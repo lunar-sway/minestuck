@@ -4,7 +4,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.inventory.specibus.StrifePortfolioHandler;
 import com.mraof.minestuck.inventory.specibus.StrifeSpecibus;
-import com.mraof.minestuck.util.KindAbstratusList;
+import com.mraof.minestuck.player.KindAbstratusList;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;

@@ -47,7 +47,7 @@ public class NonNegativeGristSet extends GristSet
 		for(int i = 0; i < list.size(); i++)
 		{
 			GristAmount amount = GristAmount.read(list.getCompound(i), null);
-			if(amount.getAmount() <= 0)
+			if(amount.getAmount() >= 0)
 				set.addGrist(amount);
 		}
 		

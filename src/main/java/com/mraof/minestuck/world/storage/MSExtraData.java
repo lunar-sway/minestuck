@@ -1,8 +1,8 @@
 package com.mraof.minestuck.world.storage;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.editmode.EditData;
-import com.mraof.minestuck.util.PostEntryTask;
+import com.mraof.minestuck.computer.editmode.EditData;
+import com.mraof.minestuck.entry.PostEntryTask;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.server.MinecraftServer;
@@ -148,11 +148,16 @@ public class MSExtraData extends WorldSavedData
 			markDirty();
 	}
 	
+	public void forEach(Consumer<EditData> consumer)
+	{
+		activeEditData.forEach(consumer);
+	}
+	
 	public void forEachAndClear(Consumer<EditData> consumer)
 	{
 		if(!activeEditData.isEmpty())
 		{
-			activeEditData.forEach(consumer);
+			forEach(consumer);
 			activeEditData.clear();
 			markDirty();
 		}

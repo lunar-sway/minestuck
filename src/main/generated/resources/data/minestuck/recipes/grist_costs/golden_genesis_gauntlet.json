@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:golden_genesis_gauntlet"
+  },
+  "grist_cost": {
+    "minestuck:build": 8000,
+    "minestuck:gold": 5000,
+    "minestuck:uranium": 300,
+    "minestuck:diamond": 250,
+    "minestuck:artifact": 10
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:fire_coral_fan"
+  },
+  "grist_cost": {
+    "minestuck:cobalt": 1,
+    "minestuck:garnet": 4
+  }
+}

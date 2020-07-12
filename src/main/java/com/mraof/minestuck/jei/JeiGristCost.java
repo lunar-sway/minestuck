@@ -1,11 +1,26 @@
 package com.mraof.minestuck.jei;
 
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
+import net.minecraft.item.crafting.Ingredient;
 
 import java.util.Objects;
 
 public abstract class JeiGristCost
 {
+	public static final String GRIST_COSTS = "minestuck.jei.grist_costs";
+	
+	private final Ingredient ingredient;
+	
+	public JeiGristCost(Ingredient ingredient)
+	{
+		this.ingredient = Objects.requireNonNull(ingredient);
+	}
+	
+	public Ingredient getIngredient()
+	{
+		return ingredient;
+	}
+	
 	public abstract Type getType();
 	
 	public abstract GristSet getGristSet();
@@ -16,8 +31,9 @@ public abstract class JeiGristCost
 	{
 		private final GristSet set;
 		
-		public Set(GristSet set)
+		public Set(Ingredient ingredient, GristSet set)
 		{
+			super(ingredient);
 			this.set = Objects.requireNonNull(set);
 		}
 		
@@ -44,8 +60,9 @@ public abstract class JeiGristCost
 	{
 		private final long wildcard;
 		
-		public Wildcard(long wildcard)
+		public Wildcard(Ingredient ingredient, long wildcard)
 		{
+			super(ingredient);
 			this.wildcard = wildcard;
 		}
 		

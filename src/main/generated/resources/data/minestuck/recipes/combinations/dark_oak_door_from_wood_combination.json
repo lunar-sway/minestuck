@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:oak_door"
+  },
+  "input2": {
+    "item": "minecraft:spruce_door"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:dark_oak_door"
+  }
+}

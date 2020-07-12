@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:primed_tnt"
+  },
+  "grist_cost": {
+    "minestuck:build": 8,
+    "minestuck:chalk": 10,
+    "minestuck:sulfur": 14
+  }
+}

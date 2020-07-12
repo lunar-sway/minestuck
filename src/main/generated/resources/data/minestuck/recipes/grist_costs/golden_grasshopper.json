@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:golden_grasshopper"
+  },
+  "grist_cost": {
+    "minestuck:gold": 4000
+  }
+}

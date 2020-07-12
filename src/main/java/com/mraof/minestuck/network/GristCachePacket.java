@@ -32,6 +32,6 @@ public class GristCachePacket implements PlayToClientPacket
 	@Override
 	public void execute()
 	{
-		ClientPlayerData.onPacketRecived(this);
+		ClientPlayerData.onPacketReceived(this);
 	}
 }

@@ -2,6 +2,7 @@ package com.mraof.minestuck.data.loot_table;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.tileentity.ItemStackTileEntity;
 import net.minecraft.advancements.criterion.EnchantmentPredicate;
 import net.minecraft.advancements.criterion.ItemPredicate;
 import net.minecraft.advancements.criterion.MinMaxBounds;
@@ -15,6 +16,8 @@ import net.minecraft.world.storage.loot.conditions.ILootCondition;
 import net.minecraft.world.storage.loot.conditions.MatchTool;
 import net.minecraft.world.storage.loot.conditions.TableBonus;
 import net.minecraft.world.storage.loot.functions.ApplyBonus;
+import net.minecraft.world.storage.loot.functions.CopyName;
+import net.minecraft.world.storage.loot.functions.CopyNbt;
 import net.minecraft.world.storage.loot.functions.SetCount;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -213,8 +216,9 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(DEAD_PLANKS_SLAB);
 		registerDropSelfLootTable(TREATED_PLANKS_SLAB);
 		
+		registerDropSelfLootTable(HOLOPAD);
 		registerDropSelfLootTable(CRUXTRUDER_LID);
-		registerDropSelfLootTable(MINI_CRUXTRUDER);	//TODO Make sure the cruxtruder drops with its color set to the item
+		registerLootTable(MINI_CRUXTRUDER, MSBlockLootTables::droppingWithColor);
 		registerDropSelfLootTable(MINI_TOTEM_LATHE);
 		registerDropSelfLootTable(MINI_ALCHEMITER);
 		registerDropSelfLootTable(MINI_PUNCH_DESIGNIX);
@@ -224,11 +228,11 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(CROCKERTOP);
 		registerDropSelfLootTable(HUBTOP);
 		registerDropSelfLootTable(LUNCHTOP);
-		registerDropSelfLootTable(TRANSPORTALIZER);
+		registerLootTable(TRANSPORTALIZER, MSBlockLootTables::droppingWithNameOnSilkTouch);
 		registerDropSelfLootTable(GRIST_WIDGET);
 		registerDropSelfLootTable(URANIUM_COOKER);
 		
-		registerDropSelfLootTable(CRUXITE_DOWEL);	//TODO Make sure the dowel drops with its content set to the item
+		registerLootTable(CRUXITE_DOWEL, MSBlockLootTables::droppingWithTEItem);
 		
 		registerDropSelfLootTable(GOLD_SEEDS);
 		registerDropSelfLootTable(WOODEN_CACTUS);
@@ -240,6 +244,7 @@ public class MSBlockLootTables extends BlockLootTables
 		registerLootTable(HOT_CAKE, func_218482_a());
 		registerLootTable(REVERSE_CAKE, func_218482_a());
 		registerLootTable(FUCHSIA_CAKE, func_218482_a());
+		registerLootTable(NEGATIVE_CAKE, func_218482_a());
 		
 		registerDropSelfLootTable(PRIMED_TNT);
 		registerDropSelfLootTable(UNSTABLE_TNT);
@@ -352,6 +357,18 @@ public class MSBlockLootTables extends BlockLootTables
 	private static LootTable.Builder strawberryStemDrop(Block block)
 	{
 		return droppingByAge(block, MSItems.STRAWBERRY_CHUNK);
+	}
+	protected static LootTable.Builder droppingWithColor(Block block)
+	{
+		return LootTable.builder().addLootPool(withSurvivesExplosion(block, LootPool.builder().rolls(ConstantRange.of(1)).addEntry(ItemLootEntry.builder(block).acceptFunction(CopyNbt.func_215881_a(CopyNbt.Source.BLOCK_ENTITY).func_216056_a("color", "color")))));
+	}
+	protected static LootTable.Builder droppingWithTEItem(Block block)
+	{
+		return LootTable.builder().addLootPool(withSurvivesExplosion(block, LootPool.builder().rolls(ConstantRange.of(1)).addEntry(DynamicLootEntry.func_216162_a(ItemStackTileEntity.ITEM_DYNAMIC))));
+	}
+	protected static LootTable.Builder droppingWithNameOnSilkTouch(Block block)
+	{
+		return dropping(block, SILK_TOUCH_CONDITION.inverted(), ItemLootEntry.builder(block).acceptFunction(CopyName.builder(CopyName.Source.BLOCK_ENTITY)));
 	}
 	
 	@Override

@@ -2,11 +2,11 @@ package com.mraof.minestuck.entity.consort;
 
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
+import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
-import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
@@ -25,6 +25,8 @@ import net.minecraft.world.storage.loot.LootParameterSets;
 import net.minecraft.world.storage.loot.LootParameters;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.network.NetworkHooks;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +40,8 @@ import java.util.UUID;
  */
 public abstract class MessageType
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	public static final String MISSING_ITEM = "consort.missing_item";
 	
 	public abstract String getString();
@@ -46,6 +50,8 @@ public abstract class MessageType
 	
 	public abstract ITextComponent getFromChain(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier,
 												String fromChain);
+	
+	protected abstract void debugAddAllMessages(List<ITextComponent> list);
 	
 	private static ITextComponent createMessage(ConsortEntity consort, ServerPlayerEntity player, String unlocalizedMessage,
 												String[] args, boolean consortPrefix)
@@ -57,16 +63,16 @@ public abstract class MessageType
 		Title worldTitle = c == null ? null : PlayerSavedData.getData(c.getClientIdentifier(), player.server).getTitle();
 		for(int i = 0; i < args.length; i++)
 		{
-			if(args[i].equals("playerNameLand"))
+			if(args[i].equals("player_name_land"))	//TODO How about extendable objects or enums instead of type strings for args?
 			{
 				if(c != null)
 					obj[i] = c.getClientIdentifier().getUsername();
 				else
 					obj[i] = "Player name";
-			} else if(args[i].equals("playerName"))
+			} else if(args[i].equals("player_name"))
 			{
 				obj[i] = player.getName();
-			} else if(args[i].equals("landName"))
+			} else if(args[i].equals("land_name"))
 			{
 				World world = consort.getServer().getWorld(consort.homeDimension);
 				LandInfo landInfo = MSDimensions.getLandInfo(consort.getServer(), consort.homeDimension);
@@ -75,37 +81,37 @@ public abstract class MessageType
 					obj[i] = landInfo.landAsTextComponent();
 				} else
 					obj[i] = "Land name";
-			} else if(args[i].equals("playerTitleLand"))
+			} else if(args[i].equals("player_title_land"))
 			{
 				if(worldTitle != null)
 					obj[i] = worldTitle.asTextComponent();
 				else
 					obj[i] = "Player title";
-			} else if(args[i].equals("playerClassLand"))
+			} else if(args[i].equals("player_class_land"))
 			{
 				if(worldTitle != null)
 					obj[i] = worldTitle.getHeroClass().asTextComponent();
 				else
 					obj[i] = "Player class";
-			} else if(args[i].equals("playerAspectLand"))
+			} else if(args[i].equals("player_aspect_land"))
 			{
 				if(worldTitle != null)
 					obj[i] = worldTitle.getHeroAspect().asTextComponent();
 				else
 					obj[i] = "Player aspect";
-			} else if(args[i].equals("consortSound"))
+			} else if(args[i].equals("consort_sound"))
 			{
 				obj[i] = new TranslationTextComponent(s + ".sound");
-			} else if(args[i].equals("consortSound2"))
+			} else if(args[i].equals("consort_sound_2"))
 			{
 				obj[i] = new TranslationTextComponent(s + ".sound.2");
-			} else if(args[i].equals("consortType"))
+			} else if(args[i].equals("consort_type"))
 			{
 				obj[i] = new TranslationTextComponent(s);
-			} else if(args[i].equals("consortTypes"))
+			} else if(args[i].equals("consort_types"))
 			{
 				obj[i] = new TranslationTextComponent(s + ".plural");
-			} else if(args[i].equals("playerTitle"))
+			} else if(args[i].equals("player_title"))
 			{
 				PlayerIdentifier identifier = IdentifierHandler.encode(player);
 				Title playerTitle = PlayerSavedData.getData(identifier, player.server).getTitle();
@@ -119,10 +125,10 @@ public abstract class MessageType
 					obj[i] = new TranslationTextComponent("denizen." + worldTitle.getHeroAspect().getTranslationKey());
 				else
 					obj[i] = "Denizen";
-			} else if(args[i].startsWith("nbtItem:"))
+			} else if(args[i].startsWith("nbt_item:"))
 			{
 				CompoundNBT nbt = consort.getMessageTagForPlayer(player);
-				ItemStack stack = ItemStack.read(nbt.getCompound(args[i].substring(8)));
+				ItemStack stack = ItemStack.read(nbt.getCompound(args[i].substring(9)));
 				if(!stack.isEmpty())
 					obj[i] = new TranslationTextComponent(stack.getTranslationKey());
 				else obj[i] = "Item";
@@ -188,6 +194,13 @@ public abstract class MessageType
 		{
 			return null;
 		}
+		
+		@Override
+		protected void debugAddAllMessages(List<ITextComponent> list)
+		{
+			//noinspection RedundantCast
+			list.add(new TranslationTextComponent("consort." + unlocalizedMessage, (Object[]) args));
+		}
 	}
 	
 	//This class takes two separate messages and treats them as one.
@@ -198,7 +211,6 @@ public abstract class MessageType
 	{
 		protected MessageType messageOne;
 		protected MessageType messageTwo;
-		protected String[] args;
 		protected String nbtName;
 		protected boolean firstOnce;
 		
@@ -254,6 +266,13 @@ public abstract class MessageType
 			ITextComponent message = messageTwo.getFromChain(consort, player, chainIdentifier, fromChain);
 			return message;
 		}
+		
+		@Override
+		protected void debugAddAllMessages(List<ITextComponent> list)
+		{
+			messageOne.debugAddAllMessages(list);
+			messageTwo.debugAddAllMessages(list);
+		}
 	}
 	
 	/**
@@ -301,6 +320,14 @@ public abstract class MessageType
 		public ITextComponent getFromChain(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier, String fromChain)
 		{
 			return message.getFromChain(consort, player, chainIdentifier, fromChain);
+		}
+		
+		@Override
+		protected void debugAddAllMessages(List<ITextComponent> list)
+		{
+			message.debugAddAllMessages(list);
+			//noinspection RedundantCast
+			list.add(new TranslationTextComponent("consort." + unlocalizedMessage, (Object[]) args));
 		}
 	}
 
@@ -419,6 +446,13 @@ public abstract class MessageType
 				nbt.putInt(this.getString(), index);
 			return text;
 		}
+		
+		@Override
+		protected void debugAddAllMessages(List<ITextComponent> list)
+		{
+			for(MessageType message : messages)
+				message.debugAddAllMessages(list);
+		}
 	}
 	
 	public static class ConditionedMessage extends MessageType
@@ -460,6 +494,13 @@ public abstract class MessageType
 			if (condition.testFor(consort, player))
 				return message1.getFromChain(consort, player, chainIdentifier, fromChain);
 			else return message2.getFromChain(consort, player, chainIdentifier, fromChain);
+		}
+		
+		@Override
+		protected void debugAddAllMessages(List<ITextComponent> list)
+		{
+			message1.debugAddAllMessages(list);
+			message2.debugAddAllMessages(list);
 		}
 		
 		public interface Condition
@@ -528,6 +569,13 @@ public abstract class MessageType
 					return message.getFromChain(consort, player, MessageType.addTo(chainIdentifier, messageName), fromChain);
 			
 			return null;
+		}
+		
+		@Override
+		protected void debugAddAllMessages(List<ITextComponent> list)
+		{
+			for(MessageType message : messages)
+				message.debugAddAllMessages(list);
 		}
 	}
 	
@@ -599,7 +647,7 @@ public abstract class MessageType
 				if(question == null)
 					return null;
 				
-				String commandStart = "/consortReply " + consort.getEntityId() + " "
+				String commandStart = "/consortreply " + consort.getEntityId() + " "
 						+ (chainIdentifier.isEmpty() ? "" : chainIdentifier + ":");
 				question.appendText("\n");
 				for(int i = 0; i < options.length; i++)
@@ -684,6 +732,20 @@ public abstract class MessageType
 				}
 			
 			return null;
+		}
+		
+		@Override
+		protected void debugAddAllMessages(List<ITextComponent> list)
+		{
+			message.debugAddAllMessages(list);
+			for(SingleMessage message : options)
+			{
+				message.debugAddAllMessages(list);
+				//noinspection RedundantCast
+				list.add(new TranslationTextComponent("consort." + message.unlocalizedMessage + ".reply", (Object[]) message.args));
+			}
+			for(MessageType message : results)
+				message.debugAddAllMessages(list);
 		}
 	}
 	
@@ -818,30 +880,37 @@ public abstract class MessageType
 			if(!update)
 				consort.updatingMessage = null;
 		}
+		
+		@Override
+		protected void debugAddAllMessages(List<ITextComponent> list)
+		{
+			for(MessageType message : messages)
+				message.debugAddAllMessages(list);
+		}
 	}
 	
 	public static class PurchaseMessage extends MessageType
 	{
 		protected String nbtName;
 		protected boolean repeat;
-		protected ResourceLocation item;
+		protected ResourceLocation lootTableId;
 		protected int cost;
 		protected MessageType message;
 		
-		public PurchaseMessage(ResourceLocation item, int cost, MessageType message)
+		public PurchaseMessage(ResourceLocation lootTableId, int cost, MessageType message)
 		{
-			this(false, item, cost, message.getString(), message);
+			this(false, lootTableId, cost, message.getString(), message);
 		}
 		
 		/**
 		 * Make sure to use this constructor with a unique name, if the message
 		 * is of a type that uses it's own stored data
 		 */
-		public PurchaseMessage(boolean repeat, ResourceLocation item, int cost, String name, MessageType message)
+		public PurchaseMessage(boolean repeat, ResourceLocation lootTableId, int cost, String name, MessageType message)
 		{
 			this.nbtName = name;
 			this.repeat = repeat;
-			this.item = item;
+			this.lootTableId = lootTableId;
 			this.cost = cost;
 			this.message = message;
 		}
@@ -866,18 +935,24 @@ public abstract class MessageType
 				if(!repeat)
 					nbt.putBoolean(nbtName, true);
 				
-				LootContext.Builder contextBuilder = new LootContext.Builder((ServerWorld) consort.world).withRandom(consort.world.rand).withParameter(LootParameters.THIS_ENTITY, consort).withParameter(LootParameters.POSITION, consort.getPosition());
-				for(ItemStack itemstack : consort.getServer().getLootTableManager().getLootTableFromLocation(item)
-						.generate(contextBuilder.build(LootParameterSets.GIFT)))
+				LootContext.Builder contextBuilder = new LootContext.Builder((ServerWorld) consort.world).withRandom(consort.world.rand)
+						.withParameter(LootParameters.THIS_ENTITY, consort).withParameter(LootParameters.POSITION, consort.getPosition());
+				List<ItemStack> loot = consort.getServer().getLootTableManager().getLootTableFromLocation(lootTableId)
+						.generate(contextBuilder.build(LootParameterSets.GIFT));
+				
+				if(loot.isEmpty())
+					LOGGER.warn("Tried to generate loot from {}, but no items were generated!", lootTableId);
+				
+				for(ItemStack itemstack : loot)
 				{
 					player.entityDropItem(itemstack, 0.0F);
-					MSCriteriaTriggers.CONSORT_ITEM.trigger(player, item.toString(), itemstack, consort);
+					MSCriteriaTriggers.CONSORT_ITEM.trigger(player, lootTableId.toString(), itemstack, consort);
 				}
 				
 				return message.getMessage(consort, player, chainIdentifier);
 			} else
 			{
-				player.sendMessage(createMessage(consort, player, "cantAfford", new String[0], false));
+				player.sendMessage(createMessage(consort, player, "cant_afford", new String[0], false));
 				
 				return null;
 			}
@@ -887,6 +962,12 @@ public abstract class MessageType
 		public String getString()
 		{
 			return nbtName;
+		}
+		
+		@Override
+		protected void debugAddAllMessages(List<ITextComponent> list)
+		{
+			message.debugAddAllMessages(list);
 		}
 	}
 	
@@ -1030,6 +1111,13 @@ public abstract class MessageType
 					
 			return false;
 		}
+		
+		@Override
+		protected void debugAddAllMessages(List<ITextComponent> list)
+		{
+			conditionedMessage.debugAddAllMessages(list);
+			defaultMessage.debugAddAllMessages(list);
+		}
 	}
 	
 	public static class GiveItemMessage extends MessageType
@@ -1111,6 +1199,12 @@ public abstract class MessageType
 		{
 			return next.getFromChain(consort, player, chainIdentifier, fromChain);
 		}
+		
+		@Override
+		protected void debugAddAllMessages(List<ITextComponent> list)
+		{
+			next.debugAddAllMessages(list);
+		}
 	}
 	
 	public static class MerchantGuiMessage extends MessageType
@@ -1154,6 +1248,12 @@ public abstract class MessageType
 		public ITextComponent getFromChain(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier, String fromChain)
 		{
 			return null;
+		}
+		
+		@Override
+		protected void debugAddAllMessages(List<ITextComponent> list)
+		{
+			initMessage.debugAddAllMessages(list);
 		}
 	}
 }

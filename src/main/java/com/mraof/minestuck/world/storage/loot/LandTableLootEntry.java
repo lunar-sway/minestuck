@@ -58,7 +58,10 @@ public class LandTableLootEntry extends LootEntry
 	{
 		LootTable lootTable = context.getLootTableManager().getLootTableFromLocation(tableName);
 		if(lootTable == null)
+		{
+			LOGGER.warn("Could not find loot table {}", tableName);
 			return;
+		}
 		if(context.addLootTable(lootTable))
 		{
 			LootPool pool = lootTable.getPool(poolName);

@@ -2,6 +2,8 @@ package com.mraof.minestuck.item.crafting.alchemy;
 
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -11,6 +13,8 @@ import java.util.function.Supplier;
  */
 public class GristAmount
 {
+	public static final String GRIST_AMOUNT = "grist_amount";
+	
 	private final GristType type;
 	private final long amount;
 	
@@ -76,6 +80,11 @@ public class GristAmount
 		GristType type = buffer.readRegistryIdSafe(GristType.class);
 		long amount = buffer.readLong();
 		return new GristAmount(type, amount);
+	}
+	
+	public ITextComponent asTextComponent()
+	{
+		return new TranslationTextComponent(GRIST_AMOUNT, getAmount(), getType().getDisplayName());
 	}
 	
 	private static String makeNBTPrefix(String prefix)

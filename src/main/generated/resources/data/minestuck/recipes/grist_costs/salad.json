@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:salad"
+  },
+  "grist_cost": {
+    "minestuck:build": 1,
+    "minestuck:iodine": 3
+  }
+}

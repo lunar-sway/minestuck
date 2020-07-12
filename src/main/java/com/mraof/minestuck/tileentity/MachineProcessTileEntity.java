@@ -6,8 +6,6 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
@@ -116,31 +114,6 @@ public abstract class MachineProcessTileEntity extends TileEntity implements ISi
 
 		return compound;
 	}
-
-	@Override
-	public CompoundNBT getUpdateTag()
-	{
-		return this.write(new CompoundNBT());
-	}
-	
-	@Override
-	public SUpdateTileEntityPacket getUpdatePacket()
-	{
-		CompoundNBT compound = this.getUpdateTag();
-		return new SUpdateTileEntityPacket(this.pos, 2, compound);
-	}
-	
-	@Override
-	public void handleUpdateTag(CompoundNBT tag)
-	{
-		this.read(tag);
-	}
-	
-	@Override
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
-	{
-		this.handleUpdateTag(pkt.getNbtCompound());
-	}
 	
 	@Override
 	public void tick()
@@ -161,12 +134,11 @@ public abstract class MachineProcessTileEntity extends TileEntity implements ISi
 
 		this.progress++;
 
-		if (this.progress == this.maxProgress)
+		if (this.progress >= this.maxProgress)
 		{
 			this.progress = 0;
 			this.ready = getOverrideStop();
 			processContents();
-			world.notifyBlockUpdate(pos, state, state, 3);
 		}
 	}
 

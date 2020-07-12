@@ -2,9 +2,9 @@ package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.TitleSelectPacket;
-import com.mraof.minestuck.util.EnumAspect;
-import com.mraof.minestuck.util.EnumClass;
-import com.mraof.minestuck.util.Title;
+import com.mraof.minestuck.player.EnumAspect;
+import com.mraof.minestuck.player.EnumClass;
+import com.mraof.minestuck.player.Title;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;

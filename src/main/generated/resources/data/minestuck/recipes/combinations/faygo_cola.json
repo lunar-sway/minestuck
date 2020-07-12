@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:orange_faygo"
+  },
+  "input2": {
+    "item": "minestuck:tab"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:faygo_cola"
+  }
+}

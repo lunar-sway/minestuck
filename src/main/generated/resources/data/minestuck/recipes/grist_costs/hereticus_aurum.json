@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:hereticus_aurum"
+  },
+  "grist_cost": {
+    "minestuck:amethyst": 8,
+    "minestuck:tar": 64,
+    "minestuck:gold": 155,
+    "minestuck:quartz": 2
+  }
+}

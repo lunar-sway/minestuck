@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:player_head"
+  },
+  "grist_cost": {
+    "minestuck:artifact": 10
+  }
+}

@@ -3,7 +3,6 @@ package com.mraof.minestuck.entity.consort;
 import com.google.common.collect.Maps;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.Pair;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -11,6 +10,7 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootParameterSets;
 import net.minecraft.world.storage.loot.LootParameters;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,15 +45,15 @@ public class ConsortRewardHandler
 		ConsortRewardHandler.registerPrice(new ItemStack(ROCK_COOKIE), 15, 20);
 		ConsortRewardHandler.registerPrice(new ItemStack(STRAWBERRY_CHUNK), 100, 150);
 		ConsortRewardHandler.registerPrice(new ItemStack(TAB), 200, 200);
-		ConsortRewardHandler.registerPrice(new ItemStack(FAYGO), 100, 100);
-		ConsortRewardHandler.registerPrice(new ItemStack(FAYGO_CANDY_APPLE), 100, 100);
+		ConsortRewardHandler.registerPrice(new ItemStack(ORANGE_FAYGO), 100, 100);
+		ConsortRewardHandler.registerPrice(new ItemStack(CANDY_APPLE_FAYGO), 100, 100);
 		ConsortRewardHandler.registerPrice(new ItemStack(FAYGO_COLA), 100, 100);
-		ConsortRewardHandler.registerPrice(new ItemStack(FAYGO_COTTON_CANDY), 100, 100);
-		ConsortRewardHandler.registerPrice(new ItemStack(FAYGO_CREME), 100, 100);
-		ConsortRewardHandler.registerPrice(new ItemStack(FAYGO_GRAPE), 100, 100);
-		ConsortRewardHandler.registerPrice(new ItemStack(FAYGO_MOON_MIST), 100, 100);
-		ConsortRewardHandler.registerPrice(new ItemStack(FAYGO_PEACH), 100, 100);
-		ConsortRewardHandler.registerPrice(new ItemStack(FAYGO_REDPOP), 100, 100);
+		ConsortRewardHandler.registerPrice(new ItemStack(COTTON_CANDY_FAYGO), 100, 100);
+		ConsortRewardHandler.registerPrice(new ItemStack(CREME_SODA_FAYGO), 100, 100);
+		ConsortRewardHandler.registerPrice(new ItemStack(GRAPE_FAYGO), 100, 100);
+		ConsortRewardHandler.registerPrice(new ItemStack(MOON_MIST_FAYGO), 100, 100);
+		ConsortRewardHandler.registerPrice(new ItemStack(PEACH_FAYGO), 100, 100);
+		ConsortRewardHandler.registerPrice(new ItemStack(REDPOP_FAYGO), 100, 100);
 		ConsortRewardHandler.registerPrice(new ItemStack(GOLD_SEEDS), 300, 400);
 		ConsortRewardHandler.registerPrice(new ItemStack(APPLE_CAKE), 100, 140);
 		ConsortRewardHandler.registerPrice(new ItemStack(IRRADIATED_STEAK), 70, 80);
@@ -86,17 +86,24 @@ public class ConsortRewardHandler
 		ConsortRewardHandler.registerPrice(new ItemStack(THRESH_DVD), 350, 400);
 		ConsortRewardHandler.registerPrice(new ItemStack(CREW_POSTER), 350, 400);
 		ConsortRewardHandler.registerPrice(new ItemStack(SBAHJ_POSTER), 350, 400);
+		ConsortRewardHandler.registerPrice(new ItemStack(GAMEBRO_MAGAZINE), 450, 600);
+		ConsortRewardHandler.registerPrice(new ItemStack(GAMEGRL_MAGAZINE), 450, 600);
 		ConsortRewardHandler.registerPrice(new ItemStack(MUSIC_DISC_EMISSARY_OF_DANCE), 1000, 1000);
 		ConsortRewardHandler.registerPrice(new ItemStack(MUSIC_DISC_DANCE_STAB_DANCE), 1000, 1000);
 		ConsortRewardHandler.registerPrice(new ItemStack(MUSIC_DISC_RETRO_BATTLE), 1000, 1000);
 		ConsortRewardHandler.registerPrice(new ItemStack(CRUMPLY_HAT), 80, 100);
+		ConsortRewardHandler.registerPrice(new ItemStack(BATTERY), 10, 100);
 		ConsortRewardHandler.registerPrice(new ItemStack(GRIMOIRE), 666, 666);
+		ConsortRewardHandler.registerPrice(new ItemStack(ACE_OF_SPADES), 3000, 5000);
+		ConsortRewardHandler.registerPrice(new ItemStack(ACE_OF_HEARTS), 3000, 5000);
+		ConsortRewardHandler.registerPrice(new ItemStack(ACE_OF_DIAMONDS), 3000, 5000);
+		ConsortRewardHandler.registerPrice(new ItemStack(ACE_OF_CLUBS), 3000, 5000);
 		ConsortRewardHandler.registerPrice(new ItemStack(POGO_CLUB), 900, 1200);
 		ConsortRewardHandler.registerPrice(new ItemStack(METAL_BAT), 400, 500);
 		ConsortRewardHandler.registerPrice(new ItemStack(FIRE_POKER), 1500, 2000);
 		ConsortRewardHandler.registerPrice(new ItemStack(COPSE_CRUSHER), 1000, 1500);
 		ConsortRewardHandler.registerPrice(new ItemStack(KATANA), 400, 500);
-		ConsortRewardHandler.registerPrice(new ItemStack(CACTUS_CUTLASS), 500, 700);
+		ConsortRewardHandler.registerPrice(new ItemStack(CACTACEAE_CUTLASS), 500, 700);
 		ConsortRewardHandler.registerPrice(new ItemStack(STEAK_SWORD), 350, 650);
 		ConsortRewardHandler.registerPrice(new ItemStack(BEEF_SWORD), 250, 625);
 		ConsortRewardHandler.registerPrice(new ItemStack(GLOWSTONE_DUST), 20, 40);
@@ -253,16 +260,16 @@ public class ConsortRewardHandler
 		{
 			for (Pair<ItemStack, Integer> pair : itemPriceList)
 			{
-				if (ItemStack.areItemsEqual(pair.object1, stack) && ItemStack.areItemStackTagsEqual(pair.object1, stack))
+				if (ItemStack.areItemsEqual(pair.getKey(), stack) && ItemStack.areItemStackTagsEqual(pair.getKey(), stack))
 				{
-					pair.object1.grow(stack.getCount());
+					pair.getKey().grow(stack.getCount());
 					continue stackLoop;
 				}
 			}
 			
 			int price = getPrice(stack, rand);
 			if (price >= 0 && itemPriceList.size() < 9)
-				itemPriceList.add(new Pair<>(stack, price));
+				itemPriceList.add(Pair.of(stack, price));
 			if (price < 0)
 				Debug.warn("Couldn't find a boondollar price for " + stack);
 		}

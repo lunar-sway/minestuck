@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:oak_stairs"
+  },
+  "input2": {
+    "item": "minecraft:spruce_stairs"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:dark_oak_stairs"
+  }
+}

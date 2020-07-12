@@ -13,6 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorldReader;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -36,12 +37,12 @@ public class DecorBlock extends Block
 		return BlockRenderLayer.CUTOUT;
 	}
 	
-	/*TODO
 	@Override
+	@SuppressWarnings("deprecation")
 	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos)
 	{
-        return worldIn.getBlockState(pos.down()).isFullCube();
-    }*/
+        return Block.hasSolidSide(worldIn.getBlockState(pos.down()), worldIn, pos.down(), Direction.UP);
+    }
 	
 	@Nullable
 	@Override
@@ -57,6 +58,7 @@ public class DecorBlock extends Block
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
 	{
 		return shape.get(state.get(FACING));

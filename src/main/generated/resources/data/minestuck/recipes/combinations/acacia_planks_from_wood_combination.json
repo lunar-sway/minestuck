@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:birch_planks"
+  },
+  "input2": {
+    "item": "minecraft:jungle_planks"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:acacia_planks"
+  }
+}

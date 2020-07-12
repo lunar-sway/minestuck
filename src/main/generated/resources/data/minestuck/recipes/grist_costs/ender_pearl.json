@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:ender_pearl"
+  },
+  "grist_cost": {
+    "minestuck:uranium": 13,
+    "minestuck:diamond": 5,
+    "minestuck:mercury": 8
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:paradises_portabello"
+  },
+  "grist_cost": {
+    "minestuck:build": 40,
+    "minestuck:iodine": 30,
+    "minestuck:ruby": 20
+  }
+}

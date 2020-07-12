@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:grasshopper"
+  },
+  "grist_cost": {
+    "minestuck:iodine": 3,
+    "minestuck:amber": 7
+  }
+}

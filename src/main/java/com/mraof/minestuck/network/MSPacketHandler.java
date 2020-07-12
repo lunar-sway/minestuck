@@ -23,7 +23,7 @@ public class MSPacketHandler
 	{
 		nextIndex = 0;
 		
-		registerMessage(ModConfigPacket.class, ModConfigPacket::decode);
+		registerMessage(DataCheckerPermissionPacket.class, DataCheckerPermissionPacket::decode);
 		registerMessage(EcheladderDataPacket.class, EcheladderDataPacket::decode);
 		registerMessage(ColorDataPacket.class, ColorDataPacket::decode);
 		registerMessage(ModusDataPacket.class, ModusDataPacket::decode);
@@ -48,6 +48,7 @@ public class MSPacketHandler
 		registerMessage(GristWildcardPacket.class, GristWildcardPacket::decode);
 		registerMessage(TransportalizerPacket.class, TransportalizerPacket::decode);
 		registerMessage(EffectTogglePacket.class, EffectTogglePacket::decode);
+		registerMessage(StoneTabletPacket.class, StoneTabletPacket::decode);
 		registerMessage(SpecibusPacket.class, SpecibusPacket::decode);
 	}
 	

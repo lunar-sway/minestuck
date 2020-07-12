@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:music_disc_11"
+  },
+  "grist_cost": {
+    "minestuck:build": 10,
+    "minestuck:caulk": 5,
+    "minestuck:tar": 2,
+    "minestuck:mercury": 2
+  }
+}

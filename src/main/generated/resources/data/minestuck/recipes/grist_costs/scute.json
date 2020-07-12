@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:scute"
+  },
+  "grist_cost": {
+    "minestuck:cobalt": 5,
+    "minestuck:shale": 5,
+    "minestuck:iodine": 4
+  }
+}

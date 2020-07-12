@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:grist_widget"
+  },
+  "grist_cost": {
+    "minestuck:build": 550,
+    "minestuck:garnet": 55,
+    "minestuck:ruby": 34
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:quartz_block"
+  },
+  "grist_cost": {
+    "minestuck:quartz": 16,
+    "minestuck:marble": 4
+  }
+}

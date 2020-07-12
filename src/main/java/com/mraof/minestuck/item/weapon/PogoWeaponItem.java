@@ -1,6 +1,8 @@
 package com.mraof.minestuck.item.weapon;
 
 import net.minecraft.block.Blocks;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.PlayerEntity;
@@ -33,11 +35,14 @@ public class PogoWeaponItem extends WeaponItem
 		hitEntity(stack, target, player, getPogoMotion(stack));
 		return true;
 	}
-	
-	private double getPogoMotion(ItemStack stack)
-	{
-//		return 0.5 + EnchantmentHelper.getEnchantmentLevel(Enchantment.efficiency.effectId, stack)*0.1;
+
+	private double getPogoMotion(ItemStack stack){
 		return pogoMotion;
+	}
+
+	private static double addEfficiencyModifier(double pogoMotion, ItemStack stack)
+	{
+		return pogoMotion * ((EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, stack)*0.15)+1);
 	}
 	
 	@Override
@@ -48,6 +53,7 @@ public class PogoWeaponItem extends WeaponItem
 	
 	public static void hitEntity(ItemStack stack, LivingEntity target, LivingEntity player, double pogoMotion)
 	{
+		pogoMotion = addEfficiencyModifier(pogoMotion, stack);
 		if (player.fallDistance > 0.0F && !player.onGround && !player.isOnLadder() && !player.isInWater() && !player.isPassenger())
 		{
 			double knockbackModifier = 1D - target.getAttributes().getAttributeInstance(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).getValue();
@@ -60,6 +66,7 @@ public class PogoWeaponItem extends WeaponItem
 	
 	public static ActionResultType onItemUse(PlayerEntity player, World worldIn, BlockPos pos, ItemStack stack, Direction facing, double pogoMotion)
 	{
+		pogoMotion = addEfficiencyModifier(pogoMotion, stack);
 		if (worldIn.getBlockState(pos).getBlock() != Blocks.AIR)
 		{
 			double playerMotionX;
@@ -77,7 +84,7 @@ public class PogoWeaponItem extends WeaponItem
 					break;
 				case Y:
 					playerMotionY = velocity * facing.getDirectionVec().getY();
-					player.setMotion(player.getMotion().x, playerMotionY, player.getMotion().y);
+					player.setMotion(player.getMotion().x, playerMotionY, player.getMotion().z);
 					break;
 				case Z:
 					velocity += Math.abs(player.getMotion().z) / 2;

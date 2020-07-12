@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:cobble_basher"
+  },
+  "grist_cost": {
+    "minestuck:build": 30,
+    "minestuck:marble": 5
+  }
+}

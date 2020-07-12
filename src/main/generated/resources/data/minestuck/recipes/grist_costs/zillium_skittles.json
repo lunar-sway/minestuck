@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:zillium_skittles"
+  },
+  "grist_cost": {
+    "minestuck:zillium": 3
+  }
+}

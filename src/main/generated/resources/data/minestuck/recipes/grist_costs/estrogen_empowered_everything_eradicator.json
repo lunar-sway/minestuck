@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:estrogen_empowered_everything_eradicator"
+  },
+  "grist_cost": {
+    "minestuck:build": 8000,
+    "minestuck:shale": 1280,
+    "minestuck:uranium": 640,
+    "minestuck:rust": 300
+  }
+}

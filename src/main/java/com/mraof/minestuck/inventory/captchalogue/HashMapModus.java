@@ -2,7 +2,7 @@ package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ModusDataPacket;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
@@ -111,7 +111,7 @@ public class HashMapModus extends Modus
 		list.set(index, item);
 		markDirty();
 		
-		if(ejectByChat && MinestuckConfig.hashmapChatModusSetting != 2 || MinestuckConfig.hashmapChatModusSetting == 1)
+		if(ejectByChat && MinestuckConfig.hashmapChatModusSetting.get() != MinestuckConfig.AvailableOptions.OFF || MinestuckConfig.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.ON)
 			player.sendMessage(new TranslationTextComponent(MESSAGE, item.getTextComponent(), getSize(), index));
 		
 		return true;
@@ -134,10 +134,10 @@ public class HashMapModus extends Modus
 		return items;
 	}
 	
-	protected void fillList(NonNullList<ItemStack> items)
+	private void fillList(NonNullList<ItemStack> items)
 	{
 		items.clear();
-		list.addAll(items);
+		items.addAll(list);
 	}
 	
 	@Override
@@ -184,7 +184,7 @@ public class HashMapModus extends Modus
 			markDirty();
 			if(item.isEmpty())
 				return new ItemStack(MSItems.CAPTCHA_CARD);
-			else return AlchemyRecipes.createCard(item, false);
+			else return AlchemyHelper.createCard(item, false);
 		} else
 		{
 			list.set(id, ItemStack.EMPTY);
@@ -217,7 +217,7 @@ public class HashMapModus extends Modus
 	
 	public void onChatMessage(ServerPlayerEntity player, String str)
 	{
-		if(!ejectByChat && MinestuckConfig.hashmapChatModusSetting != 1 || MinestuckConfig.hashmapChatModusSetting == 2)
+		if(!ejectByChat && MinestuckConfig.hashmapChatModusSetting.get() != MinestuckConfig.AvailableOptions.ON || MinestuckConfig.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.OFF)
 			return;
 		
 		boolean isPrevLetter = false;

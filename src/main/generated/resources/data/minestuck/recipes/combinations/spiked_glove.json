@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:iron_bars"
+  },
+  "input2": {
+    "item": "minestuck:fancy_glove"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:spiked_glove"
+  }
+}

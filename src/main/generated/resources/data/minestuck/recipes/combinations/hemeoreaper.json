@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:homes_smell_ya_later"
+  },
+  "input2": {
+    "item": "minestuck:blood_bucket"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:hemeoreaper"
+  }
+}

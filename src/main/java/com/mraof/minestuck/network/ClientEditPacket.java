@@ -1,11 +1,13 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.editmode.DeployList;
-import com.mraof.minestuck.editmode.ServerEditHandler;
+import com.mraof.minestuck.computer.editmode.DeployEntry;
+import com.mraof.minestuck.computer.editmode.DeployList;
+import com.mraof.minestuck.computer.editmode.ServerEditHandler;
+import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
-import com.mraof.minestuck.util.IdentifierHandler;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
@@ -55,23 +57,25 @@ public class ClientEditPacket implements PlayToServerPacket
 	@Override
 	public void execute(ServerPlayerEntity player)
 	{
-		OpEntry opsEntry = player == null ? null : player.getServer().getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
+		if(player == null || player.getServer() == null)
+			return;
+		OpEntry opsEntry = player.getServer().getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
 		if(!MinestuckConfig.giveItems.get())
 		{
 			if(user == -1)
 				ServerEditHandler.onPlayerExit(player);
 			else if(!MinestuckConfig.privateComputers.get() || IdentifierHandler.encode(player).getId() == this.user || opsEntry != null && opsEntry.getPermissionLevel() >= 2)
 			{
-				IdentifierHandler.PlayerIdentifier user = IdentifierHandler.getById(this.user);
-				IdentifierHandler.PlayerIdentifier target = IdentifierHandler.getById(this.target);
+				PlayerIdentifier user = IdentifierHandler.getById(this.user);
+				PlayerIdentifier target = IdentifierHandler.getById(this.target);
 				if(user != null && target != null)
 					ServerEditHandler.newServerEditor(player, user, target);
 			}
 			return;
 		}
 		
-		IdentifierHandler.PlayerIdentifier user = IdentifierHandler.getById(this.user);
-		IdentifierHandler.PlayerIdentifier target = IdentifierHandler.getById(this.target);
+		PlayerIdentifier user = IdentifierHandler.getById(this.user);
+		PlayerIdentifier target = IdentifierHandler.getById(this.target);
 		if(user != null && target != null)
 		{
 			ServerPlayerEntity targetPlayer = target.getPlayer(player.getServer());
@@ -82,13 +86,13 @@ public class ClientEditPacket implements PlayToServerPacket
 				if(c == null || c.getServerIdentifier() != user || !(c.isMain() || SkaianetHandler.get(player.world).giveItems(target)))
 					return;
 				
-				for(DeployList.DeployEntry entry : DeployList.getItemList(player.getServer(), c))
+				for(DeployEntry entry : DeployList.getItemList(player.getServer(), c))
 				{
-					if(!c.givenItems()[entry.getOrdinal()])
+					if(!c.hasGivenItem(entry))
 					{
 						ItemStack item = entry.getItemStack(c, player.world);
-						if(!targetPlayer.inventory.hasItemStack(item))
-							c.givenItems()[entry.getOrdinal()] = targetPlayer.inventory.addItemStackToInventory(item);
+						if(!targetPlayer.inventory.hasItemStack(item) && targetPlayer.inventory.addItemStackToInventory(item))
+							c.setHasGivenItem(entry);
 					}
 				}
 				player.getServer().getPlayerList().sendInventory(targetPlayer);

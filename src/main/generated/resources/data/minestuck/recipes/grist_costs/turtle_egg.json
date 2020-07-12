@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:turtle_egg"
+  },
+  "grist_cost": {
+    "minestuck:amber": 10,
+    "minestuck:cobalt": 5
+  }
+}

@@ -1,6 +1,6 @@
 package com.mraof.minestuck.entity;
 
-import com.mraof.minestuck.editmode.ServerEditHandler;
+import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.util.Debug;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
 import net.minecraft.client.renderer.texture.DownloadingTexture;

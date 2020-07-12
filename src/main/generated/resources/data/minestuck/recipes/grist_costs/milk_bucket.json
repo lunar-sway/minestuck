@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:container_grist_cost",
+  "ingredient": {
+    "item": "minecraft:milk_bucket"
+  },
+  "grist_cost": {
+    "minestuck:chalk": 8
+  }
+}

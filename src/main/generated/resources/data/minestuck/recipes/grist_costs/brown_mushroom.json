@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:brown_mushroom"
+  },
+  "grist_cost": {
+    "minestuck:iodine": 5
+  }
+}

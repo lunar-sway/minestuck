@@ -8,6 +8,11 @@ buildscript {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
     }
 }
+
+plugins {
+    id "com.wynprice.cursemaven" version "2.1.5"
+}
+
 apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
@@ -35,7 +40,7 @@ sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = co
 minecraft {
     mappings channel: 'snapshot', version: project.getProperty('mc_mappings_version')
 
-    accessTransformer = file('src/META-INF/accesstransformer.cfg')
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
     // Default run configurations.
     // These can be tweaked, removed, or duplicated as needed.
@@ -115,6 +120,7 @@ dependencies {
 	// http://dvs1.progwml6.com/files/maven
     compileOnly fg.deobf("mezz.jei:jei-${project.getProperty('mc_jei_version')}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-${project.getProperty('mc_jei_version')}")
+    compileOnly fg.deobf("curse.maven:refinedstorage:2851763")
 }
 
 sourceSets.main.resources {

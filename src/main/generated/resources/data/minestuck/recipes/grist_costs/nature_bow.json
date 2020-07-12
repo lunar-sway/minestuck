@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:nature_bow"
+  },
+  "grist_cost": {
+    "minestuck:build": 10,
+    "minestuck:amber": 4,
+    "minestuck:chalk": 8
+  }
+}

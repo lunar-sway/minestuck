@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:inferno_shot"
+  },
+  "grist_cost": {
+    "minestuck:build": 25,
+    "minestuck:garnet": 19,
+    "minestuck:tar": 11,
+    "minestuck:amber": 3,
+    "minestuck:uranium": 1
+  }
+}

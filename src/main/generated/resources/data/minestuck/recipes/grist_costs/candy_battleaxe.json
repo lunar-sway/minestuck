@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:candy_battleaxe"
+  },
+  "grist_cost": {
+    "minestuck:iodine": 314,
+    "minestuck:gold": 240,
+    "minestuck:chalk": 160,
+    "minestuck:amber": 98
+  }
+}

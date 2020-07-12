@@ -1,7 +1,7 @@
 package com.mraof.minestuck.event;
 
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -10,13 +10,13 @@ import net.minecraftforge.eventbus.api.Event;
 @SuppressWarnings("unused")
 public class AlchemyEvent extends Event
 {
-	private final IdentifierHandler.PlayerIdentifier player;
+	private final PlayerIdentifier player;
 	private final TileEntity alchemiter;
 	private final ItemStack dowel;
-	private final ItemStack result;
+	private ItemStack result;
 	private final GristSet cost;
 	
-	public AlchemyEvent(IdentifierHandler.PlayerIdentifier player, TileEntity alchemiter, ItemStack dowel, ItemStack result, GristSet cost)
+	public AlchemyEvent(PlayerIdentifier player, TileEntity alchemiter, ItemStack dowel, ItemStack result, GristSet cost)
 	{
 		this.player = player;
 		this.alchemiter = alchemiter;
@@ -25,7 +25,7 @@ public class AlchemyEvent extends Event
 		this.cost = cost.asImmutable();
 	}
 	
-	public IdentifierHandler.PlayerIdentifier getPlayer()
+	public PlayerIdentifier getPlayer()
 	{
 		return player;
 	}
@@ -51,6 +51,11 @@ public class AlchemyEvent extends Event
 	public ItemStack getItemResult()
 	{
 		return result.copy();
+	}
+	
+	public void setItemResult(ItemStack result)
+	{
+		this.result = result.copy();
 	}
 	
 	public GristSet getCost()

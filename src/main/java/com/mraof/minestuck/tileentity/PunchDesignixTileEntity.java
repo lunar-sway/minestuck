@@ -4,17 +4,19 @@ import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.PunchDesignixBlock;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
-import com.mraof.minestuck.item.crafting.alchemy.CombinationRegistry;
+import com.mraof.minestuck.item.crafting.MSRecipeTypes;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
+import com.mraof.minestuck.item.crafting.alchemy.CombinationMode;
+import com.mraof.minestuck.item.crafting.alchemy.CombinerWrapper;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.WorldEventUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
@@ -26,8 +28,8 @@ import static com.mraof.minestuck.block.MachineBlock.FACING;
 
 public class PunchDesignixTileEntity extends TileEntity
 {
-	public boolean broken = false;
-	protected ItemStack card = ItemStack.EMPTY;
+	private boolean broken = false;
+	private ItemStack card = ItemStack.EMPTY;
 	
 	public PunchDesignixTileEntity()
 	{
@@ -39,13 +41,24 @@ public class PunchDesignixTileEntity extends TileEntity
 		if (card.getItem() == MSItems.CAPTCHA_CARD || card.isEmpty())
 		{
 			this.card = card;
-			if(world != null && !world.isRemote)
-			{
-				BlockState state = world.getBlockState(pos);
-				boolean hasCard = !card.isEmpty();
-				if(state.has(PunchDesignixBlock.Slot.HAS_CARD) && hasCard != state.get(PunchDesignixBlock.Slot.HAS_CARD))
-					world.setBlockState(pos, state.with(PunchDesignixBlock.Slot.HAS_CARD, hasCard), 2);
-			}
+			updateState();
+		}
+	}
+	
+	public void breakMachine()
+	{
+		broken = true;
+		markDirty();
+	}
+	
+	private void updateState()
+	{
+		if(world != null && !world.isRemote)
+		{
+			BlockState state = world.getBlockState(pos);
+			boolean hasCard = !card.isEmpty();
+			if(state.has(PunchDesignixBlock.Slot.HAS_CARD) && hasCard != state.get(PunchDesignixBlock.Slot.HAS_CARD))
+				world.setBlockState(pos, state.with(PunchDesignixBlock.Slot.HAS_CARD, hasCard), 2);
 		}
 	}
 	
@@ -57,9 +70,22 @@ public class PunchDesignixTileEntity extends TileEntity
 	
 	public void onRightClick(ServerPlayerEntity player, BlockState clickedState)
 	{
+		validateMachine();
+		
 		Block part = clickedState.getBlock();
-		if (part == MSBlocks.PUNCH_DESIGNIX.SLOT && !getCard().isEmpty())
-		{    //Remove card from punch slot
+		if (part instanceof PunchDesignixBlock.Slot)
+		{
+			handleSlotClick(player);
+		} else if(isUsable(clickedState) && (part == MSBlocks.PUNCH_DESIGNIX.KEYBOARD.get() || part == MSBlocks.PUNCH_DESIGNIX.RIGHT_LEG.get()))
+		{
+			handleKeyboardClick(player);
+		}
+	}
+	
+	private void handleSlotClick(ServerPlayerEntity player)
+	{
+		if(!getCard().isEmpty())
+		{
 			if (player.getHeldItemMainhand().isEmpty())
 				player.setHeldItem(Hand.MAIN_HAND, getCard());
 			else if (!player.inventory.addItemStackToInventory(getCard()))
@@ -67,92 +93,59 @@ public class PunchDesignixTileEntity extends TileEntity
 			else player.container.detectAndSendChanges();
 			
 			setCard(ItemStack.EMPTY);
-			return;
-		}
-		
-		if (isUseable(clickedState))
+		} else if(!broken)
 		{
 			ItemStack heldStack = player.getHeldItemMainhand();
-			if (part == MSBlocks.PUNCH_DESIGNIX.SLOT && getCard().isEmpty())
+			if(!heldStack.isEmpty() && heldStack.getItem() == MSItems.CAPTCHA_CARD)
+				setCard(heldStack.split(1));    //Insert card into the punch slot
+		}
+	}
+	
+	private void handleKeyboardClick(ServerPlayerEntity player)
+	{
+		ItemStack heldStack = player.getHeldItemMainhand();
+		if(heldStack.getItem() != MSItems.CAPTCHA_CARD)
+			return;    //Not a valid item in hand
+		
+		if(getCard().getItem() == MSItems.CAPTCHA_CARD)
+		{
+			if(AlchemyHelper.hasDecodedItem(heldStack))
 			{
-				if (!heldStack.isEmpty() && heldStack.getItem() == MSItems.CAPTCHA_CARD)
-					setCard(heldStack.split(1));    //Insert card into the punch slot
-				
-			} else if (part == MSBlocks.PUNCH_DESIGNIX.KEYBOARD || part == MSBlocks.PUNCH_DESIGNIX.RIGHT_LEG)
-			{
-				if (heldStack.isEmpty() || heldStack.getItem() != MSItems.CAPTCHA_CARD)
-					return;    //Not a valid item in hand
-				
-				if (!getCard().isEmpty() && getCard().getItem() == MSItems.CAPTCHA_CARD &&
-						heldStack.hasTag() && heldStack.getTag().contains("contentID"))
+				ItemStack output;
+				if(AlchemyHelper.isPunchedCard(getCard()))	//|| combination
 				{
-					ItemStack output = AlchemyRecipes.getDecodedItem(heldStack);
-					if (!output.isEmpty())
-					{
-						if(AlchemyRecipes.isPunchedCard(getCard()))
-						{    //|| combination
-							output = CombinationRegistry.getCombination(output, AlchemyRecipes.getDecodedItem(getCard()), CombinationRegistry.Mode.MODE_OR);
-							if(!output.isEmpty())
-							{
-								MSCriteriaTriggers.PUNCH_DESIGNIX.trigger(player, AlchemyRecipes.getDecodedItem(heldStack), AlchemyRecipes.getDecodedItem(getCard()), output);
-								setCard(AlchemyRecipes.createCard(output, true));
-								effects(true);
-								return;
-							}
-						} else    //Just punch the card regularly
-						{
-							MSCriteriaTriggers.PUNCH_DESIGNIX.trigger(player, output, ItemStack.EMPTY, output);
-							setCard(AlchemyRecipes.createCard(output, true));
-							effects(true);
-							
-							return;
-						}
-					}
+					output = world.getRecipeManager().getRecipe(MSRecipeTypes.COMBINATION_TYPE, new CombinerWrapper(heldStack, getCard(), CombinationMode.OR), world).map(IRecipe::getRecipeOutput).orElse(ItemStack.EMPTY);
+				} else output = AlchemyHelper.getDecodedItem(heldStack);
+				
+				if(!output.isEmpty())
+				{
+					MSCriteriaTriggers.PUNCH_DESIGNIX.trigger(player, AlchemyHelper.getDecodedItem(heldStack), AlchemyHelper.getDecodedItem(getCard()), output);
+					setCard(AlchemyHelper.createCard(output, true));
+					effects(true);
+					return;
 				}
-				effects(false);
 			}
 		}
+		effects(false);
 	}
 	
 	private void effects(boolean success)
 	{
-		world.playEvent(success ? 1000 : 1001, pos, 0);
-		if (success)
-		{
-			Direction direction = getBlockState().get(FACING);
-			int i = direction.getXOffset() + 1 + (direction.getZOffset() + 1) * 3;
-			world.playEvent(2000, pos, i);
-		}
+		WorldEventUtil.dispenserEffect(getWorld(), getPos(), getBlockState().get(FACING), success);
 	}
 	
-	private boolean isUseable(BlockState state)
+	private boolean isUsable(BlockState state)
 	{
-		BlockState currentState = getWorld().getBlockState(getPos());
-		if(!broken)
-		{
-			checkStates();
-			if(broken)
-				Debug.warnf("Failed to notice a block being broken or misplaced at the punch designix at %s", getPos());
-		}
-		if(!state.get(FACING).equals(currentState.get(FACING)))
-			return false;
-		return !broken;
+		return !broken && state.get(FACING).equals(getBlockState().get(FACING));
 	}
 	
-	public void checkStates()
+	private void validateMachine()
 	{
 		if (broken || world == null)
 			return;
 		
-		BlockState currentState = world.getBlockState(getPos());
-		Direction facing = currentState.get(FACING);
-		Direction hOffset = facing.rotateYCCW();
-		if (!world.getBlockState(getPos().offset(hOffset)).equals(MSBlocks.PUNCH_DESIGNIX.KEYBOARD.getDefaultState().with(FACING, facing)) ||
-				!world.getBlockState(getPos().down()).equals(MSBlocks.PUNCH_DESIGNIX.LEFT_LEG.getDefaultState().with(FACING, facing)) ||
-				!world.getBlockState(getPos().down().offset(hOffset)).equals(MSBlocks.PUNCH_DESIGNIX.RIGHT_LEG.getDefaultState().with(FACING, facing)))
-		{
+		if(MSBlocks.PUNCH_DESIGNIX.isInvalidFromSlot(world, getPos()))
 			broken = true;
-		}
 	}
 	
 	public void dropItem(boolean inBlock)
@@ -191,28 +184,5 @@ public class PunchDesignixTileEntity extends TileEntity
 		compound.putBoolean("broken", this.broken);
 		compound.put("card", getCard().write(new CompoundNBT()));
 		return compound;
-	}
-	
-	@Override
-	public CompoundNBT getUpdateTag()
-	{
-		CompoundNBT nbt;
-		nbt = super.getUpdateTag();
-		nbt.put("card", getCard().write(new CompoundNBT()));
-		return nbt;
-	}
-	
-	@Override
-	public SUpdateTileEntityPacket getUpdatePacket()
-	{
-		SUpdateTileEntityPacket packet;
-		packet = new SUpdateTileEntityPacket(this.pos, 0, getUpdateTag());
-		return packet;
-	}
-	
-	@Override
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
-	{
-		handleUpdateTag(pkt.getNbtCompound());
 	}
 }

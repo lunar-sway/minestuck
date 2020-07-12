@@ -10,14 +10,22 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.INameable;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.GlobalPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
 
-public class TransportalizerTileEntity extends TileEntity implements ITickableTileEntity//, ITeleporter
+import javax.annotation.Nullable;
+import java.util.List;
+
+public class TransportalizerTileEntity extends OnCollisionTeleporterTileEntity<Entity> implements INameable
 {
 	public static final String DISABLED = "minestuck.transportalizer.disabled";
 	public static final String BLOCKED = "minestuck.transportalizer.blocked";
@@ -32,7 +40,7 @@ public class TransportalizerTileEntity extends TileEntity implements ITickableTi
 	
 	public TransportalizerTileEntity()
 	{
-		super(MSTileEntityTypes.TRANSPORTALIZER);
+		super(MSTileEntityTypes.TRANSPORTALIZER, Entity.class);
 	}
 	
 	@Override
@@ -72,9 +80,18 @@ public class TransportalizerTileEntity extends TileEntity implements ITickableTi
 		else {
 			if(!enabled) { setEnabled(true); }
 		}
+		
+		super.tick();
 	}
 	
-	public void teleport(Entity entity)
+	@Override
+	protected AxisAlignedBB getTeleportField()
+	{
+		return new AxisAlignedBB(pos.getX() + 1D/16, pos.getY() + 8D/16, pos.getZ() + 1D/16, pos.getX() + 15D/16, pos.getY() + 1, pos.getZ() + 15D/16);
+	}
+	
+	@Override
+	protected void teleport(Entity entity)
 	{
 		GlobalPos location = TransportalizerSavedData.get(world).get(this.destId);
 		if(!enabled)
@@ -98,27 +115,30 @@ public class TransportalizerTileEntity extends TileEntity implements ITickableTi
 			
 			if(!destTransportalizer.getEnabled()) { return; } // Fail silently to make it look as though the player entered an ID that doesn't map to a transportalizer.
 			
-			for(DimensionType id : MinestuckConfig.forbiddenDimensionsTpz)
-				if(this.world.getDimension().getType() == id || location.getDimension() == id)
-				{
-					entity.timeUntilPortal = entity.getPortalCooldown();
-					if(entity instanceof ServerPlayerEntity)
-						entity.sendMessage(new TranslationTextComponent(this.world.getDimension().getType() == id ?FORBIDDEN:FORBIDDEN_DESTINATION));
-					return;
-				}
+			if(isDimensionForbidden(world.getDimension().getType()))
+			{
+				entity.timeUntilPortal = entity.getPortalCooldown();
+				if(entity instanceof ServerPlayerEntity)
+					entity.sendMessage(new TranslationTextComponent(FORBIDDEN));
+				return;
+			}
+			if(isDimensionForbidden(location.getDimension()))
+			{
+				entity.timeUntilPortal = entity.getPortalCooldown();
+				if(entity instanceof ServerPlayerEntity)
+					entity.sendMessage(new TranslationTextComponent(FORBIDDEN_DESTINATION));
+				return;
+			}
 			
-			BlockState block0 = this.world.getBlockState(this.pos.up());
-			BlockState block1 = this.world.getBlockState(this.pos.up(2));
-			if(block0.getMaterial().blocksMovement() || block1.getMaterial().blocksMovement())
+			if(isBlocked(this.world, this.pos))
 			{
 				entity.timeUntilPortal = entity.getPortalCooldown();
 				if(entity instanceof ServerPlayerEntity)
 					entity.sendMessage(new TranslationTextComponent(BLOCKED));
 				return;
 			}
-			block0 = world.getBlockState(location.getPos().up());
-			block1 = world.getBlockState(location.getPos().up(2));
-			if(block0.getMaterial().blocksMovement() || block1.getMaterial().blocksMovement())
+			
+			if(isBlocked(world, location.getPos()))
 			{
 				entity.timeUntilPortal = entity.getPortalCooldown();
 				if(entity instanceof ServerPlayerEntity)
@@ -132,6 +152,21 @@ public class TransportalizerTileEntity extends TileEntity implements ITickableTi
 		}
 	}
 	
+	public static boolean isBlocked(World world, BlockPos pos)
+	{
+		BlockState block0 = world.getBlockState(pos.up());
+		BlockState block1 = world.getBlockState(pos.up(2));
+		return block0.getMaterial().blocksMovement() || block1.getMaterial().blocksMovement();
+	}
+	
+	private static boolean isDimensionForbidden(DimensionType dim)
+	{
+		List<String> forbiddenTypes = MinestuckConfig.forbiddenDimensionTypesTpz.get();
+		List<String> forbiddenDims = MinestuckConfig.forbiddenModDimensionsTpz.get();
+		ResourceLocation modDim = dim.getModType() != null ? dim.getModType().getRegistryName() : null;
+		return forbiddenTypes.contains(String.valueOf(dim.getRegistryName())) || forbiddenDims.contains(String.valueOf(modDim));
+	}
+	
 	public String getId()
 	{
 		return id;
@@ -139,12 +174,15 @@ public class TransportalizerTileEntity extends TileEntity implements ITickableTi
 	
 	public void setId(String id)
 	{
-		GlobalPos location = GlobalPos.of(world.dimension.getType(), pos);
-		if(active && !this.id.isEmpty())
-			TransportalizerSavedData.get(world).remove(this.id, location);
-		
-		this.id = id;
-		active = TransportalizerSavedData.get(world).set(id, location);
+		if(world != null && !world.isRemote)
+		{
+			GlobalPos location = GlobalPos.of(world.dimension.getType(), pos);
+			if(active && !this.id.isEmpty())
+				TransportalizerSavedData.get(world).remove(this.id, location);
+			
+			this.id = id;
+			active = TransportalizerSavedData.get(world).set(id, location);
+		}
 	}
 	
 	public String getDestId()
@@ -174,7 +212,26 @@ public class TransportalizerTileEntity extends TileEntity implements ITickableTi
 		this.markDirty();
 		world.notifyBlockUpdate(pos, state, state, 0);
 	}
-
+	
+	@Override
+	public ITextComponent getName()
+	{
+		return new StringTextComponent("Transportalizer");
+	}
+	
+	@Override
+	public ITextComponent getDisplayName()
+	{
+		return hasCustomName() ? getCustomName() : getName();
+	}
+	
+	@Nullable
+	@Override
+	public ITextComponent getCustomName()
+	{
+		return id.isEmpty() ? null : new StringTextComponent(id);
+	}
+	
 	@Override
 	public void read(CompoundNBT compound)
 	{

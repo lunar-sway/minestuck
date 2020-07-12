@@ -20,6 +20,7 @@ import java.util.function.Supplier;
 public class MSItemTypes
 {
 	public static final IItemTier EMERALD_TIER = new ModItemTier(3, 1220, 8.0F, 3.0F, 12, () -> Ingredient.fromItems(Items.EMERALD));
+	public static final IItemTier PRISMARINE_TIER = new ModItemTier(2, 300, 4.0F, 3.0F, 10, () -> Ingredient.fromItems(Items.PRISMARINE_SHARD));
 	public static final IItemTier URANIUM_TIER = new ModItemTier(2, 512, 5.0F, 4.0F, 5, () -> Ingredient.fromItems(MSItems.RAW_URANIUM));
 	public static final IItemTier POGO_TIER = new ModItemTier(1, 400, 2.0F, 2.0F, 8, () -> Ingredient.fromItems(Items.SLIME_BALL));
 	public static final IItemTier BOOK_TIER = new ModItemTier(0, 250, 1.0F, 2.0F, 15, () -> Ingredient.fromItems(Items.BOOK));
@@ -27,12 +28,20 @@ public class MSItemTypes
 	public static final IItemTier RUBY_TIER = new ModItemTier(3, 2000, 10.0F, 4.0F, 16, () -> Ingredient.EMPTY);
 	public static final IItemTier ZILLYHOO_TIER = new ModItemTier(4, 3000, 15.0F, 5.0F, 25, () -> Ingredient.EMPTY);
 	public static final IItemTier SBAHJ_TIER = new ModItemTier(0, 59, 1.0F, -1.0F, 5, () -> Ingredient.EMPTY);
+	public static final IItemTier PAPER_TIER = new ModItemTier(0, 65, 1.0F, 0.0F, 15, () -> Ingredient.fromItems(Items.PAPER));
+	public static final IItemTier ICE_TIER = new ModItemTier(0, 60, 2.0F, 1.0F, 25, () -> Ingredient.fromItems(MSItems.ICE_SHARD));
 	public static final IItemTier CACTUS_TIER = new ModItemTier(0, 104, 2.0F, 1.0F, 10, () -> Ingredient.fromItems(Blocks.CACTUS));
 	public static final IItemTier MEAT_TIER = new ModItemTier(0, 175, 1.0F, 0.0F, 5, () -> Ingredient.EMPTY);
 	public static final IItemTier CANDY_TIER = new ModItemTier(0, 450, 2.5F, 0.0F, 15, () -> Ingredient.EMPTY);
+	public static final IItemTier FRUIT_TIER = new ModItemTier(0, 450, 2.5F, 0.0F, 10, () -> Ingredient.fromItems(Items.GLISTERING_MELON_SLICE));
+	public static final IItemTier BAGUETTE_TIER = new ModItemTier(0, 450, 2.5F, 0.0F, 10, () -> Ingredient.fromItems(MSItems.BREADCRUMBS));
 	public static final IItemTier HORRORTERROR_TIER = new ModItemTier(3, 1600, 4.0F, 4.0F, 15, () -> Ingredient.EMPTY);
 	
 	public static final IArmorMaterial PRISMARINE_ARMOR = new ModArmorMaterial("minestuck:prismarine", 20, new int[]{3, 7, 6, 2}, 15, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0.0F, () -> Ingredient.fromItems(Items.PRISMARINE_SHARD));
+	public static final IArmorMaterial IRON_LASS_ARMOR = new ModArmorMaterial("minestuck:iron_lass", 50, new int[]{4, 7, 8, 3}, 15, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0.0F, () -> Ingredient.EMPTY);
+	
+	public static final IArmorMaterial PROSPIT_PAJAMAS = new ModArmorMaterial("minestuck:prospit_pajamas", 10, new int[]{1, 2, 3, 1}, 0, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0.0F, () -> Ingredient.EMPTY);
+	public static final IArmorMaterial DERSE_PAJAMAS = new ModArmorMaterial("minestuck:derse_pajamas", 10, new int[]{1, 2, 3, 1}, 0, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0.0F, () -> Ingredient.EMPTY);
 	
 	public static final IArmorMaterial materialDiverHelmet = new ModArmorMaterial("minestuck:diver_helmet", 50, new int[] {0, 0, 0, 3}, 5, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0.0F, () -> Ingredient.EMPTY);
 	
@@ -56,8 +65,8 @@ public class MSItemTypes
 	
 	//Unimplemented
 	public static final MSToolType GAUNTLET_TOOL = new MSToolType(ToolType.get("gauntlet"), Material.GLASS, Material.ICE, Material.PACKED_ICE).addEnchantments(EnchantmentType.WEAPON).addEnchantments(Enchantments.SILK_TOUCH).addToolType(ToolType.get("fist"));
-	
-	private static class ModItemTier implements IItemTier
+    
+    private static class ModItemTier implements IItemTier
 	{
 		private final int harvestLevel;
 		private final int maxUses;

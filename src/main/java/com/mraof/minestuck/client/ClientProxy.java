@@ -1,17 +1,17 @@
 package com.mraof.minestuck.client;
 
-import com.mraof.minestuck.CommonProxy;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.client.model.*;
-import com.mraof.minestuck.client.renderer.MachineOutlineRenderer;
 import com.mraof.minestuck.client.renderer.entity.*;
 import com.mraof.minestuck.client.renderer.entity.frog.FrogRenderer;
 import com.mraof.minestuck.client.renderer.tileentity.GateRenderer;
+import com.mraof.minestuck.client.renderer.tileentity.HolopadRenderer;
 import com.mraof.minestuck.client.renderer.tileentity.SkaiaPortalRenderer;
 import com.mraof.minestuck.client.settings.MSKeyHandler;
-import com.mraof.minestuck.editmode.ClientEditHandler;
+import com.mraof.minestuck.computer.ComputerProgram;
+import com.mraof.minestuck.computer.SburbClient;
+import com.mraof.minestuck.computer.SburbServer;
 import com.mraof.minestuck.entity.DecoyEntity;
 import com.mraof.minestuck.entity.EntityBigPart;
 import com.mraof.minestuck.entity.EntityBullet;
@@ -25,32 +25,27 @@ import com.mraof.minestuck.entity.consort.SalamanderEntity;
 import com.mraof.minestuck.entity.consort.TurtleEntity;
 import com.mraof.minestuck.entity.item.*;
 import com.mraof.minestuck.entity.underling.*;
-import com.mraof.minestuck.event.ClientEventHandler;
 import com.mraof.minestuck.tileentity.GateTileEntity;
+import com.mraof.minestuck.tileentity.HolopadTileEntity;
 import com.mraof.minestuck.tileentity.SkaiaPortalTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.fonts.Font;
+import net.minecraft.client.renderer.entity.SpriteRenderer;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-public class ClientProxy extends CommonProxy
+public class ClientProxy
 {
 	private static FontRenderer customFont;
-	
-	public static void registerEarly()
-	{
-		FMLJavaModLoadingContext.get().getModEventBus().register(ColorHandler.class);
-	}
 	
 	private static void registerRenderers()
 	{
 		ClientRegistry.bindTileEntitySpecialRenderer(SkaiaPortalTileEntity.class, new SkaiaPortalRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(GateTileEntity.class, new GateRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(HolopadTileEntity.class, new HolopadRenderer());
 //		MinecraftForgeClient.registerItemRenderer(Minestuck.captchaCard, new CardRenderer());
 	}
 	
@@ -80,6 +75,7 @@ public class ClientProxy extends CommonProxy
 		RenderingRegistry.registerEntityRenderingHandler(VitalityGelEntity.class, VitalityGelRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(DecoyEntity.class, DecoyRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(MetalBoatEntity.class, MetalBoatRenderer::new);
+		RenderingRegistry.registerEntityRenderingHandler(BarbasolBombEntity.class, manager -> new SpriteRenderer<>(manager, Minecraft.getInstance().getItemRenderer()));
 		RenderingRegistry.registerEntityRenderingHandler(CrewPosterEntity.class, manager -> new RenderHangingArt<>(manager, new ResourceLocation("minestuck:midnight_poster")));
 		RenderingRegistry.registerEntityRenderingHandler(SbahjPosterEntity.class, manager -> new RenderHangingArt<>(manager, new ResourceLocation("minestuck:sbahj_poster")));
 		RenderingRegistry.registerEntityRenderingHandler(ShopPosterEntity.class, manager -> new RenderHangingArt<>(manager, new ResourceLocation("minestuck:shop_poster")));
@@ -90,13 +86,12 @@ public class ClientProxy extends CommonProxy
 		customFont = new FontRenderer(mc.textureManager, new Font(mc.textureManager, new ResourceLocation(Minestuck.MOD_ID, "textures/font/lucida_console_small.png")));
 		//TODO is this enough, or is MinestuckFontRenderer still needed?
 		
-		MSKeyHandler.instance.registerKeys();
-		MinecraftForge.EVENT_BUS.register(MSKeyHandler.instance);
-		MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
-
-		MinecraftForge.EVENT_BUS.register(ClientEditHandler.instance);
-		MinecraftForge.EVENT_BUS.register(new MinestuckConfig());
-		MinecraftForge.EVENT_BUS.register(MachineOutlineRenderer.class);
+		MSKeyHandler.registerKeys();
+		
+		ComputerProgram.registerProgramClass(0, SburbClient.class);
+		ComputerProgram.registerProgramClass(1, SburbServer.class);
+		
+		//MinecraftForge.EVENT_BUS.register(new MinestuckConfig()); Does not currently use any events to reload config
 	}
 	
 	public static FontRenderer getCustomFont()

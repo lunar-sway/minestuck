@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:chocolate_beetle"
+  },
+  "grist_cost": {
+    "minestuck:chalk": 2,
+    "minestuck:iodine": 4
+  }
+}

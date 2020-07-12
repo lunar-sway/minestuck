@@ -1,8 +1,10 @@
 package com.mraof.minestuck.world.gen;
 
+import com.mraof.minestuck.skaianet.UnderlingController;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandTypePair;
+import net.minecraft.entity.EntityClassification;
 import net.minecraft.util.SharedSeedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -18,6 +20,8 @@ import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
@@ -43,7 +47,6 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 		blockRegistry = Objects.requireNonNull(settings.getBlockRegistry());
 		
 		biomeHolder = Objects.requireNonNull(settings.getBiomeHolder());
-		biomeHolder.initBiomesWith(settings);
 	}
 	
 	@Override
@@ -113,6 +116,18 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 		}
 		
 		this.makeBedrock(chunkIn, sharedRandom);
+	}
+	
+	@Override
+	public List<Biome.SpawnListEntry> getPossibleCreatures(EntityClassification creatureType, BlockPos pos)
+	{
+		if(creatureType == EntityClassification.MONSTER)	//Combine biome spawn with underling spawn
+		{
+			List<Biome.SpawnListEntry> list = new ArrayList<>(super.getPossibleCreatures(creatureType, pos));
+			list.addAll(UnderlingController.getUnderlingList(pos, world.getWorld()));
+			return list;
+		}
+		return super.getPossibleCreatures(creatureType, pos);
 	}
 	
 	@Override

@@ -6,6 +6,8 @@ import com.mraof.minestuck.block.multiblock.CruxtruderMultiblock;
 import com.mraof.minestuck.block.multiblock.PunchDesignixMultiblock;
 import com.mraof.minestuck.block.multiblock.TotemLatheMultiblock;
 import com.mraof.minestuck.fluid.MSFluids;
+import com.mraof.minestuck.tileentity.MSTileEntityTypes;
+import com.mraof.minestuck.util.CustomVoxelShape;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
@@ -14,6 +16,8 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.ToolType;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.ObjectHolder;
@@ -115,16 +119,16 @@ public class MSBlocks
 	//Misc Functional Land Blocks
 	
 	//Sburb Machines
-	public static CruxtruderMultiblock CRUXTRUDER;	//TODO Figure out how the multiblocks should fit in with objectholders
 	public static final Block CRUXTRUDER_LID = getNull();
-	public static TotemLatheMultiblock TOTEM_LATHE;
-	public static AlchemiterMultiblock ALCHEMITER;
-	public static PunchDesignixMultiblock PUNCH_DESIGNIX;
+	public static CruxtruderMultiblock CRUXTRUDER = new CruxtruderMultiblock(Minestuck.MOD_ID);
+	public static TotemLatheMultiblock TOTEM_LATHE = new TotemLatheMultiblock(Minestuck.MOD_ID);
+	public static AlchemiterMultiblock ALCHEMITER = new AlchemiterMultiblock(Minestuck.MOD_ID);
+	public static PunchDesignixMultiblock PUNCH_DESIGNIX = new PunchDesignixMultiblock(Minestuck.MOD_ID);
 	public static final Block MINI_CRUXTRUDER = getNull();
 	public static final Block MINI_TOTEM_LATHE = getNull();
 	public static final Block MINI_ALCHEMITER = getNull();
 	public static final Block MINI_PUNCH_DESIGNIX = getNull();
-	//public static final Block HOLOPAD = getNull();
+	public static final Block HOLOPAD = getNull();
 	/*public static BlockJumperBlock[] jumperBlockExtension = BlockJumperBlock.createBlocks();
 	public static BlockAlchemiterUpgrades[] alchemiterUpgrades = BlockAlchemiterUpgrades.createBlocks();*/
 	
@@ -153,6 +157,7 @@ public class MSBlocks
 	public static final Block HOT_CAKE = getNull();
 	public static final Block REVERSE_CAKE = getNull();
 	public static final Block FUCHSIA_CAKE = getNull();
+	public static final Block NEGATIVE_CAKE = getNull();
 	
 	//Explosion and Redstone
 	public static final Block PRIMED_TNT = getNull();
@@ -177,8 +182,10 @@ public class MSBlocks
 		return null;
 	}
 	
-	public static void registerBlocks(IForgeRegistry<Block> registry)
+	@SubscribeEvent
+	public static void registerBlocks(final RegistryEvent.Register<Block> event)
 	{
+		IForgeRegistry<Block> registry = event.getRegistry();
 		
 		registry.register(new Block(Block.Properties.create(Material.EARTH, MaterialColor.BLACK).hardnessAndResistance(0.5F).harvestTool(ToolType.SHOVEL).sound(SoundType.GROUND)).setRegistryName("black_chess_dirt"));
 		registry.register(new Block(Block.Properties.create(Material.EARTH, MaterialColor.SNOW).hardnessAndResistance(0.5F).harvestTool(ToolType.SHOVEL).sound(SoundType.GROUND)).setRegistryName("white_chess_dirt"));
@@ -269,7 +276,7 @@ public class MSBlocks
 		Block rainbowPlanks = register(registry, new FlammableBlock(5, 20, Block.Properties.create(Material.WOOD).hardnessAndResistance(2.0F, 3.0F).harvestTool(ToolType.AXE).sound(SoundType.WOOD)).setRegistryName("rainbow_planks"));
 		Block endPlanks = register(registry, new FlammableBlock(1, 250, Block.Properties.create(Material.WOOD, MaterialColor.SAND).hardnessAndResistance(2.0F, 3.0F).harvestTool(ToolType.AXE).sound(SoundType.WOOD)).setRegistryName("end_planks"));
 		Block deadPlanks = register(registry, new FlammableBlock(5, 5, Block.Properties.create(Material.WOOD).hardnessAndResistance(2.0F, 3.0F).harvestTool(ToolType.AXE).sound(SoundType.WOOD)).setRegistryName("dead_planks"));
-		Block treatedPlanks = register(registry, new FlammableBlock(1, 0, Block.Properties.create(Material.WOOD).hardnessAndResistance(2.0F, 3.0F).harvestTool(ToolType.AXE).sound(SoundType.WOOD)).setRegistryName("treated_planks"));
+		Block treatedPlanks = register(registry, new FlammableBlock(0, 0, Block.Properties.create(Material.WOOD).hardnessAndResistance(2.0F, 3.0F).harvestTool(ToolType.AXE).sound(SoundType.WOOD)).setRegistryName("treated_planks"));
 		registry.register(new FlammableLeavesBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT)).setRegistryName("frost_leaves"));
 		registry.register(new FlammableLeavesBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT)).setRegistryName("rainbow_leaves"));
 		registry.register(new EndLeavesBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT)).setRegistryName("end_leaves"));
@@ -305,7 +312,7 @@ public class MSBlocks
 		registry.register(new FlammableLeavesBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT)).setRegistryName("doom_aspect_leaves"));
 		registry.register(new FlammableLeavesBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT)).setRegistryName("heart_aspect_leaves"));
 		registry.register(new FlammableLeavesBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT)).setRegistryName("hope_aspect_leaves"));
-		registry.register(new FlammableLeavesBlock( Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT)).setRegistryName("life_aspect_leaves"));
+		registry.register(new FlammableLeavesBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT)).setRegistryName("life_aspect_leaves"));
 		registry.register(new FlammableLeavesBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT)).setRegistryName("light_aspect_leaves"));
 		registry.register(new FlammableLeavesBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT)).setRegistryName("mind_aspect_leaves"));
 		registry.register(new FlammableLeavesBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT)).setRegistryName("rage_aspect_leaves"));
@@ -363,21 +370,18 @@ public class MSBlocks
 		registry.register(new GateBlock(Block.Properties.create(Material.PORTAL).doesNotBlockMovement().hardnessAndResistance(-1.0F, 25.0F).sound(SoundType.GLASS).lightValue(11).noDrops()).setRegistryName("gate"));
 		registry.register(new ReturnNodeBlock(Block.Properties.create(Material.PORTAL).doesNotBlockMovement().hardnessAndResistance(-1.0F, 10.0F).sound(SoundType.GLASS).lightValue(11).noDrops()).setRegistryName("return_node"));
 		
-		CRUXTRUDER = new CruxtruderMultiblock();
 		CRUXTRUDER.registerBlocks(registry);
 		registry.register(new CruxtruderLidBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(1.0F)).setRegistryName("cruxtruder_lid"));
-		TOTEM_LATHE = new TotemLatheMultiblock();
 		TOTEM_LATHE.registerBlocks(registry);
-		ALCHEMITER = new AlchemiterMultiblock();
 		ALCHEMITER.registerBlocks(registry);
-		PUNCH_DESIGNIX = new PunchDesignixMultiblock();
 		PUNCH_DESIGNIX.registerBlocks(registry);
-		registry.register(new MiniCruxtruderBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("mini_cruxtruder"));
-		registry.register(new MiniTotemLatheBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("mini_totem_lathe"));
+		registry.register(new SmallMachineBlock(MSBlockShapes.SMALL_CRUXTRUDER.createRotatedShapes(), () -> MSTileEntityTypes.MINI_CRUXTRUDER, Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("mini_cruxtruder"));
+		registry.register(new SmallMachineBlock(MSBlockShapes.SMALL_TOTEM_LATHE.createRotatedShapes(), () -> MSTileEntityTypes.MINI_TOTEM_LATHE, Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("mini_totem_lathe"));
 		registry.register(new MiniAlchemiterBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("mini_alchemiter"));
-		registry.register(new MiniPunchDesignixBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("mini_punch_designix"));
+		registry.register(new SmallMachineBlock(MSBlockShapes.SMALL_PUNCH_DESIGNIX.createRotatedShapes(), () -> MSTileEntityTypes.MINI_PUNCH_DESIGNIX, Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("mini_punch_designix"));
+		registry.register(new HolopadBlock(Block.Properties.create(Material.IRON, MaterialColor.SNOW).hardnessAndResistance(3.0F)).setRegistryName("holopad"));
+		
 		/*
-		registry.register(new BlockHolopad(Block.Properties.create(Material.IRON, MaterialColor.SNOW).hardnessAndResistance(3.0F)).setRegistryName("holopad"));
 		registry.register(jumperBlockExtension[0].setRegistryName("jumper_block_extension"));
 		registry.register(jumperBlockExtension[1].setRegistryName("jumper_block_extension2"));
 		registry.register(jumperBlockExtension[2].setRegistryName("jumper_block_extension3"));
@@ -388,19 +392,19 @@ public class MSBlocks
 		registry.register(alchemiterUpgrades[2].setRegistryName("alchemiter_upgrade3"));
 		registry.register(alchemiterUpgrades[3].setRegistryName("alchemiter_upgrade4"));
 		*/
-		registry.register(new ComputerBlock(ComputerBlock.COMPUTER_SHAPE, ComputerBlock.COMPUTER_COLLISION_SHAPE, Block.Properties.create(Material.IRON).hardnessAndResistance(4.0F)).setRegistryName("computer"));
-		registry.register(new ComputerBlock(ComputerBlock.LAPTOP_SHAPE, ComputerBlock.LAPTOP_COLLISION_SHAPE, Block.Properties.create(Material.IRON).hardnessAndResistance(4.0F)).setRegistryName("laptop"));
-		registry.register(new ComputerBlock(ComputerBlock.LAPTOP_SHAPE, ComputerBlock.LAPTOP_COLLISION_SHAPE, Block.Properties.create(Material.IRON, MaterialColor.RED).hardnessAndResistance(4.0F)).setRegistryName("crockertop"));
-		registry.register(new ComputerBlock(ComputerBlock.LAPTOP_SHAPE, ComputerBlock.LAPTOP_COLLISION_SHAPE, Block.Properties.create(Material.IRON, MaterialColor.GREEN).hardnessAndResistance(4.0F)).setRegistryName("hubtop"));
+		registry.register(new ComputerBlock(ComputerBlock.COMPUTER_SHAPE, ComputerBlock.COMPUTER_SHAPE, Block.Properties.create(Material.IRON).hardnessAndResistance(4.0F)).setRegistryName("computer"));
+		registry.register(new ComputerBlock(ComputerBlock.LAPTOP_OPEN_SHAPE, ComputerBlock.LAPTOP_CLOSED_SHAPE, Block.Properties.create(Material.IRON).hardnessAndResistance(4.0F)).setRegistryName("laptop"));
+		registry.register(new ComputerBlock(ComputerBlock.LAPTOP_OPEN_SHAPE, ComputerBlock.LAPTOP_CLOSED_SHAPE, Block.Properties.create(Material.IRON, MaterialColor.RED).hardnessAndResistance(4.0F)).setRegistryName("crockertop"));
+		registry.register(new ComputerBlock(ComputerBlock.LAPTOP_OPEN_SHAPE, ComputerBlock.LAPTOP_CLOSED_SHAPE, Block.Properties.create(Material.IRON, MaterialColor.GREEN).hardnessAndResistance(4.0F)).setRegistryName("hubtop"));
 		registry.register(new ComputerBlock(ComputerBlock.LUNCHTOP_SHAPE, ComputerBlock.LUNCHTOP_SHAPE, Block.Properties.create(Material.IRON, MaterialColor.RED).hardnessAndResistance(4.0F)).setRegistryName("lunchtop"));
 		registry.register(new TransportalizerBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("transportalizer"));
 		registry.register(new GristWidgetBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("grist_widget"));
-		registry.register(new UraniumCookerBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("uranium_cooker"));
+		registry.register(new SmallMachineBlock(new CustomVoxelShape(new double[]{4, 0, 4, 12, 6, 12}).createRotatedShapes(), () -> MSTileEntityTypes.URANIUM_COOKER, Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("uranium_cooker"));
 		
 		registry.register(new CruxiteDowelBlock(Block.Properties.create(Material.GLASS).hardnessAndResistance(0.0F)).setRegistryName("cruxite_dowel"));
 		
 		registry.register(new GoldSeedsBlock(Block.Properties.create(Material.PLANTS).hardnessAndResistance(0.1F).sound(SoundType.METAL).doesNotBlockMovement()).setRegistryName("gold_seeds"));
-		registry.register(new SpecialCactusBlock(Block.Properties.create(Material.WOOD).tickRandomly().hardnessAndResistance(1.0F, 2.5F).sound(SoundType.WOOD), ToolType.AXE).setRegistryName("wooden_cactus"));
+		registry.register(new SpecialCactusBlock(Block.Properties.create(Material.WOOD).tickRandomly().hardnessAndResistance(1.0F, 2.5F).sound(SoundType.WOOD).harvestTool(ToolType.AXE)).setRegistryName("wooden_cactus"));
 		
 		registry.register(new SimpleCakeBlock(Block.Properties.create(Material.CAKE).hardnessAndResistance(0.5F).sound(SoundType.CLOTH), 2, 0.5F, null).setRegistryName("apple_cake"));
 		registry.register(new SimpleCakeBlock(Block.Properties.create(Material.CAKE).hardnessAndResistance(0.5F).sound(SoundType.CLOTH), 2, 0.3F, player -> player.addPotionEffect(new EffectInstance(Effects.SPEED, 150, 0))).setRegistryName("blue_cake"));
@@ -409,6 +413,7 @@ public class MSBlocks
 		registry.register(new SimpleCakeBlock(Block.Properties.create(Material.CAKE).hardnessAndResistance(0.5F).sound(SoundType.CLOTH), 2, 0.1F, player -> player.setFire(4)).setRegistryName("hot_cake"));
 		registry.register(new SimpleCakeBlock(Block.Properties.create(Material.CAKE).hardnessAndResistance(0.5F).sound(SoundType.CLOTH), 2, 0.1F, null).setRegistryName("reverse_cake"));
 		registry.register(new SimpleCakeBlock(Block.Properties.create(Material.CAKE).hardnessAndResistance(0.5F).sound(SoundType.CLOTH), 3, 0.5F, player -> {player.addPotionEffect(new EffectInstance(Effects.ABSORPTION, 350, 1));player.addPotionEffect(new EffectInstance(Effects.REGENERATION, 200, 0));}).setRegistryName("fuchsia_cake"));
+		registry.register(new SimpleCakeBlock(Block.Properties.create(Material.CAKE).hardnessAndResistance(0.5F).sound(SoundType.CLOTH), 2, 0.3F, player -> {player.addPotionEffect(new EffectInstance(Effects.BLINDNESS, 300, 0));player.addPotionEffect(new EffectInstance(Effects.INVISIBILITY, 250, 0));}).setRegistryName("negative_cake"));
 		
 		registry.register(new SpecialTNTBlock(Block.Properties.create(Material.TNT).hardnessAndResistance(0.0F).sound(SoundType.PLANT), true, false, false).setRegistryName("primed_tnt"));
 		registry.register(new SpecialTNTBlock(Block.Properties.create(Material.TNT).hardnessAndResistance(0.0F).sound(SoundType.PLANT).tickRandomly(), false, true, false).setRegistryName("unstable_tnt"));
@@ -421,12 +426,12 @@ public class MSBlocks
 		registry.register(new DecorBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.5F), MSBlockShapes.FROG_STATUE).setRegistryName("mini_frog_statue"));
 		registry.register(new GlowystoneWireBlock(Block.Properties.create(Material.MISCELLANEOUS).hardnessAndResistance(0.0F).lightValue(16).doesNotBlockMovement()).setRegistryName("glowystone_dust"));
 		
-		registry.register(new FlowingModFluidBlock(MSFluids.OIL, new Vec3d(0.0, 0.0, 0.0), Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()).setRegistryName("oil"));
-		registry.register(new FlowingModFluidBlock(MSFluids.BLOOD, new Vec3d(0.8, 0.0, 0.0), Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()).setRegistryName("blood"));
-		registry.register(new FlowingModFluidBlock(MSFluids.BRAIN_JUICE, new Vec3d(0.55, 0.25, 0.7), Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()).setRegistryName("brain_juice"));
-		registry.register(new FlowingWaterColorsBlock(MSFluids.WATER_COLORS, Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()).setRegistryName("water_colors"));
-		registry.register(new FlowingModFluidBlock(MSFluids.ENDER, Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()).setRegistryName("ender"));
-		registry.register(new FlowingModFluidBlock(MSFluids.LIGHT_WATER, new Vec3d(0.2, 0.3, 1.0), Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()).setRegistryName("light_water"));
+		registry.register(new FlowingModFluidBlock(MSFluids.OIL, new Vec3d(0.0, 0.0, 0.0), 0.75f, Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()).setRegistryName("oil"));
+		registry.register(new FlowingModFluidBlock(MSFluids.BLOOD, new Vec3d(0.8, 0.0, 0.0), 0.25f, Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()).setRegistryName("blood"));
+		registry.register(new FlowingModFluidBlock(MSFluids.BRAIN_JUICE, new Vec3d(0.55, 0.25, 0.7), 0.25f, Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()).setRegistryName("brain_juice"));
+		registry.register(new FlowingWaterColorsBlock(MSFluids.WATER_COLORS, 0.01f, Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()).setRegistryName("water_colors"));
+		registry.register(new FlowingModFluidBlock(MSFluids.ENDER, new Vec3d(0, 0.35, 0.35), (Float.MAX_VALUE), Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()).setRegistryName("ender"));
+		registry.register(new FlowingModFluidBlock(MSFluids.LIGHT_WATER, new Vec3d(0.2, 0.3, 1.0), 0.01f, Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()).setRegistryName("light_water"));
 	}
 	
 	private static Block register(IForgeRegistry<Block> registry, Block block) //Used because registry.register doesn't return the registered block

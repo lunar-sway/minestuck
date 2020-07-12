@@ -1,7 +1,7 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import com.mraof.minestuck.editmode.ClientEditHandler;
+import com.mraof.minestuck.computer.editmode.ClientEditHandler;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.client.gui.widget.button.Button;

@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:spruce_log"
+  },
+  "input2": {
+    "item": "minecraft:spruce_leaves"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:spruce_sapling"
+  }
+}

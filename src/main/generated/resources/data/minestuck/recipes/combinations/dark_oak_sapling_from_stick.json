@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:stick"
+  },
+  "input2": {
+    "item": "minecraft:dark_oak_leaves"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minecraft:dark_oak_sapling"
+  }
+}

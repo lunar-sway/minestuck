@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:cactus"
+  },
+  "grist_cost": {
+    "minestuck:amber": 4,
+    "minestuck:iodine": 1
+  }
+}

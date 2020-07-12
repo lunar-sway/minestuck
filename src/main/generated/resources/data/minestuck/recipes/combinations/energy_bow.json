@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:bow"
+  },
+  "input2": {
+    "item": "minestuck:energy_core"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:energy_bow"
+  }
+}

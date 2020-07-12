@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:music_disc_wait"
+  },
+  "grist_cost": {
+    "minestuck:build": 15,
+    "minestuck:caulk": 8,
+    "minestuck:cobalt": 5,
+    "minestuck:quartz": 5
+  }
+}

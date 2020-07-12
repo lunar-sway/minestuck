@@ -13,7 +13,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import java.time.LocalDate;
 import java.time.Month;
 
-public class InventoryEditmodeScreen extends PlayerStatsContainerScreen
+public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<EditmodeContainer>
 {
 	public static final String TITLE = "minestuck.deploy_list";
 
@@ -42,7 +42,7 @@ public class InventoryEditmodeScreen extends PlayerStatsContainerScreen
 		LocalDate localdate = LocalDate.now();
 		int d = localdate.getDayOfMonth();
 		Month m = localdate.getMonth();
-		boolean b1 = MinestuckConfig.clientHardMode;
+		boolean b1 = MinestuckConfig.hardMode;
 		boolean b2 = !b1 && (m == Month.APRIL && d == 13 || m == Month.JUNE && d == 12
 				|| m == Month.OCTOBER && d == 25 || m == Month.NOVEMBER && d == 11
 				|| m == Month.NOVEMBER && d == 27);

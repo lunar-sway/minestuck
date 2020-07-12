@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "tag": "forge:ores/gold"
+  },
+  "grist_cost": {
+    "minestuck:build": 4,
+    "minestuck:gold": 9
+  }
+}

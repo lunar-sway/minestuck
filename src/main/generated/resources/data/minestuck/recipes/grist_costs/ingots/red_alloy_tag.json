@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "tag": "forge:ingots/red_alloy"
+  },
+  "grist_cost": {
+    "minestuck:rust": 18,
+    "minestuck:garnet": 32
+  }
+}

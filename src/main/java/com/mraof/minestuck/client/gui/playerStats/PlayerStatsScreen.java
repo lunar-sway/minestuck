@@ -1,13 +1,16 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.MinestuckScreen;
 import com.mraof.minestuck.client.settings.MSKeyHandler;
-import com.mraof.minestuck.editmode.ClientEditHandler;
+import com.mraof.minestuck.computer.editmode.ClientEditHandler;
+import com.mraof.minestuck.inventory.EditmodeContainer;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.MiscContainerPacket;
 import com.mraof.minestuck.skaianet.SkaiaClient;
+import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.client.gui.screen.Screen;
@@ -21,23 +24,30 @@ import net.minecraft.network.play.client.CCloseWindowPacket;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 import java.util.Arrays;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public abstract class PlayerStatsScreen extends MinestuckScreen
 {
+	//TODO A better way of working with inventory-like guis like these?
+	public static final int WINDOW_ID_START = 105;	//Note that window ids used MUST be a byte. (that's how the window id is serialized in minecraft's packets)
 	
 	public static final ResourceLocation icons = new ResourceLocation("minestuck", "textures/gui/icons.png");
 	
 	public enum NormalGuiType
 	{
 		
-		CAPTCHA_DECK(CaptchaDeckScreen::new, "gui.captcha_deck.name", false),
-		STRIFE_SPECIBUS(StrifeSpecibusScreen::new, "gui.strife_specibus.name", false),
-		ECHELADDER(EcheladderScreen::new, "gui.echeladder.name", true),
-		GRIST_CACHE(GristCacheScreen::new, "gui.grist_cache.name", true);
+		CAPTCHA_DECK(CaptchaDeckScreen::new, CaptchaDeckScreen.TITLE, false),
+		STRIFE_SPECIBUS(StrifeSpecibusScreen::new, StrifeSpecibusScreen.TITLE, false),
+		ECHELADDER(EcheladderScreen::new, EcheladderScreen.TITLE, true),
+		GRIST_CACHE(GristCacheScreen::new, GristCacheScreen.TITLE, true);
 		
 		final Supplier<? extends Screen> factory;
 		final BiFunction<Integer, PlayerInventory, ? extends ContainerScreen<?>> factory2;
@@ -76,7 +86,7 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 		public boolean reqMedium()
 		{
 			if(this == ECHELADDER)
-				return MinestuckConfig.preEntryEcheladder;
+				return !ClientPlayerData.echeladderAvailable;
 			else return this.reqMedium;
 		}
 		
@@ -84,9 +94,9 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 	
 	public enum EditmodeGuiType
 	{
-		DEPLOY_LIST(InventoryEditmodeScreen::new, "gui.deployList.name"),
+		DEPLOY_LIST(InventoryEditmodeScreen::new, InventoryEditmodeScreen.TITLE),
 //		BLOCK_LIST(GuiInventoryEditmode.class, "gui.blockList.name", true, false),
-		GRIST_CACHE(GristCacheScreen::new, "gui.gristCache.name");
+		GRIST_CACHE(GristCacheScreen::new, GristCacheScreen.TITLE);
 		
 		final Supplier<? extends Screen> factory;
 		final BiFunction<Integer, PlayerInventory, ? extends ContainerScreen<?>> factory2;
@@ -271,12 +281,12 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 			if(ClientEditHandler.isActive() ? editmodeTab.isContainer : normalTab.isContainer)
 			{
 				int ordinal = (ClientEditHandler.isActive() ? editmodeTab : normalTab).ordinal();
-				int windowId = 200 + ordinal;//ContainerHandler.clientWindowIdStart + ordinal;
-				PlayerStatsContainerScreen containerScreen = (PlayerStatsContainerScreen) (ClientEditHandler.isActive() ? editmodeTab.createGuiInstance(windowId) : normalTab.createGuiInstance(windowId));
+				int windowId = WINDOW_ID_START + ordinal;
+				PlayerStatsContainerScreen<?> containerScreen = (PlayerStatsContainerScreen<?>) (ClientEditHandler.isActive() ? editmodeTab.createGuiInstance(windowId) : normalTab.createGuiInstance(windowId));
 				
 				mc.displayGuiScreen(containerScreen);
 				if(mc.currentScreen == containerScreen)
-					MSPacketHandler.sendToServer(new MiscContainerPacket(ordinal));
+					MSPacketHandler.sendToServer(new MiscContainerPacket(ordinal, ClientEditHandler.isActive()));
 			}
 			else mc.displayGuiScreen(ClientEditHandler.isActive()? editmodeTab.createGuiInstance():normalTab.createGuiInstance());
 		}
@@ -287,11 +297,22 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int i)
 	{
-		if(MSKeyHandler.instance.statKey.isActiveAndMatches(InputMappings.getInputByCode(keyCode, scanCode)))
+		if(MSKeyHandler.statKey.isActiveAndMatches(InputMappings.getInputByCode(keyCode, scanCode)))
 		{
 			mc.displayGuiScreen(null);
 			return true;
 		}
 		else return super.keyPressed(keyCode, scanCode, i);
+	}
+	
+	@SubscribeEvent
+	public static void onPlayerLoggedIn(ClientPlayerNetworkEvent.LoggedInEvent event)
+	{
+		normalTab = NormalGuiType.CAPTCHA_DECK;
+		editmodeTab = EditmodeGuiType.DEPLOY_LIST;
+		EditmodeContainer.clientScroll = 0;
+		DataCheckerScreen.activeComponent = null;
+		EcheladderScreen.lastRung = -1;
+		EcheladderScreen.animatedRung = 0;
 	}
 }

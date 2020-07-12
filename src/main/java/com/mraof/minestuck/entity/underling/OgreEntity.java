@@ -4,7 +4,7 @@ import com.mraof.minestuck.entity.ai.AttackOnCollideWithRateGoal;
 import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
-import com.mraof.minestuck.util.Echeladder;
+import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.Entity;

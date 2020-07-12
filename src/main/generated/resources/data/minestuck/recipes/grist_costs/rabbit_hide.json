@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:rabbit_hide"
+  },
+  "grist_cost": {
+    "minestuck:iodine": 1,
+    "minestuck:chalk": 1
+  }
+}

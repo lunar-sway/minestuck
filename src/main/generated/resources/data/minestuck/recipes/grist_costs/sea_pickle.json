@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:sea_pickle"
+  },
+  "grist_cost": {
+    "minestuck:build": 4,
+    "minestuck:cobalt": 2,
+    "minestuck:amber": 2
+  }
+}

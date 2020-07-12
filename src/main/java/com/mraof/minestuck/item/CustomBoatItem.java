@@ -1,155 +1,114 @@
 package com.mraof.minestuck.item;
 
 import net.minecraft.block.DispenserBlock;
-import net.minecraft.block.material.Material;
 import net.minecraft.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.dispenser.IBlockSource;
-import net.minecraft.dispenser.IDispenseItemBehavior;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
+import net.minecraft.stats.Stats;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.util.*;
 import net.minecraft.util.math.*;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 public class CustomBoatItem extends Item
 {
-	public static final IDispenseItemBehavior DISPENSER_BEHAIVOR = new BehaivorDispenseCustomBoat();
+	private static final Predicate<Entity> CAN_COLLIDE_PREDICATE = EntityPredicates.NOT_SPECTATING.and(Entity::canBeCollidedWith);
 	protected final BoatProvider provider;
 	
 	public CustomBoatItem(BoatProvider provider, Properties properties)
 	{
 		super(properties);
 		this.provider = provider;
-		DispenserBlock.registerDispenseBehavior(this, DISPENSER_BEHAIVOR);
+		DispenserBlock.registerDispenseBehavior(this, new BehaviorDispenseCustomBoat());
 	}
 	
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn)
 	{
+		float partialTicks = 1.0F;
 		ItemStack itemstack = playerIn.getHeldItem(handIn);
-		float f = 1.0F;
-		float f1 = playerIn.prevRotationPitch + (playerIn.rotationPitch - playerIn.prevRotationPitch) * f;
-		float f2 = playerIn.prevRotationYaw + (playerIn.rotationYaw - playerIn.prevRotationYaw) * f;
-		double d0 = playerIn.prevPosX + (playerIn.posX - playerIn.prevPosX) * (double)f;
-		double d1 = playerIn.prevPosY + (playerIn.posY - playerIn.prevPosY) * (double)f + (double)playerIn.getEyeHeight();
-		double d2 = playerIn.prevPosZ + (playerIn.posZ - playerIn.prevPosZ) * (double)f;
-		Vec3d vec3 = new Vec3d(d0, d1, d2);
-		float f3 = MathHelper.cos(-f2 * 0.017453292F - (float)Math.PI);
-		float f4 = MathHelper.sin(-f2 * 0.017453292F - (float)Math.PI);
-		float f5 = -MathHelper.cos(-f1 * 0.017453292F);
-		float f6 = MathHelper.sin(-f1 * 0.017453292F);
-		float f7 = f4 * f5;
-		float f8 = f3 * f5;
-		double d3 = 5.0D;
-		Vec3d vec31 = vec3.add((double)f7 * d3, (double)f6 * d3, (double)f8 * d3);
-		//TODO check if updated correctly
-		RayTraceResult rayTrace = worldIn.rayTraceBlocks(new RayTraceContext(vec3, vec31, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.ANY, playerIn));
-
-		if (rayTrace == null)
+		RayTraceResult rayTrace = rayTrace(worldIn, playerIn, RayTraceContext.FluidMode.ANY);
+		
+		if(rayTrace.getType() == RayTraceResult.Type.MISS)
 			return new ActionResult<>(ActionResultType.PASS, itemstack);
 		else
 		{
-			Vec3d vec32 = playerIn.getLook(f);
-			boolean flag = false;
-			List<Entity> list = worldIn.getEntitiesWithinAABBExcludingEntity(playerIn, playerIn.getBoundingBox().expand(vec32.x * d3, vec32.y * d3, vec32.z * d3).grow(1.0D));
+			Vec3d lookDirection = playerIn.getLook(partialTicks);
+			List<Entity> list = worldIn.getEntitiesInAABBexcluding(playerIn, playerIn.getBoundingBox().expand(lookDirection.scale(5.0D)).grow(1.0D), CAN_COLLIDE_PREDICATE);
 			
-			for(Entity entity : list)
+			if(!list.isEmpty())
 			{
-				if (entity.canBeCollidedWith())
+				Vec3d eyePos = playerIn.getEyePosition(partialTicks);
+				for(Entity entity : list)
 				{
-					float f10 = entity.getCollisionBorderSize();
-					AxisAlignedBB axisalignedbb = entity.getBoundingBox().expand((double)f10, (double)f10, (double)f10);
+					AxisAlignedBB axisalignedbb = entity.getBoundingBox().grow(entity.getCollisionBorderSize());
 					
-					if (axisalignedbb.contains(vec3))
-					{
-						flag = true;
-					}
+					if(axisalignedbb.contains(eyePos))
+						return new ActionResult<>(ActionResultType.PASS, itemstack);
 				}
 			}
 			
-			if (flag)
+			if(rayTrace.getType() == RayTraceResult.Type.BLOCK)
 			{
-				return new ActionResult<>(ActionResultType.PASS, itemstack);
+				Entity boat = provider.createBoat(itemstack, worldIn, rayTrace.getHitVec().x, rayTrace.getHitVec().y, rayTrace.getHitVec().z);
+				boat.rotationYaw = playerIn.rotationYaw;
+				
+				if(!worldIn.isCollisionBoxesEmpty(boat, boat.getBoundingBox().grow(-0.1D)))
+					return new ActionResult<>(ActionResultType.FAIL, itemstack);
+				
+				if(!worldIn.isRemote)
+					worldIn.addEntity(boat);
+				
+				if(!playerIn.abilities.isCreativeMode)
+					itemstack.shrink(1);
+				
+				playerIn.addStat(Stats.ITEM_USED.get(this));
+				return new ActionResult<>(ActionResultType.SUCCESS, itemstack);
 			}
-			else
-			{
-			    //TODO Update
-				/*if (rayTrace.type == RayTraceResult.Type.BLOCK)
-				{
-					BlockPos blockpos = rayTrace.getBlockPos();
-					
-					Entity entityboat = provider.createBoat(itemstack, worldIn, (double)((float)blockpos.getX() + 0.5F), (double)((float)blockpos.getY() + 1.0F), (double)((float)blockpos.getZ() + 0.5F));
-					entityboat.rotationYaw = playerIn.rotationYaw;
-					
-					if (!worldIn.isCollisionBoxesEmpty(entityboat, entityboat.getBoundingBox().grow(-0.1D)))
-					{
-						return new ActionResult<>(ActionResultType.FAIL, itemstack);
-					}
-					
-					if (!worldIn.isRemote)
-					{
-						worldIn.addEntity(entityboat);
-					}
-					
-					if (!playerIn.abilities.isCreativeMode)
-					{
-						itemstack.shrink(1);
-					}
-					return new ActionResult<>(ActionResultType.SUCCESS, itemstack);
-				}
-				*/
-				return new ActionResult<>(ActionResultType.PASS, itemstack);
-			}
+			
+			return new ActionResult<>(ActionResultType.PASS, itemstack);
 		}
 	}
 	
-	protected static class BehaivorDispenseCustomBoat extends DefaultDispenseItemBehavior
+	protected class BehaviorDispenseCustomBoat extends DefaultDispenseItemBehavior
 	{
 		@Override
 		public ItemStack dispenseStack(IBlockSource source, ItemStack stack)
 		{
-			if(!(stack.getItem() instanceof CustomBoatItem))
-				throw new IllegalStateException("Can't use custom boat dispenser behaivor on non-custom boat item!");
-			
-			CustomBoatItem boatItem = (CustomBoatItem) stack.getItem();
-			Direction enumfacing = source.getBlockState().get(DispenserBlock.FACING);
+			Direction direction = source.getBlockState().get(DispenserBlock.FACING);
 			World world = source.getWorld();
-			double d0 = source.getX() + (double)((float)enumfacing.getXOffset() * 1.125F);
-			double d1 = source.getY() + (double)((float)enumfacing.getYOffset() * 1.125F);
-			double d2 = source.getZ() + (double)((float)enumfacing.getZOffset() * 1.125F);
-			BlockPos blockpos = source.getBlockPos().offset(enumfacing);
-			Material material = world.getBlockState(blockpos).getMaterial();
+			double d0 = source.getX() + (double)((float)direction.getXOffset() * 1.125F);
+			double d1 = source.getY() + (double)((float)direction.getYOffset() * 1.125F);
+			double d2 = source.getZ() + (double)((float)direction.getZOffset() * 1.125F);
+			BlockPos pos = source.getBlockPos().offset(direction);
 			double d3;
 			
-			if (Material.WATER.equals(material))
-			{
+			if(world.getFluidState(pos).isTagged(FluidTags.WATER))
 				d3 = 1.0D;
-			}
 			else
 			{
-				if (!Material.AIR.equals(material) || !Material.WATER.equals(world.getBlockState(blockpos.down()).getMaterial()))
-				{
+				if (!world.getBlockState(pos).isAir(world, pos) || !world.getFluidState(pos.down()).isTagged(FluidTags.WATER))
 					return this.dispense(source, stack);
-				}
 				
 				d3 = 0.0D;
 			}
-			Entity entityBoat = boatItem.provider.createBoat(stack, world, d0, d1 + d3, d2);
-			world.addEntity(entityBoat);
+			Entity boat = provider.createBoat(stack, world, d0, d1 + d3, d2);
+			boat.rotationYaw = direction.getHorizontalAngle();
+			world.addEntity(boat);
 			stack.shrink(1);
 			return stack;
 		}
 		@Override
 		protected void playDispenseSound(IBlockSource source)
 		{
-			source.getWorld().playEvent(1000, source.getBlockPos(), 0);
+			source.getWorld().playEvent(Constants.WorldEvents.DISPENSER_DISPENSE_SOUND, source.getBlockPos(), 0);
 		}
 	}
 	

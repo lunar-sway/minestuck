@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:chest",
+  "type": "minecraft:gift",
   "pools": [
     {
       "name": "item",

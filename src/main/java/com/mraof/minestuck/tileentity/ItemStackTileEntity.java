@@ -1,16 +1,21 @@
 package com.mraof.minestuck.tileentity;
 
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.util.ColorHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
 
-public class ItemStackTileEntity extends TileEntity
+public class ItemStackTileEntity extends TileEntity implements IColored
 {
+	public static final ResourceLocation ITEM_DYNAMIC = new ResourceLocation(Minestuck.MOD_ID, "item");
+	
 	public ItemStackTileEntity()
 	{
 		super(MSTileEntityTypes.ITEM_STACK);
@@ -33,6 +38,12 @@ public class ItemStackTileEntity extends TileEntity
 	}
 	
 	@Override
+	public int getColor()
+	{
+		return ColorHandler.getColorFromStack(stack);
+	}
+	
+	@Override
 	public void read(CompoundNBT compound)
 	{
 		super.read(compound);
@@ -50,7 +61,15 @@ public class ItemStackTileEntity extends TileEntity
 	@Override
 	public CompoundNBT getUpdateTag()
 	{
-		return write(new CompoundNBT());
+		CompoundNBT nbt = super.getUpdateTag();
+		nbt.put("stack", stack.write(new CompoundNBT()));
+		return nbt;
+	}
+	
+	@Override
+	public void handleUpdateTag(CompoundNBT tag)
+	{
+		stack = ItemStack.read(tag.getCompound("stack"));
 	}
 	
 	@Nullable

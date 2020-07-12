@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:grape_faygo"
+  },
+  "grist_cost": {
+    "minestuck:cobalt": 1,
+    "minestuck:shale": 1
+  }
+}

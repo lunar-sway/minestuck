@@ -2,6 +2,7 @@ package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.inventory.MSContainerTypes;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -31,7 +32,7 @@ public class CaptchaDeckContainer extends Container
 			@Override
 			public boolean isItemValid(ItemStack stack)
 			{
-				return ModusTypes.getTypeFromItem(stack.getItem()) != null || stack.getItem().equals(MSItems.CAPTCHA_CARD) && (!stack.hasTag() || !stack.getTag().getBoolean("punched"));
+				return ModusTypes.getTypeFromItem(stack.getItem()) != null || stack.getItem().equals(MSItems.CAPTCHA_CARD) && !AlchemyHelper.isPunchedCard(stack);
 			}
 		});
 	}

@@ -1,11 +1,11 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"2": "minestuck:machines/holopad/sigil",
-		"3": "minestuck:machines/holopad/blank",
-		"4": "minestuck:machines/holopad/side",
-		"5": "minestuck:machines/holopad/card",
-		"particle": "minestuck:machines/holopad/sigil"
+		"2": "minestuck:block/machine/holopad/sigil",
+		"3": "minestuck:block/machine/holopad/blank",
+		"4": "minestuck:block/machine/holopad/side",
+		"5": "minestuck:block/machine/holopad/card",
+		"particle": "minestuck:block/machine/holopad/sigil"
 	},
 	"elements": [
 		{

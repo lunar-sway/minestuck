@@ -76,7 +76,7 @@ public class MSBlockShapes
 public static CustomVoxelShape TOTEM_LATHE_MIDDLE_RIGHT = TOTEM_LATHE_MIDDLE_RIGHT_ACTIVE.merge(new CustomVoxelShape(new double[]{13,4,7,16,10,13}));
 public static CustomVoxelShape TOTEM_LATHE_ROD_LEFT = new CustomVoxelShape(new double[]{8,4,7,16,10,13});
 public static CustomVoxelShape TOTEM_LATHE_ROD_LEFT_ACTIVE = new CustomVoxelShape(new double[]{8,5,8,16,9,12}, new double[]{0,4,7,8,10,13});
-public static CustomVoxelShape TOTEM_LATHE_ROD_RIGHT_BASE = new CustomVoxelShape(new double[]{0,5,8,5,9,12}, new double[]{5,4,7,8,12,13});
+public static CustomVoxelShape TOTEM_LATHE_ROD_RIGHT_BASE = new CustomVoxelShape(new double[]{0,5,8,5,9,12}, new double[]{5,4,7,8,10,13});
 public static CustomVoxelShape TOTEM_LATHE_ROD_RIGHT_CARVED = TOTEM_LATHE_ROD_RIGHT_BASE.merge(new CustomVoxelShape(new double[]{8,5,12,9,9,13}, new double[]{8,9,8,9,10,12}, new double[]{8,5,7,9,9,8}, new double[]{8,4,8,9,5,12}, new double[]{8,5,8,11,9,12}, new double[]{11,5,5,8,5,13/*,8.5,11.5*/}, new double[]{13,5,8,16,9,12}, new double[]{15,9,8,16,10,12}, new double[]{15,5,12,16,9,13}, new double[]{15,4,8,16,5,12}, new double[]{15,5,7,16,9,8}));
 public static CustomVoxelShape TOTEM_LATHE_ROD_RIGHT = TOTEM_LATHE_ROD_RIGHT_BASE.merge(new CustomVoxelShape(new double[]{8,5,12,16,9,13}, new double[]{8,4,8,16,10,12}, new double[]{8,5,7,16,9,8}));
 public static CustomVoxelShape TOTEM_LATHE_TOP_LEFT = new CustomVoxelShape(new double[]{8,0,7,16,7,15}, new double[]{0,0,6,8,12,14}, new double[]{8,7,7,16,12,14}, new double[]{0,12,5,16,16,15}, new double[]{9,3,5,15,9,7});
@@ -92,14 +92,16 @@ public static CustomVoxelShape PUNCH_DESIGNIX_TOP_RIGHT_BASE = new CustomVoxelSh
 
 public static CustomVoxelShape PUNCH_DESIGNIX_TOP_RIGHT = PUNCH_DESIGNIX_TOP_RIGHT_BASE.merge(PUNCH_DESIGNIX_RIGHT_SLOPE, PUNCH_DESIGNIX_KEYBOARD);
 
-//Small Machines
-
-public static CustomVoxelShape SMALL_PUNCH_DESIGNIX = new CustomVoxelShape(new double[]{14,0,0,16,6,8}, new double[]{0,0,0,2,6,8}, new double[]{0,6,0,16,10,8}, new double[]{0,10,0,16,11,10}, new double[]{0,11,0,16,16,5}, new double[]{6.5,11,5.5,15,13,9.5});
-public static CustomVoxelShape SMALL_CRUXTRUDER = new CustomVoxelShape(new double[]{0,0,0,16,4,16}, new double[]{3,4,3,13,9,13}, new double[]{6,9,6,10,15,10}, new double[]{1.5,4,6,3,6,10}, new double[]{6,4,1.5,10,6,3}, new double[]{13,4,6,14.5,6,10}, new double[]{6,4,13,10,6,14.5});
-public static CustomVoxelShape SMALL_TOTEM_LATHE = new CustomVoxelShape(new double[]{0,0,5,3,10,10.5}, new double[]{0,10,5,3,14,9.5}, new double[]{3,0,5,16,1,11}, new double[]{3,1,5,5,14,11}, new double[]{0,14,5,10,16,11}, new double[]{5,12,5,7,14,11}, new double[]{5,1,5.5,10,2.5,10.5}, new double[]{5,2.5,5,11,3,11}, new double[]{10,1,6.5,12,2,9.5}, new double[]{12,1,5.5,14,5,10.5}, new double[]{11,5,5.5,15,7,10.5}, new double[]{15,4.5,6.5,15.5,8.5,9.5}, new double[]{7.5,11,5.5,8.5,12,10.5}, new double[]{5,5.5,7.5,6,6.5,8.5}, new double[]{10,5.5,7.5,11,6.5,8.5});
-public static CustomVoxelShape SMALL_ALCHEMITER = new CustomVoxelShape(new double[]{0,0,0,16,4,16}, new double[]{1,4,1,15,6,15}, new double[]{2,6,2,14,8,14}, new double[]{0.5,4,6.75,1,5,9.25}, new double[]{6.75,4,0.5,9.25,5,1}, new double[]{15,4,6.75,15.5,5,9.25}, new double[]{6.75,4,15,9.25,5,15.5}, new double[]{0.5,4,0.5,2.5,6,2.5}, new double[]{3.5,4,0.5,4.5,15,1.5}, new double[]{2,11,0.5,3,15,1.5}, new double[]{0.5,11,0.5,1.5,15,1.5}, new double[]{2.5,15,0.5,3.5,15.5,1.5}, new double[]{1,10.5,0.5,2.5,11,1.5}, new double[]{0,15,0,2,17,2});
-
-//Misc Machines
-public static CustomVoxelShape TRANSPORTALIZER = new CustomVoxelShape(new double[]{0,0,0,16,6,16}, new double[]{1,6,1,15,8,15});
-public static CustomVoxelShape GRIST_WIDGET = new CustomVoxelShape(new double[]{6,0,5,10,1.5,11.7}, new double[]{2.5,1,5.3,13.5,2.1,11.15}, new double[]{10,0,5,14,1.75,12}, new double[]{11,0.3,11.2,13,1.3,12.2}, new double[]{2,0,5,6,1.75,11}, new double[]{6,0,5,4,1.75,7}).rotate(Direction.SOUTH);
+	//Small Machines
+	public static CustomVoxelShape SMALL_PUNCH_DESIGNIX = new CustomVoxelShape(new double[]{0,0,8,2,6,16}, new double[]{14,0,8,16,6,16}, new double[]{0,6,8,16,10,16}, new double[]{0,10,6,16,11,16}, new double[]{0,11,11,16,16,16}, new double[]{1,11,6.5,9.5,13,10.5});
+	public static CustomVoxelShape SMALL_CRUXTRUDER = new CustomVoxelShape(new double[]{0,0,0,16,4,16}, new double[]{3,4,3,13,9,13}, new double[]{6,9,6,10,15,10}, new double[]{1.5,4,6,3,6,10}, new double[]{6,4,1.5,10,6,3}, new double[]{13,4,6,14.5,6,10}, new double[]{6,4,13,10,6,14.5});
+	public static CustomVoxelShape SMALL_TOTEM_LATHE = new CustomVoxelShape(new double[]{13,0,5.5,16,10,11}, new double[]{13,10,6.5,16,14,11}, new double[]{0,0,5,13,1,11}, new double[]{11,1,5,13,14,11}, new double[]{6,14,5,16,16,11}, new double[]{7,12,5,11,14,11}, new double[]{6,1,5.5,11,2.5,10.5}, new double[]{5,2.5,5,11,3,11}, new double[]{4,1,6.5,6,2,9.5}, new double[]{2,1,5.5,4,5,10.5}, new double[]{1,5,5.5,5,7,10.5}, new double[]{0.5,4.5,6.5,1,7.5,9.5}, new double[]{7.5,11,5.5,8.5,12,10.5}, new double[]{10,5.5,7.5,11,6.5,8.5}, new double[]{5,5.5,7.5,6,6.5,8.5});
+	public static CustomVoxelShape SMALL_ALCHEMITER = new CustomVoxelShape(new double[]{0,0,0,16,4,16}, new double[]{1,4,1,15,6,15}, new double[]{2,6,2,14,8,14}, new double[]{0.5,4,6.75,1,5,9.25}, new double[]{6.75,4,0.5,9.25,5,1}, new double[]{15,4,6.75,15.5,5,9.25}, new double[]{6.75,4,15,9.25,5,15.5}, new double[]{13.5,4,13.5,15.5,9,15.5}, new double[]{11.5,4,14.5,12.5,15,15.5}, new double[]{13,11,14.5,14,15,15.5}, new double[]{14.5,11,14.5,15.5,15,15.5}, new double[]{12,15,14.5,13.5,15.5,15.5}, new double[]{13.5,10.5,14.5,15,11,15.5}, new double[]{14,15,14,16,17,16});
+	
+	//Misc Machines
+	public static CustomVoxelShape TRANSPORTALIZER = new CustomVoxelShape(new double[]{0,0,0,16,6,16}, new double[]{1,6,1,15,8,15});
+	public static CustomVoxelShape GRIST_WIDGET = new CustomVoxelShape(new double[]{6,0,5,10,1.5,11.7}, new double[]{2.5,1,5.3,13.5,2.1,11.15}, new double[]{10,0,5,14,1.75,12}, new double[]{11,0.3,11.2,13,1.3,12.2}, new double[]{2,0,5,6,1.75,11}, new double[]{6,0,5,4,1.75,7}).rotate(Direction.SOUTH);
+	public static CustomVoxelShape COMPUTER = new CustomVoxelShape(/*mouse*/new double[]{0.5,0,2.5,2.5,1,5}, /*keyboard*/new double[]{3.5,0,0.5,15.5,1,7}, /*base*/new double[]{0.5,0,8.5,15.5,3,15.5}, /*stand*/new double[]{3.5,3,11,12,4.5,13}, /*screen*/new double[]{1,4.5,11.5,15,15.5,12.5});
+	public static CustomVoxelShape LAPTOP_CLOSED = new CustomVoxelShape(new double[]{1,0,3,15,2,14}, new double[]{1,0.5,14,15,1.5,14.5});
+	public static CustomVoxelShape LAPTOP_OPEN = new CustomVoxelShape(new double[]{1,0,3,15,1,14}, new double[]{1,0.5,14,15,1,14.5}, new double[]{1,1,14,15,12,15});
 }

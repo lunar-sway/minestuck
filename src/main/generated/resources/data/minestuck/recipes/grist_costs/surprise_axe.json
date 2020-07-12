@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:surprise_axe"
+  },
+  "grist_cost": {
+    "minestuck:build": 170,
+    "minestuck:rust": 80,
+    "minestuck:amber": 30,
+    "minestuck:iodine": 12
+  }
+}

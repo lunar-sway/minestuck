@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:container_grist_cost",
+  "ingredient": {
+    "item": "minestuck:oil_bucket"
+  },
+  "grist_cost": {
+    "minestuck:tar": 8,
+    "minestuck:shale": 8
+  }
+}

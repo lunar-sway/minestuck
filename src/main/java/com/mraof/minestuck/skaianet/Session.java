@@ -1,25 +1,29 @@
 package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
+import com.mraof.minestuck.world.lands.LandInfo;
+import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
+import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraftforge.common.util.Constants;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 
 /**
- * Was also an interface for the session system, but now just a data structure representing a session.
- * SessionHandler is the new class for session interface.
+ * A data structure that contains all related connections, along with any related data, such as predefine data.
  * @author kirderf1
  */
-public class Session
+public final class Session
 {
 	
-	Map<PlayerIdentifier, PredefineData> predefinedPlayers;
-	List<SburbConnection> connections;
+	final Map<PlayerIdentifier, PredefineData> predefinedPlayers;
+	final List<SburbConnection> connections;
 	String name;
 	
 	/**
@@ -28,10 +32,36 @@ public class Session
 	boolean completed;
 	boolean locked;
 	
-	//Unused, will later be 0 if not yet generated
-	int skaiaId;
-	int prospitId;
-	int derseId;
+	/**
+	 * If the function throws an exception, this session should no longer be considered valid
+	 */
+	void inheritFrom(Session other) throws MergeResult.SessionMergeException
+	{
+		if(locked)
+			throw MergeResult.LOCKED.exception();
+		else locked = other.locked;
+		
+		if(other.isCustom())
+		{
+			if(!isCustom())
+				name = other.name;
+			else throw MergeResult.BOTH_CUSTOM.exception();
+		}
+		
+		if(other.predefinedPlayers.entrySet().stream().allMatch(entry -> canAdd(entry.getKey(), entry.getValue())))
+			predefinedPlayers.putAll(other.predefinedPlayers);
+		else throw MergeResult.GENERIC_FAIL.exception();
+		
+		connections.addAll(other.connections);
+		
+		if(MinestuckConfig.forceMaxSize && getPlayerList().size() > SessionHandler.maxSize)
+			throw MergeResult.MERGED_SESSION_FULL.exception();
+	}
+	
+	private boolean canAdd(PlayerIdentifier player, PredefineData data)
+	{
+		return true;
+	}
 	
 	/**
 	 * Checks if the variable completed should be true or false.
@@ -80,7 +110,7 @@ public class Session
 	 */
 	public boolean containsPlayer(PlayerIdentifier player)
 	{
-		if(player.equals(IdentifierHandler.nullIdentifier))
+		if(player.equals(IdentifierHandler.NULL_IDENTIFIER))
 			return false;
 		if(predefinedPlayers.containsKey(player))
 			return true;
@@ -100,11 +130,110 @@ public class Session
 		for(SburbConnection c : this.connections)
 		{
 			list.add(c.getClientIdentifier());
-			if(!c.getServerIdentifier().equals(IdentifierHandler.nullIdentifier))
+			if(c.hasServerPlayer())
 				list.add(c.getServerIdentifier());
 		}
 		list.addAll(predefinedPlayers.keySet());
 		return list;
+	}
+	
+	boolean isTitleUsed(@Nonnull Title newTitle)
+	{
+		for(SburbConnection c : connections)
+		{
+			Title title = c.getClientTitle();
+			if(newTitle.equals(title))
+				return true;
+		}
+		
+		for(PredefineData data : predefinedPlayers.values())
+			if(newTitle.equals(data.getTitle()))
+				return true;
+		
+		return false;
+	}
+	
+	Set<Title> getUsedTitles()
+	{
+		return getUsedTitles(null);
+	}
+	
+	Set<Title> getUsedTitles(PlayerIdentifier ignore)
+	{
+		Set<Title> titles = new HashSet<>();
+		for(SburbConnection c : connections)
+		{
+			if(!c.getClientIdentifier().equals(ignore))
+			{
+				Title title = c.getClientTitle();
+				if(title != null)
+					titles.add(title);
+			}
+		}
+		
+		for(PredefineData data : predefinedPlayers.values())
+			if(!data.getPlayer().equals(ignore) && data.getTitle() != null)
+				titles.add(data.getTitle());
+		
+		return titles;
+	}
+	
+	List<TitleLandType> getUsedTitleLandTypes()
+	{
+		return getUsedTitleLandTypes(null);
+	}
+	
+	List<TitleLandType> getUsedTitleLandTypes(PlayerIdentifier ignore)
+	{
+		List<TitleLandType> types = new ArrayList<>();
+		for(SburbConnection c : connections)
+		{
+			if(!c.getClientIdentifier().equals(ignore))
+			{
+				LandInfo landInfo = c.getLandInfo();
+				if(landInfo != null)
+					types.add(landInfo.getLandAspects().title);
+			}
+		}
+		
+		for(PredefineData data : predefinedPlayers.values())
+			if(!data.getPlayer().equals(ignore) && data.getTitleLandType() != null)
+				types.add(data.getTitleLandType());
+		
+		return types;
+	}
+	
+	List<TerrainLandType> getUsedTerrainLandTypes()
+	{
+		return getUsedTerrainLandTypes(null);
+	}
+	
+	List<TerrainLandType> getUsedTerrainLandTypes(PlayerIdentifier ignore)
+	{
+		List<TerrainLandType> types = new ArrayList<>();
+		for(SburbConnection c : connections)
+		{
+			if(!c.getClientIdentifier().equals(ignore))
+			{
+				LandInfo landInfo = c.getLandInfo();
+				if(landInfo != null)
+					types.add(landInfo.getLandAspects().terrain);
+			}
+		}
+		
+		for(PredefineData data : predefinedPlayers.values())
+			if(!data.getPlayer().equals(ignore) && data.getTerrainLandType() != null)
+				types.add(data.getTerrainLandType());
+		
+		return types;
+	}
+	public void predefineCall(PlayerIdentifier player, SkaianetException.SkaianetConsumer<PredefineData> consumer) throws SkaianetException
+	{
+		PredefineData data = predefinedPlayers.get(player);
+		if(data == null)	//TODO Do not create data for players that have entered (and clear predefined data when no longer needed)
+			data = new PredefineData(player, this);
+		consumer.consume(data);
+		predefinedPlayers.put(player, data);
 	}
 	
 	/**
@@ -127,9 +256,6 @@ public class Session
 			predefineList.add(entry.getKey().saveToNBT(entry.getValue().write(), "player"));
 		nbt.put("predefinedPlayers", predefineList);
 		nbt.putBoolean("locked", locked);
-		//nbt.putInt("skaiaId", skaiaId);
-		//nbt.putInt("derseId", derseId);
-		//nbt.putInt("prospitId", prospitId);
 		return nbt;
 	}
 	
@@ -150,10 +276,12 @@ public class Session
 		{
 			try
 			{
-				s.connections.add(new SburbConnection(list.getCompound(i), handler));
+				SburbConnection c = new SburbConnection(list.getCompound(i), handler);
+				if(c.isActive() || c.isMain())
+					s.connections.add(c);
 			} catch(Exception e)
 			{
-				Debug.logger.error("Unable to read sburb connection from tag "+list.getCompound(i)+". Forced to skip connection.", e);
+				Debug.logger.error("Unable to read sburb connection from tag "+list.getCompound(i)+". Forced to skip connection. Caused by:", e);
 			}
 		}
 		
@@ -163,16 +291,8 @@ public class Session
 			for(int i = 0; i < list.size(); i++)
 			{
 				CompoundNBT compound = list.getCompound(i);
-				s.predefinedPlayers.put(IdentifierHandler.load(compound, "player"), new PredefineData().read(compound));
-			}
-		} else
-		{	//Support for saves from older minestuck versions
-			CompoundNBT predefineTag = nbt.getCompound("predefinedPlayers");
-			for(String player : predefineTag.keySet())
-			{
-				CompoundNBT compound = new CompoundNBT();
-				compound.putString("player", player);
-				s.predefinedPlayers.put(IdentifierHandler.load(compound, "player"), new PredefineData().read(predefineTag.getCompound(player)));
+				PlayerIdentifier player = IdentifierHandler.load(compound, "player");
+				s.predefinedPlayers.put(player, new PredefineData(player, s).read(compound));
 			}
 		}
 		

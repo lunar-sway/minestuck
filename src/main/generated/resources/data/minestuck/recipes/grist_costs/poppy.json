@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:poppy"
+  },
+  "grist_cost": {
+    "minestuck:garnet": 4,
+    "minestuck:iodine": 1
+  }
+}

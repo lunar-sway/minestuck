@@ -1,7 +1,6 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.block.multiblock.MachineMultiblock;
-import net.minecraft.item.Item;
 
 public class MultiMachineBlock extends MachineBlock
 {
@@ -12,10 +11,5 @@ public class MultiMachineBlock extends MachineBlock
 		super(properties);
 		this.machine = machine;
 	}
-	
-	@Override
-	public Item asItem()
-	{
-		return this == machine.getMainBlock() ? super.asItem() : machine.asItem();
-	}
+	//TODO Is this class needed? Is there anything that subclasses do that is better off done here?
 }

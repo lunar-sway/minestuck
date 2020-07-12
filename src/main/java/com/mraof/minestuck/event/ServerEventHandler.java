@@ -3,19 +3,26 @@ package com.mraof.minestuck.event;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.entity.consort.ConsortDialogue;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.weapon.PotionWeaponItem;
+import com.mraof.minestuck.player.Echeladder;
+import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
-import com.mraof.minestuck.util.Echeladder;
+import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.potion.Effects;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.SoundCategory;
@@ -23,6 +30,7 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.item.ItemExpireEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
@@ -33,11 +41,31 @@ import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class ServerEventHandler
 {
 	public static long lastDay;
+	
+	@SubscribeEvent
+	public static void serverStarting(FMLServerStartingEvent event)
+	{
+		ConsortDialogue.serverStarting();
+		//if(!event.getServer().isDedicatedServer() && Minestuck.class.getAnnotation(Mod.class).version().startsWith("@")) TODO Find an alternative to detect dev environment
+		//event.getServer().setOnlineMode(false);	//Makes it possible to use LAN in a development environment
+		
+		lastDay = event.getServer().getWorld(DimensionType.OVERWORLD).getGameTime() / 24000L;
+	}
+	
+	@SubscribeEvent
+	public static void serverStopped(FMLServerStoppedEvent event)
+	{
+		IdentifierHandler.clear();
+		SkaianetHandler.clear();
+		MSFeatures.LAND_GATE.clearCache();
+	}
 	
 	@SubscribeEvent
 	public static void onWorldTick(TickEvent.WorldTickEvent event)
@@ -178,6 +206,16 @@ public class ServerEventHandler
 			PlayerData data = PlayerSavedData.getData((ServerPlayerEntity) event.player);
 			if(data.getTitle() != null)
 				data.getTitle().handleAspectEffects((ServerPlayerEntity) event.player);
+		}
+	}
+	
+	@SubscribeEvent
+	public static void breadStaling(ItemExpireEvent event)
+	{
+		ItemEntity e = event.getEntityItem();
+		if(e.getItem().getCount() == 1 && (e.getItem().getItem() == Items.BREAD)) {
+			ItemEntity stalebread = new ItemEntity(e.world, e.posX, e.posY, e.posZ, new ItemStack(MSItems.STALE_BAGUETTE));
+			e.world.addEntity(stalebread);
 		}
 	}
 }

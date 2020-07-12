@@ -15,6 +15,7 @@ public abstract class MachineProcessBlock extends MachineBlock
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving)
 	{
 		if (state.getBlock() != newState.getBlock())

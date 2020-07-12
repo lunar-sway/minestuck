@@ -2,7 +2,6 @@ package com.mraof.minestuck.inventory;
 
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.Pair;
 import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.item.ItemEntity;
@@ -14,6 +13,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TranslationTextComponent;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Arrays;
 import java.util.List;
@@ -51,8 +51,8 @@ public class ConsortMerchantInventory implements IInventory
 		for (int i = 0; i < stocks.size(); i++)
 		{
 			Pair<ItemStack, Integer> entry = stocks.get(i);
-			inv.set(i, entry.object1);
-			prices[i] = entry.object2;
+			inv.set(i, entry.getKey());
+			prices[i] = entry.getValue();
 		}
 	}
 	

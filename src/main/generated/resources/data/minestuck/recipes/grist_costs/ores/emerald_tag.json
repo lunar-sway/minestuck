@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "tag": "forge:ores/emerald"
+  },
+  "grist_cost": {
+    "minestuck:build": 4,
+    "minestuck:ruby": 9,
+    "minestuck:diamond": 9
+  }
+}

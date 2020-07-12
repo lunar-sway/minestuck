@@ -1,0 +1,47 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "name": "weapons",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "quality": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.75,
+                "max": 1.0
+              }
+            }
+          ],
+          "name": "minestuck:night_club"
+        }
+      ]
+    },
+    {
+      "name": "supplies",
+      "rolls": 1,
+      "entries": []
+    },
+    {
+      "name": "misc",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "name": "minecraft:pumpkin"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 4,
+          "quality": 2,
+          "name": "minestuck:crew_poster"
+        }
+      ]
+    }
+  ]
+}

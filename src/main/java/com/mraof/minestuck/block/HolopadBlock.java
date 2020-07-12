@@ -41,6 +41,7 @@ public class HolopadBlock extends MachineBlock
 	public HolopadBlock(Properties builder)
 	{
 		super(builder);
+		setDefaultState(getDefaultState().with(HAS_CARD, false));
 	}
 	
 	@Override
@@ -77,7 +78,6 @@ public class HolopadBlock extends MachineBlock
 		if(te != null && !worldIn.isRemote)
 		{
 			te.dropItem(true, worldIn, pos, te.getCard());
-			te.destroyHologram(pos);
 		}
 		
 		super.onBlockHarvested(worldIn, pos, state, player);
@@ -107,4 +107,6 @@ public class HolopadBlock extends MachineBlock
 	{
 		return BlockRenderLayer.CUTOUT_MIPPED;
 	}
+	
+	
 }

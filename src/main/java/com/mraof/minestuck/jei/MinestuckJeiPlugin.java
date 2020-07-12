@@ -4,18 +4,21 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
+import com.mraof.minestuck.item.crafting.alchemy.CombinationMode;
+import com.mraof.minestuck.item.crafting.alchemy.CombinationRecipe;
 import com.mraof.minestuck.item.crafting.alchemy.GristAmount;
 import com.mraof.minestuck.item.crafting.alchemy.GristCostRecipe;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.ingredients.IIngredientType;
-import mezz.jei.api.registration.IModIngredientRegistration;
-import mezz.jei.api.registration.IRecipeCategoryRegistration;
-import mezz.jei.api.registration.IRecipeRegistration;
-import mezz.jei.api.registration.ISubtypeRegistration;
+import mezz.jei.api.registration.*;
 import net.minecraft.client.Minecraft;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 
+import java.util.Collection;
 import java.util.stream.Collectors;
 
 /**
@@ -26,13 +29,10 @@ public class MinestuckJeiPlugin implements IModPlugin
 {
 	public static final ResourceLocation PLUGIN_ID = new ResourceLocation(Minestuck.MOD_ID, "minestuck");
 	public static final ResourceLocation GRIST_COST_ID = new ResourceLocation(Minestuck.MOD_ID, "grist_cost");
+	public static final ResourceLocation LATHE_ID = new ResourceLocation(Minestuck.MOD_ID, "totem_lathe");
+	public static final ResourceLocation DESIGNIX_ID = new ResourceLocation(Minestuck.MOD_ID, "punch_designix");
 	
 	public static final IIngredientType<GristAmount> GRIST = () -> GristAmount.class;
-	
-	GristCostRecipeCategory alchemiterCategory;
-	//TotemLatheRecipeCategory totemLatheCategory;
-	//DesignixRecipeCategory designixCategory;
-	
 	
 	@Override
 	public ResourceLocation getPluginUid()
@@ -56,58 +56,34 @@ public class MinestuckJeiPlugin implements IModPlugin
 	@Override
 	public void registerCategories(IRecipeCategoryRegistration registry)
 	{
-		alchemiterCategory = new GristCostRecipeCategory(registry.getJeiHelpers().getGuiHelper());
+		GristCostRecipeCategory alchemiterCategory = new GristCostRecipeCategory(registry.getJeiHelpers().getGuiHelper());
 		registry.addRecipeCategories(alchemiterCategory);
-		/*totemLatheCategory = new TotemLatheRecipeCategory(registry.getJeiHelpers().getGuiHelper());
+		TotemLatheRecipeCategory totemLatheCategory = new TotemLatheRecipeCategory(registry.getJeiHelpers().getGuiHelper());
 		registry.addRecipeCategories(totemLatheCategory);
-		designixCategory = new DesignixRecipeCategory(registry.getJeiHelpers().getGuiHelper());
-		registry.addRecipeCategories(designixCategory);*/
+		DesignixRecipeCategory designixCategory = new DesignixRecipeCategory(registry.getJeiHelpers().getGuiHelper());
+		registry.addRecipeCategories(designixCategory);
+	}
+	
+	@Override
+	public void registerRecipeCatalysts(IRecipeCatalystRegistration registration)
+	{
+		registration.addRecipeCatalyst(new ItemStack(MSBlocks.ALCHEMITER), GRIST_COST_ID);
+		registration.addRecipeCatalyst(new ItemStack(MSBlocks.MINI_ALCHEMITER), GRIST_COST_ID);
+		registration.addRecipeCatalyst(new ItemStack(MSBlocks.TOTEM_LATHE), LATHE_ID);
+		registration.addRecipeCatalyst(new ItemStack(MSBlocks.MINI_TOTEM_LATHE), LATHE_ID);
+		registration.addRecipeCatalyst(new ItemStack(MSBlocks.PUNCH_DESIGNIX), DESIGNIX_ID);
+		registration.addRecipeCatalyst(new ItemStack(MSBlocks.MINI_PUNCH_DESIGNIX), DESIGNIX_ID);
+		registration.addRecipeCatalyst(new ItemStack(MSBlocks.CRUXITE_DOWEL), GRIST_COST_ID, LATHE_ID);
+		registration.addRecipeCatalyst(new ItemStack(MSItems.CAPTCHA_CARD), LATHE_ID, DESIGNIX_ID);
 	}
 	
 	@Override
 	public void registerRecipes(IRecipeRegistration registration)
 	{
-		registration.addRecipes(Minecraft.getInstance().world.getRecipeManager().getRecipes().stream().filter(recipe -> recipe.getType() == MSRecipeTypes.GRIST_COST_TYPE && ((GristCostRecipe) recipe).getJeiCost() != null).collect(Collectors.toList()), GRIST_COST_ID);
+		World world = Minecraft.getInstance().world;
+		Collection<IRecipe<?>> recipes = world.getRecipeManager().getRecipes();
+		registration.addRecipes(recipes.stream().filter(recipe -> recipe.getType() == MSRecipeTypes.GRIST_COST_TYPE).flatMap(recipe -> ((GristCostRecipe) recipe).getJeiCosts(world).stream()).collect(Collectors.toList()), GRIST_COST_ID);
+		registration.addRecipes(recipes.stream().filter(recipe -> recipe.getType() == MSRecipeTypes.COMBINATION_TYPE).flatMap(recipe -> ((CombinationRecipe) recipe).getJeiCombinations().stream()).filter(combination -> combination.getMode() == CombinationMode.AND).collect(Collectors.toList()), LATHE_ID);
+		registration.addRecipes(recipes.stream().filter(recipe -> recipe.getType() == MSRecipeTypes.COMBINATION_TYPE).flatMap(recipe -> ((CombinationRecipe) recipe).getJeiCombinations().stream()).filter(combination -> combination.getMode() == CombinationMode.OR).collect(Collectors.toList()), DESIGNIX_ID);
 	}
-	
-	/*
-	@Override
-    public void register(IModRegistry registry)
-    {
-        ArrayList<AlchemiterRecipeWrapper> alchemiterRecipes = new ArrayList<>();
-        for(Map.Entry<List<Object>, GristSet> entry : AlchemyCostRegistry.getAllConversions().entrySet())
-        {
-            for(ItemStack stack : getItemStacks(entry.getKey().get(0), (Integer) entry.getKey().get(1)))
-            {
-                alchemiterRecipes.add(new AlchemiterRecipeWrapper(stack, entry.getValue()));
-            }
-        }
-        registry.addRecipes(alchemiterRecipes, alchemiterCategory.getUid());
-        registry.addRecipeCatalyst(new ItemStack(MinestuckBlocks.sburbMachine, 1, BlockSburbMachine.MachineType.ALCHEMITER.ordinal()), alchemiterCategory.getUid());
-
-        ArrayList<PunchCardRecipeWrapper> latheRecipes = new ArrayList<>();
-		ArrayList<PunchCardRecipeWrapper> designixRecipes = new ArrayList<>();
-        for(Map.Entry<List<Object>, ItemStack> entry : CombinationRegistry.getAllConversions().entrySet())
-        {
-            List<ItemStack> firstStacks = getItemStacks(entry.getKey().get(0), (Integer) entry.getKey().get(1));
-            List<ItemStack> secondStacks = getItemStacks(entry.getKey().get(2), (Integer) entry.getKey().get(3));
-            if(!(firstStacks.isEmpty() || secondStacks.isEmpty()))
-            {
-                if(entry.getKey().get(4) == CombinationRegistry.Mode.MODE_AND)
-                {
-					latheRecipes.add(new TotemLatheRecipeWrapper(firstStacks, secondStacks, entry.getValue()));
-                }
-                else
-                {
-					designixRecipes.add(new DesignixRecipeWrapper(firstStacks, secondStacks, entry.getValue()));
-                }
-            }
-        }
-
-        Debug.info("Adding " +  (latheRecipes.size() + designixRecipes.size()) + " punch card recipes to the jei plugin");
-        registry.addRecipes(latheRecipes, totemLatheCategory.getUid());
-        registry.addRecipes(designixRecipes, designixCategory.getUid());
-        registry.addRecipeCatalyst(new ItemStack(MinestuckBlocks.sburbMachine, 1, BlockSburbMachine.MachineType.TOTEM_LATHE.ordinal()), totemLatheCategory.getUid());
-        registry.addRecipeCatalyst(new ItemStack(MinestuckBlocks.sburbMachine, 1, BlockSburbMachine.MachineType.PUNCH_DESIGNIX.ordinal()), designixCategory.getUid());
-    }*/
 }

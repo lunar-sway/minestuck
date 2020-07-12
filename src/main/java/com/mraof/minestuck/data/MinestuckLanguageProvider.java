@@ -1,8 +1,10 @@
 package com.mraof.minestuck.data;
 
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
-import com.mraof.minestuck.util.EnumAspect;
-import com.mraof.minestuck.util.EnumClass;
+import com.mraof.minestuck.player.Echeladder;
+import com.mraof.minestuck.player.EnumAspect;
+import com.mraof.minestuck.player.EnumClass;
+import com.mraof.minestuck.skaianet.MergeResult;
 import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.entity.EntityType;
@@ -17,6 +19,7 @@ import java.util.function.Supplier;
 /**
  * This is made to also be useful for mods other than minestuck. If you're making a plugin, this class can be rather helpful!
  */
+@SuppressWarnings({"unused", "WeakerAccess"})
 public abstract class MinestuckLanguageProvider extends LanguageProvider
 {
 	private final String modid;
@@ -125,7 +128,7 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
 	}
 	protected void addRung(int rung, String value)
 	{
-		add("echeladder.rung." + rung, value);
+		add(Echeladder.translationKey(rung), value);
 	}
 	protected void addAdvancement(String key, String title, String description)
 	{
@@ -151,5 +154,13 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
 	protected void addEntitySubtitles(EntityType<?> type, String key, String value)
 	{
 		add("subtitles."+type.getTranslationKey()+"."+key, value);
+	}
+	protected void addColor(String key, String value)
+	{
+		add("minestuck.color."+key, value);
+	}
+	protected void add(MergeResult result, String value)
+	{
+		add(result.translationKey(), value);
 	}
 }

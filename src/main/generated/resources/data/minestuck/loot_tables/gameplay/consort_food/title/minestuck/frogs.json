@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:gift",
+  "pools": [
+    {
+      "name": "main",
+      "rolls": 1,
+      "entries": []
+    },
+    {
+      "name": "special",
+      "rolls": 1,
+      "entries": []
+    }
+  ]
+}

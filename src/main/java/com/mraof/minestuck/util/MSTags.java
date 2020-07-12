@@ -4,9 +4,11 @@ import com.mraof.minestuck.Minestuck;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.tags.*;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.Tags;
 
 public class MSTags
 {
@@ -67,6 +69,8 @@ public class MSTags
 		public static final Tag<Item> DIAMOND_ORES = tag("ores/diamond");
 		public static final Tag<Item> CRUXITE_STORAGE_BLOCKS = tag("storage_blocks/cruxite");
 		public static final Tag<Item> GRIST_CANDY = tag("grist_candy");
+		public static final Tag<Item> FAYGO = tag("faygo");
+		public static final Tag<Item> MODUS_CARD = tag("modus_card");
 		
 		private static Tag<Item> tag(String name)
 		{
@@ -103,6 +107,30 @@ public class MSTags
 		private static Tag<EntityType<?>> tag(String name)
 		{
 			return new EntityTypeTags.Wrapper(new ResourceLocation(Minestuck.MOD_ID, name));
+		}
+	}
+	
+	public static Tag<Item> dyeItemTag(DyeColor color)
+	{
+		switch(color)
+		{
+			case WHITE: return Tags.Items.DYES_WHITE;
+			case ORANGE: return Tags.Items.DYES_ORANGE;
+			case MAGENTA: return Tags.Items.DYES_MAGENTA;
+			case LIGHT_BLUE: return Tags.Items.DYES_LIGHT_BLUE;
+			case YELLOW: return Tags.Items.DYES_YELLOW;
+			case LIME: return Tags.Items.DYES_LIME;
+			case PINK: return Tags.Items.DYES_PINK;
+			case GRAY: return Tags.Items.DYES_GRAY;
+			case LIGHT_GRAY: return Tags.Items.DYES_LIGHT_GRAY;
+			case CYAN: return Tags.Items.DYES_CYAN;
+			case PURPLE: return Tags.Items.DYES_PURPLE;
+			case BLUE: return Tags.Items.DYES_BLUE;
+			case BROWN: return Tags.Items.DYES_BROWN;
+			case GREEN: return Tags.Items.DYES_GREEN;
+			case RED: return Tags.Items.DYES_RED;
+			case BLACK: return Tags.Items.DYES_BLACK;
+			default: throw new IllegalArgumentException("Got unexpected color: "+color);
 		}
 	}
 }

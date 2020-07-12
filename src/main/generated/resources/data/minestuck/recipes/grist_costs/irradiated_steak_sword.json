@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:irradiated_steak_sword"
+  },
+  "grist_cost": {
+    "minestuck:iodine": 55,
+    "minestuck:tar": 10,
+    "minestuck:uranium": 8
+  }
+}

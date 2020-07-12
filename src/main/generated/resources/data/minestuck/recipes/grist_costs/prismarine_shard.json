@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:prismarine_shard"
+  },
+  "grist_cost": {
+    "minestuck:cobalt": 3,
+    "minestuck:build": 3
+  }
+}

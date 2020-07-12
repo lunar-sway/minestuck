@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:grass_block"
+  },
+  "input2": {
+    "item": "minecraft:end_stone"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:end_grass"
+  }
+}

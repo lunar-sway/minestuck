@@ -33,7 +33,7 @@ public class Teleport
 			ServerPlayerEntity player = (ServerPlayerEntity) entity;
 			
 			ChunkPos chunkpos = new ChunkPos(new BlockPos(x, y, z));
-			world.getChunkProvider().func_217228_a(TicketType.POST_TELEPORT, chunkpos, 1, player.getEntityId());
+			world.getChunkProvider().registerTicket(TicketType.POST_TELEPORT, chunkpos, 1, player.getEntityId());
 			player.stopRiding();
 			if(player.isSleeping())
 			{
@@ -68,6 +68,7 @@ public class Teleport
 				entity.setLocationAndAngles(x, y, z, yaw, pitch);
 				entity.setRotationYawHead(yaw);
 				world.func_217460_e(entity);
+				oldEntity.remove(false);
 			}
 		}
 		

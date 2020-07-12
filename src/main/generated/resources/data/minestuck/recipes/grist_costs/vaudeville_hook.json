@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:vaudeville_hook"
+  },
+  "grist_cost": {
+    "minestuck:iodine": 8,
+    "minestuck:tar": 4
+  }
+}

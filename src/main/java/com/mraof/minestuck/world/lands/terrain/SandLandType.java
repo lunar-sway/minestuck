@@ -64,6 +64,8 @@ public class SandLandType extends TerrainLandType
 			registry.setBlockState("structure_primary_decorative", Blocks.CHISELED_SANDSTONE.getDefaultState());
 			registry.setBlockState("structure_primary_stairs", Blocks.SANDSTONE_STAIRS.getDefaultState());
 			registry.setBlockState("village_path", Blocks.RED_SAND.getDefaultState());
+			registry.setBlockState("cruxite_ore", MSBlocks.SANDSTONE_CRUXITE_ORE.getDefaultState());
+			registry.setBlockState("uranium_ore", MSBlocks.SANDSTONE_URANIUM_ORE.getDefaultState());
 		} else
 		{
 			registry.setGroundState(Blocks.RED_SANDSTONE.getDefaultState(), MSFillerBlockTypes.RED_SANDSTONE);
@@ -72,6 +74,8 @@ public class SandLandType extends TerrainLandType
 			registry.setBlockState("structure_primary_decorative", Blocks.CHISELED_RED_SANDSTONE.getDefaultState());
 			registry.setBlockState("structure_primary_stairs", Blocks.RED_SANDSTONE_STAIRS.getDefaultState());
 			registry.setBlockState("village_path", Blocks.SAND.getDefaultState());
+			registry.setBlockState("cruxite_ore", MSBlocks.RED_SANDSTONE_CRUXITE_ORE.getDefaultState());
+			registry.setBlockState("uranium_ore", MSBlocks.RED_SANDSTONE_URANIUM_ORE.getDefaultState());
 		}
 		registry.setBlockState("structure_secondary", Blocks.STONE_BRICKS.getDefaultState());
 		registry.setBlockState("structure_secondary_decorative", Blocks.CHISELED_STONE_BRICKS.getDefaultState());

@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:tag_source_grist_cost",
+  "ingredient": {
+    "tag": "forge:ores/cobalt"
+  },
+  "grist_cost": {
+    "minestuck:build": 4
+  },
+  "source": "forge:ingots/cobalt"
+}

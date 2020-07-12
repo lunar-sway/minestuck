@@ -25,21 +25,15 @@ import java.util.Random;
 public abstract class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IMob
 {
 	private static Random randStatic = new Random();
-	private RangedAttackGoal entityAIArrowAttack = new RangedAttackGoal(this, 0.25F, 20, 10.0F);
-	private MeleeAttackGoal entityAIAttackOnCollide = new MeleeAttackGoal(this, .4F, false);
-	private int pawnType;
-	protected float moveSpeed = 0.3F;
-
+	private final RangedAttackGoal aiArrowAttack = new RangedAttackGoal(this, 0.25F, 20, 10.0F);
+	private final MeleeAttackGoal aiMeleeAttack = new MeleeAttackGoal(this, .4F, false);
+	private static final float moveSpeed = 0.3F;
+	
 	public PawnEntity(EntityType<? extends PawnEntity> type, World world)
-	{
-		this(type, world, randStatic.nextDouble() < .25 ? 1 : 0);
-	}
-	public PawnEntity(EntityType<? extends PawnEntity> type, World world, int pawnType)
 	{
 		super(type, world);
 		this.experienceValue = 1;
-
-		this.pawnType = pawnType;
+		setCombatTask();
 	}
 
 	@Override
@@ -54,23 +48,11 @@ public abstract class PawnEntity extends CarapacianEntity implements IRangedAtta
 		return moveSpeed;
 	}
 	
-	@Nullable
 	@Override
-	public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag)
+	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty)
 	{
-		spawnDataIn = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
-		
-		setEquipmentBasedOnDifficulty(difficultyIn);
-		
-		if(this.pawnType == 1)
-		{
-			this.targetSelector.addGoal(4, entityAIArrowAttack);
-		}
-		else
-			this.goalSelector.addGoal(4, this.entityAIAttackOnCollide);
-		this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(this.pawnType == 1 ? Items.BOW : rand.nextDouble() < .2 ? MSItems.REGISWORD : rand.nextDouble() < .02 ? MSItems.SORD : Items.STONE_SWORD));
-		this.setEnchantmentBasedOnDifficulty(difficultyIn);
-		return spawnDataIn;
+		super.setEquipmentBasedOnDifficulty(difficulty);
+		this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(randStatic.nextDouble() < .25 ? Items.BOW : rand.nextDouble() < .2 ? MSItems.REGISWORD : rand.nextDouble() < .02 ? MSItems.SORD : Items.STONE_SWORD));
 	}
 	
 	@Override
@@ -136,7 +118,7 @@ public abstract class PawnEntity extends CarapacianEntity implements IRangedAtta
 			par1Entity.setFire(1);
 
 		if (knockback > 0)
-			par1Entity.addVelocity((double)(-MathHelper.sin(this.rotationYaw * (float)Math.PI / 180.0F) * (float)knockback * 0.5F), 0.1D, (double)(MathHelper.cos(this.rotationYaw * (float)Math.PI / 180.0F) * (float)knockback * 0.5F));
+			par1Entity.addVelocity(-MathHelper.sin(this.rotationYaw * (float)Math.PI / 180.0F) * (float)knockback * 0.5F, 0.1D, (double)(MathHelper.cos(this.rotationYaw * (float)Math.PI / 180.0F) * (float)knockback * 0.5F));
 
 		return par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this), damage);
 	}
@@ -154,35 +136,51 @@ public abstract class PawnEntity extends CarapacianEntity implements IRangedAtta
 //		}
 //	}
 	
-	@Override
-	public void setCombatTask()
+	private void setCombatTask()
 	{
-		if(this.entityAIArrowAttack == null || this.entityAIAttackOnCollide == null)
+		if(this.world != null && !this.world.isRemote)
 		{
-			entityAIArrowAttack = new RangedAttackGoal(this, 0.25F, 20, 10.0F);
-			entityAIAttackOnCollide = new MeleeAttackGoal(this, .4F, false);
+			this.goalSelector.removeGoal(this.aiArrowAttack);
+			this.goalSelector.removeGoal(this.aiMeleeAttack);
+			ItemStack weapon = this.getHeldItemMainhand();
+			
+			if(!weapon.isEmpty() && weapon.getItem() == Items.BOW)
+			{
+				this.goalSelector.addGoal(4, this.aiArrowAttack);
+			} else
+				this.goalSelector.addGoal(4, this.aiMeleeAttack);
 		}
-		this.goalSelector.removeGoal(this.entityAIArrowAttack);
-		this.goalSelector.removeGoal(this.entityAIAttackOnCollide);
-		ItemStack weapon = this.getHeldItemMainhand();
-
-		if(!weapon.isEmpty() && weapon.getItem() == Items.BOW)
-		{
-			this.goalSelector.addGoal(4, this.entityAIArrowAttack);
-		}
-		else
-			this.goalSelector.addGoal(4, this.entityAIAttackOnCollide);
+	}
+	
+	@Override
+	public void readAdditional(CompoundNBT compound)
+	{
+		super.readAdditional(compound);
+		setCombatTask();
 	}
 	
 	@Override
 	public void setItemStackToSlot(EquipmentSlotType slotIn, ItemStack stack)
 	{
 		super.setItemStackToSlot(slotIn, stack);
-
-		if (!this.world.isRemote && slotIn == EquipmentSlotType.MAINHAND)
+		
+		if (!this.world.isRemote)
 		{
 			this.setCombatTask();
 		}
+	}
+	
+	@Nullable
+	@Override
+	public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag)
+	{
+		spawnDataIn = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+		
+		setEquipmentBasedOnDifficulty(difficultyIn);
+		this.setEnchantmentBasedOnDifficulty(difficultyIn);
+		
+		setCombatTask();
+		return spawnDataIn;
 	}
 	
 	@Override

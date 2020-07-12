@@ -2,9 +2,13 @@ package com.mraof.minestuck.item.crafting.alchemy;
 
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
+import com.mraof.minestuck.item.crafting.alchemy.generator.GeneratedCostProvider;
+import com.mraof.minestuck.item.crafting.alchemy.generator.GenerationContext;
+import com.mraof.minestuck.item.crafting.alchemy.generator.GristCostResult;
 import com.mraof.minestuck.jei.JeiGristCost;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.*;
 import net.minecraft.network.PacketBuffer;
@@ -15,15 +19,18 @@ import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 
 public abstract class GristCostRecipe implements IRecipe<IInventory>
 {
 	
 	public static GristSet findCostForItem(ItemStack input, GristType type, boolean shouldRoundDown, World world)
 	{
-		return findRecipeForItem(input, world).map(recipe -> recipe.getGristCost(input, type, shouldRoundDown)).orElse(null);
+		return findRecipeForItem(input, world).map(recipe -> recipe.getGristCost(input, type, shouldRoundDown, world)).orElse(null);
 	}
 	
 	public static Optional<GristCostRecipe> findRecipeForItem(ItemStack input, World world)
@@ -37,11 +44,11 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 	}
 	
 	public final ResourceLocation id;
-	public final Ingredient ingredient;
+	protected final Ingredient ingredient;
 	@Nullable
-	public final Integer priority;
+	protected final Integer priority;
 	
-	public GristCostRecipe(ResourceLocation id, Ingredient ingredient, Integer priority)
+	public GristCostRecipe(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority)
 	{
 		this.id = id;
 		this.ingredient = ingredient;
@@ -97,16 +104,34 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 		else return priority;
 	}
 	
-	public abstract GristSet getGristCost(ItemStack input, GristType wildcardType, boolean shouldRoundDown);
+	public abstract GristSet getGristCost(ItemStack input, GristType wildcardType, boolean shouldRoundDown, @Nullable World world);
 	
 	public boolean canPickWildcard()
 	{
 		return false;
 	}
 	
-	public JeiGristCost getJeiCost()
+	public void addCostProvider(BiConsumer<Item, GeneratedCostProvider> consumer)
 	{
-		return null;
+		GeneratedCostProvider provider = new DefaultProvider();
+		for(ItemStack stack : ingredient.getMatchingStacks())
+			consumer.accept(stack.getItem(), provider);
+	}
+	
+	private class DefaultProvider implements GeneratedCostProvider
+	{
+		@Override
+		public GristCostResult generate(Item item, GristCostResult lastCost, GenerationContext context)
+		{
+			if(lastCost == null && ingredient.test(new ItemStack(item)))
+				return new GristCostResult(getGristCost(new ItemStack(item), GristTypes.BUILD, false, null));
+			else return null;
+		}
+	}
+	
+	public List<JeiGristCost> getJeiCosts(World world)
+	{
+		return Collections.emptyList();
 	}
 	
 	private static int priorityFromIngredient(Ingredient ingredient)
@@ -116,6 +141,10 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 	
 	public static GristSet scaleToCountAndDurability(GristSet cost, ItemStack stack, boolean shouldRoundDown)
 	{
+		if(cost == null)
+			return null;
+		
+		cost = cost.copy();
 		if (stack.getCount() != 1)
 			cost.scale(stack.getCount());
 		
@@ -125,7 +154,7 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 			cost.scale(multiplier, shouldRoundDown);
 		}
 		
-		return cost;
+		return cost.asImmutable();
 	}
 	
 	//Helper class for implementing serializer classes

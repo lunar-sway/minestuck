@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:carrot"
+  },
+  "grist_cost": {
+    "minestuck:amber": 3,
+    "minestuck:chalk": 1
+  }
+}

@@ -4,7 +4,8 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.event.AlchemyEvent;
 import com.mraof.minestuck.inventory.MiniAlchemiterContainer;
 import com.mraof.minestuck.item.crafting.alchemy.*;
-import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -20,7 +21,7 @@ import net.minecraftforge.registries.ForgeRegistry;
 
 import javax.annotation.Nullable;
 
-public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implements INamedContainerProvider
+public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implements INamedContainerProvider, IOwnable, GristWildcardHolder
 {
 	public static final String TITLE = "container.minestuck.mini_alchemiter";
 	public static final RunType TYPE = RunType.BUTTON_OVERRIDE;
@@ -45,7 +46,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 	};
 	
 	private int ticks_since_update = 0;
-	public IdentifierHandler.PlayerIdentifier owner;
+	private PlayerIdentifier owner;
 	private GristType wildcardGrist = GristTypes.BUILD;
 	
 	public MiniAlchemiterTileEntity()
@@ -77,7 +78,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 		if(!world.isBlockPowered(this.getPos()) && !this.inv.get(INPUT).isEmpty() && this.owner != null)
 		{
 			//Check owner's cache: Do they have everything they need?
-			ItemStack newItem = AlchemyRecipes.getDecodedItem(this.inv.get(INPUT));
+			ItemStack newItem = AlchemyHelper.getDecodedItem(this.inv.get(INPUT));
 			if(newItem.isEmpty())
 				if(!inv.get(INPUT).hasTag() || !inv.get(INPUT).getTag().contains("contentID"))
 					newItem = new ItemStack(MSBlocks.GENERIC_OBJECT);
@@ -99,12 +100,18 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 	@Override
 	public void processContents()
 	{
-		ItemStack newItem = AlchemyRecipes.getDecodedItem(this.inv.get(INPUT));
+		ItemStack newItem = AlchemyHelper.getDecodedItem(this.inv.get(INPUT));
 		
 		if (newItem.isEmpty())
 			newItem = new ItemStack(MSBlocks.GENERIC_OBJECT);
 		
 		GristSet cost = GristCostRecipe.findCostForItem(newItem, wildcardGrist, false, world);
+		
+		GristHelper.decrease(world, owner, cost);
+		
+		AlchemyEvent event = new AlchemyEvent(owner, this, this.inv.get(INPUT), newItem, cost);
+		MinecraftForge.EVENT_BUS.post(event);
+		newItem = event.getItemResult();
 		
 		if (inv.get(OUTPUT).isEmpty())
 		{
@@ -114,11 +121,6 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 		{
 			this.inv.get(OUTPUT).grow(1);
 		}
-		
-		GristHelper.decrease(world, owner, cost);
-		
-		AlchemyEvent event = new AlchemyEvent(owner, this, this.inv.get(INPUT), newItem, cost);
-		MinecraftForge.EVENT_BUS.post(event);
 	}
 	
 	// We're going to want to trigger a block update every 20 ticks to have comparators pull data from the Alchemiter.
@@ -177,7 +179,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 	{
 		if (getStackInSlot(INPUT) != null && owner != null)
 		{
-			ItemStack newItem = AlchemyRecipes.getDecodedItem(getStackInSlot(INPUT));
+			ItemStack newItem = AlchemyHelper.getDecodedItem(getStackInSlot(INPUT));
 			if (newItem.isEmpty())
 				if (!getStackInSlot(INPUT).hasTag() || !getStackInSlot(INPUT).getTag().contains("contentID"))
 					newItem = new ItemStack(MSBlocks.GENERIC_OBJECT);
@@ -223,6 +225,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 		return wildcardGrist;
 	}
 	
+	@Override
 	public void setWildcardGrist(GristType wildcardGrist)
 	{
 		if(this.wildcardGrist != wildcardGrist)
@@ -230,5 +233,17 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 			this.wildcardGrist = wildcardGrist;
 			markDirty();
 		}
+	}
+	
+	@Override
+	public void setOwner(PlayerIdentifier identifier)
+	{
+		this.owner = identifier;
+	}
+	
+	@Override
+	public PlayerIdentifier getOwner()
+	{
+		return owner;
 	}
 }

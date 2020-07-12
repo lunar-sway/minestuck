@@ -8,8 +8,8 @@ import net.minecraft.util.math.BlockPos;
 
 public class TransportalizerPacket implements PlayToServerPacket
 {
-	BlockPos pos;
-	String destId;
+	private final BlockPos pos;
+	private final String destId;
 	
 	public TransportalizerPacket(BlockPos pos, String destId)
 	{

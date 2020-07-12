@@ -1,24 +1,49 @@
 package com.mraof.minestuck.world.storage;
 
-import com.mraof.minestuck.editmode.ClientEditHandler;
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.computer.editmode.ClientEditHandler;
+import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.inventory.specibus.StrifeSpecibus;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.network.GristCachePacket;
-import com.mraof.minestuck.util.Title;
+import com.mraof.minestuck.player.Title;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 import java.util.List;
 
+/**
+ * Contains static field for any {@link PlayerData} fields that also need client access.
+ * @author kirderf1
+ */
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class ClientPlayerData
 {
+	public static Modus clientSideModus;
 	public static Title title;
+	public static boolean echeladderAvailable;
 	public static int rung;
 	public static float rungProgress;
 	public static long boondollars;
 	public static List<StrifeSpecibus> playerPortfolio;
-	static GristSet playerGrist;
-	static GristSet targetGrist;
+	private static GristSet playerGrist;
+	private static GristSet targetGrist;
+	public static int playerColor;
+	public static boolean displaySelectionGui;
 	
-	public static void onPacketRecived(GristCachePacket packet)
+	@SubscribeEvent
+	public static void onLoggedIn(ClientPlayerNetworkEvent.LoggedInEvent event)
+	{
+		clientSideModus = null;
+		title = null;
+		rung = -1;
+		playerColor = -1;
+		displaySelectionGui = false;
+	}
+	
+	public static void onPacketReceived(GristCachePacket packet)
 	{
 		if (packet.isEditmode)
 		{

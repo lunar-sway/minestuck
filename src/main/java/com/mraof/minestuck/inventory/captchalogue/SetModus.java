@@ -2,7 +2,7 @@ package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -178,7 +178,7 @@ public class SetModus extends Modus
 		{
 			size--;
 			markDirty();
-			item = AlchemyRecipes.createCard(item, false);
+			item = AlchemyHelper.createCard(item, false);
 		}
 		
 		return item;

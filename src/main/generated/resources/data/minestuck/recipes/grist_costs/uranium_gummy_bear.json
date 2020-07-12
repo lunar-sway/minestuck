@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:uranium_gummy_bear"
+  },
+  "grist_cost": {
+    "minestuck:uranium": 3
+  }
+}

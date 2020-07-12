@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:emerald_axe"
+  },
+  "input2": {
+    "item": "minestuck:frog"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:ruby_croak"
+  }
+}

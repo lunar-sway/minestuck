@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:tree_modus_card"
+  },
+  "grist_cost": {
+    "minestuck:build": 400,
+    "minestuck:amber": 35
+  }
+}

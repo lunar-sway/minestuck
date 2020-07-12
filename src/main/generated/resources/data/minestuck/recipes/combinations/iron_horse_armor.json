@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:iron_ingot"
+  },
+  "input2": {
+    "item": "minecraft:saddle"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minecraft:iron_horse_armor"
+  }
+}

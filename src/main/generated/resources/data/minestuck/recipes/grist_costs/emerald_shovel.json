@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:emerald_shovel"
+  },
+  "grist_cost": {
+    "minestuck:chalk": 40,
+    "minestuck:diamond": 70,
+    "minestuck:ruby": 66
+  }
+}

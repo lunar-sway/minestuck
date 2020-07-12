@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:wooden_axe"
+  },
+  "input2": {
+    "item": "minecraft:anvil"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:blacksmith_bane"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:cobalt_gum"
+  },
+  "grist_cost": {
+    "minestuck:cobalt": 3
+  }
+}

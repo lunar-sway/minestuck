@@ -1,7 +1,7 @@
 package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.util.EnumAspect;
+import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
@@ -66,7 +66,8 @@ public class LightLandType extends TitleLandType
 	@Override
 	public boolean isAspectCompatible(TerrainLandType aspect)
 	{
-		return aspect.getSkylightBase() >= 1/2F;	//TODO Add no thunder as condition
+		LandProperties properties = new LandProperties(aspect);
+		aspect.setProperties(properties);
+		return aspect.getSkylightBase() >= 1/2F && properties.forceThunder == LandProperties.ForceType.OFF;
 	}
-	
 }

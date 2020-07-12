@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:sbahj_poster"
+  },
+  "grist_cost": {
+    "minestuck:build": 4
+  }
+}

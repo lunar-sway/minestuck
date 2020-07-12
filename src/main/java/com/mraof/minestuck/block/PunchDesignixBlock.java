@@ -3,6 +3,7 @@ package com.mraof.minestuck.block;
 import com.mraof.minestuck.block.multiblock.MachineMultiblock;
 import com.mraof.minestuck.tileentity.PunchDesignixTileEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
+import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -25,11 +26,6 @@ import java.util.Map;
 
 public class PunchDesignixBlock extends MultiMachineBlock
 {
-	
-	public static final Map<Direction, VoxelShape> LEG_SHAPE = createRotatedShapes(0, 0, 4, 16, 16, 16);
-	public static final Map<Direction, VoxelShape> SLOT_SHAPE = createRotatedShapes(0, 0, 9, 15, 7, 16);
-	public static final Map<Direction, VoxelShape> KEYBOARD_SHAPE = createRotatedShapes(1, 0, 4, 16, 7, 16);
-	
 	protected final Map<Direction, VoxelShape> shape;
 	protected final BlockPos mainPos;
 	
@@ -41,12 +37,14 @@ public class PunchDesignixBlock extends MultiMachineBlock
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
 	{
 		return shape.get(state.get(FACING));
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
 	{
 		if (worldIn.isRemote)
@@ -59,6 +57,7 @@ public class PunchDesignixBlock extends MultiMachineBlock
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving)
 	{
 		if(state.getBlock() != newState.getBlock())
@@ -68,21 +67,13 @@ public class PunchDesignixBlock extends MultiMachineBlock
 			if(te instanceof PunchDesignixTileEntity)
 			{
 				PunchDesignixTileEntity designix = (PunchDesignixTileEntity) te;
-				designix.broken = true;
+				designix.breakMachine();
 				if(hasTileEntity(state))
 					designix.dropItem(true);
 			}
 			
 			super.onReplaced(state, worldIn, pos, newState, isMoving);
 		}
-	}
-	
-	@Override
-	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
-	{
-		TileEntity te = worldIn.getTileEntity(pos);
-		if(te instanceof PunchDesignixTileEntity)
-			((PunchDesignixTileEntity) te).checkStates();
 	}
 	
     /**
@@ -94,7 +85,7 @@ public class PunchDesignixBlock extends MultiMachineBlock
 	public BlockPos getMainPos(BlockState state, BlockPos pos)
 	{
 		Direction direction = state.get(FACING);
-		Rotation rotation = rotationFromDirection(direction);
+		Rotation rotation = MSRotationUtil.fromDirection(direction);
 		
 		return pos.add(this.mainPos.rotate(rotation));
 	}

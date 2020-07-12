@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:estrogen_empowered_everything_eradicator"
+  },
+  "input2": {
+    "item": "minestuck:sbahj_poster"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:eeeeeeeeeeee"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:enchanted_book"
+  },
+  "grist_cost": {
+    "minestuck:uranium": 8,
+    "minestuck:quartz": 1,
+    "minestuck:diamond": 4,
+    "minestuck:ruby": 4,
+    "minestuck:chalk": 16,
+    "minestuck:iodine": 2
+  }
+}

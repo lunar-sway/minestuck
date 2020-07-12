@@ -3,21 +3,29 @@ package com.mraof.minestuck.item.crafting.alchemy;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.ExtraJSONUtils;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
 
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class GristSet
 {
+	public static final String MISSING_MESSAGE = "grist.missing";
+	public static final String GRIST_COMMA = "grist.comma";
+	
+	public static final GristSet EMPTY = new GristSet(Collections.emptyMap());
 
 	private final Map<GristType, Long> gristTypes;
 
@@ -148,7 +156,12 @@ public class GristSet
 	{
 		return this.gristTypes;
 	}
-
+	
+	public boolean hasType(GristType type)
+	{
+		return gristTypes.containsKey(type);
+	}
+	
 	/**
 	 * Returns a ArrayList containing GristAmount objects representing the set.
 	 */
@@ -225,10 +238,47 @@ public class GristSet
 		build.append(']');
 		return build.toString();
 	}
-
+	
+	public ITextComponent asTextComponent()
+	{
+		ITextComponent component = null;
+		for(GristAmount grist : getAmounts())
+		{
+			if(component == null)
+				component = grist.asTextComponent();
+			else component = new TranslationTextComponent(GRIST_COMMA, component, grist.asTextComponent());
+		}
+		if(component != null)
+			return component;
+		else return new StringTextComponent("");
+	}
+	
+	public ITextComponent createMissingMessage()
+	{
+		return new TranslationTextComponent(MISSING_MESSAGE, asTextComponent());
+	}
+	
+	
 	public GristSet copy()
 	{
 		return new GristSet(new TreeMap<>(gristTypes));
+	}
+	
+	public void spawnGristEntities(World world, double x, double y, double z, Random rand, Consumer<GristEntity> postProcessor)
+	{
+		for(GristAmount amount : getAmounts())
+		{
+			long countLeft = amount.getAmount();
+			for(int i = 0; i < 10 && countLeft > 0; i++)
+			{
+				long spawnedCount = countLeft <= amount.getAmount()/10 || i == 9 ? countLeft : Math.min(countLeft, (long) world.rand.nextDouble()*countLeft + 1);
+				GristAmount spawnedAmount = new GristAmount(amount.getType(), spawnedCount);
+				GristEntity entity = new GristEntity(world, x, y, z, spawnedAmount);
+				postProcessor.accept(entity);
+				world.addEntity(entity);
+				countLeft -= spawnedCount;
+			}
+		}
 	}
 	
 	public JsonElement serialize()

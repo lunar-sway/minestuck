@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:emerald_pickaxe"
+  },
+  "grist_cost": {
+    "minestuck:rust": 42,
+    "minestuck:diamond": 72,
+    "minestuck:ruby": 70
+  }
+}

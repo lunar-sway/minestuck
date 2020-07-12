@@ -4,7 +4,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.inventory.specibus.StrifePortfolioHandler;
 import com.mraof.minestuck.inventory.specibus.StrifeSpecibus;
-import com.mraof.minestuck.util.KindAbstratusType;
+import com.mraof.minestuck.player.KindAbstratusType;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;

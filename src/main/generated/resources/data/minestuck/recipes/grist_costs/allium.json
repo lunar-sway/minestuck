@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:allium"
+  },
+  "grist_cost": {
+    "minestuck:amethyst": 1,
+    "minestuck:garnet": 3,
+    "minestuck:iodine": 1
+  }
+}

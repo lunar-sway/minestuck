@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:spiked_glove"
+  },
+  "grist_cost": {
+    "minestuck:build": 25,
+    "minestuck:rust": 5,
+    "minestuck:chalk": 3
+  }
+}

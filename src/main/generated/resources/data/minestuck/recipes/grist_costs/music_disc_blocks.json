@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:music_disc_blocks"
+  },
+  "grist_cost": {
+    "minestuck:build": 15,
+    "minestuck:caulk": 8,
+    "minestuck:ruby": 5,
+    "minestuck:rust": 5
+  }
+}

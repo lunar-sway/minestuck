@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:black_concrete"
+  },
+  "grist_cost": {
+    "minestuck:tar": 1,
+    "minestuck:build": 3,
+    "minestuck:cobalt": 3
+  }
+}

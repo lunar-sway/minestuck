@@ -1,10 +1,11 @@
 package com.mraof.minestuck.entity.item;
 
-import com.mraof.minestuck.editmode.ClientEditHandler;
-import com.mraof.minestuck.editmode.ServerEditHandler;
+import com.mraof.minestuck.computer.editmode.ClientEditHandler;
+import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.item.crafting.alchemy.*;
-import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
@@ -75,10 +76,11 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount)
 	{
-		if (this.isInvulnerableTo(source))
+		if(this.isInvulnerableTo(source))
 		{
 			return false;
-		} else
+		}
+		else
 		{
 			this.markVelocityChanged();
 			this.gristHealth = (int)((float)this.gristHealth - amount);
@@ -223,13 +225,14 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		}
 	}
 	
-	public void consumeGrist(IdentifierHandler.PlayerIdentifier identifier, boolean sound)
+	public void consumeGrist(PlayerIdentifier identifier, boolean sound)
 	{
 		if(this.world.isRemote)
 			throw new IllegalStateException("Grist entities shouldn't be consumed client-side.");
 		if(sound)
 			this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.1F, 0.5F * ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.8F));
 		GristHelper.increase(world, identifier, new GristSet(gristType, gristValue));
+		GristHelper.notify(world.getServer(), identifier, new GristSet(gristType, gristValue));
 		this.remove();
 	}
 	

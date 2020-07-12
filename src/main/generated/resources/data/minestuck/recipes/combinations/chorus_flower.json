@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "tag": "minecraft:small_flowers"
+  },
+  "input2": {
+    "item": "minecraft:chorus_fruit"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minecraft:chorus_flower"
+  }
+}

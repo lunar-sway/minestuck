@@ -18,7 +18,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class GristSelectorScreen extends MinestuckScreen
+public class GristSelectorScreen<T extends Screen & Positioned> extends MinestuckScreen
 {
 	public static final String TITLE = "minestuck.grist_selector";
 	public static final String SELECT_GRIST = "minestuck.select_grist";
@@ -26,18 +26,12 @@ public class GristSelectorScreen extends MinestuckScreen
 
 	private static final int guiWidth = 226, guiHeight = 190;
 
-	private Screen otherScreen;
+	private T otherScreen;
 	private int page = 0;
 	private GuiButtonExt previousButton;
 	private GuiButtonExt nextButton;
 
-	protected GristSelectorScreen(MiniAlchemiterScreen screen)
-	{
-		super(new TranslationTextComponent(TITLE));
-		this.otherScreen = screen;
-	}
-
-	public GristSelectorScreen(AlchemiterScreen screen)
+	public GristSelectorScreen(T screen)
 	{
 		super(new TranslationTextComponent(TITLE));
 		this.otherScreen = screen;
@@ -115,23 +109,19 @@ public class GristSelectorScreen extends MinestuckScreen
 				int gristYOffset = yOffset + gristIconY + (gristDisplayYOffset * row - row);
 				if (isPointInRegion(gristXOffset, gristYOffset, 16, 16, xcor, ycor))
 				{
-					BlockPos pos;
-					if(otherScreen instanceof AlchemiterScreen)
-						pos = ((AlchemiterScreen) otherScreen).getAlchemiter().getPos();
-					else if(otherScreen instanceof MiniAlchemiterScreen)
-						pos = ((MiniAlchemiterScreen) otherScreen).getContainer().machinePos;
-					else break;
+					BlockPos pos = otherScreen.getPosition();
+					
 					otherScreen.width = this.width;
 					otherScreen.height = this.height;
 					minecraft.currentScreen = otherScreen;
 					GristWildcardPacket packet = new GristWildcardPacket(pos, type);
 					MSPacketHandler.INSTANCE.sendToServer(packet);
-					break;
+					return true;
 				}
 				offset++;
 			}
 		}
-		return true;
+		return false;
 	}
 	
 	@Override

@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:jar_of_bugs"
+  },
+  "grist_cost": {
+    "minestuck:build": 5,
+    "minestuck:chalk": 3
+  }
+}

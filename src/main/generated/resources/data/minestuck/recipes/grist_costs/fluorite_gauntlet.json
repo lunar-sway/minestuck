@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:fluorite_gauntlet"
+  },
+  "grist_cost": {
+    "minestuck:cobalt": 803,
+    "minestuck:caulk": 500,
+    "minestuck:quartz": 10,
+    "minestuck:shale": 2
+  }
+}

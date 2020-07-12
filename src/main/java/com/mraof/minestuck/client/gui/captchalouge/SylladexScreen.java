@@ -6,6 +6,7 @@ import com.mraof.minestuck.client.settings.MSKeyHandler;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.client.gui.screen.ConfirmScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
@@ -128,7 +129,7 @@ public abstract class SylladexScreen extends Screen
 		
 		font.drawString(getTitle().getFormattedText(), xOffset + 15, yOffset + 5, 0x404040);
 		
-		String str = CaptchaDeckHandler.clientSideModus.getName().getFormattedText();
+		String str = ClientPlayerData.clientSideModus.getName().getFormattedText();
 		font.drawString(str, xOffset + GUI_WIDTH - font.getStringWidth(str) - 16, yOffset + 5, 0x404040);
 		
 		super.render(xcor, ycor, f);
@@ -216,7 +217,7 @@ public abstract class SylladexScreen extends Screen
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int i)
 	{
-		if(MSKeyHandler.instance.sylladexKey.isActiveAndMatches(InputMappings.getInputByCode(keyCode, scanCode)))
+		if(MSKeyHandler.sylladexKey.isActiveAndMatches(InputMappings.getInputByCode(keyCode, scanCode)))
 		{
 			minecraft.displayGuiScreen(null);
 			return true;

@@ -3,7 +3,7 @@ package com.mraof.minestuck.block;
 import com.mraof.minestuck.block.multiblock.MachineMultiblock;
 import com.mraof.minestuck.tileentity.CruxtruderTileEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
-import net.minecraft.block.Block;
+import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -22,8 +22,6 @@ import java.util.Map;
 
 public class CruxtruderBlock extends MultiMachineBlock
 {
-	public static final VoxelShape TUBE_SHAPE = Block.makeCuboidShape(2, 0, 2, 14, 16, 14);
-	
 	protected final Map<Direction, VoxelShape> shape;
 	protected final boolean hasTileEntity;
 	protected final BlockPos mainPos;
@@ -37,12 +35,14 @@ public class CruxtruderBlock extends MultiMachineBlock
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
 	{
 		return shape.get(state.get(FACING));
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
 	{
 		if(hasTileEntity && (state.get(FACING) == hit.getFace() || hit.getFace() == Direction.UP))
@@ -74,6 +74,7 @@ public class CruxtruderBlock extends MultiMachineBlock
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving)
 	{
 		BlockPos MainPos = getMainPos(state, pos);
@@ -88,7 +89,7 @@ public class CruxtruderBlock extends MultiMachineBlock
 	
 	public BlockPos getMainPos(BlockState state, BlockPos pos)
 	{
-		Rotation rotation = rotationFromDirection(state.get(FACING));
+		Rotation rotation = MSRotationUtil.fromDirection(state.get(FACING));
 		
 		return pos.add(mainPos.rotate(rotation));
 	}

@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "tag": "forge:ingots/copper"
+  },
+  "grist_cost": {
+    "minestuck:rust": 16,
+    "minestuck:cobalt": 3
+  }
+}

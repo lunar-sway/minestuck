@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:gravel"
+  },
+  "input2": {
+    "item": "minecraft:sand"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:light_gray_concrete_powder"
+  }
+}

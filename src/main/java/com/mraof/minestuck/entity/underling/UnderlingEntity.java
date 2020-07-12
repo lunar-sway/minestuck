@@ -10,10 +10,11 @@ import com.mraof.minestuck.item.crafting.alchemy.GristAmount;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
-import com.mraof.minestuck.skaianet.SburbHandler;
+import com.mraof.minestuck.player.Echeladder;
+import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.skaianet.UnderlingController;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.Echeladder;
-import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
@@ -28,6 +29,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -39,10 +41,7 @@ import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 {
@@ -53,7 +52,7 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 	
 	private static final float maxSharedProgress = 2;	//The multiplier for the maximum amount progress that can be gathered from each enemy with the group fight bonus
 	
-	protected Map<IdentifierHandler.PlayerIdentifier, Double> damageMap = new HashMap<>();	//Map that stores how much damage each player did to this to this underling. Null is used for environmental or other non-player damage
+	protected Map<PlayerIdentifier, Double> damageMap = new HashMap<>();	//Map that stores how much damage each player did to this to this underling. Null is used for environmental or other non-player damage
 	
 	public UnderlingEntity(EntityType<? extends UnderlingEntity> type, World world)
 	{
@@ -84,6 +83,12 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 		
 		this.getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(this.getKnockbackResistance());
 		this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(this.getWanderSpeed());
+	}
+	
+	@Override
+	public SoundCategory getSoundCategory()
+	{
+		return SoundCategory.HOSTILE;
 	}
 	
 	@Override
@@ -252,7 +257,7 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 	{
 		if(compound.contains("Type", Constants.NBT.TAG_STRING))
 			applyGristType(GristType.read(compound, "Type", GristTypes.ARTIFACT), false);
-		else applyGristType(SburbHandler.getUnderlingType(this), true);
+		else applyGristType(UnderlingController.getUnderlingType(this), true);
 		super.readAdditional(compound);
 		
 		fromSpawner = compound.getBoolean("Spawned");
@@ -265,10 +270,9 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 		}
 	}
 	
-	@Override
-	public boolean canSpawn(IWorld worldIn, SpawnReason spawnReasonIn)
+	public static boolean canSpawnOnAndNotPeaceful(EntityType<? extends MobEntity> type, IWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn)
 	{
-		return this.world.getDifficulty() != Difficulty.PEACEFUL && super.canSpawn(worldIn, spawnReasonIn);
+		return worldIn.getDifficulty() != Difficulty.PEACEFUL && canSpawnOn(type, worldIn, reason, pos, randomIn);
 	}
 	
 	@Nullable
@@ -277,7 +281,7 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 	{
 		if(!(spawnDataIn instanceof UnderlingData))
 		{
-			applyGristType(SburbHandler.getUnderlingType(this), true);
+			applyGristType(UnderlingController.getUnderlingType(this), true);
 			spawnDataIn = new UnderlingData(getGristType());
 		} else
 		{
@@ -289,7 +293,7 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 	
 	public void onEntityDamaged(DamageSource source, float amount)
 	{
-		IdentifierHandler.PlayerIdentifier player = null;
+		PlayerIdentifier player = null;
 		if(source.getTrueSource() instanceof ServerPlayerEntity)
 			player = IdentifierHandler.encode((ServerPlayerEntity) source.getTrueSource());
 		if(damageMap.containsKey(player))
@@ -315,7 +319,7 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 		
 		int maxProgress = (int) (progress*maxSharedProgress);
 		damageMap.remove(null);
-		IdentifierHandler.PlayerIdentifier[] playerList = damageMap.keySet().toArray(new IdentifierHandler.PlayerIdentifier[0]);
+		PlayerIdentifier[] playerList = damageMap.keySet().toArray(new PlayerIdentifier[0]);
 		double[] modifiers = new double[playerList.length];
 		double totalModifier = 0;
 		
@@ -326,7 +330,9 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 			totalModifier += modifiers[i];
 		}
 		
-		Debug.infof("%s players are splitting on %s progress from %s", playerList.length, progress, getType().getRegistryName());
+		if(playerList.length > 0)
+			Debug.debugf("%s players are splitting on %s progress from %s", playerList.length, progress, getType().getRegistryName());
+		
 		if(totalModifier > maxSharedProgress)
 			for(int i = 0; i < playerList.length; i++)
 				Echeladder.increaseProgress(playerList[i], world, (int) (maxProgress*modifiers[i]/totalModifier));

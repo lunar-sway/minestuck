@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:grimoire"
+  },
+  "grist_cost": {
+    "minestuck:build": 120,
+    "minestuck:amethyst": 60,
+    "minestuck:garnet": 33
+  }
+}

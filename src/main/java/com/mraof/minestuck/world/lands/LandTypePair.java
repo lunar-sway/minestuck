@@ -13,10 +13,10 @@ public class LandTypePair
 {
 	public static final String FORMAT = "land.format";
 	
-	public LandTypePair(TerrainLandType terrainAspect, TitleLandType titleAspect)
+	public LandTypePair(TerrainLandType terrainType, TitleLandType titleType)
 	{
-		terrain = Objects.requireNonNull(terrainAspect);
-		title = Objects.requireNonNull(titleAspect);
+		terrain = Objects.requireNonNull(terrainType);
+		title = Objects.requireNonNull(titleType);
 	}
 	
 	@Nonnull

@@ -1,8 +1,9 @@
 package com.mraof.minestuck.world.storage;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.editmode.EditData;
-import com.mraof.minestuck.editmode.ServerEditHandler;
+import com.mraof.minestuck.computer.editmode.EditData;
+import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.inventory.specibus.StrifePortfolioHandler;
@@ -12,18 +13,22 @@ import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.item.crafting.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.item.crafting.alchemy.NonNegativeGristSet;
 import com.mraof.minestuck.network.*;
+import com.mraof.minestuck.player.Echeladder;
+import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
-import com.mraof.minestuck.util.ColorCollector;
-import com.mraof.minestuck.util.Echeladder;
-import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.util.Title;
+import com.mraof.minestuck.util.ColorHandler;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -32,15 +37,28 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Stores and sends any data connected to a specific player.
+ * This class is for server-side use only.
+ * @author kirderf1
+ */
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class PlayerData
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	final IdentifierHandler.PlayerIdentifier identifier;
+	@SubscribeEvent
+	public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event)
+	{
+		ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
+		PlayerSavedData.getData(player).onPlayerLoggedIn(player);
+	}
+	
+	final PlayerIdentifier identifier;
 	
 	private final PlayerSavedData savedData;
 	private final Echeladder echeladder;
-	private int color = ColorCollector.DEFAULT_COLOR;
+	private int color = ColorHandler.DEFAULT_COLOR;
 	
 	private boolean givenModus;
 	private Modus modus;
@@ -54,7 +72,7 @@ public final class PlayerData
 	
 	private List<StrifeSpecibus> strifePortfolio = new ArrayList<>(Collections.singletonList(new StrifeSpecibus(0)));
 	
-	PlayerData(PlayerSavedData savedData, IdentifierHandler.PlayerIdentifier player)
+	PlayerData(PlayerSavedData savedData, PlayerIdentifier player)
 	{
 		this.savedData = savedData;
 		this.identifier = player;
@@ -157,8 +175,11 @@ public final class PlayerData
 	
 	private void setGivenModus()
 	{
-		givenModus = true;
-		markDirty();
+		if(!givenModus)
+		{
+			givenModus = true;
+			markDirty();
+		}
 	}
 	
 	public long getBoondollars()
@@ -272,20 +293,38 @@ public final class PlayerData
 		}
 	}
 	
+	private void tryGiveStartingModus(ServerPlayerEntity player)
+	{
+		List<String> startingTypes = MinestuckConfig.startingModusTypes.get();
+		if(!startingTypes.isEmpty())
+		{
+			String type = startingTypes.get(player.world.rand.nextInt(startingTypes.size()));
+			if(type.isEmpty())
+			{
+				setGivenModus();
+				return;
+			}
+			ResourceLocation name = ResourceLocation.tryCreate(type);
+			if(name == null)
+				LOGGER.error("Unable to parse starting modus type {} as a resource location!", type);
+			else
+			{
+				Modus modus = CaptchaDeckHandler.createServerModus(name, savedData);
+				if(modus != null)
+				{
+					modus.initModus(null, player, null, MinestuckConfig.initialModusSize.get());
+					setModus(modus);
+				} else LOGGER.warn("Couldn't create a starting modus type by name {}.", type);
+			}
+		}
+	}
+	
 	public void onPlayerLoggedIn(ServerPlayerEntity player)
 	{
 		getEcheladder().updateEcheladderBonuses(player);
 		
-		if(getModus() == null && MinestuckConfig.defaultModusTypes.length > 0 && !hasGivenModus())
-		{
-			int index = player.world.rand.nextInt(MinestuckConfig.defaultModusTypes.length);
-			Modus modus = CaptchaDeckHandler.createServerModus(new ResourceLocation(MinestuckConfig.defaultModusTypes[index]), savedData);
-			if(modus != null)
-			{
-				modus.initModus(player, null, MinestuckConfig.initialModusSize.get());
-				CaptchaDeckHandler.setModus(player, modus);
-			} else LOGGER.warn("Couldn't create a modus by name {}.", MinestuckConfig.defaultModusTypes[index]);
-		}
+		if(getModus() == null && !hasGivenModus())
+			tryGiveStartingModus(player);
 		
 		if(getModus() != null)
 		{
@@ -293,7 +332,7 @@ public final class PlayerData
 			MSPacketHandler.sendToPlayer(ModusDataPacket.create(CaptchaDeckHandler.writeToNBT(modus)), player);
 		}
 		
-		echeladder.sendDataPacket(player, true);
+		echeladder.sendInitialPacket(player);
 		sendColor(player, !hasLoggedIn);
 		sendBoondollars(player);
 		updateGristCache(player);

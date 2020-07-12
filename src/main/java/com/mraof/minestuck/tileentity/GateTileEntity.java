@@ -1,46 +1,55 @@
 package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.skaianet.SburbHandler;
-import com.mraof.minestuck.util.PositionTeleporter;
+import com.mraof.minestuck.util.ColorHandler;
+import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.GateHandler;
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.server.ServerWorld;
 
-public class GateTileEntity extends TileEntity
+public class GateTileEntity extends OnCollisionTeleporterTileEntity<ServerPlayerEntity>
 {
 	//Only used client-side
 	public int color;
+	private boolean hasCollisions = false;
 	
 	public GateHandler.Type gateType;
 	
 	public GateTileEntity()
 	{
-		super(MSTileEntityTypes.GATE);
+		super(MSTileEntityTypes.GATE, ServerPlayerEntity.class);
 	}
 	
-	public void teleportEntity(ServerWorld world, ServerPlayerEntity player, Block block)
+	@Override
+	protected AxisAlignedBB getTeleportField()
 	{
-		if(block == MSBlocks.RETURN_NODE)
+		if(getBlockState().getBlock() == MSBlocks.RETURN_NODE)
+			return new AxisAlignedBB(pos.getX() - 1, pos.getY() + 7D / 16, pos.getZ() - 1, pos.getX() + 1, pos.getY() + 9D / 16, pos.getZ() + 1);
+		else
+			return new AxisAlignedBB(pos.getX(), pos.getY() + 7D / 16, pos.getZ(), pos.getX() + 1, pos.getY() + 9D / 16, pos.getZ() + 1);
+	}
+	
+	@Override
+	protected void teleport(ServerPlayerEntity player)
+	{
+		if(getBlockState().getBlock() == MSBlocks.RETURN_NODE)
 		{
 			BlockPos pos = world.getDimension().findSpawn(0, 0, false);
 			if(pos == null)
 				return;
-			PositionTeleporter.moveEntity(player, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
+			Teleport.teleportEntity(player, (ServerWorld) world, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
 			player.timeUntilPortal = player.getPortalCooldown();
 			player.setMotion(Vec3d.ZERO);
 			player.fallDistance = 0;
 		} else
 		{
-			GateHandler.teleport(gateType, world, player);
+			GateHandler.teleport(gateType, (ServerWorld) world, player);
 		}
 	}
 	
@@ -71,16 +80,14 @@ public class GateTileEntity extends TileEntity
 	public CompoundNBT getUpdateTag()
 	{
 		CompoundNBT nbt = super.getUpdateTag();
-		nbt.putInt("color", SburbHandler.getColorForDimension(world));
+		nbt.putInt("color", ColorHandler.getColorForDimension((ServerWorld) world));
 		return nbt;
 	}
 	
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket()
 	{
-		CompoundNBT nbt = new CompoundNBT();
-		nbt.putInt("color", SburbHandler.getColorForDimension(world));
-		return new SUpdateTileEntityPacket(this.pos, 0, nbt);
+		return new SUpdateTileEntityPacket(this.pos, 0, getUpdateTag());
 	}
 	
 	@Override

@@ -1,13 +1,18 @@
 package com.mraof.minestuck.skaianet;
 
 import com.mojang.datafixers.Dynamic;
-import com.mraof.minestuck.editmode.DeployList;
+import com.mraof.minestuck.computer.editmode.DeployEntry;
+import com.mraof.minestuck.computer.editmode.EditData;
+import com.mraof.minestuck.computer.editmode.ServerEditHandler;
+import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.world.lands.LandInfo;
+import com.mraof.minestuck.world.lands.LandTypePair;
+import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
+import com.mraof.minestuck.world.lands.title.TitleLandType;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -18,38 +23,25 @@ import net.minecraft.util.math.GlobalPos;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.util.Constants;
 
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-public class SburbConnection
+public final class SburbConnection
 {
-	final SkaianetHandler handler;
+	private final SkaianetHandler handler;
 	
-	/**
-	 * Identifier for the client player. Beware that this might be null if connection.client isn't null
-	 * It is recommended to use connection.getClientName() instead if possible
-	 */
-	final PlayerIdentifier clientIdentifier;
-	/**
-	 * Identifier for the server player. Beware that this might be null if connection.server isn't null
-	 * It is recommended to use connection.getServerName() instead if possible
-	 */
-	PlayerIdentifier serverIdentifier;
-	GlobalPos clientComputer;	//TODO Abstraction that works with multiple representations of computers
-	GlobalPos serverComputer;
+	private final PlayerIdentifier clientIdentifier;
+	private PlayerIdentifier serverIdentifier;
+	private GlobalPos clientComputer;	//TODO Abstraction that works with multiple representations of computers
+	private GlobalPos serverComputer;
 	
 	private boolean isActive;
 	private boolean isMain;
-	boolean hasEntered;
-	boolean canSplit;
-	LandInfo clientHomeLand;
+	boolean canSplit;	//TODO invert and rename to lockedToSession or something like that
+	private boolean hasEntered = false;	//If the player has entered. Is set to true after entry has finished
+	private LandInfo clientLandInfo;	//The land info for this client player. This is initialized in preparation for entry
 	int artifactType;
-	/**
-	 * If the client will have frog breeding as quest, the array will be extended and the new positions will hold the gear.
-	 */
-	boolean[] givenItemList = new boolean[DeployList.getEntryCount()];
-	ListNBT unregisteredItems = new ListNBT();
+	
+	private final Set<String> givenItemList = new HashSet<>();
 	
 	//Only used by the edit handler
 	public int centerX, centerZ;	//TODO No longer needed as it is either computer pos or the land dim spawn location. Should be functions instead
@@ -58,6 +50,11 @@ public class SburbConnection
 	//Non-saved variables used by the edit handler
 	public double posX, posZ;
 	public boolean useCoordinates;
+	
+	SburbConnection(PlayerIdentifier client, SkaianetHandler handler)
+	{
+		this(client, IdentifierHandler.NULL_IDENTIFIER, handler);
+	}
 	
 	SburbConnection(PlayerIdentifier client, PlayerIdentifier server, SkaianetHandler handler)
 	{
@@ -71,46 +68,43 @@ public class SburbConnection
 	{
 		this.handler = handler;
 		isMain = nbt.getBoolean("IsMain");
+		boolean active = true;
 		if(nbt.contains("Inventory", Constants.NBT.TAG_LIST))
 			inventory = nbt.getList("Inventory", Constants.NBT.TAG_COMPOUND);
 		if(isMain)
 		{
-			isActive = nbt.getBoolean("IsActive");
-			hasEntered = nbt.getBoolean("HasEntered");
+			active = nbt.getBoolean("IsActive");
 			
 			if(nbt.contains("CanSplit", Constants.NBT.TAG_ANY_NUMERIC))
 				canSplit = nbt.getBoolean("CanSplit");
 			ListNBT list = nbt.getList("GivenItems", Constants.NBT.TAG_STRING);
 			for(int i = 0; i < list.size(); i++)
 			{
-				String name = list.getString(i);
-				int ordinal = DeployList.getOrdinal(name);
-				if(ordinal == -1)
-					unregisteredItems.add(new StringNBT(name));
-				else givenItemList[ordinal] = true;
+				givenItemList.add(list.getString(i));
 			}
 		}
 		clientIdentifier = IdentifierHandler.load(nbt, "client");
 		serverIdentifier = IdentifierHandler.load(nbt, "server");
-		if(isActive)
+		if(active)
 		{
 			try
 			{
-				clientComputer = GlobalPos.deserialize(new Dynamic<>(NBTDynamicOps.INSTANCE, nbt.getCompound("client_pos")));
-				serverComputer = GlobalPos.deserialize(new Dynamic<>(NBTDynamicOps.INSTANCE, nbt.getCompound("server_pos")));
+				GlobalPos clientPos = GlobalPos.deserialize(new Dynamic<>(NBTDynamicOps.INSTANCE, nbt.getCompound("client_pos")));
+				GlobalPos serverPos = GlobalPos.deserialize(new Dynamic<>(NBTDynamicOps.INSTANCE, nbt.getCompound("server_pos")));
+				setActive(clientPos, serverPos);
 			} catch(Exception e)
 			{
 				Debug.logger.error("Unable to read computer position for sburb connection between "+ clientIdentifier.getUsername()+" and "+serverIdentifier.getUsername()+", setting connection to be inactive. Cause: ", e);
-				isActive = false;
 			}
 		}
 		if(nbt.contains("ClientLand", Constants.NBT.TAG_COMPOUND))
 		{
-			clientHomeLand = LandInfo.read(nbt.getCompound("ClientLand"), handler, getClientIdentifier());	//TODO add robustness in the case that the dimension type no longer exists?
+			clientLandInfo = LandInfo.read(nbt.getCompound("ClientLand"), handler, getClientIdentifier());
+			handler.updateLandMaps(this);
+			hasEntered = nbt.contains("has_entered") ? nbt.getBoolean("has_entered") : true;
 		}
 		artifactType = nbt.getInt("artifact");
 	}
-	
 	
 	CompoundNBT write()
 	{
@@ -121,20 +115,16 @@ public class SburbConnection
 		if(isMain)
 		{
 			nbt.putBoolean("IsActive", isActive);
-			nbt.putBoolean("HasEntered", hasEntered);
 			nbt.putBoolean("CanSplit", canSplit);
-			ListNBT list = unregisteredItems.copy();
-			String[] deployNames = DeployList.getNameList();
-			for(int i = 0; i < givenItemList.length; i++)
-			{
-				if(givenItemList[i])
-					list.add(new StringNBT(deployNames[i]));
-			}
+			ListNBT list = new ListNBT();
+			for(String name : givenItemList)
+				list.add(new StringNBT(name));
 			
 			nbt.put("GivenItems", list);
-			if(clientHomeLand != null)
+			if(clientLandInfo != null)
 			{
-				nbt.put("ClientLand", clientHomeLand.write(new CompoundNBT()));
+				nbt.put("ClientLand", clientLandInfo.write(new CompoundNBT()));
+				nbt.putBoolean("has_entered", hasEntered);
 			}
 		}
 		
@@ -153,6 +143,8 @@ public class SburbConnection
 	
 	void setActive(GlobalPos client, GlobalPos server)
 	{
+		Objects.requireNonNull(client);
+		Objects.requireNonNull(server);
 		clientComputer = client;
 		serverComputer = server;
 		isActive = true;
@@ -175,9 +167,30 @@ public class SburbConnection
 		return serverIdentifier;
 	}
 	
+	public boolean hasServerPlayer()
+	{
+		return getServerIdentifier() != IdentifierHandler.NULL_IDENTIFIER;
+	}
+	
+	void removeServerPlayer()
+	{
+		serverIdentifier = IdentifierHandler.NULL_IDENTIFIER;
+	}
+	
+	void setNewServerPlayer(PlayerIdentifier identifier)
+	{
+		if(hasServerPlayer())
+			throw new IllegalStateException("Connection already has server player");
+		else serverIdentifier = identifier;
+	}
+	
 	public GlobalPos getClientComputer()
 	{
 		return clientComputer;
+	}
+	public GlobalPos getServerComputer()
+	{
+		return serverComputer;
 	}
 	
 	public boolean isClient(ComputerTileEntity computer)
@@ -188,11 +201,6 @@ public class SburbConnection
 	public boolean isServer(ComputerTileEntity computer)
 	{
 		return isActive && getServerIdentifier().equals(computer.owner) && serverComputer.getDimension() == computer.getWorld().getDimension().getType() && serverComputer.getPos().equals(computer.getPos());
-	}
-	
-	public boolean hasEntered()
-	{
-		return hasEntered;
 	}
 	public boolean isMain(){return isMain;}
 	public boolean isActive()
@@ -207,15 +215,75 @@ public class SburbConnection
 		}
 	}
 	
+	public boolean hasEntered()
+	{
+		return hasEntered;
+	}
+	public Title getClientTitle()
+	{
+		if(hasEntered())
+		{
+			Title title = PlayerSavedData.getData(getClientIdentifier(), handler.mcServer).getTitle();
+			if(title == null)
+				Debug.warnf("Found player %s that has entered, but did not have a title!", getClientIdentifier().getUsername());
+			return title;
+		}
+		return null;
+	}
 	/**
 	 * @return The land dimension assigned to the client player.
 	 */
 	public DimensionType getClientDimension()
 	{
-		return clientHomeLand == null ? null : clientHomeLand.getDimensionType();
+		return getLandInfo() == null ? null : getLandInfo().getDimensionType();
 	}
-	public boolean[] givenItems(){return Arrays.copyOf(givenItemList, givenItemList.length);}
+	LandInfo getLandInfo()
+	{
+		return clientLandInfo;
+	}
+	void setLand(LandTypePair landTypes, DimensionType dimension)
+	{
+		if(clientLandInfo != null)
+			throw new IllegalStateException("Can't set land twice");
+		else
+		{
+			clientLandInfo = new LandInfo(clientIdentifier, landTypes, dimension, new Random());	//TODO handle random better
+			handler.updateLandMaps(this);
+		}
+	}
+	void setHasEntered()
+	{
+		if(clientLandInfo == null)
+			throw new IllegalStateException("Land has not been initiated, can't have entered now!");
+		if(hasEntered)
+			throw new IllegalStateException("Can't have entered twice");
+		hasEntered = true;
+	}
+	@Deprecated
+	public boolean hasGivenItem(String item) { return givenItemList.contains(item); }
+	public boolean hasGivenItem(DeployEntry item) { return givenItemList.contains(item.getName()); }
+	public void setHasGivenItem(DeployEntry item)
+	{
+		if(givenItemList.add(item.getName()))
+		{
+			EditData data = ServerEditHandler.getData(handler.mcServer, this);
+			if(data != null)
+				data.sendGivenItemsToEditor();
+		}
+	}
+	void resetGivenItems() { givenItemList.clear(); }
 	
+	void copyFrom(SburbConnection other)
+	{
+		canSplit = other.canSplit;
+		centerX = other.centerX;
+		centerZ = other.centerZ;
+		clientLandInfo = other.clientLandInfo;
+		hasEntered = other.hasEntered;
+		artifactType = other.artifactType;
+		if(other.inventory != null)
+			inventory = other.inventory.copy();
+	}
 	/**
 	 * Writes the connection info needed client-side to a network buffer. Must match with {@link ReducedConnection#read}.
 	 */
@@ -224,7 +292,7 @@ public class SburbConnection
 		buffer.writeBoolean(isMain);
 		if(isMain){
 			buffer.writeBoolean(isActive);
-			buffer.writeBoolean(hasEntered);
+			buffer.writeBoolean(hasEntered());
 		}
 		buffer.writeInt(getClientIdentifier().getId());
 		buffer.writeString(getClientIdentifier().getUsername(), 16);
@@ -232,67 +300,74 @@ public class SburbConnection
 		buffer.writeString(getServerIdentifier().getUsername(), 16);
 	}
 	
+	/**
+	 * Creates data for this connection to be sent to the data checker screen
+	 */
 	CompoundNBT createDataTag(Set<PlayerIdentifier> playerSet, Map<PlayerIdentifier, PredefineData> predefinedPlayers)
 	{
 		if(isMain())
 			playerSet.add(getClientIdentifier());
 		CompoundNBT connectionTag = new CompoundNBT();
 		connectionTag.putString("client", getClientIdentifier().getUsername());
-		connectionTag.putString("clientId", getClientIdentifier().getString());
-		if(!getServerIdentifier().equals(IdentifierHandler.nullIdentifier))
+		connectionTag.putString("clientId", getClientIdentifier().getCommandString());
+		if(hasServerPlayer())
 			connectionTag.putString("server", getServerIdentifier().getUsername());
 		connectionTag.putBoolean("isMain", isMain());
 		connectionTag.putBoolean("isActive", isActive());
 		if(isMain())
 		{
-			if(clientHomeLand != null)
+			if(clientLandInfo != null)
 			{
 				connectionTag.putString("clientDim", getClientDimension().getRegistryName().toString());
-				connectionTag.putString("aspect1", clientHomeLand.landName1());
-				connectionTag.putString("aspect2", clientHomeLand.landName2());
+				connectionTag.putString("landType1", clientLandInfo.landName1());
+				connectionTag.putString("landType2", clientLandInfo.landName2());
 				Title title = PlayerSavedData.getData(getClientIdentifier(), handler.mcServer).getTitle();
-				connectionTag.putByte("class", title == null ? -1 : (byte) title.getHeroClass().ordinal());
-				connectionTag.putByte("aspect", title == null ? -1 : (byte) title.getHeroAspect().ordinal());
+				if(title != null)
+				{
+					connectionTag.putByte("class", (byte) title.getHeroClass().ordinal());
+					connectionTag.putByte("aspect", (byte) title.getHeroAspect().ordinal());
+				}
 			} else if(predefinedPlayers.containsKey(getClientIdentifier()))
 			{
 				PredefineData data = predefinedPlayers.get(getClientIdentifier());
-				
-				if(data.title != null)
-				{
-					connectionTag.putByte("class", (byte) data.title.getHeroClass().ordinal());
-					connectionTag.putByte("aspect", (byte) data.title.getHeroAspect().ordinal());
-				}
-				
-				if(data.landTerrain != null)
-					connectionTag.putString("aspectTerrain", data.landTerrain.getRegistryName().toString());
-				if(data.landTitle != null)
-					connectionTag.putString("aspectTitle", data.landTitle.getRegistryName().toString());
+				putPredefinedDataToTag(connectionTag, data);
 			}
 		}
 		return connectionTag;
 	}
 	
+	/**
+	 * Creates data to be sent to the data checker screen for players with predefined data but without a connection
+	 */
 	static CompoundNBT cratePredefineDataTag(PlayerIdentifier identifier, PredefineData data)
 	{
 		CompoundNBT connectionTag = new CompoundNBT();
 		
 		connectionTag.putString("client", identifier.getUsername());
-		connectionTag.putString("clientId", identifier.getString());
+		connectionTag.putString("clientId", identifier.getCommandString());
 		connectionTag.putBoolean("isMain", true);
 		connectionTag.putBoolean("isActive", false);
 		connectionTag.putInt("clientDim", 0);
 		
-		if(data.title != null)
-		{
-			connectionTag.putByte("class", (byte) data.title.getHeroClass().ordinal());
-			connectionTag.putByte("aspect", (byte) data.title.getHeroAspect().ordinal());
-		}
-		
-		if(data.landTerrain != null)
-			connectionTag.putString("aspectTerrain", data.landTerrain.getRegistryName().toString());
-		if(data.landTitle != null)
-			connectionTag.putString("aspectTitle", data.landTitle.getRegistryName().toString());
+		putPredefinedDataToTag(connectionTag, data);
 		
 		return connectionTag;
+	}
+	
+	private static void putPredefinedDataToTag(CompoundNBT nbt, PredefineData data)
+	{
+		Title title = data.getTitle();
+		if(title != null)
+		{
+			nbt.putByte("class", (byte) data.getTitle().getHeroClass().ordinal());
+			nbt.putByte("aspect", (byte) data.getTitle().getHeroAspect().ordinal());
+		}
+		
+		TerrainLandType terrainType = data.getTerrainLandType();
+		TitleLandType titleType = data.getTitleLandType();
+		if(terrainType != null)
+			nbt.putString("terrainLandType", terrainType.getRegistryName().toString());
+		if(titleType != null)
+			nbt.putString("titleLandType", titleType.getRegistryName().toString());
 	}
 }

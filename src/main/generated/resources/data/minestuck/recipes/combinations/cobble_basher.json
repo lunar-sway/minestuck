@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:cobblestone"
+  },
+  "input2": {
+    "item": "minestuck:fancy_glove"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:cobble_basher"
+  }
+}

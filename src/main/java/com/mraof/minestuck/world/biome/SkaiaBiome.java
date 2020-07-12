@@ -1,7 +1,7 @@
 package com.mraof.minestuck.world.biome;
 
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.world.gen.SkaiaSurfaceBuilder;
+import com.mraof.minestuck.world.gen.MSSurfaceBuilders;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.surfacebuilders.ConfiguredSurfaceBuilder;
@@ -17,7 +17,7 @@ public class SkaiaBiome extends AbstractBiome
 	
 	protected void init()
 	{
-		this.surfaceBuilder = new ConfiguredSurfaceBuilder<>(SkaiaSurfaceBuilder.SKAIA, SurfaceBuilder.AIR_CONFIG);
+		this.surfaceBuilder = new ConfiguredSurfaceBuilder<>(MSSurfaceBuilders.SKAIA.get(), SurfaceBuilder.AIR_CONFIG);
 		this.addSpawn(EntityClassification.MONSTER, new SpawnListEntry(MSEntityTypes.DERSITE_PAWN, 2, 1, 10));
 		this.addSpawn(EntityClassification.MONSTER, new SpawnListEntry(MSEntityTypes.DERSITE_BISHOP, 1, 1, 1));
 		this.addSpawn(EntityClassification.MONSTER, new SpawnListEntry(MSEntityTypes.DERSITE_ROOK, 1, 1, 1));

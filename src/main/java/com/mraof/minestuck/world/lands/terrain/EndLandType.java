@@ -54,6 +54,8 @@ public class EndLandType extends TerrainLandType
 		registry.setBlockState("village_fence", Blocks.NETHER_BRICK_FENCE.getDefaultState());
 		registry.setBlockState("structure_wool_1", Blocks.GREEN_WOOL.getDefaultState());
 		registry.setBlockState("structure_wool_3", Blocks.PURPLE_WOOL.getDefaultState());
+		registry.setBlockState("cruxite_ore", MSBlocks.END_STONE_CRUXITE_ORE.getDefaultState());
+		registry.setBlockState("uranium_ore", MSBlocks.END_STONE_URANIUM_ORE.getDefaultState());
 	}
 	
 	@Override
@@ -80,7 +82,6 @@ public class EndLandType extends TerrainLandType
 		{
 			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(MSFeatures.END_TREE, IFeatureConfig.NO_FEATURE_CONFIG, Placement.COUNT_EXTRA_HEIGHTMAP, new AtSurfaceWithExtraConfig(3, 0.1F, 1)));
 		}
-		
 		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(Feature.ORE, new OreFeatureConfig(blocks.getGroundType(), Blocks.COARSE_DIRT.getDefaultState(), 16), Placement.COUNT_RANGE, new CountRangeConfig(8, 0, 0, 128)));
 		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(Feature.ORE, new OreFeatureConfig(blocks.getGroundType(), Blocks.GRAVEL.getDefaultState(), 33), Placement.COUNT_RANGE, new CountRangeConfig(8, 0, 0, 256)));
 		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(Feature.ORE, new OreFeatureConfig(blocks.getGroundType(), MSBlocks.END_STONE_IRON_ORE.getDefaultState(), 9), Placement.COUNT_RANGE, new CountRangeConfig(20, 0, 0, 64)));

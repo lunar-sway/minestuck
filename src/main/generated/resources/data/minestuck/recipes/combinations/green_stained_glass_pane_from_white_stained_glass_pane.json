@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "tag": "forge:dyes/green"
+  },
+  "input2": {
+    "item": "minecraft:white_stained_glass_pane"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:green_stained_glass_pane"
+  }
+}

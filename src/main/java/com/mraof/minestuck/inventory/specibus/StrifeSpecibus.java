@@ -1,8 +1,8 @@
 package com.mraof.minestuck.inventory.specibus;
 
-import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-import com.mraof.minestuck.util.KindAbstratusList;
-import com.mraof.minestuck.util.KindAbstratusType;
+import com.mraof.minestuck.player.KindAbstratusList;
+import com.mraof.minestuck.player.KindAbstratusType;
+import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;

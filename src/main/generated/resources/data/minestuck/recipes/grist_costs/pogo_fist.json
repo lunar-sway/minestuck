@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:pogo_fist"
+  },
+  "grist_cost": {
+    "minestuck:build": 16,
+    "minestuck:shale": 21
+  }
+}

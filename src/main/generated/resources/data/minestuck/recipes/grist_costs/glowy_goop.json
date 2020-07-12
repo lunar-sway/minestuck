@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:glowy_goop"
+  },
+  "grist_cost": {
+    "minestuck:build": 8,
+    "minestuck:caulk": 8,
+    "minestuck:mercury": 4
+  }
+}

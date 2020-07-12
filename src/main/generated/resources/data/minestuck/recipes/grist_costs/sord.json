@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:sord"
+  },
+  "grist_cost": {
+    "minestuck:build": 0
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:raw_uranium"
+  },
+  "grist_cost": {
+    "minestuck:uranium": 3
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:unknowable_egg"
+  },
+  "grist_cost": {
+    "minestuck:amber": 15,
+    "minestuck:amethyst": 15,
+    "minestuck:tar": 1
+  }
+}

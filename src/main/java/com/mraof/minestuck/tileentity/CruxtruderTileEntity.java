@@ -4,18 +4,20 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.CruxiteDowelBlock;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.util.ColorCollector;
+import com.mraof.minestuck.util.ColorHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.common.util.Constants;
 
-public class CruxtruderTileEntity extends TileEntity
+public class CruxtruderTileEntity extends TileEntity	//TODO check if it is broken
 {
+	public static final String EMPTY = "block.minestuck.cruxtruder.empty";
+	
 	private int color = -1;
 	private boolean broken = false;
 	private int material = 0;
@@ -72,13 +74,14 @@ public class CruxtruderTileEntity extends TileEntity
 				{
 					if(MinestuckConfig.cruxtruderIntake.get() && material == 0)
 					{
-						world.playEvent(1001, pos, 0);
+						world.playEvent(Constants.WorldEvents.DISPENSER_FAIL_SOUND, pos, 0);
+						player.sendMessage(new TranslationTextComponent(EMPTY));
 					} else
 					{
 						world.setBlockState(pos, MSBlocks.CRUXITE_DOWEL.getDefaultState().with(CruxiteDowelBlock.DOWEL_TYPE, CruxiteDowelBlock.Type.CRUXTRUDER));
 						TileEntity te = world.getTileEntity(pos);
 						if(te instanceof ItemStackTileEntity)
-							ColorCollector.setColor(((ItemStackTileEntity) te).getStack(), color);
+							ColorHandler.setColor(((ItemStackTileEntity) te).getStack(), color);
 						if(material > 0)
 							material--;
 					}
@@ -107,22 +110,5 @@ public class CruxtruderTileEntity extends TileEntity
 		compound.putBoolean("broken", broken);
 		compound.putInt("material", material);
 		return compound;
-	}
-	
-	@Override
-	public CompoundNBT getUpdateTag()
-	{
-		return write(new CompoundNBT());
-	}
-	@Override
-	public SUpdateTileEntityPacket getUpdatePacket()
-	{
-		return new SUpdateTileEntityPacket(this.pos, 0, getUpdateTag());
-	}
-	
-	@Override
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
-	{
-		handleUpdateTag(pkt.getNbtCompound());
 	}
 }

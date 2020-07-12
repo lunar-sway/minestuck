@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:peony"
+  },
+  "grist_cost": {
+    "minestuck:garnet": 4,
+    "minestuck:chalk": 4,
+    "minestuck:iodine": 2
+  }
+}

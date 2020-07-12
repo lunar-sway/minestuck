@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:crew_poster"
+  },
+  "grist_cost": {
+    "minestuck:tar": 3,
+    "minestuck:rust": 2
+  }
+}

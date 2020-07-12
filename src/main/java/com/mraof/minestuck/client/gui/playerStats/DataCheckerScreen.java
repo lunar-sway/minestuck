@@ -5,8 +5,10 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.settings.MSKeyHandler;
 import com.mraof.minestuck.network.DataCheckerPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.util.EnumAspect;
-import com.mraof.minestuck.util.EnumClass;
+import com.mraof.minestuck.player.EnumAspect;
+import com.mraof.minestuck.player.EnumClass;
+import com.mraof.minestuck.player.Title;
+import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.screen.Screen;
@@ -252,7 +254,7 @@ public class DataCheckerScreen extends Screen
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int i)
 	{
-		if(MSKeyHandler.instance.statKey.isActiveAndMatches(InputMappings.getInputByCode(keyCode, scanCode)))
+		if(MSKeyHandler.statKey.isActiveAndMatches(InputMappings.getInputByCode(keyCode, scanCode)))
 		{
 			minecraft.displayGuiScreen(null);
 			return true;
@@ -398,7 +400,7 @@ public class DataCheckerScreen extends Screen
 				ConnectionComponent connection = new ConnectionComponent(this, connectionList.getCompound(i), dataTag);
 				list.add(connection);
 				
-				if(connection.landDim != 0)
+				if(!connection.landDim.isEmpty())
 					playersEntered++;
 				playerSet.add(connection.client);
 				playerSet.add(connection.server);
@@ -442,7 +444,7 @@ public class DataCheckerScreen extends Screen
 		String client;
 		String server;
 		boolean isMain;
-		int landDim;
+		String landDim = "";
 		
 		public ConnectionComponent(SessionComponent parent, CompoundNBT connectionTag, CompoundNBT dataTag)
 		{
@@ -451,7 +453,7 @@ public class DataCheckerScreen extends Screen
 			this.server = connectionTag.getString("server");
 			this.isMain = connectionTag.getBoolean("isMain");
 			if(isMain)
-				landDim = connectionTag.getInt("clientDim");
+				landDim = connectionTag.getString("clientDim");
 			
 			list.add(new TextField("Client Player: %s", client));
 			if(!server.isEmpty())
@@ -462,21 +464,20 @@ public class DataCheckerScreen extends Screen
 			list.add(null);
 			if(isMain)
 			{
-				list.add(new TextField("Land dimension: %s", (landDim != 0 ? String.valueOf(landDim) : "Pre-entry")));
-				if(landDim != 0 && connectionTag.contains("aspect1"))
-					list.add(new LocalizedTextField("land.message.format", new TranslationTextComponent("land."+connectionTag.getString("aspect1")), new TranslationTextComponent("land."+connectionTag.getString("aspect2"))));
+				list.add(new TextField("Land dim: %s", (!landDim.isEmpty() ? landDim : "Pre-entry")));
+				if(!landDim.isEmpty() && connectionTag.contains("landType1"))
+					list.add(new LocalizedTextField(LandTypePair.FORMAT, new TranslationTextComponent("land."+connectionTag.getString("landType1")).getFormattedText(), new TranslationTextComponent("land."+connectionTag.getString("landType2")).getFormattedText()));
 				if(connectionTag.contains("class"))
 				{
 					byte cl = connectionTag.getByte("class"), as = connectionTag.getByte("aspect");
-					String titleClass = cl == -1 ? "Unknown" : "title."+EnumClass.values()[cl].toString();
-					String titleAspect = as == -1 ? "Unknown" : "title."+EnumAspect.values()[as].toString();
-					list.add(new LocalizedTextField("title.format", new TranslationTextComponent(titleClass), new TranslationTextComponent(titleAspect)));
+					Title title = new Title(EnumClass.values()[cl], EnumAspect.values()[as]);
+					list.add(new TextField(title.asTextComponent().getFormattedText()));
 				}
 				
-				if(connectionTag.contains("aspectTitle"))
-					list.add(new TextField("Title aspect: %s", connectionTag.getString("aspectTitle")));
-				if(connectionTag.contains("aspectTerrain"))
-					list.add(new TextField("Terrain aspect: %s", connectionTag.getString("aspectTerrain")));
+				if(connectionTag.contains("titleLandType"))
+					list.add(new TextField("Title land type: %s", connectionTag.getString("titleLandType")));
+				if(connectionTag.contains("terrainLandType"))
+					list.add(new TextField("Terrain land type: %s", connectionTag.getString("terrainLandType")));
 			}
 			list.add(new GristCacheButton(connectionTag.getString("clientId")));
 		}

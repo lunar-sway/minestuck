@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:cobblestone_wall"
+  },
+  "input2": {
+    "item": "minecraft:mossy_cobblestone"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:mossy_cobblestone_wall"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:fungal_spore"
+  },
+  "grist_cost": {
+    "minestuck:iodine": 2,
+    "minestuck:amber": 1
+  }
+}

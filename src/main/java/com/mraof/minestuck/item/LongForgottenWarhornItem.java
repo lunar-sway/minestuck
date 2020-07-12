@@ -52,6 +52,8 @@ public class LongForgottenWarhornItem extends Item
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn)
 	{
+		worldIn.playSound(playerIn, playerIn.posX, playerIn.posY, playerIn.posZ, MSSoundEvents.ITEM_LONG_FORGOTTEN_WARHORN_USE, SoundCategory.AMBIENT, 1.5F, 1.0F);
+		
 		ItemStack item = playerIn.getHeldItem(handIn);
 		if(!worldIn.isRemote)
 		{
@@ -64,14 +66,8 @@ public class LongForgottenWarhornItem extends Item
 				playerIn.addPotionEffect(new EffectInstance(Effects.BLINDNESS, 15, 1));
 			}
 			item.damageItem(durability, playerIn, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
-			playerIn.world.playSound(null, playerIn.posX, playerIn.posY, playerIn.posZ, MSSoundEvents.ITEM_LONG_FORGOTTEN_WARHORN_USE, SoundCategory.AMBIENT, 1.5F, 1.0F);
 		}
-		if(worldIn.isRemote)
-		{
-			return new ActionResult<>(ActionResultType.SUCCESS, item);
-		} else
-		{
-			return new ActionResult<>(ActionResultType.PASS, item);
-		}
+		
+		return new ActionResult<>(ActionResultType.SUCCESS, item);
 	}
 }

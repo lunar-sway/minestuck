@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:bow"
+  },
+  "input2": {
+    "item": "minecraft:vine"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:nature_bow"
+  }
+}

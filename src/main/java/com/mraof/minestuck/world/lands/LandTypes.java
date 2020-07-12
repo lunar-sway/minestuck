@@ -3,9 +3,9 @@ package com.mraof.minestuck.world.lands;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.player.EnumAspect;
+import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.EnumAspect;
-import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.world.MSDimensionTypes;
 import com.mraof.minestuck.world.lands.terrain.*;
 import com.mraof.minestuck.world.lands.title.*;
@@ -24,6 +24,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @ObjectHolder(Minestuck.MOD_ID)
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
@@ -46,6 +47,7 @@ public class LandTypes
 	public static final TerrainLandType FUNGI = getNull();
 	public static final TerrainLandType HEAT = getNull();
 	public static final TerrainLandType ROCK = getNull();
+	public static final TerrainLandType PETRIFICATION = getNull();
 	public static final TerrainLandType SAND = getNull();
 	public static final TerrainLandType RED_SAND = getNull();
 	public static final TerrainLandType LUSH_DESERTS = getNull();
@@ -175,20 +177,15 @@ public class LandTypes
 		TitleLandType landAspect;
 		if(aspectTerrain != null)
 		{
-			landAspect = selectRandomAspect(usedAspects, titleGroupMap, aspect -> aspect.getType() == titleAspect && aspect.isAspectCompatible(aspectTerrain));
-			if(landAspect == null)
-			{
-				Debug.warnf("Failed to find a title land aspect compatible with land aspect \"%s\". Forced to use a poorly compatible land aspect instead.", aspectTerrain.getRegistryName());
-				landAspect = selectRandomAspect(usedAspects, titleGroupMap, aspect -> aspect.getType() == titleAspect);
-			}
-		} else landAspect = selectRandomAspect(usedAspects, titleGroupMap, aspect -> aspect.getType() == titleAspect);
+			landAspect = selectRandomAspect(usedAspects, titleGroupMap, aspect -> aspect.getAspect() == titleAspect && aspect.isAspectCompatible(aspectTerrain));
+		} else landAspect = selectRandomAspect(usedAspects, titleGroupMap, aspect -> aspect.getAspect() == titleAspect);
 		
 		if(landAspect != null)
 			return landAspect;
 		else return TITLE_NULL;
 	}
 	
-	private <A extends ILandType> A selectRandomAspect(List<A> usedAspects, Map<ResourceLocation, List<A>> groupMap, Predicate<A> condition)
+	private <A extends ILandType<?>> A selectRandomAspect(List<A> usedAspects, Map<ResourceLocation, List<A>> groupMap, Predicate<A> condition)
 	{
 		List<List<A>> list = Lists.newArrayList();
 		for(List<A> aspects : groupMap.values())
@@ -205,7 +202,7 @@ public class LandTypes
 		return pickOneFromUsage(groupList, usedAspects, Object::equals);
 	}
 	
-	private <A extends ILandType, B> B pickOneFromUsage(List<B> list, List<A> usedAspects, BiPredicate<B, A> matchPredicate)
+	private <A extends ILandType<?>, B> B pickOneFromUsage(List<B> list, List<A> usedAspects, BiPredicate<B, A> matchPredicate)
 	{
 		if(list.isEmpty())
 			return null;
@@ -251,7 +248,7 @@ public class LandTypes
 	 * @param aspects Land aspects that the land should have
 	 * @return Returns the dimension of the newly created land.
 	 */
-	public static DimensionType createLandType(MinecraftServer server, IdentifierHandler.PlayerIdentifier player, LandTypePair aspects)
+	public static DimensionType createLandType(MinecraftServer server, PlayerIdentifier player, LandTypePair aspects)
 	{
 		String base = "minestuck:land_"+player.getUsername().toLowerCase();
 		ResourceLocation dimensionName;
@@ -269,6 +266,11 @@ public class LandTypes
 		}
 		
 		return DimensionManager.registerDimension(dimensionName, MSDimensionTypes.LANDS, null, true);
+	}
+	
+	public static Set<TitleLandType> getCompatibleTitleTypes(TerrainLandType terrain)
+	{
+		return TITLE_REGISTRY.getValues().stream().filter(landType -> landType.isAspectCompatible(terrain) && landType.canBePickedAtRandom()).collect(Collectors.toSet());
 	}
 	
 	private static class TerrainCallbacks implements IForgeRegistry.AddCallback<TerrainLandType>, IForgeRegistry.ClearCallback<TerrainLandType>, IForgeRegistry.CreateCallback<TerrainLandType>

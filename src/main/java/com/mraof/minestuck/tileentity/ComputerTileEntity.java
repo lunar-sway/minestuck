@@ -1,11 +1,11 @@
 package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.client.gui.ComputerScreen;
+import com.mraof.minestuck.computer.ProgramData;
+import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
-import com.mraof.minestuck.util.ComputerProgram;
-import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
@@ -36,8 +36,6 @@ public class ComputerTileEntity extends TileEntity
 	public Hashtable<Integer, String> latestmessage = new Hashtable<Integer, String>();
 	public CompoundNBT programData = new CompoundNBT();
 	public int programSelected = -1;
-	
-	public ComputerProgram program;
 	
 	@Override
 	public void read(CompoundNBT compound)
@@ -103,8 +101,7 @@ public class ComputerTileEntity extends TileEntity
 	@Override
 	public CompoundNBT getUpdateTag()
 	{
-		CompoundNBT tagCompound = new CompoundNBT();
-		this.write(tagCompound);
+		CompoundNBT tagCompound = this.write(new CompoundNBT());
 		tagCompound.remove("owner");
 		tagCompound.remove("ownerMost");
 		tagCompound.remove("ownerLeast");
@@ -147,8 +144,8 @@ public class ComputerTileEntity extends TileEntity
 	public void closeAll() 
 	{
 		for(Entry<Integer, Boolean> entry : installedPrograms.entrySet())
-			if(entry.getValue() && entry.getKey() != -1 && ComputerProgram.getProgram(entry.getKey()) != null)
-				ComputerProgram.getProgram(entry.getKey()).onClosed(this);
+			if(entry.getValue() && entry.getKey() != -1)
+				ProgramData.closeProgram(entry.getKey(), this);
 	}
 
 	public void connected(PlayerIdentifier player, boolean isClient)

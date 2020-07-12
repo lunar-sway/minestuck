@@ -2,15 +2,14 @@ package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.GristWidgetBlock;
-import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.inventory.GristWidgetContainer;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
-import com.mraof.minestuck.item.crafting.alchemy.GristAmount;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristCostRecipe;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
+import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -25,12 +24,12 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class GristWidgetTileEntity extends MachineProcessTileEntity implements INamedContainerProvider
+public class GristWidgetTileEntity extends MachineProcessTileEntity implements INamedContainerProvider, IOwnable
 {
 	public static final String TITLE = "container.minestuck.grist_widget";
 	public static final RunType TYPE = RunType.BUTTON_OVERRIDE;
 	
-	public IdentifierHandler.PlayerIdentifier owner;
+	private PlayerIdentifier owner;
 	boolean hasItem;
 	
 	public GristWidgetTileEntity()
@@ -47,9 +46,9 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements I
 	{
 		if(world == null)
 			return null;
-		ItemStack heldItem = AlchemyRecipes.getDecodedItem(stack, true);
+		ItemStack heldItem = AlchemyHelper.getDecodedItem(stack, true);
 		GristSet gristSet = GristCostRecipe.findCostForItem(heldItem, null, true, world);
-		if(stack.getItem() != MSItems.CAPTCHA_CARD || AlchemyRecipes.isPunchedCard(stack) || gristSet == null)
+		if(stack.getItem() != MSItems.CAPTCHA_CARD || AlchemyHelper.isPunchedCard(stack) || gristSet == null)
 			return null;
 		
 		return gristSet;
@@ -87,7 +86,7 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements I
 		} else
 		{
 			return (!itemstack.getTag().getBoolean("punched") && itemstack.getTag().getInt("contentSize") > 0
-					&& AlchemyRecipes.getDecodedItem(itemstack).getItem() != MSItems.CAPTCHA_CARD);
+					&& AlchemyHelper.getDecodedItem(itemstack).getItem() != MSItems.CAPTCHA_CARD);
 		}
 	}
 	
@@ -126,25 +125,8 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements I
 			return;
 		}
 		
-		for(GristAmount amount : gristSet.getAmounts())
-		{
-			long grist = amount.getAmount();
-			while(grist > 0)
-			{
-				GristAmount gristAmount = new GristAmount(amount.getType(),
-						grist <= 3 ? grist : (world.rand.nextInt((int) Math.min(Integer.MAX_VALUE, grist)) + 1));    //TODO is there a better way?
-				GristEntity entity = new GristEntity(world,
-						this.pos.getX()
-								+ 0.5 /* this.width - this.width / 2 */,
-						this.pos.getY() + 1, this.pos.getZ()
-						+ 0.5 /* this.width - this.width / 2 */,
-						gristAmount);
-				entity.setMotion(entity.getMotion().mul(0.5, 0.5, 0.5));
-				world.addEntity(entity);
-				//Create grist entity of gristAmount
-				grist -= gristAmount.getAmount();
-			}
-		}
+		gristSet.spawnGristEntities(world, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, world.rand, entity -> entity.setMotion(entity.getMotion().mul(0.5, 0.5, 0.5)));
+		
 		this.decrStackSize(0, 1);
 	}
 	
@@ -197,6 +179,18 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements I
 	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity player)
 	{
 		return new GristWidgetContainer(windowId, playerInventory, this, parameters, pos);
+	}
+	
+	@Override
+	public void setOwner(PlayerIdentifier identifier)
+	{
+		this.owner = identifier;
+	}
+	
+	@Override
+	public PlayerIdentifier getOwner()
+	{
+		return owner;
 	}
 	
 	public void resendState()

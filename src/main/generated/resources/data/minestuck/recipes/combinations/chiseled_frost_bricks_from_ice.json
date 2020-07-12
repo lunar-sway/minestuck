@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:chiseled_stone_bricks"
+  },
+  "input2": {
+    "item": "minecraft:ice"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:chiseled_frost_bricks"
+  }
+}

@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.gen.feature.structure.blocks;
 
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import net.minecraft.block.*;
 import net.minecraft.state.IProperty;
@@ -8,6 +9,7 @@ import net.minecraft.state.properties.Half;
 import net.minecraft.util.Direction;
 import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.feature.OreFeatureConfig;
+import net.minecraft.world.gen.surfacebuilders.SurfaceBuilderConfig;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +27,7 @@ public final class StructureBlockRegistry
 		registerBlock(name, defaultBlock, Block.class);
 	}
 	
+	//TODO With async modloading, perhaps we should synchronize this in some way?
 	public static void registerBlock(String name, BlockState defaultBlock, Class<? extends Block> extention)
 	{
 		if(defaultBlock == null || name == null)
@@ -64,8 +67,10 @@ public final class StructureBlockRegistry
 		templateBlockMap.put(templateState, name);
 	}
 	
-	static
+	static	//TODO Use public static final Strings as a standard for names to reduce risk of typos
 	{
+		registerBlock("cruxite_ore", MSBlocks.STONE_CRUXITE_ORE.getDefaultState());
+		registerBlock("uranium_ore", MSBlocks.STONE_URANIUM_ORE.getDefaultState());
 		registerBlock("ground", Blocks.STONE.getDefaultState());
 		registerBlock("upper", "ground", Blocks.DIRT);
 		registerBlock("surface", "upper", Blocks.GRASS_BLOCK);
@@ -209,6 +214,11 @@ public final class StructureBlockRegistry
 				newState = with(state, newState, property);
 			return newState;
 		} else return state;
+	}
+	
+	public SurfaceBuilderConfig getSurfaceBuilderConfig()
+	{
+		return new SurfaceBuilderConfig(getBlockState("surface"), getBlockState("upper"), getBlockState("ocean_surface"));
 	}
 	
 	private static <T extends Comparable<T>> BlockState with(BlockState fromState, BlockState toState, IProperty<T> property)

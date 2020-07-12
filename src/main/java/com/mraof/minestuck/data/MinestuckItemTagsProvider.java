@@ -1,6 +1,7 @@
 package com.mraof.minestuck.data;
 
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.ExtraForgeTags;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.data.DataGenerator;
@@ -75,11 +76,30 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		getBuilder(ItemTags.MUSIC_DISCS).add(MUSIC_DISC_DANCE_STAB_DANCE, MUSIC_DISC_EMISSARY_OF_DANCE, MUSIC_DISC_RETRO_BATTLE);
 		getBuilder(Tags.Items.MUSIC_DISCS).add(MUSIC_DISC_DANCE_STAB_DANCE, MUSIC_DISC_EMISSARY_OF_DANCE, MUSIC_DISC_RETRO_BATTLE);
 		getBuilder(DUSTS).add(MSBlocks.GLOWYSTONE_DUST.asItem());
-		getBuilder(RODS).add(UP_STICK);
+		getBuilder(RODS).add(URANIUM_POWERED_STICK);
 		getBuilder(ExtraForgeTags.Items.URANIUM_CHUNKS).add(RAW_URANIUM);
+		getBuilder(ExtraForgeTags.Items.COPPER_ORES);
+		getBuilder(ExtraForgeTags.Items.TIN_ORES);
+		getBuilder(ExtraForgeTags.Items.SILVER_ORES);
+		getBuilder(ExtraForgeTags.Items.LEAD_ORES);
+		getBuilder(ExtraForgeTags.Items.NICKEL_ORES);
+		getBuilder(ExtraForgeTags.Items.ALUMINIUM_ORES);
+		getBuilder(ExtraForgeTags.Items.COBALT_ORES);
+		getBuilder(ExtraForgeTags.Items.ARDITE_ORES);
+		getBuilder(ExtraForgeTags.Items.COPPER_INGOTS);
+		getBuilder(ExtraForgeTags.Items.TIN_INGOTS);
+		getBuilder(ExtraForgeTags.Items.SILVER_INGOTS);
+		getBuilder(ExtraForgeTags.Items.LEAD_INGOTS);
+		getBuilder(ExtraForgeTags.Items.NICKEL_INGOTS);
+		getBuilder(ExtraForgeTags.Items.INVAR_INGOTS);
+		getBuilder(ExtraForgeTags.Items.ALUMINIUM_INGOTS);
+		getBuilder(ExtraForgeTags.Items.COBALT_INGOTS);
+		getBuilder(ExtraForgeTags.Items.ARDITE_INGOTS);
+		getBuilder(ExtraForgeTags.Items.RED_ALLOY_INGOTS);
 		
 		getBuilder(GRIST_CANDY).add(BUILD_GUSHERS, AMBER_GUMMY_WORM, CAULK_PRETZEL, CHALK_CANDY_CIGARETTE, IODINE_LICORICE, SHALE_PEEP, TAR_LICORICE, COBALT_GUM, MARBLE_JAWBREAKER, MERCURY_SIXLETS, QUARTZ_JELLY_BEAN, SULFUR_CANDY_APPLE, AMETHYST_HARD_CANDY, GARNET_TWIX, RUBY_LOLLIPOP, RUST_GUMMY_EYE, DIAMOND_MINT, GOLD_CANDY_RIBBON, URANIUM_GUMMY_BEAR, ARTIFACT_WARHEAD, ZILLIUM_SKITTLES);
-		
+		getBuilder(MSTags.Items.FAYGO).add(MSItems.ORANGE_FAYGO, CANDY_APPLE_FAYGO, FAYGO_COLA, COTTON_CANDY_FAYGO, CREME_SODA_FAYGO, GRAPE_FAYGO, MOON_MIST_FAYGO, PEACH_FAYGO, REDPOP_FAYGO);
+		getBuilder(MODUS_CARD).add(STACK_MODUS_CARD, QUEUE_MODUS_CARD, QUEUESTACK_MODUS_CARD, TREE_MODUS_CARD, HASHMAP_MODUS_CARD, SET_MODUS_CARD);
 	}
 	
 	@Override

@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:claw_of_nrubyiglith"
+  },
+  "grist_cost": {
+    "minestuck:build": 333,
+    "minestuck:amethyst": 80,
+    "minestuck:chalk": 6,
+    "minestuck:garnet": 6,
+    "minestuck:shale": 6
+  }
+}

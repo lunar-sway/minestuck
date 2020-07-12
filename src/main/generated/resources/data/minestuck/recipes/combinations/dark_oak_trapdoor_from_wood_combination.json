@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:oak_trapdoor"
+  },
+  "input2": {
+    "item": "minecraft:spruce_trapdoor"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:dark_oak_trapdoor"
+  }
+}

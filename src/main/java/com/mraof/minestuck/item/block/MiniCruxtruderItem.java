@@ -1,6 +1,7 @@
 package com.mraof.minestuck.item.block;
 
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.item.AlchemizedColored;
 import com.mraof.minestuck.tileentity.MiniCruxtruderTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -11,10 +12,11 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.apache.logging.log4j.LogManager;
 
 import javax.annotation.Nullable;
 
-public class MiniCruxtruderItem extends BlockItem
+public class MiniCruxtruderItem extends BlockItem implements AlchemizedColored
 {
 	public MiniCruxtruderItem(Block blockIn, Properties builder)
 	{
@@ -29,6 +31,7 @@ public class MiniCruxtruderItem extends BlockItem
 			TileEntity te = world.getTileEntity(pos);
 			if(te instanceof MiniCruxtruderTileEntity)
 				((MiniCruxtruderTileEntity) te).color = stack.getTag().getInt("color");
+			else LogManager.getLogger().warn("Placed miniature cruxtruder, but no appropriate tile entity was created. Instead found {}.", te);
 		}
 		return true;
 	}

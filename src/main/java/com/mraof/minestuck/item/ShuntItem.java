@@ -1,6 +1,6 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyRecipes;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -24,9 +24,9 @@ public class ShuntItem extends Item
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
 	{
-		if(AlchemyRecipes.hasDecodedItem(stack))
+		if(AlchemyHelper.hasDecodedItem(stack))
 		{
-			ItemStack content = AlchemyRecipes.getDecodedItem(stack);
+			ItemStack content = AlchemyHelper.getDecodedItem(stack);
 			
 			if (!content.isEmpty())
 				tooltip.add(new StringTextComponent("(").appendSibling(content.getDisplayName()).appendText(")"));

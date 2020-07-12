@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "tag": "minestuck:modus_card"
+  },
+  "input2": {
+    "item": "minestuck:computer"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:hashmap_modus_card"
+  }
+}

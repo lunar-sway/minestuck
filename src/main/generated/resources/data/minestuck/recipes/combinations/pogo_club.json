@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:deuce_club"
+  },
+  "input2": {
+    "item": "minecraft:slime_ball"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:pogo_club"
+  }
+}

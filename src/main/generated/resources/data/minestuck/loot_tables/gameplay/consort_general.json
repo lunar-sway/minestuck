@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:chest",
+  "type": "minecraft:gift",
   "pools": [
     {
       "name": "item",
@@ -130,11 +130,70 @@
         },
         {
           "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minestuck:consort",
+              "consort": "salamander"
+            }
+          ],
+          "weight": 2,
+          "name": "minestuck:ace_of_clubs"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minestuck:consort",
+              "consort": "nakagator"
+            }
+          ],
+          "weight": 2,
+          "name": "minestuck:ace_of_spades"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minestuck:consort",
+              "consort": "turtle"
+            }
+          ],
+          "weight": 2,
+          "name": "minestuck:ace_of_hearts"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minestuck:consort",
+              "consort": "iguana"
+            }
+          ],
+          "weight": 2,
+          "name": "minestuck:ace_of_diamonds"
+        },
+        {
+          "type": "minecraft:item",
           "name": "minestuck:music_disc_emissary_of_dance"
         },
         {
           "type": "minecraft:item",
           "name": "minestuck:music_disc_dance_stab_dance"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 2,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 4.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minestuck:battery"
         },
         {
           "type": "minecraft:item",

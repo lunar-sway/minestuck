@@ -10,45 +10,48 @@ public class ReducedConnection
 	/**
 	 * Display name used by computer guis
 	 */
-	String clientName, serverName;
+	private final String clientName, serverName;
 	/**
 	 * Id for identifying players clientside
 	 */
-	int clientId, serverId;
+	private final int clientId, serverId;
 	
-	boolean isActive;
-	boolean isMain;
-	boolean hasEntered;
-	
-	private ReducedConnection()
-	{
-		this.isActive = true;
-	}
+	private final boolean isActive;
+	private final boolean isMain;
+	private final boolean hasEntered;
 	
 	//client side
 	public String getClientDisplayName() {return clientName;}
 	public String getServerDisplayName() {return serverName;}
 	public int getClientId() {return clientId;}
 	public int getServerId() {return serverId;}
+	public boolean isActive() {return isActive;}
+	public boolean isMain() {return isMain;}
+	public boolean hasEntered() {return hasEntered;}
 	
 	/**
 	 * Reads a connection from a network buffer. Must match with {@link SburbConnection#toBuffer}.
 	 */
 	public static ReducedConnection read(PacketBuffer buffer)
 	{
-		ReducedConnection c = new ReducedConnection();
-		
-		c.isMain = buffer.readBoolean();
-		if(c.isMain)
+		return new ReducedConnection(buffer);
+	}
+	
+	private ReducedConnection(PacketBuffer buffer)
+	{
+		isMain = buffer.readBoolean();
+		if(isMain)
 		{
-			c.isActive = buffer.readBoolean();
-			c.hasEntered = buffer.readBoolean();
+			isActive = buffer.readBoolean();
+			hasEntered = buffer.readBoolean();
+		} else
+		{
+			isActive = true;
+			hasEntered = false;
 		}
-		c.clientId = buffer.readInt();
-		c.clientName = buffer.readString(16);
-		c.serverId = buffer.readInt();
-		c.serverName = buffer.readString(16);
-		
-		return c;
+		clientId = buffer.readInt();
+		clientName = buffer.readString(16);
+		serverId = buffer.readInt();
+		serverName = buffer.readString(16);
 	}
 }

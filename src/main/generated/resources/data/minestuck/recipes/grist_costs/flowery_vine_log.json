@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:flowery_vine_log"
+  },
+  "grist_cost": {
+    "minestuck:build": 7,
+    "minestuck:iodine": 1
+  }
+}

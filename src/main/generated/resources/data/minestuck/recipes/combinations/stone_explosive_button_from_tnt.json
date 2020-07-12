@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:tnt"
+  },
+  "input2": {
+    "item": "minecraft:stone_button"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:stone_explosive_button"
+  }
+}

@@ -8,11 +8,14 @@ import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+
+import java.util.Collections;
+import java.util.List;
 
 public class GristCost extends GristCostRecipe
 {
-	public final ImmutableGristSet cost;
-	private JeiGristCost jeiCost;
+	private final ImmutableGristSet cost;
 	
 	public GristCost(ResourceLocation id, Ingredient ingredient, GristSet cost, Integer priority)
 	{
@@ -21,17 +24,15 @@ public class GristCost extends GristCostRecipe
 	}
 	
 	@Override
-	public GristSet getGristCost(ItemStack input, GristType wildcardType, boolean shouldRoundDown)
+	public GristSet getGristCost(ItemStack input, GristType wildcardType, boolean shouldRoundDown, World world)
 	{
-		return scaleToCountAndDurability(cost.copy(), input, shouldRoundDown).asImmutable();
+		return scaleToCountAndDurability(cost, input, shouldRoundDown);
 	}
 	
 	@Override
-	public JeiGristCost getJeiCost()
+	public List<JeiGristCost> getJeiCosts(World world)
 	{
-		if(jeiCost == null)
-			jeiCost = new JeiGristCost.Set(cost);
-		return jeiCost;
+		return Collections.singletonList(new JeiGristCost.Set(ingredient, cost));
 	}
 	
 	@Override

@@ -22,8 +22,11 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootParameters;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class CruxiteDowelBlock extends Block
 {
@@ -39,6 +42,7 @@ public class CruxiteDowelBlock extends Block
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
 	{
 		return state.get(DOWEL_TYPE) == Type.CRUXTRUDER ? CRUXTRUDER_SHAPE : DOWEL_SHAPE;
@@ -66,6 +70,21 @@ public class CruxiteDowelBlock extends Block
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
+	public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
+	{
+		TileEntity te = builder.get(LootParameters.BLOCK_ENTITY);
+		if (te instanceof ItemStackTileEntity)
+		{
+			ItemStackTileEntity itemTE = (ItemStackTileEntity)te;
+			builder = builder.withDynamicDrop(ItemStackTileEntity.ITEM_DYNAMIC, (context, consumer) -> consumer.accept(itemTE.getStack()));
+		}
+		
+		return super.getDrops(state, builder);
+	}
+	
+	@Override
+	@SuppressWarnings("deprecation")
 	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
 	{
 		if(!worldIn.isRemote)
@@ -110,6 +129,7 @@ public class CruxiteDowelBlock extends Block
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public PushReaction getPushReaction(BlockState state)
 	{
 		return PushReaction.DESTROY;

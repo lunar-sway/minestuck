@@ -1,6 +1,7 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.client.gui.playerStats.EcheladderScreen;
+import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
@@ -11,17 +12,24 @@ public class EcheladderDataPacket implements PlayToClientPacket
 	private final int rung;
 	private final float progress;
 	private final boolean sendMessage;
+	private final boolean available;
 	
-	private EcheladderDataPacket(int rung, float progress, boolean sendMessage)
+	private EcheladderDataPacket(int rung, float progress, boolean sendMessage, boolean available)
 	{
 		this.rung = rung;
 		this.progress = progress;
 		this.sendMessage = sendMessage;
+		this.available = available;
 	}
 	
 	public static EcheladderDataPacket create(int rung, float progress, boolean sendMessage)
 	{
-		return new EcheladderDataPacket(rung, progress, sendMessage);
+		return new EcheladderDataPacket(rung, progress, sendMessage, true);
+	}
+	
+	public static EcheladderDataPacket init(int rung, float progress, boolean available)
+	{
+		return new EcheladderDataPacket(rung, progress, false, available);
 	}
 	
 	@Override
@@ -30,6 +38,7 @@ public class EcheladderDataPacket implements PlayToClientPacket
 		buffer.writeInt(rung);
 		buffer.writeFloat(progress);
 		buffer.writeBoolean(sendMessage);
+		buffer.writeBoolean(available);
 	}
 	
 	public static EcheladderDataPacket decode(PacketBuffer buffer)
@@ -47,11 +56,12 @@ public class EcheladderDataPacket implements PlayToClientPacket
 		int prev = ClientPlayerData.rung;
 		ClientPlayerData.rung = rung;
 		ClientPlayerData.rungProgress = progress;
-		if(!sendMessage)
+		ClientPlayerData.echeladderAvailable = available;
+		if(sendMessage)
 			for(prev++; prev <= rung; prev++)
 			{
-				TranslationTextComponent rung = new TranslationTextComponent("echeladder.rung" + prev);
-				Minecraft.getInstance().player.sendMessage(new TranslationTextComponent("You reached rung %s!", rung));    //TODO Translation key
+				TranslationTextComponent rung = new TranslationTextComponent(Echeladder.translationKey(prev));
+				Minecraft.getInstance().player.sendMessage(new TranslationTextComponent(Echeladder.NEW_RUNG, rung));
 			}
 		else EcheladderScreen.animatedRung = EcheladderScreen.lastRung = rung;
 	}
