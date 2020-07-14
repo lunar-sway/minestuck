@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "minestuck:block/cassette_player_closed" },
+        "facing=east": { "model": "minestuck:block/cassette_player_closed", "y": 90 },
+        "facing=south": { "model": "minestuck:block/cassette_player_closed", "y": 180 },
+        "facing=west": { "model": "minestuck:block/cassette_player_closed", "y": 270 }
+    }
+}
