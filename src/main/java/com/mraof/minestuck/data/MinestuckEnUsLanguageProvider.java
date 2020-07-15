@@ -292,6 +292,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.STONE_EXPLOSIVE_BUTTON, "TNT Button");
 		add(MSBlocks.BLENDER, "Blender");
 		add(MSBlocks.CHESSBOARD, "Chessboard");
+		add(MSBlocks.CASSETTE_PLAYER_CLOSED, "Cassette Player");
 		add(MSBlocks.MINI_FROG_STATUE, "Frog Statue Replica");
 		addStoreTooltip(MSBlocks.MINI_FROG_STATUE, "Some say it's creepy, some say it's cute, others would say it's contraband, so keep it out of sight!");
 		add(MSBlocks.GLOWYSTONE_DUST, "Glowystone Dust");
@@ -746,7 +747,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addExtra(MSItems.MUSIC_DISC_DANCE_STAB_DANCE, "desc", "Catboss - Dance-Stab-Dance");
 		add(MSItems.MUSIC_DISC_RETRO_BATTLE, "Music Disc");
 		addExtra(MSItems.MUSIC_DISC_RETRO_BATTLE, "desc", "SinFrog - Retro Battle Theme");
-		
+		add(MSItems.CASSETTE_MELLOHI, "Cassette");
+		addExtra(MSItems.CASSETTE_MELLOHI, "desc", "C418 - mellohi");
+
 		addStore(Items.PUMPKIN_PIE, "Tasty Pie");
 		addStoreTooltip(Items.PUMPKIN_PIE, "This pie appeared in storage a few days ago out of nowhere. No idea where it came from, but it sure is tasty!");
 		addStoreTooltip(Items.WHEAT_SEEDS, "You know what tastes even better than those plant grains? Their seeds, of course!");

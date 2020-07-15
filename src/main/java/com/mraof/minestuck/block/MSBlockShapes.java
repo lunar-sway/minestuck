@@ -38,6 +38,8 @@ public class MSBlockShapes
 	public static final CustomVoxelShape BLENDER = BLENDER_BASE.merge(BLENDER_CONTAINER, BLENDER_HANDLE, BLENDER_LID);
 	
 	public static final CustomVoxelShape CHESSBOARD = new CustomVoxelShape(new double[]{0, 0, 0, 16, 1, 16});
+
+	public static final CustomVoxelShape CASSETTE_PLAYER_CLOSED = new CustomVoxelShape(new double[]{5, 0, 4, 11, 1.5, 12});
 	
 	//Machines
 	public static final CustomVoxelShape ALCHEMITER_CENTER = new CustomVoxelShape(new double[]{0,0,0,16,16,16});

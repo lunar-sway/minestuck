@@ -337,7 +337,9 @@ public class MSItems
 	public static final Item MUSIC_DISC_EMISSARY_OF_DANCE = getNull();
 	public static final Item MUSIC_DISC_DANCE_STAB_DANCE = getNull();
 	public static final Item MUSIC_DISC_RETRO_BATTLE = getNull();
-	
+	//Cassettes
+	public static final Item CASSETTE_MELLOHI = getNull();
+
 	@Nonnull
 	@SuppressWarnings("ConstantConditions")
 	private static <T> T getNull()
@@ -569,9 +571,10 @@ public class MSItems
 		registerItemBlock(registry, WOODEN_EXPLOSIVE_BUTTON, MSItemGroup.MAIN);
 		registerItemBlock(registry, STONE_EXPLOSIVE_BUTTON, MSItemGroup.MAIN);
 		
-		registerItemBlock(registry, BLENDER, MSItemGroup.MAIN);
-		registerItemBlock(registry, CHESSBOARD, MSItemGroup.MAIN);
-		registerItemBlock(registry, MINI_FROG_STATUE, MSItemGroup.MAIN);
+		registerItemBlock(registry, BLENDER, MSItemGroup.DECORATIONS);
+		registerItemBlock(registry, CHESSBOARD, MSItemGroup.DECORATIONS);
+		registerItemBlock(registry, MINI_FROG_STATUE, MSItemGroup.DECORATIONS);
+		registerItemBlock(registry, CASSETTE_PLAYER_CLOSED, MSItemGroup.DECORATIONS);
 		registerItemBlock(registry, GLOWYSTONE_DUST, MSItemGroup.MAIN);
 		
 		//hammers
@@ -866,7 +869,9 @@ public class MSItems
 		registry.register(new ModMusicDiscItem(13, () -> MSSoundEvents.MUSIC_DISC_EMISSARY_OF_DANCE, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_emissary_of_dance"));
 		registry.register(new ModMusicDiscItem(13, () -> MSSoundEvents.MUSIC_DISC_DANCE_STAB_DANCE, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_dance_stab_dance"));
 		registry.register(new ModMusicDiscItem(13, () -> MSSoundEvents.MUSIC_DISC_RETRO_BATTLE_THEME, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_retro_battle"));
-		
+		//Cassettes
+		registry.register(new CassetteItem(13, () -> SoundEvents.MUSIC_DISC_MELLOHI, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("cassette_mellohi"));
+
 	}
 	
 	private static Item registerItemBlock(IForgeRegistry<Item> registry, Block block)
