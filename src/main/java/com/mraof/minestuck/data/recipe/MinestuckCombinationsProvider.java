@@ -260,7 +260,6 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(Items.SHEARS).input(Items.IRON_INGOT).and().input(Items.GRASS).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.FIRE_CHARGE).input(Items.BLAZE_POWDER).or().input(Items.GUNPOWDER).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.BOW).input(Items.WOODEN_SWORD).or().input(Items.ARROW).buildFor(consumer, Minestuck.MOD_ID);
-		CombinationRecipeBuilder.of(Items.CROSSBOW).input(Items.BOW).and().input(Items.STICK).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.FLOWER_POT).input(ItemTags.SMALL_FLOWERS).and().input(Items.BRICK).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.EXPERIENCE_BOTTLE).namedInput(Items.POTION).or().input(Items.ENCHANTED_BOOK).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.EXPERIENCE_BOTTLE).namedInput(Items.GLASS_BOTTLE).or().input(Items.ENCHANTED_BOOK).buildFor(consumer, Minestuck.MOD_ID);
@@ -291,7 +290,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(Items.SKELETON_SKULL).input(Items.WITHER_SKELETON_SKULL).and().namedInput(Items.BONE).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.SKELETON_SKULL).input(Items.WITHER_SKELETON_SKULL).and().namedInput(Items.BONE_MEAL).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.ZOMBIE_HEAD).input(Items.SKELETON_SKULL).or().input(Items.ROTTEN_FLESH).buildFor(consumer, Minestuck.MOD_ID);
-		CombinationRecipeBuilder.of(Items.BONE).input(Items.STICK).or().input(Items.WHITE_DYE).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(Items.BONE).input(Items.STICK).or().input(Items.SKELETON_SKULL).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.GHAST_TEAR).input(Items.PHANTOM_MEMBRANE).and().input(Items.GUNPOWDER).buildFor(consumer, Minestuck.MOD_ID);
 
 		/////////////////	MINESTUCK	\\\\\\\\\\\\\\\\\
