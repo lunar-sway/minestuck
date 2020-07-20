@@ -795,6 +795,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItemGroup.MAIN, "Minestuck Main");
 		add(MSItemGroup.LANDS, "Minestuck Lands");
 		add(MSItemGroup.WEAPONS, "Minestuck Weapons");
+		add(MSItemGroup.DECORATIONS, "Minestuck Decorations");
 		
 		add(MSBiomes.SKAIA, "Skaia");
 		add(MSBiomes.LAND_NORMAL, "Land");

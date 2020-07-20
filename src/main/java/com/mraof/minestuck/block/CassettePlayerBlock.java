@@ -24,9 +24,9 @@ import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
 
-public class CassettePlayerBlock extends DecorBlock
-{
+public class CassettePlayerBlock extends DecorBlock {
     public static final BooleanProperty HAS_CASSETTE = ModBlockStateProperties.HAS_CASSETTE;
+    public static final BooleanProperty IS_OPEN = ModBlockStateProperties.IS_OPEN;
     private final Supplier<TileEntityType<?>> tileType;
 
     public CassettePlayerBlock(Properties properties, CustomVoxelShape shape, Supplier<TileEntityType<?>> tileType) {
@@ -38,7 +38,12 @@ public class CassettePlayerBlock extends DecorBlock
     @Override
     @SuppressWarnings("deprecation")
     public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        if (state.get(HAS_CASSETTE)) {
+        if (player.isSneaking()) {
+            if (state.get(IS_OPEN)) state = state.with(IS_OPEN, Boolean.valueOf(false));
+            else state = state.with(IS_OPEN, Boolean.valueOf(true));
+            worldIn.setBlockState(pos, state, 2);
+            return true;
+        } else if (state.get(HAS_CASSETTE) && state.get(IS_OPEN)) {
             this.dropCassette(worldIn, pos);
             state = state.with(HAS_CASSETTE, Boolean.valueOf(false));
             worldIn.setBlockState(pos, state, 2);
@@ -50,7 +55,7 @@ public class CassettePlayerBlock extends DecorBlock
 
     public void insertCassette(IWorld worldIn, BlockPos pos, BlockState state, ItemStack cassetteStack) {
         TileEntity tileentity = worldIn.getTileEntity(pos);
-        if (tileentity instanceof CassettePlayerTileEntity) {
+        if (tileentity instanceof CassettePlayerTileEntity && state.get(IS_OPEN)) {
             ((CassettePlayerTileEntity)tileentity).setCassette(cassetteStack.copy());
             worldIn.setBlockState(pos, state.with(HAS_CASSETTE, Boolean.valueOf(true)), 2);
         }
@@ -119,5 +124,6 @@ public class CassettePlayerBlock extends DecorBlock
     {
         builder.add(FACING);
         builder.add(HAS_CASSETTE);
+        builder.add(IS_OPEN);
     }
 }

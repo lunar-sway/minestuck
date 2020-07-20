@@ -28,7 +28,7 @@ public class CassetteItem extends ModMusicDiscItem {
         World world = context.getWorld();
         BlockPos blockpos = context.getPos();
         BlockState blockstate = world.getBlockState(blockpos);
-        if (blockstate.getBlock() == MSBlocks.CASSETTE_PLAYER_CLOSED && !blockstate.get(CassettePlayerBlock.HAS_CASSETTE)) {
+        if (blockstate.getBlock() == MSBlocks.CASSETTE_PLAYER_CLOSED && !blockstate.get(CassettePlayerBlock.HAS_CASSETTE) && blockstate.get(CassettePlayerBlock.IS_OPEN)) {
             ItemStack itemstack = context.getItem();
             if (!world.isRemote) {
                 ((CassettePlayerBlock)MSBlocks.CASSETTE_PLAYER_CLOSED).insertCassette(world, blockpos, blockstate, itemstack);
