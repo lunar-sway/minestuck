@@ -4,7 +4,7 @@
     "item": "minecraft:sand"
   },
   "input2": {
-    "item": "minecraft:gravel"
+    "item": "minecraft:water_bucket"
   },
   "mode": "and",
   "output": {

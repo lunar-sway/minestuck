@@ -4,7 +4,7 @@
     "item": "minecraft:stick"
   },
   "input2": {
-    "item": "minecraft:white_dye"
+    "item": "minecraft:skeleton_skull"
   },
   "mode": "or",
   "output": {
