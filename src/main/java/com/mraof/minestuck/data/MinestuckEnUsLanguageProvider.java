@@ -749,6 +749,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addExtra(MSItems.MUSIC_DISC_RETRO_BATTLE, "desc", "SinFrog - Retro Battle Theme");
 		add(MSItems.CASSETTE_MELLOHI, "Cassette");
 		addExtra(MSItems.CASSETTE_MELLOHI, "desc", "C418 - mellohi");
+		add(MSItems.CASSETTE_EMISSARY, "Cassette");
+		addExtra(MSItems.CASSETTE_EMISSARY, "desc", "Catboss - Emissary of Dance");
 
 		addStore(Items.PUMPKIN_PIE, "Tasty Pie");
 		addStoreTooltip(Items.PUMPKIN_PIE, "This pie appeared in storage a few days ago out of nowhere. No idea where it came from, but it sure is tasty!");

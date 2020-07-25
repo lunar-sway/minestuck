@@ -339,6 +339,7 @@ public class MSItems
 	public static final Item MUSIC_DISC_RETRO_BATTLE = getNull();
 	//Cassettes
 	public static final Item CASSETTE_MELLOHI = getNull();
+	public static final Item CASSETTE_EMISSARY = getNull();
 
 	@Nonnull
 	@SuppressWarnings("ConstantConditions")
@@ -871,6 +872,7 @@ public class MSItems
 		registry.register(new ModMusicDiscItem(13, () -> MSSoundEvents.MUSIC_DISC_RETRO_BATTLE_THEME, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_retro_battle"));
 		//Cassettes
 		registry.register(new CassetteItem(13, () -> SoundEvents.MUSIC_DISC_MELLOHI, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("cassette_mellohi"));
+		registry.register(new CassetteItem(13, () -> MSSoundEvents.MUSIC_DISC_EMISSARY_OF_DANCE, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("cassette_emissary"));
 
 	}
 	
