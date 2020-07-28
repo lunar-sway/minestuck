@@ -339,6 +339,14 @@ public class MSItems
 	public static final Item MUSIC_DISC_RETRO_BATTLE = getNull();
 	//Cassettes
 	public static final Item CASSETTE_MELLOHI = getNull();
+	public static final Item CASSETTE_13 = getNull();
+	public static final Item CASSETTE_BLOCKS = getNull();
+	public static final Item CASSETTE_CAT = getNull();
+	public static final Item CASSETTE_CHIRP = getNull();
+	public static final Item CASSETTE_FAR = getNull();
+	public static final Item CASSETTE_MALL = getNull();
+	public static final Item CASSETTE_DANCE_STAB = getNull();
+	public static final Item CASSETTE_RETRO_BATTLE = getNull();
 	public static final Item CASSETTE_EMISSARY = getNull();
 
 	@Nonnull
@@ -872,7 +880,15 @@ public class MSItems
 		registry.register(new ModMusicDiscItem(13, () -> MSSoundEvents.MUSIC_DISC_RETRO_BATTLE_THEME, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_retro_battle"));
 		//Cassettes
 		registry.register(new CassetteItem(13, () -> SoundEvents.MUSIC_DISC_MELLOHI, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("cassette_mellohi"));
+		registry.register(new CassetteItem(13, () -> SoundEvents.MUSIC_DISC_13, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("cassette_13"));
+		registry.register(new CassetteItem(13, () -> SoundEvents.MUSIC_DISC_BLOCKS, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("cassette_blocks"));
+		registry.register(new CassetteItem(13, () -> SoundEvents.MUSIC_DISC_CAT, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("cassette_cat"));
+		registry.register(new CassetteItem(13, () -> SoundEvents.MUSIC_DISC_CHIRP, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("cassette_chirp"));
+		registry.register(new CassetteItem(13, () -> SoundEvents.MUSIC_DISC_FAR, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("cassette_far"));
+		registry.register(new CassetteItem(13, () -> SoundEvents.MUSIC_DISC_MALL, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("cassette_mall"));
 		registry.register(new CassetteItem(13, () -> MSSoundEvents.MUSIC_DISC_EMISSARY_OF_DANCE, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("cassette_emissary"));
+		registry.register(new CassetteItem(13, () -> MSSoundEvents.MUSIC_DISC_DANCE_STAB_DANCE, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("cassette_dance_stab"));
+		registry.register(new CassetteItem(13, () -> MSSoundEvents.MUSIC_DISC_RETRO_BATTLE_THEME, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("cassette_retro_battle"));
 
 	}
 	

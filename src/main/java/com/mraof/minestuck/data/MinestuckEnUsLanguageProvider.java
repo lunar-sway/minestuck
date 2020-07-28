@@ -749,8 +749,24 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addExtra(MSItems.MUSIC_DISC_RETRO_BATTLE, "desc", "SinFrog - Retro Battle Theme");
 		add(MSItems.CASSETTE_MELLOHI, "Cassette");
 		addExtra(MSItems.CASSETTE_MELLOHI, "desc", "C418 - mellohi");
+		add(MSItems.CASSETTE_13, "Cassette");
+		addExtra(MSItems.CASSETTE_13, "desc", "C418 - 13");
+		add(MSItems.CASSETTE_BLOCKS, "Cassette");
+		addExtra(MSItems.CASSETTE_BLOCKS, "desc", "C418 - blocks");
+		add(MSItems.CASSETTE_CAT, "Cassette");
+		addExtra(MSItems.CASSETTE_CAT, "desc", "C418 - cat");
+		add(MSItems.CASSETTE_CHIRP, "Cassette");
+		addExtra(MSItems.CASSETTE_CHIRP, "desc", "C418 - chirp");
+		add(MSItems.CASSETTE_FAR, "Cassette");
+		addExtra(MSItems.CASSETTE_FAR, "desc", "C418 - far");
+		add(MSItems.CASSETTE_MALL, "Cassette");
+		addExtra(MSItems.CASSETTE_MALL, "desc", "C418 - mall");
 		add(MSItems.CASSETTE_EMISSARY, "Cassette");
 		addExtra(MSItems.CASSETTE_EMISSARY, "desc", "Catboss - Emissary of Dance");
+		add(MSItems.CASSETTE_DANCE_STAB, "Cassette");
+		addExtra(MSItems.CASSETTE_DANCE_STAB, "desc", "Catboss - Dance-Stab-Dance");
+		add(MSItems.CASSETTE_RETRO_BATTLE, "Cassette");
+		addExtra(MSItems.CASSETTE_RETRO_BATTLE, "desc", "SinFrog - Retro Battle Theme");
 
 		addStore(Items.PUMPKIN_PIE, "Tasty Pie");
 		addStoreTooltip(Items.PUMPKIN_PIE, "This pie appeared in storage a few days ago out of nowhere. No idea where it came from, but it sure is tasty!");
