@@ -23,4 +23,9 @@ public class FireWeaponItem extends WeaponItem
 		target.setFire(duration);
 		return super.hitEntity(itemStack, target, player);
 	}
+
+	public int getFireDuration()
+	{
+		return this.duration;
+	}
 }

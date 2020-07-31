@@ -8,6 +8,7 @@ import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.weapon.FireWeaponItem;
 import com.mraof.minestuck.item.weapon.PotionWeaponItem;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.IdentifierHandler;
@@ -18,6 +19,7 @@ import com.mraof.minestuck.world.storage.MSExtraData;
 import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -119,6 +121,22 @@ public class ServerEventHandler
 	public static void onPlayerAttack(AttackEntityEvent event)
 	{
 		cachedCooledAttackStrength = event.getPlayer().getCooledAttackStrength(0.5F);
+
+		if (event.getPlayer().getHeldItemMainhand().getItem() instanceof FireWeaponItem)
+		{
+			FireWeaponItem fireWeaponItem = (FireWeaponItem) event.getPlayer().getHeldItemMainhand().getItem();
+
+			if (event.getTarget().canBeAttackedWithItem())
+			{
+				if (!event.getTarget().hitByEntity(event.getPlayer()))
+				{
+					if (event.getTarget() instanceof LivingEntity)
+					{
+						event.getTarget().setFire(fireWeaponItem.getFireDuration());
+					}
+				}
+			}
+		}
 	}
 
 	@SubscribeEvent(priority=EventPriority.NORMAL)
