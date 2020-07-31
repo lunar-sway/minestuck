@@ -33,7 +33,7 @@ public class DrinkableItem extends Item {
             playerentity.addStat(Stats.ITEM_USED.get(this));
         }
 
-        return entityLiving.onFoodEaten(worldIn, stack);
+        return playerentity == null || !playerentity.abilities.isCreativeMode ? entityLiving.onFoodEaten(worldIn, stack) : stack;
     }
 
     @Override
