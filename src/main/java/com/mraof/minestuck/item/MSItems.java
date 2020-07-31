@@ -337,6 +337,9 @@ public class MSItems
 	public static final Item MUSIC_DISC_EMISSARY_OF_DANCE = getNull();
 	public static final Item MUSIC_DISC_DANCE_STAB_DANCE = getNull();
 	public static final Item MUSIC_DISC_RETRO_BATTLE = getNull();
+
+	//Custom
+	public static final Item APPLE_JUICE = getNull();
 	
 	@Nonnull
 	@SuppressWarnings("ConstantConditions")
@@ -866,7 +869,9 @@ public class MSItems
 		registry.register(new ModMusicDiscItem(13, () -> MSSoundEvents.MUSIC_DISC_EMISSARY_OF_DANCE, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_emissary_of_dance"));
 		registry.register(new ModMusicDiscItem(13, () -> MSSoundEvents.MUSIC_DISC_DANCE_STAB_DANCE, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_dance_stab_dance"));
 		registry.register(new ModMusicDiscItem(13, () -> MSSoundEvents.MUSIC_DISC_RETRO_BATTLE_THEME, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_retro_battle"));
-		
+
+		//BC's Custom Things
+		registry.register(new DrinkableItem(new Item.Properties().maxStackSize(16).group(MSItemGroup.BC).food(MSFoods.APPLE_JUICE)).setRegistryName("apple_juice"));
 	}
 	
 	private static Item registerItemBlock(IForgeRegistry<Item> registry, Block block)
