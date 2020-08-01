@@ -21,7 +21,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.DrawBlockHighlightEvent;
+import net.minecraftforge.client.event.DrawHighlightEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -29,7 +29,7 @@ import net.minecraftforge.fml.common.Mod;
 public class MachineOutlineRenderer
 {
 	@SubscribeEvent
-	public static void renderWorld(DrawBlockHighlightEvent.HighlightBlock event)
+	public static void renderWorld(DrawHighlightEvent.HighlightBlock event)
 	{
 		Minecraft mc = Minecraft.getInstance();
 		BlockRayTraceResult rayTrace = event.getTarget();
