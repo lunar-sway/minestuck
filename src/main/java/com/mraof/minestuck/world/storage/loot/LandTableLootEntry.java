@@ -132,12 +132,6 @@ public class LandTableLootEntry extends LootEntry
 		}
 	}
 	
-	@Override
-	public void func_216142_a(ValidationResults p_216142_1_, Function<ResourceLocation, LootTable> p_216142_2_, Set<ResourceLocation> p_216142_3_, LootParameterSet p_216142_4_)
-	{
-		super.func_216142_a(p_216142_1_, p_216142_2_, p_216142_3_, p_216142_4_);
-	}
-	
 	public static class SerializerImpl extends Serializer<LandTableLootEntry>
 	{
 		public SerializerImpl()

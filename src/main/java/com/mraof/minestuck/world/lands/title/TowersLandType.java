@@ -8,7 +8,6 @@ import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegi
 import net.minecraft.block.Blocks;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.BushConfig;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.placement.ChanceConfig;
 import net.minecraft.world.gen.placement.IPlacementConfig;
