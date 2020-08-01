@@ -9,7 +9,7 @@ import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraftforge.fml.client.config.GuiButtonExt;
+import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
 
 public class TransportalizerScreen extends Screen
 {
@@ -39,7 +39,7 @@ public class TransportalizerScreen extends Screen
 		this.destinationTextField.setFocused2(true);
 		addButton(destinationTextField);
 		
-		addButton(new GuiButtonExt(this.width / 2 - 20, yOffset + 50, 40, 20, I18n.format("gui.done"), button -> finish()));
+		addButton(new ExtendedButton(this.width / 2 - 20, yOffset + 50, 40, 20, I18n.format("gui.done"), button -> finish()));
 	}
 	
 	@Override

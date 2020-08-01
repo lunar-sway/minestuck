@@ -1,6 +1,7 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.settings.MSKeyHandler;
 import com.mraof.minestuck.network.DataCheckerPacket;
@@ -22,7 +23,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fml.client.config.GuiButtonExt;
+import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -62,7 +63,7 @@ public class DataCheckerScreen extends Screen
 		for(int i = 0; i < 5; i++)
 		{
 			final int id = i;
-			contentButtons[id] = addButton(new GuiButtonExt(xOffset + 5, yOffset + LIST_Y + i*22, 180, 20, "", button -> contentButton(id)));
+			contentButtons[id] = addButton(new ExtendedButton(xOffset + 5, yOffset + LIST_Y + i*22, 180, 20, "", button -> contentButton(id)));
 		}
 		returnButton = addButton(new Button(xOffset + GUI_WIDTH - 25, yOffset + 5, 18, 18, "", button -> goBack()));
 		refreshButton = addButton(new Button(xOffset + GUI_WIDTH - 45, yOffset + 5, 18, 18, "", button -> refresh()));
@@ -103,12 +104,12 @@ public class DataCheckerScreen extends Screen
 		this.minecraft.getTextureManager().bindTexture(icons);
 		
 		if(this.returnButton.active)
-			GlStateManager.color3f(1, 1, 1);
-		else GlStateManager.color3f(.5F, .5F, .5F);
+			RenderSystem.color3f(1, 1, 1);
+		else RenderSystem.color3f(.5F, .5F, .5F);
 		blit(xOffset + GUI_WIDTH - 24, yOffset + 6, 240, 0, 16, 16);
 		if(this.refreshButton.active)
-			GlStateManager.color3f(1, 1, 1);
-		else GlStateManager.color3f(.5F, .5F, .5F);
+			RenderSystem.color3f(1, 1, 1);
+		else RenderSystem.color3f(.5F, .5F, .5F);
 		blit(xOffset + GUI_WIDTH - 44, yOffset + 6, 224, 0, 16, 16);
 		
 		if(guiComponent != null)
@@ -120,15 +121,15 @@ public class DataCheckerScreen extends Screen
 				IDataComponent component = i + index < list.size() ? list.get(i + index) : null;
 				if(component != null && !component.isButton())
 				{
-					GlStateManager.color3f(1, 1, 1);
+					RenderSystem.color3f(1, 1, 1);
 					this.minecraft.getTextureManager().bindTexture(guiBackground);
 					blit(xOffset + 5, yOffset + LIST_Y + i*22, 0, 236, 180, 20);
 					font.drawString(component.getName(), xOffset + 9, yOffset + LIST_Y + 10 - font.FONT_HEIGHT/2 + i*22, 0);
 				}
 			}
 		} else font.drawString("Retrieving data from server...", xOffset + 9, yOffset + 15 - font.FONT_HEIGHT/2, 0);
-		
-		GlStateManager.color3f(1, 1, 1);
+
+		RenderSystem.color3f(1, 1, 1);
 		int textureIndex = canScroll ? 232 : 244;
 		this.minecraft.getTextureManager().bindTexture(guiBackground);
 		blit((width - GUI_WIDTH)/2 + 190, (height - GUI_HEIGHT)/2 + LIST_Y + 1 + (int) displayIndex*91, textureIndex, 0, 12, 15);

@@ -18,7 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.CCloseWindowPacket;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.client.config.GuiButtonExt;
+import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
 
 public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckContainer>
 {
@@ -41,8 +41,8 @@ public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckCon
 	public void init()
 	{
 		super.init();
-		modusButton = new GuiButtonExt(xOffset + 102, yOffset + 31, 50, 18, I18n.format(USE_ITEM), button -> use());
-		sylladexMap = new GuiButtonExt(xOffset + 6, yOffset + 31, 60, 18, I18n.format(SYLLADEX), button -> sylladex());
+		modusButton = new ExtendedButton(xOffset + 102, yOffset + 31, 50, 18, I18n.format(USE_ITEM), button -> use());
+		sylladexMap = new ExtendedButton(xOffset + 6, yOffset + 31, 60, 18, I18n.format(SYLLADEX), button -> sylladex());
 		addButton(modusButton);
 		addButton(sylladexMap);
 		sylladexMap.active = ClientPlayerData.clientSideModus != null;

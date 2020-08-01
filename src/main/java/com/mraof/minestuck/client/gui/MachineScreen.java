@@ -11,7 +11,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraftforge.fml.client.config.GuiButtonExt;
+import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
 import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nullable;
@@ -51,7 +51,7 @@ public abstract class MachineScreen<T extends MachineContainer> extends Containe
 		return super.keyPressed(keyCode, scanCode, i);
 	}
 	
-	protected class GoButton extends GuiButtonExt
+	protected class GoButton extends ExtendedButton
 	{
 		public GoButton(int x, int y, int widthIn, int heightIn, String buttonText)
 		{

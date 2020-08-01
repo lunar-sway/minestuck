@@ -1,6 +1,7 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.computer.editmode.ClientEditHandler;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
@@ -8,7 +9,7 @@ import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.client.config.GuiButtonExt;
+import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
 
 public class GristCacheScreen extends PlayerStatsScreen
 {
@@ -31,8 +32,8 @@ public class GristCacheScreen extends PlayerStatsScreen
 	public void init()
 	{
 		super.init();
-		this.previousButton = new GuiButtonExt(this.xOffset + 8, this.yOffset + 8, 16, 16, "<", button -> prevPage());
-		this.nextButton = new GuiButtonExt(this.xOffset + guiWidth - 24, this.yOffset + 8, 16, 16, ">", button -> nextPage());
+		this.previousButton = new ExtendedButton(this.xOffset + 8, this.yOffset + 8, 16, 16, "<", button -> prevPage());
+		this.nextButton = new ExtendedButton(this.xOffset + guiWidth - 24, this.yOffset + 8, 16, 16, ">", button -> nextPage());
 		if(GristTypes.REGISTRY.getValues().size() > rows * columns)
 		{
 			addButton(this.nextButton);
@@ -60,7 +61,7 @@ public class GristCacheScreen extends PlayerStatsScreen
 
 		drawActiveTabAndOther(mouseX, mouseY);
 
-		GlStateManager.color3f(1, 1, 1);
+		RenderSystem.color3f(1, 1, 1);
 		GlStateManager.disableRescaleNormal();
 		RenderHelper.disableStandardItemLighting();
 		GlStateManager.disableLighting();

@@ -1,6 +1,7 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.network.ColorSelectPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.util.ColorHandler;
@@ -114,7 +115,7 @@ public class ColorSelectorScreen extends Screen
 				y += 3;
 			if(selectedIndex >= 8)
 				y += 3;
-			GlStateManager.color3f(1F, 1F, 1F);
+			RenderSystem.color3f(1.0F, 1.0F, 1.0F);
 			this.minecraft.getTextureManager().bindTexture(guiBackground);
 			this.blit(xOffset + x, yOffset + y, guiWidth, 0, 36, 20);
 		}
