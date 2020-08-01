@@ -130,10 +130,10 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 		if(tail == null)
 			return;
 		float f1 = this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw);
-		double tailPosX = (this.posX +  Math.sin(f1 / 180.0 * Math.PI) * tail.getWidth());
-		double tailPosZ = (this.posZ + -Math.cos(f1 / 180.0 * Math.PI) * tail.getWidth());
+		double tailPosX = (this.getPosX() +  Math.sin(f1 / 180.0 * Math.PI) * tail.getWidth());
+		double tailPosZ = (this.getPosZ() + -Math.cos(f1 / 180.0 * Math.PI) * tail.getWidth());
 
-		tail.setPositionAndRotation(tailPosX, this.posY, tailPosZ, this.rotationYaw, this.rotationPitch);
+		tail.setPositionAndRotation(tailPosX, this.getPosY(), tailPosZ, this.rotationYaw, this.rotationPitch);
 	}
 
 	@Override
