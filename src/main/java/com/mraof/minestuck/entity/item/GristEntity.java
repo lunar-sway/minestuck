@@ -95,7 +95,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	}
 	
 	@Override
-	public int getBrightnessForRender()
+	public int getBrightness()
 	{
 		float f1 = 0.5F;
 
