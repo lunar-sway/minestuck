@@ -30,13 +30,13 @@ public final class MSFeatures
 	
 	public static final Feature<NoFeatureConfig> RAINBOW_TREE = getNull();
 	public static final Feature<NoFeatureConfig> END_TREE =	 getNull();
-	public static final Feature<BushConfig> LEAFLESS_TREE = getNull();
+	public static final Feature<BlockStateFeatureConfig> LEAFLESS_TREE = getNull();
 	
 	public static final Feature<NoFeatureConfig> RETURN_NODE = getNull();
 	public static final Feature<NoFeatureConfig> FIRE_FIELD = getNull();
 	public static final Feature<ProbabilityConfig> CAKE = getNull();
-	public static final Feature<BushConfig> PILLAR = getNull();
-	public static final Feature<BushConfig> LARGE_PILLAR = getNull();
+	public static final Feature<BlockStateFeatureConfig> PILLAR = getNull();
+	public static final Feature<BlockStateFeatureConfig> LARGE_PILLAR = getNull();
 	public static final Feature<BlockBlobConfig> BLOCK_BLOB = getNull();
 	public static final Feature<NoFeatureConfig> STRAWBERRY = getNull();
 	public static final Feature<NoFeatureConfig> OCEAN_RUNDOWN = getNull();
@@ -71,13 +71,13 @@ public final class MSFeatures
 		
 		registry.register(new RainbowTreeFeature(NoFeatureConfig::deserialize, false).setRegistryName("rainbow_tree"));
 		registry.register(new EndTreeFeature(NoFeatureConfig::deserialize, false).setRegistryName("end_tree"));
-		registry.register(new LeaflessTreeFeature(BushConfig::deserialize).setRegistryName("leafless_tree"));
+		registry.register(new LeaflessTreeFeature(BlockStateFeatureConfig::deserialize).setRegistryName("leafless_tree"));
 		
 		registry.register(new ReturnNodeFeature(NoFeatureConfig::deserialize).setRegistryName("return_node"));
 		registry.register(new FireFieldFeature(NoFeatureConfig::deserialize).setRegistryName("fire_field"));
 		registry.register(new CakeFeature(ProbabilityConfig::deserialize).setRegistryName("cake"));
-		registry.register(new PillarFeature(BushConfig::deserialize, false).setRegistryName("pillar"));
-		registry.register(new PillarFeature(BushConfig::deserialize, true).setRegistryName("large_pillar"));
+		registry.register(new PillarFeature(BlockStateFeatureConfig::deserialize, false).setRegistryName("pillar"));
+		registry.register(new PillarFeature(BlockStateFeatureConfig::deserialize, true).setRegistryName("large_pillar"));
 		registry.register(new ConditionFreeBlobFeature(BlockBlobConfig::deserialize).setRegistryName("block_blob"));
 		registry.register(new ScatteredPlantFeature(NoFeatureConfig::deserialize, MSBlocks.STRAWBERRY.getDefaultState()).setRegistryName("strawberry"));
 		registry.register(new OceanRundownFeature(NoFeatureConfig::deserialize).setRegistryName("ocean_rundown"));
