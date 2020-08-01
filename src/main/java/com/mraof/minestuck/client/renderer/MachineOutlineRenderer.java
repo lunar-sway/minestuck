@@ -1,6 +1,8 @@
 package com.mraof.minestuck.client.renderer;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.item.MSItems;
@@ -10,6 +12,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
@@ -20,6 +24,7 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.DrawHighlightEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -51,6 +56,9 @@ public class MachineOutlineRenderer
 			return false;
 		if(stack.getItem() instanceof MultiblockItem)
 		{
+			IRenderTypeBuffer bufferIn = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
+			IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.getLines());
+
 			MultiblockItem item = (MultiblockItem) stack.getItem();
 			BlockPos pos = rayTraceResult.getPos();
 			BlockItemUseContext context = new BlockItemUseContext(new ItemUseContext(player, hand, rayTraceResult));
@@ -73,8 +81,8 @@ public class MachineOutlineRenderer
 			
 			boolean placeable;
 			AxisAlignedBB boundingBox;
-			
-			GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+
+			RenderSystem.defaultBlendFunc();
 			GlStateManager.lineWidth(2.0F);
 			GlStateManager.disableTexture();
 			GlStateManager.depthMask(false);	//GL stuff was copied from the standard mouseover bounding box drawing, which is likely why the alpha isn't working
@@ -88,13 +96,13 @@ public class MachineOutlineRenderer
 				AxisAlignedBB rod = GuiUtil.rotateAround(new AxisAlignedBB(3.25, 1, 3.25, 3.75, 4, 3.75), 0.5, 0.5, rotation).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
 				AxisAlignedBB pad = GuiUtil.rotateAround(new AxisAlignedBB(0, 0, 0, 4, 1, 4), 0.5, 0.5, rotation).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
 				//If you don't want the extra details to the alchemiter outline, comment out the following two lines
-				WorldRenderer.drawSelectionBoundingBox(rod, placeable ? 0 : 1, placeable ? 1 : 0, 0, 0.5F);
-				WorldRenderer.drawSelectionBoundingBox(pad, placeable ? 0 : 1, placeable ? 1 : 0, 0, 0.5F);
+				WorldRenderer.drawBoundingBox(ivertexbuilder, rod.minX, rod.minY, rod.minZ, rod.maxX, rod.maxY, rod.maxZ, placeable ? 0 : 1, placeable ? 1 : 0, 0, 0.5F);
+				WorldRenderer.drawBoundingBox(ivertexbuilder, pad.minX, pad.minY, pad.minZ, pad.maxX, pad.maxY, pad.maxZ, placeable ? 0 : 1, placeable ? 1 : 0, 0, 0.5F);
 			}
 			
 			boundingBox = GuiUtil.fromBoundingBox(item.getMultiblock().getBoundingBox(rotation)).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
-			
-			WorldRenderer.drawSelectionBoundingBox(boundingBox, placeable ? 0 : 1, placeable ? 1 : 0, 0, 0.5F);
+
+			WorldRenderer.drawBoundingBox(ivertexbuilder, boundingBox.minX, boundingBox.minY, boundingBox.minZ, boundingBox.maxX, boundingBox.maxY, boundingBox.maxZ, placeable ? 0 : 1, placeable ? 1 : 0, 0, 0.5F);
 			GlStateManager.depthMask(true);
 			GlStateManager.enableTexture();
 			GlStateManager.disableBlend();
