@@ -2,6 +2,7 @@ package com.mraof.minestuck.client.gui.captchalouge;
 
 import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.client.settings.MSKeyHandler;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
@@ -115,7 +116,7 @@ public abstract class SylladexScreen extends Screen
 
 		RenderHelper.enableStandardItemLighting();
 		GlStateManager.enableRescaleNormal();
-		GLX.glMultiTexCoord2f(GLX.GL_TEXTURE1, 240F, 240F);
+		RenderSystem.glMultiTexCoord2f(33986, 240F, 240F);
 		for(GuiCard card : visibleCards)
 			card.drawItem();
 		GlStateManager.disableDepthTest();

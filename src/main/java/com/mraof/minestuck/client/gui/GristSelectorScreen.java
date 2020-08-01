@@ -11,7 +11,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.client.config.GuiButtonExt;
+import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,8 +28,8 @@ public class GristSelectorScreen<T extends Screen & Positioned> extends Minestuc
 
 	private T otherScreen;
 	private int page = 0;
-	private GuiButtonExt previousButton;
-	private GuiButtonExt nextButton;
+	private ExtendedButton previousButton;
+	private ExtendedButton nextButton;
 
 	public GristSelectorScreen(T screen)
 	{
@@ -47,8 +47,8 @@ public class GristSelectorScreen<T extends Screen & Positioned> extends Minestuc
 		super.init();
 		int xOffset = (width - guiWidth) / 2;
 		int yOffset = (height - guiHeight) / 2;
-		this.previousButton = new GuiButtonExt((this.width) + 8, yOffset + 8, 16, 16, "<", button -> prevPage());
-		this.nextButton = new GuiButtonExt(xOffset + guiWidth - 24, yOffset + 8, 16, 16, ">", button -> nextPage());
+		this.previousButton = new ExtendedButton((this.width) + 8, yOffset + 8, 16, 16, "<", button -> prevPage());
+		this.nextButton = new ExtendedButton(xOffset + guiWidth - 24, yOffset + 8, 16, 16, ">", button -> nextPage());
 		if(GristTypes.REGISTRY.getValues().size() > rows * columns)
 		{
 			this.addButton(this.nextButton);
