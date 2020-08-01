@@ -9,6 +9,7 @@ import net.minecraft.item.Items;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -16,6 +17,8 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.storage.WorldSavedData;
 
 import java.util.Random;
 
@@ -41,7 +44,7 @@ public class RainbowSaplingBlock extends BushBlock implements IGrowable
 	}
 	
 	@Override
-	public void tick(BlockState state, World worldIn, BlockPos pos, Random random)
+	public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random)
 	{
 		super.tick(state, worldIn, pos, random);
 		if (!worldIn.isAreaLoaded(pos, 1)) return; // Forge: prevent loading unloaded chunks when checking neighbor's light
@@ -62,7 +65,7 @@ public class RainbowSaplingBlock extends BushBlock implements IGrowable
 	}
 	
 	@Override
-	public void grow(World worldIn, Random rand, BlockPos pos, BlockState state)
+	public void grow(ServerWorld worldIn, Random rand, BlockPos pos, BlockState state)
 	{
 		if(state.get(RED) && state.get(GREEN) && state.get(BLUE))
 		{
@@ -144,7 +147,7 @@ public class RainbowSaplingBlock extends BushBlock implements IGrowable
 	}
 	
 	@Override
-	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
 	{
 		ItemStack stack = player.getHeldItem(hand);
 		if(stack.getItem() == Items.LAPIS_LAZULI)
@@ -192,7 +195,7 @@ public class RainbowSaplingBlock extends BushBlock implements IGrowable
 			if(worldIn.rand.nextFloat() < 0.5)
 				state = state.with(RED, true);
 			else state = state.with(GREEN, true);
-		} else return false;
+		} else return ActionResultType.FAIL;
 		
 		if(!worldIn.isRemote)
 		{
@@ -200,7 +203,7 @@ public class RainbowSaplingBlock extends BushBlock implements IGrowable
 			stack.shrink(1);
 		}
 		
-		return true;
+		return ActionResultType.SUCCESS;
 	}
 	
 	@Override
@@ -209,10 +212,10 @@ public class RainbowSaplingBlock extends BushBlock implements IGrowable
 		return BlockTags.WOOL.contains(state.getBlock()) || super.isValidGround(state, worldIn, pos);
 	}
 	
-	private void generateTree(World worldIn, BlockPos pos, BlockState state, Random rand)
+	private void generateTree(ServerWorld worldIn, BlockPos pos, BlockState state, Random rand)
 	{
 		if(!net.minecraftforge.event.ForgeEventFactory.saplingGrowTree(worldIn, rand, pos))
 			return;
-		tree.spawn(worldIn, pos, state, rand);
+		tree.place(worldIn, worldIn.getChunkProvider().getChunkGenerator(), pos, state, rand);
 	}
 }

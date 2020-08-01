@@ -42,9 +42,9 @@ public class HologramEntity extends Entity
 	
 	public void onUpdate()
     {
-        this.prevPosX = this.posX;
-        this.prevPosY = this.posY;
-        this.prevPosZ = this.posZ;
+        this.prevPosX = this.getPosX();
+        this.prevPosY = this.getPosY();
+        this.prevPosZ = this.getPosZ();
         ++this.innerRotation;
 
         if (!this.world.isRemote)

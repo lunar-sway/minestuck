@@ -59,7 +59,7 @@ public abstract class GatePiece extends ScatteredStructurePiece
 	}
 	
 	@Override
-	public boolean addComponentParts(IWorld worldIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
+	public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox mutableBoundingBoxIn, ChunkPos chunkPosIn)
 	{
 		placeGate(worldIn, boundingBox);
 		return true;

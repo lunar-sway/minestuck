@@ -13,22 +13,14 @@ public class FrogRenderer extends MobRenderer<FrogEntity, FrogModel<FrogEntity>>
 
 	public FrogRenderer(EntityRendererManager manager)
 	{
-		super(manager, new FrogModel(), 0.5f);
+		super(manager, new FrogModel<>(), 0.5f);
 		this.addLayer(new FrogSkinLayer(this));
 		this.addLayer(new FrogEyesLayer(this));
 		this.addLayer(new FrogBellyLayer(this));
-		
-	}
-
-	@Override
-	protected void preRenderCallback(FrogEntity frog, float partialTickTime)
-	{
-		float scale = frog.getFrogSize();
-		GlStateManager.scalef(scale,scale,scale);
 	}
 	
 	@Override
-	protected ResourceLocation getEntityTexture(FrogEntity entity)
+	public ResourceLocation getEntityTexture(FrogEntity entity)
 	{
 		return new ResourceLocation(Minestuck.MOD_ID, "textures/entity/frog/base.png");
 	}

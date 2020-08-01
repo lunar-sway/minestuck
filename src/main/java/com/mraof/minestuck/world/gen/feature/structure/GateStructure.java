@@ -6,19 +6,23 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.LandChunkGenerator;
 import com.mraof.minestuck.world.gen.LandGenSettings;
+import net.minecraft.util.SharedSeedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeManager;
 import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.world.gen.feature.structure.MineshaftConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.structure.StructureStart;
 import net.minecraft.world.gen.feature.template.TemplateManager;
+import net.minecraft.world.server.ServerWorld;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -41,19 +45,17 @@ public class GateStructure extends Structure<NoFeatureConfig>
 		DimensionType type = chunkGenerator instanceof LandChunkGenerator ? ((LandChunkGenerator) chunkGenerator).getDimensionType() : null;
 		return findGatePosition(type, chunkGenerator);
 	}
-	
-	@Override
-	public boolean hasStartAt(ChunkGenerator<?> chunkGenerator, Random random, int chunkX, int chunkZ)
-	{
-		ChunkPos pos = this.getStartPositionForPosition(chunkGenerator, random, chunkX, chunkZ, 0, 0);
-		
+
+	public boolean canBeGenerated(BiomeManager biomeManagerIn, ChunkGenerator<?> generatorIn, Random randIn, int chunkX, int chunkZ, Biome biomeIn) {
+		ChunkPos pos = this.getStartPositionForPosition(generatorIn, randIn, chunkX, chunkZ, 0, 0);
+
 		return chunkX == pos.x && chunkZ == pos.z;
 	}
 	
 	@Override
 	public IStartFactory getStartFactory()
 	{
-		return Start::new;
+		return GateStructure.Start::new;
 	}
 	
 	@Override
@@ -70,16 +72,19 @@ public class GateStructure extends Structure<NoFeatureConfig>
 	
 	public BlockPos findLandGatePos(IWorld world)
 	{
-		if(world.getChunkProvider().getChunkGenerator().getBiomeProvider().hasStructure(this))
+		if (world instanceof ServerWorld)
 		{
-			ChunkPos chunkPos = findGatePosition(world.getDimension().getType(), world.getChunkProvider().getChunkGenerator());
-			
-			StructureStart start = world.getChunk(chunkPos.x, chunkPos.z, ChunkStatus.STRUCTURE_STARTS).getStructureStart(getStructureName());
-			
-			if(start instanceof Start)
+			if(((ServerWorld) world).getChunkProvider().getChunkGenerator().getBiomeProvider().hasStructure(this))
 			{
-				return ((Start) start).findGatePos();
-			} else Debug.warnf("Expected to find gate structure at chunk coords %s, in dimension %s, but found %s!", chunkPos, world.getDimension().getType().getRegistryName(), start);
+				ChunkPos chunkPos = findGatePosition(world.getDimension().getType(), ((ServerWorld) world).getChunkProvider().getChunkGenerator());
+
+				StructureStart start = world.getChunk(chunkPos.x, chunkPos.z, ChunkStatus.STRUCTURE_STARTS).getStructureStart(getStructureName());
+
+				if(start instanceof Start)
+				{
+					return ((Start) start).findGatePos();
+				} else Debug.warnf("Expected to find gate structure at chunk coords %s, in dimension %s, but found %s!", chunkPos, world.getDimension().getType().getRegistryName(), start);
+			}
 		}
 		
 		return null;
@@ -106,9 +111,9 @@ public class GateStructure extends Structure<NoFeatureConfig>
 			int posZ = (int) Math.round(Math.sin(angle) * radius);
 			
 			//TODO Could there be a better way to search for a position? (Look for possible positions with the "surrounded by normal biomes" property rather than pick a random one and then check if it has this property)
-			BlockPos pos = chunkGenerator.getBiomeProvider().findBiomePosition((posX << 4) + 8, (posZ << 4) + 8, 96, Collections.singletonList(MSBiomes.LAND_NORMAL), worldRand);
-			
-			if(pos != null && chunkGenerator.getBiomeProvider().getBiomesInSquare(pos.getX(), pos.getZ(), 16).stream().allMatch(biome -> biome == MSBiomes.LAND_NORMAL))
+			BlockPos pos = chunkGenerator.getBiomeProvider().func_225531_a_((posX << 4) + 8, 0,(posZ << 4) + 8, 96, Collections.singletonList(MSBiomes.LAND_NORMAL), worldRand);
+
+			if(pos != null && chunkGenerator.getBiomeProvider().getBiomes(pos.getX(), 0, pos.getZ(), 16).stream().allMatch(biome -> biome == MSBiomes.LAND_NORMAL))
 				return new ChunkPos(pos.getX() >> 4, pos.getZ() >> 4);
 		}
 		
@@ -116,7 +121,7 @@ public class GateStructure extends Structure<NoFeatureConfig>
 		int posZ = (int) Math.round(Math.sin(angle) * radius);
 		Debug.warn("Did not come across a decent location for land gates. Placing it without regard to any biomes.");
 		
-		BlockPos pos = chunkGenerator.getBiomeProvider().findBiomePosition((posX << 4) + 8, (posZ << 4) + 8, 96, Collections.singletonList(MSBiomes.LAND_NORMAL), worldRand);
+		BlockPos pos = chunkGenerator.getBiomeProvider().func_225531_a_((posX << 4) + 8, 0, (posZ << 4) + 8, 96, Collections.singletonList(MSBiomes.LAND_NORMAL), worldRand);
 		
 		ChunkPos gatePos;
 		if(pos != null)
@@ -139,9 +144,8 @@ public class GateStructure extends Structure<NoFeatureConfig>
 	
 	public static class Start extends StructureStart
 	{
-		Start(Structure<?> structure, int chunkX, int chunkZ, Biome biome, MutableBoundingBox boundingBox, int reference, long seed)
-		{
-			super(structure, chunkX, chunkZ, biome, boundingBox, reference, seed);
+		public Start(Structure<?> p_i225811_1_, int p_i225811_2_, int p_i225811_3_, MutableBoundingBox p_i225811_4_, int p_i225811_5_, long p_i225811_6_) {
+			super(p_i225811_1_, p_i225811_2_, p_i225811_3_, p_i225811_4_, p_i225811_5_, p_i225811_6_);
 		}
 		
 		@Override

@@ -10,6 +10,7 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 import java.util.Random;
 
@@ -50,7 +51,7 @@ public class EndSaplingBlock extends BushBlock implements IGrowable
 	 * If Alpha is true and omega is false, then the tree will generate.
 	 */
 	@Override
-	public void grow(World worldIn, Random rand, BlockPos pos, BlockState state)
+	public void grow(ServerWorld worldIn, Random rand, BlockPos pos, BlockState state)
 	{
 		if(worldIn.isRemote || worldIn.getMoonPhase() == 4)
 		{
@@ -78,11 +79,11 @@ public class EndSaplingBlock extends BushBlock implements IGrowable
 		}
 	}
 	
-	private void generateTree(World worldIn, BlockPos pos, BlockState state, Random rand)
+	private void generateTree(ServerWorld worldIn, BlockPos pos, BlockState state, Random rand)
 	{
 		if(!net.minecraftforge.event.ForgeEventFactory.saplingGrowTree(worldIn, rand, pos))
 			return;
-		tree.spawn(worldIn, pos, state, rand);
+		tree.place(worldIn, worldIn.getChunkProvider().getChunkGenerator(), pos, state, rand);
 	}
 	
 	@Override
@@ -98,7 +99,7 @@ public class EndSaplingBlock extends BushBlock implements IGrowable
 	}
 	
 	@Override
-	public void tick(BlockState state, World worldIn, BlockPos pos, Random random)
+	public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random)
 	{
 		if (!worldIn.isRemote)
 		{

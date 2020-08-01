@@ -7,6 +7,7 @@ import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Rotation;
@@ -43,19 +44,19 @@ public class CruxtruderBlock extends MultiMachineBlock
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
 	{
 		if(hasTileEntity && (state.get(FACING) == hit.getFace() || hit.getFace() == Direction.UP))
 		{
 			if(worldIn.isRemote)
-				return true;
+				return ActionResultType.SUCCESS;
 			
 			TileEntity te = worldIn.getTileEntity(pos);
 			if(te instanceof CruxtruderTileEntity)
 				((CruxtruderTileEntity) te).onRightClick(player, hit.getFace() == Direction.UP);
-			return true;
+			return ActionResultType.SUCCESS;
 		}
-		return false;
+		return ActionResultType.FAIL;
 	}
 	
 	@Override

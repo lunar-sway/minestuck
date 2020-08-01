@@ -132,9 +132,9 @@ public class ConsortDialogue
 		
 		//Towers
 		addMessage("climb_high").landTitle(TOWERS, WIND).consort(EnumConsort.IGUANA);
-		addMessage(new ConditionedMessage((ConsortEntity consort, ServerPlayerEntity player) -> consort.posY < 78, new ChainMessage(new SingleMessage("height_fear.towers.1"), new SingleMessage("height_fear.towers.2")),
+		addMessage(new ConditionedMessage((ConsortEntity consort, ServerPlayerEntity player) -> consort.getPosY() < 78, new ChainMessage(new SingleMessage("height_fear.towers.1"), new SingleMessage("height_fear.towers.2")),
 				new SingleMessage("height_fear.panic"))).landTitle(TOWERS).consort(EnumConsort.TURTLE);
-		addMessage(new ConditionedMessage((ConsortEntity consort, ServerPlayerEntity player) -> consort.posY < 78, new ChainMessage(new SingleMessage("height_fear.rock.1"), new SingleMessage("height_fear.rock.2")),
+		addMessage(new ConditionedMessage((ConsortEntity consort, ServerPlayerEntity player) -> consort.getPosY() < 78, new ChainMessage(new SingleMessage("height_fear.rock.1"), new SingleMessage("height_fear.rock.2")),
 				new SingleMessage("height_fear.panic"))).landTitle(WIND).consort(EnumConsort.TURTLE);
 		
 		//Shade

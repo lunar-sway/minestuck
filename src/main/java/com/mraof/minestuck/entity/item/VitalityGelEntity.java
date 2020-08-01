@@ -88,23 +88,23 @@ public class VitalityGelEntity extends Entity implements IEntityAdditionalSpawnD
 	{
 	}
 	
-	@Override
-	public int getBrightnessForRender()
-	{
-		float f1 = 0.5F;
-
-		int i = super.getBrightnessForRender();
-		int j = i & 255;
-		int k = i >> 16 & 255;
-		j += (int)(f1 * 15.0F * 16.0F);
-
-		if (j > 240)
-		{
-			j = 240;
-		}
-
-		return j | k << 16;
-	}
+//	@Override
+//	public int getBrightnessForRender()
+//	{
+//		float f1 = 0.5F;
+//
+//		int i = super.getBrightnessForRender();
+//		int j = i & 255;
+//		int k = i >> 16 & 255;
+//		j += (int)(f1 * 15.0F * 16.0F);
+//
+//		if (j > 240)
+//		{
+//			j = 240;
+//		}
+//
+//		return j | k << 16;
+//	}
 
 	/**
 	 * Called to update the entity's position/logic.
@@ -114,12 +114,12 @@ public class VitalityGelEntity extends Entity implements IEntityAdditionalSpawnD
 	{
 		super.tick();
 		
-		this.prevPosX = this.posX;
-		this.prevPosY = this.posY;
-		this.prevPosZ = this.posZ;
+		this.prevPosX = this.getPosX();
+		this.prevPosY = this.getPosY();
+		this.prevPosZ = this.getPosZ();
 		this.setMotion(this.getMotion().add(0, -0.03D, 0));
 		
-		if (this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.posY), MathHelper.floor(this.posZ))).getMaterial() == Material.LAVA)
+		if (this.world.getBlockState(new BlockPos(MathHelper.floor(this.getPosX()), MathHelper.floor(this.getPosY()), MathHelper.floor(this.getPosZ()))).getMaterial() == Material.LAVA)
 		{
 			this.setMotion(0.2D, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F);
 			this.playSound(SoundEvents.ENTITY_GENERIC_BURN, 0.4F, 2.0F + this.rand.nextFloat() * 0.4F);
@@ -139,9 +139,9 @@ public class VitalityGelEntity extends Entity implements IEntityAdditionalSpawnD
 
 		if (this.closestPlayer != null)
 		{
-			double d1 = (this.closestPlayer.posX - this.posX) / d0;
-			double d2 = (this.closestPlayer.posY + (double)this.closestPlayer.getEyeHeight() - this.posY) / d0;
-			double d3 = (this.closestPlayer.posZ - this.posZ) / d0;
+			double d1 = (this.closestPlayer.getPosX() - this.getPosX()) / d0;
+			double d2 = (this.closestPlayer.getPosY() + (double)this.closestPlayer.getEyeHeight() - this.getPosY()) / d0;
+			double d3 = (this.closestPlayer.getPosZ() - this.getPosZ()) / d0;
 			double d4 = Math.sqrt(d1 * d1 + d2 * d2 + d3 * d3);
 			double d5 = this.getSize(Pose.STANDING).width * 2.0D - d4;
 
@@ -156,7 +156,7 @@ public class VitalityGelEntity extends Entity implements IEntityAdditionalSpawnD
 		
 		if(this.onGround)
 		{
-			BlockPos pos = new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getBoundingBox().minY) - 1, MathHelper.floor(this.posZ));
+			BlockPos pos = new BlockPos(MathHelper.floor(this.getPosX()), MathHelper.floor(this.getBoundingBox().minY) - 1, MathHelper.floor(this.getPosZ()));
 			f = this.world.getBlockState(pos).getSlipperiness(world, pos, this) * 0.98F;
 		}
 		

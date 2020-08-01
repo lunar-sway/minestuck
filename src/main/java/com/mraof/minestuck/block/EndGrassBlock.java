@@ -6,6 +6,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 import java.util.Random;
 
@@ -17,7 +18,7 @@ public class EndGrassBlock extends Block
 	}
 	
 	@Override
-	public void randomTick(BlockState state, World worldIn, BlockPos pos, Random random)
+	public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random)
 	{
 		if(!worldIn.isRemote)
 		{

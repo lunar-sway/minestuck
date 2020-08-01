@@ -1,15 +1,17 @@
 package com.mraof.minestuck.client.renderer.entity.frog;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.client.model.FrogModel;
 import com.mraof.minestuck.entity.FrogEntity;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.IEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.util.ResourceLocation;
 
 public class FrogSkinLayer extends LayerRenderer<FrogEntity, FrogModel<FrogEntity>>
 {
-	private final FrogModel frogModel = new FrogModel();
+	private final FrogModel<FrogEntity> frogModel = new FrogModel<>();
 	private float colorMin = 0.25f;
 	private String name;
 
@@ -19,11 +21,10 @@ public class FrogSkinLayer extends LayerRenderer<FrogEntity, FrogModel<FrogEntit
 	}
 
 	@Override
-	public void render(FrogEntity frog, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
+	public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, FrogEntity frog, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch)
 	{
 		if (!frog.isInvisible()) {
 			int type = frog.getFrogType();
-			this.bindTexture(this.getTexture(type));
 			if ((type > frog.maxTypes() || type < 1)) {
 				int skinColor = frog.getSkinColor();
 
@@ -39,11 +40,12 @@ public class FrogSkinLayer extends LayerRenderer<FrogEntity, FrogModel<FrogEntit
 					b = this.colorMin;
 
 				GlStateManager.color4f(r, g, b, 1f);
+
+				this.getEntityModel().copyModelAttributesTo(this.frogModel);
+				this.frogModel.setLivingAnimations(frog, limbSwing, limbSwingAmount, partialTicks);
+				this.frogModel.setRotationAngles(frog, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+				renderCutoutModel(this.getEntityModel(), this.getTexture(type), matrixStackIn, bufferIn, packedLightIn, frog, 1.0F, 1.0F, 1.0F);
 			}
-			this.getEntityModel().setModelAttributes(this.frogModel);
-            this.frogModel.setLivingAnimations(frog, limbSwing, limbSwingAmount, partialTicks);
-            this.frogModel.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, 1f, frog);
-	        this.frogModel.render(frog, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 	        
 			GlStateManager.disableBlend();
 		}
@@ -78,11 +80,4 @@ public class FrogSkinLayer extends LayerRenderer<FrogEntity, FrogModel<FrogEntit
 		}
 		return new ResourceLocation(path);
 	}
-
-	@Override
-	public boolean shouldCombineTextures() {
-
-		return false;
-	}
-
 }

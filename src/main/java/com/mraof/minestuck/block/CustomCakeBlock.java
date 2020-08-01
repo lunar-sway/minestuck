@@ -5,6 +5,7 @@ import net.minecraft.block.CakeBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Stats;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -18,16 +19,16 @@ public abstract class CustomCakeBlock extends CakeBlock
 	}
 	
 	@Override
-	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
 	{
 		if (!worldIn.isRemote)
 		{
-			return this.eatCake(worldIn, pos, state, player);
+			return this.eatCake(worldIn, pos, state, player) ? ActionResultType.SUCCESS : ActionResultType.FAIL;
 		}
 		else
 		{
 			ItemStack itemstack = player.getHeldItem(hand);
-			return this.eatCake(worldIn, pos, state, player) || itemstack.isEmpty();
+			return this.eatCake(worldIn, pos, state, player) || itemstack.isEmpty() ? ActionResultType.SUCCESS : ActionResultType.FAIL;
 		}
 	}
 	

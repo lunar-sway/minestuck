@@ -1,6 +1,7 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen.*;
 import com.mraof.minestuck.client.settings.MSKeyHandler;
@@ -53,7 +54,7 @@ public abstract class PlayerStatsContainerScreen<T extends Container> extends Co
 	
 	protected void drawTabs()
 	{
-		GlStateManager.color3f(1,1,1);
+		RenderSystem.color3f(1,1,1);
 		
 		minecraft.getTextureManager().bindTexture(PlayerStatsScreen.icons);
 		
@@ -89,7 +90,7 @@ public abstract class PlayerStatsContainerScreen<T extends Container> extends Co
 	
 	protected void drawActiveTabAndIcons()
 	{
-		GlStateManager.color3f(1,1,1);
+		RenderSystem.color3f(1,1,1);
 		
 		minecraft.getTextureManager().bindTexture(PlayerStatsScreen.icons);
 		

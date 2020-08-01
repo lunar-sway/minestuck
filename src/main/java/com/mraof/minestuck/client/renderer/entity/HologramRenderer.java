@@ -17,25 +17,26 @@ public class HologramRenderer extends EntityRenderer<HologramEntity>
 		super(manager);
 	}
 	
-	@Override
-	public void doRender(HologramEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
-		
-		ItemStack item = entity.getItem();
-		float f = (float)entity.innerRotation + partialTicks;
-		float scale = 0.8f;
-		
-		GlStateManager.color4f(0f, 1f, 1f, 0.5f);
-		
-		GlStateManager.pushMatrix();
-		//GlStateManager.rotate(180, 0, 0, 1);
-		GlStateManager.scalef(scale, scale, scale);
-        GlStateManager.translatef((float)x, (float)y+0.5F, (float)z);
-                GlStateManager.rotatef((f) / 20.0F * (180F / (float)Math.PI), 0.0F, 1.0F, 0.0F);
-		Minecraft.getInstance().getItemRenderer().renderItem(item, ItemCameraTransforms.TransformType.GROUND);
-
-      //  GlStateManager.translate((float)x, (float)y, (float)z);
-		GlStateManager.popMatrix();
-	}
+//	@Override
+//	public void doRender(HologramEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
+//
+//		ItemStack item = entity.getItem();
+//		float f = (float)entity.innerRotation + partialTicks;
+//		float scale = 0.8f;
+//
+//		GlStateManager.color4f(0f, 1f, 1f, 0.5f);
+//
+//		GlStateManager.pushMatrix();
+//		//GlStateManager.rotate(180, 0, 0, 1);
+//		GlStateManager.scalef(scale, scale, scale);
+//        GlStateManager.translatef((float)x, (float)y+0.5F, (float)z);
+//                GlStateManager.rotatef((f) / 20.0F * (180F / (float)Math.PI), 0.0F, 1.0F, 0.0F);
+//		Minecraft.getInstance().getItemRenderer().renderItem(item, ItemCameraTransforms.TransformType.GROUND);
+//		Minecraft.getInstance().getItemRenderer().renderIt
+//
+//      //  GlStateManager.translate((float)x, (float)y, (float)z);
+//		GlStateManager.popMatrix();
+//	}
 	
 	protected boolean canRenderName(HologramEntity entity)
     {
@@ -43,7 +44,7 @@ public class HologramRenderer extends EntityRenderer<HologramEntity>
     }
 
 	@Override
-	protected ResourceLocation getEntityTexture(HologramEntity entity)
+	public ResourceLocation getEntityTexture(HologramEntity entity)
 	{
 		return null;
 	}

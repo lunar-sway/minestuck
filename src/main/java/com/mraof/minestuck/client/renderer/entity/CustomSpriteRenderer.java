@@ -31,17 +31,17 @@ public class CustomSpriteRenderer<T extends Entity & RendersAsItem> extends Enti
 		fakeEntity = new FakeEntity(type);
 		renderer = new ModifiedSpriteRenderer(renderManager, itemRenderer);
 	}
-	
-	@Override
-	public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks)
-	{
-		fakeEntity.setEntity(entity);
-		renderer.doRender(fakeEntity, x, y, z, entityYaw, partialTicks);
-	}
+
+//	@Override
+//	public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks)
+//	{
+//		fakeEntity.setEntity(entity);
+//		renderer.doRender(fakeEntity, x, y, z, entityYaw, partialTicks);
+//	}
 	
 	@Nullable
 	@Override
-	protected ResourceLocation getEntityTexture(T entity)
+	public ResourceLocation getEntityTexture(T entity)
 	{
 		fakeEntity.setEntity(entity);
 		return renderer.getTexture(fakeEntity);
@@ -60,9 +60,7 @@ public class CustomSpriteRenderer<T extends Entity & RendersAsItem> extends Enti
 		void setEntity(T entity)
 		{
 			this.entity = entity;
-			posX = entity.posX;
-			posY = entity.posY;
-			posZ = entity.posZ;
+			this.setPosition(entity.getPosX(), entity.getPosY(), entity.getPosZ());
 		}
 		
 		@Override

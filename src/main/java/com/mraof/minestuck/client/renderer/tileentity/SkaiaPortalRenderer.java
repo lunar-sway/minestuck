@@ -1,11 +1,14 @@
 package com.mraof.minestuck.client.renderer.tileentity;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.tileentity.SkaiaPortalTileEntity;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GLAllocation;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
@@ -20,11 +23,15 @@ public class SkaiaPortalRenderer extends TileEntityRenderer<SkaiaPortalTileEntit
     private static final ResourceLocation particlefield = new ResourceLocation("minestuck","textures/particlefield.png");
     
     FloatBuffer floatBuffer = GLAllocation.createDirectFloatBuffer(16);
-	
+
+	public SkaiaPortalRenderer(TileEntityRendererDispatcher rendererDispatcherIn) {
+		super(rendererDispatcherIn);
+	}
+
 	@Override
-	public void render(SkaiaPortalTileEntity tileEntityIn, double x, double y, double z, float partialTicks, int destroyStage)
+	public void render(SkaiaPortalTileEntity tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn)
 	{
-		Vec3d position = this.rendererDispatcher.renderInfo.getProjectedView();
+		Vec3d position = this.renderDispatcher.renderInfo.getProjectedView();
 
 		float var9 = (float) position.x;
 		float var10 = (float) position.y;
@@ -42,7 +49,7 @@ public class SkaiaPortalRenderer extends TileEntityRenderer<SkaiaPortalTileEntit
 
             if (var14 == 0)
             {
-                this.bindTexture(tunnel);
+                this.renderDispatcher.textureManager.bindTexture(tunnel);
                 var17 = 0.1F;
                 var15 = 65.0F;
                 var16 = 0.125F;
@@ -52,7 +59,7 @@ public class SkaiaPortalRenderer extends TileEntityRenderer<SkaiaPortalTileEntit
 
             if (var14 == 1)
             {
-                this.bindTexture(particlefield);
+				this.renderDispatcher.textureManager.bindTexture(particlefield);
 				GlStateManager.enableBlend();
 				GlStateManager.blendFunc(GL11.GL_ONE, GL11.GL_ONE);
                 var16 = 0.5F;

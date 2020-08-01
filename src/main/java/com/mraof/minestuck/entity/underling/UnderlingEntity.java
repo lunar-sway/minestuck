@@ -168,7 +168,7 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 			if(!dropCandy)
 			{
 				for(GristAmount gristType : grist.getAmounts())
-					this.world.addEntity(new GristEntity(world, randX(), this.posY, randZ(), gristType));
+					this.world.addEntity(new GristEntity(world, randX(), this.getPosY(), randZ(), gristType));
 			} else
 			{
 				for(GristAmount gristType : grist.getAmounts())
@@ -178,25 +178,25 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 					ItemStack candyItem = gristType.getType().getCandyItem();
 					candyItem.setCount(candy);
 					if(candy > 0)
-						this.world.addEntity(new ItemEntity(world, randX(), this.posY, randZ(), candyItem));
+						this.world.addEntity(new ItemEntity(world, randX(), this.getPosY(), randZ(), candyItem));
 					if(gristAmount > 0)
-						this.world.addEntity(new GristEntity(world, randX(), this.posY, randZ(),new GristAmount(gristType.getType(), gristAmount)));
+						this.world.addEntity(new GristEntity(world, randX(), this.getPosY(), randZ(),new GristAmount(gristType.getType(), gristAmount)));
 				}
 			}
 			
 			if(this.rand.nextInt(4) == 0)
-				this.world.addEntity(new VitalityGelEntity(world, randX(), this.posY, randZ(), this.getVitalityGel()));
+				this.world.addEntity(new VitalityGelEntity(world, randX(), this.getPosY(), randZ(), this.getVitalityGel()));
 		}
 	}
 	
 	private double randX()
 	{
-		return this.posX + this.rand.nextDouble() * this.getWidth() - this.getWidth() / 2;
+		return this.getPosX() + this.rand.nextDouble() * this.getWidth() - this.getWidth() / 2;
 	}
 	
 	private double randZ()
 	{
-		return this.posZ + this.rand.nextDouble() * this.getWidth() - this.getWidth() / 2;
+		return this.getPosZ() + this.rand.nextDouble() * this.getWidth() - this.getWidth() / 2;
 	}
 	
 	@Override

@@ -12,6 +12,7 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -52,7 +53,7 @@ public class SpecialTNTBlock extends TNTBlock
 			if(instant)
 				entity.setFuse(0);
 			worldIn.addEntity(entity);
-			worldIn.playSound(null, entity.posX, entity.posY, entity.posZ, SoundEvents.ENTITY_TNT_PRIMED, SoundCategory.BLOCKS, 1.0F, 1.0F);
+			worldIn.playSound(null, entity.getPosX(), entity.getPosY(), entity.getPosZ(), SoundEvents.ENTITY_TNT_PRIMED, SoundCategory.BLOCKS, 1.0F, 1.0F);
 		}
 	}
 	
@@ -70,7 +71,7 @@ public class SpecialTNTBlock extends TNTBlock
 	}
 	
 	@Override
-	public void randomTick(BlockState state, World worldIn, BlockPos pos, Random random)
+	public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random)
 	{
 		if(unstable && random.nextDouble() < 0.1)
 		{

@@ -59,9 +59,9 @@ public abstract class PawnEntity extends CarapacianEntity implements IRangedAtta
 	public void attackEntityWithRangedAttack(LivingEntity target, float distanceFactor)
 	{
 		ArrowEntity arrow = new ArrowEntity(this.world, this);
-		double d0 = target.posX - this.posX;
-		double d1 = target.getBoundingBox().minY + (double)(target.getHeight() / 3.0F) - arrow.posY;
-		double d2 = target.posZ - this.posZ;
+		double d0 = target.getPosX() - this.getPosX();
+		double d1 = target.getBoundingBox().minY + (double)(target.getHeight() / 3.0F) - arrow.getPosY();
+		double d2 = target.getPosZ() - this.getPosZ();
 		double d3 = (double)MathHelper.sqrt(d0 * d0 + d2 * d2);
 		arrow.shoot(d0, d1 + d3 * 0.2D, d2, 1.6F, 12.0F);
 		int power = EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.POWER, this);

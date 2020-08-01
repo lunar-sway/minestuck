@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.IStringSerializable;
@@ -55,33 +56,33 @@ public class ComputerBlock extends MachineBlock
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
 	{
 		ItemStack heldItem = player.getHeldItem(handIn);
 		if(state.get(STATE) == State.OFF)
 		{
 			if(player.isSneaking() || !Direction.UP.equals(hit.getFace()) || !heldItem.isEmpty() && ProgramData.getProgramID(heldItem) == -2)
-				return false;
+				return ActionResultType.FAIL;
 			
 			turnOn(state, worldIn, pos, player, handIn, hit);
 			
-			return true;
+			return ActionResultType.SUCCESS;
 		} else
 		{
 			ComputerTileEntity tileEntity = (ComputerTileEntity) worldIn.getTileEntity(pos);
 			
 			if (tileEntity == null || player.isSneaking())
 			{
-				return false;
+				return ActionResultType.FAIL;
 			}
 			
 			if(insertDisk(tileEntity, state, worldIn, pos, player, handIn))
-				return true;
+				return ActionResultType.SUCCESS;
 			
 			if(worldIn.isRemote && SkaiaClient.requestData(tileEntity))
 				MSScreenFactories.displayComputerScreen(tileEntity);
 			
-			return true;
+			return ActionResultType.SUCCESS;
 		}
 	}
 	

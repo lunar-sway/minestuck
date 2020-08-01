@@ -1,10 +1,13 @@
 package com.mraof.minestuck.client.renderer.tileentity;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.tileentity.GateTileEntity;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -14,9 +17,13 @@ public class GateRenderer extends TileEntityRenderer<GateTileEntity>
 	
 	private static final ResourceLocation INNER_NODE = new ResourceLocation("minestuck","textures/block/node_spiro_inner.png");
 	private static final ResourceLocation OUTER_NODE = new ResourceLocation("minestuck","textures/block/node_spiro_outer.png");
-	
+
+	public GateRenderer(TileEntityRendererDispatcher rendererDispatcherIn) {
+		super(rendererDispatcherIn);
+	}
+
 	@Override
-	public void render(GateTileEntity tileEntityIn, double x, double y, double z, float partialTicks, int destroyStage)
+	public void render(GateTileEntity tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn)
 	{
 		int color = tileEntityIn.color;
 		float r = ((color >> 16) & 255)/255F;
@@ -88,5 +95,4 @@ public class GateRenderer extends TileEntityRenderer<GateTileEntity>
 		Tessellator.getInstance().draw();
 		GlStateManager.popMatrix();
 	}
-	
 }

@@ -1,6 +1,7 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
@@ -146,7 +147,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 			String s = I18n.hasKey("echeladder.rung."+rung) ? I18n.format("echeladder.rung."+rung) : "Rung "+(rung+1);
 			mc.fontRenderer.drawString(s, xOffset+ladderXOffset - mc.fontRenderer.getStringWidth(s) / 2, y + 2, textColor);
 		}
-		GlStateManager.color3f(1,1,1);
+		RenderSystem.color3f(1,1,1);
 		
 		this.mc.getTextureManager().bindTexture(guiEcheladder);
 		this.blit(xOffset, yOffset, 0, 0, guiWidth, guiHeight);

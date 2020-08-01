@@ -8,6 +8,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 import java.util.Random;
 
@@ -27,7 +28,7 @@ public class EndLeavesBlock extends FlammableLeavesBlock
 	}
 	
 	@Override
-	public void randomTick(BlockState state, World worldIn, BlockPos pos, Random random)
+	public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random)
 	{
 		if(!state.get(PERSISTENT) && state.get(DISTANCE) >= LEAF_SUSTAIN_DISTANCE)
 		{
@@ -49,7 +50,7 @@ public class EndLeavesBlock extends FlammableLeavesBlock
 	protected BlockState updateDistance(BlockState state, IWorld world, BlockPos pos) {
 		int i = 7;
 		
-		try (BlockPos.PooledMutableBlockPos mutablePos = BlockPos.PooledMutableBlockPos.retain())
+		try (BlockPos.PooledMutable mutablePos = BlockPos.PooledMutable.retain())
 		{
 			for(Direction facing : Direction.values())
 			{

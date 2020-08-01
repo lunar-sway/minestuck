@@ -1,6 +1,7 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.StoneTabletPacket;
@@ -151,7 +152,7 @@ public class StoneTabletScreen extends Screen
 			int i = Math.min(this.selectionEnd, this.selectionStart);
 			int j = Math.max(this.selectionEnd, this.selectionStart);
 			String s = pageText.substring(i, j);
-			int k = this.font.func_216863_a(pageText, 1, j, true);
+			int k = this.font.getWordPosition(pageText, 1, j, true);
 			String s1 = pageText.substring(i, k);
 			Point point = StoneTabletUtils.createPointer(font, pageText, i);
 			Point point1 = new Point(point.x, point.y + 9);
@@ -205,7 +206,7 @@ public class StoneTabletScreen extends Screen
 		GlStateManager.color4f(0.0F, 0.0F, 255.0F, 255.0F);
 		GlStateManager.disableTexture();
 		GlStateManager.enableColorLogicOp();
-		GlStateManager.logicOp(GlStateManager.LogicOp.OR_REVERSE);
+		RenderSystem.logicOp(GlStateManager.LogicOp.OR_REVERSE);
 		bufferbuilder.begin(7, DefaultVertexFormats.POSITION);
 		bufferbuilder.pos((double)point.x, (double)point1.y, 0.0D).endVertex();
 		bufferbuilder.pos((double)point1.x, (double)point1.y, 0.0D).endVertex();
@@ -325,8 +326,8 @@ public class StoneTabletScreen extends Screen
 				{
 					if (i - this.lastClickTime < 250L) {
 						if (this.selectionStart == this.selectionEnd) {
-							this.selectionStart = this.font.func_216863_a(s, -1, j, false);
-							this.selectionEnd = this.font.func_216863_a(s, 1, j, false);
+							this.selectionStart = this.font.getWordPosition(s, -1, j, false);
+							this.selectionEnd = this.font.getWordPosition(s, 1, j, false);
 						} else 
 							{
 							this.selectionStart = 0;
@@ -473,7 +474,7 @@ public class StoneTabletScreen extends Screen
 	{
 		int i = this.font.getBidiFlag() ? 1 : -1;
 		if (Screen.hasControlDown()) 
-			this.selectionEnd = this.font.func_216863_a(pageText, i, this.selectionEnd, true);
+			this.selectionEnd = this.font.getWordPosition(pageText, i, this.selectionEnd, true);
 		else
 			this.selectionEnd = Math.max(0, this.selectionEnd + i);
 		
@@ -489,7 +490,7 @@ public class StoneTabletScreen extends Screen
 	{
 		int i = this.font.getBidiFlag() ? -1 : 1;
 		if (Screen.hasControlDown())
-			this.selectionEnd = this.font.func_216863_a(pageText, i, this.selectionEnd, true);
+			this.selectionEnd = this.font.getWordPosition(pageText, i, this.selectionEnd, true);
 		else
 			this.selectionEnd = Math.min(pageText.length(), this.selectionEnd + i);
 				

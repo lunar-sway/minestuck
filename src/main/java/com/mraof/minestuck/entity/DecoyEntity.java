@@ -66,14 +66,12 @@ public class DecoyEntity extends MobEntity
 		this.player = new DecoyPlayer(world, this, player);
 		for(String key : player.getPersistentData().keySet())
 			this.player.getPersistentData().put(key, player.getPersistentData().get(key).copy());
-		this.posX = player.posX;
-		originX = posX;
+		originX = this.getPosX();
 		this.chunkCoordX = player.chunkCoordX;
-		this.posY = player.posY;
-		originY = posY;
+		originY = this.getPosY();
 		this.chunkCoordY = player.chunkCoordY;
-		this.posZ = player.posZ;
-		originZ = posZ;
+		originZ = this.getPosZ();
+		this.setPosition(this.getPosX(), this.getPosY(), this.getPosZ());
 		this.chunkCoordZ = player.chunkCoordZ;
 		this.rotationPitch = player.rotationPitch;
 		this.rotationYaw = player.rotationYaw;
@@ -81,9 +79,9 @@ public class DecoyEntity extends MobEntity
 		this.renderYawOffset = player.renderYawOffset;
 		this.gameType = player.interactionManager.getGameType();
 		initInventory(player);
-		player.getAttribute(SharedMonsterAttributes.MAX_HEALTH).getModifiers().forEach(attributeModifier ->
+		player.getAttribute(SharedMonsterAttributes.MAX_HEALTH).func_225505_c_().forEach(attributeModifier ->
 				this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).applyModifier(attributeModifier));
-		player.getAttribute(SharedMonsterAttributes.MAX_HEALTH).getModifiers().forEach(attributeModifier ->
+		player.getAttribute(SharedMonsterAttributes.MAX_HEALTH).func_225505_c_().forEach(attributeModifier ->
 				this.player.getAttribute(SharedMonsterAttributes.MAX_HEALTH).applyModifier(attributeModifier));
 		this.setHealth(player.getHealth());
 		username = player.getName().getFormattedText();
@@ -220,7 +218,7 @@ public class DecoyEntity extends MobEntity
 		rotationPitch = prevRotationPitch;
 		
 		if(isFlying)
-			posY = prevPosY;
+			this.setPosition(this.getPosX(), prevPosY, this.getPosZ());
 		
 		if(!world.isRemote)
 		{
@@ -232,9 +230,9 @@ public class DecoyEntity extends MobEntity
 	}
 	
 	public boolean locationChanged() {
-		return originX >= posX+1 || originX <= posX-1 ||
-				originY >= posY+1 || originY <= posY-1 ||
-				originZ >= posZ+1 || originZ <= posZ-1;
+		return originX >= this.getPosX()+1 || originX <= this.getPosX()-1 ||
+				originY >= this.getPosY()+1 || originY <= this.getPosY()-1 ||
+				originZ >= this.getPosZ()+1 || originZ <= this.getPosZ()-1;
 	}
 	
 	@Override

@@ -22,7 +22,7 @@ public class DecoyRenderer extends MobRenderer<DecoyEntity, PlayerModel<DecoyEnt
 	}
 	
 	@Override
-	protected ResourceLocation getEntityTexture(DecoyEntity entity)
+	public ResourceLocation getEntityTexture(DecoyEntity entity)
 	{
 		return entity.getLocationSkin();
 	}
