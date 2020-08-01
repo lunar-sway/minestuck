@@ -6,6 +6,7 @@
 
 package com.mraof.minestuck.client.model;
 
+import com.google.common.collect.ImmutableList;
 import com.mraof.minestuck.entity.consort.IguanaEntity;
 import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
@@ -91,15 +92,11 @@ public class IguanaModel<T extends IguanaEntity> extends SegmentedModel<T>
 	}
 
 	@Override
-	public void setRotationAngles(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch)
-	{
-		super.setRotationAngles(entity, f, f1, f2, f3, f4, f5);
+	public void setRotationAngles(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+
 	}
 
-	@Override
-	public void setRotationAngles(T entity, float f, float f1, float f2, float f3, float f4, float f5)
-	{
-		super.setRotationAngles(entity, f, f1, f2, f3, f4, f5);
+	public Iterable<ModelRenderer> getParts() {
+		return ImmutableList.of(this.body, this.rightLeg, this.leftLeg, this.head, this.upperTail, this.lowerTail, this.upperJaw, this.lowerJaw, this.shape1, this.shape2);
 	}
-
 }
