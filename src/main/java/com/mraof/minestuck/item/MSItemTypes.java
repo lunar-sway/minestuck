@@ -10,6 +10,7 @@ import net.minecraft.item.IArmorMaterial;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.LazyValue;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraftforge.common.ToolType;
@@ -70,7 +71,7 @@ public class MSItemTypes
 		private final float efficiency;
 		private final float attackDamage;
 		private final int enchantability;
-		private final LazyLoadBase<Ingredient> repairMaterial;
+		private final LazyValue<Ingredient> repairMaterial;
 		
 		public ModItemTier(int harvestLevel, int maxUses, float efficiency, float attackDamage, int enchantability, Supplier<Ingredient> repairMaterial)
 		{
@@ -79,7 +80,7 @@ public class MSItemTypes
 			this.efficiency = efficiency;
 			this.attackDamage = attackDamage;
 			this.enchantability = enchantability;
-			this.repairMaterial = new LazyLoadBase<>(repairMaterial);
+			this.repairMaterial = new LazyValue<>(repairMaterial);
 		}
 		
 		@Override
@@ -129,7 +130,7 @@ public class MSItemTypes
 		private final int enchantability;
 		private final SoundEvent soundEvent;
 		private final float toughness;
-		private final LazyLoadBase<Ingredient> repairMaterial;
+		private final LazyValue<Ingredient> repairMaterial;
 		
 		public ModArmorMaterial(String name, int maxDamageFactor, int[] damageReductionAmountArray, int enchantability, SoundEvent soundEvent, float toughness, Supplier<Ingredient> repairMaterial)
 		{
@@ -139,7 +140,7 @@ public class MSItemTypes
 			this.enchantability = enchantability;
 			this.soundEvent = soundEvent;
 			this.toughness = toughness;
-			this.repairMaterial = new LazyLoadBase<>(repairMaterial);
+			this.repairMaterial = new LazyValue<>(repairMaterial);
 		}
 		
 		@Override
