@@ -8,7 +8,7 @@ import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -59,16 +59,16 @@ public class HolopadBlock extends MachineBlock
 	}
 	
 	@Override
-	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
 	{
-		if(player.isSneaking()) return false;
+		if(player.isSneaking()) return ActionResultType.FAIL;
 		if(worldIn.isRemote)
-			return true;
+			return ActionResultType.SUCCESS;
 		TileEntity te = worldIn.getTileEntity(pos);
 		
 		if(te instanceof HolopadTileEntity)
 			((HolopadTileEntity) te).onRightClick(player);
-		return true;
+		return ActionResultType.SUCCESS;
 	}
 	
 	@Override
@@ -103,11 +103,11 @@ public class HolopadBlock extends MachineBlock
 		return COLLISION_SHAPE.get(state.get(FACING));
 	}
 	
-	@Override
-	public BlockRenderLayer getRenderLayer()
-	{
-		return BlockRenderLayer.CUTOUT_MIPPED;
-	}
+//	@Override
+//	public BlockRenderLayer getRenderLayer()
+//	{
+//		return BlockRenderLayer.CUTOUT_MIPPED;
+//	}
 	
 	
 }

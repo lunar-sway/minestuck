@@ -17,7 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.client.config.GuiButtonExt;
+import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
 
 import java.util.ArrayList;
 
@@ -62,7 +62,7 @@ public abstract class SylladexScreen extends Screen
 	@Override
 	public void init()
 	{
-		emptySylladex = new GuiButtonExt((width - GUI_WIDTH)/2 + 140, (height - GUI_HEIGHT)/2 + 175, 100, 20, I18n.format(EMPTY_SYLLADEX_BUTTON), button -> emptySylladex());
+		emptySylladex = new ExtendedButton((width - GUI_WIDTH)/2 + 140, (height - GUI_HEIGHT)/2 + 175, 100, 20, I18n.format(EMPTY_SYLLADEX_BUTTON), button -> emptySylladex());
 		addButton(emptySylladex);
 		updateContent();
 	}
@@ -112,8 +112,8 @@ public abstract class SylladexScreen extends Screen
 		
 		for(GuiCard card : visibleCards)
 			card.drawItemBackground();
-		
-		RenderHelper.enableGUIStandardItemLighting();
+
+		RenderHelper.enableStandardItemLighting();
 		GlStateManager.enableRescaleNormal();
 		GLX.glMultiTexCoord2f(GLX.GL_TEXTURE1, 240F, 240F);
 		for(GuiCard card : visibleCards)

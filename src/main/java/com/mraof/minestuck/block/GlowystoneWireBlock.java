@@ -12,7 +12,6 @@ import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.state.properties.RedstoneSide;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
@@ -309,9 +308,9 @@ public class GlowystoneWireBlock extends Block
 		builder.add(NORTH, EAST, SOUTH, WEST);
 	}
 	
-	@Override
-	public BlockRenderLayer getRenderLayer()
-	{
-		return BlockRenderLayer.CUTOUT;
-	}
+//	@Override
+//	public BlockRenderLayer getRenderLayer()
+//	{
+//		return BlockRenderLayer.CUTOUT;
+//	}
 }

@@ -15,7 +15,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.client.config.GuiButtonExt;
+import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
 
 import java.util.List;
 
@@ -48,14 +48,14 @@ public class AlchemiterScreen extends Screen implements Positioned
 	@Override
 	protected void init()
 	{
-		Button alchemize = new GuiButtonExt((width - 100) / 2, (height - guiHeight) / 2 + 110, 100, 20, "ALCHEMIZE", button -> alchemize());
+		Button alchemize = new ExtendedButton((width - 100) / 2, (height - guiHeight) / 2 + 110, 100, 20, "ALCHEMIZE", button -> alchemize());
 		
-		Button hundredsUp = new GuiButtonExt((width - guiWidth) / 2 + 10, (height - guiHeight) / 2 + 10, 18, 18, "^", button -> changeAmount(100));
-		Button tensUp = new GuiButtonExt((width - guiWidth) / 2 + 31, (height - guiHeight) / 2 + 10, 18, 18, "^", button -> changeAmount(10));
-		Button onesUp = new GuiButtonExt((width - guiWidth) / 2 + 52, (height - guiHeight) / 2 + 10, 18, 18, "^", button -> changeAmount(1));
-		Button hundredsDown = new GuiButtonExt((width - guiWidth) / 2 + 10, (height - guiHeight) / 2 + 74, 18, 18, "v", button -> changeAmount(-100));
-		Button tensDown = new GuiButtonExt((width - guiWidth) / 2 + 31, (height - guiHeight) / 2 + 74, 18, 18, "v", button -> changeAmount(-10));
-		Button onesDown = new GuiButtonExt((width - guiWidth) / 2 + 52, (height - guiHeight) / 2 + 74, 18, 18, "v", button -> changeAmount(-1));
+		Button hundredsUp = new ExtendedButton((width - guiWidth) / 2 + 10, (height - guiHeight) / 2 + 10, 18, 18, "^", button -> changeAmount(100));
+		Button tensUp = new ExtendedButton((width - guiWidth) / 2 + 31, (height - guiHeight) / 2 + 10, 18, 18, "^", button -> changeAmount(10));
+		Button onesUp = new ExtendedButton((width - guiWidth) / 2 + 52, (height - guiHeight) / 2 + 10, 18, 18, "^", button -> changeAmount(1));
+		Button hundredsDown = new ExtendedButton((width - guiWidth) / 2 + 10, (height - guiHeight) / 2 + 74, 18, 18, "v", button -> changeAmount(-100));
+		Button tensDown = new ExtendedButton((width - guiWidth) / 2 + 31, (height - guiHeight) / 2 + 74, 18, 18, "v", button -> changeAmount(-10));
+		Button onesDown = new ExtendedButton((width - guiWidth) / 2 + 52, (height - guiHeight) / 2 + 74, 18, 18, "v", button -> changeAmount(-1));
 		
 		addButton(alchemize);
 		GristSet cost = alchemiter.getGristCost(1);
