@@ -118,9 +118,9 @@ dependencies {
     minecraft "net.minecraftforge:forge:${project.getProperty('mc_forge_version')}"
 
 	// http://dvs1.progwml6.com/files/maven
-    compileOnly fg.deobf("mezz.jei:jei-${project.getProperty('mc_jei_version')}:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-${project.getProperty('mc_jei_version')}")
-    compileOnly fg.deobf("curse.maven:refinedstorage:2851763")
+//    compileOnly fg.deobf("mezz.jei:jei-${project.getProperty('mc_jei_version')}:api")
+//    runtimeOnly fg.deobf("mezz.jei:jei-${project.getProperty('mc_jei_version')}")
+//    compileOnly fg.deobf("curse.maven:refinedstorage:2851763")
 }
 
 sourceSets.main.resources {

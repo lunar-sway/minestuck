@@ -244,7 +244,7 @@ public class MinestuckConfig
 	}
 	
 	@SubscribeEvent
-	public static void onReload(final ModConfig.ConfigReloading event)
+	public static void onReload(final ModConfig.Reloading event)
 	{
 		MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
 		if(server != null && server.isOnExecutionThread())	//TODO Check if this will be true after server start. If not, use a static boolean together with a tick event instead
