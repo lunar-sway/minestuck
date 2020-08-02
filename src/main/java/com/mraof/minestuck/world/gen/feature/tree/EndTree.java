@@ -17,6 +17,6 @@ public class EndTree extends Tree
 	@Override
 	protected ConfiguredFeature<TreeFeatureConfig, ?> getTreeFeature(Random randomIn, boolean p_225546_2_) {
 		return MSFeatures.END_TREE.withConfiguration((new TreeFeatureConfig.Builder(new SimpleBlockStateProvider(MSBlocks.END_LOG.getDefaultState()), new SimpleBlockStateProvider(MSBlocks.END_LEAVES.getDefaultState()),
-				new BlobFoliagePlacer(2, 0))).baseHeight(4).heightRandA(2).foliageHeight(3).ignoreVines().setSapling((net.minecraftforge.common.IPlantable) MSBlocks.END_SAPLING.getDefaultState()).build());
+				new BlobFoliagePlacer(2, 0))).baseHeight(4).heightRandA(2).foliageHeight(3).ignoreVines().setSapling(MSBlocks.END_SAPLING).build());
 	}
 }

@@ -82,11 +82,11 @@ public class EndLandType extends TerrainLandType
 		if(biome.staticBiome == MSBiomes.LAND_NORMAL)
 		{
 			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, MSFeatures.END_TREE.withConfiguration((new TreeFeatureConfig.Builder(new SimpleBlockStateProvider(MSBlocks.END_LOG.getDefaultState()), new SimpleBlockStateProvider(MSBlocks.END_LEAVES.getDefaultState()),
-					new BlobFoliagePlacer(2, 0))).baseHeight(4).heightRandA(2).foliageHeight(3).ignoreVines().setSapling((net.minecraftforge.common.IPlantable) MSBlocks.END_SAPLING.getDefaultState()).build()).withPlacement(Placement.COUNT_EXTRA_HEIGHTMAP.configure(new AtSurfaceWithExtraConfig(2, 0.1F, 1))));
+					new BlobFoliagePlacer(2, 0))).baseHeight(4).heightRandA(2).foliageHeight(3).ignoreVines().setSapling(MSBlocks.END_SAPLING).build()).withPlacement(Placement.COUNT_EXTRA_HEIGHTMAP.configure(new AtSurfaceWithExtraConfig(2, 0.1F, 1))));
 		} else if(biome.staticBiome == MSBiomes.LAND_ROUGH)
 		{
 			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, MSFeatures.END_TREE.withConfiguration((new TreeFeatureConfig.Builder(new SimpleBlockStateProvider(MSBlocks.END_LOG.getDefaultState()), new SimpleBlockStateProvider(MSBlocks.END_LEAVES.getDefaultState()),
-					new BlobFoliagePlacer(2, 0))).baseHeight(4).heightRandA(2).foliageHeight(3).ignoreVines().setSapling((net.minecraftforge.common.IPlantable) MSBlocks.END_SAPLING.getDefaultState()).build()).withPlacement(Placement.COUNT_EXTRA_HEIGHTMAP.configure(new AtSurfaceWithExtraConfig(3, 0.1F, 1))));
+					new BlobFoliagePlacer(2, 0))).baseHeight(4).heightRandA(2).foliageHeight(3).ignoreVines().setSapling(MSBlocks.END_SAPLING).build()).withPlacement(Placement.COUNT_EXTRA_HEIGHTMAP.configure(new AtSurfaceWithExtraConfig(3, 0.1F, 1))));
 		}
 		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), Blocks.COARSE_DIRT.getDefaultState(), 16)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(8, 0, 0, 128))));
 		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), Blocks.GRAVEL.getDefaultState(), 33)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(8, 0, 0, 256))));

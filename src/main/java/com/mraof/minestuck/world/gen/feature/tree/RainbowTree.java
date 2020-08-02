@@ -19,6 +19,6 @@ public class RainbowTree extends Tree
 	@Override
 	protected ConfiguredFeature<TreeFeatureConfig, ?> getTreeFeature(Random randomIn, boolean p_225546_2_) {
 		return MSFeatures.RAINBOW_TREE.withConfiguration((new TreeFeatureConfig.Builder(new SimpleBlockStateProvider(MSBlocks.RAINBOW_LOG.getDefaultState()), new SimpleBlockStateProvider(MSBlocks.RAINBOW_LEAVES.getDefaultState()),
-				new BlobFoliagePlacer(2, 0))).baseHeight(4).heightRandA(2).foliageHeight(3).ignoreVines().setSapling((net.minecraftforge.common.IPlantable) MSBlocks.RAINBOW_SAPLING.getDefaultState()).build());
+				new BlobFoliagePlacer(2, 0))).baseHeight(4).heightRandA(2).foliageHeight(3).ignoreVines().setSapling(MSBlocks.RAINBOW_SAPLING).build());
 	}
 }
