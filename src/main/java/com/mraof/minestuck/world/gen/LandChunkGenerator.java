@@ -52,14 +52,14 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 	@Override
 	protected double[] getBiomeNoiseColumn(int columnX, int columnZ)
 	{
-		float baseDepth = biomeHolder.localBiomeFrom(biomeProvider.getBiomeAtFactorFour(columnX, columnZ)).getDepth();
+		float baseDepth = biomeHolder.localBiomeFrom(biomeProvider.getNoiseBiome(columnX, 0, columnZ)).getDepth();
 		
 		float depthSum = 0, scaleSum = 0, weightSum = 0;
 		for(int x = -2; x <= 2; x++)
 		{
 			for(int z = -2; z <= 2; z++)
 			{
-				Biome biome = biomeHolder.localBiomeFrom(biomeProvider.getBiomeAtFactorFour(columnX + x, columnZ + z));
+				Biome biome = biomeHolder.localBiomeFrom(biomeProvider.getNoiseBiome(columnX + x, 0, columnZ + z));
 				float weight = biomeWeight[(x + 2)*5 + z + 2] / (biome.getDepth() + 2);
 				if(biome.getDepth() > baseDepth)
 					weight /= 2;
@@ -94,29 +94,29 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 		double vertical2 = 4.277575D;
 		int lerpModifier = 3;
 		int skyValueTarget = -10;
-		this.func_222546_a(noiseColumn, columnX, columnZ, horizontal, vertical, horizontal2, vertical2, lerpModifier, skyValueTarget);
+		this.calcNoiseColumn(noiseColumn, columnX, columnZ, horizontal, vertical, horizontal2, vertical2, lerpModifier, skyValueTarget);
 	}
-	
-	@Override
-	public void generateSurface(IChunk chunkIn)
-	{
-		SharedSeedRandom sharedRandom = new SharedSeedRandom();
-		sharedRandom.setBaseChunkSeed(chunkIn.getPos().x, chunkIn.getPos().z);
-		
-		int xOffset = chunkIn.getPos().getXStart(), zOffset = chunkIn.getPos().getZStart();
-		Biome[] biomes = chunkIn.getBiomes();
-		
-		for(int x = 0; x < 16; x++)
-		{
-			for(int z = 0; z < 16; z++)
-			{
-				int y = chunkIn.getTopBlockY(Heightmap.Type.WORLD_SURFACE_WG, x, z);
-				biomeHolder.localBiomeFrom(biomes[z*16 + x]).buildSurface(sharedRandom, chunkIn, x + xOffset, z + zOffset, y, 0, getSettings().getDefaultBlock(), getSettings().getDefaultFluid(), getSeaLevel(),  world.getSeed());
-			}
-		}
-		
-		this.makeBedrock(chunkIn, sharedRandom);
-	}
+
+//	@Override
+//	public void generateSurface(WorldGenRegion p_225551_1_, IChunk chunkIn)
+//	{
+//		SharedSeedRandom sharedRandom = new SharedSeedRandom();
+//		sharedRandom.setBaseChunkSeed(chunkIn.getPos().x, chunkIn.getPos().z);
+//
+//		int xOffset = chunkIn.getPos().getXStart(), zOffset = chunkIn.getPos().getZStart();
+//		Biome[] biomes = chunkIn.;
+//
+//		for(int x = 0; x < 16; x++)
+//		{
+//			for(int z = 0; z < 16; z++)
+//			{
+//				int y = chunkIn.getTopBlockY(Heightmap.Type.WORLD_SURFACE_WG, x, z);
+//				biomeHolder.localBiomeFrom(biomes[z*16 + x]).buildSurface(sharedRandom, chunkIn, x + xOffset, z + zOffset, y, 0, getSettings().getDefaultBlock(), getSettings().getDefaultFluid(), getSeaLevel(),  world.getSeed());
+//			}
+//		}
+//
+//		this.makeBedrock(chunkIn, sharedRandom);
+//	}
 	
 	@Override
 	public List<Biome.SpawnListEntry> getPossibleCreatures(EntityClassification creatureType, BlockPos pos)
@@ -134,18 +134,6 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 	public int getGroundHeight()
 	{
 		return 64;
-	}
-	
-	@Override
-	protected Biome getBiome(IChunk chunkIn)
-	{
-		return biomeHolder.localBiomeFrom(super.getBiome(chunkIn));
-	}
-	
-	@Override
-	protected Biome getBiome(WorldGenRegion worldRegionIn, BlockPos pos)
-	{
-		return biomeHolder.localBiomeFrom(super.getBiome(worldRegionIn, pos));
 	}
 	
 	@Override

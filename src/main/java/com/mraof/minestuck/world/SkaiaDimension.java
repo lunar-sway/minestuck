@@ -26,7 +26,7 @@ public class SkaiaDimension extends Dimension
 {
 	public SkaiaDimension(World worldIn, DimensionType typeIn)
 	{
-		super(worldIn, typeIn);
+		super(worldIn, typeIn, 0.0F);
 	}
 	
 	@Override
@@ -35,7 +35,7 @@ public class SkaiaDimension extends Dimension
 		SkaiaGenSettings settings = MSWorldGenTypes.SKAIA.createSettings();
 		settings.setDefaultBlock(Blocks.STONE.getDefaultState());
 		settings.setDefaultFluid(Blocks.AIR.getDefaultState());
-		return MSWorldGenTypes.SKAIA.create(this.world, BiomeProviderType.FIXED.create(BiomeProviderType.FIXED.createSettings().setBiome(MSBiomes.SKAIA)), settings);
+		return MSWorldGenTypes.SKAIA.create(this.world, BiomeProviderType.FIXED.create(BiomeProviderType.FIXED.createSettings(this.world.getWorldInfo()).setBiome(MSBiomes.SKAIA)), settings);
 	}
 	
 	@Override

@@ -6,9 +6,9 @@ import com.mraof.minestuck.world.gen.feature.structure.GateStructure;
 import com.mraof.minestuck.world.gen.feature.structure.ImpDungeonStructure;
 import com.mraof.minestuck.world.gen.feature.structure.SmallRuinStructure;
 import com.mraof.minestuck.world.gen.feature.structure.village.ConsortVillageStructure;
-import com.mraof.minestuck.world.gen.feature.tree.EndTreeFeature;
+//import com.mraof.minestuck.world.gen.feature.tree.EndTreeFeature;
 import com.mraof.minestuck.world.gen.feature.tree.LeaflessTreeFeature;
-import com.mraof.minestuck.world.gen.feature.tree.RainbowTreeFeature;
+//import com.mraof.minestuck.world.gen.feature.tree.RainbowTreeFeature;
 import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraftforge.event.RegistryEvent;
@@ -28,8 +28,8 @@ public final class MSFeatures
 	public static final Structure<NoFeatureConfig> IMP_DUNGEON = getNull();
 	public static final Structure<NoFeatureConfig> CONSORT_VILLAGE = getNull();
 	
-	public static final Feature<NoFeatureConfig> RAINBOW_TREE = getNull();
-	public static final Feature<NoFeatureConfig> END_TREE =	 getNull();
+	public static final Feature<TreeFeatureConfig> RAINBOW_TREE = getNull();
+	public static final Feature<TreeFeatureConfig> END_TREE =	 getNull();
 	public static final Feature<BlockStateFeatureConfig> LEAFLESS_TREE = getNull();
 	
 	public static final Feature<NoFeatureConfig> RETURN_NODE = getNull();
@@ -68,8 +68,8 @@ public final class MSFeatures
 		registry.register(new ImpDungeonStructure(NoFeatureConfig::deserialize).setRegistryName("imp_dungeon"));
 		registry.register(new ConsortVillageStructure(NoFeatureConfig::deserialize).setRegistryName("consort_village"));
 		
-		registry.register(new RainbowTreeFeature(NoFeatureConfig::deserialize, false).setRegistryName("rainbow_tree"));
-		registry.register(new EndTreeFeature(NoFeatureConfig::deserialize, false).setRegistryName("end_tree"));
+		registry.register(new TreeFeature(TreeFeatureConfig::func_227338_a_).setRegistryName("rainbow_tree"));
+		registry.register(new TreeFeature(TreeFeatureConfig::func_227338_a_).setRegistryName("end_tree"));
 		registry.register(new LeaflessTreeFeature(BlockStateFeatureConfig::deserialize).setRegistryName("leafless_tree"));
 		
 		registry.register(new ReturnNodeFeature(NoFeatureConfig::deserialize).setRegistryName("return_node"));

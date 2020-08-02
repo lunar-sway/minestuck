@@ -39,7 +39,7 @@ public class BucketsLandType extends TitleLandType    //Yes, buckets
 	{
 		if(biome.staticBiome != MSBiomes.LAND_OCEAN)
 		{
-			biome.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, Biome.createDecoratedFeature(MSFeatures.BUCKET, IFeatureConfig.NO_FEATURE_CONFIG, Placement.CHANCE_PASSTHROUGH, new ChanceConfig(16)));
+			biome.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MSFeatures.BUCKET.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.CHANCE_PASSTHROUGH.configure(new ChanceConfig(16))));
 		}
 	}
 }

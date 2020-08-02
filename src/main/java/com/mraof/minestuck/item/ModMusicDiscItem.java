@@ -21,7 +21,7 @@ public class ModMusicDiscItem extends MusicDiscItem
 	
 	public ModMusicDiscItem(int comparatorValueIn, Supplier<SoundEvent> soundIn, Properties builder)
 	{
-		super(comparatorValueIn, soundIn.get(), builder);
+		super(comparatorValueIn, soundIn, builder);
 		this.soundEvent = soundIn;
 	}
 	
