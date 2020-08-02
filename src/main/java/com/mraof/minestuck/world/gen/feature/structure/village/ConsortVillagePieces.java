@@ -19,10 +19,12 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.*;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.template.TemplateManager;
+import net.minecraft.world.server.ServerWorld;
 
 import java.util.List;
 import java.util.Random;
@@ -327,13 +329,13 @@ public class ConsortVillagePieces
 			if(boundingBox.isVecInside(pos))
 			{
 				
-				if(!(world.getChunkProvider().getChunkGenerator().getSettings() instanceof LandGenSettings))
+				if(!(((ServerWorld) world).getChunkProvider().getChunkGenerator().getSettings() instanceof LandGenSettings))
 				{
 					Debug.warn("Tried to spawn a consort in a building that is being generated outside of a land dimension.");
 					return false;
 				}
 				
-				LandTypePair landTypes = ((LandGenSettings) world.getChunkProvider().getChunkGenerator().getSettings()).getLandTypes();
+				LandTypePair landTypes = ((LandGenSettings) ((ServerWorld) world).getChunkProvider().getChunkGenerator().getSettings()).getLandTypes();
 				
 				EntityType<? extends ConsortEntity> consortType = landTypes.terrain.getConsortType();
 				
@@ -458,7 +460,23 @@ public class ConsortVillagePieces
 				}
 			}
 		}
-		
+
+		@Override
+		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(((ServerWorld) worldIn).getChunkProvider().getChunkGenerator().getSettings());
+			BlockState pathBlock = blocks.getBlockState("village_path");
+
+			for (int i = this.boundingBox.minX; i <= this.boundingBox.maxX; ++i)
+			{
+				for (int j = this.boundingBox.minZ; j <= this.boundingBox.maxZ; ++j)
+				{
+					placeRoadtile(i, j, structureBoundingBoxIn, worldIn, pathBlock);
+				}
+			}
+
+			return true;
+		}
+
 		public static MutableBoundingBox findPieceBox(ConsortVillageCenter.VillageCenter start, List<StructurePiece> components, Random rand, int x, int y, int z, Direction facing)
 		{
 			for(int i = 7 * MathHelper.nextInt(rand, 3, 5); i >= 7; i -= 7)
@@ -470,23 +488,6 @@ public class ConsortVillagePieces
 			}
 			
 			return null;
-		}
-		
-		@Override
-		public boolean addComponentParts(IWorld worldIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
-		{
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(worldIn.getChunkProvider().getChunkGenerator().getSettings());
-			BlockState pathBlock = blocks.getBlockState("village_path");
-			
-			for (int i = this.boundingBox.minX; i <= this.boundingBox.maxX; ++i)
-			{
-				for (int j = this.boundingBox.minZ; j <= this.boundingBox.maxZ; ++j)
-				{
-					placeRoadtile(i, j, structureBoundingBoxIn, worldIn, pathBlock);
-				}
-			}
-			
-			return true;
 		}
 	}
 	

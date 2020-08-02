@@ -18,15 +18,15 @@ import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.structure.StructureStart;
 import net.minecraft.world.gen.feature.template.TemplateManager;
+import net.minecraft.world.server.ServerWorld;
 
 import java.util.List;
 import java.util.Random;
 
 public class ImpDungeonStart extends StructureStart
 {
-	public ImpDungeonStart(Structure<?> structureIn, int chunkX, int chunkZ, Biome biomeIn, MutableBoundingBox boundsIn, int referenceIn, long seed)
-	{
-		super(structureIn, chunkX, chunkZ, biomeIn, boundsIn, referenceIn, seed);
+	public ImpDungeonStart(Structure<?> p_i225801_1_, int p_i225801_2_, int p_i225801_3_, MutableBoundingBox p_i225801_4_, int p_i225801_5_, long p_i225801_6_) {
+		super(p_i225801_1_, p_i225801_2_, p_i225801_3_, p_i225801_4_, p_i225801_5_, p_i225801_6_);
 	}
 	
 	@Override
@@ -72,23 +72,22 @@ public class ImpDungeonStart extends StructureStart
 			tagCompound.putBoolean("definedHeight", definedHeight);
 			tagCompound.putInt("compoHeight", compoHeight);
 		}
-		
+
 		@Override
-		public boolean addComponentParts(IWorld worldIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
-		{
+		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
 			checkHeight(worldIn, structureBoundingBoxIn);
-			
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(worldIn.getChunkProvider().getChunkGenerator().getSettings());
-			
+
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(((ServerWorld) worldIn).getChunkProvider().getChunkGenerator().getSettings());
+
 			BlockState wallBlock = blocks.getBlockState("structure_primary");
 			BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");
 			BlockState floorBlock = blocks.getBlockState("structure_secondary");
 			BlockState floorStairs = blocks.getBlockState("structure_secondary_stairs").rotate(Rotation.CLOCKWISE_180);
 			BlockState torch = blocks.getBlockState("wall_torch");
-			
+
 			for(int x = 1; x < 5; x++)
 				buildFloorTile(floorBlock, x, 0, worldIn, randomIn, structureBoundingBoxIn);
-			
+
 			for(int z = 0; z < 5; z++)
 			{
 				buildFloorTile(wallBlock, 0, z, worldIn, randomIn, structureBoundingBoxIn);
@@ -96,19 +95,19 @@ public class ImpDungeonStart extends StructureStart
 				buildWall(wallBlock, 0, z, worldIn, randomIn, structureBoundingBoxIn, 0);
 				buildWall(wallBlock, 5, z, worldIn, randomIn, structureBoundingBoxIn, 0);
 			}
-			
+
 			for(int x = 1; x < 5; x++)
 				buildWall(wallBlock, x, 5, worldIn, randomIn, structureBoundingBoxIn, 0);
 			if(this.getBlockStateFromPos(worldIn, 1, 2, 5, boundingBox) == wallBlock)
 				this.setBlockState(worldIn, wallDecor, 1, 2, 5, boundingBox);
 			if(this.getBlockStateFromPos(worldIn, 4, 2, 5, boundingBox) == wallBlock)
 				this.setBlockState(worldIn, wallDecor, 4, 2, 5, boundingBox);
-			
+
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 1, 1, 0, 4, floorBlock, floorBlock, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 0, 1, 4, 0, 4, floorBlock, floorBlock, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 5, 4, 0, 5, wallBlock, wallBlock, false);
 			fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 0, 4, 4, 4);
-			
+
 			fillWithAir(worldIn, structureBoundingBoxIn, 2, 0, 2, 3, 0, 4);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 1, 3, 0, 1, floorStairs, floorStairs, false);
 			fillWithAir(worldIn, structureBoundingBoxIn, 2, -1, 3, 3, -1, 5);
@@ -124,7 +123,7 @@ public class ImpDungeonStart extends StructureStart
 			fillWithAir(worldIn, structureBoundingBoxIn, 2, -5, 7, 3, -5, 9);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, -5, 6, 3, -5, 6, floorStairs, floorStairs, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, -6, 6, 4, -6, 8, floorBlock, floorBlock, false);
-			
+
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, compoHeight - boundingBox.minY, 10, 4, -3, 10, wallBlock, wallBlock, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, -5, 6, 1, -3, 9, wallBlock, wallBlock, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, -1, 2, 1, -1, 5, wallBlock, wallBlock, false);
@@ -140,10 +139,10 @@ public class ImpDungeonStart extends StructureStart
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, compoHeight - boundingBox.minY, 9, 1, -6, 9, wallBlock, wallBlock, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, compoHeight - boundingBox.minY, 9, 4, -6, 9, wallBlock, wallBlock, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, compoHeight - boundingBox.minY, 8, 4, -7, 8, wallBlock, wallBlock, false);
-			
+
 			setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.EAST), 2, -3, 8, structureBoundingBoxIn);
 			setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.WEST), 3, -3, 8, structureBoundingBoxIn);
-			
+
 			return true;
 		}
 		

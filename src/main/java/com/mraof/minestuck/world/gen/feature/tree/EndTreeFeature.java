@@ -11,85 +11,86 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.gen.IWorldGenerationReader;
 import net.minecraft.world.gen.feature.AbstractTreeFeature;
+import net.minecraft.world.gen.feature.BaseTreeFeatureConfig;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.world.gen.feature.TreeFeatureConfig;
 
 import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
 
-public class EndTreeFeature extends AbstractTreeFeature<NoFeatureConfig>
+public class EndTreeFeature extends AbstractTreeFeature<TreeFeatureConfig>
 {
 	private static final BlockState LOG = MSBlocks.END_LOG.getDefaultState();
 	private static final BlockState LEAF = MSBlocks.END_LEAVES.getDefaultState();
-	
+
 	private final int minMax = 5, maxMax = 5;
-	
-	public EndTreeFeature(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactory, boolean doBlockNotify)
+
+	public EndTreeFeature(Function<Dynamic<?>, ? extends TreeFeatureConfig> configFactory, boolean doBlockNotify)
 	{
-		super(configFactory, doBlockNotify);
+		super(configFactory);
 	}
-	
+
 	@Override
-	protected boolean place(Set<BlockPos> changedBlocks, IWorldGenerationReader worldIn, Random rand, BlockPos position, MutableBoundingBox boundsIn)
-	{
+	protected boolean place(IWorldGenerationReader generationReader, Random rand, BlockPos position, Set<BlockPos> changedBlocks, Set<BlockPos> p_225557_5_, MutableBoundingBox boundsIn, TreeFeatureConfig configIn) {
 		boolean flag = true;
-		
+
 		if (position.getY() >= 1 && position.getY() < 256)
 		{
-			if(!worldIn.hasBlockState(position.down(), blockState -> MSTags.Blocks.END_SAPLING_DIRT.contains(blockState.getBlock())))
+			if(!generationReader.hasBlockState(position.down(), blockState -> MSTags.Blocks.END_SAPLING_DIRT.contains(blockState.getBlock())))
 			{
 				return false;
 			}
-			
-			if(subGenerate(changedBlocks, worldIn, rand, position, position, boundsIn, EndLeavesBlock.LEAF_SUSTAIN_DISTANCE, 0, rand.nextInt(maxMax - minMax + 1) + minMax - 1))
+
+			if(subGenerate(changedBlocks, generationReader, rand, position, position, boundsIn, EndLeavesBlock.LEAF_SUSTAIN_DISTANCE, 0, rand.nextInt(maxMax - minMax + 1) + minMax - 1))
 			{
-				setLogState(changedBlocks, worldIn, position, LOG, boundsIn);
+				setLogState(changedBlocks, generationReader, position, LOG, boundsIn);
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
 	//The point of using this algorithm, pretty much copy-pasted from the code on chorus plants, was to make these trees more reminiscent of chorus plants.
 	//As it stands, however, they don't branch horizontally, the way a chorus plant would.
 	//It's not necessary to fix this for end trees to exist and be enjoyed, but fixing it would be a good idea.
 	private boolean subGenerate(Set<BlockPos> changedBlocks, IWorldGenerationReader worldIn, Random rand, BlockPos curr, BlockPos origin, MutableBoundingBox boundsIn, int range, int age, int maxAge)
 	{
 		int i = rand.nextInt(Math.max(1, 4 - age)) + 1;
-		
+
 		if (age == 0)
 		{
 			++i;
 		}
-		
+
 		for (int j = 1; j < i; ++j)
 		{
 			BlockPos logPos = curr.up(j);
-			
+
 			if (!areAllNeighborsEmpty(worldIn, logPos, null))
 			{
 				return false;
 			}
-			
+
 			setLogState(changedBlocks, worldIn, logPos, LOG, boundsIn);
 		}
-		
+
 		boolean flag = false;
-		
+
 		if (age < maxAge)
 		{
 			int buds = rand.nextInt(4);
-			
+
 			if (age == 0)
 			{
 				++buds;
 			}
-			
+
 			for (int k = 0; k < buds; ++k)		//TODO: Change this to prioritize north/south growth over east/west growth, and to lock growth into one axis
 			{
 				Direction direction = Direction.Plane.HORIZONTAL.random(rand);
 				BlockPos nextPos = curr.up(i).offset(direction);
-				
+
 				if (Math.abs(nextPos.getX() - origin.getX()) < range
 						&& Math.abs(nextPos.getZ() - origin.getZ()) < range
 						&& isAirOrLeaves(worldIn, nextPos)
@@ -106,7 +107,7 @@ public class EndTreeFeature extends AbstractTreeFeature<NoFeatureConfig>
 				}
 			}
 		}
-		
+
 		if (!flag)
 		{
 			setLogState(changedBlocks, worldIn, curr.up(i), LOG, boundsIn);
@@ -114,7 +115,7 @@ public class EndTreeFeature extends AbstractTreeFeature<NoFeatureConfig>
 		}
 		return true;
 	}
-	
+
 	private static boolean areAllNeighborsEmpty(IWorldGenerationReader worldIn, BlockPos pos, Direction excludingSide)
 	{
 		for (Direction direction : Direction.Plane.HORIZONTAL)
@@ -124,15 +125,15 @@ public class EndTreeFeature extends AbstractTreeFeature<NoFeatureConfig>
 				return false;
 			}
 		}
-		
+
 		return true;
 	}
-	
+
 	public void generateLeaves(Set<BlockPos> changedBlocks, IWorldGenerationReader world, BlockPos pos, BlockState logState, MutableBoundingBox boundsIn)
 	{
 		Direction.Axis primary = logState.get(DoubleLogBlock.AXIS);
 		Direction.Axis secondary = logState.get(DoubleLogBlock.AXIS_2);
-		
+
 		if(primary == Direction.Axis.X || secondary == Direction.Axis.X)
 		{
 			leaves(changedBlocks, world, pos.east(), boundsIn, 1);
@@ -149,7 +150,7 @@ public class EndTreeFeature extends AbstractTreeFeature<NoFeatureConfig>
 			leaves(changedBlocks, world, pos.north(), boundsIn, 1);
 		}
 	}
-	
+
 	private void leaves(Set<BlockPos> changedBlocks, IWorldGenerationReader world, BlockPos curr, MutableBoundingBox boundsIn, int distance)
 	{
 		if(isAirOrLeaves(world, curr))

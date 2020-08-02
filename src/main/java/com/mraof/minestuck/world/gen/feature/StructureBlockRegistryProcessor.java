@@ -12,6 +12,7 @@ import net.minecraft.world.gen.feature.template.IStructureProcessorType;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
 import net.minecraft.world.gen.feature.template.StructureProcessor;
 import net.minecraft.world.gen.feature.template.Template;
+import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
 
@@ -26,7 +27,7 @@ public class StructureBlockRegistryProcessor extends StructureProcessor
 		if(world.getDimension() instanceof LandDimension)
 		{
 			LandDimension dimension = (LandDimension) world.getDimension();
-			LandGenSettings settings = (LandGenSettings) dimension.getWorld().getChunkProvider().getChunkGenerator().getSettings();
+			LandGenSettings settings = (LandGenSettings) ((ServerWorld) dimension.getWorld()).getChunkProvider().getChunkGenerator().getSettings();
 			StructureBlockRegistry registry = settings.getBlockRegistry();
 			BlockState newState = registry.getTemplateState(original.state);
 			return new Template.BlockInfo(current.pos, newState, current.nbt);
