@@ -69,7 +69,7 @@ public class AttackOnCollideWithRateGoal extends Goal
 		else
 		{
 			this.entityTarget = target;
-			this.entityPath = this.attacker.getNavigator().getPathToEntityLiving(this.entityTarget, 0);
+			this.entityPath = this.attacker.getNavigator().getPathToEntity(this.entityTarget, 0);
 			return this.entityPath != null;
 		}
 	}
@@ -81,7 +81,7 @@ public class AttackOnCollideWithRateGoal extends Goal
 	public boolean shouldContinueExecuting()
 	{
 		LivingEntity entityliving = this.attacker.getAttackTarget();
-		return entityliving != null && this.entityTarget.isAlive() && (!this.willSearch ? !this.attacker.getNavigator().noPath() : this.attacker.isWithinHomeDistanceFromPosition(new BlockPos(MathHelper.floor(this.entityTarget.posX), MathHelper.floor(this.entityTarget.posY), MathHelper.floor(this.entityTarget.posZ))));
+		return entityliving != null && this.entityTarget.isAlive() && (!this.willSearch ? !this.attacker.getNavigator().noPath() : this.attacker.isWithinHomeDistanceFromPosition(new BlockPos(MathHelper.floor(this.entityTarget.getPosX()), MathHelper.floor(this.entityTarget.getPosY()), MathHelper.floor(this.entityTarget.getPosZ()))));
 	}
 
 	/**
@@ -118,7 +118,7 @@ public class AttackOnCollideWithRateGoal extends Goal
 		this.attackTick = Math.max(this.attackTick - 1, 0);
 		double d0 = (double)(this.attacker.getWidth() * distanceMultiplier * this.attacker.getWidth() * distanceMultiplier);
 
-		if (this.attacker.getDistanceSq(this.entityTarget.posX, this.entityTarget.getBoundingBox().minY, this.entityTarget.posZ) - (entityTarget.getWidth() / 2 ) <= d0)
+		if (this.attacker.getDistanceSq(this.entityTarget.getPosX(), this.entityTarget.getBoundingBox().minY, this.entityTarget.getPosZ()) - (entityTarget.getWidth() / 2 ) <= d0)
 		{
 			if (this.attackTick <= 0)
 			{

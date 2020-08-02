@@ -52,7 +52,7 @@ public class LongForgottenWarhornItem extends Item
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn)
 	{
-		worldIn.playSound(playerIn, playerIn.posX, playerIn.posY, playerIn.posZ, MSSoundEvents.ITEM_LONG_FORGOTTEN_WARHORN_USE, SoundCategory.AMBIENT, 1.5F, 1.0F);
+		worldIn.playSound(playerIn, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), MSSoundEvents.ITEM_LONG_FORGOTTEN_WARHORN_USE, SoundCategory.AMBIENT, 1.5F, 1.0F);
 		
 		ItemStack item = playerIn.getHeldItem(handIn);
 		if(!worldIn.isRemote)

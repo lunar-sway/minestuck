@@ -360,7 +360,7 @@ public class MSBlockLootTables extends BlockLootTables
 	}
 	protected static LootTable.Builder droppingWithColor(Block block)
 	{
-		return LootTable.builder().addLootPool(withSurvivesExplosion(block, LootPool.builder().rolls(ConstantRange.of(1)).addEntry(ItemLootEntry.builder(block).acceptFunction(CopyNbt.func_215881_a(CopyNbt.Source.BLOCK_ENTITY).func_216056_a("color", "color")))));
+		return LootTable.builder().addLootPool(withSurvivesExplosion(block, LootPool.builder().rolls(ConstantRange.of(1)).addEntry(ItemLootEntry.builder(block).acceptFunction(CopyNbt.builder(CopyNbt.Source.BLOCK_ENTITY).replaceOperation("color", "color")))));
 	}
 	protected static LootTable.Builder droppingWithTEItem(Block block)
 	{

@@ -258,7 +258,7 @@ public class EntryProcess
 			while (iterator.hasNext())
 			{
 				Entity e = iterator.next();
-				if(origin.distanceSq(e.posX, e.posY, e.posZ, true) <= artifactRange.get()*artifactRange.get())
+				if(origin.distanceSq(e.getPosX(), e.getPosY(), e.getPosZ(), true) <= artifactRange.get()*artifactRange.get())
 				{
 					if(MinestuckConfig.entryCrater.get() || e instanceof PlayerEntity || !creative && e instanceof ItemEntity)
 					{
@@ -266,7 +266,7 @@ public class EntryProcess
 							ServerEditHandler.reset(ServerEditHandler.getData((PlayerEntity) e));
 						else
 						{
-							Teleport.teleportEntity(e, worldserver1, e.posX + xDiff, e.posY + yDiff, e.posZ + zDiff);
+							Teleport.teleportEntity(e, worldserver1, e.getPosX() + xDiff, e.getPosY() + yDiff, e.getPosZ() + zDiff);
 						}
 						//These entities should no longer be in the world, and this list is later used for entities that *should* remain.
 						iterator.remove();
@@ -281,7 +281,7 @@ public class EntryProcess
 							nbttagcompound.remove("Dimension");
 							newEntity.read(nbttagcompound);
 							newEntity.dimension = worldserver1.getDimension().getType();
-							newEntity.setPosition(newEntity.posX + xDiff, newEntity.posY + yDiff, newEntity.posZ + zDiff);
+							newEntity.setPosition(newEntity.getPosX() + xDiff, newEntity.getPosY() + yDiff, newEntity.getPosZ() + zDiff);
 							worldserver1.addEntity(newEntity);
 						}
 					}
@@ -303,7 +303,7 @@ public class EntryProcess
 			}
 			blockMoves.clear();
 			
-			player.setPositionAndUpdate(player.posX + xDiff, player.posY + yDiff, player.posZ + zDiff);
+			player.setPositionAndUpdate(player.getPosX() + xDiff, player.getPosY() + yDiff, player.getPosZ() + zDiff);
 			
 			SkaianetHandler.get(worldserver0).clearMovingList();
 			
@@ -345,7 +345,7 @@ public class EntryProcess
 			
 			MSExtraData.get(worldserver1).addPostEntryTask(new PostEntryTask(worldserver1.getDimension().getType(), x + xDiff, y + yDiff, z + zDiff, artifactRange.get(), (byte) 0));
 			
-			MSDimensions.getLandInfo(worldserver1).setSpawn(MathHelper.floor(player.posY));
+			MSDimensions.getLandInfo(worldserver1).setSpawn(MathHelper.floor(player.getPosY()));
 			
 			LOGGER.info("Entry finished");
 		}
@@ -386,11 +386,11 @@ public class EntryProcess
 	
 	private static boolean canModifyEntryBlocks(World world, PlayerEntity player)
 	{
-		int x = (int) player.posX;
-		if(player.posX < 0) x--;
-		int y = (int) player.posY;
-		int z = (int) player.posZ;
-		if(player.posZ < 0) z--;
+		int x = (int) player.getPosX();
+		if(player.getPosX() < 0) x--;
+		int y = (int) player.getPosY();
+		int z = (int) player.getPosZ();
+		if(player.getPosZ() < 0) z--;
 		for(int blockX = x - artifactRange.get(); blockX <= x + artifactRange.get(); blockX++)
 		{
 			int zWidth = (int) Math.sqrt(artifactRange.get() * artifactRange.get() - (blockX - x) * (blockX - x));

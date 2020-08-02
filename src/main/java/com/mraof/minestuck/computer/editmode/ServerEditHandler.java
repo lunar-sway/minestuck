@@ -451,35 +451,35 @@ public final class ServerEditHandler
 	 * Used on both server and client side.
 	 */
 	public static void updatePosition(PlayerEntity player, double range, int centerX, int centerZ) {
-		double y = player.posY;
+		double y = player.getPosY();
 		if(y < 0) {
 			y = 0;
 			player.setMotion(player.getMotion().mul(1, 0, 1));
 			player.abilities.isFlying = true;
 		}
 		
-		double newX = player.posX;
-		double newZ = player.posZ;
-		double offset = player.getBoundingBox().maxX-player.posX;
+		double newX = player.getPosX();
+		double newZ = player.getPosZ();
+		double offset = player.getBoundingBox().maxX-player.getPosX();
 		
 		if(range >= 1) {
-			if(player.posX > centerX+range-offset)
+			if(player.getPosX() > centerX+range-offset)
 				newX = centerX+range-offset;
-			else if(player.posX < centerX-range+offset)
+			else if(player.getPosX() < centerX-range+offset)
 				newX = centerX-range+offset;
-			if(player.posZ > centerZ+range-offset)
+			if(player.getPosZ() > centerZ+range-offset)
 				newZ = centerZ+range-offset;
-			else if(player.posZ < centerZ-range+offset)
+			else if(player.getPosZ() < centerZ-range+offset)
 				newZ = centerZ-range+offset;
 		}
 		
-		if(newX != player.posX)
+		if(newX != player.getPosX())
 			player.setMotion(player.getMotion().mul(0, 1, 1));
 		
-		if(newZ != player.posZ)
+		if(newZ != player.getPosZ())
 			player.setMotion(player.getMotion().mul(1, 1, 0));
 		
-		if(newX != player.posX || newZ != player.posZ || y != player.posY)
+		if(newX != player.getPosX() || newZ != player.getPosZ() || y != player.getPosY())
 		{
 			player.setPositionAndUpdate(newX, y, newZ);
 		}

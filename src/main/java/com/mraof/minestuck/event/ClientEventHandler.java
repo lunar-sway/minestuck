@@ -1,6 +1,7 @@
 package com.mraof.minestuck.event;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.ColorSelectorScreen;
@@ -93,7 +94,7 @@ public class ClientEventHandler
 			
 			event.setCanceled(true);
 			event.setDensity(fogDensity);
-			GlStateManager.fogMode(GlStateManager.FogMode.EXP);
+			RenderSystem.fogMode(GlStateManager.FogMode.EXP);
 		}
 	}
 	

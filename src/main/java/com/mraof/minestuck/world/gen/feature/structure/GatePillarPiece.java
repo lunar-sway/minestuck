@@ -10,6 +10,7 @@ import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.template.TemplateManager;
+import net.minecraft.world.server.ServerWorld;
 
 import java.util.Random;
 
@@ -36,11 +37,11 @@ public class GatePillarPiece extends GatePiece
 	{
 		return new BlockPos(1, 24, 1);
 	}
-	
+
 	@Override
-	public boolean addComponentParts(IWorld worldIn, Random randomIn, MutableBoundingBox boundingBoxIn, ChunkPos chunkPosIn)
+	public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox boundingBoxIn, ChunkPos chunkPosIn)
 	{
-		StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(worldIn.getChunkProvider().getChunkGenerator().getSettings());
+		StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(((ServerWorld) worldIn).getChunkProvider().getChunkGenerator().getSettings());
 		
 		BlockState ground = blocks.getBlockState("ground");
 		
@@ -55,8 +56,8 @@ public class GatePillarPiece extends GatePiece
 			randomlyPlaceBlock(worldIn, boundingBoxIn, randomIn, 0.5F, 0, y, 2, ground);
 			randomlyPlaceBlock(worldIn, boundingBoxIn, randomIn, 0.5F, 2, y, 2, ground);
 		}
-		
-		super.addComponentParts(worldIn, randomIn, boundingBoxIn, chunkPosIn);
+
+		super.create(worldIn, chunkGeneratorIn, randomIn, boundingBoxIn, chunkPosIn);
 		
 		return true;
 	}

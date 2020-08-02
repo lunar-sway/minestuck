@@ -17,6 +17,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
+import net.minecraft.world.server.ServerWorld;
 
 import java.util.Random;
 
@@ -62,7 +63,7 @@ public abstract class ImprovedStructurePiece extends StructurePiece
 	{
 		int i = 0;
 		int j = 0;
-		BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
+		BlockPos.Mutable mutablePos = new BlockPos.Mutable();
 		
 		for (int k = boundingBox.minZ; k <= boundingBox.maxZ; ++k)
 		{
@@ -73,7 +74,7 @@ public abstract class ImprovedStructurePiece extends StructurePiece
 				if (structurebb.isVecInside(mutablePos))
 				{
 					i += Math.max(worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, mutablePos).getY(),
-							worldIn.getChunkProvider().getChunkGenerator().getGroundHeight() - 1);
+							((ServerWorld) worldIn).getChunkProvider().getChunkGenerator().getGroundHeight() - 1);
 					++j;
 				}
 			}

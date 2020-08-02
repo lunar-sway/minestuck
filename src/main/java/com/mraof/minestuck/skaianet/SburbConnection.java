@@ -118,7 +118,7 @@ public final class SburbConnection
 			nbt.putBoolean("CanSplit", canSplit);
 			ListNBT list = new ListNBT();
 			for(String name : givenItemList)
-				list.add(new StringNBT(name));
+				list.add(StringNBT.valueOf(name));
 			
 			nbt.put("GivenItems", list);
 			if(clientLandInfo != null)

@@ -43,7 +43,7 @@ public class HurtByTargetAlliedGoal extends TargetGoal
 		this.revengeTimer = this.goalOwner.getRevengeTimer();
 		
 		double d0 = this.getTargetDistance();
-		List<CreatureEntity> list = this.goalOwner.world.getEntitiesWithinAABB(CreatureEntity.class, new AxisAlignedBB(this.goalOwner.posX, this.goalOwner.posY, this.goalOwner.posZ, this.goalOwner.posX + 1.0D, this.goalOwner.posY + 1.0D, this.goalOwner.posZ + 1.0D).grow(d0, 10.0D, d0), entitySelector);
+		List<CreatureEntity> list = this.goalOwner.world.getEntitiesWithinAABB(CreatureEntity.class, new AxisAlignedBB(this.goalOwner.getPosX(), this.goalOwner.getPosY(), this.goalOwner.getPosZ(), this.goalOwner.getPosX() + 1.0D, this.goalOwner.getPosY() + 1.0D, this.goalOwner.getPosZ() + 1.0D).grow(d0, 10.0D, d0), entitySelector);
 		Iterator<CreatureEntity> iterator = list.iterator();
 		
 		while (iterator.hasNext())

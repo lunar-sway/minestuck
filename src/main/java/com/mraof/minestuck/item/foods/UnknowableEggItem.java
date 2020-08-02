@@ -25,7 +25,7 @@ public class UnknowableEggItem extends Item {
 		{
 			player.addPotionEffect(new EffectInstance(Effects.NAUSEA, 160, 2));
 			player.addPotionEffect(new EffectInstance(Effects.POISON, 160, 2));
-			player.world.playSound(null, player.posX, player.posY, player.posZ, MSSoundEvents.ITEM_GRIMOIRE_USE, SoundCategory.AMBIENT, 1.0F, 0.8F);
+			player.world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), MSSoundEvents.ITEM_GRIMOIRE_USE, SoundCategory.AMBIENT, 1.0F, 0.8F);
 		}
 		return super.onItemUseFinish(stack, worldIn, player);
 	}

@@ -60,7 +60,7 @@ public class CustomBoatItem extends Item
 				Entity boat = provider.createBoat(itemstack, worldIn, rayTrace.getHitVec().x, rayTrace.getHitVec().y, rayTrace.getHitVec().z);
 				boat.rotationYaw = playerIn.rotationYaw;
 				
-				if(!worldIn.isCollisionBoxesEmpty(boat, boat.getBoundingBox().grow(-0.1D)))
+				if(!worldIn.hasNoCollisions(boat, boat.getBoundingBox().grow(-0.1D)))
 					return new ActionResult<>(ActionResultType.FAIL, itemstack);
 				
 				if(!worldIn.isRemote)

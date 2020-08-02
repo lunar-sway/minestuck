@@ -581,7 +581,7 @@ public final class SburbHandler
 				|| PlayerSavedData.getData(identifier, player.server).getTitle() != null)
 			return true;
 		
-		titleSelectionMap.put(player, new Vec3d(player.posX, player.posY, player.posZ));
+		titleSelectionMap.put(player, new Vec3d(player.getPosX(), player.getPosY(), player.getPosZ()));
 		TitleSelectPacket packet = new TitleSelectPacket();
 		MSPacketHandler.sendToPlayer(packet, player);
 		return false;

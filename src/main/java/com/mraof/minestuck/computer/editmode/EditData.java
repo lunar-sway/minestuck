@@ -139,9 +139,9 @@ public class EditData
 		private PlayerRecovery(DecoyEntity decoy)
 		{
 			dimension = decoy.dimension;
-			posX = decoy.posX;
-			posY = decoy.posY;
-			posZ = decoy.posZ;
+			posX = decoy.getPosX();
+			posY = decoy.getPosY();
+			posZ = decoy.getPosZ();
 			rotationYaw = decoy.rotationYaw;
 			rotationPitch = decoy.rotationPitch;
 			gameType = decoy.gameType;
@@ -255,8 +255,8 @@ public class EditData
 				{
 					
 					connection.useCoordinates = true;
-					connection.posX = editPlayer.posX;
-					connection.posZ = editPlayer.posZ;
+					connection.posX = editPlayer.getPosX();
+					connection.posZ = editPlayer.getPosZ();
 				}
 			} else LOGGER.warn("Unable to perform editmode recovery for the connection for client player {}. Got null connection.", clientPlayer.getUsername());
 		}

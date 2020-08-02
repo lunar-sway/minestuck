@@ -15,7 +15,7 @@ public class Teleport
 	
 	public static Entity teleportEntity(Entity entity, ServerWorld world)
 	{
-		return teleportEntity(entity, world, entity.posX, entity.posY, entity.posZ);
+		return teleportEntity(entity, world, entity.getPosX(), entity.getPosY(), entity.getPosZ());
 	}
 	
 	public static Entity teleportEntity(Entity entity, ServerWorld world, double x, double y, double z)
@@ -37,7 +37,7 @@ public class Teleport
 			player.stopRiding();
 			if(player.isSleeping())
 			{
-				player.wakeUpPlayer(true, true, false);
+				player.wakeUp();
 			}
 			
 			boolean toNewDim = player.world != world;
@@ -67,7 +67,7 @@ public class Teleport
 				entity.copyDataFromOld(oldEntity);
 				entity.setLocationAndAngles(x, y, z, yaw, pitch);
 				entity.setRotationYawHead(yaw);
-				world.func_217460_e(entity);
+				world.addFromAnotherDimension(entity);
 				oldEntity.remove(false);
 			}
 		}
