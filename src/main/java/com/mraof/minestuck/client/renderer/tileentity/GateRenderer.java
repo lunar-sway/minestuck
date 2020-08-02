@@ -2,6 +2,7 @@ package com.mraof.minestuck.client.renderer.tileentity;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.tileentity.GateTileEntity;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -31,14 +32,14 @@ public class GateRenderer extends TileEntityRenderer<GateTileEntity>
 		float b = (color & 255)/255F;
 		
 		GlStateManager.pushLightingAttributes();
-		GlStateManager.color3f(r, g, b);
+		RenderSystem.color3f(r, g, b);
 		GlStateManager.pushMatrix();
 		GlStateManager.disableCull();
 		GlStateManager.disableLighting();
 		
 		if(tileEntityIn.isGate())
-			renderGateAt(tileEntityIn, x, y, z, partialTicks, destroyStage);
-		else renderReturnNodeAt(tileEntityIn, x, y, z, partialTicks, destroyStage);
+			renderGateAt(tileEntityIn, tileEntityIn.getPos().getX(), tileEntityIn.getPos().getY(), tileEntityIn.getPos().getZ(), partialTicks);
+		else renderReturnNodeAt(tileEntityIn, tileEntityIn.getPos().getX(), tileEntityIn.getPos().getY(), tileEntityIn.getPos().getZ(), partialTicks);
 		
 		GlStateManager.enableCull();
 		GlStateManager.enableLighting();
@@ -46,7 +47,7 @@ public class GateRenderer extends TileEntityRenderer<GateTileEntity>
 		GlStateManager.popAttributes();
 	}
 	
-	public void renderGateAt(GateTileEntity tileEntity, double posX, double posY, double posZ, float f, int p_180535_9_)
+	public void renderGateAt(GateTileEntity tileEntity, double posX, double posY, double posZ, float f)
 	{
 		BufferBuilder buffer = Tessellator.getInstance().getBuffer();
 		float tick = tileEntity.getWorld().getGameTime() + f;
@@ -55,7 +56,7 @@ public class GateRenderer extends TileEntityRenderer<GateTileEntity>
 		GlStateManager.pushMatrix();
 		GlStateManager.rotatef(tick, 0, 1, 0);
 		double y = 0.5;
-		this.bindTexture(INNER_NODE);
+		this.renderDispatcher.textureManager.bindTexture(INNER_NODE);
 		buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
 		buffer.pos(-1.5, y, -1.5).tex(0, 0).endVertex();
 		buffer.pos(-1.5, y, 1.5).tex(0, 1).endVertex();
@@ -65,7 +66,7 @@ public class GateRenderer extends TileEntityRenderer<GateTileEntity>
 		GlStateManager.popMatrix();
 	}
 	
-	public void renderReturnNodeAt(GateTileEntity tileEntity, double posX, double posY, double posZ, float f, int p_180535_9_)
+	public void renderReturnNodeAt(GateTileEntity tileEntity, double posX, double posY, double posZ, float f)
 	{
 		BufferBuilder buffer = Tessellator.getInstance().getBuffer();
 		float tick = tileEntity.getWorld().getGameTime() + f;
@@ -74,7 +75,7 @@ public class GateRenderer extends TileEntityRenderer<GateTileEntity>
 		GlStateManager.pushMatrix();
 		GlStateManager.rotatef(tick, 0, 1, 0);
 		double y = 0.5;
-		this.bindTexture(INNER_NODE);
+		this.renderDispatcher.textureManager.bindTexture(INNER_NODE);
 		buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
 		buffer.pos(-1, y, -1).tex(0, 0).endVertex();
 		buffer.pos(-1, y, 1).tex(0, 1).endVertex();
@@ -86,7 +87,7 @@ public class GateRenderer extends TileEntityRenderer<GateTileEntity>
 		GlStateManager.pushMatrix();
 		GlStateManager.rotatef(-tick/1.5F, 0, 1, 0);
 		y = 0.5 + MathHelper.sin(tick/50)*0.1;
-		this.bindTexture(OUTER_NODE);
+		this.renderDispatcher.textureManager.bindTexture(OUTER_NODE);
 		buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
 		buffer.pos(-1, y, -1).tex(0, 0).endVertex();
 		buffer.pos(-1, y, 1).tex(0, 1).endVertex();

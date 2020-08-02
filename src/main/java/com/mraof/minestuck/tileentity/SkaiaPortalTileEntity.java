@@ -29,9 +29,9 @@ public class SkaiaPortalTileEntity extends TileEntity //implements ITeleporter
 	}
 	
 	@Override
-	public void setWorld(World worldIn)
+	public void setWorldAndPos(World worldIn, BlockPos pos)
 	{
-		super.setWorld(worldIn);
+		super.setWorldAndPos(worldIn, pos);
 		if(!worldIn.isRemote && destination.getDimension() == worldIn.getDimension().getType())
 			destination = GlobalPos.of(worldIn.getDimension().getType() == MSDimensions.skaiaDimension ? DimensionType.OVERWORLD : MSDimensions.skaiaDimension, destination.getPos());
 	}

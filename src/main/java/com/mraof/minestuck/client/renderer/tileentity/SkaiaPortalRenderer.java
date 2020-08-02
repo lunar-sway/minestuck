@@ -65,11 +65,11 @@ public class SkaiaPortalRenderer extends TileEntityRenderer<SkaiaPortalTileEntit
                 var16 = 0.5F;
             }
 
-            float var18 = (float) (-(y + var13));
+            float var18 = (float) (-(tileEntityIn.getPos().getY() + var13));
 			float var19 = var18 + (float) position.y;
 			float var20 = var18 + var15 + (float) position.y;
 			float var21 = var19 / var20;
-			var21 += (float) (y + var13);
+			var21 += (float) (tileEntityIn.getPos().getY() + var13);
 			GlStateManager.translatef(var9, var21, var11);
 			GlStateManager.texGenMode(GlStateManager.TexGen.S, GL11.GL_OBJECT_LINEAR);
 			GlStateManager.texGenMode(GlStateManager.TexGen.T, GL11.GL_OBJECT_LINEAR);
@@ -109,10 +109,10 @@ public class SkaiaPortalRenderer extends TileEntityRenderer<SkaiaPortalTileEntit
             }
 			
 			GlStateManager.color4f(var21 * var17, var22 * var17, var23 * var17, 1.0F);
-			var24.pos(x, y + var13, z).tex(0, 0).endVertex();
-			var24.pos(x, y + var13, z + 1.0D).tex(0, 1).endVertex();
-			var24.pos(x + 1.0D, y + var13, z + 1.0D).tex(1, 1).endVertex();
-			var24.pos(x + 1.0D, y + var13, z).tex(1, 0).endVertex();
+			var24.pos(tileEntityIn.getPos().getX(), tileEntityIn.getPos().getY() + var13, tileEntityIn.getPos().getZ()).tex(0, 0).endVertex();
+			var24.pos(tileEntityIn.getPos().getX(), tileEntityIn.getPos().getY() + var13, tileEntityIn.getPos().getZ() + 1.0D).tex(0, 1).endVertex();
+			var24.pos(tileEntityIn.getPos().getX() + 1.0D, tileEntityIn.getPos().getY() + var13, tileEntityIn.getPos().getZ() + 1.0D).tex(1, 1).endVertex();
+			var24.pos(tileEntityIn.getPos().getX() + 1.0D, tileEntityIn.getPos().getY() + var13, tileEntityIn.getPos().getZ()).tex(1, 0).endVertex();
 			Tessellator.getInstance().draw();
 			GlStateManager.popMatrix();
 			GlStateManager.matrixMode(GL11.GL_MODELVIEW);

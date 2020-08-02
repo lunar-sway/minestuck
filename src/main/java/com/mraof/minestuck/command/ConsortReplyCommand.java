@@ -23,8 +23,8 @@ public class ConsortReplyCommand
 	{
 		ServerPlayerEntity player = source.asPlayer();
 		Entity entity = player.world.getEntityByID(id);
-		if(entity instanceof ConsortEntity && new Vec3d(player.posX, player.posY, player.posZ)
-				.squareDistanceTo(entity.posX, entity.posY, entity.posZ) < 100)
+		if(entity instanceof ConsortEntity && new Vec3d(player.getPosX(), player.getPosY(), player.getPosZ())
+				.squareDistanceTo(entity.getPosX(), entity.getPosY(), entity.getPosZ()) < 100)
 		{
 			ConsortEntity consort = (ConsortEntity) entity;
 			consort.commandReply(player, path);

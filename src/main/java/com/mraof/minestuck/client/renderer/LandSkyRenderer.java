@@ -1,6 +1,7 @@
 package com.mraof.minestuck.client.renderer;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.skaianet.SkaiaClient;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.LandDimension;
@@ -36,7 +37,7 @@ public class LandSkyRenderer implements IRenderHandler
 	@Override
 	public void render(int ticks, float partialTicks, ClientWorld world, Minecraft mc)
 	{
-		float heightModifier = (float) MathHelper.clamp((mc.player.posY - 144)/112, 0, 1);
+		float heightModifier = (float) MathHelper.clamp((mc.player.getPosY() - 144)/112, 0, 1);
 		float heightModifierDiminish = (1 - heightModifier/1.5F);
 		float skyClearness = 1.0F - world.getRainStrength(partialTicks);
 		float starBrightness = world.getStarBrightness(partialTicks) * skyClearness;
@@ -49,12 +50,12 @@ public class LandSkyRenderer implements IRenderHandler
 		float g = (float)vec3d.y*heightModifierDiminish;
 		float b = (float)vec3d.z*heightModifierDiminish;
 		
-		GlStateManager.color3f(r, g, b);
+		RenderSystem.color3f(r, g, b);
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
 		GlStateManager.depthMask(false);
 		GlStateManager.enableFog();
-		GlStateManager.color3f(r, g, b);
+		RenderSystem.color3f(r, g, b);
 		
 		bufferbuilder.begin(7, DefaultVertexFormats.POSITION);
 		for (int k = -384; k <= 384; k += 64)
@@ -72,19 +73,19 @@ public class LandSkyRenderer implements IRenderHandler
 		GlStateManager.disableFog();
 		GlStateManager.disableAlphaTest();
 		GlStateManager.enableBlend();
-		GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+		RenderSystem.defaultBlendFunc();
 		RenderHelper.disableStandardItemLighting();
 		
 		GlStateManager.enableTexture();
-		GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+		RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 		GlStateManager.color4f(1.0F, 1.0F, 1.0F, skaiaBrightness);
 		float skaiaSize = 20.0F;
 		mc.getTextureManager().bindTexture(SKAIA_TEXTURE);
 		bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-		bufferbuilder.pos(-skaiaSize, 100.0D, -skaiaSize).tex(0.0D, 0.0D).endVertex();
-		bufferbuilder.pos(skaiaSize, 100.0D, -skaiaSize).tex(1.0D, 0.0D).endVertex();
-		bufferbuilder.pos(skaiaSize, 100.0D, skaiaSize).tex(1.0D, 1.0D).endVertex();
-		bufferbuilder.pos(-skaiaSize, 100.0D, skaiaSize).tex(0.0D, 1.0D).endVertex();
+		bufferbuilder.pos(-skaiaSize, 100.0D, -skaiaSize).tex(0.0F, 0.0F).endVertex();
+		bufferbuilder.pos(skaiaSize, 100.0D, -skaiaSize).tex(1.0F, 0.0F).endVertex();
+		bufferbuilder.pos(skaiaSize, 100.0D, skaiaSize).tex(1.0F, 1.0F).endVertex();
+		bufferbuilder.pos(-skaiaSize, 100.0D, skaiaSize).tex(0.0F, 1.0F).endVertex();
 		tessellator.draw();
 		GlStateManager.disableTexture();
 		
@@ -106,8 +107,8 @@ public class LandSkyRenderer implements IRenderHandler
 		GlStateManager.enableAlphaTest();
 		GlStateManager.enableFog();
 		GlStateManager.disableTexture();
-		GlStateManager.color3f(0.0F, 0.0F, 0.0F);
-		double d3 = mc.player.getEyePosition(partialTicks).y - world.getHorizon();
+		RenderSystem.color3f(0.0F, 0.0F, 0.0F);
+		double d3 = mc.player.getEyePosition(partialTicks).y - world.getHorizonHeight();
 		
 		//
 		
@@ -223,17 +224,17 @@ public class LandSkyRenderer implements IRenderHandler
 		float planetSize = 4.0F*scale;
 		mc.getTextureManager().bindTexture(textures[0]);
 		bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-		bufferbuilder.pos(-planetSize, 100.0D, -planetSize).tex(0.0D, 0.0D).endVertex();
-		bufferbuilder.pos(planetSize, 100.0D, -planetSize).tex(1.0D, 0.0D).endVertex();
-		bufferbuilder.pos(planetSize, 100.0D, planetSize).tex(1.0D, 1.0D).endVertex();
-		bufferbuilder.pos(-planetSize, 100.0D, planetSize).tex(0.0D, 1.0D).endVertex();
+		bufferbuilder.pos(-planetSize, 100.0D, -planetSize).tex(0.0F, 0.0F).endVertex();
+		bufferbuilder.pos(planetSize, 100.0D, -planetSize).tex(1.0F, 0.0F).endVertex();
+		bufferbuilder.pos(planetSize, 100.0D, planetSize).tex(1.0F, 1.0F).endVertex();
+		bufferbuilder.pos(-planetSize, 100.0D, planetSize).tex(0.0F, 1.0F).endVertex();
 		tessellator.draw();
 		mc.getTextureManager().bindTexture(textures[1]);
 		bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-		bufferbuilder.pos(-planetSize, 100.0D, -planetSize).tex(0.0D, 0.0D).endVertex();
-		bufferbuilder.pos(planetSize, 100.0D, -planetSize).tex(1.0D, 0.0D).endVertex();
-		bufferbuilder.pos(planetSize, 100.0D, planetSize).tex(1.0D, 1.0D).endVertex();
-		bufferbuilder.pos(-planetSize, 100.0D, planetSize).tex(0.0D, 1.0D).endVertex();
+		bufferbuilder.pos(-planetSize, 100.0D, -planetSize).tex(0.0F, 0.0F).endVertex();
+		bufferbuilder.pos(planetSize, 100.0D, -planetSize).tex(1.0F, 0.0F).endVertex();
+		bufferbuilder.pos(planetSize, 100.0D, planetSize).tex(1.0F, 1.0F).endVertex();
+		bufferbuilder.pos(-planetSize, 100.0D, planetSize).tex(0.0F, 1.0F).endVertex();
 		tessellator.draw();
 		GlStateManager.popMatrix();
 	}
