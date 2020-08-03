@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:nautilus_shell"
+  },
+  "input2": {
+    "item": "minecraft:diamond"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minecraft:heart_of_the_sea"
+  }
+}

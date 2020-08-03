@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:potato"
+  },
+  "input2": {
+    "item": "minecraft:pufferfish"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:poisonous_potato"
+  }
+}
