@@ -96,6 +96,13 @@ public class ClientProxy
 		RenderTypeLookup.setRenderLayer(MSBlocks.GOLD_SEEDS.getBlock(), RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.GLOWY_GOOP.getBlock(), RenderType.getSolid());
 		RenderTypeLookup.setRenderLayer(MSBlocks.COAGULATED_BLOOD.getBlock(), RenderType.getSolid());
+		RenderTypeLookup.setRenderLayer(MSBlocks.RAINBOW_SAPLING.getBlock(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.END_SAPLING.getBlock(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.GLOWING_MUSHROOM.getBlock(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.DESERT_BUSH.getBlock(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.BLOOMING_CACTUS.getBlock(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.PETRIFIED_GRASS.getBlock(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.PETRIFIED_POPPY.getBlock(), RenderType.getCutout());
 
 		MSKeyHandler.registerKeys();
 		

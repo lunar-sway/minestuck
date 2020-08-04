@@ -18,7 +18,7 @@ public class EndLeavesBlock extends FlammableLeavesBlock
 	
 	public EndLeavesBlock(Properties properties)
 	{
-		super(properties);
+		super(properties.notSolid());
 	}
 	
 	@Override

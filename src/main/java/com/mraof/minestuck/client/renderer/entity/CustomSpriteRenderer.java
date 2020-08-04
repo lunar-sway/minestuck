@@ -1,5 +1,7 @@
 package com.mraof.minestuck.client.renderer.entity;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
@@ -32,12 +34,13 @@ public class CustomSpriteRenderer<T extends Entity & RendersAsItem> extends Enti
 		renderer = new ModifiedSpriteRenderer(renderManager, itemRenderer);
 	}
 
-//	@Override
-//	public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks)
-//	{
-//		fakeEntity.setEntity(entity);
-//		renderer.doRender(fakeEntity, x, y, z, entityYaw, partialTicks);
-//	}
+	@Override
+	public void render(T entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn)
+
+	{
+		fakeEntity.setEntity(entityIn);
+		renderer.render(fakeEntity, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
+	}
 	
 	@Nullable
 	@Override
