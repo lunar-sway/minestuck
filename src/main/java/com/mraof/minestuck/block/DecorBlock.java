@@ -30,12 +30,6 @@ public class DecorBlock extends Block
 		this.shape = shape.createRotatedShapes();
 	}
 	
-//	@Override
-//	public BlockRenderLayer getRenderLayer()
-//	{
-//		return BlockRenderLayer.CUTOUT;
-//	}
-	
 	@Override
 	@SuppressWarnings("deprecation")
 	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos)

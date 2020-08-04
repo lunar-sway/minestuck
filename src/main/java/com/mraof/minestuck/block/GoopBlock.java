@@ -23,12 +23,6 @@ public class GoopBlock extends SlimeBlock
 		return ToolType.SHOVEL;
 	}
 	
-//	@Override
-//	public BlockRenderLayer getRenderLayer()
-//	{
-//		return BlockRenderLayer.SOLID;
-//	}
-	
 	@Override
 	public int getOpacity(BlockState state, IBlockReader worldIn, BlockPos pos)
 	{

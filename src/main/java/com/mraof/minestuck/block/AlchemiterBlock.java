@@ -136,11 +136,5 @@ public class AlchemiterBlock extends MultiMachineBlock
 			super.fillStateContainer(builder);
 			builder.add(DOWEL);
 		}
-		
-//		@Override
-//		public BlockRenderLayer getRenderLayer()
-//		{
-//			return BlockRenderLayer.CUTOUT;
-//		}
 	}
 }

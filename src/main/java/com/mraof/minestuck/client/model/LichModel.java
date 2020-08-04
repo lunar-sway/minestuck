@@ -1,8 +1,12 @@
 package com.mraof.minestuck.client.model;
 
 import com.google.common.collect.ImmutableList;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.mraof.minestuck.entity.underling.LichEntity;
+import net.minecraft.client.renderer.Quaternion;
+import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
@@ -111,6 +115,14 @@ public class LichModel<T extends LichEntity> extends SegmentedModel<T>
 		this.BodyUpper.setRotationPoint(-1.7F, -0.1F, -5.0F);
 		this.BodyUpper.addBox(0.0F, 0.0F, 0.0F, 6, 8, 10, 0.0F);
 		this.setRotation(BodyUpper, 0.0F, 0.0F, 0.27314402793711257F);
+	}
+
+	public void render(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha)
+	{
+		matrixStackIn.scale(1F / modelScale[0], 1F / modelScale[1], 1F / modelScale[2]);
+		matrixStackIn.translate(0F, -0.5F, 0F);
+		matrixStackIn.rotate(new Quaternion(Vector3f.YP, 90.0F, true));
+		super.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
 	}
 	
 	public void setRotation(ModelRenderer model, float x, float y, float z) {

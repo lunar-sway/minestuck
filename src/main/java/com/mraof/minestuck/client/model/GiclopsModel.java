@@ -1,6 +1,8 @@
 package com.mraof.minestuck.client.model;
 
 import com.google.common.collect.ImmutableList;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.mraof.minestuck.entity.underling.GiclopsEntity;
 import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
@@ -62,6 +64,27 @@ public class GiclopsModel<T extends GiclopsEntity> extends SegmentedModel<T>
 		this.leftArm.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * 1.2F * limbSwingAmount * 0.5F;
 		this.rightArm.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.2F * limbSwingAmount * 0.5F;
 	}
+
+	public void render(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha)
+	{
+		super.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+	}
+
+	/*
+	 	public void render(T entity, float par2, float par3, float par4, float par5, float par6, float par7)
+	 	{
+	 	GL11.glPushMatrix();
+        GL11.glTranslatef(0.0F, par7 * scaling, 0.0F);
+		this.body.render(par7 * scaling);
+		this.rightArm.render(par7 * scaling);
+		this.leftArm.render(par7 * scaling);
+		this.rightLeg.render(par7 * scaling);
+		this.leftLeg.render(par7 * scaling);
+		this.head.render(par7 * scaling);
+		this.tail.render(par7 * scaling);
+		GL11.glPopMatrix();
+	 	}
+	 */
 
 	public Iterable<ModelRenderer> getParts() {
 		return ImmutableList.of(this.head, this.body, this.leftArm, this.rightArm, this.leftLeg, this.rightLeg, this.tail);

@@ -48,12 +48,6 @@ public class CruxiteDowelBlock extends Block
 		return state.get(DOWEL_TYPE) == Type.CRUXTRUDER ? CRUXTRUDER_SHAPE : DOWEL_SHAPE;
 	}
 	
-//	@Override
-//	public BlockRenderLayer getRenderLayer()
-//	{
-//		return BlockRenderLayer.CUTOUT_MIPPED;
-//	}
-	
 	@Override
 	public boolean hasTileEntity(BlockState state)
 	{

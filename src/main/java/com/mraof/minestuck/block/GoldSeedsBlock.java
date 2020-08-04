@@ -27,12 +27,6 @@ public class GoldSeedsBlock extends Block
 		return SHAPE;
 	}
 	
-//	@Override
-//	public BlockRenderLayer getRenderLayer()
-//	{
-//		return BlockRenderLayer.CUTOUT;
-//	}
-	
 	@Override
 	@SuppressWarnings("deprecation")
 	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos)

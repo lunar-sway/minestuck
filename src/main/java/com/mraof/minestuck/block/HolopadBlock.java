@@ -103,11 +103,5 @@ public class HolopadBlock extends MachineBlock
 		return COLLISION_SHAPE.get(state.get(FACING));
 	}
 	
-//	@Override
-//	public BlockRenderLayer getRenderLayer()
-//	{
-//		return BlockRenderLayer.CUTOUT_MIPPED;
-//	}
-	
 	
 }

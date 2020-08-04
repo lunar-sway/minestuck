@@ -1,6 +1,7 @@
 package com.mraof.minestuck.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.SkaiaPortalBlock;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.client.model.*;
@@ -31,6 +32,8 @@ import com.mraof.minestuck.tileentity.HolopadTileEntity;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.tileentity.SkaiaPortalTileEntity;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.entity.SpriteRenderer;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.tileentity.TileEntityType;
@@ -82,11 +85,23 @@ public class ClientProxy
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.SBAHJ_POSTER, manager -> new RenderHangingArt<>(manager, new ResourceLocation("minestuck:sbahj_poster")));
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.SHOP_POSTER, manager -> new RenderHangingArt<>(manager, new ResourceLocation("minestuck:shop_poster")));
 
+		RenderTypeLookup.setRenderLayer(MSBlocks.ALCHEMITER.TOTEM_PAD.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.TOTEM_LATHE.DOWEL_ROD.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.HOLOPAD.getBlock(), RenderType.getCutoutMipped());
+		RenderTypeLookup.setRenderLayer(MSBlocks.CRUXITE_DOWEL.getBlock(), RenderType.getCutoutMipped());
+		RenderTypeLookup.setRenderLayer(MSBlocks.BLENDER.getBlock(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.CHESSBOARD.getBlock(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.MINI_FROG_STATUE.getBlock(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.GLOWYSTONE_DUST.getBlock(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.GOLD_SEEDS.getBlock(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.GLOWY_GOOP.getBlock(), RenderType.getSolid());
+		RenderTypeLookup.setRenderLayer(MSBlocks.COAGULATED_BLOOD.getBlock(), RenderType.getSolid());
+
 		MSKeyHandler.registerKeys();
 		
 		ComputerProgram.registerProgramClass(0, SburbClient.class);
 		ComputerProgram.registerProgramClass(1, SburbServer.class);
-		
+
 		//MinecraftForge.EVENT_BUS.register(new MinestuckConfig()); Does not currently use any events to reload config
 	}
 }

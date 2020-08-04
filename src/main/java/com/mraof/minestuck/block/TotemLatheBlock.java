@@ -159,7 +159,7 @@ public class TotemLatheBlock extends MultiMachineBlock
 			super.fillStateContainer(builder);
 			builder.add(DOWEL);
 		}
-		
+
 //		@Override
 //		public BlockRenderLayer getRenderLayer()
 //		{
@@ -195,11 +195,5 @@ public class TotemLatheBlock extends MultiMachineBlock
 			super.fillStateContainer(builder);
 			builder.add(COUNT);
 		}
-		
-//		@Override
-//		public BlockRenderLayer getRenderLayer()
-//		{
-//			return BlockRenderLayer.CUTOUT_MIPPED;
-//		}
 	}
 }

@@ -6,6 +6,9 @@
 package com.mraof.minestuck.client.model;
 
 import com.google.common.collect.ImmutableList;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.mraof.minestuck.entity.underling.ImpEntity;
 import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
@@ -57,6 +60,13 @@ public class ImpModel<T extends ImpEntity> extends SegmentedModel<T>
 		Legright.setRotationPoint(0F, 21F, 0F);
 		Legright.mirror = true;
 		setRotation(Legright, 0F, 0F, 0F);
+	}
+
+	public void render(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha)
+	{
+		matrixStackIn.scale(1.5f, 1.5f, 1.5f);
+		matrixStackIn.translate(0F, -0.5F, 0F);
+		super.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
 	}
 
 	private void setRotation(ModelRenderer model, float x, float y, float z)

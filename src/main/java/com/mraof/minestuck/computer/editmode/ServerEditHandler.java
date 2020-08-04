@@ -213,8 +213,8 @@ public final class ServerEditHandler
 			posZ = c.centerZ + 0.5;
 		}
 		
-		if(Teleport.teleportEntity(player, world, posX, posY, posZ) == null)
-			return false;
+		//if(Teleport.teleportEntity(player, world, posX, posY, posZ) == null)
+		//	return false;
 		
 		player.closeScreen();
 		player.inventory.clear();
@@ -268,7 +268,7 @@ public final class ServerEditHandler
 		int range = MSDimensions.isLandDimension(player.dimension) ? MinestuckConfig.landEditRange.get() : MinestuckConfig.overworldEditRange.get();
 		
 		updateInventory(player, c);
-		updatePosition(player, range, c.centerX, c.centerZ);
+		//updatePosition(player, range, c.centerX, c.centerZ);
 		
 		player.timeUntilPortal = player.getPortalCooldown();
 	}

@@ -307,10 +307,4 @@ public class GlowystoneWireBlock extends Block
 	{
 		builder.add(NORTH, EAST, SOUTH, WEST);
 	}
-	
-//	@Override
-//	public BlockRenderLayer getRenderLayer()
-//	{
-//		return BlockRenderLayer.CUTOUT;
-//	}
 }

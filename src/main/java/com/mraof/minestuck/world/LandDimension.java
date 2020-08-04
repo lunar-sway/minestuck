@@ -7,6 +7,7 @@ import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
+import com.mraof.minestuck.world.gen.LandChunkGenerator;
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.MSWorldGenTypes;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
@@ -234,6 +235,7 @@ public class LandDimension extends Dimension
 	}
 
 	@Override
+	@OnlyIn(Dist.CLIENT)
 	public Vec3d getFogColor(float par1, float par2)
 	{
 		return properties.getFogColor();

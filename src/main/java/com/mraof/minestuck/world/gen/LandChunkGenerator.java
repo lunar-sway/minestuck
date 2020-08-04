@@ -23,6 +23,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 {
@@ -97,26 +98,25 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 		this.calcNoiseColumn(noiseColumn, columnX, columnZ, horizontal, vertical, horizontal2, vertical2, lerpModifier, skyValueTarget);
 	}
 
-//	@Override
-//	public void generateSurface(WorldGenRegion p_225551_1_, IChunk chunkIn)
-//	{
-//		SharedSeedRandom sharedRandom = new SharedSeedRandom();
-//		sharedRandom.setBaseChunkSeed(chunkIn.getPos().x, chunkIn.getPos().z);
-//
-//		int xOffset = chunkIn.getPos().getXStart(), zOffset = chunkIn.getPos().getZStart();
-//		Biome[] biomes = chunkIn.;
-//
-//		for(int x = 0; x < 16; x++)
-//		{
-//			for(int z = 0; z < 16; z++)
-//			{
-//				int y = chunkIn.getTopBlockY(Heightmap.Type.WORLD_SURFACE_WG, x, z);
-//				biomeHolder.localBiomeFrom(biomes[z*16 + x]).buildSurface(sharedRandom, chunkIn, x + xOffset, z + zOffset, y, 0, getSettings().getDefaultBlock(), getSettings().getDefaultFluid(), getSeaLevel(),  world.getSeed());
-//			}
-//		}
-//
-//		this.makeBedrock(chunkIn, sharedRandom);
-//	}
+	@Override
+	public void generateSurface(WorldGenRegion worldGenRegion, IChunk chunkIn) {
+		SharedSeedRandom sharedRandom = new SharedSeedRandom();
+		sharedRandom.setBaseChunkSeed(chunkIn.getPos().x, chunkIn.getPos().z);
+
+		int xOffset = chunkIn.getPos().getXStart(), zOffset = chunkIn.getPos().getZStart();
+
+		for(int x = 0; x < 16; x++)
+		{
+			for(int z = 0; z < 16; z++)
+			{
+				int y = chunkIn.getTopBlockY(Heightmap.Type.WORLD_SURFACE_WG, x, z);
+
+				biomeHolder.localBiomeFrom(biomeProvider.getNoiseBiome(x, y, z)).buildSurface(sharedRandom, chunkIn, x + xOffset, z + zOffset, y, 0, getSettings().getDefaultBlock(), getSettings().getDefaultFluid(), getSeaLevel(),  world.getSeed());
+			}
+		}
+
+		this.makeBedrock(chunkIn, sharedRandom);
+	}
 	
 	@Override
 	public List<Biome.SpawnListEntry> getPossibleCreatures(EntityClassification creatureType, BlockPos pos)
