@@ -1,5 +1,6 @@
 package com.mraof.minestuck.client.renderer;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
@@ -11,10 +12,7 @@ import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.*;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
@@ -24,11 +22,16 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.DrawHighlightEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+
+import java.lang.reflect.Method;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class MachineOutlineRenderer
@@ -44,19 +47,17 @@ public class MachineOutlineRenderer
 			if (rayTrace.getFace() != Direction.UP)
 				return;
 			
-			if (!renderCheckItem(mc.player, Hand.MAIN_HAND, mc.player.getHeldItemMainhand(), rayTrace, event.getInfo()))
-				 renderCheckItem(mc.player, Hand.OFF_HAND, mc.player.getHeldItemOffhand(), rayTrace, event.getInfo());
+			if (!renderCheckItem(event.getMatrix(), event.getBuffers(), mc.player, Hand.MAIN_HAND, mc.player.getHeldItemMainhand(), rayTrace, event.getInfo()))
+				 renderCheckItem(event.getMatrix(), event.getBuffers(), mc.player, Hand.OFF_HAND, mc.player.getHeldItemOffhand(), rayTrace, event.getInfo());
 		}
 	}
 	
-	private static boolean renderCheckItem(ClientPlayerEntity player, Hand hand, ItemStack stack, BlockRayTraceResult rayTraceResult, ActiveRenderInfo info)
+	private static boolean renderCheckItem(MatrixStack matrixStack, IRenderTypeBuffer bufferIn, ClientPlayerEntity player, Hand hand, ItemStack stack, BlockRayTraceResult rayTraceResult, ActiveRenderInfo info)
 	{
-		
 		if(stack.isEmpty())
 			return false;
 		if(stack.getItem() instanceof MultiblockItem)
 		{
-			IRenderTypeBuffer bufferIn = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
 			IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.getLines());
 
 			MultiblockItem item = (MultiblockItem) stack.getItem();
@@ -90,24 +91,33 @@ public class MachineOutlineRenderer
 			pos = item.getPlacementPos(pos, placedFacing, hitX, hitZ);
 			
 			placeable = item.canPlaceAt(context, pos, placedFacing);
-			
+
 			if(item == MSItems.ALCHEMITER)//Alchemiter
 			{
 				AxisAlignedBB rod = GuiUtil.rotateAround(new AxisAlignedBB(3.25, 1, 3.25, 3.75, 4, 3.75), 0.5, 0.5, rotation).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
 				AxisAlignedBB pad = GuiUtil.rotateAround(new AxisAlignedBB(0, 0, 0, 4, 1, 4), 0.5, 0.5, rotation).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
 				//If you don't want the extra details to the alchemiter outline, comment out the following two lines
-				WorldRenderer.drawBoundingBox(ivertexbuilder, rod.minX, rod.minY, rod.minZ, rod.maxX, rod.maxY, rod.maxZ, placeable ? 0 : 1, placeable ? 1 : 0, 0, 0.5F);
-				WorldRenderer.drawBoundingBox(ivertexbuilder, pad.minX, pad.minY, pad.minZ, pad.maxX, pad.maxY, pad.maxZ, placeable ? 0 : 1, placeable ? 1 : 0, 0, 0.5F);
+				drawPhernaliaPlacementOutline(matrixStack, ivertexbuilder, VoxelShapes.create(rod), 0, 0, 0, placeable ? 0 : 1, placeable ? 1 : 0, 0, 0.5F);
+				drawPhernaliaPlacementOutline(matrixStack, ivertexbuilder, VoxelShapes.create(pad), 0, 0, 0, placeable ? 0 : 1, placeable ? 1 : 0, 0, 0.5F);
 			}
 			
 			boundingBox = GuiUtil.fromBoundingBox(item.getMultiblock().getBoundingBox(rotation)).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
 
-			WorldRenderer.drawBoundingBox(ivertexbuilder, boundingBox.minX, boundingBox.minY, boundingBox.minZ, boundingBox.maxX, boundingBox.maxY, boundingBox.maxZ, placeable ? 0 : 1, placeable ? 1 : 0, 0, 0.5F);
+			drawPhernaliaPlacementOutline(matrixStack, ivertexbuilder, VoxelShapes.create(boundingBox), 0, 0, 0, placeable ? 0 : 1, placeable ? 1 : 0, 0, 0.5F);
+
 			GlStateManager.depthMask(true);
 			GlStateManager.enableTexture();
 			GlStateManager.disableBlend();
 			return true;
 		}
 		return false;
+	}
+
+	private static void drawPhernaliaPlacementOutline(MatrixStack matrixStackIn, IVertexBuilder bufferIn, VoxelShape shapeIn, double xIn, double yIn, double zIn, float red, float green, float blue, float alpha) {
+		Matrix4f matrix4f = matrixStackIn.getLast().getMatrix();
+		shapeIn.forEachEdge((p_230013_12_, p_230013_14_, p_230013_16_, p_230013_18_, p_230013_20_, p_230013_22_) -> {
+			bufferIn.pos(matrix4f, (float)(p_230013_12_ + xIn), (float)(p_230013_14_ + yIn), (float)(p_230013_16_ + zIn)).color(red, green, blue, alpha).endVertex();
+			bufferIn.pos(matrix4f, (float)(p_230013_18_ + xIn), (float)(p_230013_20_ + yIn), (float)(p_230013_22_ + zIn)).color(red, green, blue, alpha).endVertex();
+		});
 	}
 }
