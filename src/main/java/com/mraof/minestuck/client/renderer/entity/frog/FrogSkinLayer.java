@@ -2,8 +2,10 @@ package com.mraof.minestuck.client.renderer.entity.frog;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.client.model.FrogModel;
 import com.mraof.minestuck.entity.FrogEntity;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.IEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
@@ -25,12 +27,12 @@ public class FrogSkinLayer extends LayerRenderer<FrogEntity, FrogModel<FrogEntit
 	{
 		if (!frog.isInvisible()) {
 			int type = frog.getFrogType();
-			if ((type > frog.maxTypes() || type < 1)) {
+			if ((type > FrogEntity.maxTypes() || type < 1)) {
 				int skinColor = frog.getSkinColor();
 
 				float r = (float) ((skinColor & 16711680) >> 16) / 255f;
 				float g = (float) ((skinColor & 65280) >> 8) / 255f;
-				float b = (float) ((skinColor & 255) >> 0) / 255f;
+				float b = (float) ((skinColor & 255)) / 255f;
 
 				if (r < this.colorMin)
 					r = this.colorMin;
@@ -39,17 +41,13 @@ public class FrogSkinLayer extends LayerRenderer<FrogEntity, FrogModel<FrogEntit
 				if (b < this.colorMin)
 					b = this.colorMin;
 
-				GlStateManager.color4f(r, g, b, 1f);
-
-				this.getEntityModel().copyModelAttributesTo(this.frogModel);
-				this.frogModel.setLivingAnimations(frog, limbSwing, limbSwingAmount, partialTicks);
-				this.frogModel.setRotationAngles(frog, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
-				renderCutoutModel(this.getEntityModel(), this.getTexture(type), matrixStackIn, bufferIn, packedLightIn, frog, 1.0F, 1.0F, 1.0F);
+				renderCopyCutoutModel(this.getEntityModel(), this.frogModel, this.getTexture(type), matrixStackIn, bufferIn, packedLightIn, frog, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, partialTicks, r, g, b);
 			}
-	        
-			GlStateManager.disableBlend();
+			else
+			{
+				renderCopyCutoutModel(this.getEntityModel(), this.frogModel, this.getTexture(type), matrixStackIn, bufferIn, packedLightIn, frog, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, partialTicks, 1.0F, 1.0F, 1.0F);
+			}
 		}
-
 	}
 
 	public ResourceLocation getTexture(int type) {

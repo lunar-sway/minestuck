@@ -1,5 +1,7 @@
 package com.mraof.minestuck.client.renderer.entity;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.Entity;
@@ -13,16 +15,15 @@ public class ShadowRenderer<T extends Entity> extends EntityRenderer<T>
 		this.shadowSize = shadowSize;
 	}
 	
-	public void doRenderShadow(T entity, double d0, double d1, double d2, float f, float f1)
+	public void doRenderShadow(T entity)
 	{
 		this.shadowSize = entity.getWidth();
 	}
-	
-//	@Override
-//	public void doRender(T entity, double d0, double d1, double d2, float f, float f1)
-//	{
-//		this.doRenderShadow(entity, d0, d1, d2, f, f1);
-//	}
+
+	@Override
+	public void render(T entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
+		this.doRenderShadow(entityIn);
+	}
 	
 	@Override
 	public ResourceLocation getEntityTexture(T entity)

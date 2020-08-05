@@ -118,37 +118,6 @@ public class FrogModel<T extends FrogEntity> extends SegmentedModel<T>
 		this.jumpRotation = MathHelper.sin(((FrogEntity)entitylivingbaseIn).setJumpCompletion(partialTickTime) * (float)Math.PI);
 	}
 
-	/*
-	public void render(T entity, float f, float f1, float f2, float f3, float f4, float f5) {
-		this.right_foot.render(f5);
-		this.left_bottom_leg.render(f5);
-		this.right_bottom_leg.render(f5);
-		this.left_eye.render(f5);
-		this.left_foot.render(f5);
-		this.right_eye.render(f5);
-		GlStateManager.pushMatrix();
-		GlStateManager.translatef(this.right_top_leg.offsetX, this.right_top_leg.offsetY, this.right_top_leg.offsetZ);
-		GlStateManager.translatef(this.right_top_leg.rotationPointX * f5, this.right_top_leg.rotationPointY * f5, this.right_top_leg.rotationPointZ * f5);
-		GlStateManager.scalef(1.0F, 0.9F, 1.0F);
-		GlStateManager.translatef(-this.right_top_leg.offsetX, -this.right_top_leg.offsetY, -this.right_top_leg.offsetZ);
-		GlStateManager.translatef(-this.right_top_leg.rotationPointX * f5, -this.right_top_leg.rotationPointY * f5, -this.right_top_leg.rotationPointZ * f5);
-		this.right_top_leg.render(f5);
-		GlStateManager.popMatrix();
-		this.left_arm.render(f5);
-		this.head.render(f5);
-		GlStateManager.pushMatrix();
-		GlStateManager.translatef(this.left_top_leg.offsetX, this.left_top_leg.offsetY, this.left_top_leg.offsetZ);
-		GlStateManager.translatef(this.left_top_leg.rotationPointX * f5, this.left_top_leg.rotationPointY * f5, this.left_top_leg.rotationPointZ * f5);
-		GlStateManager.scalef(1.0F, 0.9F, 1.0F);
-		GlStateManager.translatef(-this.left_top_leg.offsetX, -this.left_top_leg.offsetY, -this.left_top_leg.offsetZ);
-		GlStateManager.translatef(-this.left_top_leg.rotationPointX * f5, -this.left_top_leg.rotationPointY * f5, -this.left_top_leg.rotationPointZ * f5);
-		this.left_top_leg.render(f5);
-		GlStateManager.popMatrix();
-		this.right_arm.render(f5);
-		this.body.render(f5);
-	}
-	 */
-
 	public Iterable<ModelRenderer> getParts() {
 		return ImmutableList.of(this.right_foot, this.left_bottom_leg, this.right_bottom_leg, this.left_eye, this.left_foot, this.right_eye, this.right_top_leg, this.left_arm, this.head, this.left_top_leg, this.right_arm, this.body);
 	}
