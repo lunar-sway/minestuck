@@ -26,8 +26,8 @@ public class HolopadRenderer extends TileEntityRenderer<HolopadTileEntity>
 			ItemStack item = tileEntityIn.getHoloItem();
 			float f = (float) tileEntityIn.innerRotation + partialTicks;
 			matrixStackIn.push();
-			matrixStackIn.translate((float) tileEntityIn.getPos().getX() + 0.5F, (float) tileEntityIn.getPos().getY() + 0.6F, (float) tileEntityIn.getPos().getZ() + 0.5F);
-			matrixStackIn.rotate(new Quaternion(Vector3f.YP, f / 20.0F * 57.295776F, true));
+			matrixStackIn.translate(0.5F, 0.6F, 0.5F);
+			matrixStackIn.rotate(Vector3f.YP.rotation((f / 20.0F * 57.295776F) / 75));
 			Minecraft.getInstance().getItemRenderer().renderItem(item, ItemCameraTransforms.TransformType.GROUND, combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn);
 			matrixStackIn.pop();
 		}
