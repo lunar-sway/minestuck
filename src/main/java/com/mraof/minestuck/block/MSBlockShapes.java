@@ -31,25 +31,25 @@ public class MSBlockShapes
 	
 	public static final CustomVoxelShape FROG_STATUE = FROG_STATUE_BASE.merge(FROG_STATUE_BODY, FROG_STATUE_HEAD).rotate(Direction.SOUTH);
 	
-	public static final CustomVoxelShape BLENDER_BASE = new CustomVoxelShape(new double[]{3, 0,3, 13, 3, 13}, new double[]{4, 3, 4, 12, 4, 12});
-	public static final CustomVoxelShape BLENDER_CONTAINER = new CustomVoxelShape(new double[]{5, 4, 5, 11, 7, 11}, new double[]{4,7,4, 12, 13, 12}, new double[]{3, 13, 3, 13, 14, 13});
-	public static final CustomVoxelShape BLENDER_HANDLE = new CustomVoxelShape(new double[]{3,6,7,5,7,9}, new double[]{2, 7, 7, 3, 11, 9}, new double[]{3, 11, 7, 4, 12, 9});
-	public static final CustomVoxelShape BLENDER_LID = new CustomVoxelShape(new double[]{3,14,3,13,16,13});
+	public static final CustomVoxelShape BLENDER_BASE = new CustomVoxelShape(new double[]{3, 0, 3, 13, 3, 13}, new double[]{4, 3, 4, 12, 4, 12});
+	public static final CustomVoxelShape BLENDER_CONTAINER = new CustomVoxelShape(new double[]{5, 4, 5, 11, 7, 11}, new double[]{4, 7, 4, 12, 13, 12}, new double[]{3, 13, 3, 13, 14, 13});
+	public static final CustomVoxelShape BLENDER_HANDLE = new CustomVoxelShape(new double[]{3, 6, 7, 5, 7, 9}, new double[]{2, 7, 7, 3, 11, 9}, new double[]{3, 11, 7, 4, 12, 9});
+	public static final CustomVoxelShape BLENDER_LID = new CustomVoxelShape(new double[]{3, 14, 3, 13, 16, 13});
 	public static final CustomVoxelShape BLENDER = BLENDER_BASE.merge(BLENDER_CONTAINER, BLENDER_HANDLE, BLENDER_LID);
 	
 	public static final CustomVoxelShape CHESSBOARD = new CustomVoxelShape(new double[]{0, 0, 0, 16, 1, 16});
-
-	public static final CustomVoxelShape CASSETTE_PLAYER_CLOSED = new CustomVoxelShape(new double[]{5, 0, 4, 11, 1.5, 12});
+	
+	public static final CustomVoxelShape CASSETTE_PLAYER_DEFAULT = new CustomVoxelShape(new double[]{5, 0, 4, 11, 1.5, 12});
 	
 	//Machines
-	public static final CustomVoxelShape ALCHEMITER_CENTER = new CustomVoxelShape(new double[]{0,0,0,16,16,16});
-	public static final CustomVoxelShape ALCHEMITER_CORNER = new CustomVoxelShape(new double[]{0,0,0,16,8,16}, new double[]{0,8,6,10,12,16}, new double[]{0,12,8,8,16,16});
-	public static final CustomVoxelShape ALCHEMITER_LEFT_SIDE = new CustomVoxelShape(new double[]{0,0,0,16,8,16}, new double[]{0,8,6,16,12,16}, new double[]{0,12,8,16,16,16}, new double[]{0,8,2,4,12,6}, new double[]{10,8,1,14,11,5});
-	public static final CustomVoxelShape ALCHEMITER_RIGHT_SIDE = new CustomVoxelShape(new double[]{0,0,0,16,8,16}, new double[]{0,8,6,16,12,16}, new double[]{0,12,8,16,16,16}, new double[]{12,8,2,16,12,6}, new double[]{2,8,1,6,11,5});
-	public static final CustomVoxelShape ALCHEMITER_TOTEM_CORNER = new CustomVoxelShape(new double[]{0,0,0,16,8,16}, new double[]{0,8,6,10,12,16}, new double[]{0,12,8,8,16,16}, new double[]{8,8,2,14,16,8}, new double[]{10,8,12,14,16,16});
-	public static final CustomVoxelShape ALCHEMITER_TOTEM_PAD = new CustomVoxelShape(new double[]{8,0,2,14,4,8}, new double[]{10,0,12,14,14,16}, new double[]{11,14,13,13,16,15});
-	public static final CustomVoxelShape ALCHEMITER_LOWER_ROD = new CustomVoxelShape(new double[]{10,0,2,14,16,6}, new double[]{10,0,7,14,16,11}, new double[]{10,0,7,14,16,16}, new double[]{11,-2,3,13,0,10});
-	public static final CustomVoxelShape ALCHEMITER_UPPER_ROD = new CustomVoxelShape(new double[]{10,0,2,14,8,6}, new double[]{10,0,7,14,8,11}, new double[]{10,0,12,14,8,16}, new double[]{11,8,8,13,10,15},
+	public static final CustomVoxelShape ALCHEMITER_CENTER = new CustomVoxelShape(new double[]{0, 0, 0, 16, 16, 16});
+	public static final CustomVoxelShape ALCHEMITER_CORNER = new CustomVoxelShape(new double[]{0, 0, 0, 16, 8, 16}, new double[]{0, 8, 6, 10, 12, 16}, new double[]{0, 12, 8, 8, 16, 16});
+	public static final CustomVoxelShape ALCHEMITER_LEFT_SIDE = new CustomVoxelShape(new double[]{0, 0, 0, 16, 8, 16}, new double[]{0, 8, 6, 16, 12, 16}, new double[]{0, 12, 8, 16, 16, 16}, new double[]{0, 8, 2, 4, 12, 6}, new double[]{10, 8, 1, 14, 11, 5});
+	public static final CustomVoxelShape ALCHEMITER_RIGHT_SIDE = new CustomVoxelShape(new double[]{0, 0, 0, 16, 8, 16}, new double[]{0, 8, 6, 16, 12, 16}, new double[]{0, 12, 8, 16, 16, 16}, new double[]{12, 8, 2, 16, 12, 6}, new double[]{2, 8, 1, 6, 11, 5});
+	public static final CustomVoxelShape ALCHEMITER_TOTEM_CORNER = new CustomVoxelShape(new double[]{0, 0, 0, 16, 8, 16}, new double[]{0, 8, 6, 10, 12, 16}, new double[]{0, 12, 8, 8, 16, 16}, new double[]{8, 8, 2, 14, 16, 8}, new double[]{10, 8, 12, 14, 16, 16});
+	public static final CustomVoxelShape ALCHEMITER_TOTEM_PAD = new CustomVoxelShape(new double[]{8, 0, 2, 14, 4, 8}, new double[]{10, 0, 12, 14, 14, 16}, new double[]{11, 14, 13, 13, 16, 15});
+	public static final CustomVoxelShape ALCHEMITER_LOWER_ROD = new CustomVoxelShape(new double[]{10, 0, 2, 14, 16, 6}, new double[]{10, 0, 7, 14, 16, 11}, new double[]{10, 0, 7, 14, 16, 16}, new double[]{11, -2, 3, 13, 0, 10});
+	public static final CustomVoxelShape ALCHEMITER_UPPER_ROD = new CustomVoxelShape(new double[]{10, 0, 2, 14, 8, 6}, new double[]{10, 0, 7, 14, 8, 11}, new double[]{10, 0, 12, 14, 8, 16}, new double[]{11, 8, 8, 13, 10, 15},
 			new double[]{9,8,3,13,10,5}, new double[]{7,4,2,9,10,6}, new double[]{3,5,3,7,6,5});
 	
 	public static final CustomVoxelShape CRUXTRUDER_BASE_CORNER = new CustomVoxelShape(new double[]{1,0,1,16,9,16}, new double[]{9,9,9,16,16,16});
