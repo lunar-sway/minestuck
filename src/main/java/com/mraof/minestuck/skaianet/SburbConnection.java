@@ -31,7 +31,7 @@ public final class SburbConnection
 	
 	private final PlayerIdentifier clientIdentifier;
 	private PlayerIdentifier serverIdentifier;
-	private GlobalPos clientComputer;	//TODO Abstraction that works with multiple representations of computers
+	private GlobalPos clientComputer;	//TODO Replace with abstraction that works with multiple representations of computers
 	private GlobalPos serverComputer;
 	
 	private boolean isActive;
@@ -45,10 +45,6 @@ public final class SburbConnection
 	
 	//Only used by the edit handler
 	public ListNBT inventory;	//TODO Should not be public
-	
-	//Non-saved variables used by the edit handler
-	public double posX, posZ;
-	public boolean useCoordinates;
 	
 	SburbConnection(PlayerIdentifier client, SkaianetHandler handler)
 	{

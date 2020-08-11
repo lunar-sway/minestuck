@@ -4,6 +4,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entity.DecoyEntity;
 import com.mraof.minestuck.event.ConnectionClosedEvent;
+import com.mraof.minestuck.event.SburbEvent;
 import com.mraof.minestuck.item.crafting.alchemy.GristCostRecipe;
 import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
@@ -31,6 +32,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.GlobalPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.GameType;
@@ -53,14 +55,12 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
+import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
 import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Main class to handle the server side of edit mode.
@@ -68,10 +68,12 @@ import java.util.UUID;
  * @author kirderf1
  */
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public final class ServerEditHandler
+public final class ServerEditHandler	//TODO Consider splitting this class into two
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	public static final ArrayList<String> commands = new ArrayList<>(Arrays.asList("effect", "gamemode", "defaultgamemode", "enchant", "xp", "tp", "spreadplayers", "kill", "clear", "spawnpoint", "setworldspawn", "give"));
+	
+	static final Map<SburbConnection, Vec3d> lastEditmodePos = new HashMap<>();
 	
 	/**
 	 * Called both when any player logged out and when a player pressed the exit button.
@@ -83,10 +85,22 @@ public final class ServerEditHandler
 	}
 	
 	@SubscribeEvent
+	public static void serverStopped(FMLServerStoppedEvent event)
+	{
+		lastEditmodePos.clear();
+	}
+	
+	@SubscribeEvent
 	public static void onDisconnect(ConnectionClosedEvent event)
 	{
 		reset(getData(event.getMinecraftServer(), event.getConnection()));
-		event.getConnection().useCoordinates = false;
+		lastEditmodePos.remove(event.getConnection());
+	}
+	
+	@SubscribeEvent
+	public static void onEntry(SburbEvent.OnEntry event)
+	{
+		lastEditmodePos.remove(event.getConnection());
 	}
 	
 	@SubscribeEvent
@@ -199,10 +213,11 @@ public final class ServerEditHandler
 		double posX, posY = 0, posZ;
 		ServerWorld world = player.getServer().getWorld(c.hasEntered() ? c.getClientDimension() : c.getClientComputer().getDimension());
 		
-		if(c.useCoordinates)
+		if(lastEditmodePos.containsKey(c))
 		{
-			posX = c.posX;
-			posZ = c.posZ;
+			Vec3d lastPos = lastEditmodePos.get(c);
+			posX = lastPos.x;
+			posZ = lastPos.z;
 		} else
 		{
 			BlockPos center = getEditmodeCenter(c);
