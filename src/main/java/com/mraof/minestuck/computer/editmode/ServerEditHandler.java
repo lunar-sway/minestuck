@@ -481,7 +481,9 @@ public final class ServerEditHandler
 		
 		if(newX != player.posX || newZ != player.posZ || y != player.posY)
 		{
-			player.setPositionAndUpdate(newX, y, newZ);
+			if(player.world.isRemote)
+				player.setPosition(newX, y, newZ);
+			else player.setPositionAndUpdate(newX, y, newZ);
 		}
 	}
 	
