@@ -30,6 +30,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.GlobalPos;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.GameType;
@@ -174,11 +175,7 @@ public final class ServerEditHandler
 			Debug.info("Activating edit mode on player \""+player.getName().getFormattedText()+"\", target player: \""+computerTarget+"\".");
 			DecoyEntity decoy = new DecoyEntity((ServerWorld) player.world, player);
 			EditData data = new EditData(decoy, player, c);
-			if(!c.hasEntered())
-			{
-				c.centerX = c.getClientComputer().getPos().getX();
-				c.centerZ = c.getClientComputer().getPos().getZ();
-			}
+
 			if(!setPlayerStats(player, c))
 			{
 				player.sendMessage(new StringTextComponent(TextFormatting.RED+"Failed to activate edit mode."));
@@ -188,8 +185,9 @@ public final class ServerEditHandler
 				player.inventory.read(c.inventory);
 			decoy.world.addEntity(decoy);
 			MSExtraData.get(player.world).addEditData(data);
-			
-			ServerEditPacket packet = ServerEditPacket.activate(computerTarget.getUsername(), c.centerX, c.centerZ, DeployList.getDeployListTag(player.getServer(), c));
+
+			BlockPos center = getEditmodeCenter(c);
+			ServerEditPacket packet = ServerEditPacket.activate(computerTarget.getUsername(), center.getX(), center.getZ(), DeployList.getDeployListTag(player.getServer(), c));
 			MSPacketHandler.sendToPlayer(packet, player);
 			data.sendGristCacheToEditor();
 		}
@@ -205,13 +203,13 @@ public final class ServerEditHandler
 		{
 			posX = c.posX;
 			posZ = c.posZ;
-			posY = world.getHeight(Heightmap.Type.MOTION_BLOCKING, new BlockPos(posX, 0, posZ)).getY();
 		} else
 		{
-			posX = c.centerX + 0.5;
-			posY = world.getHeight(Heightmap.Type.MOTION_BLOCKING, new BlockPos(c.centerX, 0, c.centerZ)).getY();
-			posZ = c.centerZ + 0.5;
+			BlockPos center = getEditmodeCenter(c);
+			posX = center.getX() + 0.5;
+			posZ = center.getZ() + 0.5;
 		}
+		posY = world.getHeight(Heightmap.Type.MOTION_BLOCKING, new BlockPos(posX, 0, posZ)).getY();
 		
 		if(Teleport.teleportEntity(player, world, posX, posY, posZ) == null)
 			return false;
@@ -230,7 +228,8 @@ public final class ServerEditHandler
 		EditData data = getData(editor);
 		if(data != null)
 		{
-			ServerEditPacket packet = ServerEditPacket.activate(data.connection.getClientIdentifier().getUsername(), data.connection.centerX, data.connection.centerZ, DeployList.getDeployListTag(editor.getServer(), data.connection));
+			BlockPos center = getEditmodeCenter(data.connection);
+			ServerEditPacket packet = ServerEditPacket.activate(data.connection.getClientIdentifier().getUsername(), center.getX(), center.getZ(), DeployList.getDeployListTag(editor.getServer(), data.connection));
 			MSPacketHandler.sendToPlayer(packet, editor);
 			data.sendGristCacheToEditor();
 		} else
@@ -253,7 +252,17 @@ public final class ServerEditHandler
 	public static EditData getData(DecoyEntity decoy) {
 		return MSExtraData.get(decoy.getEntityWorld()).findEditData(editData -> editData.getDecoy() == decoy);
 	}
-	
+
+	private static BlockPos getEditmodeCenter(SburbConnection connection)
+	{
+		GlobalPos computerPos = connection.getClientComputer();
+		if(computerPos == null)
+			throw new IllegalStateException("Connection has to be active with a computer position to be used here");
+		if(connection.hasEntered())
+			return new BlockPos(0, 0, 0);
+		else return computerPos.getPos();
+	}
+
 	@SubscribeEvent
 	public static void tickEnd(TickEvent.PlayerTickEvent event) {
 		if(event.phase != TickEvent.Phase.END || event.side == LogicalSide.CLIENT)
@@ -266,9 +275,10 @@ public final class ServerEditHandler
 		
 		SburbConnection c = data.connection;
 		int range = MSDimensions.isLandDimension(player.dimension) ? MinestuckConfig.landEditRange.get() : MinestuckConfig.overworldEditRange.get();
-		
+		BlockPos center = getEditmodeCenter(c);
+
 		updateInventory(player, c);
-		updatePosition(player, range, c.centerX, c.centerZ);
+		updatePosition(player, range, center.getX(), center.getZ());
 		
 		player.timeUntilPortal = player.getPortalCooldown();
 	}

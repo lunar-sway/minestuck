@@ -618,9 +618,7 @@ public final class SkaianetHandler
 		}
 		
 		SburbHandler.onEntry(mcServer, c);
-		
-		c.centerX = 0;
-		c.centerZ = 0;
+
 		c.useCoordinates = false;
 		updateAll();
 		infoTracker.reloadLandChains();
