@@ -31,7 +31,7 @@ public class CassettePlayerBlock extends DecorBlock {
 
     public CassettePlayerBlock(Properties properties, CustomVoxelShape shape, Supplier<TileEntityType<?>> tileType) {
         super(properties, shape);
-        this.setDefaultState(this.stateContainer.getBaseState().with(HAS_CASSETTE, Boolean.valueOf(false)));
+        this.setDefaultState(this.stateContainer.getBaseState().with(HAS_CASSETTE, false));
         this.tileType = tileType;
     }
 
@@ -39,13 +39,12 @@ public class CassettePlayerBlock extends DecorBlock {
     @SuppressWarnings("deprecation")
     public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
         if (player.isSneaking()) {
-            if (state.get(IS_OPEN)) state = state.with(IS_OPEN, Boolean.valueOf(false));
-            else state = state.with(IS_OPEN, Boolean.valueOf(true));
+            state = state.cycle(IS_OPEN);
             worldIn.setBlockState(pos, state, 2);
             return true;
         } else if (state.get(HAS_CASSETTE) && state.get(IS_OPEN)) {
             this.dropCassette(worldIn, pos);
-            state = state.with(HAS_CASSETTE, Boolean.valueOf(false));
+            state = state.with(HAS_CASSETTE, false);
             worldIn.setBlockState(pos, state, 2);
             return true;
         } else {
@@ -56,8 +55,8 @@ public class CassettePlayerBlock extends DecorBlock {
     public void insertCassette(IWorld worldIn, BlockPos pos, BlockState state, ItemStack cassetteStack) {
         TileEntity tileentity = worldIn.getTileEntity(pos);
         if (tileentity instanceof CassettePlayerTileEntity && state.get(IS_OPEN)) {
-            ((CassettePlayerTileEntity)tileentity).setCassette(cassetteStack.copy());
-            worldIn.setBlockState(pos, state.with(HAS_CASSETTE, Boolean.valueOf(true)), 2);
+            ((CassettePlayerTileEntity) tileentity).setCassette(cassetteStack.copy());
+            worldIn.setBlockState(pos, state.with(HAS_CASSETTE, true), 2);
         }
     }
 
