@@ -725,6 +725,6 @@ public final class SkaianetHandler
 	{
 		INSTANCE = null;
 		MSDimensionTypes.LANDS.dimToLandTypes.clear();
-		SburbHandler.titleSelectionMap.clear();
+		SburbHandler.playersInTitleSelection.clear();
 	}
 }

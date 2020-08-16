@@ -70,7 +70,7 @@ public class EntryProcess
 		{
 			if(player.world.getDimension().getType() != DimensionType.THE_NETHER)
 			{
-				if(!SburbHandler.shouldEnterNow(player))
+				if(!SburbHandler.performEntryCheck(player))
 					return;
 				
 				PlayerIdentifier identifier = IdentifierHandler.encode(player);

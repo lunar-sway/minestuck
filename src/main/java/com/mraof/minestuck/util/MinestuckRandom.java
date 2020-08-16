@@ -12,6 +12,7 @@ import java.util.Random;
  * @author BenjaminK
  *
  */
+@Deprecated
 public abstract class MinestuckRandom	//TODO This is not good because it carries over between worlds, and is generally not predictable based on world seed. A different solution is needed
 {
 	private static HashMap<PlayerIdentifier, Random> playerRandMap = new HashMap<PlayerIdentifier, Random>();
