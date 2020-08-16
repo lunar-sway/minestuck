@@ -12,29 +12,32 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 
 import java.util.function.Supplier;
 
-public class CassetteItem extends ModMusicDiscItem {
-
-    public CassetteItem(int comparatorValueIn, Supplier<SoundEvent>soundIn, Properties builder)
-    {
-        super(comparatorValueIn, soundIn, builder);
-    }
-
-
-    @Override
-    public ActionResultType onItemUse(ItemUseContext context) {
-        World world = context.getWorld();
-        BlockPos blockpos = context.getPos();
-        BlockState blockstate = world.getBlockState(blockpos);
-        if(blockstate.getBlock() == MSBlocks.CASSETTE_PLAYER_DEFAULT && !blockstate.get(CassettePlayerBlock.HAS_CASSETTE) && blockstate.get(CassettePlayerBlock.OPEN))
+public class CassetteItem extends ModMusicDiscItem
+{
+	
+	public CassetteItem(int comparatorValueIn, Supplier<SoundEvent> soundIn, Properties builder)
+	{
+		super(comparatorValueIn, soundIn, builder);
+	}
+	
+	
+	@Override
+	public ActionResultType onItemUse(ItemUseContext context)
+	{
+		World world = context.getWorld();
+		BlockPos blockpos = context.getPos();
+		BlockState blockstate = world.getBlockState(blockpos);
+		if(blockstate.getBlock() == MSBlocks.CASSETTE_PLAYER_DEFAULT && !blockstate.get(CassettePlayerBlock.HAS_CASSETTE) && blockstate.get(CassettePlayerBlock.OPEN))
 		{
 			ItemStack itemstack = context.getItem();
 			if(!world.isRemote)
 			{
 				((CassettePlayerBlock) MSBlocks.CASSETTE_PLAYER_DEFAULT).insertCassette(world, blockpos, blockstate, itemstack);
-				world.playEvent((PlayerEntity) null, 1010, blockpos, Item.getIdFromItem(this));
+				world.playEvent((PlayerEntity) null, Constants.WorldEvents.PLAY_RECORD_SOUND, blockpos, Item.getIdFromItem(this));
 				itemstack.shrink(1);
 				PlayerEntity playerentity = context.getPlayer();
 				if(playerentity != null)
@@ -42,10 +45,11 @@ public class CassetteItem extends ModMusicDiscItem {
 					playerentity.addStat(Stats.PLAY_RECORD);
 				}
 			}
-
-            return ActionResultType.SUCCESS;
-        } else {
-            return ActionResultType.PASS;
-        }
-    }
+			
+			return ActionResultType.SUCCESS;
+		} else
+		{
+			return ActionResultType.PASS;
+		}
+	}
 }
