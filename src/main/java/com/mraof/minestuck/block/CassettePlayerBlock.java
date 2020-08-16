@@ -26,8 +26,8 @@ import java.util.function.Supplier;
 
 public class CassettePlayerBlock extends DecorBlock
 {
-	public static final BooleanProperty HAS_CASSETTE = ModBlockStateProperties.HAS_CASSETTE;
-	public static final BooleanProperty IS_OPEN = ModBlockStateProperties.IS_OPEN;
+	public static final BooleanProperty HAS_CASSETTE = MSProperties.HAS_CASSETTE;
+	public static final BooleanProperty OPEN = MSProperties.OPEN;
 	private final Supplier<TileEntityType<?>> tileType;
 	
 	public CassettePlayerBlock(Properties properties, CustomVoxelShape shape, Supplier<TileEntityType<?>> tileType)
@@ -43,10 +43,10 @@ public class CassettePlayerBlock extends DecorBlock
 	{
 		if(player.isSneaking())
 		{
-			state = state.cycle(IS_OPEN);
+			state = state.cycle(OPEN);
 			worldIn.setBlockState(pos, state, 2);
 			return true;
-		} else if(state.get(HAS_CASSETTE) && state.get(IS_OPEN))
+		} else if(state.get(HAS_CASSETTE) && state.get(OPEN))
 		{
 			this.dropCassette(worldIn, pos);
 			state = state.with(HAS_CASSETTE, false);
@@ -61,7 +61,7 @@ public class CassettePlayerBlock extends DecorBlock
 	public void insertCassette(IWorld worldIn, BlockPos pos, BlockState state, ItemStack cassetteStack)
 	{
 		TileEntity tileentity = worldIn.getTileEntity(pos);
-		if(tileentity instanceof CassettePlayerTileEntity && state.get(IS_OPEN))
+		if(tileentity instanceof CassettePlayerTileEntity && state.get(OPEN))
 		{
 			if(state.get(HAS_CASSETTE))
 			{
@@ -147,6 +147,6 @@ public class CassettePlayerBlock extends DecorBlock
 	{
 		builder.add(FACING);
 		builder.add(HAS_CASSETTE);
-		builder.add(IS_OPEN);
+		builder.add(OPEN);
 	}
 }

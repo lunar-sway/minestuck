@@ -1,64 +1,64 @@
 {
     "variants": {
-        "facing=north,is_open=false,has_cassette=false": {
+        "facing=north,open=false,has_cassette=false": {
             "model": "minestuck:block/cassette_player_closed"
         },
-        "facing=south,is_open=false,has_cassette=false": {
+        "facing=south,open=false,has_cassette=false": {
             "model": "minestuck:block/cassette_player_closed",
-            "y": 180
+            "y":     180
         },
-        "facing=west,is_open=false,has_cassette=false": {
+        "facing=west,open=false,has_cassette=false":  {
             "model": "minestuck:block/cassette_player_closed",
-            "y": 270
+            "y":     270
         },
-        "facing=east,is_open=false,has_cassette=false": {
+        "facing=east,open=false,has_cassette=false":  {
             "model": "minestuck:block/cassette_player_closed",
-            "y": 90
+            "y":     90
         },
-        "facing=north,is_open=true,has_cassette=false": {
+        "facing=north,open=true,has_cassette=false":  {
             "model": "minestuck:block/cassette_player_open"
         },
-        "facing=south,is_open=true,has_cassette=false": {
+        "facing=south,open=true,has_cassette=false":  {
             "model": "minestuck:block/cassette_player_open",
-            "y": 180
+            "y":     180
         },
-        "facing=west,is_open=true,has_cassette=false": {
+        "facing=west,open=true,has_cassette=false":   {
             "model": "minestuck:block/cassette_player_open",
-            "y": 270
+            "y":     270
         },
-        "facing=east,is_open=true,has_cassette=false": {
+        "facing=east,open=true,has_cassette=false":   {
             "model": "minestuck:block/cassette_player_open",
-            "y": 90
+            "y":     90
         },
-        "facing=north,is_open=false,has_cassette=true": {
+        "facing=north,open=false,has_cassette=true":  {
             "model": "minestuck:block/cassette_player_with_tape_closed"
         },
-        "facing=south,is_open=false,has_cassette=true": {
+        "facing=south,open=false,has_cassette=true":  {
             "model": "minestuck:block/cassette_player_with_tape_closed",
-            "y": 180
+            "y":     180
         },
-        "facing=west,is_open=false,has_cassette=true": {
+        "facing=west,open=false,has_cassette=true":   {
             "model": "minestuck:block/cassette_player_with_tape_closed",
-            "y": 270
+            "y":     270
         },
-        "facing=east,is_open=false,has_cassette=true": {
+        "facing=east,open=false,has_cassette=true":   {
             "model": "minestuck:block/cassette_player_with_tape_closed",
-            "y": 90
+            "y":     90
         },
-        "facing=north,is_open=true,has_cassette=true": {
+        "facing=north,open=true,has_cassette=true":   {
             "model": "minestuck:block/cassette_player_with_tape_open"
         },
-        "facing=south,is_open=true,has_cassette=true": {
+        "facing=south,open=true,has_cassette=true":   {
             "model": "minestuck:block/cassette_player_with_tape_open",
-            "y": 180
+            "y":     180
         },
-        "facing=west,is_open=true,has_cassette=true": {
+        "facing=west,open=true,has_cassette=true":    {
             "model": "minestuck:block/cassette_player_with_tape_open",
-            "y": 270
+            "y":     270
         },
-        "facing=east,is_open=true,has_cassette=true": {
+        "facing=east,open=true,has_cassette=true":    {
             "model": "minestuck:block/cassette_player_with_tape_open",
-            "y": 90
+            "y":     90
         }
     }
 }
