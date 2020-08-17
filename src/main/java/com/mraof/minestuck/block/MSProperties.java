@@ -20,7 +20,6 @@ public class MSProperties
 	public static final BooleanProperty GREEN = BooleanProperty.create("green");
 	public static final BooleanProperty BLUE = BooleanProperty.create("blue");
 	public static final BooleanProperty HAS_CASSETTE = BooleanProperty.create("has_cassette");
-	public static final BooleanProperty OPEN = BooleanProperty.create("open");
 	
 	public static final IntegerProperty COUNT_0_2 = IntegerProperty.create("count", 0, 2);
 	

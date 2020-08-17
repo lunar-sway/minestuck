@@ -11,6 +11,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Hand;
@@ -27,7 +28,7 @@ import java.util.function.Supplier;
 public class CassettePlayerBlock extends DecorBlock
 {
 	public static final BooleanProperty HAS_CASSETTE = MSProperties.HAS_CASSETTE;
-	public static final BooleanProperty OPEN = MSProperties.OPEN;
+	public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
 	private final Supplier<TileEntityType<?>> tileType;
 	
 	public CassettePlayerBlock(Properties properties, CustomVoxelShape shape, Supplier<TileEntityType<?>> tileType)
@@ -81,18 +82,18 @@ public class CassettePlayerBlock extends DecorBlock
 			TileEntity tileentity = worldIn.getTileEntity(pos);
 			if(tileentity instanceof CassettePlayerTileEntity)
 			{
-				CassettePlayerTileEntity cassetteplayertileentity = (CassettePlayerTileEntity) tileentity;
-				ItemStack itemstack = cassetteplayertileentity.getCassette();
+				CassettePlayerTileEntity cassettePlayer = (CassettePlayerTileEntity) tileentity;
+				ItemStack itemstack = cassettePlayer.getCassette();
 				if(!itemstack.isEmpty())
 				{
 					worldIn.playEvent(1010, pos, 0);
-					cassetteplayertileentity.clear();
+					cassettePlayer.clear();
 					float f = 0.7F;
-					double randomX = (double) (worldIn.rand.nextFloat() * 0.7F) + (double) 0.15F;
-					double randomY = (double) (worldIn.rand.nextFloat() * 0.7F) + (double) 0.060000002F + 0.6D;
-					double randomZ = (double) (worldIn.rand.nextFloat() * 0.7F) + (double) 0.15F;
+					double xOffset = (double) (worldIn.rand.nextFloat() * f) + (double) 0.15F;
+					double yOffset = (double) (worldIn.rand.nextFloat() * f) + (double) 0.060000002F + 0.6D;
+					double zOffset = (double) (worldIn.rand.nextFloat() * f) + (double) 0.15F;
 					ItemStack itemstack1 = itemstack.copy();
-					ItemEntity itementity = new ItemEntity(worldIn, (double) pos.getX() + randomX, (double) pos.getY() + randomY, (double) pos.getZ() + randomZ, itemstack1);
+					ItemEntity itementity = new ItemEntity(worldIn, (double) pos.getX() + xOffset, (double) pos.getY() + yOffset, (double) pos.getZ() + zOffset, itemstack1);
 					itementity.setDefaultPickupDelay();
 					worldIn.addEntity(itementity);
 				}
