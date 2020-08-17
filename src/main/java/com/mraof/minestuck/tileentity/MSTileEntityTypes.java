@@ -53,6 +53,6 @@ public class MSTileEntityTypes	//TODO Use @ObjectHolder or DeferredRegister here
 		event.getRegistry().register((HOLOPAD = TileEntityType.Builder.create(HolopadTileEntity::new, MSBlocks.HOLOPAD).build(null)).setRegistryName("holopad"));
 		event.getRegistry().register((SKAIA_PORTAL = TileEntityType.Builder.create(SkaiaPortalTileEntity::new, MSBlocks.SKAIA_PORTAL).build(null)).setRegistryName("skaia_portal"));
 		event.getRegistry().register((GATE = TileEntityType.Builder.create(GateTileEntity::new, MSBlocks.GATE, MSBlocks.RETURN_NODE).build(null)).setRegistryName("gate"));
-		event.getRegistry().register((CASSETTE_PLAYER = TileEntityType.Builder.create(CassettePlayerTileEntity::new, MSBlocks.CASSETTE_PLAYER_DEFAULT).build(null)).setRegistryName("cassette_player_closed"));
+		event.getRegistry().register((CASSETTE_PLAYER = TileEntityType.Builder.create(CassettePlayerTileEntity::new, MSBlocks.CASSETTE_PLAYER_DEFAULT).build(null)).setRegistryName("cassette_player_default"));
 	}
 }

@@ -1,0 +1,43 @@
+{
+    "parent":       "minecraft:recipes/root",
+    "rewards":      {
+        "recipes": [
+            "minestuck:chessboard_white"
+        ]
+    },
+    "criteria":     {
+        "has_white_terracotta": {
+            "trigger":    "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "minecraft:white_terracotta"
+                    }
+                ]
+            }
+        },
+        "has_black_terracotta": {
+            "trigger":    "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "minecraft:black_terracotta"
+                    }
+                ]
+            }
+        },
+        "has_the_recipe":       {
+            "trigger":    "minecraft:recipe_unlocked",
+            "conditions": {
+                "recipe": "minestuck:chessboard_white"
+            }
+        }
+    },
+    "requirements": [
+        [
+            "has_white_terracotta",
+            "has_black_terracotta",
+            "has_the_recipe"
+        ]
+    ]
+}
