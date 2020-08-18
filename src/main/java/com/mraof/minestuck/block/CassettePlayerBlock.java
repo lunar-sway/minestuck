@@ -62,16 +62,10 @@ public class CassettePlayerBlock extends DecorBlock
 	public void insertCassette(IWorld worldIn, BlockPos pos, BlockState state, ItemStack cassetteStack)
 	{
 		TileEntity tileentity = worldIn.getTileEntity(pos);
-		if(tileentity instanceof CassettePlayerTileEntity && state.get(OPEN))
+		if(tileentity instanceof CassettePlayerTileEntity && state.get(OPEN) & !state.get(HAS_CASSETTE))
 		{
-			if(state.get(HAS_CASSETTE))
-			{
-				this.dropCassette((World) worldIn, pos);
-			} else
-			{
-				((CassettePlayerTileEntity) tileentity).setCassette(cassetteStack.copy());
-				worldIn.setBlockState(pos, state.with(HAS_CASSETTE, true), 2);
-			}
+			((CassettePlayerTileEntity) tileentity).setCassette(cassetteStack.copy());
+			worldIn.setBlockState(pos, state.with(HAS_CASSETTE, true), 2);
 		}
 	}
 	
