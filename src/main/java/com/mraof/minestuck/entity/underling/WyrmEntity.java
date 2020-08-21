@@ -52,18 +52,6 @@ public class WyrmEntity extends UnderlingEntity implements IEntityMultiPart
 	{
 		return GristHelper.generateUnderlingGristDrops(this, damageMap, 87);
 	}
-
-	@Override
-	protected float getMaximumHealth()
-	{
-		return 20; //TODO make real value
-	}
-	
-	@Override
-	protected double getAttackDamage()
-	{
-		return 0;
-	}
 	
 	@Override
 	protected int getVitalityGel()

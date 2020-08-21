@@ -15,6 +15,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
@@ -42,8 +43,11 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	protected void registerAttributes()
 	{
 		super.registerAttributes();
+		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(210.0D);
 		getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(32.0D);
 		getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.9D);
+		getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(10.0D);
+		
 	}
 	
 	@Override
@@ -77,12 +81,6 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	}
 
 	@Override
-	protected double getAttackDamage()
-	{
-		return getGristType().getPower()*4.5 + 10;
-	}
-	
-	@Override
 	protected int getVitalityGel()
 	{
 		return rand.nextInt(4) + 5;
@@ -92,13 +90,9 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	protected void onGristTypeUpdated(GristType type)
 	{
 		super.onGristTypeUpdated(type);
+		applyGristModifier(SharedMonsterAttributes.MAX_HEALTH, 46 * type.getPower(), AttributeModifier.Operation.ADDITION);
+		applyGristModifier(SharedMonsterAttributes.ATTACK_DAMAGE, 4.5 * type.getPower(), AttributeModifier.Operation.ADDITION);
 		this.experienceValue = (int) (7 * type.getPower() + 5);
-	}
-	
-	@Override
-	protected float getMaximumHealth()
-	{
-		return 46 * getGristType().getPower() + 210;
 	}
 	
 	@Override

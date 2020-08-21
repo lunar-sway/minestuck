@@ -10,6 +10,7 @@ import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
@@ -27,8 +28,10 @@ public class LichEntity extends UnderlingEntity
 	protected void registerAttributes()
 	{
 		super.registerAttributes();
-		getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.3F);
+		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(175.0D);
+		getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.3D);
 		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.4D);
+		getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(8.0D);
 	}
 	
 	@Override
@@ -61,18 +64,6 @@ public class LichEntity extends UnderlingEntity
 	}
 	
 	@Override
-	protected float getMaximumHealth() 
-	{
-		return 30 * getGristType().getPower() + 175;
-	}
-	
-	@Override
-	protected double getAttackDamage()
-	{
-		return Math.ceil(getGristType().getPower()*3.4 + 8);
-	}
-	
-	@Override
 	protected int getVitalityGel()
 	{
 		return rand.nextInt(3)+6;
@@ -82,6 +73,8 @@ public class LichEntity extends UnderlingEntity
 	protected void onGristTypeUpdated(GristType type)
 	{
 		super.onGristTypeUpdated(type);
+		applyGristModifier(SharedMonsterAttributes.MAX_HEALTH, 30 * type.getPower(), AttributeModifier.Operation.ADDITION);
+		applyGristModifier(SharedMonsterAttributes.ATTACK_DAMAGE, 3.4 * type.getPower(), AttributeModifier.Operation.ADDITION);
 		this.experienceValue = (int) (6.5 * type.getPower() + 4);
 	}
 	

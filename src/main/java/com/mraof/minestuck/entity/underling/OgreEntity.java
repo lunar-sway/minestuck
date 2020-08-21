@@ -10,6 +10,7 @@ import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
@@ -28,8 +29,10 @@ public class OgreEntity extends UnderlingEntity
 	protected void registerAttributes()
 	{
 		super.registerAttributes();
+		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(50.0D);
 		getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.4F);
 		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.65D);
+		getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(6.0D);
 	}
 	
 	@Override
@@ -63,18 +66,6 @@ public class OgreEntity extends UnderlingEntity
 	}
 	
 	@Override
-	protected float getMaximumHealth() 
-	{
-		return 13F * getGristType().getPower() + 50;
-	}
-	
-	@Override
-	protected double getAttackDamage()
-	{
-		return getGristType().getPower() * 2.1 + 6;
-	}
-	
-	@Override
 	protected int getVitalityGel()
 	{
 		return rand.nextInt(3) + 3;
@@ -84,6 +75,8 @@ public class OgreEntity extends UnderlingEntity
 	protected void onGristTypeUpdated(GristType type)
 	{
 		super.onGristTypeUpdated(type);
+		applyGristModifier(SharedMonsterAttributes.MAX_HEALTH, 13 * type.getPower(), AttributeModifier.Operation.ADDITION);
+		applyGristModifier(SharedMonsterAttributes.ATTACK_DAMAGE, 2.1 * type.getPower(), AttributeModifier.Operation.ADDITION);
 		this.experienceValue = (int) (5 * type.getPower() + 4);
 	}
 	

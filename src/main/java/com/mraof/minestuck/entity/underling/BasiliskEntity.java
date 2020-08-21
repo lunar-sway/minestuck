@@ -11,6 +11,7 @@ import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
@@ -31,8 +32,10 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 	protected void registerAttributes()
 	{
 		super.registerAttributes();
+		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(85.0D);
 		getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.6D);
 		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.75D);
+		getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(6.0D);
 	}
 	
 	@Override
@@ -66,18 +69,6 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 	}
 	
 	@Override
-	protected float getMaximumHealth() 
-	{
-		return 20 * getGristType().getPower() + 85;
-	}
-
-	@Override
-	protected double getAttackDamage()
-	{
-		return getGristType().getPower()*2.7 + 6;
-	}
-	
-	@Override
 	protected int getVitalityGel()
 	{
 		return rand.nextInt(3) + 4;
@@ -87,6 +78,8 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 	protected void onGristTypeUpdated(GristType type)
 	{
 		super.onGristTypeUpdated(type);
+		applyGristModifier(SharedMonsterAttributes.MAX_HEALTH, 20 * type.getPower(), AttributeModifier.Operation.ADDITION);
+		applyGristModifier(SharedMonsterAttributes.ATTACK_DAMAGE, 2.7 * type.getPower(), AttributeModifier.Operation.ADDITION);
 		this.experienceValue = (int) (6 * type.getPower() + 4);
 	}
 	
