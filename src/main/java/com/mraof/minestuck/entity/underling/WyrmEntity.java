@@ -58,18 +58,6 @@ public class WyrmEntity extends UnderlingEntity implements IEntityMultiPart
 	{
 		return 20; //TODO make real value
 	}
-
-	@Override
-	protected float getKnockbackResistance()
-	{
-		return 0;
-	}
-
-	@Override
-	protected double getWanderSpeed()
-	{
-		return 0;
-	}
 	
 	@Override
 	protected double getAttackDamage()

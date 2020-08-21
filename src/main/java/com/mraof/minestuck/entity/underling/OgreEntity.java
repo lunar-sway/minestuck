@@ -9,6 +9,7 @@ import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
@@ -21,6 +22,14 @@ public class OgreEntity extends UnderlingEntity
 	{
 		super(type, world);
 		this.stepHeight = 1.0F;
+	}
+	
+	@Override
+	protected void registerAttributes()
+	{
+		super.registerAttributes();
+		getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.4F);
+		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.65D);
 	}
 	
 	@Override
@@ -54,21 +63,9 @@ public class OgreEntity extends UnderlingEntity
 	}
 	
 	@Override
-	protected double getWanderSpeed() 
-	{
-		return 0.65;
-	}
-	
-	@Override
 	protected float getMaximumHealth() 
 	{
 		return 13F * getGristType().getPower() + 50;
-	}
-	
-	@Override
-	protected float getKnockbackResistance()
-	{
-		return 0.4F;
 	}
 	
 	@Override

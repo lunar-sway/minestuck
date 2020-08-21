@@ -9,6 +9,7 @@ import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
@@ -19,6 +20,13 @@ public class ImpEntity extends UnderlingEntity
 	public ImpEntity(EntityType<? extends ImpEntity> type, World world)
 	{
 		super(type, world);
+	}
+	
+	@Override
+	protected void registerAttributes()
+	{
+		super.registerAttributes();
+		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.6D);
 	}
 	
 	@Override
@@ -51,20 +59,9 @@ public class ImpEntity extends UnderlingEntity
 	}
 	
 	@Override
-	protected double getWanderSpeed() 
-	{
-		return 0.6;
-	}
-	@Override
 	protected float getMaximumHealth() 
 	{
 		return 8 * getGristType().getPower() + 6;
-	}
-	
-	@Override
-	protected float getKnockbackResistance()
-	{
-		return 0;
 	}
 	
 	@Override

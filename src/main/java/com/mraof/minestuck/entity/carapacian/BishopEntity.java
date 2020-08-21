@@ -26,23 +26,19 @@ public abstract class BishopEntity extends CarapacianEntity implements IRangedAt
 	}
 	
 	@Override
+	protected void registerAttributes()
+	{
+		super.registerAttributes();
+		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(40D);
+		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.2D);
+	}
+	
+	@Override
 	protected void registerGoals()
 	{
 		super.registerGoals();
 		this.goalSelector.addGoal(4, new AttackByDistanceGoal(this, 0.25F, 30, 64.0F));
 		this.targetSelector.addGoal(2, new NearestAttackableExtendedGoal(this, LivingEntity.class, 0, true, false, entity -> attackEntitySelector.isEntityApplicable(entity)));
-	}
-	
-	@Override
-	public float getWanderSpeed()
-	{
-		return .2F;
-	}
-
-	@Override
-	protected float getMaximumHealth()
-	{
-		return 40;
 	}
 	
 	@Override

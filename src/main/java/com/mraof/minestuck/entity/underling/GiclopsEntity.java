@@ -39,6 +39,14 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	}
 	
 	@Override
+	protected void registerAttributes()
+	{
+		super.registerAttributes();
+		getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(32.0D);
+		getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.9D);
+	}
+	
+	@Override
 	protected void registerGoals()
 	{
 		super.registerGoals();
@@ -69,18 +77,6 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	}
 
 	@Override
-	protected double getWanderSpeed() 
-	{
-		return 0.7;
-	}
-	
-	@Override
-	protected float getKnockbackResistance()
-	{
-		return 0.9F;
-	}
-	
-	@Override
 	protected double getAttackDamage()
 	{
 		return getGristType().getPower()*4.5 + 10;
@@ -97,13 +93,6 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	{
 		super.onGristTypeUpdated(type);
 		this.experienceValue = (int) (7 * type.getPower() + 5);
-	}
-	
-	@Override
-	protected void registerAttributes()
-	{
-		super.registerAttributes();
-		this.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(32.0D);
 	}
 	
 	@Override

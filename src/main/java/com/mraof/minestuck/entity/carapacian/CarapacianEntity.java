@@ -40,7 +40,7 @@ public abstract class CarapacianEntity extends MinestuckEntity
 		this.goalSelector.addGoal(1, new SwimGoal(this));
 		//this.goalSelector.addGoal(4, new EntityAIMoveToBattle(this));
 		this.targetSelector.addGoal(1, new HurtByTargetAlliedGoal(this, this.getKingdom() == EnumEntityKingdom.PROSPITIAN ? PROSPITIAN_SELECTOR : DERSITE_SELECTOR));
-		this.goalSelector.addGoal(5, new WaterAvoidingRandomWalkingGoal(this, this.getWanderSpeed()));
+		this.goalSelector.addGoal(5, new WaterAvoidingRandomWalkingGoal(this, 1.0F));
 		this.goalSelector.addGoal(6, new LookRandomlyGoal(this));
 		this.goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 8.0F));
 	}
@@ -76,8 +76,6 @@ public abstract class CarapacianEntity extends MinestuckEntity
 				enemyTypes.addAll(MSTags.EntityTypes.PROSPITIAN_CARAPACIANS.getAllElements());
 		}
 	}
-	
-	public abstract float getWanderSpeed();
 	
 	public void addEnemy(EntityType<?> enemyType)
 	{

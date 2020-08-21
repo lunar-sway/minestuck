@@ -65,8 +65,8 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 		attackEntitySelector.entityList.add(EntityType.PLAYER);
 		
 		goalSelector.addGoal(1, new SwimGoal(this));
-		goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, getWanderSpeed()));
-		goalSelector.addGoal(5, new RandomWalkingGoal(this, getWanderSpeed()));
+		goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 1.0D));
+		goalSelector.addGoal(5, new RandomWalkingGoal(this, 1.0D));
 		goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 8.0F));
 		goalSelector.addGoal(7, new LookRandomlyGoal(this));
 		
@@ -78,10 +78,9 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 	protected void registerAttributes()
 	{
 		super.registerAttributes();
-		this.getAttributes().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
+		getAttributes().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
 		
-		this.getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(this.getKnockbackResistance());
-		this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(this.getWanderSpeed());
+		this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(this.getMaximumHealth());
 		//TODO Kinda high, should likely be lower
 		getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(128.0D);
 	}
@@ -140,9 +139,8 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 	//used when getting how much grist should be dropped on death
 	public abstract GristSet getGristSpoils();
 	
-	protected abstract float getKnockbackResistance();
-	
-	protected abstract double getWanderSpeed();
+	//Temporary until the dependence on grist types has been changed to a modifier
+	protected abstract float getMaximumHealth();
 	
 	protected abstract double getAttackDamage();
 	

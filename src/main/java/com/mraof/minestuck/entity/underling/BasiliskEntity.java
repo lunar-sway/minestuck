@@ -10,6 +10,7 @@ import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
@@ -24,6 +25,14 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 		super(type, world);
 		tail = new UnderlingPartEntity(this, 0, 3F, 2F);
 		//world.addEntity(tail); TODO Not safe to add entities to world on creation. A different solution is needed
+	}
+	
+	@Override
+	protected void registerAttributes()
+	{
+		super.registerAttributes();
+		getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.6D);
+		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.75D);
 	}
 	
 	@Override
@@ -62,18 +71,6 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 		return 20 * getGristType().getPower() + 85;
 	}
 
-	@Override
-	protected double getWanderSpeed()
-	{
-		return 0.75;
-	}
-	
-	@Override
-	protected float getKnockbackResistance()
-	{
-		return 0.6F;
-	}
-	
 	@Override
 	protected double getAttackDamage()
 	{

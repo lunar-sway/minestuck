@@ -28,7 +28,6 @@ public abstract class PawnEntity extends CarapacianEntity implements IRangedAtta
 	private static Random randStatic = new Random();
 	private final RangedAttackGoal aiArrowAttack = new RangedAttackGoal(this, 0.25F, 20, 10.0F);
 	private final MeleeAttackGoal aiMeleeAttack = new MeleeAttackGoal(this, .4F, false);
-	private static final float moveSpeed = 0.3F;
 	
 	public PawnEntity(EntityType<? extends PawnEntity> type, World world)
 	{
@@ -38,22 +37,19 @@ public abstract class PawnEntity extends CarapacianEntity implements IRangedAtta
 	}
 	
 	@Override
+	protected void registerAttributes()
+	{
+		super.registerAttributes();
+		getAttributes().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
+		
+		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.2D);
+	}
+	
+	@Override
 	protected void registerGoals()
 	{
 		super.registerGoals();
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 0, true, false, entity -> attackEntitySelector.isEntityApplicable(entity)));
-	}
-	
-	@Override
-	public float getMaximumHealth() 
-	{
-		return 20;
-	}
-
-	@Override
-	public float getWanderSpeed() 
-	{
-		return moveSpeed;
 	}
 	
 	@Override
@@ -189,12 +185,5 @@ public abstract class PawnEntity extends CarapacianEntity implements IRangedAtta
 		
 		setCombatTask();
 		return spawnDataIn;
-	}
-	
-	@Override
-	protected void registerAttributes()
-	{
-		super.registerAttributes();
-		this.getAttributes().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
 	}
 }

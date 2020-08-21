@@ -9,6 +9,7 @@ import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
@@ -20,6 +21,14 @@ public class LichEntity extends UnderlingEntity
 	public LichEntity(EntityType<? extends LichEntity> type, World world)
 	{
 		super(type, world);
+	}
+	
+	@Override
+	protected void registerAttributes()
+	{
+		super.registerAttributes();
+		getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.3F);
+		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.4D);
 	}
 	
 	@Override
@@ -52,21 +61,9 @@ public class LichEntity extends UnderlingEntity
 	}
 	
 	@Override
-	protected double getWanderSpeed() 
-	{
-		return 0.4;
-	}
-	
-	@Override
 	protected float getMaximumHealth() 
 	{
 		return 30 * getGristType().getPower() + 175;
-	}
-	
-	@Override
-	protected float getKnockbackResistance()
-	{
-		return 0.3F;
 	}
 	
 	@Override
