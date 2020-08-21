@@ -1,9 +1,9 @@
 {
 	"credit":       "Made by Ishumire",
 	"texture_size": [ 32, 32 ],
-	"textures":     {
+	"textures": {
 		"0":        "minestuck:block/cassette_player_default",
-		"1":        "minestuck:item/cassette/cassette_default",
+		"1":        "minestuck:block/cassette/cassette_default",
 		"particle": "minestuck:block/cassette_player_default"
 	},
 	"elements":     [
