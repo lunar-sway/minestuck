@@ -1,18 +1,19 @@
 package com.mraof.minestuck.entity.carapacian;
 
 import com.mraof.minestuck.entity.ai.AttackByDistanceGoal;
-import com.mraof.minestuck.entity.ai.NearestAttackableTargetWithHeightGoal;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.IRangedAttackMob;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.*;
+import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.projectile.FireballEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
+import java.util.function.Predicate;
 
 public abstract class BishopEntity extends CarapacianEntity implements IRangedAttackMob, IMob
 {
@@ -27,17 +28,19 @@ public abstract class BishopEntity extends CarapacianEntity implements IRangedAt
 	@Override
 	protected void registerGoals()
 	{
+		super.registerGoals();
 		this.goalSelector.addGoal(4, new AttackByDistanceGoal(this, 0.25F, 30, 64.0F));
+		this.targetSelector.addGoal(2, new NearestAttackableExtendedGoal(this, LivingEntity.class, 0, true, false, entity -> attackEntitySelector.isEntityApplicable(entity)));
 	}
 	
 	@Override
-	public float getWanderSpeed() 
+	public float getWanderSpeed()
 	{
 		return .2F;
 	}
 
 	@Override
-	protected float getMaximumHealth() 
+	protected float getMaximumHealth()
 	{
 		return 40;
 	}
@@ -75,7 +78,7 @@ public abstract class BishopEntity extends CarapacianEntity implements IRangedAt
 //	 */
 //	protected void attackEntity(Entity par1Entity, float par2)
 //	{
-//		
+//
 //		if (this.attackTime <= 0 && par2 < 2.0F && par1Entity.getBoundingBox().maxY > this.getBoundingBox().minY && par1Entity.getBoundingBox().minY < this.getBoundingBox().maxY)
 //		{
 //			this.attackTime = 20;
@@ -93,7 +96,7 @@ public abstract class BishopEntity extends CarapacianEntity implements IRangedAt
 	}
 	
 	@Override
-	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2) 
+	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2)
 	{
 		if(par1DamageSource.isFireDamage())
 		{
@@ -103,11 +106,19 @@ public abstract class BishopEntity extends CarapacianEntity implements IRangedAt
 		}
 		return super.attackEntityFrom(par1DamageSource, par2);
 	}
-	@Override
-	NearestAttackableTargetWithHeightGoal entityAINearestAttackableTargetWithHeight()
+	
+	private static class NearestAttackableExtendedGoal extends NearestAttackableTargetGoal<LivingEntity>
 	{
-		NearestAttackableTargetWithHeightGoal ai = new NearestAttackableTargetWithHeightGoal(this, LivingEntity.class, 256.0F, 0, true, false, attackEntitySelector);
-		ai.setTargetHeightDistance(64);
-		return ai;
+		NearestAttackableExtendedGoal(MobEntity goalOwnerIn, Class<LivingEntity> targetClassIn, int targetChanceIn, boolean checkSight, boolean nearbyOnlyIn, @Nullable Predicate<LivingEntity> targetPredicate)
+		{
+			super(goalOwnerIn, targetClassIn, targetChanceIn, checkSight, nearbyOnlyIn, targetPredicate);
+		}
+		
+		@Override
+		protected AxisAlignedBB getTargetableArea(double targetDistance)
+		{
+			//Bishops use a much higher bounding box for some reason. Probably for their fire ball targeting
+			return this.goalOwner.getBoundingBox().grow(targetDistance, 64.0D, targetDistance);
+		}
 	}
 }

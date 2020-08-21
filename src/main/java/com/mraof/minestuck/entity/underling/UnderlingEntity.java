@@ -3,7 +3,6 @@ package com.mraof.minestuck.entity.underling;
 import com.mraof.minestuck.entity.EntityListFilter;
 import com.mraof.minestuck.entity.MinestuckEntity;
 import com.mraof.minestuck.entity.ai.HurtByTargetAlliedGoal;
-import com.mraof.minestuck.entity.ai.NearestAttackableTargetWithHeightGoal;
 import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.entity.item.VitalityGelEntity;
 import com.mraof.minestuck.item.crafting.alchemy.GristAmount;
@@ -72,7 +71,7 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 		goalSelector.addGoal(7, new LookRandomlyGoal(this));
 		
 		targetSelector.addGoal(1, new HurtByTargetAlliedGoal(this, entity -> MSTags.EntityTypes.UNDERLINGS.contains(entity.getType())));
-		targetSelector.addGoal(2, new NearestAttackableTargetWithHeightGoal(this, LivingEntity.class, 128.0F, 2, true, false, attackEntitySelector));
+		targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 2, true, false, entity -> attackEntitySelector.isEntityApplicable(entity)));
 	}
 	
 	@Override
@@ -83,6 +82,8 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 		
 		this.getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(this.getKnockbackResistance());
 		this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(this.getWanderSpeed());
+		//TODO Kinda high, should likely be lower
+		getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(128.0D);
 	}
 	
 	@Override

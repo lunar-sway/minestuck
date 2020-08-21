@@ -5,6 +5,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.ai.goal.RangedAttackGoal;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.projectile.ArrowEntity;
@@ -35,7 +36,14 @@ public abstract class PawnEntity extends CarapacianEntity implements IRangedAtta
 		this.experienceValue = 1;
 		setCombatTask();
 	}
-
+	
+	@Override
+	protected void registerGoals()
+	{
+		super.registerGoals();
+		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 0, true, false, entity -> attackEntitySelector.isEntityApplicable(entity)));
+	}
+	
 	@Override
 	public float getMaximumHealth() 
 	{
