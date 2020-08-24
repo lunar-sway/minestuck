@@ -4,12 +4,14 @@ import com.google.common.collect.Lists;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
+import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
@@ -112,5 +114,11 @@ public class WoodLandType extends TerrainLandType
 	public EntityType<? extends ConsortEntity> getConsortType()
 	{
 		return MSEntityTypes.SALAMANDER;
+	}
+	
+	@Override
+	public SoundEvent getBackgroundMusic()
+	{
+		return MSSoundEvents.MUSIC_WOOD;
 	}
 }

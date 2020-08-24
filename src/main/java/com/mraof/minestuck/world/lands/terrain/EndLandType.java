@@ -1,9 +1,9 @@
 package com.mraof.minestuck.world.lands.terrain;
 
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.MinestuckConfig.*;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
+import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
@@ -14,6 +14,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
@@ -23,8 +24,6 @@ import net.minecraft.world.gen.feature.OreFeatureConfig;
 import net.minecraft.world.gen.placement.AtSurfaceWithExtraConfig;
 import net.minecraft.world.gen.placement.CountRangeConfig;
 import net.minecraft.world.gen.placement.Placement;
-
-import static com.mraof.minestuck.MinestuckConfig.baseCruxiteVeinSize;
 
 public class EndLandType extends TerrainLandType
 {
@@ -108,5 +107,11 @@ public class EndLandType extends TerrainLandType
 	public EntityType<? extends ConsortEntity> getConsortType()
 	{
 		return MSEntityTypes.NAKAGATOR;
+	}
+	
+	@Override
+	public SoundEvent getBackgroundMusic()
+	{
+		return MSSoundEvents.MUSIC_END;
 	}
 }

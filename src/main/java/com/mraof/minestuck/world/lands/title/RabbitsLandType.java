@@ -1,6 +1,7 @@
 package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.player.EnumAspect;
+import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
@@ -9,6 +10,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.biome.Biome;
 
 public class RabbitsLandType extends TitleLandType
@@ -49,5 +51,11 @@ public class RabbitsLandType extends TitleLandType
 		StructureBlockRegistry registry = new StructureBlockRegistry();
 		aspect.registerBlocks(registry);
 		return registry.getBlockState("ocean").getMaterial() != Material.LAVA;
+	}
+	
+	@Override
+	public SoundEvent getBackgroundMusic()
+	{
+		return MSSoundEvents.MUSIC_RABBITS;
 	}
 }

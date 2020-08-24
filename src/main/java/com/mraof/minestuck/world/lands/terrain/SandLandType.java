@@ -6,6 +6,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
+import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.LandGenSettings;
@@ -16,6 +17,7 @@ import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
@@ -171,6 +173,12 @@ public class SandLandType extends TerrainLandType
 	public EntityType<? extends ConsortEntity> getConsortType()
 	{
 		return MSEntityTypes.TURTLE;
+	}
+	
+	@Override
+	public SoundEvent getBackgroundMusic()
+	{
+		return type == Variant.LUSH_DESERTS ? MSSoundEvents.MUSIC_LUSH_DESERTS : MSSoundEvents.MUSIC_SAND;
 	}
 	
 	public enum Variant

@@ -23,10 +23,317 @@
       }
     ]
   },
-  "music.land": {
+  "music.default": {
+    "sounds": []
+  },
+  "music.forest": {
     "sounds": [
       {
-        "name": "minestuck:records/dance_stab_dance",
+        "name": "minestuck:music/lands/arboreal_action",
+        "stream": true
+      }
+    ]
+  },
+  "music.taiga": {
+    "sounds": [
+      {
+        "name": "minestuck:music/lands/phosphorescent_planet",
+        "stream": true
+      }
+    ]
+  },
+  "music.frost": {
+    "sounds": [
+      {
+        "name": "minestuck:music/lands/new_town",
+        "stream": true
+      }
+    ]
+  },
+  "music.fungi": {
+    "sounds": [
+      {
+        "name": "minestuck:music/lands/phosphorescent_planet",
+        "stream": true
+      },
+      {
+        "name": "minestuck:music/lands/shady_city",
+        "stream": true
+      }
+    ]
+  },
+  "music.heat": {
+    "sounds": [
+      {
+        "name": "minestuck:music/lands/ultrahot_radicality",
+        "stream": true
+      }
+    ]
+  },
+  "music.rock": {
+    "sounds": [
+      {
+        "name": "minestuck:music/lands/ultrahot_radicality",
+        "stream": true
+      },
+      {
+        "name": "minestuck:music/lands/shady_city",
+        "stream": true
+      }
+    ]
+  },
+  "music.petrification": {
+    "sounds": [
+      {
+        "name": "minestuck:music/lands/shady_city",
+        "stream": true
+      }
+    ]
+  },
+  "music.sand": {
+    "sounds": [
+      {
+        "name": "minestuck:music/lands/ultrahot_radicality",
+        "stream": true
+      },
+      {
+        "name": "minestuck:music/lands/new_town",
+        "stream": true
+      }
+    ]
+  },
+  "music.lush_deserts": {
+    "sounds": [
+      {
+        "name": "minestuck:music/lands/ultrahot_radicality",
+        "stream": true
+      }
+    ]
+  },
+  "music.sandstone": {
+    "sounds": [
+      {
+        "name": "minestuck:music/lands/phosphorescent_planet",
+        "stream": true
+      }
+    ]
+  },
+  "music.shade": {
+    "sounds": [
+      {
+        "name": "minestuck:music/lands/phosphorescent_planet",
+        "stream": true
+      }
+    ]
+  },
+  "music.wood": {
+    "sounds": [
+      {
+        "name": "minestuck:music/lands/arboreal_action",
+        "stream": true
+      },
+      {
+        "name": "minestuck:music/lands/shady_city",
+        "stream": true
+      }
+    ]
+  },
+  "music.rainbow": {
+    "sounds": [
+      {
+        "name": "minestuck:music/lands/new_town",
+        "stream": true
+      }
+    ]
+  },
+  "music.flora": {
+    "sounds": [
+      {
+        "name": "minestuck:music/lands/arboreal_action",
+        "stream": true
+      }
+    ]
+  },
+  "music.end": {
+    "sounds": [
+      {
+        "name": "minestuck:music/lands/arboreal_action",
+        "stream": true
+      }
+    ]
+  },
+  "music.rain": {
+    "sounds": [
+      {
+        "name": "minestuck:music/lands/new_town",
+        "stream": true
+      }
+    ]
+  },
+  "music.frogs": {
+    "sounds": [
+      {
+        "name": "minestuck:music/lands/sunbleached_chalk",
+        "stream": true
+      },
+      {
+        "name": "minestuck:music/lands/unrelenting_underlings",
+        "stream": true
+      }
+    ]
+  },
+  "music.wind": {
+    "sounds": [
+      {
+        "name": "minestuck:music/lands/ragged_winds",
+        "stream": true
+      },
+      {
+        "name": "minestuck:music/lands/rung_climber",
+        "stream": true
+      }
+    ]
+  },
+  "music.light": {
+    "sounds": [
+      {
+        "name": "minestuck:music/lands/sunbleached_chalk",
+        "stream": true
+      },
+      {
+        "name": "minestuck:music/lands/distant_thoughts",
+        "stream": true
+      }
+    ]
+  },
+  "music.clockwork": {
+    "sounds": [
+      {
+        "name": "minestuck:music/lands/ragged_winds",
+        "stream": true
+      },
+      {
+        "name": "minestuck:music/lands/unrelenting_underlings",
+        "stream": true
+      }
+    ]
+  },
+  "music.silence": {
+    "sounds": [
+      {
+        "name": "minestuck:music/lands/ragged_winds",
+        "stream": true
+      },
+      {
+        "name": "minestuck:music/lands/distant_thoughts",
+        "stream": true
+      }
+    ]
+  },
+  "music.thunder": {
+    "sounds": [
+      {
+        "name": "minestuck:music/lands/unrelenting_underlings",
+        "stream": true
+      },
+      {
+        "name": "minestuck:music/lands/rung_climber",
+        "stream": true
+      }
+    ]
+  },
+  "music.pulse": {
+    "sounds": [
+      {
+        "name": "minestuck:music/lands/ragged_winds",
+        "stream": true
+      },
+      {
+        "name": "minestuck:music/lands/graveyard_stuffers",
+        "stream": true
+      }
+    ]
+  },
+  "music.thought": {
+    "sounds": [
+      {
+        "name": "minestuck:music/lands/leaf_in_the_breeze",
+        "stream": true
+      },
+      {
+        "name": "minestuck:music/lands/distant_thoughts",
+        "stream": true
+      }
+    ]
+  },
+  "music.buckets": {
+    "sounds": [
+      {
+        "name": "minestuck:music/lands/leaf_in_the_breeze",
+        "stream": true
+      },
+      {
+        "name": "minestuck:music/lands/graveyard_stuffers",
+        "stream": true
+      }
+    ]
+  },
+  "music.cake": {
+    "sounds": [
+      {
+        "name": "minestuck:music/lands/sunbleached_chalk",
+        "stream": true
+      },
+      {
+        "name": "minestuck:music/lands/rung_climber",
+        "stream": true
+      }
+    ]
+  },
+  "music.rabbits": {
+    "sounds": [
+      {
+        "name": "minestuck:music/lands/sunbleached_chalk",
+        "stream": true
+      },
+      {
+        "name": "minestuck:music/lands/leaf_in_the_breeze",
+        "stream": true
+      }
+    ]
+  },
+  "music.monsters": {
+    "sounds": [
+      {
+        "name": "minestuck:music/lands/unrelenting_underlings",
+        "stream": true
+      },
+      {
+        "name": "minestuck:music/lands/graveyard_stuffers",
+        "stream": true
+      }
+    ]
+  },
+  "music.undead": {
+    "sounds": [
+      {
+        "name": "minestuck:music/lands/distant_thoughts",
+        "stream": true
+      },
+      {
+        "name": "minestuck:music/lands/graveyard_stuffers",
+        "stream": true
+      }
+    ]
+  },
+  "music.towers": {
+    "sounds": [
+      {
+        "name": "minestuck:music/lands/leaf_in_the_breeze",
+        "stream": true
+      },
+      {
+        "name": "minestuck:music/lands/rung_climber",
         "stream": true
       }
     ]

@@ -32,6 +32,6 @@ public interface ILandType<A extends ILandType<?>> extends IForgeRegistryEntry<A
 	
 	default SoundEvent getBackgroundMusic()
 	{
-		return MSSoundEvents.MUSIC_LAND;
+		return MSSoundEvents.MUSIC_DEFAULT;
 	}
 }
