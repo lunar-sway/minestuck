@@ -18,7 +18,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, value = Dist.CLIENT)
-public class MSMusicTicker
+public class MSMusicTicker	//TODO Introduce types (something similar to vanilla) such that this class could be reused for prospit, derse etc
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
@@ -50,8 +50,8 @@ public class MSMusicTicker
 		{
 			if(!wasInLand)
 			{
-				LOGGER.debug("Entered");
 				ticksUntilMusic = MathHelper.nextInt(mc.world.rand, 0, 6000);
+				LOGGER.debug("Entered a land. Land music scheduled to play in {} ticks", ticksUntilMusic);
 			}
 			
 			if(currentMusic == null)
@@ -61,11 +61,13 @@ public class MSMusicTicker
 				{
 					currentMusic = SimpleSound.music(getLandSoundEvent(mc));
 					mc.getSoundHandler().play(currentMusic);
+					LOGGER.debug("Land music started.");
 				}
 			} else if(!mc.getSoundHandler().isPlaying(currentMusic))
 			{
 				currentMusic = null;
 				ticksUntilMusic = MathHelper.nextInt(mc.world.rand, 12000, 24000);
+				LOGGER.debug("Land music finished playing. Scheduling music to be played again in {} ticks.", ticksUntilMusic);
 			}
 			
 			wasInLand = true;
@@ -76,6 +78,7 @@ public class MSMusicTicker
 			{
 				mc.getSoundHandler().stop(currentMusic);
 				currentMusic = null;
+				LOGGER.debug("Left land, stopped music.");
 			}
 		}
 	}
