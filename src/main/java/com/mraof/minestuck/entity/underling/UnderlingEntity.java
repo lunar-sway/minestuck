@@ -272,7 +272,7 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 		if(compound.contains("HomePos", Constants.NBT.TAG_COMPOUND))
 		{
 			CompoundNBT nbt = compound.getCompound("HomePos");
-			BlockPos pos = new BlockPos(nbt.getInt("HomeX"), nbt.getInt("HomeY"), nbt.getInt("homeZ"));
+			BlockPos pos = new BlockPos(nbt.getInt("HomeX"), nbt.getInt("HomeY"), nbt.getInt("HomeZ"));
 			setHomePosAndDistance(pos, nbt.getInt("MaxHomeDistance"));
 		}
 	}
