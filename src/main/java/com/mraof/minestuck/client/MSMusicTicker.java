@@ -1,13 +1,13 @@
 package com.mraof.minestuck.client;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.LandDimension;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.SimpleSound;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
@@ -35,7 +35,7 @@ public class MSMusicTicker
 	public static void playSound(PlaySoundEvent event)
 	{
 		Minecraft mc = Minecraft.getInstance();
-		if(mc.player != null && MSDimensions.isLandDimension(mc.player.dimension)
+		if(mc.world != null && MSDimensions.isLandDimension(mc.world.getDimension().getType())
 				&& event.getSound().getSoundLocation().equals(mc.getAmbientMusicType().getSound().getName()))
 			event.setResultSound(null);
 	}
@@ -46,12 +46,8 @@ public class MSMusicTicker
 	
 	private static void tick(Minecraft mc)
 	{
-		if(mc.player != null && MSDimensions.isLandDimension(mc.player.dimension))
+		if(mc.world != null && MSDimensions.isLandDimension(mc.world.getDimension().getType()))
 		{
-			LandDimension dim = (LandDimension) mc.player.world.getDimension();
-			
-			LandTypePair pair = dim.landTypes;
-			
 			if(!wasInLand)
 			{
 				LOGGER.debug("Entered");
@@ -63,7 +59,7 @@ public class MSMusicTicker
 				ticksUntilMusic--;
 				if(ticksUntilMusic < 0)
 				{
-					currentMusic = SimpleSound.music(MSSoundEvents.MUSIC_LAND);
+					currentMusic = SimpleSound.music(getLandSoundEvent(mc));
 					mc.getSoundHandler().play(currentMusic);
 				}
 			} else if(!mc.getSoundHandler().isPlaying(currentMusic))
@@ -82,5 +78,16 @@ public class MSMusicTicker
 				currentMusic = null;
 			}
 		}
+	}
+	
+	private static SoundEvent getLandSoundEvent(Minecraft mc)
+	{
+		LandDimension dim = (LandDimension) mc.world.getDimension();
+		
+		LandTypePair pair = dim.landTypes;
+		
+		if(mc.world.rand.nextBoolean())
+			return pair.terrain.getBackgroundMusic();
+		else return pair.title.getBackgroundMusic();
 	}
 }
