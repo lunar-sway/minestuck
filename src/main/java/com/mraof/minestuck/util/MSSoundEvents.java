@@ -19,6 +19,7 @@ public class MSSoundEvents
 	public static final SoundEvent MUSIC_DISC_EMISSARY_OF_DANCE = getNull();
 	public static final SoundEvent MUSIC_DISC_DANCE_STAB_DANCE = getNull();
 	public static final SoundEvent MUSIC_DISC_RETRO_BATTLE_THEME = getNull();
+	public static final SoundEvent MUSIC_LAND = getNull();
 	public static final SoundEvent ENTITY_NAKAGATOR_AMBIENT = getNull();
 	public static final SoundEvent ENTITY_NAKAGATOR_HURT = getNull();
 	public static final SoundEvent ENTITY_NAKAGATOR_DEATH = getNull();
@@ -66,6 +67,7 @@ public class MSSoundEvents
 	{
 		List<String> paths = Lists.newArrayList(
 				"music_disc.emissary_of_dance", "music_disc.dance_stab_dance", "music_disc.retro_battle_theme",
+				"music.land",
 				"entity.nakagator.ambient", "entity.nakagator.hurt", "entity.nakagator.death",
 				"entity.iguana.ambient", "entity.iguana.hurt", "entity.iguana.death",
 				"entity.salamander.ambient", "entity.salamander.hurt", "entity.salamander.death",

@@ -14,6 +14,7 @@ import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
+import net.minecraft.client.audio.MusicTicker;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
@@ -265,9 +266,13 @@ public class LandDimension extends Dimension
 		return properties.getCloudColor();
 	}
 	
-	public World getWorld()
+	@Nullable
+	@Override
+	public MusicTicker.MusicType getMusicType()
 	{
-		return world;
+		//A hack to make the vanilla music ticker behave as if the music type changes when entering/exiting lands
+		// (matters for some timing-related behavior, even if we stop any vanilla music from playing in lands)
+		return MusicTicker.MusicType.MENU;
 	}
 	
 	public static class Type extends ModDimension

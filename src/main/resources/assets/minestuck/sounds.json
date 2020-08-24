@@ -23,6 +23,14 @@
       }
     ]
   },
+  "music.land": {
+    "sounds": [
+      {
+        "name": "minestuck:records/dance_stab_dance",
+        "stream": true
+      }
+    ]
+  },
   "entity.nakagator.ambient": {
     "category": "friendly",
     "subtitle": "subtitles.entity.minestuck.nakagator.ambient",
