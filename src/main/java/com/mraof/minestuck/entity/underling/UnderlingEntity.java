@@ -68,8 +68,8 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 		attackEntitySelector.entityList.add(EntityType.PLAYER);
 		
 		goalSelector.addGoal(1, new SwimGoal(this));
-		goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 1.0D));
-		goalSelector.addGoal(5, new RandomWalkingGoal(this, 1.0D));
+		goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 0.8D));
+		goalSelector.addGoal(5, new RandomWalkingGoal(this, 0.6D));
 		goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 8.0F));
 		goalSelector.addGoal(7, new LookRandomlyGoal(this));
 		
