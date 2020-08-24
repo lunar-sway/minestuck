@@ -9,6 +9,7 @@ import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -90,5 +91,16 @@ public class ImpEntity extends UnderlingEntity
 				ladder.checkBonus(Echeladder.UNDERLING_BONUS_OFFSET);
 			}
 		}
+	}
+	
+	@Override
+	protected boolean isAppropriateTarget(LivingEntity entity)
+	{
+		if(entity instanceof ServerPlayerEntity)
+		{
+			//Rung was chosen fairly arbitrary. Feel free to change it if you think a different rung is better
+			return PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder().getRung() < 19;
+		}
+		return super.isAppropriateTarget(entity);
 	}
 }
