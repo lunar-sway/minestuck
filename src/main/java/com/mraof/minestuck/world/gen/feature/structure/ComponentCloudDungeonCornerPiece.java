@@ -1,5 +1,7 @@
 package com.mraof.minestuck.world.gen.feature.structure;
 
+import com.mraof.minestuck.world.gen.feature.structure.castle.CastlePiece;
+
 import java.util.ArrayList;
 
 public class ComponentCloudDungeonCornerPiece extends ComponentCloudDungeonPiece 
@@ -10,7 +12,7 @@ public class ComponentCloudDungeonCornerPiece extends ComponentCloudDungeonPiece
 	protected boolean isBlack, bottom;
 	public int averageGroundLevel = -1;
 	public int castleWidth, castleLength, x, z, totalPieces;
-	public ArrayList<ComponentCastlePiece> pendingPieces = new ArrayList<ComponentCastlePiece>();
+	public ArrayList<CastlePiece> pendingPieces = new ArrayList<CastlePiece>();
 	
 	public ComponentCloudDungeonCornerPiece() {}
 	/*protected ComponentCloudDungeonCornerPiece(int par1, int x, int z,  boolean isBlack)
