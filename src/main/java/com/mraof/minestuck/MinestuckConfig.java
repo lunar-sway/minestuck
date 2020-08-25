@@ -26,7 +26,7 @@ public class MinestuckConfig
 		
 		private Common(ForgeConfigSpec.Builder builder)
 		{
-			builder.push("logging");
+			builder.comment("If you're looking for a config option that isn't here, try looking in the world-specific config").push("logging");
 			logIngredientItemsWithoutCosts = builder.comment("Makes the recipe-generated grist cost process log any items that are used as recipe ingredients, but is neither the output of a different recipe, or has a grist cost. Useful for finding items that probably need manual grist costs.")
 					.define("logIngredientItemsWithoutCosts", false);
 			logItemsWithRecipeAndCost = builder.comment("Makes the recipe-generated grist cost process log any items that has a grist cost, but which could also be provided as a recipe generated cost. Useful for finding items that probably do not need manual grist costs.")
