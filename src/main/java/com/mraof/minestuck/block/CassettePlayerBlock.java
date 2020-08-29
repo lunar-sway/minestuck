@@ -62,7 +62,7 @@ public class CassettePlayerBlock extends DecorBlock
 	public void insertCassette(IWorld worldIn, BlockPos pos, BlockState state, ItemStack cassetteStack)
 	{
 		TileEntity tileentity = worldIn.getTileEntity(pos);
-		if(tileentity instanceof CassettePlayerTileEntity && state.get(OPEN) & !state.get(HAS_CASSETTE))
+		if(tileentity instanceof CassettePlayerTileEntity && state.get(OPEN) && !state.get(HAS_CASSETTE))
 		{
 			((CassettePlayerTileEntity) tileentity).setCassette(cassetteStack.copy());
 			worldIn.setBlockState(pos, state.with(HAS_CASSETTE, true), 2);
@@ -83,9 +83,9 @@ public class CassettePlayerBlock extends DecorBlock
 					worldIn.playEvent(1010, pos, 0);
 					cassettePlayer.clear();
 					float f = 0.7F;
-					double xOffset = (double) (worldIn.rand.nextFloat() * f) + (double) 0.15F;
-					double yOffset = (double) (worldIn.rand.nextFloat() * f) + (double) 0.060000002F + 0.6D;
-					double zOffset = (double) (worldIn.rand.nextFloat() * f) + (double) 0.15F;
+					double xOffset = f * worldIn.rand.nextFloat() + 0.15;
+					double yOffset = f * worldIn.rand.nextFloat() + 0.66;
+					double zOffset = f * worldIn.rand.nextFloat() + 0.15;
 					ItemStack itemstack1 = itemstack.copy();
 					ItemEntity itementity = new ItemEntity(worldIn, (double) pos.getX() + xOffset, (double) pos.getY() + yOffset, (double) pos.getZ() + zOffset, itemstack1);
 					itementity.setDefaultPickupDelay();

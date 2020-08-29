@@ -36,7 +36,7 @@ public class CassetteItem extends ModMusicDiscItem
 			ItemStack itemstack = context.getItem();
 			if(!world.isRemote)
 			{
-				((CassettePlayerBlock) MSBlocks.CASSETTE_PLAYER_DEFAULT).insertCassette(world, blockpos, blockstate, itemstack);
+				(MSBlocks.CASSETTE_PLAYER_DEFAULT).insertCassette(world, blockpos, blockstate, itemstack);
 				world.playEvent((PlayerEntity) null, Constants.WorldEvents.PLAY_RECORD_SOUND, blockpos, Item.getIdFromItem(this));
 				itemstack.shrink(1);
 				PlayerEntity playerentity = context.getPlayer();

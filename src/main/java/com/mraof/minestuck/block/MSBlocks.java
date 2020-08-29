@@ -171,7 +171,7 @@ public class MSBlocks
 	public static final Block CHESSBOARD = getNull();
 	public static final Block MINI_FROG_STATUE = getNull();
 	public static final Block GLOWYSTONE_DUST = getNull();
-	public static final Block CASSETTE_PLAYER_DEFAULT = getNull();
+	public static final CassettePlayerBlock CASSETTE_PLAYER_DEFAULT = getNull();
 	
 	public static final FlowingFluidBlock OIL = getNull(), BLOOD = getNull(), BRAIN_JUICE = getNull();
 	public static final FlowingFluidBlock WATER_COLORS = getNull(), ENDER = getNull(), LIGHT_WATER = getNull();
