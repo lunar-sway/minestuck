@@ -10,6 +10,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
@@ -27,14 +28,14 @@ import java.util.function.Supplier;
 
 public class CassettePlayerBlock extends DecorBlock
 {
-	public static final BooleanProperty HAS_CASSETTE = MSProperties.HAS_CASSETTE;
 	public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
+	public static final EnumProperty<EnumCassetteType> CASSETTE = MSProperties.CASSETTE;
 	private final Supplier<TileEntityType<?>> tileType;
 	
 	public CassettePlayerBlock(Properties properties, CustomVoxelShape shape, Supplier<TileEntityType<?>> tileType)
 	{
 		super(properties, shape);
-		this.setDefaultState(this.stateContainer.getBaseState().with(HAS_CASSETTE, false));
+		this.setDefaultState(this.stateContainer.getBaseState().with(CASSETTE, EnumCassetteType.NONE));
 		this.tileType = tileType;
 	}
 	
@@ -47,10 +48,10 @@ public class CassettePlayerBlock extends DecorBlock
 			state = state.cycle(OPEN);
 			worldIn.setBlockState(pos, state, 2);
 			return true;
-		} else if(state.get(HAS_CASSETTE) && state.get(OPEN))
+		} else if(state.get(CASSETTE) != EnumCassetteType.NONE && state.get(OPEN))
 		{
 			this.dropCassette(worldIn, pos);
-			state = state.with(HAS_CASSETTE, false);
+			state = state.with(CASSETTE, EnumCassetteType.NONE);
 			worldIn.setBlockState(pos, state, 2);
 			return true;
 		} else
@@ -62,10 +63,12 @@ public class CassettePlayerBlock extends DecorBlock
 	public void insertCassette(IWorld worldIn, BlockPos pos, BlockState state, ItemStack cassetteStack)
 	{
 		TileEntity tileentity = worldIn.getTileEntity(pos);
-		if(tileentity instanceof CassettePlayerTileEntity && state.get(OPEN) && !state.get(HAS_CASSETTE))
+		if(tileentity instanceof CassettePlayerTileEntity && state.get(OPEN) && state.get(CASSETTE) == EnumCassetteType.NONE)
 		{
 			((CassettePlayerTileEntity) tileentity).setCassette(cassetteStack.copy());
-			worldIn.setBlockState(pos, state.with(HAS_CASSETTE, true), 2);
+			if(cassetteStack.getItem() instanceof CassetteItem){
+				worldIn.setBlockState(pos, state.with(CASSETTE, ((CassetteItem) cassetteStack.getItem()).cassetteID), 2);
+			}
 		}
 	}
 	
@@ -141,7 +144,7 @@ public class CassettePlayerBlock extends DecorBlock
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
 	{
 		builder.add(FACING);
-		builder.add(HAS_CASSETTE);
+		builder.add(CASSETTE);
 		builder.add(OPEN);
 	}
 }

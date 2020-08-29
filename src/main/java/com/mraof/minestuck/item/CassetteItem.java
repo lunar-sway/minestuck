@@ -1,6 +1,7 @@
 package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.block.CassettePlayerBlock;
+import com.mraof.minestuck.block.EnumCassetteType;
 import com.mraof.minestuck.block.MSBlocks;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -18,12 +19,13 @@ import java.util.function.Supplier;
 
 public class CassetteItem extends ModMusicDiscItem
 {
+	public final EnumCassetteType cassetteID;
 	
-	public CassetteItem(int comparatorValueIn, Supplier<SoundEvent> soundIn, Properties builder)
+	public CassetteItem(int comparatorValueIn, Supplier<SoundEvent> soundIn, EnumCassetteType cassetteName, Properties builder)
 	{
 		super(comparatorValueIn, soundIn, builder);
+		this.cassetteID = cassetteName;
 	}
-	
 	
 	@Override
 	public ActionResultType onItemUse(ItemUseContext context)
@@ -31,7 +33,7 @@ public class CassetteItem extends ModMusicDiscItem
 		World world = context.getWorld();
 		BlockPos blockpos = context.getPos();
 		BlockState blockstate = world.getBlockState(blockpos);
-		if(blockstate.getBlock() == MSBlocks.CASSETTE_PLAYER_DEFAULT && !blockstate.get(CassettePlayerBlock.HAS_CASSETTE) && blockstate.get(CassettePlayerBlock.OPEN))
+		if(blockstate.getBlock() == MSBlocks.CASSETTE_PLAYER_DEFAULT && blockstate.get(CassettePlayerBlock.CASSETTE) == EnumCassetteType.NONE && blockstate.get(CassettePlayerBlock.OPEN))
 		{
 			ItemStack itemstack = context.getItem();
 			if(!world.isRemote)

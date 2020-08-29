@@ -19,10 +19,10 @@ public class MSProperties
 	public static final BooleanProperty RED = BooleanProperty.create("red");
 	public static final BooleanProperty GREEN = BooleanProperty.create("green");
 	public static final BooleanProperty BLUE = BooleanProperty.create("blue");
-	public static final BooleanProperty HAS_CASSETTE = BooleanProperty.create("has_cassette");
 	
 	public static final IntegerProperty COUNT_0_2 = IntegerProperty.create("count", 0, 2);
 	
+	public static final EnumProperty<EnumCassetteType> CASSETTE = EnumProperty.create("cassette", EnumCassetteType.class);
 	public static final EnumProperty<EnumDowelType> DOWEL = EnumProperty.create("dowel", EnumDowelType.class, EnumDowelType.DOWEL, EnumDowelType.CARVED_DOWEL);
 	public static final EnumProperty<EnumDowelType> DOWEL_OR_NONE = EnumProperty.create("dowel", EnumDowelType.class);
 	public static final EnumProperty<CruxiteDowelBlock.Type> DOWEL_BLOCK = EnumProperty.create("dowel", CruxiteDowelBlock.Type.class);
