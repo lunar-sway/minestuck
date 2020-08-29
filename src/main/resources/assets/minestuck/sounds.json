@@ -53,6 +53,10 @@
   "music.frost": {
     "sounds": [
       {
+        "name": "minestuck:music/lands/arctic_frost",
+        "stream": true
+      },
+      {
         "name": "minestuck:music/lands/new_town",
         "stream": true
       }
@@ -92,6 +96,10 @@
   },
   "music.petrification": {
     "sounds": [
+      {
+        "name": "minestuck:music/lands/arctic_frost",
+        "stream": true
+      },
       {
         "name": "minestuck:music/lands/shady_city",
         "stream": true
@@ -133,6 +141,10 @@
   "music.shade": {
     "sounds": [
       {
+        "name": "minestuck:music/lands/arctic_frost",
+        "stream": true
+      },
+      {
         "name": "minestuck:music/lands/phosphorescent_planet",
         "stream": true
       }
@@ -160,6 +172,10 @@
   },
   "music.flora": {
     "sounds": [
+      {
+        "name": "minestuck:music/lands/arctic_frost",
+        "stream": true
+      },
       {
         "name": "minestuck:music/lands/arboreal_action",
         "stream": true
