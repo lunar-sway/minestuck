@@ -33,6 +33,7 @@ public class EndSaplingBlock extends BushBlock implements IGrowable
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext contezt)
 	{
 		return SHAPE;
@@ -57,7 +58,7 @@ public class EndSaplingBlock extends BushBlock implements IGrowable
 	@Override
 	public void grow(World worldIn, Random rand, BlockPos pos, BlockState state)
 	{
-		if(worldIn.isRemote || worldIn.getMoonPhase() == 4)
+		if(worldIn.isRemote || worldIn.getDimension().getMoonPhase(worldIn.getDayTime()) == 4)
 		{
 			return;
 		}
@@ -110,6 +111,7 @@ public class EndSaplingBlock extends BushBlock implements IGrowable
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public void tick(BlockState state, World worldIn, BlockPos pos, Random random)
 	{
 		if (!worldIn.isRemote)
