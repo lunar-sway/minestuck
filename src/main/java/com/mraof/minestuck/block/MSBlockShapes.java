@@ -39,7 +39,7 @@ public class MSBlockShapes
 	
 	public static final CustomVoxelShape CHESSBOARD = new CustomVoxelShape(new double[]{0, 0, 0, 16, 1, 16});
 	
-	public static final CustomVoxelShape CASSETTE_PLAYER_DEFAULT = new CustomVoxelShape(new double[]{5, 0, 4, 11, 1.5, 12});
+	public static final CustomVoxelShape CASSETTE_PLAYER_DEFAULT = new CustomVoxelShape(new double[]{4, 0, 4, 12, 2, 15});
 	
 	//Machines
 	public static final CustomVoxelShape ALCHEMITER_CENTER = new CustomVoxelShape(new double[]{0, 0, 0, 16, 16, 16});
