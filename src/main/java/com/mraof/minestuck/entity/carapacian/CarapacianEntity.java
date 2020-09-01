@@ -49,8 +49,7 @@ public abstract class CarapacianEntity extends MinestuckEntity
 	protected void registerAttributes()
 	{
 		super.registerAttributes();
-		//TODO value based on original implementation. Probably too big. Consider using a smaller number (and specific to subtypes)
-		getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(256.0D);
+		getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(32.0D);
 	}
 	
 	private void setAllies()

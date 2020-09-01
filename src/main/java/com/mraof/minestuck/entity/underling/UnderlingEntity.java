@@ -88,8 +88,7 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 		super.registerAttributes();
 		getAttributes().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
 		
-		//TODO Kinda high, should likely be lower
-		getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(128.0D);
+		getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(32.0D);
 	}
 	
 	@Override
