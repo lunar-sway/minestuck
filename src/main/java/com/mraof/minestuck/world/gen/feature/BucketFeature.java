@@ -24,7 +24,6 @@ import net.minecraft.world.gen.feature.template.*;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.Optional;
 import java.util.Random;
 import java.util.function.Function;
 
@@ -73,11 +72,8 @@ public class BucketFeature extends Feature<NoFeatureConfig>
 				else if(rarity == Rarity.RARE)
 					list.func_226313_a_(fluid.getDefaultState().getBlockState(), 1);
 			}
-
-			//TODO: Figure out what the line below does.
-			//list.func_226319_c_();
-			Optional<? extends BlockState> optional = list.func_220655_b().findFirst();
-			bucketFluid = optional.isPresent() ? optional.get() : Blocks.AIR.getDefaultState();
+			
+			bucketFluid = list.func_226318_b_(rand);
 		} else
 		{
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(generator.getSettings());
