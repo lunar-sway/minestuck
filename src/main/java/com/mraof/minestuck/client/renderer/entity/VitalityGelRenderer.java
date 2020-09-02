@@ -1,18 +1,13 @@
 package com.mraof.minestuck.client.renderer.entity;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GLX;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.entity.item.VitalityGelEntity;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
 
 public class VitalityGelRenderer extends EntityRenderer<VitalityGelEntity>
 {

@@ -1,7 +1,6 @@
 package com.mraof.minestuck.client.renderer;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.mraof.minestuck.Minestuck;
@@ -12,7 +11,10 @@ import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.Matrix4f;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
@@ -24,14 +26,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.DrawHighlightEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
-
-import java.lang.reflect.Method;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class MachineOutlineRenderer
@@ -84,9 +82,9 @@ public class MachineOutlineRenderer
 			AxisAlignedBB boundingBox;
 
 			RenderSystem.defaultBlendFunc();
-			GlStateManager.lineWidth(2.0F);
-			GlStateManager.disableTexture();
-			GlStateManager.depthMask(false);	//GL stuff was copied from the standard mouseover bounding box drawing, which is likely why the alpha isn't working
+			RenderSystem.lineWidth(2.0F);
+			RenderSystem.disableTexture();
+			RenderSystem.depthMask(false);	//GL stuff was copied from the standard mouseover bounding box drawing, which is likely why the alpha isn't working
 			
 			pos = item.getPlacementPos(pos, placedFacing, hitX, hitZ);
 			
@@ -104,10 +102,10 @@ public class MachineOutlineRenderer
 			boundingBox = GuiUtil.fromBoundingBox(item.getMultiblock().getBoundingBox(rotation)).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
 
 			drawPhernaliaPlacementOutline(matrixStack, ivertexbuilder, VoxelShapes.create(boundingBox), 0, 0, 0, placeable ? 0 : 1, placeable ? 1 : 0, 0, 0.5F);
-
-			GlStateManager.depthMask(true);
-			GlStateManager.enableTexture();
-			GlStateManager.disableBlend();
+			
+			RenderSystem.depthMask(true);
+			RenderSystem.enableTexture();
+			RenderSystem.disableBlend();
 			return true;
 		}
 		return false;

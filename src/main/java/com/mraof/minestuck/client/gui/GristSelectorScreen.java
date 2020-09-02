@@ -1,6 +1,5 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
@@ -63,8 +62,8 @@ public class GristSelectorScreen<T extends Screen & Positioned> extends Minestuc
 		int yOffset = (height - guiHeight) / 2;
 
 		this.renderBackground();
-
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		
+		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		this.minecraft.getTextureManager().bindTexture(guiGristcache);
 		this.blit(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
@@ -74,10 +73,10 @@ public class GristSelectorScreen<T extends Screen & Positioned> extends Minestuc
 		super.render(mouseX, mouseY, partialTicks);
 
 		RenderSystem.color3f(1.0F, 1.0F, 1.0F);
-		GlStateManager.disableRescaleNormal();
+		RenderSystem.disableRescaleNormal();
 		RenderHelper.disableStandardItemLighting();
-		GlStateManager.disableLighting();
-		GlStateManager.disableDepthTest();
+		RenderSystem.disableLighting();
+		RenderSystem.disableDepthTest();
 
 		this.drawGrist(xOffset, yOffset, mouseX, mouseY, page);
 		

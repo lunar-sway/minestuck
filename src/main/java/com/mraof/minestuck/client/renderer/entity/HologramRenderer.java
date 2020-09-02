@@ -1,7 +1,6 @@
 package com.mraof.minestuck.client.renderer.entity;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.entity.item.HologramEntity;
 import net.minecraft.client.Minecraft;
@@ -12,7 +11,6 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.entity.IRendersAsItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 

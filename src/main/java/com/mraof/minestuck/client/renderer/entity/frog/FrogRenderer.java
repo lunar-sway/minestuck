@@ -1,7 +1,6 @@
 package com.mraof.minestuck.client.renderer.entity.frog;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.model.FrogModel;
 import com.mraof.minestuck.entity.FrogEntity;

@@ -1,6 +1,5 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.network.ColorSelectPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
@@ -50,7 +49,7 @@ public class ColorSelectorScreen extends Screen
 	{
 		this.renderBackground();
 		
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		
 		int xOffset = (width - guiWidth)/2;
 		int yOffset = (height - guiHeight)/2;

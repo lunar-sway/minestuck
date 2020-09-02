@@ -8,9 +8,7 @@ import com.mraof.minestuck.network.StoneTabletPacket;
 import com.mraof.minestuck.util.StoneTabletUtils;
 import com.mraof.minestuck.util.StoneTabletUtils.Point;
 import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.gui.chat.NarratorChatListener;
-import net.minecraft.client.gui.screen.ReadBookScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -25,8 +23,6 @@ import net.minecraft.util.SharedConstants;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 
 public class StoneTabletScreen extends Screen
@@ -105,7 +101,7 @@ public class StoneTabletScreen extends Screen
 	{
 		this.renderBackground();
 		this.setFocused(null);
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.minecraft.getTextureManager().bindTexture(TABLET_TEXTURES);
 		int i = (this.width - 192) / 2;
 		int j = 2;
@@ -203,18 +199,18 @@ public class StoneTabletScreen extends Screen
 		StoneTabletUtils.adjustPointerB(point1, width);
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
-		GlStateManager.color4f(0.0F, 0.0F, 255.0F, 255.0F);
-		GlStateManager.disableTexture();
-		GlStateManager.enableColorLogicOp();
+		RenderSystem.color4f(0.0F, 0.0F, 1.0F, 1.0F);
+		RenderSystem.disableTexture();
+		RenderSystem.enableColorLogicOp();
 		RenderSystem.logicOp(GlStateManager.LogicOp.OR_REVERSE);
 		bufferbuilder.begin(7, DefaultVertexFormats.POSITION);
-		bufferbuilder.pos((double)point.x, (double)point1.y, 0.0D).endVertex();
-		bufferbuilder.pos((double)point1.x, (double)point1.y, 0.0D).endVertex();
-		bufferbuilder.pos((double)point1.x, (double)point.y, 0.0D).endVertex();
-		bufferbuilder.pos((double)point.x, (double)point.y, 0.0D).endVertex();
+		bufferbuilder.pos(point.x, point1.y, 0.0D).endVertex();
+		bufferbuilder.pos(point1.x, point1.y, 0.0D).endVertex();
+		bufferbuilder.pos(point1.x, point.y, 0.0D).endVertex();
+		bufferbuilder.pos(point.x, point.y, 0.0D).endVertex();
 		tessellator.draw();
-		GlStateManager.disableColorLogicOp();
-		GlStateManager.enableTexture();
+		RenderSystem.disableColorLogicOp();
+		RenderSystem.enableTexture();
 	}
 	
 	@Override

@@ -1,6 +1,5 @@
 package com.mraof.minestuck.client.util;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.item.crafting.alchemy.GristAmount;
@@ -109,7 +108,7 @@ public class GuiUtil
 				fontRenderer.drawString(haveStr, boardX + needStrWidth + needOffset + iconSize + haveOffset + index%GRIST_BOARD_WIDTH, boardY + 8*row, color);
 				
 				RenderSystem.color3f(1, 1, 1);
-				GlStateManager.disableLighting();
+				RenderSystem.disableLighting();
 				ResourceLocation icon = mode == GristboardMode.JEI_WILDCARD ? GristType.getDummyIcon() : type.getIcon();
 				if(icon != null)
 				{

@@ -1,6 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.TransportalizerPacket;
 import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
@@ -46,7 +46,7 @@ public class TransportalizerScreen extends Screen
 	public void render(int mouseX, int mouseY, float partialTicks)
 	{
 		this.renderBackground();
-		GlStateManager.color4f(1F, 1F, 1F, 1F);
+		RenderSystem.color4f(1F, 1F, 1F, 1F);
 		this.minecraft.getTextureManager().bindTexture(guiBackground);
 		int yOffset = (this.height / 2) - (guiHeight / 2);
 		this.blit((this.width / 2) - (guiWidth / 2), yOffset, 0, 0, guiWidth, guiHeight);

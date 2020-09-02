@@ -2,16 +2,13 @@ package com.mraof.minestuck.client.model;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.mraof.minestuck.entity.underling.LichEntity;
 import net.minecraft.client.renderer.Quaternion;
 import net.minecraft.client.renderer.Vector3f;
-import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.util.math.MathHelper;
-import org.lwjgl.opengl.GL11;
 
 /**
  * Lich - Caldw3ll

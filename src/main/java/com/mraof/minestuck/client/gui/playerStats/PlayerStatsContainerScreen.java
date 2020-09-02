@@ -1,6 +1,5 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen.*;
@@ -109,7 +108,7 @@ public abstract class PlayerStatsContainerScreen<T extends Container> extends Co
 	protected void drawTabTooltip(int xcor, int ycor)
 	{
 		
-		GlStateManager.disableDepthTest();
+		RenderSystem.disableDepthTest();
 		if(ycor < yOffset && ycor > yOffset - tabHeight + 4)
 			for(int i = 0; i < (mode? NormalGuiType.values():EditmodeGuiType.values()).length; i++)
 				if(xcor < xOffset + i*(tabWidth + 2))
@@ -118,8 +117,8 @@ public abstract class PlayerStatsContainerScreen<T extends Container> extends Co
 						&& (!mode || !NormalGuiType.values()[i].reqMedium() || SkaiaClient.enteredMedium(SkaiaClient.playerId) || minecraft.playerController.isInCreativeMode()))
 					renderTooltip(Arrays.asList(I18n.format(mode? NormalGuiType.values()[i].name:EditmodeGuiType.values()[i].name)),
 							xcor - guiLeft, ycor - guiTop, font);
-		GlStateManager.enableDepthTest();
-		GlStateManager.disableLighting();
+		RenderSystem.enableDepthTest();
+		RenderSystem.disableLighting();
 	}
 	
 	@Override

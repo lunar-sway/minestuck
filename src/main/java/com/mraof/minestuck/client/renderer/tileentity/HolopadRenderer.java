@@ -1,11 +1,9 @@
 package com.mraof.minestuck.client.renderer.tileentity;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.tileentity.HolopadTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.Quaternion;
 import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;

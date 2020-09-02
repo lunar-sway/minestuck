@@ -1,6 +1,5 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.computer.editmode.ClientEditHandler;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
@@ -44,8 +43,8 @@ public class GristCacheScreen extends PlayerStatsScreen
 	public void render(int mouseX, int mouseY, float partialTicks)
 	{
 		this.renderBackground();
-
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		
+		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		drawTabs();
 
@@ -62,10 +61,10 @@ public class GristCacheScreen extends PlayerStatsScreen
 		drawActiveTabAndOther(mouseX, mouseY);
 
 		RenderSystem.color3f(1, 1, 1);
-		GlStateManager.disableRescaleNormal();
+		RenderSystem.disableRescaleNormal();
 		RenderHelper.disableStandardItemLighting();
-		GlStateManager.disableLighting();
-		GlStateManager.disableDepthTest();
+		RenderSystem.disableLighting();
+		RenderSystem.disableDepthTest();
 
 		this.drawGrist(xOffset, yOffset, mouseX, mouseY, page);
 	}

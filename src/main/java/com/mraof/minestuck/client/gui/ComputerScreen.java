@@ -1,6 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.computer.ComputerProgram;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import net.minecraft.client.Minecraft;
@@ -47,7 +47,7 @@ public class ComputerScreen extends Screen
 	{
 		this.renderBackground();
 		
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		if(te.hasProgram(-1)) {
 			this.mc.getTextureManager().bindTexture(guiBsod);
 			int yOffset = (this.height / 2) - (ySize / 2);
@@ -60,10 +60,10 @@ public class ComputerScreen extends Screen
 			this.blit((this.width / 2) - (xSize / 2), yOffset, 0, 0, xSize, ySize);
 			font.drawString("Insert disk.", (width - xSize) / 2F +15, (height - ySize) / 2F +45, 4210752);
 		}
-		GlStateManager.disableRescaleNormal();
+		RenderSystem.disableRescaleNormal();
 		RenderHelper.disableStandardItemLighting();
-		GlStateManager.disableLighting();
-		GlStateManager.disableDepthTest();
+		RenderSystem.disableLighting();
+		RenderSystem.disableDepthTest();
 
 		super.render(mouseX, mouseY, partialTicks);
 	}

@@ -1,6 +1,5 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.settings.MSKeyHandler;

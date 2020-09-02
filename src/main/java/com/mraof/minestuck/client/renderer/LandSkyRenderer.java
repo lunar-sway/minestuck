@@ -44,7 +44,7 @@ public class LandSkyRenderer implements IRenderHandler
 		starBrightness += (0.5 - starBrightness)*heightModifier;
 		float skaiaBrightness = 0.5F +0.5F*skyClearness*heightModifier;
 		
-		GlStateManager.disableTexture();
+		RenderSystem.disableTexture();
 		Vec3d vec3d = world.getSkyColor(mc.getRenderViewEntity().getPosition(), partialTicks);
 		float r = (float)vec3d.x*heightModifierDiminish;
 		float g = (float)vec3d.y*heightModifierDiminish;
@@ -53,8 +53,8 @@ public class LandSkyRenderer implements IRenderHandler
 		RenderSystem.color3f(r, g, b);
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
-		GlStateManager.depthMask(false);
-		GlStateManager.enableFog();
+		RenderSystem.depthMask(false);
+		RenderSystem.enableFog();
 		RenderSystem.color3f(r, g, b);
 		
 		bufferbuilder.begin(7, DefaultVertexFormats.POSITION);
@@ -70,15 +70,15 @@ public class LandSkyRenderer implements IRenderHandler
 		}
 		tessellator.draw();
 		
-		GlStateManager.disableFog();
-		GlStateManager.disableAlphaTest();
-		GlStateManager.enableBlend();
+		RenderSystem.disableFog();
+		RenderSystem.disableAlphaTest();
+		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 		RenderHelper.disableStandardItemLighting();
 		
-		GlStateManager.enableTexture();
+		RenderSystem.enableTexture();
 		RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, skaiaBrightness);
+		RenderSystem.color4f(1.0F, 1.0F, 1.0F, skaiaBrightness);
 		float skaiaSize = 20.0F;
 		mc.getTextureManager().bindTexture(SKAIA_TEXTURE);
 		bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
@@ -87,33 +87,33 @@ public class LandSkyRenderer implements IRenderHandler
 		bufferbuilder.pos(skaiaSize, 100.0D, skaiaSize).tex(1.0F, 1.0F).endVertex();
 		bufferbuilder.pos(-skaiaSize, 100.0D, skaiaSize).tex(0.0F, 1.0F).endVertex();
 		tessellator.draw();
-		GlStateManager.disableTexture();
+		RenderSystem.disableTexture();
 		
 		if(starBrightness > 0)
 		{
-			GlStateManager.color4f(starBrightness, starBrightness, starBrightness, starBrightness);
+			RenderSystem.color4f(starBrightness, starBrightness, starBrightness, starBrightness);
 			
-			GlStateManager.pushMatrix();
-			GlStateManager.rotatef(world.getCelestialAngle(partialTicks) * 360.0F, 0, 0, 1);
+			RenderSystem.pushMatrix();
+			RenderSystem.rotatef(world.getCelestialAngle(partialTicks) * 360.0F, 0, 0, 1);
 			drawVeil(partialTicks, world);
-			GlStateManager.popMatrix();
-			GlStateManager.color4f(starBrightness*2, starBrightness*2, starBrightness*2, starBrightness*2);
+			RenderSystem.popMatrix();
+			RenderSystem.color4f(starBrightness*2, starBrightness*2, starBrightness*2, starBrightness*2);
 			
 			drawLands(mc, world.getDimension().getType());
 		}
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		
-		GlStateManager.disableBlend();
-		GlStateManager.enableAlphaTest();
-		GlStateManager.enableFog();
-		GlStateManager.disableTexture();
+		RenderSystem.disableBlend();
+		RenderSystem.enableAlphaTest();
+		RenderSystem.enableFog();
+		RenderSystem.disableTexture();
 		RenderSystem.color3f(0.0F, 0.0F, 0.0F);
 		double d3 = mc.player.getEyePosition(partialTicks).y - world.getHorizonHeight();
 		
 		//
 		
-		GlStateManager.pushMatrix();
-		GlStateManager.translatef(0.0F, -((float)(d3 - 16.0D)), 0.0F);
+		RenderSystem.pushMatrix();
+		RenderSystem.translatef(0.0F, -((float)(d3 - 16.0D)), 0.0F);
 		bufferbuilder.begin(7, DefaultVertexFormats.POSITION);
 		
 		for(int k = -384; k <= 384; k += 64)
@@ -127,9 +127,9 @@ public class LandSkyRenderer implements IRenderHandler
 			}
 		}
 		tessellator.draw();
-		GlStateManager.popMatrix();
-		GlStateManager.enableTexture();
-		GlStateManager.depthMask(true);
+		RenderSystem.popMatrix();
+		RenderSystem.enableTexture();
+		RenderSystem.depthMask(true);
 	}
 	
 	private void drawVeil(float partialTicks, ClientWorld world)
@@ -191,7 +191,7 @@ public class LandSkyRenderer implements IRenderHandler
 		if(list == null)
 			return;
 		int index = list.indexOf(dim.getRegistryName());
-		GlStateManager.enableTexture();
+		RenderSystem.enableTexture();
 		for(int i = 1; i < list.size(); i++)
 		{
 			ResourceLocation landName = list.get((index + i)%list.size());
@@ -204,7 +204,7 @@ public class LandSkyRenderer implements IRenderHandler
 				else drawLand(mc, getResourceLocations(landTypes.create(), random), (i / (float) list.size()), random);
 			}
 		}
-		GlStateManager.disableTexture();
+		RenderSystem.disableTexture();
 	}
 	
 	private void drawLand(Minecraft mc, ResourceLocation[] textures, float pos, Random random)
@@ -217,9 +217,9 @@ public class LandSkyRenderer implements IRenderHandler
 		
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
-		GlStateManager.pushMatrix();
-		GlStateManager.rotatef((float) (180/Math.PI * v), 0, 0, 1);
-		GlStateManager.rotatef((float) 90*random.nextInt(4), 0, 1, 0);
+		RenderSystem.pushMatrix();
+		RenderSystem.rotatef((float) (180/Math.PI * v), 0, 0, 1);
+		RenderSystem.rotatef((float) 90*random.nextInt(4), 0, 1, 0);
 		
 		float planetSize = 4.0F*scale;
 		mc.getTextureManager().bindTexture(textures[0]);
@@ -236,7 +236,7 @@ public class LandSkyRenderer implements IRenderHandler
 		bufferbuilder.pos(planetSize, 100.0D, planetSize).tex(1.0F, 1.0F).endVertex();
 		bufferbuilder.pos(-planetSize, 100.0D, planetSize).tex(0.0F, 1.0F).endVertex();
 		tessellator.draw();
-		GlStateManager.popMatrix();
+		RenderSystem.popMatrix();
 	}
 	
 	private ResourceLocation[] getResourceLocations(LandTypePair aspects, Random random)

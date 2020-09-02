@@ -1,6 +1,5 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
@@ -209,10 +208,10 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 		if(MinestuckConfig.dataCheckerAccess)
 			blit(xOffset + guiWidth + (tabWidth - 16)/2 - tabWidth, yOffset - tabHeight + tabOverlap + 8, 5*16, tabHeight*2, 16, 16);
 		
-		GlStateManager.disableRescaleNormal();
+		RenderSystem.disableRescaleNormal();
 		RenderHelper.disableStandardItemLighting();
-		GlStateManager.disableLighting();
-		GlStateManager.disableDepthTest();
+		RenderSystem.disableLighting();
+		RenderSystem.disableDepthTest();
 		
 		if(ycor < yOffset && ycor > yOffset - tabHeight + 4)
 			for(int i = 0; i < (mode? NormalGuiType.values():EditmodeGuiType.values()).length; i++)

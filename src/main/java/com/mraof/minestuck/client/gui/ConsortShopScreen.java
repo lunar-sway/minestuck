@@ -1,6 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.inventory.ConsortMerchantContainer;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
@@ -31,7 +31,7 @@ public class ConsortShopScreen extends ContainerScreen<ConsortMerchantContainer>
 			portrait = new ResourceLocation("minestuck",
 					"textures/gui/store/"+container.getConsortType().name().toLowerCase()+"_"+container.getMerchantType().name().toLowerCase()+".png");
 		
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		
 		this.minecraft.getTextureManager().bindTexture(guiBackground);
 		int x = (width - xSize) / 2;

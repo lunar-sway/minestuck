@@ -1,6 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.item.MSItems;
@@ -80,7 +80,7 @@ public class AlchemiterScreen extends Screen implements Positioned
 		this.renderBackground();
 		
 		
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		
 		this.minecraft.getTextureManager().bindTexture(guiBackground);
 		this.blit(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
