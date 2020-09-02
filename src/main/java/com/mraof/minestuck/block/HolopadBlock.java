@@ -4,7 +4,6 @@ import com.mraof.minestuck.tileentity.HolopadTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
@@ -61,7 +60,7 @@ public class HolopadBlock extends MachineBlock
 	@Override
 	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
 	{
-		if(player.isSneaking()) return ActionResultType.FAIL;
+		if(player.isSneaking()) return ActionResultType.PASS;
 		if(worldIn.isRemote)
 			return ActionResultType.SUCCESS;
 		TileEntity te = worldIn.getTileEntity(pos);

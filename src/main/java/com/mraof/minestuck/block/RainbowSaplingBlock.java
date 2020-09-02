@@ -18,7 +18,6 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.WorldSavedData;
 
 import java.util.Random;
 
@@ -195,7 +194,7 @@ public class RainbowSaplingBlock extends BushBlock implements IGrowable
 			if(worldIn.rand.nextFloat() < 0.5)
 				state = state.with(RED, true);
 			else state = state.with(GREEN, true);
-		} else return ActionResultType.FAIL;
+		} else return ActionResultType.PASS;
 		
 		if(!worldIn.isRemote)
 		{

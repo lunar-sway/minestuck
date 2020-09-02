@@ -72,7 +72,7 @@ public class TransportalizerBlock extends MachineBlock
 
 		if (tileEntity == null || player.isSneaking())
 		{
-			return ActionResultType.FAIL;
+			return ActionResultType.PASS;
 		}
 
 		if(worldIn.isRemote)

@@ -1,14 +1,13 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.tileentity.IOwnable;
 import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.tileentity.IOwnable;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
@@ -21,7 +20,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
-import javax.swing.*;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -62,7 +60,7 @@ public class SmallMachineBlock extends MachineProcessBlock
 				}
 			}
 			return ActionResultType.SUCCESS;
-		} else return ActionResultType.FAIL;
+		} else return ActionResultType.PASS;
 	}
 	
 	@Override

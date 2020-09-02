@@ -58,11 +58,14 @@ public class ComputerBlock extends MachineBlock
 	@SuppressWarnings("deprecation")
 	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
 	{
+		if(player.isSneaking())
+			return ActionResultType.PASS;
+		
 		ItemStack heldItem = player.getHeldItem(handIn);
 		if(state.get(STATE) == State.OFF)
 		{
-			if(player.isSneaking() || !Direction.UP.equals(hit.getFace()) || !heldItem.isEmpty() && ProgramData.getProgramID(heldItem) == -2)
-				return ActionResultType.FAIL;
+			if(!Direction.UP.equals(hit.getFace()) || !heldItem.isEmpty() && ProgramData.getProgramID(heldItem) == -2)
+				return ActionResultType.PASS;
 			
 			turnOn(state, worldIn, pos, player, handIn, hit);
 			
@@ -71,10 +74,9 @@ public class ComputerBlock extends MachineBlock
 		{
 			ComputerTileEntity tileEntity = (ComputerTileEntity) worldIn.getTileEntity(pos);
 			
-			if (tileEntity == null || player.isSneaking())
-			{
+			
+			if(tileEntity == null)
 				return ActionResultType.FAIL;
-			}
 			
 			if(insertDisk(tileEntity, state, worldIn, pos, player, handIn))
 				return ActionResultType.SUCCESS;

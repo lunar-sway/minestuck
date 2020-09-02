@@ -56,7 +56,7 @@ public class CruxtruderBlock extends MultiMachineBlock
 				((CruxtruderTileEntity) te).onRightClick(player, hit.getFace() == Direction.UP);
 			return ActionResultType.SUCCESS;
 		}
-		return ActionResultType.FAIL;
+		return ActionResultType.PASS;
 	}
 	
 	@Override

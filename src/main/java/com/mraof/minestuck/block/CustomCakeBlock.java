@@ -23,12 +23,12 @@ public abstract class CustomCakeBlock extends CakeBlock
 	{
 		if (!worldIn.isRemote)
 		{
-			return this.eatCake(worldIn, pos, state, player) ? ActionResultType.SUCCESS : ActionResultType.FAIL;
+			return this.eatCake(worldIn, pos, state, player) ? ActionResultType.SUCCESS : ActionResultType.PASS;
 		}
 		else
 		{
 			ItemStack itemstack = player.getHeldItem(hand);
-			return this.eatCake(worldIn, pos, state, player) || itemstack.isEmpty() ? ActionResultType.SUCCESS : ActionResultType.FAIL;
+			return this.eatCake(worldIn, pos, state, player) ? ActionResultType.SUCCESS : itemstack.isEmpty() ? ActionResultType.CONSUME : ActionResultType.PASS;
 		}
 	}
 	
