@@ -17,6 +17,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
+import org.lwjgl.opengl.GL13;
 
 import java.util.ArrayList;
 
@@ -114,7 +115,7 @@ public abstract class SylladexScreen extends Screen
 
 		RenderHelper.enableStandardItemLighting();
 		RenderSystem.enableRescaleNormal();
-		RenderSystem.glMultiTexCoord2f(33986, 240F, 240F);
+		RenderSystem.glMultiTexCoord2f(GL13.GL_TEXTURE2, 240F, 240F);
 		for(GuiCard card : visibleCards)
 			card.drawItem();
 		RenderSystem.disableDepthTest();
