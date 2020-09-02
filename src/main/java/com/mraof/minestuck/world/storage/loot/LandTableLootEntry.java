@@ -9,7 +9,6 @@ import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.loot.*;
 import net.minecraft.world.storage.loot.conditions.ILootCondition;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
@@ -19,9 +18,7 @@ import org.apache.logging.log4j.Logger;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class LandTableLootEntry extends LootEntry
 {
@@ -57,8 +54,8 @@ public class LandTableLootEntry extends LootEntry
 	
 	private void expandFrom(ResourceLocation tableName, LootContext context, Consumer<ILootGenerator> lootGenCollector)
 	{
-		ServerWorld serverworld = context.getWorld();
-		LootTable lootTable = serverworld.getServer().getLootTableManager().getLootTableFromLocation(tableName);
+		LootTable lootTable = context.getLootTable(tableName);
+		//noinspection ConstantConditions
 		if(lootTable == null)
 		{
 			LOGGER.warn("Could not find loot table {}", tableName);
@@ -67,6 +64,7 @@ public class LandTableLootEntry extends LootEntry
 		if(context.addLootTable(lootTable))
 		{
 			LootPool pool = lootTable.getPool(poolName);
+			//noinspection ConstantConditions
 			if(pool != null)
 			{
 				List<LootEntry> entries = accessWithReflection(pool);
