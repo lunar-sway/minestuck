@@ -10,6 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeManager;
 import net.minecraft.world.biome.provider.BiomeProvider;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.dimension.DimensionType;
@@ -23,7 +24,6 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 {
@@ -134,6 +134,12 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 	public int getGroundHeight()
 	{
 		return 64;
+	}
+	
+	@Override
+	protected Biome getBiome(BiomeManager biomeManagerIn, BlockPos posIn)
+	{
+		return biomeHolder.localBiomeFrom(super.getBiome(biomeManagerIn, posIn));
 	}
 	
 	@Override

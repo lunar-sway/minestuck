@@ -20,7 +20,6 @@ import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.template.TemplateManager;
-import net.minecraft.world.server.ServerWorld;
 
 import java.util.List;
 import java.util.Random;
@@ -79,7 +78,7 @@ public class ImpDungeonPieces
 
 		@Override
 		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(((ServerWorld) worldIn).getChunkProvider().getChunkGenerator().getSettings());
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
 
 			BlockState wallBlock = blocks.getBlockState("structure_primary");
 			BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");
