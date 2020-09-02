@@ -89,8 +89,9 @@ public class ConsortVillageStructure extends Structure<NoFeatureConfig>	//TODO I
 	private static class Start extends StructureStart
 	{
 		
-		Start(Structure<?> p_i225801_1_, int p_i225801_2_, int p_i225801_3_, MutableBoundingBox p_i225801_4_, int p_i225801_5_, long p_i225801_6_) {
-			super(p_i225801_1_, p_i225801_2_, p_i225801_3_, p_i225801_4_, p_i225801_5_, p_i225801_6_);
+		Start(Structure<?> structure, int chunkX, int chunkZ, MutableBoundingBox boundingBox, int reference, long seed)
+		{
+			super(structure, chunkX, chunkZ, boundingBox, reference, seed);
 		}
 		
 		@Override

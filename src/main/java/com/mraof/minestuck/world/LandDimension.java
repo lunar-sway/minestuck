@@ -235,10 +235,10 @@ public class LandDimension extends Dimension
 	{
 		return properties.getFogColor();
 	}
-
-	public World getWorld()
+	
+	public StructureBlockRegistry getBlocks()
 	{
-		return world;
+		return blocks;
 	}
 	
 	public static class Type extends ModDimension

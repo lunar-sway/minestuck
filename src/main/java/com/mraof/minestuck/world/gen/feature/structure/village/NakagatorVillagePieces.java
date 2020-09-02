@@ -14,7 +14,6 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.template.TemplateManager;
-import net.minecraft.world.server.ServerWorld;
 
 import java.util.List;
 import java.util.Random;
@@ -46,7 +45,8 @@ public class NakagatorVillagePieces
 		}
 
 		@Override
-		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
+		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
+		{
 			if (this.averageGroundLvl < 0)
 			{
 				this.averageGroundLvl = this.getAverageGroundLevel(worldIn, chunkGeneratorIn, structureBoundingBoxIn);
@@ -59,7 +59,7 @@ public class NakagatorVillagePieces
 				this.boundingBox.offset(0, this.averageGroundLvl - this.boundingBox.minY - 1, 0);
 			}
 
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(((ServerWorld) worldIn).getChunkProvider().getChunkGenerator().getSettings());
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
 			BlockState secondary = blocks.getBlockState("structure_secondary");
 			BlockState secondaryDecor = blocks.getBlockState("structure_secondary_decorative");
 			BlockState fence = blocks.getBlockState("village_fence");
@@ -198,7 +198,8 @@ public class NakagatorVillagePieces
 		}
 
 		@Override
-		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
+		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
+		{
 			if (averageGroundLvl < 0)
 			{
 				averageGroundLvl = getAverageGroundLevel(worldIn, chunkGeneratorIn, structureBoundingBoxIn);
@@ -211,7 +212,7 @@ public class NakagatorVillagePieces
 				boundingBox.offset(0, averageGroundLvl - boundingBox.minY - 1, 0);
 			}
 
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(((ServerWorld) worldIn).getChunkProvider().getChunkGenerator().getSettings());
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
 			BlockState buildBlock = blocks.getBlockState("structure_primary");
 			BlockState stairs1 = blocks.getStairs("structure_primary_stairs", Direction.SOUTH, false);
 			BlockState stairs2 = blocks.getStairs("structure_primary_stairs", Direction.NORTH, false);
@@ -322,7 +323,8 @@ public class NakagatorVillagePieces
 		}
 
 		@Override
-		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
+		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
+		{
 			if (averageGroundLvl < 0)
 			{
 				averageGroundLvl = getAverageGroundLevel(worldIn, chunkGeneratorIn, structureBoundingBoxIn);
@@ -335,7 +337,7 @@ public class NakagatorVillagePieces
 				boundingBox.offset(0, averageGroundLvl - boundingBox.minY - 1, 0);
 			}
 
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(((ServerWorld) worldIn).getChunkProvider().getChunkGenerator().getSettings());
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
 			BlockState buildBlock = blocks.getBlockState("structure_primary");
 			BlockState stairs1 = blocks.getStairs("structure_primary_stairs", Direction.NORTH, false);
 			BlockState stairs2 = blocks.getStairs("structure_primary_stairs", Direction.SOUTH, false);
@@ -450,7 +452,8 @@ public class NakagatorVillagePieces
 		}
 
 		@Override
-		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
+		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
+		{
 			if (averageGroundLvl < 0)
 			{
 				averageGroundLvl = getAverageGroundLevel(worldIn, chunkGeneratorIn, structureBoundingBoxIn);
@@ -463,7 +466,7 @@ public class NakagatorVillagePieces
 				boundingBox.offset(0, averageGroundLvl - boundingBox.minY - 1, 0);
 			}
 
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(((ServerWorld) worldIn).getChunkProvider().getChunkGenerator().getSettings());
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
 			BlockState buildBlock = blocks.getBlockState("structure_primary");
 			BlockState stairs1 = blocks.getStairs("structure_primary_stairs", Direction.NORTH, false);
 			BlockState stairs2 = blocks.getStairs("structure_primary_stairs", Direction.SOUTH, false);

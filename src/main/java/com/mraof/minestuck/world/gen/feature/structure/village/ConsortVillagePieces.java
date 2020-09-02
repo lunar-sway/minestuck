@@ -462,8 +462,9 @@ public class ConsortVillagePieces
 		}
 
 		@Override
-		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(((ServerWorld) worldIn).getChunkProvider().getChunkGenerator().getSettings());
+		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
+		{
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
 			BlockState pathBlock = blocks.getBlockState("village_path");
 
 			for (int i = this.boundingBox.minX; i <= this.boundingBox.maxX; ++i)

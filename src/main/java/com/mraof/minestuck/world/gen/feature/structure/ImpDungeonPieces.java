@@ -282,7 +282,7 @@ public class ImpDungeonPieces
 
 		@Override
 		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(((ServerWorld) worldIn).getChunkProvider().getChunkGenerator().getSettings());
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
 
 			BlockState wallBlock = blocks.getBlockState("structure_primary");
 			BlockState floorBlock = blocks.getBlockState("structure_secondary");
@@ -368,7 +368,7 @@ public class ImpDungeonPieces
 		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
 
 
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(((ServerWorld) worldIn).getChunkProvider().getChunkGenerator().getSettings());
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
 
 			BlockState wallBlock = blocks.getBlockState("structure_primary");
 			BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");
@@ -480,7 +480,7 @@ public class ImpDungeonPieces
 		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
 
 
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(((ServerWorld) worldIn).getChunkProvider().getChunkGenerator().getSettings());
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
 
 			BlockState wallBlock = blocks.getBlockState("structure_primary");
 			BlockState floorBlock = blocks.getBlockState("structure_secondary");
@@ -555,7 +555,7 @@ public class ImpDungeonPieces
 
 		@Override
 		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(((ServerWorld) worldIn).getChunkProvider().getChunkGenerator().getSettings());
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
 
 			BlockState wallBlock = blocks.getBlockState("structure_primary");
 			BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");
@@ -626,7 +626,7 @@ public class ImpDungeonPieces
 		
 		@Override
 		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(((ServerWorld) worldIn).getChunkProvider().getChunkGenerator().getSettings());
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
 			
 			BlockState wallBlock = blocks.getBlockState("structure_primary");
 			BlockState floorStairsFront = blocks.getStairs("structure_secondary_stairs", Direction.SOUTH, false);
@@ -722,7 +722,7 @@ public class ImpDungeonPieces
 		
 		@Override
 		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(((ServerWorld) worldIn).getChunkProvider().getChunkGenerator().getSettings());
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
 			
 			BlockState wallBlock = blocks.getBlockState("structure_primary");
 			BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");
@@ -820,7 +820,7 @@ public class ImpDungeonPieces
 		
 		@Override
 		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(((ServerWorld) worldIn).getChunkProvider().getChunkGenerator().getSettings());
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
 			
 			BlockState wallBlock = blocks.getBlockState("structure_primary");
 			BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");
@@ -948,7 +948,7 @@ public class ImpDungeonPieces
 		
 		@Override
 		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(((ServerWorld) worldIn).getChunkProvider().getChunkGenerator().getSettings());
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
 			
 			BlockState wallBlock = blocks.getBlockState("structure_primary");
 			BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");
@@ -1054,7 +1054,7 @@ public class ImpDungeonPieces
 		
 		@Override
 		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(((ServerWorld) worldIn).getChunkProvider().getChunkGenerator().getSettings());
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
 			
 			BlockState wallBlock = blocks.getBlockState("structure_primary");
 			BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");
@@ -1188,7 +1188,7 @@ public class ImpDungeonPieces
 		
 		@Override
 		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(((ServerWorld) worldIn).getChunkProvider().getChunkGenerator().getSettings());
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
 			
 			BlockState wallBlock = blocks.getBlockState("structure_primary");
 			BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");

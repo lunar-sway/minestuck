@@ -18,15 +18,15 @@ import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.structure.StructureStart;
 import net.minecraft.world.gen.feature.template.TemplateManager;
-import net.minecraft.world.server.ServerWorld;
 
 import java.util.List;
 import java.util.Random;
 
 public class ImpDungeonStart extends StructureStart
 {
-	public ImpDungeonStart(Structure<?> p_i225801_1_, int p_i225801_2_, int p_i225801_3_, MutableBoundingBox p_i225801_4_, int p_i225801_5_, long p_i225801_6_) {
-		super(p_i225801_1_, p_i225801_2_, p_i225801_3_, p_i225801_4_, p_i225801_5_, p_i225801_6_);
+	public ImpDungeonStart(Structure<?> structure, int chunkX, int chunkZ, MutableBoundingBox boundingBox, int reference, long seed)
+	{
+		super(structure, chunkX, chunkZ, boundingBox, reference, seed);
 	}
 	
 	@Override
@@ -74,10 +74,11 @@ public class ImpDungeonStart extends StructureStart
 		}
 
 		@Override
-		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
+		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
+		{
 			checkHeight(worldIn, structureBoundingBoxIn);
 
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(((ServerWorld) worldIn).getChunkProvider().getChunkGenerator().getSettings());
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
 
 			BlockState wallBlock = blocks.getBlockState("structure_primary");
 			BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");

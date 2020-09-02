@@ -21,7 +21,6 @@ import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.structure.ScatteredStructurePiece;
 import net.minecraft.world.gen.feature.template.TemplateManager;
-import net.minecraft.world.server.ServerWorld;
 
 import java.util.Random;
 
@@ -67,11 +66,12 @@ public class SmallRuinPiece extends ScatteredStructurePiece
 	}
 
 	@Override
-	public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox boundingBoxIn, ChunkPos chunkPosIn) {
+	public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox boundingBoxIn, ChunkPos chunkPosIn)
+	{
 		if(!isInsideBounds(worldIn, boundingBoxIn, 0))
 			return false;
 
-		StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(((ServerWorld) worldIn).getChunkProvider().getChunkGenerator().getSettings());
+		StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
 		BlockState wallBlock = blocks.getBlockState("structure_primary");
 		BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");
 		BlockState floorBlock = blocks.getBlockState("structure_secondary");
