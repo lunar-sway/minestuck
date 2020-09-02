@@ -90,6 +90,7 @@ public class MinestuckConfig
 	public static BooleanValue aspectEffects;
 	public static BooleanValue playerSelectedTitle;
 	public static IntValue preEntryRungLimit;
+	public static BooleanValue rungHealthOnRespawn;
 	
 	//Entry
 	public static BooleanValue entryCrater;
@@ -141,6 +142,8 @@ public class MinestuckConfig
 				.define("echeladderProgress", true);
 		preEntryRungLimit = SERVER_BUILDER.comment("The highest rung you can get before entering medium. Note that the first rung is indexed as 0, the second as 1 and so on.")
 				.defineInRange("preEntryRungLimit", 6, 0, 49);
+		rungHealthOnRespawn = SERVER_BUILDER.comment("If true, players will respawn with full health, rung bonuses included. If false, health will be left alone (typically meaning that you respawn with 10 hearts)")
+				.define("preEntryRungLimit", true);
 		aspectEffects = SERVER_BUILDER.comment("If this is true, players will gain certain potion effects once they reach a certain rung based on their aspect.")
 				.define("aspectEffects", true);
 		playerSelectedTitle = SERVER_BUILDER.comment("Enable this to let players select their own title. They will however not be able to select the Lord or Muse as class.")
