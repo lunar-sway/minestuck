@@ -79,7 +79,7 @@ public final class MSEntityTypes
 		register(registry, EntityType.Builder.create(BasiliskEntity::new, EntityClassification.MONSTER).size(3F, 2F), "basilisk");
 		register(registry, EntityType.Builder.create(LichEntity::new, EntityClassification.MONSTER).size(0.8F, 2.0F), "lich");
 		register(registry, EntityType.Builder.create(GiclopsEntity::new, EntityClassification.MONSTER).size(8.0F, 12.0F), "giclops");
-		//register(registry, EntityType.Builder.create(WyrmEntity::new, EntityClassification.MONSTER), "wyrm");
+		register(registry, EntityType.Builder.create(WyrmEntity::new, EntityClassification.MONSTER), "wyrm");
 		
 		register(registry, EntityType.Builder.create(BlackPawnEntity::new, EntityClassification.MONSTER).size(0.6F, 1.5F), "dersite_pawn");
 		register(registry, EntityType.Builder.create(WhitePawnEntity::new, EntityClassification.MONSTER).size(0.6F, 1.5F), "prospitian_pawn");
