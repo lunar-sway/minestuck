@@ -9,10 +9,8 @@ import com.mraof.minestuck.entity.consort.ConsortDialogue;
 import com.mraof.minestuck.entity.consort.ConsortRewardHandler;
 import com.mraof.minestuck.entry.ComputerBlockProcess;
 import com.mraof.minestuck.entry.EntryProcess;
-//import com.mraof.minestuck.entry.RSEntryBlockProcess;
 import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.ModMusicDiscItem;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.KindAbstratusList;
 import com.mraof.minestuck.skaianet.SessionHandler;
@@ -21,7 +19,6 @@ import com.mraof.minestuck.world.gen.MSSurfaceBuilders;
 import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.WorldPersistenceHooks;
 import net.minecraftforge.fml.common.Mod;
@@ -77,8 +74,6 @@ public class Minestuck
 		
 		KindAbstratusList.registerTypes();
 		DeployList.registerItems();
-		
-		ModMusicDiscItem.setup();
 		
 		ProgramData.registerProgram(0, new ItemStack(MSItems.CLIENT_DISK), ProgramData::onClientClosed);	//This idea was kind of bad and should be replaced
 		ProgramData.registerProgram(1, new ItemStack(MSItems.SERVER_DISK), ProgramData::onServerClosed);
