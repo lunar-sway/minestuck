@@ -5,7 +5,7 @@ import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.world.biome.Biome;
 
-public class LandBiomeHolder
+public class LandBiomeHolder	//TODO getting a biome no longer goes through the land dimension. Check if there are any places where a wrapper biome should be, but isn't
 {
 	private final LandTypePair landTypes;
 	private final LandWrapperBiome normalBiome, oceanBiome, roughBiome;

@@ -1,25 +1,14 @@
 package com.mraof.minestuck.world.biome.gen;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.biome.provider.BiomeProvider;
-import net.minecraft.world.gen.LazyAreaLayerContext;
-import net.minecraft.world.gen.area.IAreaFactory;
-import net.minecraft.world.gen.area.LazyArea;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.layer.Layer;
-import net.minecraft.world.gen.layer.LayerUtil;
 
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
 import java.util.Set;
 
 public class LandBiomeProvider extends BiomeProvider
@@ -35,7 +24,8 @@ public class LandBiomeProvider extends BiomeProvider
 		this.genLevelLayer = LandBiomeLayers.buildLandProcedure(settings.getSeed(), settings.getGenSettings());
 		biomeHolder = settings.getGenSettings().getBiomeHolder();
 	}
-
+	
+	@Override
 	public Biome getNoiseBiome(int x, int y, int z) {
 		return this.genLevelLayer.func_215738_a(x, z);
 	}

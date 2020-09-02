@@ -7,7 +7,6 @@ import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
-import com.mraof.minestuck.world.gen.LandChunkGenerator;
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.MSWorldGenTypes;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
@@ -137,6 +136,8 @@ public class LandDimension extends Dimension
 		return pos;
 	}
 	
+	//TODO make sure the sky color and cloud gets used (or removed/replaced)
+	//TODO this is now hardcoded to be used for skylight. Change this accordingly and change land sky renderer to use its own calculation (for this and for star brightness)
 	@Override
 	public float calculateCelestialAngle(long worldTime, float partialTicks)
 	{
@@ -227,13 +228,7 @@ public class LandDimension extends Dimension
 		else if(properties.forceThunder == LandProperties.ForceType.ON)
 			world.thunderingStrength = 1.0F;
 	}
-
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public boolean isSkyColored() {
-		return true;
-	}
-
+	
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public Vec3d getFogColor(float par1, float par2)
