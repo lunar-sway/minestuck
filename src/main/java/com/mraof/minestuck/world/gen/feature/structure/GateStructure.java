@@ -139,8 +139,9 @@ public class GateStructure extends Structure<NoFeatureConfig>
 	
 	public static class Start extends StructureStart
 	{
-		public Start(Structure<?> p_i225811_1_, int p_i225811_2_, int p_i225811_3_, MutableBoundingBox p_i225811_4_, int p_i225811_5_, long p_i225811_6_) {
-			super(p_i225811_1_, p_i225811_2_, p_i225811_3_, p_i225811_4_, p_i225811_5_, p_i225811_6_);
+		public Start(Structure<?> structure, int chunkX, int chunkZ, MutableBoundingBox boundingBox, int reference, long seed)
+		{
+			super(structure, chunkX, chunkZ, boundingBox, reference, seed);
 		}
 		
 		@Override
