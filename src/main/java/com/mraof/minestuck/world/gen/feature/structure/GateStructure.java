@@ -6,18 +6,15 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.LandChunkGenerator;
 import com.mraof.minestuck.world.gen.LandGenSettings;
-import net.minecraft.util.SharedSeedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeManager;
 import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.structure.MineshaftConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.structure.StructureStart;
@@ -70,21 +67,19 @@ public class GateStructure extends Structure<NoFeatureConfig>
 		return 3; //Note: might not agree with actual gate pieces that are added in the future
 	}
 	
-	public BlockPos findLandGatePos(IWorld world)
+	public BlockPos findLandGatePos(ServerWorld world)
 	{
-		if (world instanceof ServerWorld)
+		if(world.getChunkProvider().getChunkGenerator().getBiomeProvider().hasStructure(this))
 		{
-			if(((ServerWorld) world).getChunkProvider().getChunkGenerator().getBiomeProvider().hasStructure(this))
+			ChunkPos chunkPos = findGatePosition(world.getDimension().getType(), world.getChunkProvider().getChunkGenerator());
+			
+			StructureStart start = world.getChunk(chunkPos.x, chunkPos.z, ChunkStatus.STRUCTURE_STARTS).getStructureStart(getStructureName());
+			
+			if(start instanceof Start)
 			{
-				ChunkPos chunkPos = findGatePosition(world.getDimension().getType(), ((ServerWorld) world).getChunkProvider().getChunkGenerator());
-
-				StructureStart start = world.getChunk(chunkPos.x, chunkPos.z, ChunkStatus.STRUCTURE_STARTS).getStructureStart(getStructureName());
-
-				if(start instanceof Start)
-				{
-					return ((Start) start).findGatePos();
-				} else Debug.warnf("Expected to find gate structure at chunk coords %s, in dimension %s, but found %s!", chunkPos, world.getDimension().getType().getRegistryName(), start);
-			}
+				return ((Start) start).findGatePos();
+			} else
+				Debug.warnf("Expected to find gate structure at chunk coords %s, in dimension %s, but found %s!", chunkPos, world.getDimension().getType().getRegistryName(), start);
 		}
 		
 		return null;
