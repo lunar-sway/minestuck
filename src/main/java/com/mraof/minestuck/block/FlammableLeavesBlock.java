@@ -10,7 +10,7 @@ public class FlammableLeavesBlock extends LeavesBlock
 {
 	public FlammableLeavesBlock(Properties properties)
 	{
-		super(properties.notSolid());
+		super(properties);
 	}
 	
 	@Override

@@ -1,22 +1,6 @@
 package com.mraof.minestuck.world.gen.feature.tree;
 
-import com.mojang.datafixers.Dynamic;
-import com.mraof.minestuck.block.MSBlocks;
-import net.minecraft.block.BlockState;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.world.gen.IWorldGenerationBaseReader;
-import net.minecraft.world.gen.IWorldGenerationReader;
-import net.minecraft.world.gen.feature.AbstractTreeFeature;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraftforge.common.IPlantable;
-
-import java.util.Random;
-import java.util.Set;
-import java.util.function.Function;
-
-//public class RainbowTreeFeature extends AbstractTreeFeature<NoFeatureConfig>
+//public class RainbowTreeFeature extends AbstractTreeFeature<NoFeatureConfig> TODO maybe reimplement? (might not be needed with vanillas changes together with forge patches)
 //{
 //	private static final BlockState LOG = MSBlocks.RAINBOW_LOG.getDefaultState();
 //	private static final BlockState LEAF = MSBlocks.RAINBOW_LEAVES.getDefaultState();
