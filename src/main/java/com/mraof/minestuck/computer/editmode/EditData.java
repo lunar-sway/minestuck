@@ -201,7 +201,7 @@ public class EditData
 					throw new IllegalStateException("Unable to teleport editmode player "+player.getGameProfile().getName()+" to their original dimension with world: " + world);
 				else LOGGER.warn("Unable to teleport editmode player {} to their original dimension with world: {}", player.getGameProfile().getName(), world);
 			}
-			//player.connection.setPlayerLocation(posX, posY, posZ, rotationYaw, rotationPitch);
+			player.connection.setPlayerLocation(posX, posY, posZ, rotationYaw, rotationPitch);
 			player.setGameType(gameType);
 			player.abilities.read(capabilities);
 			player.sendPlayerAbilities();

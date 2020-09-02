@@ -66,12 +66,12 @@ public class DecoyEntity extends MobEntity
 		this.player = new DecoyPlayer(world, this, player);
 		for(String key : player.getPersistentData().keySet())
 			this.player.getPersistentData().put(key, player.getPersistentData().get(key).copy());
+		this.setPosition(player.getPosX(), player.getPosY(), player.getPosZ());
 		originX = this.getPosX();
 		this.chunkCoordX = player.chunkCoordX;
 		originY = this.getPosY();
 		this.chunkCoordY = player.chunkCoordY;
 		originZ = this.getPosZ();
-		this.setPosition(this.getPosX(), this.getPosY(), this.getPosZ());
 		this.chunkCoordZ = player.chunkCoordZ;
 		this.rotationPitch = player.rotationPitch;
 		this.rotationYaw = player.rotationYaw;
