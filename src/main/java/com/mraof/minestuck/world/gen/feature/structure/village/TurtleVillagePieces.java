@@ -50,7 +50,7 @@ public class TurtleVillagePieces
 		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
 			if (this.averageGroundLvl < 0)
 			{
-				this.averageGroundLvl = this.getAverageGroundLevel(worldIn, structureBoundingBoxIn);
+				this.averageGroundLvl = this.getAverageGroundLevel(worldIn, chunkGeneratorIn, structureBoundingBoxIn);
 
 				if (this.averageGroundLvl < 0)
 				{
@@ -152,7 +152,7 @@ public class TurtleVillagePieces
 		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
 			if (this.averageGroundLvl < 0)
 			{
-				this.averageGroundLvl = this.getAverageGroundLevel(worldIn, structureBoundingBoxIn);
+				this.averageGroundLvl = this.getAverageGroundLevel(worldIn, chunkGeneratorIn, structureBoundingBoxIn);
 
 				if (this.averageGroundLvl < 0)
 				{
@@ -225,7 +225,7 @@ public class TurtleVillagePieces
 		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
 			if (this.averageGroundLvl < 0)
 			{
-				this.averageGroundLvl = this.getAverageGroundLevel(worldIn, structureBoundingBoxIn);
+				this.averageGroundLvl = this.getAverageGroundLevel(worldIn, chunkGeneratorIn, structureBoundingBoxIn);
 
 				if (this.averageGroundLvl < 0)
 				{
@@ -334,7 +334,7 @@ public class TurtleVillagePieces
 		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
 			if (this.averageGroundLvl < 0)
 			{
-				this.averageGroundLvl = this.getAverageGroundLevel(worldIn, structureBoundingBoxIn);
+				this.averageGroundLvl = this.getAverageGroundLevel(worldIn, chunkGeneratorIn, structureBoundingBoxIn);
 
 				if (this.averageGroundLvl < 0)
 				{
