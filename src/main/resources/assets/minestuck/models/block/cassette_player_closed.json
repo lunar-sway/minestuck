@@ -9,7 +9,6 @@
 			"name": "tapeplayer14",
 			"from": [5, 1, 5],
 			"to": [11, 2, 6],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 5, 8]},
 			"faces": {
 				"north": {"uv": [8, 9, 11, 9.5], "texture": "#cassette_player"},
 				"south": {"uv": [7, 9.5, 10, 10], "texture": "#cassette_player"},
@@ -20,7 +19,6 @@
 			"name": "tapeplayer11",
 			"from": [5, 1.75, 6],
 			"to": [11, 2, 10],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 5.75, 8.5]},
 			"faces": {
 				"up": {"uv": [7, 0, 10, 2], "texture": "#cassette_player"},
 				"down": {"uv": [7, 2, 10, 4], "texture": "#cassette_player"}
@@ -30,7 +28,6 @@
 			"name": "tapeplayer10",
 			"from": [5, 0.75, 4.01],
 			"to": [11, 1.75, 5.01],
-			"rotation": {"angle": 0, "axis": "y", "origin": [6.5, 0.75, 8]},
 			"faces": {
 				"north": {"uv": [4, 10.5, 7, 11], "texture": "#cassette_player"},
 				"up": {"uv": [7, 10.5, 10, 11], "texture": "#cassette_player"}
@@ -40,7 +37,6 @@
 			"name": "tapeplayer4",
 			"from": [4, 1, 4],
 			"to": [5, 2, 15],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 5, 8]},
 			"faces": {
 				"north": {"uv": [10, 1.5, 10.5, 2], "texture": "#cassette_player"},
 				"east": {"uv": [8, 5.5, 13.5, 6], "texture": "#cassette_player"},
@@ -53,7 +49,6 @@
 			"name": "tapeplayer3",
 			"from": [11, 1, 4],
 			"to": [12, 2, 15],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 5, 8]},
 			"faces": {
 				"north": {"uv": [1, 10.5, 1.5, 11], "texture": "#cassette_player"},
 				"east": {"uv": [8, 5, 13.5, 5.5], "texture": "#cassette_player"},
@@ -66,7 +61,6 @@
 			"name": "tapeplayer2",
 			"from": [5, 1, 10],
 			"to": [11, 2, 15],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 5, 8]},
 			"faces": {
 				"north": {"uv": [4, 3, 7, 3.5], "texture": "#cassette_player"},
 				"south": {"uv": [8, 7.5, 11, 8], "texture": "#cassette_player"},
@@ -77,7 +71,6 @@
 			"name": "tapeplayer1",
 			"from": [4, 0, 4],
 			"to": [12, 1, 15],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0.75, 8]},
 			"faces": {
 				"north": {"uv": [8, 7, 12, 7.5], "texture": "#cassette_player"},
 				"east": {"uv": [8, 4.5, 13.5, 5], "texture": "#cassette_player"},

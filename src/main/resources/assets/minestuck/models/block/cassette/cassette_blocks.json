@@ -1,28 +1,6 @@
 {
-	"credit":       "Made by Ishumire",
-	"texture_size": [ 32, 32 ],
+	"parent": "minestuck:block/cassette/cassette_model",
 	"textures": {
-		"0":        "minestuck:block/cassette/cassette_blocks"
-	},
-	"elements":     [
-		{
-			"from":  [ 5, 1, 6 ],
-			"to":    [ 11, 1.75, 10 ],
-			"faces": {
-				"north": { "uv": [ 0, 0, 3, 0.375 ], "texture": "#0" },
-				"east":  { "uv": [ 0, 0, 2, 0.375 ], "texture": "#0" },
-				"south": { "uv": [ 0, 0, 3, 0.375 ], "texture": "#0" },
-				"west":  { "uv": [ 0, 0, 2, 0.375 ], "texture": "#0" },
-				"up":    { "uv": [ 0, 10, 9, 16 ], "texture": "#0" },
-				"down":  { "uv": [ 0, 0, 3, 2 ], "texture": "#0" }
-			}
-		}
-	],
-	"groups":       [
-		{
-			"name":     "group",
-			"origin":   [ 8, 8, 8 ],
-			"children": [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ]
-		}, 12
-	]
+		"texture": "minestuck:block/cassette/cassette_blocks"
+	}
 }
