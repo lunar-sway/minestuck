@@ -67,13 +67,13 @@ public final class UnderlingController
 			}
 		}
 		
-		if(impWeight > 0)
+		if(impWeight > 0 && MinestuckConfig.naturalImpSpawn.get())
 			list.add(new Biome.SpawnListEntry(MSEntityTypes.IMP, impWeight, Math.max(1, (int)(impWeight/2.5)), Math.max(3, impWeight)));
-		if(ogreWeight > 0)
+		if(ogreWeight > 0 && MinestuckConfig.naturalOgreSpawn.get())
 			list.add(new Biome.SpawnListEntry(MSEntityTypes.OGRE, ogreWeight, ogreWeight >= 5 ? 2 : 1, Math.max(1, ogreWeight/2)));
-		if(basiliskWeight > 0)
+		if(basiliskWeight > 0 && MinestuckConfig.naturalBasiliskSpawn.get())
 			list.add(new Biome.SpawnListEntry(MSEntityTypes.BASILISK, basiliskWeight, 1, Math.max(1, basiliskWeight/2)));
-		if(lichWeight > 0)
+		if(lichWeight > 0 && MinestuckConfig.naturalLichSpawn.get())
 			list.add(new Biome.SpawnListEntry(MSEntityTypes.LICH, lichWeight, 1, Math.max(1, lichWeight/2)));
 		if(giclopsWeight > 0 && !MinestuckConfig.disableGiclops.get())
 			list.add(new Biome.SpawnListEntry(MSEntityTypes.GICLOPS, giclopsWeight, 1, Math.max(1, giclopsWeight/2)));

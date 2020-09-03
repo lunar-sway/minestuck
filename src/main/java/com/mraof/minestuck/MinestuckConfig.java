@@ -58,6 +58,10 @@ public class MinestuckConfig
 	//Medium
 	public static BooleanValue canBreakGates;
 	public static BooleanValue disableGiclops;
+	public static BooleanValue naturalImpSpawn;
+	public static BooleanValue naturalOgreSpawn;
+	public static BooleanValue naturalBasiliskSpawn;
+	public static BooleanValue naturalLichSpawn;
 	public static BooleanValue allowSecondaryConnections;
 	
 	//Ores
@@ -226,6 +230,14 @@ public class MinestuckConfig
 				.define("canBreakGates",true);
 		disableGiclops = SERVER_BUILDER.comment("Right now, the giclops pathfinding is currently causing huge amounts of lag due to their size. This option is a short-term solution that will disable giclops spawning and remove all existing giclopes.")
 				.define("disableGiclops",true);
+		naturalImpSpawn = SERVER_BUILDER.comment("Determines if imps will spawn naturally. Note that this does not affect other spawning methods or any imps that has already spawned.")
+				.define("naturalImpSpawn",true);
+		naturalOgreSpawn = SERVER_BUILDER.comment("Determines if ogres will spawn naturally. Note that this does not affect other spawning methods or any ogres that has already spawned.")
+				.define("naturalOgreSpawn",true);
+		naturalBasiliskSpawn = SERVER_BUILDER.comment("Determines if basilisks will spawn naturally. Note that this does not affect other spawning methods or any basilisks that has already spawned.")
+				.define("naturalBasiliskSpawn",true);
+		naturalLichSpawn = SERVER_BUILDER.comment("Determines if liches will spawn naturally. Note that this does not affect other spawning methods or any liches that has already spawned.")
+				.define("naturalLichSpawn",true);
 		allowSecondaryConnections = SERVER_BUILDER.comment("Set this to true to allow so-called 'secondary connections' to be created.")
 				.define("secondaryConnections", true);
 		SERVER_BUILDER.pop();
