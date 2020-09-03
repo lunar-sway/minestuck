@@ -3,7 +3,7 @@
 	"texture_size": [32, 32],
 	"textures": {
 		"cassette_player": "minestuck:block/cassette_player_default",
-		"particle": "minestuck:block/cassette_player_default"
+		"particle": "minestuck:item/cassette_player"
 	},
 	"elements": [
 		{
