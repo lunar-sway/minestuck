@@ -4,16 +4,12 @@ import com.mraof.minestuck.block.CassettePlayerBlock;
 import com.mraof.minestuck.block.EnumCassetteType;
 import com.mraof.minestuck.block.MSBlocks;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
-import net.minecraft.stats.Stats;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
 
 import java.util.function.Supplier;
 
@@ -39,13 +35,7 @@ public class CassetteItem extends ModMusicDiscItem
 			if(!world.isRemote)
 			{
 				(MSBlocks.CASSETTE_PLAYER).insertCassette(world, blockpos, blockstate, itemstack);
-				world.playEvent((PlayerEntity) null, Constants.WorldEvents.PLAY_RECORD_SOUND, blockpos, Item.getIdFromItem(this));
 				itemstack.shrink(1);
-				PlayerEntity playerentity = context.getPlayer();
-				if(playerentity != null)
-				{
-					playerentity.addStat(Stats.PLAY_RECORD);
-				}
 			}
 			
 			return ActionResultType.SUCCESS;

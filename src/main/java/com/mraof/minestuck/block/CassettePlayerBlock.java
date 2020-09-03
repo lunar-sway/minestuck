@@ -13,6 +13,7 @@ import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.stats.Stats;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Hand;
@@ -21,6 +22,7 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
@@ -46,7 +48,20 @@ public class CassettePlayerBlock extends DecorBlock
 		if(player.isSneaking())
 		{
 			state = state.cycle(OPEN);
+			TileEntity tileentity = worldIn.getTileEntity(pos);
+			ItemStack itemStack = ((CassettePlayerTileEntity) tileentity).getCassette();
 			worldIn.setBlockState(pos, state, 2);
+			if(tileentity instanceof CassettePlayerTileEntity && !state.get(OPEN))
+			{
+				worldIn.playEvent((PlayerEntity) null, Constants.WorldEvents.PLAY_RECORD_SOUND, pos, Item.getIdFromItem(itemStack.getItem()));
+				if(player != null)
+				{
+					player.addStat(Stats.PLAY_RECORD);
+				}
+			} else if(tileentity instanceof CassettePlayerTileEntity && state.get(OPEN))
+			{
+				worldIn.playEvent(1010, pos, 0);
+			}
 			return true;
 		} else if(state.get(CASSETTE) != EnumCassetteType.NONE && state.get(OPEN))
 		{
@@ -66,7 +81,8 @@ public class CassettePlayerBlock extends DecorBlock
 		if(tileentity instanceof CassettePlayerTileEntity && state.get(OPEN) && state.get(CASSETTE) == EnumCassetteType.NONE)
 		{
 			((CassettePlayerTileEntity) tileentity).setCassette(cassetteStack.copy());
-			if(cassetteStack.getItem() instanceof CassetteItem){
+			if(cassetteStack.getItem() instanceof CassetteItem)
+			{
 				worldIn.setBlockState(pos, state.with(CASSETTE, ((CassetteItem) cassetteStack.getItem()).cassetteID), 2);
 			}
 		}
