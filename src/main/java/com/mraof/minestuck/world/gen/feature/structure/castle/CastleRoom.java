@@ -1,4 +1,4 @@
-package com.mraof.minestuck.world.gen.feature.structure;
+package com.mraof.minestuck.world.gen.feature.structure.castle;
 
 public class CastleRoom 
 {

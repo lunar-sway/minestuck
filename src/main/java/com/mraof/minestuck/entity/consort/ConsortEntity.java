@@ -9,6 +9,7 @@ import com.mraof.minestuck.util.MSNBTUtil;
 import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.player.PlayerEntity;
@@ -54,6 +55,13 @@ public abstract class ConsortEntity extends MinestuckEntity implements IContaine
 	}
 	
 	@Override
+	protected void registerAttributes()
+	{
+		super.registerAttributes();
+		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10D);
+	}
+	
+	@Override
 	protected void registerGoals()
 	{
 		goalSelector.addGoal(0, new SwimGoal(this));
@@ -67,12 +75,6 @@ public abstract class ConsortEntity extends MinestuckEntity implements IContaine
 	{
 		if(!this.detachHome() || getMaximumHomeDistance() > 1)
 			goalSelector.addGoal(5, new WaterAvoidingRandomWalkingGoal(this, 0.5F));
-	}
-	
-	@Override
-	protected float getMaximumHealth()
-	{
-		return 10;
 	}
 	
 	@Override

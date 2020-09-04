@@ -14,6 +14,7 @@ import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameType;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
@@ -253,10 +254,7 @@ public class EditData
 				connection.inventory = this.inventory;
 				if(editPlayer != null)
 				{
-					
-					connection.useCoordinates = true;
-					connection.posX = editPlayer.getPosX();
-					connection.posZ = editPlayer.getPosZ();
+					ServerEditHandler.lastEditmodePos.put(connection, new Vec3d(editPlayer.getPosX(), editPlayer.getPosY(), editPlayer.getPosZ()));
 				}
 			} else LOGGER.warn("Unable to perform editmode recovery for the connection for client player {}. Got null connection.", clientPlayer.getUsername());
 		}

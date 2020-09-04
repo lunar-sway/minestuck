@@ -109,7 +109,7 @@ public class ServerEventHandler
 				Echeladder.increaseProgress(player, exp);
 		}
 		if(event.getEntity() instanceof ServerPlayerEntity)
-			SburbHandler.stopEntry((ServerPlayerEntity) event.getEntity());
+			SburbHandler.cancelSelection((ServerPlayerEntity) event.getEntity());
 	}
 
 	//Gets reset after AttackEntityEvent but before LivingHurtEvent, but is used in determining if it's a critical hit
@@ -166,7 +166,7 @@ public class ServerEventHandler
 	@SubscribeEvent
 	public static void playerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event)
 	{
-		SburbHandler.stopEntry((ServerPlayerEntity) event.getPlayer());
+		SburbHandler.cancelSelection((ServerPlayerEntity) event.getPlayer());
 		
 		PlayerSavedData.getData((ServerPlayerEntity) event.getPlayer()).getEcheladder().resendAttributes(event.getPlayer());
 	}

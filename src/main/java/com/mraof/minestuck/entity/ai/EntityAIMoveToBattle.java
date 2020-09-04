@@ -45,7 +45,7 @@ public class EntityAIMoveToBattle extends Goal
 	public void startExecuting()
 	{
 		
-		this.target.getNavigator().tryMoveToXYZ(destination.x, destination.y, destination.z, target.getWanderSpeed());
+		this.target.getNavigator().tryMoveToXYZ(destination.x, destination.y, destination.z, 1.0F);
 	}
 	
 	@Override

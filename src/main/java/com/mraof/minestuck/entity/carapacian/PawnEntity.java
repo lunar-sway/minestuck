@@ -5,6 +5,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.ai.goal.RangedAttackGoal;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.projectile.ArrowEntity;
@@ -27,7 +28,6 @@ public abstract class PawnEntity extends CarapacianEntity implements IRangedAtta
 	private static Random randStatic = new Random();
 	private final RangedAttackGoal aiArrowAttack = new RangedAttackGoal(this, 0.25F, 20, 10.0F);
 	private final MeleeAttackGoal aiMeleeAttack = new MeleeAttackGoal(this, .4F, false);
-	private static final float moveSpeed = 0.3F;
 	
 	public PawnEntity(EntityType<? extends PawnEntity> type, World world)
 	{
@@ -35,17 +35,21 @@ public abstract class PawnEntity extends CarapacianEntity implements IRangedAtta
 		this.experienceValue = 1;
 		setCombatTask();
 	}
-
+	
 	@Override
-	public float getMaximumHealth() 
+	protected void registerAttributes()
 	{
-		return 20;
+		super.registerAttributes();
+		getAttributes().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
+		
+		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.2D);
 	}
-
+	
 	@Override
-	public float getWanderSpeed() 
+	protected void registerGoals()
 	{
-		return moveSpeed;
+		super.registerGoals();
+		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 0, true, false, entity -> attackEntitySelector.isEntityApplicable(entity)));
 	}
 	
 	@Override
@@ -181,12 +185,5 @@ public abstract class PawnEntity extends CarapacianEntity implements IRangedAtta
 		
 		setCombatTask();
 		return spawnDataIn;
-	}
-	
-	@Override
-	protected void registerAttributes()
-	{
-		super.registerAttributes();
-		this.getAttributes().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
 	}
 }

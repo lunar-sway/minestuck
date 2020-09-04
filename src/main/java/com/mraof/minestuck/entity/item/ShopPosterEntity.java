@@ -26,10 +26,10 @@ public class ShopPosterEntity extends HangingArtEntity<ShopPosterEntity.ShopArt>
 		super(type, worldIn);
 	}
 	
-	public ShopPosterEntity(World worldIn, BlockPos pos, Direction direction, ItemStack stack, int meta)
+	public ShopPosterEntity(World worldIn, BlockPos pos, Direction direction, ItemStack stack)
 	{
-		super(MSEntityTypes.SHOP_POSTER, worldIn, pos, direction, stack, meta, false);
-		setPosterType(meta);
+		super(MSEntityTypes.SHOP_POSTER, worldIn, pos, direction);
+		//setPosterType(meta);
 	}
 	
 	@Override

@@ -1,8 +1,8 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.client.gui.MSScreenFactories;
-import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.player.Title;
+import com.mraof.minestuck.skaianet.SburbHandler;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 
@@ -47,6 +47,6 @@ public class TitleSelectPacket implements PlayToBothPacket
 	@Override
 	public void execute(ServerPlayerEntity player)
 	{
-		SburbHandler.titleSelected(player, title);
+		SburbHandler.handleTitleSelection(player, title);
 	}
 }

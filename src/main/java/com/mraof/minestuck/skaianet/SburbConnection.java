@@ -31,7 +31,7 @@ public final class SburbConnection
 	
 	private final PlayerIdentifier clientIdentifier;
 	private PlayerIdentifier serverIdentifier;
-	private GlobalPos clientComputer;	//TODO Abstraction that works with multiple representations of computers
+	private GlobalPos clientComputer;	//TODO Replace with abstraction that works with multiple representations of computers
 	private GlobalPos serverComputer;
 	
 	private boolean isActive;
@@ -44,12 +44,7 @@ public final class SburbConnection
 	private final Set<String> givenItemList = new HashSet<>();
 	
 	//Only used by the edit handler
-	public int centerX, centerZ;	//TODO No longer needed as it is either computer pos or the land dim spawn location. Should be functions instead
 	public ListNBT inventory;	//TODO Should not be public
-	
-	//Non-saved variables used by the edit handler
-	public double posX, posZ;
-	public boolean useCoordinates;
 	
 	SburbConnection(PlayerIdentifier client, SkaianetHandler handler)
 	{
@@ -276,8 +271,6 @@ public final class SburbConnection
 	void copyFrom(SburbConnection other)
 	{
 		canSplit = other.canSplit;
-		centerX = other.centerX;
-		centerZ = other.centerZ;
 		clientLandInfo = other.clientLandInfo;
 		hasEntered = other.hasEntered;
 		artifactType = other.artifactType;

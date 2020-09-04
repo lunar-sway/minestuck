@@ -4,6 +4,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entity.DecoyEntity;
 import com.mraof.minestuck.event.ConnectionClosedEvent;
+import com.mraof.minestuck.event.SburbEvent;
 import com.mraof.minestuck.item.crafting.alchemy.GristCostRecipe;
 import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
@@ -30,6 +31,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.GlobalPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.GameType;
@@ -52,14 +55,12 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
+import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
 import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Main class to handle the server side of edit mode.
@@ -67,10 +68,12 @@ import java.util.UUID;
  * @author kirderf1
  */
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public final class ServerEditHandler
+public final class ServerEditHandler	//TODO Consider splitting this class into two
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	public static final ArrayList<String> commands = new ArrayList<>(Arrays.asList("effect", "gamemode", "defaultgamemode", "enchant", "xp", "tp", "spreadplayers", "kill", "clear", "spawnpoint", "setworldspawn", "give"));
+	
+	static final Map<SburbConnection, Vec3d> lastEditmodePos = new HashMap<>();
 	
 	/**
 	 * Called both when any player logged out and when a player pressed the exit button.
@@ -82,10 +85,22 @@ public final class ServerEditHandler
 	}
 	
 	@SubscribeEvent
+	public static void serverStopped(FMLServerStoppedEvent event)
+	{
+		lastEditmodePos.clear();
+	}
+	
+	@SubscribeEvent
 	public static void onDisconnect(ConnectionClosedEvent event)
 	{
 		reset(getData(event.getMinecraftServer(), event.getConnection()));
-		event.getConnection().useCoordinates = false;
+		lastEditmodePos.remove(event.getConnection());
+	}
+	
+	@SubscribeEvent
+	public static void onEntry(SburbEvent.OnEntry event)
+	{
+		lastEditmodePos.remove(event.getConnection());
 	}
 	
 	@SubscribeEvent
@@ -174,11 +189,7 @@ public final class ServerEditHandler
 			Debug.info("Activating edit mode on player \""+player.getName().getFormattedText()+"\", target player: \""+computerTarget+"\".");
 			DecoyEntity decoy = new DecoyEntity((ServerWorld) player.world, player);
 			EditData data = new EditData(decoy, player, c);
-			if(!c.hasEntered())
-			{
-				c.centerX = c.getClientComputer().getPos().getX();
-				c.centerZ = c.getClientComputer().getPos().getZ();
-			}
+
 			if(!setPlayerStats(player, c))
 			{
 				player.sendMessage(new StringTextComponent(TextFormatting.RED+"Failed to activate edit mode."));
@@ -188,8 +199,9 @@ public final class ServerEditHandler
 				player.inventory.read(c.inventory);
 			decoy.world.addEntity(decoy);
 			MSExtraData.get(player.world).addEditData(data);
-			
-			ServerEditPacket packet = ServerEditPacket.activate(computerTarget.getUsername(), c.centerX, c.centerZ, DeployList.getDeployListTag(player.getServer(), c));
+
+			BlockPos center = getEditmodeCenter(c);
+			ServerEditPacket packet = ServerEditPacket.activate(computerTarget.getUsername(), center.getX(), center.getZ(), DeployList.getDeployListTag(player.getServer(), c));
 			MSPacketHandler.sendToPlayer(packet, player);
 			data.sendGristCacheToEditor();
 		}
@@ -201,17 +213,18 @@ public final class ServerEditHandler
 		double posX, posY = 0, posZ;
 		ServerWorld world = player.getServer().getWorld(c.hasEntered() ? c.getClientDimension() : c.getClientComputer().getDimension());
 		
-		if(c.useCoordinates)
+		if(lastEditmodePos.containsKey(c))
 		{
-			posX = c.posX;
-			posZ = c.posZ;
-			posY = world.getHeight(Heightmap.Type.MOTION_BLOCKING, new BlockPos(posX, 0, posZ)).getY();
+			Vec3d lastPos = lastEditmodePos.get(c);
+			posX = lastPos.x;
+			posZ = lastPos.z;
 		} else
 		{
-			posX = c.centerX + 0.5;
-			posY = world.getHeight(Heightmap.Type.MOTION_BLOCKING, new BlockPos(c.centerX, 0, c.centerZ)).getY();
-			posZ = c.centerZ + 0.5;
+			BlockPos center = getEditmodeCenter(c);
+			posX = center.getX() + 0.5;
+			posZ = center.getZ() + 0.5;
 		}
+		posY = world.getHeight(Heightmap.Type.MOTION_BLOCKING, new BlockPos(posX, 0, posZ)).getY();
 		
 		if(Teleport.teleportEntity(player, world, posX, posY, posZ) == null)
 			return false;
@@ -230,7 +243,8 @@ public final class ServerEditHandler
 		EditData data = getData(editor);
 		if(data != null)
 		{
-			ServerEditPacket packet = ServerEditPacket.activate(data.connection.getClientIdentifier().getUsername(), data.connection.centerX, data.connection.centerZ, DeployList.getDeployListTag(editor.getServer(), data.connection));
+			BlockPos center = getEditmodeCenter(data.connection);
+			ServerEditPacket packet = ServerEditPacket.activate(data.connection.getClientIdentifier().getUsername(), center.getX(), center.getZ(), DeployList.getDeployListTag(editor.getServer(), data.connection));
 			MSPacketHandler.sendToPlayer(packet, editor);
 			data.sendGristCacheToEditor();
 		} else
@@ -253,7 +267,17 @@ public final class ServerEditHandler
 	public static EditData getData(DecoyEntity decoy) {
 		return MSExtraData.get(decoy.getEntityWorld()).findEditData(editData -> editData.getDecoy() == decoy);
 	}
-	
+
+	private static BlockPos getEditmodeCenter(SburbConnection connection)
+	{
+		GlobalPos computerPos = connection.getClientComputer();
+		if(computerPos == null)
+			throw new IllegalStateException("Connection has to be active with a computer position to be used here");
+		if(connection.hasEntered())
+			return new BlockPos(0, 0, 0);
+		else return computerPos.getPos();
+	}
+
 	@SubscribeEvent
 	public static void tickEnd(TickEvent.PlayerTickEvent event) {
 		if(event.phase != TickEvent.Phase.END || event.side == LogicalSide.CLIENT)
@@ -266,9 +290,10 @@ public final class ServerEditHandler
 		
 		SburbConnection c = data.connection;
 		int range = MSDimensions.isLandDimension(player.dimension) ? MinestuckConfig.landEditRange.get() : MinestuckConfig.overworldEditRange.get();
-		
+		BlockPos center = getEditmodeCenter(c);
+
 		updateInventory(player, c);
-		updatePosition(player, range, c.centerX, c.centerZ);
+		updatePosition(player, range, center.getX(), center.getZ());
 		
 		player.timeUntilPortal = player.getPortalCooldown();
 	}
@@ -481,7 +506,9 @@ public final class ServerEditHandler
 		
 		if(newX != player.getPosX() || newZ != player.getPosZ() || y != player.getPosY())
 		{
-			player.setPositionAndUpdate(newX, y, newZ);
+			if(player.world.isRemote)
+				player.setPosition(newX, y, newZ);
+			else player.setPositionAndUpdate(newX, y, newZ);
 		}
 	}
 	

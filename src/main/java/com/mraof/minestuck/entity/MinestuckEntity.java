@@ -2,7 +2,6 @@ package com.mraof.minestuck.entity;
 
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
@@ -16,15 +15,6 @@ public abstract class MinestuckEntity extends CreatureEntity
 	{
 		super(type, world);
 	}
-	
-	@Override
-	protected void registerAttributes()
-	{
-		super.registerAttributes();
-		this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(this.getMaximumHealth());
-	}
-	
-	protected abstract float getMaximumHealth();
 	
 	protected ResourceLocation createTexture()
 	{

@@ -2,7 +2,10 @@ package com.mraof.minestuck.entity.carapacian;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
@@ -16,21 +19,19 @@ public abstract class RookEntity extends CarapacianEntity implements IMob
 	}
 	
 	@Override
-	protected void registerGoals()
+	protected void registerAttributes()
 	{
-		this.goalSelector.addGoal(4, new MeleeAttackGoal(this, .4F, false));
+		super.registerAttributes();
+		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(50D);
+		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
 	}
 	
 	@Override
-	public float getMaximumHealth()
+	protected void registerGoals()
 	{
-		return 50;
-	}
-
-	@Override
-	public float getWanderSpeed()
-	{
-		return .3F;
+		super.registerGoals();
+		this.goalSelector.addGoal(4, new MeleeAttackGoal(this, .4F, false));
+		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 0, true, false, entity -> attackEntitySelector.isEntityApplicable(entity)));
 	}
 
 	public float getAttackStrength(Entity entity)

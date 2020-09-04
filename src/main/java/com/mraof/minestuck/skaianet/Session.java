@@ -227,7 +227,8 @@ public final class Session
 		
 		return types;
 	}
-	public void predefineCall(PlayerIdentifier player, SkaianetException.SkaianetConsumer<PredefineData> consumer) throws SkaianetException
+	
+	void predefineCall(PlayerIdentifier player, SkaianetException.SkaianetConsumer<PredefineData> consumer) throws SkaianetException
 	{
 		PredefineData data = predefinedPlayers.get(player);
 		if(data == null)	//TODO Do not create data for players that have entered (and clear predefined data when no longer needed)

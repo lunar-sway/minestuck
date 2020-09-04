@@ -7,6 +7,7 @@ import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.event.ConnectionClosedEvent;
 import com.mraof.minestuck.event.ConnectionCreatedEvent;
+import com.mraof.minestuck.event.SburbEvent;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
@@ -619,11 +620,10 @@ public final class SkaianetHandler
 		
 		SburbHandler.onEntry(mcServer, c);
 		
-		c.centerX = 0;
-		c.centerZ = 0;
-		c.useCoordinates = false;
 		updateAll();
 		infoTracker.reloadLandChains();
+		
+		MinecraftForge.EVENT_BUS.post(new SburbEvent.OnEntry(mcServer, c, sessionHandler.getPlayerSession(target)));
 	}
 	
 	public void resetGivenItems()
@@ -725,6 +725,6 @@ public final class SkaianetHandler
 	{
 		INSTANCE = null;
 		MSDimensionTypes.LANDS.dimToLandTypes.clear();
-		SburbHandler.titleSelectionMap.clear();
+		SburbHandler.playersInTitleSelection.clear();
 	}
 }

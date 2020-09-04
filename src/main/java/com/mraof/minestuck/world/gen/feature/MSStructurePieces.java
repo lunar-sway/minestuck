@@ -2,6 +2,7 @@ package com.mraof.minestuck.world.gen.feature;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.gen.feature.structure.*;
+import com.mraof.minestuck.world.gen.feature.structure.castle.*;
 import com.mraof.minestuck.world.gen.feature.structure.village.*;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
@@ -29,6 +30,9 @@ public final class MSStructurePieces
 	public static IStructurePieceType SHELL_HOUSE_1, TURTLE_MARKET_1, TURTLE_TEMPLE_1;
 	public static IStructurePieceType SMALL_VILLAGE_TENT_1, LARGE_VILLAGE_TENT_1, SMALL_TENT_STORE;
 	public static IStructurePieceType HIGH_NAK_HOUSING_1, HIGH_NAK_MARKET, HIGH_NAK_INN;
+	
+	public static IStructurePieceType SKAIA_CASTLE_START, SKAIA_CASTLE_SOLID, SKAIA_CASTLE_WALL;
+	public static IStructurePieceType SKAIA_CASTLE_ROOM, SKAIA_CASTLE_LIBRARY, SKAIA_CASTLE_STAIRCASE;
 	
 	/**
 	 * Should only be called by {@link com.mraof.minestuck.world.gen.feature.MSFeatures} on feature registry.
@@ -71,6 +75,13 @@ public final class MSStructurePieces
 		SMALL_VILLAGE_TENT_1 = register(IguanaVillagePieces.SmallTent1::new, Minestuck.MOD_ID+":small_village_tent_1");
 		LARGE_VILLAGE_TENT_1 = register(IguanaVillagePieces.LargeTent1::new, Minestuck.MOD_ID+":large_village_tent_1");
 		SMALL_TENT_STORE = register(IguanaVillagePieces.SmallTentStore::new, Minestuck.MOD_ID+":small_tent_store");
+		
+		SKAIA_CASTLE_START = register(CastleStartPiece::new, Minestuck.MOD_ID+":skaia_castle_start");
+		SKAIA_CASTLE_SOLID = register(CastleSolidPiece::new, Minestuck.MOD_ID+":skaia_castle_solid");
+		SKAIA_CASTLE_WALL = register(CastleWallPiece::new, Minestuck.MOD_ID+":skaia_castle_wall");
+		SKAIA_CASTLE_ROOM = register(CastleRoomPiece::new, Minestuck.MOD_ID+":skaia_castle_room");
+		SKAIA_CASTLE_LIBRARY = register(CastleLibraryPiece::new, Minestuck.MOD_ID+":skaia_castle_library");
+		SKAIA_CASTLE_STAIRCASE = register(CastleStaircasePiece::new, Minestuck.MOD_ID+":skaia_castle_staircase");
 	}
 	
 	private static IStructurePieceType register(IStructurePieceType type, String name) {

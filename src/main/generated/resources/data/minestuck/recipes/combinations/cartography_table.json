@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:crafting_table"
+  },
+  "input2": {
+    "item": "minecraft:map"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:cartography_table"
+  }
+}
