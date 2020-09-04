@@ -18,6 +18,7 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.util.Constants;
 
 import java.util.Random;
 
@@ -79,7 +80,7 @@ public class RainbowSaplingBlock extends BushBlock implements IGrowable
 				property = GREEN;
 			else property = BLUE;
 			if(!state.get(property))
-				worldIn.setBlockState(pos, state.with(property, true), 2);
+				worldIn.setBlockState(pos, state.with(property, true), Constants.BlockFlags.BLOCK_UPDATE);
 		}
 	}
 	

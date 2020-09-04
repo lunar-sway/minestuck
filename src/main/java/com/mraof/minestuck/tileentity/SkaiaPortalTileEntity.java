@@ -88,7 +88,7 @@ public class SkaiaPortalTileEntity extends TileEntity //implements ITeleporter
 		{
 			for(int blockZ = (int) z - 2; blockZ < z + 2; blockZ++)
 			{
-				world.setBlockState(new BlockPos(blockX, (int) y - 1, blockZ), blocks[(blockX + blockZ) & 3].getDefaultState(), 3);
+				world.setBlockState(new BlockPos(blockX, (int) y - 1, blockZ), blocks[(blockX + blockZ) & 3].getDefaultState(), Constants.BlockFlags.DEFAULT);
 				for(int blockY = (int) y; blockY < y + 6; blockY++)
 					world.removeBlock(new BlockPos(blockX, blockY, blockZ), false);
 			}

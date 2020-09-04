@@ -23,6 +23,7 @@ import net.minecraft.world.gen.feature.template.PlacementSettings;
 import net.minecraft.world.gen.feature.template.Template;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.util.Constants;
 
 import java.util.Random;
 import java.util.function.Function;
@@ -122,7 +123,7 @@ public class TowerFeature extends Feature<NoFeatureConfig>
 					String data = blockInfo.nbt.getString("metadata");
 					if(data.equals("basic_chest"))
 					{
-						worldIn.setBlockState(blockInfo.pos, Blocks.AIR.getDefaultState(), 3);
+						worldIn.setBlockState(blockInfo.pos, Blocks.AIR.getDefaultState(), Constants.BlockFlags.DEFAULT);
 						TileEntity tileentity = worldIn.getTileEntity(blockInfo.pos.down());
 						if (tileentity instanceof ChestTileEntity)
 						{

@@ -24,6 +24,7 @@ import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.template.TemplateManager;
+import net.minecraftforge.common.util.Constants;
 
 import java.util.List;
 import java.util.Random;
@@ -284,7 +285,7 @@ public class ConsortVillagePieces
 					
 					if (state.getMaterial().isLiquid() || state.isSolid())
 					{
-						worldIn.setBlockState(blockpos, pathBlock, 2);
+						worldIn.setBlockState(blockpos, pathBlock, Constants.BlockFlags.BLOCK_UPDATE);
 						break;
 					}
 					
@@ -302,7 +303,7 @@ public class ConsortVillagePieces
 			
 			while(pos.getY() >= world.getSeaLevel())
 			{
-				world.setBlockState(pos, block, 2);
+				world.setBlockState(pos, block, Constants.BlockFlags.BLOCK_UPDATE);
 				
 				pos = pos.down();
 				

@@ -38,6 +38,7 @@ import net.minecraft.world.chunk.ChunkSection;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.util.Constants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -296,9 +297,9 @@ public class EntryProcess
 				if(MinestuckConfig.entryCrater.get() && worldserver0.getBlockState(move.source).getBlock() != Blocks.BEDROCK)
 				{
 					if(move.update)
-						worldserver0.setBlockState(move.source, Blocks.AIR.getDefaultState(), 3);
+						worldserver0.setBlockState(move.source, Blocks.AIR.getDefaultState(), Constants.BlockFlags.DEFAULT);
 					else
-						worldserver0.setBlockState(move.source, Blocks.AIR.getDefaultState(), 2);
+						worldserver0.setBlockState(move.source, Blocks.AIR.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
 				}
 			}
 			blockMoves.clear();

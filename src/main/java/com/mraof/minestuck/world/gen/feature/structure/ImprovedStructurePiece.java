@@ -16,6 +16,7 @@ import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
+import net.minecraftforge.common.util.Constants;
 
 import java.util.Random;
 
@@ -158,7 +159,7 @@ public abstract class ImprovedStructurePiece extends StructurePiece
 				default:
 			}
 			
-			worldIn.setBlockState(blockpos, blockstateIn, 2);
+			worldIn.setBlockState(blockpos, blockstateIn, Constants.BlockFlags.BLOCK_UPDATE);
 			
 			IFluidState ifluidstate = worldIn.getFluidState(blockpos);
 			if(!ifluidstate.isEmpty())

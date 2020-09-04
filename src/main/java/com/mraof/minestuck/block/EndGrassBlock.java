@@ -8,6 +8,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.util.Constants;
 
 import java.util.Random;
 
@@ -62,6 +63,6 @@ public class EndGrassBlock extends Block
 	@Override
 	public void onPlantGrow(BlockState state, IWorld world, BlockPos pos, BlockPos source)
 	{
-		world.setBlockState(pos, Blocks.END_STONE.getDefaultState(), 2);
+		world.setBlockState(pos, Blocks.END_STONE.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
 	}
 }

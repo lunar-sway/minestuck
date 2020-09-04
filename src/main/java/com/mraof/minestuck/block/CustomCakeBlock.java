@@ -10,6 +10,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 
 public abstract class CustomCakeBlock extends CakeBlock
 {
@@ -46,7 +47,7 @@ public abstract class CustomCakeBlock extends CakeBlock
 			
 			if (i < 6)
 			{
-				worldIn.setBlockState(pos, state.with(BITES, i + 1), 3);
+				worldIn.setBlockState(pos, state.with(BITES, i + 1), Constants.BlockFlags.DEFAULT);
 			}
 			else
 			{

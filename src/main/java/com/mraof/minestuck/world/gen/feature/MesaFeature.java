@@ -11,6 +11,7 @@ import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraftforge.common.util.Constants;
 
 import java.util.*;
 import java.util.function.Function;
@@ -60,10 +61,10 @@ public class MesaFeature extends Feature<NoFeatureConfig>
 		
 		if(!stomps)
 		{
-				worldIn.setBlockState(nodePos, isAlt?altCore:baseCore, 2);
+				worldIn.setBlockState(nodePos, isAlt?altCore:baseCore, Constants.BlockFlags.BLOCK_UPDATE);
 		} else
 		{
-			worldIn.setBlockState(nodePos, Blocks.AIR.getDefaultState(), 2);
+			worldIn.setBlockState(nodePos, Blocks.AIR.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
 		}
 		
 		return true;
@@ -169,7 +170,7 @@ public class MesaFeature extends Feature<NoFeatureConfig>
 			do
 			{
 				was.put(pos, world.getBlockState(pos));
-				world.setBlockState(pos, isAlt?altBlock[pos.getY() % altBlock.length]:baseBlock[pos.getY() % baseBlock.length], 2);
+				world.setBlockState(pos, isAlt?altBlock[pos.getY() % altBlock.length]:baseBlock[pos.getY() % baseBlock.length], Constants.BlockFlags.BLOCK_UPDATE);
 				pos = pos.down();
 			} while(!world.getBlockState(pos).equals(groundBlock));
 		}
@@ -197,7 +198,7 @@ public class MesaFeature extends Feature<NoFeatureConfig>
 		
 		if(stomps)
 		{
-			was.forEach((t, u) -> world.setBlockState(t, u, 2));
+			was.forEach((t, u) -> world.setBlockState(t, u, Constants.BlockFlags.BLOCK_UPDATE));
 		}
 		
 		return corePosition;

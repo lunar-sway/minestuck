@@ -13,6 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -30,12 +31,13 @@ public class SpecialTNTBlock extends TNTBlock
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public void onBlockClicked(BlockState state, World worldIn, BlockPos pos, PlayerEntity player)
 	{
 		if(primed)
 		{
 			this.explode(worldIn, pos, player);
-			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 11);
+			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), Constants.BlockFlags.DEFAULT_AND_RERENDER);
 		}
 	}
 	

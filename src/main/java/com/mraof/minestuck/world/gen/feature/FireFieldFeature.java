@@ -10,6 +10,7 @@ import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraftforge.common.util.Constants;
 
 import java.util.Random;
 import java.util.function.Function;
@@ -37,9 +38,9 @@ public class FireFieldFeature extends Feature<NoFeatureConfig>
 			BlockState block = worldIn.getBlockState(pos1);
 			if(block == surface || block == upper)
 			{
-				worldIn.setBlockState(pos1, Blocks.NETHERRACK.getDefaultState(), 2);
+				worldIn.setBlockState(pos1, Blocks.NETHERRACK.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
 				if(worldIn.isAirBlock(pos1.up()) && rand.nextFloat() < FIRE_CHANCE)
-					worldIn.setBlockState(pos1.up(), Blocks.FIRE.getDefaultState(), 2);
+					worldIn.setBlockState(pos1.up(), Blocks.FIRE.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
 			}
 		}
 		

@@ -23,6 +23,7 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -93,7 +94,7 @@ public class ComputerBlock extends MachineBlock
 		if(!worldIn.isRemote)
 		{
 			BlockState newState = state.with(STATE, State.ON);
-			worldIn.setBlockState(pos, newState, 2);
+			worldIn.setBlockState(pos, newState, Constants.BlockFlags.BLOCK_UPDATE);
 			
 			TileEntity te = worldIn.getTileEntity(pos);
 			if(te instanceof ComputerTileEntity)
@@ -113,7 +114,7 @@ public class ComputerBlock extends MachineBlock
 			if(id == -1)
 			{
 				tileEntity.closeAll();
-				worldIn.setBlockState(pos, state.with(STATE, State.BROKEN), 2);
+				worldIn.setBlockState(pos, state.with(STATE, State.BROKEN), Constants.BlockFlags.BLOCK_UPDATE);
 			}
 			else tileEntity.installedPrograms.put(id, true);
 			tileEntity.markDirty();
