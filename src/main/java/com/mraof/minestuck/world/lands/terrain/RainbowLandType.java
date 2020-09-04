@@ -8,6 +8,7 @@ import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.MSSurfaceBuilders;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.feature.tree.RainbowTree;
 import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -17,12 +18,9 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.SpawnListEntry;
 import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.blockstateprovider.SimpleBlockStateProvider;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.OreFeatureConfig;
-import net.minecraft.world.gen.feature.TreeFeatureConfig;
-import net.minecraft.world.gen.foliageplacer.BlobFoliagePlacer;
 import net.minecraft.world.gen.placement.AtSurfaceWithExtraConfig;
 import net.minecraft.world.gen.placement.ChanceConfig;
 import net.minecraft.world.gen.placement.CountRangeConfig;
@@ -84,13 +82,10 @@ public class RainbowLandType extends TerrainLandType
 		
 		if(biome.staticBiome == MSBiomes.LAND_NORMAL)
 		{
-			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, MSFeatures.RAINBOW_TREE.withConfiguration((new TreeFeatureConfig.Builder(new SimpleBlockStateProvider(MSBlocks.RAINBOW_LOG.getDefaultState()), new SimpleBlockStateProvider(MSBlocks.RAINBOW_LEAVES.getDefaultState()),
-					new BlobFoliagePlacer(2, 0))).baseHeight(4).heightRandA(2).foliageHeight(3).ignoreVines().setSapling(MSBlocks.RAINBOW_SAPLING).build()).withPlacement(Placement.COUNT_EXTRA_HEIGHTMAP.configure(new AtSurfaceWithExtraConfig(4, 0.1F, 1))));
-
+			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.NORMAL_TREE.withConfiguration(RainbowTree.getDefaultConfig().build()).withPlacement(Placement.COUNT_EXTRA_HEIGHTMAP.configure(new AtSurfaceWithExtraConfig(4, 0.1F, 1))));
 		} else if(biome.staticBiome == MSBiomes.LAND_ROUGH)
 		{
-			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, MSFeatures.RAINBOW_TREE.withConfiguration((new TreeFeatureConfig.Builder(new SimpleBlockStateProvider(MSBlocks.RAINBOW_LOG.getDefaultState()), new SimpleBlockStateProvider(MSBlocks.RAINBOW_LEAVES.getDefaultState()),
-					new BlobFoliagePlacer(2, 0))).baseHeight(4).heightRandA(2).foliageHeight(3).ignoreVines().setSapling(MSBlocks.RAINBOW_SAPLING).build()).withPlacement(Placement.COUNT_EXTRA_HEIGHTMAP.configure(new AtSurfaceWithExtraConfig(2, 0.1F, 1))));
+			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.NORMAL_TREE.withConfiguration(RainbowTree.getDefaultConfig().build()).withPlacement(Placement.COUNT_EXTRA_HEIGHTMAP.configure(new AtSurfaceWithExtraConfig(2, 0.1F, 1))));
 		}
 		biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.MESA.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.CHANCE_HEIGHTMAP.configure(new ChanceConfig(25))));
 		

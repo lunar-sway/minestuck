@@ -27,7 +27,6 @@ public final class MSFeatures
 	public static final Structure<NoFeatureConfig> CONSORT_VILLAGE = getNull();
 	public static final Structure<NoFeatureConfig> SKAIA_CASTLE = getNull();
 	
-	public static final Feature<TreeFeatureConfig> RAINBOW_TREE = getNull();
 	public static final Feature<TreeFeatureConfig> END_TREE =	 getNull();
 	public static final Feature<BlockStateFeatureConfig> LEAFLESS_TREE = getNull();
 	
@@ -68,7 +67,6 @@ public final class MSFeatures
 		registry.register(new ConsortVillageStructure(NoFeatureConfig::deserialize).setRegistryName("consort_village"));
 		registry.register(new CastleStructure(NoFeatureConfig::deserialize).setRegistryName("skaia_castle"));
 		
-		registry.register(new TreeFeature(TreeFeatureConfig::func_227338_a_).setRegistryName("rainbow_tree"));
 		registry.register(new TreeFeature(TreeFeatureConfig::func_227338_a_).setRegistryName("end_tree"));
 		registry.register(new LeaflessTreeFeature(BlockStateFeatureConfig::deserialize).setRegistryName("leafless_tree"));
 		
