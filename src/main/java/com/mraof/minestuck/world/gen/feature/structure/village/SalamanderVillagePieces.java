@@ -241,9 +241,9 @@ public class SalamanderVillagePieces
 			setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.EAST), 1, 3, 4, structureBoundingBoxIn);
 
 			if(!spawns[0])
-				spawns[0] = spawnConsort(2, 1, 3, structureBoundingBoxIn, worldIn);
+				spawns[0] = spawnConsort(2, 1, 3, structureBoundingBoxIn, worldIn, chunkGeneratorIn);
 			if(!spawns[1])
-				spawns[1] = spawnConsort(3, 1, 4,structureBoundingBoxIn, worldIn);
+				spawns[1] = spawnConsort(3, 1, 4,structureBoundingBoxIn, worldIn, chunkGeneratorIn);
 			return true;
 		}
 	}
@@ -340,11 +340,11 @@ public class SalamanderVillagePieces
 			this.setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.SOUTH), 3, 7, 2, structureBoundingBoxIn);
 
 			if(!spawns[0])
-				spawns[0] = this.spawnConsort(2, 1, 4,structureBoundingBoxIn, worldIn);
+				spawns[0] = this.spawnConsort(2, 1, 4,structureBoundingBoxIn, worldIn, chunkGeneratorIn);
 			if(!spawns[1])
-				spawns[1] = this.spawnConsort(3, 1, 5,structureBoundingBoxIn, worldIn);
+				spawns[1] = this.spawnConsort(3, 1, 5,structureBoundingBoxIn, worldIn, chunkGeneratorIn);
 			if(!spawns[2])
-				spawns[2] = this.spawnConsort(4, 1, 4,structureBoundingBoxIn, worldIn);
+				spawns[2] = this.spawnConsort(4, 1, 4,structureBoundingBoxIn, worldIn, chunkGeneratorIn);
 
 			return true;
 		}
@@ -449,7 +449,7 @@ public class SalamanderVillagePieces
 			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 3, 1, 1, Direction.SOUTH, doorBlock.getBlock(), DoorHingeSide.LEFT);
 
 			if(!spawns[0])
-				spawns[0] = spawnConsort(3, 1, 5,structureBoundingBoxIn, worldIn, EnumConsort.getRandomMerchant(randomIn), 1);
+				spawns[0] = spawnConsort(3, 1, 5,structureBoundingBoxIn, worldIn, chunkGeneratorIn, EnumConsort.getRandomMerchant(randomIn), 1);
 
 			return true;
 		}

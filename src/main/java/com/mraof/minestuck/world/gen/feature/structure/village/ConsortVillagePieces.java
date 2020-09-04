@@ -24,7 +24,6 @@ import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.template.TemplateManager;
-import net.minecraft.world.server.ServerWorld;
 
 import java.util.List;
 import java.util.Random;
@@ -312,30 +311,30 @@ public class ConsortVillagePieces
 			}
 		}
 		
-		protected boolean spawnConsort(int x, int y, int z, MutableBoundingBox boundingBox, IWorld world)
+		protected boolean spawnConsort(int x, int y, int z, MutableBoundingBox boundingBox, IWorld world, ChunkGenerator<?> chunkGenerator)
 		{
-			return spawnConsort(x, y, z, boundingBox, world, EnumConsort.MerchantType.NONE, 48);
+			return spawnConsort(x, y, z, boundingBox, world, chunkGenerator, EnumConsort.MerchantType.NONE, 48);
 		}
 		
-		protected boolean spawnConsort(int x, int y, int z, MutableBoundingBox boundingBox, IWorld world, int maxHomeDistance)
+		protected boolean spawnConsort(int x, int y, int z, MutableBoundingBox boundingBox, IWorld world, ChunkGenerator<?> chunkGenerator, int maxHomeDistance)
 		{
-			return spawnConsort(x, y, z, boundingBox, world, EnumConsort.MerchantType.NONE, maxHomeDistance);
+			return spawnConsort(x, y, z, boundingBox, world, chunkGenerator, EnumConsort.MerchantType.NONE, maxHomeDistance);
 		}
 		
-		protected boolean spawnConsort(int x, int y, int z, MutableBoundingBox boundingBox, IWorld world, EnumConsort.MerchantType type, int maxHomeDistance)
+		protected boolean spawnConsort(int x, int y, int z, MutableBoundingBox boundingBox, IWorld world, ChunkGenerator<?> chunkGenerator, EnumConsort.MerchantType type, int maxHomeDistance)
 		{
 			BlockPos pos = new BlockPos(this.getXWithOffset(x, z), this.getYWithOffset(y), this.getZWithOffset(x, z));
 			
 			if(boundingBox.isVecInside(pos))
 			{
 				
-				if(!(((ServerWorld) world).getChunkProvider().getChunkGenerator().getSettings() instanceof LandGenSettings))
+				if(!(chunkGenerator.getSettings() instanceof LandGenSettings))
 				{
 					Debug.warn("Tried to spawn a consort in a building that is being generated outside of a land dimension.");
 					return false;
 				}
 				
-				LandTypePair landTypes = ((LandGenSettings) ((ServerWorld) world).getChunkProvider().getChunkGenerator().getSettings()).getLandTypes();
+				LandTypePair landTypes = ((LandGenSettings) chunkGenerator.getSettings()).getLandTypes();
 				
 				EntityType<? extends ConsortEntity> consortType = landTypes.terrain.getConsortType();
 				

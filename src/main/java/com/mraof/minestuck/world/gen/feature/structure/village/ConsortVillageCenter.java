@@ -232,15 +232,15 @@ public class ConsortVillageCenter
 			setBlockState(worldIn, torch, 6, 2, 4, structureBoundingBoxIn);
 
 			if(!spawns[0])
-				spawns[0] = spawnConsort(0, 2, 3, boundingBox, worldIn, EnumConsort.MerchantType.FOOD, 1);
+				spawns[0] = spawnConsort(0, 2, 3, boundingBox, worldIn, chunkGeneratorIn, EnumConsort.MerchantType.FOOD, 1);
 			if(!spawns[1])
-				spawns[1] = spawnConsort(0, 2, 5, boundingBox, worldIn, EnumConsort.MerchantType.FOOD, 1);
+				spawns[1] = spawnConsort(0, 2, 5, boundingBox, worldIn, chunkGeneratorIn, EnumConsort.MerchantType.FOOD, 1);
 			if(!spawns[2])
-				spawns[2] = spawnConsort(7, 2, 3, boundingBox, worldIn, EnumConsort.MerchantType.GENERAL, 1);
+				spawns[2] = spawnConsort(7, 2, 3, boundingBox, worldIn, chunkGeneratorIn, EnumConsort.MerchantType.GENERAL, 1);
 			if(!spawns[3])
-				spawns[3] = spawnConsort(7, 2, 5, boundingBox, worldIn, EnumConsort.MerchantType.GENERAL, 1);
+				spawns[3] = spawnConsort(7, 2, 5, boundingBox, worldIn, chunkGeneratorIn, EnumConsort.MerchantType.GENERAL, 1);
 			if(!spawns[4])
-				spawns[4] = spawnConsort(3, 2, 9, boundingBox, worldIn, EnumConsort.getRandomMerchant(randomIn), 1);
+				spawns[4] = spawnConsort(3, 2, 9, boundingBox, worldIn, chunkGeneratorIn, EnumConsort.getRandomMerchant(randomIn), 1);
 
 			return true;
 		}

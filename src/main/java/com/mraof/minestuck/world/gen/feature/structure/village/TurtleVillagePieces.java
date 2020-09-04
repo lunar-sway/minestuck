@@ -194,9 +194,9 @@ public class TurtleVillagePieces
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 7, 4, 4, 7, 5, buildBlock, buildBlock, false);
 
 			if(!spawns[0])
-				spawns[0] = spawnConsort(2, 1, 5, structureBoundingBoxIn, worldIn);
+				spawns[0] = spawnConsort(2, 1, 5, structureBoundingBoxIn, worldIn, chunkGeneratorIn);
 			if(!spawns[1])
-				spawns[1] = spawnConsort(5, 1, 5, structureBoundingBoxIn, worldIn);
+				spawns[1] = spawnConsort(5, 1, 5, structureBoundingBoxIn, worldIn, chunkGeneratorIn);
 
 			return true;
 		}
@@ -304,9 +304,9 @@ public class TurtleVillagePieces
 			this.setBlockState(worldIn, lightBlock, 11, 6, 16, structureBoundingBoxIn);
 
 			if(!spawns[0])
-				spawns[0] = spawnConsort(4, 1, 15, structureBoundingBoxIn, worldIn, EnumConsort.getRandomMerchant(randomIn), 1);
+				spawns[0] = spawnConsort(4, 1, 15, structureBoundingBoxIn, worldIn, chunkGeneratorIn, EnumConsort.getRandomMerchant(randomIn), 1);
 			if(!spawns[1])
-				spawns[1] = spawnConsort(9, 1, 15, structureBoundingBoxIn, worldIn, EnumConsort.getRandomMerchant(randomIn), 1);
+				spawns[1] = spawnConsort(9, 1, 15, structureBoundingBoxIn, worldIn, chunkGeneratorIn, EnumConsort.getRandomMerchant(randomIn), 1);
 
 			return true;
 		}
@@ -422,11 +422,11 @@ public class TurtleVillagePieces
 			setBlockState(worldIn, Blocks.STONE_BUTTON.getDefaultState().rotate(Rotation.CLOCKWISE_180), 4, 1, 2, structureBoundingBoxIn);
 
 			if(!spawns[0])
-				spawns[0] = spawnConsort(4, 0, 10, structureBoundingBoxIn, worldIn);
+				spawns[0] = spawnConsort(4, 0, 10, structureBoundingBoxIn, worldIn, chunkGeneratorIn);
 			if(!spawns[1])
-				spawns[1] = spawnConsort(5, 0, 10, structureBoundingBoxIn, worldIn);
+				spawns[1] = spawnConsort(5, 0, 10, structureBoundingBoxIn, worldIn, chunkGeneratorIn);
 			if(!spawns[2])
-				spawns[2] = spawnConsort(6, 0, 10, structureBoundingBoxIn, worldIn);
+				spawns[2] = spawnConsort(6, 0, 10, structureBoundingBoxIn, worldIn, chunkGeneratorIn);
 
 			return true;
 		}

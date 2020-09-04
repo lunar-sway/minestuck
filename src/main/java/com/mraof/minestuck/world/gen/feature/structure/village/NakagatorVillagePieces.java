@@ -292,11 +292,11 @@ public class NakagatorVillagePieces
 
 			//Consorts
 			if(!spawns[0])
-				spawns[0] = spawnConsort(2, 1, 6, structureBoundingBoxIn, worldIn);
+				spawns[0] = spawnConsort(2, 1, 6, structureBoundingBoxIn, worldIn, chunkGeneratorIn);
 			if(!spawns[1])
-				spawns[1] = spawnConsort(3, 5, 3, structureBoundingBoxIn, worldIn);
+				spawns[1] = spawnConsort(3, 5, 3, structureBoundingBoxIn, worldIn, chunkGeneratorIn);
 			if(!spawns[2])
-				spawns[2] = spawnConsort(5, 9, 6, structureBoundingBoxIn, worldIn);
+				spawns[2] = spawnConsort(5, 9, 6, structureBoundingBoxIn, worldIn, chunkGeneratorIn);
 
 			return true;
 		}
@@ -421,11 +421,11 @@ public class NakagatorVillagePieces
 			setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.WEST), 8, 10, 3, structureBoundingBoxIn);
 
 			if(!spawns[0])
-				spawns[0] = spawnConsort(5, 1, 5, structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.FOOD, 1);
+				spawns[0] = spawnConsort(5, 1, 5, structureBoundingBoxIn, worldIn, chunkGeneratorIn, EnumConsort.MerchantType.FOOD, 1);
 			if(!spawns[1])
-				spawns[1] = spawnConsort(6, 5, 5, structureBoundingBoxIn, worldIn, EnumConsort.getRandomMerchant(randomIn), 1);
+				spawns[1] = spawnConsort(6, 5, 5, structureBoundingBoxIn, worldIn, chunkGeneratorIn, EnumConsort.getRandomMerchant(randomIn), 1);
 			if(!spawns[2])
-				spawns[2] = spawnConsort(5, 9, 5, structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.GENERAL, 1);
+				spawns[2] = spawnConsort(5, 9, 5, structureBoundingBoxIn, worldIn, chunkGeneratorIn, EnumConsort.MerchantType.GENERAL, 1);
 
 			return true;
 		}
@@ -620,11 +620,11 @@ public class NakagatorVillagePieces
 			setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.SOUTH), 8, 17, 4, structureBoundingBoxIn);
 
 			if(!spawns[0])
-				spawns[0] = spawnConsort(5, 3, 5, structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.FOOD, 1);
+				spawns[0] = spawnConsort(5, 3, 5, structureBoundingBoxIn, worldIn, chunkGeneratorIn, EnumConsort.MerchantType.FOOD, 1);
 			if(!spawns[1])
-				spawns[1] = spawnConsort(6, 7, 6, structureBoundingBoxIn, worldIn, EnumConsort.getRandomMerchant(randomIn), 1);
+				spawns[1] = spawnConsort(6, 7, 6, structureBoundingBoxIn, worldIn, chunkGeneratorIn, EnumConsort.getRandomMerchant(randomIn), 1);
 			if(!spawns[2])
-				spawns[2] = spawnConsort(5, 11, 3, structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.GENERAL, 1);
+				spawns[2] = spawnConsort(5, 11, 3, structureBoundingBoxIn, worldIn, chunkGeneratorIn, EnumConsort.MerchantType.GENERAL, 1);
 
 			return true;
 		}
