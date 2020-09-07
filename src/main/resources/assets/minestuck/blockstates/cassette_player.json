@@ -1,0 +1,144 @@
+{
+    "multipart": [
+        {
+            "when":  { "facing": "north", "open": "false" },
+            "apply": { "model": "minestuck:block/cassette_player_closed" }
+        },
+        {
+            "when":  { "facing": "south", "open": "false" },
+            "apply": { "model": "minestuck:block/cassette_player_closed", "y": 180 }
+        },
+        {
+            "when":  { "facing": "west", "open": "false" },
+            "apply": { "model": "minestuck:block/cassette_player_closed", "y": 270 }
+        },
+        {
+            "when":  { "facing": "east", "open": "false" },
+            "apply": { "model": "minestuck:block/cassette_player_closed", "y": 90 }
+        },
+        {
+            "when":  { "facing": "north", "open": "true" },
+            "apply": { "model": "minestuck:block/cassette_player_open" }
+        },
+        {
+            "when":  { "facing": "south", "open": "true" },
+            "apply": { "model": "minestuck:block/cassette_player_open", "y": 180 }
+        },
+        {
+            "when":  { "facing": "west", "open": "true" },
+            "apply": { "model": "minestuck:block/cassette_player_open", "y": 270 }
+        },
+        {
+            "when":  { "facing": "east", "open": "true" },
+            "apply": { "model": "minestuck:block/cassette_player_open", "y": 90 }
+        },
+        {   "when": { "facing": "north", "cassette": "thirteen" },
+            "apply": { "model": "minestuck:block/cassette/cassette_13"}
+        },
+        {   "when": { "facing": "north", "cassette": "cat" },
+            "apply": { "model": "minestuck:block/cassette/cassette_cat"}
+        },
+        {   "when": { "facing": "north", "cassette": "blocks" },
+            "apply": { "model": "minestuck:block/cassette/cassette_blocks"}
+        },
+        {   "when": { "facing": "north", "cassette": "chirp" },
+            "apply": { "model": "minestuck:block/cassette/cassette_chirp"}
+        },
+        {   "when": { "facing": "north", "cassette": "mall" },
+            "apply": { "model": "minestuck:block/cassette/cassette_mall"}
+        },
+        {   "when": { "facing": "north", "cassette": "mellohi" },
+            "apply": { "model": "minestuck:block/cassette/cassette_mellohi"}
+        },
+        {   "when": { "facing": "north", "cassette": "emissary_of_dance" },
+            "apply": { "model": "minestuck:block/cassette/cassette_emissary"}
+        },
+        {   "when": { "facing": "north", "cassette": "dance_stab_dance" },
+            "apply": { "model": "minestuck:block/cassette/cassette_dance_stab"}
+        },
+        {   "when": { "facing": "north", "cassette": "retro_battle_theme" },
+            "apply": { "model": "minestuck:block/cassette/cassette_retro_battle"}
+        },
+        {   "when": { "facing": "south", "cassette": "thirteen" },
+            "apply": { "model": "minestuck:block/cassette/cassette_13", "y": 180 }
+        },
+        {   "when": { "facing": "south", "cassette": "cat" },
+            "apply": { "model": "minestuck:block/cassette/cassette_cat", "y": 180 }
+        },
+        {   "when": { "facing": "south", "cassette": "blocks" },
+            "apply": { "model": "minestuck:block/cassette/cassette_blocks", "y": 180 }
+        },
+        {   "when": { "facing": "south", "cassette": "chirp" },
+            "apply": { "model": "minestuck:block/cassette/cassette_chirp", "y": 180 }
+        },
+        {   "when": { "facing": "south", "cassette": "mall" },
+            "apply": { "model": "minestuck:block/cassette/cassette_mall", "y": 180 }
+        },
+        {   "when": { "facing": "south", "cassette": "mellohi" },
+            "apply": { "model": "minestuck:block/cassette/cassette_mellohi", "y": 180 }
+        },
+        {   "when": { "facing": "south", "cassette": "emissary_of_dance" },
+            "apply": { "model": "minestuck:block/cassette/cassette_emissary", "y": 180 }
+        },
+        {   "when": { "facing": "south", "cassette": "dance_stab_dance" },
+            "apply": { "model": "minestuck:block/cassette/cassette_dance_stab", "y": 180 }
+        },
+        {   "when": { "facing": "south", "cassette": "retro_battle_theme" },
+            "apply": { "model": "minestuck:block/cassette/cassette_retro_battle", "y": 180 }
+        },
+        {   "when": { "facing": "west", "cassette": "thirteen" },
+            "apply": { "model": "minestuck:block/cassette/cassette_13", "y": 270 }
+        },
+        {   "when": { "facing": "west", "cassette": "cat" },
+            "apply": { "model": "minestuck:block/cassette/cassette_cat", "y": 270 }
+        },
+        {   "when": { "facing": "west", "cassette": "blocks" },
+            "apply": { "model": "minestuck:block/cassette/cassette_blocks", "y": 270 }
+        },
+        {   "when": { "facing": "west", "cassette": "chirp" },
+            "apply": { "model": "minestuck:block/cassette/cassette_chirp", "y": 270 }
+        },
+        {   "when": { "facing": "west", "cassette": "mall" },
+            "apply": { "model": "minestuck:block/cassette/cassette_mall", "y": 270 }
+        },
+        {   "when": { "facing": "west", "cassette": "mellohi" },
+            "apply": { "model": "minestuck:block/cassette/cassette_mellohi", "y": 270 }
+        },
+        {   "when": { "facing": "west", "cassette": "emissary_of_dance" },
+            "apply": { "model": "minestuck:block/cassette/cassette_emissary", "y": 270 }
+        },
+        {   "when": { "facing": "west", "cassette": "dance_stab_dance" },
+            "apply": { "model": "minestuck:block/cassette/cassette_dance_stab", "y": 270 }
+        },
+        {   "when": { "facing": "west", "cassette": "retro_battle_theme" },
+            "apply": { "model": "minestuck:block/cassette/cassette_retro_battle", "y": 270 }
+        },
+        {   "when": { "facing": "east", "cassette": "thirteen" },
+            "apply": { "model": "minestuck:block/cassette/cassette_13", "y": 90 }
+        },
+        {   "when": { "facing": "east", "cassette": "cat" },
+            "apply": { "model": "minestuck:block/cassette/cassette_cat", "y": 90 }
+        },
+        {   "when": { "facing": "east", "cassette": "blocks" },
+            "apply": { "model": "minestuck:block/cassette/cassette_blocks", "y": 90 }
+        },
+        {   "when": { "facing": "east", "cassette": "chirp" },
+            "apply": { "model": "minestuck:block/cassette/cassette_chirp", "y": 90 }
+        },
+        {   "when": { "facing": "east", "cassette": "mall" },
+            "apply": { "model": "minestuck:block/cassette/cassette_mall", "y": 90 }
+        },
+        {   "when": { "facing": "east", "cassette": "mellohi" },
+            "apply": { "model": "minestuck:block/cassette/cassette_mellohi", "y": 90 }
+        },
+        {   "when": { "facing": "east", "cassette": "emissary_of_dance" },
+            "apply": { "model": "minestuck:block/cassette/cassette_emissary", "y": 90 }
+        },
+        {   "when": { "facing": "east", "cassette": "dance_stab_dance" },
+            "apply": { "model": "minestuck:block/cassette/cassette_dance_stab", "y": 90 }
+        },
+        {   "when": { "facing": "east", "cassette": "retro_battle_theme" },
+            "apply": { "model": "minestuck:block/cassette/cassette_retro_battle", "y": 90 }
+        }
+    ]
+}
