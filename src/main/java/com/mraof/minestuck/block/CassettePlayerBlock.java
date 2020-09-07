@@ -49,18 +49,18 @@ public class CassettePlayerBlock extends DecorBlock
 		{
 			state = state.cycle(OPEN);
 			TileEntity tileentity = worldIn.getTileEntity(pos);
-			ItemStack itemStack = ((CassettePlayerTileEntity) tileentity).getCassette();
 			worldIn.setBlockState(pos, state, 2);
 			if(tileentity instanceof CassettePlayerTileEntity && !state.get(OPEN))
 			{
-				worldIn.playEvent((PlayerEntity) null, Constants.WorldEvents.PLAY_RECORD_SOUND, pos, Item.getIdFromItem(itemStack.getItem()));
+				ItemStack itemStack = ((CassettePlayerTileEntity) tileentity).getCassette();
+				worldIn.playEvent(Constants.WorldEvents.PLAY_RECORD_SOUND, pos, Item.getIdFromItem(itemStack.getItem()));
 				if(player != null)
 				{
 					player.addStat(Stats.PLAY_RECORD);
 				}
 			} else if(tileentity instanceof CassettePlayerTileEntity && state.get(OPEN))
 			{
-				worldIn.playEvent(1010, pos, 0);
+				worldIn.playEvent(Constants.WorldEvents.PLAY_RECORD_SOUND, pos, 0);
 			}
 			return true;
 		} else if(state.get(CASSETTE) != EnumCassetteType.NONE && state.get(OPEN))
@@ -99,7 +99,7 @@ public class CassettePlayerBlock extends DecorBlock
 				ItemStack itemstack = cassettePlayer.getCassette();
 				if(!itemstack.isEmpty())
 				{
-					worldIn.playEvent(1010, pos, 0);
+					worldIn.playEvent(Constants.WorldEvents.PLAY_RECORD_SOUND, pos, 0);
 					cassettePlayer.clear();
 					float f = 0.7F;
 					double xOffset = f * worldIn.rand.nextFloat() + 0.15;
