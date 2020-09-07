@@ -31,7 +31,7 @@ repositories {
     }
 }
 
-version = '1.14.4-1.4.' + System.env.BUILD_NUMBER
+version = '1.15.2-1.4.' + System.env.BUILD_NUMBER
 group = 'com.mraof.minestuck'
 archivesBaseName = 'Minestuck'
 
@@ -118,9 +118,9 @@ dependencies {
     minecraft "net.minecraftforge:forge:${project.getProperty('mc_forge_version')}"
 
 	// http://dvs1.progwml6.com/files/maven
-//    compileOnly fg.deobf("mezz.jei:jei-${project.getProperty('mc_jei_version')}:api")
-//    runtimeOnly fg.deobf("mezz.jei:jei-${project.getProperty('mc_jei_version')}")
-//    compileOnly fg.deobf("curse.maven:refinedstorage:2851763")
+    compileOnly fg.deobf("mezz.jei:jei-${project.getProperty('mc_jei_version')}:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-${project.getProperty('mc_jei_version')}")
+    compileOnly fg.deobf("curse.maven:refinedstorage:${project.getProperty('mc_refined_storage_build')}")
 }
 
 sourceSets.main.resources {
