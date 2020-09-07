@@ -9,7 +9,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class MSSurfaceBuilders
 {
-	public static DeferredRegister<SurfaceBuilder<?>> REGISTER = new DeferredRegister<>(ForgeRegistries.SURFACE_BUILDERS, Minestuck.MOD_ID);
+	public static DeferredRegister<SurfaceBuilder<?>> REGISTER = DeferredRegister.create(ForgeRegistries.SURFACE_BUILDERS, Minestuck.MOD_ID);
 	
 	public static final RegistryObject<SkaiaSurfaceBuilder> SKAIA = REGISTER.register("skaia", () -> new SkaiaSurfaceBuilder(SurfaceBuilderConfig::deserialize));
 	public static final RegistryObject<RainbowSurfaceBuilder> RAINBOW = REGISTER.register("rainbow", () -> new RainbowSurfaceBuilder(SurfaceBuilderConfig::deserialize));

@@ -34,7 +34,7 @@ import net.minecraftforge.common.util.Constants;
 public class AlchemiterTileEntity extends TileEntity implements IColored, GristWildcardHolder
 {
 	
-	private GristType wildcardGrist = GristTypes.BUILD;
+	private GristType wildcardGrist = GristTypes.BUILD.get();
 	protected boolean broken = false;
 	protected ItemStack dowel = ItemStack.EMPTY;
 	protected ItemStack upgradeItem[] = {ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY,ItemStack.EMPTY,ItemStack.EMPTY};

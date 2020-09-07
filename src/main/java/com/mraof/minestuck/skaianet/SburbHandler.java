@@ -128,7 +128,7 @@ public final class SburbHandler
 	public static GristType getPrimaryGristType(PlayerIdentifier player)
 	{
 		
-		return GristTypes.SHALE;
+		return GristTypes.SHALE.get();
 	}
 	
 	public static SburbConnection getConnectionForDimension(ServerWorld world)

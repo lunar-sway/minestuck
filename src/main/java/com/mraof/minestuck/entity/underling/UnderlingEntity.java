@@ -101,7 +101,7 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 	protected void registerData()
 	{
 		super.registerData();
-		dataManager.register(GRIST_TYPE, String.valueOf(GristTypes.ARTIFACT.getRegistryName()));
+		dataManager.register(GRIST_TYPE, String.valueOf(GristTypes.ARTIFACT.get().getRegistryName()));
 	}
 	
 	protected void applyGristType(GristType type)
@@ -143,7 +143,7 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 			return type;
 		} else Debug.warnf("Unable to read underling grist type from string %s.", dataManager.get(GRIST_TYPE));
 		
-		return GristTypes.ARTIFACT;
+		return GristTypes.ARTIFACT.get();
 	}
 	
 	//used when getting how much grist should be dropped on death

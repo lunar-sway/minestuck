@@ -1,14 +1,13 @@
 package com.mraof.minestuck.item.crafting.alchemy;
 
-import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.event.GristDropsEvent;
-import com.mraof.minestuck.skaianet.SburbConnection;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.skaianet.SburbConnection;
+import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -20,6 +19,7 @@ import net.minecraftforge.common.MinecraftForge;
 
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.function.Supplier;
 
 import static com.mraof.minestuck.MinestuckConfig.showGristChanges;
 
@@ -36,7 +36,7 @@ public class GristHelper
 		List<GristType> typeList = new ArrayList<>();
 		for(GristType type : GristTypes.values())
 		{
-			if(type.getRarity() > 0 && type != GristTypes.ARTIFACT)
+			if(type.getRarity() > 0 && type != GristTypes.ARTIFACT.get())
 			{
 				typeList.add(type);
 				totalWeight += type.getRarity();
@@ -92,6 +92,11 @@ public class GristHelper
 	public static long getGrist(World world, PlayerIdentifier player, GristType type)
 	{
 		return PlayerSavedData.getData(player, world).getGristCache().getGrist(type);
+	}
+	
+	public static long getGrist(World world, PlayerIdentifier player, Supplier<GristType> type)
+	{
+		return getGrist(world, player, type.get());
 	}
 	
 	public static boolean canAfford(ServerPlayerEntity player, GristSet cost)

@@ -11,6 +11,7 @@ import com.mraof.minestuck.entry.ComputerBlockProcess;
 import com.mraof.minestuck.entry.EntryProcess;
 import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.KindAbstratusList;
 import com.mraof.minestuck.skaianet.SessionHandler;
@@ -51,6 +52,7 @@ public class Minestuck
 		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		MSFluids.FLUIDS.register(eventBus);
 		MSSurfaceBuilders.REGISTER.register(eventBus);
+		GristTypes.GRIST_TYPES.register(eventBus);
 	}
 	
 	private void setup(final FMLCommonSetupEvent event)
