@@ -15,7 +15,6 @@ import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.stats.Stats;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -25,20 +24,17 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
-import java.util.function.Supplier;
 
 
 public class CassettePlayerBlock extends DecorBlock
 {
 	public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
 	public static final EnumProperty<EnumCassetteType> CASSETTE = MSProperties.CASSETTE;
-	private final Supplier<TileEntityType<?>> tileType;
 	
-	public CassettePlayerBlock(Properties properties, CustomVoxelShape shape, Supplier<TileEntityType<?>> tileType)
+	public CassettePlayerBlock(Properties properties, CustomVoxelShape shape)
 	{
 		super(properties, shape);
 		this.setDefaultState(this.stateContainer.getBaseState().with(CASSETTE, EnumCassetteType.NONE));
-		this.tileType = tileType;
 	}
 	
 	@Override
@@ -133,7 +129,7 @@ public class CassettePlayerBlock extends DecorBlock
 	@Override
 	public TileEntity createTileEntity(BlockState state, IBlockReader world)
 	{
-		return tileType.get().create();
+		return new CassettePlayerTileEntity();
 	}
 	
 	public boolean hasComparatorInputOverride(BlockState state)

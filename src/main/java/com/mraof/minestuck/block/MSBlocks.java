@@ -425,7 +425,7 @@ public class MSBlocks
 		registry.register(new DecorBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F).sound(SoundType.METAL), MSBlockShapes.BLENDER).setRegistryName("blender"));
 		registry.register(new DecorBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.5F), MSBlockShapes.CHESSBOARD).setRegistryName("chessboard"));
 		registry.register(new DecorBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.5F), MSBlockShapes.FROG_STATUE).setRegistryName("mini_frog_statue"));
-		registry.register(new CassettePlayerBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F).sound(SoundType.METAL), MSBlockShapes.CASSETTE_PLAYER, () -> MSTileEntityTypes.CASSETTE_PLAYER).setRegistryName("cassette_player"));
+		registry.register(new CassettePlayerBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F).sound(SoundType.METAL), MSBlockShapes.CASSETTE_PLAYER).setRegistryName("cassette_player"));
 		registry.register(new GlowystoneWireBlock(Block.Properties.create(Material.MISCELLANEOUS).hardnessAndResistance(0.0F).lightValue(16).doesNotBlockMovement()).setRegistryName("glowystone_dust"));
 		
 		registry.register(new FlowingModFluidBlock(MSFluids.OIL, new Vec3d(0.0, 0.0, 0.0), 0.75f, Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()).setRegistryName("oil"));
