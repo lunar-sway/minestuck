@@ -27,10 +27,10 @@ public class LandSkyRenderer implements SkyRenderHandler
 	
 	private static final ResourceLocation SKAIA_TEXTURE = new ResourceLocation("minestuck", "textures/environment/skaia.png");
 	
-	private LandDimension providerLands;
+	private LandDimension dimension;
 	public LandSkyRenderer(LandDimension provider)
 	{
-		providerLands = provider;
+		dimension = provider;
 	}
 	
 	@Override
@@ -44,7 +44,7 @@ public class LandSkyRenderer implements SkyRenderHandler
 		float skaiaBrightness = 0.5F +0.5F*skyClearness*heightModifier;
 		
 		RenderSystem.disableTexture();
-		Vec3d vec3d = world.getSkyColor(mc.gameRenderer.getActiveRenderInfo().getBlockPos(), partialTicks);
+		Vec3d vec3d = dimension.getSkyColor();//world.getSkyColor(mc.gameRenderer.getActiveRenderInfo().getBlockPos(), partialTicks);
 		float r = (float)vec3d.x*heightModifierDiminish;
 		float g = (float)vec3d.y*heightModifierDiminish;
 		float b = (float)vec3d.z*heightModifierDiminish;

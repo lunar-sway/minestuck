@@ -136,7 +136,7 @@ public class LandDimension extends Dimension
 		return pos;
 	}
 	
-	//TODO make sure the sky color and cloud gets used (or removed/replaced)
+	//TODO make sure the cloud gets used (or removed/replaced)
 	//TODO this is now hardcoded to be used for skylight. Change this accordingly and change land sky renderer to use its own calculation (for this and for star brightness)
 	@Override
 	public float calculateCelestialAngle(long worldTime, float partialTicks)
@@ -231,9 +231,14 @@ public class LandDimension extends Dimension
 	
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public Vec3d getFogColor(float par1, float par2)
+	public Vec3d getFogColor(float celestialAngle, float partialTicks)
 	{
 		return properties.getFogColor();
+	}
+	
+	public Vec3d getSkyColor()
+	{
+		return properties.getSkyColor();
 	}
 	
 	public StructureBlockRegistry getBlocks()
