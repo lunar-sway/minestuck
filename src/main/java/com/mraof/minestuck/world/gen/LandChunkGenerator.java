@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.gen;
 
+import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.skaianet.UnderlingController;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
@@ -21,7 +22,6 @@ import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.spawner.WorldEntitySpawner;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -133,13 +133,9 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 	@Override
 	public List<Biome.SpawnListEntry> getPossibleCreatures(EntityClassification creatureType, BlockPos pos)
 	{
-		if(creatureType == EntityClassification.MONSTER)	//Combine biome spawn with underling spawn
-		{
-			List<Biome.SpawnListEntry> list = new ArrayList<>(super.getPossibleCreatures(creatureType, pos));
-			list.addAll(UnderlingController.getUnderlingList(pos, world.getWorld()));
-			return list;
-		}
-		return super.getPossibleCreatures(creatureType, pos);
+		if(creatureType == MSEntityTypes.UNDERLING)
+			return UnderlingController.getUnderlingList(pos, world.getWorld());
+		else return super.getPossibleCreatures(creatureType, pos);
 	}
 	
 	@Override
