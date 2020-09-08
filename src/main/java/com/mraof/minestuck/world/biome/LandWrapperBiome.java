@@ -41,7 +41,7 @@ public class LandWrapperBiome extends LandBiome
 			addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, createDecoratedFeature(Feature.ORE, new OreFeatureConfig(blocks.getGroundType(), blocks.getBlockState("uranium_ore"), baseUraniumVeinSize), Placement.COUNT_RANGE, new CountRangeConfig(uraniumVeinsPerChunk, uraniumStratumMin, uraniumStratumMin, uraniumStratumMax)));
 		}
 		setSurfaceBuilder(SurfaceBuilder.DEFAULT, blocks.getSurfaceBuilderConfig());
-		this.addSpawn(EntityClassification.CREATURE, new SpawnListEntry(consortType, 2, 1, 10));
+		this.addSpawn(EntityClassification.CREATURE, new SpawnListEntry(consortType, 2, 1, 3));
 		
 		if(staticBiome != MSBiomes.LAND_OCEAN)
 			addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, createDecoratedFeature(MSFeatures.RETURN_NODE, IFeatureConfig.NO_FEATURE_CONFIG, Placement.CHANCE_HEIGHTMAP, new ChanceConfig(128)));

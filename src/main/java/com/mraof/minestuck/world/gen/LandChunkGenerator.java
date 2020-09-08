@@ -18,6 +18,7 @@ import net.minecraft.world.gen.NoiseChunkGenerator;
 import net.minecraft.world.gen.WorldGenRegion;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
+import net.minecraft.world.spawner.WorldEntitySpawner;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -116,6 +117,17 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 		}
 		
 		this.makeBedrock(chunkIn, sharedRandom);
+	}
+	
+	@Override
+	public void spawnMobs(WorldGenRegion region)
+	{
+		int x = region.getMainChunkX();
+		int z = region.getMainChunkZ();
+		Biome biome = biomeHolder.localBiomeFrom(region.getChunk(x, z).getBiomes()[0]);
+		SharedSeedRandom rand = new SharedSeedRandom();
+		rand.setDecorationSeed(region.getSeed(), x << 4, z << 4);
+		WorldEntitySpawner.performWorldGenSpawning(region, biome, x, z, rand);
 	}
 	
 	@Override

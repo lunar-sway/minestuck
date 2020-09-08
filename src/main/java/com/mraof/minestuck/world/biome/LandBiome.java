@@ -22,6 +22,12 @@ public abstract class LandBiome extends AbstractBiome
 	}
 	
 	@Override
+	public float getSpawningChance()
+	{
+		return 0.2F;
+	}
+	
+	@Override
 	public boolean doesWaterFreeze(IWorldReader worldIn, BlockPos water, boolean mustBeAtEdge)
 	{
 		if(!(this instanceof LandWrapperBiome) && worldIn.getDimension() instanceof LandDimension)
