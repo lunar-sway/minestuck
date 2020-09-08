@@ -36,13 +36,14 @@ import java.util.Iterator;
 public abstract class ConsortEntity extends MinestuckEntity implements IContainerProvider
 {	//I'd get rid of the seemingly pointless subclasses, but as of writing, entity renderers are registered to entity classes instead of entity types.
 	
+	private boolean hasHadMessage = false;
 	ConsortDialogue.DialogueWrapper message;
 	int messageTicksLeft;
 	CompoundNBT messageData;
 	public EnumConsort.MerchantType merchantType = EnumConsort.MerchantType.NONE;
 	DimensionType homeDimension;
 	boolean visitedSkaia;
-	MessageType.DelayMessage updatingMessage; //Change to an interface/array if more message components need tick updates
+	MessageType.DelayMessage updatingMessage; //TODO Change to an interface/array if more message components need tick updates
 	public ConsortMerchantInventory stocks;
 	private int eventTimer = -1;
 	private float explosionRadius = 2.0f;
@@ -87,9 +88,10 @@ public abstract class ConsortEntity extends MinestuckEntity implements IContaine
 				ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
 				if(message == null)
 				{
-					message = ConsortDialogue.getRandomMessage(this, serverPlayer);
+					message = ConsortDialogue.getRandomMessage(this, serverPlayer, hasHadMessage);
 					messageTicksLeft = 24000 + world.rand.nextInt(24000);
 					messageData = new CompoundNBT();
+					hasHadMessage = true;
 				}
 				ITextComponent text = message.getMessage(this, serverPlayer);	//TODO Make sure to catch any issues here
 				if (text != null)
@@ -130,7 +132,8 @@ public abstract class ConsortEntity extends MinestuckEntity implements IContaine
 			messageTicksLeft--;
 		else if(messageTicksLeft == 0)
 		{
-			message = null;
+			if(message != null && !message.isLockedToConsort())
+				message = null;
 			messageData = null;
 			updatingMessage = null;
 			stocks = null;
@@ -176,6 +179,7 @@ public abstract class ConsortEntity extends MinestuckEntity implements IContaine
 			compound.putInt("MessageTicks", messageTicksLeft);
 			compound.put("MessageData", messageData);
 		}
+		compound.putBoolean("HasHadMessage", hasHadMessage);
 		
 		compound.putInt("Type", merchantType.ordinal());
 		MSNBTUtil.tryWriteDimensionType(compound, "HomeDim", homeDimension);
@@ -209,7 +213,8 @@ public abstract class ConsortEntity extends MinestuckEntity implements IContaine
 				messageTicksLeft = compound.getInt("MessageTicks");
 			else messageTicksLeft = 24000;	//Used to make summoning with a specific message slightly easier
 			messageData = compound.getCompound("MessageData");
-		}
+			hasHadMessage = true;
+		} else hasHadMessage = compound.getBoolean("HasHadMessage");
 		
 		merchantType = EnumConsort.MerchantType.values()[MathHelper.clamp(compound.getInt("Type"), 0, EnumConsort.MerchantType.values().length - 1)];
 		
