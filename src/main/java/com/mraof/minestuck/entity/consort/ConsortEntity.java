@@ -2,7 +2,6 @@ package com.mraof.minestuck.entity.consort;
 
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.entity.MinestuckEntity;
-import com.mraof.minestuck.entity.consort.MessageType.SingleMessage;
 import com.mraof.minestuck.inventory.ConsortMerchantContainer;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.util.MSNBTUtil;
@@ -31,7 +30,6 @@ import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
-import java.util.Iterator;
 
 public abstract class ConsortEntity extends MinestuckEntity implements IContainerProvider
 {	//I'd get rid of the seemingly pointless subclasses, but as of writing, entity renderers are registered to entity classes instead of entity types.
@@ -45,9 +43,7 @@ public abstract class ConsortEntity extends MinestuckEntity implements IContaine
 	boolean visitedSkaia;
 	MessageType.DelayMessage updatingMessage; //TODO Change to an interface/array if more message components need tick updates
 	public ConsortMerchantInventory stocks;
-	private int eventTimer = -1;
-	private float explosionRadius = 2.0f;
-	static private SingleMessage explosionMessage = new SingleMessage("immortalityHerb.3");
+	private int eventTimer = -1;	//TODO use the interface mentioned in the todo above to implement consort explosion instead
 	
 	public ConsortEntity(EntityType<? extends ConsortEntity> type, World world)
 	{
@@ -95,10 +91,7 @@ public abstract class ConsortEntity extends MinestuckEntity implements IContaine
 				}
 				ITextComponent text = message.getMessage(this, serverPlayer);	//TODO Make sure to catch any issues here
 				if (text != null)
-				{
 					player.sendMessage(text);
-					onSendMessage(serverPlayer, text, this);
-				}
 				MSCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, message.getString(), this);
 			}
 			
@@ -107,18 +100,12 @@ public abstract class ConsortEntity extends MinestuckEntity implements IContaine
 			return super.processInteract(player, hand);
 	}
 	
-	public void onSendMessage(ServerPlayerEntity player, ITextComponent text, ConsortEntity consortEntity)
+	protected void setExplosionTimer()
 	{
-		Iterator<ITextComponent> i = text.iterator();
-		String explosionMessage = ConsortEntity.explosionMessage.getMessageForTesting(this, player).getUnformattedComponentText();
-		
-		//This block triggers when the consort from Flora Lands eats the "immortality" herb.
-		if(text.getUnformattedComponentText().equals(explosionMessage))
-		{
-			//Start a timer of one second: 20 ticks.
-			//Consorts explode when the timer hits zero.
+		//Start a timer of one second: 20 ticks.
+		//Consorts explode when the timer hits zero.
+		if(eventTimer == -1)
 			eventTimer = 20;
-		}
 	}
 	
 	@Override
@@ -163,7 +150,8 @@ public abstract class ConsortEntity extends MinestuckEntity implements IContaine
 		{
 			boolean flag = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this);
 			this.dead = true;
-			this.world.createExplosion(this, this.posX, this.posY, this.posZ, this.explosionRadius, flag ? Explosion.Mode.DESTROY : Explosion.Mode.NONE);
+			float explosionRadius = 2.0f;
+			this.world.createExplosion(this, this.posX, this.posY, this.posZ, explosionRadius, flag ? Explosion.Mode.DESTROY : Explosion.Mode.NONE);
 			this.remove();
 		}
 	}

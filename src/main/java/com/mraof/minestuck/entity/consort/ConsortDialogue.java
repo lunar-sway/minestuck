@@ -217,7 +217,7 @@ public class ConsortDialogue
 		addMessage("giant_swords").landTerrain(FLORA);
 		addMessage(new ChainMessage(new SingleMessage("bloodberries.1"), new SingleMessage("bloodberries.2"))).landTerrain(FLORA);
 		addMessage("sharp_slide").landTerrain(FLORA);
-		addMessage(new ChainMessage(new SingleMessage("immortality_herb.1"), new SingleMessage("immortality_herb.2"), new SingleMessage("immortality_herb.3"))).landTerrain(FLORA).lockToConsort();
+		addMessage(new ChainMessage(new SingleMessage("immortality_herb.1"), new SingleMessage("immortality_herb.2"), new ExplosionMessage("immortality_herb.3"))).landTerrain(FLORA).lockToConsort();
 		addMessage(new ChainMessage(new SingleMessage("spices.1"), new SingleMessage("spices.2", "land_name"))).landTerrain(FLORA);
 
 		//Misc
