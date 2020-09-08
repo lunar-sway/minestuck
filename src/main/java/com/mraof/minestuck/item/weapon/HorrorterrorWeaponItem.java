@@ -1,5 +1,6 @@
 package com.mraof.minestuck.item.weapon;
 
+import com.google.common.collect.ImmutableList;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.IItemTier;
@@ -10,10 +11,12 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
-import java.util.Random;
+import java.util.List;
 
 public class HorrorterrorWeaponItem extends WeaponItem
 {
+	
+	private static final List<String> MESSAGES = ImmutableList.of("machinations", "stir", "suffering", "will", "done", "conspiracies");
 	
 	public HorrorterrorWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, MSToolType toolType, Properties builder)
 	{
@@ -26,15 +29,8 @@ public class HorrorterrorWeaponItem extends WeaponItem
         if (attacker instanceof PlayerEntity && attacker.getRNG().nextFloat() < .15)
         {
         	if(!attacker.world.isRemote) {
-        		String[] options = new String[] {"item.clawOfNrubyiglith.message.machinations",
-        				"item.clawOfNrubyiglith.message.stir",
-        				"item.clawOfNrubyiglith.message.suffering",
-        				"item.clawOfNrubyiglith.message.will",
-        				"item.clawOfNrubyiglith.message.done",
-        				"item.clawOfNrubyiglith.message.conspiracies"};
-        		Random rand = new Random();
-        		int num = rand.nextInt(options.length);
-    			ITextComponent message = new TranslationTextComponent(options[num]);
+        		String key = MESSAGES.get(attacker.getRNG().nextInt(MESSAGES.size()));
+    			ITextComponent message = new TranslationTextComponent(getTranslationKey()+".message."+key);
     			message.getStyle().setColor(TextFormatting.DARK_PURPLE);
     			attacker.sendMessage(message);
     		}
