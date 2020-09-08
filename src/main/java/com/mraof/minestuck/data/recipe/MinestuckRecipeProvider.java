@@ -1,5 +1,6 @@
 package com.mraof.minestuck.data.recipe;
 
+import com.google.gson.JsonObject;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
@@ -21,6 +22,7 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.crafting.IngredientNBT;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.function.Consumer;
 
@@ -147,10 +149,10 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		
 		cookingRecipesFor(recipeBuilder, Ingredient.fromItems(MSItems.BEEF_SWORD), MSItems.STEAK_SWORD, 0.5F, "has_beef_sword", hasItem(MSItems.BEEF_SWORD));
 		
-		CookingRecipeBuilder.cookingRecipe(Ingredient.fromItems(Items.BEEF), MSItems.IRRADIATED_STEAK, 0.2F, 20, MSRecipeTypes.IRRADIATING).addCriterion("has_beef", hasItem(Items.BEEF)).build(recipeBuilder);
-		CookingRecipeBuilder.cookingRecipe(Ingredient.fromItems(MSItems.BEEF_SWORD), MSItems.IRRADIATED_STEAK_SWORD, 0.35F, 20, MSRecipeTypes.IRRADIATING).addCriterion("has_beef_sword", hasItem(MSItems.BEEF_SWORD)).build(recipeBuilder);
-		CookingRecipeBuilder.cookingRecipe(Ingredient.fromItems(Items.STICK), MSItems.URANIUM_POWERED_STICK, 0.1F, 100, MSRecipeTypes.IRRADIATING).addCriterion("has_stick", hasItem(Items.STICK)).build(recipeBuilder);
-		CookingRecipeBuilder.cookingRecipe(Ingredient.fromItems(Items.MUSHROOM_STEW), Items.SLIME_BALL, 0.1F, 20, MSRecipeTypes.IRRADIATING).addCriterion("has_mushroom_stew", hasItem(Items.MUSHROOM_STEW)).build(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "slimeball_from_irradiating"));
+		CookingRecipeBuilder.cookingRecipe(Ingredient.fromItems(Items.BEEF), MSItems.IRRADIATED_STEAK, 0.2F, 20, MSRecipeTypes.IRRADIATING).addCriterion("has_beef", hasItem(Items.BEEF)).build(skipAdvancement(recipeBuilder));
+		CookingRecipeBuilder.cookingRecipe(Ingredient.fromItems(MSItems.BEEF_SWORD), MSItems.IRRADIATED_STEAK_SWORD, 0.35F, 20, MSRecipeTypes.IRRADIATING).addCriterion("has_beef_sword", hasItem(MSItems.BEEF_SWORD)).build(skipAdvancement(recipeBuilder));
+		CookingRecipeBuilder.cookingRecipe(Ingredient.fromItems(Items.STICK), MSItems.URANIUM_POWERED_STICK, 0.1F, 100, MSRecipeTypes.IRRADIATING).addCriterion("has_stick", hasItem(Items.STICK)).build(skipAdvancement(recipeBuilder));
+		CookingRecipeBuilder.cookingRecipe(Ingredient.fromItems(Items.MUSHROOM_STEW), Items.SLIME_BALL, 0.1F, 20, MSRecipeTypes.IRRADIATING).addCriterion("has_mushroom_stew", hasItem(Items.MUSHROOM_STEW)).build(skipAdvancement(recipeBuilder), new ResourceLocation(Minestuck.MOD_ID, "slimeball_from_irradiating"));
 		IrradiatingFallbackRecipeBuilder.fallback(IRecipeType.SMOKING).build(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "irradiate_smoking_fallback"));
 		
 		SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(MSBlocks.COARSE_STONE), MSBlocks.COARSE_STONE_STAIRS).addCriterion("has_coarse_stone", hasItem(MSBlocks.COARSE_STONE)).build(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "coarse_stone_stairs_from_coarse_stone_stonecutting"));
@@ -194,6 +196,57 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		CookingRecipeBuilder.smeltingRecipe(input, result, experience, 200).addCriterion(criterionName, criterion).build(recipeBuilder);
 		CookingRecipeBuilder.cookingRecipe(input, result, experience, 100, IRecipeSerializer.SMOKING).addCriterion(criterionName, criterion).build(recipeBuilder, new ResourceLocation(itemName.getNamespace(), itemName.getPath()+"_from_smoking"));
 		CookingRecipeBuilder.cookingRecipe(input, result, experience, 600, IRecipeSerializer.CAMPFIRE_COOKING).addCriterion(criterionName, criterion).build(recipeBuilder, new ResourceLocation(itemName.getNamespace(), itemName.getPath()+"_from_campfire_cooking"));
+	}
+	
+	//TODO check between mc versions if this is still needed
+	//As of writing this, the categories used by the vanilla recipe books are hardcoded, and all recipes are put in these categories
+	// Because of this, recipes of modded recipe types will when unlocked show up in a vanilla recipe category
+	// As a temporary solution, this function helps to remove the recipe advancement, thus preventing the recipe from "unlocking"
+	private Consumer<IFinishedRecipe> skipAdvancement(Consumer<IFinishedRecipe> recipeBuilder)
+	{
+		return recipe -> recipeBuilder.accept(new Wrapper(recipe));
+	}
+	
+	private static class Wrapper implements IFinishedRecipe
+	{
+		IFinishedRecipe recipe;
+		
+		Wrapper(IFinishedRecipe recipe)
+		{
+			this.recipe = recipe;
+		}
+		
+		@Override
+		public void serialize(JsonObject json)
+		{
+			recipe.serialize(json);
+		}
+		
+		@Override
+		public ResourceLocation getID()
+		{
+			return recipe.getID();
+		}
+		
+		@Override
+		public IRecipeSerializer<?> getSerializer()
+		{
+			return recipe.getSerializer();
+		}
+		
+		@Nullable
+		@Override
+		public JsonObject getAdvancementJson()
+		{
+			return null;
+		}
+		
+		@Nullable
+		@Override
+		public ResourceLocation getAdvancementID()
+		{
+			return null;
+		}
 	}
 	
 	@Override
