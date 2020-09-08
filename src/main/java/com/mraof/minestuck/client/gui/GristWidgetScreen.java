@@ -61,7 +61,7 @@ public class GristWidgetScreen extends MachineScreen<GristWidgetContainer>
 			
 			int cost = GristWidgetTileEntity.getGristWidgetBoondollarValue(set);
 			long has = ClientPlayerData.boondollars;
-			String costText = GuiUtil.addSuffix(cost)+"£("+GuiUtil.addSuffix(has)+")";
+			String costText = GuiUtil.addSuffix(cost)+"\u00a3("+GuiUtil.addSuffix(has)+")";
 			font.drawString(costText, xSize - 9 - font.getStringWidth(costText), ySize - 96 + 3, cost > has ? 0xFF0000 : 0x00FF00);
 			
 			List<String> tooltip = GuiUtil.getGristboardTooltip(set, GuiUtil.GristboardMode.GRIST_WIDGET, mouseX - this.guiLeft, mouseY - this.guiTop, 9, 45, font);
