@@ -40,11 +40,6 @@ public abstract class TerrainLandType extends ForgeRegistryEntry<TerrainLandType
 	
 	public abstract Vec3d getFogColor();
 	
-	public Vec3d getCloudColor()
-	{
-		return getFogColor();
-	}
-	
 	public Vec3d getSkyColor()
 	{
 		return new Vec3d(0, 0, 0);

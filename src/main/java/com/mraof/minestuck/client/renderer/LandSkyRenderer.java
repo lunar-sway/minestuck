@@ -88,7 +88,7 @@ public class LandSkyRenderer implements SkyRenderHandler
 			RenderSystem.disableTexture();
 			RenderSystem.color4f(starBrightness, starBrightness, starBrightness, starBrightness);
 			matrixStack.push();
-			matrixStack.rotate(Vector3f.ZP.rotationDegrees(world.getCelestialAngle(partialTicks) * 360.0F));
+			matrixStack.rotate(Vector3f.ZP.rotationDegrees(dimension.calculateVeilAngle() * 360.0F));
 			drawVeil(matrixStack.getLast().getMatrix(), partialTicks, world);
 			matrixStack.pop();
 			

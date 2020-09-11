@@ -10,7 +10,6 @@ public class LandProperties
 	public float skylightBase;
 	private Vec3d skyColor;
 	private Vec3d fogColor;
-	private Vec3d cloudColor;
 	
 	public Biome.Category category = Biome.Category.NONE;
 	public Biome.RainType rainType = Biome.RainType.NONE;
@@ -25,7 +24,6 @@ public class LandProperties
 		skylightBase = landType.getSkylightBase();
 		skyColor = landType.getSkyColor();
 		fogColor = landType.getFogColor();
-		cloudColor = landType.getCloudColor();
 	}
 	
 	public void load(LandTypePair types)
@@ -50,11 +48,6 @@ public class LandProperties
 	public Vec3d getFogColor()
 	{
 		return fogColor;
-	}
-	
-	public Vec3d getCloudColor()
-	{
-		return cloudColor;
 	}
 	
 	public enum ForceType

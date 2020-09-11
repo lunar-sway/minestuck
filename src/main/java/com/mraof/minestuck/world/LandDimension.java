@@ -136,12 +136,16 @@ public class LandDimension extends Dimension
 		return pos;
 	}
 	
-	//TODO make sure the cloud gets used (or removed/replaced)
-	//TODO this is now hardcoded to be used for skylight. Change this accordingly and change land sky renderer to use its own calculation (for this and for star brightness)
 	@Override
 	public float calculateCelestialAngle(long worldTime, float partialTicks)
 	{
-		double d0 = MathHelper.frac((double)worldTime / 24000.0D - 0.25D);
+		//Reverses the algorithm used to calculate the skylight float. Needed as the skylight is currently hardcoded to use celestial angle
+		return (float) (Math.acos((properties.skylightBase - 0.5F) / 2) / (Math.PI * 2F));
+	}
+	
+	public float calculateVeilAngle()
+	{
+		double d0 = MathHelper.frac((double)world.getDayTime() / 24000.0D - 0.25D);
 		double d1 = 0.5D - Math.cos(d0 * Math.PI) / 2.0D;
 		return (float)(d0 * 2.0D + d1) / 3.0F;
 	}
