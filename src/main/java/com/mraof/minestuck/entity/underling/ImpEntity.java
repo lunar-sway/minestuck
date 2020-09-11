@@ -1,6 +1,5 @@
 package com.mraof.minestuck.entity.underling;
 
-import com.mraof.minestuck.entity.ai.AttackOnCollideWithRateGoal;
 import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
@@ -9,6 +8,10 @@ import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
@@ -22,6 +25,15 @@ public class ImpEntity extends UnderlingEntity
 	}
 	
 	@Override
+	protected void registerAttributes()
+	{
+		super.registerAttributes();
+		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(6.0D);
+		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.28D);
+		getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.0D);
+	}
+	
+	@Override
 	public GristSet getGristSpoils()
 	{
 		return GristHelper.generateUnderlingGristDrops(this, damageMap, 1);
@@ -31,8 +43,7 @@ public class ImpEntity extends UnderlingEntity
 	protected void registerGoals()
 	{
 		super.registerGoals();
-		AttackOnCollideWithRateGoal aiAttack = new AttackOnCollideWithRateGoal(this, .4F, 20, false);
-		this.goalSelector.addGoal(3, aiAttack);
+		this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.0F, false));
 	}
 	
 	protected SoundEvent getAmbientSound()
@@ -51,29 +62,6 @@ public class ImpEntity extends UnderlingEntity
 	}
 	
 	@Override
-	protected double getWanderSpeed() 
-	{
-		return 0.6;
-	}
-	@Override
-	protected float getMaximumHealth() 
-	{
-		return 8 * getGristType().getPower() + 6;
-	}
-	
-	@Override
-	protected float getKnockbackResistance()
-	{
-		return 0;
-	}
-	
-	@Override
-	protected double getAttackDamage()
-	{
-		return Math.ceil(getGristType().getPower() + 1);
-	}
-	
-	@Override
 	protected int getVitalityGel()
 	{
 		return rand.nextInt(3)+1;
@@ -83,6 +71,8 @@ public class ImpEntity extends UnderlingEntity
 	protected void onGristTypeUpdated(GristType type)
 	{
 		super.onGristTypeUpdated(type);
+		applyGristModifier(SharedMonsterAttributes.MAX_HEALTH, 8 * type.getPower(), AttributeModifier.Operation.ADDITION);
+		applyGristModifier(SharedMonsterAttributes.ATTACK_DAMAGE, Math.ceil(type.getPower()), AttributeModifier.Operation.ADDITION);
 		this.experienceValue = (int) (3 * type.getPower() + 1);
 	}
 	
@@ -100,5 +90,16 @@ public class ImpEntity extends UnderlingEntity
 				ladder.checkBonus(Echeladder.UNDERLING_BONUS_OFFSET);
 			}
 		}
+	}
+	
+	@Override
+	protected boolean isAppropriateTarget(LivingEntity entity)
+	{
+		if(entity instanceof ServerPlayerEntity)
+		{
+			//Rung was chosen fairly arbitrary. Feel free to change it if you think a different rung is better
+			return PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder().getRung() < 19;
+		}
+		return super.isAppropriateTarget(entity);
 	}
 }

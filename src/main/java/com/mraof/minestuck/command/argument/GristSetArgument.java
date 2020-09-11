@@ -57,7 +57,7 @@ public class GristSetArgument implements ArgumentType<GristSet>
 				reader.skip();
 				int start2 = reader.getCursor();
 				GristType type = gristArgument.parse(reader);
-				if(set.hasType(type))
+				if(!set.hasType(type))
 				{
 					set.addGrist(type, count);
 					

@@ -32,4 +32,12 @@ public abstract class SburbEvent extends Event
 	{
 		return mcServer;
 	}
+	
+	public static class OnEntry extends SburbEvent
+	{
+		public OnEntry(MinecraftServer mcServer, SburbConnection connection, Session session)
+		{
+			super(mcServer, connection, session);
+		}
+	}
 }

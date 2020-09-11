@@ -1,0 +1,6 @@
+{
+	"parent": "minestuck:block/cassette/cassette_model",
+	"textures": {
+		"texture": "minestuck:block/cassette/cassette_chirp"
+	}
+}

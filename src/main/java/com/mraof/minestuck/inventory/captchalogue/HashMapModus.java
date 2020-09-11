@@ -134,10 +134,10 @@ public class HashMapModus extends Modus
 		return items;
 	}
 	
-	protected void fillList(NonNullList<ItemStack> items)
+	private void fillList(NonNullList<ItemStack> items)
 	{
 		items.clear();
-		list.addAll(items);
+		items.addAll(list);
 	}
 	
 	@Override

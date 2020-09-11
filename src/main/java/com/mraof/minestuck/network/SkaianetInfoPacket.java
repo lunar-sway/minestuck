@@ -1,12 +1,13 @@
 package com.mraof.minestuck.network;
 
+import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.ReducedConnection;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaiaClient;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
-import com.mraof.minestuck.player.IdentifierHandler;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,9 +21,9 @@ public class SkaianetInfoPacket implements PlayToBothPacket
 	public Map<Integer, String> openServers;
 	public List<SburbConnection> connectionsFrom;
 	public List<ReducedConnection> connectionsTo;
-	public List<List<Integer>> landChains;
+	public List<List<ResourceLocation>> landChains;
 	
-	public static SkaianetInfoPacket landChains(List<List<Integer>> landChains)
+	public static SkaianetInfoPacket landChains(List<List<ResourceLocation>> landChains)
 	{
 		SkaianetInfoPacket packet = new SkaianetInfoPacket();
 		packet.landChains = landChains;
@@ -56,11 +57,15 @@ public class SkaianetInfoPacket implements PlayToBothPacket
 		if(landChains != null) //Land chain data
 		{
 			buffer.writeBoolean(true);
-			for(List<Integer> list : landChains)
+			for(List<ResourceLocation> list : landChains)
 			{
 				buffer.writeInt(list.size());
-				for(int i : list)
-					buffer.writeInt(i);
+				for(ResourceLocation land : list)
+				{
+					if(land == null)
+						buffer.writeString("");
+					else buffer.writeString(land.toString());
+				}
 			}
 		} else
 		{
@@ -95,9 +100,14 @@ public class SkaianetInfoPacket implements PlayToBothPacket
 			while(buffer.readableBytes() > 0)
 			{
 				int size = buffer.readInt();
-				List<Integer> list = new ArrayList<>();
+				List<ResourceLocation> list = new ArrayList<>();
 				for(int k = 0; k < size; k++)
-					list.add(buffer.readInt());
+				{
+					String landName = buffer.readString(32767);
+					if(landName.isEmpty())
+						list.add(null);
+					else list.add(ResourceLocation.tryCreate(landName));
+				}
 				packet.landChains.add(list);
 			}
 		} else

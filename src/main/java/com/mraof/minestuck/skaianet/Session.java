@@ -227,7 +227,8 @@ public final class Session
 		
 		return types;
 	}
-	public void predefineCall(PlayerIdentifier player, SkaianetException.SkaianetConsumer<PredefineData> consumer) throws SkaianetException
+	
+	void predefineCall(PlayerIdentifier player, SkaianetException.SkaianetConsumer<PredefineData> consumer) throws SkaianetException
 	{
 		PredefineData data = predefinedPlayers.get(player);
 		if(data == null)	//TODO Do not create data for players that have entered (and clear predefined data when no longer needed)
@@ -276,7 +277,9 @@ public final class Session
 		{
 			try
 			{
-				s.connections.add(new SburbConnection(list.getCompound(i), handler));
+				SburbConnection c = new SburbConnection(list.getCompound(i), handler);
+				if(c.isActive() || c.isMain())
+					s.connections.add(c);
 			} catch(Exception e)
 			{
 				Debug.logger.error("Unable to read sburb connection from tag "+list.getCompound(i)+". Forced to skip connection. Caused by:", e);

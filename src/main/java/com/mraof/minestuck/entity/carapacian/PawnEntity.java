@@ -5,6 +5,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.ai.goal.RangedAttackGoal;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.projectile.ArrowEntity;
@@ -20,14 +21,11 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 public abstract class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IMob
 {
-	private static Random randStatic = new Random();
 	private final RangedAttackGoal aiArrowAttack = new RangedAttackGoal(this, 0.25F, 20, 10.0F);
 	private final MeleeAttackGoal aiMeleeAttack = new MeleeAttackGoal(this, .4F, false);
-	private static final float moveSpeed = 0.3F;
 	
 	public PawnEntity(EntityType<? extends PawnEntity> type, World world)
 	{
@@ -35,24 +33,28 @@ public abstract class PawnEntity extends CarapacianEntity implements IRangedAtta
 		this.experienceValue = 1;
 		setCombatTask();
 	}
-
+	
 	@Override
-	public float getMaximumHealth() 
+	protected void registerAttributes()
 	{
-		return 20;
+		super.registerAttributes();
+		getAttributes().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
+		
+		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.2D);
 	}
-
+	
 	@Override
-	public float getWanderSpeed() 
+	protected void registerGoals()
 	{
-		return moveSpeed;
+		super.registerGoals();
+		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 0, true, false, entity -> attackEntitySelector.isEntityApplicable(entity)));
 	}
 	
 	@Override
 	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty)
 	{
 		super.setEquipmentBasedOnDifficulty(difficulty);
-		this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(randStatic.nextDouble() < .25 ? Items.BOW : rand.nextDouble() < .2 ? MSItems.REGISWORD : rand.nextDouble() < .02 ? MSItems.SORD : Items.STONE_SWORD));
+		this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(rand.nextDouble() < .25 ? Items.BOW : rand.nextDouble() < .2 ? MSItems.REGISWORD : rand.nextDouble() < .02 ? MSItems.SORD : Items.STONE_SWORD));
 	}
 	
 	@Override
@@ -62,7 +64,7 @@ public abstract class PawnEntity extends CarapacianEntity implements IRangedAtta
 		double d0 = target.posX - this.posX;
 		double d1 = target.getBoundingBox().minY + (double)(target.getHeight() / 3.0F) - arrow.posY;
 		double d2 = target.posZ - this.posZ;
-		double d3 = (double)MathHelper.sqrt(d0 * d0 + d2 * d2);
+		double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
 		arrow.shoot(d0, d1 + d3 * 0.2D, d2, 1.6F, 12.0F);
 		int power = EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.POWER, this);
 		int punch = EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.PUNCH, this);
@@ -181,12 +183,5 @@ public abstract class PawnEntity extends CarapacianEntity implements IRangedAtta
 		
 		setCombatTask();
 		return spawnDataIn;
-	}
-	
-	@Override
-	protected void registerAttributes()
-	{
-		super.registerAttributes();
-		this.getAttributes().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
 	}
 }

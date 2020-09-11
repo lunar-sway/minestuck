@@ -4,12 +4,20 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
+import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.client.renderer.texture.PotionSpriteUploader;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import org.lwjgl.glfw.GLFW;
 
+import javax.annotation.Nullable;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -27,7 +35,6 @@ public class EcheladderScreen extends PlayerStatsScreen
 	public static final String PROTECTION_UNDERLING_INCREASE = "minestuck.echeladder.protection_underling.increase";
 	
 	private static final ResourceLocation guiEcheladder = new ResourceLocation("minestuck", "textures/gui/echeladder.png");
-	private static final ResourceLocation potionIcons = new ResourceLocation("textures/gui/container/inventory.png");
 	
 	private static final int MAX_SCROLL = Echeladder.RUNG_COUNT*14 - 154;
 														//0			1			2			3			4			5			6			7			8			9			10			11			12			13			14			15			16			17			18			19			20			21			22			23			24			25			26			27			28			29			30			31			32			33			34			35			36			37			38			39			40			41			42			43			44			45			46			47			48			49
@@ -111,6 +118,40 @@ public class EcheladderScreen extends PlayerStatsScreen
 		
 		drawTabs();
 		
+		drawLadder(currentRung, showLastRung);
+		
+		GlStateManager.color3f(1,1,1);
+		
+		this.mc.getTextureManager().bindTexture(guiEcheladder);
+		this.blit(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
+
+		this.blit(xOffset + 80, yOffset + 42 + (int) (130*(1 - scrollIndex/(float) MAX_SCROLL)), 0, 243, 7, 13);
+		
+		List<String> tooltip = drawEffectIconsAndText(currentRung, mouseX, mouseY);
+		
+		if(fromRung < currentRung)
+		{
+			Random rand = new Random(452619373);
+			int rung;
+			for(rung = 0; rung <= Math.max(fromRung, currentRung - 4); rung++)
+				rand.nextInt(0xFFFFFF);
+			for(; rung <= currentRung; rung++)
+			{
+				int index = rung - 1 - Math.max(fromRung, currentRung - 4);
+				ITextComponent newTooltip = drawGainedRungBonuses(rung, index, rand, mouseX, mouseY);
+				if(newTooltip != null)
+					tooltip = Collections.singletonList(newTooltip.getFormattedText());
+			}
+		}
+		
+		drawActiveTabAndOther(mouseX, mouseY);
+		
+		if(tooltip != null)
+			renderTooltip(tooltip, mouseX, mouseY);
+	}
+	
+	private void drawLadder(int currentRung, boolean showLastRung)
+	{
 		this.mc.getTextureManager().bindTexture(guiEcheladder);
 		int scroll = scrollIndex % 14;
 		for(int i = 0; i < rows; i++)
@@ -146,17 +187,17 @@ public class EcheladderScreen extends PlayerStatsScreen
 			String s = I18n.hasKey("echeladder.rung."+rung) ? I18n.format("echeladder.rung."+rung) : "Rung "+(rung+1);
 			mc.fontRenderer.drawString(s, xOffset+ladderXOffset - mc.fontRenderer.getStringWidth(s) / 2, y + 2, textColor);
 		}
-		GlStateManager.color3f(1,1,1);
-		
-		this.mc.getTextureManager().bindTexture(guiEcheladder);
-		this.blit(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
-
-		this.blit(xOffset + 80, yOffset + 42 + (int) (130*(1 - scrollIndex/(float) MAX_SCROLL)), 0, 243, 7, 13);
-		
+	}
+	
+	@Nullable
+	private List<String> drawEffectIconsAndText(int currentRung, int mouseX, int mouseY)
+	{
 		boolean gristLimit = true;
-		this.mc.getTextureManager().bindTexture(potionIcons);
-		this.blit(xOffset + 5, yOffset + 30, 72, 198, 18, 18);
-		this.blit(xOffset + 5, yOffset + 84, 126, 198, 18, 18);
+		this.minecraft.getTextureManager().bindTexture(AtlasTexture.LOCATION_EFFECTS_TEXTURE);
+		PotionSpriteUploader sprites = this.minecraft.getPotionSpriteUploader();
+		
+		blit(xOffset + 5, yOffset + 30, blitOffset, 18, 18, sprites.getSprite(Effects.STRENGTH));
+		blit(xOffset + 5, yOffset + 84, blitOffset, 18, 18, sprites.getSprite(Effects.HEALTH_BOOST));
 		this.mc.getTextureManager().bindTexture(PlayerStatsScreen.icons);
 		this.blit(xOffset + 6, yOffset + 139, 48, 64, 16, 16);
 		this.blit(xOffset + 5, yOffset + 7, 238, 16, 18, 18);
@@ -178,55 +219,48 @@ public class EcheladderScreen extends PlayerStatsScreen
 		mc.fontRenderer.drawString(I18n.format(CACHE), xOffset + 24, yOffset + 138, 0x404040);
 		mc.fontRenderer.drawString("Unlimited", xOffset + 26, yOffset + 147, 0x0094FF);
 		
-		String tooltip = null;
-		if(fromRung < currentRung)
+		if(mouseY >= yOffset + 39 && mouseY < yOffset + 39 + mc.fontRenderer.FONT_HEIGHT && mouseX >= xOffset + 26 && mouseX < xOffset + 26 + mc.fontRenderer.getStringWidth(attack+"%"))
+			return Arrays.asList(I18n.format(DAMAGE_UNDERLING), Math.round(attack*Echeladder.getUnderlingDamageModifier(currentRung)) + "%");
+		if(mouseY >= yOffset + 93 && mouseY < yOffset + 93 + mc.fontRenderer.FONT_HEIGHT && mouseX >= xOffset + 26 && mouseX < xOffset + 26 + mc.fontRenderer.getStringWidth(String.valueOf(health)))
+			return Arrays.asList(I18n.format(PROTECTION_UNDERLING), String.format("%.1f", 100*Echeladder.getUnderlingProtectionModifier(currentRung))+"%");
+		return null;
+	}
+	
+	@Nullable
+	private ITextComponent drawGainedRungBonuses(int rung, int index, Random rand, int mouseX, int mouseY)
+	{
+		int textColor = rand.nextInt(0xFFFFFF);
+		if(textColors.length > rung)
+			textColor = textColors[rung];
+		int bg = backgrounds.length > rung ? backgrounds[rung] : (textColor^0xFFFFFFFF);
+		
+		String str = "+"+(Math.round(100*Echeladder.attackBonus(rung)) - Math.round(100*Echeladder.attackBonus(rung - 1)))+"%!";
+		fill(xOffset + 5 + 32*(index%2), yOffset + 50 + 15*(index/2), xOffset + 35 + 32*(index%2), yOffset + 62 + 15*(index/2), bg);
+		int strX = xOffset + 20 + 32*(index%2) - mc.fontRenderer.getStringWidth(str)/2, strY = yOffset + 52 + 15*(index/2);
+		mc.fontRenderer.drawString(str, strX, strY, textColor);
+		
+		double d = (Echeladder.healthBoost(rung) - Echeladder.healthBoost(rung - 1))/2D;
+		str = "+"+(d == 0 ? d : d+"!");
+		fill(xOffset + 5 + 32*(index%2), yOffset + 104 + 15*(index/2), xOffset + 35 + 32*(index%2), yOffset + 116 + 15*(index/2), bg);
+		strX = xOffset + 20 + 32*(index%2) - mc.fontRenderer.getStringWidth(str)/2;
+		strY = yOffset + 106 + 15*(index/2);
+		mc.fontRenderer.drawString(str, strX, strY, textColor);
+		
+		if(mouseY >= strY && mouseY < strY + mc.fontRenderer.FONT_HEIGHT && mouseX >= strX && mouseX < strX + mc.fontRenderer.getStringWidth(str))
 		{
-			rand =  new Random(452619373);
-			int rung;
-			for(rung = 0; rung <= Math.max(fromRung, currentRung - 4); rung++)
-				rand.nextInt(0xFFFFFF);
-			for(; rung <= currentRung; rung++)
-			{
-				int index = rung - 1 - Math.max(fromRung, currentRung - 4);
-				int textColor = rand.nextInt(0xFFFFFF);
-				if(textColors.length > rung)
-					textColor = textColors[rung];
-				int bg = backgrounds.length > rung ? backgrounds[rung] : (textColor^0xFFFFFFFF);
-				
-				String str = "+"+(Math.round(100*Echeladder.attackBonus(rung)) - Math.round(100*Echeladder.attackBonus(rung - 1)))+"%!";
-				fill(xOffset + 5 + 32*(index%2), yOffset + 50 + 15*(index/2), xOffset + 35 + 32*(index%2), yOffset + 62 + 15*(index/2), bg);
-				int strX = xOffset + 20 + 32*(index%2) - mc.fontRenderer.getStringWidth(str)/2, strY = yOffset + 52 + 15*(index/2);
-				mc.fontRenderer.drawString(str, strX, strY, textColor);
-				if(mouseY >= strY && mouseY < strY + mc.fontRenderer.FONT_HEIGHT && mouseX >= strX && mouseX < strX + mc.fontRenderer.getStringWidth(str))
-				{
-					int diff = (int) Math.round(100*Echeladder.attackBonus(rung)*Echeladder.getUnderlingDamageModifier(rung));
-					diff -= Math.round(100*Echeladder.attackBonus(rung - 1)*Echeladder.getUnderlingDamageModifier(rung - 1));
-					tooltip = I18n.format(DAMAGE_UNDERLING_INCREASE, diff);
-				}
-				
-				double d = (Echeladder.healthBoost(rung) - Echeladder.healthBoost(rung - 1))/2D;
-				str = "+"+(d == 0 ? d : d+"!");
-				fill(xOffset + 5 + 32*(index%2), yOffset + 104 + 15*(index/2), xOffset + 35 + 32*(index%2), yOffset + 116 + 15*(index/2), bg);
-				strX = xOffset + 20 + 32*(index%2) - mc.fontRenderer.getStringWidth(str)/2;
-				strY = yOffset + 106 + 15*(index/2);
-				mc.fontRenderer.drawString(str, strX, strY, textColor);
-				if(mouseY >= strY && mouseY < strY + mc.fontRenderer.FONT_HEIGHT && mouseX >= strX && mouseX < strX + mc.fontRenderer.getStringWidth(str))
-				{
-					int diff = (int) Math.round(1000*Echeladder.getUnderlingProtectionModifier(rung - 1));
-					diff -= Math.round(1000*Echeladder.getUnderlingProtectionModifier(rung));
-					tooltip = I18n.format(PROTECTION_UNDERLING_INCREASE, diff/10D);
-				}
-			}
+			int diff = (int) Math.round(100*Echeladder.attackBonus(rung)*Echeladder.getUnderlingDamageModifier(rung));
+			diff -= Math.round(100*Echeladder.attackBonus(rung - 1)*Echeladder.getUnderlingDamageModifier(rung - 1));
+			return new TranslationTextComponent(DAMAGE_UNDERLING_INCREASE, diff);
 		}
 		
-		drawActiveTabAndOther(mouseX, mouseY);
+		if(mouseY >= strY && mouseY < strY + mc.fontRenderer.FONT_HEIGHT && mouseX >= strX && mouseX < strX + mc.fontRenderer.getStringWidth(str))
+		{
+			int diff = (int) Math.round(1000*Echeladder.getUnderlingProtectionModifier(rung - 1));
+			diff -= Math.round(1000*Echeladder.getUnderlingProtectionModifier(rung));
+			return new TranslationTextComponent(PROTECTION_UNDERLING_INCREASE, diff/10D);
+		}
 		
-		if(tooltip != null)
-			renderTooltip(Arrays.asList(tooltip), mouseX, mouseY);
-		else if(mouseY >= yOffset + 39 && mouseY < yOffset + 39 + mc.fontRenderer.FONT_HEIGHT && mouseX >= xOffset + 26 && mouseX < xOffset + 26 + mc.fontRenderer.getStringWidth(attack+"%"))
-			renderTooltip(Arrays.asList(I18n.format(DAMAGE_UNDERLING), Math.round(attack*Echeladder.getUnderlingDamageModifier(currentRung)) + "%"), mouseX, mouseY);
-		else if(mouseY >= yOffset + 93 && mouseY < yOffset + 93 + mc.fontRenderer.FONT_HEIGHT && mouseX >= xOffset + 26 && mouseX < xOffset + 26 + mc.fontRenderer.getStringWidth(String.valueOf(health)))
-			renderTooltip(Arrays.asList(I18n.format(PROTECTION_UNDERLING), String.format("%.1f", 100*Echeladder.getUnderlingProtectionModifier(currentRung))+"%"), mouseX, mouseY);
+		return null;
 	}
 	
 	private void updateScrollAndAnimation(int xcor, int ycor)
@@ -253,7 +287,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int i)
 	{
-		if(keyCode == 28 || keyCode == 156 && animationCycle > 0)
+		if((keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER) && animationCycle > 0)
 		{
 			animationCycle = 0;
 			return true;

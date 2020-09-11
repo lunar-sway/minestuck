@@ -10,6 +10,7 @@ import com.mraof.minestuck.network.SkaianetInfoPacket;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
@@ -26,14 +27,14 @@ public class SkaiaClient
 {
 	
 	//Variables
-	private static Map<Integer, Map<Integer, String>> openServers = new HashMap<>();
-	private static List<ReducedConnection> connections = new ArrayList<>();
-	private static Map<Integer, Boolean> serverWaiting = new HashMap<>();
-	private static Map<Integer, Boolean> resumingClient = new HashMap<>();
+	private static final Map<Integer, Map<Integer, String>> openServers = new HashMap<>();
+	private static final List<ReducedConnection> connections = new ArrayList<>();
+	private static final Map<Integer, Boolean> serverWaiting = new HashMap<>();
+	private static final Map<Integer, Boolean> resumingClient = new HashMap<>();
 	/**
 	 * A map used to track chains of lands, to be used by the skybox render
 	 */
-	private static Map<DimensionType, List<DimensionType>> landChainMap = new HashMap<>();
+	private static final Map<ResourceLocation, List<ResourceLocation>> landChainMap = new HashMap<>();
 	private static ComputerTileEntity te = null;
 	public static int playerId;	//The id that this player is expected to have.
 	
@@ -91,9 +92,9 @@ public class SkaiaClient
 		return false;
 	}
 	
-	public static List<DimensionType> getLandChain(DimensionType id)
+	public static List<ResourceLocation> getLandChain(DimensionType id)
 	{
-		return landChainMap.get(id);
+		return landChainMap.get(id.getRegistryName());
 	}
 	
 	public static boolean isActive(int playerId, boolean isClient)
@@ -143,14 +144,11 @@ public class SkaiaClient
 		if(data.landChains != null)
 		{
 			landChainMap.clear();
-			for(List<Integer> list : data.landChains)
+			for(List<ResourceLocation> list : data.landChains)
 			{
-				List<DimensionType> dimList = new ArrayList<>();
-				for(int i : list)
+				for(ResourceLocation land : list)
 				{
-					DimensionType type = i == 0 ? null : DimensionType.getById(i);	//Note: 0 is used to signal an open end of a land chain
-					dimList.add(type);
-					landChainMap.put(type, dimList);
+					landChainMap.put(land, list);
 				}
 			}
 			return;

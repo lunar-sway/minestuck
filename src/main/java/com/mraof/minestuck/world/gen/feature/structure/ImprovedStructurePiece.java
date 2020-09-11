@@ -1,10 +1,8 @@
 package com.mraof.minestuck.world.gen.feature.structure;
 
 import com.mraof.minestuck.block.ReturnNodeBlock;
-import net.minecraft.block.BedBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.DoorBlock;
+import net.minecraft.block.*;
+import net.minecraft.fluid.IFluidState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.properties.BedPart;
 import net.minecraft.state.properties.DoorHingeSide;
@@ -132,6 +130,11 @@ public abstract class ImprovedStructurePiece extends StructurePiece
 		}
 	}
 	
+	protected boolean needPostprocessing(Block block)
+	{
+		return block instanceof FourWayBlock || block instanceof TorchBlock || block instanceof LadderBlock || block instanceof StairsBlock;
+	}
+	
 	@Override
 	protected void setBlockState(IWorld worldIn, BlockState blockstateIn, int x, int y, int z, MutableBoundingBox boundingboxIn)
 	{
@@ -155,6 +158,13 @@ public abstract class ImprovedStructurePiece extends StructurePiece
 			}
 			
 			worldIn.setBlockState(blockpos, blockstateIn, 2);
+			
+			IFluidState ifluidstate = worldIn.getFluidState(blockpos);
+			if(!ifluidstate.isEmpty())
+				worldIn.getPendingFluidTicks().scheduleTick(blockpos, ifluidstate.getFluid(), 0);
+			
+			if(needPostprocessing(blockstateIn.getBlock()))
+				worldIn.getChunk(blockpos).markBlockForPostprocessing(blockpos);
 		}
 	}
 }

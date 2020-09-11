@@ -1,6 +1,7 @@
 package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.EnumCassetteType;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.item.CrewPosterEntity;
 import com.mraof.minestuck.entity.item.MetalBoatEntity;
@@ -137,6 +138,9 @@ public class MSItems
 	public static final Item POGO_CLUB = getNull();
 	public static final Item METAL_BAT = getNull();
 	public static final Item SPIKED_CLUB = getNull();
+	public static final Item KINGS_SCEPTER_WHITE = getNull();
+	public static final Item KINGS_SCEPTER_BLACK = getNull();
+
 	public static final Item HORSE_HITCHER = getNull();
 	public static final Item ACE_OF_SPADES = getNull();
 	public static final Item CLUB_OF_FELONY = getNull();
@@ -144,8 +148,6 @@ public class MSItems
 	public static final Item CUESTICK = getNull();
 	public static final Item ACE_OF_DIAMONDS = getNull();
 	public static final Item ACE_OF_HEARTS = getNull();
-	public static final Item KINGS_SCEPTER_WHITE = getNull();
-	public static final Item KINGS_SCEPTER_BLACK = getNull();
 
 	//canes
 	public static final Item CANE = getNull();
@@ -197,6 +199,7 @@ public class MSItems
 	public static final Item IRON_LASS_CHESTPLATE = getNull();
 	public static final Item IRON_LASS_SKIRT = getNull();
 	public static final Item IRON_LASS_SHOES = getNull();
+
 	public static final Item PROSPIT_SHIRT = getNull();
 	public static final Item PROSPIT_PANTS = getNull();
 	public static final Item PROSPIT_SHOES = getNull();
@@ -223,6 +226,9 @@ public class MSItems
 	public static final Item SHUNT = getNull();
 	
 	//Food
+	public static final Item PHLEGM_GUSHERS = getNull();
+	public static final Item SORROW_GUSHERS = getNull();
+
 	public static final Item BUG_ON_A_STICK = getNull();
 	public static final Item CHOCOLATE_BEETLE = getNull();
 	public static final Item CONE_OF_FLIES = getNull();
@@ -240,8 +246,6 @@ public class MSItems
 	public static final Item FOOD_CAN = getNull();
 
 	public static final Item CANDY_CORN = getNull();
-	public static final Item PHLEGM_GUSHERS = getNull();
-	public static final Item SORROW_GUSHERS = getNull();
 	public static final Item BUILD_GUSHERS = getNull();
 	public static final Item AMBER_GUMMY_WORM = getNull();
 	public static final Item CAULK_PRETZEL = getNull();
@@ -299,11 +303,6 @@ public class MSItems
 
 	//Alchemy Items
 	public static final Item GRIMOIRE = getNull();
-	public static final Item LONG_FORGOTTEN_WARHORN = getNull();
-	public static final Item QUEENS_RING_BLACK = getNull();
-	public static final Item QUEENS_RING_WHITE = getNull();
-	public static final Item RAZOR_BLADE = getNull();
-	public static final Item ICE_SHARD = getNull();
 	public static final Item BATTERY = getNull();
 	public static final Item BARBASOL = getNull();
 	public static final Item CLOTHES_IRON = getNull();
@@ -314,13 +313,18 @@ public class MSItems
 	public static final Item GAMEGRL_MAGAZINE = getNull();
 	public static final Item CREW_POSTER = getNull();
 	public static final Item SBAHJ_POSTER = getNull();
+	public static final Item BI_DYE = getNull();
 
 	//Other
 	public static final Item CAPTCHAROID_CAMERA = getNull();
+	public static final Item LONG_FORGOTTEN_WARHORN = getNull();
 	public static final Item BARBASOL_BOMB = getNull();
+	public static final Item RAZOR_BLADE = getNull();
+	public static final Item ICE_SHARD = getNull();
 	public static final Item HORN = getNull();
 	public static final Item CAKE_MIX = getNull();
-	public static final Item BI_DYE = getNull();
+	public static final Item QUEENS_RING_BLACK = getNull();
+	public static final Item QUEENS_RING_WHITE = getNull();
 
 	public static final Item SCALEMATE_APPLESCAB = getNull();
 	public static final Item SCALEMATE_BERRYBREATH = getNull();
@@ -343,7 +347,18 @@ public class MSItems
 	public static final Item MUSIC_DISC_EMISSARY_OF_DANCE = getNull();
 	public static final Item MUSIC_DISC_DANCE_STAB_DANCE = getNull();
 	public static final Item MUSIC_DISC_RETRO_BATTLE = getNull();
-	
+	//Cassettes
+	public static final Item CASSETTE_MELLOHI = getNull();
+	public static final Item CASSETTE_13 = getNull();
+	public static final Item CASSETTE_BLOCKS = getNull();
+	public static final Item CASSETTE_CAT = getNull();
+	public static final Item CASSETTE_CHIRP = getNull();
+	public static final Item CASSETTE_FAR = getNull();
+	public static final Item CASSETTE_MALL = getNull();
+	public static final Item CASSETTE_DANCE_STAB = getNull();
+	public static final Item CASSETTE_RETRO_BATTLE = getNull();
+	public static final Item CASSETTE_EMISSARY = getNull();
+
 	@Nonnull
 	@SuppressWarnings("ConstantConditions")
 	private static <T> T getNull()
@@ -473,54 +488,54 @@ public class MSItems
 		registerItemBlock(registry, RAINBOW_SAPLING, MSItemGroup.LANDS);
 		registerItemBlock(registry, END_SAPLING, MSItemGroup.LANDS);
 		
-		registerItemBlock(registry, BLOOD_ASPECT_LOG, MSItemGroup.LANDS);
-		registerItemBlock(registry, BREATH_ASPECT_LOG, MSItemGroup.LANDS);
-		registerItemBlock(registry, DOOM_ASPECT_LOG, MSItemGroup.LANDS);
-		registerItemBlock(registry, HEART_ASPECT_LOG, MSItemGroup.LANDS);
-		registerItemBlock(registry, HOPE_ASPECT_LOG, MSItemGroup.LANDS);
-		registerItemBlock(registry, LIFE_ASPECT_LOG, MSItemGroup.LANDS);
-		registerItemBlock(registry, LIGHT_ASPECT_LOG, MSItemGroup.LANDS);
-		registerItemBlock(registry, MIND_ASPECT_LOG, MSItemGroup.LANDS);
-		registerItemBlock(registry, RAGE_ASPECT_LOG, MSItemGroup.LANDS);
-		registerItemBlock(registry, SPACE_ASPECT_LOG, MSItemGroup.LANDS);
-		registerItemBlock(registry, TIME_ASPECT_LOG, MSItemGroup.LANDS);
-		registerItemBlock(registry, VOID_ASPECT_LOG, MSItemGroup.LANDS);
-		registerItemBlock(registry, BLOOD_ASPECT_PLANKS, MSItemGroup.LANDS);
-		registerItemBlock(registry, BREATH_ASPECT_PLANKS, MSItemGroup.LANDS);
-		registerItemBlock(registry, DOOM_ASPECT_PLANKS, MSItemGroup.LANDS);
-		registerItemBlock(registry, HEART_ASPECT_PLANKS, MSItemGroup.LANDS);
-		registerItemBlock(registry, HOPE_ASPECT_PLANKS, MSItemGroup.LANDS);
-		registerItemBlock(registry, LIFE_ASPECT_PLANKS, MSItemGroup.LANDS);
-		registerItemBlock(registry, LIGHT_ASPECT_PLANKS, MSItemGroup.LANDS);
-		registerItemBlock(registry, MIND_ASPECT_PLANKS, MSItemGroup.LANDS);
-		registerItemBlock(registry, RAGE_ASPECT_PLANKS, MSItemGroup.LANDS);
-		registerItemBlock(registry, SPACE_ASPECT_PLANKS, MSItemGroup.LANDS);
-		registerItemBlock(registry, TIME_ASPECT_PLANKS, MSItemGroup.LANDS);
-		registerItemBlock(registry, VOID_ASPECT_PLANKS, MSItemGroup.LANDS);
-		registerItemBlock(registry, BLOOD_ASPECT_LEAVES, MSItemGroup.LANDS);
-		registerItemBlock(registry, BREATH_ASPECT_LEAVES, MSItemGroup.LANDS);
-		registerItemBlock(registry, DOOM_ASPECT_LEAVES, MSItemGroup.LANDS);
-		registerItemBlock(registry, HEART_ASPECT_LEAVES, MSItemGroup.LANDS);
-		registerItemBlock(registry, HOPE_ASPECT_LEAVES, MSItemGroup.LANDS);
-		registerItemBlock(registry, LIFE_ASPECT_LEAVES, MSItemGroup.LANDS);
-		registerItemBlock(registry, LIGHT_ASPECT_LEAVES, MSItemGroup.LANDS);
-		registerItemBlock(registry, MIND_ASPECT_LEAVES, MSItemGroup.LANDS);
-		registerItemBlock(registry, RAGE_ASPECT_LEAVES, MSItemGroup.LANDS);
-		registerItemBlock(registry, SPACE_ASPECT_LEAVES, MSItemGroup.LANDS);
-		registerItemBlock(registry, TIME_ASPECT_LEAVES, MSItemGroup.LANDS);
-		registerItemBlock(registry, VOID_ASPECT_LEAVES, MSItemGroup.LANDS);
-		registerItemBlock(registry, BLOOD_ASPECT_SAPLING, MSItemGroup.LANDS);
-		registerItemBlock(registry, BREATH_ASPECT_SAPLING, MSItemGroup.LANDS);
-		registerItemBlock(registry, DOOM_ASPECT_SAPLING, MSItemGroup.LANDS);
-		registerItemBlock(registry, HEART_ASPECT_SAPLING, MSItemGroup.LANDS);
-		registerItemBlock(registry, HOPE_ASPECT_SAPLING, MSItemGroup.LANDS);
-		registerItemBlock(registry, LIFE_ASPECT_SAPLING, MSItemGroup.LANDS);
-		registerItemBlock(registry, LIGHT_ASPECT_SAPLING, MSItemGroup.LANDS);
-		registerItemBlock(registry, MIND_ASPECT_SAPLING, MSItemGroup.LANDS);
-		registerItemBlock(registry, RAGE_ASPECT_SAPLING, MSItemGroup.LANDS);
-		registerItemBlock(registry, SPACE_ASPECT_SAPLING, MSItemGroup.LANDS);
-		registerItemBlock(registry, TIME_ASPECT_SAPLING, MSItemGroup.LANDS);
-		registerItemBlock(registry, VOID_ASPECT_SAPLING, MSItemGroup.LANDS);
+		registerItemBlock(registry, BLOOD_ASPECT_LOG);
+		registerItemBlock(registry, BREATH_ASPECT_LOG);
+		registerItemBlock(registry, DOOM_ASPECT_LOG);
+		registerItemBlock(registry, HEART_ASPECT_LOG);
+		registerItemBlock(registry, HOPE_ASPECT_LOG);
+		registerItemBlock(registry, LIFE_ASPECT_LOG);
+		registerItemBlock(registry, LIGHT_ASPECT_LOG);
+		registerItemBlock(registry, MIND_ASPECT_LOG);
+		registerItemBlock(registry, RAGE_ASPECT_LOG);
+		registerItemBlock(registry, SPACE_ASPECT_LOG);
+		registerItemBlock(registry, TIME_ASPECT_LOG);
+		registerItemBlock(registry, VOID_ASPECT_LOG);
+		registerItemBlock(registry, BLOOD_ASPECT_PLANKS);
+		registerItemBlock(registry, BREATH_ASPECT_PLANKS);
+		registerItemBlock(registry, DOOM_ASPECT_PLANKS);
+		registerItemBlock(registry, HEART_ASPECT_PLANKS);
+		registerItemBlock(registry, HOPE_ASPECT_PLANKS);
+		registerItemBlock(registry, LIFE_ASPECT_PLANKS);
+		registerItemBlock(registry, LIGHT_ASPECT_PLANKS);
+		registerItemBlock(registry, MIND_ASPECT_PLANKS);
+		registerItemBlock(registry, RAGE_ASPECT_PLANKS);
+		registerItemBlock(registry, SPACE_ASPECT_PLANKS);
+		registerItemBlock(registry, TIME_ASPECT_PLANKS);
+		registerItemBlock(registry, VOID_ASPECT_PLANKS);
+		registerItemBlock(registry, BLOOD_ASPECT_LEAVES);
+		registerItemBlock(registry, BREATH_ASPECT_LEAVES);
+		registerItemBlock(registry, DOOM_ASPECT_LEAVES);
+		registerItemBlock(registry, HEART_ASPECT_LEAVES);
+		registerItemBlock(registry, HOPE_ASPECT_LEAVES);
+		registerItemBlock(registry, LIFE_ASPECT_LEAVES);
+		registerItemBlock(registry, LIGHT_ASPECT_LEAVES);
+		registerItemBlock(registry, MIND_ASPECT_LEAVES);
+		registerItemBlock(registry, RAGE_ASPECT_LEAVES);
+		registerItemBlock(registry, SPACE_ASPECT_LEAVES);
+		registerItemBlock(registry, TIME_ASPECT_LEAVES);
+		registerItemBlock(registry, VOID_ASPECT_LEAVES);
+		registerItemBlock(registry, BLOOD_ASPECT_SAPLING);
+		registerItemBlock(registry, BREATH_ASPECT_SAPLING);
+		registerItemBlock(registry, DOOM_ASPECT_SAPLING);
+		registerItemBlock(registry, HEART_ASPECT_SAPLING);
+		registerItemBlock(registry, HOPE_ASPECT_SAPLING);
+		registerItemBlock(registry, LIFE_ASPECT_SAPLING);
+		registerItemBlock(registry, LIGHT_ASPECT_SAPLING);
+		registerItemBlock(registry, MIND_ASPECT_SAPLING);
+		registerItemBlock(registry, RAGE_ASPECT_SAPLING);
+		registerItemBlock(registry, SPACE_ASPECT_SAPLING);
+		registerItemBlock(registry, TIME_ASPECT_SAPLING);
+		registerItemBlock(registry, VOID_ASPECT_SAPLING);
 		
 		registerItemBlock(registry, GLOWING_MUSHROOM, MSItemGroup.LANDS);
 		registerItemBlock(registry, DESERT_BUSH, MSItemGroup.LANDS);
@@ -531,9 +546,9 @@ public class MSItems
 		
 		registerItemBlock(registry, GLOWY_GOOP, MSItemGroup.LANDS);
 		registerItemBlock(registry, COAGULATED_BLOOD, MSItemGroup.LANDS);
-		registerItemBlock(registry, VEIN, MSItemGroup.LANDS);
-		registerItemBlock(registry, VEIN_CORNER, MSItemGroup.LANDS);
-		registerItemBlock(registry, INVERTED_VEIN_CORNER, MSItemGroup.LANDS);
+		registerItemBlock(registry, VEIN);
+		registerItemBlock(registry, VEIN_CORNER);
+		registerItemBlock(registry, INVERTED_VEIN_CORNER);
 
 		registerItemBlock(registry, NAKAGATOR_STATUE, MSItemGroup.LANDS);
 		registerItemBlock(registry, IGUANA_STATUE, MSItemGroup.LANDS);
@@ -609,13 +624,15 @@ public class MSItems
 		registerItemBlock(registry, BLENDER, MSItemGroup.MAIN);
 		registerItemBlock(registry, CHESSBOARD, MSItemGroup.MAIN);
 		registerItemBlock(registry, MINI_FROG_STATUE, MSItemGroup.MAIN);
+		registerItemBlock(registry, CASSETTE_PLAYER, MSItemGroup.MAIN);
+
 		registerItemBlock(registry, GLOWYSTONE_DUST, MSItemGroup.MAIN);
 		
 		//hammers
 		registry.register(new WeaponItem(ItemTier.IRON, 2, -2.4F, 1.0F, MSItemTypes.HAMMER_TOOL, new Item.Properties().defaultMaxDamage(131).group(MSItemGroup.WEAPONS)).setRegistryName("claw_hammer"));
-		registry.register(new WeaponItem(ItemTier.IRON, 4, -2.8F, 4.0F,  MSItemTypes.HAMMER_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("sledge_hammer"));
-		registry.register(new WeaponItem(ItemTier.IRON, 5, -2.8F, 3.5F,  MSItemTypes.HAMMER_TOOL, new Item.Properties().defaultMaxDamage(450).group(MSItemGroup.WEAPONS)).setRegistryName("blacksmith_hammer"));
-		registry.register(new PogoWeaponItem(MSItemTypes.POGO_TIER, 5, -2.8F, 2.0F, 0.7,  MSItemTypes.HAMMER_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("pogo_hammer"));
+		registry.register(new WeaponItem(ItemTier.IRON, 4, -2.8F, 4.0F, MSItemTypes.HAMMER_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("sledge_hammer"));
+		registry.register(new WeaponItem(ItemTier.IRON, 5, -2.8F, 3.5F, MSItemTypes.HAMMER_TOOL, new Item.Properties().defaultMaxDamage(450).group(MSItemGroup.WEAPONS)).setRegistryName("blacksmith_hammer"));
+		registry.register(new PogoWeaponItem(MSItemTypes.POGO_TIER, 5, -2.8F, 2.0F, 0.7, MSItemTypes.HAMMER_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("pogo_hammer"));
 		registry.register(new PogoWeaponItem(MSItemTypes.POGO_TIER, 7, -2.8F, 2.0F, 0.4,  MSItemTypes.HAMMER_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("wrinklefucker"));
 		registry.register(new WeaponItem(MSItemTypes.BOOK_TIER, 8, -2.9F, 5.0F,  MSItemTypes.HAMMER_TOOL, new Item.Properties().defaultMaxDamage(1024).group(MSItemGroup.WEAPONS)).setRegistryName("telescopic_sassacrusher"));
 		registry.register(new WeaponItem(MSItemTypes.REGI_TIER, 3, -2.4F, 8.0F,  MSItemTypes.HAMMER_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("regi_hammer"));
@@ -807,7 +824,7 @@ public class MSItems
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.LANDS).food(MSFoods.GRASSHOPPER)).setRegistryName("grasshopper"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.LANDS).food(MSFoods.JAR_OF_BUGS)).setRegistryName("jar_of_bugs"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.LANDS).food(MSFoods.ONION)).setRegistryName("onion"));
-		registry.register(new SoupItem(new Item.Properties().group(MSItemGroup.LANDS)).setRegistryName("salad"));
+		registry.register(new SoupItem(new Item.Properties().group(MSItemGroup.LANDS).food(MSFoods.SALAD).maxStackSize(1)).setRegistryName("salad"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.LANDS).food(MSFoods.DESERT_FRUIT)).setRegistryName("desert_fruit"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.LANDS)).setRegistryName("rock_cookie"));	//Not actually food, but let's pretend it is
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.LANDS).food(MSFoods.WOODEN_CARROT)).setRegistryName("wooden_carrot"));
@@ -872,10 +889,10 @@ public class MSItems
 		registry.register(new ObsidianBucketItem(new Item.Properties().maxStackSize(1).containerItem(Items.BUCKET).group(MSItemGroup.MAIN)).setRegistryName("obsidian_bucket"));
 		registry.register(new CaptcharoidCameraItem(new Item.Properties().defaultMaxDamage(64).group(MSItemGroup.MAIN)).setRegistryName("captcharoid_camera"));
 		registry.register(new GrimoireItem(new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("grimoire"));
-		registry.register(new LongForgottenWarhornItem(new Item.Properties().defaultMaxDamage(100)).setRegistryName("long_forgotten_warhorn"));
+		registry.register(new LongForgottenWarhornItem(new Item.Properties().defaultMaxDamage(100).group(MSItemGroup.MAIN)).setRegistryName("long_forgotten_warhorn"));
 		registry.register(new Item(new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("queens_ring_black"));
 		registry.register(new Item(new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("queens_ring_white"));
-		registry.register(new BarbasolBombItem(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("barbasol_bomb"));
+		registry.register(new BarbasolBombItem(new Item.Properties().maxStackSize(16).group(MSItemGroup.MAIN)).setRegistryName("barbasol_bomb"));
 		registry.register(new RazorBladeItem(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("razor_blade"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("ice_shard"));
 		registry.register(new SoundItem(() -> MSSoundEvents.ITEM_HORN_USE, new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("horn"));
@@ -907,9 +924,20 @@ public class MSItems
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("bi_dye"));
 
 		//Music disks
-		registry.register(new ModMusicDiscItem(13, () -> MSSoundEvents.MUSIC_DISC_EMISSARY_OF_DANCE, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_emissary_of_dance"));
-		registry.register(new ModMusicDiscItem(13, () -> MSSoundEvents.MUSIC_DISC_DANCE_STAB_DANCE, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_dance_stab_dance"));
-		registry.register(new ModMusicDiscItem(13, () -> MSSoundEvents.MUSIC_DISC_RETRO_BATTLE_THEME, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_retro_battle"));
+		registry.register(new ModMusicDiscItem(1, () -> MSSoundEvents.MUSIC_DISC_EMISSARY_OF_DANCE, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_emissary_of_dance"));
+		registry.register(new ModMusicDiscItem(2, () -> MSSoundEvents.MUSIC_DISC_DANCE_STAB_DANCE, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_dance_stab_dance"));
+		registry.register(new ModMusicDiscItem(3, () -> MSSoundEvents.MUSIC_DISC_RETRO_BATTLE_THEME, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_retro_battle"));
+		//Cassettes
+		registry.register(new CassetteItem(1, () -> SoundEvents.MUSIC_DISC_13, EnumCassetteType.THIRTEEN, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("cassette_13"));
+		registry.register(new CassetteItem(2, () -> SoundEvents.MUSIC_DISC_CAT, EnumCassetteType.CAT, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("cassette_cat"));
+		registry.register(new CassetteItem(3, () -> SoundEvents.MUSIC_DISC_BLOCKS, EnumCassetteType.BLOCKS, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("cassette_blocks"));
+		registry.register(new CassetteItem(4, () -> SoundEvents.MUSIC_DISC_CHIRP, EnumCassetteType.CHIRP, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("cassette_chirp"));
+		registry.register(new CassetteItem(5, () -> SoundEvents.MUSIC_DISC_FAR, EnumCassetteType.FAR, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("cassette_far"));
+		registry.register(new CassetteItem(6, () -> SoundEvents.MUSIC_DISC_MALL, EnumCassetteType.MALL, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("cassette_mall"));
+		registry.register(new CassetteItem(7, () -> SoundEvents.MUSIC_DISC_MELLOHI, EnumCassetteType.MELLOHI, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("cassette_mellohi"));
+		registry.register(new CassetteItem(1, () -> MSSoundEvents.MUSIC_DISC_EMISSARY_OF_DANCE, EnumCassetteType.EMISSARY_OF_DANCE, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("cassette_emissary"));
+		registry.register(new CassetteItem(2, () -> MSSoundEvents.MUSIC_DISC_DANCE_STAB_DANCE, EnumCassetteType.DANCE_STAB_DANCE, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("cassette_dance_stab"));
+		registry.register(new CassetteItem(3, () -> MSSoundEvents.MUSIC_DISC_RETRO_BATTLE_THEME, EnumCassetteType.RETRO_BATTLE_THEME, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("cassette_retro_battle"));
 		
 	}
 	

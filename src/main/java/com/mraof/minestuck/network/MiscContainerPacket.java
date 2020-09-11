@@ -6,41 +6,60 @@ import com.mraof.minestuck.inventory.EditmodeContainer;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckContainer;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class MiscContainerPacket implements PlayToServerPacket
 {
+	private static final Logger LOGGER = LogManager.getLogger();
 	
-	int i;
+	private final int index;
+	private final boolean editmode;
 	
-	public MiscContainerPacket(int i)
+	public MiscContainerPacket(int index, boolean editmode)
 	{
-		this.i = i;
+		this.index = index;
+		this.editmode = editmode;
 	}
 	
 	@Override
 	public void encode(PacketBuffer buffer)
 	{
-		buffer.writeInt(i);
+		buffer.writeInt(index);
+		buffer.writeBoolean(editmode);
 	}
 	
 	public static MiscContainerPacket decode(PacketBuffer buffer)
 	{
-		int i = buffer.readInt();
+		int index = buffer.readInt();
+		boolean editmode = buffer.readBoolean();
 		
-		return new MiscContainerPacket(i);
+		return new MiscContainerPacket(index, editmode);
 	}
 	
 	@Override
 	public void execute(ServerPlayerEntity player)
 	{
-		if(ServerEditHandler.getData(player) == null)
+		boolean isInEditmode = ServerEditHandler.getData(player) != null;
+		
+		if(editmode != isInEditmode)
 		{
-			player.openContainer = new CaptchaDeckContainer(PlayerStatsScreen.WINDOW_ID_START + i, player.inventory);//ContainerHandler.windowIdStart + i;
+			if(isInEditmode)
+				LOGGER.error("Sanity check failed: {} tried to open a minestuck gui while in editmode", player.getName().getFormattedText());
+			else LOGGER.error("Sanity check failed: {} tried to open an editmode gui while outside editmode", player.getName().getFormattedText());
+			
+			ServerEditHandler.resendEditmodeStatus(player);
 		} else
 		{
-			player.openContainer = new EditmodeContainer(PlayerStatsScreen.WINDOW_ID_START + i, player.inventory);
+			if(!isInEditmode)
+			{
+				player.openContainer = new CaptchaDeckContainer(PlayerStatsScreen.WINDOW_ID_START + index, player.inventory);//ContainerHandler.windowIdStart + i;
+			} else
+			{
+				player.openContainer = new EditmodeContainer(PlayerStatsScreen.WINDOW_ID_START + index, player.inventory);
+			}
+			
+			player.addSelfToInternalCraftingInventory();
 		}
-		
-		player.addSelfToInternalCraftingInventory();
 	}
 }

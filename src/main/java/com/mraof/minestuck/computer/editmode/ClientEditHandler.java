@@ -19,7 +19,10 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Hand;
-import net.minecraft.util.text.*;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.GuiOpenEvent;
@@ -113,10 +116,10 @@ public final class ClientEditHandler
 		{
 			GristType grist = amount.getType();
 			TextFormatting color = amount.getAmount() <= have.getGrist(grist) ? TextFormatting.GREEN : TextFormatting.RED;
-			toolTip.add(new StringTextComponent(amount.getAmount()+" ").appendSibling(grist.getDisplayName()).appendText(" ("+have.getGrist(grist) + ")").setStyle(new Style().setColor(color)));
+			toolTip.add(new StringTextComponent(amount.getAmount()+" ").appendSibling(grist.getDisplayName()).appendText(" ("+have.getGrist(grist) + ")").applyTextStyle(color));
 		}
 		if(cost.isEmpty())
-			toolTip.add(new TranslationTextComponent(GuiUtil.FREE).setStyle(new Style().setColor(TextFormatting.GREEN)));
+			toolTip.add(new TranslationTextComponent(GuiUtil.FREE).applyTextStyle(TextFormatting.GREEN));
 	}
 	
 	@SubscribeEvent

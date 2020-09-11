@@ -56,17 +56,25 @@ public final class SessionHandler
 	SessionHandler(SkaianetHandler skaianetHandler)
 	{
 		this.skaianetHandler = skaianetHandler;
+		
+		singleSession = MinestuckConfig.globalSession.get();
+		if(singleSession)
+		{
+			Session globalSession = new Session();
+			
+			globalSession.name = GLOBAL_SESSION_NAME;
+			addNewSession(globalSession);
+		}
 	}
 	
 	void onLoad()
 	{
 		singleSession = sessionsByName.containsKey(GLOBAL_SESSION_NAME) && sessions.size() == 1;	//TODO Make this into a saved property instead
-		if(singleSession && !MinestuckConfig.globalSession.get()) {
+		
+		if(singleSession && !MinestuckConfig.globalSession.get())
 			splitGlobalSession();
-		} else if(!singleSession && MinestuckConfig.globalSession.get())
-		{
+		else if(!singleSession && MinestuckConfig.globalSession.get())
 			mergeAll();
-		}
 	}
 	
 	/**
@@ -81,12 +89,14 @@ public final class SessionHandler
 			Session session = SessionMerger.mergedSessionFromAll(sessions);
 			sessions.clear();
 			sessionsByName.clear();
+			
 			session.name = GLOBAL_SESSION_NAME;
-			sessions.add(session);
-			sessionsByName.put(session.name, session);
+			addNewSession(session);
+			
+			singleSession = true;
+			
 		} catch(MergeResult.SessionMergeException e)
 		{
-			singleSession = false;
 			Debug.warn("Not able to merge all sessions together! Global session temporarily disabled for this time.");
 		}
 	}
@@ -216,7 +226,7 @@ public final class SessionHandler
 	Map<Integer, String> getServerList(PlayerIdentifier client)
 	{
 		Map<Integer, String> map = new HashMap<>();
-		for(PlayerIdentifier server : skaianetHandler.serversOpen.keySet())
+		for(PlayerIdentifier server : skaianetHandler.openedServers.keySet())
 		{
 			if(canConnect(client, server))
 			{
@@ -411,6 +421,9 @@ public final class SessionHandler
 	
 	void read(CompoundNBT nbt)
 	{
+		sessions.clear();
+		sessionsByName.clear();
+		
 		ListNBT list = nbt.getList("sessions", Constants.NBT.TAG_COMPOUND);
 		for(int i = 0; i < list.size(); i++)
 		{

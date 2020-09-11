@@ -26,7 +26,7 @@ public class MinestuckConfig
 		
 		private Common(ForgeConfigSpec.Builder builder)
 		{
-			builder.push("logging");
+			builder.comment("If you're looking for a config option that isn't here, try looking in the world-specific config").push("logging");
 			logIngredientItemsWithoutCosts = builder.comment("Makes the recipe-generated grist cost process log any items that are used as recipe ingredients, but is neither the output of a different recipe, or has a grist cost. Useful for finding items that probably need manual grist costs.")
 					.define("logIngredientItemsWithoutCosts", false);
 			logItemsWithRecipeAndCost = builder.comment("Makes the recipe-generated grist cost process log any items that has a grist cost, but which could also be provided as a recipe generated cost. Useful for finding items that probably do not need manual grist costs.")
@@ -58,6 +58,10 @@ public class MinestuckConfig
 	//Medium
 	public static BooleanValue canBreakGates;
 	public static BooleanValue disableGiclops;
+	public static BooleanValue naturalImpSpawn;
+	public static BooleanValue naturalOgreSpawn;
+	public static BooleanValue naturalBasiliskSpawn;
+	public static BooleanValue naturalLichSpawn;
 	public static BooleanValue allowSecondaryConnections;
 	
 	//Ores
@@ -90,6 +94,7 @@ public class MinestuckConfig
 	public static BooleanValue aspectEffects;
 	public static BooleanValue playerSelectedTitle;
 	public static IntValue preEntryRungLimit;
+	public static BooleanValue rungHealthOnRespawn;
 	
 	//Entry
 	public static BooleanValue entryCrater;
@@ -141,6 +146,8 @@ public class MinestuckConfig
 				.define("echeladderProgress", true);
 		preEntryRungLimit = SERVER_BUILDER.comment("The highest rung you can get before entering medium. Note that the first rung is indexed as 0, the second as 1 and so on.")
 				.defineInRange("preEntryRungLimit", 6, 0, 49);
+		rungHealthOnRespawn = SERVER_BUILDER.comment("If true, players will respawn with full health, rung bonuses included. If false, health will be left alone (typically meaning that you respawn with 10 hearts)")
+				.define("rungHealthOnRespawn", true);
 		aspectEffects = SERVER_BUILDER.comment("If this is true, players will gain certain potion effects once they reach a certain rung based on their aspect.")
 				.define("aspectEffects", true);
 		playerSelectedTitle = SERVER_BUILDER.comment("Enable this to let players select their own title. They will however not be able to select the Lord or Muse as class.")
@@ -152,7 +159,7 @@ public class MinestuckConfig
 				.define("dropItemsInCards", true);
 		initialModusSize = SERVER_BUILDER.comment("The initial amount of captchalogue cards in your sylladex.")
 				.defineInRange("initialModusSize", 5, 0, Integer.MAX_VALUE);
-		startingModusTypes = SERVER_BUILDER.comment("An array with the possible modus types to be assigned. Written with mod-id and modus name, for example \"minestuck:queue_stack\" or \"minestuck:hashmap\"")
+		startingModusTypes = SERVER_BUILDER.comment("An array with the possible modus types to be assigned. Written with mod-id and modus name, for example \"minestuck:queue_stack\" or \"minestuck:hash_map\"")
 				.define("startingModusTypes", new ArrayList<>(Arrays.asList("minestuck:stack","minestuck:queue")));
 		modusMaxSize = SERVER_BUILDER.comment("The max size on a modus. Ignored if the value is 0.")
 				.defineInRange("modusMaxSize", 0, 0, Integer.MAX_VALUE);
@@ -223,6 +230,14 @@ public class MinestuckConfig
 				.define("canBreakGates",true);
 		disableGiclops = SERVER_BUILDER.comment("Right now, the giclops pathfinding is currently causing huge amounts of lag due to their size. This option is a short-term solution that will disable giclops spawning and remove all existing giclopes.")
 				.define("disableGiclops",true);
+		naturalImpSpawn = SERVER_BUILDER.comment("Determines if imps will spawn naturally. Note that this does not affect other spawning methods or any imps that has already spawned.")
+				.define("naturalImpSpawn",true);
+		naturalOgreSpawn = SERVER_BUILDER.comment("Determines if ogres will spawn naturally. Note that this does not affect other spawning methods or any ogres that has already spawned.")
+				.define("naturalOgreSpawn",true);
+		naturalBasiliskSpawn = SERVER_BUILDER.comment("Determines if basilisks will spawn naturally. Note that this does not affect other spawning methods or any basilisks that has already spawned.")
+				.define("naturalBasiliskSpawn",true);
+		naturalLichSpawn = SERVER_BUILDER.comment("Determines if liches will spawn naturally. Note that this does not affect other spawning methods or any liches that has already spawned.")
+				.define("naturalLichSpawn",true);
 		allowSecondaryConnections = SERVER_BUILDER.comment("Set this to true to allow so-called 'secondary connections' to be created.")
 				.define("secondaryConnections", true);
 		SERVER_BUILDER.pop();

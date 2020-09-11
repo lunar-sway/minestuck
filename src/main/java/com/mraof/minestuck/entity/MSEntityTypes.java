@@ -25,6 +25,8 @@ import javax.annotation.Nonnull;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public final class MSEntityTypes
 {
+	public static EntityClassification UNDERLING = EntityClassification.create("UNDERLING", "underling", 35, false, false);
+
 	public static final EntityType<FrogEntity> FROG = getNull();
 	public static final EntityType<SalamanderEntity> SALAMANDER = getNull();
 	public static final EntityType<TurtleEntity> TURTLE = getNull();
@@ -69,17 +71,17 @@ public final class MSEntityTypes
 	{
 		IForgeRegistry<EntityType<?>> registry = event.getRegistry();
 		register(registry, EntityType.Builder.<FrogEntity>create(FrogEntity::new, EntityClassification.CREATURE).size(0.51F, 0.51F), "frog");
-		register(registry, EntityType.Builder.create(SalamanderEntity::new, EntityClassification.CREATURE).size(0.6F, 1.5F), "salamander");
-		register(registry, EntityType.Builder.create(TurtleEntity::new, EntityClassification.CREATURE).size(0.6F, 1.5F), "turtle");
-		register(registry, EntityType.Builder.create(NakagatorEntity::new, EntityClassification.CREATURE).size(0.6F, 1.5F), "nakagator");
-		register(registry, EntityType.Builder.create(IguanaEntity::new, EntityClassification.CREATURE).size(0.6F, 1.5F), "iguana");
+		register(registry, EntityType.Builder.create(SalamanderEntity::new, EntityClassification.CREATURE).size(0.45F, 1.0F), "salamander");
+		register(registry, EntityType.Builder.create(TurtleEntity::new, EntityClassification.CREATURE).size(0.45F, 1.0F), "turtle");
+		register(registry, EntityType.Builder.create(NakagatorEntity::new, EntityClassification.CREATURE).size(0.45F, 1.1F), "nakagator");
+		register(registry, EntityType.Builder.create(IguanaEntity::new, EntityClassification.CREATURE).size(0.45F, 1.0F), "iguana");
 		
-		register(registry, EntityType.Builder.create(ImpEntity::new, EntityClassification.MONSTER).size(0.75F, 1.5F), "imp");
-		register(registry, EntityType.Builder.create(OgreEntity::new, EntityClassification.MONSTER).size(3.0F, 4.5F), "ogre");
-		register(registry, EntityType.Builder.create(BasiliskEntity::new, EntityClassification.MONSTER).size(3F, 2F), "basilisk");
-		register(registry, EntityType.Builder.create(LichEntity::new, EntityClassification.MONSTER).size(1.0F, 2.0F), "lich");
-		register(registry, EntityType.Builder.create(GiclopsEntity::new, EntityClassification.MONSTER).size(8.0F, 12.0F), "giclops");
-		register(registry, EntityType.Builder.create(WyrmEntity::new, EntityClassification.MONSTER), "wyrm");
+		register(registry, EntityType.Builder.create(ImpEntity::new, UNDERLING).size(0.7F, 1.2F), "imp");
+		register(registry, EntityType.Builder.create(OgreEntity::new, UNDERLING).size(2.8F, 4.3F), "ogre");
+		register(registry, EntityType.Builder.create(BasiliskEntity::new, UNDERLING).size(3F, 2F), "basilisk");
+		register(registry, EntityType.Builder.create(LichEntity::new, UNDERLING).size(0.8F, 2.0F), "lich");
+		register(registry, EntityType.Builder.create(GiclopsEntity::new, UNDERLING).size(8.0F, 12.0F), "giclops");
+		register(registry, EntityType.Builder.create(WyrmEntity::new, UNDERLING), "wyrm");
 		
 		register(registry, EntityType.Builder.create(BlackPawnEntity::new, EntityClassification.MONSTER).size(0.6F, 1.5F), "dersite_pawn");
 		register(registry, EntityType.Builder.create(WhitePawnEntity::new, EntityClassification.MONSTER).size(0.6F, 1.5F), "prospitian_pawn");
@@ -88,16 +90,16 @@ public final class MSEntityTypes
 		register(registry, EntityType.Builder.create(BlackRookEntity::new, EntityClassification.MONSTER).size(3.5F, 3.5F), "dersite_rook");
 		register(registry, EntityType.Builder.create(WhiteRookEntity::new, EntityClassification.MONSTER).size(3.5F, 3.5F), "prospitian_rook");
 
-		register(registry, EntityType.Builder.<GristEntity>create(GristEntity::new, EntityClassification.MISC).size(1 / 3F, 1 / 3F).immuneToFire(), "grist");
-		register(registry, EntityType.Builder.<VitalityGelEntity>create(VitalityGelEntity::new, EntityClassification.MISC).size(1 / 4F, 1 / 4F).immuneToFire(), "vitality_gel");
+		register(registry, EntityType.Builder.<GristEntity>create(GristEntity::new, EntityClassification.MISC).size(1 / 3F, 1 / 3F).setTrackingRange(4).setUpdateInterval(20).immuneToFire(), "grist");
+		register(registry, EntityType.Builder.<VitalityGelEntity>create(VitalityGelEntity::new, EntityClassification.MISC).size(1 / 4F, 1 / 4F).setTrackingRange(4).setUpdateInterval(20).immuneToFire(), "vitality_gel");
 		register(registry, EntityType.Builder.<DecoyEntity>create(EntityClassification.MISC).setCustomClientFactory((spawnEntity, world) -> new DecoyEntity(world)).disableSerialization().disableSummoning(), "player_decoy");
 		
-		register(registry, EntityType.Builder.<MetalBoatEntity>create(MetalBoatEntity::new, EntityClassification.MISC), "metal_boat");
-		register(registry, EntityType.Builder.<BarbasolBombEntity>create(BarbasolBombEntity::new, EntityClassification.MISC), "barbasol_bomb");
-		register(registry, EntityType.Builder.<CrewPosterEntity>create(CrewPosterEntity::new, EntityClassification.MISC), "midnight_crew_poster");
-		register(registry, EntityType.Builder.<SbahjPosterEntity>create(SbahjPosterEntity::new, EntityClassification.MISC), "sbahj_poster");
-		register(registry, EntityType.Builder.<ShopPosterEntity>create(ShopPosterEntity::new, EntityClassification.MISC), "shop_poster");
-		register(registry, EntityType.Builder.<HologramEntity>create(HologramEntity::new, EntityClassification.MISC), "hologram");
+		register(registry, EntityType.Builder.<MetalBoatEntity>create(MetalBoatEntity::new, EntityClassification.MISC).size(1.375F, 0.5625F), "metal_boat");
+		register(registry, EntityType.Builder.<BarbasolBombEntity>create(BarbasolBombEntity::new, EntityClassification.MISC).size(0.25F, 0.25F).setTrackingRange(4).setUpdateInterval(10), "barbasol_bomb");
+		register(registry, EntityType.Builder.<CrewPosterEntity>create(CrewPosterEntity::new, EntityClassification.MISC).size(0.5F, 0.5F).setShouldReceiveVelocityUpdates(false).setTrackingRange(10).setUpdateInterval(Integer.MAX_VALUE), "midnight_crew_poster");
+		register(registry, EntityType.Builder.<SbahjPosterEntity>create(SbahjPosterEntity::new, EntityClassification.MISC).size(0.5F, 0.5F).setShouldReceiveVelocityUpdates(false).setTrackingRange(10).setUpdateInterval(Integer.MAX_VALUE), "sbahj_poster");
+		register(registry, EntityType.Builder.<ShopPosterEntity>create(ShopPosterEntity::new, EntityClassification.MISC).size(0.5F, 0.5F).setShouldReceiveVelocityUpdates(false).setTrackingRange(10).setUpdateInterval(Integer.MAX_VALUE), "shop_poster");
+		register(registry, EntityType.Builder.<HologramEntity>create(HologramEntity::new, EntityClassification.MISC).size(0.25F, 0.25F).setShouldReceiveVelocityUpdates(false).setTrackingRange(10).setUpdateInterval(Integer.MAX_VALUE), "hologram");
 	}
 	
 	public static void registerPlacements()

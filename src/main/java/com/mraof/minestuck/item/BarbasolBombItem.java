@@ -5,7 +5,6 @@ import com.mraof.minestuck.entity.item.BarbasolBombEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
@@ -31,13 +30,14 @@ public class BarbasolBombItem extends Item
         
         if(!worldIn.isRemote)
         {
-            BarbasolBombEntity bomb = new BarbasolBombEntity(MSEntityTypes.BARBASOL_BOMB, playerIn, worldIn);
+            
+            BarbasolBombEntity bomb = new BarbasolBombEntity(MSEntityTypes.BARBASOL_BOMB, playerIn, worldIn, playerIn.abilities.allowEdit);
             bomb.setItem(item);
             bomb.shoot(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, -20.0F, 0.7F, 1.0F);
             worldIn.addEntity(bomb);
         }
         
         playerIn.addStat(Stats.ITEM_USED.get(this));
-        return new ActionResult<>(ActionResultType.SUCCESS, new ItemStack(this));
+        return new ActionResult<>(ActionResultType.SUCCESS, item);
     }
 }

@@ -1,6 +1,6 @@
 package com.mraof.minestuck.world.biome;
 
-import com.mraof.minestuck.world.gen.LandGenSettings;
+import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.world.biome.Biome;
@@ -19,13 +19,13 @@ public class LandBiomeHolder
 		oceanBiome = MSBiomes.LAND_OCEAN.createWrapper(properties);
 	}
 	
-	public void initBiomesWith(LandGenSettings settings)
+	public void initBiomesWith(StructureBlockRegistry blocks)
 	{
 		for(LandWrapperBiome biome : getBiomes())
 		{
-			biome.init(settings);
-			landTypes.terrain.setBiomeSettings(biome, settings.getBlockRegistry());
-			landTypes.title.setBiomeSettings(biome, settings.getBlockRegistry());
+			biome.init(blocks, landTypes.terrain.getConsortType());
+			landTypes.terrain.setBiomeSettings(biome, blocks);
+			landTypes.title.setBiomeSettings(biome, blocks);
 		}
 	}
 	

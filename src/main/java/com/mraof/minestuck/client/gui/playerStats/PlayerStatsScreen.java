@@ -286,7 +286,7 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 				
 				mc.displayGuiScreen(containerScreen);
 				if(mc.currentScreen == containerScreen)
-					MSPacketHandler.sendToServer(new MiscContainerPacket(ordinal));
+					MSPacketHandler.sendToServer(new MiscContainerPacket(ordinal, ClientEditHandler.isActive()));
 			}
 			else mc.displayGuiScreen(ClientEditHandler.isActive()? editmodeTab.createGuiInstance():normalTab.createGuiInstance());
 		}

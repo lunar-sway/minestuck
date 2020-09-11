@@ -1,7 +1,11 @@
 package com.mraof.minestuck.block;
 
+import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.gen.feature.tree.EndTree;
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.BushBlock;
+import net.minecraft.block.IGrowable;
 import net.minecraft.block.trees.Tree;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
@@ -9,6 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
 import java.util.Random;
@@ -28,6 +33,7 @@ public class EndSaplingBlock extends BushBlock implements IGrowable
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext contezt)
 	{
 		return SHAPE;
@@ -52,7 +58,7 @@ public class EndSaplingBlock extends BushBlock implements IGrowable
 	@Override
 	public void grow(World worldIn, Random rand, BlockPos pos, BlockState state)
 	{
-		if(worldIn.isRemote || worldIn.getMoonPhase() == 4)
+		if(worldIn.isRemote || worldIn.getDimension().getMoonPhase(worldIn.getDayTime()) == 4)
 		{
 			return;
 		}
@@ -92,12 +98,20 @@ public class EndSaplingBlock extends BushBlock implements IGrowable
 	}
 	
 	@Override
-	protected boolean isValidGround(BlockState state, IBlockReader worldIn, BlockPos pos)
+	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos)
 	{
-		return state.getBlock() == Blocks.END_STONE || state.getBlock() == MSBlocks.COARSE_END_STONE || state.getBlock() == MSBlocks.END_GRASS;
+		BlockPos groundPos = pos.down();
+		return isValidGround(worldIn.getBlockState(groundPos), worldIn, groundPos);
 	}
 	
 	@Override
+	protected boolean isValidGround(BlockState state, IBlockReader worldIn, BlockPos pos)
+	{
+		return MSTags.Blocks.END_SAPLING_DIRT.contains(state.getBlock());
+	}
+	
+	@Override
+	@SuppressWarnings("deprecation")
 	public void tick(BlockState state, World worldIn, BlockPos pos, Random random)
 	{
 		if (!worldIn.isRemote)

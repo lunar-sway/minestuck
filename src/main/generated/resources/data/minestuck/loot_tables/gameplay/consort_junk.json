@@ -175,41 +175,47 @@
         },
         {
           "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minestuck:consort",
+              "consort": "nakagator"
+            }
+          ],
           "weight": 5,
           "name": "minestuck:onion"
         },
         {
           "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minestuck:consort",
+              "consort": "salamander"
+            }
+          ],
           "weight": 5,
           "name": "minestuck:tab"
         },
         {
           "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minestuck:consort",
+              "consort": "turtle"
+            }
+          ],
           "weight": 5,
           "name": "minestuck:jar_of_bugs"
         },
         {
           "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minestuck:consort",
+              "consort": "iguana"
+            }
+          ],
           "weight": 5,
           "name": "minestuck:grasshopper"
-        }
-      ],
-      "conditions": [
-        {
-          "condition": "minestuck:consort",
-          "consort": "nakagator"
-        },
-        {
-          "condition": "minestuck:consort",
-          "consort": "salamander"
-        },
-        {
-          "condition": "minestuck:consort",
-          "consort": "turtle"
-        },
-        {
-          "condition": "minestuck:consort",
-          "consort": "iguana"
         }
       ]
     }

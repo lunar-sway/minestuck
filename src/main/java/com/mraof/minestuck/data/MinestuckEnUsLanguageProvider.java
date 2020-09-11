@@ -24,6 +24,7 @@ import com.mraof.minestuck.item.crafting.alchemy.GristAmount;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
+import com.mraof.minestuck.item.weapon.SordItem;
 import com.mraof.minestuck.jei.JeiGristCost;
 import com.mraof.minestuck.network.EffectTogglePacket;
 import com.mraof.minestuck.player.*;
@@ -215,6 +216,18 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.SPACE_ASPECT_SAPLING, "Space Sapling");
 		add(MSBlocks.TIME_ASPECT_SAPLING, "Time Sapling");
 		add(MSBlocks.VOID_ASPECT_SAPLING, "Void Sapling");
+		addTooltip(MSBlocks.BLOOD_ASPECT_SAPLING, "Not yet implemented");
+		addTooltip(MSBlocks.BREATH_ASPECT_SAPLING, "Not yet implemented");
+		addTooltip(MSBlocks.DOOM_ASPECT_SAPLING, "Not yet implemented");
+		addTooltip(MSBlocks.HEART_ASPECT_SAPLING, "Not yet implemented");
+		addTooltip(MSBlocks.HOPE_ASPECT_SAPLING, "Not yet implemented");
+		addTooltip(MSBlocks.LIFE_ASPECT_SAPLING, "Not yet implemented");
+		addTooltip(MSBlocks.LIGHT_ASPECT_SAPLING, "Not yet implemented");
+		addTooltip(MSBlocks.MIND_ASPECT_SAPLING, "Not yet implemented");
+		addTooltip(MSBlocks.RAGE_ASPECT_SAPLING, "Not yet implemented");
+		addTooltip(MSBlocks.SPACE_ASPECT_SAPLING, "Not yet implemented");
+		addTooltip(MSBlocks.TIME_ASPECT_SAPLING, "Not yet implemented");
+		addTooltip(MSBlocks.VOID_ASPECT_SAPLING, "Not yet implemented");
 		add(MSBlocks.GLOWING_MUSHROOM, "Glowing Mushroom");
 		addStoreTooltip(MSBlocks.GLOWING_MUSHROOM, "This mushroom tastes a bit better than any other around here, according to myself!");
 		add(MSBlocks.DESERT_BUSH, "Desert Bush");
@@ -300,6 +313,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.STONE_EXPLOSIVE_BUTTON, "TNT Button");
 		add(MSBlocks.BLENDER, "Blender");
 		add(MSBlocks.CHESSBOARD, "Chessboard");
+		add(MSBlocks.CASSETTE_PLAYER, "Cassette Player");
 		add(MSBlocks.MINI_FROG_STATUE, "Frog Statue Replica");
 		addStoreTooltip(MSBlocks.MINI_FROG_STATUE, "Some say it's creepy, some say it's cute, others would say it's contraband, so keep it out of sight!");
 		add(MSBlocks.NAKAGATOR_STATUE, "Nakagator Statue");
@@ -327,6 +341,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.BLACKSMITH_HAMMER, "A strong hammer that would commonly be found in a blacksmiths. It can also break blocks");
 		add(MSItems.POGO_HAMMER, "Pogo Hammer");
 		addTooltip(MSItems.POGO_HAMMER, "A slimy hammer with the ability to bounce back your enemies. It can also break blocks");
+		add(MSItems.WRINKLEFUCKER, "Wrinklefucker");
+		addTooltip(MSItems.WRINKLEFUCKER, "Is there anything more iconic?");
 		add(MSItems.TELESCOPIC_SASSACRUSHER, "Telescopic Sassacrusher");
 		addTooltip(MSItems.TELESCOPIC_SASSACRUSHER, "OH ho! The perfect hammer for the dashing young gent who loves a pranksters gambit or a good grist horde!");
 		add(MSItems.REGI_HAMMER, "Regihammer");
@@ -347,6 +363,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.MWRTHWL, "Mwrthwl");
 		add(MSItems.SORD, "Sord.....");
 		addTooltip(MSItems.SORD, "A shitty sword. Not much more too it.");
+		addExtra(MSItems.SORD, SordItem.DROP_MESSAGE, "The shittiness of the sord made it phase through your hand");
+		add(MSItems.PAPER_SWORD, "Paper Sword");
+		addTooltip(MSItems.PAPER_SWORD, "None shall be the wiser. It is the perfect crime.");
 		add(MSItems.CACTACEAE_CUTLASS, "Cactaceae Cutlass");
 		addTooltip(MSItems.CACTACEAE_CUTLASS, "A spiny sword made of cactus, you might hurt yourself more on the spines then the blade would your enemies");
 		addStoreTooltip(MSItems.CACTACEAE_CUTLASS, "It's not as quenchy, but if it comes down to it you can always drink the blood of your foes.");
@@ -423,7 +442,14 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.FLUORITE_OCTET, "Magical Dice! Let 'em roll!");
 		add(MSItems.CAT_CLAWS_DRAWN, "Cat Claws");
 		add(MSItems.CAT_CLAWS_SHEATHED, "Cat Claws");
+		add(MSItems.LIPSTICK_CHAINSAW, "Chainsaw");
+		add(MSItems.LIPSTICK, "Jade Lipstick");
+		add(MSItems.CIGARETTE_LANCE, "Cigarette Holder Lance");
 		add(MSItems.SICKLE, "Sickle");
+		add(MSItems.OW_THE_EDGE, "oW THE EDGE");
+		add(MSItems.THORNY_SUBJECT, "A Thorny Subject");
+		add(MSItems.HEMEOREAPER, "Hemeoreaper");
+		addTooltip(MSItems.HEMEOREAPER, "You get the feeling you should hide this away, or maybe paint it a nice gray.");
 		add(MSItems.HOMES_SMELL_YA_LATER, "Homes Smell Ya Later");
 		add(MSItems.FUDGESICKLE, "Fudgesickle");
 		addTooltip(MSItems.FUDGESICKLE, "Whose idea was this?");
@@ -464,12 +490,28 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.KINGS_SCEPTER_WHITE, "Starts the Reckoning in the capable hands of a carapacian. It would be hard to call YOU capable however...");
 		add(MSItems.KINGS_SCEPTER_BLACK, "Kings Scepter");
 		addTooltip(MSItems.KINGS_SCEPTER_BLACK, "Super sizes and prototypes a king, but useless to you. Good for whacking however!");
+		add(MSItems.HORSE_HITCHER, "Cast Iron Horse Hitcher");
+		add(MSItems.ACE_OF_SPADES, "Ace of Spades");
+		addStore(MSItems.ACE_OF_SPADES, "Shovel Sigil");
+		addStoreTooltip(MSItems.ACE_OF_SPADES, "Who knows, maybe this has digging magic?");
+		add(MSItems.CLUB_OF_FELONY, "Club of Felony");
+		add(MSItems.ACE_OF_CLUBS, "Ace of Clubs");
+		addStore(MSItems.ACE_OF_CLUBS, "Clover Sigil");
+		addStoreTooltip(MSItems.ACE_OF_CLUBS, "Perhaps this slip of paper has luck magic?");
+		add(MSItems.CUESTICK, "Ultra-Violence Cuestick");
+		add(MSItems.ACE_OF_DIAMONDS, "Ace of Diamonds");
+		addStore(MSItems.ACE_OF_DIAMONDS, "Star Sigil");
+		addStoreTooltip(MSItems.ACE_OF_DIAMONDS, "This star-shaped sigil probably has magical astral properties.");
+		add(MSItems.ACE_OF_HEARTS, "Ace of Hearts");
+		addStore(MSItems.ACE_OF_HEARTS, "Heart Sigil");
+		addStoreTooltip(MSItems.ACE_OF_HEARTS, "This thing MUST have magical love powers!");
 		add(MSItems.CANE, "Cane");
 		addTooltip(MSItems.CANE, "An average walking cane, used by the blind and those with weak knees.");
 		add(MSItems.VAUDEVILLE_HOOK, "Vaudeville Hook");
 		addTooltip(MSItems.VAUDEVILLE_HOOK, "This is sure to get the audience laughing with the many japes you can pull with this bad boy!");
 		add(MSItems.BEAR_POKING_STICK, "Bear-Poking Stick");
 		addTooltip(MSItems.BEAR_POKING_STICK, "Do not-- and I repeat, DO NOT-- poke the bear!");
+		add(MSItems.CROWBAR, "Crowbar");
 		add(MSItems.UMBRELLA, "Umbrella");
 		addTooltip(MSItems.UMBRELLA, "Shit, let's be Mary Poppins.");
 		add(MSItems.UPPER_CRUST_CRUST_CANE, "Upper Crust Crust Cane");
@@ -513,7 +555,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.CROCKER_FORK, "Junior Battlemaster's Bowlbuster Poking Solution 50000");
 		addTooltip(MSItems.CROCKER_FORK, "Did something change?");
 		add(MSItems.SKAIA_FORK, "Skaia War Fork");
-		addTooltip(MSItems.SKAIA_FORK, "The elegance and grace of skaia, and the ability to poke things of a fork!");
+		addTooltip(MSItems.SKAIA_FORK, "The elegance and grace of Skaia, and the ability to poke things of a fork!");
 		add(MSItems.FORK, "Fork");
 		add(MSItems.TUNING_FORK, "Tuning Fork");
 		addTooltip(MSItems.TUNING_FORK, "Does anyone hear a ringing?");
@@ -531,6 +573,16 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.PRISMARINE_CHESTPLATE, "Prismarine Chestplate");
 		add(MSItems.PRISMARINE_LEGGINGS, "Prismarine Leggings");
 		add(MSItems.PRISMARINE_BOOTS, "Prismarine Boots");
+		add(MSItems.IRON_LASS_GLASSES, "Iron Lass Glasses");
+		add(MSItems.IRON_LASS_CHESTPLATE, "Iron Lass Chestplate");
+		add(MSItems.IRON_LASS_SKIRT, "Iron Lass Skirt");
+		add(MSItems.IRON_LASS_SHOES, "Iron Lass Boots");
+		add(MSItems.PROSPIT_SHIRT, "Prospit Shirt");
+		add(MSItems.PROSPIT_PANTS, "Prospit Pants");
+		add(MSItems.PROSPIT_SHOES, "Prospit Shoes");
+		add(MSItems.DERSE_SHIRT, "Derse Shirt");
+		add(MSItems.DERSE_PANTS, "Derse Pants");
+		add(MSItems.DERSE_SHOES, "Derse Shoes");
 		add(MSItems.BOONDOLLARS, "Boondollars");
 		addExtra(MSItems.BOONDOLLARS, "amount", "Amount: %s");
 		add(MSItems.RAW_CRUXITE, "Raw Cruxite");
@@ -555,6 +607,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.SHUNT, "Punch Card Shunt");
 		addExtra(MSItems.SHUNT, "invalid", "Invalid Item");
 		addExtra(MSItems.SHUNT, "empty", "Empty");
+		add(MSItems.PHLEGM_GUSHERS, "Hellacious Blue Phlegm Aneurysm Gushers");
+		addTooltip(MSItems.PHLEGM_GUSHERS, "These should be convenient, if somewhat unappetizing.");
+		add(MSItems.SORROW_GUSHERS, "Bodacious Black Liquid Sorrow Gushers");
+		addTooltip(MSItems.SORROW_GUSHERS, "These are pure poison.");
 		add(MSItems.BUG_ON_A_STICK, "Bug On a Stick");
 		addStoreTooltip(MSItems.BUG_ON_A_STICK, "Who doesn't like bugs? Someone who haven't had a bug on a stick. That's who.");
 		add(MSItems.CHOCOLATE_BEETLE, "Chocolate Covered Beetle");
@@ -642,6 +698,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addExtra(MSItems.SURPRISE_EMBRYO, "message", "WOW! NO WAY! You found a %s inside your Surprise Embryo!");
 		add(MSItems.UNKNOWABLE_EGG, "The Egg of Unknowable, Horrible Truths");
 		addTooltip(MSItems.UNKNOWABLE_EGG, "This egg somehow knows your name.");
+		add(MSItems.BREADCRUMBS, "Breadcrumbs");
 		add(MSItems.GOLDEN_GRASSHOPPER, "Golden Grasshopper");
 		add(MSItems.BUG_NET, "Net");
 		addTooltip(MSItems.BUG_NET, "Perfect for catching bugs and frogs!");
@@ -700,17 +757,36 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.RAZOR_BLADE, "Only a fool would try to pick this up.");
 		add(MSItems.URANIUM_POWERED_STICK, "Uranium-Powered Stick");
 		addTooltip(MSItems.URANIUM_POWERED_STICK, "Never runs out of uranium!");
+		add(MSItems.SCALEMATE_APPLESCAB, "Officer Applescab");
+		add(MSItems.SCALEMATE_BERRYBREATH, "Inspector Berrybreath");
+		add(MSItems.SCALEMATE_CINNAMONWHIFF, "Officer Cinnamonwhiff");
+		add(MSItems.SCALEMATE_HONEYTONGUE, "Doctor Honeytongue");
+		add(MSItems.SCALEMATE_LEMONSNOUT, "Senator Lemonsnout");
+		add(MSItems.SCALEMATE_PINESNOUT, "Duke Pinesnout");
+		add(MSItems.SCALEMATE_PUCEFOOT, "Professor Pucefoot");
+		add(MSItems.SCALEMATE_PUMPKINSNUFFLE, "Liason Pumpkinsnuffle");
+		add(MSItems.SCALEMATE_PYRALSPITE, "Pyralspite");
+		add(MSItems.SCALEMATE_WITNESS, "The Witness");
 		add(MSItems.IRON_BOAT, "Iron Boat");
 		add(MSItems.GOLD_BOAT, "Golden Boat");
 		add(MSItems.THRESH_DVD, "Thresh Prince DVD");
 		add(MSItems.GAMEBRO_MAGAZINE, "Game Bro Magazine");
 		add(MSItems.GAMEGRL_MAGAZINE, "Game Grl Magazine");
 		add(MSItems.ICE_SHARD, "Ice Shard");
+		add(MSItems.HORN, "Horn");
+		addTooltip(MSItems.HORN, ":o)");
+		add(MSItems.CAKE_MIX, "Cake Mix");
+		add(MSItems.BARBASOL, "Barbasol");
+		add(MSItems.BARBASOL_BOMB, "Betty Crocker Barbasol Bomb");
+		add(MSItems.CLOTHES_IRON, "Clothes Iron");
 		add(MSItems.BATTERY, "Battery");
 		addStore(MSItems.BATTERY, "Death Gusher");
 		addStoreTooltip(MSItems.BATTERY, "This one's tough to crunch into, and the effort's barely even worth it!");
 		add(MSItems.BI_DYE, "Bi Dye");
 		addTooltip(MSItems.BI_DYE, "Show off your pride to friends! Make gear to help vanquish your foes!");
+		add(MSItems.INK_SQUID_PRO_QUO, "Ink of Squid Pro Quo");
+		addTooltip(MSItems.INK_SQUID_PRO_QUO, "For the love of god, don't drink it.");
+		add(MSItems.CUEBALL, "Magic Cueball");
 		add(MSItems.CREW_POSTER, "Midnight Crew Poster");
 		add(MSItems.SBAHJ_POSTER, "Sweet Bro and Hella Jeff Poster");
 		add(MSItems.MUSIC_DISC_EMISSARY_OF_DANCE, "Music Disc");
@@ -719,7 +795,27 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addExtra(MSItems.MUSIC_DISC_DANCE_STAB_DANCE, "desc", "Catboss - Dance-Stab-Dance");
 		add(MSItems.MUSIC_DISC_RETRO_BATTLE, "Music Disc");
 		addExtra(MSItems.MUSIC_DISC_RETRO_BATTLE, "desc", "SinFrog - Retro Battle Theme");
-		
+		add(MSItems.CASSETTE_MELLOHI, "Cassette");
+		addExtra(MSItems.CASSETTE_MELLOHI, "desc", "C418 - mellohi");
+		add(MSItems.CASSETTE_13, "Cassette");
+		addExtra(MSItems.CASSETTE_13, "desc", "C418 - 13");
+		add(MSItems.CASSETTE_BLOCKS, "Cassette");
+		addExtra(MSItems.CASSETTE_BLOCKS, "desc", "C418 - blocks");
+		add(MSItems.CASSETTE_CAT, "Cassette");
+		addExtra(MSItems.CASSETTE_CAT, "desc", "C418 - cat");
+		add(MSItems.CASSETTE_CHIRP, "Cassette");
+		addExtra(MSItems.CASSETTE_CHIRP, "desc", "C418 - chirp");
+		add(MSItems.CASSETTE_FAR, "Cassette");
+		addExtra(MSItems.CASSETTE_FAR, "desc", "C418 - far");
+		add(MSItems.CASSETTE_MALL, "Cassette");
+		addExtra(MSItems.CASSETTE_MALL, "desc", "C418 - mall");
+		add(MSItems.CASSETTE_EMISSARY, "Cassette");
+		addExtra(MSItems.CASSETTE_EMISSARY, "desc", "Catboss - Emissary of Dance");
+		add(MSItems.CASSETTE_DANCE_STAB, "Cassette");
+		addExtra(MSItems.CASSETTE_DANCE_STAB, "desc", "Catboss - Dance-Stab-Dance");
+		add(MSItems.CASSETTE_RETRO_BATTLE, "Cassette");
+		addExtra(MSItems.CASSETTE_RETRO_BATTLE, "desc", "SinFrog - Retro Battle Theme");
+
 		addStore(Items.PUMPKIN_PIE, "Tasty Pie");
 		addStoreTooltip(Items.PUMPKIN_PIE, "This pie appeared in storage a few days ago out of nowhere. No idea where it came from, but it sure is tasty!");
 		addStoreTooltip(Items.WHEAT_SEEDS, "You know what tastes even better than those plant grains? Their seeds, of course!");
@@ -936,21 +1032,21 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addRung(49, "Master Of Mods");
 		
 		addAdvancement(MSAvancementProvider.ROOT, "Minestuck", "The Beginning of Something Really Excellent");
-		addAdvancement(MSAvancementProvider.CONNECT, "Connect", "Create a connection with someone.");
-		addAdvancement(MSAvancementProvider.ENTRY, "A New World", "Create, and use the Cruxite Artifact.");
+		addAdvancement(MSAvancementProvider.CONNECT, "Connect", "Create a connection with someone");
+		addAdvancement(MSAvancementProvider.ENTRY, "A New World", "Create, and use the Cruxite Artifact");
 		addAdvancement(MSAvancementProvider.ALCHEMY, "Step Towards Alchemy", "Getting a punch designix is the first step to alchemizing something else!");
-		addAdvancement(MSAvancementProvider.NEW_MODUS, "A New Type of Frustrating", "Equip a new modus.");
-		addAdvancement(MSAvancementProvider.ALL_MODI, "A Full Set", "Try a new modus type.");
-		addAdvancement(MSAvancementProvider.GOLD_SEEDS, "Gold Farming", "It begins to dawn on you that everything you just did may have been a colossal waste of time.");
-		addAdvancement(MSAvancementProvider.FRENCH_FRY, "Can I Get A, Uh...", "Successfully place and consume an order.");
-		addAdvancement(MSAvancementProvider.MELON_OVERLOAD, "M- M- M- MELON OVERLOAAAAD!", "Become overloaded with melons.");
-		addAdvancement(MSAvancementProvider.TREE_MODUS, "Uprooting", "Remove the root card in a tree modus with a bunch of items.");
-		addAdvancement(MSAvancementProvider.KILL_OGRE, "The Big One", "Kill an ogre.");
-		addAdvancement(MSAvancementProvider.RETURN_NODE, "There's no Place Like Home", "Find a Return Node and jump in to return home.");
+		addAdvancement(MSAvancementProvider.NEW_MODUS, "A New Type of Frustrating", "Equip a new modus");
+		addAdvancement(MSAvancementProvider.ALL_MODI, "A Full Set", "Try a new modus type");
+		addAdvancement(MSAvancementProvider.GOLD_SEEDS, "Gold Farming", "It begins to dawn on you that everything you just did may have been a colossal waste of time");
+		addAdvancement(MSAvancementProvider.FRENCH_FRY, "Can I Get A, Uh...", "Successfully place and consume an order");
+		addAdvancement(MSAvancementProvider.MELON_OVERLOAD, "M- M- M- MELON OVERLOAAAAD!", "Become overloaded with melons");
+		addAdvancement(MSAvancementProvider.TREE_MODUS, "Uprooting", "Remove the root card in a tree modus with a bunch of items");
+		addAdvancement(MSAvancementProvider.KILL_OGRE, "The Big One", "Kill an ogre");
+		addAdvancement(MSAvancementProvider.RETURN_NODE, "There's No Place Like Home", "Find a Return Node and jump in to return home");
 		addAdvancement(MSAvancementProvider.DUNGEON, "Dungeon Explorer", "Find a Dungeon to explore!");
-		addAdvancement(MSAvancementProvider.COMMUNE, "Commune", "Visit a village and talk to a consort.");
-		addAdvancement(MSAvancementProvider.BUGS, "Crunchy and High in Protein", "Eat a bug.");
-		addAdvancement(MSAvancementProvider.SHADY_BUYER, "Buyer Beware", "Buy an item from a shady consort.");
+		addAdvancement(MSAvancementProvider.COMMUNE, "Commune", "Visit a village and talk to a consort");
+		addAdvancement(MSAvancementProvider.BUGS, "Crunchy and High in Protein", "Eat a bug");
+		addAdvancement(MSAvancementProvider.SHADY_BUYER, "Buyer Beware", "Buy an item from a shady consort");
 		
 		addLand(FungiLandType.FUNGI, "Fungi");
 		addLand(FungiLandType.DANK, "Dank");
@@ -1223,7 +1319,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("rabbit.food.3a", "Except maybe cacti, but would rabbits eat something that prickly?");
 		addDialogue("rabbit.food.2b", "I mean, there's not really much else than mushrooms around here.");
 		//Monsters
-		addDialogue("pet_zombie", "I've heard moaning coming from our son's bedroom. I found out he's keeping a pet zombie in there! Tamed it n' everything!");
+		addDialogue("pet_zombie", "I've heard moaning coming from our son's bedroom. I found out he's keeping a pet zombie in there! Tamed it and everything!");
 		addDialogue("spider_raid", "A few giant spiders raided our village last night, taking all of our bugs! Those monsters...");
 		addDialogue("monstersona", "What's your monster-sona? Mine is a zombie.");
 		//Towers
@@ -1233,7 +1329,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		//Thought
 		addDialogue("glass_books", "Our smartest villager read all the books in the library and now knows how to make glass jars! He's a gift from the big frog above!");
 		addDialogue("book_food", "We ate all the books in the nearby college ruins. It turns out thousand-year-old leather doesn't make the best dinner.");
-		addDialogue("to_eat", "To eat, or not to eat, that is the question.");
+		addDialogue("to_eat", "To eat or not to eat, that is the question.");
 		//Cake
 		addDialogue("mystery_recipe", "All of the villagers here are trying to crack the mystery of how to make the frosted bread we see all day on our walks.");
 		addDialogue("cake_regen", "I heard all the cakes magically regenerate if you don't completely eat them! That's completely stupid!");
@@ -1343,7 +1439,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("mycelium.2", "No? Is that just me?");
 		addDialogue("adaptation.1", "At first, no one liked the mushrooms when our planet was cursed with the Dank.");
 		addDialogue("adaptation.2", "Those who refused to adapt to the new food source Perished, obviously.");
-		addDialogue("jacket", "It's so damp and cold! I wish I had a jacket!");
+		addDialogue("jacket", "It's so damp and cold. I wish I had a jacket!");
 		addDialogue("mushroom_curse", "Curse %s! And curse all their mushrooms, too! I miss eating crickets instead of all these mushrooms!");
 		addDialogue("fungus_destroyer", "According to legends of old, the %s will come one day and get the evil %s to clear up all this fungus!");
 		//Rainbow
@@ -1449,8 +1545,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("await_hero", "Here, in the %s, we %s worship the %s. We wait and hope for the day that they awaken.");
 		addDialogue("watch_skaia", "Sometimes, I look up in the sky to see Skaia and wish I could visit there some day...");
 		addDialogue("at_skaia.1", "OH MY %s! I'M ACTUALLY ON SKAIA!");
-		addDialogue("at_skaia.2", "Oh my...! I'm actually on skaia!");
-		addDialogue("visited_skaia", "You know, I have actually visited skaia at one point!");
+		addDialogue("at_skaia.2", "Oh my...! I'm actually on Skaia!");
+		addDialogue("visited_skaia", "You know, I have actually visited Skaia at one point!");
 		addDialogue("zazzerpan", "Old wizard Zazzerpan would be turning in his grave if he saw the horrors that walk these lands. Those giclopes sure are terrifying!");
 		addDialogue("texas_history", "The place was %s, the year, was 20XX.");
 		addDialogue("disks", "I used to be an adventurer like you, then I never got the disks.");
@@ -1572,10 +1668,11 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		
 		addSubtitles("warhorn", "Warhorn sounds");
 		addSubtitles("whispers", "Spooky Whispers");
+		addSubtitles("horn", "Horn honks");
 		addSubtitles("screech", "Estrogen-empowered screech");
 		addSubtitles("upcheladder", "Echeladder levels up");
 		addSubtitles("lootblock", "Fanfare for collecting loot!");
-		
+
 		addEntitySubtitles(MSEntityTypes.NAKAGATOR, "ambient", "Nakagator naks");
 		addEntitySubtitles(MSEntityTypes.NAKAGATOR, "hurt", "Nakagator hurts");
 		addEntitySubtitles(MSEntityTypes.NAKAGATOR, "death", "Nakagator dies");

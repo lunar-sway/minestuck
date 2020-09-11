@@ -10,6 +10,7 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.LazyInstance;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
@@ -33,7 +34,7 @@ public final class InfoTracker
 	/**
 	 * Chains of lands to be used by the skybox render
 	 */
-	private final LazyInstance<List<List<Integer>>> landChains = new LazyInstance<>(this::createLandChains);
+	private final LazyInstance<List<List<ResourceLocation>>> landChains = new LazyInstance<>(this::createLandChains);
 	
 	InfoTracker(SkaianetHandler skaianet)
 	{
@@ -92,33 +93,33 @@ public final class InfoTracker
 		return SkaianetInfoPacket.landChains(landChains.get());
 	}
 	
-	private List<List<Integer>> createLandChains()
+	private List<List<ResourceLocation>> createLandChains()
 	{
-		List<List<Integer>> landChains = new ArrayList<>();
+		List<List<ResourceLocation>> landChains = new ArrayList<>();
 		
-		Set<Integer> checked = new HashSet<>();
+		Set<DimensionType> checked = new HashSet<>();
 		for(SburbConnection c : skaianet.connections)
 		{
 			DimensionType dimensionType = c.getClientDimension();
-			if(c.isMain() && dimensionType != null && !checked.contains(dimensionType.getId()))
+			if(c.isMain() && dimensionType != null && !checked.contains(dimensionType))
 			{
-				LinkedList<Integer> chain = new LinkedList<>();
-				chain.add(c.getClientDimension().getId());
-				checked.add(c.getClientDimension().getId());
+				LinkedList<ResourceLocation> chain = new LinkedList<>();
+				chain.add(c.getClientDimension().getRegistryName());
+				checked.add(c.getClientDimension());
 				SburbConnection cIter = c;
 				while(true)
 				{
 					cIter = skaianet.getMainConnection(cIter.getClientIdentifier(), false);
 					if(cIter != null && cIter.hasEntered())
 					{
-						if(!checked.contains(cIter.getClientDimension().getId()))
+						if(!checked.contains(cIter.getClientDimension()))
 						{
-							chain.addLast(cIter.getClientDimension().getId());
-							checked.add(cIter.getClientDimension().getId());
+							chain.addLast(cIter.getClientDimension().getRegistryName());
+							checked.add(cIter.getClientDimension());
 						} else break;
 					} else
 					{
-						chain.addLast(0);
+						chain.addLast(null);
 						break;
 					}
 				}
@@ -126,10 +127,10 @@ public final class InfoTracker
 				while(true)
 				{
 					cIter = skaianet.getMainConnection(cIter.getServerIdentifier(), true);
-					if(cIter != null && cIter.hasEntered() && !checked.contains(cIter.getClientDimension().getId()))
+					if(cIter != null && cIter.hasEntered() && !checked.contains(cIter.getClientDimension()))
 					{
-						chain.addFirst(cIter.getClientDimension().getId());
-						checked.add(cIter.getClientDimension().getId());
+						chain.addFirst(cIter.getClientDimension().getRegistryName());
+						checked.add(cIter.getClientDimension());
 					} else
 					{
 						break;

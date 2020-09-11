@@ -287,6 +287,7 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(WOODEN_IGUANA_STATUE);
 		registerDropSelfLootTable(WOODEN_SALAMANDER_STATUE);
 		registerDropSelfLootTable(WOODEN_TURTLE_STATUE);
+		registerDropSelfLootTable(CASSETTE_PLAYER);
 		registerDropSelfLootTable(GLOWYSTONE_DUST);
 	}
 	

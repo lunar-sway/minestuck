@@ -3,6 +3,7 @@ package com.mraof.minestuck.world.gen.feature.structure.blocks;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.entity.EntityType;
+import net.minecraft.state.properties.ChestType;
 import net.minecraft.tileentity.ChestTileEntity;
 import net.minecraft.tileentity.MobSpawnerTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -46,9 +47,14 @@ public class StructureBlockUtil
 	
 	public static void placeLootChest(BlockPos pos, IWorld world, MutableBoundingBox bb, Direction direction, ResourceLocation lootTable, Random rand)
 	{
+		placeLootChest(pos, world, bb, direction, ChestType.SINGLE, lootTable, rand);
+	}
+	
+	public static void placeLootChest(BlockPos pos, IWorld world, MutableBoundingBox bb, Direction direction, ChestType type, ResourceLocation lootTable, Random rand)
+	{
 		if(bb == null || bb.isVecInside(pos))
 		{
-			world.setBlockState(pos, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, direction), 2);
+			world.setBlockState(pos, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, direction).with(ChestBlock.TYPE, type), 2);
 			
 			TileEntity te = world.getTileEntity(pos);
 			if(te instanceof ChestTileEntity)
