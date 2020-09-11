@@ -79,6 +79,10 @@
       {
         "name": "minestuck:music/lands/ultrahot_radicality",
         "stream": true
+      },
+      {
+        "name": "minestuck:music/lands/heated_metal",
+        "stream": true
       }
     ]
   },
@@ -135,6 +139,10 @@
       {
         "name": "minestuck:music/lands/phosphorescent_planet",
         "stream": true
+      },
+      {
+        "name": "minestuck:music/lands/heated_metal",
+        "stream": true
       }
     ]
   },
@@ -167,6 +175,10 @@
       {
         "name": "minestuck:music/lands/new_town",
         "stream": true
+      },
+      {
+        "name": "minestuck:music/lands/heated_metal",
+        "stream": true
       }
     ]
   },
@@ -186,6 +198,10 @@
     "sounds": [
       {
         "name": "minestuck:music/lands/arboreal_action",
+        "stream": true
+      },
+      {
+        "name": "minestuck:music/lands/heated_metal",
         "stream": true
       }
     ]
