@@ -1,6 +1,6 @@
 package com.mraof.minestuck.jei;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.item.crafting.alchemy.GristAmount;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 import net.minecraft.client.Minecraft;
@@ -22,20 +22,20 @@ public class GristIngredientRenderer implements IIngredientRenderer<GristAmount>
 	{
 		if(ingredient == null)
 			return;
-		GlStateManager.enableBlend();
-		GlStateManager.enableAlphaTest();
-		GlStateManager.color4f(1, 1, 1, 1);
-		
+		RenderSystem.enableBlend();
+		RenderSystem.enableAlphaTest();
+		RenderSystem.color4f(1, 1, 1, 1);
+
 		ResourceLocation icon = ingredient.getType().getIcon();
 		Minecraft.getInstance().getTextureManager().bindTexture(icon);
-		
+
 		float scale = (float) 1 / 16;
-		
+
 		int iconX = 16;
 		int iconY = 16;
 		int iconU = 0;
 		int iconV = 0;
-		
+
 		BufferBuilder render = Tessellator.getInstance().getBuffer();
 		render.begin(7, DefaultVertexFormats.POSITION_TEX);
 		render.pos(xPosition, yPosition + iconY, 0D).tex((iconU) * scale, (iconV + iconY) * scale).endVertex();
@@ -44,10 +44,10 @@ public class GristIngredientRenderer implements IIngredientRenderer<GristAmount>
 		render.pos(xPosition, yPosition, 0D).tex((iconU) * scale, (iconV) * scale).endVertex();
 		Tessellator.getInstance().draw();
 		
-		GlStateManager.disableAlphaTest();
-		GlStateManager.disableBlend();
+		RenderSystem.disableAlphaTest();
+		RenderSystem.disableBlend();
 	}
-	
+
 	@Override
 	public List<String> getTooltip(GristAmount ingredient, ITooltipFlag tooltipFlag)
 	{

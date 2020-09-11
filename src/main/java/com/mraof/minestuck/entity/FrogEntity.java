@@ -90,7 +90,7 @@ public class FrogEntity extends CreatureEntity
 			{
 				if(!player.isCreative())itemstack.shrink(1);
 				
-				this.world.addParticle(ParticleTypes.EXPLOSION, this.posX, this.posY + (double)(this.getHeight() / 2.0F), this.posZ, 0.0D, 0.0D, 0.0D);
+				this.world.addParticle(ParticleTypes.EXPLOSION, this.getPosX(), this.getPosY() + (double)(this.getHeight() / 2.0F), this.getPosZ(), 0.0D, 0.0D, 0.0D);
 				this.playSound(SoundEvents.BLOCK_ANVIL_HIT, this.getSoundVolume(), ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F) * 0.8F);
 				this.setType(5);
 			}
@@ -159,7 +159,7 @@ public class FrogEntity extends CreatureEntity
 	@Override
 	protected float getJumpUpwardsMotion()
 	{
-		if (!this.collidedHorizontally && (!this.moveController.isUpdating() || this.moveController.getY() <= this.posY + 0.5D))
+		if (!this.collidedHorizontally && (!this.moveController.isUpdating() || this.moveController.getY() <= this.getPosY() + 0.5D))
 		{
 			Path path = this.navigator.getPath();
 
@@ -167,7 +167,7 @@ public class FrogEntity extends CreatureEntity
 			{
 				Vec3d vec3d = path.getPosition(this);
 
-				if (vec3d.y > this.posY + 0.5D)
+				if (vec3d.y > this.getPosY() + 0.5D)
 				{
 					return 0.5F;
 				}
@@ -290,7 +290,7 @@ public class FrogEntity extends CreatureEntity
 	
 	private void calculateRotationYaw(double x, double z)
 	{
-		this.rotationYaw = (float)(MathHelper.atan2(z - this.posZ, x - this.posX) * (180D / Math.PI)) - 90.0F;
+		this.rotationYaw = (float)(MathHelper.atan2(z - this.getPosZ(), x - this.getPosX()) * (180D / Math.PI)) - 90.0F;
 	}
 
 	private void enableJumpControl()
@@ -524,7 +524,7 @@ public class FrogEntity extends CreatureEntity
 	{
 		if(this.dataManager.get(TYPE) == 6) this.dataManager.set(FROG_SIZE, Float.valueOf(0.6f));
 		else this.dataManager.set(FROG_SIZE, Float.valueOf(size));
-		this.setPosition(this.posX, this.posY, this.posZ);
+		this.setPosition(this.getPosX(), this.getPosY(), this.getPosZ());
 		this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue((double)(baseHealth * size));
 		this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue((double)(baseSpeed * size));
 

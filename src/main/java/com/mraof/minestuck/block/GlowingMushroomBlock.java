@@ -5,7 +5,9 @@ import net.minecraft.block.BushBlock;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.PlantType;
+import net.minecraftforge.common.util.Constants;
 
 import java.util.Random;
 
@@ -23,7 +25,7 @@ public class GlowingMushroomBlock extends BushBlock
 	}
 	
 	@Override
-	public void tick(BlockState state, World worldIn, BlockPos pos, Random random)
+	public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random)
 	{
 		super.tick(state, worldIn, pos, random);
 		if(canSpread(worldIn, pos, state) && random.nextInt(25) == 0)
@@ -44,7 +46,7 @@ public class GlowingMushroomBlock extends BushBlock
 				BlockPos spreadPos = pos.add(random.nextInt(3) - 1, random.nextInt(2) - random.nextInt(2), random.nextInt(3) - 1);
 				if (worldIn.isAirBlock(spreadPos) && this.canSpread(worldIn, spreadPos, this.getDefaultState()))
 				{
-					worldIn.setBlockState(spreadPos, this.getDefaultState(), 2);
+					worldIn.setBlockState(spreadPos, this.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
 					return;
 				}
 			}

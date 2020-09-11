@@ -160,7 +160,7 @@ public abstract class ConsortEntity extends MinestuckEntity implements IContaine
 		{
 			boolean flag = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this);
 			this.dead = true;
-			this.world.createExplosion(this, this.posX, this.posY, this.posZ, this.explosionRadius, flag ? Explosion.Mode.DESTROY : Explosion.Mode.NONE);
+			this.world.createExplosion(this, this.getPosX(), this.getPosY(), this.getPosZ(), this.explosionRadius, flag ? Explosion.Mode.DESTROY : Explosion.Mode.NONE);
 			this.remove();
 		}
 	}

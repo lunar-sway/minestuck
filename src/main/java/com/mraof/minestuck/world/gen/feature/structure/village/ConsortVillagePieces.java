@@ -19,10 +19,12 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.*;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.template.TemplateManager;
+import net.minecraftforge.common.util.Constants;
 
 import java.util.List;
 import java.util.Random;
@@ -283,7 +285,7 @@ public class ConsortVillagePieces
 					
 					if (state.getMaterial().isLiquid() || state.isSolid())
 					{
-						worldIn.setBlockState(blockpos, pathBlock, 2);
+						worldIn.setBlockState(blockpos, pathBlock, Constants.BlockFlags.BLOCK_UPDATE);
 						break;
 					}
 					
@@ -301,7 +303,7 @@ public class ConsortVillagePieces
 			
 			while(pos.getY() >= world.getSeaLevel())
 			{
-				world.setBlockState(pos, block, 2);
+				world.setBlockState(pos, block, Constants.BlockFlags.BLOCK_UPDATE);
 				
 				pos = pos.down();
 				
@@ -310,30 +312,30 @@ public class ConsortVillagePieces
 			}
 		}
 		
-		protected boolean spawnConsort(int x, int y, int z, MutableBoundingBox boundingBox, IWorld world)
+		protected boolean spawnConsort(int x, int y, int z, MutableBoundingBox boundingBox, IWorld world, ChunkGenerator<?> chunkGenerator)
 		{
-			return spawnConsort(x, y, z, boundingBox, world, EnumConsort.MerchantType.NONE, 48);
+			return spawnConsort(x, y, z, boundingBox, world, chunkGenerator, EnumConsort.MerchantType.NONE, 48);
 		}
 		
-		protected boolean spawnConsort(int x, int y, int z, MutableBoundingBox boundingBox, IWorld world, int maxHomeDistance)
+		protected boolean spawnConsort(int x, int y, int z, MutableBoundingBox boundingBox, IWorld world, ChunkGenerator<?> chunkGenerator, int maxHomeDistance)
 		{
-			return spawnConsort(x, y, z, boundingBox, world, EnumConsort.MerchantType.NONE, maxHomeDistance);
+			return spawnConsort(x, y, z, boundingBox, world, chunkGenerator, EnumConsort.MerchantType.NONE, maxHomeDistance);
 		}
 		
-		protected boolean spawnConsort(int x, int y, int z, MutableBoundingBox boundingBox, IWorld world, EnumConsort.MerchantType type, int maxHomeDistance)
+		protected boolean spawnConsort(int x, int y, int z, MutableBoundingBox boundingBox, IWorld world, ChunkGenerator<?> chunkGenerator, EnumConsort.MerchantType type, int maxHomeDistance)
 		{
 			BlockPos pos = new BlockPos(this.getXWithOffset(x, z), this.getYWithOffset(y), this.getZWithOffset(x, z));
 			
 			if(boundingBox.isVecInside(pos))
 			{
 				
-				if(!(world.getChunkProvider().getChunkGenerator().getSettings() instanceof LandGenSettings))
+				if(!(chunkGenerator.getSettings() instanceof LandGenSettings))
 				{
 					Debug.warn("Tried to spawn a consort in a building that is being generated outside of a land dimension.");
 					return false;
 				}
 				
-				LandTypePair landTypes = ((LandGenSettings) world.getChunkProvider().getChunkGenerator().getSettings()).getLandTypes();
+				LandTypePair landTypes = ((LandGenSettings) chunkGenerator.getSettings()).getLandTypes();
 				
 				EntityType<? extends ConsortEntity> consortType = landTypes.terrain.getConsortType();
 				
@@ -458,7 +460,24 @@ public class ConsortVillagePieces
 				}
 			}
 		}
-		
+
+		@Override
+		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
+		{
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
+			BlockState pathBlock = blocks.getBlockState("village_path");
+
+			for (int i = this.boundingBox.minX; i <= this.boundingBox.maxX; ++i)
+			{
+				for (int j = this.boundingBox.minZ; j <= this.boundingBox.maxZ; ++j)
+				{
+					placeRoadtile(i, j, structureBoundingBoxIn, worldIn, pathBlock);
+				}
+			}
+
+			return true;
+		}
+
 		public static MutableBoundingBox findPieceBox(ConsortVillageCenter.VillageCenter start, List<StructurePiece> components, Random rand, int x, int y, int z, Direction facing)
 		{
 			for(int i = 7 * MathHelper.nextInt(rand, 3, 5); i >= 7; i -= 7)
@@ -470,23 +489,6 @@ public class ConsortVillagePieces
 			}
 			
 			return null;
-		}
-		
-		@Override
-		public boolean addComponentParts(IWorld worldIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
-		{
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(worldIn.getChunkProvider().getChunkGenerator().getSettings());
-			BlockState pathBlock = blocks.getBlockState("village_path");
-			
-			for (int i = this.boundingBox.minX; i <= this.boundingBox.maxX; ++i)
-			{
-				for (int j = this.boundingBox.minZ; j <= this.boundingBox.maxZ; ++j)
-				{
-					placeRoadtile(i, j, structureBoundingBoxIn, worldIn, pathBlock);
-				}
-			}
-			
-			return true;
 		}
 	}
 	

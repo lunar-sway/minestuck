@@ -107,6 +107,11 @@ public class GristSet
 		return this.gristTypes.getOrDefault(type, 0L);
 	}
 	
+	public long getGrist(Supplier<GristType> type)
+	{
+		return getGrist(type.get());
+	}
+	
 	/**
 	 * @return a value estimate for this grist set
 	 */
@@ -147,6 +152,11 @@ public class GristSet
 			this.gristTypes.compute(type, (key, value) -> value == null ? amount : value + amount);
 		}
 		return this;
+	}
+	
+	public GristSet addGrist(Supplier<GristType> type, long amount)
+	{
+		return addGrist(type.get(), amount);
 	}
 
 	/**

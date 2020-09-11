@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.IStringSerializable;
@@ -22,6 +23,7 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -55,33 +57,35 @@ public class ComputerBlock extends MachineBlock
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
 	{
+		if(player.isSneaking())
+			return ActionResultType.PASS;
+		
 		ItemStack heldItem = player.getHeldItem(handIn);
 		if(state.get(STATE) == State.OFF)
 		{
-			if(player.isSneaking() || !Direction.UP.equals(hit.getFace()) || !heldItem.isEmpty() && ProgramData.getProgramID(heldItem) == -2)
-				return false;
+			if(!Direction.UP.equals(hit.getFace()) || !heldItem.isEmpty() && ProgramData.getProgramID(heldItem) == -2)
+				return ActionResultType.PASS;
 			
 			turnOn(state, worldIn, pos, player, handIn, hit);
 			
-			return true;
+			return ActionResultType.SUCCESS;
 		} else
 		{
 			ComputerTileEntity tileEntity = (ComputerTileEntity) worldIn.getTileEntity(pos);
 			
-			if (tileEntity == null || player.isSneaking())
-			{
-				return false;
-			}
+			
+			if(tileEntity == null)
+				return ActionResultType.FAIL;
 			
 			if(insertDisk(tileEntity, state, worldIn, pos, player, handIn))
-				return true;
+				return ActionResultType.SUCCESS;
 			
 			if(worldIn.isRemote && SkaiaClient.requestData(tileEntity))
 				MSScreenFactories.displayComputerScreen(tileEntity);
 			
-			return true;
+			return ActionResultType.SUCCESS;
 		}
 	}
 	
@@ -90,7 +94,7 @@ public class ComputerBlock extends MachineBlock
 		if(!worldIn.isRemote)
 		{
 			BlockState newState = state.with(STATE, State.ON);
-			worldIn.setBlockState(pos, newState, 2);
+			worldIn.setBlockState(pos, newState, Constants.BlockFlags.BLOCK_UPDATE);
 			
 			TileEntity te = worldIn.getTileEntity(pos);
 			if(te instanceof ComputerTileEntity)
@@ -110,7 +114,7 @@ public class ComputerBlock extends MachineBlock
 			if(id == -1)
 			{
 				tileEntity.closeAll();
-				worldIn.setBlockState(pos, state.with(STATE, State.BROKEN), 2);
+				worldIn.setBlockState(pos, state.with(STATE, State.BROKEN), Constants.BlockFlags.BLOCK_UPDATE);
 			}
 			else tileEntity.installedPrograms.put(id, true);
 			tileEntity.markDirty();

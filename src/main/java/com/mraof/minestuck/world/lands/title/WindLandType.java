@@ -54,7 +54,7 @@ public class WindLandType extends TitleLandType
 	@Override
 	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
 	{
-		biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(MSFeatures.ROCK_SPIKE, IFeatureConfig.NO_FEATURE_CONFIG, Placement.CHANCE_HEIGHTMAP, new ChanceConfig(50)));
+		biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.ROCK_SPIKE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.CHANCE_HEIGHTMAP.configure(new ChanceConfig(50))));
 	}
 	
 	@Override

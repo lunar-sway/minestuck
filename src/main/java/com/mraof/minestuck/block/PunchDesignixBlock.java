@@ -11,6 +11,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Rotation;
@@ -45,15 +46,15 @@ public class PunchDesignixBlock extends MultiMachineBlock
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
 	{
 		if (worldIn.isRemote)
-			return true;
+			return ActionResultType.SUCCESS;
 		BlockPos mainPos = getMainPos(state, pos);
 		TileEntity te = worldIn.getTileEntity(mainPos);
 		if (te instanceof PunchDesignixTileEntity)
 			((PunchDesignixTileEntity) te).onRightClick((ServerPlayerEntity) player, state);
-		return true;
+		return ActionResultType.SUCCESS;
 	}
 	
 	@Override

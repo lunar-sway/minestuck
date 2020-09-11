@@ -30,7 +30,7 @@ public class ElectricWeaponItem extends DualWeaponItem
         if(electrocuteInWater && isSelected && entityIn.isInWater() && entityIn instanceof LivingEntity)
         {
             stack.damageItem(70, ((LivingEntity) entityIn), entity -> entity.sendBreakAnimation(Hand.MAIN_HAND));
-            ItemEntity weapon = new ItemEntity(entityIn.world, entityIn.posX, entityIn.posY, entityIn.posZ, stack.copy());
+            ItemEntity weapon = new ItemEntity(entityIn.world, entityIn.getPosX(), entityIn.getPosY(), entityIn.getPosZ(), stack.copy());
             weapon.getItem().setCount(1);
             weapon.setPickupDelay(40);
             entityIn.world.addEntity(weapon);
@@ -47,7 +47,7 @@ public class ElectricWeaponItem extends DualWeaponItem
         ItemStack held = target.getHeldItemMainhand();
         if (attacker.getRNG().nextFloat() < .05 && !held.isEmpty())
         {
-            ItemEntity item = new ItemEntity(target.world, target.posX, target.posY, target.posZ, held.copy());
+            ItemEntity item = new ItemEntity(target.world, target.getPosX(), target.getPosY(), target.getPosZ(), held.copy());
             item.getItem().setCount(1);
             item.setPickupDelay(40);
             target.world.addEntity(item);

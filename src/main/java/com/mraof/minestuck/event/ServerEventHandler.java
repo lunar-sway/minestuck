@@ -214,7 +214,7 @@ public class ServerEventHandler
 	{
 		ItemEntity e = event.getEntityItem();
 		if(e.getItem().getCount() == 1 && (e.getItem().getItem() == Items.BREAD)) {
-			ItemEntity stalebread = new ItemEntity(e.world, e.posX, e.posY, e.posZ, new ItemStack(MSItems.STALE_BAGUETTE));
+			ItemEntity stalebread = new ItemEntity(e.world, e.getPosX(), e.getPosY(), e.getPosZ(), new ItemStack(MSItems.STALE_BAGUETTE));
 			e.world.addEntity(stalebread);
 		}
 	}

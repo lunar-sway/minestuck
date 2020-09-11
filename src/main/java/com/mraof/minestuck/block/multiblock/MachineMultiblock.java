@@ -11,6 +11,7 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.IWorld;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -144,7 +145,7 @@ public abstract class MachineMultiblock implements IItemProvider    //An abstrac
 		{
 			BlockState state = getRotatedState(rotation);
 			if(state != null)
-				world.setBlockState(pos.add(this.pos.rotate(rotation)), state, 3);
+				world.setBlockState(pos.add(this.pos.rotate(rotation)), state, Constants.BlockFlags.DEFAULT);
 		}
 		
 		private boolean matchesWithRotation(IWorld world, BlockPos pos, Rotation rotation)

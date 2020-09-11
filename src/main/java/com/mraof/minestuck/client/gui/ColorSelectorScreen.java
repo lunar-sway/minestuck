@@ -1,6 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.network.ColorSelectPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.util.ColorHandler;
@@ -11,7 +11,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.client.config.GuiButtonExt;
+import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
 
 public class ColorSelectorScreen extends Screen
 {
@@ -41,7 +41,7 @@ public class ColorSelectorScreen extends Screen
 	@Override
 	public void init()
 	{
-		addButton(new GuiButtonExt((width - guiWidth)/2 + 50, (height - guiHeight)/2 + 132, 76, 20, "Choose", button -> selectColor()));
+		addButton(new ExtendedButton((width - guiWidth)/2 + 50, (height - guiHeight)/2 + 132, 76, 20, "Choose", button -> selectColor()));
 	}
 	
 	@Override
@@ -49,7 +49,7 @@ public class ColorSelectorScreen extends Screen
 	{
 		this.renderBackground();
 		
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		
 		int xOffset = (width - guiWidth)/2;
 		int yOffset = (height - guiHeight)/2;
@@ -114,7 +114,7 @@ public class ColorSelectorScreen extends Screen
 				y += 3;
 			if(selectedIndex >= 8)
 				y += 3;
-			GlStateManager.color3f(1F, 1F, 1F);
+			RenderSystem.color3f(1.0F, 1.0F, 1.0F);
 			this.minecraft.getTextureManager().bindTexture(guiBackground);
 			this.blit(xOffset + x, yOffset + y, guiWidth, 0, 36, 20);
 		}

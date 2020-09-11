@@ -15,7 +15,7 @@ public class MinestuckEntityRenderer<T extends MinestuckEntity, M extends Entity
 	}
 	
 	@Override
-	protected ResourceLocation getEntityTexture(T entity) 
+	public ResourceLocation getEntityTexture(T entity)
 	{
 		return entity.getTextureResource();
 	}

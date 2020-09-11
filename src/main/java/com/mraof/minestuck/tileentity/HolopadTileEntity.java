@@ -18,8 +18,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import java.util.List;
+import net.minecraftforge.common.util.Constants;
 
 public class HolopadTileEntity extends TileEntity implements ITickableTileEntity
 {
@@ -164,7 +163,7 @@ public class HolopadTileEntity extends TileEntity implements ITickableTileEntity
 			BlockState state = world.getBlockState(pos);
 			boolean hasCard = !card.isEmpty();
 			if(state.has(HolopadBlock.HAS_CARD) && hasCard != state.get(HolopadBlock.HAS_CARD))
-				world.setBlockState(pos, state.with(HolopadBlock.HAS_CARD, hasCard), 2);
+				world.setBlockState(pos, state.with(HolopadBlock.HAS_CARD, hasCard), Constants.BlockFlags.BLOCK_UPDATE);
 		}
 	}
 }

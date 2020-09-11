@@ -6,15 +6,12 @@
     ]
   },
   "criteria": {
-    "has_at_least_9_raw_cruxite": {
+    "has_raw_cruxite": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "minestuck:raw_cruxite",
-            "count": {
-              "min": 9
-            }
+            "item": "minestuck:raw_cruxite"
           }
         ]
       }
@@ -38,7 +35,7 @@
   },
   "requirements": [
     [
-      "has_at_least_9_raw_cruxite",
+      "has_raw_cruxite",
       "has_cruxite_block",
       "has_the_recipe"
     ]

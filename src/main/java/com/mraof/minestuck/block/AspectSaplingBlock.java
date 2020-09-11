@@ -9,6 +9,7 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 import java.util.Random;
 
@@ -39,10 +40,9 @@ public class AspectSaplingBlock extends BushBlock implements IGrowable
 		return false;
 	}
 
-	
 	@Override
-	public void grow(World worldIn, Random rand, BlockPos pos, BlockState state)
-	{
+	public void grow(ServerWorld worldIn, Random rand, BlockPos pos, BlockState state) {
+
 		//Nothing here yet as the trees are unfinished
 	}
 }

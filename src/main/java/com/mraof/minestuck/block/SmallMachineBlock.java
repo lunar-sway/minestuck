@@ -1,13 +1,14 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.tileentity.IOwnable;
 import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.tileentity.IOwnable;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -43,7 +44,7 @@ public class SmallMachineBlock extends MachineProcessBlock
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
 	{
 		if(!player.isSneaking())
 		{
@@ -58,8 +59,8 @@ public class SmallMachineBlock extends MachineProcessBlock
 						NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, pos);
 				}
 			}
-			return true;
-		} else return false;
+			return ActionResultType.SUCCESS;
+		} else return ActionResultType.PASS;
 	}
 	
 	@Override

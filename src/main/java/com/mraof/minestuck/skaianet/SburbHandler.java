@@ -128,7 +128,7 @@ public final class SburbHandler
 	public static GristType getPrimaryGristType(PlayerIdentifier player)
 	{
 		
-		return GristTypes.SHALE;
+		return GristTypes.SHALE.get();
 	}
 	
 	public static SburbConnection getConnectionForDimension(ServerWorld world)
@@ -274,7 +274,7 @@ public final class SburbHandler
 				|| PlayerSavedData.getData(identifier, player.server).getTitle() != null)
 			return true;
 		
-		playersInTitleSelection.put(player, new Vec3d(player.posX, player.posY, player.posZ));
+		playersInTitleSelection.put(player, new Vec3d(player.getPosX(), player.getPosY(), player.getPosZ()));
 		TitleSelectPacket packet = new TitleSelectPacket();
 		MSPacketHandler.sendToPlayer(packet, player);
 		return false;

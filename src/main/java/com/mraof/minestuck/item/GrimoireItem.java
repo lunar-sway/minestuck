@@ -26,7 +26,7 @@ public class GrimoireItem extends Item
 		{
 			ITextComponent message = new TranslationTextComponent("After flipping through some pages, you feel significantly more insignificant.");
 			playerIn.sendMessage(message);
-			playerIn.world.playSound(null, playerIn.posX, playerIn.posY, playerIn.posZ, MSSoundEvents.ITEM_GRIMOIRE_USE, SoundCategory.AMBIENT, 0.5F, 0.8F);
+			playerIn.world.playSound(null, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), MSSoundEvents.ITEM_GRIMOIRE_USE, SoundCategory.AMBIENT, 0.5F, 0.8F);
 		}
 		return super.onItemRightClick(worldIn, playerIn, handIn);
 	}

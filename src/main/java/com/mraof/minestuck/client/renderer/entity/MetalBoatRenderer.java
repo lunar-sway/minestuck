@@ -18,7 +18,7 @@ public class MetalBoatRenderer extends BoatRenderer
 	}
 	
 	@Override
-	protected ResourceLocation getEntityTexture(BoatEntity entity)
+	public ResourceLocation getEntityTexture(BoatEntity entity)
 	{
 		MetalBoatEntity boat = (MetalBoatEntity) entity;
 		

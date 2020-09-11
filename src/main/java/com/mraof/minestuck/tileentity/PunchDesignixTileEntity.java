@@ -21,6 +21,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
 
@@ -58,7 +59,7 @@ public class PunchDesignixTileEntity extends TileEntity
 			BlockState state = world.getBlockState(pos);
 			boolean hasCard = !card.isEmpty();
 			if(state.has(PunchDesignixBlock.Slot.HAS_CARD) && hasCard != state.get(PunchDesignixBlock.Slot.HAS_CARD))
-				world.setBlockState(pos, state.with(PunchDesignixBlock.Slot.HAS_CARD, hasCard), 2);
+				world.setBlockState(pos, state.with(PunchDesignixBlock.Slot.HAS_CARD, hasCard), Constants.BlockFlags.BLOCK_UPDATE);
 		}
 	}
 	

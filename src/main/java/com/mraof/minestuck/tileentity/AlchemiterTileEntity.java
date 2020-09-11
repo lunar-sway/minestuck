@@ -34,7 +34,7 @@ import net.minecraftforge.common.util.Constants;
 public class AlchemiterTileEntity extends TileEntity implements IColored, GristWildcardHolder
 {
 	
-	private GristType wildcardGrist = GristTypes.BUILD;
+	private GristType wildcardGrist = GristTypes.BUILD.get();
 	protected boolean broken = false;
 	protected ItemStack dowel = ItemStack.EMPTY;
 	protected ItemStack upgradeItem[] = {ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY,ItemStack.EMPTY,ItemStack.EMPTY};
@@ -59,7 +59,7 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 				if(state.has(AlchemiterBlock.Pad.DOWEL))	//If not, then the machine has likely been destroyed; don't bother doing anything about it
 				{
 					state = state.with(AlchemiterBlock.Pad.DOWEL, EnumDowelType.getForDowel(newDowel));
-					world.setBlockState(pos, state, 2);
+					world.setBlockState(pos, state, Constants.BlockFlags.BLOCK_UPDATE);
 				}
 			}
 		}

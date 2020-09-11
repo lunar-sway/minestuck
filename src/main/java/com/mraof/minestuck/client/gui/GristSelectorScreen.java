@@ -1,6 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.network.GristWildcardPacket;
@@ -11,7 +11,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.client.config.GuiButtonExt;
+import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,8 +28,8 @@ public class GristSelectorScreen<T extends Screen & Positioned> extends Minestuc
 
 	private T otherScreen;
 	private int page = 0;
-	private GuiButtonExt previousButton;
-	private GuiButtonExt nextButton;
+	private ExtendedButton previousButton;
+	private ExtendedButton nextButton;
 
 	public GristSelectorScreen(T screen)
 	{
@@ -47,8 +47,8 @@ public class GristSelectorScreen<T extends Screen & Positioned> extends Minestuc
 		super.init();
 		int xOffset = (width - guiWidth) / 2;
 		int yOffset = (height - guiHeight) / 2;
-		this.previousButton = new GuiButtonExt((this.width) + 8, yOffset + 8, 16, 16, "<", button -> prevPage());
-		this.nextButton = new GuiButtonExt(xOffset + guiWidth - 24, yOffset + 8, 16, 16, ">", button -> nextPage());
+		this.previousButton = new ExtendedButton((this.width) + 8, yOffset + 8, 16, 16, "<", button -> prevPage());
+		this.nextButton = new ExtendedButton(xOffset + guiWidth - 24, yOffset + 8, 16, 16, ">", button -> nextPage());
 		if(GristTypes.REGISTRY.getValues().size() > rows * columns)
 		{
 			this.addButton(this.nextButton);
@@ -62,8 +62,8 @@ public class GristSelectorScreen<T extends Screen & Positioned> extends Minestuc
 		int yOffset = (height - guiHeight) / 2;
 
 		this.renderBackground();
-
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		
+		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		this.minecraft.getTextureManager().bindTexture(guiGristcache);
 		this.blit(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
@@ -72,11 +72,11 @@ public class GristSelectorScreen<T extends Screen & Positioned> extends Minestuc
 		minecraft.fontRenderer.drawString(cacheMessage, (this.width / 2F) - minecraft.fontRenderer.getStringWidth(cacheMessage) / 2F, yOffset + 12, 0x404040);
 		super.render(mouseX, mouseY, partialTicks);
 
-		GlStateManager.color3f(1, 1, 1);
-		GlStateManager.disableRescaleNormal();
+		RenderSystem.color3f(1.0F, 1.0F, 1.0F);
+		RenderSystem.disableRescaleNormal();
 		RenderHelper.disableStandardItemLighting();
-		GlStateManager.disableLighting();
-		GlStateManager.disableDepthTest();
+		RenderSystem.disableLighting();
+		RenderSystem.disableDepthTest();
 
 		this.drawGrist(xOffset, yOffset, mouseX, mouseY, page);
 		

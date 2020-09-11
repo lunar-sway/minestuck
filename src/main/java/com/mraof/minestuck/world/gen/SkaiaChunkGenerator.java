@@ -13,7 +13,7 @@ public class SkaiaChunkGenerator extends NoiseChunkGenerator<SkaiaGenSettings>
 	{
 		super(worldIn, biomeProviderIn, 4, 8, 256, settings, false);
 		
-		this.depthNoise = new OctavesNoiseGenerator(this.randomSeed, 16);
+		this.depthNoise = new OctavesNoiseGenerator(this.randomSeed, 16, 0);
 	}
 	
 	@Override
@@ -54,7 +54,7 @@ public class SkaiaChunkGenerator extends NoiseChunkGenerator<SkaiaGenSettings>
 		double vertical2 = 4.277575D;
 		int lerpModifier = 3;
 		int skyValueTarget = -10;
-		this.func_222546_a(noiseColumn, columnX, columnZ, horizontal, vertical, horizontal2, vertical2, lerpModifier, skyValueTarget);
+		this.calcNoiseColumn(noiseColumn, columnX, columnZ, horizontal, vertical, horizontal2, vertical2, lerpModifier, skyValueTarget);
 	}
 	
 	@Override

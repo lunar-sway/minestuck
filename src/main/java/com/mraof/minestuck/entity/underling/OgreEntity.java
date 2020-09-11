@@ -1,6 +1,6 @@
 package com.mraof.minestuck.entity.underling;
 
-import com.mraof.minestuck.entity.ai.AttackOnCollideWithRateGoal;
+import com.mraof.minestuck.entity.ai.CustomMeleeAttackGoal;
 import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
@@ -31,7 +31,7 @@ public class OgreEntity extends UnderlingEntity
 		super.registerAttributes();
 		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(50.0D);
 		getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.4F);
-		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.65D);
+		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.22D);
 		getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(6.0D);
 	}
 	
@@ -39,9 +39,7 @@ public class OgreEntity extends UnderlingEntity
 	protected void registerGoals()
 	{
 		super.registerGoals();
-		AttackOnCollideWithRateGoal aiAttack = new AttackOnCollideWithRateGoal(this, .3F, 40, false);
-		aiAttack.setDistanceMultiplier(1.2F);
-		this.goalSelector.addGoal(3, aiAttack);
+		this.goalSelector.addGoal(3, new CustomMeleeAttackGoal(this, 1.0F, false, 40, 1.2F));
 	}
 	
 	protected SoundEvent getAmbientSound()

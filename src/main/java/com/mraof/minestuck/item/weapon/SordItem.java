@@ -23,7 +23,7 @@ public class SordItem extends WeaponItem
 	{
 		if(!attacker.getEntityWorld().isRemote && attacker.getRNG().nextFloat() < .25)
 		{
-			ItemEntity sord = new ItemEntity(attacker.world, attacker.posX, attacker.posY, attacker.posZ, itemStack.copy());
+			ItemEntity sord = new ItemEntity(attacker.world, attacker.getPosX(), attacker.getPosY(), attacker.getPosZ(), itemStack.copy());
 			sord.getItem().setCount(1);
 			sord.setPickupDelay(40);
 			attacker.world.addEntity(sord);

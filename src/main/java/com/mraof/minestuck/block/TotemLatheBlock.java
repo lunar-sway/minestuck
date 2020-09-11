@@ -13,7 +13,7 @@ import net.minecraft.state.EnumProperty;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Rotation;
@@ -48,16 +48,16 @@ public class TotemLatheBlock extends MultiMachineBlock
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
 	{
 		if(worldIn.isRemote)
-			return true;
+			return ActionResultType.SUCCESS;
 		
 		BlockPos mainPos = getMainPos(state, pos);
 		TileEntity te = worldIn.getTileEntity(mainPos);
 		if(te instanceof TotemLatheTileEntity)
 			((TotemLatheTileEntity) te).onRightClick(player, state);
-		return true;
+		return ActionResultType.SUCCESS;
 	}
 	
 	@Override
@@ -159,12 +159,12 @@ public class TotemLatheBlock extends MultiMachineBlock
 			super.fillStateContainer(builder);
 			builder.add(DOWEL);
 		}
-		
-		@Override
-		public BlockRenderLayer getRenderLayer()
-		{
-			return BlockRenderLayer.CUTOUT;
-		}
+
+//		@Override
+//		public BlockRenderLayer getRenderLayer()
+//		{
+//			return BlockRenderLayer.CUTOUT;
+//		}
 	}
 	
 	public static class Slot extends TotemLatheBlock
@@ -194,12 +194,6 @@ public class TotemLatheBlock extends MultiMachineBlock
 		{
 			super.fillStateContainer(builder);
 			builder.add(COUNT);
-		}
-		
-		@Override
-		public BlockRenderLayer getRenderLayer()
-		{
-			return BlockRenderLayer.CUTOUT_MIPPED;
 		}
 	}
 }

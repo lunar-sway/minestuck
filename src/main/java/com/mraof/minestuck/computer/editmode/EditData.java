@@ -140,9 +140,9 @@ public class EditData
 		private PlayerRecovery(DecoyEntity decoy)
 		{
 			dimension = decoy.dimension;
-			posX = decoy.posX;
-			posY = decoy.posY;
-			posZ = decoy.posZ;
+			posX = decoy.getPosX();
+			posY = decoy.getPosY();
+			posZ = decoy.getPosZ();
 			rotationYaw = decoy.rotationYaw;
 			rotationPitch = decoy.rotationPitch;
 			gameType = decoy.gameType;
@@ -254,7 +254,7 @@ public class EditData
 				connection.inventory = this.inventory;
 				if(editPlayer != null)
 				{
-					ServerEditHandler.lastEditmodePos.put(connection, new Vec3d(editPlayer.posX, editPlayer.posY, editPlayer.posZ));
+					ServerEditHandler.lastEditmodePos.put(connection, new Vec3d(editPlayer.getPosX(), editPlayer.getPosY(), editPlayer.getPosZ()));
 				}
 			} else LOGGER.warn("Unable to perform editmode recovery for the connection for client player {}. Got null connection.", clientPlayer.getUsername());
 		}

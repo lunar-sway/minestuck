@@ -12,7 +12,7 @@ import com.mraof.minestuck.entry.EntryProcess;
 import com.mraof.minestuck.entry.RSEntryBlockProcess;
 import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.ModMusicDiscItem;
+import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.KindAbstratusList;
 import com.mraof.minestuck.skaianet.SessionHandler;
@@ -54,6 +54,7 @@ public class Minestuck
 		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		MSFluids.FLUIDS.register(eventBus);
 		MSSurfaceBuilders.REGISTER.register(eventBus);
+		GristTypes.GRIST_TYPES.register(eventBus);
 	}
 	
 	private void setup(final FMLCommonSetupEvent event)
@@ -77,8 +78,6 @@ public class Minestuck
 		
 		KindAbstratusList.registerTypes();
 		DeployList.registerItems();
-		
-		ModMusicDiscItem.setup();
 		
 		ProgramData.registerProgram(0, new ItemStack(MSItems.CLIENT_DISK), ProgramData::onClientClosed);	//This idea was kind of bad and should be replaced
 		ProgramData.registerProgram(1, new ItemStack(MSItems.SERVER_DISK), ProgramData::onServerClosed);

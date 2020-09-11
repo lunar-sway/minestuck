@@ -32,10 +32,10 @@ public class EntityAIMoveToBattle extends Goal
 		
 		EnumEntityKingdom type = target.getKingdom();
 		
-		if(type == EnumEntityKingdom.DERSITE && target.posX >= 0 || type == EnumEntityKingdom.PROSPITIAN && target.posX <= 0)
+		if(type == EnumEntityKingdom.DERSITE && target.getPosX() >= 0 || type == EnumEntityKingdom.PROSPITIAN && target.getPosX() <= 0)
 			return false;
 		
-		BlockPos pos = target.world.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, new BlockPos(type == EnumEntityKingdom.DERSITE ? 5 : -5, 0, target.posY));
+		BlockPos pos = target.world.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, new BlockPos(type == EnumEntityKingdom.DERSITE ? 5 : -5, 0, target.getPosY()));
 		destination = RandomPositionGenerator.findRandomTargetBlockTowards(target, 10, 7, new Vec3d(pos.getX(), pos.getY(), pos.getZ()));
 		
 		return destination != null;

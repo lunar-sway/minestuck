@@ -37,19 +37,19 @@ public class GristCostRecipeCategory implements IRecipeCategory<JeiGristCost>
 		background = guiHelper.createDrawable(alchemiterBackground, 8, 15, 160, 56);
 		icon = guiHelper.createDrawableIngredient(new ItemStack(MSBlocks.ALCHEMITER));
 	}
-	
+
 	@Override
 	public Class<? extends JeiGristCost> getRecipeClass()
 	{
 		return JeiGristCost.class;
 	}
-	
+
 	@Override
 	public ResourceLocation getUid()
 	{
 		return MinestuckJeiPlugin.GRIST_COST_ID;
 	}
-	
+
 	@Override
 	public String getTitle()
 	{
@@ -61,13 +61,13 @@ public class GristCostRecipeCategory implements IRecipeCategory<JeiGristCost>
 	{
 		return background;
 	}
-	
+
 	@Override
 	public IDrawable getIcon()
 	{
 		return icon;
 	}
-	
+
 	@Override
 	public void setIngredients(JeiGristCost recipe, IIngredients ingredients)
 	{
@@ -76,7 +76,7 @@ public class GristCostRecipeCategory implements IRecipeCategory<JeiGristCost>
 			ingredients.setInputs(MinestuckJeiPlugin.GRIST, recipe.getGristSet().getAmounts());
 		//TODO Wildcard grist cost
 	}
-	
+
 	@Override
 	public void setRecipe(IRecipeLayout recipeLayout, JeiGristCost recipe, IIngredients ingredients)
 	{
@@ -88,7 +88,7 @@ public class GristCostRecipeCategory implements IRecipeCategory<JeiGristCost>
 		recipeLayout.getItemStacks().set(0, inputDowels.collect(Collectors.toList()));
 		recipeLayout.getItemStacks().set(1, ingredients.getOutputs(VanillaTypes.ITEM).get(0));
 	}
-	
+
 	@Override
 	public void draw(JeiGristCost recipe, double mouseX, double mouseY)
 	{
@@ -97,7 +97,7 @@ public class GristCostRecipeCategory implements IRecipeCategory<JeiGristCost>
 		else if(recipe.getType() == JeiGristCost.Type.WILDCARD)
 			GuiUtil.drawGristBoard(new GristSet(GristTypes.BUILD, recipe.getWildcardAmount()), GuiUtil.GristboardMode.JEI_WILDCARD, 1, 30, Minecraft.getInstance().fontRenderer);
 	}
-	
+
 	@Override
 	public List<String> getTooltipStrings(JeiGristCost recipe, double mouseX, double mouseY)
 	{

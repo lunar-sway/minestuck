@@ -54,7 +54,7 @@ public class SilenceLandType extends TitleLandType
 	@Override
 	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
 	{
-		biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(Feature.SIMPLE_BLOCK, new BlockWithContextConfig(Blocks.PUMPKIN.getDefaultState(), Lists.newArrayList(blocks.getBlockState("surface")), Lists.newArrayList(Blocks.AIR.getDefaultState()), Lists.newArrayList(Blocks.AIR.getDefaultState())), Placement.CHANCE_HEIGHTMAP, new ChanceConfig(128)));
+		biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Feature.SIMPLE_BLOCK.withConfiguration(new BlockWithContextConfig(Blocks.PUMPKIN.getDefaultState(), Lists.newArrayList(blocks.getBlockState("surface")), Lists.newArrayList(Blocks.AIR.getDefaultState()), Lists.newArrayList(Blocks.AIR.getDefaultState()))).withPlacement(Placement.CHANCE_HEIGHTMAP.configure(new ChanceConfig(128))));
 	}
 	
 	@Override

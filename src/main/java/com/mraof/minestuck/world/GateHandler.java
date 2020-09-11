@@ -89,7 +89,7 @@ public class GateHandler
 				
 				BlockPos placement = pos.add(x, 0, z);
 				
-				if(world.getBiomeBody(placement) == MSBiomes.LAND_NORMAL)
+				if(world.getBiome(placement) == MSBiomes.LAND_NORMAL)
 				{
 					//TODO Can and has placed the player into a lava ocean. Fix this (Also for other hazards)
 					int y = world.getChunk(placement).getTopBlockY(Heightmap.Type.MOTION_BLOCKING, placement.getX(), placement.getZ());

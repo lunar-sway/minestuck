@@ -61,7 +61,7 @@ public class ThoughtLandType extends TitleLandType
 	{
 		if(biome.staticBiome == MSBiomes.LAND_NORMAL)
 		{
-			biome.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, Biome.createDecoratedFeature(MSFeatures.SMALL_LIBRARY, IFeatureConfig.NO_FEATURE_CONFIG, Placement.CHANCE_PASSTHROUGH, new ChanceConfig(64)));
+			biome.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MSFeatures.SMALL_LIBRARY.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.CHANCE_PASSTHROUGH.configure(new ChanceConfig(64))));
 		}
 	}
 	

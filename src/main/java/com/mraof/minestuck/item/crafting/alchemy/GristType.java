@@ -30,7 +30,7 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 	
 	private final float rarity;
 	private final float value;
-	private final ItemStack candyItem;
+	private final Supplier<ItemStack> candyItem;
 	private final List<Supplier<GristType>> secondaryTypes;
 	private String translationKey;
 	private ResourceLocation icon;
@@ -107,7 +107,7 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 	
 	public ItemStack getCandyItem()
 	{
-		return candyItem.copy();
+		return candyItem.get();
 	}
 	
 	public List<GristType> getSecondaryTypes()
@@ -161,7 +161,7 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 		return read(nbt, key, GristTypes.BUILD);
 	}
 	
-	public static GristType read(CompoundNBT nbt, String key, GristType fallback)
+	public static GristType read(CompoundNBT nbt, String key, Supplier<GristType> fallback)
 	{
 		ResourceLocation name = MSNBTUtil.tryReadResourceLocation(nbt, key);
 		if(name != null)
@@ -171,7 +171,7 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 				return type;
 			else LOGGER.warn("Couldn't find grist type by name {}  while reading from nbt. Will fall back to {} instead.", name, fallback);
 		}
-		return fallback;
+		return fallback.get();
 	}
 	
 	static class DummyType extends GristType
@@ -197,8 +197,8 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 	public static class Properties
 	{
 		private final float rarity, value;
-		private ItemStack candyItem = ItemStack.EMPTY;
-		private List<Supplier<GristType>> secondaryGristTypes = new ArrayList<>();
+		private Supplier<ItemStack> candyItem = () -> ItemStack.EMPTY;
+		private final List<Supplier<GristType>> secondaryGristTypes = new ArrayList<>();
 		
 		public Properties(float rarity)
 		{
@@ -211,12 +211,13 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 			this.value = value;
 		}
 		
-		public Properties candy(Item item)
+		public Properties candy(Supplier<Item> item)
 		{
-			return candy(new ItemStack(item));
+			Objects.requireNonNull(item);
+			return candyStack(() -> new ItemStack(item.get()));
 		}
 		
-		public Properties candy(ItemStack stack)
+		public Properties candyStack(Supplier<ItemStack> stack)
 		{
 			candyItem = Objects.requireNonNull(stack);
 			return this;

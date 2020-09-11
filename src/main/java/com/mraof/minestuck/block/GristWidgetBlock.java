@@ -8,6 +8,7 @@ import net.minecraft.state.StateContainer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 
 public class GristWidgetBlock extends SmallMachineBlock
 {
@@ -30,6 +31,6 @@ public class GristWidgetBlock extends SmallMachineBlock
 	{
 		BlockState oldState = world.getBlockState(pos);
 		if(oldState.getBlock() instanceof GristWidgetBlock)
-			world.setBlockState(pos, oldState.with(HAS_CARD, b), 2);
+			world.setBlockState(pos, oldState.with(HAS_CARD, b), Constants.BlockFlags.BLOCK_UPDATE);
 	}
 }

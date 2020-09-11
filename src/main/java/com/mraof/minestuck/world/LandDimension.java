@@ -31,6 +31,8 @@ import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ModDimension;
 
 import javax.annotation.Nullable;
@@ -47,7 +49,7 @@ public class LandDimension extends Dimension
 	
 	private LandDimension(World worldIn, DimensionType typeIn, LandTypePair aspects)
 	{
-		super(worldIn, typeIn);
+		super(worldIn, typeIn, 0.0F);
 		
 		if(aspects != null)
 			landTypes = aspects;
@@ -89,42 +91,20 @@ public class LandDimension extends Dimension
 	}
 	
 	@Override
-	public float getSunBrightness(float partialTicks)
-	{
-		float skylight = properties.skylightBase;
-		skylight = (float)((double)skylight * (1.0D - (double)(world.getRainStrength(partialTicks) * 5.0F) / 16.0D));
-		skylight = (float)((double)skylight * (1.0D - (double)(world.getThunderStrength(partialTicks) * 5.0F) / 16.0D));
-		return skylight*0.8F + 0.2F;
-	}
-	
-	@Override
-	public float getStarBrightness(float par1)
-	{
-		float f = 1 - properties.skylightBase;
-		return f * f * 0.5F;
-	}
-	
-	@Override
 	public ChunkGenerator<?> createChunkGenerator()
 	{
 		LandGenSettings settings = MSWorldGenTypes.LANDS.createSettings();
 		settings.setLandTypes(landTypes);
 		settings.setBiomeHolder(biomeHolder);
 		settings.setStructureBlocks(blocks);
-		return MSWorldGenTypes.LANDS.create(this.world, MSWorldGenTypes.LAND_BIOMES.create(MSWorldGenTypes.LAND_BIOMES.createSettings().setGenSettings(settings).setSeed(this.getSeed())), settings);
+		return MSWorldGenTypes.LANDS.create(this.world, MSWorldGenTypes.LAND_BIOMES.create(MSWorldGenTypes.LAND_BIOMES.createSettings(this.world.getWorldInfo()).setGenSettings(settings).setSeed(this.getSeed())), settings);
 	}
 	
 	public LandWrapperBiome getWrapperBiome(Biome biome)
 	{
 		return biomeHolder.localBiomeFrom(biome);
 	}
-	
-	@Override
-	public Biome getBiome(BlockPos pos)
-	{
-		return biomeHolder.localBiomeFrom(super.getBiome(pos));
-	}
-	
+
 	@Nullable
 	@Override
 	public BlockPos findSpawn(ChunkPos chunkPos, boolean checkValid)
@@ -160,7 +140,13 @@ public class LandDimension extends Dimension
 	@Override
 	public float calculateCelestialAngle(long worldTime, float partialTicks)
 	{
-		double d0 = MathHelper.frac((double)worldTime / 24000.0D - 0.25D);
+		//Reverses the algorithm used to calculate the skylight float. Needed as the skylight is currently hardcoded to use celestial angle
+		return (float) (Math.acos((properties.skylightBase - 0.5F) / 2) / (Math.PI * 2F));
+	}
+	
+	public float calculateVeilAngle()
+	{
+		double d0 = MathHelper.frac((double)world.getDayTime() / 24000.0D - 0.25D);
 		double d1 = 0.5D - Math.cos(d0 * Math.PI) / 2.0D;
 		return (float)(d0 * 2.0D + d1) / 3.0F;
 	}
@@ -249,21 +235,20 @@ public class LandDimension extends Dimension
 	}
 	
 	@Override
-	public Vec3d getSkyColor(BlockPos cameraPos, float partialTicks)
-	{
-		return properties.getSkyColor();
-	}
-	
-	@Override
-	public Vec3d getFogColor(float par1, float par2)
+	@OnlyIn(Dist.CLIENT)
+	public Vec3d getFogColor(float celestialAngle, float partialTicks)
 	{
 		return properties.getFogColor();
 	}
 	
-	@Override
-	public Vec3d getCloudColor(float partialTicks)
+	public Vec3d getSkyColor()
 	{
-		return properties.getCloudColor();
+		return properties.getSkyColor();
+	}
+	
+	public StructureBlockRegistry getBlocks()
+	{
+		return blocks;
 	}
 	
 	@Nullable

@@ -110,7 +110,7 @@ public class AttackByDistanceGoal extends Goal
 	@Override
 	public void tick()
 	{
-		double d0 = this.entityHost.getDistanceSq(this.attackTarget.posX, this.attackTarget.getBoundingBox().minY, this.attackTarget.posZ);
+		double d0 = this.entityHost.getDistanceSq(this.attackTarget.getPosX(), this.attackTarget.getBoundingBox().minY, this.attackTarget.getPosZ());
 		boolean flag = this.entityHost.getEntitySenses().canSee(this.attackTarget);
 
 		if (flag)
@@ -168,7 +168,7 @@ public class AttackByDistanceGoal extends Goal
 		else
 		{
 			this.rangedAttackTime = Math.max(this.rangedAttackTime - 1, 0);
-			if(this.attacker.getDistanceSq(this.attackTarget.posX, this.attackTarget.getBoundingBox().minY, this.attackTarget.posZ) <= d0)
+			if(this.attacker.getDistanceSq(this.attackTarget.getPosX(), this.attackTarget.getBoundingBox().minY, this.attackTarget.getPosZ()) <= d0)
 			{
 				if(this.rangedAttackTime <= 0)
 				{

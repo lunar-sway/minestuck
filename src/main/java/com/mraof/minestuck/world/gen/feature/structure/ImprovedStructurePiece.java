@@ -1,10 +1,8 @@
 package com.mraof.minestuck.world.gen.feature.structure;
 
 import com.mraof.minestuck.block.ReturnNodeBlock;
-import net.minecraft.block.BedBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.DoorBlock;
+import net.minecraft.block.*;
+import net.minecraft.fluid.IFluidState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.properties.BedPart;
 import net.minecraft.state.properties.DoorHingeSide;
@@ -14,9 +12,11 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
+import net.minecraftforge.common.util.Constants;
 
 import java.util.Random;
 
@@ -58,11 +58,11 @@ public abstract class ImprovedStructurePiece extends StructurePiece
 		ReturnNodeBlock.placeReturnNode(world, new BlockPos(posX, posY, posZ), boundingBox);
 	}
 	
-	protected int getAverageGroundLevel(IWorld worldIn, MutableBoundingBox structurebb)
+	protected int getAverageGroundLevel(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, MutableBoundingBox structurebb)
 	{
 		int i = 0;
 		int j = 0;
-		BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
+		BlockPos.Mutable mutablePos = new BlockPos.Mutable();
 		
 		for (int k = boundingBox.minZ; k <= boundingBox.maxZ; ++k)
 		{
@@ -73,7 +73,7 @@ public abstract class ImprovedStructurePiece extends StructurePiece
 				if (structurebb.isVecInside(mutablePos))
 				{
 					i += Math.max(worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, mutablePos).getY(),
-							worldIn.getChunkProvider().getChunkGenerator().getGroundHeight() - 1);
+							chunkGeneratorIn.getGroundHeight() - 1);
 					++j;
 				}
 			}
@@ -132,6 +132,11 @@ public abstract class ImprovedStructurePiece extends StructurePiece
 		}
 	}
 	
+	protected boolean needPostprocessing(Block block)
+	{
+		return block instanceof FourWayBlock || block instanceof TorchBlock || block instanceof LadderBlock || block instanceof StairsBlock;
+	}
+	
 	@Override
 	protected void setBlockState(IWorld worldIn, BlockState blockstateIn, int x, int y, int z, MutableBoundingBox boundingboxIn)
 	{
@@ -154,7 +159,14 @@ public abstract class ImprovedStructurePiece extends StructurePiece
 				default:
 			}
 			
-			worldIn.setBlockState(blockpos, blockstateIn, 2);
+			worldIn.setBlockState(blockpos, blockstateIn, Constants.BlockFlags.BLOCK_UPDATE);
+			
+			IFluidState ifluidstate = worldIn.getFluidState(blockpos);
+			if(!ifluidstate.isEmpty())
+				worldIn.getPendingFluidTicks().scheduleTick(blockpos, ifluidstate.getFluid(), 0);
+			
+			if(needPostprocessing(blockstateIn.getBlock()))
+				worldIn.getChunk(blockpos).markBlockForPostprocessing(blockpos);
 		}
 	}
 }

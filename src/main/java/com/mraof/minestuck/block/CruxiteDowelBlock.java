@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.IStringSerializable;
@@ -49,12 +49,6 @@ public class CruxiteDowelBlock extends Block
 	}
 	
 	@Override
-	public BlockRenderLayer getRenderLayer()
-	{
-		return BlockRenderLayer.CUTOUT_MIPPED;
-	}
-	
-	@Override
 	public boolean hasTileEntity(BlockState state)
 	{
 		return true;
@@ -85,11 +79,11 @@ public class CruxiteDowelBlock extends Block
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
 	{
 		if(!worldIn.isRemote)
 			dropDowel(worldIn, pos);
-		return true;
+		return  ActionResultType.SUCCESS;
 	}
 	
 	@Override

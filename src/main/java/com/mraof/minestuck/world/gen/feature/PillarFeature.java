@@ -6,24 +6,24 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationSettings;
-import net.minecraft.world.gen.feature.BushConfig;
+import net.minecraft.world.gen.feature.BlockStateFeatureConfig;
 import net.minecraft.world.gen.feature.Feature;
 
 import java.util.Random;
 import java.util.function.Function;
 
-public class PillarFeature extends Feature<BushConfig>
+public class PillarFeature extends Feature<BlockStateFeatureConfig>
 {
 	private final boolean large;
 	
-	public PillarFeature(Function<Dynamic<?>, ? extends BushConfig> configFactoryIn, boolean large)
+	public PillarFeature(Function<Dynamic<?>, ? extends BlockStateFeatureConfig> configFactoryIn, boolean large)
 	{
 		super(configFactoryIn);
 		this.large = large;
 	}
 	
 	@Override
-	public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, BushConfig config)
+	public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, BlockStateFeatureConfig config)
 	{
 		BlockState state = config.state;
 		int height = 4 + rand.nextInt(4);

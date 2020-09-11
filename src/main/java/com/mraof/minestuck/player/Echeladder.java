@@ -57,7 +57,10 @@ public class Echeladder
 	@SubscribeEvent
 	public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event)
 	{
-		PlayerSavedData.getData((ServerPlayerEntity) event.getPlayer()).getEcheladder().updateEcheladderBonuses((ServerPlayerEntity) event.getPlayer());
+		Echeladder echeladder = PlayerSavedData.getData((ServerPlayerEntity) event.getPlayer()).getEcheladder();
+		echeladder.updateEcheladderBonuses((ServerPlayerEntity) event.getPlayer());
+		if(MinestuckConfig.rungHealthOnRespawn.get())
+			event.getPlayer().heal(event.getPlayer().getMaxHealth());
 	}
 	
 	private final PlayerSavedData savedData;
@@ -126,7 +129,7 @@ public class Echeladder
 			if(rung != prevRung)
 			{
 				updateEcheladderBonuses(player);
-				player.world.playSound(null, player.posX, player.posY, player.posZ, MSSoundEvents.EVENT_ECHELADDER_INCREASE, SoundCategory.AMBIENT, 1F, 1F);
+				player.world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), MSSoundEvents.EVENT_ECHELADDER_INCREASE, SoundCategory.AMBIENT, 1F, 1F);
 			}
 		}
 	}

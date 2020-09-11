@@ -2,7 +2,6 @@ package com.mraof.minestuck.block;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SlimeBlock;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraftforge.common.ToolType;
@@ -22,12 +21,6 @@ public class GoopBlock extends SlimeBlock
 	public ToolType getHarvestTool(BlockState state)
 	{
 		return ToolType.SHOVEL;
-	}
-	
-	@Override
-	public BlockRenderLayer getRenderLayer()
-	{
-		return BlockRenderLayer.SOLID;
 	}
 	
 	@Override

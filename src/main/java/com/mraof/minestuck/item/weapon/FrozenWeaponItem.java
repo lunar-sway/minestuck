@@ -29,7 +29,7 @@ public class FrozenWeaponItem extends WeaponItem
             target.attackEntityFrom(DamageSource.causePlayerDamage((PlayerEntity) attacker), 2);
             stack.damageItem(2, attacker, entity -> entity.sendBreakAnimation(Hand.MAIN_HAND));
             
-            ItemEntity shardEntity = new ItemEntity(target.world, target.posX, target.posY, target.posZ, new ItemStack(MSItems.ICE_SHARD, 1));
+            ItemEntity shardEntity = new ItemEntity(target.world, target.getPosX(), target.getPosY(), target.getPosZ(), new ItemStack(MSItems.ICE_SHARD, 1));
             if (!target.world.isRemote)
                 target.world.addEntity(shardEntity);
         }

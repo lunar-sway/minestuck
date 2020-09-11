@@ -35,7 +35,7 @@ public class CruxiteAppleItem extends CruxiteArtifactItem
 		if(entityLiving instanceof ServerPlayerEntity)
 		{
 			ServerPlayerEntity player = (ServerPlayerEntity) entityLiving;
-			worldIn.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
+			worldIn.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
 			onArtifactActivated(player);
 		}
 		return stack;

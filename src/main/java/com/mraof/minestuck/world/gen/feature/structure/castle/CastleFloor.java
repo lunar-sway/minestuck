@@ -1,4 +1,4 @@
-package com.mraof.minestuck.world.gen.feature.structure;
+package com.mraof.minestuck.world.gen.feature.structure.castle;
 
 import java.util.ArrayList;
 import java.util.List;
