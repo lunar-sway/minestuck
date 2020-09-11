@@ -15,8 +15,6 @@ public class MSBiomes
 {
 	
 	public static final SkaiaBiome SKAIA = getNull();
-	public static final ProspitBiome PROSPIT = getNull();
-	public static final DerseBiome DERSE = getNull();
 	public static final LandBiome.Normal LAND_NORMAL = getNull();
 	public static final LandBiome.Rough LAND_ROUGH = getNull();
 	public static final LandBiome.Ocean LAND_OCEAN = getNull();
@@ -31,8 +29,6 @@ public class MSBiomes
 	public static void registerBiomes(final RegistryEvent.Register<Biome> event)
 	{
 		event.getRegistry().register(new SkaiaBiome().setRegistryName("skaia"));
-		event.getRegistry().register(new ProspitBiome().setRegistryName("prospit"));
-		event.getRegistry().register(new DerseBiome().setRegistryName("derse"));
 		event.getRegistry().register(new LandBiome.Normal().setRegistryName("land_normal"));
 		event.getRegistry().register(new LandBiome.Rough().setRegistryName("land_rough"));
 		event.getRegistry().register(new LandBiome.Ocean().setRegistryName("land_ocean"));
@@ -41,8 +37,6 @@ public class MSBiomes
 	public static void init()
 	{
 		SKAIA.init();
-		PROSPIT.init();
-		DERSE.init();
 		LAND_NORMAL.init();
 		LAND_ROUGH.init();
 		LAND_OCEAN.init();

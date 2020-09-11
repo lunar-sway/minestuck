@@ -60,8 +60,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.DARK_GRAY_CHESS_DIRT, "Dark Gray Chess Tile");
 		add(MSBlocks.LIGHT_GRAY_CHESS_DIRT, "Light Gray Chess Tile");
 		add(MSBlocks.SKAIA_PORTAL, "Skaia Portal");
-		add(MSBlocks.PROSPIT_TRANSPORTALIZER, "Prospit Lunar Transportalizer");
-		add(MSBlocks.DERSE_TRANSPORTALIZER, "Derse Lunar Transportalizer");
 		add(MSBlocks.GOLD_BRICKS, "Gold Bricks");
 		add(MSBlocks.GOLD_BRICK_STAIRS, "Gold Brick Stairs");
 		add(MSBlocks.GOLD_BRICK_SLAB, "Gold Brick Slab");
@@ -136,11 +134,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.BROWN_DUNGEON_TILE, "Brown Dungeon Tile");
 		add(MSBlocks.BROWN_DUNGEON_TILE_SLAB, "Brown Dungeon Tile Slab");
 		add(MSBlocks.BROWN_DUNGEON_GLYPHS, "Brown Dungeon Glyphs");
-		add(MSBlocks.CALEDFWLCH_PEDESTAL, "Caledfwlch Pedestal");
-		add(MSBlocks.EMPTY_CALEDFWLCH_PEDESTAL, "Empty Caledfwlch Pedestal");
 		add(MSBlocks.GREEN_DUNGEON_SMOOTH_STONE, "Green Dungeon Smooth Stone");
 		add(MSBlocks.GREEN_DUNGEON_TILE, "Green Dungeon Tile");
-		add(MSBlocks.DENIZEN, "Denizen");
 		add(MSBlocks.MOSSY_PINK_STONE_BRICKS, "Mossy Pink Stone Bricks");
 		add(MSBlocks.DENSE_CLOUD, "Dense Cloud");
 		add(MSBlocks.BRIGHT_DENSE_CLOUD, "Bright Dense Cloud");
@@ -317,10 +312,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.WOODEN_SALAMANDER_STATUE, "Wooden Salamander Statue");
 		add(MSBlocks.WOODEN_TURTLE_STATUE, "Wooden Turtle Statue");
 		add(MSBlocks.GLOWYSTONE_DUST, "Glowystone Dust");
-		add(MSBlocks.LOOT_CHEST, "Loot Chest");
-		add(MSBlocks.EMPTY_LOOT_CHEST, "Empty Loot Chest");
-		add(MSBlocks.WOODEN_LOOT_CHEST, "Wooden Loot Chest");
-		//add(MSBlocks.EMPTY_WOODEN_LOOT_CHEST, "Empty Wooden Loot Chest");
 		add(MSBlocks.OIL, "Oil");
 		add(MSBlocks.BLOOD, "Blood");
 		add(MSBlocks.BRAIN_JUICE, "Brain Juice");
@@ -776,8 +767,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItemGroup.WEAPONS, "Minestuck Weapons");
 		
 		add(MSBiomes.SKAIA, "Skaia");
-		add(MSBiomes.PROSPIT, "Prospit");
-		add(MSBiomes.DERSE, "Derse");
 		add(MSBiomes.LAND_NORMAL, "Land");
 		add(MSBiomes.LAND_OCEAN, "Ocean Land");
 		add(MSBiomes.LAND_ROUGH, "Rough Land");
@@ -817,9 +806,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSEntityTypes.PROSPITIAN_BISHOP, "Prospitian Bishop");
 		add(MSEntityTypes.DERSITE_ROOK, "Dersite Rook");
 		add(MSEntityTypes.PROSPITIAN_ROOK, "Prospitian Rook");
-		add(MSEntityTypes.PROSPITIAN_CITIZEN, "Prospitian Citizen");
-		add(MSEntityTypes.DERSITE_CITIZEN, "Dersite Citizen");
-		add(MSEntityTypes.DERSITE_FARMER, "Dersite Farmer");
 		add(MSEntityTypes.GRIST, "Grist");
 		addExtra(MSEntityTypes.GRIST, "type", "%s Grist");
 		add(MSEntityTypes.VITALITY_GEL, "Vitality Gel");

@@ -362,8 +362,6 @@ public class MSItems
 		registerItemBlock(registry, LIGHT_GRAY_CHESS_DIRT, MSItemGroup.MAIN);
 		registerItemBlock(registry, SKAIA_PORTAL, MSItemGroup.MAIN);
 
-		registerItemBlock(registry, PROSPIT_TRANSPORTALIZER, MSItemGroup.MAIN);
-		registerItemBlock(registry, DERSE_TRANSPORTALIZER, MSItemGroup.MAIN);
 		registerItemBlock(registry, GOLD_BRICKS, MSItemGroup.MAIN);
 		registerItemBlock(registry, GOLD_BRICK_CHISELED, MSItemGroup.MAIN);
 		registerItemBlock(registry, GOLD_COLUMN, MSItemGroup.MAIN);
@@ -372,9 +370,6 @@ public class MSItems
 		registerItemBlock(registry, PURPLE_BRICKS, MSItemGroup.MAIN);
 		registerItemBlock(registry, PURPLE_BRICK_CHISELED, MSItemGroup.MAIN);
 		registerItemBlock(registry, PURPLE_COLUMN, MSItemGroup.MAIN);
-		registerItemBlock(registry, PURPLE_TILE_LIGHT, MSItemGroup.MAIN);
-		registerItemBlock(registry, PURPLE_TILE_DARK, MSItemGroup.MAIN);
-		registerItemBlock(registry, PURPLE_TILE_COLORED, MSItemGroup.MAIN);
 		registerItemBlock(registry, GOLD_BRICK_STAIRS, MSItemGroup.MAIN);
 		registerItemBlock(registry, GOLD_BRICK_SLAB, MSItemGroup.MAIN);
 		registerItemBlock(registry, PURPLE_BRICK_STAIRS, MSItemGroup.MAIN);
@@ -446,7 +441,6 @@ public class MSItems
 		registerItemBlock(registry, BROWN_DUNGEON_GLYPHS, MSItemGroup.LANDS);
 		registerItemBlock(registry, GREEN_DUNGEON_SMOOTH_STONE, MSItemGroup.LANDS);
 		registerItemBlock(registry, GREEN_DUNGEON_TILE, MSItemGroup.LANDS);
-		registerItemBlock(registry, DENIZEN, MSItemGroup.LANDS);
 		registerItemBlock(registry, DENSE_CLOUD, MSItemGroup.LANDS);
 		registerItemBlock(registry, BRIGHT_DENSE_CLOUD, MSItemGroup.LANDS);
 		registerItemBlock(registry, SUGAR_CUBE, MSItemGroup.LANDS);
@@ -549,8 +543,6 @@ public class MSItems
 		registerItemBlock(registry, WOODEN_IGUANA_STATUE, MSItemGroup.LANDS);
 		registerItemBlock(registry, WOODEN_SALAMANDER_STATUE, MSItemGroup.LANDS);
 		registerItemBlock(registry, WOODEN_TURTLE_STATUE, MSItemGroup.LANDS);
-		//registerItemBlock(registry, LOOT_CHEST, MSItemGroup.LANDS);
-		//registerItemBlock(registry, WOODEN_LOOT_CHEST, MSItemGroup.LANDS);
 		
 		registerItemBlock(registry, COARSE_STONE_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, SHADE_BRICK_STAIRS, MSItemGroup.LANDS);

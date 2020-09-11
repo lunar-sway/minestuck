@@ -41,8 +41,6 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(DARK_GRAY_CHESS_DIRT);
 		registerDropSelfLootTable(LIGHT_GRAY_CHESS_DIRT);
 
-		//registerDropSelfLootTable(PROSPIT_TRANSPORTALIZER);
-		//registerDropSelfLootTable(DERSE_TRANSPORTALIZER);
 		registerDropSelfLootTable(GOLD_BRICKS);
 		registerDropSelfLootTable(GOLD_BRICK_CHISELED);
 		registerDropSelfLootTable(GOLD_BRICK_STAIRS);
@@ -57,12 +55,6 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(PURPLE_COLUMN);
 		registerDropSelfLootTable(PURPLE_WALL);
 		registerDropSelfLootTable(PURPLE_SPIKE);
-
-		//registerDropSelfLootTable(CALEDFWLCH_PEDESTAL);
-		//registerDropSelfLootTable(EMPTY_CALEDFWLCH_PEDESTAL);
-		//registerDropSelfLootTable(LOOT_CHEST);
-		//registerDropSelfLootTable(EMPTY_LOOT_CHEST);
-		//registerDropSelfLootTable(WOODEN_LOOT_CHEST);
 		
 		registerLootTable(STONE_CRUXITE_ORE, MSBlockLootTables::cruxiteOreDrop);
 		registerLootTable(COBBLESTONE_CRUXITE_ORE, MSBlockLootTables::cruxiteOreDrop);

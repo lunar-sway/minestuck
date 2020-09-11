@@ -16,8 +16,6 @@ public class MSDimensionTypes
 	
 	public static final LandDimension.Type LANDS = getNull();
 	public static final ModDimension SKAIA = getNull();
-	public static final ModDimension PROSPIT = getNull();
-	public static final ModDimension DERSE = getNull();
 	
 	@Nonnull
 	@SuppressWarnings("ConstantConditions")
@@ -31,7 +29,5 @@ public class MSDimensionTypes
 	{
 		event.getRegistry().register(new LandDimension.Type().setRegistryName("lands"));
 		event.getRegistry().register(new SkaiaDimension.Type().setRegistryName("skaia"));
-		event.getRegistry().register(new ProspitDimension.Type().setRegistryName("prospit"));
-		event.getRegistry().register(new DerseDimension.Type().setRegistryName("derse"));
 	}
 }

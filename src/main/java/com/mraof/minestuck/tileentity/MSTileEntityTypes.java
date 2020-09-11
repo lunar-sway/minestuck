@@ -28,8 +28,6 @@ public class MSTileEntityTypes	//TODO Use @ObjectHolder or DeferredRegister here
 	public static TileEntityType<TileEntityUpgradedAlchemiter> UPGRADE_ALCHEMITER;
 	public static TileEntityType<HolopadTileEntity> HOLOPAD;
 	public static TileEntityType<SkaiaPortalTileEntity> SKAIA_PORTAL;
-	public static TileEntityType<ProspitTransportalizerTileEntity> PROSPIT_TRANSPORTALIZER;
-	public static TileEntityType<DerseTransportalizerTileEntity> DERSE_TRANSPORTALIZER;
 	public static TileEntityType<GateTileEntity> GATE;
 	
 	@SubscribeEvent
@@ -53,8 +51,6 @@ public class MSTileEntityTypes	//TODO Use @ObjectHolder or DeferredRegister here
 		//event.getRegistry().register((UPGRADE_ALCHEMITER = TileEntityType.Builder.create(TileEntityUpgradedAlchemiter::new).build(null)).setRegistryName("upgrade_alchemiter"));
 		event.getRegistry().register((HOLOPAD = TileEntityType.Builder.create(HolopadTileEntity::new, MSBlocks.HOLOPAD).build(null)).setRegistryName("holopad"));
 		event.getRegistry().register((SKAIA_PORTAL = TileEntityType.Builder.create(SkaiaPortalTileEntity::new, MSBlocks.SKAIA_PORTAL).build(null)).setRegistryName("skaia_portal"));
-		event.getRegistry().register((PROSPIT_TRANSPORTALIZER = TileEntityType.Builder.create(ProspitTransportalizerTileEntity::new, MSBlocks.PROSPIT_TRANSPORTALIZER).build(null)).setRegistryName("prospit_transportalizer"));
-		event.getRegistry().register((DERSE_TRANSPORTALIZER = TileEntityType.Builder.create(DerseTransportalizerTileEntity::new, MSBlocks.DERSE_TRANSPORTALIZER).build(null)).setRegistryName("derse_transportalizer"));
 		event.getRegistry().register((GATE = TileEntityType.Builder.create(GateTileEntity::new, MSBlocks.GATE, MSBlocks.RETURN_NODE).build(null)).setRegistryName("gate"));
 	}
 }

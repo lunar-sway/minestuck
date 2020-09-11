@@ -33,8 +33,6 @@ public class MSBlocks
 	public static final Block SKAIA_PORTAL = getNull();
 
 	//Kingdoms
-	public static final Block PROSPIT_TRANSPORTALIZER = getNull();
-	public static final Block DERSE_TRANSPORTALIZER = getNull();
 	public static final Block GOLD_BRICKS = getNull();
 	public static final Block GOLD_BRICK_CHISELED = getNull();
 	public static final Block GOLD_BRICK_STAIRS = getNull();
@@ -141,10 +139,8 @@ public class MSBlocks
 	public static final Block BROWN_DUNGEON_TILE_SLAB = getNull();
 	public static final Block GREEN_DUNGEON_SMOOTH_STONE = getNull();
 	public static final Block GREEN_DUNGEON_TILE = getNull();
-	public static final Block DENIZEN = getNull();
 
 	//Dungeon Special
-	public static final Block CALEDFWLCH_PEDESTAL = getNull(), EMPTY_CALEDFWLCH_PEDESTAL = getNull();
 	public static final Block NAKAGATOR_STATUE = getNull();
 	public static final Block IGUANA_STATUE = getNull();
 	public static final Block SALAMANDER_STATUE = getNull();
@@ -153,10 +149,6 @@ public class MSBlocks
 	public static final Block WOODEN_IGUANA_STATUE = getNull();
 	public static final Block WOODEN_SALAMANDER_STATUE = getNull();
 	public static final Block WOODEN_TURTLE_STATUE = getNull();
-	public static final Block LOOT_CHEST = getNull();
-	public static final Block EMPTY_LOOT_CHEST = getNull();
-	public static final Block WOODEN_LOOT_CHEST = getNull();
-	//public static final Block EMPTY_WOODEN_LOOT_CHEST = getNull();
 	
 	//Sburb Machines
 	public static final Block CRUXTRUDER_LID = getNull();
@@ -233,8 +225,6 @@ public class MSBlocks
 		registry.register(new Block(Block.Properties.create(Material.EARTH, MaterialColor.LIGHT_GRAY).hardnessAndResistance(0.5F).harvestTool(ToolType.SHOVEL).sound(SoundType.GROUND)).setRegistryName("light_gray_chess_dirt"));
 		registry.register(new SkaiaPortalBlock(Block.Properties.create(Material.PORTAL, MaterialColor.CYAN).doesNotBlockMovement().lightValue(11).hardnessAndResistance(-1.0F, 3600000.0F).noDrops()).setRegistryName("skaia_portal"));
 
-		registry.register(new ProspitTransportalizerBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(-1.0F)).setRegistryName("prospit_transportalizer"));
-		registry.register(new DerseTransportalizerBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(-1.0F)).setRegistryName("derse_transportalizer"));
 		Block goldBricks = register(registry, new Block(Block.Properties.create(Material.ROCK, MaterialColor.YELLOW).hardnessAndResistance(6.0F, 9.0F).harvestTool(ToolType.PICKAXE).lightValue(13).harvestLevel(3)).setRegistryName("gold_bricks"));
 		registry.register(new ModStairsBlock(goldBricks.getDefaultState(), Block.Properties.from(goldBricks)).setRegistryName("gold_brick_stairs"));
 		registry.register(new SlabBlock(Block.Properties.from(goldBricks)).setRegistryName("gold_brick_slab"));
@@ -319,7 +309,6 @@ public class MSBlocks
 		registry.register(new MSDirectionalBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(120.0F).sound(SoundType.STONE)).setRegistryName("brown_dungeon_column"));
 		registry.register(new Block(Block.Properties.create(Material.ROCK, MaterialColor.GREEN).hardnessAndResistance(120.0F)).setRegistryName("green_dungeon_smooth_stone"));
 		registry.register(new Block(Block.Properties.create(Material.ROCK, MaterialColor.GREEN).hardnessAndResistance(120.0F)).setRegistryName("green_dungeon_tile"));
-		registry.register(new Block(Block.Properties.create(Material.ROCK, MaterialColor.GREEN).hardnessAndResistance(120.0F)).setRegistryName("denizen"));
 
 		registry.register(new FlammableLogBlock(MaterialColor.LIGHT_BLUE, Block.Properties.create(Material.WOOD, MaterialColor.LIGHT_BLUE).hardnessAndResistance(2.0F).harvestTool(ToolType.AXE).lightValue(11).sound(SoundType.WOOD)).setRegistryName("glowing_log"));
 		registry.register(new FlammableLogBlock(MaterialColor.ICE, Block.Properties.create(Material.WOOD, MaterialColor.ICE).hardnessAndResistance(2.0F).harvestTool(ToolType.AXE).sound(SoundType.WOOD)).setRegistryName("frost_log"));
@@ -498,13 +487,7 @@ public class MSBlocks
 		registry.register(new DecorBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(2.0F).sound(SoundType.WOOD), MSBlockShapes.WOODEN_IGUANA_STATUE).setRegistryName("wooden_iguana_statue"));
 		registry.register(new DecorBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(2.0F).sound(SoundType.WOOD), MSBlockShapes.WOODEN_SALAMANDER_STATUE).setRegistryName("wooden_salamander_statue"));
 		registry.register(new DecorBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(2.0F).sound(SoundType.WOOD), MSBlockShapes.WOODEN_TURTLE_STATUE).setRegistryName("wooden_turtle_statue"));
-		registry.register(new DecorBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(-1.0F, 25.0F).sound(SoundType.METAL), MSBlockShapes.EMPTY_CALEDFWLCH_PEDESTAL).setRegistryName("empty_caledfwlch_pedestal"));
-		registry.register(new DecorBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(5.0F).sound(SoundType.METAL), MSBlockShapes.EMPTY_LOOT_CHEST).setRegistryName("empty_loot_chest"));
 		registry.register(new GlowystoneWireBlock(Block.Properties.create(Material.MISCELLANEOUS).hardnessAndResistance(0.0F).lightValue(16).doesNotBlockMovement()).setRegistryName("glowystone_dust"));
-
-		registry.register(new LootBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(5.0F).sound(SoundType.METAL), MSBlockShapes.LOOT_CHEST).setRegistryName("loot_chest"));
-		registry.register(new LootBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(5.0F).sound(SoundType.METAL), MSBlockShapes.WOODEN_LOOT_CHEST).setRegistryName("wooden_loot_chest"));
-		registry.register(new LootBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(-1.0F, 25.0F).sound(SoundType.METAL), MSBlockShapes.CALEDFWLCH_PEDESTAL).setRegistryName("caledfwlch_pedestal"));
 		
 		registry.register(new FlowingModFluidBlock(MSFluids.OIL, new Vec3d(0.0, 0.0, 0.0), 0.75f, Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()).setRegistryName("oil"));
 		registry.register(new FlowingModFluidBlock(MSFluids.BLOOD, new Vec3d(0.8, 0.0, 0.0), 0.25f, Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()).setRegistryName("blood"));
