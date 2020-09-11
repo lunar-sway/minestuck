@@ -10,6 +10,7 @@ import com.mraof.minestuck.world.MSDimensionTypes;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.ResourceLocation;
@@ -17,16 +18,13 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.client.SkyRenderHandler;
+import org.lwjgl.opengl.GL11;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
 
 public class LandSkyRenderer implements SkyRenderHandler
 {
-	
-	private static final ResourceLocation SKAIA_TEXTURE = new ResourceLocation("minestuck", "textures/environment/skaia.png");
-	
 	private LandDimension dimension;
 	public LandSkyRenderer(LandDimension provider)
 	{
@@ -56,7 +54,7 @@ public class LandSkyRenderer implements SkyRenderHandler
 		RenderSystem.color3f(r, g, b);
 		
 		Matrix4f matrix = matrixStack.getLast().getMatrix();
-		buffer.begin(7, DefaultVertexFormats.POSITION);
+		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
 		for (int k = -384; k <= 384; k += 64)
 		{
 			for (int l = -384; l <= 384; l += 64)
@@ -80,21 +78,15 @@ public class LandSkyRenderer implements SkyRenderHandler
 		RenderSystem.enableTexture();
 		RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, skaiaBrightness);
+		
 		float skaiaSize = 20.0F;
-		mc.getTextureManager().bindTexture(SKAIA_TEXTURE);
-		buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-		buffer.pos(matrix, -skaiaSize, 100, -skaiaSize).tex(0.0F, 0.0F).endVertex();
-		buffer.pos(matrix, skaiaSize, 100, -skaiaSize).tex(1.0F, 0.0F).endVertex();
-		buffer.pos(matrix, skaiaSize, 100, skaiaSize).tex(1.0F, 1.0F).endVertex();
-		buffer.pos(matrix, -skaiaSize, 100, skaiaSize).tex(0.0F, 1.0F).endVertex();
-		buffer.finishDrawing();
-		WorldVertexBufferUploader.draw(buffer);
-		RenderSystem.disableTexture();
+		TextureAtlasSprite skaiaSprite = LandSkySpriteUploader.getInstance().getSkaiaSprite();
+		drawSprite(mc, buffer, matrix, skaiaSize, skaiaSprite);
 		
 		if(starBrightness > 0)
 		{
+			RenderSystem.disableTexture();
 			RenderSystem.color4f(starBrightness, starBrightness, starBrightness, starBrightness);
-			
 			matrixStack.push();
 			matrixStack.rotate(Vector3f.ZP.rotationDegrees(world.getCelestialAngle(partialTicks) * 360.0F));
 			drawVeil(matrixStack.getLast().getMatrix(), partialTicks, world);
@@ -116,7 +108,7 @@ public class LandSkyRenderer implements SkyRenderHandler
 		matrixStack.translate(0.0, -(d3 - 16.0), 0.0);
 		matrix = matrixStack.getLast().getMatrix();
 		
-		buffer.begin(7, DefaultVertexFormats.POSITION);
+		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
 		
 		for(int k = -384; k <= 384; k += 64)
 		{
@@ -140,7 +132,7 @@ public class LandSkyRenderer implements SkyRenderHandler
 		BufferBuilder buffer = Tessellator.getInstance().getBuffer();
 		Random random = new Random(10842L);
 		
-		buffer.begin(7, DefaultVertexFormats.POSITION);
+		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
 		
 		for(int count = 0; count < 1500; count++)
 		{
@@ -204,16 +196,18 @@ public class LandSkyRenderer implements SkyRenderHandler
 				LandTypePair.LazyInstance landTypes = MSDimensionTypes.LANDS.dimToLandTypes.get(landName);
 				if(landTypes == null)
 					Debug.warnf("Missing land types for dimension %s!", landName);
-				else drawLand(mc, matrixStack, getResourceLocations(landTypes.create(), random), (i / (float) list.size()), random);
+				else drawLand(mc, matrixStack, landTypes.create(), (i / (float) list.size()), random);
 			}
 		}
 		RenderSystem.disableTexture();
 	}
 	
-	private void drawLand(Minecraft mc, MatrixStack matrixStack, ResourceLocation[] textures, float pos, Random random)
+	private void drawLand(Minecraft mc, MatrixStack matrixStack, LandTypePair aspects, float pos, Random random)
 	{
-		if(pos == 0.5F || textures == null)
+		if(pos == 0.5F || aspects == null)
 			return;
+		
+		int index = random.nextInt(LandSkySpriteUploader.VARIANT_COUNT);
 		
 		float v = (float) Math.PI*(0.5F - pos);
 		float scale = 1/MathHelper.cos(v);
@@ -225,35 +219,21 @@ public class LandSkyRenderer implements SkyRenderHandler
 		Matrix4f matrix = matrixStack.getLast().getMatrix();
 		
 		float planetSize = 4.0F*scale;
-		mc.getTextureManager().bindTexture(textures[0]);
-		buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-		buffer.pos(matrix, -planetSize, 100, -planetSize).tex(0.0F, 0.0F).endVertex();
-		buffer.pos(matrix, planetSize, 100, -planetSize).tex(1.0F, 0.0F).endVertex();
-		buffer.pos(matrix, planetSize, 100, planetSize).tex(1.0F, 1.0F).endVertex();
-		buffer.pos(matrix, -planetSize, 100, planetSize).tex(0.0F, 1.0F).endVertex();
-		buffer.finishDrawing();
-		WorldVertexBufferUploader.draw(buffer);
-		mc.getTextureManager().bindTexture(textures[1]);
-		buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-		buffer.pos(matrix, -planetSize, 100, -planetSize).tex(0.0F, 0.0F).endVertex();
-		buffer.pos(matrix, planetSize, 100, -planetSize).tex(1.0F, 0.0F).endVertex();
-		buffer.pos(matrix, planetSize, 100, planetSize).tex(1.0F, 1.0F).endVertex();
-		buffer.pos(matrix, -planetSize, 100, planetSize).tex(0.0F, 1.0F).endVertex();
-		buffer.finishDrawing();
-		WorldVertexBufferUploader.draw(buffer);
+		drawSprite(mc, buffer, matrix, planetSize, LandSkySpriteUploader.getInstance().getPlanetSprite(aspects.terrain, index));
+		drawSprite(mc, buffer, matrix, planetSize, LandSkySpriteUploader.getInstance().getOverlaySprite(aspects.title, index));
+		
 		matrixStack.pop();
 	}
 	
-	private ResourceLocation[] getResourceLocations(LandTypePair aspects, Random random)
+	private void drawSprite(Minecraft mc, BufferBuilder buffer, Matrix4f matrix, float size, TextureAtlasSprite sprite)
 	{
-		if(aspects == null)
-			return null;
-		
-		int index = random.nextInt(3);
-		ResourceLocation terrainName = Objects.requireNonNull(aspects.terrain.getRegistryName());
-		ResourceLocation titleName = Objects.requireNonNull(aspects.title.getRegistryName());
-		ResourceLocation terrain = new ResourceLocation(terrainName.getNamespace(), "textures/environment/planets/planet_"+terrainName.getPath()+"_"+index+".png");
-		ResourceLocation title = new ResourceLocation(titleName.getNamespace(), "textures/environment/overlays/overlay_"+titleName.getPath()+"_"+index+".png");
-		return new ResourceLocation[] {terrain, title};
+		mc.getTextureManager().bindTexture(sprite.getAtlasTexture().getTextureLocation());
+		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+		buffer.pos(matrix, -size, 100, -size).tex(sprite.getMinU(), sprite.getMinV()).endVertex();
+		buffer.pos(matrix, size, 100, -size).tex(sprite.getMaxU(), sprite.getMinV()).endVertex();
+		buffer.pos(matrix, size, 100, size).tex(sprite.getMaxU(), sprite.getMaxV()).endVertex();
+		buffer.pos(matrix, -size, 100, size).tex(sprite.getMinU(), sprite.getMaxV()).endVertex();
+		buffer.finishDrawing();
+		WorldVertexBufferUploader.draw(buffer);
 	}
 }
