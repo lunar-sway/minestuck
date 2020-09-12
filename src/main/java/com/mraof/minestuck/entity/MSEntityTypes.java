@@ -2,10 +2,8 @@ package com.mraof.minestuck.entity;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.carapacian.*;
-import com.mraof.minestuck.entity.consort.IguanaEntity;
-import com.mraof.minestuck.entity.consort.NakagatorEntity;
-import com.mraof.minestuck.entity.consort.SalamanderEntity;
-import com.mraof.minestuck.entity.consort.TurtleEntity;
+import com.mraof.minestuck.entity.consort.ConsortEntity;
+import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.entity.item.*;
 import com.mraof.minestuck.entity.underling.*;
 import net.minecraft.entity.EntityClassification;
@@ -26,10 +24,10 @@ import javax.annotation.Nonnull;
 public final class MSEntityTypes
 {
 	public static final EntityType<FrogEntity> FROG = getNull();
-	public static final EntityType<SalamanderEntity> SALAMANDER = getNull();
-	public static final EntityType<TurtleEntity> TURTLE = getNull();
-	public static final EntityType<NakagatorEntity> NAKAGATOR = getNull();
-	public static final EntityType<IguanaEntity> IGUANA = getNull();
+	public static final EntityType<ConsortEntity> SALAMANDER = getNull();
+	public static final EntityType<ConsortEntity> TURTLE = getNull();
+	public static final EntityType<ConsortEntity> NAKAGATOR = getNull();
+	public static final EntityType<ConsortEntity> IGUANA = getNull();
 	
 	public static final EntityType<ImpEntity> IMP = getNull();
 	public static final EntityType<OgreEntity> OGRE = getNull();
@@ -69,10 +67,10 @@ public final class MSEntityTypes
 	{
 		IForgeRegistry<EntityType<?>> registry = event.getRegistry();
 		register(registry, EntityType.Builder.<FrogEntity>create(FrogEntity::new, EntityClassification.CREATURE).size(0.51F, 0.51F), "frog");
-		register(registry, EntityType.Builder.create(SalamanderEntity::new, EntityClassification.CREATURE).size(0.45F, 1.0F), "salamander");
-		register(registry, EntityType.Builder.create(TurtleEntity::new, EntityClassification.CREATURE).size(0.45F, 1.0F), "turtle");
-		register(registry, EntityType.Builder.create(NakagatorEntity::new, EntityClassification.CREATURE).size(0.45F, 1.1F), "nakagator");
-		register(registry, EntityType.Builder.create(IguanaEntity::new, EntityClassification.CREATURE).size(0.45F, 1.0F), "iguana");
+		register(registry, EntityType.Builder.create(EnumConsort.SALAMANDER::create, EntityClassification.CREATURE).size(0.45F, 1.0F), "salamander");
+		register(registry, EntityType.Builder.create(EnumConsort.TURTLE::create, EntityClassification.CREATURE).size(0.45F, 1.0F), "turtle");
+		register(registry, EntityType.Builder.create(EnumConsort.NAKAGATOR::create, EntityClassification.CREATURE).size(0.45F, 1.1F), "nakagator");
+		register(registry, EntityType.Builder.create(EnumConsort.IGUANA::create, EntityClassification.CREATURE).size(0.45F, 1.0F), "iguana");
 		
 		register(registry, EntityType.Builder.create(ImpEntity::new, EntityClassification.MONSTER).size(0.7F, 1.2F), "imp");
 		register(registry, EntityType.Builder.create(OgreEntity::new, EntityClassification.MONSTER).size(2.8F, 4.3F), "ogre");

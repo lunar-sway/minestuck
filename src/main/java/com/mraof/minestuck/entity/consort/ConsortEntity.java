@@ -19,7 +19,9 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.IContainerProvider;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
@@ -33,8 +35,10 @@ import net.minecraftforge.common.util.Constants;
 import javax.annotation.Nullable;
 import java.util.Iterator;
 
-public abstract class ConsortEntity extends MinestuckEntity implements IContainerProvider
+public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 {	//I'd get rid of the seemingly pointless subclasses, but as of writing, entity renderers are registered to entity classes instead of entity types.
+	
+	private final EnumConsort consortType;
 	
 	ConsortDialogue.DialogueWrapper message;
 	int messageTicksLeft;
@@ -48,9 +52,10 @@ public abstract class ConsortEntity extends MinestuckEntity implements IContaine
 	private float explosionRadius = 2.0f;
 	static private SingleMessage explosionMessage = new SingleMessage("immortalityHerb.3");
 	
-	public ConsortEntity(EntityType<? extends ConsortEntity> type, World world)
+	public ConsortEntity(EnumConsort consortType, EntityType<? extends ConsortEntity> type, World world)
 	{
 		super(type, world);
+		this.consortType = consortType;
 		this.experienceValue = 1;
 	}
 	
@@ -260,7 +265,10 @@ public abstract class ConsortEntity extends MinestuckEntity implements IContaine
 		return false;
 	}
 	
-	public abstract EnumConsort getConsortType();
+	public EnumConsort getConsortType()
+	{
+		return consortType;
+	}
 	
 	public void commandReply(ServerPlayerEntity player, String chain)
 	{
@@ -296,5 +304,26 @@ public abstract class ConsortEntity extends MinestuckEntity implements IContaine
 	protected void writeShopContainerBuffer(PacketBuffer buffer)
 	{
 		ConsortMerchantContainer.write(buffer, this, stocks.getPrices());
+	}
+	
+	@Nullable
+	@Override
+	protected SoundEvent getAmbientSound()
+	{
+		return consortType.getAmbientSound();
+	}
+	
+	@Nullable
+	@Override
+	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
+	{
+		return consortType.getHurtSound();
+	}
+	
+	@Nullable
+	@Override
+	protected SoundEvent getDeathSound()
+	{
+		return consortType.getDeathSound();
 	}
 }

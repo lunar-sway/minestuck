@@ -6,11 +6,11 @@
 package com.mraof.minestuck.client.model;
 
 import com.google.common.collect.ImmutableList;
-import com.mraof.minestuck.entity.consort.TurtleEntity;
+import com.mraof.minestuck.entity.consort.ConsortEntity;
 import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
 
-public class TurtleModel<T extends TurtleEntity> extends SegmentedModel<T>
+public class TurtleModel<T extends ConsortEntity> extends SegmentedModel<T>
 {
 	// fields
 	ModelRenderer head;

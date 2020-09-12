@@ -1,12 +1,12 @@
 package com.mraof.minestuck.client.model;
 
 import com.google.common.collect.ImmutableList;
-import com.mraof.minestuck.entity.consort.NakagatorEntity;
+import com.mraof.minestuck.entity.consort.ConsortEntity;
 import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.util.math.MathHelper;
 
-public class NakagatorModel<T extends NakagatorEntity> extends SegmentedModel<T>
+public class NakagatorModel<T extends ConsortEntity> extends SegmentedModel<T>
 {
 	public boolean hasArms;
 	ModelRenderer body;

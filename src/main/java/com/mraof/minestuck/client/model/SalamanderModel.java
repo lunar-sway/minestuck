@@ -1,13 +1,12 @@
 package com.mraof.minestuck.client.model;
 
 import com.google.common.collect.ImmutableList;
-import com.mraof.minestuck.entity.consort.SalamanderEntity;
+import com.mraof.minestuck.entity.consort.ConsortEntity;
 import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.util.math.MathHelper;
-import org.lwjgl.opengl.GL11;
 
-public class SalamanderModel<T extends SalamanderEntity> extends SegmentedModel<T>
+public class SalamanderModel<T extends ConsortEntity> extends SegmentedModel<T>
 {
 	ModelRenderer body;
 	ModelRenderer rightLeg;

@@ -7,11 +7,11 @@
 package com.mraof.minestuck.client.model;
 
 import com.google.common.collect.ImmutableList;
-import com.mraof.minestuck.entity.consort.IguanaEntity;
+import com.mraof.minestuck.entity.consort.ConsortEntity;
 import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
 
-public class IguanaModel<T extends IguanaEntity> extends SegmentedModel<T>
+public class IguanaModel<T extends ConsortEntity> extends SegmentedModel<T>
 {
 	//fields
 	ModelRenderer body;
