@@ -701,6 +701,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.OBSIDIAN_BUCKET, "Obsidian Bucket");
 		add(MSItems.CAPTCHAROID_CAMERA, "Captcharoid Camera");
 		add(MSItems.GRIMOIRE, "Grimoire for Summoning the Zoologically Dubious");
+		addExtra(MSItems.GRIMOIRE, "message", "After flipping through some pages, you feel significantly more insignificant.");
 		addTooltip(MSItems.GRIMOIRE, "This book is absolutely indispensable for enthusiasts of your ilk. Of which there are very few.");
 		addStore(MSItems.GRIMOIRE, "Spooky Book");
 		addStoreTooltip(MSItems.GRIMOIRE, "Our best wizard cultists tried to decipher this ancient tome, but none of them can read.");
