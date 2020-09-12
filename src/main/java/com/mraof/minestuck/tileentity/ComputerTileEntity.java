@@ -1,6 +1,7 @@
 package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.client.gui.ComputerScreen;
+import com.mraof.minestuck.computer.ISburbComputer;
 import com.mraof.minestuck.computer.ProgramData;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
@@ -18,8 +19,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-public class ComputerTileEntity extends TileEntity
-{
+public class ComputerTileEntity extends TileEntity implements ISburbComputer
+{	//TODO The implementation of this class need a serious rewrite
 	public ComputerTileEntity()
 	{
 		super(MSTileEntityTypes.COMPUTER);
@@ -148,6 +149,7 @@ public class ComputerTileEntity extends TileEntity
 				ProgramData.closeProgram(entry.getKey(), this);
 	}
 
+	@Override
 	public void connected(PlayerIdentifier player, boolean isClient)
 	{
 		if(isClient)
@@ -157,8 +159,68 @@ public class ComputerTileEntity extends TileEntity
 		}
 		else
 		{
-			this.getData(1).putBoolean("isOpen", false);
+			getData(1).putBoolean("isOpen", false);
 		}
+		markDirty();
+		markBlockForUpdate();
+	}
+	
+	@Override
+	public PlayerIdentifier getOwner()
+	{
+		return owner;
+	}
+	
+	@Override
+	public boolean getClientBoolean(String name)
+	{
+		return getData(0).getBoolean(name);
+	}
+	
+	@Override
+	public boolean getServerBoolean(String name)
+	{
+		return getData(1).getBoolean(name);
+	}
+	
+	@Override
+	public void putClientBoolean(String name, boolean value)
+	{
+		getData(0).putBoolean(name, value);
+		markDirty();
+		markBlockForUpdate();
+	}
+	
+	@Override
+	public void putServerBoolean(String name, boolean value)
+	{
+		getData(1).putBoolean(name, value);
+		markDirty();
+		markBlockForUpdate();
+	}
+	
+	@Override
+	public void clearConnectedClient()
+	{
+		getData(1).putString("connectedClient", "");
+		markDirty();
+		markBlockForUpdate();
+	}
+	
+	@Override
+	public void putClientMessage(String message)
+	{
+		latestmessage.put(0, message);
+		markDirty();
+		markBlockForUpdate();
+	}
+	
+	@Override
+	public void putServerMessage(String message)
+	{
+		latestmessage.put(1, message);
+		markDirty();
+		markBlockForUpdate();
 	}
 	
 	public void markBlockForUpdate()

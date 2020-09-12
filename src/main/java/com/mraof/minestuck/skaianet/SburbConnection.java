@@ -1,13 +1,13 @@
 package com.mraof.minestuck.skaianet;
 
-import com.mojang.datafixers.Dynamic;
+import com.mraof.minestuck.computer.ComputerReference;
+import com.mraof.minestuck.computer.ISburbComputer;
 import com.mraof.minestuck.computer.editmode.DeployEntry;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;
-import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.lands.LandTypePair;
@@ -16,10 +16,8 @@ import com.mraof.minestuck.world.lands.title.TitleLandType;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.NBTDynamicOps;
 import net.minecraft.nbt.StringNBT;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.GlobalPos;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.util.Constants;
 
@@ -31,8 +29,8 @@ public final class SburbConnection
 	
 	private final PlayerIdentifier clientIdentifier;
 	private PlayerIdentifier serverIdentifier;
-	private GlobalPos clientComputer;	//TODO Replace with abstraction that works with multiple representations of computers
-	private GlobalPos serverComputer;
+	private ComputerReference clientComputer;
+	private ComputerReference serverComputer;
 	
 	private boolean isActive;
 	private boolean isMain;
@@ -84,9 +82,7 @@ public final class SburbConnection
 		{
 			try
 			{
-				GlobalPos clientPos = GlobalPos.deserialize(new Dynamic<>(NBTDynamicOps.INSTANCE, nbt.getCompound("client_pos")));
-				GlobalPos serverPos = GlobalPos.deserialize(new Dynamic<>(NBTDynamicOps.INSTANCE, nbt.getCompound("server_pos")));
-				setActive(clientPos, serverPos);
+				setActive(ComputerReference.read(nbt.getCompound("client_computer")), ComputerReference.read(nbt.getCompound("server_computer")));
 			} catch(Exception e)
 			{
 				Debug.logger.error("Unable to read computer position for sburb connection between "+ clientIdentifier.getUsername()+" and "+serverIdentifier.getUsername()+", setting connection to be inactive. Cause: ", e);
@@ -128,15 +124,15 @@ public final class SburbConnection
 		
 		if(isActive)
 		{
-			nbt.put("client_pos", clientComputer.serialize(NBTDynamicOps.INSTANCE));
-			nbt.put("server_pos", serverComputer.serialize(NBTDynamicOps.INSTANCE));
+			nbt.put("client_computer", clientComputer.write(new CompoundNBT()));
+			nbt.put("server_computer", serverComputer.write(new CompoundNBT()));
 		}
 		
 		nbt.putInt("artifact", artifactType);
 		return nbt;
 	}
 	
-	void setActive(GlobalPos client, GlobalPos server)
+	void setActive(ComputerReference client, ComputerReference server)
 	{
 		Objects.requireNonNull(client);
 		Objects.requireNonNull(server);
@@ -179,23 +175,23 @@ public final class SburbConnection
 		else serverIdentifier = identifier;
 	}
 	
-	public GlobalPos getClientComputer()
+	public ComputerReference getClientComputer()
 	{
 		return clientComputer;
 	}
-	public GlobalPos getServerComputer()
+	public ComputerReference getServerComputer()
 	{
 		return serverComputer;
 	}
 	
-	public boolean isClient(ComputerTileEntity computer)
+	public boolean isClient(ISburbComputer computer)
 	{
-		return isActive && getClientIdentifier().equals(computer.owner) && clientComputer.getDimension() == computer.getWorld().getDimension().getType() && clientComputer.getPos().equals(computer.getPos());
+		return isActive && getClientIdentifier().equals(computer.getOwner()) && clientComputer.matches(computer);
 	}
 	
-	public boolean isServer(ComputerTileEntity computer)
+	public boolean isServer(ISburbComputer computer)
 	{
-		return isActive && getServerIdentifier().equals(computer.owner) && serverComputer.getDimension() == computer.getWorld().getDimension().getType() && serverComputer.getPos().equals(computer.getPos());
+		return isActive && getServerIdentifier().equals(computer.getOwner()) && serverComputer.matches(computer);
 	}
 	public boolean isMain(){return isMain;}
 	public boolean isActive()

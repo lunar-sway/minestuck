@@ -211,7 +211,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	{
 		
 		double posX, posY = 0, posZ;
-		ServerWorld world = player.getServer().getWorld(c.hasEntered() ? c.getClientDimension() : c.getClientComputer().getDimension());
+		ServerWorld world = player.getServer().getWorld(c.hasEntered() ? c.getClientDimension() : c.getClientComputer().getPosForEditmode().getDimension());
 		
 		if(lastEditmodePos.containsKey(c))
 		{
@@ -270,7 +270,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 
 	private static BlockPos getEditmodeCenter(SburbConnection connection)
 	{
-		GlobalPos computerPos = connection.getClientComputer();
+		GlobalPos computerPos = connection.getClientComputer().getPosForEditmode();
 		if(computerPos == null)
 			throw new IllegalStateException("Connection has to be active with a computer position to be used here");
 		if(connection.hasEntered())
