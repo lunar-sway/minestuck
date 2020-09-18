@@ -1,8 +1,0 @@
-{
-  "variants": {
-    "facing=south": { "model": "minestuck:block/loot_chest_empty" },
-    "facing=west":  { "model": "minestuck:block/loot_chest_empty", "y": 90 },
-    "facing=north": { "model": "minestuck:block/loot_chest_empty", "y": 180 },
-    "facing=east":  { "model": "minestuck:block/loot_chest_empty", "y": 270 }
-  }
-}
