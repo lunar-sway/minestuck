@@ -303,13 +303,13 @@ public class MSBlocks
 		registry.register(new Block(Block.Properties.create(Material.GLASS, MaterialColor.LIGHT_GRAY).hardnessAndResistance(0.5F).sound(SoundType.SNOW)).setRegistryName("bright_dense_cloud"));
 		registry.register(new Block(Block.Properties.create(Material.SAND, MaterialColor.SNOW).hardnessAndResistance(0.4F).sound(SoundType.SAND)).setRegistryName("sugar_cube"));
 
-		Block brownDungeon = register(registry, new Block(Block.Properties.create(Material.ROCK, MaterialColor.BROWN).hardnessAndResistance(120.0F)).setRegistryName("brown_dungeon_bricks"));
-		registry.register(new Block(Block.Properties.create(Material.ROCK, MaterialColor.BROWN).hardnessAndResistance(120.0F)).setRegistryName("brown_dungeon_tile"));
+		Block brownDungeon = register(registry, new Block(Block.Properties.create(Material.ROCK, MaterialColor.BROWN).hardnessAndResistance(8.0F)).setRegistryName("brown_dungeon_bricks"));
+		registry.register(new Block(Block.Properties.create(Material.ROCK, MaterialColor.BROWN).hardnessAndResistance(8.0F)).setRegistryName("brown_dungeon_tile"));
 		registry.register(new SlabBlock(Block.Properties.from(brownDungeon)).setRegistryName("brown_dungeon_tile_slab"));
-		registry.register(new MSHorizontalBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(120.0F).sound(SoundType.STONE)).setRegistryName("brown_dungeon_glyphs"));
-		registry.register(new MSDirectionalBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(120.0F).sound(SoundType.STONE)).setRegistryName("brown_dungeon_column"));
-		registry.register(new Block(Block.Properties.create(Material.ROCK, MaterialColor.GREEN).hardnessAndResistance(120.0F)).setRegistryName("green_dungeon_smooth_stone"));
-		registry.register(new Block(Block.Properties.create(Material.ROCK, MaterialColor.GREEN).hardnessAndResistance(120.0F)).setRegistryName("green_dungeon_tile"));
+		registry.register(new MSHorizontalBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(8.0F).sound(SoundType.STONE)).setRegistryName("brown_dungeon_glyphs"));
+		registry.register(new MSDirectionalBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(8.0F).sound(SoundType.STONE)).setRegistryName("brown_dungeon_column"));
+		registry.register(new Block(Block.Properties.create(Material.ROCK, MaterialColor.GREEN).hardnessAndResistance(8.0F)).setRegistryName("green_dungeon_smooth_stone"));
+		registry.register(new Block(Block.Properties.create(Material.ROCK, MaterialColor.GREEN).hardnessAndResistance(8.0F)).setRegistryName("green_dungeon_tile"));
 
 		registry.register(new FlammableLogBlock(MaterialColor.LIGHT_BLUE, Block.Properties.create(Material.WOOD, MaterialColor.LIGHT_BLUE).hardnessAndResistance(2.0F).harvestTool(ToolType.AXE).lightValue(11).sound(SoundType.WOOD)).setRegistryName("glowing_log"));
 		registry.register(new FlammableLogBlock(MaterialColor.ICE, Block.Properties.create(Material.WOOD, MaterialColor.ICE).hardnessAndResistance(2.0F).harvestTool(ToolType.AXE).sound(SoundType.WOOD)).setRegistryName("frost_log"));
