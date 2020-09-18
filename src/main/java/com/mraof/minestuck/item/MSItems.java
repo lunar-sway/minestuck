@@ -689,7 +689,7 @@ public class MSItems
 		registry.register(new WeaponItem(MSItemTypes.RUBY_TIER, 7, -3.0F, 8.0F, MSItemTypes.AXE_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("ruby_croak"));
 		registry.register(new FireWeaponItem(MSItemTypes.RUBY_TIER, 7, -3.0F, 9.0F, 30, MSItemTypes.AXE_TOOL, new Item.Properties().defaultMaxDamage(3000).group(MSItemGroup.WEAPONS)).setRegistryName("hephaestus_lumberjack"));
 		registry.register(new PogoFarmineItem(MSItemTypes.URANIUM_TIER, 7, -3.0F, 5.0F, Integer.MAX_VALUE, 100, 0.7, MSItemTypes.AXE_HAMMER_TOOL, new Item.Properties().defaultMaxDamage(2048).group(MSItemGroup.WEAPONS)).setRegistryName("fission_focused_fault_feller"));
-		registry.register(new WeaponItem(ItemTier.IRON, 10, -3.6F, 3.0F, MSItemTypes.AXE_TOOL, new Item.Properties().defaultMaxDamage(400).group(MSItemGroup.WEAPONS)).setRegistryName("bisector"));
+		registry.register(new WeaponItem(ItemTier.IRON, 9, -3.4F, 3.0F, MSItemTypes.AXE_TOOL, new Item.Properties().defaultMaxDamage(400).group(MSItemGroup.WEAPONS)).setRegistryName("bisector"));
 
 		//Dice
 		registry.register(new WeaponItem(ItemTier.STONE, 5, -3.0F, 1.0F, MSItemTypes.NONE, new Item.Properties().defaultMaxDamage(51).group(MSItemGroup.WEAPONS)).setRegistryName("dice"));
