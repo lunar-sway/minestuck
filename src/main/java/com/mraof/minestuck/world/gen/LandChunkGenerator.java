@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.gen;
 
+import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.skaianet.UnderlingController;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
@@ -7,6 +8,7 @@ import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.util.SharedSeedRandom;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.biome.Biome;
@@ -19,9 +21,9 @@ import net.minecraft.world.gen.NoiseChunkGenerator;
 import net.minecraft.world.gen.WorldGenRegion;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
+import net.minecraft.world.spawner.WorldEntitySpawner;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -119,15 +121,22 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 	}
 	
 	@Override
+	public void spawnMobs(WorldGenRegion region)
+	{
+		int x = region.getMainChunkX();
+		int z = region.getMainChunkZ();
+		Biome biome = region.getBiome((new ChunkPos(x, z)).asBlockPos());
+		SharedSeedRandom rand = new SharedSeedRandom();
+		rand.setDecorationSeed(region.getSeed(), x << 4, z << 4);
+		WorldEntitySpawner.performWorldGenSpawning(region, biome, x, z, rand);
+	}
+	
+	@Override
 	public List<Biome.SpawnListEntry> getPossibleCreatures(EntityClassification creatureType, BlockPos pos)
 	{
-		if(creatureType == EntityClassification.MONSTER)	//Combine biome spawn with underling spawn
-		{
-			List<Biome.SpawnListEntry> list = new ArrayList<>(super.getPossibleCreatures(creatureType, pos));
-			list.addAll(UnderlingController.getUnderlingList(pos, world.getWorld()));
-			return list;
-		}
-		return super.getPossibleCreatures(creatureType, pos);
+		if(creatureType == MSEntityTypes.UNDERLING)
+			return UnderlingController.getUnderlingList(pos, world.getWorld());
+		else return super.getPossibleCreatures(creatureType, pos);
 	}
 	
 	@Override

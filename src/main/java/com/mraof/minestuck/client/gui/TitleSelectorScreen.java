@@ -109,7 +109,7 @@ public class TitleSelectorScreen extends Screen
 	}
 	
 	@Override
-	public void onClose()
+	public void removed()
 	{
 		if(sendPacket)
 			MSPacketHandler.sendToServer(new TitleSelectPacket());

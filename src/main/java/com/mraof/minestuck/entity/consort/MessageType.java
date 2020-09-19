@@ -1256,4 +1256,19 @@ public abstract class MessageType
 			initMessage.debugAddAllMessages(list);
 		}
 	}
+	
+	public static class ExplosionMessage extends SingleMessage
+	{
+		public ExplosionMessage(String message, String... args)
+		{
+			super(message, args);
+		}
+		
+		@Override
+		public ITextComponent getMessage(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier)
+		{
+			consort.setExplosionTimer();
+			return super.getMessage(consort, player, chainIdentifier);
+		}
+	}
 }

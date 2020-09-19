@@ -217,7 +217,7 @@ public class ConsortDialogue
 		addMessage("giant_swords").landTerrain(FLORA);
 		addMessage(new ChainMessage(new SingleMessage("bloodberries.1"), new SingleMessage("bloodberries.2"))).landTerrain(FLORA);
 		addMessage("sharp_slide").landTerrain(FLORA);
-		addMessage(new ChainMessage(new SingleMessage("immortality_herb.1"), new SingleMessage("immortality_herb.2"), new SingleMessage("immortality_herb.3"))).landTerrain(FLORA);
+		addMessage(new ChainMessage(new SingleMessage("immortality_herb.1"), new SingleMessage("immortality_herb.2"), new ExplosionMessage("immortality_herb.3"))).landTerrain(FLORA).lockToConsort();
 		addMessage(new ChainMessage(new SingleMessage("spices.1"), new SingleMessage("spices.2", "land_name"))).landTerrain(FLORA);
 
 		//Misc
@@ -452,7 +452,7 @@ public class ConsortDialogue
 		return set.toArray(new TitleLandType[0]);
 	}
 	
-	public static DialogueWrapper getRandomMessage(ConsortEntity consort, ServerPlayerEntity player)
+	public static DialogueWrapper getRandomMessage(ConsortEntity consort, ServerPlayerEntity player, boolean hasHadMessage)
 	{
 		LandTypePair aspects = MSDimensions.getAspects(player.getServer(), consort.homeDimension);
 		
@@ -460,6 +460,8 @@ public class ConsortDialogue
 		
 		for(DialogueWrapper message : messages)
 		{
+			if(message.lockToConsort && hasHadMessage)
+				continue;
 			if(message.reqLand && aspects == null)
 				continue;
 			if(message.consortRequirement != null && !message.consortRequirement.contains(consort.getConsortType()))
@@ -499,6 +501,7 @@ public class ConsortDialogue
 		}
 		
 		private boolean reqLand;
+		private boolean lockToConsort;
 		
 		private MessageType messageStart;
 		
@@ -514,6 +517,17 @@ public class ConsortDialogue
 		{
 			reqLand = true;
 			return this;
+		}
+		
+		public DialogueWrapper lockToConsort()
+		{
+			lockToConsort = true;
+			return this;
+		}
+		
+		public boolean isLockedToConsort()
+		{
+			return lockToConsort;
 		}
 		
 		public DialogueWrapper landTerrain(TerrainLandType... aspects)
@@ -594,6 +608,7 @@ public class ConsortDialogue
 		{
 			return messageStart.getString();
 		}
+		
 	}
 	
 	private static boolean isAnyNull(Object[] objects)

@@ -38,6 +38,7 @@ public final class MSFeatures
 	public static final Feature<BlockStateFeatureConfig> LARGE_PILLAR = getNull();
 	public static final Feature<BlockBlobConfig> BLOCK_BLOB = getNull();
 	public static final Feature<NoFeatureConfig> OCEAN_RUNDOWN = getNull();
+	public static final Feature<NoFeatureConfig> RABBIT_PLACEMENT = getNull();
 	
 	public static final Feature<NoFeatureConfig> SMALL_LIBRARY = getNull();
 	public static final Feature<NoFeatureConfig> CAKE_PEDESTAL = getNull();
@@ -78,6 +79,7 @@ public final class MSFeatures
 		registry.register(new PillarFeature(BlockStateFeatureConfig::deserialize, true).setRegistryName("large_pillar"));
 		registry.register(new ConditionFreeBlobFeature(BlockBlobConfig::deserialize).setRegistryName("block_blob"));
 		registry.register(new OceanRundownFeature(NoFeatureConfig::deserialize).setRegistryName("ocean_rundown"));
+		registry.register(new RabbitPlacementFeature(NoFeatureConfig::deserialize).setRegistryName("rabbit_placement"));
 		
 		registry.register(new SmallLibraryFeature(NoFeatureConfig::deserialize).setRegistryName("small_library"));
 		registry.register(new CakePedestalFeature(NoFeatureConfig::deserialize).setRegistryName("cake_pedestal"));

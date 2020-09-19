@@ -1,0 +1,92 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [32, 32],
+	"textures": {
+		"cassette_player": "minestuck:block/cassette_player_default",
+		"particle": "minestuck:item/cassette_player"
+	},
+	"elements": [
+		{
+			"name": "tapeplayer14",
+			"from": [5, 1, 5],
+			"to": [11, 2, 6],
+			"faces": {
+				"north": {"uv": [8, 9, 11, 9.5], "texture": "#cassette_player"},
+				"south": {"uv": [7, 9.5, 10, 10], "texture": "#cassette_player"},
+				"up": {"uv": [4, 3.5, 7, 4], "texture": "#cassette_player"}
+			}
+		},
+		{
+			"name": "tapeplayer11",
+			"from": [5, 1.75, 6],
+			"to": [11, 2, 10],
+			"faces": {
+				"up": {"uv": [7, 0, 10, 2], "texture": "#cassette_player"},
+				"down": {"uv": [7, 2, 10, 4], "texture": "#cassette_player"}
+			}
+		},
+		{
+			"name": "tapeplayer10",
+			"from": [5, 0.75, 4.01],
+			"to": [11, 1.75, 5.01],
+			"faces": {
+				"north": {"uv": [4, 10.5, 7, 11], "texture": "#cassette_player"},
+				"up": {"uv": [7, 10.5, 10, 11], "texture": "#cassette_player"}
+			}
+		},
+		{
+			"name": "tapeplayer4",
+			"from": [4, 1, 4],
+			"to": [5, 2, 15],
+			"faces": {
+				"north": {"uv": [10, 1.5, 10.5, 2], "texture": "#cassette_player"},
+				"east": {"uv": [8, 5.5, 13.5, 6], "texture": "#cassette_player"},
+				"south": {"uv": [10, 2.5, 10.5, 3], "texture": "#cassette_player"},
+				"west": {"uv": [8, 6, 13.5, 6.5], "texture": "#cassette_player"},
+				"up": {"uv": [3.5, 5.5, 4, 11], "texture": "#cassette_player"}
+			}
+		},
+		{
+			"name": "tapeplayer3",
+			"from": [11, 1, 4],
+			"to": [12, 2, 15],
+			"faces": {
+				"north": {"uv": [1, 10.5, 1.5, 11], "texture": "#cassette_player"},
+				"east": {"uv": [8, 5, 13.5, 5.5], "texture": "#cassette_player"},
+				"south": {"uv": [2, 10.5, 2.5, 11], "texture": "#cassette_player"},
+				"west": {"uv": [8, 8, 13.5, 8.5], "texture": "#cassette_player"},
+				"up": {"uv": [0.5, 8, 1, 13.5], "texture": "#cassette_player"}
+			}
+		},
+		{
+			"name": "tapeplayer2",
+			"from": [5, 1, 10],
+			"to": [11, 2, 15],
+			"faces": {
+				"north": {"uv": [4, 3, 7, 3.5], "texture": "#cassette_player"},
+				"south": {"uv": [8, 7.5, 11, 8], "texture": "#cassette_player"},
+				"up": {"uv": [0, 5.5, 3, 8], "texture": "#cassette_player"}
+			}
+		},
+		{
+			"name": "tapeplayer1",
+			"from": [4, 0, 4],
+			"to": [12, 1, 15],
+			"faces": {
+				"north": {"uv": [8, 7, 12, 7.5], "texture": "#cassette_player"},
+				"east": {"uv": [8, 4.5, 13.5, 5], "texture": "#cassette_player"},
+				"south": {"uv": [8, 6.5, 12, 7], "texture": "#cassette_player"},
+				"west": {"uv": [8, 4, 13.5, 4.5], "texture": "#cassette_player"},
+				"up": {"uv": [4, 4, 8, 9.5], "texture": "#cassette_player"},
+				"down": {"uv": [0, 0, 4, 5.5], "texture": "#cassette_player"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "group",
+			"origin": [8, 8, 8],
+			"children": [0, 1, 2, 3, 4, 5, 6]
+		}
+	]
+}

@@ -25,6 +25,8 @@ import javax.annotation.Nonnull;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public final class MSEntityTypes
 {
+	public static EntityClassification UNDERLING = EntityClassification.create("UNDERLING", "underling", 35, false, false);
+	
 	public static final EntityType<FrogEntity> FROG = getNull();
 	public static final EntityType<ConsortEntity> SALAMANDER = getNull();
 	public static final EntityType<ConsortEntity> TURTLE = getNull();
@@ -74,12 +76,12 @@ public final class MSEntityTypes
 		register(registry, EntityType.Builder.create(EnumConsort.NAKAGATOR::create, EntityClassification.CREATURE).size(0.45F, 1.1F), "nakagator");
 		register(registry, EntityType.Builder.create(EnumConsort.IGUANA::create, EntityClassification.CREATURE).size(0.45F, 1.0F), "iguana");
 		
-		register(registry, EntityType.Builder.create(ImpEntity::new, EntityClassification.MONSTER).size(0.7F, 1.2F), "imp");
-		register(registry, EntityType.Builder.create(OgreEntity::new, EntityClassification.MONSTER).size(2.8F, 4.3F), "ogre");
-		register(registry, EntityType.Builder.create(BasiliskEntity::new, EntityClassification.MONSTER).size(3F, 2F), "basilisk");
-		register(registry, EntityType.Builder.create(LichEntity::new, EntityClassification.MONSTER).size(0.8F, 2.0F), "lich");
-		register(registry, EntityType.Builder.create(GiclopsEntity::new, EntityClassification.MONSTER).size(8.0F, 12.0F), "giclops");
-		register(registry, EntityType.Builder.create(WyrmEntity::new, EntityClassification.MONSTER), "wyrm");
+		register(registry, EntityType.Builder.create(ImpEntity::new, UNDERLING).size(0.7F, 1.2F), "imp");
+		register(registry, EntityType.Builder.create(OgreEntity::new, UNDERLING).size(2.8F, 4.3F), "ogre");
+		register(registry, EntityType.Builder.create(BasiliskEntity::new, UNDERLING).size(3F, 2F), "basilisk");
+		register(registry, EntityType.Builder.create(LichEntity::new, UNDERLING).size(0.8F, 2.0F), "lich");
+		register(registry, EntityType.Builder.create(GiclopsEntity::new, UNDERLING).size(8.0F, 12.0F), "giclops");
+		register(registry, EntityType.Builder.create(WyrmEntity::new, UNDERLING), "wyrm");
 		
 		register(registry, EntityType.Builder.create(PawnEntity::createDersite, EntityClassification.MONSTER).size(0.6F, 1.5F), "dersite_pawn");
 		register(registry, EntityType.Builder.create(PawnEntity::createProspitian, EntityClassification.MONSTER).size(0.6F, 1.5F), "prospitian_pawn");
