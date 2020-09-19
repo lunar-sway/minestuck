@@ -6,11 +6,9 @@ import com.mraof.minestuck.block.EnumDowelType;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.event.AlchemyEvent;
-import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.*;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.util.AlchemiterUpgrades;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.util.Debug;
 import net.minecraft.block.Block;
@@ -37,10 +35,6 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 	private GristType wildcardGrist = GristTypes.BUILD.get();
 	protected boolean broken = false;
 	protected ItemStack dowel = ItemStack.EMPTY;
-	protected ItemStack upgradeItem[] = {ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY,ItemStack.EMPTY,ItemStack.EMPTY};
-	protected AlchemiterUpgrades upgrade[] = new AlchemiterUpgrades[7];
-	public boolean upgraded = false;
-	protected TileEntity jbe = null;
 	
 	public AlchemiterTileEntity()
 	{
@@ -134,77 +128,6 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 		setDowel(ItemStack.EMPTY);
 	}
 	
-	//JBE upgrades
-	public void setUpgrade(ItemStack stack, int id)
-	{
-		if(!stack.isEmpty())
-		{
-			this.upgradeItem[id] = stack;
-			if(world != null)
-			{
-				BlockState state = world.getBlockState(pos);
-				world.notifyBlockUpdate(pos, state, state, 2);
-			}
-		}
-	}
-	
-	public void setUpgraded(boolean bool, BlockPos pos)
-	{
-		
-		TileEntity te = world.getTileEntity(pos);
-		
-		if(te instanceof TileEntityJumperBlock)
-			jbe = te;
-		else
-		{
-			Debug.warnf("%s is not a jbe tile entity", te);
-			return;
-		}
-		
-		TileEntityJumperBlock jbeTe = (TileEntityJumperBlock) te;
-		this.upgraded = bool;
-		
-		if(bool)
-		{
-			for(int i = 0; i < upgradeItem.length; i++)
-			{
-				this.upgradeItem[i] = jbeTe.getUpgrade(i);
-				this.upgradeItem[i].setCount(1);
-			}
-			
-		}
-		else
-		{
-			for(int i = 0; i < upgradeItem.length; i++)
-			{
-				this.upgradeItem[i] = ItemStack.EMPTY;
-			}
-		}
-		
-		//this.upgrade = AlchemiterUpgrades.getUpgradesFromList(getUpgradeItemsList());
-	}
-	
-		
-	/*public boolean hasUpgrade(AlchemiterUpgrades upgrade)
-	{
-		return AlchemiterUpgrades.hasUpgrade(getUpgradeItemsList(), upgrade);
-	}*/
-	
-	public boolean isUpgraded()
-	{
-		return this.upgraded;
-	}
-	
-	//TODO
-	public void doTheBlenderThing()
-	{
-		if(!dowel.isEmpty())
-		{
-			InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(MSItems.RAW_CRUXITE, 1));
-			setDowel(ItemStack.EMPTY);
-		}
-	}
-	
 	private boolean isUseable(BlockState state)
 	{
 		if(!broken)
@@ -214,21 +137,6 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 				Debug.warnf("Failed to notice a block being broken or misplaced at the alchemiter at %s", getPos());
 		}
 		return !broken;
-	}
-	
-	public AlchemiterUpgrades[] getUpgradeList()
-	{
-		return upgrade;
-	}
-	
-	public ItemStack[] getUpgradeItemsList()
-	{
-		return this.upgradeItem;
-	}
-	
-	public ItemStack getUpgrade(int id)
-	{
-		return upgradeItem[id];
 	}
 	
 	public void checkStates()
@@ -281,13 +189,7 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 		super.write(compound);
 
 		compound.putString("gristType", wildcardGrist.getRegistryName().toString());
-		compound.putBoolean("upgraded", upgraded);
 		compound.putBoolean("broken", isBroken());
-		
-		for(int i = 0; i < upgradeItem.length; i++)
-		{
-			compound.put("upgrade" + i, upgradeItem[i].write(new CompoundNBT()));
-		}
 		
 		if(dowel!= null)
 			compound.put("dowel", dowel.write(new CompoundNBT()));
@@ -305,8 +207,7 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket()
 	{
-		SUpdateTileEntityPacket packet = new SUpdateTileEntityPacket(this.pos, 0, getUpdateTag());
-		return packet;
+		return new SUpdateTileEntityPacket(this.pos, 0, getUpdateTag());
 	}
 	
 	@Override
@@ -329,11 +230,6 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 				}
 			}
 			return;
-		}
-		else
-		{
-			//if(hasUpgrade(AlchemiterUpgrades.blender) && !dowel.isEmpty())
-			//	doTheBlenderThing();
 		}
 		
 		onPadRightClick(playerIn, state, side);
@@ -396,18 +292,8 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 			while(quantity > 0)
 			{
 				ItemStack stack = newItem.copy();
-				//TODO
-				/*if(hasUpgrade(AlchemiterUpgrades.captchaCard)) {
-					int stackCount =  Math.min(AlchemyRecipes.getDecodedItem(stack).getMaxStackSize(), quantity);
-					
-					stack = AlchemyRecipes.changeEncodeSize(stack, stackCount);
-					quantity -=  Math.min(AlchemyRecipes.getDecodedItem(stack).getMaxStackSize(), quantity);
-				}
-				else*/
-				{
-					stack.setCount(Math.min(stack.getMaxStackSize(), quantity));
-					quantity -= stack.getCount();
-				}
+				stack.setCount(Math.min(stack.getMaxStackSize(), quantity));
+				quantity -= stack.getCount();
 				ItemEntity item = new ItemEntity(world, spawnPos.getX(), spawnPos.getY() + 0.5, spawnPos.getZ(), stack);
 				world.addEntity(item);
 			}
@@ -419,8 +305,6 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 		ItemStack dowel = getDowel();
 		GristSet set;
 		ItemStack stack = getOutput();
-		//if(hasUpgrade(AlchemiterUpgrades.captchaCard))
-		//	stack = AlchemyRecipes.getDecodedItem(getOutput());
 		if(dowel.isEmpty() || world == null)
 			return null;
 		
