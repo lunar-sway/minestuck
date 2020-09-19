@@ -49,7 +49,7 @@ public class GristSelectorScreen<T extends Screen & Positioned> extends Minestuc
 		int yOffset = (height - guiHeight) / 2;
 		this.previousButton = new ExtendedButton((this.width) + 8, yOffset + 8, 16, 16, "<", button -> prevPage());
 		this.nextButton = new ExtendedButton(xOffset + guiWidth - 24, yOffset + 8, 16, 16, ">", button -> nextPage());
-		if(GristTypes.REGISTRY.getValues().size() > rows * columns)
+		if(GristTypes.getRegistry().getValues().size() > rows * columns)
 		{
 			this.addButton(this.nextButton);
 		}
@@ -96,7 +96,7 @@ public class GristSelectorScreen<T extends Screen & Positioned> extends Minestuc
 			int xOffset = (width - guiWidth) / 2;
 			int yOffset = (height - guiHeight) / 2;
 
-			List<GristType> types = new ArrayList<>(GristTypes.REGISTRY.getValues());
+			List<GristType> types = new ArrayList<>(GristTypes.getRegistry().getValues());
 			Collections.sort(types);
 			types = types.stream().skip(page * rows * columns).limit(rows * columns).collect(Collectors.toList());
 
@@ -153,7 +153,7 @@ public class GristSelectorScreen<T extends Screen & Positioned> extends Minestuc
 	
 	private void nextPage()
 	{
-		int maxPage = (GristTypes.REGISTRY.getValues().size() - 1) / (rows * columns);
+		int maxPage = (GristTypes.getRegistry().getValues().size() - 1) / (rows * columns);
 		if(page < maxPage)
 		{
 			page++;

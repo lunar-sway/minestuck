@@ -58,7 +58,7 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 	public String getTranslationKey()
 	{
 		if(translationKey == null)
-			translationKey = Util.makeTranslationKey("grist", GristTypes.REGISTRY.getKey(this));
+			translationKey = Util.makeTranslationKey("grist", GristTypes.getRegistry().getKey(this));
 		
 		return translationKey;
 	}
@@ -99,7 +99,7 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 	
 	public ResourceLocation getEffectiveName()
 	{
-		ResourceLocation name = GristTypes.REGISTRY.getKey(this);
+		ResourceLocation name = GristTypes.getRegistry().getKey(this);
 		if(name == null)
 			return new ResourceLocation(Minestuck.MOD_ID, "dummy");
 		else return name;
@@ -117,7 +117,7 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 	
 	public int getId()
 	{
-		return ((ForgeRegistry<GristType>) GristTypes.REGISTRY).getID(this);	//TODO Not ideal. Find a better solution
+		return ((ForgeRegistry<GristType>) GristTypes.getRegistry()).getID(this);	//TODO Not ideal. Find a better solution
 	}
 	
 	/**
@@ -166,7 +166,7 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 		ResourceLocation name = MSNBTUtil.tryReadResourceLocation(nbt, key);
 		if(name != null)
 		{
-			GristType type = GristTypes.REGISTRY.getValue(name);
+			GristType type = GristTypes.getRegistry().getValue(name);
 			if(type != null)
 				return type;
 			else LOGGER.warn("Couldn't find grist type by name {}  while reading from nbt. Will fall back to {} instead.", name, fallback);

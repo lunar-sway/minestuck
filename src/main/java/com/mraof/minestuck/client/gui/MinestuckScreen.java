@@ -43,7 +43,7 @@ public abstract class MinestuckScreen extends Screen
 		GristType tooltipType = null;
 		GristSet clientGrist = ClientPlayerData.getClientGrist();
 
-		List<GristType> types = new ArrayList<>(GristTypes.REGISTRY.getValues());
+		List<GristType> types = new ArrayList<>(GristTypes.getRegistry().getValues());
 		Collections.sort(types);
 		types = types.stream().skip(page * rows * columns).limit(rows * columns).collect(Collectors.toList());
 

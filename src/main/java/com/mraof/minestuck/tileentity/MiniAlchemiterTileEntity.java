@@ -38,7 +38,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 		@Override
 		public void set(int id)
 		{
-			GristType type = ((ForgeRegistry<GristType>) GristTypes.REGISTRY).getValue(id);	//TODO Not ideal. Find a better solution
+			GristType type = ((ForgeRegistry<GristType>) GristTypes.getRegistry()).getValue(id);	//TODO Not ideal. Find a better solution
 			if(type == null)
 				type = GristTypes.BUILD.get();
 			setWildcardGrist(type);

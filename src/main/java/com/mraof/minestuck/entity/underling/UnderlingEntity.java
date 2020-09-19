@@ -136,7 +136,7 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 	@Nonnull
 	public GristType getGristType()
 	{
-		GristType type = GristTypes.REGISTRY.getValue(ResourceLocation.tryCreate(dataManager.get(GRIST_TYPE)));
+		GristType type = GristTypes.getRegistry().getValue(ResourceLocation.tryCreate(dataManager.get(GRIST_TYPE)));
 		
 		if(type != null)
 		{

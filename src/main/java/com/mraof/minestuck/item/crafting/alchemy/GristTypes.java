@@ -3,22 +3,19 @@ package com.mraof.minestuck.item.crafting.alchemy;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.RegistryObject;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryBuilder;
 
 import java.util.Collection;
+import java.util.function.Supplier;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public class GristTypes
 {
-	public static IForgeRegistry<GristType> REGISTRY;
-	
 	public static final DeferredRegister<GristType> GRIST_TYPES = DeferredRegister.create(GristType.class, Minestuck.MOD_ID);
+	
+	private static final Supplier<IForgeRegistry<GristType>> REGISTRY = GRIST_TYPES.makeRegistry("grist", () -> new RegistryBuilder<GristType>().set(DummyFactory.INSTANCE));
 	
 	public static final RegistryObject<GristType> BUILD = GRIST_TYPES.register("build", () -> new GristType(new GristType.Properties(0.0F, 1).candy(() -> MSItems.BUILD_GUSHERS)));
 	public static final RegistryObject<GristType> AMBER = GRIST_TYPES.register("amber", () -> new GristType(new GristType.Properties(0.5F, 1.5F).candy(() -> MSItems.AMBER_GUMMY_WORM).secondary(GristTypes.RUST).secondary(GristTypes.SULFUR)));
@@ -49,22 +46,17 @@ public class GristTypes
 		{
 			string = Minestuck.MOD_ID + ":" + string;
 		}
-		return REGISTRY.getValue(new ResourceLocation(string));
+		return getRegistry().getValue(new ResourceLocation(string));
+	}
+	
+	public static IForgeRegistry<GristType> getRegistry()
+	{
+		return REGISTRY.get();
 	}
 	
 	public static Collection<GristType> values()
 	{
-		return REGISTRY.getValues();
-	}
-	
-	@SubscribeEvent
-	public static void onRegistryNewRegistry(final RegistryEvent.NewRegistry event)
-	{
-		REGISTRY = new RegistryBuilder<GristType>()
-				.setName(new ResourceLocation(Minestuck.MOD_ID, "grist"))
-				.setType(GristType.class)
-				.set(DummyFactory.INSTANCE)
-				.create();
+		return getRegistry().getValues();
 	}
 	
 	private static class DummyFactory implements IForgeRegistry.DummyFactory<GristType>
