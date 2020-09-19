@@ -23,17 +23,27 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public abstract class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IMob
+public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IMob
 {
 	private static Random randStatic = new Random();
 	private final RangedAttackGoal aiArrowAttack = new RangedAttackGoal(this, 0.25F, 20, 10.0F);
 	private final MeleeAttackGoal aiMeleeAttack = new MeleeAttackGoal(this, .4F, false);
 	
-	public PawnEntity(EntityType<? extends PawnEntity> type, World world)
+	protected PawnEntity(EntityType<? extends PawnEntity> type, EnumEntityKingdom kingdom, World world)
 	{
-		super(type, world);
+		super(type, kingdom, world);
 		this.experienceValue = 1;
 		setCombatTask();
+	}
+	
+	public static PawnEntity createProspitian(EntityType<? extends PawnEntity> type, World world)
+	{
+		return new PawnEntity(type, EnumEntityKingdom.PROSPITIAN, world);
+	}
+	
+	public static PawnEntity createDersite(EntityType<? extends PawnEntity> type, World world)
+	{
+		return new PawnEntity(type, EnumEntityKingdom.DERSITE, world);
 	}
 	
 	@Override

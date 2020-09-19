@@ -1,7 +1,9 @@
 package com.mraof.minestuck.entity;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.entity.carapacian.*;
+import com.mraof.minestuck.entity.carapacian.BishopEntity;
+import com.mraof.minestuck.entity.carapacian.PawnEntity;
+import com.mraof.minestuck.entity.carapacian.RookEntity;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.entity.item.*;
@@ -36,12 +38,12 @@ public final class MSEntityTypes
 	public static final EntityType<GiclopsEntity> GICLOPS = getNull();
 	public static final EntityType<WyrmEntity> WYRM = getNull();
 	
-	public static final EntityType<BlackPawnEntity> DERSITE_PAWN = getNull();
-	public static final EntityType<WhitePawnEntity> PROSPITIAN_PAWN = getNull();
-	public static final EntityType<BlackBishopEntity> DERSITE_BISHOP = getNull();
-	public static final EntityType<WhiteBishopEntity> PROSPITIAN_BISHOP = getNull();
-	public static final EntityType<BlackRookEntity> DERSITE_ROOK = getNull();
-	public static final EntityType<WhiteRookEntity> PROSPITIAN_ROOK = getNull();
+	public static final EntityType<PawnEntity> DERSITE_PAWN = getNull();
+	public static final EntityType<PawnEntity> PROSPITIAN_PAWN = getNull();
+	public static final EntityType<BishopEntity> DERSITE_BISHOP = getNull();
+	public static final EntityType<BishopEntity> PROSPITIAN_BISHOP = getNull();
+	public static final EntityType<RookEntity> DERSITE_ROOK = getNull();
+	public static final EntityType<RookEntity> PROSPITIAN_ROOK = getNull();
 	
 	public static final EntityType<GristEntity> GRIST = getNull();
 	public static final EntityType<VitalityGelEntity> VITALITY_GEL = getNull();
@@ -79,12 +81,12 @@ public final class MSEntityTypes
 		register(registry, EntityType.Builder.create(GiclopsEntity::new, EntityClassification.MONSTER).size(8.0F, 12.0F), "giclops");
 		register(registry, EntityType.Builder.create(WyrmEntity::new, EntityClassification.MONSTER), "wyrm");
 		
-		register(registry, EntityType.Builder.create(BlackPawnEntity::new, EntityClassification.MONSTER).size(0.6F, 1.5F), "dersite_pawn");
-		register(registry, EntityType.Builder.create(WhitePawnEntity::new, EntityClassification.MONSTER).size(0.6F, 1.5F), "prospitian_pawn");
-		register(registry, EntityType.Builder.create(BlackBishopEntity::new, EntityClassification.MONSTER).size(1.9F, 4.1F), "dersite_bishop");
-		register(registry, EntityType.Builder.create(WhiteBishopEntity::new, EntityClassification.MONSTER).size(1.9F, 4.1F), "prospitian_bishop");
-		register(registry, EntityType.Builder.create(BlackRookEntity::new, EntityClassification.MONSTER).size(3.5F, 3.5F), "dersite_rook");
-		register(registry, EntityType.Builder.create(WhiteRookEntity::new, EntityClassification.MONSTER).size(3.5F, 3.5F), "prospitian_rook");
+		register(registry, EntityType.Builder.create(PawnEntity::createDersite, EntityClassification.MONSTER).size(0.6F, 1.5F), "dersite_pawn");
+		register(registry, EntityType.Builder.create(PawnEntity::createProspitian, EntityClassification.MONSTER).size(0.6F, 1.5F), "prospitian_pawn");
+		register(registry, EntityType.Builder.create(BishopEntity::createDersite, EntityClassification.MONSTER).size(1.9F, 4.1F), "dersite_bishop");
+		register(registry, EntityType.Builder.create(BishopEntity::createProspitian, EntityClassification.MONSTER).size(1.9F, 4.1F), "prospitian_bishop");
+		register(registry, EntityType.Builder.create(RookEntity::createDersite, EntityClassification.MONSTER).size(3.5F, 3.5F), "dersite_rook");
+		register(registry, EntityType.Builder.create(RookEntity::createProspitian, EntityClassification.MONSTER).size(3.5F, 3.5F), "prospitian_rook");
 		
 		register(registry, EntityType.Builder.<GristEntity>create(GristEntity::new, EntityClassification.MISC).size(1 / 3F, 1 / 3F).setTrackingRange(4).setUpdateInterval(20).immuneToFire(), "grist");
 		register(registry, EntityType.Builder.<VitalityGelEntity>create(VitalityGelEntity::new, EntityClassification.MISC).size(1 / 4F, 1 / 4F).setTrackingRange(4).setUpdateInterval(20).immuneToFire(), "vitality_gel");
