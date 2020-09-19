@@ -40,7 +40,7 @@ public class TransportalizerTileEntity extends OnCollisionTeleporterTileEntity<E
 	
 	public TransportalizerTileEntity()
 	{
-		super(MSTileEntityTypes.TRANSPORTALIZER, Entity.class);
+		super(MSTileEntityTypes.TRANSPORTALIZER.get(), Entity.class);
 	}
 	
 	@Override

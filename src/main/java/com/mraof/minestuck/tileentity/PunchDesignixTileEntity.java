@@ -34,7 +34,7 @@ public class PunchDesignixTileEntity extends TileEntity
 	
 	public PunchDesignixTileEntity()
 	{
-		super(MSTileEntityTypes.PUNCH_DESIGNIX);
+		super(MSTileEntityTypes.PUNCH_DESIGNIX.get());
 	}
 	
 	public void setCard(ItemStack card)

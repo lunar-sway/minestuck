@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block;
 
+import com.mraof.minestuck.tileentity.GristWidgetTileEntity;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -10,13 +11,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
-public class GristWidgetBlock extends SmallMachineBlock
+public class GristWidgetBlock extends SmallMachineBlock<GristWidgetTileEntity>
 {
 	public static final BooleanProperty HAS_CARD = MSProperties.HAS_CARD;
 	
 	public GristWidgetBlock(Properties properties)
 	{
-		super(MSBlockShapes.GRIST_WIDGET.createRotatedShapes(), () -> MSTileEntityTypes.GRIST_WIDGET, properties);
+		super(MSBlockShapes.GRIST_WIDGET.createRotatedShapes(), MSTileEntityTypes.GRIST_WIDGET, properties);
 		setDefaultState(getStateContainer().getBaseState().with(FACING, Direction.NORTH).with(HAS_CARD, false));
 	}
 	

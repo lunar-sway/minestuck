@@ -38,7 +38,7 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 	
 	public AlchemiterTileEntity()
 	{
-		super(MSTileEntityTypes.ALCHEMITER);
+		super(MSTileEntityTypes.ALCHEMITER.get());
 	}
 	
 	public void setDowel(ItemStack newDowel)

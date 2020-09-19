@@ -28,7 +28,7 @@ public class HolopadTileEntity extends TileEntity implements ITickableTileEntity
 	
 	public HolopadTileEntity()
 	{
-		super(MSTileEntityTypes.HOLOPAD);
+		super(MSTileEntityTypes.HOLOPAD.get());
 	}
 	
 	public void onRightClick(PlayerEntity player)

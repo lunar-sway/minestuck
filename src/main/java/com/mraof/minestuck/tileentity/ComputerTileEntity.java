@@ -23,7 +23,7 @@ public class ComputerTileEntity extends TileEntity implements ISburbComputer
 {	//TODO The implementation of this class need a serious rewrite
 	public ComputerTileEntity()
 	{
-		super(MSTileEntityTypes.COMPUTER);
+		super(MSTileEntityTypes.COMPUTER.get());
 	}
 	
 	/**

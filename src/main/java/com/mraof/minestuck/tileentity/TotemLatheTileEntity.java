@@ -35,7 +35,7 @@ public class TotemLatheTileEntity extends TileEntity
 	
 	public TotemLatheTileEntity()
 	{
-		super(MSTileEntityTypes.TOTEM_LATHE);
+		super(MSTileEntityTypes.TOTEM_LATHE.get());
 	}
 	
 	private boolean tryAddCard(ItemStack stack)

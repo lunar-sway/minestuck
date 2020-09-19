@@ -11,11 +11,11 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class MiniAlchemiterBlock extends SmallMachineBlock
+public class MiniAlchemiterBlock extends SmallMachineBlock<MiniAlchemiterTileEntity>
 {
 	public MiniAlchemiterBlock(Properties properties)
 	{
-		super(MSBlockShapes.SMALL_ALCHEMITER.createRotatedShapes(), () -> MSTileEntityTypes.MINI_ALCHEMITER, properties);
+		super(MSBlockShapes.SMALL_ALCHEMITER.createRotatedShapes(), MSTileEntityTypes.MINI_ALCHEMITER, properties);
 	}
 	
 	@Override

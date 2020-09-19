@@ -25,7 +25,7 @@ public class SkaiaPortalTileEntity extends TileEntity //implements ITeleporter
 	
 	public SkaiaPortalTileEntity()
 	{
-		super(MSTileEntityTypes.SKAIA_PORTAL);
+		super(MSTileEntityTypes.SKAIA_PORTAL.get());
 	}
 	
 	@Override

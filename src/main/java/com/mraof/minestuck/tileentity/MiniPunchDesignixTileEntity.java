@@ -25,7 +25,7 @@ public class MiniPunchDesignixTileEntity extends MachineProcessTileEntity implem
 	
 	public MiniPunchDesignixTileEntity()
 	{
-		super(MSTileEntityTypes.MINI_PUNCH_DESIGNIX);
+		super(MSTileEntityTypes.MINI_PUNCH_DESIGNIX.get());
 	}
 	
 	@Override

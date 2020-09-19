@@ -51,7 +51,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 	
 	public MiniAlchemiterTileEntity()
 	{
-		super(MSTileEntityTypes.MINI_ALCHEMITER);
+		super(MSTileEntityTypes.MINI_ALCHEMITER.get());
 	}
 	
 	@Override

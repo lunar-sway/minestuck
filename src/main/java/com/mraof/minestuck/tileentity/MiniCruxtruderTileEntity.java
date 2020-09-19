@@ -24,7 +24,7 @@ public class MiniCruxtruderTileEntity extends MachineProcessTileEntity implement
 	
 	public MiniCruxtruderTileEntity()
 	{
-		super(MSTileEntityTypes.MINI_CRUXTRUDER);
+		super(MSTileEntityTypes.MINI_CRUXTRUDER.get());
 	}
 	
 	@Override

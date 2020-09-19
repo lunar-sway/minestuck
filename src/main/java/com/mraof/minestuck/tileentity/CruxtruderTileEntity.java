@@ -24,7 +24,7 @@ public class CruxtruderTileEntity extends TileEntity	//TODO check if it is broke
 	
 	public CruxtruderTileEntity()
 	{
-		super(MSTileEntityTypes.CRUXTRUDER);
+		super(MSTileEntityTypes.CRUXTRUDER.get());
 	}
 	
 	public int getColor()

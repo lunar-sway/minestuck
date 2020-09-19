@@ -23,12 +23,12 @@ import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class SmallMachineBlock extends MachineProcessBlock
+public class SmallMachineBlock<T extends TileEntity> extends MachineProcessBlock
 {
 	private final Map<Direction, VoxelShape> shape;
-	private final Supplier<TileEntityType<?>> tileType;
+	private final Supplier<TileEntityType<T>> tileType;
 	
-	public SmallMachineBlock(Map<Direction, VoxelShape> shape, Supplier<TileEntityType<?>> tileType, Properties properties)
+	public SmallMachineBlock(Map<Direction, VoxelShape> shape, Supplier<TileEntityType<T>> tileType, Properties properties)
 	{
 		super(properties);
 		this.shape = shape;

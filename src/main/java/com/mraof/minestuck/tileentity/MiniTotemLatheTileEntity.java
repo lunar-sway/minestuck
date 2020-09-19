@@ -27,7 +27,7 @@ public class MiniTotemLatheTileEntity extends MachineProcessTileEntity implement
 	
 	public MiniTotemLatheTileEntity()
 	{
-		super(MSTileEntityTypes.MINI_TOTEM_LATHE);
+		super(MSTileEntityTypes.MINI_TOTEM_LATHE.get());
 	}
 	
 	@Override

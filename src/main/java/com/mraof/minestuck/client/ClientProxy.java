@@ -27,9 +27,9 @@ public class ClientProxy
 {
 	private static void registerRenderers()
 	{
-		ClientRegistry.bindTileEntityRenderer(MSTileEntityTypes.SKAIA_PORTAL, SkaiaPortalRenderer::new);
-		ClientRegistry.bindTileEntityRenderer(MSTileEntityTypes.GATE, GateRenderer::new);
-		ClientRegistry.bindTileEntityRenderer(MSTileEntityTypes.HOLOPAD, HolopadRenderer::new);
+		ClientRegistry.bindTileEntityRenderer(MSTileEntityTypes.SKAIA_PORTAL.get(), SkaiaPortalRenderer::new);
+		ClientRegistry.bindTileEntityRenderer(MSTileEntityTypes.GATE.get(), GateRenderer::new);
+		ClientRegistry.bindTileEntityRenderer(MSTileEntityTypes.HOLOPAD.get(), HolopadRenderer::new);
 //		MinecraftForgeClient.registerItemRenderer(Minestuck.captchaCard, new CardRenderer());
 	}
 	

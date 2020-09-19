@@ -34,7 +34,7 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements I
 	
 	public GristWidgetTileEntity()
 	{
-		super(MSTileEntityTypes.GRIST_WIDGET);
+		super(MSTileEntityTypes.GRIST_WIDGET.get());
 	}
 	
 	public GristSet getGristWidgetResult()
