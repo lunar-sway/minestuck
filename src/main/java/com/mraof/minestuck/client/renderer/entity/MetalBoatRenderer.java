@@ -8,10 +8,6 @@ import net.minecraft.util.ResourceLocation;
 
 public class MetalBoatRenderer extends BoatRenderer
 {
-	
-	private static final ResourceLocation ironVariant = new ResourceLocation("minestuck", "textures/entity/iron_boat.png");
-	private static final ResourceLocation goldVariant = new ResourceLocation("minestuck", "textures/entity/gold_boat.png");
-	
 	public MetalBoatRenderer(EntityRendererManager manager)
 	{
 		super(manager);
@@ -22,8 +18,6 @@ public class MetalBoatRenderer extends BoatRenderer
 	{
 		MetalBoatEntity boat = (MetalBoatEntity) entity;
 		
-		if(boat.boatType() == 1)
-			return goldVariant;
-		else return ironVariant;
+		return boat.boatType().getBoatTexture();
 	}
 }

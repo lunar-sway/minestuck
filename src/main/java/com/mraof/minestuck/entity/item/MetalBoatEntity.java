@@ -12,27 +12,32 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.network.NetworkHooks;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class MetalBoatEntity extends BoatEntity implements IEntityAdditionalSpawnData
 {
+	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private int type;	//TODO Replace with enum, or other object-based type
+	private Type type;
 	
 	public MetalBoatEntity(EntityType<? extends MetalBoatEntity> type, World world)
 	{
 		super(type, world);
 	}
 	
-	public MetalBoatEntity(World world, double x, double y, double z, int type)
+	public MetalBoatEntity(World world, double x, double y, double z, Type type)
 	{
 		super(MSEntityTypes.METAL_BOAT, world);
 		this.preventEntitySpawning = false;
@@ -44,7 +49,7 @@ public class MetalBoatEntity extends BoatEntity implements IEntityAdditionalSpaw
 		this.type = type;
 	}
 	
-	public int boatType()
+	public Type boatType()
 	{
 		return type;
 	}
@@ -52,10 +57,24 @@ public class MetalBoatEntity extends BoatEntity implements IEntityAdditionalSpaw
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount)
 	{
-		if(type == 0)
-			return super.attackEntityFrom(source, amount/1.5F);
-		else
-			return super.attackEntityFrom(source, amount);
+		return super.attackEntityFrom(source, amount*type.damageModifier);
+	}
+	
+	@Override
+	public void tick()
+	{
+		Status status = getBoatStatus();
+		if(status == Status.IN_WATER)
+			setMotion(getMotion().add(0, -0.1, 0));
+		else if(status == Status.UNDER_WATER)
+			setMotion(getMotion().add(0, -0.02, 0));
+		super.tick();
+	}
+	
+	@Override
+	public void setMotion(Vec3d motionIn)
+	{
+		super.setMotion(new Vec3d(motionIn.x, -Math.abs(motionIn.y), motionIn.z));
 	}
 	
 	private final List<ItemEntity> captureDropsCache = new ArrayList<>(5);
@@ -78,25 +97,17 @@ public class MetalBoatEntity extends BoatEntity implements IEntityAdditionalSpaw
 	
 	private Item getDroppedItem()
 	{
-		if(this.type == 0)
-			return Items.IRON_INGOT;
-		else if(this.type == 1)
-			return Items.GOLD_INGOT;
-		throw new IllegalStateException("Unexpected metal boat type: "+type);
+		return type.droppedItem.get();
 	}
 	
 	@Override
 	public Item getItemBoat()
 	{
-		if(this.type == 0)
-			return MSItems.IRON_BOAT;
-		else if(this.type == 1)
-			return MSItems.GOLD_BOAT;
-		throw new IllegalStateException("Unexpected metal boat type: "+type);
+		return type.boatItem.get();
 	}
 	
 	@Override
-	public void setBoatType(Type boatType)
+	public void setBoatType(BoatEntity.Type boatType)
 	{
 		throw new UnsupportedOperationException();
 	}
@@ -104,30 +115,69 @@ public class MetalBoatEntity extends BoatEntity implements IEntityAdditionalSpaw
 	@Override
 	protected void writeAdditional(CompoundNBT compound)
 	{
-		compound.putByte("Type", (byte) type);
+		compound.putString("Type", type.asString());
 	}
 	
 	@Override
 	protected void readAdditional(CompoundNBT compound)
 	{
-		this.type = compound.getByte("Type");
+		this.type = Type.fromString(compound.getString("Type"));
 	}
 	
 	@Override
 	public void writeSpawnData(PacketBuffer buffer)
 	{
-		buffer.writeByte(type);
+		buffer.writeString(type.asString());
 	}
 	
 	@Override
 	public void readSpawnData(PacketBuffer additionalData)
 	{
-		this.type = additionalData.readByte();
+		this.type = Type.fromString(additionalData.readString(16));
 	}
 	
 	@Override
 	public IPacket<?> createSpawnPacket()
 	{
 		return NetworkHooks.getEntitySpawningPacket(this);
+	}
+	
+	public enum Type
+	{
+		IRON(1/1.5F, () -> Items.IRON_INGOT, () -> MSItems.IRON_BOAT, new ResourceLocation("minestuck", "textures/entity/iron_boat.png")),
+		GOLD(1.0F, () -> Items.GOLD_INGOT, () -> MSItems.GOLD_BOAT, new ResourceLocation("minestuck", "textures/entity/gold_boat.png"));
+		
+		private final float damageModifier;
+		private final Supplier<Item> droppedItem, boatItem;
+		private final ResourceLocation boatTexture;
+		
+		Type(float damageModifier, Supplier<Item> droppedItem, Supplier<Item> boatItem, ResourceLocation boatTexture)
+		{
+			this.damageModifier = damageModifier;
+			this.droppedItem = droppedItem;
+			this.boatItem = boatItem;
+			this.boatTexture = boatTexture;
+		}
+		
+		public String asString()
+		{
+			return toString().toLowerCase();
+		}
+		
+		public static Type fromString(String name)
+		{
+			for(Type type : values())
+			{
+				if(type.asString().equals(name))
+					return type;
+			}
+			LOGGER.error("No minestuck boat type matching string \"{}\"", name);
+			return IRON;
+		}
+		
+		public ResourceLocation getBoatTexture()
+		{
+			return boatTexture;
+		}
 	}
 }
