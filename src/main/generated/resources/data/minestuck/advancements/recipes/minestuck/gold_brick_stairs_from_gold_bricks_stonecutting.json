@@ -11,7 +11,7 @@
       "conditions": {
         "items": [
           {
-            "item": "minestuck:gold_bricks"
+            "item": "minestuck:glowing_gold_bricks"
           }
         ]
       }

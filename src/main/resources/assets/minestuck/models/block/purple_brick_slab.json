@@ -1,8 +1,0 @@
-{
-  "parent": "block/slab",
-  "textures": {
-    "bottom": "minestuck:block/purple_bricks",
-    "top": "minestuck:block/purple_bricks",
-    "side": "minestuck:block/purple_bricks"
-  }
-}

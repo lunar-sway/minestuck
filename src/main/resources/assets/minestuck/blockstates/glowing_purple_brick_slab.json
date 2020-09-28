@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "type=bottom": { "model": "minestuck:block/glowing_purple_brick_slab" },
+    "type=top":    { "model": "minestuck:block/glowing_purple_brick_slab_top" },
+    "type=double": { "model": "minestuck:block/glowing_purple_bricks" }
+  }
+}

@@ -8,7 +8,8 @@
     "minestuck:mycelium_brick_stairs",
     "minestuck:chalk_stairs",
     "minestuck:chalk_brick_stairs",
-    "minestuck:gold_brick_stairs",
-    "minestuck:pink_stone_brick_stairs"
+    "minestuck:pink_stone_brick_stairs",
+    "minestuck:glowing_gold_brick_stairs",
+    "minestuck:glowing_purple_brick_stairs"
   ]
 }

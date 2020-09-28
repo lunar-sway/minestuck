@@ -555,7 +555,7 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSBlocks.FLOWERY_MOSSY_STONE_BRICKS).grist(BUILD, 7).grist(AMBER, 1).grist(IODINE, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.FLOWERY_MOSSY_COBBLESTONE).grist(BUILD, 7).grist(AMBER, 1).grist(IODINE, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.TREATED_PLANKS).grist(BUILD, 2).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSBlocks.GOLD_BRICKS).grist(BUILD, 4).grist(GOLD, 2).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.GLOWING_GOLD_BRICKS).grist(BUILD, 4).grist(GOLD, 2).build(recipeSaver);
 		
 		GristCostRecipeBuilder.of(MSItems.SBAHJ_POSTER).grist(BUILD, 4).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CREW_POSTER).grist(TAR, 3).grist(RUST, 2).build(recipeSaver);

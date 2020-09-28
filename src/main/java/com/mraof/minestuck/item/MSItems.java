@@ -377,20 +377,20 @@ public class MSItems
 		registerItemBlock(registry, LIGHT_GRAY_CHESS_DIRT, MSItemGroup.MAIN);
 		registerItemBlock(registry, SKAIA_PORTAL, MSItemGroup.MAIN);
 
-		registerItemBlock(registry, GOLD_BRICKS, MSItemGroup.MAIN);
-		registerItemBlock(registry, GOLD_BRICK_CHISELED, MSItemGroup.MAIN);
-		registerItemBlock(registry, GOLD_COLUMN, MSItemGroup.MAIN);
-		registerItemBlock(registry, GOLD_WALL, MSItemGroup.MAIN);
-		registerItemBlock(registry, GOLD_SPIKE, MSItemGroup.MAIN);
-		registerItemBlock(registry, PURPLE_BRICKS, MSItemGroup.MAIN);
-		registerItemBlock(registry, PURPLE_BRICK_CHISELED, MSItemGroup.MAIN);
-		registerItemBlock(registry, PURPLE_COLUMN, MSItemGroup.MAIN);
-		registerItemBlock(registry, GOLD_BRICK_STAIRS, MSItemGroup.MAIN);
-		registerItemBlock(registry, GOLD_BRICK_SLAB, MSItemGroup.MAIN);
-		registerItemBlock(registry, PURPLE_BRICK_STAIRS, MSItemGroup.MAIN);
-		registerItemBlock(registry, PURPLE_BRICK_SLAB, MSItemGroup.MAIN);
-		registerItemBlock(registry, PURPLE_WALL, MSItemGroup.MAIN);
-		registerItemBlock(registry, PURPLE_SPIKE, MSItemGroup.MAIN);
+		registerItemBlock(registry, GLOWING_GOLD_BRICKS, MSItemGroup.MAIN);
+		registerItemBlock(registry, GLOWING_GOLD_BRICK_CHISELED, MSItemGroup.MAIN);
+		registerItemBlock(registry, GLOWING_GOLD_COLUMN, MSItemGroup.MAIN);
+		registerItemBlock(registry, GLOWING_GOLD_WALL, MSItemGroup.MAIN);
+		registerItemBlock(registry, GLOWING_GOLD_SPIKE, MSItemGroup.MAIN);
+		registerItemBlock(registry, GLOWING_PURPLE_BRICKS, MSItemGroup.MAIN);
+		registerItemBlock(registry, GLOWING_PURPLE_BRICK_CHISELED, MSItemGroup.MAIN);
+		registerItemBlock(registry, GLOWING_PURPLE_COLUMN, MSItemGroup.MAIN);
+		registerItemBlock(registry, GLOWING_GOLD_BRICK_STAIRS, MSItemGroup.MAIN);
+		registerItemBlock(registry, GLOWING_GOLD_BRICK_SLAB, MSItemGroup.MAIN);
+		registerItemBlock(registry, GLOWING_PURPLE_BRICK_STAIRS, MSItemGroup.MAIN);
+		registerItemBlock(registry, GLOWING_PURPLE_BRICK_SLAB, MSItemGroup.MAIN);
+		registerItemBlock(registry, GLOWING_PURPLE_WALL, MSItemGroup.MAIN);
+		registerItemBlock(registry, GLOWING_PURPLE_SPIKE, MSItemGroup.MAIN);
 
 		registerItemBlock(registry, STONE_CRUXITE_ORE, MSItemGroup.LANDS);
 		registerItemBlock(registry, NETHERRACK_CRUXITE_ORE, MSItemGroup.LANDS);

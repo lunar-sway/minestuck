@@ -1,0 +1,7 @@
+{
+  "parent": "block/cube_column",
+  "textures": {
+    "end": "minestuck:block/glowing_gold_brick_chiseled",
+    "side": "minestuck:block/glowing_gold_column"
+  }
+}

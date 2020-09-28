@@ -41,20 +41,20 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(DARK_GRAY_CHESS_DIRT);
 		registerDropSelfLootTable(LIGHT_GRAY_CHESS_DIRT);
 
-		registerDropSelfLootTable(GOLD_BRICKS);
-		registerDropSelfLootTable(GOLD_BRICK_CHISELED);
-		registerDropSelfLootTable(GOLD_BRICK_STAIRS);
-		registerDropSelfLootTable(GOLD_BRICK_SLAB);
-		registerDropSelfLootTable(GOLD_COLUMN);
-		registerDropSelfLootTable(GOLD_WALL);
-		registerDropSelfLootTable(GOLD_SPIKE);
-		registerDropSelfLootTable(PURPLE_BRICKS);
-		registerDropSelfLootTable(PURPLE_BRICK_CHISELED);
-		registerDropSelfLootTable(PURPLE_BRICK_STAIRS);
-		registerDropSelfLootTable(PURPLE_BRICK_SLAB);
-		registerDropSelfLootTable(PURPLE_COLUMN);
-		registerDropSelfLootTable(PURPLE_WALL);
-		registerDropSelfLootTable(PURPLE_SPIKE);
+		registerDropSelfLootTable(GLOWING_GOLD_BRICKS);
+		registerDropSelfLootTable(GLOWING_GOLD_BRICK_CHISELED);
+		registerDropSelfLootTable(GLOWING_GOLD_BRICK_STAIRS);
+		registerDropSelfLootTable(GLOWING_GOLD_BRICK_SLAB);
+		registerDropSelfLootTable(GLOWING_GOLD_COLUMN);
+		registerDropSelfLootTable(GLOWING_GOLD_WALL);
+		registerDropSelfLootTable(GLOWING_GOLD_SPIKE);
+		registerDropSelfLootTable(GLOWING_PURPLE_BRICKS);
+		registerDropSelfLootTable(GLOWING_PURPLE_BRICK_CHISELED);
+		registerDropSelfLootTable(GLOWING_PURPLE_BRICK_STAIRS);
+		registerDropSelfLootTable(GLOWING_PURPLE_BRICK_SLAB);
+		registerDropSelfLootTable(GLOWING_PURPLE_COLUMN);
+		registerDropSelfLootTable(GLOWING_PURPLE_WALL);
+		registerDropSelfLootTable(GLOWING_PURPLE_SPIKE);
 		
 		registerLootTable(STONE_CRUXITE_ORE, MSBlockLootTables::cruxiteOreDrop);
 		registerLootTable(COBBLESTONE_CRUXITE_ORE, MSBlockLootTables::cruxiteOreDrop);
@@ -115,7 +115,6 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(CHISELED_PINK_STONE_BRICKS);
 		registerDropSelfLootTable(CRACKED_PINK_STONE_BRICKS);
 		registerDropSelfLootTable(MOSSY_PINK_STONE_BRICKS);
-		registerDropSelfLootTable(GOLD_BRICKS);
 		registerDropSelfLootTable(BROWN_DUNGEON_BRICKS);
 		registerDropSelfLootTable(BROWN_DUNGEON_TILE);
 		registerDropSelfLootTable(BROWN_DUNGEON_COLUMN);
@@ -225,7 +224,6 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(MYCELIUM_BRICK_STAIRS);
 		registerDropSelfLootTable(CHALK_STAIRS);
 		registerDropSelfLootTable(CHALK_BRICK_STAIRS);
-		registerDropSelfLootTable(GOLD_BRICK_STAIRS);
 		registerDropSelfLootTable(PINK_STONE_BRICK_STAIRS);
 		registerDropSelfLootTable(RAINBOW_PLANKS_STAIRS);
 		registerDropSelfLootTable(END_PLANKS_STAIRS);

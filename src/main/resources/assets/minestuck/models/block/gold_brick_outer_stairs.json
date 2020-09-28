@@ -1,8 +1,0 @@
-{
-  "parent": "block/outer_stairs",
-  "textures": {
-    "bottom": "minestuck:block/gold_bricks",
-    "top": "minestuck:block/gold_bricks",
-    "side": "minestuck:block/gold_bricks"
-  }
-}

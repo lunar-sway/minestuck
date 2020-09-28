@@ -1,8 +1,8 @@
 {
   "type": "minecraft:stonecutting",
   "ingredient": {
-    "item": "minestuck:gold_bricks"
+    "item": "minestuck:glowing_gold_bricks"
   },
-  "result": "minestuck:gold_brick_stairs",
+  "result": "minestuck:glowing_gold_brick_stairs",
   "count": 1
 }
