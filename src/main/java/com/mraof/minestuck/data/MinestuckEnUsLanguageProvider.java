@@ -64,14 +64,14 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.GLOWING_GOLD_BRICKS, "Gold Bricks");
 		add(MSBlocks.GLOWING_GOLD_BRICK_STAIRS, "Gold Brick Stairs");
 		add(MSBlocks.GLOWING_GOLD_BRICK_SLAB, "Gold Brick Slab");
-		add(MSBlocks.GLOWING_GOLD_BRICK_CHISELED, "Chiseled Gold Bricks");
+		add(MSBlocks.CHISELED_GLOWING_GOLD_BRICK, "Chiseled Gold Bricks");
 		add(MSBlocks.GLOWING_GOLD_COLUMN, "Gold Column");
 		add(MSBlocks.GLOWING_GOLD_WALL, "Gold Wall");
 		add(MSBlocks.GLOWING_GOLD_SPIKE, "Gold Spike");
 		add(MSBlocks.GLOWING_PURPLE_BRICKS, "Purple Bricks");
 		add(MSBlocks.GLOWING_PURPLE_BRICK_STAIRS, "Purple Brick Stairs");
 		add(MSBlocks.GLOWING_PURPLE_BRICK_SLAB, "Purple Brick Slab");
-		add(MSBlocks.GLOWING_PURPLE_BRICK_CHISELED, "Chiseled Purple Bricks");
+		add(MSBlocks.CHISELED_GLOWING_PURPLE_BRICK, "Chiseled Purple Bricks");
 		add(MSBlocks.GLOWING_PURPLE_COLUMN, "Purple Column");
 		add(MSBlocks.GLOWING_PURPLE_WALL, "Purple Wall");
 		add(MSBlocks.GLOWING_PURPLE_SPIKE, "Purple Spike");
@@ -1671,7 +1671,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addSubtitles("horn", "Horn honks");
 		addSubtitles("screech", "Estrogen-empowered screech");
 		addSubtitles("upcheladder", "Echeladder levels up");
-		addSubtitles("lootblock", "Fanfare for collecting loot!");
 
 		addEntitySubtitles(MSEntityTypes.NAKAGATOR, "ambient", "Nakagator naks");
 		addEntitySubtitles(MSEntityTypes.NAKAGATOR, "hurt", "Nakagator hurts");

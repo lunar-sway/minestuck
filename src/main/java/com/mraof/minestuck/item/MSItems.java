@@ -378,12 +378,12 @@ public class MSItems
 		registerItemBlock(registry, SKAIA_PORTAL, MSItemGroup.MAIN);
 
 		registerItemBlock(registry, GLOWING_GOLD_BRICKS, MSItemGroup.MAIN);
-		registerItemBlock(registry, GLOWING_GOLD_BRICK_CHISELED, MSItemGroup.MAIN);
+		registerItemBlock(registry, CHISELED_GLOWING_GOLD_BRICK, MSItemGroup.MAIN);
 		registerItemBlock(registry, GLOWING_GOLD_COLUMN, MSItemGroup.MAIN);
 		registerItemBlock(registry, GLOWING_GOLD_WALL, MSItemGroup.MAIN);
 		registerItemBlock(registry, GLOWING_GOLD_SPIKE, MSItemGroup.MAIN);
 		registerItemBlock(registry, GLOWING_PURPLE_BRICKS, MSItemGroup.MAIN);
-		registerItemBlock(registry, GLOWING_PURPLE_BRICK_CHISELED, MSItemGroup.MAIN);
+		registerItemBlock(registry, CHISELED_GLOWING_PURPLE_BRICK, MSItemGroup.MAIN);
 		registerItemBlock(registry, GLOWING_PURPLE_COLUMN, MSItemGroup.MAIN);
 		registerItemBlock(registry, GLOWING_GOLD_BRICK_STAIRS, MSItemGroup.MAIN);
 		registerItemBlock(registry, GLOWING_GOLD_BRICK_SLAB, MSItemGroup.MAIN);

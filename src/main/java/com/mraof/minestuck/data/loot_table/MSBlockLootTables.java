@@ -42,14 +42,14 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(LIGHT_GRAY_CHESS_DIRT);
 
 		registerDropSelfLootTable(GLOWING_GOLD_BRICKS);
-		registerDropSelfLootTable(GLOWING_GOLD_BRICK_CHISELED);
+		registerDropSelfLootTable(CHISELED_GLOWING_GOLD_BRICK);
 		registerDropSelfLootTable(GLOWING_GOLD_BRICK_STAIRS);
 		registerDropSelfLootTable(GLOWING_GOLD_BRICK_SLAB);
 		registerDropSelfLootTable(GLOWING_GOLD_COLUMN);
 		registerDropSelfLootTable(GLOWING_GOLD_WALL);
 		registerDropSelfLootTable(GLOWING_GOLD_SPIKE);
 		registerDropSelfLootTable(GLOWING_PURPLE_BRICKS);
-		registerDropSelfLootTable(GLOWING_PURPLE_BRICK_CHISELED);
+		registerDropSelfLootTable(CHISELED_GLOWING_PURPLE_BRICK);
 		registerDropSelfLootTable(GLOWING_PURPLE_BRICK_STAIRS);
 		registerDropSelfLootTable(GLOWING_PURPLE_BRICK_SLAB);
 		registerDropSelfLootTable(GLOWING_PURPLE_COLUMN);

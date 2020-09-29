@@ -34,14 +34,14 @@ public class MSBlocks
 
 	//Kingdoms
 	public static final Block GLOWING_GOLD_BRICKS = getNull();
-	public static final Block GLOWING_GOLD_BRICK_CHISELED = getNull();
+	public static final Block CHISELED_GLOWING_GOLD_BRICK = getNull();
 	public static final Block GLOWING_GOLD_BRICK_STAIRS = getNull();
 	public static final Block GLOWING_GOLD_BRICK_SLAB = getNull();
 	public static final Block GLOWING_GOLD_COLUMN = getNull();
 	public static final Block GLOWING_GOLD_WALL = getNull();
 	public static final Block GLOWING_GOLD_SPIKE = getNull();
 	public static final Block GLOWING_PURPLE_BRICKS = getNull();
-	public static final Block GLOWING_PURPLE_BRICK_CHISELED = getNull();
+	public static final Block CHISELED_GLOWING_PURPLE_BRICK = getNull();
 	public static final Block GLOWING_PURPLE_BRICK_STAIRS = getNull();
 	public static final Block GLOWING_PURPLE_BRICK_SLAB = getNull();
 	public static final Block GLOWING_PURPLE_COLUMN = getNull();
@@ -229,14 +229,14 @@ public class MSBlocks
 		Block goldBricks = register(registry, new Block(Block.Properties.create(Material.ROCK, MaterialColor.YELLOW).hardnessAndResistance(6.0F, 9.0F).harvestTool(ToolType.PICKAXE).lightValue(13).harvestLevel(3)).setRegistryName("glowing_gold_bricks"));
 		registry.register(new ModStairsBlock(goldBricks.getDefaultState(), Block.Properties.from(goldBricks)).setRegistryName("glowing_gold_brick_stairs"));
 		registry.register(new SlabBlock(Block.Properties.from(goldBricks)).setRegistryName("glowing_gold_brick_slab"));
-		registry.register(new Block(Block.Properties.from(goldBricks)).setRegistryName("glowing_gold_brick_chiseled"));
+		registry.register(new Block(Block.Properties.from(goldBricks)).setRegistryName("chiseled_glowing_gold_brick"));
 		registry.register(new MSDirectionalBlock(Block.Properties.from(goldBricks)).setRegistryName("glowing_gold_column"));
 		registry.register(new WallBlock(Block.Properties.from(goldBricks)).setRegistryName("glowing_gold_wall"));
 		registry.register(new DecorBlock(Block.Properties.from(goldBricks), MSBlockShapes.SPIKE).setRegistryName("glowing_gold_spike"));
 		Block purpleBricks = register(registry, new Block(Block.Properties.create(Material.ROCK, MaterialColor.PURPLE).hardnessAndResistance(6.0F, 9.0F).harvestTool(ToolType.PICKAXE).lightValue(10).harvestLevel(3)).setRegistryName("glowing_purple_bricks"));
 		registry.register(new ModStairsBlock(purpleBricks.getDefaultState(), Block.Properties.from(purpleBricks)).setRegistryName("glowing_purple_brick_stairs"));
 		registry.register(new SlabBlock(Block.Properties.from(purpleBricks)).setRegistryName("glowing_purple_brick_slab"));
-		registry.register(new Block(Block.Properties.from(purpleBricks)).setRegistryName("glowing_purple_brick_chiseled"));
+		registry.register(new Block(Block.Properties.from(purpleBricks)).setRegistryName("chiseled_glowing_purple_brick"));
 		registry.register(new MSDirectionalBlock(Block.Properties.from(purpleBricks)).setRegistryName("glowing_purple_column"));
 		registry.register(new WallBlock(Block.Properties.from(purpleBricks)).setRegistryName("glowing_purple_wall"));
 		registry.register(new DecorBlock(Block.Properties.from(purpleBricks), MSBlockShapes.SPIKE).setRegistryName("glowing_purple_spike"));

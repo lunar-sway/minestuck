@@ -1,7 +1,7 @@
 {
   "parent": "block/cube_column",
   "textures": {
-    "end": "minestuck:block/glowing_purple_brick_chiseled",
+    "end": "minestuck:block/chiseled_glowing_purple_brick",
     "side": "minestuck:block/glowing_purple_column"
   }
 }
