@@ -273,16 +273,6 @@
       }
     ]
   },
-  "block.lootblock.open": {
-    "category": "block",
-    "subtitle": "subtitles.minestuck.lootblock",
-    "sounds": [
-      {
-        "name": "minestuck:random/lootblock",
-        "stream": false
-      }
-    ]
-  },
   "event.echeladder.increase": {
     "category": "ambient",
     "subtitle": "subtitles.minestuck.upcheladder",
