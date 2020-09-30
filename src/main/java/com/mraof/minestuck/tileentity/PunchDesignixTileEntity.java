@@ -2,7 +2,7 @@ package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.block.PunchDesignixBlock;
+import com.mraof.minestuck.block.machine.PunchDesignixBlock;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
@@ -25,7 +25,7 @@ import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
 
-import static com.mraof.minestuck.block.MachineBlock.FACING;
+import static com.mraof.minestuck.block.machine.MachineBlock.FACING;
 
 public class PunchDesignixTileEntity extends TileEntity
 {

@@ -1,7 +1,7 @@
 package com.mraof.minestuck.tileentity;
 
-import com.mraof.minestuck.block.HolopadBlock;
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.block.machine.HolopadBlock;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import net.minecraft.block.Block;

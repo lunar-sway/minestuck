@@ -1,8 +1,8 @@
 package com.mraof.minestuck.world.gen.feature.tree;
 
 import com.mojang.datafixers.Dynamic;
-import com.mraof.minestuck.block.DoubleLogBlock;
-import com.mraof.minestuck.block.EndLeavesBlock;
+import com.mraof.minestuck.block.plant.DoubleLogBlock;
+import com.mraof.minestuck.block.plant.EndLeavesBlock;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;

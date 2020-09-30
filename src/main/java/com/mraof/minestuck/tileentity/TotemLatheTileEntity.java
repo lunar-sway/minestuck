@@ -3,7 +3,7 @@ package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.block.EnumDowelType;
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.block.TotemLatheBlock;
+import com.mraof.minestuck.block.machine.TotemLatheBlock;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;

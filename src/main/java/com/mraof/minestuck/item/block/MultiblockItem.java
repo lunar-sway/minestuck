@@ -1,7 +1,7 @@
 package com.mraof.minestuck.item.block;
 
-import com.mraof.minestuck.block.AlchemiterBlock;
-import com.mraof.minestuck.block.multiblock.MachineMultiblock;
+import com.mraof.minestuck.block.machine.AlchemiterBlock;
+import com.mraof.minestuck.block.machine.MachineMultiblock;
 import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.Block;

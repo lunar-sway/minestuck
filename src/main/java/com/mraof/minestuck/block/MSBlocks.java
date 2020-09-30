@@ -1,10 +1,10 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.block.multiblock.AlchemiterMultiblock;
-import com.mraof.minestuck.block.multiblock.CruxtruderMultiblock;
-import com.mraof.minestuck.block.multiblock.PunchDesignixMultiblock;
-import com.mraof.minestuck.block.multiblock.TotemLatheMultiblock;
+import com.mraof.minestuck.block.fluid.FlowingModFluidBlock;
+import com.mraof.minestuck.block.fluid.FlowingWaterColorsBlock;
+import com.mraof.minestuck.block.machine.*;
+import com.mraof.minestuck.block.plant.*;
 import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.util.CustomVoxelShape;
