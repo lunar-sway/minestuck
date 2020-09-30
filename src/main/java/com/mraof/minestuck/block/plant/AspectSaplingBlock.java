@@ -17,12 +17,13 @@ public class AspectSaplingBlock extends BushBlock implements IGrowable
 {
 	protected static final VoxelShape SHAPE = Block.makeCuboidShape(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
 	
-	protected AspectSaplingBlock(Properties properties)
+	public AspectSaplingBlock(Properties properties)
 	{
 		super(properties);
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
 	{
 		return SHAPE;

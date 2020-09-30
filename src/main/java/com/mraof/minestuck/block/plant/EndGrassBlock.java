@@ -14,7 +14,7 @@ import java.util.Random;
 
 public class EndGrassBlock extends Block
 {
-	protected EndGrassBlock(Properties properties)
+	public EndGrassBlock(Properties properties)
 	{
 		super(properties);
 	}

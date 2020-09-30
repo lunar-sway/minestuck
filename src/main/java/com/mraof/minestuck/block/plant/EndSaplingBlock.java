@@ -28,7 +28,7 @@ public class EndSaplingBlock extends BushBlock implements IGrowable
 	
 	private final Tree tree = new EndTree();
 	
-	protected EndSaplingBlock(Properties properties)
+	public EndSaplingBlock(Properties properties)
 	{
 		super(properties);
 		this.setDefaultState(this.stateContainer.getBaseState().with(ALPHA, false).with(OMEGA, false));

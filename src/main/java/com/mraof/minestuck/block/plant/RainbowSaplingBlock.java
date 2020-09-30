@@ -32,19 +32,21 @@ public class RainbowSaplingBlock extends BushBlock implements IGrowable
 	
 	private final Tree tree = new RainbowTree();
 	
-	protected RainbowSaplingBlock(Properties properties)
+	public RainbowSaplingBlock(Properties properties)
 	{
 		super(properties);
 		this.setDefaultState(this.stateContainer.getBaseState().with(RED, false).with(GREEN, false).with(BLUE, false));
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
 	{
 		return SHAPE;
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random)
 	{
 		super.tick(state, worldIn, pos, random);
@@ -92,6 +94,7 @@ public class RainbowSaplingBlock extends BushBlock implements IGrowable
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving)
 	{
 		BlockState soil = worldIn.getBlockState(pos.down());
@@ -148,6 +151,7 @@ public class RainbowSaplingBlock extends BushBlock implements IGrowable
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
 	{
 		ItemStack stack = player.getHeldItem(hand);

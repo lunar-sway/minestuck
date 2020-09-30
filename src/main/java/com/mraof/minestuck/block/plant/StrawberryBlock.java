@@ -16,7 +16,7 @@ public class StrawberryBlock extends StemGrownBlock
 {
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	
-	protected StrawberryBlock(Properties properties)
+	public StrawberryBlock(Properties properties)
 	{
 		super(properties);
 		
