@@ -1,6 +1,7 @@
-package com.mraof.minestuck.network;
+package com.mraof.minestuck.network.data;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.network.PlayToClientPacket;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
