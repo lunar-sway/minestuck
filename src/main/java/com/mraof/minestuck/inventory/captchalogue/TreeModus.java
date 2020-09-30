@@ -30,7 +30,7 @@ public class TreeModus extends Modus
 	}
 	
 	@Override
-	public void initModus(ServerPlayerEntity player, NonNullList<ItemStack> prev, int size)
+	public void initModus(ItemStack modusItem, ServerPlayerEntity player, NonNullList<ItemStack> prev, int size)
 	{
 		this.size = size;
 		node = null; //TODO Handle potential prev list instead

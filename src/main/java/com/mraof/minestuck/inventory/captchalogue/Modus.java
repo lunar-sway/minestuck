@@ -28,18 +28,7 @@ public abstract class Modus
 	 * This is called when the modus is created without calling readFromNBT(nbt).
 	 * Note that this method is used to clear the inventory/size after dropping stuff on death without creating a new instance.
 	 */
-	@Deprecated //will be removed in favor of the other initModus function;
-	public void initModus(ServerPlayerEntity player, NonNullList<ItemStack> prev, int size)
-	{}
-	
-	/**
-	 * This is called when the modus is created without calling readFromNBT(nbt).
-	 * Note that this method is used to clear the inventory/size after dropping stuff on death without creating a new instance.
-	 */
-	public void initModus(ItemStack modusItem, ServerPlayerEntity player, NonNullList<ItemStack> prev, int size)
-	{
-		initModus(player, prev, size);
-	}
+	public abstract void initModus(ItemStack modusItem, ServerPlayerEntity player, NonNullList<ItemStack> prev, int size);
 	
 	public abstract void readFromNBT(CompoundNBT nbt);
 	

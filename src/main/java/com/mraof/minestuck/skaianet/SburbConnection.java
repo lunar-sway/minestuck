@@ -250,8 +250,6 @@ public final class SburbConnection
 			throw new IllegalStateException("Can't have entered twice");
 		hasEntered = true;
 	}
-	@Deprecated
-	public boolean hasGivenItem(String item) { return givenItemList.contains(item); }
 	public boolean hasGivenItem(DeployEntry item) { return givenItemList.contains(item.getName()); }
 	public void setHasGivenItem(DeployEntry item)
 	{

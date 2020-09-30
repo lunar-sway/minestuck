@@ -32,7 +32,7 @@ public class HashMapModus extends Modus
 	}
 	
 	@Override
-	public void initModus(ServerPlayerEntity player, NonNullList<ItemStack> prev, int size)
+	public void initModus(ItemStack modusItem, ServerPlayerEntity player, NonNullList<ItemStack> prev, int size)
 	{
 		list = NonNullList.create();
 		if(prev != null)

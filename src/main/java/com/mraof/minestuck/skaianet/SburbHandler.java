@@ -14,7 +14,6 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.MinestuckRandom;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
@@ -253,7 +252,7 @@ public final class SburbHandler
 	 */
 	static void onConnectionCreated(SburbConnection c)
 	{
-		Random rand = MinestuckRandom.getPlayerSpecificRandom(c.getClientIdentifier(), 0);
+		Random rand = new Random();	//TODO seed?
 		c.artifactType = rand.nextInt(2);
 		Debug.infof("Randomized artifact type to be: %d for player %s.", c.artifactType, c.getClientIdentifier().getUsername());
 	}
