@@ -5,10 +5,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.ExtraJSONUtils;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -316,7 +316,7 @@ public class GristSet
 			GristType type = GristTypes.getRegistry().getValue(gristId);
 			if(type == null)
 				throw new JsonParseException("'"+entry.getKey()+"' did not match an existing grist type!");
-			long amount = ExtraJSONUtils.getLong(entry.getValue(), entry.getKey());
+			long amount = JSONUtils.func_219794_f(entry.getValue(), entry.getKey());	//getLong
 			set.addGrist(type, amount);
 		}
 		
