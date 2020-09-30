@@ -366,7 +366,7 @@ public class MSItems
 		registerItemBlock(registry, WHITE_CHESS_DIRT, MSItemGroup.MAIN);
 		registerItemBlock(registry, DARK_GRAY_CHESS_DIRT, MSItemGroup.MAIN);
 		registerItemBlock(registry, LIGHT_GRAY_CHESS_DIRT, MSItemGroup.MAIN);
-		registerItemBlock(registry, SKAIA_PORTAL, MSItemGroup.MAIN);
+		registerItemBlock(registry, SKAIA_PORTAL, new Item.Properties().group(MSItemGroup.MAIN).rarity(Rarity.EPIC));
 		
 		registerItemBlock(registry, STONE_CRUXITE_ORE, MSItemGroup.LANDS);
 		registerItemBlock(registry, NETHERRACK_CRUXITE_ORE, MSItemGroup.LANDS);
@@ -494,18 +494,18 @@ public class MSItems
 		registerItemBlock(registry, SPACE_ASPECT_LEAVES);
 		registerItemBlock(registry, TIME_ASPECT_LEAVES);
 		registerItemBlock(registry, VOID_ASPECT_LEAVES);
-		registerItemBlock(registry, BLOOD_ASPECT_SAPLING);
-		registerItemBlock(registry, BREATH_ASPECT_SAPLING);
-		registerItemBlock(registry, DOOM_ASPECT_SAPLING);
-		registerItemBlock(registry, HEART_ASPECT_SAPLING);
-		registerItemBlock(registry, HOPE_ASPECT_SAPLING);
-		registerItemBlock(registry, LIFE_ASPECT_SAPLING);
-		registerItemBlock(registry, LIGHT_ASPECT_SAPLING);
-		registerItemBlock(registry, MIND_ASPECT_SAPLING);
-		registerItemBlock(registry, RAGE_ASPECT_SAPLING);
-		registerItemBlock(registry, SPACE_ASPECT_SAPLING);
-		registerItemBlock(registry, TIME_ASPECT_SAPLING);
-		registerItemBlock(registry, VOID_ASPECT_SAPLING);
+		registerItemBlock(registry, BLOOD_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
+		registerItemBlock(registry, BREATH_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
+		registerItemBlock(registry, DOOM_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
+		registerItemBlock(registry, HEART_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
+		registerItemBlock(registry, HOPE_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
+		registerItemBlock(registry, LIFE_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
+		registerItemBlock(registry, LIGHT_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
+		registerItemBlock(registry, MIND_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
+		registerItemBlock(registry, RAGE_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
+		registerItemBlock(registry, SPACE_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
+		registerItemBlock(registry, TIME_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
+		registerItemBlock(registry, VOID_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
 		
 		registerItemBlock(registry, GLOWING_MUSHROOM, MSItemGroup.LANDS);
 		registerItemBlock(registry, DESERT_BUSH, MSItemGroup.LANDS);
@@ -557,7 +557,7 @@ public class MSItems
 		registerItemBlock(registry, HUBTOP, MSItemGroup.MAIN);
 		registerItemBlock(registry, LUNCHTOP, MSItemGroup.MAIN);
 		registerItemBlock(registry, new TransportalizerItem(TRANSPORTALIZER, new Item.Properties().group(MSItemGroup.MAIN)));
-		registerItemBlock(registry, GRIST_WIDGET, MSItemGroup.MAIN);
+		registerItemBlock(registry, GRIST_WIDGET, new Item.Properties().group(MSItemGroup.MAIN).rarity(Rarity.UNCOMMON));
 		registerItemBlock(registry, URANIUM_COOKER, MSItemGroup.MAIN);
 		
 		registerItemBlock(registry, new DowelItem(CRUXITE_DOWEL, new Item.Properties().group(MSItemGroup.MAIN)));
@@ -599,7 +599,7 @@ public class MSItems
 		registry.register(new FireWeaponItem(MSItemTypes.RUBY_TIER, 6, -2.8F, 12.0F, 25,  MSItemTypes.HAMMER_TOOL, new Item.Properties().defaultMaxDamage(1413).group(MSItemGroup.WEAPONS)).setRegistryName("melt_masher"));
 		registry.register(new PogoFarmineItem(MSItemTypes.RUBY_TIER, 5, -2.8F, 9.0F, Integer.MAX_VALUE, 200, 0.7, MSItemTypes.MULTI_TOOL,  new Item.Properties().defaultMaxDamage(6114).group(MSItemGroup.WEAPONS)).setRegistryName("estrogen_empowered_everything_eradicator"));
 		registry.register(new SbahjEEEEItem(MSItemTypes.RUBY_TIER, 5, -2.8F, 9.1F, 0.2,  MSItemTypes.HAMMER_TOOL, new Item.Properties().defaultMaxDamage(6114).group(MSItemGroup.WEAPONS)).setRegistryName("eeeeeeeeeeee"));
-		registry.register(new WeaponItem(MSItemTypes.ZILLYHOO_TIER, 6, -2.8F, 15.0F,  MSItemTypes.HAMMER_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("zillyhoo_hammer"));
+		registry.register(new WeaponItem(MSItemTypes.ZILLYHOO_TIER, 6, -2.8F, 15.0F,  MSItemTypes.HAMMER_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.RARE)).setRegistryName("zillyhoo_hammer"));
 		registry.register(new RandomWeaponItem(MSItemTypes.ZILLYHOO_TIER, 3, -2.8F, 15.0F,  MSItemTypes.HAMMER_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("popamatic_vrillyhoo"));
 		registry.register(new FireWeaponItem(MSItemTypes.RUBY_TIER, 6, -2.8F, 4.0F, 50,  MSItemTypes.HAMMER_TOOL, new Item.Properties()).setRegistryName("scarlet_zillyhoo"));
 		registry.register(new WeaponItem(MSItemTypes.RUBY_TIER, 7, -2.8F, 4.0F,  MSItemTypes.HAMMER_TOOL, new Item.Properties()).setRegistryName("mwrthwl"));
@@ -619,7 +619,7 @@ public class MSItems
 		registry.register(new WeaponItem(MSItemTypes.RUBY_TIER, 2, -2.4F, 15.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().defaultMaxDamage(1025).group(MSItemGroup.WEAPONS)).setRegistryName("caledfwlch"));
 		registry.register(new WeaponItem(MSItemTypes.RUBY_TIER, 3, -2.4F, 15.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().defaultMaxDamage(1561).group(MSItemGroup.WEAPONS)).setRegistryName("royal_deringer"));
 		registry.register(new WeaponItem(ItemTier.IRON, 5, -2.6F, 15.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().defaultMaxDamage(600).group(MSItemGroup.WEAPONS)).setRegistryName("claymore"));
-		registry.register(new WeaponItem(MSItemTypes.ZILLYHOO_TIER, 3, -2.4F, 15.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("cutlass_of_zillywair"));
+		registry.register(new WeaponItem(MSItemTypes.ZILLYHOO_TIER, 3, -2.4F, 15.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.RARE)).setRegistryName("cutlass_of_zillywair"));
 		registry.register(new WeaponItem(MSItemTypes.REGI_TIER, 3, -2.4F, 15.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("regisword"));
 		registry.register(new WeaponItem(MSItemTypes.RUBY_TIER, 3, -2.4F, 15.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("scarlet_ribbitar"));
 		registry.register(new WeaponItem(MSItemTypes.RUBY_TIER, 1, -2.4F, 15.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().defaultMaxDamage(1000).group(MSItemGroup.WEAPONS)).setRegistryName("dogg_machete"));
@@ -756,8 +756,8 @@ public class MSItems
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("energy_core"));
 		//have to fix Cruxite artifact classes
 		
-		registry.register(new CruxiteAppleItem(new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("cruxite_apple"));
-		registry.register(new CruxitePotionItem(new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("cruxite_potion"));
+		registry.register(new CruxiteAppleItem(new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN).rarity(Rarity.UNCOMMON)).setRegistryName("cruxite_apple"));
+		registry.register(new CruxitePotionItem(new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN).rarity(Rarity.UNCOMMON)).setRegistryName("cruxite_potion"));
 		
 		registry.register(new Item(new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("client_disk"));
 		registry.register(new Item(new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("server_disk"));
@@ -768,7 +768,7 @@ public class MSItems
 		registry.register(new Item(new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("tree_modus_card"));
 		registry.register(new Item(new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("hashmap_modus_card"));
 		registry.register(new Item(new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("set_modus_card"));
-		registry.register(new ShuntItem(new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("shunt"));
+		registry.register(new ShuntItem(new Item.Properties().maxStackSize(1)).setRegistryName("shunt"));
 		
 		//food
 		registry.register(new HealingFoodItem(4F, new Item.Properties().group(MSItemGroup.MAIN).food(MSFoods.PHLEGM_GUSHERS)).setRegistryName("phlegm_gushers"));
@@ -810,8 +810,8 @@ public class MSItems
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN).food(MSFoods.DIAMOND_MINT)).setRegistryName("diamond_mint"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN).food(MSFoods.GOLD_CANDY_RIBBON)).setRegistryName("gold_candy_ribbon"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN).food(MSFoods.URANIUM_GUMMY_BEAR)).setRegistryName("uranium_gummy_bear"));
-		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN).food(MSFoods.ARTIFACT_WARHEAD)).setRegistryName("artifact_warhead"));
-		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN).food(MSFoods.ZILLIUM_SKITTLES)).setRegistryName("zillium_skittles"));
+		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN).food(MSFoods.ARTIFACT_WARHEAD).rarity(Rarity.UNCOMMON)).setRegistryName("artifact_warhead"));
+		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN).food(MSFoods.ZILLIUM_SKITTLES).rarity(Rarity.UNCOMMON)).setRegistryName("zillium_skittles"));
 		registry.register(new DrinkableItem(new Item.Properties().maxStackSize(16).group(MSItemGroup.MAIN).food(MSFoods.TAB)).setRegistryName("tab"));
 		registry.register(new DrinkableItem(new Item.Properties().maxStackSize(16).group(MSItemGroup.MAIN).food(MSFoods.FAYGO)).setRegistryName("orange_faygo"));
 		registry.register(new DrinkableItem(new Item.Properties().maxStackSize(16).group(MSItemGroup.MAIN).food(MSFoods.FAYGO_CANDY_APPLE)).setRegistryName("candy_apple_faygo"));
@@ -843,8 +843,8 @@ public class MSItems
 		registry.register(new BucketItem(MSFluids.LIGHT_WATER, new Item.Properties().containerItem(Items.BUCKET).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("light_water_bucket"));
 		registry.register(new ObsidianBucketItem(new Item.Properties().maxStackSize(1).containerItem(Items.BUCKET).group(MSItemGroup.MAIN)).setRegistryName("obsidian_bucket"));
 		registry.register(new CaptcharoidCameraItem(new Item.Properties().defaultMaxDamage(64).group(MSItemGroup.MAIN)).setRegistryName("captcharoid_camera"));
-		registry.register(new GrimoireItem(new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("grimoire"));
-		registry.register(new LongForgottenWarhornItem(new Item.Properties().defaultMaxDamage(100).group(MSItemGroup.MAIN)).setRegistryName("long_forgotten_warhorn"));
+		registry.register(new GrimoireItem(new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN).rarity(Rarity.UNCOMMON)).setRegistryName("grimoire"));
+		registry.register(new LongForgottenWarhornItem(new Item.Properties().defaultMaxDamage(100).group(MSItemGroup.MAIN).rarity(Rarity.UNCOMMON)).setRegistryName("long_forgotten_warhorn"));
 		registry.register(new BarbasolBombItem(new Item.Properties().maxStackSize(16).group(MSItemGroup.MAIN)).setRegistryName("barbasol_bomb"));
 		registry.register(new RazorBladeItem(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("razor_blade"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("ice_shard"));
@@ -873,7 +873,6 @@ public class MSItems
 		registry.register(new Item(new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("gamegrl_magazine"));
 		registry.register(new HangingItem((world, pos, facing, stack) -> new CrewPosterEntity(world, pos, facing), new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("crew_poster"));
 		registry.register(new HangingItem((world, pos, facing, stack) -> new SbahjPosterEntity(world, pos, facing), new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("sbahj_poster"));
-		//registry.register(new Item(new Item.Properties().maxStackSize(1)).setRegistryName("fake_arms"));
 		
 		//Music disks
 		registry.register(new MusicDiscItem(1, () -> MSSoundEvents.MUSIC_DISC_EMISSARY_OF_DANCE, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_emissary_of_dance"));
@@ -901,6 +900,11 @@ public class MSItems
 	private static Item registerItemBlock(IForgeRegistry<Item> registry, Block block, ItemGroup group)
 	{
 		return registerItemBlock(registry, new BlockItem(block, new Item.Properties().group(group)));
+	}
+	
+	private static Item registerItemBlock(IForgeRegistry<Item> registry, Block block, Item.Properties properties)
+	{
+		return registerItemBlock(registry, new BlockItem(block, properties));
 	}
 	
 	private static Item registerItemBlock(IForgeRegistry<Item> registry, BlockItem item)
