@@ -129,8 +129,6 @@ public class MSBlocks
 	public static final Block MINI_ALCHEMITER = getNull();
 	public static final Block MINI_PUNCH_DESIGNIX = getNull();
 	public static final Block HOLOPAD = getNull();
-	/*public static BlockJumperBlock[] jumperBlockExtension = BlockJumperBlock.createBlocks();
-	public static BlockAlchemiterUpgrades[] alchemiterUpgrades = BlockAlchemiterUpgrades.createBlocks();*/
 	
 	//Misc Machines
 	public static final Block COMPUTER = getNull();
@@ -382,17 +380,6 @@ public class MSBlocks
 		registry.register(new SmallMachineBlock<>(MSBlockShapes.SMALL_PUNCH_DESIGNIX.createRotatedShapes(), MSTileEntityTypes.MINI_PUNCH_DESIGNIX, Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("mini_punch_designix"));
 		registry.register(new HolopadBlock(Block.Properties.create(Material.IRON, MaterialColor.SNOW).hardnessAndResistance(3.0F)).setRegistryName("holopad"));
 		
-		/*
-		registry.register(jumperBlockExtension[0].setRegistryName("jumper_block_extension"));
-		registry.register(jumperBlockExtension[1].setRegistryName("jumper_block_extension2"));
-		registry.register(jumperBlockExtension[2].setRegistryName("jumper_block_extension3"));
-		registry.register(jumperBlockExtension[3].setRegistryName("jumper_block_extension4"));
-		
-		registry.register(alchemiterUpgrades[0].setRegistryName("alchemiter_upgrade"));
-		registry.register(alchemiterUpgrades[1].setRegistryName("alchemiter_upgrade2"));
-		registry.register(alchemiterUpgrades[2].setRegistryName("alchemiter_upgrade3"));
-		registry.register(alchemiterUpgrades[3].setRegistryName("alchemiter_upgrade4"));
-		*/
 		registry.register(new ComputerBlock(ComputerBlock.COMPUTER_SHAPE, ComputerBlock.COMPUTER_SHAPE, Block.Properties.create(Material.IRON).hardnessAndResistance(4.0F)).setRegistryName("computer"));
 		registry.register(new ComputerBlock(ComputerBlock.LAPTOP_OPEN_SHAPE, ComputerBlock.LAPTOP_CLOSED_SHAPE, Block.Properties.create(Material.IRON).hardnessAndResistance(4.0F)).setRegistryName("laptop"));
 		registry.register(new ComputerBlock(ComputerBlock.LAPTOP_OPEN_SHAPE, ComputerBlock.LAPTOP_CLOSED_SHAPE, Block.Properties.create(Material.IRON, MaterialColor.RED).hardnessAndResistance(4.0F)).setRegistryName("crockertop"));
