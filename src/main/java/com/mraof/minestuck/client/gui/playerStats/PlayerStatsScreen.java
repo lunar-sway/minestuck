@@ -2,6 +2,7 @@ package com.mraof.minestuck.client.gui.playerStats;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.MinestuckScreen;
 import com.mraof.minestuck.client.settings.MSKeyHandler;
 import com.mraof.minestuck.computer.editmode.ClientEditHandler;
@@ -85,7 +86,7 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 		public boolean reqMedium()
 		{
 			if(this == ECHELADDER)
-				return !ClientPlayerData.isEcheladderAvailable();
+				return MinestuckConfig.SERVER.preEntryRungLimit.get() == 0;
 			else return this.reqMedium;
 		}
 		

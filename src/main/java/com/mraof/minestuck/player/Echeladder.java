@@ -266,7 +266,7 @@ public class Echeladder
 	
 	public void sendInitialPacket(ServerPlayerEntity player)
 	{
-		EcheladderDataPacket packet = EcheladderDataPacket.init(getRung(), MinestuckConfig.SERVER.echeladderProgress.get() ? getProgress() : 0F, MinestuckConfig.SERVER.preEntryRungLimit.get() > 0);	//TODO either remove the availability flag (since the config is synced to client) or make sure that the flag is updated properly when the config is
+		EcheladderDataPacket packet = EcheladderDataPacket.init(getRung(), MinestuckConfig.SERVER.echeladderProgress.get() ? getProgress() : 0F);
 		MSPacketHandler.sendToPlayer(packet, player);
 	}
 	

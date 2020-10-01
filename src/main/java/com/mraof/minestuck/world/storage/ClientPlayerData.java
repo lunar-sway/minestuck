@@ -29,7 +29,6 @@ public class ClientPlayerData
 	
 	private static Modus modus;
 	private static Title title;
-	private static boolean echeladderAvailable;
 	private static int rung;
 	private static float rungProgress;
 	private static long boondollars;
@@ -57,11 +56,6 @@ public class ClientPlayerData
 	public static Title getTitle()
 	{
 		return title;
-	}
-	
-	public static boolean isEcheladderAvailable()
-	{
-		return echeladderAvailable;
 	}
 	
 	public static int getRung()
@@ -128,7 +122,6 @@ public class ClientPlayerData
 	
 	public static void handleDataPacket(EcheladderDataPacket packet)
 	{
-		echeladderAvailable = packet.isEcheladderAvailable();
 		rung = packet.getRung();
 		rungProgress = packet.getProgress();
 	}

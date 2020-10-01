@@ -13,24 +13,22 @@ public class EcheladderDataPacket implements PlayToClientPacket
 	private final int rung;
 	private final float progress;
 	private final boolean sendMessage;
-	private final boolean available;
 	
-	private EcheladderDataPacket(int rung, float progress, boolean sendMessage, boolean available)
+	private EcheladderDataPacket(int rung, float progress, boolean sendMessage)
 	{
 		this.rung = rung;
 		this.progress = progress;
 		this.sendMessage = sendMessage;
-		this.available = available;
 	}
 	
 	public static EcheladderDataPacket create(int rung, float progress, boolean sendMessage)
 	{
-		return new EcheladderDataPacket(rung, progress, sendMessage, true);
+		return new EcheladderDataPacket(rung, progress, sendMessage);
 	}
 	
-	public static EcheladderDataPacket init(int rung, float progress, boolean available)
+	public static EcheladderDataPacket init(int rung, float progress)
 	{
-		return new EcheladderDataPacket(rung, progress, false, available);
+		return new EcheladderDataPacket(rung, progress, false);
 	}
 	
 	@Override
@@ -39,16 +37,15 @@ public class EcheladderDataPacket implements PlayToClientPacket
 		buffer.writeInt(rung);
 		buffer.writeFloat(progress);
 		buffer.writeBoolean(sendMessage);
-		buffer.writeBoolean(available);
 	}
 	
 	public static EcheladderDataPacket decode(PacketBuffer buffer)
 	{
 		int rung = buffer.readInt();
 		float progress = buffer.readFloat();
-		boolean skipMessage = buffer.readBoolean();
+		boolean sendMessage = buffer.readBoolean();
 		
-		return create(rung, progress, skipMessage);
+		return create(rung, progress, sendMessage);
 	}
 	
 	@Override
@@ -75,8 +72,4 @@ public class EcheladderDataPacket implements PlayToClientPacket
 		return progress;
 	}
 	
-	public boolean isEcheladderAvailable()
-	{
-		return available;
-	}
 }
