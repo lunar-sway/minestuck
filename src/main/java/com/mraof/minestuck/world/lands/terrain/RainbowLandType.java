@@ -8,6 +8,7 @@ import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.MSSurfaceBuilders;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.feature.structure.village.ConsortVillageCenter;
 import com.mraof.minestuck.world.gen.feature.tree.RainbowTree;
 import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.block.BlockState;
@@ -25,6 +26,8 @@ import net.minecraft.world.gen.placement.AtSurfaceWithExtraConfig;
 import net.minecraft.world.gen.placement.ChanceConfig;
 import net.minecraft.world.gen.placement.CountRangeConfig;
 import net.minecraft.world.gen.placement.Placement;
+
+import java.util.function.BiConsumer;
 
 public class RainbowLandType extends TerrainLandType
 {
@@ -117,5 +120,11 @@ public class RainbowLandType extends TerrainLandType
 	public EntityType<? extends ConsortEntity> getConsortType()
 	{
 		return MSEntityTypes.TURTLE;
+	}
+	
+	@Override
+	public void addVillageCenters(BiConsumer<ConsortVillageCenter.CenterFactory, Integer> factoryWeightConsumer)
+	{
+		addTurtleVillageCenters(factoryWeightConsumer);
 	}
 }

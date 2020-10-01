@@ -9,6 +9,7 @@ import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.feature.structure.village.ConsortVillageCenter;
 import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -23,6 +24,8 @@ import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.placement.CountRangeConfig;
 import net.minecraft.world.gen.placement.FrequencyConfig;
 import net.minecraft.world.gen.placement.Placement;
+
+import java.util.function.BiConsumer;
 
 public class SandstoneLandType extends TerrainLandType
 {
@@ -150,6 +153,12 @@ public class SandstoneLandType extends TerrainLandType
 	public EntityType<? extends ConsortEntity> getConsortType()
 	{
 		return MSEntityTypes.TURTLE;
+	}
+	
+	@Override
+	public void addVillageCenters(BiConsumer<ConsortVillageCenter.CenterFactory, Integer> factoryWeightConsumer)
+	{
+		addTurtleVillageCenters(factoryWeightConsumer);
 	}
 	
 	public enum Variant
