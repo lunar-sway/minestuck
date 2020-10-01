@@ -416,16 +416,25 @@ public class ConsortDialogue
 		addMessage(new MerchantGuiMessage(new SingleMessage("boring_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTerrain(RAINBOW);
 	}
 	
+	/**
+	 * Not thread-safe. Make sure to only call this on the main thread
+	 */
 	public static DialogueWrapper addMessage(String message, String... args)
 	{
 		return addMessage(new SingleMessage(message, args));
 	}
 	
+	/**
+	 * Not thread-safe. Make sure to only call this on the main thread
+	 */
 	public static DialogueWrapper addMessage(MessageType message)
 	{
 		return addMessage(10, message);
 	}
 	
+	/**
+	 * Not thread-safe. Make sure to only call this on the main thread
+	 */
 	public static DialogueWrapper addMessage(int weight, MessageType message)
 	{
 		DialogueWrapper msg = new DialogueWrapper(weight);

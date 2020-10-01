@@ -37,7 +37,7 @@ public final class SessionHandler
 	/**
 	 * The max numbers of players per session.
 	 */
-	public static int maxSize;
+	public static final int maxSize = 144;
 	
 	/**
 	 * If the current Minecraft world will act as if Minestuck.globalSession is true or not.

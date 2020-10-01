@@ -65,6 +65,7 @@ public final class DeployList
 	
 	/**
 	 * Register the specific item as deployable.
+	 * Note: Not thread-safe. Make sure to only call this on the main thread
 	 * @param stack The item to be registered.
 	 * The itemstack can have nbt tags, with the exception of the display tag.
 	 * @param cost1 How much it costs the first time deployed.
@@ -78,16 +79,25 @@ public final class DeployList
 		registerItem(name, cost1, cost2, tier, null, (connection, world) -> stack);
 	}
 	
+	/**
+	 * Not thread-safe. Make sure to only call this on the main thread
+	 */
 	public static void registerItem(String name, GristSet cost, int tier, IAvailabilityCondition condition, BiFunction<SburbConnection, World, ItemStack> item)
 	{
 		registerItem(name, tier, condition, item, (isPrimary, connection) -> cost);
 	}
 	
+	/**
+	 * Not thread-safe. Make sure to only call this on the main thread
+	 */
 	public static void registerItem(String name, GristSet cost1, GristSet cost2, int tier, IAvailabilityCondition condition, BiFunction<SburbConnection, World, ItemStack> item)
 	{
 		registerItem(name, tier, condition, item, (isPrimary, connection) -> isPrimary ? cost1 : cost2);
 	}
 	
+	/**
+	 * Not thread-safe. Make sure to only call this on the main thread
+	 */
 	public static void registerItem(String name, int tier, IAvailabilityCondition condition, BiFunction<SburbConnection, World, ItemStack> item, BiFunction<Boolean, SburbConnection, GristSet> grist)
 	{
 		if(containsEntry(name))

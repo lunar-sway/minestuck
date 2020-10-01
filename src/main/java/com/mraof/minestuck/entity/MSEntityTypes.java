@@ -102,6 +102,9 @@ public final class MSEntityTypes
 		register(registry, EntityType.Builder.<HologramEntity>create(HologramEntity::new, EntityClassification.MISC).size(0.25F, 0.25F).setShouldReceiveVelocityUpdates(false).setTrackingRange(10).setUpdateInterval(Integer.MAX_VALUE), "hologram");
 	}
 	
+	/**
+	 * Currently (1.15), this is not thread safe and need to be deferred
+	 */
 	public static void registerPlacements()
 	{
 		EntitySpawnPlacementRegistry.register(DERSITE_PAWN, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, MobEntity::canSpawnOn);

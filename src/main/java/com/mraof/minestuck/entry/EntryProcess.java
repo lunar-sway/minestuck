@@ -52,6 +52,9 @@ public class EntryProcess
 	
 	private static final Set<EntryBlockProcessing> blockProcessors = new HashSet<>();
 	
+	/**
+	 * Not thread-safe. Make sure to only call this on the main thread
+	 */
 	public static void addBlockProcessing(EntryBlockProcessing processing)
 	{
 		blockProcessors.add(processing);

@@ -15,13 +15,13 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.KindAbstratusList;
-import com.mraof.minestuck.skaianet.SessionHandler;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.MSSurfaceBuilders;
 import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.WorldPersistenceHooks;
@@ -59,36 +59,47 @@ public class Minestuck
 		GristTypes.GRIST_TYPES.register(eventBus);
 	}
 	
+	/**
+	 * Common setup, which happens in parallel with other mods.
+	 * Only do thread-safe setup, such as internal setup of thread-safe registering.
+	 */
 	private void setup(final FMLCommonSetupEvent event)
 	{
-		MSCriteriaTriggers.register();
-		MSEntityTypes.registerPlacements();
-		MSFillerBlockTypes.init();
-		
-		//register ore generation
-		setupOverworldOreGeneration();
-		//GameRegistry.registerWorldGenerator(oreHandler, 0);
+		DeferredWorkQueue.runLater(this::mainThreadSetup);
 		
 		//register channel handler
 		MSPacketHandler.setupChannel();
 		
+		MSBiomes.init();
+	}
+	
+	/**
+	 * Handles any setup that is not thread-safe, and thus need to happen on the main thread.
+	 * Typically meant for registering stuff.
+	 */
+	private void mainThreadSetup()
+	{
+		MSCriteriaTriggers.register();
+		MSEntityTypes.registerPlacements();
+		MSFillerBlockTypes.init();	//Not sure if this is thread safe, but better safe than sorry
+		
+		//register ore generation
+		setupOverworldOreGeneration();
+		
 		//register consort shop prices
 		ConsortRewardHandler.registerMinestuckPrices();
 		
-		MSBiomes.init();
 		ConsortDialogue.init();
 		
 		KindAbstratusList.registerTypes();
 		DeployList.registerItems();
 		
-		ProgramData.registerProgram(0, new ItemStack(MSItems.CLIENT_DISK), ProgramData::onClientClosed);	//This idea was kind of bad and should be replaced
+		ProgramData.registerProgram(0, new ItemStack(MSItems.CLIENT_DISK), ProgramData::onClientClosed);
 		ProgramData.registerProgram(1, new ItemStack(MSItems.SERVER_DISK), ProgramData::onServerClosed);
 		
 		EntryProcess.addBlockProcessing(new ComputerBlockProcess());
 		if(ModList.get().isLoaded("refinedstorage"))
 			EntryProcess.addBlockProcessing(new RSEntryBlockProcess());
-		
-		SessionHandler.maxSize = 144;//acceptTitleCollision?(generateSpecialClasses?168:144):12;
 	}
 	
 	private void clientSetup(final FMLClientSetupEvent event)

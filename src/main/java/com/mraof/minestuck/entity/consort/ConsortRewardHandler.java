@@ -216,11 +216,17 @@ public class ConsortRewardHandler
 
 	}
 	
+	/**
+	 * Not thread-safe. Make sure to only call this on the main thread
+	 */
 	public static void registerPrice(ItemStack stack, int min, int max)	//Maybe add json support at some point too
 	{
 		registerPrice(stack, new PriceVariation(min, max));
 	}
 	
+	/**
+	 * Not thread-safe. Make sure to only call this on the main thread
+	 */
 	public static void registerPrice(ItemStack stack, PriceVariation prize)
 	{
 		prices.put(stack, prize);
