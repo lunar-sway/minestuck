@@ -85,7 +85,7 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 		public boolean reqMedium()
 		{
 			if(this == ECHELADDER)
-				return !ClientPlayerData.echeladderAvailable;
+				return !ClientPlayerData.isEcheladderAvailable();
 			else return this.reqMedium;
 		}
 		
@@ -186,7 +186,7 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 				}
 		}
 		
-		if(ClientPlayerData.dataCheckerAccess)
+		if(ClientPlayerData.hasDataCheckerAccess())
 			blit(xOffset + guiWidth - tabWidth, yOffset -tabHeight + tabOverlap, 2*tabWidth, 0, tabWidth, tabHeight);
 	}
 	
@@ -204,7 +204,7 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 			if(!mode || !NormalGuiType.values()[i].reqMedium() || SkaiaClient.enteredMedium(SkaiaClient.playerId) || mc.playerController.isInCreativeMode())
 				blit(xOffset + (tabWidth - 16)/2 + (tabWidth+2)*i, yOffset - tabHeight + tabOverlap + 8, i*16, tabHeight*2 + (mode? 0:16), 16, 16);
 		
-		if(ClientPlayerData.dataCheckerAccess)
+		if(ClientPlayerData.hasDataCheckerAccess())
 			blit(xOffset + guiWidth + (tabWidth - 16)/2 - tabWidth, yOffset - tabHeight + tabOverlap + 8, 5*16, tabHeight*2, 16, 16);
 		
 		RenderSystem.disableRescaleNormal();
@@ -245,7 +245,7 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 					}
 					return true;
 				}
-			if(ClientPlayerData.dataCheckerAccess && xcor < xOffset + guiWidth && xcor >= xOffset + guiWidth - tabWidth)
+			if(ClientPlayerData.hasDataCheckerAccess() && xcor < xOffset + guiWidth && xcor >= xOffset + guiWidth - tabWidth)
 			{
 				mc.displayGuiScreen(new DataCheckerScreen());
 				return true;
@@ -260,7 +260,7 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 		
 		if(mc.player.isSpectator())
 		{
-			if(ClientPlayerData.dataCheckerAccess)
+			if(ClientPlayerData.hasDataCheckerAccess())
 			{
 				if(mc.currentScreen instanceof DataCheckerScreen)
 					mc.displayGuiScreen(null);

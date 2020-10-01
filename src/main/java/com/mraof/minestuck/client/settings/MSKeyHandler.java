@@ -81,8 +81,8 @@ public class MSKeyHandler
 		
 		while(sylladexKey.isPressed())
 		{
-			if(ClientPlayerData.clientSideModus != null)
-				MSScreenFactories.displaySylladexScreen(ClientPlayerData.clientSideModus);
+			if(ClientPlayerData.getModus() != null)
+				MSScreenFactories.displaySylladexScreen(ClientPlayerData.getModus());
 		}
 	}
 	

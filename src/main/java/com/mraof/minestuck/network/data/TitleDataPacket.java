@@ -37,6 +37,11 @@ public class TitleDataPacket implements PlayToClientPacket
 	@Override
 	public void execute()
 	{
-		ClientPlayerData.title = this.title;
+		ClientPlayerData.handleDataPacket(this);
+	}
+	
+	public Title getTitle()
+	{
+		return title;
 	}
 }

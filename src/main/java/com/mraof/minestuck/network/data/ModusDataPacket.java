@@ -1,9 +1,6 @@
 package com.mraof.minestuck.network.data;
 
-import com.mraof.minestuck.client.gui.MSScreenFactories;
-import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.network.PlayToClientPacket;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.CompressedStreamTools;
@@ -59,9 +56,11 @@ public class ModusDataPacket implements PlayToClientPacket
 	@Override
 	public void execute()
 	{
-		ClientPlayerData.clientSideModus = CaptchaDeckHandler.readFromNBT(nbt, null);
-		if(ClientPlayerData.clientSideModus != null)
-			MSScreenFactories.updateSylladexScreen();
-		else Debug.debug("Player lost their modus after update packet");
+		ClientPlayerData.handleDataPacket(this);
+	}
+	
+	public CompoundNBT getNBT()
+	{
+		return nbt;
 	}
 }

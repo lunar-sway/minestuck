@@ -66,10 +66,10 @@ public class EcheladderScreen extends PlayerStatsScreen
 	public void init()
 	{
 		super.init();
-		scrollIndex = MathHelper.clamp((ClientPlayerData.rung - 8)*14, 0, MAX_SCROLL);
+		scrollIndex = MathHelper.clamp((ClientPlayerData.getRung() - 8)*14, 0, MAX_SCROLL);
 		animatedRung = Math.max(animatedRung, lastRung);	//If you gain a rung while the gui is open, the animated rung might get higher than the lastRung. Otherwise they're always the same value.
 		fromRung = lastRung;
-		lastRung = ClientPlayerData.rung;
+		lastRung = ClientPlayerData.getRung();
 	}
 	
 	@Override
@@ -83,11 +83,11 @@ public class EcheladderScreen extends PlayerStatsScreen
 		if(animationCycle == 0)
 		{
 			currentRung = animatedRung;
-			if(animatedRung < ClientPlayerData.rung)
+			if(animatedRung < ClientPlayerData.getRung())
 			{
-				animatedRungs = ClientPlayerData.rung - animatedRung;
+				animatedRungs = ClientPlayerData.getRung() - animatedRung;
 				animationCycle = timeBeforeAnimation + getTicksForRungAnimation(animatedRungs)*speedFactor;
-				animatedRung = ClientPlayerData.rung;
+				animatedRung = ClientPlayerData.getRung();
 			}
 		} else
 		{
@@ -181,7 +181,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 					bg = backgrounds[rung];
 				else if(textColors.length > rung)
 					bg = ~textColors[rung];
-				fill(xOffset + 90, y + 10, xOffset + 90 + (int)(146* ClientPlayerData.rungProgress), y + 12, bg);
+				fill(xOffset + 90, y + 10, xOffset + 90 + (int)(146* ClientPlayerData.getRungProgress()), y + 12, bg);
 			} else rand.nextInt(0xFFFFFF);
 			
 			String s = I18n.hasKey("echeladder.rung."+rung) ? I18n.format("echeladder.rung."+rung) : "Rung "+(rung+1);
@@ -217,7 +217,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 		mc.fontRenderer.drawString(String.valueOf(health), xOffset + 26, yOffset + 93, 0x0094FF);
 		
 		mc.fontRenderer.drawString("=", xOffset + 25, yOffset + 12, 0x404040);	//Should this be black, or the same blue as the numbers?
-		mc.fontRenderer.drawString(String.valueOf(ClientPlayerData.boondollars), xOffset + 27 + mc.fontRenderer.getStringWidth("="), yOffset + 12, 0x0094FF);
+		mc.fontRenderer.drawString(String.valueOf(ClientPlayerData.getBoondollars()), xOffset + 27 + mc.fontRenderer.getStringWidth("="), yOffset + 12, 0x0094FF);
 		
 		mc.fontRenderer.drawString(I18n.format(CACHE), xOffset + 24, yOffset + 138, 0x404040);
 		mc.fontRenderer.drawString("Unlimited", xOffset + 26, yOffset + 147, 0x0094FF);

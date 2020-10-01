@@ -33,6 +33,11 @@ public class BoondollarDataPacket implements PlayToClientPacket
 	@Override
 	public void execute()
 	{
-		ClientPlayerData.boondollars = count;
+		ClientPlayerData.handleDataPacket(this);
+	}
+	
+	public long getBoondollars()
+	{
+		return count;
 	}
 }

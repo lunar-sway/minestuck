@@ -60,7 +60,7 @@ public class GristWidgetScreen extends MachineScreen<GristWidgetContainer>
 			GuiUtil.drawGristBoard(set, GuiUtil.GristboardMode.GRIST_WIDGET, 9, 45, font);
 			
 			int cost = GristWidgetTileEntity.getGristWidgetBoondollarValue(set);
-			long has = ClientPlayerData.boondollars;
+			long has = ClientPlayerData.getBoondollars();
 			String costText = GuiUtil.addSuffix(cost)+"\u00a3("+GuiUtil.addSuffix(has)+")";
 			font.drawString(costText, xSize - 9 - font.getStringWidth(costText), ySize - 96 + 3, cost > has ? 0xFF0000 : 0x00FF00);
 			

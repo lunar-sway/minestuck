@@ -75,7 +75,7 @@ public abstract class PlayerStatsContainerScreen<T extends Container> extends Co
 				}
 		}
 		
-		if(ClientPlayerData.dataCheckerAccess)
+		if(ClientPlayerData.hasDataCheckerAccess())
 			blit(xOffset + guiWidth - tabWidth, yOffset -tabHeight + tabOverlap, 2*tabWidth, 0, tabWidth, tabHeight);
 	}
 	
@@ -101,7 +101,7 @@ public abstract class PlayerStatsContainerScreen<T extends Container> extends Co
 			if(!mode || !NormalGuiType.values()[i].reqMedium() || SkaiaClient.enteredMedium(SkaiaClient.playerId) || minecraft.playerController.isInCreativeMode())
 				blit(xOffset + (tabWidth - 16)/2 + (tabWidth+2)*i, yOffset - tabHeight + tabOverlap + 8, i*16, tabHeight*2 + (mode? 0:16), 16, 16);
 		
-		if(ClientPlayerData.dataCheckerAccess)
+		if(ClientPlayerData.hasDataCheckerAccess())
 			blit(xOffset + guiWidth + (tabWidth - 16)/2 - tabWidth, yOffset - tabHeight + tabOverlap + 8, 5*16, tabHeight*2, 16, 16);
 	}
 	
@@ -143,7 +143,7 @@ public abstract class PlayerStatsContainerScreen<T extends Container> extends Co
 					}
 					return true;
 				}
-			if(ClientPlayerData.dataCheckerAccess && xcor < xOffset + guiWidth && xcor >= xOffset + guiWidth - tabWidth)
+			if(ClientPlayerData.hasDataCheckerAccess() && xcor < xOffset + guiWidth && xcor >= xOffset + guiWidth - tabWidth)
 			{
 				minecraft.displayGuiScreen(new DataCheckerScreen());
 				return true;

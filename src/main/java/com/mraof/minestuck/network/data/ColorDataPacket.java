@@ -1,7 +1,6 @@
 package com.mraof.minestuck.network.data;
 
 import com.mraof.minestuck.network.PlayToClientPacket;
-import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.network.PacketBuffer;
 
@@ -46,10 +45,16 @@ public class ColorDataPacket implements PlayToClientPacket
 	@Override
 	public void execute()
 	{
-		if(color == -2)
-		{
-			ClientPlayerData.playerColor = ColorHandler.DEFAULT_COLOR;
-			ClientPlayerData.displaySelectionGui = true;
-		} else ClientPlayerData.playerColor = color;
+		ClientPlayerData.handleDataPacket(this);
+	}
+	
+	public boolean hasNoColor()
+	{
+		return color == NO_COLOR;
+	}
+	
+	public int getColor()
+	{
+		return color;
 	}
 }

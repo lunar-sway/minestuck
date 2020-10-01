@@ -44,6 +44,11 @@ public class DataCheckerPermissionPacket implements PlayToClientPacket
 	@Override
 	public void execute()
 	{
-		ClientPlayerData.dataCheckerAccess = available;
+		ClientPlayerData.handleDataPacket(this);
+	}
+	
+	public boolean isDataCheckerAvailable()
+	{
+		return available;
 	}
 }

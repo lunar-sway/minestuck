@@ -44,7 +44,7 @@ public class ConsortShopScreen extends ContainerScreen<ConsortMerchantContainer>
 		this.minecraft.getTextureManager().bindTexture(PlayerStatsScreen.icons);
 		this.blit(x + 5, y + 7, 238, 16, 18, 18);
 		
-		font.drawString(String.valueOf(ClientPlayerData.boondollars), x + 25, y + 12, 0x0094FF);
+		font.drawString(String.valueOf(ClientPlayerData.getBoondollars()), x + 25, y + 12, 0x0094FF);
 		
 		for (int i = 0; i < 9; i++)
 		{

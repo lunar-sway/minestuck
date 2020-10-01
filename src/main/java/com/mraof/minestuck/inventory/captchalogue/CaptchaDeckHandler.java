@@ -419,8 +419,8 @@ public class CaptchaDeckHandler
 		Modus modus;
 		ResourceLocation name = new ResourceLocation(nbt.getString("type"));
 		
-		if(clientSide && ClientPlayerData.clientSideModus != null && name.equals(ClientPlayerData.clientSideModus.getType().getRegistryName()))
-			modus = ClientPlayerData.clientSideModus;
+		if(clientSide && ClientPlayerData.getModus() != null && name.equals(ClientPlayerData.getModus().getType().getRegistryName()))
+			modus = ClientPlayerData.getModus();
 		else
 		{
 			modus = clientSide ? createClientModus(name) : createServerModus(name, savedData);

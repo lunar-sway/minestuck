@@ -39,9 +39,9 @@ public class ClientEventHandler
 	{
 		if(event.phase == TickEvent.Phase.END)
 		{
-			if(ClientPlayerData.displaySelectionGui && Minecraft.getInstance().currentScreen == null)
+			if(ClientPlayerData.shouDisplayColorSelection() && Minecraft.getInstance().currentScreen == null)
 			{
-				ClientPlayerData.displaySelectionGui = false;
+				ClientPlayerData.clearDisplayColorSelection();
 				if(MinestuckConfig.CLIENT.loginColorSelector.get())
 					Minecraft.getInstance().displayGuiScreen(new ColorSelectorScreen(true));
 			}

@@ -52,9 +52,9 @@ public class GristCacheScreen extends PlayerStatsScreen
 		this.blit(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 
 		String cacheMessage;
-		if (ClientEditHandler.isActive() || ClientPlayerData.title == null)
+		if(ClientEditHandler.isActive() || ClientPlayerData.getTitle() == null)
 			cacheMessage = getTitle().getFormattedText();
-		else cacheMessage = ClientPlayerData.title.asTextComponent().getFormattedText();
+		else cacheMessage = ClientPlayerData.getTitle().asTextComponent().getFormattedText();
 		mc.fontRenderer.drawString(cacheMessage, (this.width / 2F) - mc.fontRenderer.getStringWidth(cacheMessage) / 2F, yOffset + 12, 0x404040);
 		super.render(mouseX, mouseY, partialTicks);
 

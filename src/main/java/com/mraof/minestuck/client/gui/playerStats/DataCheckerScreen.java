@@ -139,7 +139,7 @@ public class DataCheckerScreen extends Screen
 	{
 		if(guiComponent != activeComponent)
 			componentChanged();
-		if(!ClientPlayerData.dataCheckerAccess)
+		if(!ClientPlayerData.hasDataCheckerAccess())
 			minecraft.displayGuiScreen(null);
 	}
 	

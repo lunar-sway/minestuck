@@ -54,10 +54,8 @@ public class EcheladderDataPacket implements PlayToClientPacket
 	@Override
 	public void execute()
 	{
-		int prev = ClientPlayerData.rung;
-		ClientPlayerData.rung = rung;
-		ClientPlayerData.rungProgress = progress;
-		ClientPlayerData.echeladderAvailable = available;
+		int prev = ClientPlayerData.getRung();
+		ClientPlayerData.handleDataPacket(this);
 		if(sendMessage)
 			for(prev++; prev <= rung; prev++)
 			{
@@ -65,5 +63,20 @@ public class EcheladderDataPacket implements PlayToClientPacket
 				Minecraft.getInstance().player.sendMessage(new TranslationTextComponent(Echeladder.NEW_RUNG, rung));
 			}
 		else EcheladderScreen.animatedRung = EcheladderScreen.lastRung = rung;
+	}
+	
+	public int getRung()
+	{
+		return rung;
+	}
+	
+	public float getProgress()
+	{
+		return progress;
+	}
+	
+	public boolean isEcheladderAvailable()
+	{
+		return available;
 	}
 }

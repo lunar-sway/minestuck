@@ -129,7 +129,7 @@ public abstract class SylladexScreen extends Screen
 		
 		font.drawString(getTitle().getFormattedText(), xOffset + 15, yOffset + 5, 0x404040);
 		
-		String str = ClientPlayerData.clientSideModus.getName().getFormattedText();
+		String str = ClientPlayerData.getModus().getName().getFormattedText();
 		font.drawString(str, xOffset + GUI_WIDTH - font.getStringWidth(str) - 16, yOffset + 5, 0x404040);
 		
 		super.render(xcor, ycor, f);
