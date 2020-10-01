@@ -168,7 +168,7 @@ final class SessionMerger
 		if(target.locked && size != players.size())	//If the session is locked and we're trying to add a new player to it
 			throw MergeResult.LOCKED.exception();
 		
-		if(MinestuckConfig.forceMaxSize && size > SessionHandler.maxSize)
+		if(MinestuckConfig.SERVER.forceMaxSize && size > SessionHandler.maxSize)
 			throw fullSessionResult.exception();
 		
 	}

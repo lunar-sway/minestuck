@@ -104,7 +104,7 @@ public class GristWidgetScreen extends MachineScreen<GristWidgetContainer>
 		
 		goButton = new GoButton((width - xSize) / 2 + goX, (height - ySize) / 2 + goY, 30, 12, container.overrideStop() ? "STOP" : "GO");
 		addButton(goButton);
-		if(MinestuckConfig.disableGristWidget.get())
+		if(MinestuckConfig.SERVER.disableGristWidget.get())
 			goButton.active = false;
 	}
 }

@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.biome;
 
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
@@ -18,7 +19,7 @@ import net.minecraft.world.gen.surfacebuilders.ConfiguredSurfaceBuilder;
 import net.minecraft.world.gen.surfacebuilders.ISurfaceBuilderConfig;
 import net.minecraft.world.gen.surfacebuilders.SurfaceBuilder;
 
-import static com.mraof.minestuck.MinestuckConfig.*;
+import static com.mraof.minestuck.world.gen.OreGeneration.*;
 
 public class LandWrapperBiome extends LandBiome
 {
@@ -32,11 +33,11 @@ public class LandWrapperBiome extends LandBiome
 	
 	public void init(StructureBlockRegistry blocks, EntityType<? extends ConsortEntity> consortType)
 	{
-		if(generateCruxiteOre.get())
+		if(MinestuckConfig.SERVER.generateCruxiteOre.get())
 		{
 			addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), blocks.getBlockState("cruxite_ore"), baseCruxiteVeinSize)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(cruxiteVeinsPerChunk, cruxiteStratumMin, cruxiteStratumMin, cruxiteStratumMax))));
 		}
-		if(generateUraniumOre.get())
+		if(MinestuckConfig.SERVER.generateUraniumOre.get())
 		{
 			addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), blocks.getBlockState("uranium_ore"), baseUraniumVeinSize)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(uraniumVeinsPerChunk, uraniumStratumMin, uraniumStratumMin, uraniumStratumMax))));
 		}

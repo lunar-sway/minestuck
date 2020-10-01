@@ -1,5 +1,6 @@
 package com.mraof.minestuck.item.crafting.alchemy;
 
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
@@ -20,8 +21,6 @@ import net.minecraftforge.common.MinecraftForge;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.function.Supplier;
-
-import static com.mraof.minestuck.MinestuckConfig.showGristChanges;
 
 public class GristHelper
 {
@@ -152,7 +151,7 @@ public class GristHelper
 	
 	public static void notify(MinecraftServer server, PlayerIdentifier player, GristSet set)
 	{
-		if(showGristChanges.get())
+		if(MinestuckConfig.SERVER.showGristChanges.get())
 		{
 			Map<GristType, Long> reqs = set.getMap();
 			for(Entry<GristType, Long> pairs : reqs.entrySet())
@@ -166,7 +165,7 @@ public class GristHelper
 	
 	public static void notifyEditPlayer(MinecraftServer server, PlayerIdentifier player, GristSet set, boolean increase)
 	{
-		if(showGristChanges.get())
+		if(MinestuckConfig.SERVER.showGristChanges.get())
 		{
 			SburbConnection sc = SkaianetHandler.get(server).getActiveConnection(player);
 			if(sc == null)

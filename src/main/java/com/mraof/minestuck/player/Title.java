@@ -47,7 +47,7 @@ public final class Title
 	
 	public void handleAspectEffects(ServerPlayerEntity player)
 	{
-		if(!MinestuckConfig.aspectEffects.get())
+		if(!MinestuckConfig.SERVER.aspectEffects.get())
 			return;
 		PlayerData data = PlayerSavedData.getData(player);
 		if(data.effectToggle())

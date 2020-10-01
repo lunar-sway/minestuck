@@ -264,7 +264,7 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 	{
 		ItemStack newItem = getOutput();
 		//Clamp quantity
-		quantity = Math.min(newItem.getMaxStackSize() * MinestuckConfig.alchemiterMaxStacks.get(), Math.max(1, quantity));
+		quantity = Math.min(newItem.getMaxStackSize() * MinestuckConfig.SERVER.alchemiterMaxStacks.get(), Math.max(1, quantity));
 		
 		Direction facing = world.getBlockState(pos).get(AlchemiterBlock.FACING);
 		//get the position to spawn the item

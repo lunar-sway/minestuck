@@ -54,7 +54,7 @@ public final class Session
 		
 		connections.addAll(other.connections);
 		
-		if(MinestuckConfig.forceMaxSize && getPlayerList().size() > SessionHandler.maxSize)
+		if(MinestuckConfig.SERVER.forceMaxSize && getPlayerList().size() > SessionHandler.maxSize)
 			throw MergeResult.MERGED_SESSION_FULL.exception();
 	}
 	
@@ -299,7 +299,7 @@ public final class Session
 		
 		s.locked = nbt.getBoolean("locked");
 		
-		s.checkIfCompleted(MinestuckConfig.globalSession.get());
+		s.checkIfCompleted(MinestuckConfig.SERVER.globalSession.get());
 		return s;
 	}
 	

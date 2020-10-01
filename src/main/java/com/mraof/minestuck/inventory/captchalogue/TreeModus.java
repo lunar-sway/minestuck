@@ -114,7 +114,7 @@ public class TreeModus extends Modus
 	@Override
 	public boolean increaseSize(ServerPlayerEntity player)
 	{
-		if(MinestuckConfig.modusMaxSize.get() > 0 && size >= MinestuckConfig.modusMaxSize.get())
+		if(MinestuckConfig.SERVER.modusMaxSize.get() > 0 && size >= MinestuckConfig.SERVER.modusMaxSize.get())
 			return false;
 		
 		size++;
@@ -198,7 +198,7 @@ public class TreeModus extends Modus
 	
 	protected void autoBalance()
 	{
-		if(!autoBalance && MinestuckConfig.treeModusSetting.get() != MinestuckConfig.AvailableOptions.ON || MinestuckConfig.treeModusSetting.get() == MinestuckConfig.AvailableOptions.OFF)
+		if(!autoBalance && MinestuckConfig.SERVER.treeModusSetting.get() != MinestuckConfig.AvailableOptions.ON || MinestuckConfig.SERVER.treeModusSetting.get() == MinestuckConfig.AvailableOptions.OFF)
 			return;
 		
 		int minDepth = getDepth(node, true);

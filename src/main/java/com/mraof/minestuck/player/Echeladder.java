@@ -59,7 +59,7 @@ public class Echeladder
 	{
 		Echeladder echeladder = PlayerSavedData.getData((ServerPlayerEntity) event.getPlayer()).getEcheladder();
 		echeladder.updateEcheladderBonuses((ServerPlayerEntity) event.getPlayer());
-		if(MinestuckConfig.rungHealthOnRespawn.get())
+		if(MinestuckConfig.SERVER.rungHealthOnRespawn.get())
 			event.getPlayer().heal(event.getPlayer().getMaxHealth());
 	}
 	
@@ -85,7 +85,7 @@ public class Echeladder
 	public void increaseProgress(int exp)
 	{
 		SburbConnection c = SkaianetHandler.get(savedData.mcServer).getMainConnection(identifier, true);
-		int topRung = c != null && c.hasEntered() ? RUNG_COUNT - 1 : MinestuckConfig.preEntryRungLimit.get();
+		int topRung = c != null && c.hasEntered() ? RUNG_COUNT - 1 : MinestuckConfig.SERVER.preEntryRungLimit.get();
 		int expReq = getRungProgressReq();
 		if(rung >= topRung || exp < expReq*MIN_PROGRESS_MODIFIER)
 			return;
@@ -255,7 +255,7 @@ public class Echeladder
 		{
 			savedData.markDirty();
 			ServerPlayerEntity player = identifier.getPlayer(savedData.mcServer);
-			if(player != null && (MinestuckConfig.echeladderProgress.get() || prevRung != this.rung))
+			if(player != null && (MinestuckConfig.SERVER.echeladderProgress.get() || prevRung != this.rung))
 			{
 				sendDataPacket(player, false);
 				if(prevRung != this.rung)
@@ -266,13 +266,13 @@ public class Echeladder
 	
 	public void sendInitialPacket(ServerPlayerEntity player)
 	{
-		EcheladderDataPacket packet = EcheladderDataPacket.init(getRung(), MinestuckConfig.echeladderProgress.get() ? getProgress() : 0F, MinestuckConfig.preEntryRungLimit.get() > 0);
+		EcheladderDataPacket packet = EcheladderDataPacket.init(getRung(), MinestuckConfig.SERVER.echeladderProgress.get() ? getProgress() : 0F, MinestuckConfig.SERVER.preEntryRungLimit.get() > 0);
 		MSPacketHandler.sendToPlayer(packet, player);
 	}
 	
 	public void sendDataPacket(ServerPlayerEntity player, boolean sendMessage)
 	{
-		EcheladderDataPacket packet = EcheladderDataPacket.create(getRung(), MinestuckConfig.echeladderProgress.get() ? getProgress() : 0F, sendMessage);
+		EcheladderDataPacket packet = EcheladderDataPacket.create(getRung(), MinestuckConfig.SERVER.echeladderProgress.get() ? getProgress() : 0F, sendMessage);
 		MSPacketHandler.sendToPlayer(packet, player);
 	}
 	

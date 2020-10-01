@@ -94,7 +94,7 @@ public class CaptchaDeckHandler
 			{
 				PlayerData data = PlayerSavedData.getData(player);
 				modus = type.createServerSide(PlayerSavedData.get(player.server));
-				modus.initModus(stack, player, null, data.hasGivenModus() ? 0 : MinestuckConfig.initialModusSize.get());
+				modus.initModus(stack, player, null, data.hasGivenModus() ? 0 : MinestuckConfig.SERVER.initialModusSize.get());
 				setModus(player, modus);
 				container.inventory.setInventorySlotContents(0, ItemStack.EMPTY);
 			}
@@ -362,13 +362,13 @@ public class CaptchaDeckHandler
 		NonNullList<ItemStack> stacks = modus.getItems();
 		int size = modus.getSize();
 		int cardsToKeep;
-		switch(MinestuckConfig.sylladexDropMode.get())
+		switch(MinestuckConfig.SERVER.sylladexDropMode.get())
 		{
 			case ITEMS:
 				cardsToKeep = size;
 				break;
 			case CARDS_AND_ITEMS:
-				cardsToKeep = MinestuckConfig.initialModusSize.get();
+				cardsToKeep = MinestuckConfig.SERVER.initialModusSize.get();
 				break;
 			case ALL: default:
 				cardsToKeep = 0;
@@ -376,7 +376,7 @@ public class CaptchaDeckHandler
 		
 		for(ItemStack stack : stacks)
 			if(!stack.isEmpty() && !EnchantmentHelper.hasVanishingCurse(stack))
-				if(size > cardsToKeep && MinestuckConfig.dropItemsInCards.get())
+				if(size > cardsToKeep && MinestuckConfig.SERVER.dropItemsInCards.get())
 				{
 					ItemStack card = AlchemyHelper.createCard(stack, false);
 					player.dropItem(card, true, false);
@@ -387,7 +387,7 @@ public class CaptchaDeckHandler
 		for(; size > cardsToKeep; size = Math.max(size - stackLimit, cardsToKeep))
 			player.dropItem(new ItemStack(MSItems.CAPTCHA_CARD, Math.min(stackLimit, size - cardsToKeep)), true, false);
 		
-		if(MinestuckConfig.sylladexDropMode.get() == MinestuckConfig.DropMode.ALL)
+		if(MinestuckConfig.SERVER.sylladexDropMode.get() == MinestuckConfig.DropMode.ALL)
 		{
 			player.dropItem(modus.getModusItem(), true, false);
 			setModus(player, null);

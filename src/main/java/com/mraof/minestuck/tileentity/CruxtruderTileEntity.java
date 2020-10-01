@@ -52,7 +52,7 @@ public class CruxtruderTileEntity extends TileEntity	//TODO check if it is broke
 		{
 			BlockPos pos = getPos().up();
 			BlockState state = getWorld().getBlockState(pos);
-			if(top && MinestuckConfig.cruxtruderIntake.get() && state.isAir(getWorld(), pos) && material < 64 && material > -1)
+			if(top && MinestuckConfig.SERVER.cruxtruderIntake.get() && state.isAir(getWorld(), pos) && material < 64 && material > -1)
 			{
 				ItemStack stack = player.getHeldItemMainhand();
 				if(stack.getItem() != MSItems.RAW_CRUXITE)
@@ -72,7 +72,7 @@ public class CruxtruderTileEntity extends TileEntity	//TODO check if it is broke
 					CruxiteDowelBlock.dropDowel(getWorld(), pos);
 				} else if(state.isAir(getWorld(), pos))
 				{
-					if(MinestuckConfig.cruxtruderIntake.get() && material == 0)
+					if(MinestuckConfig.SERVER.cruxtruderIntake.get() && material == 0)
 					{
 						world.playEvent(Constants.WorldEvents.DISPENSER_FAIL_SOUND, pos, 0);
 						player.sendMessage(new TranslationTextComponent(EMPTY));

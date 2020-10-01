@@ -426,10 +426,10 @@ public final class SkaianetHandler
 	
 	private void checkData()
 	{
-		if(!MinestuckConfig.skaianetCheck.get())
+		if(!MinestuckConfig.SERVER.skaianetCheck.get())
 			return;
 		
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings("unchecked")	//TODO Use function calls instead of an array
 		Iterator<Entry<PlayerIdentifier, ComputerReference>>[] iter1 = new Iterator[]{openedServers.entrySet().iterator(),resumingClients.entrySet().iterator(),resumingServers.entrySet().iterator()};
 		
 		for(Iterator<Entry<PlayerIdentifier, ComputerReference>> i : iter1)

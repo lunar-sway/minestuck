@@ -57,7 +57,7 @@ public final class SessionHandler
 	{
 		this.skaianetHandler = skaianetHandler;
 		
-		singleSession = MinestuckConfig.globalSession.get();
+		singleSession = MinestuckConfig.SERVER.globalSession.get();
 		if(singleSession)
 		{
 			Session globalSession = new Session();
@@ -71,9 +71,9 @@ public final class SessionHandler
 	{
 		singleSession = sessionsByName.containsKey(GLOBAL_SESSION_NAME) && sessions.size() == 1;	//TODO Make this into a saved property instead
 		
-		if(singleSession && !MinestuckConfig.globalSession.get())
+		if(singleSession && !MinestuckConfig.SERVER.globalSession.get())
 			splitGlobalSession();
-		else if(!singleSession && MinestuckConfig.globalSession.get())
+		else if(!singleSession && MinestuckConfig.SERVER.globalSession.get())
 			mergeAll();
 	}
 	
@@ -130,7 +130,7 @@ public final class SessionHandler
 	 */
 	void splitGlobalSession()
 	{
-		if(MinestuckConfig.globalSession.get() || sessions.size() != 1)
+		if(MinestuckConfig.SERVER.globalSession.get() || sessions.size() != 1)
 			return;
 		
 		Session s = getGlobalSession();
@@ -176,7 +176,7 @@ public final class SessionHandler
 					break;
 				}
 		
-		return cClient != null && sClient == sServer && (MinestuckConfig.allowSecondaryConnections.get() || cClient == cServer)	//Reconnect within session
+		return cClient != null && sClient == sServer && (MinestuckConfig.SERVER.allowSecondaryConnections.get() || cClient == cServer)	//Reconnect within session
 				|| cClient == null && !serverActive && !(sClient != null && sClient.locked) && !(sServer != null && sServer.locked);	//Connect with a new player and potentially create a main connection
 	}
 	
@@ -208,14 +208,15 @@ public final class SessionHandler
 				SburbConnection c = skaianetHandler.getMainConnection(connection.getClientIdentifier(), false);
 				if(c.isActive())
 					skaianetHandler.closeConnection(c.getClientIdentifier(), c.getServerIdentifier(), true);
-				switch(MinestuckConfig.escapeFailureMode) {
-				case 0:
-					c.removeServerPlayer();
-					c.setNewServerPlayer(connection.getServerIdentifier());
-					break;
-				case 1:
-					c.removeServerPlayer();
-					break;
+				switch(MinestuckConfig.SERVER.escapeFailureMode.get())
+				{
+					case CLOSE:
+						c.removeServerPlayer();
+						c.setNewServerPlayer(connection.getServerIdentifier());
+						break;
+					case OPEN:
+						c.removeServerPlayer();
+						break;
 				}
 			}
 			if(s.connections.size() == 0 && !s.isCustom())

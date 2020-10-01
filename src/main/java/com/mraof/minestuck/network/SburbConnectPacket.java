@@ -57,7 +57,7 @@ public class SburbConnectPacket implements PlayToServerPacket
 				ComputerTileEntity computer = (ComputerTileEntity) te;
 				MinecraftServer mcServer = Objects.requireNonNull(player.getServer());
 				OpEntry opsEntry = mcServer.getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
-				if((!MinestuckConfig.privateComputers.get() || IdentifierHandler.encode(player) == computer.owner || opsEntry != null && opsEntry.getPermissionLevel() >= 2) && ServerEditHandler.getData(player) == null)
+				if((!MinestuckConfig.SERVER.privateComputers.get() || IdentifierHandler.encode(player) == computer.owner || opsEntry != null && opsEntry.getPermissionLevel() >= 2) && ServerEditHandler.getData(player) == null)
 					SkaianetHandler.get(mcServer).requestConnection(computer.owner, ComputerReference.of(computer), otherPlayer != -1 ? IdentifierHandler.getById(otherPlayer) : null, isClient);
 			}
 		}

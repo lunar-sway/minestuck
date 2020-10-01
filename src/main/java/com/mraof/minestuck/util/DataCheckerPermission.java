@@ -74,7 +74,7 @@ public class DataCheckerPermission
 	
 	public static boolean hasPermission(ServerPlayerEntity player)
 	{
-		switch(MinestuckConfig.dataCheckerPermission.get())
+		switch(MinestuckConfig.SERVER.dataCheckerPermission.get())
 		{
 			case ANYONE: return true;
 			case OPS: return hasOp(player);

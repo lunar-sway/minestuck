@@ -121,7 +121,7 @@ public class AlchemiterScreen extends Screen implements Positioned
 	{
 		//the amount the button changes the amount
 		int result = itemQuantity + change;
-		int maxCount = Math.min(999, alchemiter.getOutput().getMaxStackSize() * MinestuckConfig.alchemiterMaxStacks.get());
+		int maxCount = Math.min(999, alchemiter.getOutput().getMaxStackSize() * MinestuckConfig.SERVER.alchemiterMaxStacks.get());
 		
 		itemQuantity = MathHelper.clamp(result, 1, maxCount);
 	}

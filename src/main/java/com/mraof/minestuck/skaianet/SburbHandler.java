@@ -47,7 +47,7 @@ public final class SburbHandler
 	{
 		Session session = SessionHandler.get(world).getPlayerSession(player);
 		if(session == null)
-			if(MinestuckConfig.playerSelectedTitle.get())
+			if(MinestuckConfig.SERVER.playerSelectedTitle.get())
 				session = new Session();
 			else
 			{
@@ -84,7 +84,7 @@ public final class SburbHandler
 			if(title == null)
 				return;
 			PlayerSavedData.getData(player, world).setTitle(title);
-		} else if(!MinestuckConfig.playerSelectedTitle.get())
+		} else if(!MinestuckConfig.SERVER.playerSelectedTitle.get())
 			Debug.warnf("Trying to generate a title for %s when a title is already assigned!", player.getUsername());
 	}
 	
@@ -263,7 +263,7 @@ public final class SburbHandler
 	 */
 	public static boolean performEntryCheck(ServerPlayerEntity player)
 	{
-		if(!MinestuckConfig.playerSelectedTitle.get())
+		if(!MinestuckConfig.SERVER.playerSelectedTitle.get())
 			return true;
 		
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
@@ -286,7 +286,7 @@ public final class SburbHandler
 	
 	public static void handleTitleSelection(ServerPlayerEntity player, Title title)
 	{
-		if(MinestuckConfig.playerSelectedTitle.get() && playersInTitleSelection.containsKey(player))
+		if(MinestuckConfig.SERVER.playerSelectedTitle.get() && playersInTitleSelection.containsKey(player))
 		{
 			PlayerIdentifier identifier = IdentifierHandler.encode(player);
 			

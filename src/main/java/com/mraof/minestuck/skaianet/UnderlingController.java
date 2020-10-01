@@ -67,15 +67,15 @@ public final class UnderlingController
 			}
 		}
 		
-		if(impWeight > 0 && MinestuckConfig.naturalImpSpawn.get())
+		if(impWeight > 0 && MinestuckConfig.SERVER.naturalImpSpawn.get())
 			list.add(new Biome.SpawnListEntry(MSEntityTypes.IMP, impWeight, Math.max(1, (int)(impWeight/2.5)), Math.max(3, impWeight)));
-		if(ogreWeight > 0 && MinestuckConfig.naturalOgreSpawn.get())
+		if(ogreWeight > 0 && MinestuckConfig.SERVER.naturalOgreSpawn.get())
 			list.add(new Biome.SpawnListEntry(MSEntityTypes.OGRE, ogreWeight, ogreWeight >= 5 ? 2 : 1, Math.max(1, ogreWeight/2)));
-		if(basiliskWeight > 0 && MinestuckConfig.naturalBasiliskSpawn.get())
+		if(basiliskWeight > 0 && MinestuckConfig.SERVER.naturalBasiliskSpawn.get())
 			list.add(new Biome.SpawnListEntry(MSEntityTypes.BASILISK, basiliskWeight, 1, Math.max(1, basiliskWeight/2)));
-		if(lichWeight > 0 && MinestuckConfig.naturalLichSpawn.get())
+		if(lichWeight > 0 && MinestuckConfig.SERVER.naturalLichSpawn.get())
 			list.add(new Biome.SpawnListEntry(MSEntityTypes.LICH, lichWeight, 1, Math.max(1, lichWeight/2)));
-		if(giclopsWeight > 0 && !MinestuckConfig.disableGiclops.get())
+		if(giclopsWeight > 0 && !MinestuckConfig.SERVER.disableGiclops.get())
 			list.add(new Biome.SpawnListEntry(MSEntityTypes.GICLOPS, giclopsWeight, 1, Math.max(1, giclopsWeight/2)));
 		//TODO Add hook for addons to add more underlings
 		

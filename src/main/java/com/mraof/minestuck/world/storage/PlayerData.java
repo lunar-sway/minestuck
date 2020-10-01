@@ -275,7 +275,7 @@ public final class PlayerData
 	
 	private void tryGiveStartingModus(ServerPlayerEntity player)
 	{
-		List<String> startingTypes = MinestuckConfig.startingModusTypes.get();
+		List<String> startingTypes = MinestuckConfig.SERVER.startingModusTypes.get();
 		if(!startingTypes.isEmpty())
 		{
 			String type = startingTypes.get(player.world.rand.nextInt(startingTypes.size()));
@@ -292,7 +292,7 @@ public final class PlayerData
 				Modus modus = CaptchaDeckHandler.createServerModus(name, savedData);
 				if(modus != null)
 				{
-					modus.initModus(null, player, null, MinestuckConfig.initialModusSize.get());
+					modus.initModus(null, player, null, MinestuckConfig.SERVER.initialModusSize.get());
 					setModus(modus);
 				} else LOGGER.warn("Couldn't create a starting modus type by name {}.", type);
 			}

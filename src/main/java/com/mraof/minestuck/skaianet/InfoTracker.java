@@ -72,7 +72,7 @@ public final class InfoTracker
 			return;
 		}
 		
-		if(MinestuckConfig.privateComputers.get() && !p0.equals(p1) && !player.hasPermissionLevel(2))
+		if(MinestuckConfig.SERVER.privateComputers.get() && !p0.equals(p1) && !player.hasPermissionLevel(2))
 		{
 			player.sendMessage(new StringTextComponent("[Minestuck] ").setStyle(new Style().setColor(TextFormatting.RED)).appendSibling(new TranslationTextComponent(SkaianetHandler.PRIVATE_COMPUTER)));
 			return;
@@ -202,7 +202,7 @@ public final class InfoTracker
 				iter0.remove();
 			}
 		
-		if(MinestuckConfig.privateComputers.get())
+		if(MinestuckConfig.SERVER.privateComputers.get())
 		{
 			for(Map.Entry<PlayerIdentifier, Set<PlayerIdentifier>> entry : infoToSend.entrySet())
 			{

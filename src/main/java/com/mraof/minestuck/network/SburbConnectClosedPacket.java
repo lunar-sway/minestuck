@@ -2,8 +2,8 @@ package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.skaianet.SkaianetHandler;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.server.management.OpEntry;
@@ -43,7 +43,7 @@ public class SburbConnectClosedPacket implements PlayToServerPacket
 	public void execute(ServerPlayerEntity player)
 	{
 		OpEntry opsEntry = player.getServer().getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
-		if((!MinestuckConfig.privateComputers.get() || IdentifierHandler.encode(player).getId() == this.player || opsEntry != null && opsEntry.getPermissionLevel() >= 2) && ServerEditHandler.getData(player) == null)
+		if((!MinestuckConfig.SERVER.privateComputers.get() || IdentifierHandler.encode(player).getId() == this.player || opsEntry != null && opsEntry.getPermissionLevel() >= 2) && ServerEditHandler.getData(player) == null)
 			SkaianetHandler.get(player.world).closeConnection(IdentifierHandler.getById(this.player), otherPlayer != -1 ? IdentifierHandler.getById(this.otherPlayer) : null, isClient);
 	}
 }

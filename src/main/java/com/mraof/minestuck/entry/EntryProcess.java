@@ -44,8 +44,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
-import static com.mraof.minestuck.MinestuckConfig.artifactRange;
-
 public class EntryProcess
 {
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -59,6 +57,8 @@ public class EntryProcess
 	{
 		blockProcessors.add(processing);
 	}
+	
+	private final int artifactRange = MinestuckConfig.SERVER.artifactRange.get();
 	
 	private int xDiff;
 	private int yDiff;
@@ -81,7 +81,7 @@ public class EntryProcess
 				SburbConnection c = SkaianetHandler.get(player.world).getMainConnection(identifier, true);
 				
 				//Only performs Entry if you have no connection, haven't Entered, or you're not in a Land and additional Entries are permitted.
-				if(c == null || !c.hasEntered() || !MinestuckConfig.stopSecondEntry.get() && !MSDimensions.isLandDimension(player.world.getDimension().getType()))
+				if(c == null || !c.hasEntered() || !MinestuckConfig.SERVER.stopSecondEntry.get() && !MSDimensions.isLandDimension(player.world.getDimension().getType()))
 				{
 					if(!canModifyEntryBlocks(player.world, player))
 					{
@@ -154,7 +154,7 @@ public class EntryProcess
 		creative = player.interactionManager.isCreative();
 		SburbConnection conn = SkaianetHandler.get(worldserver0).getMainConnection(IdentifierHandler.encode(player), true);
 		
-		topY = MinestuckConfig.adaptEntryBlockHeight.get() ? getTopHeight(worldserver0, x, y, z) : y + artifactRange.get();
+		topY = MinestuckConfig.SERVER.adaptEntryBlockHeight.get() ? getTopHeight(worldserver0, x, y, z) : y + artifactRange;
 		yDiff = 127 - topY;
 		xDiff = 0 - x;
 		zDiff = 0 - z;
@@ -163,14 +163,14 @@ public class EntryProcess
 		long time = System.currentTimeMillis();
 		int bl = 0;
 		boolean foundComputer = false;
-		for(int blockX = x - artifactRange.get(); blockX <= x + artifactRange.get(); blockX++)
+		for(int blockX = x - artifactRange; blockX <= x + artifactRange; blockX++)
 		{
-			int zWidth = (int) Math.sqrt((artifactRange.get()+0.5) * (artifactRange.get()+0.5) - (blockX - x) * (blockX - x));
+			int zWidth = (int) Math.sqrt((artifactRange+0.5) * (artifactRange+0.5) - (blockX - x) * (blockX - x));
 			for(int blockZ = z - zWidth; blockZ <= z + zWidth; blockZ++)
 			{
 				Chunk c = worldserver0.getChunk(blockX >> 4, blockZ >> 4);
 				
-				int height = (int) Math.sqrt(artifactRange.get() * artifactRange.get() - (((blockX - x) * (blockX - x) + (blockZ - z) * (blockZ - z)) / 2F));
+				int height = (int) Math.sqrt(artifactRange * artifactRange - (((blockX - x) * (blockX - x) + (blockZ - z) * (blockZ - z)) / 2F));
 				
 				int blockY;
 				for(blockY = Math.max(0, y - height); blockY <= Math.min(topY, y + height); blockY++)
@@ -215,7 +215,7 @@ public class EntryProcess
 			}
 		}
 		
-		if(!foundComputer && MinestuckConfig.needComputer.get())
+		if(!foundComputer && MinestuckConfig.SERVER.needComputer.get())
 		{
 			player.sendStatusMessage(new StringTextComponent("There is no computer in range."), false);
 			return false;
@@ -256,15 +256,15 @@ public class EntryProcess
 			LOGGER.debug("Teleporting entities...");
 			//The fudge here is to ensure that the AABB will always contain every entity meant to be moved.
 			// As entities outside the radius will be excluded from transport anyway, this is fine.
-			AxisAlignedBB entityTeleportBB = player.getBoundingBox().grow(artifactRange.get() + 0.5);
+			AxisAlignedBB entityTeleportBB = player.getBoundingBox().grow(artifactRange + 0.5);
 			List<Entity> list = worldserver0.getEntitiesWithinAABBExcludingEntity(player, entityTeleportBB);
 			Iterator<Entity> iterator = list.iterator();
 			while (iterator.hasNext())
 			{
 				Entity e = iterator.next();
-				if(origin.distanceSq(e.getPosX(), e.getPosY(), e.getPosZ(), true) <= artifactRange.get()*artifactRange.get())
+				if(origin.distanceSq(e.getPosX(), e.getPosY(), e.getPosZ(), true) <= artifactRange*artifactRange)
 				{
-					if(MinestuckConfig.entryCrater.get() || e instanceof PlayerEntity || !creative && e instanceof ItemEntity)
+					if(MinestuckConfig.SERVER.entryCrater.get() || e instanceof PlayerEntity || !creative && e instanceof ItemEntity)
 					{
 						if(e instanceof PlayerEntity && ServerEditHandler.getData((PlayerEntity) e) != null)
 							ServerEditHandler.reset(ServerEditHandler.getData((PlayerEntity) e));
@@ -297,7 +297,7 @@ public class EntryProcess
 			{
 				removeTileEntity(worldserver0, move.source, creative);	//Tile entities need special treatment
 				
-				if(MinestuckConfig.entryCrater.get() && worldserver0.getBlockState(move.source).getBlock() != Blocks.BEDROCK)
+				if(MinestuckConfig.SERVER.entryCrater.get() && worldserver0.getBlockState(move.source).getBlock() != Blocks.BEDROCK)
 				{
 					if(move.update)
 						worldserver0.setBlockState(move.source, Blocks.AIR.getDefaultState(), Constants.BlockFlags.DEFAULT);
@@ -313,7 +313,7 @@ public class EntryProcess
 			
 			//Remove entities that were generated in the process of teleporting entities and removing blocks.
 			// This is usually caused by "anchored" blocks being updated between the removal of their anchor and their own removal.
-			if(!creative || MinestuckConfig.entryCrater.get())
+			if(!creative || MinestuckConfig.SERVER.entryCrater.get())
 			{
 				LOGGER.debug("Removing entities left in the crater...");
 				List<Entity> removalList = worldserver0.getEntitiesWithinAABBExcludingEntity(player, entityTeleportBB);
@@ -325,7 +325,7 @@ public class EntryProcess
 				removalList.removeAll(list);
 				
 				iterator = removalList.iterator();
-				if(MinestuckConfig.entryCrater.get())
+				if(MinestuckConfig.SERVER.entryCrater.get())
 				{
 					while (iterator.hasNext())
 					{
@@ -347,7 +347,7 @@ public class EntryProcess
 			placeGate(GateHandler.Type.GATE_1, new BlockPos(x + xDiff, GateHandler.gateHeight1, z + zDiff), worldserver1);
 			placeGate(GateHandler.Type.GATE_2, new BlockPos(x + xDiff, GateHandler.gateHeight2, z + zDiff), worldserver1);
 			
-			MSExtraData.get(worldserver1).addPostEntryTask(new PostEntryTask(worldserver1.getDimension().getType(), x + xDiff, y + yDiff, z + zDiff, artifactRange.get(), (byte) 0));
+			MSExtraData.get(worldserver1).addPostEntryTask(new PostEntryTask(worldserver1.getDimension().getType(), x + xDiff, y + yDiff, z + zDiff, artifactRange, (byte) 0));
 			
 			MSDimensions.getLandInfo(worldserver1).setSpawn(MathHelper.floor(player.getPosY()));
 			
@@ -369,7 +369,7 @@ public class EntryProcess
 		TileEntity tileEntity = worldserver0.getTileEntity(pos);
 		if(tileEntity != null)
 		{
-			if(MinestuckConfig.entryCrater.get() || !creative)
+			if(MinestuckConfig.SERVER.entryCrater.get() || !creative)
 			{
 				String name = worldserver0.getBlockState(pos).getBlock().getRegistryName().toString();
 				try {
@@ -388,16 +388,16 @@ public class EntryProcess
 		}
 	}
 	
-	private static boolean canModifyEntryBlocks(World world, PlayerEntity player)
+	private boolean canModifyEntryBlocks(World world, PlayerEntity player)
 	{
 		int x = (int) player.getPosX();
 		if(player.getPosX() < 0) x--;
 		int y = (int) player.getPosY();
 		int z = (int) player.getPosZ();
 		if(player.getPosZ() < 0) z--;
-		for(int blockX = x - artifactRange.get(); blockX <= x + artifactRange.get(); blockX++)
+		for(int blockX = x - artifactRange; blockX <= x + artifactRange; blockX++)
 		{
-			int zWidth = (int) Math.sqrt(artifactRange.get() * artifactRange.get() - (blockX - x) * (blockX - x));
+			int zWidth = (int) Math.sqrt(artifactRange * artifactRange - (blockX - x) * (blockX - x));
 			for(int blockZ = z - zWidth; blockZ <= z + zWidth; blockZ++)
 				if(!world.isBlockModifiable(player, new BlockPos(blockX, y, blockZ)))
 					return false;
@@ -430,16 +430,16 @@ public class EntryProcess
 	/**
 	 * Gives the Y-value of the highest non-air block within artifact range of the coordinates provided in the given world.
 	 */
-	private static int getTopHeight(ServerWorld world, int x, int y, int z)
+	private int getTopHeight(ServerWorld world, int x, int y, int z)
 	{
 		LOGGER.debug("Getting maxY..");
 		int maxY = y;
-		for(int blockX = x - artifactRange.get(); blockX <= x + artifactRange.get(); blockX++)
+		for(int blockX = x - artifactRange; blockX <= x + artifactRange; blockX++)
 		{
-			int zWidth = (int) Math.sqrt(artifactRange.get() * artifactRange.get() - (blockX - x) * (blockX - x));
+			int zWidth = (int) Math.sqrt(artifactRange * artifactRange - (blockX - x) * (blockX - x));
 			for(int blockZ = z - zWidth; blockZ <= z + zWidth; blockZ++)
 			{
-				int height = (int) (Math.sqrt(artifactRange.get() * artifactRange.get() - (((blockX - x) * (blockX - x) + (blockZ - z) * (blockZ - z)) / 2)));
+				int height = (int) (Math.sqrt(artifactRange * artifactRange - (((blockX - x) * (blockX - x) + (blockZ - z) * (blockZ - z)) / 2F)));
 				for(int blockY = Math.min(255, y + height); blockY > maxY; blockY--)
 					if(!world.isAirBlock(new BlockPos(blockX, blockY, blockZ)))
 					{

@@ -98,7 +98,7 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	{
 		super.baseTick();
 		partGroup.updatePositions();
-		if(!world.isRemote && MinestuckConfig.disableGiclops.get())
+		if(!world.isRemote && MinestuckConfig.SERVER.disableGiclops.get())
 			this.remove();
 	}
 	
