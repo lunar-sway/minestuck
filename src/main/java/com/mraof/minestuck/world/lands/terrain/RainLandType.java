@@ -10,7 +10,6 @@ import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
-import com.mraof.minestuck.world.gen.feature.structure.village.ConsortVillageCenter;
 import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
@@ -26,7 +25,7 @@ import net.minecraft.world.gen.placement.CountRangeConfig;
 import net.minecraft.world.gen.placement.FrequencyConfig;
 import net.minecraft.world.gen.placement.Placement;
 
-import java.util.function.BiConsumer;
+import java.util.Random;
 
 public class RainLandType extends TerrainLandType
 {
@@ -134,8 +133,14 @@ public class RainLandType extends TerrainLandType
 	}
 	
 	@Override
-	public void addVillageCenters(BiConsumer<ConsortVillageCenter.CenterFactory, Integer> factoryWeightConsumer)
+	public void addVillageCenters(CenterRegister register)
 	{
-		addTurtleVillageCenters(factoryWeightConsumer);
+		addTurtleVillageCenters(register);
+	}
+	
+	@Override
+	public void addVillagePieces(PieceRegister register, Random random)
+	{
+		addTurtleVillagePieces(register, random);
 	}
 }

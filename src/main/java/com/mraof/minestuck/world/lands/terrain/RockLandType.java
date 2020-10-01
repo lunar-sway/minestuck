@@ -23,7 +23,7 @@ import net.minecraft.world.gen.blockstateprovider.SimpleBlockStateProvider;
 import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.placement.*;
 
-import java.util.function.BiConsumer;
+import java.util.Random;
 
 public class RockLandType extends TerrainLandType
 {
@@ -159,11 +159,17 @@ public class RockLandType extends TerrainLandType
 	}
 	
 	@Override
-	public void addVillageCenters(BiConsumer<ConsortVillageCenter.CenterFactory, Integer> factoryWeightConsumer)
+	public void addVillageCenters(CenterRegister register)
 	{
-		addNakagatorVillageCenters(factoryWeightConsumer);
+		addNakagatorVillageCenters(register);
 		
-		factoryWeightConsumer.accept(ConsortVillageCenter.RockCenter::new, 5);
+		register.add(ConsortVillageCenter.RockCenter::new, 5);
+	}
+	
+	@Override
+	public void addVillagePieces(PieceRegister register, Random random)
+	{
+		addNakagatorVillagePieces(register, random);
 	}
 	
 	public enum Variant

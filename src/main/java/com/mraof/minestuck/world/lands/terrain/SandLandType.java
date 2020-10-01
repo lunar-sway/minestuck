@@ -29,7 +29,7 @@ import net.minecraft.world.gen.placement.CountRangeConfig;
 import net.minecraft.world.gen.placement.FrequencyConfig;
 import net.minecraft.world.gen.placement.Placement;
 
-import java.util.function.BiConsumer;
+import java.util.Random;
 
 public class SandLandType extends TerrainLandType
 {
@@ -180,11 +180,17 @@ public class SandLandType extends TerrainLandType
 	}
 	
 	@Override
-	public void addVillageCenters(BiConsumer<ConsortVillageCenter.CenterFactory, Integer> factoryWeightConsumer)
+	public void addVillageCenters(CenterRegister register)
 	{
-		addTurtleVillageCenters(factoryWeightConsumer);
+		addTurtleVillageCenters(register);
 		
-		factoryWeightConsumer.accept(ConsortVillageCenter.CactusPyramidCenter::new, 5);
+		register.add(ConsortVillageCenter.CactusPyramidCenter::new, 5);
+	}
+	
+	@Override
+	public void addVillagePieces(PieceRegister register, Random random)
+	{
+		addTurtleVillagePieces(register, random);
 	}
 	
 	public enum Variant

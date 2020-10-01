@@ -4,10 +4,11 @@ import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.feature.structure.village.ConsortVillageCenter;
+import com.mraof.minestuck.world.gen.feature.structure.village.ConsortVillagePieces;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
-import java.util.function.BiConsumer;
+import java.util.Random;
 
 public interface ILandType<A extends ILandType<?>> extends IForgeRegistryEntry<A>
 {
@@ -31,6 +32,19 @@ public interface ILandType<A extends ILandType<?>> extends IForgeRegistryEntry<A
 	default void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
 	{}
 	
-	default void addVillageCenters(BiConsumer<ConsortVillageCenter.CenterFactory, Integer> factoryWeightConsumer)
+	default void addVillageCenters(CenterRegister register)
 	{}
+	
+	interface CenterRegister
+	{
+		void add(ConsortVillageCenter.CenterFactory factory, int weight);
+	}
+	
+	default void addVillagePieces(PieceRegister register, Random random)
+	{}
+	
+	interface PieceRegister
+	{
+		void add(ConsortVillagePieces.PieceFactory factory, int weight, int limit);
+	}
 }

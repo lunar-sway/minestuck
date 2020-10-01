@@ -101,7 +101,7 @@ public class ConsortVillageStructure extends Structure<NoFeatureConfig>	//TODO I
 			{
 				LandGenSettings settings = (LandGenSettings) generator.getSettings();
 				LandTypePair landTypes = settings.getLandTypes();
-				List<ConsortVillagePieces.PieceWeight> pieceWeightList = ConsortVillagePieces.getStructureVillageWeightedPieceList(rand, landTypes.terrain.getConsortType(), landTypes);
+				List<ConsortVillagePieces.PieceWeight> pieceWeightList = ConsortVillagePieces.getStructureVillageWeightedPieceList(rand, landTypes);
 				ConsortVillageCenter.VillageCenter start = ConsortVillageCenter.getVillageStart((chunkX << 4) + rand.nextInt(16), (chunkZ << 4) + rand.nextInt(16), rand, pieceWeightList, landTypes);
 				components.add(start);
 				start.buildComponent(start, components, rand);

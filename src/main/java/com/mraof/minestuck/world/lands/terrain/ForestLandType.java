@@ -8,7 +8,6 @@ import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
-import com.mraof.minestuck.world.gen.feature.structure.village.ConsortVillageCenter;
 import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
@@ -28,7 +27,7 @@ import net.minecraft.world.gen.placement.CountRangeConfig;
 import net.minecraft.world.gen.placement.FrequencyConfig;
 import net.minecraft.world.gen.placement.Placement;
 
-import java.util.function.BiConsumer;
+import java.util.Random;
 
 public class ForestLandType extends TerrainLandType
 {
@@ -152,9 +151,15 @@ public class ForestLandType extends TerrainLandType
 	}
 	
 	@Override
-	public void addVillageCenters(BiConsumer<ConsortVillageCenter.CenterFactory, Integer> factoryWeightConsumer)
+	public void addVillageCenters(CenterRegister register)
 	{
-		addIguanaVillageCenters(factoryWeightConsumer);
+		addIguanaVillageCenters(register);
+	}
+	
+	@Override
+	public void addVillagePieces(PieceRegister register, Random random)
+	{
+		addIguanaVillagePieces(register, random);
 	}
 	
 	public enum Variant

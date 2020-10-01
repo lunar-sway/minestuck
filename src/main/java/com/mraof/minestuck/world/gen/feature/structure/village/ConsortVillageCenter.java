@@ -5,6 +5,7 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.lands.ILandType;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -23,7 +24,6 @@ import net.minecraft.world.gen.feature.template.TemplateManager;
 
 import java.util.List;
 import java.util.Random;
-import java.util.function.BiConsumer;
 
 /**
  * Created by kirderf1
@@ -44,9 +44,9 @@ public class ConsortVillageCenter
 	{
 		List<CenterEntry> weightList = Lists.newArrayList();
 		
-		BiConsumer<CenterFactory, Integer> consumer = (centerFactory, weight) -> weightList.add(new CenterEntry(centerFactory, weight));
-		landTypes.terrain.addVillageCenters(consumer);
-		landTypes.title.addVillageCenters(consumer);
+		ILandType.CenterRegister register = (factory, weight) -> weightList.add(new CenterEntry(factory, weight));
+		landTypes.terrain.addVillageCenters(register);
+		landTypes.title.addVillageCenters(register);
 		
 		if(weightList.isEmpty())
 			return new ConsortVillageCenter.VillageMarketCenter(list, x, z, rand);
