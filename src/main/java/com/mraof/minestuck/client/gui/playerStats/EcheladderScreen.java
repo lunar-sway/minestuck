@@ -77,7 +77,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 	{
 		updateScrollAndAnimation(mouseX, mouseY);
 		
-		int speedFactor = MinestuckConfig.echeladderAnimation.get().getSpeed();
+		int speedFactor = MinestuckConfig.CLIENT.echeladderAnimation.get().getSpeed();
 		int currentRung;
 		boolean showLastRung = true;
 		if(animationCycle == 0)
@@ -275,7 +275,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 		}
 		
 		if(animationCycle > 0)
-			if(MinestuckConfig.echeladderAnimation.get() != MinestuckConfig.AnimationSpeed.NOTHING)
+			if(MinestuckConfig.CLIENT.echeladderAnimation.get() != MinestuckConfig.AnimationSpeed.NOTHING)
 				animationCycle--;
 			else animationCycle = 0;
 	}

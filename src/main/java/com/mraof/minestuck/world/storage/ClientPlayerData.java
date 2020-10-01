@@ -16,7 +16,7 @@ import net.minecraftforge.fml.common.Mod;
  * @author kirderf1
  */
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
-public class ClientPlayerData
+public class ClientPlayerData	//TODO reduce visibility of fields
 {
 	public static Modus clientSideModus;
 	public static Title title;
@@ -28,6 +28,7 @@ public class ClientPlayerData
 	private static GristSet targetGrist;
 	public static int playerColor;
 	public static boolean displaySelectionGui;
+	public static boolean dataCheckerAccess;
 	
 	@SubscribeEvent
 	public static void onLoggedIn(ClientPlayerNetworkEvent.LoggedInEvent event)

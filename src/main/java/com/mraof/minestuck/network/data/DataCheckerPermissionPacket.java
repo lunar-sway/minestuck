@@ -1,7 +1,7 @@
 package com.mraof.minestuck.network.data;
 
-import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.network.PlayToClientPacket;
+import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -44,6 +44,6 @@ public class DataCheckerPermissionPacket implements PlayToClientPacket
 	@Override
 	public void execute()
 	{
-		MinestuckConfig.dataCheckerAccess = available;
+		ClientPlayerData.dataCheckerAccess = available;
 	}
 }

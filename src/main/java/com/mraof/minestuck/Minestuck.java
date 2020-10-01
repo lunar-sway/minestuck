@@ -46,8 +46,8 @@ public class Minestuck
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
 		
-		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, MinestuckConfig.commonConfigSpec);
-		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, MinestuckConfig.CLIENT_CONFIG);
+		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, MinestuckConfig.commonSpec);
+		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, MinestuckConfig.clientSpec);
 		ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, MinestuckConfig.SERVER_CONFIG);
 		
 		WorldPersistenceHooks.addHook(new MSWorldPersistenceHook());

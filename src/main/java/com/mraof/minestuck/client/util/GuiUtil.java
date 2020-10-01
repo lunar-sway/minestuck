@@ -52,7 +52,7 @@ public class GuiUtil
 		
 		GristSet playerGrist = ClientPlayerData.getClientGrist();
 		Iterator<GristAmount> it = grist.getAmounts().iterator();
-		if(!MinestuckConfig.alchemyIcons.get())
+		if(!MinestuckConfig.CLIENT.alchemyIcons.get())
 		{
 			int place = 0;
 			while (it.hasNext())
@@ -135,7 +135,7 @@ public class GuiUtil
 		mouseY -= boardY;
 		
 		GristSet playerGrist = ClientPlayerData.getClientGrist();
-		if(!MinestuckConfig.alchemyIcons.get())
+		if(!MinestuckConfig.CLIENT.alchemyIcons.get())
 		{
 			int place = 0;
 			for(GristAmount entry : grist.getAmounts())

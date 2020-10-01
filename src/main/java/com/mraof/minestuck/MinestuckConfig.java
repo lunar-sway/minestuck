@@ -35,16 +35,43 @@ public class MinestuckConfig
 		}
 	}
 	
-	static final ForgeConfigSpec commonConfigSpec;
+	public static class Client
+	{
+		public final EnumValue<AnimationSpeed> echeladderAnimation;
+		public final BooleanValue loginColorSelector;
+		public final BooleanValue alchemyIcons;
+		
+		private Client(Builder builder)
+		{
+			builder.push("client");
+			alchemyIcons = builder.comment("Set this to true to replace grist names in alchemiter/grist widget with the grist icon.")
+					.define("alchemyIcons", true);
+			loginColorSelector = builder.comment("Determines if the color selector should be displayed when entering a save file for the first time.")
+					.define("loginColorSelector", true);
+			echeladderAnimation = builder.comment("Allows control of standard speed for the echeladder rung \"animation\", or if it should have one in the first place.")
+					.defineEnum("echeladderAnimation", AnimationSpeed.NORMAL);
+			builder.pop();
+		}
+	}
+	
+	static final ForgeConfigSpec commonSpec;
 	public static final Common COMMON;
 	static
 	{
 		Pair<Common, ForgeConfigSpec> pair = new ForgeConfigSpec.Builder().configure(Common::new);
 		COMMON = pair.getLeft();
-		commonConfigSpec = pair.getRight();
+		commonSpec = pair.getRight();
 	}
 	
-	static final ForgeConfigSpec CLIENT_CONFIG;
+	static final ForgeConfigSpec clientSpec;
+	public static final Client CLIENT;
+	static
+	{
+		Pair<Client, ForgeConfigSpec> pair = new ForgeConfigSpec.Builder().configure(Client::new);
+		CLIENT = pair.getLeft();
+		clientSpec = pair.getRight();
+	}
+	
 	static final ForgeConfigSpec SERVER_CONFIG;
 	
 	//            Server	(The category for all config values that influence both client and server, and is appropriate to be per-world. Is stored in a per-world config and synced to any clients connected to the server)
@@ -123,12 +150,6 @@ public class MinestuckConfig
 	public static IntValue overworldEditRange;
 	public static IntValue landEditRange;
 	public static BooleanValue giveItems;
-	
-	//            Client	(Anything that is only needed for clients (only needed client-side))
-	public static EnumValue<AnimationSpeed> echeladderAnimation;
-	public static BooleanValue loginColorSelector;
-	public static boolean dataCheckerAccess;
-	public static BooleanValue alchemyIcons;
 	
 	static
 	{
@@ -243,19 +264,6 @@ public class MinestuckConfig
 		SERVER_BUILDER.pop();
 		
 		SERVER_CONFIG = SERVER_BUILDER.build();
-		
-		
-		ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
-		CLIENT_BUILDER.push("client");
-		alchemyIcons = CLIENT_BUILDER.comment("Set this to true to replace grist names in alchemiter/grist widget with the grist icon.")
-				.define("alchemyIcons", true);
-		loginColorSelector = CLIENT_BUILDER.comment("Determines if the color selector should be displayed when entering a save file for the first time.")
-				.define("loginColorSelector", true);
-		echeladderAnimation = CLIENT_BUILDER.comment("Allows control of standard speed for the echeladder rung \"animation\", or if it should have one in the first place.")
-				.defineEnum("echeladderAnimation", AnimationSpeed.NORMAL);
-		CLIENT_BUILDER.pop();
-		
-		CLIENT_CONFIG = CLIENT_BUILDER.build();
 	}
 	
 	@SubscribeEvent

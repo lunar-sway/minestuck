@@ -8,7 +8,6 @@ import com.mraof.minestuck.client.gui.ColorSelectorScreen;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.fluid.IMSFog;
 import com.mraof.minestuck.inventory.ConsortMerchantContainer;
-import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
@@ -43,7 +42,7 @@ public class ClientEventHandler
 			if(ClientPlayerData.displaySelectionGui && Minecraft.getInstance().currentScreen == null)
 			{
 				ClientPlayerData.displaySelectionGui = false;
-				if(MinestuckConfig.loginColorSelector.get())
+				if(MinestuckConfig.CLIENT.loginColorSelector.get())
 					Minecraft.getInstance().displayGuiScreen(new ColorSelectorScreen(true));
 			}
 			

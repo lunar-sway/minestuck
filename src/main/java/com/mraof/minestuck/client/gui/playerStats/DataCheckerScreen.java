@@ -1,7 +1,6 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.settings.MSKeyHandler;
 import com.mraof.minestuck.network.DataCheckerPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
@@ -9,6 +8,7 @@ import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.world.lands.LandTypePair;
+import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.screen.Screen;
@@ -139,7 +139,7 @@ public class DataCheckerScreen extends Screen
 	{
 		if(guiComponent != activeComponent)
 			componentChanged();
-		if(!MinestuckConfig.dataCheckerAccess)
+		if(!ClientPlayerData.dataCheckerAccess)
 			minecraft.displayGuiScreen(null);
 	}
 	
