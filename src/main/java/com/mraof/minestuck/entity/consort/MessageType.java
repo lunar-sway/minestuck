@@ -18,7 +18,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.*;
 import net.minecraft.util.text.event.ClickEvent;
-import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootParameterSets;
@@ -74,7 +73,6 @@ public abstract class MessageType
 				obj[i] = player.getName();
 			} else if(args[i].equals("land_name"))
 			{
-				World world = consort.getServer().getWorld(consort.homeDimension);
 				LandInfo landInfo = MSDimensions.getLandInfo(consort.getServer(), consort.homeDimension);
 				if(landInfo != null)
 				{

@@ -181,7 +181,7 @@ public class ConsortDialogue
 		addMessage("mushroom_curse", "denizen").landTerrain(FUNGI);
 		addMessage("jacket").landTerrain(FUNGI);
 		addMessage("mildew").landTerrain(FUNGI);
-		addMessage("fungus_destroyer", "player_title", "denizen").landTerrain(FUNGI);
+		addMessage("fungus_destroyer", "player_title_land", "denizen").landTerrain(FUNGI);
 		
 		//Rainbow Terrain
 		addMessage("generic_green").landTerrain(RAINBOW);
