@@ -1,5 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
@@ -58,7 +59,7 @@ public abstract class MinestuckScreen extends Screen
 
 			if (this.isPointInRegion(gristXOffset + gristIconX, gristYOffset + gristIconY, 16, 16, xcor, ycor))
 			{
-				this.fillGradient(gristXOffset + gristIconX, gristYOffset + gristIconY, gristXOffset + gristIconX + 16, gristYOffset + gristIconY + 17, -2130706433, -2130706433);
+				this.fillGradient(gristXOffset + gristIconX, gristYOffset + gristIconY, gristXOffset + gristIconX + 16, gristYOffset + gristIconY + 17, 0x80ffffff, 0x80ffffff);
 				tooltipType = type;
 				showName = true;
 			}
@@ -94,6 +95,7 @@ public abstract class MinestuckScreen extends Screen
 			return;
 		
 		this.minecraft.getTextureManager().bindTexture(icon);
+		RenderSystem.enableAlphaTest();
 
 		float scale = (float) 1 / 16;
 
