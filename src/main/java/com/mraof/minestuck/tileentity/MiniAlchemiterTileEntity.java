@@ -32,13 +32,13 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 		@Override
 		public int get()
 		{
-			return getWildcardGrist().getId();
+			return ((ForgeRegistry<GristType>) GristTypes.getRegistry()).getID(getWildcardGrist());
 		}
 		
 		@Override
 		public void set(int id)
 		{
-			GristType type = ((ForgeRegistry<GristType>) GristTypes.getRegistry()).getValue(id);	//TODO Not ideal. Find a better solution
+			GristType type = ((ForgeRegistry<GristType>) GristTypes.getRegistry()).getValue(id);
 			if(type == null)
 				type = GristTypes.BUILD.get();
 			setWildcardGrist(type);

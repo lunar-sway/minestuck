@@ -17,7 +17,7 @@ public class GristTypes
 	
 	private static final Supplier<IForgeRegistry<GristType>> REGISTRY = GRIST_TYPES.makeRegistry("grist", () -> new RegistryBuilder<GristType>().set(DummyFactory.INSTANCE));
 	
-	public static final RegistryObject<GristType> BUILD = GRIST_TYPES.register("build", () -> new GristType(new GristType.Properties(0.0F, 1).candy(() -> MSItems.BUILD_GUSHERS)));
+	public static final RegistryObject<GristType> BUILD = GRIST_TYPES.register("build", () -> new GristType(new GristType.Properties(1.0F, 1).candy(() -> MSItems.BUILD_GUSHERS).notUnderlingType()));
 	public static final RegistryObject<GristType> AMBER = GRIST_TYPES.register("amber", () -> new GristType(new GristType.Properties(0.5F, 1.5F).candy(() -> MSItems.AMBER_GUMMY_WORM).secondary(GristTypes.RUST).secondary(GristTypes.SULFUR)));
 	public static final RegistryObject<GristType> CAULK = GRIST_TYPES.register("caulk", () -> new GristType(new GristType.Properties(0.5F, 1.5F).candy(() -> MSItems.CAULK_PRETZEL).secondary(GristTypes.IODINE).secondary(GristTypes.CHALK)));
 	public static final RegistryObject<GristType> CHALK = GRIST_TYPES.register("chalk", () -> new GristType(new GristType.Properties(0.5F, 1.5F).candy(() -> MSItems.CHALK_CANDY_CIGARETTE).secondary(GristTypes.SHALE).secondary(GristTypes.MARBLE)));
@@ -37,17 +37,7 @@ public class GristTypes
 	public static final RegistryObject<GristType> GOLD = GRIST_TYPES.register("gold", () -> new GristType(new GristType.Properties(0.2F, 5).candy(() -> MSItems.GOLD_CANDY_RIBBON).secondary(GristTypes.URANIUM)));
 	public static final RegistryObject<GristType> URANIUM = GRIST_TYPES.register("uranium", () -> new GristType(new GristType.Properties(0.2F, 5).candy(() -> MSItems.URANIUM_GUMMY_BEAR).secondary(GristTypes.DIAMOND)));
 	public static final RegistryObject<GristType> ARTIFACT = GRIST_TYPES.register("artifact", () -> new GristType(new GristType.Properties(0.1F, 1).candy(() -> MSItems.ARTIFACT_WARHEAD)));
-	public static final RegistryObject<GristType> ZILLIUM = GRIST_TYPES.register("zillium", () -> new GristType(new GristType.Properties(0.0F, 10).candy(() -> MSItems.ZILLIUM_SKITTLES)));
-	
-	@SuppressWarnings("unused")	//Should be used by commands
-	public static GristType getTypeForCommand(String string)
-	{
-		if (!string.contains(":"))
-		{
-			string = Minestuck.MOD_ID + ":" + string;
-		}
-		return getRegistry().getValue(new ResourceLocation(string));
-	}
+	public static final RegistryObject<GristType> ZILLIUM = GRIST_TYPES.register("zillium", () -> new GristType(new GristType.Properties(0.0F, 10).candy(() -> MSItems.ZILLIUM_SKITTLES).notUnderlingType()));
 	
 	public static IForgeRegistry<GristType> getRegistry()
 	{

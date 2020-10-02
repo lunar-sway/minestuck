@@ -106,7 +106,7 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 	
 	protected void applyGristType(GristType type)
 	{
-		if(type.getRarity() == 0)	//Utility grist type
+		if(!type.isUnderlingType())	//Utility grist type
 			throw new IllegalArgumentException("Can't set underling grist type to "+type.getRegistryName());
 		dataManager.set(GRIST_TYPE, String.valueOf(type.getRegistryName()));
 		

@@ -35,7 +35,8 @@ public class GristHelper
 		List<GristType> typeList = new ArrayList<>();
 		for(GristType type : GristTypes.values())
 		{
-			if(type.getRarity() > 0 && type != GristTypes.ARTIFACT.get())
+			//Artifact grist is a special case that is an underling type, but does not naturally spawn
+			if(type.isUnderlingType() && type != GristTypes.ARTIFACT.get())
 			{
 				typeList.add(type);
 				totalWeight += type.getRarity();
