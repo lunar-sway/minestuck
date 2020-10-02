@@ -12,7 +12,6 @@ import com.mraof.minestuck.event.SburbEvent;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.MSDimensionTypes;
 import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.lands.LandTypePair;
@@ -222,7 +221,7 @@ public final class SkaianetHandler
 					computer.putServerBoolean("isOpen", false);
 					computer.putServerMessage(STOP_RESUME);
 				}
-			} else Debug.warn("[SKAIANET] Got disconnect request but server is not open! "+player);
+			} else LOGGER.warn("[SKAIANET] Got disconnect request but server is not open! "+player);
 		} else {
 			SburbConnection c = isClient?getConnection(player, otherPlayer):getConnection(otherPlayer, player);
 			if(c != null)
@@ -325,7 +324,7 @@ public final class SkaianetHandler
 					sessionHandler.onConnectionCreated(c);
 				} catch(MergeResult.SessionMergeException e)
 				{
-					Debug.warnf("SessionHandler denied connection between %s and %s, reason: %s", c.getClientIdentifier().getUsername(), c.getServerIdentifier().getUsername(), e.getMessage());
+					LOGGER.warn("SessionHandler denied connection between {} and {}, reason: {}", c.getClientIdentifier().getUsername(), c.getServerIdentifier().getUsername(), e.getMessage());
 					connections.remove(c);
 					ISburbComputer cComp = c.getClientComputer().getComputer(mcServer);
 					if(cComp != null)
@@ -441,7 +440,7 @@ public final class SkaianetHandler
 						|| !(i == iter1[1] && computer.getClientBoolean("isResuming")
 								|| i != iter1[1] && computer.getServerBoolean("isOpen")))
 				{
-					Debug.warn("[SKAIANET] Invalid computer in waiting list!");
+					LOGGER.warn("[SKAIANET] Invalid computer in waiting list!");
 					i.remove();
 				}
 			}
@@ -452,7 +451,7 @@ public final class SkaianetHandler
 			SburbConnection c = iter2.next();
 			if(c.getClientIdentifier() == null || c.getServerIdentifier() == null)
 			{
-				Debug.warn("Found a broken connection with the client \""+c.getClientIdentifier()+"\" and server \""+c.getServerIdentifier()+". If this message continues to show up, something isn't working as it should.");
+				LOGGER.warn("Found a broken connection with the client \""+c.getClientIdentifier()+"\" and server \""+c.getServerIdentifier()+". If this message continues to show up, something isn't working as it should.");
 				iter2.remove();
 				continue;
 			}
@@ -462,7 +461,7 @@ public final class SkaianetHandler
 				if(cc == null || sc == null || c.getClientComputer().isInNether() || c.getServerComputer().isInNether() || !c.getClientIdentifier().equals(cc.getOwner())
 						|| !c.getServerIdentifier().equals(sc.getOwner()) || !cc.getClientBoolean("connectedToServer"))
 				{
-					Debug.warnf("[SKAIANET] Invalid computer in connection between %s and %s.", c.getClientIdentifier(), c.getServerIdentifier());
+					LOGGER.warn("[SKAIANET] Invalid computer in connection between {} and {}.", c.getClientIdentifier(), c.getServerIdentifier());
 					if(!c.isMain())
 						iter2.remove();
 					else c.close();
@@ -524,7 +523,7 @@ public final class SkaianetHandler
 			c = getActiveConnection(target);
 			if(c == null)
 			{
-				Debug.infof("Player %s entered without connection. Creating connection... ", target.getUsername());
+				LOGGER.info("Player {} entered without connection. Creating connection... ", target.getUsername());
 				c = new SburbConnection(target, this);
 				c.setIsMain();
 				try
@@ -536,7 +535,7 @@ public final class SkaianetHandler
 				{
 					if(sessionHandler.singleSession)
 					{
-						Debug.warnf("Failed to create connection: %s. Trying again with global session disabled for this world...", e.getMessage());
+						LOGGER.warn("Failed to create connection: {}. Trying again with global session disabled for this world...", e.getMessage());
 						sessionHandler.splitGlobalSession();
 						try
 						{
@@ -547,12 +546,12 @@ public final class SkaianetHandler
 						{
 							sessionHandler.singleSession = true;
 							sessionHandler.mergeAll();
-							Debug.errorf("Couldn't create a connection for %s: %s. Stopping entry.", target.getUsername(), f.getMessage());
+							LOGGER.error("Couldn't create a connection for {}: {}. Stopping entry.", target.getUsername(), f.getMessage());
 							return null;
 						}
 					} else
 					{
-						Debug.errorf("Couldn't create a connection for %s: %s. Stopping entry.", target.getUsername(), e.getMessage());
+						LOGGER.error("Couldn't create a connection for {}: {}. Stopping entry.", target.getUsername(), e.getMessage());
 						return null;
 					}
 				}
@@ -581,7 +580,7 @@ public final class SkaianetHandler
 		SburbConnection c = getMainConnection(target, true);
 		if(c == null)
 		{
-			Debug.errorf("Finished entry without a player connection for %s. This should NOT happen!", target.getUsername());
+			LOGGER.error("Finished entry without a player connection for {}. This should NOT happen!", target.getUsername());
 			return;
 		}
 		
