@@ -39,7 +39,7 @@ public class RecipeGeneratedGristCost extends GristCostRecipe
 	@Override
 	public GristSet getGristCost(ItemStack input, GristType wildcardType, boolean shouldRoundDown, World world)
 	{
-		return getCost(input.getItem());
+		return scaleToCountAndDurability(getCost(input.getItem()), input, shouldRoundDown);
 	}
 	
 	@Override
