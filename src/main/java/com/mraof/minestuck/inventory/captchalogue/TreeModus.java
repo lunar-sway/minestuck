@@ -4,8 +4,6 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
-import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.network.data.ModusDataPacket;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -187,12 +185,7 @@ public class TreeModus extends Modus
 			autoBalance = value > 0;
 			markDirty();
 			if(autoBalance)
-			{
-				TreeNode node = this.node;
 				autoBalance();
-				if(node != this.node)
-					MSPacketHandler.sendToPlayer(ModusDataPacket.create(CaptchaDeckHandler.writeToNBT(this)), player);
-			}
 		}
 	}
 	

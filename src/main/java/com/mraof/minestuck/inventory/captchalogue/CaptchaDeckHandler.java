@@ -135,9 +135,8 @@ public class CaptchaDeckHandler
 				for(int i = 0; i < stack.getCount() - failed; i++)
 				{
 					ItemStack toPut = content.copy();
-					if(!modus.putItemStack(player, toPut))
+					if(!putInModus(player, modus, toPut))
 						launchItem(player, toPut);
-					else MSCriteriaTriggers.CAPTCHALOGUE.trigger(player, modus, toPut);
 				}
 			
 			if(failed == 0)
@@ -147,169 +146,86 @@ public class CaptchaDeckHandler
 		
 		if(modus != null)
 		{
-			ModusDataPacket packet = ModusDataPacket.create(writeToNBT(modus));
-			MSPacketHandler.sendToPlayer(packet, player);
+			modus.checkAndResend(player);
 		}
 	}
 	
-	//TODO Spotted duplicate code in this and the following function. Refactor the part that makes sense to refactor
 	public static void captchalogueItem(ServerPlayerEntity player)
 	{
-		ItemStack stack = player.getHeldItemMainhand();
+		captchalogueItem(player, player.getHeldItemMainhand());
+	}
+	
+	public static void captchalogueInventoryItem(ServerPlayerEntity player, int slotIndex)
+	{
+		System.out.println("Raw Slot: " + slotIndex);
+		//This statement is so that the server knows whether the item is in the hotbar or not because apparently THE "openContainer" CANT EDIT THE HOTBAR SLOTS.
+		if(player.openContainer.equals(player.container) && PlayerInventory.isHotbar(slotIndex))
+		{
+			captchalogueItem(player, player.inventory.mainInventory.get(slotIndex));
+		}
+		else {
+			Slot slot = player.openContainer.getSlot(slotIndex);
+			captchalogueItem(player, slot.getStack());
+		}
+	}
+	
+	private static void captchalogueItem(ServerPlayerEntity player, ItemStack stack)
+	{
 		Modus modus = getModus(player);
 		
 		if(stack.getItem() == MSItems.BOONDOLLARS)
 		{
 			PlayerSavedData.getData(player).addBoondollars(BoondollarsItem.getCount(stack));
-			stack.setCount(0);
+			stack.shrink(1);
 			return;
 		}
 		
 		if(modus != null && !stack.isEmpty())
 		{
-			boolean card1 = false, card2 = true;
 			if(stack.getItem() == MSItems.CAPTCHA_CARD && AlchemyHelper.hasDecodedItem(stack)
 					&& !AlchemyHelper.isPunchedCard(stack))
-			{
-				ItemStack newStack = AlchemyHelper.getDecodedItem(stack, true);
-				if(!newStack.isEmpty())
-				{
-					card1 = true;
-					stack = newStack;
-					card2 = modus.increaseSize(player);
-				}
-			}
-			if(modus.putItemStack(player, stack))
-			{
-				MSCriteriaTriggers.CAPTCHALOGUE.trigger(player, modus, stack);
-				if(!card2)
-					launchAnyItem(player, new ItemStack(MSItems.CAPTCHA_CARD, 1));
-				
-				stack = player.getHeldItemMainhand();
-				if(card1 && stack.getCount() > 1)
-					stack.shrink(1);
-				else player.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
-			}
-			else if(card1 && card2)
-			{
-				launchAnyItem(player, stack);
-				stack = player.getHeldItemMainhand();
-				if(stack.getCount() == 1)
-					player.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
-				else stack.shrink(1);
-			}
-			ModusDataPacket packet = ModusDataPacket.create(writeToNBT(modus));
-			MSPacketHandler.sendToPlayer(packet, player);
+				handleCardCaptchalogue(player, modus, stack);
+			else putInModus(player, modus, stack);
+			
+			modus.checkAndResend(player);
 		}
-		
 	}
 	
-	public static void captchalogueInventoryItem (ServerPlayerEntity player, int slotIndex) {
-		ItemStack stack;
-		Modus modus = getModus(player);
-		System.out.println("Raw Slot: " + slotIndex);
-		//This statement is so that the server knows whether the item is in the hotbar or not because apparently THE "openContainer" CANT EDIT THE HOTBAR SLOTS.
-		if(player.openContainer.equals(player.container) && PlayerInventory.isHotbar(slotIndex)) {
-			int hotbarIndex = slotIndex;
+	private static void handleCardCaptchalogue(ServerPlayerEntity player, Modus modus, ItemStack card)
+	{
+		ItemStack stackInCard = AlchemyHelper.getDecodedItem(card, true);
+		boolean spentCard = modus.increaseSize(player);
+		
+		if(spentCard)
+			card.shrink(1);
+		
+		if(!stackInCard.isEmpty())
+		{
+			boolean captchaloguedItem = putInModus(player, modus, card);
 			
-			stack = player.inventory.mainInventory.get(hotbarIndex);
-
-			if(stack.getItem() == MSItems.BOONDOLLARS)
-			{
-				PlayerSavedData.getData(player).addBoondollars(BoondollarsItem.getCount(stack));
-				stack.setCount(0);
-				return;
+			if(captchaloguedItem && !spentCard)
+			{	//Item was captchalogued, but the card remained
+				launchAnyItem(player, new ItemStack(MSItems.CAPTCHA_CARD, 1));    //TODO split existing stack and instead remove the content to keep any other nbt data
+				card.shrink(1);
+			} else if(!captchaloguedItem && spentCard)
+			{	//The card was used, but the item failed to captchalogue
+				launchAnyItem(player, stackInCard);
 			}
-
-			if(modus != null && !stack.isEmpty())
-			{
-				boolean card1 = false, card2 = true;
-				if(stack.getItem() == MSItems.CAPTCHA_CARD && AlchemyHelper.hasDecodedItem(stack)
-						&& !AlchemyHelper.isPunchedCard(stack))
-				{
-					ItemStack newStack = AlchemyHelper.getDecodedItem(stack, true);
-					if(!newStack.isEmpty())
-					{
-						card1 = true;
-						stack = newStack;
-						card2 = modus.increaseSize(player);
-					}
-				}
-				if(modus.putItemStack(player, stack))
-				{
-					MSCriteriaTriggers.CAPTCHALOGUE.trigger(player, modus, stack);
-					if(!card2)
-						launchAnyItem(player, new ItemStack(MSItems.CAPTCHA_CARD, 1));
-					stack = player.inventory.mainInventory.get(hotbarIndex);
-					if(card1 && stack.getCount() > 1)
-						stack.shrink(1);
-					else {
-						player.inventory.setInventorySlotContents(hotbarIndex, ItemStack.EMPTY);
-					}
-				}
-				else if(card1 && card2)
-				{
-					launchAnyItem(player, stack);
-					stack = player.inventory.mainInventory.get(hotbarIndex);
-					if(stack.getCount() == 1) {
-						player.inventory.setInventorySlotContents(hotbarIndex, ItemStack.EMPTY);
-					} else stack.shrink(1);
-				}
-				ModusDataPacket packet = ModusDataPacket.create(writeToNBT(modus));
-				MSPacketHandler.sendToPlayer(packet, player);
-			}
-		}
-		else {
-			Slot slot = player.openContainer.getSlot(slotIndex);
-			stack = slot.getStack();
-
-			if(stack.getItem() == MSItems.BOONDOLLARS)
-			{
-				PlayerSavedData.getData(player).addBoondollars(BoondollarsItem.getCount(stack));
-				stack.setCount(0);
-				return;
-			}
-
-			if(modus != null && !stack.isEmpty())
-			{
-				boolean card1 = false, card2 = true;
-				if(stack.getItem() == MSItems.CAPTCHA_CARD && AlchemyHelper.hasDecodedItem(stack)
-						&& !AlchemyHelper.isPunchedCard(stack))
-				{
-					ItemStack newStack = AlchemyHelper.getDecodedItem(stack, true);
-					if(!newStack.isEmpty())
-					{
-						card1 = true;
-						stack = newStack;
-						card2 = modus.increaseSize(player);
-					}
-				}
-				if(modus.putItemStack(player, stack))
-				{
-					MSCriteriaTriggers.CAPTCHALOGUE.trigger(player, modus, stack);
-					if(!card2)
-						launchAnyItem(player, new ItemStack(MSItems.CAPTCHA_CARD, 1));
-					stack = slot.getStack();
-					if(card1 && stack.getCount() > 1)
-						stack.shrink(1);
-					else {
-						slot.putStack(ItemStack.EMPTY);
-					}
-				}
-				else if(card1 && card2)
-				{
-					launchAnyItem(player, stack);
-					stack = slot.getStack();
-					if(stack.getCount() == 1) {
-						slot.putStack(ItemStack.EMPTY);
-					} else stack.shrink(1);
-				}
-				ModusDataPacket packet = ModusDataPacket.create(writeToNBT(modus));
-				MSPacketHandler.sendToPlayer(packet, player);
-			}
+			
 		}
 	}
-
+	
+	private static boolean putInModus(ServerPlayerEntity player, Modus modus, ItemStack stack)
+	{
+		boolean result = modus.putItemStack(player, stack.copy());
+		if(result)
+		{
+			MSCriteriaTriggers.CAPTCHALOGUE.trigger(player, modus, stack);
+			stack.setCount(0);
+		}
+		return result;
+	}
+	
 	public static void getItem(ServerPlayerEntity player, int index, boolean asCard)
 	{
 		Modus modus = getModus(player);
@@ -348,8 +264,7 @@ public class CaptchaDeckHandler
 					launchAnyItem(player, stack);
 			}
 		}
-		ModusDataPacket packet = ModusDataPacket.create(writeToNBT(modus));
-		MSPacketHandler.sendToPlayer(packet, player);
+		modus.checkAndResend(player);
 	}
 	
 	private static void dropSylladex(ServerPlayerEntity player)
@@ -393,7 +308,7 @@ public class CaptchaDeckHandler
 			setModus(player, null);
 		} else modus.initModus(null, player, null, size);
 		
-		ModusDataPacket packet = ModusDataPacket.create(writeToNBT(modus));
+		ModusDataPacket packet = ModusDataPacket.create(writeToNBT(getModus(player)));
 		MSPacketHandler.sendToPlayer(packet, player);
 	}
 	

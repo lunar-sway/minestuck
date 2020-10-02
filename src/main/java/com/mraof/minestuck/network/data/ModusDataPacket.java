@@ -9,7 +9,6 @@ import net.minecraft.network.PacketBuffer;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Objects;
 
 public class ModusDataPacket implements PlayToClientPacket
 {
@@ -17,7 +16,7 @@ public class ModusDataPacket implements PlayToClientPacket
 	
 	private ModusDataPacket(CompoundNBT nbt)
 	{
-		this.nbt = Objects.requireNonNull(nbt);
+		this.nbt = nbt;
 	}
 	
 	public static ModusDataPacket create(CompoundNBT nbt)
@@ -28,29 +27,35 @@ public class ModusDataPacket implements PlayToClientPacket
 	@Override
 	public void encode(PacketBuffer buffer)
 	{
-		try
+		if(nbt != null)
 		{
-			ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-			CompressedStreamTools.writeCompressed(nbt, bytes);
-			buffer.writeBytes(bytes.toByteArray());
-		} catch(IOException e)
-		{
-			throw new IllegalStateException(e);
+			try
+			{
+				ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+				CompressedStreamTools.writeCompressed(nbt, bytes);
+				buffer.writeBytes(bytes.toByteArray());
+			} catch(IOException e)
+			{
+				throw new IllegalStateException(e);
+			}
 		}
 	}
 	
 	public static ModusDataPacket decode(PacketBuffer buffer)
 	{
-		byte[] bytes = new byte[buffer.readableBytes()];
-		buffer.readBytes(bytes);
-		try
+		if(buffer.readableBytes() > 0)
 		{
-			CompoundNBT nbt = CompressedStreamTools.readCompressed(new ByteArrayInputStream(bytes));
-			return new ModusDataPacket(nbt);
-		} catch(IOException e)
-		{
-			throw new IllegalStateException(e);
-		}
+			byte[] bytes = new byte[buffer.readableBytes()];
+			buffer.readBytes(bytes);
+			try
+			{
+				CompoundNBT nbt = CompressedStreamTools.readCompressed(new ByteArrayInputStream(bytes));
+				return new ModusDataPacket(nbt);
+			} catch(IOException e)
+			{
+				throw new IllegalStateException(e);
+			}
+		} else return new ModusDataPacket(null);
 	}
 	
 	@Override

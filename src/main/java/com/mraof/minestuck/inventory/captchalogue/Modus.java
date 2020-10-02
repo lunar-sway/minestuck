@@ -1,5 +1,7 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
+import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.network.data.ModusDataPacket;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -16,6 +18,7 @@ public abstract class Modus
 	private final PlayerSavedData savedData;
 	private final ModusType<?> type;
 	public final LogicalSide side;
+	private boolean needResend;
 	
 	public Modus(ModusType<?> type, PlayerSavedData savedData, LogicalSide side)
 	{
@@ -80,6 +83,17 @@ public abstract class Modus
 	{
 		if(savedData != null)
 			savedData.markDirty();
+		needResend = true;
+	}
+	
+	public final void checkAndResend(ServerPlayerEntity player)
+	{
+		if(needResend)
+		{
+			ModusDataPacket packet = ModusDataPacket.create(CaptchaDeckHandler.writeToNBT(this));
+			MSPacketHandler.sendToPlayer(packet, player);
+			needResend = false;
+		}
 	}
 	
 	protected MinecraftServer getServer()
