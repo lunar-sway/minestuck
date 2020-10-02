@@ -3,12 +3,14 @@ package com.mraof.minestuck.skaianet;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
+import com.mraof.minestuck.event.UnderlingSpawnListEvent;
 import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.MinecraftForge;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +79,8 @@ public final class UnderlingController
 			list.add(new Biome.SpawnListEntry(MSEntityTypes.LICH, lichWeight, 1, Math.max(1, lichWeight/2)));
 		if(giclopsWeight > 0 && !MinestuckConfig.SERVER.disableGiclops.get())
 			list.add(new Biome.SpawnListEntry(MSEntityTypes.GICLOPS, giclopsWeight, 1, Math.max(1, giclopsWeight/2)));
-		//TODO Add hook for addons to add more underlings
+		
+		MinecraftForge.EVENT_BUS.post(new UnderlingSpawnListEvent(difficulty, list));
 		
 		difficultyList[difficulty] = list;
 		
