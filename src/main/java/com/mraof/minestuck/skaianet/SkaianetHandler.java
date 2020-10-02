@@ -398,23 +398,24 @@ public final class SkaianetHandler
 		
 		sessionHandler.write(compound);
 		
-		String[] s = {"serversOpen","resumingClients","resumingServers"};
-		@SuppressWarnings("unchecked")
-		Map<PlayerIdentifier, ComputerReference>[] maps = new Map[]{openedServers, resumingClients, resumingServers};
-		for(int i = 0; i < 3; i++)
-		{
-			ListNBT list = new ListNBT();
-			for(Entry<PlayerIdentifier, ComputerReference> entry : maps[i].entrySet())
-			{
-				CompoundNBT nbt = new CompoundNBT();
-				nbt.put("computer", entry.getValue().write(new CompoundNBT()));
-				entry.getKey().saveToNBT(nbt, "player");
-				list.add(nbt);
-			}
-			compound.put(s[i], list);
-		}
+		compound.put("serversOpen", saveComputerMap(openedServers));
+		compound.put("resumingClients", saveComputerMap(resumingClients));
+		compound.put("resumingServers", saveComputerMap(resumingServers));
 		
 		return compound;
+	}
+	
+	private ListNBT saveComputerMap(Map<PlayerIdentifier, ComputerReference> map)
+	{
+		ListNBT list = new ListNBT();
+		for(Entry<PlayerIdentifier, ComputerReference> entry : map.entrySet())
+		{
+			CompoundNBT nbt = new CompoundNBT();
+			nbt.put("computer", entry.getValue().write(new CompoundNBT()));
+			entry.getKey().saveToNBT(nbt, "player");
+			list.add(nbt);
+		}
+		return list;
 	}
 	
 	void updateAll()
@@ -428,22 +429,9 @@ public final class SkaianetHandler
 		if(!MinestuckConfig.SERVER.skaianetCheck.get())
 			return;
 		
-		@SuppressWarnings("unchecked")	//TODO Use function calls instead of an array
-		Iterator<Entry<PlayerIdentifier, ComputerReference>>[] iter1 = new Iterator[]{openedServers.entrySet().iterator(),resumingClients.entrySet().iterator(),resumingServers.entrySet().iterator()};
-		
-		for(Iterator<Entry<PlayerIdentifier, ComputerReference>> i : iter1)
-			while(i.hasNext())
-			{
-				Entry<PlayerIdentifier, ComputerReference> data = i.next();
-				ISburbComputer computer = data.getValue().getComputer(mcServer);
-				if(computer == null || data.getValue().isInNether() || !computer.getOwner().equals(data.getKey())
-						|| !(i == iter1[1] && computer.getClientBoolean("isResuming")
-								|| i != iter1[1] && computer.getServerBoolean("isOpen")))
-				{
-					LOGGER.warn("[SKAIANET] Invalid computer in waiting list!");
-					i.remove();
-				}
-			}
+		validateComputerMap(openedServers, false);
+		validateComputerMap(resumingClients, true);
+		validateComputerMap(resumingServers, false);
 		
 		Iterator<SburbConnection> iter2 = connections.iterator();
 		while(iter2.hasNext())
@@ -484,6 +472,23 @@ public final class SkaianetHandler
 		}
 		
 		infoTracker.checkData();
+	}
+	
+	private void validateComputerMap(Map<PlayerIdentifier, ComputerReference> map, boolean clientPlayerMap)
+	{
+		Iterator<Entry<PlayerIdentifier, ComputerReference>> i = map.entrySet().iterator();
+		while(i.hasNext())
+		{
+			Entry<PlayerIdentifier, ComputerReference> data = i.next();
+			ISburbComputer computer = data.getValue().getComputer(mcServer);
+			if(computer == null || data.getValue().isInNether() || !computer.getOwner().equals(data.getKey())
+					|| !(clientPlayerMap && computer.getClientBoolean("isResuming")
+					|| !clientPlayerMap && computer.getServerBoolean("isOpen")))
+			{
+				LOGGER.warn("[SKAIANET] Invalid computer in waiting list!");
+				i.remove();
+			}
+		}
 	}
 	
 	public SburbConnection getConnection(PlayerIdentifier client, PlayerIdentifier server)
