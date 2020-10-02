@@ -7,7 +7,7 @@ import net.minecraft.network.PacketBuffer;
 
 public class ColorSelectPacket implements PlayToServerPacket
 {
-	private int colorIndex;
+	private final int colorIndex;
 	
 	public ColorSelectPacket(int colorIndex)
 	{

@@ -15,21 +15,23 @@ import net.minecraft.server.management.OpEntry;
 
 public class ClientEditPacket implements PlayToServerPacket
 {
+	private final int user;
+	private final int target;
 	
-	int user = -1;
-	int target;
+	private ClientEditPacket(int user, int target)
+	{
+		this.user = user;
+		this.target = target;
+	}
 	
 	public static ClientEditPacket exit()
 	{
-		return new ClientEditPacket();
+		return new ClientEditPacket(-1, 0);
 	}
 	
 	public static ClientEditPacket activate(int user, int target)
 	{
-		ClientEditPacket packet = new ClientEditPacket();
-		packet.user = user;
-		packet.target = target;
-		return packet;
+		return new ClientEditPacket(user, target);
 	}
 	
 	@Override
@@ -44,14 +46,14 @@ public class ClientEditPacket implements PlayToServerPacket
 	
 	public static ClientEditPacket decode(PacketBuffer buffer)
 	{
-		ClientEditPacket packet = new ClientEditPacket();
 		if(buffer.readableBytes() > 0)
 		{
-			packet.user = buffer.readInt();
-			packet.target = buffer.readInt();
+			int user = buffer.readInt();
+			int target = buffer.readInt();
+			return activate(user, target);
 		}
 		
-		return packet;
+		return exit();
 	}
 	
 	@Override

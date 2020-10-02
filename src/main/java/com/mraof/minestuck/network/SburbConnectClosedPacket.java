@@ -11,9 +11,9 @@ import net.minecraft.server.management.OpEntry;
 public class SburbConnectClosedPacket implements PlayToServerPacket
 {
 	
-	public int player;
-	public int otherPlayer;
-	public boolean isClient;
+	private final int player;
+	private final int otherPlayer;
+	private final boolean isClient;
 	
 	public SburbConnectClosedPacket(int player, int otherPlayer, boolean isClient)
 	{

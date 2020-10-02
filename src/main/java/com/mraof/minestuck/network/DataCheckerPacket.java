@@ -15,30 +15,29 @@ import java.io.IOException;
 public class DataCheckerPacket implements PlayToBothPacket
 {
 	
-	public static int index = 0;
+	private static int index = 0;
 	
 	/**
 	 * Used to avoid confusion when the client sends several requests during a short period
 	 */
-	public int packetIndex;
-	public CompoundNBT nbtData;
+	private final int packetIndex;
+	private final CompoundNBT nbtData;
+	
+	private DataCheckerPacket(int packetIndex, CompoundNBT nbtData)
+	{
+		this.packetIndex = packetIndex;
+		this.nbtData = nbtData;
+	}
 	
 	public static DataCheckerPacket request()
 	{
-		DataCheckerPacket packet = new DataCheckerPacket();
 		index = (index + 1) % 100;
-		packet.packetIndex = index;
-		
-		return packet;
+		return new DataCheckerPacket(index, null);
 	}
 	
 	public static DataCheckerPacket data(int index, CompoundNBT nbtData)
 	{
-		DataCheckerPacket packet = new DataCheckerPacket();
-		packet.packetIndex = index;
-		packet.nbtData = nbtData;
-		
-		return packet;
+		return new DataCheckerPacket(index, nbtData);
 	}
 	
 	@Override
@@ -62,16 +61,15 @@ public class DataCheckerPacket implements PlayToBothPacket
 	
 	public static DataCheckerPacket decode(PacketBuffer buffer)
 	{
-		DataCheckerPacket packet = new DataCheckerPacket();
-		packet.packetIndex = buffer.readInt();
-		
+		int packetIndex = buffer.readInt();
+		CompoundNBT nbt = null;
 		if(buffer.readableBytes() > 0)
 		{
 			byte[] bytes = new byte[buffer.readableBytes()];
 			buffer.readBytes(bytes);
 			try
 			{
-				packet.nbtData = CompressedStreamTools.readCompressed(new ByteArrayInputStream(bytes));
+				nbt = CompressedStreamTools.readCompressed(new ByteArrayInputStream(bytes));
 			}
 			catch(IOException e)
 			{
@@ -79,7 +77,7 @@ public class DataCheckerPacket implements PlayToBothPacket
 			}
 		}
 		
-		return packet;
+		return new DataCheckerPacket(index, nbt);
 	}
 	
 	@Override

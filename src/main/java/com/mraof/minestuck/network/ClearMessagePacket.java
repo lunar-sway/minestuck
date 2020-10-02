@@ -16,8 +16,8 @@ import net.minecraft.util.math.BlockPos;
  */
 public class ClearMessagePacket implements PlayToServerPacket
 {
-	BlockPos computer;
-	int program;
+	private final BlockPos computer;
+	private final int program;
 	
 	public ClearMessagePacket(BlockPos computer, int program)
 	{

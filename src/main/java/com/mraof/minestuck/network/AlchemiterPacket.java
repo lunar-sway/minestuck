@@ -8,8 +8,8 @@ import net.minecraft.util.math.BlockPos;
 
 public class AlchemiterPacket implements PlayToServerPacket
 {
-	public BlockPos pos;
-	public int quantity;
+	private final BlockPos pos;
+	private final int quantity;
 	
 	public AlchemiterPacket(BlockPos pos, int quantity)
 	{
