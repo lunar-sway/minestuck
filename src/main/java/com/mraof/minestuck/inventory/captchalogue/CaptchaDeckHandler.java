@@ -116,7 +116,7 @@ public class CaptchaDeckHandler
 				}
 				
 				setModus(player, modus);
-				container.inventory.setInventorySlotContents(0, new ItemStack(oldType.getItem()));	//TODO Get the stack from the modus to let the modus save stuff to the stack
+				container.inventory.setInventorySlotContents(0, oldModus.getModusItem());
 			}
 			
 			MSCriteriaTriggers.CHANGE_MODUS.trigger(player, modus);
