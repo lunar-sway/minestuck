@@ -15,7 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.WeightedRandom;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -222,7 +222,7 @@ public class ConsortDialogue
 
 		//Misc
 		addMessage("denizen_mention").reqLand();
-		addMessage("floating_island").consortReq(consort -> consort.getDistanceSq(new Vec3d(consort.world.getSpawnPoint())) < 65536).reqLand();
+		addMessage("floating_island").consortReq(consort -> consort.getDistanceSq(new Vector3d(consort.world.getWorldInfo().getSpawnX(), consort.world.getWorldInfo().getSpawnY(), consort.world.getWorldInfo().getSpawnZ())) < 65536).reqLand();
 		addMessage("ring_fishing").consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);
 		addMessage("frog_walk").consort(EnumConsort.TURTLE);
 		addMessage("delicious_hair").consort(EnumConsort.IGUANA);
@@ -279,10 +279,10 @@ public class ConsortDialogue
 		
 		addMessage("await_hero", "land_name", "consort_types", "player_title_land").reqLand();
 		addMessage(new ConditionedMessage("skaia", (ConsortEntity consort, ServerPlayerEntity player) -> !consort.visitedSkaia, new SingleMessage("watch_skaia"),
-				new ConditionedMessage((ConsortEntity consort, ServerPlayerEntity player) -> MSDimensions.isSkaia(consort.dimension),
+				new ConditionedMessage((ConsortEntity consort, ServerPlayerEntity player) -> MSDimensions.isSkaia(consort.world.getDimensionKey()),
 						new SingleMessage("at_skaia.1", "consort_sound_2"), new SingleMessage("visited_skaia")))).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA, EnumConsort.NAKAGATOR).reqLand();
 		addMessage(new ConditionedMessage("skaia_turtle", (ConsortEntity consort, ServerPlayerEntity player) -> !consort.visitedSkaia, new SingleMessage("watch_skaia"),
-				new ConditionedMessage((ConsortEntity consort, ServerPlayerEntity player) -> MSDimensions.isSkaia(consort.dimension),
+				new ConditionedMessage((ConsortEntity consort, ServerPlayerEntity player) -> MSDimensions.isSkaia(consort.world.getDimensionKey()),
 						new SingleMessage("at_skaia.2"), new SingleMessage("visited_skaia")))).consort(EnumConsort.TURTLE).reqLand();
 		
 		addMessage(new SingleMessage("zazzerpan")).consort(EnumConsort.TURTLE);
@@ -649,6 +649,6 @@ public class ConsortDialogue
 		}
 		
 		for(ITextComponent textComponent : list)
-			LOGGER.info(textComponent.getFormattedText());
+			LOGGER.info(textComponent.getString());
 	}
 }

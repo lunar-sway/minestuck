@@ -4,7 +4,11 @@ import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.util.Debug;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
 import net.minecraft.client.renderer.texture.DownloadingTexture;
-import net.minecraft.entity.*;
+import net.minecraft.entity.EntitySize;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.Pose;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -18,6 +22,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.FoodStats;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.GameType;
@@ -79,12 +84,10 @@ public class DecoyEntity extends MobEntity
 		this.renderYawOffset = player.renderYawOffset;
 		this.gameType = player.interactionManager.getGameType();
 		initInventory(player);
-		player.getAttribute(SharedMonsterAttributes.MAX_HEALTH).func_225505_c_().forEach(attributeModifier ->
-				this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).applyModifier(attributeModifier));
-		player.getAttribute(SharedMonsterAttributes.MAX_HEALTH).func_225505_c_().forEach(attributeModifier ->
-				this.player.getAttribute(SharedMonsterAttributes.MAX_HEALTH).applyModifier(attributeModifier));
+		this.getAttribute(Attributes.MAX_HEALTH).copyValuesFromInstance(player.getAttribute(Attributes.MAX_HEALTH));
+		this.player.getAttribute(Attributes.MAX_HEALTH).copyValuesFromInstance(player.getAttribute(Attributes.MAX_HEALTH));
 		this.setHealth(player.getHealth());
-		username = player.getName().getFormattedText();
+		username = player.getName().getString();
 		isFlying = player.abilities.isFlying;
 		player.abilities.write(this.capabilities);
 		foodStatsNBT = new CompoundNBT();
@@ -132,7 +135,7 @@ public class DecoyEntity extends MobEntity
 		{
 			foodStats = null;
 			Debug.logger.error("Couldn't initiate food stats for player decoy. Proceeding to not simulate food stats.", e);
-			sourcePlayer.sendMessage(new StringTextComponent("An issue came up while creating the decoy. More info in the server logs."));
+			sourcePlayer.sendMessage(new StringTextComponent("An issue came up while creating the decoy. More info in the server logs."), Util.DUMMY_UUID);
 		}
 	}
 	

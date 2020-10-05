@@ -12,6 +12,7 @@ import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -25,7 +26,7 @@ import javax.annotation.Nonnull;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public final class MSEntityTypes
 {
-	public static EntityClassification UNDERLING = EntityClassification.create("UNDERLING", "underling", 35, false, false);
+	public static EntityClassification UNDERLING = EntityClassification.create("UNDERLING", "underling", 35, false, false, 128);
 	
 	public static final EntityType<FrogEntity> FROG = getNull();
 	public static final EntityType<ConsortEntity> SALAMANDER = getNull();
@@ -118,6 +119,31 @@ public final class MSEntityTypes
 		EntitySpawnPlacementRegistry.register(BASILISK, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, UnderlingEntity::canSpawnOnAndNotPeaceful);
 		EntitySpawnPlacementRegistry.register(LICH, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, UnderlingEntity::canSpawnOnAndNotPeaceful);
 		EntitySpawnPlacementRegistry.register(GICLOPS, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, UnderlingEntity::canSpawnOnAndNotPeaceful);
+	}
+	
+	public static void registerAttributes()
+	{
+		GlobalEntityTypeAttributes.put(FROG, FrogEntity.frogAttributes().create());
+		GlobalEntityTypeAttributes.put(SALAMANDER, ConsortEntity.consortAttributes().create());
+		GlobalEntityTypeAttributes.put(TURTLE, ConsortEntity.consortAttributes().create());
+		GlobalEntityTypeAttributes.put(NAKAGATOR, ConsortEntity.consortAttributes().create());
+		GlobalEntityTypeAttributes.put(IGUANA, ConsortEntity.consortAttributes().create());
+		
+		GlobalEntityTypeAttributes.put(IMP, ImpEntity.impAttributes().create());
+		GlobalEntityTypeAttributes.put(OGRE, OgreEntity.ogreAttributes().create());
+		GlobalEntityTypeAttributes.put(BASILISK, BasiliskEntity.basiliskAttributes().create());
+		GlobalEntityTypeAttributes.put(LICH, LichEntity.lichAttributes().create());
+		GlobalEntityTypeAttributes.put(GICLOPS, GiclopsEntity.giclopsAttributes().create());
+		GlobalEntityTypeAttributes.put(WYRM, UnderlingEntity.underlingAttributes().create());
+		
+		GlobalEntityTypeAttributes.put(DERSITE_PAWN, PawnEntity.pawnAttributes().create());
+		GlobalEntityTypeAttributes.put(PROSPITIAN_PAWN, PawnEntity.pawnAttributes().create());
+		GlobalEntityTypeAttributes.put(DERSITE_BISHOP, BishopEntity.bishopAttributes().create());
+		GlobalEntityTypeAttributes.put(PROSPITIAN_BISHOP, BishopEntity.bishopAttributes().create());
+		GlobalEntityTypeAttributes.put(DERSITE_ROOK, RookEntity.rookAttributes().create());
+		GlobalEntityTypeAttributes.put(PROSPITIAN_ROOK, RookEntity.rookAttributes().create());
+		
+		GlobalEntityTypeAttributes.put(PLAYER_DECOY, MobEntity.func_233666_p_().create());
 	}
 	
 	private static void register(IForgeRegistry<EntityType<?>> registry, EntityType.Builder<?> builder, String name)

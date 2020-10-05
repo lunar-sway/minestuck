@@ -16,8 +16,10 @@ import com.mraof.minestuck.skaianet.UnderlingController;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.IAttribute;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.monster.IMob;
@@ -34,10 +36,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.Difficulty;
-import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.*;
 import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
@@ -82,13 +81,9 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 		return attackEntitySelector.isEntityApplicable(entity);
 	}
 	
-	@Override
-	protected void registerAttributes()
+	public static AttributeModifierMap.MutableAttribute underlingAttributes()
 	{
-		super.registerAttributes();
-		getAttributes().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
-		
-		getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(32.0D);
+		return MobEntity.func_233666_p_().createMutableAttribute(Attributes.ATTACK_DAMAGE).createMutableAttribute(Attributes.FOLLOW_RANGE, 32);
 	}
 	
 	@Override
@@ -126,11 +121,11 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 		clearTexture();
 	}
 	
-	protected void applyGristModifier(IAttribute attribute, double modifier, AttributeModifier.Operation operation)
+	protected void applyGristModifier(Attribute attribute, double modifier, AttributeModifier.Operation operation)
 	{
 		getAttribute(attribute).removeModifier(GRIST_MODIFIER_ID);
 		//Does not need to be saved because this bonus should already be applied when the grist type has been set
-		getAttribute(attribute).applyModifier(new AttributeModifier(GRIST_MODIFIER_ID, "Grist Bonus", modifier, operation).setSaved(false));
+		getAttribute(attribute).applyNonPersistentModifier(new AttributeModifier(GRIST_MODIFIER_ID, "Grist Bonus", modifier, operation));
 	}
 	
 	@Nonnull
@@ -154,7 +149,7 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 	@Override
 	public boolean attackEntityAsMob(Entity entityIn)
 	{
-		return entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue());
+		return entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
 	}
 	
 	@Override
@@ -283,7 +278,7 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 	
 	@Nullable
 	@Override
-	public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag)
+	public ILivingEntityData onInitialSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag)
 	{
 		if(!(spawnDataIn instanceof UnderlingData))
 		{

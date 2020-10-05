@@ -4,6 +4,8 @@ import com.mraof.minestuck.item.MSItems;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.ai.goal.RangedAttackGoal;
@@ -17,7 +19,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -43,14 +45,10 @@ public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IM
 	{
 		return new PawnEntity(type, EnumEntityKingdom.DERSITE, world);
 	}
-	
-	@Override
-	protected void registerAttributes()
+	public static AttributeModifierMap.MutableAttribute pawnAttributes()
 	{
-		super.registerAttributes();
-		getAttributes().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
-		
-		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.2D);
+		return CarapacianEntity.carapacianAttributes().createMutableAttribute(Attributes.ATTACK_DAMAGE)
+				.createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.2);
 	}
 	
 	@Override
@@ -112,7 +110,7 @@ public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IM
 		float damage = 2;
 
 		if (!weapon.isEmpty())
-			damage += (float)this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue();
+			damage += (float)this.getAttribute(Attributes.ATTACK_DAMAGE).getValue();
 		
 		damage += EnchantmentHelper.getModifierForCreature(this.getHeldItemMainhand(), ((LivingEntity) par1Entity).getCreatureAttribute());
 		
@@ -184,7 +182,7 @@ public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IM
 	
 	@Nullable
 	@Override
-	public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag)
+	public ILivingEntityData onInitialSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag)
 	{
 		spawnDataIn = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
 		

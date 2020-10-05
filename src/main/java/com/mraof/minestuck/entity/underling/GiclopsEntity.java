@@ -14,13 +14,16 @@ import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MoverType;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.tags.ITag;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 public class GiclopsEntity extends UnderlingEntity implements IBigEntity
@@ -39,15 +42,11 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 		partGroup.createEntities(world);
 	}
 	
-	@Override
-	protected void registerAttributes()
+	public static AttributeModifierMap.MutableAttribute giclopsAttributes()
 	{
-		super.registerAttributes();
-		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(210.0D);
-		getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.9D);
-		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.23D);
-		getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(10.0D);
-		
+		return UnderlingEntity.underlingAttributes().createMutableAttribute(Attributes.MAX_HEALTH, 210)
+				.createMutableAttribute(Attributes.KNOCKBACK_RESISTANCE, 0.9).createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.23)
+				.createMutableAttribute(Attributes.ATTACK_DAMAGE, 10);
 	}
 	
 	@Override
@@ -88,8 +87,8 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	protected void onGristTypeUpdated(GristType type)
 	{
 		super.onGristTypeUpdated(type);
-		applyGristModifier(SharedMonsterAttributes.MAX_HEALTH, 46 * type.getPower(), AttributeModifier.Operation.ADDITION);
-		applyGristModifier(SharedMonsterAttributes.ATTACK_DAMAGE, 4.5 * type.getPower(), AttributeModifier.Operation.ADDITION);
+		applyGristModifier(Attributes.MAX_HEALTH, 46 * type.getPower(), AttributeModifier.Operation.ADDITION);
+		applyGristModifier(Attributes.ATTACK_DAMAGE, 4.5 * type.getPower(), AttributeModifier.Operation.ADDITION);
 		this.experienceValue = (int) (7 * type.getPower() + 5);
 	}
 	
@@ -149,18 +148,20 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	}
 
 	//Only pay attention to the top for water
+	
 	@Override
-	public boolean handleWaterMovement()
+	public boolean handleFluidAcceleration(ITag<Fluid> fluidTag, double fluidFactor)
 	{
 		AxisAlignedBB realBox = this.getBoundingBox();
 		this.setBoundingBox(new AxisAlignedBB(realBox.minX, realBox.maxY - 1, realBox.minZ, realBox.maxX, realBox.maxY, realBox.maxZ));
-		boolean result = super.handleWaterMovement();
+		boolean result = super.handleFluidAcceleration(fluidTag, fluidFactor);
 		this.setBoundingBox(realBox);
 		return result;
 	}
 	
+	
 	@Override
-	public void move(MoverType typeIn, Vec3d pos)
+	public void move(MoverType typeIn, Vector3d pos)
 	{
 		AxisAlignedBB realBox = this.getBoundingBox();
 		double minX = pos.x > 0 ? realBox.maxX - pos.x : realBox.minX;

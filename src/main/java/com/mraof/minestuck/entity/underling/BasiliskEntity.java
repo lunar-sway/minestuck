@@ -10,8 +10,9 @@ import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
@@ -28,14 +29,11 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 		//world.addEntity(tail); TODO Not safe to add entities to world on creation. A different solution is needed
 	}
 	
-	@Override
-	protected void registerAttributes()
+	public static AttributeModifierMap.MutableAttribute basiliskAttributes()
 	{
-		super.registerAttributes();
-		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(85.0D);
-		getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.6D);
-		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
-		getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(6.0D);
+		return UnderlingEntity.underlingAttributes().createMutableAttribute(Attributes.MAX_HEALTH, 85)
+				.createMutableAttribute(Attributes.KNOCKBACK_RESISTANCE, 0.6).createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.25)
+				.createMutableAttribute(Attributes.ATTACK_DAMAGE, 6);
 	}
 	
 	@Override
@@ -76,8 +74,8 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 	protected void onGristTypeUpdated(GristType type)
 	{
 		super.onGristTypeUpdated(type);
-		applyGristModifier(SharedMonsterAttributes.MAX_HEALTH, 20 * type.getPower(), AttributeModifier.Operation.ADDITION);
-		applyGristModifier(SharedMonsterAttributes.ATTACK_DAMAGE, 2.7 * type.getPower(), AttributeModifier.Operation.ADDITION);
+		applyGristModifier(Attributes.MAX_HEALTH, 20 * type.getPower(), AttributeModifier.Operation.ADDITION);
+		applyGristModifier(Attributes.ATTACK_DAMAGE, 2.7 * type.getPower(), AttributeModifier.Operation.ADDITION);
 		this.experienceValue = (int) (6 * type.getPower() + 4);
 	}
 	

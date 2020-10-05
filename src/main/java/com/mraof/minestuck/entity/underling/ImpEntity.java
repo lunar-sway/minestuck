@@ -9,8 +9,9 @@ import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.DamageSource;
@@ -24,13 +25,10 @@ public class ImpEntity extends UnderlingEntity
 		super(type, world);
 	}
 	
-	@Override
-	protected void registerAttributes()
+	public static AttributeModifierMap.MutableAttribute impAttributes()
 	{
-		super.registerAttributes();
-		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(6.0D);
-		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.28D);
-		getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.0D);
+		return UnderlingEntity.underlingAttributes().createMutableAttribute(Attributes.MAX_HEALTH, 6)
+				.createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.28).createMutableAttribute(Attributes.ATTACK_DAMAGE, 1);
 	}
 	
 	@Override
@@ -71,8 +69,8 @@ public class ImpEntity extends UnderlingEntity
 	protected void onGristTypeUpdated(GristType type)
 	{
 		super.onGristTypeUpdated(type);
-		applyGristModifier(SharedMonsterAttributes.MAX_HEALTH, 8 * type.getPower(), AttributeModifier.Operation.ADDITION);
-		applyGristModifier(SharedMonsterAttributes.ATTACK_DAMAGE, Math.ceil(type.getPower()), AttributeModifier.Operation.ADDITION);
+		applyGristModifier(Attributes.MAX_HEALTH, 8 * type.getPower(), AttributeModifier.Operation.ADDITION);
+		applyGristModifier(Attributes.ATTACK_DAMAGE, Math.ceil(type.getPower()), AttributeModifier.Operation.ADDITION);
 		this.experienceValue = (int) (3 * type.getPower() + 1);
 	}
 	

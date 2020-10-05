@@ -6,7 +6,7 @@ import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.gen.Heightmap;
 
 import java.util.EnumSet;
@@ -15,7 +15,7 @@ public class EntityAIMoveToBattle extends Goal
 {
 	
 	private CarapacianEntity target;
-	protected Vec3d destination;
+	protected Vector3d destination;
 	
 	public EntityAIMoveToBattle(CarapacianEntity entity)
 	{
@@ -27,7 +27,7 @@ public class EntityAIMoveToBattle extends Goal
 	public boolean shouldExecute()
 	{	//TODO When the castles are fixed, make the entity possibly head for one if it's closer
 		
-		if(target.dimension != MSDimensions.skaiaDimension || this.target.getAttackTarget() != null && !this.target.getNavigator().noPath())
+		if(!MSDimensions.isSkaia(target.world.getDimensionKey()) || this.target.getAttackTarget() != null && !this.target.getNavigator().noPath())
 			return false;
 		
 		EnumEntityKingdom type = target.getKingdom();
@@ -36,7 +36,7 @@ public class EntityAIMoveToBattle extends Goal
 			return false;
 		
 		BlockPos pos = target.world.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, new BlockPos(type == EnumEntityKingdom.DERSITE ? 5 : -5, 0, target.getPosY()));
-		destination = RandomPositionGenerator.findRandomTargetBlockTowards(target, 10, 7, new Vec3d(pos.getX(), pos.getY(), pos.getZ()));
+		destination = RandomPositionGenerator.findRandomTargetBlockTowards(target, 10, 7, new Vector3d(pos.getX(), pos.getY(), pos.getZ()));
 		
 		return destination != null;
 	}

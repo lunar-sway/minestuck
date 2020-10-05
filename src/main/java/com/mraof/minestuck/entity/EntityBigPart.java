@@ -5,7 +5,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
@@ -116,7 +116,7 @@ public class EntityBigPart extends Entity implements IEntityAdditionalSpawnData
 	}
 	
 	@Override
-	public void move(MoverType typeIn, Vec3d pos)
+	public void move(MoverType typeIn, Vector3d pos)
 	{
 		this.setBoundingBox(this.getBoundingBox().offset(pos));
 		this.resetPositionToBB();

@@ -14,7 +14,6 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 public class HologramEntity extends Entity
@@ -49,9 +48,9 @@ public class HologramEntity extends Entity
 
         if (!this.world.isRemote)
         {
-            BlockPos blockpos = new BlockPos(this);
+            BlockPos blockpos = getPosition();
 
-            if (this.world.getDimension().getType() == DimensionType.THE_END && this.world.getBlockState(blockpos).getBlock() != Blocks.FIRE)
+            if (this.world.getDimensionKey() == World.THE_END && this.world.getBlockState(blockpos).getBlock() != Blocks.FIRE)
             {
                 this.world.setBlockState(blockpos, Blocks.FIRE.getDefaultState());
             }

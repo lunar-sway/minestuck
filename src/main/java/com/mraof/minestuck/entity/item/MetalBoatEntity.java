@@ -14,7 +14,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -42,7 +42,7 @@ public class MetalBoatEntity extends BoatEntity implements IEntityAdditionalSpaw
 		super(MSEntityTypes.METAL_BOAT, world);
 		this.preventEntitySpawning = false;
 		this.setPosition(x, y, z);
-		this.setMotion(Vec3d.ZERO);
+		this.setMotion(Vector3d.ZERO);
 		this.prevPosX = x;
 		this.prevPosY = y;
 		this.prevPosZ = z;
@@ -72,9 +72,9 @@ public class MetalBoatEntity extends BoatEntity implements IEntityAdditionalSpaw
 	}
 	
 	@Override
-	public void setMotion(Vec3d motionIn)
+	public void setMotion(Vector3d motionIn)
 	{
-		super.setMotion(new Vec3d(motionIn.x, -Math.abs(motionIn.y), motionIn.z));
+		super.setMotion(new Vector3d(motionIn.x, -Math.abs(motionIn.y), motionIn.z));
 	}
 	
 	private final List<ItemEntity> captureDropsCache = new ArrayList<>(5);

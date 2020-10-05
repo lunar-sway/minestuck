@@ -2,6 +2,8 @@ package com.mraof.minestuck.entity.carapacian;
 
 import com.mraof.minestuck.entity.ai.AttackByDistanceGoal;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.projectile.FireballEntity;
@@ -9,7 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -35,12 +37,10 @@ public class BishopEntity extends CarapacianEntity implements IRangedAttackMob, 
 		return new BishopEntity(type, EnumEntityKingdom.DERSITE, world);
 	}
 	
-	@Override
-	protected void registerAttributes()
+	public static AttributeModifierMap.MutableAttribute bishopAttributes()
 	{
-		super.registerAttributes();
-		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(40D);
-		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.2D);
+		return CarapacianEntity.carapacianAttributes().createMutableAttribute(Attributes.MAX_HEALTH, 40)
+				.createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.2);
 	}
 	
 	@Override
@@ -62,7 +62,7 @@ public class BishopEntity extends CarapacianEntity implements IRangedAttackMob, 
 		FireballEntity fireball = new FireballEntity(this.world, this, distanceX, distanceY, distanceZ);
 		fireball.explosionPower = 1;
 		double d8 = this.getHeight();
-		Vec3d vec3 = this.getLook(1.0F);
+		Vector3d vec3 = this.getLook(1.0F);
 		double x = (this.getBoundingBox().minX + this.getBoundingBox().maxX) / 2.0F  + vec3.x * d8;
 		double y = this.getPosY() + (double)(this.getHeight() / 2.0F);
 		double z = (this.getBoundingBox().minZ + this.getBoundingBox().maxZ) / 2.0F + vec3.z * d8;

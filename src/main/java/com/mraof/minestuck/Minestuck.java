@@ -80,6 +80,7 @@ public class Minestuck
 	private void mainThreadSetup()
 	{
 		MSCriteriaTriggers.register();
+		MSEntityTypes.registerAttributes();
 		MSEntityTypes.registerPlacements();
 		MSFillerBlockTypes.init();	//Not sure if this is thread safe, but better safe than sorry
 		

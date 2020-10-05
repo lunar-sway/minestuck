@@ -4,12 +4,11 @@ import com.google.common.collect.Maps;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.Debug;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootParameterSets;
+import net.minecraft.loot.LootParameters;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootParameterSets;
-import net.minecraft.world.storage.loot.LootParameters;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
@@ -258,7 +257,7 @@ public class ConsortRewardHandler
 	
 	public static List<Pair<ItemStack, Integer>> generateStock(ResourceLocation lootTable, ConsortEntity consort, Random rand)
 	{
-		LootContext.Builder contextBuilder = new LootContext.Builder((ServerWorld) consort.world).withParameter(LootParameters.THIS_ENTITY, consort).withParameter(LootParameters.POSITION, new BlockPos(consort));
+		LootContext.Builder contextBuilder = new LootContext.Builder((ServerWorld) consort.world).withParameter(LootParameters.THIS_ENTITY, consort).withParameter(LootParameters.field_237457_g_, consort.getPositionVec());
 		List<ItemStack> itemStacks = consort.getServer().getLootTableManager().getLootTableFromLocation(lootTable).generate(contextBuilder.build(LootParameterSets.GIFT));
 		List<Pair<ItemStack, Integer>> itemPriceList = new ArrayList<>();
 		stackLoop:

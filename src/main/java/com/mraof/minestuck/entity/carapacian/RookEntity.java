@@ -3,7 +3,8 @@ package com.mraof.minestuck.entity.carapacian;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.monster.IMob;
@@ -28,12 +29,10 @@ public class RookEntity extends CarapacianEntity implements IMob
 		return new RookEntity(type, EnumEntityKingdom.DERSITE, world);
 	}
 	
-	@Override
-	protected void registerAttributes()
+	public static AttributeModifierMap.MutableAttribute rookAttributes()
 	{
-		super.registerAttributes();
-		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(50D);
-		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
+		return CarapacianEntity.carapacianAttributes().createMutableAttribute(Attributes.MAX_HEALTH, 50)
+				.createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3);
 	}
 	
 	@Override

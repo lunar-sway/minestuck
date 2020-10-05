@@ -25,12 +25,9 @@ public class CustomMeleeAttackGoal extends MeleeAttackGoal
 	}
 	
 	@Override
-	protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr)
+	protected void func_234039_g_()
 	{
-		boolean tickCondition = attackTick <= 0;
-		super.checkAndPerformAttack(enemy, distToEnemySqr);
-		if(tickCondition && attackTick > 0)
-			attackTick = attackRate;
+		field_234037_i_ = attackRate;
 	}
 	
 	@Override

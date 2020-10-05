@@ -3,6 +3,8 @@ package com.mraof.minestuck.entity;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.controller.JumpController;
 import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.ai.goal.*;
@@ -15,25 +17,22 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.Path;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 import java.util.Random;
 
 public class FrogEntity extends CreatureEntity
 {
+	private static final double BASE_HEALTH = 5;
+	private static final double BASE_SPEED = 0.3D;
 	
 	private int jumpTicks;
 	private int jumpDuration;
 	private boolean wasOnGround;
 	private int currentMoveTypeDuration;
-	private final int baseHealth = 5;
-	private final double baseSpeed = 0.3D;
 	private static final DataParameter<Float> FROG_SIZE = EntityDataManager.createKey(FrogEntity.class, DataSerializers.FLOAT);
 	private static final DataParameter<Integer> SKIN_COLOR = EntityDataManager.createKey(FrogEntity.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> EYE_COLOR = EntityDataManager.createKey(FrogEntity.class, DataSerializers.VARINT);
@@ -68,8 +67,8 @@ public class FrogEntity extends CreatureEntity
 		this.dataManager.register(BELLY_TYPE, random(maxBelly()));
 	}
 	
-	@Override
-	protected boolean processInteract(PlayerEntity player, Hand hand)
+	@Override	//Right-click interact
+	protected ActionResultType func_230254_b_(PlayerEntity player, Hand hand)
 	{
 		ItemStack itemstack = player.getHeldItem(hand);
 		
@@ -95,7 +94,7 @@ public class FrogEntity extends CreatureEntity
 				this.setType(5);
 			}
 		}
-		return super.processInteract(player, hand);
+		return super.func_230254_b_(player, hand);
 	}
 	
 	protected CompoundNBT getFrogData()
@@ -134,12 +133,9 @@ public class FrogEntity extends CreatureEntity
 		return super.getSize(poseIn).scale((this.getFrogType() == 6) ? 0.6F :this.getFrogSize());
 	}
 	
-	@Override
-	protected void registerAttributes()
+	public static AttributeModifierMap.MutableAttribute frogAttributes()
 	{
-		super.registerAttributes();
-		
-		this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(baseHealth);
+		return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, BASE_HEALTH);
 	}
 	
 	//Entity AI
@@ -165,7 +161,7 @@ public class FrogEntity extends CreatureEntity
 
 			if (path != null && path.getCurrentPathIndex() < path.getCurrentPathLength())
 			{
-				Vec3d vec3d = path.getPosition(this);
+				Vector3d vec3d = path.getPosition(this);
 
 				if (vec3d.y > this.getPosY() + 0.5D)
 				{
@@ -193,7 +189,7 @@ public class FrogEntity extends CreatureEntity
 
 			if (d1 < 0.01D)
 			{
-				this.moveRelative(0.1F, new Vec3d(0.0F, 0.0F, 1.0F));
+				this.moveRelative(0.1F, new Vector3d(0.0F, 0.0F, 1.0F));
 			}
 		}
 
@@ -268,7 +264,7 @@ public class FrogEntity extends CreatureEntity
 				if (this.moveController.isUpdating() && this.currentMoveTypeDuration == 0)
 				{
 					Path path = this.navigator.getPath();
-					Vec3d vec3d = new Vec3d(this.moveController.getX(), this.moveController.getY(), this.moveController.getZ());
+					Vector3d vec3d = new Vector3d(this.moveController.getX(), this.moveController.getY(), this.moveController.getZ());
 
 					if (path != null && path.getCurrentPathIndex() < path.getCurrentPathLength())
 					{
@@ -525,8 +521,8 @@ public class FrogEntity extends CreatureEntity
 		if(this.dataManager.get(TYPE) == 6) this.dataManager.set(FROG_SIZE, Float.valueOf(0.6f));
 		else this.dataManager.set(FROG_SIZE, Float.valueOf(size));
 		this.setPosition(this.getPosX(), this.getPosY(), this.getPosZ());
-		this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue((double)(baseHealth * size));
-		this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue((double)(baseSpeed * size));
+		this.getAttribute(Attributes.MAX_HEALTH).setBaseValue((double)(BASE_HEALTH * size));
+		this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(BASE_SPEED * size);
 
 		if (p_70799_2_)
 		{

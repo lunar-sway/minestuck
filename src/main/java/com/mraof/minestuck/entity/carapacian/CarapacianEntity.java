@@ -7,7 +7,9 @@ import com.mraof.minestuck.util.MSTags;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.LookAtGoal;
 import net.minecraft.entity.ai.goal.LookRandomlyGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
@@ -47,11 +49,9 @@ public abstract class CarapacianEntity extends MinestuckEntity
 		this.goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 8.0F));
 	}
 	
-	@Override
-	protected void registerAttributes()
+	public static AttributeModifierMap.MutableAttribute carapacianAttributes()
 	{
-		super.registerAttributes();
-		getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(32.0D);
+		return MobEntity.func_233666_p_().createMutableAttribute(Attributes.FOLLOW_RANGE, 32);
 	}
 	
 	private void setEnemies()

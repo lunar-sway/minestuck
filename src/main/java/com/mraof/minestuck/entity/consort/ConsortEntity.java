@@ -4,12 +4,13 @@ import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.entity.MinestuckEntity;
 import com.mraof.minestuck.inventory.ConsortMerchantContainer;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
-import com.mraof.minestuck.util.MSNBTUtil;
 import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -17,18 +18,16 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.IContainerProvider;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.NBTDynamicOps;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.Explosion;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
@@ -43,7 +42,7 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 	int messageTicksLeft;
 	CompoundNBT messageData;
 	public EnumConsort.MerchantType merchantType = EnumConsort.MerchantType.NONE;
-	DimensionType homeDimension;
+	RegistryKey<World> homeDimension;
 	boolean visitedSkaia;
 	MessageType.DelayMessage updatingMessage; //TODO Change to an interface/array if more message components need tick updates
 	public ConsortMerchantInventory stocks;
@@ -56,11 +55,10 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 		this.experienceValue = 1;
 	}
 	
-	@Override
-	protected void registerAttributes()
+	
+	public static AttributeModifierMap.MutableAttribute consortAttributes()
 	{
-		super.registerAttributes();
-		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10D);
+		return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 10);
 	}
 	
 	@Override
@@ -80,7 +78,7 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 	}
 	
 	@Override
-	protected boolean processInteract(PlayerEntity player, Hand hand)
+	protected ActionResultType func_230254_b_(PlayerEntity player, Hand hand)
 	{
 		if(this.isAlive() && !player.isSneaking() && eventTimer < 0)
 		{
@@ -96,13 +94,13 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 				}
 				ITextComponent text = message.getMessage(this, serverPlayer);	//TODO Make sure to catch any issues here
 				if (text != null)
-					player.sendMessage(text);
+					player.sendMessage(text, Util.DUMMY_UUID);
 				MSCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, message.getString(), this);
 			}
 			
-			return true;
+			return ActionResultType.SUCCESS;
 		} else
-			return super.processInteract(player, hand);
+			return super.func_230254_b_(player, hand);
 	}
 	
 	protected void setExplosionTimer()
@@ -136,7 +134,7 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 			updatingMessage.onTickUpdate(this);
 		}
 		
-		if(MSDimensions.isSkaia(dimension))
+		if(MSDimensions.isSkaia(world.getDimensionKey()))
 			visitedSkaia = true;
 		
 		if(eventTimer > 0)
@@ -175,7 +173,8 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 		compound.putBoolean("HasHadMessage", hasHadMessage);
 		
 		compound.putInt("Type", merchantType.ordinal());
-		MSNBTUtil.tryWriteDimensionType(compound, "HomeDim", homeDimension);
+		ResourceLocation.CODEC.encodeStart(NBTDynamicOps.INSTANCE, homeDimension.getLocation()).resultOrPartial(LOGGER::error)
+				.ifPresent(tag -> compound.put("\"HomeDim\"", tag));
 		
 		if(merchantType != EnumConsort.MerchantType.NONE && stocks != null)
 			compound.put("Stock", stocks.writeToNBT());
@@ -212,9 +211,9 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 		merchantType = EnumConsort.MerchantType.values()[MathHelper.clamp(compound.getInt("Type"), 0, EnumConsort.MerchantType.values().length - 1)];
 		
 		if(compound.contains("HomeDim", Constants.NBT.TAG_STRING))
-			homeDimension = MSNBTUtil.tryReadDimensionType(compound, "HomeDim");
+			homeDimension = World.CODEC.parse(NBTDynamicOps.INSTANCE, compound.get("HomeDim")).resultOrPartial(LOGGER::error).orElse(null);
 		if(homeDimension == null)
-			homeDimension = this.world.getDimension().getType();
+			homeDimension = this.world.getDimensionKey();
 		
 		if(merchantType != EnumConsort.MerchantType.NONE && compound.contains("Stock", Constants.NBT.TAG_LIST))
 		{
@@ -235,7 +234,7 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 	
 	@Nullable
 	@Override
-	public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag)
+	public ILivingEntityData onInitialSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag)
 	{
 		if(merchantType == EnumConsort.MerchantType.NONE && this.rand.nextInt(30) == 0)
 		{
@@ -244,7 +243,7 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 				setHomePosAndDistance(getHomePosition(), (int) (getMaximumHomeDistance()*0.4F));
 		}
 		
-		homeDimension = world.getDimension().getType();
+		homeDimension = world.getDimensionKey();
 		visitedSkaia = rand.nextFloat() < 0.1F;
 		
 		applyAdditionalAITasks();
@@ -269,7 +268,7 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 		{
 			ITextComponent text = message.getFromChain(this, player, chain);
 			if(text != null)
-				player.sendMessage(text);
+				player.sendMessage(text, Util.DUMMY_UUID);
 		}
 	}
 	
