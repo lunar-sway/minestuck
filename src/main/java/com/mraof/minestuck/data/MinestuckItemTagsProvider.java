@@ -1,14 +1,19 @@
 package com.mraof.minestuck.data;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.ExtraForgeTags;
 import com.mraof.minestuck.util.MSTags;
+import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.ItemTagsProvider;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.data.ExistingFileHelper;
+
+import javax.annotation.Nullable;
 
 import static com.mraof.minestuck.item.MSItems.*;
 import static com.mraof.minestuck.util.MSTags.Items.*;
@@ -17,10 +22,9 @@ import static net.minecraftforge.common.Tags.Items.*;
 
 public class MinestuckItemTagsProvider extends ItemTagsProvider
 {
-	
-	MinestuckItemTagsProvider(DataGenerator generatorIn)
+	MinestuckItemTagsProvider(DataGenerator dataGenerator, BlockTagsProvider blockTagProvider, @Nullable ExistingFileHelper existingFileHelper)
 	{
-		super(generatorIn);
+		super(dataGenerator, blockTagProvider, Minestuck.MOD_ID, existingFileHelper);
 	}
 	
 	@Override
@@ -66,41 +70,40 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		copy(MSTags.Blocks.URANIUM_ORES, URANIUM_ORES);
 		copy(MSTags.Blocks.COAL_ORES, COAL_ORES);
 		copy(MSTags.Blocks.IRON_ORES, IRON_ORES);
-		copy(MSTags.Blocks.GOLD_ORES, GOLD_ORES);
+		copy(MSTags.Blocks.GOLD_ORES, MSTags.Items.GOLD_ORES);
 		copy(MSTags.Blocks.REDSTONE_ORES, REDSTONE_ORES);
 		copy(MSTags.Blocks.QUARTZ_ORES, QUARTZ_ORES);
 		copy(MSTags.Blocks.LAPIS_ORES, LAPIS_ORES);
 		copy(MSTags.Blocks.DIAMOND_ORES, DIAMOND_ORES);
 		copy(MSTags.Blocks.CRUXITE_STORAGE_BLOCKS, CRUXITE_STORAGE_BLOCKS);
 
-		getBuilder(ItemTags.MUSIC_DISCS).add(MUSIC_DISC_DANCE_STAB_DANCE, MUSIC_DISC_EMISSARY_OF_DANCE, MUSIC_DISC_RETRO_BATTLE);
-		getBuilder(Tags.Items.MUSIC_DISCS).add(MUSIC_DISC_DANCE_STAB_DANCE, MUSIC_DISC_EMISSARY_OF_DANCE, MUSIC_DISC_RETRO_BATTLE);
-		getBuilder(DUSTS).add(MSBlocks.GLOWYSTONE_DUST.asItem());
-		getBuilder(RODS).add(URANIUM_POWERED_STICK);
-		getBuilder(ExtraForgeTags.Items.URANIUM_CHUNKS).add(RAW_URANIUM);
-		getBuilder(ExtraForgeTags.Items.COPPER_ORES);
-		getBuilder(ExtraForgeTags.Items.TIN_ORES);
-		getBuilder(ExtraForgeTags.Items.SILVER_ORES);
-		getBuilder(ExtraForgeTags.Items.LEAD_ORES);
-		getBuilder(ExtraForgeTags.Items.NICKEL_ORES);
-		getBuilder(ExtraForgeTags.Items.ALUMINIUM_ORES);
-		getBuilder(ExtraForgeTags.Items.COBALT_ORES);
-		getBuilder(ExtraForgeTags.Items.ARDITE_ORES);
-		getBuilder(ExtraForgeTags.Items.COPPER_INGOTS);
-		getBuilder(ExtraForgeTags.Items.TIN_INGOTS);
-		getBuilder(ExtraForgeTags.Items.SILVER_INGOTS);
-		getBuilder(ExtraForgeTags.Items.LEAD_INGOTS);
-		getBuilder(ExtraForgeTags.Items.NICKEL_INGOTS);
-		getBuilder(ExtraForgeTags.Items.INVAR_INGOTS);
-		getBuilder(ExtraForgeTags.Items.ALUMINIUM_INGOTS);
-		getBuilder(ExtraForgeTags.Items.COBALT_INGOTS);
-		getBuilder(ExtraForgeTags.Items.ARDITE_INGOTS);
-		getBuilder(ExtraForgeTags.Items.RED_ALLOY_INGOTS);
+		getOrCreateBuilder(ItemTags.MUSIC_DISCS).add(MUSIC_DISC_DANCE_STAB_DANCE, MUSIC_DISC_EMISSARY_OF_DANCE, MUSIC_DISC_RETRO_BATTLE);
+		getOrCreateBuilder(DUSTS).add(MSBlocks.GLOWYSTONE_DUST.asItem());
+		getOrCreateBuilder(RODS).add(URANIUM_POWERED_STICK);
+		getOrCreateBuilder(ExtraForgeTags.Items.URANIUM_CHUNKS).add(RAW_URANIUM);
+		getOrCreateBuilder(ExtraForgeTags.Items.COPPER_ORES);
+		getOrCreateBuilder(ExtraForgeTags.Items.TIN_ORES);
+		getOrCreateBuilder(ExtraForgeTags.Items.SILVER_ORES);
+		getOrCreateBuilder(ExtraForgeTags.Items.LEAD_ORES);
+		getOrCreateBuilder(ExtraForgeTags.Items.NICKEL_ORES);
+		getOrCreateBuilder(ExtraForgeTags.Items.ALUMINIUM_ORES);
+		getOrCreateBuilder(ExtraForgeTags.Items.COBALT_ORES);
+		getOrCreateBuilder(ExtraForgeTags.Items.ARDITE_ORES);
+		getOrCreateBuilder(ExtraForgeTags.Items.COPPER_INGOTS);
+		getOrCreateBuilder(ExtraForgeTags.Items.TIN_INGOTS);
+		getOrCreateBuilder(ExtraForgeTags.Items.SILVER_INGOTS);
+		getOrCreateBuilder(ExtraForgeTags.Items.LEAD_INGOTS);
+		getOrCreateBuilder(ExtraForgeTags.Items.NICKEL_INGOTS);
+		getOrCreateBuilder(ExtraForgeTags.Items.INVAR_INGOTS);
+		getOrCreateBuilder(ExtraForgeTags.Items.ALUMINIUM_INGOTS);
+		getOrCreateBuilder(ExtraForgeTags.Items.COBALT_INGOTS);
+		getOrCreateBuilder(ExtraForgeTags.Items.ARDITE_INGOTS);
+		getOrCreateBuilder(ExtraForgeTags.Items.RED_ALLOY_INGOTS);
 		
-		getBuilder(GRIST_CANDY).add(BUILD_GUSHERS, AMBER_GUMMY_WORM, CAULK_PRETZEL, CHALK_CANDY_CIGARETTE, IODINE_LICORICE, SHALE_PEEP, TAR_LICORICE, COBALT_GUM, MARBLE_JAWBREAKER, MERCURY_SIXLETS, QUARTZ_JELLY_BEAN, SULFUR_CANDY_APPLE, AMETHYST_HARD_CANDY, GARNET_TWIX, RUBY_LOLLIPOP, RUST_GUMMY_EYE, DIAMOND_MINT, GOLD_CANDY_RIBBON, URANIUM_GUMMY_BEAR, ARTIFACT_WARHEAD, ZILLIUM_SKITTLES);
-		getBuilder(MSTags.Items.FAYGO).add(MSItems.ORANGE_FAYGO, CANDY_APPLE_FAYGO, FAYGO_COLA, COTTON_CANDY_FAYGO, CREME_SODA_FAYGO, GRAPE_FAYGO, MOON_MIST_FAYGO, PEACH_FAYGO, REDPOP_FAYGO);
-		getBuilder(MODUS_CARD).add(STACK_MODUS_CARD, QUEUE_MODUS_CARD, QUEUESTACK_MODUS_CARD, TREE_MODUS_CARD, HASHMAP_MODUS_CARD, SET_MODUS_CARD);
-		getBuilder(CASSETTES).add(MSItems.CASSETTE_MELLOHI, CASSETTE_13, CASSETTE_BLOCKS, CASSETTE_CAT, CASSETTE_CHIRP, CASSETTE_FAR, CASSETTE_MALL, CASSETTE_DANCE_STAB, CASSETTE_RETRO_BATTLE, CASSETTE_EMISSARY);
+		getOrCreateBuilder(GRIST_CANDY).add(BUILD_GUSHERS, AMBER_GUMMY_WORM, CAULK_PRETZEL, CHALK_CANDY_CIGARETTE, IODINE_LICORICE, SHALE_PEEP, TAR_LICORICE, COBALT_GUM, MARBLE_JAWBREAKER, MERCURY_SIXLETS, QUARTZ_JELLY_BEAN, SULFUR_CANDY_APPLE, AMETHYST_HARD_CANDY, GARNET_TWIX, RUBY_LOLLIPOP, RUST_GUMMY_EYE, DIAMOND_MINT, GOLD_CANDY_RIBBON, URANIUM_GUMMY_BEAR, ARTIFACT_WARHEAD, ZILLIUM_SKITTLES);
+		getOrCreateBuilder(MSTags.Items.FAYGO).add(MSItems.ORANGE_FAYGO, CANDY_APPLE_FAYGO, FAYGO_COLA, COTTON_CANDY_FAYGO, CREME_SODA_FAYGO, GRAPE_FAYGO, MOON_MIST_FAYGO, PEACH_FAYGO, REDPOP_FAYGO);
+		getOrCreateBuilder(MODUS_CARD).add(STACK_MODUS_CARD, QUEUE_MODUS_CARD, QUEUESTACK_MODUS_CARD, TREE_MODUS_CARD, HASHMAP_MODUS_CARD, SET_MODUS_CARD);
+		getOrCreateBuilder(CASSETTES).add(MSItems.CASSETTE_MELLOHI, CASSETTE_13, CASSETTE_BLOCKS, CASSETTE_CAT, CASSETTE_CHIRP, CASSETTE_FAR, CASSETTE_MALL, CASSETTE_DANCE_STAB, CASSETTE_RETRO_BATTLE, CASSETTE_EMISSARY);
 	}
 
 	@Override

@@ -11,14 +11,14 @@ import net.minecraft.block.Blocks;
 import net.minecraft.data.loot.BlockLootTables;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.Items;
-import net.minecraft.world.storage.loot.*;
-import net.minecraft.world.storage.loot.conditions.ILootCondition;
-import net.minecraft.world.storage.loot.conditions.MatchTool;
-import net.minecraft.world.storage.loot.conditions.TableBonus;
-import net.minecraft.world.storage.loot.functions.ApplyBonus;
-import net.minecraft.world.storage.loot.functions.CopyName;
-import net.minecraft.world.storage.loot.functions.CopyNbt;
-import net.minecraft.world.storage.loot.functions.SetCount;
+import net.minecraft.loot.*;
+import net.minecraft.loot.conditions.ILootCondition;
+import net.minecraft.loot.conditions.MatchTool;
+import net.minecraft.loot.conditions.TableBonus;
+import net.minecraft.loot.functions.ApplyBonus;
+import net.minecraft.loot.functions.CopyName;
+import net.minecraft.loot.functions.CopyNbt;
+import net.minecraft.loot.functions.SetCount;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.stream.Collectors;
@@ -187,14 +187,14 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(PETRIFIED_GRASS);
 		registerDropSelfLootTable(PETRIFIED_POPPY);
 		registerDropSelfLootTable(STRAWBERRY);
-		registerLootTable(ATTACHED_STRAWBERRY_STEM, func_218482_a());
+		registerLootTable(ATTACHED_STRAWBERRY_STEM, blockNoDrop());	//TODO vanilla has a different loot table for their attached stems, should we replicate?
 		registerLootTable(STRAWBERRY_STEM, MSBlockLootTables::strawberryStemDrop);
 		
 		registerDropSelfLootTable(GLOWY_GOOP);
 		registerDropSelfLootTable(COAGULATED_BLOOD);
-		registerLootTable(VEIN, func_218482_a());
-		registerLootTable(VEIN_CORNER, func_218482_a());
-		registerLootTable(INVERTED_VEIN_CORNER, func_218482_a());
+		registerLootTable(VEIN, blockNoDrop());
+		registerLootTable(VEIN_CORNER, blockNoDrop());
+		registerLootTable(INVERTED_VEIN_CORNER, blockNoDrop());
 		
 		registerDropSelfLootTable(COARSE_STONE_STAIRS);
 		registerDropSelfLootTable(SHADE_BRICK_STAIRS);
@@ -237,14 +237,14 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(GOLD_SEEDS);
 		registerDropSelfLootTable(WOODEN_CACTUS);
 		
-		registerLootTable(APPLE_CAKE, func_218482_a());
-		registerLootTable(BLUE_CAKE, func_218482_a());
-		registerLootTable(COLD_CAKE, func_218482_a());
-		registerLootTable(RED_CAKE, func_218482_a());
-		registerLootTable(HOT_CAKE, func_218482_a());
-		registerLootTable(REVERSE_CAKE, func_218482_a());
-		registerLootTable(FUCHSIA_CAKE, func_218482_a());
-		registerLootTable(NEGATIVE_CAKE, func_218482_a());
+		registerLootTable(APPLE_CAKE, blockNoDrop());
+		registerLootTable(BLUE_CAKE, blockNoDrop());
+		registerLootTable(COLD_CAKE, blockNoDrop());
+		registerLootTable(RED_CAKE, blockNoDrop());
+		registerLootTable(HOT_CAKE, blockNoDrop());
+		registerLootTable(REVERSE_CAKE, blockNoDrop());
+		registerLootTable(FUCHSIA_CAKE, blockNoDrop());
+		registerLootTable(NEGATIVE_CAKE, blockNoDrop());
 		
 		registerDropSelfLootTable(PRIMED_TNT);
 		registerDropSelfLootTable(UNSTABLE_TNT);

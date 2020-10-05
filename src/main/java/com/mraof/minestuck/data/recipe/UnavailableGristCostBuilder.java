@@ -6,7 +6,8 @@ import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.ITag;
+import net.minecraft.tags.TagCollectionManager;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 
@@ -20,9 +21,10 @@ public class UnavailableGristCostBuilder
 	private final Ingredient ingredient;
 	private Integer priority = null;
 	
-	public static UnavailableGristCostBuilder of(Tag<Item> tag)
+	public static UnavailableGristCostBuilder of(ITag<Item> tag)
 	{
-		return new UnavailableGristCostBuilder(new ResourceLocation(tag.getId().getNamespace(), tag.getId().getPath()+"_tag"), Ingredient.fromTag(tag));
+		ResourceLocation tagId = TagCollectionManager.getManager().getItemTags().getValidatedIdFromTag(tag);
+		return new UnavailableGristCostBuilder(new ResourceLocation(tagId.getNamespace(), tagId.getPath()+"_tag"), Ingredient.fromTag(tag));
 	}
 	
 	public static UnavailableGristCostBuilder of(IItemProvider item)

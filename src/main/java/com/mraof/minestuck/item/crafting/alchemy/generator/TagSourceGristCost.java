@@ -8,8 +8,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 
@@ -17,11 +17,11 @@ import javax.annotation.Nullable;
 
 public class TagSourceGristCost extends GeneratedGristCost
 {
-	private final Tag<Item> source;
+	private final ITag<Item> source;
 	private final float multiplier;
 	private final ImmutableGristSet addedCost;
 	
-	private TagSourceGristCost(ResourceLocation id, Ingredient ingredient, Tag<Item> source, float multiplier, GristSet addedCost, @Nullable Integer priority)
+	private TagSourceGristCost(ResourceLocation id, Ingredient ingredient, ITag<Item> source, float multiplier, GristSet addedCost, @Nullable Integer priority)
 	{
 		super(id, ingredient, priority);
 		this.source = source;
@@ -69,7 +69,7 @@ public class TagSourceGristCost extends GeneratedGristCost
 			GristSet cost = GristSet.deserialize(JSONUtils.getJsonObject(json, "grist_cost"));
 			float multiplier = json.has("multiplier") ? JSONUtils.getFloat(json, "multiplier") : 1;
 			ResourceLocation resourcelocation = new ResourceLocation(JSONUtils.getString(json, "source"));
-			Tag<Item> tag = ItemTags.getCollection().get(resourcelocation);
+			ITag<Item> tag = ItemTags.getCollection().get(resourcelocation);
 			return new TagSourceGristCost(recipeId, ingredient, tag, multiplier, cost, priority);
 		}
 		

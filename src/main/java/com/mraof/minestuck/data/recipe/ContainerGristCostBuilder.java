@@ -9,7 +9,8 @@ import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.ITag;
+import net.minecraft.tags.TagCollectionManager;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 
@@ -24,9 +25,10 @@ public class ContainerGristCostBuilder
 	private final ImmutableMap.Builder<GristType, Long> costBuilder = ImmutableMap.builder();
 	private Integer priority = null;
 	
-	public static ContainerGristCostBuilder of(Tag<Item> tag)
+	public static ContainerGristCostBuilder of(ITag<Item> tag)
 	{
-		return new ContainerGristCostBuilder(new ResourceLocation(tag.getId().getNamespace(), tag.getId().getPath()+"_tag"), Ingredient.fromTag(tag));
+		ResourceLocation tagId = TagCollectionManager.getManager().getItemTags().getValidatedIdFromTag(tag);
+		return new ContainerGristCostBuilder(new ResourceLocation(tagId.getNamespace(), tagId.getPath()+"_tag"), Ingredient.fromTag(tag));
 	}
 	
 	public static ContainerGristCostBuilder of(IItemProvider item)

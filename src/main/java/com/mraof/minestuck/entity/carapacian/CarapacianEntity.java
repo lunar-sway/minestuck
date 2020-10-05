@@ -15,7 +15,7 @@ import net.minecraft.entity.ai.goal.LookRandomlyGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.ITag;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ public abstract class CarapacianEntity extends MinestuckEntity
 	private final EnumEntityKingdom kingdom;
 	
 	protected List<EntityType<?>> enemyTypes = new ArrayList<>();	//TODO Save this!
-	protected final Tag<EntityType<?>> allyTag;
+	protected final ITag<EntityType<?>> allyTag;
 	protected EntityListFilter attackEntitySelector = new EntityListFilter(enemyTypes);
 
 	public CarapacianEntity(EntityType<? extends CarapacianEntity> type, EnumEntityKingdom kingdom, World world)

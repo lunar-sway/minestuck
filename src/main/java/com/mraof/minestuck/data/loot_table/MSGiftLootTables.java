@@ -10,14 +10,14 @@ import com.mraof.minestuck.world.storage.loot.MSLootTables;
 import com.mraof.minestuck.world.storage.loot.conditions.ConsortLootCondition;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.loot.*;
+import net.minecraft.loot.functions.SetCount;
+import net.minecraft.loot.functions.SetDamage;
+import net.minecraft.loot.functions.SetNBT;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.potion.Potions;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.*;
-import net.minecraft.world.storage.loot.functions.SetCount;
-import net.minecraft.world.storage.loot.functions.SetDamage;
-import net.minecraft.world.storage.loot.functions.SetNBT;
 
 import java.util.Objects;
 import java.util.function.BiConsumer;
@@ -327,7 +327,7 @@ public class MSGiftLootTables implements Consumer<BiConsumer<ResourceLocation, L
 						.addEntry(ItemLootEntry.builder(Items.PUMPKIN_PIE).weight(3).acceptFunction(SetCount.builder(RandomValueRange.of(1, 2))))
 						.addEntry(ItemLootEntry.builder(Items.GOLDEN_APPLE).weight(1))
 						.addEntry(ItemLootEntry.builder(MSItems.CANDY_CORN).weight(1).acceptFunction(SetCount.builder(RandomValueRange.of(1, 4))))
-						.addEntry(TagLootEntry.func_216176_b(MSTags.Items.GRIST_CANDY).weight(1).acceptFunction(SetCount.builder(RandomValueRange.of(1, 4))))));
+						.addEntry(TagLootEntry.getBuilder(MSTags.Items.GRIST_CANDY).weight(1).acceptFunction(SetCount.builder(RandomValueRange.of(1, 4))))));
 		
 		//Iguana
 		lootProcessor.accept(locationFor(LandTypes.FOREST, MSLootTables.CONSORT_FOOD_STOCK), LootTable.builder()

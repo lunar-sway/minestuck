@@ -8,7 +8,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.ITag;
+import net.minecraft.tags.TagCollectionManager;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 
@@ -44,7 +45,7 @@ public class CombinationRecipeBuilder
 		return new CombinationRecipeBuilder(output);
 	}
 	
-	public CombinationRecipeBuilder input(Tag<Item> tag)
+	public CombinationRecipeBuilder input(ITag<Item> tag)
 	{
 		return input(Ingredient.fromTag(tag));
 	}
@@ -64,10 +65,10 @@ public class CombinationRecipeBuilder
 		return this;
 	}
 	
-	public CombinationRecipeBuilder namedInput(Tag<Item> tag)
+	public CombinationRecipeBuilder namedInput(ITag<Item> tag)
 	{
 		input(Ingredient.fromTag(tag));
-		return namedSource(tag.getId().getPath());
+		return namedSource(TagCollectionManager.getManager().getItemTags().getValidatedIdFromTag(tag).getPath());
 	}
 	
 	public CombinationRecipeBuilder namedInput(IItemProvider item)

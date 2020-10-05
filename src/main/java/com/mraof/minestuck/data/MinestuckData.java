@@ -5,6 +5,7 @@ import com.mraof.minestuck.data.loot_table.MinestuckLootTableProvider;
 import com.mraof.minestuck.data.recipe.MinestuckCombinationsProvider;
 import com.mraof.minestuck.data.recipe.MinestuckGristCostsProvider;
 import com.mraof.minestuck.data.recipe.MinestuckRecipeProvider;
+import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -20,10 +21,11 @@ public class MinestuckData
 		
 		if(event.includeServer())
 		{
-			gen.addProvider(new MinestuckBlockTagsProvider(gen));
-			gen.addProvider(new MinestuckItemTagsProvider(gen));
-			gen.addProvider(new MinestuckFluidTagsProvider(gen));
-			gen.addProvider(new MinestuckEntityTypeTagsProvider(gen));
+			BlockTagsProvider blockTags = new MinestuckBlockTagsProvider(gen, null);
+			gen.addProvider(blockTags);
+			gen.addProvider(new MinestuckItemTagsProvider(gen, blockTags, null));
+			gen.addProvider(new MinestuckFluidTagsProvider(gen, null));
+			gen.addProvider(new MinestuckEntityTypeTagsProvider(gen, null));
 			
 			gen.addProvider(new MinestuckRecipeProvider(gen));
 			gen.addProvider(new MinestuckGristCostsProvider(gen));

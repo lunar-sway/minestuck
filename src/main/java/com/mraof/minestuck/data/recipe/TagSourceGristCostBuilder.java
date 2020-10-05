@@ -10,7 +10,8 @@ import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.ITag;
+import net.minecraft.tags.TagCollectionManager;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 
@@ -23,13 +24,14 @@ public class TagSourceGristCostBuilder
 	private final ResourceLocation defaultName;
 	private final Ingredient ingredient;
 	private final ImmutableMap.Builder<GristType, Long> costBuilder = ImmutableMap.builder();
-	private Tag<Item> source;
+	private ITag<Item> source;
 	private float multiplier = 1;
 	private Integer priority = null;
 	
-	public static TagSourceGristCostBuilder of(Tag<Item> tag)
+	public static TagSourceGristCostBuilder of(ITag<Item> tag)
 	{
-		return new TagSourceGristCostBuilder(new ResourceLocation(tag.getId().getNamespace(), tag.getId().getPath()+"_tag"), Ingredient.fromTag(tag));
+		ResourceLocation tagId = TagCollectionManager.getManager().getItemTags().getValidatedIdFromTag(tag);
+		return new TagSourceGristCostBuilder(new ResourceLocation(tagId.getNamespace(), tagId.getPath()+"_tag"), Ingredient.fromTag(tag));
 	}
 	
 	public static TagSourceGristCostBuilder of(IItemProvider item)
@@ -70,7 +72,7 @@ public class TagSourceGristCostBuilder
 		return this;
 	}
 	
-	public TagSourceGristCostBuilder source(Tag<Item> source)
+	public TagSourceGristCostBuilder source(ITag<Item> source)
 	{
 		this.source = source;
 		return this;
@@ -101,10 +103,10 @@ public class TagSourceGristCostBuilder
 	
 	public static class Result extends GristCostRecipeBuilder.Result
 	{
-		private final Tag<Item> source;
+		private final ITag<Item> source;
 		private final float multiplier;
 		
-		public Result(ResourceLocation id, Ingredient ingredient, Tag<Item> source, float multiplier, GristSet cost, Integer priority)
+		public Result(ResourceLocation id, Ingredient ingredient, ITag<Item> source, float multiplier, GristSet cost, Integer priority)
 		{
 			super(id, ingredient, cost, priority);
 			this.source = Objects.requireNonNull(source, "Source tag must not be null");
@@ -115,7 +117,8 @@ public class TagSourceGristCostBuilder
 		public void serialize(JsonObject jsonObject)
 		{
 			super.serialize(jsonObject);
-			jsonObject.addProperty("source", source.getId().toString());
+			ResourceLocation tagId = TagCollectionManager.getManager().getItemTags().getValidatedIdFromTag(source);
+			jsonObject.addProperty("source", tagId.toString());
 			if(multiplier != 1)
 				jsonObject.addProperty("multiplier", multiplier);
 		}

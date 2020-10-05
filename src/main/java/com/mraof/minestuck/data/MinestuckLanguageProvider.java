@@ -12,6 +12,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IItemProvider;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.data.LanguageProvider;
 
 import java.util.function.Supplier;
@@ -96,7 +97,7 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
 	}
 	protected void add(ItemGroup key, String value)
 	{
-		add(key.getTranslationKey(), value);
+		add(((TranslationTextComponent)key.getGroupName()).getKey(), value);
 	}
 	protected void addEntityTypeExtra(Supplier<EntityType<?>> key, String type, String value)
 	{
