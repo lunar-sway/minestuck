@@ -1,14 +1,13 @@
 package com.mraof.minestuck.world.gen.feature.structure.castle;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
+import net.minecraft.util.SharedSeedRandom;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeManager;
+import net.minecraft.world.biome.provider.BiomeProvider;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
-
-import java.util.Random;
-import java.util.function.Function;
 
 /**
  * @author mraof
@@ -16,32 +15,26 @@ import java.util.function.Function;
  */
 public class CastleStructure extends Structure<NoFeatureConfig>
 {
-	public CastleStructure(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactoryIn)
+	public CastleStructure(Codec<NoFeatureConfig> configCodec)
 	{
-		super(configFactoryIn);
+		super(configCodec);
 	}
 	
 	@Override
-	public boolean canBeGenerated(BiomeManager biomeManagerIn, ChunkGenerator<?> generator, Random rand, int chunkX, int chunkZ, Biome biomeIn)
+	protected boolean func_230363_a_(ChunkGenerator generator, BiomeProvider biomeProvider, long seed, SharedSeedRandom rand, int chunkX, int chunkZ, Biome biome, ChunkPos pos, NoFeatureConfig config)
 	{
         int var3 = chunkX >> 4;
         int var4 = chunkZ >> 4;
-        rand.setSeed((long)(var3 ^ var4 << 4) ^ generator.getSeed());
+        rand.setSeed((long)(var3 ^ var4 << 4) ^ seed);
         rand.nextInt();
         return chunkX == 1 && chunkZ == 0;//this.rand.nextInt(3) != 0 ? false : (par1 != (var3 << 4) + 4 + this.rand.nextInt(8) ? false : par2 == (var4 << 4) + 4 + this.rand.nextInt(8));
     }
 	
 	@Override
-	public IStartFactory getStartFactory()
+	public IStartFactory<NoFeatureConfig> getStartFactory()
 	{
         return StructureCastleStart::new;
     }
-	
-	@Override
-	public int getSize()
-	{
-		return 5;	//Dunno
-	}
 	
 	@Override
 	public String getStructureName()

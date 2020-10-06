@@ -1,9 +1,11 @@
 package com.mraof.minestuck.world.gen.feature.structure.castle;
 
 import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.util.registry.DynamicRegistries;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
+import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.structure.StructureStart;
@@ -15,15 +17,15 @@ import java.util.List;
  * @author mraof
  *
  */
-public class StructureCastleStart extends StructureStart
+public class StructureCastleStart extends StructureStart<NoFeatureConfig>
 {
-	public StructureCastleStart(Structure<?> structureIn, int chunkX, int chunkZ, MutableBoundingBox boundsIn, int referenceIn, long seed)
+	public StructureCastleStart(Structure<NoFeatureConfig> structureIn, int chunkX, int chunkZ, MutableBoundingBox boundsIn, int referenceIn, long seed)
 	{
 		super(structureIn, chunkX, chunkZ, boundsIn, referenceIn, seed);
 	}
 	
 	@Override
-	public void init(ChunkGenerator<?> generator, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn)
+	public void func_230364_a_(DynamicRegistries registries, ChunkGenerator generator, TemplateManager templateManager, int chunkX, int chunkZ, Biome biome, NoFeatureConfig config)
 	{
 		boolean isBlack = rand.nextBoolean();
 		
@@ -44,7 +46,7 @@ public class StructureCastleStart extends StructureStart
 		for(int xPos = bounds.minX; xPos <= bounds.maxX; xPos++)
 			for(int zPos = bounds.minZ; zPos <= bounds.maxZ; zPos++)
 			{
-				int posHeight = generator.func_222532_b(xPos, zPos, Heightmap.Type.OCEAN_FLOOR_WG);
+				int posHeight = generator.getHeight(xPos, zPos, Heightmap.Type.OCEAN_FLOOR_WG);
 				minY = Math.min(minY, posHeight);
 			}
 		

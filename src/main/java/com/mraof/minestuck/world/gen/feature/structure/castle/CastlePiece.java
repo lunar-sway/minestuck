@@ -5,7 +5,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
@@ -60,7 +60,7 @@ public abstract class CastlePiece extends StructurePiece
 	 * Discover the y coordinate that will serve as the ground level of the supplied BoundingBox. (A median of all the
 	 * levels in the BB's horizontal rectangle).
 	 */
-	protected int getAverageGroundLevel(IWorld par1World, MutableBoundingBox par2StructureBoundingBox)
+	protected int getAverageGroundLevel(ISeedReader par1World, MutableBoundingBox par2StructureBoundingBox)
 	{
 		int var3 = 0;
 		int var4 = 0;
@@ -90,7 +90,7 @@ public abstract class CastlePiece extends StructurePiece
 		}
 	}
 	
-	protected void fillWithAlternatingBlocks(IWorld world, MutableBoundingBox structureboundingbox, int x1, int y1, int z1, int x2, int y2, int z2, BlockState block1, BlockState block2, boolean b)
+	protected void fillWithAlternatingBlocks(ISeedReader world, MutableBoundingBox structureboundingbox, int x1, int y1, int z1, int x2, int y2, int z2, BlockState block1, BlockState block2, boolean b)
 	{
 		for (int y = y1; y <= y2; ++y)
 		{
@@ -112,7 +112,7 @@ public abstract class CastlePiece extends StructurePiece
 			}
 		}
 	}
-	protected int getAverageGroundLevel(IWorld world)
+	protected int getAverageGroundLevel(ISeedReader world)
 	{
 		return this.getAverageGroundLevel(world, this.boundingBox);
 	}
