@@ -6,7 +6,10 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.PushReaction;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootParameters;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
@@ -20,10 +23,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootParameters;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -86,10 +86,11 @@ public class CruxiteDowelBlock extends Block
 		return  ActionResultType.SUCCESS;
 	}
 	
+	@Nullable
 	@Override
-	public BlockState getStateForPlacement(BlockState state, Direction facing, BlockState state2, IWorld world, BlockPos pos1, BlockPos pos2, Hand hand)
+	public BlockState getStateForPlacement(BlockItemUseContext context)
 	{
-		return facing == Direction.UP ? state : Blocks.AIR.getDefaultState();
+		return context.getFace() == Direction.UP ? getDefaultState() : Blocks.AIR.getDefaultState();
 	}
 	
 	@Override
@@ -137,7 +138,7 @@ public class CruxiteDowelBlock extends Block
 		
 		
 		@Override
-		public String getName()
+		public String getString()
 		{
 			return this.name().toLowerCase();
 		}

@@ -221,6 +221,6 @@ public class RainbowSaplingBlock extends BushBlock implements IGrowable
 	{
 		if(!net.minecraftforge.event.ForgeEventFactory.saplingGrowTree(worldIn, rand, pos))
 			return;
-		tree.place(worldIn, worldIn.getChunkProvider().getChunkGenerator(), pos, state, rand);
+		tree.attemptGrowTree(worldIn, worldIn.getChunkProvider().getChunkGenerator(), pos, state, rand);
 	}
 }

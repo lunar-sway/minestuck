@@ -47,20 +47,21 @@ public class EndLeavesBlock extends FlammableLeavesBlock
 		return stateIn;
 	}
 	
-	protected BlockState updateDistance(BlockState state, IWorld world, BlockPos pos) {
+	protected BlockState updateDistance(BlockState state, IWorld world, BlockPos pos)
+	{
 		int i = 7;
 		
-		try (BlockPos.PooledMutable mutablePos = BlockPos.PooledMutable.retain())
+		BlockPos.Mutable mutablePos = new BlockPos.Mutable();
+		
+		for(Direction facing : Direction.values())
 		{
-			for(Direction facing : Direction.values())
-			{
-				mutablePos.setPos(pos).move(facing);
-				int axisDecrease = facing.getAxis() == Direction.Axis.X ? 2 : 1;
-				i = Math.min(i, getDistance(world.getBlockState(mutablePos)) + axisDecrease);
-				if(i == 1)
-					break;
-			}
+			mutablePos.setPos(pos).move(facing);
+			int axisDecrease = facing.getAxis() == Direction.Axis.X ? 2 : 1;
+			i = Math.min(i, getDistance(world.getBlockState(mutablePos)) + axisDecrease);
+			if(i == 1)
+				break;
 		}
+		
 		
 		return state.with(DISTANCE, i);
 	}

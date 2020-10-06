@@ -57,7 +57,7 @@ public class GlowingMushroomBlock extends BushBlock
 	@Override
 	public PlantType getPlantType(IBlockReader world, BlockPos pos)
 	{
-		return PlantType.Cave;
+		return PlantType.CAVE;
 	}
 	
 	public boolean canSpread(World world, BlockPos pos, BlockState state)

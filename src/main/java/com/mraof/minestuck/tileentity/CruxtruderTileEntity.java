@@ -10,6 +10,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.util.Constants;
@@ -75,7 +76,7 @@ public class CruxtruderTileEntity extends TileEntity	//TODO check if it is broke
 					if(MinestuckConfig.SERVER.cruxtruderIntake.get() && material == 0)
 					{
 						world.playEvent(Constants.WorldEvents.DISPENSER_FAIL_SOUND, pos, 0);
-						player.sendMessage(new TranslationTextComponent(EMPTY));
+						player.sendMessage(new TranslationTextComponent(EMPTY), Util.DUMMY_UUID);
 					} else
 					{
 						world.setBlockState(pos, MSBlocks.CRUXITE_DOWEL.getDefaultState().with(CruxiteDowelBlock.DOWEL_TYPE, CruxiteDowelBlock.Type.CRUXTRUDER));
@@ -91,15 +92,15 @@ public class CruxtruderTileEntity extends TileEntity	//TODO check if it is broke
 	}
 	
 	@Override
-	public void read(CompoundNBT compound)
+	public void read(BlockState state, CompoundNBT nbt)
 	{
-		super.read(compound);
+		super.read(state, nbt);
 		
-		if(compound.contains("color"))
-			color = compound.getInt("color");
-		if(compound.contains("broken"))
-			broken = compound.getBoolean("broken");
-		material = compound.getInt("material");
+		if(nbt.contains("color"))
+			color = nbt.getInt("color");
+		if(nbt.contains("broken"))
+			broken = nbt.getBoolean("broken");
+		material = nbt.getInt("material");
 	}
 	
 	@Override

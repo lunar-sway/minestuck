@@ -64,7 +64,7 @@ public class ReturnNodeBlock extends GateBlock
 			if(boundingBox == null || boundingBox.isVecInside(pos))
 			{
 				if(i == 3)
-					world.setBlockState(pos, MSBlocks.RETURN_NODE.getDefaultState().cycle(GateBlock.MAIN), Constants.BlockFlags.BLOCK_UPDATE);
+					world.setBlockState(pos, MSBlocks.RETURN_NODE.getDefaultState().with(GateBlock.MAIN, true), Constants.BlockFlags.BLOCK_UPDATE);
 				else world.setBlockState(pos, MSBlocks.RETURN_NODE.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
 			}
 		}

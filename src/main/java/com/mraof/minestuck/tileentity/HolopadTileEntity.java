@@ -69,7 +69,7 @@ public class HolopadTileEntity extends TileEntity implements ITickableTileEntity
 		BlockPos dropPos;
 		if(inBlock)
 			dropPos = pos;
-		else if(!Block.hasSolidSide(worldIn.getBlockState(pos.up()), worldIn, pos.up(), Direction.DOWN))
+		else if(!Block.hasEnoughSolidSide(worldIn, pos.up(), Direction.DOWN))
 			dropPos = pos.up();
 		else dropPos = pos;
 		
@@ -111,11 +111,11 @@ public class HolopadTileEntity extends TileEntity implements ITickableTileEntity
 	}
 	
 	@Override
-	public void read(CompoundNBT compound)
+	public void read(BlockState state, CompoundNBT nbt)
 	{
-		super.read(compound);
+		super.read(state, nbt);
 		//broken = tagCompound.getBoolean("broken");
-		setCard(ItemStack.read(compound.getCompound("card")));
+		setCard(ItemStack.read(nbt.getCompound("card")));
 	}
 	
 	@Override
@@ -146,7 +146,7 @@ public class HolopadTileEntity extends TileEntity implements ITickableTileEntity
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
 	{
-		handleUpdateTag(pkt.getNbtCompound());
+		handleUpdateTag(getBlockState(), pkt.getNbtCompound());
 	}
 	
 	
@@ -162,7 +162,7 @@ public class HolopadTileEntity extends TileEntity implements ITickableTileEntity
 		{
 			BlockState state = world.getBlockState(pos);
 			boolean hasCard = !card.isEmpty();
-			if(state.has(HolopadBlock.HAS_CARD) && hasCard != state.get(HolopadBlock.HAS_CARD))
+			if(state.hasProperty(HolopadBlock.HAS_CARD) && hasCard != state.get(HolopadBlock.HAS_CARD))
 				world.setBlockState(pos, state.with(HolopadBlock.HAS_CARD, hasCard), Constants.BlockFlags.BLOCK_UPDATE);
 		}
 	}

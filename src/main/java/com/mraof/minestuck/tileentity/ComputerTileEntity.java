@@ -39,12 +39,12 @@ public class ComputerTileEntity extends TileEntity implements ISburbComputer
 	public int programSelected = -1;
 	
 	@Override
-	public void read(CompoundNBT compound)
+	public void read(BlockState state, CompoundNBT nbt)
 	{
-		super.read(compound);
-		if (compound.contains("programs"))
+		super.read(state, nbt);
+		if (nbt.contains("programs"))
 		{
-			CompoundNBT programs = compound.getCompound("programs");
+			CompoundNBT programs = nbt.getCompound("programs");
 			for (Object name : programs.keySet())
 			{
 				installedPrograms.put(programs.getInt((String)name), true);
@@ -54,24 +54,13 @@ public class ComputerTileEntity extends TileEntity implements ISburbComputer
 		latestmessage.clear();
 		for(Entry<Integer,Boolean> e : installedPrograms.entrySet())
 			if(e.getValue())
-				latestmessage.put(e.getKey(), compound.getString("text" + e.getKey()));
+				latestmessage.put(e.getKey(), nbt.getString("text" + e.getKey()));
 
-		programData = compound.getCompound("programData");
-
-		if(!compound.contains("programData"))
-		{
-			CompoundNBT nbt = new CompoundNBT();
-			nbt.putBoolean("connectedToServer", compound.getBoolean("connectServer"));
-			nbt.putBoolean("isResuming", compound.getBoolean("resumeClient"));
-			programData.put("program_0", nbt);
-			nbt = new CompoundNBT();
-			nbt.putString("connectedClient", compound.getString("connectClient"));
-			nbt.putBoolean("isOpen", compound.getBoolean("serverOpen"));
-			programData.put("program_1", nbt);
-		}
-		if(compound.contains("ownerId"))
-			ownerId = compound.getInt("ownerId");
-		else this.owner = IdentifierHandler.load(compound, "owner");
+		programData = nbt.getCompound("programData");
+		
+		if(nbt.contains("ownerId"))
+			ownerId = nbt.getInt("ownerId");
+		else this.owner = IdentifierHandler.load(nbt, "owner");
 		if(gui != null)
 			gui.updateGui();
 	}
@@ -127,7 +116,7 @@ public class ComputerTileEntity extends TileEntity implements ISburbComputer
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
 	{
-		this.read(pkt.getNbtCompound());
+		this.read(getBlockState(), pkt.getNbtCompound());
 	}
 
 	public boolean hasProgram(int id) 

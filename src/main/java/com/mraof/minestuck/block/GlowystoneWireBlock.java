@@ -87,9 +87,9 @@ public class GlowystoneWireBlock extends Block
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context)
 	{
-		IBlockReader iblockreader = context.getWorld();
+		IWorld world = context.getWorld();
 		BlockPos blockpos = context.getPos();
-		return this.getDefaultState().with(WEST, this.getSide(iblockreader, blockpos, Direction.WEST)).with(EAST, this.getSide(iblockreader, blockpos, Direction.EAST)).with(NORTH, this.getSide(iblockreader, blockpos, Direction.NORTH)).with(SOUTH, this.getSide(iblockreader, blockpos, Direction.SOUTH));
+		return this.getDefaultState().with(WEST, this.getSide(world, blockpos, Direction.WEST)).with(EAST, this.getSide(world, blockpos, Direction.EAST)).with(NORTH, this.getSide(world, blockpos, Direction.NORTH)).with(SOUTH, this.getSide(world, blockpos, Direction.SOUTH));
 	}
 	
 	
@@ -105,14 +105,14 @@ public class GlowystoneWireBlock extends Block
 		}
 	}
 	
-	private RedstoneSide getSide(IBlockReader worldIn, BlockPos pos, Direction face)
+	private RedstoneSide getSide(IWorldReader worldIn, BlockPos pos, Direction face)
 	{
 		BlockPos blockpos = pos.offset(face);
 		BlockState blockstate = worldIn.getBlockState(blockpos);
 		BlockPos blockpos1 = pos.up();
 		BlockState blockstate1 = worldIn.getBlockState(blockpos1);
 		if (!blockstate1.isNormalCube(worldIn, blockpos1)) {
-			boolean flag = Block.hasSolidSide(blockstate, worldIn, blockpos, Direction.UP);
+			boolean flag = Block.hasEnoughSolidSide(worldIn, blockpos, Direction.UP);
 			if (flag && canConnectTo(worldIn.getBlockState(blockpos.up()))) {
 				if (isOpaque(blockstate.getCollisionShape(worldIn, blockpos))) {
 					return RedstoneSide.UP;
@@ -130,7 +130,7 @@ public class GlowystoneWireBlock extends Block
 	{
 		BlockPos blockpos = pos.down();
 		BlockState blockstate = worldIn.getBlockState(blockpos);
-		return Block.hasSolidSide(blockstate, worldIn, blockpos, Direction.UP);
+		return Block.hasEnoughSolidSide(worldIn, blockpos, Direction.UP);
 	}
 	
 	private BlockState updateSurroundingGlowystone(World worldIn, BlockPos pos, BlockState state)

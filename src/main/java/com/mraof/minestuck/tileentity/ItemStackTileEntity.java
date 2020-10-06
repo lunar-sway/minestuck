@@ -44,10 +44,10 @@ public class ItemStackTileEntity extends TileEntity implements IColored
 	}
 	
 	@Override
-	public void read(CompoundNBT compound)
+	public void read(BlockState state, CompoundNBT nbt)
 	{
-		super.read(compound);
-		stack = ItemStack.read(compound.getCompound("stack"));
+		super.read(state, nbt);
+		stack = ItemStack.read(nbt.getCompound("stack"));
 	}
 	
 	@Override
@@ -66,8 +66,9 @@ public class ItemStackTileEntity extends TileEntity implements IColored
 		return nbt;
 	}
 	
+	
 	@Override
-	public void handleUpdateTag(CompoundNBT tag)
+	public void handleUpdateTag(BlockState state, CompoundNBT tag)
 	{
 		stack = ItemStack.read(tag.getCompound("stack"));
 	}
@@ -82,7 +83,7 @@ public class ItemStackTileEntity extends TileEntity implements IColored
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
 	{
-		handleUpdateTag(pkt.getNbtCompound());
+		handleUpdateTag(getBlockState(), pkt.getNbtCompound());
 		if(world != null)
 		{
 			BlockState state = world.getBlockState(pos);

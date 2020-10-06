@@ -58,7 +58,7 @@ public class PunchDesignixTileEntity extends TileEntity
 		{
 			BlockState state = world.getBlockState(pos);
 			boolean hasCard = !card.isEmpty();
-			if(state.has(PunchDesignixBlock.Slot.HAS_CARD) && hasCard != state.get(PunchDesignixBlock.Slot.HAS_CARD))
+			if(state.hasProperty(PunchDesignixBlock.Slot.HAS_CARD) && hasCard != state.get(PunchDesignixBlock.Slot.HAS_CARD))
 				world.setBlockState(pos, state.with(PunchDesignixBlock.Slot.HAS_CARD, hasCard), Constants.BlockFlags.BLOCK_UPDATE);
 		}
 	}
@@ -160,9 +160,9 @@ public class PunchDesignixTileEntity extends TileEntity
 		BlockPos dropPos;
 		if (inBlock)
 			dropPos = this.pos;
-		else if (!Block.hasSolidSide(world.getBlockState(this.pos.offset(direction)), world, this.pos.offset(direction), direction.getOpposite()))
+		else if (!Block.hasEnoughSolidSide(world, this.pos.offset(direction), direction.getOpposite()))
 			dropPos = this.pos.offset(direction);
-		else if (!Block.hasSolidSide(world.getBlockState(this.pos.up()), world, this.pos.up(), Direction.DOWN))
+		else if (!Block.hasEnoughSolidSide(world, this.pos.up(), Direction.DOWN))
 			dropPos = this.pos.up();
 		else dropPos = this.pos;
 		
@@ -171,11 +171,11 @@ public class PunchDesignixTileEntity extends TileEntity
 	}
 	
 	@Override
-	public void read(CompoundNBT compound)
+	public void read(BlockState state, CompoundNBT nbt)
 	{
-		super.read(compound);
-		broken = compound.getBoolean("broken");
-		setCard(ItemStack.read(compound.getCompound("card")));
+		super.read(state, nbt);
+		broken = nbt.getBoolean("broken");
+		setCard(ItemStack.read(nbt.getCompound("card")));
 	}
 	
 	@Override

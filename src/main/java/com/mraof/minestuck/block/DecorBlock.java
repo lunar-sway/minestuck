@@ -34,7 +34,7 @@ public class DecorBlock extends Block
 	@SuppressWarnings("deprecation")
 	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos)
 	{
-        return Block.hasSolidSide(worldIn.getBlockState(pos.down()), worldIn, pos.down(), Direction.UP);
+        return Block.hasEnoughSolidSide(worldIn, pos.down(), Direction.UP);
     }
 	
 	@Nullable

@@ -3,7 +3,6 @@ package com.mraof.minestuck.block.plant;
 import com.mraof.minestuck.block.MSProperties;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.material.MaterialColor;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
@@ -13,15 +12,15 @@ public class DoubleLogBlock extends FlammableLogBlock
 {
 	public static final EnumProperty<Direction.Axis> AXIS_2 = MSProperties.AXIS_2;
 	
-	public DoubleLogBlock(MaterialColor axisColor, Properties properties)
+	public DoubleLogBlock(Properties properties)
 	{
-		super(axisColor, properties);
+		super(properties);
 		setDefaultState(getStateContainer().getBaseState().with(AXIS, Direction.Axis.Y).with(AXIS_2, Direction.Axis.Y));
 	}
 	
-	public DoubleLogBlock(MaterialColor axisColor, int flammability, int encouragement, Properties properties)
+	public DoubleLogBlock(int flammability, int encouragement, Properties properties)
 	{
-		super(axisColor, flammability, encouragement, properties);
+		super(flammability, encouragement, properties);
 		setDefaultState(getStateContainer().getBaseState().with(AXIS, Direction.Axis.Y).with(AXIS_2, Direction.Axis.Y));
 	}
 	

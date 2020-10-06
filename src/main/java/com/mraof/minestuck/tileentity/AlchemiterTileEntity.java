@@ -50,7 +50,7 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 			if(world != null)
 			{
 				BlockState state = world.getBlockState(pos);
-				if(state.has(AlchemiterBlock.Pad.DOWEL))	//If not, then the machine has likely been destroyed; don't bother doing anything about it
+				if(state.hasProperty(AlchemiterBlock.Pad.DOWEL))	//If not, then the machine has likely been destroyed; don't bother doing anything about it
 				{
 					state = state.with(AlchemiterBlock.Pad.DOWEL, EnumDowelType.getForDowel(newDowel));
 					world.setBlockState(pos, state, Constants.BlockFlags.BLOCK_UPDATE);
@@ -121,7 +121,7 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 			return;
 		}
 		BlockPos dropPos = direction == null ? this.pos : this.pos.offset(direction);
-		if(direction != null && Block.hasSolidSide(world.getBlockState(this.pos.offset(direction)), world, pos.offset(direction), direction.getOpposite()))
+		if(direction != null && Block.hasEnoughSolidSide(world, pos.offset(direction), direction.getOpposite()))
 			dropPos = this.pos;
 		
 		InventoryHelper.spawnItemStack(world, dropPos.getX(), dropPos.getY(), dropPos.getZ(), dowel);
@@ -154,11 +154,11 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 	}
 	
 	@Override
-	public void read(CompoundNBT compound)
+	public void read(BlockState state, CompoundNBT nbt)
 	{
-		super.read(compound);
+		super.read(state, nbt);
 		
-		wildcardGrist = GristType.read(compound, "gristType");
+		wildcardGrist = GristType.read(nbt, "gristType");
 		
 		/*
 		this.upgraded = compound.getBoolean("upgraded");
@@ -172,11 +172,11 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 		}
 		*/
 		
-		broken = compound.getBoolean("broken");
+		broken = nbt.getBoolean("broken");
 		
 		ItemStack oldDowel = dowel;
-		if(compound.contains("dowel"))
-			dowel = ItemStack.read(compound.getCompound("dowel"));
+		if(nbt.contains("dowel"))
+			dowel = ItemStack.read(nbt.getCompound("dowel"));
 		
 		//This a slight hack to force a rerender (since it at the time of writing normally happens before we get the update packet). This should not be done normally
 		if(world != null && world.isRemote && !ItemStack.areItemStacksEqual(oldDowel, dowel))
@@ -213,7 +213,7 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
 	{
-		handleUpdateTag(pkt.getNbtCompound());
+		handleUpdateTag(getBlockState(), pkt.getNbtCompound());
 	}
 	
 	public void onRightClick(World worldIn, PlayerEntity playerIn, BlockState state, Direction side)

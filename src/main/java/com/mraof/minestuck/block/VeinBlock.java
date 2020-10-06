@@ -20,7 +20,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class VeinBlock extends DirectionalBlock
+public class VeinBlock extends DirectionalBlock	//TODO duplicate code between this and VeinCornerBlock. Do something about that
 {
 
 	protected VeinBlock(Properties properties)
@@ -33,7 +33,8 @@ public class VeinBlock extends DirectionalBlock
 	public void harvestBlock(World world, PlayerEntity player, BlockPos pos, BlockState state, @Nullable TileEntity tileEntity, ItemStack stack) {
 		super.harvestBlock(world, player, pos, state, tileEntity, stack);
 		if (EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, stack) == 0) {
-			if (world.dimension.doesWaterVaporize()) {
+			if (world.getDimensionType().isUltrawarm())
+			{
 				world.removeBlock(pos, false);
 				return;
 			}

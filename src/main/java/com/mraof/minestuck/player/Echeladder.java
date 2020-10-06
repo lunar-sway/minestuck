@@ -9,10 +9,9 @@ import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.AttributeMap;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -23,7 +22,6 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import java.util.Set;
 import java.util.UUID;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -174,22 +172,22 @@ public class Echeladder
 		int healthBonus = healthBoost(rung);
 		double damageBonus = attackBonus(rung);
 		
-		updateAttribute(player.getAttribute(SharedMonsterAttributes.MAX_HEALTH), new AttributeModifier(echeladderHealthBoostModifierUUID, "Echeladder Health Boost", healthBonus, AttributeModifier.Operation.ADDITION));	//If this isn't saved, your health goes to 10 hearts (if it was higher before) when loading the save file.
-		updateAttribute(player.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE), new AttributeModifier(echeladderDamageBoostModifierUUID, "Echeladder Damage Boost", damageBonus, AttributeModifier.Operation.MULTIPLY_BASE).setSaved(false));
+		updateAttribute(player.getAttribute(Attributes.MAX_HEALTH), new AttributeModifier(echeladderHealthBoostModifierUUID, "Echeladder Health Boost", healthBonus, AttributeModifier.Operation.ADDITION));	//If this isn't saved, your health goes to 10 hearts (if it was higher before) when loading the save file.
+		updateAttribute(player.getAttribute(Attributes.ATTACK_DAMAGE), new AttributeModifier(echeladderDamageBoostModifierUUID, "Echeladder Damage Boost", damageBonus, AttributeModifier.Operation.MULTIPLY_BASE));
 	}
 	
-	public void updateAttribute(IAttributeInstance attribute, AttributeModifier modifier)
+	public void updateAttribute(ModifiableAttributeInstance attribute, AttributeModifier modifier)
 	{
 		if(attribute.hasModifier(modifier))
 			attribute.removeModifier(attribute.getModifier(modifier.getID()));
-		attribute.applyModifier(modifier);
+		attribute.applyPersistentModifier(modifier);
 	}
 	
 	public void resendAttributes(PlayerEntity player)
 	{
-		Set<IAttributeInstance> attributesToSend = ((AttributeMap) player.getAttributes()).getDirtyInstances();
-		
-		attributesToSend.add(player.getAttribute(SharedMonsterAttributes.MAX_HEALTH));
+		/*Set<IAttributeInstance> attributesToSend = ((AttributeMap) player.getAttributes()).getDirtyInstances();
+		TODO is this still needed, and if so, how?
+		attributesToSend.add(player.getAttribute(SharedMonsterAttributes.MAX_HEALTH));*/
 	}
 	
 	public void saveEcheladder(CompoundNBT nbt)

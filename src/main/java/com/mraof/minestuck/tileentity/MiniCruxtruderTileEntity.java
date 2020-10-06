@@ -4,6 +4,7 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.inventory.MiniCruxtruderContainer;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.ColorHandler;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -64,10 +65,10 @@ public class MiniCruxtruderTileEntity extends MachineProcessTileEntity implement
 	}
 	
 	@Override
-	public void read(CompoundNBT compound)
+	public void read(BlockState state, CompoundNBT nbt)
 	{
-		super.read(compound);
-		this.color = compound.getInt("color");
+		super.read(state, nbt);
+		this.color = nbt.getInt("color");
 	}
 	
 	@Override

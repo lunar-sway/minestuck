@@ -199,7 +199,7 @@ public class ComputerBlock extends MachineBlock
 		BROKEN;
 		
 		@Override
-		public String getName()
+		public String getString()
 		{
 			return name().toLowerCase();
 		}

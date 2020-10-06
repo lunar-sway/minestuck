@@ -43,7 +43,7 @@ public class SkaiaPortalBlock extends ContainerBlock
 	@SuppressWarnings("deprecation")
 	public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn)
 	{
-		if (!entityIn.isPassenger() && !entityIn.isBeingRidden() && !worldIn.isRemote && entityIn.timeUntilPortal == 0)
+		if (!entityIn.isPassenger() && !entityIn.isBeingRidden() && !worldIn.isRemote && !entityIn.func_242280_ah())	//checkPortalTime
 		{
 			TileEntity tile = worldIn.getTileEntity(pos);
 			if(tile instanceof  SkaiaPortalTileEntity)

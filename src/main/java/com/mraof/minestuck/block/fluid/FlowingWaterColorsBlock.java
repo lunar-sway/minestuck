@@ -6,7 +6,7 @@ import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IWorldReader;
 
 import java.util.function.Supplier;
@@ -16,7 +16,7 @@ import java.util.function.Supplier;
  */
 public class FlowingWaterColorsBlock extends FlowingFluidBlock implements IMSFog
 {
-	private float fogDensity;
+	private final float fogDensity;
 	
 	public FlowingWaterColorsBlock(Supplier<FlowingFluid> fluid, Properties properties)
 	{
@@ -30,14 +30,14 @@ public class FlowingWaterColorsBlock extends FlowingFluidBlock implements IMSFog
 	}
 	
 	@Override
-	public Vec3d getFogColor(BlockState state, IWorldReader world, BlockPos pos, Entity entity, Vec3d originalColor, float partialTicks)
+	public Vector3d getFogColor(BlockState state, IWorldReader world, BlockPos pos, Entity entity, Vector3d originalColor, float partialTicks)
 	{
-		Vec3d newColor = new Vec3d(0.0, 20.0, 30.0);
+		Vector3d newColor = new Vector3d(0.0, 20.0, 30.0);
 		newColor = newColor.rotateYaw((float) (entity.getPosX() / 2.0));
 		newColor = newColor.rotatePitch((float) (entity.getPosZ() / 2.0));
 		newColor = newColor.rotateYaw((float) (entity.getPosY()));
 		newColor = newColor.normalize();
-		newColor = new Vec3d(newColor.x % 1.0, newColor.y % 1.0, newColor.z % 1.0);
+		newColor = new Vector3d(newColor.x % 1.0, newColor.y % 1.0, newColor.z % 1.0);
 		
 		return newColor;
 	}
@@ -49,7 +49,7 @@ public class FlowingWaterColorsBlock extends FlowingFluidBlock implements IMSFog
 	}
 	
 	@Override
-	public Vec3d getMSFogColor(BlockState state, IWorldReader world, BlockPos pos, Entity entity, Vec3d originalColor, float partialTicks)
+	public Vector3d getMSFogColor(BlockState state, IWorldReader world, BlockPos pos, Entity entity, Vector3d originalColor, float partialTicks)
 	{
 		return this.getFogColor(state, world, pos, entity, originalColor, partialTicks);
 	}

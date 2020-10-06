@@ -1,5 +1,6 @@
 package com.mraof.minestuck.tileentity;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.inventory.IClearable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -14,16 +15,18 @@ public class CassettePlayerTileEntity extends TileEntity implements IClearable
 		super(MSTileEntityTypes.CASSETTE_PLAYER.get());
 	}
 	
-	public void read(CompoundNBT compound)
+	@Override
+	public void read(BlockState state, CompoundNBT nbt)
 	{
-		super.read(compound);
-		if(compound.contains("CassetteItem", 10))
+		super.read(state, nbt);
+		if(nbt.contains("CassetteItem", 10))
 		{
-			this.setCassette(ItemStack.read(compound.getCompound("CassetteItem")));
+			this.setCassette(ItemStack.read(nbt.getCompound("CassetteItem")));
 		}
 		
 	}
 	
+	@Override
 	public CompoundNBT write(CompoundNBT compound)
 	{
 		super.write(compound);
@@ -46,6 +49,7 @@ public class CassettePlayerTileEntity extends TileEntity implements IClearable
 		this.markDirty();
 	}
 	
+	@Override
 	public void clear()
 	{
 		this.setCassette(ItemStack.EMPTY);

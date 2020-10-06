@@ -16,7 +16,6 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -176,10 +175,10 @@ public class GateBlock extends Block
 	}
 	
 	@Override
-	public float getExplosionResistance(BlockState state, IWorldReader world, BlockPos pos, @Nullable Entity exploder, Explosion explosion)
+	public float getExplosionResistance(BlockState state, IBlockReader world, BlockPos pos, Explosion explosion)
 	{
 		if(this instanceof ReturnNodeBlock || MinestuckConfig.SERVER.canBreakGates.get())
-			return super.getExplosionResistance(state, world, pos, exploder, explosion);
+			return super.getExplosionResistance(state, world, pos, explosion);
 		else return 3600000.0F;
 	}
 }

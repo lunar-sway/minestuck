@@ -6,6 +6,7 @@ import com.mraof.minestuck.inventory.MiniAlchemiterContainer;
 import com.mraof.minestuck.item.crafting.alchemy.*;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -140,14 +141,14 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 	}
 	
 	@Override
-	public void read(CompoundNBT compound)
+	public void read(BlockState state, CompoundNBT nbt)
 	{
-		super.read(compound);
+		super.read(state, nbt);
 		
-		this.wildcardGrist = GristType.read(compound, "gristType");
+		this.wildcardGrist = GristType.read(nbt, "gristType");
 		
-		if(IdentifierHandler.hasIdentifier(compound, "owner"))
-			owner = IdentifierHandler.load(compound, "owner");
+		if(IdentifierHandler.hasIdentifier(nbt, "owner"))
+			owner = IdentifierHandler.load(nbt, "owner");
 	}
 	
 	@Override

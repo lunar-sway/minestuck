@@ -4,13 +4,14 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.GateHandler;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
 
 public class GateTileEntity extends OnCollisionTeleporterTileEntity<ServerPlayerEntity>
@@ -40,12 +41,12 @@ public class GateTileEntity extends OnCollisionTeleporterTileEntity<ServerPlayer
 	{
 		if(getBlockState().getBlock() == MSBlocks.RETURN_NODE)
 		{
-			BlockPos pos = world.getDimension().findSpawn(0, 0, false);
+			BlockPos pos = ((ServerWorld)world).getSpawnPoint();
 			if(pos == null)
 				return;
 			Teleport.teleportEntity(player, (ServerWorld) world, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
-			player.timeUntilPortal = player.getPortalCooldown();
-			player.setMotion(Vec3d.ZERO);
+			player.func_242279_ag();	//setPortalCooldown
+			player.setMotion(Vector3d.ZERO);
 			player.fallDistance = 0;
 		} else
 		{
@@ -60,11 +61,11 @@ public class GateTileEntity extends OnCollisionTeleporterTileEntity<ServerPlayer
 	}
 	
 	@Override
-	public void read(CompoundNBT compound)
+	public void read(BlockState state, CompoundNBT nbt)
 	{
-		super.read(compound);
-		if(compound.contains("gate_type"))
-			this.gateType = GateHandler.Type.fromString(compound.getString("gate_type"));
+		super.read(state, nbt);
+		if(nbt.contains("gate_type"))
+			this.gateType = GateHandler.Type.fromString(nbt.getString("gate_type"));
 	}
 	
 	@Override
@@ -91,7 +92,7 @@ public class GateTileEntity extends OnCollisionTeleporterTileEntity<ServerPlayer
 	}
 	
 	@Override
-	public void handleUpdateTag(CompoundNBT tag)
+	public void handleUpdateTag(BlockState state, CompoundNBT tag)
 	{
 		this.color = tag.getInt("color");
 	}
@@ -99,7 +100,7 @@ public class GateTileEntity extends OnCollisionTeleporterTileEntity<ServerPlayer
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
 	{
-		handleUpdateTag(pkt.getNbtCompound());
+		handleUpdateTag(getBlockState(), pkt.getNbtCompound());
 	}
 	
 	public boolean isGate()

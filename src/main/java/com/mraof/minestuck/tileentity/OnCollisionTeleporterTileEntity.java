@@ -50,8 +50,8 @@ public abstract class OnCollisionTeleporterTileEntity<E extends Entity> extends 
 			List<E> entities = world.getEntitiesWithinAABB(entityClass, boundingBox, entity -> canTeleport(entity) && shouldTeleport(entity));
 			for(E entity : entities)
 			{
-				if(entity.timeUntilPortal != 0)
-					entity.timeUntilPortal = entity.getPortalCooldown();
+				if(entity.func_242280_ah())	//portalTimeNotZero
+					entity.func_242279_ag(); //setPortalCooldown
 				else teleport(entity);
 			}
 			hasCollision = false;	//TODO is this correct behavior if entity.timeUntilPortal != 0?

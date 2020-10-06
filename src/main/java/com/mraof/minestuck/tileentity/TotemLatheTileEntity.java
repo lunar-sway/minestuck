@@ -280,7 +280,7 @@ public class TotemLatheTileEntity extends TileEntity
 		BlockPos dropPos;
 		if(inBlock)
 			dropPos = pos;
-		else if(!Block.hasSolidSide(world.getBlockState(pos.offset(direction)), world, pos.offset(direction), direction.getOpposite()))
+		else if(!Block.hasEnoughSolidSide(world, pos.offset(direction), direction.getOpposite()))
 			dropPos = pos.offset(direction);
 		else dropPos = pos;
 		
@@ -288,12 +288,12 @@ public class TotemLatheTileEntity extends TileEntity
 	}
 	
 	@Override
-	public void read(CompoundNBT compound)
+	public void read(BlockState state, CompoundNBT nbt)
 	{
-		super.read(compound);
-		broken = compound.getBoolean("broken");
-		card1 = ItemStack.read(compound.getCompound("card1"));
-		card2 = ItemStack.read(compound.getCompound("card2"));
+		super.read(state, nbt);
+		broken = nbt.getBoolean("broken");
+		card1 = ItemStack.read(nbt.getCompound("card1"));
+		card2 = ItemStack.read(nbt.getCompound("card2"));
 		if(card1.isEmpty() && !card2.isEmpty())
 		{
 			card1 = card2;

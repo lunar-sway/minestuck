@@ -1,10 +1,11 @@
 package com.mraof.minestuck.tileentity;
 
-import com.mojang.datafixers.Dynamic;
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTDynamicOps;
@@ -13,15 +14,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.GlobalPos;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.util.Constants;
 
 public class SkaiaPortalTileEntity extends TileEntity //implements ITeleporter
 {
-	private GlobalPos destination = GlobalPos.of(MSDimensions.skaiaDimension, new BlockPos(0, -1, 0));
+	private GlobalPos destination = GlobalPos.getPosition(MSDimensions.skaiaDimension, new BlockPos(0, -1, 0));
 	
 	public SkaiaPortalTileEntity()
 	{
@@ -32,23 +31,24 @@ public class SkaiaPortalTileEntity extends TileEntity //implements ITeleporter
 	public void setWorldAndPos(World worldIn, BlockPos pos)
 	{
 		super.setWorldAndPos(worldIn, pos);
-		if(!worldIn.isRemote && destination.getDimension() == worldIn.getDimension().getType())
-			destination = GlobalPos.of(worldIn.getDimension().getType() == MSDimensions.skaiaDimension ? DimensionType.OVERWORLD : MSDimensions.skaiaDimension, destination.getPos());
+		if(!worldIn.isRemote && destination.getDimension() == worldIn.getDimensionKey())
+			destination = GlobalPos.getPosition(worldIn.getDimensionKey() == MSDimensions.skaiaDimension ? World.OVERWORLD : MSDimensions.skaiaDimension, destination.getPos());
 	}
 	
 	@Override
-	public void read(CompoundNBT compound)
+	public void read(BlockState state, CompoundNBT nbt)
 	{
-		super.read(compound);
-		if(compound.contains("dest", Constants.NBT.TAG_COMPOUND))
-			destination = GlobalPos.deserialize(new Dynamic<>(NBTDynamicOps.INSTANCE, compound.getCompound("dest")));
+		super.read(state, nbt);
+		if(nbt.contains("dest", Constants.NBT.TAG_COMPOUND))
+			destination = GlobalPos.CODEC.parse(NBTDynamicOps.INSTANCE, nbt.get("dest")).resultOrPartial(Debug::error).orElse(destination);
 	}
 	
 	@Override
 	public CompoundNBT write(CompoundNBT compound)
 	{
 		super.write(compound);
-		compound.put("dest", destination.serialize(NBTDynamicOps.INSTANCE));
+		GlobalPos.CODEC.encodeStart(NBTDynamicOps.INSTANCE, destination).resultOrPartial(Debug::error)
+				.ifPresent(tag -> compound.put("dest", tag));
 		
 		return compound;
 	}
@@ -59,23 +59,23 @@ public class SkaiaPortalTileEntity extends TileEntity //implements ITeleporter
 		if(server == null || world == null)
 			return;
 		
-		if(destination.getDimension() != this.world.getDimension().getType())
+		if(destination.getDimension() != this.world.getDimensionKey())
 		{
 			if(destination.getPos().getY() < 0)
 			{
-				ServerWorld world = DimensionManager.getWorld(entity.getServer(), destination.getDimension(), true, true);
+				ServerWorld world = server.getWorld(destination.getDimension());
 				if(world == null)
 					return;
 				//TODO gets world height on a chunk that doesn't exist
 				// However doesn't matter a lot since the position isn't used yet
-				destination = GlobalPos.of(destination.getDimension(), world.getHeight(Heightmap.Type.WORLD_SURFACE, new BlockPos(entity)).up(5));
+				destination = GlobalPos.getPosition(destination.getDimension(), world.getHeight(Heightmap.Type.WORLD_SURFACE, entity.getPosition()).up(5));
 			}
-			entity = Teleport.teleportEntity(entity, DimensionManager.getWorld(entity.getServer(), destination.getDimension(), true, true), pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+			entity = Teleport.teleportEntity(entity, server.getWorld(destination.getDimension()), pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
 			if(entity != null)
 				placeDestPlatform(entity.world);
 		}
 		if(entity != null)
-			entity.timeUntilPortal = entity.getPortalCooldown();
+				entity.func_242279_ag();	//setPortalCooldown
 	}
 	
 	private void placeDestPlatform(World world)

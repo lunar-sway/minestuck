@@ -11,7 +11,9 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.util.INameable;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.GlobalPos;
@@ -19,7 +21,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
@@ -50,8 +51,8 @@ public class TransportalizerTileEntity extends OnCollisionTeleporterTileEntity<E
 		if(!world.isRemote && active)
 		{
 			if(id.isEmpty())
-				id = TransportalizerSavedData.get(world).findNewId(world.rand, GlobalPos.of(world.dimension.getType(), pos));
-			else active = TransportalizerSavedData.get(world).set(id, GlobalPos.of(world.dimension.getType(), pos));
+				id = TransportalizerSavedData.get(world).findNewId(world.rand, GlobalPos.getPosition(world.getDimensionKey(), pos));
+			else active = TransportalizerSavedData.get(world).set(id, GlobalPos.getPosition(world.getDimensionKey(), pos));
 		}
 	}
 	
@@ -61,7 +62,7 @@ public class TransportalizerTileEntity extends OnCollisionTeleporterTileEntity<E
 		super.remove();
 		if(!world.isRemote && active)
 		{
-			TransportalizerSavedData.get(world).remove(id, GlobalPos.of(world.dimension.getType(), pos));
+			TransportalizerSavedData.get(world).remove(id, GlobalPos.getPosition(world.getDimensionKey(), pos));
 		}
 	}
 	
@@ -96,9 +97,9 @@ public class TransportalizerTileEntity extends OnCollisionTeleporterTileEntity<E
 		GlobalPos location = TransportalizerSavedData.get(world).get(this.destId);
 		if(!enabled)
 		{
-			entity.timeUntilPortal = entity.getPortalCooldown();
+			entity.func_242279_ag(); //setPortalCooldown
 			if(entity instanceof ServerPlayerEntity)
-				entity.sendMessage(new TranslationTextComponent(DISABLED));
+				entity.sendMessage(new TranslationTextComponent(DISABLED), Util.DUMMY_UUID);
 			return;
 		}
 		if(location != null && location.getPos().getY() != -1)
@@ -115,40 +116,40 @@ public class TransportalizerTileEntity extends OnCollisionTeleporterTileEntity<E
 			
 			if(!destTransportalizer.getEnabled()) { return; } // Fail silently to make it look as though the player entered an ID that doesn't map to a transportalizer.
 			
-			if(isDimensionForbidden(world.getDimension().getType()))
+			if(isDimensionForbidden(world.getDimensionKey()))
 			{
-				entity.timeUntilPortal = entity.getPortalCooldown();
+				entity.func_242279_ag(); //setPortalCooldown
 				if(entity instanceof ServerPlayerEntity)
-					entity.sendMessage(new TranslationTextComponent(FORBIDDEN));
+					entity.sendMessage(new TranslationTextComponent(FORBIDDEN), Util.DUMMY_UUID);
 				return;
 			}
 			if(isDimensionForbidden(location.getDimension()))
 			{
-				entity.timeUntilPortal = entity.getPortalCooldown();
+				entity.func_242279_ag(); //setPortalCooldown
 				if(entity instanceof ServerPlayerEntity)
-					entity.sendMessage(new TranslationTextComponent(FORBIDDEN_DESTINATION));
+					entity.sendMessage(new TranslationTextComponent(FORBIDDEN_DESTINATION), Util.DUMMY_UUID);
 				return;
 			}
 			
 			if(isBlocked(this.world, this.pos))
 			{
-				entity.timeUntilPortal = entity.getPortalCooldown();
+				entity.func_242279_ag(); //setPortalCooldown
 				if(entity instanceof ServerPlayerEntity)
-					entity.sendMessage(new TranslationTextComponent(BLOCKED));
+					entity.sendMessage(new TranslationTextComponent(BLOCKED), Util.DUMMY_UUID);
 				return;
 			}
 			
 			if(isBlocked(world, location.getPos()))
 			{
-				entity.timeUntilPortal = entity.getPortalCooldown();
+				entity.func_242279_ag(); //setPortalCooldown
 				if(entity instanceof ServerPlayerEntity)
-					entity.sendMessage(new TranslationTextComponent(BLOCKED_DESTINATION));
+					entity.sendMessage(new TranslationTextComponent(BLOCKED_DESTINATION), Util.DUMMY_UUID);
 				return;
 			}
 			
 			entity = Teleport.teleportEntity(entity, (ServerWorld) destTransportalizer.world, location.getPos().getX() + 0.5, location.getPos().getY() + 0.6, location.getPos().getZ() + 0.5, entity.rotationYaw, entity.rotationPitch);
 			if(entity != null)
-				entity.timeUntilPortal = entity.getPortalCooldown();
+				entity.func_242279_ag(); //setPortalCooldown
 		}
 	}
 	
@@ -159,11 +160,11 @@ public class TransportalizerTileEntity extends OnCollisionTeleporterTileEntity<E
 		return block0.getMaterial().blocksMovement() || block1.getMaterial().blocksMovement();
 	}
 	
-	private static boolean isDimensionForbidden(DimensionType dim)
+	private static boolean isDimensionForbidden(RegistryKey<World> dim)
 	{
 		List<String> forbiddenTypes = MinestuckConfig.SERVER.forbiddenDimensionTypesTpz.get();
 		List<String> forbiddenDims = MinestuckConfig.SERVER.forbiddenModDimensionsTpz.get();
-		ResourceLocation modDim = dim.getModType() != null ? dim.getModType().getRegistryName() : null;
+		ResourceLocation modDim = null;//dim.getModType() != null ? dim.getModType().getRegistryName() : null; TODO
 		return forbiddenTypes.contains(String.valueOf(dim.getRegistryName())) || forbiddenDims.contains(String.valueOf(modDim));
 	}
 	
@@ -176,7 +177,7 @@ public class TransportalizerTileEntity extends OnCollisionTeleporterTileEntity<E
 	{
 		if(world != null && !world.isRemote)
 		{
-			GlobalPos location = GlobalPos.of(world.dimension.getType(), pos);
+			GlobalPos location = GlobalPos.getPosition(world.getDimensionKey(), pos);
 			if(active && !this.id.isEmpty())
 				TransportalizerSavedData.get(world).remove(this.id, location);
 			
@@ -233,13 +234,13 @@ public class TransportalizerTileEntity extends OnCollisionTeleporterTileEntity<E
 	}
 	
 	@Override
-	public void read(CompoundNBT compound)
+	public void read(BlockState state, CompoundNBT nbt)
 	{
-		super.read(compound);
-		this.destId = compound.getString("destId");
-		this.id = compound.getString("idString");
-		if(compound.contains("active"))
-			this.active = compound.getBoolean("active");
+		super.read(state, nbt);
+		this.destId = nbt.getString("destId");
+		this.id = nbt.getString("idString");
+		if(nbt.contains("active"))
+			this.active = nbt.getBoolean("active");
 	}
 
 	@Override
@@ -269,7 +270,7 @@ public class TransportalizerTileEntity extends OnCollisionTeleporterTileEntity<E
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
 	{
-		this.read(pkt.getNbtCompound());
+		this.read(getBlockState(), pkt.getNbtCompound());
 	}
 	
 }

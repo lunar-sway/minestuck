@@ -60,24 +60,19 @@ public class EndSaplingBlock extends BushBlock implements IGrowable
 	@Override
 	public void grow(ServerWorld worldIn, Random rand, BlockPos pos, BlockState state)
 	{
-		if(worldIn.isRemote || worldIn.getDimension().getMoonPhase(worldIn.getDayTime()) == 4)
+		if(worldIn.isRemote || worldIn.getDimensionType().getMoonPhase(worldIn.getDayTime()) == 4)
 		{
 			return;
 		}
-		boolean alpha = state.get(ALPHA);
-		boolean omega = state.get(OMEGA);
-		
 		if(rand.nextFloat() < 0.5)
 		{
-			alpha = !alpha;
-			state = state.cycle(ALPHA);
+			state = state.func_235896_a_(ALPHA);	//cycle
 		} else
 		{
-			omega = !omega;
-			state = state.cycle(OMEGA);
+			state = state.func_235896_a_(OMEGA);
 		}
 		
-		if(alpha && !omega)
+		if(state.get(ALPHA) && !state.get(OMEGA))
 		{
 			generateTree(worldIn, pos, state, rand);
 		} else
@@ -90,7 +85,7 @@ public class EndSaplingBlock extends BushBlock implements IGrowable
 	{
 		if(!net.minecraftforge.event.ForgeEventFactory.saplingGrowTree(worldIn, rand, pos))
 			return;
-		tree.place(worldIn, worldIn.getChunkProvider().getChunkGenerator(), pos, state, rand);
+		tree.attemptGrowTree(worldIn, worldIn.getChunkProvider().getChunkGenerator(), pos, state, rand);
 	}
 	
 	@Override

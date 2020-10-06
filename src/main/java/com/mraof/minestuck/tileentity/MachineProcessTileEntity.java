@@ -91,15 +91,15 @@ public abstract class MachineProcessTileEntity extends TileEntity implements ISi
 	}
 	
 	@Override
-	public void read(CompoundNBT compound)
+	public void read(BlockState state, CompoundNBT nbt)
 	{
-		super.read(compound);
+		super.read(state, nbt);
 
-		this.progress = compound.getInt("progress");
+		this.progress = nbt.getInt("progress");
 		if(getRunType() == RunType.BUTTON_OVERRIDE)
-			this.overrideStop = compound.getBoolean("overrideStop");
+			this.overrideStop = nbt.getBoolean("overrideStop");
 		inv.clear();
-		ItemStackHelper.loadAllItems(compound, inv);
+		ItemStackHelper.loadAllItems(nbt, inv);
 	}
 	
 	@Override

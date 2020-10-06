@@ -4,6 +4,7 @@ import com.mraof.minestuck.inventory.UraniumCookerContainer;
 import com.mraof.minestuck.item.crafting.IrradiatingRecipe;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.util.ExtraForgeTags;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -61,10 +62,10 @@ public class UraniumCookerTileEntity extends MachineProcessTileEntity implements
 	}
 	
 	@Override
-	public void read(CompoundNBT compound)
+	public void read(BlockState state, CompoundNBT nbt)
 	{
-		super.read(compound);
-		fuel = compound.getShort("fuel");
+		super.read(state, nbt);
+		fuel = nbt.getShort("fuel");
 	}
 	
 	@Override
