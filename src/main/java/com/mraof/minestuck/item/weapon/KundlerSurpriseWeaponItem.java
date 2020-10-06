@@ -7,7 +7,8 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.Util;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -35,9 +36,9 @@ public class KundlerSurpriseWeaponItem extends WeaponItem
             ItemEntity item = new ItemEntity(target.world, target.getPosX(), target.getPosY(), target.getPosZ(), items[num].copy());
             target.world.addEntity(item);
     
-            ITextComponent message = new TranslationTextComponent(getTranslationKey() + ".message", items[num].getDisplayName());
-            message.getStyle().setColor(TextFormatting.GOLD);
-            attacker.sendMessage(message);
+            IFormattableTextComponent message = new TranslationTextComponent(getTranslationKey() + ".message", items[num].getDisplayName());
+            message.mergeStyle(TextFormatting.GOLD);
+            attacker.sendMessage(message, Util.DUMMY_UUID);
         }
         return super.hitEntity(stack, target, attacker);
     }

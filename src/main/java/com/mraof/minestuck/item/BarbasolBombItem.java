@@ -33,7 +33,7 @@ public class BarbasolBombItem extends Item
             
             BarbasolBombEntity bomb = new BarbasolBombEntity(MSEntityTypes.BARBASOL_BOMB, playerIn, worldIn, playerIn.abilities.allowEdit);
             bomb.setItem(item);
-            bomb.shoot(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, -20.0F, 0.7F, 1.0F);
+            bomb.func_234612_a_(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, -20.0F, 0.7F, 1.0F);    //shoot
             worldIn.addEntity(bomb);
         }
         

@@ -1,6 +1,5 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.FrogEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
@@ -16,12 +15,12 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -32,7 +31,6 @@ public class FrogItem extends Item
 	public FrogItem(Properties properties)
 	{
 		super(properties);
-		this.addPropertyOverride(new ResourceLocation(Minestuck.MOD_ID, "type"), (stack, world, holder) -> !stack.hasTag() ? 0 : stack.getTag().getInt("Type"));
 	}
 	
 	@Override
@@ -138,7 +136,7 @@ public class FrogItem extends Item
 			else
 				spawnPos = pos.offset(face);
 			
-			Entity entity =  createFrog(world, (double)spawnPos.getX() + 0.5D, (double)spawnPos.getY(), (double)spawnPos.getZ() + 0.5D, 0);
+			Entity entity =  createFrog((ServerWorld) world, (double)spawnPos.getX() + 0.5D, (double)spawnPos.getY(), (double)spawnPos.getZ() + 0.5D, 0);
 			
 			if (entity != null)
 			{
@@ -159,7 +157,7 @@ public class FrogItem extends Item
 	}
 	
 	@Nullable
-	public static Entity createFrog(World worldIn, double x, double y, double z, int type)
+	public static Entity createFrog(ServerWorld worldIn, double x, double y, double z, int type)
 	{
 
 		FrogEntity frog = null;

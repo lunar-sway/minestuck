@@ -1,5 +1,6 @@
 package com.mraof.minestuck.client;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.client.model.*;
@@ -13,12 +14,18 @@ import com.mraof.minestuck.computer.ComputerProgram;
 import com.mraof.minestuck.computer.SburbClient;
 import com.mraof.minestuck.computer.SburbServer;
 import com.mraof.minestuck.entity.MSEntityTypes;
+import com.mraof.minestuck.item.BoondollarsItem;
+import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.StoneTabletItem;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.entity.SpriteRenderer;
 import net.minecraft.client.renderer.entity.model.BipedModel;
+import net.minecraft.item.IItemPropertyGetter;
+import net.minecraft.item.ItemModelsProperties;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -90,7 +97,18 @@ public class ClientProxy
 		
 		ComputerProgram.registerProgramClass(0, SburbClient.class);
 		ComputerProgram.registerProgramClass(1, SburbServer.class);
-
-		//MinecraftForge.EVENT_BUS.register(new MinestuckConfig()); Does not currently use any events to reload config
+		
+		IItemPropertyGetter content = (stack, world, holder) -> AlchemyHelper.hasDecodedItem(stack) ? 1 : 0;
+		ResourceLocation contentName = new ResourceLocation(Minestuck.MOD_ID, "content");
+		
+		ItemModelsProperties.registerProperty(MSItems.CAPTCHA_CARD, contentName, content);
+		ItemModelsProperties.registerProperty(MSItems.CRUXITE_DOWEL, contentName, content);
+		ItemModelsProperties.registerProperty(MSItems.SHUNT, contentName, content);
+		ItemModelsProperties.registerProperty(MSItems.CAPTCHA_CARD, new ResourceLocation(Minestuck.MOD_ID, "punched"), (stack, world, holder) -> AlchemyHelper.isPunchedCard(stack) ? 1 : 0);
+		ItemModelsProperties.registerProperty(MSItems.CAPTCHA_CARD, new ResourceLocation(Minestuck.MOD_ID, "ghost"), (stack, world, holder) -> AlchemyHelper.isGhostCard(stack) ? 1 : 0);
+		
+		ItemModelsProperties.registerProperty(MSItems.BOONDOLLARS, new ResourceLocation(Minestuck.MOD_ID, "count"), (stack, world, holder) -> BoondollarsItem.getCount(stack));
+		ItemModelsProperties.registerProperty(MSItems.FROG, new ResourceLocation(Minestuck.MOD_ID, "type"), (stack, world, holder) -> !stack.hasTag() ? 0 : stack.getTag().getInt("Type"));
+		ItemModelsProperties.registerProperty(MSItems.STONE_SLAB, new ResourceLocation(Minestuck.MOD_ID, "carved"), (stack, world, holder) -> StoneTabletItem.hasText(stack) ? 1 : 0);
 	}
 }

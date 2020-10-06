@@ -2,7 +2,6 @@ package com.mraof.minestuck.item.block;
 
 import com.mraof.minestuck.block.CruxiteDowelBlock;
 import com.mraof.minestuck.item.AlchemizedColored;
-import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.tileentity.ItemStackTileEntity;
 import net.minecraft.block.Block;
@@ -16,7 +15,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
@@ -29,7 +27,6 @@ public class DowelItem extends BlockItem implements AlchemizedColored
 	public DowelItem(Block blockIn, Properties builder)
 	{
 		super(blockIn, builder);
-		this.addPropertyOverride(CaptchaCardItem.CONTENT_NAME, CaptchaCardItem.CONTENT);
 	}
 	
 	@Override
@@ -49,11 +46,11 @@ public class DowelItem extends BlockItem implements AlchemizedColored
 			
 			if(!containedStack.isEmpty())
 			{
-				tooltip.add(new StringTextComponent("(").appendSibling(containedStack.getDisplayName()).appendText(")").setStyle(new Style().setColor(TextFormatting.GRAY)));
+				tooltip.add(new StringTextComponent("(").append(containedStack.getDisplayName()).appendString(")").mergeStyle(TextFormatting.GRAY));
 			}
 			else
 			{
-				tooltip.add(new StringTextComponent("(").appendSibling(new StringTextComponent("item.captchaCard.invalid")).appendText(")").setStyle(new Style().setColor(TextFormatting.GRAY)));//TODO translation key
+				tooltip.add(new StringTextComponent("(").append(new StringTextComponent("item.captchaCard.invalid")).appendString(")").mergeStyle(TextFormatting.GRAY));//TODO translation key
 			}
 		}
 	}

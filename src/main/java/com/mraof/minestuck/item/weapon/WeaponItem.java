@@ -60,8 +60,8 @@ public class WeaponItem extends SwordItem //To allow weapons to have the sweep e
         } else		//We know that no specific harvestTool is specified, meaning any harvestTool efficiency is defined in the harvestTool itself.
         {			//This also means that there's no harvestTool *level* specified, so any harvestTool of that class is sufficient.
         	Material mat = blockIn.getMaterial();
-        	if(mat.isToolNotRequired())
-        		return true;
+        	//if(mat.isToolNotRequired())
+        	//	return true;
         	
         	if(toolType != null)
 			{

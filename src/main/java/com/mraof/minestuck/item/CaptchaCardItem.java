@@ -1,16 +1,20 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.*;
-import net.minecraft.util.text.*;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -18,15 +22,9 @@ import java.util.List;
 
 public class CaptchaCardItem extends Item
 {
-	public static final IItemPropertyGetter CONTENT = (stack, world, holder) -> AlchemyHelper.hasDecodedItem(stack) ? 1 : 0;
-	public static final ResourceLocation CONTENT_NAME = new ResourceLocation(Minestuck.MOD_ID, "content");
-	
 	public CaptchaCardItem(Properties properties)
 	{
 		super(properties);
-		this.addPropertyOverride(CONTENT_NAME, CONTENT);
-		this.addPropertyOverride(new ResourceLocation(Minestuck.MOD_ID, "punched"), (stack, world, holder) -> AlchemyHelper.isPunchedCard(stack) ? 1 : 0);
-		this.addPropertyOverride(new ResourceLocation(Minestuck.MOD_ID, "ghost"), (stack, world, holder) -> AlchemyHelper.isGhostCard(stack) ? 1 : 0);
 	}
 	
 	@Override
@@ -71,16 +69,16 @@ public class CaptchaCardItem extends Item
 			if(!content.isEmpty())
 			{
 				String stackSize = (nbt.getBoolean("punched") || nbt.getInt("contentSize") <= 0) ? "" : nbt.getInt("contentSize") + "x";
-				tooltip.add(new StringTextComponent("(").appendText(stackSize).appendSibling(content.getDisplayName()).appendText(")").setStyle(new Style().setColor(TextFormatting.GRAY)));
+				tooltip.add(new StringTextComponent("(").appendString(stackSize).append(content.getDisplayName()).appendString(")").mergeStyle(TextFormatting.GRAY));
 				if(nbt.getBoolean("punched"))
-					tooltip.add(new StringTextComponent("(").appendSibling(new TranslationTextComponent("item.minestuck.captcha_card.punched")).appendText(")").setStyle(new Style().setColor(TextFormatting.GRAY)));
+					tooltip.add(new StringTextComponent("(").append(new TranslationTextComponent("item.minestuck.captcha_card.punched")).appendString(")").mergeStyle(TextFormatting.GRAY));
 				else if(nbt.getInt("contentSize") <= 0)
-					tooltip.add(new StringTextComponent("(").appendSibling(new StringTextComponent("item.minestuck.captcha_card.ghost")).appendText(")").setStyle(new Style().setColor(TextFormatting.GRAY)));
+					tooltip.add(new StringTextComponent("(").append(new StringTextComponent("item.minestuck.captcha_card.ghost")).appendString(")").mergeStyle(TextFormatting.GRAY));
 			} else
 			{
-				tooltip.add(new StringTextComponent("(").appendSibling(new TranslationTextComponent("item.minestuck.captcha_card.invalid")).appendText(")").setStyle(new Style().setColor(TextFormatting.GRAY)));
+				tooltip.add(new StringTextComponent("(").append(new TranslationTextComponent("item.minestuck.captcha_card.invalid")).appendString(")").mergeStyle(TextFormatting.GRAY));
 			}
 		} else
-			tooltip.add(new StringTextComponent("(").appendSibling(new TranslationTextComponent("item.minestuck.captcha_card.empty")).appendText(")").setStyle(new Style().setColor(TextFormatting.GRAY)));
+			tooltip.add(new StringTextComponent("(").append(new TranslationTextComponent("item.minestuck.captcha_card.empty")).appendString(")").mergeStyle(TextFormatting.GRAY));
 	}
 }

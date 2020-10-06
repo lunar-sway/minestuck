@@ -12,14 +12,14 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 import java.util.function.Supplier;
 
 public class MelonWeaponItem extends WeaponItem
@@ -56,10 +56,10 @@ public class MelonWeaponItem extends WeaponItem
             
             if(melonOverload && harvestCounter >= 9 && entityLiving instanceof PlayerEntity)
             {
-                ITextComponent message = new TranslationTextComponent(getTranslationKey() + ".message");
-                message.getStyle().setColor(TextFormatting.GREEN);
-                message.getStyle().setBold(true);
-                entityLiving.sendMessage(message);
+                IFormattableTextComponent message = new TranslationTextComponent(getTranslationKey() + ".message");
+                message.mergeStyle(TextFormatting.GREEN);
+                message.setStyle(message.getStyle().setBold(true));
+                entityLiving.sendMessage(message, Util.DUMMY_UUID);
                 
                 entityLiving.addPotionEffect(new EffectInstance(Effects.STRENGTH, 1800, 3));
                 entityLiving.addPotionEffect(new EffectInstance(Effects.RESISTANCE, 1800, 3));

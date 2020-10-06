@@ -4,7 +4,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
@@ -54,9 +54,9 @@ public class PogoWeaponItem extends WeaponItem
 	public static void hitEntity(ItemStack stack, LivingEntity target, LivingEntity player, double pogoMotion)
 	{
 		pogoMotion = addEfficiencyModifier(pogoMotion, stack);
-		if (player.fallDistance > 0.0F && !player.onGround && !player.isOnLadder() && !player.isInWater() && !player.isPassenger())
+		if (player.fallDistance > 0.0F && !player.isOnGround() && !player.isOnLadder() && !player.isInWater() && !player.isPassenger())
 		{
-			double knockbackModifier = 1D - target.getAttributes().getAttributeInstance(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).getValue();
+			double knockbackModifier = 1D - target.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE);
 			double targetMotionY = Math.max(target.getMotion().y, knockbackModifier * Math.min(pogoMotion* 2, Math.abs(player.getMotion().y) + target.getMotion().y + pogoMotion));
 			target.setMotion(target.getMotion().x, targetMotionY, target.getMotion().z);
 			player.setMotion(player.getMotion().x, 0, player.getMotion().z);

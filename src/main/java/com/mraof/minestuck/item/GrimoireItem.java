@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.Util;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
@@ -23,7 +24,7 @@ public class GrimoireItem extends Item
 	{
 		playerIn.world.playSound(playerIn, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), MSSoundEvents.ITEM_GRIMOIRE_USE, SoundCategory.AMBIENT, 0.5F, 0.8F);
 		if(worldIn.isRemote)
-			playerIn.sendMessage(new TranslationTextComponent(getTranslationKey() + ".message"));
+			playerIn.sendMessage(new TranslationTextComponent(getTranslationKey() + ".message"), Util.DUMMY_UUID);
 		return super.onItemRightClick(worldIn, playerIn, handIn);
 	}
 }

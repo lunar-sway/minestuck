@@ -7,6 +7,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -35,7 +36,7 @@ public class RazorBladeItem extends Item
 					attacker.world.addEntity(razor);
 					stack.shrink(1);
 					ITextComponent message = new TranslationTextComponent("While you handle the razor blade, you accidentally cut yourself and drop it.");
-					attacker.sendMessage(message);
+					attacker.sendMessage(message, Util.DUMMY_UUID);
 				}
 				attacker.setHealth(attacker.getHealth() - 1);
 			}
@@ -58,7 +59,7 @@ public class RazorBladeItem extends Item
 					entityLiving.world.addEntity(razor);
 					stack.shrink(1);
 					ITextComponent message = new TranslationTextComponent("While you handle the razor blade, you accidentally cut yourself and drop it.");
-					entityLiving.sendMessage(message);
+					entityLiving.sendMessage(message, Util.DUMMY_UUID);
 				}
 				entityLiving.attackEntityFrom(DamageSource.GENERIC, 1);
 			}

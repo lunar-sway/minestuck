@@ -46,6 +46,8 @@ public class MSItems
 	public static final MultiblockItem ALCHEMITER = getNull();
 	public static final MultiblockItem PUNCH_DESIGNIX = getNull();
 	
+	public static final Item CRUXITE_DOWEL = getNull();
+	
 	//hammers
 	public static final Item CLAW_HAMMER = getNull();
 	public static final Item SLEDGE_HAMMER = getNull();
@@ -560,7 +562,7 @@ public class MSItems
 		registerItemBlock(registry, GRIST_WIDGET, new Item.Properties().group(MSItemGroup.MAIN).rarity(Rarity.UNCOMMON));
 		registerItemBlock(registry, URANIUM_COOKER, MSItemGroup.MAIN);
 		
-		registerItemBlock(registry, new DowelItem(CRUXITE_DOWEL, new Item.Properties().group(MSItemGroup.MAIN)));
+		registerItemBlock(registry, new DowelItem(MSBlocks.CRUXITE_DOWEL, new Item.Properties().group(MSItemGroup.MAIN)));
 		
 		registerItemBlock(registry, GOLD_SEEDS, MSItemGroup.MAIN);
 		registerItemBlock(registry, WOODEN_CACTUS, MSItemGroup.MAIN);
@@ -730,7 +732,7 @@ public class MSItems
 		registry.register(new ModAxeItem(MSItemTypes.EMERALD_TIER, 5, -3.0F, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("emerald_axe"));
 		registry.register(new ModPickaxeItem(MSItemTypes.EMERALD_TIER, 1 , -2.8F, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("emerald_pickaxe"));
 		registry.register(new ShovelItem(MSItemTypes.EMERALD_TIER, 1.5F, -3.0F, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("emerald_shovel"));
-		registry.register(new HoeItem(MSItemTypes.EMERALD_TIER, 0.0F, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("emerald_hoe"));
+		registry.register(new HoeItem(MSItemTypes.EMERALD_TIER, -3, 0.0F, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("emerald_hoe"));
 		
 		//armor
 		registry.register(new ArmorItem(MSItemTypes.PRISMARINE_ARMOR, EquipmentSlotType.HEAD, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("prismarine_helmet"));

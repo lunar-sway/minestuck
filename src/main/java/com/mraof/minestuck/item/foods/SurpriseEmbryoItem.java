@@ -6,14 +6,16 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.Util;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import java.util.Random;
 
-public class SurpriseEmbryoItem extends Item {
+public class SurpriseEmbryoItem extends Item
+{
 	
 	public SurpriseEmbryoItem(Properties properties)
 	{
@@ -32,10 +34,10 @@ public class SurpriseEmbryoItem extends Item {
 			if(!((PlayerEntity) player).inventory.addItemStackToInventory(items[num].copy()))
 				if(!world.isRemote)
 					((PlayerEntity) player).dropItem(items[num].copy(), false);
-				
-			ITextComponent message = new TranslationTextComponent(getTranslationKey() + ".message", items[num].getDisplayName());
-			message.getStyle().setColor(TextFormatting.GOLD);
-			player.sendMessage(message);
+			
+			IFormattableTextComponent message = new TranslationTextComponent(getTranslationKey() + ".message", items[num].getDisplayName());
+			message.mergeStyle(TextFormatting.GOLD);
+			player.sendMessage(message, Util.DUMMY_UUID);
 		}
 		return super.onItemUseFinish(stack, world, player);
 	}

@@ -7,7 +7,8 @@ import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.Util;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -30,9 +31,9 @@ public class HorrorterrorWeaponItem extends WeaponItem
         {
         	if(!attacker.world.isRemote) {
         		String key = MESSAGES.get(attacker.getRNG().nextInt(MESSAGES.size()));
-    			ITextComponent message = new TranslationTextComponent(getTranslationKey()+".message."+key);
-    			message.getStyle().setColor(TextFormatting.DARK_PURPLE);
-    			attacker.sendMessage(message);
+				IFormattableTextComponent message = new TranslationTextComponent(getTranslationKey()+".message."+key);
+    			message.mergeStyle(TextFormatting.DARK_PURPLE);
+    			attacker.sendMessage(message, Util.DUMMY_UUID);
     		}
         	attacker.addPotionEffect(new EffectInstance(Effects.WITHER, 100, 2));
         }

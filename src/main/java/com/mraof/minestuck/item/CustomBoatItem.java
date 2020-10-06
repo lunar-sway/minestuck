@@ -10,7 +10,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.*;
-import net.minecraft.util.math.*;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceContext;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
@@ -40,12 +44,12 @@ public class CustomBoatItem extends Item
 			return new ActionResult<>(ActionResultType.PASS, itemstack);
 		else
 		{
-			Vec3d lookDirection = playerIn.getLook(partialTicks);
+			Vector3d lookDirection = playerIn.getLook(partialTicks);
 			List<Entity> list = worldIn.getEntitiesInAABBexcluding(playerIn, playerIn.getBoundingBox().expand(lookDirection.scale(5.0D)).grow(1.0D), CAN_COLLIDE_PREDICATE);
 			
 			if(!list.isEmpty())
 			{
-				Vec3d eyePos = playerIn.getEyePosition(partialTicks);
+				Vector3d eyePos = playerIn.getEyePosition(partialTicks);
 				for(Entity entity : list)
 				{
 					AxisAlignedBB axisalignedbb = entity.getBoundingBox().grow(entity.getCollisionBorderSize());

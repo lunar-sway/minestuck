@@ -1,6 +1,5 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
@@ -10,7 +9,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -24,7 +22,6 @@ public class StoneTabletItem extends Item
 	public StoneTabletItem(Properties properties)
 	{
 		super(properties);
-		addPropertyOverride(new ResourceLocation(Minestuck.MOD_ID, "carved"), (stack, world, holder) -> hasText(stack) ? 1 : 0);
 	}
 	
 	@Override
@@ -33,7 +30,7 @@ public class StoneTabletItem extends Item
 		super.addInformation(stack, worldIn, tooltip, flagIn);
 		
 		if(hasText(stack))
-			tooltip.add(new TranslationTextComponent(getTranslationKey()+".carved").applyTextStyle(TextFormatting.GRAY));
+			tooltip.add(new TranslationTextComponent(getTranslationKey()+".carved").mergeStyle(TextFormatting.GRAY));
 	}
 	
 	@Override

@@ -4,6 +4,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Util;
 import net.minecraft.util.text.TranslationTextComponent;
 
 /**
@@ -28,7 +29,7 @@ public class SordItem extends WeaponItem
 			sord.setPickupDelay(40);
 			attacker.world.addEntity(sord);
 			itemStack.shrink(1);
-			attacker.sendMessage(new TranslationTextComponent(getTranslationKey() + "." + DROP_MESSAGE));
+			attacker.sendMessage(new TranslationTextComponent(getTranslationKey() + "." + DROP_MESSAGE), Util.DUMMY_UUID);
 		}
 		return super.hitEntity(itemStack, target, attacker);
 	}
