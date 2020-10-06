@@ -45,6 +45,7 @@ public class Teleport
 			if(toNewDim && player.world != world)	//Was teleporting to a new dimension, but the teleportation did not go through
 				return null;
 			
+			player.invulnerableDimensionChange = true;
 			player.setRotationYawHead(yaw);
 		} else
 		{

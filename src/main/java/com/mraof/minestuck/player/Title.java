@@ -12,6 +12,8 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.util.Constants;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Objects;
 
@@ -20,6 +22,8 @@ import static com.mraof.minestuck.player.EnumAspect.HOPE;
 public final class Title
 {
 	public static final String FORMAT = "title.format";
+	
+	private static final Logger LOGGER = LogManager.getLogger();
 	
 	private static final Effect[] aspectEffects = {Effects.ABSORPTION, Effects.SPEED, Effects.RESISTANCE, Effects.ABSORPTION, Effects.FIRE_RESISTANCE, Effects.REGENERATION, Effects.LUCK, Effects.NIGHT_VISION, Effects.STRENGTH, Effects.JUMP_BOOST, Effects.HASTE, Effects.INVISIBILITY }; //Blood, Breath, Doom, Heart, Hope, Life, Light, Mind, Rage, Space, Time, Void
 	// Increase the starting rungs
@@ -66,6 +70,7 @@ public final class Title
 				if(potionLevel > 0)
 				{
 					player.addPotionEffect(new EffectInstance(aspectEffects[aspect.ordinal()], 600, potionLevel - 1));
+					LOGGER.debug("Applied aspect potion effect to {}", player.getDisplayName().getFormattedText());
 				}
 			}
 		}
