@@ -13,14 +13,14 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.profiler.IProfiler;
 import net.minecraft.resources.IResource;
 import net.minecraft.resources.IResourceManager;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
+import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -44,25 +44,25 @@ public class RecipeGeneratedCostHandler extends ReloadListener<List<RecipeGenera
 	
 	public static final String PATH = "minestuck/grist_cost_generation_recipes.json";
 	
-	private final MinecraftServer server;
+	private final RecipeManager recipeManager;
 	private Map<Item, GristSet> generatedCosts = Collections.emptyMap();
 	private RecipeGeneratedCostProcess process = null;
 	
-	private RecipeGeneratedCostHandler(MinecraftServer server)
+	private RecipeGeneratedCostHandler(RecipeManager recipeManager)
 	{
-		this.server = server;
+		this.recipeManager = recipeManager;
 	}
 	
 	private RecipeGeneratedCostHandler(Map<Item, GristSet> generatedCosts)
 	{
-		server = null;
+		recipeManager = null;
 		this.generatedCosts = generatedCosts;
 	}
 	
 	@SubscribeEvent(priority = EventPriority.HIGH)
-	public static void serverAboutToStart(FMLServerAboutToStartEvent event)
+	public static void addListener(AddReloadListenerEvent event)
 	{
-		event.getServer().getResourceManager().addReloadListener(new RecipeGeneratedCostHandler(event.getServer()));
+		event.addListener(new RecipeGeneratedCostHandler(event.getDataPackRegistries().getRecipeManager()));
 	}
 	
 	GristSet getGristCost(Item item)
@@ -141,8 +141,8 @@ public class RecipeGeneratedCostHandler extends ReloadListener<List<RecipeGenera
 		List<SourceEntry> sources;
 		try
 		{
-			Type type = new TypeToken<List<SourceEntry>>(){}.getType();
-			sources = JSONUtils.fromJson(GSON, new InputStreamReader(input), type);
+			TypeToken<List<SourceEntry>> type = new TypeToken<List<SourceEntry>>(){};
+			sources = JSONUtils.fromJSON(GSON, new InputStreamReader(input), type, false);
 		} finally
 		{
 			IOUtils.closeQuietly(input);
@@ -182,7 +182,7 @@ public class RecipeGeneratedCostHandler extends ReloadListener<List<RecipeGenera
 				return new RecipeSerializerSource(recipeSerializer);
 			case "recipe_type":
 				ResourceLocation typeName = new ResourceLocation(JSONUtils.getString(json, "source"));
-				IRecipeType<?> recipeType = Registry.RECIPE_TYPE.getValue(typeName).orElseThrow(() -> new JsonParseException("No recipe type by name " + typeName));
+				IRecipeType<?> recipeType = Registry.RECIPE_TYPE.getOptional(typeName).orElseThrow(() -> new JsonParseException("No recipe type by name " + typeName));
 				return new RecipeTypeSource(recipeType);
 		}
 		throw new JsonParseException("Invalid source type " + type);
@@ -191,10 +191,9 @@ public class RecipeGeneratedCostHandler extends ReloadListener<List<RecipeGenera
 	@Override
 	protected void apply(List<SourceEntry> sources, IResourceManager resourceManagerIn, IProfiler profilerIn)
 	{
-		Objects.requireNonNull(server, "Server was null while generating grist costs");
+		Objects.requireNonNull(recipeManager, "Recipe manager was null while generating grist costs");
 		
-		RecipeManager recipeManager = server.getRecipeManager();
-		if(!server.isOnExecutionThread() || (sources.size() != 0 && recipeManager.getRecipes().size() == 0))
+		if(!ServerLifecycleHooks.getCurrentServer().isOnExecutionThread() || (sources.size() != 0 && recipeManager.getRecipes().size() == 0))
 		{
 			throw new IllegalStateException("Grist cost generator is supposed to be executed on server thread after initializing. The failure of this assertion is not good!");
 		}

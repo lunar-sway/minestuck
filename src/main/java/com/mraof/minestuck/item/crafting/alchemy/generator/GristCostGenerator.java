@@ -5,13 +5,13 @@ import com.mraof.minestuck.item.crafting.alchemy.GristCostRecipe;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import net.minecraft.client.resources.ReloadListener;
 import net.minecraft.item.Item;
+import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.profiler.IProfiler;
 import net.minecraft.resources.IResourceManager;
-import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,17 +24,17 @@ public final class GristCostGenerator extends ReloadListener<Void>
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private final MinecraftServer server;
+	private final RecipeManager recipes;
 	
-	private GristCostGenerator(MinecraftServer server)
+	private GristCostGenerator(RecipeManager recipes)
 	{
-		this.server = server;
+		this.recipes = recipes;
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOW)
-	public static void serverAboutToStart(FMLServerAboutToStartEvent event)
+	public static void addListener(AddReloadListenerEvent event)
 	{
-		event.getServer().getResourceManager().addReloadListener(new GristCostGenerator(event.getServer()));
+		event.addListener(new GristCostGenerator(event.getDataPackRegistries().getRecipeManager()));
 	}
 	
 	@Override
@@ -49,7 +49,7 @@ public final class GristCostGenerator extends ReloadListener<Void>
 		GeneratorProcess process = new GeneratorProcess();
 		
 		//Collect providers
-		Stream<GristCostRecipe> stream = server.getRecipeManager().getRecipes().stream().filter(recipe -> recipe instanceof GristCostRecipe).map(recipe -> (GristCostRecipe) recipe);
+		Stream<GristCostRecipe> stream = recipes.getRecipes().stream().filter(recipe -> recipe instanceof GristCostRecipe).map(recipe -> (GristCostRecipe) recipe);
 		for(GristCostRecipe recipe : stream.sorted(Comparator.comparingInt(value -> -value.getPriority())).collect(Collectors.toList()))
 		{
 			recipe.addCostProvider((item, provider) ->
