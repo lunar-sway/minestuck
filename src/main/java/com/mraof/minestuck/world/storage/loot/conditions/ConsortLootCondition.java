@@ -2,12 +2,14 @@ package com.mraof.minestuck.world.storage.loot.conditions;
 
 import com.google.gson.*;
 import com.mraof.minestuck.entity.consort.EnumConsort;
+import com.mraof.minestuck.world.storage.loot.MSLootTables;
 import net.minecraft.entity.Entity;
+import net.minecraft.loot.ILootSerializer;
+import net.minecraft.loot.LootConditionType;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootParameters;
+import net.minecraft.loot.conditions.ILootCondition;
 import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootParameters;
-import net.minecraft.world.storage.loot.conditions.ILootCondition;
 
 public class ConsortLootCondition implements ILootCondition
 {
@@ -16,6 +18,12 @@ public class ConsortLootCondition implements ILootCondition
 	public ConsortLootCondition(EnumConsort[] consorts)
 	{
 		this.consorts = consorts;
+	}
+	
+	@Override
+	public LootConditionType func_230419_b_()	//getType
+	{
+		return MSLootTables.consortConditionType();
 	}
 	
 	@Override
@@ -34,13 +42,8 @@ public class ConsortLootCondition implements ILootCondition
 		return () -> new ConsortLootCondition(consorts);
 	}
 	
-	public static class Serializer extends ILootCondition.AbstractSerializer<ConsortLootCondition>
+	public static class Serializer implements ILootSerializer<ConsortLootCondition>
 	{
-		public Serializer()
-		{
-			super(new ResourceLocation("minestuck", "consort"), ConsortLootCondition.class);
-		}
-		
 		@Override
 		public void serialize(JsonObject json, ConsortLootCondition value, JsonSerializationContext context)
 		{

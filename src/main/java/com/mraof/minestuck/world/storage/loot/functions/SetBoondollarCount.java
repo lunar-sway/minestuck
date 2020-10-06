@@ -4,13 +4,10 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.mraof.minestuck.item.BoondollarsItem;
+import com.mraof.minestuck.world.storage.loot.MSLootTables;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.IRandomRange;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootFunction;
-import net.minecraft.world.storage.loot.RandomRanges;
-import net.minecraft.world.storage.loot.conditions.ILootCondition;
+import net.minecraft.loot.*;
+import net.minecraft.loot.conditions.ILootCondition;
 
 public class SetBoondollarCount extends LootFunction
 {
@@ -20,6 +17,12 @@ public class SetBoondollarCount extends LootFunction
 	{
 		super(conditionsIn);
 		this.countRange = countRangeIn;
+	}
+	
+	@Override
+	public LootFunctionType getFunctionType()
+	{
+		return MSLootTables.setBoondollarFunctionType();
 	}
 	
 	@Override
@@ -35,11 +38,6 @@ public class SetBoondollarCount extends LootFunction
 	
 	public static class Serializer extends LootFunction.Serializer<SetBoondollarCount>
 	{
-		public Serializer()
-		{
-			super(new ResourceLocation("minestuck:set_boondollar_count"), SetBoondollarCount.class);
-		}
-		
 		public void serialize(JsonObject object, SetBoondollarCount functionClazz, JsonSerializationContext serializationContext)
 		{
 			object.add("count", RandomRanges.serialize(functionClazz.countRange, serializationContext));

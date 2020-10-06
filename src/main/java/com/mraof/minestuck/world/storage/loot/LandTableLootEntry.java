@@ -3,14 +3,13 @@ package com.mraof.minestuck.world.storage.loot;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.*;
+import net.minecraft.loot.conditions.ILootCondition;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.*;
-import net.minecraft.world.storage.loot.conditions.ILootCondition;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,9 +34,15 @@ public class LandTableLootEntry extends LootEntry
 	}
 	
 	@Override
+		public LootPoolEntryType func_230420_a_()	//getType
+	{
+		return MSLootTables.landTableEntryType();
+	}
+	
+	@Override
 	public boolean expand(LootContext context, Consumer<ILootGenerator> lootGenCollector)
 	{
-		LandTypePair aspects = MSDimensions.getAspects(context.getWorld().getServer(), context.getWorld().dimension.getType());
+		LandTypePair aspects = MSDimensions.getAspects(context.getWorld().getServer(), context.getWorld().getDimensionKey());
 		if(test(context) && aspects != null)
 		{
 			ResourceLocation terrainTableName = new ResourceLocation(table.getNamespace(), table.getPath() + "/terrain/" + Objects.requireNonNull(aspects.terrain.getRegistryName()).toString().replace(':', '/'));
@@ -134,12 +139,8 @@ public class LandTableLootEntry extends LootEntry
 	
 	public static class SerializerImpl extends Serializer<LandTableLootEntry>
 	{
-		public SerializerImpl()
-		{
-			super(new ResourceLocation(Minestuck.MOD_ID, "land_table"), LandTableLootEntry.class);
-		}
-		
-		public void serialize(JsonObject json, LandTableLootEntry entryIn, JsonSerializationContext context)
+		@Override
+		public void doSerialize(JsonObject json, LandTableLootEntry entryIn, JsonSerializationContext context)
 		{
 			json.addProperty("name", entryIn.table.toString());
 			json.addProperty("pool", entryIn.poolName);

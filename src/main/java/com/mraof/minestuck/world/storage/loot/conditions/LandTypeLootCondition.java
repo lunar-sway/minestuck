@@ -7,11 +7,14 @@ import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
+import com.mraof.minestuck.world.storage.loot.MSLootTables;
+import net.minecraft.loot.ILootSerializer;
+import net.minecraft.loot.LootConditionType;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.conditions.ILootCondition;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.conditions.ILootCondition;
 
 import java.util.Collections;
 import java.util.Objects;
@@ -38,13 +41,19 @@ public class LandTypeLootCondition implements ILootCondition
 	}
 	
 	@Override
+	public LootConditionType func_230419_b_()	//getType
+	{
+		return MSLootTables.landTypeConditionType();
+	}
+	
+	@Override
 	public boolean test(LootContext context)
 	{
 		ServerWorld world = context.getWorld();
 		
-		if(world != null && MSDimensions.isLandDimension(world.getDimension().getType()))
+		if(world != null && MSDimensions.isLandDimension(world.getDimensionKey()))
 		{
-			LandTypePair aspects = MSDimensions.getAspects(world.getServer(), world.getDimension().getType());
+			LandTypePair aspects = MSDimensions.getAspects(world.getServer(), world.getDimensionKey());
 			
 			if(aspects != null && (terrainTypes.contains(aspects.terrain) || titleTypes.contains(aspects.title)
 					|| terrainGroups.contains(aspects.terrain.getGroup()) || titleGroups.contains(aspects.title.getGroup())))
@@ -54,13 +63,8 @@ public class LandTypeLootCondition implements ILootCondition
 		return inverted;
 	}
 	
-	public static class Serializer extends ILootCondition.AbstractSerializer<LandTypeLootCondition>
+	public static class Serializer implements ILootSerializer<LandTypeLootCondition>
 	{
-		public Serializer()
-		{
-			super(new ResourceLocation("minestuck", "land_aspect"), LandTypeLootCondition.class);
-		}
-		
 		@Override
 		public void serialize(JsonObject json, LandTypeLootCondition value, JsonSerializationContext context)
 		{
