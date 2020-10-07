@@ -93,7 +93,7 @@ final class SessionMerger
 		//Add locked players from connections
 		for(SburbConnection connection : session.connections)
 		{
-			if(!connection.canSplit)
+			if(connection.lockedToSession)
 			{
 				connections.remove(connection);
 				lockedPlayers.add(connection.getClientIdentifier());
