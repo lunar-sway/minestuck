@@ -30,7 +30,7 @@ public class EndTreeFeature extends AbstractTreeFeature<TreeFeatureConfig>
 			if(subGenerate(world, rand, position, position, logBlocks, foliageBlocks, boundingBox, EndLeavesBlock.LEAF_SUSTAIN_DISTANCE, 0, 4, config))
 			{
 				setDirtAt(world, position.down(), position);
-				func_227216_a_(world, rand, position, logBlocks, boundingBox, config);    //place log
+				setLog(world, rand, position, logBlocks, boundingBox, config);
 				return true;
 			}
 		}
@@ -52,7 +52,7 @@ public class EndTreeFeature extends AbstractTreeFeature<TreeFeatureConfig>
 				return false;
 		
 		for(int y = 1; y < height; y++)
-			func_227216_a_(world, rand, curr.up(y), logBlocks, bounds, config);	//place log block
+			setLog(world, rand, curr.up(y), logBlocks, bounds, config);
 		
 		boolean flag = false;
 		
@@ -89,7 +89,7 @@ public class EndTreeFeature extends AbstractTreeFeature<TreeFeatureConfig>
 		
 		if (!flag)
 		{
-			func_227216_a_(world, rand, curr.up(height), logBlocks, bounds, config);	//place log block
+			setLog(world, rand, curr.up(height), logBlocks, bounds, config);
 			generateLeaves(world, rand, curr.up(height), foliageBlocks, bounds, config, Direction.Axis.Y, Direction.Axis.Y);
 		}
 		return true;
@@ -101,7 +101,7 @@ public class EndTreeFeature extends AbstractTreeFeature<TreeFeatureConfig>
 			return false;
 		else
 		{
-			func_227217_a_(world, pos, config.trunkProvider.getBlockState(rand, pos).with(DoubleLogBlock.AXIS_2, axis), bounds);
+			setBlockState(world, pos, config.trunkProvider.getBlockState(rand, pos).with(DoubleLogBlock.AXIS_2, axis), bounds);
 			logBlocks.add(pos.toImmutable());
 			return true;
 		}
@@ -145,7 +145,7 @@ public class EndTreeFeature extends AbstractTreeFeature<TreeFeatureConfig>
 		{
 			if(distance <= EndLeavesBlock.LEAF_SUSTAIN_DISTANCE)
 			{
-				func_227219_b_(world, rand, curr, changedBlocks, boundsIn, config);
+				setLeaf(world, rand, curr, changedBlocks, boundsIn, config);
 				leaves(world, rand, curr.south(), changedBlocks, boundsIn, config, distance + 1);
 				leaves(world, rand, curr.north(), changedBlocks, boundsIn, config, distance + 1);
 				leaves(world, rand, curr.up(), changedBlocks, boundsIn, config, distance + 1);

@@ -30,7 +30,7 @@ public abstract class GatePiece extends ScatteredStructurePiece
 		for(int xPos = boundingBox.minX; xPos <= boundingBox.maxX; xPos++)
 			for(int zPos = boundingBox.minZ; zPos <= boundingBox.maxZ; zPos++)
 			{
-				int posHeight = generator.func_222532_b(xPos, zPos, Heightmap.Type.OCEAN_FLOOR_WG);
+				int posHeight = generator.getHeight(xPos, zPos, Heightmap.Type.OCEAN_FLOOR_WG);
 				heightSum += posHeight;
 				count++;
 			}

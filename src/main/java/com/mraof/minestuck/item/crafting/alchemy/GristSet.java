@@ -323,7 +323,7 @@ public class GristSet
 			GristType type = GristTypes.getRegistry().getValue(gristId);
 			if(type == null)
 				throw new JsonParseException("'"+entry.getKey()+"' did not match an existing grist type!");
-			long amount = JSONUtils.func_219794_f(entry.getValue(), entry.getKey());	//getLong
+			long amount = JSONUtils.getLong(entry.getValue(), entry.getKey());	//getLong
 			set.addGrist(type, amount);
 		}
 		

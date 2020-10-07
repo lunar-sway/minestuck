@@ -69,7 +69,7 @@ public final class MSFeatures
 		registry.register(new ConsortVillageStructure(NoFeatureConfig::deserialize).setRegistryName("consort_village"));
 		registry.register(new CastleStructure(NoFeatureConfig::deserialize).setRegistryName("skaia_castle"));
 		
-		registry.register(new EndTreeFeature(TreeFeatureConfig::func_227338_a_).setRegistryName("end_tree"));
+		registry.register(new EndTreeFeature(TreeFeatureConfig::deserializeFoliage).setRegistryName("end_tree"));
 		registry.register(new LeaflessTreeFeature(BlockStateFeatureConfig::deserialize).setRegistryName("leafless_tree"));
 		
 		registry.register(new ReturnNodeFeature(NoFeatureConfig::deserialize).setRegistryName("return_node"));

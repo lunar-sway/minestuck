@@ -53,7 +53,7 @@ public class WildcardGristCost extends GristCostRecipe
 		@Override
 		protected WildcardGristCost read(ResourceLocation recipeId, JsonObject json, Ingredient ingredient, Integer priority)
 		{
-			long wildcardCost = JSONUtils.func_226161_m_(json, "grist_cost");
+			long wildcardCost = JSONUtils.getLong(json, "grist_cost");
 			return new WildcardGristCost(recipeId, ingredient, wildcardCost, priority);
 		}
 		
