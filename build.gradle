@@ -35,7 +35,7 @@ repositories {
     }
 }
 
-version = '1.15.2-1.4.' + System.env.BUILD_NUMBER
+version = project.getProperty('mc_ms_version') +'.' + System.env.BUILD_NUMBER
 group = 'com.mraof.minestuck'
 archivesBaseName = 'Minestuck'
 
