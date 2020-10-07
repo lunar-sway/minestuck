@@ -1,14 +1,15 @@
 package com.mraof.minestuck.client.gui;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.TransportalizerPacket;
 import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
 
 public class TransportalizerScreen extends Screen
@@ -33,25 +34,25 @@ public class TransportalizerScreen extends Screen
 	public void init()
 	{
 		int yOffset = (this.height / 2) - (guiHeight / 2);
-		this.destinationTextField = new TextFieldWidget(this.font, this.width / 2 - 20, yOffset + 25, 40, 20, "Transportalizer destination code");	//TODO Use translation instead, and maybe look at other text fields for what the text should be
+		this.destinationTextField = new TextFieldWidget(this.font, this.width / 2 - 20, yOffset + 25, 40, 20, new StringTextComponent("Transportalizer destination code"));	//TODO Use translation instead, and maybe look at other text fields for what the text should be
 		this.destinationTextField.setMaxStringLength(4);
 		this.destinationTextField.setText(te.getDestId());
 		this.destinationTextField.setFocused2(true);
 		addButton(destinationTextField);
 		
-		addButton(new ExtendedButton(this.width / 2 - 20, yOffset + 50, 40, 20, I18n.format("gui.done"), button -> finish()));
+		addButton(new ExtendedButton(this.width / 2 - 20, yOffset + 50, 40, 20, new TranslationTextComponent("gui.done"), button -> finish()));
 	}
 	
 	@Override
-	public void render(int mouseX, int mouseY, float partialTicks)
+	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground();
+		this.renderBackground(matrixStack);
 		RenderSystem.color4f(1F, 1F, 1F, 1F);
 		this.minecraft.getTextureManager().bindTexture(guiBackground);
 		int yOffset = (this.height / 2) - (guiHeight / 2);
-		this.blit((this.width / 2) - (guiWidth / 2), yOffset, 0, 0, guiWidth, guiHeight);
-		font.drawString(te.getId(), (this.width / 2) - font.getStringWidth(te.getId()) / 2, yOffset + 10, te.getActive() ? 0x404040 : 0xFF0000);
-		super.render(mouseX, mouseY, partialTicks);
+		this.blit(matrixStack, (this.width / 2) - (guiWidth / 2), yOffset, 0, 0, guiWidth, guiHeight);
+		font.drawString(matrixStack, te.getId(), (this.width / 2) - font.getStringWidth(te.getId()) / 2, yOffset + 10, te.getActive() ? 0x404040 : 0xFF0000);
+		super.render(matrixStack, mouseX, mouseY, partialTicks);
 	}
 
 	private void finish()

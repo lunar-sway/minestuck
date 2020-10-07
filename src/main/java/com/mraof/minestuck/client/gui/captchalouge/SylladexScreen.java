@@ -1,5 +1,6 @@
 package com.mraof.minestuck.client.gui.captchalouge;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.client.settings.MSKeyHandler;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
@@ -10,7 +11,6 @@ import net.minecraft.client.gui.screen.ConfirmScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.InputMappings;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -62,15 +62,15 @@ public abstract class SylladexScreen extends Screen
 	@Override
 	public void init()
 	{
-		emptySylladex = new ExtendedButton((width - GUI_WIDTH)/2 + 140, (height - GUI_HEIGHT)/2 + 175, 100, 20, I18n.format(EMPTY_SYLLADEX_BUTTON), button -> emptySylladex());
+		emptySylladex = new ExtendedButton((width - GUI_WIDTH)/2 + 140, (height - GUI_HEIGHT)/2 + 175, 100, 20, new TranslationTextComponent(EMPTY_SYLLADEX_BUTTON), button -> emptySylladex());
 		addButton(emptySylladex);
 		updateContent();
 	}
 	
 	@Override
-	public void render(int xcor, int ycor, float f)
+	public void render(MatrixStack matrixStack, int xcor, int ycor, float f)
 	{
-		this.renderBackground();
+		this.renderBackground(matrixStack);
 		
 		emptySylladex.x = (width - GUI_WIDTH)/2 + 140;
 		emptySylladex.y = (height - GUI_HEIGHT)/2 + 175;
@@ -100,7 +100,7 @@ public abstract class SylladexScreen extends Screen
 		
 		prepareMap(xOffset + X_OFFSET, yOffset + Y_OFFSET);
 		
-		drawGuiMap(xcor, ycor);
+		drawGuiMap(matrixStack, xcor, ycor);
 		
 		RenderSystem.color4f(1F, 1F, 1F, 1F);
 		
@@ -111,13 +111,13 @@ public abstract class SylladexScreen extends Screen
 				visibleCards.add(card);
 		
 		for(GuiCard card : visibleCards)
-			card.drawItemBackground();
+			card.drawItemBackground(matrixStack);
 
 		RenderHelper.enableStandardItemLighting();
 		RenderSystem.enableRescaleNormal();
 		RenderSystem.glMultiTexCoord2f(GL13.GL_TEXTURE2, 240F, 240F);
 		for(GuiCard card : visibleCards)
-			card.drawItem();
+			card.drawItem(matrixStack);
 		RenderSystem.disableDepthTest();
 		RenderHelper.disableStandardItemLighting();
 		RenderSystem.color4f(1F, 1F, 1F, 1F);
@@ -125,14 +125,14 @@ public abstract class SylladexScreen extends Screen
 		finishMap();
 		
 		minecraft.getTextureManager().bindTexture(sylladexFrame);
-		blit(xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
+		blit(matrixStack, xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 		
-		font.drawString(getTitle().getFormattedText(), xOffset + 15, yOffset + 5, 0x404040);
+		font.drawString(matrixStack, getTitle().getString(), xOffset + 15, yOffset + 5, 0x404040);
 		
-		String str = ClientPlayerData.getModus().getName().getFormattedText();
-		font.drawString(str, xOffset + GUI_WIDTH - font.getStringWidth(str) - 16, yOffset + 5, 0x404040);
+		String str = ClientPlayerData.getModus().getName().getString();
+		font.drawString(matrixStack, str, xOffset + GUI_WIDTH - font.getStringWidth(str) - 16, yOffset + 5, 0x404040);
 		
-		super.render(xcor, ycor, f);
+		super.render(matrixStack, xcor, ycor, f);
 		
 		if(isMouseInContainer(xcor, ycor))
 		{
@@ -142,7 +142,7 @@ public abstract class SylladexScreen extends Screen
 				if(translX >= card.xPos + 2 - mapX && translX < card.xPos + 18 - mapX &&
 						translY >= card.yPos + 7 - mapY && translY < card.yPos + 23 - mapY)
 				{
-					card.drawTooltip(xcor, ycor);
+					card.drawTooltip(matrixStack, xcor, ycor);
 					break;
 				}
 		}
@@ -266,9 +266,9 @@ public abstract class SylladexScreen extends Screen
 		return false;
 	}
 	
-	public void drawGuiMap(int xcor, int ycor)
+	public void drawGuiMap(MatrixStack matrixStack, int mouseX, int mouseY)
 	{
-		fill(0, 0, mapWidth, mapHeight, 0xFF8B8B8B);
+		fill(matrixStack, 0, 0, mapWidth, mapHeight, 0xFF8B8B8B);
 	}
 	
 	private void prepareMap(int xOffset, int yOffset)
@@ -354,7 +354,7 @@ public abstract class SylladexScreen extends Screen
 			}
 		}
 
-		protected void drawItemBackground()
+		protected void drawItemBackground(MatrixStack matrixStack)
 		{
 			gui.minecraft.getTextureManager().bindTexture(gui.getCardTexture(this));
 			int minX = 0, maxX = CARD_WIDTH, minY = 0, maxY = CARD_HEIGHT;
@@ -366,12 +366,12 @@ public abstract class SylladexScreen extends Screen
 				minY += gui.mapY - (this.yPos + minY);
 			else if(this.yPos + maxY > gui.mapY + gui.mapHeight)
 				maxY -= (this.yPos + maxY) - (gui.mapY + gui.mapHeight);
-			gui.blit(this.xPos + minX - gui.mapX, this.yPos + minY - gui.mapY,	//Gui pos
+			gui.blit(matrixStack, this.xPos + minX - gui.mapX, this.yPos + minY - gui.mapY,	//Gui pos
 					gui.getCardTextureX(this) + minX, gui.getCardTextureY(this) + minY,	//Texture pos
 					maxX - minX, maxY - minY);	//Size
 		}
 		
-		protected void drawItem()
+		protected void drawItem(MatrixStack matrixStack)
 		{
 			RenderSystem.color4f(1F, 1F, 1F, 1F);
 			if(!this.item.isEmpty())
@@ -387,7 +387,7 @@ public abstract class SylladexScreen extends Screen
 					RenderSystem.disableLighting();
 					RenderSystem.disableDepthTest();
 					RenderSystem.disableBlend();
-					gui.font.drawStringWithShadow(stackSize, x + 16 - gui.font.getStringWidth(stackSize), y + 8, 0xC6C6C6);
+					gui.font.drawStringWithShadow(matrixStack, stackSize, x + 16 - gui.font.getStringWidth(stackSize), y + 8, 0xC6C6C6);
 					RenderSystem.enableLighting();
 					RenderSystem.enableDepthTest();
 					RenderSystem.enableBlend();
@@ -396,10 +396,10 @@ public abstract class SylladexScreen extends Screen
 			}
 		}
 		
-		protected void drawTooltip(int mouseX, int mouseY)
+		protected void drawTooltip(MatrixStack matrixStack, int mouseX, int mouseY)
 		{
 			if(!item.isEmpty())
-				gui.renderTooltip(item, mouseX, mouseY);
+				gui.renderTooltip(matrixStack, item, mouseX, mouseY);
 		}
 		
 	}
@@ -418,10 +418,10 @@ public abstract class SylladexScreen extends Screen
 		}
 		
 		@Override
-		protected void drawTooltip(int mouseX, int mouseY) {}
+		protected void drawTooltip(MatrixStack matrixStack, int mouseX, int mouseY) {}
 		
 		@Override
-		protected void drawItem()
+		protected void drawItem(MatrixStack matrixStack)
 		{
 			RenderSystem.color4f(1F, 1F, 1F, 1F);
 			if(size > 1)
@@ -434,7 +434,7 @@ public abstract class SylladexScreen extends Screen
 				RenderSystem.disableLighting();
 				RenderSystem.disableDepthTest();
 				RenderSystem.disableBlend();
-				gui.font.drawStringWithShadow(stackSize, x, y, 0xC6C6C6);
+				gui.font.drawStringWithShadow(matrixStack, stackSize, x, y, 0xC6C6C6);
 				RenderSystem.enableLighting();
 				RenderSystem.enableDepthTest();
 				RenderSystem.enableBlend();

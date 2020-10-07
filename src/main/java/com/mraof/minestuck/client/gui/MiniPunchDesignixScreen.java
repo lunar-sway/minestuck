@@ -1,11 +1,13 @@
 package com.mraof.minestuck.client.gui;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.inventory.MiniPunchDesignixContainer;
 import com.mraof.minestuck.tileentity.MiniPunchDesignixTileEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 
 public class MiniPunchDesignixScreen extends MachineScreen<MiniPunchDesignixContainer>
 {
@@ -33,23 +35,23 @@ public class MiniPunchDesignixScreen extends MachineScreen<MiniPunchDesignixCont
 	}
 	
 	@Override
-	public void render(int mouseX, int mouseY, float partialTicks)
+	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground();
-		super.render(mouseX, mouseY, partialTicks);
-		this.renderHoveredToolTip(mouseX, mouseY);
+		this.renderBackground(matrixStack);
+		super.render(matrixStack, mouseX, mouseY, partialTicks);
+		this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
 	}
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
+	protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY)
 	{
-		font.drawString(title.getFormattedText(), 8, 6, 4210752);
+		font.drawString(matrixStack, title.getString(), 8, 6, 4210752);
 		//draws "Inventory" or your regional equivalent
-		font.drawString(playerInventory.getDisplayName().getFormattedText(), 8, ySize - 96 + 2, 4210752);
+		font.drawString(matrixStack, playerInventory.getDisplayName().getString(), 8, ySize - 96 + 2, 4210752);
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
+	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float par1, int par2, int par3)
 	{
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
@@ -57,13 +59,13 @@ public class MiniPunchDesignixScreen extends MachineScreen<MiniPunchDesignixCont
 		this.minecraft.getTextureManager().bindTexture(BACKGROUND);
 		int x = (width - xSize) / 2;
 		int y = (height - ySize) / 2;
-		this.blit(x, y, 0, 0, xSize, ySize);
+		this.blit(matrixStack, x, y, 0, 0, xSize, ySize);
 
 		//draw progress bar
 		this.minecraft.getTextureManager().bindTexture(PROGRESS);
 		int width = getScaledValue(container.getProgress(), MiniPunchDesignixTileEntity.DEFAULT_MAX_PROGRESS, progressWidth);
 		int height = progressHeight;
-		blit(x + progressX, y + progressY, 0, 0, width, height, progressWidth, progressHeight);
+		blit(matrixStack, x + progressX, y + progressY, 0, 0, width, height, progressWidth, progressHeight);
 	}
 
 	@Override
@@ -71,7 +73,7 @@ public class MiniPunchDesignixScreen extends MachineScreen<MiniPunchDesignixCont
 	{
 		super.init();
 		
-		goButton = new GoButton((width - xSize) / 2 + goX, (height - ySize) / 2 + goY, 30, 12, container.overrideStop() ? "STOP" : "GO");
+		goButton = new GoButton((width - xSize) / 2 + goX, (height - ySize) / 2 + goY, 30, 12, new StringTextComponent(container.overrideStop() ? "STOP" : "GO"));
 		addButton(goButton);
 	}
 }

@@ -1,5 +1,6 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.client.settings.MSKeyHandler;
 import com.mraof.minestuck.network.DataCheckerPacket;
@@ -62,10 +63,10 @@ public class DataCheckerScreen extends Screen
 		for(int i = 0; i < 5; i++)
 		{
 			final int id = i;
-			contentButtons[id] = addButton(new ExtendedButton(xOffset + 5, yOffset + LIST_Y + i*22, 180, 20, "", button -> contentButton(id)));
+			contentButtons[id] = addButton(new ExtendedButton(xOffset + 5, yOffset + LIST_Y + i*22, 180, 20, StringTextComponent.EMPTY, button -> contentButton(id)));
 		}
-		returnButton = addButton(new Button(xOffset + GUI_WIDTH - 25, yOffset + 5, 18, 18, "", button -> goBack()));
-		refreshButton = addButton(new Button(xOffset + GUI_WIDTH - 45, yOffset + 5, 18, 18, "", button -> refresh()));
+		returnButton = addButton(new Button(xOffset + GUI_WIDTH - 25, yOffset + 5, 18, 18, StringTextComponent.EMPTY, button -> goBack()));
+		refreshButton = addButton(new Button(xOffset + GUI_WIDTH - 45, yOffset + 5, 18, 18, StringTextComponent.EMPTY, button -> refresh()));
 		
 		if(activeComponent == null)
 			MSPacketHandler.sendToServer(DataCheckerPacket.request());
@@ -74,7 +75,7 @@ public class DataCheckerScreen extends Screen
 	}
 	
 	@Override
-	public void render(int mouseX, int mouseY, float partialTicks)
+	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
 	{
 		int xOffset = (width - GUI_WIDTH)/2;
 		int yOffset = (height - GUI_HEIGHT)/2;
@@ -92,46 +93,46 @@ public class DataCheckerScreen extends Screen
 			}
 		}
 		
-		renderBackground();
+		renderBackground(matrixStack);
 		
 		this.minecraft.getTextureManager().bindTexture(guiBackground);
 		
-		blit(xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
+		blit(matrixStack, xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 		
-		super.render(mouseX, mouseY, partialTicks);
+		super.render(matrixStack, mouseX, mouseY, partialTicks);
 		
 		this.minecraft.getTextureManager().bindTexture(icons);
 		
 		if(this.returnButton.active)
 			RenderSystem.color3f(1, 1, 1);
 		else RenderSystem.color3f(.5F, .5F, .5F);
-		blit(xOffset + GUI_WIDTH - 24, yOffset + 6, 240, 0, 16, 16);
+		blit(matrixStack, xOffset + GUI_WIDTH - 24, yOffset + 6, 240, 0, 16, 16);
 		if(this.refreshButton.active)
 			RenderSystem.color3f(1, 1, 1);
 		else RenderSystem.color3f(.5F, .5F, .5F);
-		blit(xOffset + GUI_WIDTH - 44, yOffset + 6, 224, 0, 16, 16);
+		blit(matrixStack, xOffset + GUI_WIDTH - 44, yOffset + 6, 224, 0, 16, 16);
 		
 		if(guiComponent != null)
 		{
 			List<IDataComponent> list = guiComponent.getComponentList();
 			for(int i = 0; i < 5; i++)
 			{
-				 font.drawString(guiComponent.getName(), xOffset + 9, yOffset + 15 - font.FONT_HEIGHT/2, 0);
+				 font.drawString(matrixStack, guiComponent.getName(), xOffset + 9, yOffset + 15 - font.FONT_HEIGHT/2, 0);
 				IDataComponent component = i + index < list.size() ? list.get(i + index) : null;
 				if(component != null && !component.isButton())
 				{
 					RenderSystem.color3f(1, 1, 1);
 					this.minecraft.getTextureManager().bindTexture(guiBackground);
-					blit(xOffset + 5, yOffset + LIST_Y + i*22, 0, 236, 180, 20);
-					font.drawString(component.getName(), xOffset + 9, yOffset + LIST_Y + 10 - font.FONT_HEIGHT/2 + i*22, 0);
+					blit(matrixStack, xOffset + 5, yOffset + LIST_Y + i*22, 0, 236, 180, 20);
+					font.drawString(matrixStack, component.getName(), xOffset + 9, yOffset + LIST_Y + 10 - font.FONT_HEIGHT/2 + i*22, 0);
 				}
 			}
-		} else font.drawString("Retrieving data from server...", xOffset + 9, yOffset + 15 - font.FONT_HEIGHT/2, 0);
+		} else font.drawString(matrixStack, "Retrieving data from server...", xOffset + 9, yOffset + 15 - font.FONT_HEIGHT/2, 0);
 
 		RenderSystem.color3f(1, 1, 1);
 		int textureIndex = canScroll ? 232 : 244;
 		this.minecraft.getTextureManager().bindTexture(guiBackground);
-		blit((width - GUI_WIDTH)/2 + 190, (height - GUI_HEIGHT)/2 + LIST_Y + 1 + (int) displayIndex*91, textureIndex, 0, 12, 15);
+		blit(matrixStack, (width - GUI_WIDTH)/2 + 190, (height - GUI_HEIGHT)/2 + LIST_Y + 1 + (int) displayIndex*91, textureIndex, 0, 12, 15);
 	}
 	
 	@Override
@@ -243,7 +244,7 @@ public class DataCheckerScreen extends Screen
 				if(component != null && component.isButton())
 				{
 					button.visible = true;
-					button.setMessage(component.getName());
+					button.setMessage(new StringTextComponent(component.getName()));
 					
 				} else button.visible = false;
 			}
@@ -466,12 +467,12 @@ public class DataCheckerScreen extends Screen
 			{
 				list.add(new TextField("Land dim: %s", (!landDim.isEmpty() ? landDim : "Pre-entry")));
 				if(!landDim.isEmpty() && connectionTag.contains("landType1"))
-					list.add(new LocalizedTextField(LandTypePair.FORMAT, new TranslationTextComponent("land."+connectionTag.getString("landType1")).getFormattedText(), new TranslationTextComponent("land."+connectionTag.getString("landType2")).getFormattedText()));
+					list.add(new LocalizedTextField(LandTypePair.FORMAT, new TranslationTextComponent("land."+connectionTag.getString("landType1")).getString(), new TranslationTextComponent("land."+connectionTag.getString("landType2")).getString()));
 				if(connectionTag.contains("class"))
 				{
 					byte cl = connectionTag.getByte("class"), as = connectionTag.getByte("aspect");
 					Title title = new Title(EnumClass.values()[cl], EnumAspect.values()[as]);
-					list.add(new TextField(title.asTextComponent().getFormattedText()));
+					list.add(new TextField(title.asTextComponent().getString()));
 				}
 				
 				if(connectionTag.contains("titleLandType"))

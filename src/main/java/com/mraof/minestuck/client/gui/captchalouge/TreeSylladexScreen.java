@@ -1,5 +1,6 @@
 package com.mraof.minestuck.client.gui.captchalouge;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.inventory.captchalogue.TreeModus;
@@ -7,7 +8,8 @@ import com.mraof.minestuck.inventory.captchalogue.TreeModus.TreeNode;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.resources.I18n;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
 
 public class TreeSylladexScreen extends SylladexScreen
@@ -31,19 +33,19 @@ public class TreeSylladexScreen extends SylladexScreen
 	public void init()
 	{
 		super.init();
-		guiButton = new ExtendedButton((width - GUI_WIDTH)/2 + 15, (height - GUI_HEIGHT)/2 + 175, 120, 20, "", button -> changeSetting());
+		guiButton = new ExtendedButton((width - GUI_WIDTH)/2 + 15, (height - GUI_HEIGHT)/2 + 175, 120, 20, StringTextComponent.EMPTY, button -> changeSetting());
 		addButton(guiButton);
 	}
 	
 	@Override
-	public void render(int xcor, int ycor, float f)
+	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float f)
 	{
 		guiButton.x = (width - GUI_WIDTH)/2 + 15;
 		guiButton.y = (height - GUI_HEIGHT)/2 + 175;
 		boolean autobalance = MinestuckConfig.SERVER.treeModusSetting.get() == MinestuckConfig.AvailableOptions.BOTH ? modus.autoBalance : MinestuckConfig.SERVER.treeModusSetting.get() == MinestuckConfig.AvailableOptions.ON;
-		guiButton.setMessage(I18n.format(autobalance ? AUTOBALANCE_ON : AUTOBALANCE_OFF));
+		guiButton.setMessage(new TranslationTextComponent(autobalance ? AUTOBALANCE_ON : AUTOBALANCE_OFF));
 		guiButton.active = MinestuckConfig.SERVER.treeModusSetting.get() == MinestuckConfig.AvailableOptions.BOTH;
-		super.render(xcor, ycor, f);
+		super.render(matrixStack, mouseX, mouseY, f);
 	}
 	
 	@Override
@@ -84,11 +86,11 @@ public class TreeSylladexScreen extends SylladexScreen
 	}
 	
 	@Override
-	public void drawGuiMap(int xcor, int ycor)
+	public void drawGuiMap(MatrixStack matrixStack, int mouseX, int mouseY)
 	{
-		super.drawGuiMap(xcor, ycor);
+		super.drawGuiMap(matrixStack, mouseX, mouseY);
 		if(guiIndexList[0] != null)
-			drawNodeLines(0, 0);
+			drawNodeLines(matrixStack, 0, 0);
 	}
 	
 	private void changeSetting()
@@ -100,7 +102,7 @@ public class TreeSylladexScreen extends SylladexScreen
 		}
 	}
 	
-	protected void drawNodeLines(int index, int depth)
+	protected void drawNodeLines(MatrixStack matrixStack, int index, int depth)
 	{
 		if(depth >= maxDepth)
 			return;
@@ -112,15 +114,15 @@ public class TreeSylladexScreen extends SylladexScreen
 			GuiCard other = guiIndexList[index*2 + 1];
 			
 			if(mapX < card.xPos + 10 && mapX + mapWidth > card.xPos + 9 && mapY < card.yPos + CARD_HEIGHT + 6 && mapY + mapHeight > card.yPos + CARD_HEIGHT)
-				fill(card.xPos + 9 - mapX, card.yPos + CARD_HEIGHT - mapY, card.xPos + 10 - mapX, card.yPos + CARD_HEIGHT - mapY + 6, 0xFF000000);
+				fill(matrixStack, card.xPos + 9 - mapX, card.yPos + CARD_HEIGHT - mapY, card.xPos + 10 - mapX, card.yPos + CARD_HEIGHT - mapY + 6, 0xFF000000);
 			
 			if(mapX < card.xPos + 10 && mapX + mapWidth > other.xPos + 10 && mapY < card.yPos + CARD_HEIGHT + 6 && mapY + mapHeight > card.yPos + CARD_HEIGHT + 5)
-				fill(Math.max(0, other.xPos - mapX + 10), card.yPos + CARD_HEIGHT - mapY + 5, Math.min(mapWidth, card.xPos + 10 - mapX), card.yPos + CARD_HEIGHT - mapY + 6, 0xFF000000);
+				fill(matrixStack, Math.max(0, other.xPos - mapX + 10), card.yPos + CARD_HEIGHT - mapY + 5, Math.min(mapWidth, card.xPos + 10 - mapX), card.yPos + CARD_HEIGHT - mapY + 6, 0xFF000000);
 			
 			if(mapX < other.xPos + 11 && mapX + mapWidth > other.xPos + 10 && mapY < other.yPos && mapY + mapHeight > card.yPos + CARD_HEIGHT + 5)
-				fill(other.xPos + 10 - mapX, card.yPos + CARD_HEIGHT + 5 - mapY, other.xPos + 11 - mapX, other.yPos - mapY, 0xFF000000);
+				fill(matrixStack, other.xPos + 10 - mapX, card.yPos + CARD_HEIGHT + 5 - mapY, other.xPos + 11 - mapX, other.yPos - mapY, 0xFF000000);
 			
-			drawNodeLines(index*2 + 1, depth + 1);
+			drawNodeLines(matrixStack, index*2 + 1, depth + 1);
 		}
 		
 		if(guiIndexList[index*2 + 2] != null)
@@ -128,19 +130,19 @@ public class TreeSylladexScreen extends SylladexScreen
 			GuiCard other = guiIndexList[index*2 + 2];
 			
 			if(mapX < card.xPos + 12 && mapX + mapWidth > card.xPos + 11 && mapY < card.yPos + CARD_HEIGHT + 6 && mapY + mapHeight > card.yPos + CARD_HEIGHT)
-				fill(card.xPos + 11 - mapX, card.yPos + CARD_HEIGHT - mapY, card.xPos + 12 - mapX, card.yPos + CARD_HEIGHT - mapY + 6, 0xFF000000);
+				fill(matrixStack, card.xPos + 11 - mapX, card.yPos + CARD_HEIGHT - mapY, card.xPos + 12 - mapX, card.yPos + CARD_HEIGHT - mapY + 6, 0xFF000000);
 			
 			if(mapX < other.xPos + 10 && mapX + mapWidth > card.xPos + 11 && mapY < card.yPos + CARD_HEIGHT + 6 && mapY + mapHeight > card.yPos + CARD_HEIGHT + 5)
-				fill(Math.max(0, card.xPos + 11 - mapX), card.yPos + CARD_HEIGHT - mapY + 5, Math.min(mapWidth, other.xPos + 10 - mapX), card.yPos + CARD_HEIGHT - mapY + 6, 0xFF000000);
+				fill(matrixStack, Math.max(0, card.xPos + 11 - mapX), card.yPos + CARD_HEIGHT - mapY + 5, Math.min(mapWidth, other.xPos + 10 - mapX), card.yPos + CARD_HEIGHT - mapY + 6, 0xFF000000);
 			
 			if(mapX < other.xPos + 10 && mapX + mapWidth > other.xPos + 9 && mapY < other.yPos && mapY + mapHeight > card.yPos + CARD_HEIGHT + 5)
-				fill(other.xPos + 9 - mapX, card.yPos + CARD_HEIGHT + 5 - mapY, other.xPos + 10 - mapX, other.yPos - mapY, 0xFF000000);
+				fill(matrixStack, other.xPos + 9 - mapX, card.yPos + CARD_HEIGHT + 5 - mapY, other.xPos + 10 - mapX, other.yPos - mapY, 0xFF000000);
 			
-			drawNodeLines(index*2 + 1, depth + 1);
+			drawNodeLines(matrixStack, index*2 + 1, depth + 1);
 		}
 		
 		if(guiIndexList[index*2 + 2] != null)
-			drawNodeLines(index*2 + 2, depth + 1);
+			drawNodeLines(matrixStack, index*2 + 2, depth + 1);
 		
 	}
 	

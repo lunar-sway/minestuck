@@ -1,5 +1,6 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.client.gui.captchalouge.SylladexScreen;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckContainer;
@@ -12,7 +13,6 @@ import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.client.gui.screen.ConfirmScreen;
 import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.CCloseWindowPacket;
@@ -41,8 +41,8 @@ public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckCon
 	public void init()
 	{
 		super.init();
-		modusButton = new ExtendedButton(xOffset + 102, yOffset + 31, 50, 18, I18n.format(USE_ITEM), button -> use());
-		sylladexMap = new ExtendedButton(xOffset + 6, yOffset + 31, 60, 18, I18n.format(SYLLADEX), button -> sylladex());
+		modusButton = new ExtendedButton(xOffset + 102, yOffset + 31, 50, 18, new TranslationTextComponent(USE_ITEM), button -> use());
+		sylladexMap = new ExtendedButton(xOffset + 6, yOffset + 31, 60, 18, new TranslationTextComponent(SYLLADEX), button -> sylladex());
 		addButton(modusButton);
 		addButton(sylladexMap);
 		sylladexMap.active = ClientPlayerData.getModus() != null;
@@ -50,27 +50,27 @@ public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckCon
 	}
 	
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float par1, int xcor, int ycor)
+	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float par1, int xcor, int ycor)
 	{
 		sylladexMap.active = ClientPlayerData.getModus() != null;
 		modusButton.active = !container.inventory.getStackInSlot(0).isEmpty();
 		
-		drawTabs();
+		drawTabs(matrixStack);
 		
 		minecraft.getTextureManager().bindTexture(guiCaptchaDeck);
-		this.blit(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
+		this.blit(matrixStack, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
-		drawActiveTabAndIcons();
+		drawActiveTabAndIcons(matrixStack);
 		
 	}
 	
 	@Override
-	protected void drawGuiContainerForegroundLayer(int xcor, int ycor)
+	protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY)
 	{
-		drawTabTooltip(xcor, ycor);
+		drawTabTooltip(matrixStack, mouseX, mouseY);
 		
-		String message = getTitle().getFormattedText();
-		font.drawString(message, (this.width / 2F) - font.getStringWidth(message) / 2F - guiLeft, yOffset + 12 - guiTop, 0x404040);
+		String message = getTitle().getString();
+		font.drawString(matrixStack, message, (this.width / 2F) - font.getStringWidth(message) / 2F - guiLeft, yOffset + 12 - guiTop, 0x404040);
 		
 	}
 	

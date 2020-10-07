@@ -1,5 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.TitleSelectPacket;
 import com.mraof.minestuck.player.EnumAspect;
@@ -10,6 +11,7 @@ import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
 
@@ -45,7 +47,7 @@ public class TitleSelectorScreen extends Screen
 			if(i < 12)
 			{
 				ITextComponent className = c.asTextComponent();
-				Button button = new ExtendedButton((width - guiWidth) / 2 + 4 + (i % 2) * 40, (height - guiHeight) / 2 + 24 + (i / 2) * 16, 40, 16, className.getFormattedText(), button1 -> pickClass(c));
+				Button button = new ExtendedButton((width - guiWidth) / 2 + 4 + (i % 2) * 40, (height - guiHeight) / 2 + 24 + (i / 2) * 16, 40, 16, className, button1 -> pickClass(c));
 				addButton(button);
 				classButtons[i] = button;
 			}
@@ -56,35 +58,35 @@ public class TitleSelectorScreen extends Screen
 			if(i < 12)
 			{
 				ITextComponent aspectName = a.asTextComponent();
-				Button button = new ExtendedButton((width - guiWidth) / 2 + 102 + (i % 2) * 40, (height - guiHeight) / 2 + 24 + (i / 2) * 16, 40, 16, aspectName.getFormattedText(), button1 -> pickAspect(a));
+				Button button = new ExtendedButton((width - guiWidth) / 2 + 102 + (i % 2) * 40, (height - guiHeight) / 2 + 24 + (i / 2) * 16, 40, 16, aspectName, button1 -> pickAspect(a));
 				addButton(button);
 				aspectButtons[i] = button;
 			}
 		}
-		selectButton = new ExtendedButton((width - guiWidth)/2 + 63, (height - guiHeight)/2 + 128, 60, 20, "Select", button -> select());
+		selectButton = new ExtendedButton((width - guiWidth)/2 + 63, (height - guiHeight)/2 + 128, 60, 20, new StringTextComponent("Select"), button -> select());	//TODO translation key
 		addButton(selectButton);
 	}
 	
 	@Override
-	public void render(int mouseX, int mouseY, float partialTicks)
+	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
 	{
 		selectButton.active = currentClass != null && currentAspect != null;
 		
 		int xOffset = (width - guiWidth)/2;
 		int yOffset = (height - guiHeight)/2;
 		
-		this.renderBackground();
+		this.renderBackground(matrixStack);
 		
 		this.minecraft.getTextureManager().bindTexture(guiBackground);
-		this.blit(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
+		this.blit(matrixStack, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
-		String message = previous == null ? I18n.format(SELECT_TITLE) : I18n.format(USED_TITLE, previous.asTextComponent().getFormattedText());
-		font.drawString(message, (this.width / 2F) - font.getStringWidth(message) / 2F, yOffset + 12, 0x404040);
+		String message = previous == null ? I18n.format(SELECT_TITLE) : I18n.format(USED_TITLE, previous.asTextComponent().getString());
+		font.drawString(matrixStack, message, (this.width / 2F) - font.getStringWidth(message) / 2F, yOffset + 12, 0x404040);
 		
 		message = I18n.format(Title.FORMAT, "", "");
-		font.drawString(message, (this.width / 2F) - font.getStringWidth(message) / 2F, yOffset + 56 - font.FONT_HEIGHT/2F, 0x404040);
+		font.drawString(matrixStack, message, (this.width / 2F) - font.getStringWidth(message) / 2F, yOffset + 56 - font.FONT_HEIGHT/2F, 0x404040);
 		
-		super.render(mouseX, mouseY, partialTicks);
+		super.render(matrixStack, mouseX, mouseY, partialTicks);
 		
 	}
 	
@@ -112,7 +114,7 @@ public class TitleSelectorScreen extends Screen
 	}
 	
 	@Override
-	public void removed()
+	public void onClose()
 	{
 		if(sendPacket)
 			MSPacketHandler.sendToServer(new TitleSelectPacket());

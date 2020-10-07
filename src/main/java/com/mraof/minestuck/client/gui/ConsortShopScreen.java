@@ -1,5 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.inventory.ConsortMerchantContainer;
@@ -22,7 +23,7 @@ public class ConsortShopScreen extends ContainerScreen<ConsortMerchantContainer>
 	}
 	
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY)
+	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY)
 	{
 		if(container.getConsortType() == null || container.getMerchantType() == null)
 			return;
@@ -36,15 +37,15 @@ public class ConsortShopScreen extends ContainerScreen<ConsortMerchantContainer>
 		this.minecraft.getTextureManager().bindTexture(guiBackground);
 		int x = (width - xSize) / 2;
 		int y = (height - ySize) / 2;
-		this.blit(x, y, 0, 0, xSize, ySize);
+		this.blit(matrixStack, x, y, 0, 0, xSize, ySize);
 		
 		this.minecraft.getTextureManager().bindTexture(portrait);
-		blit(x+119, y+40, 0, 0, 64, 64, 64, 64);
+		blit(matrixStack, x+119, y+40, 0, 0, 64, 64, 64, 64);
 		
 		this.minecraft.getTextureManager().bindTexture(PlayerStatsScreen.icons);
-		this.blit(x + 5, y + 7, 238, 16, 18, 18);
+		this.blit(matrixStack, x + 5, y + 7, 238, 16, 18, 18);
 		
-		font.drawString(String.valueOf(ClientPlayerData.getBoondollars()), x + 25, y + 12, 0x0094FF);
+		font.drawString(matrixStack, String.valueOf(ClientPlayerData.getBoondollars()), x + 25, y + 12, 0x0094FF);
 		
 		for (int i = 0; i < 9; i++)
 		{
@@ -52,15 +53,15 @@ public class ConsortShopScreen extends ContainerScreen<ConsortMerchantContainer>
 			if (price == 0 || container.getSlot(i).getStack().isEmpty())
 				continue;
 			String cost = price + "\u00A3";
-			font.drawString(cost, x + 25 - font.getStringWidth(cost)/2F + 35*(i%3), y + 54 + 33*(i/3), 0x000000);
+			font.drawString(matrixStack, cost, x + 25 - font.getStringWidth(cost)/2F + 35*(i%3), y + 54 + 33*(i/3), 0x000000);
 		}
 	}
 	
 	@Override
-	public void render(int mouseX, int mouseY, float partialTicks)
+	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground();
-		super.render(mouseX, mouseY, partialTicks);
-		this.renderHoveredToolTip(mouseX, mouseY);
+		this.renderBackground(matrixStack);
+		super.render(matrixStack, mouseX, mouseY, partialTicks);
+		this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
 	}
 }

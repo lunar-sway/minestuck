@@ -1,5 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.computer.ComputerProgram;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
@@ -8,9 +9,9 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
 
 import java.util.Iterator;
@@ -43,29 +44,29 @@ public class ComputerScreen extends Screen
 	}
 	
 	@Override
-	public void render(int mouseX, int mouseY, float partialTicks)
+	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground();
+		this.renderBackground(matrixStack);
 		
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		if(te.hasProgram(-1)) {
 			this.mc.getTextureManager().bindTexture(guiBsod);
 			int yOffset = (this.height / 2) - (ySize / 2);
-			this.blit((this.width / 2) - (xSize / 2), yOffset, 0, 0, xSize, ySize);
+			this.blit(matrixStack, (this.width / 2) - (xSize / 2), yOffset, 0, 0, xSize, ySize);
 		} else if(program != null)
-			program.paintGui(this, te);
+			program.paintGui(matrixStack, this, te);
 		else {
 			this.mc.getTextureManager().bindTexture(guiBackground);
 			int yOffset = (this.height / 2) - (ySize / 2);
-			this.blit((this.width / 2) - (xSize / 2), yOffset, 0, 0, xSize, ySize);
-			font.drawString("Insert disk.", (width - xSize) / 2F +15, (height - ySize) / 2F +45, 4210752);
+			this.blit(matrixStack, (this.width / 2) - (xSize / 2), yOffset, 0, 0, xSize, ySize);
+			font.drawString(matrixStack, "Insert disk.", (width - xSize) / 2F +15, (height - ySize) / 2F +45, 4210752);
 		}
 		RenderSystem.disableRescaleNormal();
 		RenderHelper.disableStandardItemLighting();
 		RenderSystem.disableLighting();
 		RenderSystem.disableDepthTest();
 
-		super.render(mouseX, mouseY, partialTicks);
+		super.render(matrixStack, mouseX, mouseY, partialTicks);
 	}
 	
 	@Override
@@ -86,7 +87,7 @@ public class ComputerScreen extends Screen
 		if(te.programSelected != -1 && (program == null || program.getId() != te.programSelected))
 			program = ComputerProgram.getProgram(te.programSelected);
 		
-		programButton = new ExtendedButton((width - xSize)/2 +95,(height - ySize)/2 +10,70,20, "", button -> changeProgram());
+		programButton = new ExtendedButton((width - xSize)/2 +95,(height - ySize)/2 +10,70,20, StringTextComponent.EMPTY, button -> changeProgram());
 		addButton(programButton);
 		if(te.programSelected != -1)
 			program.onInitGui(this, null);
@@ -106,7 +107,7 @@ public class ComputerScreen extends Screen
 		
 		if(program != null) {
 			program.onUpdateGui(this);
-			programButton.setMessage(I18n.format(program.getName()));
+			programButton.setMessage(new TranslationTextComponent(program.getName()));
 		}
 		
 	}

@@ -1,5 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.Minestuck;
@@ -14,7 +15,6 @@ import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
@@ -23,6 +23,7 @@ import net.minecraft.util.SharedConstants;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 
 
 public class StoneTabletScreen extends Screen
@@ -68,7 +69,7 @@ public class StoneTabletScreen extends Screen
 		++updateCount;
 	}
 	@Override
-	public void removed() {
+	public void onClose() {
 		this.minecraft.keyboardListener.enableRepeatEvents(false);
 	}
 	@Override
@@ -78,37 +79,37 @@ public class StoneTabletScreen extends Screen
 		
 		if(canEdit)
 		{
-			this.buttonDone = this.addButton(new Button(this.width / 2 - 100, 196, 98, 20, I18n.format("gui.done"), (button) ->
+			this.buttonDone = this.addButton(new Button(this.width / 2 - 100, 196, 98, 20, new TranslationTextComponent("gui.done"), (button) ->
 			{
 				this.minecraft.displayGuiScreen(null);
 				this.sendTabletToServer();
 			}));
-			this.buttonCancel = this.addButton(new Button(this.width / 2 + 2, 196, 98, 20, I18n.format("gui.cancel"), (button) ->
+			this.buttonCancel = this.addButton(new Button(this.width / 2 + 2, 196, 98, 20, new TranslationTextComponent("gui.cancel"), (button) ->
 			{
 				minecraft.displayGuiScreen(null);
 			}));
 		}
 		else
 		{
-			this.addButton(new Button(this.width / 2 - 100, 196, 200, 20, I18n.format("gui.done"), (p_214161_1_) -> {
+			this.addButton(new Button(this.width / 2 - 100, 196, 200, 20, new TranslationTextComponent("gui.done"), (p_214161_1_) -> {
 				this.minecraft.displayGuiScreen((Screen)null);
 			}));
 		}
 	}
 	
 	@Override
-	public void render(int mouseX, int mouseY, float partialTicks)
+	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground();
-		this.setFocused(null);
+		this.renderBackground(matrixStack);
+		this.setListener(null);
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.minecraft.getTextureManager().bindTexture(TABLET_TEXTURES);
 		int i = (this.width - 192) / 2;
 		int j = 2;
-		this.blit(i, 2, 0, 0, 192, 192);
+		this.blit(matrixStack, i, 2, 0, 0, 192, 192);
 		{
 			String s5 = this.text;
-			this.font.drawSplitString(s5, i + 36, 32, 114, 0);
+			//this.font.drawSplitString(s5, i + 36, 32, 114, 0); TODO no obvious replacement found. Continue looking
 			this.highlightSelectedText(s5);
 			if (this.updateCount / 6 % 2 == 0) 
 			{
@@ -124,16 +125,16 @@ public class StoneTabletScreen extends Screen
 				{
 					if(this.selectionEnd < s5.length())
 					{
-						AbstractGui.fill(point.x, point.y - 1, point.x + 1, point.y + 9, -16777216);
+						AbstractGui.fill(matrixStack, point.x, point.y - 1, point.x + 1, point.y + 9, -16777216);
 					} else
 					{
-						this.font.drawString("_", (float) point.x, (float) point.y, 0);
+						this.font.drawString(matrixStack, "_", (float) point.x, (float) point.y, 0);
 					}
 				}
 			}
 		}
 		
-		super.render(mouseX, mouseY, partialTicks);
+		super.render(matrixStack, mouseX, mouseY, partialTicks);
 	}
 	
 	/**
@@ -148,7 +149,7 @@ public class StoneTabletScreen extends Screen
 			int i = Math.min(this.selectionEnd, this.selectionStart);
 			int j = Math.max(this.selectionEnd, this.selectionStart);
 			String s = pageText.substring(i, j);
-			int k = this.font.getWordPosition(pageText, 1, j, true);
+			int k = 0;//this.font.getWordPosition(pageText, 1, j, true); TODO
 			String s1 = pageText.substring(i, k);
 			Point point = StoneTabletUtils.createPointer(font, pageText, i);
 			Point point1 = new Point(point.x, point.y + 9);
@@ -167,8 +168,8 @@ public class StoneTabletScreen extends Screen
 				String s2 = s.substring(0, l);
 				char c0 = s.charAt(l);
 				boolean flag = c0 == ' ' || c0 == '\n';
-				s = TextFormatting.getFormatString(s2) + s.substring(l + (flag ? 1 : 0));
-				s1 = TextFormatting.getFormatString(s2) + s1.substring(l + (flag ? 1 : 0));
+				s = TextFormatting.getTextWithoutFormattingCodes(s2) + s.substring(l + (flag ? 1 : 0));	//TODO was getFormatString(String). Make sure that this is the right replacement
+				s1 = TextFormatting.getTextWithoutFormattingCodes(s2) + s1.substring(l + (flag ? 1 : 0));
 				point1.x = point.x + this.getTextWidth(s2 + " ");
 				this.drawSelectionBox(point, point1);
 				point.x = 0;
@@ -322,8 +323,8 @@ public class StoneTabletScreen extends Screen
 				{
 					if (i - this.lastClickTime < 250L) {
 						if (this.selectionStart == this.selectionEnd) {
-							this.selectionStart = this.font.getWordPosition(s, -1, j, false);
-							this.selectionEnd = this.font.getWordPosition(s, 1, j, false);
+							this.selectionStart = 0;//this.font.getWordPosition(s, -1, j, false); TODO
+							this.selectionEnd = 0;//this.font.getWordPosition(s, 1, j, false);
 						} else 
 							{
 							this.selectionStart = 0;
@@ -470,7 +471,7 @@ public class StoneTabletScreen extends Screen
 	{
 		int i = this.font.getBidiFlag() ? 1 : -1;
 		if (Screen.hasControlDown()) 
-			this.selectionEnd = this.font.getWordPosition(pageText, i, this.selectionEnd, true);
+			this.selectionEnd = 0;//this.font.getWordPosition(pageText, i, this.selectionEnd, true); TODO
 		else
 			this.selectionEnd = Math.max(0, this.selectionEnd + i);
 		
@@ -486,7 +487,7 @@ public class StoneTabletScreen extends Screen
 	{
 		int i = this.font.getBidiFlag() ? -1 : 1;
 		if (Screen.hasControlDown())
-			this.selectionEnd = this.font.getWordPosition(pageText, i, this.selectionEnd, true);
+			this.selectionEnd = 0;//this.font.getWordPosition(pageText, i, this.selectionEnd, true); TODO
 		else
 			this.selectionEnd = Math.min(pageText.length(), this.selectionEnd + i);
 				

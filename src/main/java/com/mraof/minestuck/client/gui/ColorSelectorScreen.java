@@ -1,11 +1,13 @@
 package com.mraof.minestuck.client.gui;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -39,13 +41,13 @@ public class ColorSelectorScreen extends Screen
 	@Override
 	public void init()
 	{
-		addButton(new ExtendedButton((width - guiWidth)/2 + 50, (height - guiHeight)/2 + 132, 76, 20, "Choose", button -> selectColor()));
+		addButton(new ExtendedButton((width - guiWidth)/2 + 50, (height - guiHeight)/2 + 132, 76, 20, new StringTextComponent("Choose"), button -> selectColor()));	//TODO translation key
 	}
 	
 	@Override
-	public void render(int mouseX, int mouseY, float partialTicks)
+	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground();
+		this.renderBackground(matrixStack);
 		
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		
@@ -53,23 +55,23 @@ public class ColorSelectorScreen extends Screen
 		int yOffset = (height - guiHeight)/2;
 		
 		this.minecraft.getTextureManager().bindTexture(guiBackground);
-		this.blit(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
+		this.blit(matrixStack, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
 		String cacheMessage = I18n.format(SELECT_COLOR);
-		minecraft.fontRenderer.drawString(cacheMessage, (this.width / 2F) - font.getStringWidth(cacheMessage) / 2F, yOffset + 12, 0x404040);
+		minecraft.fontRenderer.drawString(matrixStack, cacheMessage, (this.width / 2F) - font.getStringWidth(cacheMessage) / 2F, yOffset + 12, 0x404040);
 		
-		renderColorBoxes();
+		renderColorBoxes(matrixStack);
 		
-		super.render(mouseX, mouseY, partialTicks);
+		super.render(matrixStack, mouseX, mouseY, partialTicks);
 		
-		renderSelectionBox();
+		renderSelectionBox(matrixStack);
 		
 		int index = getColorIndexAtMouse(mouseX, mouseY);
 		if(index != -1)
-			renderTooltip(ColorHandler.getName(index).getFormattedText(), mouseX, mouseY);
+			renderTooltip(matrixStack, ColorHandler.getName(index), mouseX, mouseY);
 	}
 	
-	private void renderColorBoxes()
+	private void renderColorBoxes(MatrixStack matrixStack)
 	{
 		int xOffset = (width - guiWidth)/2;
 		int yOffset = (height - guiHeight)/2;
@@ -79,14 +81,14 @@ public class ColorSelectorScreen extends Screen
 		{
 			int color = ColorHandler.getColor(i) | 0xFF000000;
 			int x = 21 + 34*i;
-			fill(xOffset + x, yOffset + 32, xOffset + x + 32, yOffset + 48, color);
+			fill(matrixStack, xOffset + x, yOffset + 32, xOffset + x + 32, yOffset + 48, color);
 		}
 		//Alpha colors
 		for(int i = 0; i < 4; i++)
 		{
 			int color = ColorHandler.getColor(i + 4) | 0xFF000000;
 			int x = 21 + 34*i;
-			fill(xOffset + x, yOffset + 53, xOffset + x + 32, yOffset + 69, color);
+			fill(matrixStack, xOffset + x, yOffset + 53, xOffset + x + 32, yOffset + 69, color);
 		}
 		//Troll colors
 		for(int xIndex = 0; xIndex < 4; xIndex++)
@@ -95,11 +97,11 @@ public class ColorSelectorScreen extends Screen
 				int color = ColorHandler.getColor(yIndex*4 + xIndex + 8) | 0xFF000000;
 				int x = 21 + 34*xIndex;
 				int y = 74 + 18*yIndex;
-				fill(xOffset + x, yOffset + y, xOffset + x + 32, yOffset + y + 16, color);
+				fill(matrixStack, xOffset + x, yOffset + y, xOffset + x + 32, yOffset + y + 16, color);
 			}
 	}
 	
-	private void renderSelectionBox()
+	private void renderSelectionBox(MatrixStack matrixStack)
 	{
 		int xOffset = (width - guiWidth)/2;
 		int yOffset = (height - guiHeight)/2;
@@ -114,7 +116,7 @@ public class ColorSelectorScreen extends Screen
 				y += 3;
 			RenderSystem.color3f(1.0F, 1.0F, 1.0F);
 			this.minecraft.getTextureManager().bindTexture(guiBackground);
-			this.blit(xOffset + x, yOffset + y, guiWidth, 0, 36, 20);
+			this.blit(matrixStack, xOffset + x, yOffset + y, guiWidth, 0, 36, 20);
 		}
 	}
 	
@@ -162,7 +164,7 @@ public class ColorSelectorScreen extends Screen
 	}
 	
 	@Override
-	public void removed()
+	public void onClose()
 	{
 		if(firstTime && minecraft != null && minecraft.player != null)
 		{
@@ -170,7 +172,7 @@ public class ColorSelectorScreen extends Screen
 			if(ClientPlayerData.getPlayerColor() == ColorHandler.DEFAULT_COLOR)
 				message = new TranslationTextComponent(DEFAULT_COLOR_SELECTED);
 			else message = new TranslationTextComponent(COLOR_SELECTED);
-			this.minecraft.player.sendMessage(new StringTextComponent("[Minestuck] ").appendSibling(message));
+			this.minecraft.player.sendMessage(new StringTextComponent("[Minestuck] ").append(message), Util.DUMMY_UUID);
 		}
 	}
 	
