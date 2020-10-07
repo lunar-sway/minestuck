@@ -10,8 +10,9 @@ import com.mraof.minestuck.network.SkaianetInfoPacket;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -92,7 +93,7 @@ public class SkaiaClient
 		return false;
 	}
 	
-	public static List<ResourceLocation> getLandChain(DimensionType id)
+	public static List<ResourceLocation> getLandChain(RegistryKey<World> id)
 	{
 		return landChainMap.get(id.getRegistryName());
 	}

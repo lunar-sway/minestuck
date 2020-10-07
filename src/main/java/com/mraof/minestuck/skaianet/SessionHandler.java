@@ -7,21 +7,18 @@ import com.mraof.minestuck.command.SburbConnectionCommand;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.world.MSDimensionTypes;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.util.Constants;
 
 import java.util.*;
@@ -358,7 +355,7 @@ public final class SessionHandler
 			if(cs.isActive())
 				skaianetHandler.closeConnection(identifier, cs.getClientIdentifier(), false);
 			cs.removeServerPlayer();
-			source.sendFeedback(new StringTextComponent(identifier.getUsername()+"'s old client player "+cs.getClientIdentifier().getUsername()+" is now without a server player.").setStyle(new Style().setColor(TextFormatting.YELLOW)), true);
+			source.sendFeedback(new StringTextComponent(identifier.getUsername()+"'s old client player "+cs.getClientIdentifier().getUsername()+" is now without a server player.").mergeStyle(TextFormatting.YELLOW), true);
 		}
 		
 		cc.removeServerPlayer();
@@ -397,18 +394,19 @@ public final class SessionHandler
 		skaianetHandler.infoTracker.reloadLandChains();
 	}
 	
-	private static DimensionType createDebugLand(LandTypePair landTypes) throws CommandSyntaxException
+	private static RegistryKey<World> createDebugLand(LandTypePair landTypes) throws CommandSyntaxException
 	{
 		String base = "minestuck:debug_land";
 		
 		ResourceLocation landName = new ResourceLocation(base);
-		
+		/*	TODO
 		for(int i = 0; DimensionType.byName(landName) != null; i++)
 		{
 			landName = new ResourceLocation(base+"_"+i);
 		}
 		
-		return DimensionManager.registerDimension(landName, MSDimensionTypes.LANDS, null, true);
+		return DimensionManager.registerDimension(landName, MSDimensionTypes.LANDS, null, true);*/
+		return null;
 	}
 	/*
 	public static List<String> getSessionNames()

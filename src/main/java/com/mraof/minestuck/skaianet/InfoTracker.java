@@ -10,12 +10,13 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.LazyInstance;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Util;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -74,7 +75,7 @@ public final class InfoTracker
 		
 		if(MinestuckConfig.SERVER.privateComputers.get() && !p0.equals(p1) && !player.hasPermissionLevel(2))
 		{
-			player.sendMessage(new StringTextComponent("[Minestuck] ").setStyle(new Style().setColor(TextFormatting.RED)).appendSibling(new TranslationTextComponent(SkaianetHandler.PRIVATE_COMPUTER)));
+			player.sendMessage(new StringTextComponent("[Minestuck] ").mergeStyle(TextFormatting.RED).append(new TranslationTextComponent(SkaianetHandler.PRIVATE_COMPUTER)), Util.DUMMY_UUID);
 			return;
 		}
 		if(!s.add(p1))
@@ -97,14 +98,14 @@ public final class InfoTracker
 	{
 		List<List<ResourceLocation>> landChains = new ArrayList<>();
 		
-		Set<DimensionType> checked = new HashSet<>();
+		Set<RegistryKey<World>> checked = new HashSet<>();
 		for(SburbConnection c : skaianet.connections)
 		{
-			DimensionType dimensionType = c.getClientDimension();
+			RegistryKey<World> dimensionType = c.getClientDimension();
 			if(c.isMain() && dimensionType != null && !checked.contains(dimensionType))
 			{
 				LinkedList<ResourceLocation> chain = new LinkedList<>();
-				chain.add(c.getClientDimension().getRegistryName());
+				chain.add(c.getClientDimension().getLocation());
 				checked.add(c.getClientDimension());
 				SburbConnection cIter = c;
 				while(true)
@@ -114,7 +115,7 @@ public final class InfoTracker
 					{
 						if(!checked.contains(cIter.getClientDimension()))
 						{
-							chain.addLast(cIter.getClientDimension().getRegistryName());
+							chain.addLast(cIter.getClientDimension().getLocation());
 							checked.add(cIter.getClientDimension());
 						} else break;
 					} else
@@ -129,7 +130,7 @@ public final class InfoTracker
 					cIter = skaianet.getMainConnection(cIter.getServerIdentifier(), true);
 					if(cIter != null && cIter.hasEntered() && !checked.contains(cIter.getClientDimension()))
 					{
-						chain.addFirst(cIter.getClientDimension().getRegistryName());
+						chain.addFirst(cIter.getClientDimension().getLocation());
 						checked.add(cIter.getClientDimension());
 					} else
 					{

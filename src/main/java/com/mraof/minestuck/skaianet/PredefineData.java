@@ -9,7 +9,6 @@ import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.command.CommandSource;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.util.Constants;
@@ -92,7 +91,7 @@ public final class PredefineData
 		
 		if(terrainLandType != null && !landType.isAspectCompatible(terrainLandType))
 		{
-			source.sendFeedback(new TranslationTextComponent(RESETTING_TERRAIN_TYPE, terrainLandType.getRegistryName()).setStyle(new Style().setColor(TextFormatting.YELLOW)), true);
+			source.sendFeedback(new TranslationTextComponent(RESETTING_TERRAIN_TYPE, terrainLandType.getRegistryName()).mergeStyle(TextFormatting.YELLOW), true);
 			terrainLandType = null;
 		}
 		this.titleLandType = landType;
@@ -114,7 +113,7 @@ public final class PredefineData
 			
 			if(previous == null)
 				source.sendFeedback(new TranslationTextComponent(GENERATED_TITLE, title.asTextComponent()), true);
-			else source.sendFeedback(new TranslationTextComponent(CHANGED_TITLE, previous.asTextComponent(), title.asTextComponent()).setStyle(new Style().setColor(TextFormatting.YELLOW)), true);
+			else source.sendFeedback(new TranslationTextComponent(CHANGED_TITLE, previous.asTextComponent(), title.asTextComponent()).mergeStyle(TextFormatting.YELLOW), true);
 		}
 	}
 	
@@ -144,7 +143,7 @@ public final class PredefineData
 			
 			if(previous == null)
 				source.sendFeedback(new TranslationTextComponent(GENERATED_TITLE_LAND, titleLandType.getRegistryName()), true);
-			else source.sendFeedback(new TranslationTextComponent(CHANGED_TITLE_LAND, previous.getRegistryName(), titleLandType.getRegistryName()).setStyle(new Style().setColor(TextFormatting.YELLOW)), true);
+			else source.sendFeedback(new TranslationTextComponent(CHANGED_TITLE_LAND, previous.getRegistryName(), titleLandType.getRegistryName()).mergeStyle(TextFormatting.YELLOW), true);
 		}
 	}
 	

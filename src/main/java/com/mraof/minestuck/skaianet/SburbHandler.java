@@ -25,9 +25,9 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.RegistryKey;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
 
 import java.util.HashMap;
@@ -41,7 +41,7 @@ import java.util.Random;
  */
 public final class SburbHandler
 {
-	static Map<PlayerEntity, Vec3d> playersInTitleSelection = new HashMap<>();	//TODO Consider making this non-static
+	static Map<PlayerEntity, Vector3d> playersInTitleSelection = new HashMap<>();	//TODO Consider making this non-static
 	
 	private static Title produceTitle(World world, PlayerIdentifier player)
 	{
@@ -132,9 +132,9 @@ public final class SburbHandler
 	
 	public static SburbConnection getConnectionForDimension(ServerWorld world)
 	{
-		return getConnectionForDimension(world.getServer(), world.getDimension().getType());
+		return getConnectionForDimension(world.getServer(), world.getDimensionKey());
 	}
-	public static SburbConnection getConnectionForDimension(MinecraftServer mcServer, DimensionType dim)
+	public static SburbConnection getConnectionForDimension(MinecraftServer mcServer, RegistryKey<World> dim)
 	{
 		if(dim == null)
 			return null;
@@ -212,9 +212,9 @@ public final class SburbHandler
 	{
 		PlayerIdentifier identifier = c.getClientIdentifier();
 		
-		generateAndSetTitle(mcServer.getWorld(DimensionType.OVERWORLD), c.getClientIdentifier());
+		generateAndSetTitle(mcServer.getWorld(World.OVERWORLD), c.getClientIdentifier());
 		LandTypePair landTypes = genLandAspects(mcServer, c);		//This is where the Land dimension is actually registered, but it also needs the player's Title to be determined.
-		DimensionType dimType = LandTypes.createLandType(mcServer, identifier, landTypes);
+		RegistryKey<World> dimType = LandTypes.createLandType(mcServer, identifier, landTypes);
 		c.setLand(landTypes, dimType);
 	}
 	
@@ -273,7 +273,7 @@ public final class SburbHandler
 				|| PlayerSavedData.getData(identifier, player.server).getTitle() != null)
 			return true;
 		
-		playersInTitleSelection.put(player, new Vec3d(player.getPosX(), player.getPosY(), player.getPosZ()));
+		playersInTitleSelection.put(player, new Vector3d(player.getPosX(), player.getPosY(), player.getPosZ()));
 		TitleSelectPacket packet = new TitleSelectPacket();
 		MSPacketHandler.sendToPlayer(packet, player);
 		return false;
@@ -305,13 +305,13 @@ public final class SburbHandler
 				PlayerSavedData.getData(identifier, player.server).setTitle(title);
 			}
 			
-			Vec3d pos = playersInTitleSelection.remove(player);
+			Vector3d pos = playersInTitleSelection.remove(player);
 			
 			player.setPosition(pos.x, pos.y, pos.z);
 			
 			EntryProcess process = new EntryProcess();
 			process.onArtifactActivated(player);
 			
-		} else Debug.warnf("%s tried to select a title without entering.", player.getName().getFormattedText());
+		} else Debug.warnf("%s tried to select a title without entering.", player.getName().getString());
 	}
 }
