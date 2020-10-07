@@ -67,7 +67,7 @@ public abstract class ButtonListProgram extends ComputerProgram
 		buttonMap.clear();
 		for(int i = 0; i < 4; i++)
 		{
-			Button button = new ExtendedButton((gui.width - ComputerScreen.xSize) / 2 + 14, (gui.height - ComputerScreen.ySize) / 2 + 60 + i * 24, 120, 20, new StringTextComponent(""), button1 -> onButtonPressed(gui.te, button1));
+			Button button = new ExtendedButton((gui.width - ComputerScreen.xSize) / 2 + 14, (gui.height - ComputerScreen.ySize) / 2 + 60 + i * 24, 120, 20, StringTextComponent.EMPTY, button1 -> onButtonPressed(gui.te, button1));
 			buttonMap.put(button, new UnlocalizedString(""));
 			gui.addButton(button);
 		}

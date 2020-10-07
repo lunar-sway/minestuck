@@ -13,17 +13,20 @@ import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.util.math.vector.Matrix4f;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.world.World;
 import net.minecraftforge.client.SkyRenderHandler;
 import org.lwjgl.opengl.GL11;
 
 import java.util.List;
 import java.util.Random;
 
-public class LandSkyRenderer implements SkyRenderHandler
+public class LandSkyRenderer implements SkyRenderHandler	//TODO
 {
 	private LandDimension dimension;
 	public LandSkyRenderer(LandDimension provider)
@@ -42,7 +45,7 @@ public class LandSkyRenderer implements SkyRenderHandler
 		float skaiaBrightness = 0.5F +0.5F*skyClearness*heightModifier;
 		
 		RenderSystem.disableTexture();
-		Vec3d vec3d = dimension.getSkyColor();//world.getSkyColor(mc.gameRenderer.getActiveRenderInfo().getBlockPos(), partialTicks);
+		Vector3d vec3d = world.getSkyColor(mc.player.getPosition(), partialTicks);//dimension.getSkyColor();//world.getSkyColor(mc.gameRenderer.getActiveRenderInfo().getBlockPos(), partialTicks);
 		float r = (float)vec3d.x*heightModifierDiminish;
 		float g = (float)vec3d.y*heightModifierDiminish;
 		float b = (float)vec3d.z*heightModifierDiminish;
@@ -93,7 +96,7 @@ public class LandSkyRenderer implements SkyRenderHandler
 			matrixStack.pop();
 			
 			RenderSystem.color4f(starBrightness*2, starBrightness*2, starBrightness*2, starBrightness*2);
-			drawLands(mc, matrixStack, world.getDimension().getType());
+			drawLands(mc, matrixStack, world.getDimensionKey());
 		}
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		
@@ -102,7 +105,7 @@ public class LandSkyRenderer implements SkyRenderHandler
 		RenderSystem.enableFog();
 		RenderSystem.disableTexture();
 		RenderSystem.color3f(0.0F, 0.0F, 0.0F);
-		double d3 = mc.player.getEyePosition(partialTicks).y - world.getHorizonHeight();
+		double d3 = mc.player.getEyePosition(partialTicks).y - world.getWorldInfo().getVoidFogHeight();
 		
 		matrixStack.push();
 		matrixStack.translate(0.0, -(d3 - 16.0), 0.0);
@@ -180,7 +183,7 @@ public class LandSkyRenderer implements SkyRenderHandler
 		WorldVertexBufferUploader.draw(buffer);
 	}
 	
-	private void drawLands(Minecraft mc, MatrixStack matrixStack, DimensionType dim)
+	private void drawLands(Minecraft mc, MatrixStack matrixStack, RegistryKey<World> dim)
 	{
 		List<ResourceLocation> list = SkaiaClient.getLandChain(dim);
 		if(list == null)
@@ -192,7 +195,7 @@ public class LandSkyRenderer implements SkyRenderHandler
 			ResourceLocation landName = list.get((index + i)%list.size());
 			if(landName != null)
 			{
-				Random random = new Random(31*mc.world.getSeed() + landName.hashCode());
+				Random random = new Random(/*31*mc.world.getSeed() + TODO?*/ landName.hashCode());
 				LandTypePair.LazyInstance landTypes = MSDimensionTypes.LANDS.dimToLandTypes.get(landName);
 				if(landTypes == null)
 					Debug.warnf("Missing land types for dimension %s!", landName);
