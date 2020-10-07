@@ -69,8 +69,6 @@ public final class SessionHandler
 	
 	void onLoad()
 	{
-		singleSession = sessionsByName.containsKey(GLOBAL_SESSION_NAME) && sessions.size() == 1;	//TODO Make this into a saved property instead
-		
 		if(singleSession && !MinestuckConfig.SERVER.globalSession.get())
 			splitGlobalSession();
 		else if(!singleSession && MinestuckConfig.SERVER.globalSession.get())
@@ -425,30 +423,47 @@ public final class SessionHandler
 		sessions.clear();
 		sessionsByName.clear();
 		
-		ListNBT list = nbt.getList("sessions", Constants.NBT.TAG_COMPOUND);
-		for(int i = 0; i < list.size(); i++)
+		if(nbt.contains("session", Constants.NBT.TAG_COMPOUND))
 		{
-			Session session = Session.read(list.getCompound(i), skaianetHandler);
-			sessions.add(session);
-			skaianetHandler.connections.addAll(session.connections);
-			
-			if(session.isCustom())
+			//read as global session
+			singleSession = true;
+			Session session = Session.read(nbt.getCompound("session"), skaianetHandler);
+			session.name = GLOBAL_SESSION_NAME;
+			addNewSession(session);
+		} else
+		{
+			singleSession = false;
+			ListNBT list = nbt.getList("sessions", Constants.NBT.TAG_COMPOUND);
+			for(int i = 0; i < list.size(); i++)
 			{
-				if(sessionsByName.containsKey(session.name))
-					Debug.warnf("A session with a duplicate name has been loaded! (Session '%s') Either a bug or someone messing with the data file.", session.name);
-				sessionsByName.put(session.name, session);
+				Session session = Session.read(list.getCompound(i), skaianetHandler);
+				sessions.add(session);
+				skaianetHandler.connections.addAll(session.connections);
+				
+				if(session.isCustom())
+				{
+					if(sessionsByName.containsKey(session.name))
+						Debug.warnf("A session with a duplicate name has been loaded! (Session '%s') Either a bug or someone messing with the data file.", session.name);
+					sessionsByName.put(session.name, session);
+				}
 			}
 		}
 	}
 	
 	void write(CompoundNBT compound)
 	{
-		ListNBT list = new ListNBT();
-		
-		for(Session s : sessions)
-			list.add(s.write());
-		
-		compound.put("sessions", list);
+		if(singleSession)
+		{
+			compound.put("sessions", getGlobalSession().write());
+		} else
+		{
+			ListNBT list = new ListNBT();
+			
+			for(Session s : sessions)
+				list.add(s.write());
+			
+			compound.put("sessions", list);
+		}
 	}
 	
 	/**
