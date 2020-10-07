@@ -19,6 +19,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -116,10 +117,10 @@ public final class ClientEditHandler
 		{
 			GristType grist = amount.getType();
 			TextFormatting color = amount.getAmount() <= have.getGrist(grist) ? TextFormatting.GREEN : TextFormatting.RED;
-			toolTip.add(new StringTextComponent(amount.getAmount()+" ").appendSibling(grist.getDisplayName()).appendText(" ("+have.getGrist(grist) + ")").applyTextStyle(color));
+			toolTip.add(new StringTextComponent(amount.getAmount()+" ").append(grist.getDisplayName()).appendString(" ("+have.getGrist(grist) + ")").mergeStyle(color));
 		}
 		if(cost.isEmpty())
-			toolTip.add(new TranslationTextComponent(GuiUtil.FREE).applyTextStyle(TextFormatting.GREEN));
+			toolTip.add(new TranslationTextComponent(GuiUtil.FREE).mergeStyle(TextFormatting.GREEN));
 	}
 	
 	@SubscribeEvent
@@ -129,7 +130,7 @@ public final class ClientEditHandler
 			return;
 		PlayerEntity player = event.player;
 		
-		double range = MSDimensions.isLandDimension(player.dimension) ? MinestuckConfig.SERVER.landEditRange.get() : MinestuckConfig.SERVER.overworldEditRange.get();
+		double range = MSDimensions.isLandDimension(player.world.getDimensionKey()) ? MinestuckConfig.SERVER.landEditRange.get() : MinestuckConfig.SERVER.overworldEditRange.get();
 		
 		ServerEditHandler.updatePosition(player, range, centerX, centerZ);
 		
@@ -185,7 +186,7 @@ public final class ClientEditHandler
 			{
 				if(cost != null)
 				{
-					event.getPlayer().sendMessage(cost.createMissingMessage());
+					event.getPlayer().sendMessage(cost.createMissingMessage(), Util.DUMMY_UUID);
 				}
 				event.setCanceled(true);
 			}

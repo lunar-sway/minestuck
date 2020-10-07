@@ -1,15 +1,13 @@
 package com.mraof.minestuck.computer;
 
-import com.mojang.datafixers.Dynamic;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
+import com.mraof.minestuck.util.Debug;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTDynamicOps;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.GlobalPos;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
-import net.minecraftforge.common.DimensionManager;
 
 import java.util.Objects;
 
@@ -24,7 +22,7 @@ class TEComputerReference extends ComputerReference
 	
 	static TEComputerReference create(CompoundNBT nbt)
 	{
-		GlobalPos location = GlobalPos.deserialize(new Dynamic<>(NBTDynamicOps.INSTANCE, nbt.getCompound("pos")));
+		GlobalPos location = GlobalPos.CODEC.parse(NBTDynamicOps.INSTANCE, nbt.get("pos")).resultOrPartial(Debug::error).orElse(null);
 		return new TEComputerReference(location);
 	}
 	
@@ -32,14 +30,14 @@ class TEComputerReference extends ComputerReference
 	public CompoundNBT write(CompoundNBT nbt)
 	{
 		nbt.putString("type", "tile_entity");
-		nbt.put("pos", location.serialize(NBTDynamicOps.INSTANCE));
+		GlobalPos.CODEC.encodeStart(NBTDynamicOps.INSTANCE, location).resultOrPartial(Debug::error).ifPresent(tag -> nbt.put("pos", tag));
 		return super.write(nbt);
 	}
 	
 	@Override
 	public ISburbComputer getComputer(MinecraftServer server)
 	{
-		World world = DimensionManager.getWorld(server, location.getDimension(), false, true);
+		World world = server.getWorld(location.getDimension());
 		if(world == null)
 			return null;
 		TileEntity te = world.getTileEntity(location.getPos());
@@ -54,14 +52,14 @@ class TEComputerReference extends ComputerReference
 		if(computer instanceof ComputerTileEntity)
 		{
 			ComputerTileEntity te = (ComputerTileEntity) computer;
-			return location.getDimension() == Objects.requireNonNull(te.getWorld()).getDimension().getType() && location.getPos().equals(te.getPos());
+			return location.getDimension() == Objects.requireNonNull(te.getWorld()).getDimensionKey() && location.getPos().equals(te.getPos());
 		} else return false;
 	}
 	
 	@Override
 	public boolean isInNether()
 	{
-		return location.getDimension() == DimensionType.THE_NETHER;
+		return location.getDimension() == World.THE_NETHER;
 	}
 	
 	@Override

@@ -174,7 +174,7 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 		
 		compound.putInt("Type", merchantType.ordinal());
 		ResourceLocation.CODEC.encodeStart(NBTDynamicOps.INSTANCE, homeDimension.getLocation()).resultOrPartial(LOGGER::error)
-				.ifPresent(tag -> compound.put("\"HomeDim\"", tag));
+				.ifPresent(tag -> compound.put("HomeDim", tag));
 		
 		if(merchantType != EnumConsort.MerchantType.NONE && stocks != null)
 			compound.put("Stock", stocks.writeToNBT());

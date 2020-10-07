@@ -8,17 +8,18 @@ import com.mraof.minestuck.network.data.GristCachePacket;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnection;
-import com.mraof.minestuck.util.MSNBTUtil;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.nbt.NBTDynamicOps;
+import net.minecraft.util.RegistryKey;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.GameType;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.util.Constants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -128,7 +129,7 @@ public class EditData
 	
 	public static class PlayerRecovery
 	{
-		private final DimensionType dimension;
+		private final RegistryKey<World> dimension;
 		private final double posX, posY, posZ;
 		private final float rotationYaw, rotationPitch;
 		private final GameType gameType;
@@ -139,7 +140,7 @@ public class EditData
 		
 		private PlayerRecovery(DecoyEntity decoy)
 		{
-			dimension = decoy.dimension;
+			dimension = decoy.world.getDimensionKey();
 			posX = decoy.getPosX();
 			posY = decoy.getPosY();
 			posZ = decoy.getPosZ();
@@ -154,7 +155,7 @@ public class EditData
 		
 		private PlayerRecovery(CompoundNBT nbt)
 		{
-			dimension = MSNBTUtil.tryReadDimensionType(nbt, "dim");
+			dimension = World.CODEC.parse(NBTDynamicOps.INSTANCE, nbt.get("dim")).resultOrPartial(LOGGER::error).orElse(null);
 			posX = nbt.getDouble("x");
 			posY = nbt.getDouble("y");
 			posZ = nbt.getDouble("z");
@@ -170,7 +171,9 @@ public class EditData
 		
 		public CompoundNBT write(CompoundNBT nbt)
 		{
-			MSNBTUtil.tryWriteDimensionType(nbt, "dim", dimension);
+			if(dimension != null)
+				ResourceLocation.CODEC.encodeStart(NBTDynamicOps.INSTANCE, dimension.getLocation()).resultOrPartial(LOGGER::error)
+						.ifPresent(tag -> nbt.put("dim", tag));
 			nbt.putDouble("x", posX);
 			nbt.putDouble("y", posY);
 			nbt.putDouble("z", posZ);
@@ -189,14 +192,14 @@ public class EditData
 		void recover(ServerPlayerEntity player, boolean throwException)
 		{
 			player.closeScreen();
-			DimensionType dim = dimension;
+			RegistryKey<World> dim = dimension;
 			if(dim == null)
 			{
 				LOGGER.warn("Couldn't load original dimension for player {}. Defaulting to overworld.", player.getGameProfile().getName());
-				dim = DimensionType.OVERWORLD;
+				dim = World.OVERWORLD;
 			}
-			ServerWorld world = DimensionManager.getWorld(player.server, dim, true, true);
-			if(player.dimension != dim && (world == null || Teleport.teleportEntity(player, world) == null))
+			ServerWorld world = player.server.getWorld(dim);
+			if(player.world.getDimensionKey() != dim && (world == null || Teleport.teleportEntity(player, world) == null))
 			{
 				if(throwException)
 					throw new IllegalStateException("Unable to teleport editmode player "+player.getGameProfile().getName()+" to their original dimension with world: " + world);
@@ -254,7 +257,7 @@ public class EditData
 				connection.inventory = this.inventory;
 				if(editPlayer != null)
 				{
-					ServerEditHandler.lastEditmodePos.put(connection, new Vec3d(editPlayer.getPosX(), editPlayer.getPosY(), editPlayer.getPosZ()));
+					ServerEditHandler.lastEditmodePos.put(connection, new Vector3d(editPlayer.getPosX(), editPlayer.getPosY(), editPlayer.getPosZ()));
 				}
 			} else LOGGER.warn("Unable to perform editmode recovery for the connection for client player {}. Got null connection.", clientPlayer.getUsername());
 		}

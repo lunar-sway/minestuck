@@ -30,9 +30,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.GlobalPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.GameType;
@@ -73,7 +74,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	private static final Logger LOGGER = LogManager.getLogger();
 	public static final ArrayList<String> commands = new ArrayList<>(Arrays.asList("effect", "gamemode", "defaultgamemode", "enchant", "xp", "tp", "spreadplayers", "kill", "clear", "spawnpoint", "setworldspawn", "give"));
 	
-	static final Map<SburbConnection, Vec3d> lastEditmodePos = new HashMap<>();
+	static final Map<SburbConnection, Vector3d> lastEditmodePos = new HashMap<>();
 	
 	/**
 	 * Called both when any player logged out and when a player pressed the exit button.
@@ -110,7 +111,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 		if(prevData != null && event.getPlayer() instanceof ServerPlayerEntity)
 		{
 			//take measures to prevent editmode data from ending up with an invalid player entity
-			LOGGER.error("Minestuck failed to prevent death or different cloning event for player {}. Applying measure to reduce problems", event.getPlayer().getName().getFormattedText());
+			LOGGER.error("Minestuck failed to prevent death or different cloning event for player {}. Applying measure to reduce problems", event.getPlayer().getName().getString());
 			
 			MSExtraData data = MSExtraData.get(event.getEntity().world);
 			data.removeEditData(prevData);
@@ -180,19 +181,19 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	{
 		if(player.isPassenger())
 		{
-			player.sendMessage(new StringTextComponent("You may not activate editmode while riding something"));
+			player.sendMessage(new StringTextComponent("You may not activate editmode while riding something"), Util.DUMMY_UUID);
 			return;    //Don't want to bother making the decoy able to ride anything right now.
 		}
 		SburbConnection c = SkaianetHandler.get(player.getServer()).getActiveConnection(computerTarget);
 		if(c != null && c.getServerIdentifier().equals(computerOwner) && getData(player.server, c) == null && getData(player) == null)
 		{
-			Debug.info("Activating edit mode on player \""+player.getName().getFormattedText()+"\", target player: \""+computerTarget+"\".");
+			Debug.info("Activating edit mode on player \""+player.getName().getString()+"\", target player: \""+computerTarget+"\".");
 			DecoyEntity decoy = new DecoyEntity((ServerWorld) player.world, player);
 			EditData data = new EditData(decoy, player, c);
 
 			if(!setPlayerStats(player, c))
 			{
-				player.sendMessage(new StringTextComponent(TextFormatting.RED+"Failed to activate edit mode."));
+				player.sendMessage(new StringTextComponent("Failed to activate edit mode.").mergeStyle(TextFormatting.RED), Util.DUMMY_UUID);
 				return;
 			}
 			if(c.inventory != null)
@@ -215,7 +216,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 		
 		if(lastEditmodePos.containsKey(c))
 		{
-			Vec3d lastPos = lastEditmodePos.get(c);
+			Vector3d lastPos = lastEditmodePos.get(c);
 			posX = lastPos.x;
 			posZ = lastPos.z;
 		} else
@@ -289,13 +290,13 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			return;
 		
 		SburbConnection c = data.connection;
-		int range = MSDimensions.isLandDimension(player.dimension) ? MinestuckConfig.SERVER.landEditRange.get() : MinestuckConfig.SERVER.overworldEditRange.get();
+		int range = MSDimensions.isLandDimension(player.world.getDimensionKey()) ? MinestuckConfig.SERVER.landEditRange.get() : MinestuckConfig.SERVER.overworldEditRange.get();
 		BlockPos center = getEditmodeCenter(c);
 
 		updateInventory(player, c);
 		updatePosition(player, range, center.getX(), center.getZ());
 		
-		player.timeUntilPortal = player.getPortalCooldown();
+		player.func_242279_ag(); //setPortalCooldown
 	}
 	
 	@SubscribeEvent
@@ -368,7 +369,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 				if(!GristHelper.canAfford(event.getWorld(), data.connection.getClientIdentifier(), cost))
 				{
 					if(cost != null)
-						event.getPlayer().sendMessage(cost.createMissingMessage());
+						event.getPlayer().sendMessage(cost.createMissingMessage(), Util.DUMMY_UUID);
 					event.setCanceled(true);
 				}
 			}

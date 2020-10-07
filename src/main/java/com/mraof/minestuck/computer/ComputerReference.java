@@ -11,7 +11,7 @@ public abstract class ComputerReference
 {
 	public static ComputerReference of(ComputerTileEntity te)
 	{
-		return new TEComputerReference(GlobalPos.of(Objects.requireNonNull(te.getWorld()).dimension.getType(), te.getPos()));
+		return new TEComputerReference(GlobalPos.getPosition(Objects.requireNonNull(te.getWorld()).getDimensionKey(), te.getPos()));
 	}
 	
 	public static ComputerReference read(CompoundNBT nbt)
