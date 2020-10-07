@@ -195,8 +195,8 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 				player.sendMessage(new StringTextComponent(TextFormatting.RED+"Failed to activate edit mode."));
 				return;
 			}
-			if(c.inventory != null)
-				player.inventory.read(c.inventory);
+			if(c.getEditmodeInventory() != null)
+				player.inventory.read(c.getEditmodeInventory());
 			decoy.world.addEntity(decoy);
 			MSExtraData.get(player.world).addEditData(data);
 

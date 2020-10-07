@@ -42,7 +42,7 @@ public final class SburbConnection
 	private final Set<String> givenItemList = new HashSet<>();
 	
 	//Only used by the edit handler
-	public ListNBT inventory;	//TODO Should not be public
+	private ListNBT inventory;
 	
 	SburbConnection(PlayerIdentifier client, SkaianetHandler handler)
 	{
@@ -260,6 +260,16 @@ public final class SburbConnection
 		}
 	}
 	void resetGivenItems() { givenItemList.clear(); }
+	
+	public ListNBT getEditmodeInventory()
+	{
+		return inventory == null ? null : inventory.copy();
+	}
+	
+	public void putEditmodeInventory(ListNBT nbt)
+	{
+		inventory = nbt;
+	}
 	
 	void copyFrom(SburbConnection other)
 	{
