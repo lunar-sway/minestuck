@@ -35,7 +35,7 @@ public class StoneTabletUtils
 			String s1 = s.substring(0, k);
 			char c0 = s.charAt(k);
 			boolean flag = c0 == ' ' || c0 == '\n';
-			s = TextFormatting.getFormatString(s1) + s.substring(k + (flag ? 1 : 0));
+			s = TextFormatting.getTextWithoutFormattingCodes(s1) + s.substring(k + (flag ? 1 : 0));
 			i += s1.length() + (flag ? 1 : 0);
 			if (i - 1 >= sectionEnd)
 			{
@@ -81,7 +81,7 @@ public class StoneTabletUtils
 			for(int i = 0; i < s.length(); ++i)
 			{
 				char c0 = s.charAt(i);
-				float f2 = font.getCharWidth(c0);
+				float f2 = font.getStringWidth(String.valueOf(c0));
 				if (c0 == 167 && i < s.length() - 1)
 				{
 					++i;
@@ -136,7 +136,7 @@ public class StoneTabletUtils
 					
 					char c0 = s.charAt(i1);
 					boolean flag = c0 == ' ' || c0 == '\n';
-					s = TextFormatting.getFormatString(s1) + s.substring(i1 + (flag ? 1 : 0));
+					s = TextFormatting.getTextWithoutFormattingCodes(s1) + s.substring(i1 + (flag ? 1 : 0));
 					l += s1.length() + (flag ? 1 : 0);
 				} else if (pointer.y >= j && pointer.y < k)
 				{
@@ -153,13 +153,13 @@ public class StoneTabletUtils
 	
 	public static int getSelectionWidth(FontRenderer font, String pageText, int selectionEnd)
 	{
-		return (int)font.getCharWidth(pageText.charAt(MathHelper.clamp(selectionEnd, 0, pageText.length() - 1)));
+		return (int)font.getStringWidth(String.valueOf(pageText.charAt(MathHelper.clamp(selectionEnd, 0, pageText.length() - 1))));
 	}
 	
 	
 	public static int sizeStringToWidth(FontRenderer font, String text, int wrapWidth)
 	{
-		return font.sizeStringToWidth(text, wrapWidth);
+		return font.getWordWrappedHeight(text, wrapWidth);	//TODO was called sizeStringToWidth(). This was the only function with matching types. Check if this is the right replacement
 	}
 	
 	public static class Point

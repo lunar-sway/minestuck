@@ -25,18 +25,18 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.RegistryKey;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkSection;
 import net.minecraft.world.chunk.IChunk;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.Constants;
 import org.apache.logging.log4j.LogManager;
@@ -72,7 +72,7 @@ public class EntryProcess
 	{
 		try
 		{
-			if(player.world.getDimension().getType() != DimensionType.THE_NETHER)
+			if(player.world.getDimensionKey() != World.THE_NETHER)
 			{
 				if(!SburbHandler.performEntryCheck(player))
 					return;
@@ -81,11 +81,11 @@ public class EntryProcess
 				SburbConnection c = SkaianetHandler.get(player.world).getMainConnection(identifier, true);
 				
 				//Only performs Entry if you have no connection, haven't Entered, or you're not in a Land and additional Entries are permitted.
-				if(c == null || !c.hasEntered() || !MinestuckConfig.SERVER.stopSecondEntry.get() && !MSDimensions.isLandDimension(player.world.getDimension().getType()))
+				if(c == null || !c.hasEntered() || !MinestuckConfig.SERVER.stopSecondEntry.get() && !MSDimensions.isLandDimension(player.world.getDimensionKey()))
 				{
 					if(!canModifyEntryBlocks(player.world, player))
 					{
-						player.sendMessage(new StringTextComponent("You are not allowed to enter here."));
+						player.sendMessage(new StringTextComponent("You are not allowed to enter here."), Util.DUMMY_UUID);	//TODO translation key
 						return;
 					}
 					
@@ -98,16 +98,16 @@ public class EntryProcess
 						}
 						
 						//Teleports the player to their home in the Medium, without any bells or whistles.
-						BlockPos pos = landWorld.getDimension().getSpawnPoint();
+						BlockPos pos = new BlockPos(0, 100, 0);//landWorld.getDimension().getSpawnPoint(); TODO
 						Teleport.teleportEntity(player, landWorld, pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F, player.rotationYaw, player.rotationPitch);
 						
 						return;
 					}
 					
-					DimensionType landDimension = SkaianetHandler.get(player.world).prepareEntry(identifier);
+					RegistryKey<World> landDimension = SkaianetHandler.get(player.world).prepareEntry(identifier);
 					if(landDimension == null)
 					{
-						player.sendMessage(new StringTextComponent("Something went wrong while creating your Land. More details in the server console."));
+						player.sendMessage(new StringTextComponent("Something went wrong while creating your Land. More details in the server console."), Util.DUMMY_UUID);
 					}
 					else
 					{
@@ -127,7 +127,7 @@ public class EntryProcess
 								SkaianetHandler.get(player.world).onEntry(identifier);
 							} else
 							{
-								player.sendMessage(new StringTextComponent("Entry failed. Unable to teleport you!"));
+								player.sendMessage(new StringTextComponent("Entry failed. Unable to teleport you!"), Util.DUMMY_UUID);
 							}
 						}
 					}
@@ -135,8 +135,8 @@ public class EntryProcess
 			}
 		} catch(Exception e)
 		{
-			LOGGER.error("Exception when {} tried to enter their land.", player.getName().getFormattedText(), e);
-			player.sendMessage(new StringTextComponent("[Minestuck] Something went wrong during entry. "+ (player.getServer().isDedicatedServer()?"Check the console for the error message.":"Notify the server owner about this.")).setStyle(new Style().setColor(TextFormatting.RED)));
+			LOGGER.error("Exception when {} tried to enter their land.", player.getName().getString(), e);
+			player.sendMessage(new StringTextComponent("[Minestuck] Something went wrong during entry. "+ (player.getServer().isDedicatedServer()?"Check the console for the error message.":"Notify the server owner about this.")).mergeStyle(TextFormatting.RED), Util.DUMMY_UUID);
 		}
 	}
 	
@@ -145,7 +145,7 @@ public class EntryProcess
 		
 		blockMoves = new HashSet<>();
 		
-		LOGGER.info("Starting entry for player {}", player.getName().getFormattedText());
+		LOGGER.info("Starting entry for player {}", player.getName().getString());
 		int x = origin.getX();
 		int y = origin.getY();
 		int z = origin.getZ();
@@ -280,11 +280,7 @@ public class EntryProcess
 						Entity newEntity = e.getType().create(worldserver1);
 						if (newEntity != null)
 						{
-							CompoundNBT nbttagcompound = new CompoundNBT();
-							e.writeWithoutTypeId(nbttagcompound);
-							nbttagcompound.remove("Dimension");
-							newEntity.read(nbttagcompound);
-							newEntity.dimension = worldserver1.getDimension().getType();
+							newEntity.copyDataFromOld(e);
 							newEntity.setPosition(newEntity.getPosX() + xDiff, newEntity.getPosY() + yDiff, newEntity.getPosZ() + zDiff);
 							worldserver1.addEntity(newEntity);
 						}
@@ -347,7 +343,7 @@ public class EntryProcess
 			placeGate(GateHandler.Type.GATE_1, new BlockPos(x + xDiff, GateHandler.gateHeight1, z + zDiff), worldserver1);
 			placeGate(GateHandler.Type.GATE_2, new BlockPos(x + xDiff, GateHandler.gateHeight2, z + zDiff), worldserver1);
 			
-			MSExtraData.get(worldserver1).addPostEntryTask(new PostEntryTask(worldserver1.getDimension().getType(), x + xDiff, y + yDiff, z + zDiff, artifactRange, (byte) 0));
+			MSExtraData.get(worldserver1).addPostEntryTask(new PostEntryTask(worldserver1.getDimensionKey(), x + xDiff, y + yDiff, z + zDiff, artifactRange, (byte) 0));
 			
 			MSDimensions.getLandInfo(worldserver1).setSpawn(MathHelper.floor(player.getPosY()));
 			
@@ -458,7 +454,7 @@ public class EntryProcess
 		for(int i = 0; i < 9; i++)
 			if(i == 4)
 			{
-				world.setBlockState(pos, MSBlocks.GATE.getDefaultState().cycle(GateBlock.MAIN), 0);
+				world.setBlockState(pos, MSBlocks.GATE.getDefaultState().func_235896_a_(GateBlock.MAIN), 0);	//cycle
 				GateTileEntity tileEntity = (GateTileEntity) world.getTileEntity(pos);
 				tileEntity.gateType = gateType;
 			}
@@ -509,7 +505,7 @@ public class EntryProcess
 				nbt.putInt("x", dest.getX());
 				nbt.putInt("y", dest.getY());
 				nbt.putInt("z", dest.getZ());
-				newTE = TileEntity.create(nbt);
+				newTE = TileEntity.readTileEntity(block, nbt);
 				if(newTE != null)
 					chunkTo.addTileEntity(dest, newTE);
 				else LOGGER.warn("Unable to create a new tile entity {} when teleporting blocks to the medium!", tileEntity.getType().getRegistryName());

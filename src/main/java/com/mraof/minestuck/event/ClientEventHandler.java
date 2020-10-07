@@ -15,8 +15,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.Style;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IWorldReader;
@@ -70,12 +69,12 @@ public class ClientEventHandler
 					event.getToolTip().add(new TranslationTextComponent(name, arg1));
 				else event.getToolTip().add(stack.getDisplayName());
 				if(I18n.hasKey(tooltip))
-					event.getToolTip().add(new TranslationTextComponent(tooltip, arg1).setStyle(new Style().setColor(TextFormatting.GRAY)));
+					event.getToolTip().add(new TranslationTextComponent(tooltip, arg1).mergeStyle(TextFormatting.GRAY));
 			} else if(stack.getItem().getRegistryName().getNamespace().equals(Minestuck.MOD_ID))
 			{
 				String name = stack.getTranslationKey() + ".tooltip";
 				if(I18n.hasKey(name))
-					event.getToolTip().add(1, new TranslationTextComponent(name).setStyle(new Style().setColor(TextFormatting.GRAY)));
+					event.getToolTip().add(1, new TranslationTextComponent(name).mergeStyle(TextFormatting.GRAY));
 			}
 		}
 	}
@@ -107,13 +106,13 @@ public class ClientEventHandler
 		IWorldReader world = event.getInfo().getRenderViewEntity().world;
 		BlockPos pos = event.getInfo().getBlockPos();
 		Entity entity = event.getInfo().getRenderViewEntity();
-		Vec3d originalColor = new Vec3d(event.getRed(), event.getGreen(), event.getBlue());
+		Vector3d originalColor = new Vector3d(event.getRed(), event.getGreen(), event.getBlue());
 		float partialTick = (float) (event.getRenderPartialTicks());
 		
 		if(state.getBlock() instanceof IMSFog)
 		{
 			IMSFog fog = (IMSFog) (state.getBlock());
-			Vec3d fogColor = fog.getMSFogColor(state, world, pos, entity, originalColor, partialTick);
+			Vector3d fogColor = fog.getMSFogColor(state, world, pos, entity, originalColor, partialTick);
 			
 			event.setRed((float) fogColor.getX());
 			event.setGreen((float) fogColor.getY());

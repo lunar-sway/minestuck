@@ -6,9 +6,10 @@ import com.mraof.minestuck.util.MSNBTUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunk;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
 
@@ -25,13 +26,13 @@ public class PostEntryTask
 	 */
 	private static final long MIN_TIME = 20;
 	
-	private final DimensionType dimension;
+	private final RegistryKey<World> dimension;
 	private final int x, y, z;
 	private final int entrySize;
 	private final byte entryType;	//Used if we add more ways for entry to happen
 	private int index;
 	
-	public PostEntryTask(DimensionType dimension, int xCoord, int yCoord, int zCoord, int entrySize, byte entryType)
+	public PostEntryTask(RegistryKey<World> dimension, int xCoord, int yCoord, int zCoord, int entrySize, byte entryType)
 	{
 		this.dimension = dimension;
 		this.x = xCoord;
@@ -107,7 +108,7 @@ public class PostEntryTask
 				}
 			}
 			
-			Debug.infof("Completed entry block updates for dimension %s.", dimension.getRegistryName());
+			Debug.infof("Completed entry block updates for dimension %s.", dimension.getLocation());
 			setDone();
 			return true;
 		}

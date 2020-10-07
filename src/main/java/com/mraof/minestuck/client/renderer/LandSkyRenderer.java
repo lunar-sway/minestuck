@@ -188,7 +188,7 @@ public class LandSkyRenderer implements SkyRenderHandler	//TODO
 		List<ResourceLocation> list = SkaiaClient.getLandChain(dim);
 		if(list == null)
 			return;
-		int index = list.indexOf(dim.getRegistryName());
+		int index = list.indexOf(dim.getLocation());
 		RenderSystem.enableTexture();
 		for(int i = 1; i < list.size(); i++)
 		{

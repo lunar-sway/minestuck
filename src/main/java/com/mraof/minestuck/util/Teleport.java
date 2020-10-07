@@ -58,7 +58,6 @@ public class Teleport
 			} else
 			{
 				entity.detach();
-				entity.dimension = world.dimension.getType();
 				Entity oldEntity = entity;
 				entity = entity.getType().create(world);
 				if (entity == null)
@@ -75,7 +74,7 @@ public class Teleport
 		if(!(entity instanceof LivingEntity) || !((LivingEntity)entity).isElytraFlying())
 		{
 			entity.setMotion(entity.getMotion().mul(1.0D, 0.0D, 1.0D));
-			entity.onGround = true;
+			entity.setOnGround(true);
 		}
 		
 		return entity;

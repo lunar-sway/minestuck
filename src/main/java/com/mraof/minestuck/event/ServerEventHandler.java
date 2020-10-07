@@ -27,7 +27,7 @@ import net.minecraft.potion.Effects;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.World;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
@@ -56,7 +56,7 @@ public class ServerEventHandler
 		//if(!event.getServer().isDedicatedServer() && Minestuck.class.getAnnotation(Mod.class).version().startsWith("@")) TODO Find an alternative to detect dev environment
 		//event.getServer().setOnlineMode(false);	//Makes it possible to use LAN in a development environment
 		
-		lastDay = event.getServer().getWorld(DimensionType.OVERWORLD).getGameTime() / 24000L;
+		lastDay = event.getServer().func_241755_D_().getGameTime() / 24000L;
 	}
 	
 	@SubscribeEvent
@@ -73,7 +73,7 @@ public class ServerEventHandler
 		if(event.phase == TickEvent.Phase.END)
 		{
 			
-			if(!MinestuckConfig.SERVER.hardMode && event.world.getDimension().getType() == DimensionType.OVERWORLD)
+			if(!MinestuckConfig.SERVER.hardMode && event.world.getDimensionKey() == World.OVERWORLD)
 			{
 				long time = event.world.getGameTime() / 24000L;
 				if(time != lastDay)
@@ -134,7 +134,7 @@ public class ServerEventHandler
 					double modifier = PlayerSavedData.getData(player).getEcheladder().getUnderlingDamageModifier();
 					event.setAmount((float) (event.getAmount() * modifier));
 				}
-				boolean critical = cachedCooledAttackStrength > 0.9 && player.fallDistance > 0.0F && !player.onGround && !player.isOnLadder() && !player.isInWater() && !player.isPotionActive(Effects.BLINDNESS) && !player.isPassenger() && !player.isBeingRidden();
+				boolean critical = cachedCooledAttackStrength > 0.9 && player.fallDistance > 0.0F && !player.isOnGround() && !player.isOnLadder() && !player.isInWater() && !player.isPotionActive(Effects.BLINDNESS) && !player.isPassenger() && !player.isBeingRidden();
 				if(!player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() instanceof PotionWeaponItem)
 				{
 					if(((PotionWeaponItem) player.getHeldItemMainhand().getItem()).potionOnCrit())
@@ -181,7 +181,7 @@ public class ServerEventHandler
 	
 	//This functionality uses an event to maintain compatibility with mod items having hoe functionality but not extending ItemHoe, like TiCon mattocks.
 	@SubscribeEvent
-	public static void onPlayerUseHoe(UseHoeEvent event)
+	public static void onPlayerUseHoe(UseHoeEvent event)	//TODO replace by an extension to block.getToolModifiedState()
 	{
 		if(event.getContext().getWorld().getBlockState(event.getContext().getPos()).getBlock() == MSBlocks.COARSE_END_STONE)
 		{
