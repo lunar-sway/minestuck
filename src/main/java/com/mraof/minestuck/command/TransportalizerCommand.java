@@ -16,7 +16,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.GlobalPos;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.DimensionManager;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -44,7 +43,7 @@ public class TransportalizerCommand
 		if(destination == null)
 			throw NOT_FOUND_EXCEPTION.create(code);
 		
-		ServerWorld world = DimensionManager.getWorld(source.getServer(), destination.getDimension(), false, true);
+		ServerWorld world = source.getServer().getWorld(destination.getDimension());
 		
 		if(world == null || world.getBlockState(destination.getPos()).getBlock() != MSBlocks.TRANSPORTALIZER)
 			throw NOT_FOUND_EXCEPTION.create(code);
@@ -58,7 +57,7 @@ public class TransportalizerCommand
 			Entity newEntity = Teleport.teleportEntity(entity, world, destination.getPos().getX() + 0.5, destination.getPos().getY() + 0.6, destination.getPos().getZ() + 0.5, entity.rotationYaw, entity.rotationPitch);
 			if(newEntity != null)
 			{
-				newEntity.timeUntilPortal = 60;
+				newEntity.func_242279_ag(); //setPortalCooldown
 				count++;
 			} else source.sendErrorMessage(new TranslationTextComponent(FAILURE, entity.getDisplayName()));
 		}
