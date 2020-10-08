@@ -6,15 +6,12 @@ import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
-import net.minecraftforge.common.DimensionManager;
-import net.minecraftforge.event.world.RegisterDimensionsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
-import net.minecraftforge.registries.ClearableRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,7 +24,7 @@ public class MSDimensions
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final ResourceLocation SKAIA_ID = new ResourceLocation(Minestuck.MOD_ID, "skaia");
 	
-	public static DimensionType skaiaDimension;
+	public static RegistryKey<World> skaiaDimension;
 	
 	/**
 	 * On server init, this function is called to register dimensions.
@@ -57,7 +54,7 @@ public class MSDimensions
 		}
 	}
 	
-	public static LandTypePair getAspects(MinecraftServer server, DimensionType dimension)
+	public static LandTypePair getAspects(MinecraftServer server, RegistryKey<World> dimension)
 	{
 		LandInfo info = getLandInfo(server, dimension);
 		if(info != null)
@@ -71,20 +68,20 @@ public class MSDimensions
 	
 	public static LandInfo getLandInfo(World world)
 	{
-		return getLandInfo(world.getServer(), world.getDimension().getType());
+		return getLandInfo(world.getServer(), world.getDimensionKey());
 	}
 	
-	public static LandInfo getLandInfo(MinecraftServer server, DimensionType dimension)
+	public static LandInfo getLandInfo(MinecraftServer server, RegistryKey<World> dimension)
 	{
 		return SkaianetHandler.get(server).landInfoForDimension(dimension);
 	}
 	
-	public static boolean isLandDimension(DimensionType dimension)
+	public static boolean isLandDimension(RegistryKey<World> dimension)
 	{
 		return dimension != null && dimension.getModType() == MSDimensionTypes.LANDS;
 	}
 	
-	public static boolean isSkaia(DimensionType dimension)
+	public static boolean isSkaia(RegistryKey<World> dimension)
 	{
 		return dimension != null && dimension.getModType() == MSDimensionTypes.SKAIA;
 	}

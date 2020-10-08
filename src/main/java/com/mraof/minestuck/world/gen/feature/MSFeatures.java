@@ -30,7 +30,7 @@ public final class MSFeatures
 	public static final Structure<NoFeatureConfig> CONSORT_VILLAGE = getNull();
 	public static final Structure<NoFeatureConfig> SKAIA_CASTLE = getNull();
 	
-	public static final Feature<TreeFeatureConfig> END_TREE = getNull();
+	//public static final Feature<TreeFeatureConfig> END_TREE = getNull();
 	public static final Feature<BlockStateFeatureConfig> LEAFLESS_TREE = getNull();
 	
 	public static final Feature<NoFeatureConfig> RETURN_NODE = getNull();

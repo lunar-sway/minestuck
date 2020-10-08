@@ -1,6 +1,6 @@
 package com.mraof.minestuck.world.gen;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import com.mraof.minestuck.block.MSBlocks;
 import net.minecraft.block.BlockState;
 import net.minecraft.world.biome.Biome;
@@ -9,7 +9,6 @@ import net.minecraft.world.gen.surfacebuilders.SurfaceBuilder;
 import net.minecraft.world.gen.surfacebuilders.SurfaceBuilderConfig;
 
 import java.util.Random;
-import java.util.function.Function;
 
 public class SkaiaSurfaceBuilder extends SurfaceBuilder<SurfaceBuilderConfig>
 {
@@ -18,9 +17,9 @@ public class SkaiaSurfaceBuilder extends SurfaceBuilder<SurfaceBuilderConfig>
 	public final SurfaceBuilderConfig DARK_GRAY_CHESS_CONFIG = new SurfaceBuilderConfig(MSBlocks.DARK_GRAY_CHESS_DIRT.getDefaultState(), MSBlocks.DARK_GRAY_CHESS_DIRT.getDefaultState(), MSBlocks.DARK_GRAY_CHESS_DIRT.getDefaultState());
 	public final SurfaceBuilderConfig BLACK_CHESS_CONFIG = new SurfaceBuilderConfig(MSBlocks.BLACK_CHESS_DIRT.getDefaultState(), MSBlocks.BLACK_CHESS_DIRT.getDefaultState(), MSBlocks.BLACK_CHESS_DIRT.getDefaultState());
 	
-	public SkaiaSurfaceBuilder(Function<Dynamic<?>, ? extends SurfaceBuilderConfig> deserializer)
+	public SkaiaSurfaceBuilder(Codec<SurfaceBuilderConfig> codec)
 	{
-		super(deserializer);
+		super(codec);
 	}
 	
 	@Override

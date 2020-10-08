@@ -1,5 +1,5 @@
 package com.mraof.minestuck.world;
-
+/*
 import com.mraof.minestuck.client.renderer.LandSkyRenderer;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.SburbConnection;
@@ -299,4 +299,4 @@ public class LandDimension extends Dimension
 			return new LandDimension(world, type, aspects == null ? null : aspects.create());
 		}
 	}
-}
+}*/

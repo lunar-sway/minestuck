@@ -1,5 +1,5 @@
 package com.mraof.minestuck.world.gen;
-
+/*
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.skaianet.UnderlingController;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
@@ -168,4 +168,4 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 	{
 		return world.getDimension().getType();
 	}
-}
+}*/

@@ -4,11 +4,14 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
@@ -32,17 +35,17 @@ public class LandInfo
 	private BlockPos gatePos = null;
 	private int spawnY = -1;
 	@Nullable
-	private DimensionType cachedDimension;
+	private RegistryKey<World> cachedDimension;
 	@Nullable
 	private LandTypePair cachedAspects;
 	
-	public LandInfo(PlayerIdentifier identifier, LandTypePair landTypes, DimensionType dimensionType, Random random)
+	public LandInfo(PlayerIdentifier identifier, LandTypePair landTypes, RegistryKey<World> dimensionType, Random random)
 	{
 		this.identifier = Objects.requireNonNull(identifier);
 		cachedAspects = Objects.requireNonNull(landTypes);
 		this.landAspects = landTypes.createLazy();
 		cachedDimension = Objects.requireNonNull(dimensionType);
-		dimensionName = DimensionType.getKey(dimensionType);
+		dimensionName = dimensionType.getLocation();
 		useReverseOrder = random.nextBoolean();
 		terrainNameIndex = random.nextInt(landTypes.terrain.getNames().length);
 		titleNameIndex = random.nextInt(landTypes.title.getNames().length);
@@ -112,11 +115,11 @@ public class LandInfo
 	 * Because world persistence is loaded alongside the dimension type registry, there's not a guarrantee that it is loaded and ready before skaianet is loading data.
 	 * Note: It has indeed happened that Skaianet has loaded before world-specific dimension types.
 	 */
-	public DimensionType getDimensionType()
+	public RegistryKey<World> getDimensionType()
 	{
 		if(cachedDimension == null)
 		{
-			cachedDimension = DimensionType.byName(dimensionName);
+			cachedDimension = RegistryKey.getOrCreateKey(Registry.WORLD_KEY, dimensionName);	//TODO will the cache be needed anymore?
 			if(cachedDimension == null)
 				throw new IllegalStateException("Unable to load dimenison "+dimensionName+". Either the name is wrong, or this is called before dimensions have been loaded.");
 		}
@@ -183,6 +186,6 @@ public class LandInfo
 	public void sendLandEntryMessage(ServerPlayerEntity player)
 	{
 		ITextComponent toSend = new TranslationTextComponent(LAND_ENTRY, this.landAsTextComponent());
-		player.sendMessage(toSend);
+		player.sendMessage(toSend, Util.DUMMY_UUID);
 	}
 }

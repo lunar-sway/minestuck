@@ -6,14 +6,13 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.world.MSDimensionTypes;
 import com.mraof.minestuck.world.lands.terrain.*;
 import com.mraof.minestuck.world.lands.title.*;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.ResourceLocationException;
-import net.minecraft.world.dimension.DimensionType;
-import net.minecraftforge.common.DimensionManager;
+import net.minecraft.world.World;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -248,7 +247,7 @@ public class LandTypes
 	 * @param aspects Land aspects that the land should have
 	 * @return Returns the dimension of the newly created land.
 	 */
-	public static DimensionType createLandType(MinecraftServer server, PlayerIdentifier player, LandTypePair aspects)
+	public static RegistryKey<World> createLandType(MinecraftServer server, PlayerIdentifier player, LandTypePair aspects)
 	{
 		String base = "minestuck:land_"+player.getUsername().toLowerCase();
 		ResourceLocation dimensionName;
@@ -261,11 +260,13 @@ public class LandTypes
 			dimensionName = new ResourceLocation(base);
 		}
 		
+		/* TODO
 		for(int i = 0; DimensionType.byName(dimensionName) != null; i++) {
 			dimensionName = new ResourceLocation(base+"_"+i);
 		}
 		
-		return DimensionManager.registerDimension(dimensionName, MSDimensionTypes.LANDS, null, true);
+		return DimensionManager.registerDimension(dimensionName, MSDimensionTypes.LANDS, null, true);*/
+		return null;
 	}
 	
 	public static Set<TitleLandType> getCompatibleTitleTypes(TerrainLandType terrain)

@@ -1,14 +1,14 @@
 package com.mraof.minestuck.world.gen.feature.structure.blocks;
 
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.world.gen.LandGenSettings;
 import net.minecraft.block.*;
-import net.minecraft.state.IProperty;
+import net.minecraft.state.Property;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.state.properties.Half;
 import net.minecraft.util.Direction;
-import net.minecraft.world.gen.GenerationSettings;
+import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.OreFeatureConfig;
+import net.minecraft.world.gen.feature.template.RuleTest;
 import net.minecraft.world.gen.surfacebuilders.SurfaceBuilderConfig;
 
 import java.util.HashMap;
@@ -113,11 +113,11 @@ public final class StructureBlockRegistry
 		defaultRegistry.setBlockState("ocean_surface", Blocks.GRAVEL.getDefaultState());
 	}
 	
-	public static StructureBlockRegistry getOrDefault(GenerationSettings settings)
+	public static StructureBlockRegistry getOrDefault(ChunkGenerator settings)
 	{
-		if(settings instanceof LandGenSettings)
+		/*if(settings instanceof LandGenSettings) TODO
 			return ((LandGenSettings) settings).getBlockRegistry();
-		else return defaultRegistry;
+		else*/ return defaultRegistry;
 	}
 	
 	private static class BlockEntry
@@ -146,7 +146,7 @@ public final class StructureBlockRegistry
 	
 	//Nonstatic stuff
 	private Map<String, BlockState> blockRegistry = new HashMap<>();
-	private OreFeatureConfig.FillerBlockType groundType = OreFeatureConfig.FillerBlockType.NATURAL_STONE;
+	private RuleTest groundType = OreFeatureConfig.FillerBlockType.field_241882_a;
 	
 	public void setBlockState(String name, BlockState state)
 	{
@@ -162,7 +162,7 @@ public final class StructureBlockRegistry
 		blockRegistry.put(name, state);
 	}
 	
-	public void setGroundState(BlockState state, OreFeatureConfig.FillerBlockType groundType)
+	public void setGroundState(BlockState state, RuleTest groundType)
 	{
 		Objects.requireNonNull(state,  "Null parameters not allowed.");
 		Objects.requireNonNull(groundType,  "Null parameters not allowed.");
@@ -200,7 +200,7 @@ public final class StructureBlockRegistry
 		return state;
 	}
 	
-	public OreFeatureConfig.FillerBlockType getGroundType()
+	public RuleTest getGroundType()
 	{
 		return groundType;
 	}
@@ -210,7 +210,7 @@ public final class StructureBlockRegistry
 		if(templateBlockMap.containsKey(state.getBlock()))
 		{
 			BlockState newState = getBlockState(templateBlockMap.get(state.getBlock()));
-			for(IProperty<?> property : state.getProperties())
+			for(Property<?> property : state.getProperties())
 				newState = with(state, newState, property);
 			return newState;
 		} else return state;
@@ -221,16 +221,16 @@ public final class StructureBlockRegistry
 		return new SurfaceBuilderConfig(getBlockState("surface"), getBlockState("upper"), getBlockState("ocean_surface"));
 	}
 	
-	private static <T extends Comparable<T>> BlockState with(BlockState fromState, BlockState toState, IProperty<T> property)
+	private static <T extends Comparable<T>> BlockState with(BlockState fromState, BlockState toState, Property<T> property)
 	{
-		if(toState.has(property))
+		if(toState.hasProperty(property))
 			return toState.with(property, fromState.get(property));
 		else return toState;
 	}
 	
-	public static <T extends Comparable<T>> BlockState withOptionally(BlockState state, IProperty<T> property, T value)
+	public static <T extends Comparable<T>> BlockState withOptionally(BlockState state, Property<T> property, T value)
 	{
-		if(state.has(property))
+		if(state.hasProperty(property))
 		{
 			state = state.with(property, value);
 		}

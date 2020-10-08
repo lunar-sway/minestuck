@@ -1,5 +1,5 @@
 package com.mraof.minestuck.world.gen;
-
+/*
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.gen.feature.structure.GateStructure;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
@@ -64,4 +64,4 @@ public class LandGenSettings extends GenerationSettings
 	{
 		return 0;
 	}
-}
+}*/

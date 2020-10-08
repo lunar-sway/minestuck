@@ -1,17 +1,5 @@
 package com.mraof.minestuck.world.gen;
 
-import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.block.MSBlocks;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.GenerationStage.Decoration;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.OreFeatureConfig;
-import net.minecraft.world.gen.feature.OreFeatureConfig.FillerBlockType;
-import net.minecraft.world.gen.placement.CountRangeConfig;
-import net.minecraft.world.gen.placement.Placement;
-import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.registries.ForgeRegistries;
-
 public class OreGeneration
 {
 	public static final int cruxiteVeinsPerChunk = 10;
@@ -27,7 +15,7 @@ public class OreGeneration
 	
 	public static void setupOverworldOreGeneration()
 	{
-		for(Biome biome : ForgeRegistries.BIOMES)
+		/*for(Biome biome : ForgeRegistries.BIOMES) TODO might now need BiomeLoadingEvent and a replacement to biome dictionary
 		{
 			if(BiomeDictionary.hasType(biome, BiomeDictionary.Type.OVERWORLD))
 			{
@@ -40,6 +28,6 @@ public class OreGeneration
 					biome.addFeature(Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(FillerBlockType.NATURAL_STONE, MSBlocks.STONE_URANIUM_ORE.getDefaultState(), baseUraniumVeinSize)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(uraniumVeinsPerChunk, uraniumStratumMin, uraniumStratumMin, uraniumStratumMax))));
 				}
 			}
-		}
+		}*/
 	}
 }
