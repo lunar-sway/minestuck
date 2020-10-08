@@ -1,26 +1,6 @@
 package com.mraof.minestuck.world.biome;
 
-import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.entity.consort.ConsortEntity;
-import com.mraof.minestuck.world.gen.feature.MSFeatures;
-import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.EntityType;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.IFeatureConfig;
-import net.minecraft.world.gen.feature.OreFeatureConfig;
-import net.minecraft.world.gen.placement.ChanceConfig;
-import net.minecraft.world.gen.placement.CountRangeConfig;
-import net.minecraft.world.gen.placement.IPlacementConfig;
-import net.minecraft.world.gen.placement.Placement;
-import net.minecraft.world.gen.surfacebuilders.ConfiguredSurfaceBuilder;
-import net.minecraft.world.gen.surfacebuilders.ISurfaceBuilderConfig;
-import net.minecraft.world.gen.surfacebuilders.SurfaceBuilder;
-
-import static com.mraof.minestuck.world.gen.OreGeneration.*;
-
+/*
 public class LandWrapperBiome extends LandBiome
 {
 	public final LandBiome staticBiome;
@@ -78,4 +58,4 @@ public class LandWrapperBiome extends LandBiome
 	{
 		super.addSpawn(classification, entry);
 	}
-}
+}*/

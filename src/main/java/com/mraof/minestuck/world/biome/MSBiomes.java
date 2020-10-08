@@ -14,10 +14,10 @@ import javax.annotation.Nonnull;
 public class MSBiomes
 {
 	
-	public static final SkaiaBiome SKAIA = getNull();
-	public static final LandBiome.Normal LAND_NORMAL = getNull();
-	public static final LandBiome.Rough LAND_ROUGH = getNull();
-	public static final LandBiome.Ocean LAND_OCEAN = getNull();
+	public static final Biome SKAIA = getNull();
+	public static final Biome LAND_NORMAL = getNull();
+	public static final Biome LAND_ROUGH = getNull();
+	public static final Biome LAND_OCEAN = getNull();
 	
 	@Nonnull
 	@SuppressWarnings("ConstantConditions")
@@ -28,17 +28,9 @@ public class MSBiomes
 	@SubscribeEvent
 	public static void registerBiomes(final RegistryEvent.Register<Biome> event)
 	{
-		event.getRegistry().register(new SkaiaBiome().setRegistryName("skaia"));
-		event.getRegistry().register(new LandBiome.Normal().setRegistryName("land_normal"));
+		event.getRegistry().register(SkaiaBiome.makeBiome().setRegistryName("skaia"));
+		/*event.getRegistry().register(new LandBiome.Normal().setRegistryName("land_normal"));
 		event.getRegistry().register(new LandBiome.Rough().setRegistryName("land_rough"));
-		event.getRegistry().register(new LandBiome.Ocean().setRegistryName("land_ocean"));
-	}
-	
-	public static void init()
-	{
-		SKAIA.init();
-		LAND_NORMAL.init();
-		LAND_ROUGH.init();
-		LAND_OCEAN.init();
+		event.getRegistry().register(new LandBiome.Ocean().setRegistryName("land_ocean"));*/
 	}
 }

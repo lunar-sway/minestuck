@@ -1,10 +1,6 @@
 package com.mraof.minestuck.world.biome;
 
-import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
-import com.mraof.minestuck.world.lands.LandProperties;
-import com.mraof.minestuck.world.lands.LandTypePair;
-import net.minecraft.world.biome.Biome;
-
+/*
 public class LandBiomeHolder	//TODO getting a biome no longer goes through the land dimension. Check if there are any places where a wrapper biome should be, but isn't
 {
 	private final LandTypePair landTypes;
@@ -44,4 +40,4 @@ public class LandBiomeHolder	//TODO getting a biome no longer goes through the l
 	{
 		return new LandWrapperBiome[]{normalBiome, roughBiome, oceanBiome};
 	}
-}
+}*/

@@ -5,32 +5,30 @@ import com.mraof.minestuck.world.gen.MSSurfaceBuilders;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.IFeatureConfig;
-import net.minecraft.world.gen.placement.IPlacementConfig;
-import net.minecraft.world.gen.placement.Placement;
-import net.minecraft.world.gen.surfacebuilders.ConfiguredSurfaceBuilder;
+import net.minecraft.world.biome.BiomeAmbience;
+import net.minecraft.world.biome.BiomeGenerationSettings;
+import net.minecraft.world.biome.MobSpawnInfo;
+import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.surfacebuilders.SurfaceBuilder;
 
-public class SkaiaBiome extends AbstractBiome
+public class SkaiaBiome
 {
-	protected SkaiaBiome()
+	public static Biome makeBiome()
 	{
-		super(new Biome.Builder().precipitation(Biome.RainType.NONE).category(Biome.Category.NONE).depth(0.1F).scale(0.2F).temperature(0.5F).downfall(0.5F).waterColor(0x3F76E4).waterFogColor(0x050533));
+		MobSpawnInfo.Builder spawnInfo = new MobSpawnInfo.Builder();
+		spawnInfo.withSpawner(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(MSEntityTypes.DERSITE_PAWN, 2, 1, 10));
+		spawnInfo.withSpawner(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(MSEntityTypes.DERSITE_BISHOP, 1, 1, 1));
+		spawnInfo.withSpawner(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(MSEntityTypes.DERSITE_ROOK, 1, 1, 1));
+		spawnInfo.withSpawner(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(MSEntityTypes.PROSPITIAN_PAWN, 2, 1, 10));
+		spawnInfo.withSpawner(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(MSEntityTypes.PROSPITIAN_BISHOP, 1, 1, 1));
+		spawnInfo.withSpawner(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(MSEntityTypes.PROSPITIAN_ROOK, 1, 1, 1));
 		
-	}
-	
-	protected void init()
-	{
-		this.surfaceBuilder = new ConfiguredSurfaceBuilder<>(MSSurfaceBuilders.SKAIA.get(), SurfaceBuilder.AIR_CONFIG);
-		this.addSpawn(EntityClassification.MONSTER, new SpawnListEntry(MSEntityTypes.DERSITE_PAWN, 2, 1, 10));
-		this.addSpawn(EntityClassification.MONSTER, new SpawnListEntry(MSEntityTypes.DERSITE_BISHOP, 1, 1, 1));
-		this.addSpawn(EntityClassification.MONSTER, new SpawnListEntry(MSEntityTypes.DERSITE_ROOK, 1, 1, 1));
-		this.addSpawn(EntityClassification.MONSTER, new SpawnListEntry(MSEntityTypes.PROSPITIAN_PAWN, 2, 1, 10));
-		this.addSpawn(EntityClassification.MONSTER, new SpawnListEntry(MSEntityTypes.PROSPITIAN_BISHOP, 1, 1, 1));
-		this.addSpawn(EntityClassification.MONSTER, new SpawnListEntry(MSEntityTypes.PROSPITIAN_ROOK, 1, 1, 1));
+		BiomeGenerationSettings.Builder genSettings = new BiomeGenerationSettings.Builder().withSurfaceBuilder(() -> MSSurfaceBuilders.SKAIA.get().func_242929_a(SurfaceBuilder.STONE_STONE_GRAVEL_CONFIG));	//TODO configured surface builders are now a registry. Make sure to register it
+		genSettings.withStructure(MSFeatures.SKAIA_CASTLE.func_236391_a_(NoFeatureConfig.field_236559_b_));	//TODO configured structure is also being registered in vanilla
 		
-		addStructure(MSFeatures.SKAIA_CASTLE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
-		addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MSFeatures.SKAIA_CASTLE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.NOPE.configure(IPlacementConfig.NO_PLACEMENT_CONFIG)));
+		BiomeAmbience.Builder ambience = new BiomeAmbience.Builder().setWaterColor(0x3F76E4).setWaterFogColor(0x050533);
+		ambience.setFogColor(0xC0D8FF).withSkyColor(0x7AA4FF);
+		
+		return new Biome.Builder().precipitation(Biome.RainType.NONE).category(Biome.Category.NONE).depth(0.1F).scale(0.2F).temperature(0.5F).downfall(0.5F).setEffects(ambience.build()).withMobSpawnSettings(spawnInfo.copy()).withGenerationSettings(genSettings.build()).build();
 	}
 }

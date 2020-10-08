@@ -1,14 +1,6 @@
 package com.mraof.minestuck.world.biome;
 
-import com.mraof.minestuck.world.LandDimension;
-import com.mraof.minestuck.world.lands.LandProperties;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.surfacebuilders.ConfiguredSurfaceBuilder;
-import net.minecraft.world.gen.surfacebuilders.SurfaceBuilder;
-
-public abstract class LandBiome extends AbstractBiome
+/*public abstract class LandBiome extends AbstractBiome TODO
 {
 	public LandBiome(Builder biomeBuilder)
 	{
@@ -79,4 +71,4 @@ public abstract class LandBiome extends AbstractBiome
 			return new LandWrapperBiome(this, Category.OCEAN, properties.rainType, properties.temperature, properties.downfall, properties.oceanBiomeDepth, properties.oceanBiomeScale);
 		}
 	}
-}
+}*/
