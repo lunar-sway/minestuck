@@ -47,9 +47,8 @@ public class VeinCornerBlock extends Block
 			}
 			
 			Material mater = world.getBlockState(pos.down()).getMaterial();
-			if(mater.blocksMovement() || mater.isLiquid()) {
-				//worldIn.setBlockState(pos, MinestuckBlocks.blockBlood.getDefaultState());
-			}
+			if(mater.blocksMovement() || mater.isLiquid())
+				world.setBlockState(pos, MSBlocks.BLOOD.getDefaultState());
 		}
 	}
 	
@@ -60,6 +59,7 @@ public class VeinCornerBlock extends Block
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public BlockState mirror(BlockState state, Mirror mirrorIn)
 	{
 		return state.with(FACING, mirrorIn.mirror(state.get(FACING)));
@@ -69,20 +69,18 @@ public class VeinCornerBlock extends Block
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context)
 	{
-		//IBlockState iblockstate = worldIn.getBlockState(pos.offset(facing.getOpposite()));
+		BlockState state = context.getWorld().getBlockState(context.getPos().offset(context.getFace().getOpposite()));
 		Half half = context.getFace() == Direction.UP ? Half.TOP : Half.BOTTOM;
 		Direction facing = context.getPlacementHorizontalFacing();
 		
-	   /* if (iblockstate.getBlock() == MinestuckBlocks.vein || iblockstate.getBlock() == MinestuckBlocks.veinCorner)
+		if(state.getBlock() == MSBlocks.VEIN || state.getBlock() == MSBlocks.VEIN_CORNER)
 		{
-			EnumFacing enumfacing = (EnumFacing)iblockstate.getValue(FACING);
-
-			if (enumfacing == facing)
-			{
-				return this.getDefaultState().withProperty(FACING, facing.getOpposite());
-			}
-		}*/
-
+			Direction direction = state.get(FACING);
+			
+			if (direction == context.getFace())
+				return this.getDefaultState().with(FACING, direction.getOpposite());
+		}
+		
 		return this.getDefaultState().with(FACING, facing).with(HALF, half);
 	}
 	

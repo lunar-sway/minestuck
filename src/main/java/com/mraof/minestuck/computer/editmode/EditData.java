@@ -254,7 +254,7 @@ public class EditData
 		{
 			if(connection != null)
 			{
-				connection.inventory = this.inventory;
+				connection.putEditmodeInventory(this.inventory);
 				if(editPlayer != null)
 				{
 					ServerEditHandler.lastEditmodePos.put(connection, new Vector3d(editPlayer.getPosX(), editPlayer.getPosY(), editPlayer.getPosZ()));

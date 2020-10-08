@@ -213,13 +213,20 @@ public class GristSet
 	public GristSet scale(float scale, boolean roundDown)
 	{
 		this.gristTypes.forEach((type, amount) -> {
-			if (amount > 0)
+			if (amount != 0)
 			{
-				this.gristTypes.put(type, roundDown ? (long) (amount * scale) : Math.max(Math.round(amount * scale), 1));
+				this.gristTypes.put(type, roundDown ? (long) (amount * scale) : roundToNonZero(amount * scale));
 			}
 		});
 
 		return this;
+	}
+	
+	private int roundToNonZero(float value)
+	{
+		if(value < 0)
+			return Math.min(-1, Math.round(value));
+		else return Math.max(1, Math.round(value));
 	}
 
 	/**

@@ -35,7 +35,7 @@ public final class SburbConnection
 	
 	private boolean isActive;
 	private boolean isMain;
-	boolean canSplit;	//TODO invert and rename to lockedToSession or something like that
+	boolean lockedToSession;
 	private boolean hasEntered = false;	//If the player has entered. Is set to true after entry has finished
 	private LandInfo clientLandInfo;	//The land info for this client player. This is initialized in preparation for entry
 	int artifactType;
@@ -43,7 +43,7 @@ public final class SburbConnection
 	private final Set<String> givenItemList = new HashSet<>();
 	
 	//Only used by the edit handler
-	public ListNBT inventory;	//TODO Should not be public
+	private ListNBT inventory;
 	
 	SburbConnection(PlayerIdentifier client, SkaianetHandler handler)
 	{
@@ -55,7 +55,7 @@ public final class SburbConnection
 		clientIdentifier = client;
 		serverIdentifier = server;
 		this.handler = handler;
-		this.canSplit = true;
+		this.lockedToSession = false;
 	}
 	
 	SburbConnection(CompoundNBT nbt, SkaianetHandler handler)
@@ -69,8 +69,7 @@ public final class SburbConnection
 		{
 			active = nbt.getBoolean("IsActive");
 			
-			if(nbt.contains("CanSplit", Constants.NBT.TAG_ANY_NUMERIC))
-				canSplit = nbt.getBoolean("CanSplit");
+			lockedToSession = nbt.getBoolean("locked");
 			ListNBT list = nbt.getList("GivenItems", Constants.NBT.TAG_STRING);
 			for(int i = 0; i < list.size(); i++)
 			{
@@ -107,7 +106,7 @@ public final class SburbConnection
 		if(isMain)
 		{
 			nbt.putBoolean("IsActive", isActive);
-			nbt.putBoolean("CanSplit", canSplit);
+			nbt.putBoolean("locked", lockedToSession);
 			ListNBT list = new ListNBT();
 			for(String name : givenItemList)
 				list.add(StringNBT.valueOf(name));
@@ -263,9 +262,19 @@ public final class SburbConnection
 	}
 	void resetGivenItems() { givenItemList.clear(); }
 	
+	public ListNBT getEditmodeInventory()
+	{
+		return inventory == null ? null : inventory.copy();
+	}
+	
+	public void putEditmodeInventory(ListNBT nbt)
+	{
+		inventory = nbt;
+	}
+	
 	void copyFrom(SburbConnection other)
 	{
-		canSplit = other.canSplit;
+		lockedToSession = other.lockedToSession;
 		clientLandInfo = other.clientLandInfo;
 		hasEntered = other.hasEntered;
 		artifactType = other.artifactType;

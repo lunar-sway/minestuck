@@ -26,7 +26,7 @@ public class AlchemiterScreen extends Screen implements Positioned
 	
 	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/large_alchemiter.png");
 	private static final int guiWidth = 159, guiHeight = 102;
-	private AlchemiterTileEntity alchemiter;
+	private final AlchemiterTileEntity alchemiter;
 	private int itemQuantity;
 	
 	AlchemiterScreen(AlchemiterTileEntity te)
