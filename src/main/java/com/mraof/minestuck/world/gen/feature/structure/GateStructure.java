@@ -1,41 +1,35 @@
 package com.mraof.minestuck.world.gen.feature.structure;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.world.biome.MSBiomes;
-import com.mraof.minestuck.world.gen.LandChunkGenerator;
-import com.mraof.minestuck.world.gen.LandGenSettings;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.util.registry.DynamicRegistries;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeManager;
-import net.minecraft.world.chunk.ChunkStatus;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.structure.StructureStart;
 import net.minecraft.world.gen.feature.template.TemplateManager;
-import net.minecraft.world.server.ServerWorld;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-import java.util.function.Function;
 
 public class GateStructure extends Structure<NoFeatureConfig>
 {
-	private final Map<DimensionType, ChunkPos> positionCache = new HashMap<>();
+	private final Map<RegistryKey<World>, ChunkPos> positionCache = new HashMap<>();
 	
-	public GateStructure(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactory)
+	public GateStructure(Codec<NoFeatureConfig> codec)
 	{
-		super(configFactory);
+		super(codec);
 	}
-	
+	/*
 	@Override
 	protected ChunkPos getStartPositionForPosition(ChunkGenerator<?> chunkGenerator, Random random, int x, int z, int spacingOffsetsX, int spacingOffsetsZ)
 	{
@@ -48,9 +42,9 @@ public class GateStructure extends Structure<NoFeatureConfig>
 
 		return chunkX == pos.x && chunkZ == pos.z;
 	}
-	
+	*/
 	@Override
-	public IStartFactory getStartFactory()
+	public IStartFactory<NoFeatureConfig> getStartFactory()
 	{
 		return GateStructure.Start::new;
 	}
@@ -60,13 +54,7 @@ public class GateStructure extends Structure<NoFeatureConfig>
 	{
 		return Minestuck.MOD_ID + ":land_gate";
 	}
-	
-	@Override
-	public int getSize()
-	{
-		return 3; //Note: might not agree with actual gate pieces that are added in the future
-	}
-	
+	/* TODO
 	public BlockPos findLandGatePos(ServerWorld world)
 	{
 		if(world.getChunkProvider().getChunkGenerator().getBiomeProvider().hasStructure(this))
@@ -137,22 +125,22 @@ public class GateStructure extends Structure<NoFeatureConfig>
 		positionCache.clear();
 	}
 	
-	public static class Start extends StructureStart
+	public static class Start extends StructureStart<NoFeatureConfig>
 	{
-		public Start(Structure<?> structure, int chunkX, int chunkZ, MutableBoundingBox boundingBox, int reference, long seed)
+		public Start(Structure<NoFeatureConfig> structure, int chunkX, int chunkZ, MutableBoundingBox boundingBox, int reference, long seed)
 		{
 			super(structure, chunkX, chunkZ, boundingBox, reference, seed);
 		}
 		
 		@Override
-		public void init(ChunkGenerator<?> generator, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn)
+		public void func_230364_a_(DynamicRegistries registries, ChunkGenerator generator, TemplateManager templates, int chunkX, int chunkZ, Biome biome, NoFeatureConfig config)
 		{
 			PieceFactory factory = null;
-			if(generator.getSettings() instanceof LandGenSettings)
+			/*if(generator.getSettings() instanceof LandGenSettings) TODO
 			{
 				LandGenSettings settings = (LandGenSettings) generator.getSettings();
 				factory = settings.getGatePiece();
-			}
+			}*/
 			
 			if(factory == null)
 				factory = GatePillarPiece::new;
@@ -176,6 +164,6 @@ public class GateStructure extends Structure<NoFeatureConfig>
 	
 	public interface PieceFactory
 	{
-		GatePiece create(ChunkGenerator<?> generator, Random rand, int minX, int minZ);
+		GatePiece create(ChunkGenerator generator, Random rand, int minX, int minZ);
 	}
 }

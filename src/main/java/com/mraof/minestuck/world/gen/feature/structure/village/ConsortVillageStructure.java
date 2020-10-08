@@ -1,75 +1,28 @@
 package com.mraof.minestuck.world.gen.feature.structure.village;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.world.biome.MSBiomes;
-import com.mraof.minestuck.world.gen.LandGenSettings;
-import com.mraof.minestuck.world.lands.LandTypePair;
-import net.minecraft.util.SharedSeedRandom;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.util.registry.DynamicRegistries;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeManager;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
-import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.structure.StructureStart;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 
-import java.util.List;
-import java.util.Random;
-import java.util.function.Function;
-
-public class ConsortVillageStructure extends Structure<NoFeatureConfig>	//TODO Implement this
+public class ConsortVillageStructure extends Structure<NoFeatureConfig>
 {
 	private static final int VILLAGE_DISTANCE = 24;
 	private static final int MIN_VILLAGE_DISTANCE = 5;
 	
-	public ConsortVillageStructure(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactory)
+	public ConsortVillageStructure(Codec<NoFeatureConfig> codec)
 	{
-		super(configFactory);
+		super(codec);
 	}
 	
 	@Override
-	protected ChunkPos getStartPositionForPosition(ChunkGenerator<?> chunkGenerator, Random random, int x, int z, int spacingOffsetsX, int spacingOffsetsZ)
-	{
-		if(x < 0)
-		{
-			x -= VILLAGE_DISTANCE - 1;
-		}
-		
-		if(z < 0)
-		{
-			z -= VILLAGE_DISTANCE - 1;
-		}
-		
-		x = x / VILLAGE_DISTANCE;
-		z = z / VILLAGE_DISTANCE;
-		x += spacingOffsetsX;
-		z += spacingOffsetsZ;
-		((SharedSeedRandom)random).setLargeFeatureSeedWithSalt(chunkGenerator.getSeed(), x, z, 10387312);
-		x = x * VILLAGE_DISTANCE;
-		z = z * VILLAGE_DISTANCE;
-		x = x + random.nextInt(VILLAGE_DISTANCE - MIN_VILLAGE_DISTANCE);
-		z = z + random.nextInt(VILLAGE_DISTANCE - MIN_VILLAGE_DISTANCE);
-		
-		return new ChunkPos(x, z);
-	}
-
-	@Override
-	public boolean canBeGenerated(BiomeManager biomeManagerIn, ChunkGenerator<?> generatorIn, Random randIn, int chunkX, int chunkZ, Biome biomeIn) {
-		ChunkPos pos = this.getStartPositionForPosition(generatorIn, randIn, chunkX, chunkZ, 0, 0);
-
-		if(chunkX == pos.x && chunkZ == pos.z)
-		{
-			return generatorIn.getBiomeProvider().getBiomes(chunkX * 16 + 8, 0, chunkZ * 16 + 8, 16).stream().allMatch(biome -> biome == MSBiomes.LAND_NORMAL);
-		}
-		return false;
-	}
-	
-	@Override
-	public IStartFactory getStartFactory()
+	public IStartFactory<NoFeatureConfig> getStartFactory()
 	{
 		return Start::new;
 	}
@@ -80,23 +33,17 @@ public class ConsortVillageStructure extends Structure<NoFeatureConfig>	//TODO I
 		return Minestuck.MOD_ID + ":consort_village";
 	}
 	
-	@Override
-	public int getSize()
-	{
-		return 8;
-	}
-	
-	private static class Start extends StructureStart
+	private static class Start extends StructureStart<NoFeatureConfig>
 	{
 		
-		Start(Structure<?> structure, int chunkX, int chunkZ, MutableBoundingBox boundingBox, int reference, long seed)
+		Start(Structure<NoFeatureConfig> structure, int chunkX, int chunkZ, MutableBoundingBox boundingBox, int reference, long seed)
 		{
 			super(structure, chunkX, chunkZ, boundingBox, reference, seed);
 		}
 		
 		@Override
-		public void init(ChunkGenerator<?> generator, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn)
-		{
+		public void func_230364_a_(DynamicRegistries registries, ChunkGenerator generator, TemplateManager templates, int chunkX, int chunkZ, Biome biome, NoFeatureConfig config)
+		{/* TODO
 			if(generator.getSettings() instanceof LandGenSettings)
 			{
 				LandGenSettings settings = (LandGenSettings) generator.getSettings();
@@ -121,7 +68,7 @@ public class ConsortVillageStructure extends Structure<NoFeatureConfig>	//TODO I
 					}
 				}
 				recalculateStructureSize();
-			}
+			}*/
 		}
 	}
 }

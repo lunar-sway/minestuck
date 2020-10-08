@@ -10,18 +10,20 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
 import net.minecraft.world.gen.feature.structure.ScatteredStructurePiece;
+import net.minecraft.world.gen.feature.structure.StructureManager;
 import net.minecraftforge.common.util.Constants;
 
 import java.util.Random;
 
 public abstract class GatePiece extends ScatteredStructurePiece
 {
-	public GatePiece(IStructurePieceType type, ChunkGenerator<?> generator, Random random, int x, int z, int width, int height, int depth, int heightOffset)
+	public GatePiece(IStructurePieceType type, ChunkGenerator generator, Random random, int x, int z, int width, int height, int depth, int heightOffset)
 	{
 		super(type, random, x, 64, z, width, height, depth);
 		
@@ -30,7 +32,7 @@ public abstract class GatePiece extends ScatteredStructurePiece
 		for(int xPos = boundingBox.minX; xPos <= boundingBox.maxX; xPos++)
 			for(int zPos = boundingBox.minZ; zPos <= boundingBox.maxZ; zPos++)
 			{
-				int posHeight = generator.func_222532_b(xPos, zPos, Heightmap.Type.OCEAN_FLOOR_WG);
+				int posHeight = generator.getHeight(xPos, zPos, Heightmap.Type.OCEAN_FLOOR_WG);
 				heightSum += posHeight;
 				count++;
 			}
@@ -59,10 +61,10 @@ public abstract class GatePiece extends ScatteredStructurePiece
 		throw new UnsupportedOperationException("Shouldn't change the bounding box after creating the gate piece. Look at other gate pieces for an example of what to do instead.");
 	}
 	
-	@Override
-	public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox mutableBoundingBoxIn, ChunkPos chunkPosIn)
+	@Override	//create()
+	public boolean func_230383_a_(ISeedReader world, StructureManager manager, ChunkGenerator chunkGenerator, Random random, MutableBoundingBox mutableBoundingBox, ChunkPos chunkPos, BlockPos pos)
 	{
-		placeGate(worldIn, boundingBox);
+		placeGate(world, boundingBox);
 		return true;
 	}
 	

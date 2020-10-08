@@ -2,7 +2,7 @@ package com.mraof.minestuck.world.gen.feature.structure;
 
 import com.mraof.minestuck.block.ReturnNodeBlock;
 import net.minecraft.block.*;
-import net.minecraft.fluid.IFluidState;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.properties.BedPart;
 import net.minecraft.state.properties.DoorHingeSide;
@@ -11,6 +11,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
@@ -32,14 +33,14 @@ public abstract class ImprovedStructurePiece extends StructurePiece
 		super(structurePierceTypeIn, nbt);
 	}
 	
-	protected void generateDoor(IWorld worldIn, MutableBoundingBox sbb, Random rand, int x, int y, int z, Direction direction, Block door, DoorHingeSide hinge)
+	protected void generateDoor(ISeedReader worldIn, MutableBoundingBox sbb, Random rand, int x, int y, int z, Direction direction, Block door, DoorHingeSide hinge)
 	{
 		BlockState state = door.getDefaultState().with(DoorBlock.FACING, direction).with(DoorBlock.HINGE, hinge);
 		setBlockState(worldIn, state, x, y, z, sbb);
 		setBlockState(worldIn, state.with(DoorBlock.HALF, DoubleBlockHalf.UPPER), x, y + 1, z, sbb);
 	}
 	
-	protected void generateBed(IWorld worldIn, MutableBoundingBox sbb, Random rand, int x, int y, int z, Direction direction, BlockState state)
+	protected void generateBed(ISeedReader worldIn, MutableBoundingBox sbb, Random rand, int x, int y, int z, Direction direction, BlockState state)
 	{
 		state = state.with(BedBlock.HORIZONTAL_FACING, direction);
 		setBlockState(worldIn, state, x, y, z, sbb);
@@ -58,7 +59,7 @@ public abstract class ImprovedStructurePiece extends StructurePiece
 		ReturnNodeBlock.placeReturnNode(world, new BlockPos(posX, posY, posZ), boundingBox);
 	}
 	
-	protected int getAverageGroundLevel(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, MutableBoundingBox structurebb)
+	protected int getAverageGroundLevel(IWorld worldIn, ChunkGenerator chunkGeneratorIn, MutableBoundingBox structurebb)
 	{
 		int i = 0;
 		int j = 0;
@@ -137,8 +138,9 @@ public abstract class ImprovedStructurePiece extends StructurePiece
 		return block instanceof FourWayBlock || block instanceof TorchBlock || block instanceof LadderBlock || block instanceof StairsBlock;
 	}
 	
+	
 	@Override
-	protected void setBlockState(IWorld worldIn, BlockState blockstateIn, int x, int y, int z, MutableBoundingBox boundingboxIn)
+	protected void setBlockState(ISeedReader worldIn, BlockState blockstateIn, int x, int y, int z, MutableBoundingBox boundingboxIn)
 	{
 		BlockPos blockpos = new BlockPos(getXWithOffset(x, z), getYWithOffset(y), getZWithOffset(x, z));
 		
@@ -161,7 +163,7 @@ public abstract class ImprovedStructurePiece extends StructurePiece
 			
 			worldIn.setBlockState(blockpos, blockstateIn, Constants.BlockFlags.BLOCK_UPDATE);
 			
-			IFluidState ifluidstate = worldIn.getFluidState(blockpos);
+			FluidState ifluidstate = worldIn.getFluidState(blockpos);
 			if(!ifluidstate.isEmpty())
 				worldIn.getPendingFluidTicks().scheduleTick(blockpos, ifluidstate.getFluid(), 0);
 			

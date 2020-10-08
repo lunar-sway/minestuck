@@ -1,33 +1,25 @@
 package com.mraof.minestuck.world.gen.feature.structure;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.util.registry.DynamicRegistries;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.structure.ScatteredStructure;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.structure.StructureStart;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 
-import java.util.function.Function;
-
-public class SmallRuinStructure extends ScatteredStructure<NoFeatureConfig>
+public class SmallRuinStructure extends Structure<NoFeatureConfig>
 {
-	public SmallRuinStructure(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactory)
+	public SmallRuinStructure(Codec<NoFeatureConfig> codec)
 	{
-		super(configFactory);
+		super(codec);
 	}
 	
 	@Override
-	protected int getSeedModifier()
-	{
-		return 59273643;
-	}
-	
-	@Override
-	public IStartFactory getStartFactory()
+	public IStartFactory<NoFeatureConfig> getStartFactory()
 	{
 		return Start::new;
 	}
@@ -38,32 +30,14 @@ public class SmallRuinStructure extends ScatteredStructure<NoFeatureConfig>
 		return Minestuck.MOD_ID + ":small_ruin";
 	}
 	
-	@Override
-	public int getSize()
+	public static class Start extends StructureStart<NoFeatureConfig>
 	{
-		return 2;
-	}
-	
-	@Override
-	protected int getBiomeFeatureDistance(ChunkGenerator<?> generator)
-	{
-		return 16;
-	}
-	
-	@Override
-	protected int getBiomeFeatureSeparation(ChunkGenerator<?> generator)
-	{
-		return 4;
-	}
-	
-	public static class Start extends StructureStart
-	{
-		private Start(Structure<?> structure, int chunkX, int chunkZ, MutableBoundingBox boundingBox, int reference, long seed) {
+		private Start(Structure<NoFeatureConfig> structure, int chunkX, int chunkZ, MutableBoundingBox boundingBox, int reference, long seed) {
 			super(structure, chunkX, chunkZ, boundingBox, reference, seed);
 		}
 		
 		@Override
-		public void init(ChunkGenerator<?> generator, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn)
+		public void func_230364_a_(DynamicRegistries registries, ChunkGenerator generator, TemplateManager templates, int chunkX, int chunkZ, Biome biome, NoFeatureConfig config)
 		{
 			SmallRuinPiece piece = new SmallRuinPiece(rand, chunkX * 16 + rand.nextInt(16), chunkZ * 16 + rand.nextInt(16), 0.5F);
 			components.add(piece);

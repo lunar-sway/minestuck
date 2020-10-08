@@ -10,11 +10,15 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.util.registry.DynamicRegistries;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
+import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
+import net.minecraft.world.gen.feature.structure.StructureManager;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.structure.StructureStart;
 import net.minecraft.world.gen.feature.template.TemplateManager;
@@ -22,15 +26,15 @@ import net.minecraft.world.gen.feature.template.TemplateManager;
 import java.util.List;
 import java.util.Random;
 
-public class ImpDungeonStart extends StructureStart
+public class ImpDungeonStart extends StructureStart<NoFeatureConfig>
 {
-	public ImpDungeonStart(Structure<?> structure, int chunkX, int chunkZ, MutableBoundingBox boundingBox, int reference, long seed)
+	public ImpDungeonStart(Structure<NoFeatureConfig> structure, int chunkX, int chunkZ, MutableBoundingBox boundingBox, int reference, long seed)
 	{
 		super(structure, chunkX, chunkZ, boundingBox, reference, seed);
 	}
 	
 	@Override
-	public void init(ChunkGenerator<?> generator, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn)
+	public void func_230364_a_(DynamicRegistries registries, ChunkGenerator generator, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn, NoFeatureConfig config)
 	{
 		EntryPiece piece = new EntryPiece(chunkX, chunkZ, rand, components);
 		components.add(piece);
@@ -74,11 +78,11 @@ public class ImpDungeonStart extends StructureStart
 		}
 
 		@Override
-		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
+		public boolean func_230383_a_(ISeedReader worldIn, StructureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
 		{
 			checkHeight(worldIn, structureBoundingBoxIn);
 
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
 
 			BlockState wallBlock = blocks.getBlockState("structure_primary");
 			BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");
@@ -170,7 +174,7 @@ public class ImpDungeonStart extends StructureStart
 			definedHeight = true;
 		}
 		
-		protected void buildWall(BlockState block, int x, int z, IWorld world, Random rand, MutableBoundingBox boundingBox, int minY)
+		protected void buildWall(BlockState block, int x, int z, ISeedReader world, Random rand, MutableBoundingBox boundingBox, int minY)
 		{
 			float f = 0.5F + z*0.2F;
 			for(int y = 1; y < 4; y++)
@@ -184,7 +188,7 @@ public class ImpDungeonStart extends StructureStart
 			}
 		}
 		
-		protected void buildFloorTile(BlockState block, int x, int z, IWorld world, Random rand, MutableBoundingBox boundingBox)
+		protected void buildFloorTile(BlockState block, int x, int z, ISeedReader world, Random rand, MutableBoundingBox boundingBox)
 		{
 			int y = 0;
 			

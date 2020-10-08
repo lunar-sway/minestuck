@@ -16,10 +16,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.structure.ScatteredStructurePiece;
+import net.minecraft.world.gen.feature.structure.StructureManager;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 
 import java.util.Random;
@@ -66,12 +67,12 @@ public class SmallRuinPiece extends ScatteredStructurePiece
 	}
 
 	@Override
-	public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox boundingBoxIn, ChunkPos chunkPosIn)
+	public boolean func_230383_a_(ISeedReader worldIn, StructureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, MutableBoundingBox boundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
 	{
 		if(!isInsideBounds(worldIn, boundingBoxIn, 0))
 			return false;
 
-		StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
+		StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
 		BlockState wallBlock = blocks.getBlockState("structure_primary");
 		BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");
 		BlockState floorBlock = blocks.getBlockState("structure_secondary");
@@ -130,13 +131,13 @@ public class SmallRuinPiece extends ScatteredStructurePiece
 		return true;
 	}
 	
-	private boolean generateChest(IWorld worldIn, MutableBoundingBox boundingBoxIn, Random randomIn, int x, int y, int z, Direction direction, ResourceLocation lootTable)
+	private boolean generateChest(ISeedReader worldIn, MutableBoundingBox boundingBoxIn, Random randomIn, int x, int y, int z, Direction direction, ResourceLocation lootTable)
 	{
 		BlockPos blockpos = new BlockPos(this.getXWithOffset(x, z), this.getYWithOffset(y), this.getZWithOffset(x, z));
 		return generateChest(worldIn, boundingBoxIn, randomIn, blockpos, lootTable, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, direction));
 	}
 	
-	private void buildWall(BlockState block, int x, int z, IWorld world, Random rand, MutableBoundingBox boundingBox, int minY)
+	private void buildWall(BlockState block, int x, int z, ISeedReader world, Random rand, MutableBoundingBox boundingBox, int minY)
 	{
 		
 		float f = z * 0.2F;
@@ -151,7 +152,7 @@ public class SmallRuinPiece extends ScatteredStructurePiece
 		}
 	}
 	
-	private boolean buildFloorTile(BlockState block, int x, int z, IWorld world, Random rand, MutableBoundingBox boundingBox)
+	private boolean buildFloorTile(BlockState block, int x, int z, ISeedReader world, Random rand, MutableBoundingBox boundingBox)
 	{
 		int y = 0;
 		
@@ -177,7 +178,7 @@ public class SmallRuinPiece extends ScatteredStructurePiece
 		return b;
 	}
 	
-	private boolean placeUnderling(int xPos, int zPos, MutableBoundingBox boundingBox, IWorld world, Random rand)
+	private boolean placeUnderling(int xPos, int zPos, MutableBoundingBox boundingBox, ISeedReader world, Random rand)
 	{
 		if(!boundingBox.isVecInside(new BlockPos(xPos, 64, zPos)))
 			return false;

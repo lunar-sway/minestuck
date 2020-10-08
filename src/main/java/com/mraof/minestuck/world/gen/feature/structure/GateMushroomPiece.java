@@ -8,15 +8,16 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.feature.structure.StructureManager;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 
 import java.util.Random;
 
 public class GateMushroomPiece extends GatePiece
 {
-	public GateMushroomPiece(ChunkGenerator<?> generator, Random random, int minX, int minZ)
+	public GateMushroomPiece(ChunkGenerator generator, Random random, int minX, int minZ)
 	{
 		super(MSStructurePieces.GATE_MUSHROOM, generator, random, minX, minZ, 11, 25, 11, 0);
 	}
@@ -37,10 +38,11 @@ public class GateMushroomPiece extends GatePiece
 	{
 		return new BlockPos(5, 24, 5);
 	}
-
+	
 	@Override
-	public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox boundingBoxIn, ChunkPos chunkPosIn)
+	public boolean func_230383_a_(ISeedReader worldIn, StructureManager manager, ChunkGenerator chunkGenerator, Random random, MutableBoundingBox boundingBoxIn, ChunkPos chunkPos, BlockPos pos)
 	{
+		
 		BlockState stem = Blocks.MUSHROOM_STEM.getDefaultState().with(HugeMushroomBlock.DOWN, false);
 		BlockState mushroom = Blocks.BROWN_MUSHROOM_BLOCK.getDefaultState().with(HugeMushroomBlock.UP, false).with(HugeMushroomBlock.DOWN, false);
 		
@@ -56,7 +58,7 @@ public class GateMushroomPiece extends GatePiece
 		fillWithBlocks(worldIn, boundingBoxIn, 3, 20, 9, 7, 20, 9, mushroom, mushroom, false);
 		fillWithBlocks(worldIn, boundingBoxIn, 4, 20, 10, 6, 20, 10, mushroom, mushroom, false);
 		
-		super.create(worldIn, chunkGeneratorIn, randomIn, boundingBoxIn, chunkPosIn);
+		super.func_230383_a_(worldIn, manager, chunkGenerator, random, boundingBoxIn, chunkPos, pos);
 		
 		return true;
 	}
