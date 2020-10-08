@@ -1,28 +1,14 @@
 package com.mraof.minestuck.world.lands.terrain;
 
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
-import com.mraof.minestuck.world.biome.LandWrapperBiome;
-import com.mraof.minestuck.world.biome.MSBiomes;
-import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.blockplacer.SimpleBlockPlacer;
-import net.minecraft.world.gen.blockstateprovider.ForestFlowerBlockStateProvider;
-import net.minecraft.world.gen.blockstateprovider.SimpleBlockStateProvider;
-import net.minecraft.world.gen.feature.*;
-import net.minecraft.world.gen.placement.ChanceConfig;
-import net.minecraft.world.gen.placement.CountRangeConfig;
-import net.minecraft.world.gen.placement.FrequencyConfig;
-import net.minecraft.world.gen.placement.Placement;
 
 import java.util.Random;
 
@@ -32,8 +18,8 @@ public class FloraLandType extends TerrainLandType
 	public static final String FLOWERS = "minestuck.flowers";
 	public static final String THORNS = "minestuck.thorns";
 	
-	private static final Vec3d fogColor = new Vec3d(0.5D, 0.6D, 0.9D);
-	private static final Vec3d skyColor = new Vec3d(0.6D, 0.8D, 0.6D);
+	private static final Vector3d fogColor = new Vector3d(0.5D, 0.6D, 0.9D);
+	private static final Vector3d skyColor = new Vector3d(0.6D, 0.8D, 0.6D);
 	
 	public FloraLandType()
 	{
@@ -70,7 +56,7 @@ public class FloraLandType extends TerrainLandType
 		properties.category = Biome.Category.FOREST;
 		properties.downfall = 0.4F;
 	}
-	
+	/*
 	@Override
 	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
 	{
@@ -107,15 +93,15 @@ public class FloraLandType extends TerrainLandType
 		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), Blocks.LAPIS_ORE.getDefaultState(), 3)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(8, 0, 0, 32))));
 		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), MSBlocks.STONE_QUARTZ_ORE.getDefaultState(), 5)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(8, 0, 0, 32))));
 	}
-	
+	*/
 	@Override
-	public Vec3d getFogColor()
+	public Vector3d getFogColor()
 	{
 		return fogColor;
 	}
 	
 	@Override
-	public Vec3d getSkyColor()
+	public Vector3d getSkyColor()
 	{
 		return skyColor;
 	}

@@ -3,28 +3,13 @@ package com.mraof.minestuck.world.lands.terrain;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
-import com.mraof.minestuck.world.biome.LandWrapperBiome;
-import com.mraof.minestuck.world.biome.MSBiomes;
-import com.mraof.minestuck.world.gen.MSSurfaceBuilders;
-import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
-import com.mraof.minestuck.world.gen.feature.tree.RainbowTree;
 import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.Biome.SpawnListEntry;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.IFeatureConfig;
-import net.minecraft.world.gen.feature.OreFeatureConfig;
-import net.minecraft.world.gen.placement.AtSurfaceWithExtraConfig;
-import net.minecraft.world.gen.placement.ChanceConfig;
-import net.minecraft.world.gen.placement.CountRangeConfig;
-import net.minecraft.world.gen.placement.Placement;
 
 import java.util.Random;
 
@@ -33,8 +18,8 @@ public class RainbowLandType extends TerrainLandType
 	public static final String RAINBOW = "minestuck.rainbow";
 	public static final String COLORS = "minestuck.colors";
 	
-	private static final Vec3d fogColor = new Vec3d(0.0D, 0.6D, 0.8D);
-	private static final Vec3d skyColor = new Vec3d(0.9D, 0.6D, 0.8D);
+	private static final Vector3d fogColor = new Vector3d(0.0D, 0.6D, 0.8D);
+	private static final Vector3d skyColor = new Vector3d(0.9D, 0.6D, 0.8D);
 	
 	public RainbowLandType()
 	{
@@ -76,7 +61,7 @@ public class RainbowLandType extends TerrainLandType
 		properties.downfall = 0.6F;
 		properties.temperature = 1.0F;
 	}
-	
+	/*
 	@Override
 	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
 	{
@@ -102,15 +87,15 @@ public class RainbowLandType extends TerrainLandType
 		
 		biome.addSpawn(EntityClassification.WATER_CREATURE, new SpawnListEntry(EntityType.SQUID, 2, 3, 5));
 	}
-	
+	*/
 	@Override
-	public Vec3d getFogColor() 
+	public Vector3d getFogColor()
 	{
 		return fogColor;
 	}
 	
 	@Override
-	public Vec3d getSkyColor()
+	public Vector3d getSkyColor()
 	{
 		return skyColor;
 	}

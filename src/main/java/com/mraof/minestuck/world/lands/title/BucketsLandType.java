@@ -1,16 +1,8 @@
 package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.player.EnumAspect;
-import com.mraof.minestuck.world.biome.LandWrapperBiome;
-import com.mraof.minestuck.world.biome.MSBiomes;
-import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.Blocks;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.IFeatureConfig;
-import net.minecraft.world.gen.placement.ChanceConfig;
-import net.minecraft.world.gen.placement.Placement;
 
 public class BucketsLandType extends TitleLandType    //Yes, buckets
 {
@@ -33,7 +25,7 @@ public class BucketsLandType extends TitleLandType    //Yes, buckets
 		registry.setBlockState("structure_wool_2", Blocks.BLUE_WOOL.getDefaultState());
 		registry.setBlockState("carpet", Blocks.BLACK_CARPET.getDefaultState());
 	}
-	
+	/*
 	@Override
 	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
 	{
@@ -42,4 +34,5 @@ public class BucketsLandType extends TitleLandType    //Yes, buckets
 			biome.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MSFeatures.BUCKET.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.CHANCE_PASSTHROUGH.configure(new ChanceConfig(16))));
 		}
 	}
+	*/
 }

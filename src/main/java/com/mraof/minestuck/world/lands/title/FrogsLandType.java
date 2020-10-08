@@ -1,21 +1,10 @@
 package com.mraof.minestuck.world.lands.title;
 
-import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.player.EnumAspect;
-import com.mraof.minestuck.world.biome.LandWrapperBiome;
-import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.DefaultBiomeFeatures;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.IFeatureConfig;
-import net.minecraft.world.gen.placement.FrequencyConfig;
-import net.minecraft.world.gen.placement.Placement;
 
 public class FrogsLandType extends TitleLandType
 {
@@ -38,7 +27,7 @@ public class FrogsLandType extends TitleLandType
 		registry.setBlockState("structure_wool_2", Blocks.GREEN_WOOL.getDefaultState());
 		registry.setBlockState("carpet", Blocks.LIME_CARPET.getDefaultState());
 	}
-	
+	/*
 	@Override
 	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blockRegistry)
 	{
@@ -49,7 +38,7 @@ public class FrogsLandType extends TitleLandType
 		
 		biome.addSpawn(EntityClassification.CREATURE, new Biome.SpawnListEntry(MSEntityTypes.FROG, 10, 4, 4));
 	}
-	
+	*/
 	@Override
 	public boolean isAspectCompatible(TerrainLandType aspect)
 	{

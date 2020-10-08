@@ -1,26 +1,14 @@
 package com.mraof.minestuck.world.lands.terrain;
 
-import com.google.common.collect.Lists;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
-import com.mraof.minestuck.world.biome.LandWrapperBiome;
-import com.mraof.minestuck.world.biome.MSBiomes;
-import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.DefaultBiomeFeatures;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.OreFeatureConfig;
-import net.minecraft.world.gen.feature.SphereReplaceConfig;
-import net.minecraft.world.gen.placement.CountRangeConfig;
-import net.minecraft.world.gen.placement.FrequencyConfig;
-import net.minecraft.world.gen.placement.Placement;
 
 import java.util.Random;
 
@@ -30,7 +18,7 @@ public class FrostLandType extends TerrainLandType
 	public static final String ICE = "minestuck.ice";
 	public static final String SNOW = "minestuck.snow";
 	
-	private static final Vec3d fogColor = new Vec3d(0.5D, 0.6D, 0.98D);
+	private static final Vector3d fogColor = new Vector3d(0.5D, 0.6D, 0.98D);
 	
 	public FrostLandType()
 	{
@@ -70,7 +58,7 @@ public class FrostLandType extends TerrainLandType
 		properties.forceRain = LandProperties.ForceType.ON;
 		properties.temperature = 0.0F;
 	}
-	
+	/*
 	@Override
 	public void setGenSettings(LandGenSettings settings)
 	{
@@ -102,7 +90,7 @@ public class FrostLandType extends TerrainLandType
 
 		DefaultBiomeFeatures.addFreezeTopLayer(biome);
 	}
-	
+	*/
 	@Override
 	public float getSkylightBase()
 	{
@@ -110,15 +98,15 @@ public class FrostLandType extends TerrainLandType
 	}
 	
 	@Override
-	public Vec3d getFogColor()
+	public Vector3d getFogColor()
 	{
 		return fogColor;
 	}
 	
 	@Override
-	public Vec3d getSkyColor()
+	public Vector3d getSkyColor()
 	{
-		return new Vec3d(0.6D, 0.7D, 0.9D);
+		return new Vector3d(0.6D, 0.7D, 0.9D);
 	}
 	
 	@Override

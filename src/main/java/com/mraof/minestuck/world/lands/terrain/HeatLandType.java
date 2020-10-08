@@ -1,23 +1,15 @@
 package com.mraof.minestuck.world.lands.terrain;
 
-import com.google.common.collect.Lists;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
-import com.mraof.minestuck.world.biome.LandWrapperBiome;
-import com.mraof.minestuck.world.biome.MSBiomes;
-import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.*;
-import net.minecraft.world.gen.placement.CountRangeConfig;
-import net.minecraft.world.gen.placement.FrequencyConfig;
-import net.minecraft.world.gen.placement.Placement;
+import net.minecraft.world.gen.feature.OreFeatureConfig;
 
 import java.util.Random;
 
@@ -27,7 +19,7 @@ public class HeatLandType extends TerrainLandType
 	public static final String FLAME = "minestuck.flame";
 	public static final String FIRE = "minestuck.fire";
 	
-	private static final Vec3d skyColor = new Vec3d(0.4D, 0.0D, 0.0D);
+	private static final Vector3d skyColor = new Vector3d(0.4D, 0.0D, 0.0D);
 	
 	public HeatLandType()
 	{
@@ -37,7 +29,7 @@ public class HeatLandType extends TerrainLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setGroundState(Blocks.NETHERRACK.getDefaultState(), OreFeatureConfig.FillerBlockType.NETHERRACK);
+		registry.setGroundState(Blocks.NETHERRACK.getDefaultState(), OreFeatureConfig.FillerBlockType.field_241883_b);
 		registry.setBlockState("upper", Blocks.COBBLESTONE.getDefaultState());
 		registry.setBlockState("ocean", Blocks.LAVA.getDefaultState());
 		registry.setBlockState("structure_primary", Blocks.NETHER_BRICKS.getDefaultState());
@@ -68,7 +60,7 @@ public class HeatLandType extends TerrainLandType
 		properties.downfall = 0.0F;
 		properties.temperature = 2.0F;
 	}
-	
+	/*
 	@Override
 	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
 	{
@@ -93,7 +85,7 @@ public class HeatLandType extends TerrainLandType
 		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), MSBlocks.NETHERRACK_COAL_ORE.getDefaultState(), 17)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(26, 0, 0, 128))));
 		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), Blocks.NETHER_QUARTZ_ORE.getDefaultState(), 8)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(13, 0, 0, 64))));
 	}
-	
+	*/
 	@Override
 	public float getSkylightBase()
 	{
@@ -101,7 +93,7 @@ public class HeatLandType extends TerrainLandType
 	}
 	
 	@Override
-	public Vec3d getFogColor() 
+	public Vector3d getFogColor()
 	{
 		return skyColor;
 	}

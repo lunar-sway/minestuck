@@ -2,15 +2,11 @@ package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.player.EnumAspect;
-import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.block.Blocks;
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.biome.Biome.SpawnListEntry;
+import net.minecraft.util.math.vector.Vector3d;
 
 public class MonstersLandType extends TitleLandType
 {
@@ -46,9 +42,9 @@ public class MonstersLandType extends TitleLandType
 	public void setProperties(LandProperties properties)
 	{
 		properties.skylightBase = Math.min(1/4F, properties.skylightBase);
-		properties.mergeFogColor(new Vec3d(0.1, 0, 0), 0.5F);
+		properties.mergeFogColor(new Vector3d(0.1, 0, 0), 0.5F);
 	}
-	
+	/*
 	@Override
 	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blockRegistry)
 	{
@@ -64,7 +60,7 @@ public class MonstersLandType extends TitleLandType
 			biome.addSpawn(EntityClassification.MONSTER, new SpawnListEntry(EntityType.SKELETON, 1, 1, 2));
 		}
 	}
-	
+	*/
 	public enum Variant
 	{
 		MONSTERS,
