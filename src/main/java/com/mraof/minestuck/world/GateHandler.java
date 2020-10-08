@@ -7,7 +7,6 @@ import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.biome.MSBiomes;
-import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.lands.LandInfo;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -65,7 +64,7 @@ public class GateHandler
 				return info.getGatePos();
 		}
 		
-		BlockPos gatePos = MSFeatures.LAND_GATE.findLandGatePos(world);
+		BlockPos gatePos = null;//TODO MSFeatures.LAND_GATE.findLandGatePos(world);
 		
 		if(info != null)
 			info.setGatePos(gatePos);

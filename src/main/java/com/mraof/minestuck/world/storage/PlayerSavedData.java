@@ -8,7 +8,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.DimensionSavedDataManager;
 import net.minecraft.world.storage.WorldSavedData;
@@ -48,7 +47,7 @@ public class PlayerSavedData extends WorldSavedData
 	
 	public static PlayerSavedData get(MinecraftServer mcServer)
 	{
-		ServerWorld world = mcServer.getWorld(DimensionType.OVERWORLD);
+		ServerWorld world = mcServer.func_241755_D_();
 		
 		DimensionSavedDataManager storage = world.getSavedData();
 		PlayerSavedData instance = storage.get(() -> new PlayerSavedData(mcServer), DATA_NAME);

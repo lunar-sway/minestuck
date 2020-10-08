@@ -11,6 +11,7 @@ import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -131,12 +132,12 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements I
 	}
 	
 	@Override
-	public void read(CompoundNBT compound)
+	public void read(BlockState state, CompoundNBT nbt)
 	{
-		super.read(compound);
+		super.read(state, nbt);
 		
-		if(IdentifierHandler.hasIdentifier(compound, "owner"))
-			owner = IdentifierHandler.load(compound, "owner");
+		if(IdentifierHandler.hasIdentifier(nbt, "owner"))
+			owner = IdentifierHandler.load(nbt, "owner");
 	}
 	
 	@Override

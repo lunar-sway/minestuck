@@ -5,7 +5,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -15,8 +15,8 @@ import java.util.ArrayList;
  */
 public class PartGroup
 {
-    private ArrayList<Vec3d> positions = new ArrayList<>();
-    private ArrayList<Vec3d> sizes = new ArrayList<>();
+    private ArrayList<Vector3d> positions = new ArrayList<>();
+    private ArrayList<Vector3d> sizes = new ArrayList<>();
     public ArrayList<EntityBigPart> parts = new ArrayList<>();
     private ArrayList<AxisAlignedBB> boxes = new ArrayList<>();
     LivingEntity parent;
@@ -30,24 +30,24 @@ public class PartGroup
     //x, y, z assuming no rotation
     public void addBox(double xOffset, double yOffset, double zOffset, double xSize, double ySize, double zSize)
     {
-        Vec3d offset = new Vec3d(xOffset, yOffset, zOffset);
-        Vec3d max = offset.add(xSize, ySize, zSize);
-        //I know AxisAlignedBB has a constructor for two Vec3d but that doesn't work on dedicated servers
+        Vector3d offset = new Vector3d(xOffset, yOffset, zOffset);
+        Vector3d max = offset.add(xSize, ySize, zSize);
+        //I know AxisAlignedBB has a constructor for two Vector3d but that doesn't work on dedicated servers
         boxes.add(new AxisAlignedBB(offset.x, offset.y, offset.z, max.x, max.y, max.z));
         for(int x = 0; x < xSize; x++)
         {
             positions.add(offset.add(x + 0.5, 0, 0.5));
-            sizes.add(new Vec3d(1, ySize, 1));
+            sizes.add(new Vector3d(1, ySize, 1));
             positions.add(offset.add(x + 0.5, 0, zSize - 0.5));
-            sizes.add(new Vec3d(1, ySize, 1));
+            sizes.add(new Vector3d(1, ySize, 1));
         }
 
         for(int z = 1; z < zSize - 1; z++)
         {
             positions.add(offset.add(0.5, 0, z + 0.5));
-            sizes.add(new Vec3d(1, ySize + 10, 1));
+            sizes.add(new Vector3d(1, ySize + 10, 1));
             positions.add(offset.add(xSize - 0.5, 0, z + 0.5));
-            sizes.add(new Vec3d(1, ySize + 10, 1));
+            sizes.add(new Vector3d(1, ySize + 10, 1));
         }
     }
 
@@ -56,7 +56,7 @@ public class PartGroup
         for(int i = 0; i < positions.size(); i++)
         {
             EntityBigPart part = new EntityBigPart(parent.getType(), world, this, (float) sizes.get(i).x, (float) sizes.get(i).y);
-            Vec3d position = positions.get(i);
+            Vector3d position = positions.get(i);
             part.setPosition(parent.getPosX() + position.x, parent.getPosY() + position.y, parent.getPosZ() + position.z);
             part.setPartId(parts.size());
             parts.add(part);
@@ -74,7 +74,7 @@ public class PartGroup
         for(int i = 0; i < parts.size(); i++)
         {
             EntityBigPart part = parts.get(i);
-            Vec3d position = positions.get(i).rotateYaw(yaw);
+            Vector3d position = positions.get(i).rotateYaw(yaw);
             part.setPosition(parent.getPosX() + position.x, parent.getPosY() + position.y, parent.getPosZ() + position.z);
             if(parent.removed != part.removed)
             {
@@ -90,7 +90,7 @@ public class PartGroup
         parent.world.getProfiler().startSection("partGroupCollision");
         float yaw = -parent.renderYawOffset * 3.141592f / 180f;
         boolean positionChanged = false;
-        Vec3d position = new Vec3d(entity.getPosX() - parent.getPosX(), entity.getPosY() - parent.getPosY(), entity.getPosZ() - parent.getPosZ()).rotateYaw(yaw);
+        Vector3d position = new Vector3d(entity.getPosX() - parent.getPosX(), entity.getPosY() - parent.getPosY(), entity.getPosZ() - parent.getPosZ()).rotateYaw(yaw);
         for (AxisAlignedBB box : boxes)
         {
             AxisAlignedBB relativeBox = new AxisAlignedBB(position.x, position.y, position.z, entity.getWidth(), entity.getHeight(), entity.getWidth());
@@ -103,11 +103,11 @@ public class PartGroup
                 double differenceZ = position.z - centerZ;
                 if(Math.abs(differenceX) > Math.abs(differenceZ))
                 {
-                    position = new Vec3d(position.x, position.y, differenceZ > 0 ? box.maxZ : box.minZ);
+                    position = new Vector3d(position.x, position.y, differenceZ > 0 ? box.maxZ : box.minZ);
                 }
                 else
                 {
-                    position = new Vec3d(differenceX > 0 ? box.maxX : box.minX, position.y, position.z);
+                    position = new Vector3d(differenceX > 0 ? box.maxX : box.minX, position.y, position.z);
                 }
             }
             if(positionChanged)

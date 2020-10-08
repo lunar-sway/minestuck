@@ -9,14 +9,9 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class MSDimensions
@@ -29,7 +24,7 @@ public class MSDimensions
 	/**
 	 * On server init, this function is called to register dimensions.
 	 * The dimensions registered will then be sent and registered by forge client-side.
-	 */
+	 *//*
 	@SubscribeEvent
 	public static void registerDimensionTypes(final RegisterDimensionsEvent event)
 	{
@@ -38,7 +33,7 @@ public class MSDimensions
 	}
 	
 	@SubscribeEvent
-	public static void serverStopped(final FMLServerStoppedEvent event)
+	public static void serverStopped(final FMLServerStoppedEvent event)	will likely not be needed anymore
 	{
 		if(!event.getServer().isDedicatedServer())
 		{
@@ -52,7 +47,7 @@ public class MSDimensions
 				registry.register(entry.getValue().getId() + 1, entry.getKey(), entry.getValue());
 			}
 		}
-	}
+	}*/
 	
 	public static LandTypePair getAspects(MinecraftServer server, RegistryKey<World> dimension)
 	{
@@ -78,11 +73,11 @@ public class MSDimensions
 	
 	public static boolean isLandDimension(RegistryKey<World> dimension)
 	{
-		return dimension != null && dimension.getModType() == MSDimensionTypes.LANDS;
+		return dimension != null;//TODO && dimension.getModType() == MSDimensionTypes.LANDS;
 	}
 	
 	public static boolean isSkaia(RegistryKey<World> dimension)
 	{
-		return dimension != null && dimension.getModType() == MSDimensionTypes.SKAIA;
+		return dimension != null;//TODO && dimension.getModType() == MSDimensionTypes.SKAIA;
 	}
 }

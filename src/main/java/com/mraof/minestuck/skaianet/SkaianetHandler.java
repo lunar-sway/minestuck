@@ -574,7 +574,7 @@ public final class SkaianetHandler
 	void updateLandMaps(SburbConnection connection)
 	{
 		typeToInfoContainer.put(connection.getLandInfo().getDimensionName(), connection.getLandInfo());
-		MSDimensionTypes.LANDS.dimToLandTypes.put(connection.getLandInfo().getDimensionName(), connection.getLandInfo().getLazyLandAspects());
+		//TODO MSDimensionTypes.LANDS.dimToLandTypes.put(connection.getLandInfo().getDimensionName(), connection.getLandInfo().getLazyLandAspects());
 	}
 	
 	/**
@@ -695,7 +695,7 @@ public final class SkaianetHandler
 	public static void clear()
 	{
 		INSTANCE = null;
-		MSDimensionTypes.LANDS.dimToLandTypes.clear();
+		//TODO MSDimensionTypes.LANDS.dimToLandTypes.clear();
 		SburbHandler.playersInTitleSelection.clear();
 	}
 }

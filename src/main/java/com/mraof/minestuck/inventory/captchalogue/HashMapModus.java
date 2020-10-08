@@ -8,6 +8,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.Util;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.LogicalSide;
 
@@ -110,7 +111,7 @@ public class HashMapModus extends Modus
 		markDirty();
 		
 		if(ejectByChat && MinestuckConfig.SERVER.hashmapChatModusSetting.get() != MinestuckConfig.AvailableOptions.OFF || MinestuckConfig.SERVER.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.ON)
-			player.sendMessage(new TranslationTextComponent(MESSAGE, item.getTextComponent(), getSize(), index));
+			player.sendMessage(new TranslationTextComponent(MESSAGE, item.getTextComponent(), getSize(), index), Util.DUMMY_UUID);
 		
 		return true;
 	}
@@ -268,7 +269,7 @@ public class HashMapModus extends Modus
 			player.inventory.setInventorySlotContents(player.inventory.currentItem, stack);
 		else CaptchaDeckHandler.launchAnyItem(player, stack);
 		
-		player.sendMessage(new TranslationTextComponent("message.hash_map", i, getSize(), index, stack.getTextComponent()));
+		player.sendMessage(new TranslationTextComponent("message.hash_map", i, getSize(), index, stack.getTextComponent()), Util.DUMMY_UUID);
 	}
 	
 }

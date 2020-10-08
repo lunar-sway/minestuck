@@ -45,8 +45,8 @@ public class MiscContainerPacket implements PlayToServerPacket
 		if(editmode != isInEditmode)
 		{
 			if(isInEditmode)
-				LOGGER.error("Sanity check failed: {} tried to open a minestuck gui while in editmode", player.getName().getFormattedText());
-			else LOGGER.error("Sanity check failed: {} tried to open an editmode gui while outside editmode", player.getName().getFormattedText());
+				LOGGER.error("Sanity check failed: {} tried to open a minestuck gui while in editmode", player.getName().getString());
+			else LOGGER.error("Sanity check failed: {} tried to open an editmode gui while outside editmode", player.getName().getString());
 			
 			ServerEditHandler.resendEditmodeStatus(player);
 		} else

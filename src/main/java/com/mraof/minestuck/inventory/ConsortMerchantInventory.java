@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.Util;
 import net.minecraft.util.text.TranslationTextComponent;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -67,7 +68,7 @@ public class ConsortMerchantInventory implements IInventory
 			int amountPurchased = (int) Math.min(prices[index] != 0 ? playerData.getBoondollars() / prices[index] : Integer.MAX_VALUE, all ? stack.getCount() : 1);
 			if (amountPurchased == 0)
 			{
-				player.sendMessage(new TranslationTextComponent(CANT_AFFORD));
+				player.sendMessage(new TranslationTextComponent(CANT_AFFORD), Util.DUMMY_UUID);
 			} else
 			{
 				playerData.takeBoondollars(amountPurchased * prices[index]);

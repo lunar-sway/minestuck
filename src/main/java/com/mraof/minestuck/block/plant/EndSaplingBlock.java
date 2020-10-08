@@ -2,7 +2,6 @@ package com.mraof.minestuck.block.plant;
 
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.util.MSTags;
-import com.mraof.minestuck.world.gen.feature.tree.EndTree;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BushBlock;
@@ -26,7 +25,8 @@ public class EndSaplingBlock extends BushBlock implements IGrowable
 	public static final BooleanProperty OMEGA = MSProperties.OMEGA;
 	protected static final VoxelShape SHAPE = Block.makeCuboidShape(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
 	
-	private final Tree tree = new EndTree();
+	
+	private final Tree tree = null;//new EndTree(); TODO
 	
 	public EndSaplingBlock(Properties properties)
 	{

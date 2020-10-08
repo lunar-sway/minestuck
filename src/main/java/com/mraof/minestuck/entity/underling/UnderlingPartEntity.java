@@ -4,9 +4,11 @@ import com.mraof.minestuck.entity.IEntityMultiPart;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.Pose;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.tags.ITag;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
@@ -98,8 +100,9 @@ public class UnderlingPartEntity extends Entity implements IEntityAdditionalSpaw
 	{
 		return this == par1Entity || this.baseEntity == par1Entity;
 	}
+	
 	@Override
-	public boolean handleWaterMovement() 
+	public boolean handleFluidAcceleration(ITag<Fluid> fluidTag, double fluidFactor)
 	{
 		return false;
 	}

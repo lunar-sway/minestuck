@@ -1,6 +1,5 @@
 package com.mraof.minestuck.world.storage;
 
-import com.mojang.datafixers.Dynamic;
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
@@ -8,7 +7,6 @@ import net.minecraft.nbt.NBTDynamicOps;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.GlobalPos;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.DimensionSavedDataManager;
 import net.minecraft.world.storage.WorldSavedData;
@@ -41,15 +39,8 @@ public class TransportalizerSavedData extends WorldSavedData
 		locations.clear();
 		for(String id : nbt.keySet())
 		{
-			try
-			{
-				INBT locationTag = nbt.get(id);
-				GlobalPos location = GlobalPos.deserialize(new Dynamic<>(NBTDynamicOps.INSTANCE, locationTag));
-				locations.put(id, location);
-			} catch(IllegalArgumentException e)
-			{
-				LOGGER.error("Could not load transportalizer {} due to unreadable location. This transportalizer will be ignored.", id);
-			}
+			INBT locationTag = nbt.get(id);
+			GlobalPos.CODEC.parse(NBTDynamicOps.INSTANCE, locationTag).resultOrPartial(LOGGER::error).ifPresent(location -> locations.put(id, location));
 		}
 	}
 	
@@ -60,9 +51,7 @@ public class TransportalizerSavedData extends WorldSavedData
 		{
 			GlobalPos location = entry.getValue();
 			
-			INBT locationTag = location.serialize(NBTDynamicOps.INSTANCE);
-			
-			compound.put(entry.getKey(), locationTag);
+			GlobalPos.CODEC.encodeStart(NBTDynamicOps.INSTANCE, location).resultOrPartial(LOGGER::error).ifPresent(locationTag -> compound.put(entry.getKey(), locationTag));
 		}
 		
 		return compound;
@@ -118,7 +107,7 @@ public class TransportalizerSavedData extends WorldSavedData
 	
 	public static TransportalizerSavedData get(MinecraftServer mcServer)
 	{
-		ServerWorld world = mcServer.getWorld(DimensionType.OVERWORLD);
+		ServerWorld world = mcServer.getWorld(World.OVERWORLD);
 		
 		DimensionSavedDataManager storage = world.getSavedData();
 		TransportalizerSavedData instance = storage.get(TransportalizerSavedData::new, DATA_NAME);

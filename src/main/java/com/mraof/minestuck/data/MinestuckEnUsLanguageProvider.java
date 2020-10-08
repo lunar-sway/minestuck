@@ -34,7 +34,6 @@ import com.mraof.minestuck.skaianet.PredefineData;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.*;
 import com.mraof.minestuck.world.GateHandler;
-import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.terrain.*;
@@ -814,12 +813,12 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItemGroup.MAIN, "Minestuck Main");
 		add(MSItemGroup.LANDS, "Minestuck Lands");
 		add(MSItemGroup.WEAPONS, "Minestuck Weapons");
-		
+		/*TODO
 		add(MSBiomes.SKAIA, "Skaia");
 		add(MSBiomes.LAND_NORMAL, "Land");
 		add(MSBiomes.LAND_OCEAN, "Ocean Land");
 		add(MSBiomes.LAND_ROUGH, "Rough Land");
-		
+		*/
 		add(MSEntityTypes.FROG, "Frog");
 		add(MSEntityTypes.SALAMANDER, "Salamander");
 		addExtra(MSEntityTypes.SALAMANDER, "plural", "Salamanders");

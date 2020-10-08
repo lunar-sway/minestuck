@@ -12,7 +12,7 @@ import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import org.lwjgl.opengl.GL11;
 
 import java.nio.FloatBuffer;
@@ -32,7 +32,7 @@ public class SkaiaPortalRenderer extends TileEntityRenderer<SkaiaPortalTileEntit
 	@Override
 	public void render(SkaiaPortalTileEntity tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn)
 	{
-		Vec3d position = this.renderDispatcher.renderInfo.getProjectedView();
+		Vector3d position = this.renderDispatcher.renderInfo.getProjectedView();
 
 		float var9 = (float) position.x;
 		float var10 = (float) position.y;

@@ -1,10 +1,7 @@
 package com.mraof.minestuck.world.gen.feature.structure.village;
 
 import com.google.common.collect.Lists;
-import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.consort.EnumConsort;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
 import com.mraof.minestuck.world.gen.feature.structure.ImprovedStructurePiece;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
@@ -13,18 +10,19 @@ import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.LadderBlock;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.util.math.vector.Vector3i;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
+import net.minecraft.world.gen.feature.structure.StructureManager;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 import net.minecraftforge.common.util.Constants;
@@ -232,10 +230,10 @@ public class ConsortVillagePieces
 			}
 		}
 		
-		protected void clearFront(IWorld world, MutableBoundingBox structureBB, int minX, int maxX, int y, int z)
+		protected void clearFront(ISeedReader world, MutableBoundingBox structureBB, int minX, int maxX, int y, int z)
 		{
 			for (int x = minX; x <= maxX; x++)
-				if (structureBB.isVecInside(new Vec3i(this.getXWithOffset(x, z), this.getYWithOffset(y), this.getZWithOffset(x, z))))
+				if (structureBB.isVecInside(new Vector3i(this.getXWithOffset(x, z), this.getYWithOffset(y), this.getZWithOffset(x, z))))
 				{
 					this.fillWithAir(world, structureBB, x, y, z, x, y + 4, z);
 					BlockPos pos = new BlockPos(this.getXWithOffset(x, z - 1), this.getYWithOffset(y), this.getZWithOffset(x, z - 1));
@@ -314,7 +312,7 @@ public class ConsortVillagePieces
 			
 			if(boundingBox.isVecInside(pos))
 			{
-				
+				/*
 				if(!(chunkGenerator.getSettings() instanceof LandGenSettings))
 				{
 					Debug.warn("Tried to spawn a consort in a building that is being generated outside of a land dimension.");
@@ -346,7 +344,7 @@ public class ConsortVillagePieces
 				} catch(Exception e)
 				{
 					e.printStackTrace();
-				}
+				}*/
 			}
 			return false;
 		}
@@ -448,9 +446,9 @@ public class ConsortVillagePieces
 		}
 
 		@Override
-		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
+		public boolean func_230383_a_(ISeedReader worldIn, StructureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
 		{
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
 			BlockState pathBlock = blocks.getBlockState("village_path");
 
 			for (int i = this.boundingBox.minX; i <= this.boundingBox.maxX; ++i)

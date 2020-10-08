@@ -1,31 +1,6 @@
 package com.mraof.minestuck.client.renderer;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mraof.minestuck.skaianet.SkaiaClient;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.world.LandDimension;
-import com.mraof.minestuck.world.MSDimensionTypes;
-import com.mraof.minestuck.world.lands.LandTypePair;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.world.World;
-import net.minecraftforge.client.SkyRenderHandler;
-import org.lwjgl.opengl.GL11;
-
-import java.util.List;
-import java.util.Random;
-
+/*
 public class LandSkyRenderer implements SkyRenderHandler	//TODO
 {
 	private LandDimension dimension;
@@ -195,7 +170,7 @@ public class LandSkyRenderer implements SkyRenderHandler	//TODO
 			ResourceLocation landName = list.get((index + i)%list.size());
 			if(landName != null)
 			{
-				Random random = new Random(/*31*mc.world.getSeed() + TODO?*/ landName.hashCode());
+				Random random = new Random(/*31*mc.world.getSeed() + TODO?*//* landName.hashCode());
 				LandTypePair.LazyInstance landTypes = MSDimensionTypes.LANDS.dimToLandTypes.get(landName);
 				if(landTypes == null)
 					Debug.warnf("Missing land types for dimension %s!", landName);
@@ -239,4 +214,4 @@ public class LandSkyRenderer implements SkyRenderHandler	//TODO
 		buffer.finishDrawing();
 		WorldVertexBufferUploader.draw(buffer);
 	}
-}
+}*/
