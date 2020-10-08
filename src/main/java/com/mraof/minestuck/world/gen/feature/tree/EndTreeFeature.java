@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.gen.feature.tree;
-
+/* TODO Vanilla no longer has an abstract tree feature. We should look at the possibility of adapting to vanillas current tree model,
+     or if that doesn't suit the end tree, create it as its own feature extending Feature
 import com.mojang.datafixers.Dynamic;
 import com.mraof.minestuck.block.plant.DoubleLogBlock;
 import com.mraof.minestuck.block.plant.EndLeavesBlock;
@@ -14,6 +15,7 @@ import net.minecraft.world.gen.feature.TreeFeatureConfig;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
+
 
 public class EndTreeFeature extends AbstractTreeFeature<TreeFeatureConfig>
 {
@@ -155,4 +157,4 @@ public class EndTreeFeature extends AbstractTreeFeature<TreeFeatureConfig>
 			}
 		}
 	}
-}
+}*/

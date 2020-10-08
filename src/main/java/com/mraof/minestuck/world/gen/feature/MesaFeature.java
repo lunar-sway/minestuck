@@ -1,20 +1,19 @@
 package com.mraof.minestuck.world.gen.feature;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import com.mraof.minestuck.util.CoordPair;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraftforge.common.util.Constants;
 
 import java.util.*;
-import java.util.function.Function;
 
 public class MesaFeature extends Feature<NoFeatureConfig>
 {
@@ -39,32 +38,32 @@ public class MesaFeature extends Feature<NoFeatureConfig>
 	
 	private final boolean stomps = false;
 	
-	public MesaFeature(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactoryIn)
+	public MesaFeature(Codec<NoFeatureConfig> codec)
 	{
-		super(configFactoryIn);
+		super(codec);
 	}
 	
 	@Override
-	public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, NoFeatureConfig config)
+	public boolean func_241855_a(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
 	{
 		int tallness = 7;
 		int height = rand.nextInt(tallness) + tallness + 3;
 		
-		if(worldIn.getBlockState(pos.up(height*2/3)).getMaterial().isLiquid())	//At least 1/3rd of the height should be above the liquid surface
+		if(world.getBlockState(pos.up(height*2/3)).getMaterial().isLiquid())	//At least 1/3rd of the height should be above the liquid surface
 			return false;
 		
 		float plateauSize = 0.6F + rand.nextFloat()*(height/10F);
 		float altFrequency = 0.01F;
 		boolean isAlt = rand.nextFloat() < altFrequency;
 		
-		BlockPos nodePos = generateMesa(pos.up(height), height, plateauSize, worldIn, rand, isAlt, generator.getSettings().getDefaultBlock());
+		BlockPos nodePos = generateMesa(pos.up(height), height, plateauSize, world, rand, isAlt, Blocks.STONE.getDefaultState());//generator.getSettings().getDefaultBlock()); TODO
 		
 		if(!stomps)
 		{
-				worldIn.setBlockState(nodePos, isAlt?altCore:baseCore, Constants.BlockFlags.BLOCK_UPDATE);
+				world.setBlockState(nodePos, isAlt?altCore:baseCore, Constants.BlockFlags.BLOCK_UPDATE);
 		} else
 		{
-			worldIn.setBlockState(nodePos, Blocks.AIR.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
+			world.setBlockState(nodePos, Blocks.AIR.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
 		}
 		
 		return true;

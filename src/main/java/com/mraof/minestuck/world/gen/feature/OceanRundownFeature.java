@@ -1,12 +1,12 @@
 package com.mraof.minestuck.world.gen.feature;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
@@ -14,21 +14,22 @@ import net.minecraft.world.gen.feature.NoFeatureConfig;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.function.Function;
 
 public class OceanRundownFeature extends Feature<NoFeatureConfig>
 {	//TODO Make sure that this works as intended
-	public OceanRundownFeature(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactoryIn)
+	
+	
+	public OceanRundownFeature(Codec<NoFeatureConfig> codec)
 	{
-		super(configFactoryIn);
+		super(codec);
 	}
 	
 	@Override
-	public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, NoFeatureConfig config)
+	public boolean func_241855_a(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
 	{
 		BlockPos pos2, pos3;
 		
-		if(generator.getBiomeProvider().getBiomes(pos.getX(), worldIn.getSeaLevel(), pos.getZ(), 7).contains(MSBiomes.LAND_OCEAN))
+		if(generator.getBiomeProvider().getBiomes(pos.getX(), world.getSeaLevel(), pos.getZ(), 7).contains(MSBiomes.LAND_OCEAN))
 		{
 			return false;
 		}
@@ -47,7 +48,7 @@ public class OceanRundownFeature extends Feature<NoFeatureConfig>
 		pos2 = oceanPos.remove(rand.nextInt(oceanPos.size()));
 		pos3 = oceanPos.get(rand.nextInt(oceanPos.size()));
 		
-		BlockState fluid = generator.getSettings().getDefaultFluid();
+		BlockState fluid = Blocks.WATER.getDefaultState();//generator.getSettings().getDefaultFluid(); TODO
 		int minX = Math.min(pos.getX(), Math.min(pos2.getX(), pos3.getX()));
 		int maxX = Math.max(pos.getX(), Math.max(pos2.getX(), pos3.getX()));
 		for(int posX = minX; posX <= maxX; posX++)
@@ -90,9 +91,9 @@ public class OceanRundownFeature extends Feature<NoFeatureConfig>
 			}
 			for(int posZ = z1; posZ <= z2; posZ++)
 			{
-				BlockPos groundPos = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, new BlockPos(posX, 0, posZ));
-				if(!worldIn.getBlockState(groundPos).getMaterial().isLiquid())
-					setBlockState(worldIn, groundPos.down(), fluid);
+				BlockPos groundPos = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, new BlockPos(posX, 0, posZ));
+				if(!world.getBlockState(groundPos).getMaterial().isLiquid())
+					setBlockState(world, groundPos.down(), fluid);
 			}
 		}
 		

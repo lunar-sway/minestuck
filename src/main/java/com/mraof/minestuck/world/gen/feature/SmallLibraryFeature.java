@@ -1,7 +1,7 @@
 package com.mraof.minestuck.world.gen.feature;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.Mirror;
@@ -10,32 +10,30 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.template.*;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.util.Constants;
 
 import java.util.Random;
-import java.util.function.Function;
 
 public class SmallLibraryFeature extends Feature<NoFeatureConfig>
 {
 	private static final ResourceLocation STRUCTURE_SMALL_LIBRARY = new ResourceLocation(Minestuck.MOD_ID, "small_library");
 	
-	public SmallLibraryFeature(Function<Dynamic<?>, ? extends NoFeatureConfig> deserialize)
+	public SmallLibraryFeature(Codec<NoFeatureConfig> codec)
 	{
-		super(deserialize);
+		super(codec);
 	}
 	
 	@Override
-	public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, NoFeatureConfig config)
+	public boolean func_241855_a(ISeedReader worldIn, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
 	{
 		Rotation rotation = Rotation.randomRotation(rand);
-		TemplateManager templates = ((ServerWorld) worldIn.getWorld()).getSaveHandler().getStructureTemplateManager();
+		TemplateManager templates = worldIn.getWorld().getStructureTemplateManager();
 		Template template = templates.getTemplateDefaulted(STRUCTURE_SMALL_LIBRARY);
 		
 		PlacementSettings settings = new PlacementSettings().setRotation(rotation).setChunk(new ChunkPos(pos)).setRandom(rand).addProcessor(StructureBlockRegistryProcessor.INSTANCE);
@@ -72,7 +70,7 @@ public class SmallLibraryFeature extends Feature<NoFeatureConfig>
 		int y = Math.min(y1, y2) - 1;
 		
 		BlockPos structurePos = template.getZeroPositionWithTransform(new BlockPos(pos.getX() + xOffset, y, pos.getZ() + zOffset), Mirror.NONE, rotation);
-		template.addBlocksToWorld(worldIn, structurePos, settings);
+		template.func_237146_a_(worldIn, structurePos, structurePos, settings, rand, Constants.BlockFlags.NO_RERENDER);
 		
 		return true;
 	}
