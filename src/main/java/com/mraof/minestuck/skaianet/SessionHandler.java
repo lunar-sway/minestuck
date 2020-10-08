@@ -454,7 +454,7 @@ public final class SessionHandler
 	{
 		if(singleSession)
 		{
-			compound.put("sessions", getGlobalSession().write());
+			compound.put("session", getGlobalSession().write());
 		} else
 		{
 			ListNBT list = new ListNBT();
