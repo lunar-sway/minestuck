@@ -10,6 +10,8 @@ modLoader="javafml" #mandatory
 # A version range to match for said mod loader - for regular FML @Mod it will be the forge version
 loaderVersion="[34,)" #mandatory
 
+license="HUGWARE"
+
 # A URL to refer people to when problems occur with this mod
 issueTrackerURL="https://github.com/mraof/Minestuck/issues" #optional
 

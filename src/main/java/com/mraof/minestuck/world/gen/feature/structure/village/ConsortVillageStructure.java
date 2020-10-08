@@ -6,6 +6,7 @@ import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.util.registry.DynamicRegistries;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.structure.StructureStart;
@@ -19,6 +20,12 @@ public class ConsortVillageStructure extends Structure<NoFeatureConfig>
 	public ConsortVillageStructure(Codec<NoFeatureConfig> codec)
 	{
 		super(codec);
+	}
+	
+	@Override
+	public GenerationStage.Decoration func_236396_f_()
+	{
+		return GenerationStage.Decoration.SURFACE_STRUCTURES;
 	}
 	
 	@Override

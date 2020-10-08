@@ -104,10 +104,14 @@ public class GristCostRecipeCategory implements IRecipeCategory<JeiGristCost>
 	@Override
 	public List<ITextComponent> getTooltipStrings(JeiGristCost recipe, double mouseX, double mouseY)
 	{
+		ITextComponent text = null;
 		if(recipe.getType() == JeiGristCost.Type.GRIST_SET)
-			return Collections.singletonList(GuiUtil.getGristboardTooltip(recipe.getGristSet(), GuiUtil.GristboardMode.ALCHEMITER, mouseX, mouseY, 1, 30, Minecraft.getInstance().fontRenderer));
+			text = GuiUtil.getGristboardTooltip(recipe.getGristSet(), GuiUtil.GristboardMode.ALCHEMITER, mouseX, mouseY, 1, 30, Minecraft.getInstance().fontRenderer);
 		else if(recipe.getType() == JeiGristCost.Type.WILDCARD)
-			return Collections.singletonList(GuiUtil.getGristboardTooltip(new GristSet(GristTypes.BUILD, recipe.getWildcardAmount()), GuiUtil.GristboardMode.JEI_WILDCARD, mouseX, mouseY, 1, 30, Minecraft.getInstance().fontRenderer));
-		return IRecipeCategory.super.getTooltipStrings(recipe, mouseX, mouseY);
+			text = GuiUtil.getGristboardTooltip(new GristSet(GristTypes.BUILD, recipe.getWildcardAmount()), GuiUtil.GristboardMode.JEI_WILDCARD, mouseX, mouseY, 1, 30, Minecraft.getInstance().fontRenderer);
+		
+		if(text != null)
+			return Collections.singletonList(text);
+		else return IRecipeCategory.super.getTooltipStrings(recipe, mouseX, mouseY);
 	}
 }

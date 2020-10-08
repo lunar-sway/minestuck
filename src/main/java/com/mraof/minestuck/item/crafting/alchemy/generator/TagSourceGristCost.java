@@ -9,14 +9,18 @@ import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tags.ITag;
-import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagCollectionManager;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 
 public class TagSourceGristCost extends GeneratedGristCost
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	private final ITag<Item> source;
 	private final float multiplier;
 	private final ImmutableGristSet addedCost;
@@ -40,6 +44,9 @@ public class TagSourceGristCost extends GeneratedGristCost
 	@Override
 	protected GristSet generateCost(GenerationContext context)
 	{
+		if(source == null)
+			return null;
+		
 		GristSet maxCost = null;
 		for(Item item : source.getAllElements())
 		{
@@ -69,7 +76,9 @@ public class TagSourceGristCost extends GeneratedGristCost
 			GristSet cost = GristSet.deserialize(JSONUtils.getJsonObject(json, "grist_cost"));
 			float multiplier = json.has("multiplier") ? JSONUtils.getFloat(json, "multiplier") : 1;
 			ResourceLocation resourcelocation = new ResourceLocation(JSONUtils.getString(json, "source"));
-			ITag<Item> tag = ItemTags.getCollection().get(resourcelocation);
+			ITag<Item> tag = TagCollectionManager.getManager().getItemTags().get(resourcelocation);
+			if(tag == null)
+				LOGGER.warn("No tag by name {} for grist cost {}", resourcelocation, recipeId);
 			return new TagSourceGristCost(recipeId, ingredient, tag, multiplier, cost, priority);
 		}
 		

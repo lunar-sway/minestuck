@@ -6,6 +6,7 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.provider.BiomeProvider;
 import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
 
@@ -29,6 +30,12 @@ public class CastleStructure extends Structure<NoFeatureConfig>
         rand.nextInt();
         return chunkX == 1 && chunkZ == 0;//this.rand.nextInt(3) != 0 ? false : (par1 != (var3 << 4) + 4 + this.rand.nextInt(8) ? false : par2 == (var4 << 4) + 4 + this.rand.nextInt(8));
     }
+	
+	@Override
+	public GenerationStage.Decoration func_236396_f_()
+	{
+		return GenerationStage.Decoration.SURFACE_STRUCTURES;
+	}
 	
 	@Override
 	public IStartFactory<NoFeatureConfig> getStartFactory()

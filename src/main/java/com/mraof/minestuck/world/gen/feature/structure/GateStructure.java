@@ -11,6 +11,7 @@ import net.minecraft.util.registry.DynamicRegistries;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
@@ -29,20 +30,27 @@ public class GateStructure extends Structure<NoFeatureConfig>
 	{
 		super(codec);
 	}
-	/*
+	
 	@Override
-	protected ChunkPos getStartPositionForPosition(ChunkGenerator<?> chunkGenerator, Random random, int x, int z, int spacingOffsetsX, int spacingOffsetsZ)
+	public GenerationStage.Decoration func_236396_f_()
 	{
-		DimensionType type = chunkGenerator instanceof LandChunkGenerator ? ((LandChunkGenerator) chunkGenerator).getDimensionType() : null;
-		return findGatePosition(type, chunkGenerator);
+		return GenerationStage.Decoration.SURFACE_STRUCTURES;
 	}
-
-	public boolean canBeGenerated(BiomeManager biomeManagerIn, ChunkGenerator<?> generatorIn, Random randIn, int chunkX, int chunkZ, Biome biomeIn) {
-		ChunkPos pos = this.getStartPositionForPosition(generatorIn, randIn, chunkX, chunkZ, 0, 0);
-
-		return chunkX == pos.x && chunkZ == pos.z;
-	}
-	*/
+	
+	/*
+		@Override
+		protected ChunkPos getStartPositionForPosition(ChunkGenerator<?> chunkGenerator, Random random, int x, int z, int spacingOffsetsX, int spacingOffsetsZ)
+		{
+			DimensionType type = chunkGenerator instanceof LandChunkGenerator ? ((LandChunkGenerator) chunkGenerator).getDimensionType() : null;
+			return findGatePosition(type, chunkGenerator);
+		}
+	
+		public boolean canBeGenerated(BiomeManager biomeManagerIn, ChunkGenerator<?> generatorIn, Random randIn, int chunkX, int chunkZ, Biome biomeIn) {
+			ChunkPos pos = this.getStartPositionForPosition(generatorIn, randIn, chunkX, chunkZ, 0, 0);
+	
+			return chunkX == pos.x && chunkZ == pos.z;
+		}
+		*/
 	@Override
 	public IStartFactory<NoFeatureConfig> getStartFactory()
 	{

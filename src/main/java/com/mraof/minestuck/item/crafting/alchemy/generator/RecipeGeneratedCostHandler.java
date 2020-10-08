@@ -20,7 +20,6 @@ import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -193,7 +192,7 @@ public class RecipeGeneratedCostHandler extends ReloadListener<List<RecipeGenera
 	{
 		Objects.requireNonNull(recipeManager, "Recipe manager was null while generating grist costs");
 		
-		if(!ServerLifecycleHooks.getCurrentServer().isOnExecutionThread() || (sources.size() != 0 && recipeManager.getRecipes().size() == 0))
+		if(/*!ServerLifecycleHooks.getCurrentServer().isOnExecutionThread() || */(sources.size() != 0 && recipeManager.getRecipes().size() == 0))
 		{
 			throw new IllegalStateException("Grist cost generator is supposed to be executed on server thread after initializing. The failure of this assertion is not good!");
 		}

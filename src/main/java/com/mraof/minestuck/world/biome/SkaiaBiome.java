@@ -10,6 +10,7 @@ import net.minecraft.world.biome.BiomeGenerationSettings;
 import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.surfacebuilders.SurfaceBuilder;
+import net.minecraftforge.common.world.BiomeGenerationSettingsBuilder;
 
 public class SkaiaBiome
 {
@@ -23,8 +24,8 @@ public class SkaiaBiome
 		spawnInfo.withSpawner(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(MSEntityTypes.PROSPITIAN_BISHOP, 1, 1, 1));
 		spawnInfo.withSpawner(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(MSEntityTypes.PROSPITIAN_ROOK, 1, 1, 1));
 		
-		BiomeGenerationSettings.Builder genSettings = new BiomeGenerationSettings.Builder().withSurfaceBuilder(() -> MSSurfaceBuilders.SKAIA.get().func_242929_a(SurfaceBuilder.STONE_STONE_GRAVEL_CONFIG));	//TODO configured surface builders are now a registry. Make sure to register it
-		genSettings.withStructure(MSFeatures.SKAIA_CASTLE.func_236391_a_(NoFeatureConfig.field_236559_b_));	//TODO configured structure is also being registered in vanilla
+		BiomeGenerationSettingsBuilder genSettings = new BiomeGenerationSettingsBuilder(new BiomeGenerationSettings.Builder().withSurfaceBuilder(() -> MSSurfaceBuilders.SKAIA.get().func_242929_a(SurfaceBuilder.STONE_STONE_GRAVEL_CONFIG)).build());	//TODO configured surface builders are now a registry. Make sure to register it
+		genSettings.getStructures().add(() -> MSFeatures.SKAIA_CASTLE.func_236391_a_(NoFeatureConfig.field_236559_b_));	//TODO configured structure is also being registered in vanilla
 		
 		BiomeAmbience.Builder ambience = new BiomeAmbience.Builder().setWaterColor(0x3F76E4).setWaterFogColor(0x050533);
 		ambience.setFogColor(0xC0D8FF).withSkyColor(0x7AA4FF);
