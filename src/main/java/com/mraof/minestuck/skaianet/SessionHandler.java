@@ -430,6 +430,7 @@ public final class SessionHandler
 			Session session = Session.read(nbt.getCompound("session"), skaianetHandler);
 			session.name = GLOBAL_SESSION_NAME;
 			addNewSession(session);
+			skaianetHandler.connections.addAll(session.connections);
 		} else
 		{
 			singleSession = false;
