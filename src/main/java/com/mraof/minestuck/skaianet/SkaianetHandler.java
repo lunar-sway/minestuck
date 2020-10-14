@@ -538,27 +538,8 @@ public final class SkaianetHandler
 					connections.add(c);
 				} catch(MergeResult.SessionMergeException e)
 				{
-					if(sessionHandler.singleSession)
-					{
-						LOGGER.warn("Failed to create connection: {}. Trying again with global session disabled for this world...", e.getMessage());
-						sessionHandler.splitGlobalSession();
-						try
-						{
-							sessionHandler.onConnectionCreated(c);
-							SburbHandler.onFirstItemGiven(c);
-							connections.add(c);
-						} catch(MergeResult.SessionMergeException f)
-						{
-							sessionHandler.singleSession = true;
-							sessionHandler.mergeAll();
-							LOGGER.error("Couldn't create a connection for {}: {}. Stopping entry.", target.getUsername(), f.getMessage());
-							return null;
-						}
-					} else
-					{
-						LOGGER.error("Couldn't create a connection for {}: {}. Stopping entry.", target.getUsername(), e.getMessage());
-						return null;
-					}
+					LOGGER.error("Couldn't create a connection for {}: {}. Stopping entry.", target.getUsername(), e.getMessage());
+					return null;
 				}
 			}
 			else giveItems(target);
