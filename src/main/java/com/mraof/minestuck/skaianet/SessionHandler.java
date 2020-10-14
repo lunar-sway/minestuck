@@ -102,7 +102,14 @@ public final class SessionHandler
 	{
 		if(!singleSession)
 			throw new IllegalStateException("Should not deal with global sessions at this time");
-		return sessionsByName.get(GLOBAL_SESSION_NAME);
+		Session s = sessionsByName.get(GLOBAL_SESSION_NAME);
+		if(s == null)
+		{
+			LOGGER.error("Global session was not present on getGlobalSession() call. This should not happen! Creating a new global session.");
+			s = new Session();
+			setGlobalSession(s);
+		}
+		return s;
 	}
 	
 	private void setGlobalSession(Session session)
@@ -120,7 +127,7 @@ public final class SessionHandler
 	 */
 	void splitGlobalSession()
 	{
-		if(MinestuckConfig.SERVER.globalSession.get() || sessions.size() != 1)
+		if(MinestuckConfig.SERVER.globalSession.get() || !singleSession)
 			return;
 		
 		Session s = getGlobalSession();
@@ -133,17 +140,13 @@ public final class SessionHandler
 		List<Session> sessions = SessionMerger.splitSession(session);
 		sessions.forEach(session1 -> session1.checkIfCompleted(singleSession));
 		this.sessions.addAll(sessions);
-		if(session.connections.isEmpty() && !session.isCustom())
-			this.sessions.remove(session);
+		removeIfEmpty(session);
 	}
 	
 	void onConnectionChainBroken(Session session)
 	{
-		if(singleSession)
-			return;
-		if(session.isEmpty())
-			sessions.remove(session);
-		else split(session);
+		if(!singleSession)
+			split(session);
 	}
 	
 	/**
@@ -184,9 +187,9 @@ public final class SessionHandler
 	 * (includes everything but getting crushed by a meteor and other reasons for removal of a main connection)
 	 */
 	void onConnectionClosed(SburbConnection connection, boolean normal)
-	{
+	{	//TODO the design of this function may need to be looked over
 		Session s = getPlayerSession(connection.getClientIdentifier());
-		
+		Objects.requireNonNull(s);	//If the connection exists, then there should be a session that contains it
 		if(!connection.isMain())
 		{
 			s.connections.remove(connection);
@@ -209,8 +212,7 @@ public final class SessionHandler
 						break;
 				}
 			}
-			if(s.connections.size() == 0 && !s.isCustom())
-				sessions.remove(s);
+			onConnectionChainBroken(s);
 		}
 	}
 	
@@ -257,6 +259,15 @@ public final class SessionHandler
 			if(session.isCustom())
 				sessionsByName.put(session.name, session);
 			skaianetHandler.connections.addAll(session.connections);
+		}
+	}
+	
+	private void removeIfEmpty(Session session)
+	{
+		if(!singleSession && session.isEmpty())
+		{
+			sessions.remove(session);
+			sessionsByName.remove(session.name);
 		}
 	}
 	
