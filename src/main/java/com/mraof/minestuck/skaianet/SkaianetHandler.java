@@ -50,7 +50,7 @@ public final class SkaianetHandler
 	final Map<PlayerIdentifier, ComputerReference> openedServers = new HashMap<>();
 	private final Map<PlayerIdentifier, ComputerReference> resumingClients = new HashMap<>();
 	private final Map<PlayerIdentifier, ComputerReference> resumingServers = new HashMap<>();
-	List<SburbConnection> connections = new ArrayList<>();
+	Set<SburbConnection> connections = new HashSet<>();
 	private final List<ComputerReference> movingComputers = new ArrayList<>();
 	final SessionHandler sessionHandler = new SessionHandler(this);
 	final InfoTracker infoTracker = new InfoTracker(this);

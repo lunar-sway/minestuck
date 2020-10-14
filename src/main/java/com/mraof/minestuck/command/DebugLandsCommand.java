@@ -5,7 +5,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mraof.minestuck.command.argument.LandTypePairArgument;
 import com.mraof.minestuck.command.argument.ListArgument;
-import com.mraof.minestuck.skaianet.SessionHandler;
+import com.mraof.minestuck.skaianet.CommandActionHandler;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
@@ -31,7 +31,7 @@ public class DebugLandsCommand
 	private static int createDebugLands(CommandSource source, List<LandTypePair> landTypes) throws CommandSyntaxException
 	{
 		ServerPlayerEntity player = source.asPlayer();
-		SessionHandler.get(player.server).createDebugLandsChain(player, landTypes, source);
+		CommandActionHandler.createDebugLandsChain(player, landTypes, source);
 		return 1;
 	}
 }

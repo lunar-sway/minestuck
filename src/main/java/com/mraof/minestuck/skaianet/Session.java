@@ -308,6 +308,11 @@ public final class Session
 		return name != null;
 	}
 	
+	public boolean isEmpty()
+	{
+		return connections.isEmpty() && predefinedPlayers.isEmpty();
+	}
+	
 	CompoundNBT createDataTag()
 	{
 		ListNBT connectionList = new ListNBT();

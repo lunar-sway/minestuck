@@ -1,28 +1,14 @@
 package com.mraof.minestuck.skaianet;
 
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.command.DebugLandsCommand;
-import com.mraof.minestuck.command.SburbConnectionCommand;
-import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.world.MSDimensionTypes;
-import com.mraof.minestuck.world.lands.LandTypePair;
-import net.minecraft.command.CommandSource;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.util.Constants;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
@@ -32,6 +18,8 @@ import java.util.*;
  */
 public final class SessionHandler
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	private static final String GLOBAL_SESSION_NAME = "global";
 	
 	/**
@@ -60,10 +48,7 @@ public final class SessionHandler
 		singleSession = MinestuckConfig.SERVER.globalSession.get();
 		if(singleSession)
 		{
-			Session globalSession = new Session();
-			
-			globalSession.name = GLOBAL_SESSION_NAME;
-			addNewSession(globalSession);
+			setGlobalSession(new Session());
 		}
 	}
 	
@@ -88,14 +73,13 @@ public final class SessionHandler
 			sessions.clear();
 			sessionsByName.clear();
 			
-			session.name = GLOBAL_SESSION_NAME;
-			addNewSession(session);
+			setGlobalSession(session);
 			
 			singleSession = true;
 			
 		} catch(MergeResult.SessionMergeException e)
 		{
-			Debug.warn("Not able to merge all sessions together! Global session temporarily disabled for this time.");
+			LOGGER.warn("Not able to merge all sessions together! Global session temporarily disabled for this time.");
 		}
 	}
 	
@@ -119,6 +103,14 @@ public final class SessionHandler
 		if(!singleSession)
 			throw new IllegalStateException("Should not deal with global sessions at this time");
 		return sessionsByName.get(GLOBAL_SESSION_NAME);
+	}
+	
+	private void setGlobalSession(Session session)
+	{
+		if(!sessions.isEmpty() || !sessionsByName.isEmpty() || !skaianetHandler.connections.isEmpty())
+			throw new IllegalStateException("Trying to set the global session to a non-cleared state!");
+		session.name = GLOBAL_SESSION_NAME;
+		addNewSession(session);
 	}
 	
 	/**
@@ -145,11 +137,11 @@ public final class SessionHandler
 			this.sessions.remove(session);
 	}
 	
-	private void onConnectionChainBroken(Session session)
+	void onConnectionChainBroken(Session session)
 	{
 		if(singleSession)
 			return;
-		if(session.connections.isEmpty() && !session.isCustom())
+		if(session.isEmpty())
 			sessions.remove(session);
 		else split(session);
 	}
@@ -235,82 +227,20 @@ public final class SessionHandler
 		return map;
 	}
 	
-	public int connectByCommand(CommandSource source, PlayerIdentifier client, PlayerIdentifier server) throws CommandSyntaxException
+	private void correctAndAddSession(Session session)
 	{
+		if(session.isCustom() && sessionsByName.containsKey(session.name))
+		{
+			LOGGER.error("Found session with name that is already being used. Removing session name before adding.");
+			session.name = null;
+		}
 		try
 		{
-			Session target = SessionMerger.getValidMergedSession(this, client, server);
-			if(target.locked)
-			{
-				throw SburbConnectionCommand.LOCKED_EXCEPTION.create();
-			}
-			
-			if(forceConnection(target, client, server))
-			{
-				source.sendFeedback(new TranslationTextComponent(SburbConnectionCommand.SUCCESS, client.getUsername(), server.getUsername()), true);
-				return 1;
-			} else
-			{
-				throw SburbConnectionCommand.CONNECTED_EXCEPTION.create();
-			}
-		} catch(MergeResult.SessionMergeException e)
+			addNewSession(session);
+		} catch(RuntimeException e)
 		{
-			throw SburbConnectionCommand.MERGE_EXCEPTION.create(e.getResult());
+			LOGGER.error("Failed to add session. This might lead to loss of data, so I hope you've got a backup! Reason \"{}\"", e.getMessage());
 		}
-	}
-	
-	private boolean forceConnection(Session session, PlayerIdentifier client, PlayerIdentifier server)
-	{
-		SburbConnection cc = skaianetHandler.getMainConnection(client, true), cs = skaianetHandler.getMainConnection(server, false);
-		
-		if(cc != null && cc == cs || session.locked)
-			return false;
-		
-		boolean updateLandChain = false;
-		if(cs != null)
-		{
-			if(cs.isActive())
-				skaianetHandler.closeConnection(server, cs.getClientIdentifier(), false);
-			cs.removeServerPlayer();
-			updateLandChain = cs.hasEntered();
-		}
-		
-		if(cc != null && cc.isActive())
-			skaianetHandler.closeConnection(client, cc.getServerIdentifier(), true);
-		
-		SburbConnection connection = skaianetHandler.getConnection(client, server);
-		if(cc == null)
-		{
-			if(connection != null)
-				cc = connection;
-			else
-			{
-				cc = new SburbConnection(client, server, skaianetHandler);
-				skaianetHandler.connections.add(cc);
-				session.connections.add(cc);
-				SburbHandler.onConnectionCreated(cc);
-			}
-			cc.setIsMain();
-		} else
-		{
-			cc.removeServerPlayer();
-			cc.setNewServerPlayer(server);
-			if(connection != null && connection.isActive())
-			{
-				skaianetHandler.connections.remove(connection);
-				session.connections.remove(connection);
-				cc.setActive(connection.getClientComputer(), connection.getServerComputer());
-			}
-			updateLandChain |= cc.hasEntered();
-		}
-		
-		onConnectionChainBroken(session);
-		
-		skaianetHandler.updateAll();
-		if(updateLandChain)
-			skaianetHandler.infoTracker.reloadLandChains();
-		
-		return true;
 	}
 	
 	void addNewSession(Session session)
@@ -319,11 +249,14 @@ public final class SessionHandler
 			throw new IllegalStateException("Session has already been added: " + session.name);
 		else if(session.isCustom() && sessionsByName.containsKey(session.name))
 			throw new IllegalStateException("Session name is already in use: " + session.name);
+		else if(session.connections.stream().anyMatch(skaianetHandler.connections::contains))
+			throw new IllegalStateException("Session contained connections that have already been added: " + session.name);
 		else
 		{
 			sessions.add(session);
 			if(session.isCustom())
 				sessionsByName.put(session.name, session);
+			skaianetHandler.connections.addAll(session.connections);
 		}
 	}
 	
@@ -338,76 +271,6 @@ public final class SessionHandler
 			sessionsByName.put(result.name, result);
 	}
 	
-	public void createDebugLandsChain(ServerPlayerEntity player, List<LandTypePair> landTypes, CommandSource source) throws CommandSyntaxException
-	{
-		PlayerIdentifier identifier = IdentifierHandler.encode(player);
-		Session s = getPlayerSession(identifier);
-		if(s != null && s.locked)
-			throw SburbConnectionCommand.LOCKED_EXCEPTION.create();
-		
-		SburbConnection cc = skaianetHandler.getMainConnection(identifier, true);
-		if(s == null || cc == null || !cc.hasEntered())
-			throw DebugLandsCommand.MUST_ENTER_EXCEPTION.create();
-		if(cc.isActive())
-			skaianetHandler.closeConnection(identifier, cc.getServerIdentifier(), true);
-		
-		SburbConnection cs = skaianetHandler.getMainConnection(identifier, false);
-		if(cs != null) {
-			if(cs.isActive())
-				skaianetHandler.closeConnection(identifier, cs.getClientIdentifier(), false);
-			cs.removeServerPlayer();
-			source.sendFeedback(new StringTextComponent(identifier.getUsername()+"'s old client player "+cs.getClientIdentifier().getUsername()+" is now without a server player.").setStyle(new Style().setColor(TextFormatting.YELLOW)), true);
-		}
-		
-		cc.removeServerPlayer();
-		SburbConnection c = cc;
-		int i = 0;
-		for(; i < landTypes.size(); i++)
-		{
-			LandTypePair land = landTypes.get(i);
-			if(land == null)
-				break;
-			PlayerIdentifier fakePlayer = IdentifierHandler.createNewFakeIdentifier();
-			c.setNewServerPlayer(fakePlayer);
-			
-			c = skaianetHandler.makeConnectionWithLand(land, createDebugLand(land), fakePlayer, IdentifierHandler.NULL_IDENTIFIER, s);
-		}
-		
-		if(i == landTypes.size())
-			c.setNewServerPlayer(identifier);
-		else
-		{
-			PlayerIdentifier lastIdentifier = identifier;
-			for(i = landTypes.size() - 1; i >= 0; i++)
-			{
-				LandTypePair land = landTypes.get(i);
-				if(land == null)
-					break;
-				PlayerIdentifier fakePlayer = IdentifierHandler.createNewFakeIdentifier();
-				
-				c = skaianetHandler.makeConnectionWithLand(land, createDebugLand(land), fakePlayer, lastIdentifier, s);
-				
-				lastIdentifier = fakePlayer;
-			}
-		}
-		
-		skaianetHandler.updateAll();
-		skaianetHandler.infoTracker.reloadLandChains();
-	}
-	
-	private static DimensionType createDebugLand(LandTypePair landTypes) throws CommandSyntaxException
-	{
-		String base = "minestuck:debug_land";
-		
-		ResourceLocation landName = new ResourceLocation(base);
-		
-		for(int i = 0; DimensionType.byName(landName) != null; i++)
-		{
-			landName = new ResourceLocation(base+"_"+i);
-		}
-		
-		return DimensionManager.registerDimension(landName, MSDimensionTypes.LANDS, null, true);
-	}
 	/*
 	public static List<String> getSessionNames()
 	{
@@ -427,27 +290,13 @@ public final class SessionHandler
 		{
 			//read as global session
 			singleSession = true;
-			Session session = Session.read(nbt.getCompound("session"), skaianetHandler);
-			session.name = GLOBAL_SESSION_NAME;
-			addNewSession(session);
-			skaianetHandler.connections.addAll(session.connections);
+			setGlobalSession(Session.read(nbt.getCompound("session"), skaianetHandler));
 		} else
 		{
 			singleSession = false;
 			ListNBT list = nbt.getList("sessions", Constants.NBT.TAG_COMPOUND);
 			for(int i = 0; i < list.size(); i++)
-			{
-				Session session = Session.read(list.getCompound(i), skaianetHandler);
-				sessions.add(session);
-				skaianetHandler.connections.addAll(session.connections);
-				
-				if(session.isCustom())
-				{
-					if(sessionsByName.containsKey(session.name))
-						Debug.warnf("A session with a duplicate name has been loaded! (Session '%s') Either a bug or someone messing with the data file.", session.name);
-					sessionsByName.put(session.name, session);
-				}
-			}
+				correctAndAddSession(Session.read(list.getCompound(i), skaianetHandler));
 		}
 	}
 	
