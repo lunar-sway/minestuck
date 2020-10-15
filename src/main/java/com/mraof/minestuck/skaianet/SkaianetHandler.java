@@ -50,9 +50,9 @@ public final class SkaianetHandler
 	final Map<PlayerIdentifier, ComputerReference> openedServers = new HashMap<>();
 	private final Map<PlayerIdentifier, ComputerReference> resumingClients = new HashMap<>();
 	private final Map<PlayerIdentifier, ComputerReference> resumingServers = new HashMap<>();
-	Set<SburbConnection> connections = new HashSet<>();
+	final Set<SburbConnection> connections = new HashSet<>();
 	private final List<ComputerReference> movingComputers = new ArrayList<>();
-	final SessionHandler sessionHandler = new SessionHandler(this);
+	final SessionHandler sessionHandler;
 	final InfoTracker infoTracker = new InfoTracker(this);
 	/**
 	 * Changes to this map must also be done to {@link MSDimensionTypes#LANDS#dimToLandAspects}
@@ -62,7 +62,23 @@ public final class SkaianetHandler
 	MinecraftServer mcServer;
 	
 	private SkaianetHandler()
-	{}
+	{
+		sessionHandler = new DefaultSessionHandler(this);
+	}
+	
+	private SkaianetHandler(CompoundNBT nbt)
+	{
+		SessionHandler sessions;
+		if(nbt.contains("session", Constants.NBT.TAG_COMPOUND))
+			sessions = new GlobalSessionHandler(this, nbt.getCompound("session"));
+		else sessions = new DefaultSessionHandler(this, nbt.getList("sessions", Constants.NBT.TAG_COMPOUND));
+		
+		sessionHandler = sessions.getActual();
+		
+		readPlayerComputerList(nbt, openedServers, "serversOpen");
+		readPlayerComputerList(nbt, resumingClients, "resumingClients");
+		readPlayerComputerList(nbt, resumingServers, "resumingServers");
+	}
 	
 	/**
 	 * @param client The client player to search for
@@ -371,17 +387,6 @@ public final class SkaianetHandler
 		infoTracker.requestInfo(player, p1);
 	}
 	
-	private void read(CompoundNBT nbt)
-	{
-		sessionHandler.read(nbt);
-		
-		readPlayerComputerList(nbt, openedServers, "serversOpen");
-		readPlayerComputerList(nbt, resumingClients, "resumingClients");
-		readPlayerComputerList(nbt, resumingServers, "resumingServers");
-		
-		sessionHandler.onLoad();
-	}
-	
 	private void readPlayerComputerList(CompoundNBT nbt, Map<PlayerIdentifier, ComputerReference> map, String key)
 	{
 		ListNBT list = nbt.getList(key, Constants.NBT.TAG_COMPOUND);
@@ -654,8 +659,7 @@ public final class SkaianetHandler
 		{
 			try
 			{
-				INSTANCE = new SkaianetHandler();
-				INSTANCE.read(nbt);
+				INSTANCE = new SkaianetHandler(nbt);
 			} catch(Exception e)
 			{
 				LOGGER.error("Caught unhandled exception while loading Skaianet:", e);

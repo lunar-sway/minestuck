@@ -13,7 +13,6 @@ import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.util.ColorHandler;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
@@ -29,6 +28,8 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,6 +42,8 @@ import java.util.Random;
  */
 public final class SburbHandler
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	static Map<PlayerEntity, Vec3d> playersInTitleSelection = new HashMap<>();	//TODO Consider making this non-static
 	
 	private static Title produceTitle(World world, PlayerIdentifier player)
@@ -51,7 +54,7 @@ public final class SburbHandler
 				session = new Session();
 			else
 			{
-				Debug.logger.warn(String.format("Trying to generate a title for %s before creating a session!", player.getUsername()), new Throwable().fillInStackTrace());
+				LOGGER.warn("Trying to generate a title for {} before creating a session!", player.getUsername(), new Throwable().fillInStackTrace());
 				return null;
 			}
 		
@@ -85,23 +88,13 @@ public final class SburbHandler
 				return;
 			PlayerSavedData.getData(player, world).setTitle(title);
 		} else if(!MinestuckConfig.SERVER.playerSelectedTitle.get())
-			Debug.warnf("Trying to generate a title for %s when a title is already assigned!", player.getUsername());
+			LOGGER.warn("Trying to generate a title for {} when a title is already assigned!", player.getUsername());
 	}
 	
 	public static void handlePredefineData(ServerPlayerEntity player, SkaianetException.SkaianetConsumer<PredefineData> consumer) throws SkaianetException
 	{
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
-		Session session = SessionHandler.get(player.server).getPlayerSession(identifier);
-		if(session != null)
-			session.predefineCall(identifier, consumer);
-		else
-		{
-			//When no previous session exists, add the session after the predefine call,
-			// such that the session isn't added if predefine call fails
-			session = new Session();
-			session.predefineCall(identifier, consumer);
-			SessionHandler.get(player.server).addNewSession(session);
-		}
+		SessionHandler.get(player.server).findOrCreateAndCall(identifier, session -> session.predefineCall(identifier, consumer));
 	}
 	
 	/**
@@ -111,11 +104,9 @@ public final class SburbHandler
 	public static ItemStack getEntryItem(World world, SburbConnection c)
 	{
 		int color =  ColorHandler.getColorForPlayer(c.getClientIdentifier(), world);
-		Item artifact;
-		if(c == null)
-			artifact = MSItems.CRUXITE_APPLE;
 		
-		else switch(c.artifactType)
+		Item artifact;
+		switch(c.artifactType)
 		{
 		case 1: artifact = MSItems.CRUXITE_POTION; break;
 		default: artifact = MSItems.CRUXITE_APPLE;
@@ -151,10 +142,11 @@ public final class SburbHandler
 	 */
 	public static int availableTier(MinecraftServer mcServer, PlayerIdentifier client)
 	{
-		Session s = SessionHandler.get(mcServer).getPlayerSession(client);
+		SessionHandler handler = SessionHandler.get(mcServer);
+		Session s = handler.getPlayerSession(client);
 		if(s == null)
 			return -1;
-		if(s.completed)
+		if(handler.doesSessionHaveMaxTier(s))
 			return Integer.MAX_VALUE;
 		SburbConnection c = SkaianetHandler.get(mcServer).getActiveConnection(client);
 		if(c == null)
@@ -192,7 +184,7 @@ public final class SburbHandler
 				titleLandType = Generator.generateWeightedTitleLandType(session, title.getHeroAspect(), terrainLandType, connection.getClientIdentifier());
 				if(terrainLandType != null && titleLandType == LandTypes.TITLE_NULL)
 				{
-					Debug.warnf("Failed to find a title land aspect compatible with land aspect \"%s\". Forced to use a poorly compatible land aspect instead.", terrainLandType.getRegistryName());
+					LOGGER.warn("Failed to find a title land aspect compatible with land aspect \"{}\". Forced to use a poorly compatible land aspect instead.", terrainLandType.getRegistryName());
 					titleLandType = Generator.generateWeightedTitleLandType(session, title.getHeroAspect(), null, connection.getClientIdentifier());
 				}
 			}
@@ -222,7 +214,7 @@ public final class SburbHandler
 	{
 		c.setHasEntered();
 		
-		SessionHandler.get(server).getPlayerSession(c.getClientIdentifier()).checkIfCompleted(SessionHandler.get(server).singleSession);
+		SessionHandler.get(server).getPlayerSession(c.getClientIdentifier()).checkIfCompleted();
 		
 		ServerPlayerEntity player = c.getClientIdentifier().getPlayer(server);
 		if(player != null)
@@ -254,7 +246,7 @@ public final class SburbHandler
 	{
 		Random rand = new Random();	//TODO seed?
 		c.artifactType = rand.nextInt(2);
-		Debug.infof("Randomized artifact type to be: %d for player %s.", c.artifactType, c.getClientIdentifier().getUsername());
+		LOGGER.info("Randomized artifact type to be: {} for player {}.", c.artifactType, c.getClientIdentifier().getUsername());
 	}
 	
 	/**
@@ -312,6 +304,6 @@ public final class SburbHandler
 			EntryProcess process = new EntryProcess();
 			process.onArtifactActivated(player);
 			
-		} else Debug.warnf("%s tried to select a title without entering.", player.getName().getFormattedText());
+		} else LOGGER.warn("{} tried to select a title without entering.", player.getName().getFormattedText());
 	}
 }

@@ -8,38 +8,36 @@ import java.util.function.Consumer;
 
 final class SessionMerger
 {
-	
-	static Session getValidMergedSession(SessionHandler handler, PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException
+	static Session getValidMergedSession(DefaultSessionHandler handler, PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException
 	{
-		if(handler.singleSession)
+		Session cs = handler.getPlayerSession(client), ss = handler.getPlayerSession(server);
+		if(cs != null && ss != null)
 		{
-			verifyCanAdd(handler.getGlobalSession(), client, server, MergeResult.GLOBAL_SESSION_FULL);
-			return handler.getGlobalSession();
+			Session target = createMergedSession(cs, ss);
+			verifyCanAdd(target, client, server, MergeResult.MERGED_SESSION_FULL);
+			handler.handleSuccessfulMerge(cs, ss, target);
+			return target;
+		} else if(cs != null)
+		{
+			verifyCanAdd(cs, client, server, MergeResult.CLIENT_SESSION_FULL);
+			return cs;
+		} else if(ss != null)
+		{
+			verifyCanAdd(ss, client, server, MergeResult.SERVER_SESSION_FULL);
+			return ss;
 		} else
 		{
-			Session cs = handler.getPlayerSession(client), ss = handler.getPlayerSession(server);
-			if(cs != null && ss != null)
-			{
-				Session target = createMergedSession(cs, ss);
-				verifyCanAdd(target, client, server, MergeResult.MERGED_SESSION_FULL);
-				handler.handleSuccessfulMerge(cs, ss, target);
-				return target;
-			} else if(cs != null)
-			{
-				verifyCanAdd(cs, client, server, MergeResult.CLIENT_SESSION_FULL);
-				return cs;
-			} else if(ss != null)
-			{
-				verifyCanAdd(ss, client, server, MergeResult.SERVER_SESSION_FULL);
-				return ss;
-			} else
-			{
-				Session session = new Session();
-				verifyCanAdd(session, client, server, MergeResult.GENERIC_FAIL);
-				handler.addNewSession(session);
-				return session;
-			}
+			Session session = new Session();
+			verifyCanAdd(session, client, server, MergeResult.GENERIC_FAIL);
+			handler.addNewSession(session);
+			return session;
 		}
+	}
+	
+	static Session verifyCanAddToGlobal(Session session, PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException
+	{
+		verifyCanAdd(session, client, server, MergeResult.GLOBAL_SESSION_FULL);
+		return session;
 	}
 	
 	static Session mergedSessionFromAll(Set<Session> sessions) throws MergeResult.SessionMergeException
@@ -168,13 +166,12 @@ final class SessionMerger
 		if(target.locked && size != players.size())	//If the session is locked and we're trying to add a new player to it
 			throw MergeResult.LOCKED.exception();
 		
-		if(MinestuckConfig.SERVER.forceMaxSize && size > SessionHandler.maxSize)
+		if(MinestuckConfig.SERVER.forceMaxSize && size > SessionHandler.MAX_SIZE)
 			throw fullSessionResult.exception();
 		
 	}
 	
 	private static Session createMergedSession(Session s1, Session s2) throws MergeResult.SessionMergeException
-	
 	{
 		Session mergedSession = new Session();
 		mergedSession.inheritFrom(s1);

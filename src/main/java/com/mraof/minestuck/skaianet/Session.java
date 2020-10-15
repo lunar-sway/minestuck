@@ -54,7 +54,7 @@ public final class Session
 		
 		connections.addAll(other.connections);
 		
-		if(MinestuckConfig.SERVER.forceMaxSize && getPlayerList().size() > SessionHandler.maxSize)
+		if(MinestuckConfig.SERVER.forceMaxSize && getPlayerList().size() > SessionHandler.MAX_SIZE)
 			throw MergeResult.MERGED_SESSION_FULL.exception();
 	}
 	
@@ -66,9 +66,9 @@ public final class Session
 	/**
 	 * Checks if the variable completed should be true or false.
 	 */
-	void checkIfCompleted(boolean singleSession)
+	void checkIfCompleted()
 	{
-		if(connections.isEmpty() || singleSession)
+		if(connections.isEmpty())
 		{
 			completed = false;
 			return;
@@ -299,7 +299,7 @@ public final class Session
 		
 		s.locked = nbt.getBoolean("locked");
 		
-		s.checkIfCompleted(MinestuckConfig.SERVER.globalSession.get());
+		s.checkIfCompleted();
 		return s;
 	}
 	
