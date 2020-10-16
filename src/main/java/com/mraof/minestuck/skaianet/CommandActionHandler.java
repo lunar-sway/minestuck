@@ -18,6 +18,7 @@ import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.DimensionManager;
 
 import java.util.List;
+import java.util.Optional;
 
 public final class CommandActionHandler
 {
@@ -49,45 +50,47 @@ public final class CommandActionHandler
 	
 	private static boolean forceConnection(SkaianetHandler skaianet, Session session, PlayerIdentifier client, PlayerIdentifier server)
 	{
-		SburbConnection cc = skaianet.getMainConnection(client, true), cs = skaianet.getMainConnection(server, false);
+		Optional<SburbConnection> cc = skaianet.getMainConnection(client, true), cs = skaianet.getMainConnection(server, false);
 		
-		if(cc != null && cc == cs || session.locked)
+		if(cc.isPresent() && cc.get() == cs.orElse(null) || session.locked)
 			return false;
 		
 		boolean updateLandChain = false;
-		if(cs != null)
+		if(cs.isPresent())
 		{
-			if(cs.isActive())
-				skaianet.closeConnection(server, cs.getClientIdentifier(), false);
-			cs.removeServerPlayer();
-			updateLandChain = cs.hasEntered();
+			SburbConnection serverConnection = cs.get();
+			if(serverConnection.isActive())
+				skaianet.closeConnection(server, serverConnection.getClientIdentifier(), false);
+			serverConnection.removeServerPlayer();
+			updateLandChain = serverConnection.hasEntered();
 		}
 		
-		if(cc != null && cc.isActive())
-			skaianet.closeConnection(client, cc.getServerIdentifier(), true);
+		if(cc.isPresent() && cc.get().isActive())
+			skaianet.closeConnection(client, cc.get().getServerIdentifier(), true);
 		
 		SburbConnection connection = skaianet.getConnection(client, server);
-		if(cc == null)
+		if(!cc.isPresent())
 		{
 			if(connection != null)
-				cc = connection;
+				connection.setIsMain();
 			else
 			{
-				cc = new SburbConnection(client, server, skaianet);
-				session.connections.add(cc);
-				SburbHandler.onConnectionCreated(cc);
+				SburbConnection newConnection = new SburbConnection(client, server, skaianet);
+				session.connections.add(newConnection);
+				SburbHandler.onConnectionCreated(newConnection);
+				newConnection.setIsMain();
 			}
-			cc.setIsMain();
 		} else
 		{
-			cc.removeServerPlayer();
-			cc.setNewServerPlayer(server);
+			SburbConnection clientConnection = cc.get();
+			clientConnection.removeServerPlayer();
+			clientConnection.setNewServerPlayer(server);
 			if(connection != null && connection.isActive())
 			{
 				session.connections.remove(connection);
-				cc.setActive(connection.getClientComputer(), connection.getServerComputer());
+				clientConnection.setActive(connection.getClientComputer(), connection.getServerComputer());
 			}
-			updateLandChain |= cc.hasEntered();
+			updateLandChain |= clientConnection.hasEntered();
 		}
 		
 		skaianet.sessionHandler.onConnectionChainBroken(session);
@@ -108,22 +111,25 @@ public final class CommandActionHandler
 		if(s != null && s.locked)
 			throw SburbConnectionCommand.LOCKED_EXCEPTION.create();
 		
-		SburbConnection cc = skaianet.getMainConnection(identifier, true);
-		if(s == null || cc == null || !cc.hasEntered())
+		Optional<SburbConnection> cc = skaianet.getMainConnection(identifier, true);
+		if(s == null || !cc.isPresent()|| !cc.get().hasEntered())
 			throw DebugLandsCommand.MUST_ENTER_EXCEPTION.create();
-		if(cc.isActive())
-			skaianet.closeConnection(identifier, cc.getServerIdentifier(), true);
+		SburbConnection clientConnection = cc.get();
+		if(clientConnection.isActive())
+			skaianet.closeConnection(identifier, clientConnection.getServerIdentifier(), true);
 		
-		SburbConnection cs = skaianet.getMainConnection(identifier, false);
-		if(cs != null) {
-			if(cs.isActive())
-				skaianet.closeConnection(identifier, cs.getClientIdentifier(), false);
-			cs.removeServerPlayer();
-			source.sendFeedback(new StringTextComponent(identifier.getUsername()+"'s old client player "+cs.getClientIdentifier().getUsername()+" is now without a server player.").setStyle(new Style().setColor(TextFormatting.YELLOW)), true);
+		Optional<SburbConnection> cs = skaianet.getMainConnection(identifier, false);
+		if(cs.isPresent())
+		{
+			SburbConnection serverConnection = cs.get();
+			if(serverConnection.isActive())
+				skaianet.closeConnection(identifier, serverConnection.getClientIdentifier(), false);
+			serverConnection.removeServerPlayer();
+			source.sendFeedback(new StringTextComponent(identifier.getUsername()+"'s old client player "+serverConnection.getClientIdentifier().getUsername()+" is now without a server player.").setStyle(new Style().setColor(TextFormatting.YELLOW)), true);
 		}
 		
-		cc.removeServerPlayer();
-		SburbConnection c = cc;
+		clientConnection.removeServerPlayer();
+		SburbConnection c = clientConnection;
 		int i = 0;
 		for(; i < landTypes.size(); i++)
 		{

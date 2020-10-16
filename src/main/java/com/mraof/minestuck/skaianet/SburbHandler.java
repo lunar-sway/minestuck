@@ -33,6 +33,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 
 /**
@@ -231,8 +232,8 @@ public final class SburbHandler
 	public static boolean hasEntered(ServerPlayerEntity player)
 	{
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
-		SburbConnection c = SkaianetHandler.get(player.server).getMainConnection(identifier, true);
-		return c != null && c.hasEntered();
+		Optional<SburbConnection> c = SkaianetHandler.get(player.server).getMainConnection(identifier, true);
+		return c.isPresent() && c.get().hasEntered();
 	}
 	
 	/**

@@ -23,6 +23,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -84,8 +85,8 @@ public class Echeladder
 	
 	public void increaseProgress(int exp)
 	{
-		SburbConnection c = SkaianetHandler.get(savedData.mcServer).getMainConnection(identifier, true);
-		int topRung = c != null && c.hasEntered() ? RUNG_COUNT - 1 : MinestuckConfig.SERVER.preEntryRungLimit.get();
+		Optional<SburbConnection> c = SkaianetHandler.get(savedData.mcServer).getMainConnection(identifier, true);
+		int topRung = c.isPresent() && c.get().hasEntered() ? RUNG_COUNT - 1 : MinestuckConfig.SERVER.preEntryRungLimit.get();
 		int expReq = getRungProgressReq();
 		if(rung >= topRung || exp < expReq*MIN_PROGRESS_MODIFIER)
 			return;

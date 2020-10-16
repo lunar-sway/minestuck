@@ -93,22 +93,21 @@ public final class SkaianetHandler
 	@Nullable
 	public PlayerIdentifier getAssociatedPartner(PlayerIdentifier player, boolean isClient)
 	{
-		Stream<SburbConnection> connections = sessionHandler.getConnectionStream().filter(SburbConnection::isMain);
+		Optional<SburbConnection> c = getMainConnection(player, isClient);
 		if(isClient)
-			return connections.filter(c -> c.getClientIdentifier().equals(player)).filter(SburbConnection::hasServerPlayer)
-					.findAny().map(SburbConnection::getServerIdentifier).orElse(null);
-		else return connections.filter(c -> c.getServerIdentifier().equals(player))
-					.findAny().map(SburbConnection::getClientIdentifier).orElse(null);
+			return c.filter(SburbConnection::hasServerPlayer)
+					.map(SburbConnection::getServerIdentifier).orElse(null);
+		else return c.map(SburbConnection::getClientIdentifier).orElse(null);
 	}
 	
-	public SburbConnection getMainConnection(PlayerIdentifier player, boolean isClient)
+	public Optional<SburbConnection> getMainConnection(PlayerIdentifier player, boolean isClient)
 	{
 		if(player == null || player.equals(IdentifierHandler.NULL_IDENTIFIER))
-			return null;
+			return Optional.empty();
 		Stream<SburbConnection> connections = sessionHandler.getConnectionStream().filter(SburbConnection::isMain);
 		if(isClient)
-			return connections.filter(c -> c.getClientIdentifier().equals(player)).findAny().orElse(null);
-		else return connections.filter(c -> c.getServerIdentifier().equals(player)).findAny().orElse(null);
+			return connections.filter(c -> c.getClientIdentifier().equals(player)).findAny();
+		else return connections.filter(c -> c.getServerIdentifier().equals(player)).findAny();
 	}
 	
 	public boolean giveItems(PlayerIdentifier player)
@@ -256,7 +255,7 @@ public final class SkaianetHandler
 					
 					c.close();
 					
-					ConnectionCreatedEvent.ConnectionType type = !c.isMain() && getMainConnection(c.getClientIdentifier(), true) != null
+					ConnectionCreatedEvent.ConnectionType type = !c.isMain() && getMainConnection(c.getClientIdentifier(), true).isPresent()
 							? ConnectionCreatedEvent.ConnectionType.SECONDARY : ConnectionCreatedEvent.ConnectionType.REGULAR;
 					MinecraftForge.EVENT_BUS.post(new ConnectionClosedEvent(mcServer, c, sessionHandler.getPlayerSession(c.getClientIdentifier()), type));
 				} else if(otherPlayer.equals(getAssociatedPartner(player, isClient)))
@@ -316,12 +315,12 @@ public final class SkaianetHandler
 		boolean updateLandChain = false;
 		if(newConnection)
 		{
-			SburbConnection conn = getMainConnection(c.getClientIdentifier(), true);
-			if(conn != null && !conn.hasServerPlayer() && getMainConnection(c.getServerIdentifier(), false) == null)
+			Optional<SburbConnection> conn = getMainConnection(c.getClientIdentifier(), true);
+			if(conn.isPresent() && !conn.get().hasServerPlayer() && !getMainConnection(c.getServerIdentifier(), false).isPresent())
 			{
-				conn.setNewServerPlayer(c.getServerIdentifier());
-				conn.setActive(c.getClientComputer(), c.getServerComputer());
-				c = conn;
+				conn.get().setNewServerPlayer(c.getServerIdentifier());
+				conn.get().setActive(c.getClientComputer(), c.getServerComputer());
+				c = conn.get();
 				type = ConnectionCreatedEvent.ConnectionType.RESUME;
 				updateLandChain = true;
 			} else
@@ -341,9 +340,9 @@ public final class SkaianetHandler
 				}
 				SburbHandler.onConnectionCreated(c);
 				
-				if(conn != null)
+				if(conn.isPresent())
 				{
-					c.copyFrom(conn);
+					c.copyFrom(conn.get());
 					type = ConnectionCreatedEvent.ConnectionType.SECONDARY;
 				}
 			}
@@ -447,7 +446,7 @@ public final class SkaianetHandler
 						sc.putServerMessage(CLOSED);
 					}
 					
-					ConnectionCreatedEvent.ConnectionType type = !c.isMain() && getMainConnection(c.getClientIdentifier(), true) != null
+					ConnectionCreatedEvent.ConnectionType type = !c.isMain() && getMainConnection(c.getClientIdentifier(), true).isPresent()
 							? ConnectionCreatedEvent.ConnectionType.SECONDARY : ConnectionCreatedEvent.ConnectionType.REGULAR;
 					MinecraftForge.EVENT_BUS.post(new ConnectionClosedEvent(mcServer, c, sessionHandler.getPlayerSession(c.getClientIdentifier()), type));
 				}
@@ -503,7 +502,7 @@ public final class SkaianetHandler
 	 */
 	public DimensionType prepareEntry(PlayerIdentifier target)
 	{
-		SburbConnection c = getMainConnection(target, true);
+		SburbConnection c = getMainConnection(target, true).orElse(null);
 		if(c == null)
 		{
 			c = getActiveConnection(target);
@@ -543,19 +542,19 @@ public final class SkaianetHandler
 	 */
 	public void onEntry(PlayerIdentifier target)
 	{
-		SburbConnection c = getMainConnection(target, true);
-		if(c == null)
+		Optional<SburbConnection> c = getMainConnection(target, true);
+		if(!c.isPresent())
 		{
 			LOGGER.error("Finished entry without a player connection for {}. This should NOT happen!", target.getUsername());
 			return;
 		}
 		
-		SburbHandler.onEntry(mcServer, c);
+		SburbHandler.onEntry(mcServer, c.get());
 		
 		updateAll();
 		infoTracker.reloadLandChains();
 		
-		MinecraftForge.EVENT_BUS.post(new SburbEvent.OnEntry(mcServer, c, sessionHandler.getPlayerSession(target)));
+		MinecraftForge.EVENT_BUS.post(new SburbEvent.OnEntry(mcServer, c.get(), sessionHandler.getPlayerSession(target)));
 	}
 	
 	public void resetGivenItems()

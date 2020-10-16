@@ -7,10 +7,7 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Stream;
 
 /**
@@ -70,9 +67,9 @@ public abstract class SessionHandler
 	private boolean canConnect(PlayerIdentifier client, PlayerIdentifier server)
 	{
 		Session sClient = getPlayerSession(client), sServer = getPlayerSession(server);
-		SburbConnection cClient = skaianetHandler.getMainConnection(client, true);
-		SburbConnection cServer = skaianetHandler.getMainConnection(server, false);
-		boolean serverActive = cServer != null;
+		Optional<SburbConnection> cClient = skaianetHandler.getMainConnection(client, true);
+		Optional<SburbConnection> cServer = skaianetHandler.getMainConnection(server, false);
+		boolean serverActive = cServer.isPresent();
 		if(!serverActive && sServer != null)
 			for(SburbConnection c : sServer.connections)
 				if(c.getServerIdentifier().equals(server))
@@ -81,8 +78,8 @@ public abstract class SessionHandler
 					break;
 				}
 		
-		return cClient != null && sClient == sServer && (MinestuckConfig.SERVER.allowSecondaryConnections.get() || cClient == cServer)	//Reconnect within session
-				|| cClient == null && !serverActive && !(sClient != null && sClient.locked) && !(sServer != null && sServer.locked);	//Connect with a new player and potentially create a main connection
+		return cClient.isPresent() && sClient == sServer && (MinestuckConfig.SERVER.allowSecondaryConnections.get() || cClient.get() == cServer.orElse(null))	//Reconnect within session
+				|| !cClient.isPresent() && !serverActive && !(sClient != null && sClient.locked) && !(sServer != null && sServer.locked);	//Connect with a new player and potentially create a main connection
 	}
 	
 	void onConnectionCreated(SburbConnection connection) throws MergeResult.SessionMergeException
@@ -108,9 +105,10 @@ public abstract class SessionHandler
 			onConnectionChainBroken(s);
 		} else if(!normal) {
 			s.connections.remove(connection);
-			if(skaianetHandler.getAssociatedPartner(connection.getClientIdentifier(), false) != null)
+			Optional<SburbConnection> optional = skaianetHandler.getMainConnection(connection.getClientIdentifier(), false);
+			if(optional.isPresent())
 			{
-				SburbConnection c = skaianetHandler.getMainConnection(connection.getClientIdentifier(), false);
+				SburbConnection c = optional.get();
 				if(c.isActive())
 					skaianetHandler.closeConnection(c.getClientIdentifier(), c.getServerIdentifier(), true);
 				switch(MinestuckConfig.SERVER.escapeFailureMode.get())

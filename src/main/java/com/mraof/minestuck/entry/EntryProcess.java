@@ -78,10 +78,10 @@ public class EntryProcess
 					return;
 				
 				PlayerIdentifier identifier = IdentifierHandler.encode(player);
-				SburbConnection c = SkaianetHandler.get(player.world).getMainConnection(identifier, true);
+				Optional<SburbConnection> c = SkaianetHandler.get(player.world).getMainConnection(identifier, true);
 				
 				//Only performs Entry if you have no connection, haven't Entered, or you're not in a Land and additional Entries are permitted.
-				if(c == null || !c.hasEntered() || !MinestuckConfig.SERVER.stopSecondEntry.get() && !MSDimensions.isLandDimension(player.world.getDimension().getType()))
+				if(!c.isPresent() || !c.get().hasEntered() || !MinestuckConfig.SERVER.stopSecondEntry.get() && !MSDimensions.isLandDimension(player.world.getDimension().getType()))
 				{
 					if(!canModifyEntryBlocks(player.world, player))
 					{
@@ -89,9 +89,9 @@ public class EntryProcess
 						return;
 					}
 					
-					if(c != null && c.hasEntered())
+					if(c.isPresent() && c.get().hasEntered())
 					{
-						ServerWorld landWorld = Objects.requireNonNull(player.getServer()).getWorld(c.getClientDimension());
+						ServerWorld landWorld = Objects.requireNonNull(player.getServer()).getWorld(c.get().getClientDimension());
 						if(landWorld == null)
 						{
 							return;
@@ -152,7 +152,6 @@ public class EntryProcess
 		this.origin = origin;
 		
 		creative = player.interactionManager.isCreative();
-		SburbConnection conn = SkaianetHandler.get(worldserver0).getMainConnection(IdentifierHandler.encode(player), true);
 		
 		topY = MinestuckConfig.SERVER.adaptEntryBlockHeight.get() ? getTopHeight(worldserver0, x, y, z) : y + artifactRange;
 		yDiff = 127 - topY;

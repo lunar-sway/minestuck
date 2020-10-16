@@ -37,6 +37,7 @@ import net.minecraftforge.common.ModDimension;
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.BiFunction;
 
 public class LandDimension extends Dimension
@@ -177,12 +178,12 @@ public class LandDimension extends Dimension
 	public DimensionType getRespawnDimension(ServerPlayerEntity player)
 	{
 		DimensionType dimOut;
-		SburbConnection c = SkaianetHandler.get(player.server).getMainConnection(IdentifierHandler.encode(player), true);
-		if(c == null || !c.hasEntered())
-			dimOut = player.getSpawnDimension();	//Method outputs 0 when no spawn dimension is set, sending players to the overworld.
+		Optional<SburbConnection> c = SkaianetHandler.get(player.server).getMainConnection(IdentifierHandler.encode(player), true);
+		if(c.isPresent() && c.get().hasEntered())
+			dimOut = c.get().getClientDimension();
 		else
 		{
-			dimOut = c.getClientDimension();
+			dimOut = player.getSpawnDimension();	//Method outputs 0 when no spawn dimension is set, sending players to the overworld.
 		}
 		
 		return dimOut;

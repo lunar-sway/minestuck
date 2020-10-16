@@ -1,8 +1,8 @@
 package com.mraof.minestuck.world;
 
+import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
-import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.MSWorldGenTypes;
 import com.mraof.minestuck.world.gen.SkaiaGenSettings;
@@ -20,6 +20,7 @@ import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraftforge.common.ModDimension;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 import java.util.function.BiFunction;
 
 public class SkaiaDimension extends Dimension
@@ -93,12 +94,12 @@ public class SkaiaDimension extends Dimension
 	public DimensionType getRespawnDimension(ServerPlayerEntity player)
 	{
 		DimensionType dimOut;
-		SburbConnection c = SkaianetHandler.get(world.getServer()).getMainConnection(IdentifierHandler.encode(player), true);
-		if(c == null || !c.hasEntered())
-			dimOut = player.getSpawnDimension();	//Method outputs 0 when no spawn dimension is set, sending players to the overworld.
+		Optional<SburbConnection> c = SkaianetHandler.get(world.getServer()).getMainConnection(IdentifierHandler.encode(player), true);
+		if(c.isPresent() && c.get().hasEntered())
+			dimOut = c.get().getClientDimension();
 		else
 		{
-			dimOut = c.getClientDimension();
+			dimOut = player.getSpawnDimension();	//Method outputs 0 when no spawn dimension is set, sending players to the overworld.
 		}
 		
 		return dimOut;
