@@ -13,6 +13,7 @@ import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ServerEditPacket;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnection;
+import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Teleport;
@@ -316,7 +317,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 					GristHelper.notifyEditPlayer(event.getPlayer().world.getServer(), data.connection.getClientIdentifier(), cost, false);
 					data.connection.setHasGivenItem(entry);
 					if(!data.connection.isMain())
-						SkaianetHandler.get(event.getPlayer().getServer()).giveItems(data.connection.getClientIdentifier());
+						SburbHandler.giveItems(event.getPlayer().getServer(), data.connection.getClientIdentifier());
 				}
 				else event.setCanceled(true);
 			}
@@ -449,7 +450,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 					GristSet cost = entry.getCurrentCost(c);
 					c.setHasGivenItem(entry);
 					if(!c.isMain())
-						SkaianetHandler.get(player.server).giveItems(c.getClientIdentifier());
+						SburbHandler.giveItems(player.server, c.getClientIdentifier());
 					if(!cost.isEmpty())
 					{
 						GristHelper.decrease(player.world, c.getClientIdentifier(), cost);

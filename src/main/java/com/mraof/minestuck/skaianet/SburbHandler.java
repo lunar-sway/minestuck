@@ -2,6 +2,7 @@ package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
+import com.mraof.minestuck.computer.editmode.DeployList;
 import com.mraof.minestuck.entry.EntryProcess;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
@@ -195,9 +196,25 @@ public final class SburbHandler
 		return new LandTypePair(terrainLandType, titleLandType);
 	}
 	
+	public static boolean giveItems(MinecraftServer mcServer, PlayerIdentifier player)
+	{
+		SkaianetHandler handler = SkaianetHandler.get(mcServer);
+		SburbConnection c = handler.getActiveConnection(player);
+		if(c != null && !c.isMain() && !handler.getMainConnection(c.getClientIdentifier(), true).isPresent()
+				&& !handler.getMainConnection(c.getServerIdentifier(), false).isPresent())
+		{
+			c.setIsMain();
+			onFirstItemGiven(c);
+			handler.infoTracker.sendConnectionInfo(c.getClientIdentifier());
+			handler.infoTracker.sendConnectionInfo(c.getServerIdentifier());
+			return true;
+		}
+		return false;
+	}
+	
 	static void onFirstItemGiven(SburbConnection connection)
 	{
-		
+	
 	}
 	
 	static void prepareEntry(MinecraftServer mcServer, SburbConnection c)
@@ -302,5 +319,12 @@ public final class SburbHandler
 			process.onArtifactActivated(player);
 			
 		} else LOGGER.warn("{} tried to select a title without entering.", player.getName().getFormattedText());
+	}
+	
+	public static void resetGivenItems(MinecraftServer mcServer)
+	{
+		SessionHandler.get(mcServer).getConnectionStream().forEach(SburbConnection::resetGivenItems);
+		
+		DeployList.onConditionsUpdated(mcServer);
 	}
 }

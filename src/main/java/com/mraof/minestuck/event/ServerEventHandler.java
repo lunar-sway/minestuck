@@ -79,7 +79,7 @@ public class ServerEventHandler
 				if(time != lastDay)
 				{
 					lastDay = time;
-					SkaianetHandler.get(event.world.getServer()).resetGivenItems();
+					SburbHandler.resetGivenItems(event.world.getServer());
 				}
 			}
 			

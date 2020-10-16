@@ -7,6 +7,7 @@ import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnection;
+import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -85,7 +86,7 @@ public class ClientEditPacket implements PlayToServerPacket
 			if(targetPlayer != null && (!MinestuckConfig.SERVER.privateComputers.get() || user.appliesTo(player) || opsEntry != null && opsEntry.getPermissionLevel() >= 2))
 			{
 				SburbConnection c = SkaianetHandler.get(player.world).getActiveConnection(target);
-				if(c == null || c.getServerIdentifier() != user || !(c.isMain() || SkaianetHandler.get(player.world).giveItems(target)))
+				if(c == null || c.getServerIdentifier() != user || !(c.isMain() || SburbHandler.giveItems(player.server, target)))
 					return;
 				
 				for(DeployEntry entry : DeployList.getItemList(player.getServer(), c))

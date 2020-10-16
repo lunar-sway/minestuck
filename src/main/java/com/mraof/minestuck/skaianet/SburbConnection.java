@@ -281,7 +281,16 @@ public final class SburbConnection
 				data.sendGivenItemsToEditor();
 		}
 	}
-	void resetGivenItems() { givenItemList.clear(); }
+	void resetGivenItems()
+	{
+		if(!givenItemList.isEmpty())
+		{
+			givenItemList.clear();
+			EditData data = ServerEditHandler.getData(handler.mcServer, this);
+			if(data != null)
+				data.sendGivenItemsToEditor();
+		}
+	}
 	
 	public ListNBT getEditmodeInventory()
 	{

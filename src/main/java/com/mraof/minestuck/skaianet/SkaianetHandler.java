@@ -3,9 +3,6 @@ package com.mraof.minestuck.skaianet;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.computer.ComputerReference;
 import com.mraof.minestuck.computer.ISburbComputer;
-import com.mraof.minestuck.computer.editmode.DeployList;
-import com.mraof.minestuck.computer.editmode.EditData;
-import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.event.ConnectionClosedEvent;
 import com.mraof.minestuck.event.ConnectionCreatedEvent;
 import com.mraof.minestuck.event.SburbEvent;
@@ -108,21 +105,6 @@ public final class SkaianetHandler
 		if(isClient)
 			return connections.filter(c -> c.getClientIdentifier().equals(player)).findAny();
 		else return connections.filter(c -> c.getServerIdentifier().equals(player)).findAny();
-	}
-	
-	public boolean giveItems(PlayerIdentifier player)
-	{
-		SburbConnection c = getActiveConnection(player);
-		if(c != null && !c.isMain() && getAssociatedPartner(c.getClientIdentifier(), true) == null
-				&& getAssociatedPartner(c.getServerIdentifier(), false) == null)
-		{
-			c.setIsMain();
-			SburbHandler.onFirstItemGiven(c);
-			infoTracker.sendConnectionInfo(c.getClientIdentifier());
-			infoTracker.sendConnectionInfo(c.getServerIdentifier());
-			return true;
-		}
-		return false;
 	}
 	
 	public void requestConnection(PlayerIdentifier player, ComputerReference compRef, PlayerIdentifier otherPlayer, boolean connectingAsClient)
@@ -521,7 +503,7 @@ public final class SkaianetHandler
 					return null;
 				}
 			}
-			else giveItems(target);
+			else SburbHandler.giveItems(mcServer, target);
 		}
 		else if(c.getClientDimension() != null)
 			return c.getClientDimension();
@@ -555,22 +537,6 @@ public final class SkaianetHandler
 		infoTracker.reloadLandChains();
 		
 		MinecraftForge.EVENT_BUS.post(new SburbEvent.OnEntry(mcServer, c.get(), sessionHandler.getPlayerSession(target)));
-	}
-	
-	public void resetGivenItems()
-	{
-		sessionHandler.getConnectionStream().forEach(this::resetGivenItemsFor);
-		
-		DeployList.onConditionsUpdated(mcServer);
-	}
-	
-	private void resetGivenItemsFor(SburbConnection c)
-	{
-		c.resetGivenItems();
-		
-		EditData data = ServerEditHandler.getData(mcServer, c);
-		if(data != null)
-			data.sendGivenItemsToEditor();
 	}
 	
 	public void movingComputer(ComputerTileEntity oldTE, ComputerTileEntity newTE)
