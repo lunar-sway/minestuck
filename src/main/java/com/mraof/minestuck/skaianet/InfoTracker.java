@@ -21,6 +21,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Works with the info that will be sent to players through {@link com.mraof.minestuck.network.SkaianetInfoPacket}
@@ -98,49 +99,51 @@ public final class InfoTracker
 		List<List<ResourceLocation>> landChains = new ArrayList<>();
 		
 		Set<DimensionType> checked = new HashSet<>();
-		for(SburbConnection c : skaianet.connections)
-		{
-			DimensionType dimensionType = c.getClientDimension();
-			if(c.isMain() && dimensionType != null && !checked.contains(dimensionType))
-			{
-				LinkedList<ResourceLocation> chain = new LinkedList<>();
-				chain.add(c.getClientDimension().getRegistryName());
-				checked.add(c.getClientDimension());
-				SburbConnection cIter = c;
-				while(true)
-				{
-					cIter = skaianet.getMainConnection(cIter.getClientIdentifier(), false);
-					if(cIter != null && cIter.hasEntered())
-					{
-						if(!checked.contains(cIter.getClientDimension()))
-						{
-							chain.addLast(cIter.getClientDimension().getRegistryName());
-							checked.add(cIter.getClientDimension());
-						} else break;
-					} else
-					{
-						chain.addLast(null);
-						break;
-					}
-				}
-				cIter = c;
-				while(true)
-				{
-					cIter = skaianet.getMainConnection(cIter.getServerIdentifier(), true);
-					if(cIter != null && cIter.hasEntered() && !checked.contains(cIter.getClientDimension()))
-					{
-						chain.addFirst(cIter.getClientDimension().getRegistryName());
-						checked.add(cIter.getClientDimension());
-					} else
-					{
-						break;
-					}
-				}
-				landChains.add(chain);
-			}
-		}
+		skaianet.sessionHandler.getConnectionStream().forEach(c -> populateLandChain(landChains, checked, c));
 		
 		return landChains;
+	}
+	
+	private void populateLandChain(List<List<ResourceLocation>> landChains, Set<DimensionType> checked, SburbConnection c)
+	{
+		DimensionType dimensionType = c.getClientDimension();
+		if(c.isMain() && dimensionType != null && !checked.contains(dimensionType))
+		{
+			LinkedList<ResourceLocation> chain = new LinkedList<>();
+			chain.add(c.getClientDimension().getRegistryName());
+			checked.add(c.getClientDimension());
+			SburbConnection cIter = c;
+			while(true)
+			{
+				cIter = skaianet.getMainConnection(cIter.getClientIdentifier(), false);
+				if(cIter != null && cIter.hasEntered())
+				{
+					if(!checked.contains(cIter.getClientDimension()))
+					{
+						chain.addLast(cIter.getClientDimension().getRegistryName());
+						checked.add(cIter.getClientDimension());
+					} else break;
+				} else
+				{
+					chain.addLast(null);
+					break;
+				}
+			}
+			cIter = c;
+			while(true)
+			{
+				cIter = skaianet.getMainConnection(cIter.getServerIdentifier(), true);
+				if(cIter != null && cIter.hasEntered() && !checked.contains(cIter.getClientDimension()))
+				{
+					chain.addFirst(cIter.getClientDimension().getRegistryName());
+					checked.add(cIter.getClientDimension());
+				} else
+				{
+					break;
+				}
+			}
+			landChains.add(chain);
+		}
 	}
 	
 	void reloadLandChains()
@@ -161,12 +164,11 @@ public final class InfoTracker
 		ServerPlayerEntity playerMP = player.getPlayer(skaianet.mcServer);
 		if(iden == null || playerMP == null)//If the player disconnected
 			return;
-		for(SburbConnection c : skaianet.connections)
-			if(c.isActive() && (c.getClientIdentifier().equals(player) || c.getServerIdentifier().equals(player)))
-			{
-				MSCriteriaTriggers.SBURB_CONNECTION.trigger(playerMP);
-				break;
-			}
+		
+		//Trigger advancement if there is an active connection that the player is in
+		skaianet.sessionHandler.getConnectionStream().filter(SburbConnection::isActive).filter(c -> c.hasPlayer(player))
+				.findAny().ifPresent(c -> MSCriteriaTriggers.SBURB_CONNECTION.trigger(playerMP));
+		
 		for(PlayerIdentifier i : iden)
 		{
 			if(i != null)
@@ -184,10 +186,8 @@ public final class InfoTracker
 		
 		Map<Integer, String> serverMap = skaianet.sessionHandler.getServerList(player);
 		
-		List<SburbConnection> list = new ArrayList<>();
-		for(SburbConnection c : skaianet.connections)
-			if(c.getClientIdentifier().equals(player) || c.getServerIdentifier().equals(player))
-				list.add(c);
+		// create list with all connections that the player is in
+		List<SburbConnection> list = skaianet.sessionHandler.getConnectionStream().filter(c -> c.hasPlayer(player)).collect(Collectors.toList());
 		
 		return SkaianetInfoPacket.update(player.getId(), clientResuming, serverResuming, serverMap, list);
 	}

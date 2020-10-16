@@ -21,13 +21,16 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.util.Constants;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 
 public final class SburbConnection
 {
 	private final SkaianetHandler handler;
 	
+	@Nonnull
 	private final PlayerIdentifier clientIdentifier;
+	@Nonnull
 	private PlayerIdentifier serverIdentifier;
 	private ComputerReference clientComputer;
 	private ComputerReference serverComputer;
@@ -51,8 +54,8 @@ public final class SburbConnection
 	
 	SburbConnection(PlayerIdentifier client, PlayerIdentifier server, SkaianetHandler handler)
 	{
-		clientIdentifier = client;
-		serverIdentifier = server;
+		clientIdentifier = Objects.requireNonNull(client);
+		serverIdentifier = Objects.requireNonNull(server);
 		this.handler = handler;
 		this.lockedToSession = false;
 	}
@@ -133,6 +136,8 @@ public final class SburbConnection
 	
 	void setActive(ComputerReference client, ComputerReference server)
 	{
+		if(isActive())
+			throw new IllegalStateException("Should not activate sburb connection when already active");
 		Objects.requireNonNull(client);
 		Objects.requireNonNull(server);
 		clientComputer = client;
@@ -147,11 +152,13 @@ public final class SburbConnection
 		isActive = false;
 	}
 	
+	@Nonnull
 	public PlayerIdentifier getClientIdentifier()
 	{
 		return clientIdentifier;
 	}
 	
+	@Nonnull
 	public PlayerIdentifier getServerIdentifier()
 	{
 		return serverIdentifier;
@@ -171,7 +178,12 @@ public final class SburbConnection
 	{
 		if(hasServerPlayer())
 			throw new IllegalStateException("Connection already has server player");
-		else serverIdentifier = identifier;
+		else serverIdentifier = Objects.requireNonNull(identifier);
+	}
+	
+	boolean hasPlayer(PlayerIdentifier player)
+	{
+		return clientIdentifier.equals(player) || serverIdentifier.equals(player);
 	}
 	
 	public ComputerReference getClientComputer()
@@ -191,6 +203,16 @@ public final class SburbConnection
 	public boolean isServer(ISburbComputer computer)
 	{
 		return isActive && getServerIdentifier().equals(computer.getOwner()) && serverComputer.matches(computer);
+	}
+	void updateComputer(ISburbComputer oldComputer, ComputerReference newComputer)
+	{
+		if(isActive())
+		{
+			if(clientComputer.matches(oldComputer))
+				clientComputer = Objects.requireNonNull(newComputer);
+			if(serverComputer.matches(oldComputer))
+				serverComputer = Objects.requireNonNull(newComputer);
+		}
 	}
 	public boolean isMain(){return isMain;}
 	public boolean isActive()

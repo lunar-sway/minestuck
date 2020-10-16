@@ -13,7 +13,7 @@ import net.minecraftforge.common.DimensionManager;
 
 import java.util.Objects;
 
-class TEComputerReference extends ComputerReference
+class TEComputerReference implements ComputerReference
 {
 	protected final GlobalPos location;
 	
@@ -33,7 +33,7 @@ class TEComputerReference extends ComputerReference
 	{
 		nbt.putString("type", "tile_entity");
 		nbt.put("pos", location.serialize(NBTDynamicOps.INSTANCE));
-		return super.write(nbt);
+		return nbt;
 	}
 	
 	@Override

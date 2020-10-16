@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Stream;
 
 /**
  * An extension to SkaianetHandler with a focus on sessions
@@ -42,6 +43,11 @@ public abstract class SessionHandler
 	public abstract Session getPlayerSession(PlayerIdentifier player);
 	
 	abstract Set<Session> getSessions();
+	
+	Stream<SburbConnection> getConnectionStream()
+	{
+		return getSessions().stream().flatMap(session -> session.connections.stream());
+	}
 	
 	abstract Session tryGetSessionToAdd(PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException;
 	

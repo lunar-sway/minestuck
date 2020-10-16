@@ -30,6 +30,7 @@ import org.apache.logging.log4j.Logger;
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.stream.Stream;
 
 /**
  * This class handles server sided stuff about the sburb connection network.
@@ -50,7 +51,6 @@ public final class SkaianetHandler
 	final Map<PlayerIdentifier, ComputerReference> openedServers = new HashMap<>();
 	private final Map<PlayerIdentifier, ComputerReference> resumingClients = new HashMap<>();
 	private final Map<PlayerIdentifier, ComputerReference> resumingServers = new HashMap<>();
-	final Set<SburbConnection> connections = new HashSet<>();
 	private final List<ComputerReference> movingComputers = new ArrayList<>();
 	final SessionHandler sessionHandler;
 	final InfoTracker infoTracker = new InfoTracker(this);
@@ -86,34 +86,29 @@ public final class SkaianetHandler
 	 */
 	public SburbConnection getActiveConnection(PlayerIdentifier client)
 	{
-		for(SburbConnection c : connections)
-			if(c.isActive() && c.getClientIdentifier().equals(client))
-				return c;
-		return null;
+		return sessionHandler.getConnectionStream().filter(SburbConnection::isActive).filter(c -> c.getClientIdentifier().equals(client))
+				.findAny().orElse(null);
 	}
 	
 	@Nullable
 	public PlayerIdentifier getAssociatedPartner(PlayerIdentifier player, boolean isClient)
 	{
-		for(SburbConnection c : connections)
-			if(c.isMain())
-				if(isClient && c.getClientIdentifier().equals(player))
-					return c.hasServerPlayer() ? c.getServerIdentifier() : null;
-				else if(!isClient && c.getServerIdentifier().equals(player))
-					return c.getClientIdentifier();
-		return null;
+		Stream<SburbConnection> connections = sessionHandler.getConnectionStream().filter(SburbConnection::isMain);
+		if(isClient)
+			return connections.filter(c -> c.getClientIdentifier().equals(player)).filter(SburbConnection::hasServerPlayer)
+					.findAny().map(SburbConnection::getServerIdentifier).orElse(null);
+		else return connections.filter(c -> c.getServerIdentifier().equals(player))
+					.findAny().map(SburbConnection::getClientIdentifier).orElse(null);
 	}
 	
 	public SburbConnection getMainConnection(PlayerIdentifier player, boolean isClient)
 	{
 		if(player == null || player.equals(IdentifierHandler.NULL_IDENTIFIER))
 			return null;
-		for(SburbConnection c : connections)
-			if(c.isMain())
-				if(isClient ? (c.getClientIdentifier().equals(player))
-						: c.getServerIdentifier().equals(player))
-					return c;
-		return null;
+		Stream<SburbConnection> connections = sessionHandler.getConnectionStream().filter(SburbConnection::isMain);
+		if(isClient)
+			return connections.filter(c -> c.getClientIdentifier().equals(player)).findAny().orElse(null);
+		else return connections.filter(c -> c.getServerIdentifier().equals(player)).findAny().orElse(null);
 	}
 	
 	public boolean giveItems(PlayerIdentifier player)
@@ -259,9 +254,7 @@ public final class SkaianetHandler
 					}
 					sessionHandler.onConnectionClosed(c, true);
 					
-					if(c.isMain())
-						c.close();
-					else connections.remove(c);
+					c.close();
 					
 					ConnectionCreatedEvent.ConnectionType type = !c.isMain() && getMainConnection(c.getClientIdentifier(), true) != null
 							? ConnectionCreatedEvent.ConnectionType.SECONDARY : ConnectionCreatedEvent.ConnectionType.REGULAR;
@@ -301,7 +294,6 @@ public final class SkaianetHandler
 			if(c == null)
 			{
 				c = new SburbConnection(player, otherPlayer, this);
-				connections.add(c);
 				newConnection = true;
 			}
 			
@@ -327,7 +319,6 @@ public final class SkaianetHandler
 			SburbConnection conn = getMainConnection(c.getClientIdentifier(), true);
 			if(conn != null && !conn.hasServerPlayer() && getMainConnection(c.getServerIdentifier(), false) == null)
 			{
-				connections.remove(c);
 				conn.setNewServerPlayer(c.getServerIdentifier());
 				conn.setActive(c.getClientComputer(), c.getServerComputer());
 				c = conn;
@@ -341,7 +332,6 @@ public final class SkaianetHandler
 				} catch(MergeResult.SessionMergeException e)
 				{
 					LOGGER.warn("SessionHandler denied connection between {} and {}, reason: {}", c.getClientIdentifier().getUsername(), c.getServerIdentifier().getUsername(), e.getMessage());
-					connections.remove(c);
 					ISburbComputer cComp = c.getClientComputer().getComputer(mcServer);
 					if(cComp != null)
 						cComp.putClientMessage(e.getResult().translationKey());
@@ -375,7 +365,6 @@ public final class SkaianetHandler
 		c.setHasEntered();
 		
 		session.connections.add(c);
-		connections.add(c);
 		SburbHandler.onConnectionCreated(c);
 		
 		return c;
@@ -438,16 +427,7 @@ public final class SkaianetHandler
 		validateComputerMap(resumingClients, true);
 		validateComputerMap(resumingServers, false);
 		
-		Iterator<SburbConnection> iter2 = connections.iterator();
-		while(iter2.hasNext())
-		{
-			SburbConnection c = iter2.next();
-			if(c.getClientIdentifier() == null || c.getServerIdentifier() == null)
-			{
-				LOGGER.warn("Found a broken connection with the client \""+c.getClientIdentifier()+"\" and server \""+c.getServerIdentifier()+". If this message continues to show up, something isn't working as it should.");
-				iter2.remove();
-				continue;
-			}
+		sessionHandler.getConnectionStream().forEach(c -> {
 			if(c.isActive())
 			{
 				ISburbComputer cc = c.getClientComputer().getComputer(mcServer), sc = c.getServerComputer().getComputer(mcServer);
@@ -455,9 +435,7 @@ public final class SkaianetHandler
 						|| !c.getServerIdentifier().equals(sc.getOwner()) || !cc.getClientBoolean("connectedToServer"))
 				{
 					LOGGER.warn("[SKAIANET] Invalid computer in connection between {} and {}.", c.getClientIdentifier(), c.getServerIdentifier());
-					if(!c.isMain())
-						iter2.remove();
-					else c.close();
+					c.close();
 					sessionHandler.onConnectionClosed(c, true);
 					
 					if(cc != null)
@@ -474,7 +452,7 @@ public final class SkaianetHandler
 					MinecraftForge.EVENT_BUS.post(new ConnectionClosedEvent(mcServer, c, sessionHandler.getPlayerSession(c.getClientIdentifier()), type));
 				}
 			}
-		}
+		});
 		
 		infoTracker.checkData();
 	}
@@ -498,10 +476,8 @@ public final class SkaianetHandler
 	
 	public SburbConnection getConnection(PlayerIdentifier client, PlayerIdentifier server)
 	{
-		for(SburbConnection c : connections)
-			if(c.getClientIdentifier().equals(client) && c.getServerIdentifier().equals(server))
-				return c;
-		return null;
+		return sessionHandler.getConnectionStream().filter(c -> c.getClientIdentifier().equals(client) && c.getServerIdentifier().equals(server))
+				.findAny().orElse(null);
 	}
 	
 	boolean hasResumingClient(PlayerIdentifier identifier)
@@ -516,7 +492,7 @@ public final class SkaianetHandler
 	
 	public SburbConnection getServerConnection(ISburbComputer computer)
 	{
-		return connections.stream().filter(c -> c.isServer(computer)).findAny().orElse(null);
+		return sessionHandler.getConnectionStream().filter(c -> c.isServer(computer)).findAny().orElse(null);
 	}
 	
 	/**
@@ -540,7 +516,6 @@ public final class SkaianetHandler
 				{
 					sessionHandler.onConnectionCreated(c);
 					SburbHandler.onFirstItemGiven(c);
-					connections.add(c);
 				} catch(MergeResult.SessionMergeException e)
 				{
 					LOGGER.error("Couldn't create a connection for {}: {}. Stopping entry.", target.getUsername(), e.getMessage());
@@ -585,15 +560,18 @@ public final class SkaianetHandler
 	
 	public void resetGivenItems()
 	{
-		for(SburbConnection c : connections)
-		{
-			c.resetGivenItems();
-			
-			EditData data = ServerEditHandler.getData(mcServer, c);
-			if(data != null)
-				data.sendGivenItemsToEditor();
-		}
+		sessionHandler.getConnectionStream().forEach(this::resetGivenItemsFor);
+		
 		DeployList.onConditionsUpdated(mcServer);
+	}
+	
+	private void resetGivenItemsFor(SburbConnection c)
+	{
+		c.resetGivenItems();
+		
+		EditData data = ServerEditHandler.getData(mcServer, c);
+		if(data != null)
+			data.sendGivenItemsToEditor();
 	}
 	
 	public void movingComputer(ComputerTileEntity oldTE, ComputerTileEntity newTE)
@@ -602,15 +580,7 @@ public final class SkaianetHandler
 		if(!oldTE.owner.equals(newTE.owner))
 			throw new IllegalStateException("Moving computers with different owners! ("+oldTE.owner+" and "+newTE.owner+")");
 		
-		for(SburbConnection c : connections)
-		{
-			if(c.isActive())
-			{
-				boolean isClient = c.isClient(oldTE), isServer = c.isServer(oldTE);
-				if(isClient || isServer)	//TODO Change to an "update positions" function in the sburb connection, and add checks to isActive in setActive()
-					c.setActive(isClient ? newRef : c.getClientComputer(), isServer ? newRef : c.getServerComputer());
-			}
-		}
+		sessionHandler.getConnectionStream().forEach(c -> c.updateComputer(oldTE, newRef));
 		
 		if(resumingClients.containsKey(oldTE.owner) && resumingClients.get(oldTE.owner).equals(oldRef))
 			resumingClients.put(oldTE.owner, newRef);	//Used to be map.replace until someone had a NoSuchMethodError

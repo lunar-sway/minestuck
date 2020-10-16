@@ -129,10 +129,9 @@ public final class SburbHandler
 	{
 		if(dim == null)
 			return null;
-		for(SburbConnection c : SkaianetHandler.get(mcServer).connections)
-			if(c.getClientDimension() == dim)
-				return c;
-		return null;
+		
+		return SessionHandler.get(mcServer).getConnectionStream().filter(c -> c.getClientDimension() == dim)
+				.findAny().orElse(null);
 	}
 	
 	/**
@@ -226,10 +225,7 @@ public final class SburbHandler
 	
 	public static boolean canSelectColor(PlayerIdentifier player, MinecraftServer mcServer)
 	{
-		for(SburbConnection c : SkaianetHandler.get(mcServer).connections)
-			if(c.getClientIdentifier().equals(player))
-				return false;
-		return true;
+		return SessionHandler.get(mcServer).getConnectionStream().noneMatch(c -> c.getClientIdentifier().equals(player));
 	}
 	
 	public static boolean hasEntered(ServerPlayerEntity player)

@@ -135,14 +135,13 @@ public final class DefaultSessionHandler extends SessionHandler
 			throw new IllegalStateException("Session has already been added: " + session.name);
 		else if(session.isCustom() && sessionsByName.containsKey(session.name))
 			throw new IllegalStateException("Session name is already in use: " + session.name);
-		else if(session.connections.stream().anyMatch(skaianetHandler.connections::contains))
+		else if(getConnectionStream().anyMatch(session.connections::contains))
 			throw new IllegalStateException("Session contained connections that have already been added: " + session.name);
 		else
 		{
 			sessions.add(session);
 			if(session.isCustom())
 				sessionsByName.put(session.name, session);
-			skaianetHandler.connections.addAll(session.connections);
 		}
 	}
 	

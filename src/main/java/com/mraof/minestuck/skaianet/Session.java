@@ -23,7 +23,7 @@ public final class Session
 {
 	
 	final Map<PlayerIdentifier, PredefineData> predefinedPlayers;
-	final List<SburbConnection> connections;
+	final Set<SburbConnection> connections;
 	String name;
 	
 	/**
@@ -73,7 +73,7 @@ public final class Session
 			completed = false;
 			return;
 		}
-		PlayerIdentifier start = connections.get(0).getClientIdentifier();
+		PlayerIdentifier start = connections.stream().findAny().get().getClientIdentifier();
 		PlayerIdentifier current = start;
 		main: while(true){
 			for(SburbConnection c : connections)
@@ -99,7 +99,7 @@ public final class Session
 	
 	Session()
 	{
-		connections = new ArrayList<>();
+		connections = new HashSet<>();
 		predefinedPlayers = new HashMap<>();
 	}
 	

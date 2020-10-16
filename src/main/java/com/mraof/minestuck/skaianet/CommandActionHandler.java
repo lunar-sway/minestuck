@@ -74,7 +74,6 @@ public final class CommandActionHandler
 			else
 			{
 				cc = new SburbConnection(client, server, skaianet);
-				skaianet.connections.add(cc);
 				session.connections.add(cc);
 				SburbHandler.onConnectionCreated(cc);
 			}
@@ -85,7 +84,6 @@ public final class CommandActionHandler
 			cc.setNewServerPlayer(server);
 			if(connection != null && connection.isActive())
 			{
-				skaianet.connections.remove(connection);
 				session.connections.remove(connection);
 				cc.setActive(connection.getClientComputer(), connection.getServerComputer());
 			}
