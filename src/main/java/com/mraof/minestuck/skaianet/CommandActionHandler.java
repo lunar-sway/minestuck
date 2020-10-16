@@ -139,7 +139,7 @@ public final class CommandActionHandler
 			PlayerIdentifier fakePlayer = IdentifierHandler.createNewFakeIdentifier();
 			c.setNewServerPlayer(fakePlayer);
 			
-			c = skaianet.makeConnectionWithLand(land, createDebugLand(land), fakePlayer, IdentifierHandler.NULL_IDENTIFIER, s);
+			c = makeConnectionWithLand(skaianet, land, createDebugLand(land), fakePlayer, IdentifierHandler.NULL_IDENTIFIER, s);
 		}
 		
 		if(i == landTypes.size())
@@ -154,7 +154,7 @@ public final class CommandActionHandler
 					break;
 				PlayerIdentifier fakePlayer = IdentifierHandler.createNewFakeIdentifier();
 				
-				c = skaianet.makeConnectionWithLand(land, createDebugLand(land), fakePlayer, lastIdentifier, s);
+				c = makeConnectionWithLand(skaianet, land, createDebugLand(land), fakePlayer, lastIdentifier, s);
 				
 				lastIdentifier = fakePlayer;
 			}
@@ -163,6 +163,20 @@ public final class CommandActionHandler
 		skaianet.updateAll();
 		skaianet.infoTracker.reloadLandChains();
 	}
+	
+	private static SburbConnection makeConnectionWithLand(SkaianetHandler skaianet, LandTypePair landTypes, DimensionType dimensionName, PlayerIdentifier client, PlayerIdentifier server, Session session)
+	{
+		SburbConnection c = new SburbConnection(client, server, skaianet);
+		c.setIsMain();
+		c.setLand(landTypes, dimensionName);
+		c.setHasEntered();
+		
+		session.connections.add(c);
+		SburbHandler.onConnectionCreated(c);
+		
+		return c;
+	}
+	
 	
 	private static DimensionType createDebugLand(LandTypePair landTypes) throws CommandSyntaxException
 	{

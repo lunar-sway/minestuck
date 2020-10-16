@@ -9,7 +9,6 @@ import com.mraof.minestuck.event.SburbEvent;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
-import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -331,19 +330,6 @@ public final class SkaianetHandler
 			infoTracker.reloadLandChains();
 	}
 	
-	SburbConnection makeConnectionWithLand(LandTypePair landTypes, DimensionType dimensionName, PlayerIdentifier client, PlayerIdentifier server, Session session)
-	{
-		SburbConnection c = new SburbConnection(client, server, this);
-		c.setIsMain();
-		c.setLand(landTypes, dimensionName);
-		c.setHasEntered();
-		
-		session.connections.add(c);
-		SburbHandler.onConnectionCreated(c);
-		
-		return c;
-	}
-	
 	public void requestInfo(ServerPlayerEntity player, PlayerIdentifier p1)
 	{
 		checkData();
@@ -534,12 +520,9 @@ public final class SkaianetHandler
 		
 		sessionHandler.getConnectionStream().forEach(c -> c.updateComputer(oldTE, newRef));
 		
-		if(resumingClients.containsKey(oldTE.owner) && resumingClients.get(oldTE.owner).equals(oldRef))
-			resumingClients.put(oldTE.owner, newRef);	//Used to be map.replace until someone had a NoSuchMethodError
-		if(resumingServers.containsKey(oldTE.owner) && resumingServers.get(oldTE.owner).equals(oldRef))
-			resumingServers.put(oldTE.owner, newRef);
-		if(openedServers.containsKey(oldTE.owner) && openedServers.get(oldTE.owner).equals(oldRef))
-			openedServers.put(oldTE.owner, newRef);
+		resumingClients.replace(oldTE.owner, oldRef, newRef);
+		resumingServers.replace(oldTE.owner, oldRef, newRef);
+		openedServers.replace(oldTE.owner, oldRef, newRef);
 		
 		movingComputers.add(newRef);
 	}
