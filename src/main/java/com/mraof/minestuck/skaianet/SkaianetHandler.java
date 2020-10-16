@@ -9,14 +9,11 @@ import com.mraof.minestuck.event.SburbEvent;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
-import com.mraof.minestuck.world.MSDimensionTypes;
-import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.MinecraftForge;
@@ -51,10 +48,6 @@ public final class SkaianetHandler
 	private final List<ComputerReference> movingComputers = new ArrayList<>();
 	final SessionHandler sessionHandler;
 	final InfoTracker infoTracker = new InfoTracker(this);
-	/**
-	 * Changes to this map must also be done to {@link MSDimensionTypes#LANDS#dimToLandAspects}
-	 */
-	private final Map<ResourceLocation, LandInfo> typeToInfoContainer = new HashMap<>();
 	
 	MinecraftServer mcServer;
 	
@@ -513,12 +506,6 @@ public final class SkaianetHandler
 		return c.getClientDimension();
 	}
 	
-	void updateLandMaps(SburbConnection connection)
-	{
-		typeToInfoContainer.put(connection.getLandInfo().getDimensionName(), connection.getLandInfo());
-		MSDimensionTypes.LANDS.dimToLandTypes.put(connection.getLandInfo().getDimensionName(), connection.getLandInfo().getLazyLandAspects());
-	}
-	
 	/**
 	 * Called when entry teleportation has successfully finished.
 	 */
@@ -560,11 +547,6 @@ public final class SkaianetHandler
 	public void clearMovingList()
 	{
 		movingComputers.clear();
-	}
-	
-	public LandInfo landInfoForDimension(DimensionType type)
-	{
-		return typeToInfoContainer.get(DimensionType.getKey(type));
 	}
 	
 	public static SkaianetHandler get(World world)
@@ -615,7 +597,6 @@ public final class SkaianetHandler
 	public static void clear()
 	{
 		INSTANCE = null;
-		MSDimensionTypes.LANDS.dimToLandTypes.clear();
 		SburbHandler.playersInTitleSelection.clear();
 	}
 }

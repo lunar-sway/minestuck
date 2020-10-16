@@ -10,6 +10,7 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.skaianet.client.ReducedConnection;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
@@ -94,7 +95,7 @@ public final class SburbConnection
 		if(nbt.contains("ClientLand", Constants.NBT.TAG_COMPOUND))
 		{
 			clientLandInfo = LandInfo.read(nbt.getCompound("ClientLand"), handler, getClientIdentifier());
-			handler.updateLandMaps(this);
+			MSDimensions.updateLandMaps(this);
 			hasEntered = nbt.contains("has_entered") ? nbt.getBoolean("has_entered") : true;
 		}
 		artifactType = nbt.getInt("artifact");
@@ -250,7 +251,7 @@ public final class SburbConnection
 	{
 		return getLandInfo() == null ? null : getLandInfo().getDimensionType();
 	}
-	LandInfo getLandInfo()
+	public LandInfo getLandInfo()
 	{
 		return clientLandInfo;
 	}
@@ -261,7 +262,7 @@ public final class SburbConnection
 		else
 		{
 			clientLandInfo = new LandInfo(clientIdentifier, landTypes, dimension, new Random());	//TODO handle random better
-			handler.updateLandMaps(this);
+			MSDimensions.updateLandMaps(this);
 		}
 	}
 	void setHasEntered()

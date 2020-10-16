@@ -13,6 +13,7 @@ import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
+import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import com.mraof.minestuck.world.storage.PlayerData;
@@ -64,6 +65,7 @@ public class ServerEventHandler
 	{
 		IdentifierHandler.clear();
 		SkaianetHandler.clear();
+		MSDimensions.clear();
 		MSFeatures.LAND_GATE.clearCache();
 	}
 	
