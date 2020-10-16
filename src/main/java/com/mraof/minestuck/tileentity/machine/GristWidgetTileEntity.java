@@ -1,4 +1,4 @@
-package com.mraof.minestuck.tileentity;
+package com.mraof.minestuck.tileentity.machine;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.machine.GristWidgetBlock;
@@ -9,6 +9,7 @@ import com.mraof.minestuck.item.crafting.alchemy.GristCostRecipe;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.PlayerEntity;

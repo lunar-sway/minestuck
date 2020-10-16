@@ -2,6 +2,8 @@ package com.mraof.minestuck.event;
 
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.tileentity.machine.AlchemiterTileEntity;
+import com.mraof.minestuck.tileentity.machine.MiniAlchemiterTileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -30,7 +32,7 @@ public class AlchemyEvent extends Event
 	}
 	
 	/**
-	 * Returns the alchemiter tile entity that this is happening on. Either an instance of {@link com.mraof.minestuck.tileentity.AlchemiterTileEntity} or {@link com.mraof.minestuck.tileentity.MiniAlchemiterTileEntity}.
+	 * Returns the alchemiter tile entity that this is happening on. Either an instance of {@link AlchemiterTileEntity} or {@link MiniAlchemiterTileEntity}.
 	 */
 	public TileEntity getAlchemiter()
 	{

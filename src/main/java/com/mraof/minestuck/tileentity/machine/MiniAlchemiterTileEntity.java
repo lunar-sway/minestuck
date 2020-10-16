@@ -1,4 +1,4 @@
-package com.mraof.minestuck.tileentity;
+package com.mraof.minestuck.tileentity.machine;
 
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.event.AlchemyEvent;
@@ -6,6 +6,7 @@ import com.mraof.minestuck.inventory.MiniAlchemiterContainer;
 import com.mraof.minestuck.item.crafting.alchemy.*;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;

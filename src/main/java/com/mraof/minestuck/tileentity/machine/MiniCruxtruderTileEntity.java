@@ -1,8 +1,9 @@
-package com.mraof.minestuck.tileentity;
+package com.mraof.minestuck.tileentity.machine;
 
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.inventory.MiniCruxtruderContainer;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.util.ColorHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;

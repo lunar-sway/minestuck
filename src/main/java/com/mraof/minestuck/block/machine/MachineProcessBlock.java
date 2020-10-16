@@ -1,6 +1,6 @@
 package com.mraof.minestuck.block.machine;
 
-import com.mraof.minestuck.tileentity.MachineProcessTileEntity;
+import com.mraof.minestuck.tileentity.machine.MachineProcessTileEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.tileentity.TileEntity;

@@ -1,4 +1,4 @@
-package com.mraof.minestuck.tileentity;
+package com.mraof.minestuck.tileentity.machine;
 
 import com.mraof.minestuck.player.PlayerIdentifier;
 

@@ -1,4 +1,4 @@
-package com.mraof.minestuck.tileentity;
+package com.mraof.minestuck.tileentity.machine;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.EnumDowelType;
@@ -9,6 +9,8 @@ import com.mraof.minestuck.event.AlchemyEvent;
 import com.mraof.minestuck.item.crafting.alchemy.*;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.tileentity.IColored;
+import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.util.Debug;
 import net.minecraft.block.Block;

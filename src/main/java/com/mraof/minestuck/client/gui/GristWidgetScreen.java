@@ -5,7 +5,7 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.inventory.GristWidgetContainer;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import com.mraof.minestuck.tileentity.GristWidgetTileEntity;
+import com.mraof.minestuck.tileentity.machine.GristWidgetTileEntity;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;

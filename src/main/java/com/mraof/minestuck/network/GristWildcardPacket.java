@@ -1,7 +1,7 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
-import com.mraof.minestuck.tileentity.GristWildcardHolder;
+import com.mraof.minestuck.tileentity.machine.GristWildcardHolder;
 import com.mraof.minestuck.util.Debug;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;

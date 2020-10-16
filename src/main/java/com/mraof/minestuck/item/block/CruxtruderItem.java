@@ -3,7 +3,7 @@ package com.mraof.minestuck.item.block;
 import com.mraof.minestuck.block.machine.CruxtruderMultiblock;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
-import com.mraof.minestuck.tileentity.CruxtruderTileEntity;
+import com.mraof.minestuck.tileentity.machine.CruxtruderTileEntity;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MSRotationUtil;

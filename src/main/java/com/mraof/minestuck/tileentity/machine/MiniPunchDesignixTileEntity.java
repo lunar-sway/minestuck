@@ -1,4 +1,4 @@
-package com.mraof.minestuck.tileentity;
+package com.mraof.minestuck.tileentity.machine;
 
 import com.mraof.minestuck.inventory.MiniPunchDesignixContainer;
 import com.mraof.minestuck.item.MSItems;
@@ -6,6 +6,7 @@ import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.item.crafting.alchemy.CombinationMode;
 import com.mraof.minestuck.item.crafting.alchemy.ItemCombiner;
+import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;

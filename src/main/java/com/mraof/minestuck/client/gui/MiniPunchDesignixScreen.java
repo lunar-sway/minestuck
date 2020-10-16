@@ -2,7 +2,7 @@ package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.inventory.MiniPunchDesignixContainer;
-import com.mraof.minestuck.tileentity.MiniPunchDesignixTileEntity;
+import com.mraof.minestuck.tileentity.machine.MiniPunchDesignixTileEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;

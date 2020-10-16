@@ -1,4 +1,4 @@
-package com.mraof.minestuck.tileentity;
+package com.mraof.minestuck.tileentity.machine;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;

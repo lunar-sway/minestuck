@@ -1,4 +1,4 @@
-package com.mraof.minestuck.tileentity;
+package com.mraof.minestuck.tileentity.machine;
 
 
 import com.mraof.minestuck.block.EnumDowelType;
@@ -9,6 +9,8 @@ import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.item.crafting.alchemy.CombinationMode;
 import com.mraof.minestuck.item.crafting.alchemy.CombinerWrapper;
+import com.mraof.minestuck.tileentity.ItemStackTileEntity;
+import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.WorldEventUtil;
