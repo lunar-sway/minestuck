@@ -3,7 +3,7 @@ package com.mraof.minestuck.client.renderer;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mraof.minestuck.skaianet.SkaiaClient;
+import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.LandDimension;
 import com.mraof.minestuck.world.MSDimensionTypes;

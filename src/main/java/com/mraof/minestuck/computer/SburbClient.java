@@ -1,8 +1,8 @@
 package com.mraof.minestuck.computer;
 
 import com.mraof.minestuck.client.gui.ColorSelectorScreen;
-import com.mraof.minestuck.skaianet.ReducedConnection;
-import com.mraof.minestuck.skaianet.SkaiaClient;
+import com.mraof.minestuck.skaianet.client.ReducedConnection;
+import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundNBT;

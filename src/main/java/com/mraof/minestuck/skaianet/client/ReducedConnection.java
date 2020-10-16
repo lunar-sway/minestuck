@@ -1,5 +1,6 @@
-package com.mraof.minestuck.skaianet;
+package com.mraof.minestuck.skaianet.client;
 
+import com.mraof.minestuck.skaianet.SburbConnection;
 import net.minecraft.network.PacketBuffer;
 
 /**

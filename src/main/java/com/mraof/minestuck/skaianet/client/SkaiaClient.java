@@ -1,4 +1,4 @@
-package com.mraof.minestuck.skaianet;
+package com.mraof.minestuck.skaianet.client;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.ComputerScreen;

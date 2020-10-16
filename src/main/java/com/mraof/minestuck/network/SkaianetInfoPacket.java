@@ -1,10 +1,10 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.skaianet.ReducedConnection;
 import com.mraof.minestuck.skaianet.SburbConnection;
-import com.mraof.minestuck.skaianet.SkaiaClient;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
+import com.mraof.minestuck.skaianet.client.ReducedConnection;
+import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
