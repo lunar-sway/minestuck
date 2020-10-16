@@ -7,6 +7,8 @@ import com.mraof.minestuck.entity.item.CrewPosterEntity;
 import com.mraof.minestuck.entity.item.MetalBoatEntity;
 import com.mraof.minestuck.entity.item.SbahjPosterEntity;
 import com.mraof.minestuck.fluid.MSFluids;
+import com.mraof.minestuck.item.artifact.CruxiteAppleItem;
+import com.mraof.minestuck.item.artifact.CruxitePotionItem;
 import com.mraof.minestuck.item.block.*;
 import com.mraof.minestuck.item.foods.DrinkableItem;
 import com.mraof.minestuck.item.foods.HealingFoodItem;
