@@ -3,12 +3,9 @@ package com.mraof.minestuck.skaianet;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.computer.editmode.DeployList;
-import com.mraof.minestuck.entry.EntryProcess;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
-import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.network.TitleSelectPacket;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
@@ -20,20 +17,16 @@ import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 
@@ -45,8 +38,6 @@ import java.util.Random;
 public final class SburbHandler
 {
 	private static final Logger LOGGER = LogManager.getLogger();
-	
-	static Map<PlayerEntity, Vec3d> playersInTitleSelection = new HashMap<>();	//TODO Consider making this non-static
 	
 	private static Title produceTitle(World world, PlayerIdentifier player)
 	{
@@ -80,7 +71,7 @@ public final class SburbHandler
 		return title;
 	}
 	
-	private static void generateAndSetTitle(World world, PlayerIdentifier player)
+	static void generateAndSetTitle(World world, PlayerIdentifier player)
 	{
 		PlayerData data = PlayerSavedData.getData(player, world);
 		if(data.getTitle() == null)
@@ -261,64 +252,6 @@ public final class SburbHandler
 		Random rand = new Random();	//TODO seed?
 		c.artifactType = rand.nextInt(2);
 		LOGGER.info("Randomized artifact type to be: {} for player {}.", c.artifactType, c.getClientIdentifier().getUsername());
-	}
-	
-	/**
-	 * Checks if the player has the go-ahead to enter.
-	 * If the player should get the title selection screen, this will send that packet to the player and then return false.
-	 */
-	public static boolean performEntryCheck(ServerPlayerEntity player)
-	{
-		if(!MinestuckConfig.SERVER.playerSelectedTitle.get())
-			return true;
-		
-		PlayerIdentifier identifier = IdentifierHandler.encode(player);
-		Session s = SessionHandler.get(player.world).getPlayerSession(identifier);
-		
-		if(s != null && s.predefinedPlayers.containsKey(identifier) && s.predefinedPlayers.get(identifier).getTitle() != null
-				|| PlayerSavedData.getData(identifier, player.server).getTitle() != null)
-			return true;
-		
-		playersInTitleSelection.put(player, new Vec3d(player.getPosX(), player.getPosY(), player.getPosZ()));
-		TitleSelectPacket packet = new TitleSelectPacket();
-		MSPacketHandler.sendToPlayer(packet, player);
-		return false;
-	}
-	
-	public static void cancelSelection(ServerPlayerEntity player)
-	{
-		playersInTitleSelection.remove(player);
-	}
-	
-	public static void handleTitleSelection(ServerPlayerEntity player, Title title)
-	{
-		if(MinestuckConfig.SERVER.playerSelectedTitle.get() && playersInTitleSelection.containsKey(player))
-		{
-			PlayerIdentifier identifier = IdentifierHandler.encode(player);
-			
-			if(title == null)
-				generateAndSetTitle(player.world, identifier);
-			else
-			{
-				Session s = SessionHandler.get(player.server).getPlayerSession(identifier);
-				if(s != null && s.getUsedTitles(identifier).contains(title))
-				{
-					// Title is already used in session; inform the player that they can't pick this title
-					MSPacketHandler.sendToPlayer(new TitleSelectPacket(title), player);
-					return;
-				}
-				
-				PlayerSavedData.getData(identifier, player.server).setTitle(title);
-			}
-			
-			Vec3d pos = playersInTitleSelection.remove(player);
-			
-			player.setPosition(pos.x, pos.y, pos.z);
-			
-			EntryProcess process = new EntryProcess();
-			process.onArtifactActivated(player);
-			
-		} else LOGGER.warn("{} tried to select a title without entering.", player.getName().getFormattedText());
 	}
 	
 	public static void resetGivenItems(MinecraftServer mcServer)

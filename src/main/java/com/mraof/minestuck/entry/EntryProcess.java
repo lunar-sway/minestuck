@@ -7,8 +7,8 @@ import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnection;
-import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
+import com.mraof.minestuck.skaianet.TitleSelectionHook;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import com.mraof.minestuck.tileentity.GateTileEntity;
 import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
@@ -74,7 +74,7 @@ public class EntryProcess
 		{
 			if(player.world.getDimension().getType() != DimensionType.THE_NETHER)
 			{
-				if(!SburbHandler.performEntryCheck(player))
+				if(!TitleSelectionHook.performEntryCheck(player))
 					return;
 				
 				PlayerIdentifier identifier = IdentifierHandler.encode(player);

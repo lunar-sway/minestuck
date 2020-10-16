@@ -580,6 +580,6 @@ public final class SkaianetHandler
 	public static void clear()
 	{
 		INSTANCE = null;
-		SburbHandler.playersInTitleSelection.clear();
+		TitleSelectionHook.playersInTitleSelection.clear();
 	}
 }
