@@ -38,7 +38,7 @@ public class CruxtruderItem extends MultiblockItem
 			int color;
 			EditData editData = ServerEditHandler.getData(player);
 			if(editData != null)
-				color = ColorHandler.getColorForPlayer(editData.getTarget(), world);
+				color = ColorHandler.getColorForPlayer(editData.getConnection().getClientIdentifier(), world);
 			else color =  ColorHandler.getColorForPlayer((ServerPlayerEntity) player);
 			
 			((CruxtruderTileEntity) te).setColor(color);

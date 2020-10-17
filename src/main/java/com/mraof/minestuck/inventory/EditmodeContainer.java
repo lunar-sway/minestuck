@@ -7,7 +7,6 @@ import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.EditmodeInventoryPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.skaianet.SburbConnection;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -25,10 +24,9 @@ public class EditmodeContainer extends Container
 {
 	
 	private final PlayerEntity player;
-	public Inventory inventory = new Inventory(14);
-	public ArrayList<ItemStack> items  = new ArrayList<>();
+	private final Inventory inventory = new Inventory(14);
+	private List<ItemStack> items  = new ArrayList<>();
 	private int scroll;
-	public static int clientScroll;
 	
 	public EditmodeContainer(int windowId, PlayerInventory playerInventory)
 	{
@@ -95,9 +93,9 @@ public class EditmodeContainer extends Container
 		EditData editData = ServerEditHandler.getData(player);
 		if(editData == null)
 			throw new IllegalStateException("Creating an editmode inventory container, but the player is not in editmode");
-		ArrayList<ItemStack> itemList = new ArrayList<>();
-		SburbConnection c = SkaianetHandler.get(player.world).getActiveConnection(editData.getTarget());
-		ArrayList<ItemStack> tools = new ArrayList<>();
+		List<ItemStack> itemList = new ArrayList<>();
+		SburbConnection c = editData.getConnection();
+		List<ItemStack> tools = DeployList.getEditmodeTools();
 		//Fill list with harvestTool items when implemented
 		
 		List<DeployEntry> deployItems = DeployList.getItemList(player.getServer(), c);
@@ -142,10 +140,20 @@ public class EditmodeContainer extends Container
 		MSPacketHandler.sendToPlayer(packet, (ServerPlayerEntity) player);
 	}
 	
+	public void receiveUpdatePacket(EditmodeInventoryPacket packet)
+	{
+		if(!player.world.isRemote)
+			throw new IllegalStateException("Should not receive update packet here for server-side container");
+		for(int i = 0; i < packet.getInventory().size(); i++)
+		{
+			inventory.setInventorySlotContents(i, packet.getInventory().get(i));
+		}
+	}
+	
 	private static class ToolbarSlot extends Slot
 	{
 		
-		public ToolbarSlot(IInventory inventory, int index, int x, int y)
+		ToolbarSlot(IInventory inventory, int index, int x, int y)
 		{
 			super(inventory, index, x, y);
 		}
@@ -161,7 +169,7 @@ public class EditmodeContainer extends Container
 	private static class InventorySlot extends ToolbarSlot
 	{
 		
-		public InventorySlot(IInventory inventory, int index, int x, int y)
+		InventorySlot(IInventory inventory, int index, int x, int y)
 		{
 			super(inventory, index, x, y);
 		}

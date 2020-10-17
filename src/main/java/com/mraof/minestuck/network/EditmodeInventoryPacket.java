@@ -70,10 +70,7 @@ public class EditmodeInventoryPacket implements PlayToBothPacket
 			InventoryEditmodeScreen gui = (InventoryEditmodeScreen) Minecraft.getInstance().currentScreen;
 			gui.less = b1;
 			gui.more = b2;
-			for(int i = 0; i < inventory.size(); i++)
-			{
-				gui.getContainer().inventory.setInventorySlotContents(i, inventory.get(i));
-			}
+			gui.getContainer().receiveUpdatePacket(this);
 		}
 	}
 	
@@ -82,5 +79,10 @@ public class EditmodeInventoryPacket implements PlayToBothPacket
 	{
 		if(player.openContainer instanceof EditmodeContainer)
 			((EditmodeContainer)player.openContainer).updateScroll(b1);
+	}
+	
+	public List<ItemStack> getInventory()
+	{
+		return inventory;
 	}
 }

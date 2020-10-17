@@ -48,12 +48,9 @@ public class EditData
 	
 	private boolean isRecovering;
 	
-	/**
-	 * @return a player identifier for the player at the receiving end of the connection
-	 */
-	public PlayerIdentifier getTarget()
+	public SburbConnection getConnection()
 	{
-		return connection.getClientIdentifier();
+		return connection;
 	}
 	
 	/**

@@ -22,6 +22,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.BiFunction;
 
@@ -192,5 +193,10 @@ public final class DeployList
 	public static void onConditionsUpdated(MinecraftServer server)
 	{
 		MSExtraData.get(server).forEach(EditData::sendGivenItemsToEditor);
+	}
+	
+	public static List<ItemStack> getEditmodeTools()
+	{
+		return Collections.emptyList();
 	}
 }
