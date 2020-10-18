@@ -1,5 +1,6 @@
-package com.mraof.minestuck.network;
+package com.mraof.minestuck.network.computer;
 
+import com.mraof.minestuck.network.PlayToBothPacket;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;

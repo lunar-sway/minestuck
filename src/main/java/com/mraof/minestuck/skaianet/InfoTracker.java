@@ -4,7 +4,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.network.SkaianetInfoPacket;
+import com.mraof.minestuck.network.computer.SkaianetInfoPacket;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.util.Debug;
@@ -24,7 +24,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Works with the info that will be sent to players through {@link com.mraof.minestuck.network.SkaianetInfoPacket}
+ * Works with the info that will be sent to players through {@link SkaianetInfoPacket}
  */
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID)
 public final class InfoTracker

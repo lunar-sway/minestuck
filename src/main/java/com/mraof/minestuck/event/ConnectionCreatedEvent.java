@@ -30,7 +30,8 @@ public class ConnectionCreatedEvent extends SburbEvent
 	{
 		REGULAR,
 		SECONDARY,
-		RESUME
+		RESUME,
+		NEW_SERVER
 	}
 	
 	public enum SessionJoinType

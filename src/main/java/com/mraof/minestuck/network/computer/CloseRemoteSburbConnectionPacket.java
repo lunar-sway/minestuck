@@ -1,5 +1,6 @@
-package com.mraof.minestuck.network;
+package com.mraof.minestuck.network.computer;
 
+import com.mraof.minestuck.network.PlayToServerPacket;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -35,7 +36,7 @@ public class CloseRemoteSburbConnectionPacket implements PlayToServerPacket
 	@Override
 	public void execute(ServerPlayerEntity player)
 	{
-		ComputerTileEntity.forNetworkIfPresent(player, pos, computer ->
-				SkaianetHandler.get(player.server).closeClientConnectionRemotely(computer.getOwner()));
+		ComputerTileEntity.forNetworkIfPresent(player, pos,
+				computer -> SkaianetHandler.get(player.server).closeClientConnectionRemotely(computer.getOwner()));
 	}
 }

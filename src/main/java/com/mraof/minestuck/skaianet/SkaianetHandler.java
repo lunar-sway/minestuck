@@ -20,7 +20,6 @@ import net.minecraftforge.common.util.Constants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.annotation.Nullable;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Stream;
@@ -78,16 +77,6 @@ public final class SkaianetHandler
 				.findAny().orElse(null);
 	}
 	
-	@Nullable
-	public PlayerIdentifier getAssociatedPartner(PlayerIdentifier player, boolean isClient)
-	{
-		Optional<SburbConnection> c = getMainConnection(player, isClient);
-		if(isClient)
-			return c.filter(SburbConnection::hasServerPlayer)
-					.map(SburbConnection::getServerIdentifier).orElse(null);
-		else return c.map(SburbConnection::getClientIdentifier).orElse(null);
-	}
-	
 	public Optional<SburbConnection> getMainConnection(PlayerIdentifier player, boolean isClient)
 	{
 		if(player == null || player.equals(IdentifierHandler.NULL_IDENTIFIER))
@@ -98,76 +87,201 @@ public final class SkaianetHandler
 		else return connections.filter(c -> c.getServerIdentifier().equals(player)).findAny();
 	}
 	
-	public void requestConnection(PlayerIdentifier player, ComputerReference compRef, PlayerIdentifier otherPlayer, boolean connectingAsClient)
+	public void connectToServer(ISburbComputer computer, PlayerIdentifier server)
 	{
-		if(compRef.isInNether())
-			return;
-		ISburbComputer computer = compRef.getComputer(mcServer);
-		if(computer == null)
+		PlayerIdentifier player = computer.getOwner();
+		ComputerReference reference = computer.createReference();
+		if(reference.isInNether() || isConnectingBlocked(player, true)
+				|| !sessionHandler.getServerList(player).containsKey(server.getId()))
 			return;
 		
-		boolean success;
-		if(!connectingAsClient)	//Is server
-			success = handleConnectByServer(player, compRef, computer, otherPlayer);
-		else success = handleConnectByClient(player, compRef, computer, otherPlayer);
+		ComputerReference serverReference = openedServers.remove(server);
 		
-		if(success)
+		if(serverReference != null)
 		{
-			updateAll();
+			ISburbComputer serverComputer = serverReference.getComputer(mcServer);
+			if(serverComputer == null)
+			{
+				LOGGER.error("Tried to connect to {}, but the waiting computer was not found.",
+						server.getUsername());
+				return;
+			}
+			
+			Optional<SburbConnection> optional = getMainConnection(player, true);
+			if(optional.isPresent())
+			{
+				SburbConnection connection = optional.get();
+				if(connection.getServerIdentifier().equals(server))
+				{
+					connection.setActive(reference, serverReference);
+					
+					computer.connected(server, true);
+					serverComputer.connected(player, false);
+					
+					MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(mcServer, connection, sessionHandler.getPlayerSession(player),
+							ConnectionCreatedEvent.ConnectionType.RESUME, ConnectionCreatedEvent.SessionJoinType.INTERNAL));
+				} else if(!connection.hasServerPlayer())
+				{
+					Session s1 = sessionHandler.getPlayerSession(player), s2 = sessionHandler.getPlayerSession(server);
+					ConnectionCreatedEvent.SessionJoinType joinType = s1 == null || s2 == null ? ConnectionCreatedEvent.SessionJoinType.JOIN
+							: s1 == s2 ? ConnectionCreatedEvent.SessionJoinType.INTERNAL : ConnectionCreatedEvent.SessionJoinType.MERGE;
+					
+					connection.setNewServerPlayer(server);
+					try
+					{
+						sessionHandler.onConnectionCreated(connection);    //TODO the function does the checks we want, but is not too relevant. Make a more appropriate function call (or perhaps we get there through further restructuring)
+						connection.setActive(reference, serverReference);
+						
+						computer.connected(server, true);
+						serverComputer.connected(player, false);
+						
+						MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(mcServer, connection, sessionHandler.getPlayerSession(player),
+								ConnectionCreatedEvent.ConnectionType.NEW_SERVER, joinType));
+					} catch(MergeResult.SessionMergeException e)
+					{
+						LOGGER.warn("SessionHandler denied connection between {} and {}, reason: {}", player.getUsername(), server.getUsername(), e.getMessage());
+						computer.putClientMessage(e.getResult().translationKey());
+						connection.removeServerPlayer();
+						openedServers.put(server, serverReference);
+					}
+				} else
+				{
+					SburbConnection newConnection = new SburbConnection(player, server, this);
+					newConnection.setActive(reference, serverReference);
+					newConnection.copyFrom(connection);
+					
+					try
+					{
+						sessionHandler.onConnectionCreated(newConnection);
+						
+						computer.connected(server, true);
+						serverComputer.connected(player, false);
+						
+						MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(mcServer, newConnection, sessionHandler.getPlayerSession(player),
+								ConnectionCreatedEvent.ConnectionType.SECONDARY, ConnectionCreatedEvent.SessionJoinType.INTERNAL));
+					} catch(MergeResult.SessionMergeException e)
+					{
+						LOGGER.warn("SessionHandler denied connection between {} and {}, reason: {}", player.getUsername(), server.getUsername(), e.getMessage());
+						computer.putClientMessage(e.getResult().translationKey());
+						openedServers.put(server, serverReference);
+					}
+				}
+			} else
+			{
+				//TODO session join type is better gotten from the session handler in connection to its check
+				Session s1 = sessionHandler.getPlayerSession(player), s2 = sessionHandler.getPlayerSession(server);
+				ConnectionCreatedEvent.SessionJoinType joinType = s1 == null || s2 == null ? ConnectionCreatedEvent.SessionJoinType.JOIN
+						: s1 == s2 ? ConnectionCreatedEvent.SessionJoinType.INTERNAL : ConnectionCreatedEvent.SessionJoinType.MERGE;
+				
+				SburbConnection newConnection = new SburbConnection(player, server, this);
+				newConnection.setActive(reference, serverReference);
+				
+				try
+				{
+					sessionHandler.onConnectionCreated(newConnection);
+					SburbHandler.onConnectionCreated(newConnection);
+					
+					computer.connected(server, true);
+					serverComputer.connected(player, false);
+					
+					MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(mcServer, newConnection, sessionHandler.getPlayerSession(player),
+							ConnectionCreatedEvent.ConnectionType.REGULAR, joinType));
+				} catch(MergeResult.SessionMergeException e)
+				{
+					LOGGER.warn("SessionHandler denied connection between {} and {}, reason: {}", player.getUsername(), server.getUsername(), e.getMessage());
+					computer.putClientMessage(e.getResult().translationKey());
+					openedServers.put(server, serverReference);
+				}
+			}
 		}
 	}
 	
-	private boolean handleConnectByClient(PlayerIdentifier player, ComputerReference compRef, ISburbComputer computer, PlayerIdentifier otherPlayer)
+	public void resumeConnection(ISburbComputer computer, boolean isClient)
 	{
-		if(getActiveConnection(player) != null || resumingClients.containsKey(player))
-			return false;
-		PlayerIdentifier p = getAssociatedPartner(player, true);
-		if(p != null && (otherPlayer == null || p.equals(otherPlayer)))	//If trying to connect to the associated partner
-		{
-			if(resumingServers.containsKey(p))	//If server is "resuming".
-				connectTo(player, compRef, true, p, resumingServers);
-			else if(openedServers.containsKey(p))	//If server is normally open.
-				connectTo(player, compRef, true, p, openedServers);
-			else	//If server isn't open
-			{
-				computer.putClientBoolean("isResuming", true);
-				resumingClients.put(player, compRef);
-			}
-		}
-		else if(openedServers.containsKey(otherPlayer))	//If the server is open.
-			connectTo(player, compRef, true, otherPlayer, openedServers);
-		else return false;
+		PlayerIdentifier player = computer.getOwner();
+		ComputerReference reference = computer.createReference();
+		if(reference.isInNether() || isConnectingBlocked(player, isClient))
+			return;
+		Optional<SburbConnection> optional = getMainConnection(player, isClient);
 		
-		return true;
+		optional.ifPresent(connection -> {
+			PlayerIdentifier otherPlayer = isClient ? connection.getServerIdentifier() : connection.getClientIdentifier();
+			ComputerReference otherReference = getResumeMap(!isClient).remove(otherPlayer);
+			
+			if(isClient && otherReference == null)
+				otherReference = openedServers.remove(player);
+			
+			if(otherReference != null)
+			{
+				ISburbComputer otherComputer = otherReference.getComputer(mcServer);
+				if(otherComputer == null)
+				{
+					LOGGER.error("Tried to resume connection, between {} and {}, but the waiting computer was not found.",
+							connection.getClientIdentifier().getUsername(), connection.getServerIdentifier().getUsername());
+					return;
+				}
+				
+				if(isClient)
+					connection.setActive(reference, otherReference);
+				else connection.setActive(otherReference, reference);
+				
+				computer.connected(otherPlayer, isClient);
+				otherComputer.connected(player, !isClient);
+				
+				MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(mcServer, connection, sessionHandler.getPlayerSession(player),
+						ConnectionCreatedEvent.ConnectionType.RESUME, ConnectionCreatedEvent.SessionJoinType.INTERNAL));
+			} else
+			{
+				getResumeMap(isClient).put(player, reference);
+				computer.setIsResuming(isClient);
+			}
+		});
 	}
 	
-	private boolean handleConnectByServer(PlayerIdentifier player, ComputerReference compRef, ISburbComputer computer, PlayerIdentifier otherPlayer)
+	public void openServer(ISburbComputer computer)
 	{
-		if(openedServers.containsKey(player) || resumingServers.containsKey(player))
-			return false;
-		if(otherPlayer == null)	//Wants to open
-		{
-			if(resumingClients.containsKey(getAssociatedPartner(player, false)))
-				connectTo(player, compRef, false, getAssociatedPartner(player, false), resumingClients);
-			else
-			{
-				computer.putServerBoolean("isOpen", true);
-				openedServers.put(player, compRef);
-			}
-		}
-		else if(otherPlayer.equals(getAssociatedPartner(player, false)))	//Wants to resume
-		{
-			if(resumingClients.containsKey(otherPlayer))	//The client is already waiting
-				connectTo(player, compRef, false, otherPlayer, resumingClients);
-			else	//Client is not currently trying to resume
-			{
-				computer.putServerBoolean("isOpen", true);
-				resumingServers.put(player, compRef);
-			}
-		}
-		else return false;
+		PlayerIdentifier player = computer.getOwner();
+		ComputerReference reference = computer.createReference();
+		if(reference.isInNether() || isConnectingBlocked(player, false))
+			return;
 		
-		return true;
+		Optional<SburbConnection> optional = getMainConnection(player, false);
+		if(optional.isPresent() && resumingClients.containsKey(optional.get().getClientIdentifier()))
+		{
+			SburbConnection connection = optional.get();
+			ComputerReference clientReference = resumingClients.remove(connection.getClientIdentifier());
+			ISburbComputer clientComputer = clientReference.getComputer(mcServer);
+			if(clientComputer == null)
+			{
+				LOGGER.error("Tried to resume connection, between {} and {}, but the waiting computer was not found.",
+						connection.getClientIdentifier().getUsername(), player.getUsername());
+				return;
+			}
+			
+			connection.setActive(clientReference, reference);
+			
+			computer.connected(connection.getClientIdentifier(), false);
+			clientComputer.connected(player, true);
+			
+			MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(mcServer, connection, sessionHandler.getPlayerSession(player),
+					ConnectionCreatedEvent.ConnectionType.RESUME, ConnectionCreatedEvent.SessionJoinType.INTERNAL));
+		} else
+		{
+			computer.putServerBoolean("isOpen", true);
+			openedServers.put(player, reference);
+		}
+	}
+	
+	private boolean isConnectingBlocked(PlayerIdentifier player, boolean isClient)
+	{
+		if(isClient)
+			return getActiveConnection(player) != null || resumingClients.containsKey(player);
+		else return openedServers.containsKey(player) || resumingServers.containsKey(player);
+	}
+	
+	private Map<PlayerIdentifier, ComputerReference> getResumeMap(boolean isClient)
+	{
+		return isClient ? resumingClients : resumingServers;
 	}
 	
 	public void closeClientConnectionRemotely(PlayerIdentifier player)
@@ -261,87 +375,6 @@ public final class SkaianetHandler
 		MinecraftForge.EVENT_BUS.post(new ConnectionClosedEvent(mcServer, connection, sessionHandler.getPlayerSession(connection.getClientIdentifier()), type));
 		
 		updateAll();
-	}
-	
-	private void connectTo(PlayerIdentifier player, ComputerReference computer, boolean isClient, PlayerIdentifier otherPlayer, Map<PlayerIdentifier, ComputerReference> map)
-	{
-		ISburbComputer c1 = computer.getComputer(mcServer), c2 = map.get(otherPlayer).getComputer(mcServer);
-		if(c2 == null)
-		{
-			map.remove(otherPlayer);	//Invalid, should not be in the list
-			return;
-		}
-		if(c1 == null)
-			return;
-		SburbConnection c;
-		boolean newConnection = false;	//True if new, false if resuming.
-		if(isClient)
-		{
-			c = getConnection(player, otherPlayer);
-			if(c == null)
-			{
-				c = new SburbConnection(player, otherPlayer, this);
-				newConnection = true;
-			}
-			
-			c.setActive(computer, map.remove(otherPlayer));
-		} else
-		{
-			c = getConnection(otherPlayer, player);
-			if(c == null)
-				return;	//A server should only be able to resume
-			
-			c.setActive(map.remove(otherPlayer), computer);
-		}
-		
-		//Get session type for event
-		Session s1 = sessionHandler.getPlayerSession(c.getClientIdentifier()), s2 = sessionHandler.getPlayerSession(c.getServerIdentifier());
-		ConnectionCreatedEvent.SessionJoinType joinType = s1 == null || s2 == null ? ConnectionCreatedEvent.SessionJoinType.JOIN
-				: s1 == s2 ? ConnectionCreatedEvent.SessionJoinType.INTERNAL : ConnectionCreatedEvent.SessionJoinType.MERGE;
-		ConnectionCreatedEvent.ConnectionType type = ConnectionCreatedEvent.ConnectionType.REGULAR;
-		
-		boolean updateLandChain = false;
-		if(newConnection)
-		{
-			Optional<SburbConnection> conn = getMainConnection(c.getClientIdentifier(), true);
-			if(conn.isPresent() && !conn.get().hasServerPlayer() && !getMainConnection(c.getServerIdentifier(), false).isPresent())
-			{
-				conn.get().setNewServerPlayer(c.getServerIdentifier());
-				conn.get().setActive(c.getClientComputer(), c.getServerComputer());
-				c = conn.get();
-				type = ConnectionCreatedEvent.ConnectionType.RESUME;
-				updateLandChain = true;
-			} else
-			{
-				try
-				{
-					sessionHandler.onConnectionCreated(c);
-				} catch(MergeResult.SessionMergeException e)
-				{
-					LOGGER.warn("SessionHandler denied connection between {} and {}, reason: {}", c.getClientIdentifier().getUsername(), c.getServerIdentifier().getUsername(), e.getMessage());
-					ISburbComputer cComp = c.getClientComputer().getComputer(mcServer);
-					if(cComp != null)
-						cComp.putClientMessage(e.getResult().translationKey());
-					map.put(c.getServerIdentifier(), c.getServerComputer());
-					return;
-				
-				}
-				SburbHandler.onConnectionCreated(c);
-				
-				if(conn.isPresent())
-				{
-					c.copyFrom(conn.get());
-					type = ConnectionCreatedEvent.ConnectionType.SECONDARY;
-				}
-			}
-		} else type = ConnectionCreatedEvent.ConnectionType.RESUME;
-		
-		c1.connected(otherPlayer, isClient);
-		c2.connected(player, !isClient);
-		
-		MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(mcServer, c, sessionHandler.getPlayerSession(c.getClientIdentifier()), type, joinType));
-		if(updateLandChain)
-			infoTracker.reloadLandChains();
 	}
 	
 	public void requestInfo(ServerPlayerEntity player, PlayerIdentifier p1)

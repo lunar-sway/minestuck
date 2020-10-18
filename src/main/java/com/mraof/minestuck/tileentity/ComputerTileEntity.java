@@ -2,6 +2,7 @@ package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.ComputerScreen;
+import com.mraof.minestuck.computer.ComputerReference;
 import com.mraof.minestuck.computer.ISburbComputer;
 import com.mraof.minestuck.computer.ProgramData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
@@ -177,6 +178,12 @@ public class ComputerTileEntity extends TileEntity implements ISburbComputer
 	public PlayerIdentifier getOwner()
 	{
 		return owner;
+	}
+	
+	@Override
+	public ComputerReference createReference()
+	{
+		return ComputerReference.of(this);
 	}
 	
 	@Override
