@@ -3,7 +3,6 @@ package com.mraof.minestuck.network;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 
 /**
@@ -16,19 +15,19 @@ import net.minecraft.util.math.BlockPos;
  */
 public class ClearMessagePacket implements PlayToServerPacket
 {
-	private final BlockPos computer;
+	private final BlockPos pos;
 	private final int program;
 	
-	public ClearMessagePacket(BlockPos computer, int program)
+	public ClearMessagePacket(BlockPos pos, int program)
 	{
-		this.computer = computer;
+		this.pos = pos;
 		this.program = program;
 	}
 	
 	@Override
 	public void encode(PacketBuffer buffer)
 	{
-		buffer.writeBlockPos(computer);
+		buffer.writeBlockPos(pos);
 		buffer.writeInt(program);
 	}
 	
@@ -43,17 +42,9 @@ public class ClearMessagePacket implements PlayToServerPacket
 	@Override
 	public void execute(ServerPlayerEntity player)
 	{
-	
-		if(player.getEntityWorld().isAreaLoaded(computer, 0))
-		{
-			TileEntity te = player.getEntityWorld().getTileEntity(computer);
-			if(te instanceof ComputerTileEntity)
-			{
-				ComputerTileEntity computerTE = (ComputerTileEntity) te;
-				
-				computerTE.latestmessage.put(program, "");
-				computerTE.markBlockForUpdate();
-			}
-		}
+		ComputerTileEntity.forNetworkIfPresent(player, pos, computer -> {
+			computer.latestmessage.put(program, "");
+			computer.markBlockForUpdate();
+		});
 	}
 }

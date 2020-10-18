@@ -308,8 +308,6 @@ public class EntryProcess
 			
 			player.setPositionAndUpdate(player.getPosX() + xDiff, player.getPosY() + yDiff, player.getPosZ() + zDiff);
 			
-			SkaianetHandler.get(worldserver0).clearMovingList();
-			
 			//Remove entities that were generated in the process of teleporting entities and removing blocks.
 			// This is usually caused by "anchored" blocks being updated between the removal of their anchor and their own removal.
 			if(!creative || MinestuckConfig.SERVER.entryCrater.get())

@@ -60,13 +60,13 @@ public final class CommandActionHandler
 		{
 			SburbConnection serverConnection = cs.get();
 			if(serverConnection.isActive())
-				skaianet.closeConnection(server, serverConnection.getClientIdentifier(), false);
+				skaianet.closeConnection(serverConnection);
 			serverConnection.removeServerPlayer();
 			updateLandChain = serverConnection.hasEntered();
 		}
 		
 		if(cc.isPresent() && cc.get().isActive())
-			skaianet.closeConnection(client, cc.get().getServerIdentifier(), true);
+			skaianet.closeConnection(cc.get());
 		
 		SburbConnection connection = skaianet.getConnection(client, server);
 		if(!cc.isPresent())
@@ -116,14 +116,14 @@ public final class CommandActionHandler
 			throw DebugLandsCommand.MUST_ENTER_EXCEPTION.create();
 		SburbConnection clientConnection = cc.get();
 		if(clientConnection.isActive())
-			skaianet.closeConnection(identifier, clientConnection.getServerIdentifier(), true);
+			skaianet.closeConnection(clientConnection);
 		
 		Optional<SburbConnection> cs = skaianet.getMainConnection(identifier, false);
 		if(cs.isPresent())
 		{
 			SburbConnection serverConnection = cs.get();
 			if(serverConnection.isActive())
-				skaianet.closeConnection(identifier, serverConnection.getClientIdentifier(), false);
+				skaianet.closeConnection(clientConnection);
 			serverConnection.removeServerPlayer();
 			source.sendFeedback(new StringTextComponent(identifier.getUsername()+"'s old client player "+serverConnection.getClientIdentifier().getUsername()+" is now without a server player.").setStyle(new Style().setColor(TextFormatting.YELLOW)), true);
 		}

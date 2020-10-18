@@ -36,7 +36,8 @@ public class MSPacketHandler
 		registerMessage(ColorSelectPacket.class, ColorSelectPacket::decode);
 		registerMessage(TitleSelectPacket.class, TitleSelectPacket::decode);
 		registerMessage(SburbConnectPacket.class, SburbConnectPacket::decode);
-		registerMessage(SburbConnectClosedPacket.class, SburbConnectClosedPacket::decode);
+		registerMessage(CloseSburbConnectionPacket.class, CloseSburbConnectionPacket::decode);
+		registerMessage(CloseRemoteSburbConnectionPacket.class, CloseRemoteSburbConnectionPacket::decode);
 		registerMessage(ClearMessagePacket.class, ClearMessagePacket::decode);
 		registerMessage(SkaianetInfoPacket.class, SkaianetInfoPacket::decode);
 		registerMessage(DataCheckerPacket.class, DataCheckerPacket::decode);

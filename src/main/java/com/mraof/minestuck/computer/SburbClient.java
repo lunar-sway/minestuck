@@ -1,6 +1,9 @@
 package com.mraof.minestuck.computer;
 
 import com.mraof.minestuck.client.gui.ColorSelectorScreen;
+import com.mraof.minestuck.network.CloseRemoteSburbConnectionPacket;
+import com.mraof.minestuck.network.CloseSburbConnectionPacket;
+import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.skaianet.client.ReducedConnection;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
@@ -64,8 +67,10 @@ public class SburbClient extends ButtonListProgram
 			SkaiaClient.sendConnectRequest(te, (Integer) data[1], true);
 		else if(buttonName.equals(CLOSE_BUTTON))
 		{
-			ReducedConnection c = SkaiaClient.getClientConnection(te.ownerId);
-			SkaiaClient.sendCloseRequest(te, te.getData(getId()).getBoolean("isResuming") || c == null ? -1 : c.getServerId(), true);
+			CompoundNBT nbt = te.getData(getId());
+			if(!nbt.getBoolean("isResuming") && !nbt.getBoolean("connectedToServer"))
+				MSPacketHandler.sendToServer(CloseRemoteSburbConnectionPacket.asClient(te));
+			else MSPacketHandler.sendToServer(CloseSburbConnectionPacket.asClient(te));
 		} else if(buttonName.equals(SELECT_COLOR))
 			Minecraft.getInstance().displayGuiScreen(new ColorSelectorScreen(false));
 	}

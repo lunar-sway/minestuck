@@ -2,6 +2,7 @@ package com.mraof.minestuck.computer;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.network.ClientEditPacket;
+import com.mraof.minestuck.network.CloseSburbConnectionPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.skaianet.client.ReducedConnection;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
@@ -70,7 +71,7 @@ public class SburbServer extends ButtonListProgram
 				SkaiaClient.sendConnectRequest(te, -1, false);
 				break;
 			case CLOSE_BUTTON:
-				SkaiaClient.sendCloseRequest(te, te.getData(getId()).getBoolean("isOpen") ? -1 : te.getData(getId()).getInt("connectedClient"), false);
+				MSPacketHandler.sendToServer(CloseSburbConnectionPacket.asServer(te));
 				break;
 		}
 	}

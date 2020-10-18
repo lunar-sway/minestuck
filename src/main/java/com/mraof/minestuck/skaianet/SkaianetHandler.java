@@ -44,7 +44,6 @@ public final class SkaianetHandler
 	final Map<PlayerIdentifier, ComputerReference> openedServers = new HashMap<>();
 	private final Map<PlayerIdentifier, ComputerReference> resumingClients = new HashMap<>();
 	private final Map<PlayerIdentifier, ComputerReference> resumingServers = new HashMap<>();
-	private final List<ComputerReference> movingComputers = new ArrayList<>();
 	final SessionHandler sessionHandler;
 	final InfoTracker infoTracker = new InfoTracker(this);
 	
@@ -171,81 +170,96 @@ public final class SkaianetHandler
 		return true;
 	}
 	
-	public void closeConnection(PlayerIdentifier player, PlayerIdentifier otherPlayer, boolean isClient)
+	public void closeClientConnectionRemotely(PlayerIdentifier player)
 	{
-		if(otherPlayer == null)
+		if(resumingClients.containsKey(player))
 		{
-			if(isClient)
+			ISburbComputer computer = resumingClients.remove(player).getComputer(mcServer);
+			if(computer != null)
 			{
-				if(movingComputers.contains(resumingClients.get(player)))
-					return;
-				ISburbComputer computer = resumingClients.remove(player).getComputer(mcServer);
-				if(computer != null)
-				{
-					computer.putClientBoolean("isResuming", false);
-					computer.putClientMessage(STOP_RESUME);
-				}
-			} else if(openedServers.containsKey(player))
+				computer.putClientBoolean("isResuming", false);
+				computer.putClientMessage(STOP_RESUME);
+				updateAll();
+			}
+		} else
+		{
+			SburbConnection activeConnection = getActiveConnection(player);
+			if(activeConnection != null)
+				closeConnection(activeConnection);
+		}
+	}
+	
+	public void closeClientConnection(ISburbComputer computer)
+	{
+		PlayerIdentifier owner = computer.getOwner();
+		if(resumingClients.containsKey(owner) && resumingClients.get(owner).matches(computer))
+		{
+			resumingClients.remove(owner);
+			computer.putClientBoolean("isResuming", false);
+			computer.putClientMessage(STOP_RESUME);
+			updateAll();
+		} else
+		{
+			SburbConnection activeConnection = getActiveConnection(owner);
+			if(activeConnection != null && activeConnection.isClient(computer))
 			{
-				if(movingComputers.contains(openedServers.get(player)))
-					return;
-				ISburbComputer computer = openedServers.remove(player).getComputer(mcServer);
-				if(computer != null)
-				{
-					computer.putServerBoolean("isOpen", false);
-					computer.putServerMessage(CLOSED_SERVER);
-				}
-			} else if(resumingServers.containsKey(player))
-			{
-				if(movingComputers.contains(resumingServers.get(player)))
-					return;
-				ISburbComputer computer = resumingServers.remove(player).getComputer(mcServer);
-				if(computer != null)
-				{
-					computer.putServerBoolean("isOpen", false);
-					computer.putServerMessage(STOP_RESUME);
-				}
-			} else LOGGER.warn("[SKAIANET] Got disconnect request but server is not open! "+player);
-		} else {
-			SburbConnection c = isClient?getConnection(player, otherPlayer):getConnection(otherPlayer, player);
-			if(c != null)
-			{
-				if(c.isActive())
-				{
-					if(movingComputers.contains(isClient ? c.getClientComputer() : c.getServerComputer()))
-						return;
-					ISburbComputer cc = c.getClientComputer().getComputer(mcServer), sc = c.getServerComputer().getComputer(mcServer);
-					if(cc != null)
-					{
-						cc.putClientBoolean("connectedToServer", false);
-						cc.putClientMessage(CLOSED);
-					}
-					if(sc != null)
-					{
-						sc.clearConnectedClient();
-						sc.putServerMessage(CLOSED);
-					}
-					sessionHandler.onConnectionClosed(c, true);
-					
-					c.close();
-					
-					ConnectionCreatedEvent.ConnectionType type = !c.isMain() && getMainConnection(c.getClientIdentifier(), true).isPresent()
-							? ConnectionCreatedEvent.ConnectionType.SECONDARY : ConnectionCreatedEvent.ConnectionType.REGULAR;
-					MinecraftForge.EVENT_BUS.post(new ConnectionClosedEvent(mcServer, c, sessionHandler.getPlayerSession(c.getClientIdentifier()), type));
-				} else if(otherPlayer.equals(getAssociatedPartner(player, isClient)))
-				{
-					if(movingComputers.contains(isClient?resumingClients.get(player):resumingServers.get(player)))
-						return;
-					ISburbComputer computer = (isClient?resumingClients:resumingServers).remove(player).getComputer(mcServer);
-					if(computer != null)
-					{
-						if(isClient)
-							computer.putClientMessage(STOP_RESUME);
-						else computer.putServerMessage(STOP_RESUME);
-					}
-				}
+				closeConnection(activeConnection, computer, activeConnection.getServerComputer().getComputer(mcServer));
 			}
 		}
+	}
+	
+	public void closeServerConnection(ISburbComputer computer)
+	{
+		checkAndCloseFromServerList(computer, openedServers);
+		checkAndCloseFromServerList(computer, resumingServers);
+		
+		SburbConnection connection = getServerConnection(computer);
+		
+		if(connection != null)
+		{
+			closeConnection(connection, connection.getClientComputer().getComputer(mcServer), computer);
+		}
+	}
+	
+	private void checkAndCloseFromServerList(ISburbComputer computer, Map<PlayerIdentifier, ComputerReference> map)
+	{
+		PlayerIdentifier owner = computer.getOwner();
+		if(map.containsKey(owner) && map.get(owner).matches(computer))
+		{
+			map.remove(owner);
+			computer.putServerBoolean("isOpen", false);
+			computer.putServerMessage(STOP_RESUME);
+			updateAll();
+		}
+	}
+	
+	void closeConnection(SburbConnection connection)
+	{
+		closeConnection(connection, connection.getClientComputer().getComputer(mcServer),
+				connection.getServerComputer().getComputer(mcServer));
+	}
+	
+	private void closeConnection(SburbConnection connection, ISburbComputer clientComputer, ISburbComputer serverComputer)
+	{
+		if(clientComputer != null)
+		{
+			clientComputer.putClientBoolean("connectedToServer", false);
+			clientComputer.putClientMessage(CLOSED);
+		}
+		if(serverComputer != null)
+		{
+			serverComputer.clearConnectedClient();
+			serverComputer.putServerMessage(CLOSED);
+		}
+		
+		sessionHandler.onConnectionClosed(connection, true);
+		
+		connection.close();
+		
+		ConnectionCreatedEvent.ConnectionType type = !connection.isMain() && getMainConnection(connection.getClientIdentifier(), true).isPresent()
+				? ConnectionCreatedEvent.ConnectionType.SECONDARY : ConnectionCreatedEvent.ConnectionType.REGULAR;
+		MinecraftForge.EVENT_BUS.post(new ConnectionClosedEvent(mcServer, connection, sessionHandler.getPlayerSession(connection.getClientIdentifier()), type));
+		
 		updateAll();
 	}
 	
@@ -523,13 +537,6 @@ public final class SkaianetHandler
 		resumingClients.replace(oldTE.owner, oldRef, newRef);
 		resumingServers.replace(oldTE.owner, oldRef, newRef);
 		openedServers.replace(oldTE.owner, oldRef, newRef);
-		
-		movingComputers.add(newRef);
-	}
-	
-	public void clearMovingList()
-	{
-		movingComputers.clear();
 	}
 	
 	public static SkaianetHandler get(World world)

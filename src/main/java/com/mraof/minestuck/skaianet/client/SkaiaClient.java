@@ -4,7 +4,6 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.ComputerScreen;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.network.SburbConnectClosedPacket;
 import com.mraof.minestuck.network.SburbConnectPacket;
 import com.mraof.minestuck.network.SkaianetInfoPacket;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
@@ -130,12 +129,6 @@ public class SkaiaClient
 	public static void sendConnectRequest(ComputerTileEntity te, int otherPlayer, boolean isClient)	//Used for both connect, open server and resume
 	{
 		SburbConnectPacket packet = new SburbConnectPacket(te.getPos(), otherPlayer, isClient);
-		MSPacketHandler.sendToServer(packet);
-	}
-	
-	public static void sendCloseRequest(ComputerTileEntity te, int otherPlayer, boolean isClient)
-	{
-		SburbConnectClosedPacket packet = new SburbConnectClosedPacket(te.ownerId, otherPlayer, isClient);
 		MSPacketHandler.sendToServer(packet);
 	}
 	
