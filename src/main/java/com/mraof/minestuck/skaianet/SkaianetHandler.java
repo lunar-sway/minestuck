@@ -241,6 +241,10 @@ public final class SkaianetHandler
 	
 	private void closeConnection(SburbConnection connection, ISburbComputer clientComputer, ISburbComputer serverComputer)
 	{
+		sessionHandler.onConnectionClosed(connection, true);
+		
+		connection.close();
+		
 		if(clientComputer != null)
 		{
 			clientComputer.putClientBoolean("connectedToServer", false);
@@ -251,10 +255,6 @@ public final class SkaianetHandler
 			serverComputer.clearConnectedClient();
 			serverComputer.putServerMessage(CLOSED);
 		}
-		
-		sessionHandler.onConnectionClosed(connection, true);
-		
-		connection.close();
 		
 		ConnectionCreatedEvent.ConnectionType type = !connection.isMain() && getMainConnection(connection.getClientIdentifier(), true).isPresent()
 				? ConnectionCreatedEvent.ConnectionType.SECONDARY : ConnectionCreatedEvent.ConnectionType.REGULAR;
@@ -409,21 +409,7 @@ public final class SkaianetHandler
 						|| !c.getServerIdentifier().equals(sc.getOwner()) || !cc.getClientBoolean("connectedToServer"))
 				{
 					LOGGER.warn("[SKAIANET] Invalid computer in connection between {} and {}.", c.getClientIdentifier(), c.getServerIdentifier());
-					c.close();
-					sessionHandler.onConnectionClosed(c, true);
-					
-					if(cc != null)
-					{
-						cc.putClientBoolean("connectedToServer", false);
-						cc.putClientMessage(CLOSED);
-					} else if(sc != null)
-					{
-						sc.putServerMessage(CLOSED);
-					}
-					
-					ConnectionCreatedEvent.ConnectionType type = !c.isMain() && getMainConnection(c.getClientIdentifier(), true).isPresent()
-							? ConnectionCreatedEvent.ConnectionType.SECONDARY : ConnectionCreatedEvent.ConnectionType.REGULAR;
-					MinecraftForge.EVENT_BUS.post(new ConnectionClosedEvent(mcServer, c, sessionHandler.getPlayerSession(c.getClientIdentifier()), type));
+					closeConnection(c, cc, sc);
 				}
 			}
 		});
