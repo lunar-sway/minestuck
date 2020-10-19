@@ -31,7 +31,9 @@ public final class InfoTracker
 {
 	private final SkaianetHandler skaianet;
 	
-	private final Map<PlayerIdentifier, Set<PlayerIdentifier>> infoToSend = new HashMap<>();	//Key: player, value: data to send to player
+	private final Map<PlayerIdentifier, Set<PlayerIdentifier>> listenerMap = new HashMap<>();
+	private final Set<PlayerIdentifier> toUpdate = new HashSet<>();
+	private final Map<PlayerIdentifier, Set<Integer>> openedServersCache = new HashMap<>();
 	/**
 	 * Chains of lands to be used by the skybox render
 	 */
@@ -52,12 +54,28 @@ public final class InfoTracker
 		}
 	}
 	
+	@SubscribeEvent
+	public static void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event)
+	{
+		if(event.getPlayer() instanceof ServerPlayerEntity)
+		{
+			ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
+			PlayerIdentifier identifier = Objects.requireNonNull(IdentifierHandler.encode(player));
+			SkaianetHandler.get(player.server).infoTracker.listenerMap.values().forEach(set -> set.removeIf(identifier::equals));
+		}
+	}
+	
 	private void onPlayerLoggedIn(ServerPlayerEntity player)
 	{
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
-		infoToSend.put(identifier, new HashSet<>(Collections.singleton(identifier)));
+		getSet(identifier).add(identifier);
 		sendConnectionInfo(identifier);
 		MSPacketHandler.sendToPlayer(createLandChainPacket(), player);
+	}
+	
+	private Set<PlayerIdentifier> getSet(PlayerIdentifier identifier)
+	{
+		return listenerMap.computeIfAbsent(identifier, ignored -> new HashSet<>());
 	}
 	
 	void requestInfo(ServerPlayerEntity player, PlayerIdentifier p1)
@@ -66,26 +84,18 @@ public final class InfoTracker
 		if(p0 == null)
 			return;
 		
-		Set<PlayerIdentifier> s = infoToSend.get(p0);
-		if(s == null)
-		{
-			Debug.error("[SKAIANET] Something went wrong with player \"" + player.getName() + "\"'s skaianet data!");
-			return;
-		}
-		
-		if(MinestuckConfig.SERVER.privateComputers.get() && !p0.equals(p1) && !player.hasPermissionLevel(2))
+		if(cannotAccess(player, p1))
 		{
 			player.sendMessage(new StringTextComponent("[Minestuck] ").setStyle(new Style().setColor(TextFormatting.RED)).appendSibling(new TranslationTextComponent(SkaianetHandler.PRIVATE_COMPUTER)));
 			return;
 		}
-		if(!s.add(p1))
+		if(!getSet(p1).add(p0))
 		{
 			Debug.warnf("[Skaianet] Player %s already got the requested data.", player.getName());
-			sendConnectionInfo(p0);	//Update anyway, to fix whatever went wrong
-			return;
 		}
 		
-		sendConnectionInfo(p0);
+		SkaianetInfoPacket packet = generateClientInfoPacket(p1);
+		MSPacketHandler.sendToPlayer(packet, player);
 	}
 	
 	
@@ -152,29 +162,53 @@ public final class InfoTracker
 		MSPacketHandler.sendToAll(createLandChainPacket());
 	}
 	
-	void sendInfoToAll()
+	void markDirty(PlayerIdentifier player)
 	{
-		for(PlayerIdentifier i : infoToSend.keySet())
-			sendConnectionInfo(i);
+		toUpdate.add(player);
 	}
 	
-	void sendConnectionInfo(PlayerIdentifier player)
+	void markDirty(SburbConnection connection)
 	{
-		Set<PlayerIdentifier> iden = infoToSend.get(player);
-		ServerPlayerEntity playerMP = player.getPlayer(skaianet.mcServer);
-		if(iden == null || playerMP == null)//If the player disconnected
-			return;
+		markDirty(connection.getClientIdentifier());
+		if(connection.hasServerPlayer())
+			markDirty(connection.getServerIdentifier());
+	}
+	
+	void checkAndSend()
+	{
+		checkListeners();
 		
-		//Trigger advancement if there is an active connection that the player is in
-		skaianet.sessionHandler.getConnectionStream().filter(SburbConnection::isActive).filter(c -> c.hasPlayer(player))
-				.findAny().ifPresent(c -> MSCriteriaTriggers.SBURB_CONNECTION.trigger(playerMP));
-		
-		for(PlayerIdentifier i : iden)
+		for(Map.Entry<PlayerIdentifier, Set<Integer>> entry : openedServersCache.entrySet())
 		{
-			if(i != null)
+			if(!entry.getValue().equals(skaianet.sessionHandler.getServerList(entry.getKey()).keySet()))
+				markDirty(entry.getKey());
+		}
+		
+		for(PlayerIdentifier identifier : toUpdate)
+		{
+			sendConnectionInfo(identifier);
+		}
+		toUpdate.clear();
+	}
+	
+	private void sendConnectionInfo(PlayerIdentifier player)
+	{
+		SkaianetInfoPacket packet = generateClientInfoPacket(player);
+		
+		for(PlayerIdentifier listener : getSet(player))
+		{
+			ServerPlayerEntity playerListener = listener.getPlayer(skaianet.mcServer);
+			
+			if(playerListener != null)
 			{
-				SkaianetInfoPacket packet = generateClientInfoPacket(i);
-				MSPacketHandler.sendToPlayer(packet, playerMP);
+				if(player.equals(listener))
+				{
+					//Trigger advancement if there is an active connection that the player is in
+					skaianet.sessionHandler.getConnectionStream().filter(SburbConnection::isActive).filter(c -> c.hasPlayer(player))
+							.findAny().ifPresent(c -> MSCriteriaTriggers.SBURB_CONNECTION.trigger(playerListener));
+				}
+				
+				MSPacketHandler.sendToPlayer(packet, playerListener);
 			}
 		}
 	}
@@ -185,6 +219,7 @@ public final class InfoTracker
 		boolean serverResuming = skaianet.hasResumingServer(player);
 		
 		Map<Integer, String> serverMap = skaianet.sessionHandler.getServerList(player);
+		openedServersCache.put(player, serverMap.keySet());
 		
 		// create list with all connections that the player is in
 		List<SburbConnection> list = skaianet.sessionHandler.getConnectionStream().filter(c -> c.hasPlayer(player)).collect(Collectors.toList());
@@ -192,26 +227,14 @@ public final class InfoTracker
 		return SkaianetInfoPacket.update(player.getId(), clientResuming, serverResuming, serverMap, list);
 	}
 	
-	void checkData()
+	private void checkListeners()
 	{
-		Iterator<PlayerIdentifier> iter0 = infoToSend.keySet().iterator();
-		while(iter0.hasNext())
-			if(iter0.next().getPlayer(skaianet.mcServer) == null)
-			{
-				Debug.warn("[SKAIANET] Player disconnected, removing data.");
-				iter0.remove();
-			}
-		
-		if(MinestuckConfig.SERVER.privateComputers.get())
-		{
-			for(Map.Entry<PlayerIdentifier, Set<PlayerIdentifier>> entry : infoToSend.entrySet())
-			{
-				ServerPlayerEntity player = entry.getKey().getPlayer(skaianet.mcServer);
-				if(player != null && player.hasPermissionLevel(2))
-					continue;
-				
-				entry.getValue().removeIf(identifier -> !identifier.equals(entry.getKey()));
-			}
-		}
+		listenerMap.forEach((identifier, set) -> set.removeIf(listener -> cannotAccess(listener.getPlayer(skaianet.mcServer), identifier)));
+	}
+	
+	private boolean cannotAccess(ServerPlayerEntity listener, PlayerIdentifier identifier)
+	{
+		return listener == null || (MinestuckConfig.SERVER.privateComputers.get() && !identifier.appliesTo(listener)
+				&& !listener.hasPermissionLevel(2));
 	}
 }

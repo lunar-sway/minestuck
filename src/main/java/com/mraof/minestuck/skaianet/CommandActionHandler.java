@@ -61,6 +61,7 @@ public final class CommandActionHandler
 			SburbConnection serverConnection = cs.get();
 			if(serverConnection.isActive())
 				skaianet.closeConnection(serverConnection);
+			skaianet.infoTracker.markDirty(serverConnection);
 			serverConnection.removeServerPlayer();
 			updateLandChain = serverConnection.hasEntered();
 		}
@@ -72,17 +73,21 @@ public final class CommandActionHandler
 		if(!cc.isPresent())
 		{
 			if(connection != null)
+			{
 				connection.setIsMain();
-			else
+				skaianet.infoTracker.markDirty(connection);
+			} else
 			{
 				SburbConnection newConnection = new SburbConnection(client, server, skaianet);
 				session.connections.add(newConnection);
 				SburbHandler.onConnectionCreated(newConnection);
 				newConnection.setIsMain();
+				skaianet.infoTracker.markDirty(newConnection);
 			}
 		} else
 		{
 			SburbConnection clientConnection = cc.get();
+			skaianet.infoTracker.markDirty(clientConnection);
 			clientConnection.removeServerPlayer();
 			clientConnection.setNewServerPlayer(server);
 			if(connection != null && connection.isActive())
@@ -90,12 +95,13 @@ public final class CommandActionHandler
 				session.connections.remove(connection);
 				clientConnection.setActive(connection.getClientComputer(), connection.getServerComputer());
 			}
+			skaianet.infoTracker.markDirty(clientConnection);
 			updateLandChain |= clientConnection.hasEntered();
 		}
 		
 		skaianet.sessionHandler.onConnectionChainBroken(session);
 		
-		skaianet.updateAll();
+		skaianet.checkAndUpdate();
 		if(updateLandChain)
 			skaianet.infoTracker.reloadLandChains();
 		
@@ -124,10 +130,12 @@ public final class CommandActionHandler
 			SburbConnection serverConnection = cs.get();
 			if(serverConnection.isActive())
 				skaianet.closeConnection(clientConnection);
+			skaianet.infoTracker.markDirty(serverConnection);
 			serverConnection.removeServerPlayer();
 			source.sendFeedback(new StringTextComponent(identifier.getUsername()+"'s old client player "+serverConnection.getClientIdentifier().getUsername()+" is now without a server player.").setStyle(new Style().setColor(TextFormatting.YELLOW)), true);
 		}
 		
+		skaianet.infoTracker.markDirty(clientConnection);
 		clientConnection.removeServerPlayer();
 		SburbConnection c = clientConnection;
 		int i = 0;
@@ -160,7 +168,7 @@ public final class CommandActionHandler
 			}
 		}
 		
-		skaianet.updateAll();
+		skaianet.checkAndUpdate();
 		skaianet.infoTracker.reloadLandChains();
 	}
 	

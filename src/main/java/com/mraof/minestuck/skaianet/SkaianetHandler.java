@@ -99,11 +99,13 @@ public final class SkaianetHandler
 		
 		if(serverReference != null)
 		{
+			infoTracker.markDirty(server);
 			ISburbComputer serverComputer = serverReference.getComputer(mcServer);
 			if(serverComputer == null)
 			{
 				LOGGER.error("Tried to connect to {}, but the waiting computer was not found.",
 						server.getUsername());
+				checkAndUpdate();
 				return;
 			}
 			
@@ -117,6 +119,8 @@ public final class SkaianetHandler
 					
 					computer.connected(server, true);
 					serverComputer.connected(player, false);
+					
+					infoTracker.markDirty(connection);
 					
 					MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(mcServer, connection, sessionHandler.getPlayerSession(player),
 							ConnectionCreatedEvent.ConnectionType.RESUME, ConnectionCreatedEvent.SessionJoinType.INTERNAL));
@@ -134,6 +138,8 @@ public final class SkaianetHandler
 						
 						computer.connected(server, true);
 						serverComputer.connected(player, false);
+						
+						infoTracker.markDirty(connection);
 						
 						MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(mcServer, connection, sessionHandler.getPlayerSession(player),
 								ConnectionCreatedEvent.ConnectionType.NEW_SERVER, joinType));
@@ -156,6 +162,8 @@ public final class SkaianetHandler
 						
 						computer.connected(server, true);
 						serverComputer.connected(player, false);
+						
+						infoTracker.markDirty(newConnection);
 						
 						MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(mcServer, newConnection, sessionHandler.getPlayerSession(player),
 								ConnectionCreatedEvent.ConnectionType.SECONDARY, ConnectionCreatedEvent.SessionJoinType.INTERNAL));
@@ -184,6 +192,8 @@ public final class SkaianetHandler
 					computer.connected(server, true);
 					serverComputer.connected(player, false);
 					
+					infoTracker.markDirty(newConnection);
+					
 					MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(mcServer, newConnection, sessionHandler.getPlayerSession(player),
 							ConnectionCreatedEvent.ConnectionType.REGULAR, joinType));
 				} catch(MergeResult.SessionMergeException e)
@@ -194,6 +204,8 @@ public final class SkaianetHandler
 				}
 			}
 		}
+		
+		checkAndUpdate();
 	}
 	
 	public void resumeConnection(ISburbComputer computer, boolean isClient)
@@ -209,15 +221,17 @@ public final class SkaianetHandler
 			ComputerReference otherReference = getResumeMap(!isClient).remove(otherPlayer);
 			
 			if(isClient && otherReference == null)
-				otherReference = openedServers.remove(player);
+				otherReference = openedServers.remove(otherPlayer);
 			
 			if(otherReference != null)
 			{
+				infoTracker.markDirty(otherPlayer);
 				ISburbComputer otherComputer = otherReference.getComputer(mcServer);
 				if(otherComputer == null)
 				{
 					LOGGER.error("Tried to resume connection, between {} and {}, but the waiting computer was not found.",
 							connection.getClientIdentifier().getUsername(), connection.getServerIdentifier().getUsername());
+					checkAndUpdate();
 					return;
 				}
 				
@@ -228,13 +242,17 @@ public final class SkaianetHandler
 				computer.connected(otherPlayer, isClient);
 				otherComputer.connected(player, !isClient);
 				
+				infoTracker.markDirty(connection);
+				
 				MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(mcServer, connection, sessionHandler.getPlayerSession(player),
 						ConnectionCreatedEvent.ConnectionType.RESUME, ConnectionCreatedEvent.SessionJoinType.INTERNAL));
 			} else
 			{
 				getResumeMap(isClient).put(player, reference);
 				computer.setIsResuming(isClient);
+				infoTracker.markDirty(player);
 			}
+			checkAndUpdate();
 		});
 	}
 	
@@ -250,11 +268,14 @@ public final class SkaianetHandler
 		{
 			SburbConnection connection = optional.get();
 			ComputerReference clientReference = resumingClients.remove(connection.getClientIdentifier());
+			infoTracker.markDirty(connection.getClientIdentifier());
+			
 			ISburbComputer clientComputer = clientReference.getComputer(mcServer);
 			if(clientComputer == null)
 			{
 				LOGGER.error("Tried to resume connection, between {} and {}, but the waiting computer was not found.",
 						connection.getClientIdentifier().getUsername(), player.getUsername());
+				checkAndUpdate();
 				return;
 			}
 			
@@ -263,13 +284,18 @@ public final class SkaianetHandler
 			computer.connected(connection.getClientIdentifier(), false);
 			clientComputer.connected(player, true);
 			
+			infoTracker.markDirty(connection);
+			
 			MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(mcServer, connection, sessionHandler.getPlayerSession(player),
 					ConnectionCreatedEvent.ConnectionType.RESUME, ConnectionCreatedEvent.SessionJoinType.INTERNAL));
 		} else
 		{
 			computer.putServerBoolean("isOpen", true);
 			openedServers.put(player, reference);
+			
+			infoTracker.markDirty(player);
 		}
+		checkAndUpdate();
 	}
 	
 	private boolean isConnectingBlocked(PlayerIdentifier player, boolean isClient)
@@ -289,12 +315,13 @@ public final class SkaianetHandler
 		if(resumingClients.containsKey(player))
 		{
 			ISburbComputer computer = resumingClients.remove(player).getComputer(mcServer);
+			infoTracker.markDirty(player);
 			if(computer != null)
 			{
 				computer.putClientBoolean("isResuming", false);
 				computer.putClientMessage(STOP_RESUME);
-				updateAll();
 			}
+			checkAndUpdate();
 		} else
 		{
 			SburbConnection activeConnection = getActiveConnection(player);
@@ -309,9 +336,10 @@ public final class SkaianetHandler
 		if(resumingClients.containsKey(owner) && resumingClients.get(owner).matches(computer))
 		{
 			resumingClients.remove(owner);
+			infoTracker.markDirty(owner);
 			computer.putClientBoolean("isResuming", false);
 			computer.putClientMessage(STOP_RESUME);
-			updateAll();
+			checkAndUpdate();
 		} else
 		{
 			SburbConnection activeConnection = getActiveConnection(owner);
@@ -343,7 +371,7 @@ public final class SkaianetHandler
 			map.remove(owner);
 			computer.putServerBoolean("isOpen", false);
 			computer.putServerMessage(STOP_RESUME);
-			updateAll();
+			infoTracker.markDirty(owner);
 		}
 	}
 	
@@ -358,6 +386,7 @@ public final class SkaianetHandler
 		sessionHandler.onConnectionClosed(connection, true);
 		
 		connection.close();
+		infoTracker.markDirty(connection);
 		
 		if(clientComputer != null)
 		{
@@ -374,7 +403,7 @@ public final class SkaianetHandler
 				? ConnectionCreatedEvent.ConnectionType.SECONDARY : ConnectionCreatedEvent.ConnectionType.REGULAR;
 		MinecraftForge.EVENT_BUS.post(new ConnectionClosedEvent(mcServer, connection, sessionHandler.getPlayerSession(connection.getClientIdentifier()), type));
 		
-		updateAll();
+		checkAndUpdate();
 	}
 	
 	public void requestInfo(ServerPlayerEntity player, PlayerIdentifier p1)
@@ -419,10 +448,10 @@ public final class SkaianetHandler
 		return list;
 	}
 	
-	void updateAll()
+	void checkAndUpdate()
 	{
 		checkData();
-		infoTracker.sendInfoToAll();
+		infoTracker.checkAndSend();
 	}
 	
 	private void checkData()
@@ -446,8 +475,6 @@ public final class SkaianetHandler
 				}
 			}
 		});
-		
-		infoTracker.checkData();
 	}
 	
 	private void validateComputerMap(Map<PlayerIdentifier, ComputerReference> map, boolean clientPlayerMap)
@@ -539,7 +566,7 @@ public final class SkaianetHandler
 		
 		SburbHandler.onEntry(mcServer, c.get());
 		
-		updateAll();
+		checkAndUpdate();
 		infoTracker.reloadLandChains();
 		
 		MinecraftForge.EVENT_BUS.post(new SburbEvent.OnEntry(mcServer, c.get(), sessionHandler.getPlayerSession(target)));

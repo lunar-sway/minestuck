@@ -196,8 +196,7 @@ public final class SburbHandler
 		{
 			c.setIsMain();
 			onFirstItemGiven(c);
-			handler.infoTracker.sendConnectionInfo(c.getClientIdentifier());
-			handler.infoTracker.sendConnectionInfo(c.getServerIdentifier());
+			handler.infoTracker.markDirty(c);
 			return true;
 		}
 		return false;

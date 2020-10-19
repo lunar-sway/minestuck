@@ -136,7 +136,7 @@ public final class SburbConnection
 		return nbt;
 	}
 	
-	void setActive(ComputerReference client, ComputerReference server)
+	void setActive(ComputerReference client, ComputerReference server)	//TODO adapt this to take ISburbComputer instead, and call computer.connected() here instead
 	{
 		if(isActive())
 			throw new IllegalStateException("Should not activate sburb connection when already active");
