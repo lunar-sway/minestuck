@@ -136,12 +136,30 @@ public final class SburbConnection
 		return nbt;
 	}
 	
-	void setActive(ComputerReference client, ComputerReference server)	//TODO adapt this to take ISburbComputer instead, and call computer.connected() here instead
+	void copyComputerReferences(SburbConnection connection)
+	{
+		if(!connection.isActive() || !connection.getClientIdentifier().equals(clientIdentifier)
+				|| !connection.getServerIdentifier().equals(serverIdentifier))
+			throw new IllegalArgumentException();
+		setActive(connection.getClientComputer(), connection.getServerComputer());
+	}
+	
+	void setActive(ISburbComputer client, ISburbComputer server)	//TODO adapt this to take ISburbComputer instead, and call computer.connected() here instead
 	{
 		if(isActive())
 			throw new IllegalStateException("Should not activate sburb connection when already active");
 		Objects.requireNonNull(client);
 		Objects.requireNonNull(server);
+		setActive(client.createReference(), server.createReference());
+		
+		client.connected(serverIdentifier, true);
+		server.connected(clientIdentifier, false);
+		
+		handler.infoTracker.markDirty(this);
+	}
+	
+	private void setActive(ComputerReference client, ComputerReference server)
+	{
 		clientComputer = client;
 		serverComputer = server;
 		isActive = true;

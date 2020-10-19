@@ -93,7 +93,7 @@ public final class CommandActionHandler
 			if(connection != null && connection.isActive())
 			{
 				session.connections.remove(connection);
-				clientConnection.setActive(connection.getClientComputer(), connection.getServerComputer());
+				clientConnection.copyComputerReferences(connection);
 			}
 			skaianet.infoTracker.markDirty(clientConnection);
 			updateLandChain |= clientConnection.hasEntered();

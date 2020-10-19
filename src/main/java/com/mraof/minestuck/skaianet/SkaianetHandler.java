@@ -115,12 +115,7 @@ public final class SkaianetHandler
 				SburbConnection connection = optional.get();
 				if(connection.getServerIdentifier().equals(server))
 				{
-					connection.setActive(reference, serverReference);
-					
-					computer.connected(server, true);
-					serverComputer.connected(player, false);
-					
-					infoTracker.markDirty(connection);
+					connection.setActive(computer, serverComputer);
 					
 					MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(mcServer, connection, sessionHandler.getPlayerSession(player),
 							ConnectionCreatedEvent.ConnectionType.RESUME, ConnectionCreatedEvent.SessionJoinType.INTERNAL));
@@ -134,12 +129,7 @@ public final class SkaianetHandler
 					try
 					{
 						sessionHandler.onConnectionCreated(connection);    //TODO the function does the checks we want, but is not too relevant. Make a more appropriate function call (or perhaps we get there through further restructuring)
-						connection.setActive(reference, serverReference);
-						
-						computer.connected(server, true);
-						serverComputer.connected(player, false);
-						
-						infoTracker.markDirty(connection);
+						connection.setActive(computer, serverComputer);
 						
 						MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(mcServer, connection, sessionHandler.getPlayerSession(player),
 								ConnectionCreatedEvent.ConnectionType.NEW_SERVER, joinType));
@@ -153,17 +143,13 @@ public final class SkaianetHandler
 				} else
 				{
 					SburbConnection newConnection = new SburbConnection(player, server, this);
-					newConnection.setActive(reference, serverReference);
 					newConnection.copyFrom(connection);
 					
 					try
 					{
 						sessionHandler.onConnectionCreated(newConnection);
 						
-						computer.connected(server, true);
-						serverComputer.connected(player, false);
-						
-						infoTracker.markDirty(newConnection);
+						newConnection.setActive(computer, serverComputer);
 						
 						MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(mcServer, newConnection, sessionHandler.getPlayerSession(player),
 								ConnectionCreatedEvent.ConnectionType.SECONDARY, ConnectionCreatedEvent.SessionJoinType.INTERNAL));
@@ -182,17 +168,13 @@ public final class SkaianetHandler
 						: s1 == s2 ? ConnectionCreatedEvent.SessionJoinType.INTERNAL : ConnectionCreatedEvent.SessionJoinType.MERGE;
 				
 				SburbConnection newConnection = new SburbConnection(player, server, this);
-				newConnection.setActive(reference, serverReference);
 				
 				try
 				{
 					sessionHandler.onConnectionCreated(newConnection);
 					SburbHandler.onConnectionCreated(newConnection);
 					
-					computer.connected(server, true);
-					serverComputer.connected(player, false);
-					
-					infoTracker.markDirty(newConnection);
+					newConnection.setActive(computer, serverComputer);
 					
 					MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(mcServer, newConnection, sessionHandler.getPlayerSession(player),
 							ConnectionCreatedEvent.ConnectionType.REGULAR, joinType));
@@ -236,13 +218,8 @@ public final class SkaianetHandler
 				}
 				
 				if(isClient)
-					connection.setActive(reference, otherReference);
-				else connection.setActive(otherReference, reference);
-				
-				computer.connected(otherPlayer, isClient);
-				otherComputer.connected(player, !isClient);
-				
-				infoTracker.markDirty(connection);
+					connection.setActive(computer, otherComputer);
+				else connection.setActive(otherComputer, computer);
 				
 				MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(mcServer, connection, sessionHandler.getPlayerSession(player),
 						ConnectionCreatedEvent.ConnectionType.RESUME, ConnectionCreatedEvent.SessionJoinType.INTERNAL));
@@ -279,12 +256,7 @@ public final class SkaianetHandler
 				return;
 			}
 			
-			connection.setActive(clientReference, reference);
-			
-			computer.connected(connection.getClientIdentifier(), false);
-			clientComputer.connected(player, true);
-			
-			infoTracker.markDirty(connection);
+			connection.setActive(clientComputer, computer);
 			
 			MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(mcServer, connection, sessionHandler.getPlayerSession(player),
 					ConnectionCreatedEvent.ConnectionType.RESUME, ConnectionCreatedEvent.SessionJoinType.INTERNAL));
