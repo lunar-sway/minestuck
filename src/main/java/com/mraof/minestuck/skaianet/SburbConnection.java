@@ -13,8 +13,6 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.lands.LandTypePair;
-import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
-import com.mraof.minestuck.world.lands.title.TitleLandType;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -24,11 +22,14 @@ import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Random;
+import java.util.Set;
 
 public final class SburbConnection
 {
-	private final SkaianetHandler skaianet;
+	final SkaianetHandler skaianet;
 	
 	@Nonnull
 	private final PlayerIdentifier clientIdentifier;
@@ -350,76 +351,5 @@ public final class SburbConnection
 		buffer.writeString(getClientIdentifier().getUsername(), 16);
 		buffer.writeInt(getServerIdentifier().getId());
 		buffer.writeString(getServerIdentifier().getUsername(), 16);
-	}
-	
-	/**
-	 * Creates data for this connection to be sent to the data checker screen
-	 */
-	CompoundNBT createDataTag(Set<PlayerIdentifier> playerSet, Map<PlayerIdentifier, PredefineData> predefinedPlayers)
-	{
-		if(isMain())
-			playerSet.add(getClientIdentifier());
-		CompoundNBT connectionTag = new CompoundNBT();
-		connectionTag.putString("client", getClientIdentifier().getUsername());
-		connectionTag.putString("clientId", getClientIdentifier().getCommandString());
-		if(hasServerPlayer())
-			connectionTag.putString("server", getServerIdentifier().getUsername());
-		connectionTag.putBoolean("isMain", isMain());
-		connectionTag.putBoolean("isActive", isActive());
-		if(isMain())
-		{
-			if(clientLandInfo != null)
-			{
-				connectionTag.putString("clientDim", getClientDimension().getRegistryName().toString());
-				connectionTag.putString("landType1", clientLandInfo.landName1());
-				connectionTag.putString("landType2", clientLandInfo.landName2());
-				Title title = PlayerSavedData.getData(getClientIdentifier(), skaianet.mcServer).getTitle();
-				if(title != null)
-				{
-					connectionTag.putByte("class", (byte) title.getHeroClass().ordinal());
-					connectionTag.putByte("aspect", (byte) title.getHeroAspect().ordinal());
-				}
-			} else if(predefinedPlayers.containsKey(getClientIdentifier()))
-			{
-				PredefineData data = predefinedPlayers.get(getClientIdentifier());
-				putPredefinedDataToTag(connectionTag, data);
-			}
-		}
-		return connectionTag;
-	}
-	
-	/**
-	 * Creates data to be sent to the data checker screen for players with predefined data but without a connection
-	 */
-	static CompoundNBT createPredefineDataTag(PlayerIdentifier identifier, PredefineData data)
-	{
-		CompoundNBT connectionTag = new CompoundNBT();
-		
-		connectionTag.putString("client", identifier.getUsername());
-		connectionTag.putString("clientId", identifier.getCommandString());
-		connectionTag.putBoolean("isMain", true);
-		connectionTag.putBoolean("isActive", false);
-		connectionTag.putInt("clientDim", 0);
-		
-		putPredefinedDataToTag(connectionTag, data);
-		
-		return connectionTag;
-	}
-	
-	private static void putPredefinedDataToTag(CompoundNBT nbt, PredefineData data)
-	{
-		Title title = data.getTitle();
-		if(title != null)
-		{
-			nbt.putByte("class", (byte) data.getTitle().getHeroClass().ordinal());
-			nbt.putByte("aspect", (byte) data.getTitle().getHeroAspect().ordinal());
-		}
-		
-		TerrainLandType terrainType = data.getTerrainLandType();
-		TitleLandType titleType = data.getTitleLandType();
-		if(terrainType != null)
-			nbt.putString("terrainLandType", terrainType.getRegistryName().toString());
-		if(titleType != null)
-			nbt.putString("titleLandType", titleType.getRegistryName().toString());
 	}
 }

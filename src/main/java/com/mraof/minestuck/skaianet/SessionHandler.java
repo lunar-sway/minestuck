@@ -3,7 +3,6 @@ package com.mraof.minestuck.skaianet;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 
@@ -136,21 +135,6 @@ public abstract class SessionHandler
 			}
 		}
 		return map;
-	}
-	
-	/**
-	 * Creates data to be used for the data checker
-	 */
-	public CompoundNBT createDataTag()
-	{
-		CompoundNBT nbt = new CompoundNBT();
-		ListNBT sessionList = new ListNBT();
-		nbt.put("sessions", sessionList);
-		for(Session session : getSessions())
-		{
-			sessionList.add(session.createDataTag());
-		}
-		return nbt;
 	}
 	
 	public static SessionHandler get(MinecraftServer server)
