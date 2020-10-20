@@ -77,7 +77,7 @@ public final class CommandActionHandler
 			} else
 			{
 				SburbConnection newConnection = new SburbConnection(client, server, skaianet);
-				session.connections.add(newConnection);
+				session.addConnection(newConnection);
 				SburbHandler.onConnectionCreated(newConnection);
 				newConnection.setIsMain();
 			}
@@ -172,7 +172,7 @@ public final class CommandActionHandler
 		c.setLand(landTypes, dimensionName);
 		c.setHasEntered();
 		
-		session.connections.add(c);
+		session.addConnection(c);
 		SburbHandler.onConnectionCreated(c);
 		
 		return c;

@@ -32,6 +32,17 @@ public final class Session
 	boolean completed;
 	boolean locked;
 	
+	void addConnection(SburbConnection connection)
+	{
+		connections.add(connection);
+		connection.setSession(this);
+	}
+	
+	void finishMergeOrSplit()
+	{
+		connections.forEach(connection -> connection.setSession(this));
+	}
+	
 	/**
 	 * If the function throws an exception, this session should no longer be considered valid
 	 */

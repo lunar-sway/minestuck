@@ -37,6 +37,7 @@ public final class SburbConnection
 	private PlayerIdentifier serverIdentifier;
 	private ComputerReference clientComputer;
 	private ComputerReference serverComputer;
+	private Session session;
 	
 	private boolean isActive;
 	private boolean isMain;
@@ -137,6 +138,11 @@ public final class SburbConnection
 		
 		nbt.putInt("artifact", artifactType);
 		return nbt;
+	}
+	
+	void setSession(Session session)
+	{
+		this.session = session;
 	}
 	
 	void copyComputerReferences(SburbConnection connection)

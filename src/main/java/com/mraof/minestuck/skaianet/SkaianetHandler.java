@@ -122,8 +122,6 @@ public final class SkaianetHandler
 							ConnectionCreatedEvent.ConnectionType.RESUME, ConnectionCreatedEvent.SessionJoinType.INTERNAL));
 				} else if(!connection.hasServerPlayer())
 				{
-					Session s1 = sessionHandler.getPlayerSession(player), s2 = sessionHandler.getPlayerSession(server);
-					
 					try
 					{
 						Pair<Session, ConnectionCreatedEvent.SessionJoinType> pair = sessionHandler.getSessionForConnecting(player, server);
@@ -149,7 +147,7 @@ public final class SkaianetHandler
 						SburbConnection newConnection = new SburbConnection(player, server, this);
 						newConnection.copyFrom(connection);
 						newConnection.setActive(computer, serverComputer);
-						session.connections.add(newConnection);
+						session.addConnection(newConnection);
 						
 						MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(mcServer, newConnection, sessionHandler.getPlayerSession(player),
 								ConnectionCreatedEvent.ConnectionType.SECONDARY, ConnectionCreatedEvent.SessionJoinType.INTERNAL));
@@ -162,9 +160,6 @@ public final class SkaianetHandler
 				}
 			} else
 			{
-				//TODO session join type is better gotten from the session handler in connection to its check
-				Session s1 = sessionHandler.getPlayerSession(player), s2 = sessionHandler.getPlayerSession(server);
-				
 				try
 				{
 					Pair<Session, ConnectionCreatedEvent.SessionJoinType> pair = sessionHandler.getSessionForConnecting(player, server);
@@ -172,7 +167,7 @@ public final class SkaianetHandler
 					SburbConnection newConnection = new SburbConnection(player, server, this);
 					SburbHandler.onConnectionCreated(newConnection);
 					newConnection.setActive(computer, serverComputer);
-					pair.getLeft().connections.add(newConnection);
+					pair.getLeft().addConnection(newConnection);
 					
 					MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(mcServer, newConnection, pair.getLeft(),
 							ConnectionCreatedEvent.ConnectionType.REGULAR, pair.getRight()));
@@ -503,7 +498,7 @@ public final class SkaianetHandler
 				c.setIsMain();
 				try
 				{
-					sessionHandler.getSessionForConnecting(target, IdentifierHandler.NULL_IDENTIFIER).getLeft().connections.add(c);
+					sessionHandler.getSessionForConnecting(target, IdentifierHandler.NULL_IDENTIFIER).getLeft().addConnection(c);
 					SburbHandler.onFirstItemGiven(c);
 				} catch(MergeResult.SessionMergeException e)
 				{
