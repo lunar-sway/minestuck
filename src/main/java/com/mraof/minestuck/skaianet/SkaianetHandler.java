@@ -358,7 +358,6 @@ public final class SkaianetHandler
 		sessionHandler.onConnectionClosed(connection, true);
 		
 		connection.close();
-		infoTracker.markDirty(connection);
 		
 		if(clientComputer != null)
 		{

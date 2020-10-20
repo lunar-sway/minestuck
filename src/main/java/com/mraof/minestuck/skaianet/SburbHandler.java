@@ -196,7 +196,6 @@ public final class SburbHandler
 		{
 			c.setIsMain();
 			onFirstItemGiven(c);
-			handler.infoTracker.markDirty(c);
 			return true;
 		}
 		return false;
