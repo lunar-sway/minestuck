@@ -1,36 +1,42 @@
 package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.event.ConnectionCreatedEvent;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
 import java.util.function.Consumer;
 
 final class SessionMerger
 {
-	static Session getValidMergedSession(DefaultSessionHandler handler, PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException
+	static Pair<Session, ConnectionCreatedEvent.SessionJoinType> getValidMergedSession(DefaultSessionHandler handler, PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException
 	{
+		//TODO should find session by connection, but not by predefined data
 		Session cs = handler.getPlayerSession(client), ss = handler.getPlayerSession(server);
 		if(cs != null && ss != null)
 		{
+			if(cs == ss)
+				return Pair.of(cs, ConnectionCreatedEvent.SessionJoinType.INTERNAL);
+			
 			Session target = createMergedSession(cs, ss);
 			verifyCanAdd(target, client, server, MergeResult.MERGED_SESSION_FULL);
 			handler.handleSuccessfulMerge(cs, ss, target);
-			return target;
+			return Pair.of(target, ConnectionCreatedEvent.SessionJoinType.MERGE);
 		} else if(cs != null)
 		{
 			verifyCanAdd(cs, client, server, MergeResult.CLIENT_SESSION_FULL);
-			return cs;
+			return Pair.of(cs, ConnectionCreatedEvent.SessionJoinType.JOIN);
 		} else if(ss != null)
 		{
 			verifyCanAdd(ss, client, server, MergeResult.SERVER_SESSION_FULL);
-			return ss;
+			return Pair.of(ss, ConnectionCreatedEvent.SessionJoinType.JOIN);
 		} else
 		{
 			Session session = new Session();
 			verifyCanAdd(session, client, server, MergeResult.GENERIC_FAIL);
 			handler.addNewSession(session);
-			return session;
+			return Pair.of(session, ConnectionCreatedEvent.SessionJoinType.JOIN);
 		}
 	}
 	

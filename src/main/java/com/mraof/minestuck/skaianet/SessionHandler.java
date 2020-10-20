@@ -1,10 +1,12 @@
 package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.event.ConnectionCreatedEvent;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -45,7 +47,7 @@ public abstract class SessionHandler
 		return getSessions().stream().flatMap(session -> session.connections.stream());
 	}
 	
-	abstract Session tryGetSessionToAdd(PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException;
+	abstract Pair<Session, ConnectionCreatedEvent.SessionJoinType> tryGetSessionToAdd(PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException;
 	
 	abstract void findOrCreateAndCall(PlayerIdentifier player, SkaianetException.SkaianetConsumer<Session> consumer) throws SkaianetException;
 	
@@ -81,7 +83,7 @@ public abstract class SessionHandler
 				|| !cClient.isPresent() && !serverActive && !(sClient != null && sClient.locked) && !(sServer != null && sServer.locked);	//Connect with a new player and potentially create a main connection
 	}
 	
-	Session getSessionForConnecting(PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException
+	Pair<Session, ConnectionCreatedEvent.SessionJoinType> getSessionForConnecting(PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException
 	{
 		if(!canConnect(client, server))
 			throw MergeResult.GENERIC_FAIL.exception();

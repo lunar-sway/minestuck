@@ -28,7 +28,7 @@ public final class CommandActionHandler
 		SkaianetHandler skaianet = SkaianetHandler.get(source.getServer());
 		try
 		{
-			Session target = skaianet.sessionHandler.tryGetSessionToAdd(client, server);
+			Session target = skaianet.sessionHandler.tryGetSessionToAdd(client, server).getLeft();
 			if(target.locked)
 			{
 				throw SburbConnectionCommand.LOCKED_EXCEPTION.create();

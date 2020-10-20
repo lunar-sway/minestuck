@@ -17,6 +17,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -122,18 +123,16 @@ public final class SkaianetHandler
 				} else if(!connection.hasServerPlayer())
 				{
 					Session s1 = sessionHandler.getPlayerSession(player), s2 = sessionHandler.getPlayerSession(server);
-					ConnectionCreatedEvent.SessionJoinType joinType = s1 == null || s2 == null ? ConnectionCreatedEvent.SessionJoinType.JOIN
-							: s1 == s2 ? ConnectionCreatedEvent.SessionJoinType.INTERNAL : ConnectionCreatedEvent.SessionJoinType.MERGE;
 					
 					try
 					{
-						sessionHandler.getSessionForConnecting(player, server);
+						Pair<Session, ConnectionCreatedEvent.SessionJoinType> pair = sessionHandler.getSessionForConnecting(player, server);
 						
-						connection.setActive(computer, serverComputer);
 						connection.setNewServerPlayer(server);
+						connection.setActive(computer, serverComputer);
 						
-						MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(mcServer, connection, sessionHandler.getPlayerSession(player),
-								ConnectionCreatedEvent.ConnectionType.NEW_SERVER, joinType));
+						MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(mcServer, connection, pair.getLeft(),
+								ConnectionCreatedEvent.ConnectionType.NEW_SERVER, pair.getRight()));
 					} catch(MergeResult.SessionMergeException e)
 					{
 						LOGGER.warn("SessionHandler denied connection between {} and {}, reason: {}", player.getUsername(), server.getUsername(), e.getMessage());
@@ -145,7 +144,7 @@ public final class SkaianetHandler
 				{
 					try
 					{
-						Session session = sessionHandler.getSessionForConnecting(player, server);
+						Session session = sessionHandler.getSessionForConnecting(player, server).getLeft();
 						
 						SburbConnection newConnection = new SburbConnection(player, server, this);
 						newConnection.copyFrom(connection);
@@ -165,21 +164,18 @@ public final class SkaianetHandler
 			{
 				//TODO session join type is better gotten from the session handler in connection to its check
 				Session s1 = sessionHandler.getPlayerSession(player), s2 = sessionHandler.getPlayerSession(server);
-				ConnectionCreatedEvent.SessionJoinType joinType = s1 == null || s2 == null ? ConnectionCreatedEvent.SessionJoinType.JOIN
-						: s1 == s2 ? ConnectionCreatedEvent.SessionJoinType.INTERNAL : ConnectionCreatedEvent.SessionJoinType.MERGE;
-				
 				
 				try
 				{
-					Session session = sessionHandler.getSessionForConnecting(player, server);
+					Pair<Session, ConnectionCreatedEvent.SessionJoinType> pair = sessionHandler.getSessionForConnecting(player, server);
 					
 					SburbConnection newConnection = new SburbConnection(player, server, this);
 					SburbHandler.onConnectionCreated(newConnection);
 					newConnection.setActive(computer, serverComputer);
-					session.connections.add(newConnection);
+					pair.getLeft().connections.add(newConnection);
 					
-					MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(mcServer, newConnection, sessionHandler.getPlayerSession(player),
-							ConnectionCreatedEvent.ConnectionType.REGULAR, joinType));
+					MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(mcServer, newConnection, pair.getLeft(),
+							ConnectionCreatedEvent.ConnectionType.REGULAR, pair.getRight()));
 				} catch(MergeResult.SessionMergeException e)
 				{
 					LOGGER.warn("SessionHandler denied connection between {} and {}, reason: {}", player.getUsername(), server.getUsername(), e.getMessage());
@@ -507,7 +503,7 @@ public final class SkaianetHandler
 				c.setIsMain();
 				try
 				{
-					sessionHandler.getSessionForConnecting(target, IdentifierHandler.NULL_IDENTIFIER).connections.add(c);
+					sessionHandler.getSessionForConnecting(target, IdentifierHandler.NULL_IDENTIFIER).getLeft().connections.add(c);
 					SburbHandler.onFirstItemGiven(c);
 				} catch(MergeResult.SessionMergeException e)
 				{
