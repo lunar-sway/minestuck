@@ -7,6 +7,7 @@ import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.item.crafting.alchemy.CombinationMode;
 import com.mraof.minestuck.item.crafting.alchemy.ItemCombiner;
+import com.mraof.minestuck.item.crafting.alchemy.ItemCombinerWrapper;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.util.ColorHandler;
 import net.minecraft.entity.player.PlayerEntity;
@@ -16,19 +17,37 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.Direction;
+import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.wrapper.CombinedInvWrapper;
+import net.minecraftforge.items.wrapper.RangedWrapper;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class MiniTotemLatheTileEntity extends MachineProcessTileEntity implements INamedContainerProvider, ItemCombiner
+public class MiniTotemLatheTileEntity extends MachineProcessTileEntity implements INamedContainerProvider
 {
 	public static final String TITLE = "container.minestuck.mini_totem_lathe";
 	public static final RunType TYPE = RunType.BUTTON;
 	
+	private final ItemCombiner combinerInventory = new ItemCombinerWrapper(itemHandler, CombinationMode.AND);
+	
 	public MiniTotemLatheTileEntity()
 	{
 		super(MSTileEntityTypes.MINI_TOTEM_LATHE.get());
+	}
+	
+	@Override
+	protected ItemStackHandler createItemHandler()
+	{
+		return new CustomHandler(4, (index, stack) -> (index == 0 || index == 1) && stack.getItem() == MSItems.CAPTCHA_CARD || index == 2 && stack.getItem() == MSBlocks.CRUXITE_DOWEL.asItem());
 	}
 	
 	@Override
@@ -38,63 +57,47 @@ public class MiniTotemLatheTileEntity extends MachineProcessTileEntity implement
 	}
 	
 	@Override
-	public CombinationMode getMode()
-	{
-		return CombinationMode.AND;
-	}
-	
-	@Override
-	public int getSizeInventory()
-	{
-		return 4;
-	}
-	
-	@Override
-	public boolean isItemValidForSlot(int index, ItemStack stack)
-	{
-		return (index == 0 || index == 1) && stack.getItem() == MSItems.CAPTCHA_CARD || index == 2 && stack.getItem() == MSBlocks.CRUXITE_DOWEL.asItem();
-	}
-	
-	@Override
 	public boolean contentsValid()
 	{
 		ItemStack output = createResult();
 		
+		ItemStack currentOutput = itemHandler.getStackInSlot(3);
 		if(!output.isEmpty())
-			return inv.get(3).isEmpty() || ItemStack.areItemsEqual(output, inv.get(3)) && ItemStack.areItemStackTagsEqual(output, inv.get(3));
+			return currentOutput.isEmpty() || ItemStack.areItemsEqual(output, currentOutput) && ItemStack.areItemStackTagsEqual(output, currentOutput);
 		else return false;
 	}
 	
 	@Override
 	public void processContents()
 	{
-		if (!inv.get(3).isEmpty())
+		if (!itemHandler.getStackInSlot(3).isEmpty())
 		{
-			this.inv.get(3).grow(1);
-			decrStackSize(2, 1);
+			itemHandler.extractItem(3, -1, false);
+			itemHandler.extractItem(2, 1, false);
 			return;
 		}
 		
 		ItemStack outputDowel = createResult();
 		
-		setInventorySlotContents(3, outputDowel);
-		decrStackSize(2, 1);
+		itemHandler.setStackInSlot(3, outputDowel);
+		itemHandler.extractItem(2, 1, false);
 	}
 	
 	private ItemStack createResult()
 	{
-		if(inv.get(0).isEmpty() && inv.get(1).isEmpty() || inv.get(2).isEmpty() || AlchemyHelper.hasDecodedItem(inv.get(2)))
+		ItemStack input1 = itemHandler.getStackInSlot(0), input2 = itemHandler.getStackInSlot(1), dowelInput = itemHandler.getStackInSlot(2);
+		if(input1.isEmpty() && input2.isEmpty() || dowelInput.isEmpty() || AlchemyHelper.hasDecodedItem(dowelInput))
 			return ItemStack.EMPTY;
 		
 		ItemStack output;
-		if (!inv.get(0).isEmpty() && !inv.get(1).isEmpty())
-			if (!AlchemyHelper.isPunchedCard(inv.get(0)) || !AlchemyHelper.isPunchedCard(inv.get(1)))
+		if (!input1.isEmpty() && !input2.isEmpty())
+			if (!AlchemyHelper.isPunchedCard(input1) || !AlchemyHelper.isPunchedCard(input2))
 				output = new ItemStack(MSBlocks.GENERIC_OBJECT);
 			else
-				output = world.getRecipeManager().getRecipe(MSRecipeTypes.COMBINATION_TYPE, this, world).map(IRecipe::getRecipeOutput).orElse(ItemStack.EMPTY);
+				output = world.getRecipeManager().getRecipe(MSRecipeTypes.COMBINATION_TYPE, combinerInventory, world).map(IRecipe::getRecipeOutput).orElse(ItemStack.EMPTY);
 		else
 		{
-			ItemStack input = inv.get(0).isEmpty() ? inv.get(1) : inv.get(0);
+			ItemStack input = input1.isEmpty() ? input2 : input1;
 			if (!AlchemyHelper.isPunchedCard(input))
 				output = new ItemStack(MSBlocks.GENERIC_OBJECT);
 			else output = AlchemyHelper.getDecodedItem(input);
@@ -105,7 +108,7 @@ public class MiniTotemLatheTileEntity extends MachineProcessTileEntity implement
 		
 		ItemStack outputDowel = output.getItem().equals(MSBlocks.GENERIC_OBJECT.asItem())
 				? new ItemStack(MSBlocks.CRUXITE_DOWEL) : AlchemyHelper.createEncodedItem(output, false);
-		ColorHandler.setColor(outputDowel, ColorHandler.getColorFromStack(inv.get(2)));	//Setting color
+		ColorHandler.setColor(outputDowel, ColorHandler.getColorFromStack(dowelInput));	//Setting color
 		return outputDowel;
 	}
 	
@@ -123,28 +126,41 @@ public class MiniTotemLatheTileEntity extends MachineProcessTileEntity implement
 		return new TranslationTextComponent(TITLE);
 	}
 	
-	@Override
-	public int[] getSlotsForFace(Direction side)
+	private final LazyOptional<IItemHandler> upHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 2, 3));
+	private final LazyOptional<IItemHandler> downHandler = LazyOptional.of(() -> new CombinedInvWrapper(createSlotInputsHandler(), new RangedWrapper(itemHandler, 3, 4)));
+	private final LazyOptional<IItemHandler> sideHandler = LazyOptional.of(this::createSlotInputsHandler);
+	
+	private IItemHandlerModifiable createSlotInputsHandler()
 	{
-		if(side == Direction.UP)
-			return new int[] {2};
-		if(side == Direction.DOWN)
-			return new int[] {0, 1, 3};
-		else return new int[] {0, 1};
+		return new RangedWrapper(itemHandler, 0, 2)
+		{
+			@Nonnull
+			@Override
+			public ItemStack extractItem(int slot, int amount, boolean simulate)
+			{
+				if(itemHandler.getStackInSlot(3).isEmpty())
+					return ItemStack.EMPTY;
+				return super.extractItem(slot, amount, simulate);
+			}
+		};
 	}
 	
+	@Nonnull
 	@Override
-	public boolean canExtractItem(int index, ItemStack stack, Direction direction)
+	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side)
 	{
-		if(index == 0 || index == 1)
-			return !inv.get(3).isEmpty();
-		else return true;
+		if(cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && side != null)
+		{
+			return side == Direction.DOWN ? downHandler.cast() :
+					side == Direction.UP ? upHandler.cast() : sideHandler.cast();
+		}
+		return super.getCapability(cap, side);
 	}
 	
 	@Nullable
 	@Override
 	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity playerIn)
 	{
-		return new MiniTotemLatheContainer(windowId, playerInventory, this, parameters, pos);
+		return new MiniTotemLatheContainer(windowId, playerInventory, itemHandler, parameters, IWorldPosCallable.of(world, pos), pos);
 	}
 }

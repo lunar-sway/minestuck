@@ -14,12 +14,20 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
+import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.IntReferenceHolder;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.wrapper.RangedWrapper;
 import net.minecraftforge.registries.ForgeRegistry;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implements INamedContainerProvider, IOwnable, GristWildcardHolder
@@ -56,35 +64,29 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 	}
 	
 	@Override
+	protected ItemStackHandler createItemHandler()
+	{
+		return new CustomHandler(2, (slot, stack) ->  slot == INPUT && stack.getItem() == MSBlocks.CRUXITE_DOWEL.asItem());
+	}
+	
+	@Override
 	public RunType getRunType()
 	{
 		return TYPE;
 	}
 	
 	@Override
-	public int getSizeInventory()
-	{
-		return 2;
-	}
-	
-	@Override
-	public boolean isItemValidForSlot(int index, ItemStack stack)
-	{
-		return index == 0 && stack.getItem() == MSBlocks.CRUXITE_DOWEL.asItem();
-	}
-	
-	@Override
 	public boolean contentsValid()
 	{
-		if(!world.isBlockPowered(this.getPos()) && !this.inv.get(INPUT).isEmpty() && this.owner != null)
+		if(!world.isBlockPowered(this.getPos()) && !itemHandler.getStackInSlot(INPUT).isEmpty() && this.owner != null)
 		{
 			//Check owner's cache: Do they have everything they need?
-			ItemStack newItem = AlchemyHelper.getDecodedItem(this.inv.get(INPUT));
+			ItemStack newItem = AlchemyHelper.getDecodedItem(itemHandler.getStackInSlot(INPUT));
 			if(newItem.isEmpty())
-				if(!inv.get(INPUT).hasTag() || !inv.get(INPUT).getTag().contains("contentID"))
+				if(!itemHandler.getStackInSlot(INPUT).hasTag() || !itemHandler.getStackInSlot(INPUT).getTag().contains("contentID"))
 					newItem = new ItemStack(MSBlocks.GENERIC_OBJECT);
 				else return false;
-			if(!inv.get(OUTPUT).isEmpty() && (inv.get(OUTPUT).getItem() != newItem.getItem() || inv.get(OUTPUT).getMaxStackSize() <= inv.get(OUTPUT).getCount()))
+			if(!itemHandler.getStackInSlot(OUTPUT).isEmpty() && (itemHandler.getStackInSlot(OUTPUT).getItem() != newItem.getItem() || itemHandler.getStackInSlot(OUTPUT).getMaxStackSize() <= itemHandler.getStackInSlot(OUTPUT).getCount()))
 			{
 				return false;
 			}
@@ -101,7 +103,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 	@Override
 	public void processContents()
 	{
-		ItemStack newItem = AlchemyHelper.getDecodedItem(this.inv.get(INPUT));
+		ItemStack newItem = AlchemyHelper.getDecodedItem(itemHandler.getStackInSlot(INPUT));
 		
 		if (newItem.isEmpty())
 			newItem = new ItemStack(MSBlocks.GENERIC_OBJECT);
@@ -110,18 +112,14 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 		
 		GristHelper.decrease(world, owner, cost);
 		
-		AlchemyEvent event = new AlchemyEvent(owner, this, this.inv.get(INPUT), newItem, cost);
+		AlchemyEvent event = new AlchemyEvent(owner, this, itemHandler.getStackInSlot(INPUT), newItem, cost);
 		MinecraftForge.EVENT_BUS.post(event);
 		newItem = event.getItemResult();
+		ItemStack existing = itemHandler.getStackInSlot(OUTPUT);
+		if(!existing.isEmpty())
+			newItem.grow(existing.getCount());
 		
-		if (inv.get(OUTPUT).isEmpty())
-		{
-			setInventorySlotContents(1, newItem);
-		}
-		else
-		{
-			this.inv.get(OUTPUT).grow(1);
-		}
+		itemHandler.setStackInSlot(OUTPUT, newItem);
 	}
 	
 	// We're going to want to trigger a block update every 20 ticks to have comparators pull data from the Alchemiter.
@@ -168,31 +166,41 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 		return new TranslationTextComponent(TITLE);
 	}
 	
+	private final LazyOptional<IItemHandler> sideHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, INPUT, INPUT + 1));
+	private final LazyOptional<IItemHandler> downHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, OUTPUT, OUTPUT + 1));
+	
+	@Nonnull
 	@Override
-	public int[] getSlotsForFace(Direction side)
+	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side)
 	{
-		if(side == Direction.DOWN)
-			return new int[] {1};
-		else return new int[] {0};
+		if(cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && side != null)
+		{
+			return side == Direction.DOWN ? downHandler.cast() : sideHandler.cast();
+		}
+		return super.getCapability(cap, side);
 	}
 	
 	public int comparatorValue()
 	{
-		if (getStackInSlot(INPUT) != null && owner != null)
+		ItemStack input = itemHandler.getStackInSlot(INPUT);
+		if(!input.isEmpty() && owner != null)
 		{
-			ItemStack newItem = AlchemyHelper.getDecodedItem(getStackInSlot(INPUT));
+			ItemStack newItem = AlchemyHelper.getDecodedItem(input);
 			if (newItem.isEmpty())
-				if (!getStackInSlot(INPUT).hasTag() || !getStackInSlot(INPUT).getTag().contains("contentID"))
+			{
+				if(!AlchemyHelper.hasDecodedItem(input))
 					newItem = new ItemStack(MSBlocks.GENERIC_OBJECT);
 				else return 0;
-			if (!getStackInSlot(OUTPUT).isEmpty() && (getStackInSlot(OUTPUT).getItem() != newItem.getItem() || getStackInSlot(OUTPUT).getMaxStackSize() <= getStackInSlot(OUTPUT).getCount()))
+			}
+			ItemStack output = itemHandler.getStackInSlot(OUTPUT);
+			if (!output.isEmpty() && (output.getItem() != newItem.getItem() || output.getMaxStackSize() <= output.getCount()))
 			{
 				return 0;
 			}
 			GristSet cost = GristCostRecipe.findCostForItem(newItem, wildcardGrist, false, world);
 			// We need to run the check 16 times. Don't want to hammer the game with too many of these, so the comparators are only told to update every 20 ticks.
 			// Additionally, we need to check if the item in the slot is empty. Otherwise, it will attempt to check the cost for air, which cannot be alchemized anyway.
-			if (cost != null && !getStackInSlot(0).isEmpty())
+			if (cost != null && !input.isEmpty())
 			{
 				GristSet scale_cost;
 				for (int lvl = 1; lvl <= 17; lvl++)
@@ -218,7 +226,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 	@Override
 	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity player)
 	{
-		return new MiniAlchemiterContainer(windowId, playerInventory, this, parameters, wildcardGristHolder, pos);
+		return new MiniAlchemiterContainer(windowId, playerInventory, itemHandler, parameters, wildcardGristHolder, IWorldPosCallable.of(world, pos), pos);
 	}
 	
 	public GristType getWildcardGrist()

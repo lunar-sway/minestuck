@@ -18,10 +18,11 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
+import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
 
@@ -31,16 +32,34 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements I
 	public static final RunType TYPE = RunType.BUTTON_OVERRIDE;
 	
 	private PlayerIdentifier owner;
-	boolean hasItem;
+	private boolean hasItem;
 	
 	public GristWidgetTileEntity()
 	{
 		super(MSTileEntityTypes.GRIST_WIDGET.get());
 	}
 	
+	@Override
+	protected ItemStackHandler createItemHandler()
+	{
+		return new CustomHandler(1, this::isItemValid);
+	}
+	
+	private boolean isItemValid(int slot, ItemStack stack)
+	{
+		if(stack.getItem() != MSItems.CAPTCHA_CARD)
+		{
+			return false;
+		} else
+		{
+			return (!AlchemyHelper.isPunchedCard(stack) && !AlchemyHelper.isGhostCard(stack)
+					&& AlchemyHelper.getDecodedItem(stack).getItem() != MSItems.CAPTCHA_CARD);
+		}
+	}
+	
 	public GristSet getGristWidgetResult()
 	{
-		return getGristWidgetResult(inv.get(0), world);
+		return getGristWidgetResult(itemHandler.getStackInSlot(0), world);
 	}
 	
 	public static GristSet getGristWidgetResult(ItemStack stack, World world)
@@ -73,30 +92,11 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements I
 	}
 	
 	@Override
-	public int getSizeInventory()
-	{
-		return 1;
-	}
-	
-	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack)
-	{
-		if(i != 0 || itemstack.getItem() != MSItems.CAPTCHA_CARD)
-		{
-			return false;
-		} else
-		{
-			return (!itemstack.getTag().getBoolean("punched") && itemstack.getTag().getInt("contentSize") > 0
-					&& AlchemyHelper.getDecodedItem(itemstack).getItem() != MSItems.CAPTCHA_CARD);
-		}
-	}
-	
-	@Override
 	public void tick()
 	{
 		super.tick();
 		
-		boolean item = this.getStackInSlot(0).getCount() == 0;
+		boolean item = !itemHandler.getStackInSlot(0).isEmpty();
 		if(item != hasItem)
 		{
 			hasItem = item;
@@ -128,7 +128,7 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements I
 		
 		gristSet.spawnGristEntities(world, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, world.rand, entity -> entity.setMotion(entity.getMotion().mul(0.5, 0.5, 0.5)));
 		
-		this.decrStackSize(0, 1);
+		itemHandler.extractItem(0, 1, false);
 	}
 	
 	@Override
@@ -152,24 +152,6 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements I
 	}
 	
 	@Override
-	public int[] getSlotsForFace(Direction side)
-	{
-		return new int[0];
-	}
-	
-	@Override
-	public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction)
-	{
-		return true;
-	}
-	
-	@Override
-	public boolean canExtractItem(int index, ItemStack stack, Direction direction)
-	{
-		return true;
-	}
-	
-	@Override
 	public ITextComponent getDisplayName()
 	{
 		return new TranslationTextComponent(TITLE);
@@ -179,7 +161,7 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements I
 	@Override
 	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity player)
 	{
-		return new GristWidgetContainer(windowId, playerInventory, this, parameters, pos);
+		return new GristWidgetContainer(windowId, playerInventory, itemHandler, parameters, IWorldPosCallable.of(world, pos), pos);
 	}
 	
 	@Override
@@ -196,12 +178,6 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements I
 	
 	public void resendState()
 	{
-		if(hasItem)
-		{
-			GristWidgetBlock.updateItem(false, world, this.getPos());
-		} else
-		{
-			GristWidgetBlock.updateItem(true, world, this.getPos());
-		}
+		GristWidgetBlock.updateItem(hasItem, world, this.getPos());
 	}
 }

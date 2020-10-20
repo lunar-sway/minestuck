@@ -4,17 +4,19 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.inventory.slot.InputSlot;
 import com.mraof.minestuck.inventory.slot.OutputSlot;
 import com.mraof.minestuck.item.MSItems;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IIntArray;
+import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.IntArray;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 
@@ -29,24 +31,21 @@ public class MiniTotemLatheContainer extends MachineContainer
 	private static final int OUTPUT_X = 134;
 	private static final int OUTPUT_Y = 34;
 	
-	private final IInventory totemLatheInventory;
-	
 	public MiniTotemLatheContainer(int windowId, PlayerInventory playerInventory, PacketBuffer buffer)
 	{
-		this(MSContainerTypes.MINI_TOTEM_LATHE, windowId, playerInventory, new Inventory(4), new IntArray(3), buffer.readBlockPos());
+		this(MSContainerTypes.MINI_TOTEM_LATHE, windowId, playerInventory, new ItemStackHandler(4), new IntArray(3), IWorldPosCallable.DUMMY, buffer.readBlockPos());
 	}
 	
-	public MiniTotemLatheContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, BlockPos machinePos)
+	public MiniTotemLatheContainer(int windowId, PlayerInventory playerInventory, IItemHandler inventory, IIntArray parameters, IWorldPosCallable position, BlockPos machinePos)
 	{
-		this(MSContainerTypes.MINI_TOTEM_LATHE, windowId, playerInventory, inventory, parameters, machinePos);
+		this(MSContainerTypes.MINI_TOTEM_LATHE, windowId, playerInventory, inventory, parameters, position, machinePos);
 	}
 	
-	public MiniTotemLatheContainer(ContainerType<? extends MiniTotemLatheContainer> type, int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, BlockPos machinePos)
+	public MiniTotemLatheContainer(ContainerType<? extends MiniTotemLatheContainer> type, int windowId, PlayerInventory playerInventory, IItemHandler inventory, IIntArray parameters, IWorldPosCallable position, BlockPos machinePos)
 	{
-		super(type, windowId, parameters, machinePos);
+		super(type, windowId, parameters, position, machinePos);
 		
-		assertInventorySize(inventory, 4);
-		this.totemLatheInventory = inventory;
+		assertItemHandlerSize(inventory, 4);
 		
 		addSlot(new InputSlot(inventory, 0, CARD_1_X, CARD_1_Y, MSItems.CAPTCHA_CARD));
 		addSlot(new InputSlot(inventory, 1, CARD_2_X, CARD_2_Y, MSItems.CAPTCHA_CARD));
@@ -55,10 +54,11 @@ public class MiniTotemLatheContainer extends MachineContainer
 		
 		bindPlayerInventory(playerInventory);
 	}
+	
 	@Override
-	public boolean canInteractWith(PlayerEntity player)
+	protected Block getValidBlock()
 	{
-		return totemLatheInventory.isUsableByPlayer(player);
+		return MSBlocks.MINI_TOTEM_LATHE;
 	}
 	
 	protected void bindPlayerInventory(PlayerInventory playerInventory)
