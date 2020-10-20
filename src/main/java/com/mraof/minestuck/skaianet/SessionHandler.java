@@ -82,13 +82,12 @@ public abstract class SessionHandler
 				|| !cClient.isPresent() && !serverActive && !(sClient != null && sClient.locked) && !(sServer != null && sServer.locked);	//Connect with a new player and potentially create a main connection
 	}
 	
-	void onConnectionCreated(SburbConnection connection) throws MergeResult.SessionMergeException
+	Session getSessionForConnecting(PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException
 	{
-		if(!canConnect(connection.getClientIdentifier(), connection.getServerIdentifier()))
+		if(!canConnect(client, server))
 			throw MergeResult.GENERIC_FAIL.exception();
 		
-		Session session = tryGetSessionToAdd(connection.getClientIdentifier(), connection.getServerIdentifier());
-		session.connections.add(connection);
+		return tryGetSessionToAdd(client, server);
 	}
 	
 	/**

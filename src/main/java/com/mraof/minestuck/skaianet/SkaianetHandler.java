@@ -125,11 +125,12 @@ public final class SkaianetHandler
 					ConnectionCreatedEvent.SessionJoinType joinType = s1 == null || s2 == null ? ConnectionCreatedEvent.SessionJoinType.JOIN
 							: s1 == s2 ? ConnectionCreatedEvent.SessionJoinType.INTERNAL : ConnectionCreatedEvent.SessionJoinType.MERGE;
 					
-					connection.setNewServerPlayer(server);
 					try
 					{
-						sessionHandler.onConnectionCreated(connection);    //TODO the function does the checks we want, but is not too relevant. Make a more appropriate function call (or perhaps we get there through further restructuring)
+						sessionHandler.getSessionForConnecting(player, server);
+						
 						connection.setActive(computer, serverComputer);
+						connection.setNewServerPlayer(server);
 						
 						MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(mcServer, connection, sessionHandler.getPlayerSession(player),
 								ConnectionCreatedEvent.ConnectionType.NEW_SERVER, joinType));
@@ -142,14 +143,14 @@ public final class SkaianetHandler
 					}
 				} else
 				{
-					SburbConnection newConnection = new SburbConnection(player, server, this);
-					newConnection.copyFrom(connection);
-					
 					try
 					{
-						sessionHandler.onConnectionCreated(newConnection);
+						Session session = sessionHandler.getSessionForConnecting(player, server);
 						
+						SburbConnection newConnection = new SburbConnection(player, server, this);
+						newConnection.copyFrom(connection);
 						newConnection.setActive(computer, serverComputer);
+						session.connections.add(newConnection);
 						
 						MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(mcServer, newConnection, sessionHandler.getPlayerSession(player),
 								ConnectionCreatedEvent.ConnectionType.SECONDARY, ConnectionCreatedEvent.SessionJoinType.INTERNAL));
@@ -167,14 +168,15 @@ public final class SkaianetHandler
 				ConnectionCreatedEvent.SessionJoinType joinType = s1 == null || s2 == null ? ConnectionCreatedEvent.SessionJoinType.JOIN
 						: s1 == s2 ? ConnectionCreatedEvent.SessionJoinType.INTERNAL : ConnectionCreatedEvent.SessionJoinType.MERGE;
 				
-				SburbConnection newConnection = new SburbConnection(player, server, this);
 				
 				try
 				{
-					sessionHandler.onConnectionCreated(newConnection);
-					SburbHandler.onConnectionCreated(newConnection);
+					Session session = sessionHandler.getSessionForConnecting(player, server);
 					
+					SburbConnection newConnection = new SburbConnection(player, server, this);
+					SburbHandler.onConnectionCreated(newConnection);
 					newConnection.setActive(computer, serverComputer);
+					session.connections.add(newConnection);
 					
 					MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(mcServer, newConnection, sessionHandler.getPlayerSession(player),
 							ConnectionCreatedEvent.ConnectionType.REGULAR, joinType));
@@ -505,7 +507,7 @@ public final class SkaianetHandler
 				c.setIsMain();
 				try
 				{
-					sessionHandler.onConnectionCreated(c);
+					sessionHandler.getSessionForConnecting(target, IdentifierHandler.NULL_IDENTIFIER).connections.add(c);
 					SburbHandler.onFirstItemGiven(c);
 				} catch(MergeResult.SessionMergeException e)
 				{
