@@ -1,10 +1,8 @@
 package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.event.ConnectionCreatedEvent;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.nbt.CompoundNBT;
-import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
@@ -60,9 +58,9 @@ public final class GlobalSessionHandler extends SessionHandler
 	}
 	
 	@Override
-	Pair<Session, ConnectionCreatedEvent.SessionJoinType> tryGetSessionToAdd(PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException
+	Session tryGetSessionToAdd(PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException
 	{
-		return Pair.of(SessionMerger.verifyCanAddToGlobal(globalSession, client, server), ConnectionCreatedEvent.SessionJoinType.JOIN);
+		return SessionMerger.verifyCanAddToGlobal(globalSession, client, server);
 	}
 	
 	@Override
