@@ -96,7 +96,7 @@ public final class SkaianetHandler
 				|| !sessionHandler.getServerList(player).containsKey(server.getId()))
 			return;
 		
-		ComputerReference serverReference = openedServers.remove(server);
+		ComputerReference serverReference = openedServers.get(server);
 		
 		if(serverReference != null)
 		{
@@ -106,6 +106,7 @@ public final class SkaianetHandler
 			{
 				LOGGER.error("Tried to connect to {}, but the waiting computer was not found.",
 						server.getUsername());
+				openedServers.remove(server);
 				checkAndUpdate();
 				return;
 			}
@@ -118,6 +119,8 @@ public final class SkaianetHandler
 				{
 					connection.setActive(computer, serverComputer);
 					
+					openedServers.remove(server);
+					
 					MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(mcServer, connection, sessionHandler.getPlayerSession(player),
 							ConnectionCreatedEvent.ConnectionType.RESUME, ConnectionCreatedEvent.SessionJoinType.INTERNAL));
 				} else if(!connection.hasServerPlayer())
@@ -129,6 +132,8 @@ public final class SkaianetHandler
 						connection.setNewServerPlayer(server);
 						connection.setActive(computer, serverComputer);
 						
+						openedServers.remove(server);
+						
 						MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(mcServer, connection, pair.getLeft(),
 								ConnectionCreatedEvent.ConnectionType.NEW_SERVER, pair.getRight()));
 					} catch(MergeResult.SessionMergeException e)
@@ -136,7 +141,6 @@ public final class SkaianetHandler
 						LOGGER.warn("SessionHandler denied connection between {} and {}, reason: {}", player.getUsername(), server.getUsername(), e.getMessage());
 						computer.putClientMessage(e.getResult().translationKey());
 						connection.removeServerPlayer();
-						openedServers.put(server, serverReference);
 					}
 				} else
 				{
@@ -146,8 +150,11 @@ public final class SkaianetHandler
 						
 						SburbConnection newConnection = new SburbConnection(player, server, this);
 						newConnection.copyFrom(connection);
-						newConnection.setActive(computer, serverComputer);
 						session.addConnection(newConnection);
+						
+						newConnection.setActive(computer, serverComputer);
+						
+						openedServers.remove(server);
 						
 						MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(mcServer, newConnection, sessionHandler.getPlayerSession(player),
 								ConnectionCreatedEvent.ConnectionType.SECONDARY, ConnectionCreatedEvent.SessionJoinType.INTERNAL));
@@ -155,7 +162,6 @@ public final class SkaianetHandler
 					{
 						LOGGER.warn("SessionHandler denied connection between {} and {}, reason: {}", player.getUsername(), server.getUsername(), e.getMessage());
 						computer.putClientMessage(e.getResult().translationKey());
-						openedServers.put(server, serverReference);
 					}
 				}
 			} else
@@ -166,8 +172,11 @@ public final class SkaianetHandler
 					
 					SburbConnection newConnection = new SburbConnection(player, server, this);
 					SburbHandler.onConnectionCreated(newConnection);
-					newConnection.setActive(computer, serverComputer);
 					pair.getLeft().addConnection(newConnection);
+					
+					newConnection.setActive(computer, serverComputer);
+					
+					openedServers.remove(server);
 					
 					MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(mcServer, newConnection, pair.getLeft(),
 							ConnectionCreatedEvent.ConnectionType.REGULAR, pair.getRight()));
@@ -175,7 +184,6 @@ public final class SkaianetHandler
 				{
 					LOGGER.warn("SessionHandler denied connection between {} and {}, reason: {}", player.getUsername(), server.getUsername(), e.getMessage());
 					computer.putClientMessage(e.getResult().translationKey());
-					openedServers.put(server, serverReference);
 				}
 			}
 		}
@@ -193,10 +201,14 @@ public final class SkaianetHandler
 		
 		optional.ifPresent(connection -> {
 			PlayerIdentifier otherPlayer = isClient ? connection.getServerIdentifier() : connection.getClientIdentifier();
-			ComputerReference otherReference = getResumeMap(!isClient).remove(otherPlayer);
+			Map<PlayerIdentifier, ComputerReference> map = getResumeMap(!isClient);
+			ComputerReference otherReference = map.get(otherPlayer);
 			
 			if(isClient && otherReference == null)
-				otherReference = openedServers.remove(otherPlayer);
+			{
+				otherReference = openedServers.get(otherPlayer);
+				map = openedServers;
+			}
 			
 			if(otherReference != null)
 			{
@@ -206,6 +218,7 @@ public final class SkaianetHandler
 				{
 					LOGGER.error("Tried to resume connection, between {} and {}, but the waiting computer was not found.",
 							connection.getClientIdentifier().getUsername(), connection.getServerIdentifier().getUsername());
+					map.remove(otherPlayer);
 					checkAndUpdate();
 					return;
 				}
@@ -213,6 +226,8 @@ public final class SkaianetHandler
 				if(isClient)
 					connection.setActive(computer, otherComputer);
 				else connection.setActive(otherComputer, computer);
+				
+				map.remove(otherPlayer);
 				
 				MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(mcServer, connection, sessionHandler.getPlayerSession(player),
 						ConnectionCreatedEvent.ConnectionType.RESUME, ConnectionCreatedEvent.SessionJoinType.INTERNAL));
@@ -237,7 +252,7 @@ public final class SkaianetHandler
 		if(optional.isPresent() && resumingClients.containsKey(optional.get().getClientIdentifier()))
 		{
 			SburbConnection connection = optional.get();
-			ComputerReference clientReference = resumingClients.remove(connection.getClientIdentifier());
+			ComputerReference clientReference = resumingClients.get(connection.getClientIdentifier());
 			infoTracker.markDirty(connection.getClientIdentifier());
 			
 			ISburbComputer clientComputer = clientReference.getComputer(mcServer);
@@ -245,11 +260,14 @@ public final class SkaianetHandler
 			{
 				LOGGER.error("Tried to resume connection, between {} and {}, but the waiting computer was not found.",
 						connection.getClientIdentifier().getUsername(), player.getUsername());
+				resumingClients.remove(connection.getClientIdentifier());
 				checkAndUpdate();
 				return;
 			}
 			
 			connection.setActive(clientComputer, computer);
+			
+			resumingClients.remove(connection.getClientIdentifier());
 			
 			MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(mcServer, connection, sessionHandler.getPlayerSession(player),
 					ConnectionCreatedEvent.ConnectionType.RESUME, ConnectionCreatedEvent.SessionJoinType.INTERNAL));
