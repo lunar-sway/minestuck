@@ -5,6 +5,7 @@ import com.mraof.minestuck.computer.ISburbComputer;
 import com.mraof.minestuck.computer.editmode.DeployEntry;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
+import com.mraof.minestuck.event.ConnectionCreatedEvent;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;
@@ -19,6 +20,7 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.StringNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
@@ -155,7 +157,7 @@ public final class SburbConnection
 		isActive = true;
 	}
 	
-	void setActive(ISburbComputer client, ISburbComputer server)
+	void setActive(ISburbComputer client, ISburbComputer server, ConnectionCreatedEvent.ConnectionType type)
 	{
 		if(isActive())
 			throw new IllegalStateException("Should not activate sburb connection when already active");
@@ -170,6 +172,7 @@ public final class SburbConnection
 		client.connected(serverIdentifier, true);
 		server.connected(clientIdentifier, false);
 		
+		MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(skaianet.mcServer, this, session, type));
 	}
 	
 	void close()

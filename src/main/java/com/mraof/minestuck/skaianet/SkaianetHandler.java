@@ -116,12 +116,10 @@ public final class SkaianetHandler
 				SburbConnection connection = optional.get();
 				if(connection.getServerIdentifier().equals(server))
 				{
-					connection.setActive(computer, serverComputer);
+					connection.setActive(computer, serverComputer, ConnectionCreatedEvent.ConnectionType.RESUME);
 					
 					openedServers.remove(server);
 					
-					MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(mcServer, connection, sessionHandler.getPlayerSession(player),
-							ConnectionCreatedEvent.ConnectionType.RESUME));
 				} else if(!connection.hasServerPlayer())
 				{
 					try
@@ -129,12 +127,10 @@ public final class SkaianetHandler
 						Session session = sessionHandler.getSessionForConnecting(player, server);
 						
 						connection.setNewServerPlayer(server);
-						connection.setActive(computer, serverComputer);
+						connection.setActive(computer, serverComputer, ConnectionCreatedEvent.ConnectionType.NEW_SERVER);
 						
 						openedServers.remove(server);
 						
-						MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(mcServer, connection, session,
-								ConnectionCreatedEvent.ConnectionType.NEW_SERVER));
 					} catch(MergeResult.SessionMergeException e)
 					{
 						LOGGER.warn("SessionHandler denied connection between {} and {}, reason: {}", player.getUsername(), server.getUsername(), e.getMessage());
@@ -151,12 +147,10 @@ public final class SkaianetHandler
 						newConnection.copyFrom(connection);
 						session.addConnection(newConnection);
 						
-						newConnection.setActive(computer, serverComputer);
+						newConnection.setActive(computer, serverComputer, ConnectionCreatedEvent.ConnectionType.SECONDARY);
 						
 						openedServers.remove(server);
 						
-						MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(mcServer, newConnection, sessionHandler.getPlayerSession(player),
-								ConnectionCreatedEvent.ConnectionType.SECONDARY));
 					} catch(MergeResult.SessionMergeException e)
 					{
 						LOGGER.warn("SessionHandler denied connection between {} and {}, reason: {}", player.getUsername(), server.getUsername(), e.getMessage());
@@ -173,12 +167,10 @@ public final class SkaianetHandler
 					SburbHandler.onConnectionCreated(newConnection);
 					session.addConnection(newConnection);
 					
-					newConnection.setActive(computer, serverComputer);
+					newConnection.setActive(computer, serverComputer, ConnectionCreatedEvent.ConnectionType.REGULAR);
 					
 					openedServers.remove(server);
 					
-					MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(mcServer, newConnection, session,
-							ConnectionCreatedEvent.ConnectionType.REGULAR));
 				} catch(MergeResult.SessionMergeException e)
 				{
 					LOGGER.warn("SessionHandler denied connection between {} and {}, reason: {}", player.getUsername(), server.getUsername(), e.getMessage());
@@ -223,13 +215,11 @@ public final class SkaianetHandler
 				}
 				
 				if(isClient)
-					connection.setActive(computer, otherComputer);
-				else connection.setActive(otherComputer, computer);
+					connection.setActive(computer, otherComputer, ConnectionCreatedEvent.ConnectionType.RESUME);
+				else connection.setActive(otherComputer, computer, ConnectionCreatedEvent.ConnectionType.RESUME);
 				
 				map.remove(otherPlayer);
 				
-				MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(mcServer, connection, sessionHandler.getPlayerSession(player),
-						ConnectionCreatedEvent.ConnectionType.RESUME));
 			} else
 			{
 				getResumeMap(isClient).put(player, reference);
@@ -264,12 +254,10 @@ public final class SkaianetHandler
 				return;
 			}
 			
-			connection.setActive(clientComputer, computer);
+			connection.setActive(clientComputer, computer, ConnectionCreatedEvent.ConnectionType.RESUME);
 			
 			resumingClients.remove(connection.getClientIdentifier());
 			
-			MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(mcServer, connection, sessionHandler.getPlayerSession(player),
-					ConnectionCreatedEvent.ConnectionType.RESUME));
 		} else
 		{
 			computer.putServerBoolean("isOpen", true);
