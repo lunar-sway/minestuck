@@ -99,13 +99,12 @@ public final class SkaianetHandler
 		
 		if(serverReference != null)
 		{
-			infoTracker.markDirty(server);
 			ISburbComputer serverComputer = serverReference.getComputer(mcServer);
 			if(serverComputer == null)
 			{
 				LOGGER.error("Tried to connect to {}, but the waiting computer was not found.",
 						server.getUsername());
-				openedServers.remove(server);
+				removeFromMap(openedServers, server);
 				checkAndUpdate();
 				return;
 			}
@@ -117,7 +116,7 @@ public final class SkaianetHandler
 				if(connection.getServerIdentifier().equals(server))
 				{
 					connection.setActive(computer, serverComputer, ConnectionCreatedEvent.ConnectionType.RESUME);
-					openedServers.remove(server);
+					removeFromMap(openedServers, server);
 				} else if(!connection.hasServerPlayer())
 				{
 					try
@@ -126,12 +125,11 @@ public final class SkaianetHandler
 						connection.setNewServerPlayer(server);
 						
 						connection.setActive(computer, serverComputer, ConnectionCreatedEvent.ConnectionType.NEW_SERVER);
-						openedServers.remove(server);
+						removeFromMap(openedServers, server);
 					} catch(MergeResult.SessionMergeException e)
 					{
 						LOGGER.warn("SessionHandler denied connection between {} and {}, reason: {}", player.getUsername(), server.getUsername(), e.getMessage());
 						computer.putClientMessage(e.getResult().translationKey());
-						connection.removeServerPlayer();
 					}
 				} else
 				{
@@ -139,7 +137,7 @@ public final class SkaianetHandler
 					{
 						SburbConnection newConnection = tryCreateSecondaryConnectionFor(connection, server);
 						newConnection.setActive(computer, serverComputer, ConnectionCreatedEvent.ConnectionType.SECONDARY);
-						openedServers.remove(server);
+						removeFromMap(openedServers, server);
 					} catch(MergeResult.SessionMergeException e)
 					{
 						LOGGER.warn("Secondary connection failed between {} and {}, reason: {}", player.getUsername(), server.getUsername(), e.getMessage());
@@ -152,7 +150,7 @@ public final class SkaianetHandler
 				{
 					SburbConnection newConnection = tryCreateNewConnectionFor(player, server);
 					newConnection.setActive(computer, serverComputer, ConnectionCreatedEvent.ConnectionType.REGULAR);
-					openedServers.remove(server);
+					removeFromMap(openedServers, server);
 				} catch(MergeResult.SessionMergeException e)
 				{
 					LOGGER.warn("Connection failed between {} and {}, reason: {}", player.getUsername(), server.getUsername(), e.getMessage());
@@ -206,13 +204,12 @@ public final class SkaianetHandler
 			
 			if(otherReference != null)
 			{
-				infoTracker.markDirty(otherPlayer);
 				ISburbComputer otherComputer = otherReference.getComputer(mcServer);
 				if(otherComputer == null)
 				{
 					LOGGER.error("Tried to resume connection, between {} and {}, but the waiting computer was not found.",
 							connection.getClientIdentifier().getUsername(), connection.getServerIdentifier().getUsername());
-					map.remove(otherPlayer);
+					removeFromMap(map, otherPlayer);
 					checkAndUpdate();
 					return;
 				}
@@ -221,7 +218,7 @@ public final class SkaianetHandler
 					connection.setActive(computer, otherComputer, ConnectionCreatedEvent.ConnectionType.RESUME);
 				else connection.setActive(otherComputer, computer, ConnectionCreatedEvent.ConnectionType.RESUME);
 				
-				map.remove(otherPlayer);
+				removeFromMap(map, otherPlayer);
 				
 			} else
 			{
@@ -245,21 +242,20 @@ public final class SkaianetHandler
 		{
 			SburbConnection connection = optional.get();
 			ComputerReference clientReference = resumingClients.get(connection.getClientIdentifier());
-			infoTracker.markDirty(connection.getClientIdentifier());
 			
 			ISburbComputer clientComputer = clientReference.getComputer(mcServer);
 			if(clientComputer == null)
 			{
 				LOGGER.error("Tried to resume connection, between {} and {}, but the waiting computer was not found.",
 						connection.getClientIdentifier().getUsername(), player.getUsername());
-				resumingClients.remove(connection.getClientIdentifier());
+				removeFromMap(resumingClients, connection.getClientIdentifier());
 				checkAndUpdate();
 				return;
 			}
 			
 			connection.setActive(clientComputer, computer, ConnectionCreatedEvent.ConnectionType.RESUME);
 			
-			resumingClients.remove(connection.getClientIdentifier());
+			removeFromMap(resumingClients, connection.getClientIdentifier());
 			
 		} else
 		{
@@ -281,6 +277,12 @@ public final class SkaianetHandler
 	private Map<PlayerIdentifier, ComputerReference> getResumeMap(boolean isClient)
 	{
 		return isClient ? resumingClients : resumingServers;
+	}
+	
+	private void removeFromMap(Map<PlayerIdentifier, ComputerReference> map, PlayerIdentifier player)
+	{
+		map.remove(player);
+		infoTracker.markDirty(player);
 	}
 	
 	public void closeClientConnectionRemotely(PlayerIdentifier player)
@@ -341,10 +343,9 @@ public final class SkaianetHandler
 		PlayerIdentifier owner = computer.getOwner();
 		if(map.containsKey(owner) && map.get(owner).matches(computer))
 		{
-			map.remove(owner);
+			removeFromMap(map, owner);
 			computer.putServerBoolean("isOpen", false);
 			computer.putServerMessage(STOP_RESUME);
-			infoTracker.markDirty(owner);
 		}
 	}
 	
