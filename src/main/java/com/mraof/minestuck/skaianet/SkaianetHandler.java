@@ -11,7 +11,6 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
@@ -20,8 +19,8 @@ import net.minecraftforge.common.util.Constants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.*;
-import java.util.Map.Entry;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
@@ -40,11 +39,11 @@ public final class SkaianetHandler
 	
 	private static SkaianetHandler INSTANCE;
 	
-	final Map<PlayerIdentifier, ComputerReference> openedServers = new HashMap<>();
-	private final Map<PlayerIdentifier, ComputerReference> resumingClients = new HashMap<>();
-	private final Map<PlayerIdentifier, ComputerReference> resumingServers = new HashMap<>();
-	final SessionHandler sessionHandler;
 	final InfoTracker infoTracker = new InfoTracker(this);
+	final ComputerWaitingList openedServers = new ComputerWaitingList(infoTracker, false, "opened server");
+	private final ComputerWaitingList resumingClients = new ComputerWaitingList(infoTracker, true, "resuming client");
+	private final ComputerWaitingList resumingServers = new ComputerWaitingList(infoTracker, false, "resuming server");
+	final SessionHandler sessionHandler;
 	
 	MinecraftServer mcServer;
 	
@@ -62,9 +61,9 @@ public final class SkaianetHandler
 		
 		sessionHandler = sessions.getActual();
 		
-		readPlayerComputerList(nbt, openedServers, "serversOpen");
-		readPlayerComputerList(nbt, resumingClients, "resumingClients");
-		readPlayerComputerList(nbt, resumingServers, "resumingServers");
+		openedServers.read(nbt.getList("serversOpen", Constants.NBT.TAG_COMPOUND));
+		resumingClients.read(nbt.getList("resumingClients", Constants.NBT.TAG_COMPOUND));
+		resumingServers.read(nbt.getList("resumingServers", Constants.NBT.TAG_COMPOUND));
 	}
 	
 	/**
@@ -95,20 +94,10 @@ public final class SkaianetHandler
 				|| !sessionHandler.getServerList(player).containsKey(server.getId()))
 			return;
 		
-		ComputerReference serverReference = openedServers.get(server);
+		ISburbComputer serverComputer = openedServers.getComputer(mcServer, server);
 		
-		if(serverReference != null)
+		if(serverComputer != null)
 		{
-			ISburbComputer serverComputer = serverReference.getComputer(mcServer);
-			if(serverComputer == null)
-			{
-				LOGGER.error("Tried to connect to {}, but the waiting computer was not found.",
-						server.getUsername());
-				removeFromMap(openedServers, server);
-				checkAndUpdate();
-				return;
-			}
-			
 			Optional<SburbConnection> optional = getMainConnection(player, true);
 			if(optional.isPresent())
 			{
@@ -116,7 +105,7 @@ public final class SkaianetHandler
 				if(connection.getServerIdentifier().equals(server))
 				{
 					connection.setActive(computer, serverComputer, ConnectionCreatedEvent.ConnectionType.RESUME);
-					removeFromMap(openedServers, server);
+					openedServers.remove(server);
 				} else if(!connection.hasServerPlayer())
 				{
 					try
@@ -125,7 +114,7 @@ public final class SkaianetHandler
 						connection.setNewServerPlayer(server);
 						
 						connection.setActive(computer, serverComputer, ConnectionCreatedEvent.ConnectionType.NEW_SERVER);
-						removeFromMap(openedServers, server);
+						openedServers.remove(server);
 					} catch(MergeResult.SessionMergeException e)
 					{
 						LOGGER.warn("SessionHandler denied connection between {} and {}, reason: {}", player.getUsername(), server.getUsername(), e.getMessage());
@@ -137,7 +126,7 @@ public final class SkaianetHandler
 					{
 						SburbConnection newConnection = tryCreateSecondaryConnectionFor(connection, server);
 						newConnection.setActive(computer, serverComputer, ConnectionCreatedEvent.ConnectionType.SECONDARY);
-						removeFromMap(openedServers, server);
+						openedServers.remove(server);
 					} catch(MergeResult.SessionMergeException e)
 					{
 						LOGGER.warn("Secondary connection failed between {} and {}, reason: {}", player.getUsername(), server.getUsername(), e.getMessage());
@@ -150,7 +139,7 @@ public final class SkaianetHandler
 				{
 					SburbConnection newConnection = tryCreateNewConnectionFor(player, server);
 					newConnection.setActive(computer, serverComputer, ConnectionCreatedEvent.ConnectionType.REGULAR);
-					removeFromMap(openedServers, server);
+					openedServers.remove(server);
 				} catch(MergeResult.SessionMergeException e)
 				{
 					LOGGER.warn("Connection failed between {} and {}, reason: {}", player.getUsername(), server.getUsername(), e.getMessage());
@@ -193,38 +182,25 @@ public final class SkaianetHandler
 		
 		optional.ifPresent(connection -> {
 			PlayerIdentifier otherPlayer = isClient ? connection.getServerIdentifier() : connection.getClientIdentifier();
-			Map<PlayerIdentifier, ComputerReference> map = getResumeMap(!isClient);
-			ComputerReference otherReference = map.get(otherPlayer);
+			ComputerWaitingList list = getResumeList(!isClient);
+			ISburbComputer otherComputer = list.getComputer(mcServer, otherPlayer);
 			
-			if(isClient && otherReference == null)
+			if(isClient && otherComputer == null)
 			{
-				otherReference = openedServers.get(otherPlayer);
-				map = openedServers;
+				otherComputer = openedServers.getComputer(mcServer, otherPlayer);
+				list = openedServers;
 			}
 			
-			if(otherReference != null)
+			if(otherComputer != null)
 			{
-				ISburbComputer otherComputer = otherReference.getComputer(mcServer);
-				if(otherComputer == null)
-				{
-					LOGGER.error("Tried to resume connection, between {} and {}, but the waiting computer was not found.",
-							connection.getClientIdentifier().getUsername(), connection.getServerIdentifier().getUsername());
-					removeFromMap(map, otherPlayer);
-					checkAndUpdate();
-					return;
-				}
-				
 				if(isClient)
 					connection.setActive(computer, otherComputer, ConnectionCreatedEvent.ConnectionType.RESUME);
 				else connection.setActive(otherComputer, computer, ConnectionCreatedEvent.ConnectionType.RESUME);
 				
-				removeFromMap(map, otherPlayer);
-				
+				list.remove(otherPlayer);
 			} else
 			{
-				getResumeMap(isClient).put(player, reference);
-				computer.setIsResuming(isClient);
-				infoTracker.markDirty(player);
+				getResumeList(isClient).put(player, computer);
 			}
 			checkAndUpdate();
 		});
@@ -238,31 +214,19 @@ public final class SkaianetHandler
 			return;
 		
 		Optional<SburbConnection> optional = getMainConnection(player, false);
-		if(optional.isPresent() && resumingClients.containsKey(optional.get().getClientIdentifier()))
+		if(optional.isPresent() && resumingClients.contains(optional.get().getClientIdentifier()))
 		{
 			SburbConnection connection = optional.get();
-			ComputerReference clientReference = resumingClients.get(connection.getClientIdentifier());
+			ISburbComputer clientComputer = resumingClients.getComputer(mcServer, connection.getClientIdentifier());
 			
-			ISburbComputer clientComputer = clientReference.getComputer(mcServer);
-			if(clientComputer == null)
+			if(clientComputer != null)
 			{
-				LOGGER.error("Tried to resume connection, between {} and {}, but the waiting computer was not found.",
-						connection.getClientIdentifier().getUsername(), player.getUsername());
-				removeFromMap(resumingClients, connection.getClientIdentifier());
-				checkAndUpdate();
-				return;
+				resumingClients.remove(connection.getClientIdentifier());
+				connection.setActive(clientComputer, computer, ConnectionCreatedEvent.ConnectionType.RESUME);
 			}
-			
-			connection.setActive(clientComputer, computer, ConnectionCreatedEvent.ConnectionType.RESUME);
-			
-			removeFromMap(resumingClients, connection.getClientIdentifier());
-			
 		} else
 		{
-			computer.putServerBoolean("isOpen", true);
-			openedServers.put(player, reference);
-			
-			infoTracker.markDirty(player);
+			openedServers.put(player, computer);
 		}
 		checkAndUpdate();
 	}
@@ -270,27 +234,21 @@ public final class SkaianetHandler
 	private boolean isConnectingBlocked(PlayerIdentifier player, boolean isClient)
 	{
 		if(isClient)
-			return getActiveConnection(player) != null || resumingClients.containsKey(player);
-		else return openedServers.containsKey(player) || resumingServers.containsKey(player);
+			return getActiveConnection(player) != null || resumingClients.contains(player);
+		else return openedServers.contains(player) || resumingServers.contains(player);
 	}
 	
-	private Map<PlayerIdentifier, ComputerReference> getResumeMap(boolean isClient)
+	private ComputerWaitingList getResumeList(boolean isClient)
 	{
 		return isClient ? resumingClients : resumingServers;
 	}
 	
-	private void removeFromMap(Map<PlayerIdentifier, ComputerReference> map, PlayerIdentifier player)
-	{
-		map.remove(player);
-		infoTracker.markDirty(player);
-	}
-	
 	public void closeClientConnectionRemotely(PlayerIdentifier player)
 	{
-		if(resumingClients.containsKey(player))
+		if(resumingClients.contains(player))
 		{
-			ISburbComputer computer = resumingClients.remove(player).getComputer(mcServer);
-			infoTracker.markDirty(player);
+			ISburbComputer computer = resumingClients.getComputer(mcServer, player);
+			resumingClients.remove(player);
 			if(computer != null)
 			{
 				computer.putClientBoolean("isResuming", false);
@@ -308,10 +266,9 @@ public final class SkaianetHandler
 	public void closeClientConnection(ISburbComputer computer)
 	{
 		PlayerIdentifier owner = computer.getOwner();
-		if(resumingClients.containsKey(owner) && resumingClients.get(owner).matches(computer))
+		if(resumingClients.contains(computer))
 		{
 			resumingClients.remove(owner);
-			infoTracker.markDirty(owner);
 			computer.putClientBoolean("isResuming", false);
 			computer.putClientMessage(STOP_RESUME);
 			checkAndUpdate();
@@ -338,12 +295,12 @@ public final class SkaianetHandler
 		}
 	}
 	
-	private void checkAndCloseFromServerList(ISburbComputer computer, Map<PlayerIdentifier, ComputerReference> map)
+	private void checkAndCloseFromServerList(ISburbComputer computer, ComputerWaitingList map)
 	{
 		PlayerIdentifier owner = computer.getOwner();
-		if(map.containsKey(owner) && map.get(owner).matches(computer))
+		if(map.contains(computer))
 		{
-			removeFromMap(map, owner);
+			map.remove(owner);
 			computer.putServerBoolean("isOpen", false);
 			computer.putServerMessage(STOP_RESUME);
 		}
@@ -385,40 +342,17 @@ public final class SkaianetHandler
 		infoTracker.requestInfo(player, p1);
 	}
 	
-	private void readPlayerComputerList(CompoundNBT nbt, Map<PlayerIdentifier, ComputerReference> map, String key)
-	{
-		ListNBT list = nbt.getList(key, Constants.NBT.TAG_COMPOUND);
-		for(int i = 0; i < list.size(); i++)
-		{
-			CompoundNBT cmp = list.getCompound(i);
-			map.put(IdentifierHandler.load(cmp, "player"), ComputerReference.read(cmp.getCompound("computer")));
-		}
-	}
-	
 	private CompoundNBT write(CompoundNBT compound)
 	{
 		//checkData();
 		
 		sessionHandler.write(compound);
 		
-		compound.put("serversOpen", saveComputerMap(openedServers));
-		compound.put("resumingClients", saveComputerMap(resumingClients));
-		compound.put("resumingServers", saveComputerMap(resumingServers));
+		compound.put("serversOpen", openedServers.write());
+		compound.put("resumingClients", resumingClients.write());
+		compound.put("resumingServers", resumingServers.write());
 		
 		return compound;
-	}
-	
-	private ListNBT saveComputerMap(Map<PlayerIdentifier, ComputerReference> map)
-	{
-		ListNBT list = new ListNBT();
-		for(Entry<PlayerIdentifier, ComputerReference> entry : map.entrySet())
-		{
-			CompoundNBT nbt = new CompoundNBT();
-			nbt.put("computer", entry.getValue().write(new CompoundNBT()));
-			entry.getKey().saveToNBT(nbt, "player");
-			list.add(nbt);
-		}
-		return list;
 	}
 	
 	void checkAndUpdate()
@@ -432,9 +366,9 @@ public final class SkaianetHandler
 		if(!MinestuckConfig.SERVER.skaianetCheck.get())
 			return;
 		
-		validateComputerMap(openedServers, false);
-		validateComputerMap(resumingClients, true);
-		validateComputerMap(resumingServers, false);
+		openedServers.validate(mcServer);
+		resumingClients.validate(mcServer);
+		resumingServers.validate(mcServer);
 		
 		sessionHandler.getConnectionStream().forEach(c -> {
 			if(c.isActive())
@@ -450,23 +384,6 @@ public final class SkaianetHandler
 		});
 	}
 	
-	private void validateComputerMap(Map<PlayerIdentifier, ComputerReference> map, boolean clientPlayerMap)
-	{
-		Iterator<Entry<PlayerIdentifier, ComputerReference>> i = map.entrySet().iterator();
-		while(i.hasNext())
-		{
-			Entry<PlayerIdentifier, ComputerReference> data = i.next();
-			ISburbComputer computer = data.getValue().getComputer(mcServer);
-			if(computer == null || data.getValue().isInNether() || !computer.getOwner().equals(data.getKey())
-					|| !(clientPlayerMap && computer.getClientBoolean("isResuming")
-					|| !clientPlayerMap && computer.getServerBoolean("isOpen")))
-			{
-				LOGGER.warn("[SKAIANET] Invalid computer in waiting list!");
-				i.remove();
-			}
-		}
-	}
-	
 	public SburbConnection getConnection(PlayerIdentifier client, PlayerIdentifier server)
 	{
 		return sessionHandler.getConnectionStream().filter(c -> c.getClientIdentifier().equals(client) && c.getServerIdentifier().equals(server))
@@ -475,12 +392,12 @@ public final class SkaianetHandler
 	
 	boolean hasResumingClient(PlayerIdentifier identifier)
 	{
-		return resumingClients.containsKey(identifier);
+		return resumingClients.contains(identifier);
 	}
 	
 	boolean hasResumingServer(PlayerIdentifier identifier)
 	{
-		return resumingServers.containsKey(identifier) || openedServers.containsKey(identifier);
+		return resumingServers.contains(identifier) || openedServers.contains(identifier);
 	}
 	
 	public SburbConnection getServerConnection(ISburbComputer computer)
