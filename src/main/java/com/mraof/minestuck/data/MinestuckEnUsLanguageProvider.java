@@ -1175,8 +1175,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MergeResult.ABLE, "Able to merge");
 		add(MergeResult.LOCKED, "Either session is locked");
 		add(MergeResult.GLOBAL_SESSION_FULL, "Game session is full");
-		add(MergeResult.CLIENT_SESSION_FULL, "Client player's session is full");
-		add(MergeResult.SERVER_SESSION_FULL, "Server player's session is full");
+		add(MergeResult.SESSION_FULL, "The session is full");
 		add(MergeResult.MERGED_SESSION_FULL, "Too many players in total in both player's sessions");
 		add(MergeResult.BOTH_CUSTOM, "Can't merge two custom sessions");
 		add(MergeResult.GENERIC_FAIL, "Merge failed");

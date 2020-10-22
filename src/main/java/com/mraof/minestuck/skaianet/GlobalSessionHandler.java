@@ -58,9 +58,9 @@ public final class GlobalSessionHandler extends SessionHandler
 	}
 	
 	@Override
-	Session tryGetSessionToAdd(PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException
+	Session prepareSessionFor(PlayerIdentifier... players) throws MergeResult.SessionMergeException
 	{
-		return SessionMerger.verifyCanAddToGlobal(globalSession, client, server);
+		return SessionMerger.verifyCanAddToGlobal(globalSession, players);
 	}
 	
 	@Override

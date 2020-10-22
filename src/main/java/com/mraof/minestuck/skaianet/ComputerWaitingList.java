@@ -13,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 public class ComputerWaitingList
 {
@@ -121,5 +122,10 @@ public class ComputerWaitingList
 				i.remove();
 			}
 		}
+	}
+	
+	Set<PlayerIdentifier> getPlayers()
+	{
+		return map.keySet();
 	}
 }

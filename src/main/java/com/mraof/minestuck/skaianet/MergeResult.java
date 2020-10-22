@@ -5,8 +5,7 @@ public enum MergeResult	//TODO This isn't used for much else than exceptions. Re
 	ABLE("able", "Is able to merge"),
 	LOCKED("locked", "Session is locked"),
 	GLOBAL_SESSION_FULL("global_session_full", "Global session is full"),
-	CLIENT_SESSION_FULL("client_session_full", "Client session is full"),
-	SERVER_SESSION_FULL("server_session_full", "Server session is full"),
+	SESSION_FULL("session_full", "Session is full"),
 	MERGED_SESSION_FULL("merged_session_full", "Merged session is full"),
 	BOTH_CUSTOM("both_custom", "Both sessions are custom sessions"),
 	GENERIC_FAIL("fail", "Merge failed");

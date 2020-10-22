@@ -5,42 +5,37 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 final class SessionMerger
 {
-	static Session getValidMergedSession(DefaultSessionHandler handler, PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException
+	static Session getValidMergedSession(DefaultSessionHandler handler, PlayerIdentifier... players) throws MergeResult.SessionMergeException
 	{
-		//TODO should find session by connection, but not by predefined data
-		Session cs = handler.getPlayerSession(client), ss = handler.getPlayerSession(server);
-		if(cs != null && ss != null)
+		Set<Session> sessions = Arrays.stream(players).map(handler::getPlayerSession).filter(Objects::nonNull).collect(Collectors.toSet());
+		
+		if(sessions.size() > 1)
 		{
-			if(cs == ss)
-				return cs;
-			
-			Session target = createMergedSession(cs, ss);
-			verifyCanAdd(target, client, server, MergeResult.MERGED_SESSION_FULL);
-			handler.handleSuccessfulMerge(cs, ss, target);
+			Session target = createMergedSession(sessions);
+			verifyCanAdd(target, MergeResult.MERGED_SESSION_FULL, players);
+			handler.handleSuccessfulMerge(sessions, target);
 			return target;
-		} else if(cs != null)
+		} else if(sessions.size() == 1)
 		{
-			verifyCanAdd(cs, client, server, MergeResult.CLIENT_SESSION_FULL);
-			return cs;
-		} else if(ss != null)
-		{
-			verifyCanAdd(ss, client, server, MergeResult.SERVER_SESSION_FULL);
-			return ss;
+			Session session = sessions.stream().findAny().get();
+			verifyCanAdd(session, MergeResult.SESSION_FULL, players);
+			return session;
 		} else
 		{
 			Session session = new Session();
-			verifyCanAdd(session, client, server, MergeResult.GENERIC_FAIL);
+			verifyCanAdd(session, MergeResult.GENERIC_FAIL, players);
 			handler.addNewSession(session);
 			return session;
 		}
 	}
 	
-	static Session verifyCanAddToGlobal(Session session, PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException
+	static Session verifyCanAddToGlobal(Session session, PlayerIdentifier... players) throws MergeResult.SessionMergeException
 	{
-		verifyCanAdd(session, client, server, MergeResult.GLOBAL_SESSION_FULL);
+		verifyCanAdd(session, MergeResult.GLOBAL_SESSION_FULL, players);
 		return session;
 	}
 	
@@ -158,28 +153,28 @@ final class SessionMerger
 		} while(addedAny);
 	}
 	
-	private static void verifyCanAdd(Session target, PlayerIdentifier client, PlayerIdentifier server, MergeResult fullSessionResult) throws MergeResult.SessionMergeException
+	private static void verifyCanAdd(Session target, MergeResult fullSessionResult, PlayerIdentifier... players) throws MergeResult.SessionMergeException
 	{
-		Set<PlayerIdentifier> players = target.getPlayerList();
-		int size = players.size();
-		if(!players.contains(client))
-			size++;
-		if(!players.contains(server))
-			size++;
+		Set<PlayerIdentifier> playersInSession = target.getPlayerList();
+		int size = playersInSession.size();
+		for(PlayerIdentifier player : players)
+		{
+			if(!playersInSession.contains(player))
+				size++;
+		}
 		
-		if(target.locked && size != players.size())	//If the session is locked and we're trying to add a new player to it
+		if(target.locked && size != playersInSession.size())	//If the session is locked and we're trying to add a new player to it
 			throw MergeResult.LOCKED.exception();
 		
 		if(MinestuckConfig.SERVER.forceMaxSize && size > SessionHandler.MAX_SIZE)
 			throw fullSessionResult.exception();
-		
 	}
 	
-	private static Session createMergedSession(Session s1, Session s2) throws MergeResult.SessionMergeException
+	private static Session createMergedSession(Set<Session> sessions) throws MergeResult.SessionMergeException
 	{
 		Session mergedSession = new Session();
-		mergedSession.inheritFrom(s1);
-		mergedSession.inheritFrom(s2);
+		for(Session session : sessions)
+			mergedSession.inheritFrom(session);
 		return mergedSession;
 	}
 }

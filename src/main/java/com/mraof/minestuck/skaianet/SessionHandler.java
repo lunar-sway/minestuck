@@ -45,7 +45,7 @@ public abstract class SessionHandler
 		return getSessions().stream().flatMap(session -> session.connections.stream());
 	}
 	
-	abstract Session tryGetSessionToAdd(PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException;
+	abstract Session prepareSessionFor(PlayerIdentifier... players) throws MergeResult.SessionMergeException;
 	
 	abstract void findOrCreateAndCall(PlayerIdentifier player, SkaianetException.SkaianetConsumer<Session> consumer) throws SkaianetException;
 	
@@ -86,7 +86,7 @@ public abstract class SessionHandler
 		if(!canConnect(client, server))
 			throw MergeResult.GENERIC_FAIL.exception();
 		
-		return tryGetSessionToAdd(client, server);
+		return prepareSessionFor(client, server);
 	}
 	
 	/**
@@ -127,7 +127,7 @@ public abstract class SessionHandler
 	Map<Integer, String> getServerList(PlayerIdentifier client)
 	{
 		Map<Integer, String> map = new HashMap<>();
-		for(PlayerIdentifier server : skaianetHandler.openedServers.keySet())
+		for(PlayerIdentifier server : skaianetHandler.openedServers.getPlayers())
 		{
 			if(canConnect(client, server))
 			{

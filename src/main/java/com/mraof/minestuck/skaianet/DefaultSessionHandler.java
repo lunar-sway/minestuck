@@ -86,9 +86,9 @@ public final class DefaultSessionHandler extends SessionHandler
 	}
 	
 	@Override
-	Session tryGetSessionToAdd(PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException
+	Session prepareSessionFor(PlayerIdentifier... players) throws MergeResult.SessionMergeException
 	{
-		return SessionMerger.getValidMergedSession(this, client, server);
+		return SessionMerger.getValidMergedSession(this, players);
 	}
 	
 	@Override
@@ -145,12 +145,13 @@ public final class DefaultSessionHandler extends SessionHandler
 		}
 	}
 	
-	void handleSuccessfulMerge(Session s1, Session s2, Session result)
+	void handleSuccessfulMerge(Set<Session> sessions, Session result)
 	{
-		sessions.remove(s1);
-		sessionsByName.remove(s1.name);
-		sessions.remove(s2);
-		sessionsByName.remove(s2.name);
+		for(Session session : sessions)
+		{
+			sessions.remove(session);
+			sessionsByName.remove(session.name);
+		}
 		sessions.add(result);
 		if(result.isCustom())
 			sessionsByName.put(result.name, result);
