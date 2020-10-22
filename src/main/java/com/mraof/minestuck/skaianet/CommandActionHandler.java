@@ -50,9 +50,9 @@ public final class CommandActionHandler
 	
 	private static boolean forceConnection(SkaianetHandler skaianet, Session session, PlayerIdentifier client, PlayerIdentifier server)
 	{
-		Optional<SburbConnection> cc = skaianet.getMainConnection(client, true), cs = skaianet.getMainConnection(server, false);
+		Optional<SburbConnection> cc = skaianet.getPrimaryConnection(client, true), cs = skaianet.getPrimaryConnection(server, false);
 		
-		if(cc.isPresent() && cc.get() == cs.orElse(null) || session.locked)
+		if(cc.isPresent() && cc.equals(cs) || session.locked)
 			return false;
 		
 		boolean updateLandChain = false;
@@ -69,7 +69,7 @@ public final class CommandActionHandler
 			skaianet.closeConnection(cc.get());
 		
 		SburbConnection connection = skaianet.getConnection(client, server);
-		if(!cc.isPresent())
+		if(!cc.isPresent() || !cc.get().isMain())
 		{
 			if(connection != null)
 			{
@@ -112,14 +112,14 @@ public final class CommandActionHandler
 		if(s != null && s.locked)
 			throw SburbConnectionCommand.LOCKED_EXCEPTION.create();
 		
-		Optional<SburbConnection> cc = skaianet.getMainConnection(identifier, true);
+		Optional<SburbConnection> cc = skaianet.getPrimaryConnection(identifier, true);
 		if(s == null || !cc.isPresent()|| !cc.get().hasEntered())
 			throw DebugLandsCommand.MUST_ENTER_EXCEPTION.create();
 		SburbConnection clientConnection = cc.get();
 		if(clientConnection.isActive())
 			skaianet.closeConnection(clientConnection);
 		
-		Optional<SburbConnection> cs = skaianet.getMainConnection(identifier, false);
+		Optional<SburbConnection> cs = skaianet.getPrimaryConnection(identifier, false);
 		if(cs.isPresent())
 		{
 			SburbConnection serverConnection = cs.get();

@@ -76,14 +76,20 @@ public final class SkaianetHandler
 				.findAny().orElse(null);
 	}
 	
-	public Optional<SburbConnection> getMainConnection(PlayerIdentifier player, boolean isClient)
+	public Optional<SburbConnection> getPrimaryConnection(PlayerIdentifier player, boolean isClient)
 	{
 		if(player == null || player.equals(IdentifierHandler.NULL_IDENTIFIER))
 			return Optional.empty();
-		Stream<SburbConnection> connections = sessionHandler.getConnectionStream().filter(SburbConnection::isMain);
+		
+		Stream<SburbConnection> connections = sessionHandler.getConnectionStream();
 		if(isClient)
-			return connections.filter(c -> c.getClientIdentifier().equals(player)).findAny();
-		else return connections.filter(c -> c.getServerIdentifier().equals(player)).findAny();
+			connections = connections.filter(c -> c.getClientIdentifier().equals(player));
+		else connections = connections.filter(c -> c.getServerIdentifier().equals(player));
+		
+		Optional<SburbConnection> optional = connections.filter(SburbConnection::isMain).findAny();
+		if(optional.isPresent())
+			return optional;
+		else return connections.filter(SburbConnection::isActive).findAny();
 	}
 	
 	public void connectToServer(ISburbComputer computer, PlayerIdentifier server)
@@ -98,7 +104,7 @@ public final class SkaianetHandler
 		
 		if(serverComputer != null)
 		{
-			Optional<SburbConnection> optional = getMainConnection(player, true);
+			Optional<SburbConnection> optional = getPrimaryConnection(player, true);
 			if(optional.isPresent())
 			{
 				SburbConnection connection = optional.get();
@@ -178,17 +184,18 @@ public final class SkaianetHandler
 		ComputerReference reference = computer.createReference();
 		if(reference.isInNether() || isConnectingBlocked(player, isClient))
 			return;
-		Optional<SburbConnection> optional = getMainConnection(player, isClient);
+		Optional<SburbConnection> optional = getPrimaryConnection(player, isClient);
 		
-		optional.ifPresent(connection -> {
+		optional.filter(connection -> !connection.isActive()).ifPresent(connection -> {
 			PlayerIdentifier otherPlayer = isClient ? connection.getServerIdentifier() : connection.getClientIdentifier();
+			
 			ComputerWaitingList list = getResumeList(!isClient);
 			ISburbComputer otherComputer = list.getComputer(mcServer, otherPlayer);
 			
 			if(isClient && otherComputer == null)
 			{
-				otherComputer = openedServers.getComputer(mcServer, otherPlayer);
 				list = openedServers;
+				otherComputer = list.getComputer(mcServer, otherPlayer);
 			}
 			
 			if(otherComputer != null)
@@ -213,8 +220,8 @@ public final class SkaianetHandler
 		if(reference.isInNether() || isConnectingBlocked(player, false))
 			return;
 		
-		Optional<SburbConnection> optional = getMainConnection(player, false);
-		if(optional.isPresent() && resumingClients.contains(optional.get().getClientIdentifier()))
+		Optional<SburbConnection> optional = getPrimaryConnection(player, false);
+		if(optional.isPresent() && !optional.get().isActive() && resumingClients.contains(optional.get().getClientIdentifier()))
 		{
 			SburbConnection connection = optional.get();
 			ISburbComputer clientComputer = resumingClients.getComputer(mcServer, connection.getClientIdentifier());
@@ -328,8 +335,9 @@ public final class SkaianetHandler
 			serverComputer.clearConnectedClient();
 			serverComputer.putServerMessage(CLOSED);
 		}
-		
-		ConnectionCreatedEvent.ConnectionType type = !connection.isMain() && getMainConnection(connection.getClientIdentifier(), true).isPresent()
+		//Is secondary connection if primary is present, and does not equal this connection.
+		// TODO it being primary/secondary should be present as a final field in connections
+		ConnectionCreatedEvent.ConnectionType type = getPrimaryConnection(connection.getClientIdentifier(), true).map(c -> !connection.equals(c)).orElse(true)
 				? ConnectionCreatedEvent.ConnectionType.SECONDARY : ConnectionCreatedEvent.ConnectionType.REGULAR;
 		MinecraftForge.EVENT_BUS.post(new ConnectionClosedEvent(mcServer, connection, sessionHandler.getPlayerSession(connection.getClientIdentifier()), type));
 		
@@ -413,27 +421,23 @@ public final class SkaianetHandler
 	 */
 	public DimensionType prepareEntry(PlayerIdentifier target)
 	{
-		SburbConnection c = getMainConnection(target, true).orElse(null);
+		SburbConnection c = getPrimaryConnection(target, true).orElse(null);
 		if(c == null)
 		{
-			c = getActiveConnection(target);
-			if(c == null)
+			LOGGER.info("Player {} entered without connection. Creating connection... ", target.getUsername());
+			c = new SburbConnection(target, this);
+			c.setIsMain();
+			try
 			{
-				LOGGER.info("Player {} entered without connection. Creating connection... ", target.getUsername());
-				c = new SburbConnection(target, this);
-				c.setIsMain();
-				try
-				{
-					sessionHandler.getSessionForConnecting(target, IdentifierHandler.NULL_IDENTIFIER).addConnection(c);
-					SburbHandler.onFirstItemGiven(c);
-				} catch(MergeResult.SessionMergeException e)
-				{
-					LOGGER.error("Couldn't create a connection for {}: {}. Stopping entry.", target.getUsername(), e.getMessage());
-					return null;
-				}
+				sessionHandler.getSessionForConnecting(target, IdentifierHandler.NULL_IDENTIFIER).addConnection(c);
+				SburbHandler.onFirstItemGiven(c);
+			} catch(MergeResult.SessionMergeException e)
+			{
+				LOGGER.error("Couldn't create a connection for {}: {}. Stopping entry.", target.getUsername(), e.getMessage());
+				return null;
 			}
-			else SburbHandler.giveItems(mcServer, target);
-		}
+		} else if(!c.isMain())
+			SburbHandler.giveItems(mcServer, target);
 		else if(c.getClientDimension() != null)
 			return c.getClientDimension();
 		
@@ -447,7 +451,7 @@ public final class SkaianetHandler
 	 */
 	public void onEntry(PlayerIdentifier target)
 	{
-		Optional<SburbConnection> c = getMainConnection(target, true);
+		Optional<SburbConnection> c = getPrimaryConnection(target, true);
 		if(!c.isPresent())
 		{
 			LOGGER.error("Finished entry without a player connection for {}. This should NOT happen!", target.getUsername());

@@ -178,7 +178,7 @@ public class LandDimension extends Dimension
 	public DimensionType getRespawnDimension(ServerPlayerEntity player)
 	{
 		DimensionType dimOut;
-		Optional<SburbConnection> c = SkaianetHandler.get(player.server).getMainConnection(IdentifierHandler.encode(player), true);
+		Optional<SburbConnection> c = SkaianetHandler.get(player.server).getPrimaryConnection(IdentifierHandler.encode(player), true);
 		if(c.isPresent() && c.get().hasEntered())
 			dimOut = c.get().getClientDimension();
 		else

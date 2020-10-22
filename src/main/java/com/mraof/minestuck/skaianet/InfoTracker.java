@@ -125,7 +125,7 @@ public final class InfoTracker
 			SburbConnection cIter = c;
 			while(true)
 			{
-				cIter = skaianet.getMainConnection(cIter.getClientIdentifier(), false).orElse(null);
+				cIter = skaianet.getPrimaryConnection(cIter.getClientIdentifier(), false).orElse(null);
 				if(cIter != null && cIter.hasEntered())
 				{
 					if(!checked.contains(cIter.getClientDimension()))
@@ -142,7 +142,7 @@ public final class InfoTracker
 			cIter = c;
 			while(true)
 			{
-				cIter = skaianet.getMainConnection(cIter.getServerIdentifier(), true).orElse(null);
+				cIter = skaianet.getPrimaryConnection(cIter.getServerIdentifier(), true).orElse(null);
 				if(cIter != null && cIter.hasEntered() && !checked.contains(cIter.getClientDimension()))
 				{
 					chain.addFirst(cIter.getClientDimension().getRegistryName());

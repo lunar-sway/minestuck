@@ -78,7 +78,7 @@ public class EntryProcess
 					return;
 				
 				PlayerIdentifier identifier = IdentifierHandler.encode(player);
-				Optional<SburbConnection> c = SkaianetHandler.get(player.world).getMainConnection(identifier, true);
+				Optional<SburbConnection> c = SkaianetHandler.get(player.world).getPrimaryConnection(identifier, true);
 				
 				//Only performs Entry if you have no connection, haven't Entered, or you're not in a Land and additional Entries are permitted.
 				if(!c.isPresent() || !c.get().hasEntered() || !MinestuckConfig.SERVER.stopSecondEntry.get() && !MSDimensions.isLandDimension(player.world.getDimension().getType()))

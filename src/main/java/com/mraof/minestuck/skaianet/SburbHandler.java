@@ -191,8 +191,7 @@ public final class SburbHandler
 	{
 		SkaianetHandler handler = SkaianetHandler.get(mcServer);
 		SburbConnection c = handler.getActiveConnection(player);
-		if(c != null && !c.isMain() && !handler.getMainConnection(c.getClientIdentifier(), true).isPresent()
-				&& !handler.getMainConnection(c.getServerIdentifier(), false).isPresent())
+		if(c != null && !c.isMain() && handler.getPrimaryConnection(c.getClientIdentifier(), true).map(c::equals).orElse(false))
 		{
 			c.setIsMain();
 			onFirstItemGiven(c);
@@ -238,7 +237,7 @@ public final class SburbHandler
 	public static boolean hasEntered(ServerPlayerEntity player)
 	{
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
-		Optional<SburbConnection> c = SkaianetHandler.get(player.server).getMainConnection(identifier, true);
+		Optional<SburbConnection> c = SkaianetHandler.get(player.server).getPrimaryConnection(identifier, true);
 		return c.isPresent() && c.get().hasEntered();
 	}
 	

@@ -63,11 +63,12 @@ public abstract class SessionHandler
 	 * @return True if client connection is not null and client and server session is the same or 
 	 * client connection is null and server connection is null.
 	 */
+	//TODO repalce with proper checks when creating a regular or secondary connection
 	private boolean canConnect(PlayerIdentifier client, PlayerIdentifier server)
 	{
 		Session sClient = getPlayerSession(client), sServer = getPlayerSession(server);
-		Optional<SburbConnection> cClient = skaianetHandler.getMainConnection(client, true);
-		Optional<SburbConnection> cServer = skaianetHandler.getMainConnection(server, false);
+		Optional<SburbConnection> cClient = skaianetHandler.getPrimaryConnection(client, true);
+		Optional<SburbConnection> cServer = skaianetHandler.getPrimaryConnection(server, false);
 		boolean serverActive = cServer.isPresent();
 		if(!serverActive && sServer != null)
 			for(SburbConnection c : sServer.connections)
@@ -103,21 +104,24 @@ public abstract class SessionHandler
 			onConnectionChainBroken(s);
 		} else if(!normal) {
 			s.connections.remove(connection);
-			Optional<SburbConnection> optional = skaianetHandler.getMainConnection(connection.getClientIdentifier(), false);
+			Optional<SburbConnection> optional = skaianetHandler.getPrimaryConnection(connection.getClientIdentifier(), false);
 			if(optional.isPresent())
 			{
 				SburbConnection c = optional.get();
 				if(c.isActive())
 					skaianetHandler.closeConnection(c);
-				switch(MinestuckConfig.SERVER.escapeFailureMode.get())
+				if(c.isMain())
 				{
-					case CLOSE:
-						c.removeServerPlayer();
-						c.setNewServerPlayer(connection.getServerIdentifier());
-						break;
-					case OPEN:
-						c.removeServerPlayer();
-						break;
+					switch(MinestuckConfig.SERVER.escapeFailureMode.get())
+					{
+						case CLOSE:
+							c.removeServerPlayer();
+							c.setNewServerPlayer(connection.getServerIdentifier());
+							break;
+						case OPEN:
+							c.removeServerPlayer();
+							break;
+					}
 				}
 			}
 			onConnectionChainBroken(s);

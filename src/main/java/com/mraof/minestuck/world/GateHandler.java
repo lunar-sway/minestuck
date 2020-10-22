@@ -106,7 +106,7 @@ public class GateHandler
 		SburbConnection landConnection = SburbHandler.getConnectionForDimension(world.getServer(), world.getDimension().getType());
 		if(landConnection != null)
 		{
-			SburbConnection clientConnection = SkaianetHandler.get(world.getServer()).getMainConnection(landConnection.getClientIdentifier(), false).orElse(null);
+			SburbConnection clientConnection = SkaianetHandler.get(world.getServer()).getPrimaryConnection(landConnection.getClientIdentifier(), false).orElse(null);
 			
 			if(clientConnection != null && clientConnection.hasEntered() && MSDimensions.isLandDimension(clientConnection.getClientDimension()))
 			{
@@ -129,7 +129,7 @@ public class GateHandler
 		SburbConnection landConnection = SburbHandler.getConnectionForDimension(world.getServer(), world.getDimension().getType());
 		if(landConnection != null)
 		{
-			SburbConnection serverConnection = SkaianetHandler.get(world.getServer()).getMainConnection(landConnection.getServerIdentifier(), true).orElse(null);
+			SburbConnection serverConnection = SkaianetHandler.get(world.getServer()).getPrimaryConnection(landConnection.getServerIdentifier(), true).orElse(null);
 			
 			if(serverConnection != null && serverConnection.hasEntered() && MSDimensions.isLandDimension(serverConnection.getClientDimension()))	//Last shouldn't be necessary, but just in case something goes wrong elsewhere...
 			{

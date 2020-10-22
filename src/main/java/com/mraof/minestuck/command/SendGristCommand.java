@@ -51,8 +51,8 @@ public class SendGristCommand
 	private static boolean isPermittedFor(ServerPlayerEntity player, ServerPlayerEntity player2)
 	{
 		PlayerIdentifier name1 = IdentifierHandler.encode(player), name2 = IdentifierHandler.encode(player2);
-		Optional<SburbConnection> c1 = SkaianetHandler.get(player.server).getMainConnection(name1, true);
-		Optional<SburbConnection> c2 = SkaianetHandler.get(player.server).getMainConnection(name2, true);
+		Optional<SburbConnection> c1 = SkaianetHandler.get(player.server).getPrimaryConnection(name1, true);
+		Optional<SburbConnection> c2 = SkaianetHandler.get(player.server).getPrimaryConnection(name2, true);
 		if(!c1.isPresent() || !c2.isPresent() || !c1.get().hasEntered() || !c2.get().hasEntered())
 			return false;
 		else return SessionHandler.get(player.server).getPlayerSession(name1) == SessionHandler.get(player.server).getPlayerSession(name2);
