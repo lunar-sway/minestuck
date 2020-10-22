@@ -117,20 +117,16 @@ public final class SkaianetHandler
 				if(connection.getServerIdentifier().equals(server))
 				{
 					connection.setActive(computer, serverComputer, ConnectionCreatedEvent.ConnectionType.RESUME);
-					
 					openedServers.remove(server);
-					
 				} else if(!connection.hasServerPlayer())
 				{
 					try
 					{
-						Session session = sessionHandler.getSessionForConnecting(player, server);
-						
+						sessionHandler.getSessionForConnecting(player, server);
 						connection.setNewServerPlayer(server);
+						
 						connection.setActive(computer, serverComputer, ConnectionCreatedEvent.ConnectionType.NEW_SERVER);
-						
 						openedServers.remove(server);
-						
 					} catch(MergeResult.SessionMergeException e)
 					{
 						LOGGER.warn("SessionHandler denied connection between {} and {}, reason: {}", player.getUsername(), server.getUsername(), e.getMessage());
@@ -141,19 +137,12 @@ public final class SkaianetHandler
 				{
 					try
 					{
-						Session session = sessionHandler.getSessionForConnecting(player, server);
-						
-						SburbConnection newConnection = new SburbConnection(player, server, this);
-						newConnection.copyFrom(connection);
-						session.addConnection(newConnection);
-						
+						SburbConnection newConnection = tryCreateSecondaryConnectionFor(connection, server);
 						newConnection.setActive(computer, serverComputer, ConnectionCreatedEvent.ConnectionType.SECONDARY);
-						
 						openedServers.remove(server);
-						
 					} catch(MergeResult.SessionMergeException e)
 					{
-						LOGGER.warn("SessionHandler denied connection between {} and {}, reason: {}", player.getUsername(), server.getUsername(), e.getMessage());
+						LOGGER.warn("Secondary connection failed between {} and {}, reason: {}", player.getUsername(), server.getUsername(), e.getMessage());
 						computer.putClientMessage(e.getResult().translationKey());
 					}
 				}
@@ -161,25 +150,39 @@ public final class SkaianetHandler
 			{
 				try
 				{
-					Session session = sessionHandler.getSessionForConnecting(player, server);
-					
-					SburbConnection newConnection = new SburbConnection(player, server, this);
-					SburbHandler.onConnectionCreated(newConnection);
-					session.addConnection(newConnection);
-					
+					SburbConnection newConnection = tryCreateNewConnectionFor(player, server);
 					newConnection.setActive(computer, serverComputer, ConnectionCreatedEvent.ConnectionType.REGULAR);
-					
 					openedServers.remove(server);
-					
 				} catch(MergeResult.SessionMergeException e)
 				{
-					LOGGER.warn("SessionHandler denied connection between {} and {}, reason: {}", player.getUsername(), server.getUsername(), e.getMessage());
+					LOGGER.warn("Connection failed between {} and {}, reason: {}", player.getUsername(), server.getUsername(), e.getMessage());
 					computer.putClientMessage(e.getResult().translationKey());
 				}
 			}
 		}
 		
 		checkAndUpdate();
+	}
+	
+	private SburbConnection tryCreateNewConnectionFor(PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException
+	{
+		Session session = sessionHandler.getSessionForConnecting(client, server);
+		SburbConnection newConnection = new SburbConnection(client, server, this);
+		SburbHandler.onConnectionCreated(newConnection);
+		session.addConnection(newConnection);
+		
+		return newConnection;
+	}
+	
+	private SburbConnection tryCreateSecondaryConnectionFor(SburbConnection connection, PlayerIdentifier server) throws MergeResult.SessionMergeException
+	{
+		PlayerIdentifier client = connection.getClientIdentifier();
+		Session session = sessionHandler.getSessionForConnecting(client, server);
+		SburbConnection newConnection = new SburbConnection(client, server, this);
+		newConnection.copyFrom(connection);
+		session.addConnection(newConnection);
+		
+		return connection;
 	}
 	
 	public void resumeConnection(ISburbComputer computer, boolean isClient)
