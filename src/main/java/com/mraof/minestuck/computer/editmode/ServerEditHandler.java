@@ -473,6 +473,13 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			event.setCanceled(true);
 	}
 	
+	@SubscribeEvent(priority=EventPriority.NORMAL)
+	public static void onInteractEvent(PlayerInteractEvent event)
+	{
+		if(!event.getEntity().world.isRemote && getData(event.getPlayer()) != null)
+			event.setCanceled(true);
+	}
+	
 	/**
 	 * Used on both server and client side.
 	 */
