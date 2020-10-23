@@ -316,6 +316,7 @@ public class MSItems
 	public static final Item ICE_SHARD = getNull();
 	public static final Item HORN = getNull();
 	public static final Item CAKE_MIX = getNull();
+	public static final Item TEMPLE_COMPASS = getNull();
 	
 	public static final Item SCALEMATE_APPLESCAB = getNull();
 	public static final Item SCALEMATE_BERRYBREATH = getNull();
@@ -851,6 +852,7 @@ public class MSItems
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("ice_shard"));
 		registry.register(new SoundItem(() -> MSSoundEvents.ITEM_HORN_USE, new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("horn"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("cake_mix"));
+		registry.register(new TempleCompassItem(new Item.Properties().group(MSItemGroup.MAIN).maxStackSize(1)).setRegistryName("temple_compass"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("battery"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("barbasol"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("clothes_iron"));
