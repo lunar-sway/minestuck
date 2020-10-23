@@ -340,7 +340,7 @@ public final class SkaianetHandler
 		ConnectionCreatedEvent.ConnectionType type = getPrimaryConnection(connection.getClientIdentifier(), true).map(c -> !connection.equals(c)).orElse(true)
 				? ConnectionCreatedEvent.ConnectionType.SECONDARY : ConnectionCreatedEvent.ConnectionType.REGULAR;
 		MinecraftForge.EVENT_BUS.post(new ConnectionClosedEvent(mcServer, connection, sessionHandler.getPlayerSession(connection.getClientIdentifier()), type));
-		
+		// TODO move this call further out the function call chain
 		checkAndUpdate();
 	}
 	

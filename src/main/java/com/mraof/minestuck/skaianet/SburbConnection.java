@@ -204,13 +204,18 @@ public final class SburbConnection
 	{
 		skaianet.infoTracker.markDirty(this);
 		serverIdentifier = IdentifierHandler.NULL_IDENTIFIER;
+		skaianet.sessionHandler.onConnectionChainBroken(session);
 	}
 	
-	void setNewServerPlayer(PlayerIdentifier identifier)
+	void setNewServerPlayer(PlayerIdentifier server) throws MergeResult.SessionMergeException
 	{
 		if(hasServerPlayer())
 			throw new IllegalStateException("Connection already has server player");
-		else serverIdentifier = Objects.requireNonNull(identifier);
+		if(skaianet.getPrimaryConnection(server, false).isPresent())
+			throw MergeResult.GENERIC_FAIL.exception();
+		skaianet.sessionHandler.prepareSessionFor(clientIdentifier, server);	//Make sure that it is fine to add the server here session-wise
+		
+		serverIdentifier = Objects.requireNonNull(server);
 		skaianet.infoTracker.markDirty(this);
 	}
 	

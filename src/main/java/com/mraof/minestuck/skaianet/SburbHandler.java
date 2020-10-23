@@ -190,8 +190,8 @@ public final class SburbHandler
 	public static boolean giveItems(MinecraftServer mcServer, PlayerIdentifier player)
 	{
 		SkaianetHandler handler = SkaianetHandler.get(mcServer);
-		SburbConnection c = handler.getActiveConnection(player);
-		if(c != null && !c.isMain() && handler.getPrimaryConnection(c.getClientIdentifier(), true).map(c::equals).orElse(false))
+		SburbConnection c = handler.getPrimaryConnection(player, true).orElse(null);
+		if(c != null && !c.isMain())
 		{
 			c.setIsMain();
 			onFirstItemGiven(c);

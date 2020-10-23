@@ -115,8 +115,14 @@ public abstract class SessionHandler
 					switch(MinestuckConfig.SERVER.escapeFailureMode.get())
 					{
 						case CLOSE:
-							c.removeServerPlayer();
-							c.setNewServerPlayer(connection.getServerIdentifier());
+							try
+							{
+								c.removeServerPlayer();
+								c.setNewServerPlayer(connection.getServerIdentifier());
+							} catch(MergeResult.SessionMergeException e)
+							{
+								throw new IllegalStateException(e);
+							}
 							break;
 						case OPEN:
 							c.removeServerPlayer();
