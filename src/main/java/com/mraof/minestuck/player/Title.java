@@ -60,7 +60,7 @@ public final class Title
 			EnumAspect aspect = data.getTitle().getHeroAspect();
 			int potionLevel = (int) (aspectStrength[aspect.ordinal()] * rung); //Blood, Breath, Doom, Heart, Hope, Life, Light, Mind, Rage, Space, Time, Void
 			
-			if(player.getEntityWorld().getGameTime() % 380 == player.getGameProfile().getId().hashCode() % 380)
+			if(player.getEntityWorld().getGameTime() % 380 == 0)
 			{
 				if(rung > 18 && aspect == HOPE)
 				{
