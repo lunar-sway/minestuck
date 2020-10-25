@@ -19,6 +19,7 @@ import net.minecraftforge.common.util.Constants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Comparator;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -86,10 +87,7 @@ public final class SkaianetHandler
 			connections = connections.filter(c -> c.getClientIdentifier().equals(player));
 		else connections = connections.filter(c -> c.getServerIdentifier().equals(player));
 		
-		Optional<SburbConnection> optional = connections.filter(SburbConnection::isMain).findAny();
-		if(optional.isPresent())
-			return optional;
-		else return connections.filter(SburbConnection::isActive).findAny();
+		return connections.filter(c -> c.isMain() || c.isActive()).max(Comparator.comparingInt(c -> c.isMain() ? 1 : 0));
 	}
 	
 	public void connectToServer(ISburbComputer computer, PlayerIdentifier server)
