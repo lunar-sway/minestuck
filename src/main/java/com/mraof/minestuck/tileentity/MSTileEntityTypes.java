@@ -30,6 +30,7 @@ public class MSTileEntityTypes	//TODO Use @ObjectHolder or DeferredRegister here
 	public static TileEntityType<SkaiaPortalTileEntity> SKAIA_PORTAL;
 	public static TileEntityType<GateTileEntity> GATE;
 	public static TileEntityType<CassettePlayerTileEntity> CASSETTE_PLAYER;
+	public static TileEntityType<LotusTimeCapsuleTileEntity> LOTUS_TIME_CAPSULE;
 	
 	@SubscribeEvent
 	public static void registerTileEntityType(final RegistryEvent.Register<TileEntityType<?>> event)
@@ -54,5 +55,6 @@ public class MSTileEntityTypes	//TODO Use @ObjectHolder or DeferredRegister here
 		event.getRegistry().register((SKAIA_PORTAL = TileEntityType.Builder.create(SkaiaPortalTileEntity::new, MSBlocks.SKAIA_PORTAL).build(null)).setRegistryName("skaia_portal"));
 		event.getRegistry().register((GATE = TileEntityType.Builder.create(GateTileEntity::new, MSBlocks.GATE, MSBlocks.RETURN_NODE).build(null)).setRegistryName("gate"));
 		event.getRegistry().register((CASSETTE_PLAYER = TileEntityType.Builder.create(CassettePlayerTileEntity::new, MSBlocks.CASSETTE_PLAYER).build(null)).setRegistryName("cassette_player"));
+		//event.getRegistry().register((LOTUS_TIME_CAPSULE = TileEntityType.Builder.create(LotusTimeCapsuleTileEntity::new, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK).build(null)).setRegistryName("lotus_time_capsule"));
 	}
 }

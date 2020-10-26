@@ -173,6 +173,9 @@ public class MSBlocks
 	public static final Block GLOWYSTONE_DUST = getNull();
 	public static final CassettePlayerBlock CASSETTE_PLAYER = getNull();
 	
+	//Loot Block
+	public static final LotusTimeCapsuleBlock LOTUS_TIME_CAPSULE_BLOCK = getNull();
+	
 	public static final FlowingFluidBlock OIL = getNull(), BLOOD = getNull(), BRAIN_JUICE = getNull();
 	public static final FlowingFluidBlock WATER_COLORS = getNull(), ENDER = getNull(), LIGHT_WATER = getNull();
 	
@@ -427,6 +430,8 @@ public class MSBlocks
 		registry.register(new DecorBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.5F), MSBlockShapes.FROG_STATUE).setRegistryName("mini_frog_statue"));
 		registry.register(new CassettePlayerBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F).sound(SoundType.METAL), MSBlockShapes.CASSETTE_PLAYER).setRegistryName("cassette_player"));
 		registry.register(new GlowystoneWireBlock(Block.Properties.create(Material.MISCELLANEOUS).hardnessAndResistance(0.0F).lightValue(16).doesNotBlockMovement()).setRegistryName("glowystone_dust"));
+		
+		registry.register(new LotusTimeCapsuleBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.5F).sound(SoundType.STONE)).setRegistryName("lotus_time_capsule")); //removed ", MSBlockShapes.FROG_STATUE"
 		
 		registry.register(new FlowingModFluidBlock(MSFluids.OIL, new Vec3d(0.0, 0.0, 0.0), 0.75f, Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()).setRegistryName("oil"));
 		registry.register(new FlowingModFluidBlock(MSFluids.BLOOD, new Vec3d(0.8, 0.0, 0.0), 0.25f, Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()).setRegistryName("blood"));
