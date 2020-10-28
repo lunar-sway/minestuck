@@ -222,6 +222,20 @@ public final class ClientEditHandler
 			event.setCanceled(true);
 	}
 	
+	@SubscribeEvent(priority=EventPriority.NORMAL)
+	public static void onInteractEvent(PlayerInteractEvent.EntityInteract event)
+	{
+		if(event.getEntity().world.isRemote && event.getPlayer().isUser() && isActive())
+			event.setCanceled(true);
+	}
+	
+	@SubscribeEvent(priority=EventPriority.NORMAL)
+	public static void onInteractEvent(PlayerInteractEvent.EntityInteractSpecific event)
+	{
+		if(event.getEntity().world.isRemote && event.getPlayer().isUser() && isActive())
+			event.setCanceled(true);
+	}
+	
 	@SubscribeEvent
 	public static void onWorldUnload(WorldEvent.Unload event)
 	{
