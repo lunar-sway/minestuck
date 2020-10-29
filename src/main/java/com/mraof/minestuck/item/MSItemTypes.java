@@ -10,7 +10,7 @@ import net.minecraft.item.IArmorMaterial;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.LazyLoadBase;
+import net.minecraft.util.LazyValue;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraftforge.common.ToolType;
@@ -28,6 +28,7 @@ public class MSItemTypes
 	public static final IItemTier RUBY_TIER = new ModItemTier(3, 2000, 10.0F, 4.0F, 16, () -> Ingredient.EMPTY);
 	public static final IItemTier ZILLYHOO_TIER = new ModItemTier(4, 3000, 15.0F, 5.0F, 25, () -> Ingredient.EMPTY);
 	public static final IItemTier SBAHJ_TIER = new ModItemTier(0, 59, 1.0F, -1.0F, 5, () -> Ingredient.EMPTY);
+	public static final IItemTier PAPER_TIER = new ModItemTier(0, 65, 1.0F, 0.0F, 15, () -> Ingredient.fromItems(Items.PAPER));
 	public static final IItemTier ICE_TIER = new ModItemTier(0, 60, 2.0F, 1.0F, 25, () -> Ingredient.fromItems(MSItems.ICE_SHARD));
 	public static final IItemTier CACTUS_TIER = new ModItemTier(0, 104, 2.0F, 1.0F, 10, () -> Ingredient.fromItems(Blocks.CACTUS));
 	public static final IItemTier MEAT_TIER = new ModItemTier(0, 175, 1.0F, 0.0F, 5, () -> Ingredient.EMPTY);
@@ -37,6 +38,10 @@ public class MSItemTypes
 	public static final IItemTier HORRORTERROR_TIER = new ModItemTier(3, 1600, 4.0F, 4.0F, 15, () -> Ingredient.EMPTY);
 	
 	public static final IArmorMaterial PRISMARINE_ARMOR = new ModArmorMaterial("minestuck:prismarine", 20, new int[]{3, 7, 6, 2}, 15, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0.0F, () -> Ingredient.fromItems(Items.PRISMARINE_SHARD));
+	public static final IArmorMaterial IRON_LASS_ARMOR = new ModArmorMaterial("minestuck:iron_lass", 50, new int[]{4, 7, 8, 3}, 15, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0.0F, () -> Ingredient.EMPTY);
+	
+	public static final IArmorMaterial PROSPIT_PAJAMAS = new ModArmorMaterial("minestuck:prospit_pajamas", 10, new int[]{1, 2, 3, 1}, 0, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0.0F, () -> Ingredient.EMPTY);
+	public static final IArmorMaterial DERSE_PAJAMAS = new ModArmorMaterial("minestuck:derse_pajamas", 10, new int[]{1, 2, 3, 1}, 0, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0.0F, () -> Ingredient.EMPTY);
 	
 	//Base Tools
 	public static final MSToolType SICKLE_TOOL = new MSToolType(ToolType.get("sickle"), Material.WEB, Material.LEAVES, Material.PLANTS, Material.TALL_PLANTS).addEnchantments(EnchantmentType.WEAPON);
@@ -58,15 +63,15 @@ public class MSItemTypes
 	
 	//Unimplemented
 	public static final MSToolType GAUNTLET_TOOL = new MSToolType(ToolType.get("gauntlet"), Material.GLASS, Material.ICE, Material.PACKED_ICE).addEnchantments(EnchantmentType.WEAPON).addEnchantments(Enchantments.SILK_TOUCH).addToolType(ToolType.get("fist"));
-	
-	private static class ModItemTier implements IItemTier
+    
+    private static class ModItemTier implements IItemTier
 	{
 		private final int harvestLevel;
 		private final int maxUses;
 		private final float efficiency;
 		private final float attackDamage;
 		private final int enchantability;
-		private final LazyLoadBase<Ingredient> repairMaterial;
+		private final LazyValue<Ingredient> repairMaterial;
 		
 		public ModItemTier(int harvestLevel, int maxUses, float efficiency, float attackDamage, int enchantability, Supplier<Ingredient> repairMaterial)
 		{
@@ -75,7 +80,7 @@ public class MSItemTypes
 			this.efficiency = efficiency;
 			this.attackDamage = attackDamage;
 			this.enchantability = enchantability;
-			this.repairMaterial = new LazyLoadBase<>(repairMaterial);
+			this.repairMaterial = new LazyValue<>(repairMaterial);
 		}
 		
 		@Override
@@ -125,7 +130,7 @@ public class MSItemTypes
 		private final int enchantability;
 		private final SoundEvent soundEvent;
 		private final float toughness;
-		private final LazyLoadBase<Ingredient> repairMaterial;
+		private final LazyValue<Ingredient> repairMaterial;
 		
 		public ModArmorMaterial(String name, int maxDamageFactor, int[] damageReductionAmountArray, int enchantability, SoundEvent soundEvent, float toughness, Supplier<Ingredient> repairMaterial)
 		{
@@ -135,7 +140,7 @@ public class MSItemTypes
 			this.enchantability = enchantability;
 			this.soundEvent = soundEvent;
 			this.toughness = toughness;
-			this.repairMaterial = new LazyLoadBase<>(repairMaterial);
+			this.repairMaterial = new LazyValue<>(repairMaterial);
 		}
 		
 		@Override

@@ -9,8 +9,9 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.client.config.GuiButtonExt;
+import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
 
 public class TitleSelectorScreen extends Screen
 {
@@ -43,7 +44,8 @@ public class TitleSelectorScreen extends Screen
 			int i = EnumClass.getIntFromClass(c);
 			if(i < 12)
 			{
-				Button button = new GuiButtonExt((width - guiWidth) / 2 + 4 + (i % 2) * 40, (height - guiHeight) / 2 + 24 + (i / 2) * 16, 40, 16, c.getDisplayName(), button1 -> pickClass(c));
+				ITextComponent className = c.asTextComponent();
+				Button button = new ExtendedButton((width - guiWidth) / 2 + 4 + (i % 2) * 40, (height - guiHeight) / 2 + 24 + (i / 2) * 16, 40, 16, className.getFormattedText(), button1 -> pickClass(c));
 				addButton(button);
 				classButtons[i] = button;
 			}
@@ -53,12 +55,13 @@ public class TitleSelectorScreen extends Screen
 			int i = EnumAspect.getIntFromAspect(a);
 			if(i < 12)
 			{
-				Button button = new GuiButtonExt((width - guiWidth) / 2 + 102 + (i % 2) * 40, (height - guiHeight) / 2 + 24 + (i / 2) * 16, 40, 16, a.getDisplayName(), button1 -> pickAspect(a));
+				ITextComponent aspectName = a.asTextComponent();
+				Button button = new ExtendedButton((width - guiWidth) / 2 + 102 + (i % 2) * 40, (height - guiHeight) / 2 + 24 + (i / 2) * 16, 40, 16, aspectName.getFormattedText(), button1 -> pickAspect(a));
 				addButton(button);
 				aspectButtons[i] = button;
 			}
 		}
-		selectButton = new GuiButtonExt((width - guiWidth)/2 + 63, (height - guiHeight)/2 + 128, 60, 20, "Select", button -> select());
+		selectButton = new ExtendedButton((width - guiWidth)/2 + 63, (height - guiHeight)/2 + 128, 60, 20, "Select", button -> select());
 		addButton(selectButton);
 	}
 	
@@ -109,7 +112,7 @@ public class TitleSelectorScreen extends Screen
 	}
 	
 	@Override
-	public void onClose()
+	public void removed()
 	{
 		if(sendPacket)
 			MSPacketHandler.sendToServer(new TitleSelectPacket());

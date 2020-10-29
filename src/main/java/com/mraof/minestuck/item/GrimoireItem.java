@@ -7,7 +7,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
@@ -22,12 +21,9 @@ public class GrimoireItem extends Item
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn)
 	{
-		if(!worldIn.isRemote && playerIn != null)
-		{
-			ITextComponent message = new TranslationTextComponent("After flipping through some pages, you feel significantly more insignificant.");
-			playerIn.sendMessage(message);
-			playerIn.world.playSound(null, playerIn.posX, playerIn.posY, playerIn.posZ, MSSoundEvents.ITEM_GRIMOIRE_USE, SoundCategory.AMBIENT, 0.5F, 0.8F);
-		}
+		playerIn.world.playSound(playerIn, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), MSSoundEvents.ITEM_GRIMOIRE_USE, SoundCategory.AMBIENT, 0.5F, 0.8F);
+		if(worldIn.isRemote)
+			playerIn.sendMessage(new TranslationTextComponent(getTranslationKey() + ".message"));
 		return super.onItemRightClick(worldIn, playerIn, handIn);
 	}
 }

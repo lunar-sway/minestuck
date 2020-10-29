@@ -18,7 +18,7 @@ public class ItemStackTileEntity extends TileEntity implements IColored
 	
 	public ItemStackTileEntity()
 	{
-		super(MSTileEntityTypes.ITEM_STACK);
+		super(MSTileEntityTypes.ITEM_STACK.get());
 	}
 	
 	private ItemStack stack = ItemStack.EMPTY;

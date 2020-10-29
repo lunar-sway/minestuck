@@ -94,6 +94,10 @@ public class ConsortRewardHandler
 		ConsortRewardHandler.registerPrice(new ItemStack(CRUMPLY_HAT), 80, 100);
 		ConsortRewardHandler.registerPrice(new ItemStack(BATTERY), 10, 100);
 		ConsortRewardHandler.registerPrice(new ItemStack(GRIMOIRE), 666, 666);
+		ConsortRewardHandler.registerPrice(new ItemStack(ACE_OF_SPADES), 3000, 5000);
+		ConsortRewardHandler.registerPrice(new ItemStack(ACE_OF_HEARTS), 3000, 5000);
+		ConsortRewardHandler.registerPrice(new ItemStack(ACE_OF_DIAMONDS), 3000, 5000);
+		ConsortRewardHandler.registerPrice(new ItemStack(ACE_OF_CLUBS), 3000, 5000);
 		ConsortRewardHandler.registerPrice(new ItemStack(POGO_CLUB), 900, 1200);
 		ConsortRewardHandler.registerPrice(new ItemStack(METAL_BAT), 400, 500);
 		ConsortRewardHandler.registerPrice(new ItemStack(FIRE_POKER), 1500, 2000);
@@ -212,11 +216,17 @@ public class ConsortRewardHandler
 
 	}
 	
+	/**
+	 * Not thread-safe. Make sure to only call this on the main thread
+	 */
 	public static void registerPrice(ItemStack stack, int min, int max)	//Maybe add json support at some point too
 	{
 		registerPrice(stack, new PriceVariation(min, max));
 	}
 	
+	/**
+	 * Not thread-safe. Make sure to only call this on the main thread
+	 */
 	public static void registerPrice(ItemStack stack, PriceVariation prize)
 	{
 		prices.put(stack, prize);

@@ -2,8 +2,8 @@ package com.mraof.minestuck.item.crafting.alchemy;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.event.AlchemyEvent;
-import com.mraof.minestuck.item.CruxiteArtifactItem;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.artifact.CruxiteArtifactItem;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.item.Item;

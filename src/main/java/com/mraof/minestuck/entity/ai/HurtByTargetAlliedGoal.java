@@ -7,19 +7,18 @@ import net.minecraft.entity.ai.goal.TargetGoal;
 import net.minecraft.util.math.AxisAlignedBB;
 
 import java.util.EnumSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.function.Predicate;
 
 public class HurtByTargetAlliedGoal extends TargetGoal
 {
-	Predicate<Entity> entitySelector;
+	private final Predicate<Entity> alliedPredicate;
 	private int revengeTimer;
 
-	public HurtByTargetAlliedGoal(CreatureEntity par1EntityCreature, Predicate<Entity> entitySelector)
+	public HurtByTargetAlliedGoal(CreatureEntity par1EntityCreature, Predicate<Entity> alliedPredicate)
 	{
 		super(par1EntityCreature, false);
-		this.entitySelector = entitySelector;
+		this.alliedPredicate = alliedPredicate;
 		this.setMutexFlags(EnumSet.of(Flag.TARGET));
 	}
 
@@ -39,20 +38,17 @@ public class HurtByTargetAlliedGoal extends TargetGoal
 	@Override
 	public void startExecuting()
 	{
-		this.goalOwner.setAttackTarget(this.goalOwner.getAttackTarget());
+		this.goalOwner.setAttackTarget(this.goalOwner.getRevengeTarget());
 		this.revengeTimer = this.goalOwner.getRevengeTimer();
 		
 		double d0 = this.getTargetDistance();
-		List<CreatureEntity> list = this.goalOwner.world.getEntitiesWithinAABB(CreatureEntity.class, new AxisAlignedBB(this.goalOwner.posX, this.goalOwner.posY, this.goalOwner.posZ, this.goalOwner.posX + 1.0D, this.goalOwner.posY + 1.0D, this.goalOwner.posZ + 1.0D).grow(d0, 10.0D, d0), entitySelector);
-		Iterator<CreatureEntity> iterator = list.iterator();
+		List<CreatureEntity> list = this.goalOwner.world.getEntitiesWithinAABB(CreatureEntity.class, new AxisAlignedBB(this.goalOwner.getPosX(), this.goalOwner.getPosY(), this.goalOwner.getPosZ(), this.goalOwner.getPosX() + 1.0D, this.goalOwner.getPosY() + 1.0D, this.goalOwner.getPosZ() + 1.0D).grow(d0, 10.0D, d0), alliedPredicate);
 		
-		while (iterator.hasNext())
+		for(CreatureEntity creature : list)
 		{
-			CreatureEntity creature = iterator.next();
-			
-			if (this.goalOwner != creature && creature.getAttackTarget() == null && !creature.isOnSameTeam(this.goalOwner.getRevengeTarget()))
+			if(this.goalOwner != creature && creature.getRevengeTarget() == null && !creature.isOnSameTeam(this.goalOwner.getRevengeTarget()))
 			{
-				creature.setAttackTarget(this.goalOwner.getAttackTarget());
+				creature.setAttackTarget(this.goalOwner.getRevengeTarget());
 			}
 		}
 

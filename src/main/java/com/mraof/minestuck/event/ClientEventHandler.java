@@ -1,13 +1,13 @@
 package com.mraof.minestuck.event;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.ColorSelectorScreen;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.fluid.IMSFog;
 import com.mraof.minestuck.inventory.ConsortMerchantContainer;
-import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
@@ -39,10 +39,10 @@ public class ClientEventHandler
 	{
 		if(event.phase == TickEvent.Phase.END)
 		{
-			if(ClientPlayerData.displaySelectionGui && Minecraft.getInstance().currentScreen == null)
+			if(ClientPlayerData.shouDisplayColorSelection() && Minecraft.getInstance().currentScreen == null)
 			{
-				ClientPlayerData.displaySelectionGui = false;
-				if(MinestuckConfig.loginColorSelector.get())
+				ClientPlayerData.clearDisplayColorSelection();
+				if(MinestuckConfig.CLIENT.loginColorSelector.get())
 					Minecraft.getInstance().displayGuiScreen(new ColorSelectorScreen(true));
 			}
 			
@@ -93,7 +93,7 @@ public class ClientEventHandler
 			
 			event.setCanceled(true);
 			event.setDensity(fogDensity);
-			GlStateManager.fogMode(GlStateManager.FogMode.EXP);
+			RenderSystem.fogMode(GlStateManager.FogMode.EXP);
 		}
 	}
 	

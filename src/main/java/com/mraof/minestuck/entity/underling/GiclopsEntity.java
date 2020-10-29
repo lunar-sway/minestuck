@@ -4,7 +4,7 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entity.EntityBigPart;
 import com.mraof.minestuck.entity.IBigEntity;
 import com.mraof.minestuck.entity.PartGroup;
-import com.mraof.minestuck.entity.ai.AttackOnCollideWithRateGoal;
+import com.mraof.minestuck.entity.ai.CustomMeleeAttackGoal;
 import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
@@ -15,6 +15,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
@@ -39,12 +40,21 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	}
 	
 	@Override
+	protected void registerAttributes()
+	{
+		super.registerAttributes();
+		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(210.0D);
+		getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.9D);
+		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.23D);
+		getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(10.0D);
+		
+	}
+	
+	@Override
 	protected void registerGoals()
 	{
 		super.registerGoals();
-		AttackOnCollideWithRateGoal aiAttack = new AttackOnCollideWithRateGoal(this, .3F, 50, false);
-		aiAttack.setDistanceMultiplier(1.1F);
-		this.goalSelector.addGoal(3, aiAttack);
+		this.goalSelector.addGoal(3, new CustomMeleeAttackGoal(this, 1.0F, false, 50, 1.1F));
 	}
 	
 	protected SoundEvent getAmbientSound()
@@ -69,24 +79,6 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	}
 
 	@Override
-	protected double getWanderSpeed() 
-	{
-		return 0.7;
-	}
-	
-	@Override
-	protected float getKnockbackResistance()
-	{
-		return 0.9F;
-	}
-	
-	@Override
-	protected double getAttackDamage()
-	{
-		return getGristType().getPower()*4.5 + 10;
-	}
-	
-	@Override
 	protected int getVitalityGel()
 	{
 		return rand.nextInt(4) + 5;
@@ -96,20 +88,9 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	protected void onGristTypeUpdated(GristType type)
 	{
 		super.onGristTypeUpdated(type);
+		applyGristModifier(SharedMonsterAttributes.MAX_HEALTH, 46 * type.getPower(), AttributeModifier.Operation.ADDITION);
+		applyGristModifier(SharedMonsterAttributes.ATTACK_DAMAGE, 4.5 * type.getPower(), AttributeModifier.Operation.ADDITION);
 		this.experienceValue = (int) (7 * type.getPower() + 5);
-	}
-	
-	@Override
-	protected void registerAttributes()
-	{
-		super.registerAttributes();
-		this.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(32.0D);
-	}
-	
-	@Override
-	protected float getMaximumHealth()
-	{
-		return 46 * getGristType().getPower() + 210;
 	}
 	
 	@Override
@@ -117,7 +98,7 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	{
 		super.baseTick();
 		partGroup.updatePositions();
-		if(!world.isRemote && MinestuckConfig.disableGiclops.get())
+		if(!world.isRemote && MinestuckConfig.SERVER.disableGiclops.get())
 			this.remove();
 	}
 	

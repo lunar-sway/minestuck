@@ -3,7 +3,7 @@ package com.mraof.minestuck.client.gui;
 import com.mraof.minestuck.inventory.MachineContainer;
 import com.mraof.minestuck.network.GoButtonPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.tileentity.MachineProcessTileEntity;
+import com.mraof.minestuck.tileentity.machine.MachineProcessTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -11,7 +11,10 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraftforge.fml.client.config.GuiButtonExt;
+import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
+import org.lwjgl.glfw.GLFW;
+
+import javax.annotation.Nullable;
 
 /**
  * Created by mraof on 2017 December 07 at 12:55 AM.
@@ -22,6 +25,7 @@ public abstract class MachineScreen<T extends MachineContainer> extends Containe
 	public static final String STOP = "minestuck.button.stop";
 	
 	protected final MachineProcessTileEntity.RunType runType;
+	@Nullable
 	protected GoButton goButton;
 	
 	public MachineScreen(MachineProcessTileEntity.RunType runType, T screenContainer, PlayerInventory inv, ITextComponent titleIn)
@@ -33,7 +37,7 @@ public abstract class MachineScreen<T extends MachineContainer> extends Containe
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int i)
 	{
-		if(keyCode == 28)
+		if(keyCode == GLFW.GLFW_KEY_ENTER && goButton != null)
 		{
 			this.minecraft.getSoundHandler().play(SimpleSound.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 
@@ -47,7 +51,7 @@ public abstract class MachineScreen<T extends MachineContainer> extends Containe
 		return super.keyPressed(keyCode, scanCode, i);
 	}
 	
-	protected class GoButton extends GuiButtonExt
+	protected class GoButton extends ExtendedButton
 	{
 		public GoButton(int x, int y, int widthIn, int heightIn, String buttonText)
 		{
@@ -86,7 +90,7 @@ public abstract class MachineScreen<T extends MachineContainer> extends Containe
 		
 		private void onClick(int mouseKey)
 		{
-			if(mouseKey == 0)
+			if(mouseKey == GLFW.GLFW_MOUSE_BUTTON_1)
 			{
 				if(!container.overrideStop())
 				{
@@ -94,15 +98,15 @@ public abstract class MachineScreen<T extends MachineContainer> extends Containe
 					GoButtonPacket packet = new GoButtonPacket(true, false);
 					MSPacketHandler.sendToServer(packet);
 					
-					goButton.setMessage(I18n.format(GO));
+					setMessage(I18n.format(GO));
 				}
-			} else if(mouseKey == 1 && runType == MachineProcessTileEntity.RunType.BUTTON_OVERRIDE)
+			} else if(mouseKey == GLFW.GLFW_MOUSE_BUTTON_2 && runType == MachineProcessTileEntity.RunType.BUTTON_OVERRIDE)
 			{
 				//Tell the machine to go until stopped
 				GoButtonPacket packet = new GoButtonPacket(true, !container.overrideStop());
 				MSPacketHandler.sendToServer(packet);
 				
-				goButton.setMessage(I18n.format(container.overrideStop() ? STOP : GO));
+				setMessage(I18n.format(container.overrideStop() ? STOP : GO));
 			}
 		}
 	}

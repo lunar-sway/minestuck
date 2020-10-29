@@ -32,16 +32,26 @@ public class SburbPredefineCommand
 		dispatcher.register(Commands.literal("sburbpredefine").requires(source -> source.hasPermissionLevel(2)).then(subCommandTitle()).then(subCommandTerrainLand()).then(subCommandTitleLand()).then(subCommandDefine()));
 	}
 	
+	/**
+	 * Subcommand that sets the name of the session that a specified player is in
+	 */
 	private static ArgumentBuilder<CommandSource, ?> subCommandName()
 	{
 		return null;
 	}
 	
+	/**
+	 * Subcommand that "adds" specified players to a session
+	 */
 	private static ArgumentBuilder<CommandSource, ?> subCommandAdd()
 	{
 		return null;
 	}
 	
+	/**
+	 * Subcommand that makes appropriate predefines for all players in the session,
+	 * and then locks the session to the players currently in the session
+	 */
 	private static ArgumentBuilder<CommandSource, ?> subCommandFinish()
 	{
 		return null;

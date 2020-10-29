@@ -1,6 +1,5 @@
 package com.mraof.minestuck.computer;
 
-import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import net.minecraft.item.ItemStack;
@@ -8,6 +7,7 @@ import net.minecraft.item.Items;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
@@ -74,18 +74,13 @@ public class ProgramData
 	
 	public static void onClientClosed(ComputerTileEntity te)
 	{
-		if(te.getData(0).getBoolean("connectedToServer") && SkaianetHandler.get(te.getWorld()).getActiveConnection(te.owner) != null)
-			SkaianetHandler.get(te.getWorld()).closeConnection(te.owner, SkaianetHandler.get(te.getWorld()).getActiveConnection(te.owner).getServerIdentifier(), true);
-		else if(te.getData(0).getBoolean("isResuming"))
-			SkaianetHandler.get(te.getWorld()).closeConnection(te.owner, null, true);
+		Objects.requireNonNull(te.getWorld());
+		SkaianetHandler.get(te.getWorld()).closeClientConnection(te);	//Can safely be done even if this computer isn't in a connection
 	}
 	
 	public static void onServerClosed(ComputerTileEntity te)
 	{
-		SburbConnection c = SkaianetHandler.get(te.getWorld()).getServerConnection(te);
-		if(c != null)
-			SkaianetHandler.get(te.getWorld()).closeConnection(te.owner, c.getClientIdentifier(), false);
-		else if(te.getData(1).getBoolean("isOpen"))
-			SkaianetHandler.get(te.getWorld()).closeConnection(te.owner, null, false);
+		Objects.requireNonNull(te.getWorld());
+		SkaianetHandler.get(te.getWorld()).closeServerConnection(te);
 	}
 }

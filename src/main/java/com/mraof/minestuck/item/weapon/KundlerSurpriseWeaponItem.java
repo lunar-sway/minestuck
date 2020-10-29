@@ -32,7 +32,7 @@ public class KundlerSurpriseWeaponItem extends WeaponItem
                     new ItemStack(MSItems.SURPRISE_EMBRYO), new ItemStack(MSItems.GAMEGRL_MAGAZINE), new ItemStack(MSItems.GAMEBRO_MAGAZINE),
                     new ItemStack(Blocks.DEAD_HORN_CORAL)};
             int num = ran.nextInt(items.length);
-            ItemEntity item = new ItemEntity(target.world, target.posX, target.posY, target.posZ, items[num].copy());
+            ItemEntity item = new ItemEntity(target.world, target.getPosX(), target.getPosY(), target.getPosZ(), items[num].copy());
             target.world.addEntity(item);
     
             ITextComponent message = new TranslationTextComponent(getTranslationKey() + ".message", items[num].getDisplayName());

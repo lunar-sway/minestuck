@@ -267,6 +267,22 @@
             }
           ],
           "name": "minecraft:bone"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 7,
+          "quality": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 3.0,
+                "max": 7.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minestuck:phlegm_gushers"
         }
       ]
     },
@@ -359,6 +375,26 @@
         },
         {
           "type": "minecraft:item",
+          "weight": 8,
+          "name": "minestuck:ink_squid_pro_quo"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 8.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minestuck:barbasol"
+        },
+        {
+          "type": "minecraft:item",
           "weight": 10,
           "quality": -1,
           "name": "minestuck:generic_object"
@@ -367,6 +403,10 @@
           "type": "minecraft:item",
           "quality": 2,
           "name": "minestuck:transportalizer"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:cueball"
         },
         {
           "type": "minecraft:item",
@@ -406,6 +446,22 @@
       "name": "boondollars",
       "rolls": 1,
       "entries": [
+        {
+          "type": "minecraft:item",
+          "weight": 7,
+          "quality": -1,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 3.0,
+                "max": 7.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minestuck:sorrow_gushers"
+        },
         {
           "type": "minecraft:item",
           "weight": 10,

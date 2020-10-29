@@ -14,7 +14,7 @@ public class PositionTeleporter
 		{
 			if (((ServerPlayerEntity)entity).isSleeping())
 			{
-				((ServerPlayerEntity)entity).wakeUpPlayer(true, true, false);
+				((ServerPlayerEntity)entity).wakeUp();
 			}
 			
 			((ServerPlayerEntity)entity).connection.setPlayerLocation(posX, posY, posZ, entity.rotationYaw, entity.rotationPitch);

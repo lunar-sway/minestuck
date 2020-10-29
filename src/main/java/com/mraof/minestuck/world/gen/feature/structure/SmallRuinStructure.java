@@ -58,9 +58,8 @@ public class SmallRuinStructure extends ScatteredStructure<NoFeatureConfig>
 	
 	public static class Start extends StructureStart
 	{
-		private Start(Structure<?> structure, int chunkX, int chunkZ, Biome biome, MutableBoundingBox boundingBox, int reference, long seed)
-		{
-			super(structure, chunkX, chunkZ, biome, boundingBox, reference, seed);
+		private Start(Structure<?> structure, int chunkX, int chunkZ, MutableBoundingBox boundingBox, int reference, long seed) {
+			super(structure, chunkX, chunkZ, boundingBox, reference, seed);
 		}
 		
 		@Override

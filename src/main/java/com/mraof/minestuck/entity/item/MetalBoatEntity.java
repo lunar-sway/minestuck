@@ -2,28 +2,42 @@ package com.mraof.minestuck.entity.item;
 
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.item.MSItems;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.item.BoatEntity;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.IPacket;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraftforge.fml.network.NetworkHooks;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.function.Supplier;
 
 public class MetalBoatEntity extends BoatEntity implements IEntityAdditionalSpawnData
-{	//TODO vanilla boat functions differently now. This class will probably need to be updated
+{
+	private static final Logger LOGGER = LogManager.getLogger();
 	
-	public int type;
-	private boolean isDropping = false;
+	private Type type;
 	
 	public MetalBoatEntity(EntityType<? extends MetalBoatEntity> type, World world)
 	{
 		super(type, world);
 	}
 	
-	public MetalBoatEntity(World world, double x, double y, double z, int type)
+	public MetalBoatEntity(World world, double x, double y, double z, Type type)
 	{
 		super(MSEntityTypes.METAL_BOAT, world);
 		this.preventEntitySpawning = false;
@@ -35,156 +49,135 @@ public class MetalBoatEntity extends BoatEntity implements IEntityAdditionalSpaw
 		this.type = type;
 	}
 	
-	@Override
-	public void setDamageTaken(float damage)
+	public Type boatType()
 	{
-		if(type == 0)
-			super.setDamageTaken(damage/1.5F);
-		else if(type == 1)
-			super.setDamageTaken(damage);
-	}
-	
-	/*TODO Look at this and compare to the boat entity
-	@Override
-	public void tick()
-	{
-		double pos = posY;
-		double motion = motionY;
-		captureDrops(new ArrayList<>());
-		
-		super.tick();
-		
-		Collection<EntityItem> capturedDrops = captureDrops(null);
-		if(isDropping || !capturedDrops.isEmpty())
-		{
-			double prevMotionX = posX - prevPosX, prevMotionZ = posZ - prevPosZ;
-			double maxMotion = type == 0 ? 0.3 : 0.2;
-			if(isDropping || Math.sqrt(prevMotionX * prevMotionX + prevMotionZ * prevMotionZ) > maxMotion)
-				for(int i = 0; i < 3; i++)
-					entityDropItem(getTypeItem(), 1);
-			else
-			{
-				revive();
-				this.motionX *= 0.9900000095367432D;
-				this.motionY *= 0.949999988079071D;
-				this.motionZ *= 0.9900000095367432D;
-			}
-		}
-		
-		capturedDrops.clear();
-		
-		if(!this.world.isMaterialInBB(this.getBoundingBox(), Material.WATER))
-			return;
-		
-		this.motionY = motion;
-		setPosition(posX, pos, posZ);
-		this.motionY -= type == 0 ? 0.03D : 0.04D;
-		motionX /= 1.5;
-		motionY /= 1.5;
-		motionZ /= 1.5;
-		
-		move(MoverType.SELF, 0, motionY, 0);
-		
-	}
-	
-	@Override
-	protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos)
-	{
-		if (onGroundIn)
-		{
-			float fall = type == 0 ? 5.0F : 3.0F;
-			if (this.fallDistance > fall)
-			{
-				this.fall(this.fallDistance, 1.0F);
-				
-				if (!this.world.isRemote && !this.removed)
-				{
-					this.remove();
-					
-					isDropping = true;
-				}
-				
-				this.fallDistance = 0.0F;
-			}
-		}
-		else if (this.world.getBlockState((new BlockPos(this)).down()).getMaterial() != Material.WATER && y < 0.0D)
-		{
-			this.fallDistance = (float)((double)this.fallDistance - y);
-		}
+		return type;
 	}
 	
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount)
 	{
-		if (this.isInvulnerableTo(source))
-			return false;
-		else if (!this.world.isRemote && !this.removed)
-		{
-			if (this.getPassengers().contains(source.getTrueSource()) && source instanceof EntityDamageSourceIndirect)
-				return false;
-			else
-			{
-				this.setForwardDirection(-this.getForwardDirection());
-				this.setTimeSinceHit(10);
-				this.setDamageTaken(this.getDamageTaken() + amount * 10.0F);
-				this.markVelocityChanged();
-				boolean flag = source.getTrueSource() instanceof EntityPlayer && ((EntityPlayer)source.getTrueSource()).abilities.isCreativeMode;
-				
-				if (flag || this.getDamageTaken() > 40.0F)
-				{
-					this.removePassengers();
-					
-					if (!flag)
-						this.entityDropItem(new ItemStack(getBoatItem()), 0.0F);
-					
-					this.remove();
-				}
-				
-				return true;
-			}
-		}
-		else return true;
-	}*/
-	
-	private Item getTypeItem()
-	{
-		if(this.type == 0)
-			return Items.IRON_INGOT;
-		else if(this.type == 1)
-			return Items.GOLD_INGOT;
-		return null;
+		return super.attackEntityFrom(source, amount*type.damageModifier);
 	}
 	
-	private Item getBoatItem()
+	@Override
+	public void tick()
 	{
-		if(this.type == 0)
-			return MSItems.IRON_BOAT;
-		else if(this.type == 1)
-			return MSItems.GOLD_BOAT;
-		return null;
+		Status status = getBoatStatus();
+		if(status == Status.IN_WATER)
+			setMotion(getMotion().add(0, -0.1, 0));
+		else if(status == Status.UNDER_WATER)
+			setMotion(getMotion().add(0, -0.02, 0));
+		super.tick();
+	}
+	
+	@Override
+	public void setMotion(Vec3d motionIn)
+	{
+		super.setMotion(new Vec3d(motionIn.x, -Math.abs(motionIn.y), motionIn.z));
+	}
+	
+	private final List<ItemEntity> captureDropsCache = new ArrayList<>(5);
+	
+	@Override
+	protected void updateFallState(double y, boolean onGroundIn, BlockState state, BlockPos pos)
+	{
+		Collection<ItemEntity> prevCapture = captureDrops(captureDropsCache);
+		
+		super.updateFallState(y, onGroundIn, state, pos);
+		
+		//If the boat is broken from the fall, capture the vanilla drops and drop ingots instead
+		if(!captureDrops(prevCapture).isEmpty())
+		{
+			captureDropsCache.clear();
+			for(int i = 0; i < 3; i++)
+				entityDropItem(getDroppedItem());
+		}
+	}
+	
+	private Item getDroppedItem()
+	{
+		return type.droppedItem.get();
+	}
+	
+	@Override
+	public Item getItemBoat()
+	{
+		return type.boatItem.get();
+	}
+	
+	@Override
+	public void setBoatType(BoatEntity.Type boatType)
+	{
+		throw new UnsupportedOperationException();
 	}
 	
 	@Override
 	protected void writeAdditional(CompoundNBT compound)
 	{
-		compound.putByte("Type", (byte) type);
+		compound.putString("Type", type.asString());
 	}
 	
 	@Override
 	protected void readAdditional(CompoundNBT compound)
 	{
-		this.type = compound.getByte("Type");
+		this.type = Type.fromString(compound.getString("Type"));
 	}
 	
 	@Override
 	public void writeSpawnData(PacketBuffer buffer)
 	{
-		buffer.writeByte(type);
+		buffer.writeString(type.asString());
 	}
 	
 	@Override
 	public void readSpawnData(PacketBuffer additionalData)
 	{
-		this.type = additionalData.readByte();
+		this.type = Type.fromString(additionalData.readString(16));
+	}
+	
+	@Override
+	public IPacket<?> createSpawnPacket()
+	{
+		return NetworkHooks.getEntitySpawningPacket(this);
+	}
+	
+	public enum Type
+	{
+		IRON(1/1.5F, () -> Items.IRON_INGOT, () -> MSItems.IRON_BOAT, new ResourceLocation("minestuck", "textures/entity/iron_boat.png")),
+		GOLD(1.0F, () -> Items.GOLD_INGOT, () -> MSItems.GOLD_BOAT, new ResourceLocation("minestuck", "textures/entity/gold_boat.png"));
+		
+		private final float damageModifier;
+		private final Supplier<Item> droppedItem, boatItem;
+		private final ResourceLocation boatTexture;
+		
+		Type(float damageModifier, Supplier<Item> droppedItem, Supplier<Item> boatItem, ResourceLocation boatTexture)
+		{
+			this.damageModifier = damageModifier;
+			this.droppedItem = droppedItem;
+			this.boatItem = boatItem;
+			this.boatTexture = boatTexture;
+		}
+		
+		public String asString()
+		{
+			return toString().toLowerCase();
+		}
+		
+		public static Type fromString(String name)
+		{
+			for(Type type : values())
+			{
+				if(type.asString().equals(name))
+					return type;
+			}
+			LOGGER.error("No minestuck boat type matching string \"{}\"", name);
+			return IRON;
+		}
+		
+		public ResourceLocation getBoatTexture()
+		{
+			return boatTexture;
+		}
 	}
 }

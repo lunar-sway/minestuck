@@ -17,7 +17,7 @@ public class SbahjEEEEItem extends PogoWeaponItem
 	@Override
 	public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity player)
 	{
-		player.world.playSound(null, player.posX, player.posY, player.posZ, MSSoundEvents.ITEM_EEEEEEEEEEEE_HIT, SoundCategory.AMBIENT, 1.5F, 1.0F);
+		player.world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), MSSoundEvents.ITEM_EEEEEEEEEEEE_HIT, SoundCategory.AMBIENT, 1.5F, 1.0F);
 		return super.hitEntity(stack, target, player);
 	}
 }

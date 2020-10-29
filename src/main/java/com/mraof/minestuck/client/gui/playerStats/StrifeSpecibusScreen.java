@@ -1,6 +1,6 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.player.KindAbstratusList;
 import com.mraof.minestuck.player.KindAbstratusType;
 import net.minecraft.util.ResourceLocation;
@@ -28,7 +28,7 @@ public class StrifeSpecibusScreen extends PlayerStatsScreen
 		super.render(xcor, ycor, par3);
 		this.renderBackground();
 		
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		
 		drawTabs();
 		

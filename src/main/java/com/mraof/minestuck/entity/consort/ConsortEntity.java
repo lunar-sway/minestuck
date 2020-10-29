@@ -2,13 +2,13 @@ package com.mraof.minestuck.entity.consort;
 
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.entity.MinestuckEntity;
-import com.mraof.minestuck.entity.consort.MessageType.SingleMessage;
 import com.mraof.minestuck.inventory.ConsortMerchantContainer;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.util.MSNBTUtil;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,6 +20,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
@@ -31,27 +32,35 @@ import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
-import java.util.Iterator;
 
-public abstract class ConsortEntity extends MinestuckEntity implements IContainerProvider
+public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 {	//I'd get rid of the seemingly pointless subclasses, but as of writing, entity renderers are registered to entity classes instead of entity types.
 	
+	private final EnumConsort consortType;
+	
+	private boolean hasHadMessage = false;
 	ConsortDialogue.DialogueWrapper message;
 	int messageTicksLeft;
 	CompoundNBT messageData;
 	public EnumConsort.MerchantType merchantType = EnumConsort.MerchantType.NONE;
 	DimensionType homeDimension;
 	boolean visitedSkaia;
-	MessageType.DelayMessage updatingMessage; //Change to an interface/array if more message components need tick updates
+	MessageType.DelayMessage updatingMessage; //TODO Change to an interface/array if more message components need tick updates
 	public ConsortMerchantInventory stocks;
-	private int eventTimer = -1;
-	private float explosionRadius = 2.0f;
-	static private SingleMessage explosionMessage = new SingleMessage("immortalityHerb.3");
+	private int eventTimer = -1;	//TODO use the interface mentioned in the todo above to implement consort explosion instead
 	
-	public ConsortEntity(EntityType<? extends ConsortEntity> type, World world)
+	public ConsortEntity(EnumConsort consortType, EntityType<? extends ConsortEntity> type, World world)
 	{
 		super(type, world);
+		this.consortType = consortType;
 		this.experienceValue = 1;
+	}
+	
+	@Override
+	protected void registerAttributes()
+	{
+		super.registerAttributes();
+		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10D);
 	}
 	
 	@Override
@@ -71,12 +80,6 @@ public abstract class ConsortEntity extends MinestuckEntity implements IContaine
 	}
 	
 	@Override
-	protected float getMaximumHealth()
-	{
-		return 10;
-	}
-	
-	@Override
 	protected boolean processInteract(PlayerEntity player, Hand hand)
 	{
 		if(this.isAlive() && !player.isSneaking() && eventTimer < 0)
@@ -86,17 +89,15 @@ public abstract class ConsortEntity extends MinestuckEntity implements IContaine
 				ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
 				if(message == null)
 				{
-					message = ConsortDialogue.getRandomMessage(this, serverPlayer);
+					message = ConsortDialogue.getRandomMessage(this, serverPlayer, hasHadMessage);
 					messageTicksLeft = 24000 + world.rand.nextInt(24000);
 					messageData = new CompoundNBT();
+					hasHadMessage = true;
 					PlayerSavedData.getData((ServerPlayerEntity) player).addConsortReputation(1);
 				}
 				ITextComponent text = message.getMessage(this, serverPlayer);	//TODO Make sure to catch any issues here
 				if (text != null)
-				{
 					player.sendMessage(text);
-					onSendMessage(serverPlayer, text, this);
-				}
 				MSCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, message.getString(), this);
 			}
 			
@@ -105,18 +106,12 @@ public abstract class ConsortEntity extends MinestuckEntity implements IContaine
 			return super.processInteract(player, hand);
 	}
 	
-	public void onSendMessage(ServerPlayerEntity player, ITextComponent text, ConsortEntity consortEntity)
+	protected void setExplosionTimer()
 	{
-		Iterator<ITextComponent> i = text.iterator();
-		String explosionMessage = ConsortEntity.explosionMessage.getMessageForTesting(this, player).getUnformattedComponentText();
-		
-		//This block triggers when the consort from Flora Lands eats the "immortality" herb.
-		if(text.getUnformattedComponentText().equals(explosionMessage))
-		{
-			//Start a timer of one second: 20 ticks.
-			//Consorts explode when the timer hits zero.
+		//Start a timer of one second: 20 ticks.
+		//Consorts explode when the timer hits zero.
+		if(eventTimer == -1)
 			eventTimer = 20;
-		}
 	}
 	
 	@Override
@@ -130,7 +125,8 @@ public abstract class ConsortEntity extends MinestuckEntity implements IContaine
 			messageTicksLeft--;
 		else if(messageTicksLeft == 0)
 		{
-			message = null;
+			if(message != null && !message.isLockedToConsort())
+				message = null;
 			messageData = null;
 			updatingMessage = null;
 			stocks = null;
@@ -160,7 +156,8 @@ public abstract class ConsortEntity extends MinestuckEntity implements IContaine
 		{
 			boolean flag = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this);
 			this.dead = true;
-			this.world.createExplosion(this, this.posX, this.posY, this.posZ, this.explosionRadius, flag ? Explosion.Mode.DESTROY : Explosion.Mode.NONE);
+			float explosionRadius = 2.0f;
+			this.world.createExplosion(this, this.getPosX(), this.getPosY(), this.getPosZ(), explosionRadius, flag ? Explosion.Mode.DESTROY : Explosion.Mode.NONE);
 			this.remove();
 		}
 	}
@@ -176,6 +173,7 @@ public abstract class ConsortEntity extends MinestuckEntity implements IContaine
 			compound.putInt("MessageTicks", messageTicksLeft);
 			compound.put("MessageData", messageData);
 		}
+		compound.putBoolean("HasHadMessage", hasHadMessage);
 		
 		compound.putInt("Type", merchantType.ordinal());
 		MSNBTUtil.tryWriteDimensionType(compound, "HomeDim", homeDimension);
@@ -209,7 +207,8 @@ public abstract class ConsortEntity extends MinestuckEntity implements IContaine
 				messageTicksLeft = compound.getInt("MessageTicks");
 			else messageTicksLeft = 24000;	//Used to make summoning with a specific message slightly easier
 			messageData = compound.getCompound("MessageData");
-		}
+			hasHadMessage = true;
+		} else hasHadMessage = compound.getBoolean("HasHadMessage");
 		
 		merchantType = EnumConsort.MerchantType.values()[MathHelper.clamp(compound.getInt("Type"), 0, EnumConsort.MerchantType.values().length - 1)];
 		
@@ -277,7 +276,10 @@ public abstract class ConsortEntity extends MinestuckEntity implements IContaine
 		return false;
 	}
 	
-	public abstract EnumConsort getConsortType();
+	public EnumConsort getConsortType()
+	{
+		return consortType;
+	}
 	
 	public void commandReply(ServerPlayerEntity player, String chain)
 	{
@@ -313,5 +315,26 @@ public abstract class ConsortEntity extends MinestuckEntity implements IContaine
 	protected void writeShopContainerBuffer(PacketBuffer buffer)
 	{
 		ConsortMerchantContainer.write(buffer, this, stocks.getPrices());
+	}
+	
+	@Nullable
+	@Override
+	protected SoundEvent getAmbientSound()
+	{
+		return consortType.getAmbientSound();
+	}
+	
+	@Nullable
+	@Override
+	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
+	{
+		return consortType.getHurtSound();
+	}
+	
+	@Nullable
+	@Override
+	protected SoundEvent getDeathSound()
+	{
+		return consortType.getDeathSound();
 	}
 }

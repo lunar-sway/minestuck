@@ -3,6 +3,7 @@ package com.mraof.minestuck.util;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+@Deprecated	//Get and use your own logger
 public class Debug
 {
 	

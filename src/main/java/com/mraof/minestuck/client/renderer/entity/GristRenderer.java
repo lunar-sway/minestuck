@@ -1,13 +1,12 @@
 package com.mraof.minestuck.client.renderer.entity;
 
-import com.mojang.blaze3d.platform.GLX;
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.mraof.minestuck.entity.item.GristEntity;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.ResourceLocation;
 
 public class GristRenderer extends EntityRenderer<GristEntity>
@@ -21,36 +20,31 @@ public class GristRenderer extends EntityRenderer<GristEntity>
 	}
 
 	@Override
-	public void doRender(GristEntity grist, double d0, double d1, double d2, float f, float f1)
+	public void render(GristEntity grist, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn)
 	{
-		GlStateManager.pushMatrix();
-		GlStateManager.translatef((float)d0, (float)d1 + grist.getSizeByValue()/2, (float)d2);
-		this.bindEntityTexture(grist);
-		BufferBuilder vertexbuffer = Tessellator.getInstance().getBuffer();
-		int j = grist.getBrightnessForRender();
-		int k = j % 65536;
-		int l = j / 65536;
-		GLX.glMultiTexCoord2f(GLX.GL_TEXTURE1, (float)k, (float)l);
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		GlStateManager.rotatef(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
-		GlStateManager.rotatef(-this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
-		float f11 = grist.getSizeByValue();
-		GlStateManager.scalef(f11, f11, f11);
-		vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_NORMAL);
-		vertexbuffer.pos(-0.5D, -0.25D, 0.0D).tex(0.0D, 1.0D).normal(0.0F, 1.0F, 0.0F).endVertex();
-		vertexbuffer.pos(0.5D, -0.25D, 0.0D).tex(1.0D, 1.0D).normal(0.0F, 1.0F, 0.0F).endVertex();
-		vertexbuffer.pos(0.5D, 0.75D, 0.0D).tex(1.0D, 0.0D).normal(0.0F, 1.0F, 0.0F).endVertex();
-		vertexbuffer.pos(-0.5D, 0.75D, 0.0D).tex(0.0D, 0.0D).normal(0.0F, 1.0F, 0.0F).endVertex();
-		Tessellator.getInstance().draw();
-		GlStateManager.disableBlend();
-		GlStateManager.disableRescaleNormal();
-		GlStateManager.popMatrix();
-		
+		matrixStackIn.push();
+		matrixStackIn.translate(0.0F, 0.0F + grist.getSizeByValue()/2, 0.0F);
+		matrixStackIn.scale(grist.getSizeByValue(), grist.getSizeByValue(), grist.getSizeByValue());
+		matrixStackIn.rotate(this.renderManager.getCameraOrientation());
+		matrixStackIn.rotate(Vector3f.YP.rotationDegrees(180.0F));
+		MatrixStack.Entry matrixstack = matrixStackIn.getLast();
+		Matrix4f matrix4f = matrixstack.getMatrix();
+		Matrix3f matrix3f = matrixstack.getNormal();
+		IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.getEntityCutoutNoCull(this.getEntityTexture(grist)));
+		ivertexbuilder.pos(matrix4f, 0.0F - 0.5F, 0 - 0.25F, 0.0F).color(255, 255, 255, 255).tex(0, 1)
+				.overlay(OverlayTexture.NO_OVERLAY).lightmap(packedLightIn).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
+		ivertexbuilder.pos(matrix4f, 1.0F - 0.5F, 0 - 0.25F, 0.0F).color(255, 255, 255, 255).tex(1, 1)
+				.overlay(OverlayTexture.NO_OVERLAY).lightmap(packedLightIn).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
+		ivertexbuilder.pos(matrix4f, 1.0F - 0.5F, 1 - 0.25F, 0.0F).color(255, 255, 255, 255).tex(1, 0)
+				.overlay(OverlayTexture.NO_OVERLAY).lightmap(packedLightIn).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
+		ivertexbuilder.pos(matrix4f, 0.0F - 0.5F, 1 - 0.25F, 0.0F).color(255, 255, 255, 255).tex(0, 0)
+				.overlay(OverlayTexture.NO_OVERLAY).lightmap(packedLightIn).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
+		matrixStackIn.pop();
+		super.render(grist, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
 	}
-	
+
 	@Override
-	protected ResourceLocation getEntityTexture(GristEntity entity)
-	{
+	public ResourceLocation getEntityTexture(GristEntity entity) {
 		return entity.getGristType().getIcon();
 	}
 

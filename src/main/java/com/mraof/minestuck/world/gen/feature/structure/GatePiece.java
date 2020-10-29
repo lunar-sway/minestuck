@@ -15,6 +15,7 @@ import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
 import net.minecraft.world.gen.feature.structure.ScatteredStructurePiece;
+import net.minecraftforge.common.util.Constants;
 
 import java.util.Random;
 
@@ -29,7 +30,7 @@ public abstract class GatePiece extends ScatteredStructurePiece
 		for(int xPos = boundingBox.minX; xPos <= boundingBox.maxX; xPos++)
 			for(int zPos = boundingBox.minZ; zPos <= boundingBox.maxZ; zPos++)
 			{
-				int posHeight = generator.func_222532_b(xPos, zPos, Heightmap.Type.OCEAN_FLOOR_WG);
+				int posHeight = generator.getHeight(xPos, zPos, Heightmap.Type.OCEAN_FLOOR_WG);
 				heightSum += posHeight;
 				count++;
 			}
@@ -59,7 +60,7 @@ public abstract class GatePiece extends ScatteredStructurePiece
 	}
 	
 	@Override
-	public boolean addComponentParts(IWorld worldIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
+	public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox mutableBoundingBoxIn, ChunkPos chunkPosIn)
 	{
 		placeGate(worldIn, boundingBox);
 		return true;
@@ -75,12 +76,12 @@ public abstract class GatePiece extends ScatteredStructurePiece
 				{
 					if(offsetX == 0 && offsetZ == 0)
 					{
-						worldIn.setBlockState(gatePos, MSBlocks.GATE.getDefaultState().with(GateBlock.MAIN, true), 2);
+						worldIn.setBlockState(gatePos, MSBlocks.GATE.getDefaultState().with(GateBlock.MAIN, true), Constants.BlockFlags.BLOCK_UPDATE);
 						TileEntity tileEntity = worldIn.getTileEntity(gatePos);
 						if(tileEntity instanceof GateTileEntity)
 							((GateTileEntity) tileEntity).gateType = GateHandler.Type.LAND_GATE;
 						else Debug.errorf("Expected a gate tile entity after placing a gate block, but got %s!", tileEntity);
-					} else worldIn.setBlockState(gatePos.add(offsetX, 0, offsetZ), MSBlocks.GATE.getDefaultState(), 2);
+					} else worldIn.setBlockState(gatePos.add(offsetX, 0, offsetZ), MSBlocks.GATE.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
 				}
 		}
 	}

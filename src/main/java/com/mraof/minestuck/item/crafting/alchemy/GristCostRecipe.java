@@ -124,7 +124,7 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 		public GristCostResult generate(Item item, GristCostResult lastCost, GenerationContext context)
 		{
 			if(lastCost == null && ingredient.test(new ItemStack(item)))
-				return new GristCostResult(getGristCost(new ItemStack(item), GristTypes.BUILD, false, null));
+				return new GristCostResult(getGristCost(new ItemStack(item), GristTypes.BUILD.get(), false, null));
 			else return null;
 		}
 	}

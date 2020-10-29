@@ -24,7 +24,6 @@ import java.util.Set;
 public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends HangingEntity implements IEntityAdditionalSpawnData
 {
 	public T art;
-	private static boolean random = true;
 	
 	public HangingArtEntity(EntityType<? extends HangingArtEntity<T>> type, World worldIn)
 	{
@@ -35,6 +34,7 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 	{
 		super(type, worldIn, pos);
 		List<T> artList = Lists.newArrayList();
+		int maxValidSize = 0;
 		
 		for(T art : getArtSet())
 		{
@@ -42,39 +42,19 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 			this.updateFacingWithBoundingBox(direction);
 			
 			if(this.onValidSurface())
+			{
 				artList.add(art);
+				maxValidSize = Math.max(maxValidSize, art.getSizeX() * art.getSizeY());
+			}
 		}
+		
+		//Makes sure that the art picked is the largest possible
+		int maxSize = maxValidSize;
+		artList.removeIf(art -> art.getSizeX() * art.getSizeY() < maxSize);
 		
 		if(!artList.isEmpty())
 				this.art = artList.get(this.rand.nextInt(artList.size()));
 		
-		
-		this.updateFacingWithBoundingBox(direction);
-	}
-
-	public HangingArtEntity(EntityType<? extends HangingArtEntity<T>> type, World worldIn, BlockPos pos, Direction direction, ItemStack stack, int meta, boolean random)
-	{
-		super(type, worldIn, pos);
-		List<T> artList = Lists.newArrayList();
-		
-		setRandom(random);
-		
-		for(T art : getArtSet())
-		{
-			this.art = art;
-			this.updateFacingWithBoundingBox(direction);
-			
-			if(this.onValidSurface())
-				artList.add(art);
-		}
-		
-		if(!artList.isEmpty())
-		{
-			if(random)
-				this.art = artList.get(this.rand.nextInt(artList.size()));
-			else
-				this.art = artList.get(meta);
-		}
 		
 		this.updateFacingWithBoundingBox(direction);
 	}
@@ -105,7 +85,6 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 	@Override
 	public void readAdditional(CompoundNBT compound)
 	{
-		super.readAdditional(compound);
 		String s = compound.getString("Motive");
 		
 		for(T art : this.getArtSet())
@@ -120,6 +99,8 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 			this.art = this.getDefault();
 			Debug.warnf("Could not load art %s for type %s, resorting to the default type.", s, this.getType().getTranslationKey());
 		}
+		super.readAdditional(compound);
+		updateBoundingBox();	//Fixes a vanilla-related bug where pos and bb isn't updated when loaded from nbt
 	}
 	
 	@Override
@@ -170,7 +151,7 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 	public void setPositionAndRotationDirect(double x, double y, double z, float yaw, float pitch, int posRotationIncrements,
 			boolean teleport)
 	{
-		BlockPos blockpos = this.hangingPosition.add(x - this.posX, y - this.posY, z - this.posZ);
+		BlockPos blockpos = this.hangingPosition.add(x - this.getPosX(), y - this.getPosY(), z - this.getPosZ());
 		this.setPosition((double) blockpos.getX(), (double) blockpos.getY(), (double) blockpos.getZ());
 	}
 	
@@ -233,16 +214,6 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 		
 		int getOffsetX();
 		int getOffsetY();
-	}
-	
-	public static void setRandom(boolean rand)
-	{
-		random = rand;
-	}
-	
-	public boolean getRandom()
-	{
-		return random;
 	}
 
 	public Direction getFacingDirection() {return facingDirection;}

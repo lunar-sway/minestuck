@@ -23,7 +23,7 @@ public class GateTileEntity extends OnCollisionTeleporterTileEntity<ServerPlayer
 	
 	public GateTileEntity()
 	{
-		super(MSTileEntityTypes.GATE, ServerPlayerEntity.class);
+		super(MSTileEntityTypes.GATE.get(), ServerPlayerEntity.class);
 	}
 	
 	@Override

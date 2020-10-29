@@ -1,7 +1,7 @@
 package com.mraof.minestuck.item.block;
 
-import com.mraof.minestuck.block.AlchemiterBlock;
-import com.mraof.minestuck.block.multiblock.MachineMultiblock;
+import com.mraof.minestuck.block.machine.AlchemiterBlock;
+import com.mraof.minestuck.block.machine.MachineMultiblock;
 import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.Block;
@@ -74,16 +74,18 @@ public class MultiblockItem extends BlockItem
 	
 	public boolean canPlaceAt(BlockItemUseContext context, BlockPos pos, Direction facing)
 	{
+		PlayerEntity player = context.getPlayer();
+		if(player != null && !player.canPlayerEdit(pos, Direction.UP, context.getItem()))
+			return false;
 		MutableBoundingBox boundingBox = multiblock.getBoundingBox(MSRotationUtil.fromDirection(facing));
 		for(int x = boundingBox.minX; x <= boundingBox.maxX; x++)
 		{
 			for(int z = boundingBox.minZ; z <= boundingBox.maxZ; z++)
 			{
-				if(!context.getPlayer().canPlayerEdit(pos.add(x, 0, z), Direction.UP, context.getItem()))
-					return false;
 				for(int y = boundingBox.minY; y <= boundingBox.maxY; y++)
 				{
-					if(!context.getWorld().getBlockState(pos.add(x, y, z)).isReplaceable(context))
+					if(World.isOutsideBuildHeight(pos.add(x, y, z)) || player != null && !context.getWorld().isBlockModifiable(player, pos)
+							|| !context.getWorld().getBlockState(pos.add(x, y, z)).isReplaceable(context))
 						return false;
 				}
 			}

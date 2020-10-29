@@ -57,7 +57,7 @@ public class PartGroup
         {
             EntityBigPart part = new EntityBigPart(parent.getType(), world, this, (float) sizes.get(i).x, (float) sizes.get(i).y);
             Vec3d position = positions.get(i);
-            part.setPosition(parent.posX + position.x, parent.posY + position.y, parent.posZ + position.z);
+            part.setPosition(parent.getPosX() + position.x, parent.getPosY() + position.y, parent.getPosZ() + position.z);
             part.setPartId(parts.size());
             parts.add(part);
             //world.addEntity(part); TODO Not safe to add entities to world on creation. A different solution is needed
@@ -75,7 +75,7 @@ public class PartGroup
         {
             EntityBigPart part = parts.get(i);
             Vec3d position = positions.get(i).rotateYaw(yaw);
-            part.setPosition(parent.posX + position.x, parent.posY + position.y, parent.posZ + position.z);
+            part.setPosition(parent.getPosX() + position.x, parent.getPosY() + position.y, parent.getPosZ() + position.z);
             if(parent.removed != part.removed)
             {
                 if(parent.removed)
@@ -90,7 +90,7 @@ public class PartGroup
         parent.world.getProfiler().startSection("partGroupCollision");
         float yaw = -parent.renderYawOffset * 3.141592f / 180f;
         boolean positionChanged = false;
-        Vec3d position = new Vec3d(entity.posX - parent.posX, entity.posY - parent.posY, entity.posZ - parent.posZ).rotateYaw(yaw);
+        Vec3d position = new Vec3d(entity.getPosX() - parent.getPosX(), entity.getPosY() - parent.getPosY(), entity.getPosZ() - parent.getPosZ()).rotateYaw(yaw);
         for (AxisAlignedBB box : boxes)
         {
             AxisAlignedBB relativeBox = new AxisAlignedBB(position.x, position.y, position.z, entity.getWidth(), entity.getHeight(), entity.getWidth());

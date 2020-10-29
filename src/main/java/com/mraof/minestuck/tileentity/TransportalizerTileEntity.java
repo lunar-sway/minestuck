@@ -40,7 +40,7 @@ public class TransportalizerTileEntity extends OnCollisionTeleporterTileEntity<E
 	
 	public TransportalizerTileEntity()
 	{
-		super(MSTileEntityTypes.TRANSPORTALIZER, Entity.class);
+		super(MSTileEntityTypes.TRANSPORTALIZER.get(), Entity.class);
 	}
 	
 	@Override
@@ -161,8 +161,8 @@ public class TransportalizerTileEntity extends OnCollisionTeleporterTileEntity<E
 	
 	private static boolean isDimensionForbidden(DimensionType dim)
 	{
-		List<String> forbiddenTypes = MinestuckConfig.forbiddenDimensionTypesTpz.get();
-		List<String> forbiddenDims = MinestuckConfig.forbiddenModDimensionsTpz.get();
+		List<String> forbiddenTypes = MinestuckConfig.SERVER.forbiddenDimensionTypesTpz.get();
+		List<String> forbiddenDims = MinestuckConfig.SERVER.forbiddenModDimensionsTpz.get();
 		ResourceLocation modDim = dim.getModType() != null ? dim.getModType().getRegistryName() : null;
 		return forbiddenTypes.contains(String.valueOf(dim.getRegistryName())) || forbiddenDims.contains(String.valueOf(modDim));
 	}

@@ -14,6 +14,9 @@ public class MSCriteriaTriggers
 	public static final ConsortItemTrigger CONSORT_ITEM = new ConsortItemTrigger();
 	public static final ConsortTalkTrigger CONSORT_TALK = new ConsortTalkTrigger();
 	
+	/**
+	 * Currently (1.15), this is not thread safe and need to be deferred
+	 */
 	public static void register()
 	{
 		CriteriaTriggers.register(SBURB_CONNECTION);

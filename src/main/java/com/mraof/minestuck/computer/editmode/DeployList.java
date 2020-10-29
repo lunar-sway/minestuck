@@ -22,6 +22,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.BiFunction;
 
@@ -46,15 +47,15 @@ public final class DeployList
 		registerItem("alchemiter", new ItemStack(MSBlocks.ALCHEMITER), new GristSet(), new GristSet(GristTypes.BUILD, 100), 0);
 		registerItem("punch_designix", 0,null, item(MSBlocks.PUNCH_DESIGNIX),
 				(isPrimary, connection) -> new GristSet(SburbHandler.getPrimaryGristType(connection.getClientIdentifier()), 4));
-		registerItem("portable_cruxtruder", new GristSet(GristTypes.BUILD, 200), 1, config(MinestuckConfig.portableMachines),
+		registerItem("portable_cruxtruder", new GristSet(GristTypes.BUILD, 200), 1, config(MinestuckConfig.SERVER.portableMachines),
 				(connection, world) -> MiniCruxtruderItem.getCruxtruderWithColor(ColorHandler.getColorForPlayer(connection.getClientIdentifier(), world)));
-		registerItem("portable_punch_designix", new GristSet(GristTypes.BUILD, 200), 1, config(MinestuckConfig.portableMachines), item(MSBlocks.MINI_PUNCH_DESIGNIX));
-		registerItem("portable_totem_lathe", new GristSet(GristTypes.BUILD, 200), 1, config(MinestuckConfig.portableMachines), item(MSBlocks.MINI_TOTEM_LATHE));
-		registerItem("portable_alchemiter", new GristSet(GristTypes.BUILD, 300), 1, config(MinestuckConfig.portableMachines), item(MSBlocks.MINI_ALCHEMITER));
+		registerItem("portable_punch_designix", new GristSet(GristTypes.BUILD, 200), 1, config(MinestuckConfig.SERVER.portableMachines), item(MSBlocks.MINI_PUNCH_DESIGNIX));
+		registerItem("portable_totem_lathe", new GristSet(GristTypes.BUILD, 200), 1, config(MinestuckConfig.SERVER.portableMachines), item(MSBlocks.MINI_TOTEM_LATHE));
+		registerItem("portable_alchemiter", new GristSet(GristTypes.BUILD, 300), 1, config(MinestuckConfig.SERVER.portableMachines), item(MSBlocks.MINI_ALCHEMITER));
 		/*registerItem("jumper_block_extension", new ItemStack(MinestuckBlocks.jumperBlockExtension[0]), new GristSet(GristType.Build, 1000), 1);
 		registerItem("punch_card_shunt", new ItemStack(MinestuckItems.shunt), new GristSet(GristType.Build, 100), 1);*/
 		registerItem("holopad", new ItemStack(MSBlocks.HOLOPAD), new GristSet(GristTypes.BUILD, 4000), 2);
-		registerItem("card_punched_card", new GristSet(GristTypes.BUILD, 25), null, 0, config(MinestuckConfig.deployCard), (sburbConnection, world) -> AlchemyHelper.createCard(new ItemStack(MSItems.CAPTCHA_CARD), true));
+		registerItem("card_punched_card", new GristSet(GristTypes.BUILD, 25), null, 0, config(MinestuckConfig.SERVER.deployCard), (sburbConnection, world) -> AlchemyHelper.createCard(new ItemStack(MSItems.CAPTCHA_CARD), true));
 		
 	}
 	
@@ -65,6 +66,7 @@ public final class DeployList
 	
 	/**
 	 * Register the specific item as deployable.
+	 * Note: Not thread-safe. Make sure to only call this on the main thread
 	 * @param stack The item to be registered.
 	 * The itemstack can have nbt tags, with the exception of the display tag.
 	 * @param cost1 How much it costs the first time deployed.
@@ -78,16 +80,25 @@ public final class DeployList
 		registerItem(name, cost1, cost2, tier, null, (connection, world) -> stack);
 	}
 	
+	/**
+	 * Not thread-safe. Make sure to only call this on the main thread
+	 */
 	public static void registerItem(String name, GristSet cost, int tier, IAvailabilityCondition condition, BiFunction<SburbConnection, World, ItemStack> item)
 	{
 		registerItem(name, tier, condition, item, (isPrimary, connection) -> cost);
 	}
 	
+	/**
+	 * Not thread-safe. Make sure to only call this on the main thread
+	 */
 	public static void registerItem(String name, GristSet cost1, GristSet cost2, int tier, IAvailabilityCondition condition, BiFunction<SburbConnection, World, ItemStack> item)
 	{
 		registerItem(name, tier, condition, item, (isPrimary, connection) -> isPrimary ? cost1 : cost2);
 	}
 	
+	/**
+	 * Not thread-safe. Make sure to only call this on the main thread
+	 */
 	public static void registerItem(String name, int tier, IAvailabilityCondition condition, BiFunction<SburbConnection, World, ItemStack> item, BiFunction<Boolean, SburbConnection, GristSet> grist)
 	{
 		if(containsEntry(name))
@@ -182,5 +193,10 @@ public final class DeployList
 	public static void onConditionsUpdated(MinecraftServer server)
 	{
 		MSExtraData.get(server).forEach(EditData::sendGivenItemsToEditor);
+	}
+	
+	public static List<ItemStack> getEditmodeTools()
+	{
+		return Collections.emptyList();
 	}
 }

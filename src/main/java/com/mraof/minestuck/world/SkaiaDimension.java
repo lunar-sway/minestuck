@@ -1,8 +1,8 @@
 package com.mraof.minestuck.world;
 
+import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
-import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.MSWorldGenTypes;
 import com.mraof.minestuck.world.gen.SkaiaGenSettings;
@@ -20,13 +20,14 @@ import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraftforge.common.ModDimension;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 import java.util.function.BiFunction;
 
 public class SkaiaDimension extends Dimension
 {
 	public SkaiaDimension(World worldIn, DimensionType typeIn)
 	{
-		super(worldIn, typeIn);
+		super(worldIn, typeIn, 0.0F);
 	}
 	
 	@Override
@@ -35,7 +36,7 @@ public class SkaiaDimension extends Dimension
 		SkaiaGenSettings settings = MSWorldGenTypes.SKAIA.createSettings();
 		settings.setDefaultBlock(Blocks.STONE.getDefaultState());
 		settings.setDefaultFluid(Blocks.AIR.getDefaultState());
-		return MSWorldGenTypes.SKAIA.create(this.world, BiomeProviderType.FIXED.create(BiomeProviderType.FIXED.createSettings().setBiome(MSBiomes.SKAIA)), settings);
+		return MSWorldGenTypes.SKAIA.create(this.world, BiomeProviderType.FIXED.create(BiomeProviderType.FIXED.createSettings(this.world.getWorldInfo()).setBiome(MSBiomes.SKAIA)), settings);
 	}
 	
 	@Override
@@ -93,12 +94,12 @@ public class SkaiaDimension extends Dimension
 	public DimensionType getRespawnDimension(ServerPlayerEntity player)
 	{
 		DimensionType dimOut;
-		SburbConnection c = SkaianetHandler.get(world.getServer()).getMainConnection(IdentifierHandler.encode(player), true);
-		if(c == null || !c.hasEntered())
-			dimOut = player.getSpawnDimension();	//Method outputs 0 when no spawn dimension is set, sending players to the overworld.
+		Optional<SburbConnection> c = SkaianetHandler.get(world.getServer()).getPrimaryConnection(IdentifierHandler.encode(player), true);
+		if(c.isPresent() && c.get().hasEntered())
+			dimOut = c.get().getClientDimension();
 		else
 		{
-			dimOut = c.getClientDimension();
+			dimOut = player.getSpawnDimension();	//Method outputs 0 when no spawn dimension is set, sending players to the overworld.
 		}
 		
 		return dimOut;

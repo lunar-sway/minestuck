@@ -42,9 +42,9 @@ public class CakeLandType extends TitleLandType
 	{
 		if(biome.staticBiome != MSBiomes.LAND_OCEAN)
 		{
-			biome.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, Biome.createDecoratedFeature(MSFeatures.CAKE_PEDESTAL, IFeatureConfig.NO_FEATURE_CONFIG, Placement.CHANCE_PASSTHROUGH, new ChanceConfig(100)));
+			biome.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MSFeatures.CAKE_PEDESTAL.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.CHANCE_PASSTHROUGH.configure(new ChanceConfig(100))));
 		}
-		
-		biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(MSFeatures.CAKE, new ProbabilityConfig(biome.getDefaultTemperature()/2), Placement.TOP_SOLID_HEIGHTMAP_RANGE, new TopSolidRangeConfig(0, 5)));
+
+		biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.CAKE.withConfiguration(new ProbabilityConfig(biome.getDefaultTemperature()/2)).withPlacement(Placement.TOP_SOLID_HEIGHTMAP_RANGE.configure(new TopSolidRangeConfig(0, 5))));
 	}
 }

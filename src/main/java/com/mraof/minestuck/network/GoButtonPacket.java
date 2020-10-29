@@ -7,8 +7,8 @@ import net.minecraft.network.PacketBuffer;
 public class GoButtonPacket implements PlayToServerPacket
 {
 	
-	public boolean newMode;
-	public boolean overrideStop;
+	private final boolean newMode;
+	private final boolean overrideStop;
 	
 	public GoButtonPacket(boolean newMode, boolean overrideStop)
 	{

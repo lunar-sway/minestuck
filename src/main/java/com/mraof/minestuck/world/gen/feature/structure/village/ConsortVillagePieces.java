@@ -1,7 +1,6 @@
 package com.mraof.minestuck.world.gen.feature.structure.village;
 
 import com.google.common.collect.Lists;
-import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.util.Debug;
@@ -9,6 +8,7 @@ import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
 import com.mraof.minestuck.world.gen.feature.structure.ImprovedStructurePiece;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.lands.ILandType;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -19,40 +19,25 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.*;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.template.TemplateManager;
+import net.minecraftforge.common.util.Constants;
 
 import java.util.List;
 import java.util.Random;
 
 public class ConsortVillagePieces
 {
-	public static List<PieceWeight> getStructureVillageWeightedPieceList(Random random, EntityType<? extends ConsortEntity> consortType, LandTypePair landTypes)
+	public static List<PieceWeight> getStructureVillageWeightedPieceList(Random random, LandTypePair landTypes)
 	{
 		List<PieceWeight> list = Lists.newArrayList();
-		if(consortType == MSEntityTypes.SALAMANDER)
-		{
-			list.add(new PieceWeight(SalamanderVillagePieces.PipeHouse1::createPiece, 3, MathHelper.nextInt(random, 5, 8)));
-			list.add(new PieceWeight(SalamanderVillagePieces.HighPipeHouse1::createPiece, 6, MathHelper.nextInt(random, 2, 4)));
-			list.add(new PieceWeight(SalamanderVillagePieces.SmallTowerStore::createPiece, 10, MathHelper.nextInt(random, 1, 3)));
-		} else if(consortType == MSEntityTypes.TURTLE)
-		{
-			list.add(new PieceWeight(TurtleVillagePieces.ShellHouse1::createPiece, 3, MathHelper.nextInt(random, 5, 8)));
-			list.add(new PieceWeight(TurtleVillagePieces.TurtleMarket1::createPiece, 10, MathHelper.nextInt(random, 0, 2)));
-			list.add(new PieceWeight(TurtleVillagePieces.TurtleTemple1::createPiece, 10, MathHelper.nextInt(random, 1, 1)));
-		} else if(consortType == MSEntityTypes.IGUANA)
-		{
-			list.add(new PieceWeight(IguanaVillagePieces.SmallTent1::createPiece, 3, MathHelper.nextInt(random, 5, 8)));
-			list.add(new PieceWeight(IguanaVillagePieces.LargeTent1::createPiece, 10, MathHelper.nextInt(random, 1, 2)));
-			list.add(new PieceWeight(IguanaVillagePieces.SmallTentStore::createPiece, 8, MathHelper.nextInt(random, 2, 3)));
-		} else if(consortType == MSEntityTypes.NAKAGATOR)
-		{
-			list.add(new PieceWeight(NakagatorVillagePieces.HighNakHousing1::createPiece, 6, MathHelper.nextInt(random, 3, 5)));
-			list.add(new PieceWeight(NakagatorVillagePieces.HighNakMarket1::createPiece, 10, MathHelper.nextInt(random, 1, 2)));
-			list.add(new PieceWeight(NakagatorVillagePieces.HighNakInn1::createPiece, 15, MathHelper.nextInt(random, 1, 1)));
-		}
+		
+		ILandType.PieceRegister register = (factory, weight, limit) -> list.add(new PieceWeight(factory, weight, limit));
+		landTypes.terrain.addVillagePieces(register, random);
+		landTypes.title.addVillagePieces(register, random);
 		
 		list.removeIf(pieceWeight -> pieceWeight.villagePiecesLimit == 0);
 		
@@ -151,7 +136,7 @@ public class ConsortVillagePieces
 		public int villagePiecesSpawned;
 		public int villagePiecesLimit;
 		
-		public PieceWeight(PieceFactory pieceFactory, int weight, int limit)
+		private PieceWeight(PieceFactory pieceFactory, int weight, int limit)
 		{
 			this.pieceFactory = pieceFactory;
 			this.villagePieceWeight = weight;
@@ -283,7 +268,7 @@ public class ConsortVillagePieces
 					
 					if (state.getMaterial().isLiquid() || state.isSolid())
 					{
-						worldIn.setBlockState(blockpos, pathBlock, 2);
+						worldIn.setBlockState(blockpos, pathBlock, Constants.BlockFlags.BLOCK_UPDATE);
 						break;
 					}
 					
@@ -301,7 +286,7 @@ public class ConsortVillagePieces
 			
 			while(pos.getY() >= world.getSeaLevel())
 			{
-				world.setBlockState(pos, block, 2);
+				world.setBlockState(pos, block, Constants.BlockFlags.BLOCK_UPDATE);
 				
 				pos = pos.down();
 				
@@ -310,30 +295,30 @@ public class ConsortVillagePieces
 			}
 		}
 		
-		protected boolean spawnConsort(int x, int y, int z, MutableBoundingBox boundingBox, IWorld world)
+		protected boolean spawnConsort(int x, int y, int z, MutableBoundingBox boundingBox, IWorld world, ChunkGenerator<?> chunkGenerator)
 		{
-			return spawnConsort(x, y, z, boundingBox, world, EnumConsort.MerchantType.NONE, 48);
+			return spawnConsort(x, y, z, boundingBox, world, chunkGenerator, EnumConsort.MerchantType.NONE, 48);
 		}
 		
-		protected boolean spawnConsort(int x, int y, int z, MutableBoundingBox boundingBox, IWorld world, int maxHomeDistance)
+		protected boolean spawnConsort(int x, int y, int z, MutableBoundingBox boundingBox, IWorld world, ChunkGenerator<?> chunkGenerator, int maxHomeDistance)
 		{
-			return spawnConsort(x, y, z, boundingBox, world, EnumConsort.MerchantType.NONE, maxHomeDistance);
+			return spawnConsort(x, y, z, boundingBox, world, chunkGenerator, EnumConsort.MerchantType.NONE, maxHomeDistance);
 		}
 		
-		protected boolean spawnConsort(int x, int y, int z, MutableBoundingBox boundingBox, IWorld world, EnumConsort.MerchantType type, int maxHomeDistance)
+		protected boolean spawnConsort(int x, int y, int z, MutableBoundingBox boundingBox, IWorld world, ChunkGenerator<?> chunkGenerator, EnumConsort.MerchantType type, int maxHomeDistance)
 		{
 			BlockPos pos = new BlockPos(this.getXWithOffset(x, z), this.getYWithOffset(y), this.getZWithOffset(x, z));
 			
 			if(boundingBox.isVecInside(pos))
 			{
 				
-				if(!(world.getChunkProvider().getChunkGenerator().getSettings() instanceof LandGenSettings))
+				if(!(chunkGenerator.getSettings() instanceof LandGenSettings))
 				{
 					Debug.warn("Tried to spawn a consort in a building that is being generated outside of a land dimension.");
 					return false;
 				}
 				
-				LandTypePair landTypes = ((LandGenSettings) world.getChunkProvider().getChunkGenerator().getSettings()).getLandTypes();
+				LandTypePair landTypes = ((LandGenSettings) chunkGenerator.getSettings()).getLandTypes();
 				
 				EntityType<? extends ConsortEntity> consortType = landTypes.terrain.getConsortType();
 				
@@ -458,7 +443,24 @@ public class ConsortVillagePieces
 				}
 			}
 		}
-		
+
+		@Override
+		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
+		{
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
+			BlockState pathBlock = blocks.getBlockState("village_path");
+
+			for (int i = this.boundingBox.minX; i <= this.boundingBox.maxX; ++i)
+			{
+				for (int j = this.boundingBox.minZ; j <= this.boundingBox.maxZ; ++j)
+				{
+					placeRoadtile(i, j, structureBoundingBoxIn, worldIn, pathBlock);
+				}
+			}
+
+			return true;
+		}
+
 		public static MutableBoundingBox findPieceBox(ConsortVillageCenter.VillageCenter start, List<StructurePiece> components, Random rand, int x, int y, int z, Direction facing)
 		{
 			for(int i = 7 * MathHelper.nextInt(rand, 3, 5); i >= 7; i -= 7)
@@ -470,23 +472,6 @@ public class ConsortVillagePieces
 			}
 			
 			return null;
-		}
-		
-		@Override
-		public boolean addComponentParts(IWorld worldIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
-		{
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(worldIn.getChunkProvider().getChunkGenerator().getSettings());
-			BlockState pathBlock = blocks.getBlockState("village_path");
-			
-			for (int i = this.boundingBox.minX; i <= this.boundingBox.maxX; ++i)
-			{
-				for (int j = this.boundingBox.minZ; j <= this.boundingBox.maxZ; ++j)
-				{
-					placeRoadtile(i, j, structureBoundingBoxIn, worldIn, pathBlock);
-				}
-			}
-			
-			return true;
 		}
 	}
 	

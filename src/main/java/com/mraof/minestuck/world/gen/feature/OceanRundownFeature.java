@@ -5,7 +5,6 @@ import com.mraof.minestuck.world.biome.MSBiomes;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.Heightmap;
@@ -29,18 +28,17 @@ public class OceanRundownFeature extends Feature<NoFeatureConfig>
 	{
 		BlockPos pos2, pos3;
 		
-		if(generator.getBiomeProvider().getBiomesInSquare(pos.getX(), pos.getZ(), 7).contains(MSBiomes.LAND_OCEAN))
+		if(generator.getBiomeProvider().getBiomes(pos.getX(), worldIn.getSeaLevel(), pos.getZ(), 7).contains(MSBiomes.LAND_OCEAN))
 		{
 			return false;
 		}
 		//Look for ocean and pick pos2 and pos3
 		List<BlockPos> oceanPos = new ArrayList<>();
-		Biome[] biomes = generator.getBiomeProvider().getBiomes(pos.getX() - 8, pos.getZ() - 8, 16, 16, false);
 		for(int posX = 0; posX < 16; posX++)
 		{
 			for(int posZ = 0; posZ < 16; posZ++)
 			{
-				if(biomes[posX + posZ * 16].equals(MSBiomes.LAND_OCEAN))
+				if(generator.getBiomeProvider().getNoiseBiome(pos.getX() + posX - 8, pos.getY(), pos.getZ() + posZ - 8).equals(MSBiomes.LAND_OCEAN))
 					oceanPos.add(pos.add(posX - 8, 0, posZ - 8));
 			}
 		}

@@ -10,7 +10,8 @@ import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.item.crafting.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.item.crafting.alchemy.NonNegativeGristSet;
-import com.mraof.minestuck.network.*;
+import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.network.data.*;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
@@ -309,7 +310,7 @@ public final class PlayerData
 	
 	private void tryGiveStartingModus(ServerPlayerEntity player)
 	{
-		List<String> startingTypes = MinestuckConfig.startingModusTypes.get();
+		List<String> startingTypes = MinestuckConfig.SERVER.startingModusTypes.get();
 		if(!startingTypes.isEmpty())
 		{
 			String type = startingTypes.get(player.world.rand.nextInt(startingTypes.size()));
@@ -326,7 +327,7 @@ public final class PlayerData
 				Modus modus = CaptchaDeckHandler.createServerModus(name, savedData);
 				if(modus != null)
 				{
-					modus.initModus(player, null, MinestuckConfig.initialModusSize.get());
+					modus.initModus(null, player, null, MinestuckConfig.SERVER.initialModusSize.get());
 					setModus(modus);
 				} else LOGGER.warn("Couldn't create a starting modus type by name {}.", type);
 			}

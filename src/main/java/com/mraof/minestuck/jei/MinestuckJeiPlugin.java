@@ -31,28 +31,28 @@ public class MinestuckJeiPlugin implements IModPlugin
 	public static final ResourceLocation GRIST_COST_ID = new ResourceLocation(Minestuck.MOD_ID, "grist_cost");
 	public static final ResourceLocation LATHE_ID = new ResourceLocation(Minestuck.MOD_ID, "totem_lathe");
 	public static final ResourceLocation DESIGNIX_ID = new ResourceLocation(Minestuck.MOD_ID, "punch_designix");
-	
+
 	public static final IIngredientType<GristAmount> GRIST = () -> GristAmount.class;
-	
+
 	@Override
 	public ResourceLocation getPluginUid()
 	{
 		return PLUGIN_ID;
 	}
-	
+
 	@Override
 	public void registerItemSubtypes(ISubtypeRegistration subtypeRegistry)
     {
         subtypeRegistry.useNbtForSubtypes(MSItems.CAPTCHA_CARD);
         subtypeRegistry.useNbtForSubtypes(MSBlocks.CRUXITE_DOWEL.asItem());
     }
-	
+
 	@Override
     public void registerIngredients(IModIngredientRegistration registry)
     {
     	registry.register(GRIST, GristIngredientHelper.createList(), new GristIngredientHelper(), new GristIngredientRenderer());
     }
-	
+
 	@Override
 	public void registerCategories(IRecipeCategoryRegistration registry)
 	{
@@ -63,7 +63,7 @@ public class MinestuckJeiPlugin implements IModPlugin
 		DesignixRecipeCategory designixCategory = new DesignixRecipeCategory(registry.getJeiHelpers().getGuiHelper());
 		registry.addRecipeCategories(designixCategory);
 	}
-	
+
 	@Override
 	public void registerRecipeCatalysts(IRecipeCatalystRegistration registration)
 	{
@@ -76,7 +76,7 @@ public class MinestuckJeiPlugin implements IModPlugin
 		registration.addRecipeCatalyst(new ItemStack(MSBlocks.CRUXITE_DOWEL), GRIST_COST_ID, LATHE_ID);
 		registration.addRecipeCatalyst(new ItemStack(MSItems.CAPTCHA_CARD), LATHE_ID, DESIGNIX_ID);
 	}
-	
+
 	@Override
 	public void registerRecipes(IRecipeRegistration registration)
 	{

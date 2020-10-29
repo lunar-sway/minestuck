@@ -30,8 +30,7 @@ public class SkaiaPortalBlock extends ContainerBlock
 	@Override
 	public TileEntity createNewTileEntity(IBlockReader worldIn)
 	{
-		SkaiaPortalTileEntity tileEntity = new SkaiaPortalTileEntity();
-		return tileEntity;
+		return new SkaiaPortalTileEntity();
 	}
 	
 	@Override
@@ -41,12 +40,14 @@ public class SkaiaPortalBlock extends ContainerBlock
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn)
 	{
 		if (!entityIn.isPassenger() && !entityIn.isBeingRidden() && !worldIn.isRemote && entityIn.timeUntilPortal == 0)
 		{
-			SkaiaPortalTileEntity portal = (SkaiaPortalTileEntity) worldIn.getTileEntity(pos);
-			portal.teleportEntity(entityIn);
+			TileEntity tile = worldIn.getTileEntity(pos);
+			if(tile instanceof  SkaiaPortalTileEntity)
+				((SkaiaPortalTileEntity) tile).teleportEntity(entityIn);
 		}
 	}
 	

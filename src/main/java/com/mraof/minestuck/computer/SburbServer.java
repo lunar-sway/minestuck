@@ -3,8 +3,11 @@ package com.mraof.minestuck.computer;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.network.ClientEditPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.skaianet.ReducedConnection;
-import com.mraof.minestuck.skaianet.SkaiaClient;
+import com.mraof.minestuck.network.computer.CloseSburbConnectionPacket;
+import com.mraof.minestuck.network.computer.OpenSburbServerPacket;
+import com.mraof.minestuck.network.computer.ResumeSburbConnectionPacket;
+import com.mraof.minestuck.skaianet.client.ReducedConnection;
+import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 
 import java.util.ArrayList;
@@ -36,7 +39,7 @@ public class SburbServer extends ButtonListProgram
 		{
 			list.add(new UnlocalizedString(CONNECT, displayPlayer));
 			list.add(new UnlocalizedString(CLOSE_BUTTON));
-			list.add(new UnlocalizedString(MinestuckConfig.giveItems.get() ? GIVE_BUTTON : EDIT_BUTTON));
+			list.add(new UnlocalizedString(MinestuckConfig.SERVER.giveItems.get() ? GIVE_BUTTON : EDIT_BUTTON));
 		} else if (te.getData(getId()).getBoolean("isOpen"))
 		{
 			list.add(new UnlocalizedString(RESUME_SERVER));
@@ -46,7 +49,7 @@ public class SburbServer extends ButtonListProgram
 		else
 		{
 			list.add(new UnlocalizedString(OFFLINE));
-			if(MinestuckConfig.allowSecondaryConnections.get() || SkaiaClient.getAssociatedPartner(te.ownerId, false) == -1)
+			if(MinestuckConfig.SERVER.allowSecondaryConnections.get() || SkaiaClient.getAssociatedPartner(te.ownerId, false) == -1)
 				list.add(new UnlocalizedString(OPEN_BUTTON));
 			if(SkaiaClient.getAssociatedPartner(te.ownerId, false) != -1)
 				list.add(new UnlocalizedString(RESUME_BUTTON));
@@ -64,13 +67,13 @@ public class SburbServer extends ButtonListProgram
 				MSPacketHandler.sendToServer(packet);
 				break;
 			case RESUME_BUTTON:
-				SkaiaClient.sendConnectRequest(te, SkaiaClient.getAssociatedPartner(te.ownerId, false), false);
+				MSPacketHandler.sendToServer(ResumeSburbConnectionPacket.asServer(te));
 				break;
 			case OPEN_BUTTON:
-				SkaiaClient.sendConnectRequest(te, -1, false);
+				MSPacketHandler.sendToServer(OpenSburbServerPacket.create(te));
 				break;
 			case CLOSE_BUTTON:
-				SkaiaClient.sendCloseRequest(te, te.getData(getId()).getBoolean("isOpen") ? -1 : te.getData(getId()).getInt("connectedClient"), false);
+				MSPacketHandler.sendToServer(CloseSburbConnectionPacket.asServer(te));
 				break;
 		}
 	}

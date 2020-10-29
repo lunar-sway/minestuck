@@ -3,7 +3,6 @@ package com.mraof.minestuck.entity.underling;
 import com.mraof.minestuck.entity.EntityListFilter;
 import com.mraof.minestuck.entity.MinestuckEntity;
 import com.mraof.minestuck.entity.ai.HurtByTargetAlliedGoal;
-import com.mraof.minestuck.entity.ai.NearestAttackableTargetWithHeightGoal;
 import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.entity.item.VitalityGelEntity;
 import com.mraof.minestuck.item.crafting.alchemy.GristAmount;
@@ -18,6 +17,8 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.monster.IMob;
@@ -46,6 +47,7 @@ import java.util.*;
 
 public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 {
+	public static final UUID GRIST_MODIFIER_ID = UUID.fromString("08B6DEFC-E3F4-11EA-87D0-0242AC130003");
 	private static final DataParameter<String> GRIST_TYPE = EntityDataManager.createKey(UnderlingEntity.class, DataSerializers.STRING);
 	protected EntityListFilter attackEntitySelector;	//TODO this filter isn't being saved. F1X PLZ
 	protected boolean fromSpawner;
@@ -67,23 +69,27 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 		attackEntitySelector.entityList.add(EntityType.PLAYER);
 		
 		goalSelector.addGoal(1, new SwimGoal(this));
-		goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, getWanderSpeed()));
-		goalSelector.addGoal(5, new RandomWalkingGoal(this, getWanderSpeed()));
+		goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 0.8D));
+		goalSelector.addGoal(5, new RandomWalkingGoal(this, 0.6D));
 		goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 8.0F));
 		goalSelector.addGoal(7, new LookRandomlyGoal(this));
 		
 		targetSelector.addGoal(1, new HurtByTargetAlliedGoal(this, entity -> MSTags.EntityTypes.UNDERLINGS.contains(entity.getType())));
-		targetSelector.addGoal(2, new NearestAttackableTargetWithHeightGoal(this, LivingEntity.class, 128.0F, 2, true, false, attackEntitySelector));
+		targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 2, true, false, this::isAppropriateTarget));
+	}
+	
+	protected boolean isAppropriateTarget(LivingEntity entity)
+	{
+		return attackEntitySelector.isEntityApplicable(entity);
 	}
 	
 	@Override
 	protected void registerAttributes()
 	{
 		super.registerAttributes();
-		this.getAttributes().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
+		getAttributes().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
 		
-		this.getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(this.getKnockbackResistance());
-		this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(this.getWanderSpeed());
+		getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(32.0D);
 	}
 	
 	@Override
@@ -96,18 +102,17 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 	protected void registerData()
 	{
 		super.registerData();
-		dataManager.register(GRIST_TYPE, String.valueOf(GristTypes.ARTIFACT.getRegistryName()));
+		dataManager.register(GRIST_TYPE, String.valueOf(GristTypes.ARTIFACT.get().getRegistryName()));
 	}
 	
-	protected void applyGristType(GristType type, boolean fullHeal)
+	protected void applyGristType(GristType type)
 	{
-		if(type.getRarity() == 0)	//Utility grist type
+		if(!type.isUnderlingType())	//Utility grist type
 			throw new IllegalArgumentException("Can't set underling grist type to "+type.getRegistryName());
 		dataManager.set(GRIST_TYPE, String.valueOf(type.getRegistryName()));
 		
 		onGristTypeUpdated(type);
-		if(fullHeal)
-			this.setHealth(this.getMaxHealth());
+		setHealth(getMaxHealth());
 	}
 	
 	@Override
@@ -120,31 +125,30 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 	protected void onGristTypeUpdated(GristType type)
 	{
 		clearTexture();
-		this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(this.getMaximumHealth());
-		this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(this.getAttackDamage());
+	}
+	
+	protected void applyGristModifier(IAttribute attribute, double modifier, AttributeModifier.Operation operation)
+	{
+		getAttribute(attribute).removeModifier(GRIST_MODIFIER_ID);
+		//Does not need to be saved because this bonus should already be applied when the grist type has been set
+		getAttribute(attribute).applyModifier(new AttributeModifier(GRIST_MODIFIER_ID, "Grist Bonus", modifier, operation).setSaved(false));
 	}
 	
 	@Nonnull
 	public GristType getGristType()
 	{
-		GristType type = GristTypes.REGISTRY.getValue(ResourceLocation.tryCreate(dataManager.get(GRIST_TYPE)));
+		GristType type = GristTypes.getRegistry().getValue(ResourceLocation.tryCreate(dataManager.get(GRIST_TYPE)));
 		
 		if(type != null)
 		{
 			return type;
 		} else Debug.warnf("Unable to read underling grist type from string %s.", dataManager.get(GRIST_TYPE));
 		
-		return GristTypes.ARTIFACT;
+		return GristTypes.ARTIFACT.get();
 	}
 	
 	//used when getting how much grist should be dropped on death
 	public abstract GristSet getGristSpoils();
-	
-	protected abstract float getKnockbackResistance();
-	
-	protected abstract double getWanderSpeed();
-	
-	protected abstract double getAttackDamage();
 	
 	protected abstract int getVitalityGel();
 	
@@ -169,7 +173,7 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 			if(!dropCandy)
 			{
 				for(GristAmount gristType : grist.getAmounts())
-					this.world.addEntity(new GristEntity(world, randX(), this.posY, randZ(), gristType));
+					this.world.addEntity(new GristEntity(world, randX(), this.getPosY(), randZ(), gristType));
 			} else
 			{
 				for(GristAmount gristType : grist.getAmounts())
@@ -179,14 +183,14 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 					ItemStack candyItem = gristType.getType().getCandyItem();
 					candyItem.setCount(candy);
 					if(candy > 0)
-						this.world.addEntity(new ItemEntity(world, randX(), this.posY, randZ(), candyItem));
+						this.world.addEntity(new ItemEntity(world, randX(), this.getPosY(), randZ(), candyItem));
 					if(gristAmount > 0)
-						this.world.addEntity(new GristEntity(world, randX(), this.posY, randZ(),new GristAmount(gristType.getType(), gristAmount)));
+						this.world.addEntity(new GristEntity(world, randX(), this.getPosY(), randZ(),new GristAmount(gristType.getType(), gristAmount)));
 				}
 			}
 			
 			if(this.rand.nextInt(4) == 0)
-				this.world.addEntity(new VitalityGelEntity(world, randX(), this.posY, randZ(), this.getVitalityGel()));
+				this.world.addEntity(new VitalityGelEntity(world, randX(), this.getPosY(), randZ(), this.getVitalityGel()));
 		}
 	}
 	
@@ -202,12 +206,12 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 	
 	private double randX()
 	{
-		return this.posX + this.rand.nextDouble() * this.getWidth() - this.getWidth() / 2;
+		return this.getPosX() + this.rand.nextDouble() * this.getWidth() - this.getWidth() / 2;
 	}
 	
 	private double randZ()
 	{
-		return this.posZ + this.rand.nextDouble() * this.getWidth() - this.getWidth() / 2;
+		return this.getPosZ() + this.rand.nextDouble() * this.getWidth() - this.getWidth() / 2;
 	}
 	
 	@Override
@@ -266,9 +270,11 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 	@Override
 	public void readAdditional(CompoundNBT compound)
 	{
+		//Note: grist type should be read and applied before reading health due to the modifiers to max health
 		if(compound.contains("Type", Constants.NBT.TAG_STRING))
-			applyGristType(GristType.read(compound, "Type", GristTypes.ARTIFACT), false);
-		else applyGristType(UnderlingController.getUnderlingType(this), true);
+			applyGristType(GristType.read(compound, "Type", GristTypes.ARTIFACT));
+		else applyGristType(UnderlingController.getUnderlingType(this));
+		
 		super.readAdditional(compound);
 		
 		fromSpawner = compound.getBoolean("Spawned");
@@ -276,7 +282,7 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 		if(compound.contains("HomePos", Constants.NBT.TAG_COMPOUND))
 		{
 			CompoundNBT nbt = compound.getCompound("HomePos");
-			BlockPos pos = new BlockPos(nbt.getInt("HomeX"), nbt.getInt("HomeY"), nbt.getInt("homeZ"));
+			BlockPos pos = new BlockPos(nbt.getInt("HomeX"), nbt.getInt("HomeY"), nbt.getInt("HomeZ"));
 			setHomePosAndDistance(pos, nbt.getInt("MaxHomeDistance"));
 		}
 	}
@@ -292,11 +298,11 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 	{
 		if(!(spawnDataIn instanceof UnderlingData))
 		{
-			applyGristType(UnderlingController.getUnderlingType(this), true);
+			applyGristType(UnderlingController.getUnderlingType(this));
 			spawnDataIn = new UnderlingData(getGristType());
 		} else
 		{
-			applyGristType(((UnderlingData)spawnDataIn).type, true);
+			applyGristType(((UnderlingData)spawnDataIn).type);
 		}
 		
 		return super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);

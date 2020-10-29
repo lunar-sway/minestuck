@@ -81,15 +81,15 @@ public class MSKeyHandler
 		
 		while(sylladexKey.isPressed())
 		{
-			if(ClientPlayerData.clientSideModus != null)
-				MSScreenFactories.displaySylladexScreen(ClientPlayerData.clientSideModus);
+			if(ClientPlayerData.getModus() != null)
+				MSScreenFactories.displaySylladexScreen(ClientPlayerData.getModus());
 		}
 	}
 	
 	@SubscribeEvent
 	public static void onTick(TickEvent.ClientTickEvent event)
 	{
-		if(InputMappings.isKeyDown(Minecraft.getInstance().mainWindow.getHandle(), captchaKey.getKey().getKeyCode()) && !captchaKeyPressed) {
+		if(InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), captchaKey.getKey().getKeyCode()) && !captchaKeyPressed) {
 
 				//This statement is here because for some reason 'slotNumber' always returns as 0 if it is referenced inside the creative inventory.
 			if (Minecraft.getInstance().currentScreen instanceof CreativeScreen && Minecraft.getInstance().player.openContainer instanceof CreativeScreen.CreativeContainer && ((ContainerScreen)Minecraft.getInstance().currentScreen).getSlotUnderMouse() != null && ((ContainerScreen)Minecraft.getInstance().currentScreen).getSlotUnderMouse().getHasStack())
@@ -98,7 +98,7 @@ public class MSKeyHandler
 				MSPacketHandler.sendToServer(CaptchaDeckPacket.captchalogueInv(((ContainerScreen<?>)Minecraft.getInstance().currentScreen).getSlotUnderMouse().slotNumber));
 		}
 		
-		captchaKeyPressed = InputMappings.isKeyDown(Minecraft.getInstance().mainWindow.getHandle(), captchaKey.getKey().getKeyCode());
+		captchaKeyPressed = InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), captchaKey.getKey().getKeyCode());
 	}
 	
 }

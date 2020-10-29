@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.gen;
 
+import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.skaianet.UnderlingController;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
@@ -7,9 +8,11 @@ import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.util.SharedSeedRandom;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeManager;
 import net.minecraft.world.biome.provider.BiomeProvider;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.dimension.DimensionType;
@@ -18,9 +21,9 @@ import net.minecraft.world.gen.NoiseChunkGenerator;
 import net.minecraft.world.gen.WorldGenRegion;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
+import net.minecraft.world.spawner.WorldEntitySpawner;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -47,20 +50,19 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 		blockRegistry = Objects.requireNonNull(settings.getBlockRegistry());
 		
 		biomeHolder = Objects.requireNonNull(settings.getBiomeHolder());
-		biomeHolder.initBiomesWith(settings);
 	}
 	
 	@Override
 	protected double[] getBiomeNoiseColumn(int columnX, int columnZ)
 	{
-		float baseDepth = biomeHolder.localBiomeFrom(biomeProvider.getBiomeAtFactorFour(columnX, columnZ)).getDepth();
+		float baseDepth = biomeHolder.localBiomeFrom(biomeProvider.getNoiseBiome(columnX, 0, columnZ)).getDepth();
 		
 		float depthSum = 0, scaleSum = 0, weightSum = 0;
 		for(int x = -2; x <= 2; x++)
 		{
 			for(int z = -2; z <= 2; z++)
 			{
-				Biome biome = biomeHolder.localBiomeFrom(biomeProvider.getBiomeAtFactorFour(columnX + x, columnZ + z));
+				Biome biome = biomeHolder.localBiomeFrom(biomeProvider.getNoiseBiome(columnX + x, 0, columnZ + z));
 				float weight = biomeWeight[(x + 2)*5 + z + 2] / (biome.getDepth() + 2);
 				if(biome.getDepth() > baseDepth)
 					weight /= 2;
@@ -95,40 +97,46 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 		double vertical2 = 4.277575D;
 		int lerpModifier = 3;
 		int skyValueTarget = -10;
-		this.func_222546_a(noiseColumn, columnX, columnZ, horizontal, vertical, horizontal2, vertical2, lerpModifier, skyValueTarget);
+		this.calcNoiseColumn(noiseColumn, columnX, columnZ, horizontal, vertical, horizontal2, vertical2, lerpModifier, skyValueTarget);
 	}
-	
+
 	@Override
-	public void generateSurface(IChunk chunkIn)
-	{
+	public void generateSurface(WorldGenRegion worldGenRegion, IChunk chunkIn) {
 		SharedSeedRandom sharedRandom = new SharedSeedRandom();
 		sharedRandom.setBaseChunkSeed(chunkIn.getPos().x, chunkIn.getPos().z);
-		
+
 		int xOffset = chunkIn.getPos().getXStart(), zOffset = chunkIn.getPos().getZStart();
-		Biome[] biomes = chunkIn.getBiomes();
-		
+
 		for(int x = 0; x < 16; x++)
 		{
 			for(int z = 0; z < 16; z++)
 			{
 				int y = chunkIn.getTopBlockY(Heightmap.Type.WORLD_SURFACE_WG, x, z);
-				biomeHolder.localBiomeFrom(biomes[z*16 + x]).buildSurface(sharedRandom, chunkIn, x + xOffset, z + zOffset, y, 0, getSettings().getDefaultBlock(), getSettings().getDefaultFluid(), getSeaLevel(),  world.getSeed());
+
+				biomeHolder.localBiomeFrom(biomeProvider.getNoiseBiome(x, y, z)).buildSurface(sharedRandom, chunkIn, x + xOffset, z + zOffset, y, 0, getSettings().getDefaultBlock(), getSettings().getDefaultFluid(), getSeaLevel(),  world.getSeed());
 			}
 		}
-		
+
 		this.makeBedrock(chunkIn, sharedRandom);
+	}
+	
+	@Override
+	public void spawnMobs(WorldGenRegion region)
+	{
+		int x = region.getMainChunkX();
+		int z = region.getMainChunkZ();
+		Biome biome = region.getBiome((new ChunkPos(x, z)).asBlockPos());
+		SharedSeedRandom rand = new SharedSeedRandom();
+		rand.setDecorationSeed(region.getSeed(), x << 4, z << 4);
+		WorldEntitySpawner.performWorldGenSpawning(region, biome, x, z, rand);
 	}
 	
 	@Override
 	public List<Biome.SpawnListEntry> getPossibleCreatures(EntityClassification creatureType, BlockPos pos)
 	{
-		if(creatureType == EntityClassification.MONSTER)	//Combine biome spawn with underling spawn
-		{
-			List<Biome.SpawnListEntry> list = new ArrayList<>(super.getPossibleCreatures(creatureType, pos));
-			list.addAll(UnderlingController.getUnderlingList(pos, world.getWorld()));
-			return list;
-		}
-		return super.getPossibleCreatures(creatureType, pos);
+		if(creatureType == MSEntityTypes.UNDERLING)
+			return UnderlingController.getUnderlingList(pos, world.getWorld());
+		else return super.getPossibleCreatures(creatureType, pos);
 	}
 	
 	@Override
@@ -138,15 +146,9 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 	}
 	
 	@Override
-	protected Biome getBiome(IChunk chunkIn)
+	protected Biome getBiome(BiomeManager biomeManagerIn, BlockPos posIn)
 	{
-		return biomeHolder.localBiomeFrom(super.getBiome(chunkIn));
-	}
-	
-	@Override
-	protected Biome getBiome(WorldGenRegion worldRegionIn, BlockPos pos)
-	{
-		return biomeHolder.localBiomeFrom(super.getBiome(worldRegionIn, pos));
+		return biomeHolder.localBiomeFrom(super.getBiome(biomeManagerIn, posIn));
 	}
 	
 	@Override

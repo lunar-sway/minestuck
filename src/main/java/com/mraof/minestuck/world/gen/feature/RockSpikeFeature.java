@@ -9,6 +9,7 @@ import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraftforge.common.util.Constants;
 
 import java.util.*;
 import java.util.function.Function;
@@ -160,7 +161,7 @@ public class RockSpikeFeature extends Feature<NoFeatureConfig>
 					break;
 				}*/
 				was.put(pos, world.getBlockState(pos));
-				world.setBlockState(pos, ground, 2);
+				world.setBlockState(pos, ground, Constants.BlockFlags.BLOCK_UPDATE);
 				pos = pos.down();
 			} while(!world.getBlockState(pos).equals(ground));
 		}
@@ -188,7 +189,7 @@ public class RockSpikeFeature extends Feature<NoFeatureConfig>
 		
 		if(stomps)
 		{
-			was.forEach((t, u) -> world.setBlockState(t, u, 2));
+			was.forEach((t, u) -> world.setBlockState(t, u, Constants.BlockFlags.BLOCK_UPDATE));
 		}
 		
 		return corePosition;

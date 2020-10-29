@@ -1,7 +1,7 @@
 package com.mraof.minestuck.entity.underling;
 
 import com.mraof.minestuck.entity.IEntityMultiPart;
-import com.mraof.minestuck.entity.ai.AttackOnCollideWithRateGoal;
+import com.mraof.minestuck.entity.ai.CustomMeleeAttackGoal;
 import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
@@ -10,6 +10,8 @@ import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
@@ -27,12 +29,20 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 	}
 	
 	@Override
+	protected void registerAttributes()
+	{
+		super.registerAttributes();
+		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(85.0D);
+		getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.6D);
+		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
+		getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(6.0D);
+	}
+	
+	@Override
 	protected void registerGoals()
 	{
 		super.registerGoals();
-		AttackOnCollideWithRateGoal aiAttack = new AttackOnCollideWithRateGoal(this, .3F, 40, false);
-		aiAttack.setDistanceMultiplier(1.2F);
-		this.goalSelector.addGoal(3, aiAttack);
+		this.goalSelector.addGoal(3, new CustomMeleeAttackGoal(this, 1.0F, false, 40, 1.2F));
 	}
 	
 	protected SoundEvent getAmbientSound()
@@ -57,30 +67,6 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 	}
 	
 	@Override
-	protected float getMaximumHealth() 
-	{
-		return 20 * getGristType().getPower() + 85;
-	}
-
-	@Override
-	protected double getWanderSpeed()
-	{
-		return 0.75;
-	}
-	
-	@Override
-	protected float getKnockbackResistance()
-	{
-		return 0.6F;
-	}
-	
-	@Override
-	protected double getAttackDamage()
-	{
-		return getGristType().getPower()*2.7 + 6;
-	}
-	
-	@Override
 	protected int getVitalityGel()
 	{
 		return rand.nextInt(3) + 4;
@@ -90,6 +76,8 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 	protected void onGristTypeUpdated(GristType type)
 	{
 		super.onGristTypeUpdated(type);
+		applyGristModifier(SharedMonsterAttributes.MAX_HEALTH, 20 * type.getPower(), AttributeModifier.Operation.ADDITION);
+		applyGristModifier(SharedMonsterAttributes.ATTACK_DAMAGE, 2.7 * type.getPower(), AttributeModifier.Operation.ADDITION);
 		this.experienceValue = (int) (6 * type.getPower() + 4);
 	}
 	
@@ -130,10 +118,10 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 		if(tail == null)
 			return;
 		float f1 = this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw);
-		double tailPosX = (this.posX +  Math.sin(f1 / 180.0 * Math.PI) * tail.getWidth());
-		double tailPosZ = (this.posZ + -Math.cos(f1 / 180.0 * Math.PI) * tail.getWidth());
+		double tailPosX = (this.getPosX() +  Math.sin(f1 / 180.0 * Math.PI) * tail.getWidth());
+		double tailPosZ = (this.getPosZ() + -Math.cos(f1 / 180.0 * Math.PI) * tail.getWidth());
 
-		tail.setPositionAndRotation(tailPosX, this.posY, tailPosZ, this.rotationYaw, this.rotationPitch);
+		tail.setPositionAndRotation(tailPosX, this.getPosY(), tailPosZ, this.rotationYaw, this.rotationPitch);
 	}
 
 	@Override

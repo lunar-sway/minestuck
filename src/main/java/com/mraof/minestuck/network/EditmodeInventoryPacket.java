@@ -13,25 +13,24 @@ import java.util.List;
 public class EditmodeInventoryPacket implements PlayToBothPacket
 {
 	
-	public boolean b1, b2;
-	public List<ItemStack> inventory;
+	private final boolean b1, b2;
+	private final List<ItemStack> inventory;
+	
+	private EditmodeInventoryPacket(boolean b1, boolean b2, List<ItemStack> inventory)
+	{
+		this.b1 = b1;
+		this.b2 = b2;
+		this.inventory = inventory;
+	}
 	
 	public static EditmodeInventoryPacket update(List<ItemStack> inventory, boolean scrollLeft, boolean scrollRight)
 	{
-		EditmodeInventoryPacket packet = new EditmodeInventoryPacket();
-		packet.b1 = scrollLeft;
-		packet.b2 = scrollRight;
-		packet.inventory = inventory;
-		
-		return packet;
+		return new EditmodeInventoryPacket(scrollLeft, scrollRight, inventory);
 	}
 	
 	public static EditmodeInventoryPacket scroll(boolean isRight)
 	{
-		EditmodeInventoryPacket packet = new EditmodeInventoryPacket();
-		packet.b1 = isRight;
-		
-		return packet;
+		return new EditmodeInventoryPacket(isRight, false, null);
 	}
 	
 	@Override
@@ -48,19 +47,19 @@ public class EditmodeInventoryPacket implements PlayToBothPacket
 	
 	public static EditmodeInventoryPacket decode(PacketBuffer buffer)
 	{
-		EditmodeInventoryPacket packet = new EditmodeInventoryPacket();
-		packet.b1 = buffer.readBoolean();
+		boolean b1 = buffer.readBoolean();
 		if(buffer.readableBytes() > 0)
 		{
-			packet.b2 = buffer.readBoolean();
-			packet.inventory = new ArrayList<>();
+			boolean b2 = buffer.readBoolean();
+			List<ItemStack> inventory = new ArrayList<>();
 			while(buffer.readableBytes() > 0)
 			{
-				packet.inventory.add(buffer.readItemStack());
+				inventory.add(buffer.readItemStack());
 			}
+			return update(inventory, b1, b2);
 		}
 		
-		return packet;
+		return scroll(b1);
 	}
 	
 	@Override
@@ -71,10 +70,7 @@ public class EditmodeInventoryPacket implements PlayToBothPacket
 			InventoryEditmodeScreen gui = (InventoryEditmodeScreen) Minecraft.getInstance().currentScreen;
 			gui.less = b1;
 			gui.more = b2;
-			for(int i = 0; i < inventory.size(); i++)
-			{
-				((EditmodeContainer) gui.getContainer()).inventory.setInventorySlotContents(i, inventory.get(i));
-			}
+			gui.getContainer().receiveUpdatePacket(this);
 		}
 	}
 	
@@ -83,5 +79,10 @@ public class EditmodeInventoryPacket implements PlayToBothPacket
 	{
 		if(player.openContainer instanceof EditmodeContainer)
 			((EditmodeContainer)player.openContainer).updateScroll(b1);
+	}
+	
+	public List<ItemStack> getInventory()
+	{
+		return inventory;
 	}
 }

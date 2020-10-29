@@ -29,7 +29,7 @@ public class DefaultInterpreter implements RecipeInterpreter
 	}
 	
 	@Override
-	public GristSet generateCost(IRecipe<?> recipe, Item item, RecipeGeneratedCostHandler.IngredientLookup ingredientInterpreter)
+	public GristSet generateCost(IRecipe<?> recipe, Item output, GenerationContext context)
 	{
 		if(recipe.isDynamic())
 			return null;
@@ -37,7 +37,7 @@ public class DefaultInterpreter implements RecipeInterpreter
 		GristSet totalCost = new GristSet();
 		for(Ingredient ingredient : recipe.getIngredients())
 		{
-			GristSet ingredientCost = ingredientInterpreter.lookup(ingredient, true);
+			GristSet ingredientCost = context.costForIngredient(ingredient, true);
 			if(ingredientCost == null)
 				return null;
 			else totalCost.addGrist(ingredientCost);

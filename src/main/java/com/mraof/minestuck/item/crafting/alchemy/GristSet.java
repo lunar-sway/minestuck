@@ -5,10 +5,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.ExtraJSONUtils;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -107,6 +107,11 @@ public class GristSet
 		return this.gristTypes.getOrDefault(type, 0L);
 	}
 	
+	public long getGrist(Supplier<GristType> type)
+	{
+		return getGrist(type.get());
+	}
+	
 	/**
 	 * @return a value estimate for this grist set
 	 */
@@ -147,6 +152,11 @@ public class GristSet
 			this.gristTypes.compute(type, (key, value) -> value == null ? amount : value + amount);
 		}
 		return this;
+	}
+	
+	public GristSet addGrist(Supplier<GristType> type, long amount)
+	{
+		return addGrist(type.get(), amount);
 	}
 
 	/**
@@ -203,13 +213,20 @@ public class GristSet
 	public GristSet scale(float scale, boolean roundDown)
 	{
 		this.gristTypes.forEach((type, amount) -> {
-			if (amount > 0)
+			if (amount != 0)
 			{
-				this.gristTypes.put(type, roundDown ? (long) (amount * scale) : Math.max(Math.round(amount * scale), 1));
+				this.gristTypes.put(type, roundDown ? (long) (amount * scale) : roundToNonZero(amount * scale));
 			}
 		});
 
 		return this;
+	}
+	
+	private int roundToNonZero(float value)
+	{
+		if(value < 0)
+			return Math.min(-1, Math.round(value));
+		else return Math.max(1, Math.round(value));
 	}
 
 	/**
@@ -303,10 +320,10 @@ public class GristSet
 		for(Map.Entry<String, JsonElement> entry : json.entrySet())
 		{
 			ResourceLocation gristId = new ResourceLocation(entry.getKey());
-			GristType type = GristTypes.REGISTRY.getValue(gristId);
+			GristType type = GristTypes.getRegistry().getValue(gristId);
 			if(type == null)
 				throw new JsonParseException("'"+entry.getKey()+"' did not match an existing grist type!");
-			long amount = ExtraJSONUtils.getLong(entry.getValue(), entry.getKey());
+			long amount = JSONUtils.getLong(entry.getValue(), entry.getKey());	//getLong
 			set.addGrist(type, amount);
 		}
 		

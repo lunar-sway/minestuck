@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.gen.feature.structure;
 
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.underling.OgreEntity;
 import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
@@ -11,11 +12,13 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.WallTorchBlock;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.state.properties.ChestType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.template.TemplateManager;
@@ -74,24 +77,22 @@ public class ImpDungeonPieces
 				corridors[1] = false;
 			return getCoordBaseMode().getAxis().equals(facing.getAxis());
 		}
-		
+
 		@Override
-		public boolean addComponentParts(IWorld worldIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
-		{
-			
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(worldIn.getChunkProvider().getChunkGenerator().getSettings());
-			
+		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
+
 			BlockState wallBlock = blocks.getBlockState("structure_primary");
 			BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");
 			BlockState floorBlock = blocks.getBlockState("structure_secondary");
 			BlockState floorDecor = blocks.getBlockState("structure_secondary_decorative");
 			BlockState fluid = blocks.getBlockState("fall_fluid");
-			
+
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 4, 4, 0, 6, floorBlock, floorBlock, false);
 			fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 4, 4, 4, 6);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 5, 3, 0, 5, fluid, fluid, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, -1, 5, 3, -1, 5, floorDecor, floorDecor, false);
-			
+
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 3, 0, 5, 7, wallBlock, wallBlock, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 0, 3, 5, 5, 7, wallBlock, wallBlock, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 4, 3, 4, 5, 3, wallBlock, wallBlock, false);
@@ -100,7 +101,7 @@ public class ImpDungeonPieces
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 7, 1, 3, 7, wallDecor, wallDecor, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 0, 3, 4, 3, 3, wallDecor, wallDecor, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 0, 7, 4, 3, 7, wallDecor, wallDecor, false);
-			
+
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 0, 3, 0, 3, floorBlock, floorBlock, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 7, 3, 0, 9, floorBlock, floorBlock, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 4, 0, 3, 4, 2, wallBlock, wallBlock, false);
@@ -111,12 +112,12 @@ public class ImpDungeonPieces
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 1, 8, 4, 4, 9, wallBlock, wallBlock, false);
 			fillWithAir(worldIn, structureBoundingBoxIn, 2, 1, 0, 3, 3, 3);
 			fillWithAir(worldIn, structureBoundingBoxIn, 2, 1, 7, 3, 3, 9);
-			
+
 			if(corridors[0])
 				fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 1, 9, 3, 3, 9, wallBlock, wallBlock, false);
 			if(corridors[1])
 				fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 1, 0, 3, 3, 0, wallBlock, wallBlock, false);
-			
+
 			return true;
 		}
 	}
@@ -279,33 +280,23 @@ public class ImpDungeonPieces
 			if(light)
 				tagCompound.putByte("lpos", lightPos);
 		}
-		
+
 		@Override
-		protected boolean connectFrom(Direction facing)
-		{
-			if(getCoordBaseMode().equals(facing))
-				corridors[0] = false;
-			return getCoordBaseMode().getAxis().equals(facing.getAxis());
-		}
-		
-		@Override
-		public boolean addComponentParts(IWorld worldIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
-		{
-			
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(worldIn.getChunkProvider().getChunkGenerator().getSettings());
-			
+		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
+
 			BlockState wallBlock = blocks.getBlockState("structure_primary");
 			BlockState floorBlock = blocks.getBlockState("structure_secondary");
-			
+
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 0, 2, 0, 9, floorBlock, floorBlock, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 4, 0, 2, 4, 9, wallBlock, wallBlock, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 0, 0, 4, 9, wallBlock, wallBlock, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 0, 0, 3, 4, 9, wallBlock, wallBlock, false);
 			fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 0, 2, 3, 9);
-			
+
 			if(corridors[0])
 				fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 1, 9, 2, 3, 9, wallBlock, wallBlock, false);
-			
+
 			if(light)
 			{
 				BlockState torch = blocks.getBlockState("wall_torch");
@@ -313,8 +304,16 @@ public class ImpDungeonPieces
 					setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.WEST), 2, 2, 4 + lightPos%2, structureBoundingBoxIn);
 				else setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.EAST), 1, 2, 4 + lightPos%2, structureBoundingBoxIn);
 			}
-			
+
 			return true;
+		}
+
+		@Override
+		protected boolean connectFrom(Direction facing)
+		{
+			if(getCoordBaseMode().equals(facing))
+				corridors[0] = false;
+			return getCoordBaseMode().getAxis().equals(facing.getAxis());
 		}
 	}
 	
@@ -365,7 +364,62 @@ public class ImpDungeonPieces
 			super.readAdditional(tagCompound);
 			tagCompound.putBoolean("l", light);
 		}
-		
+
+		@Override
+		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
+
+
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
+
+			BlockState wallBlock = blocks.getBlockState("structure_primary");
+			BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");
+			BlockState floorBlock = blocks.getBlockState("structure_secondary");
+
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 0, 0, 5, 0, 9, floorBlock, floorBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 4, 3, 0, 5, floorBlock, floorBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 0, 4, 9, 0, 5, floorBlock, floorBlock, false);
+
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 0, 0, 3, 4, 3, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 0, 0, 6, 4, 3, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 0, 6, 3, 4, 9, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 0, 6, 6, 4, 9, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 3, 2, 4, 3, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 6, 2, 4, 6, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 7, 0, 3, 9, 4, 3, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 7, 0, 6, 9, 4, 6, wallBlock, wallBlock, false);
+
+			fillWithAir(worldIn, structureBoundingBoxIn, 4, 1, 0, 5, 3, 9);
+			fillWithAir(worldIn, structureBoundingBoxIn, 0, 1, 4, 3, 3, 5);
+			fillWithAir(worldIn, structureBoundingBoxIn, 6, 1, 4, 9, 3, 5);
+			fillWithAir(worldIn, structureBoundingBoxIn, 4, 4, 4, 5, 4, 5);
+
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 4, 0, 5, 4, 2, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 4, 3, 5, 4, 3, wallDecor, wallDecor, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 4, 7, 5, 4, 9, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 4, 6, 5, 4, 6, wallDecor, wallDecor, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 4, 4, 2, 4, 5, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 4, 4, 3, 4, 5, wallDecor, wallDecor, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 7, 4, 4, 9, 4, 5, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 4, 4, 6, 4, 5, wallDecor, wallDecor, false);
+
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 5, 3, 6, 5, 6, wallBlock, wallBlock, false);
+
+			if(corridors[0])
+				fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 1, 4, 0, 3, 5, wallBlock, wallBlock, false);
+			if(corridors[1])
+				fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 1, 9, 5, 3, 9, wallBlock, wallBlock, false);
+			if(corridors[2])
+				fillWithBlocks(worldIn, structureBoundingBoxIn, 9, 1, 4, 9, 3, 5, wallBlock, wallBlock, false);
+
+			if(light)
+			{
+				BlockState lightBlock = blocks.getBlockState("light_block");
+				fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 5, 4, 5, 5, 5, lightBlock, lightBlock, false);
+			}
+
+			return true;
+		}
+
 		@Override
 		protected boolean connectFrom(Direction facing)
 		{
@@ -375,61 +429,6 @@ public class ImpDungeonPieces
 				corridors[1] = false;
 			else if(getCoordBaseMode().rotateYCCW().equals(facing))
 				corridors[2] = false;
-			return true;
-		}
-		
-		@Override
-		public boolean addComponentParts(IWorld worldIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
-		{
-			
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(worldIn.getChunkProvider().getChunkGenerator().getSettings());
-			
-			BlockState wallBlock = blocks.getBlockState("structure_primary");
-			BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");
-			BlockState floorBlock = blocks.getBlockState("structure_secondary");
-			
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 0, 0, 5, 0, 9, floorBlock, floorBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 4, 3, 0, 5, floorBlock, floorBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 0, 4, 9, 0, 5, floorBlock, floorBlock, false);
-			
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 0, 0, 3, 4, 3, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 0, 0, 6, 4, 3, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 0, 6, 3, 4, 9, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 0, 6, 6, 4, 9, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 3, 2, 4, 3, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 6, 2, 4, 6, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 7, 0, 3, 9, 4, 3, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 7, 0, 6, 9, 4, 6, wallBlock, wallBlock, false);
-			
-			fillWithAir(worldIn, structureBoundingBoxIn, 4, 1, 0, 5, 3, 9);
-			fillWithAir(worldIn, structureBoundingBoxIn, 0, 1, 4, 3, 3, 5);
-			fillWithAir(worldIn, structureBoundingBoxIn, 6, 1, 4, 9, 3, 5);
-			fillWithAir(worldIn, structureBoundingBoxIn, 4, 4, 4, 5, 4, 5);
-			
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 4, 0, 5, 4, 2, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 4, 3, 5, 4, 3, wallDecor, wallDecor, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 4, 7, 5, 4, 9, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 4, 6, 5, 4, 6, wallDecor, wallDecor, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 4, 4, 2, 4, 5, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 4, 4, 3, 4, 5, wallDecor, wallDecor, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 7, 4, 4, 9, 4, 5, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 4, 4, 6, 4, 5, wallDecor, wallDecor, false);
-			
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 5, 3, 6, 5, 6, wallBlock, wallBlock, false);
-			
-			if(corridors[0])
-				fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 1, 4, 0, 3, 5, wallBlock, wallBlock, false);
-			if(corridors[1])
-				fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 1, 9, 5, 3, 9, wallBlock, wallBlock, false);
-			if(corridors[2])
-				fillWithBlocks(worldIn, structureBoundingBoxIn, 9, 1, 4, 9, 3, 5, wallBlock, wallBlock, false);
-			
-			if(light)
-			{
-				BlockState lightBlock = blocks.getBlockState("light_block");
-				fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 5, 4, 5, 5, 5, lightBlock, lightBlock, false);
-			}
-			
 			return true;
 		}
 	}
@@ -477,27 +476,16 @@ public class ImpDungeonPieces
 			super.readAdditional(tagCompound);
 			tagCompound.putBoolean("l", light);
 		}
-		
+
 		@Override
-		protected boolean connectFrom(Direction facing)
-		{
-			if(getCoordBaseMode().rotateY().equals(facing))
-				corridors[1] = false;
-			else if(getCoordBaseMode().getOpposite().equals(facing))
-				corridors[0] = false;
-			else return false;
-			return true;
-		}
-		
-		@Override
-		public boolean addComponentParts(IWorld worldIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
-		{
-			
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(worldIn.getChunkProvider().getChunkGenerator().getSettings());
-			
+		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
+
+
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
+
 			BlockState wallBlock = blocks.getBlockState("structure_primary");
 			BlockState floorBlock = blocks.getBlockState("structure_secondary");
-			
+
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 0, 0, 5, 0, 5, floorBlock, floorBlock, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 4, 3, 0, 5, floorBlock, floorBlock, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 0, 0, 6, 4, 6, wallBlock, wallBlock, false);
@@ -508,19 +496,30 @@ public class ImpDungeonPieces
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 4, 4, 3, 4, 5, wallBlock, wallBlock, false);
 			fillWithAir(worldIn, structureBoundingBoxIn, 4, 1, 0, 5, 3, 5);
 			fillWithAir(worldIn, structureBoundingBoxIn, 0, 1, 4, 3, 3, 5);
-			
+
 			if(corridors[0])
 				fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 1, 0, 5, 3, 0, wallBlock, wallBlock, false);
 			if(corridors[1])
 				fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 1, 4, 0, 3, 5, wallBlock, wallBlock, false);
-			
+
 			if(light)
 			{
 				BlockState torch = blocks.getBlockState("wall_torch");
 				setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.WEST), 5, 2, 3, structureBoundingBoxIn);
 				setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.NORTH), 3, 2, 5, structureBoundingBoxIn);
 			}
-			
+
+			return true;
+		}
+
+		@Override
+		protected boolean connectFrom(Direction facing)
+		{
+			if(getCoordBaseMode().rotateY().equals(facing))
+				corridors[1] = false;
+			else if(getCoordBaseMode().getOpposite().equals(facing))
+				corridors[0] = false;
+			else return false;
 			return true;
 		}
 	}
@@ -554,26 +553,24 @@ public class ImpDungeonPieces
 		{
 			return getCoordBaseMode().getOpposite().equals(facing);
 		}
-		
+
 		@Override
-		public boolean addComponentParts(IWorld worldIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
-		{
-			
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(worldIn.getChunkProvider().getChunkGenerator().getSettings());
-			
+		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
+
 			BlockState wallBlock = blocks.getBlockState("structure_primary");
 			BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");
 			BlockState floorBlock = blocks.getBlockState("structure_secondary");
 			BlockState floorDecor = blocks.getBlockState("structure_secondary_decorative");
 			BlockState light = blocks.getBlockState("light_block");
-			
+
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 0, 3, 0, 2, floorBlock, floorBlock, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 3, 4, 0, 6, floorBlock, floorBlock, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 4, 3, 0, 5, floorDecor, floorDecor, false);
 			fillWithAir(worldIn, structureBoundingBoxIn, 2, 1, 0, 3, 3, 2);
 			fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 3, 4, 4, 6);
 			fillWithAir(worldIn, structureBoundingBoxIn, 2, 5, 4, 3, 9, 5);
-			
+
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 0, 1, 4, 2, wallBlock, wallBlock, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 0, 0, 4, 4, 2, wallBlock, wallBlock, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 2, 0, 5, 7, wallBlock, wallBlock, false);
@@ -584,15 +581,15 @@ public class ImpDungeonPieces
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 3, 4, 0, 3, 5, wallDecor, wallDecor, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 3, 4, 5, 3, 5, wallDecor, wallDecor, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 3, 7, 3, 3, 7, wallDecor, wallDecor, false);
-			
+
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 5, 3, 4, 10, 3, wallBlock, wallBlock, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 5, 6, 4, 10, 6, wallBlock, wallBlock, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 5, 4, 1, 10, 5, wallBlock, wallBlock, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 5, 4, 4, 10, 5, wallBlock, wallBlock, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 10, 4, 3, 10, 5, light, light, false);
-			
+
 			placeReturnNode(worldIn, structureBoundingBoxIn, 2, 1, 4);
-			
+
 			return true;
 		}
 	}
@@ -627,11 +624,10 @@ public class ImpDungeonPieces
 			return getCoordBaseMode().getOpposite().equals(facing);
 		}
 		
+		
 		@Override
-		public boolean addComponentParts(IWorld worldIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
-		{
-			
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(worldIn.getChunkProvider().getChunkGenerator().getSettings());
+		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
 			
 			BlockState wallBlock = blocks.getBlockState("structure_primary");
 			BlockState floorStairsFront = blocks.getStairs("structure_secondary_stairs", Direction.SOUTH, false);
@@ -724,10 +720,10 @@ public class ImpDungeonPieces
 			return getCoordBaseMode().getOpposite().equals(facing);
 		}
 		
+		
 		@Override
-		public boolean addComponentParts(IWorld worldIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
-		{
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(worldIn.getChunkProvider().getChunkGenerator().getSettings());
+		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
 			
 			BlockState wallBlock = blocks.getBlockState("structure_primary");
 			BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");
@@ -760,18 +756,18 @@ public class ImpDungeonPieces
 			if(spawner1)
 			{
 				BlockPos spawnerPos = new BlockPos(this.getXWithOffset(1, 2), this.getYWithOffset(1), this.getZWithOffset(1, 2));
-				spawner1 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MSEntityTypes.IMP);
+				spawner1 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
 			}
 			if(spawner2)
 			{
 				BlockPos spawnerPos = new BlockPos(this.getXWithOffset(6, 2), this.getYWithOffset(1), this.getZWithOffset(6, 2));
-				spawner2 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MSEntityTypes.IMP);
+				spawner2 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
 			}
 			
 			BlockPos chestPos = new BlockPos(this.getXWithOffset(3, 5), this.getYWithOffset(1), this.getZWithOffset(3, 5));
-			StructureBlockUtil.placeLootChest(chestPos, worldIn, structureBoundingBoxIn, getCoordBaseMode().getOpposite(), MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
+			StructureBlockUtil.placeLootChest(chestPos, worldIn, structureBoundingBoxIn, getCoordBaseMode().getOpposite(), ChestType.LEFT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
 			chestPos = new BlockPos(this.getXWithOffset(4, 5), this.getYWithOffset(1), this.getZWithOffset(4, 5));
-			StructureBlockUtil.placeLootChest(chestPos, worldIn, structureBoundingBoxIn, getCoordBaseMode().getOpposite(), MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
+			StructureBlockUtil.placeLootChest(chestPos, worldIn, structureBoundingBoxIn, getCoordBaseMode().getOpposite(), ChestType.RIGHT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
 			
 			return true;
 		}
@@ -822,10 +818,10 @@ public class ImpDungeonPieces
 			return getCoordBaseMode().getOpposite().equals(facing);
 		}
 		
+		
 		@Override
-		public boolean addComponentParts(IWorld worldIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
-		{
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(worldIn.getChunkProvider().getChunkGenerator().getSettings());
+		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
 			
 			BlockState wallBlock = blocks.getBlockState("structure_primary");
 			BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");
@@ -950,10 +946,10 @@ public class ImpDungeonPieces
 			return false;
 		}
 		
+		
 		@Override
-		public boolean addComponentParts(IWorld worldIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
-		{
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(worldIn.getChunkProvider().getChunkGenerator().getSettings());
+		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
 			
 			BlockState wallBlock = blocks.getBlockState("structure_primary");
 			BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");
@@ -980,12 +976,12 @@ public class ImpDungeonPieces
 			if(spawner1)
 			{
 				BlockPos spawnerPos = new BlockPos(this.getXWithOffset(1, 4), this.getYWithOffset(1), this.getZWithOffset(1, 4));
-				spawner1 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MSEntityTypes.IMP);
+				spawner1 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
 			}
 			if(spawner2)
 			{
 				BlockPos spawnerPos = new BlockPos(this.getXWithOffset(1, 5), this.getYWithOffset(1), this.getZWithOffset(1, 5));
-				spawner2 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MSEntityTypes.IMP);
+				spawner2 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
 			}
 			
 			int z = chestPos ? 4 : 5;
@@ -1056,10 +1052,10 @@ public class ImpDungeonPieces
 			return false;
 		}
 		
+		
 		@Override
-		public boolean addComponentParts(IWorld worldIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
-		{
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(worldIn.getChunkProvider().getChunkGenerator().getSettings());
+		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
 			
 			BlockState wallBlock = blocks.getBlockState("structure_primary");
 			BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");
@@ -1100,9 +1096,9 @@ public class ImpDungeonPieces
 			int x = chestPos ? 1 : 6;
 			Direction chestDirection = chestPos ? getCoordBaseMode().rotateYCCW() : getCoordBaseMode().rotateY();
 			BlockPos chestPos = new BlockPos(this.getXWithOffset(x, 4), this.getYWithOffset(1), this.getZWithOffset(x, 4));
-			StructureBlockUtil.placeLootChest(chestPos, worldIn, structureBoundingBoxIn, chestDirection, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
+			StructureBlockUtil.placeLootChest(chestPos, worldIn, structureBoundingBoxIn, chestDirection, this.chestPos ? ChestType.LEFT : ChestType.RIGHT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
 			chestPos = new BlockPos(this.getXWithOffset(x, 5), this.getYWithOffset(1), this.getZWithOffset(x, 5));
-			StructureBlockUtil.placeLootChest(chestPos, worldIn, structureBoundingBoxIn, chestDirection, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
+			StructureBlockUtil.placeLootChest(chestPos, worldIn, structureBoundingBoxIn, chestDirection, this.chestPos ? ChestType.RIGHT : ChestType.LEFT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
 			if(!ogreSpawned && structureBoundingBoxIn.isVecInside(new BlockPos(getXWithOffset(3, 4), getYWithOffset(1), getZWithOffset(3, 4))))
 			spawnOgre(3, 1, 4, worldIn, randomIn);
 			
@@ -1190,10 +1186,10 @@ public class ImpDungeonPieces
 			return false;
 		}
 		
+		
 		@Override
-		public boolean addComponentParts(IWorld worldIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
-		{
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(worldIn.getChunkProvider().getChunkGenerator().getSettings());
+		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
 			
 			BlockState wallBlock = blocks.getBlockState("structure_primary");
 			BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");
@@ -1222,18 +1218,18 @@ public class ImpDungeonPieces
 			if(spawner1)
 			{
 				BlockPos spawnerPos = new BlockPos(this.getXWithOffset(1, 3), this.getYWithOffset(1), this.getZWithOffset(1, 3));
-				spawner1 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MSEntityTypes.IMP);
+				spawner1 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
 			}
 			if(spawner2)
 			{
 				BlockPos spawnerPos = new BlockPos(this.getXWithOffset(8, 5), this.getYWithOffset(1), this.getZWithOffset(8, 5));
-				spawner2 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MSEntityTypes.IMP);
+				spawner2 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
 			}
 			
 			BlockPos chestPos = new BlockPos(this.getXWithOffset(4, 4), this.getYWithOffset(1), this.getZWithOffset(4, 4));
-			StructureBlockUtil.placeLootChest(chestPos, worldIn, structureBoundingBoxIn, getCoordBaseMode().getOpposite(), MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
+			StructureBlockUtil.placeLootChest(chestPos, worldIn, structureBoundingBoxIn, getCoordBaseMode().getOpposite(), ChestType.LEFT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
 			chestPos = new BlockPos(this.getXWithOffset(5, 4), this.getYWithOffset(1), this.getZWithOffset(5, 4));
-			StructureBlockUtil.placeLootChest(chestPos, worldIn, structureBoundingBoxIn, getCoordBaseMode().getOpposite(), MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
+			StructureBlockUtil.placeLootChest(chestPos, worldIn, structureBoundingBoxIn, getCoordBaseMode().getOpposite(), ChestType.RIGHT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
 			
 			if(corridors[0])
 				fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 0, 0, 5, 3, 0, wallBlock, wallBlock, false);

@@ -1,10 +1,10 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.block.multiblock.AlchemiterMultiblock;
-import com.mraof.minestuck.block.multiblock.CruxtruderMultiblock;
-import com.mraof.minestuck.block.multiblock.PunchDesignixMultiblock;
-import com.mraof.minestuck.block.multiblock.TotemLatheMultiblock;
+import com.mraof.minestuck.block.fluid.FlowingModFluidBlock;
+import com.mraof.minestuck.block.fluid.FlowingWaterColorsBlock;
+import com.mraof.minestuck.block.machine.*;
+import com.mraof.minestuck.block.plant.*;
 import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.util.CustomVoxelShape;
@@ -129,8 +129,6 @@ public class MSBlocks
 	public static final Block MINI_ALCHEMITER = getNull();
 	public static final Block MINI_PUNCH_DESIGNIX = getNull();
 	public static final Block HOLOPAD = getNull();
-	/*public static BlockJumperBlock[] jumperBlockExtension = BlockJumperBlock.createBlocks();
-	public static BlockAlchemiterUpgrades[] alchemiterUpgrades = BlockAlchemiterUpgrades.createBlocks();*/
 	
 	//Misc Machines
 	public static final Block COMPUTER = getNull();
@@ -171,6 +169,7 @@ public class MSBlocks
 	public static final Block CHESSBOARD = getNull();
 	public static final Block MINI_FROG_STATUE = getNull();
 	public static final Block GLOWYSTONE_DUST = getNull();
+	public static final CassettePlayerBlock CASSETTE_PLAYER = getNull();
 	
 	public static final FlowingFluidBlock OIL = getNull(), BLOOD = getNull(), BRAIN_JUICE = getNull();
 	public static final FlowingFluidBlock WATER_COLORS = getNull(), ENDER = getNull(), LIGHT_WATER = getNull();
@@ -277,9 +276,9 @@ public class MSBlocks
 		Block endPlanks = register(registry, new FlammableBlock(1, 250, Block.Properties.create(Material.WOOD, MaterialColor.SAND).hardnessAndResistance(2.0F, 3.0F).harvestTool(ToolType.AXE).sound(SoundType.WOOD)).setRegistryName("end_planks"));
 		Block deadPlanks = register(registry, new FlammableBlock(5, 5, Block.Properties.create(Material.WOOD).hardnessAndResistance(2.0F, 3.0F).harvestTool(ToolType.AXE).sound(SoundType.WOOD)).setRegistryName("dead_planks"));
 		Block treatedPlanks = register(registry, new FlammableBlock(0, 0, Block.Properties.create(Material.WOOD).hardnessAndResistance(2.0F, 3.0F).harvestTool(ToolType.AXE).sound(SoundType.WOOD)).setRegistryName("treated_planks"));
-		registry.register(new FlammableLeavesBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT)).setRegistryName("frost_leaves"));
-		registry.register(new FlammableLeavesBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT)).setRegistryName("rainbow_leaves"));
-		registry.register(new EndLeavesBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT)).setRegistryName("end_leaves"));
+		registry.register(new FlammableLeavesBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT).notSolid()).setRegistryName("frost_leaves"));
+		registry.register(new FlammableLeavesBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT).notSolid()).setRegistryName("rainbow_leaves"));
+		registry.register(new EndLeavesBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT).notSolid()).setRegistryName("end_leaves"));
 		registry.register(new RainbowSaplingBlock(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0).sound(SoundType.PLANT)).setRegistryName("rainbow_sapling"));
 		registry.register(new EndSaplingBlock(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0).sound(SoundType.PLANT)).setRegistryName("end_sapling"));
 		
@@ -347,18 +346,18 @@ public class MSBlocks
 		registry.register(new VeinCornerBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(0.45F).sound(SoundType.SLIME)).setRegistryName("vein_corner"));
 		registry.register(new VeinCornerBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(0.45F).sound(SoundType.SLIME)).setRegistryName("inverted_vein_corner"));
 		
-		registry.register(new ModStairsBlock(coarseStone.getDefaultState(), Block.Properties.from(coarseStone)).setRegistryName("coarse_stone_stairs"));
-		registry.register(new ModStairsBlock(shadeBricks.getDefaultState(), Block.Properties.from(shadeBricks)).setRegistryName("shade_brick_stairs"));
-		registry.register(new ModStairsBlock(frostBricks.getDefaultState(), Block.Properties.from(frostBricks)).setRegistryName("frost_brick_stairs"));
-		registry.register(new ModStairsBlock(castIron.getDefaultState(), Block.Properties.from(castIron)).setRegistryName("cast_iron_stairs"));
-		registry.register(new ModStairsBlock(myceliumBricks.getDefaultState(), Block.Properties.from(myceliumBricks)).setRegistryName("mycelium_brick_stairs"));
-		registry.register(new ModStairsBlock(chalk.getDefaultState(), Block.Properties.from(chalk)).setRegistryName("chalk_stairs"));
-		registry.register(new ModStairsBlock(chalkBricks.getDefaultState(), Block.Properties.from(chalkBricks)).setRegistryName("chalk_brick_stairs"));
-		registry.register(new ModStairsBlock(pinkStoneBricks.getDefaultState(), Block.Properties.from(pinkStoneBricks)).setRegistryName("pink_stone_brick_stairs"));
-		registry.register(new ModStairsBlock(rainbowPlanks.getDefaultState(), Block.Properties.from(rainbowPlanks)).setRegistryName("rainbow_planks_stairs"));
-		registry.register(new ModStairsBlock(endPlanks.getDefaultState(), Block.Properties.from(endPlanks)).setRegistryName("end_planks_stairs"));
-		registry.register(new ModStairsBlock(deadPlanks.getDefaultState(), Block.Properties.from(deadPlanks)).setRegistryName("dead_planks_stairs"));
-		registry.register(new ModStairsBlock(treatedPlanks.getDefaultState(), Block.Properties.from(treatedPlanks)).setRegistryName("treated_planks_stairs"));
+		registry.register(new StairsBlock(() -> MSBlocks.COARSE_STONE.getDefaultState(), Block.Properties.from(coarseStone)).setRegistryName("coarse_stone_stairs"));
+		registry.register(new StairsBlock(() -> MSBlocks.SHADE_BRICKS.getDefaultState(), Block.Properties.from(shadeBricks)).setRegistryName("shade_brick_stairs"));
+		registry.register(new StairsBlock(() -> MSBlocks.FROST_BRICKS.getDefaultState(), Block.Properties.from(frostBricks)).setRegistryName("frost_brick_stairs"));
+		registry.register(new StairsBlock(() -> MSBlocks.CAST_IRON.getDefaultState(), Block.Properties.from(castIron)).setRegistryName("cast_iron_stairs"));
+		registry.register(new StairsBlock(() -> MSBlocks.MYCELIUM_BRICKS.getDefaultState(), Block.Properties.from(myceliumBricks)).setRegistryName("mycelium_brick_stairs"));
+		registry.register(new StairsBlock(() -> MSBlocks.CHALK.getDefaultState(), Block.Properties.from(chalk)).setRegistryName("chalk_stairs"));
+		registry.register(new StairsBlock(() -> MSBlocks.CHALK_BRICKS.getDefaultState(), Block.Properties.from(chalkBricks)).setRegistryName("chalk_brick_stairs"));
+		registry.register(new StairsBlock(() -> MSBlocks.PINK_STONE_BRICKS.getDefaultState(), Block.Properties.from(pinkStoneBricks)).setRegistryName("pink_stone_brick_stairs"));
+		registry.register(new StairsBlock(() -> MSBlocks.RAINBOW_PLANKS.getDefaultState(), Block.Properties.from(rainbowPlanks)).setRegistryName("rainbow_planks_stairs"));
+		registry.register(new StairsBlock(() -> MSBlocks.END_PLANKS.getDefaultState(), Block.Properties.from(endPlanks)).setRegistryName("end_planks_stairs"));
+		registry.register(new StairsBlock(() -> MSBlocks.DEAD_PLANKS.getDefaultState(), Block.Properties.from(deadPlanks)).setRegistryName("dead_planks_stairs"));
+		registry.register(new StairsBlock(() -> MSBlocks.TREATED_PLANKS.getDefaultState(), Block.Properties.from(treatedPlanks)).setRegistryName("treated_planks_stairs"));
 		registry.register(new SlabBlock(Block.Properties.from(chalk)).setRegistryName("chalk_slab"));
 		registry.register(new SlabBlock(Block.Properties.from(chalkBricks)).setRegistryName("chalk_brick_slab"));
 		registry.register(new SlabBlock(Block.Properties.from(pinkStoneBricks)).setRegistryName("pink_stone_brick_slab"));
@@ -375,23 +374,12 @@ public class MSBlocks
 		TOTEM_LATHE.registerBlocks(registry);
 		ALCHEMITER.registerBlocks(registry);
 		PUNCH_DESIGNIX.registerBlocks(registry);
-		registry.register(new SmallMachineBlock(MSBlockShapes.SMALL_CRUXTRUDER.createRotatedShapes(), () -> MSTileEntityTypes.MINI_CRUXTRUDER, Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("mini_cruxtruder"));
-		registry.register(new SmallMachineBlock(MSBlockShapes.SMALL_TOTEM_LATHE.createRotatedShapes(), () -> MSTileEntityTypes.MINI_TOTEM_LATHE, Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("mini_totem_lathe"));
+		registry.register(new SmallMachineBlock<>(MSBlockShapes.SMALL_CRUXTRUDER.createRotatedShapes(), MSTileEntityTypes.MINI_CRUXTRUDER, Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("mini_cruxtruder"));
+		registry.register(new SmallMachineBlock<>(MSBlockShapes.SMALL_TOTEM_LATHE.createRotatedShapes(), MSTileEntityTypes.MINI_TOTEM_LATHE, Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("mini_totem_lathe"));
 		registry.register(new MiniAlchemiterBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("mini_alchemiter"));
-		registry.register(new SmallMachineBlock(MSBlockShapes.SMALL_PUNCH_DESIGNIX.createRotatedShapes(), () -> MSTileEntityTypes.MINI_PUNCH_DESIGNIX, Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("mini_punch_designix"));
+		registry.register(new SmallMachineBlock<>(MSBlockShapes.SMALL_PUNCH_DESIGNIX.createRotatedShapes(), MSTileEntityTypes.MINI_PUNCH_DESIGNIX, Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("mini_punch_designix"));
 		registry.register(new HolopadBlock(Block.Properties.create(Material.IRON, MaterialColor.SNOW).hardnessAndResistance(3.0F)).setRegistryName("holopad"));
 		
-		/*
-		registry.register(jumperBlockExtension[0].setRegistryName("jumper_block_extension"));
-		registry.register(jumperBlockExtension[1].setRegistryName("jumper_block_extension2"));
-		registry.register(jumperBlockExtension[2].setRegistryName("jumper_block_extension3"));
-		registry.register(jumperBlockExtension[3].setRegistryName("jumper_block_extension4"));
-		
-		registry.register(alchemiterUpgrades[0].setRegistryName("alchemiter_upgrade"));
-		registry.register(alchemiterUpgrades[1].setRegistryName("alchemiter_upgrade2"));
-		registry.register(alchemiterUpgrades[2].setRegistryName("alchemiter_upgrade3"));
-		registry.register(alchemiterUpgrades[3].setRegistryName("alchemiter_upgrade4"));
-		*/
 		registry.register(new ComputerBlock(ComputerBlock.COMPUTER_SHAPE, ComputerBlock.COMPUTER_SHAPE, Block.Properties.create(Material.IRON).hardnessAndResistance(4.0F)).setRegistryName("computer"));
 		registry.register(new ComputerBlock(ComputerBlock.LAPTOP_OPEN_SHAPE, ComputerBlock.LAPTOP_CLOSED_SHAPE, Block.Properties.create(Material.IRON).hardnessAndResistance(4.0F)).setRegistryName("laptop"));
 		registry.register(new ComputerBlock(ComputerBlock.LAPTOP_OPEN_SHAPE, ComputerBlock.LAPTOP_CLOSED_SHAPE, Block.Properties.create(Material.IRON, MaterialColor.RED).hardnessAndResistance(4.0F)).setRegistryName("crockertop"));
@@ -399,12 +387,12 @@ public class MSBlocks
 		registry.register(new ComputerBlock(ComputerBlock.LUNCHTOP_SHAPE, ComputerBlock.LUNCHTOP_SHAPE, Block.Properties.create(Material.IRON, MaterialColor.RED).hardnessAndResistance(4.0F)).setRegistryName("lunchtop"));
 		registry.register(new TransportalizerBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("transportalizer"));
 		registry.register(new GristWidgetBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("grist_widget"));
-		registry.register(new SmallMachineBlock(new CustomVoxelShape(new double[]{4, 0, 4, 12, 6, 12}).createRotatedShapes(), () -> MSTileEntityTypes.URANIUM_COOKER, Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("uranium_cooker"));
+		registry.register(new SmallMachineBlock<>(new CustomVoxelShape(new double[]{4, 0, 4, 12, 6, 12}).createRotatedShapes(), MSTileEntityTypes.URANIUM_COOKER, Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("uranium_cooker"));
 		
 		registry.register(new CruxiteDowelBlock(Block.Properties.create(Material.GLASS).hardnessAndResistance(0.0F)).setRegistryName("cruxite_dowel"));
 		
 		registry.register(new GoldSeedsBlock(Block.Properties.create(Material.PLANTS).hardnessAndResistance(0.1F).sound(SoundType.METAL).doesNotBlockMovement()).setRegistryName("gold_seeds"));
-		registry.register(new SpecialCactusBlock(Block.Properties.create(Material.WOOD).tickRandomly().hardnessAndResistance(1.0F, 2.5F).sound(SoundType.WOOD), ToolType.AXE).setRegistryName("wooden_cactus"));
+		registry.register(new SpecialCactusBlock(Block.Properties.create(Material.WOOD).tickRandomly().hardnessAndResistance(1.0F, 2.5F).sound(SoundType.WOOD).harvestTool(ToolType.AXE)).setRegistryName("wooden_cactus"));
 		
 		registry.register(new SimpleCakeBlock(Block.Properties.create(Material.CAKE).hardnessAndResistance(0.5F).sound(SoundType.CLOTH), 2, 0.5F, null).setRegistryName("apple_cake"));
 		registry.register(new SimpleCakeBlock(Block.Properties.create(Material.CAKE).hardnessAndResistance(0.5F).sound(SoundType.CLOTH), 2, 0.3F, player -> player.addPotionEffect(new EffectInstance(Effects.SPEED, 150, 0))).setRegistryName("blue_cake"));
@@ -424,6 +412,7 @@ public class MSBlocks
 		registry.register(new DecorBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F).sound(SoundType.METAL), MSBlockShapes.BLENDER).setRegistryName("blender"));
 		registry.register(new DecorBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.5F), MSBlockShapes.CHESSBOARD).setRegistryName("chessboard"));
 		registry.register(new DecorBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.5F), MSBlockShapes.FROG_STATUE).setRegistryName("mini_frog_statue"));
+		registry.register(new CassettePlayerBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F).sound(SoundType.METAL), MSBlockShapes.CASSETTE_PLAYER).setRegistryName("cassette_player"));
 		registry.register(new GlowystoneWireBlock(Block.Properties.create(Material.MISCELLANEOUS).hardnessAndResistance(0.0F).lightValue(16).doesNotBlockMovement()).setRegistryName("glowystone_dust"));
 		
 		registry.register(new FlowingModFluidBlock(MSFluids.OIL, new Vec3d(0.0, 0.0, 0.0), 0.75f, Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()).setRegistryName("oil"));

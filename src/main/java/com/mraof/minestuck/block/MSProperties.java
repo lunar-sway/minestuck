@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block;
 
+import com.mraof.minestuck.block.machine.ComputerBlock;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.IntegerProperty;
@@ -22,6 +23,7 @@ public class MSProperties
 	
 	public static final IntegerProperty COUNT_0_2 = IntegerProperty.create("count", 0, 2);
 	
+	public static final EnumProperty<EnumCassetteType> CASSETTE = EnumProperty.create("cassette", EnumCassetteType.class);
 	public static final EnumProperty<EnumDowelType> DOWEL = EnumProperty.create("dowel", EnumDowelType.class, EnumDowelType.DOWEL, EnumDowelType.CARVED_DOWEL);
 	public static final EnumProperty<EnumDowelType> DOWEL_OR_NONE = EnumProperty.create("dowel", EnumDowelType.class);
 	public static final EnumProperty<CruxiteDowelBlock.Type> DOWEL_BLOCK = EnumProperty.create("dowel", CruxiteDowelBlock.Type.class);

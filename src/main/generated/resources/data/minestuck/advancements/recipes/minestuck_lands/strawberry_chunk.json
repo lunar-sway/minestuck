@@ -6,15 +6,12 @@
     ]
   },
   "criteria": {
-    "has_at_least_4_strawberry_chunks": {
+    "has_strawberry_chunks": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "minestuck:strawberry_chunk",
-            "count": {
-              "min": 4
-            }
+            "item": "minestuck:strawberry_chunk"
           }
         ]
       }
@@ -38,7 +35,7 @@
   },
   "requirements": [
     [
-      "has_at_least_4_strawberry_chunks",
+      "has_strawberry_chunks",
       "has_strawberry_block",
       "has_the_recipe"
     ]

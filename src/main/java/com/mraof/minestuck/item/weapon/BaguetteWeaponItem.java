@@ -29,7 +29,7 @@ public class BaguetteWeaponItem extends ConsumableWeaponItem
         ItemStack crumbs = new ItemStack(MSItems.BREADCRUMBS, 1);
         if(!target.world.isRemote)
         {
-            ItemEntity item = new ItemEntity(target.world, target.posX, target.posY, target.posZ, crumbs);
+            ItemEntity item = new ItemEntity(target.world, target.getPosX(), target.getPosY(), target.getPosZ(), crumbs);
             target.world.addEntity(item);
         }
         return super.hitEntity(itemStack, target, attacker);

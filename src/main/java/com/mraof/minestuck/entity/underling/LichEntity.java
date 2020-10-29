@@ -1,6 +1,5 @@
 package com.mraof.minestuck.entity.underling;
 
-import com.mraof.minestuck.entity.ai.AttackOnCollideWithRateGoal;
 import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
@@ -9,6 +8,9 @@ import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
@@ -23,11 +25,20 @@ public class LichEntity extends UnderlingEntity
 	}
 	
 	@Override
+	protected void registerAttributes()
+	{
+		super.registerAttributes();
+		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(175.0D);
+		getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.3D);
+		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.2D);
+		getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(8.0D);
+	}
+	
+	@Override
 	protected void registerGoals()
 	{
 		super.registerGoals();
-		AttackOnCollideWithRateGoal aiAttack = new AttackOnCollideWithRateGoal(this, .4F, 20, false);
-		this.goalSelector.addGoal(3, aiAttack);
+		this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.0F, false));
 	}
 	
 	protected SoundEvent getAmbientSound()
@@ -52,30 +63,6 @@ public class LichEntity extends UnderlingEntity
 	}
 	
 	@Override
-	protected double getWanderSpeed() 
-	{
-		return 0.4;
-	}
-	
-	@Override
-	protected float getMaximumHealth() 
-	{
-		return 30 * getGristType().getPower() + 175;
-	}
-	
-	@Override
-	protected float getKnockbackResistance()
-	{
-		return 0.3F;
-	}
-	
-	@Override
-	protected double getAttackDamage()
-	{
-		return Math.ceil(getGristType().getPower()*3.4 + 8);
-	}
-	
-	@Override
 	protected int getVitalityGel()
 	{
 		return rand.nextInt(3)+6;
@@ -85,6 +72,8 @@ public class LichEntity extends UnderlingEntity
 	protected void onGristTypeUpdated(GristType type)
 	{
 		super.onGristTypeUpdated(type);
+		applyGristModifier(SharedMonsterAttributes.MAX_HEALTH, 30 * type.getPower(), AttributeModifier.Operation.ADDITION);
+		applyGristModifier(SharedMonsterAttributes.ATTACK_DAMAGE, 3.4 * type.getPower(), AttributeModifier.Operation.ADDITION);
 		this.experienceValue = (int) (6.5 * type.getPower() + 4);
 	}
 	

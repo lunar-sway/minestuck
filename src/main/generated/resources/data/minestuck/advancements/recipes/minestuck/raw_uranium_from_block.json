@@ -6,15 +6,12 @@
     ]
   },
   "criteria": {
-    "has_at_least_9_raw_uranium": {
+    "has__raw_uranium": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "minestuck:raw_uranium",
-            "count": {
-              "min": 9
-            }
+            "item": "minestuck:raw_uranium"
           }
         ]
       }
@@ -38,7 +35,7 @@
   },
   "requirements": [
     [
-      "has_at_least_9_raw_uranium",
+      "has__raw_uranium",
       "has_uranium_block",
       "has_the_recipe"
     ]

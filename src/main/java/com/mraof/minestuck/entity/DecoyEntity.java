@@ -2,8 +2,6 @@ package com.mraof.minestuck.entity;
 
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.util.Debug;
-import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
-import net.minecraft.client.renderer.texture.DownloadingTexture;
 import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -12,43 +10,35 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.FoodStats;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.GameType;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class DecoyEntity extends MobEntity
+import java.util.UUID;
+
+public class DecoyEntity extends MobEntity implements IEntityAdditionalSpawnData
 {
-	
-	private static final DataParameter<String> USERNAME = EntityDataManager.createKey(DecoyEntity.class, DataSerializers.STRING);
-	private static final DataParameter<Float> ROTATION_YAW_HEAD = EntityDataManager.createKey(DecoyEntity.class, DataSerializers.FLOAT);
-	private static final DataParameter<Boolean> FLYING = EntityDataManager.createKey(DecoyEntity.class, DataSerializers.BOOLEAN);
 	
 	public boolean isFlying;
 	public GameType gameType;
 	public String username;
+	private UUID playerId;
 	private FoodStats foodStats;
 	private CompoundNBT foodStatsNBT;
 	public CompoundNBT capabilities = new CompoundNBT();
 	
 	public boolean markedForDespawn;
-	boolean init;
-	double originX, originY, originZ;
-	DecoyPlayer player;
+	private double originX, originY, originZ;
+	private DecoyPlayer player;
 	
-	ResourceLocation locationSkin;
-	ResourceLocation locationCape;
-	DownloadingTexture downloadImageSkin;
-	DownloadingTexture downloadImageCape;
 	public PlayerInventory inventory;
 	
 	public DecoyEntity(World world)
@@ -66,14 +56,12 @@ public class DecoyEntity extends MobEntity
 		this.player = new DecoyPlayer(world, this, player);
 		for(String key : player.getPersistentData().keySet())
 			this.player.getPersistentData().put(key, player.getPersistentData().get(key).copy());
-		this.posX = player.posX;
-		originX = posX;
+		this.setPosition(player.getPosX(), player.getPosY(), player.getPosZ());
+		originX = this.getPosX();
 		this.chunkCoordX = player.chunkCoordX;
-		this.posY = player.posY;
-		originY = posY;
+		originY = this.getPosY();
 		this.chunkCoordY = player.chunkCoordY;
-		this.posZ = player.posZ;
-		originZ = posZ;
+		originZ = this.getPosZ();
 		this.chunkCoordZ = player.chunkCoordZ;
 		this.rotationPitch = player.rotationPitch;
 		this.rotationYaw = player.rotationYaw;
@@ -81,20 +69,18 @@ public class DecoyEntity extends MobEntity
 		this.renderYawOffset = player.renderYawOffset;
 		this.gameType = player.interactionManager.getGameType();
 		initInventory(player);
-		player.getAttribute(SharedMonsterAttributes.MAX_HEALTH).getModifiers().forEach(attributeModifier ->
+		player.getAttribute(SharedMonsterAttributes.MAX_HEALTH).func_225505_c_().forEach(attributeModifier ->
 				this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).applyModifier(attributeModifier));
-		player.getAttribute(SharedMonsterAttributes.MAX_HEALTH).getModifiers().forEach(attributeModifier ->
+		player.getAttribute(SharedMonsterAttributes.MAX_HEALTH).func_225505_c_().forEach(attributeModifier ->
 				this.player.getAttribute(SharedMonsterAttributes.MAX_HEALTH).applyModifier(attributeModifier));
 		this.setHealth(player.getHealth());
-		username = player.getName().getFormattedText();
+		username = player.getGameProfile().getName();
+		playerId = player.getUniqueID();
 		isFlying = player.abilities.isFlying;
 		player.abilities.write(this.capabilities);
 		foodStatsNBT = new CompoundNBT();
 		player.getFoodStats().write(foodStatsNBT);
 		initFoodStats(player);
-		dataManager.set(USERNAME, username.toString());
-		dataManager.set(ROTATION_YAW_HEAD, this.rotationYawHead);	//Due to rotationYawHead didn't update correctly
-		dataManager.set(FLYING, isFlying);
 	}
 	
 	@Override
@@ -149,22 +135,25 @@ public class DecoyEntity extends MobEntity
 	}
 	
 	@Override
-	protected void registerData()
+	public void writeSpawnData(PacketBuffer buffer)
 	{
-		super.registerData();
-		dataManager.register(USERNAME, "");
-		dataManager.register(ROTATION_YAW_HEAD, 0F);
-		dataManager.register(FLYING, false);
+		buffer.writeString(username, 16);
+		buffer.writeUniqueId(playerId);
+		buffer.writeFloat(rotationYawHead);
+		buffer.writeBoolean(isFlying);
 	}
 	
-	protected void setupCustomSkin()
+	@Override
+	public void readSpawnData(PacketBuffer additionalData)
 	{
-		if (this.world.isRemote && username != null && !username.isEmpty()){
-			locationSkin = AbstractClientPlayerEntity.getLocationSkin(username);
-			//locationCape = AbstractClientPlayer.getLocationCape(username);
-			downloadImageSkin = AbstractClientPlayerEntity.getDownloadImageSkin(locationSkin, username);
-			//downloadImageCape = AbstractClientPlayer.getDownloadImageCape(locationCape, username);
-		}
+		username = additionalData.readString(16);
+		playerId = additionalData.readUniqueId();
+		rotationYawHead = additionalData.readFloat();
+		isFlying = additionalData.readBoolean();
+		prevRotationYawHead = rotationYawHead;
+		this.rotationYaw = rotationYawHead;	//I don't know how much of this that is necessary
+		prevRotationYaw = rotationYaw;
+		renderYawOffset = rotationYaw;
 	}
 	
 	@Override
@@ -173,26 +162,9 @@ public class DecoyEntity extends MobEntity
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 	
-	public DownloadingTexture getTextureSkin()
+	public UUID getPlayerID()
 	{
-		return downloadImageSkin;
-	}
-	
-	public DownloadingTexture getTextureCape()
-	{
-		return downloadImageCape;
-	}
-	
-	public ResourceLocation getLocationSkin()
-	{
-//		if(locationSkin == null)
-//			return AbstractClientPlayer.locationStevePng;
-		return locationSkin;
-	}
-	
-	public ResourceLocation getLocationCape()
-	{
-		return locationCape;
+		return playerId;
 	}
 	
 	@Override
@@ -204,23 +176,13 @@ public class DecoyEntity extends MobEntity
 			return;
 		}
 		super.tick();
-		if(world.isRemote && !init ){
-			username = dataManager.get(USERNAME);
-			this.rotationYawHead = dataManager.get(ROTATION_YAW_HEAD);
-			prevRotationYawHead = rotationYawHead;
-			this.rotationYaw = rotationYawHead;	//I don't know how much of this that is necessary
-			prevRotationYaw = rotationYaw;
-			renderYawOffset = rotationYaw;
-			isFlying = dataManager.get(FLYING);
-			setupCustomSkin();
-			init = true;
-		}
+		
 		rotationYawHead = prevRotationYawHead;	//Neutralize the effect of the LookHelper
 		rotationYaw = prevRotationYaw;
 		rotationPitch = prevRotationPitch;
 		
 		if(isFlying)
-			posY = prevPosY;
+			this.setPosition(this.getPosX(), prevPosY, this.getPosZ());
 		
 		if(!world.isRemote)
 		{
@@ -232,9 +194,9 @@ public class DecoyEntity extends MobEntity
 	}
 	
 	public boolean locationChanged() {
-		return originX >= posX+1 || originX <= posX-1 ||
-				originY >= posY+1 || originY <= posY-1 ||
-				originZ >= posZ+1 || originZ <= posZ-1;
+		return originX >= this.getPosX()+1 || originX <= this.getPosX()-1 ||
+				originY >= this.getPosY()+1 || originY <= this.getPosY()-1 ||
+				originZ >= this.getPosZ()+1 || originZ <= this.getPosZ()-1;
 	}
 	
 	@Override

@@ -27,7 +27,7 @@ public class RazorBladeItem extends Item
 		{
 			if(!((PlayerEntity) attacker).isCreative())
 			{
-				ItemEntity razor = new ItemEntity(attacker.world, attacker.posX, attacker.posY, attacker.posZ, stack.copy());
+				ItemEntity razor = new ItemEntity(attacker.world, attacker.getPosX(), attacker.getPosY(), attacker.getPosZ(), stack.copy());
 				if(!attacker.world.isRemote)
 				{
 					razor.getItem().setCount(1);
@@ -50,7 +50,7 @@ public class RazorBladeItem extends Item
 		{
 			if(!((PlayerEntity) entityLiving).isCreative())
 			{
-				ItemEntity razor = new ItemEntity(entityLiving.world, entityLiving.posX, entityLiving.posY, entityLiving.posZ, stack.copy());
+				ItemEntity razor = new ItemEntity(entityLiving.world, entityLiving.getPosX(), entityLiving.getPosY(), entityLiving.getPosZ(), stack.copy());
 				if(!entityLiving.world.isRemote)
 				{
 					razor.getItem().setCount(1);
