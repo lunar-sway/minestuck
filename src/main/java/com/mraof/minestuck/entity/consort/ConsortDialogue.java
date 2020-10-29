@@ -354,7 +354,7 @@ public class ConsortDialogue
 		addMessage(new ItemRequirement(hungryList, false, true, new SingleMessage("hungry"),
 						new ChoiceMessage(new SingleMessage("hungry.ask_food", "nbt_item:hungry.item"),
 								new SingleMessage[] { new SingleMessage("hungry.accept"), new SingleMessage("hungry.deny") },
-								new MessageType[] { new GiveItemMessage("hungry.item", 0, new SingleMessage("hungry.thanks")),
+								new MessageType[] { new GiveItemMessage("hungry.thanks", "hungry.item", 0, 15, new SingleMessage("hungry.thanks")),
 										new SingleMessage("sadface") }))).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);
 		addMessage(new ItemRequirement("hungry2", hungryList, false, true, false,
 						new SingleMessage(
@@ -366,11 +366,11 @@ public class ConsortDialogue
 										new SingleMessage(
 												"hungry.accept"),
 										new SingleMessage("hungry.deny") },
-								new MessageType[] { new GiveItemMessage("hungry2.item", 0, new SingleMessage("hungry.thanks")),
+								new MessageType[] { new GiveItemMessage("hungry.thanks", "hungry2.item", 0, 15, new SingleMessage("hungry.thanks")),
 										new ChoiceMessage(new SingleMessage("hungry.starving"),
 												new SingleMessage[] { new SingleMessage("hungry.agree"),
 														new SingleMessage("hungry.too_cheap") },
-												new MessageType[] { new GiveItemMessage("hungry.sell_item", "hungry2.item", 10, 15,
+												new MessageType[] { new GiveItemMessage("hungry.sell_item", "hungry2.item", 10, 0,
 														new ChainMessage(1, new DescriptionMessage("hungry.finally", "nbt_item:hungry2.item"),
 																new SingleMessage("hungry.finally"))),
 														new SingleMessage("hungry.end") }) }))).consort(EnumConsort.SALAMANDER, EnumConsort.NAKAGATOR);
