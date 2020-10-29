@@ -24,6 +24,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -62,7 +63,7 @@ public final class PlayerData
 	private long boondollars;
 	private ImmutableGristSet gristCache;	//This is immutable in order to control where it can be changed
 	
-	private long consortReputation;
+	private int consortReputation;
 	
 	private Title title;
 	private boolean effectToggle;
@@ -97,7 +98,7 @@ public final class PlayerData
 		boondollars = nbt.getLong("boondollars");
 		gristCache = NonNegativeGristSet.read(nbt.getList("grist_cache", Constants.NBT.TAG_COMPOUND)).asImmutable();
 		
-		consortReputation = nbt.getLong("consort_reputation");
+		consortReputation = nbt.getInt("consort_reputation");
 		
 		title = Title.tryRead(nbt, "title");
 		effectToggle = nbt.getBoolean("effect_toggle");
@@ -118,7 +119,7 @@ public final class PlayerData
 		nbt.putLong("boondollars", boondollars);
 		nbt.put("grist_cache", gristCache.write(new ListNBT()));
 		
-		nbt.putLong("consort_reputation", consortReputation);
+		nbt.putInt("consort_reputation", consortReputation);
 		
 		if(title != null)
 			title.write(nbt, "title");
@@ -238,24 +239,17 @@ public final class PlayerData
 		}
 	}
 	
-	public long getConsortReputation()
+	public int getConsortReputation()
 	{
 		return consortReputation;
 	}
 	
-	public void addConsortReputation(long amount)
+	public void addConsortReputation(int amount)
 	{
-		consortReputation += amount;
-		if(amount > 10000)
-			consortReputation = 10000;
-		if(amount < -10000)
-			consortReputation = -10000;
-		
-		markDirty();
-		sendConsortReputation(getPlayer());
+		setConsortReputation(MathHelper.clamp(consortReputation + amount, -10000, 10000));
 	}
 	
-	public void setConsortReputation(long amount)
+	public void setConsortReputation(int amount)
 	{
 		if(amount < -10000 || amount > 10000)
 			throw new IllegalArgumentException("Consort reputation out of bounds; it must be between -10000 and 10000.");
@@ -263,7 +257,7 @@ public final class PlayerData
 		{
 			consortReputation = amount;
 			markDirty();
-			sendBoondollars(getPlayer());
+			sendConsortReputation(getPlayer());
 		}
 	}
 	

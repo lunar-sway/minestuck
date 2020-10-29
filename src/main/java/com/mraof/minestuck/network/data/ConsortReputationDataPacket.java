@@ -1,18 +1,19 @@
-package com.mraof.minestuck.network;
+package com.mraof.minestuck.network.data;
 
+import com.mraof.minestuck.network.PlayToClientPacket;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.network.PacketBuffer;
 
 public class ConsortReputationDataPacket implements PlayToClientPacket
 {
-    private final long count;
+    private final int count;
     
-    private ConsortReputationDataPacket(long count)
+    private ConsortReputationDataPacket(int count)
     {
         this.count = count;
     }
     
-    public static ConsortReputationDataPacket create(long count)
+    public static ConsortReputationDataPacket create(int count)
     {
         return new ConsortReputationDataPacket(count);
     }
@@ -20,18 +21,23 @@ public class ConsortReputationDataPacket implements PlayToClientPacket
     @Override
     public void encode(PacketBuffer buffer)
     {
-        buffer.writeLong(count);
+        buffer.writeInt(count);
     }
     
     public static ConsortReputationDataPacket decode(PacketBuffer buffer)
     {
-        long count = buffer.readLong();
+        int count = buffer.readInt();
         return create(count);
     }
     
     @Override
     public void execute()
     {
-        ClientPlayerData.consortReputation = count;
+        ClientPlayerData.handleDataPacket(this);
+    }
+    
+    public int getCount()
+    {
+        return count;
     }
 }
