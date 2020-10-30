@@ -460,9 +460,9 @@ public class ConsortDialogue
 		return set.toArray(new TitleLandType[0]);
 	}
 	
-	public static DialogueWrapper getRandomMessage(ConsortEntity consort, ServerPlayerEntity player, boolean hasHadMessage)
+	public static DialogueWrapper getRandomMessage(ConsortEntity consort, boolean hasHadMessage)
 	{
-		LandTypePair aspects = MSDimensions.getAspects(player.getServer(), consort.homeDimension);
+		LandTypePair aspects = MSDimensions.getAspects(consort.getServer(), consort.homeDimension);
 		
 		List<DialogueWrapper> list = new ArrayList<>();
 		

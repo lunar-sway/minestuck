@@ -4,11 +4,11 @@ import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.entity.MinestuckEntity;
 import com.mraof.minestuck.inventory.ConsortMerchantContainer;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
+import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.util.MSNBTUtil;
 import com.mraof.minestuck.world.MSDimensions;
-import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.player.PlayerEntity;
@@ -17,6 +17,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.IContainerProvider;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
@@ -32,16 +33,19 @@ import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ConsortEntity extends MinestuckEntity implements IContainerProvider
-{	//I'd get rid of the seemingly pointless subclasses, but as of writing, entity renderers are registered to entity classes instead of entity types.
+{
 	
 	private final EnumConsort consortType;
 	
 	private boolean hasHadMessage = false;
 	ConsortDialogue.DialogueWrapper message;
 	int messageTicksLeft;
-	CompoundNBT messageData;
+	private CompoundNBT messageData;
+	private final Set<PlayerIdentifier> talkRepPlayerList = new HashSet<>();
 	public EnumConsort.MerchantType merchantType = EnumConsort.MerchantType.NONE;
 	DimensionType homeDimension;
 	boolean visitedSkaia;
@@ -89,21 +93,37 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 				ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
 				if(message == null)
 				{
-					message = ConsortDialogue.getRandomMessage(this, serverPlayer, hasHadMessage);
+					message = ConsortDialogue.getRandomMessage(this, hasHadMessage);
 					messageTicksLeft = 24000 + world.rand.nextInt(24000);
 					messageData = new CompoundNBT();
 					hasHadMessage = true;
-					PlayerSavedData.getData((ServerPlayerEntity) player).addConsortReputation(1);
 				}
-				ITextComponent text = message.getMessage(this, serverPlayer);	//TODO Make sure to catch any issues here
-				if (text != null)
-					player.sendMessage(text);
-				MSCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, message.getString(), this);
+				try
+				{
+					ITextComponent text = message.getMessage(this, serverPlayer);
+					if(text != null)
+						player.sendMessage(text);
+					handleConsortRepFromTalking(serverPlayer);
+					MSCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, message.getString(), this);
+				} catch(Exception e)
+				{
+					LOGGER.error("Got exception when getting dialogue message for consort for player {}.", serverPlayer.getGameProfile().getName(), e);
+				}
 			}
 			
 			return true;
 		} else
 			return super.processInteract(player, hand);
+	}
+	
+	private void handleConsortRepFromTalking(ServerPlayerEntity player)
+	{
+		PlayerIdentifier identifier = IdentifierHandler.encode(player);
+		if(!talkRepPlayerList.contains(identifier))
+		{
+			PlayerSavedData.getData(player).addConsortReputation(1);
+			talkRepPlayerList.add(identifier);
+		}
 	}
 	
 	protected void setExplosionTimer()
@@ -130,6 +150,7 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 			messageData = null;
 			updatingMessage = null;
 			stocks = null;
+			talkRepPlayerList.clear();
 		}
 		
 		if(updatingMessage != null)
@@ -172,6 +193,10 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 			compound.putString("Dialogue", message.getString());
 			compound.putInt("MessageTicks", messageTicksLeft);
 			compound.put("MessageData", messageData);
+			ListNBT list = new ListNBT();
+			for(PlayerIdentifier id : talkRepPlayerList)
+				list.add(id.saveToNBT(new CompoundNBT(), "id"));
+			compound.put("talkRepList", list);
 		}
 		compound.putBoolean("HasHadMessage", hasHadMessage);
 		
@@ -207,6 +232,12 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 				messageTicksLeft = compound.getInt("MessageTicks");
 			else messageTicksLeft = 24000;	//Used to make summoning with a specific message slightly easier
 			messageData = compound.getCompound("MessageData");
+			
+			talkRepPlayerList.clear();
+			ListNBT list = compound.getList("talkRepList", Constants.NBT.TAG_COMPOUND);
+			for(int i = 0; i < list.size(); i++)
+				talkRepPlayerList.add(IdentifierHandler.load(list.getCompound(i), "id"));
+			
 			hasHadMessage = true;
 		} else hasHadMessage = compound.getBoolean("HasHadMessage");
 		
