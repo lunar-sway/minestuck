@@ -20,6 +20,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -65,6 +66,7 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 	{
 		super.registerAttributes();
 		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10D);
+		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25);
 	}
 	
 	@Override
@@ -75,6 +77,12 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 		goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 0.6F));
 		goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 8.0F));
 		goalSelector.addGoal(7, new LookRandomlyGoal(this));
+		goalSelector.addGoal(4, new AvoidEntityGoal<>(this, PlayerEntity.class, 16F, 1.0D, 1.4D, this::shouldFleeFrom));
+	}
+	
+	private boolean shouldFleeFrom(LivingEntity entity)
+	{
+		return entity instanceof ServerPlayerEntity && EntityPredicates.CAN_AI_TARGET.test(entity) && PlayerSavedData.getData((ServerPlayerEntity) entity).getConsortReputation() <= -1000;
 	}
 	
 	protected void applyAdditionalAITasks()
@@ -88,7 +96,7 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 	{
 		if(this.isAlive() && !player.isSneaking() && eventTimer < 0)
 		{
-			if(!world.isRemote && player instanceof ServerPlayerEntity)
+			if(!world.isRemote && player instanceof ServerPlayerEntity && PlayerSavedData.getData((ServerPlayerEntity) player).getConsortReputation() > -1000)
 			{
 				ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
 				if(message == null)
