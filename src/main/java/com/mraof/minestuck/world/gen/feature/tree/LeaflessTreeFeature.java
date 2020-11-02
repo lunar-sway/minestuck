@@ -21,7 +21,7 @@ public class LeaflessTreeFeature extends Feature<BlockStateFeatureConfig>
 	}
 	
 	@Override
-	public boolean func_241855_a(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, BlockStateFeatureConfig config)
+	public boolean generate(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, BlockStateFeatureConfig config)
 	{
 		//TODO Define which blocks that it is allowed to place on
 		int size = rand.nextInt(3);

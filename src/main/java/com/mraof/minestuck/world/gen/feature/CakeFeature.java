@@ -22,7 +22,7 @@ public class CakeFeature extends Feature<ProbabilityConfig>
 	}
 	
 	@Override
-	public boolean func_241855_a(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, ProbabilityConfig config)
+	public boolean generate(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, ProbabilityConfig config)
 	{
 		int bites = Math.max(0, (int) (rand.nextDouble()*10) - 6);
 		float f = rand.nextFloat();

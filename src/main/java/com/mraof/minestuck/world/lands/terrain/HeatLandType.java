@@ -29,7 +29,7 @@ public class HeatLandType extends TerrainLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setGroundState(Blocks.NETHERRACK.getDefaultState(), OreFeatureConfig.FillerBlockType.field_241883_b);
+		registry.setGroundState(Blocks.NETHERRACK.getDefaultState(), OreFeatureConfig.FillerBlockType.BASE_STONE_NETHER);
 		registry.setBlockState("upper", Blocks.COBBLESTONE.getDefaultState());
 		registry.setBlockState("ocean", Blocks.LAVA.getDefaultState());
 		registry.setBlockState("structure_primary", Blocks.NETHER_BRICKS.getDefaultState());

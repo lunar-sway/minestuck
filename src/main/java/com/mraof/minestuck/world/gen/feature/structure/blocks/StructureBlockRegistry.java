@@ -146,7 +146,7 @@ public final class StructureBlockRegistry
 	
 	//Nonstatic stuff
 	private Map<String, BlockState> blockRegistry = new HashMap<>();
-	private RuleTest groundType = OreFeatureConfig.FillerBlockType.field_241882_a;
+	private RuleTest groundType = OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD;
 	
 	public void setBlockState(String name, BlockState state)
 	{

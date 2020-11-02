@@ -14,7 +14,7 @@ public class ImpDungeonStructure extends Structure<NoFeatureConfig>
 	}
 	
 	@Override
-	public GenerationStage.Decoration func_236396_f_()
+	public GenerationStage.Decoration getDecorationStage()
 	{
 		return GenerationStage.Decoration.SURFACE_STRUCTURES;	//Could probably also count as an underground structure, but I'm guessing the surface component takes importance
 	}

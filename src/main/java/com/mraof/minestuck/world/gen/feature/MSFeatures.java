@@ -82,7 +82,7 @@ public final class MSFeatures
 		
 		registry.register(new ReturnNodeFeature(NoFeatureConfig.field_236558_a_).setRegistryName("return_node"));
 		registry.register(new FireFieldFeature(NoFeatureConfig.field_236558_a_).setRegistryName("fire_field"));
-		registry.register(new CakeFeature(ProbabilityConfig.field_236576_b_).setRegistryName("cake"));
+		registry.register(new CakeFeature(ProbabilityConfig.CODEC).setRegistryName("cake"));
 		registry.register(new PillarFeature(BlockStateFeatureConfig.field_236455_a_, false).setRegistryName("pillar"));
 		registry.register(new PillarFeature(BlockStateFeatureConfig.field_236455_a_, true).setRegistryName("large_pillar"));
 		registry.register(new ConditionFreeBlobFeature(BlockStateFeatureConfig.field_236455_a_).setRegistryName("block_blob"));

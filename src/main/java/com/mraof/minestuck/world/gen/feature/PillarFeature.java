@@ -21,7 +21,7 @@ public class PillarFeature extends Feature<BlockStateFeatureConfig>
 	}
 	
 	@Override
-	public boolean func_241855_a(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, BlockStateFeatureConfig config)
+	public boolean generate(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, BlockStateFeatureConfig config)
 	{
 		BlockState state = config.state;
 		int height = 4 + rand.nextInt(4);

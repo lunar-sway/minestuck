@@ -35,7 +35,7 @@ public class BrokenSwordFeature extends Feature<NoFeatureConfig>
 	}
 	
 	@Override
-	public boolean func_241855_a(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
+	public boolean generate(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
 	{
 		ResourceLocation hilt, blade;
 		if(rand.nextInt(600) == 0)

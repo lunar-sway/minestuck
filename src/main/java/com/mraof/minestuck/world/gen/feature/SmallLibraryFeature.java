@@ -30,7 +30,7 @@ public class SmallLibraryFeature extends Feature<NoFeatureConfig>
 	}
 	
 	@Override
-	public boolean func_241855_a(ISeedReader worldIn, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
+	public boolean generate(ISeedReader worldIn, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
 	{
 		Rotation rotation = Rotation.randomRotation(rand);
 		TemplateManager templates = worldIn.getWorld().getStructureTemplateManager();

@@ -25,7 +25,7 @@ public class SkaiaBiome
 		spawnInfo.withSpawner(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(MSEntityTypes.PROSPITIAN_ROOK, 1, 1, 1));
 		
 		BiomeGenerationSettingsBuilder genSettings = new BiomeGenerationSettingsBuilder(new BiomeGenerationSettings.Builder().withSurfaceBuilder(() -> MSSurfaceBuilders.SKAIA.get().func_242929_a(SurfaceBuilder.STONE_STONE_GRAVEL_CONFIG)).build());	//TODO configured surface builders are now a registry. Make sure to register it
-		genSettings.getStructures().add(() -> MSFeatures.SKAIA_CASTLE.func_236391_a_(NoFeatureConfig.field_236559_b_));	//TODO configured structure is also being registered in vanilla
+		genSettings.getStructures().add(() -> MSFeatures.SKAIA_CASTLE.withConfiguration(NoFeatureConfig.field_236559_b_));	//TODO configured structure is also being registered in vanilla
 		
 		BiomeAmbience.Builder ambience = new BiomeAmbience.Builder().setWaterColor(0x3F76E4).setWaterFogColor(0x050533);
 		ambience.setFogColor(0xC0D8FF).withSkyColor(0x7AA4FF);

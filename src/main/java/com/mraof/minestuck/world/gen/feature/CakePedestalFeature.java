@@ -29,7 +29,7 @@ public class CakePedestalFeature extends Feature<NoFeatureConfig>
 	}
 	
 	@Override
-	public boolean func_241855_a(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
+	public boolean generate(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
 	{
 		TemplateManager templates = world.getWorld().getStructureTemplateManager();
 		Template template = templates.getTemplateDefaulted(STRUCTURE_CAKE_PEDESTAL);

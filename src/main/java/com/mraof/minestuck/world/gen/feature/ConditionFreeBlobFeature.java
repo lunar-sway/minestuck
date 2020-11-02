@@ -21,7 +21,7 @@ public class ConditionFreeBlobFeature extends Feature<BlockStateFeatureConfig>
 	}
 	
 	@Override
-	public boolean func_241855_a(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, BlockStateFeatureConfig config)
+	public boolean generate(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, BlockStateFeatureConfig config)
 	{
 		final int startRadius = 0;
 		for (int i1 = 0; i1 < 3; i1++)

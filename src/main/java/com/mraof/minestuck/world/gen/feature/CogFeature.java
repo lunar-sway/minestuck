@@ -31,7 +31,7 @@ public class CogFeature extends Feature<NoFeatureConfig>
 	}
 	
 	@Override
-	public boolean func_241855_a(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
+	public boolean generate(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
 	{
 		Rotation rotation = Rotation.randomRotation(rand);
 		TemplateManager templates = world.getWorld().getStructureTemplateManager();

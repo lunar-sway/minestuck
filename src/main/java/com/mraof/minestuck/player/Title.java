@@ -70,7 +70,7 @@ public final class Title
 				if(potionLevel > 0)
 				{
 					player.addPotionEffect(new EffectInstance(aspectEffects[aspect.ordinal()], 600, potionLevel - 1));
-					LOGGER.debug("Applied aspect potion effect to {}", player.getDisplayName().getFormattedText());
+					LOGGER.debug("Applied aspect potion effect to {}", player.getDisplayName().getString());
 				}
 			}
 		}
