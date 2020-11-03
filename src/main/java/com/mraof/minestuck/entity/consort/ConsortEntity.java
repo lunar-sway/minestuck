@@ -347,13 +347,13 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity player)
 	{
 		if(this.stocks != null)
-			return new ConsortMerchantContainer(windowId, playerInventory, stocks, getConsortType(), merchantType, stocks.getPrices());
+			return new ConsortMerchantContainer(windowId, playerInventory, stocks, getConsortType(), merchantType, stocks.createPricesFor((ServerPlayerEntity) player));
 		else return null;
 	}
 	
 	protected void writeShopContainerBuffer(PacketBuffer buffer)
 	{
-		ConsortMerchantContainer.write(buffer, this, stocks.getPrices());
+		ConsortMerchantContainer.write(buffer, this);
 	}
 	
 	@Nullable
