@@ -187,7 +187,19 @@ public class ConsortMerchantInventory implements IInventory
 	
 	public int calculatePrice(int price, int consortRep)
 	{
-		return price;
+		if(consortRep < -500)
+			return (int) Math.ceil(2*price);
+		else if(consortRep < -200)
+			return (int) Math.ceil(1.5*price);
+		else if(consortRep < 400)
+			return price;
+		else if(consortRep < 1200)
+			return (int) Math.ceil(0.9*price);
+		else if(consortRep < 3500)
+			return (int) Math.floor(0.8*price);
+		else if(consortRep < 8000)
+			return (int) Math.floor(0.7*price);
+		else return (int) Math.floor(0.6*price);
 	}
 	
 	public IIntArray createPricesFor(ServerPlayerEntity player)
