@@ -52,14 +52,16 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 	protected EntityListFilter attackEntitySelector;	//TODO this filter isn't being saved. F1X PLZ
 	protected boolean fromSpawner;
 	public boolean dropCandy;
+	private int consortRep;
 	
 	private static final float maxSharedProgress = 2;	//The multiplier for the maximum amount progress that can be gathered from each enemy with the group fight bonus
 	
 	protected Map<PlayerIdentifier, Double> damageMap = new HashMap<>();	//Map that stores how much damage each player did to this to this underling. Null is used for environmental or other non-player damage
 	
-	public UnderlingEntity(EntityType<? extends UnderlingEntity> type, World world)
+	public UnderlingEntity(EntityType<? extends UnderlingEntity> type, World world, int consortRep)
 	{
 		super(type, world);
+		this.consortRep = consortRep;
 	}
 	
 	@Override
@@ -199,7 +201,7 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 	{
 		LivingEntity entity = this.getAttackingEntity();
 		if(entity instanceof ServerPlayerEntity)
-			PlayerSavedData.getData((ServerPlayerEntity) entity).addConsortReputation(1);
+			PlayerSavedData.getData((ServerPlayerEntity) entity).addConsortReputation(consortRep);
 		
 		super.onDeath(cause);
 	}
