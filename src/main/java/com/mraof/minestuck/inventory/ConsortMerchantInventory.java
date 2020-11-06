@@ -68,7 +68,7 @@ public class ConsortMerchantInventory implements IInventory
 			} else
 			{
 				playerData.takeBoondollars(amountPurchased * prices[index]);
-				playerData.addConsortReputation(5);
+				playerData.addConsortReputation(5, consort.getHomeDimension());
 				ItemStack items = stack.split(amountPurchased);
 				if(stack.isEmpty())
 					prices[index] = 0;
@@ -210,7 +210,7 @@ public class ConsortMerchantInventory implements IInventory
 			@Override
 			public int get(int index)
 			{
-				return calculatePrice(prices[index], data.getConsortReputation());
+				return calculatePrice(prices[index], data.getConsortReputation(consort.getHomeDimension()));
 			}
 			
 			@Override

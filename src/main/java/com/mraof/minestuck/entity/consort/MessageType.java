@@ -948,7 +948,7 @@ public abstract class MessageType
 					MSCriteriaTriggers.CONSORT_ITEM.trigger(player, lootTableId.toString(), itemstack, consort);
 				}
 				if(rep != 0)
-					data.addConsortReputation(rep);
+					data.addConsortReputation(rep, consort.homeDimension);
 				
 				return message.getMessage(consort, player, chainIdentifier);
 			} else
@@ -1187,7 +1187,7 @@ public abstract class MessageType
 					PlayerSavedData.getData(player).addBoondollars(boondollars);
 				}
 				if(rep != 0)
-					PlayerSavedData.getData(player).addConsortReputation(rep);
+					PlayerSavedData.getData(player).addConsortReputation(rep, consort.homeDimension);
 				
 				nbt.putBoolean(this.getString(), true);
 				return next.getMessage(consort, player, chainIdentifier);

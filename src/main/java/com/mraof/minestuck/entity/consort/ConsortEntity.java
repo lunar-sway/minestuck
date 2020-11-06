@@ -82,7 +82,7 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 	
 	private boolean shouldFleeFrom(LivingEntity entity)
 	{
-		return entity instanceof ServerPlayerEntity && EntityPredicates.CAN_AI_TARGET.test(entity) && PlayerSavedData.getData((ServerPlayerEntity) entity).getConsortReputation() <= -1000;
+		return entity instanceof ServerPlayerEntity && EntityPredicates.CAN_AI_TARGET.test(entity) && PlayerSavedData.getData((ServerPlayerEntity) entity).getConsortReputation(homeDimension) <= -1000;
 	}
 	
 	protected void applyAdditionalAITasks()
@@ -96,7 +96,7 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 	{
 		if(this.isAlive() && !player.isSneaking() && eventTimer < 0)
 		{
-			if(!world.isRemote && player instanceof ServerPlayerEntity && PlayerSavedData.getData((ServerPlayerEntity) player).getConsortReputation() > -1000)
+			if(!world.isRemote && player instanceof ServerPlayerEntity && PlayerSavedData.getData((ServerPlayerEntity) player).getConsortReputation(homeDimension) > -1000)
 			{
 				ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
 				if(message == null)
@@ -129,7 +129,7 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		if(!talkRepPlayerList.contains(identifier))
 		{
-			PlayerSavedData.getData(player).addConsortReputation(1);
+			PlayerSavedData.getData(player).addConsortReputation(1, homeDimension);
 			talkRepPlayerList.add(identifier);
 		}
 	}
@@ -296,7 +296,7 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 	public boolean hitByEntity(Entity entityIn)
 	{
 		if(entityIn instanceof ServerPlayerEntity)
-			PlayerSavedData.getData((ServerPlayerEntity) entityIn).addConsortReputation(-5);
+			PlayerSavedData.getData((ServerPlayerEntity) entityIn).addConsortReputation(-5, homeDimension);
 		return super.hitByEntity(entityIn);
 	}
 	
@@ -305,7 +305,7 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 	{
 		LivingEntity livingEntity = this.getAttackingEntity();
 		if(livingEntity instanceof ServerPlayerEntity)
-			PlayerSavedData.getData((ServerPlayerEntity) livingEntity).addConsortReputation(-100);
+			PlayerSavedData.getData((ServerPlayerEntity) livingEntity).addConsortReputation(-100, homeDimension);
 		super.onDeath(cause);
 	}
 	
@@ -375,5 +375,10 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 	protected SoundEvent getDeathSound()
 	{
 		return consortType.getDeathSound();
+	}
+	
+	public DimensionType getHomeDimension()
+	{
+		return homeDimension;
 	}
 }

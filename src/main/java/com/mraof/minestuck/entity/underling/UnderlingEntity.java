@@ -201,7 +201,7 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 	{
 		LivingEntity entity = this.getAttackingEntity();
 		if(entity instanceof ServerPlayerEntity)
-			PlayerSavedData.getData((ServerPlayerEntity) entity).addConsortReputation(consortRep);
+			PlayerSavedData.getData((ServerPlayerEntity) entity).addConsortReputation(consortRep, dimension);
 		
 		super.onDeath(cause);
 	}
