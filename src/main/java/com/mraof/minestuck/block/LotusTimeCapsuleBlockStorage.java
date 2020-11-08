@@ -56,6 +56,31 @@ public class LotusTimeCapsuleBlockStorage extends Block
 		return true;
 	}
 	
+	//public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+	//		if(UNACTIVATED.equals(false))
+	//		{
+	//			ItemStack itemstack = player.getHeldItem(handIn);
+	//			if(itemstack.isEmpty())
+	//			{
+	//				if(!worldIn.isRemote)
+	//				{
+	//					Direction direction = hit.getFace();
+	//					Direction direction1 = direction.getAxis() == Direction.Axis.Y ? player.getHorizontalFacing().getOpposite() : direction;
+	//					worldIn.playSound((PlayerEntity) null, pos, MSSoundEvents.EVENT_ECHELADDER_INCREASE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+	//					worldIn.setBlockState(pos, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.getDefaultState().with(LotusTimeCapsuleBlock.UNACTIVATED, false), 11);
+	//					ItemEntity itementity = new ItemEntity(worldIn, (double) pos.getX() + 0.5D + (double) direction1.getXOffset() * 0.65D, (double) pos.getY() + 0.1D, (double) pos.getZ() + 0.5D + (double) direction1.getZOffset() * 0.65D, new ItemStack(MSItems.SERVER_DISK, 1));
+	//					itementity.setMotion(0.05D * (double) direction1.getXOffset() + worldIn.rand.nextDouble() * 0.02D, 0.05D, 0.05D * (double) direction1.getZOffset() + worldIn.rand.nextDouble() * 0.02D);
+	//					worldIn.addEntity(itementity);
+	//				}
+	//				return true;
+	//			} else
+	//			{
+	//				return super.onBlockActivated(state, worldIn, pos, player, handIn, hit);
+	//			}
+	//		}
+	//		return true;
+	//	}
+	
 	private void dropCassette(World worldIn, BlockPos pos)
 	{
 		if(!worldIn.isRemote)

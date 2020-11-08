@@ -1001,6 +1001,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addAdvancement(MSAvancementProvider.COMMUNE, "Commune", "Visit a village and talk to a consort");
 		addAdvancement(MSAvancementProvider.BUGS, "Crunchy and High in Protein", "Eat a bug");
 		addAdvancement(MSAvancementProvider.SHADY_BUYER, "Buyer Beware", "Buy an item from a shady consort");
+		addAdvancement(MSAvancementProvider.LONG_TIME_COMING, "Long Time Coming", "Collect a server disk, but where did it come from?");
 		
 		addLand(FungiLandType.FUNGI, "Fungi");
 		addLand(FungiLandType.DANK, "Dank");
