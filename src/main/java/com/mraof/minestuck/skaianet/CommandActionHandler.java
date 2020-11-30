@@ -3,18 +3,21 @@ package com.mraof.minestuck.skaianet;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mraof.minestuck.command.DebugLandsCommand;
 import com.mraof.minestuck.command.SburbConnectionCommand;
+import com.mraof.minestuck.entry.EntryProcess;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.world.MSDimensionTypes;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.DimensionManager;
 
 import java.util.List;
@@ -142,7 +145,7 @@ public final class CommandActionHandler
 				PlayerIdentifier fakePlayer = IdentifierHandler.createNewFakeIdentifier();
 				c.setNewServerPlayer(fakePlayer);
 				
-				c = makeConnectionWithLand(skaianet, land, createDebugLand(land), fakePlayer, IdentifierHandler.NULL_IDENTIFIER, s);
+				c = makeConnectionWithLand(skaianet, land, createDebugLand(player.server, land), fakePlayer, IdentifierHandler.NULL_IDENTIFIER, s);
 			}
 			
 			if(i == landTypes.size())
@@ -157,7 +160,7 @@ public final class CommandActionHandler
 						break;
 					PlayerIdentifier fakePlayer = IdentifierHandler.createNewFakeIdentifier();
 					
-					c = makeConnectionWithLand(skaianet, land, createDebugLand(land), fakePlayer, lastIdentifier, s);
+					c = makeConnectionWithLand(skaianet, land, createDebugLand(player.server, land), fakePlayer, lastIdentifier, s);
 					
 					lastIdentifier = fakePlayer;
 				}
@@ -185,7 +188,7 @@ public final class CommandActionHandler
 	}
 	
 	
-	private static DimensionType createDebugLand(LandTypePair landTypes) throws CommandSyntaxException
+	private static DimensionType createDebugLand(MinecraftServer server, LandTypePair landTypes) throws CommandSyntaxException
 	{
 		String base = "minestuck:debug_land";
 		
@@ -196,6 +199,9 @@ public final class CommandActionHandler
 			landName = new ResourceLocation(base+"_"+i);
 		}
 		
-		return DimensionManager.registerDimension(landName, MSDimensionTypes.LANDS, null, true);
+		DimensionType dim = DimensionManager.registerDimension(landName, MSDimensionTypes.LANDS, null, true);
+		ServerWorld world = DimensionManager.getWorld(server, dim, false, true);
+		EntryProcess.placeGates(world);
+		return dim;
 	}
 }

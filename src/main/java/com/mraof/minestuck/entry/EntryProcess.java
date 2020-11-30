@@ -340,9 +340,7 @@ public class EntryProcess
 			}
 			
 			LOGGER.debug("Placing gates...");
-			
-			placeGate(GateHandler.Type.GATE_1, new BlockPos(x + xDiff, GateHandler.gateHeight1, z + zDiff), worldserver1);
-			placeGate(GateHandler.Type.GATE_2, new BlockPos(x + xDiff, GateHandler.gateHeight2, z + zDiff), worldserver1);
+			placeGates(worldserver1);
 			
 			MSExtraData.get(worldserver1).addPostEntryTask(new PostEntryTask(worldserver1.getDimension().getType(), x + xDiff, y + yDiff, z + zDiff, artifactRange, (byte) 0));
 			
@@ -448,6 +446,12 @@ public class EntryProcess
 		
 		LOGGER.debug("maxY: {}", maxY);
 		return maxY;
+	}
+	
+	public static void placeGates(ServerWorld world)
+	{
+		placeGate(GateHandler.Type.GATE_1, new BlockPos(0, GateHandler.gateHeight1, 0), world);
+		placeGate(GateHandler.Type.GATE_2, new BlockPos(0, GateHandler.gateHeight2, 0), world);
 	}
 	
 	private static void placeGate(GateHandler.Type gateType, BlockPos pos, ServerWorld world)
