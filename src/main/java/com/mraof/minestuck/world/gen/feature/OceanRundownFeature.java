@@ -17,7 +17,7 @@ import java.util.Random;
 import java.util.function.Function;
 
 public class OceanRundownFeature extends Feature<NoFeatureConfig>
-{	//TODO Make sure that this works as intended
+{
 	public OceanRundownFeature(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactoryIn)
 	{
 		super(configFactoryIn);
@@ -27,8 +27,7 @@ public class OceanRundownFeature extends Feature<NoFeatureConfig>
 	public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, NoFeatureConfig config)
 	{
 		BlockPos pos2, pos3;
-		
-		if(generator.getBiomeProvider().getBiomes(pos.getX(), worldIn.getSeaLevel(), pos.getZ(), 7).contains(MSBiomes.LAND_OCEAN))
+		if(generator.getBiomeProvider().getBiomes(pos.getX(), worldIn.getSeaLevel(), pos.getZ(), 3).contains(MSBiomes.LAND_OCEAN))
 		{
 			return false;
 		}
@@ -38,7 +37,7 @@ public class OceanRundownFeature extends Feature<NoFeatureConfig>
 		{
 			for(int posZ = 0; posZ < 16; posZ++)
 			{
-				if(generator.getBiomeProvider().getNoiseBiome(pos.getX() + posX - 8, pos.getY(), pos.getZ() + posZ - 8).equals(MSBiomes.LAND_OCEAN))
+				if(generator.getBiomeProvider().getNoiseBiome(pos.getX() + posX - 8 >> 2, pos.getY(), pos.getZ() + posZ - 8 >> 2).equals(MSBiomes.LAND_OCEAN))
 					oceanPos.add(pos.add(posX - 8, 0, posZ - 8));
 			}
 		}
