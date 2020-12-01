@@ -142,6 +142,11 @@ public final class SburbConnection
 		return nbt;
 	}
 	
+	public Session getSession()
+	{
+		return session;
+	}
+	
 	void setSession(Session session)
 	{
 		this.session = session;

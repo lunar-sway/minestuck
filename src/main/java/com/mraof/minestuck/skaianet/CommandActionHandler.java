@@ -111,14 +111,15 @@ public final class CommandActionHandler
 		SessionHandler sessions = SessionHandler.get(player.server);
 		SkaianetHandler skaianet = SkaianetHandler.get(player.server);
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
-		Session s = sessions.getPlayerSession(identifier);
-		if(s != null && s.locked)
-			throw SburbConnectionCommand.LOCKED_EXCEPTION.create();
 		
 		Optional<SburbConnection> cc = skaianet.getPrimaryConnection(identifier, true);
-		if(s == null || !cc.isPresent()|| !cc.get().hasEntered())
+		if(!cc.isPresent()|| !cc.get().hasEntered())
 			throw DebugLandsCommand.MUST_ENTER_EXCEPTION.create();
 		SburbConnection clientConnection = cc.get();
+		
+		if(clientConnection.getSession().locked)
+			throw SburbConnectionCommand.LOCKED_EXCEPTION.create();
+		
 		if(clientConnection.isActive())
 			skaianet.closeConnection(clientConnection);
 		
@@ -145,7 +146,7 @@ public final class CommandActionHandler
 				PlayerIdentifier fakePlayer = IdentifierHandler.createNewFakeIdentifier();
 				c.setNewServerPlayer(fakePlayer);
 				
-				c = makeConnectionWithLand(skaianet, land, createDebugLand(player.server, land), fakePlayer, IdentifierHandler.NULL_IDENTIFIER, s);
+				c = makeConnectionWithLand(skaianet, land, createDebugLand(player.server, land), fakePlayer, IdentifierHandler.NULL_IDENTIFIER);
 			}
 			
 			if(i == landTypes.size())
@@ -160,7 +161,7 @@ public final class CommandActionHandler
 						break;
 					PlayerIdentifier fakePlayer = IdentifierHandler.createNewFakeIdentifier();
 					
-					c = makeConnectionWithLand(skaianet, land, createDebugLand(player.server, land), fakePlayer, lastIdentifier, s);
+					c = makeConnectionWithLand(skaianet, land, createDebugLand(player.server, land), fakePlayer, lastIdentifier);
 					
 					lastIdentifier = fakePlayer;
 				}
@@ -174,13 +175,14 @@ public final class CommandActionHandler
 		skaianet.infoTracker.reloadLandChains();
 	}
 	
-	private static SburbConnection makeConnectionWithLand(SkaianetHandler skaianet, LandTypePair landTypes, DimensionType dimensionName, PlayerIdentifier client, PlayerIdentifier server, Session session)
+	private static SburbConnection makeConnectionWithLand(SkaianetHandler skaianet, LandTypePair landTypes, DimensionType dimensionName, PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException
 	{
 		SburbConnection c = new SburbConnection(client, server, skaianet);
 		c.setIsMain();
 		c.setLand(landTypes, dimensionName);
 		c.setHasEntered();
 		
+		Session session = skaianet.sessionHandler.getSessionForConnecting(client, server);
 		session.addConnection(c);
 		SburbHandler.onConnectionCreated(c);
 		
