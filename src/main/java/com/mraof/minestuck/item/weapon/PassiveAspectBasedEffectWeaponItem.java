@@ -1,28 +1,19 @@
 package com.mraof.minestuck.item.weapon;
 
 import com.mraof.minestuck.player.EnumAspect;
-import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.Title;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
-import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
 import java.util.function.Supplier;
-
-import static com.mraof.minestuck.player.EnumAspect.BREATH;
-import static com.mraof.minestuck.world.storage.PlayerSavedData.getData;
 
 public class PassiveAspectBasedEffectWeaponItem extends WeaponItem
 {
