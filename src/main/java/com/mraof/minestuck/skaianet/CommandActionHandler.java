@@ -10,7 +10,6 @@ import com.mraof.minestuck.world.MSDimensionTypes;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
@@ -146,7 +145,7 @@ public final class CommandActionHandler
 				PlayerIdentifier fakePlayer = IdentifierHandler.createNewFakeIdentifier();
 				c.setNewServerPlayer(fakePlayer);
 				
-				c = makeConnectionWithLand(skaianet, land, createDebugLand(player.server, land), fakePlayer, IdentifierHandler.NULL_IDENTIFIER);
+				c = makeConnectionWithLand(skaianet, land, createDebugLand(land), fakePlayer, IdentifierHandler.NULL_IDENTIFIER);
 			}
 			
 			if(i == landTypes.size())
@@ -161,7 +160,7 @@ public final class CommandActionHandler
 						break;
 					PlayerIdentifier fakePlayer = IdentifierHandler.createNewFakeIdentifier();
 					
-					c = makeConnectionWithLand(skaianet, land, createDebugLand(player.server, land), fakePlayer, lastIdentifier);
+					c = makeConnectionWithLand(skaianet, land, createDebugLand(land), fakePlayer, lastIdentifier);
 					
 					lastIdentifier = fakePlayer;
 				}
@@ -186,11 +185,15 @@ public final class CommandActionHandler
 		session.addConnection(c);
 		SburbHandler.onConnectionCreated(c);
 		
+		//The land types used by generation is set during connection init above, so placing gates currently has to go after that
+		ServerWorld world = DimensionManager.getWorld(skaianet.mcServer, dimensionName, false, true);
+		EntryProcess.placeGates(world);
+		
 		return c;
 	}
 	
 	
-	private static DimensionType createDebugLand(MinecraftServer server, LandTypePair landTypes) throws CommandSyntaxException
+	private static DimensionType createDebugLand(LandTypePair landTypes) throws CommandSyntaxException
 	{
 		String base = "minestuck:debug_land";
 		
@@ -201,9 +204,6 @@ public final class CommandActionHandler
 			landName = new ResourceLocation(base+"_"+i);
 		}
 		
-		DimensionType dim = DimensionManager.registerDimension(landName, MSDimensionTypes.LANDS, null, true);
-		ServerWorld world = DimensionManager.getWorld(server, dim, false, true);
-		EntryProcess.placeGates(world);
-		return dim;
+		return DimensionManager.registerDimension(landName, MSDimensionTypes.LANDS, null, true);
 	}
 }
