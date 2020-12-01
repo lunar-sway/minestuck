@@ -1,10 +1,9 @@
 package com.mraof.minestuck.item.weapon;
 
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.player.EnumAspect;
-import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.Title;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
-import com.mraof.minestuck.world.storage.PlayerData;
+import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -12,17 +11,18 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
-
 import java.util.function.Supplier;
-
-import static com.mraof.minestuck.player.EnumAspect.BREATH;
-import static com.mraof.minestuck.world.storage.PlayerSavedData.getData;
 
 public class AspectBasedEffectWeaponItem extends WeaponItem
 {
@@ -41,18 +41,25 @@ public class AspectBasedEffectWeaponItem extends WeaponItem
     }
     
     @Override
-    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected)
+    public boolean hitEntity(ItemStack itemStack, LivingEntity target, LivingEntity attacker)
     {
-        if(isSelected && entityIn instanceof ServerPlayerEntity)
+        Title title = PlayerSavedData.getData((ServerPlayerEntity) attacker).getTitle();
+        
+        if(attacker instanceof ServerPlayerEntity && attacker.getRNG().nextFloat() < .1)
         {
-            Title title = PlayerSavedData.getData((ServerPlayerEntity) entityIn).getTitle();
             if(title != null)
             {
                 if (title.getHeroAspect() == aspect)
                 {
-                    ((ServerPlayerEntity) entityIn).addPotionEffect(new EffectInstance(effect.get(), duration, effectTier));
+                    ((ServerPlayerEntity) attacker).addPotionEffect(new EffectInstance(effect.get(), duration, effectTier));
                 }
             }
         }
+    
+        if (itemStack.getItem() == MSItems.CLOWN_CLUB) {
+            attacker.world.playSound(null, attacker.posX, attacker.posY, attacker.posZ, MSSoundEvents.ITEM_HORN_USE, SoundCategory.AMBIENT, 1.5F, 1.0F);
+        }
+        
+        return super.hitEntity(itemStack, target, attacker);
     }
 }
