@@ -23,11 +23,12 @@ import static com.mraof.minestuck.world.gen.OreGeneration.*;
 
 public class LandWrapperBiome extends LandBiome
 {
+	@Deprecated
 	public final LandBiome staticBiome;
 	
-	public LandWrapperBiome(LandBiome biome, Category category, RainType rainType, float temperature, float downfall, float depth, float scale)
+	public LandWrapperBiome(LandBiome biome, Category category, float temperature, float downfall, float depth, float scale)
 	{
-		super(new Biome.Builder().category(category).precipitation(rainType).temperature(temperature).downfall(downfall).depth(depth).scale(scale).waterColor(0x3F76E4).waterFogColor(0x050533));
+		super(biome.type, new Biome.Builder().category(category).precipitation(biome.getPrecipitation()).temperature(temperature).downfall(downfall).depth(depth).scale(scale).waterColor(0x3F76E4).waterFogColor(0x050533));
 		this.staticBiome = biome;
 	}
 	
@@ -44,7 +45,7 @@ public class LandWrapperBiome extends LandBiome
 		setSurfaceBuilder(SurfaceBuilder.DEFAULT, blocks.getSurfaceBuilderConfig());
 		this.addSpawn(EntityClassification.CREATURE, new SpawnListEntry(consortType, 2, 1, 3));
 		
-		if(staticBiome != MSBiomes.LAND_OCEAN)
+		if(type != BiomeType.OCEAN)
 			addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.RETURN_NODE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.CHANCE_HEIGHTMAP.configure(new ChanceConfig(128))));
 		addDefaultStructures(blocks);
 	}
@@ -57,12 +58,12 @@ public class LandWrapperBiome extends LandBiome
 	private void addDefaultStructures(StructureBlockRegistry blocks)
 	{
 		addStructure(MSFeatures.LAND_GATE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
-		if(staticBiome == MSBiomes.LAND_NORMAL)
+		if(type == BiomeType.NORMAL)
 		{
 			addStructure(MSFeatures.SMALL_RUIN.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
 			addStructure(MSFeatures.CONSORT_VILLAGE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
 		}
-		if(staticBiome == MSBiomes.LAND_NORMAL || staticBiome == MSBiomes.LAND_ROUGH)
+		if(type == BiomeType.NORMAL || type == BiomeType.ROUGH)
 		{
 			addStructure(MSFeatures.IMP_DUNGEON.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
 		}

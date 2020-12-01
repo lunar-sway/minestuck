@@ -4,6 +4,8 @@ import com.google.common.collect.Lists;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
+import com.mraof.minestuck.world.biome.BiomeType;
+import com.mraof.minestuck.world.biome.LandBiomeSet;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.LandGenSettings;
@@ -63,10 +65,15 @@ public class FrostLandType extends TerrainLandType
 	}
 	
 	@Override
+	public LandBiomeSet getBiomeSet()
+	{
+		return MSBiomes.SNOW_LAND;
+	}
+	
+	@Override
 	public void setProperties(LandProperties properties)
 	{
 		properties.category = Biome.Category.ICY;
-		properties.rainType = Biome.RainType.SNOW;
 		properties.forceRain = LandProperties.ForceType.ON;
 		properties.temperature = 0.0F;
 	}
@@ -83,13 +90,13 @@ public class FrostLandType extends TerrainLandType
 		//list.add(new SpruceTreeDecorator(MinestuckBlocks.log.getDefaultState().withProperty(BlockMinestuckLog1.VARIANT, BlockMinestuckLog1.BlockType.FROST), MinestuckBlocks.leaves1.getDefaultState().withProperty(BlockMinestuckLeaves1.VARIANT, BlockMinestuckLeaves1.BlockType.FROST).withProperty(BlockMinestuckLeaves1.CHECK_DECAY, Boolean.valueOf(false)), BiomeMinestuck.mediumNormal));
 		//list.add(new SpruceTreeDecorator(MinestuckBlocks.log.getDefaultState().withProperty(BlockMinestuckLog1.VARIANT, BlockMinestuckLog1.BlockType.FROST), MinestuckBlocks.leaves1.getDefaultState().withProperty(BlockMinestuckLeaves1.VARIANT, BlockMinestuckLeaves1.BlockType.FROST).withProperty(BlockMinestuckLeaves1.CHECK_DECAY, Boolean.valueOf(false)), BiomeMinestuck.mediumRough));
 		
-		if(biome.staticBiome != MSBiomes.LAND_NORMAL)
+		if(biome.type != BiomeType.NORMAL)
 			biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.DISK.withConfiguration(new SphereReplaceConfig(Blocks.COARSE_DIRT.getDefaultState(), 7, 2, Lists.newArrayList(blocks.getBlockState("surface"), blocks.getBlockState("upper")))).withPlacement(Placement.COUNT_TOP_SOLID.configure(new FrequencyConfig(10))));
 		
-		if(biome.staticBiome == MSBiomes.LAND_NORMAL)
+		if(biome.type == BiomeType.NORMAL)
 		{
 			biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.DISK.withConfiguration(new SphereReplaceConfig(Blocks.SNOW_BLOCK.getDefaultState(), 5, 2, Lists.newArrayList(blocks.getBlockState("surface"), blocks.getBlockState("upper")))).withPlacement(Placement.COUNT_TOP_SOLID.configure(new FrequencyConfig(15))));
-		} else if(biome.staticBiome == MSBiomes.LAND_ROUGH)
+		} else if(biome.type == BiomeType.ROUGH)
 		{
 			biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.DISK.withConfiguration(new SphereReplaceConfig(Blocks.SNOW_BLOCK.getDefaultState(), 4, 2, Lists.newArrayList(blocks.getBlockState("surface"), blocks.getBlockState("upper")))).withPlacement(Placement.COUNT_TOP_SOLID.configure(new FrequencyConfig(8))));
 			biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.DISK.withConfiguration(new SphereReplaceConfig(Blocks.ICE.getDefaultState(), 4, 1, Lists.newArrayList(blocks.getBlockState("surface"), blocks.getBlockState("upper")))).withPlacement(Placement.COUNT_TOP_SOLID.configure(new FrequencyConfig(8))));

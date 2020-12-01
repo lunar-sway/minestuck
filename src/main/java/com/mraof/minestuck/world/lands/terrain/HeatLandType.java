@@ -4,6 +4,8 @@ import com.google.common.collect.Lists;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
+import com.mraof.minestuck.world.biome.BiomeType;
+import com.mraof.minestuck.world.biome.LandBiomeSet;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
@@ -62,6 +64,12 @@ public class HeatLandType extends TerrainLandType
 	}
 	
 	@Override
+	public LandBiomeSet getBiomeSet()
+	{
+		return MSBiomes.NO_RAIN_LAND;
+	}
+	
+	@Override
 	public void setProperties(LandProperties properties)
 	{
 		properties.category = Biome.Category.NETHER;
@@ -72,18 +80,18 @@ public class HeatLandType extends TerrainLandType
 	@Override
 	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
 	{
-		if(biome.staticBiome != MSBiomes.LAND_OCEAN)
+		if(biome.type != BiomeType.OCEAN)
 		{
 			biome.addFeature(GenerationStage.Decoration.TOP_LAYER_MODIFICATION, MSFeatures.OCEAN_RUNDOWN.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.COUNT_HEIGHTMAP.configure(new FrequencyConfig(3))));
 		}
 		
-		if(biome.staticBiome == MSBiomes.LAND_NORMAL)
+		if(biome.type == BiomeType.NORMAL)
 		{
 			biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.FIRE_FIELD.withConfiguration(NoFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(7, 0, 0, 256))));
 
 			biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.DISK.withConfiguration(new SphereReplaceConfig(Blocks.GLOWSTONE.getDefaultState(), 4, 1, Lists.newArrayList(blocks.getBlockState("surface"), blocks.getBlockState("upper")))).withPlacement(Placement.COUNT_TOP_SOLID.configure(new FrequencyConfig(5))));
 			biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.DISK.withConfiguration(new SphereReplaceConfig(Blocks.SOUL_SAND.getDefaultState(), 7, 2, Lists.newArrayList(blocks.getBlockState("surface"), blocks.getBlockState("upper")))).withPlacement(Placement.COUNT_TOP_SOLID.configure(new FrequencyConfig(8))));
-		} else if(biome.staticBiome == MSBiomes.LAND_ROUGH)
+		} else if(biome.type == BiomeType.ROUGH)
 		{
 			biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.FIRE_FIELD.withConfiguration(NoFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(10, 0, 0, 256))));
 

@@ -2,8 +2,7 @@ package com.mraof.minestuck.world.gen.feature.structure;
 
 import com.mojang.datafixers.Dynamic;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.world.biome.MSBiomes;
+import com.mraof.minestuck.world.biome.LandBiomeSet;
 import com.mraof.minestuck.world.gen.LandChunkGenerator;
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import net.minecraft.util.math.BlockPos;
@@ -20,6 +19,8 @@ import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.structure.StructureStart;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 import net.minecraft.world.server.ServerWorld;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -29,6 +30,8 @@ import java.util.function.Function;
 
 public class GateStructure extends Structure<NoFeatureConfig>
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	private final Map<DimensionType, ChunkPos> positionCache = new HashMap<>();
 	
 	public GateStructure(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactory)
@@ -79,7 +82,7 @@ public class GateStructure extends Structure<NoFeatureConfig>
 			{
 				return ((Start) start).findGatePos();
 			} else
-				Debug.warnf("Expected to find gate structure at chunk coords %s, in dimension %s, but found %s!", chunkPos, world.getDimension().getType().getRegistryName(), start);
+				LOGGER.warn("Expected to find gate structure at chunk coords {}, in dimension {}, but found {}!", chunkPos, world.getDimension().getType().getRegistryName(), start);
 		}
 		
 		return null;
@@ -100,23 +103,25 @@ public class GateStructure extends Structure<NoFeatureConfig>
 		double angle = 2 * Math.PI * worldRand.nextDouble();
 		int radius = 38 + worldRand.nextInt(12);
 		
+		Biome normalBiome = LandBiomeSet.getSet(chunkGenerator.getSettings()).NORMAL.get();
+		
 		for(; radius < 65; radius += 6)
 		{
 			int posX = (int) Math.round(Math.cos(angle) * radius);
 			int posZ = (int) Math.round(Math.sin(angle) * radius);
 			
 			//TODO Could there be a better way to search for a position? (Look for possible positions with the "surrounded by normal biomes" property rather than pick a random one and then check if it has this property)
-			BlockPos pos = chunkGenerator.getBiomeProvider().func_225531_a_((posX << 4) + 8, 0,(posZ << 4) + 8, 96, Collections.singletonList(MSBiomes.LAND_NORMAL), worldRand);
+			BlockPos pos = chunkGenerator.getBiomeProvider().func_225531_a_((posX << 4) + 8, 0,(posZ << 4) + 8, 96, Collections.singletonList(normalBiome), worldRand);
 
-			if(pos != null && chunkGenerator.getBiomeProvider().getBiomes(pos.getX(), 0, pos.getZ(), 16).stream().allMatch(biome -> biome == MSBiomes.LAND_NORMAL))
+			if(pos != null && chunkGenerator.getBiomeProvider().getBiomes(pos.getX(), 0, pos.getZ(), 16).stream().allMatch(biome -> biome == normalBiome))
 				return new ChunkPos(pos.getX() >> 4, pos.getZ() >> 4);
 		}
 		
 		int posX = (int) Math.round(Math.cos(angle) * radius);
 		int posZ = (int) Math.round(Math.sin(angle) * radius);
-		Debug.warn("Did not come across a decent location for land gates. Placing it without regard to any biomes.");
+		LOGGER.warn("Did not come across a decent location for land gates. Placing it without regard to any biomes.");
 		
-		BlockPos pos = chunkGenerator.getBiomeProvider().func_225531_a_((posX << 4) + 8, 0, (posZ << 4) + 8, 96, Collections.singletonList(MSBiomes.LAND_NORMAL), worldRand);
+		BlockPos pos = chunkGenerator.getBiomeProvider().func_225531_a_((posX << 4) + 8, 0, (posZ << 4) + 8, 96, Collections.singletonList(normalBiome), worldRand);
 		
 		ChunkPos gatePos;
 		if(pos != null)
@@ -169,7 +174,7 @@ public class GateStructure extends Structure<NoFeatureConfig>
 					return ((GatePiece) piece).getGatePos();
 			}
 			
-			Debug.errorf("Did not find a gate piece in gate structure. Instead had components %s.", components);
+			LOGGER.error("Did not find a gate piece in gate structure. Instead had components {}.", components);
 			return null;
 		}
 	}

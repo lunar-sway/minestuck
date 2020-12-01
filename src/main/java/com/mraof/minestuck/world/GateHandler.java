@@ -6,7 +6,7 @@ import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Teleport;
-import com.mraof.minestuck.world.biome.MSBiomes;
+import com.mraof.minestuck.world.biome.BiomeType;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.lands.LandInfo;
 import net.minecraft.block.BlockState;
@@ -89,7 +89,7 @@ public class GateHandler
 				
 				BlockPos placement = pos.add(x, 0, z);
 				
-				if(world.getBiome(placement) == MSBiomes.LAND_NORMAL)
+				if(BiomeType.NORMAL.isBiomeOfType(world.getBiome(placement)))
 				{
 					//TODO Can and has placed the player into a lava ocean. Fix this (Also for other hazards)
 					int y = world.getChunk(placement).getTopBlockY(Heightmap.Type.MOTION_BLOCKING, placement.getX(), placement.getZ());

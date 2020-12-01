@@ -1,6 +1,8 @@
 package com.mraof.minestuck.world.lands.terrain;
 
 import com.mraof.minestuck.entity.consort.ConsortEntity;
+import com.mraof.minestuck.world.biome.LandBiomeSet;
+import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.feature.structure.village.IguanaVillagePieces;
 import com.mraof.minestuck.world.gen.feature.structure.village.NakagatorVillagePieces;
 import com.mraof.minestuck.world.gen.feature.structure.village.SalamanderVillagePieces;
@@ -67,6 +69,11 @@ public abstract class TerrainLandType extends ForgeRegistryEntry<TerrainLandType
 	}
 	
 	public abstract EntityType<? extends ConsortEntity> getConsortType();
+	
+	public LandBiomeSet getBiomeSet()
+	{
+		return MSBiomes.DEFAULT_LAND;
+	}
 	
 	public static void addSalamanderVillageCenters(CenterRegister register)
 	{

@@ -1,8 +1,6 @@
 package com.mraof.minestuck.world.biome.gen;
 
-import com.google.common.collect.ImmutableSet;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
-import com.mraof.minestuck.world.biome.MSBiomes;
 import net.minecraft.block.BlockState;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.provider.BiomeProvider;
@@ -18,7 +16,7 @@ public class LandBiomeProvider extends BiomeProvider
 	
 	public LandBiomeProvider(LandBiomeProviderSettings settings)
 	{
-		super(ImmutableSet.of(MSBiomes.LAND_NORMAL, MSBiomes.LAND_OCEAN, MSBiomes.LAND_ROUGH));
+		super(settings.getBiomes().getAll());
 		topBlocksCache.add(settings.getGenSettings().getBlockRegistry().getBlockState("surface"));
 
 		this.genLevelLayer = LandBiomeLayers.buildLandProcedure(settings.getSeed(), settings.getGenSettings());

@@ -5,7 +5,7 @@ import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.world.biome.Biome;
 
-public class LandBiomeHolder	//TODO getting a biome no longer goes through the land dimension. Check if there are any places where a wrapper biome should be, but isn't
+public class LandBiomeHolder
 {
 	private final LandTypePair landTypes;
 	private final LandWrapperBiome normalBiome, oceanBiome, roughBiome;
@@ -14,9 +14,9 @@ public class LandBiomeHolder	//TODO getting a biome no longer goes through the l
 	{
 		this.landTypes = landTypes;
 		
-		normalBiome = MSBiomes.LAND_NORMAL.createWrapper(properties);
-		roughBiome = MSBiomes.LAND_ROUGH.createWrapper(properties);
-		oceanBiome = MSBiomes.LAND_OCEAN.createWrapper(properties);
+		normalBiome = properties.biomes.NORMAL.get().createWrapper(properties);
+		roughBiome = properties.biomes.ROUGH.get().createWrapper(properties);
+		oceanBiome = properties.biomes.OCEAN.get().createWrapper(properties);
 	}
 	
 	public void initBiomesWith(StructureBlockRegistry blocks)

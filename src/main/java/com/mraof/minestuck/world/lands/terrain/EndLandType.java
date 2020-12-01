@@ -3,8 +3,8 @@ package com.mraof.minestuck.world.lands.terrain;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
+import com.mraof.minestuck.world.biome.BiomeType;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
-import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
@@ -77,10 +77,10 @@ public class EndLandType extends TerrainLandType
 	@Override
 	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
 	{
-		if(biome.staticBiome == MSBiomes.LAND_NORMAL)
+		if(biome.type == BiomeType.NORMAL)
 		{
 			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, MSFeatures.END_TREE.withConfiguration(EndTree.getDefaultConfig().build()).withPlacement(Placement.COUNT_EXTRA_HEIGHTMAP.configure(new AtSurfaceWithExtraConfig(2, 0.1F, 1))));
-		} else if(biome.staticBiome == MSBiomes.LAND_ROUGH)
+		} else if(biome.type == BiomeType.ROUGH)
 		{
 			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, MSFeatures.END_TREE.withConfiguration(EndTree.getDefaultConfig().build()).withPlacement(Placement.COUNT_EXTRA_HEIGHTMAP.configure(new AtSurfaceWithExtraConfig(3, 0.1F, 1))));
 		}

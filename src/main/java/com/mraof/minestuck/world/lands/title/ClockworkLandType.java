@@ -1,14 +1,13 @@
 package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.player.EnumAspect;
+import com.mraof.minestuck.world.biome.BiomeType;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
-import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.placement.ChanceConfig;
@@ -46,7 +45,7 @@ public class ClockworkLandType extends TitleLandType
 	@Override
 	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
 	{
-		if(biome.staticBiome == MSBiomes.LAND_ROUGH)
+		if(biome.type == BiomeType.ROUGH)
 		{
 			biome.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MSFeatures.COG.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.CHANCE_PASSTHROUGH.configure(new ChanceConfig(2))));
 		} else
@@ -54,7 +53,7 @@ public class ClockworkLandType extends TitleLandType
 			biome.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MSFeatures.COG.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.CHANCE_PASSTHROUGH.configure(new ChanceConfig(10))));
 		}
 		
-		if(biome.staticBiome == MSBiomes.LAND_OCEAN)
+		if(biome.type == BiomeType.OCEAN)
 		{
 			biome.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MSFeatures.FLOOR_COG.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.CHANCE_PASSTHROUGH.configure(new ChanceConfig(3))));
 		} else

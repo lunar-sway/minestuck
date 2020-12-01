@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.lands;
 
+import com.mraof.minestuck.world.biome.LandBiomeSet;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import net.minecraft.util.math.Vec3d;
@@ -7,20 +8,21 @@ import net.minecraft.world.biome.Biome;
 
 public class LandProperties
 {
+	public final LandBiomeSet biomes;
 	public float skylightBase;
 	private Vec3d skyColor;
 	private Vec3d fogColor;
 	
 	public Biome.Category category = Biome.Category.NONE;
-	public Biome.RainType rainType = Biome.RainType.NONE;
 	public ForceType forceRain = ForceType.OFF, forceThunder = ForceType.OFF;	//TODO Make private and set up setters that'd prevent combinations that doesn't make sense, + also setting forceRain + rainType at the same time
 	public float temperature = 0.7F, downfall = 0.5F;
-	public float normalBiomeDepth = MSBiomes.LAND_NORMAL.getDepth(), normalBiomeScale = MSBiomes.LAND_NORMAL.getScale();
-	public float roughBiomeDepth = MSBiomes.LAND_ROUGH.getDepth(), roughBiomeScale = MSBiomes.LAND_ROUGH.getScale();
-	public float oceanBiomeDepth = MSBiomes.LAND_OCEAN.getDepth(), oceanBiomeScale = MSBiomes.LAND_OCEAN.getScale();
+	public float normalBiomeDepth = MSBiomes.DEFAULT_LAND.NORMAL.get().getDepth(), normalBiomeScale = MSBiomes.DEFAULT_LAND.NORMAL.get().getScale();
+	public float roughBiomeDepth = MSBiomes.DEFAULT_LAND.ROUGH.get().getDepth(), roughBiomeScale = MSBiomes.DEFAULT_LAND.ROUGH.get().getScale();
+	public float oceanBiomeDepth = MSBiomes.DEFAULT_LAND.OCEAN.get().getDepth(), oceanBiomeScale = MSBiomes.DEFAULT_LAND.OCEAN.get().getScale();
 	
 	public LandProperties(TerrainLandType landType)
 	{
+		biomes = landType.getBiomeSet();
 		skylightBase = landType.getSkylightBase();
 		skyColor = landType.getSkyColor();
 		fogColor = landType.getFogColor();

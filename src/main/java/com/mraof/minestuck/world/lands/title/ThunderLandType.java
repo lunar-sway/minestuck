@@ -38,7 +38,6 @@ public class ThunderLandType extends TitleLandType
 	public void setProperties(LandProperties properties)
 	{
 		properties.mergeFogColor(new Vec3d(0.1, 0.1, 0.2), 0.5F);
-		properties.rainType = Biome.RainType.RAIN;
 		properties.forceRain = LandProperties.ForceType.ON;
 		properties.forceThunder = LandProperties.ForceType.ON;
 		properties.downfall += 0.1F;
@@ -55,6 +54,6 @@ public class ThunderLandType extends TitleLandType
 	{
 		LandProperties properties = new LandProperties(aspect);
 		aspect.setProperties(properties);
-		return properties.rainType != Biome.RainType.SNOW;
+		return properties.biomes.NORMAL.get().getPrecipitation() == Biome.RainType.RAIN;
 	}
 }

@@ -55,6 +55,7 @@ public class Minestuck
 		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		MSFluids.FLUIDS.register(eventBus);
 		MSSurfaceBuilders.REGISTER.register(eventBus);
+		MSBiomes.REGISTER.register(eventBus);
 		MSTileEntityTypes.REGISTER.register(eventBus);
 		GristTypes.GRIST_TYPES.register(eventBus);
 	}

@@ -2,7 +2,7 @@ package com.mraof.minestuck.world.gen.feature.structure.village;
 
 import com.mojang.datafixers.Dynamic;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.world.biome.MSBiomes;
+import com.mraof.minestuck.world.biome.LandBiomeSet;
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.util.SharedSeedRandom;
@@ -63,7 +63,8 @@ public class ConsortVillageStructure extends Structure<NoFeatureConfig>	//TODO I
 
 		if(chunkX == pos.x && chunkZ == pos.z)
 		{
-			return generatorIn.getBiomeProvider().getBiomes(chunkX * 16 + 8, 0, chunkZ * 16 + 8, 16).stream().allMatch(biome -> biome == MSBiomes.LAND_NORMAL);
+			Biome normalBiome = LandBiomeSet.getSet(generatorIn.getSettings()).NORMAL.get();
+			return generatorIn.getBiomeProvider().getBiomes(chunkX * 16 + 8, 0, chunkZ * 16 + 8, 16).stream().allMatch(biome -> biome == normalBiome);
 		}
 		return false;
 	}

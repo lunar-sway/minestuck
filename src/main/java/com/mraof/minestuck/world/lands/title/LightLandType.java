@@ -2,8 +2,8 @@ package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.player.EnumAspect;
+import com.mraof.minestuck.world.biome.BiomeType;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
-import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
@@ -11,7 +11,6 @@ import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.BlockStateFeatureConfig;
 import net.minecraft.world.gen.placement.ChanceConfig;
@@ -54,7 +53,7 @@ public class LightLandType extends TitleLandType
 	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blockRegistry)
 	{
 		BlockState lightBlock = blockRegistry.getBlockState("light_block");
-		if(biome.staticBiome == MSBiomes.LAND_ROUGH)
+		if(biome.type == BiomeType.ROUGH)
 		{
 			biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.LARGE_PILLAR.withConfiguration(new BlockStateFeatureConfig(lightBlock)).withPlacement(Placement.COUNT_TOP_SOLID.configure(new FrequencyConfig(3))));
 		} else
