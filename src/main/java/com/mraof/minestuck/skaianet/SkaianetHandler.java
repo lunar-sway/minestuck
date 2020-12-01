@@ -173,7 +173,7 @@ public final class SkaianetHandler
 		newConnection.copyFrom(connection);
 		session.addConnection(newConnection);
 		
-		return connection;
+		return newConnection;
 	}
 	
 	public void resumeConnection(ISburbComputer computer, boolean isClient)
