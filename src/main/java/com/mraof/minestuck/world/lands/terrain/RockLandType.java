@@ -76,8 +76,6 @@ public class RockLandType extends TerrainLandType
 	public void setProperties(LandProperties properties)
 	{
 		properties.category = Biome.Category.EXTREME_HILLS;
-		properties.downfall = 0.2F;
-		properties.temperature = 0.3F;
 	}
 	
 	@Override

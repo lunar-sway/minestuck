@@ -75,7 +75,6 @@ public class FrostLandType extends TerrainLandType
 	{
 		properties.category = Biome.Category.ICY;
 		properties.forceRain = LandProperties.ForceType.ON;
-		properties.temperature = 0.0F;
 	}
 	
 	@Override

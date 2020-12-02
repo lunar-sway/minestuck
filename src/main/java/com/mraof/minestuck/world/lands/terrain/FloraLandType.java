@@ -68,7 +68,6 @@ public class FloraLandType extends TerrainLandType
 	public void setProperties(LandProperties properties)
 	{
 		properties.category = Biome.Category.FOREST;
-		properties.downfall = 0.4F;
 	}
 	
 	@Override

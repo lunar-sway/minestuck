@@ -85,7 +85,6 @@ public class ForestLandType extends TerrainLandType
 	public void setProperties(LandProperties properties)
 	{
 		properties.category = this.type == Variant.TAIGA ? Biome.Category.TAIGA : Biome.Category.FOREST;
-		properties.downfall = 0.8F;
 		properties.forceRain = LandProperties.ForceType.DEFAULT;
 	}
 	

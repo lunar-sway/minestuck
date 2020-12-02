@@ -5,7 +5,9 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.world.biome.BiomeType;
+import com.mraof.minestuck.world.biome.LandBiomeSet;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
+import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
@@ -78,11 +80,15 @@ public class RainLandType extends TerrainLandType
 	}
 	
 	@Override
+	public LandBiomeSet getBiomeSet()
+	{
+		return MSBiomes.HIGH_HUMID_LAND;
+	}
+	
+	@Override
 	public void setProperties(LandProperties properties)
 	{
 		properties.category = Biome.Category.BEACH;	//I guess?
-		properties.downfall = 0.9F;
-		properties.temperature = 0.5F;
 		
 		properties.oceanBiomeScale += 0.1;
 		properties.roughBiomeScale += 0.1;

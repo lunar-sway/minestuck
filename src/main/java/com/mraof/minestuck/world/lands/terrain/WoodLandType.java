@@ -63,8 +63,6 @@ public class WoodLandType extends TerrainLandType
 	@Override
 	public void setProperties(LandProperties properties)
 	{
-		properties.downfall = 0.6F;
-		properties.temperature = 1.0F;
 	}
 	
 	@Override

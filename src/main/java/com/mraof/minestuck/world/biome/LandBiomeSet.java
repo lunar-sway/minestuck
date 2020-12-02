@@ -13,11 +13,11 @@ public class LandBiomeSet
 {
 	public final RegistryObject<LandBiome> NORMAL, ROUGH, OCEAN;
 	
-	public LandBiomeSet(DeferredRegister<Biome> register, String name, Biome.RainType precipitation)
+	public LandBiomeSet(DeferredRegister<Biome> register, String name, Biome.RainType precipitation, float temperature, float downfall)
 	{
-		NORMAL = register.register("land_"+name+"_normal", () -> new LandBiome.Normal(precipitation));
-		ROUGH = register.register("land_"+name+"_rough", () -> new LandBiome.Rough(precipitation));
-		OCEAN = register.register("land_"+name+"_ocean", () -> new LandBiome.Ocean(precipitation));
+		NORMAL = register.register("land_"+name+"_normal", () -> new LandBiome.Normal(precipitation, temperature, downfall));
+		ROUGH = register.register("land_"+name+"_rough", () -> new LandBiome.Rough(precipitation, temperature, downfall));
+		OCEAN = register.register("land_"+name+"_ocean", () -> new LandBiome.Ocean(precipitation, temperature, downfall));
 	}
 	
 	void init()

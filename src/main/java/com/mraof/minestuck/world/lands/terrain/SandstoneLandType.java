@@ -94,8 +94,6 @@ public class SandstoneLandType extends TerrainLandType
 	public void setProperties(LandProperties properties)
 	{
 		properties.category = Biome.Category.MESA;
-		properties.downfall = 0.0F;
-		properties.temperature = 1.8F;
 	}
 	
 	@Override

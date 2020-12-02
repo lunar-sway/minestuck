@@ -818,6 +818,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		
 		addBiome(MSBiomes.SKAIA, "Skaia");
 		defaultLandBiomes(MSBiomes.DEFAULT_LAND);
+		defaultLandBiomes(MSBiomes.HIGH_HUMID_LAND);
 		defaultLandBiomes(MSBiomes.NO_RAIN_LAND);
 		defaultLandBiomes(MSBiomes.SNOW_LAND);
 		

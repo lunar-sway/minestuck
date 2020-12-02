@@ -73,8 +73,6 @@ public class HeatLandType extends TerrainLandType
 	public void setProperties(LandProperties properties)
 	{
 		properties.category = Biome.Category.NETHER;
-		properties.downfall = 0.0F;
-		properties.temperature = 2.0F;
 	}
 	
 	@Override

@@ -73,8 +73,6 @@ public class RainbowLandType extends TerrainLandType
 	public void setProperties(LandProperties properties)
 	{
 		properties.category = Biome.Category.PLAINS; //I guess?
-		properties.downfall = 0.6F;
-		properties.temperature = 1.0F;
 	}
 	
 	@Override

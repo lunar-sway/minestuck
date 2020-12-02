@@ -115,8 +115,6 @@ public class SandLandType extends TerrainLandType
 	public void setProperties(LandProperties properties)
 	{
 		properties.category = Biome.Category.DESERT;
-		properties.downfall = 0.0F;
-		properties.temperature = 2.0F;
 	}
 	
 	@Override

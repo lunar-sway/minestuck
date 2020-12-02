@@ -26,9 +26,11 @@ public class LandWrapperBiome extends LandBiome
 	@Deprecated
 	public final LandBiome staticBiome;
 	
-	public LandWrapperBiome(LandBiome biome, Category category, float temperature, float downfall, float depth, float scale)
+	public LandWrapperBiome(LandBiome biome, Category category, float depth, float scale)
 	{
-		super(biome.type, new Biome.Builder().category(category).precipitation(biome.getPrecipitation()).temperature(temperature).downfall(downfall).depth(depth).scale(scale).waterColor(0x3F76E4).waterFogColor(0x050533));
+		super(biome.type, new Biome.Builder().category(category).precipitation(biome.getPrecipitation())
+				.temperature(biome.getDefaultTemperature()).downfall(biome.getDownfall()).depth(depth).scale(scale)
+				.waterColor(0x3F76E4).waterFogColor(0x050533));
 		this.staticBiome = biome;
 	}
 	
