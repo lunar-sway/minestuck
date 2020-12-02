@@ -1,11 +1,16 @@
 package com.mraof.minestuck.world.biome;
 
 import com.mraof.minestuck.Minestuck;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
+@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class MSBiomes
 {
 	public static final DeferredRegister<Biome> REGISTER = DeferredRegister.create(ForgeRegistries.BIOMES, Minestuck.MOD_ID);
@@ -23,5 +28,13 @@ public class MSBiomes
 		HIGH_HUMID_LAND.init();
 		NO_RAIN_LAND.init();
 		SNOW_LAND.init();
+	}
+	
+	@SubscribeEvent
+	public static void onMissingMappings(RegistryEvent.MissingMappings<Biome> event)
+	{
+		event.getAllMappings().stream().filter(mapping -> mapping.key.equals(new ResourceLocation("minestuck:land_normal"))).forEach(mapping -> mapping.remap(DEFAULT_LAND.NORMAL.get()));
+		event.getAllMappings().stream().filter(mapping -> mapping.key.equals(new ResourceLocation("minestuck:land_rough"))).forEach(mapping -> mapping.remap(DEFAULT_LAND.ROUGH.get()));
+		event.getAllMappings().stream().filter(mapping -> mapping.key.equals(new ResourceLocation("minestuck:land_ocean"))).forEach(mapping -> mapping.remap(DEFAULT_LAND.OCEAN.get()));
 	}
 }
