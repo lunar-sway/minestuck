@@ -450,6 +450,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addStoreTooltip(MSItems.POGO_CLUB, "Strive to touch the sky, and smash a few skulls on the way up!");
 		add(MSItems.METAL_BAT, "Metal Bat");
 		addTooltip(MSItems.METAL_BAT, "Regular weapons not working for you? Try beating foes with an average bat!");
+		add(MSItems.CLOWN_CLUB, "Clown Club");
+		addTooltip(MSItems.CLOWN_CLUB, "Rage inducing. Why would you make this");
 		add(MSItems.SPIKED_CLUB, "Spiked Club");
 		addTooltip(MSItems.SPIKED_CLUB, "About what it sounds like");
 		add(MSItems.HORSE_HITCHER, "Cast Iron Horse Hitcher");
@@ -512,6 +514,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.WOODEN_SPOON, "Like the kind you would eat your soup with");
 		add(MSItems.SILVER_SPOON, "Silver Spoon");
 		addTooltip(MSItems.SILVER_SPOON, "Could be the first silver object you've seen so far");
+		add(MSItems.NOSFERATU_SPOON, "Nosferatu Spoon");
+		addTooltip(MSItems.NOSFERATU_SPOON, "The life-draining bloodlust of evil, in spoon form");
 		add(MSItems.CROCKER_SPOON, "Junior Battlemaster's Bowlbuster Stirring Solution 50000");
 		addTooltip(MSItems.CROCKER_SPOON, "Whip your foes into shape and bake a cake all at the same time!");
 		add(MSItems.CROCKER_FORK, "Junior Battlemaster's Bowlbuster Poking Solution 50000");
