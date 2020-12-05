@@ -17,7 +17,7 @@ public class OreGeneration
 	public static final int cruxiteVeinsPerChunk = 10;
 	public static final int uraniumVeinsPerChunk = 10;
 	public static final int baseCruxiteVeinSize = 6;
-	public static final int baseUraniumVeinSize = 3;
+	public static final int baseUraniumVeinSize = 5;
 	public static final int bonusCruxiteVeinSize = 3;
 	public static final int bonusUraniumVeinSize = 3;
 	public static final int cruxiteStratumMin = 0;
