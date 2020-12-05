@@ -68,9 +68,9 @@ public class MinestuckConfig
 	public static BooleanValue generateCruxiteOre;
 	public static BooleanValue generateUraniumOre;
 	public static int cruxiteVeinsPerChunk = 10;
-	public static int uraniumVeinsPerChunk = 10;
+	public static int uraniumVeinsPerChunk = 9;
 	public static int baseCruxiteVeinSize = 6;
-	public static int baseUraniumVeinSize = 3;
+	public static int baseUraniumVeinSize = 5;
 	public static int bonusCruxiteVeinSize = 3;
 	public static int bonusUraniumVeinSize = 3;
 	public static int cruxiteStratumMin = 0;
