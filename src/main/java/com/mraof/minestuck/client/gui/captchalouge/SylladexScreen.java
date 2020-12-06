@@ -380,19 +380,8 @@ public abstract class SylladexScreen extends Screen
 				int y = this.yPos +7 - gui.mapY;
 				if(x >= gui.mapWidth || y >= gui.mapHeight || x + 16 < 0 || y + 16 < 0)
 					return;
-				gui.minecraft.getItemRenderer().renderItemAndEffectIntoGUI(item, x, y);
-				if(item.getCount() > 1)
-				{
-					String stackSize = String.valueOf(item.getCount());
-					RenderSystem.disableLighting();
-					RenderSystem.disableDepthTest();
-					RenderSystem.disableBlend();
-					gui.font.drawStringWithShadow(stackSize, x + 16 - gui.font.getStringWidth(stackSize), y + 8, 0xC6C6C6);
-					RenderSystem.enableLighting();
-					RenderSystem.enableDepthTest();
-					RenderSystem.enableBlend();
-				}
-				gui.minecraft.getItemRenderer().renderItemOverlayIntoGUI(gui.font, item, x, y, "");
+				gui.itemRenderer.renderItemAndEffectIntoGUI(item, x, y);
+				gui.itemRenderer.renderItemOverlayIntoGUI(gui.font, item, x, y, null);
 			}
 		}
 		
