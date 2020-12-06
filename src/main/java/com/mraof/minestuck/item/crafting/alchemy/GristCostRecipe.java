@@ -74,6 +74,12 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 	}
 	
 	@Override
+	public boolean isDynamic()	//Makes sure that the recipe is not unlockable (because recipe book categories are hardcoded to vanilla categories)
+	{
+		return true;
+	}
+	
+	@Override
 	public ItemStack getRecipeOutput()
 	{
 		return ItemStack.EMPTY;

@@ -46,9 +46,15 @@ public class CombinationRecipe extends AbstractCombinationRecipe
 	}
 	
 	@Override
+	public boolean isDynamic()	//Makes sure that the recipe is not unlockable (because recipe book categories are hardcoded to vanilla categories)
+	{
+		return true;
+	}
+	
+	@Override
 	public ItemStack getRecipeOutput()
 	{
-		return output.copy();
+		return ItemStack.EMPTY;
 	}
 	
 	@Override
