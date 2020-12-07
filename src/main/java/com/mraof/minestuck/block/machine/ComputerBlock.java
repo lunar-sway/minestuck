@@ -67,7 +67,7 @@ public class ComputerBlock extends MachineBlock
 		ItemStack heldItem = player.getHeldItem(handIn);
 		if(state.get(STATE) == State.OFF)
 		{
-			if(!Direction.UP.equals(hit.getFace()) || !heldItem.isEmpty() && ProgramData.getProgramID(heldItem) == -2)
+			if(!heldItem.isEmpty() && ProgramData.getProgramID(heldItem) == -2)
 				return ActionResultType.PASS;
 			
 			turnOn(state, worldIn, pos, player, handIn, hit);
