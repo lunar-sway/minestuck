@@ -33,11 +33,13 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.GlobalPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.GameType;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.TickEvent;
@@ -211,7 +213,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	static boolean setPlayerStats(ServerPlayerEntity player, SburbConnection c)
 	{
 		
-		double posX, posY = 0, posZ;
+		double posX, posY, posZ;
 		ServerWorld world = player.getServer().getWorld(c.hasEntered() ? c.getClientDimension() : c.getClientComputer().getPosForEditmode().getDimension());
 		
 		if(lastEditmodePos.containsKey(c))
@@ -225,7 +227,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			posX = center.getX() + 0.5;
 			posZ = center.getZ() + 0.5;
 		}
-		posY = world.getHeight(Heightmap.Type.MOTION_BLOCKING, new BlockPos(posX, 0, posZ)).getY();
+		posY = getMotionBlockingY(world, MathHelper.floor(posX), MathHelper.floor(posZ));
 		
 		if(Teleport.teleportEntity(player, world, posX, posY, posZ) == null)
 			return false;
@@ -237,6 +239,12 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 		player.sendPlayerAbilities();
 		
 		return true;
+	}
+	
+	//Helper function to force a chunk to load, to then get the top block
+	private static int getMotionBlockingY(ServerWorld world, int x, int z)
+	{
+		return world.getChunk(x >> 4, z >> 4, ChunkStatus.FULL, true).getTopBlockY(Heightmap.Type.MOTION_BLOCKING, x & 0xF, x & 0xF) + 1;
 	}
 	
 	public static void resendEditmodeStatus(ServerPlayerEntity editor)
