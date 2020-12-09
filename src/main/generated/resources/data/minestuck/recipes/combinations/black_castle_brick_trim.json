@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:yellow_wool"
+  },
+  "input2": {
+    "item": "minestuck:black_castle_bricks"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:black_castle_brick_trim"
+  }
+}

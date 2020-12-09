@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:black_pawn_stained_glass"
+  },
+  "input2": {
+    "item": "minestuck:chessboard"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:black_crown_stained_glass"
+  }
+}
