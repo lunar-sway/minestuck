@@ -21,6 +21,7 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -30,14 +31,15 @@ public class MetalBoatEntity extends BoatEntity implements IEntityAdditionalSpaw
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private Type type;
+	@Nonnull
+	private Type type = Type.IRON;
 	
 	public MetalBoatEntity(EntityType<? extends MetalBoatEntity> type, World world)
 	{
 		super(type, world);
 	}
 	
-	public MetalBoatEntity(World world, double x, double y, double z, Type type)
+	public MetalBoatEntity(World world, double x, double y, double z, @Nonnull Type type)
 	{
 		super(MSEntityTypes.METAL_BOAT, world);
 		this.preventEntitySpawning = false;
