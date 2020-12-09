@@ -16,9 +16,11 @@ import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -62,6 +64,15 @@ public final class InfoTracker
 			ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
 			PlayerIdentifier identifier = Objects.requireNonNull(IdentifierHandler.encode(player));
 			SkaianetHandler.get(player.server).infoTracker.listenerMap.values().forEach(set -> set.removeIf(identifier::equals));
+		}
+	}
+	
+	@SubscribeEvent
+	public static void onServerTick(TickEvent.ServerTickEvent event)
+	{
+		if(event.phase == TickEvent.Phase.END)
+		{
+			SkaianetHandler.get(ServerLifecycleHooks.getCurrentServer()).infoTracker.checkAndSend();
 		}
 	}
 	
@@ -174,7 +185,7 @@ public final class InfoTracker
 			markDirty(connection.getServerIdentifier());
 	}
 	
-	void checkAndSend()
+	private void checkAndSend()
 	{
 		checkListeners();
 		
@@ -183,6 +194,9 @@ public final class InfoTracker
 			if(!entry.getValue().equals(skaianet.sessionHandler.getServerList(entry.getKey()).keySet()))
 				markDirty(entry.getKey());
 		}
+		
+		if(!toUpdate.isEmpty())
+			skaianet.checkData();
 		
 		for(PlayerIdentifier identifier : toUpdate)
 		{

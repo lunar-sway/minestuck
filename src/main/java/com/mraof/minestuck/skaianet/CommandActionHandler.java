@@ -98,7 +98,6 @@ public final class CommandActionHandler
 			updateLandChain |= clientConnection.hasEntered();
 		}
 		
-		skaianet.checkAndUpdate();
 		if(updateLandChain)
 			skaianet.infoTracker.reloadLandChains();
 		
@@ -170,7 +169,6 @@ public final class CommandActionHandler
 			//TODO give proper feedback to user. The operation will most likely have partially executed
 		}
 		
-		skaianet.checkAndUpdate();
 		skaianet.infoTracker.reloadLandChains();
 	}
 	

@@ -151,8 +151,6 @@ public final class SkaianetHandler
 				}
 			}
 		}
-		
-		checkAndUpdate();
 	}
 	
 	private SburbConnection tryCreateNewConnectionFor(PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException
@@ -207,7 +205,6 @@ public final class SkaianetHandler
 			{
 				getResumeList(isClient).put(player, computer);
 			}
-			checkAndUpdate();
 		});
 	}
 	
@@ -233,7 +230,6 @@ public final class SkaianetHandler
 		{
 			openedServers.put(player, computer);
 		}
-		checkAndUpdate();
 	}
 	
 	private boolean isConnectingBlocked(PlayerIdentifier player, boolean isClient)
@@ -259,12 +255,13 @@ public final class SkaianetHandler
 				computer.putClientBoolean("isResuming", false);
 				computer.putClientMessage(STOP_RESUME);
 			}
-			checkAndUpdate();
 		} else
 		{
 			SburbConnection activeConnection = getActiveConnection(player);
 			if(activeConnection != null)
+			{
 				closeConnection(activeConnection);
+			}
 		}
 	}
 	
@@ -276,7 +273,6 @@ public final class SkaianetHandler
 			resumingClients.remove(owner);
 			computer.putClientBoolean("isResuming", false);
 			computer.putClientMessage(STOP_RESUME);
-			checkAndUpdate();
 		} else
 		{
 			SburbConnection activeConnection = getActiveConnection(owner);
@@ -338,8 +334,6 @@ public final class SkaianetHandler
 		ConnectionCreatedEvent.ConnectionType type = getPrimaryConnection(connection.getClientIdentifier(), true).map(c -> !connection.equals(c)).orElse(true)
 				? ConnectionCreatedEvent.ConnectionType.SECONDARY : ConnectionCreatedEvent.ConnectionType.REGULAR;
 		MinecraftForge.EVENT_BUS.post(new ConnectionClosedEvent(mcServer, connection, sessionHandler.getPlayerSession(connection.getClientIdentifier()), type));
-		// TODO move this call further out the function call chain
-		checkAndUpdate();
 	}
 	
 	public void requestInfo(ServerPlayerEntity player, PlayerIdentifier p1)
@@ -361,13 +355,7 @@ public final class SkaianetHandler
 		return compound;
 	}
 	
-	void checkAndUpdate()
-	{
-		checkData();
-		infoTracker.checkAndSend();
-	}
-	
-	private void checkData()
+	void checkData()
 	{
 		if(!MinestuckConfig.SERVER.skaianetCheck.get())
 			return;
@@ -458,7 +446,6 @@ public final class SkaianetHandler
 		
 		SburbHandler.onEntry(mcServer, c.get());
 		
-		checkAndUpdate();
 		infoTracker.reloadLandChains();
 		
 		MinecraftForge.EVENT_BUS.post(new SburbEvent.OnEntry(mcServer, c.get(), sessionHandler.getPlayerSession(target)));
