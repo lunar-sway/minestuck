@@ -8,7 +8,7 @@ import com.mraof.minestuck.client.renderer.entity.frog.FrogRenderer;
 import com.mraof.minestuck.client.renderer.tileentity.GateRenderer;
 import com.mraof.minestuck.client.renderer.tileentity.HolopadRenderer;
 import com.mraof.minestuck.client.renderer.tileentity.SkaiaPortalRenderer;
-import com.mraof.minestuck.client.settings.MSKeyHandler;
+import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.computer.ComputerProgram;
 import com.mraof.minestuck.computer.SburbClient;
 import com.mraof.minestuck.computer.SburbServer;

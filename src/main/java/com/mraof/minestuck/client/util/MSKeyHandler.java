@@ -1,4 +1,4 @@
-package com.mraof.minestuck.client.settings;
+package com.mraof.minestuck.client.util;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
@@ -9,10 +9,12 @@ import com.mraof.minestuck.network.EffectTogglePacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.screen.inventory.CreativeScreen;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.client.util.InputMappings;
+import net.minecraft.inventory.container.Slot;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.event.TickEvent;
@@ -91,11 +93,13 @@ public class MSKeyHandler
 	{
 		if(InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), captchaKey.getKey().getKeyCode()) && !captchaKeyPressed) {
 
-				//This statement is here because for some reason 'slotNumber' always returns as 0 if it is referenced inside the creative inventory.
-			if (Minecraft.getInstance().currentScreen instanceof CreativeScreen && Minecraft.getInstance().player.openContainer instanceof CreativeScreen.CreativeContainer && ((ContainerScreen)Minecraft.getInstance().currentScreen).getSlotUnderMouse() != null && ((ContainerScreen)Minecraft.getInstance().currentScreen).getSlotUnderMouse().getHasStack())
-				MSPacketHandler.sendToServer(CaptchaDeckPacket.captchalogueInv(((ContainerScreen<?>)Minecraft.getInstance().currentScreen).getSlotUnderMouse().getSlotIndex()));
-			else if(Minecraft.getInstance().currentScreen instanceof ContainerScreen && ((ContainerScreen<?>)Minecraft.getInstance().currentScreen).getSlotUnderMouse() != null && ((ContainerScreen)Minecraft.getInstance().currentScreen).getSlotUnderMouse().getHasStack())
-				MSPacketHandler.sendToServer(CaptchaDeckPacket.captchalogueInv(((ContainerScreen<?>)Minecraft.getInstance().currentScreen).getSlotUnderMouse().slotNumber));
+			Screen screen = Minecraft.getInstance().currentScreen;
+			if(screen instanceof ContainerScreen<?> && screen.getFocused() == null && !(screen instanceof CreativeScreen))
+			{
+				Slot slot = ((ContainerScreen<?>) screen).getSlotUnderMouse();
+				if(slot != null)
+					MSPacketHandler.sendToServer(CaptchaDeckPacket.captchalogueInv(slot.slotNumber, ((ContainerScreen<?>) screen).getContainer().windowId));
+			}
 		}
 		
 		captchaKeyPressed = InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), captchaKey.getKey().getKeyCode());

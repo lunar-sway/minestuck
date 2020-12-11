@@ -2,7 +2,7 @@ package com.mraof.minestuck.client.gui.playerStats;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen.*;
-import com.mraof.minestuck.client.settings.MSKeyHandler;
+import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.computer.editmode.ClientEditHandler;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import com.mraof.minestuck.world.storage.ClientPlayerData;

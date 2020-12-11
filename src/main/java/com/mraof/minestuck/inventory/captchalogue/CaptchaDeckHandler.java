@@ -15,7 +15,6 @@ import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
@@ -79,7 +78,7 @@ public class CaptchaDeckHandler
 	
 	public static void useItem(ServerPlayerEntity player)
 	{
-		if(!(player.openContainer instanceof CaptchaDeckContainer))
+		if(!(player.openContainer instanceof CaptchaDeckContainer) || !canPlayerUseModus(player))
 			 return;
 		CaptchaDeckContainer container = (CaptchaDeckContainer) player.openContainer;
 		if(container.inventory.getStackInSlot(0).isEmpty())
@@ -152,20 +151,28 @@ public class CaptchaDeckHandler
 	
 	public static void captchalogueItem(ServerPlayerEntity player)
 	{
-		captchalogueItem(player, player.getHeldItemMainhand());
+		if(canPlayerUseModus(player) && hasModus(player))
+		{
+			captchalogueItem(player, player.getHeldItemMainhand());
+		}
 	}
 	
-	public static void captchalogueInventoryItem(ServerPlayerEntity player, int slotIndex)
+	public static void captchalogueItemInSlot(ServerPlayerEntity player, int slotIndex, int windowId)
 	{
-		System.out.println("Raw Slot: " + slotIndex);
-		//This statement is so that the server knows whether the item is in the hotbar or not because apparently THE "openContainer" CANT EDIT THE HOTBAR SLOTS.
-		if(player.openContainer.equals(player.container) && PlayerInventory.isHotbar(slotIndex))
+		if(canPlayerUseModus(player) && hasModus(player) && player.openContainer.windowId == windowId && player.openContainer.getCanCraft(player))
 		{
-			captchalogueItem(player, player.inventory.mainInventory.get(slotIndex));
-		}
-		else {
-			Slot slot = player.openContainer.getSlot(slotIndex);
-			captchalogueItem(player, slot.getStack());
+			Slot slot = slotIndex >= 0 && slotIndex < player.openContainer.inventorySlots.size() ? player.openContainer.getSlot(slotIndex) : null;
+			
+			if(slot != null && !slot.getStack().isEmpty() && slot.canTakeStack(player))
+			{
+				ItemStack stack = slot.decrStackSize(slot.getStack().getMaxStackSize());
+				captchalogueItem(player, stack);
+				//It is not guaranteed that we can put the item back, so if it wasn't captchalogued, launch it
+				if(!stack.isEmpty())
+					launchItem(player, stack);
+				
+				player.openContainer.detectAndSendChanges();
+			}
 		}
 	}
 	
@@ -228,6 +235,8 @@ public class CaptchaDeckHandler
 	
 	public static void getItem(ServerPlayerEntity player, int index, boolean asCard)
 	{
+		if(!canPlayerUseModus(player))
+			return;
 		Modus modus = getModus(player);
 		if(modus == null)
 			return;
@@ -349,6 +358,11 @@ public class CaptchaDeckHandler
 		return modus;
 	}
 	
+	private static boolean hasModus(ServerPlayerEntity player)
+	{
+		return getModus(player) != null;
+	}
+	
 	public static Modus getModus(ServerPlayerEntity player)
 	{
 		return PlayerSavedData.getData(player).getModus();
@@ -363,5 +377,10 @@ public class CaptchaDeckHandler
 	{
 		return stack1.getItem() == stack2.getItem() && ItemStack.areItemStackTagsEqual(stack1, stack2)
 				&& stack1.isStackable() && stack1.getCount() + stack2.getCount() < stack1.getMaxStackSize();
+	}
+	
+	private static boolean canPlayerUseModus(ServerPlayerEntity player)
+	{
+		return !player.isSpectator();
 	}
 }
