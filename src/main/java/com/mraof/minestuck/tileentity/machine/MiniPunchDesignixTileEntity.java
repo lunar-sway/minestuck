@@ -2,18 +2,13 @@ package com.mraof.minestuck.tileentity.machine;
 
 import com.mraof.minestuck.inventory.MiniPunchDesignixContainer;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.crafting.MSRecipeTypes;
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
-import com.mraof.minestuck.item.crafting.alchemy.CombinationMode;
-import com.mraof.minestuck.item.crafting.alchemy.ItemCombiner;
-import com.mraof.minestuck.item.crafting.alchemy.ItemCombinerWrapper;
+import com.mraof.minestuck.item.crafting.alchemy.*;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.text.ITextComponent;
@@ -97,7 +92,7 @@ public class MiniPunchDesignixTileEntity extends MachineProcessTileEntity implem
 		ItemStack output = AlchemyHelper.getDecodedItemDesignix(itemHandler.getStackInSlot(0));
 		if(!output.isEmpty() && AlchemyHelper.isPunchedCard(itemHandler.getStackInSlot(1)))
 		{
-			output = world.getRecipeManager().getRecipe(MSRecipeTypes.COMBINATION_TYPE, combinerInventory, world).map(IRecipe::getRecipeOutput).orElse(ItemStack.EMPTY);
+			output = CombinationRecipe.findResult(combinerInventory, world);
 		} else return output;
 		
 		if(!output.isEmpty())

@@ -4,9 +4,9 @@ import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.machine.PunchDesignixBlock;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.item.crafting.alchemy.CombinationMode;
+import com.mraof.minestuck.item.crafting.alchemy.CombinationRecipe;
 import com.mraof.minestuck.item.crafting.alchemy.CombinerWrapper;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.util.Debug;
@@ -16,7 +16,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -116,7 +115,7 @@ public class PunchDesignixTileEntity extends TileEntity
 				ItemStack output;
 				if(AlchemyHelper.isPunchedCard(getCard()))	//|| combination
 				{
-					output = world.getRecipeManager().getRecipe(MSRecipeTypes.COMBINATION_TYPE, new CombinerWrapper(heldStack, getCard(), CombinationMode.OR), world).map(IRecipe::getRecipeOutput).orElse(ItemStack.EMPTY);
+					output = CombinationRecipe.findResult(new CombinerWrapper(heldStack, getCard(), CombinationMode.OR), world);
 				} else output = AlchemyHelper.getDecodedItem(heldStack);
 				
 				if(!output.isEmpty())

@@ -5,9 +5,9 @@ import com.mraof.minestuck.block.EnumDowelType;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.machine.TotemLatheBlock;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.item.crafting.alchemy.CombinationMode;
+import com.mraof.minestuck.item.crafting.alchemy.CombinationRecipe;
 import com.mraof.minestuck.item.crafting.alchemy.CombinerWrapper;
 import com.mraof.minestuck.tileentity.ItemStackTileEntity;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
@@ -19,7 +19,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -323,7 +322,7 @@ public class TotemLatheTileEntity extends TileEntity
 			if(!card1.isEmpty() && !card2.isEmpty())
 				if(!AlchemyHelper.isPunchedCard(card1) || !AlchemyHelper.isPunchedCard(card2))
 					output = new ItemStack(MSBlocks.GENERIC_OBJECT);
-				else output = world.getRecipeManager().getRecipe(MSRecipeTypes.COMBINATION_TYPE, new CombinerWrapper(card1, card2, CombinationMode.AND), world).map(IRecipe::getRecipeOutput).orElse(ItemStack.EMPTY);
+				else output = CombinationRecipe.findResult(new CombinerWrapper(card1, card2, CombinationMode.AND), world);
 			else
 			{
 				ItemStack input = card1.isEmpty() ? card2 : card1;
