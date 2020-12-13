@@ -6,6 +6,7 @@ import com.mraof.minestuck.network.TransportalizerPacket;
 import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
@@ -20,6 +21,7 @@ public class TransportalizerScreen extends Screen
 
 	TransportalizerTileEntity te;
 	private TextFieldWidget destinationTextField;
+	private Button doneButton;
 	
 	
 	TransportalizerScreen(TransportalizerTileEntity te)
@@ -37,9 +39,12 @@ public class TransportalizerScreen extends Screen
 		this.destinationTextField.setMaxStringLength(4);
 		this.destinationTextField.setText(te.getDestId());
 		this.destinationTextField.setFocused2(true);
+		destinationTextField.setResponder(s -> doneButton.active = s.length() == 4);
 		addButton(destinationTextField);
+		setFocusedDefault(destinationTextField);
 		
-		addButton(new ExtendedButton(this.width / 2 - 20, yOffset + 50, 40, 20, I18n.format("gui.done"), button -> finish()));
+		addButton(doneButton = new ExtendedButton(this.width / 2 - 20, yOffset + 50, 40, 20, I18n.format("gui.done"), button -> finish()));
+		doneButton.active = destinationTextField.getText().length() == 4;
 	}
 	
 	@Override
