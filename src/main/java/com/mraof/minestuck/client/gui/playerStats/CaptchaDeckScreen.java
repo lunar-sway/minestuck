@@ -50,7 +50,7 @@ public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckCon
 	}
 	
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float par1, int xcor, int ycor)
+	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY)
 	{
 		sylladexMap.active = ClientPlayerData.getModus() != null;
 		modusButton.active = !container.inventory.getStackInSlot(0).isEmpty();
@@ -65,10 +65,8 @@ public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckCon
 	}
 	
 	@Override
-	protected void drawGuiContainerForegroundLayer(int xcor, int ycor)
+	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
 	{
-		drawTabTooltip(xcor, ycor);
-		
 		String message = getTitle().getFormattedText();
 		font.drawString(message, (this.width / 2F) - font.getStringWidth(message) / 2F - guiLeft, yOffset + 12 - guiTop, 0x404040);
 		

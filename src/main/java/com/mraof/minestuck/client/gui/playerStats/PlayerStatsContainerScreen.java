@@ -15,7 +15,7 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
 
-import java.util.Arrays;
+import java.util.Collections;
 
 import static com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen.*;
 
@@ -85,6 +85,7 @@ public abstract class PlayerStatsContainerScreen<T extends Container> extends Co
 		this.renderBackground();
 		super.render(mouseX, mouseY, partialTicks);
 		this.renderHoveredToolTip(mouseX, mouseY);
+		drawTabTooltip(mouseX, mouseY);
 	}
 	
 	protected void drawActiveTabAndIcons()
@@ -105,18 +106,18 @@ public abstract class PlayerStatsContainerScreen<T extends Container> extends Co
 			blit(xOffset + guiWidth + (tabWidth - 16)/2 - tabWidth, yOffset - tabHeight + tabOverlap + 8, 5*16, tabHeight*2, 16, 16);
 	}
 	
-	protected void drawTabTooltip(int xcor, int ycor)
+	protected void drawTabTooltip(int mouseX, int mouseY)
 	{
 		
 		RenderSystem.disableDepthTest();
-		if(ycor < yOffset && ycor > yOffset - tabHeight + 4)
+		if(mouseY < yOffset && mouseY > yOffset - tabHeight + 4)
 			for(int i = 0; i < (mode? NormalGuiType.values():EditmodeGuiType.values()).length; i++)
-				if(xcor < xOffset + i*(tabWidth + 2))
+				if(mouseX < xOffset + i*(tabWidth + 2))
 					break;
-				else if(xcor < xOffset + i*(tabWidth + 2) + tabWidth
+				else if(mouseX < xOffset + i*(tabWidth + 2) + tabWidth
 						&& (!mode || !NormalGuiType.values()[i].reqMedium() || SkaiaClient.enteredMedium(SkaiaClient.playerId) || minecraft.playerController.isInCreativeMode()))
-					renderTooltip(Arrays.asList(I18n.format(mode? NormalGuiType.values()[i].name:EditmodeGuiType.values()[i].name)),
-							xcor - guiLeft, ycor - guiTop, font);
+					renderTooltip(Collections.singletonList(I18n.format(mode ? NormalGuiType.values()[i].name : EditmodeGuiType.values()[i].name)),
+							mouseX, mouseY, font);
 		RenderSystem.enableDepthTest();
 		RenderSystem.disableLighting();
 	}
