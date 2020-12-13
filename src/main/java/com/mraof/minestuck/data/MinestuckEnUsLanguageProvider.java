@@ -400,6 +400,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.SHOCK_AXE_UNPOWERED, "Kundler Shock Axe");
 		addTooltip(MSItems.SHOCK_AXE_UNPOWERED, "An electric surprise!");
 		add(MSItems.SCRAXE, "Scraxe");
+		add(MSItems.LORENTZ_DISTRANSFORMATIONER, "Lorentz Distransformationer");
+		addTooltip(MSItems.LORENTZ_DISTRANSFORMATIONER, "In physics, the Lorentz transformations are a six-parameter family of linear transformations from a coordinate frame in spacetime to another frame that moves at a constant velocity relative to the former. The respective inverse transformation is then parametrized by the negative of this velocity.");
 		add(MSItems.PISTON_POWERED_POGO_AXEHAMMER, "Piston-Powered Pogo Pulverizer");
 		add(MSItems.RUBY_CROAK, "Ruby Croak");
 		add(MSItems.HEPHAESTUS_LUMBERJACK, "Hephaestus' Lumberjack");

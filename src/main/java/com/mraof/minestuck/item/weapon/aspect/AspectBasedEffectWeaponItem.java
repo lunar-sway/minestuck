@@ -1,6 +1,8 @@
-package com.mraof.minestuck.item.weapon;
+package com.mraof.minestuck.item.weapon.aspect;
 
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.weapon.MSToolType;
+import com.mraof.minestuck.item.weapon.WeaponItem;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.util.MSSoundEvents;
