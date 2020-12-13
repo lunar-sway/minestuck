@@ -162,7 +162,14 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		}
 		
 	}
-
+	
+	@Override
+	public void checkDespawn()
+	{
+		if(this.gristValue <= 0)
+			remove();
+	}
+	
 	/*
 	 * Returns if this entity is in water and will end up adding the waters velocity to the entity
 	 */
