@@ -10,7 +10,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.server.TicketType;
 
-public class Teleport
+public class Teleport	//TODO there might still be things that vanilla does that we should do as well. Also, is it feasible to move over to the vanilla teleport method?
 {
 	
 	public static Entity teleportEntity(Entity entity, ServerWorld world)
@@ -47,6 +47,10 @@ public class Teleport
 			
 			player.invulnerableDimensionChange = true;
 			player.setRotationYawHead(yaw);
+			
+			player.setExperienceLevel(player.experienceLevel);
+			player.setPlayerHealthUpdated();
+			
 		} else
 		{
 			yaw = MathHelper.wrapDegrees(yaw);	//I think we can trust the function input enough to not need this, but better safe then sorry?
