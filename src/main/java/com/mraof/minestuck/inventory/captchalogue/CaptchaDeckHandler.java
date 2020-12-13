@@ -3,6 +3,7 @@ package com.mraof.minestuck.inventory.captchalogue;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
+import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.item.BoondollarsItem;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
@@ -381,6 +382,6 @@ public class CaptchaDeckHandler
 	
 	private static boolean canPlayerUseModus(ServerPlayerEntity player)
 	{
-		return !player.isSpectator();
+		return !player.isSpectator() && ServerEditHandler.getData(player) == null;
 	}
 }
