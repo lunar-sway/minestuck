@@ -59,7 +59,7 @@ public class LichEntity extends UnderlingEntity
 	@Override
 	public GristSet getGristSpoils()
 	{
-		return GristHelper.generateUnderlingGristDrops(this, damageMap, 8);
+		return GristHelper.generateUnderlingGristDrops(this, damageMap, 120);
 	}
 	
 	@Override

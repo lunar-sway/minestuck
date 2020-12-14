@@ -50,7 +50,7 @@ public class WyrmEntity extends UnderlingEntity implements IEntityMultiPart
 	@Override
 	public GristSet getGristSpoils()
 	{
-		return GristHelper.generateUnderlingGristDrops(this, damageMap, 87);
+		return GristHelper.generateUnderlingGristDrops(this, damageMap, 300);
 	}
 	
 	@Override
