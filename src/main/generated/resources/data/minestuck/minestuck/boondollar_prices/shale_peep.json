@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minestuck:shale_peep"
+  },
+  "range": {
+    "min": 125.0,
+    "max": 150.0,
+    "type": "minecraft:uniform"
+  }
+}

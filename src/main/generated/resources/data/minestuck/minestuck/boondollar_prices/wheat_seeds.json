@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minecraft:wheat_seeds"
+  },
+  "range": {
+    "min": 15.0,
+    "max": 20.0,
+    "type": "minecraft:uniform"
+  }
+}

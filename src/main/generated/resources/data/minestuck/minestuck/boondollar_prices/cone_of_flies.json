@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minestuck:cone_of_flies"
+  },
+  "range": {
+    "min": 4.0,
+    "max": 6.0,
+    "type": "minecraft:uniform"
+  }
+}

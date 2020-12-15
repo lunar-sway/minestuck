@@ -6,7 +6,6 @@ import com.mraof.minestuck.computer.ProgramData;
 import com.mraof.minestuck.computer.editmode.DeployList;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortDialogue;
-import com.mraof.minestuck.entity.consort.ConsortRewardHandler;
 import com.mraof.minestuck.entry.ComputerBlockProcess;
 import com.mraof.minestuck.entry.EntryProcess;
 import com.mraof.minestuck.entry.RSEntryBlockProcess;
@@ -86,9 +85,6 @@ public class Minestuck
 		
 		//register ore generation
 		setupOverworldOreGeneration();
-		
-		//register consort shop prices
-		ConsortRewardHandler.registerMinestuckPrices();
 		
 		ConsortDialogue.init();
 		

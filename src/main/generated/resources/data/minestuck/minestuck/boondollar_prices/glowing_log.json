@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minestuck:glowing_log"
+  },
+  "range": {
+    "min": 20.0,
+    "max": 32.0,
+    "type": "minecraft:uniform"
+  }
+}

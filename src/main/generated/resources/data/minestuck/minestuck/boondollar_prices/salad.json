@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minestuck:salad"
+  },
+  "range": {
+    "min": 10.0,
+    "max": 14.0,
+    "type": "minecraft:uniform"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minecraft:pumpkin_pie"
+  },
+  "range": {
+    "min": 120.0,
+    "max": 160.0,
+    "type": "minecraft:uniform"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minestuck:metal_bat"
+  },
+  "range": {
+    "min": 400.0,
+    "max": 500.0,
+    "type": "minecraft:uniform"
+  }
+}

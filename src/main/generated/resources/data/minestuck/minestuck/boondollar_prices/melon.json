@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minecraft:melon"
+  },
+  "range": {
+    "min": 70.0,
+    "max": 80.0,
+    "type": "minecraft:uniform"
+  }
+}

@@ -32,6 +32,7 @@ public class ClientPlayerData
 	private static int rung;
 	private static float rungProgress;
 	private static long boondollars;
+	private static int consortReputation;
 	private static GristSet playerGrist;
 	private static GristSet targetGrist;
 	private static int playerColor;
@@ -74,6 +75,11 @@ public class ClientPlayerData
 	public static long getBoondollars()
 	{
 		return boondollars;
+	}
+	
+	public static int getConsortReputation()
+	{
+		return consortReputation;
 	}
 	
 	public static GristSet getClientGrist()
@@ -129,6 +135,11 @@ public class ClientPlayerData
 	public static void handleDataPacket(BoondollarDataPacket packet)
 	{
 		boondollars = packet.getBoondollars();
+	}
+	
+	public static void handleDataPacket(ConsortReputationDataPacket packet)
+	{
+		consortReputation = packet.getCount();
 	}
 	
 	public static void handleDataPacket(GristCachePacket packet)
