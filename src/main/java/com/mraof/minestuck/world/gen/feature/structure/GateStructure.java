@@ -2,9 +2,6 @@ package com.mraof.minestuck.world.gen.feature.structure;
 
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.world.biome.LandBiomeSet;
-import com.mraof.minestuck.world.gen.LandChunkGenerator;
-import com.mraof.minestuck.world.gen.LandGenSettings;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -19,7 +16,6 @@ import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.structure.StructureStart;
 import net.minecraft.world.gen.feature.template.TemplateManager;
-import net.minecraft.world.server.ServerWorld;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

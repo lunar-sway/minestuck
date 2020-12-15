@@ -80,7 +80,7 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 	@Override
 	public boolean isWithinHomeDistanceCurrentPosition()
 	{
-		return homeDimension != this.dimension || super.isWithinHomeDistanceCurrentPosition();
+		return homeDimension != this.world.getDimensionKey() || super.isWithinHomeDistanceCurrentPosition();
 	}
 	
 	@Override

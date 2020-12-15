@@ -2,20 +2,12 @@ package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.player.EnumAspect;
-import com.mraof.minestuck.world.biome.BiomeType;
-import com.mraof.minestuck.world.biome.LandWrapperBiome;
-import com.mraof.minestuck.world.gen.LandGenSettings;
-import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.IFeatureConfig;
-import net.minecraft.world.gen.placement.ChanceConfig;
-import net.minecraft.world.gen.placement.Placement;
 
 public class ThoughtLandType extends TitleLandType
 {

@@ -15,7 +15,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class MSDimensions
@@ -76,7 +75,7 @@ public class MSDimensions
 	
 	public static LandInfo getLandInfo(MinecraftServer server, RegistryKey<World> dimension)
 	{
-		return typeToInfoContainer.get(DimensionType.getKey(dimension));
+		return typeToInfoContainer.get(dimension.getLocation());
 	}
 	
 	public static boolean isLandDimension(RegistryKey<World> dimension)
@@ -92,12 +91,13 @@ public class MSDimensions
 	public static void updateLandMaps(SburbConnection connection)
 	{
 		typeToInfoContainer.put(connection.getLandInfo().getDimensionName(), connection.getLandInfo());
-		MSDimensionTypes.LANDS.dimToLandTypes.put(connection.getLandInfo().getDimensionName(), connection.getLandInfo().getLazyLandAspects());
+		//TODO
+		//MSDimensionTypes.LANDS.dimToLandTypes.put(connection.getLandInfo().getDimensionName(), connection.getLandInfo().getLazyLandAspects());
 	}
 	
 	public static void clear()
 	{
 		typeToInfoContainer.clear();
-		MSDimensionTypes.LANDS.dimToLandTypes.clear();
+		//MSDimensionTypes.LANDS.dimToLandTypes.clear();
 	}
 }

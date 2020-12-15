@@ -16,8 +16,6 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
-import java.util.Collections;
-
 import static com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen.*;
 
 public abstract class PlayerStatsContainerScreen<T extends Container> extends ContainerScreen<T>
@@ -117,8 +115,8 @@ public abstract class PlayerStatsContainerScreen<T extends Container> extends Co
 					break;
 				else if(mouseX < xOffset + i*(tabWidth + 2) + tabWidth
 						&& (!mode || !NormalGuiType.values()[i].reqMedium() || SkaiaClient.enteredMedium(SkaiaClient.playerId) || minecraft.playerController.isInCreativeMode()))
-					renderTooltip(matrixStack, new TranslationTextComponent(mode ? NormalGuiType.values()[i].name : EditmodeGuiType.values()[i].name)),
-							mouseX, mouseY, font);
+					renderTooltip(matrixStack, new TranslationTextComponent(mode ? NormalGuiType.values()[i].name : EditmodeGuiType.values()[i].name),
+							mouseX, mouseY);
 		RenderSystem.enableDepthTest();
 		RenderSystem.disableLighting();
 	}

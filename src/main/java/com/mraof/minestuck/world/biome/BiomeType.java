@@ -8,6 +8,6 @@ public enum BiomeType
 	
 	public boolean isBiomeOfType(Biome biome)
 	{
-		return biome instanceof LandBiome && ((LandBiome) biome).type == this;
+		return false;//biome instanceof LandBiome && ((LandBiome) biome).type == this; TODO
 	}
 }

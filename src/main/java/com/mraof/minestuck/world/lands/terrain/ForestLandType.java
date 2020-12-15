@@ -4,8 +4,6 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
-import com.mraof.minestuck.world.biome.BiomeType;
-import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.block.Blocks;
@@ -13,15 +11,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.DefaultBiomeFeatures;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.MultipleRandomFeatureConfig;
-import net.minecraft.world.gen.feature.OreFeatureConfig;
-import net.minecraft.world.gen.placement.AtSurfaceWithExtraConfig;
-import net.minecraft.world.gen.placement.CountRangeConfig;
-import net.minecraft.world.gen.placement.FrequencyConfig;
-import net.minecraft.world.gen.placement.Placement;
 
 import java.util.Random;
 

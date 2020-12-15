@@ -6,18 +6,16 @@ import com.mraof.minestuck.command.SburbConnectionCommand;
 import com.mraof.minestuck.entry.EntryProcess;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.world.MSDimensionTypes;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.DimensionManager;
 
 import java.util.List;
 import java.util.Optional;
@@ -128,7 +126,7 @@ public final class CommandActionHandler
 			if(serverConnection.isActive())
 				skaianet.closeConnection(clientConnection);
 			serverConnection.removeServerPlayer();
-			source.sendFeedback(new StringTextComponent(identifier.getUsername()+"'s old client player "+serverConnection.getClientIdentifier().getUsername()+" is now without a server player.").setStyle(new Style().setColor(TextFormatting.YELLOW)), true);
+			source.sendFeedback(new StringTextComponent(identifier.getUsername()+"'s old client player "+serverConnection.getClientIdentifier().getUsername()+" is now without a server player.").mergeStyle(TextFormatting.YELLOW), true);
 		}
 		
 		try
@@ -172,7 +170,7 @@ public final class CommandActionHandler
 		skaianet.infoTracker.reloadLandChains();
 	}
 	
-	private static SburbConnection makeConnectionWithLand(SkaianetHandler skaianet, LandTypePair landTypes, DimensionType dimensionName, PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException
+	private static SburbConnection makeConnectionWithLand(SkaianetHandler skaianet, LandTypePair landTypes, RegistryKey<World> dimensionName, PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException
 	{
 		SburbConnection c = new SburbConnection(client, server, skaianet);
 		c.setIsMain();
@@ -184,24 +182,25 @@ public final class CommandActionHandler
 		SburbHandler.onConnectionCreated(c);
 		
 		//The land types used by generation is set during connection init above, so placing gates currently has to go after that
-		ServerWorld world = DimensionManager.getWorld(skaianet.mcServer, dimensionName, false, true);
+		ServerWorld world = skaianet.mcServer.getWorld(dimensionName);
 		EntryProcess.placeGates(world);
 		
 		return c;
 	}
 	
 	
-	private static DimensionType createDebugLand(LandTypePair landTypes) throws CommandSyntaxException
+	private static RegistryKey<World> createDebugLand(LandTypePair landTypes) throws CommandSyntaxException
 	{
 		String base = "minestuck:debug_land";
 		
 		ResourceLocation landName = new ResourceLocation(base);
-		
+		/*
 		for(int i = 0; DimensionType.byName(landName) != null; i++)
 		{
 			landName = new ResourceLocation(base+"_"+i);
 		}
 		
 		return DimensionManager.registerDimension(landName, MSDimensionTypes.LANDS, null, true);
+		 */return null;
 	}
 }

@@ -27,7 +27,7 @@ public class OceanRundownFeature extends Feature<NoFeatureConfig>
 	@Override
 	public boolean generate(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
 	{
-		Biome oceanBiome = LandBiomeSet.getSet(generator.getSettings()).OCEAN.get();
+		Biome oceanBiome = LandBiomeSet.getSet(generator).OCEAN.get();
 		BlockPos pos2, pos3;
 		if(generator.getBiomeProvider().getBiomes(pos.getX(), world.getSeaLevel(), pos.getZ(), 3).contains(oceanBiome))
 		{

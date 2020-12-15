@@ -94,7 +94,7 @@ public class MSKeyHandler
 		if(InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), captchaKey.getKey().getKeyCode()) && !captchaKeyPressed) {
 
 			Screen screen = Minecraft.getInstance().currentScreen;
-			if(screen instanceof ContainerScreen<?> && screen.getFocused() == null && !(screen instanceof CreativeScreen))
+			if(screen instanceof ContainerScreen<?> && screen.getListener() == null && !(screen instanceof CreativeScreen))
 			{
 				Slot slot = ((ContainerScreen<?>) screen).getSlotUnderMouse();
 				if(slot != null)

@@ -126,7 +126,7 @@ public final class InfoTracker
 		return landChains;
 	}
 	
-	private void populateLandChain(List<List<ResourceLocation>> landChains, Set<DimensionType> checked, SburbConnection c)
+	private void populateLandChain(List<List<ResourceLocation>> landChains, Set<RegistryKey<World>> checked, SburbConnection c)
 	{
 		RegistryKey<World> dimensionType = c.getClientDimension();
 		if(c.isMain() && dimensionType != null && !checked.contains(dimensionType))
