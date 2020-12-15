@@ -209,7 +209,7 @@ public class CaptchaDeckHandler
 		
 		if(!stackInCard.isEmpty())
 		{
-			boolean captchaloguedItem = putInModus(player, modus, card);
+			boolean captchaloguedItem = putInModus(player, modus, stackInCard);
 			
 			if(captchaloguedItem && !spentCard)
 			{	//Item was captchalogued, but the card remained
