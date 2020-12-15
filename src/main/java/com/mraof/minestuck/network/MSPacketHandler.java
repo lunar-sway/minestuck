@@ -1,6 +1,7 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.network.computer.*;
 import com.mraof.minestuck.network.data.*;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
@@ -35,8 +36,11 @@ public class MSPacketHandler
 		registerMessage(CaptchaDeckPacket.class, CaptchaDeckPacket::decode);
 		registerMessage(ColorSelectPacket.class, ColorSelectPacket::decode);
 		registerMessage(TitleSelectPacket.class, TitleSelectPacket::decode);
-		registerMessage(SburbConnectPacket.class, SburbConnectPacket::decode);
-		registerMessage(SburbConnectClosedPacket.class, SburbConnectClosedPacket::decode);
+		registerMessage(ConnectToSburbServerPacket.class, ConnectToSburbServerPacket::decode);
+		registerMessage(OpenSburbServerPacket.class, OpenSburbServerPacket::decode);
+		registerMessage(ResumeSburbConnectionPacket.class, ResumeSburbConnectionPacket::decode);
+		registerMessage(CloseSburbConnectionPacket.class, CloseSburbConnectionPacket::decode);
+		registerMessage(CloseRemoteSburbConnectionPacket.class, CloseRemoteSburbConnectionPacket::decode);
 		registerMessage(ClearMessagePacket.class, ClearMessagePacket::decode);
 		registerMessage(SkaianetInfoPacket.class, SkaianetInfoPacket::decode);
 		registerMessage(DataCheckerPacket.class, DataCheckerPacket::decode);

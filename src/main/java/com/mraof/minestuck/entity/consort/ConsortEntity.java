@@ -78,6 +78,12 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 	}
 	
 	@Override
+	public boolean isWithinHomeDistanceCurrentPosition()
+	{
+		return homeDimension != this.dimension || super.isWithinHomeDistanceCurrentPosition();
+	}
+	
+	@Override
 	protected ActionResultType func_230254_b_(PlayerEntity player, Hand hand)
 	{
 		if(this.isAlive() && !player.isSneaking() && eventTimer < 0)

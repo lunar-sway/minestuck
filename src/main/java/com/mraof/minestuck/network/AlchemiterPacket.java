@@ -1,6 +1,6 @@
 package com.mraof.minestuck.network;
 
-import com.mraof.minestuck.tileentity.AlchemiterTileEntity;
+import com.mraof.minestuck.tileentity.machine.AlchemiterTileEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;

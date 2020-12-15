@@ -1,6 +1,6 @@
 package com.mraof.minestuck.block.machine;
 
-import com.mraof.minestuck.tileentity.CruxtruderTileEntity;
+import com.mraof.minestuck.tileentity.machine.CruxtruderTileEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
 import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.block.BlockState;

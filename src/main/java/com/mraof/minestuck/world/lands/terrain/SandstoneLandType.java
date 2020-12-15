@@ -3,6 +3,10 @@ package com.mraof.minestuck.world.lands.terrain;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
+import com.mraof.minestuck.world.biome.BiomeType;
+import com.mraof.minestuck.world.biome.LandWrapperBiome;
+import com.mraof.minestuck.world.gen.LandGenSettings;
+import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.block.Blocks;
@@ -10,6 +14,15 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.DefaultBiomeFeatures;
+import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.feature.BlockBlobConfig;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.OreFeatureConfig;
+import net.minecraft.world.gen.feature.SphereReplaceConfig;
+import net.minecraft.world.gen.placement.CountRangeConfig;
+import net.minecraft.world.gen.placement.FrequencyConfig;
+import net.minecraft.world.gen.placement.Placement;
 
 import java.util.Random;
 
@@ -81,8 +94,6 @@ public class SandstoneLandType extends TerrainLandType
 	public void setProperties(LandProperties properties)
 	{
 		properties.category = Biome.Category.MESA;
-		properties.downfall = 0.0F;
-		properties.temperature = 1.8F;
 	}
 	/*
 	@Override
@@ -97,17 +108,17 @@ public class SandstoneLandType extends TerrainLandType
 		BlockState sand = blocks.getBlockState("sand");
 		BlockState sandstone = blocks.getBlockState("upper");
 		
-		if(biome.staticBiome != MSBiomes.LAND_OCEAN)
+		if(biome.type != BiomeType.OCEAN)
 		{
-			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_PATCH.withConfiguration((new BlockClusterFeatureConfig.Builder(new SimpleBlockStateProvider(Blocks.DEAD_BUSH.getDefaultState()), new SimpleBlockPlacer())).tries(32).build()).withPlacement(Placement.COUNT_HEIGHTMAP_DOUBLE.configure(new FrequencyConfig(15))));
+			DefaultBiomeFeatures.addDeadBushes(biome);
 			biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.DISK.withConfiguration(new SphereReplaceConfig(sand, 7, 2, Lists.newArrayList(blocks.getBlockState("surface"), blocks.getBlockState("upper")))).withPlacement(Placement.COUNT_TOP_SOLID.configure(new FrequencyConfig(4))));
 		}
 		
 		
-		if(biome.staticBiome == MSBiomes.LAND_NORMAL)
+		if(biome.type == BiomeType.NORMAL)
 		{
 			biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.BLOCK_BLOB.withConfiguration(new BlockBlobConfig(sandstone, 0)).withPlacement(Placement.FOREST_ROCK.configure(new FrequencyConfig(3))));
-		} else if(biome.staticBiome == MSBiomes.LAND_ROUGH)
+		} else if(biome.type == BiomeType.ROUGH)
 		{
 			biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.BLOCK_BLOB.withConfiguration(new BlockBlobConfig(sandstone, 0)).withPlacement(Placement.FOREST_ROCK.configure(new FrequencyConfig(5))));
 		}

@@ -9,7 +9,7 @@ import com.mraof.minestuck.client.renderer.entity.frog.FrogRenderer;
 import com.mraof.minestuck.client.renderer.tileentity.GateRenderer;
 import com.mraof.minestuck.client.renderer.tileentity.HolopadRenderer;
 import com.mraof.minestuck.client.renderer.tileentity.SkaiaPortalRenderer;
-import com.mraof.minestuck.client.settings.MSKeyHandler;
+import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.computer.ComputerProgram;
 import com.mraof.minestuck.computer.SburbClient;
 import com.mraof.minestuck.computer.SburbServer;
@@ -92,6 +92,10 @@ public class ClientProxy
 		RenderTypeLookup.setRenderLayer(MSBlocks.BLOOMING_CACTUS, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.PETRIFIED_GRASS, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.PETRIFIED_POPPY, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.BLACK_CROWN_STAINED_GLASS, RenderType.getTranslucent());
+		RenderTypeLookup.setRenderLayer(MSBlocks.BLACK_PAWN_STAINED_GLASS, RenderType.getTranslucent());
+		RenderTypeLookup.setRenderLayer(MSBlocks.WHITE_CROWN_STAINED_GLASS, RenderType.getTranslucent());
+		RenderTypeLookup.setRenderLayer(MSBlocks.WHITE_PAWN_STAINED_GLASS, RenderType.getTranslucent());
 
 		MSKeyHandler.registerKeys();
 		

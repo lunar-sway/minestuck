@@ -3,7 +3,7 @@ package com.mraof.minestuck.block.machine;
 import com.mraof.minestuck.block.EnumDowelType;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.tileentity.ItemStackTileEntity;
-import com.mraof.minestuck.tileentity.TotemLatheTileEntity;
+import com.mraof.minestuck.tileentity.machine.TotemLatheTileEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
 import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.block.Block;

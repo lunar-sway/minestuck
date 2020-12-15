@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:dirt"
+  },
+  "input2": {
+    "item": "minecraft:light_gray_dye"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:light_gray_chess_dirt"
+  }
+}

@@ -1,8 +1,13 @@
 package com.mraof.minestuck.computer;
 
 import com.mraof.minestuck.client.gui.ColorSelectorScreen;
-import com.mraof.minestuck.skaianet.ReducedConnection;
-import com.mraof.minestuck.skaianet.SkaiaClient;
+import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.network.computer.CloseRemoteSburbConnectionPacket;
+import com.mraof.minestuck.network.computer.CloseSburbConnectionPacket;
+import com.mraof.minestuck.network.computer.ConnectToSburbServerPacket;
+import com.mraof.minestuck.network.computer.ResumeSburbConnectionPacket;
+import com.mraof.minestuck.skaianet.client.ReducedConnection;
+import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundNBT;
@@ -59,13 +64,15 @@ public class SburbClient extends ButtonListProgram
 	public void onButtonPressed(ComputerTileEntity te, String buttonName, Object[] data)
 	{
 		if(buttonName.equals(RESUME_BUTTON))
-			SkaiaClient.sendConnectRequest(te, SkaiaClient.getAssociatedPartner(te.ownerId, true), true);
+			MSPacketHandler.sendToServer(ResumeSburbConnectionPacket.asClient(te));
 		else if(buttonName.equals(CONNECT_BUTTON))
-			SkaiaClient.sendConnectRequest(te, (Integer) data[1], true);
+			MSPacketHandler.sendToServer(ConnectToSburbServerPacket.create(te, (Integer) data[1]));
 		else if(buttonName.equals(CLOSE_BUTTON))
 		{
-			ReducedConnection c = SkaiaClient.getClientConnection(te.ownerId);
-			SkaiaClient.sendCloseRequest(te, te.getData(getId()).getBoolean("isResuming") || c == null ? -1 : c.getServerId(), true);
+			CompoundNBT nbt = te.getData(getId());
+			if(!nbt.getBoolean("isResuming") && !nbt.getBoolean("connectedToServer"))
+				MSPacketHandler.sendToServer(CloseRemoteSburbConnectionPacket.asClient(te));
+			else MSPacketHandler.sendToServer(CloseSburbConnectionPacket.asClient(te));
 		} else if(buttonName.equals(SELECT_COLOR))
 			Minecraft.getInstance().displayGuiScreen(new ColorSelectorScreen(false));
 	}

@@ -1,7 +1,7 @@
 package com.mraof.minestuck.block.machine;
 
 import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.tileentity.IOwnable;
+import com.mraof.minestuck.tileentity.machine.IOwnable;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;

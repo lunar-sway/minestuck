@@ -7,14 +7,14 @@ import net.minecraft.util.math.GlobalPos;
 
 import java.util.Objects;
 
-public abstract class ComputerReference
+public interface ComputerReference
 {
-	public static ComputerReference of(ComputerTileEntity te)
+	static ComputerReference of(ComputerTileEntity te)
 	{
 		return new TEComputerReference(GlobalPos.getPosition(Objects.requireNonNull(te.getWorld()).getDimensionKey(), te.getPos()));
 	}
 	
-	public static ComputerReference read(CompoundNBT nbt)
+	static ComputerReference read(CompoundNBT nbt)
 	{
 		String type = nbt.getString("type");
 		if(type.equals("tile_entity"))
@@ -22,17 +22,17 @@ public abstract class ComputerReference
 		else throw new IllegalStateException("Invalid computer type: " + type);
 	}
 	
-	public CompoundNBT write(CompoundNBT nbt)
+	default CompoundNBT write(CompoundNBT nbt)
 	{
 		return nbt;
 	}
 	
 	//TODO look over usages to limit force loading of dimensions
-	public abstract ISburbComputer getComputer(MinecraftServer server);
+	ISburbComputer getComputer(MinecraftServer server);
 	
-	public abstract boolean matches(ISburbComputer computer);
+	boolean matches(ISburbComputer computer);
 	
-	public abstract boolean isInNether();
+	boolean isInNether();
 	
-	public abstract GlobalPos getPosForEditmode();
+	GlobalPos getPosForEditmode();
 }

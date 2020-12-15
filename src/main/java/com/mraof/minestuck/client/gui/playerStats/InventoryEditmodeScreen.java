@@ -77,11 +77,4 @@ public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<Editmode
 		}
 		return super.mouseClicked(xcor, ycor, mouseButton);
 	}
-	
-	@Override
-	protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int xcor, int ycor)
-	{
-		drawTabTooltip(matrixStack, xcor, ycor);
-	}
-	
 }

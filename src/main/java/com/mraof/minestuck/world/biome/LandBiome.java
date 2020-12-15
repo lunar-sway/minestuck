@@ -2,9 +2,12 @@ package com.mraof.minestuck.world.biome;
 
 /*public abstract class LandBiome extends AbstractBiome TODO
 {
-	public LandBiome(Builder biomeBuilder)
+	public final BiomeType type;
+	
+	public LandBiome(BiomeType type, Builder biomeBuilder)
 	{
 		super(biomeBuilder);
+		this.type = type;
 	}
 	
 	@Override
@@ -33,42 +36,54 @@ package com.mraof.minestuck.world.biome;
 		return super.doesSnowGenerate(worldIn, pos);
 	}
 	
+	public LandWrapperBiome createWrapper(LandProperties properties)
+	{throw new UnsupportedOperationException();}
+	
 	public static class Normal extends LandBiome
 	{
-		public Normal()
+		public Normal(RainType precipitation, float temperature, float downfall)
 		{
-			super(new Biome.Builder().precipitation(Biome.RainType.NONE).category(Biome.Category.NONE).depth(0.125F).scale(0.05F).temperature(0.7F).downfall(0.5F).waterColor(0x3F76E4).waterFogColor(0x050533));
+			super(BiomeType.NORMAL, new Biome.Builder().precipitation(precipitation).category(Biome.Category.NONE)
+					.depth(0.125F).scale(0.05F).temperature(temperature).downfall(downfall)
+					.waterColor(0x3F76E4).waterFogColor(0x050533));
 		}
 		
+		@Override
 		public LandWrapperBiome createWrapper(LandProperties properties)
 		{
-			return new LandWrapperBiome(this, properties.category, properties.rainType, properties.temperature, properties.downfall, properties.normalBiomeDepth, properties.normalBiomeScale);
+			return new LandWrapperBiome(this, properties.category, properties.normalBiomeDepth, properties.normalBiomeScale);
 		}
 	}
 	
 	public static class Rough extends LandBiome
 	{
-		public Rough()
+		public Rough(RainType precipitation, float temperature, float downfall)
 		{
-			super(new Biome.Builder().precipitation(Biome.RainType.NONE).category(Biome.Category.NONE).depth(0.45F).scale(0.3F).temperature(0.7F).downfall(0.5F).waterColor(0x3F76E4).waterFogColor(0x050533));
+			super(BiomeType.ROUGH, new Biome.Builder().precipitation(precipitation).category(Biome.Category.NONE)
+					.depth(0.45F).scale(0.3F).temperature(temperature).downfall(downfall)
+					.waterColor(0x3F76E4).waterFogColor(0x050533));
 		}
 		
+		@Override
 		public LandWrapperBiome createWrapper(LandProperties properties)
 		{
-			return new LandWrapperBiome(this, properties.category, properties.rainType, properties.temperature, properties.downfall, properties.roughBiomeDepth, properties.roughBiomeScale);
+			return new LandWrapperBiome(this, properties.category, properties.roughBiomeDepth, properties.roughBiomeScale);
 		}
 	}
 	
 	public static class Ocean extends LandBiome
 	{
-		public Ocean()
+		public Ocean(RainType precipitation, float temperature, float downfall)
 		{
-			super(new Biome.Builder().precipitation(Biome.RainType.NONE).category(Category.OCEAN).depth(-1.0F).scale(0.1F).temperature(0.7F).downfall(0.5F).waterColor(0x3F76E4).waterFogColor(0x050533));
+			super(BiomeType.OCEAN, new Biome.Builder().precipitation(precipitation).category(Category.OCEAN)
+					.depth(-1.0F).scale(0.1F).temperature(temperature).downfall(downfall)
+					.waterColor(0x3F76E4).waterFogColor(0x050533));
 		}
 		
+		@Override
 		public LandWrapperBiome createWrapper(LandProperties properties)
 		{
-			return new LandWrapperBiome(this, Category.OCEAN, properties.rainType, properties.temperature, properties.downfall, properties.oceanBiomeDepth, properties.oceanBiomeScale);
+			return new LandWrapperBiome(this, Category.OCEAN, properties.oceanBiomeDepth, properties.oceanBiomeScale);
 		}
 	}
 }*/

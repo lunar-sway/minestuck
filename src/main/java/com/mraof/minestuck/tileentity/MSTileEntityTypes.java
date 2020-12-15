@@ -2,6 +2,7 @@ package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.tileentity.machine.*;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;

@@ -3,9 +3,9 @@ package com.mraof.minestuck.client.gui.playerStats;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen.*;
-import com.mraof.minestuck.client.settings.MSKeyHandler;
+import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.computer.editmode.ClientEditHandler;
-import com.mraof.minestuck.skaianet.SkaiaClient;
+import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -15,6 +15,8 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+
+import java.util.Collections;
 
 import static com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen.*;
 
@@ -84,6 +86,7 @@ public abstract class PlayerStatsContainerScreen<T extends Container> extends Co
 		this.renderBackground(matrixStack);
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
 		this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
+		drawTabTooltip(matrixStack, mouseX, mouseY);
 	}
 	
 	protected void drawActiveTabAndIcons(MatrixStack matrixStack)
@@ -104,18 +107,18 @@ public abstract class PlayerStatsContainerScreen<T extends Container> extends Co
 			blit(matrixStack, xOffset + guiWidth + (tabWidth - 16)/2 - tabWidth, yOffset - tabHeight + tabOverlap + 8, 5*16, tabHeight*2, 16, 16);
 	}
 	
-	protected void drawTabTooltip(MatrixStack matrixStack, int xcor, int ycor)
+	protected void drawTabTooltip(MatrixStack matrixStack, int mouseX, int mouseY)
 	{
 		
 		RenderSystem.disableDepthTest();
-		if(ycor < yOffset && ycor > yOffset - tabHeight + 4)
+		if(mouseY < yOffset && mouseY > yOffset - tabHeight + 4)
 			for(int i = 0; i < (mode? NormalGuiType.values():EditmodeGuiType.values()).length; i++)
-				if(xcor < xOffset + i*(tabWidth + 2))
+				if(mouseX < xOffset + i*(tabWidth + 2))
 					break;
-				else if(xcor < xOffset + i*(tabWidth + 2) + tabWidth
+				else if(mouseX < xOffset + i*(tabWidth + 2) + tabWidth
 						&& (!mode || !NormalGuiType.values()[i].reqMedium() || SkaiaClient.enteredMedium(SkaiaClient.playerId) || minecraft.playerController.isInCreativeMode()))
-					renderTooltip(matrixStack, new TranslationTextComponent(mode? NormalGuiType.values()[i].name:EditmodeGuiType.values()[i].name),
-							xcor - guiLeft, ycor - guiTop);
+					renderTooltip(matrixStack, new TranslationTextComponent(mode ? NormalGuiType.values()[i].name : EditmodeGuiType.values()[i].name)),
+							mouseX, mouseY, font);
 		RenderSystem.enableDepthTest();
 		RenderSystem.disableLighting();
 	}

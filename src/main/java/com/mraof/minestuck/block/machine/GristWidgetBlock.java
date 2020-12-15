@@ -2,8 +2,8 @@ package com.mraof.minestuck.block.machine;
 
 import com.mraof.minestuck.block.MSBlockShapes;
 import com.mraof.minestuck.block.MSProperties;
-import com.mraof.minestuck.tileentity.GristWidgetTileEntity;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
+import com.mraof.minestuck.tileentity.machine.GristWidgetTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.state.BooleanProperty;

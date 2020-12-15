@@ -2,7 +2,7 @@ package com.mraof.minestuck.block.machine;
 
 import com.mraof.minestuck.block.EnumDowelType;
 import com.mraof.minestuck.block.MSProperties;
-import com.mraof.minestuck.tileentity.AlchemiterTileEntity;
+import com.mraof.minestuck.tileentity.machine.AlchemiterTileEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
 import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.block.Block;

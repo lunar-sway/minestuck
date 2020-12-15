@@ -1,8 +1,7 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.client.gui.playerStats.DataCheckerScreen;
-import com.mraof.minestuck.skaianet.SessionHandler;
-import com.mraof.minestuck.util.DataCheckerPermission;
+import com.mraof.minestuck.skaianet.DataCheckerManager;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.CompressedStreamTools;
@@ -77,7 +76,7 @@ public class DataCheckerPacket implements PlayToBothPacket
 			}
 		}
 		
-		return new DataCheckerPacket(index, nbt);
+		return new DataCheckerPacket(packetIndex, nbt);
 	}
 	
 	@Override
@@ -90,10 +89,6 @@ public class DataCheckerPacket implements PlayToBothPacket
 	@Override
 	public void execute(ServerPlayerEntity player)
 	{
-		if(DataCheckerPermission.hasPermission(player))
-		{
-			CompoundNBT data = SessionHandler.get(player.world).createDataTag();
-			MSPacketHandler.sendToPlayer(DataCheckerPacket.data(packetIndex, data), player);
-		}
+		DataCheckerManager.onDataRequest(player, packetIndex);
 	}
 }

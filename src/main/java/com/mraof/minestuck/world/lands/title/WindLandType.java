@@ -5,7 +5,10 @@ import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegi
 import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.world.gen.placement.ChanceConfig;
+import net.minecraft.world.gen.placement.Placement;
 
 public class WindLandType extends TitleLandType
 {
@@ -33,8 +36,6 @@ public class WindLandType extends TitleLandType
 	public void setProperties(LandProperties properties)
 	{
 		properties.mergeFogColor(new Vector3d(0.1, 0.2, 0.8), 0.3F);
-		if(properties.rainType == Biome.RainType.NONE)
-			properties.rainType = Biome.RainType.RAIN;
 		if(properties.forceRain == LandProperties.ForceType.OFF)
 			properties.forceRain = LandProperties.ForceType.DEFAULT;
 		

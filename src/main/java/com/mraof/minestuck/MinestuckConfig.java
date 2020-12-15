@@ -215,7 +215,7 @@ public class MinestuckConfig
 			builder.push("medium");
 			canBreakGates = builder.comment("Lets gates be destroyed by explosions. Turning this off will make gates use the same explosion resistance as bedrock.")
 					.define("canBreakGates",true);
-			disableGiclops = builder.comment("Right now, the giclops pathfinding is currently causing huge amounts of lag due to their size. This option is a short-term solution that will disable giclops spawning and remove all existing giclopes.")
+			disableGiclops = builder.comment("Right now, the giclops pathfinding is currently causing huge amounts of lag due to their size. This option is a short-term solution that if true will disable giclops spawning and remove all existing giclopes.")
 					.define("disableGiclops",true);
 			naturalImpSpawn = builder.comment("Determines if imps will spawn naturally. Note that this does not affect other spawning methods or any imps that has already spawned.")
 					.define("naturalImpSpawn",true);

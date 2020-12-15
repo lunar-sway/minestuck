@@ -2,6 +2,11 @@ package com.mraof.minestuck.world.gen.feature.structure.village;
 
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.world.biome.LandBiomeSet;
+import com.mraof.minestuck.world.gen.LandGenSettings;
+import com.mraof.minestuck.world.lands.LandTypePair;
+import net.minecraft.util.SharedSeedRandom;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.util.registry.DynamicRegistries;
 import net.minecraft.world.biome.Biome;

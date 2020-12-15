@@ -3,7 +3,7 @@ package com.mraof.minestuck.client.gui;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.inventory.MiniCruxtruderContainer;
-import com.mraof.minestuck.tileentity.MiniCruxtruderTileEntity;
+import com.mraof.minestuck.tileentity.machine.MiniCruxtruderTileEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;

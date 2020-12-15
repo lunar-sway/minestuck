@@ -13,6 +13,8 @@ import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
+import com.mraof.minestuck.skaianet.TitleSelectionHook;
+import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import com.mraof.minestuck.world.storage.PlayerData;
@@ -64,6 +66,7 @@ public class ServerEventHandler
 	{
 		IdentifierHandler.clear();
 		SkaianetHandler.clear();
+		MSDimensions.clear();
 		MSFeatures.LAND_GATE.clearCache();
 	}
 	
@@ -79,7 +82,7 @@ public class ServerEventHandler
 				if(time != lastDay)
 				{
 					lastDay = time;
-					SkaianetHandler.get(event.world.getServer()).resetGivenItems();
+					SburbHandler.resetGivenItems(event.world.getServer());
 				}
 			}
 			
@@ -109,7 +112,7 @@ public class ServerEventHandler
 				Echeladder.increaseProgress(player, exp);
 		}
 		if(event.getEntity() instanceof ServerPlayerEntity)
-			SburbHandler.cancelSelection((ServerPlayerEntity) event.getEntity());
+			TitleSelectionHook.cancelSelection((ServerPlayerEntity) event.getEntity());
 	}
 
 	//Gets reset after AttackEntityEvent but before LivingHurtEvent, but is used in determining if it's a critical hit
@@ -166,7 +169,7 @@ public class ServerEventHandler
 	@SubscribeEvent
 	public static void playerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event)
 	{
-		SburbHandler.cancelSelection((ServerPlayerEntity) event.getPlayer());
+		TitleSelectionHook.cancelSelection((ServerPlayerEntity) event.getPlayer());
 		
 		PlayerSavedData.getData((ServerPlayerEntity) event.getPlayer()).getEcheladder().resendAttributes(event.getPlayer());
 	}

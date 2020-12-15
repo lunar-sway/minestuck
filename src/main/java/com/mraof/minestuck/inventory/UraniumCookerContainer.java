@@ -1,20 +1,24 @@
 package com.mraof.minestuck.inventory;
 
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.inventory.slot.InputSlot;
 import com.mraof.minestuck.inventory.slot.OutputSlot;
 import com.mraof.minestuck.item.MSItems;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IIntArray;
+import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.IntArray;
 import net.minecraft.util.IntReferenceHolder;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
 
@@ -28,28 +32,26 @@ public class UraniumCookerContainer extends MachineContainer
 	private static final int itemOutputX = 117;
 	private static final int itemOutputY = 35;
 	
-	private final IInventory cookerInventory;
 	private final IntReferenceHolder fuelHolder;
 	
 	public UraniumCookerContainer(int windowId, PlayerInventory playerInventory, PacketBuffer buffer)
 	{
-		this(MSContainerTypes.URANIUM_COOKER, windowId, playerInventory, new Inventory(3), new IntArray(3), IntReferenceHolder.single(), buffer.readBlockPos());
+		this(MSContainerTypes.URANIUM_COOKER, windowId, playerInventory, new ItemStackHandler(3), new IntArray(3), IntReferenceHolder.single(), IWorldPosCallable.DUMMY, buffer.readBlockPos());
 	}
 	
-	public UraniumCookerContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, IntReferenceHolder fuelHolder, BlockPos machinePos)
+	public UraniumCookerContainer(int windowId, PlayerInventory playerInventory, IItemHandler inventory, IIntArray parameters, IntReferenceHolder fuelHolder, IWorldPosCallable position, BlockPos machinePos)
 	{
-		this(MSContainerTypes.URANIUM_COOKER, windowId, playerInventory, inventory, parameters, fuelHolder, machinePos);
+		this(MSContainerTypes.URANIUM_COOKER, windowId, playerInventory, inventory, parameters, fuelHolder, position, machinePos);
 	}
 	
-	public UraniumCookerContainer(ContainerType<? extends UraniumCookerContainer> type, int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, IntReferenceHolder fuelHolder, BlockPos machinePos)
+	public UraniumCookerContainer(ContainerType<? extends UraniumCookerContainer> type, int windowId, PlayerInventory playerInventory, IItemHandler inventory, IIntArray parameters, IntReferenceHolder fuelHolder, IWorldPosCallable position, BlockPos machinePos)
 	{
-		super(type, windowId, parameters, machinePos);
+		super(type, windowId, parameters, position, machinePos);
 		
-		assertInventorySize(inventory, 3);
-		this.cookerInventory = inventory;
+		assertItemHandlerSize(inventory, 3);
 		this.fuelHolder = fuelHolder;
 		
-		addSlot(new Slot(inventory, 0, itemInputX, itemInputY));
+		addSlot(new SlotItemHandler(inventory, 0, itemInputX, itemInputY));
 		addSlot(new InputSlot(inventory, 1, uraniumInputX, uraniumInputY, MSItems.RAW_URANIUM));
 		addSlot(new OutputSlot(inventory, 2, itemOutputX, itemOutputY));
 		trackInt(fuelHolder);
@@ -58,9 +60,9 @@ public class UraniumCookerContainer extends MachineContainer
 	}
 	
 	@Override
-	public boolean canInteractWith(PlayerEntity player)
+	protected Block getValidBlock()
 	{
-		return cookerInventory.isUsableByPlayer(player);
+		return MSBlocks.URANIUM_COOKER;
 	}
 	
 	protected void bindPlayerInventory(PlayerInventory playerInventory)

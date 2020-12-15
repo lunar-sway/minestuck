@@ -5,14 +5,15 @@ import com.mraof.minestuck.computer.ISburbComputer;
 import com.mraof.minestuck.computer.editmode.DeployEntry;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
+import com.mraof.minestuck.event.ConnectionCreatedEvent;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;
+import com.mraof.minestuck.skaianet.client.ReducedConnection;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.lands.LandTypePair;
-import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
-import com.mraof.minestuck.world.lands.title.TitleLandType;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -20,18 +21,26 @@ import net.minecraft.nbt.StringNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
 
-import java.util.*;
+import javax.annotation.Nonnull;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Random;
+import java.util.Set;
 
 public final class SburbConnection
 {
-	private final SkaianetHandler handler;
+	final SkaianetHandler skaianet;
 	
+	@Nonnull
 	private final PlayerIdentifier clientIdentifier;
+	@Nonnull
 	private PlayerIdentifier serverIdentifier;
 	private ComputerReference clientComputer;
 	private ComputerReference serverComputer;
+	private Session session;
 	
 	private boolean isActive;
 	private boolean isMain;
@@ -45,22 +54,22 @@ public final class SburbConnection
 	//Only used by the edit handler
 	private ListNBT inventory;
 	
-	SburbConnection(PlayerIdentifier client, SkaianetHandler handler)
+	SburbConnection(PlayerIdentifier client, SkaianetHandler skaianet)
 	{
-		this(client, IdentifierHandler.NULL_IDENTIFIER, handler);
+		this(client, IdentifierHandler.NULL_IDENTIFIER, skaianet);
 	}
 	
-	SburbConnection(PlayerIdentifier client, PlayerIdentifier server, SkaianetHandler handler)
+	SburbConnection(PlayerIdentifier client, PlayerIdentifier server, SkaianetHandler skaianet)
 	{
-		clientIdentifier = client;
-		serverIdentifier = server;
-		this.handler = handler;
+		clientIdentifier = Objects.requireNonNull(client);
+		serverIdentifier = Objects.requireNonNull(server);
+		this.skaianet = skaianet;
 		this.lockedToSession = false;
 	}
 	
-	SburbConnection(CompoundNBT nbt, SkaianetHandler handler)
+	SburbConnection(CompoundNBT nbt, SkaianetHandler skaianet)
 	{
-		this.handler = handler;
+		this.skaianet = skaianet;
 		isMain = nbt.getBoolean("IsMain");
 		boolean active = true;
 		if(nbt.contains("Inventory", Constants.NBT.TAG_LIST))
@@ -82,7 +91,9 @@ public final class SburbConnection
 		{
 			try
 			{
-				setActive(ComputerReference.read(nbt.getCompound("client_computer")), ComputerReference.read(nbt.getCompound("server_computer")));
+				clientComputer = ComputerReference.read(nbt.getCompound("client_computer"));
+				serverComputer = ComputerReference.read(nbt.getCompound("server_computer"));
+				isActive = true;
 			} catch(Exception e)
 			{
 				Debug.logger.error("Unable to read computer position for sburb connection between "+ clientIdentifier.getUsername()+" and "+serverIdentifier.getUsername()+", setting connection to be inactive. Cause: ", e);
@@ -90,8 +101,8 @@ public final class SburbConnection
 		}
 		if(nbt.contains("ClientLand", Constants.NBT.TAG_COMPOUND))
 		{
-			clientLandInfo = LandInfo.read(nbt.getCompound("ClientLand"), handler, getClientIdentifier());
-			handler.updateLandMaps(this);
+			clientLandInfo = LandInfo.read(nbt.getCompound("ClientLand"), skaianet, getClientIdentifier());
+			MSDimensions.updateLandMaps(this);
 			hasEntered = nbt.contains("has_entered") ? nbt.getBoolean("has_entered") : true;
 		}
 		artifactType = nbt.getInt("artifact");
@@ -132,13 +143,42 @@ public final class SburbConnection
 		return nbt;
 	}
 	
-	void setActive(ComputerReference client, ComputerReference server)
+	public Session getSession()
 	{
+		return session;
+	}
+	
+	void setSession(Session session)
+	{
+		this.session = session;
+	}
+	
+	void copyComputerReferences(SburbConnection connection)
+	{
+		if(!connection.isActive() || !connection.getClientIdentifier().equals(clientIdentifier)
+				|| !connection.getServerIdentifier().equals(serverIdentifier))
+			throw new IllegalArgumentException();
+		clientComputer = connection.getClientComputer();
+		serverComputer = connection.getServerComputer();
+		isActive = true;
+	}
+	
+	void setActive(ISburbComputer client, ISburbComputer server, ConnectionCreatedEvent.ConnectionType type)
+	{
+		if(isActive())
+			throw new IllegalStateException("Should not activate sburb connection when already active");
 		Objects.requireNonNull(client);
 		Objects.requireNonNull(server);
-		clientComputer = client;
-		serverComputer = server;
+		
+		clientComputer = client.createReference();
+		serverComputer = server.createReference();
 		isActive = true;
+		skaianet.infoTracker.markDirty(this);
+		
+		client.connected(serverIdentifier, true);
+		server.connected(clientIdentifier, false);
+		
+		MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(skaianet.mcServer, this, session, type));
 	}
 	
 	void close()
@@ -146,13 +186,16 @@ public final class SburbConnection
 		clientComputer = null;
 		serverComputer = null;
 		isActive = false;
+		skaianet.infoTracker.markDirty(this);
 	}
 	
+	@Nonnull
 	public PlayerIdentifier getClientIdentifier()
 	{
 		return clientIdentifier;
 	}
 	
+	@Nonnull
 	public PlayerIdentifier getServerIdentifier()
 	{
 		return serverIdentifier;
@@ -165,14 +208,26 @@ public final class SburbConnection
 	
 	void removeServerPlayer()
 	{
+		skaianet.infoTracker.markDirty(this);
 		serverIdentifier = IdentifierHandler.NULL_IDENTIFIER;
+		skaianet.sessionHandler.onConnectionChainBroken(session);
 	}
 	
-	void setNewServerPlayer(PlayerIdentifier identifier)
+	void setNewServerPlayer(PlayerIdentifier server) throws MergeResult.SessionMergeException
 	{
 		if(hasServerPlayer())
 			throw new IllegalStateException("Connection already has server player");
-		else serverIdentifier = identifier;
+		if(skaianet.getPrimaryConnection(server, false).isPresent())
+			throw MergeResult.GENERIC_FAIL.exception();
+		skaianet.sessionHandler.prepareSessionFor(clientIdentifier, server);	//Make sure that it is fine to add the server here session-wise
+		
+		serverIdentifier = Objects.requireNonNull(server);
+		skaianet.infoTracker.markDirty(this);
+	}
+	
+	boolean hasPlayer(PlayerIdentifier player)
+	{
+		return clientIdentifier.equals(player) || serverIdentifier.equals(player);
 	}
 	
 	public ComputerReference getClientComputer()
@@ -193,6 +248,16 @@ public final class SburbConnection
 	{
 		return isActive && getServerIdentifier().equals(computer.getOwner()) && serverComputer.matches(computer);
 	}
+	void updateComputer(ISburbComputer oldComputer, ComputerReference newComputer)
+	{
+		if(isActive())
+		{
+			if(clientComputer.matches(oldComputer))
+				clientComputer = Objects.requireNonNull(newComputer);
+			if(serverComputer.matches(oldComputer))
+				serverComputer = Objects.requireNonNull(newComputer);
+		}
+	}
 	public boolean isMain(){return isMain;}
 	public boolean isActive()
 	{
@@ -203,6 +268,7 @@ public final class SburbConnection
 		if(!isMain)
 		{
 			isMain = true;
+			skaianet.infoTracker.markDirty(this);
 		}
 	}
 	
@@ -214,7 +280,7 @@ public final class SburbConnection
 	{
 		if(hasEntered())
 		{
-			Title title = PlayerSavedData.getData(getClientIdentifier(), handler.mcServer).getTitle();
+			Title title = PlayerSavedData.getData(getClientIdentifier(), skaianet.mcServer).getTitle();
 			if(title == null)
 				Debug.warnf("Found player %s that has entered, but did not have a title!", getClientIdentifier().getUsername());
 			return title;
@@ -228,7 +294,7 @@ public final class SburbConnection
 	{
 		return getLandInfo() == null ? null : getLandInfo().getDimensionType();
 	}
-	LandInfo getLandInfo()
+	public LandInfo getLandInfo()
 	{
 		return clientLandInfo;
 	}
@@ -239,7 +305,7 @@ public final class SburbConnection
 		else
 		{
 			clientLandInfo = new LandInfo(clientIdentifier, landTypes, dimension, new Random());	//TODO handle random better
-			handler.updateLandMaps(this);
+			MSDimensions.updateLandMaps(this);
 		}
 	}
 	void setHasEntered()
@@ -249,18 +315,28 @@ public final class SburbConnection
 		if(hasEntered)
 			throw new IllegalStateException("Can't have entered twice");
 		hasEntered = true;
+		skaianet.infoTracker.markDirty(this);
 	}
 	public boolean hasGivenItem(DeployEntry item) { return givenItemList.contains(item.getName()); }
 	public void setHasGivenItem(DeployEntry item)
 	{
 		if(givenItemList.add(item.getName()))
 		{
-			EditData data = ServerEditHandler.getData(handler.mcServer, this);
+			EditData data = ServerEditHandler.getData(skaianet.mcServer, this);
 			if(data != null)
 				data.sendGivenItemsToEditor();
 		}
 	}
-	void resetGivenItems() { givenItemList.clear(); }
+	void resetGivenItems()
+	{
+		if(!givenItemList.isEmpty())
+		{
+			givenItemList.clear();
+			EditData data = ServerEditHandler.getData(skaianet.mcServer, this);
+			if(data != null)
+				data.sendGivenItemsToEditor();
+		}
+	}
 	
 	public ListNBT getEditmodeInventory()
 	{
@@ -295,76 +371,5 @@ public final class SburbConnection
 		buffer.writeString(getClientIdentifier().getUsername(), 16);
 		buffer.writeInt(getServerIdentifier().getId());
 		buffer.writeString(getServerIdentifier().getUsername(), 16);
-	}
-	
-	/**
-	 * Creates data for this connection to be sent to the data checker screen
-	 */
-	CompoundNBT createDataTag(Set<PlayerIdentifier> playerSet, Map<PlayerIdentifier, PredefineData> predefinedPlayers)
-	{
-		if(isMain())
-			playerSet.add(getClientIdentifier());
-		CompoundNBT connectionTag = new CompoundNBT();
-		connectionTag.putString("client", getClientIdentifier().getUsername());
-		connectionTag.putString("clientId", getClientIdentifier().getCommandString());
-		if(hasServerPlayer())
-			connectionTag.putString("server", getServerIdentifier().getUsername());
-		connectionTag.putBoolean("isMain", isMain());
-		connectionTag.putBoolean("isActive", isActive());
-		if(isMain())
-		{
-			if(clientLandInfo != null)
-			{
-				connectionTag.putString("clientDim", getClientDimension().getRegistryName().toString());
-				connectionTag.putString("landType1", clientLandInfo.landName1());
-				connectionTag.putString("landType2", clientLandInfo.landName2());
-				Title title = PlayerSavedData.getData(getClientIdentifier(), handler.mcServer).getTitle();
-				if(title != null)
-				{
-					connectionTag.putByte("class", (byte) title.getHeroClass().ordinal());
-					connectionTag.putByte("aspect", (byte) title.getHeroAspect().ordinal());
-				}
-			} else if(predefinedPlayers.containsKey(getClientIdentifier()))
-			{
-				PredefineData data = predefinedPlayers.get(getClientIdentifier());
-				putPredefinedDataToTag(connectionTag, data);
-			}
-		}
-		return connectionTag;
-	}
-	
-	/**
-	 * Creates data to be sent to the data checker screen for players with predefined data but without a connection
-	 */
-	static CompoundNBT cratePredefineDataTag(PlayerIdentifier identifier, PredefineData data)
-	{
-		CompoundNBT connectionTag = new CompoundNBT();
-		
-		connectionTag.putString("client", identifier.getUsername());
-		connectionTag.putString("clientId", identifier.getCommandString());
-		connectionTag.putBoolean("isMain", true);
-		connectionTag.putBoolean("isActive", false);
-		connectionTag.putInt("clientDim", 0);
-		
-		putPredefinedDataToTag(connectionTag, data);
-		
-		return connectionTag;
-	}
-	
-	private static void putPredefinedDataToTag(CompoundNBT nbt, PredefineData data)
-	{
-		Title title = data.getTitle();
-		if(title != null)
-		{
-			nbt.putByte("class", (byte) data.getTitle().getHeroClass().ordinal());
-			nbt.putByte("aspect", (byte) data.getTitle().getHeroAspect().ordinal());
-		}
-		
-		TerrainLandType terrainType = data.getTerrainLandType();
-		TitleLandType titleType = data.getTitleLandType();
-		if(terrainType != null)
-			nbt.putString("terrainLandType", terrainType.getRegistryName().toString());
-		if(titleType != null)
-			nbt.putString("titleLandType", titleType.getRegistryName().toString());
 	}
 }

@@ -166,8 +166,11 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 			
 			if(!dropCandy)
 			{
-				for(GristAmount gristType : grist.getAmounts())
-					this.world.addEntity(new GristEntity(world, randX(), this.getPosY(), randZ(), gristType));
+				for(GristAmount gristAmount : grist.getAmounts())
+				{
+					if(gristAmount.getAmount() > 0)
+						this.world.addEntity(new GristEntity(world, randX(), this.getPosY(), randZ(), gristAmount));
+				}
 			} else
 			{
 				for(GristAmount gristType : grist.getAmounts())

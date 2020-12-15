@@ -5,8 +5,8 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.skaianet.CommandActionHandler;
 import com.mraof.minestuck.skaianet.MergeResult;
-import com.mraof.minestuck.skaianet.SessionHandler;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.arguments.EntityArgument;
@@ -31,6 +31,6 @@ public class SburbConnectionCommand
 	
 	private static int connect(CommandSource source, ServerPlayerEntity client, ServerPlayerEntity server) throws CommandSyntaxException
 	{
-		return SessionHandler.get(client.server).connectByCommand(source, IdentifierHandler.encode(client), IdentifierHandler.encode(server));
+		return CommandActionHandler.connectByCommand(source, IdentifierHandler.encode(client), IdentifierHandler.encode(server));
 	}
 }

@@ -7,8 +7,8 @@ import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnection;
-import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
+import com.mraof.minestuck.skaianet.TitleSelectionHook;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import com.mraof.minestuck.tileentity.GateTileEntity;
 import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
@@ -74,14 +74,14 @@ public class EntryProcess
 		{
 			if(player.world.getDimensionKey() != World.THE_NETHER)
 			{
-				if(!SburbHandler.performEntryCheck(player))
+				if(!TitleSelectionHook.performEntryCheck(player))
 					return;
 				
 				PlayerIdentifier identifier = IdentifierHandler.encode(player);
-				SburbConnection c = SkaianetHandler.get(player.world).getMainConnection(identifier, true);
+				Optional<SburbConnection> c = SkaianetHandler.get(player.world).getPrimaryConnection(identifier, true);
 				
 				//Only performs Entry if you have no connection, haven't Entered, or you're not in a Land and additional Entries are permitted.
-				if(c == null || !c.hasEntered() || !MinestuckConfig.SERVER.stopSecondEntry.get() && !MSDimensions.isLandDimension(player.world.getDimensionKey()))
+				if(!c.isPresent() || !c.get().hasEntered() || !MinestuckConfig.SERVER.stopSecondEntry.get() && !MSDimensions.isLandDimension(player.world.getDimensionKey()))
 				{
 					if(!canModifyEntryBlocks(player.world, player))
 					{
@@ -89,9 +89,9 @@ public class EntryProcess
 						return;
 					}
 					
-					if(c != null && c.hasEntered())
+					if(c.isPresent() && c.get().hasEntered())
 					{
-						ServerWorld landWorld = Objects.requireNonNull(player.getServer()).getWorld(c.getClientDimension());
+						ServerWorld landWorld = Objects.requireNonNull(player.getServer()).getWorld(c.get().getClientDimension());
 						if(landWorld == null)
 						{
 							return;
@@ -152,7 +152,6 @@ public class EntryProcess
 		this.origin = origin;
 		
 		creative = player.interactionManager.isCreative();
-		SburbConnection conn = SkaianetHandler.get(worldserver0).getMainConnection(IdentifierHandler.encode(player), true);
 		
 		topY = MinestuckConfig.SERVER.adaptEntryBlockHeight.get() ? getTopHeight(worldserver0, x, y, z) : y + artifactRange;
 		yDiff = 127 - topY;
@@ -305,8 +304,6 @@ public class EntryProcess
 			
 			player.setPositionAndUpdate(player.getPosX() + xDiff, player.getPosY() + yDiff, player.getPosZ() + zDiff);
 			
-			SkaianetHandler.get(worldserver0).clearMovingList();
-			
 			//Remove entities that were generated in the process of teleporting entities and removing blocks.
 			// This is usually caused by "anchored" blocks being updated between the removal of their anchor and their own removal.
 			if(!creative || MinestuckConfig.SERVER.entryCrater.get())
@@ -339,9 +336,7 @@ public class EntryProcess
 			}
 			
 			LOGGER.debug("Placing gates...");
-			
-			placeGate(GateHandler.Type.GATE_1, new BlockPos(x + xDiff, GateHandler.gateHeight1, z + zDiff), worldserver1);
-			placeGate(GateHandler.Type.GATE_2, new BlockPos(x + xDiff, GateHandler.gateHeight2, z + zDiff), worldserver1);
+			placeGates(worldserver1);
 			
 			MSExtraData.get(worldserver1).addPostEntryTask(new PostEntryTask(worldserver1.getDimensionKey(), x + xDiff, y + yDiff, z + zDiff, artifactRange, (byte) 0));
 			
@@ -447,6 +442,12 @@ public class EntryProcess
 		
 		LOGGER.debug("maxY: {}", maxY);
 		return maxY;
+	}
+	
+	public static void placeGates(ServerWorld world)
+	{
+		placeGate(GateHandler.Type.GATE_1, new BlockPos(0, GateHandler.gateHeight1, 0), world);
+		placeGate(GateHandler.Type.GATE_2, new BlockPos(0, GateHandler.gateHeight2, 0), world);
 	}
 	
 	private static void placeGate(GateHandler.Type gateType, BlockPos pos, ServerWorld world)

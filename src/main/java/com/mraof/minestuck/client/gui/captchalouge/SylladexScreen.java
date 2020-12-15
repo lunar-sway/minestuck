@@ -2,7 +2,7 @@ package com.mraof.minestuck.client.gui.captchalouge;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mraof.minestuck.client.settings.MSKeyHandler;
+import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
@@ -381,18 +381,7 @@ public abstract class SylladexScreen extends Screen
 				if(x >= gui.mapWidth || y >= gui.mapHeight || x + 16 < 0 || y + 16 < 0)
 					return;
 				gui.minecraft.getItemRenderer().renderItemAndEffectIntoGUI(item, x, y);
-				if(item.getCount() > 1)
-				{
-					String stackSize = String.valueOf(item.getCount());
-					RenderSystem.disableLighting();
-					RenderSystem.disableDepthTest();
-					RenderSystem.disableBlend();
-					gui.font.drawStringWithShadow(matrixStack, stackSize, x + 16 - gui.font.getStringWidth(stackSize), y + 8, 0xC6C6C6);
-					RenderSystem.enableLighting();
-					RenderSystem.enableDepthTest();
-					RenderSystem.enableBlend();
-				}
-				gui.minecraft.getItemRenderer().renderItemOverlayIntoGUI(gui.font, item, x, y, "");
+				gui.minecraft.getItemRenderer().renderItemOverlayIntoGUI(gui.font, item, x, y, null);
 			}
 		}
 		

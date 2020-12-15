@@ -23,7 +23,7 @@ public final class Session
 {
 	
 	final Map<PlayerIdentifier, PredefineData> predefinedPlayers;
-	final List<SburbConnection> connections;
+	final Set<SburbConnection> connections;
 	String name;
 	
 	/**
@@ -31,6 +31,17 @@ public final class Session
 	 */
 	boolean completed;
 	boolean locked;
+	
+	void addConnection(SburbConnection connection)
+	{
+		connections.add(connection);
+		connection.setSession(this);
+	}
+	
+	void finishMergeOrSplit()
+	{
+		connections.forEach(connection -> connection.setSession(this));
+	}
 	
 	/**
 	 * If the function throws an exception, this session should no longer be considered valid
@@ -54,7 +65,7 @@ public final class Session
 		
 		connections.addAll(other.connections);
 		
-		if(MinestuckConfig.SERVER.forceMaxSize && getPlayerList().size() > SessionHandler.maxSize)
+		if(MinestuckConfig.SERVER.forceMaxSize && getPlayerList().size() > SessionHandler.MAX_SIZE)
 			throw MergeResult.MERGED_SESSION_FULL.exception();
 	}
 	
@@ -66,14 +77,14 @@ public final class Session
 	/**
 	 * Checks if the variable completed should be true or false.
 	 */
-	void checkIfCompleted(boolean singleSession)
+	void checkIfCompleted()
 	{
-		if(connections.isEmpty() || singleSession)
+		if(connections.isEmpty())
 		{
 			completed = false;
 			return;
 		}
-		PlayerIdentifier start = connections.get(0).getClientIdentifier();
+		PlayerIdentifier start = connections.stream().findAny().get().getClientIdentifier();
 		PlayerIdentifier current = start;
 		main: while(true){
 			for(SburbConnection c : connections)
@@ -99,7 +110,7 @@ public final class Session
 	
 	Session()
 	{
-		connections = new ArrayList<>();
+		connections = new HashSet<>();
 		predefinedPlayers = new HashMap<>();
 	}
 	
@@ -299,7 +310,7 @@ public final class Session
 		
 		s.locked = nbt.getBoolean("locked");
 		
-		s.checkIfCompleted(MinestuckConfig.SERVER.globalSession.get());
+		s.checkIfCompleted();
 		return s;
 	}
 	
@@ -308,27 +319,8 @@ public final class Session
 		return name != null;
 	}
 	
-	CompoundNBT createDataTag()
+	public boolean isEmpty()
 	{
-		ListNBT connectionList = new ListNBT();
-		Set<PlayerIdentifier> playerSet = new HashSet<>();
-		for(SburbConnection c : connections)
-		{
-			connectionList.add(c.createDataTag(playerSet, predefinedPlayers));
-		}
-		
-		for(Map.Entry<PlayerIdentifier, PredefineData> entry : predefinedPlayers.entrySet())
-		{
-			if(playerSet.contains(entry.getKey()))
-				continue;
-			
-			connectionList.add(SburbConnection.cratePredefineDataTag(entry.getKey(), entry.getValue()));
-		}
-		
-		CompoundNBT sessionTag = new CompoundNBT();
-		if(name != null)
-			sessionTag.putString("name", name);
-		sessionTag.put("connections", connectionList);
-		return sessionTag;
+		return connections.isEmpty() && predefinedPlayers.isEmpty();
 	}
 }

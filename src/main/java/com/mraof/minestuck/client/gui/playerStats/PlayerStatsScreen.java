@@ -5,12 +5,11 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.MinestuckScreen;
-import com.mraof.minestuck.client.settings.MSKeyHandler;
+import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.computer.editmode.ClientEditHandler;
-import com.mraof.minestuck.inventory.EditmodeContainer;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.MiscContainerPacket;
-import com.mraof.minestuck.skaianet.SkaiaClient;
+import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SimpleSound;
@@ -310,7 +309,6 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 	{
 		normalTab = NormalGuiType.CAPTCHA_DECK;
 		editmodeTab = EditmodeGuiType.DEPLOY_LIST;
-		EditmodeContainer.clientScroll = 0;
 		DataCheckerScreen.activeComponent = null;
 		EcheladderScreen.lastRung = -1;
 		EcheladderScreen.animatedRung = 0;

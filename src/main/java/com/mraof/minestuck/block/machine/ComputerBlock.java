@@ -5,7 +5,7 @@ import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.computer.ProgramData;
 import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.skaianet.SkaiaClient;
+import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -67,7 +67,7 @@ public class ComputerBlock extends MachineBlock
 		ItemStack heldItem = player.getHeldItem(handIn);
 		if(state.get(STATE) == State.OFF)
 		{
-			if(!Direction.UP.equals(hit.getFace()) || !heldItem.isEmpty() && ProgramData.getProgramID(heldItem) == -2)
+			if(!heldItem.isEmpty() && ProgramData.getProgramID(heldItem) == -2)
 				return ActionResultType.PASS;
 			
 			turnOn(state, worldIn, pos, player, handIn, hit);

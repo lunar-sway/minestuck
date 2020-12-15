@@ -31,5 +31,10 @@ public class LandBiomeProviderSettings implements IBiomeProviderSettings
 		this.genSettings = genSettings;
 		return this;
 	}
+	
+	public LandBiomeSet getBiomes()
+	{
+		return genSettings.getLandTypes().terrain.getBiomeSet();
+	}
 }
 */

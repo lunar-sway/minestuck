@@ -18,9 +18,9 @@ import java.util.Objects;
 public final class StructureBlockRegistry
 {
 	
-	private static Map<String, BlockEntry> staticRegistry = new HashMap<>();
-	private static Map<Block, String> templateBlockMap = new HashMap<>();
-	private static StructureBlockRegistry defaultRegistry = new StructureBlockRegistry();
+	private static final Map<String, BlockEntry> staticRegistry = new HashMap<>();
+	private static final Map<Block, String> templateBlockMap = new HashMap<>();
+	private static final StructureBlockRegistry defaultRegistry = new StructureBlockRegistry();
 	
 	public static void registerBlock(String name, BlockState defaultBlock)
 	{

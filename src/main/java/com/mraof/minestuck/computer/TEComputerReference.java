@@ -11,7 +11,7 @@ import net.minecraft.world.World;
 
 import java.util.Objects;
 
-class TEComputerReference extends ComputerReference
+class TEComputerReference implements ComputerReference
 {
 	protected final GlobalPos location;
 	
@@ -31,7 +31,7 @@ class TEComputerReference extends ComputerReference
 	{
 		nbt.putString("type", "tile_entity");
 		GlobalPos.CODEC.encodeStart(NBTDynamicOps.INSTANCE, location).resultOrPartial(Debug::error).ifPresent(tag -> nbt.put("pos", tag));
-		return super.write(nbt);
+		return nbt;
 	}
 	
 	@Override

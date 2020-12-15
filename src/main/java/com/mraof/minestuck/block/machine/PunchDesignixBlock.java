@@ -1,7 +1,7 @@
 package com.mraof.minestuck.block.machine;
 
 import com.mraof.minestuck.block.MSProperties;
-import com.mraof.minestuck.tileentity.PunchDesignixTileEntity;
+import com.mraof.minestuck.tileentity.machine.PunchDesignixTileEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
 import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.block.Block;

@@ -1,7 +1,7 @@
 package com.mraof.minestuck.client.renderer.tileentity;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mraof.minestuck.tileentity.AlchemiterTileEntity;
+import com.mraof.minestuck.tileentity.machine.AlchemiterTileEntity;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;

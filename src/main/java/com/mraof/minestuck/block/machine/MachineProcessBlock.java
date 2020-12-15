@@ -1,11 +1,12 @@
 package com.mraof.minestuck.block.machine;
 
-import com.mraof.minestuck.tileentity.MachineProcessTileEntity;
+import com.mraof.minestuck.tileentity.machine.MachineProcessTileEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.items.CapabilityItemHandler;
 
 public abstract class MachineProcessBlock extends MachineBlock
 {
@@ -23,7 +24,11 @@ public abstract class MachineProcessBlock extends MachineBlock
 			TileEntity tileentity = worldIn.getTileEntity(pos);
 			if (tileentity instanceof MachineProcessTileEntity)
 			{
-				InventoryHelper.dropInventoryItems(worldIn, pos, (MachineProcessTileEntity)tileentity);
+				tileentity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(handler ->
+				{
+					for(int i = 0; i < handler.getSlots(); i++)
+						InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), handler.getStackInSlot(i));
+				});
 				worldIn.updateComparatorOutputLevel(pos, this);
 			}
 			

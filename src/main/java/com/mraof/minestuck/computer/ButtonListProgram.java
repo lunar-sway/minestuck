@@ -2,8 +2,8 @@ package com.mraof.minestuck.computer;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mraof.minestuck.client.gui.ComputerScreen;
-import com.mraof.minestuck.network.ClearMessagePacket;
 import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.network.computer.ClearMessagePacket;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;

@@ -1,19 +1,23 @@
 package com.mraof.minestuck.inventory;
 
-import com.mraof.minestuck.inventory.slot.InputSlot;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IIntArray;
+import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.IntArray;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.SlotItemHandler;
+import net.minecraftforge.items.wrapper.PlayerMainInvWrapper;
 
 import javax.annotation.Nonnull;
 
@@ -23,53 +27,51 @@ public class GristWidgetContainer extends MachineContainer
 	private static final int gristWidgetInputX = 27;
 	private static final int gristWidgetInputY = 20;
 	
-	private final IInventory widgetInventory;
-	
 	public GristWidgetContainer(int windowId, PlayerInventory playerInventory, PacketBuffer buffer)
 	{
-		this(MSContainerTypes.GRIST_WIDGET, windowId, playerInventory, new Inventory(1), new IntArray(3), buffer.readBlockPos());
+		this(MSContainerTypes.GRIST_WIDGET, windowId, playerInventory, new ItemStackHandler(1), new IntArray(3), IWorldPosCallable.DUMMY, buffer.readBlockPos());
 	}
 	
-	public GristWidgetContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, BlockPos machinePos)
+	public GristWidgetContainer(int windowId, PlayerInventory playerInventory, IItemHandler inventory, IIntArray parameters, IWorldPosCallable position, BlockPos machinePos)
 	{
-		this(MSContainerTypes.GRIST_WIDGET, windowId, playerInventory, inventory, parameters, machinePos);
+		this(MSContainerTypes.GRIST_WIDGET, windowId, playerInventory, inventory, parameters, position, machinePos);
 	}
 	
-	public GristWidgetContainer(ContainerType<? extends GristWidgetContainer> type, int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, BlockPos machinePos)
+	public GristWidgetContainer(ContainerType<? extends GristWidgetContainer> type, int windowId, PlayerInventory playerInventory, IItemHandler inventory, IIntArray parameters, IWorldPosCallable position, BlockPos machinePos)
 	{
-		super(type, windowId, parameters, machinePos);
+		super(type, windowId, parameters, position, machinePos);
 		
-		assertInventorySize(inventory, 1);
-		this.widgetInventory = inventory;
+		assertItemHandlerSize(inventory, 1);
 		
 		//the Slot constructor takes the IInventory and the slot number in that it binds to
 		//and the x-y coordinates it resides on-screen
-		addSlot(new InputSlot(inventory, 0, gristWidgetInputX, gristWidgetInputY, MSItems.CAPTCHA_CARD)
+		addSlot(new SlotItemHandler(inventory, 0, gristWidgetInputX, gristWidgetInputY)
 		{
 			@Override
 			public boolean isItemValid(ItemStack stack)
 			{
-				return super.isItemValid(stack) && AlchemyHelper.hasDecodedItem(stack) && !AlchemyHelper.isPunchedCard(stack);
+				return stack.getItem() == MSItems.CAPTCHA_CARD && AlchemyHelper.hasDecodedItem(stack) && !AlchemyHelper.isPunchedCard(stack);
 			}
 		});
 		
-		bindPlayerInventory(playerInventory);
-	}
-	@Override
-	public boolean canInteractWith(PlayerEntity player)
-	{
-		return widgetInventory.isUsableByPlayer(player);
+		bindPlayerInventory(new PlayerMainInvWrapper(playerInventory));
 	}
 	
-	protected void bindPlayerInventory(PlayerInventory playerInventory)
+	protected void bindPlayerInventory(IItemHandler playerInventory)
 	{
 		for (int i = 0; i < 3; i++)
 			for (int j = 0; j < 9; j++)
-				addSlot(new Slot(playerInventory, j + i * 9 + 9,
+				addSlot(new SlotItemHandler(playerInventory, j + i * 9 + 9,
 						8 + j * 18, 84 + i * 18));
 		
 		for (int i = 0; i < 9; i++)
-			addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));
+			addSlot(new SlotItemHandler(playerInventory, i, 8 + i * 18, 142));
+	}
+	
+	@Override
+	protected Block getValidBlock()
+	{
+		return MSBlocks.GRIST_WIDGET;
 	}
 	
 	@Nonnull

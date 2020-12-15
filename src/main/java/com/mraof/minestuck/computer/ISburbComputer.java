@@ -13,8 +13,17 @@ public interface ISburbComputer
 	void putServerBoolean(String name, boolean value);
 	void clearConnectedClient();
 	
+	default void setIsResuming(boolean isClient)
+	{
+		if(isClient)
+			putClientBoolean("isResuming", true);
+		else putServerBoolean("isOpen", true);
+	}
+	
 	void putClientMessage(String message);
 	void putServerMessage(String message);
 	
 	void connected(PlayerIdentifier player, boolean isClient);
+	
+	ComputerReference createReference();
 }
