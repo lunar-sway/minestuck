@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minecraft:golden_sword"
+  },
+  "range": {
+    "min": 900.0,
+    "max": 1200.0,
+    "type": "minecraft:uniform"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minecraft:quartz"
+  },
+  "range": {
+    "min": 60.0,
+    "max": 80.0,
+    "type": "minecraft:uniform"
+  }
+}

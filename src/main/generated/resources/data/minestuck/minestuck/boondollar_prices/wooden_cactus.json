@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minestuck:wooden_cactus"
+  },
+  "range": {
+    "min": 50.0,
+    "max": 60.0,
+    "type": "minecraft:uniform"
+  }
+}

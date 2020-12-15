@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minecraft:red_mushroom"
+  },
+  "range": {
+    "min": 15.0,
+    "max": 20.0,
+    "type": "minecraft:uniform"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minestuck:iodine_licorice"
+  },
+  "range": {
+    "min": 125.0,
+    "max": 150.0,
+    "type": "minecraft:uniform"
+  }
+}

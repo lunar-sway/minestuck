@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minestuck:gamegrl_magazine"
+  },
+  "range": {
+    "min": 450.0,
+    "max": 600.0,
+    "type": "minecraft:uniform"
+  }
+}

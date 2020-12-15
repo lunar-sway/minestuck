@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minestuck:amber_gummy_worm"
+  },
+  "range": {
+    "min": 125.0,
+    "max": 150.0,
+    "type": "minecraft:uniform"
+  }
+}

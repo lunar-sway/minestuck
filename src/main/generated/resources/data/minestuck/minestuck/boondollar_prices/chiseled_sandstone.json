@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minecraft:chiseled_sandstone"
+  },
+  "range": {
+    "min": 10.0,
+    "max": 15.0,
+    "type": "minecraft:uniform"
+  }
+}

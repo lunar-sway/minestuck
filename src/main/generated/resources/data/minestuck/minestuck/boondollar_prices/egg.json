@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minecraft:egg"
+  },
+  "range": {
+    "min": 50.0,
+    "max": 100.0,
+    "type": "minecraft:uniform"
+  }
+}
