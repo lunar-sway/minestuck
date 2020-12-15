@@ -397,7 +397,7 @@ public final class PlayerData
 		if(player == null)
 			return;
 		ConsortReputationDataPacket packet = ConsortReputationDataPacket.create(getConsortReputation(player.dimension));
-		MSPacketHandler.sendToPlayer(packet, player);
+		//MSPacketHandler.sendToPlayer(packet, player);
 	}
 	
 	private void updateGristCache(ServerPlayerEntity player)
