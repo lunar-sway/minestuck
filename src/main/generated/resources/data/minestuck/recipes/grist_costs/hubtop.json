@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:hubtop"
+  },
+  "grist_cost": {
+    "minestuck:build": 40,
+    "minestuck:rust": 10,
+    "minestuck:amber": 10
+  }
+}
