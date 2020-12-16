@@ -25,7 +25,7 @@ public class MSMusicTicker	//TODO Introduce types (something similar to vanilla)
 	@SubscribeEvent
 	public static void clientTick(TickEvent.ClientTickEvent event)
 	{
-		if(event.phase == TickEvent.Phase.END)
+		if(event.phase == TickEvent.Phase.END && !Minecraft.getInstance().isGamePaused())
 		{
 			tick(Minecraft.getInstance());
 		}
