@@ -23,9 +23,10 @@ import com.mraof.minestuck.util.ColorHandler;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -264,19 +265,19 @@ public final class PlayerData
 		}
 	}
 	
-	public int getConsortReputation(DimensionType dim)
+	public int getConsortReputation(RegistryKey<World> dim)
 	{
-		return consortReputation.getOrDefault(dim.getRegistryName(), 0);
+		return consortReputation.getOrDefault(dim.getLocation(), 0);
 	}
 	
-	public void addConsortReputation(int amount, DimensionType dim)
+	public void addConsortReputation(int amount, RegistryKey<World> dim)
 	{
 		int oldRep = getConsortReputation(dim);
 		int newRep = MathHelper.clamp(oldRep + amount, -10000, 10000);
 		
 		if(newRep != oldRep)
 		{
-			consortReputation.put(dim.getRegistryName(), newRep);
+			consortReputation.put(dim.getLocation(), newRep);
 			markDirty();
 			sendConsortReputation(getPlayer());
 		}
@@ -396,7 +397,7 @@ public final class PlayerData
 	{
 		if(player == null)
 			return;
-		ConsortReputationDataPacket packet = ConsortReputationDataPacket.create(getConsortReputation(player.dimension));
+		ConsortReputationDataPacket packet = ConsortReputationDataPacket.create(getConsortReputation(player.world.getDimensionKey()));
 		//MSPacketHandler.sendToPlayer(packet, player);
 	}
 	

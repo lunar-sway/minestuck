@@ -3,9 +3,9 @@ package com.mraof.minestuck.util;
 import com.google.gson.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.loot.IRandomRange;
+import net.minecraft.loot.RandomRanges;
 import net.minecraft.util.JSONUtils;
-import net.minecraft.world.storage.loot.IRandomRange;
-import net.minecraft.world.storage.loot.RandomRanges;
 
 import java.lang.reflect.Type;
 import java.util.Random;

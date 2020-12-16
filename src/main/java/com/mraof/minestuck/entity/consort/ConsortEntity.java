@@ -6,7 +6,6 @@ import com.mraof.minestuck.inventory.ConsortMerchantContainer;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.util.MSNBTUtil;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.*;
@@ -381,7 +380,7 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 		return consortType.getDeathSound();
 	}
 	
-	public DimensionType getHomeDimension()
+	public RegistryKey<World> getHomeDimension()
 	{
 		return homeDimension;
 	}

@@ -1,7 +1,6 @@
 package com.mraof.minestuck.client;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.world.LandDimension;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.client.Minecraft;
@@ -35,8 +34,8 @@ public class MSMusicTicker	//TODO Introduce types (something similar to vanilla)
 	public static void playSound(PlaySoundEvent event)
 	{
 		Minecraft mc = Minecraft.getInstance();
-		if(mc.world != null && MSDimensions.isLandDimension(mc.world.getDimension().getType())
-				&& event.getSound().getSoundLocation().equals(mc.getAmbientMusicType().getSound().getName()))
+		if(mc.world != null && MSDimensions.isLandDimension(mc.world.getDimensionKey())
+				&& event.getSound().getSoundLocation().equals(mc.getBackgroundMusicSelector().getSoundEvent().getName()))
 			event.setResultSound(null);
 	}
 	
@@ -46,7 +45,7 @@ public class MSMusicTicker	//TODO Introduce types (something similar to vanilla)
 	
 	private static void tick(Minecraft mc)
 	{
-		if(mc.world != null && MSDimensions.isLandDimension(mc.world.getDimension().getType()))
+		if(mc.world != null && MSDimensions.isLandDimension(mc.world.getDimensionKey()))
 		{
 			if(!wasInLand)
 			{
@@ -85,9 +84,9 @@ public class MSMusicTicker	//TODO Introduce types (something similar to vanilla)
 	
 	private static SoundEvent getLandSoundEvent(Minecraft mc)
 	{
-		LandDimension dim = (LandDimension) mc.world.getDimension();
+		//LandDimension dim = (LandDimension) mc.world.getDimension(); TODO
 		
-		LandTypePair pair = dim.landTypes;
+		LandTypePair pair = null;//dim.landTypes;
 		
 		if(mc.world.rand.nextBoolean())
 			return pair.terrain.getBackgroundMusic();

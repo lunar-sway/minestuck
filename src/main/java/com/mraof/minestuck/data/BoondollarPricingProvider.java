@@ -9,10 +9,10 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DirectoryCache;
 import net.minecraft.data.IDataProvider;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.loot.IRandomRange;
+import net.minecraft.loot.RandomValueRange;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.IRandomRange;
-import net.minecraft.world.storage.loot.RandomValueRange;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
