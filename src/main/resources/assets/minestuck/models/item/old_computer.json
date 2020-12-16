@@ -1,3 +1,6 @@
 {
-    "parent": "minestuck:block/old_computer_off"
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "minestuck:item/old_computer"
+    }
 }

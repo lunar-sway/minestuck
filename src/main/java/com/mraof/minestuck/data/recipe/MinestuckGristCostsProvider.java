@@ -535,6 +535,7 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSItems.ROCK_COOKIE).grist(BUILD, 10).grist(MARBLE, 5).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.WOODEN_CARROT).grist(BUILD, 8).grist(AMBER, 3).grist(CHALK, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.STRAWBERRY_CHUNK).grist(AMBER, 2).grist(BUILD, 1).grist(RUBY, 2).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.FOOD_CAN).grist(IODINE, 10).grist(TAR, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.DESERT_FRUIT).grist(AMBER, 1).grist(CAULK, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.FUNGAL_SPORE).grist(IODINE, 2).grist(AMBER, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.SPOREO).grist(IODINE, 3).grist(AMBER, 1).build(recipeSaver);
