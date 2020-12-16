@@ -27,8 +27,7 @@ public class TeleportingWeaponItem extends WeaponItem
     public boolean hitEntity(ItemStack itemStack, LivingEntity target, LivingEntity attacker)
     {
         Title title = PlayerSavedData.getData((ServerPlayerEntity) attacker).getTitle();
-        float attackCooldown = ((ServerPlayerEntity) attacker).getCooldownPeriod();
-        boolean critical = attackCooldown >= 1.0F && attacker.fallDistance > 0.0F && !attacker.onGround && !attacker.isOnLadder() && !attacker.isInWater() && !attacker.isPotionActive(Effects.BLINDNESS) && !attacker.isPassenger() && !attacker.isBeingRidden();
+        boolean critical = attacker.fallDistance > 0.0F && !attacker.onGround && !attacker.isOnLadder() && !attacker.isInWater() && !attacker.isPotionActive(Effects.BLINDNESS) && !attacker.isPassenger() && !attacker.isBeingRidden();
         
         if(attacker instanceof ServerPlayerEntity && critical)
         {
