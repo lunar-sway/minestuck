@@ -276,6 +276,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.CROCKERTOP, "Crockertop");
 		add(MSBlocks.HUBTOP, "Hubtop");
 		add(MSBlocks.LUNCHTOP, "Lunchtop");
+		add(MSBlocks.OLD_COMPUTER, "Old Computer");
 		add(MSBlocks.TRANSPORTALIZER, "Transportalizer");
 		add(MSBlocks.GRIST_WIDGET, "GristWidget 12000");
 		add(MSBlocks.URANIUM_COOKER, "Cookalyzer");
@@ -421,6 +422,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.RUBY_CROAK, "Ruby Croak");
 		add(MSItems.HEPHAESTUS_LUMBERJACK, "Hephaestus' Lumberjack");
 		add(MSItems.FISSION_FOCUSED_FAULT_FELLER, "Fission-Focused Fault Feller");
+		add(MSItems.BISECTOR, "Bisector");
+		addTooltip(MSItems.BISECTOR, "Cleave foes in twain... with pride :]");
 		add(MSItems.DICE, "Dice");
 		addTooltip(MSItems.DICE, "Dungeons and Dragons anybody?");
 		add(MSItems.FLUORITE_OCTET, "Fluorite Octet");
@@ -486,6 +489,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.ACE_OF_HEARTS, "Ace of Hearts");
 		addStore(MSItems.ACE_OF_HEARTS, "Heart Sigil");
 		addStoreTooltip(MSItems.ACE_OF_HEARTS, "This thing MUST have magical love powers!");
+		add(MSItems.WHITE_KINGS_SCEPTER, "Kings Scepter");
+		addTooltip(MSItems.WHITE_KINGS_SCEPTER, "Starts the Reckoning in the capable hands of a carapacian. It would be hard to call YOU capable however...");
+		add(MSItems.BLACK_KINGS_SCEPTER, "Kings Scepter");
+		addTooltip(MSItems.BLACK_KINGS_SCEPTER, "Super sizes and prototypes a king, but useless to you. Good for whacking however!");
 		add(MSItems.CANE, "Cane");
 		addTooltip(MSItems.CANE, "An average walking cane, used by the blind and those with weak knees.");
 		add(MSItems.VAUDEVILLE_HOOK, "Vaudeville Hook");
@@ -545,6 +552,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.SPORK, "Spork");
 		add(MSItems.GOLDEN_SPORK, "Golden Spork");
 		addTooltip(MSItems.GOLDEN_SPORK, "A spoon and fork with all the awfulness of gold tools? Sign me up!");
+		add(MSItems.BIDENT, "Bident");
+		addTooltip(MSItems.BIDENT, "Double trouble for all your bubble scuffle needs");
 		add(MSItems.EMERALD_SWORD, "Emerald Sword");
 		add(MSItems.EMERALD_AXE, "Emerald Axe");
 		add(MSItems.EMERALD_PICKAXE, "Emerald Pickaxe");
@@ -636,6 +645,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.STRAWBERRY_CHUNK, "It tastes a lot better than it looks.");
 		addStore(MSItems.STRAWBERRY_CHUNK, "Fistfull o' Strawberry");
 		addStoreTooltip(MSItems.STRAWBERRY_CHUNK, "This sweet-and-sour fruit glob is sure to drip stuff everywhere!");
+		add(MSItems.FOOD_CAN, "Food Can");
+		addTooltip(MSItems.FOOD_CAN, "You could be at the forefront of carapacian fashion if you turned the label into a sash");
 		add(MSItems.CANDY_CORN, "Candy Corn");
 		add(MSItems.BUILD_GUSHERS, "Build Gushers");
 		add(MSItems.AMBER_GUMMY_WORM, "Amber Gummy Worm");
@@ -729,6 +740,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addStoreTooltip(MSItems.GRIMOIRE, "Our best wizard cultists tried to decipher this ancient tome, but none of them can read.");
 		add(MSItems.LONG_FORGOTTEN_WARHORN, "The Long Forgotten Warhorn of the Acolytes");
 		addTooltip(MSItems.LONG_FORGOTTEN_WARHORN, "Some things are better left forgotten.");
+		add(MSItems.BLACK_QUEENS_RING, "Black Queen's Ring");
+		addTooltip(MSItems.BLACK_QUEENS_RING, "One of a pair. If the wrong carapacian got this, the session would Ascend into chaos!");
+		add(MSItems.WHITE_QUEENS_RING, "White Queen's Ring");
+		addTooltip(MSItems.WHITE_QUEENS_RING, "One of a pair. Cast it into the fire!");
 		add(MSItems.RAZOR_BLADE, "Razor Blade");
 		addTooltip(MSItems.RAZOR_BLADE, "Only a fool would try to pick this up.");
 		add(MSItems.URANIUM_POWERED_STICK, "Uranium-Powered Stick");
@@ -758,6 +773,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.BATTERY, "Battery");
 		addStore(MSItems.BATTERY, "Death Gusher");
 		addStoreTooltip(MSItems.BATTERY, "This one's tough to crunch into, and the effort's barely even worth it!");
+		add(MSItems.BI_DYE, "Bi Dye");
+		addTooltip(MSItems.BI_DYE, "Show off your pride to friends! Make gear to help vanquish your foes!");
 		add(MSItems.INK_SQUID_PRO_QUO, "Ink of Squid Pro Quo");
 		addTooltip(MSItems.INK_SQUID_PRO_QUO, "For the love of god, don't drink it.");
 		add(MSItems.CUEBALL, "Magic Cueball");

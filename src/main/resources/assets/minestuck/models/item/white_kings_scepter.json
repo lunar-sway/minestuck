@@ -1,0 +1,7 @@
+{
+    "parent": "item/handheld",
+    "textures": {
+        "layer0": "minestuck:item/white_kings_scepter"
+    }
+}
+
