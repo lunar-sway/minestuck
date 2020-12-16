@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minecraft:acacia_sapling"
+  },
+  "range": {
+    "min": 60.0,
+    "max": 90.0,
+    "type": "minecraft:uniform"
+  }
+}

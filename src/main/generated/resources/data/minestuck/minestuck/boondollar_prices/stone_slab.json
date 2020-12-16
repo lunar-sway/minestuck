@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minestuck:stone_slab"
+  },
+  "range": {
+    "min": 20.0,
+    "max": 30.0,
+    "type": "minecraft:uniform"
+  }
+}

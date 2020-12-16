@@ -4,11 +4,12 @@ import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.entity.MinestuckEntity;
 import com.mraof.minestuck.inventory.ConsortMerchantContainer;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
+import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.util.MSNBTUtil;
 import com.mraof.minestuck.world.MSDimensions;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.SpawnReason;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
@@ -18,6 +19,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.IContainerProvider;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.NBTDynamicOps;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.*;
@@ -31,16 +33,19 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ConsortEntity extends MinestuckEntity implements IContainerProvider
-{	//I'd get rid of the seemingly pointless subclasses, but as of writing, entity renderers are registered to entity classes instead of entity types.
+{
 	
 	private final EnumConsort consortType;
 	
 	private boolean hasHadMessage = false;
 	ConsortDialogue.DialogueWrapper message;
 	int messageTicksLeft;
-	CompoundNBT messageData;
+	private CompoundNBT messageData;
+	private final Set<PlayerIdentifier> talkRepPlayerList = new HashSet<>();
 	public EnumConsort.MerchantType merchantType = EnumConsort.MerchantType.NONE;
 	RegistryKey<World> homeDimension;
 	boolean visitedSkaia;
@@ -58,7 +63,7 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 	
 	public static AttributeModifierMap.MutableAttribute consortAttributes()
 	{
-		return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 10);
+		return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 10).createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.25);
 	}
 	
 	@Override
@@ -69,6 +74,12 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 		goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 0.6F));
 		goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 8.0F));
 		goalSelector.addGoal(7, new LookRandomlyGoal(this));
+		goalSelector.addGoal(4, new AvoidEntityGoal<>(this, PlayerEntity.class, 16F, 1.0D, 1.4D, this::shouldFleeFrom));
+	}
+	
+	private boolean shouldFleeFrom(LivingEntity entity)
+	{
+		return entity instanceof ServerPlayerEntity && EntityPredicates.CAN_AI_TARGET.test(entity) && PlayerSavedData.getData((ServerPlayerEntity) entity).getConsortReputation(homeDimension) <= -1000;
 	}
 	
 	protected void applyAdditionalAITasks()
@@ -88,25 +99,42 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 	{
 		if(this.isAlive() && !player.isSneaking() && eventTimer < 0)
 		{
-			if(!world.isRemote && player instanceof ServerPlayerEntity)
+			if(!world.isRemote && player instanceof ServerPlayerEntity && PlayerSavedData.getData((ServerPlayerEntity) player).getConsortReputation(homeDimension) > -1000)
 			{
 				ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
 				if(message == null)
 				{
-					message = ConsortDialogue.getRandomMessage(this, serverPlayer, hasHadMessage);
+					message = ConsortDialogue.getRandomMessage(this, hasHadMessage);
 					messageTicksLeft = 24000 + world.rand.nextInt(24000);
 					messageData = new CompoundNBT();
 					hasHadMessage = true;
 				}
-				ITextComponent text = message.getMessage(this, serverPlayer);	//TODO Make sure to catch any issues here
-				if (text != null)
-					player.sendMessage(text, Util.DUMMY_UUID);
-				MSCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, message.getString(), this);
+				try
+				{
+					ITextComponent text = message.getMessage(this, serverPlayer);
+					if(text != null)
+						player.sendMessage(text, Util.DUMMY_UUID);
+					handleConsortRepFromTalking(serverPlayer);
+					MSCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, message.getString(), this);
+				} catch(Exception e)
+				{
+					LOGGER.error("Got exception when getting dialogue message for consort for player {}.", serverPlayer.getGameProfile().getName(), e);
+				}
 			}
 			
 			return ActionResultType.SUCCESS;
 		} else
 			return super.func_230254_b_(player, hand);
+	}
+	
+	private void handleConsortRepFromTalking(ServerPlayerEntity player)
+	{
+		PlayerIdentifier identifier = IdentifierHandler.encode(player);
+		if(!talkRepPlayerList.contains(identifier))
+		{
+			PlayerSavedData.getData(player).addConsortReputation(1, homeDimension);
+			talkRepPlayerList.add(identifier);
+		}
 	}
 	
 	protected void setExplosionTimer()
@@ -133,6 +161,7 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 			messageData = null;
 			updatingMessage = null;
 			stocks = null;
+			talkRepPlayerList.clear();
 		}
 		
 		if(updatingMessage != null)
@@ -175,6 +204,10 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 			compound.putString("Dialogue", message.getString());
 			compound.putInt("MessageTicks", messageTicksLeft);
 			compound.put("MessageData", messageData);
+			ListNBT list = new ListNBT();
+			for(PlayerIdentifier id : talkRepPlayerList)
+				list.add(id.saveToNBT(new CompoundNBT(), "id"));
+			compound.put("talkRepList", list);
 		}
 		compound.putBoolean("HasHadMessage", hasHadMessage);
 		
@@ -211,6 +244,12 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 				messageTicksLeft = compound.getInt("MessageTicks");
 			else messageTicksLeft = 24000;	//Used to make summoning with a specific message slightly easier
 			messageData = compound.getCompound("MessageData");
+			
+			talkRepPlayerList.clear();
+			ListNBT list = compound.getList("talkRepList", Constants.NBT.TAG_COMPOUND);
+			for(int i = 0; i < list.size(); i++)
+				talkRepPlayerList.add(IdentifierHandler.load(list.getCompound(i), "id"));
+			
 			hasHadMessage = true;
 		} else hasHadMessage = compound.getBoolean("HasHadMessage");
 		
@@ -258,6 +297,23 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 	}
 	
 	@Override
+	public boolean hitByEntity(Entity entityIn)
+	{
+		if(entityIn instanceof ServerPlayerEntity)
+			PlayerSavedData.getData((ServerPlayerEntity) entityIn).addConsortReputation(-5, homeDimension);
+		return super.hitByEntity(entityIn);
+	}
+	
+	@Override
+	public void onDeath(DamageSource cause)
+	{
+		LivingEntity livingEntity = this.getAttackingEntity();
+		if(livingEntity instanceof ServerPlayerEntity)
+			PlayerSavedData.getData((ServerPlayerEntity) livingEntity).addConsortReputation(-100, homeDimension);
+		super.onDeath(cause);
+	}
+	
+	@Override
 	public boolean canDespawn(double distanceToClosestPlayer)
 	{
 		return false;
@@ -295,13 +351,13 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity player)
 	{
 		if(this.stocks != null)
-			return new ConsortMerchantContainer(windowId, playerInventory, stocks, getConsortType(), merchantType, stocks.getPrices());
+			return new ConsortMerchantContainer(windowId, playerInventory, stocks, getConsortType(), merchantType, stocks.createPricesFor((ServerPlayerEntity) player));
 		else return null;
 	}
 	
 	protected void writeShopContainerBuffer(PacketBuffer buffer)
 	{
-		ConsortMerchantContainer.write(buffer, this, stocks.getPrices());
+		ConsortMerchantContainer.write(buffer, this);
 	}
 	
 	@Nullable
@@ -323,5 +379,10 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 	protected SoundEvent getDeathSound()
 	{
 		return consortType.getDeathSound();
+	}
+	
+	public DimensionType getHomeDimension()
+	{
+		return homeDimension;
 	}
 }

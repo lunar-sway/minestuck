@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minecraft:mushroom_stew"
+  },
+  "range": {
+    "min": 95.0,
+    "max": 130.0,
+    "type": "minecraft:uniform"
+  }
+}

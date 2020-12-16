@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minestuck:chiseled_coarse_stone"
+  },
+  "range": {
+    "min": 8.0,
+    "max": 15.0,
+    "type": "minecraft:uniform"
+  }
+}

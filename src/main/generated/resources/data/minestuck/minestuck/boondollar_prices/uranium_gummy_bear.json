@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minestuck:uranium_gummy_bear"
+  },
+  "range": {
+    "min": 200.0,
+    "max": 240.0,
+    "type": "minecraft:uniform"
+  }
+}

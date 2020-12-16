@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minecraft:leather"
+  },
+  "range": {
+    "min": 65.0,
+    "max": 80.0,
+    "type": "minecraft:uniform"
+  }
+}

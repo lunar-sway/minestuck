@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minecraft:cod"
+  },
+  "range": {
+    "min": 90.0,
+    "max": 100.0,
+    "type": "minecraft:uniform"
+  }
+}

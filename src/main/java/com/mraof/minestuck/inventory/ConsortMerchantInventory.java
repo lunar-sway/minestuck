@@ -11,6 +11,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.IIntArray;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.Util;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -24,8 +25,8 @@ public class ConsortMerchantInventory implements IInventory
 	public static final String CANT_AFFORD = "consort.cant_afford";
 	
 	private final NonNullList<ItemStack> inv = NonNullList.withSize(9, ItemStack.EMPTY);
-	final int[] prices = new int[9];
-	private ConsortEntity consort;
+	private final int[] prices = new int[9];
+	private final ConsortEntity consort;
 	
 	public ConsortMerchantInventory(ConsortEntity consort, ListNBT list)
 	{
@@ -39,10 +40,6 @@ public class ConsortMerchantInventory implements IInventory
 			if(!stack.isEmpty())
 				prices[i] = nbt.getInt("price");
 		}
-	}
-	
-	public ConsortMerchantInventory()
-	{
 	}
 	
 	public ConsortMerchantInventory(ConsortEntity consort, List<Pair<ItemStack, Integer>> stocks)
@@ -72,7 +69,10 @@ public class ConsortMerchantInventory implements IInventory
 			} else
 			{
 				playerData.takeBoondollars(amountPurchased * prices[index]);
+				playerData.addConsortReputation(5, consort.getHomeDimension());
 				ItemStack items = stack.split(amountPurchased);
+				if(stack.isEmpty())
+					prices[index] = 0;
 				
 				if (!player.addItemStackToInventory(items))
 				{
@@ -173,33 +173,6 @@ public class ConsortMerchantInventory implements IInventory
 		return false;
 	}
 	
-	/*
-	@Override
-	public int getField(int id)
-	{
-		if (id == 0)
-			return consortType.ordinal();
-		else if (id == 1)
-			return merchantType.ordinal();
-		else return prices[(id - 2) % 9];
-	}
-	
-	@Override
-	public void setField(int id, int value)
-	{
-		if (id == 0)
-			consortType = EnumConsort.values()[value % EnumConsort.values().length];
-		else if (id == 1)
-			merchantType = EnumConsort.MerchantType.values()[value % EnumConsort.MerchantType.values().length];
-		else prices[(id - 2) % 9] = value;
-	}
-	
-	@Override
-	public int getFieldCount()
-	{
-		return 11;
-	}*/
-	
 	@Override
 	public void clear()
 	{
@@ -211,5 +184,47 @@ public class ConsortMerchantInventory implements IInventory
 	public int[] getPrices()
 	{
 		return Arrays.copyOf(prices, 9);
+	}
+	
+	public int calculatePrice(int price, int consortRep)
+	{
+		if(consortRep < -500)
+			return (int) Math.ceil(2*price);
+		else if(consortRep < -200)
+			return (int) Math.ceil(1.5*price);
+		else if(consortRep < 400)
+			return price;
+		else if(consortRep < 1200)
+			return (int) Math.ceil(0.9*price);
+		else if(consortRep < 3500)
+			return (int) Math.floor(0.8*price);
+		else if(consortRep < 8000)
+			return (int) Math.floor(0.7*price);
+		else return (int) Math.floor(0.6*price);
+	}
+	
+	public IIntArray createPricesFor(ServerPlayerEntity player)
+	{
+		PlayerData data = PlayerSavedData.getData(player);
+		return new IIntArray()
+		{
+			@Override
+			public int get(int index)
+			{
+				return calculatePrice(prices[index], data.getConsortReputation(consort.getHomeDimension()));
+			}
+			
+			@Override
+			public void set(int index, int value)
+			{
+				throw new UnsupportedOperationException();
+			}
+			
+			@Override
+			public int size()
+			{
+				return 9;
+			}
+		};
 	}
 }

@@ -1,8 +1,10 @@
 package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.player.EnumAspect;
+import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.Blocks;
+import net.minecraft.util.SoundEvent;
 
 public class BucketsLandType extends TitleLandType    //Yes, buckets
 {
@@ -35,4 +37,10 @@ public class BucketsLandType extends TitleLandType    //Yes, buckets
 		}
 	}
 	*/
+	
+	@Override
+	public SoundEvent getBackgroundMusic()
+	{
+		return MSSoundEvents.MUSIC_BUCKETS;
+	}
 }

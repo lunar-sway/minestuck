@@ -22,7 +22,7 @@ public class LichEntity extends UnderlingEntity
 	
 	public LichEntity(EntityType<? extends LichEntity> type, World world)
 	{
-		super(type, world);
+		super(type, world, 7);
 	}
 	
 	public static AttributeModifierMap.MutableAttribute lichAttributes()

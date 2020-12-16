@@ -24,7 +24,7 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 	
 	public BasiliskEntity(EntityType<? extends BasiliskEntity> type, World world)
 	{
-		super(type, world);
+		super(type, world, 5);
 		tail = new UnderlingPartEntity(this, 0, 3F, 2F);
 		//world.addEntity(tail); TODO Not safe to add entities to world on creation. A different solution is needed
 	}

@@ -216,6 +216,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 		
 		mc.fontRenderer.drawString(matrixStack, "=", xOffset + 25, yOffset + 12, 0x404040);	//Should this be black, or the same blue as the numbers?
 		mc.fontRenderer.drawString(matrixStack, String.valueOf(ClientPlayerData.getBoondollars()), xOffset + 27 + mc.fontRenderer.getStringWidth("="), yOffset + 12, 0x0094FF);
+		//mc.fontRenderer.drawString("Rep: " + ClientPlayerData.getConsortReputation(), xOffset + 75 + mc.fontRenderer.getCharWidth('='), yOffset + 12, 0x0094FF);
 		
 		mc.fontRenderer.drawString(matrixStack, I18n.format(CACHE), xOffset + 24, yOffset + 138, 0x404040);
 		mc.fontRenderer.drawString(matrixStack, "Unlimited", xOffset + 26, yOffset + 147, 0x0094FF);

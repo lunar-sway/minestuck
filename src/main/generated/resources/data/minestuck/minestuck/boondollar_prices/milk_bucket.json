@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minecraft:milk_bucket"
+  },
+  "range": {
+    "min": 40.0,
+    "max": 50.0,
+    "type": "minecraft:uniform"
+  }
+}

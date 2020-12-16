@@ -22,7 +22,7 @@ public class OgreEntity extends UnderlingEntity
 {
 	public OgreEntity(EntityType<? extends OgreEntity> type, World world)
 	{
-		super(type, world);
+		super(type, world, 3);
 		this.stepHeight = 1.0F;
 	}
 	

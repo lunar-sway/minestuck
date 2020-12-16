@@ -19,6 +19,40 @@ public class MSSoundEvents
 	public static final SoundEvent MUSIC_DISC_EMISSARY_OF_DANCE = getNull();
 	public static final SoundEvent MUSIC_DISC_DANCE_STAB_DANCE = getNull();
 	public static final SoundEvent MUSIC_DISC_RETRO_BATTLE_THEME = getNull();
+	
+	public static final SoundEvent MUSIC_DEFAULT = getNull();
+	public static final SoundEvent MUSIC_FOREST = getNull();
+	public static final SoundEvent MUSIC_TAIGA = getNull();
+	public static final SoundEvent MUSIC_FROST = getNull();
+	public static final SoundEvent MUSIC_FUNGI = getNull();
+	public static final SoundEvent MUSIC_HEAT = getNull();
+	public static final SoundEvent MUSIC_ROCK = getNull();
+	public static final SoundEvent MUSIC_PETRIFICATION = getNull();
+	public static final SoundEvent MUSIC_SAND = getNull();
+	public static final SoundEvent MUSIC_LUSH_DESERTS = getNull();
+	public static final SoundEvent MUSIC_SANDSTONE = getNull();
+	public static final SoundEvent MUSIC_SHADE = getNull();
+	public static final SoundEvent MUSIC_WOOD = getNull();
+	public static final SoundEvent MUSIC_RAINBOW = getNull();
+	public static final SoundEvent MUSIC_FLORA = getNull();
+	public static final SoundEvent MUSIC_END = getNull();
+	public static final SoundEvent MUSIC_RAIN = getNull();
+	
+	public static final SoundEvent MUSIC_FROGS = getNull();
+	public static final SoundEvent MUSIC_WIND = getNull();
+	public static final SoundEvent MUSIC_LIGHT = getNull();
+	public static final SoundEvent MUSIC_CLOCKWORK = getNull();
+	public static final SoundEvent MUSIC_SILENCE = getNull();
+	public static final SoundEvent MUSIC_THUNDER = getNull();
+	public static final SoundEvent MUSIC_PULSE = getNull();
+	public static final SoundEvent MUSIC_THOUGHT = getNull();
+	public static final SoundEvent MUSIC_BUCKETS = getNull();
+	public static final SoundEvent MUSIC_CAKE = getNull();
+	public static final SoundEvent MUSIC_RABBITS = getNull();
+	public static final SoundEvent MUSIC_MONSTERS = getNull();
+	public static final SoundEvent MUSIC_UNDEAD = getNull();
+	public static final SoundEvent MUSIC_TOWERS = getNull();
+	
 	public static final SoundEvent ENTITY_NAKAGATOR_AMBIENT = getNull();
 	public static final SoundEvent ENTITY_NAKAGATOR_HURT = getNull();
 	public static final SoundEvent ENTITY_NAKAGATOR_DEATH = getNull();
@@ -66,6 +100,12 @@ public class MSSoundEvents
 	{
 		List<String> paths = Lists.newArrayList(
 				"music_disc.emissary_of_dance", "music_disc.dance_stab_dance", "music_disc.retro_battle_theme",
+				"music.forest", "music.taiga", "music.frost", "music.fungi",
+				"music.heat", "music.rock", "music.petrification", "music.sand",
+				"music.lush_deserts", "music.sandstone", "music.shade", "music.wood",
+				"music.rainbow", "music.flora", "music.end", "music.rain",
+				"music.frogs", "music.wind", "music.light", "music.clockwork", "music.silence", "music.thunder", "music.pulse",
+				"music.thought", "music.buckets", "music.cake", "music.rabbits", "music.monsters", "music.undead", "music.towers",
 				"entity.nakagator.ambient", "entity.nakagator.hurt", "entity.nakagator.death",
 				"entity.iguana.ambient", "entity.iguana.hurt", "entity.iguana.death",
 				"entity.salamander.ambient", "entity.salamander.hurt", "entity.salamander.death",

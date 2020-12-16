@@ -32,7 +32,7 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 
 	public GiclopsEntity(EntityType<? extends GiclopsEntity> type, World world)
 	{
-		super(type, world);
+		super(type, world, 7);
 		
 		this.stepHeight = 2;
 		partGroup = new PartGroup(this);

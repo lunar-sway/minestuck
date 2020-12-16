@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minecraft:gold_ingot"
+  },
+  "range": {
+    "min": 120.0,
+    "max": 180.0,
+    "type": "minecraft:uniform"
+  }
+}

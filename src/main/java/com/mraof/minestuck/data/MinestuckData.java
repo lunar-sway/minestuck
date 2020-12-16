@@ -32,6 +32,7 @@ public class MinestuckData
 			gen.addProvider(new MinestuckCombinationsProvider(gen));
 			gen.addProvider(new GeneratedGristCostConfigProvider(gen, Minestuck.MOD_ID));
 			
+			gen.addProvider(new BoondollarPricingProvider(gen, Minestuck.MOD_ID));
 			gen.addProvider(new MinestuckLootTableProvider(gen));
 			gen.addProvider(new MSAvancementProvider(gen));
 			gen.addProvider(new MinestuckEnUsLanguageProvider(gen));
