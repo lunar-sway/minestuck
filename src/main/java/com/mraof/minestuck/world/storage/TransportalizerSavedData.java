@@ -93,9 +93,10 @@ public class TransportalizerSavedData extends WorldSavedData
 	
 	public String findNewId(Random random, GlobalPos location)
 	{
-		String unusedId = "";
+		String unusedId;
 		do
 		{
+			unusedId = "";
 			for(int i = 0; i < 4; i++)
 			{
 				unusedId += (char) (random.nextInt(26) + 'A');
