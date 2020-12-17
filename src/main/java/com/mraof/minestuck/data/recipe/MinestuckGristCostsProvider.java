@@ -464,11 +464,11 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSItems.IRON_BOAT).grist(RUST, 30).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.GOLD_BOAT).grist(GOLD, 30).build(recipeSaver);
 		
-		GristCostRecipeBuilder.of(MSBlocks.LAPTOP).grist(BUILD, 10).grist(RUST, 60).grist(QUARTZ, 2).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSBlocks.CROCKERTOP).grist(BUILD, 10).grist(RUST, 60).grist(MERCURY, 10).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSBlocks.HUBTOP).grist(BUILD, 40).grist(RUST, 10).grist(AMBER, 10).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSBlocks.LUNCHTOP).grist(BUILD, 30).grist(RUST, 10).grist(MARBLE, 30).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSBlocks.OLD_COMPUTER).grist(BUILD, 10).grist(RUST, 60).grist(URANIUM, 10).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.LAPTOP).grist(BUILD, 80).grist(RUST, 30).grist(QUARTZ, 2).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.CROCKERTOP).grist(BUILD, 20).grist(RUST, 5).grist(MERCURY, 5).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.HUBTOP).grist(BUILD, 60).grist(RUST, 10).grist(URANIUM, 10).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.LUNCHTOP).grist(BUILD, 30).grist(RUST, 10).grist(MARBLE, 20).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.OLD_COMPUTER).grist(BUILD, 80).grist(RUST, 30).grist(SULFUR, 10).build(recipeSaver);
 		
 		GristCostRecipeBuilder.of(MSBlocks.GLOWING_MUSHROOM).grist(BUILD, 5).grist(SHALE, 3).grist(MERCURY, 2).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.GLOWING_LOG).grist(BUILD, 8).grist(AMBER, 4).grist(MERCURY, 4).build(recipeSaver);
