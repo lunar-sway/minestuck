@@ -444,7 +444,8 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		
         CombinationRecipeBuilder.of(MSBlocks.LAPTOP).input(MSBlocks.COMPUTER).and().namedInput(MSItems.BATTERY).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.LAPTOP).input(MSBlocks.COMPUTER).and().namedInput(Items.BOOK).build(consumer);
-		CombinationRecipeBuilder.of(MSBlocks.CROCKERTOP).input(MSBlocks.LAPTOP).and().input(MSItems.CROCKER_SPOON).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.CROCKERTOP).input(MSBlocks.LAPTOP).and().namedInput(MSItems.CROCKER_SPOON).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.CROCKERTOP).input(MSBlocks.LAPTOP).and().namedInput(MSItems.CROCKER_FORK).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.HUBTOP).input(MSBlocks.LAPTOP).and().input(MSBlocks.URANIUM_BLOCK).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.LUNCHTOP).input(MSBlocks.LAPTOP).and().input(Items.APPLE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.OLD_COMPUTER).input(MSBlocks.COMPUTER).and().input(Items.CLOCK).build(consumer);

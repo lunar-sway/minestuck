@@ -1,13 +1,13 @@
 {
   "type": "minestuck:combination",
   "input1": {
-    "item": "minestuck:laptop"
+    "item": "minestuck:computer"
   },
   "input2": {
-    "item": "minestuck:cake_mix"
+    "item": "minestuck:battery"
   },
   "mode": "and",
   "output": {
-    "item": "minestuck:crockertop"
+    "item": "minestuck:laptop"
   }
 }

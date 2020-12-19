@@ -4,8 +4,8 @@
     "item": "minestuck:laptop"
   },
   "grist_cost": {
-    "minestuck:build": 10,
-    "minestuck:rust": 60,
+    "minestuck:build": 80,
+    "minestuck:rust": 30,
     "minestuck:quartz": 2
   }
 }

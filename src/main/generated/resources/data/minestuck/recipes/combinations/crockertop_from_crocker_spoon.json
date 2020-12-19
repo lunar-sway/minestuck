@@ -4,10 +4,10 @@
     "item": "minestuck:laptop"
   },
   "input2": {
-    "item": "minestuck:uranium_block"
+    "item": "minestuck:crocker_spoon"
   },
   "mode": "and",
   "output": {
-    "item": "minestuck:hubtop"
+    "item": "minestuck:crockertop"
   }
 }

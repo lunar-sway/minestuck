@@ -4,9 +4,9 @@
     "item": "minestuck:computer"
   },
   "input2": {
-    "item": "minestuck:battery"
+    "item": "minecraft:book"
   },
-  "mode": "or",
+  "mode": "and",
   "output": {
     "item": "minestuck:laptop"
   }

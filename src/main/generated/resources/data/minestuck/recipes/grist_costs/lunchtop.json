@@ -6,6 +6,6 @@
   "grist_cost": {
     "minestuck:build": 30,
     "minestuck:rust": 10,
-    "minestuck:marble": 30
+    "minestuck:marble": 20
   }
 }

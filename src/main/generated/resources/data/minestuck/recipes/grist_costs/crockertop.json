@@ -4,8 +4,8 @@
     "item": "minestuck:crockertop"
   },
   "grist_cost": {
-    "minestuck:build": 10,
-    "minestuck:rust": 60,
-    "minestuck:mercury": 10
+    "minestuck:build": 20,
+    "minestuck:rust": 5,
+    "minestuck:mercury": 5
   }
 }
