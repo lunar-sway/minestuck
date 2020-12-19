@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:laptop"
+  },
+  "input2": {
+    "item": "minestuck:thresh_dvd"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:hubtop"
+  }
+}
