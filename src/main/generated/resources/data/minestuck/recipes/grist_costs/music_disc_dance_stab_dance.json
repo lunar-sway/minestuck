@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:music_disc_dance_stab_dance"
+  },
+  "grist_cost": {
+    "minestuck:build": 15,
+    "minestuck:caulk": 8,
+    "minestuck:cobalt": 5,
+    "minestuck:sulfur": 5
+  }
+}

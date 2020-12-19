@@ -476,6 +476,17 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.STONE_SLAB).input(Items.STONE).and().input(MSItems.CARVING_TOOL).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.GLOWYSTONE_DUST).input(Items.REDSTONE).or().input(Items.GLOWSTONE_DUST).build(consumer);
 		
+		CombinationRecipeBuilder.of(MSItems.CASSETTE_13).input(Items.MUSIC_DISC_13).or().namedInput(MSBlocks.CASSETTE_PLAYER).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.CASSETTE_CAT).input(Items.MUSIC_DISC_CAT).or().namedInput(MSBlocks.CASSETTE_PLAYER).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.CASSETTE_BLOCKS).input(Items.MUSIC_DISC_BLOCKS).or().namedInput(MSBlocks.CASSETTE_PLAYER).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.CASSETTE_CHIRP).input(Items.MUSIC_DISC_CHIRP).or().namedInput(MSBlocks.CASSETTE_PLAYER).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.CASSETTE_FAR).input(Items.MUSIC_DISC_FAR).or().namedInput(MSBlocks.CASSETTE_PLAYER).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.CASSETTE_MALL).input(Items.MUSIC_DISC_MALL).or().namedInput(MSBlocks.CASSETTE_PLAYER).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.CASSETTE_MELLOHI).input(Items.MUSIC_DISC_MELLOHI).or().namedInput(MSBlocks.CASSETTE_PLAYER).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.CASSETTE_EMISSARY).input(MSItems.MUSIC_DISC_EMISSARY_OF_DANCE).or().namedInput(MSBlocks.CASSETTE_PLAYER).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.CASSETTE_DANCE_STAB).input(MSItems.MUSIC_DISC_DANCE_STAB_DANCE).or().namedInput(MSBlocks.CASSETTE_PLAYER).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.CASSETTE_RETRO_BATTLE).input(MSItems.MUSIC_DISC_RETRO_BATTLE).or().namedInput(MSBlocks.CASSETTE_PLAYER).build(consumer);
+		
 		CombinationRecipeBuilder.of(MSBlocks.BLACK_CHESS_DIRT).input(Items.DIRT).and().input(Items.BLACK_DYE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.DARK_GRAY_CHESS_DIRT).input(Items.DIRT).and().input(Items.GRAY_DYE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.LIGHT_GRAY_CHESS_DIRT).input(Items.DIRT).and().input(Items.LIGHT_GRAY_DYE).build(consumer);

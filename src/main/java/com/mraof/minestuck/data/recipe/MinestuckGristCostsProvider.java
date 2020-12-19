@@ -417,6 +417,21 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSBlocks.LUNCHTOP).grist(BUILD, 30).grist(RUST, 10).grist(MARBLE, 20).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.OLD_COMPUTER).grist(BUILD, 80).grist(RUST, 30).grist(SULFUR, 10).build(recipeSaver);
 		
+		GristCostRecipeBuilder.of(MSBlocks.CASSETTE_PLAYER).grist(BUILD, 400).grist(MARBLE, 40).grist(RUST, 20).grist(AMBER, 20).buildFor(recipeSaver, Minestuck.MOD_ID);
+		GristCostRecipeBuilder.of(MSItems.MUSIC_DISC_EMISSARY_OF_DANCE).grist(BUILD, 15).grist(CAULK, 8).grist(GOLD, 5).grist(MARBLE, 5).buildFor(recipeSaver, Minestuck.MOD_ID);
+		GristCostRecipeBuilder.of(MSItems.MUSIC_DISC_DANCE_STAB_DANCE).grist(BUILD, 15).grist(CAULK, 8).grist(COBALT, 5).grist(SULFUR, 5).buildFor(recipeSaver, Minestuck.MOD_ID);
+		GristCostRecipeBuilder.of(MSItems.MUSIC_DISC_RETRO_BATTLE).grist(BUILD, 15).grist(CAULK, 8).grist(QUARTZ, 5).grist(RUST, 5).buildFor(recipeSaver, Minestuck.MOD_ID);
+		GristCostRecipeBuilder.of(MSItems.CASSETTE_13).grist(BUILD, 15).grist(CAULK, 8).grist(AMBER, 5).grist(CHALK, 5).buildFor(recipeSaver, Minestuck.MOD_ID);
+		GristCostRecipeBuilder.of(MSItems.CASSETTE_BLOCKS).grist(BUILD, 15).grist(CAULK, 8).grist(RUBY, 5).grist(RUST, 5).buildFor(recipeSaver, Minestuck.MOD_ID);
+		GristCostRecipeBuilder.of(MSItems.CASSETTE_CAT).grist(BUILD, 15).grist(CAULK, 8).grist(URANIUM, 5).grist(SHALE, 5).buildFor(recipeSaver, Minestuck.MOD_ID);
+		GristCostRecipeBuilder.of(MSItems.CASSETTE_CHIRP).grist(BUILD, 15).grist(CAULK, 8).grist(RUBY, 5).grist(GARNET, 5).buildFor(recipeSaver, Minestuck.MOD_ID);
+		GristCostRecipeBuilder.of(MSItems.CASSETTE_FAR).grist(BUILD, 15).grist(CAULK, 8).grist(URANIUM, 5).grist(SULFUR, 5).buildFor(recipeSaver, Minestuck.MOD_ID);
+		GristCostRecipeBuilder.of(MSItems.CASSETTE_MALL).grist(BUILD, 15).grist(CAULK, 8).grist(AMETHYST, 5).grist(TAR, 5).buildFor(recipeSaver, Minestuck.MOD_ID);
+		GristCostRecipeBuilder.of(MSItems.CASSETTE_MELLOHI).grist(BUILD, 15).grist(CAULK, 8).grist(MARBLE, 5).grist(SHALE, 5).buildFor(recipeSaver, Minestuck.MOD_ID);
+		GristCostRecipeBuilder.of(MSItems.CASSETTE_EMISSARY).grist(BUILD, 15).grist(CAULK, 8).grist(GOLD, 5).grist(MARBLE, 5).buildFor(recipeSaver, Minestuck.MOD_ID);
+		GristCostRecipeBuilder.of(MSItems.CASSETTE_DANCE_STAB).grist(BUILD, 15).grist(CAULK, 8).grist(COBALT, 5).grist(SULFUR, 5).buildFor(recipeSaver, Minestuck.MOD_ID);
+		GristCostRecipeBuilder.of(MSItems.CASSETTE_RETRO_BATTLE).grist(BUILD, 15).grist(CAULK, 8).grist(QUARTZ, 5).grist(RUST, 5).buildFor(recipeSaver, Minestuck.MOD_ID);
+		
 		GristCostRecipeBuilder.of(MSBlocks.GLOWING_MUSHROOM).grist(BUILD, 5).grist(SHALE, 3).grist(MERCURY, 2).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.GLOWING_LOG).grist(BUILD, 8).grist(AMBER, 4).grist(MERCURY, 4).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.GLOWING_PLANKS).grist(BUILD, 2).grist(AMBER, 1).grist(MERCURY, 1).build(recipeSaver);
