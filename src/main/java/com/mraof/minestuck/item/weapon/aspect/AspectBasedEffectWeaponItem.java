@@ -44,7 +44,7 @@ public class AspectBasedEffectWeaponItem extends WeaponItem
         }
         
         if(itemStack.getItem() == MSItems.CLOWN_CLUB)
-            attacker.world.playSound(null, attacker.posX, attacker.posY, attacker.posZ, MSSoundEvents.ITEM_HORN_USE, SoundCategory.AMBIENT, 1.5F, 1.0F);
+            attacker.world.playSound(null, attacker.getPosX(), attacker.getPosY(), attacker.getPosZ(), MSSoundEvents.ITEM_HORN_USE, SoundCategory.AMBIENT, 1.5F, 1.0F);
         
         return super.hitEntity(itemStack, target, attacker);
     }
