@@ -1066,6 +1066,8 @@
   "item.minestuck.lipstick_chainsaw": "Chainsaw",
   "item.minestuck.long_forgotten_warhorn": "The Long Forgotten Warhorn of the Acolytes",
   "item.minestuck.long_forgotten_warhorn.tooltip": "Some things are better left forgotten.",
+  "item.minestuck.lorentz_distransformationer": "Lorentz Distransformationer",
+  "item.minestuck.lorentz_distransformationer.tooltip": "In physics, the Lorentz transformations are a six-parameter family of linear transformations from a coordinate frame in spacetime to another frame that moves at a constant velocity relative to the former. The respective inverse transformation is then parametrized by the negative of this velocity.",
   "item.minestuck.marble_jawbreaker": "Marble Jawbreaker",
   "item.minestuck.melonsbane": "Melonsbane",
   "item.minestuck.melonsbane.message": "M- M- M- MELON OVERLOAD!!!!!!",
