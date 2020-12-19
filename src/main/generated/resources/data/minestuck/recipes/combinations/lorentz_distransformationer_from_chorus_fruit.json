@@ -6,7 +6,7 @@
   "input2": {
     "item": "minecraft:chorus_fruit"
   },
-  "mode": "or",
+  "mode": "and",
   "output": {
     "item": "minestuck:lorentz_distransformationer"
   }
