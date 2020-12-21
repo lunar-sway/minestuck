@@ -76,6 +76,7 @@ public class MSItems
 	public static final Item IRRADIATED_STEAK_SWORD = getNull();
 	public static final Item KATANA = getNull();
 	public static final Item UNBREAKABLE_KATANA = getNull();
+	public static final Item ANGEL_APOCALYPSE = getNull();
 	public static final Item FIRE_POKER = getNull();
 	public static final Item TOO_HOT_TO_HANDLE = getNull();
 	public static final Item CALEDSCRATCH = getNull();
@@ -647,6 +648,7 @@ public class MSItems
 		registry.register(new ConsumableWeaponItem(MSItemTypes.MEAT_TIER, 2, -2.4F, 5.0F, 4, 0.4F, 25, MSItemTypes.SWORD_TOOL, new Item.Properties().defaultMaxDamage(150).group(MSItemGroup.WEAPONS)).setPotionEffect(new EffectInstance(Effects.WITHER, 100, 1), 0.9F).setRegistryName("irradiated_steak_sword"));
 		registry.register(new WeaponItem(ItemTier.IRON, 3, -2.4F, 15.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("katana"));
 		registry.register(new WeaponItem(MSItemTypes.RUBY_TIER, 3, -2.4F, 15.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().defaultMaxDamage(-1).group(MSItemGroup.WEAPONS)).setRegistryName("unbreakable_katana"));	//Actually unbreakable
+		registry.register(new AspectBasedEffectWeaponItem(ItemTier.IRON, 5, -2.4F, 15.0F, HOPE, () -> new EffectInstance(Effects.RESISTANCE, 60, 2), MSItemTypes.SWORD_TOOL, new Item.Properties().defaultMaxDamage(2048).group(MSItemGroup.WEAPONS)).setRegistryName("angel_apocalypse"));
 		registry.register(new FireWeaponItem(ItemTier.IRON, 4, -2.4F, 15.0F,  30, MSItemTypes.SWORD_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("fire_poker"));
 		registry.register(new FireWeaponItem(ItemTier.IRON, 3, -2.4F, 15.0F, 10, MSItemTypes.SWORD_TOOL, new Item.Properties().defaultMaxDamage(350).group(MSItemGroup.WEAPONS)).setRegistryName("too_hot_to_handle"));
 		registry.register(new WeaponItem(MSItemTypes.RUBY_TIER, 2, -2.4F, 15.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().defaultMaxDamage(1561).group(MSItemGroup.WEAPONS)).setRegistryName("caledscratch"));

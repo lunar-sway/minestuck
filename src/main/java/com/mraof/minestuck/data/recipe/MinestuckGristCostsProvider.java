@@ -381,7 +381,8 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSItems.CLAYMORE).grist(BUILD, 400).grist(RUST, 240).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.TOO_HOT_TO_HANDLE).grist(AMBER, 10).grist(RUBY, 15).grist(SULFUR, 10).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.REGISWORD).grist(AMETHYST, 27).grist(TAR, 62).grist(GOLD, 38).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSItems.UNBREAKABLE_KATANA).grist(BUILD, 1100).grist(URANIUM, 63).grist(QUARTZ, 115).grist(RUBY, 54).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.UNBREAKABLE_KATANA).grist(BUILD, 2100).grist(URANIUM, 63).grist(QUARTZ, 215).grist(RUBY, 54).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.ANGEL_APOCALYPSE).grist(BUILD, 150).grist(AMBER, 5).grist(QUARTZ, 20).grist(GOLD, 15).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.COBALT_SABRE).grist(BUILD, 1300).grist(URANIUM, 90).grist(COBALT, 175).grist(DIAMOND, 30).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.QUANTUM_SABRE).grist(BUILD, 413).grist(URANIUM, 11).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.SHATTER_BEACON).grist(BUILD, 25).grist(COBALT, 15).grist(DIAMOND, 150).grist(URANIUM, 400).build(recipeSaver);

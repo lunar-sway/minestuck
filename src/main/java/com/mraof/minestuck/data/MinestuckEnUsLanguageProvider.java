@@ -365,7 +365,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.KATANA, "Katana");
 		addTooltip(MSItems.KATANA, "A powerful Katana, once wielded by the most powerful of Otaku Masters");
 		add(MSItems.UNBREAKABLE_KATANA, "Unbreakable Katana");
-		addTooltip(MSItems.UNBREAKABLE_KATANA, "This Katana has been fused with obsidian to make it even more kawai- I mean powerful!");
+		addTooltip(MSItems.UNBREAKABLE_KATANA, "This Katana has been fused with bedrock to make it even more kawai- I mean powerful!");
+		add(MSItems.ANGEL_APOCALYPSE, "Angel Apocalypse");
+		addTooltip(MSItems.ANGEL_APOCALYPSE, "This sword either starts the end of the world or prevents the end from occurring");
 		add(MSItems.FIRE_POKER, "Fire Poker");
 		addTooltip(MSItems.FIRE_POKER, "A flaming blade! Or just that thing you find next to wood fire places.....either way it can burn you enemies");
 		addStoreTooltip(MSItems.FIRE_POKER, "Make sure you don't drop this like it's hot. Because it is hot.");
