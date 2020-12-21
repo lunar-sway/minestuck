@@ -1,12 +1,10 @@
 {
-  "type": "minestuck:grist_cost",
+  "type": "minestuck:item_source_grist_cost",
   "ingredient": {
     "item": "minecraft:magenta_concrete"
   },
   "grist_cost": {
-    "minestuck:amethyst": 1,
-    "minestuck:garnet": 1,
-    "minestuck:build": 3,
-    "minestuck:cobalt": 3
-  }
+    "minestuck:cobalt": 1
+  },
+  "source": "minecraft:magenta_concrete_powder"
 }

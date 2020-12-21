@@ -1,11 +1,10 @@
 {
-  "type": "minestuck:grist_cost",
+  "type": "minestuck:item_source_grist_cost",
   "ingredient": {
     "item": "minecraft:white_concrete"
   },
   "grist_cost": {
-    "minestuck:chalk": 1,
-    "minestuck:build": 3,
-    "minestuck:cobalt": 3
-  }
+    "minestuck:cobalt": 1
+  },
+  "source": "minecraft:white_concrete_powder"
 }

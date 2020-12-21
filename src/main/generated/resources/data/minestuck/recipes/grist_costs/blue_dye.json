@@ -1,9 +1,0 @@
-{
-  "type": "minestuck:grist_cost",
-  "ingredient": {
-    "item": "minecraft:blue_dye"
-  },
-  "grist_cost": {
-    "minestuck:amethyst": 4
-  }
-}

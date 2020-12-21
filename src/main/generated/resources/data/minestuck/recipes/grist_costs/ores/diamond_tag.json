@@ -1,10 +1,10 @@
 {
-  "type": "minestuck:grist_cost",
+  "type": "minestuck:item_source_grist_cost",
   "ingredient": {
     "tag": "forge:ores/diamond"
   },
   "grist_cost": {
-    "minestuck:build": 4,
-    "minestuck:diamond": 18
-  }
+    "minestuck:build": 4
+  },
+  "source": "minecraft:diamond"
 }
