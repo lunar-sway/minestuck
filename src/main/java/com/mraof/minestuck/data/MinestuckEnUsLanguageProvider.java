@@ -1181,6 +1181,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(TitleSelectorScreen.TITLE, "Title Selector");
 		add(TitleSelectorScreen.SELECT_TITLE, "Choose Your Title");
 		add(TitleSelectorScreen.USED_TITLE, "%s is already used");
+		add(TitleSelectorScreen.SELECT, "Select");
+		add(TitleSelectorScreen.RANDOMIZE, "Randomize");
 		add(EffectTogglePacket.ON, "Aspect Effects have been toggled on");
 		add(EffectTogglePacket.OFF, "Aspect Effects have been toggled off");
 		add(SkaianetHandler.PRIVATE_COMPUTER, "You are not allowed to access other players computers.");
