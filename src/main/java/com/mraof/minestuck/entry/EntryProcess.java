@@ -512,7 +512,7 @@ public class EntryProcess
 				nbt.putInt("z", dest.getZ());
 				newTE = TileEntity.create(nbt);
 				if(newTE != null)
-					chunkTo.addTileEntity(dest, newTE);
+					world.setTileEntity(dest, newTE);
 				else LOGGER.warn("Unable to create a new tile entity {} when teleporting blocks to the medium!", tileEntity.getType().getRegistryName());
 				
 			}
