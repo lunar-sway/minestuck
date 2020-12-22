@@ -247,7 +247,8 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(Items.DRAGON_EGG).input(Items.ENDER_EYE).and().input(Items.EGG).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.ENDER_EYE).input(Items.ENDER_PEARL).and().input(Items.BLAZE_POWDER).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.CHORUS_FLOWER).input(ItemTags.SMALL_FLOWERS).and().input(Items.CHORUS_FRUIT).buildFor(consumer, Minestuck.MOD_ID);
-		CombinationRecipeBuilder.of(Items.ELYTRA).input(Items.FEATHER).or().input(Items.ENDER_PEARL).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(Items.ELYTRA).namedInput(Items.FEATHER).or().input(Items.CHORUS_FRUIT).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(Items.ELYTRA).namedInput(Items.LEATHER_CHESTPLATE).and().input(Items.PHANTOM_MEMBRANE).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.CHORUS_FRUIT).input(Items.ENDER_PEARL).and().input(Items.POTATO).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.DRAGON_BREATH).input(Items.GLASS_BOTTLE).or().input(Items.DRAGON_HEAD).buildFor(consumer, Minestuck.MOD_ID);
 		//Fighting
