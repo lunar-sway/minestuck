@@ -339,7 +339,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 				.addLootPool(LootPool.builder().name(WEAPONS_POOL).rolls(ConstantRange.of(1))
 						.addEntry(ItemLootEntry.builder(Items.STONE_HOE).weight(5).quality(0).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.75F, 1.0F)))))
 				.addLootPool(LootPool.builder().name(SUPPLIES_POOL).rolls(ConstantRange.of(1))
-						.addEntry(ItemLootEntry.builder(Items.ELYTRA).weight(3).quality(2).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.75F, 1.0F))))
+						.addEntry(ItemLootEntry.builder(Items.ELYTRA).weight(1).quality(2).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.75F, 1.0F))))
 						.addEntry(ItemLootEntry.builder(Items.ENDER_PEARL).weight(10).quality(1).acceptFunction(SetCount.builder(RandomValueRange.of(1, 4))))
 						.addEntry(ItemLootEntry.builder(Items.CHORUS_FRUIT).weight(10).quality(-5).acceptFunction(SetCount.builder(RandomValueRange.of(1, 4)))))
 				.addLootPool(LootPool.builder().name(MISC_POOL).rolls(ConstantRange.of(1))
