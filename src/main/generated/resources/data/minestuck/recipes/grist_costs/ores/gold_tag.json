@@ -1,10 +1,12 @@
 {
-  "type": "minestuck:item_source_grist_cost",
+  "type": "minestuck:source_grist_cost",
   "ingredient": {
     "tag": "forge:ores/gold"
   },
   "grist_cost": {
     "minestuck:build": 4
   },
-  "source": "minecraft:gold_ingot"
+  "sources": [
+    "minecraft:gold_ingot"
+  ]
 }

@@ -1,10 +1,11 @@
 {
   "type": "minestuck:source_grist_cost",
   "ingredient": {
-    "tag": "forge:terracotta"
+    "item": "minecraft:salmon_bucket"
   },
   "grist_cost": {},
   "sources": [
-    "minecraft:clay"
+    "minecraft:salmon",
+    "minecraft:water_bucket"
   ]
 }

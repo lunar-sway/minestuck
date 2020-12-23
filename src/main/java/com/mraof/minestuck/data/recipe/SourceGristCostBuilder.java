@@ -1,11 +1,13 @@
 package com.mraof.minestuck.data.recipe;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.alchemy.ImmutableGristSet;
+import com.mraof.minestuck.item.crafting.alchemy.generator.SourceGristCost;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -14,69 +16,78 @@ import net.minecraft.tags.Tag;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class TagSourceGristCostBuilder
+public class SourceGristCostBuilder
 {
 	private final ResourceLocation defaultName;
 	private final Ingredient ingredient;
 	private final ImmutableMap.Builder<GristType, Long> costBuilder = ImmutableMap.builder();
-	private Tag<Item> source;
+	private final List<String> sources = new ArrayList<>();
 	private float multiplier = 1;
 	private Integer priority = null;
 	
-	public static TagSourceGristCostBuilder of(Tag<Item> tag)
+	public static SourceGristCostBuilder of(Tag<Item> tag)
 	{
-		return new TagSourceGristCostBuilder(new ResourceLocation(tag.getId().getNamespace(), tag.getId().getPath()+"_tag"), Ingredient.fromTag(tag));
+		return new SourceGristCostBuilder(new ResourceLocation(tag.getId().getNamespace(), tag.getId().getPath()+"_tag"), Ingredient.fromTag(tag));
 	}
 	
-	public static TagSourceGristCostBuilder of(IItemProvider item)
+	public static SourceGristCostBuilder of(IItemProvider item)
 	{
-		return new TagSourceGristCostBuilder(item.asItem().getRegistryName(), Ingredient.fromItems(item));
+		return new SourceGristCostBuilder(item.asItem().getRegistryName(), Ingredient.fromItems(item));
 	}
 	
-	public static TagSourceGristCostBuilder of(Ingredient ingredient)
+	public static SourceGristCostBuilder of(Ingredient ingredient)
 	{
-		return new TagSourceGristCostBuilder(ingredient);
+		return new SourceGristCostBuilder(ingredient);
 	}
 	
-	protected TagSourceGristCostBuilder(Ingredient ingredient)
+	protected SourceGristCostBuilder(Ingredient ingredient)
 	{
 		this(null, ingredient);
 	}
 	
-	protected TagSourceGristCostBuilder(ResourceLocation defaultName, Ingredient ingredient)
+	protected SourceGristCostBuilder(ResourceLocation defaultName, Ingredient ingredient)
 	{
 		this.defaultName = defaultName;
 		this.ingredient = ingredient;
 	}
 	
-	public TagSourceGristCostBuilder grist(Supplier<GristType> type, long amount)
+	public SourceGristCostBuilder grist(Supplier<GristType> type, long amount)
 	{
 		return grist(type.get(), amount);
 	}
 	
-	public TagSourceGristCostBuilder grist(GristType type, long amount)
+	public SourceGristCostBuilder grist(GristType type, long amount)
 	{
 		costBuilder.put(type, amount);
 		return this;
 	}
 	
-	public TagSourceGristCostBuilder priority(int priority)
+	public SourceGristCostBuilder priority(int priority)
 	{
 		this.priority = priority;
 		return this;
 	}
 	
-	public TagSourceGristCostBuilder source(Tag<Item> source)
+	public SourceGristCostBuilder source(Tag<Item> source)
 	{
-		this.source = source;
+		sources.add(SourceGristCost.tagString(source));
 		return this;
 	}
 	
-	public TagSourceGristCostBuilder multiplier(float multiplier)
+	
+	public SourceGristCostBuilder source(Item source)
+	{
+		sources.add(SourceGristCost.itemString(source));
+		return this;
+	}
+	
+	public SourceGristCostBuilder multiplier(float multiplier)
 	{
 		this.multiplier = multiplier;
 		return this;
@@ -96,18 +107,18 @@ public class TagSourceGristCostBuilder
 	
 	public void build(Consumer<IFinishedRecipe> recipeSaver, ResourceLocation id)
 	{
-		recipeSaver.accept(new Result(new ResourceLocation(id.getNamespace(), "grist_costs/"+id.getPath()), ingredient, source, multiplier, new ImmutableGristSet(costBuilder), priority));
+		recipeSaver.accept(new Result(new ResourceLocation(id.getNamespace(), "grist_costs/"+id.getPath()), ingredient, sources, multiplier, new ImmutableGristSet(costBuilder), priority));
 	}
 	
 	public static class Result extends GristCostRecipeBuilder.Result
 	{
-		private final Tag<Item> source;
+		private final List<String> sources;
 		private final float multiplier;
 		
-		public Result(ResourceLocation id, Ingredient ingredient, Tag<Item> source, float multiplier, GristSet cost, Integer priority)
+		public Result(ResourceLocation id, Ingredient ingredient, List<String> sources, float multiplier, GristSet cost, Integer priority)
 		{
 			super(id, ingredient, cost, priority);
-			this.source = Objects.requireNonNull(source, "Source tag must not be null");
+			this.sources = sources;
 			this.multiplier = multiplier;
 		}
 		
@@ -115,7 +126,9 @@ public class TagSourceGristCostBuilder
 		public void serialize(JsonObject jsonObject)
 		{
 			super.serialize(jsonObject);
-			jsonObject.addProperty("source", source.getId().toString());
+			JsonArray sourceArray = new JsonArray();
+			sources.forEach(sourceArray::add);
+			jsonObject.add("sources", sourceArray);
 			if(multiplier != 1)
 				jsonObject.addProperty("multiplier", multiplier);
 		}
@@ -123,7 +136,7 @@ public class TagSourceGristCostBuilder
 		@Override
 		public IRecipeSerializer<?> getSerializer()
 		{
-			return MSRecipeTypes.TAG_SOURCE_GRIST_COST;
+			return MSRecipeTypes.SOURCE_GRIST_COST;
 		}
 	}
 }

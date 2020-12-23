@@ -3,9 +3,8 @@ package com.mraof.minestuck.item.crafting;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.crafting.alchemy.*;
 import com.mraof.minestuck.item.crafting.alchemy.generator.ContainerGristCost;
-import com.mraof.minestuck.item.crafting.alchemy.generator.ItemSourceGristCost;
 import com.mraof.minestuck.item.crafting.alchemy.generator.RecipeGeneratedGristCost;
-import com.mraof.minestuck.item.crafting.alchemy.generator.TagSourceGristCost;
+import com.mraof.minestuck.item.crafting.alchemy.generator.SourceGristCost;
 import com.mraof.minestuck.world.storage.loot.MSLootTables;
 import net.minecraft.item.crafting.CookingRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -34,8 +33,7 @@ public class MSRecipeTypes
 	public static final IRecipeSerializer<GristCostRecipe> WILDCARD_GRIST_COST = getNull();
 	public static final IRecipeSerializer<UnavailableGristCost> UNAVAILABLE_GRIST_COST = getNull();
 	public static final IRecipeSerializer<RecipeGeneratedGristCost> RECIPE_GRIST_COST = getNull();
-	public static final IRecipeSerializer<TagSourceGristCost> TAG_SOURCE_GRIST_COST = getNull();
-	public static final IRecipeSerializer<ItemSourceGristCost> ITEM_SOURCE_GRIST_COST = getNull();
+	public static final IRecipeSerializer<SourceGristCost> SOURCE_GRIST_COST = getNull();
 	public static final IRecipeSerializer<CombinationRecipe> COMBINATION = getNull();
 	
 	@Nonnull
@@ -62,8 +60,7 @@ public class MSRecipeTypes
 		registry.register(new WildcardGristCost.Serializer().setRegistryName("wildcard_grist_cost"));
 		registry.register(new UnavailableGristCost.Serializer().setRegistryName("unavailable_grist_cost"));
 		registry.register(new RecipeGeneratedGristCost.Serializer().setRegistryName("recipe_grist_cost"));
-		registry.register(new ItemSourceGristCost.Serializer().setRegistryName("item_source_grist_cost"));
-		registry.register(new TagSourceGristCost.Serializer().setRegistryName("tag_source_grist_cost"));
+		registry.register(new SourceGristCost.Serializer().setRegistryName("source_grist_cost"));
 		registry.register(new CombinationRecipe.Serializer().setRegistryName("combination"));
 		
 		MSLootTables.registerLootSerializers();	//Needs to be called somewhere, preferably during a registry event, and this is close enough

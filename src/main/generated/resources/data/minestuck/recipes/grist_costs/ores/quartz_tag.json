@@ -1,11 +1,13 @@
 {
-  "type": "minestuck:item_source_grist_cost",
+  "type": "minestuck:source_grist_cost",
   "ingredient": {
     "tag": "forge:ores/quartz"
   },
   "grist_cost": {
     "minestuck:build": 4
   },
-  "source": "minecraft:quartz",
+  "sources": [
+    "minecraft:quartz"
+  ],
   "multiplier": 2.0
 }
