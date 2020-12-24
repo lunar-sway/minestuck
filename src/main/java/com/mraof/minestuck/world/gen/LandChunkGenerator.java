@@ -1,9 +1,11 @@
 package com.mraof.minestuck.world.gen;
 
 import com.mraof.minestuck.entity.MSEntityTypes;
+import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.skaianet.UnderlingController;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.lands.GristTypeLayer;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.util.SharedSeedRandom;
@@ -41,6 +43,7 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 	public final LandTypePair landTypes;
 	public final StructureBlockRegistry blockRegistry;
 	public final LandBiomeHolder biomeHolder;
+	public final GristTypeLayer gristTypeLayer;
 	
 	public LandChunkGenerator(IWorld worldIn, BiomeProvider biomeProviderIn, LandGenSettings settings)
 	{
@@ -50,6 +53,7 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 		blockRegistry = Objects.requireNonNull(settings.getBlockRegistry());
 		
 		biomeHolder = Objects.requireNonNull(settings.getBiomeHolder());
+		gristTypeLayer = GristTypeLayer.createLayer(worldIn.getSeed(), GristTypes.ARTIFACT.get());
 	}
 	
 	@Override
