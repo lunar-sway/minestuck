@@ -29,6 +29,7 @@ import net.minecraft.world.spawner.WorldEntitySpawner;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 {
@@ -44,7 +45,7 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 	public final LandTypePair landTypes;
 	public final StructureBlockRegistry blockRegistry;
 	public final LandBiomeHolder biomeHolder;
-	public final GristTypeLayer gristTypeLayer;
+	private final GristTypeLayer anyGristLayer, commonGristLayer, uncommonGristLayer;
 	
 	public LandChunkGenerator(IWorld worldIn, BiomeProvider biomeProviderIn, LandGenSettings settings)
 	{
@@ -54,7 +55,21 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 		blockRegistry = Objects.requireNonNull(settings.getBlockRegistry());
 		
 		biomeHolder = Objects.requireNonNull(settings.getBiomeHolder());
-		gristTypeLayer = GristTypeLayer.createLayer(GristType.SpawnCategory.ANY, worldIn.getSeed(), 8, GristTypes.ARTIFACT.get());
+		GristType baseType = GristTypes.ARTIFACT.get();
+		//TODO give the layers different seeds
+		commonGristLayer = GristTypeLayer.createLayer(GristType.SpawnCategory.COMMON, worldIn.getSeed(), 10, null);
+		anyGristLayer = GristTypeLayer.createLayer(GristType.SpawnCategory.ANY, worldIn.getSeed(), 8, baseType);
+		uncommonGristLayer = GristTypeLayer.createLayer(GristType.SpawnCategory.UNCOMMON, worldIn.getSeed(), 7, baseType);
+	}
+	
+	public GristTypeLayer randomLayer(Random rand)
+	{
+		switch(rand.nextInt(3))
+		{
+			case 0: return commonGristLayer;
+			case 1: return uncommonGristLayer;
+			default: return anyGristLayer;
+		}
 	}
 	
 	@Override

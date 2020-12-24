@@ -30,9 +30,8 @@ public final class UnderlingController
 		ChunkGenerator<?> chunkGenerator = entity.world.isRemote ? null : ((ServerWorld)entity.world).getChunkProvider().getChunkGenerator();
 		if(chunkGenerator instanceof LandChunkGenerator)
 		{
-			entity.setNoAI(true);
 			BlockPos pos = entity.getPosition();
-			return ((LandChunkGenerator)chunkGenerator).gristTypeLayer.getTypeAt(pos.getX(), pos.getZ());
+			return ((LandChunkGenerator)chunkGenerator).randomLayer(entity.getRNG()).getTypeAt(pos.getX(), pos.getZ());
 		}
 		else return GristHelper.getPrimaryGrist(entity.getRNG());
 	}
