@@ -34,10 +34,10 @@ public final class UnderlingController
 			BlockPos pos = entity.getPosition();
 			return ((LandChunkGenerator)chunkGenerator).gristTypeLayer.getTypeAt(pos.getX(), pos.getZ());
 		}
-		else return GristHelper.getPrimaryGrist();
+		else return GristHelper.getPrimaryGrist(entity.getRNG());
 	}
 	
-	private static List<Biome.SpawnListEntry>[] difficultyList = new List[31];
+	private static final List<Biome.SpawnListEntry>[] difficultyList = new List[31];
 	
 	public static List<Biome.SpawnListEntry> getUnderlingList(BlockPos pos, World world)
 	{
