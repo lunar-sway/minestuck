@@ -53,7 +53,7 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 		blockRegistry = Objects.requireNonNull(settings.getBlockRegistry());
 		
 		biomeHolder = Objects.requireNonNull(settings.getBiomeHolder());
-		gristTypeLayer = GristTypeLayer.createLayer(worldIn.getSeed(), GristTypes.ARTIFACT.get());
+		gristTypeLayer = GristTypeLayer.createLayer(worldIn.getSeed(), 8, GristTypes.ARTIFACT.get());
 	}
 	
 	@Override

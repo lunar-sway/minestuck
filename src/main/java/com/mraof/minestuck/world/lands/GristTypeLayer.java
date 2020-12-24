@@ -25,10 +25,10 @@ public class GristTypeLayer
 		this.area = area;
 	}
 	
-	public static GristTypeLayer createLayer(long seed, @Nullable GristType baseType)
+	public static GristTypeLayer createLayer(long seed, int zoomLevel, @Nullable GristType baseType)
 	{
 		IAreaFactory<LazyArea> layer = new BaseLayer(baseType).apply(new LazyAreaLayerContext(25, seed, 250L));
-		layer = LayerUtil.repeat(2000L, ZoomLayer.NORMAL, layer, 5, value -> new LazyAreaLayerContext(25, seed, value));
+		layer = LayerUtil.repeat(2000L, ZoomLayer.NORMAL, layer, zoomLevel, value -> new LazyAreaLayerContext(25, seed, value));
 		
 		return new GristTypeLayer(layer.make());
 	}
@@ -56,7 +56,7 @@ public class GristTypeLayer
 		@Override
 		public int apply(INoiseRandom context, int x, int z)
 		{
-			if(baseGristType != -1 && x == 0 && z == 0)
+			if(baseGristType != -1 && x * x + z * z <= 1)
 				return baseGristType;
 			
 			return WeightedRandom.getRandomItem(gristTypes, context.random(weightSum)).gristId;
