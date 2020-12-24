@@ -1,6 +1,7 @@
 package com.mraof.minestuck.world.gen;
 
 import com.mraof.minestuck.entity.MSEntityTypes;
+import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.skaianet.UnderlingController;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
@@ -53,7 +54,7 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 		blockRegistry = Objects.requireNonNull(settings.getBlockRegistry());
 		
 		biomeHolder = Objects.requireNonNull(settings.getBiomeHolder());
-		gristTypeLayer = GristTypeLayer.createLayer(worldIn.getSeed(), 8, GristTypes.ARTIFACT.get());
+		gristTypeLayer = GristTypeLayer.createLayer(GristType.SpawnCategory.ANY, worldIn.getSeed(), 8, GristTypes.ARTIFACT.get());
 	}
 	
 	@Override

@@ -25,9 +25,9 @@ public class GristTypeLayer
 		this.area = area;
 	}
 	
-	public static GristTypeLayer createLayer(long seed, int zoomLevel, @Nullable GristType baseType)
+	public static GristTypeLayer createLayer(GristType.SpawnCategory category, long seed, int zoomLevel, @Nullable GristType baseType)
 	{
-		IAreaFactory<LazyArea> layer = new BaseLayer(baseType).apply(new LazyAreaLayerContext(25, seed, 250L));
+		IAreaFactory<LazyArea> layer = new BaseLayer(category, baseType).apply(new LazyAreaLayerContext(25, seed, 250L));
 		layer = LayerUtil.repeat(2000L, ZoomLayer.NORMAL, layer, zoomLevel, value -> new LazyAreaLayerContext(25, seed, value));
 		
 		return new GristTypeLayer(layer.make());
@@ -46,10 +46,11 @@ public class GristTypeLayer
 		
 		final int baseGristType;
 		
-		public BaseLayer(@Nullable GristType type)
+		public BaseLayer(GristType.SpawnCategory category, @Nullable GristType type)
 		{
 			this.baseGristType = type == null ? -1 : ((ForgeRegistry<GristType>) GristTypes.getRegistry()).getID(type);
-			gristTypes = GristTypes.values().stream().filter(GristType::isUnderlingType).map(GristEntry::new).collect(Collectors.toList());
+			gristTypes = GristTypes.values().stream().filter(GristType::isUnderlingType)
+					.filter(gristType -> gristType.isInCategory(category)).map(GristEntry::new).collect(Collectors.toList());
 			weightSum = WeightedRandom.getTotalWeight(gristTypes);
 		}
 		
