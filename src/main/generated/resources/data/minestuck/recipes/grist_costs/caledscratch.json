@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:caledscratch"
+  },
+  "grist_cost": {
+    "minestuck:build": 1000,
+    "minestuck:quartz": 3000,
+    "minestuck:uranium": 5000,
+    "minestuck:ruby": 5000,
+    "minestuck:diamond": 1000
+  }
+}

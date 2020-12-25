@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:caledfwlch"
+  },
+  "grist_cost": {
+    "minestuck:build": 40000,
+    "minestuck:uranium": 12500,
+    "minestuck:cobalt": 24130,
+    "minestuck:diamond": 8000,
+    "minestuck:ruby": 25000
+  }
+}

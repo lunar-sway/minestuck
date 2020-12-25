@@ -1,0 +1,15 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:cutlass_of_zillywair"
+  },
+  "grist_cost": {
+    "minestuck:build": 50000,
+    "minestuck:uranium": 10000,
+    "minestuck:cobalt": 22500,
+    "minestuck:diamond": 26000,
+    "minestuck:ruby": 29000,
+    "minestuck:gold": 25000,
+    "minestuck:zillium": -1
+  }
+}

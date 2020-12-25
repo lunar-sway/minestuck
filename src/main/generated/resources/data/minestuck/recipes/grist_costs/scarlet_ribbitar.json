@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:scarlet_ribbitar"
+  },
+  "grist_cost": {
+    "minestuck:build": 50000,
+    "minestuck:ruby": 100000,
+    "minestuck:quartz": 10000,
+    "minestuck:garnet": 50000
+  }
+}

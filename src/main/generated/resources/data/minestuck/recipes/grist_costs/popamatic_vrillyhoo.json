@@ -1,0 +1,15 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:popamatic_vrillyhoo"
+  },
+  "grist_cost": {
+    "minestuck:build": 28888,
+    "minestuck:cobalt": 18888,
+    "minestuck:uranium": 10000,
+    "minestuck:diamond": 15000,
+    "minestuck:ruby": 12500,
+    "minestuck:shale": 30000,
+    "minestuck:zillium": 1
+  }
+}

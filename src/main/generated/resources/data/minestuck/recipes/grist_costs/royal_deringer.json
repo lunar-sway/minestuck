@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:royal_deringer"
+  },
+  "grist_cost": {
+    "minestuck:build": 10000,
+    "minestuck:gold": 22500,
+    "minestuck:diamond": 3140
+  }
+}

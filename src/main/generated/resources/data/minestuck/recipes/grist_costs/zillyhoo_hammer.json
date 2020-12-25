@@ -1,0 +1,15 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:zillyhoo_hammer"
+  },
+  "grist_cost": {
+    "minestuck:build": 28000,
+    "minestuck:gold": 15000,
+    "minestuck:uranium": 15000,
+    "minestuck:diamond": 10000,
+    "minestuck:ruby": 10000,
+    "minestuck:shale": 20000,
+    "minestuck:zillium": -1
+  }
+}
