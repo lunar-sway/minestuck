@@ -4,10 +4,10 @@
     "item": "minestuck:shock_axe"
   },
   "grist_cost": {
-    "minestuck:build": 275,
-    "minestuck:rust": 125,
-    "minestuck:gold": 121,
-    "minestuck:amber": 90,
-    "minestuck:uranium": 50
+    "minestuck:build": 9000,
+    "minestuck:rust": 3125,
+    "minestuck:gold": 4210,
+    "minestuck:amber": 3000,
+    "minestuck:uranium": 3000
   }
 }

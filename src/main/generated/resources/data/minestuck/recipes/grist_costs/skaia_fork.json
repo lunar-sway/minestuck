@@ -4,9 +4,9 @@
     "item": "minestuck:skaia_fork"
   },
   "grist_cost": {
-    "minestuck:build": 900,
-    "minestuck:quartz": 94,
-    "minestuck:gold": 58,
-    "minestuck:amethyst": 63
+    "minestuck:build": 9000,
+    "minestuck:quartz": 2000,
+    "minestuck:gold": 1500,
+    "minestuck:amethyst": 1500
   }
 }

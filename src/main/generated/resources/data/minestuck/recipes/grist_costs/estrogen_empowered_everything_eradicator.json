@@ -5,8 +5,8 @@
   },
   "grist_cost": {
     "minestuck:build": 8000,
-    "minestuck:shale": 1280,
-    "minestuck:uranium": 640,
-    "minestuck:rust": 300
+    "minestuck:shale": 2000,
+    "minestuck:uranium": 1500,
+    "minestuck:rust": 2000
   }
 }

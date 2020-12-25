@@ -4,8 +4,8 @@
     "item": "minestuck:blacksmith_bane"
   },
   "grist_cost": {
-    "minestuck:build": 30,
-    "minestuck:rust": 15,
-    "minestuck:tar": 12
+    "minestuck:build": 1555,
+    "minestuck:rust": 413,
+    "minestuck:tar": 413
   }
 }

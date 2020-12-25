@@ -80,7 +80,7 @@ public final class MSEntityTypes
 		register(registry, EntityType.Builder.create(OgreEntity::new, UNDERLING).size(2.8F, 4.3F), "ogre");
 		register(registry, EntityType.Builder.create(BasiliskEntity::new, UNDERLING).size(3F, 2F), "basilisk");
 		register(registry, EntityType.Builder.create(LichEntity::new, UNDERLING).size(0.8F, 2.0F), "lich");
-		register(registry, EntityType.Builder.create(GiclopsEntity::new, UNDERLING).size(8.0F, 12.0F), "giclops");
+		register(registry, EntityType.Builder.create(GiclopsEntity::new, UNDERLING).size(4.0F, 6.0F), "giclops");
 		register(registry, EntityType.Builder.create(WyrmEntity::new, UNDERLING), "wyrm");
 		
 		register(registry, EntityType.Builder.create(PawnEntity::createDersite, EntityClassification.MONSTER).size(0.6F, 1.5F), "dersite_pawn");

@@ -4,9 +4,9 @@
     "item": "minestuck:nosferatu_spoon"
   },
   "grist_cost": {
-    "minestuck:build": 150,
-    "minestuck:mercury": 5,
-    "minestuck:amethyst": 20,
-    "minestuck:garnet": 15
+    "minestuck:build": 500,
+    "minestuck:mercury": 100,
+    "minestuck:amethyst": 68,
+    "minestuck:garnet": 50
   }
 }

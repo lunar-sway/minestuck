@@ -33,7 +33,7 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 		
 		this.stepHeight = 2;
 		partGroup = new PartGroup(this);
-		partGroup.addBox(-4, 2, -1.5, 8, 8, 5);
+		partGroup.addBox(-4, 2, -1.5, 3, 5, 3);
 		partGroup.addBox(-5, 0, -0.5, 3, 2, 3);
 		partGroup.addBox(1, 0, -0.5, 3, 2, 3);
 		partGroup.createEntities(world);
@@ -75,7 +75,7 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	@Override
 	public GristSet getGristSpoils()
 	{
-		return GristHelper.generateUnderlingGristDrops(this, damageMap, 170);
+		return GristHelper.generateUnderlingGristDrops(this, damageMap, 300);
 	}
 
 	@Override

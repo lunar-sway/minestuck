@@ -4,8 +4,10 @@
     "item": "minestuck:regisword"
   },
   "grist_cost": {
-    "minestuck:amethyst": 27,
-    "minestuck:tar": 62,
-    "minestuck:gold": 38
+    "minestuck:build": 1000,
+    "minestuck:amethyst": 1000,
+    "minestuck:tar": 10000,
+    "minestuck:chalk": 10000,
+    "minestuck:gold": 1000
   }
 }

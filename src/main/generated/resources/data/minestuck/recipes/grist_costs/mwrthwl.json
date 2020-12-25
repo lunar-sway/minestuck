@@ -4,8 +4,11 @@
     "item": "minestuck:mwrthwl"
   },
   "grist_cost": {
-    "minestuck:build": 10000,
-    "minestuck:gold": 1000,
-    "minestuck:rust": 2500
+    "minestuck:build": 40000,
+    "minestuck:gold": 10000,
+    "minestuck:rust": 15000,
+    "minestuck:ruby": 10000,
+    "minestuck:shale": 20000,
+    "minestuck:zillium": 1
   }
 }

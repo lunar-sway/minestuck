@@ -4,8 +4,8 @@
     "item": "minestuck:telescopic_sassacrusher"
   },
   "grist_cost": {
-    "minestuck:shale": 39,
-    "minestuck:tar": 18,
-    "minestuck:mercury": 23
+    "minestuck:shale": 250,
+    "minestuck:tar": 10,
+    "minestuck:mercury": 50
   }
 }

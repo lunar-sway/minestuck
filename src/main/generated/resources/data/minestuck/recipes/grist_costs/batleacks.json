@@ -4,6 +4,6 @@
     "item": "minestuck:batleacks"
   },
   "grist_cost": {
-    "minestuck:build": 0
+    "minestuck:artifact": -10
   }
 }

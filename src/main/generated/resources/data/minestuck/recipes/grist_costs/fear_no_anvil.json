@@ -4,10 +4,10 @@
     "item": "minestuck:fear_no_anvil"
   },
   "grist_cost": {
-    "minestuck:build": 999,
-    "minestuck:garnet": 150,
-    "minestuck:diamond": 54,
-    "minestuck:gold": 61,
+    "minestuck:build": 5000,
+    "minestuck:garnet": 5000,
+    "minestuck:diamond": 5000,
+    "minestuck:gold": 5000,
     "minestuck:quartz": 1
   }
 }
