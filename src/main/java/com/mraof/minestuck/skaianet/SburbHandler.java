@@ -27,8 +27,10 @@ import net.minecraft.world.server.ServerWorld;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 /**
  * A class for managing sburb-related stuff from outside this package that is dependent on connections and sessions.
@@ -106,12 +108,6 @@ public final class SburbHandler
 		}
 		
 		return ColorHandler.setColor(new ItemStack(artifact), color);
-	}
-	
-	public static GristType getPrimaryGristType(PlayerIdentifier player)
-	{
-		
-		return GristTypes.SHALE.get();
 	}
 	
 	public static SburbConnection getConnectionForDimension(ServerWorld world)
@@ -249,6 +245,13 @@ public final class SburbHandler
 		Random rand = new Random();	//TODO seed?
 		c.artifactType = rand.nextInt(2);
 		LOGGER.info("Randomized artifact type to be: {} for player {}.", c.artifactType, c.getClientIdentifier().getUsername());
+		c.setBaseGrist(generateGristType(rand));
+	}
+	
+	static GristType generateGristType(Random rand)
+	{
+		List<GristType> types = GristTypes.values().stream().filter(type -> type.isInCategory(GristType.SpawnCategory.COMMON)).collect(Collectors.toList());
+		return types.get(rand.nextInt(types.size()));
 	}
 	
 	public static void resetGivenItems(MinecraftServer mcServer)
