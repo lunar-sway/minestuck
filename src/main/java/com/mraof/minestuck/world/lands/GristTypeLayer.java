@@ -14,6 +14,7 @@ import net.minecraftforge.registries.ForgeRegistry;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.LongFunction;
 import java.util.stream.Collectors;
 
 public class GristTypeLayer
@@ -25,10 +26,12 @@ public class GristTypeLayer
 		this.area = area;
 	}
 	
-	public static GristTypeLayer createLayer(GristType.SpawnCategory category, long seed, int zoomLevel, @Nullable GristType baseType)
+	public static GristTypeLayer createLayer(GristType.SpawnCategory category, int index, long seed, int zoomLevel, @Nullable GristType baseType)
 	{
-		IAreaFactory<LazyArea> layer = new BaseLayer(category, baseType).apply(new LazyAreaLayerContext(25, seed, 250L));
-		layer = LayerUtil.repeat(2000L, ZoomLayer.NORMAL, layer, zoomLevel, value -> new LazyAreaLayerContext(25, seed, value));
+		LongFunction<LazyAreaLayerContext> layerContextCreator = modifier -> new LazyAreaLayerContext(25, seed, modifier + index);
+		
+		IAreaFactory<LazyArea> layer = new BaseLayer(category, baseType).apply(layerContextCreator.apply(250L));
+		layer = LayerUtil.repeat(2000L, ZoomLayer.NORMAL, layer, zoomLevel, layerContextCreator);
 		
 		return new GristTypeLayer(layer.make());
 	}

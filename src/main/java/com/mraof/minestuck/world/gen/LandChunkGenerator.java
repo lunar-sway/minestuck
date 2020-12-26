@@ -56,10 +56,10 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 		
 		biomeHolder = Objects.requireNonNull(settings.getBiomeHolder());
 		GristType baseType = GristTypes.ARTIFACT.get();
-		//TODO give the layers different seeds
-		commonGristLayer = GristTypeLayer.createLayer(GristType.SpawnCategory.COMMON, worldIn.getSeed(), 10, null);
-		anyGristLayer = GristTypeLayer.createLayer(GristType.SpawnCategory.ANY, worldIn.getSeed(), 8, baseType);
-		uncommonGristLayer = GristTypeLayer.createLayer(GristType.SpawnCategory.UNCOMMON, worldIn.getSeed(), 7, baseType);
+		
+		commonGristLayer = GristTypeLayer.createLayer(GristType.SpawnCategory.COMMON, 0, worldIn.getSeed(), 10, null);
+		anyGristLayer = GristTypeLayer.createLayer(GristType.SpawnCategory.ANY, 1, worldIn.getSeed(), 8, baseType);
+		uncommonGristLayer = GristTypeLayer.createLayer(GristType.SpawnCategory.UNCOMMON, 2, worldIn.getSeed(), 7, baseType);
 	}
 	
 	public GristTypeLayer randomLayer(Random rand)
