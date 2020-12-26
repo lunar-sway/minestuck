@@ -2,7 +2,7 @@ package com.mraof.minestuck.world.gen;
 
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
-import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
+import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.UnderlingController;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
@@ -25,6 +25,7 @@ import net.minecraft.world.gen.WorldGenRegion;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.spawner.WorldEntitySpawner;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -55,7 +56,8 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 		blockRegistry = Objects.requireNonNull(settings.getBlockRegistry());
 		
 		biomeHolder = Objects.requireNonNull(settings.getBiomeHolder());
-		GristType baseType = GristTypes.ARTIFACT.get();
+		//Server not available from the world as it is still being constructed. Is a different solution reliable here?
+		GristType baseType = SburbHandler.getConnectionForDimension(ServerLifecycleHooks.getCurrentServer(), worldIn.getDimension().getType()).getBaseGrist();
 		
 		commonGristLayer = GristTypeLayer.createLayer(GristType.SpawnCategory.COMMON, 0, worldIn.getSeed(), 10, null);
 		anyGristLayer = GristTypeLayer.createLayer(GristType.SpawnCategory.ANY, 1, worldIn.getSeed(), 8, baseType);
