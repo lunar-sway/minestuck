@@ -107,7 +107,7 @@ public final class SburbConnection
 			hasEntered = nbt.contains("has_entered") ? nbt.getBoolean("has_entered") : true;
 		}
 		artifactType = nbt.getInt("artifact");
-		baseGrist = GristType.read(nbt, "base_type", () -> SburbHandler.generateGristType(new Random()));
+		baseGrist = GristType.read(nbt, "base_grist", () -> SburbHandler.generateGristType(new Random()));
 	}
 	
 	CompoundNBT write()
@@ -142,6 +142,7 @@ public final class SburbConnection
 		}
 		
 		nbt.putInt("artifact", artifactType);
+		baseGrist.write(nbt, "base_grist");
 		return nbt;
 	}
 	
