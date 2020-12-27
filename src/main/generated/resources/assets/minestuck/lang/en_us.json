@@ -1439,6 +1439,8 @@
   "minestuck.select_grist": "Select Grist Type",
   "minestuck.select_message": "Select a server below",
   "minestuck.select_title": "Choose Your Title",
+  "minestuck.select_title.randomize": "Randomize",
+  "minestuck.select_title.select": "Select",
   "minestuck.select_title.used": "%s is already used",
   "minestuck.server_active_message": "Server with your name exists",
   "minestuck.server_program": "Server",
