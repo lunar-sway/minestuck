@@ -386,7 +386,10 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.POPAMATIC_VRILLYHOO).input(MSItems.ZILLYHOO_HAMMER).and().input(MSItems.FLUORITE_OCTET).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.SCARLET_ZILLYHOO).input(MSItems.ZILLYHOO_HAMMER).and().input(MSItems.FROG).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.MWRTHWL).input(MSItems.REGI_HAMMER).or().input(MSItems.CUEBALL).build(consumer);
-		
+
+		CombinationRecipeBuilder.of(MSItems.CLUB_OF_FELONY).namedInput(MSItems.HORSE_HITCHER).or().input(MSItems.NIGHT_CLUB).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.CUESTICK).namedInput(MSItems.HORSE_HITCHER).and().input(MSItems.LIPSTICK_CHAINSAW).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.HORSE_HITCHER).namedInput(MSItems.IRON_CANE).or().input(MSItems.CREW_POSTER).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.VAUDEVILLE_HOOK).namedInput(MSItems.CANE).and().input(Items.FISHING_ROD).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.VAUDEVILLE_HOOK).namedInput(Items.STICK).and().input(Items.FISHING_ROD).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.BEAR_POKING_STICK).namedInput(MSItems.CANE).or().input(Items.LEATHER).build(consumer);
@@ -406,6 +409,8 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.PARADISES_PORTABELLO).input(Items.STICK).or().namedInput(Items.BROWN_MUSHROOM).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.REGI_CANE).namedInput(MSItems.CANE).and().input(MSBlocks.CHESSBOARD).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.REGI_CANE).namedInput(MSItems.IRON_CANE).and().input(MSBlocks.CHESSBOARD).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.POGO_CANE).namedInput(MSItems.CANE).and().input(Items.SLIME_BALL).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.POGO_CANE).namedInput(MSItems.IRON_CANE).and().input(Items.SLIME_BALL).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.URANIUM_POWERED_STICK).input(Items.STICK).or().input(MSItems.RAW_URANIUM).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CANDY_CANE).input(MSItems.VAUDEVILLE_HOOK).and().namedInput(MSItems.CANDY_CORN).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CANDY_CANE).input(MSItems.VAUDEVILLE_HOOK).and().namedInput(MSItems.DIAMOND_MINT).build(consumer);

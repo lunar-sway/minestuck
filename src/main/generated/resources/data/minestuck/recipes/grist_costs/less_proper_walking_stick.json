@@ -5,7 +5,7 @@
   },
   "grist_cost": {
     "minestuck:build": 500,
-    "minestuck:rust": 120,
-    "minestuck:iodine": 45
+    "minestuck:rust": 220,
+    "minestuck:iodine": 145
   }
 }

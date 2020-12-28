@@ -32,7 +32,7 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 	protected void registerAttributes()
 	{
 		super.registerAttributes();
-		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(85.0D);
+		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(185.0D);
 		getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.6D);
 		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
 		getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(6.0D);

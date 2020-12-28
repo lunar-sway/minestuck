@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:horse_hitcher"
+  },
+  "grist_cost": {
+    "minestuck:build": 4130,
+    "minestuck:tar": 2200,
+    "minestuck:rust": 2000,
+    "minestuck:shale": 3000
+  }
+}

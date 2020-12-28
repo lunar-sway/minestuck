@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:club_of_felony"
+  },
+  "grist_cost": {
+    "minestuck:build": 20000,
+    "minestuck:tar": 14130,
+    "minestuck:rust": 10000
+  }
+}

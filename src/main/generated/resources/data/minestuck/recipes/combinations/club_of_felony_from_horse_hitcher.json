@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:horse_hitcher"
+  },
+  "input2": {
+    "item": "minestuck:night_club"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:club_of_felony"
+  }
+}

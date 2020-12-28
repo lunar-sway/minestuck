@@ -4,8 +4,8 @@
     "item": "minestuck:spear_cane"
   },
   "grist_cost": {
-    "minestuck:build": 28,
-    "minestuck:mercury": 14,
-    "minestuck:amber": 11
+    "minestuck:build": 880,
+    "minestuck:mercury": 640,
+    "minestuck:amber": 410
   }
 }

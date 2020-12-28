@@ -5,8 +5,8 @@
   },
   "grist_cost": {
     "minestuck:build": 150,
-    "minestuck:mercury": 20,
-    "minestuck:cobalt": 20,
-    "minestuck:iodine": 15
+    "minestuck:mercury": 80,
+    "minestuck:cobalt": 50,
+    "minestuck:iodine": 45
   }
 }

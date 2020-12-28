@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:cuestick"
+  },
+  "grist_cost": {
+    "minestuck:build": 10000,
+    "minestuck:shale": 5000,
+    "minestuck:tar": 8000,
+    "minestuck:chalk": 8000
+  }
+}

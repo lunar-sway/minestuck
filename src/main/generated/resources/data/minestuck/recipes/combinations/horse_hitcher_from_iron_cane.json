@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:iron_cane"
+  },
+  "input2": {
+    "item": "minestuck:crew_poster"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:horse_hitcher"
+  }
+}

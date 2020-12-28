@@ -4,9 +4,9 @@
     "item": "minestuck:claw_sickle"
   },
   "grist_cost": {
-    "minestuck:build": 255,
-    "minestuck:iodine": 103,
-    "minestuck:chalk": 56,
-    "minestuck:garnet": 6
+    "minestuck:build": 15500,
+    "minestuck:iodine": 4130,
+    "minestuck:chalk": 5600,
+    "minestuck:garnet": 6000
   }
 }

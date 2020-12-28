@@ -4,8 +4,8 @@
     "item": "minestuck:prismarine_basher"
   },
   "grist_cost": {
-    "minestuck:build": 75,
-    "minestuck:cobalt": 45,
-    "minestuck:marble": 22
+    "minestuck:build": 1075,
+    "minestuck:cobalt": 450,
+    "minestuck:marble": 220
   }
 }

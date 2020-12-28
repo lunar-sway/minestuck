@@ -4,7 +4,7 @@
     "item": "minestuck:metal_bat"
   },
   "grist_cost": {
-    "minestuck:build": 35,
-    "minestuck:mercury": 23
+    "minestuck:build": 65,
+    "minestuck:mercury": 43
   }
 }

@@ -4,9 +4,9 @@
     "item": "minestuck:candy_sickle"
   },
   "grist_cost": {
-    "minestuck:iodine": 65,
-    "minestuck:gold": 38,
-    "minestuck:chalk": 53,
-    "minestuck:amber": 20
+    "minestuck:iodine": 165,
+    "minestuck:gold": 280,
+    "minestuck:chalk": 330,
+    "minestuck:amber": 200
   }
 }

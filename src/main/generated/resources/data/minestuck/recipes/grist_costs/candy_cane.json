@@ -4,8 +4,8 @@
     "item": "minestuck:candy_cane"
   },
   "grist_cost": {
-    "minestuck:iodine": 65,
-    "minestuck:chalk": 53,
-    "minestuck:amber": 20
+    "minestuck:iodine": 650,
+    "minestuck:chalk": 530,
+    "minestuck:amber": 200
   }
 }

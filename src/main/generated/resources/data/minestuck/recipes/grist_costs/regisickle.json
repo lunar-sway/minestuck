@@ -4,8 +4,8 @@
     "item": "minestuck:regisickle"
   },
   "grist_cost": {
-    "minestuck:amethyst": 25,
-    "minestuck:tar": 57,
-    "minestuck:gold": 33
+    "minestuck:amethyst": 250,
+    "minestuck:tar": 570,
+    "minestuck:gold": 133
   }
 }

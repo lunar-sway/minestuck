@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:bear_poking_stick"
+  },
+  "grist_cost": {
+    "minestuck:build": 30,
+    "minestuck:chalk": 24,
+    "minestuck:iodine": 8
+  }
+}

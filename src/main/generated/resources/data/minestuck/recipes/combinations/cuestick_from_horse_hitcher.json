@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:horse_hitcher"
+  },
+  "input2": {
+    "item": "minestuck:lipstick_chainsaw"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:cuestick"
+  }
+}

@@ -5,8 +5,8 @@
   },
   "grist_cost": {
     "minestuck:build": 1777,
-    "minestuck:ruby": 777,
-    "minestuck:rust": 777,
-    "minestuck:chalk": 277
+    "minestuck:ruby": 1777,
+    "minestuck:rust": 2777,
+    "minestuck:chalk": 1077
   }
 }
