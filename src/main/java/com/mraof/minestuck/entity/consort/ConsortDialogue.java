@@ -107,6 +107,19 @@ public class ConsortDialogue
 		addMessage("frog_hatred").landTitle(FROGS);
 		addMessage(new ChainMessage(new SingleMessage("grasshopper_fishing.1"), new SingleMessage("grasshopper_fishing.2"))).landTitle(FROGS).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);
 		addMessage("gay_frogs").landTitle(FROGS).landTerrainSpecific(RAINBOW);
+		addMessage("teleporting_frogs").landTitle(FROGS).landTerrainSpecific(END);
+		addMessage("gay_frogs").landTitle(FROGS).landTerrainSpecific(FLORA);
+		addMessage("gay_frogs").landTitle(FROGS).landTerrainSpecific(FOREST);
+		addMessage("frozen_frogs").landTitle(FROGS).landTerrainSpecific(FROST);
+		addMessage("infected_frogs").landTitle(FROGS).landTerrainSpecific(FUNGI);
+		addMessage("hot_frogs").landTitle(FROGS).landTerrainSpecific(HEAT);
+		addMessage("eaten_frogs").landTitle(FROGS).landTerrainSpecific(RAINBOW);
+		addMessage("eaten_frogs").landTitle(FROGS).landTerrainSpecific(RAIN);
+		addMessage("gay_frogs").landTitle(FROGS).landTerrainSpecific(ROCK);
+		addMessage("dehydrated_frogs").landTitle(FROGS).landTerrainSpecific(SAND);
+		addMessage("dehydrated_frogs").landTitle(FROGS).landTerrainSpecific(SANDSTONE);
+		addMessage("barren_frogs").landTitle(FROGS).landTerrainSpecific(SHADE);
+		addMessage("gay_frogs").landTitle(FROGS).landTerrainSpecific(WOOD);
 		
 		//Buckets
 		addMessage("lewd_buckets").landTitle(BUCKETS);
