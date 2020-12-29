@@ -189,7 +189,6 @@ public final class SburbHandler
 		SburbConnection c = handler.getPrimaryConnection(player, true).orElse(null);
 		if(c != null && !c.isMain())
 		{
-			c.setIsMain();
 			onFirstItemGiven(c);
 			return true;
 		}
@@ -198,7 +197,7 @@ public final class SburbHandler
 	
 	static void onFirstItemGiven(SburbConnection connection)
 	{
-	
+		connection.setIsMain();
 	}
 	
 	static void prepareEntry(MinecraftServer mcServer, SburbConnection c)

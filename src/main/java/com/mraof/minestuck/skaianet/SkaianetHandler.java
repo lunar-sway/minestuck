@@ -411,11 +411,9 @@ public final class SkaianetHandler
 		if(c == null)
 		{
 			LOGGER.info("Player {} entered without connection. Creating connection... ", target.getUsername());
-			c = new SburbConnection(target, this);
-			c.setIsMain();
 			try
 			{
-				sessionHandler.getSessionForConnecting(target, IdentifierHandler.NULL_IDENTIFIER).addConnection(c);
+				c = tryCreateNewConnectionFor(target, IdentifierHandler.NULL_IDENTIFIER);
 				SburbHandler.onFirstItemGiven(c);
 			} catch(MergeResult.SessionMergeException e)
 			{
