@@ -35,6 +35,7 @@ import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 public class ConsortEntity extends MinestuckEntity implements IContainerProvider
@@ -386,5 +387,10 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 	public DimensionType getHomeDimension()
 	{
 		return homeDimension;
+	}
+	
+	public static boolean canConsortSpawnOn(EntityType<ConsortEntity> entityType, IWorld world, SpawnReason reason, BlockPos pos, Random random)
+	{
+		return true;
 	}
 }
