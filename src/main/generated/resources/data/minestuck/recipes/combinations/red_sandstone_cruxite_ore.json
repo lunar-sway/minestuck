@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:raw_cruxite"
+  },
+  "input2": {
+    "item": "minecraft:red_sandstone"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:red_sandstone_cruxite_ore"
+  }
+}

@@ -6,6 +6,7 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.util.ExtraForgeTags;
+import com.mraof.minestuck.util.MSTags;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.data.RecipeProvider;
@@ -293,6 +294,9 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		ContainerGristCostBuilder.of(Items.MILK_BUCKET).grist(CHALK, 8).buildFor(recipeSaver, Minestuck.MOD_ID);
 		
 		//------------------------MINESTUCK------------------------\\
+		
+		oreCost(MSTags.Items.URANIUM_ORES, MSItems.RAW_URANIUM, 1, recipeSaver, Minestuck.MOD_ID);
+		oreCost(MSTags.Items.CRUXITE_ORES, MSItems.RAW_CRUXITE, 4, recipeSaver, Minestuck.MOD_ID);
 		
 		GristCostRecipeBuilder.of(MSBlocks.BLUE_DIRT).grist(BUILD, 1).grist(SHALE, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.THOUGHT_DIRT).grist(BUILD, 1).grist(CAULK, 1).build(recipeSaver);
