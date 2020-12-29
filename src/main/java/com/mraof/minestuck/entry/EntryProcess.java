@@ -37,6 +37,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkSection;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.Constants;
 import org.apache.logging.log4j.LogManager;
@@ -406,12 +407,19 @@ public class EntryProcess
 		BlockPos dest = new BlockPos(xDst, yDst, zDst);
 		ChunkSection blockStorageSrc = getBlockStorage(cSrc, ySrc >> 4);
 		ChunkSection blockStorageDst = getBlockStorage(cDst, yDst >> 4);
+		int y = yDst;
 		xSrc &= 15; ySrc &= 15; zSrc &= 15; xDst &= 15; yDst &= 15; zDst &= 15;
 		
 		boolean isEmpty = blockStorageDst.isEmpty();
-		blockStorageDst.setBlockState(xDst, yDst, zDst, blockStorageSrc.getBlockState(xSrc, ySrc, zSrc));
+		BlockState state = blockStorageSrc.getBlockState(xSrc, ySrc, zSrc);
+		blockStorageDst.setBlockState(xDst, yDst, zDst, state);
 		if(isEmpty != blockStorageDst.isEmpty())
 			world.getChunkProvider().getLightManager().func_215567_a(dest, blockStorageDst.isEmpty());	//I assume this adds or removes a light storage section here depending on if it is needed (because a section with just air doesn't have to be regarded)
+		
+		cDst.getHeightmap(Heightmap.Type.MOTION_BLOCKING).update(xDst, y, zDst, state);
+		cDst.getHeightmap(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES).update(xDst, y, zDst, state);
+		cDst.getHeightmap(Heightmap.Type.OCEAN_FLOOR).update(xDst, y, zDst, state);
+		cDst.getHeightmap(Heightmap.Type.WORLD_SURFACE).update(xDst, y, zDst, state);
 	}
 	
 	private static ChunkSection getBlockStorage(IChunk c, int y)
