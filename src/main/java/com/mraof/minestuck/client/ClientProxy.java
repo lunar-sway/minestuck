@@ -70,6 +70,7 @@ public class ClientProxy
 
 		RenderTypeLookup.setRenderLayer(MSBlocks.ALCHEMITER.TOTEM_PAD.get(), RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.TOTEM_LATHE.DOWEL_ROD.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.TOTEM_LATHE.CARD_SLOT.get(), RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.HOLOPAD, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.CRUXITE_DOWEL, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.BLENDER, RenderType.getCutout());
