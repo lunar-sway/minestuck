@@ -147,7 +147,7 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 	{
 		int x = region.getMainChunkX();
 		int z = region.getMainChunkZ();
-		Biome biome = region.getBiome((new ChunkPos(x, z)).asBlockPos());
+		Biome biome = biomeHolder.localBiomeFrom(region.getBiome((new ChunkPos(x, z)).asBlockPos()));
 		SharedSeedRandom rand = new SharedSeedRandom();
 		rand.setDecorationSeed(region.getSeed(), x << 4, z << 4);
 		WorldEntitySpawner.performWorldGenSpawning(region, biome, x, z, rand);
@@ -158,7 +158,7 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 	{
 		if(creatureType == MSEntityTypes.UNDERLING)
 			return UnderlingController.getUnderlingList(pos, world.getWorld());
-		else return super.getPossibleCreatures(creatureType, pos);
+		else return getBiome(world.getBiomeManager(), pos).getSpawns(creatureType);
 	}
 	
 	@Override
