@@ -1343,7 +1343,16 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("frog_hatred", "For whatever reason, residents of Derse HATE frogs! Why would someone hate frogs?");
 		addDialogue("grasshopper_fishing.1", "My brother found a magic grasshopper while fishing recently!");
 		addDialogue("grasshopper_fishing.2", "Usually all we find are rings!");
-		addDialogue("gay_frogs", "The frogs around here are all so gay! Look at them happily hopping about!");
+		addDialogue("teleporting_frogs", "Every time I go to capture a frog they get teleported away by %s, if only there was a way to stop them from leaving the net! Oh well, it is definetely DEFINITELY impossible.");
+		addDialogue("barren_frogs", "Because of all the gross liquids on this planet, any time the frogs on this planet lay eggs they die unless they are washed with clean water before hatching.");
+		addDialogue("tree_frogs", "I've never seen one myself but someone told me that there are frogs in the trees! Now thats just preposterous.");
+		addDialogue("frozen_frogs", "The freezing temperatures creates frogsicles out of our amphibian friends. I know when I am cold I love a path of hot water!");
+		addDialogue("infected_frogs", "Certain mushrooms release spores that make frogs very sick, thats why you wont see so many.");
+		addDialogue("hot_frogs", "Frogs made their home in rocky nests but then %s surrounded them with lava. They would get roasted if they tried leaving!");
+		addDialogue("eaten_frogs", "%s came and ate all the frogs, now all that is left is their sad little skeletons and the genetic information locked inside it.");
+		addDialogue("hungry_frogs", "I heard that all the frogs were starving on the surface so now they all live in underground pools of water.");
+		addDialogue("dehydrated_frogs", "With so little water on this planet, all the frogs have entered a state of extreme dormancy. I bet they would perk back up when dunked in a refreshing bath!");
+		addDialogue("uncarved_frogs", "There are random frog looking statues all over this land but no actual frogs. So misleading to have half the lands's title say frog! Must be a mistake.");
 		//Buckets
 		addDialogue("lewd_buckets", "Some may call our land lewd, but the buckets are just so fun to swim in!");
 		addDialogue("water_buckets", "The buckets are a great source of water, as long as you pick the ones with water...");
@@ -1374,44 +1383,28 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("height_fear.rock.1", "I'd climb up one of those rocks and look at the view, but I am scared of heights.");
 		addDialogue("height_fear.rock.2", "I mean what if I fell down and landed on my back?");
 		addDialogue("height_fear.panic", "AAH, I am scared of heights!");
-		//Shade
-		addDialogue("mush_farm.1", "Someone's gotta be farmin' all these goddamn fuckin' mushrooms, pain in the ass through truly it be.");
-		addDialogue("mush_farm.2", "So that's what I'm doing.");
-		addDialogue("mush_farm.3", "Standing around here.");
-		addDialogue("mush_farm.4", "farmin' all these");
-		addDialogue("mush_farm.5", "goddamn");
-		addDialogue("mush_farm.6", "fuckin");
-		addDialogue("mush_farm.7", "mushrooms");
-		addDialogue("mushroom_pizza", "Do you put glow mushrooms on your pizza or leave them off?");
-		addDialogue("mushroom_pizza.on", "Put them on");
-		addDialogue("mushroom_pizza.on.reply", "I put them on!");
-		addDialogue("mushroom_pizza.on.consort_reply", "Good! I was afraid I'd have to kill you!");
-		addDialogue("mushroom_pizza.off", "Leave them off");
-		addDialogue("mushroom_pizza.off.reply", "I leave them off!");
-		addDialogue("mushroom_pizza.off.consort_reply", "You are a despicable person.");
-		addDialogue("fire_hazard", "Our land is a fire waiting to happen! Hopefully there isn't any lightning!");
-		//Heat
-		addDialogue("getting_hot", "Is it getting hot in here or is it just me?");
-		addDialogue("lava_crickets", "Have you ever had a lava-roasted cricket? The lava really brings out the cricket juices.");
-		addDialogue("step_into_fire", "You'd better watch where you're going. Wouldn't want you to step right into some fire.");
-		//Wood
-		addDialogue("wood_treatments", "We figured out how to treat the wood to make it less flammable. I hope we didn't miss a spot.");
-		addDialogue("splinters.1", "Be careful not to walk barefoot here, you could get a splinter!");
-		addDialogue("splinters.2", "Some of our kind have died due to the amount of splinters they received while on a walk.");
-		//Sand & Sandstone
-		addDialogue("sand_surfing", "Sand-surfing is my new favorite sport! Too bad you can't really move, though.");
-		addDialogue("camel", "Want to buy a used camel? Only 2000 boondollars.");
-		addDialogue("camel.yes", "Why not? Seems like a good price for a camel!");
-		addDialogue("camel.yes.reply", "Sure!");
-		addDialogue("camel.no_camel", "Hahaha! Sucker! I have no camel! Cya later! 8)");
-		addDialogue("camel.no", "Of course not! You know better!");
-		addDialogue("camel.no.reply", "Not at all!");
-		addDialogue("camel.dancing_camel", "Are you sure? Too bad! The camel knew how to dance, too!");
-		addDialogue("knockoff", "I kind of feel like we're a stale, knockoff sand land.");
-		addDialogue("sandless.1", "According to legend, %s ate all the sand here leaving nothing but sandstone!");
-		addDialogue("sandless.2", "I'm kidding, I made that up on the spot. I had no other dialogue.");
-		addDialogue("red_better", "Red is much better than yellow, don't you think?");
-		addDialogue("yellow_better", "In our village, we have tales of monsters that are atttracted to red. That's why everything is yellow!");
+		//End
+		addDialogue("at_the_end", "This may be the start of our conversation, but now we're at the end.");
+		addDialogue("chorus_fruit", "Never eat fruit. Last time I tried it, I blacked out and came to somewhere else! Stick to bugs like a normal person!");
+		addDialogue("end_grass", "The grass in this place just keeps growing everywhere! I don't even know how it takes root in the stone like that.");
+		addDialogue("grass_curse", "Rumors say that %s got mad one day and cursed the world with all this grass everywhere. It gets into our homes!");
+		addDialogue("useless_pogo", "I once found this piece of junk that launched me upward when I hit the ground with it. It really hurt when I came back down, and I didn't get anywhere!");
+		addDialogue("useless_elytra", "One time, I saw a guy with some weird wing-looking things on his back. He could glide with them, but without being able to stay in the air, what's the point?");
+		//Flora
+		addDialogue("battle_site", "This land was the site of a battle ages and ages and ages ago.");
+		addDialogue("blood_oceans", "The giant creatures who warred here long ago shed so much blood that, even now, the oceans are red with it.");
+		addDialogue("giant_swords", "My grandpa told me that the giant swords everywhere were dropped by giants locked in combat ages ago.");
+		addDialogue("bloodberries.1", "The strawberries here grow big and red thanks to all the blood in the water supply! The flowers thrive, too!");
+		addDialogue("bloodberries.2", "Strawberry juice is the only thing safe to drink here. If I have any more, I'll scream. Please save us.");
+		addDialogue("immortality_herb.1", "I have a herb that grants immortality! I'm going to eat it right now!");
+		addDialogue("immortality_herb.2", "However, they are easily confused with an explosion-causing herb...");
+		addDialogue("immortality_herb.3", "I'm taking the risk.");
+		addDialogue("spices.1", "A good chef cooks with the spices found throughout the land.");
+		addDialogue("spices.2", "Other chefs are envious that they don't live in %s.");
+		addDialogue("sharp_slide", "Don't use the sharp sides of giant swords as slides. May her beautiful soul rest in pieces.");
+		//Forest
+		addDialogue("all_trees", "Jokes on the losers in other lands, we have ALL the trees! All of them!");
+		addDialogue("really_likes_trees", "Do you like trees? I really like trees. I am one with the tree. Trees. TREES. TREEEES!");
 		//Frost
 		addDialogue("frozen.1", "My neighbors were complaining the other night about the snow.");
 		addDialogue("frozen.2", "Personally, the cold never really bothered me anyways.");
@@ -1424,10 +1417,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("fur_coat.ignore.reply", "Sorry, but I can't help you.");
 		addDialogue("fur_coat.death", "I guess I'll just die then...");
 		addDialogue("tent_protection", "These tents doesn't protect against the cold very well, but they are good enough.");
-		addDialogue("all_ores", "Jokes on the losers in other lands, we have ALL the resources! All of them!");
-		addDialogue("rockfu", "Here in %s, we practice rock-fu! Learn the way of the rock to CRUSH your enemies into a fine rock powder!");
-		addDialogue("all_trees", "Jokes on the losers in other lands, we have ALL the trees! All of them!");
-		addDialogue("really_likes_trees", "Do you like trees? I really like trees. I am one with the tree. Trees. TREES. TREEEES!");
 		//Fungi
 		addDialogue("mildew", "Ah, the mildew on the grass in the morning makes the landscape so pretty!");
 		addDialogue("mycelium.1", "Frog, don't you love the feeling of mycelium on your toes?");
@@ -1437,6 +1426,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("jacket", "It's so damp and cold. I wish I had a jacket!");
 		addDialogue("mushroom_curse", "Curse %s! And curse all their mushrooms, too! I miss eating crickets instead of all these mushrooms!");
 		addDialogue("fungus_destroyer", "According to legends of old, the %s will come one day and get the evil %s to clear up all this fungus!");
+		//Heat
+		addDialogue("getting_hot", "Is it getting hot in here or is it just me?");
+		addDialogue("lava_crickets", "Have you ever had a lava-roasted cricket? The lava really brings out the cricket juices.");
+		addDialogue("step_into_fire", "You'd better watch where you're going. Wouldn't want you to step right into some fire.");
 		//Rainbow
 		addDialogue("generic_green", "Have you ever noticed rainbow wood looks green from a distance? I wonder if green is somehow more generic than other colors.");
 		addDialogue("overwhelming_colors", "Even for us turtles, this place is too bright. All the light and colors around here can be really overwhelming!");
@@ -1462,31 +1455,51 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("types_of_colors.16", "When mixing red and blue to get magenta, the blue overpowers the red and you get purple. You have to mix the purple with not just red, but pink to get magenta.");
 		addDialogue("types_of_colors.17", "Dye is weird like that.");
 		addDialogue("types_of_colors.18", "...what, you're still listening to me? Wow. No one's ever listened to the whole thing before. Would you like to hear it again?");
-		//End
-		addDialogue("at_the_end", "This may be the start of our conversation, but now we're at the end.");
-		addDialogue("chorus_fruit", "Never eat fruit. Last time I tried it, I blacked out and came to somewhere else! Stick to bugs like a normal person!");
-		addDialogue("end_grass", "The grass in this place just keeps growing everywhere! I don't even know how it takes root in the stone like that.");
-		addDialogue("grass_curse", "Rumors say that %s got mad one day and cursed the world with all this grass everywhere. It gets into our homes!");
-		addDialogue("useless_pogo", "I once found this piece of junk that launched me upward when I hit the ground with it. It really hurt when I came back down, and I didn't get anywhere!");
-		addDialogue("useless_elytra", "One time, I saw a guy with some weird wing-looking things on his back. He could glide with them, but without being able to stay in the air, what's the point?");
 		//Rain
 		addDialogue("empty_ocean", "Our oceans used to be filled with life! Now they're all barren, thanks to %s.");
 		addDialogue("forbidden_snack", "Contrary to popular belief, chalk is not safe for consumption... but how can I resist its allure?");
 		addDialogue("cotton_candy", "Have you ever considered eating a rain cloud? Yum! Maybe it tastes like cotton candy...");
 		addDialogue("monsters_below", "Do you know what lies deep beneath the ocean waters? Scary to think about!");
 		addDialogue("keep_swimming", "Just keep swimming, just keep swimming! Yay, swimming!");
-		//flora
-		addDialogue("battle_site", "This land was the site of a battle ages and ages and ages ago.");
-		addDialogue("blood_oceans", "The giant creatures who warred here long ago shed so much blood that, even now, the oceans are red with it.");
-		addDialogue("giant_swords", "My grandpa told me that the giant swords everywhere were dropped by giants locked in combat ages ago.");
-		addDialogue("bloodberries.1", "The strawberries here grow big and red thanks to all the blood in the water supply! The flowers thrive, too!");
-		addDialogue("bloodberries.2", "Strawberry juice is the only thing safe to drink here. If I have any more, I'll scream. Please save us.");
-		addDialogue("immortality_herb.1", "I have a herb that grants immortality! I'm going to eat it right now!");
-		addDialogue("immortality_herb.2", "However, they are easily confused with an explosion-causing herb...");
-		addDialogue("immortality_herb.3", "I'm taking the risk.");
-		addDialogue("spices.1", "A good chef cooks with the spices found throughout the land.");
-		addDialogue("spices.2", "Other chefs are envious that they don't live in %s.");
-		addDialogue("sharp_slide", "Don't use the sharp sides of giant swords as slides. May her beautiful soul rest in pieces.");
+		//Rock
+		addDialogue("all_ores", "Jokes on the losers in other lands, we have ALL the resources! All of them!");
+		addDialogue("rockfu", "Here in %s, we practice rock-fu! Learn the way of the rock to CRUSH your enemies into a fine rock powder!");
+		//Sand & Sandstone
+		addDialogue("sand_surfing", "Sand-surfing is my new favorite sport! Too bad you can't really move, though.");
+		addDialogue("camel", "Want to buy a used camel? Only 2000 boondollars.");
+		addDialogue("camel.yes", "Why not? Seems like a good price for a camel!");
+		addDialogue("camel.yes.reply", "Sure!");
+		addDialogue("camel.no_camel", "Hahaha! Sucker! I have no camel! Cya later! 8)");
+		addDialogue("camel.no", "Of course not! You know better!");
+		addDialogue("camel.no.reply", "Not at all!");
+		addDialogue("camel.dancing_camel", "Are you sure? Too bad! The camel knew how to dance, too!");
+		addDialogue("knockoff", "I kind of feel like we're a stale, knockoff sand land.");
+		addDialogue("sandless.1", "According to legend, %s ate all the sand here leaving nothing but sandstone!");
+		addDialogue("sandless.2", "I'm kidding, I made that up on the spot. I had no other dialogue.");
+		addDialogue("red_better", "Red is much better than yellow, don't you think?");
+		addDialogue("yellow_better", "In our village, we have tales of monsters that are atttracted to red. That's why everything is yellow!");
+		//Shade
+		addDialogue("mush_farm.1", "Someone's gotta be farmin' all these goddamn fuckin' mushrooms, pain in the ass through truly it be.");
+		addDialogue("mush_farm.2", "So that's what I'm doing.");
+		addDialogue("mush_farm.3", "Standing around here.");
+		addDialogue("mush_farm.4", "farmin' all these");
+		addDialogue("mush_farm.5", "goddamn");
+		addDialogue("mush_farm.6", "fuckin");
+		addDialogue("mush_farm.7", "mushrooms");
+		addDialogue("mushroom_pizza", "Do you put glow mushrooms on your pizza or leave them off?");
+		addDialogue("mushroom_pizza.on", "Put them on");
+		addDialogue("mushroom_pizza.on.reply", "I put them on!");
+		addDialogue("mushroom_pizza.on.consort_reply", "Good! I was afraid I'd have to kill you!");
+		addDialogue("mushroom_pizza.off", "Leave them off");
+		addDialogue("mushroom_pizza.off.reply", "I leave them off!");
+		addDialogue("mushroom_pizza.off.consort_reply", "You are a despicable person.");
+		addDialogue("fire_hazard", "Our land is a fire waiting to happen! Hopefully there isn't any lightning!");
+		//Wood
+		addDialogue("wood_treatments", "We figured out how to treat the wood to make it less flammable. I hope we didn't miss a spot.");
+		addDialogue("splinters.1", "Be careful not to walk barefoot here, you could get a splinter!");
+		addDialogue("splinters.2", "Some of our kind have died due to the amount of splinters they received while on a walk.");
+		addDialogue("wood_origins.1", "I heard a story that we were all carved from wood, that if you create something that looks alive it will become so.");
+		addDialogue("wood_origins.2", "What does that mean for this land? Is it not finished yet?");
 		
 		addDialogue("denizen_mention", "It's a wonderful day. Hopefully some monster underneath the planet's surface doesn't eat us all!");
 		addDialogue("floating_island", "I heard a floating island just appeared somewhere near here recently and falling chunks destroyed a village underneath it!");
