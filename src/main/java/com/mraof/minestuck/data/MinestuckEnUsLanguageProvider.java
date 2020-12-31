@@ -240,6 +240,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSBlocks.VEIN_CORNER, "Corner");
 		add(MSBlocks.INVERTED_VEIN_CORNER, "Vein");
 		addTooltip(MSBlocks.INVERTED_VEIN_CORNER, "Corner (Inverted Flow)");
+		add(MSBlocks.FROG_EGGS, "Frog Eggs");
+		addTooltip(MSBlocks.FROG_EGGS, "Slimy, gooey, fun entertainment for the whole family. What is there not to love?");
 		add(MSBlocks.COARSE_STONE_STAIRS, "Coarse Stone Stairs");
 		add(MSBlocks.SHADE_BRICK_STAIRS, "Shade Brick Stairs");
 		add(MSBlocks.FROST_BRICK_STAIRS, "Frost Brick Stairs");
@@ -1344,7 +1346,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("grasshopper_fishing.1", "My brother found a magic grasshopper while fishing recently!");
 		addDialogue("grasshopper_fishing.2", "Usually all we find are rings!");
 		addDialogue("teleporting_frogs", "Every time I go to capture a frog they get teleported away by %s, if only there was a way to stop them from leaving the net! Oh well, it is definetely DEFINITELY impossible.");
-		addDialogue("barren_frogs", "Because of all the gross liquids on this planet, any time the frogs on this planet lay eggs they die unless they are washed with clean water before hatching.");
+		addDialogue("barren_frogs", "Because of all the gross liquids on this planet, the frogs died and now the eggs that are left will die unless they are washed with clean water before hatching.");
 		addDialogue("tree_frogs", "I've never seen one myself but someone told me that there are frogs in the trees! Now thats just preposterous.");
 		addDialogue("frozen_frogs", "The freezing temperatures creates frogsicles out of our amphibian friends. I know when I am cold I love a path of hot water!");
 		addDialogue("infected_frogs", "Certain mushrooms release spores that make frogs very sick, thats why you wont see so many.");
