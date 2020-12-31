@@ -159,6 +159,7 @@ public class ConsortDialogue
 		addMessage("getting_hot").landTerrain(HEAT);
 		addMessage("step_into_fire").landTerrain(HEAT);
 		addMessage("lava_crickets").landTerrain(HEAT);
+		addMessage("always_hot").landTerrain(HEAT);
 		
 		//Wood
 		addMessage("wood_treatments").landTerrain(WOOD);
@@ -188,6 +189,8 @@ public class ConsortDialogue
 		//Forest
 		addMessage("all_trees").landTerrain(FOREST);
 		addMessage("really_likes_trees").landTerrain(FOREST);
+		addMessage(new ChainMessage(new SingleMessage("spooky_trees.1"), new SingleMessage("spooky_trees.2"))).landTerrain(FOREST);
+		addMessage(new ChainMessage(new SingleMessage("tree_hollow.1"), new SingleMessage("tree_hollow.2"))).landTerrain(FOREST);
 		
 		//Fungi
 		addMessage(new ChainMessage(new SingleMessage("mycelium.1"), new SingleMessage("mycelium.2"))).landTerrain(FUNGI);

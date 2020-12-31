@@ -1338,7 +1338,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		//Frogs
 		addDialogue("frog_creation", "We are thankful for all the frogs that They gave to us when the universe was created. They, of course, is the genesis frog. I feel bad for the fool who has to make another!");
 		addDialogue("frog_imitation", "Ribbit, ribbit! I'm a frog! I don't care what you say!");
-		addDialogue("frog_variants.1", "Most people believe there aren't that many types of frogs. 4740, maybe? Anything beyond that would be proposterous.");
+		addDialogue("frog_variants.1", "Most people believe there aren't that many types of frogs. 4740, maybe? Anything beyond that would be preposterous.");
 		addDialogue("frog_variants.2", "Here in %s, however, we know that there are 9.444731276889531e+22 types of frogs.");
 		addDialogue("frog_hatred", "For whatever reason, residents of Derse HATE frogs! Why would someone hate frogs?");
 		addDialogue("grasshopper_fishing.1", "My brother found a magic grasshopper while fishing recently!");
@@ -1405,6 +1405,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		//Forest
 		addDialogue("all_trees", "Jokes on the losers in other lands, we have ALL the trees! All of them!");
 		addDialogue("really_likes_trees", "Do you like trees? I really like trees. I am one with the tree. Trees. TREES. TREEEES!");
+		addDialogue("spooky_trees.1", "Sometimes I get lost in the forest and I begin hearing whispering coming from the leaves.");
+		addDialogue("spooky_trees.2", "The longer I stay, the louder it gets. But as long as you dont get lost it shouldn't be a problem!");
+		addDialogue("tree_hollow.1", "Within the forest you can find tree hollows, holes that form naturally that allow you to reach inside.");
+		addDialogue("tree_hollow.2", "Sometimes you find items in them, but when you take them out the hole seals up...");
 		//Frost
 		addDialogue("frozen.1", "My neighbors were complaining the other night about the snow.");
 		addDialogue("frozen.2", "Personally, the cold never really bothered me anyways.");
@@ -1430,6 +1434,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("getting_hot", "Is it getting hot in here or is it just me?");
 		addDialogue("lava_crickets", "Have you ever had a lava-roasted cricket? The lava really brings out the cricket juices.");
 		addDialogue("step_into_fire", "You'd better watch where you're going. Wouldn't want you to step right into some fire.");
+		addDialogue("always_hot", "I don't know if it was always this hot, but it feels like it keeps getting worse.");
 		//Rainbow
 		addDialogue("generic_green", "Have you ever noticed rainbow wood looks green from a distance? I wonder if green is somehow more generic than other colors.");
 		addDialogue("overwhelming_colors", "Even for us turtles, this place is too bright. All the light and colors around here can be really overwhelming!");
