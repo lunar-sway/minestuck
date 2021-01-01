@@ -213,6 +213,11 @@ public class MSBlockLootTables extends BlockLootTables
 		registerLootTable(VEIN_CORNER, func_218482_a());
 		registerLootTable(INVERTED_VEIN_CORNER, func_218482_a());
 		registerDropSelfLootTable(FROG_EGGS);
+		registerLootTable(DEHYDRATED_FROG, func_218482_a());
+		registerLootTable(FROZEN_FROG, func_218482_a());
+		registerLootTable(SKELETON_FROG, func_218482_a());
+		registerLootTable(WOODEN_FROG, func_218482_a());
+		
 		
 		registerDropSelfLootTable(COARSE_STONE_STAIRS);
 		registerDropSelfLootTable(SHADE_BRICK_STAIRS);

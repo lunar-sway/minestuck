@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "minestuck:block/dehydrated_frog" },
+        "facing=east":  { "model": "minestuck:block/dehydrated_frog", "y": 90 },
+        "facing=south": { "model": "minestuck:block/dehydrated_frog", "y": 180 },
+        "facing=west":  { "model": "minestuck:block/dehydrated_frog", "y": 270 }
+    }
+}

@@ -553,6 +553,10 @@ public class MSItems
 		registerItemBlock(registry, VEIN_CORNER);
 		registerItemBlock(registry, INVERTED_VEIN_CORNER);
 		registerItemBlock(registry, FROG_EGGS, MSItemGroup.LANDS);
+		registerItemBlock(registry, DEHYDRATED_FROG, MSItemGroup.LANDS);
+		registerItemBlock(registry, FROZEN_FROG, MSItemGroup.LANDS);
+		registerItemBlock(registry, SKELETON_FROG, MSItemGroup.LANDS);
+		registerItemBlock(registry, WOODEN_FROG, MSItemGroup.LANDS);
 		
 		registerItemBlock(registry, COARSE_STONE_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, SHADE_BRICK_STAIRS, MSItemGroup.LANDS);

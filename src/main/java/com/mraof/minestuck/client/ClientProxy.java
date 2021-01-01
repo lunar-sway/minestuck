@@ -90,6 +90,7 @@ public class ClientProxy
 		RenderTypeLookup.setRenderLayer(MSBlocks.WHITE_CROWN_STAINED_GLASS, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(MSBlocks.WHITE_PAWN_STAINED_GLASS, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(MSBlocks.FROG_EGGS, RenderType.getTranslucent());
+		RenderTypeLookup.setRenderLayer(MSBlocks.SKELETON_FROG, RenderType.getTranslucent());
 
 		MSKeyHandler.registerKeys();
 		

@@ -242,6 +242,13 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSBlocks.INVERTED_VEIN_CORNER, "Corner (Inverted Flow)");
 		add(MSBlocks.FROG_EGGS, "Frog Eggs");
 		addTooltip(MSBlocks.FROG_EGGS, "Slimy, gooey, fun entertainment for the whole family. What is there not to love?");
+		add(MSBlocks.DEHYDRATED_FROG, "Dehydrated Frog");
+		//addTooltip(MSBlocks.DEHYDRATED_FROG, "Frog - water");
+		add(MSBlocks.FROZEN_FROG, "Frozen Frog");
+		add(MSBlocks.SKELETON_FROG, "Skeleton Frog");
+		//addTooltip(MSBlocks.SKELETON_FROG, "Only thing left is bones");
+		add(MSBlocks.WOODEN_FROG, "Wooden Frog");
+		addTooltip(MSBlocks.WOODEN_FROG, "Looks almost lifelike, almost");
 		add(MSBlocks.COARSE_STONE_STAIRS, "Coarse Stone Stairs");
 		add(MSBlocks.SHADE_BRICK_STAIRS, "Shade Brick Stairs");
 		add(MSBlocks.FROST_BRICK_STAIRS, "Frost Brick Stairs");
