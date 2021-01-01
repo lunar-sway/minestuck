@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minestuck:garnet_twix"
+  },
+  "range": {
+    "min": 175.0,
+    "max": 210.0,
+    "type": "minecraft:uniform"
+  }
+}

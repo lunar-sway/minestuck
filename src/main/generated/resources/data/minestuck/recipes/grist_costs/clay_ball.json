@@ -4,6 +4,7 @@
     "item": "minecraft:clay_ball"
   },
   "grist_cost": {
-    "minestuck:shale": 3
+    "minestuck:shale": 1,
+    "minestuck:build": 1
   }
 }

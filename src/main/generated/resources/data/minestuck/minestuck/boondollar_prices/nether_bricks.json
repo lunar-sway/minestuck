@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minecraft:nether_bricks"
+  },
+  "range": {
+    "min": 5.0,
+    "max": 10.0,
+    "type": "minecraft:uniform"
+  }
+}

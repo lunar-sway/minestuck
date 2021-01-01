@@ -27,7 +27,7 @@ public class TransportalizerSavedData extends WorldSavedData
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final String DATA_NAME = Minestuck.MOD_ID+"_transportalizers";
 	
-	private final HashMap<String, GlobalPos> locations;
+	private final Map<String, GlobalPos> locations;
 	
 	private TransportalizerSavedData()
 	{
@@ -93,9 +93,10 @@ public class TransportalizerSavedData extends WorldSavedData
 	
 	public String findNewId(Random random, GlobalPos location)
 	{
-		String unusedId = "";
+		String unusedId;
 		do
 		{
+			unusedId = "";
 			for(int i = 0; i < 4; i++)
 			{
 				unusedId += (char) (random.nextInt(26) + 'A');
@@ -106,6 +107,12 @@ public class TransportalizerSavedData extends WorldSavedData
 		locations.put(unusedId, location);
 		this.markDirty();
 		return unusedId;
+	}
+	
+	public void replace(String id, GlobalPos oldPos, GlobalPos newPos)
+	{
+		if(locations.replace(id, oldPos, newPos))
+			markDirty();
 	}
 	
 	public static TransportalizerSavedData get(World world)

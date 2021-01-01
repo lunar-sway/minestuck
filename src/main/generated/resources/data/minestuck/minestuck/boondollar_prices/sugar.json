@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minecraft:sugar"
+  },
+  "range": {
+    "min": 50.0,
+    "max": 80.0,
+    "type": "minecraft:uniform"
+  }
+}

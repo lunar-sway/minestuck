@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minecraft:beef"
+  },
+  "range": {
+    "min": 110.0,
+    "max": 130.0,
+    "type": "minecraft:uniform"
+  }
+}

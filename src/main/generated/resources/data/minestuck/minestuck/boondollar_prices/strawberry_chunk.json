@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minestuck:strawberry_chunk"
+  },
+  "range": {
+    "min": 100.0,
+    "max": 150.0,
+    "type": "minecraft:uniform"
+  }
+}

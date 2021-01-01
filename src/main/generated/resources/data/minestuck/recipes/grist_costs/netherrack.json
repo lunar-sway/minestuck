@@ -4,7 +4,7 @@
     "item": "minecraft:netherrack"
   },
   "grist_cost": {
-    "minestuck:build": 2,
+    "minestuck:build": 1,
     "minestuck:tar": 1
   }
 }

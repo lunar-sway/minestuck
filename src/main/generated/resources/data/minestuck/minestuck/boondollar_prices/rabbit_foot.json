@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minecraft:rabbit_foot"
+  },
+  "range": {
+    "min": 80.0,
+    "max": 100.0,
+    "type": "minecraft:uniform"
+  }
+}

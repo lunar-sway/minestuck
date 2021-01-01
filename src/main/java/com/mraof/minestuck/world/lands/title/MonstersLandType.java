@@ -2,6 +2,7 @@ package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.player.EnumAspect;
+import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
@@ -9,6 +10,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.biome.Biome.SpawnListEntry;
 
@@ -63,6 +65,12 @@ public class MonstersLandType extends TitleLandType
 			biome.addSpawn(EntityClassification.MONSTER, new SpawnListEntry(EntityType.ZOMBIE, 2, 1, 3));
 			biome.addSpawn(EntityClassification.MONSTER, new SpawnListEntry(EntityType.SKELETON, 1, 1, 2));
 		}
+	}
+	
+	@Override
+	public SoundEvent getBackgroundMusic()
+	{
+		return type == Variant.UNDEAD ? MSSoundEvents.MUSIC_UNDEAD : MSSoundEvents.MUSIC_MONSTERS;
 	}
 	
 	public enum Variant

@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minestuck:flowery_vine_log"
+  },
+  "range": {
+    "min": 25.0,
+    "max": 40.0,
+    "type": "minecraft:uniform"
+  }
+}

@@ -200,9 +200,14 @@ public class TransportalizerTileEntity extends OnCollisionTeleporterTileEntity<E
 
 	public boolean getEnabled() { return enabled; }
 	
-	public boolean getActive()
+	public boolean isActive()
 	{
 		return active;
+	}
+	
+	public void tryReactivate()
+	{
+		active = TransportalizerSavedData.get(world).set(id, GlobalPos.of(world.dimension.getType(), pos));
 	}
 	
 	public void setEnabled(boolean enabled)

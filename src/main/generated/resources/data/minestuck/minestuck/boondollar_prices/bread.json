@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minecraft:bread"
+  },
+  "range": {
+    "min": 90.0,
+    "max": 130.0,
+    "type": "minecraft:uniform"
+  }
+}

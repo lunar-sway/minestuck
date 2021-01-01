@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:bisector"
+  },
+  "grist_cost": {
+    "minestuck:build": 239,
+    "minestuck:garnet": 5,
+    "minestuck:amethyst": 5,
+    "minestuck:quartz": 1
+  }
+}

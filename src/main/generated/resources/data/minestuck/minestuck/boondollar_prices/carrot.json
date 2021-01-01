@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minecraft:carrot"
+  },
+  "range": {
+    "min": 15.0,
+    "max": 18.0,
+    "type": "minecraft:uniform"
+  }
+}

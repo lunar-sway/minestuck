@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minestuck:onion"
+  },
+  "range": {
+    "min": 9.0,
+    "max": 15.0,
+    "type": "minecraft:uniform"
+  }
+}

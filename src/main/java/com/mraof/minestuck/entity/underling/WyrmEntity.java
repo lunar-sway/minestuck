@@ -17,7 +17,7 @@ public class WyrmEntity extends UnderlingEntity implements IEntityMultiPart
 	
 	public WyrmEntity(EntityType<? extends WyrmEntity> type, World world)
 	{
-		super(type, world);
+		super(type, world, 0);
 	}
 	
 	@Override

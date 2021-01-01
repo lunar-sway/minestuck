@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minestuck:fungal_spore"
+  },
+  "range": {
+    "min": 1.0,
+    "max": 4.0,
+    "type": "minecraft:uniform"
+  }
+}
