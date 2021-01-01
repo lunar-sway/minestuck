@@ -4,9 +4,9 @@
     "item": "minestuck:bisector"
   },
   "grist_cost": {
-    "minestuck:build": 239,
-    "minestuck:garnet": 5,
-    "minestuck:amethyst": 5,
-    "minestuck:quartz": 1
+    "minestuck:build": 12390,
+    "minestuck:quartz": 2000,
+    "minestuck:amethyst": 3500,
+    "minestuck:garnet": 4130
   }
 }

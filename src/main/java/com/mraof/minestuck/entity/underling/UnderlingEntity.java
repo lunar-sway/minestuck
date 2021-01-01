@@ -180,7 +180,9 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 					long gristLeft = gristAmount.getAmount();
 
 					while(gristLeft > (gristAmount.getAmount() / (int) ((Math.random() * 10) + 1))) {
-							this.world.addEntity(new GristEntity(world, randX(), this.getPosY(), randZ(), new GristAmount(gristAmount.getType(), (long)(gristLeft*0.9))));
+							if (gristLeft > 0) {
+								this.world.addEntity(new GristEntity(world, randX(), this.getPosY(), randZ(), new GristAmount(gristAmount.getType(), (long) (gristLeft * 0.9))));
+							}
 							gristLeft = gristLeft - (long)((gristLeft*0.9)+1);
 							System.out.println(gristLeft);
 					}

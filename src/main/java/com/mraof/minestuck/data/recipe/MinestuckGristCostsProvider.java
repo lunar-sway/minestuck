@@ -359,7 +359,7 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSItems.TUNING_FORK).grist(BUILD, 250).grist(RUST, 200).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.SKAIA_FORK).grist(BUILD, 9000).grist(QUARTZ, 2000).grist(GOLD, 1500).grist(AMETHYST, 1500).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.GOLDEN_SPORK).grist(BUILD, 70).grist(GOLD, 40).grist(DIAMOND, 1).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSItems.BIDENT).grist(BUILD, 239).grist(GARNET, 50).grist(AMETHYST, 50).grist(QUARTZ, 30).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.BIDENT).grist(BUILD, 12390).grist(GARNET, 2000).grist(AMETHYST, 2050).grist(QUARTZ, 1300).build(recipeSaver);
 
 		GristCostRecipeBuilder.of(MSItems.BATLEACKS).grist(ARTIFACT, -10).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.COPSE_CRUSHER).grist(BUILD, 25).grist(RUST, 15).build(recipeSaver);
@@ -380,6 +380,7 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSItems.RUBY_CROAK).grist(BUILD, 9000).grist(GARNET, 3030).grist(RUBY, 4064).grist(DIAMOND, 2600).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.HEPHAESTUS_LUMBERJACK).grist(BUILD, 10000).grist(GOLD, 6120).grist(RUBY, 4130).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.FISSION_FOCUSED_FAULT_FELLER).grist(BUILD, 18000).grist(SHALE, 2800).grist(URANIUM, 7400).grist(RUST, 3000).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.BISECTOR).grist(BUILD, 12390).grist(QUARTZ, 2000).grist(AMETHYST, 3500).grist(GARNET, 4130).build(recipeSaver);
 		
 		GristCostRecipeBuilder.of(MSItems.REGISICKLE).grist(AMETHYST, 250).grist(TAR, 570).grist(GOLD, 133).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.SICKLE).grist(BUILD, 8).build(recipeSaver);

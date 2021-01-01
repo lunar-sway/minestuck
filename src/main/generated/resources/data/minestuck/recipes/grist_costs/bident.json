@@ -4,9 +4,9 @@
     "item": "minestuck:bident"
   },
   "grist_cost": {
-    "minestuck:build": 239,
-    "minestuck:garnet": 50,
-    "minestuck:amethyst": 50,
-    "minestuck:quartz": 30
+    "minestuck:build": 12390,
+    "minestuck:garnet": 2000,
+    "minestuck:amethyst": 2050,
+    "minestuck:quartz": 1300
   }
 }
