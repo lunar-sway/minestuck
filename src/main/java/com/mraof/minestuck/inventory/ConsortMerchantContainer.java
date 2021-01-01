@@ -12,22 +12,27 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.IIntArray;
+import net.minecraft.util.IntArray;
 
 public class ConsortMerchantContainer extends Container
 {
 	private final EnumConsort consortType;
 	private final EnumConsort.MerchantType merchantType;
-	private final int[] prices;
+	private final IIntArray prices;
 	
 	private final PlayerEntity player;
 	
-	public ConsortMerchantContainer(int windowId, PlayerInventory playerInventory, IInventory storeInv, EnumConsort consortType, EnumConsort.MerchantType merchantType, int[] prices)
+	public ConsortMerchantContainer(int windowId, PlayerInventory playerInventory, IInventory storeInv, EnumConsort consortType, EnumConsort.MerchantType merchantType, IIntArray prices)
 	{
 		super(MSContainerTypes.CONSORT_MERCHANT, windowId);
 		this.player = playerInventory.player;
 		this.consortType = consortType;
 		this.merchantType = merchantType;
+		
+		assertIntArraySize(prices, 9);
 		this.prices = prices;
+		trackIntArray(prices);
 		
 		assertInventorySize(storeInv, 9);
 		
@@ -39,19 +44,14 @@ public class ConsortMerchantContainer extends Container
 	{
 		EnumConsort consortType = EnumConsort.getFromName(buffer.readString());
 		EnumConsort.MerchantType merchantType = EnumConsort.MerchantType.getFromName(buffer.readString());
-		int[] prices = new int[9];
-		for(int i = 0; i < 9; i++)
-			prices[i] = buffer.readInt();
 		
-		return new ConsortMerchantContainer(windowId, playerInventory, new Inventory(9), consortType, merchantType, prices);
+		return new ConsortMerchantContainer(windowId, playerInventory, new Inventory(9), consortType, merchantType, new IntArray(9));
 	}
 	
-	public static void write(PacketBuffer buffer, ConsortEntity consort, int[] prices)
+	public static void write(PacketBuffer buffer, ConsortEntity consort)
 	{
 		buffer.writeString(consort.getConsortType().getName());
 		buffer.writeString(consort.merchantType.getName());
-		for(int i = 0; i < 9; i++)
-			buffer.writeInt(prices[i]);
 	}
 	
 	@Override
@@ -79,9 +79,7 @@ public class ConsortMerchantContainer extends Container
 	
 	public int getPrice(int index)
 	{
-		if(index >= 0 && index < prices.length)
-			return prices[index];
-		else return -1;
+		return prices.get(index);
 	}
 	
 	public EnumConsort getConsortType()

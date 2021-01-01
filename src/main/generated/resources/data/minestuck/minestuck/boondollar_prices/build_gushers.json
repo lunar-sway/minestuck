@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minestuck:build_gushers"
+  },
+  "range": {
+    "min": 90.0,
+    "max": 120.0,
+    "type": "minecraft:uniform"
+  }
+}

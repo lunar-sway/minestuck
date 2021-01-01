@@ -24,13 +24,13 @@ public class EndLeavesBlock extends FlammableLeavesBlock
 	@Override
 	public boolean ticksRandomly(BlockState state)
 	{
-		return state.get(DISTANCE) >= LEAF_SUSTAIN_DISTANCE && !state.get(PERSISTENT);
+		return state.get(DISTANCE) > LEAF_SUSTAIN_DISTANCE && !state.get(PERSISTENT);
 	}
 	
 	@Override
 	public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random)
 	{
-		if(!state.get(PERSISTENT) && state.get(DISTANCE) >= LEAF_SUSTAIN_DISTANCE)
+		if(!state.get(PERSISTENT) && state.get(DISTANCE) > LEAF_SUSTAIN_DISTANCE)
 		{
 			spawnDrops(state, worldIn, pos);
 			worldIn.removeBlock(pos, false);

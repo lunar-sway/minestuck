@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minecraft:prismarine_crystals"
+  },
+  "range": {
+    "min": 100.0,
+    "max": 150.0,
+    "type": "minecraft:uniform"
+  }
+}

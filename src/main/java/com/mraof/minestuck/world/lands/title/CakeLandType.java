@@ -1,11 +1,13 @@
 package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.player.EnumAspect;
+import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.BiomeType;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.Blocks;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.ProbabilityConfig;
@@ -45,5 +47,11 @@ public class CakeLandType extends TitleLandType
 		}
 
 		biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.CAKE.withConfiguration(new ProbabilityConfig(biome.getDefaultTemperature()/2)).withPlacement(Placement.TOP_SOLID_HEIGHTMAP_RANGE.configure(new TopSolidRangeConfig(0, 5))));
+	}
+	
+	@Override
+	public SoundEvent getBackgroundMusic()
+	{
+		return MSSoundEvents.MUSIC_CAKE;
 	}
 }

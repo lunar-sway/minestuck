@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minestuck:chocolate_beetle"
+  },
+  "range": {
+    "min": 30.0,
+    "max": 35.0,
+    "type": "minecraft:uniform"
+  }
+}

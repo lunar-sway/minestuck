@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minestuck:cast_iron"
+  },
+  "range": {
+    "min": 5.0,
+    "max": 8.0,
+    "type": "minecraft:uniform"
+  }
+}

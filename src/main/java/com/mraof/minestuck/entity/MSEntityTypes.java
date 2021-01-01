@@ -26,6 +26,7 @@ import javax.annotation.Nonnull;
 public final class MSEntityTypes
 {
 	public static EntityClassification UNDERLING = EntityClassification.create("UNDERLING", "underling", 35, false, false);
+	public static EntityClassification CONSORT = EntityClassification.create("CONSORT", "consort", 10, true, false);
 	
 	public static final EntityType<FrogEntity> FROG = getNull();
 	public static final EntityType<ConsortEntity> SALAMANDER = getNull();
@@ -71,10 +72,10 @@ public final class MSEntityTypes
 	{
 		IForgeRegistry<EntityType<?>> registry = event.getRegistry();
 		register(registry, EntityType.Builder.<FrogEntity>create(FrogEntity::new, EntityClassification.CREATURE).size(0.51F, 0.51F), "frog");
-		register(registry, EntityType.Builder.create(EnumConsort.SALAMANDER::create, EntityClassification.CREATURE).size(0.45F, 1.0F), "salamander");
-		register(registry, EntityType.Builder.create(EnumConsort.TURTLE::create, EntityClassification.CREATURE).size(0.45F, 1.0F), "turtle");
-		register(registry, EntityType.Builder.create(EnumConsort.NAKAGATOR::create, EntityClassification.CREATURE).size(0.45F, 1.1F), "nakagator");
-		register(registry, EntityType.Builder.create(EnumConsort.IGUANA::create, EntityClassification.CREATURE).size(0.45F, 1.0F), "iguana");
+		register(registry, EntityType.Builder.create(EnumConsort.SALAMANDER::create, CONSORT).size(0.45F, 1.0F), "salamander");
+		register(registry, EntityType.Builder.create(EnumConsort.TURTLE::create, CONSORT).size(0.45F, 1.0F), "turtle");
+		register(registry, EntityType.Builder.create(EnumConsort.NAKAGATOR::create, CONSORT).size(0.45F, 1.1F), "nakagator");
+		register(registry, EntityType.Builder.create(EnumConsort.IGUANA::create, CONSORT).size(0.45F, 1.0F), "iguana");
 		
 		register(registry, EntityType.Builder.create(ImpEntity::new, UNDERLING).size(0.7F, 1.2F), "imp");
 		register(registry, EntityType.Builder.create(OgreEntity::new, UNDERLING).size(2.8F, 4.3F), "ogre");
@@ -118,6 +119,13 @@ public final class MSEntityTypes
 		EntitySpawnPlacementRegistry.register(BASILISK, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, UnderlingEntity::canSpawnOnAndNotPeaceful);
 		EntitySpawnPlacementRegistry.register(LICH, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, UnderlingEntity::canSpawnOnAndNotPeaceful);
 		EntitySpawnPlacementRegistry.register(GICLOPS, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, UnderlingEntity::canSpawnOnAndNotPeaceful);
+		
+		EntitySpawnPlacementRegistry.register(FROG, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, FrogEntity::canFrogSpawnOn);
+		
+		EntitySpawnPlacementRegistry.register(SALAMANDER, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ConsortEntity::canConsortSpawnOn);
+		EntitySpawnPlacementRegistry.register(TURTLE, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ConsortEntity::canConsortSpawnOn);
+		EntitySpawnPlacementRegistry.register(NAKAGATOR, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ConsortEntity::canConsortSpawnOn);
+		EntitySpawnPlacementRegistry.register(IGUANA, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ConsortEntity::canConsortSpawnOn);
 	}
 	
 	private static void register(IForgeRegistry<EntityType<?>> registry, EntityType.Builder<?> builder, String name)

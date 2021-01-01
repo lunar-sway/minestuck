@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minestuck:paradises_portabello"
+  },
+  "range": {
+    "min": 400.0,
+    "max": 600.0,
+    "type": "minecraft:uniform"
+  }
+}

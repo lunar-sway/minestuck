@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minestuck:sbahj_poster"
+  },
+  "range": {
+    "min": 350.0,
+    "max": 400.0,
+    "type": "minecraft:uniform"
+  }
+}

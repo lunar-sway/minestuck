@@ -152,6 +152,7 @@ public class MSBlocks
 	public static final Block CROCKERTOP = getNull();
 	public static final Block HUBTOP = getNull();
 	public static final Block LUNCHTOP = getNull();
+	public static final Block OLD_COMPUTER = getNull();
 	public static final Block TRANSPORTALIZER = getNull();
 	public static final Block GRIST_WIDGET = getNull();
 	public static final Block URANIUM_COOKER = getNull();
@@ -417,6 +418,7 @@ public class MSBlocks
 		registry.register(new ComputerBlock(ComputerBlock.LAPTOP_OPEN_SHAPE, ComputerBlock.LAPTOP_CLOSED_SHAPE, Block.Properties.create(Material.IRON, MaterialColor.RED).hardnessAndResistance(4.0F)).setRegistryName("crockertop"));
 		registry.register(new ComputerBlock(ComputerBlock.LAPTOP_OPEN_SHAPE, ComputerBlock.LAPTOP_CLOSED_SHAPE, Block.Properties.create(Material.IRON, MaterialColor.GREEN).hardnessAndResistance(4.0F)).setRegistryName("hubtop"));
 		registry.register(new ComputerBlock(ComputerBlock.LUNCHTOP_SHAPE, ComputerBlock.LUNCHTOP_SHAPE, Block.Properties.create(Material.IRON, MaterialColor.RED).hardnessAndResistance(4.0F)).setRegistryName("lunchtop"));
+		registry.register(new ComputerBlock(ComputerBlock.OLD_COMPUTER_SHAPE, ComputerBlock.OLD_COMPUTER_SHAPE, Block.Properties.create(Material.IRON).hardnessAndResistance(4.0F)).setRegistryName("old_computer"));
 		registry.register(new TransportalizerBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("transportalizer"));
 		registry.register(new GristWidgetBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("grist_widget"));
 		registry.register(new SmallMachineBlock<>(new CustomVoxelShape(new double[]{4, 0, 4, 12, 6, 12}).createRotatedShapes(), MSTileEntityTypes.URANIUM_COOKER, Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("uranium_cooker"));

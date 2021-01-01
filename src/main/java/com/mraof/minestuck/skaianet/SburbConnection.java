@@ -6,6 +6,7 @@ import com.mraof.minestuck.computer.editmode.DeployEntry;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.event.ConnectionCreatedEvent;
+import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;
@@ -47,6 +48,7 @@ public final class SburbConnection
 	private boolean hasEntered = false;	//If the player has entered. Is set to true after entry has finished
 	private LandInfo clientLandInfo;	//The land info for this client player. This is initialized in preparation for entry
 	int artifactType;
+	private GristType baseGrist;
 	
 	private final Set<String> givenItemList = new HashSet<>();
 	
@@ -105,6 +107,7 @@ public final class SburbConnection
 			hasEntered = nbt.contains("has_entered") ? nbt.getBoolean("has_entered") : true;
 		}
 		artifactType = nbt.getInt("artifact");
+		baseGrist = GristType.read(nbt, "base_grist", () -> SburbHandler.generateGristType(new Random()));
 	}
 	
 	CompoundNBT write()
@@ -139,6 +142,7 @@ public final class SburbConnection
 		}
 		
 		nbt.putInt("artifact", artifactType);
+		baseGrist.write(nbt, "base_grist");
 		return nbt;
 	}
 	
@@ -347,12 +351,25 @@ public final class SburbConnection
 		inventory = nbt;
 	}
 	
+	public GristType getBaseGrist()
+	{
+		return baseGrist;
+	}
+	
+	void setBaseGrist(GristType type)
+	{
+		if(baseGrist != null)
+			throw new IllegalStateException("base grist type has already been set!");
+		baseGrist = type;
+	}
+	
 	void copyFrom(SburbConnection other)
 	{
 		lockedToSession = other.lockedToSession;
 		clientLandInfo = other.clientLandInfo;
 		hasEntered = other.hasEntered;
 		artifactType = other.artifactType;
+		baseGrist = other.baseGrist;
 		if(other.inventory != null)
 			inventory = other.inventory.copy();
 	}

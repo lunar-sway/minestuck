@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minecraft:cocoa_beans"
+  },
+  "range": {
+    "min": 25.0,
+    "max": 35.0,
+    "type": "minecraft:uniform"
+  }
+}

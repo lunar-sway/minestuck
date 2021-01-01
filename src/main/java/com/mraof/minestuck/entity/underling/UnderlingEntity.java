@@ -15,6 +15,7 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.UnderlingController;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MSTags;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttribute;
@@ -51,14 +52,16 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 	protected EntityListFilter attackEntitySelector;	//TODO this filter isn't being saved. F1X PLZ
 	protected boolean fromSpawner;
 	public boolean dropCandy;
+	private int consortRep;
 	
 	private static final float maxSharedProgress = 2;	//The multiplier for the maximum amount progress that can be gathered from each enemy with the group fight bonus
 	
 	protected Map<PlayerIdentifier, Double> damageMap = new HashMap<>();	//Map that stores how much damage each player did to this to this underling. Null is used for environmental or other non-player damage
 	
-	public UnderlingEntity(EntityType<? extends UnderlingEntity> type, World world)
+	public UnderlingEntity(EntityType<? extends UnderlingEntity> type, World world, int consortRep)
 	{
 		super(type, world);
+		this.consortRep = consortRep;
 	}
 	
 	@Override
@@ -201,6 +204,16 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 			if(this.rand.nextInt(4) == 0)
 				this.world.addEntity(new VitalityGelEntity(world, randX(), this.getPosY(), randZ(), this.getVitalityGel()));
 		}
+	}
+	
+	@Override
+	public void onDeath(DamageSource cause)
+	{
+		LivingEntity entity = this.getAttackingEntity();
+		if(entity instanceof ServerPlayerEntity)
+			PlayerSavedData.getData((ServerPlayerEntity) entity).addConsortReputation(consortRep, dimension);
+		
+		super.onDeath(cause);
 	}
 	
 	private double randX()

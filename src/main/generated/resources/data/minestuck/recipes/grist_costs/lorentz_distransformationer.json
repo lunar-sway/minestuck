@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:lorentz_distransformationer"
+  },
+  "grist_cost": {
+    "minestuck:build": 150,
+    "minestuck:uranium": 20,
+    "minestuck:tar": 20,
+    "minestuck:rust": 15
+  }
+}

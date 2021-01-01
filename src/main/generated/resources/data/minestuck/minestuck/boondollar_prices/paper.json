@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minecraft:paper"
+  },
+  "range": {
+    "min": 5.0,
+    "max": 20.0,
+    "type": "minecraft:uniform"
+  }
+}

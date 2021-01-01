@@ -21,7 +21,7 @@ public class ImpEntity extends UnderlingEntity
 {
 	public ImpEntity(EntityType<? extends ImpEntity> type, World world)
 	{
-		super(type, world);
+		super(type, world, 1);
 	}
 	
 	@Override

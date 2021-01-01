@@ -24,6 +24,8 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -31,7 +33,9 @@ import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -51,6 +55,13 @@ public final class PlayerData
 		PlayerSavedData.getData(player).onPlayerLoggedIn(player);
 	}
 	
+	@SubscribeEvent
+	public static void onPlayerChangeDimension(PlayerEvent.PlayerChangedDimensionEvent event)
+	{
+		ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
+		PlayerSavedData.getData(player).sendConsortReputation(player);
+	}
+	
 	final PlayerIdentifier identifier;
 	
 	private final PlayerSavedData savedData;
@@ -61,6 +72,8 @@ public final class PlayerData
 	private Modus modus;
 	private long boondollars;
 	private ImmutableGristSet gristCache;	//This is immutable in order to control where it can be changed
+	
+	private final Map<ResourceLocation, Integer> consortReputation = new HashMap<>();
 	
 	private Title title;
 	private boolean effectToggle;
@@ -95,6 +108,15 @@ public final class PlayerData
 		boondollars = nbt.getLong("boondollars");
 		gristCache = NonNegativeGristSet.read(nbt.getList("grist_cache", Constants.NBT.TAG_COMPOUND)).asImmutable();
 		
+		ListNBT list = nbt.getList("consort_reputation", Constants.NBT.TAG_COMPOUND);
+		for(int i = 0; i < list.size(); i++)
+		{
+			CompoundNBT dimensionRep = list.getCompound(i);
+			ResourceLocation dimension = ResourceLocation.tryCreate(dimensionRep.getString("dim"));
+			if(dimension != null)
+				consortReputation.put(dimension, dimensionRep.getInt("rep"));
+		}
+		
 		title = Title.tryRead(nbt, "title");
 		effectToggle = nbt.getBoolean("effect_toggle");
 		
@@ -113,6 +135,16 @@ public final class PlayerData
 		else nbt.putBoolean("given_modus", givenModus);
 		nbt.putLong("boondollars", boondollars);
 		nbt.put("grist_cache", gristCache.write(new ListNBT()));
+		
+		ListNBT list = new ListNBT();
+		for(Map.Entry<ResourceLocation, Integer> entry : consortReputation.entrySet())
+		{
+			CompoundNBT dimensionRep = new CompoundNBT();
+			dimensionRep.putString("dim", entry.getKey().toString());
+			dimensionRep.putInt("rep", entry.getValue());
+			list.add(dimensionRep);
+		}
+		nbt.put("consort_reputation", list);
 		
 		if(title != null)
 			title.write(nbt, "title");
@@ -232,6 +264,24 @@ public final class PlayerData
 		}
 	}
 	
+	public int getConsortReputation(DimensionType dim)
+	{
+		return consortReputation.getOrDefault(dim.getRegistryName(), 0);
+	}
+	
+	public void addConsortReputation(int amount, DimensionType dim)
+	{
+		int oldRep = getConsortReputation(dim);
+		int newRep = MathHelper.clamp(oldRep + amount, -10000, 10000);
+		
+		if(newRep != oldRep)
+		{
+			consortReputation.put(dim.getRegistryName(), newRep);
+			markDirty();
+			sendConsortReputation(getPlayer());
+		}
+	}
+	
 	public ImmutableGristSet getGristCache()
 	{
 		return gristCache;
@@ -340,6 +390,14 @@ public final class PlayerData
 			return;
 		BoondollarDataPacket packet = BoondollarDataPacket.create(getBoondollars());
 		MSPacketHandler.sendToPlayer(packet, player);
+	}
+	
+	private void sendConsortReputation(ServerPlayerEntity player)
+	{
+		if(player == null)
+			return;
+		ConsortReputationDataPacket packet = ConsortReputationDataPacket.create(getConsortReputation(player.dimension));
+		//MSPacketHandler.sendToPlayer(packet, player);
 	}
 	
 	private void updateGristCache(ServerPlayerEntity player)

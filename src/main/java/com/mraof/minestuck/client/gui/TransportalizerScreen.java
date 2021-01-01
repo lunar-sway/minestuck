@@ -55,7 +55,7 @@ public class TransportalizerScreen extends Screen
 		this.minecraft.getTextureManager().bindTexture(guiBackground);
 		int yOffset = (this.height / 2) - (guiHeight / 2);
 		this.blit((this.width / 2) - (guiWidth / 2), yOffset, 0, 0, guiWidth, guiHeight);
-		font.drawString(te.getId(), (this.width / 2) - font.getStringWidth(te.getId()) / 2, yOffset + 10, te.getActive() ? 0x404040 : 0xFF0000);
+		font.drawString(te.getId(), (this.width / 2) - font.getStringWidth(te.getId()) / 2, yOffset + 10, te.isActive() ? 0x404040 : 0xFF0000);
 		super.render(mouseX, mouseY, partialTicks);
 	}
 

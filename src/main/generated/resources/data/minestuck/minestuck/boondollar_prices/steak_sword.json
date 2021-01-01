@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minestuck:steak_sword"
+  },
+  "range": {
+    "min": 350.0,
+    "max": 650.0,
+    "type": "minecraft:uniform"
+  }
+}
