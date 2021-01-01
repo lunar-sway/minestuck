@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:computer"
+  },
+  "input2": {
+    "item": "minecraft:book"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:laptop"
+  }
+}

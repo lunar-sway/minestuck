@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minestuck:apple_cake"
+  },
+  "range": {
+    "min": 100.0,
+    "max": 140.0,
+    "type": "minecraft:uniform"
+  }
+}

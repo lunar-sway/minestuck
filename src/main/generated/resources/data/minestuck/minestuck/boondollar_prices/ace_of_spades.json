@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minestuck:ace_of_spades"
+  },
+  "range": {
+    "min": 3000.0,
+    "max": 5000.0,
+    "type": "minecraft:uniform"
+  }
+}

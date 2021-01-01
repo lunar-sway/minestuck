@@ -1,13 +1,12 @@
 {
-  "type": "minestuck:grist_cost",
+  "type": "minestuck:source_grist_cost",
   "ingredient": {
     "item": "minecraft:cyan_concrete"
   },
   "grist_cost": {
-    "minestuck:amethyst": 1,
-    "minestuck:amber": 1,
-    "minestuck:iodine": 1,
-    "minestuck:build": 3,
-    "minestuck:cobalt": 3
-  }
+    "minestuck:cobalt": 1
+  },
+  "sources": [
+    "minecraft:cyan_concrete_powder"
+  ]
 }

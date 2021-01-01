@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minecraft:smooth_sandstone"
+  },
+  "range": {
+    "min": 5.0,
+    "max": 10.0,
+    "type": "minecraft:uniform"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:lapis_lazuli"
+  },
+  "input2": {
+    "item": "minestuck:pink_stone"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:pink_stone_lapis_ore"
+  }
+}

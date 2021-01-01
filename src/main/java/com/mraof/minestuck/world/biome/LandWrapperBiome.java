@@ -1,6 +1,7 @@
 package com.mraof.minestuck.world.biome;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
@@ -45,7 +46,8 @@ public class LandWrapperBiome extends LandBiome
 			addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), blocks.getBlockState("uranium_ore"), baseUraniumVeinSize)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(uraniumVeinsPerChunk, uraniumStratumMin, uraniumStratumMin, uraniumStratumMax))));
 		}
 		setSurfaceBuilder(SurfaceBuilder.DEFAULT, blocks.getSurfaceBuilderConfig());
-		this.addSpawn(EntityClassification.CREATURE, new SpawnListEntry(consortType, 2, 1, 3));
+		
+		addSpawn(MSEntityTypes.CONSORT, new SpawnListEntry(consortType, 2, 1, 3));
 		
 		if(type != BiomeType.OCEAN)
 			addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.RETURN_NODE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.CHANCE_HEIGHTMAP.configure(new ChanceConfig(128))));
@@ -76,7 +78,7 @@ public class LandWrapperBiome extends LandBiome
 		addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MSFeatures.CONSORT_VILLAGE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.NOPE.configure(IPlacementConfig.NO_PLACEMENT_CONFIG)));
 	}
 	
-	@Override
+	@Override	//Change access to public so that land types can add spawns
 	public void addSpawn(EntityClassification classification, SpawnListEntry entry)
 	{
 		super.addSpawn(classification, entry);

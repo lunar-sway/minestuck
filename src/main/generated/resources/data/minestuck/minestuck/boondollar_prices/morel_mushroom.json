@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minestuck:morel_mushroom"
+  },
+  "range": {
+    "min": 40.0,
+    "max": 80.0,
+    "type": "minecraft:uniform"
+  }
+}

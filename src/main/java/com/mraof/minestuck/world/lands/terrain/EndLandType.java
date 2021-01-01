@@ -3,6 +3,7 @@ package com.mraof.minestuck.world.lands.terrain;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
+import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.BiomeType;
 import com.mraof.minestuck.world.biome.LandBiomeSet;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
@@ -16,6 +17,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
@@ -49,9 +51,9 @@ public class EndLandType extends TerrainLandType
 		registry.setBlockState("ocean", MSBlocks.ENDER.getDefaultState());
 		registry.setBlockState("structure_primary", Blocks.END_STONE_BRICKS.getDefaultState());
 		registry.setBlockState("structure_primary_decorative", Blocks.PURPUR_PILLAR.getDefaultState().with(RotatedPillarBlock.AXIS, Direction.Axis.Y));
-		registry.setBlockState("structure_primary_stairs", Blocks.PURPUR_STAIRS.getDefaultState());
+		registry.setBlockState("structure_primary_stairs", Blocks.END_STONE_BRICKS.getDefaultState());
 		registry.setBlockState("structure_secondary", Blocks.PURPUR_BLOCK.getDefaultState());
-		registry.setBlockState("structure_secondary_stairs", Blocks.STONE_BRICK_STAIRS.getDefaultState());
+		registry.setBlockState("structure_secondary_stairs", Blocks.PURPUR_STAIRS.getDefaultState());
 		registry.setBlockState("structure_planks", Blocks.BRICKS.getDefaultState());
 		registry.setBlockState("structure_planks_slab", Blocks.BRICK_SLAB.getDefaultState());
 		registry.setBlockState("village_path", MSBlocks.COARSE_END_STONE.getDefaultState());
@@ -124,5 +126,11 @@ public class EndLandType extends TerrainLandType
 	public void addVillagePieces(PieceRegister register, Random random)
 	{
 		addNakagatorVillagePieces(register, random);
+	}
+	
+	@Override
+	public SoundEvent getBackgroundMusic()
+	{
+		return MSSoundEvents.MUSIC_END;
 	}
 }

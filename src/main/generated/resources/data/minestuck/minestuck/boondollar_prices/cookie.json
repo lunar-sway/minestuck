@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minecraft:cookie"
+  },
+  "range": {
+    "min": 120.0,
+    "max": 150.0,
+    "type": "minecraft:uniform"
+  }
+}

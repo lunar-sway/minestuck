@@ -46,7 +46,7 @@ public final class DeployList
 				(connection, world) -> AlchemyHelper.createCard(SburbHandler.getEntryItem(world, connection), true));
 		registerItem("alchemiter", new ItemStack(MSBlocks.ALCHEMITER), new GristSet(), new GristSet(GristTypes.BUILD, 100), 0);
 		registerItem("punch_designix", 0,null, item(MSBlocks.PUNCH_DESIGNIX),
-				(isPrimary, connection) -> new GristSet(SburbHandler.getPrimaryGristType(connection.getClientIdentifier()), 4));
+				(isPrimary, connection) -> new GristSet(connection.getBaseGrist(), 4));
 		registerItem("portable_cruxtruder", new GristSet(GristTypes.BUILD, 200), 1, config(MinestuckConfig.SERVER.portableMachines),
 				(connection, world) -> MiniCruxtruderItem.getCruxtruderWithColor(ColorHandler.getColorForPlayer(connection.getClientIdentifier(), world)));
 		registerItem("portable_punch_designix", new GristSet(GristTypes.BUILD, 200), 1, config(MinestuckConfig.SERVER.portableMachines), item(MSBlocks.MINI_PUNCH_DESIGNIX));

@@ -1,6 +1,7 @@
 package com.mraof.minestuck.item.crafting.alchemy;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.MSNBTUtil;
 import net.minecraft.item.Item;
@@ -14,9 +15,7 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -32,6 +31,7 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 	private final boolean underlingType;
 	private final Supplier<ItemStack> candyItem;
 	private final List<Supplier<GristType>> secondaryTypes;
+	private final Set<SpawnCategory> spawnCategories;
 	private String translationKey;
 	private ResourceLocation icon;
 	
@@ -42,6 +42,7 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 		underlingType = properties.isUnderlingType;
 		candyItem = properties.candyItem;
 		secondaryTypes = ImmutableList.copyOf(properties.secondaryGristTypes);
+		spawnCategories = ImmutableSet.copyOf(properties.categories);
 	}
 	
 	public ITextComponent getNameWithSuffix()
@@ -119,6 +120,11 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 	public List<GristType> getSecondaryTypes()
 	{
 		return secondaryTypes.stream().map(Supplier::get).collect(Collectors.toList());
+	}
+	
+	public boolean isInCategory(SpawnCategory category)
+	{
+		return spawnCategories.contains(category);
 	}
 	
 	/**
@@ -206,6 +212,7 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 		private boolean isUnderlingType = true;
 		private Supplier<ItemStack> candyItem = () -> ItemStack.EMPTY;
 		private final List<Supplier<GristType>> secondaryGristTypes = new ArrayList<>();
+		private final EnumSet<SpawnCategory> categories = EnumSet.noneOf(SpawnCategory.class);
 		
 		public Properties(float rarity)
 		{
@@ -241,5 +248,18 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 			secondaryGristTypes.add(type);
 			return this;
 		}
+		
+		public Properties spawnsFor(SpawnCategory... categories)
+		{
+			this.categories.addAll(Arrays.asList(categories));
+			return this;
+		}
+	}
+	
+	public enum SpawnCategory	//Which categories can a certain grist type appear under (for spawning underlings)
+	{
+		COMMON,
+		UNCOMMON,
+		ANY
 	}
 }

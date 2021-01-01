@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minestuck:zillium_skittles"
+  },
+  "range": {
+    "min": 250.0,
+    "max": 300.0,
+    "type": "minecraft:uniform"
+  }
+}
