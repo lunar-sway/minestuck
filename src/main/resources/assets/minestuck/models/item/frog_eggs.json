@@ -1,3 +1,6 @@
 {
-    "parent": "minestuck:block/frog_eggs"
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "minestuck:item/frog_eggs"
+    }
 }
