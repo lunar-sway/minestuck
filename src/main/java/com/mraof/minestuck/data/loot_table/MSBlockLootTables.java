@@ -1,6 +1,7 @@
 package com.mraof.minestuck.data.loot_table;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.tileentity.ItemStackTileEntity;
 import net.minecraft.advancements.criterion.EnchantmentPredicate;
@@ -213,10 +214,10 @@ public class MSBlockLootTables extends BlockLootTables
 		registerLootTable(VEIN_CORNER, func_218482_a());
 		registerLootTable(INVERTED_VEIN_CORNER, func_218482_a());
 		registerDropSelfLootTable(FROG_EGGS);
-		registerLootTable(DEHYDRATED_FROG, func_218482_a());
-		registerLootTable(FROZEN_FROG, func_218482_a());
-		registerLootTable(SKELETON_FROG, func_218482_a());
-		registerLootTable(WOODEN_FROG, func_218482_a());
+		registerLootTable(DEHYDRATED_FROG, MSBlockLootTables::dehydratedFrogDrop);
+		registerLootTable(FROZEN_FROG, MSBlockLootTables::frozenFrogDrop);
+		registerLootTable(SKELETON_FROG, MSBlockLootTables::skeletonFrogDrop);
+		registerLootTable(WOODEN_FROG, MSBlockLootTables::woodenFrogDrop);
 		
 		
 		registerDropSelfLootTable(COARSE_STONE_STAIRS);
@@ -382,6 +383,22 @@ public class MSBlockLootTables extends BlockLootTables
 	private static LootTable.Builder strawberryStemDrop(Block block)
 	{
 		return droppingByAge(block, MSItems.STRAWBERRY_CHUNK);
+	}
+	private static LootTable.Builder dehydratedFrogDrop(Block block)
+	{
+		return droppingWithSilkTouch(block, MSBlocks.DEHYDRATED_FROG);
+	}
+	private static LootTable.Builder frozenFrogDrop(Block block)
+	{
+		return droppingWithSilkTouch(block, FROZEN_FROG);
+	}
+	private static LootTable.Builder skeletonFrogDrop(Block block)
+	{
+		return droppingWithSilkTouch(block, SKELETON_FROG);
+	}
+	private static LootTable.Builder woodenFrogDrop(Block block)
+	{
+		return droppingWithSilkTouch(block, WOODEN_FROG);
 	}
 	protected static LootTable.Builder droppingWithColor(Block block)
 	{

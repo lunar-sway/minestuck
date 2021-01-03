@@ -385,10 +385,10 @@ public class MSBlocks
 		registry.register(new VeinCornerBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(0.45F).sound(SoundType.SLIME)).setRegistryName("inverted_vein_corner"));
 		
 		registry.register(new FrogEggsBlock(Block.Properties.create(Material.ORGANIC, MaterialColor.YELLOW).hardnessAndResistance(0F).sound(SoundType.SLIME).notSolid().tickRandomly(), MSBlockShapes.FROG_EGGS).setRegistryName("frog_eggs"));
-		registry.register(new DecorBlock(Block.Properties.create(Material.ORGANIC).hardnessAndResistance(0.5F).sound(SoundType.CORAL), MSBlockShapes.FROG_SHAPE).setRegistryName("dehydrated_frog"));
-		registry.register(new DecorBlock(Block.Properties.create(Material.ICE).hardnessAndResistance(0.5F).sound(SoundType.GLASS), MSBlockShapes.FROG_SHAPE).setRegistryName("frozen_frog"));
-		registry.register(new DecorBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.5F).sound(SoundType.STONE).notSolid(), MSBlockShapes.FROG_SHAPE).setRegistryName("skeleton_frog"));
-		registry.register(new DecorBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(0.5F).sound(SoundType.WOOD), MSBlockShapes.FROG_SHAPE).setRegistryName("wooden_frog"));
+		registry.register(new FrogBlock(Block.Properties.create(Material.ORGANIC).hardnessAndResistance(0.1F).sound(SoundType.CORAL), MSBlockShapes.FROG_SHAPE).setRegistryName("dehydrated_frog"));
+		registry.register(new FrogBlock(Block.Properties.create(Material.ICE).hardnessAndResistance(0.1F).sound(SoundType.GLASS), MSBlockShapes.FROG_SHAPE).setRegistryName("frozen_frog"));
+		registry.register(new FrogBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.1F).sound(SoundType.STONE).notSolid(), MSBlockShapes.FROG_SHAPE).setRegistryName("skeleton_frog"));
+		registry.register(new FrogBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(0.1F).sound(SoundType.WOOD), MSBlockShapes.FROG_SHAPE).setRegistryName("wooden_frog"));
 		
 		registry.register(new StairsBlock(() -> MSBlocks.COARSE_STONE.getDefaultState(), Block.Properties.from(coarseStone)).setRegistryName("coarse_stone_stairs"));
 		registry.register(new StairsBlock(() -> MSBlocks.SHADE_BRICKS.getDefaultState(), Block.Properties.from(shadeBricks)).setRegistryName("shade_brick_stairs"));
