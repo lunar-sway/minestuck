@@ -335,7 +335,6 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSItems.BEEF_SWORD).grist(IODINE, 55).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.IRRADIATED_STEAK_SWORD).grist(IODINE, 55).grist(TAR, 10).grist(URANIUM, 8).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.SORD).grist(BUILD, 0).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSItems.KATANA).grist(CHALK, 12).grist(QUARTZ, 10).grist(RUST, 6).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CALEDSCRATCH).grist(BUILD, 1000).grist(QUARTZ, 3000).grist(URANIUM, 5000).grist(RUBY, 5000).grist(DIAMOND, 1000).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.DOGG_MACHETE).grist(BUILD, 1000).grist(COBALT, 2500).grist(CHALK, 10000).grist(SHALE, 10000).grist(DIAMOND, 1000).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.ROYAL_DERINGER).grist(BUILD, 10000).grist(GOLD, 22500).grist(DIAMOND, 3140).build(recipeSaver);
@@ -376,6 +375,7 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSItems.SURPRISE_AXE).grist(BUILD, 3700).grist(RUST, 1800).grist(AMBER, 2000).grist(IODINE, 800).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.SHOCK_AXE).grist(BUILD, 9000).grist(RUST, 3125).grist(GOLD, 4210).grist(AMBER, 3000).grist(URANIUM, 3000).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.SCRAXE).grist(BUILD, 2139).grist(TAR, 2086).grist(RUST, 2430).grist(RUBY, 1800).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.LORENTZ_DISTRANSFORMATIONER).grist(BUILD, 150).grist(URANIUM, 20).grist(TAR, 20).grist(RUST, 15).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.PISTON_POWERED_POGO_AXEHAMMER).grist(BUILD, 612).grist(SHALE, 300).grist(RUST, 150).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.RUBY_CROAK).grist(BUILD, 9000).grist(GARNET, 3030).grist(RUBY, 4064).grist(DIAMOND, 2600).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.HEPHAESTUS_LUMBERJACK).grist(BUILD, 10000).grist(GOLD, 6120).grist(RUBY, 4130).build(recipeSaver);
