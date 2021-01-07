@@ -278,6 +278,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.LUNCHTOP, "Lunchtop");
 		add(MSBlocks.OLD_COMPUTER, "Old Computer");
 		add(MSBlocks.TRANSPORTALIZER, "Transportalizer");
+		add(MSBlocks.SENDIFICATOR, "Sendificator");
+		addTooltip(MSBlocks.SENDIFICATOR, "Approximately head sized");
 		add(MSBlocks.GRIST_WIDGET, "GristWidget 12000");
 		add(MSBlocks.URANIUM_COOKER, "Cookalyzer");
 		add(MSBlocks.CRUXITE_DOWEL, "Cruxite Dowel");

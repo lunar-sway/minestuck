@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=south,has_card=false": { "model": "minestuck:block/sendificator" },
+        "facing=west,has_card=false":  { "model": "minestuck:block/sendificator", "y": 90 },
+        "facing=north,has_card=false": { "model": "minestuck:block/sendificator", "y": 180 },
+        "facing=east,has_card=false":  { "model": "minestuck:block/sendificator", "y": 270 }
+    }
+}
