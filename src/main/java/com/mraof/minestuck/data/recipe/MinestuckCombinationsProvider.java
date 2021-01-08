@@ -312,6 +312,14 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.REGISWORD).namedInput(Items.IRON_SWORD).and().input(MSBlocks.CHESSBOARD).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.REGISWORD).namedInput(MSItems.KATANA).and().input(MSBlocks.CHESSBOARD).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CLAYMORE).input(Items.IRON_SWORD).and().input(Items.IRON_BLOCK).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.CALEDFWLCH).input(MSItems.CUEBALL).or().input(MSItems.CLAYMORE).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.CALEDSCRATCH).input(MSItems.MUSIC_DISC_DANCE_STAB_DANCE).and().input(MSItems.CALEDFWLCH).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.ROYAL_DERINGER).input(MSItems.REGISWORD).and().input(MSItems.CALEDFWLCH).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.DOGG_MACHETE).input(Items.ICE).or().input(MSItems.CALEDSCRATCH).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.DOGG_MACHETE).input(Items.PACKED_ICE).or().input(MSItems.CALEDSCRATCH).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.DOGG_MACHETE).input(Items.BLUE_ICE).or().input(MSItems.CALEDSCRATCH).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.DOGG_MACHETE).input(Items.GRASS_BLOCK).and().input(MSItems.CALEDSCRATCH).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.DOGG_MACHETE).input(Items.GRASS).and().input(MSItems.CALEDSCRATCH).build(consumer); //haha get it?? because snoop dogg does weed, which is called grass???? im hilarious.
 		CombinationRecipeBuilder.of(MSItems.UNBREAKABLE_KATANA).input(MSItems.KATANA).and().input(Items.BEDROCK).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.COBALT_SABRE).input(MSItems.TOO_HOT_TO_HANDLE).or().input(Items.LAPIS_BLOCK).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.SCARLET_RIBBITAR).input(MSItems.CALEDSCRATCH).and().input(MSItems.FROG).build(consumer);

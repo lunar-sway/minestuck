@@ -1,13 +1,13 @@
 {
   "type": "minestuck:combination",
   "input1": {
-    "item": "minestuck:cueball"
+    "item": "minecraft:ice"
   },
   "input2": {
-    "item": "minestuck:claymore"
+    "item": "minestuck:caledscratch"
   },
   "mode": "or",
   "output": {
-    "item": "minestuck:caledfwlch"
+    "item": "minestuck:dogg_machete"
   }
 }

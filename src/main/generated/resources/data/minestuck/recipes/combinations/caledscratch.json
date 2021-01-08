@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:music_disc_dance_stab_dance"
+  },
+  "input2": {
+    "item": "minestuck:caledfwlch"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:caledscratch"
+  }
+}

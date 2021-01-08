@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:regisword"
+  },
+  "input2": {
+    "item": "minestuck:caledfwlch"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:royal_deringer"
+  }
+}
