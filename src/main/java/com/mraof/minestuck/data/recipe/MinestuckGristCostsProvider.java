@@ -326,8 +326,8 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSItems.MELT_MASHER).grist(BUILD, 8000).grist(TAR, 7800).grist(GARNET, 5000).grist(DIAMOND, 5000).grist(GOLD, 5000).grist(RUBY, 4000).grist(SULFUR, 6500).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.ESTROGEN_EMPOWERED_EVERYTHING_ERADICATOR).grist(BUILD, 8000).grist(SHALE, 2000).grist(URANIUM, 1500).grist(RUST, 2000).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.EEEEEEEEEEEE).grist(ARTIFACT, -100).grist(BUILD, 1).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSItems.MWRTHWL).grist(BUILD, 40000).grist(GOLD, 10000).grist(RUST, 15000).grist(RUBY, 10000).grist(SHALE, 20000).grist(ZILLIUM, 1).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSItems.ZILLYHOO_HAMMER).grist(BUILD, 28000).grist(GOLD, 15000).grist(URANIUM, 15000).grist(DIAMOND, 10000).grist(RUBY, 10000).grist(SHALE, 20000).grist(ZILLIUM, -1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.MWRTHWL).grist(BUILD, 40000).grist(GOLD, 10000).grist(RUST, 15000).grist(RUBY, 10000).grist(SHALE, 20000).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.ZILLYHOO_HAMMER).grist(BUILD, 28000).grist(GOLD, 15000).grist(URANIUM, 15000).grist(DIAMOND, 10000).grist(RUBY, 10000).grist(SHALE, 20000).grist(ZILLIUM, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.POPAMATIC_VRILLYHOO).grist(BUILD, 28888).grist(COBALT, 18888).grist(URANIUM, 10000).grist(DIAMOND, 15000).grist(RUBY, 12500).grist(SHALE, 30000).grist(ZILLIUM, 1).build(recipeSaver);
 
 		GristCostRecipeBuilder.of(MSItems.PAPER_SWORD).grist(BUILD, 12).grist(TAR, 8).build(recipeSaver);
@@ -340,7 +340,7 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSItems.ROYAL_DERINGER).grist(BUILD, 10000).grist(GOLD, 22500).grist(DIAMOND, 3140).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CALEDFWLCH).grist(BUILD, 40000).grist(URANIUM, 12500).grist(COBALT, 24130).grist(DIAMOND, 8000).grist(RUBY, 25000).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.SCARLET_RIBBITAR).grist(BUILD, 50000).grist(RUBY, 100000).grist(QUARTZ, 10000).grist(GARNET, 50000).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSItems.CUTLASS_OF_ZILLYWAIR).grist(BUILD, 50000).grist(URANIUM, 10000).grist(COBALT, 22500).grist(DIAMOND, 26000).grist(RUBY, 29000).grist(GOLD, 25000).grist(ZILLIUM, -1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.CUTLASS_OF_ZILLYWAIR).grist(BUILD, 50000).grist(URANIUM, 10000).grist(COBALT, 22500).grist(DIAMOND, 26000).grist(RUBY, 29000).grist(GOLD, 25000).grist(ZILLIUM, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.FIRE_POKER).grist(AMBER, 60).grist(RUBY, 29).grist(SULFUR, 53).grist(GOLD, 22).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CLAYMORE).grist(BUILD, 400).grist(RUST, 240).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.TOO_HOT_TO_HANDLE).grist(AMBER, 20).grist(RUBY, 15).grist(SULFUR, 30).build(recipeSaver);
