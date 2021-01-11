@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:grass"
+  },
+  "input2": {
+    "item": "minestuck:caledscratch"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:dogg_machete"
+  }
+}

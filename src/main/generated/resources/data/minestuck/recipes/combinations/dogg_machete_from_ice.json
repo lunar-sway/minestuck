@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:ice"
+  },
+  "input2": {
+    "item": "minecraft:iron_sword"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:dogg_machete"
+  }
+}
