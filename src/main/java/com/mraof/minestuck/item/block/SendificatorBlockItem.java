@@ -16,8 +16,6 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
-
 public class SendificatorBlockItem extends BlockItem
 {
 	public SendificatorBlockItem(Block blockIn, Properties builder)
@@ -32,9 +30,6 @@ public class SendificatorBlockItem extends BlockItem
 		if(playerIn.isSneaking() && playerIn.getItemStackFromSlot(EquipmentSlotType.HEAD).isEmpty())
 		{
 			playerIn.replaceItemInInventory(103, new ItemStack(MSBlocks.SENDIFICATOR));
-			//itemStackIn = new ItemStack(MSBlocks.SENDIFICATOR);
-			//ItemStack itemStackHolding = playerIn.getHeldItem(handIn);
-			//playerIn.replaceItemInInventory(106, new ItemStack(Blocks.AIR));
 			
 			return new ActionResult<>(ActionResultType.SUCCESS, new ItemStack(Blocks.AIR));
 		}
@@ -57,7 +52,8 @@ public class SendificatorBlockItem extends BlockItem
 				ItemEntity recoverItemEntity = new ItemEntity(playerIn.world, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), recoverItem);
 				playerIn.world.addEntity(recoverItemEntity);
 				playerIn.replaceItemInInventory(103, new ItemStack(Items.AIR));
-				playerIn.setHealth(0);
+				//playerIn.setHealth(0);
+				playerIn.onKillCommand();
 			}
 		}
 		super.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
