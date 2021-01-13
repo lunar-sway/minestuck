@@ -511,6 +511,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.IRON_CANE, "Iron-Tipped Cane");
 		addTooltip(MSItems.IRON_CANE, "A regular cane, except that it is tipped with the power of metal!");
 		addStoreTooltip(MSItems.IRON_CANE, "This metal rod is perfect for attracting thunder!");
+		add(MSItems.UNDYING_LUCERNE_HAMMER, "Undying Lucerne Hammer");
 		add(MSItems.SPEAR_CANE, "Spear Cane");
 		addTooltip(MSItems.SPEAR_CANE, "Replace with blind persons cane for hilarious results.");
 		add(MSItems.PARADISES_PORTABELLO, "Paradise's Portabello");
