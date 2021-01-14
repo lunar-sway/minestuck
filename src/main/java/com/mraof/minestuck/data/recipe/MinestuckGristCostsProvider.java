@@ -329,6 +329,7 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSItems.MWRTHWL).grist(BUILD, 40000).grist(GOLD, 10000).grist(RUST, 15000).grist(RUBY, 10000).grist(SHALE, 20000).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.ZILLYHOO_HAMMER).grist(BUILD, 28000).grist(GOLD, 15000).grist(URANIUM, 15000).grist(DIAMOND, 10000).grist(RUBY, 10000).grist(SHALE, 20000).grist(ZILLIUM, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.POPAMATIC_VRILLYHOO).grist(BUILD, 28888).grist(COBALT, 18888).grist(URANIUM, 10000).grist(DIAMOND, 15000).grist(RUBY, 12500).grist(SHALE, 30000).grist(ZILLIUM, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.SCARLET_ZILLYHOO).grist(BUILD, 30000).grist(RUBY, 21600).grist(GARNET, 31400).grist(ZILLIUM, 1).build(recipeSaver);
 
 		GristCostRecipeBuilder.of(MSItems.PAPER_SWORD).grist(BUILD, 12).grist(TAR, 8).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CACTACEAE_CUTLASS).grist(AMBER, 7).grist(MARBLE, 2).build(recipeSaver);

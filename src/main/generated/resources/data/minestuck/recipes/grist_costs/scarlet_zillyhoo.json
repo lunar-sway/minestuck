@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:scarlet_zillyhoo"
+  },
+  "grist_cost": {
+    "minestuck:build": 30000,
+    "minestuck:ruby": 21600,
+    "minestuck:garnet": 31400,
+    "minestuck:zillium": 1
+  }
+}
