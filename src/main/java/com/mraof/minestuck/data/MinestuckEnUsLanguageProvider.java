@@ -325,6 +325,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.CLAW_HAMMER, "An average hammer found in about any garage. It can also destroy blocks");
 		add(MSItems.SLEDGE_HAMMER, "Sledgehammer");
 		addTooltip(MSItems.SLEDGE_HAMMER, "A decently large, yet average, hammer. It can also destroy blocks");
+		add(MSItems.MAILBOX, "Mailbox");
+		addTooltip(MSItems.MAILBOX, "Literally just a mailbox");
 		add(MSItems.BLACKSMITH_HAMMER, "Blacksmith's Hammer");
 		addTooltip(MSItems.BLACKSMITH_HAMMER, "A strong hammer that would commonly be found in a blacksmiths. It can also break blocks");
 		add(MSItems.POGO_HAMMER, "Pogo Hammer");
@@ -333,6 +335,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.WRINKLEFUCKER, "Is there anything more iconic?");
 		add(MSItems.TELESCOPIC_SASSACRUSHER, "Telescopic Sassacrusher");
 		addTooltip(MSItems.TELESCOPIC_SASSACRUSHER, "OH ho! The perfect hammer for the dashing young gent who loves a pranksters gambit or a good grist horde!");
+		add(MSItems.MAILBOX_OF_JUSTICE, "MAILBOX OF JUSTICE");
 		add(MSItems.REGI_HAMMER, "Regihammer");
 		add(MSItems.FEAR_NO_ANVIL, "Fear No Anvil");
 		addTooltip(MSItems.FEAR_NO_ANVIL, "What's to fear with this around? This uber hammer can break blocks and deal massive damage.");
@@ -362,6 +365,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addStoreTooltip(MSItems.STEAK_SWORD, "A sword? Made of meat? That's like, double cool!");
 		add(MSItems.BEEF_SWORD, "Raw Beef Sword");
 		add(MSItems.IRRADIATED_STEAK_SWORD, "Irradiated Steak Sword");
+		add(MSItems.MACUAHUITL, "Macuahuitl");
+		add(MSItems.FROSTY_MACUAHUITL, "Frosty Macuahuitl");
+		addTooltip(MSItems.FROSTY_MACUAHUITL, "Now featuring real Ice Shards");
 		add(MSItems.KATANA, "Katana");
 		addTooltip(MSItems.KATANA, "A powerful Katana, once wielded by the most powerful of Otaku Masters");
 		add(MSItems.UNBREAKABLE_KATANA, "Unbreakable Katana");
@@ -437,6 +443,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.LIPSTICK_CHAINSAW, "Chainsaw");
 		add(MSItems.LIPSTICK, "Jade Lipstick");
 		add(MSItems.CIGARETTE_LANCE, "Cigarette Holder Lance");
+		add(MSItems.LUCERNE_HAMMER, "Lucerne Hammer");
+		add(MSItems.UNDYING_LUCERNE_HAMMER, "Undying Lucerne Hammer");
+		add(MSItems.OBSIDIAN_AXE_KNIFE, "Obsidian Axe Knife");
+		add(MSItems.FAN, "Fan");
 		add(MSItems.SICKLE, "Sickle");
 		add(MSItems.OW_THE_EDGE, "oW THE EDGE");
 		add(MSItems.THORNY_SUBJECT, "A Thorny Subject");
@@ -511,7 +521,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.IRON_CANE, "Iron-Tipped Cane");
 		addTooltip(MSItems.IRON_CANE, "A regular cane, except that it is tipped with the power of metal!");
 		addStoreTooltip(MSItems.IRON_CANE, "This metal rod is perfect for attracting thunder!");
-		add(MSItems.UNDYING_LUCERNE_HAMMER, "Undying Lucerne Hammer");
 		add(MSItems.SPEAR_CANE, "Spear Cane");
 		addTooltip(MSItems.SPEAR_CANE, "Replace with blind persons cane for hilarious results.");
 		add(MSItems.PARADISES_PORTABELLO, "Paradise's Portabello");
