@@ -39,12 +39,13 @@ public class SendificatorBlockItem extends BlockItem
 	@Override
 	public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected)
 	{
-		if(entityIn instanceof PlayerEntity){
+		if(entityIn instanceof PlayerEntity)
+		{
 			PlayerEntity playerIn = (PlayerEntity) entityIn;
 			ItemStack recoverItem = playerIn.getItemStackFromSlot(EquipmentSlotType.HEAD);
 			if(recoverItem.isItemEqual(new ItemStack(MSBlocks.SENDIFICATOR)) && !playerIn.isCreative())
 			{
-				ItemStack headItem = new ItemStack(Items.PLAYER_HEAD,1);
+				ItemStack headItem = new ItemStack(Items.PLAYER_HEAD, 1);
 				NBTUtil.writeGameProfile(headItem.getOrCreateChildTag("SkullOwner"), playerIn.getGameProfile());
 				ItemEntity headItemEntity = new ItemEntity(playerIn.world, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), headItem);
 				playerIn.world.addEntity(headItemEntity);

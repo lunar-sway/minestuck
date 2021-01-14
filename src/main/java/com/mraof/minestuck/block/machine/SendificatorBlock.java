@@ -22,14 +22,19 @@ public class SendificatorBlock extends DecorBlock
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-		if(!player.isSneaking() && player.getHeldItemMainhand().isEmpty() && !worldIn.isRemote) {
+	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+	{
+		if(!player.isSneaking() && player.getHeldItemMainhand().isEmpty())
+		{
 			//ItemStack itemStackIn = player.getHeldItem(handIn);
 			//Function will store information about item and pass it along to TileEntity, currently useless
-			player.sendMessage(new TranslationTextComponent(getTranslationKey() + "." + ACTIVATION_MESSAGE));
-			
+			if(!worldIn.isRemote)
+			{
+				player.sendMessage(new TranslationTextComponent(getTranslationKey() + "." + ACTIVATION_MESSAGE));
+			}
 			return ActionResultType.SUCCESS;
-		} else {
+		} else
+		{
 			return super.onBlockActivated(state, worldIn, pos, player, handIn, hit);
 		}
 	}
