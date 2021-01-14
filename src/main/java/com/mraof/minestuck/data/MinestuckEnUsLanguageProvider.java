@@ -2,6 +2,7 @@ package com.mraof.minestuck.data;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.block.machine.SendificatorBlock;
 import com.mraof.minestuck.client.gui.*;
 import com.mraof.minestuck.client.gui.captchalouge.HashMapSylladexScreen;
 import com.mraof.minestuck.client.gui.captchalouge.SylladexScreen;
@@ -278,6 +279,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.LUNCHTOP, "Lunchtop");
 		add(MSBlocks.OLD_COMPUTER, "Old Computer");
 		add(MSBlocks.TRANSPORTALIZER, "Transportalizer");
+		add(MSBlocks.SENDIFICATOR, "Sendificator");
+		addTooltip(MSBlocks.SENDIFICATOR, "Approximately head sized");
+		addExtra(MSBlocks.SENDIFICATOR, SendificatorBlock.ACTIVATION_MESSAGE, "The machine indicates that it is irreversibly set to the current time and place, following that up by saying SUBMIT. OBEY.");
 		add(MSBlocks.GRIST_WIDGET, "GristWidget 12000");
 		add(MSBlocks.URANIUM_COOKER, "Cookalyzer");
 		add(MSBlocks.CRUXITE_DOWEL, "Cruxite Dowel");
