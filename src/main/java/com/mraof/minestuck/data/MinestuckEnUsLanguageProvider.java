@@ -335,7 +335,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.WRINKLEFUCKER, "Is there anything more iconic?");
 		add(MSItems.TELESCOPIC_SASSACRUSHER, "Telescopic Sassacrusher");
 		addTooltip(MSItems.TELESCOPIC_SASSACRUSHER, "OH ho! The perfect hammer for the dashing young gent who loves a pranksters gambit or a good grist horde!");
-		add(MSItems.MAILBOX_OF_JUSTICE, "MAILBOX OF JUSTICE");
+		add(MSItems.DEMOCRATIC_DEMOLITIONER, "DEMOCRATIC DEMOLITIONER");
 		add(MSItems.REGI_HAMMER, "Regihammer");
 		add(MSItems.FEAR_NO_ANVIL, "Fear No Anvil");
 		addTooltip(MSItems.FEAR_NO_ANVIL, "What's to fear with this around? This uber hammer can break blocks and deal massive damage.");
@@ -444,9 +444,11 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.LIPSTICK, "Jade Lipstick");
 		add(MSItems.CIGARETTE_LANCE, "Cigarette Holder Lance");
 		add(MSItems.LUCERNE_HAMMER, "Lucerne Hammer");
-		add(MSItems.UNDYING_LUCERNE_HAMMER, "Undying Lucerne Hammer");
+		add(MSItems.LUCERNE_HAMMER_OF_UNDYING, "Lucerne Hammer of Undying");
 		add(MSItems.OBSIDIAN_AXE_KNIFE, "Obsidian Axe Knife");
 		add(MSItems.FAN, "Fan");
+		add(MSItems.TYPHONIC_TRIVIALIZER, "Typhonic Trivializer");
+		addTooltip(MSItems.TYPHONIC_TRIVIALIZER, "It's easy being breezy, with this denizen's boon");
 		add(MSItems.SICKLE, "Sickle");
 		add(MSItems.OW_THE_EDGE, "oW THE EDGE");
 		add(MSItems.THORNY_SUBJECT, "A Thorny Subject");

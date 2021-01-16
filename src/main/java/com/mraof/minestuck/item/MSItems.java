@@ -16,6 +16,7 @@ import com.mraof.minestuck.item.foods.SurpriseEmbryoItem;
 import com.mraof.minestuck.item.foods.UnknowableEggItem;
 import com.mraof.minestuck.item.weapon.*;
 import com.mraof.minestuck.item.weapon.aspect.AspectBasedEffectWeaponItem;
+import com.mraof.minestuck.item.weapon.aspect.BreathAOEWeaponItem;
 import com.mraof.minestuck.item.weapon.aspect.PassiveAspectBasedEffectWeaponItem;
 import com.mraof.minestuck.item.weapon.aspect.TeleportingWeaponItem;
 import com.mraof.minestuck.util.MSSoundEvents;
@@ -59,7 +60,7 @@ public class MSItems
 	public static final Item POGO_HAMMER = getNull();
 	public static final Item WRINKLEFUCKER = getNull();
 	public static final Item TELESCOPIC_SASSACRUSHER = getNull();
-	public static final Item MAILBOX_OF_JUSTICE = getNull();
+	public static final Item DEMOCRATIC_DEMOLITIONER = getNull();
 	public static final Item REGI_HAMMER = getNull();
 	public static final Item FEAR_NO_ANVIL = getNull();
 	public static final Item MELT_MASHER = getNull();
@@ -129,9 +130,10 @@ public class MSItems
 	public static final Item LIPSTICK = getNull();
 	public static final Item CIGARETTE_LANCE = getNull();
 	public static final Item LUCERNE_HAMMER = getNull();
-	public static final Item UNDYING_LUCERNE_HAMMER = getNull();
+	public static final Item LUCERNE_HAMMER_OF_UNDYING = getNull();
 	public static final Item OBSIDIAN_AXE_KNIFE = getNull();
 	public static final Item FAN = getNull();
+	public static final Item TYPHONIC_TRIVIALIZER = getNull();
 	
 	//sickles
 	public static final Item SICKLE = getNull();
@@ -640,7 +642,7 @@ public class MSItems
 		registry.register(new PogoWeaponItem(MSItemTypes.POGO_TIER, 5, -2.8F, 2.0F, 0.7, MSItemTypes.HAMMER_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("pogo_hammer"));
 		registry.register(new PogoWeaponItem(MSItemTypes.POGO_TIER, 7, -2.8F, 2.0F, 0.4, MSItemTypes.HAMMER_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("wrinklefucker"));
 		registry.register(new WeaponItem(MSItemTypes.BOOK_TIER, 8, -2.9F, 5.0F, MSItemTypes.HAMMER_TOOL, new Item.Properties().defaultMaxDamage(1024).group(MSItemGroup.WEAPONS)).setRegistryName("telescopic_sassacrusher"));
-		registry.register(new WeaponItem(ItemTier.WOOD, 7, -2.8F, 1.0F, MSItemTypes.HAMMER_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("mailbox_of_justice"));
+		registry.register(new WeaponItem(ItemTier.IRON, 4, -2.8F, 1.0F, MSItemTypes.HAMMER_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("democratic_demolitioner"));
 		registry.register(new WeaponItem(MSItemTypes.REGI_TIER, 3, -2.4F, 8.0F, MSItemTypes.HAMMER_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("regi_hammer"));
 		registry.register(new PotionWeaponItem(MSItemTypes.RUBY_TIER, 6, -2.8F, 7.0F, new EffectInstance(Effects.SLOWNESS, 100, 3),  MSItemTypes.HAMMER_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("fear_no_anvil"));
 		registry.register(new FireWeaponItem(MSItemTypes.RUBY_TIER, 6, -2.8F, 12.0F, 25,  MSItemTypes.HAMMER_TOOL, new Item.Properties().defaultMaxDamage(1413).group(MSItemGroup.WEAPONS)).setRegistryName("melt_masher"));
@@ -713,12 +715,13 @@ public class MSItems
 		
 		registry.register(new WeaponItem(ItemTier.STONE, 4, -2.8F, 2.0F, MSItemTypes.MISC_TOOL, new Item.Properties().maxDamage(450).group(MSItemGroup.WEAPONS)).setRegistryName("cigarette_lance"));
 		
-		registry.register(new WeaponItem(ItemTier.IRON, 2, -2.0F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("lucerne_hammer"));
-		registry.register(new WeaponItem(ItemTier.IRON, 3, -2.0F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(2048).group(MSItemGroup.WEAPONS)).setRegistryName("undying_lucerne_hammer"));
+		registry.register(new WeaponItem(ItemTier.IRON, 3, -2.5F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("lucerne_hammer"));
+		registry.register(new WeaponItem(ItemTier.IRON, 4, -2.5F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(2048).group(MSItemGroup.WEAPONS)).setRegistryName("lucerne_hammer_of_undying"));
 		
 		registry.register(new WeaponItem(MSItemTypes.PRISMARINE_TIER, 2, -2.0F, 1.5F, MSItemTypes.MISC_TOOL, new Item.Properties().maxDamage(100).group(MSItemGroup.WEAPONS)).setRegistryName("obsidian_axe_knife"));
 		
-		registry.register(new WeaponItem(ItemTier.WOOD, 1, -1.0F, 1.5F, MSItemTypes.MISC_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("fan"));
+		registry.register(new KnockbackWeaponItem(ItemTier.WOOD, 1, -1.0F, 1.5F, MSItemTypes.MISC_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("fan"));
+		registry.register(new BreathAOEWeaponItem(MSItemTypes.RUBY_TIER, 5, -1.0F, 1.5F, BREATH, MSItemTypes.MISC_TOOL, new Item.Properties().rarity(Rarity.RARE).group(MSItemGroup.WEAPONS)).setRegistryName("typhonic_trivializer"));
 		
 		//sickles
 		registry.register(new WeaponItem(ItemTier.IRON, 2, -2.4F, 1.5F, MSItemTypes.SICKLE_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("sickle"));
