@@ -304,6 +304,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.IRRADIATED_STEAK_SWORD).input(Items.WOODEN_SWORD).or().input(MSItems.IRRADIATED_STEAK).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.SORD).namedInput(Items.WOODEN_SWORD).and().input(MSItems.SBAHJ_POSTER).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.SORD).namedInput(Items.STONE_SWORD).and().input(MSItems.SBAHJ_POSTER).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.FROSTY_MACUAHUITL).namedInput(MSItems.MACUAHUITL).or().input(MSItems.ICE_SHARD).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.KATANA).namedInput(Items.STONE_SWORD).and().input(Items.ROTTEN_FLESH).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.KATANA).namedInput(Items.IRON_SWORD).and().input(Items.ROTTEN_FLESH).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.FIRE_POKER).input(Items.IRON_SWORD).and().input(Items.BLAZE_ROD).build(consumer);

@@ -1,7 +1,7 @@
 package com.mraof.minestuck.item.weapon.aspect;
 
-import com.mraof.minestuck.item.weapon.KnockbackWeaponItem;
 import com.mraof.minestuck.item.weapon.MSToolType;
+import com.mraof.minestuck.item.weapon.PotionWeaponItem;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
@@ -9,7 +9,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
-import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.SoundCategory;
@@ -18,13 +17,13 @@ import net.minecraft.util.math.AxisAlignedBB;
 
 import java.util.List;
 
-public class BreathAOEWeaponItem extends KnockbackWeaponItem
+public class TimeAOEWeaponItem extends PotionWeaponItem
 {
 	private final EnumAspect aspect;
 	
-	public BreathAOEWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, EnumAspect aspect, MSToolType toolType, Properties builder)
+	public TimeAOEWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, EffectInstance effect, EnumAspect aspect, MSToolType toolType, Properties builder)
 	{
-		super(tier, attackDamageIn, attackSpeedIn, efficiency, toolType, builder);
+		super(tier, attackDamageIn, attackSpeedIn, efficiency, effect, true, toolType, builder);
 		this.aspect = aspect;
 	}
 	
@@ -44,10 +43,9 @@ public class BreathAOEWeaponItem extends KnockbackWeaponItem
 						for(LivingEntity livingentity : list) {
 							double d0 = attacker.getDistanceSq(livingentity);
 							if (d0 < 16.0D) {
-								attacker.world.playSound(null, attacker.getPosX(), attacker.getPosY(), attacker.getPosZ(), SoundEvents.ENTITY_ENDER_DRAGON_FLAP, SoundCategory.PLAYERS, 1.5F, 1.4F);
-								livingentity.addPotionEffect(new EffectInstance(Effects.LEVITATION, 60, 1));
-								attacker.world.addParticle(ParticleTypes.CLOUD, (float)attacker.getPosX() + random.nextFloat(), (float)attacker.getPosY() + random.nextFloat(), (float)attacker.getPosZ() + random.nextFloat(), target.getMotion().x, target.getMotion().y, target.getMotion().z);
-								attacker.removePotionEffect(Effects.LEVITATION);
+								attacker.world.playSound(null, attacker.getPosX(), attacker.getPosY(), attacker.getPosZ(), SoundEvents.BLOCK_BELL_RESONATE, SoundCategory.PLAYERS, 1.5F, 2F);
+								livingentity.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 100, 4));
+								attacker.removePotionEffect(Effects.SLOWNESS);
 							}
 						}
 					}

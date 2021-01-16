@@ -15,7 +15,7 @@ public class KnockbackWeaponItem extends WeaponItem
 	@Override
 	public boolean hitEntity(ItemStack itemStack, LivingEntity target, LivingEntity attacker)
 	{
-		float randFloat = 1 + attacker.getRNG().nextFloat();
+		float randFloat = 1.5F + attacker.getRNG().nextFloat();
 		if(!attacker.getEntityWorld().isRemote)
 		{
 			target.setMotion(target.getMotion().x * randFloat, target.getMotion().y, target.getMotion().z * randFloat);
