@@ -184,14 +184,15 @@ public class ServerEventHandler
 		{
 			PlayerEntity injuredPlayer = ((PlayerEntity) event.getEntity());
 			Title title = PlayerSavedData.getData((ServerPlayerEntity) injuredPlayer).getTitle();
+			boolean isDoom = title != null && title.getHeroAspect() == EnumAspect.DOOM;
 			ItemStack handItem = injuredPlayer.getHeldItemMainhand();
 			if(handItem.getItem() == MSItems.LUCERNE_HAMMER_OF_UNDYING){
-				if((title.getHeroAspect() == EnumAspect.DOOM && injuredPlayer.getHealth() <= 3.0F && injuredPlayer.getRNG().nextFloat() <= .08) || (title.getHeroAspect() != EnumAspect.DOOM && injuredPlayer.getHealth() <= 2.0F && injuredPlayer.getRNG().nextFloat() <= .02))
+				if((isDoom && injuredPlayer.getHealth() <= 3.0F && injuredPlayer.getRNG().nextFloat() <= .08) || (!isDoom && injuredPlayer.getHealth() <= 2.0F && injuredPlayer.getRNG().nextFloat() <= .02))
 				{
 					injuredPlayer.world.playSound(null, injuredPlayer.getPosX(), injuredPlayer.getPosY(), injuredPlayer.getPosZ(), SoundEvents.ITEM_TOTEM_USE, SoundCategory.PLAYERS, 1.0F, 1.4F);
 					injuredPlayer.setHealth(injuredPlayer.getHealth() + 3);
 					injuredPlayer.addPotionEffect(new EffectInstance(Effects.REGENERATION, 450, 0));
-					if(title.getHeroAspect() == EnumAspect.DOOM){
+					if(isDoom){
 						injuredPlayer.addPotionEffect(new EffectInstance(Effects.ABSORPTION, 100, 0));
 						handItem.damageItem(400, injuredPlayer, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
 					} else {
@@ -200,7 +201,7 @@ public class ServerEventHandler
 				}
 			}
 			if(handItem.getItem() == MSItems.CRUEL_FATE_CRUCIBLE){
-				if((title.getHeroAspect() == EnumAspect.DOOM && injuredPlayer.getHealth() <= 12.0F && injuredPlayer.getRNG().nextFloat() <= .25) || (title.getHeroAspect() != EnumAspect.DOOM && injuredPlayer.getHealth() <= 8.0F && injuredPlayer.getRNG().nextFloat() <= .10))
+				if((isDoom && injuredPlayer.getHealth() <= 12.0F && injuredPlayer.getRNG().nextFloat() <= .25) || (!isDoom && injuredPlayer.getHealth() <= 8.0F && injuredPlayer.getRNG().nextFloat() <= .10))
 				{
 					AxisAlignedBB axisalignedbb = injuredPlayer.getBoundingBox().grow(4.0D, 2.0D, 4.0D);
 					List<LivingEntity> list = injuredPlayer.world.getEntitiesWithinAABB(LivingEntity.class, axisalignedbb);
@@ -211,9 +212,9 @@ public class ServerEventHandler
 								injuredPlayer.world.playSound(null, injuredPlayer.getPosX(), injuredPlayer.getPosY(), injuredPlayer.getPosZ(), SoundEvents.ENTITY_WITHER_HURT, SoundCategory.PLAYERS, 0.5F, 1.6F);
 								livingentity.addPotionEffect(new EffectInstance(Effects.INSTANT_DAMAGE, 1, 0));
 								injuredPlayer.removePotionEffect(Effects.INSTANT_DAMAGE);
-								if(title.getHeroAspect() == EnumAspect.DOOM)
+								if(isDoom)
 									handItem.damageItem(1, injuredPlayer, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
-								if(title.getHeroAspect() != EnumAspect.DOOM)
+								else
 									handItem.damageItem(4, injuredPlayer, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
 							}
 						}
