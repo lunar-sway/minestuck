@@ -18,11 +18,11 @@ import net.minecraft.util.math.AxisAlignedBB;
 
 import java.util.List;
 
-public class BreathAOEWeaponItem extends KnockbackWeaponItem
+public class LevitationAOEWeaponItem extends KnockbackWeaponItem
 {
 	private final EnumAspect aspect;
 	
-	public BreathAOEWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, EnumAspect aspect, MSToolType toolType, Properties builder)
+	public LevitationAOEWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, EnumAspect aspect, MSToolType toolType, Properties builder)
 	{
 		super(tier, attackDamageIn, attackSpeedIn, efficiency, toolType, builder);
 		this.aspect = aspect;

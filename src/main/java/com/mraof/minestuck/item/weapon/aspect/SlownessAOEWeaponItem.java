@@ -17,11 +17,11 @@ import net.minecraft.util.math.AxisAlignedBB;
 
 import java.util.List;
 
-public class TimeAOEWeaponItem extends PotionWeaponItem
+public class SlownessAOEWeaponItem extends PotionWeaponItem
 {
 	private final EnumAspect aspect;
 	
-	public TimeAOEWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, EffectInstance effect, EnumAspect aspect, MSToolType toolType, Properties builder)
+	public SlownessAOEWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, EffectInstance effect, EnumAspect aspect, MSToolType toolType, Properties builder)
 	{
 		super(tier, attackDamageIn, attackSpeedIn, efficiency, effect, true, toolType, builder);
 		this.aspect = aspect;
