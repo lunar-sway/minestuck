@@ -51,9 +51,9 @@ public class EndLandType extends TerrainLandType
 		registry.setBlockState("ocean", MSBlocks.ENDER.getDefaultState());
 		registry.setBlockState("structure_primary", Blocks.END_STONE_BRICKS.getDefaultState());
 		registry.setBlockState("structure_primary_decorative", Blocks.PURPUR_PILLAR.getDefaultState().with(RotatedPillarBlock.AXIS, Direction.Axis.Y));
-		registry.setBlockState("structure_primary_stairs", Blocks.PURPUR_STAIRS.getDefaultState());
+		registry.setBlockState("structure_primary_stairs", Blocks.END_STONE_BRICKS.getDefaultState());
 		registry.setBlockState("structure_secondary", Blocks.PURPUR_BLOCK.getDefaultState());
-		registry.setBlockState("structure_secondary_stairs", Blocks.STONE_BRICK_STAIRS.getDefaultState());
+		registry.setBlockState("structure_secondary_stairs", Blocks.PURPUR_STAIRS.getDefaultState());
 		registry.setBlockState("structure_planks", Blocks.BRICKS.getDefaultState());
 		registry.setBlockState("structure_planks_slab", Blocks.BRICK_SLAB.getDefaultState());
 		registry.setBlockState("village_path", MSBlocks.COARSE_END_STONE.getDefaultState());

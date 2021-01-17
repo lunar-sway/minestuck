@@ -124,8 +124,8 @@ public class EndTreeFeature extends AbstractTreeFeature<TreeFeatureConfig>
 	{
 		if(primary == Direction.Axis.X || secondary == Direction.Axis.X)
 		{
-			leaves(world, rand, pos.east(), changedBlocks, boundsIn, config, 1);
-			leaves(world, rand, pos.west(), changedBlocks, boundsIn, config, 1);
+			leaves(world, rand, pos.east(), changedBlocks, boundsIn, config, 2);
+			leaves(world, rand, pos.west(), changedBlocks, boundsIn, config, 2);
 		}
 		if(primary == Direction.Axis.Y || secondary == Direction.Axis.Y)
 		{
