@@ -26,11 +26,17 @@ public class WeaponItem extends SwordItem //To allow weapons to have the sweep e
 	@Nullable
 	private final MSToolType toolType;
 	
-	public WeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, @Nullable MSToolType toolType, Properties builder)
+	@Deprecated
+	public WeaponItem(IItemTier tier, int attackDamage, float attackSpeed, float efficiency, @Nullable MSToolType toolType, Properties properties)
 	{
-		super(tier, attackDamageIn, attackSpeedIn, builder);
-		this.toolType = toolType;
-		this.efficiency = efficiency;
+		this(new Builder(tier, attackDamage, attackSpeed).efficiency(efficiency).toolType(toolType), properties);
+	}
+	
+	public WeaponItem(Builder builder, Properties properties)
+	{
+		super(builder.tier, builder.attackDamage, builder.attackSpeed, properties);
+		this.toolType = builder.toolType;
+		this.efficiency = builder.efficiency;
 	}
 	
 	@Override
@@ -137,4 +143,34 @@ public class WeaponItem extends SwordItem //To allow weapons to have the sweep e
 	@Nullable
 	public MSToolType getToolType() {return toolType;}
 	public float getEfficiency()		{return efficiency;}
+	
+	public static class Builder
+	{
+		private final IItemTier tier;
+		private final int attackDamage;
+		private final float attackSpeed;
+		@Nullable
+		private MSToolType toolType;
+		private float efficiency;
+		
+		public Builder(IItemTier tier, int attackDamage, float attackSpeed)
+		{
+			this.tier = tier;
+			this.attackDamage = attackDamage;
+			this.attackSpeed = attackSpeed;
+			efficiency = tier.getEfficiency();
+		}
+		
+		public Builder toolType(@Nullable MSToolType toolType)
+		{
+			this.toolType = toolType;
+			return this;
+		}
+		
+		public Builder efficiency(float efficiency)
+		{
+			this.efficiency = efficiency;
+			return this;
+		}
+	}
 }
