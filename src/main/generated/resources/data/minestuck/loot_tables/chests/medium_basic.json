@@ -419,6 +419,10 @@
         },
         {
           "type": "minecraft:item",
+          "name": "minestuck:sendificator"
+        },
+        {
+          "type": "minecraft:item",
           "quality": 2,
           "name": "minestuck:transportalizer"
         },

@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=south": { "model": "minestuck:block/sendificator" },
+        "facing=west":  { "model": "minestuck:block/sendificator", "y": 90 },
+        "facing=north": { "model": "minestuck:block/sendificator", "y": 180 },
+        "facing=east":  { "model": "minestuck:block/sendificator", "y": 270 }
+    }
+}
