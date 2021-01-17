@@ -87,6 +87,7 @@ public class MSItems
 	public static final Item CLAYMORE = getNull();
 	public static final Item CUTLASS_OF_ZILLYWAIR = getNull();
 	public static final Item REGISWORD = getNull();
+	public static final Item CRUEL_FATE_CRUCIBLE = getNull();
 	public static final Item SCARLET_RIBBITAR = getNull();
 	public static final Item DOGG_MACHETE = getNull();
 	public static final Item COBALT_SABRE = getNull();
@@ -670,6 +671,7 @@ public class MSItems
 		registry.register(new WeaponItem(ItemTier.IRON, 5, -2.6F, 15.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().defaultMaxDamage(600).group(MSItemGroup.WEAPONS)).setRegistryName("claymore"));
 		registry.register(new WeaponItem(MSItemTypes.ZILLYHOO_TIER, 3, -2.4F, 15.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.RARE)).setRegistryName("cutlass_of_zillywair"));
 		registry.register(new WeaponItem(MSItemTypes.REGI_TIER, 3, -2.4F, 15.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("regisword"));
+		registry.register(new WeaponItem(MSItemTypes.RUBY_TIER, 4, -2.4F, 15.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("cruel_fate_crucible"));
 		registry.register(new WeaponItem(MSItemTypes.RUBY_TIER, 3, -2.4F, 15.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("scarlet_ribbitar"));
 		registry.register(new WeaponItem(MSItemTypes.RUBY_TIER, 1, -2.4F, 15.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().defaultMaxDamage(1000).group(MSItemGroup.WEAPONS)).setRegistryName("dogg_machete"));
 		registry.register(new FireWeaponItem(ItemTier.GOLD, 7, -2.4F, 15.0F, 30, MSItemTypes.SWORD_TOOL, new Item.Properties().defaultMaxDamage(300).group(MSItemGroup.WEAPONS)).setRegistryName("cobalt_sabre"));

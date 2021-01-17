@@ -390,6 +390,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.CUTLASS_OF_ZILLYWAIR, "HooHoo! Another Zilly weapon imported straight from Zillywair! Enemies beware!");
 		add(MSItems.REGISWORD, "Regisword");
 		addTooltip(MSItems.REGISWORD, "A sword once wielded by the most wicked of ArchAgents......and the most devout mail lady");
+		add(MSItems.CRUEL_FATE_CRUCIBLE, "Cruel Fate Crucible");
+		addTooltip(MSItems.CRUEL_FATE_CRUCIBLE, "The aura of Nemesis enacts retribution on those who hurt it's wielder");
 		add(MSItems.SCARLET_RIBBITAR, "Scarlet Ribbitar");
 		add(MSItems.DOGG_MACHETE, "Snoop Dogg Snow Cone Machete");
 		add(MSItems.COBALT_SABRE, "Cobalt Cobeam Coblade");

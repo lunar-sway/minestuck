@@ -22,6 +22,7 @@ import com.mraof.minestuck.world.storage.MSExtraData;
 import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.player.PlayerEntity;
@@ -34,6 +35,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.TickEvent;
@@ -50,6 +52,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
+
+import java.util.List;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class ServerEventHandler
@@ -183,20 +187,57 @@ public class ServerEventHandler
 			if(title != null)
 			{
 				ItemStack handItem = injuredPlayer.getHeldItemMainhand();
-				if(title.getHeroAspect() == EnumAspect.DOOM && injuredPlayer.getHealth() <= 2.0F && injuredPlayer.getRNG().nextFloat() <= .08 && handItem.getItem() == MSItems.LUCERNE_HAMMER_OF_UNDYING)
-				{
-					injuredPlayer.world.playSound(null, injuredPlayer.getPosX(), injuredPlayer.getPosY(), injuredPlayer.getPosZ(), SoundEvents.ITEM_TOTEM_USE, SoundCategory.PLAYERS, 1.0F, 1.4F);
-					injuredPlayer.setHealth(injuredPlayer.getHealth() + 3);
-					injuredPlayer.addPotionEffect(new EffectInstance(Effects.REGENERATION, 450, 0));
-					injuredPlayer.addPotionEffect(new EffectInstance(Effects.ABSORPTION, 100, 0));
-					handItem.damageItem(400, injuredPlayer, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
+				if(handItem.getItem() == MSItems.LUCERNE_HAMMER_OF_UNDYING){
+					if(title.getHeroAspect() == EnumAspect.DOOM && injuredPlayer.getHealth() <= 3.0F && injuredPlayer.getRNG().nextFloat() <= .08)
+					{
+						injuredPlayer.world.playSound(null, injuredPlayer.getPosX(), injuredPlayer.getPosY(), injuredPlayer.getPosZ(), SoundEvents.ITEM_TOTEM_USE, SoundCategory.PLAYERS, 1.0F, 1.4F);
+						injuredPlayer.setHealth(injuredPlayer.getHealth() + 3);
+						injuredPlayer.addPotionEffect(new EffectInstance(Effects.REGENERATION, 450, 0));
+						injuredPlayer.addPotionEffect(new EffectInstance(Effects.ABSORPTION, 100, 0));
+						handItem.damageItem(400, injuredPlayer, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
+					}
+					if(title.getHeroAspect() != EnumAspect.DOOM && injuredPlayer.getHealth() <= 2.0F && injuredPlayer.getRNG().nextFloat() <= .02)
+					{
+						injuredPlayer.world.playSound(null, injuredPlayer.getPosX(), injuredPlayer.getPosY(), injuredPlayer.getPosZ(), SoundEvents.ITEM_TOTEM_USE, SoundCategory.PLAYERS, 1.0F, 1.4F);
+						injuredPlayer.setHealth(injuredPlayer.getHealth() + 3);
+						injuredPlayer.addPotionEffect(new EffectInstance(Effects.REGENERATION, 450, 0));
+						handItem.damageItem(1000, injuredPlayer, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
+					}
 				}
-				if(title.getHeroAspect() != EnumAspect.DOOM && injuredPlayer.getHealth() <= 2.0F && injuredPlayer.getRNG().nextFloat() <= .02 && handItem.getItem() == MSItems.LUCERNE_HAMMER_OF_UNDYING)
-				{
-					injuredPlayer.world.playSound(null, injuredPlayer.getPosX(), injuredPlayer.getPosY(), injuredPlayer.getPosZ(), SoundEvents.ITEM_TOTEM_USE, SoundCategory.PLAYERS, 1.0F, 1.4F);
-					injuredPlayer.setHealth(injuredPlayer.getHealth() + 3);
-					injuredPlayer.addPotionEffect(new EffectInstance(Effects.REGENERATION, 450, 0));
-					handItem.damageItem(1000, injuredPlayer, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
+				
+				if(handItem.getItem() == MSItems.CRUEL_FATE_CRUCIBLE){
+					if(title.getHeroAspect() == EnumAspect.DOOM && injuredPlayer.getHealth() <= 8.0F && injuredPlayer.getRNG().nextFloat() <= .25)
+					{
+						AxisAlignedBB axisalignedbb = injuredPlayer.getBoundingBox().grow(4.0D, 2.0D, 4.0D);
+						List<LivingEntity> list = injuredPlayer.world.getEntitiesWithinAABB(LivingEntity.class, axisalignedbb);
+						if (!list.isEmpty()) {
+							for(LivingEntity livingentity : list) {
+								double d0 = injuredPlayer.getDistanceSq(livingentity);
+								if (d0 < 16.0D) {
+									injuredPlayer.world.playSound(null, injuredPlayer.getPosX(), injuredPlayer.getPosY(), injuredPlayer.getPosZ(), SoundEvents.ENTITY_WITHER_HURT, SoundCategory.PLAYERS, 0.5F, 1.6F);
+									livingentity.addPotionEffect(new EffectInstance(Effects.INSTANT_DAMAGE, 1, 0));
+									injuredPlayer.removePotionEffect(Effects.INSTANT_DAMAGE);
+									handItem.damageItem(1, injuredPlayer, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
+								}
+							}
+						}
+					}
+					if(title.getHeroAspect() != EnumAspect.DOOM && injuredPlayer.getHealth() <= 4.0F && injuredPlayer.getRNG().nextFloat() <= .10)
+					{
+						AxisAlignedBB axisalignedbb = injuredPlayer.getBoundingBox().grow(6.0D, 4.0D, 6.0D);
+						List<LivingEntity> list = injuredPlayer.world.getEntitiesWithinAABB(LivingEntity.class, axisalignedbb);
+						if (!list.isEmpty()) {
+							for(LivingEntity livingentity : list) {
+								double d0 = injuredPlayer.getDistanceSq(livingentity);
+								if (d0 < 16.0D) {
+									injuredPlayer.world.playSound(null, injuredPlayer.getPosX(), injuredPlayer.getPosY(), injuredPlayer.getPosZ(), SoundEvents.ENTITY_WITHER_HURT, SoundCategory.PLAYERS, 0.5F, 1.6F);
+									livingentity.addPotionEffect(new EffectInstance(Effects.INSTANT_DAMAGE, 1, 0));
+									injuredPlayer.removePotionEffect(Effects.INSTANT_DAMAGE);
+									handItem.damageItem(4, injuredPlayer, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
+								}
+							}
+						}
+					}
 				}
 			}
 		}
