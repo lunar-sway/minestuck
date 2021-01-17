@@ -247,6 +247,7 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(LUNCHTOP);
 		registerDropSelfLootTable(OLD_COMPUTER);
 		registerLootTable(TRANSPORTALIZER, MSBlockLootTables::droppingWithNameOnSilkTouch);
+		registerDropSelfLootTable(SENDIFICATOR);
 		registerDropSelfLootTable(GRIST_WIDGET);
 		registerDropSelfLootTable(URANIUM_COOKER);
 		
