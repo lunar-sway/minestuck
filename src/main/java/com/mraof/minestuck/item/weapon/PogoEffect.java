@@ -6,7 +6,6 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.ActionResultType;
@@ -15,25 +14,25 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-/**
- * Created by mraof on 2017 January 18 at 6:17 PM.
- */
-public class PogoWeaponItem extends WeaponItem
+public class PogoEffect implements ItemUseEffect, OnHitEffect
 {
-	private double pogoMotion;
+	public static final PogoEffect EFFECT_02 = new PogoEffect(0.2);
+	public static final PogoEffect EFFECT_04 = new PogoEffect(0.4);
+	public static final PogoEffect EFFECT_05 = new PogoEffect(0.5);
+	public static final PogoEffect EFFECT_06 = new PogoEffect(0.6);
+	public static final PogoEffect EFFECT_07 = new PogoEffect(0.7);
 	
-	public PogoWeaponItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, double pogoMotion, MSToolType toolType, Properties builder)
+	private final double pogoMotion;
+	
+	public PogoEffect(double pogoMotion)
 	{
-		super(tier, attackDamageIn, attackSpeedIn, efficiency, toolType, builder);
 		this.pogoMotion = pogoMotion;
 	}
 	
 	@Override
-	public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity player)
+	public void onHit(ItemStack stack, LivingEntity target, LivingEntity player)
 	{
-		super.hitEntity(stack, target, player);
 		hitEntity(stack, target, player, getPogoMotion(stack));
-		return true;
 	}
 
 	private double getPogoMotion(ItemStack stack){
@@ -51,7 +50,7 @@ public class PogoWeaponItem extends WeaponItem
 		return onItemUse(context.getPlayer(), context.getWorld(), context.getPos(), context.getItem(), context.getFace(), getPogoMotion(context.getItem()));
 	}
 	
-	public static void hitEntity(ItemStack stack, LivingEntity target, LivingEntity player, double pogoMotion)
+	private static void hitEntity(ItemStack stack, LivingEntity target, LivingEntity player, double pogoMotion)
 	{
 		pogoMotion = addEfficiencyModifier(pogoMotion, stack);
 		if (player.fallDistance > 0.0F && !player.onGround && !player.isOnLadder() && !player.isInWater() && !player.isPassenger())
@@ -64,7 +63,7 @@ public class PogoWeaponItem extends WeaponItem
 		}
 	}
 	
-	public static ActionResultType onItemUse(PlayerEntity player, World worldIn, BlockPos pos, ItemStack stack, Direction facing, double pogoMotion)
+	private static ActionResultType onItemUse(PlayerEntity player, World worldIn, BlockPos pos, ItemStack stack, Direction facing, double pogoMotion)
 	{
 		pogoMotion = addEfficiencyModifier(pogoMotion, stack);
 		if (worldIn.getBlockState(pos).getBlock() != Blocks.AIR)

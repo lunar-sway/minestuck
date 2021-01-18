@@ -10,7 +10,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.item.SwordItem;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
@@ -28,6 +30,8 @@ public class WeaponItem extends SwordItem //To allow weapons to have the sweep e
 	private final List<OnHitEffect> onHitEffects;
 	@Nullable
 	private final DestroyBlockEffect destroyBlockEffect;
+	@Nullable
+	private final ItemUseEffect itemUseEffect;
 	
 	@Deprecated
 	public WeaponItem(IItemTier tier, int attackDamage, float attackSpeed, float efficiency, @Nullable MSToolType toolType, Properties properties)
@@ -42,6 +46,7 @@ public class WeaponItem extends SwordItem //To allow weapons to have the sweep e
 		efficiency = builder.efficiency;
 		onHitEffects = ImmutableList.copyOf(builder.onHitEffects);
 		destroyBlockEffect = builder.destroyBlockEffect;
+		itemUseEffect = builder.itemUseEffect;
 	}
 	
 	@Override
@@ -109,6 +114,14 @@ public class WeaponItem extends SwordItem //To allow weapons to have the sweep e
 	}
 	
 	@Override
+	public ActionResultType onItemUse(ItemUseContext context)
+	{
+		if(itemUseEffect != null)
+			return itemUseEffect.onItemUse(context);
+		else return super.onItemUse(context);
+	}
+	
+	@Override
 	public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker)
 	{
 		onHitEffects.forEach(effect -> effect.onHit(stack, target, attacker));
@@ -170,6 +183,8 @@ public class WeaponItem extends SwordItem //To allow weapons to have the sweep e
 		private final List<OnHitEffect> onHitEffects = new ArrayList<>();
 		@Nullable
 		private DestroyBlockEffect destroyBlockEffect = null;
+		@Nullable
+		private ItemUseEffect itemUseEffect = null;
 		
 		public Builder(IItemTier tier, int attackDamage, float attackSpeed)
 		{
@@ -188,6 +203,12 @@ public class WeaponItem extends SwordItem //To allow weapons to have the sweep e
 		public Builder set(DestroyBlockEffect effect)
 		{
 			destroyBlockEffect = effect;
+			return this;
+		}
+		
+		public Builder set(ItemUseEffect effect)
+		{
+			itemUseEffect = effect;
 			return this;
 		}
 		
