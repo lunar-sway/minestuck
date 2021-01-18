@@ -76,7 +76,7 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 		goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 8.0F));
 		goalSelector.addGoal(7, new LookRandomlyGoal(this));
 
-		targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 2, true, false, this::isAppropriateTarget));
+		targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 2, true, false, this::isAppropriateTarget));
 	}
 	
 	protected boolean isAppropriateTarget(LivingEntity entity)
@@ -178,12 +178,10 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 					Random random = new Random();
 					long gristLeft = gristAmount.getAmount();
 
-					while(gristLeft > (gristAmount.getAmount() / (int) ((Math.random() * 10) + 1))) {
-							if (gristLeft > 0) {
+					while(gristLeft > (gristAmount.getAmount() / (int) ((Math.random() * 10) + 1)) && (long)(gristLeft*0.9) > 0) {
+
 								this.world.addEntity(new GristEntity(world, randX(), this.getPosY(), randZ(), new GristAmount(gristAmount.getType(), (long) (gristLeft * 0.9))));
-							}
-							gristLeft = gristLeft - (long)((gristLeft*0.9)+1);
-							System.out.println(gristLeft);
+								gristLeft = gristLeft - (long)((gristLeft*0.9)+1);
 					}
 					this.world.addEntity(new GristEntity(world, randX(), this.getPosY(), randZ(), new GristAmount(gristAmount.getType(), gristLeft)));
 				}

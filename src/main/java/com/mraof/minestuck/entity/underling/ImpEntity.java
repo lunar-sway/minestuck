@@ -14,6 +14,8 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.goal.HurtByTargetGoal;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
@@ -47,7 +49,8 @@ public class ImpEntity extends UnderlingEntity
 	{
 		super.registerGoals();
 		this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.0F, false));
-		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+
+		this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
 	}
 	
 	protected SoundEvent getAmbientSound()
