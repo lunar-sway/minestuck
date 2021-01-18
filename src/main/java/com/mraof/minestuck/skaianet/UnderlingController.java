@@ -30,8 +30,12 @@ public final class UnderlingController
 		ChunkGenerator<?> chunkGenerator = entity.world.isRemote ? null : ((ServerWorld)entity.world).getChunkProvider().getChunkGenerator();
 		if(chunkGenerator instanceof LandChunkGenerator)
 		{
+
 			BlockPos pos = entity.getPosition();
-			return ((LandChunkGenerator)chunkGenerator).randomLayer(entity.getRNG()).getTypeAt(pos.getX(), pos.getZ());
+			//checks whether the underling is being spawned at the entry island. If not, rely on grist layers.
+			if ((pos.getX() < entity.getEntityWorld().getDimension().getSpawnPoint().getX() + 30 && pos.getZ() < entity.getEntityWorld().getDimension().getSpawnPoint().getZ() + 30) && (pos.getX() > entity.getEntityWorld().getDimension().getSpawnPoint().getX() - 30 && pos.getZ() > entity.getEntityWorld().getDimension().getSpawnPoint().getZ() - 30))
+				return GristHelper.getPrimaryGrist(entity.getRNG());
+			else return ((LandChunkGenerator)chunkGenerator).randomLayer(entity.getRNG()).getTypeAt(pos.getX(), pos.getZ());
 		}
 		else return GristHelper.getPrimaryGrist(entity.getRNG());
 	}
