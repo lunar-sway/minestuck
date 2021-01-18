@@ -845,6 +845,7 @@
   "grist.minestuck.zillium": "Zillium",
   "grist.missing": "You do not have enough grist for that. You need: %s",
   "grist_amount": "%s %s",
+  "grist_layer.info": "Grist types at this position; common: %s, uncommon: %s, any: %s",
   "item.minestuck.ace_of_clubs": "Ace of Clubs",
   "item.minestuck.ace_of_diamonds": "Ace of Diamonds",
   "item.minestuck.ace_of_hearts": "Ace of Hearts",
