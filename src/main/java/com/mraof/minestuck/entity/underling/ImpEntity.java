@@ -50,7 +50,7 @@ public class ImpEntity extends UnderlingEntity
 		super.registerGoals();
 		this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.0F, false));
 
-		this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
+		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
 	}
 	
 	protected SoundEvent getAmbientSound()
@@ -105,7 +105,7 @@ public class ImpEntity extends UnderlingEntity
 		if(entity instanceof ServerPlayerEntity)
 		{
 			//Rung was chosen fairly arbitrary. Feel free to change it if you think a different rung is better
-			return PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder().getRung() > 15 && PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder().getRung() < 6;
+			return PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder().getRung() < 15 && PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder().getRung() > 6;
 		}
 		return super.isAppropriateTarget(entity);
 	}
