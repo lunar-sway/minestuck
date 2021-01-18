@@ -1,5 +1,6 @@
 package com.mraof.minestuck.item.weapon;
 
+import com.google.common.collect.ImmutableList;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
@@ -15,8 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 
 import javax.annotation.Nullable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class WeaponItem extends SwordItem //To allow weapons to have the sweep effect
 {
@@ -25,18 +25,20 @@ public class WeaponItem extends SwordItem //To allow weapons to have the sweep e
 	
 	@Nullable
 	private final MSToolType toolType;
+	private final List<OnHitEffect> onHitEffects;
 	
 	@Deprecated
 	public WeaponItem(IItemTier tier, int attackDamage, float attackSpeed, float efficiency, @Nullable MSToolType toolType, Properties properties)
 	{
-		this(new Builder(tier, attackDamage, attackSpeed).efficiency(efficiency).toolType(toolType), properties);
+		this(new Builder(tier, attackDamage, attackSpeed).efficiency(efficiency).set(toolType), properties);
 	}
 	
 	public WeaponItem(Builder builder, Properties properties)
 	{
 		super(builder.tier, builder.attackDamage, builder.attackSpeed, properties);
-		this.toolType = builder.toolType;
-		this.efficiency = builder.efficiency;
+		toolType = builder.toolType;
+		efficiency = builder.efficiency;
+		onHitEffects = ImmutableList.copyOf(builder.onHitEffects);
 	}
 	
 	@Override
@@ -101,6 +103,13 @@ public class WeaponItem extends SwordItem //To allow weapons to have the sweep e
 	}
 	
 	@Override
+	public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker)
+	{
+		onHitEffects.forEach(effect -> effect.onHit(stack, target, attacker));
+		return super.hitEntity(stack, target, attacker);
+	}
+	
+	@Override
 	public int getHarvestLevel(ItemStack stack, ToolType tool, @Nullable PlayerEntity player, @Nullable BlockState blockState)
 	{
 		int harvestLevel = super.getHarvestLevel(stack, tool, player, blockState);
@@ -152,6 +161,7 @@ public class WeaponItem extends SwordItem //To allow weapons to have the sweep e
 		@Nullable
 		private MSToolType toolType;
 		private float efficiency;
+		private final List<OnHitEffect> onHitEffects = new ArrayList<>();
 		
 		public Builder(IItemTier tier, int attackDamage, float attackSpeed)
 		{
@@ -161,7 +171,7 @@ public class WeaponItem extends SwordItem //To allow weapons to have the sweep e
 			efficiency = tier.getEfficiency();
 		}
 		
-		public Builder toolType(@Nullable MSToolType toolType)
+		public Builder set(@Nullable MSToolType toolType)
 		{
 			this.toolType = toolType;
 			return this;
@@ -170,6 +180,12 @@ public class WeaponItem extends SwordItem //To allow weapons to have the sweep e
 		public Builder efficiency(float efficiency)
 		{
 			this.efficiency = efficiency;
+			return this;
+		}
+		
+		public Builder add(OnHitEffect... effects)
+		{
+			onHitEffects.addAll(Arrays.asList(effects));
 			return this;
 		}
 	}
