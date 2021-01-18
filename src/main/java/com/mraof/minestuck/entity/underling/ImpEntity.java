@@ -5,12 +5,14 @@ import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.util.MSSoundEvents;
+import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.goal.HurtByTargetGoal;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.DamageSource;
@@ -28,15 +30,16 @@ public class ImpEntity extends UnderlingEntity
 	protected void registerAttributes()
 	{
 		super.registerAttributes();
-		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(6.0D);
+		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(5.0D);
 		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.28D);
 		getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.0D);
+		getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(10.0D);
 	}
 	
 	@Override
 	public GristSet getGristSpoils()
 	{
-		return GristHelper.generateUnderlingGristDrops(this, damageMap, 2);
+		return GristHelper.generateUnderlingGristDrops(this, damageMap, 3);
 	}
 	
 	@Override
@@ -44,6 +47,7 @@ public class ImpEntity extends UnderlingEntity
 	{
 		super.registerGoals();
 		this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.0F, false));
+		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
 	}
 	
 	protected SoundEvent getAmbientSound()
@@ -98,7 +102,7 @@ public class ImpEntity extends UnderlingEntity
 		if(entity instanceof ServerPlayerEntity)
 		{
 			//Rung was chosen fairly arbitrary. Feel free to change it if you think a different rung is better
-			return PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder().getRung() < 19;
+			return PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder().getRung() < 15 && PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder().getRung() > 6;
 		}
 		return super.isAppropriateTarget(entity);
 	}
