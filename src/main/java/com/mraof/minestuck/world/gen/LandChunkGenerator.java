@@ -13,6 +13,8 @@ import net.minecraft.util.SharedSeedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeManager;
@@ -34,6 +36,8 @@ import java.util.Random;
 
 public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 {
+	public static final String GRIST_LAYER_INFO = "grist_layer.info";
+	
 	private static final float[] biomeWeight;
 	
 	static {
@@ -72,6 +76,14 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 			case 1: return uncommonGristLayer;
 			default: return anyGristLayer;
 		}
+	}
+	public ITextComponent getGristLayerInfo(int x, int z)
+	{
+		GristType commonType = commonGristLayer.getTypeAt(x, z);
+		GristType uncommonType = uncommonGristLayer.getTypeAt(x, z);
+		GristType anyType = anyGristLayer.getTypeAt(x, z);
+		
+		return new TranslationTextComponent(GRIST_LAYER_INFO, commonType.getDisplayName(), uncommonType.getDisplayName(), anyType.getDisplayName());
 	}
 	
 	@Override
