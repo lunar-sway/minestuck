@@ -26,6 +26,8 @@ public class WeaponItem extends SwordItem //To allow weapons to have the sweep e
 	@Nullable
 	private final MSToolType toolType;
 	private final List<OnHitEffect> onHitEffects;
+	@Nullable
+	private final DestroyBlockEffect destroyBlockEffect;
 	
 	@Deprecated
 	public WeaponItem(IItemTier tier, int attackDamage, float attackSpeed, float efficiency, @Nullable MSToolType toolType, Properties properties)
@@ -39,6 +41,7 @@ public class WeaponItem extends SwordItem //To allow weapons to have the sweep e
 		toolType = builder.toolType;
 		efficiency = builder.efficiency;
 		onHitEffects = ImmutableList.copyOf(builder.onHitEffects);
+		destroyBlockEffect = builder.destroyBlockEffect;
 	}
 	
 	@Override
@@ -84,6 +87,9 @@ public class WeaponItem extends SwordItem //To allow weapons to have the sweep e
 	@Override
 	public boolean onBlockDestroyed(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving)
 	{
+		if(destroyBlockEffect != null)
+			destroyBlockEffect.onDestroyBlock(stack, worldIn, state, pos, entityLiving);
+		
 		if (state.getBlockHardness(worldIn, pos) != 0.0F)
 		{
 			int damage = 2;
@@ -162,6 +168,8 @@ public class WeaponItem extends SwordItem //To allow weapons to have the sweep e
 		private MSToolType toolType;
 		private float efficiency;
 		private final List<OnHitEffect> onHitEffects = new ArrayList<>();
+		@Nullable
+		private DestroyBlockEffect destroyBlockEffect = null;
 		
 		public Builder(IItemTier tier, int attackDamage, float attackSpeed)
 		{
@@ -174,6 +182,12 @@ public class WeaponItem extends SwordItem //To allow weapons to have the sweep e
 		public Builder set(@Nullable MSToolType toolType)
 		{
 			this.toolType = toolType;
+			return this;
+		}
+		
+		public Builder set(DestroyBlockEffect effect)
+		{
+			destroyBlockEffect = effect;
 			return this;
 		}
 		

@@ -3,7 +3,6 @@ package com.mraof.minestuck.item.weapon;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.IItemTier;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
 
 /**
  * Created by mraof on 2017 January 18 at 6:41 PM.
@@ -36,18 +35,4 @@ public class PotionWeaponItem extends WeaponItem
     	return onCritical;
     }
     
-    public static EffectInstance getBeaconEffect(int id)
-    {
-    	EffectInstance beaconEffect;
-    	switch(id)
-    	{
-    	default:
-    	case 0: beaconEffect = new EffectInstance(Effects.SPEED, 220, 0); break;
-    	case 1: beaconEffect = new EffectInstance(Effects.HASTE, 220, 0); break;
-    	case 2: beaconEffect = new EffectInstance(Effects.JUMP_BOOST, 220, 0); break;
-    	case 3: beaconEffect = new EffectInstance(Effects.STRENGTH, 220, 0); break;
-    	
-    	}
-    	return beaconEffect;
-    }
 }
