@@ -44,8 +44,8 @@ public class SlownessAOEWeaponItem extends PotionWeaponItem
 							double d0 = attacker.getDistanceSq(livingentity);
 							if (d0 < 16.0D) {
 								attacker.world.playSound(null, attacker.getPosX(), attacker.getPosY(), attacker.getPosZ(), SoundEvents.BLOCK_BELL_RESONATE, SoundCategory.PLAYERS, 1.5F, 2F);
-								livingentity.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 100, 4));
-								attacker.removePotionEffect(Effects.SLOWNESS);
+								if(livingentity != attacker)
+									livingentity.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 100, 4));
 							}
 						}
 					}

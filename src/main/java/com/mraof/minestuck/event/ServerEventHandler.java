@@ -210,8 +210,8 @@ public class ServerEventHandler
 							double d0 = injuredPlayer.getDistanceSq(livingentity);
 							if (d0 < 16.0D) {
 								injuredPlayer.world.playSound(null, injuredPlayer.getPosX(), injuredPlayer.getPosY(), injuredPlayer.getPosZ(), SoundEvents.ENTITY_WITHER_HURT, SoundCategory.PLAYERS, 0.5F, 1.6F);
-								livingentity.addPotionEffect(new EffectInstance(Effects.INSTANT_DAMAGE, 1, 0));
-								injuredPlayer.removePotionEffect(Effects.INSTANT_DAMAGE);
+								if(livingentity != injuredPlayer)
+									livingentity.addPotionEffect(new EffectInstance(Effects.INSTANT_DAMAGE, 1, 1));
 								if(isDoom)
 									handItem.damageItem(1, injuredPlayer, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
 								else

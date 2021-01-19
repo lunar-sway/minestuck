@@ -45,9 +45,9 @@ public class LevitationAOEWeaponItem extends KnockbackWeaponItem
 							double d0 = attacker.getDistanceSq(livingentity);
 							if (d0 < 16.0D) {
 								attacker.world.playSound(null, attacker.getPosX(), attacker.getPosY(), attacker.getPosZ(), SoundEvents.ENTITY_ENDER_DRAGON_FLAP, SoundCategory.PLAYERS, 1.5F, 1.4F);
-								livingentity.addPotionEffect(new EffectInstance(Effects.LEVITATION, 60, 1));
+								if(livingentity != attacker)
+									livingentity.addPotionEffect(new EffectInstance(Effects.LEVITATION, 30, 2));
 								attacker.world.addParticle(ParticleTypes.CLOUD, (float)attacker.getPosX() + random.nextFloat(), (float)attacker.getPosY() + random.nextFloat(), (float)attacker.getPosZ() + random.nextFloat(), target.getMotion().x, target.getMotion().y, target.getMotion().z);
-								attacker.removePotionEffect(Effects.LEVITATION);
 							}
 						}
 					}
