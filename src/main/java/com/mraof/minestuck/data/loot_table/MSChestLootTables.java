@@ -38,6 +38,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.addEntry(ItemLootEntry.builder(MSItems.CLAW_HAMMER).weight(5).quality(-1).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.75F, 1.0F))))
 						.addEntry(ItemLootEntry.builder(MSItems.SICKLE).weight(5).quality(-1).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.75F, 1.0F))))
 						.addEntry(ItemLootEntry.builder(MSItems.KATANA).weight(3).quality(1).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.75F, 1.0F))))
+						.addEntry(ItemLootEntry.builder(MSItems.LIPSTICK).weight(1).quality(1).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.75F, 1.0F))))
 						.addEntry(ItemLootEntry.builder(MSItems.SLEDGE_HAMMER).weight(3).quality(1).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.75F, 1.0F))))
 						.addEntry(ItemLootEntry.builder(MSItems.WOODEN_SPOON).weight(5).quality(-2).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.75F, 1.0F))))
 						.addEntry(ItemLootEntry.builder(MSItems.FORK).weight(4).quality(-1).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.75F, 1.0F)))))
