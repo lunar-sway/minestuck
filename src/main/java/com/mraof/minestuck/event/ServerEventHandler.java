@@ -213,10 +213,7 @@ public class ServerEventHandler
 						else
 							handItem.damageItem(4, injuredPlayer, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
 						for(LivingEntity livingentity : list) {
-							double distanceSq = injuredPlayer.getDistanceSq(livingentity);
-							if (distanceSq < 16.0D) {
-								livingentity.addPotionEffect(new EffectInstance(Effects.INSTANT_DAMAGE, 1, 1));
-							}
+							livingentity.addPotionEffect(new EffectInstance(Effects.INSTANT_DAMAGE, 1, 1));
 						}
 					}
 				}
