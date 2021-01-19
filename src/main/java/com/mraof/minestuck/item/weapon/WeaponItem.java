@@ -5,14 +5,14 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentType;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.IItemTier;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.item.SwordItem;
+import net.minecraft.item.*;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
@@ -31,7 +31,13 @@ public class WeaponItem extends SwordItem //To allow weapons to have the sweep e
 	@Nullable
 	private final DestroyBlockEffect destroyBlockEffect;
 	@Nullable
-	private final ItemUseEffect itemUseEffect;
+	private final RightClickBlockEffect rightClickBlockEffect;
+	@Nullable
+	private final ItemRightClickEffect itemRightClickEffect;
+	private final int useDuration;
+	private final UseAction useAction;
+	private final List<FinishUseItemEffect> itemUsageEffects;
+	private final List<InventoryTickEffect> tickEffects;
 	
 	@Deprecated
 	public WeaponItem(IItemTier tier, int attackDamage, float attackSpeed, float efficiency, @Nullable MSToolType toolType, Properties properties)
@@ -46,7 +52,12 @@ public class WeaponItem extends SwordItem //To allow weapons to have the sweep e
 		efficiency = builder.efficiency;
 		onHitEffects = ImmutableList.copyOf(builder.onHitEffects);
 		destroyBlockEffect = builder.destroyBlockEffect;
-		itemUseEffect = builder.itemUseEffect;
+		rightClickBlockEffect = builder.rightClickBlockEffect;
+		itemRightClickEffect = builder.itemRightClickEffect;
+		useDuration = builder.useDuration;
+		useAction = builder.useAction;
+		itemUsageEffects = ImmutableList.copyOf(builder.itemUsageEffects);
+		tickEffects = ImmutableList.copyOf(builder.tickEffects);
 	}
 	
 	@Override
@@ -116,9 +127,44 @@ public class WeaponItem extends SwordItem //To allow weapons to have the sweep e
 	@Override
 	public ActionResultType onItemUse(ItemUseContext context)
 	{
-		if(itemUseEffect != null)
-			return itemUseEffect.onItemUse(context);
+		if(rightClickBlockEffect != null)
+			return rightClickBlockEffect.onClick(context);
 		else return super.onItemUse(context);
+	}
+	
+	@Override
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn)
+	{
+		if(itemRightClickEffect != null)
+			return itemRightClickEffect.onRightClick(worldIn, playerIn, handIn);
+		else return super.onItemRightClick(worldIn, playerIn, handIn);
+	}
+	
+	@Override
+	public int getUseDuration(ItemStack stack)
+	{
+		return useDuration;
+	}
+	
+	@Override
+	public UseAction getUseAction(ItemStack stack)
+	{
+		return useAction;
+	}
+	
+	@Override
+	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityLiving)
+	{
+		for(FinishUseItemEffect effect : itemUsageEffects)
+			stack = effect.onItemUseFinish(stack, worldIn, entityLiving);
+		return super.onItemUseFinish(stack, worldIn, entityLiving);
+	}
+	
+	@Override
+	public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected)
+	{
+		for(InventoryTickEffect effect : tickEffects)
+			effect.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
 	}
 	
 	@Override
@@ -184,7 +230,13 @@ public class WeaponItem extends SwordItem //To allow weapons to have the sweep e
 		@Nullable
 		private DestroyBlockEffect destroyBlockEffect = null;
 		@Nullable
-		private ItemUseEffect itemUseEffect = null;
+		private RightClickBlockEffect rightClickBlockEffect = null;
+		@Nullable
+		private ItemRightClickEffect itemRightClickEffect;
+		private int useDuration = 0;
+		private UseAction useAction = UseAction.NONE;
+		private final List<FinishUseItemEffect> itemUsageEffects = new ArrayList<>();
+		private final List<InventoryTickEffect> tickEffects = new ArrayList<>();
 		
 		public Builder(IItemTier tier, int attackDamage, float attackSpeed)
 		{
@@ -202,13 +254,25 @@ public class WeaponItem extends SwordItem //To allow weapons to have the sweep e
 		
 		public Builder set(DestroyBlockEffect effect)
 		{
+			if(rightClickBlockEffect != null)
+				throw new IllegalStateException("Destroy block effect has already been set");
 			destroyBlockEffect = effect;
 			return this;
 		}
 		
-		public Builder set(ItemUseEffect effect)
+		public Builder set(RightClickBlockEffect effect)
 		{
-			itemUseEffect = effect;
+			if(rightClickBlockEffect != null)
+				throw new IllegalStateException("Right click block effect has already been set");
+			rightClickBlockEffect = effect;
+			return this;
+		}
+		
+		public Builder set(ItemRightClickEffect effect)
+		{
+			if(itemRightClickEffect != null)
+				throw new IllegalStateException("Item right click effect has already been set");
+			itemRightClickEffect = effect;
 			return this;
 		}
 		
@@ -221,6 +285,26 @@ public class WeaponItem extends SwordItem //To allow weapons to have the sweep e
 		public Builder add(OnHitEffect... effects)
 		{
 			onHitEffects.addAll(Arrays.asList(effects));
+			return this;
+		}
+		
+		public Builder add(InventoryTickEffect... effects)
+		{
+			tickEffects.addAll(Arrays.asList(effects));
+			return this;
+		}
+		
+		public Builder setEating(FinishUseItemEffect... effects)
+		{
+			return addItemUses(32, UseAction.EAT, effects);
+		}
+		
+		public Builder addItemUses(int duration, UseAction action, FinishUseItemEffect... effects)
+		{
+			useDuration = duration;
+			useAction = action;
+			itemUsageEffects.addAll(Arrays.asList(effects));
+			set(ItemRightClickEffect.ACTIVE_HAND);
 			return this;
 		}
 	}
