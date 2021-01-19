@@ -40,13 +40,13 @@ public class LevitationAOEWeaponItem extends KnockbackWeaponItem
 				if(title.getHeroAspect() == aspect){
 					AxisAlignedBB axisalignedbb = attacker.getBoundingBox().grow(4.0D, 2.0D, 4.0D);
 					List<LivingEntity> list = attacker.world.getEntitiesWithinAABB(LivingEntity.class, axisalignedbb);
+					list.remove(attacker);
 					if (!list.isEmpty()) {
+						attacker.world.playSound(null, attacker.getPosX(), attacker.getPosY(), attacker.getPosZ(), SoundEvents.ENTITY_ENDER_DRAGON_FLAP, SoundCategory.PLAYERS, 1.5F, 1.4F);
 						for(LivingEntity livingentity : list) {
-							double d0 = attacker.getDistanceSq(livingentity);
-							if (d0 < 16.0D) {
-								attacker.world.playSound(null, attacker.getPosX(), attacker.getPosY(), attacker.getPosZ(), SoundEvents.ENTITY_ENDER_DRAGON_FLAP, SoundCategory.PLAYERS, 1.5F, 1.4F);
-								if(livingentity != attacker)
-									livingentity.addPotionEffect(new EffectInstance(Effects.LEVITATION, 30, 2));
+							double distanceSq = attacker.getDistanceSq(livingentity);
+							if (distanceSq < 16.0D) {
+								livingentity.addPotionEffect(new EffectInstance(Effects.LEVITATION, 30, 2));
 								attacker.world.addParticle(ParticleTypes.CLOUD, (float)attacker.getPosX() + random.nextFloat(), (float)attacker.getPosY() + random.nextFloat(), (float)attacker.getPosZ() + random.nextFloat(), target.getMotion().x, target.getMotion().y, target.getMotion().z);
 							}
 						}

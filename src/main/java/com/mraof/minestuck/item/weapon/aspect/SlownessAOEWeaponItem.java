@@ -39,13 +39,13 @@ public class SlownessAOEWeaponItem extends PotionWeaponItem
 				if(title.getHeroAspect() == aspect){
 					AxisAlignedBB axisalignedbb = attacker.getBoundingBox().grow(4.0D, 2.0D, 4.0D);
 					List<LivingEntity> list = attacker.world.getEntitiesWithinAABB(LivingEntity.class, axisalignedbb);
+					list.remove(attacker);
 					if (!list.isEmpty()) {
+						attacker.world.playSound(null, attacker.getPosX(), attacker.getPosY(), attacker.getPosZ(), SoundEvents.BLOCK_BELL_RESONATE, SoundCategory.PLAYERS, 1.5F, 2F);
 						for(LivingEntity livingentity : list) {
-							double d0 = attacker.getDistanceSq(livingentity);
-							if (d0 < 16.0D) {
-								attacker.world.playSound(null, attacker.getPosX(), attacker.getPosY(), attacker.getPosZ(), SoundEvents.BLOCK_BELL_RESONATE, SoundCategory.PLAYERS, 1.5F, 2F);
-								if(livingentity != attacker)
-									livingentity.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 100, 4));
+							double distanceSq = attacker.getDistanceSq(livingentity);
+							if (distanceSq < 16.0D) {
+								livingentity.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 100, 4));
 							}
 						}
 					}
