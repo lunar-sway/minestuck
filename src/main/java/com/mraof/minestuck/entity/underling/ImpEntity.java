@@ -35,7 +35,7 @@ public class ImpEntity extends UnderlingEntity
 		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(5.0D);
 		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.28D);
 		getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.0D);
-		getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(10.0D);
+		getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(8.0D);
 	}
 	
 	@Override
@@ -50,7 +50,7 @@ public class ImpEntity extends UnderlingEntity
 		super.registerGoals();
 		this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.0F, false));
 
-		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+		this.targetSelector.addGoal(1, new HurtByTargetGoal(this, OgreEntity.class, BasiliskEntity.class, GiclopsEntity.class, LichEntity.class));
 	}
 	
 	protected SoundEvent getAmbientSound()
@@ -104,8 +104,8 @@ public class ImpEntity extends UnderlingEntity
 	{
 		if(entity instanceof ServerPlayerEntity)
 		{
-			//Rung was chosen fairly arbitrary. Feel free to change it if you think a different rung is better
-			return PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder().getRung() < 15 && PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder().getRung() > 6;
+			//Max rung was chosen based off of approximately what rung the player would be at when they can start one or two-hitting this mob. Minimum rung was chosen in order to prevent low-leveled players from being ganged up on while until they are strong enough to take on multiple at a time.
+			return PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder().getRung() < 13 && PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder().getRung() > 6;
 		}
 		return super.isAppropriateTarget(entity);
 	}

@@ -10,8 +10,10 @@ import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.goal.HurtByTargetGoal;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.DamageSource;
@@ -30,10 +32,11 @@ public class LichEntity extends UnderlingEntity
 	protected void registerAttributes()
 	{
 		super.registerAttributes();
-		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(250.0D);
+		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(220.0D);
 		getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.3D);
 		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.2D);
 		getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(8.0D);
+		getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(12.0D);
 	}
 	
 	@Override
@@ -42,7 +45,7 @@ public class LichEntity extends UnderlingEntity
 		super.registerGoals();
 		this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.0F, false));
 
-		this.targetSelector.addGoal(1, new HurtByTargetAlliedGoal(this, entity -> MSTags.EntityTypes.UNDERLINGS.contains(entity.getType())));
+		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
 	}
 	
 	protected SoundEvent getAmbientSound()
@@ -95,5 +98,16 @@ public class LichEntity extends UnderlingEntity
 				ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET + 3));
 			}
 		}
+	}
+
+	@Override
+	protected boolean isAppropriateTarget(LivingEntity entity)
+	{
+		if(entity instanceof ServerPlayerEntity)
+		{
+			//Max rung was chosen based off of approximately what rung the player would be at when they can start one or two-hitting this mob. Minimum rung was chosen in order to prevent low-leveled players from being ganged up on while until they are strong enough to take on multiple at a time.
+			return PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder().getRung() < 26 && PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder().getRung() > 22;
+		}
+		return super.isAppropriateTarget(entity);
 	}
 }

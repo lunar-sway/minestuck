@@ -1,7 +1,6 @@
 package com.mraof.minestuck.entity.underling;
 
 import com.mraof.minestuck.entity.ai.CustomMeleeAttackGoal;
-import com.mraof.minestuck.entity.ai.HurtByTargetAlliedGoal;
 import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
@@ -11,8 +10,10 @@ import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.goal.HurtByTargetGoal;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
@@ -31,10 +32,11 @@ public class OgreEntity extends UnderlingEntity
 	protected void registerAttributes()
 	{
 		super.registerAttributes();
-		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(100.0D);
+		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(80.0D);
 		getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.4F);
 		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.22D);
 		getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(6.0D);
+		getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(12.0D);
 	}
 	
 	@Override
@@ -43,7 +45,7 @@ public class OgreEntity extends UnderlingEntity
 		super.registerGoals();
 		this.goalSelector.addGoal(3, new CustomMeleeAttackGoal(this, 1.0F, false, 40, 1.2F));
 
-		this.targetSelector.addGoal(1, new HurtByTargetAlliedGoal(this, entity -> MSTags.EntityTypes.UNDERLINGS.contains(entity.getType())));
+		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
 	}
 	
 	protected SoundEvent getAmbientSound()
@@ -96,5 +98,16 @@ public class OgreEntity extends UnderlingEntity
 				ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET + 1));
 			}
 		}
+	}
+
+	@Override
+	protected boolean isAppropriateTarget(LivingEntity entity)
+	{
+		if(entity instanceof ServerPlayerEntity)
+		{
+			//Max rung was chosen based off of approximately what rung the player would be at when they can start one or two-hitting this mob. Minimum rung was chosen in order to prevent low-leveled players from being ganged up on while until they are strong enough to take on multiple at a time.
+			return PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder().getRung() < 21 && PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder().getRung() > 14;
+		}
+		return super.isAppropriateTarget(entity);
 	}
 }

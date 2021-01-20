@@ -18,6 +18,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.goal.HurtByTargetGoal;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
@@ -45,10 +46,11 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	protected void registerAttributes()
 	{
 		super.registerAttributes();
-		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(310.0D);
+		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(300.0D);
 		getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.9D);
 		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.23D);
 		getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(10.0D);
+		getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(6.0D);
 		
 	}
 	
@@ -58,7 +60,7 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 		super.registerGoals();
 		this.goalSelector.addGoal(3, new CustomMeleeAttackGoal(this, 1.0F, false, 50, 1.1F));
 
-		targetSelector.addGoal(1, new HurtByTargetAlliedGoal(this, entity -> MSTags.EntityTypes.UNDERLINGS.contains(entity.getType())));
+		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
 	}
 	
 	protected SoundEvent getAmbientSound()

@@ -63,20 +63,20 @@ public final class UnderlingController
 		else
 		{
 			impWeight = 8 - (difficulty - 8)/3;
-			if(difficulty < 20)
+			if(difficulty < 16)
 				ogreWeight = (difficulty - 5)/3;
 			else ogreWeight = 5 - (difficulty - 20)/3;
 			
-			if(difficulty >= 16)
+			if(difficulty >= 20)
 			{
-				if(difficulty < 26)
+				if(difficulty < 30)
 					basiliskWeight = (difficulty - 14)/2;
 				else basiliskWeight = 6;
-				if(difficulty < 28)
+				if(difficulty < 40)
 					lichWeight = (difficulty - 12)/3;
 				else lichWeight = 6;
-				if(difficulty >= 20)
-					if(difficulty < 30)
+				if(difficulty >= 50)
+					if(difficulty < 75)
 						giclopsWeight = (difficulty - 17)/3;
 					else giclopsWeight = 5;
 			}
