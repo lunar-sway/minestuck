@@ -54,7 +54,7 @@ public final class DeployList
 		registerItem("portable_alchemiter", new GristSet(GristTypes.BUILD, 300), 1, config(MinestuckConfig.SERVER.portableMachines), item(MSBlocks.MINI_ALCHEMITER));
 		/*registerItem("jumper_block_extension", new ItemStack(MinestuckBlocks.jumperBlockExtension[0]), new GristSet(GristType.Build, 1000), 1);
 		registerItem("punch_card_shunt", new ItemStack(MinestuckItems.shunt), new GristSet(GristType.Build, 100), 1);*/
-		registerItem("holopad", new ItemStack(MSBlocks.HOLOPAD), new GristSet(GristTypes.BUILD, 4000), 2);
+		registerItem("holopad", new ItemStack(MSBlocks.HOLOPAD), new GristSet(GristTypes.BUILD, 10000), 2);
 		registerItem("card_punched_card", new GristSet(GristTypes.BUILD, 25), null, 0, config(MinestuckConfig.SERVER.deployCard), (sburbConnection, world) -> AlchemyHelper.createCard(new ItemStack(MSItems.CAPTCHA_CARD), true));
 		
 	}
