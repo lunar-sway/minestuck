@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:katana"
+  },
+  "grist_cost": {
+    "minestuck:chalk": 12,
+    "minestuck:quartz": 10,
+    "minestuck:rust": 6
+  }
+}
