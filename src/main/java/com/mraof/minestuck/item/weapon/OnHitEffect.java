@@ -70,16 +70,35 @@ public interface OnHitEffect
 	};
 	
 	OnHitEffect HORRORTERROR = (stack, target, attacker) -> {
-		if (attacker instanceof PlayerEntity && attacker.getRNG().nextFloat() < .15)
+		if(!attacker.world.isRemote && attacker instanceof PlayerEntity && attacker.getRNG().nextFloat() < .15)
 		{
-			if(!attacker.world.isRemote) {
-				List<String> messages = ImmutableList.of("machinations", "stir", "suffering", "will", "done", "conspiracies");
-				
-				String key = messages.get(attacker.getRNG().nextInt(messages.size()));
-				ITextComponent message = new TranslationTextComponent(stack.getTranslationKey()+".message."+key);
-				attacker.sendMessage(message.applyTextStyle(TextFormatting.DARK_PURPLE));
-			}
+			List<String> messages = ImmutableList.of("machinations", "stir", "suffering", "will", "done", "conspiracies");
+			
+			String key = messages.get(attacker.getRNG().nextInt(messages.size()));
+			ITextComponent message = new TranslationTextComponent(stack.getTranslationKey() + ".message." + key);
+			attacker.sendMessage(message.applyTextStyle(TextFormatting.DARK_PURPLE));
 			attacker.addPotionEffect(new EffectInstance(Effects.WITHER, 100, 2));
+		}
+	};
+	
+	OnHitEffect SPAWN_BREADCRUMBS = (stack, target, attacker) -> {
+		if(!target.world.isRemote)
+		{
+			ItemStack crumbs = new ItemStack(MSItems.BREADCRUMBS, 1);
+			ItemEntity item = new ItemEntity(target.world, target.getPosX(), target.getPosY(), target.getPosZ(), crumbs);
+			target.world.addEntity(item);
+		}
+	};
+	
+	OnHitEffect DROP_FOE_ITEM = (stack, target, attacker) -> {
+		ItemStack heldByTarget = target.getHeldItemMainhand();
+		if(!target.world.isRemote && !heldByTarget.isEmpty() && attacker.getRNG().nextFloat() < .05)
+		{
+			ItemEntity item = new ItemEntity(target.world, target.getPosX(), target.getPosY(), target.getPosZ(), heldByTarget.copy());
+			item.getItem().setCount(1);
+			item.setPickupDelay(40);
+			target.world.addEntity(item);
+			heldByTarget.shrink(1);
 		}
 	};
 	

@@ -14,7 +14,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class PogoEffect implements ItemUseEffect, OnHitEffect
+public class PogoEffect implements RightClickBlockEffect, OnHitEffect
 {
 	public static final PogoEffect EFFECT_02 = new PogoEffect(0.2);
 	public static final PogoEffect EFFECT_04 = new PogoEffect(0.4);
@@ -45,7 +45,7 @@ public class PogoEffect implements ItemUseEffect, OnHitEffect
 	}
 	
 	@Override
-	public ActionResultType onItemUse(ItemUseContext context)
+	public ActionResultType onClick(ItemUseContext context)
 	{
 		return onItemUse(context.getPlayer(), context.getWorld(), context.getPos(), context.getItem(), context.getFace(), getPogoMotion(context.getItem()));
 	}

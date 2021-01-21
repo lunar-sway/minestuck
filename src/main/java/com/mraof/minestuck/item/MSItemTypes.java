@@ -53,7 +53,6 @@ public class MSItemTypes
 	public static final MSToolType SHOVEL_TOOL = new MSToolType(ToolType.SHOVEL, Material.SNOW, Material.SNOW_BLOCK, Material.CLAY, Material.ORGANIC, Material.EARTH, Material.SAND).addEnchantments(EnchantmentType.DIGGER);
 	public static final MSToolType SWORD_TOOL = new MSToolType(ToolType.get("sword"), Material.WEB).addEnchantments(EnchantmentType.WEAPON);
 	public static final MSToolType MISC_TOOL = new MSToolType().addEnchantments(EnchantmentType.WEAPON);
-	public static final MSToolType NONE = new MSToolType();
 	
 	//Combo Tools
 	public static final MSToolType AXE_PICK_TOOL = new MSToolType(PICKAXE_TOOL, AXE_TOOL);

@@ -5,7 +5,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
@@ -57,7 +56,7 @@ public class ScalemateItem extends Item
             newItem = MSItems.SCALEMATE_WITNESS;
         } else
         {
-            return new ActionResult<>(ActionResultType.PASS, mainhandItemStack);
+            return ActionResult.resultPass(mainhandItemStack);
         }
         
         playerIn.getHeldItemOffhand().shrink(1);
@@ -65,6 +64,6 @@ public class ScalemateItem extends Item
         item.setTag(mainhandItemStack.getTag());
         
         playerIn.playSound(SoundEvents.AMBIENT_UNDERWATER_EXIT, 0.5F, 1.0F);
-        return new ActionResult<>(ActionResultType.SUCCESS, item);
+        return ActionResult.resultSuccess(item);
     }
 }
