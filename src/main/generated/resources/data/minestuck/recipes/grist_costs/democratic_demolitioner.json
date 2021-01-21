@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:democratic_demolitioner"
+  },
+  "grist_cost": {
+    "minestuck:build": 50,
+    "minestuck:gold": 5,
+    "minestuck:marble": 25
+  }
+}
