@@ -1,7 +1,6 @@
 package com.mraof.minestuck.entity.underling;
 
 import com.mraof.minestuck.entity.EntityListFilter;
-import com.mraof.minestuck.entity.MinestuckEntity;
 import com.mraof.minestuck.entity.ai.HurtByTargetAlliedGoal;
 import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.entity.item.VitalityGelEntity;
@@ -45,7 +44,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public abstract class UnderlingEntity extends MinestuckEntity implements IMob
+public abstract class UnderlingEntity extends CreatureEntity implements IMob
 {
 	public static final UUID GRIST_MODIFIER_ID = UUID.fromString("08B6DEFC-E3F4-11EA-87D0-0242AC130003");
 	private static final DataParameter<String> GRIST_TYPE = EntityDataManager.createKey(UnderlingEntity.class, DataSerializers.STRING);
@@ -125,7 +124,6 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 	
 	protected void onGristTypeUpdated(GristType type)
 	{
-		clearTexture();
 	}
 	
 	protected void applyGristModifier(IAttribute attribute, double modifier, AttributeModifier.Operation operation)
@@ -223,15 +221,6 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 	private double randZ()
 	{
 		return this.getPosZ() + this.rand.nextDouble() * this.getWidth() - this.getWidth() / 2;
-	}
-	
-	@Override
-	protected ResourceLocation createTexture()
-	{
-		ResourceLocation underlingName = Objects.requireNonNull(getType().getRegistryName(), () -> "Getting texture for entity without a registry name! "+this);
-		ResourceLocation gristName = getGristType().getEffectiveName();
-		
-		return new ResourceLocation(underlingName.getNamespace(), String.format("textures/entity/underlings/%s/%s_%s.png", gristName.getNamespace(), gristName.getPath(), underlingName.getPath()));
 	}
 	
 	@Override

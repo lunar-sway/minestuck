@@ -305,12 +305,14 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.IRRADIATED_STEAK_SWORD).input(Items.WOODEN_SWORD).or().input(MSItems.IRRADIATED_STEAK).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.SORD).namedInput(Items.WOODEN_SWORD).and().input(MSItems.SBAHJ_POSTER).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.SORD).namedInput(Items.STONE_SWORD).and().input(MSItems.SBAHJ_POSTER).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.FROSTY_MACUAHUITL).namedInput(MSItems.MACUAHUITL).or().input(MSItems.ICE_SHARD).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.KATANA).namedInput(Items.STONE_SWORD).and().input(Items.ROTTEN_FLESH).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.KATANA).namedInput(Items.IRON_SWORD).and().input(Items.ROTTEN_FLESH).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.FIRE_POKER).input(Items.IRON_SWORD).and().input(Items.BLAZE_ROD).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.TOO_HOT_TO_HANDLE).input(Items.IRON_SWORD).or().input(Items.BLAZE_ROD).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.REGISWORD).namedInput(Items.IRON_SWORD).and().input(MSBlocks.CHESSBOARD).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.REGISWORD).namedInput(MSItems.KATANA).and().input(MSBlocks.CHESSBOARD).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.CRUEL_FATE_CRUCIBLE).namedInput(Items.IRON_SWORD).or().input(MSItems.GRIMOIRE).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CLAYMORE).input(Items.IRON_SWORD).and().input(Items.IRON_BLOCK).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CALEDFWLCH).input(MSItems.CUEBALL).or().input(MSItems.CLAYMORE).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CALEDSCRATCH).input(MSItems.MUSIC_DISC_DANCE_STAB_DANCE).and().input(MSItems.CALEDFWLCH).build(consumer);
@@ -321,6 +323,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.DOGG_MACHETE).namedInput(Items.GRASS_BLOCK).and().input(MSItems.CALEDSCRATCH).build(consumer); //haha get it?? because snoop dogg does weed, which is called grass???? im hilarious.
 		CombinationRecipeBuilder.of(MSItems.DOGG_MACHETE).namedInput(Items.GRASS).and().input(MSItems.CALEDSCRATCH).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.UNBREAKABLE_KATANA).input(MSItems.KATANA).and().input(Items.BEDROCK).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.ANGEL_APOCALYPSE).input(Items.IRON_SWORD).and().input(Items.FEATHER).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.COBALT_SABRE).input(MSItems.TOO_HOT_TO_HANDLE).or().input(Items.LAPIS_BLOCK).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.SCARLET_RIBBITAR).input(MSItems.CALEDSCRATCH).and().input(MSItems.FROG).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.SHATTER_BEACON).input(Items.BEACON).and().input(Items.DIAMOND_SWORD).build(consumer);
@@ -386,10 +389,12 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		
 		CombinationRecipeBuilder.of(MSItems.SLEDGE_HAMMER).input(MSItems.CLAW_HAMMER).and().namedInput(Items.BRICKS).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.SLEDGE_HAMMER).input(MSItems.CLAW_HAMMER).and().namedInput(Items.COBBLESTONE).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.MAILBOX).input(MSItems.SLEDGE_HAMMER).and().namedInput(Items.CHEST).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.BLACKSMITH_HAMMER).input(MSItems.SLEDGE_HAMMER).and().namedInput(Items.ANVIL).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.BLACKSMITH_HAMMER).input(MSItems.SLEDGE_HAMMER).and().namedInput(Items.IRON_BLOCK).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.POGO_HAMMER).input(MSItems.SLEDGE_HAMMER).and().input(Items.SLIME_BALL).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.WRINKLEFUCKER).input(MSItems.POGO_HAMMER).or().input(MSItems.CLOTHES_IRON).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.DEMOCRATIC_DEMOLITIONER).input(MSItems.MAILBOX).or().input(MSItems.FOOD_CAN).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.REGI_HAMMER).input(MSItems.CLAW_HAMMER).and().input(MSBlocks.CHESSBOARD).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.FEAR_NO_ANVIL).input(MSItems.BLACKSMITH_HAMMER).or().input(Items.CLOCK).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.TELESCOPIC_SASSACRUSHER).input(MSItems.SLEDGE_HAMMER).and().input(Items.BOOK).build(consumer);
@@ -456,6 +461,9 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		
 		CombinationRecipeBuilder.of(MSItems.CAT_CLAWS_SHEATHED).input(Items.IRON_BARS).and().input(Items.LEATHER).build(consumer);
         CombinationRecipeBuilder.of(MSItems.CIGARETTE_LANCE).input(Items.IRON_SWORD).and().input(Tags.Items.RODS_WOODEN).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.LUCERNE_HAMMER).input(MSItems.SPEAR_CANE).and().namedInput(MSItems.CLAW_HAMMER).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.LUCERNE_HAMMER_OF_UNDYING).input(MSItems.LUCERNE_HAMMER).or().namedInput(Items.TOTEM_OF_UNDYING).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.TYPHONIC_TRIVIALIZER).input(MSItems.FAN).or().namedInput(MSBlocks.SMOOTH_SHADE_STONE).build(consumer);
 		
         CombinationRecipeBuilder.of(MSBlocks.LAPTOP).input(MSBlocks.COMPUTER).and().namedInput(MSItems.BATTERY).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.LAPTOP).input(MSBlocks.COMPUTER).and().namedInput(Items.BOOK).build(consumer);

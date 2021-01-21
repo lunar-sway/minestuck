@@ -1,7 +1,7 @@
 package com.mraof.minestuck.entity.consort;
 
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
-import com.mraof.minestuck.entity.MinestuckEntity;
+import com.mraof.minestuck.entity.SimpleTexturedEntity;
 import com.mraof.minestuck.inventory.ConsortMerchantContainer;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.player.IdentifierHandler;
@@ -38,7 +38,7 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-public class ConsortEntity extends MinestuckEntity implements IContainerProvider
+public class ConsortEntity extends SimpleTexturedEntity implements IContainerProvider
 {
 	
 	private final EnumConsort consortType;
