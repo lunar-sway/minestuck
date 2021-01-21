@@ -35,14 +35,6 @@ public interface OnHitEffect
 	OnHitEffect RAGE_STRENGTH = aspectEffect(RAGE, () -> new EffectInstance(Effects.STRENGTH, 60, 1));
 	OnHitEffect LIFE_SATURATION = aspectEffect(LIFE, () -> new EffectInstance(Effects.SATURATION, 1, 1));
 	
-	OnHitEffect SHIELD_BREAKING = (stack, target, attacker) -> {
-		if(target instanceof PlayerEntity && !target.world.isRemote)
-		{
-			PlayerEntity targetplayer = (PlayerEntity)target;
-			if(targetplayer.getHeldItem(Hand.OFF_HAND).equals(Items.SHIELD))
-				targetplayer.disableShield(true);
-		}
-	};
 	OnHitEffect SET_CANDY_DROP_FLAG = (stack, target, attacker) -> {
 		if(target instanceof UnderlingEntity)
 			((UnderlingEntity) target).dropCandy = true;
