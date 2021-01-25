@@ -199,7 +199,12 @@ public class MSItems
 	public static final Item TUNING_FORK = getNull();
 	public static final Item SPORK = getNull();
 	public static final Item GOLDEN_SPORK = getNull();
+	
 	public static final Item BIDENT = getNull();
+	public static final Item CLUBS_SUITARANG = getNull();
+	public static final Item DIAMONDS_SUITARANG = getNull();
+	public static final Item HEARTS_SUITARANG = getNull();
+	public static final Item SPADES_SUITARANG = getNull();
 	
 	//Material tools
 	public static final Item EMERALD_SWORD = getNull();
@@ -792,8 +797,13 @@ public class MSItems
 		registry.register(new NoisyWeaponItem(ItemTier.IRON, 3, -2.2F, 1.0F, () -> SoundEvents.BLOCK_NOTE_BLOCK_CHIME, MSItemTypes.MISC_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("tuning_fork"));
 		registry.register(new WeaponItem(ItemTier.STONE, 4, -2.3F, 1.0F, MSItemTypes.SHOVEL_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("spork"));
 		registry.register(new WeaponItem(ItemTier.GOLD, 5, -2.3F, 1.0F, MSItemTypes.SHOVEL_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("golden_spork"));
+		
 		registry.register(new WeaponItem(ItemTier.IRON, 7, -2.9F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("bident"));
-
+		registry.register(new MSThrowableWeaponItem(new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("clubs_suitarang"));
+		registry.register(new MSThrowableWeaponItem(new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("diamonds_suitarang"));
+		registry.register(new MSThrowableWeaponItem(new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("hearts_suitarang"));
+		registry.register(new MSThrowableWeaponItem(new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("spades_suitarang"));
+		
 		registry.register(new SwordItem(MSItemTypes.EMERALD_TIER, 3, -2.4F, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("emerald_sword"));
 		registry.register(new AxeItem(MSItemTypes.EMERALD_TIER, 5, -3.0F, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("emerald_axe"));
 		registry.register(new PickaxeItem(MSItemTypes.EMERALD_TIER, 1 , -2.8F, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("emerald_pickaxe"));

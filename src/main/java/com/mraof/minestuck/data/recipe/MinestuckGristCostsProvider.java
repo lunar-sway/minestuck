@@ -417,6 +417,11 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSItems.ROCKEFELLERS_WALKING_BLADECANE).grist(BUILD, 2222).grist(RUST, 222).grist(TAR, 22).grist(DIAMOND, 2).grist(RUBY, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.DRAGON_CANE).grist(BUILD, 1777).grist(RUBY, 777).grist(RUST, 777).grist(CHALK, 277).build(recipeSaver);
 		
+		GristCostRecipeBuilder.of(MSItems.CLUBS_SUITARANG).grist(BUILD, 20).grist(TAR, 4).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.DIAMONDS_SUITARANG).grist(BUILD, 20).grist(TAR, 4).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.HEARTS_SUITARANG).grist(BUILD, 20).grist(TAR, 4).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.SPADES_SUITARANG).grist(BUILD, 20).grist(TAR, 4).build(recipeSaver);
+		
 		GristCostRecipeBuilder.of(MSItems.CAPTCHAROID_CAMERA).grist(BUILD, 5000).grist(CAULK, 500).grist(GOLD, 500).grist(MARBLE, 500).grist(MERCURY, 500).grist(SHALE, 500).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.TRANSPORTALIZER).grist(BUILD, 350).grist(AMETHYST, 27).grist(RUST, 36).grist(URANIUM, 18).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.QUEUESTACK_MODUS_CARD).grist(BUILD, 140).build(recipeSaver);

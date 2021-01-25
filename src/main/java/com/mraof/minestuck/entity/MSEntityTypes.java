@@ -59,6 +59,8 @@ public final class MSEntityTypes
 	public static final EntityType<ShopPosterEntity> SHOP_POSTER = getNull();
 	public static final EntityType<HologramEntity> HOLOGRAM = getNull();
 	
+	public static final EntityType<ItemRenderedProjectileEntity> SUITARANG = getNull();
+	
 	@Nonnull
 	@SuppressWarnings("ConstantConditions")
 	private static <T> T getNull()
@@ -101,6 +103,8 @@ public final class MSEntityTypes
 		register(registry, EntityType.Builder.<SbahjPosterEntity>create(SbahjPosterEntity::new, EntityClassification.MISC).size(0.5F, 0.5F).setShouldReceiveVelocityUpdates(false).setTrackingRange(10).setUpdateInterval(Integer.MAX_VALUE), "sbahj_poster");
 		register(registry, EntityType.Builder.<ShopPosterEntity>create(ShopPosterEntity::new, EntityClassification.MISC).size(0.5F, 0.5F).setShouldReceiveVelocityUpdates(false).setTrackingRange(10).setUpdateInterval(Integer.MAX_VALUE), "shop_poster");
 		register(registry, EntityType.Builder.<HologramEntity>create(HologramEntity::new, EntityClassification.MISC).size(0.25F, 0.25F).setShouldReceiveVelocityUpdates(false).setTrackingRange(10).setUpdateInterval(Integer.MAX_VALUE), "hologram");
+		
+		register(registry, EntityType.Builder.<ItemRenderedProjectileEntity>create(ItemRenderedProjectileEntity::new, EntityClassification.MISC).size(0.25F, 0.25F).setTrackingRange(4).setUpdateInterval(10), "suitarang");
 	}
 	
 	/**
