@@ -415,7 +415,6 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		
 		GristCostRecipeBuilder.of(MSItems.CAPTCHAROID_CAMERA).grist(BUILD, 5000).grist(CAULK, 500).grist(GOLD, 500).grist(MARBLE, 500).grist(MERCURY, 500).grist(SHALE, 500).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.TRANSPORTALIZER).grist(BUILD, 350).grist(AMETHYST, 27).grist(RUST, 36).grist(URANIUM, 18).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSBlocks.TRANS_PORTALIZER).grist(BUILD, 450).grist(RUBY, 11).grist(COBALT, 20).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.QUEUESTACK_MODUS_CARD).grist(BUILD, 140).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.TREE_MODUS_CARD).grist(BUILD, 400).grist(AMBER, 35).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.HASHMAP_MODUS_CARD).grist(BUILD, 280).grist(RUBY, 23).build(recipeSaver);
