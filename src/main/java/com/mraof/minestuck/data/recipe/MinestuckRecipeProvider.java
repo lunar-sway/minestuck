@@ -121,6 +121,8 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		ShapelessRecipeBuilder.shapelessRecipe(MSItems.BUG_ON_A_STICK, 3).addIngredient(Ingredient.fromTag(Tags.Items.RODS_WOODEN), 3).addIngredient(MSItems.JAR_OF_BUGS).addCriterion("has_jag_of_bugs", hasItem(MSItems.JAR_OF_BUGS)).build(recipeBuilder);
 		ShapelessRecipeBuilder.shapelessRecipe(MSItems.SALAD).addIngredient(Items.BOWL).addIngredient(ItemTags.LEAVES).addCriterion("has_bowl", hasItem(Items.BOWL)).build(recipeBuilder);
 		
+		ShapelessRecipeBuilder.shapelessRecipe(MSBlocks.TRANS_PORTALIZER).addIngredient(MSBlocks.TRANSPORTALIZER).addIngredient(Items.PINK_DYE).addIngredient(Items.LIGHT_BLUE_DYE).addCriterion("has_transportalizer", hasItem(MSBlocks.TRANSPORTALIZER)).build(recipeBuilder);
+		
 		CookingRecipeBuilder.smeltingRecipe(Ingredient.fromItems(MSBlocks.PINK_STONE_BRICKS), MSBlocks.CRACKED_PINK_STONE_BRICKS, 0.1F, 200).addCriterion("has_pink_stone_bricks", hasItem(MSBlocks.PINK_STONE_BRICKS)).build(recipeBuilder);
 		CookingRecipeBuilder.smeltingRecipe(Ingredient.fromItems(MSItems.CAKE_MIX), Blocks.CAKE, 0.0F, 200).addCriterion("has_cake_mix", hasItem(MSItems.CAKE_MIX)).build(recipeBuilder, new ResourceLocation (Minestuck.MOD_ID, "cake_from_mix"));
 		

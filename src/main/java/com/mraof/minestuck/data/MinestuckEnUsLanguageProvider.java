@@ -279,6 +279,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.LUNCHTOP, "Lunchtop");
 		add(MSBlocks.OLD_COMPUTER, "Old Computer");
 		add(MSBlocks.TRANSPORTALIZER, "Transportalizer");
+		add(MSBlocks.TRANS_PORTALIZER, "TRANSportalizer");
 		add(MSBlocks.SENDIFICATOR, "Sendificator");
 		addTooltip(MSBlocks.SENDIFICATOR, "Approximately head sized");
 		addExtra(MSBlocks.SENDIFICATOR, SendificatorBlock.ACTIVATION_MESSAGE, "The machine indicates that it is irreversibly set to the current time and place, following that up by saying SUBMIT. OBEY.");
@@ -480,6 +481,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.CLOWN_CLUB, "Rage inducing. Why would you make this");
 		add(MSItems.SPIKED_CLUB, "Spiked Club");
 		addTooltip(MSItems.SPIKED_CLUB, "About what it sounds like");
+		add(MSItems.MACE, "Mace");
+		add(MSItems.M_ACE, "mACE");
 		add(MSItems.HORSE_HITCHER, "Cast Iron Horse Hitcher");
 		add(MSItems.ACE_OF_SPADES, "Ace of Spades");
 		addStore(MSItems.ACE_OF_SPADES, "Shovel Sigil");
@@ -544,6 +547,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.WOODEN_SPOON, "Like the kind you would eat your soup with");
 		add(MSItems.SILVER_SPOON, "Silver Spoon");
 		addTooltip(MSItems.SILVER_SPOON, "Could be the first silver object you've seen so far");
+		add(MSItems.TERRAIN_FLATENATOR, "Terrain Flatenator");
+		addTooltip(MSItems.TERRAIN_FLATENATOR, "Construction worker's pride and joy!");
 		add(MSItems.NOSFERATU_SPOON, "Nosferatu Spoon");
 		addTooltip(MSItems.NOSFERATU_SPOON, "The life-draining bloodlust of evil, in spoon form");
 		add(MSItems.CROCKER_SPOON, "Junior Battlemaster's Bowlbuster Stirring Solution 50000");

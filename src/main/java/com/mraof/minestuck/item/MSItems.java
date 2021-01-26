@@ -142,6 +142,8 @@ public class MSItems
 	public static final Item POGO_CLUB = getNull();
 	public static final Item METAL_BAT = getNull();
 	public static final Item CLOWN_CLUB = getNull();
+	public static final Item MACE = getNull();
+	public static final Item M_ACE = getNull();
 	public static final Item SPIKED_CLUB = getNull();
 	
 	public static final Item HORSE_HITCHER = getNull();
@@ -179,6 +181,7 @@ public class MSItems
 	//Spoons/forks
 	public static final Item WOODEN_SPOON = getNull();
 	public static final Item SILVER_SPOON = getNull();
+	public static final Item TERRAIN_FLATENATOR = getNull();
 	public static final Item NOSFERATU_SPOON = getNull();
 	public static final Item CROCKER_SPOON = getNull();
 	public static final Item CROCKER_FORK = getNull();
@@ -590,6 +593,7 @@ public class MSItems
 		registerItemBlock(registry, LUNCHTOP, MSItemGroup.MAIN);
 		registerItemBlock(registry, OLD_COMPUTER, MSItemGroup.MAIN);
 		registerItemBlock(registry, new TransportalizerItem(TRANSPORTALIZER, new Item.Properties().group(MSItemGroup.MAIN)));
+		registerItemBlock(registry, new TransportalizerItem(TRANS_PORTALIZER, new Item.Properties().group(MSItemGroup.MAIN)));
 		registerItemBlock(registry, new SendificatorBlockItem(SENDIFICATOR, new Item.Properties().group(MSItemGroup.MAIN).maxStackSize(1)));
 		registerItemBlock(registry, GRIST_WIDGET, new Item.Properties().group(MSItemGroup.MAIN).rarity(Rarity.UNCOMMON));
 		registerItemBlock(registry, URANIUM_COOKER, MSItemGroup.MAIN);
@@ -721,6 +725,8 @@ public class MSItems
 		registry.register(new WeaponItem(ItemTier.IRON, 4, -2.8F, 2.0F, MSItemTypes.MISC_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("metal_bat"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 5, -2.8F).efficiency(2.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.RAGE_STRENGTH, OnHitEffect.playSound(() -> MSSoundEvents.ITEM_HORN_USE, 1.5F, 1)), new Item.Properties().defaultMaxDamage(2048).group(MSItemGroup.WEAPONS)).setRegistryName("clown_club"));
 		registry.register(new WeaponItem(ItemTier.WOOD, 5, -2.8F, 2.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(100).group(MSItemGroup.WEAPONS)).setRegistryName("spiked_club"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 5, -2.8F).efficiency(2.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().defaultMaxDamage(500).group(MSItemGroup.WEAPONS)).setRegistryName("mace"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 6, -2.8F).efficiency(2.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().defaultMaxDamage(750).group(MSItemGroup.WEAPONS)).setRegistryName("m_ace"));
 		
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 7, -2.8F).efficiency(2.0F).set(MSItemTypes.MISC_TOOL).set(ItemRightClickEffect.switchTo(() -> MSItems.ACE_OF_SPADES)), new Item.Properties().defaultMaxDamage(500).group(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)).setRegistryName("horse_hitcher"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.PAPER_TIER, 0, -1.8F).efficiency(0.0F).set(ItemRightClickEffect.switchTo(() -> MSItems.HORSE_HITCHER)), new Item.Properties().defaultMaxDamage(500)).setRegistryName("ace_of_spades"));
@@ -759,6 +765,7 @@ public class MSItems
 		//Spoons/forks
 		registry.register(new WeaponItem(ItemTier.WOOD, 2, -2.4F, 1.0F, MSItemTypes.SHOVEL_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("wooden_spoon"));
 		registry.register(new WeaponItem(ItemTier.IRON, 1, -2.4F, 1.0F, MSItemTypes.SHOVEL_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("silver_spoon"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 3, -2.4F).efficiency(10.0F).set(MSItemTypes.SHOVEL_TOOL).set(new FarmineEffect(Integer.MAX_VALUE, 50)), new Item.Properties().defaultMaxDamage(1024).group(MSItemGroup.WEAPONS)).setRegistryName("terrain_flatenator"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 5, -2.4F).efficiency(1.0F).set(MSItemTypes.SHOVEL_TOOL).add(OnHitEffect.LIFE_SATURATION), new Item.Properties().defaultMaxDamage(2048).group(MSItemGroup.WEAPONS)).setRegistryName("nosferatu_spoon"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.DIAMOND, 5, -2.4F).efficiency(1.0F).set(MSItemTypes.SHOVEL_TOOL).set(ItemRightClickEffect.switchTo(() -> MSItems.CROCKER_FORK)), new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)).setRegistryName("crocker_spoon"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.DIAMOND, 6, -2.6F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).set(ItemRightClickEffect.switchTo(() -> MSItems.CROCKER_SPOON)), new Item.Properties().rarity(Rarity.UNCOMMON)).setRegistryName("crocker_fork"));
