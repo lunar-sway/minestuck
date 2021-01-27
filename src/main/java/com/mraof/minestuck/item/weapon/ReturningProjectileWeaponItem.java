@@ -34,8 +34,7 @@ public class ReturningProjectileWeaponItem extends Item
 		
 		item.damageItem(1, playerIn, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
 		
-		//playerIn.getCooldownTracker().setCooldown(playerIn.getActiveItemStack().getItem(), 60);
-		playerIn.getCooldownTracker().setCooldown(this, 100);
+		playerIn.getCooldownTracker().setCooldown(this, 50);
 		playerIn.addStat(Stats.ITEM_USED.get(this));
 		return new ActionResult<>(ActionResultType.SUCCESS, item);
 	}
