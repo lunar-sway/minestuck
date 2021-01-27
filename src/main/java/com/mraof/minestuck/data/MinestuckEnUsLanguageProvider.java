@@ -576,10 +576,13 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.GOLDEN_SPORK, "A spoon and fork with all the awfulness of gold tools? Sign me up!");
 		add(MSItems.BIDENT, "Bident");
 		addTooltip(MSItems.BIDENT, "Double trouble for all your bubble scuffle needs");
+		add(MSItems.SHURIKEN, "Shuriken");
 		add(MSItems.CLUBS_SUITARANG, "Clubs Suitarang");
 		add(MSItems.DIAMONDS_SUITARANG, "Diamonds Suitarang");
 		add(MSItems.HEARTS_SUITARANG, "Hearts Suitarang");
 		add(MSItems.SPADES_SUITARANG, "Spades Suitarang");
+		add(MSItems.CHAKRAM, "Magic Chakram");
+		addTooltip(MSItems.CHAKRAM, "Some power makes this weapon turn the exact opposite direction any time it hits something!");
 		add(MSItems.EMERALD_SWORD, "Emerald Sword");
 		add(MSItems.EMERALD_AXE, "Emerald Axe");
 		add(MSItems.EMERALD_PICKAXE, "Emerald Pickaxe");

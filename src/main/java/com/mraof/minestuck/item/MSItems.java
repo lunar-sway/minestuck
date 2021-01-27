@@ -201,10 +201,12 @@ public class MSItems
 	public static final Item GOLDEN_SPORK = getNull();
 	
 	public static final Item BIDENT = getNull();
+	public static final Item SHURIKEN = getNull();
 	public static final Item CLUBS_SUITARANG = getNull();
 	public static final Item DIAMONDS_SUITARANG = getNull();
 	public static final Item HEARTS_SUITARANG = getNull();
 	public static final Item SPADES_SUITARANG = getNull();
+	public static final Item CHAKRAM = getNull();
 	
 	//Material tools
 	public static final Item EMERALD_SWORD = getNull();
@@ -799,10 +801,12 @@ public class MSItems
 		registry.register(new WeaponItem(ItemTier.GOLD, 5, -2.3F, 1.0F, MSItemTypes.SHOVEL_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("golden_spork"));
 		
 		registry.register(new WeaponItem(ItemTier.IRON, 7, -2.9F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("bident"));
-		registry.register(new MSThrowableWeaponItem(new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("clubs_suitarang"));
-		registry.register(new MSThrowableWeaponItem(new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("diamonds_suitarang"));
-		registry.register(new MSThrowableWeaponItem(new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("hearts_suitarang"));
-		registry.register(new MSThrowableWeaponItem(new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("spades_suitarang"));
+		registry.register(new ConsumableProjectileWeaponItem(new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("shuriken"));
+		registry.register(new ConsumableProjectileWeaponItem(new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("clubs_suitarang"));
+		registry.register(new ConsumableProjectileWeaponItem(new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("diamonds_suitarang"));
+		registry.register(new ConsumableProjectileWeaponItem(new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("hearts_suitarang"));
+		registry.register(new ConsumableProjectileWeaponItem(new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("spades_suitarang"));
+		registry.register(new ReturningProjectileWeaponItem(new Item.Properties().group(MSItemGroup.WEAPONS).maxDamage(250)).setRegistryName("chakram"));
 		
 		registry.register(new SwordItem(MSItemTypes.EMERALD_TIER, 3, -2.4F, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("emerald_sword"));
 		registry.register(new AxeItem(MSItemTypes.EMERALD_TIER, 5, -3.0F, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("emerald_axe"));

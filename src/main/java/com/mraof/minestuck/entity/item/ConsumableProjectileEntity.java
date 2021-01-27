@@ -12,24 +12,26 @@ import net.minecraft.item.Item;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class ItemRenderedProjectileEntity extends ProjectileItemEntity implements RendersAsItem
+public class ConsumableProjectileEntity extends ProjectileItemEntity implements RendersAsItem
 {
-	public ItemRenderedProjectileEntity(EntityType<? extends ItemRenderedProjectileEntity> type, World worldIn)
+	public ConsumableProjectileEntity(EntityType<? extends ConsumableProjectileEntity> type, World worldIn)
 	{
 		super(type, worldIn);
 	}
 	
-	public ItemRenderedProjectileEntity(EntityType<? extends ItemRenderedProjectileEntity> type, double x, double y, double z, World worldIn)
+	public ConsumableProjectileEntity(EntityType<? extends ConsumableProjectileEntity> type, double x, double y, double z, World worldIn)
 	{
 		super(type, x, y, z, worldIn);
 	}
 	
-	public ItemRenderedProjectileEntity(EntityType<? extends ItemRenderedProjectileEntity> type, LivingEntity livingEntityIn, World worldIn)
+	public ConsumableProjectileEntity(EntityType<? extends ConsumableProjectileEntity> type, LivingEntity livingEntityIn, World worldIn)
 	{
 		super(type, livingEntityIn, worldIn);
 	}
@@ -55,12 +57,15 @@ public class ItemRenderedProjectileEntity extends ProjectileItemEntity implement
 			if(!this.world.isRemote && result.getType() == RayTraceResult.Type.ENTITY)
 			{
 				Entity entity = ((EntityRayTraceResult) result).getEntity();
-				entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), 3);
+				entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), 2);
 			}
-			if(!throwerPlayer.isCreative())
+			if(!throwerPlayer.isCreative() && rand.nextFloat() < 0.99F)
 			{
 				ItemEntity itemEntity = new ItemEntity(this.world, this.getPosX(), this.getPosY(), this.getPosZ(), this.getItem());
 				world.addEntity(itemEntity);
+			}else if(!throwerPlayer.isCreative() && rand.nextFloat() >= 0.99F)
+			{
+				this.world.playSound(null, this.getPosX(), this.getPosY(), this.getPosZ(), SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 0.8F, 1.5F);
 			}
 			this.remove();
 		}
