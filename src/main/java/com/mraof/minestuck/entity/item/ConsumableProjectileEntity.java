@@ -37,18 +37,6 @@ public class ConsumableProjectileEntity extends ProjectileItemEntity implements 
 	}
 	
 	@Override
-	public void writeAdditional(CompoundNBT compound)
-	{
-		super.writeAdditional(compound);
-	}
-	
-	@Override
-	public void readAdditional(CompoundNBT compound)
-	{
-		super.readAdditional(compound);
-	}
-	
-	@Override
 	protected void onImpact(RayTraceResult result)
 	{
 		if(this.getThrower() instanceof PlayerEntity)

@@ -37,18 +37,6 @@ public class ReturningProjectileEntity extends ProjectileItemEntity implements R
 	}
 	
 	@Override
-	public void writeAdditional(CompoundNBT compound)
-	{
-		super.writeAdditional(compound);
-	}
-	
-	@Override
-	public void readAdditional(CompoundNBT compound)
-	{
-		super.readAdditional(compound);
-	}
-	
-	@Override
 	protected void onImpact(RayTraceResult result)
 	{
 		PlayerEntity throwerPlayer = (PlayerEntity) this.getThrower();
@@ -57,7 +45,7 @@ public class ReturningProjectileEntity extends ProjectileItemEntity implements R
 				resetThrower();
 			}
 			++bounce;
-			this.setMotion(this.getMotion().x*-1, this.getMotion().y*-1, this.getMotion().z*-1);
+			this.setMotion(this.getMotion().x*-1.1, this.getMotion().y*-1.1, this.getMotion().z*-1.1);
 			if(!this.world.isRemote && result.getType() == RayTraceResult.Type.ENTITY)
 			{
 				Entity entity = ((EntityRayTraceResult) result).getEntity();
@@ -98,7 +86,7 @@ public class ReturningProjectileEntity extends ProjectileItemEntity implements R
 		this.lastTickPosZ = pos.z;
 		super.tick();
 		
-		if (this.ticksExisted >= 100) {
+		if (this.ticksExisted >= 75) {
 			resetThrower();
 		}
 	}
