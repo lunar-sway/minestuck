@@ -50,6 +50,7 @@ public final class MSFeatures
 	public static final Feature<NoFeatureConfig> BUCKET = getNull();
 	public static final Feature<NoFeatureConfig> BROKEN_SWORD = getNull();
 	public static final Feature<NoFeatureConfig> TOWER = getNull();
+	public static final Feature<BlockStateFeatureConfig> STONE_MOUND = getNull();
 	
 	@Nonnull
 	@SuppressWarnings("ConstantConditions")
@@ -91,6 +92,7 @@ public final class MSFeatures
 		registry.register(new BucketFeature(NoFeatureConfig::deserialize).setRegistryName("bucket"));
 		registry.register(new BrokenSwordFeature(NoFeatureConfig::deserialize).setRegistryName("broken_sword"));
 		registry.register(new TowerFeature(NoFeatureConfig::deserialize).setRegistryName("tower"));
+		registry.register(new StoneMoundFeature(BlockStateFeatureConfig::deserialize).setRegistryName("stone_mound"));
 		
 		MSStructurePieces.init();
 		MSStructureProcessorTypes.init();
