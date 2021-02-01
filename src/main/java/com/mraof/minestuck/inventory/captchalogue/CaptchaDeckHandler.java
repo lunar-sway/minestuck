@@ -13,6 +13,7 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
 import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
+import net.minecraft.client.gui.screen.inventory.CreativeScreen;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -160,19 +161,33 @@ public class CaptchaDeckHandler
 	
 	public static void captchalogueItemInSlot(ServerPlayerEntity player, int slotIndex, int windowId)
 	{
-		if(canPlayerUseModus(player) && hasModus(player) && player.openContainer.windowId == windowId && player.openContainer.getCanCraft(player))
+		if(canPlayerUseModus(player) && hasModus(player) && player.openContainer.getCanCraft(player))
 		{
-			Slot slot = slotIndex >= 0 && slotIndex < player.openContainer.inventorySlots.size() ? player.openContainer.getSlot(slotIndex) : null;
-			
-			if(slot != null && !slot.getStack().isEmpty() && slot.canTakeStack(player))
-			{
-				ItemStack stack = slot.decrStackSize(slot.getStack().getMaxStackSize());
-				captchalogueItem(player, stack);
-				//It is not guaranteed that we can put the item back, so if it wasn't captchalogued, launch it
+			if (player.inventory.isHotbar(slotIndex) && player.openContainer.equals(player.container)) {
+				ItemStack stack = player.inventory.mainInventory.get(slotIndex);
 				if(!stack.isEmpty())
-					launchItem(player, stack);
-				
-				player.openContainer.detectAndSendChanges();
+				{
+					player.inventory.setInventorySlotContents(slotIndex, ItemStack.EMPTY);
+					captchalogueItem(player, stack);
+					//It is not guaranteed that we can put the item back, so if it wasn't captchalogued, launch it
+					if(!stack.isEmpty())
+						launchItem(player, stack);
+
+					player.openContainer.detectAndSendChanges();
+				}
+			} else {
+				Slot slot = slotIndex >= 0 && slotIndex < player.openContainer.inventorySlots.size() ? player.openContainer.getSlot(slotIndex) : null;
+
+				if(slot != null && !slot.getStack().isEmpty() && slot.canTakeStack(player))
+				{
+					ItemStack stack = slot.decrStackSize(slot.getStack().getMaxStackSize());
+					captchalogueItem(player, stack);
+					//It is not guaranteed that we can put the item back, so if it wasn't captchalogued, launch it
+					if(!stack.isEmpty())
+						launchItem(player, stack);
+
+					player.openContainer.detectAndSendChanges();
+				}
 			}
 		}
 	}

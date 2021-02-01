@@ -15,6 +15,7 @@ import net.minecraft.client.gui.screen.inventory.CreativeScreen;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.client.util.InputMappings;
 import net.minecraft.inventory.container.Slot;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.event.TickEvent;
@@ -91,14 +92,26 @@ public class MSKeyHandler
 	@SubscribeEvent
 	public static void onTick(TickEvent.ClientTickEvent event)
 	{
+
 		if(InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), captchaKey.getKey().getKeyCode()) && !captchaKeyPressed) {
 
 			Screen screen = Minecraft.getInstance().currentScreen;
-			if(screen instanceof ContainerScreen<?> && screen.getFocused() == null && !(screen instanceof CreativeScreen))
+
+			if(screen instanceof ContainerScreen<?> && ((ContainerScreen<?>) screen).getSlotUnderMouse() != null && !(screen instanceof CreativeScreen))
 			{
 				Slot slot = ((ContainerScreen<?>) screen).getSlotUnderMouse();
+				Minecraft.getInstance().player.sendMessage(new StringTextComponent("Screen class name: " + screen.getClass().getSimpleName()));
+				Minecraft.getInstance().player.sendMessage(new StringTextComponent("slot index: " + slot.slotNumber));
 				if(slot != null)
 					MSPacketHandler.sendToServer(CaptchaDeckPacket.captchalogueInv(slot.slotNumber, ((ContainerScreen<?>) screen).getContainer().windowId));
+			}
+			else if(screen instanceof ContainerScreen<?> && ((ContainerScreen<?>) screen).getSlotUnderMouse() != null && (screen instanceof CreativeScreen))
+			{
+				Slot slot = ((ContainerScreen<?>) screen).getSlotUnderMouse();
+				Minecraft.getInstance().player.sendMessage(new StringTextComponent("Screen class name: " + screen.getClass().getSimpleName()));
+				Minecraft.getInstance().player.sendMessage(new StringTextComponent("slot index: " + slot.getSlotIndex()));
+				if(slot != null)
+					MSPacketHandler.sendToServer(CaptchaDeckPacket.captchalogueInv(slot.getSlotIndex(), ((ContainerScreen<?>) screen).getContainer().windowId));
 			}
 		}
 		
