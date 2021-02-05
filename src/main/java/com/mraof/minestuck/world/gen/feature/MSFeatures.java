@@ -47,6 +47,7 @@ public final class MSFeatures
 	public static final Feature<NoFeatureConfig> OASIS = getNull();
 	public static final Feature<NoFeatureConfig> MESA = getNull();
 	public static final Feature<NoFeatureConfig> ROCK_SPIKE = getNull();
+	public static final Feature<NoFeatureConfig> SURFACE_FOSSIL = getNull();
 	public static final Feature<NoFeatureConfig> BUCKET = getNull();
 	public static final Feature<NoFeatureConfig> BROKEN_SWORD = getNull();
 	public static final Feature<NoFeatureConfig> TOWER = getNull();
@@ -89,6 +90,7 @@ public final class MSFeatures
 		registry.register(new OasisFeature(NoFeatureConfig::deserialize).setRegistryName("oasis"));
 		registry.register(new MesaFeature(NoFeatureConfig::deserialize).setRegistryName("mesa"));
 		registry.register(new RockSpikeFeature(NoFeatureConfig::deserialize).setRegistryName("rock_spike"));
+		registry.register(new SurfaceFossilsFeature(NoFeatureConfig::deserialize).setRegistryName("surface_fossil"));
 		registry.register(new BucketFeature(NoFeatureConfig::deserialize).setRegistryName("bucket"));
 		registry.register(new BrokenSwordFeature(NoFeatureConfig::deserialize).setRegistryName("broken_sword"));
 		registry.register(new TowerFeature(NoFeatureConfig::deserialize).setRegistryName("tower"));
