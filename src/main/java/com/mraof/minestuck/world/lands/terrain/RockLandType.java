@@ -10,10 +10,12 @@ import com.mraof.minestuck.world.biome.BiomeType;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.biome.MinestuckBiomeFeatures;
 import com.mraof.minestuck.world.gen.LandGenSettings;
+import com.mraof.minestuck.world.gen.MSSurfaceBuilders;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.feature.structure.village.ConsortVillageCenter;
 import com.mraof.minestuck.world.lands.LandProperties;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
@@ -37,6 +39,8 @@ public class RockLandType extends TerrainLandType
 	public static final ResourceLocation GROUP_NAME = new ResourceLocation(Minestuck.MOD_ID, "rock");
 	private final Variant type;
 	
+	private Random rand;
+	
 	public RockLandType(Variant variation)
 	{
 		super(GROUP_NAME);
@@ -51,6 +55,8 @@ public class RockLandType extends TerrainLandType
 		} else {
 			registry.setBlockState("surface", Blocks.GRAVEL.getDefaultState());
 		}
+		
+		//if(type. == BiomeType.ROUGH)
 		registry.setBlockState("upper", Blocks.COBBLESTONE.getDefaultState());
 		registry.setBlockState("structure_primary_decorative", Blocks.CHISELED_STONE_BRICKS.getDefaultState());
 		registry.setBlockState("structure_primary_stairs", Blocks.STONE_BRICK_STAIRS.getDefaultState());
@@ -90,6 +96,27 @@ public class RockLandType extends TerrainLandType
 	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
 	{
 		int biomeMultiplier = 1;
+		
+		//Random rand = Random ;
+		Float randFloat = rand.nextFloat();
+		BlockState randomStone = Blocks.STONE.getDefaultState();
+		if(randFloat >= .95)
+		{
+			randomStone = Blocks.GRANITE.getDefaultState();
+		} else if (randFloat <= .05){
+			randomStone = Blocks.ANDESITE.getDefaultState();
+		} else if (randFloat <= .55 && randFloat >= .50){
+			randomStone = Blocks.DIORITE.getDefaultState();
+		} else if (randFloat <= .61 && randFloat >= .56){
+			randomStone = Blocks.DIORITE.getDefaultState();
+		} else if (randFloat <= .67 && randFloat >= .62){
+			randomStone = MSBlocks.CHALK.getDefaultState();
+		} else if (randFloat <= .73 && randFloat >= .68){
+			randomStone = MSBlocks.BLACK_STONE.getDefaultState();
+		} else if (randFloat <= .79 && randFloat >= .74){
+			randomStone = MSBlocks.PINK_STONE.getDefaultState();
+		}
+		
 		if(biome.type == BiomeType.OCEAN)
 		{
 			biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.DISK.withConfiguration(new SphereReplaceConfig(Blocks.CLAY.getDefaultState(), 6, 2, Lists.newArrayList(blocks.getBlockState("ocean_surface"), Blocks.CLAY.getDefaultState()))).withPlacement(Placement.COUNT_TOP_SOLID.configure(new FrequencyConfig(25))));
@@ -100,7 +127,7 @@ public class RockLandType extends TerrainLandType
 		{
 			if(type == Variant.ROCK)
 			{
-				biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.BLOCK_BLOB.withConfiguration(new BlockBlobConfig(Blocks.COBBLESTONE.getDefaultState(), 0)).withPlacement(Placement.COUNT_EXTRA_HEIGHTMAP.configure(new AtSurfaceWithExtraConfig(3, 0.1F, 2))));
+				biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.BLOCK_BLOB.withConfiguration(new BlockBlobConfig(randomStone, 0)).withPlacement(Placement.COUNT_EXTRA_HEIGHTMAP.configure(new AtSurfaceWithExtraConfig(3, 0.1F, 1))));
 				biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_PATCH.withConfiguration(MinestuckBiomeFeatures.PETRIFIED_GRASS_CONFIG).withPlacement(Placement.COUNT_HEIGHTMAP_DOUBLE.configure(new FrequencyConfig(1))));
 			} else if(type == Variant.PETRIFICATION)
 			{
@@ -116,7 +143,7 @@ public class RockLandType extends TerrainLandType
 			if(type == Variant.ROCK)
 			{
 				biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, MSFeatures.LEAFLESS_TREE.withConfiguration(new BlockStateFeatureConfig(MSBlocks.PETRIFIED_LOG.getDefaultState())).withPlacement(Placement.CHANCE_HEIGHTMAP.configure(new ChanceConfig(20))));
-				biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.BLOCK_BLOB.withConfiguration(new BlockBlobConfig(Blocks.COBBLESTONE.getDefaultState(), 1)).withPlacement(Placement.COUNT_EXTRA_HEIGHTMAP.configure(new AtSurfaceWithExtraConfig(4, 0.1F, 1))));
+				biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.BLOCK_BLOB.withConfiguration(new BlockBlobConfig(randomStone, 1)).withPlacement(Placement.COUNT_EXTRA_HEIGHTMAP.configure(new AtSurfaceWithExtraConfig(4, 0.1F, 1))));
 				biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_PATCH.withConfiguration(MinestuckBiomeFeatures.PETRIFIED_GRASS_CONFIG).withPlacement(Placement.COUNT_HEIGHTMAP_DOUBLE.configure(new FrequencyConfig(2))));
 				biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.STONE_MOUND.withConfiguration(new BlockStateFeatureConfig(blocks.getBlockState("ground"))).withPlacement(Placement.TOP_SOLID_HEIGHTMAP.configure(IPlacementConfig.NO_PLACEMENT_CONFIG)));
 			} else if(type == Variant.PETRIFICATION)

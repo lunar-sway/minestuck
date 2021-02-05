@@ -45,6 +45,7 @@ public class FloraLandType extends TerrainLandType
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
 		registry.setBlockState("surface", Blocks.GRASS_BLOCK.getDefaultState());
+		registry.setBlockState("surface_rough", Blocks.COARSE_DIRT.getDefaultState());
 		registry.setBlockState("upper", Blocks.DIRT.getDefaultState());
 		registry.setBlockState("ocean", MSBlocks.BLOOD.getDefaultState());
 		//registry.setBlockState("ocean_surface", Blocks.COARSE_DIRT.getDefaultState());
@@ -63,7 +64,7 @@ public class FloraLandType extends TerrainLandType
 	@Override
 	public String[] getNames()
 	{
-		return new String[] {FLORA, FLOWERS, THORNS};
+		return new String[]{FLORA, FLOWERS, THORNS};
 	}
 	
 	@Override
@@ -86,21 +87,17 @@ public class FloraLandType extends TerrainLandType
 		
 		if(biome.type == BiomeType.ROUGH)
 		{
-			biome.addFeature(GenerationStage.Decoration.TOP_LAYER_MODIFICATION, Feature.DISK.withConfiguration(new SphereReplaceConfig(Blocks.CLAY.getDefaultState(), 4, 1, Lists.newArrayList(Blocks.GRASS_BLOCK.getDefaultState(), Blocks.CLAY.getDefaultState()))).withPlacement(Placement.COUNT_HEIGHTMAP.configure(new FrequencyConfig(1))));
 			biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Feature.LAKE.withConfiguration(new BlockStateFeatureConfig(BLOOD)).withPlacement(Placement.COUNT_HEIGHTMAP.configure(new FrequencyConfig(25))));
-			
-			biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.SURFACE_FOSSIL.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.CHANCE_PASSTHROUGH.configure(new ChanceConfig(10))));
-			
+			biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.SURFACE_FOSSIL.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.CHANCE_PASSTHROUGH.configure(new ChanceConfig(5))));
 			biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.BROKEN_SWORD.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.CHANCE_PASSTHROUGH.configure(new ChanceConfig(10))));
 			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_PATCH.withConfiguration(MinestuckBiomeFeatures.STRAWBERRY_CONFIG).withPlacement(Placement.CHANCE_HEIGHTMAP_DOUBLE.configure(new ChanceConfig(1))));
-			
 		}
 		
 		if(biome.type == BiomeType.OCEAN)
 		{
 			biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.DISK.withConfiguration(new SphereReplaceConfig(Blocks.CLAY.getDefaultState(), 4, 1, Lists.newArrayList(blocks.getBlockState("ocean_surface"), Blocks.CLAY.getDefaultState()))).withPlacement(Placement.COUNT_TOP_SOLID.configure(new FrequencyConfig(1))));
 		}
-
+		
 		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), Blocks.DIRT.getDefaultState(), 33)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(8, 0, 0, 256))));
 		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), Blocks.GRAVEL.getDefaultState(), 33)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(8, 0, 0, 256))));
 		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), Blocks.COAL_ORE.getDefaultState(), 17)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(13, 0, 0, 64))));

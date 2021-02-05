@@ -1,7 +1,9 @@
 package com.mraof.minestuck.world.gen.feature;
 
 import com.mojang.datafixers.Dynamic;
+import com.mraof.minestuck.block.MSBlocks;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
@@ -23,7 +25,16 @@ public class StoneMoundFeature extends Feature<BlockStateFeatureConfig>
 	@Override
 	public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, BlockStateFeatureConfig config)
 	{
+		Float randFloat = rand.nextFloat();
 		BlockState state = config.state;
+		if(randFloat >= .95)
+		{
+			state = Blocks.GRANITE.getDefaultState();
+		} else if (randFloat <= .05){
+			state = Blocks.ANDESITE.getDefaultState();
+		} else if (randFloat <= .55 && randFloat >= .50){
+			state = Blocks.DIORITE.getDefaultState();
+		}
 		int height = 2 + rand.nextInt(60);
 		double width = 1 + height / 2;
 		int radius = (int) width * 2;
