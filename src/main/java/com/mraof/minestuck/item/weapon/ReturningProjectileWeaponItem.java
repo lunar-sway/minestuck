@@ -27,14 +27,14 @@ public class ReturningProjectileWeaponItem extends Item
 		{
 			ReturningProjectileEntity projectileEntity = new ReturningProjectileEntity(MSEntityTypes.RETURNING_PROJECTILE, playerIn, worldIn);
 			projectileEntity.setItem(item);
-			projectileEntity.shoot(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 1.5F, 0.8F);
+			projectileEntity.shoot(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 1.5F, 1.0F);
 			projectileEntity.setNoGravity(true);
 			worldIn.addEntity(projectileEntity);
 		}
 		
 		item.damageItem(1, playerIn, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
 		
-		playerIn.getCooldownTracker().setCooldown(this, 50);
+		playerIn.getCooldownTracker().setCooldown(this, 60);
 		playerIn.addStat(Stats.ITEM_USED.get(this));
 		return new ActionResult<>(ActionResultType.SUCCESS, item);
 	}

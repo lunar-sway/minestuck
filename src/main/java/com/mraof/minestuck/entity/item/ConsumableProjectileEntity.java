@@ -47,13 +47,16 @@ public class ConsumableProjectileEntity extends ProjectileItemEntity implements 
 				Entity entity = ((EntityRayTraceResult) result).getEntity();
 				entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), 2);
 			}
-			if(!throwerPlayer.isCreative() && rand.nextFloat() < 0.99F)
+			if(!throwerPlayer.isCreative())
 			{
-				ItemEntity itemEntity = new ItemEntity(this.world, this.getPosX(), this.getPosY(), this.getPosZ(), this.getItem());
-				world.addEntity(itemEntity);
-			}else if(!throwerPlayer.isCreative() && rand.nextFloat() >= 0.99F)
-			{
-				this.world.playSound(null, this.getPosX(), this.getPosY(), this.getPosZ(), SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 0.8F, 1.5F);
+				if(rand.nextFloat() < 0.99F)
+				{
+					ItemEntity itemEntity = new ItemEntity(this.world, this.getPosX(), this.getPosY(), this.getPosZ(), this.getItem());
+					world.addEntity(itemEntity);
+				} else
+				{
+					this.world.playSound(null, this.getPosX(), this.getPosY(), this.getPosZ(), SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 0.8F, 1.5F);
+				}
 			}
 			this.remove();
 		}

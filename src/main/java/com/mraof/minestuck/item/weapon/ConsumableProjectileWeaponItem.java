@@ -27,7 +27,7 @@ public class ConsumableProjectileWeaponItem extends Item
 		{
 			ConsumableProjectileEntity projectileEntity = new ConsumableProjectileEntity(MSEntityTypes.CONSUMABLE_PROJECTILE, playerIn, worldIn);
 			projectileEntity.setItem(item);
-			projectileEntity.shoot(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 2.0F, 1.7F);
+			projectileEntity.shoot(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 2.0F, 2.4F);
 			worldIn.addEntity(projectileEntity);
 		}
 		if(!playerIn.isCreative())
