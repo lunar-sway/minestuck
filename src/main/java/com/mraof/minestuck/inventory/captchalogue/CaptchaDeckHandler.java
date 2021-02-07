@@ -161,8 +161,9 @@ public class CaptchaDeckHandler
 	
 	public static void captchalogueItemInSlot(ServerPlayerEntity player, int slotIndex, int windowId)
 	{
-		if(canPlayerUseModus(player) && hasModus(player) && player.openContainer.getCanCraft(player))
+		if(canPlayerUseModus(player) && hasModus(player) && player.openContainer.windowId == windowId && player.openContainer.getCanCraft(player))
 		{
+			//For some reason, creative mode container treats slot numbers differently than every other inventory container, so this is done to ensure that the player can still captchalogue items from their hotbar even when in creative mode.
 			if (player.inventory.isHotbar(slotIndex) && player.openContainer.equals(player.container)) {
 				ItemStack stack = player.inventory.mainInventory.get(slotIndex);
 				if(!stack.isEmpty())

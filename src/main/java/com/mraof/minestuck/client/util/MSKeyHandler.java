@@ -20,6 +20,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.glfw.GLFW;
@@ -73,7 +74,10 @@ public class MSKeyHandler
 		
 		while(captchaKey.isPressed())
 		{
-			if(!Minecraft.getInstance().player.getHeldItemMainhand().isEmpty())
+			if(!Minecraft.getInstance().player.getHeldItemMainhand().isEmpty() && !ModList.get().isLoaded("cosmeticarmorreworked"))
+				MSPacketHandler.sendToServer(CaptchaDeckPacket.captchalogue());
+			//Apparently when CosmeticArmorReloaded is active, the game no longer refuses to call onKeyInput when a gui is open, and so we need to make sure that a gui is not open.
+			if(!Minecraft.getInstance().player.getHeldItemMainhand().isEmpty() && ModList.get().isLoaded("cosmeticarmorreworked") && !(Minecraft.getInstance().currentScreen instanceof ContainerScreen<?>))
 				MSPacketHandler.sendToServer(CaptchaDeckPacket.captchalogue());
 		}
 		
@@ -97,21 +101,39 @@ public class MSKeyHandler
 
 			Screen screen = Minecraft.getInstance().currentScreen;
 
-			if(screen instanceof ContainerScreen<?> && ((ContainerScreen<?>) screen).getSlotUnderMouse() != null && !(screen instanceof CreativeScreen))
-			{
-				Slot slot = ((ContainerScreen<?>) screen).getSlotUnderMouse();
-				Minecraft.getInstance().player.sendMessage(new StringTextComponent("Screen class name: " + screen.getClass().getSimpleName()));
-				Minecraft.getInstance().player.sendMessage(new StringTextComponent("slot index: " + slot.slotNumber));
-				if(slot != null)
-					MSPacketHandler.sendToServer(CaptchaDeckPacket.captchalogueInv(slot.slotNumber, ((ContainerScreen<?>) screen).getContainer().windowId));
+			//screen.getFocused() is not used when CAR is loaded because CosmeticArmorReworked sets it to a value when in the default normal inventory, thus not allowing anything to be captchalogued.
+			//The extra getSlotUnderMouse() check is done to make sure that the value of getSlotUnderMouse() is not referenced while the mouse isn't hovering over a ContainerScreen. For some reason, if neither this check nor the getFocused() check are here, the game will crash when pressing C while the mouse is not hovering over the inventory gui.
+			if(ModList.get().isLoaded("cosmeticarmorreworked")) {
+				if (screen instanceof ContainerScreen<?> && ((ContainerScreen<?>) screen).getSlotUnderMouse() != null && !(screen instanceof CreativeScreen)) {
+					Slot slot = ((ContainerScreen<?>) screen).getSlotUnderMouse();
+
+					if (slot != null)
+						MSPacketHandler.sendToServer(CaptchaDeckPacket.captchalogueInv(slot.slotNumber, ((ContainerScreen<?>) screen).getContainer().windowId));
+				}
+				//For some reason, creative mode container treats slot numbers differently than every other inventory container, so this is done to ensure that the player can still captchalogue items from their hotbar even when in creative mode.
+				//The creative mode container does some wonky reordering of the slotNumbers, so getSlotUnderMouse() doesn't work without these weird workarounds using getSlotIndex().
+				else if (screen instanceof ContainerScreen<?> && ((ContainerScreen<?>) screen).getSlotUnderMouse() != null && (screen instanceof CreativeScreen)) {
+					Slot slot = ((ContainerScreen<?>) screen).getSlotUnderMouse();
+
+					if (slot != null)
+						MSPacketHandler.sendToServer(CaptchaDeckPacket.captchalogueInv(slot.getSlotIndex(), ((ContainerScreen<?>) screen).getContainer().windowId));
+				}
 			}
-			else if(screen instanceof ContainerScreen<?> && ((ContainerScreen<?>) screen).getSlotUnderMouse() != null && (screen instanceof CreativeScreen))
-			{
-				Slot slot = ((ContainerScreen<?>) screen).getSlotUnderMouse();
-				Minecraft.getInstance().player.sendMessage(new StringTextComponent("Screen class name: " + screen.getClass().getSimpleName()));
-				Minecraft.getInstance().player.sendMessage(new StringTextComponent("slot index: " + slot.getSlotIndex()));
-				if(slot != null)
-					MSPacketHandler.sendToServer(CaptchaDeckPacket.captchalogueInv(slot.getSlotIndex(), ((ContainerScreen<?>) screen).getContainer().windowId));
+			else {
+				if (screen instanceof ContainerScreen<?> && screen.getFocused() == null && !(screen instanceof CreativeScreen)) {
+					Slot slot = ((ContainerScreen<?>) screen).getSlotUnderMouse();
+
+					if (slot != null)
+						MSPacketHandler.sendToServer(CaptchaDeckPacket.captchalogueInv(slot.slotNumber, ((ContainerScreen<?>) screen).getContainer().windowId));
+				}
+				//For some reason, creative mode container treats slot numbers differently than every other inventory container, so this is done to ensure that the player can still captchalogue items from their hotbar even when in creative mode.
+				//The creative mode container does some wonky reordering of the slotNumbers, so getSlotUnderMouse() doesn't work without these weird workarounds using getSlotIndex().
+				else if (screen instanceof ContainerScreen<?> && screen.getFocused() == null && (screen instanceof CreativeScreen)) {
+					Slot slot = ((ContainerScreen<?>) screen).getSlotUnderMouse();
+
+					if (slot != null)
+						MSPacketHandler.sendToServer(CaptchaDeckPacket.captchalogueInv(slot.getSlotIndex(), ((ContainerScreen<?>) screen).getContainer().windowId));
+				}
 			}
 		}
 		
