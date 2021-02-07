@@ -18,6 +18,9 @@ import net.minecraft.world.server.ServerWorld;
 import java.util.Random;
 import java.util.function.Function;
 
+/**
+ * A version of the {@link net.minecraft.world.gen.feature.FossilsFeature}, but it can be spawned on the terrain surface reliably.
+ */
 public class SurfaceFossilsFeature extends Feature<NoFeatureConfig>
 {
 	private static final ResourceLocation STRUCTURE_SPINE_01 = new ResourceLocation("fossil/spine_1");
