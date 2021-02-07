@@ -49,19 +49,19 @@ public class RandomRockConditionFreeBlobFeature extends Feature<RandomRockBlockB
 			randomStone = MSBlocks.PINK_STONE.getDefaultState();
 		}
 		
-		for (int i1 = 0; i1 < 3; i1++)
+		for(int i1 = 0; i1 < 3; i1++)
 		{
 			int xSize = config.startRadius + rand.nextInt(2);
 			int ySize = config.startRadius + rand.nextInt(2);
 			int zSize = config.startRadius + rand.nextInt(2);
-			float f = (float)(xSize + ySize + zSize) * 0.333F + 0.5F;
+			float f = (float) (xSize + ySize + zSize) * 0.333F + 0.5F;
 			Iterator iterator = BlockPos.getAllInBox(pos.add(-xSize, -ySize, -zSize), pos.add(xSize, ySize, zSize)).iterator();
 			
-			while (iterator.hasNext())
+			while(iterator.hasNext())
 			{
-				BlockPos blockpos1 = (BlockPos)iterator.next();
+				BlockPos blockpos1 = (BlockPos) iterator.next();
 				
-				if (blockpos1.distanceSq(pos) <= (double)(f * f))
+				if(blockpos1.distanceSq(pos) <= (double) (f * f))
 					setBlockState(worldIn, blockpos1, randomStone);
 			}
 			

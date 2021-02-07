@@ -29,9 +29,11 @@ public class StoneMoundFeature extends Feature<BlockStateFeatureConfig>
 		if(randFloat >= .95)
 		{
 			state = Blocks.GRANITE.getDefaultState();
-		} else if (randFloat <= .05){
+		} else if(randFloat <= .05)
+		{
 			state = Blocks.ANDESITE.getDefaultState();
-		} else if (randFloat <= .55 && randFloat >= .50){
+		} else if(randFloat <= .55 && randFloat >= .50)
+		{
 			state = Blocks.DIORITE.getDefaultState();
 		}
 		int height = 2 + rand.nextInt(60);
