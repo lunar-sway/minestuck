@@ -61,6 +61,7 @@ public final class MSEntityTypes
 	
 	public static final EntityType<ConsumableProjectileEntity> CONSUMABLE_PROJECTILE = getNull();
 	public static final EntityType<ReturningProjectileEntity> RETURNING_PROJECTILE = getNull();
+	public static final EntityType<BouncingProjectileEntity> BOUNCING_PROJECTILE = getNull();
 	
 	@Nonnull
 	@SuppressWarnings("ConstantConditions")
@@ -107,6 +108,7 @@ public final class MSEntityTypes
 		
 		register(registry, EntityType.Builder.<ConsumableProjectileEntity>create(ConsumableProjectileEntity::new, EntityClassification.MISC).size(0.25F, 0.25F).setTrackingRange(4).setUpdateInterval(10), "consumable_projectile");
 		register(registry, EntityType.Builder.<ReturningProjectileEntity>create(ReturningProjectileEntity::new, EntityClassification.MISC).size(0.25F, 0.25F).setTrackingRange(6).setUpdateInterval(1), "returning_projectile");
+		register(registry, EntityType.Builder.<BouncingProjectileEntity>create(BouncingProjectileEntity::new, EntityClassification.MISC).size(0.25F, 0.25F).setTrackingRange(6).setUpdateInterval(1), "bouncing_projectile");
 	}
 	
 	/**

@@ -3,6 +3,7 @@ package com.mraof.minestuck.item;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.EnumCassetteType;
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.entity.item.BouncingProjectileEntity;
 import com.mraof.minestuck.entity.item.CrewPosterEntity;
 import com.mraof.minestuck.entity.item.MetalBoatEntity;
 import com.mraof.minestuck.entity.item.SbahjPosterEntity;
@@ -809,8 +810,8 @@ public class MSItems
 		registry.register(new ConsumableProjectileWeaponItem(new Item.Properties().group(MSItemGroup.WEAPONS), 2.0F, 2.4F,2).setRegistryName("diamonds_suitarang"));
 		registry.register(new ConsumableProjectileWeaponItem(new Item.Properties().group(MSItemGroup.WEAPONS), 2.0F, 2.4F,2).setRegistryName("hearts_suitarang"));
 		registry.register(new ConsumableProjectileWeaponItem(new Item.Properties().group(MSItemGroup.WEAPONS), 2.0F, 2.4F,2).setRegistryName("spades_suitarang"));
-		registry.register(new ReturningProjectileWeaponItem(new Item.Properties().group(MSItemGroup.WEAPONS).maxDamage(250), 1.5F, 1.0F,5, 60).setRegistryName("chakram"));
-		registry.register(new ReturningProjectileWeaponItem(new Item.Properties().group(MSItemGroup.WEAPONS).maxDamage(1000), 2.0F, 0.6F,6, 20).setRegistryName("umbral_infiltrator"));
+		registry.register(new BouncingProjectileWeaponItem(new Item.Properties().group(MSItemGroup.WEAPONS).maxDamage(250), 1.5F, 1.0F,5, 60).setRegistryName("chakram"));
+		registry.register(new ReturningProjectileWeaponItem(new Item.Properties().group(MSItemGroup.WEAPONS).maxDamage(1000), 1.2F, 0.6F,6, 20).setRegistryName("umbral_infiltrator"));
 		
 		registry.register(new SwordItem(MSItemTypes.EMERALD_TIER, 3, -2.4F, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("emerald_sword"));
 		registry.register(new AxeItem(MSItemTypes.EMERALD_TIER, 5, -3.0F, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("emerald_axe"));

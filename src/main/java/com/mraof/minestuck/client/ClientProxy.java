@@ -66,6 +66,7 @@ public class ClientProxy
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.BARBASOL_BOMB, manager -> new SpriteRenderer<>(manager, Minecraft.getInstance().getItemRenderer()));
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.CONSUMABLE_PROJECTILE, manager -> new SpriteRenderer<>(manager, Minecraft.getInstance().getItemRenderer()));
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.RETURNING_PROJECTILE, manager -> new SpriteRenderer<>(manager, Minecraft.getInstance().getItemRenderer()));
+		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.BOUNCING_PROJECTILE, manager -> new SpriteRenderer<>(manager, Minecraft.getInstance().getItemRenderer()));
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.MIDNIGHT_CREW_POSTER, manager -> new RenderHangingArt<>(manager, new ResourceLocation("minestuck:midnight_poster")));
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.SBAHJ_POSTER, manager -> new RenderHangingArt<>(manager, new ResourceLocation("minestuck:sbahj_poster")));
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.SHOP_POSTER, manager -> new RenderHangingArt<>(manager, new ResourceLocation("minestuck:shop_poster")));

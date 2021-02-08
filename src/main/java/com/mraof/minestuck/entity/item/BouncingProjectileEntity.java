@@ -2,36 +2,38 @@ package com.mraof.minestuck.entity.item;
 
 import com.mraof.minestuck.client.renderer.entity.RendersAsItem;
 import com.mraof.minestuck.item.MSItems;
-import net.minecraft.entity.*;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.network.IPacket;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.*;
+import net.minecraft.util.math.EntityRayTraceResult;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class ReturningProjectileEntity extends ConsumableProjectileEntity implements RendersAsItem
+public class BouncingProjectileEntity extends ReturningProjectileEntity implements RendersAsItem
 {
 	private int bounce;
-	public int maxTick = 0;
 	
-	public ReturningProjectileEntity(EntityType<? extends ReturningProjectileEntity> type, World worldIn)
+	public BouncingProjectileEntity(EntityType<? extends BouncingProjectileEntity> type, World worldIn)
 	{
 		super(type, worldIn);
 	}
 	
-	public ReturningProjectileEntity(EntityType<? extends ReturningProjectileEntity> type, double x, double y, double z, World worldIn)
+	public BouncingProjectileEntity(EntityType<? extends BouncingProjectileEntity> type, double x, double y, double z, World worldIn)
 	{
 		super(type, x, y, z, worldIn);
 	}
 	
-	public ReturningProjectileEntity(EntityType<? extends ReturningProjectileEntity> type, LivingEntity livingEntityIn, World worldIn, int damage, int maxTick)
+	public BouncingProjectileEntity(EntityType<? extends BouncingProjectileEntity> type, LivingEntity livingEntityIn, World worldIn, int damage, int maxTick)
 	{
-		super(type, livingEntityIn, worldIn, damage);
-		this.maxTick = maxTick;
+		super(type, livingEntityIn, worldIn, damage, maxTick);
 	}
 	
 	@Override
@@ -45,10 +47,11 @@ public class ReturningProjectileEntity extends ConsumableProjectileEntity implem
 				resetThrower();
 			}
 			
+			//RayTraceResult.Type.BLOCK;
+			//result.getHitVec().inverse();
+			
 			if(!this.world.isRemote && result.getType() == RayTraceResult.Type.ENTITY)
 			{
-				++bounce;
-				this.setMotion(getMotion().scale(-1.1));
 				Entity entity = ((EntityRayTraceResult) result).getEntity();
 				if(entity != throwerPlayer)
 					entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), damage);
@@ -56,10 +59,33 @@ public class ReturningProjectileEntity extends ConsumableProjectileEntity implem
 				{
 					resetThrower();
 				}
-			} else if(!this.world.isRemote && result.getType() == RayTraceResult.Type.BLOCK && func_213882_k().getItem() != MSItems.UMBRAL_INFILTRATOR)
+			} else if(!this.world.isRemote && result.getType() == RayTraceResult.Type.BLOCK)
 			{
 				++bounce;
-				this.setMotion(getMotion().scale(-1.1));
+				
+				//result.getHitVec().rotatePitch(1.0F);
+				//this.setMotion(getMotion());
+				double velocityX = this.getMotion().x;
+				double velocityY = this.getMotion().y;
+				double velocityZ = this.getMotion().z;
+				double absVelocityX = (velocityX * velocityX) / velocityX;
+				double absVelocityY = (velocityY * velocityY) / velocityY;
+				double absVelocityZ = (velocityZ * velocityZ) / velocityZ;
+				/*
+				this.moveRelative();
+				this.handlePistonMovement;
+				Vec3d pos = this.getMotion();
+				pos = this.maybeBackOffFromEdge(pos, 0);*/
+				
+				if(absVelocityX >= absVelocityY && absVelocityX >= absVelocityZ)
+					this.setMotion(-velocityX,velocityY,velocityZ);
+				
+				if(absVelocityY >= absVelocityX && absVelocityY >= absVelocityZ)
+					this.setMotion(velocityX,-velocityY,velocityZ);
+				
+				if(absVelocityZ >= absVelocityY && absVelocityZ >= absVelocityX)
+					this.setMotion(velocityX,velocityY,-velocityZ);
+				
 				this.world.playSound(null, this.getPosX(), this.getPosY(), this.getPosZ(), SoundEvents.ITEM_SHIELD_BLOCK, SoundCategory.PLAYERS, 0.6F, 4.0F);
 			}
 			
