@@ -649,8 +649,8 @@ public class MSItems
 		registry.register(new SbahjEEEEItem(MSItemTypes.RUBY_TIER, 5, -2.8F, 9.1F, 0.2,  MSItemTypes.HAMMER_TOOL, new Item.Properties().defaultMaxDamage(6114).group(MSItemGroup.WEAPONS)).setRegistryName("eeeeeeeeeeee"));
 		registry.register(new WeaponItem(MSItemTypes.ZILLYHOO_TIER, 6, -2.8F, 15.0F,  MSItemTypes.HAMMER_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.RARE)).setRegistryName("zillyhoo_hammer"));
 		registry.register(new RandomWeaponItem(MSItemTypes.ZILLYHOO_TIER, 3, -2.8F, 15.0F,  MSItemTypes.HAMMER_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("popamatic_vrillyhoo"));
-		registry.register(new FireWeaponItem(MSItemTypes.RUBY_TIER, 6, -2.8F, 4.0F, 50,  MSItemTypes.HAMMER_TOOL, new Item.Properties()).setRegistryName("scarlet_zillyhoo"));
-		registry.register(new WeaponItem(MSItemTypes.RUBY_TIER, 7, -2.8F, 4.0F,  MSItemTypes.HAMMER_TOOL, new Item.Properties()).setRegistryName("mwrthwl"));
+		registry.register(new FireWeaponItem(MSItemTypes.RUBY_TIER, 6, -2.8F, 4.0F, 50,  MSItemTypes.HAMMER_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("scarlet_zillyhoo"));
+		registry.register(new WeaponItem(MSItemTypes.RUBY_TIER, 7, -2.8F, 4.0F,  MSItemTypes.HAMMER_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("mwrthwl"));
 		
 		//blades
 		registry.register(new SordItem(MSItemTypes.SBAHJ_TIER, 3, -2.4F, 1.0F,  MSItemTypes.SWORD_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("sord"));
@@ -711,7 +711,7 @@ public class MSItems
 		registry.register(new DualWeaponItem(ItemTier.IRON, -1, -1.0F, 10.0F, () -> MSItems.CAT_CLAWS_DRAWN, MSItemTypes.NONE, new Item.Properties().defaultMaxDamage(500)).setRegistryName("cat_claws_sheathed"));
 		
 		registry.register(new DualWeaponItem(ItemTier.IRON, 2, -1.5F, 10.0F, () -> MSItems.LIPSTICK, MSItemTypes.AXE_TOOL, new Item.Properties().defaultMaxDamage(250).group(MSItemGroup.WEAPONS)).setRegistryName("lipstick_chainsaw"));
-		registry.register(new DualWeaponItem(ItemTier.WOOD, -1, -0.5F, 10.0F, () -> MSItems.LIPSTICK_CHAINSAW, MSItemTypes.NONE, new Item.Properties().defaultMaxDamage(250)).setRegistryName("lipstick"));
+		registry.register(new DualWeaponItem(ItemTier.WOOD, -1, -0.5F, 10.0F, () -> MSItems.LIPSTICK_CHAINSAW, MSItemTypes.NONE, new Item.Properties().defaultMaxDamage(250).group(MSItemGroup.WEAPONS)).setRegistryName("lipstick"));
 		
 		registry.register(new WeaponItem(ItemTier.STONE, 4, -2.8F, 2.0F, MSItemTypes.MISC_TOOL, new Item.Properties().maxDamage(450).group(MSItemGroup.WEAPONS)).setRegistryName("cigarette_lance"));
 		
@@ -748,11 +748,11 @@ public class MSItems
 		registry.register(new WeaponItem(ItemTier.WOOD, 5, -2.2F, 2.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(500).group(MSItemGroup.WEAPONS)).setRegistryName("spiked_club"));
 		
 		registry.register(new DualWeaponItem(ItemTier.IRON, 4, -2.0F, 2.0F, () -> MSItems.ACE_OF_SPADES, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(500).group(MSItemGroup.WEAPONS)).setRegistryName("horse_hitcher"));
-		registry.register(new DualWeaponItem(MSItemTypes.PAPER_TIER, 0, -1.8F, 0.0F, () -> MSItems.HORSE_HITCHER, MSItemTypes.NONE, new Item.Properties().defaultMaxDamage(500)).setRegistryName("ace_of_spades"));
-		registry.register(new DualWeaponItem(ItemTier.IRON, 5, -2.0F, 2.0F, () -> MSItems.ACE_OF_CLUBS, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(500).group(MSItemGroup.WEAPONS)).setRegistryName("club_of_felony"));
-		registry.register(new DualWeaponItem(MSItemTypes.PAPER_TIER, 0, -1.8F, 0.0F, () -> MSItems.CLUB_OF_FELONY, MSItemTypes.NONE, new Item.Properties().defaultMaxDamage(500)).setRegistryName("ace_of_clubs"));
+		registry.register(new DualWeaponItem(MSItemTypes.PAPER_TIER, 0, -1.8F, 0.0F, () -> MSItems.HORSE_HITCHER, MSItemTypes.NONE, new Item.Properties().defaultMaxDamage(500).group(MSItemGroup.WEAPONS)).setRegistryName("ace_of_spades"));
+		registry.register(new DualWeaponItem(ItemTier.IRON, 5, -2.0F, 2.0F, () -> MSItems.ACE_OF_CLUBS, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(500).group(MSItemGroup.WEAPONS).group(MSItemGroup.WEAPONS)).setRegistryName("club_of_felony"));
+		registry.register(new DualWeaponItem(MSItemTypes.PAPER_TIER, 0, -1.8F, 0.0F, () -> MSItems.CLUB_OF_FELONY, MSItemTypes.NONE, new Item.Properties().defaultMaxDamage(500).group(MSItemGroup.WEAPONS)).setRegistryName("ace_of_clubs"));
 		registry.register(new DualWeaponItem(ItemTier.IRON, 5, -2.0F, 2.0F, () -> MSItems.ACE_OF_DIAMONDS, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(500).group(MSItemGroup.WEAPONS)).setRegistryName("cuestick"));
-		registry.register(new DualWeaponItem(MSItemTypes.PAPER_TIER, 0, -1.8F, 0.0F, () -> MSItems.CUESTICK, MSItemTypes.NONE, new Item.Properties().defaultMaxDamage(500)).setRegistryName("ace_of_diamonds"));
+		registry.register(new DualWeaponItem(MSItemTypes.PAPER_TIER, 0, -1.8F, 0.0F, () -> MSItems.CUESTICK, MSItemTypes.NONE, new Item.Properties().defaultMaxDamage(500).group(MSItemGroup.WEAPONS)).setRegistryName("ace_of_diamonds"));
 		registry.register(new Item(new Item.Properties().defaultMaxDamage(500)).setRegistryName("ace_of_hearts"));
 		registry.register(new WeaponItem(MSItemTypes.REGI_TIER, 4, -2.2F, 4.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(2048).group(MSItemGroup.WEAPONS)).setRegistryName("white_kings_scepter"));
 		registry.register(new WeaponItem(MSItemTypes.REGI_TIER, 4, -2.2F, 4.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(2048).group(MSItemGroup.WEAPONS)).setRegistryName("black_kings_scepter"));
@@ -810,12 +810,12 @@ public class MSItems
 		registry.register(new ArmorItem(MSItemTypes.IRON_LASS_ARMOR, EquipmentSlotType.LEGS, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("iron_lass_skirt"));
 		registry.register(new ArmorItem(MSItemTypes.IRON_LASS_ARMOR, EquipmentSlotType.FEET, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("iron_lass_shoes"));
 		
-		registry.register(new ArmorItem(MSItemTypes.PROSPIT_PAJAMAS, EquipmentSlotType.CHEST, new Item.Properties()).setRegistryName("prospit_shirt"));
-		registry.register(new ArmorItem(MSItemTypes.PROSPIT_PAJAMAS, EquipmentSlotType.LEGS, new Item.Properties()).setRegistryName("prospit_pants"));
-		registry.register(new ArmorItem(MSItemTypes.PROSPIT_PAJAMAS, EquipmentSlotType.FEET, new Item.Properties()).setRegistryName("prospit_shoes"));
-		registry.register(new ArmorItem(MSItemTypes.DERSE_PAJAMAS, EquipmentSlotType.CHEST, new Item.Properties()).setRegistryName("derse_shirt"));
-		registry.register(new ArmorItem(MSItemTypes.DERSE_PAJAMAS, EquipmentSlotType.LEGS, new Item.Properties()).setRegistryName("derse_pants"));
-		registry.register(new ArmorItem(MSItemTypes.DERSE_PAJAMAS, EquipmentSlotType.FEET, new Item.Properties()).setRegistryName("derse_shoes"));
+		registry.register(new ArmorItem(MSItemTypes.PROSPIT_PAJAMAS, EquipmentSlotType.CHEST, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("prospit_shirt"));
+		registry.register(new ArmorItem(MSItemTypes.PROSPIT_PAJAMAS, EquipmentSlotType.LEGS, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("prospit_pants"));
+		registry.register(new ArmorItem(MSItemTypes.PROSPIT_PAJAMAS, EquipmentSlotType.FEET, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("prospit_shoes"));
+		registry.register(new ArmorItem(MSItemTypes.DERSE_PAJAMAS, EquipmentSlotType.CHEST, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("derse_shirt"));
+		registry.register(new ArmorItem(MSItemTypes.DERSE_PAJAMAS, EquipmentSlotType.LEGS, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("derse_pants"));
+		registry.register(new ArmorItem(MSItemTypes.DERSE_PAJAMAS, EquipmentSlotType.FEET, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("derse_shoes"));
 		
 		//core items
 		registry.register(new BoondollarsItem(new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("boondollars"));
