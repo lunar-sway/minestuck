@@ -9,7 +9,6 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileItemEntity;
 import net.minecraft.item.Item;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
@@ -21,6 +20,8 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 public class ConsumableProjectileEntity extends ProjectileItemEntity implements RendersAsItem
 {
+	public int damage = 0;
+	
 	public ConsumableProjectileEntity(EntityType<? extends ConsumableProjectileEntity> type, World worldIn)
 	{
 		super(type, worldIn);
@@ -31,9 +32,10 @@ public class ConsumableProjectileEntity extends ProjectileItemEntity implements 
 		super(type, x, y, z, worldIn);
 	}
 	
-	public ConsumableProjectileEntity(EntityType<? extends ConsumableProjectileEntity> type, LivingEntity livingEntityIn, World worldIn)
+	public ConsumableProjectileEntity(EntityType<? extends ConsumableProjectileEntity> type, LivingEntity livingEntityIn, World worldIn, int damage)
 	{
 		super(type, livingEntityIn, worldIn);
+		this.damage = damage;
 	}
 	
 	@Override
@@ -45,7 +47,7 @@ public class ConsumableProjectileEntity extends ProjectileItemEntity implements 
 			if(!this.world.isRemote && result.getType() == RayTraceResult.Type.ENTITY)
 			{
 				Entity entity = ((EntityRayTraceResult) result).getEntity();
-				entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), 2);
+				entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), this.damage);
 			}
 			if(!throwerPlayer.isCreative())
 			{

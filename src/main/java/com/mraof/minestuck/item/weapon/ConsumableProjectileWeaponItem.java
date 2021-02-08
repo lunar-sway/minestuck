@@ -11,9 +11,16 @@ import net.minecraft.world.World;
 
 public class ConsumableProjectileWeaponItem extends Item
 {
-	public ConsumableProjectileWeaponItem(Properties properties)
+	public final float velocity;
+	public final float accuracy;
+	public final int damage;
+	
+	public ConsumableProjectileWeaponItem(Properties properties, float velocity, float accuracy, int damage)
 	{
 		super(properties);
+		this.velocity = velocity;
+		this.accuracy = accuracy;
+		this.damage = damage;
 	}
 	
 	@Override
@@ -25,9 +32,9 @@ public class ConsumableProjectileWeaponItem extends Item
 		
 		if(!worldIn.isRemote)
 		{
-			ConsumableProjectileEntity projectileEntity = new ConsumableProjectileEntity(MSEntityTypes.CONSUMABLE_PROJECTILE, playerIn, worldIn);
+			ConsumableProjectileEntity projectileEntity = new ConsumableProjectileEntity(MSEntityTypes.CONSUMABLE_PROJECTILE, playerIn, worldIn, damage);
 			projectileEntity.setItem(item);
-			projectileEntity.shoot(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 2.0F, 2.4F);
+			projectileEntity.shoot(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, velocity, accuracy);
 			worldIn.addEntity(projectileEntity);
 		}
 		if(!playerIn.isCreative())
