@@ -663,7 +663,7 @@ public class MSItems
 		registry.register(new FrozenWeaponItem(MSItemTypes.ICE_TIER, 6, -2.4F, 1.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().defaultMaxDamage(200).group(MSItemGroup.WEAPONS)).setRegistryName("frosty_macuahuitl"));
 		registry.register(new WeaponItem(ItemTier.IRON, 3, -2.4F, 15.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("katana"));
 		registry.register(new WeaponItem(MSItemTypes.RUBY_TIER, 3, -2.4F, 15.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().defaultMaxDamage(-1).group(MSItemGroup.WEAPONS)).setRegistryName("unbreakable_katana"));	//Actually unbreakable
-		registry.register(new AspectBasedEffectWeaponItem(ItemTier.IRON, 5, -2.4F, 15.0F, HOPE, () -> new EffectInstance(Effects.RESISTANCE, 60, 2), MSItemTypes.SWORD_TOOL, new Item.Properties().defaultMaxDamage(2048).group(MSItemGroup.WEAPONS)).setRegistryName("angel_apocalypse"));
+		registry.register(new AspectBasedEffectWeaponItem(ItemTier.IRON, 5, -2.4F, 15.0F, HOPE, () -> new EffectInstance(Effects.RESISTANCE, 60, 2), () -> new EffectInstance(Effects.RESISTANCE, 0, 0), MSItemTypes.SWORD_TOOL, new Item.Properties().defaultMaxDamage(2048).group(MSItemGroup.WEAPONS)).setRegistryName("angel_apocalypse"));
 		registry.register(new FireWeaponItem(ItemTier.IRON, 4, -2.4F, 15.0F,  30, MSItemTypes.SWORD_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("fire_poker"));
 		registry.register(new FireWeaponItem(ItemTier.IRON, 3, -2.4F, 15.0F, 10, MSItemTypes.SWORD_TOOL, new Item.Properties().defaultMaxDamage(350).group(MSItemGroup.WEAPONS)).setRegistryName("too_hot_to_handle"));
 		registry.register(new WeaponItem(MSItemTypes.RUBY_TIER, 2, -2.4F, 15.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().defaultMaxDamage(1561).group(MSItemGroup.WEAPONS)).setRegistryName("caledscratch"));
@@ -744,7 +744,7 @@ public class MSItems
 		registry.register(new FrozenWeaponItem(MSItemTypes.ICE_TIER, 5, -2.2F, 2.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(250).group(MSItemGroup.WEAPONS)).setRegistryName("club_zero"));
 		registry.register(new PogoWeaponItem(MSItemTypes.POGO_TIER, 2, -2.2F, 2.0F, 0.5, MSItemTypes.MISC_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("pogo_club"));
 		registry.register(new WeaponItem(ItemTier.IRON, 3, -2.2F, 2.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(750).group(MSItemGroup.WEAPONS)).setRegistryName("metal_bat"));
-		registry.register(new AspectBasedEffectWeaponItem(ItemTier.IRON, 3, -2.2F, 2.0F, RAGE, () -> new EffectInstance(Effects.STRENGTH, 60, 1), MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(2048).group(MSItemGroup.WEAPONS)).setRegistryName("clown_club"));
+		registry.register(new AspectBasedEffectWeaponItem(ItemTier.IRON, 3, -2.2F, 2.0F, RAGE, () -> new EffectInstance(Effects.STRENGTH, 60, 1), () -> new EffectInstance(Effects.STRENGTH, 0, 0), MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(2048).group(MSItemGroup.WEAPONS)).setRegistryName("clown_club"));
 		registry.register(new WeaponItem(ItemTier.WOOD, 5, -2.2F, 2.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(500).group(MSItemGroup.WEAPONS)).setRegistryName("spiked_club"));
 		
 		registry.register(new DualWeaponItem(ItemTier.IRON, 4, -2.0F, 2.0F, () -> MSItems.ACE_OF_SPADES, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(500).group(MSItemGroup.WEAPONS)).setRegistryName("horse_hitcher"));
@@ -784,7 +784,7 @@ public class MSItems
 		//Spoons/forks
 		registry.register(new WeaponItem(ItemTier.WOOD, 2, -2.2F, 1.0F, MSItemTypes.SHOVEL_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("wooden_spoon"));
 		registry.register(new WeaponItem(ItemTier.IRON, 1, -2.2F, 1.0F, MSItemTypes.SHOVEL_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("silver_spoon"));
-		registry.register(new AspectBasedEffectWeaponItem(ItemTier.IRON, 1, -2.2F, 1.0F, LIFE, () -> new EffectInstance(Effects.SATURATION, 1, 2), MSItemTypes.SHOVEL_TOOL, new Item.Properties().defaultMaxDamage(2048).group(MSItemGroup.WEAPONS)).setRegistryName("nosferatu_spoon"));
+		registry.register(new AspectBasedEffectWeaponItem(ItemTier.IRON, 1, -2.2F, 1.0F, LIFE, () -> new EffectInstance(Effects.SATURATION, 1, 2), () -> new EffectInstance(Effects.HUNGER, 40, 250), MSItemTypes.SHOVEL_TOOL, new Item.Properties().defaultMaxDamage(2048).group(MSItemGroup.WEAPONS)).setRegistryName("nosferatu_spoon"));
 		registry.register(new DualWeaponItem(MSItemTypes.RUBY_TIER, 0, -2.2F, 1.0F, () -> MSItems.CROCKER_FORK, MSItemTypes.SHOVEL_TOOL, new Item.Properties().defaultMaxDamage(512).group(MSItemGroup.WEAPONS)).setRegistryName("crocker_spoon"));
 		registry.register(new DualWeaponItem(MSItemTypes.RUBY_TIER, 2, -2.6F, 1.0F, () -> MSItems.CROCKER_SPOON, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(512)).setRegistryName("crocker_fork"));
 		registry.register(new WeaponItem(MSItemTypes.REGI_TIER, 5, -2.2F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(2048).group(MSItemGroup.WEAPONS)).setRegistryName("skaia_fork"));
