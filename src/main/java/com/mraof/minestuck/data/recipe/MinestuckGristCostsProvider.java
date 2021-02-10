@@ -338,16 +338,13 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSItems.BEEF_SWORD).grist(IODINE, 55).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.IRRADIATED_STEAK_SWORD).grist(IODINE, 55).grist(TAR, 10).grist(URANIUM, 8).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.SORD).grist(BUILD, 0).build(recipeSaver);
-		//GristCostRecipeBuilder.of(MSItems.KATANA).grist(CHALK, 12).grist(QUARTZ, 10).grist(RUST, 6).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.FROSTY_MACUAHUITL).grist(BUILD, 45).grist(COBALT, 45).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSItems.KATANA).grist(CHALK, 12).grist(QUARTZ, 10).grist(RUST, 6).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.FIRE_POKER).grist(AMBER, 41).grist(RUBY, 14).grist(SULFUR, 38).grist(GOLD, 3).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CLAYMORE).grist(BUILD, 400).grist(RUST, 240).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.TOO_HOT_TO_HANDLE).grist(AMBER, 10).grist(RUBY, 15).grist(SULFUR, 10).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.REGISWORD).grist(AMETHYST, 27).grist(TAR, 62).grist(GOLD, 38).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSItems.UNBREAKABLE_KATANA).grist(BUILD, 1800).grist(URANIUM, 93).grist(QUARTZ, 155).grist(RUBY, 84).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CRUEL_FATE_CRUCIBLE).grist(BUILD, 1200).grist(TAR, 300).grist(COBALT, 100).grist(GOLD, 50).grist(QUARTZ, 1).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSItems.UNBREAKABLE_KATANA).grist(BUILD, 2100).grist(URANIUM, 63).grist(QUARTZ, 215).grist(RUBY, 54).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.UNBREAKABLE_KATANA).grist(BUILD, 1800).grist(URANIUM, 93).grist(QUARTZ, 155).grist(RUBY, 84).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.ANGEL_APOCALYPSE).grist(BUILD, 150).grist(AMBER, 5).grist(QUARTZ, 20).grist(GOLD, 15).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.COBALT_SABRE).grist(BUILD, 1300).grist(URANIUM, 90).grist(COBALT, 175).grist(DIAMOND, 30).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.QUANTUM_SABRE).grist(BUILD, 413).grist(URANIUM, 61).grist(CAULK, 52).build(recipeSaver);
