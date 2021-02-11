@@ -679,7 +679,7 @@ public class MSItems
 		registry.register(new WeaponItem(ItemTier.IRON, 5, -2.6F, 15.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().defaultMaxDamage(600).group(MSItemGroup.WEAPONS)).setRegistryName("claymore"));
 		registry.register(new WeaponItem(MSItemTypes.ZILLYHOO_TIER, 6, -2.4F, 15.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.EPIC)).setRegistryName("cutlass_of_zillywair"));
 		registry.register(new WeaponItem(MSItemTypes.REGI_TIER, 5, -2.4F, 15.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("regisword"));
-		registry.register(new WeaponItem(MSItemTypes.DENIZEN_TIER, 4, -2.4F, 15.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().defaultMaxDamage(4096).group(MSItemGroup.WEAPONS)).setRegistryName("cruel_fate_crucible"));
+		registry.register(new WeaponItem(MSItemTypes.DENIZEN_TIER, 4, -2.4F, 15.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().defaultMaxDamage(4096).group(MSItemGroup.WEAPONS)).setRegistryName("cruel_fate_crucible")); //Special property in ServerEventHandler
 		registry.register(new WeaponItem(MSItemTypes.CORUNDUM_TIER, 7, -2.4F, 15.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.RARE)).setRegistryName("scarlet_ribbitar"));
 		registry.register(new WeaponItem(ItemTier.IRON, 6, -2.4F, 15.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().defaultMaxDamage(1000).group(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)).setRegistryName("dogg_machete"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.GOLD, 7, -2.4F).efficiency(15.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.setOnFire(30)), new Item.Properties().defaultMaxDamage(300).group(MSItemGroup.WEAPONS)).setRegistryName("cobalt_sabre"));
@@ -724,7 +724,7 @@ public class MSItems
 		registry.register(new WeaponItem(MSItemTypes.REGI_TIER, 4, -2.8F, 2.0F, MSItemTypes.MISC_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)).setRegistryName("cigarette_lance"));
 		
 		registry.register(new WeaponItem(ItemTier.IRON, 3, -2.5F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("lucerne_hammer"));
-		registry.register(new WeaponItem(ItemTier.IRON, 4, -2.5F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(2048).group(MSItemGroup.WEAPONS)).setRegistryName("lucerne_hammer_of_undying"));
+		registry.register(new WeaponItem(ItemTier.IRON, 4, -2.5F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(2048).group(MSItemGroup.WEAPONS)).setRegistryName("lucerne_hammer_of_undying")); //Special property in ServerEventHandler
 		
 		registry.register(new WeaponItem(MSItemTypes.PRISMARINE_TIER, 2, -2.0F, 1.5F, MSItemTypes.MISC_TOOL, new Item.Properties().maxDamage(100).group(MSItemGroup.WEAPONS)).setRegistryName("obsidian_axe_knife"));
 		

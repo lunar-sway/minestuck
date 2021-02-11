@@ -31,8 +31,8 @@ public interface OnHitEffect
 {
 	void onHit(ItemStack stack, LivingEntity target, LivingEntity attacker);
 	
-	OnHitEffect RAGE_STRENGTH = aspectEffect(RAGE, () -> new EffectInstance(Effects.STRENGTH, 60, 1), () -> null);
-	OnHitEffect HOPE_RESISTANCE = aspectEffect(HOPE, () -> new EffectInstance(Effects.RESISTANCE, 60, 2), () -> null);
+	OnHitEffect RAGE_STRENGTH = aspectEffect(RAGE, () -> new EffectInstance(Effects.STRENGTH, 80, 1), null);
+	OnHitEffect HOPE_RESISTANCE = aspectEffect(HOPE, () -> new EffectInstance(Effects.RESISTANCE, 120, 2), null);
 	OnHitEffect LIFE_SATURATION = aspectEffect(LIFE, () -> new EffectInstance(Effects.SATURATION, 1, 1), () -> new EffectInstance(Effects.HUNGER, 60, 100));
 	
 	OnHitEffect SET_CANDY_DROP_FLAG = (stack, target, attacker) -> {
@@ -106,25 +106,36 @@ public interface OnHitEffect
 	{
 		return (itemStack, target, attacker) -> target.setFire(duration);
 	}
+	
 	static OnHitEffect playSound(Supplier<SoundEvent> sound)
 	{
 		return playSound(sound, 1, 1);
 	}
+	
 	static OnHitEffect playSound(Supplier<SoundEvent> sound, float volume, float pitch)
 	{
 		return (itemStack, target, attacker) -> attacker.world.playSound(null, attacker.getPosX(), attacker.getPosY(), attacker.getPosZ(), sound.get(), attacker.getSoundCategory(), volume, pitch);
 	}
-	static OnHitEffect aspectEffect(EnumAspect aspect, Supplier<EffectInstance> playerEffect, Supplier<EffectInstance> targetEffect)
+	
+	static OnHitEffect aspectEffect(EnumAspect aspect, Supplier<EffectInstance> playerEffect, Supplier<EffectInstance> enemyEffect)
 	{
 		return (stack, target, attacker) -> {
+			boolean critical = attacker.fallDistance > 0.0F && !attacker.onGround && !attacker.isOnLadder() && !attacker.isInWater() && !attacker.isPotionActive(Effects.BLINDNESS) && !attacker.isPassenger() && !attacker.isBeingRidden();
+			float randFloat = attacker.getRNG().nextFloat();
 			if(attacker instanceof ServerPlayerEntity)
 			{
 				Title title = PlayerSavedData.getData((ServerPlayerEntity) attacker).getTitle();
 				
-				if(title != null && title.getHeroAspect() == aspect && attacker.getRNG().nextFloat() < .1){
-					attacker.addPotionEffect(playerEffect.get());
-					if(targetEffect != null)
-					target.addPotionEffect(targetEffect.get());
+				if(critical)
+					randFloat = randFloat - .1F;
+				if(title != null && randFloat < .1)
+				{
+					if(title.getHeroAspect() == aspect)
+					{
+						attacker.addPotionEffect(playerEffect.get());
+						if(enemyEffect != null)
+							target.addPotionEffect(enemyEffect.get());
+					}
 				}
 			}
 			
