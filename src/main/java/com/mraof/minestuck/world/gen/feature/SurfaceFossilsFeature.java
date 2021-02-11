@@ -33,9 +33,9 @@ public class SurfaceFossilsFeature extends Feature<NoFeatureConfig>
 	private static final ResourceLocation STRUCTURE_SKULL_04 = new ResourceLocation("fossil/skull_4");
 	private static final ResourceLocation[] FOSSILS = new ResourceLocation[]{STRUCTURE_SPINE_01, STRUCTURE_SPINE_02, STRUCTURE_SPINE_03, STRUCTURE_SPINE_04, STRUCTURE_SKULL_01, STRUCTURE_SKULL_02, STRUCTURE_SKULL_03, STRUCTURE_SKULL_04};
 	
-	public SurfaceFossilsFeature(Function<Dynamic<?>, ? extends NoFeatureConfig> p_i49873_1_)
+	public SurfaceFossilsFeature(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactoryIn)
 	{
-		super(p_i49873_1_);
+		super(configFactoryIn);
 	}
 	
 	public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, NoFeatureConfig config)

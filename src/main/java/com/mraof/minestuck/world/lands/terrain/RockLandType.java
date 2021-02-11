@@ -95,7 +95,7 @@ public class RockLandType extends TerrainLandType
 	@Override
 	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
 	{
-		int biomeMultiplier = biome.type == BiomeType.ROUGH || biome.type == BiomeType.OCEAN ? 2 : 1;
+		int biomeMultiplier = biome.type == BiomeType.ROUGH || biome.type == BiomeType.OCEAN ? 3 : 1;
 		
 		if(biome.type == BiomeType.OCEAN)
 		{
@@ -135,14 +135,14 @@ public class RockLandType extends TerrainLandType
 		}
 		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), Blocks.GRAVEL.getDefaultState(), 33)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(10 * biomeMultiplier, 0, 0, 256))));
 		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), Blocks.INFESTED_STONE.getDefaultState(), 9)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(7 * biomeMultiplier, 0, 0, 64 * biomeMultiplier))));
-		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), Blocks.COAL_ORE.getDefaultState(), 17)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(15 * biomeMultiplier, 0, 0, 128 * biomeMultiplier))));
+		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), Blocks.COAL_ORE.getDefaultState(), 17)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(15 * biomeMultiplier, 0, 0, 64 * biomeMultiplier))));
 		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), Blocks.IRON_ORE.getDefaultState(), 9)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(15 * biomeMultiplier, 0, 0, 64 * biomeMultiplier))));
 		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), Blocks.REDSTONE_ORE.getDefaultState(), 8)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(8 * biomeMultiplier, 0, 0, 32 * biomeMultiplier))));
 		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), Blocks.LAPIS_ORE.getDefaultState(), 7)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(3 * biomeMultiplier, 0, 0, 24 * biomeMultiplier))));
 		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), Blocks.GOLD_ORE.getDefaultState(), 9)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(3 * biomeMultiplier, 0, 0, 32 * biomeMultiplier))));
 		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), Blocks.DIAMOND_ORE.getDefaultState(), 6)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(2 * biomeMultiplier, 0, 0, 24 * biomeMultiplier))));
 		
-		biome.addCarver(GenerationStage.Carving.AIR, Biome.createCarver(WorldCarver.HELL_CAVE, new ProbabilityConfig(0.7F)));
+		biome.addCarver(GenerationStage.Carving.AIR, Biome.createCarver(WorldCarver.CANYON, new ProbabilityConfig(0.4F)));
 		
 	}
 	

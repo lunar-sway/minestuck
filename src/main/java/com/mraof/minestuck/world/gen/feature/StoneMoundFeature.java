@@ -24,7 +24,7 @@ public class StoneMoundFeature extends Feature<BlockStateFeatureConfig>
 	@Override
 	public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, BlockStateFeatureConfig config)
 	{
-		Float randFloat = rand.nextFloat();
+		float randFloat = rand.nextFloat();
 		BlockState state;
 		if(randFloat >= .95)
 		{
