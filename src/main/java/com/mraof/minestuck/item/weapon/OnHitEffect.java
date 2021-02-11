@@ -25,15 +25,15 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Supplier;
 
-import static com.mraof.minestuck.player.EnumAspect.LIFE;
-import static com.mraof.minestuck.player.EnumAspect.RAGE;
+import static com.mraof.minestuck.player.EnumAspect.*;
 
 public interface OnHitEffect
 {
 	void onHit(ItemStack stack, LivingEntity target, LivingEntity attacker);
 	
-	OnHitEffect RAGE_STRENGTH = aspectEffect(RAGE, () -> new EffectInstance(Effects.STRENGTH, 60, 1));
-	OnHitEffect LIFE_SATURATION = aspectEffect(LIFE, () -> new EffectInstance(Effects.SATURATION, 1, 1));
+	OnHitEffect RAGE_STRENGTH = aspectEffect(RAGE, () -> new EffectInstance(Effects.STRENGTH, 60, 1), () -> null);
+	OnHitEffect HOPE_RESISTANCE = aspectEffect(HOPE, () -> new EffectInstance(Effects.RESISTANCE, 60, 2), () -> null);
+	OnHitEffect LIFE_SATURATION = aspectEffect(LIFE, () -> new EffectInstance(Effects.SATURATION, 1, 1), () -> new EffectInstance(Effects.HUNGER, 60, 100));
 	
 	OnHitEffect SET_CANDY_DROP_FLAG = (stack, target, attacker) -> {
 		if(target instanceof UnderlingEntity)
@@ -114,15 +114,18 @@ public interface OnHitEffect
 	{
 		return (itemStack, target, attacker) -> attacker.world.playSound(null, attacker.getPosX(), attacker.getPosY(), attacker.getPosZ(), sound.get(), attacker.getSoundCategory(), volume, pitch);
 	}
-	static OnHitEffect aspectEffect(EnumAspect aspect, Supplier<EffectInstance> effect)
+	static OnHitEffect aspectEffect(EnumAspect aspect, Supplier<EffectInstance> playerEffect, Supplier<EffectInstance> targetEffect)
 	{
 		return (stack, target, attacker) -> {
 			if(attacker instanceof ServerPlayerEntity)
 			{
 				Title title = PlayerSavedData.getData((ServerPlayerEntity) attacker).getTitle();
 				
-				if(title != null && title.getHeroAspect() == aspect && attacker.getRNG().nextFloat() < .1)
-					attacker.addPotionEffect(effect.get());
+				if(title != null && title.getHeroAspect() == aspect && attacker.getRNG().nextFloat() < .1){
+					attacker.addPotionEffect(playerEffect.get());
+					if(targetEffect != null)
+					target.addPotionEffect(targetEffect.get());
+				}
 			}
 			
 			if(stack.getItem() == MSItems.CLOWN_CLUB)
