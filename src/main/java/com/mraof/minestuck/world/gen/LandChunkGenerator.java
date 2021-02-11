@@ -128,6 +128,7 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 		sharedRandom.setBaseChunkSeed(chunkIn.getPos().x, chunkIn.getPos().z);
 
 		int xOffset = chunkIn.getPos().getXStart(), zOffset = chunkIn.getPos().getZStart();
+		BlockPos.Mutable mutable = new BlockPos.Mutable();
 
 		for(int x = 0; x < 16; x++)
 		{
@@ -135,7 +136,8 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 			{
 				int y = chunkIn.getTopBlockY(Heightmap.Type.WORLD_SURFACE_WG, x, z);
 				//So far we've skipped providing a noise value, but perhaps that's something we might actually want in the future?
-				biomeHolder.localBiomeFrom(biomeProvider.getNoiseBiome(x + xOffset, y, z + zOffset)).buildSurface(sharedRandom, chunkIn, x + xOffset, z + zOffset, y, 0, getSettings().getDefaultBlock(), getSettings().getDefaultFluid(), getSeaLevel(),  world.getSeed());
+				biomeHolder.localBiomeFrom(worldGenRegion.getBiome(mutable.setPos(x + xOffset, y, z + zOffset)))
+						.buildSurface(sharedRandom, chunkIn, x + xOffset, z + zOffset, y, 0, getSettings().getDefaultBlock(), getSettings().getDefaultFluid(), getSeaLevel(),  world.getSeed());
 			}
 		}
 
