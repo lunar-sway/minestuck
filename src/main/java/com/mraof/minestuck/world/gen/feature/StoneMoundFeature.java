@@ -25,16 +25,19 @@ public class StoneMoundFeature extends Feature<BlockStateFeatureConfig>
 	public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, BlockStateFeatureConfig config)
 	{
 		Float randFloat = rand.nextFloat();
-		BlockState state = config.state;
+		BlockState state;
 		if(randFloat >= .95)
 		{
 			state = Blocks.GRANITE.getDefaultState();
-		} else if(randFloat <= .05)
+		} else if(randFloat >= .9)
 		{
 			state = Blocks.ANDESITE.getDefaultState();
-		} else if(randFloat <= .55 && randFloat >= .50)
+		} else if(randFloat >= .85)
 		{
 			state = Blocks.DIORITE.getDefaultState();
+		} else
+		{
+			state = config.state;
 		}
 		int height = 2 + rand.nextInt(60);
 		double width = 1 + height / 2;

@@ -25,28 +25,31 @@ public class RandomRockConditionFreeBlobFeature extends Feature<RandomRockBlockB
 	public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, RandomRockBlockBlobConfig config)
 	{
 		float randFloat = rand.nextFloat();
-		BlockState randomStone = Blocks.STONE.getDefaultState();
+		BlockState randomStone;
 		if(randFloat >= .95)
 		{
 			randomStone = Blocks.GRANITE.getDefaultState();
-		} else if(randFloat <= .05)
+		} else if(randFloat >= .9)
 		{
 			randomStone = Blocks.ANDESITE.getDefaultState();
-		} else if(randFloat <= .55 && randFloat >= .50)
+		} else if(randFloat >= .85)
 		{
 			randomStone = Blocks.DIORITE.getDefaultState();
-		} else if(randFloat <= .61 && randFloat >= .56)
+		} else if(randFloat >= .8)
 		{
 			randomStone = Blocks.COBBLESTONE.getDefaultState();
-		} else if(randFloat <= .67 && randFloat >= .62)
+		} else if(randFloat >= .75)
 		{
 			randomStone = MSBlocks.CHALK.getDefaultState();
-		} else if(randFloat <= .73 && randFloat >= .68)
+		} else if(randFloat >= .7)
 		{
 			randomStone = MSBlocks.BLACK_STONE.getDefaultState();
-		} else if(randFloat <= .79 && randFloat >= .74)
+		} else if(randFloat >= .65)
 		{
 			randomStone = MSBlocks.PINK_STONE.getDefaultState();
+		} else
+		{
+			randomStone = Blocks.STONE.getDefaultState();
 		}
 		
 		for(int i1 = 0; i1 < 3; i1++)
