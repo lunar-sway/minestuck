@@ -15,8 +15,7 @@ import com.mraof.minestuck.item.foods.HealingFoodItem;
 import com.mraof.minestuck.item.foods.SurpriseEmbryoItem;
 import com.mraof.minestuck.item.foods.UnknowableEggItem;
 import com.mraof.minestuck.item.weapon.*;
-import com.mraof.minestuck.item.weapon.aspect.PassiveAspectBasedEffectWeaponItem;
-import com.mraof.minestuck.item.weapon.aspect.TeleportingWeaponItem;
+import com.mraof.minestuck.item.weapon.aspect.*;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -35,6 +34,7 @@ import javax.annotation.Nonnull;
 
 import static com.mraof.minestuck.block.MSBlocks.*;
 import static com.mraof.minestuck.player.EnumAspect.BREATH;
+import static com.mraof.minestuck.player.EnumAspect.HOPE;
 
 /**
  * This class contains all non-ItemBlock items that minestuck adds,
@@ -53,10 +53,12 @@ public class MSItems
 	//hammers
 	public static final Item CLAW_HAMMER = getNull();
 	public static final Item SLEDGE_HAMMER = getNull();
+	public static final Item MAILBOX = getNull();
 	public static final Item BLACKSMITH_HAMMER = getNull();
 	public static final Item POGO_HAMMER = getNull();
 	public static final Item WRINKLEFUCKER = getNull();
 	public static final Item TELESCOPIC_SASSACRUSHER = getNull();
+	public static final Item DEMOCRATIC_DEMOLITIONER = getNull();
 	public static final Item REGI_HAMMER = getNull();
 	public static final Item FEAR_NO_ANVIL = getNull();
 	public static final Item MELT_MASHER = getNull();
@@ -73,8 +75,11 @@ public class MSItems
 	public static final Item STEAK_SWORD = getNull();
 	public static final Item BEEF_SWORD = getNull();
 	public static final Item IRRADIATED_STEAK_SWORD = getNull();
+	public static final Item MACUAHUITL = getNull();
+	public static final Item FROSTY_MACUAHUITL = getNull();
 	public static final Item KATANA = getNull();
 	public static final Item UNBREAKABLE_KATANA = getNull();
+	public static final Item ANGEL_APOCALYPSE = getNull();
 	public static final Item FIRE_POKER = getNull();
 	public static final Item TOO_HOT_TO_HANDLE = getNull();
 	public static final Item CALEDSCRATCH = getNull();
@@ -83,6 +88,7 @@ public class MSItems
 	public static final Item CLAYMORE = getNull();
 	public static final Item CUTLASS_OF_ZILLYWAIR = getNull();
 	public static final Item REGISWORD = getNull();
+	public static final Item CRUEL_FATE_CRUCIBLE = getNull();
 	public static final Item SCARLET_RIBBITAR = getNull();
 	public static final Item DOGG_MACHETE = getNull();
 	public static final Item COBALT_SABRE = getNull();
@@ -111,15 +117,22 @@ public class MSItems
 	public static final Item HEPHAESTUS_LUMBERJACK = getNull();
 	public static final Item FISSION_FOCUSED_FAULT_FELLER = getNull();
 	public static final Item BISECTOR = getNull();
+	
 	//Dice
 	public static final Item DICE = getNull();
 	public static final Item FLUORITE_OCTET = getNull();
+	
 	//misc weapons
 	public static final Item CAT_CLAWS_DRAWN = getNull();
 	public static final Item CAT_CLAWS_SHEATHED = getNull();
 	public static final Item LIPSTICK_CHAINSAW = getNull();
 	public static final Item LIPSTICK = getNull();
 	public static final Item CIGARETTE_LANCE = getNull();
+	public static final Item LUCERNE_HAMMER = getNull();
+	public static final Item LUCERNE_HAMMER_OF_UNDYING = getNull();
+	public static final Item OBSIDIAN_AXE_KNIFE = getNull();
+	public static final Item FAN = getNull();
+	public static final Item TYPHONIC_TRIVIALIZER = getNull();
 	
 	//sickles
 	public static final Item SICKLE = getNull();
@@ -628,12 +641,14 @@ public class MSItems
 		//hammers
 		registry.register(new WeaponItem(ItemTier.IRON, 2, -3.0F, 1.0F, MSItemTypes.HAMMER_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("claw_hammer"));
 		registry.register(new WeaponItem(ItemTier.IRON, 4, -3.2F, 4.0F, MSItemTypes.HAMMER_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("sledge_hammer"));
+		registry.register(new WeaponItem(ItemTier.WOOD, 4, -2.8F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("mailbox"));
 		registry.register(new WeaponItem(ItemTier.IRON, 5, -3.2F, 3.5F, MSItemTypes.HAMMER_TOOL, new Item.Properties().defaultMaxDamage(450).group(MSItemGroup.WEAPONS)).setRegistryName("blacksmith_hammer"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.POGO_TIER, 5, -3.2F).efficiency(2.0F).set(MSItemTypes.HAMMER_TOOL).set(PogoEffect.EFFECT_07).add(PogoEffect.EFFECT_07), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("pogo_hammer"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.POGO_TIER, 7, -3.2F).efficiency(2.0F).set(MSItemTypes.HAMMER_TOOL).set(PogoEffect.EFFECT_04).add(PogoEffect.EFFECT_04), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("wrinklefucker"));
 		registry.register(new WeaponItem(MSItemTypes.BOOK_TIER, 11, -3.4F, 5.0F, MSItemTypes.HAMMER_TOOL, new Item.Properties().defaultMaxDamage(1024).group(MSItemGroup.WEAPONS)).setRegistryName("telescopic_sassacrusher"));
+		registry.register(new WeaponItem(ItemTier.IRON, 4, -2.8F, 1.0F, MSItemTypes.HAMMER_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("democratic_demolitioner"));
 		registry.register(new WeaponItem(MSItemTypes.REGI_TIER, 7, -3.2F, 8.0F, MSItemTypes.HAMMER_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("regi_hammer"));
-		registry.register(new PotionWeaponItem(MSItemTypes.DENIZEN_TIER, 7, -3.2F, 7.0F, new EffectInstance(Effects.SLOWNESS, 100, 3),  MSItemTypes.HAMMER_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.RARE)).setRegistryName("fear_no_anvil"));
+		registry.register(new SlownessAOEWeaponItem(MSItemTypes.DENIZEN_TIER, 7, -3.2F, 7.0F, new EffectInstance(Effects.SLOWNESS, 100, 4), TIME, MSItemTypes.HAMMER_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS).defaultMaxDamage(4096).rarity(Rarity.RARE)).setRegistryName("fear_no_anvil"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.DIAMOND, 8, -3.2F).efficiency(12.0F).set(MSItemTypes.HAMMER_TOOL).add(OnHitEffect.setOnFire(25)), new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)).setRegistryName("melt_masher"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.DIAMOND, 7, -3.2F).efficiency(9.0F).set(MSItemTypes.MULTI_TOOL).set(new FarmineEffect(Integer.MAX_VALUE, 200)).set(PogoEffect.EFFECT_07).add(PogoEffect.EFFECT_07),  new Item.Properties().defaultMaxDamage(6114).group(MSItemGroup.WEAPONS)).setRegistryName("estrogen_empowered_everything_eradicator"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.SBAHJ_TIER, 9, -3.2F).efficiency(9.1F).set(MSItemTypes.HAMMER_TOOL).set(PogoEffect.EFFECT_02).add(PogoEffect.EFFECT_02, OnHitEffect.playSound(() -> MSSoundEvents.ITEM_EEEEEEEEEEEE_HIT, 1.5F, 1.0F)), new Item.Properties().defaultMaxDamage(6114).group(MSItemGroup.WEAPONS)).setRegistryName("eeeeeeeeeeee"));
@@ -649,8 +664,11 @@ public class MSItems
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.MEAT_TIER, 4, -2.4F).efficiency(5.0F).set(MSItemTypes.SWORD_TOOL).setEating(FinishUseItemEffect.foodEffect(8, 1F)), new Item.Properties().defaultMaxDamage(250).group(MSItemGroup.WEAPONS)).setRegistryName("steak_sword"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.MEAT_TIER, 2, -2.4F).efficiency(5.0F).set(MSItemTypes.SWORD_TOOL).setEating(FinishUseItemEffect.foodEffect(3, 0.8F, 75)), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("beef_sword"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.MEAT_TIER, 5, -2.4F).efficiency(5.0F).set(MSItemTypes.SWORD_TOOL).setEating(FinishUseItemEffect.potionEffect(() -> new EffectInstance(Effects.WITHER, 100, 1), 0.9F), FinishUseItemEffect.foodEffect(4, 0.4F, 25)), new Item.Properties().defaultMaxDamage(300).group(MSItemGroup.WEAPONS)).setRegistryName("irradiated_steak_sword"));
+		registry.register(new WeaponItem(MSItemTypes.PRISMARINE_TIER, 3, -2.4F, 1.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().defaultMaxDamage(100).group(MSItemGroup.WEAPONS)).setRegistryName("macuahuitl"));
+		registry.register(new FrozenWeaponItem(MSItemTypes.ICE_TIER, 6, -2.4F, 1.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().defaultMaxDamage(200).group(MSItemGroup.WEAPONS)).setRegistryName("frosty_macuahuitl"));
 		registry.register(new WeaponItem(ItemTier.IRON, 3, -2.4F, 15.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("katana"));
 		registry.register(new WeaponItem(MSItemTypes.ZILLYHOO_TIER, 6, -2.4F, 15.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().defaultMaxDamage(-1).group(MSItemGroup.WEAPONS).rarity(Rarity.RARE)).setRegistryName("unbreakable_katana"));	//Actually unbreakable
+		registry.register(new AspectBasedEffectWeaponItem(ItemTier.IRON, 5, -2.4F, 15.0F, HOPE, () -> new EffectInstance(Effects.RESISTANCE, 60, 2), MSItemTypes.SWORD_TOOL, new Item.Properties().defaultMaxDamage(2048).group(MSItemGroup.WEAPONS)).setRegistryName("angel_apocalypse"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 4, -2.4F).efficiency(15.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.setOnFire(30)), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("fire_poker"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 3, -2.4F).efficiency(15.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.setOnFire(10)), new Item.Properties().defaultMaxDamage(350).group(MSItemGroup.WEAPONS)).setRegistryName("too_hot_to_handle"));
 		registry.register(new WeaponItem(ItemTier.DIAMOND, 7, -2.4F, 15.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.RARE)).setRegistryName("caledscratch"));
@@ -659,6 +677,7 @@ public class MSItems
 		registry.register(new WeaponItem(ItemTier.IRON, 5, -2.6F, 15.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().defaultMaxDamage(600).group(MSItemGroup.WEAPONS)).setRegistryName("claymore"));
 		registry.register(new WeaponItem(MSItemTypes.ZILLYHOO_TIER, 6, -2.4F, 15.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.EPIC)).setRegistryName("cutlass_of_zillywair"));
 		registry.register(new WeaponItem(MSItemTypes.REGI_TIER, 5, -2.4F, 15.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("regisword"));
+		registry.register(new WeaponItem(MSItemTypes.RUBY_TIER, 4, -2.4F, 15.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().defaultMaxDamage(4096).group(MSItemGroup.WEAPONS)).setRegistryName("cruel_fate_crucible"));
 		registry.register(new WeaponItem(MSItemTypes.CORUNDUM_TIER, 7, -2.4F, 15.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.RARE)).setRegistryName("scarlet_ribbitar"));
 		registry.register(new WeaponItem(ItemTier.IRON, 6, -2.4F, 15.0F, MSItemTypes.SWORD_TOOL, new Item.Properties().defaultMaxDamage(1000).group(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)).setRegistryName("dogg_machete"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.GOLD, 7, -2.4F).efficiency(15.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.setOnFire(30)), new Item.Properties().defaultMaxDamage(300).group(MSItemGroup.WEAPONS)).setRegistryName("cobalt_sabre"));
@@ -682,7 +701,7 @@ public class MSItems
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 8, -3.0F).efficiency(6.0F).set(MSItemTypes.AXE_TOOL).set(ItemRightClickEffect.switchTo(() -> SHOCK_AXE_UNPOWERED)).add(OnHitEffect.DROP_FOE_ITEM).add(InventoryTickEffect.DROP_WHEN_IN_WATER), new Item.Properties().defaultMaxDamage(800).group(MSItemGroup.WEAPONS)).setRegistryName("shock_axe"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 8, -3.0F).efficiency(6.0F).set(MSItemTypes.AXE_TOOL).set(ItemRightClickEffect.switchTo(() -> MSItems.SHOCK_AXE)), new Item.Properties().defaultMaxDamage(800)).setRegistryName("shock_axe_unpowered"));
 		registry.register(new WeaponItem(ItemTier.IRON, 8, -3.0F, 7.0F, MSItemTypes.AXE_TOOL, new Item.Properties().defaultMaxDamage(500).group(MSItemGroup.WEAPONS)).setRegistryName("scraxe"));
-		registry.register(new TeleportingWeaponItem(ItemTier.IRON, 6, -3.0F, 7.0F, MSItemTypes.AXE_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("lorentz_distransformationer"));
+		registry.register(new TeleportingWeaponItem(ItemTier.IRON, 6, -3.0F, 7.0F, MSItemTypes.AXE_TOOL, new Item.Properties().defaultMaxDamage(2048).group(MSItemGroup.WEAPONS)).setRegistryName("lorentz_distransformationer"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.POGO_TIER, 6, -3.0F).efficiency(2.0F).set(MSItemTypes.AXE_HAMMER_TOOL).set(new FarmineEffect(Integer.MAX_VALUE, 50)).set(PogoEffect.EFFECT_06).add(PogoEffect.EFFECT_06), new Item.Properties().defaultMaxDamage(800).group(MSItemGroup.WEAPONS)).setRegistryName("piston_powered_pogo_axehammer"));
 		registry.register(new WeaponItem(MSItemTypes.CORUNDUM_TIER, 8, -3.0F, 8.0F, MSItemTypes.AXE_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.RARE)).setRegistryName("ruby_croak"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.CORUNDUM_TIER, 7, -3.0F).efficiency(9.0F).set(MSItemTypes.AXE_TOOL).add(OnHitEffect.setOnFire(30)), new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.RARE)).setRegistryName("hephaestus_lumberjack"));
@@ -690,17 +709,25 @@ public class MSItems
 		registry.register(new WeaponItem(ItemTier.IRON, 9, -3.2F, 5.0F, MSItemTypes.AXE_TOOL, new Item.Properties().defaultMaxDamage(600).group(MSItemGroup.WEAPONS)).setRegistryName("bisector"));
 		
 		//Dice
-		registry.register(new WeaponItem(ItemTier.STONE, 5, -3.0F, 1.0F, null, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("dice"));
-		registry.register(new WeaponItem(ItemTier.DIAMOND, 4, -3.0F, 1.0F, null, new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.EPIC)).setRegistryName("fluorite_octet"));
+		registry.register(new WeaponItem(ItemTier.STONE, 5, -3.0F, 1.0F, null, new Item.Properties().group(MSItemGroup.WEAPONS).defaultMaxDamage(500)).setRegistryName("dice"));
+		registry.register(new WeaponItem(ItemTier.DIAMOND, 4, -3.0F, 1.0F, null, new Item.Properties().group(MSItemGroup.WEAPONS).defaultMaxDamage(4096).rarity(Rarity.EPIC)).setRegistryName("fluorite_octet"));
 		//misc weapons
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 2, -1.5F).efficiency(10.0F).set(MSItemTypes.CLAWS_TOOL).set(ItemRightClickEffect.switchTo(() -> MSItems.CAT_CLAWS_SHEATHED)), new Item.Properties().defaultMaxDamage(500).group(MSItemGroup.WEAPONS)).setRegistryName("cat_claws_drawn"));
 		
-		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, -1, -1.0F).efficiency(10.0F).set(ItemRightClickEffect.switchTo(() -> MSItems.CAT_CLAWS_DRAWN)), new Item.Properties().defaultMaxDamage(500)).setRegistryName("cat_claws_sheathed"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, -1, -1.0F).efficiency(10.0F).set(ItemRightClickEffect.switchTo(() -> MSItems.CAT_CLAWS_DRAWN)), new Item.Properties().defaultMaxDamage(500).group(MSItemGroup.WEAPONS)).setRegistryName("cat_claws_sheathed"));
 		
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 2, -1.5F).efficiency(10.0F).set(MSItemTypes.AXE_TOOL).set(ItemRightClickEffect.switchTo(() -> MSItems.LIPSTICK)), new Item.Properties().defaultMaxDamage(250).group(MSItemGroup.WEAPONS)).setRegistryName("lipstick_chainsaw"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.WOOD, -1, -0.5F).efficiency(10.0F).set(ItemRightClickEffect.switchTo(() -> MSItems.LIPSTICK_CHAINSAW)), new Item.Properties().defaultMaxDamage(250)).setRegistryName("lipstick"));
 		
 		registry.register(new WeaponItem(MSItemTypes.REGI_TIER, 4, -2.8F, 2.0F, MSItemTypes.MISC_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)).setRegistryName("cigarette_lance"));
+		
+		registry.register(new WeaponItem(ItemTier.IRON, 3, -2.5F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("lucerne_hammer"));
+		registry.register(new WeaponItem(ItemTier.IRON, 4, -2.5F, 1.0F, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(2048).group(MSItemGroup.WEAPONS)).setRegistryName("lucerne_hammer_of_undying"));
+		
+		registry.register(new WeaponItem(MSItemTypes.PRISMARINE_TIER, 2, -2.0F, 1.5F, MSItemTypes.MISC_TOOL, new Item.Properties().maxDamage(100).group(MSItemGroup.WEAPONS)).setRegistryName("obsidian_axe_knife"));
+		
+		registry.register(new KnockbackWeaponItem(ItemTier.WOOD, 1, -1.0F, 1.5F, MSItemTypes.MISC_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("fan"));
+		registry.register(new LevitationAOEWeaponItem(MSItemTypes.RUBY_TIER, 2, -1.0F, 1.5F, BREATH, MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(4096).rarity(Rarity.RARE).group(MSItemGroup.WEAPONS)).setRegistryName("typhonic_trivializer"));
 		
 		//sickles
 		registry.register(new WeaponItem(ItemTier.IRON, 2, -2.2F, 1.5F, MSItemTypes.SICKLE_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("sickle"));
@@ -729,11 +756,11 @@ public class MSItems
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 6, -2.8F).efficiency(2.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().defaultMaxDamage(750).group(MSItemGroup.WEAPONS)).setRegistryName("m_ace"));
 		
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 7, -2.8F).efficiency(2.0F).set(MSItemTypes.MISC_TOOL).set(ItemRightClickEffect.switchTo(() -> MSItems.ACE_OF_SPADES)), new Item.Properties().defaultMaxDamage(500).group(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)).setRegistryName("horse_hitcher"));
-		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.PAPER_TIER, 0, -1.8F).efficiency(0.0F).set(ItemRightClickEffect.switchTo(() -> MSItems.HORSE_HITCHER)), new Item.Properties().defaultMaxDamage(500)).setRegistryName("ace_of_spades"));
-		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 7, -2.8F).efficiency(2.0F).set(MSItemTypes.MISC_TOOL).set(ItemRightClickEffect.switchTo(() -> MSItems.ACE_OF_CLUBS)), new Item.Properties().defaultMaxDamage(500).group(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)).setRegistryName("club_of_felony"));
-		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.PAPER_TIER, 0, -1.8F).efficiency(0.0F).set(ItemRightClickEffect.switchTo(() -> MSItems.CLUB_OF_FELONY)), new Item.Properties().defaultMaxDamage(500)).setRegistryName("ace_of_clubs"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.PAPER_TIER, 0, -1.8F).efficiency(0.0F).set(ItemRightClickEffect.switchTo(() -> MSItems.HORSE_HITCHER)), new Item.Properties().defaultMaxDamage(500).group(MSItemGroup.WEAPONS)).setRegistryName("ace_of_spades"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 7, -2.8F).efficiency(2.0F).set(MSItemTypes.MISC_TOOL).set(ItemRightClickEffect.switchTo(() -> MSItems.ACE_OF_CLUBS)), new Item.Properties().defaultMaxDamage(500).group(MSItemGroup.WEAPONS).group(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)).setRegistryName("club_of_felony"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.PAPER_TIER, 0, -1.8F).efficiency(0.0F).set(ItemRightClickEffect.switchTo(() -> MSItems.CLUB_OF_FELONY)), new Item.Properties().defaultMaxDamage(500).group(MSItemGroup.WEAPONS)).setRegistryName("ace_of_clubs"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 5, -2.0F).efficiency(2.0F).set(MSItemTypes.MISC_TOOL).set(ItemRightClickEffect.switchTo(() -> MSItems.ACE_OF_DIAMONDS)), new Item.Properties().defaultMaxDamage(500).group(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)).setRegistryName("cuestick"));
-		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.PAPER_TIER, 0, -1.8F).efficiency(0.0F).set(ItemRightClickEffect.switchTo(() -> MSItems.CUESTICK)), new Item.Properties().defaultMaxDamage(500)).setRegistryName("ace_of_diamonds"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.PAPER_TIER, 0, -1.8F).efficiency(0.0F).set(ItemRightClickEffect.switchTo(() -> MSItems.CUESTICK)), new Item.Properties().defaultMaxDamage(500).group(MSItemGroup.WEAPONS)).setRegistryName("ace_of_diamonds"));
 		registry.register(new Item(new Item.Properties().defaultMaxDamage(500)).setRegistryName("ace_of_hearts"));
 		registry.register(new WeaponItem(MSItemTypes.REGI_TIER, 8, -2.8F, 4.0F, MSItemTypes.MISC_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.EPIC)).setRegistryName("white_kings_scepter"));
 		registry.register(new WeaponItem(MSItemTypes.REGI_TIER, 8, -2.8F, 4.0F, MSItemTypes.MISC_TOOL, new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.EPIC)).setRegistryName("black_kings_scepter"));
@@ -792,12 +819,12 @@ public class MSItems
 		registry.register(new ArmorItem(MSItemTypes.IRON_LASS_ARMOR, EquipmentSlotType.LEGS, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("iron_lass_skirt"));
 		registry.register(new ArmorItem(MSItemTypes.IRON_LASS_ARMOR, EquipmentSlotType.FEET, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("iron_lass_shoes"));
 		
-		registry.register(new ArmorItem(MSItemTypes.PROSPIT_PAJAMAS, EquipmentSlotType.CHEST, new Item.Properties()).setRegistryName("prospit_shirt"));
-		registry.register(new ArmorItem(MSItemTypes.PROSPIT_PAJAMAS, EquipmentSlotType.LEGS, new Item.Properties()).setRegistryName("prospit_pants"));
-		registry.register(new ArmorItem(MSItemTypes.PROSPIT_PAJAMAS, EquipmentSlotType.FEET, new Item.Properties()).setRegistryName("prospit_shoes"));
-		registry.register(new ArmorItem(MSItemTypes.DERSE_PAJAMAS, EquipmentSlotType.CHEST, new Item.Properties()).setRegistryName("derse_shirt"));
-		registry.register(new ArmorItem(MSItemTypes.DERSE_PAJAMAS, EquipmentSlotType.LEGS, new Item.Properties()).setRegistryName("derse_pants"));
-		registry.register(new ArmorItem(MSItemTypes.DERSE_PAJAMAS, EquipmentSlotType.FEET, new Item.Properties()).setRegistryName("derse_shoes"));
+		registry.register(new ArmorItem(MSItemTypes.PROSPIT_PAJAMAS, EquipmentSlotType.CHEST, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("prospit_shirt"));
+		registry.register(new ArmorItem(MSItemTypes.PROSPIT_PAJAMAS, EquipmentSlotType.LEGS, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("prospit_pants"));
+		registry.register(new ArmorItem(MSItemTypes.PROSPIT_PAJAMAS, EquipmentSlotType.FEET, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("prospit_shoes"));
+		registry.register(new ArmorItem(MSItemTypes.DERSE_PAJAMAS, EquipmentSlotType.CHEST, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("derse_shirt"));
+		registry.register(new ArmorItem(MSItemTypes.DERSE_PAJAMAS, EquipmentSlotType.LEGS, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("derse_pants"));
+		registry.register(new ArmorItem(MSItemTypes.DERSE_PAJAMAS, EquipmentSlotType.FEET, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("derse_shoes"));
 		
 		//core items
 		registry.register(new BoondollarsItem(new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("boondollars"));

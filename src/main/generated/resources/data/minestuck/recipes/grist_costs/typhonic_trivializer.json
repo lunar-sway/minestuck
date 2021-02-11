@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:typhonic_trivializer"
+  },
+  "grist_cost": {
+    "minestuck:build": 1000,
+    "minestuck:ruby": 150,
+    "minestuck:diamond": 50,
+    "minestuck:shale": 200,
+    "minestuck:uranium": 5
+  }
+}

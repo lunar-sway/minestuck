@@ -80,7 +80,7 @@ public class RainbowLandType extends TerrainLandType
 	@Override
 	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
 	{
-		biome.setSurfaceBuilder(MSSurfaceBuilders.RAINBOW.get(), blocks.getSurfaceBuilderConfig());
+		biome.setSurfaceBuilder(MSSurfaceBuilders.RAINBOW.get(), blocks.getSurfaceBuilderConfig(biome.type));
 		
 		if(biome.type == BiomeType.NORMAL)
 		{

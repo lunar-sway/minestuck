@@ -7,11 +7,11 @@ import net.minecraft.world.World;
 
 import java.util.Objects;
 
-public abstract class MinestuckEntity extends CreatureEntity
+public abstract class SimpleTexturedEntity extends CreatureEntity
 {
 	private ResourceLocation textureResource;
 	
-	public MinestuckEntity(EntityType<? extends MinestuckEntity> type, World world)
+	public SimpleTexturedEntity(EntityType<? extends SimpleTexturedEntity> type, World world)
 	{
 		super(type, world);
 	}
@@ -28,10 +28,5 @@ public abstract class MinestuckEntity extends CreatureEntity
 		if(textureResource == null)
 			textureResource = createTexture();
 		return textureResource;
-	}
-	
-	protected void clearTexture()
-	{
-		textureResource = null;
 	}
 }

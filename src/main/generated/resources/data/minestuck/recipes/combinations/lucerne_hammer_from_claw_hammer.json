@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:spear_cane"
+  },
+  "input2": {
+    "item": "minestuck:claw_hammer"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:lucerne_hammer"
+  }
+}

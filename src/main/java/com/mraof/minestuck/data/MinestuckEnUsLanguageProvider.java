@@ -330,6 +330,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.CLAW_HAMMER, "An average hammer found in about any garage. It can also destroy blocks");
 		add(MSItems.SLEDGE_HAMMER, "Sledgehammer");
 		addTooltip(MSItems.SLEDGE_HAMMER, "A decently large, yet average, hammer. It can also destroy blocks");
+		add(MSItems.MAILBOX, "Mailbox");
+		addTooltip(MSItems.MAILBOX, "Literally just a mailbox");
 		add(MSItems.BLACKSMITH_HAMMER, "Blacksmith's Hammer");
 		addTooltip(MSItems.BLACKSMITH_HAMMER, "A strong hammer that would commonly be found in a blacksmiths. It can also break blocks");
 		add(MSItems.POGO_HAMMER, "Pogo Hammer");
@@ -338,6 +340,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.WRINKLEFUCKER, "Is there anything more iconic?");
 		add(MSItems.TELESCOPIC_SASSACRUSHER, "Telescopic Sassacrusher");
 		addTooltip(MSItems.TELESCOPIC_SASSACRUSHER, "OH ho! The perfect hammer for the dashing young gent who loves a pranksters gambit or a good grist horde!");
+		add(MSItems.DEMOCRATIC_DEMOLITIONER, "DEMOCRATIC DEMOLITIONER");
 		add(MSItems.REGI_HAMMER, "Regihammer");
 		add(MSItems.FEAR_NO_ANVIL, "Fear No Anvil");
 		addTooltip(MSItems.FEAR_NO_ANVIL, "What's to fear with this around? This uber hammer can break blocks and deal massive damage.");
@@ -367,10 +370,15 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addStoreTooltip(MSItems.STEAK_SWORD, "A sword? Made of meat? That's like, double cool!");
 		add(MSItems.BEEF_SWORD, "Raw Beef Sword");
 		add(MSItems.IRRADIATED_STEAK_SWORD, "Irradiated Steak Sword");
+		add(MSItems.MACUAHUITL, "Macuahuitl");
+		add(MSItems.FROSTY_MACUAHUITL, "Frosty Macuahuitl");
+		addTooltip(MSItems.FROSTY_MACUAHUITL, "Now featuring real Ice Shards");
 		add(MSItems.KATANA, "Katana");
 		addTooltip(MSItems.KATANA, "A powerful Katana, once wielded by the most powerful of Otaku Masters");
 		add(MSItems.UNBREAKABLE_KATANA, "Unbreakable Katana");
-		addTooltip(MSItems.UNBREAKABLE_KATANA, "This Katana has been fused with obsidian to make it even more kawai- I mean powerful!");
+		addTooltip(MSItems.UNBREAKABLE_KATANA, "This Katana has been fused with bedrock to make it even more kawai- I mean powerful!");
+		add(MSItems.ANGEL_APOCALYPSE, "Angel Apocalypse");
+		addTooltip(MSItems.ANGEL_APOCALYPSE, "This sword either starts the end of the world or prevents the end from occurring");
 		add(MSItems.FIRE_POKER, "Fire Poker");
 		addTooltip(MSItems.FIRE_POKER, "A flaming blade! Or just that thing you find next to wood fire places.....either way it can burn you enemies");
 		addStoreTooltip(MSItems.FIRE_POKER, "Make sure you don't drop this like it's hot. Because it is hot.");
@@ -387,6 +395,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.CUTLASS_OF_ZILLYWAIR, "HooHoo! Another Zilly weapon imported straight from Zillywair! Enemies beware!");
 		add(MSItems.REGISWORD, "Regisword");
 		addTooltip(MSItems.REGISWORD, "A sword once wielded by the most wicked of ArchAgents......and the most devout mail lady");
+		add(MSItems.CRUEL_FATE_CRUCIBLE, "Cruel Fate Crucible");
+		addTooltip(MSItems.CRUEL_FATE_CRUCIBLE, "The aura of Nemesis enacts retribution on those who hurt it's wielder");
 		add(MSItems.SCARLET_RIBBITAR, "Scarlet Ribbitar");
 		add(MSItems.DOGG_MACHETE, "Snoop Dogg Snow Cone Machete");
 		add(MSItems.COBALT_SABRE, "Cobalt Cobeam Coblade");
@@ -440,6 +450,12 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.LIPSTICK_CHAINSAW, "Chainsaw");
 		add(MSItems.LIPSTICK, "Jade Lipstick");
 		add(MSItems.CIGARETTE_LANCE, "Cigarette Holder Lance");
+		add(MSItems.LUCERNE_HAMMER, "Lucerne Hammer");
+		add(MSItems.LUCERNE_HAMMER_OF_UNDYING, "Lucerne Hammer of Undying");
+		add(MSItems.OBSIDIAN_AXE_KNIFE, "Obsidian Axe Knife");
+		add(MSItems.FAN, "Fan");
+		add(MSItems.TYPHONIC_TRIVIALIZER, "Typhonic Trivializer");
+		addTooltip(MSItems.TYPHONIC_TRIVIALIZER, "It's easy being breezy, with this denizen's boon");
 		add(MSItems.SICKLE, "Sickle");
 		add(MSItems.OW_THE_EDGE, "oW THE EDGE");
 		add(MSItems.THORNY_SUBJECT, "A Thorny Subject");
