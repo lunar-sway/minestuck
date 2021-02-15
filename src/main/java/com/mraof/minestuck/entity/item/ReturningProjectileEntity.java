@@ -24,6 +24,7 @@ public class ReturningProjectileEntity extends ConsumableProjectileEntity implem
 	private BlockRayTraceResult blockResult;
 	private Direction blockFace;
 	private BlockPos blockPos;
+	private Direction entityDirection;
 	
 	public ReturningProjectileEntity(EntityType<? extends ReturningProjectileEntity> type, World worldIn)
 	{
@@ -84,7 +85,85 @@ public class ReturningProjectileEntity extends ConsumableProjectileEntity implem
 			}
 		}
 	}
+	/*
+	private void setDirection(@Nullable Direction directionIn) {
+		this.entityDirection = directionIn;
+	}
 	
+	private void selectNextMoveDirection(@Nullable Direction.Axis p_184569_1_) {
+		double d0 = 0.5D;
+		BlockPos blockpos;
+		if (this.owner == null) {
+			blockpos = (new BlockPos(this)).down();
+		} else {
+			d0 = (double)this.owner.getHeight() * 0.5D;
+			blockpos = new BlockPos(this.owner.getPosX(), this.owner.getPosY() + d0, this.owner.getPosZ());
+		}
+		
+		double d1 = (double)blockpos.getX() + 0.5D;
+		double d2 = (double)blockpos.getY() + d0;
+		double d3 = (double)blockpos.getZ() + 0.5D;
+		Direction direction = null;
+		if (!blockpos.withinDistance(this.getPositionVec(), 2.0D)) {
+			BlockPos blockpos1 = new BlockPos(this);
+			List<Direction> list = Lists.newArrayList();
+			if (p_184569_1_ != Direction.Axis.X) {
+				if (blockpos1.getX() < blockpos.getX() && this.world.isAirBlock(blockpos1.east())) {
+					list.add(Direction.EAST);
+				} else if (blockpos1.getX() > blockpos.getX() && this.world.isAirBlock(blockpos1.west())) {
+					list.add(Direction.WEST);
+				}
+			}
+			
+			if (p_184569_1_ != Direction.Axis.Y) {
+				if (blockpos1.getY() < blockpos.getY() && this.world.isAirBlock(blockpos1.up())) {
+					list.add(Direction.UP);
+				} else if (blockpos1.getY() > blockpos.getY() && this.world.isAirBlock(blockpos1.down())) {
+					list.add(Direction.DOWN);
+				}
+			}
+			
+			if (p_184569_1_ != Direction.Axis.Z) {
+				if (blockpos1.getZ() < blockpos.getZ() && this.world.isAirBlock(blockpos1.south())) {
+					list.add(Direction.SOUTH);
+				} else if (blockpos1.getZ() > blockpos.getZ() && this.world.isAirBlock(blockpos1.north())) {
+					list.add(Direction.NORTH);
+				}
+			}
+			
+			direction = Direction.random(this.rand);
+			if (list.isEmpty()) {
+				for(int i = 5; !this.world.isAirBlock(blockpos1.offset(direction)) && i > 0; --i) {
+					direction = Direction.random(this.rand);
+				}
+			} else {
+				direction = list.get(this.rand.nextInt(list.size()));
+			}
+			
+			d1 = this.getPosX() + (double)direction.getXOffset();
+			d2 = this.getPosY() + (double)direction.getYOffset();
+			d3 = this.getPosZ() + (double)direction.getZOffset();
+		}
+		
+		this.setDirection(direction);
+		double d6 = d1 - this.getPosX();
+		double d7 = d2 - this.getPosY();
+		double d4 = d3 - this.getPosZ();
+		double d5 = (double)MathHelper.sqrt(d6 * d6 + d7 * d7 + d4 * d4);
+		if (d5 == 0.0D) {
+			this.targetDeltaX = 0.0D;
+			this.targetDeltaY = 0.0D;
+			this.targetDeltaZ = 0.0D;
+		} else {
+			this.targetDeltaX = d6 / d5 * 0.15D;
+			this.targetDeltaY = d7 / d5 * 0.15D;
+			this.targetDeltaZ = d4 / d5 * 0.15D;
+		}
+		
+		this.isAirBorne = true;
+		//this.steps = 10 + this.rand.nextInt(5) * 10;
+	}
+	*/
 	public void resetThrower()
 	{
 		PlayerEntity throwerPlayer = (PlayerEntity) this.getThrower();
