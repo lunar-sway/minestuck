@@ -19,7 +19,7 @@ import net.minecraftforge.registries.ObjectHolder;
 import javax.annotation.Nonnull;
 
 @ObjectHolder(Minestuck.MOD_ID)
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class MSFeatures
 {
 	public static final GateStructure LAND_GATE = getNull();
@@ -37,6 +37,7 @@ public final class MSFeatures
 	public static final Feature<BlockStateFeatureConfig> PILLAR = getNull();
 	public static final Feature<BlockStateFeatureConfig> LARGE_PILLAR = getNull();
 	public static final Feature<BlockBlobConfig> BLOCK_BLOB = getNull();
+	public static final Feature<RandomRockBlockBlobConfig> RANDOM_ROCK_BLOCK_BLOB = getNull();
 	public static final Feature<NoFeatureConfig> OCEAN_RUNDOWN = getNull();
 	public static final Feature<NoFeatureConfig> RABBIT_PLACEMENT = getNull();
 	
@@ -47,9 +48,11 @@ public final class MSFeatures
 	public static final Feature<NoFeatureConfig> OASIS = getNull();
 	public static final Feature<NoFeatureConfig> MESA = getNull();
 	public static final Feature<NoFeatureConfig> ROCK_SPIKE = getNull();
+	public static final Feature<NoFeatureConfig> SURFACE_FOSSIL = getNull();
 	public static final Feature<NoFeatureConfig> BUCKET = getNull();
 	public static final Feature<NoFeatureConfig> BROKEN_SWORD = getNull();
 	public static final Feature<NoFeatureConfig> TOWER = getNull();
+	public static final Feature<BlockStateFeatureConfig> STONE_MOUND = getNull();
 	
 	@Nonnull
 	@SuppressWarnings("ConstantConditions")
@@ -78,6 +81,7 @@ public final class MSFeatures
 		registry.register(new PillarFeature(BlockStateFeatureConfig::deserialize, false).setRegistryName("pillar"));
 		registry.register(new PillarFeature(BlockStateFeatureConfig::deserialize, true).setRegistryName("large_pillar"));
 		registry.register(new ConditionFreeBlobFeature(BlockBlobConfig::deserialize).setRegistryName("block_blob"));
+		registry.register(new RandomRockConditionFreeBlobFeature(RandomRockBlockBlobConfig::deserialize).setRegistryName("random_rock_block_blob"));
 		registry.register(new OceanRundownFeature(NoFeatureConfig::deserialize).setRegistryName("ocean_rundown"));
 		registry.register(new RabbitPlacementFeature(NoFeatureConfig::deserialize).setRegistryName("rabbit_placement"));
 		
@@ -88,9 +92,11 @@ public final class MSFeatures
 		registry.register(new OasisFeature(NoFeatureConfig::deserialize).setRegistryName("oasis"));
 		registry.register(new MesaFeature(NoFeatureConfig::deserialize).setRegistryName("mesa"));
 		registry.register(new RockSpikeFeature(NoFeatureConfig::deserialize).setRegistryName("rock_spike"));
+		registry.register(new SurfaceFossilsFeature(NoFeatureConfig::deserialize).setRegistryName("surface_fossil"));
 		registry.register(new BucketFeature(NoFeatureConfig::deserialize).setRegistryName("bucket"));
 		registry.register(new BrokenSwordFeature(NoFeatureConfig::deserialize).setRegistryName("broken_sword"));
 		registry.register(new TowerFeature(NoFeatureConfig::deserialize).setRegistryName("tower"));
+		registry.register(new StoneMoundFeature(BlockStateFeatureConfig::deserialize).setRegistryName("stone_mound"));
 		
 		MSStructurePieces.init();
 		MSStructureProcessorTypes.init();
