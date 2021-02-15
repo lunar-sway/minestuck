@@ -587,6 +587,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.CHAKRAM, "Some power makes this weapon turn the exact opposite direction any time it hits something!");
 		add(MSItems.UMBRAL_INFILTRATOR, "Umbral Infiltrator");
 		addTooltip(MSItems.UMBRAL_INFILTRATOR, "Phases through blocks like the shadowy abyss of the denizen Nyx");
+		add(MSItems.SORCERERS_PINBALL, "Sorcerer's Pinball");
+		addTooltip(MSItems.SORCERERS_PINBALL, "Enchanted with real bouncy majyyk");
 		add(MSItems.EMERALD_SWORD, "Emerald Sword");
 		add(MSItems.EMERALD_AXE, "Emerald Axe");
 		add(MSItems.EMERALD_PICKAXE, "Emerald Pickaxe");

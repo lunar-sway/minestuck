@@ -2,6 +2,7 @@ package com.mraof.minestuck.entity.item;
 
 import com.mraof.minestuck.client.renderer.entity.RendersAsItem;
 import com.mraof.minestuck.item.MSItems;
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -9,17 +10,20 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.network.IPacket;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 public class BouncingProjectileEntity extends ReturningProjectileEntity implements RendersAsItem
 {
 	private int bounce;
+	private int inBlockTicks = 0;
+	private BlockRayTraceResult blockResult;
+	private Direction blockFace;
+	private BlockPos blockPos;
 	
 	public BouncingProjectileEntity(EntityType<? extends BouncingProjectileEntity> type, World worldIn)
 	{
@@ -40,17 +44,20 @@ public class BouncingProjectileEntity extends ReturningProjectileEntity implemen
 	protected void onImpact(RayTraceResult result)
 	{
 		PlayerEntity throwerPlayer = (PlayerEntity) this.getThrower();
-		if(throwerPlayer != null)
+		if(throwerPlayer != null && !world.isRemote)
 		{
-			if(this.world.getEntitiesWithinAABB(PlayerEntity.class, getBoundingBox().grow(5)).contains(throwerPlayer))
-			{
-				resetThrower();
-			}
+			int cooldownTicks = throwerPlayer.getCooldownTracker().hashCode();
 			
-			//RayTraceResult.Type.BLOCK;
-			//result.getHitVec().inverse();
+			++bounce;
 			
-			if(!this.world.isRemote && result.getType() == RayTraceResult.Type.ENTITY)
+			double velocityX = this.getMotion().x;
+			double velocityY = this.getMotion().y;
+			double velocityZ = this.getMotion().z;
+			double absVelocityX = (velocityX * velocityX) / velocityX;
+			double absVelocityY = (velocityY * velocityY) / velocityY;
+			double absVelocityZ = (velocityZ * velocityZ) / velocityZ;
+			
+			if(result.getType() == RayTraceResult.Type.ENTITY)
 			{
 				Entity entity = ((EntityRayTraceResult) result).getEntity();
 				if(entity != throwerPlayer)
@@ -59,45 +66,42 @@ public class BouncingProjectileEntity extends ReturningProjectileEntity implemen
 				{
 					resetThrower();
 				}
-			} else if(!this.world.isRemote && result.getType() == RayTraceResult.Type.BLOCK)
-			{
-				++bounce;
-				
-				//result.getHitVec().rotatePitch(1.0F);
-				//this.setMotion(getMotion());
-				double velocityX = this.getMotion().x;
-				double velocityY = this.getMotion().y;
-				double velocityZ = this.getMotion().z;
-				double absVelocityX = (velocityX * velocityX) / velocityX;
-				double absVelocityY = (velocityY * velocityY) / velocityY;
-				double absVelocityZ = (velocityZ * velocityZ) / velocityZ;
-				/*
-				this.moveRelative();
-				this.handlePistonMovement;
-				Vec3d pos = this.getMotion();
-				pos = this.maybeBackOffFromEdge(pos, 0);*/
 				
 				if(absVelocityX >= absVelocityY && absVelocityX >= absVelocityZ)
-					this.setMotion(-velocityX,velocityY,velocityZ);
-				
+					this.setMotion(-velocityX, velocityY, velocityZ);
 				if(absVelocityY >= absVelocityX && absVelocityY >= absVelocityZ)
-					this.setMotion(velocityX,-velocityY,velocityZ);
-				
+					this.setMotion(velocityX, -velocityY, velocityZ);
 				if(absVelocityZ >= absVelocityY && absVelocityZ >= absVelocityX)
-					this.setMotion(velocityX,velocityY,-velocityZ);
+					this.setMotion(velocityX, velocityY, -velocityZ);
 				
-				this.world.playSound(null, this.getPosX(), this.getPosY(), this.getPosZ(), SoundEvents.ITEM_SHIELD_BLOCK, SoundCategory.PLAYERS, 0.6F, 4.0F);
-			}
-			
-			if(!world.isRemote)
+			} else if(result.getType() == RayTraceResult.Type.BLOCK)
 			{
-				int cooldownTicks = throwerPlayer.getCooldownTracker().hashCode();
-				if(cooldownTicks <= 5)
+				blockResult = (BlockRayTraceResult) result;
+				blockFace = blockResult.getFace();
+				blockPos = blockResult.getPos();
+				
+				if(Block.hasEnoughSolidSide(world, blockPos, blockFace))
 				{
-					resetThrower();
+					this.world.playSound(null, this.getPosX(), this.getPosY(), this.getPosZ(), SoundEvents.ITEM_SHIELD_BLOCK, SoundCategory.PLAYERS, 0.6F, 4.0F);
+					
+					++bounce;
+					
+					if(blockFace == Direction.EAST || blockFace == Direction.WEST)
+						this.setMotion(-velocityX, velocityY, velocityZ);
+					if(blockFace == Direction.DOWN || blockFace == Direction.UP)
+						this.setMotion(velocityX, -velocityY, velocityZ);
+					if(blockFace == Direction.NORTH || blockFace == Direction.SOUTH)
+						this.setMotion(velocityX, velocityY, -velocityZ);
+					
+				}
+				
+				if(Block.hasEnoughSolidSide(world, blockPos, blockFace) && blockResult.isInside())
+				{
+					++inBlockTicks;
 				}
 			}
-			if(bounce > 15)
+			
+			if(bounce > 15 || cooldownTicks <= 5)
 			{
 				resetThrower();
 			}
@@ -120,12 +124,13 @@ public class BouncingProjectileEntity extends ReturningProjectileEntity implemen
 		this.lastTickPosX = pos.x;
 		this.lastTickPosY = pos.y;
 		this.lastTickPosZ = pos.z;
-		super.tick();
 		
-		if(this.ticksExisted >= maxTick)
+		if(this.ticksExisted >= maxTick || inBlockTicks >= 1)
 		{
 			resetThrower();
 		}
+		
+		super.tick();
 	}
 	
 	@Override
@@ -137,6 +142,6 @@ public class BouncingProjectileEntity extends ReturningProjectileEntity implemen
 	@Override
 	protected Item getDefaultItem()
 	{
-		return MSItems.CHAKRAM;
+		return MSItems.SORCERERS_PINBALL;
 	}
 }

@@ -2,11 +2,14 @@ package com.mraof.minestuck.entity.item;
 
 import com.mraof.minestuck.client.renderer.entity.RendersAsItem;
 import com.mraof.minestuck.item.MSItems;
+import net.minecraft.block.Block;
 import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.item.Item;
 import net.minecraft.network.IPacket;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.*;
@@ -17,6 +20,10 @@ public class ReturningProjectileEntity extends ConsumableProjectileEntity implem
 {
 	private int bounce;
 	public int maxTick = 0;
+	private int inBlockTicks = 0;
+	private BlockRayTraceResult blockResult;
+	private Direction blockFace;
+	private BlockPos blockPos;
 	
 	public ReturningProjectileEntity(EntityType<? extends ReturningProjectileEntity> type, World worldIn)
 	{
@@ -38,17 +45,14 @@ public class ReturningProjectileEntity extends ConsumableProjectileEntity implem
 	protected void onImpact(RayTraceResult result)
 	{
 		PlayerEntity throwerPlayer = (PlayerEntity) this.getThrower();
-		if(throwerPlayer != null)
+		if(throwerPlayer != null && !world.isRemote)
 		{
-			if(this.world.getEntitiesWithinAABB(PlayerEntity.class, getBoundingBox().grow(5)).contains(throwerPlayer))
-			{
-				resetThrower();
-			}
+			int cooldownTicks = throwerPlayer.getCooldownTracker().hashCode();
 			
-			if(!this.world.isRemote && result.getType() == RayTraceResult.Type.ENTITY)
+			if(result.getType() == RayTraceResult.Type.ENTITY)
 			{
 				++bounce;
-				this.setMotion(getMotion().scale(-1.1));
+				this.setMotion(getMotion().scale(-1.05));
 				Entity entity = ((EntityRayTraceResult) result).getEntity();
 				if(entity != throwerPlayer)
 					entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), damage);
@@ -56,22 +60,25 @@ public class ReturningProjectileEntity extends ConsumableProjectileEntity implem
 				{
 					resetThrower();
 				}
-			} else if(!this.world.isRemote && result.getType() == RayTraceResult.Type.BLOCK && func_213882_k().getItem() != MSItems.UMBRAL_INFILTRATOR)
+			} else if(result.getType() == RayTraceResult.Type.BLOCK && func_213882_k().getItem() != MSItems.UMBRAL_INFILTRATOR)
 			{
-				++bounce;
-				this.setMotion(getMotion().scale(-1.1));
-				this.world.playSound(null, this.getPosX(), this.getPosY(), this.getPosZ(), SoundEvents.ITEM_SHIELD_BLOCK, SoundCategory.PLAYERS, 0.6F, 4.0F);
-			}
-			
-			if(!world.isRemote)
-			{
-				int cooldownTicks = throwerPlayer.getCooldownTracker().hashCode();
-				if(cooldownTicks <= 5)
+				blockResult = (BlockRayTraceResult) result;
+				blockFace = blockResult.getFace();
+				blockPos = blockResult.getPos();
+				if(Block.hasEnoughSolidSide(world, blockPos, blockFace))
 				{
-					resetThrower();
+					++bounce;
+					this.setMotion(getMotion().scale(-1.05));
+					this.world.playSound(null, this.getPosX(), this.getPosY(), this.getPosZ(), SoundEvents.ITEM_SHIELD_BLOCK, SoundCategory.PLAYERS, 0.6F, 4.0F);
+				}
+				
+				if(Block.hasEnoughSolidSide(world, blockPos, blockFace) && blockResult.isInside())
+				{
+					++inBlockTicks;
 				}
 			}
-			if(bounce > 15)
+			
+			if(bounce > 15 || cooldownTicks <= 5)
 			{
 				resetThrower();
 			}
@@ -94,12 +101,20 @@ public class ReturningProjectileEntity extends ConsumableProjectileEntity implem
 		this.lastTickPosX = pos.x;
 		this.lastTickPosY = pos.y;
 		this.lastTickPosZ = pos.z;
-		super.tick();
 		
-		if(this.ticksExisted >= maxTick)
+		if(this.isInWater())
+			this.setMotion(getMotion().scale(1.2));
+		else
+			this.setMotion(getMotion().scale(1.005));
+		
+		if(this.ticksExisted >= maxTick || inBlockTicks >= 1)
 		{
 			resetThrower();
 		}
+		
+		ProjectileHelper.rotateTowardsMovement(this, 0.2F);
+		
+		super.tick();
 	}
 	
 	@Override
