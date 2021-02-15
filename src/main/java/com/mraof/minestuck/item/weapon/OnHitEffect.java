@@ -25,8 +25,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Supplier;
 
-import static com.mraof.minestuck.player.EnumAspect.LIFE;
-import static com.mraof.minestuck.player.EnumAspect.RAGE;
+import static com.mraof.minestuck.player.EnumAspect.*;
 
 public interface OnHitEffect
 {
@@ -34,6 +33,7 @@ public interface OnHitEffect
 	
 	OnHitEffect RAGE_STRENGTH = aspectEffect(RAGE, () -> new EffectInstance(Effects.STRENGTH, 60, 1));
 	OnHitEffect LIFE_SATURATION = aspectEffect(LIFE, () -> new EffectInstance(Effects.SATURATION, 1, 1));
+	OnHitEffect HOPE_RESISTANCE = aspectEffect(HOPE, () -> new EffectInstance(Effects.RESISTANCE, 60, 2));
 	
 	OnHitEffect SET_CANDY_DROP_FLAG = (stack, target, attacker) -> {
 		if(target instanceof UnderlingEntity)
