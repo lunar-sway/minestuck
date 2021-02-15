@@ -43,10 +43,8 @@ public class BouncingProjectileEntity extends ReturningProjectileEntity implemen
 	@Override
 	protected void onImpact(RayTraceResult result)
 	{
-		PlayerEntity throwerPlayer = (PlayerEntity) this.getThrower();
-		if(throwerPlayer != null && !world.isRemote)
-		{
-			int cooldownTicks = throwerPlayer.getCooldownTracker().hashCode();
+		if(this.getThrower() instanceof PlayerEntity && !world.isRemote){
+			PlayerEntity throwerPlayer = (PlayerEntity) this.getThrower();
 			
 			++bounce;
 			
@@ -92,7 +90,6 @@ public class BouncingProjectileEntity extends ReturningProjectileEntity implemen
 						this.setMotion(velocityX, -velocityY, velocityZ);
 					if(blockFace == Direction.NORTH || blockFace == Direction.SOUTH)
 						this.setMotion(velocityX, velocityY, -velocityZ);
-					
 				}
 				
 				if(Block.hasEnoughSolidSide(world, blockPos, blockFace) && blockResult.isInside())
@@ -101,7 +98,7 @@ public class BouncingProjectileEntity extends ReturningProjectileEntity implemen
 				}
 			}
 			
-			if(bounce > 15 || cooldownTicks <= 5)
+			if(bounce > 15)
 			{
 				resetThrower();
 			}
@@ -125,7 +122,7 @@ public class BouncingProjectileEntity extends ReturningProjectileEntity implemen
 		this.lastTickPosY = pos.y;
 		this.lastTickPosZ = pos.z;
 		
-		if(this.ticksExisted >= maxTick || inBlockTicks >= 1)
+		if(this.ticksExisted >= maxTick || inBlockTicks >= 3)
 		{
 			resetThrower();
 		}
