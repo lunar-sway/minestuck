@@ -2,6 +2,7 @@ package com.mraof.minestuck.item.weapon;
 
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.item.ReturningProjectileEntity;
+import com.mraof.minestuck.item.MSItems;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Stats;
@@ -31,6 +32,8 @@ public class ReturningProjectileWeaponItem extends ConsumableProjectileWeaponIte
 			projectileEntity.setItem(item);
 			projectileEntity.shoot(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, velocity, accuracy);
 			projectileEntity.setNoGravity(true);
+			if(item.getItem() == MSItems.UMBRAL_INFILTRATOR)
+				projectileEntity.setGlowing(true);
 			worldIn.addEntity(projectileEntity);
 		}
 		

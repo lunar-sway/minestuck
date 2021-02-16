@@ -1,6 +1,7 @@
 package com.mraof.minestuck.entity.item;
 
 import com.mraof.minestuck.client.renderer.entity.RendersAsItem;
+import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -58,13 +59,14 @@ public class BouncingProjectileEntity extends ReturningProjectileEntity implemen
 			if(result.getType() == RayTraceResult.Type.ENTITY)
 			{
 				Entity entity = ((EntityRayTraceResult) result).getEntity();
-				if(entity != throwerPlayer)
+				if(entity instanceof UnderlingEntity)
+					entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), damage * 2);
+				else if(entity != throwerPlayer)
 					entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), damage);
-				if(entity == throwerPlayer)
+				else
 				{
 					resetThrower();
 				}
-				
 				if(absVelocityX >= absVelocityY && absVelocityX >= absVelocityZ)
 					this.setMotion(-velocityX, velocityY, velocityZ);
 				if(absVelocityY >= absVelocityX && absVelocityY >= absVelocityZ)

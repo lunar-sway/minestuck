@@ -1,6 +1,7 @@
 package com.mraof.minestuck.entity.item;
 
 import com.mraof.minestuck.client.renderer.entity.RendersAsItem;
+import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -47,7 +48,10 @@ public class ConsumableProjectileEntity extends ProjectileItemEntity implements 
 			if(!this.world.isRemote && result.getType() == RayTraceResult.Type.ENTITY)
 			{
 				Entity entity = ((EntityRayTraceResult) result).getEntity();
-				entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), this.damage);
+				if(entity instanceof UnderlingEntity)
+					entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), damage * 2);
+				else
+					entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), damage);
 			}
 			if(!throwerPlayer.isCreative())
 			{

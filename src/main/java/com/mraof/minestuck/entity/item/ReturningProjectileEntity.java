@@ -1,10 +1,15 @@
 package com.mraof.minestuck.entity.item;
 
 import com.mraof.minestuck.client.renderer.entity.RendersAsItem;
+import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.player.EnumAspect;
+import com.mraof.minestuck.player.Title;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.Block;
 import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.network.IPacket;
 import net.minecraft.util.DamageSource;
@@ -23,6 +28,7 @@ public class ReturningProjectileEntity extends ConsumableProjectileEntity implem
 	private BlockRayTraceResult blockResult;
 	private Direction blockFace;
 	private BlockPos blockPos;
+	private boolean umbralVoid;
 	
 	public ReturningProjectileEntity(EntityType<? extends ReturningProjectileEntity> type, World worldIn)
 	{
@@ -43,21 +49,30 @@ public class ReturningProjectileEntity extends ConsumableProjectileEntity implem
 	@Override
 	protected void onImpact(RayTraceResult result) //Need to find a way to improve rate of checking
 	{
-		if(this.getThrower() instanceof PlayerEntity && !world.isRemote){
+		if(this.getThrower() instanceof PlayerEntity && !world.isRemote)
+		{
 			PlayerEntity throwerPlayer = (PlayerEntity) this.getThrower();
+			
+			Title title = PlayerSavedData.getData((ServerPlayerEntity) this.getThrower()).getTitle();
+			if(title != null)
+			{
+				umbralVoid = title.getHeroAspect() == EnumAspect.VOID && func_213882_k().getItem() == MSItems.UMBRAL_INFILTRATOR;
+			}
 			
 			if(result.getType() == RayTraceResult.Type.ENTITY)
 			{
 				++bounce;
 				this.setMotion(getMotion().scale(-1.05));
 				Entity entity = ((EntityRayTraceResult) result).getEntity();
-				if(entity != throwerPlayer)
+				if(entity instanceof UnderlingEntity)
+					entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), damage * 2);
+				else if(entity != throwerPlayer)
 					entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), damage);
-				if(entity == throwerPlayer)
+				else
 				{
 					resetThrower();
 				}
-			} else if(result.getType() == RayTraceResult.Type.BLOCK && func_213882_k().getItem() != MSItems.UMBRAL_INFILTRATOR)
+			} else if(result.getType() == RayTraceResult.Type.BLOCK && !umbralVoid)
 			{
 				blockResult = (BlockRayTraceResult) result;
 				blockFace = blockResult.getFace();
