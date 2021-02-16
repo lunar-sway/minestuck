@@ -343,7 +343,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.DEMOCRATIC_DEMOLITIONER, "DEMOCRATIC DEMOLITIONER");
 		add(MSItems.REGI_HAMMER, "Regihammer");
 		add(MSItems.FEAR_NO_ANVIL, "Fear No Anvil");
-		addTooltip(MSItems.FEAR_NO_ANVIL, "What's to fear with this around? This uber hammer can break blocks and deal massive damage.");
+		addTooltip(MSItems.FEAR_NO_ANVIL, "Break blocks and stop clocks with the hammer of Hephaestus");
 		add(MSItems.MELT_MASHER, "Melt-Masher");
 		addTooltip(MSItems.MELT_MASHER, "This hot-commodity of a hammer looks like it came fresh out of the furnace! Leaves foes with third-degree burns.");
 		add(MSItems.ESTROGEN_EMPOWERED_EVERYTHING_ERADICATOR, "Estrogen-Empowered Everything Eradicator");
@@ -378,7 +378,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.UNBREAKABLE_KATANA, "Unbreakable Katana");
 		addTooltip(MSItems.UNBREAKABLE_KATANA, "This Katana has been fused with bedrock to make it even more kawai- I mean powerful!");
 		add(MSItems.ANGEL_APOCALYPSE, "Angel Apocalypse");
-		addTooltip(MSItems.ANGEL_APOCALYPSE, "This sword either starts the end of the world or prevents the end from occurring");
+		addTooltip(MSItems.ANGEL_APOCALYPSE, "This sword either starts the end of the world or prevents the end from occurring. Hopefully the latter!");
 		add(MSItems.FIRE_POKER, "Fire Poker");
 		addTooltip(MSItems.FIRE_POKER, "A flaming blade! Or just that thing you find next to wood fire places.....either way it can burn you enemies");
 		addStoreTooltip(MSItems.FIRE_POKER, "Make sure you don't drop this like it's hot. Because it is hot.");
@@ -452,6 +452,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.CIGARETTE_LANCE, "Cigarette Holder Lance");
 		add(MSItems.LUCERNE_HAMMER, "Lucerne Hammer");
 		add(MSItems.LUCERNE_HAMMER_OF_UNDYING, "Lucerne Hammer of Undying");
+		addTooltip(MSItems.LUCERNE_HAMMER_OF_UNDYING, "Delays down your imminent doom");
 		add(MSItems.OBSIDIAN_AXE_KNIFE, "Obsidian Axe Knife");
 		add(MSItems.FAN, "Fan");
 		add(MSItems.TYPHONIC_TRIVIALIZER, "Typhonic Trivializer");

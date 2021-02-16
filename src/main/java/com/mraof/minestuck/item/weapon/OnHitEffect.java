@@ -17,6 +17,7 @@ import net.minecraft.item.Items;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.*;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -31,9 +32,12 @@ public interface OnHitEffect
 {
 	void onHit(ItemStack stack, LivingEntity target, LivingEntity attacker);
 	
-	OnHitEffect RAGE_STRENGTH = aspectEffect(RAGE, () -> new EffectInstance(Effects.STRENGTH, 60, 1));
-	OnHitEffect LIFE_SATURATION = aspectEffect(LIFE, () -> new EffectInstance(Effects.SATURATION, 1, 1));
-	OnHitEffect HOPE_RESISTANCE = aspectEffect(HOPE, () -> new EffectInstance(Effects.RESISTANCE, 60, 2));
+	OnHitEffect RAGE_STRENGTH = aspectEffect(RAGE, () -> new EffectInstance(Effects.STRENGTH, 80, 1), null);
+	OnHitEffect HOPE_RESISTANCE = aspectEffect(HOPE, () -> new EffectInstance(Effects.RESISTANCE, 120, 2), null);
+	OnHitEffect LIFE_SATURATION = aspectEffect(LIFE, () -> new EffectInstance(Effects.SATURATION, 1, 1), () -> new EffectInstance(Effects.HUNGER, 60, 100));
+	
+	OnHitEffect BREATH_LEVITATION_AOE = aspectAOE(BREATH, () -> new EffectInstance(Effects.LEVITATION, 30, 2), () -> SoundEvents.ENTITY_ENDER_DRAGON_FLAP,1.4F);
+	OnHitEffect TIME_SLOWNESS_AOE = aspectAOE(TIME, () -> new EffectInstance(Effects.SLOWNESS, 100, 4), () -> SoundEvents.BLOCK_BELL_RESONATE, 2F);
 	
 	OnHitEffect SET_CANDY_DROP_FLAG = (stack, target, attacker) -> {
 		if(target instanceof UnderlingEntity)
@@ -106,27 +110,79 @@ public interface OnHitEffect
 	{
 		return (itemStack, target, attacker) -> target.setFire(duration);
 	}
+	
 	static OnHitEffect playSound(Supplier<SoundEvent> sound)
 	{
 		return playSound(sound, 1, 1);
 	}
+	
 	static OnHitEffect playSound(Supplier<SoundEvent> sound, float volume, float pitch)
 	{
 		return (itemStack, target, attacker) -> attacker.world.playSound(null, attacker.getPosX(), attacker.getPosY(), attacker.getPosZ(), sound.get(), attacker.getSoundCategory(), volume, pitch);
 	}
-	static OnHitEffect aspectEffect(EnumAspect aspect, Supplier<EffectInstance> effect)
+	
+	static OnHitEffect enemyKnockback(float knockback)
 	{
 		return (stack, target, attacker) -> {
+			float randFloat = knockback + attacker.getRNG().nextFloat();
+			
+			if(!attacker.getEntityWorld().isRemote)
+			{
+				target.setMotion(target.getMotion().x * randFloat, target.getMotion().y, target.getMotion().z * randFloat);
+			}
+		};
+	}
+	
+	static OnHitEffect aspectEffect(EnumAspect aspect, Supplier<EffectInstance> playerEffect, Supplier<EffectInstance> enemyEffect)
+	{
+		return (stack, target, attacker) -> {
+			boolean critical = attacker.fallDistance > 0.0F && !attacker.onGround && !attacker.isOnLadder() && !attacker.isInWater() && !attacker.isPotionActive(Effects.BLINDNESS) && !attacker.isPassenger() && !attacker.isBeingRidden();
+			float randFloat = attacker.getRNG().nextFloat();
 			if(attacker instanceof ServerPlayerEntity)
 			{
 				Title title = PlayerSavedData.getData((ServerPlayerEntity) attacker).getTitle();
 				
-				if(title != null && title.getHeroAspect() == aspect && attacker.getRNG().nextFloat() < .1)
-					attacker.addPotionEffect(effect.get());
+				if(critical)
+					randFloat = randFloat - .1F;
+				if(title != null && randFloat < .1)
+				{
+					if(title.getHeroAspect() == aspect)
+					{
+						attacker.addPotionEffect(playerEffect.get());
+						if(enemyEffect != null)
+							target.addPotionEffect(enemyEffect.get());
+					}
+				}
 			}
-			
-			if(stack.getItem() == MSItems.CLOWN_CLUB)
-				attacker.world.playSound(null, attacker.getPosX(), attacker.getPosY(), attacker.getPosZ(), MSSoundEvents.ITEM_HORN_USE, SoundCategory.AMBIENT, 1.5F, 1.0F);
+		};
+	}
+	
+	static OnHitEffect aspectAOE(EnumAspect aspect, Supplier<EffectInstance> effect, Supplier<SoundEvent> sound, float pitch)
+	{
+		return (stack, target, attacker) -> {
+			boolean critical = attacker.fallDistance > 0.0F && !attacker.onGround && !attacker.isOnLadder() && !attacker.isInWater() && !attacker.isPotionActive(Effects.BLINDNESS) && !attacker.isPassenger() && !attacker.isBeingRidden();
+			float randFloat = attacker.getRNG().nextFloat();
+			if(attacker instanceof ServerPlayerEntity)
+			{
+				Title title = PlayerSavedData.getData((ServerPlayerEntity) attacker).getTitle();
+				
+				if(critical)
+					randFloat = randFloat - .1F;
+				if(title != null && randFloat < .1)
+				{
+					if(title.getHeroAspect() == aspect){
+						AxisAlignedBB axisalignedbb = attacker.getBoundingBox().grow(4.0D, 2.0D, 4.0D);
+						List<LivingEntity> list = attacker.world.getEntitiesWithinAABB(LivingEntity.class, axisalignedbb);
+						list.remove(attacker);
+						if (!list.isEmpty()) {
+							attacker.world.playSound(null, attacker.getPosition(), sound.get(), SoundCategory.PLAYERS, 1.5F, pitch);
+							for(LivingEntity livingentity : list) {
+								livingentity.addPotionEffect(effect.get());
+							}
+						}
+					}
+				}
+			}
 		};
 	}
 }
