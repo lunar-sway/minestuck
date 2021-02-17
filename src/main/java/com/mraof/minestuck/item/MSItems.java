@@ -330,6 +330,9 @@ public class MSItems
 	public static final Item SASSACRE_TEXT = getNull();
 	public static final Item WISEGUY = getNull();
 	public static final Item TABLESTUCK_MANUAL = getNull();
+	public static final Item TILLDEATH_HANDBOOK = getNull();
+	public static final Item BINARY_CODE = getNull();
+	public static final Item NONBINARY_CODE = getNull();
 	public static final Item THRESH_DVD = getNull();
 	public static final Item GAMEBRO_MAGAZINE = getNull();
 	public static final Item GAMEGRL_MAGAZINE = getNull();
@@ -948,6 +951,9 @@ public class MSItems
 		registry.register(new Item(new Item.Properties().maxStackSize(1).group(MSItemGroup.LANDS)).setRegistryName("sassacre_text"));
 		registry.register(new Item(new Item.Properties().maxStackSize(1).group(MSItemGroup.LANDS)).setRegistryName("wiseguy"));
 		registry.register(new Item(new Item.Properties().maxStackSize(1).group(MSItemGroup.LANDS)).setRegistryName("tablestuck_manual"));
+		registry.register(new Item(new Item.Properties().maxStackSize(1).group(MSItemGroup.LANDS)).setRegistryName("tilldeath_handbook"));
+		registry.register(new Item(new Item.Properties().maxStackSize(1).group(MSItemGroup.LANDS)).setRegistryName("binary_code"));
+		registry.register(new Item(new Item.Properties().maxStackSize(1).group(MSItemGroup.LANDS)).setRegistryName("nonbinary_code"));
 		registry.register(new Item(new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("thresh_dvd"));
 		registry.register(new Item(new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("gamebro_magazine"));
 		registry.register(new Item(new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("gamegrl_magazine"));

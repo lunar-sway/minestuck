@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:tilldeath_handbook"
+  },
+  "grist_cost": {
+    "minestuck:tar": 10,
+    "minestuck:amethyst": 4
+  }
+}

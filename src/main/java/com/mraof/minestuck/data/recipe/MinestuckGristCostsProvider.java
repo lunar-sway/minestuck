@@ -566,6 +566,9 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSItems.SASSACRE_TEXT).grist(CAULK, 10).grist(MERCURY, 4).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.WISEGUY).grist(CHALK, 10).grist(SULFUR, 4).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.TABLESTUCK_MANUAL).grist(MARBLE, 10).grist(COBALT, 4).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.TILLDEATH_HANDBOOK).grist(TAR, 10).grist(AMETHYST, 4).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.BINARY_CODE).grist(IODINE, 10).grist(SHALE, 4).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.NONBINARY_CODE).grist(BUILD, 10).grist(URANIUM, 4).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.THRESH_DVD).grist(IODINE, 3).grist(AMETHYST, 2).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.GAMEBRO_MAGAZINE).grist(CHALK, 3).grist(GARNET, 2).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.GAMEGRL_MAGAZINE).grist(CHALK, 3).grist(AMBER, 2).build(recipeSaver);
