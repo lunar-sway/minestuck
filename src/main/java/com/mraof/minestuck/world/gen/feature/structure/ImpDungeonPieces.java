@@ -794,7 +794,7 @@ public class ImpDungeonPieces
 			ctxt.compoGen[xIndex][zIndex] = this;
 			
 			light = ctxt.rand.nextFloat() < 0.4F;
-			bookChance = ctxt.rand.nextFloat() - 0.5F;
+			bookChance = ctxt.rand.nextBoolean() ? 0 : 0.8F;
 		}
 		
 		public BookcaseRoom(TemplateManager templates, CompoundNBT nbt)
