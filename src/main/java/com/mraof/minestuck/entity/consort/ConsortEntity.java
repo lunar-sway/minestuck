@@ -109,10 +109,11 @@ public class ConsortEntity extends SimpleTexturedEntity implements IContainerPro
 				if(message == null)
 				{
 					message = ConsortDialogue.getRandomMessage(this, hasHadMessage);
-					messageTicksLeft = 24000 + world.rand.nextInt(24000);
-					messageData = new CompoundNBT();
 					hasHadMessage = true;
 				}
+				
+				checkMessageData();
+				
 				try
 				{
 					ITextComponent text = message.getMessage(this, serverPlayer);
@@ -129,6 +130,23 @@ public class ConsortEntity extends SimpleTexturedEntity implements IContainerPro
 			return true;
 		} else
 			return super.processInteract(player, hand);
+	}
+	
+	private void checkMessageData()
+	{
+		if(messageData == null)
+		{
+			messageData = new CompoundNBT();
+			messageTicksLeft = 24000 + world.rand.nextInt(24000);
+		}
+	}
+	
+	private void clearDialogueData()
+	{
+		messageData = null;
+		updatingMessage = null;
+		stocks = null;
+		talkRepPlayerList.clear();
 	}
 	
 	private void handleConsortRepFromTalking(ServerPlayerEntity player)
@@ -160,12 +178,9 @@ public class ConsortEntity extends SimpleTexturedEntity implements IContainerPro
 			messageTicksLeft--;
 		else if(messageTicksLeft == 0)
 		{
+			clearDialogueData();
 			if(message != null && !message.isLockedToConsort())
 				message = null;
-			messageData = null;
-			updatingMessage = null;
-			stocks = null;
-			talkRepPlayerList.clear();
 		}
 		
 		if(updatingMessage != null)
@@ -206,12 +221,15 @@ public class ConsortEntity extends SimpleTexturedEntity implements IContainerPro
 		if(message != null)
 		{
 			compound.putString("Dialogue", message.getString());
-			compound.putInt("MessageTicks", messageTicksLeft);
-			compound.put("MessageData", messageData);
-			ListNBT list = new ListNBT();
-			for(PlayerIdentifier id : talkRepPlayerList)
-				list.add(id.saveToNBT(new CompoundNBT(), "id"));
-			compound.put("talkRepList", list);
+			if(messageData != null)
+			{
+				compound.putInt("MessageTicks", messageTicksLeft);
+				compound.put("MessageData", messageData);
+				ListNBT list = new ListNBT();
+				for(PlayerIdentifier id : talkRepPlayerList)
+					list.add(id.saveToNBT(new CompoundNBT(), "id"));
+				compound.put("talkRepList", list);
+			}
 		}
 		compound.putBoolean("HasHadMessage", hasHadMessage);
 		
@@ -243,15 +261,16 @@ public class ConsortEntity extends SimpleTexturedEntity implements IContainerPro
 		if(compound.contains("Dialogue", Constants.NBT.TAG_STRING))
 		{
 			message = ConsortDialogue.getMessageFromString(compound.getString("Dialogue"));
-			if(compound.contains("MessageTicks", Constants.NBT.TAG_ANY_NUMERIC))
+			if(compound.contains("MessageData", Constants.NBT.TAG_COMPOUND))
+			{
+				messageData = compound.getCompound("MessageData");
 				messageTicksLeft = compound.getInt("MessageTicks");
-			else messageTicksLeft = 24000;	//Used to make summoning with a specific message slightly easier
-			messageData = compound.getCompound("MessageData");
-			
-			talkRepPlayerList.clear();
-			ListNBT list = compound.getList("talkRepList", Constants.NBT.TAG_COMPOUND);
-			for(int i = 0; i < list.size(); i++)
-				talkRepPlayerList.add(IdentifierHandler.load(list.getCompound(i), "id"));
+				
+				talkRepPlayerList.clear();
+				ListNBT list = compound.getList("talkRepList", Constants.NBT.TAG_COMPOUND);
+				for(int i = 0; i < list.size(); i++)
+					talkRepPlayerList.add(IdentifierHandler.load(list.getCompound(i), "id"));
+			}
 			
 			hasHadMessage = true;
 		} else hasHadMessage = compound.getBoolean("HasHadMessage");
