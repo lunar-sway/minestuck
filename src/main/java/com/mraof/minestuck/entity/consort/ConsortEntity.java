@@ -1,5 +1,6 @@
 package com.mraof.minestuck.entity.consort;
 
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.entity.SimpleTexturedEntity;
 import com.mraof.minestuck.inventory.ConsortMerchantContainer;
@@ -175,8 +176,8 @@ public class ConsortEntity extends SimpleTexturedEntity implements IContainerPro
 			return;
 		
 		if(messageTicksLeft > 0)
-			messageTicksLeft--;
-		else if(messageTicksLeft == 0)
+			messageTicksLeft -= MinestuckConfig.SERVER.dialogueRenewalSpeed.get();
+		else if(messageData != null)
 		{
 			clearDialogueData();
 			if(message != null && !message.isLockedToConsort())
@@ -184,21 +185,15 @@ public class ConsortEntity extends SimpleTexturedEntity implements IContainerPro
 		}
 		
 		if(updatingMessage != null)
-		{
 			updatingMessage.onTickUpdate(this);
-		}
 		
 		if(MSDimensions.isSkaia(dimension))
 			visitedSkaia = true;
 		
 		if(eventTimer > 0)
-		{
 			eventTimer--;
-		}
 		else if(eventTimer == 0)
-		{
 			explode();
-		}
 	}
 	
 	private void explode()
