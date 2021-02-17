@@ -782,6 +782,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.SCALEMATE_WITNESS, "The Witness");
 		add(MSItems.IRON_BOAT, "Iron Boat");
 		add(MSItems.GOLD_BOAT, "Golden Boat");
+		add(MSItems.FLARP_MANUAL, "Flarp Manual");
+		add(MSItems.SASSACRE_TEXT, "Sassacre Text");
+		add(MSItems.WISEGUY, "Wise Guy");
+		add(MSItems.TABLESTUCK_MANUAL, "Tablestuck Manual");
 		add(MSItems.THRESH_DVD, "Thresh Prince DVD");
 		add(MSItems.GAMEBRO_MAGAZINE, "Game Bro Magazine");
 		add(MSItems.GAMEGRL_MAGAZINE, "Game Grl Magazine");

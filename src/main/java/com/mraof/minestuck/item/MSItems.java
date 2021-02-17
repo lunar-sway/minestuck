@@ -326,6 +326,10 @@ public class MSItems
 	public static final Item CLOTHES_IRON = getNull();
 	public static final Item INK_SQUID_PRO_QUO = getNull();
 	public static final Item CUEBALL = getNull();
+	public static final Item FLARP_MANUAL = getNull();
+	public static final Item SASSACRE_TEXT = getNull();
+	public static final Item WISEGUY = getNull();
+	public static final Item TABLESTUCK_MANUAL = getNull();
 	public static final Item THRESH_DVD = getNull();
 	public static final Item GAMEBRO_MAGAZINE = getNull();
 	public static final Item GAMEGRL_MAGAZINE = getNull();
@@ -940,6 +944,10 @@ public class MSItems
 		registry.register(new ScalemateItem(new Item.Properties()).setRegistryName("scalemate_witness"));
 		registry.register(new CustomBoatItem((stack, world, x, y, z) -> new MetalBoatEntity(world, x, y, z, MetalBoatEntity.Type.IRON), new Item.Properties().group(MSItemGroup.MAIN).maxStackSize(1)).setRegistryName("iron_boat"));
 		registry.register(new CustomBoatItem((stack, world, x, y, z) -> new MetalBoatEntity(world, x, y, z, MetalBoatEntity.Type.GOLD), new Item.Properties().group(MSItemGroup.MAIN).maxStackSize(1)).setRegistryName("gold_boat"));
+		registry.register(new Item(new Item.Properties().maxStackSize(1).group(MSItemGroup.LANDS)).setRegistryName("flarp_manual"));
+		registry.register(new Item(new Item.Properties().maxStackSize(1).group(MSItemGroup.LANDS)).setRegistryName("sassacre_text"));
+		registry.register(new Item(new Item.Properties().maxStackSize(1).group(MSItemGroup.LANDS)).setRegistryName("wiseguy"));
+		registry.register(new Item(new Item.Properties().maxStackSize(1).group(MSItemGroup.LANDS)).setRegistryName("tablestuck_manual"));
 		registry.register(new Item(new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("thresh_dvd"));
 		registry.register(new Item(new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("gamebro_magazine"));
 		registry.register(new Item(new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("gamegrl_magazine"));

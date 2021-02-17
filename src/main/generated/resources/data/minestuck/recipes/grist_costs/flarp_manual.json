@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:flarp_manual"
+  },
+  "grist_cost": {
+    "minestuck:amber": 10,
+    "minestuck:tar": 4
+  }
+}

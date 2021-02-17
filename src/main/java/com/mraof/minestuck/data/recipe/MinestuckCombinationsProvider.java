@@ -389,7 +389,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.DEMOCRATIC_DEMOLITIONER).input(MSItems.MAILBOX).or().input(MSItems.FOOD_CAN).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.REGI_HAMMER).input(MSItems.CLAW_HAMMER).and().input(MSBlocks.CHESSBOARD).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.FEAR_NO_ANVIL).input(MSItems.BLACKSMITH_HAMMER).or().input(Items.CLOCK).build(consumer);
-		CombinationRecipeBuilder.of(MSItems.TELESCOPIC_SASSACRUSHER).input(MSItems.SLEDGE_HAMMER).and().input(Items.BOOK).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.TELESCOPIC_SASSACRUSHER).input(MSItems.SLEDGE_HAMMER).and().input(MSItems.SASSACRE_TEXT).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.MELT_MASHER).input(MSItems.FEAR_NO_ANVIL).or().input(Items.LAVA_BUCKET).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.ESTROGEN_EMPOWERED_EVERYTHING_ERADICATOR).input(MSItems.FISSION_FOCUSED_FAULT_FELLER).or().input(MSItems.GAMEGRL_MAGAZINE).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.EEEEEEEEEEEE).input(MSItems.ESTROGEN_EMPOWERED_EVERYTHING_ERADICATOR).and().input(MSItems.SBAHJ_POSTER).build(consumer);
@@ -398,7 +398,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.MWRTHWL).input(MSItems.REGI_HAMMER).or().input(MSItems.CUEBALL).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.VAUDEVILLE_HOOK).namedInput(MSItems.CANE).and().input(Items.FISHING_ROD).build(consumer);
-		CombinationRecipeBuilder.of(MSItems.VAUDEVILLE_HOOK).namedInput(Items.STICK).and().input(Items.FISHING_ROD).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.VAUDEVILLE_HOOK).namedInput(Items.STICK).or().input(MSItems.WISEGUY).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.BEAR_POKING_STICK).namedInput(MSItems.CANE).or().input(Items.LEATHER).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.BEAR_POKING_STICK).namedInput(Items.STICK).or().input(Items.LEATHER).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.UMBRELLA).input(Items.STICK).and().namedInput(Items.BLACK_WOOL).build(consumer);
