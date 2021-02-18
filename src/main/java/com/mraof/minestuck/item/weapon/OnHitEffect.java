@@ -18,9 +18,11 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
 
 import java.util.List;
 import java.util.Random;
@@ -136,6 +138,30 @@ public interface OnHitEffect
 		target.attackEntityFrom(source, rng);
 	};
 	
+	OnHitEffect SPACE_TELEPORT = requireAspect(SPACE, onCrit((stack, target, attacker) -> {
+		double oldPosX = attacker.getPosX();
+		double oldPosY = attacker.getPosY();
+		double oldPosZ = attacker.getPosZ();
+		World worldIn = attacker.world;
+		
+		for(int i = 0; i < 16; ++i)
+		{
+			double newPosX = attacker.getPosX() + (attacker.getRNG().nextDouble() - 0.5D) * 16.0D;
+			double newPosY = MathHelper.clamp(attacker.getPosY() + (double) (attacker.getRNG().nextInt(16) - 8), 0.0D, worldIn.getActualHeight() - 1);
+			double newPosZ = attacker.getPosZ() + (attacker.getRNG().nextDouble() - 0.5D) * 16.0D;
+			if(attacker.isPassenger())
+				attacker.stopRiding();
+			
+			if(attacker.attemptTeleport(newPosX, newPosY, newPosZ, true))
+			{
+				worldIn.playSound(null, oldPosX, oldPosY, oldPosZ, SoundEvents.ITEM_CHORUS_FRUIT_TELEPORT, SoundCategory.PLAYERS, 1.0F, 1.0F);
+				attacker.playSound(SoundEvents.ITEM_CHORUS_FRUIT_TELEPORT, 1.0F, 1.0F);
+				attacker.lookAt(attacker.getCommandSource().getEntityAnchorType(), target.getPositionVec());
+				break;
+			}
+		}
+	}));
+	
 	static OnHitEffect setOnFire(int duration)
 	{
 		return (itemStack, target, attacker) -> target.setFire(duration);
@@ -212,31 +238,6 @@ public interface OnHitEffect
 				attacker.world.playSound(null, attacker.getPosition(), sound.get(), SoundCategory.PLAYERS, 1.5F, pitch);
 				for(LivingEntity livingentity : list)
 					livingentity.addPotionEffect(effect.get());
-			}
-		};
-	}
-	
-	static OnHitEffect aspectAOE(EnumAspect aspect, Supplier<EffectInstance> effect, Supplier<SoundEvent> sound, float pitch)
-	{
-		return (stack, target, attacker) -> {
-			if(attacker instanceof ServerPlayerEntity)
-			{
-				Title title = PlayerSavedData.getData((ServerPlayerEntity) attacker).getTitle();
-				
-				if(title != null && attacker.getRNG().nextFloat() < (ServerEventHandler.wasLastHitCrit(attacker) ? 0.2 : 0.1))
-				{
-					if(title.getHeroAspect() == aspect){
-						AxisAlignedBB axisalignedbb = attacker.getBoundingBox().grow(4.0D, 2.0D, 4.0D);
-						List<LivingEntity> list = attacker.world.getEntitiesWithinAABB(LivingEntity.class, axisalignedbb);
-						list.remove(attacker);
-						if (!list.isEmpty()) {
-							attacker.world.playSound(null, attacker.getPosition(), sound.get(), SoundCategory.PLAYERS, 1.5F, pitch);
-							for(LivingEntity livingentity : list) {
-								livingentity.addPotionEffect(effect.get());
-							}
-						}
-					}
-				}
 			}
 		};
 	}
