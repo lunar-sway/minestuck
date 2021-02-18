@@ -42,7 +42,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.player.AttackEntityEvent;
+import net.minecraftforge.event.entity.player.CriticalHitEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.UseHoeEvent;
 import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
@@ -126,15 +126,16 @@ public class ServerEventHandler
 		}
 	}
 
-	//Gets reset after AttackEntityEvent but before LivingHurtEvent, but is used in determining if it's a critical hit
-	private static float cachedCooledAttackStrength = 0;
+	// Stores the crit result from the CriticalHitEvent, to be used during LivingHurtEvent to trigger special effects of any weapons.
+	// This method is reliable only as long as LivingHurtEvent is posted only on the main thread and after a matching CriticalHitEvent
+	private static boolean cachedCrit;
 
 	@SubscribeEvent
-	public static void onPlayerAttack(AttackEntityEvent event)
+	public static void onCrit(CriticalHitEvent event)
 	{
-		cachedCooledAttackStrength = event.getPlayer().getCooledAttackStrength(0.5F);
+		cachedCrit = event.getResult() == Event.Result.ALLOW || event.getResult() == Event.Result.DEFAULT && event.isVanillaCritical();
 	}
-
+	
 	@SubscribeEvent(priority=EventPriority.NORMAL)
 	public static void onEntityAttack(LivingHurtEvent event)
 	{
@@ -148,13 +149,12 @@ public class ServerEventHandler
 					double modifier = PlayerSavedData.getData(player).getEcheladder().getUnderlingDamageModifier();
 					event.setAmount((float) (event.getAmount() * modifier));
 				}
-				boolean critical = cachedCooledAttackStrength > 0.9 && player.fallDistance > 0.0F && !player.onGround && !player.isOnLadder() && !player.isInWater() && !player.isPotionActive(Effects.BLINDNESS) && !player.isPassenger() && !player.isBeingRidden();
 				if(!player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() instanceof PotionWeaponItem)
 				{
 					if(((PotionWeaponItem) player.getHeldItemMainhand().getItem()).potionOnCrit())
 					{
-						if(critical)
-						event.getEntityLiving().addPotionEffect(((PotionWeaponItem) player.getHeldItemMainhand().getItem()).getEffect(player));
+						if(cachedCrit)
+							event.getEntityLiving().addPotionEffect(((PotionWeaponItem) player.getHeldItemMainhand().getItem()).getEffect(player));
 					}
 					else event.getEntityLiving().addPotionEffect(((PotionWeaponItem) player.getHeldItemMainhand().getItem()).getEffect(player));
 				}
