@@ -15,7 +15,6 @@ import com.mraof.minestuck.item.foods.HealingFoodItem;
 import com.mraof.minestuck.item.foods.SurpriseEmbryoItem;
 import com.mraof.minestuck.item.foods.UnknowableEggItem;
 import com.mraof.minestuck.item.weapon.*;
-import com.mraof.minestuck.item.weapon.aspect.PassiveAspectBasedEffectWeaponItem;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -33,7 +32,6 @@ import net.minecraftforge.registries.ObjectHolder;
 import javax.annotation.Nonnull;
 
 import static com.mraof.minestuck.block.MSBlocks.*;
-import static com.mraof.minestuck.player.EnumAspect.BREATH;
 
 /**
  * This class contains all non-ItemBlock items that minestuck adds,
@@ -770,7 +768,7 @@ public class MSItems
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.WOOD, 2, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().defaultMaxDamage(150).group(MSItemGroup.WEAPONS)).setRegistryName("vaudeville_hook"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.WOOD, 3, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.notAtPlayer(OnHitEffect.enemyPotionEffect(() -> new EffectInstance(Effects.STRENGTH, 140, 1)))), new Item.Properties().defaultMaxDamage(150).group(MSItemGroup.WEAPONS)).setRegistryName("bear_poking_stick"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 6, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.playSound(() -> SoundEvents.BLOCK_ANVIL_PLACE)), new Item.Properties().defaultMaxDamage(-1).group(MSItemGroup.WEAPONS).rarity(Rarity.EPIC)).setRegistryName("crowbar"));
-		registry.register(new PassiveAspectBasedEffectWeaponItem(ItemTier.WOOD, 2, -2.0F, 1.0F, BREATH, () -> new EffectInstance(Effects.SLOW_FALLING, 2, 2), MSItemTypes.MISC_TOOL, new Item.Properties().defaultMaxDamage(350).group(MSItemGroup.WEAPONS)).setRegistryName("umbrella"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.WOOD, 2, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(InventoryTickEffect.BREATH_SLOW_FALLING), new Item.Properties().defaultMaxDamage(350).group(MSItemGroup.WEAPONS)).setRegistryName("umbrella"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.ORGANIC_TIER, 3, -2.0F).efficiency(2.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.SPAWN_BREADCRUMBS).setEating(FinishUseItemEffect.SPAWN_BREADCRUMBS, FinishUseItemEffect.foodEffect(4, 0.5F)), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("upper_crust_crust_cane"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 2, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("iron_cane"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 3, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("spear_cane"));
