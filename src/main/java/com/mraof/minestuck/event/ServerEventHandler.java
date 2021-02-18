@@ -8,7 +8,6 @@ import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.weapon.PotionWeaponItem;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.IdentifierHandler;
@@ -154,15 +153,6 @@ public class ServerEventHandler
 				{    //Increase damage to underling
 					double modifier = PlayerSavedData.getData(player).getEcheladder().getUnderlingDamageModifier();
 					event.setAmount((float) (event.getAmount() * modifier));
-				}
-				if(!player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() instanceof PotionWeaponItem)
-				{
-					if(((PotionWeaponItem) player.getHeldItemMainhand().getItem()).potionOnCrit())
-					{
-						if(wasLastHitCrit(player))
-							event.getEntityLiving().addPotionEffect(((PotionWeaponItem) player.getHeldItemMainhand().getItem()).getEffect(player));
-					}
-					else event.getEntityLiving().addPotionEffect(((PotionWeaponItem) player.getHeldItemMainhand().getItem()).getEffect(player));
 				}
 			}
 			else if (event.getEntityLiving() instanceof ServerPlayerEntity && event.getSource().getTrueSource() instanceof UnderlingEntity)

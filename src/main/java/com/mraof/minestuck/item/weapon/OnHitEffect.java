@@ -185,6 +185,14 @@ public interface OnHitEffect
 		};
 	}
 	
+	static OnHitEffect onCrit(OnHitEffect effect)
+	{
+		return (stack, target, attacker) -> {
+			if(ServerEventHandler.wasLastHitCrit(attacker))
+				effect.onHit(stack, target, attacker);
+		};
+	}
+	
 	static OnHitEffect chanceWithCritMod(OnHitEffect effect)
 	{
 		return (stack, target, attacker) -> {
