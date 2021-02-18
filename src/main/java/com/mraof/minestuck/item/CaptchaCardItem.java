@@ -57,9 +57,9 @@ public class CaptchaCardItem extends Item
 		if(playerIn.isSneaking() && stack.hasTag() && ((AlchemyHelper.isGhostCard(stack) && !AlchemyHelper.isPunchedCard(stack)) || !AlchemyHelper.hasDecodedItem(stack)))
 		{
 			AlchemyHelper.removeItemFromCard(stack);
-			return new ActionResult<>(ActionResultType.SUCCESS, stack);
+			return ActionResult.resultSuccess(new ItemStack(playerIn.getHeldItem(handIn).getItem(), playerIn.getHeldItem(handIn).getCount()));
 		}
-		else return new ActionResult<>(ActionResultType.PASS, playerIn.getHeldItem(handIn));
+		else return ActionResult.resultPass(playerIn.getHeldItem(handIn));
 	}
 	
 	@Override
