@@ -227,6 +227,14 @@ public interface OnHitEffect
 		};
 	}
 	
+	static OnHitEffect notAtPlayer(OnHitEffect effect)
+	{
+		return (stack, target, attacker) -> {
+			if(!(target instanceof PlayerEntity))
+				effect.onHit(stack, target, attacker);
+		};
+	}
+	
 	static OnHitEffect potionAOE(Supplier<EffectInstance> effect, Supplier<SoundEvent> sound, float pitch)
 	{
 		return (stack, target, attacker) -> {
