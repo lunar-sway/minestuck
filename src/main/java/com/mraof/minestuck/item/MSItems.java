@@ -759,8 +759,8 @@ public class MSItems
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 5, -2.0F).efficiency(2.0F).set(MSItemTypes.MISC_TOOL).set(ItemRightClickEffect.switchTo(() -> MSItems.ACE_OF_DIAMONDS)), new Item.Properties().defaultMaxDamage(500).group(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)).setRegistryName("cuestick"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.PAPER_TIER, 0, -1.8F).efficiency(0.0F).set(ItemRightClickEffect.switchTo(() -> MSItems.CUESTICK)), new Item.Properties().defaultMaxDamage(500)).setRegistryName("ace_of_diamonds"));
 		registry.register(new Item(new Item.Properties().defaultMaxDamage(500)).setRegistryName("ace_of_hearts"));
-		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.REGI_TIER, 8, -2.8F).efficiency(4.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.EPIC)).setRegistryName("white_kings_scepter"));
-		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.REGI_TIER, 8, -2.8F).efficiency(4.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.EPIC)).setRegistryName("black_kings_scepter"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.REGI_TIER, 8, -2.8F).efficiency(4.0F).set(MSItemTypes.MISC_TOOL).set(ItemRightClickEffect.summonFireball()), new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.EPIC)).setRegistryName("white_kings_scepter"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.REGI_TIER, 8, -2.8F).efficiency(4.0F).set(MSItemTypes.MISC_TOOL).set(ItemRightClickEffect.summonFireball()), new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.EPIC)).setRegistryName("black_kings_scepter"));
 		
 		
 		//canes
