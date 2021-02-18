@@ -119,6 +119,16 @@ public interface OnHitEffect
 		}
 	};
 	
+	OnHitEffect RANDOM_DAMAGE = (stack, target, attacker) -> {
+		DamageSource source;
+		if(attacker instanceof PlayerEntity)
+			source = DamageSource.causePlayerDamage((PlayerEntity) attacker);
+		else source = DamageSource.causeMobDamage(attacker);
+		
+		float rng = (float) (attacker.getRNG().nextInt(7)+1) * (attacker.getRNG().nextInt(7)+1);
+		target.attackEntityFrom(source, rng);
+	};
+	
 	static OnHitEffect setOnFire(int duration)
 	{
 		return (itemStack, target, attacker) -> target.setFire(duration);
