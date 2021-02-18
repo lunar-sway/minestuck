@@ -133,12 +133,13 @@ public class ServerEventHandler
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onCrit(CriticalHitEvent event)
 	{
-		cachedCrit = event.getResult() == Event.Result.ALLOW || event.getResult() == Event.Result.DEFAULT && event.isVanillaCritical();
+		if(!event.getEntity().world.isRemote)
+			cachedCrit = event.getResult() == Event.Result.ALLOW || event.getResult() == Event.Result.DEFAULT && event.isVanillaCritical();
 	}
 	
-	public static boolean wasLastHitCrit()
+	public static boolean wasLastHitCrit(LivingEntity entity)
 	{
-		return cachedCrit;
+		return entity instanceof ServerPlayerEntity && cachedCrit;
 	}
 	
 	@SubscribeEvent(priority=EventPriority.NORMAL)
@@ -158,7 +159,7 @@ public class ServerEventHandler
 				{
 					if(((PotionWeaponItem) player.getHeldItemMainhand().getItem()).potionOnCrit())
 					{
-						if(wasLastHitCrit())
+						if(wasLastHitCrit(player))
 							event.getEntityLiving().addPotionEffect(((PotionWeaponItem) player.getHeldItemMainhand().getItem()).getEffect(player));
 					}
 					else event.getEntityLiving().addPotionEffect(((PotionWeaponItem) player.getHeldItemMainhand().getItem()).getEffect(player));

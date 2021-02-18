@@ -32,12 +32,18 @@ public interface OnHitEffect
 {
 	void onHit(ItemStack stack, LivingEntity target, LivingEntity attacker);
 	
-	OnHitEffect RAGE_STRENGTH = aspectEffect(RAGE, () -> new EffectInstance(Effects.STRENGTH, 80, 1), null);
-	OnHitEffect HOPE_RESISTANCE = aspectEffect(HOPE, () -> new EffectInstance(Effects.RESISTANCE, 120, 2), null);
-	OnHitEffect LIFE_SATURATION = aspectEffect(LIFE, () -> new EffectInstance(Effects.SATURATION, 1, 1), () -> new EffectInstance(Effects.HUNGER, 60, 100));
+	OnHitEffect RAGE_STRENGTH = requireAspect(RAGE, chanceWithCritMod(
+			userPotionEffect(() -> new EffectInstance(Effects.STRENGTH, 80, 1))));
+	OnHitEffect HOPE_RESISTANCE = requireAspect(HOPE, chanceWithCritMod(
+			userPotionEffect(() -> new EffectInstance(Effects.RESISTANCE, 120, 2))));
+	OnHitEffect LIFE_SATURATION = requireAspect(LIFE, chanceWithCritMod(
+			userPotionEffect(() -> new EffectInstance(Effects.SATURATION, 1, 1))
+					.and(enemyPotionEffect(() -> new EffectInstance(Effects.HUNGER, 60, 100)))));
 	
-	OnHitEffect BREATH_LEVITATION_AOE = aspectAOE(BREATH, () -> new EffectInstance(Effects.LEVITATION, 30, 2), () -> SoundEvents.ENTITY_ENDER_DRAGON_FLAP,1.4F);
-	OnHitEffect TIME_SLOWNESS_AOE = aspectAOE(TIME, () -> new EffectInstance(Effects.SLOWNESS, 100, 4), () -> SoundEvents.BLOCK_BELL_RESONATE, 2F);
+	OnHitEffect BREATH_LEVITATION_AOE = requireAspect(BREATH, chanceWithCritMod(
+			potionAOE(() -> new EffectInstance(Effects.LEVITATION, 30, 2), () -> SoundEvents.ENTITY_ENDER_DRAGON_FLAP,1.4F)));
+	OnHitEffect TIME_SLOWNESS_AOE = requireAspect(TIME, chanceWithCritMod(
+			potionAOE(() -> new EffectInstance(Effects.SLOWNESS, 100, 4), () -> SoundEvents.BLOCK_BELL_RESONATE, 2F)));
 	
 	OnHitEffect SET_CANDY_DROP_FLAG = (stack, target, attacker) -> {
 		if(target instanceof UnderlingEntity)
@@ -157,26 +163,47 @@ public interface OnHitEffect
 		};
 	}
 	
-	static OnHitEffect aspectEffect(EnumAspect aspect, Supplier<EffectInstance> playerEffect, Supplier<EffectInstance> enemyEffect)
+	static OnHitEffect userPotionEffect(Supplier<EffectInstance> effect)
+	{
+		return (stack, target, attacker) -> attacker.addPotionEffect(effect.get());
+	}
+	
+	static OnHitEffect enemyPotionEffect(Supplier<EffectInstance> effect)
+	{
+		return (stack, target, attacker) -> target.addPotionEffect(effect.get());
+	}
+	
+	static OnHitEffect requireAspect(EnumAspect aspect, OnHitEffect effect)
 	{
 		return (stack, target, attacker) -> {
-			boolean critical = attacker.fallDistance > 0.0F && !attacker.onGround && !attacker.isOnLadder() && !attacker.isInWater() && !attacker.isPotionActive(Effects.BLINDNESS) && !attacker.isPassenger() && !attacker.isBeingRidden();
-			float randFloat = attacker.getRNG().nextFloat();
 			if(attacker instanceof ServerPlayerEntity)
 			{
 				Title title = PlayerSavedData.getData((ServerPlayerEntity) attacker).getTitle();
-				
-				if(critical)
-					randFloat = randFloat - .1F;
-				if(title != null && randFloat < .1)
-				{
-					if(title.getHeroAspect() == aspect)
-					{
-						attacker.addPotionEffect(playerEffect.get());
-						if(enemyEffect != null)
-							target.addPotionEffect(enemyEffect.get());
-					}
-				}
+				if(title != null && title.getHeroAspect() == aspect)
+					effect.onHit(stack, target, attacker);
+			}
+		};
+	}
+	
+	static OnHitEffect chanceWithCritMod(OnHitEffect effect)
+	{
+		return (stack, target, attacker) -> {
+			if(!attacker.world.isRemote && attacker.getRNG().nextFloat() < (ServerEventHandler.wasLastHitCrit(attacker) ? 0.2 : 0.1))
+				effect.onHit(stack, target, attacker);
+		};
+	}
+	
+	static OnHitEffect potionAOE(Supplier<EffectInstance> effect, Supplier<SoundEvent> sound, float pitch)
+	{
+		return (stack, target, attacker) -> {
+			AxisAlignedBB axisalignedbb = attacker.getBoundingBox().grow(4.0D, 2.0D, 4.0D);
+			List<LivingEntity> list = attacker.world.getEntitiesWithinAABB(LivingEntity.class, axisalignedbb);
+			list.remove(attacker);
+			if (!list.isEmpty())
+			{
+				attacker.world.playSound(null, attacker.getPosition(), sound.get(), SoundCategory.PLAYERS, 1.5F, pitch);
+				for(LivingEntity livingentity : list)
+					livingentity.addPotionEffect(effect.get());
 			}
 		};
 	}
@@ -188,7 +215,7 @@ public interface OnHitEffect
 			{
 				Title title = PlayerSavedData.getData((ServerPlayerEntity) attacker).getTitle();
 				
-				if(title != null && attacker.getRNG().nextFloat() < (ServerEventHandler.wasLastHitCrit() ? 0.2 : 0.1))
+				if(title != null && attacker.getRNG().nextFloat() < (ServerEventHandler.wasLastHitCrit(attacker) ? 0.2 : 0.1))
 				{
 					if(title.getHeroAspect() == aspect){
 						AxisAlignedBB axisalignedbb = attacker.getBoundingBox().grow(4.0D, 2.0D, 4.0D);
@@ -203,6 +230,14 @@ public interface OnHitEffect
 					}
 				}
 			}
+		};
+	}
+	
+	default OnHitEffect and(OnHitEffect effect)
+	{
+		return (stack, target, attacker) -> {
+			this.onHit(stack, target, attacker);
+			effect.onHit(stack, target, attacker);
 		};
 	}
 }
