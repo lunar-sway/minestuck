@@ -2,6 +2,7 @@ package com.mraof.minestuck.item.weapon;
 
 import com.google.common.collect.ImmutableList;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
+import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.Title;
@@ -183,15 +184,11 @@ public interface OnHitEffect
 	static OnHitEffect aspectAOE(EnumAspect aspect, Supplier<EffectInstance> effect, Supplier<SoundEvent> sound, float pitch)
 	{
 		return (stack, target, attacker) -> {
-			boolean critical = attacker.fallDistance > 0.0F && !attacker.onGround && !attacker.isOnLadder() && !attacker.isInWater() && !attacker.isPotionActive(Effects.BLINDNESS) && !attacker.isPassenger() && !attacker.isBeingRidden();
-			float randFloat = attacker.getRNG().nextFloat();
 			if(attacker instanceof ServerPlayerEntity)
 			{
 				Title title = PlayerSavedData.getData((ServerPlayerEntity) attacker).getTitle();
 				
-				if(critical)
-					randFloat = randFloat - .1F;
-				if(title != null && randFloat < .1)
+				if(title != null && attacker.getRNG().nextFloat() < (ServerEventHandler.wasLastHitCrit() ? 0.2 : 0.1))
 				{
 					if(title.getHeroAspect() == aspect){
 						AxisAlignedBB axisalignedbb = attacker.getBoundingBox().grow(4.0D, 2.0D, 4.0D);

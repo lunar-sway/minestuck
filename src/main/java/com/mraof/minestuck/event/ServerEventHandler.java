@@ -130,10 +130,15 @@ public class ServerEventHandler
 	// This method is reliable only as long as LivingHurtEvent is posted only on the main thread and after a matching CriticalHitEvent
 	private static boolean cachedCrit;
 
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onCrit(CriticalHitEvent event)
 	{
 		cachedCrit = event.getResult() == Event.Result.ALLOW || event.getResult() == Event.Result.DEFAULT && event.isVanillaCritical();
+	}
+	
+	public static boolean wasLastHitCrit()
+	{
+		return cachedCrit;
 	}
 	
 	@SubscribeEvent(priority=EventPriority.NORMAL)
@@ -153,7 +158,7 @@ public class ServerEventHandler
 				{
 					if(((PotionWeaponItem) player.getHeldItemMainhand().getItem()).potionOnCrit())
 					{
-						if(cachedCrit)
+						if(wasLastHitCrit())
 							event.getEntityLiving().addPotionEffect(((PotionWeaponItem) player.getHeldItemMainhand().getItem()).getEffect(player));
 					}
 					else event.getEntityLiving().addPotionEffect(((PotionWeaponItem) player.getHeldItemMainhand().getItem()).getEffect(player));
