@@ -154,14 +154,12 @@ public class AlchemyHelper
 	public static ItemStack createCard(ItemStack item, boolean punched)
 	{
 		ItemStack stack = createEncodedItem(item, true);
-		if(!stack.hasTag())
-			stack.setTag(new CompoundNBT());
-		stack.getTag().putBoolean("punched", punched);
+		stack.getOrCreateTag().putBoolean("punched", punched);
 		if(!punched)
 		{
 			if(item.hasTag())
-				stack.getTag().put("contentTags", item.getTag());
-			stack.getTag().putInt("contentSize", item.getCount());
+				stack.getOrCreateTag().put("contentTags", item.getTag());
+			stack.getOrCreateTag().putInt("contentSize", item.getCount());
 		}
 		
 		return stack;
@@ -171,23 +169,24 @@ public class AlchemyHelper
 	public static ItemStack createGhostCard(ItemStack item)
 	{
 		ItemStack stack = createEncodedItem(item, true);
-		if(!stack.hasTag())
-			stack.setTag(new CompoundNBT());
-		stack.getTag().putBoolean("punched", false);
+		stack.getOrCreateTag().putBoolean("punched", false);
 			if(item.hasTag())
-				stack.getTag().put("contentTags", item.getTag());
-			stack.getTag().putInt("contentSize", 0);
+				stack.getOrCreateTag().put("contentTags", item.getTag());
+			stack.getOrCreateTag().putInt("contentSize", 0);
 		return stack;
+	}
+	
+	public static void removeItemFromCard(ItemStack card)
+	{
+		card.removeChildTag("contentID");
+		card.removeChildTag("punched");
+		card.removeChildTag("contentTags");
+		card.removeChildTag("contentSize");
 	}
 	
 	public static ItemStack changeEncodeSize(ItemStack stack, int size)
 	{
-		
-		if(!stack.hasTag())
-			stack.setTag(new CompoundNBT());
-		
-			stack.getTag().putInt("contentSize", size);
-		
+		stack.getOrCreateTag().putInt("contentSize", size);
 		
 		return stack;
 	}
@@ -195,14 +194,11 @@ public class AlchemyHelper
 	public static ItemStack createShunt(ItemStack item)
 	{
 		ItemStack stack = createEncodedItem(item, SHUNT);
-		if(!stack.hasTag())
-			stack.setTag(new CompoundNBT());
-		stack.getTag().putBoolean("punched", true);
+		stack.getOrCreateTag().putBoolean("punched", true);
 		
-			if(item.hasTag())
-				stack.getTag().put("contentTags", item.getTag());
-			stack.getTag().putInt("contentSize", item.getCount());
-		
+		if(item.hasTag())
+			stack.getOrCreateTag().put("contentTags", item.getTag());
+		stack.getOrCreateTag().putInt("contentSize", item.getCount());
 		
 		return stack;
 	}
