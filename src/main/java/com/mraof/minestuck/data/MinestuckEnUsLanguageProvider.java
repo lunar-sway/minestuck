@@ -25,7 +25,7 @@ import com.mraof.minestuck.item.crafting.alchemy.GristAmount;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
-import com.mraof.minestuck.item.weapon.SordItem;
+import com.mraof.minestuck.item.weapon.OnHitEffect;
 import com.mraof.minestuck.jei.JeiGristCost;
 import com.mraof.minestuck.network.EffectTogglePacket;
 import com.mraof.minestuck.player.*;
@@ -359,7 +359,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.MWRTHWL, "Mwrthwl");
 		add(MSItems.SORD, "Sord.....");
 		addTooltip(MSItems.SORD, "A shitty sword. Not much more too it.");
-		addExtra(MSItems.SORD, SordItem.DROP_MESSAGE, "The shittiness of the sord made it phase through your hand");
+		addExtra(MSItems.SORD, OnHitEffect.SORD_DROP_MESSAGE, "The shittiness of the sord made it phase through your hand");
 		add(MSItems.PAPER_SWORD, "Paper Sword");
 		addTooltip(MSItems.PAPER_SWORD, "None shall be the wiser. It is the perfect crime.");
 		add(MSItems.CACTACEAE_CUTLASS, "Cactaceae Cutlass");

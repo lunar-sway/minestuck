@@ -5,7 +5,6 @@ import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.Title;
-import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.LivingEntity;
@@ -103,6 +102,20 @@ public interface OnHitEffect
 			item.setPickupDelay(40);
 			target.world.addEntity(item);
 			heldByTarget.shrink(1);
+		}
+	};
+	
+	String SORD_DROP_MESSAGE = "drop_message";
+	
+	OnHitEffect SORD_DROP = (stack, target, attacker) -> {
+		if(!attacker.getEntityWorld().isRemote && attacker.getRNG().nextFloat() < .25)
+		{
+			ItemEntity sord = new ItemEntity(attacker.world, attacker.getPosX(), attacker.getPosY(), attacker.getPosZ(), stack.copy());
+			sord.getItem().setCount(1);
+			sord.setPickupDelay(40);
+			attacker.world.addEntity(sord);
+			stack.shrink(1);
+			attacker.sendMessage(new TranslationTextComponent(sord.getItem().getTranslationKey() + "." + SORD_DROP_MESSAGE));
 		}
 	};
 	
