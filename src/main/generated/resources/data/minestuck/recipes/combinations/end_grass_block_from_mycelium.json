@@ -8,6 +8,6 @@
   },
   "mode": "or",
   "output": {
-    "item": "minestuck:end_grass"
+    "item": "minestuck:end_grass_block"
   }
 }

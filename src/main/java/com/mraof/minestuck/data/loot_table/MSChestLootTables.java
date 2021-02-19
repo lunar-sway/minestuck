@@ -350,7 +350,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.addEntry(ItemLootEntry.builder(Items.SHULKER_SHELL).weight(1).quality(1))
 						.addEntry(ItemLootEntry.builder(Items.END_STONE).weight(8).quality(-1).acceptFunction(SetCount.builder(RandomValueRange.of(1, 16))))
 						.addEntry(ItemLootEntry.builder(Items.END_ROD).weight(5).quality(0).acceptFunction(SetCount.builder(RandomValueRange.of(1, 2))))
-						.addEntry(ItemLootEntry.builder(MSBlocks.END_GRASS).weight(5).quality(-1).acceptFunction(SetCount.builder(RandomValueRange.of(1, 16))))
+						.addEntry(ItemLootEntry.builder(MSBlocks.END_GRASS_BLOCK).weight(5).quality(-1).acceptFunction(SetCount.builder(RandomValueRange.of(1, 16))))
 						.addEntry(ItemLootEntry.builder(MSBlocks.COARSE_END_STONE).weight(8).quality(-1).acceptFunction(SetCount.builder(RandomValueRange.of(1, 6))))));
 		
 		lootProcessor.accept(locationFor(LandTypes.RAIN, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.builder()

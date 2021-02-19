@@ -1,7 +1,7 @@
 {
   "type": "minestuck:combination",
   "input1": {
-    "item": "minestuck:end_grass"
+    "item": "minestuck:end_grass_block"
   },
   "input2": {
     "item": "minecraft:dirt"

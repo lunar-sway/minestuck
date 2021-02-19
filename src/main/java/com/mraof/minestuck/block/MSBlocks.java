@@ -75,7 +75,7 @@ public class MSBlocks
 	public static final Block MYCELIUM_BRICKS = getNull();
 	public static final Block BLACK_STONE = getNull();
 	public static final Block FLOWERY_MOSSY_COBBLESTONE = getNull(), FLOWERY_MOSSY_STONE_BRICKS = getNull();
-	public static final Block COARSE_END_STONE = getNull(), END_GRASS = getNull();
+	public static final Block COARSE_END_STONE = getNull(), END_GRASS_BLOCK = getNull();
 	public static final Block CHALK = getNull(), POLISHED_CHALK = getNull(), CHALK_BRICKS = getNull(), CHISELED_CHALK_BRICKS = getNull();
 	public static final Block PINK_STONE = getNull(), POLISHED_PINK_STONE = getNull(), PINK_STONE_BRICKS = getNull(), CHISELED_PINK_STONE_BRICKS = getNull();
 	public static final Block CRACKED_PINK_STONE_BRICKS = getNull(), MOSSY_PINK_STONE_BRICKS = getNull();
@@ -113,6 +113,7 @@ public class MSBlocks
 	public static final Block PETRIFIED_GRASS = getNull();
 	public static final Block PETRIFIED_POPPY = getNull();
 	public static final Block STRAWBERRY = getNull(), ATTACHED_STRAWBERRY_STEM = getNull(), STRAWBERRY_STEM = getNull();
+	public static final Block TALL_END_GRASS = getNull();
 	
 	//Special Land Blocks
 	public static final Block GLOWY_GOOP = getNull();
@@ -273,7 +274,7 @@ public class MSBlocks
 		registry.register(new Block(Block.Properties.create(Material.ROCK).hardnessAndResistance(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("flowery_mossy_cobblestone"));
 		registry.register(new Block(Block.Properties.create(Material.ROCK).hardnessAndResistance(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("flowery_mossy_stone_bricks"));
 		registry.register(new Block(Block.Properties.create(Material.ROCK, MaterialColor.SAND).hardnessAndResistance(3.0F, 9.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("coarse_end_stone"));
-		registry.register(new EndGrassBlock(Block.Properties.create(Material.ROCK, MaterialColor.PURPLE).hardnessAndResistance(3.0F, 9.0F).harvestTool(ToolType.SHOVEL).tickRandomly()).setRegistryName("end_grass"));
+		registry.register(new EndGrassBlock(Block.Properties.create(Material.ROCK, MaterialColor.PURPLE).hardnessAndResistance(3.0F, 9.0F).harvestTool(ToolType.SHOVEL).tickRandomly()).setRegistryName("end_grass_block"));
 		Block chalk = register(registry, new Block(Block.Properties.create(Material.ROCK, MaterialColor.SNOW).hardnessAndResistance(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("chalk"));
 		registry.register(new Block(Block.Properties.create(Material.ROCK, MaterialColor.SNOW).hardnessAndResistance(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("polished_chalk"));
 		Block chalkBricks = register(registry, new Block(Block.Properties.create(Material.ROCK, MaterialColor.SNOW).hardnessAndResistance(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("chalk_bricks"));
@@ -373,6 +374,7 @@ public class MSBlocks
 		registry.register(new StrawberryBlock(Block.Properties.create(Material.GOURD, MaterialColor.RED).hardnessAndResistance(1.0F).sound(SoundType.WOOD)).setRegistryName("strawberry"));
 		registry.register(new StrawberryBlock.AttachedStem((StemGrownBlock) STRAWBERRY, Block.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0).sound(SoundType.WOOD)).setRegistryName("attached_strawberry_stem"));
 		registry.register(new StrawberryBlock.Stem((StemGrownBlock) STRAWBERRY, Block.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0).sound(SoundType.WOOD)).setRegistryName("strawberry_stem"));
+		registry.register(new TallEndGrassBlock(Block.Properties.create(Material.TALL_PLANTS, DyeColor.GREEN).doesNotBlockMovement().hardnessAndResistance(0.1F).sound(SoundType.NETHER_WART)).setRegistryName("tall_end_grass"));
 		
 		registry.register(new GoopBlock(Block.Properties.create(Material.CLAY).hardnessAndResistance(0.1F).sound(SoundType.SLIME).lightValue(14)).setRegistryName("glowy_goop"));
 		registry.register(new GoopBlock(Block.Properties.create(Material.CLAY).hardnessAndResistance(0.1F).sound(SoundType.SLIME)).setRegistryName("coagulated_blood"));

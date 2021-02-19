@@ -23,7 +23,7 @@ public class EndGrassBlock extends Block
 	@SuppressWarnings("deprecation")
 	public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random)
 	{
-		if(!worldIn.isRemote)
+		if(!worldIn.isRemote && random.nextFloat() >= .999F)
 		{
 			if(!worldIn.isAreaLoaded(pos, 3))
 				return;

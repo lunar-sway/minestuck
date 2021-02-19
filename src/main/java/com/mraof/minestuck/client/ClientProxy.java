@@ -86,6 +86,7 @@ public class ClientProxy
 		RenderTypeLookup.setRenderLayer(MSBlocks.BLOOMING_CACTUS, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.PETRIFIED_GRASS, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.PETRIFIED_POPPY, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.TALL_END_GRASS, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.BLACK_CROWN_STAINED_GLASS, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(MSBlocks.BLACK_PAWN_STAINED_GLASS, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(MSBlocks.WHITE_CROWN_STAINED_GLASS, RenderType.getTranslucent());

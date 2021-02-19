@@ -124,7 +124,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.FLOWERY_MOSSY_COBBLESTONE, "Flowery Mossy Cobblestone");
 		add(MSBlocks.FLOWERY_MOSSY_STONE_BRICKS, "Flowery Mossy Stone Bricks");
 		add(MSBlocks.COARSE_END_STONE, "Coarse End Stone");
-		add(MSBlocks.END_GRASS, "End Grass");
+		add(MSBlocks.END_GRASS_BLOCK, "End Grass Block");
 		add(MSBlocks.CHALK, "Chalk");
 		add(MSBlocks.POLISHED_CHALK, "Polished Chalk");
 		add(MSBlocks.CHALK_BRICKS, "Chalk Bricks");
@@ -234,6 +234,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.STRAWBERRY, "Strawberry");
 		add(MSBlocks.ATTACHED_STRAWBERRY_STEM, "Strawberry Stem");
 		add(MSBlocks.STRAWBERRY_STEM, "Strawberry Stem");
+		add(MSBlocks.TALL_END_GRASS, "End Grass");
 		add(MSBlocks.GLOWY_GOOP, "Glowy Goop");
 		add(MSBlocks.COAGULATED_BLOOD, "Coagulated Blood");
 		add(MSBlocks.VEIN, "Vein");

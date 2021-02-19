@@ -459,7 +459,7 @@ public class MSItems
 		registerItemBlock(registry, FLOWERY_MOSSY_COBBLESTONE, MSItemGroup.LANDS);
 		registerItemBlock(registry, FLOWERY_MOSSY_STONE_BRICKS, MSItemGroup.LANDS);
 		registerItemBlock(registry, COARSE_END_STONE, MSItemGroup.LANDS);
-		registerItemBlock(registry, END_GRASS, MSItemGroup.LANDS);
+		registerItemBlock(registry, END_GRASS_BLOCK, MSItemGroup.LANDS);
 		registerItemBlock(registry, CHALK, MSItemGroup.LANDS);
 		registerItemBlock(registry, CHALK_BRICKS, MSItemGroup.LANDS);
 		registerItemBlock(registry, CHISELED_CHALK_BRICKS, MSItemGroup.LANDS);
@@ -557,6 +557,7 @@ public class MSItems
 		registerItemBlock(registry, PETRIFIED_GRASS, MSItemGroup.LANDS);
 		registerItemBlock(registry, PETRIFIED_POPPY, MSItemGroup.LANDS);
 		registerItemBlock(registry, STRAWBERRY, MSItemGroup.LANDS);
+		registerItemBlock(registry, TALL_END_GRASS, MSItemGroup.LANDS);
 		
 		registerItemBlock(registry, GLOWY_GOOP, MSItemGroup.LANDS);
 		registerItemBlock(registry, COAGULATED_BLOOD, MSItemGroup.LANDS);

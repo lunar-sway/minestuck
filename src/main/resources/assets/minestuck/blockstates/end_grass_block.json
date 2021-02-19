@@ -1,0 +1,10 @@
+{
+    "variants": {
+        "": [
+            { "model": "minestuck:block/end_grass_block" },
+            { "model": "minestuck:block/end_grass_block", "y": 90 },
+            { "model": "minestuck:block/end_grass_block", "y": 180 },
+            { "model": "minestuck:block/end_grass_block", "y": 270 }
+        ]
+    }
+}

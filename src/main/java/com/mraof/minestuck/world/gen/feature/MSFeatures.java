@@ -38,6 +38,7 @@ public final class MSFeatures
 	public static final Feature<BlockStateFeatureConfig> LARGE_PILLAR = getNull();
 	public static final Feature<BlockBlobConfig> BLOCK_BLOB = getNull();
 	public static final Feature<RandomRockBlockBlobConfig> RANDOM_ROCK_BLOCK_BLOB = getNull();
+	public static final Feature<SphereReplaceConfig> SURFACE_DISK = getNull();
 	public static final Feature<NoFeatureConfig> OCEAN_RUNDOWN = getNull();
 	public static final Feature<NoFeatureConfig> RABBIT_PLACEMENT = getNull();
 	
@@ -82,6 +83,7 @@ public final class MSFeatures
 		registry.register(new PillarFeature(BlockStateFeatureConfig::deserialize, true).setRegistryName("large_pillar"));
 		registry.register(new ConditionFreeBlobFeature(BlockBlobConfig::deserialize).setRegistryName("block_blob"));
 		registry.register(new RandomRockConditionFreeBlobFeature(RandomRockBlockBlobConfig::deserialize).setRegistryName("random_rock_block_blob"));
+		registry.register(new SurfaceDiskFeature(SphereReplaceConfig::deserialize).setRegistryName("surface_disk"));
 		registry.register(new OceanRundownFeature(NoFeatureConfig::deserialize).setRegistryName("ocean_rundown"));
 		registry.register(new RabbitPlacementFeature(NoFeatureConfig::deserialize).setRegistryName("rabbit_placement"));
 		

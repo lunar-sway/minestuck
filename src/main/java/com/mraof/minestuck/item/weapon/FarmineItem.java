@@ -56,7 +56,7 @@ public class FarmineItem extends WeaponItem
 		addAssociation(Blocks.DIRT, Blocks.GRASS);
 		addAssociation(Blocks.DIRT, Blocks.MYCELIUM);
 		addAssociation(Blocks.DIRT, Blocks.GRASS_PATH);
-		addAssociation(Blocks.END_STONE, MSBlocks.END_GRASS);
+		addAssociation(Blocks.END_STONE, MSBlocks.END_GRASS_BLOCK);
 		
 		addOneWayAssociation(Blocks.COBBLESTONE, Blocks.INFESTED_COBBLESTONE);
 		addOneWayAssociation(Blocks.STONE, Blocks.INFESTED_STONE);
