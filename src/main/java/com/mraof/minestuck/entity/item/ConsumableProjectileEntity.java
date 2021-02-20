@@ -1,6 +1,5 @@
 package com.mraof.minestuck.entity.item;
 
-import com.mraof.minestuck.client.renderer.entity.RendersAsItem;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.entity.Entity;
@@ -10,6 +9,7 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileItemEntity;
 import net.minecraft.item.Item;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
@@ -19,9 +19,9 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class ConsumableProjectileEntity extends ProjectileItemEntity implements RendersAsItem
+public class ConsumableProjectileEntity extends ProjectileItemEntity
 {
-	public int damage = 0;
+	private int damage = 0;
 	
 	public ConsumableProjectileEntity(EntityType<? extends ConsumableProjectileEntity> type, World worldIn)
 	{
@@ -69,6 +69,20 @@ public class ConsumableProjectileEntity extends ProjectileItemEntity implements 
 	}
 	
 	@Override
+	public void readAdditional(CompoundNBT compound)
+	{
+		super.readAdditional(compound);
+		damage = compound.getInt("damage");
+	}
+	
+	@Override
+	public void writeAdditional(CompoundNBT compound)
+	{
+		super.writeAdditional(compound);
+		compound.putInt("damage", damage);
+	}
+	
+	@Override
 	public IPacket<?> createSpawnPacket()
 	{
 		return NetworkHooks.getEntitySpawningPacket(this);
@@ -77,6 +91,6 @@ public class ConsumableProjectileEntity extends ProjectileItemEntity implements 
 	@Override
 	protected Item getDefaultItem()
 	{
-		return MSItems.CLUBS_SUITARANG;
+		return MSItems.SHURIKEN;
 	}
 }
