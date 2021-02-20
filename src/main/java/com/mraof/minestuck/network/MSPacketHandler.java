@@ -53,7 +53,7 @@ public class MSPacketHandler
 		registerMessage(AlchemiterPacket.class, AlchemiterPacket::decode);
 		registerMessage(GristWildcardPacket.class, GristWildcardPacket::decode);
 		registerMessage(TransportalizerPacket.class, TransportalizerPacket::decode);
-		registerMessage(EffectTogglePacket.class, EffectTogglePacket::decode);
+		registerMessage(UserEffectPacket.class, UserEffectPacket::decode);
 		registerMessage(StoneTabletPacket.class, StoneTabletPacket::decode);
 	}
 	

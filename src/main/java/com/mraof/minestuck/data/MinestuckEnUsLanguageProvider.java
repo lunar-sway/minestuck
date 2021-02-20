@@ -27,7 +27,7 @@ import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.item.weapon.OnHitEffect;
 import com.mraof.minestuck.jei.JeiGristCost;
-import com.mraof.minestuck.network.EffectTogglePacket;
+import com.mraof.minestuck.network.UserEffectPacket;
 import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.Generator;
 import com.mraof.minestuck.skaianet.MergeResult;
@@ -1209,8 +1209,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(TitleSelectorScreen.USED_TITLE, "%s is already used");
 		add(TitleSelectorScreen.SELECT, "Select");
 		add(TitleSelectorScreen.RANDOMIZE, "Randomize");
-		add(EffectTogglePacket.ON, "Aspect Effects have been toggled on");
-		add(EffectTogglePacket.OFF, "Aspect Effects have been toggled off");
+		//add(UserEffectPacket.ON, "Aspect Effects have been toggled on");
+		//add(UserEffectPacket.OFF, "Aspect Effects have been toggled off");
 		add(SkaianetHandler.PRIVATE_COMPUTER, "You are not allowed to access other players computers.");
 		add(TransportalizerTileEntity.DISABLED, "This transportalizer is currently disabled with a redstone signal.");
 		add(TransportalizerTileEntity.BLOCKED, "The transportalizer appears to need more space above it to function.");
@@ -1299,7 +1299,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSKeyHandler.STATS_GUI, "View General Minestuck Gui");
 		add(MSKeyHandler.EXIT_EDIT_MODE, "Exit Edit Mode");
 		add(MSKeyHandler.CAPTCHALOGUE, "Captchalogue Held Item");
-		add(MSKeyHandler.ASPECT_EFFECT_TOGGLE, "Toggle Aspect Effects");
+		add(MSKeyHandler.USER_ASPECT_EFFECT, "User Aspect Effect");
+		add(MSKeyHandler.POSITIVE_TARGET_ASPECT_EFFECT, "Positive Target Aspect Effect");
+		add(MSKeyHandler.NEGATIVE_TARGET_ASPECT_EFFECT, "Negative Target Aspect Effect");
 		add(MSKeyHandler.SYLLADEX, "Open Sylladex");
 		
 		add(ConsortMerchantInventory.CANT_AFFORD, "You don't have enough boondollars for that!");

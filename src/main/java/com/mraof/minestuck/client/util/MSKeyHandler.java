@@ -5,7 +5,7 @@ import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.computer.editmode.ClientEditHandler;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
-import com.mraof.minestuck.network.EffectTogglePacket;
+import com.mraof.minestuck.network.UserEffectPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.client.Minecraft;
@@ -30,13 +30,17 @@ public class MSKeyHandler
 	public static final String STATS_GUI = "key.minestuck.stats_gui";
 	public static final String EXIT_EDIT_MODE = "key.minestuck.exit_edit_mode";
 	public static final String CAPTCHALOGUE = "key.minestuck.captchalogue";
-	public static final String ASPECT_EFFECT_TOGGLE = "key.minestuck.aspext_effect_toggle";
+	public static final String USER_ASPECT_EFFECT = "key.minestuck.user_aspect_power";
+	public static final String POSITIVE_TARGET_ASPECT_EFFECT = "key.minestuck.positive_target_aspect_power";
+	public static final String NEGATIVE_TARGET_ASPECT_EFFECT = "key.minestuck.negative_target_aspect_power";
 	public static final String SYLLADEX = "key.minestuck.sylladex";
 	
 	public static KeyBinding statKey;
 	public static KeyBinding editKey;
 	public static KeyBinding captchaKey;
-	public static KeyBinding effectToggleKey;
+	public static KeyBinding userPowerKey;
+	public static KeyBinding positiveTargetPowerKey;
+	public static KeyBinding negativeTargetPowerKey;
 	public static KeyBinding sylladexKey;
 	static boolean captchaKeyPressed = false;
 	
@@ -51,8 +55,12 @@ public class MSKeyHandler
 		ClientRegistry.registerKeyBinding(editKey);
 		captchaKey = new KeyBinding(CAPTCHALOGUE, GLFW.GLFW_KEY_V, CATEGORY);
 		ClientRegistry.registerKeyBinding(captchaKey);
-		effectToggleKey = new KeyBinding(ASPECT_EFFECT_TOGGLE, GLFW.GLFW_KEY_BACKSLASH, CATEGORY);
-		ClientRegistry.registerKeyBinding(effectToggleKey);
+		userPowerKey = new KeyBinding(USER_ASPECT_EFFECT, GLFW.GLFW_KEY_U, CATEGORY);
+		ClientRegistry.registerKeyBinding(userPowerKey);
+		positiveTargetPowerKey = new KeyBinding(POSITIVE_TARGET_ASPECT_EFFECT, -1, CATEGORY);
+		ClientRegistry.registerKeyBinding(positiveTargetPowerKey);
+		negativeTargetPowerKey = new KeyBinding(NEGATIVE_TARGET_ASPECT_EFFECT, -1, CATEGORY);
+		ClientRegistry.registerKeyBinding(negativeTargetPowerKey);
 		sylladexKey = new KeyBinding(SYLLADEX, -1, CATEGORY);
 		ClientRegistry.registerKeyBinding(sylladexKey);
 	}
@@ -76,9 +84,9 @@ public class MSKeyHandler
 				MSPacketHandler.sendToServer(CaptchaDeckPacket.captchalogue());
 		}
 		
-		while(effectToggleKey.isPressed())
+		while(userPowerKey.isPressed())
 		{
-			MSPacketHandler.sendToServer(new EffectTogglePacket());
+			MSPacketHandler.sendToServer(new UserEffectPacket());
 		}
 		
 		while(sylladexKey.isPressed())
