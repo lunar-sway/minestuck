@@ -258,8 +258,11 @@ public class ServerEventHandler
 		if(!event.player.world.isRemote)
 		{
 			PlayerData data = PlayerSavedData.getData((ServerPlayerEntity) event.player);
-			if(data.getTitle() != null)
-				data.getTitle().handleAspectEffects((ServerPlayerEntity) event.player);
+			if(data.getTitle() != null && data.getAspectPowerCooldown() > 0){
+				data.setAspectPowerCooldown(data.getAspectPowerCooldown()-(1 + data.getEcheladder().getRung()/10));
+			}
+			if(data.getAspectPowerCooldown() < 0)
+				data.setAspectPowerCooldown(0);
 		}
 	}
 	

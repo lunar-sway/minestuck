@@ -27,7 +27,6 @@ import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.item.weapon.OnHitEffect;
 import com.mraof.minestuck.jei.JeiGristCost;
-import com.mraof.minestuck.network.UserEffectPacket;
 import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.Generator;
 import com.mraof.minestuck.skaianet.MergeResult;

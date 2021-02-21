@@ -16,20 +16,27 @@ import org.apache.logging.log4j.Logger;
 
 import static com.mraof.minestuck.player.EnumAspect.HOPE;
 
-public class UserEffectPacket implements PlayToServerPacket
+public class PositiveEffectPacket implements PlayToServerPacket
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	private static final Effect[] positiveAspectEffects = {Effects.ABSORPTION, Effects.SPEED, Effects.RESISTANCE, Effects.ABSORPTION, Effects.FIRE_RESISTANCE, Effects.REGENERATION, Effects.LUCK, Effects.NIGHT_VISION, Effects.STRENGTH, Effects.JUMP_BOOST, Effects.HASTE, Effects.INVISIBILITY }; //Blood, Breath, Doom, Heart, Hope, Life, Light, Mind, Rage, Space, Time, Void
+	//private boolean isUser;
+	
+	//private static final Effect[] negativeAspectEffects = {Effects.INSTANT_DAMAGE, Effects.SPEED, Effects.WEAKNESS, Effects.INSTANT_DAMAGE, Effects.WEAKNESS, Effects.WITHER, Effects.UNLUCK, Effects.BLINDNESS, Effects.WEAKNESS, Effects.SLOWNESS, Effects.SLOWNESS, Effects.GLOWING }; //Blood, Breath, Doom, Heart, Hope, Life, Light, Mind, Rage, Space, Time, Void
+	
+	// Increase the starting rungs
+	//private static final float[] aspectStrength = new float[] {1.0F/14, 1.0F/15, 1.0F/28, 1.0F/14, 1.0F/18, 1.0F/20, 1.0F/10, 1.0F/12, 1.0F/25, 1.0F/10, 1.0F/13, 1.0F/12}; //Absorption, Speed, Resistance, Saturation, Fire Resistance, Regeneration, Luck, Night Vision, Strength, Jump Boost, Haste, Invisibility
 	
 	@Override
 	public void encode(PacketBuffer buffer)
 	{
 	}
 	
-	public static UserEffectPacket decode(PacketBuffer buffer)
+	public static PositiveEffectPacket decode(PacketBuffer buffer)
 	{
-		return new UserEffectPacket();
+		return new PositiveEffectPacket();
+		//this.isUser = isUser;
 	}
 	
 	@Override
@@ -39,25 +46,17 @@ public class UserEffectPacket implements PlayToServerPacket
 			return;
 		PlayerData data = PlayerSavedData.getData(player);
 		int rung = data.getEcheladder().getRung();
-		int cooldown = data.getAspectPowerCooldown();
 		if(data.getTitle().getHeroAspect() != null){
-			LogManager.getLogger().debug("{}'s power cooldown is {}", player.getName().getFormattedText(), cooldown);
-			if(cooldown <= 0){
-				EnumAspect aspect = data.getTitle().getHeroAspect();
-				int potionLevel = rung/12;
-				
-				if(rung > 20 && aspect == HOPE)
-				{
-					player.addPotionEffect(new EffectInstance(Effects.WATER_BREATHING, 300, 0));
-				}
-				
-				player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_ILLUSIONER_CAST_SPELL, SoundCategory.PLAYERS, 0.8F, 1.6F);
-				player.addPotionEffect(new EffectInstance(positiveAspectEffects[aspect.ordinal()], 300, potionLevel));
-				LOGGER.debug("Applied aspect potion effect to {}, level {}", player.getName().getFormattedText(), potionLevel);
-				
-				data.setAspectPowerCooldown(4500);
+			EnumAspect aspect = data.getTitle().getHeroAspect();
+			int potionLevel = rung/15;
+			
+			if(rung > 20 && aspect == HOPE)
+			{
+				player.addPotionEffect(new EffectInstance(Effects.WATER_BREATHING, 600, 0));
 			}
+			
+			player.addPotionEffect(new EffectInstance(positiveAspectEffects[aspect.ordinal()], 600, potionLevel));
+			LOGGER.debug("Applied aspect potion effect to {}, level {}", player.getName().getFormattedText(), potionLevel);
 		}
-		
 	}
 }

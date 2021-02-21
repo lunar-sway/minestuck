@@ -76,7 +76,7 @@ public final class PlayerData
 	private final Map<ResourceLocation, Integer> consortReputation = new HashMap<>();
 	
 	private Title title;
-	private boolean effectToggle;
+	private int aspectPowerCooldown;
 	
 	private boolean hasLoggedIn;
 	
@@ -118,7 +118,7 @@ public final class PlayerData
 		}
 		
 		title = Title.tryRead(nbt, "title");
-		effectToggle = nbt.getBoolean("effect_toggle");
+		aspectPowerCooldown = nbt.getInt("aspect_power_cooldown");
 		
 		hasLoggedIn = true;
 	}
@@ -146,9 +146,10 @@ public final class PlayerData
 		}
 		nbt.put("consort_reputation", list);
 		
-		if(title != null)
+		if(title != null){
 			title.write(nbt, "title");
-		nbt.putBoolean("effect_toggle", effectToggle);
+			nbt.putInt("aspect_power_cooldown", aspectPowerCooldown);
+		}
 		
 		return nbt;
 	}
@@ -309,18 +310,14 @@ public final class PlayerData
 		} else throw new IllegalStateException("Can't set title for player "+ identifier.getUsername()+" because they already have one");
 	}
 	
-	public boolean effectToggle()
+	public int getAspectPowerCooldown()
 	{
-		return effectToggle;
+		return aspectPowerCooldown;
 	}
 	
-	public void effectToggle(boolean toggle)
+	public void setAspectPowerCooldown(int value)
 	{
-		if(effectToggle != toggle)
-		{
-			effectToggle = toggle;
-			markDirty();
-		}
+		aspectPowerCooldown = value;
 	}
 	
 	private void tryGiveStartingModus(ServerPlayerEntity player)
