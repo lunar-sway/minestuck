@@ -67,7 +67,7 @@ public class UserEffectPacket implements PlayToServerPacket
 				
 				if(aspect == SPACE)
 				{
-					this.rayTraceBlock = player.pick(5.0D + (double) rung * 1.1, 0.0F, false);
+					this.rayTraceBlock = player.pick(5.0D + (double) rung * 1.5, 0.0F, false);
 					
 					if(this.rayTraceBlock.getType() == RayTraceResult.Type.BLOCK)
 					{
@@ -77,21 +77,24 @@ public class UserEffectPacket implements PlayToServerPacket
 						
 						player.teleport(player.server.getWorld(player.dimension), blockPos.getX(), blockPos.getY(), blockPos.getZ(), player.rotationYaw, player.rotationPitch);
 						player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_ILLUSIONER_CAST_SPELL, SoundCategory.PLAYERS, 0.8F, 1.6F);
+						data.setAspectPowerCooldown(4500);
 					}
 				}
 				
-				if(aspect == LIFE)
+				if(aspect == TIME)
 				{
 					if(player.getHeldItemMainhand().getItem() == Items.CLOCK || player.getHeldItemOffhand().getItem() == Items.CLOCK)
 					{
 						data.setTimePlayerAnchor(player.getPosition(), player.server.getWorld(player.dimension), player.rotationYaw, player.rotationPitch);
 						player.sendMessage(new StringTextComponent("Time anchor set!"));
+						data.setAspectPowerCooldown(500);
 					} else
 					{
 						if(data.getTimePlayerAnchorDimension() != null)
 						{
 							player.teleport(data.getTimePlayerAnchorDimension(), data.getTimePlayerAnchorPos().getX(), data.getTimePlayerAnchorPos().getY(), data.getTimePlayerAnchorPos().getZ(), data.getTimePlayerAnchorYaw(), data.getTimePlayerAnchorPitch());
 							player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_ILLUSIONER_CAST_SPELL, SoundCategory.PLAYERS, 0.8F, 1.6F);
+							data.setAspectPowerCooldown(4500);
 						} else
 						{
 							player.sendMessage(new StringTextComponent("Time anchor was not set or the dimension transfer was invalid! Hold a clock to store a location to return to."));
