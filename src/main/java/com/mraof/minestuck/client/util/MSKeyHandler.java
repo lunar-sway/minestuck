@@ -67,7 +67,7 @@ public class MSKeyHandler
 	}
 	
 	@SubscribeEvent
-	public static void onKeyInput(InputEvent event)	//This is only called during the game, when no gui is active
+	public static void onKeyInput(InputEvent event)    //This is only called during the game, when no gui is active
 	{
 		while(statKey.isPressed())
 		{
@@ -110,8 +110,9 @@ public class MSKeyHandler
 	@SubscribeEvent
 	public static void onTick(TickEvent.ClientTickEvent event)
 	{
-		if(InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), captchaKey.getKey().getKeyCode()) && !captchaKeyPressed) {
-
+		if(InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), captchaKey.getKey().getKeyCode()) && !captchaKeyPressed)
+		{
+			
 			Screen screen = Minecraft.getInstance().currentScreen;
 			if(screen instanceof ContainerScreen<?> && screen.getFocused() == null && !(screen instanceof CreativeScreen))
 			{

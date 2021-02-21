@@ -24,8 +24,10 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -77,6 +79,10 @@ public final class PlayerData
 	
 	private Title title;
 	private int aspectPowerCooldown;
+	private ServerWorld anchorDimension;
+	private BlockPos timePlayerAnchor;
+	private float anchorYaw;
+	private float anchorPitch;
 	
 	private boolean hasLoggedIn;
 	
@@ -119,6 +125,12 @@ public final class PlayerData
 		
 		title = Title.tryRead(nbt, "title");
 		aspectPowerCooldown = nbt.getInt("aspect_power_cooldown");
+		//anchorDimension = MSNBTUtil.tryReadDimensionType(nbt, "time_anchor_dimension");
+		/*if(anchorDimension == null)
+			anchorDimension = savedData;*/
+		timePlayerAnchor = new BlockPos(nbt.getInt("time_player_anchor_x"), nbt.getInt("time_player_anchor_y"), nbt.getInt("time_player_anchor_z"));
+		anchorYaw = nbt.getFloat("time_anchor_yaw");
+		anchorPitch = nbt.getFloat("time_anchor_pitch");
 		
 		hasLoggedIn = true;
 	}
@@ -146,9 +158,16 @@ public final class PlayerData
 		}
 		nbt.put("consort_reputation", list);
 		
+		
 		if(title != null){
 			title.write(nbt, "title");
 			nbt.putInt("aspect_power_cooldown", aspectPowerCooldown);
+			//MSNBTUtil.tryWriteDimensionType(nbt, "time_anchor_dimension", anchorDimension);
+			nbt.putInt("time_player_anchor_x", timePlayerAnchor.getX());
+			nbt.putInt("time_player_anchor_y", timePlayerAnchor.getY());
+			nbt.putInt("time_player_anchor_z", timePlayerAnchor.getZ());
+			nbt.putFloat("time_anchor_yaw", anchorYaw);
+			nbt.putFloat("time_anchor_pitch", anchorPitch);
 		}
 		
 		return nbt;
@@ -318,6 +337,35 @@ public final class PlayerData
 	public void setAspectPowerCooldown(int value)
 	{
 		aspectPowerCooldown = value;
+	}
+	
+	public BlockPos getTimePlayerAnchorPos()
+	{
+		return timePlayerAnchor;
+	}
+	
+	public ServerWorld getTimePlayerAnchorDimension()
+	{
+		return anchorDimension;
+	}
+	
+	public float getTimePlayerAnchorYaw()
+	{
+		return anchorYaw;
+	}
+	
+	public float getTimePlayerAnchorPitch()
+	{
+		return anchorPitch;
+	}
+	
+	public void setTimePlayerAnchor(BlockPos pos, ServerWorld world, float yaw, float pitch)
+	{
+		timePlayerAnchor = pos;
+		anchorDimension = world;
+		anchorYaw = yaw;
+		anchorPitch = pitch;
+		LogManager.getLogger().debug("time player anchor: pos={}, world={}, yaw={}. pitch={}", timePlayerAnchor, anchorDimension, anchorYaw, anchorPitch);
 	}
 	
 	private void tryGiveStartingModus(ServerPlayerEntity player)
