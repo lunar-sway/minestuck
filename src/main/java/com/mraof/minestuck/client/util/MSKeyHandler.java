@@ -5,8 +5,8 @@ import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.computer.editmode.ClientEditHandler;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
-import com.mraof.minestuck.network.PositiveEffectPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.network.PositiveOtherEffectPacket;
 import com.mraof.minestuck.network.UserEffectPacket;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.client.Minecraft;
@@ -92,7 +92,7 @@ public class MSKeyHandler
 		
 		while(positiveTargetPowerKey.isPressed())
 		{
-			MSPacketHandler.sendToServer(new PositiveEffectPacket());
+			MSPacketHandler.sendToServer(new PositiveOtherEffectPacket());
 		}
 		
 		/*while(negativeTargetPowerKey.isPressed())

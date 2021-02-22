@@ -54,7 +54,7 @@ public class MSPacketHandler
 		registerMessage(GristWildcardPacket.class, GristWildcardPacket::decode);
 		registerMessage(TransportalizerPacket.class, TransportalizerPacket::decode);
 		registerMessage(UserEffectPacket.class, UserEffectPacket::decode);
-		registerMessage(PositiveEffectPacket.class, PositiveEffectPacket::decode);
+		registerMessage(PositiveOtherEffectPacket.class, PositiveOtherEffectPacket::decode);
 		//registerMessage(UserEffectPacket.class, UserEffectPacket::decode);
 		registerMessage(StoneTabletPacket.class, StoneTabletPacket::decode);
 	}
