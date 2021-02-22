@@ -110,6 +110,7 @@ public class UserEffectPacket implements PlayToServerPacket
 	
 	public void heroClassModifiers(PlayerData data, EnumClass heroClass, int rung, EffectInstance effectInstance)
 	{
+		data.setAspectPowerCooldown(4500);
 		//heir unmodified here
 		if(heroClass == EnumClass.SEER)
 		{
@@ -117,12 +118,12 @@ public class UserEffectPacket implements PlayToServerPacket
 		}
 		if(heroClass == EnumClass.WITCH)
 		{
-			data.setAspectPowerCooldown(4500 - (rung * 50) + 1000); //high value
+			data.setAspectPowerCooldown(4500 - (rung * 50 + 1250)); //high value
 		}
 		//knight unmodified here
 		if(heroClass == EnumClass.MAID)
 		{
-			data.setAspectPowerCooldown(4500 - (rung * 60)); //increases as player moves away from helping self
+			data.setAspectPowerCooldown(4500 - (rung * 75)); //increases as player moves away from helping self
 		}
 		//rogue unmodified here
 		if(heroClass == EnumClass.PAGE)
@@ -136,13 +137,9 @@ public class UserEffectPacket implements PlayToServerPacket
 		//sylph unmodified here
 		if(heroClass == EnumClass.MAGE)
 		{
-			data.setAspectPowerCooldown(4500 - (rung * 50) + 250); //moderate reduction
+			data.setAspectPowerCooldown(4500 - (rung * 50 + 250)); //moderate reduction
 		}
 		//thief unmodified here
 		//bard unmodified here
-		else
-		{
-			data.setAspectPowerCooldown(4500);
-		}
 	}
 }

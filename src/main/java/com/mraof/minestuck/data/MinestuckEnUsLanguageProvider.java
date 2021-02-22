@@ -1208,8 +1208,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(TitleSelectorScreen.USED_TITLE, "%s is already used");
 		add(TitleSelectorScreen.SELECT, "Select");
 		add(TitleSelectorScreen.RANDOMIZE, "Randomize");
-		//add(UserEffectPacket.ON, "Aspect Effects have been toggled on");
-		//add(UserEffectPacket.OFF, "Aspect Effects have been toggled off");
 		add(SkaianetHandler.PRIVATE_COMPUTER, "You are not allowed to access other players computers.");
 		add(TransportalizerTileEntity.DISABLED, "This transportalizer is currently disabled with a redstone signal.");
 		add(TransportalizerTileEntity.BLOCKED, "The transportalizer appears to need more space above it to function.");

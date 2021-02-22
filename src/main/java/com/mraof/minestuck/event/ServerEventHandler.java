@@ -8,10 +8,7 @@ import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.player.Echeladder;
-import com.mraof.minestuck.player.EnumAspect;
-import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.player.Title;
+import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.skaianet.TitleSelectionHook;
@@ -213,6 +210,9 @@ public class ServerEventHandler
 						}
 					}
 				}
+			}
+			if(title != null && (title.getHeroClass() == EnumClass.HEIR || title.getHeroClass() == EnumClass.BARD)){
+			
 			}
 		}
 	}

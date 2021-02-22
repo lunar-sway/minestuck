@@ -55,7 +55,7 @@ public class MSPacketHandler
 		registerMessage(TransportalizerPacket.class, TransportalizerPacket::decode);
 		registerMessage(UserEffectPacket.class, UserEffectPacket::decode);
 		registerMessage(PositiveOtherEffectPacket.class, PositiveOtherEffectPacket::decode);
-		//registerMessage(UserEffectPacket.class, UserEffectPacket::decode);
+		registerMessage(NegativeOtherEffectPacket.class, NegativeOtherEffectPacket::decode);
 		registerMessage(StoneTabletPacket.class, StoneTabletPacket::decode);
 	}
 	

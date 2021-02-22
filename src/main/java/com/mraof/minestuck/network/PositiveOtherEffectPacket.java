@@ -77,15 +77,16 @@ public class PositiveOtherEffectPacket implements PlayToServerPacket
 	
 	public void heroClassModifiers(PlayerData data, EnumClass heroClass, int rung, EffectInstance effectInstance, LivingEntity playerEntity)
 	{
+		data.setAspectPowerCooldown(4500);
 		//heir unmodified here
 		if(heroClass == EnumClass.SEER)
 		{
-			data.setAspectPowerCooldown(4500 - (rung * 60)); //increases as player moves away from helping self
+			data.setAspectPowerCooldown(4500 - (rung * 75)); //increases as player moves away from helping self
 		}
 		//witch unmodified here
 		if(heroClass == EnumClass.KNIGHT)
 		{
-			data.setAspectPowerCooldown(4500 - (rung * 50) + 1000); //high value
+			data.setAspectPowerCooldown(4500 - (rung * 50 + 1250)); //high value
 		}
 		if(heroClass == EnumClass.MAID)
 		{
@@ -96,22 +97,18 @@ public class PositiveOtherEffectPacket implements PlayToServerPacket
 		//prince unmodified here
 		if(heroClass == EnumClass.SYLPH)
 		{
-			data.setAspectPowerCooldown(4500 - (rung * 50) + 1000); //high value
+			data.setAspectPowerCooldown(4500 - (rung * 50 + 1000)); //high value
 			playerEntity.addPotionEffect(effectInstance);
 			LOGGER.debug("Applied class bonus aspect potion effect to {}", playerEntity.getName().getFormattedText());
 		}
 		if(heroClass == EnumClass.MAGE)
 		{
-			data.setAspectPowerCooldown(4500 - (rung * 50) + 250); //moderate reduction
+			data.setAspectPowerCooldown(4500 - (rung * 50 + 250)); //moderate reduction
 		}
 		if(heroClass == EnumClass.THIEF)
 		{
 			data.setAspectPowerCooldown(4500 + 1500); //detrimental
 		}
 		//bard unmodified here
-		else
-		{
-			data.setAspectPowerCooldown(4500);
-		}
 	}
 }
