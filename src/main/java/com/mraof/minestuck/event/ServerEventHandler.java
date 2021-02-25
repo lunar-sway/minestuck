@@ -248,7 +248,7 @@ public class ServerEventHandler
 					}
 					
 					if(title.getHeroAspect() == DOOM){
-						Effect[] positivePotionEffects = {Effects.ABSORPTION, Effects.SLOW_FALLING, Effects.RESISTANCE, Effects.FIRE_RESISTANCE, Effects.REGENERATION, Effects.LUCK, Effects.NIGHT_VISION, Effects.STRENGTH, Effects.SPEED, Effects.HASTE, Effects.INVISIBILITY, Effects.WATER_BREATHING};
+						Effect[] positivePotionEffects = {Effects.ABSORPTION, Effects.SLOW_FALLING, Effects.RESISTANCE, Effects.FIRE_RESISTANCE, Effects.REGENERATION, Effects.LUCK, Effects.NIGHT_VISION, Effects.STRENGTH, Effects.SPEED, Effects.HASTE, Effects.INVISIBILITY, Effects.WATER_BREATHING}; //TODO EffectType.BENEFICIAL.ordinal(); <- maybe make it a list and check for Beneficial as it iterates?
 						for(int i = 0; i < positivePotionEffects.length; i++){
 							attackingEntity.removePotionEffect(positivePotionEffects[i]);
 						}

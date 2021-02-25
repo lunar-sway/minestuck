@@ -3,6 +3,7 @@ package com.mraof.minestuck.network;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
+import com.mraof.minestuck.potions.MSEffects;
 import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.BlockState;
@@ -137,6 +138,8 @@ public class UserEffectPacket implements PlayToServerPacket
 				if(rung > 20 && aspect == LIFE)
 				{
 					player.addPotionEffect(new EffectInstance(Effects.SATURATION, 1, 1));
+					//player.addPotionEffect(new EffectInstance(MSEffects.HOPE_AURA, 300, 0));
+					//player.addPotionEffect(new EffectInstance(MSEffects.TIME_STOP, 120, 0));
 				}
 				
 				if(rung > 15 && aspect == LIGHT)
