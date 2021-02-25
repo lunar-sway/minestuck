@@ -6,6 +6,7 @@ import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.Title;
+import com.mraof.minestuck.util.RandomLocalTeleport;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.LivingEntity;
@@ -138,28 +139,9 @@ public interface OnHitEffect
 		target.attackEntityFrom(source, rng);
 	};
 	
-	OnHitEffect SPACE_TELEPORT = requireAspect(SPACE, onCrit((stack, target, attacker) -> {
-		double oldPosX = attacker.getPosX();
-		double oldPosY = attacker.getPosY();
-		double oldPosZ = attacker.getPosZ();
-		World worldIn = attacker.world;
-		
-		for(int i = 0; i < 16; ++i)
-		{
-			double newPosX = attacker.getPosX() + (attacker.getRNG().nextDouble() - 0.5D) * 16.0D;
-			double newPosY = MathHelper.clamp(attacker.getPosY() + (double) (attacker.getRNG().nextInt(16) - 8), 0.0D, worldIn.getActualHeight() - 1);
-			double newPosZ = attacker.getPosZ() + (attacker.getRNG().nextDouble() - 0.5D) * 16.0D;
-			if(attacker.isPassenger())
-				attacker.stopRiding();
-			
-			if(attacker.attemptTeleport(newPosX, newPosY, newPosZ, true))
-			{
-				worldIn.playSound(null, oldPosX, oldPosY, oldPosZ, SoundEvents.ITEM_CHORUS_FRUIT_TELEPORT, SoundCategory.PLAYERS, 1.0F, 1.0F);
-				attacker.playSound(SoundEvents.ITEM_CHORUS_FRUIT_TELEPORT, 1.0F, 1.0F);
-				attacker.lookAt(attacker.getCommandSource().getEntityAnchorType(), target.getPositionVec());
-				break;
-			}
-		}
+	OnHitEffect SPACE_TELEPORT = requireAspect(LIFE, onCrit((stack, target, attacker) -> {
+		RandomLocalTeleport.teleportEntity((LivingEntity) attacker, attacker.world);
+		attacker.lookAt(attacker.getCommandSource().getEntityAnchorType(), target.getPositionVec());
 	}));
 	
 	static OnHitEffect setOnFire(int duration)

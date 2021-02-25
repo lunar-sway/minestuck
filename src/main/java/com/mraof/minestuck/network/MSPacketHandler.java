@@ -56,6 +56,7 @@ public class MSPacketHandler
 		registerMessage(UserEffectPacket.class, UserEffectPacket::decode);
 		registerMessage(PositiveOtherEffectPacket.class, PositiveOtherEffectPacket::decode);
 		registerMessage(NegativeOtherEffectPacket.class, NegativeOtherEffectPacket::decode);
+		registerMessage(PassiveEffectTogglePacket.class, PassiveEffectTogglePacket::decode);
 		registerMessage(StoneTabletPacket.class, StoneTabletPacket::decode);
 	}
 	

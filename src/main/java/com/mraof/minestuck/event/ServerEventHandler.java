@@ -12,12 +12,15 @@ import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.skaianet.TitleSelectionHook;
+import com.mraof.minestuck.util.RandomLocalTeleport;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityPredicate;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.monster.*;
@@ -25,6 +28,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.server.MinecraftServer;
@@ -48,8 +52,11 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
+import org.apache.logging.log4j.LogManager;
 
 import java.util.List;
+
+import static com.mraof.minestuck.player.EnumAspect.*;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class ServerEventHandler
@@ -176,7 +183,10 @@ public class ServerEventHandler
 		if(event.getEntityLiving() instanceof PlayerEntity)
 		{
 			PlayerEntity injuredPlayer = ((PlayerEntity) event.getEntity());
-			Title title = PlayerSavedData.getData((ServerPlayerEntity) injuredPlayer).getTitle();
+			PlayerData data = PlayerSavedData.getData((ServerPlayerEntity) injuredPlayer);
+			Title title = data.getTitle();
+			int rung = data.getEcheladder().getRung();
+			
 			boolean isDoom = title != null && title.getHeroAspect() == EnumAspect.DOOM;
 			ItemStack handItem = injuredPlayer.getHeldItemMainhand();
 			if(handItem.getItem() == MSItems.LUCERNE_HAMMER_OF_UNDYING){
@@ -211,8 +221,46 @@ public class ServerEventHandler
 					}
 				}
 			}
-			if(title != null && (title.getHeroClass() == EnumClass.HEIR || title.getHeroClass() == EnumClass.BARD)){
-			
+			if(title != null && title.getHeroClass() == EnumClass.BARD && injuredPlayer.getRNG().nextFloat() <= (.01 + rung/500) && data.passiveEffectToggle()){
+				LivingEntity attackingEntity = (LivingEntity) event.getSource().getTrueSource();
+				if(attackingEntity != null){
+					//EntityPredicate visiblePredicate = (new EntityPredicate()).setLineOfSiteRequired();
+					Effect[] negativeAspectEffects = {null, Effects.SLOWNESS, null, Effects.WITHER, Effects.WEAKNESS, Effects.WITHER, Effects.BLINDNESS, null, Effects.WEAKNESS, null, Effects.SLOWNESS, Effects.BLINDNESS}; //Blood, Breath, Doom, Heart, Hope, Life, Light, Mind, Rage, Space, Time, Void
+					
+					if(title.getHeroAspect() == SPACE){
+						RandomLocalTeleport.teleportEntity((LivingEntity) attackingEntity, attackingEntity.world);
+					}
+					
+					if(title.getHeroAspect() == LIFE || title.getHeroAspect() == BLOOD){
+						List<Entity> nearbyEntities = attackingEntity.world.getEntitiesWithinAABBExcludingEntity(attackingEntity, attackingEntity.getBoundingBox().grow(6.0D));
+						
+						if(!nearbyEntities.isEmpty())
+						{
+							for(Entity eventEntity : nearbyEntities)
+							{
+								if(eventEntity instanceof LivingEntity)
+								{
+									LivingEntity livingEventEntity = (LivingEntity) eventEntity;
+									livingEventEntity.getCombatTracker().reset();
+									livingEventEntity.setRevengeTarget(attackingEntity);
+								}
+							}
+						}
+					}
+					
+					if(title.getHeroAspect() == DOOM){
+						Effect[] positivePotionEffects = {Effects.ABSORPTION, Effects.SLOW_FALLING, Effects.RESISTANCE, Effects.FIRE_RESISTANCE, Effects.REGENERATION, Effects.LUCK, Effects.NIGHT_VISION, Effects.STRENGTH, Effects.SPEED, Effects.HASTE, Effects.INVISIBILITY, Effects.WATER_BREATHING};
+						for(int i = 0; i < positivePotionEffects.length; i++){
+							attackingEntity.removePotionEffect(positivePotionEffects[i]);
+						}
+						
+					}
+					
+					if(negativeAspectEffects[title.getHeroAspect().ordinal()] != null){
+						attackingEntity.addPotionEffect(new EffectInstance(negativeAspectEffects[data.getTitle().getHeroAspect().ordinal()], 300, rung / 12));
+					}
+					LogManager.getLogger().debug("Applied passive class aspect effect to {}", attackingEntity.getName().getFormattedText());
+				}
 			}
 		}
 	}
@@ -257,15 +305,51 @@ public class ServerEventHandler
 	{
 		if(!event.player.world.isRemote)
 		{
-			PlayerData data = PlayerSavedData.getData((ServerPlayerEntity) event.player);
+			PlayerEntity player = event.player;
+			PlayerData data = PlayerSavedData.getData((ServerPlayerEntity) player);
+			Title title = data.getTitle();
 			
-			if(event.player.isCreative() && data.getAspectPowerCooldown() > 20)
-				data.setAspectPowerCooldown(20);
-			if(data.getTitle() != null && data.getAspectPowerCooldown() > 0){
-				data.setAspectPowerCooldown(data.getAspectPowerCooldown()-(1 + data.getEcheladder().getRung()/10));
+			if(data.getTitle() != null){
+				if(data.getAspectPowerCooldown() > 0){
+					data.setAspectPowerCooldown(data.getAspectPowerCooldown()-(1 + data.getEcheladder().getRung()/10));
+				}
+				
+				int rung = data.getEcheladder().getRung();
+				
+				if(player.getEntityWorld().getGameTime() % (380 * (1 + 50/(rung+5))) == 0 && title.getHeroClass() == EnumClass.HEIR && data.passiveEffectToggle()){
+					
+					Effect[] positiveAspectEffects = {Effects.ABSORPTION, Effects.SLOW_FALLING, Effects.RESISTANCE, Effects.ABSORPTION, Effects.FIRE_RESISTANCE, Effects.REGENERATION, Effects.LUCK, Effects.NIGHT_VISION, Effects.STRENGTH, Effects.SPEED, Effects.HASTE, Effects.INVISIBILITY}; //Blood, Breath, Doom, Heart, Hope, Life, Light, Mind, Rage, Space, Time, Void
+					if(rung > 20 && title.getHeroAspect() == SPACE)
+					{
+						player.addPotionEffect(new EffectInstance(Effects.HASTE, 300, 0));
+					}
+					
+					if(rung > 20 && title.getHeroAspect() == TIME)
+					{
+						player.addPotionEffect(new EffectInstance(Effects.SPEED, 300, 0));
+					}
+					
+					if(rung > 20 && title.getHeroAspect() == HOPE)
+					{
+						player.addPotionEffect(new EffectInstance(Effects.WATER_BREATHING, 300, 0));
+					}
+					if(rung > 20 && title.getHeroAspect() == LIFE)
+					{
+						player.addPotionEffect(new EffectInstance(Effects.SATURATION, 1, 0));
+					}
+					if(positiveAspectEffects[title.getHeroAspect().ordinal()] != null){
+						player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_ILLUSIONER_CAST_SPELL, SoundCategory.PLAYERS, 0.5F, 1.4F);
+						player.addPotionEffect(new EffectInstance(positiveAspectEffects[title.getHeroAspect().ordinal()], 300, rung / 20));
+						LogManager.getLogger().debug("Applied passive class aspect potion effect to {}", player.getName().getFormattedText());
+					}
+				}
 			}
+			if(player.isCreative() && data.getAspectPowerCooldown() > 20)
+				data.setAspectPowerCooldown(20);
+			
 			if(data.getAspectPowerCooldown() < 0)
 				data.setAspectPowerCooldown(0);
+			
 		}
 	}
 	

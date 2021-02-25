@@ -31,6 +31,7 @@ public class MSKeyHandler
 	public static final String USER_ASPECT_EFFECT = "key.minestuck.user_aspect_power";
 	public static final String POSITIVE_TARGET_ASPECT_EFFECT = "key.minestuck.positive_target_aspect_power";
 	public static final String NEGATIVE_TARGET_ASPECT_EFFECT = "key.minestuck.negative_target_aspect_power";
+	public static final String PASSIVE_ASPECT_EFFECT_TOGGLE = "key.minestuck.passive_aspect_power_toggle";
 	public static final String SYLLADEX = "key.minestuck.sylladex";
 	
 	public static KeyBinding statKey;
@@ -39,6 +40,7 @@ public class MSKeyHandler
 	public static KeyBinding userPowerKey;
 	public static KeyBinding positiveTargetPowerKey;
 	public static KeyBinding negativeTargetPowerKey;
+	public static KeyBinding passivePowerToggleKey;
 	public static KeyBinding sylladexKey;
 	static boolean captchaKeyPressed = false;
 	
@@ -59,6 +61,9 @@ public class MSKeyHandler
 		ClientRegistry.registerKeyBinding(positiveTargetPowerKey);
 		negativeTargetPowerKey = new KeyBinding(NEGATIVE_TARGET_ASPECT_EFFECT, -1, CATEGORY);
 		ClientRegistry.registerKeyBinding(negativeTargetPowerKey);
+		passivePowerToggleKey = new KeyBinding(PASSIVE_ASPECT_EFFECT_TOGGLE, -1, CATEGORY);
+		ClientRegistry.registerKeyBinding(passivePowerToggleKey);
+		
 		sylladexKey = new KeyBinding(SYLLADEX, -1, CATEGORY);
 		ClientRegistry.registerKeyBinding(sylladexKey);
 	}
@@ -95,6 +100,11 @@ public class MSKeyHandler
 		while(negativeTargetPowerKey.isPressed())
 		{
 			MSPacketHandler.sendToServer(new NegativeOtherEffectPacket());
+		}
+		
+		while(passivePowerToggleKey.isPressed())
+		{
+			MSPacketHandler.sendToServer(new PassiveEffectTogglePacket());
 		}
 		
 		while(sylladexKey.isPressed())

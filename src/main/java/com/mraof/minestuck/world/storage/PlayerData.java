@@ -20,6 +20,7 @@ import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.ColorHandler;
+import com.mraof.minestuck.util.MSNBTUtil;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -28,6 +29,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -78,8 +80,10 @@ public final class PlayerData
 	private final Map<ResourceLocation, Integer> consortReputation = new HashMap<>();
 	
 	private Title title;
+	private boolean passiveEffectToggle;
 	private int aspectPowerCooldown;
-	private ServerWorld anchorDimension;
+	private ServerWorld anchorServerWorld;
+	private DimensionType anchorDimensionType;
 	private BlockPos timePlayerAnchor;
 	private float anchorYaw;
 	private float anchorPitch;
@@ -124,13 +128,15 @@ public final class PlayerData
 		}
 		
 		title = Title.tryRead(nbt, "title");
+		passiveEffectToggle = nbt.getBoolean("effect_toggle");
 		aspectPowerCooldown = nbt.getInt("aspect_power_cooldown");
-		//anchorDimension = MSNBTUtil.tryReadDimensionType(nbt, "time_anchor_dimension");
-		/*if(anchorDimension == null)
-			anchorDimension = savedData;*/
-		timePlayerAnchor = new BlockPos(nbt.getInt("time_player_anchor_x"), nbt.getInt("time_player_anchor_y"), nbt.getInt("time_player_anchor_z"));
+		
+		/*anchorDimensionType = MSNBTUtil.tryReadDimensionType(nbt, "anchor_dimension_type");
+		if(this.getPlayer().getServer() != null && anchorDimensionType != null)
+			anchorServerWorld = DimensionManager.getWorld(this.getPlayer().getServer(), anchorDimensionType, false, true);*/
+		/*timePlayerAnchor = new BlockPos(nbt.getInt("time_player_anchor_x"), nbt.getInt("time_player_anchor_y"), nbt.getInt("time_player_anchor_z"));
 		anchorYaw = nbt.getFloat("time_anchor_yaw");
-		anchorPitch = nbt.getFloat("time_anchor_pitch");
+		anchorPitch = nbt.getFloat("time_anchor_pitch");*/
 		
 		hasLoggedIn = true;
 	}
@@ -161,13 +167,14 @@ public final class PlayerData
 		
 		if(title != null){
 			title.write(nbt, "title");
+			nbt.putBoolean("passive_effect_toggle", passiveEffectToggle);
 			nbt.putInt("aspect_power_cooldown", aspectPowerCooldown);
-			//MSNBTUtil.tryWriteDimensionType(nbt, "time_anchor_dimension", anchorDimension);
-			nbt.putInt("time_player_anchor_x", timePlayerAnchor.getX());
+			//MSNBTUtil.tryWriteDimensionType(nbt, "anchor_dimension_type", anchorDimensionType);
+			/*nbt.putInt("time_player_anchor_x", timePlayerAnchor.getX());
 			nbt.putInt("time_player_anchor_y", timePlayerAnchor.getY());
 			nbt.putInt("time_player_anchor_z", timePlayerAnchor.getZ());
 			nbt.putFloat("time_anchor_yaw", anchorYaw);
-			nbt.putFloat("time_anchor_pitch", anchorPitch);
+			nbt.putFloat("time_anchor_pitch", anchorPitch);*/
 		}
 		
 		return nbt;
@@ -329,6 +336,18 @@ public final class PlayerData
 		} else throw new IllegalStateException("Can't set title for player "+ identifier.getUsername()+" because they already have one");
 	}
 	
+	public boolean passiveEffectToggle(){
+		return passiveEffectToggle;
+	}
+	
+	public void passiveEffectToggle(boolean toggle){
+		if(passiveEffectToggle != toggle)
+		{
+			passiveEffectToggle = toggle;
+			markDirty();
+		}
+	}
+	
 	public int getAspectPowerCooldown()
 	{
 		return aspectPowerCooldown;
@@ -346,7 +365,7 @@ public final class PlayerData
 	
 	public ServerWorld getTimePlayerAnchorDimension()
 	{
-		return anchorDimension;
+		return anchorServerWorld;
 	}
 	
 	public float getTimePlayerAnchorYaw()
@@ -362,10 +381,10 @@ public final class PlayerData
 	public void setTimePlayerAnchor(BlockPos pos, ServerWorld world, float yaw, float pitch)
 	{
 		timePlayerAnchor = pos;
-		anchorDimension = world;
+		anchorServerWorld = world;
 		anchorYaw = yaw;
 		anchorPitch = pitch;
-		LogManager.getLogger().debug("time player anchor: pos={}, world={}, yaw={}. pitch={}", timePlayerAnchor, anchorDimension, anchorYaw, anchorPitch);
+		LogManager.getLogger().debug("time player anchor: pos={}, world={}, yaw={}. pitch={}", timePlayerAnchor, anchorServerWorld, anchorYaw, anchorPitch);
 	}
 	
 	private void tryGiveStartingModus(ServerPlayerEntity player)

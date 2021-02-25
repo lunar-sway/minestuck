@@ -23,7 +23,7 @@ public class PositiveOtherEffectPacket implements PlayToServerPacket
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final EntityPredicate visiblePredicate = (new EntityPredicate()).setLineOfSiteRequired();
 	
-	private static final Effect[] positiveAspectEffects = {Effects.ABSORPTION, Effects.SLOW_FALLING, Effects.RESISTANCE, Effects.ABSORPTION, Effects.FIRE_RESISTANCE, Effects.REGENERATION, Effects.LUCK, Effects.NIGHT_VISION, Effects.STRENGTH, Effects.HASTE, Effects.SPEED, Effects.INVISIBILITY}; //Blood, Breath, Doom, Heart, Hope, Life, Light, Mind, Rage, Space, Time, Void
+	private static final Effect[] positiveAspectEffects = {Effects.ABSORPTION, Effects.SLOW_FALLING, Effects.RESISTANCE, Effects.ABSORPTION, Effects.FIRE_RESISTANCE, Effects.REGENERATION, Effects.LUCK, Effects.NIGHT_VISION, Effects.STRENGTH, Effects.SPEED, Effects.HASTE, Effects.INVISIBILITY}; //Blood, Breath, Doom, Heart, Hope, Life, Light, Mind, Rage, Space, Time, Void
 	
 	@Override
 	public void encode(PacketBuffer buffer)
@@ -54,15 +54,30 @@ public class PositiveOtherEffectPacket implements PlayToServerPacket
 				int potionLevel = rung / 12;
 				EffectInstance effectInstance = new EffectInstance(positiveAspectEffects[aspect.ordinal()], 300, potionLevel);
 				
-				LivingEntity closestTarget = player.world.getClosestEntityWithinAABB(LivingEntity.class, visiblePredicate, player, player.getPosX(), player.getPosY(), player.getPosZ(), player.getBoundingBox().expand(player.getLookVec().scale(5.0D + (double) rung / 5)).grow(0.3D));
+				LivingEntity closestTarget = player.world.getClosestEntityWithinAABB(LivingEntity.class, visiblePredicate, player, player.getPosX(), player.getPosY(), player.getPosZ(), player.getBoundingBox().expand(player.getLookVec().scale(5.0D + (double) rung / 5)).grow(0.05D));
 				
 				if(closestTarget != null)
 				{
 					if(positiveAspectEffects[aspect.ordinal()] != null)
 					{
+						if(rung > 20 && aspect == SPACE)
+						{
+							closestTarget.addPotionEffect(new EffectInstance(Effects.HASTE, 300, 0));
+						}
+						
+						if(rung > 20 && aspect == TIME)
+						{
+							closestTarget.addPotionEffect(new EffectInstance(Effects.SPEED, 300, 0));
+						}
+						
 						if(rung > 20 && aspect == HOPE)
 						{
 							closestTarget.addPotionEffect(new EffectInstance(Effects.WATER_BREATHING, 300, 0));
+						}
+						
+						if(rung > 20 && aspect == LIFE)
+						{
+							player.addPotionEffect(new EffectInstance(Effects.SATURATION, 1, 0));
 						}
 						
 						player.world.playSound(null, closestTarget.getPosition(), SoundEvents.ENTITY_ILLUSIONER_CAST_SPELL, SoundCategory.PLAYERS, 0.8F, 1.6F);
@@ -81,33 +96,33 @@ public class PositiveOtherEffectPacket implements PlayToServerPacket
 		//heir unmodified here
 		if(heroClass == EnumClass.SEER)
 		{
-			data.setAspectPowerCooldown(4500 - (rung * 75)); //increases as player moves away from helping self
+			data.setAspectPowerCooldown(data.getAspectPowerCooldown() - (rung * 75)); //increases as player moves away from helping self
 		}
 		//witch unmodified here
 		if(heroClass == EnumClass.KNIGHT)
 		{
-			data.setAspectPowerCooldown(4500 - (rung * 50 + 1250)); //high value
+			data.setAspectPowerCooldown(data.getAspectPowerCooldown() - (rung * 50 + 1250)); //high value
 		}
 		if(heroClass == EnumClass.MAID)
 		{
-			data.setAspectPowerCooldown(4500 - (50 * (50 / (rung + 1)))); //inverts as player switches towards commanding others
+			data.setAspectPowerCooldown(data.getAspectPowerCooldown() - (50 * (50 / (rung + 1)))); //inverts as player switches towards commanding others
 		}
 		//rogue unmodified here
 		//page unmodified here
 		//prince unmodified here
 		if(heroClass == EnumClass.SYLPH)
 		{
-			data.setAspectPowerCooldown(4500 - (rung * 50 + 1000)); //high value
+			data.setAspectPowerCooldown(data.getAspectPowerCooldown() - (rung * 50 + 1000)); //high value
 			playerEntity.addPotionEffect(effectInstance);
 			LOGGER.debug("Applied class bonus aspect potion effect to {}", playerEntity.getName().getFormattedText());
 		}
 		if(heroClass == EnumClass.MAGE)
 		{
-			data.setAspectPowerCooldown(4500 - (rung * 50 + 250)); //moderate reduction
+			data.setAspectPowerCooldown(data.getAspectPowerCooldown() - (rung * 50 + 250)); //moderate reduction
 		}
 		if(heroClass == EnumClass.THIEF)
 		{
-			data.setAspectPowerCooldown(4500 + 1500); //detrimental
+			data.setAspectPowerCooldown(data.getAspectPowerCooldown() + 1500); //detrimental
 		}
 		//bard unmodified here
 	}
