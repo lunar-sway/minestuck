@@ -7,8 +7,6 @@ import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -17,11 +15,8 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.tileentity.ChestTileEntity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.*;
-import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.LogManager;
@@ -53,6 +48,10 @@ public class UserEffectPacket implements PlayToServerPacket
 	{
 		if(!MinestuckConfig.SERVER.aspectEffects.get())
 			return;
+		if(player.isSpectator()){
+			player.sendMessage(new StringTextComponent("Aspect powers cannot be used in spectator mode"));
+			return;
+		}
 		PlayerData data = PlayerSavedData.getData(player);
 		int rung = data.getEcheladder().getRung();
 		int cooldown = data.getAspectPowerCooldown();
@@ -140,6 +139,33 @@ public class UserEffectPacket implements PlayToServerPacket
 					player.addPotionEffect(new EffectInstance(Effects.SATURATION, 1, 1));
 				}
 				
+				if(rung > 15 && aspect == LIGHT)
+				{
+					World worldIn = player.world;
+					
+					BlockPos.Mutable mutablePos = new BlockPos.Mutable();
+					BlockPos playerPos = player.getPosition();
+					
+					for(BlockPos blockpos : BlockPos.getAllInBoxMutable(playerPos.add(16, 16, 16), playerPos.add(-16, -32, -16)))
+					{
+						if(blockpos.withinDistance(player.getPositionVec(), 32))
+						{
+							mutablePos.setPos(blockpos.getX(), blockpos.getY(), blockpos.getZ());
+							BlockState mutableBlockState = worldIn.getBlockState(mutablePos);
+							if(mutableBlockState.getBlock() == Blocks.CHEST)
+							{
+								player.sendMessage(new StringTextComponent("You detect a chest at " + mutablePos.getX() + " " + mutablePos.getY() + " " + mutablePos.getZ()));
+								/*
+								INamedContainerProvider iNamedContainerProvider = mutableBlockState.getBlock().getContainer(mutableBlockState, worldIn, mutablePos);
+								if (iNamedContainerProvider != null) {
+									LogManager.getLogger().debug("{} has a loottable", iNamedContainerProvider);
+									player.sendMessage(new StringTextComponent("It has not been opened before!"));
+								}*/
+									break;
+							}
+						}
+					}
+				}
 			}
 		}
 	}

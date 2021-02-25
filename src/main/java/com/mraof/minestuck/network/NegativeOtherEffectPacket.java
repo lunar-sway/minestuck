@@ -17,6 +17,7 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.text.StringTextComponent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -49,6 +50,10 @@ public class NegativeOtherEffectPacket implements PlayToServerPacket
 	{
 		if(!MinestuckConfig.SERVER.aspectEffects.get())
 			return;
+		if(player.isSpectator()){
+			player.sendMessage(new StringTextComponent("Aspect powers cannot be used in spectator mode"));
+			return;
+		}
 		playerCasting = (PlayerEntity) player;
 		PlayerData data = PlayerSavedData.getData(player);
 		int rung = data.getEcheladder().getRung();

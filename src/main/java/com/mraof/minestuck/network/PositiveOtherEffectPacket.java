@@ -13,6 +13,7 @@ import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.*;
+import net.minecraft.util.text.StringTextComponent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -40,6 +41,10 @@ public class PositiveOtherEffectPacket implements PlayToServerPacket
 	{
 		if(!MinestuckConfig.SERVER.aspectEffects.get())
 			return;
+		if(player.isSpectator()){
+			player.sendMessage(new StringTextComponent("Aspect powers cannot be used in spectator mode"));
+			return;
+		}
 		PlayerData data = PlayerSavedData.getData(player);
 		int rung = data.getEcheladder().getRung();
 		int cooldown = data.getAspectPowerCooldown();

@@ -20,7 +20,6 @@ import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityPredicate;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.monster.*;
@@ -225,13 +224,13 @@ public class ServerEventHandler
 				LivingEntity attackingEntity = (LivingEntity) event.getSource().getTrueSource();
 				if(attackingEntity != null){
 					//EntityPredicate visiblePredicate = (new EntityPredicate()).setLineOfSiteRequired();
-					Effect[] negativeAspectEffects = {null, Effects.SLOWNESS, null, Effects.WITHER, Effects.WEAKNESS, Effects.WITHER, Effects.BLINDNESS, null, Effects.WEAKNESS, null, Effects.SLOWNESS, Effects.BLINDNESS}; //Blood, Breath, Doom, Heart, Hope, Life, Light, Mind, Rage, Space, Time, Void
+					Effect[] negativeAspectEffects = {null, Effects.SLOWNESS, null, Effects.WITHER, Effects.WEAKNESS, Effects.WITHER, Effects.GLOWING, null, Effects.WEAKNESS, null, Effects.SLOWNESS, Effects.BLINDNESS}; //Blood, Breath, Doom, Heart, Hope, Life, Light, Mind, Rage, Space, Time, Void
 					
 					if(title.getHeroAspect() == SPACE){
 						RandomLocalTeleport.teleportEntity((LivingEntity) attackingEntity, attackingEntity.world);
 					}
 					
-					if(title.getHeroAspect() == LIFE || title.getHeroAspect() == BLOOD){
+					if(title.getHeroAspect() == MIND || title.getHeroAspect() == BLOOD){
 						List<Entity> nearbyEntities = attackingEntity.world.getEntitiesWithinAABBExcludingEntity(attackingEntity, attackingEntity.getBoundingBox().grow(6.0D));
 						
 						if(!nearbyEntities.isEmpty())
@@ -253,7 +252,6 @@ public class ServerEventHandler
 						for(int i = 0; i < positivePotionEffects.length; i++){
 							attackingEntity.removePotionEffect(positivePotionEffects[i]);
 						}
-						
 					}
 					
 					if(negativeAspectEffects[title.getHeroAspect().ordinal()] != null){
@@ -316,7 +314,7 @@ public class ServerEventHandler
 				
 				int rung = data.getEcheladder().getRung();
 				
-				if(player.getEntityWorld().getGameTime() % (380 * (1 + 50/(rung+5))) == 0 && title.getHeroClass() == EnumClass.HEIR && data.passiveEffectToggle()){
+				if(player.getEntityWorld().getGameTime() % (380 * (1 + 50/(rung+5))) == 0 && title.getHeroClass() == EnumClass.HEIR && data.passiveEffectToggle() && !player.isSpectator()){
 					
 					Effect[] positiveAspectEffects = {Effects.ABSORPTION, Effects.SLOW_FALLING, Effects.RESISTANCE, Effects.ABSORPTION, Effects.FIRE_RESISTANCE, Effects.REGENERATION, Effects.LUCK, Effects.NIGHT_VISION, Effects.STRENGTH, Effects.SPEED, Effects.HASTE, Effects.INVISIBILITY}; //Blood, Breath, Doom, Heart, Hope, Life, Light, Mind, Rage, Space, Time, Void
 					if(rung > 20 && title.getHeroAspect() == SPACE)
