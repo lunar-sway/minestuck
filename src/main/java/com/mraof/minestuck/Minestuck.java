@@ -66,6 +66,9 @@ public class Minestuck
 		setupOverworldOreGeneration();
 		//GameRegistry.registerWorldGenerator(oreHandler, 0);
 		
+		//register structure generation
+		setupOverworldStructureGeneration();
+		
 		//register channel handler
 		MSPacketHandler.setupChannel();
 		
