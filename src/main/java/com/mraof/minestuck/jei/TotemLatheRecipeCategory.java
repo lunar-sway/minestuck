@@ -32,13 +32,13 @@ public class TotemLatheRecipeCategory implements IRecipeCategory<JeiCombination>
 		background = guiHelper.createDrawable(totemLatheBackground, 25, 24, 130, 36);
 		icon = guiHelper.createDrawableIngredient(new ItemStack(MSBlocks.TOTEM_LATHE));
 	}
-	
+
 	@Override
 	public Class<? extends JeiCombination> getRecipeClass()
 	{
 		return JeiCombination.class;
 	}
-	
+
 	@Override
 	public ResourceLocation getUid()
 	{
@@ -56,20 +56,20 @@ public class TotemLatheRecipeCategory implements IRecipeCategory<JeiCombination>
 	{
 		return background;
 	}
-	
+
 	@Override
 	public IDrawable getIcon()
 	{
 		return icon;
 	}
-	
+
 	@Override
 	public void setIngredients(JeiCombination jeiCombination, IIngredients ingredients)
 	{
 		ingredients.setInputLists(VanillaTypes.ITEM, Arrays.asList(Arrays.asList(jeiCombination.getInput1().getMatchingStacks()), Arrays.asList(jeiCombination.getInput2().getMatchingStacks())));
 		ingredients.setOutput(VanillaTypes.ITEM, jeiCombination.getOutput());
 	}
-	
+
 	@Override
 	public void setRecipe(IRecipeLayout recipeLayout, JeiCombination jeiCombination, IIngredients ingredients)
 	{
@@ -92,11 +92,11 @@ public class TotemLatheRecipeCategory implements IRecipeCategory<JeiCombination>
 			second.add(AlchemyHelper.createCard(stack, true));
 		}
 		stackGroup.set(1, second);
-		
-		stackGroup.set(2, ColorHandler.setColor(new ItemStack(MSBlocks.CRUXITE_DOWEL), ClientPlayerData.playerColor));
-		
+
+		stackGroup.set(2, ColorHandler.setColor(new ItemStack(MSBlocks.CRUXITE_DOWEL), ClientPlayerData.getPlayerColor()));
+
 		List<ItemStack> outputs = new ArrayList<>(ingredients.getOutputs(VanillaTypes.ITEM).get(0));
-		ItemStack outputDowel = ColorHandler.setColor(AlchemyHelper.createEncodedItem(outputs.get(0), false), ClientPlayerData.playerColor);
+		ItemStack outputDowel = ColorHandler.setColor(AlchemyHelper.createEncodedItem(outputs.get(0), false), ClientPlayerData.getPlayerColor());
 		outputs.add(outputDowel);
 		stackGroup.set(3, outputs);
 	}

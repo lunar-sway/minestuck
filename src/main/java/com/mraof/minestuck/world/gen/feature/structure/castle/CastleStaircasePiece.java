@@ -7,6 +7,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 
@@ -38,9 +39,9 @@ public class CastleStaircasePiece extends CastleRoomPiece
 	}
 	
 	@Override
-	public boolean addComponentParts(IWorld world, Random random, MutableBoundingBox structureBoundingBox, ChunkPos chunkPosIn)
+	public boolean create(IWorld world, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBox, ChunkPos chunkPosIn)
 	{
-//		super.addComponentParts(world, random, structureBoundingBox, chunkPosIn);
+//		super.create(world, chunkGeneratorIn, randomIn, structureBoundingBox, chunkPosIn);
 //		do what that would have done but set the offset correctly
 		BlockState chessTile = (isBlack ? MSBlocks.BLACK_CHESS_DIRT : MSBlocks.WHITE_CHESS_DIRT).getDefaultState();
 		BlockState chessTile1 = (isBlack ? MSBlocks.DARK_GRAY_CHESS_DIRT : MSBlocks.LIGHT_GRAY_CHESS_DIRT).getDefaultState();

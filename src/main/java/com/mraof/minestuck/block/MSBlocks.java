@@ -1,10 +1,10 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.block.multiblock.AlchemiterMultiblock;
-import com.mraof.minestuck.block.multiblock.CruxtruderMultiblock;
-import com.mraof.minestuck.block.multiblock.PunchDesignixMultiblock;
-import com.mraof.minestuck.block.multiblock.TotemLatheMultiblock;
+import com.mraof.minestuck.block.fluid.FlowingModFluidBlock;
+import com.mraof.minestuck.block.fluid.FlowingWaterColorsBlock;
+import com.mraof.minestuck.block.machine.*;
+import com.mraof.minestuck.block.plant.*;
 import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.util.CustomVoxelShape;
@@ -31,6 +31,22 @@ public class MSBlocks
 	//Skaia
 	public static final Block BLACK_CHESS_DIRT = getNull(), WHITE_CHESS_DIRT = getNull(), DARK_GRAY_CHESS_DIRT = getNull(), LIGHT_GRAY_CHESS_DIRT = getNull();
 	public static final Block SKAIA_PORTAL = getNull();
+	public static final Block BLACK_CASTLE_BRICKS = getNull();
+	public static final Block DARK_GRAY_CASTLE_BRICKS = getNull();
+	public static final Block LIGHT_GRAY_CASTLE_BRICKS = getNull();
+	public static final Block WHITE_CASTLE_BRICKS = getNull();
+	public static final Block BLACK_CASTLE_BRICK_SMOOTH = getNull();
+	public static final Block DARK_GRAY_CASTLE_BRICK_SMOOTH = getNull();
+	public static final Block LIGHT_GRAY_CASTLE_BRICK_SMOOTH = getNull();
+	public static final Block WHITE_CASTLE_BRICK_SMOOTH = getNull();
+	public static final Block BLACK_CASTLE_BRICK_TRIM = getNull();
+	public static final Block DARK_GRAY_CASTLE_BRICK_TRIM = getNull();
+	public static final Block LIGHT_GRAY_CASTLE_BRICK_TRIM = getNull();
+	public static final Block WHITE_CASTLE_BRICK_TRIM = getNull();
+	public static final Block BLACK_CROWN_STAINED_GLASS = getNull();
+	public static final Block BLACK_PAWN_STAINED_GLASS = getNull();
+	public static final Block WHITE_CROWN_STAINED_GLASS = getNull();
+	public static final Block WHITE_PAWN_STAINED_GLASS = getNull();
 	
 	//Ores
 	public static final Block STONE_CRUXITE_ORE = getNull(), NETHERRACK_CRUXITE_ORE = getNull(), COBBLESTONE_CRUXITE_ORE = getNull(), SANDSTONE_CRUXITE_ORE = getNull();
@@ -129,8 +145,6 @@ public class MSBlocks
 	public static final Block MINI_ALCHEMITER = getNull();
 	public static final Block MINI_PUNCH_DESIGNIX = getNull();
 	public static final Block HOLOPAD = getNull();
-	/*public static BlockJumperBlock[] jumperBlockExtension = BlockJumperBlock.createBlocks();
-	public static BlockAlchemiterUpgrades[] alchemiterUpgrades = BlockAlchemiterUpgrades.createBlocks();*/
 	
 	//Misc Machines
 	public static final Block COMPUTER = getNull();
@@ -138,7 +152,10 @@ public class MSBlocks
 	public static final Block CROCKERTOP = getNull();
 	public static final Block HUBTOP = getNull();
 	public static final Block LUNCHTOP = getNull();
+	public static final Block OLD_COMPUTER = getNull();
 	public static final Block TRANSPORTALIZER = getNull();
+	public static final Block TRANS_PORTALIZER = getNull();
+	public static final Block SENDIFICATOR = getNull();
 	public static final Block GRIST_WIDGET = getNull();
 	public static final Block URANIUM_COOKER = getNull();
 	
@@ -196,6 +213,22 @@ public class MSBlocks
 		registry.register(new Block(Block.Properties.create(Material.EARTH, MaterialColor.GRAY).hardnessAndResistance(0.5F).harvestTool(ToolType.SHOVEL).sound(SoundType.GROUND)).setRegistryName("dark_gray_chess_dirt"));
 		registry.register(new Block(Block.Properties.create(Material.EARTH, MaterialColor.LIGHT_GRAY).hardnessAndResistance(0.5F).harvestTool(ToolType.SHOVEL).sound(SoundType.GROUND)).setRegistryName("light_gray_chess_dirt"));
 		registry.register(new SkaiaPortalBlock(Block.Properties.create(Material.PORTAL, MaterialColor.CYAN).doesNotBlockMovement().lightValue(11).hardnessAndResistance(-1.0F, 3600000.0F).noDrops()).setRegistryName("skaia_portal"));
+		registry.register(new Block(Block.Properties.create(Material.ROCK, MaterialColor.BLACK_TERRACOTTA).hardnessAndResistance(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("black_castle_bricks"));
+		registry.register(new Block(Block.Properties.create(Material.ROCK, MaterialColor.GRAY_TERRACOTTA).hardnessAndResistance(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("dark_gray_castle_bricks"));
+		registry.register(new Block(Block.Properties.create(Material.ROCK, MaterialColor.LIGHT_GRAY_TERRACOTTA).hardnessAndResistance(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("light_gray_castle_bricks"));
+		registry.register(new Block(Block.Properties.create(Material.ROCK, MaterialColor.WHITE_TERRACOTTA).hardnessAndResistance(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("white_castle_bricks"));
+		registry.register(new Block(Block.Properties.create(Material.ROCK, MaterialColor.BLACK_TERRACOTTA).hardnessAndResistance(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("black_castle_brick_smooth"));
+		registry.register(new Block(Block.Properties.create(Material.ROCK, MaterialColor.GRAY_TERRACOTTA).hardnessAndResistance(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("dark_gray_castle_brick_smooth"));
+		registry.register(new Block(Block.Properties.create(Material.ROCK, MaterialColor.LIGHT_GRAY_TERRACOTTA).hardnessAndResistance(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("light_gray_castle_brick_smooth"));
+		registry.register(new Block(Block.Properties.create(Material.ROCK, MaterialColor.WHITE_TERRACOTTA).hardnessAndResistance(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("white_castle_brick_smooth"));
+		registry.register(new MSDirectionalBlock(Block.Properties.create(Material.ROCK, MaterialColor.BLACK_TERRACOTTA).hardnessAndResistance(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("black_castle_brick_trim"));
+		registry.register(new MSDirectionalBlock(Block.Properties.create(Material.ROCK, MaterialColor.GRAY_TERRACOTTA).hardnessAndResistance(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("dark_gray_castle_brick_trim"));
+		registry.register(new MSDirectionalBlock(Block.Properties.create(Material.ROCK, MaterialColor.LIGHT_GRAY_TERRACOTTA).hardnessAndResistance(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("light_gray_castle_brick_trim"));
+		registry.register(new MSDirectionalBlock(Block.Properties.create(Material.ROCK, MaterialColor.WHITE_TERRACOTTA).hardnessAndResistance(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("white_castle_brick_trim"));
+		registry.register(new StainedGlassBlock(DyeColor.BLUE, Block.Properties.create(Material.GLASS, DyeColor.BLUE).hardnessAndResistance(0.3F).sound(SoundType.GLASS).notSolid()).setRegistryName("black_crown_stained_glass"));
+		registry.register(new StainedGlassBlock(DyeColor.BLUE, Block.Properties.create(Material.GLASS, DyeColor.BLUE).hardnessAndResistance(0.3F).sound(SoundType.GLASS).notSolid()).setRegistryName("black_pawn_stained_glass"));
+		registry.register(new StainedGlassBlock(DyeColor.BLUE, Block.Properties.create(Material.GLASS, DyeColor.BLUE).hardnessAndResistance(0.3F).sound(SoundType.GLASS).notSolid()).setRegistryName("white_crown_stained_glass"));
+		registry.register(new StainedGlassBlock(DyeColor.BLUE, Block.Properties.create(Material.GLASS, DyeColor.BLUE).hardnessAndResistance(0.3F).sound(SoundType.GLASS).notSolid()).setRegistryName("white_pawn_stained_glass"));
 		
 		registry.register(new CustomOreBlock(2, 5, Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("stone_cruxite_ore"));
 		registry.register(new CustomOreBlock(2, 5, Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0F, 3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("netherrack_cruxite_ore"));
@@ -281,9 +314,9 @@ public class MSBlocks
 		Block endPlanks = register(registry, new FlammableBlock(1, 250, Block.Properties.create(Material.WOOD, MaterialColor.SAND).hardnessAndResistance(2.0F, 3.0F).harvestTool(ToolType.AXE).sound(SoundType.WOOD)).setRegistryName("end_planks"));
 		Block deadPlanks = register(registry, new FlammableBlock(5, 5, Block.Properties.create(Material.WOOD).hardnessAndResistance(2.0F, 3.0F).harvestTool(ToolType.AXE).sound(SoundType.WOOD)).setRegistryName("dead_planks"));
 		Block treatedPlanks = register(registry, new FlammableBlock(0, 0, Block.Properties.create(Material.WOOD).hardnessAndResistance(2.0F, 3.0F).harvestTool(ToolType.AXE).sound(SoundType.WOOD)).setRegistryName("treated_planks"));
-		registry.register(new FlammableLeavesBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT)).setRegistryName("frost_leaves"));
-		registry.register(new FlammableLeavesBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT)).setRegistryName("rainbow_leaves"));
-		registry.register(new EndLeavesBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT)).setRegistryName("end_leaves"));
+		registry.register(new FlammableLeavesBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT).notSolid()).setRegistryName("frost_leaves"));
+		registry.register(new FlammableLeavesBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT).notSolid()).setRegistryName("rainbow_leaves"));
+		registry.register(new EndLeavesBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT).notSolid()).setRegistryName("end_leaves"));
 		registry.register(new RainbowSaplingBlock(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0).sound(SoundType.PLANT)).setRegistryName("rainbow_sapling"));
 		registry.register(new EndSaplingBlock(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0).sound(SoundType.PLANT)).setRegistryName("end_sapling"));
 		
@@ -351,18 +384,18 @@ public class MSBlocks
 		registry.register(new VeinCornerBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(0.45F).sound(SoundType.SLIME)).setRegistryName("vein_corner"));
 		registry.register(new VeinCornerBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(0.45F).sound(SoundType.SLIME)).setRegistryName("inverted_vein_corner"));
 		
-		registry.register(new ModStairsBlock(coarseStone.getDefaultState(), Block.Properties.from(coarseStone)).setRegistryName("coarse_stone_stairs"));
-		registry.register(new ModStairsBlock(shadeBricks.getDefaultState(), Block.Properties.from(shadeBricks)).setRegistryName("shade_brick_stairs"));
-		registry.register(new ModStairsBlock(frostBricks.getDefaultState(), Block.Properties.from(frostBricks)).setRegistryName("frost_brick_stairs"));
-		registry.register(new ModStairsBlock(castIron.getDefaultState(), Block.Properties.from(castIron)).setRegistryName("cast_iron_stairs"));
-		registry.register(new ModStairsBlock(myceliumBricks.getDefaultState(), Block.Properties.from(myceliumBricks)).setRegistryName("mycelium_brick_stairs"));
-		registry.register(new ModStairsBlock(chalk.getDefaultState(), Block.Properties.from(chalk)).setRegistryName("chalk_stairs"));
-		registry.register(new ModStairsBlock(chalkBricks.getDefaultState(), Block.Properties.from(chalkBricks)).setRegistryName("chalk_brick_stairs"));
-		registry.register(new ModStairsBlock(pinkStoneBricks.getDefaultState(), Block.Properties.from(pinkStoneBricks)).setRegistryName("pink_stone_brick_stairs"));
-		registry.register(new ModStairsBlock(rainbowPlanks.getDefaultState(), Block.Properties.from(rainbowPlanks)).setRegistryName("rainbow_planks_stairs"));
-		registry.register(new ModStairsBlock(endPlanks.getDefaultState(), Block.Properties.from(endPlanks)).setRegistryName("end_planks_stairs"));
-		registry.register(new ModStairsBlock(deadPlanks.getDefaultState(), Block.Properties.from(deadPlanks)).setRegistryName("dead_planks_stairs"));
-		registry.register(new ModStairsBlock(treatedPlanks.getDefaultState(), Block.Properties.from(treatedPlanks)).setRegistryName("treated_planks_stairs"));
+		registry.register(new StairsBlock(() -> MSBlocks.COARSE_STONE.getDefaultState(), Block.Properties.from(coarseStone)).setRegistryName("coarse_stone_stairs"));
+		registry.register(new StairsBlock(() -> MSBlocks.SHADE_BRICKS.getDefaultState(), Block.Properties.from(shadeBricks)).setRegistryName("shade_brick_stairs"));
+		registry.register(new StairsBlock(() -> MSBlocks.FROST_BRICKS.getDefaultState(), Block.Properties.from(frostBricks)).setRegistryName("frost_brick_stairs"));
+		registry.register(new StairsBlock(() -> MSBlocks.CAST_IRON.getDefaultState(), Block.Properties.from(castIron)).setRegistryName("cast_iron_stairs"));
+		registry.register(new StairsBlock(() -> MSBlocks.MYCELIUM_BRICKS.getDefaultState(), Block.Properties.from(myceliumBricks)).setRegistryName("mycelium_brick_stairs"));
+		registry.register(new StairsBlock(() -> MSBlocks.CHALK.getDefaultState(), Block.Properties.from(chalk)).setRegistryName("chalk_stairs"));
+		registry.register(new StairsBlock(() -> MSBlocks.CHALK_BRICKS.getDefaultState(), Block.Properties.from(chalkBricks)).setRegistryName("chalk_brick_stairs"));
+		registry.register(new StairsBlock(() -> MSBlocks.PINK_STONE_BRICKS.getDefaultState(), Block.Properties.from(pinkStoneBricks)).setRegistryName("pink_stone_brick_stairs"));
+		registry.register(new StairsBlock(() -> MSBlocks.RAINBOW_PLANKS.getDefaultState(), Block.Properties.from(rainbowPlanks)).setRegistryName("rainbow_planks_stairs"));
+		registry.register(new StairsBlock(() -> MSBlocks.END_PLANKS.getDefaultState(), Block.Properties.from(endPlanks)).setRegistryName("end_planks_stairs"));
+		registry.register(new StairsBlock(() -> MSBlocks.DEAD_PLANKS.getDefaultState(), Block.Properties.from(deadPlanks)).setRegistryName("dead_planks_stairs"));
+		registry.register(new StairsBlock(() -> MSBlocks.TREATED_PLANKS.getDefaultState(), Block.Properties.from(treatedPlanks)).setRegistryName("treated_planks_stairs"));
 		registry.register(new SlabBlock(Block.Properties.from(chalk)).setRegistryName("chalk_slab"));
 		registry.register(new SlabBlock(Block.Properties.from(chalkBricks)).setRegistryName("chalk_brick_slab"));
 		registry.register(new SlabBlock(Block.Properties.from(pinkStoneBricks)).setRegistryName("pink_stone_brick_slab"));
@@ -379,31 +412,23 @@ public class MSBlocks
 		TOTEM_LATHE.registerBlocks(registry);
 		ALCHEMITER.registerBlocks(registry);
 		PUNCH_DESIGNIX.registerBlocks(registry);
-		registry.register(new SmallMachineBlock(MSBlockShapes.SMALL_CRUXTRUDER.createRotatedShapes(), () -> MSTileEntityTypes.MINI_CRUXTRUDER, Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("mini_cruxtruder"));
-		registry.register(new SmallMachineBlock(MSBlockShapes.SMALL_TOTEM_LATHE.createRotatedShapes(), () -> MSTileEntityTypes.MINI_TOTEM_LATHE, Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("mini_totem_lathe"));
+		registry.register(new SmallMachineBlock<>(MSBlockShapes.SMALL_CRUXTRUDER.createRotatedShapes(), MSTileEntityTypes.MINI_CRUXTRUDER, Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("mini_cruxtruder"));
+		registry.register(new SmallMachineBlock<>(MSBlockShapes.SMALL_TOTEM_LATHE.createRotatedShapes(), MSTileEntityTypes.MINI_TOTEM_LATHE, Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("mini_totem_lathe"));
 		registry.register(new MiniAlchemiterBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("mini_alchemiter"));
-		registry.register(new SmallMachineBlock(MSBlockShapes.SMALL_PUNCH_DESIGNIX.createRotatedShapes(), () -> MSTileEntityTypes.MINI_PUNCH_DESIGNIX, Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("mini_punch_designix"));
+		registry.register(new SmallMachineBlock<>(MSBlockShapes.SMALL_PUNCH_DESIGNIX.createRotatedShapes(), MSTileEntityTypes.MINI_PUNCH_DESIGNIX, Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("mini_punch_designix"));
 		registry.register(new HolopadBlock(Block.Properties.create(Material.IRON, MaterialColor.SNOW).hardnessAndResistance(3.0F)).setRegistryName("holopad"));
 		
-		/*
-		registry.register(jumperBlockExtension[0].setRegistryName("jumper_block_extension"));
-		registry.register(jumperBlockExtension[1].setRegistryName("jumper_block_extension2"));
-		registry.register(jumperBlockExtension[2].setRegistryName("jumper_block_extension3"));
-		registry.register(jumperBlockExtension[3].setRegistryName("jumper_block_extension4"));
-		
-		registry.register(alchemiterUpgrades[0].setRegistryName("alchemiter_upgrade"));
-		registry.register(alchemiterUpgrades[1].setRegistryName("alchemiter_upgrade2"));
-		registry.register(alchemiterUpgrades[2].setRegistryName("alchemiter_upgrade3"));
-		registry.register(alchemiterUpgrades[3].setRegistryName("alchemiter_upgrade4"));
-		*/
 		registry.register(new ComputerBlock(ComputerBlock.COMPUTER_SHAPE, ComputerBlock.COMPUTER_SHAPE, Block.Properties.create(Material.IRON).hardnessAndResistance(4.0F)).setRegistryName("computer"));
 		registry.register(new ComputerBlock(ComputerBlock.LAPTOP_OPEN_SHAPE, ComputerBlock.LAPTOP_CLOSED_SHAPE, Block.Properties.create(Material.IRON).hardnessAndResistance(4.0F)).setRegistryName("laptop"));
 		registry.register(new ComputerBlock(ComputerBlock.LAPTOP_OPEN_SHAPE, ComputerBlock.LAPTOP_CLOSED_SHAPE, Block.Properties.create(Material.IRON, MaterialColor.RED).hardnessAndResistance(4.0F)).setRegistryName("crockertop"));
 		registry.register(new ComputerBlock(ComputerBlock.LAPTOP_OPEN_SHAPE, ComputerBlock.LAPTOP_CLOSED_SHAPE, Block.Properties.create(Material.IRON, MaterialColor.GREEN).hardnessAndResistance(4.0F)).setRegistryName("hubtop"));
 		registry.register(new ComputerBlock(ComputerBlock.LUNCHTOP_SHAPE, ComputerBlock.LUNCHTOP_SHAPE, Block.Properties.create(Material.IRON, MaterialColor.RED).hardnessAndResistance(4.0F)).setRegistryName("lunchtop"));
+		registry.register(new ComputerBlock(ComputerBlock.OLD_COMPUTER_SHAPE, ComputerBlock.OLD_COMPUTER_SHAPE, Block.Properties.create(Material.IRON).hardnessAndResistance(4.0F)).setRegistryName("old_computer"));
 		registry.register(new TransportalizerBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("transportalizer"));
+		registry.register(new TransportalizerBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("trans_portalizer"));
+		registry.register(new SendificatorBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F), MSBlockShapes.SENDIFICATOR).setRegistryName("sendificator"));
 		registry.register(new GristWidgetBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("grist_widget"));
-		registry.register(new SmallMachineBlock(new CustomVoxelShape(new double[]{4, 0, 4, 12, 6, 12}).createRotatedShapes(), () -> MSTileEntityTypes.URANIUM_COOKER, Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("uranium_cooker"));
+		registry.register(new SmallMachineBlock<>(new CustomVoxelShape(new double[]{4, 0, 4, 12, 6, 12}).createRotatedShapes(), MSTileEntityTypes.URANIUM_COOKER, Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("uranium_cooker"));
 		
 		registry.register(new CruxiteDowelBlock(Block.Properties.create(Material.GLASS).hardnessAndResistance(0.0F)).setRegistryName("cruxite_dowel"));
 		

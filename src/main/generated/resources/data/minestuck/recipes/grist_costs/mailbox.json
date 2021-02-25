@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:mailbox"
+  },
+  "grist_cost": {
+    "minestuck:build": 16,
+    "minestuck:mercury": 3
+  }
+}

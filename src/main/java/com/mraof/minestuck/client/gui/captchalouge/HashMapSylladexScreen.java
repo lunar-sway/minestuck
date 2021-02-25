@@ -9,7 +9,7 @@ import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraftforge.fml.client.config.GuiButtonExt;
+import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
 
 public class HashMapSylladexScreen extends SylladexScreen
 {
@@ -30,7 +30,7 @@ public class HashMapSylladexScreen extends SylladexScreen
 	public void init()
 	{
 		super.init();
-		guiButton = new GuiButtonExt((width - GUI_WIDTH)/2 + 15, (height - GUI_HEIGHT)/2 + 175, 120, 20, "", button -> changeSetting());
+		guiButton = new ExtendedButton((width - GUI_WIDTH)/2 + 15, (height - GUI_HEIGHT)/2 + 175, 120, 20, "", button -> changeSetting());
 		addButton(guiButton);
 	}
 	
@@ -39,9 +39,9 @@ public class HashMapSylladexScreen extends SylladexScreen
 	{
 		guiButton.x = (width - GUI_WIDTH)/2 + 15;
 		guiButton.y = (height - GUI_HEIGHT)/2 + 175;
-		boolean active = MinestuckConfig.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.BOTH ? modus.ejectByChat : MinestuckConfig.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.ON;
+		boolean active = MinestuckConfig.SERVER.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.BOTH ? modus.ejectByChat : MinestuckConfig.SERVER.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.ON;
 		guiButton.setMessage(I18n.format(active ? EJECT_BY_CHAT_ON : EJECT_BY_CHAT_OFF));
-		guiButton.active = MinestuckConfig.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.BOTH;
+		guiButton.active = MinestuckConfig.SERVER.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.BOTH;
 		super.render(mouseX, mouseY, f);
 	}
 	
@@ -103,7 +103,7 @@ public class HashMapSylladexScreen extends SylladexScreen
 	
 	private void changeSetting()
 	{
-		if(MinestuckConfig.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.BOTH)
+		if(MinestuckConfig.SERVER.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.BOTH)
 		{
 			modus.ejectByChat = !modus.ejectByChat;
 			MSPacketHandler.sendToServer(CaptchaDeckPacket.modusParam((byte) 0, modus.ejectByChat ? 1 : 0));

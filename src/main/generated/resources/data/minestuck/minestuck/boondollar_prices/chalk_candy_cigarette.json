@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minestuck:chalk_candy_cigarette"
+  },
+  "range": {
+    "min": 125.0,
+    "max": 150.0,
+    "type": "minecraft:uniform"
+  }
+}

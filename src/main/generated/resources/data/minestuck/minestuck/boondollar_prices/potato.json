@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minecraft:potato"
+  },
+  "range": {
+    "min": 12.0,
+    "max": 15.0,
+    "type": "minecraft:uniform"
+  }
+}

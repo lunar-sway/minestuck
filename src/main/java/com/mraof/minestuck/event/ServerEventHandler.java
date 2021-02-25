@@ -8,32 +8,40 @@ import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.weapon.PotionWeaponItem;
 import com.mraof.minestuck.player.Echeladder;
+import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
+import com.mraof.minestuck.skaianet.TitleSelectionHook;
+import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.monster.*;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.player.AttackEntityEvent;
+import net.minecraftforge.event.entity.player.CriticalHitEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.UseHoeEvent;
 import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
@@ -43,6 +51,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
+
+import java.util.List;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class ServerEventHandler
@@ -64,6 +74,7 @@ public class ServerEventHandler
 	{
 		IdentifierHandler.clear();
 		SkaianetHandler.clear();
+		MSDimensions.clear();
 		MSFeatures.LAND_GATE.clearCache();
 	}
 	
@@ -73,13 +84,13 @@ public class ServerEventHandler
 		if(event.phase == TickEvent.Phase.END)
 		{
 			
-			if(!MinestuckConfig.hardMode && event.world.getDimension().getType() == DimensionType.OVERWORLD)
+			if(!MinestuckConfig.SERVER.hardMode && event.world.getDimension().getType() == DimensionType.OVERWORLD)
 			{
 				long time = event.world.getGameTime() / 24000L;
 				if(time != lastDay)
 				{
 					lastDay = time;
-					SkaianetHandler.get(event.world.getServer()).resetGivenItems();
+					SburbHandler.resetGivenItems(event.world.getServer());
 				}
 			}
 			
@@ -109,18 +120,27 @@ public class ServerEventHandler
 				Echeladder.increaseProgress(player, exp);
 		}
 		if(event.getEntity() instanceof ServerPlayerEntity)
-			SburbHandler.cancelSelection((ServerPlayerEntity) event.getEntity());
+		{
+			TitleSelectionHook.cancelSelection((ServerPlayerEntity) event.getEntity());
+		}
 	}
 
-	//Gets reset after AttackEntityEvent but before LivingHurtEvent, but is used in determining if it's a critical hit
-	private static float cachedCooledAttackStrength = 0;
+	// Stores the crit result from the CriticalHitEvent, to be used during LivingHurtEvent to trigger special effects of any weapons.
+	// This method is reliable only as long as LivingHurtEvent is posted only on the main thread and after a matching CriticalHitEvent
+	private static boolean cachedCrit;
 
-	@SubscribeEvent
-	public static void onPlayerAttack(AttackEntityEvent event)
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public static void onCrit(CriticalHitEvent event)
 	{
-		cachedCooledAttackStrength = event.getPlayer().getCooledAttackStrength(0.5F);
+		if(!event.getEntity().world.isRemote)
+			cachedCrit = event.getResult() == Event.Result.ALLOW || event.getResult() == Event.Result.DEFAULT && event.isVanillaCritical();
 	}
-
+	
+	public static boolean wasLastHitCrit(LivingEntity entity)
+	{
+		return entity instanceof ServerPlayerEntity && cachedCrit;
+	}
+	
 	@SubscribeEvent(priority=EventPriority.NORMAL)
 	public static void onEntityAttack(LivingHurtEvent event)
 	{
@@ -133,16 +153,6 @@ public class ServerEventHandler
 				{    //Increase damage to underling
 					double modifier = PlayerSavedData.getData(player).getEcheladder().getUnderlingDamageModifier();
 					event.setAmount((float) (event.getAmount() * modifier));
-				}
-				boolean critical = cachedCooledAttackStrength > 0.9 && player.fallDistance > 0.0F && !player.onGround && !player.isOnLadder() && !player.isInWater() && !player.isPotionActive(Effects.BLINDNESS) && !player.isPassenger() && !player.isBeingRidden();
-				if(!player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() instanceof PotionWeaponItem)
-				{
-					if(((PotionWeaponItem) player.getHeldItemMainhand().getItem()).potionOnCrit())
-					{
-						if(critical)
-						event.getEntityLiving().addPotionEffect(((PotionWeaponItem) player.getHeldItemMainhand().getItem()).getEffect(player));
-					}
-					else event.getEntityLiving().addPotionEffect(((PotionWeaponItem) player.getHeldItemMainhand().getItem()).getEffect(player));
 				}
 			}
 			else if (event.getEntityLiving() instanceof ServerPlayerEntity && event.getSource().getTrueSource() instanceof UnderlingEntity)
@@ -163,10 +173,54 @@ public class ServerEventHandler
 		}
 	}
 	
+	@SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = false)
+	public static void onPlayerInjured(LivingHurtEvent event)
+	{
+		if(event.getEntityLiving() instanceof PlayerEntity)
+		{
+			PlayerEntity injuredPlayer = ((PlayerEntity) event.getEntity());
+			Title title = PlayerSavedData.getData((ServerPlayerEntity) injuredPlayer).getTitle();
+			boolean isDoom = title != null && title.getHeroAspect() == EnumAspect.DOOM;
+			ItemStack handItem = injuredPlayer.getHeldItemMainhand();
+			if(handItem.getItem() == MSItems.LUCERNE_HAMMER_OF_UNDYING){
+				if((isDoom && injuredPlayer.getHealth() <= 3.0F && injuredPlayer.getRNG().nextFloat() <= .08) || (!isDoom && injuredPlayer.getHealth() <= 2.0F && injuredPlayer.getRNG().nextFloat() <= .02))
+				{
+					injuredPlayer.world.playSound(null, injuredPlayer.getPosX(), injuredPlayer.getPosY(), injuredPlayer.getPosZ(), SoundEvents.ITEM_TOTEM_USE, SoundCategory.PLAYERS, 1.0F, 1.4F);
+					injuredPlayer.setHealth(injuredPlayer.getHealth() + 3);
+					injuredPlayer.addPotionEffect(new EffectInstance(Effects.REGENERATION, 450, 0));
+					if(isDoom){
+						injuredPlayer.addPotionEffect(new EffectInstance(Effects.ABSORPTION, 100, 0));
+						handItem.damageItem(400, injuredPlayer, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
+					} else {
+						handItem.damageItem(1000, injuredPlayer, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
+					}
+				}
+			}
+			if(handItem.getItem() == MSItems.CRUEL_FATE_CRUCIBLE){
+				if((isDoom && injuredPlayer.getHealth() <= 12.0F && injuredPlayer.getRNG().nextFloat() <= .25) || (!isDoom && injuredPlayer.getHealth() <= 8.0F && injuredPlayer.getRNG().nextFloat() <= .10))
+				{
+					AxisAlignedBB axisalignedbb = injuredPlayer.getBoundingBox().grow(4.0D, 2.0D, 4.0D);
+					List<LivingEntity> list = injuredPlayer.world.getEntitiesWithinAABB(LivingEntity.class, axisalignedbb);
+					list.remove(injuredPlayer);
+					if (!list.isEmpty()) {
+						injuredPlayer.world.playSound(null, injuredPlayer.getPosX(), injuredPlayer.getPosY(), injuredPlayer.getPosZ(), SoundEvents.ENTITY_WITHER_HURT, SoundCategory.PLAYERS, 0.5F, 1.6F);
+						if(isDoom)
+							handItem.damageItem(1, injuredPlayer, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
+						else
+							handItem.damageItem(4, injuredPlayer, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
+						for(LivingEntity livingentity : list) {
+							livingentity.addPotionEffect(new EffectInstance(Effects.INSTANT_DAMAGE, 1, 1));
+						}
+					}
+				}
+			}
+		}
+	}
+	
 	@SubscribeEvent
 	public static void playerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event)
 	{
-		SburbHandler.cancelSelection((ServerPlayerEntity) event.getPlayer());
+		TitleSelectionHook.cancelSelection((ServerPlayerEntity) event.getPlayer());
 		
 		PlayerSavedData.getData((ServerPlayerEntity) event.getPlayer()).getEcheladder().resendAttributes(event.getPlayer());
 	}
@@ -214,7 +268,7 @@ public class ServerEventHandler
 	{
 		ItemEntity e = event.getEntityItem();
 		if(e.getItem().getCount() == 1 && (e.getItem().getItem() == Items.BREAD)) {
-			ItemEntity stalebread = new ItemEntity(e.world, e.posX, e.posY, e.posZ, new ItemStack(MSItems.STALE_BAGUETTE));
+			ItemEntity stalebread = new ItemEntity(e.world, e.getPosX(), e.getPosY(), e.getPosZ(), new ItemStack(MSItems.STALE_BAGUETTE));
 			e.world.addEntity(stalebread);
 		}
 	}

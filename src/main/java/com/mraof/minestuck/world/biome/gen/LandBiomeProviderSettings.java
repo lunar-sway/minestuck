@@ -1,13 +1,19 @@
 package com.mraof.minestuck.world.biome.gen;
 
+import com.mraof.minestuck.world.biome.LandBiomeSet;
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import net.minecraft.world.biome.provider.IBiomeProviderSettings;
+import net.minecraft.world.storage.WorldInfo;
 
 public class LandBiomeProviderSettings implements IBiomeProviderSettings
 {
 	private long seed;
 	private LandGenSettings genSettings;
-	
+
+	public LandBiomeProviderSettings(WorldInfo worldInfo)
+	{
+	}
+
 	public long getSeed()
 	{
 		return seed;
@@ -28,5 +34,10 @@ public class LandBiomeProviderSettings implements IBiomeProviderSettings
 	{
 		this.genSettings = genSettings;
 		return this;
+	}
+	
+	public LandBiomeSet getBiomes()
+	{
+		return genSettings.getLandTypes().terrain.getBiomeSet();
 	}
 }

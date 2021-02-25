@@ -2,13 +2,14 @@ package com.mraof.minestuck.world.gen.feature.structure.village;
 
 import com.mojang.datafixers.Dynamic;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.world.biome.MSBiomes;
+import com.mraof.minestuck.world.biome.LandBiomeSet;
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.util.SharedSeedRandom;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeManager;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
@@ -55,15 +56,15 @@ public class ConsortVillageStructure extends Structure<NoFeatureConfig>	//TODO I
 		
 		return new ChunkPos(x, z);
 	}
-	
+
 	@Override
-	public boolean hasStartAt(ChunkGenerator<?> chunkGenerator, Random random, int chunkX, int chunkZ)
-	{
-		ChunkPos pos = this.getStartPositionForPosition(chunkGenerator, random, chunkX, chunkZ, 0, 0);
-		
+	public boolean canBeGenerated(BiomeManager biomeManagerIn, ChunkGenerator<?> generatorIn, Random randIn, int chunkX, int chunkZ, Biome biomeIn) {
+		ChunkPos pos = this.getStartPositionForPosition(generatorIn, randIn, chunkX, chunkZ, 0, 0);
+
 		if(chunkX == pos.x && chunkZ == pos.z)
 		{
-			return chunkGenerator.getBiomeProvider().getBiomesInSquare(chunkX * 16 + 8, chunkZ * 16 + 8, 16).stream().allMatch(biome -> biome == MSBiomes.LAND_NORMAL);
+			Biome normalBiome = LandBiomeSet.getSet(generatorIn.getSettings()).NORMAL.get();
+			return generatorIn.getBiomeProvider().getBiomes(chunkX * 16 + 8, 0, chunkZ * 16 + 8, 16).stream().allMatch(biome -> biome == normalBiome);
 		}
 		return false;
 	}
@@ -89,9 +90,9 @@ public class ConsortVillageStructure extends Structure<NoFeatureConfig>	//TODO I
 	private static class Start extends StructureStart
 	{
 		
-		Start(Structure<?> structureIn, int chunkX, int chunkZ, Biome biomeIn, MutableBoundingBox boundsIn, int referenceIn, long seed)
+		Start(Structure<?> structure, int chunkX, int chunkZ, MutableBoundingBox boundingBox, int reference, long seed)
 		{
-			super(structureIn, chunkX, chunkZ, biomeIn, boundsIn, referenceIn, seed);
+			super(structure, chunkX, chunkZ, boundingBox, reference, seed);
 		}
 		
 		@Override
@@ -101,7 +102,7 @@ public class ConsortVillageStructure extends Structure<NoFeatureConfig>	//TODO I
 			{
 				LandGenSettings settings = (LandGenSettings) generator.getSettings();
 				LandTypePair landTypes = settings.getLandTypes();
-				List<ConsortVillagePieces.PieceWeight> pieceWeightList = ConsortVillagePieces.getStructureVillageWeightedPieceList(rand, landTypes.terrain.getConsortType(), landTypes);
+				List<ConsortVillagePieces.PieceWeight> pieceWeightList = ConsortVillagePieces.getStructureVillageWeightedPieceList(rand, landTypes);
 				ConsortVillageCenter.VillageCenter start = ConsortVillageCenter.getVillageStart((chunkX << 4) + rand.nextInt(16), (chunkZ << 4) + rand.nextInt(16), rand, pieceWeightList, landTypes);
 				components.add(start);
 				start.buildComponent(start, components, rand);

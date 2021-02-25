@@ -5,6 +5,7 @@ import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
 import com.mraof.minestuck.skaianet.MergeResult;
+import com.mraof.minestuck.world.biome.LandBiomeSet;
 import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.entity.EntityType;
@@ -162,5 +163,11 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
 	protected void add(MergeResult result, String value)
 	{
 		add(result.translationKey(), value);
+	}
+	protected void defaultLandBiomes(LandBiomeSet biomes)
+	{
+		addBiome(biomes.NORMAL, "Land");
+		addBiome(biomes.ROUGH, "Rough Land");
+		addBiome(biomes.OCEAN, "Ocean Land");
 	}
 }

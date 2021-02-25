@@ -1,8 +1,8 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.inventory.MiniTotemLatheContainer;
-import com.mraof.minestuck.tileentity.MiniTotemLatheTileEntity;
+import com.mraof.minestuck.tileentity.machine.MiniTotemLatheTileEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -43,7 +43,7 @@ public class MiniTotemLatheScreen extends MachineScreen<MiniTotemLatheContainer>
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
 	{
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		//draw background
 		this.minecraft.getTextureManager().bindTexture(BACKGROUND);

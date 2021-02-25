@@ -4,8 +4,6 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
-import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.network.ModusDataPacket;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -30,7 +28,7 @@ public class TreeModus extends Modus
 	}
 	
 	@Override
-	public void initModus(ServerPlayerEntity player, NonNullList<ItemStack> prev, int size)
+	public void initModus(ItemStack modusItem, ServerPlayerEntity player, NonNullList<ItemStack> prev, int size)
 	{
 		this.size = size;
 		node = null; //TODO Handle potential prev list instead
@@ -114,7 +112,7 @@ public class TreeModus extends Modus
 	@Override
 	public boolean increaseSize(ServerPlayerEntity player)
 	{
-		if(MinestuckConfig.modusMaxSize.get() > 0 && size >= MinestuckConfig.modusMaxSize.get())
+		if(MinestuckConfig.SERVER.modusMaxSize.get() > 0 && size >= MinestuckConfig.SERVER.modusMaxSize.get())
 			return false;
 		
 		size++;
@@ -187,18 +185,13 @@ public class TreeModus extends Modus
 			autoBalance = value > 0;
 			markDirty();
 			if(autoBalance)
-			{
-				TreeNode node = this.node;
 				autoBalance();
-				if(node != this.node)
-					MSPacketHandler.sendToPlayer(ModusDataPacket.create(CaptchaDeckHandler.writeToNBT(this)), player);
-			}
 		}
 	}
 	
 	protected void autoBalance()
 	{
-		if(!autoBalance && MinestuckConfig.treeModusSetting.get() != MinestuckConfig.AvailableOptions.ON || MinestuckConfig.treeModusSetting.get() == MinestuckConfig.AvailableOptions.OFF)
+		if(!autoBalance && MinestuckConfig.SERVER.treeModusSetting.get() != MinestuckConfig.AvailableOptions.ON || MinestuckConfig.SERVER.treeModusSetting.get() == MinestuckConfig.AvailableOptions.OFF)
 			return;
 		
 		int minDepth = getDepth(node, true);

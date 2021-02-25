@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minecraft:glowstone_dust"
+  },
+  "range": {
+    "min": 20.0,
+    "max": 40.0,
+    "type": "minecraft:uniform"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minecraft:diamond"
+  },
+  "range": {
+    "min": 800.0,
+    "max": 1200.0,
+    "type": "minecraft:uniform"
+  }
+}

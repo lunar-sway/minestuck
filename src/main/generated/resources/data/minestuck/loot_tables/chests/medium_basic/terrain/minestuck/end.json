@@ -27,7 +27,6 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 3,
           "quality": 2,
           "functions": [
             {

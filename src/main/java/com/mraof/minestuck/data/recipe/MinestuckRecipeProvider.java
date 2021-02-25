@@ -8,7 +8,6 @@ import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.util.ExtraForgeTags;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.advancements.criterion.InventoryChangeTrigger;
-import net.minecraft.advancements.criterion.MinMaxBounds;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.*;
 import net.minecraft.item.Items;
@@ -19,7 +18,6 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.crafting.IngredientNBT;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
@@ -36,14 +34,14 @@ public class MinestuckRecipeProvider extends RecipeProvider
 	@Override
 	protected void registerRecipes(Consumer<IFinishedRecipe> recipeBuilder)
 	{
-		ShapelessRecipeBuilder.shapelessRecipe(MSItems.RAW_CRUXITE, 9).addIngredient(MSBlocks.CRUXITE_BLOCK).addCriterion("has_at_least_9_raw_cruxite", hasItem(MinMaxBounds.IntBound.atLeast(9), MSItems.RAW_CRUXITE)).addCriterion("has_cruxite_block", hasItem(MSBlocks.CRUXITE_BLOCK)).build(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "raw_cruxite_from_block"));
-		ShapedRecipeBuilder.shapedRecipe(MSBlocks.CRUXITE_BLOCK).key('#', MSItems.RAW_CRUXITE).patternLine("###").patternLine("###").patternLine("###").addCriterion("has_at_least_9_raw_cruxite", hasItem(MinMaxBounds.IntBound.atLeast(9), MSItems.RAW_CRUXITE)).build(recipeBuilder);
-		ShapelessRecipeBuilder.shapelessRecipe(MSItems.RAW_URANIUM, 9).addIngredient(MSBlocks.URANIUM_BLOCK).addCriterion("has_at_least_9_raw_uranium", hasItem(MinMaxBounds.IntBound.atLeast(9), MSItems.RAW_URANIUM)).addCriterion("has_uranium_block", hasItem(MSBlocks.URANIUM_BLOCK)).build(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "raw_uranium_from_block"));
-		ShapedRecipeBuilder.shapedRecipe(MSBlocks.URANIUM_BLOCK).key('#', MSItems.RAW_URANIUM).patternLine("###").patternLine("###").patternLine("###").addCriterion("has_at_least_9_raw_uranium", hasItem(MinMaxBounds.IntBound.atLeast(9), MSItems.RAW_URANIUM)).build(recipeBuilder);
-		ShapelessRecipeBuilder.shapelessRecipe(Items.SUGAR, 9).addIngredient(MSBlocks.SUGAR_CUBE).addCriterion("has_at_least_9_sugar", hasItem(MinMaxBounds.IntBound.atLeast(9), Items.SUGAR)).addCriterion("has_sugar_cube", hasItem(MSBlocks.SUGAR_CUBE)).build(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "sugar_from_cube"));
-		ShapedRecipeBuilder.shapedRecipe(MSBlocks.SUGAR_CUBE).key('#', Items.SUGAR).patternLine("###").patternLine("###").patternLine("###").addCriterion("has_at_least_9_sugar", hasItem(MinMaxBounds.IntBound.atLeast(9), Items.SUGAR)).build(recipeBuilder);
-		ShapelessRecipeBuilder.shapelessRecipe(MSItems.STRAWBERRY_CHUNK, 4).addIngredient(MSBlocks.STRAWBERRY).addCriterion("has_at_least_4_strawberry_chunks", hasItem(MinMaxBounds.IntBound.atLeast(4), MSItems.STRAWBERRY_CHUNK)).addCriterion("has_strawberry_block", hasItem(MSBlocks.STRAWBERRY)).build(recipeBuilder);
-		ShapedRecipeBuilder.shapedRecipe(MSBlocks.STRAWBERRY).key('#', MSItems.STRAWBERRY_CHUNK).patternLine("##").patternLine("##").addCriterion("has_at_least_4_strawberry_chunks", hasItem(MinMaxBounds.IntBound.atLeast(4), MSItems.STRAWBERRY_CHUNK)).build(recipeBuilder);
+		ShapelessRecipeBuilder.shapelessRecipe(MSItems.RAW_CRUXITE, 9).addIngredient(MSBlocks.CRUXITE_BLOCK).addCriterion("has_raw_cruxite", hasItem(MSItems.RAW_CRUXITE)).addCriterion("has_cruxite_block", hasItem(MSBlocks.CRUXITE_BLOCK)).build(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "raw_cruxite_from_block"));
+		ShapedRecipeBuilder.shapedRecipe(MSBlocks.CRUXITE_BLOCK).key('#', MSItems.RAW_CRUXITE).patternLine("###").patternLine("###").patternLine("###").addCriterion("has_raw_cruxite", hasItem(MSItems.RAW_CRUXITE)).build(recipeBuilder);
+		ShapelessRecipeBuilder.shapelessRecipe(MSItems.RAW_URANIUM, 9).addIngredient(MSBlocks.URANIUM_BLOCK).addCriterion("has__raw_uranium", hasItem(MSItems.RAW_URANIUM)).addCriterion("has_uranium_block", hasItem(MSBlocks.URANIUM_BLOCK)).build(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "raw_uranium_from_block"));
+		ShapedRecipeBuilder.shapedRecipe(MSBlocks.URANIUM_BLOCK).key('#', MSItems.RAW_URANIUM).patternLine("###").patternLine("###").patternLine("###").addCriterion("has_raw_uranium", hasItem(MSItems.RAW_URANIUM)).build(recipeBuilder);
+		ShapelessRecipeBuilder.shapelessRecipe(Items.SUGAR, 9).addIngredient(MSBlocks.SUGAR_CUBE).addCriterion("has_sugar", hasItem(Items.SUGAR)).addCriterion("has_sugar_cube", hasItem(MSBlocks.SUGAR_CUBE)).build(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "sugar_from_cube"));
+		ShapedRecipeBuilder.shapedRecipe(MSBlocks.SUGAR_CUBE).key('#', Items.SUGAR).patternLine("###").patternLine("###").patternLine("###").addCriterion("has_sugar", hasItem(Items.SUGAR)).build(recipeBuilder);
+		ShapelessRecipeBuilder.shapelessRecipe(MSItems.STRAWBERRY_CHUNK, 4).addIngredient(MSBlocks.STRAWBERRY).addCriterion("has_strawberry_chunks", hasItem( MSItems.STRAWBERRY_CHUNK)).addCriterion("has_strawberry_block", hasItem(MSBlocks.STRAWBERRY)).build(recipeBuilder);
+		ShapedRecipeBuilder.shapedRecipe(MSBlocks.STRAWBERRY).key('#', MSItems.STRAWBERRY_CHUNK).patternLine("##").patternLine("##").addCriterion("has_strawberry_chunks", hasItem(MSItems.STRAWBERRY_CHUNK)).build(recipeBuilder);
 		
 		ShapedRecipeBuilder.shapedRecipe(MSBlocks.SHADE_BRICKS, 4).key('#', MSBlocks.SMOOTH_SHADE_STONE).patternLine("##").patternLine("##").addCriterion("has_shade_stone", hasItem(MSBlocks.SMOOTH_SHADE_STONE)).build(recipeBuilder);
 		ShapedRecipeBuilder.shapedRecipe(MSBlocks.FROST_BRICKS, 4).key('#', MSBlocks.FROST_TILE).patternLine("##").patternLine("##").addCriterion("has_frost_tile", hasItem(MSBlocks.FROST_TILE)).build(recipeBuilder);
@@ -98,15 +96,19 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		ShapedRecipeBuilder.shapedRecipe(MSBlocks.CHESSBOARD).key('W', Blocks.WHITE_TERRACOTTA).key('B', Blocks.BLACK_TERRACOTTA).patternLine("BWB").patternLine("WBW").patternLine("BWB").setGroup("chessboard").addCriterion("has_white_terracotta", hasItem(Blocks.WHITE_TERRACOTTA)).addCriterion("has_black_terracotta", hasItem(Blocks.BLACK_TERRACOTTA)).build(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "chessboard_black"));
 		ShapedRecipeBuilder.shapedRecipe(MSItems.CLOTHES_IRON).key('s', Tags.Items.STONE).key('i', Tags.Items.INGOTS_IRON).key('r', Tags.Items.RODS_WOODEN).patternLine(" rr").patternLine("sss").patternLine("iii").addCriterion("has_stick", hasItem(Tags.Items.RODS_WOODEN)).addCriterion("has_iron_ingot", hasItem(Tags.Items.INGOTS_IRON)).build(recipeBuilder);
 		ShapedRecipeBuilder.shapedRecipe(MSItems.HORN).key('w', Items.WHITE_WOOL).key('i', Tags.Items.INGOTS_IRON).key('r', Tags.Items.RODS_WOODEN).patternLine("  i").patternLine(" r ").patternLine("w  ").addCriterion("has_stick", hasItem(Tags.Items.RODS_WOODEN)).addCriterion("has_iron_ingot", hasItem(Tags.Items.INGOTS_IRON)).addCriterion("has_white_wool", hasItem(Items.WHITE_WOOL)).build(recipeBuilder);
+		ShapelessRecipeBuilder.shapelessRecipe(MSItems.BI_DYE, 2).addIngredient(Items.BLUE_DYE).addCriterion("has_blue_dye", hasItem(Items.BLUE_DYE)).addIngredient(Items.PINK_DYE).addCriterion("has_pink_dye", hasItem(Items.PINK_DYE)).addIngredient(Items.PURPLE_DYE).addCriterion("has_purple_dye", hasItem(Items.PURPLE_DYE)).build(recipeBuilder);
 		
 		ShapedRecipeBuilder.shapedRecipe(MSItems.CLAW_HAMMER).key('i', Tags.Items.INGOTS_IRON).key('s', Tags.Items.RODS_WOODEN).patternLine(" ii").patternLine("is ").patternLine(" s ").addCriterion("has_iron_ingot", hasItem(Tags.Items.INGOTS_IRON)).build(recipeBuilder);
 		ShapedRecipeBuilder.shapedRecipe(MSItems.SLEDGE_HAMMER).key('i', Tags.Items.INGOTS_IRON).key('s', Tags.Items.RODS_WOODEN).key('S', Tags.Items.STONE).patternLine("iSi").patternLine(" s ").patternLine(" s ").addCriterion("has_iron_ingot", hasItem(Tags.Items.INGOTS_IRON)).build(recipeBuilder);
 		ShapedRecipeBuilder.shapedRecipe(MSItems.KATANA).key('i', Tags.Items.INGOTS_IRON).key('s', Tags.Items.RODS_WOODEN).patternLine("  i").patternLine(" i ").patternLine("s  ").addCriterion("has_iron_ingot", hasItem(Tags.Items.INGOTS_IRON)).build(recipeBuilder);
+		ShapedRecipeBuilder.shapedRecipe(MSItems.MACUAHUITL).key('P', ItemTags.PLANKS).key('s', Tags.Items.RODS_WOODEN).key('O', Items.OBSIDIAN).patternLine("OPO").patternLine("OPO").patternLine(" s ").addCriterion("has_stick", hasItem(Tags.Items.RODS_WOODEN)).build(recipeBuilder);
+		ShapedRecipeBuilder.shapedRecipe(MSItems.OBSIDIAN_AXE_KNIFE).key('s', Tags.Items.RODS_WOODEN).key('O', Items.OBSIDIAN).patternLine("  O").patternLine(" Os").patternLine("Os ").addCriterion("has_stick", hasItem(Tags.Items.RODS_WOODEN)).build(recipeBuilder);
 		ShapedRecipeBuilder.shapedRecipe(MSItems.SICKLE).key('i', Tags.Items.INGOTS_IRON).key('s', Tags.Items.RODS_WOODEN).patternLine("ii ").patternLine("  i").patternLine(" s ").addCriterion("has_iron_ingot", hasItem(Tags.Items.INGOTS_IRON)).build(recipeBuilder);
 		ShapedRecipeBuilder.shapedRecipe(MSItems.DEUCE_CLUB).key('P', ItemTags.PLANKS).key('s', Tags.Items.RODS_WOODEN).patternLine("  P").patternLine(" s ").patternLine("s  ").addCriterion("has_stick", hasItem(Tags.Items.RODS_WOODEN)).build(recipeBuilder);
 		ShapedRecipeBuilder.shapedRecipe(MSItems.CANE).key('s', Tags.Items.RODS_WOODEN).patternLine("  s").patternLine(" s ").patternLine("s  ").addCriterion("has_stick", hasItem(Tags.Items.RODS_WOODEN)).build(recipeBuilder);
 		ShapedRecipeBuilder.shapedRecipe(MSItems.BEAR_POKING_STICK).key('s', Tags.Items.RODS_WOODEN).key('l', Tags.Items.LEATHER).patternLine("  s").patternLine(" s ").patternLine("l  ").addCriterion("has_stick", hasItem(Tags.Items.RODS_WOODEN)).build(recipeBuilder);
 		ShapedRecipeBuilder.shapedRecipe(MSItems.UMBRELLA).key('s', Tags.Items.RODS_WOODEN).key('w', Items.BLACK_WOOL).patternLine(" w ").patternLine("wsw").patternLine(" s ").addCriterion("has_stick", hasItem(Tags.Items.RODS_WOODEN)).build(recipeBuilder);
+		ShapedRecipeBuilder.shapedRecipe(MSItems.FAN).key('s', Tags.Items.RODS_WOODEN).key('p', Items.PAPER).patternLine("  p").patternLine(" pp").patternLine("pps").addCriterion("has_stick", hasItem(Tags.Items.RODS_WOODEN)).build(recipeBuilder);
 		ShapedRecipeBuilder.shapedRecipe(MSItems.IRON_CANE).key('i', Tags.Items.INGOTS_IRON).key('c', MSItems.CANE).patternLine("  i").patternLine(" c ").patternLine("i  ").addCriterion("has_iron_ingot", hasItem(Tags.Items.INGOTS_IRON)).build(recipeBuilder);
 		ShapedRecipeBuilder.shapedRecipe(MSItems.WOODEN_SPOON).key('s', Tags.Items.RODS_WOODEN).key('b', Items.BOWL).patternLine("b").patternLine("s").patternLine("s").addCriterion("has_stick", hasItem(Tags.Items.RODS_WOODEN)).build(recipeBuilder);
 		ShapedRecipeBuilder.shapedRecipe(MSItems.FORK).key('S', Tags.Items.STONE).patternLine("S S").patternLine(" S ").patternLine(" S ").addCriterion("has_stone", hasItem(Tags.Items.STONE)).build(recipeBuilder);
@@ -115,11 +117,14 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		ShapedRecipeBuilder.shapedRecipe(MSItems.CLIENT_DISK).key('i', Tags.Items.INGOTS_IRON).key('c', MSItems.RAW_CRUXITE).patternLine("c c").patternLine(" i ").patternLine("c c").setGroup("sburb_disk").addCriterion("has_raw_cruxite", hasItem(MSItems.RAW_CRUXITE)).build(recipeBuilder);
 		ShapedRecipeBuilder.shapedRecipe(MSItems.SERVER_DISK).key('i', Tags.Items.INGOTS_IRON).key('c', MSItems.RAW_CRUXITE).patternLine(" c ").patternLine("cic").patternLine(" c ").setGroup("sburb_disk").addCriterion("has_raw_cruxite", hasItem(MSItems.RAW_CRUXITE)).build(recipeBuilder);
 		ShapedRecipeBuilder.shapedRecipe(MSItems.CAPTCHA_CARD).key('p', Items.PAPER).key('c', MSItems.RAW_CRUXITE).patternLine("ppp").patternLine("pcp").patternLine("ppp").addCriterion("has_raw_cruxite", hasItem(MSItems.RAW_CRUXITE)).build(recipeBuilder);
-		NonMirroredRecipeBuilder.nonMirroredRecipe(MSItems.STACK_MODUS_CARD).key('a', IngredientNBT.fromItems(MSItems.CAPTCHA_CARD)).key('c', MSItems.RAW_CRUXITE).key('C', MSBlocks.CRUXITE_BLOCK).patternLine("Cac").addCriterion("has_card", hasItem(MSItems.CAPTCHA_CARD)).build(recipeBuilder);
-		NonMirroredRecipeBuilder.nonMirroredRecipe(MSItems.QUEUE_MODUS_CARD).key('a', IngredientNBT.fromItems(MSItems.CAPTCHA_CARD)).key('c', MSItems.RAW_CRUXITE).key('C', MSBlocks.CRUXITE_BLOCK).patternLine("caC").addCriterion("has_card", hasItem(MSItems.CAPTCHA_CARD)).build(recipeBuilder);
+		//TODO custom ingredient type to disallow punched cards or cards with items to be used here
+		NonMirroredRecipeBuilder.nonMirroredRecipe(MSItems.STACK_MODUS_CARD).key('a', Ingredient.fromItems(MSItems.CAPTCHA_CARD)).key('c', MSItems.RAW_CRUXITE).key('C', MSBlocks.CRUXITE_BLOCK).patternLine("Cac").addCriterion("has_card", hasItem(MSItems.CAPTCHA_CARD)).build(recipeBuilder);
+		NonMirroredRecipeBuilder.nonMirroredRecipe(MSItems.QUEUE_MODUS_CARD).key('a', Ingredient.fromItems(MSItems.CAPTCHA_CARD)).key('c', MSItems.RAW_CRUXITE).key('C', MSBlocks.CRUXITE_BLOCK).patternLine("caC").addCriterion("has_card", hasItem(MSItems.CAPTCHA_CARD)).build(recipeBuilder);
 		
 		ShapelessRecipeBuilder.shapelessRecipe(MSItems.BUG_ON_A_STICK, 3).addIngredient(Ingredient.fromTag(Tags.Items.RODS_WOODEN), 3).addIngredient(MSItems.JAR_OF_BUGS).addCriterion("has_jag_of_bugs", hasItem(MSItems.JAR_OF_BUGS)).build(recipeBuilder);
 		ShapelessRecipeBuilder.shapelessRecipe(MSItems.SALAD).addIngredient(Items.BOWL).addIngredient(ItemTags.LEAVES).addCriterion("has_bowl", hasItem(Items.BOWL)).build(recipeBuilder);
+		
+		ShapelessRecipeBuilder.shapelessRecipe(MSBlocks.TRANS_PORTALIZER).addIngredient(MSBlocks.TRANSPORTALIZER).addIngredient(Items.PINK_DYE).addIngredient(Items.LIGHT_BLUE_DYE).addCriterion("has_transportalizer", hasItem(MSBlocks.TRANSPORTALIZER)).build(recipeBuilder);
 		
 		CookingRecipeBuilder.smeltingRecipe(Ingredient.fromItems(MSBlocks.PINK_STONE_BRICKS), MSBlocks.CRACKED_PINK_STONE_BRICKS, 0.1F, 200).addCriterion("has_pink_stone_bricks", hasItem(MSBlocks.PINK_STONE_BRICKS)).build(recipeBuilder);
 		CookingRecipeBuilder.smeltingRecipe(Ingredient.fromItems(MSItems.CAKE_MIX), Blocks.CAKE, 0.0F, 200).addCriterion("has_cake_mix", hasItem(MSItems.CAKE_MIX)).build(recipeBuilder, new ResourceLocation (Minestuck.MOD_ID, "cake_from_mix"));

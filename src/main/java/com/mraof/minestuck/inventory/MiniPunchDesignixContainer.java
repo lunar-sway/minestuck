@@ -1,20 +1,24 @@
 package com.mraof.minestuck.inventory;
 
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.inventory.slot.InputSlot;
 import com.mraof.minestuck.inventory.slot.OutputSlot;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IIntArray;
+import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.IntArray;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
 
@@ -28,26 +32,23 @@ public class MiniPunchDesignixContainer extends MachineContainer
 	private static final int designixOutputX = 116;
 	private static final int designixOutputY = 37;
 	
-	private final IInventory designixInventory;
-	
 	public MiniPunchDesignixContainer(int windowId, PlayerInventory playerInventory, PacketBuffer buffer)
 	{
-		this(MSContainerTypes.MINI_PUNCH_DESIGNIX, windowId, playerInventory, new Inventory(3), new IntArray(3), buffer.readBlockPos());
+		this(MSContainerTypes.MINI_PUNCH_DESIGNIX, windowId, playerInventory, new ItemStackHandler(3), new IntArray(3), IWorldPosCallable.DUMMY, buffer.readBlockPos());
 	}
 	
-	public MiniPunchDesignixContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, BlockPos machinePos)
+	public MiniPunchDesignixContainer(int windowId, PlayerInventory playerInventory, IItemHandler inventory, IIntArray parameters, IWorldPosCallable position, BlockPos machinePos)
 	{
-		this(MSContainerTypes.MINI_PUNCH_DESIGNIX, windowId, playerInventory, inventory, parameters, machinePos);
+		this(MSContainerTypes.MINI_PUNCH_DESIGNIX, windowId, playerInventory, inventory, parameters, position, machinePos);
 	}
 	
-	public MiniPunchDesignixContainer(ContainerType<? extends MiniPunchDesignixContainer> type, int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, BlockPos machinePos)
+	public MiniPunchDesignixContainer(ContainerType<? extends MiniPunchDesignixContainer> type, int windowId, PlayerInventory playerInventory, IItemHandler inventory, IIntArray parameters, IWorldPosCallable position, BlockPos machinePos)
 	{
-		super(type, windowId, parameters, machinePos);
+		super(type, windowId, parameters, position, machinePos);
 		
-		assertInventorySize(inventory, 3);
-		this.designixInventory = inventory;
+		assertItemHandlerSize(inventory, 3);
 		
-		addSlot(new Slot(inventory, 0, designixInputX, designixInputY));
+		addSlot(new SlotItemHandler(inventory, 0, designixInputX, designixInputY));
 		addSlot(new InputSlot(inventory, 1, designixCardsX, designixCardsY, MSItems.CAPTCHA_CARD));
 		addSlot(new OutputSlot(inventory, 2, designixOutputX, designixOutputY));
 		
@@ -55,9 +56,9 @@ public class MiniPunchDesignixContainer extends MachineContainer
 	}
 	
 	@Override
-	public boolean canInteractWith(PlayerEntity player)
+	protected Block getValidBlock()
 	{
-		return designixInventory.isUsableByPlayer(player);
+		return MSBlocks.MINI_PUNCH_DESIGNIX;
 	}
 	
 	protected void bindPlayerInventory(PlayerInventory playerInventory)

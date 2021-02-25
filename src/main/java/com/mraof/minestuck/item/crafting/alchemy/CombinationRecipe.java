@@ -19,6 +19,11 @@ import java.util.List;
 
 public class CombinationRecipe extends AbstractCombinationRecipe
 {
+	public static ItemStack findResult(ItemCombiner combiner, World world) {
+		return world.getRecipeManager().getRecipe(MSRecipeTypes.COMBINATION_TYPE, combiner, world)
+				.map(recipe -> recipe.getCraftingResult(combiner)).orElse(ItemStack.EMPTY);
+	}
+	
 	private final Ingredient input1, input2;
 	private final CombinationMode mode;
 	private final ItemStack output;
@@ -42,13 +47,19 @@ public class CombinationRecipe extends AbstractCombinationRecipe
 	@Override
 	public ItemStack getCraftingResult(ItemCombiner inv)
 	{
-		return getRecipeOutput();
+		return output;
+	}
+	
+	@Override
+	public boolean isDynamic()	//Makes sure that the recipe is not unlockable (because recipe book categories are hardcoded to vanilla categories)
+	{
+		return true;
 	}
 	
 	@Override
 	public ItemStack getRecipeOutput()
 	{
-		return output.copy();
+		return ItemStack.EMPTY;
 	}
 	
 	@Override

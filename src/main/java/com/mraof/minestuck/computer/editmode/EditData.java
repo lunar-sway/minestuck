@@ -2,9 +2,9 @@ package com.mraof.minestuck.computer.editmode;
 
 import com.mraof.minestuck.entity.DecoyEntity;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import com.mraof.minestuck.network.GristCachePacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ServerEditPacket;
+import com.mraof.minestuck.network.data.GristCachePacket;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnection;
@@ -48,12 +48,9 @@ public class EditData
 	
 	private boolean isRecovering;
 	
-	/**
-	 * @return a player identifier for the player at the receiving end of the connection
-	 */
-	public PlayerIdentifier getTarget()
+	public SburbConnection getConnection()
 	{
-		return connection.getClientIdentifier();
+		return connection;
 	}
 	
 	/**
@@ -140,9 +137,9 @@ public class EditData
 		private PlayerRecovery(DecoyEntity decoy)
 		{
 			dimension = decoy.dimension;
-			posX = decoy.posX;
-			posY = decoy.posY;
-			posZ = decoy.posZ;
+			posX = decoy.getPosX();
+			posY = decoy.getPosY();
+			posZ = decoy.getPosZ();
 			rotationYaw = decoy.rotationYaw;
 			rotationPitch = decoy.rotationPitch;
 			gameType = decoy.gameType;
@@ -251,10 +248,10 @@ public class EditData
 		{
 			if(connection != null)
 			{
-				connection.inventory = this.inventory;
+				connection.putEditmodeInventory(this.inventory);
 				if(editPlayer != null)
 				{
-					ServerEditHandler.lastEditmodePos.put(connection, new Vec3d(editPlayer.posX, editPlayer.posY, editPlayer.posZ));
+					ServerEditHandler.lastEditmodePos.put(connection, new Vec3d(editPlayer.getPosX(), editPlayer.getPosY(), editPlayer.getPosZ()));
 				}
 			} else LOGGER.warn("Unable to perform editmode recovery for the connection for client player {}. Got null connection.", clientPlayer.getUsername());
 		}

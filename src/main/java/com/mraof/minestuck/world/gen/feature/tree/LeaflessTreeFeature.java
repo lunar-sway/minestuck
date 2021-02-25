@@ -8,21 +8,21 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationSettings;
-import net.minecraft.world.gen.feature.BushConfig;
+import net.minecraft.world.gen.feature.BlockStateFeatureConfig;
 import net.minecraft.world.gen.feature.Feature;
 
 import java.util.Random;
 import java.util.function.Function;
 
-public class LeaflessTreeFeature extends Feature<BushConfig>
+public class LeaflessTreeFeature extends Feature<BlockStateFeatureConfig>
 {
-	public LeaflessTreeFeature(Function<Dynamic<?>, ? extends BushConfig> configFactoryIn)
+	public LeaflessTreeFeature(Function<Dynamic<?>, ? extends BlockStateFeatureConfig> configFactoryIn)
 	{
 		super(configFactoryIn);
 	}
 	
 	@Override
-	public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, BushConfig config)
+	public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, BlockStateFeatureConfig config)
 	{
 		//TODO Define which blocks that it is allowed to place on
 		int size = rand.nextInt(3);

@@ -1,6 +1,5 @@
 package com.mraof.minestuck.player;
 
-import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -88,19 +87,6 @@ public enum EnumAspect	//TODO This could potentially be changed to a registry. H
 				return a;
 		}
 		return null;
-	}
-	
-	/**
-	 * Translates and returns the proper name of this title-aspect. Should only be used client-side.
-	 * For usage in messages sent to a player from a server, use <code>asTextComponent()</code>.
-	 * For debugging purposes, use <code>toString()</code> instead.
-	 * @return a translated string of the name.
-	 * @deprecated use {@link #asTextComponent()} instead
-	 */
-	@Deprecated
-	public String getDisplayName()
-	{
-		return I18n.format(getTranslationKey());
 	}
 	
 	/**

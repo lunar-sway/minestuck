@@ -28,7 +28,7 @@ public class SetModus extends Modus
 	}
 	
 	@Override
-	public void initModus(ServerPlayerEntity player, NonNullList<ItemStack> prev, int size)
+	public void initModus(ItemStack modusItem, ServerPlayerEntity player, NonNullList<ItemStack> prev, int size)
 	{
 		this.size = size;
 		list = NonNullList.create();
@@ -134,7 +134,7 @@ public class SetModus extends Modus
 	@Override
 	public boolean increaseSize(ServerPlayerEntity player)
 	{
-		if(MinestuckConfig.modusMaxSize.get() > 0 && size >= MinestuckConfig.modusMaxSize.get())
+		if(MinestuckConfig.SERVER.modusMaxSize.get() > 0 && size >= MinestuckConfig.SERVER.modusMaxSize.get())
 			return false;
 		
 		size++;

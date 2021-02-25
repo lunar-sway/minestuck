@@ -4,6 +4,6 @@
     "item": "minecraft:string"
   },
   "grist_cost": {
-    "minestuck:chalk": 2
+    "minestuck:chalk": 1
   }
 }

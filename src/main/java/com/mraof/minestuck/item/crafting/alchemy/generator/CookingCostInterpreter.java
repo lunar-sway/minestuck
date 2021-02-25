@@ -23,14 +23,14 @@ public class CookingCostInterpreter extends DefaultInterpreter
 	}
 	
 	@Override
-	public GristSet generateCost(IRecipe<?> recipe, Item item, RecipeGeneratedCostHandler.IngredientLookup ingredientInterpreter)
+	public GristSet generateCost(IRecipe<?> recipe, Item output, GenerationContext context)
 	{
-		GristSet cost = super.generateCost(recipe, item, ingredientInterpreter);
+		GristSet cost = super.generateCost(recipe, output, context);
 		
 		if(cost != null && recipe instanceof AbstractCookingRecipe)
 		{
 			float cookTime = ((AbstractCookingRecipe) recipe).getCookTime();
-			cost.addGrist(fuelCost.copy().scale(cookTime/ STANDARD_COOKING_TIME, false));
+			cost.addGrist(fuelCost.copy().scale(cookTime / STANDARD_COOKING_TIME, false));
 		}
 		
 		return cost;

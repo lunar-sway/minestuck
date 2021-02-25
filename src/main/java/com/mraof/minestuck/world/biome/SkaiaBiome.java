@@ -30,7 +30,7 @@ public class SkaiaBiome extends AbstractBiome
 		this.addSpawn(EntityClassification.MONSTER, new SpawnListEntry(MSEntityTypes.PROSPITIAN_BISHOP, 1, 1, 1));
 		this.addSpawn(EntityClassification.MONSTER, new SpawnListEntry(MSEntityTypes.PROSPITIAN_ROOK, 1, 1, 1));
 		
-		addStructure(MSFeatures.SKAIA_CASTLE, IFeatureConfig.NO_FEATURE_CONFIG);
-		addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, createDecoratedFeature(MSFeatures.SKAIA_CASTLE, IFeatureConfig.NO_FEATURE_CONFIG, Placement.NOPE, IPlacementConfig.NO_PLACEMENT_CONFIG));
+		addStructure(MSFeatures.SKAIA_CASTLE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
+		addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MSFeatures.SKAIA_CASTLE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.NOPE.configure(IPlacementConfig.NO_PLACEMENT_CONFIG)));
 	}
 }

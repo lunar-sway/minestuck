@@ -1,6 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.inventory.MiniAlchemiterContainer;
@@ -8,7 +8,7 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristCostRecipe;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import com.mraof.minestuck.tileentity.MiniAlchemiterTileEntity;
+import com.mraof.minestuck.tileentity.machine.MiniAlchemiterTileEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -88,7 +88,7 @@ public class MiniAlchemiterScreen extends MachineScreen<MiniAlchemiterContainer>
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
 	{
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		//draw background
 		this.minecraft.getTextureManager().bindTexture(BACKGROUND);

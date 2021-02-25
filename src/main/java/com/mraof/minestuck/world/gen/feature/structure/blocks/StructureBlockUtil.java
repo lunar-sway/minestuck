@@ -13,6 +13,7 @@ import net.minecraft.util.WeightedSpawnerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.IWorld;
+import net.minecraftforge.common.util.Constants;
 
 import java.util.Objects;
 import java.util.Random;
@@ -31,7 +32,7 @@ public class StructureBlockUtil
 	{
 		if(bb.isVecInside(pos))
 		{
-			world.setBlockState(pos, Blocks.SPAWNER.getDefaultState(), 2);
+			world.setBlockState(pos, Blocks.SPAWNER.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
 			
 			TileEntity te = world.getTileEntity(pos);
 			if(te instanceof MobSpawnerTileEntity)
@@ -54,7 +55,7 @@ public class StructureBlockUtil
 	{
 		if(bb == null || bb.isVecInside(pos))
 		{
-			world.setBlockState(pos, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, direction).with(ChestBlock.TYPE, type), 2);
+			world.setBlockState(pos, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, direction).with(ChestBlock.TYPE, type), Constants.BlockFlags.BLOCK_UPDATE);
 			
 			TileEntity te = world.getTileEntity(pos);
 			if(te instanceof ChestTileEntity)

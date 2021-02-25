@@ -57,7 +57,7 @@ public class IdentifierHandler
 				identifier = new UUIDIdentifier(nextIdentifierId, nbt.getUniqueId(key));
 				break;
 			case "fake":
-				identifier = new FakeIdentifier(nextIdentifierId, nbt.getInt(key+"count"));
+				identifier = new FakeIdentifier(nextIdentifierId, nbt.getInt(key+"_count"));
 				break;
 			default: throw new IllegalArgumentException("Can't parse identifier type "+type);
 		}
@@ -190,7 +190,7 @@ public class IdentifierHandler
 		@Override
 		public String toString()
 		{
-			return getUsername();
+			return "Identifier:"+getUsername();
 		}
 		
 		@Override
@@ -246,13 +246,19 @@ public class IdentifierHandler
 			nbt.putString(key, "null");
 			return nbt;
 		}
+		
+		@Override
+		public String toString()
+		{
+			return "Identifier:null";
+		}
 	}
 	
 	private static class FakeIdentifier extends PlayerIdentifier
 	{
 		private final int count;
 		
-		public FakeIdentifier(int id, int count)
+		FakeIdentifier(int id, int count)
 		{
 			super(id);
 			this.count = count;
@@ -288,6 +294,12 @@ public class IdentifierHandler
 			nbt.putString(key, "fake");
 			nbt.putInt(key+"_count", count);
 			return nbt;
+		}
+		
+		@Override
+		public String toString()
+		{
+			return "Identifier:fake_"+count;
 		}
 		
 		@Override

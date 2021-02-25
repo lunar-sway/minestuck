@@ -1,6 +1,6 @@
 package com.mraof.minestuck.network;
 
-import com.mraof.minestuck.tileentity.AlchemiterTileEntity;
+import com.mraof.minestuck.tileentity.machine.AlchemiterTileEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
@@ -8,8 +8,8 @@ import net.minecraft.util.math.BlockPos;
 
 public class AlchemiterPacket implements PlayToServerPacket
 {
-	public BlockPos pos;
-	public int quantity;
+	private final BlockPos pos;
+	private final int quantity;
 	
 	public AlchemiterPacket(BlockPos pos, int quantity)
 	{

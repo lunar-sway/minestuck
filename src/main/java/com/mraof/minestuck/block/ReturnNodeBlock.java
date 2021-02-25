@@ -5,6 +5,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 
@@ -63,8 +64,8 @@ public class ReturnNodeBlock extends GateBlock
 			if(boundingBox == null || boundingBox.isVecInside(pos))
 			{
 				if(i == 3)
-					world.setBlockState(pos, MSBlocks.RETURN_NODE.getDefaultState().cycle(GateBlock.MAIN), 2);
-				else world.setBlockState(pos, MSBlocks.RETURN_NODE.getDefaultState(), 2);
+					world.setBlockState(pos, MSBlocks.RETURN_NODE.getDefaultState().cycle(GateBlock.MAIN), Constants.BlockFlags.BLOCK_UPDATE);
+				else world.setBlockState(pos, MSBlocks.RETURN_NODE.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
 			}
 		}
 	}

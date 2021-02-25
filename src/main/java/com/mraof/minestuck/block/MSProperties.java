@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block;
 
+import com.mraof.minestuck.block.machine.ComputerBlock;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.IntegerProperty;

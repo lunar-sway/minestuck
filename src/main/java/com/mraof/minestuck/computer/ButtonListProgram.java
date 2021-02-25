@@ -1,13 +1,13 @@
 package com.mraof.minestuck.computer;
 
 import com.mraof.minestuck.client.gui.ComputerScreen;
-import com.mraof.minestuck.network.ClearMessagePacket;
 import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.network.computer.ClearMessagePacket;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
-import net.minecraftforge.fml.client.config.GuiButtonExt;
+import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -39,17 +39,18 @@ public abstract class ButtonListProgram extends ComputerProgram
 	 */
 	protected abstract void onButtonPressed(ComputerTileEntity te, String buttonName, Object[] data);
 	
-	public final void onButtonPressed(ComputerTileEntity te, Button button) {
+	public final void onButtonPressed(ComputerScreen screen, Button button) {
 		UnlocalizedString data = buttonMap.get(button);
 		if (button == upButton)
 			index--;
 		else if (button == downButton)
 			index++;
 		else if(data != null) {
-			if(!te.latestmessage.get(this.getId()).isEmpty())
-				MSPacketHandler.sendToServer(new ClearMessagePacket(te.getPos(), this.getId()));
-			onButtonPressed(te, data.string, data.formatData);
+			if(!screen.te.latestmessage.get(this.getId()).isEmpty())
+				MSPacketHandler.sendToServer(new ClearMessagePacket(screen.te.getPos(), this.getId()));
+			onButtonPressed(screen.te, data.string, data.formatData);
 		}
+		screen.updateGui();
 	}
 	
 	@Override
@@ -63,14 +64,14 @@ public abstract class ButtonListProgram extends ComputerProgram
 		buttonMap.clear();
 		for(int i = 0; i < 4; i++)
 		{
-			Button button = new GuiButtonExt((gui.width - ComputerScreen.xSize) / 2 + 14, (gui.height - ComputerScreen.ySize) / 2 + 60 + i * 24, 120, 20, "", button1 -> onButtonPressed(gui.te, button1));
+			Button button = new ExtendedButton((gui.width - ComputerScreen.xSize) / 2 + 14, (gui.height - ComputerScreen.ySize) / 2 + 60 + i * 24, 120, 20, "", button1 -> onButtonPressed(gui, button1));
 			buttonMap.put(button, new UnlocalizedString(""));
 			gui.addButton(button);
 		}
 		
-		upButton = new GuiButtonExt((gui.width - ComputerScreen.xSize) / 2 + 140, (gui.height - ComputerScreen.ySize) / 2 + 60, 20, 20, "^", button1 -> onButtonPressed(gui.te, button1));
+		upButton = new ExtendedButton((gui.width - ComputerScreen.xSize) / 2 + 140, (gui.height - ComputerScreen.ySize) / 2 + 60, 20, 20, "^", button1 -> onButtonPressed(gui, button1));
 		gui.addButton(upButton);
-		downButton = new GuiButtonExt((gui.width - ComputerScreen.xSize) / 2 + 140, (gui.height - ComputerScreen.ySize) / 2 + 132, 20, 20, "v", button1 -> onButtonPressed(gui.te, button1));
+		downButton = new ExtendedButton((gui.width - ComputerScreen.xSize) / 2 + 140, (gui.height - ComputerScreen.ySize) / 2 + 132, 20, 20, "v", button1 -> onButtonPressed(gui, button1));
 		gui.addButton(downButton);
 	}
 	

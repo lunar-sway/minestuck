@@ -129,7 +129,7 @@ public final class ClientEditHandler
 			return;
 		PlayerEntity player = event.player;
 		
-		double range = MSDimensions.isLandDimension(player.dimension) ? MinestuckConfig.landEditRange.get() : MinestuckConfig.overworldEditRange.get();
+		double range = MSDimensions.isLandDimension(player.dimension) ? MinestuckConfig.SERVER.landEditRange.get() : MinestuckConfig.SERVER.overworldEditRange.get();
 		
 		ServerEditHandler.updatePosition(player, range, centerX, centerZ);
 		
@@ -217,6 +217,20 @@ public final class ClientEditHandler
 	
 	@SubscribeEvent
 	public static void onAttackEvent(AttackEntityEvent event)
+	{
+		if(event.getEntity().world.isRemote && event.getPlayer().isUser() && isActive())
+			event.setCanceled(true);
+	}
+	
+	@SubscribeEvent
+	public static void onInteractEvent(PlayerInteractEvent.EntityInteract event)
+	{
+		if(event.getEntity().world.isRemote && event.getPlayer().isUser() && isActive())
+			event.setCanceled(true);
+	}
+	
+	@SubscribeEvent
+	public static void onInteractEvent(PlayerInteractEvent.EntityInteractSpecific event)
 	{
 		if(event.getEntity().world.isRemote && event.getPlayer().isUser() && isActive())
 			event.setCanceled(true);

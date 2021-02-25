@@ -4,8 +4,8 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
-import com.mraof.minestuck.network.DataCheckerPermissionPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.network.data.DataCheckerPermissionPacket;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.OpEntry;
@@ -74,7 +74,7 @@ public class DataCheckerPermission
 	
 	public static boolean hasPermission(ServerPlayerEntity player)
 	{
-		switch(MinestuckConfig.dataCheckerPermission.get())
+		switch(MinestuckConfig.SERVER.dataCheckerPermission.get())
 		{
 			case ANYONE: return true;
 			case OPS: return hasOp(player);

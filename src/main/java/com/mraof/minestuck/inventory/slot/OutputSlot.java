@@ -1,13 +1,13 @@
 package com.mraof.minestuck.inventory.slot;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.SlotItemHandler;
 
-public class OutputSlot extends Slot
+public class OutputSlot extends SlotItemHandler
 {
 	
-	public OutputSlot(IInventory inventory, int index, int xPosition, int yPosition)
+	public OutputSlot(IItemHandler inventory, int index, int xPosition, int yPosition)
 	{
 		super(inventory, index, xPosition, yPosition);
 	}

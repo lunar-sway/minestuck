@@ -30,44 +30,44 @@ public class DesignixRecipeCategory implements IRecipeCategory<JeiCombination>
         background = guiHelper.createDrawable(punchDesignixBackground, 43, 25, 94, 42);
 		icon = guiHelper.createDrawableIngredient(new ItemStack(MSBlocks.PUNCH_DESIGNIX));
     }
-	
+
 	@Override
 	public Class<? extends JeiCombination> getRecipeClass()
 	{
 		return JeiCombination.class;
 	}
-	
+
 	@Override
 	public ResourceLocation getUid()
 	{
 		return MinestuckJeiPlugin.DESIGNIX_ID;
 	}
-	
+
 	@Override
 	public String getTitle()
 	{
 		return I18n.format(MSBlocks.PUNCH_DESIGNIX.KEYBOARD.get().getTranslationKey());
 	}
-	
+
 	@Override
 	public IDrawable getBackground()
 	{
 		return background;
 	}
-	
+
 	@Override
 	public IDrawable getIcon()
 	{
 		return icon;
 	}
-	
+
 	@Override
 	public void setIngredients(JeiCombination jeiCombination, IIngredients ingredients)
 	{
 		ingredients.setInputLists(VanillaTypes.ITEM, Arrays.asList(Arrays.asList(jeiCombination.getInput1().getMatchingStacks()), Arrays.asList(jeiCombination.getInput2().getMatchingStacks())));
 		ingredients.setOutput(VanillaTypes.ITEM, jeiCombination.getOutput());
 	}
-	
+
 	@Override
 	public void setRecipe(IRecipeLayout recipeLayout, JeiCombination jeiCombination, IIngredients ingredients)
 	{

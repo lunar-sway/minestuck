@@ -5,18 +5,21 @@ import com.mraof.minestuck.inventory.slot.InputSlot;
 import com.mraof.minestuck.inventory.slot.OutputSlot;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
+import com.mraof.minestuck.tileentity.machine.MiniAlchemiterTileEntity;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IIntArray;
+import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.IntArray;
 import net.minecraft.util.IntReferenceHolder;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.registries.ForgeRegistry;
 
 import javax.annotation.Nonnull;
@@ -29,37 +32,36 @@ public class MiniAlchemiterContainer extends MachineContainer
 	private static final int OUTPUT_X = 135;
 	private static final int OUTPUT_Y = 20;
 	
-	private final IInventory alchemiterInventory;
 	private final IntReferenceHolder wildcardHolder;
 	
 	public MiniAlchemiterContainer(int windowId, PlayerInventory playerInventory, PacketBuffer buffer)
 	{
-		this(MSContainerTypes.MINI_ALCHEMITER, windowId, playerInventory, new Inventory(2), new IntArray(3), IntReferenceHolder.single(), buffer.readBlockPos());
+		this(MSContainerTypes.MINI_ALCHEMITER, windowId, playerInventory, new ItemStackHandler(2), new IntArray(3), IntReferenceHolder.single(), IWorldPosCallable.DUMMY, buffer.readBlockPos());
 	}
 	
-	public MiniAlchemiterContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, IntReferenceHolder wildcardHolder, BlockPos machinePos)
+	public MiniAlchemiterContainer(int windowId, PlayerInventory playerInventory, IItemHandler inventory, IIntArray parameters, IntReferenceHolder wildcardHolder, IWorldPosCallable position, BlockPos machinePos)
 	{
-		this(MSContainerTypes.MINI_ALCHEMITER, windowId, playerInventory, inventory, parameters, wildcardHolder, machinePos);
+		this(MSContainerTypes.MINI_ALCHEMITER, windowId, playerInventory, inventory, parameters, wildcardHolder, position, machinePos);
 	}
 	
-	public MiniAlchemiterContainer(ContainerType<? extends MiniAlchemiterContainer> type, int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray parameters, IntReferenceHolder wildcardHolder, BlockPos machinePos)
+	public MiniAlchemiterContainer(ContainerType<? extends MiniAlchemiterContainer> type, int windowId, PlayerInventory playerInventory, IItemHandler inventory, IIntArray parameters, IntReferenceHolder wildcardHolder, IWorldPosCallable position, BlockPos machinePos)
 	{
-		super(type, windowId, parameters, machinePos);
+		super(type, windowId, parameters, position, machinePos);
 		
-		assertInventorySize(inventory, 2);
-		this.alchemiterInventory = inventory;
+		assertItemHandlerSize(inventory, 2);
 		this.wildcardHolder = wildcardHolder;
 		
-		addSlot(new InputSlot(inventory, 0, INPUT_X, INPUT_Y, MSBlocks.CRUXITE_DOWEL.asItem()));
-		addSlot(new OutputSlot(inventory, 1, OUTPUT_X, OUTPUT_Y));
+		addSlot(new InputSlot(inventory, MiniAlchemiterTileEntity.INPUT, INPUT_X, INPUT_Y, MSBlocks.CRUXITE_DOWEL.asItem()));
+		addSlot(new OutputSlot(inventory, MiniAlchemiterTileEntity.OUTPUT, OUTPUT_X, OUTPUT_Y));
 		trackInt(wildcardHolder);
 		
 		bindPlayerInventory(playerInventory);
 	}
+	
 	@Override
-	public boolean canInteractWith(PlayerEntity player)
+	protected Block getValidBlock()
 	{
-		return alchemiterInventory.isUsableByPlayer(player);
+		return MSBlocks.MINI_ALCHEMITER;
 	}
 	
 	protected void bindPlayerInventory(PlayerInventory playerInventory)
@@ -110,9 +112,9 @@ public class MiniAlchemiterContainer extends MachineContainer
 	
 	public GristType getWildcardType()
 	{
-		GristType type = ((ForgeRegistry<GristType>) GristTypes.REGISTRY).getValue(wildcardHolder.get());	//TODO this is not ideal. Find a better way
+		GristType type = ((ForgeRegistry<GristType>) GristTypes.getRegistry()).getValue(wildcardHolder.get());
 		if(type == null)
-			type = GristTypes.BUILD;
+			type = GristTypes.BUILD.get();
 		return type;
 	}
 }

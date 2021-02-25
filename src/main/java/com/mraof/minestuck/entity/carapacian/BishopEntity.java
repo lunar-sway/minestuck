@@ -15,14 +15,24 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.function.Predicate;
 
-public abstract class BishopEntity extends CarapacianEntity implements IRangedAttackMob, IMob
+public class BishopEntity extends CarapacianEntity implements IRangedAttackMob, IMob
 {
 	int burnTime;
 
-	public BishopEntity(EntityType<? extends BishopEntity> type, World par1World)
+	protected BishopEntity(EntityType<? extends BishopEntity> type, EnumEntityKingdom kingdom, World world)
 	{
-		super(type, par1World);
+		super(type, kingdom, world);
 		this.experienceValue = 3;
+	}
+	
+	public static BishopEntity createProspitian(EntityType<? extends BishopEntity> type, World world)
+	{
+		return new BishopEntity(type, EnumEntityKingdom.PROSPITIAN, world);
+	}
+	
+	public static BishopEntity createDersite(EntityType<? extends BishopEntity> type, World world)
+	{
+		return new BishopEntity(type, EnumEntityKingdom.DERSITE, world);
 	}
 	
 	@Override
@@ -45,17 +55,18 @@ public abstract class BishopEntity extends CarapacianEntity implements IRangedAt
 	public void attackEntityWithRangedAttack(LivingEntity target, float distanceFactor)
 	{
 		
-		double distanceX = target.posX - this.posX;
-		double distanceY = target.getBoundingBox().minY + (double)(target.getHeight() / 2.0F) - (this.posY + (double)(this.getHeight() / 2.0F));
-		double distanceZ = target.posZ - this.posZ;
+		double distanceX = target.getPosX() - this.getPosX();
+		double distanceY = target.getBoundingBox().minY + (double)(target.getHeight() / 2.0F) - (this.getPosY() + (double)(this.getHeight() / 2.0F));
+		double distanceZ = target.getPosZ() - this.getPosZ();
 		
 		FireballEntity fireball = new FireballEntity(this.world, this, distanceX, distanceY, distanceZ);
 		fireball.explosionPower = 1;
-		double d8 = (double)this.getHeight();
+		double d8 = this.getHeight();
 		Vec3d vec3 = this.getLook(1.0F);
-		fireball.posX = (this.getBoundingBox().minX + this.getBoundingBox().maxX) / 2.0F  + vec3.x * d8;
-		fireball.posY = this.posY + (double)(this.getHeight() / 2.0F);
-		fireball.posZ = (this.getBoundingBox().minZ + this.getBoundingBox().maxZ) / 2.0F + vec3.z * d8;
+		double x = (this.getBoundingBox().minX + this.getBoundingBox().maxX) / 2.0F  + vec3.x * d8;
+		double y = this.getPosY() + (double)(this.getHeight() / 2.0F);
+		double z = (this.getBoundingBox().minZ + this.getBoundingBox().maxZ) / 2.0F + vec3.z * d8;
+		fireball.setPosition(x, y, z);
 		this.world.addEntity(fireball);
 	}
 	public int getAttackStrength(Entity par1Entity)

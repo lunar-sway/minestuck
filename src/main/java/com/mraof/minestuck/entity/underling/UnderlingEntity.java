@@ -1,7 +1,6 @@
 package com.mraof.minestuck.entity.underling;
 
 import com.mraof.minestuck.entity.EntityListFilter;
-import com.mraof.minestuck.entity.MinestuckEntity;
 import com.mraof.minestuck.entity.ai.HurtByTargetAlliedGoal;
 import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.entity.item.VitalityGelEntity;
@@ -15,6 +14,7 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.UnderlingController;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MSTags;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttribute;
@@ -44,21 +44,23 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public abstract class UnderlingEntity extends MinestuckEntity implements IMob
+public abstract class UnderlingEntity extends CreatureEntity implements IMob
 {
 	public static final UUID GRIST_MODIFIER_ID = UUID.fromString("08B6DEFC-E3F4-11EA-87D0-0242AC130003");
 	private static final DataParameter<String> GRIST_TYPE = EntityDataManager.createKey(UnderlingEntity.class, DataSerializers.STRING);
 	protected EntityListFilter attackEntitySelector;	//TODO this filter isn't being saved. F1X PLZ
 	protected boolean fromSpawner;
 	public boolean dropCandy;
+	private int consortRep;
 	
 	private static final float maxSharedProgress = 2;	//The multiplier for the maximum amount progress that can be gathered from each enemy with the group fight bonus
 	
 	protected Map<PlayerIdentifier, Double> damageMap = new HashMap<>();	//Map that stores how much damage each player did to this to this underling. Null is used for environmental or other non-player damage
 	
-	public UnderlingEntity(EntityType<? extends UnderlingEntity> type, World world)
+	public UnderlingEntity(EntityType<? extends UnderlingEntity> type, World world, int consortRep)
 	{
 		super(type, world);
+		this.consortRep = consortRep;
 	}
 	
 	@Override
@@ -101,12 +103,12 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 	protected void registerData()
 	{
 		super.registerData();
-		dataManager.register(GRIST_TYPE, String.valueOf(GristTypes.ARTIFACT.getRegistryName()));
+		dataManager.register(GRIST_TYPE, String.valueOf(GristTypes.ARTIFACT.get().getRegistryName()));
 	}
 	
 	protected void applyGristType(GristType type)
 	{
-		if(type.getRarity() == 0)	//Utility grist type
+		if(!type.isUnderlingType())	//Utility grist type
 			throw new IllegalArgumentException("Can't set underling grist type to "+type.getRegistryName());
 		dataManager.set(GRIST_TYPE, String.valueOf(type.getRegistryName()));
 		
@@ -123,7 +125,6 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 	
 	protected void onGristTypeUpdated(GristType type)
 	{
-		clearTexture();
 	}
 	
 	protected void applyGristModifier(IAttribute attribute, double modifier, AttributeModifier.Operation operation)
@@ -136,14 +137,14 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 	@Nonnull
 	public GristType getGristType()
 	{
-		GristType type = GristTypes.REGISTRY.getValue(ResourceLocation.tryCreate(dataManager.get(GRIST_TYPE)));
+		GristType type = GristTypes.getRegistry().getValue(ResourceLocation.tryCreate(dataManager.get(GRIST_TYPE)));
 		
 		if(type != null)
 		{
 			return type;
 		} else Debug.warnf("Unable to read underling grist type from string %s.", dataManager.get(GRIST_TYPE));
 		
-		return GristTypes.ARTIFACT;
+		return GristTypes.ARTIFACT.get();
 	}
 	
 	//used when getting how much grist should be dropped on death
@@ -171,8 +172,11 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 			
 			if(!dropCandy)
 			{
-				for(GristAmount gristType : grist.getAmounts())
-					this.world.addEntity(new GristEntity(world, randX(), this.posY, randZ(), gristType));
+				for(GristAmount gristAmount : grist.getAmounts())
+				{
+					if(gristAmount.getAmount() > 0)
+						this.world.addEntity(new GristEntity(world, randX(), this.getPosY(), randZ(), gristAmount));
+				}
 			} else
 			{
 				for(GristAmount gristType : grist.getAmounts())
@@ -182,34 +186,35 @@ public abstract class UnderlingEntity extends MinestuckEntity implements IMob
 					ItemStack candyItem = gristType.getType().getCandyItem();
 					candyItem.setCount(candy);
 					if(candy > 0)
-						this.world.addEntity(new ItemEntity(world, randX(), this.posY, randZ(), candyItem));
+						this.world.addEntity(new ItemEntity(world, randX(), this.getPosY(), randZ(), candyItem));
 					if(gristAmount > 0)
-						this.world.addEntity(new GristEntity(world, randX(), this.posY, randZ(),new GristAmount(gristType.getType(), gristAmount)));
+						this.world.addEntity(new GristEntity(world, randX(), this.getPosY(), randZ(),new GristAmount(gristType.getType(), gristAmount)));
 				}
 			}
 			
 			if(this.rand.nextInt(4) == 0)
-				this.world.addEntity(new VitalityGelEntity(world, randX(), this.posY, randZ(), this.getVitalityGel()));
+				this.world.addEntity(new VitalityGelEntity(world, randX(), this.getPosY(), randZ(), this.getVitalityGel()));
 		}
+	}
+	
+	@Override
+	public void onDeath(DamageSource cause)
+	{
+		LivingEntity entity = this.getAttackingEntity();
+		if(entity instanceof ServerPlayerEntity)
+			PlayerSavedData.getData((ServerPlayerEntity) entity).addConsortReputation(consortRep, dimension);
+		
+		super.onDeath(cause);
 	}
 	
 	private double randX()
 	{
-		return this.posX + this.rand.nextDouble() * this.getWidth() - this.getWidth() / 2;
+		return this.getPosX() + this.rand.nextDouble() * this.getWidth() - this.getWidth() / 2;
 	}
 	
 	private double randZ()
 	{
-		return this.posZ + this.rand.nextDouble() * this.getWidth() - this.getWidth() / 2;
-	}
-	
-	@Override
-	protected ResourceLocation createTexture()
-	{
-		ResourceLocation underlingName = Objects.requireNonNull(getType().getRegistryName(), () -> "Getting texture for entity without a registry name! "+this);
-		ResourceLocation gristName = getGristType().getEffectiveName();
-		
-		return new ResourceLocation(underlingName.getNamespace(), String.format("textures/entity/underlings/%s/%s_%s.png", gristName.getNamespace(), gristName.getPath(), underlingName.getPath()));
+		return this.getPosZ() + this.rand.nextDouble() * this.getWidth() - this.getWidth() / 2;
 	}
 	
 	@Override

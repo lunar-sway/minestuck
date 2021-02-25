@@ -5,10 +5,10 @@ import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.event.GristDropsEvent;
-import com.mraof.minestuck.skaianet.SburbConnection;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.skaianet.SburbConnection;
+import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -20,23 +20,20 @@ import net.minecraftforge.common.MinecraftForge;
 
 import java.util.*;
 import java.util.Map.Entry;
-
-import static com.mraof.minestuck.MinestuckConfig.showGristChanges;
+import java.util.function.Supplier;
 
 public class GristHelper
 {
-	private static Random random = new Random();
-	
 	/**
 	 * Returns a random grist type. Used for creating randomly aligned underlings.
 	 */
-	public static GristType getPrimaryGrist()
+	public static GristType getPrimaryGrist(Random random)
 	{
 		float totalWeight = 0;
 		List<GristType> typeList = new ArrayList<>();
 		for(GristType type : GristTypes.values())
 		{
-			if(type.getRarity() > 0 && type != GristTypes.ARTIFACT)
+			if(type.isUnderlingType() && type.isInCategory(GristType.SpawnCategory.ANY))
 			{
 				typeList.add(type);
 				totalWeight += type.getRarity();
@@ -56,7 +53,7 @@ public class GristHelper
 	/**
 	 * Returns a secondary grist type based on primary grist
 	 */
-	public static GristType getSecondaryGrist(GristType primary)
+	public static GristType getSecondaryGrist(Random random, GristType primary)
 	{
 		List<GristType> secondaryTypes = primary.getSecondaryTypes();
 		if(secondaryTypes.size() > 0)
@@ -70,8 +67,9 @@ public class GristHelper
 	 */
 	public static GristSet generateUnderlingGristDrops(UnderlingEntity entity, Map<PlayerIdentifier, Double> damageMap, double multiplier)
 	{
+		Random random = entity.getRNG();
 		GristType primary = entity.getGristType();
-		GristType secondary = getSecondaryGrist(primary);
+		GristType secondary = getSecondaryGrist(random, primary);
 		
 		GristSet set = new GristSet();
 		set.addGrist(GristTypes.BUILD, (int) (2 * multiplier + random.nextDouble() * 18 * multiplier));
@@ -92,6 +90,11 @@ public class GristHelper
 	public static long getGrist(World world, PlayerIdentifier player, GristType type)
 	{
 		return PlayerSavedData.getData(player, world).getGristCache().getGrist(type);
+	}
+	
+	public static long getGrist(World world, PlayerIdentifier player, Supplier<GristType> type)
+	{
+		return getGrist(world, player, type.get());
 	}
 	
 	public static boolean canAfford(ServerPlayerEntity player, GristSet cost)
@@ -147,7 +150,7 @@ public class GristHelper
 	
 	public static void notify(MinecraftServer server, PlayerIdentifier player, GristSet set)
 	{
-		if(showGristChanges.get())
+		if(MinestuckConfig.SERVER.showGristChanges.get())
 		{
 			Map<GristType, Long> reqs = set.getMap();
 			for(Entry<GristType, Long> pairs : reqs.entrySet())
@@ -161,7 +164,7 @@ public class GristHelper
 	
 	public static void notifyEditPlayer(MinecraftServer server, PlayerIdentifier player, GristSet set, boolean increase)
 	{
-		if(showGristChanges.get())
+		if(MinestuckConfig.SERVER.showGristChanges.get())
 		{
 			SburbConnection sc = SkaianetHandler.get(server).getActiveConnection(player);
 			if(sc == null)

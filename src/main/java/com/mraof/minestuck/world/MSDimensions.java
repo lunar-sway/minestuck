@@ -1,7 +1,7 @@
 package com.mraof.minestuck.world;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
+import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
@@ -18,6 +18,7 @@ import net.minecraftforge.registries.ClearableRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -26,6 +27,10 @@ public class MSDimensions
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final ResourceLocation SKAIA_ID = new ResourceLocation(Minestuck.MOD_ID, "skaia");
+	/**
+	 * Changes to this map must also be done to {@link MSDimensionTypes#LANDS#dimToLandAspects}
+	 */
+	private static final Map<ResourceLocation, LandInfo> typeToInfoContainer = new HashMap<>();
 	
 	public static DimensionType skaiaDimension;
 	
@@ -76,7 +81,7 @@ public class MSDimensions
 	
 	public static LandInfo getLandInfo(MinecraftServer server, DimensionType dimension)
 	{
-		return SkaianetHandler.get(server).landInfoForDimension(dimension);
+		return typeToInfoContainer.get(DimensionType.getKey(dimension));
 	}
 	
 	public static boolean isLandDimension(DimensionType dimension)
@@ -87,5 +92,17 @@ public class MSDimensions
 	public static boolean isSkaia(DimensionType dimension)
 	{
 		return dimension != null && dimension.getModType() == MSDimensionTypes.SKAIA;
+	}
+	
+	public static void updateLandMaps(SburbConnection connection)
+	{
+		typeToInfoContainer.put(connection.getLandInfo().getDimensionName(), connection.getLandInfo());
+		MSDimensionTypes.LANDS.dimToLandTypes.put(connection.getLandInfo().getDimensionName(), connection.getLandInfo().getLazyLandAspects());
+	}
+	
+	public static void clear()
+	{
+		typeToInfoContainer.clear();
+		MSDimensionTypes.LANDS.dimToLandTypes.clear();
 	}
 }

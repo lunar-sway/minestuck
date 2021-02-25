@@ -18,7 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.CCloseWindowPacket;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.client.config.GuiButtonExt;
+import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
 
 public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckContainer>
 {
@@ -41,18 +41,18 @@ public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckCon
 	public void init()
 	{
 		super.init();
-		modusButton = new GuiButtonExt(xOffset + 102, yOffset + 31, 50, 18, I18n.format(USE_ITEM), button -> use());
-		sylladexMap = new GuiButtonExt(xOffset + 6, yOffset + 31, 60, 18, I18n.format(SYLLADEX), button -> sylladex());
+		modusButton = new ExtendedButton(xOffset + 102, yOffset + 31, 50, 18, I18n.format(USE_ITEM), button -> use());
+		sylladexMap = new ExtendedButton(xOffset + 6, yOffset + 31, 60, 18, I18n.format(SYLLADEX), button -> sylladex());
 		addButton(modusButton);
 		addButton(sylladexMap);
-		sylladexMap.active = ClientPlayerData.clientSideModus != null;
+		sylladexMap.active = ClientPlayerData.getModus() != null;
 		modusButton.active = !container.inventory.getStackInSlot(0).isEmpty();
 	}
 	
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float par1, int xcor, int ycor)
+	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY)
 	{
-		sylladexMap.active = ClientPlayerData.clientSideModus != null;
+		sylladexMap.active = ClientPlayerData.getModus() != null;
 		modusButton.active = !container.inventory.getStackInSlot(0).isEmpty();
 		
 		drawTabs();
@@ -65,10 +65,8 @@ public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckCon
 	}
 	
 	@Override
-	protected void drawGuiContainerForegroundLayer(int xcor, int ycor)
+	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
 	{
-		drawTabTooltip(xcor, ycor);
-		
 		String message = getTitle().getFormattedText();
 		font.drawString(message, (this.width / 2F) - font.getStringWidth(message) / 2F - guiLeft, yOffset + 12 - guiTop, 0x404040);
 		
@@ -82,7 +80,8 @@ public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckCon
 			{
 				ModusType<?> type = ModusTypes.getTypeFromItem(stack.getItem());
 				Modus newModus = type.createClientSide();
-				if(newModus != null && ClientPlayerData.clientSideModus != null && newModus.getClass() != ClientPlayerData.clientSideModus.getClass() && !newModus.canSwitchFrom(ClientPlayerData.clientSideModus))
+				Modus modus = ClientPlayerData.getModus();
+				if(newModus != null && modus != null && newModus.getClass() != modus.getClass() && !newModus.canSwitchFrom(modus))
 				{
 					minecraft.currentScreen = new ConfirmScreen(this::onConfirm, new TranslationTextComponent(SylladexScreen.EMPTY_SYLLADEX_1), new TranslationTextComponent(SylladexScreen.EMPTY_SYLLADEX_2))
 					{
@@ -103,11 +102,11 @@ public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckCon
 	
 	private void sylladex()
 	{
-		if( ClientPlayerData.clientSideModus != null)
+		if( ClientPlayerData.getModus() != null)
 		{
 			minecraft.player.connection.sendPacket(new CCloseWindowPacket(minecraft.player.openContainer.windowId));
 			minecraft.player.inventory.setItemStack(ItemStack.EMPTY);
-			MSScreenFactories.displaySylladexScreen(ClientPlayerData.clientSideModus);
+			MSScreenFactories.displaySylladexScreen(ClientPlayerData.getModus());
 			minecraft.player.openContainer = minecraft.player.container;
 		}
 	}

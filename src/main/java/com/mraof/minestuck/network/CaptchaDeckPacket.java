@@ -17,17 +17,18 @@ public class CaptchaDeckPacket implements PlayToServerPacket
 	private static final byte MODUS_PARAM = 3;
 	private static final byte CAPTCHALOGUE_INV = 4;
 	
-	public byte type;
+	private byte type;
 	
-	public CompoundNBT nbt;
+	private CompoundNBT nbt;
 	
-	public int itemIndex;
-	public boolean asCard;
+	private int itemIndex;
+	private boolean asCard;
 	
-	public byte valueType;
-	public int value;
+	private byte valueType;
+	private int value;
 	
-	public int slotIndex;
+	private int slotIndex;
+	private int windowId;
 	
 	public static CaptchaDeckPacket modus()
 	{
@@ -65,11 +66,12 @@ public class CaptchaDeckPacket implements PlayToServerPacket
 		return packet;
 	}
 	
-	public static CaptchaDeckPacket captchalogueInv(int slotIndex)
+	public static CaptchaDeckPacket captchalogueInv(int slotIndex, int windowId)
 	{
 		CaptchaDeckPacket packet = new CaptchaDeckPacket();
 		packet.type = CAPTCHALOGUE_INV;
 		packet.slotIndex = slotIndex;
+		packet.windowId = windowId;
 		
 		return packet;
 	}
@@ -89,6 +91,7 @@ public class CaptchaDeckPacket implements PlayToServerPacket
 		} else if(type == CAPTCHALOGUE_INV)
 		{
 			buffer.writeInt(slotIndex);
+			buffer.writeInt(windowId);
 		}
 	}
 	
@@ -112,6 +115,7 @@ public class CaptchaDeckPacket implements PlayToServerPacket
 			else if(packet.type == CAPTCHALOGUE_INV)
 			{
 				packet.slotIndex = buffer.readInt();
+				packet.windowId = buffer.readInt();
 			}
 		}
 		
@@ -130,10 +134,13 @@ public class CaptchaDeckPacket implements PlayToServerPacket
 			CaptchaDeckHandler.captchalogueItem(player);
 		else if(this.type == CAPTCHALOGUE_INV)
 		{
-			CaptchaDeckHandler.captchalogueInventoryItem(player, slotIndex);
+			CaptchaDeckHandler.captchalogueItemInSlot(player, slotIndex, windowId);
 		} else if(this.type == GET)
 			CaptchaDeckHandler.getItem(player, itemIndex, asCard);
 		else if(this.type == MODUS_PARAM && CaptchaDeckHandler.getModus(player) != null)
+		{
 			CaptchaDeckHandler.getModus(player).setValue(player, valueType, value);
+			CaptchaDeckHandler.getModus(player).checkAndResend(player);
+		}
 	}
 }

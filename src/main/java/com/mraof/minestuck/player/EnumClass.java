@@ -1,13 +1,8 @@
 package com.mraof.minestuck.player;
 
-import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.EnumSet;
-import java.util.Random;
 import java.util.stream.Stream;
 
 /**
@@ -30,54 +25,6 @@ public enum EnumClass
 	EnumClass(boolean usedInGeneration)
 	{
 		this.usedInGeneration = usedInGeneration;
-	}
-	
-	/**
-	 * This method generates one of the 12 default title-classes that is not found in the <code>unavailableClasses</code> set.
-	 * @param unavailableClasses An <code>EnumSet&#60;EnumClass&#62;</code> that includes all forbidden title-classes,
-	 *                              typically all title-classes that is already being used by other players.
-	 * @param rand Random used to select a title-class.
-	 * @return null if <code>unavailableClasses</code> has been filled, else a random <code>EnumClass</code> that isn't in <code>unavailableClasses</code>.
-	 */
-	@Deprecated
-	public static EnumClass getRandomClass(@Nullable EnumSet<EnumClass> unavailableClasses, @Nonnull Random rand)
-	{
-		return getRandomClass(unavailableClasses, rand, false);
-	}
-	
-	/**
-	 * This method generates one of the 12 default title-classes that is not found in the <code>unavailableClasses</code> set.
-	 * If you don't want the two special title-classes to be forbidden, use <code>true</code> as the <code>includeSpecial</code> parameter.
-	 * @param unavailableClasses An <code>EnumSet&#60;EnumClass&#62;</code> that includes all forbidden title-classes,
-	 *                              typically all title-classes that is already being used by other players.
-	 * @param rand Random used to select a title-class.
-	 * @param includeSpecial If it should include the two special title-classes.
-	 * @return null if <code>unavailableClasses</code> has been filled, else a random <code>EnumClass</code> that isn't in <code>unavailableClasses</code>.
-	 */
-	@Deprecated
-	public static EnumClass getRandomClass(@Nullable EnumSet<EnumClass> unavailableClasses, @Nonnull Random rand, boolean includeSpecial)
-	{
-		if(unavailableClasses == null)
-			unavailableClasses = EnumSet.noneOf(EnumClass.class);
-		if(!includeSpecial)	//Prevent generation of the special "master" classes unless includeSpecial is true
-		{
-			unavailableClasses.add(LORD);
-			unavailableClasses.add(MUSE);
-		}
-		
-		EnumSet<EnumClass> classes = EnumSet.complementOf(unavailableClasses);	//TODO Does it make more sense for the parameter to instead be a set of available classes?
-		if(classes.isEmpty())
-			return null;	//No class available to generate
-		
-		int classInt = rand.nextInt(classes.size());
-		for(EnumClass c : classes)	//Go through each available title-class until the index generated is reached
-		{
-			if(classInt == 0)
-				return c;
-			classInt--;
-		}
-		
-		return null;
 	}
 	
 	/**
@@ -124,19 +71,6 @@ public enum EnumClass
 	public String toString()
 	{
 		return this.name().toLowerCase();
-	}
-	
-	/**
-	 * Translates and returns the proper name of this title-class. Should only be used client-side.
-	 * For usage in messages sent to a player from a server, use <code>asTextComponent()</code>.
-	 * For debugging purposes, use <code>toString()</code> instead.
-	 * @return a translated string of the name.
-	 * @deprecated use {@link #asTextComponent()} instead
-	 */
-	@Deprecated
-	public String getDisplayName()
-	{
-		return I18n.format(getTranslationKey());
 	}
 	
 	/**

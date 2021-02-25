@@ -52,7 +52,6 @@ public final class ClientDeployList
 			return cost;
 		}
 		
-		@Deprecated
 		public int getIndex()
 		{
 			return index;

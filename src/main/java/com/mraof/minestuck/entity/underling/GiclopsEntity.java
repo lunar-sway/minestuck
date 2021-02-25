@@ -29,7 +29,7 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 
 	public GiclopsEntity(EntityType<? extends GiclopsEntity> type, World world)
 	{
-		super(type, world);
+		super(type, world, 7);
 		
 		this.stepHeight = 2;
 		partGroup = new PartGroup(this);
@@ -98,7 +98,7 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	{
 		super.baseTick();
 		partGroup.updatePositions();
-		if(!world.isRemote && MinestuckConfig.disableGiclops.get())
+		if(!world.isRemote && MinestuckConfig.SERVER.disableGiclops.get())
 			this.remove();
 	}
 	

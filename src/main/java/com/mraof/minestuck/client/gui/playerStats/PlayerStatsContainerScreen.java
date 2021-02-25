@@ -1,11 +1,11 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mraof.minestuck.MinestuckConfig;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen.*;
-import com.mraof.minestuck.client.settings.MSKeyHandler;
+import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.computer.editmode.ClientEditHandler;
-import com.mraof.minestuck.skaianet.SkaiaClient;
+import com.mraof.minestuck.skaianet.client.SkaiaClient;
+import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.resources.I18n;
@@ -15,7 +15,7 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
 
-import java.util.Arrays;
+import java.util.Collections;
 
 import static com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen.*;
 
@@ -53,7 +53,7 @@ public abstract class PlayerStatsContainerScreen<T extends Container> extends Co
 	
 	protected void drawTabs()
 	{
-		GlStateManager.color3f(1,1,1);
+		RenderSystem.color3f(1,1,1);
 		
 		minecraft.getTextureManager().bindTexture(PlayerStatsScreen.icons);
 		
@@ -75,7 +75,7 @@ public abstract class PlayerStatsContainerScreen<T extends Container> extends Co
 				}
 		}
 		
-		if(MinestuckConfig.dataCheckerAccess)
+		if(ClientPlayerData.hasDataCheckerAccess())
 			blit(xOffset + guiWidth - tabWidth, yOffset -tabHeight + tabOverlap, 2*tabWidth, 0, tabWidth, tabHeight);
 	}
 	
@@ -85,11 +85,12 @@ public abstract class PlayerStatsContainerScreen<T extends Container> extends Co
 		this.renderBackground();
 		super.render(mouseX, mouseY, partialTicks);
 		this.renderHoveredToolTip(mouseX, mouseY);
+		drawTabTooltip(mouseX, mouseY);
 	}
 	
 	protected void drawActiveTabAndIcons()
 	{
-		GlStateManager.color3f(1,1,1);
+		RenderSystem.color3f(1,1,1);
 		
 		minecraft.getTextureManager().bindTexture(PlayerStatsScreen.icons);
 		
@@ -101,24 +102,24 @@ public abstract class PlayerStatsContainerScreen<T extends Container> extends Co
 			if(!mode || !NormalGuiType.values()[i].reqMedium() || SkaiaClient.enteredMedium(SkaiaClient.playerId) || minecraft.playerController.isInCreativeMode())
 				blit(xOffset + (tabWidth - 16)/2 + (tabWidth+2)*i, yOffset - tabHeight + tabOverlap + 8, i*16, tabHeight*2 + (mode? 0:16), 16, 16);
 		
-		if(MinestuckConfig.dataCheckerAccess)
+		if(ClientPlayerData.hasDataCheckerAccess())
 			blit(xOffset + guiWidth + (tabWidth - 16)/2 - tabWidth, yOffset - tabHeight + tabOverlap + 8, 5*16, tabHeight*2, 16, 16);
 	}
 	
-	protected void drawTabTooltip(int xcor, int ycor)
+	protected void drawTabTooltip(int mouseX, int mouseY)
 	{
 		
-		GlStateManager.disableDepthTest();
-		if(ycor < yOffset && ycor > yOffset - tabHeight + 4)
+		RenderSystem.disableDepthTest();
+		if(mouseY < yOffset && mouseY > yOffset - tabHeight + 4)
 			for(int i = 0; i < (mode? NormalGuiType.values():EditmodeGuiType.values()).length; i++)
-				if(xcor < xOffset + i*(tabWidth + 2))
+				if(mouseX < xOffset + i*(tabWidth + 2))
 					break;
-				else if(xcor < xOffset + i*(tabWidth + 2) + tabWidth
+				else if(mouseX < xOffset + i*(tabWidth + 2) + tabWidth
 						&& (!mode || !NormalGuiType.values()[i].reqMedium() || SkaiaClient.enteredMedium(SkaiaClient.playerId) || minecraft.playerController.isInCreativeMode()))
-					renderTooltip(Arrays.asList(I18n.format(mode? NormalGuiType.values()[i].name:EditmodeGuiType.values()[i].name)),
-							xcor - guiLeft, ycor - guiTop, font);
-		GlStateManager.enableDepthTest();
-		GlStateManager.disableLighting();
+					renderTooltip(Collections.singletonList(I18n.format(mode ? NormalGuiType.values()[i].name : EditmodeGuiType.values()[i].name)),
+							mouseX, mouseY, font);
+		RenderSystem.enableDepthTest();
+		RenderSystem.disableLighting();
 	}
 	
 	@Override
@@ -143,7 +144,7 @@ public abstract class PlayerStatsContainerScreen<T extends Container> extends Co
 					}
 					return true;
 				}
-			if(MinestuckConfig.dataCheckerAccess && xcor < xOffset + guiWidth && xcor >= xOffset + guiWidth - tabWidth)
+			if(ClientPlayerData.hasDataCheckerAccess() && xcor < xOffset + guiWidth && xcor >= xOffset + guiWidth - tabWidth)
 			{
 				minecraft.displayGuiScreen(new DataCheckerScreen());
 				return true;

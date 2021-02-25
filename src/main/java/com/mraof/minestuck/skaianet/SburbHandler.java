@@ -2,38 +2,35 @@ package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
-import com.mraof.minestuck.entry.EntryProcess;
+import com.mraof.minestuck.computer.editmode.DeployList;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
-import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.network.TitleSelectPacket;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.util.ColorHandler;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.MinestuckRandom;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
+import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 /**
  * A class for managing sburb-related stuff from outside this package that is dependent on connections and sessions.
@@ -42,17 +39,17 @@ import java.util.Random;
  */
 public final class SburbHandler
 {
-	static Map<PlayerEntity, Vec3d> playersInTitleSelection = new HashMap<>();	//TODO Consider making this non-static
+	private static final Logger LOGGER = LogManager.getLogger();
 	
 	private static Title produceTitle(World world, PlayerIdentifier player)
 	{
 		Session session = SessionHandler.get(world).getPlayerSession(player);
 		if(session == null)
-			if(MinestuckConfig.playerSelectedTitle.get())
+			if(MinestuckConfig.SERVER.playerSelectedTitle.get())
 				session = new Session();
 			else
 			{
-				Debug.logger.warn(String.format("Trying to generate a title for %s before creating a session!", player.getUsername()), new Throwable().fillInStackTrace());
+				LOGGER.warn("Trying to generate a title for {} before creating a session!", player.getUsername(), new Throwable().fillInStackTrace());
 				return null;
 			}
 		
@@ -76,7 +73,7 @@ public final class SburbHandler
 		return title;
 	}
 	
-	private static void generateAndSetTitle(World world, PlayerIdentifier player)
+	static void generateAndSetTitle(World world, PlayerIdentifier player)
 	{
 		PlayerData data = PlayerSavedData.getData(player, world);
 		if(data.getTitle() == null)
@@ -85,24 +82,14 @@ public final class SburbHandler
 			if(title == null)
 				return;
 			PlayerSavedData.getData(player, world).setTitle(title);
-		} else if(!MinestuckConfig.playerSelectedTitle.get())
-			Debug.warnf("Trying to generate a title for %s when a title is already assigned!", player.getUsername());
+		} else if(!MinestuckConfig.SERVER.playerSelectedTitle.get())
+			LOGGER.warn("Trying to generate a title for {} when a title is already assigned!", player.getUsername());
 	}
 	
 	public static void handlePredefineData(ServerPlayerEntity player, SkaianetException.SkaianetConsumer<PredefineData> consumer) throws SkaianetException
 	{
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
-		Session session = SessionHandler.get(player.server).getPlayerSession(identifier);
-		if(session != null)
-			session.predefineCall(identifier, consumer);
-		else
-		{
-			//When no previous session exists, add the session after the predefine call,
-			// such that the session isn't added if predefine call fails
-			session = new Session();
-			session.predefineCall(identifier, consumer);
-			SessionHandler.get(player.server).addNewSession(session);
-		}
+		SessionHandler.get(player.server).findOrCreateAndCall(identifier, session -> session.predefineCall(identifier, consumer));
 	}
 	
 	/**
@@ -112,23 +99,15 @@ public final class SburbHandler
 	public static ItemStack getEntryItem(World world, SburbConnection c)
 	{
 		int color =  ColorHandler.getColorForPlayer(c.getClientIdentifier(), world);
-		Item artifact;
-		if(c == null)
-			artifact = MSItems.CRUXITE_APPLE;
 		
-		else switch(c.artifactType)
+		Item artifact;
+		switch(c.artifactType)
 		{
 		case 1: artifact = MSItems.CRUXITE_POTION; break;
 		default: artifact = MSItems.CRUXITE_APPLE;
 		}
 		
 		return ColorHandler.setColor(new ItemStack(artifact), color);
-	}
-	
-	public static GristType getPrimaryGristType(PlayerIdentifier player)
-	{
-		
-		return GristTypes.SHALE;
 	}
 	
 	public static SburbConnection getConnectionForDimension(ServerWorld world)
@@ -139,10 +118,9 @@ public final class SburbHandler
 	{
 		if(dim == null)
 			return null;
-		for(SburbConnection c : SkaianetHandler.get(mcServer).connections)
-			if(c.getClientDimension() == dim)
-				return c;
-		return null;
+		
+		return SessionHandler.get(mcServer).getConnectionStream().filter(c -> c.getClientDimension() == dim)
+				.findAny().orElse(null);
 	}
 	
 	/**
@@ -152,10 +130,11 @@ public final class SburbHandler
 	 */
 	public static int availableTier(MinecraftServer mcServer, PlayerIdentifier client)
 	{
-		Session s = SessionHandler.get(mcServer).getPlayerSession(client);
+		SessionHandler handler = SessionHandler.get(mcServer);
+		Session s = handler.getPlayerSession(client);
 		if(s == null)
 			return -1;
-		if(s.completed)
+		if(handler.doesSessionHaveMaxTier(s))
 			return Integer.MAX_VALUE;
 		SburbConnection c = SkaianetHandler.get(mcServer).getActiveConnection(client);
 		if(c == null)
@@ -193,7 +172,7 @@ public final class SburbHandler
 				titleLandType = Generator.generateWeightedTitleLandType(session, title.getHeroAspect(), terrainLandType, connection.getClientIdentifier());
 				if(terrainLandType != null && titleLandType == LandTypes.TITLE_NULL)
 				{
-					Debug.warnf("Failed to find a title land aspect compatible with land aspect \"%s\". Forced to use a poorly compatible land aspect instead.", terrainLandType.getRegistryName());
+					LOGGER.warn("Failed to find a title land aspect compatible with land aspect \"{}\". Forced to use a poorly compatible land aspect instead.", terrainLandType.getRegistryName());
 					titleLandType = Generator.generateWeightedTitleLandType(session, title.getHeroAspect(), null, connection.getClientIdentifier());
 				}
 			}
@@ -204,9 +183,21 @@ public final class SburbHandler
 		return new LandTypePair(terrainLandType, titleLandType);
 	}
 	
+	public static boolean giveItems(MinecraftServer mcServer, PlayerIdentifier player)
+	{
+		SkaianetHandler handler = SkaianetHandler.get(mcServer);
+		SburbConnection c = handler.getPrimaryConnection(player, true).orElse(null);
+		if(c != null && !c.isMain())
+		{
+			onFirstItemGiven(c);
+			return true;
+		}
+		return false;
+	}
+	
 	static void onFirstItemGiven(SburbConnection connection)
 	{
-		
+		connection.setIsMain();
 	}
 	
 	static void prepareEntry(MinecraftServer mcServer, SburbConnection c)
@@ -223,7 +214,7 @@ public final class SburbHandler
 	{
 		c.setHasEntered();
 		
-		SessionHandler.get(server).getPlayerSession(c.getClientIdentifier()).checkIfCompleted(SessionHandler.get(server).singleSession);
+		SessionHandler.get(server).getPlayerSession(c.getClientIdentifier()).checkIfCompleted();
 		
 		ServerPlayerEntity player = c.getClientIdentifier().getPlayer(server);
 		if(player != null)
@@ -235,17 +226,14 @@ public final class SburbHandler
 	
 	public static boolean canSelectColor(PlayerIdentifier player, MinecraftServer mcServer)
 	{
-		for(SburbConnection c : SkaianetHandler.get(mcServer).connections)
-			if(c.getClientIdentifier().equals(player))
-				return false;
-		return true;
+		return SessionHandler.get(mcServer).getConnectionStream().noneMatch(c -> c.getClientIdentifier().equals(player));
 	}
 	
 	public static boolean hasEntered(ServerPlayerEntity player)
 	{
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
-		SburbConnection c = SkaianetHandler.get(player.server).getMainConnection(identifier, true);
-		return c != null && c.hasEntered();
+		Optional<SburbConnection> c = SkaianetHandler.get(player.server).getPrimaryConnection(identifier, true);
+		return c.isPresent() && c.get().hasEntered();
 	}
 	
 	/**
@@ -253,66 +241,22 @@ public final class SburbHandler
 	 */
 	static void onConnectionCreated(SburbConnection c)
 	{
-		Random rand = MinestuckRandom.getPlayerSpecificRandom(c.getClientIdentifier(), 0);
+		Random rand = new Random();	//TODO seed?
 		c.artifactType = rand.nextInt(2);
-		Debug.infof("Randomized artifact type to be: %d for player %s.", c.artifactType, c.getClientIdentifier().getUsername());
+		LOGGER.info("Randomized artifact type to be: {} for player {}.", c.artifactType, c.getClientIdentifier().getUsername());
+		c.setBaseGrist(generateGristType(rand));
 	}
 	
-	/**
-	 * Checks if the player has the go-ahead to enter.
-	 * If the player should get the title selection screen, this will send that packet to the player and then return false.
-	 */
-	public static boolean performEntryCheck(ServerPlayerEntity player)
+	static GristType generateGristType(Random rand)
 	{
-		if(!MinestuckConfig.playerSelectedTitle.get())
-			return true;
-		
-		PlayerIdentifier identifier = IdentifierHandler.encode(player);
-		Session s = SessionHandler.get(player.world).getPlayerSession(identifier);
-		
-		if(s != null && s.predefinedPlayers.containsKey(identifier) && s.predefinedPlayers.get(identifier).getTitle() != null
-				|| PlayerSavedData.getData(identifier, player.server).getTitle() != null)
-			return true;
-		
-		playersInTitleSelection.put(player, new Vec3d(player.posX, player.posY, player.posZ));
-		TitleSelectPacket packet = new TitleSelectPacket();
-		MSPacketHandler.sendToPlayer(packet, player);
-		return false;
+		List<GristType> types = GristTypes.values().stream().filter(type -> type.isInCategory(GristType.SpawnCategory.COMMON)).collect(Collectors.toList());
+		return types.get(rand.nextInt(types.size()));
 	}
 	
-	public static void cancelSelection(ServerPlayerEntity player)
+	public static void resetGivenItems(MinecraftServer mcServer)
 	{
-		playersInTitleSelection.remove(player);
-	}
-	
-	public static void handleTitleSelection(ServerPlayerEntity player, Title title)
-	{
-		if(MinestuckConfig.playerSelectedTitle.get() && playersInTitleSelection.containsKey(player))
-		{
-			PlayerIdentifier identifier = IdentifierHandler.encode(player);
-			
-			if(title == null)
-				generateAndSetTitle(player.world, identifier);
-			else
-			{
-				Session s = SessionHandler.get(player.server).getPlayerSession(identifier);
-				if(s != null && s.getUsedTitles(identifier).contains(title))
-				{
-					// Title is already used in session; inform the player that they can't pick this title
-					MSPacketHandler.sendToPlayer(new TitleSelectPacket(title), player);
-					return;
-				}
-				
-				PlayerSavedData.getData(identifier, player.server).setTitle(title);
-			}
-			
-			Vec3d pos = playersInTitleSelection.remove(player);
-			
-			player.setPosition(pos.x, pos.y, pos.z);
-			
-			EntryProcess process = new EntryProcess();
-			process.onArtifactActivated(player);
-			
-		} else Debug.warnf("%s tried to select a title without entering.", player.getName().getFormattedText());
+		SessionHandler.get(mcServer).getConnectionStream().forEach(SburbConnection::resetGivenItems);
+		
+		DeployList.onConditionsUpdated(mcServer);
 	}
 }

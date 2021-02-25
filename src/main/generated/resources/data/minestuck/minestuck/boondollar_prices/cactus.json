@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minecraft:cactus"
+  },
+  "range": {
+    "min": 30.0,
+    "max": 40.0,
+    "type": "minecraft:uniform"
+  }
+}

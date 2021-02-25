@@ -36,12 +36,12 @@ public class GristTypeArgument implements ArgumentType<GristType>
 	{
 		int start2 = reader.getCursor();
 		ResourceLocation gristName = ResourceLocation.read(reader);
-		if(!GristTypes.REGISTRY.containsKey(gristName))
+		if(!GristTypes.getRegistry().containsKey(gristName))
 		{
 			reader.setCursor(start2);
 			throw INVALID_TYPE.createWithContext(reader, gristName);
 		}
-		return GristTypes.REGISTRY.getValue(gristName);
+		return GristTypes.getRegistry().getValue(gristName);
 	}
 	
 	@Override

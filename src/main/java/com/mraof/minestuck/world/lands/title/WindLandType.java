@@ -1,13 +1,14 @@
 package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.player.EnumAspect;
+import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.block.Blocks;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.placement.ChanceConfig;
@@ -39,8 +40,6 @@ public class WindLandType extends TitleLandType
 	public void setProperties(LandProperties properties)
 	{
 		properties.mergeFogColor(new Vec3d(0.1, 0.2, 0.8), 0.3F);
-		if(properties.rainType == Biome.RainType.NONE)
-			properties.rainType = Biome.RainType.RAIN;
 		if(properties.forceRain == LandProperties.ForceType.OFF)
 			properties.forceRain = LandProperties.ForceType.DEFAULT;
 		
@@ -52,6 +51,12 @@ public class WindLandType extends TitleLandType
 	@Override
 	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
 	{
-		biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(MSFeatures.ROCK_SPIKE, IFeatureConfig.NO_FEATURE_CONFIG, Placement.CHANCE_HEIGHTMAP, new ChanceConfig(50)));
+		biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.ROCK_SPIKE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.CHANCE_HEIGHTMAP.configure(new ChanceConfig(50))));
+	}
+	
+	@Override
+	public SoundEvent getBackgroundMusic()
+	{
+		return MSSoundEvents.MUSIC_WIND;
 	}
 }

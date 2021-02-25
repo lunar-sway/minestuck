@@ -15,6 +15,7 @@ import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.stats.Stats;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -39,7 +40,7 @@ public class CassettePlayerBlock extends DecorBlock
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
 	{
 		if(player.isSneaking())
 		{
@@ -58,16 +59,16 @@ public class CassettePlayerBlock extends DecorBlock
 			{
 				worldIn.playEvent(Constants.WorldEvents.PLAY_RECORD_SOUND, pos, 0);
 			}
-			return true;
+			return ActionResultType.SUCCESS;
 		} else if(state.get(CASSETTE) != EnumCassetteType.NONE && state.get(OPEN))
 		{
 			this.dropCassette(worldIn, pos);
 			state = state.with(CASSETTE, EnumCassetteType.NONE);
 			worldIn.setBlockState(pos, state, 2);
-			return true;
+			return ActionResultType.SUCCESS;
 		} else
 		{
-			return false;
+			return ActionResultType.PASS;
 		}
 	}
 	

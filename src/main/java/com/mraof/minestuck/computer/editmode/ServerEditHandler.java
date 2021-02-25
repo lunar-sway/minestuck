@@ -13,6 +13,7 @@ import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ServerEditPacket;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnection;
+import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Teleport;
@@ -32,11 +33,13 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.GlobalPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.GameType;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.TickEvent;
@@ -195,8 +198,8 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 				player.sendMessage(new StringTextComponent(TextFormatting.RED+"Failed to activate edit mode."));
 				return;
 			}
-			if(c.inventory != null)
-				player.inventory.read(c.inventory);
+			if(c.getEditmodeInventory() != null)
+				player.inventory.read(c.getEditmodeInventory());
 			decoy.world.addEntity(decoy);
 			MSExtraData.get(player.world).addEditData(data);
 
@@ -210,8 +213,8 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	static boolean setPlayerStats(ServerPlayerEntity player, SburbConnection c)
 	{
 		
-		double posX, posY = 0, posZ;
-		ServerWorld world = player.getServer().getWorld(c.hasEntered() ? c.getClientDimension() : c.getClientComputer().getDimension());
+		double posX, posY, posZ;
+		ServerWorld world = player.getServer().getWorld(c.hasEntered() ? c.getClientDimension() : c.getClientComputer().getPosForEditmode().getDimension());
 		
 		if(lastEditmodePos.containsKey(c))
 		{
@@ -224,7 +227,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			posX = center.getX() + 0.5;
 			posZ = center.getZ() + 0.5;
 		}
-		posY = world.getHeight(Heightmap.Type.MOTION_BLOCKING, new BlockPos(posX, 0, posZ)).getY();
+		posY = getMotionBlockingY(world, MathHelper.floor(posX), MathHelper.floor(posZ));
 		
 		if(Teleport.teleportEntity(player, world, posX, posY, posZ) == null)
 			return false;
@@ -236,6 +239,12 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 		player.sendPlayerAbilities();
 		
 		return true;
+	}
+	
+	//Helper function to force a chunk to load, to then get the top block
+	private static int getMotionBlockingY(ServerWorld world, int x, int z)
+	{
+		return world.getChunk(x >> 4, z >> 4, ChunkStatus.FULL, true).getTopBlockY(Heightmap.Type.MOTION_BLOCKING, x & 0xF, x & 0xF) + 1;
 	}
 	
 	public static void resendEditmodeStatus(ServerPlayerEntity editor)
@@ -270,7 +279,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 
 	private static BlockPos getEditmodeCenter(SburbConnection connection)
 	{
-		GlobalPos computerPos = connection.getClientComputer();
+		GlobalPos computerPos = connection.getClientComputer().getPosForEditmode();
 		if(computerPos == null)
 			throw new IllegalStateException("Connection has to be active with a computer position to be used here");
 		if(connection.hasEntered())
@@ -289,7 +298,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			return;
 		
 		SburbConnection c = data.connection;
-		int range = MSDimensions.isLandDimension(player.dimension) ? MinestuckConfig.landEditRange.get() : MinestuckConfig.overworldEditRange.get();
+		int range = MSDimensions.isLandDimension(player.dimension) ? MinestuckConfig.SERVER.landEditRange.get() : MinestuckConfig.SERVER.overworldEditRange.get();
 		BlockPos center = getEditmodeCenter(c);
 
 		updateInventory(player, c);
@@ -316,7 +325,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 					GristHelper.notifyEditPlayer(event.getPlayer().world.getServer(), data.connection.getClientIdentifier(), cost, false);
 					data.connection.setHasGivenItem(entry);
 					if(!data.connection.isMain())
-						SkaianetHandler.get(event.getPlayer().getServer()).giveItems(data.connection.getClientIdentifier());
+						SburbHandler.giveItems(event.getPlayer().getServer(), data.connection.getClientIdentifier());
 				}
 				else event.setCanceled(true);
 			}
@@ -389,7 +398,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			EditData data = getData(event.getPlayer());
 			BlockState block = event.getWorld().getBlockState(event.getPos());
 			if(block.getBlockHardness(event.getWorld(), event.getPos()) < 0 || block.getMaterial() == Material.PORTAL
-					|| (GristHelper.getGrist(event.getEntity().world, data.connection.getClientIdentifier(), GristTypes.BUILD) <= 0 && !MinestuckConfig.gristRefund.get()))
+					|| (GristHelper.getGrist(event.getEntity().world, data.connection.getClientIdentifier(), GristTypes.BUILD) <= 0 && !MinestuckConfig.SERVER.gristRefund.get()))
 				event.setCanceled(true);
 		}
 	}
@@ -409,7 +418,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 		if(!event.getEntity().world.isRemote && getData(event.getPlayer()) != null)
 		{
 			EditData data = getData(event.getPlayer());
-			if(!MinestuckConfig.gristRefund.get())
+			if(!MinestuckConfig.SERVER.gristRefund.get())
 			{
 				GristHelper.decrease(event.getWorld(), data.connection.getClientIdentifier(), new GristSet(GristTypes.BUILD,1));
 				GristHelper.notifyEditPlayer(event.getWorld().getServer(), data.connection.getClientIdentifier(), new GristSet(GristTypes.BUILD, 1), false);
@@ -449,7 +458,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 					GristSet cost = entry.getCurrentCost(c);
 					c.setHasGivenItem(entry);
 					if(!c.isMain())
-						SkaianetHandler.get(player.server).giveItems(c.getClientIdentifier());
+						SburbHandler.giveItems(player.server, c.getClientIdentifier());
 					if(!cost.isEmpty())
 					{
 						GristHelper.decrease(player.world, c.getClientIdentifier(), cost);
@@ -472,39 +481,53 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			event.setCanceled(true);
 	}
 	
+	@SubscribeEvent(priority=EventPriority.NORMAL)
+	public static void onInteractEvent(PlayerInteractEvent.EntityInteract event)
+	{
+		if(!event.getEntity().world.isRemote && getData(event.getPlayer()) != null)
+			event.setCanceled(true);
+	}
+	
+	@SubscribeEvent(priority=EventPriority.NORMAL)
+	public static void onInteractEvent(PlayerInteractEvent.EntityInteractSpecific event)
+	{
+		if(!event.getEntity().world.isRemote && getData(event.getPlayer()) != null)
+			event.setCanceled(true);
+	}
+	
 	/**
 	 * Used on both server and client side.
 	 */
 	public static void updatePosition(PlayerEntity player, double range, int centerX, int centerZ) {
-		double y = player.posY;
+		double y = player.getPosY();
 		if(y < 0) {
 			y = 0;
 			player.setMotion(player.getMotion().mul(1, 0, 1));
 			player.abilities.isFlying = true;
 		}
 		
-		double newX = player.posX;
-		double newZ = player.posZ;
-		double offset = player.getBoundingBox().maxX-player.posX;
+		double newX = player.getPosX();
+		double newZ = player.getPosZ();
+		double offset = player.getBoundingBox().maxX-player.getPosX();
 		
 		if(range >= 1) {
-			if(player.posX > centerX+range-offset)
+			if(player.getPosX() > centerX+range-offset)
 				newX = centerX+range-offset;
-			else if(player.posX < centerX-range+offset)
+			else if(player.getPosX() < centerX-range+offset)
 				newX = centerX-range+offset;
-			if(player.posZ > centerZ+range-offset)
+			if(player.getPosZ() > centerZ+range-offset)
 				newZ = centerZ+range-offset;
-			else if(player.posZ < centerZ-range+offset)
+			else if(player.getPosZ() < centerZ-range+offset)
 				newZ = centerZ-range+offset;
 		}
 		
-		if(newX != player.posX)
+		if(newX != player.getPosX())
 			player.setMotion(player.getMotion().mul(0, 1, 1));
 		
-		if(newZ != player.posZ)
+		if(newZ != player.getPosZ())
 			player.setMotion(player.getMotion().mul(1, 1, 0));
 		
-		if(newX != player.posX || newZ != player.posZ || y != player.posY)
+		if(newX != player.getPosX() || newZ != player.getPosZ() || y != player.getPosY())
 		{
 			if(player.world.isRemote)
 				player.setPosition(newX, y, newZ);

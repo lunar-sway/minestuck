@@ -37,9 +37,9 @@ public class GateMushroomPiece extends GatePiece
 	{
 		return new BlockPos(5, 24, 5);
 	}
-	
+
 	@Override
-	public boolean addComponentParts(IWorld worldIn, Random randomIn, MutableBoundingBox boundingBoxIn, ChunkPos chunkPosIn)
+	public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox boundingBoxIn, ChunkPos chunkPosIn)
 	{
 		BlockState stem = Blocks.MUSHROOM_STEM.getDefaultState().with(HugeMushroomBlock.DOWN, false);
 		BlockState mushroom = Blocks.BROWN_MUSHROOM_BLOCK.getDefaultState().with(HugeMushroomBlock.UP, false).with(HugeMushroomBlock.DOWN, false);
@@ -56,7 +56,7 @@ public class GateMushroomPiece extends GatePiece
 		fillWithBlocks(worldIn, boundingBoxIn, 3, 20, 9, 7, 20, 9, mushroom, mushroom, false);
 		fillWithBlocks(worldIn, boundingBoxIn, 4, 20, 10, 6, 20, 10, mushroom, mushroom, false);
 		
-		super.addComponentParts(worldIn, randomIn, boundingBoxIn, chunkPosIn);
+		super.create(worldIn, chunkGeneratorIn, randomIn, boundingBoxIn, chunkPosIn);
 		
 		return true;
 	}

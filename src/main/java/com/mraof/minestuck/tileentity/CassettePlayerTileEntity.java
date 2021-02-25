@@ -11,7 +11,7 @@ public class CassettePlayerTileEntity extends TileEntity implements IClearable
 	
 	public CassettePlayerTileEntity()
 	{
-		super(MSTileEntityTypes.CASSETTE_PLAYER);
+		super(MSTileEntityTypes.CASSETTE_PLAYER.get());
 	}
 	
 	public void read(CompoundNBT compound)

@@ -23,7 +23,7 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 	
 	public BasiliskEntity(EntityType<? extends BasiliskEntity> type, World world)
 	{
-		super(type, world);
+		super(type, world, 5);
 		tail = new UnderlingPartEntity(this, 0, 3F, 2F);
 		//world.addEntity(tail); TODO Not safe to add entities to world on creation. A different solution is needed
 	}
@@ -118,10 +118,10 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 		if(tail == null)
 			return;
 		float f1 = this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw);
-		double tailPosX = (this.posX +  Math.sin(f1 / 180.0 * Math.PI) * tail.getWidth());
-		double tailPosZ = (this.posZ + -Math.cos(f1 / 180.0 * Math.PI) * tail.getWidth());
+		double tailPosX = (this.getPosX() +  Math.sin(f1 / 180.0 * Math.PI) * tail.getWidth());
+		double tailPosZ = (this.getPosZ() + -Math.cos(f1 / 180.0 * Math.PI) * tail.getWidth());
 
-		tail.setPositionAndRotation(tailPosX, this.posY, tailPosZ, this.rotationYaw, this.rotationPitch);
+		tail.setPositionAndRotation(tailPosX, this.getPosY(), tailPosZ, this.rotationYaw, this.rotationPitch);
 	}
 
 	@Override

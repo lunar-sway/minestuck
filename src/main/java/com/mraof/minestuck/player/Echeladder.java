@@ -2,8 +2,8 @@ package com.mraof.minestuck.player;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.network.EcheladderDataPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.network.data.EcheladderDataPacket;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
@@ -23,6 +23,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -59,7 +60,7 @@ public class Echeladder
 	{
 		Echeladder echeladder = PlayerSavedData.getData((ServerPlayerEntity) event.getPlayer()).getEcheladder();
 		echeladder.updateEcheladderBonuses((ServerPlayerEntity) event.getPlayer());
-		if(MinestuckConfig.rungHealthOnRespawn.get())
+		if(MinestuckConfig.SERVER.rungHealthOnRespawn.get())
 			event.getPlayer().heal(event.getPlayer().getMaxHealth());
 	}
 	
@@ -84,8 +85,8 @@ public class Echeladder
 	
 	public void increaseProgress(int exp)
 	{
-		SburbConnection c = SkaianetHandler.get(savedData.mcServer).getMainConnection(identifier, true);
-		int topRung = c != null && c.hasEntered() ? RUNG_COUNT - 1 : MinestuckConfig.preEntryRungLimit.get();
+		Optional<SburbConnection> c = SkaianetHandler.get(savedData.mcServer).getPrimaryConnection(identifier, true);
+		int topRung = c.map(SburbConnection::hasEntered).orElse(false) ? RUNG_COUNT - 1 : MinestuckConfig.SERVER.preEntryRungLimit.get();
 		int expReq = getRungProgressReq();
 		if(rung >= topRung || exp < expReq*MIN_PROGRESS_MODIFIER)
 			return;
@@ -129,7 +130,7 @@ public class Echeladder
 			if(rung != prevRung)
 			{
 				updateEcheladderBonuses(player);
-				player.world.playSound(null, player.posX, player.posY, player.posZ, MSSoundEvents.EVENT_ECHELADDER_INCREASE, SoundCategory.AMBIENT, 1F, 1F);
+				player.world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), MSSoundEvents.EVENT_ECHELADDER_INCREASE, SoundCategory.AMBIENT, 1F, 1F);
 			}
 		}
 	}
@@ -255,7 +256,7 @@ public class Echeladder
 		{
 			savedData.markDirty();
 			ServerPlayerEntity player = identifier.getPlayer(savedData.mcServer);
-			if(player != null && (MinestuckConfig.echeladderProgress.get() || prevRung != this.rung))
+			if(player != null && (MinestuckConfig.SERVER.echeladderProgress.get() || prevRung != this.rung))
 			{
 				sendDataPacket(player, false);
 				if(prevRung != this.rung)
@@ -266,13 +267,13 @@ public class Echeladder
 	
 	public void sendInitialPacket(ServerPlayerEntity player)
 	{
-		EcheladderDataPacket packet = EcheladderDataPacket.init(getRung(), MinestuckConfig.echeladderProgress.get() ? getProgress() : 0F, MinestuckConfig.preEntryRungLimit.get() > 0);
+		EcheladderDataPacket packet = EcheladderDataPacket.init(getRung(), MinestuckConfig.SERVER.echeladderProgress.get() ? getProgress() : 0F);
 		MSPacketHandler.sendToPlayer(packet, player);
 	}
 	
 	public void sendDataPacket(ServerPlayerEntity player, boolean sendMessage)
 	{
-		EcheladderDataPacket packet = EcheladderDataPacket.create(getRung(), MinestuckConfig.echeladderProgress.get() ? getProgress() : 0F, sendMessage);
+		EcheladderDataPacket packet = EcheladderDataPacket.create(getRung(), MinestuckConfig.SERVER.echeladderProgress.get() ? getProgress() : 0F, sendMessage);
 		MSPacketHandler.sendToPlayer(packet, player);
 	}
 	

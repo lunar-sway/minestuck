@@ -25,13 +25,13 @@ public class SkaiaPortalTileEntity extends TileEntity //implements ITeleporter
 	
 	public SkaiaPortalTileEntity()
 	{
-		super(MSTileEntityTypes.SKAIA_PORTAL);
+		super(MSTileEntityTypes.SKAIA_PORTAL.get());
 	}
 	
 	@Override
-	public void setWorld(World worldIn)
+	public void setWorldAndPos(World worldIn, BlockPos pos)
 	{
-		super.setWorld(worldIn);
+		super.setWorldAndPos(worldIn, pos);
 		if(!worldIn.isRemote && destination.getDimension() == worldIn.getDimension().getType())
 			destination = GlobalPos.of(worldIn.getDimension().getType() == MSDimensions.skaiaDimension ? DimensionType.OVERWORLD : MSDimensions.skaiaDimension, destination.getPos());
 	}
@@ -88,7 +88,7 @@ public class SkaiaPortalTileEntity extends TileEntity //implements ITeleporter
 		{
 			for(int blockZ = (int) z - 2; blockZ < z + 2; blockZ++)
 			{
-				world.setBlockState(new BlockPos(blockX, (int) y - 1, blockZ), blocks[(blockX + blockZ) & 3].getDefaultState(), 3);
+				world.setBlockState(new BlockPos(blockX, (int) y - 1, blockZ), blocks[(blockX + blockZ) & 3].getDefaultState(), Constants.BlockFlags.DEFAULT);
 				for(int blockY = (int) y; blockY < y + 6; blockY++)
 					world.removeBlock(new BlockPos(blockX, blockY, blockZ), false);
 			}

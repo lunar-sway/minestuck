@@ -9,6 +9,7 @@ import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandInfo;
+import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.SimpleNamedContainerProvider;
@@ -18,7 +19,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.*;
 import net.minecraft.util.text.event.ClickEvent;
-import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootParameterSets;
@@ -74,7 +74,6 @@ public abstract class MessageType
 				obj[i] = player.getName();
 			} else if(args[i].equals("land_name"))
 			{
-				World world = consort.getServer().getWorld(consort.homeDimension);
 				LandInfo landInfo = MSDimensions.getLandInfo(consort.getServer(), consort.homeDimension);
 				if(landInfo != null)
 				{
@@ -895,18 +894,18 @@ public abstract class MessageType
 		protected boolean repeat;
 		protected ResourceLocation lootTableId;
 		protected int cost;
+		protected int rep;
 		protected MessageType message;
 		
 		public PurchaseMessage(ResourceLocation lootTableId, int cost, MessageType message)
 		{
-			this(false, lootTableId, cost, message.getString(), message);
+			this(false, lootTableId, cost, 0, message.getString(), message);
 		}
-		
 		/**
 		 * Make sure to use this constructor with a unique name, if the message
 		 * is of a type that uses it's own stored data
 		 */
-		public PurchaseMessage(boolean repeat, ResourceLocation lootTableId, int cost, String name, MessageType message)
+		public PurchaseMessage(boolean repeat, ResourceLocation lootTableId, int cost, int rep, String name, MessageType message)
 		{
 			this.nbtName = name;
 			this.repeat = repeat;
@@ -926,11 +925,11 @@ public abstract class MessageType
 		public ITextComponent getMessage(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier)
 		{
 			CompoundNBT nbt = consort.getMessageTagForPlayer(player);
-			
+			PlayerData data = PlayerSavedData.getData(player);
 			if(!repeat && nbt.getBoolean(nbtName))
 				return message.getMessage(consort, player, chainIdentifier);
 			
-			if(PlayerSavedData.getData(player).tryTakeBoondollars(cost))
+			if(data.tryTakeBoondollars(cost))
 			{
 				if(!repeat)
 					nbt.putBoolean(nbtName, true);
@@ -948,6 +947,8 @@ public abstract class MessageType
 					player.entityDropItem(itemstack, 0.0F);
 					MSCriteriaTriggers.CONSORT_ITEM.trigger(player, lootTableId.toString(), itemstack, consort);
 				}
+				if(rep != 0)
+					data.addConsortReputation(rep, consort.homeDimension);
 				
 				return message.getMessage(consort, player, chainIdentifier);
 			} else
@@ -1126,17 +1127,19 @@ public abstract class MessageType
 		protected MessageType next;
 		protected String itemData;
 		protected int boondollars;
+		protected int rep;
 		
 		public GiveItemMessage(String itemData, int boondollars, MessageType next)
 		{
-			this(next.getString(), itemData, boondollars, next);
+			this(next.getString(), itemData, boondollars, 0, next);
 		}
 		
-		public GiveItemMessage(String nbtName, String itemData, int boondollars, MessageType next)
+		public GiveItemMessage(String nbtName, String itemData, int boondollars, int rep, MessageType next)
 		{
 			this.nbtName = nbtName;
 			this.itemData = itemData;
 			this.boondollars = boondollars;
+			this.rep = rep;
 			this.next = next;
 		}
 		
@@ -1183,6 +1186,9 @@ public abstract class MessageType
 				{
 					PlayerSavedData.getData(player).addBoondollars(boondollars);
 				}
+				if(rep != 0)
+					PlayerSavedData.getData(player).addConsortReputation(rep, consort.homeDimension);
+				
 				nbt.putBoolean(this.getString(), true);
 				return next.getMessage(consort, player, chainIdentifier);
 			} else

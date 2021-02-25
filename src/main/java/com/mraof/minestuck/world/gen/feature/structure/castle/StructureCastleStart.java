@@ -17,9 +17,9 @@ import java.util.List;
  */
 public class StructureCastleStart extends StructureStart
 {
-	public StructureCastleStart(Structure<?> structureIn, int chunkX, int chunkZ, Biome biomeIn, MutableBoundingBox boundsIn, int referenceIn, long seed)
+	public StructureCastleStart(Structure<?> structureIn, int chunkX, int chunkZ, MutableBoundingBox boundsIn, int referenceIn, long seed)
 	{
-		super(structureIn, chunkX, chunkZ, biomeIn, boundsIn, referenceIn, seed);
+		super(structureIn, chunkX, chunkZ, boundsIn, referenceIn, seed);
 	}
 	
 	@Override
@@ -44,7 +44,7 @@ public class StructureCastleStart extends StructureStart
 		for(int xPos = bounds.minX; xPos <= bounds.maxX; xPos++)
 			for(int zPos = bounds.minZ; zPos <= bounds.maxZ; zPos++)
 			{
-				int posHeight = generator.func_222532_b(xPos, zPos, Heightmap.Type.OCEAN_FLOOR_WG);
+				int posHeight = generator.getHeight(xPos, zPos, Heightmap.Type.OCEAN_FLOOR_WG);
 				minY = Math.min(minY, posHeight);
 			}
 		

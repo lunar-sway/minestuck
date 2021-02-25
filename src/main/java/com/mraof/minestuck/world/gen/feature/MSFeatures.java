@@ -1,7 +1,6 @@
 package com.mraof.minestuck.world.gen.feature;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.world.gen.feature.structure.GateStructure;
 import com.mraof.minestuck.world.gen.feature.structure.ImpDungeonStructure;
 import com.mraof.minestuck.world.gen.feature.structure.SmallRuinStructure;
@@ -9,7 +8,6 @@ import com.mraof.minestuck.world.gen.feature.structure.castle.CastleStructure;
 import com.mraof.minestuck.world.gen.feature.structure.village.ConsortVillageStructure;
 import com.mraof.minestuck.world.gen.feature.tree.EndTreeFeature;
 import com.mraof.minestuck.world.gen.feature.tree.LeaflessTreeFeature;
-import com.mraof.minestuck.world.gen.feature.tree.RainbowTreeFeature;
 import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraftforge.event.RegistryEvent;
@@ -21,7 +19,7 @@ import net.minecraftforge.registries.ObjectHolder;
 import javax.annotation.Nonnull;
 
 @ObjectHolder(Minestuck.MOD_ID)
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class MSFeatures
 {
 	public static final GateStructure LAND_GATE = getNull();
@@ -30,17 +28,16 @@ public final class MSFeatures
 	public static final Structure<NoFeatureConfig> CONSORT_VILLAGE = getNull();
 	public static final Structure<NoFeatureConfig> SKAIA_CASTLE = getNull();
 	
-	public static final Feature<NoFeatureConfig> RAINBOW_TREE = getNull();
-	public static final Feature<NoFeatureConfig> END_TREE =	 getNull();
-	public static final Feature<BushConfig> LEAFLESS_TREE = getNull();
+	public static final Feature<TreeFeatureConfig> END_TREE = getNull();
+	public static final Feature<BlockStateFeatureConfig> LEAFLESS_TREE = getNull();
 	
 	public static final Feature<NoFeatureConfig> RETURN_NODE = getNull();
 	public static final Feature<NoFeatureConfig> FIRE_FIELD = getNull();
 	public static final Feature<ProbabilityConfig> CAKE = getNull();
-	public static final Feature<BushConfig> PILLAR = getNull();
-	public static final Feature<BushConfig> LARGE_PILLAR = getNull();
+	public static final Feature<BlockStateFeatureConfig> PILLAR = getNull();
+	public static final Feature<BlockStateFeatureConfig> LARGE_PILLAR = getNull();
 	public static final Feature<BlockBlobConfig> BLOCK_BLOB = getNull();
-	public static final Feature<NoFeatureConfig> STRAWBERRY = getNull();
+	public static final Feature<RandomRockBlockBlobConfig> RANDOM_ROCK_BLOCK_BLOB = getNull();
 	public static final Feature<NoFeatureConfig> OCEAN_RUNDOWN = getNull();
 	public static final Feature<NoFeatureConfig> RABBIT_PLACEMENT = getNull();
 	
@@ -51,9 +48,11 @@ public final class MSFeatures
 	public static final Feature<NoFeatureConfig> OASIS = getNull();
 	public static final Feature<NoFeatureConfig> MESA = getNull();
 	public static final Feature<NoFeatureConfig> ROCK_SPIKE = getNull();
+	public static final Feature<NoFeatureConfig> SURFACE_FOSSIL = getNull();
 	public static final Feature<NoFeatureConfig> BUCKET = getNull();
 	public static final Feature<NoFeatureConfig> BROKEN_SWORD = getNull();
 	public static final Feature<NoFeatureConfig> TOWER = getNull();
+	public static final Feature<BlockStateFeatureConfig> STONE_MOUND = getNull();
 	
 	@Nonnull
 	@SuppressWarnings("ConstantConditions")
@@ -73,17 +72,16 @@ public final class MSFeatures
 		registry.register(new ConsortVillageStructure(NoFeatureConfig::deserialize).setRegistryName("consort_village"));
 		registry.register(new CastleStructure(NoFeatureConfig::deserialize).setRegistryName("skaia_castle"));
 		
-		registry.register(new RainbowTreeFeature(NoFeatureConfig::deserialize, false).setRegistryName("rainbow_tree"));
-		registry.register(new EndTreeFeature(NoFeatureConfig::deserialize, false).setRegistryName("end_tree"));
-		registry.register(new LeaflessTreeFeature(BushConfig::deserialize).setRegistryName("leafless_tree"));
+		registry.register(new EndTreeFeature(TreeFeatureConfig::deserializeFoliage).setRegistryName("end_tree"));
+		registry.register(new LeaflessTreeFeature(BlockStateFeatureConfig::deserialize).setRegistryName("leafless_tree"));
 		
 		registry.register(new ReturnNodeFeature(NoFeatureConfig::deserialize).setRegistryName("return_node"));
 		registry.register(new FireFieldFeature(NoFeatureConfig::deserialize).setRegistryName("fire_field"));
 		registry.register(new CakeFeature(ProbabilityConfig::deserialize).setRegistryName("cake"));
-		registry.register(new PillarFeature(BushConfig::deserialize, false).setRegistryName("pillar"));
-		registry.register(new PillarFeature(BushConfig::deserialize, true).setRegistryName("large_pillar"));
+		registry.register(new PillarFeature(BlockStateFeatureConfig::deserialize, false).setRegistryName("pillar"));
+		registry.register(new PillarFeature(BlockStateFeatureConfig::deserialize, true).setRegistryName("large_pillar"));
 		registry.register(new ConditionFreeBlobFeature(BlockBlobConfig::deserialize).setRegistryName("block_blob"));
-		registry.register(new ScatteredPlantFeature(NoFeatureConfig::deserialize, MSBlocks.STRAWBERRY.getDefaultState()).setRegistryName("strawberry"));
+		registry.register(new RandomRockConditionFreeBlobFeature(RandomRockBlockBlobConfig::deserialize).setRegistryName("random_rock_block_blob"));
 		registry.register(new OceanRundownFeature(NoFeatureConfig::deserialize).setRegistryName("ocean_rundown"));
 		registry.register(new RabbitPlacementFeature(NoFeatureConfig::deserialize).setRegistryName("rabbit_placement"));
 		
@@ -94,9 +92,11 @@ public final class MSFeatures
 		registry.register(new OasisFeature(NoFeatureConfig::deserialize).setRegistryName("oasis"));
 		registry.register(new MesaFeature(NoFeatureConfig::deserialize).setRegistryName("mesa"));
 		registry.register(new RockSpikeFeature(NoFeatureConfig::deserialize).setRegistryName("rock_spike"));
+		registry.register(new SurfaceFossilsFeature(NoFeatureConfig::deserialize).setRegistryName("surface_fossil"));
 		registry.register(new BucketFeature(NoFeatureConfig::deserialize).setRegistryName("bucket"));
 		registry.register(new BrokenSwordFeature(NoFeatureConfig::deserialize).setRegistryName("broken_sword"));
 		registry.register(new TowerFeature(NoFeatureConfig::deserialize).setRegistryName("tower"));
+		registry.register(new StoneMoundFeature(BlockStateFeatureConfig::deserialize).setRegistryName("stone_mound"));
 		
 		MSStructurePieces.init();
 		MSStructureProcessorTypes.init();

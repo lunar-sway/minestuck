@@ -1,11 +1,11 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.inventory.GristWidgetContainer;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import com.mraof.minestuck.tileentity.GristWidgetTileEntity;
+import com.mraof.minestuck.tileentity.machine.GristWidgetTileEntity;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
@@ -60,7 +60,7 @@ public class GristWidgetScreen extends MachineScreen<GristWidgetContainer>
 			GuiUtil.drawGristBoard(set, GuiUtil.GristboardMode.GRIST_WIDGET, 9, 45, font);
 			
 			int cost = GristWidgetTileEntity.getGristWidgetBoondollarValue(set);
-			long has = ClientPlayerData.boondollars;
+			long has = ClientPlayerData.getBoondollars();
 			String costText = GuiUtil.addSuffix(cost)+"\u00a3("+GuiUtil.addSuffix(has)+")";
 			font.drawString(costText, xSize - 9 - font.getStringWidth(costText), ySize - 96 + 3, cost > has ? 0xFF0000 : 0x00FF00);
 			
@@ -82,7 +82,7 @@ public class GristWidgetScreen extends MachineScreen<GristWidgetContainer>
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
 	{
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		//draw background
 		this.minecraft.getTextureManager().bindTexture(BACKGROUND);
@@ -104,7 +104,7 @@ public class GristWidgetScreen extends MachineScreen<GristWidgetContainer>
 		
 		goButton = new GoButton((width - xSize) / 2 + goX, (height - ySize) / 2 + goY, 30, 12, container.overrideStop() ? "STOP" : "GO");
 		addButton(goButton);
-		if(MinestuckConfig.disableGristWidget.get())
+		if(MinestuckConfig.SERVER.disableGristWidget.get())
 			goButton.active = false;
 	}
 }

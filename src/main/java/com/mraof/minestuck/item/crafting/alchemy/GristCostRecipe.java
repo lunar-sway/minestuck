@@ -74,6 +74,12 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 	}
 	
 	@Override
+	public boolean isDynamic()	//Makes sure that the recipe is not unlockable (because recipe book categories are hardcoded to vanilla categories)
+	{
+		return true;
+	}
+	
+	@Override
 	public ItemStack getRecipeOutput()
 	{
 		return ItemStack.EMPTY;
@@ -124,7 +130,7 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 		public GristCostResult generate(Item item, GristCostResult lastCost, GenerationContext context)
 		{
 			if(lastCost == null && ingredient.test(new ItemStack(item)))
-				return new GristCostResult(getGristCost(new ItemStack(item), GristTypes.BUILD, false, null));
+				return new GristCostResult(getGristCost(new ItemStack(item), GristTypes.BUILD.get(), false, null));
 			else return null;
 		}
 	}

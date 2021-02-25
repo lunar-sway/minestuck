@@ -6,6 +6,7 @@ import com.mraof.minestuck.block.MSBlocks;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
+import net.minecraft.item.MusicDiscItem;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -13,7 +14,7 @@ import net.minecraft.world.World;
 
 import java.util.function.Supplier;
 
-public class CassetteItem extends ModMusicDiscItem
+public class CassetteItem extends MusicDiscItem
 {
 	public final EnumCassetteType cassetteID;
 	

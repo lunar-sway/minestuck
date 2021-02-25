@@ -1,11 +1,11 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
-import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.PotionSpriteUploader;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.ResourceLocation;
@@ -66,10 +66,10 @@ public class EcheladderScreen extends PlayerStatsScreen
 	public void init()
 	{
 		super.init();
-		scrollIndex = MathHelper.clamp((ClientPlayerData.rung - 8)*14, 0, MAX_SCROLL);
+		scrollIndex = MathHelper.clamp((ClientPlayerData.getRung() - 8)*14, 0, MAX_SCROLL);
 		animatedRung = Math.max(animatedRung, lastRung);	//If you gain a rung while the gui is open, the animated rung might get higher than the lastRung. Otherwise they're always the same value.
 		fromRung = lastRung;
-		lastRung = ClientPlayerData.rung;
+		lastRung = ClientPlayerData.getRung();
 	}
 	
 	@Override
@@ -77,17 +77,17 @@ public class EcheladderScreen extends PlayerStatsScreen
 	{
 		updateScrollAndAnimation(mouseX, mouseY);
 		
-		int speedFactor = MinestuckConfig.echeladderAnimation.get().getSpeed();
+		int speedFactor = MinestuckConfig.CLIENT.echeladderAnimation.get().getSpeed();
 		int currentRung;
 		boolean showLastRung = true;
 		if(animationCycle == 0)
 		{
 			currentRung = animatedRung;
-			if(animatedRung < ClientPlayerData.rung)
+			if(animatedRung < ClientPlayerData.getRung())
 			{
-				animatedRungs = ClientPlayerData.rung - animatedRung;
+				animatedRungs = ClientPlayerData.getRung() - animatedRung;
 				animationCycle = timeBeforeAnimation + getTicksForRungAnimation(animatedRungs)*speedFactor;
-				animatedRung = ClientPlayerData.rung;
+				animatedRung = ClientPlayerData.getRung();
 			}
 		} else
 		{
@@ -114,13 +114,13 @@ public class EcheladderScreen extends PlayerStatsScreen
 		super.render(mouseX, mouseY, partialTicks);
 		this.renderBackground();
 		
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		
 		drawTabs();
 		
 		drawLadder(currentRung, showLastRung);
 		
-		GlStateManager.color3f(1,1,1);
+		RenderSystem.color3f(1,1,1);
 		
 		this.mc.getTextureManager().bindTexture(guiEcheladder);
 		this.blit(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
@@ -181,7 +181,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 					bg = backgrounds[rung];
 				else if(textColors.length > rung)
 					bg = ~textColors[rung];
-				fill(xOffset + 90, y + 10, xOffset + 90 + (int)(146* ClientPlayerData.rungProgress), y + 12, bg);
+				fill(xOffset + 90, y + 10, xOffset + 90 + (int)(146* ClientPlayerData.getRungProgress()), y + 12, bg);
 			} else rand.nextInt(0xFFFFFF);
 			
 			String s = I18n.hasKey("echeladder.rung."+rung) ? I18n.format("echeladder.rung."+rung) : "Rung "+(rung+1);
@@ -193,11 +193,14 @@ public class EcheladderScreen extends PlayerStatsScreen
 	private List<String> drawEffectIconsAndText(int currentRung, int mouseX, int mouseY)
 	{
 		boolean gristLimit = true;
-		this.minecraft.getTextureManager().bindTexture(AtlasTexture.LOCATION_EFFECTS_TEXTURE);
 		PotionSpriteUploader sprites = this.minecraft.getPotionSpriteUploader();
+		TextureAtlasSprite strengthSprite = sprites.getSprite(Effects.STRENGTH);
+		TextureAtlasSprite healthSprite = sprites.getSprite(Effects.HEALTH_BOOST);
 		
-		blit(xOffset + 5, yOffset + 30, blitOffset, 18, 18, sprites.getSprite(Effects.STRENGTH));
-		blit(xOffset + 5, yOffset + 84, blitOffset, 18, 18, sprites.getSprite(Effects.HEALTH_BOOST));
+		minecraft.getTextureManager().bindTexture(strengthSprite.getAtlasTexture().getTextureLocation());
+		blit(xOffset + 5, yOffset + 30, getBlitOffset(), 18, 18, strengthSprite);
+		minecraft.getTextureManager().bindTexture(healthSprite.getAtlasTexture().getTextureLocation());
+		blit(xOffset + 5, yOffset + 84, getBlitOffset(), 18, 18, healthSprite);
 		this.mc.getTextureManager().bindTexture(PlayerStatsScreen.icons);
 		this.blit(xOffset + 6, yOffset + 139, 48, 64, 16, 16);
 		this.blit(xOffset + 5, yOffset + 7, 238, 16, 18, 18);
@@ -214,7 +217,8 @@ public class EcheladderScreen extends PlayerStatsScreen
 		mc.fontRenderer.drawString(String.valueOf(health), xOffset + 26, yOffset + 93, 0x0094FF);
 		
 		mc.fontRenderer.drawString("=", xOffset + 25, yOffset + 12, 0x404040);	//Should this be black, or the same blue as the numbers?
-		mc.fontRenderer.drawString(String.valueOf(ClientPlayerData.boondollars), xOffset + 27 + mc.fontRenderer.getStringWidth("="), yOffset + 12, 0x0094FF);
+		mc.fontRenderer.drawString(String.valueOf(ClientPlayerData.getBoondollars()), xOffset + 27 + mc.fontRenderer.getStringWidth("="), yOffset + 12, 0x0094FF);
+		//mc.fontRenderer.drawString("Rep: " + ClientPlayerData.getConsortReputation(), xOffset + 75 + mc.fontRenderer.getCharWidth('='), yOffset + 12, 0x0094FF);
 		
 		mc.fontRenderer.drawString(I18n.format(CACHE), xOffset + 24, yOffset + 138, 0x404040);
 		mc.fontRenderer.drawString("Unlimited", xOffset + 26, yOffset + 147, 0x0094FF);
@@ -272,7 +276,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 		}
 		
 		if(animationCycle > 0)
-			if(MinestuckConfig.echeladderAnimation.get() != MinestuckConfig.AnimationSpeed.NOTHING)
+			if(MinestuckConfig.CLIENT.echeladderAnimation.get() != MinestuckConfig.AnimationSpeed.NOTHING)
 				animationCycle--;
 			else animationCycle = 0;
 	}

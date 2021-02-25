@@ -4,7 +4,6 @@
     "item": "minecraft:green_dye"
   },
   "grist_cost": {
-    "minestuck:amber": 3,
-    "minestuck:iodine": 1
+    "minestuck:amber": 4
   }
 }

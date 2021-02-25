@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minestuck:trans_portalizer"
+    ]
+  },
+  "criteria": {
+    "has_transportalizer": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minestuck:transportalizer"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minestuck:trans_portalizer"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_transportalizer",
+      "has_the_recipe"
+    ]
+  ]
+}

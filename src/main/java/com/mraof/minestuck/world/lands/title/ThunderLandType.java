@@ -1,11 +1,13 @@
 package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.player.EnumAspect;
+import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import net.minecraft.block.Blocks;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.biome.Biome;
 
@@ -38,10 +40,8 @@ public class ThunderLandType extends TitleLandType
 	public void setProperties(LandProperties properties)
 	{
 		properties.mergeFogColor(new Vec3d(0.1, 0.1, 0.2), 0.5F);
-		properties.rainType = Biome.RainType.RAIN;
 		properties.forceRain = LandProperties.ForceType.ON;
 		properties.forceThunder = LandProperties.ForceType.ON;
-		properties.downfall += 0.1F;
 	}
 	
 	@Override
@@ -55,6 +55,12 @@ public class ThunderLandType extends TitleLandType
 	{
 		LandProperties properties = new LandProperties(aspect);
 		aspect.setProperties(properties);
-		return properties.rainType != Biome.RainType.SNOW;
+		return properties.biomes.NORMAL.get().getPrecipitation() == Biome.RainType.RAIN;
+	}
+	
+	@Override
+	public SoundEvent getBackgroundMusic()
+	{
+		return MSSoundEvents.MUSIC_THUNDER;
 	}
 }

@@ -14,9 +14,9 @@ public class LandBiomeHolder
 	{
 		this.landTypes = landTypes;
 		
-		normalBiome = MSBiomes.LAND_NORMAL.createWrapper(properties);
-		roughBiome = MSBiomes.LAND_ROUGH.createWrapper(properties);
-		oceanBiome = MSBiomes.LAND_OCEAN.createWrapper(properties);
+		normalBiome = properties.biomes.NORMAL.get().createWrapper(properties);
+		roughBiome = properties.biomes.ROUGH.get().createWrapper(properties);
+		oceanBiome = properties.biomes.OCEAN.get().createWrapper(properties);
 	}
 	
 	public void initBiomesWith(StructureBlockRegistry blocks)

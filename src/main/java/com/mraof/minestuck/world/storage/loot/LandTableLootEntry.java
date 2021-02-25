@@ -18,9 +18,7 @@ import org.apache.logging.log4j.Logger;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class LandTableLootEntry extends LootEntry
 {
@@ -56,7 +54,8 @@ public class LandTableLootEntry extends LootEntry
 	
 	private void expandFrom(ResourceLocation tableName, LootContext context, Consumer<ILootGenerator> lootGenCollector)
 	{
-		LootTable lootTable = context.getLootTableManager().getLootTableFromLocation(tableName);
+		LootTable lootTable = context.getLootTable(tableName);
+		//noinspection ConstantConditions
 		if(lootTable == null)
 		{
 			LOGGER.warn("Could not find loot table {}", tableName);
@@ -65,6 +64,7 @@ public class LandTableLootEntry extends LootEntry
 		if(context.addLootTable(lootTable))
 		{
 			LootPool pool = lootTable.getPool(poolName);
+			//noinspection ConstantConditions
 			if(pool != null)
 			{
 				List<LootEntry> entries = accessWithReflection(pool);
@@ -130,12 +130,6 @@ public class LandTableLootEntry extends LootEntry
 				return null;
 			}
 		}
-	}
-	
-	@Override
-	public void func_216142_a(ValidationResults p_216142_1_, Function<ResourceLocation, LootTable> p_216142_2_, Set<ResourceLocation> p_216142_3_, LootParameterSet p_216142_4_)
-	{
-		super.func_216142_a(p_216142_1_, p_216142_2_, p_216142_3_, p_216142_4_);
 	}
 	
 	public static class SerializerImpl extends Serializer<LandTableLootEntry>

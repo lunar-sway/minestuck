@@ -8,6 +8,7 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 import java.util.Random;
 
@@ -24,7 +25,7 @@ public class SpecialButtonBlock extends AbstractButtonBlock
 	}
 	
 	@Override
-	public void tick(BlockState state, World worldIn, BlockPos pos, Random random)
+	public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random)
 	{
 		boolean b = state.get(POWERED);
 		super.tick(state, worldIn, pos, random);

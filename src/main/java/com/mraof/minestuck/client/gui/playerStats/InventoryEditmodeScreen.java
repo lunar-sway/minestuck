@@ -42,7 +42,7 @@ public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<Editmode
 		LocalDate localdate = LocalDate.now();
 		int d = localdate.getDayOfMonth();
 		Month m = localdate.getMonth();
-		boolean b1 = MinestuckConfig.hardMode;
+		boolean b1 = MinestuckConfig.SERVER.hardMode;
 		boolean b2 = !b1 && (m == Month.APRIL && d == 13 || m == Month.JUNE && d == 12
 				|| m == Month.OCTOBER && d == 25 || m == Month.NOVEMBER && d == 11
 				|| m == Month.NOVEMBER && d == 27);
@@ -76,11 +76,4 @@ public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<Editmode
 		}
 		return super.mouseClicked(xcor, ycor, mouseButton);
 	}
-	
-	@Override
-	protected void drawGuiContainerForegroundLayer(int xcor, int ycor)
-	{
-		drawTabTooltip(xcor, ycor);
-	}
-	
 }

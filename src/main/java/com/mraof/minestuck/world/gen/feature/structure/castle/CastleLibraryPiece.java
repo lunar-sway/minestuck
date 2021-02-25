@@ -6,6 +6,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 
 import java.util.Random;
@@ -29,9 +30,9 @@ public class CastleLibraryPiece extends CastleRoomPiece
 	}
 	
 	@Override
-	public boolean addComponentParts(IWorld world, Random random, MutableBoundingBox structureBoundingBox, ChunkPos chunkPosIn)
+	public boolean create(IWorld world, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBox, ChunkPos chunkPosIn)
 	{
-		super.addComponentParts(world, random, structureBoundingBox, chunkPosIn);
+		super.create(world, chunkGeneratorIn, randomIn, structureBoundingBox, chunkPosIn);
 		this.fillWithBlocks(world, structureBoundingBox, 1, 1, 1, 1, 3, 6, Blocks.BOOKSHELF.getDefaultState(), Blocks.AIR.getDefaultState(), false);
 		this.fillWithBlocks(world, structureBoundingBox, 6, 1, 1, 6, 3, 6, Blocks.BOOKSHELF.getDefaultState(), Blocks.AIR.getDefaultState(), false);
 		return true;

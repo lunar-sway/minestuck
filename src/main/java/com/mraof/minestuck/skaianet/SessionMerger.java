@@ -5,41 +5,38 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 final class SessionMerger
 {
-	
-	static Session getValidMergedSession(SessionHandler handler, PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException
+	static Session getValidMergedSession(DefaultSessionHandler handler, PlayerIdentifier... players) throws MergeResult.SessionMergeException
 	{
-		if(handler.singleSession)
+		Set<Session> sessions = Arrays.stream(players).map(handler::getPlayerSession).filter(Objects::nonNull).collect(Collectors.toSet());
+		
+		if(sessions.size() > 1)
 		{
-			verifyCanAdd(handler.getGlobalSession(), client, server, MergeResult.GLOBAL_SESSION_FULL);
-			return handler.getGlobalSession();
+			Session target = createMergedSession(sessions);
+			verifyCanAdd(target, MergeResult.MERGED_SESSION_FULL, players);
+			handler.handleSuccessfulMerge(sessions, target);
+			return target;
+		} else if(sessions.size() == 1)
+		{
+			Session session = sessions.stream().findAny().get();
+			verifyCanAdd(session, MergeResult.SESSION_FULL, players);
+			return session;
 		} else
 		{
-			Session cs = handler.getPlayerSession(client), ss = handler.getPlayerSession(server);
-			if(cs != null && ss != null)
-			{
-				Session target = createMergedSession(cs, ss);
-				verifyCanAdd(target, client, server, MergeResult.MERGED_SESSION_FULL);
-				handler.handleSuccessfulMerge(cs, ss, target);
-				return target;
-			} else if(cs != null)
-			{
-				verifyCanAdd(cs, client, server, MergeResult.CLIENT_SESSION_FULL);
-				return cs;
-			} else if(ss != null)
-			{
-				verifyCanAdd(ss, client, server, MergeResult.SERVER_SESSION_FULL);
-				return ss;
-			} else
-			{
-				Session session = new Session();
-				verifyCanAdd(session, client, server, MergeResult.GENERIC_FAIL);
-				handler.addNewSession(session);
-				return session;
-			}
+			Session session = new Session();
+			verifyCanAdd(session, MergeResult.GENERIC_FAIL, players);
+			handler.addNewSession(session);
+			return session;
 		}
+	}
+	
+	static Session verifyCanAddToGlobal(Session session, PlayerIdentifier... players) throws MergeResult.SessionMergeException
+	{
+		verifyCanAdd(session, MergeResult.GLOBAL_SESSION_FULL, players);
+		return session;
 	}
 	
 	static Session mergedSessionFromAll(Set<Session> sessions) throws MergeResult.SessionMergeException
@@ -93,7 +90,7 @@ final class SessionMerger
 		//Add locked players from connections
 		for(SburbConnection connection : session.connections)
 		{
-			if(!connection.canSplit)
+			if(connection.lockedToSession)
 			{
 				connections.remove(connection);
 				lockedPlayers.add(connection.getClientIdentifier());
@@ -156,29 +153,28 @@ final class SessionMerger
 		} while(addedAny);
 	}
 	
-	private static void verifyCanAdd(Session target, PlayerIdentifier client, PlayerIdentifier server, MergeResult fullSessionResult) throws MergeResult.SessionMergeException
+	private static void verifyCanAdd(Session target, MergeResult fullSessionResult, PlayerIdentifier... players) throws MergeResult.SessionMergeException
 	{
-		Set<PlayerIdentifier> players = target.getPlayerList();
-		int size = players.size();
-		if(!players.contains(client))
-			size++;
-		if(!players.contains(server))
-			size++;
+		Set<PlayerIdentifier> playersInSession = target.getPlayerList();
+		int size = playersInSession.size();
+		for(PlayerIdentifier player : players)
+		{
+			if(!playersInSession.contains(player))
+				size++;
+		}
 		
-		if(target.locked && size != players.size())	//If the session is locked and we're trying to add a new player to it
+		if(target.locked && size != playersInSession.size())	//If the session is locked and we're trying to add a new player to it
 			throw MergeResult.LOCKED.exception();
 		
-		if(MinestuckConfig.forceMaxSize && size > SessionHandler.maxSize)
+		if(MinestuckConfig.SERVER.forceMaxSize && size > SessionHandler.MAX_SIZE)
 			throw fullSessionResult.exception();
-		
 	}
 	
-	private static Session createMergedSession(Session s1, Session s2) throws MergeResult.SessionMergeException
-	
+	private static Session createMergedSession(Set<Session> sessions) throws MergeResult.SessionMergeException
 	{
 		Session mergedSession = new Session();
-		mergedSession.inheritFrom(s1);
-		mergedSession.inheritFrom(s2);
+		for(Session session : sessions)
+			mergedSession.inheritFrom(session);
 		return mergedSession;
 	}
 }

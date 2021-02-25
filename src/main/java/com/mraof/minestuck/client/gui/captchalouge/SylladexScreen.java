@@ -1,8 +1,7 @@
 package com.mraof.minestuck.client.gui.captchalouge;
 
-import com.mojang.blaze3d.platform.GLX;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mraof.minestuck.client.settings.MSKeyHandler;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
@@ -17,7 +16,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.client.config.GuiButtonExt;
+import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
+import org.lwjgl.opengl.GL13;
 
 import java.util.ArrayList;
 
@@ -62,7 +62,7 @@ public abstract class SylladexScreen extends Screen
 	@Override
 	public void init()
 	{
-		emptySylladex = new GuiButtonExt((width - GUI_WIDTH)/2 + 140, (height - GUI_HEIGHT)/2 + 175, 100, 20, I18n.format(EMPTY_SYLLADEX_BUTTON), button -> emptySylladex());
+		emptySylladex = new ExtendedButton((width - GUI_WIDTH)/2 + 140, (height - GUI_HEIGHT)/2 + 175, 100, 20, I18n.format(EMPTY_SYLLADEX_BUTTON), button -> emptySylladex());
 		addButton(emptySylladex);
 		updateContent();
 	}
@@ -102,7 +102,7 @@ public abstract class SylladexScreen extends Screen
 		
 		drawGuiMap(xcor, ycor);
 		
-		GlStateManager.color4f(1F, 1F, 1F, 1F);
+		RenderSystem.color4f(1F, 1F, 1F, 1F);
 		
 		ArrayList<GuiCard> visibleCards = new ArrayList<>();
 		for(GuiCard card : cards)
@@ -112,15 +112,15 @@ public abstract class SylladexScreen extends Screen
 		
 		for(GuiCard card : visibleCards)
 			card.drawItemBackground();
-		
-		RenderHelper.enableGUIStandardItemLighting();
-		GlStateManager.enableRescaleNormal();
-		GLX.glMultiTexCoord2f(GLX.GL_TEXTURE1, 240F, 240F);
+
+		RenderHelper.enableStandardItemLighting();
+		RenderSystem.enableRescaleNormal();
+		RenderSystem.glMultiTexCoord2f(GL13.GL_TEXTURE2, 240F, 240F);
 		for(GuiCard card : visibleCards)
 			card.drawItem();
-		GlStateManager.disableDepthTest();
+		RenderSystem.disableDepthTest();
 		RenderHelper.disableStandardItemLighting();
-		GlStateManager.color4f(1F, 1F, 1F, 1F);
+		RenderSystem.color4f(1F, 1F, 1F, 1F);
 		
 		finishMap();
 		
@@ -129,7 +129,7 @@ public abstract class SylladexScreen extends Screen
 		
 		font.drawString(getTitle().getFormattedText(), xOffset + 15, yOffset + 5, 0x404040);
 		
-		String str = ClientPlayerData.clientSideModus.getName().getFormattedText();
+		String str = ClientPlayerData.getModus().getName().getFormattedText();
 		font.drawString(str, xOffset + GUI_WIDTH - font.getStringWidth(str) - 16, yOffset + 5, 0x404040);
 		
 		super.render(xcor, ycor, f);
@@ -273,14 +273,14 @@ public abstract class SylladexScreen extends Screen
 	
 	private void prepareMap(int xOffset, int yOffset)
 	{
-		GlStateManager.pushMatrix();
-		GlStateManager.translatef((float)xOffset, (float)yOffset, 0F);
-		GlStateManager.scalef(1.0F / this.scroll, 1.0F / this.scroll, 1.0F);
+		RenderSystem.pushMatrix();
+		RenderSystem.translatef((float)xOffset, (float)yOffset, 0F);
+		RenderSystem.scalef(1.0F / this.scroll, 1.0F / this.scroll, 1.0F);
 	}
 	
 	private void finishMap()
 	{
-		GlStateManager.popMatrix();
+		RenderSystem.popMatrix();
 	}
 	
 	private boolean isMouseInContainer(double xcor, double ycor)
@@ -373,26 +373,15 @@ public abstract class SylladexScreen extends Screen
 		
 		protected void drawItem()
 		{
-			GlStateManager.color4f(1F, 1F, 1F, 1F);
+			RenderSystem.color4f(1F, 1F, 1F, 1F);
 			if(!this.item.isEmpty())
 			{
 				int x = this.xPos +2 - gui.mapX;
 				int y = this.yPos +7 - gui.mapY;
 				if(x >= gui.mapWidth || y >= gui.mapHeight || x + 16 < 0 || y + 16 < 0)
 					return;
-				gui.minecraft.getItemRenderer().renderItemAndEffectIntoGUI(item, x, y);
-				if(item.getCount() > 1)
-				{
-					String stackSize = String.valueOf(item.getCount());
-					GlStateManager.disableLighting();
-					GlStateManager.disableDepthTest();
-					GlStateManager.disableBlend();
-					gui.font.drawStringWithShadow(stackSize, x + 16 - gui.font.getStringWidth(stackSize), y + 8, 0xC6C6C6);
-					GlStateManager.enableLighting();
-					GlStateManager.enableDepthTest();
-					GlStateManager.enableBlend();
-				}
-				gui.minecraft.getItemRenderer().renderItemOverlayIntoGUI(gui.font, item, x, y, "");
+				gui.itemRenderer.renderItemAndEffectIntoGUI(item, x, y);
+				gui.itemRenderer.renderItemOverlayIntoGUI(gui.font, item, x, y, null);
 			}
 		}
 		
@@ -423,7 +412,7 @@ public abstract class SylladexScreen extends Screen
 		@Override
 		protected void drawItem()
 		{
-			GlStateManager.color4f(1F, 1F, 1F, 1F);
+			RenderSystem.color4f(1F, 1F, 1F, 1F);
 			if(size > 1)
 			{
 				String stackSize = String.valueOf(size);
@@ -431,13 +420,13 @@ public abstract class SylladexScreen extends Screen
 				int y = this.yPos - gui.mapY + 15;
 				if(x >= gui.mapWidth || y >= gui.mapHeight || x + gui.font.getStringWidth(stackSize) < 0 || y + gui.font.FONT_HEIGHT < 0)
 					return;
-				GlStateManager.disableLighting();
-				GlStateManager.disableDepthTest();
-				GlStateManager.disableBlend();
+				RenderSystem.disableLighting();
+				RenderSystem.disableDepthTest();
+				RenderSystem.disableBlend();
 				gui.font.drawStringWithShadow(stackSize, x, y, 0xC6C6C6);
-				GlStateManager.enableLighting();
-				GlStateManager.enableDepthTest();
-				GlStateManager.enableBlend();
+				RenderSystem.enableLighting();
+				RenderSystem.enableDepthTest();
+				RenderSystem.enableBlend();
 			}
 		}
 		

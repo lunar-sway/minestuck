@@ -10,12 +10,12 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.server.TicketType;
 
-public class Teleport
+public class Teleport	//TODO there might still be things that vanilla does that we should do as well. Also, is it feasible to move over to the vanilla teleport method?
 {
 	
 	public static Entity teleportEntity(Entity entity, ServerWorld world)
 	{
-		return teleportEntity(entity, world, entity.posX, entity.posY, entity.posZ);
+		return teleportEntity(entity, world, entity.getPosX(), entity.getPosY(), entity.getPosZ());
 	}
 	
 	public static Entity teleportEntity(Entity entity, ServerWorld world, double x, double y, double z)
@@ -37,7 +37,7 @@ public class Teleport
 			player.stopRiding();
 			if(player.isSleeping())
 			{
-				player.wakeUpPlayer(true, true, false);
+				player.wakeUp();
 			}
 			
 			boolean toNewDim = player.world != world;
@@ -45,7 +45,12 @@ public class Teleport
 			if(toNewDim && player.world != world)	//Was teleporting to a new dimension, but the teleportation did not go through
 				return null;
 			
+			player.invulnerableDimensionChange = true;
 			player.setRotationYawHead(yaw);
+			
+			player.setExperienceLevel(player.experienceLevel);
+			player.setPlayerHealthUpdated();
+			
 		} else
 		{
 			yaw = MathHelper.wrapDegrees(yaw);	//I think we can trust the function input enough to not need this, but better safe then sorry?
@@ -67,7 +72,7 @@ public class Teleport
 				entity.copyDataFromOld(oldEntity);
 				entity.setLocationAndAngles(x, y, z, yaw, pitch);
 				entity.setRotationYawHead(yaw);
-				world.func_217460_e(entity);
+				world.addFromAnotherDimension(entity);
 				oldEntity.remove(false);
 			}
 		}

@@ -1,8 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mraof.minestuck.network.ColorSelectPacket;
-import com.mraof.minestuck.network.MSPacketHandler;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.client.gui.screen.Screen;
@@ -11,7 +9,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.client.config.GuiButtonExt;
+import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
 
 public class ColorSelectorScreen extends Screen
 {
@@ -31,7 +29,7 @@ public class ColorSelectorScreen extends Screen
 		this.firstTime = firstTime;
 		for(int i = 0; i < ColorHandler.getColorSize(); i++)
 		{
-			if(ColorHandler.getColor(i) == ClientPlayerData.playerColor)
+			if(ColorHandler.getColor(i) == ClientPlayerData.getPlayerColor())
 			{
 				selectedIndex = i;
 			}
@@ -41,7 +39,7 @@ public class ColorSelectorScreen extends Screen
 	@Override
 	public void init()
 	{
-		addButton(new GuiButtonExt((width - guiWidth)/2 + 50, (height - guiHeight)/2 + 132, 76, 20, "Choose", button -> selectColor()));
+		addButton(new ExtendedButton((width - guiWidth)/2 + 50, (height - guiHeight)/2 + 132, 76, 20, "Choose", button -> selectColor()));
 	}
 	
 	@Override
@@ -49,7 +47,7 @@ public class ColorSelectorScreen extends Screen
 	{
 		this.renderBackground();
 		
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		
 		int xOffset = (width - guiWidth)/2;
 		int yOffset = (height - guiHeight)/2;
@@ -114,7 +112,7 @@ public class ColorSelectorScreen extends Screen
 				y += 3;
 			if(selectedIndex >= 8)
 				y += 3;
-			GlStateManager.color3f(1F, 1F, 1F);
+			RenderSystem.color3f(1.0F, 1.0F, 1.0F);
 			this.minecraft.getTextureManager().bindTexture(guiBackground);
 			this.blit(xOffset + x, yOffset + y, guiWidth, 0, 36, 20);
 		}
@@ -159,8 +157,7 @@ public class ColorSelectorScreen extends Screen
 	
 	private void selectColor()
 	{
-		MSPacketHandler.sendToServer(new ColorSelectPacket(selectedIndex));
-		ClientPlayerData.playerColor = ColorHandler.getColor(selectedIndex);
+		ClientPlayerData.selectColor(selectedIndex);
 		this.minecraft.displayGuiScreen(null);
 	}
 	
@@ -170,7 +167,7 @@ public class ColorSelectorScreen extends Screen
 		if(firstTime && minecraft != null && minecraft.player != null)
 		{
 			ITextComponent message;
-			if(ClientPlayerData.playerColor == ColorHandler.DEFAULT_COLOR)
+			if(ClientPlayerData.getPlayerColor() == ColorHandler.DEFAULT_COLOR)
 				message = new TranslationTextComponent(DEFAULT_COLOR_SELECTED);
 			else message = new TranslationTextComponent(COLOR_SELECTED);
 			this.minecraft.player.sendMessage(new StringTextComponent("[Minestuck] ").appendSibling(message));

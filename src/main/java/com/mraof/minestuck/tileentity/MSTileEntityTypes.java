@@ -2,59 +2,34 @@ package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.tileentity.machine.*;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
-public class MSTileEntityTypes	//TODO Use @ObjectHolder or DeferredRegister here
+public class MSTileEntityTypes
 {
-	public static TileEntityType<ComputerTileEntity> COMPUTER;
-	public static TileEntityType<MiniCruxtruderTileEntity> MINI_CRUXTRUDER;
-	public static TileEntityType<MiniTotemLatheTileEntity> MINI_TOTEM_LATHE;
-	public static TileEntityType<MiniAlchemiterTileEntity> MINI_ALCHEMITER;
-	public static TileEntityType<MiniPunchDesignixTileEntity> MINI_PUNCH_DESIGNIX;
-	public static TileEntityType<CruxtruderTileEntity> CRUXTRUDER;
-	public static TileEntityType<TotemLatheTileEntity> TOTEM_LATHE;
-	public static TileEntityType<AlchemiterTileEntity> ALCHEMITER;
-	public static TileEntityType<PunchDesignixTileEntity> PUNCH_DESIGNIX;
-	public static TileEntityType<GristWidgetTileEntity> GRIST_WIDGET;
-	public static TileEntityType<TransportalizerTileEntity> TRANSPORTALIZER;
-	public static TileEntityType<ItemStackTileEntity> ITEM_STACK;
-	public static TileEntityType<UraniumCookerTileEntity> URANIUM_COOKER;
-	public static TileEntityType<TileEntityJumperBlock> JUMPER_BLOCK;
-	public static TileEntityType<TileEntityAlchemiterUpgrade> ALCHEMITER_UPGRADE;
-	public static TileEntityType<TileEntityUpgradedAlchemiter> UPGRADE_ALCHEMITER;
-	public static TileEntityType<HolopadTileEntity> HOLOPAD;
-	public static TileEntityType<SkaiaPortalTileEntity> SKAIA_PORTAL;
-	public static TileEntityType<GateTileEntity> GATE;
-	public static TileEntityType<CassettePlayerTileEntity> CASSETTE_PLAYER;
-	public static TileEntityType<LotusTimeCapsuleTileEntity> LOTUS_TIME_CAPSULE;
+	public static final DeferredRegister<TileEntityType<?>> REGISTER = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, Minestuck.MOD_ID);
 	
-	@SubscribeEvent
-	public static void registerTileEntityType(final RegistryEvent.Register<TileEntityType<?>> event)
-	{
-		event.getRegistry().register((COMPUTER = TileEntityType.Builder.create(ComputerTileEntity::new, MSBlocks.COMPUTER, MSBlocks.CROCKERTOP, MSBlocks.HUBTOP, MSBlocks.LAPTOP, MSBlocks.LUNCHTOP).build(null)).setRegistryName("computer"));
-		event.getRegistry().register((MINI_CRUXTRUDER = TileEntityType.Builder.create(MiniCruxtruderTileEntity::new, MSBlocks.MINI_CRUXTRUDER).build(null)).setRegistryName("mini_cruxtruder"));
-		event.getRegistry().register((MINI_TOTEM_LATHE = TileEntityType.Builder.create(MiniTotemLatheTileEntity::new, MSBlocks.MINI_TOTEM_LATHE).build(null)).setRegistryName("mini_totem_lathe"));
-		event.getRegistry().register((MINI_ALCHEMITER = TileEntityType.Builder.create(MiniAlchemiterTileEntity::new, MSBlocks.MINI_ALCHEMITER).build(null)).setRegistryName("mini_alchemiter"));
-		event.getRegistry().register((MINI_PUNCH_DESIGNIX = TileEntityType.Builder.create(MiniPunchDesignixTileEntity::new, MSBlocks.MINI_PUNCH_DESIGNIX).build(null)).setRegistryName("mini_punch_designix"));
-		event.getRegistry().register((CRUXTRUDER = TileEntityType.Builder.create(CruxtruderTileEntity::new, MSBlocks.CRUXTRUDER.CENTER.get()).build(null)).setRegistryName("cruxtruder"));
-		event.getRegistry().register((TOTEM_LATHE = TileEntityType.Builder.create(TotemLatheTileEntity::new, MSBlocks.TOTEM_LATHE.CARD_SLOT.get()).build(null)).setRegistryName("totem_lathe"));
-		event.getRegistry().register((ALCHEMITER = TileEntityType.Builder.create(AlchemiterTileEntity::new, MSBlocks.ALCHEMITER.TOTEM_PAD.get()).build(null)).setRegistryName("alchemiter"));
-		event.getRegistry().register((PUNCH_DESIGNIX = TileEntityType.Builder.create(PunchDesignixTileEntity::new, MSBlocks.PUNCH_DESIGNIX.SLOT.get()).build(null)).setRegistryName("punch_designix"));
-		event.getRegistry().register((GRIST_WIDGET = TileEntityType.Builder.create(GristWidgetTileEntity::new, MSBlocks.GRIST_WIDGET).build(null)).setRegistryName("grist_widget"));
-		event.getRegistry().register((TRANSPORTALIZER = TileEntityType.Builder.create(TransportalizerTileEntity::new, MSBlocks.TRANSPORTALIZER).build(null)).setRegistryName("transportalizer"));
-		event.getRegistry().register((ITEM_STACK = TileEntityType.Builder.create(ItemStackTileEntity::new, MSBlocks.CRUXITE_DOWEL, MSBlocks.TOTEM_LATHE.DOWEL_ROD.get()).build(null)).setRegistryName("item_stack"));
-		event.getRegistry().register((URANIUM_COOKER = TileEntityType.Builder.create(UraniumCookerTileEntity::new, MSBlocks.URANIUM_COOKER).build(null)).setRegistryName("uranium_cooker"));
-		//event.getRegistry().register((JUMPER_BLOCK = TileEntityType.Builder.create(TileEntityJumperBlock::new).build(null)).setRegistryName("jumper_block"));
-		//event.getRegistry().register((ALCHEMITER_UPGRADE = TileEntityType.Builder.create(TileEntityAlchemiterUpgrade::new).build(null)).setRegistryName("alchemiter_upgrade"));
-		//event.getRegistry().register((UPGRADE_ALCHEMITER = TileEntityType.Builder.create(TileEntityUpgradedAlchemiter::new).build(null)).setRegistryName("upgrade_alchemiter"));
-		event.getRegistry().register((HOLOPAD = TileEntityType.Builder.create(HolopadTileEntity::new, MSBlocks.HOLOPAD).build(null)).setRegistryName("holopad"));
-		event.getRegistry().register((SKAIA_PORTAL = TileEntityType.Builder.create(SkaiaPortalTileEntity::new, MSBlocks.SKAIA_PORTAL).build(null)).setRegistryName("skaia_portal"));
-		event.getRegistry().register((GATE = TileEntityType.Builder.create(GateTileEntity::new, MSBlocks.GATE, MSBlocks.RETURN_NODE).build(null)).setRegistryName("gate"));
-		event.getRegistry().register((CASSETTE_PLAYER = TileEntityType.Builder.create(CassettePlayerTileEntity::new, MSBlocks.CASSETTE_PLAYER).build(null)).setRegistryName("cassette_player"));
-		//event.getRegistry().register((LOTUS_TIME_CAPSULE = TileEntityType.Builder.create(LotusTimeCapsuleTileEntity::new, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK).build(null)).setRegistryName("lotus_time_capsule"));
-	}
+	public static final RegistryObject<TileEntityType<ComputerTileEntity>> COMPUTER = REGISTER.register("computer", () -> TileEntityType.Builder.create(ComputerTileEntity::new, MSBlocks.COMPUTER, MSBlocks.CROCKERTOP, MSBlocks.HUBTOP, MSBlocks.LAPTOP, MSBlocks.LUNCHTOP).build(null));
+	public static final RegistryObject<TileEntityType<MiniCruxtruderTileEntity>> MINI_CRUXTRUDER = REGISTER.register("mini_cruxtruder", () -> TileEntityType.Builder.create(MiniCruxtruderTileEntity::new, MSBlocks.MINI_CRUXTRUDER).build(null));
+	public static final RegistryObject<TileEntityType<MiniTotemLatheTileEntity>> MINI_TOTEM_LATHE = REGISTER.register("mini_totem_lathe", () -> TileEntityType.Builder.create(MiniTotemLatheTileEntity::new, MSBlocks.MINI_TOTEM_LATHE).build(null));
+	public static final RegistryObject<TileEntityType<MiniAlchemiterTileEntity>> MINI_ALCHEMITER = REGISTER.register("mini_alchemiter", () -> TileEntityType.Builder.create(MiniAlchemiterTileEntity::new, MSBlocks.MINI_ALCHEMITER).build(null));
+	public static final RegistryObject<TileEntityType<MiniPunchDesignixTileEntity>> MINI_PUNCH_DESIGNIX = REGISTER.register("mini_punch_designix", () -> TileEntityType.Builder.create(MiniPunchDesignixTileEntity::new, MSBlocks.MINI_PUNCH_DESIGNIX).build(null));
+	public static final RegistryObject<TileEntityType<CruxtruderTileEntity>> CRUXTRUDER = REGISTER.register("cruxtruder", () -> TileEntityType.Builder.create(CruxtruderTileEntity::new, MSBlocks.CRUXTRUDER.CENTER.get()).build(null));
+	public static final RegistryObject<TileEntityType<TotemLatheTileEntity>> TOTEM_LATHE = REGISTER.register("totem_lathe", () -> TileEntityType.Builder.create(TotemLatheTileEntity::new, MSBlocks.TOTEM_LATHE.CARD_SLOT.get()).build(null));
+	public static final RegistryObject<TileEntityType<AlchemiterTileEntity>> ALCHEMITER = REGISTER.register("alchemiter", () -> TileEntityType.Builder.create(AlchemiterTileEntity::new, MSBlocks.ALCHEMITER.TOTEM_PAD.get()).build(null));
+	public static final RegistryObject<TileEntityType<PunchDesignixTileEntity>> PUNCH_DESIGNIX = REGISTER.register("punch_designix", () -> TileEntityType.Builder.create(PunchDesignixTileEntity::new, MSBlocks.PUNCH_DESIGNIX.SLOT.get()).build(null));
+	public static final RegistryObject<TileEntityType<GristWidgetTileEntity>> GRIST_WIDGET = REGISTER.register("grist_widget", () -> TileEntityType.Builder.create(GristWidgetTileEntity::new, MSBlocks.GRIST_WIDGET).build(null));
+	public static final RegistryObject<TileEntityType<TransportalizerTileEntity>> TRANSPORTALIZER = REGISTER.register("transportalizer", () -> TileEntityType.Builder.create(TransportalizerTileEntity::new, MSBlocks.TRANSPORTALIZER, MSBlocks.TRANS_PORTALIZER).build(null));
+	public static final RegistryObject<TileEntityType<ItemStackTileEntity>> ITEM_STACK = REGISTER.register("item_stack", () -> TileEntityType.Builder.create(ItemStackTileEntity::new, MSBlocks.CRUXITE_DOWEL, MSBlocks.TOTEM_LATHE.DOWEL_ROD.get()).build(null));
+	public static final RegistryObject<TileEntityType<UraniumCookerTileEntity>> URANIUM_COOKER = REGISTER.register("uranium_cooker", () -> TileEntityType.Builder.create(UraniumCookerTileEntity::new, MSBlocks.URANIUM_COOKER).build(null));
+	public static final RegistryObject<TileEntityType<HolopadTileEntity>> HOLOPAD = REGISTER.register("holopad", () -> TileEntityType.Builder.create(HolopadTileEntity::new, MSBlocks.HOLOPAD).build(null));
+	public static final RegistryObject<TileEntityType<SkaiaPortalTileEntity>> SKAIA_PORTAL = REGISTER.register("skaia_portal", () -> TileEntityType.Builder.create(SkaiaPortalTileEntity::new, MSBlocks.SKAIA_PORTAL).build(null));
+	public static final RegistryObject<TileEntityType<GateTileEntity>> GATE = REGISTER.register("gate", () -> TileEntityType.Builder.create(GateTileEntity::new, MSBlocks.GATE, MSBlocks.RETURN_NODE).build(null));
+	public static final RegistryObject<TileEntityType<CassettePlayerTileEntity>> CASSETTE_PLAYER = REGISTER.register("cassette_player", () -> TileEntityType.Builder.create(CassettePlayerTileEntity::new, MSBlocks.CASSETTE_PLAYER).build(null));
+	//	public static TileEntityType<LotusTimeCapsuleTileEntity> LOTUS_TIME_CAPSULE;
+	//event.getRegistry().register((LOTUS_TIME_CAPSULE = TileEntityType.Builder.create(LotusTimeCapsuleTileEntity::new, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK).build(null)).setRegistryName("lotus_time_capsule"));
+	
 }

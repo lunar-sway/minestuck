@@ -27,7 +27,7 @@ public final class MSFluids
 	public static final ResourceLocation STILL_ENDER_TEXTURE = new ResourceLocation(Minestuck.MOD_ID, "block/still_ender");
 	public static final ResourceLocation FLOWING_ENDER_TEXTURE = new ResourceLocation(Minestuck.MOD_ID, "block/flowing_ender");
 	
-	public static final DeferredRegister<Fluid> FLUIDS = new DeferredRegister<>(ForgeRegistries.FLUIDS, Minestuck.MOD_ID);
+	public static final DeferredRegister<Fluid> FLUIDS = DeferredRegister.create(ForgeRegistries.FLUIDS, Minestuck.MOD_ID);
 	
 	public static final RegistryObject<FlowingFluid> OIL = FLUIDS.register("oil", () -> new ForgeFlowingFluid.Source(MSFluids.OIL_PROPERTIES));
 	public static final RegistryObject<FlowingFluid> FLOWING_OIL = FLUIDS.register("flowing_oil", () -> new ForgeFlowingFluid.Flowing(MSFluids.OIL_PROPERTIES));

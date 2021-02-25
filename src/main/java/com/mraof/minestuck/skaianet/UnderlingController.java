@@ -3,12 +3,17 @@ package com.mraof.minestuck.skaianet;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
+import com.mraof.minestuck.event.UnderlingSpawnListEvent;
 import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
+import com.mraof.minestuck.world.gen.LandChunkGenerator;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.MinecraftForge;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +27,16 @@ public final class UnderlingController
 {
 	public static GristType getUnderlingType(UnderlingEntity entity)
 	{
-		return GristHelper.getPrimaryGrist();
+		ChunkGenerator<?> chunkGenerator = entity.world.isRemote ? null : ((ServerWorld)entity.world).getChunkProvider().getChunkGenerator();
+		if(chunkGenerator instanceof LandChunkGenerator)
+		{
+			BlockPos pos = entity.getPosition();
+			return ((LandChunkGenerator)chunkGenerator).randomLayer(entity.getRNG()).getTypeAt(pos.getX(), pos.getZ());
+		}
+		else return GristHelper.getPrimaryGrist(entity.getRNG());
 	}
 	
-	private static List<Biome.SpawnListEntry>[] difficultyList = new List[31];
+	private static final List<Biome.SpawnListEntry>[] difficultyList = new List[31];
 	
 	public static List<Biome.SpawnListEntry> getUnderlingList(BlockPos pos, World world)
 	{
@@ -67,17 +78,18 @@ public final class UnderlingController
 			}
 		}
 		
-		if(impWeight > 0 && MinestuckConfig.naturalImpSpawn.get())
+		if(impWeight > 0 && MinestuckConfig.SERVER.naturalImpSpawn.get())
 			list.add(new Biome.SpawnListEntry(MSEntityTypes.IMP, impWeight, Math.max(1, (int)(impWeight/2.5)), Math.max(3, impWeight)));
-		if(ogreWeight > 0 && MinestuckConfig.naturalOgreSpawn.get())
+		if(ogreWeight > 0 && MinestuckConfig.SERVER.naturalOgreSpawn.get())
 			list.add(new Biome.SpawnListEntry(MSEntityTypes.OGRE, ogreWeight, ogreWeight >= 5 ? 2 : 1, Math.max(1, ogreWeight/2)));
-		if(basiliskWeight > 0 && MinestuckConfig.naturalBasiliskSpawn.get())
+		if(basiliskWeight > 0 && MinestuckConfig.SERVER.naturalBasiliskSpawn.get())
 			list.add(new Biome.SpawnListEntry(MSEntityTypes.BASILISK, basiliskWeight, 1, Math.max(1, basiliskWeight/2)));
-		if(lichWeight > 0 && MinestuckConfig.naturalLichSpawn.get())
+		if(lichWeight > 0 && MinestuckConfig.SERVER.naturalLichSpawn.get())
 			list.add(new Biome.SpawnListEntry(MSEntityTypes.LICH, lichWeight, 1, Math.max(1, lichWeight/2)));
-		if(giclopsWeight > 0 && !MinestuckConfig.disableGiclops.get())
+		if(giclopsWeight > 0 && !MinestuckConfig.SERVER.disableGiclops.get())
 			list.add(new Biome.SpawnListEntry(MSEntityTypes.GICLOPS, giclopsWeight, 1, Math.max(1, giclopsWeight/2)));
-		//TODO Add hook for addons to add more underlings
+		
+		MinecraftForge.EVENT_BUS.post(new UnderlingSpawnListEvent(difficulty, list));
 		
 		difficultyList[difficulty] = list;
 		

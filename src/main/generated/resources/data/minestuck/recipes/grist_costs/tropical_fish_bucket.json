@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:source_grist_cost",
+  "ingredient": {
+    "item": "minecraft:tropical_fish_bucket"
+  },
+  "grist_cost": {},
+  "sources": [
+    "minecraft:tropical_fish",
+    "minecraft:water_bucket"
+  ]
+}

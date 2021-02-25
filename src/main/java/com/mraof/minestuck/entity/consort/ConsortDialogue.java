@@ -132,9 +132,9 @@ public class ConsortDialogue
 		
 		//Towers
 		addMessage("climb_high").landTitle(TOWERS, WIND).consort(EnumConsort.IGUANA);
-		addMessage(new ConditionedMessage((ConsortEntity consort, ServerPlayerEntity player) -> consort.posY < 78, new ChainMessage(new SingleMessage("height_fear.towers.1"), new SingleMessage("height_fear.towers.2")),
+		addMessage(new ConditionedMessage((ConsortEntity consort, ServerPlayerEntity player) -> consort.getPosY() < 78, new ChainMessage(new SingleMessage("height_fear.towers.1"), new SingleMessage("height_fear.towers.2")),
 				new SingleMessage("height_fear.panic"))).landTitle(TOWERS).consort(EnumConsort.TURTLE);
-		addMessage(new ConditionedMessage((ConsortEntity consort, ServerPlayerEntity player) -> consort.posY < 78, new ChainMessage(new SingleMessage("height_fear.rock.1"), new SingleMessage("height_fear.rock.2")),
+		addMessage(new ConditionedMessage((ConsortEntity consort, ServerPlayerEntity player) -> consort.getPosY() < 78, new ChainMessage(new SingleMessage("height_fear.rock.1"), new SingleMessage("height_fear.rock.2")),
 				new SingleMessage("height_fear.panic"))).landTitle(WIND).consort(EnumConsort.TURTLE);
 		
 		//Shade
@@ -181,7 +181,7 @@ public class ConsortDialogue
 		addMessage("mushroom_curse", "denizen").landTerrain(FUNGI);
 		addMessage("jacket").landTerrain(FUNGI);
 		addMessage("mildew").landTerrain(FUNGI);
-		addMessage("fungus_destroyer", "player_title", "denizen").landTerrain(FUNGI);
+		addMessage("fungus_destroyer", "player_title_land", "denizen").landTerrain(FUNGI);
 		
 		//Rainbow Terrain
 		addMessage("generic_green").landTerrain(RAINBOW);
@@ -301,12 +301,12 @@ public class ConsortDialogue
 		addMessage(new ChoiceMessage(new DescriptionMessage("peppy_offer"),
 				new SingleMessage[] { new SingleMessage("peppy_offer.buy"), new SingleMessage("peppy_offer.deny") },
 				new MessageType[] {
-						new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 1000, "purchase",
+						new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 1000, -15, "purchase",
 								new ChainMessage(1, new SingleMessage("peppy_offer.item"), new SingleMessage("peppy_offer.purchase"))),
 						new ChoiceMessage(new SingleMessage("peppy_offer.next"),
 								new SingleMessage[] { new SingleMessage("peppy_offer.deny_again"), new SingleMessage("peppy_offer.buy_2") },
 								new MessageType[] { new SingleMessage("dots"),
-										new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 500, "purchase",
+										new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 500, -35, "purchase",
 												new SingleMessage("peppy_offer.purchase")) }) })).type(MerchantType.SHADY).consort(EnumConsort.NAKAGATOR, EnumConsort.IGUANA);
 
 
@@ -321,7 +321,7 @@ public class ConsortDialogue
 								new SingleMessage("shady_offer.deny")
 						},
 				new MessageType[] {
-						new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 1000, "purchase",
+						new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 1000, -15,"purchase",
 								new ChainMessage(1,
 										new SingleMessage("shady_offer.item"),
 										new SingleMessage("shady_offer.purchase")
@@ -336,7 +336,7 @@ public class ConsortDialogue
 								new MessageType[]
 								{
 										new SingleMessage("dots"),
-										new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 500, "purchase",
+										new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 500, -35, "purchase",
 												new SingleMessage("shady_offer.purchase")
 										)
 								}
@@ -354,7 +354,7 @@ public class ConsortDialogue
 		addMessage(new ItemRequirement(hungryList, false, true, new SingleMessage("hungry"),
 						new ChoiceMessage(new SingleMessage("hungry.ask_food", "nbt_item:hungry.item"),
 								new SingleMessage[] { new SingleMessage("hungry.accept"), new SingleMessage("hungry.deny") },
-								new MessageType[] { new GiveItemMessage("hungry.item", 0, new SingleMessage("hungry.thanks")),
+								new MessageType[] { new GiveItemMessage("hungry.thanks", "hungry.item", 0, 15, new SingleMessage("hungry.thanks")),
 										new SingleMessage("sadface") }))).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);
 		addMessage(new ItemRequirement("hungry2", hungryList, false, true, false,
 						new SingleMessage(
@@ -366,66 +366,74 @@ public class ConsortDialogue
 										new SingleMessage(
 												"hungry.accept"),
 										new SingleMessage("hungry.deny") },
-								new MessageType[] { new GiveItemMessage("hungry2.item", 0, new SingleMessage("hungry.thanks")),
+								new MessageType[] { new GiveItemMessage("hungry.thanks", "hungry2.item", 0, 15, new SingleMessage("hungry.thanks")),
 										new ChoiceMessage(new SingleMessage("hungry.starving"),
 												new SingleMessage[] { new SingleMessage("hungry.agree"),
 														new SingleMessage("hungry.too_cheap") },
-												new MessageType[] { new GiveItemMessage("hungry.sell_item", "hungry2.item", 10,
+												new MessageType[] { new GiveItemMessage("hungry.sell_item", "hungry2.item", 10, 0,
 														new ChainMessage(1, new DescriptionMessage("hungry.finally", "nbt_item:hungry2.item"),
 																new SingleMessage("hungry.finally"))),
 														new SingleMessage("hungry.end") }) }))).consort(EnumConsort.SALAMANDER, EnumConsort.NAKAGATOR);
 		
-		addMessage(new MerchantGuiMessage(new SingleMessage("food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).consort(EnumConsort.SALAMANDER);
-		addMessage(new MerchantGuiMessage(new SingleMessage("fast_food"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).consort(EnumConsort.NAKAGATOR);
-		addMessage(new MerchantGuiMessage(new SingleMessage("grocery_store"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).consort(EnumConsort.IGUANA);
-		addMessage(new MerchantGuiMessage(new SingleMessage("tasty_welcome"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).consort(EnumConsort.TURTLE);
-		addMessage(new MerchantGuiMessage(new SingleMessage("breath_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(WIND);
-		addMessage(new MerchantGuiMessage(new SingleMessage("blood_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(PULSE);
-		addMessage(new MerchantGuiMessage(new SingleMessage("life_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(RABBITS);
-		addMessage(new MerchantGuiMessage(new SingleMessage("doom_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(THUNDER);
-		//addMessage(new MerchantGuiMessage(new SingleMessage("frog_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(FROGS);
-		addMessage(new MerchantGuiMessage(new SingleMessage("space_food_shop", "land_name"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(FROGS);
-		addMessage(new MerchantGuiMessage(new SingleMessage("time_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(CLOCKWORK);
-		addMessage(new MerchantGuiMessage(new SingleMessage("thyme_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(CLOCKWORK, THOUGHT);
-		addMessage(new MerchantGuiMessage(new SingleMessage("mind_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(THOUGHT);
-		addMessage(new MerchantGuiMessage(new SingleMessage("heart_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(CAKE);
-		addMessage(new MerchantGuiMessage(new SingleMessage("light_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(LIGHT);
-		addMessage(new MerchantGuiMessage(new SingleMessage("void_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(SILENCE);
-		addMessage(new MerchantGuiMessage(new SingleMessage("rage_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(MONSTERS);
-		addMessage(new MerchantGuiMessage(new DescriptionMessage("hope_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(TOWERS);
-		addMessage(new MerchantGuiMessage(new SingleMessage("buckets_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(BUCKETS);
+		addMessage(new MerchantGuiMessage(new SingleMessage("food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).consort(EnumConsort.SALAMANDER).lockToConsort();
+		addMessage(new MerchantGuiMessage(new SingleMessage("fast_food"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).consort(EnumConsort.NAKAGATOR).lockToConsort();
+		addMessage(new MerchantGuiMessage(new SingleMessage("grocery_store"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).consort(EnumConsort.IGUANA).lockToConsort();
+		addMessage(new MerchantGuiMessage(new SingleMessage("tasty_welcome"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).consort(EnumConsort.TURTLE).lockToConsort();
+		addMessage(new MerchantGuiMessage(new SingleMessage("breeze_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(WIND).lockToConsort();
+		addMessage(new MerchantGuiMessage(new SingleMessage("blood_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(PULSE).lockToConsort();
+		addMessage(new MerchantGuiMessage(new SingleMessage("rabbit_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(RABBITS).lockToConsort();
+		addMessage(new MerchantGuiMessage(new SingleMessage("lightning_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(THUNDER).lockToConsort();
+		addMessage(new MerchantGuiMessage(new SingleMessage("frog_leg_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(FROGS).lockToConsort();
+		addMessage(new MerchantGuiMessage(new SingleMessage("frog_food_shop", "land_name"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(FROGS).lockToConsort();
+		addMessage(new MerchantGuiMessage(new SingleMessage("time_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(CLOCKWORK).lockToConsort();
+		addMessage(new MerchantGuiMessage(new SingleMessage("thyme_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(CLOCKWORK, THOUGHT).lockToConsort();
+		addMessage(new MerchantGuiMessage(new SingleMessage("library_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(THOUGHT).lockToConsort();
+		addMessage(new MerchantGuiMessage(new SingleMessage("cake_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(CAKE).lockToConsort();
+		addMessage(new MerchantGuiMessage(new SingleMessage("light_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(LIGHT).lockToConsort();
+		addMessage(new MerchantGuiMessage(new SingleMessage("silence_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(SILENCE).lockToConsort();
+		addMessage(new MerchantGuiMessage(new SingleMessage("rage_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(MONSTERS).lockToConsort();
+		addMessage(new MerchantGuiMessage(new DescriptionMessage("hope_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(TOWERS).lockToConsort();
+		addMessage(new MerchantGuiMessage(new SingleMessage("buckets_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(BUCKETS).lockToConsort();
 		
-		addMessage(new MerchantGuiMessage(new SingleMessage("general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL);
-		addMessage(new MerchantGuiMessage(new SingleMessage("got_the_goods"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL);
-		addMessage(new MerchantGuiMessage(new SingleMessage("rising_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL);
-		addMessage(new MerchantGuiMessage(new SingleMessage("breath_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(WIND);
-		addMessage(new MerchantGuiMessage(new SingleMessage("blood_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(PULSE);
-		addMessage(new MerchantGuiMessage(new SingleMessage("life_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(RABBITS);
-		addMessage(new MerchantGuiMessage(new SingleMessage("doom_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(THUNDER);
-		//addMessage(new MerchantGuiMessage(new SingleMessage("frog_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(FROGS);
-		addMessage(new MerchantGuiMessage(new SingleMessage("space_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(FROGS);
-		addMessage(new MerchantGuiMessage(new SingleMessage("time_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(CLOCKWORK);
-		addMessage(new MerchantGuiMessage(new SingleMessage("mind_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(THOUGHT);
-		addMessage(new MerchantGuiMessage(new SingleMessage("heart_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(CAKE);
-		addMessage(new MerchantGuiMessage(new SingleMessage("light_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(LIGHT);
-		addMessage(new MerchantGuiMessage(new SingleMessage("void_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(SILENCE);
-		addMessage(new MerchantGuiMessage(new SingleMessage("rage_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(MONSTERS);
-		addMessage(new MerchantGuiMessage(new SingleMessage("hope_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(TOWERS);
-		addMessage(new MerchantGuiMessage(new SingleMessage("buckets_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(BUCKETS);
+		addMessage(new MerchantGuiMessage(new SingleMessage("general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).lockToConsort();
+		addMessage(new MerchantGuiMessage(new SingleMessage("got_the_goods"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).lockToConsort();
+		addMessage(new MerchantGuiMessage(new SingleMessage("rising_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).lockToConsort();
+		addMessage(new MerchantGuiMessage(new SingleMessage("breeze_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(WIND).lockToConsort();
+		addMessage(new MerchantGuiMessage(new SingleMessage("blood_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(PULSE).lockToConsort();
+		addMessage(new MerchantGuiMessage(new SingleMessage("life_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(RABBITS).lockToConsort();
+		addMessage(new MerchantGuiMessage(new SingleMessage("doom_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(THUNDER).lockToConsort();
+		addMessage(new MerchantGuiMessage(new SingleMessage("frog_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(FROGS).lockToConsort();
+		addMessage(new MerchantGuiMessage(new SingleMessage("time_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(CLOCKWORK).lockToConsort();
+		addMessage(new MerchantGuiMessage(new SingleMessage("book_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(THOUGHT).lockToConsort();
+		addMessage(new MerchantGuiMessage(new SingleMessage("cake_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(CAKE).lockToConsort();
+		addMessage(new MerchantGuiMessage(new SingleMessage("light_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(LIGHT).lockToConsort();
+		addMessage(new MerchantGuiMessage(new SingleMessage("silence_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(SILENCE).lockToConsort();
+		addMessage(new MerchantGuiMessage(new SingleMessage("rage_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(MONSTERS).lockToConsort();
+		addMessage(new MerchantGuiMessage(new SingleMessage("tower_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(TOWERS).lockToConsort();
+		addMessage(new MerchantGuiMessage(new SingleMessage("buckets_general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(BUCKETS).lockToConsort();
 		
 		addMessage(new MerchantGuiMessage(new SingleMessage("boring_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTerrain(RAINBOW);
 	}
 	
+	/**
+	 * Not thread-safe. Make sure to only call this on the main thread
+	 */
 	public static DialogueWrapper addMessage(String message, String... args)
 	{
 		return addMessage(new SingleMessage(message, args));
 	}
 	
+	/**
+	 * Not thread-safe. Make sure to only call this on the main thread
+	 */
 	public static DialogueWrapper addMessage(MessageType message)
 	{
 		return addMessage(10, message);
 	}
 	
+	/**
+	 * Not thread-safe. Make sure to only call this on the main thread
+	 */
 	public static DialogueWrapper addMessage(int weight, MessageType message)
 	{
 		DialogueWrapper msg = new DialogueWrapper(weight);
@@ -452,9 +460,9 @@ public class ConsortDialogue
 		return set.toArray(new TitleLandType[0]);
 	}
 	
-	public static DialogueWrapper getRandomMessage(ConsortEntity consort, ServerPlayerEntity player, boolean hasHadMessage)
+	public static DialogueWrapper getRandomMessage(ConsortEntity consort, boolean hasHadMessage)
 	{
-		LandTypePair aspects = MSDimensions.getAspects(player.getServer(), consort.homeDimension);
+		LandTypePair aspects = MSDimensions.getAspects(consort.getServer(), consort.homeDimension);
 		
 		List<DialogueWrapper> list = new ArrayList<>();
 		

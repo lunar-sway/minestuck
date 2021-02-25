@@ -9,8 +9,8 @@ import net.minecraft.util.Hand;
 
 public class StoneTabletPacket implements PlayToServerPacket
 {
-	public String text;
-	public Hand hand;
+	private final String text;
+	private final Hand hand;
 	
 	public StoneTabletPacket(String text, Hand hand)
 	{

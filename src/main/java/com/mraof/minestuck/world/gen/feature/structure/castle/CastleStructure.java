@@ -1,6 +1,8 @@
 package com.mraof.minestuck.world.gen.feature.structure.castle;
 
 import com.mojang.datafixers.Dynamic;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeManager;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
@@ -20,13 +22,13 @@ public class CastleStructure extends Structure<NoFeatureConfig>
 	}
 	
 	@Override
-	public boolean hasStartAt(ChunkGenerator<?> chunkGen, Random rand, int chunkPosX, int chunkPosZ)
+	public boolean canBeGenerated(BiomeManager biomeManagerIn, ChunkGenerator<?> generator, Random rand, int chunkX, int chunkZ, Biome biomeIn)
 	{
-        int var3 = chunkPosX >> 4;
-        int var4 = chunkPosZ >> 4;
-        rand.setSeed((long)(var3 ^ var4 << 4) ^ chunkGen.getSeed());
+        int var3 = chunkX >> 4;
+        int var4 = chunkZ >> 4;
+        rand.setSeed((long)(var3 ^ var4 << 4) ^ generator.getSeed());
         rand.nextInt();
-        return chunkPosX == 1 && chunkPosZ == 0;//this.rand.nextInt(3) != 0 ? false : (par1 != (var3 << 4) + 4 + this.rand.nextInt(8) ? false : par2 == (var4 << 4) + 4 + this.rand.nextInt(8));
+        return chunkX == 1 && chunkZ == 0;//this.rand.nextInt(3) != 0 ? false : (par1 != (var3 << 4) + 4 + this.rand.nextInt(8) ? false : par2 == (var4 << 4) + 4 + this.rand.nextInt(8));
     }
 	
 	@Override

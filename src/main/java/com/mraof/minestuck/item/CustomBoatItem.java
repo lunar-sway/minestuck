@@ -9,7 +9,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Direction;
+import net.minecraft.util.EntityPredicates;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
@@ -37,7 +40,7 @@ public class CustomBoatItem extends Item
 		RayTraceResult rayTrace = rayTrace(worldIn, playerIn, RayTraceContext.FluidMode.ANY);
 		
 		if(rayTrace.getType() == RayTraceResult.Type.MISS)
-			return new ActionResult<>(ActionResultType.PASS, itemstack);
+			return ActionResult.resultPass(itemstack);
 		else
 		{
 			Vec3d lookDirection = playerIn.getLook(partialTicks);
@@ -51,7 +54,7 @@ public class CustomBoatItem extends Item
 					AxisAlignedBB axisalignedbb = entity.getBoundingBox().grow(entity.getCollisionBorderSize());
 					
 					if(axisalignedbb.contains(eyePos))
-						return new ActionResult<>(ActionResultType.PASS, itemstack);
+						return ActionResult.resultPass(itemstack);
 				}
 			}
 			
@@ -60,8 +63,8 @@ public class CustomBoatItem extends Item
 				Entity boat = provider.createBoat(itemstack, worldIn, rayTrace.getHitVec().x, rayTrace.getHitVec().y, rayTrace.getHitVec().z);
 				boat.rotationYaw = playerIn.rotationYaw;
 				
-				if(!worldIn.isCollisionBoxesEmpty(boat, boat.getBoundingBox().grow(-0.1D)))
-					return new ActionResult<>(ActionResultType.FAIL, itemstack);
+				if(!worldIn.hasNoCollisions(boat, boat.getBoundingBox().grow(-0.1D)))
+					return ActionResult.resultFail(itemstack);
 				
 				if(!worldIn.isRemote)
 					worldIn.addEntity(boat);
@@ -70,10 +73,10 @@ public class CustomBoatItem extends Item
 					itemstack.shrink(1);
 				
 				playerIn.addStat(Stats.ITEM_USED.get(this));
-				return new ActionResult<>(ActionResultType.SUCCESS, itemstack);
+				return ActionResult.resultSuccess(itemstack);
 			}
 			
-			return new ActionResult<>(ActionResultType.PASS, itemstack);
+			return ActionResult.resultPass(itemstack);
 		}
 	}
 	

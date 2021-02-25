@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:old_computer"
+  },
+  "grist_cost": {
+    "minestuck:build": 80,
+    "minestuck:rust": 30,
+    "minestuck:sulfur": 10
+  }
+}

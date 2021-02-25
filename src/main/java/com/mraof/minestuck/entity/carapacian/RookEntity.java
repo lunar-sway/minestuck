@@ -10,12 +10,22 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
-public abstract class RookEntity extends CarapacianEntity implements IMob
+public class RookEntity extends CarapacianEntity implements IMob
 {
-	public RookEntity(EntityType<? extends RookEntity> type, World world)
+	protected RookEntity(EntityType<? extends RookEntity> type, EnumEntityKingdom kingdom, World world)
 	{
-		super(type, world);
+		super(type, kingdom, world);
 		this.experienceValue = 10;
+	}
+	
+	public static RookEntity createProspitian(EntityType<? extends RookEntity> type, World world)
+	{
+		return new RookEntity(type, EnumEntityKingdom.PROSPITIAN, world);
+	}
+	
+	public static RookEntity createDersite(EntityType<? extends RookEntity> type, World world)
+	{
+		return new RookEntity(type, EnumEntityKingdom.DERSITE, world);
 	}
 	
 	@Override
