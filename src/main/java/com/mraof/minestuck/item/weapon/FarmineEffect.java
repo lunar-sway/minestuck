@@ -8,7 +8,6 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
@@ -35,16 +34,15 @@ import java.util.PriorityQueue;
  * @author BenjaminK
  *
  */
-public class FarmineItem extends WeaponItem
+public class FarmineEffect implements DestroyBlockEffect
 {
 	private int radius;
 	private int terminus;
-	private HashSet<Block> farMineForbiddenBlocks = new HashSet<>();
-	private HashMap<Block, HashSet<Block>> farMineEquivalencies = new HashMap<>();
+	private final HashSet<Block> farMineForbiddenBlocks = new HashSet<>();
+	private final HashMap<Block, HashSet<Block>> farMineEquivalencies = new HashMap<>();
 	
-	public FarmineItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, float efficiency, int radius, int terminus, MSToolType toolType, Properties builder)
+	public FarmineEffect(int radius, int terminus)
 	{
-		super(tier, attackDamageIn, attackSpeedIn, efficiency, toolType, builder);
 		redefineLimiters(radius, terminus);
 		initializeFarMineLists();
 	}
@@ -77,12 +75,13 @@ public class FarmineItem extends WeaponItem
 	* @param playerIn The player doing the actual destroying. This MUST be an instance of EntityPlayer or no farmining will occur!
 	* @return Returns false if and only if the world is remote.
 	*/
+	
 	@Override
-	public boolean onBlockDestroyed(ItemStack stack, World worldIn, BlockState blockState, BlockPos pos, LivingEntity playerIn)
+	public void onDestroyBlock(ItemStack stack, World worldIn, BlockState blockState, BlockPos pos, LivingEntity playerIn)
 	{
 		if(worldIn.isRemote)
 		{
-			return false;
+			return;
 		}
 		
 		Comparator<Pair<BlockPos, Integer>> comparator = new PairedIntComparator();
@@ -90,23 +89,20 @@ public class FarmineItem extends WeaponItem
 		Block block = blockState.getBlock();
 		int fortuneLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, stack);
 		HashSet<Block> equals = farMineEquivalencies.get(block);
-		if(equals==null) equals = new HashSet<Block>();	
+		if(equals==null) equals = new HashSet<>();
 		
 		//If the harvestTool can't harvest the block, or the player isn't actually a player, or the player is sneaking,
 		//or the harvestTool doesn't farmine, or it's one of those blocks that breaks instantly, don't farmine.
-		if (!canHarvestBlock(stack, blockState) || !(playerIn instanceof PlayerEntity) || playerIn.isSneaking()
+		if (!stack.canHarvestBlock(blockState) || !(playerIn instanceof PlayerEntity) || playerIn.isSneaking()
 				|| terminus == 1 || radius==0 || Math.abs(blockState.getBlockHardness(worldIn, pos)) < 0.000000001)
 		{
-			if (!isDamageable())
-				return true;
-			else
-				return super.onBlockDestroyed(stack, worldIn, blockState, pos, playerIn);
+			return;
 		}
 		else
 		{
 			//If the block is unacceptable or there's a harvestTool mismatch, cap out at a basic 3x3 area
 			if (farMineForbiddenBlocks.contains(block)
-					|| getDestroySpeed(stack, blockState) < getEfficiency())
+					|| stack.getDestroySpeed(blockState) < ((WeaponItem) stack.getItem()).getEfficiency())
 			{
 				candidates.add(Pair.of(pos, 1));
 			}
@@ -196,10 +192,7 @@ public class FarmineItem extends WeaponItem
 		//We add 1 because that means the harvestTool will always take at least 2 damage.
 		//This is important because all ItemWeapons take at least 2 damage whenever it breaks a block.
 		//This is because WeaponItem extends ItemSword.
-		if (isDamageable())
-			stack.damageItem(blocksToBreak.size() + 1, playerIn, player -> player.sendBreakAnimation(Hand.MAIN_HAND));
-		
-		return true;
+		stack.damageItem(blocksToBreak.size() + 1, playerIn, player -> player.sendBreakAnimation(Hand.MAIN_HAND));
 	}
 	
 	/*
@@ -286,7 +279,7 @@ public class FarmineItem extends WeaponItem
 	 * @param t T is the new value for the harvestTool's terminus. This will limit how many blocks can be mined. Values are clamped to a minimum of 1.
 	 * @return Returns the same farmining harvestTool, after the change has been applied. Useful for chaining same-line modifications.
 	 */
-	public FarmineItem redefineLimiters(int r, int t)
+	public FarmineEffect redefineLimiters(int r, int t)
 	{
 		//A terminus of less than 1 means that the harvestTool cannot mine. A terminus of 1 means it cannot farmine.
 		terminus = Math.max(1, t);

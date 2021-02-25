@@ -25,7 +25,7 @@ import com.mraof.minestuck.item.crafting.alchemy.GristAmount;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
-import com.mraof.minestuck.item.weapon.SordItem;
+import com.mraof.minestuck.item.weapon.OnHitEffect;
 import com.mraof.minestuck.jei.JeiGristCost;
 import com.mraof.minestuck.network.EffectTogglePacket;
 import com.mraof.minestuck.player.*;
@@ -279,6 +279,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.LUNCHTOP, "Lunchtop");
 		add(MSBlocks.OLD_COMPUTER, "Old Computer");
 		add(MSBlocks.TRANSPORTALIZER, "Transportalizer");
+		add(MSBlocks.TRANS_PORTALIZER, "TRANSportalizer");
 		add(MSBlocks.SENDIFICATOR, "Sendificator");
 		addTooltip(MSBlocks.SENDIFICATOR, "Approximately head sized");
 		addExtra(MSBlocks.SENDIFICATOR, SendificatorBlock.ACTIVATION_MESSAGE, "The machine indicates that it is irreversibly set to the current time and place, following that up by saying SUBMIT. OBEY.");
@@ -342,7 +343,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.DEMOCRATIC_DEMOLITIONER, "DEMOCRATIC DEMOLITIONER");
 		add(MSItems.REGI_HAMMER, "Regihammer");
 		add(MSItems.FEAR_NO_ANVIL, "Fear No Anvil");
-		addTooltip(MSItems.FEAR_NO_ANVIL, "What's to fear with this around? This uber hammer can break blocks and deal massive damage.");
+		addTooltip(MSItems.FEAR_NO_ANVIL, "Break blocks and stop clocks with the hammer of Hephaestus");
 		add(MSItems.MELT_MASHER, "Melt-Masher");
 		addTooltip(MSItems.MELT_MASHER, "This hot-commodity of a hammer looks like it came fresh out of the furnace! Leaves foes with third-degree burns.");
 		add(MSItems.ESTROGEN_EMPOWERED_EVERYTHING_ERADICATOR, "Estrogen-Empowered Everything Eradicator");
@@ -358,7 +359,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.MWRTHWL, "Mwrthwl");
 		add(MSItems.SORD, "Sord.....");
 		addTooltip(MSItems.SORD, "A shitty sword. Not much more too it.");
-		addExtra(MSItems.SORD, SordItem.DROP_MESSAGE, "The shittiness of the sord made it phase through your hand");
+		addExtra(MSItems.SORD, OnHitEffect.SORD_DROP_MESSAGE, "The shittiness of the sord made it phase through your hand");
 		add(MSItems.PAPER_SWORD, "Paper Sword");
 		addTooltip(MSItems.PAPER_SWORD, "None shall be the wiser. It is the perfect crime.");
 		add(MSItems.CACTACEAE_CUTLASS, "Cactaceae Cutlass");
@@ -377,7 +378,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.UNBREAKABLE_KATANA, "Unbreakable Katana");
 		addTooltip(MSItems.UNBREAKABLE_KATANA, "This Katana has been fused with bedrock to make it even more kawai- I mean powerful!");
 		add(MSItems.ANGEL_APOCALYPSE, "Angel Apocalypse");
-		addTooltip(MSItems.ANGEL_APOCALYPSE, "This sword either starts the end of the world or prevents the end from occurring");
+		addTooltip(MSItems.ANGEL_APOCALYPSE, "This sword either starts the end of the world or prevents the end from occurring. Hopefully the latter!");
 		add(MSItems.FIRE_POKER, "Fire Poker");
 		addTooltip(MSItems.FIRE_POKER, "A flaming blade! Or just that thing you find next to wood fire places.....either way it can burn you enemies");
 		addStoreTooltip(MSItems.FIRE_POKER, "Make sure you don't drop this like it's hot. Because it is hot.");
@@ -451,6 +452,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.CIGARETTE_LANCE, "Cigarette Holder Lance");
 		add(MSItems.LUCERNE_HAMMER, "Lucerne Hammer");
 		add(MSItems.LUCERNE_HAMMER_OF_UNDYING, "Lucerne Hammer of Undying");
+		addTooltip(MSItems.LUCERNE_HAMMER_OF_UNDYING, "Delays down your imminent doom");
 		add(MSItems.OBSIDIAN_AXE_KNIFE, "Obsidian Axe Knife");
 		add(MSItems.FAN, "Fan");
 		add(MSItems.TYPHONIC_TRIVIALIZER, "Typhonic Trivializer");
@@ -496,6 +498,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.CLOWN_CLUB, "Rage inducing. Why would you make this");
 		add(MSItems.SPIKED_CLUB, "Spiked Club");
 		addTooltip(MSItems.SPIKED_CLUB, "About what it sounds like");
+		add(MSItems.MACE, "Mace");
+		add(MSItems.M_ACE, "mACE");
 		add(MSItems.HORSE_HITCHER, "Cast Iron Horse Hitcher");
 		add(MSItems.ACE_OF_SPADES, "Ace of Spades");
 		addStore(MSItems.ACE_OF_SPADES, "Shovel Sigil");
@@ -560,6 +564,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.WOODEN_SPOON, "Like the kind you would eat your soup with");
 		add(MSItems.SILVER_SPOON, "Silver Spoon");
 		addTooltip(MSItems.SILVER_SPOON, "Could be the first silver object you've seen so far");
+		add(MSItems.TERRAIN_FLATENATOR, "Terrain Flatenator");
+		addTooltip(MSItems.TERRAIN_FLATENATOR, "Construction worker's pride and joy!");
 		add(MSItems.NOSFERATU_SPOON, "Nosferatu Spoon");
 		addTooltip(MSItems.NOSFERATU_SPOON, "The life-draining bloodlust of evil, in spoon form");
 		add(MSItems.CROCKER_SPOON, "Junior Battlemaster's Bowlbuster Stirring Solution 50000");
