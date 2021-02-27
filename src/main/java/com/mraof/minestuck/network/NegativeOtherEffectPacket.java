@@ -15,6 +15,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.StringTextComponent;
@@ -69,7 +70,7 @@ public class NegativeOtherEffectPacket implements PlayToServerPacket
 				int potionLevel = rung / 20;
 				EffectInstance effectInstance = new EffectInstance(negativeAspectEffects[aspect.ordinal()], 200, potionLevel);
 				
-				LivingEntity closestTarget = player.world.getClosestEntityWithinAABB(LivingEntity.class, visiblePredicate, player, player.getPosX(), player.getPosY(), player.getPosZ(), player.getBoundingBox().expand(player.getLookVec().scale(5.0D + (double) rung / 5)).grow(0.05D));
+				LivingEntity closestTarget = player.world.getClosestEntityWithinAABB(LivingEntity.class, visiblePredicate, player, player.getPosX(), player.getPosY(), player.getPosZ(), player.getBoundingBox().expand(player.getLookVec().scale(5.0D + (double) rung / 5)).grow(0.01D));
 				
 				if(closestTarget != null)
 				{
@@ -185,12 +186,16 @@ public class NegativeOtherEffectPacket implements PlayToServerPacket
 	public void damageTarget(LivingEntity closestTarget, int rung, int mod)
 	{
 		LOGGER.debug("Health going in {}", closestTarget.getHealth());
-		closestTarget.performHurtAnimation();
+		//closestTarget.performHurtAnimation();
 		closestTarget.setRevengeTarget(playerCasting);
-		if(closestTarget instanceof UnderlingEntity)
-			closestTarget.setHealth(closestTarget.getHealth() - 5 + rung);
-		else
-			closestTarget.setHealth(closestTarget.getHealth() - (int) (2 + (double) rung / mod));
+		if(closestTarget instanceof UnderlingEntity){
+			closestTarget.attackEntityFrom(DamageSource.causePlayerDamage(playerCasting), 5 + rung);
+			//closestTarget.setHealth(closestTarget.getHealth() - (5 + rung));
+		}
+		else{
+			//closestTarget.setHealth(closestTarget.getHealth() - (int) (2 + (double) rung / mod));
+			closestTarget.attackEntityFrom(DamageSource.causePlayerDamage(playerCasting), (int) (2 + (double) rung / mod)); //TODO create new DamageSource to bypass death message inclusion of held weapon
+		}
 		LOGGER.debug("Health coming out {}", closestTarget.getHealth());
 	}
 }

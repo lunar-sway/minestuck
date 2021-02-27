@@ -154,7 +154,7 @@ public class UserEffectPacket implements PlayToServerPacket
 						if(blockpos.withinDistance(player.getPositionVec(), 32))
 						{
 							mutablePos.setPos(blockpos.getX(), blockpos.getY(), blockpos.getZ());
-							BlockState mutableBlockState = worldIn.getBlockState(mutablePos);
+							BlockState mutableBlockState = worldIn.getBlockState(mutablePos); //TODO remove mutable, just keep blockpos, also get rid of withinDistance
 							if(mutableBlockState.getBlock() == Blocks.CHEST)
 							{
 								player.sendMessage(new StringTextComponent("You detect a chest at " + mutablePos.getX() + " " + mutablePos.getY() + " " + mutablePos.getZ()));
