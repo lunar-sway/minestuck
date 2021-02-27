@@ -2,6 +2,7 @@ package com.mraof.minestuck.entity.item;
 
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.weapon.projectiles.ProjectileDamaging;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -9,6 +10,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileItemEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.util.DamageSource;
@@ -21,7 +23,6 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 public class BouncingProjectileEntity extends ProjectileItemEntity
 {
-	private int damage;
 	private int bounce;
 	public int maxTick = 0;
 	private int inBlockTicks = 0;
@@ -36,24 +37,24 @@ public class BouncingProjectileEntity extends ProjectileItemEntity
 		super(type, x, y, z, worldIn);
 	}
 	
-	public BouncingProjectileEntity(EntityType<? extends BouncingProjectileEntity> type, LivingEntity livingEntityIn, World worldIn, int damage, int maxTick)
+	public BouncingProjectileEntity(EntityType<? extends BouncingProjectileEntity> type, LivingEntity livingEntityIn, World worldIn, int maxTick)
 	{
 		super(type, livingEntityIn, worldIn);
-		this.damage = damage;
 		this.maxTick = maxTick;
 	}
 	
 	@Override
 	protected void onImpact(RayTraceResult result)
 	{
+		int damage = ProjectileDamaging.getDamageFromItem(getItemFromItemStack().getItem());
 		++bounce;
 		
 		double velocityX = this.getMotion().x;
 		double velocityY = this.getMotion().y;
 		double velocityZ = this.getMotion().z;
-		double absVelocityX = (velocityX * velocityX) / velocityX;
-		double absVelocityY = (velocityY * velocityY) / velocityY;
-		double absVelocityZ = (velocityZ * velocityZ) / velocityZ;
+		double absVelocityX = Math.abs(velocityX);
+		double absVelocityY = Math.abs(velocityY);
+		double absVelocityZ = Math.abs(velocityZ);
 		
 		if(result.getType() == RayTraceResult.Type.ENTITY)
 		{
@@ -86,7 +87,7 @@ public class BouncingProjectileEntity extends ProjectileItemEntity
 			{
 				if(!world.isRemote)
 				{
-					this.world.playSound(null, this.getPosX(), this.getPosY(), this.getPosZ(), SoundEvents.ITEM_SHIELD_BLOCK, SoundCategory.PLAYERS, 0.6F, 4.0F);
+					this.world.playSound(null, this.getPosX(), this.getPosY(), this.getPosZ(), SoundEvents.ITEM_SHIELD_BLOCK, SoundCategory.NEUTRAL, 0.6F, 4.0F);
 					++bounce;
 				}
 				
@@ -143,7 +144,6 @@ public class BouncingProjectileEntity extends ProjectileItemEntity
 	public void readAdditional(CompoundNBT compound)
 	{
 		super.readAdditional(compound);
-		damage = compound.getInt("damage");
 		bounce = compound.getInt("bounce");
 		maxTick = compound.getInt("maxTick");
 		inBlockTicks = compound.getInt("inBlockTicks");
@@ -153,7 +153,6 @@ public class BouncingProjectileEntity extends ProjectileItemEntity
 	public void writeAdditional(CompoundNBT compound)
 	{
 		super.writeAdditional(compound);
-		compound.putInt("damage", damage);
 		compound.putInt("bounce", bounce);
 		compound.putInt("maxTick", maxTick);
 		compound.putInt("inBlockTicks", inBlockTicks);
@@ -169,5 +168,10 @@ public class BouncingProjectileEntity extends ProjectileItemEntity
 	protected Item getDefaultItem()
 	{
 		return MSItems.SORCERERS_PINBALL;
+	}
+	
+	public ItemStack getItemFromItemStack() {
+		ItemStack itemstack = this.func_213882_k();
+		return itemstack.isEmpty() ? new ItemStack(this.getDefaultItem()) : itemstack;
 	}
 }

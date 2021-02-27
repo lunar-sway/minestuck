@@ -1,19 +1,26 @@
-package com.mraof.minestuck.item.weapon;
+package com.mraof.minestuck.item.weapon.projectiles;
 
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.entity.item.BouncingProjectileEntity;
 import com.mraof.minestuck.entity.item.ReturningProjectileEntity;
+import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.player.EnumAspect;
+import com.mraof.minestuck.player.Title;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 
-public class BouncingProjectileWeaponItem extends ReturningProjectileWeaponItem
+public class ReturningProjectileWeaponItem extends ConsumableProjectileWeaponItem
 {
-	public BouncingProjectileWeaponItem(Properties properties, float velocity, float accuracy, int damage, int maxTick)
+	protected final int maxTick;
+	
+	public ReturningProjectileWeaponItem(Properties properties, float velocity, float accuracy, int damage, int maxTick)
 	{
-		super(properties, velocity, accuracy, damage, maxTick);
+		super(properties, velocity, accuracy, damage);
+		this.maxTick = maxTick;
 	}
 	
 	@Override
@@ -25,10 +32,19 @@ public class BouncingProjectileWeaponItem extends ReturningProjectileWeaponItem
 		
 		if(!worldIn.isRemote)
 		{
-			BouncingProjectileEntity projectileEntity = new BouncingProjectileEntity(MSEntityTypes.BOUNCING_PROJECTILE, playerIn, worldIn, damage, maxTick);
+			boolean noBlockCollision = false;
+			Title title = PlayerSavedData.getData((ServerPlayerEntity) playerIn).getTitle();
+			if(title != null)
+			{
+				noBlockCollision = title.getHeroAspect() == EnumAspect.VOID && item.getItem() == MSItems.UMBRAL_INFILTRATOR;
+			}
+			
+			ReturningProjectileEntity projectileEntity = new ReturningProjectileEntity(MSEntityTypes.RETURNING_PROJECTILE, playerIn, worldIn, maxTick, noBlockCollision);
 			projectileEntity.setItem(item);
 			projectileEntity.shoot(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, velocity, accuracy);
 			projectileEntity.setNoGravity(true);
+			if(noBlockCollision)
+				projectileEntity.setGlowing(true);
 			worldIn.addEntity(projectileEntity);
 		}
 		

@@ -2,6 +2,7 @@ package com.mraof.minestuck.entity.item;
 
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.weapon.projectiles.ProjectileDamaging;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -9,6 +10,7 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileItemEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.util.DamageSource;
@@ -21,7 +23,7 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 public class ConsumableProjectileEntity extends ProjectileItemEntity
 {
-	private int damage = 0;
+	//private int damage = 0;
 	
 	public ConsumableProjectileEntity(EntityType<? extends ConsumableProjectileEntity> type, World worldIn)
 	{
@@ -33,53 +35,41 @@ public class ConsumableProjectileEntity extends ProjectileItemEntity
 		super(type, x, y, z, worldIn);
 	}
 	
-	public ConsumableProjectileEntity(EntityType<? extends ConsumableProjectileEntity> type, LivingEntity livingEntityIn, World worldIn, int damage)
+	public ConsumableProjectileEntity(EntityType<? extends ConsumableProjectileEntity> type, LivingEntity livingEntityIn, World worldIn)
 	{
 		super(type, livingEntityIn, worldIn);
-		this.damage = damage;
+	}
+	
+	private static boolean isNonCreativePlayer(LivingEntity entity)
+	{
+		return entity instanceof PlayerEntity && !((PlayerEntity) entity).isCreative();
 	}
 	
 	@Override
 	protected void onImpact(RayTraceResult result)
 	{
-		if(this.getThrower() instanceof PlayerEntity)
+		int damage = ProjectileDamaging.getDamageFromItem(getItemFromItemStack().getItem());
+		
+		if(result.getType() == RayTraceResult.Type.ENTITY)
 		{
-			PlayerEntity throwerPlayer = (PlayerEntity) this.getThrower();
-			if(!this.world.isRemote && result.getType() == RayTraceResult.Type.ENTITY)
-			{
-				Entity entity = ((EntityRayTraceResult) result).getEntity();
-				if(entity instanceof UnderlingEntity)
-					entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), damage * 2);
-				else
-					entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), damage);
-			}
-			if(!throwerPlayer.isCreative())
-			{
-				if(rand.nextFloat() < 0.99F)
-				{
-					ItemEntity itemEntity = new ItemEntity(this.world, this.getPosX(), this.getPosY(), this.getPosZ(), this.getItem());
-					world.addEntity(itemEntity);
-				} else
-				{
-					this.world.playSound(null, this.getPosX(), this.getPosY(), this.getPosZ(), SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 0.8F, 1.5F);
-				}
-			}
-			this.remove();
+			Entity entity = ((EntityRayTraceResult) result).getEntity();
+			if(entity instanceof UnderlingEntity)
+				entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), damage * 2);
+			else
+				entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), damage);
 		}
-	}
-	
-	@Override
-	public void readAdditional(CompoundNBT compound)
-	{
-		super.readAdditional(compound);
-		damage = compound.getInt("damage");
-	}
-	
-	@Override
-	public void writeAdditional(CompoundNBT compound)
-	{
-		super.writeAdditional(compound);
-		compound.putInt("damage", damage);
+		if(isNonCreativePlayer(this.getThrower()))
+		{
+			if(rand.nextFloat() < 0.99F)
+			{
+				ItemEntity itemEntity = new ItemEntity(this.world, this.getPosX(), this.getPosY(), this.getPosZ(), this.getItem());
+				world.addEntity(itemEntity);
+			} else
+			{
+				this.world.playSound(null, this.getPosX(), this.getPosY(), this.getPosZ(), SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.NEUTRAL, 0.8F, 1.5F);
+			}
+		}
+		this.remove();
 	}
 	
 	@Override
@@ -92,5 +82,10 @@ public class ConsumableProjectileEntity extends ProjectileItemEntity
 	protected Item getDefaultItem()
 	{
 		return MSItems.SHURIKEN;
+	}
+	
+	public ItemStack getItemFromItemStack() {
+		ItemStack itemstack = this.func_213882_k();
+		return itemstack.isEmpty() ? new ItemStack(this.getDefaultItem()) : itemstack;
 	}
 }

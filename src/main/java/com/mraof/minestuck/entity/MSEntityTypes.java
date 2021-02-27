@@ -107,8 +107,8 @@ public final class MSEntityTypes
 		register(registry, EntityType.Builder.<HologramEntity>create(HologramEntity::new, EntityClassification.MISC).size(0.25F, 0.25F).setShouldReceiveVelocityUpdates(false).setTrackingRange(10).setUpdateInterval(Integer.MAX_VALUE), "hologram");
 		
 		register(registry, EntityType.Builder.<ConsumableProjectileEntity>create(ConsumableProjectileEntity::new, EntityClassification.MISC).size(0.25F, 0.25F).setTrackingRange(4).setUpdateInterval(10), "consumable_projectile");
-		register(registry, EntityType.Builder.<ReturningProjectileEntity>create(ReturningProjectileEntity::new, EntityClassification.MISC).size(0.25F, 0.25F).setTrackingRange(6).setUpdateInterval(8), "returning_projectile");
-		register(registry, EntityType.Builder.<BouncingProjectileEntity>create(BouncingProjectileEntity::new, EntityClassification.MISC).size(0.25F, 0.25F).setTrackingRange(6).setUpdateInterval(8), "bouncing_projectile");
+		register(registry, EntityType.Builder.<ReturningProjectileEntity>create(ReturningProjectileEntity::new, EntityClassification.MISC).size(0.25F, 0.25F).setTrackingRange(6).setUpdateInterval(2), "returning_projectile"); //TODO smaller update interval value is temporary solution to improve client rendering
+		register(registry, EntityType.Builder.<BouncingProjectileEntity>create(BouncingProjectileEntity::new, EntityClassification.MISC).size(0.25F, 0.25F).setTrackingRange(6).setUpdateInterval(2), "bouncing_projectile");
 	}
 	
 	/**
