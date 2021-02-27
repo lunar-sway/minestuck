@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:shuriken"
+  },
+  "input2": {
+    "item": "minecraft:ender_eye"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:chakram"
+  }
+}

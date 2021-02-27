@@ -15,6 +15,9 @@ import com.mraof.minestuck.item.foods.HealingFoodItem;
 import com.mraof.minestuck.item.foods.SurpriseEmbryoItem;
 import com.mraof.minestuck.item.foods.UnknowableEggItem;
 import com.mraof.minestuck.item.weapon.*;
+import com.mraof.minestuck.item.weapon.projectiles.BouncingProjectileWeaponItem;
+import com.mraof.minestuck.item.weapon.projectiles.ConsumableProjectileWeaponItem;
+import com.mraof.minestuck.item.weapon.projectiles.ReturningProjectileWeaponItem;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -200,7 +203,17 @@ public class MSItems
 	public static final Item TUNING_FORK = getNull();
 	public static final Item SPORK = getNull();
 	public static final Item GOLDEN_SPORK = getNull();
+	
 	public static final Item BIDENT = getNull();
+	public static final Item SBAHJARANG = getNull();
+	public static final Item SHURIKEN = getNull();
+	public static final Item CLUBS_SUITARANG = getNull();
+	public static final Item DIAMONDS_SUITARANG = getNull();
+	public static final Item HEARTS_SUITARANG = getNull();
+	public static final Item SPADES_SUITARANG = getNull();
+	public static final Item CHAKRAM = getNull();
+	public static final Item UMBRAL_INFILTRATOR = getNull();
+	public static final Item SORCERERS_PINBALL = getNull();
 	
 	//Material tools
 	public static final Item EMERALD_SWORD = getNull();
@@ -798,8 +811,17 @@ public class MSItems
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 3, -2.6F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.playSound(() -> SoundEvents.BLOCK_NOTE_BLOCK_CHIME)), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("tuning_fork"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.STONE, 4, -2.5F).efficiency(1.0F).set(MSItemTypes.SHOVEL_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("spork"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.GOLD, 5, -2.5F).efficiency(1.0F).set(MSItemTypes.SHOVEL_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("golden_spork"));
+		
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 7, -2.9F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("bident"));
-
+		registry.register(new ConsumableProjectileWeaponItem(new Item.Properties().group(MSItemGroup.WEAPONS), 0.5F, 20.0F, 1).setRegistryName("sbahjarang"));
+		registry.register(new ConsumableProjectileWeaponItem(new Item.Properties().group(MSItemGroup.WEAPONS), 1.0F, 2.8F, 2).setRegistryName("shuriken"));
+		registry.register(new ConsumableProjectileWeaponItem(new Item.Properties().group(MSItemGroup.WEAPONS), 1.5F, 2.4F,3).setRegistryName("clubs_suitarang"));
+		registry.register(new ConsumableProjectileWeaponItem(new Item.Properties().group(MSItemGroup.WEAPONS), 1.5F, 2.4F,3).setRegistryName("diamonds_suitarang"));
+		registry.register(new ConsumableProjectileWeaponItem(new Item.Properties().group(MSItemGroup.WEAPONS), 1.5F, 2.4F,3).setRegistryName("hearts_suitarang"));
+		registry.register(new ConsumableProjectileWeaponItem(new Item.Properties().group(MSItemGroup.WEAPONS), 1.5F, 2.4F,3).setRegistryName("spades_suitarang"));
+		registry.register(new ReturningProjectileWeaponItem(new Item.Properties().group(MSItemGroup.WEAPONS).maxDamage(250), 1.3F, 1.0F,5, 30).setRegistryName("chakram"));
+		registry.register(new ReturningProjectileWeaponItem(new Item.Properties().group(MSItemGroup.WEAPONS).maxDamage(2048), 1.5F, 0.6F,12, 20).setRegistryName("umbral_infiltrator"));
+		registry.register(new BouncingProjectileWeaponItem(new Item.Properties().group(MSItemGroup.WEAPONS).maxDamage(250), 1.5F, 1.0F,5, 20).setRegistryName("sorcerers_pinball"));
 		registry.register(new SwordItem(MSItemTypes.EMERALD_TIER, 3, -2.4F, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("emerald_sword"));
 		registry.register(new AxeItem(MSItemTypes.EMERALD_TIER, 5, -3.0F, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("emerald_axe"));
 		registry.register(new PickaxeItem(MSItemTypes.EMERALD_TIER, 1 , -2.8F, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("emerald_pickaxe"));

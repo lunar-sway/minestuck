@@ -113,6 +113,10 @@ public class BoondollarPricingProvider implements IDataProvider
 		add(ACE_OF_HEARTS, 3000, 5000);
 		add(ACE_OF_DIAMONDS, 3000, 5000);
 		add(ACE_OF_CLUBS, 3000, 5000);
+		add(CLUBS_SUITARANG, 30, 50);
+		add(DIAMONDS_SUITARANG, 30, 50);
+		add(HEARTS_SUITARANG, 30, 50);
+		add(SPADES_SUITARANG, 30, 50);
 		add(POGO_CLUB, 900, 1200);
 		add(METAL_BAT, 400, 500);
 		add(FIRE_POKER, 1500, 2000);
