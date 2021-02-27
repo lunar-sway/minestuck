@@ -28,12 +28,12 @@ public class DormantLotusTimeCapsuleBlock extends Block
 	protected DormantLotusTimeCapsuleBlock(Properties builder) {
 		super(builder);
 	}
-	
+	/*
 	public void tick(BlockState state, World worldIn, BlockPos pos, Random random) {
 		super.tick(state, worldIn, pos, random);
 		if (random.nextInt(7) == 0) {
 			//worldIn.setBlockState(pos, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.getDefaultState().with(LotusTimeCapsuleBlock.UNACTIVATED, true), 11);
 			worldIn.setBlockState(pos, MSBlocks.MINI_FROG_STATUE.getDefaultState());
 		}
-	}
+	}*/
 }

@@ -3,7 +3,7 @@ package com.mraof.minestuck.block;
 import com.mraof.minestuck.item.CassetteItem;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.tileentity.CassettePlayerTileEntity;
-import com.mraof.minestuck.tileentity.LotusTimeCapsuleTileEntity;
+//import com.mraof.minestuck.tileentity.LotusTimeCapsuleTileEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -23,7 +23,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
-
+/*
 public class LotusTimeCapsuleBlockStorage extends Block
 {
 	public static final BooleanProperty UNACTIVATED = MSProperties.UNACTIVATED;
@@ -174,3 +174,4 @@ public class LotusTimeCapsuleBlockStorage extends Block
 	//			return super.onBlockActivated(state, worldIn, pos, player, handIn, hit);
 	//		}
 	
+*/

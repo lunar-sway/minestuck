@@ -21,6 +21,7 @@ import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.Random;
 
+/*
 public class LotusTimeCapsuleTileEntity extends TileEntity
 {
 	int countdownTime = 2000;
@@ -39,4 +40,4 @@ public class LotusTimeCapsuleTileEntity extends TileEntity
 		}
 	}
 }
-
+*/

@@ -16,8 +16,10 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
+/*
 public class TempleCompassItem extends Item
 {
+   
    public TempleCompassItem(Properties builder) {
       super(builder);
       this.addPropertyOverride(new ResourceLocation("angle"), new IItemPropertyGetter() {
@@ -76,15 +78,16 @@ public class TempleCompassItem extends Item
             return (double)MathHelper.wrapDegrees(180 + p_185094_1_.getHorizontalFacing().getHorizontalIndex() * 90);
          }
 
+         
          @OnlyIn(Dist.CLIENT)
          private double getSpawnToAngle(IWorld p_185092_1_, Entity p_185092_2_) {
             World worldIn = p_185092_2_.world;
             //BlockPos blockpos = p_185092_1_.getSpawnPoint();
-            BlockPos blockpos = p_185092_1_.getChunkProvider().getChunkGenerator().findNearestStructure(worldIn, "Stronghold", new BlockPos(p_185092_2_), 100, false);
+            //BlockPos blockpos = p_185092_1_.getChunkProvider().getChunkGenerator().findNearestStructure(worldIn, "Stronghold", new BlockPos(p_185092_2_), 100, false);
             return Math.atan2((double)blockpos.getZ() - p_185092_2_.posZ, (double)blockpos.getX() - p_185092_2_.posX);
             
             //BlockPos blockpos = worldIn.getChunkProvider().getChunkGenerator().findNearestStructure(worldIn, "Stronghold", new BlockPos(playerIn), 100, false);
          }
       });
    }
-}
+}*/

@@ -41,7 +41,7 @@ public class LotusTimeCapsuleBlock extends Block
 				Direction direction = hit.getFace();
 				Direction direction1 = direction.getAxis() == Direction.Axis.Y ? player.getHorizontalFacing().getOpposite() : direction;
 				worldIn.playSound((PlayerEntity) null, pos, MSSoundEvents.EVENT_ECHELADDER_INCREASE, SoundCategory.BLOCKS, 1.0F, 1.0F);
-				worldIn.setBlockState(pos, MSBlocks.DORMANT_LOTUS_TIME_CAPSULE_BLOCK.getDefaultState(), 11);
+				//worldIn.setBlockState(pos, MSBlocks.DORMANT_LOTUS_TIME_CAPSULE_BLOCK.getDefaultState(), 11);
 				ItemEntity itementity = new ItemEntity(worldIn, (double) pos.getX() + 0.5D + (double) direction1.getXOffset() * 0.65D, (double) pos.getY() + 0.1D, (double) pos.getZ() + 0.5D + (double) direction1.getZOffset() * 0.65D, new ItemStack(MSItems.SERVER_DISK, 1));
 				itementity.setMotion(0.05D * (double) direction1.getXOffset() + worldIn.rand.nextDouble() * 0.02D, 0.05D, 0.05D * (double) direction1.getZOffset() + worldIn.rand.nextDouble() * 0.02D);
 				worldIn.addEntity(itementity);
@@ -57,10 +57,10 @@ public class LotusTimeCapsuleBlock extends Block
 			}
 			return true;
 		} else {
-			return super.onBlockActivated(state, worldIn, pos, player, handIn, hit);
+			return false;
 		}
 	}
-	
+	/*
 	public List<ItemStack>  generateLoot(ResourceLocation lootTable, PlayerEntity playerEntity) {
 		//LootTable loottable = playerEntity.world.getServer().getLootTableManager().getLootTableFromLocation(playerEntity.getLootTableResourceLocation());
 		//LootContext.Builder lootcontext$builder = (new LootContext.Builder((ServerWorld)playerEntity.world)).withParameter(LootParameters.POSITION, new BlockPos(playerEntity)).withParameter(LootParameters.THIS_ENTITY, playerEntity).withRandom(playerEntity.getRNG());
@@ -69,7 +69,5 @@ public class LotusTimeCapsuleBlock extends Block
 		LootContext.Builder contextBuilder = new LootContext.Builder((ServerWorld) playerEntity.world).withParameter(LootParameters.THIS_ENTITY, playerEntity).withParameter(LootParameters.POSITION, new BlockPos(playerEntity));
 		List<ItemStack> itemStacks = playerEntity.getServer().getLootTableManager().getLootTableFromLocation(lootTable).generate(contextBuilder.build(LootParameterSets.GIFT));
 		return itemStacks;
-	}
-	
-	
+	}*/
 }
