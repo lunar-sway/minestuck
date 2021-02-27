@@ -59,6 +59,10 @@ public final class MSEntityTypes
 	public static final EntityType<ShopPosterEntity> SHOP_POSTER = getNull();
 	public static final EntityType<HologramEntity> HOLOGRAM = getNull();
 	
+	public static final EntityType<ConsumableProjectileEntity> CONSUMABLE_PROJECTILE = getNull();
+	public static final EntityType<ReturningProjectileEntity> RETURNING_PROJECTILE = getNull();
+	public static final EntityType<BouncingProjectileEntity> BOUNCING_PROJECTILE = getNull();
+	
 	@Nonnull
 	@SuppressWarnings("ConstantConditions")
 	private static <T> T getNull()
@@ -101,6 +105,10 @@ public final class MSEntityTypes
 		register(registry, EntityType.Builder.<SbahjPosterEntity>create(SbahjPosterEntity::new, EntityClassification.MISC).size(0.5F, 0.5F).setShouldReceiveVelocityUpdates(false).setTrackingRange(10).setUpdateInterval(Integer.MAX_VALUE), "sbahj_poster");
 		register(registry, EntityType.Builder.<ShopPosterEntity>create(ShopPosterEntity::new, EntityClassification.MISC).size(0.5F, 0.5F).setShouldReceiveVelocityUpdates(false).setTrackingRange(10).setUpdateInterval(Integer.MAX_VALUE), "shop_poster");
 		register(registry, EntityType.Builder.<HologramEntity>create(HologramEntity::new, EntityClassification.MISC).size(0.25F, 0.25F).setShouldReceiveVelocityUpdates(false).setTrackingRange(10).setUpdateInterval(Integer.MAX_VALUE), "hologram");
+		
+		register(registry, EntityType.Builder.<ConsumableProjectileEntity>create(ConsumableProjectileEntity::new, EntityClassification.MISC).size(0.25F, 0.25F).setTrackingRange(4).setUpdateInterval(10), "consumable_projectile");
+		register(registry, EntityType.Builder.<ReturningProjectileEntity>create(ReturningProjectileEntity::new, EntityClassification.MISC).size(0.25F, 0.25F).setTrackingRange(6).setUpdateInterval(2), "returning_projectile"); //TODO smaller update interval value is temporary solution to improve client rendering
+		register(registry, EntityType.Builder.<BouncingProjectileEntity>create(BouncingProjectileEntity::new, EntityClassification.MISC).size(0.25F, 0.25F).setTrackingRange(6).setUpdateInterval(2), "bouncing_projectile");
 	}
 	
 	/**

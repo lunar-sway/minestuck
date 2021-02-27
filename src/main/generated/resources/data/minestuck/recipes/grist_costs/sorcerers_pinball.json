@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:sorcerers_pinball"
+  },
+  "grist_cost": {
+    "minestuck:build": 200,
+    "minestuck:mercury": 30,
+    "minestuck:iodine": 5
+  }
+}

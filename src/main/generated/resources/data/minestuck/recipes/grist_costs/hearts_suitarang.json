@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:hearts_suitarang"
+  },
+  "grist_cost": {
+    "minestuck:build": 20,
+    "minestuck:tar": 4
+  }
+}
