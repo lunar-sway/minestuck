@@ -54,7 +54,7 @@ public class ConsumableProjectileEntity extends ProjectileItemEntity
 		{
 			Entity entity = ((EntityRayTraceResult) result).getEntity();
 			if(entity instanceof UnderlingEntity)
-				entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), damage * 2);
+				entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), damage * 1.5F);
 			else
 				entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), damage);
 		}
