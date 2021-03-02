@@ -2,13 +2,19 @@ package com.mraof.minestuck.block.plant;
 
 import com.mraof.minestuck.block.MSBlocks;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.DoublePlantBlock;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
+import java.util.List;
 import java.util.Random;
 
 public class TallEndGrassBlock extends DoublePlantBlock
@@ -21,19 +27,19 @@ public class TallEndGrassBlock extends DoublePlantBlock
 	@Override
 	protected boolean isValidGround(BlockState state, IBlockReader worldIn, BlockPos pos)
 	{
-		return state.getBlock() == Blocks.END_STONE || state.getBlock() == MSBlocks.END_GRASS_BLOCK || state.getBlock() == MSBlocks.COARSE_END_STONE;
+		return /*state.getBlock() == Blocks.END_STONE || */state.getBlock() == MSBlocks.END_GRASS_BLOCK/* || state.getBlock() == MSBlocks.COARSE_END_STONE*/;
 	}
-	/*
+	
 	@Override
 	@SuppressWarnings("deprecation")
 	public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random)
 	{
-		if(!worldIn.isRemote)
+		if(!worldIn.isRemote && random.nextFloat() >= .9F)
 		{
-			List<LivingEntity> list = worldIn.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1));
+			List<LivingEntity> list = worldIn.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX()+1, pos.getY(), pos.getZ()+1));
 			for(LivingEntity livingentity : list)
 			{
-				if(!livingentity.isSneaking())
+				if(!livingentity.isSneaking() && !livingentity.isSpectator())
 				{
 					double oldPosX = livingentity.getPosX();
 					double oldPosY = livingentity.getPosY();
@@ -60,7 +66,9 @@ public class TallEndGrassBlock extends DoublePlantBlock
 			}
 		}
 	}
-	*/
+	
+	
+	
 	@Override
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
 	{
