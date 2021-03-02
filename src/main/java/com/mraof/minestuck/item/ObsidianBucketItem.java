@@ -5,7 +5,10 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
 
 public class ObsidianBucketItem extends Item
@@ -23,7 +26,7 @@ public class ObsidianBucketItem extends Item
 			if(!worldIn.isRemote)
 				playerIn.dropItem(new ItemStack(Blocks.OBSIDIAN), false);
 		
-		return new ActionResult<>(ActionResultType.SUCCESS, new ItemStack(Items.BUCKET));
+		return ActionResult.resultSuccess(new ItemStack(Items.BUCKET));
 	}
 	
 }

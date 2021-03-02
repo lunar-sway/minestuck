@@ -65,6 +65,11 @@ public final class SkaianetHandler
 		openedServers.read(nbt.getList("serversOpen", Constants.NBT.TAG_COMPOUND));
 		resumingClients.read(nbt.getList("resumingClients", Constants.NBT.TAG_COMPOUND));
 		resumingServers.read(nbt.getList("resumingServers", Constants.NBT.TAG_COMPOUND));
+		
+		//fix data in secondary connections that isn't being saved by finding them and copying data from the primary counterpart
+		// TODO this is a simple solution, but a more elegant solution would be to achieve this during reading from nbt
+		sessionHandler.getConnectionStream().filter(c -> c.isActive() && !c.isMain()).forEach(c ->
+				getPrimaryConnection(c.getClientIdentifier(), true).ifPresent(c::copyFrom));
 	}
 	
 	/**

@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " i ",
+    "ini",
+    " i "
+  ],
+  "key": {
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "n": {
+      "item": "minecraft:iron_nugget"
+    }
+  },
+  "result": {
+    "item": "minestuck:shuriken",
+    "count": 2
+  }
+}
