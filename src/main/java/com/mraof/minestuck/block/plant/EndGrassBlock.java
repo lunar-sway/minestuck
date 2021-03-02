@@ -19,9 +19,9 @@ public class EndGrassBlock extends Block
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
 	{
 		super.animateTick(stateIn, worldIn, pos, rand);
-
-		if (rand.nextInt(10) == 0)
-			worldIn.addParticle(ParticleTypes.PORTAL, (float)pos.getX() + rand.nextFloat(), (float)pos.getY() + 1.1F, (float)pos.getZ() + rand.nextFloat(), 0.0D, 0.0D, 0.0D);
+		
+		if(rand.nextInt(10) == 0)
+			worldIn.addParticle(ParticleTypes.PORTAL, (float) pos.getX() + rand.nextFloat(), (float) pos.getY() + 1.1F, (float) pos.getZ() + rand.nextFloat(), 0.0D, 0.0D, 0.0D);
 	}
 	
 	/*
@@ -61,5 +61,6 @@ public class EndGrassBlock extends Block
 				}
 			}
 		}
-	}*/
+	}
+	*/
 }

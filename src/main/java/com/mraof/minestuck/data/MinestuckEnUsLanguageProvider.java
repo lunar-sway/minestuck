@@ -1505,9 +1505,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		//End
 		addDialogue("at_the_end", "This may be the start of our conversation, but now we're at the end.");
 		addDialogue("chorus_fruit", "Never eat fruit. Last time I tried it, I blacked out and came to somewhere else! Stick to bugs like a normal person!");
-		addDialogue("end_grass", "The grass in this place just keeps growing everywhere! I don't even know how it takes root in the stone like that.");
+		addDialogue("end_grass", "The grass in this place just keeps growing everywhere! You can bet that any patches of grass you find weren't there before. I don't even know how it takes root in the stone like that.");
 		addDialogue("grass_curse", "Rumors say that %s got mad one day and cursed the world with all this grass everywhere. It gets into our homes!");
-		addDialogue("useless_pogo", "I once found this piece of junk that launched me upward when I hit the ground with it. It really hurt when I came back down, and I didn't get anywhere!");
+		addDialogue("tall_grass", "The taller grass is so disorienting to walk through! Unless you are careful it will just move you around.");
 		addDialogue("useless_elytra", "One time, I saw a guy with some weird wing-looking things on his back. He could glide with them, but without being able to stay in the air, what's the point?");
 		//Rain
 		addDialogue("empty_ocean", "Our oceans used to be filled with life! Now they're all barren, thanks to %s.");
@@ -1577,6 +1577,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("rap_battle_concede.reply", "... wow. I'm just... not going to try to go against something like that.");
 		addDialogue("rap_battle_concede.final", "%s, yes! I am the greatest rapper ever!");
 		
+		
+		addDialogue("useless_pogo", "I once found this piece of junk that launched me upward when I hit the ground with it. It really hurt when I came back down, and I didn't get anywhere!");
 		addDialogue("await_hero", "Here, in the %s, we %s worship the %s. We wait and hope for the day that they awaken.");
 		addDialogue("watch_skaia", "Sometimes, I look up in the sky to see Skaia and wish I could visit there some day...");
 		addDialogue("at_skaia.1", "OH MY %s! I'M ACTUALLY ON SKAIA!");

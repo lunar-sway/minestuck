@@ -201,7 +201,7 @@ public class ConsortDialogue
 		addMessage("chorus_fruit").landTerrain(END);
 		addMessage("end_grass").landTerrain(END);
 		addMessage("grass_curse", "denizen").landTerrain(END);
-		addMessage("useless_pogo").landTerrain(END);
+		addMessage("tall_grass").landTerrain(END);
 		addMessage("useless_elytra").landTerrain(END);
 		
 		//Rain terrain
@@ -277,6 +277,7 @@ public class ConsortDialogue
 			).setAcceptNull()
 		).consort(EnumConsort.NAKAGATOR, EnumConsort.IGUANA);
 		
+		addMessage("useless_pogo");
 		addMessage("await_hero", "land_name", "consort_types", "player_title_land").reqLand();
 		addMessage(new ConditionedMessage("skaia", (ConsortEntity consort, ServerPlayerEntity player) -> !consort.visitedSkaia, new SingleMessage("watch_skaia"),
 				new ConditionedMessage((ConsortEntity consort, ServerPlayerEntity player) -> MSDimensions.isSkaia(consort.dimension),
