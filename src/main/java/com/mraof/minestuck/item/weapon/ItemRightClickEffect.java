@@ -1,5 +1,7 @@
 package com.mraof.minestuck.item.weapon;
 
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.FireballEntity;
@@ -10,6 +12,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -67,6 +70,30 @@ public interface ItemRightClickEffect
 				player.getCooldownTracker().setCooldown(itemStackIn.getItem(), 20);
 				itemStackIn.damageItem(2, player, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
 				world.addEntity(fireball);
+			}
+			return ActionResult.resultPass(itemStackIn);
+		};
+	}
+	
+	static ItemRightClickEffect extinguishFire(int mod)
+	{
+		return (world, player, hand) -> {
+			ItemStack itemStackIn = player.getHeldItem(hand);
+			
+			if(!world.isRemote){
+				world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ENTITY_ENDER_DRAGON_FLAP, SoundCategory.PLAYERS, 1.0F, 1.4F);
+				
+				for(BlockPos blockPos : BlockPos.getAllInBoxMutable(player.getPosition().add(2*mod, mod, 2*mod), player.getPosition().add(-2*mod, -1*mod, -2*mod))) {
+					BlockState blockState = world.getBlockState(blockPos);
+					if(blockState.getBlock() == Blocks.FIRE){
+						world.setBlockState(blockPos, Blocks.AIR.getDefaultState());
+						world.playSound(null, blockPos.getX(), blockPos.getY(), blockPos.getZ(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 1.0F);
+					}
+				}
+				
+				player.swing(hand, true);
+				player.getCooldownTracker().setCooldown(itemStackIn.getItem(), 15);
+				itemStackIn.damageItem(1, player, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
 			}
 			return ActionResult.resultPass(itemStackIn);
 		};
