@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "minestuck:diamonds_suitarang"
+  },
+  "range": {
+    "min": 30.0,
+    "max": 50.0,
+    "type": "minecraft:uniform"
+  }
+}
