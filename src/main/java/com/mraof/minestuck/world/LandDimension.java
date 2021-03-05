@@ -1,6 +1,5 @@
 package com.mraof.minestuck.world;
 
-import com.mraof.minestuck.client.renderer.LandSkyRenderer;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
@@ -30,7 +29,6 @@ import net.minecraft.world.dimension.Dimension;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ModDimension;
@@ -63,9 +61,6 @@ public class LandDimension extends Dimension
 		doesWaterVaporize = false;
 		
 		this.nether = false;
-		
-		if(!(world instanceof ServerWorld)) //world.isRemote can't be used just yet because it is set after the dimension is created
-			setSkyRenderer(new LandSkyRenderer(this));
 		
 		initLandAspects();
 	}
