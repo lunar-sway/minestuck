@@ -473,6 +473,6 @@ public class MSBlocks
 	@SubscribeEvent
 	public static void onMissingMappings(RegistryEvent.MissingMappings<Block> event)
 	{
-		event.getAllMappings().stream().filter(mapping -> mapping.key.equals(new ResourceLocation("minestuck:end_grass"))).forEach(mapping -> mapping.remap(END_GRASS_BLOCK));
+		event.getAllMappings().stream().filter(mapping -> mapping.key.equals(new ResourceLocation("minestuck:end_grass"))).forEach(mapping -> mapping.remap(MSBlocks.END_GRASS_BLOCK));
 	}
 }
