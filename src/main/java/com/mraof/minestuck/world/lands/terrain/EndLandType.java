@@ -40,10 +40,10 @@ public class EndLandType extends TerrainLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setGroundState(Blocks.END_STONE.getDefaultState(), MSFillerBlockTypes.END_STONE);
+		registry.setGroundState(MSBlocks.COARSE_END_STONE.getDefaultState(), MSFillerBlockTypes.COARSE_END_STONE);
 		registry.setBlockState("surface", Blocks.END_STONE.getDefaultState());
 		registry.setBlockState("surface_rough", MSBlocks.END_GRASS_BLOCK.getDefaultState());
-		registry.setBlockState("upper", MSBlocks.COARSE_END_STONE.getDefaultState());
+		registry.setBlockState("upper", Blocks.END_STONE.getDefaultState());
 		registry.setBlockState("ocean", MSBlocks.ENDER.getDefaultState());
 		registry.setBlockState("structure_primary", Blocks.END_STONE_BRICKS.getDefaultState());
 		registry.setBlockState("structure_primary_decorative", Blocks.PURPUR_PILLAR.getDefaultState().with(RotatedPillarBlock.AXIS, Direction.Axis.Y));
@@ -98,7 +98,7 @@ public class EndLandType extends TerrainLandType
 		}
 		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), MSBlocks.END_STONE_IRON_ORE.getDefaultState(), 9)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(20, 0, 0, 64))));
 		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), MSBlocks.END_STONE_REDSTONE_ORE.getDefaultState(), 8)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(10, 0, 0, 32))));
-		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), MSBlocks.COARSE_END_STONE.getDefaultState(), 36)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(40, 0, 0, 64))));
+		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), Blocks.END_STONE.getDefaultState(), 36)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(40, 0, 0, 64))));
 	}
 	
 	@Override

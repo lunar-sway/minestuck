@@ -1377,6 +1377,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("ticking", "The ticking keeps me up all night. It keeps us all up all night. Save us.");
 		//Frogs
 		addDialogue("frog_creation", "We are thankful for all the frogs that They gave to us when the universe was created. They, of course, is the genesis frog. I feel bad for the fool who has to make another!");
+		addDialogue("frog_location", "You won't find many frogs where you find villages. Most of them live where the terrain is rougher.");
 		addDialogue("frog_imitation", "Ribbit, ribbit! I'm a frog! I don't care what you say!");
 		addDialogue("frog_variants.1", "Most people believe there aren't that many types of frogs. 4740, maybe? Anything beyond that would be proposterous.");
 		addDialogue("frog_variants.2", "Here in %s, however, we know that there are 9.444731276889531e+22 types of frogs.");
@@ -1384,6 +1385,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("grasshopper_fishing.1", "My brother found a magic grasshopper while fishing recently!");
 		addDialogue("grasshopper_fishing.2", "Usually all we find are rings!");
 		addDialogue("gay_frogs", "The frogs around here are all so gay! Look at them happily hopping about!");
+		addDialogue("non_teleporting_frogs", "While the rest of us are getting dizzy, teleporting at random in the tall grass, the frogs seem immune! Makes it harder to catch them, that's for sure.");
 		//Buckets
 		addDialogue("lewd_buckets", "Some may call our land lewd, but the buckets are just so fun to swim in!");
 		addDialogue("water_buckets", "The buckets are a great source of water, as long as you pick the ones with water...");

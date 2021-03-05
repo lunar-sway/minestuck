@@ -1,6 +1,7 @@
 package com.mraof.minestuck.block.plant;
 
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.entity.FrogEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.DoublePlantBlock;
 import net.minecraft.entity.LivingEntity;
@@ -40,7 +41,7 @@ public class TallEndGrassBlock extends DoublePlantBlock
 			List<LivingEntity> list = worldIn.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY(), pos.getZ() + 1));
 			for(LivingEntity livingentity : list)
 			{
-				if(!livingentity.isSneaking() && !livingentity.isSpectator())
+				if(!livingentity.isSneaking() && !livingentity.isSpectator() && !(livingentity instanceof FrogEntity))
 				{
 					randomTeleport(worldIn, livingentity);
 				}

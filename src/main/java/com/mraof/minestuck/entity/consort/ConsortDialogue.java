@@ -102,11 +102,13 @@ public class ConsortDialogue
 		
 		//Frogs
 		addMessage("frog_creation").landTitle(FROGS);
+		addMessage("frog_location").landTitle(FROGS);
 		addMessage("frog_imitation").landTitle(FROGS);
 		addMessage(new ChainMessage(new SingleMessage("frog_variants.1"), new SingleMessage("frog_variants.2", "land_name"))).landTitle(FROGS);
 		addMessage("frog_hatred").landTitle(FROGS);
 		addMessage(new ChainMessage(new SingleMessage("grasshopper_fishing.1"), new SingleMessage("grasshopper_fishing.2"))).landTitle(FROGS).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);
 		addMessage("gay_frogs").landTitle(FROGS).landTerrainSpecific(RAINBOW);
+		addMessage("non_teleporting_frogs").landTitle(FROGS).landTerrainSpecific(END);
 		
 		//Buckets
 		addMessage("lewd_buckets").landTitle(BUCKETS);
