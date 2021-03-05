@@ -14,6 +14,7 @@ import net.minecraft.block.material.MaterialColor;
 import net.minecraft.item.DyeColor;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.RegistryEvent;
@@ -467,5 +468,11 @@ public class MSBlocks
 	{
 		registry.register(block);
 		return block;
+	}
+	
+	@SubscribeEvent
+	public static void onMissingMappings(RegistryEvent.MissingMappings<Block> event)
+	{
+		event.getAllMappings().stream().filter(mapping -> mapping.key.equals(new ResourceLocation("minestuck:end_grass"))).forEach(mapping -> mapping.remap(END_GRASS_BLOCK));
 	}
 }
