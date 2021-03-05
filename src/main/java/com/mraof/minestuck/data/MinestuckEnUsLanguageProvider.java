@@ -1246,6 +1246,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(CheckLandCommand.CHECK, "You are currently in %s.");
 		add(CheckLandCommand.FAIL, "You are currently not in a land dimension.");
 		add(SendGristCommand.SUCCESS, "Successfully gave grist to %s: %s");
+		add(SendGristCommand.RECEIVE, "Received grist from %s: %s");
 		add(SendGristCommand.NOT_PERMITTED, "You are not permitted to send grist to %s.");
 		add(SendGristCommand.CANT_AFFORD, "You do not have enough grist to send %s.");
 		add(GristCommand.GET, "%s has: %s");
@@ -1255,6 +1256,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(GristCommand.SET, "Set the grist cache for %s players to %s.");
 		add(SetRungCommand.SUCCESS, "Successfully changed the echeladder of %s players to rung %d with %d%% progress.");
 		add(PorkhollowCommand.SEND, "Successfully sent %s boondollars to %s.");
+		add(PorkhollowCommand.RECEIVE, "Received %s boondollars from %s.");
 		add(PorkhollowCommand.TAKE, "Successfully took out %s boondollars from your porkhollow.");
 		add(PorkhollowCommand.INSUFFICIENT, "You do not have enough boondollars to do that.");
 		add(TransportalizerCommand.NOT_FOUND, "Couldn't find transportalizer with ID \"%s\"");

@@ -20,6 +20,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 public class PorkhollowCommand    //Much like /gristSend and /land, is a temporary command until a proper feature is in place
 {
 	public static final String SEND = "commands.minestuck.porkhollow.send";
+	public static final String RECEIVE = "commands.minestuck.porkhollow.receive";
 	public static final String TAKE = "commands.minestuck.porkhollow.take";
 	public static final String INSUFFICIENT = "commands.minestuck.porkhollow.insufficient";
 	private static final SimpleCommandExceptionType NOT_ENOUGH = new SimpleCommandExceptionType(new TranslationTextComponent(INSUFFICIENT));
@@ -48,6 +49,7 @@ public class PorkhollowCommand    //Much like /gristSend and /land, is a tempora
 		{
 			PlayerSavedData.getData(target).addBoondollars(amount);
 			source.sendFeedback(new TranslationTextComponent(SEND, amount, target.getDisplayName()), true);
+			target.sendMessage(new TranslationTextComponent(RECEIVE, amount, player.getDisplayName()));
 			return 1;
 		} else throw NOT_ENOUGH.create();
 	}
