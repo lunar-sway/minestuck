@@ -76,6 +76,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.DARK_GRAY_CASTLE_BRICK_TRIM, "Dark Gray Castle Brick Trim");
 		add(MSBlocks.LIGHT_GRAY_CASTLE_BRICK_TRIM, "Light Gray Castle Brick Trim");
 		add(MSBlocks.WHITE_CASTLE_BRICK_TRIM, "White Castle Brick Trim");
+		add(MSBlocks.CHECKERED_STAINED_GLASS, "Checkered Stained Glass");
 		add(MSBlocks.BLACK_CROWN_STAINED_GLASS, "Black Crown Stained Glass");
 		add(MSBlocks.BLACK_PAWN_STAINED_GLASS, "Black Pawn Stained Glass");
 		add(MSBlocks.WHITE_CROWN_STAINED_GLASS, "White Crown Stained Glass");

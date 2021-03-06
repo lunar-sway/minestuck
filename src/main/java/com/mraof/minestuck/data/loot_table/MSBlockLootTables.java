@@ -53,6 +53,7 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(WHITE_CASTLE_BRICK_TRIM);
 		registerDropSelfLootTable(LIGHT_GRAY_CASTLE_BRICK_TRIM);
 		registerDropSelfLootTable(DARK_GRAY_CASTLE_BRICK_TRIM);
+		registerDropSelfLootTable(CHECKERED_STAINED_GLASS);
 		registerDropSelfLootTable(BLACK_CROWN_STAINED_GLASS);
 		registerDropSelfLootTable(BLACK_PAWN_STAINED_GLASS);
 		registerDropSelfLootTable(WHITE_CROWN_STAINED_GLASS);
