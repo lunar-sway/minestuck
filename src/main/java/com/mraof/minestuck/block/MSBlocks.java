@@ -122,6 +122,8 @@ public class MSBlocks
 	public static final Block VEIN = getNull();
 	public static final Block VEIN_CORNER = getNull();
 	public static final Block INVERTED_VEIN_CORNER = getNull();
+	public static final Block PARCEL_PYXIS = getNull();
+	public static final Block PIPE = getNull();
 	
 	//Structure Land Blocks
 	public static final Block COARSE_STONE_STAIRS = getNull(), SHADE_BRICK_STAIRS = getNull(), FROST_BRICK_STAIRS = getNull(), CAST_IRON_STAIRS = getNull();
