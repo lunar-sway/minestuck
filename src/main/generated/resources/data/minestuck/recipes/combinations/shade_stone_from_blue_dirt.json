@@ -1,13 +1,13 @@
 {
   "type": "minestuck:combination",
   "input1": {
-    "item": "minecraft:stone_bricks"
+    "item": "minecraft:stone"
   },
   "input2": {
     "item": "minestuck:blue_dirt"
   },
   "mode": "or",
   "output": {
-    "item": "minestuck:shade_bricks"
+    "item": "minestuck:shade_stone"
   }
 }
