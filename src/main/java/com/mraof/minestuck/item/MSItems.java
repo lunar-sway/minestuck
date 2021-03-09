@@ -588,6 +588,9 @@ public class MSItems
 		registerItemBlock(registry, VEIN);
 		registerItemBlock(registry, VEIN_CORNER);
 		registerItemBlock(registry, INVERTED_VEIN_CORNER);
+		registerItemBlock(registry, PIPE, MSItemGroup.LANDS);
+		registerItemBlock(registry, PARCEL_PYXIS, MSItemGroup.LANDS);
+		registerItemBlock(registry, PYXIS_LID, MSItemGroup.LANDS);
 		
 		registerItemBlock(registry, COARSE_STONE_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, SHADE_BRICK_STAIRS, MSItemGroup.LANDS);

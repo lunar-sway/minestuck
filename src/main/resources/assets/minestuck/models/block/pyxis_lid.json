@@ -1,0 +1,24 @@
+{
+    "parent": "block/thin_block",
+    "textures": {
+		"particle": "minestuck:block/pipe",
+		"down": "minestuck:block/parcel_pyxis_inside",
+		"top": "minestuck:block/parcel_pyxis_top",
+        "side": "minestuck:block/pipe"
+    },
+    
+    "elements": [
+        {
+            "from": [ 2, 0, 2 ],
+            "to": [ 14, 5, 14 ],
+            "faces": {
+                "north": { "uv": [ 0, 0, 12, 5 ], "texture": "#side" },
+                "east":  { "uv": [ 0, 6, 12, 11 ], "texture": "#side" },
+                "south": { "uv": [ 0, 0, 12, 5 ], "texture": "#side" },
+                "west":  { "uv": [ 0, 6, 12, 11 ], "texture": "#side" },
+                "up":    { "uv": [ 2, 2, 14, 14 ], "texture": "#top" },
+                "down":  { "uv": [ 2, 2, 14, 14 ], "texture": "#down", "cullface":"down" }
+            }
+        }
+    ]
+}

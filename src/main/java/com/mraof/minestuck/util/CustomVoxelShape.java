@@ -25,7 +25,7 @@ public class CustomVoxelShape
 		double[][] out = parts.clone();
 		for(int i = 0; i < out.length; i++)
 		{
-			double[] part = out[i];
+			double[] part = out[i]; //for north/default visualize a cube with left face 0, right face 3, front face 2, back face 5, bottom face 1, top face 4
 			switch(dir)
 			{
 				case WEST:
@@ -37,6 +37,12 @@ public class CustomVoxelShape
 				case EAST:
 					out[i] = new double[] {16-part[5], part[1], part[0], 16-part[2], part[4], part[3]};
 				break;
+				case UP:
+					out[i] = new double[] {part[0], 16-part[2], 16-part[4], part[3], 16-part[5], 16-part[1]};
+					break;
+				case DOWN:
+					out[i] = new double[] {part[0], part[1], part[2], part[3], part[4], part[5]};
+					break;
 			}
 		}
 		return new CustomVoxelShape(out);
@@ -79,5 +85,10 @@ public class CustomVoxelShape
 	public Map<Direction, VoxelShape> createRotatedShapes()
 	{
 		return Maps.newEnumMap(ImmutableMap.of(Direction.NORTH, this.create(Direction.NORTH), Direction.SOUTH, this.create(Direction.SOUTH), Direction.WEST, this.create(Direction.WEST), Direction.EAST, this.create(Direction.EAST)));
+	}
+	
+	public ImmutableMap<Direction, VoxelShape> createRotatedShapesAllDirections()
+	{
+		return ImmutableMap.<Direction, VoxelShape>builder().put(Direction.UP, this.create(Direction.UP)).put(Direction.DOWN, this.create(Direction.DOWN)).put(Direction.NORTH, this.create(Direction.NORTH)).put(Direction.SOUTH, this.create(Direction.SOUTH)).put(Direction.WEST, this.create(Direction.WEST)).put(Direction.EAST, this.create(Direction.EAST)).build();
 	}
 }
