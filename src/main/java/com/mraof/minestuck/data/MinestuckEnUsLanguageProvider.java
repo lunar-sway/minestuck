@@ -254,7 +254,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.INVERTED_VEIN_CORNER, "Vein");
 		addTooltip(MSBlocks.INVERTED_VEIN_CORNER, "Corner (Inverted Flow)");
 		add(MSBlocks.PIPE, "Pipe");
+		add(MSBlocks.PIPE_INTERSECTION, "Pipe Intersection");
+		addTooltip(MSBlocks.PIPE_INTERSECTION, "Astute engineers may note the lack of any openings and inability for anything to cross this intersection. In the business this is called 'useless'");
 		add(MSBlocks.PARCEL_PYXIS, "Parcel Pyxis");
+		addTooltip(MSBlocks.PARCEL_PYXIS, "This doesn't actually seem to do anything");
 		add(MSBlocks.PYXIS_LID, "Parcel Pyxis Lid");
 		add(MSBlocks.COARSE_STONE_STAIRS, "Coarse Stone Stairs");
 		add(MSBlocks.SHADE_BRICK_STAIRS, "Shade Brick Stairs");

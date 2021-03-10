@@ -30,13 +30,6 @@ public class DecorBlock extends Block
 		this.shape = shape.createRotatedShapes();
 	}
 	
-	@Override
-	@SuppressWarnings("deprecation")
-	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos)
-	{
-        return Block.hasSolidSide(worldIn.getBlockState(pos.down()), worldIn, pos.down(), Direction.UP);
-    }
-	
 	@Nullable
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context)

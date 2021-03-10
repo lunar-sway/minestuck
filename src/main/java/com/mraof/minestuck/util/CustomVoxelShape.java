@@ -38,10 +38,10 @@ public class CustomVoxelShape
 					out[i] = new double[] {16-part[5], part[1], part[0], 16-part[2], part[4], part[3]};
 				break;
 				case UP:
-					out[i] = new double[] {part[0], 16-part[2], 16-part[4], part[3], 16-part[5], 16-part[1]};
+					out[i] = new double[] {part[0], part[2], part[4], part[3], part[5], part[1]}; //works for vertically symmetric blocks but may not work otherwise
 					break;
 				case DOWN:
-					out[i] = new double[] {part[0], part[1], part[2], part[3], part[4], part[5]};
+					out[i] = new double[] {part[0], part[2], 16-part[4], part[3], part[5], 16-part[1]}; //works for vertically symmetric blocks but may not work otherwise
 					break;
 			}
 		}

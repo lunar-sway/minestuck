@@ -93,7 +93,7 @@ public final class MSFeatures
 		registry.register(new OasisFeature(NoFeatureConfig::deserialize).setRegistryName("oasis"));
 		registry.register(new MesaFeature(NoFeatureConfig::deserialize).setRegistryName("mesa"));
 		registry.register(new RockSpikeFeature(NoFeatureConfig::deserialize).setRegistryName("rock_spike"));
-		registry.register(new ParcelPyxisFeature(ProbabilityConfig::deserialize).setRegistryName("parcel_pyxis"));
+		registry.register(new ParcelPyxisFeature(NoFeatureConfig::deserialize).setRegistryName("parcel_pyxis"));
 		registry.register(new SurfaceFossilsFeature(NoFeatureConfig::deserialize).setRegistryName("surface_fossil"));
 		registry.register(new BucketFeature(NoFeatureConfig::deserialize).setRegistryName("bucket"));
 		registry.register(new BrokenSwordFeature(NoFeatureConfig::deserialize).setRegistryName("broken_sword"));

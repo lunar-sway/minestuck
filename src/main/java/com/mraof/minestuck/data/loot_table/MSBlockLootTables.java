@@ -224,6 +224,7 @@ public class MSBlockLootTables extends BlockLootTables
 		registerLootTable(VEIN_CORNER, func_218482_a());
 		registerLootTable(INVERTED_VEIN_CORNER, func_218482_a());
 		registerDropSelfLootTable(PIPE);
+		registerDropSelfLootTable(PIPE_INTERSECTION);
 		registerDropSelfLootTable(PARCEL_PYXIS);
 		registerDropSelfLootTable(PYXIS_LID);
 		
