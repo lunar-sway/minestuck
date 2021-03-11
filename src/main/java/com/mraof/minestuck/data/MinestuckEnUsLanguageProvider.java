@@ -318,7 +318,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.CASSETTE_PLAYER, "Cassette Player");
 		add(MSBlocks.MINI_FROG_STATUE, "Frog Statue Replica");
 		addStoreTooltip(MSBlocks.MINI_FROG_STATUE, "Some say it's creepy, some say it's cute, others would say it's contraband, so keep it out of sight!");
-		//add(MSBlocks.LOTUS_TIME_CAPSULE_BLOCK, "Lotus Time Capsule");
 		MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.forEachBlock(block -> add(block, "Lotus Time Capsule"));
 		add(MSBlocks.GLOWYSTONE_DUST, "Glowystone Dust");
 		add(MSBlocks.OIL, "Oil");
@@ -608,9 +607,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.RAW_CRUXITE, "Raw Cruxite");
 		add(MSItems.RAW_URANIUM, "Uranium Lump");
 		add(MSItems.ENERGY_CORE, "Energy Core");
-		add(MSItems.TEMPLE_COMPASS, "Temple Compass");
 		add(MSItems.TEMPLE_SCANNER, "Temple Scanner");
-		addExtra(MSItems.TEMPLE_SCANNER, "successMessage", "Closest detected temple at X = %s and Z = %s");
+		addExtra(MSItems.TEMPLE_SCANNER, "successMessage", "Closest detected temple around X = %s and Z = %s");
 		addExtra(MSItems.TEMPLE_SCANNER, "failMessage", "No temple detected nearby");
 		add(MSItems.CRUXITE_APPLE, "Cruxite Artifact");
 		add(MSItems.CRUXITE_POTION, "Cruxite Artifact");

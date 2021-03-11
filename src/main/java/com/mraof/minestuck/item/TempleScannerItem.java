@@ -1,6 +1,5 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -25,17 +24,16 @@ public class TempleScannerItem extends Item
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn)
 	{
-		worldIn.playSound(playerIn, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.UI_TOAST_IN, SoundCategory.AMBIENT, 1.5F, 1.0F);
+		worldIn.playSound(playerIn, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.UI_BUTTON_CLICK, SoundCategory.AMBIENT, 0.8F, 1.3F);
 		
 		ItemStack item = playerIn.getHeldItem(handIn);
 		if(worldIn instanceof ServerWorld)
 		{
 			BlockPos blockpos = ((ServerWorld) worldIn).getChunkProvider().getChunkGenerator().findNearestStructure(worldIn, "minestuck:frog_temple", new BlockPos(playerIn), 100, false);
-			//BlockPos blockpos = ((ServerWorld) worldIn).getChunkProvider().getChunkGenerator().findNearestStructure(worldIn, "Stronghold", new BlockPos(playerIn), 100, false);
 			
 			if(blockpos != null)
 			{
-				ITextComponent message = new TranslationTextComponent(getTranslationKey() + ".successMessage", blockpos.getX(), blockpos.getZ());
+				ITextComponent message = new TranslationTextComponent(getTranslationKey() + ".successMessage", blockpos.getX()+random.nextInt(32)-16, blockpos.getZ()+random.nextInt(32)-16);
 				message.getStyle().setColor(TextFormatting.AQUA);
 				playerIn.sendMessage(message);
 			} else
