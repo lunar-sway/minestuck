@@ -15,6 +15,9 @@ import com.mraof.minestuck.item.foods.HealingFoodItem;
 import com.mraof.minestuck.item.foods.SurpriseEmbryoItem;
 import com.mraof.minestuck.item.foods.UnknowableEggItem;
 import com.mraof.minestuck.item.weapon.*;
+import com.mraof.minestuck.item.weapon.projectiles.BouncingProjectileWeaponItem;
+import com.mraof.minestuck.item.weapon.projectiles.ConsumableProjectileWeaponItem;
+import com.mraof.minestuck.item.weapon.projectiles.ReturningProjectileWeaponItem;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -201,7 +204,17 @@ public class MSItems
 	public static final Item TUNING_FORK = getNull();
 	public static final Item SPORK = getNull();
 	public static final Item GOLDEN_SPORK = getNull();
+	
 	public static final Item BIDENT = getNull();
+	public static final Item SBAHJARANG = getNull();
+	public static final Item SHURIKEN = getNull();
+	public static final Item CLUBS_SUITARANG = getNull();
+	public static final Item DIAMONDS_SUITARANG = getNull();
+	public static final Item HEARTS_SUITARANG = getNull();
+	public static final Item SPADES_SUITARANG = getNull();
+	public static final Item CHAKRAM = getNull();
+	public static final Item UMBRAL_INFILTRATOR = getNull();
+	public static final Item SORCERERS_PINBALL = getNull();
 	
 	//Material tools
 	public static final Item EMERALD_SWORD = getNull();
@@ -410,6 +423,7 @@ public class MSItems
 		registerItemBlock(registry, DARK_GRAY_CASTLE_BRICK_TRIM, MSItemGroup.MAIN);
 		registerItemBlock(registry, LIGHT_GRAY_CASTLE_BRICK_TRIM, MSItemGroup.MAIN);
 		registerItemBlock(registry, WHITE_CASTLE_BRICK_TRIM, MSItemGroup.MAIN);
+		registerItemBlock(registry, CHECKERED_STAINED_GLASS, MSItemGroup.MAIN);
 		registerItemBlock(registry, BLACK_CROWN_STAINED_GLASS, MSItemGroup.MAIN);
 		registerItemBlock(registry, BLACK_PAWN_STAINED_GLASS, MSItemGroup.MAIN);
 		registerItemBlock(registry, WHITE_CROWN_STAINED_GLASS, MSItemGroup.MAIN);
@@ -421,6 +435,7 @@ public class MSItems
 		registerItemBlock(registry, SANDSTONE_CRUXITE_ORE, MSItemGroup.LANDS);
 		registerItemBlock(registry, RED_SANDSTONE_CRUXITE_ORE, MSItemGroup.LANDS);
 		registerItemBlock(registry, END_STONE_CRUXITE_ORE, MSItemGroup.LANDS);
+		registerItemBlock(registry, SHADE_STONE_CRUXITE_ORE, MSItemGroup.LANDS);
 		registerItemBlock(registry, PINK_STONE_CRUXITE_ORE, MSItemGroup.LANDS);
 		registerItemBlock(registry, STONE_URANIUM_ORE, MSItemGroup.LANDS);
 		registerItemBlock(registry, NETHERRACK_URANIUM_ORE, MSItemGroup.LANDS);
@@ -428,14 +443,17 @@ public class MSItems
 		registerItemBlock(registry, SANDSTONE_URANIUM_ORE, MSItemGroup.LANDS);
 		registerItemBlock(registry, RED_SANDSTONE_URANIUM_ORE, MSItemGroup.LANDS);
 		registerItemBlock(registry, END_STONE_URANIUM_ORE, MSItemGroup.LANDS);
+		registerItemBlock(registry, SHADE_STONE_URANIUM_ORE, MSItemGroup.LANDS);
 		registerItemBlock(registry, PINK_STONE_URANIUM_ORE, MSItemGroup.LANDS);
 		registerItemBlock(registry, NETHERRACK_COAL_ORE, MSItemGroup.LANDS);
+		registerItemBlock(registry, SHADE_STONE_COAL_ORE, MSItemGroup.LANDS);
 		registerItemBlock(registry, PINK_STONE_COAL_ORE, MSItemGroup.LANDS);
 		registerItemBlock(registry, END_STONE_IRON_ORE, MSItemGroup.LANDS);
 		registerItemBlock(registry, SANDSTONE_IRON_ORE, MSItemGroup.LANDS);
 		registerItemBlock(registry, RED_SANDSTONE_IRON_ORE, MSItemGroup.LANDS);
 		registerItemBlock(registry, SANDSTONE_GOLD_ORE, MSItemGroup.LANDS);
 		registerItemBlock(registry, RED_SANDSTONE_GOLD_ORE, MSItemGroup.LANDS);
+		registerItemBlock(registry, SHADE_STONE_GOLD_ORE, MSItemGroup.LANDS);
 		registerItemBlock(registry, PINK_STONE_GOLD_ORE, MSItemGroup.LANDS);
 		registerItemBlock(registry, END_STONE_REDSTONE_ORE, MSItemGroup.LANDS);
 		registerItemBlock(registry, STONE_QUARTZ_ORE, MSItemGroup.LANDS);
@@ -450,6 +468,7 @@ public class MSItems
 		registerItemBlock(registry, THOUGHT_DIRT, MSItemGroup.LANDS);
 		registerItemBlock(registry, COARSE_STONE, MSItemGroup.LANDS);
 		registerItemBlock(registry, CHISELED_COARSE_STONE, MSItemGroup.LANDS);
+		registerItemBlock(registry, SHADE_STONE, MSItemGroup.LANDS);
 		registerItemBlock(registry, SHADE_BRICKS, MSItemGroup.LANDS);
 		registerItemBlock(registry, SMOOTH_SHADE_STONE, MSItemGroup.LANDS);
 		registerItemBlock(registry, FROST_BRICKS, MSItemGroup.LANDS);
@@ -473,6 +492,11 @@ public class MSItems
 		registerItemBlock(registry, CRACKED_PINK_STONE_BRICKS, MSItemGroup.LANDS);
 		registerItemBlock(registry, MOSSY_PINK_STONE_BRICKS, MSItemGroup.LANDS);
 		registerItemBlock(registry, POLISHED_PINK_STONE, MSItemGroup.LANDS);
+		registerItemBlock(registry, BROWN_STONE, MSItemGroup.LANDS);
+		registerItemBlock(registry, BROWN_STONE_BRICKS, MSItemGroup.LANDS);
+		registerItemBlock(registry, BROWN_STONE_COLUMN, MSItemGroup.LANDS);
+		registerItemBlock(registry, CRACKED_BROWN_STONE_BRICKS, MSItemGroup.LANDS);
+		registerItemBlock(registry, POLISHED_BROWN_STONE, MSItemGroup.LANDS);
 		registerItemBlock(registry, DENSE_CLOUD, MSItemGroup.LANDS);
 		registerItemBlock(registry, BRIGHT_DENSE_CLOUD, MSItemGroup.LANDS);
 		registerItemBlock(registry, SUGAR_CUBE, MSItemGroup.LANDS);
@@ -566,6 +590,10 @@ public class MSItems
 		registerItemBlock(registry, VEIN);
 		registerItemBlock(registry, VEIN_CORNER);
 		registerItemBlock(registry, INVERTED_VEIN_CORNER);
+		registerItemBlock(registry, PIPE, MSItemGroup.LANDS);
+		registerItemBlock(registry, PIPE_INTERSECTION, MSItemGroup.LANDS);
+		registerItemBlock(registry, PARCEL_PYXIS, MSItemGroup.LANDS);
+		registerItemBlock(registry, PYXIS_LID, MSItemGroup.LANDS);
 		
 		registerItemBlock(registry, COARSE_STONE_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, SHADE_BRICK_STAIRS, MSItemGroup.LANDS);
@@ -575,6 +603,7 @@ public class MSItems
 		registerItemBlock(registry, CHALK_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, CHALK_BRICK_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, PINK_STONE_BRICK_STAIRS, MSItemGroup.LANDS);
+		registerItemBlock(registry, BROWN_STONE_BRICK_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, RAINBOW_PLANKS_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, END_PLANKS_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, DEAD_PLANKS_STAIRS, MSItemGroup.LANDS);
@@ -582,6 +611,7 @@ public class MSItems
 		registerItemBlock(registry, CHALK_SLAB, MSItemGroup.LANDS);
 		registerItemBlock(registry, CHALK_BRICK_SLAB, MSItemGroup.LANDS);
 		registerItemBlock(registry, PINK_STONE_BRICK_SLAB, MSItemGroup.LANDS);
+		registerItemBlock(registry, BROWN_STONE_BRICK_SLAB, MSItemGroup.LANDS);
 		registerItemBlock(registry, RAINBOW_PLANKS_SLAB, MSItemGroup.LANDS);
 		registerItemBlock(registry, END_PLANKS_SLAB, MSItemGroup.LANDS);
 		registerItemBlock(registry, DEAD_PLANKS_SLAB, MSItemGroup.LANDS);
@@ -649,7 +679,7 @@ public class MSItems
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.BOOK_TIER, 11, -3.4F).efficiency(5.0F).set(MSItemTypes.HAMMER_TOOL), new Item.Properties().defaultMaxDamage(1024).group(MSItemGroup.WEAPONS)).setRegistryName("telescopic_sassacrusher"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 4, -2.8F).efficiency(1.0F).set(MSItemTypes.HAMMER_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("democratic_demolitioner"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.REGI_TIER, 7, -3.2F).efficiency(8.0F).set(MSItemTypes.HAMMER_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("regi_hammer"));
-		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.DENIZEN_TIER, 7, -3.2F).efficiency(7.0F).set(MSItemTypes.HAMMER_TOOL).add(OnHitEffect.TIME_SLOWNESS_AOE), new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.RARE)).setRegistryName("fear_no_anvil"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.DENIZEN_TIER, 7, -3.2F).efficiency(7.0F).set(MSItemTypes.HAMMER_TOOL).add(OnHitEffect.TIME_SLOWNESS_AOE).add(OnHitEffect.enemyPotionEffect(() -> new EffectInstance(Effects.SLOWNESS, 100, 1))), new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.RARE)).setRegistryName("fear_no_anvil"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.DIAMOND, 8, -3.2F).efficiency(12.0F).set(MSItemTypes.HAMMER_TOOL).add(OnHitEffect.setOnFire(25)), new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)).setRegistryName("melt_masher"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.DIAMOND, 7, -3.2F).efficiency(9.0F).set(MSItemTypes.MULTI_TOOL).set(new FarmineEffect(Integer.MAX_VALUE, 200)).set(PogoEffect.EFFECT_07).add(PogoEffect.EFFECT_07),  new Item.Properties().defaultMaxDamage(6114).group(MSItemGroup.WEAPONS)).setRegistryName("estrogen_empowered_everything_eradicator"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.SBAHJ_TIER, 9, -3.2F).efficiency(9.1F).set(MSItemTypes.HAMMER_TOOL).set(PogoEffect.EFFECT_02).add(PogoEffect.EFFECT_02, OnHitEffect.playSound(() -> MSSoundEvents.ITEM_EEEEEEEEEEEE_HIT, 1.5F, 1.0F)), new Item.Properties().defaultMaxDamage(6114).group(MSItemGroup.WEAPONS)).setRegistryName("eeeeeeeeeeee"));
@@ -727,8 +757,8 @@ public class MSItems
 		
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.PRISMARINE_TIER, 2, -2.0F).efficiency(1.5F).set(MSItemTypes.MISC_TOOL), new Item.Properties().maxDamage(100).group(MSItemGroup.WEAPONS)).setRegistryName("obsidian_axe_knife"));
 		
-		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.WOOD, 1, -1.0F).efficiency(1.5F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.enemyKnockback(1.5F)), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("fan"));
-		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.DENIZEN_TIER, 2, -1.0F).efficiency(1.5F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.BREATH_LEVITATION_AOE).add(OnHitEffect.enemyKnockback(2.0F)), new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.RARE)).setRegistryName("typhonic_trivializer"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.WOOD, 1, -1.0F).efficiency(1.5F).set(MSItemTypes.MISC_TOOL).set(ItemRightClickEffect.extinguishFire(1)).add(OnHitEffect.enemyKnockback(1.5F)), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("fan"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.DENIZEN_TIER, 2, -1.0F).efficiency(1.5F).set(MSItemTypes.MISC_TOOL).set(ItemRightClickEffect.extinguishFire(3)).add(OnHitEffect.BREATH_LEVITATION_AOE).add(OnHitEffect.enemyKnockback(2.0F)), new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.RARE)).setRegistryName("typhonic_trivializer"));
 		
 		//sickles
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 2, -2.2F).efficiency(1.5F).set(MSItemTypes.SICKLE_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("sickle"));
@@ -802,8 +832,17 @@ public class MSItems
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 3, -2.6F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.playSound(() -> SoundEvents.BLOCK_NOTE_BLOCK_CHIME)), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("tuning_fork"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.STONE, 4, -2.5F).efficiency(1.0F).set(MSItemTypes.SHOVEL_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("spork"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.GOLD, 5, -2.5F).efficiency(1.0F).set(MSItemTypes.SHOVEL_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("golden_spork"));
+		
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 7, -2.9F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("bident"));
-
+		registry.register(new ConsumableProjectileWeaponItem(new Item.Properties().group(MSItemGroup.WEAPONS), 0.5F, 20.0F, 1).setRegistryName("sbahjarang"));
+		registry.register(new ConsumableProjectileWeaponItem(new Item.Properties().group(MSItemGroup.WEAPONS), 1.0F, 2.8F, 2).setRegistryName("shuriken"));
+		registry.register(new ConsumableProjectileWeaponItem(new Item.Properties().group(MSItemGroup.WEAPONS), 1.5F, 2.4F,3).setRegistryName("clubs_suitarang"));
+		registry.register(new ConsumableProjectileWeaponItem(new Item.Properties().group(MSItemGroup.WEAPONS), 1.5F, 2.4F,3).setRegistryName("diamonds_suitarang"));
+		registry.register(new ConsumableProjectileWeaponItem(new Item.Properties().group(MSItemGroup.WEAPONS), 1.5F, 2.4F,3).setRegistryName("hearts_suitarang"));
+		registry.register(new ConsumableProjectileWeaponItem(new Item.Properties().group(MSItemGroup.WEAPONS), 1.5F, 2.4F,3).setRegistryName("spades_suitarang"));
+		registry.register(new ReturningProjectileWeaponItem(new Item.Properties().group(MSItemGroup.WEAPONS).maxDamage(250), 1.3F, 1.0F,5, 30).setRegistryName("chakram"));
+		registry.register(new ReturningProjectileWeaponItem(new Item.Properties().group(MSItemGroup.WEAPONS).maxDamage(2048), 1.5F, 0.6F,12, 20).setRegistryName("umbral_infiltrator"));
+		registry.register(new BouncingProjectileWeaponItem(new Item.Properties().group(MSItemGroup.WEAPONS).maxDamage(250), 1.5F, 1.0F,5, 20).setRegistryName("sorcerers_pinball"));
 		registry.register(new SwordItem(MSItemTypes.EMERALD_TIER, 3, -2.4F, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("emerald_sword"));
 		registry.register(new AxeItem(MSItemTypes.EMERALD_TIER, 5, -3.0F, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("emerald_axe"));
 		registry.register(new PickaxeItem(MSItemTypes.EMERALD_TIER, 1 , -2.8F, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("emerald_pickaxe"));

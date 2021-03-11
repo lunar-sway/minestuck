@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "minestuck:block/parcel_pyxis" },
+        "facing=east":  { "model": "minestuck:block/parcel_pyxis", "y": 90 },
+        "facing=south": { "model": "minestuck:block/parcel_pyxis", "y": 180 },
+        "facing=west":  { "model": "minestuck:block/parcel_pyxis", "y": 270 }
+    }
+}

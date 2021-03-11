@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:shade_stone"
+  },
+  "grist_cost": {
+    "minestuck:build": 2,
+    "minestuck:shale": 2
+  }
+}
