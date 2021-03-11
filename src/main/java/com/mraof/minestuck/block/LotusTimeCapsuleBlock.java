@@ -1,38 +1,55 @@
 package com.mraof.minestuck.block;
 
+import com.mraof.minestuck.block.machine.MachineMultiblock;
+import com.mraof.minestuck.block.machine.MultiMachineBlock;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.util.CustomVoxelShape;
 import com.mraof.minestuck.util.MSSoundEvents;
-import net.minecraft.block.*;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.brain.BrainUtil;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootParameterSets;
-import net.minecraft.world.storage.loot.LootParameters;
-import net.minecraft.world.storage.loot.LootTable;
 
-import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
-public class LotusTimeCapsuleBlock extends Block
+public class LotusTimeCapsuleBlock extends MultiMachineBlock
 {
-	public static final BooleanProperty UNACTIVATED = MSProperties.UNACTIVATED;
+	protected final Map<Direction, VoxelShape> shape;
+	protected final boolean recursive, corner;
+	protected final BlockPos mainPos;
 	
-	protected LotusTimeCapsuleBlock(Block.Properties builder) {
-		super(builder);
+	public LotusTimeCapsuleBlock(MachineMultiblock machine, CustomVoxelShape shape, boolean recursive, boolean corner, BlockPos mainPos, Properties properties)
+	{
+		super(machine, properties);
+		this.shape = shape.createRotatedShapes();
+		this.recursive = recursive;
+		this.corner = corner;
+		this.mainPos = mainPos;
 	}
 	
-	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit, Random random) {
+	@Override
+	@SuppressWarnings("deprecation")
+	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
+	{
+		return shape.get(state.get(FACING));
+	}
+	
+	@Override
+	@SuppressWarnings("deprecation")
+	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+	{
 		ItemStack itemstack = player.getHeldItem(handIn);
 		if(itemstack.isEmpty())
 		{
@@ -55,19 +72,37 @@ public class LotusTimeCapsuleBlock extends Block
 				//worldIn.setBlockState(pos, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.getDefaultState(), 11);
 				//worldIn.setBlockState(pos, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.getDefaultState().with(LotusTimeCapsuleBlock.UNACTIVATED, false), 11);
 			}
-			return true;
+			return ActionResultType.SUCCESS;
 		} else {
-			return false;
+			return ActionResultType.FAIL;
 		}
 	}
-	/*
-	public List<ItemStack>  generateLoot(ResourceLocation lootTable, PlayerEntity playerEntity) {
-		//LootTable loottable = playerEntity.world.getServer().getLootTableManager().getLootTableFromLocation(playerEntity.getLootTableResourceLocation());
-		//LootContext.Builder lootcontext$builder = (new LootContext.Builder((ServerWorld)playerEntity.world)).withParameter(LootParameters.POSITION, new BlockPos(playerEntity)).withParameter(LootParameters.THIS_ENTITY, playerEntity).withRandom(playerEntity.getRNG());
-		//return loottable.generate(lootcontext$builder.build(LootParameterSets.CHEST));
-		
-		LootContext.Builder contextBuilder = new LootContext.Builder((ServerWorld) playerEntity.world).withParameter(LootParameters.THIS_ENTITY, playerEntity).withParameter(LootParameters.POSITION, new BlockPos(playerEntity));
-		List<ItemStack> itemStacks = playerEntity.getServer().getLootTableManager().getLootTableFromLocation(lootTable).generate(contextBuilder.build(LootParameterSets.GIFT));
-		return itemStacks;
-	}*/
+	
+	@Override
+	@SuppressWarnings("deprecation")
+	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving)
+	{
+		if(state.getBlock() != newState.getBlock())
+		{
+			super.onReplaced(state, worldIn, pos, newState, isMoving);
+		}
+	}
+	
+	public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
+		super.tick(state, worldIn, pos, random);
+		if (random.nextInt(7) == 0) {
+			//worldIn.setBlockState(pos, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.getDefaultState().with(LotusTimeCapsuleBlock.UNACTIVATED, true), 11);
+			//worldIn.setBlockState(pos, MSBlocks.MINI_FROG_STATUE.getDefaultState());
+		}
+	}
+	
+	@Override
+	public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random)
+	{
+		super.randomTick(state, worldIn, pos, random);
+		if (random.nextFloat() >= 0.99F) {
+			//worldIn.setBlockState(pos, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.getDefaultState().with(LotusTimeCapsuleBlock.UNACTIVATED, true), 11);
+			worldIn.setBlockState(pos.up(1), MSBlocks.MINI_FROG_STATUE.getDefaultState());
+		}
+	}
 }

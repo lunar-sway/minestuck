@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.gen.feature.structure;
 
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.storage.loot.MSLootTables;
@@ -70,6 +71,7 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 	private void generateLoot(IWorld worldIn, MutableBoundingBox boundingBoxIn, Random randomIn, Direction direction, ResourceLocation lootTable)
 	{
 		setBlockState(worldIn, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, direction), 18, 17+30, 9+38, boundingBox);
+		setBlockState(worldIn, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.getMainBlock().getDefaultState(), 21, 49+30, 21+38, boundingBox);
 		/*
 		BlockPos blockPos = new BlockPos(18,17,9);
 		TileEntity te = worldIn.getTileEntity(blockPos);
@@ -82,7 +84,7 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 	
 	private void buildMainPlatform(BlockState block, IWorld world, Random rand, MutableBoundingBox boundingBox, int a)
 	{
-		fillWithBlocks(world, boundingBox, a*2, 0+30, a*2+38, (int)(40 * (1-(float)a/20)), 8+(8*a)+30, (int)(40 * (1-(float)a/20))+38, block, block, false);
+		fillWithBlocks(world, boundingBox, a*2, 0+30, a*2+39, (int)(40 * (1-(float)a/20)), 8+(8*a)+30, (int)(40 * (1-(float)a/20))+39, block, block, false);
 		for(int i = 0; i < 8; i++)
 		{
 			//fillWithBlocks(world, boundingBox, 15, i+(8*a), -60+i, 25, i+(8*a), 60-i, Blocks.GOLD_BLOCK.getDefaultState(), Blocks.IRON_BLOCK.getDefaultState(), false);
@@ -118,15 +120,15 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 		{
 			fillWithBlocks(world, boundingBox, 16, i+30, i, 24, i+30, 50, Blocks.GOLD_BLOCK.getDefaultState(), Blocks.IRON_BLOCK.getDefaultState(), false); //stairs
 		}
-		fillWithBlocks(world, boundingBox, 16, 0, 0, 24, -30+30, 12+38, Blocks.GOLD_BLOCK.getDefaultState(), Blocks.IRON_BLOCK.getDefaultState(), false); //underneath stairs
-		fillWithBlocks(world, boundingBox, 0, 0, 0+38, 40, -30+30, 40+38, block, block, false); //underneath main platform
+		fillWithBlocks(world, boundingBox, 16, 0, 0, 24, 30, 12+39, Blocks.GOLD_BLOCK.getDefaultState(), Blocks.IRON_BLOCK.getDefaultState(), false); //underneath stairs
+		fillWithBlocks(world, boundingBox, 0, 0, 0+39, 40, 30, 40+39, block, block, false); //underneath main platform
 	}
 	
 	private void carveRooms(IWorld world, MutableBoundingBox boundingBox)
 	{
 		//fillWithBlocks(world, boundingBox, 15, 48, 15, 30, 55, 32, Blocks.GOLD_BLOCK.getDefaultState(), Blocks.IRON_BLOCK.getDefaultState(), false); //underneath stairs
-		fillWithAir(world, boundingBox, 13, 49+30, 13+38, 27, 55+30, 27+38); //lotus room
-		fillWithAir(world, boundingBox, 19, 49+30, 12+38, 21, 52+30, 12+38); //lotus room entry
-		fillWithAir(world, boundingBox, 8, 16+30, 8+38, 32, 24+30, 32+38); //lower room
+		fillWithAir(world, boundingBox, 13, 49+30, 13+39, 27, 55+30, 27+39); //lotus room
+		fillWithAir(world, boundingBox, 19, 49+30, 12+39, 21, 52+30, 12+39); //lotus room entry
+		fillWithAir(world, boundingBox, 8, 16+30, 8+39, 32, 24+30, 32+39); //lower room
 	}
 }
