@@ -29,11 +29,15 @@ public class TempleScannerItem extends Item
 		ItemStack item = playerIn.getHeldItem(handIn);
 		if(worldIn instanceof ServerWorld)
 		{
-			BlockPos blockpos = ((ServerWorld) worldIn).getChunkProvider().getChunkGenerator().findNearestStructure(worldIn, "minestuck:frog_temple", new BlockPos(playerIn), 100, false);
+			BlockPos structureBlockPos = ((ServerWorld) worldIn).getChunkProvider().getChunkGenerator().findNearestStructure(worldIn, "minestuck:frog_temple", new BlockPos(playerIn), 100, false);
 			
-			if(blockpos != null)
+			
+			if(structureBlockPos != null)
 			{
-				ITextComponent message = new TranslationTextComponent(getTranslationKey() + ".successMessage", blockpos.getX()+random.nextInt(32)-16, blockpos.getZ()+random.nextInt(32)-16);
+				BlockPos playerBlockPos = playerIn.getPosition();
+				playerBlockPos.distanceSq(structureBlockPos);
+				ITextComponent message = new TranslationTextComponent(getTranslationKey() + ".successMessage", playerBlockPos.distanceSq(structureBlockPos));
+				//ITextComponent message = new TranslationTextComponent(getTranslationKey() + ".successMessage", structureBlockPos.getX()+random.nextInt(32)-16, blockpos.getZ()+random.nextInt(32)-16);
 				message.getStyle().setColor(TextFormatting.AQUA);
 				playerIn.sendMessage(message);
 			} else
