@@ -88,11 +88,11 @@ public class EndLandType extends TerrainLandType
 		
 		if(biome.type == BiomeType.NORMAL)
 		{
-			biome.addFeature(GenerationStage.Decoration.TOP_LAYER_MODIFICATION, MSFeatures.SURFACE_DISK.withConfiguration(new SphereReplaceConfig(MSBlocks.END_GRASS.getDefaultState(), 5, 1, Lists.newArrayList(blocks.getBlockState("surface"), MSBlocks.END_GRASS.getDefaultState()))).withPlacement(Placement.COUNT_TOP_SOLID.configure(new FrequencyConfig(1))));
+			biome.addFeature(GenerationStage.Decoration.TOP_LAYER_MODIFICATION, MSFeatures.GRASSY_SURFACE_DISK.withConfiguration(new SphereReplaceConfig(MSBlocks.END_GRASS.getDefaultState(), 5, 1, Lists.newArrayList(blocks.getBlockState("surface"), MSBlocks.END_GRASS.getDefaultState()))).withPlacement(Placement.COUNT_TOP_SOLID.configure(new FrequencyConfig(1))));
 			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_PATCH.withConfiguration(MinestuckBiomeFeatures.TALL_END_GRASS_CONFIG).withPlacement(Placement.COUNT_HEIGHTMAP_DOUBLE.configure(new FrequencyConfig(8))));
 		} else if(biome.type == BiomeType.ROUGH)
 		{
-			biome.addFeature(GenerationStage.Decoration.TOP_LAYER_MODIFICATION, MSFeatures.SURFACE_DISK.withConfiguration(new SphereReplaceConfig(Blocks.END_STONE.getDefaultState(), 4, 1, Lists.newArrayList(blocks.getBlockState("surface_rough"), Blocks.END_STONE.getDefaultState()))).withPlacement(Placement.COUNT_TOP_SOLID.configure(new FrequencyConfig(1))));
+			biome.addFeature(GenerationStage.Decoration.TOP_LAYER_MODIFICATION, MSFeatures.GRASSY_SURFACE_DISK.withConfiguration(new SphereReplaceConfig(Blocks.END_STONE.getDefaultState(), 4, 1, Lists.newArrayList(blocks.getBlockState("surface_rough"), Blocks.END_STONE.getDefaultState()))).withPlacement(Placement.COUNT_TOP_SOLID.configure(new FrequencyConfig(1))));
 			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.CHORUS_PLANT.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.CHORUS_PLANT.configure(IPlacementConfig.NO_PLACEMENT_CONFIG)));
 			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_PATCH.withConfiguration(MinestuckBiomeFeatures.TALL_END_GRASS_CONFIG).withPlacement(Placement.COUNT_HEIGHTMAP_DOUBLE.configure(new FrequencyConfig(10))));
 		}

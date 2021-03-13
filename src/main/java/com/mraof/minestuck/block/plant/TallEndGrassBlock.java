@@ -53,7 +53,7 @@ public class TallEndGrassBlock extends DoublePlantBlock
 	public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, PlayerEntity player)
 	{
 		super.onBlockHarvested(worldIn, pos, state, player);
-		if(!worldIn.isRemote)
+		if(!worldIn.isRemote && !player.isCreative())
 		{
 			randomTeleport(worldIn, player);
 		}
