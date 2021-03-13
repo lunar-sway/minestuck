@@ -2,7 +2,7 @@
     "parent": "block/cube_bottom_top",
     "textures": {
         "bottom": "minestuck:block/end_stone",
-        "top": "minestuck:block/end_grass_block_top",
-        "side": "minestuck:block/end_grass_block_side"
+        "top": "minestuck:block/end_grass_top",
+        "side": "minestuck:block/end_grass_side"
     }
 }
