@@ -79,7 +79,7 @@ public class EndLandType extends TerrainLandType
 	}
 	
 	@Override
-	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
+	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blocks) //TODO Try and find a method of checking that a non solid block exists above SurfaceDisk features as their use here is to lay down grass
 	{
 		if(biome.type != BiomeType.OCEAN)
 		{
