@@ -1,7 +1,7 @@
 {
   "type": "minestuck:grist_cost",
   "ingredient": {
-    "item": "minestuck:end_grass_block"
+    "item": "minestuck:end_grass"
   },
   "grist_cost": {
     "minestuck:build": 4,

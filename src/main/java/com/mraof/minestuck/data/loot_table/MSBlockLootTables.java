@@ -109,7 +109,7 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(FLOWERY_MOSSY_COBBLESTONE);
 		registerDropSelfLootTable(FLOWERY_MOSSY_STONE_BRICKS);
 		registerDropSelfLootTable(COARSE_END_STONE);
-		registerLootTable(END_GRASS_BLOCK, MSBlockLootTables::endGrassDrop);
+		registerLootTable(END_GRASS, MSBlockLootTables::endGrassDrop);
 		registerDropSelfLootTable(CHALK);
 		registerDropSelfLootTable(POLISHED_CHALK);
 		registerDropSelfLootTable(CHALK_BRICKS);

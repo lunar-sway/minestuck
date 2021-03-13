@@ -71,7 +71,7 @@ public class MinestuckBlockTagsProvider extends BlockTagsProvider
 		getBuilder(LAPIS_ORES).add(PINK_STONE_LAPIS_ORE);
 		getBuilder(DIAMOND_ORES).add(PINK_STONE_DIAMOND_ORE);
 		getBuilder(CRUXITE_STORAGE_BLOCKS).add(CRUXITE_BLOCK);
-		getBuilder(END_SAPLING_DIRT).add(Tags.Blocks.END_STONES).add(END_GRASS_BLOCK);
+		getBuilder(END_SAPLING_DIRT).add(Tags.Blocks.END_STONES).add(END_GRASS);
 	}
 	
 	@Override

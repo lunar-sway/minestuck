@@ -531,9 +531,9 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSBlocks.BLUE_DIRT).input(Items.DIRT).or().input(Items.BLUE_DYE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.THOUGHT_DIRT).input(Items.DIRT).or().input(Items.LIME_DYE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.COARSE_END_STONE).input(Items.COARSE_DIRT).or().input(Items.END_STONE).build(consumer);
-		CombinationRecipeBuilder.of(MSBlocks.END_GRASS_BLOCK).namedInput(Items.GRASS_BLOCK).or().input(Items.END_STONE).build(consumer);
-		CombinationRecipeBuilder.of(MSBlocks.END_GRASS_BLOCK).namedInput(Items.MYCELIUM).or().input(Items.END_STONE).build(consumer);
-		CombinationRecipeBuilder.of(Items.GRASS_BLOCK).namedInput(MSBlocks.END_GRASS_BLOCK).and().input(Items.DIRT).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(MSBlocks.END_GRASS).namedInput(Items.GRASS_BLOCK).or().input(Items.END_STONE).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.END_GRASS).namedInput(Items.MYCELIUM).or().input(Items.END_STONE).build(consumer);
+		CombinationRecipeBuilder.of(Items.GRASS_BLOCK).namedInput(MSBlocks.END_GRASS).and().input(Items.DIRT).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(MSBlocks.VINE_LOG).input(Items.OAK_LOG).and().input(Items.VINE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.FLOWERY_VINE_LOG).input(MSBlocks.VINE_LOG).or().input(ItemTags.SMALL_FLOWERS).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.GLOWING_MUSHROOM).input(Items.BROWN_MUSHROOM).or().input(Items.GLOWSTONE_DUST).build(consumer);

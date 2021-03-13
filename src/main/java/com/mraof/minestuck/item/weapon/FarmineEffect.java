@@ -54,7 +54,7 @@ public class FarmineEffect implements DestroyBlockEffect
 		addAssociation(Blocks.DIRT, Blocks.GRASS);
 		addAssociation(Blocks.DIRT, Blocks.MYCELIUM);
 		addAssociation(Blocks.DIRT, Blocks.GRASS_PATH);
-		addAssociation(Blocks.END_STONE, MSBlocks.END_GRASS_BLOCK);
+		addAssociation(Blocks.END_STONE, MSBlocks.END_GRASS);
 		
 		addOneWayAssociation(Blocks.COBBLESTONE, Blocks.INFESTED_COBBLESTONE);
 		addOneWayAssociation(Blocks.STONE, Blocks.INFESTED_STONE);

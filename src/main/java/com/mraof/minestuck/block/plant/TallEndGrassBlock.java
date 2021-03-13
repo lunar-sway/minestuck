@@ -29,7 +29,7 @@ public class TallEndGrassBlock extends DoublePlantBlock
 	@Override
 	protected boolean isValidGround(BlockState state, IBlockReader worldIn, BlockPos pos)
 	{
-		return state.getBlock() == MSBlocks.END_GRASS_BLOCK;
+		return state.getBlock() == MSBlocks.END_GRASS;
 	}
 	
 	@Override

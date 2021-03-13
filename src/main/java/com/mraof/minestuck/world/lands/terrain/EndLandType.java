@@ -42,7 +42,7 @@ public class EndLandType extends TerrainLandType
 	{
 		registry.setGroundState(MSBlocks.COARSE_END_STONE.getDefaultState(), MSFillerBlockTypes.COARSE_END_STONE);
 		registry.setBlockState("surface", Blocks.END_STONE.getDefaultState());
-		registry.setBlockState("surface_rough", MSBlocks.END_GRASS_BLOCK.getDefaultState());
+		registry.setBlockState("surface_rough", MSBlocks.END_GRASS.getDefaultState());
 		registry.setBlockState("upper", Blocks.END_STONE.getDefaultState());
 		registry.setBlockState("ocean", MSBlocks.ENDER.getDefaultState());
 		registry.setBlockState("structure_primary", Blocks.END_STONE_BRICKS.getDefaultState());
@@ -88,7 +88,7 @@ public class EndLandType extends TerrainLandType
 		
 		if(biome.type == BiomeType.NORMAL)
 		{
-			biome.addFeature(GenerationStage.Decoration.TOP_LAYER_MODIFICATION, MSFeatures.SURFACE_DISK.withConfiguration(new SphereReplaceConfig(MSBlocks.END_GRASS_BLOCK.getDefaultState(), 5, 1, Lists.newArrayList(blocks.getBlockState("surface"), MSBlocks.END_GRASS_BLOCK.getDefaultState()))).withPlacement(Placement.COUNT_TOP_SOLID.configure(new FrequencyConfig(1))));
+			biome.addFeature(GenerationStage.Decoration.TOP_LAYER_MODIFICATION, MSFeatures.SURFACE_DISK.withConfiguration(new SphereReplaceConfig(MSBlocks.END_GRASS.getDefaultState(), 5, 1, Lists.newArrayList(blocks.getBlockState("surface"), MSBlocks.END_GRASS.getDefaultState()))).withPlacement(Placement.COUNT_TOP_SOLID.configure(new FrequencyConfig(1))));
 			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_PATCH.withConfiguration(MinestuckBiomeFeatures.TALL_END_GRASS_CONFIG).withPlacement(Placement.COUNT_HEIGHTMAP_DOUBLE.configure(new FrequencyConfig(8))));
 		} else if(biome.type == BiomeType.ROUGH)
 		{
