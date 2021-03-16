@@ -35,9 +35,7 @@ public class TempleScannerItem extends Item
 			if(structureBlockPos != null)
 			{
 				BlockPos playerBlockPos = playerIn.getPosition();
-				playerBlockPos.distanceSq(structureBlockPos);
-				ITextComponent message = new TranslationTextComponent(getTranslationKey() + ".successMessage", playerBlockPos.distanceSq(structureBlockPos));
-				//ITextComponent message = new TranslationTextComponent(getTranslationKey() + ".successMessage", structureBlockPos.getX()+random.nextInt(32)-16, blockpos.getZ()+random.nextInt(32)-16);
+				ITextComponent message = new TranslationTextComponent(getTranslationKey() + ".successMessage", (int)Math.sqrt(playerBlockPos.distanceSq(structureBlockPos.up(64))));
 				message.getStyle().setColor(TextFormatting.AQUA);
 				playerIn.sendMessage(message);
 			} else

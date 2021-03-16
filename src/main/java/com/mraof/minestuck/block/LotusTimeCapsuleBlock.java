@@ -4,6 +4,7 @@ import com.mraof.minestuck.block.machine.MachineMultiblock;
 import com.mraof.minestuck.block.machine.MultiMachineBlock;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.CustomVoxelShape;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemEntity;
@@ -100,7 +101,8 @@ public class LotusTimeCapsuleBlock extends MultiMachineBlock
 	public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random)
 	{
 		super.randomTick(state, worldIn, pos, random);
-		if (random.nextFloat() >= 0.99F) {
+		Debug.debugf("random tick");
+		if (random.nextFloat() >= 0.98F) {
 			//worldIn.setBlockState(pos, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.getDefaultState().with(LotusTimeCapsuleBlock.UNACTIVATED, true), 11);
 			worldIn.setBlockState(pos.up(1), MSBlocks.MINI_FROG_STATUE.getDefaultState());
 		}

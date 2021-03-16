@@ -642,7 +642,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.ENERGY_CORE, "Energy Core");
 		add(MSItems.TEMPLE_SCANNER, "Temple Scanner");
 		addExtra(MSItems.TEMPLE_SCANNER, "successMessage", "Closest detected temple around %s blocks away");
-		//addExtra(MSItems.TEMPLE_SCANNER, "successMessage", "Closest detected temple around X = %s and Z = %s");
 		addExtra(MSItems.TEMPLE_SCANNER, "failMessage", "No temple detected nearby");
 		add(MSItems.CRUXITE_APPLE, "Cruxite Artifact");
 		add(MSItems.CRUXITE_POTION, "Cruxite Artifact");
