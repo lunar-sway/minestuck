@@ -596,6 +596,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.UMBRAL_INFILTRATOR, "Phases through blocks like the shadowy abyss of the denizen Nyx");
 		add(MSItems.SORCERERS_PINBALL, "Sorcerer's Pinball");
 		addTooltip(MSItems.SORCERERS_PINBALL, "Enchanted with real bouncy majyyk");
+		add(MSItems.THORN_OF_OGLOGOTH, "Thorn of Oglogoth");
 		add(MSItems.EMERALD_SWORD, "Emerald Sword");
 		add(MSItems.EMERALD_AXE, "Emerald Axe");
 		add(MSItems.EMERALD_PICKAXE, "Emerald Pickaxe");
