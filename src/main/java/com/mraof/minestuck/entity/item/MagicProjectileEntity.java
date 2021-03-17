@@ -15,6 +15,7 @@ import net.minecraft.entity.projectile.DamagingProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.network.IPacket;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
@@ -79,7 +80,8 @@ public class MagicProjectileEntity extends DamagingProjectileEntity implements I
 				entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.shootingEntity), damage * 1.5F);
 			else
 				entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.shootingEntity), damage);
-			this.remove();
+			if(entity != this.shootingEntity)
+				removeEntity();
 		}
 		
 		if(result.getType() == RayTraceResult.Type.BLOCK)
@@ -89,9 +91,17 @@ public class MagicProjectileEntity extends DamagingProjectileEntity implements I
 			BlockPos blockPos = blockResult.getPos();
 			if(Block.hasEnoughSolidSide(world, blockPos, blockFace))
 			{
-				this.remove();
+				removeEntity();
 			}
 		}
+	}
+	
+	public void removeEntity()
+	{
+		for(int i = 0; i < this.rand.nextInt(3) + 2; ++i) {
+			this.world.addParticle(ParticleTypes.POOF, this.getPosX(), this.getPosY(), this.getPosZ(), this.rand.nextGaussian() * 0.05D, 0.005D, this.rand.nextGaussian() * 0.05D);
+		}
+		this.remove();
 	}
 	
 	public void tick()
@@ -108,7 +118,7 @@ public class MagicProjectileEntity extends DamagingProjectileEntity implements I
 		
 		if(this.ticksExisted >= 100)
 		{
-			this.remove();
+			removeEntity();
 		}
 		
 		world.addParticle(ParticleTypes.END_ROD, this.getPosX(), this.getPosY(), this.getPosZ(), 0.0D, 0.0D, 0.0D);
@@ -125,6 +135,13 @@ public class MagicProjectileEntity extends DamagingProjectileEntity implements I
 	@Override
 	public ItemStack getItem()
 	{
-		return null;
+		ItemStack itemStack = new ItemStack(Items.BRICK);
+		return itemStack;
+	}
+	
+	@Override
+	protected boolean isFireballFiery()
+	{
+		return false;
 	}
 }

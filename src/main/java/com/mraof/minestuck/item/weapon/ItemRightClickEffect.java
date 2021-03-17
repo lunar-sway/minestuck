@@ -86,16 +86,17 @@ public interface ItemRightClickEffect
 			
 			if(!world.isRemote)
 			{
-				double accelerationX = velocity * player.getLookVec().x + (player.getRNG().nextFloat() - .5F);
-				double accelerationY = velocity * player.getLookVec().y + (player.getRNG().nextFloat() - .5F);
-				double accelerationZ = velocity * player.getLookVec().z + (player.getRNG().nextFloat() - .5F);
+				double accelerationX = velocity * player.getLookVec().x + (player.getRNG().nextFloat() - .5F)/accuracy;
+				double accelerationY = velocity * player.getLookVec().y + (player.getRNG().nextFloat() - .5F)/accuracy;
+				double accelerationZ = velocity * player.getLookVec().z + (player.getRNG().nextFloat() - .5F)/accuracy;
 				MagicProjectileEntity projectileEntity = new MagicProjectileEntity(world, player, accelerationX, accelerationY, accelerationZ, damage);
-				//projectileEntity.setItem(itemStackIn);
-				//projectileEntity.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, velocity, accuracy);
 				world.addEntity(projectileEntity);
+				//projectileEntity.setPosition(player.getPosX(), player.getEyeHeight(), player.getPosZ());
 			}
 			
-			player.getCooldownTracker().setCooldown(itemStackIn.getItem(), 20);
+			player.getCooldownTracker().setCooldown(itemStackIn.getItem(), 100);
+			if(player.isCreative())
+				player.getCooldownTracker().setCooldown(itemStackIn.getItem(), 10);
 			itemStackIn.damageItem(2, player, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
 			player.addStat(Stats.ITEM_USED.get(itemStackIn.getItem()));
 			return ActionResult.resultPass(itemStackIn);
