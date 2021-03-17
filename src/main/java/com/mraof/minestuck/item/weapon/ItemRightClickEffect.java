@@ -1,21 +1,22 @@
 package com.mraof.minestuck.item.weapon;
 
-import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.entity.item.MagicProjectileEntity;
+import com.mraof.minestuck.entity.underling.UnderlingEntity;
+import com.mraof.minestuck.util.Debug;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.EntityPredicate;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.FireballEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.pathfinding.PathType;
 import net.minecraft.stats.Stats;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -23,6 +24,8 @@ import java.util.function.Supplier;
 
 public interface ItemRightClickEffect
 {
+	EntityPredicate visiblePredicate = (new EntityPredicate()).setLineOfSiteRequired();
+	
 	ActionResult<ItemStack> onRightClick(World world, PlayerEntity player, Hand hand);
 	
 	ItemRightClickEffect ACTIVE_HAND = (world, player, hand) -> {
@@ -78,26 +81,44 @@ public interface ItemRightClickEffect
 		};
 	}
 	
-	static ItemRightClickEffect summonMagicProjectile(float velocity, float accuracy, int damage)
+	static ItemRightClickEffect summonMagicProjectile(int distance, int damage)
 	{
 		return (world, player, hand) -> {
 			ItemStack itemStackIn = player.getHeldItem(hand);
-			world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ENTITY_ILLUSIONER_CAST_SPELL, SoundCategory.PLAYERS, 0.6F, 1.6F);
+			world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ENTITY_ILLUSIONER_CAST_SPELL, SoundCategory.PLAYERS, 0.8F, 1.6F);
 			
-			if(!world.isRemote)
+			//LivingEntity closestTarget = player.world.getClosestEntityWithinAABB(LivingEntity.class, visiblePredicate, player, player.getPosX(), player.getPosY(), player.getPosZ(), player.getBoundingBox().expand(player.getLookVec().scale(5.0D+velocity)).shrink(1.0D));
+			Vec3d vec3d;
+			
+			
+			for(float i = 0; i < distance*2; i++)
 			{
-				double accelerationX = velocity * player.getLookVec().x + (player.getRNG().nextFloat() - .5F)/accuracy;
-				double accelerationY = velocity * player.getLookVec().y + (player.getRNG().nextFloat() - .5F)/accuracy;
-				double accelerationZ = velocity * player.getLookVec().z + (player.getRNG().nextFloat() - .5F)/accuracy;
-				MagicProjectileEntity projectileEntity = new MagicProjectileEntity(world, player, accelerationX, accelerationY, accelerationZ, damage);
-				world.addEntity(projectileEntity);
-				//projectileEntity.setPosition(player.getPosX(), player.getEyeHeight(), player.getPosZ());
+				vec3d = player.getLookVec().scale(i/2);
+				BlockPos projectilePos = new BlockPos(player.getPosX() + vec3d.x, player.getPosYEye() + vec3d.y, player.getPosZ() + vec3d.z);
+				if(!world.getBlockState(projectilePos).allowsMovement(world, projectilePos, PathType.LAND))
+				{
+					break;
+				}
+				AxisAlignedBB axisAlignedBB = new AxisAlignedBB(projectilePos);
+				//List<Entity> livingEntityList = world.getEntitiesWithinAABBExcludingEntity(player, axisAlignedBB);
+				LivingEntity closestTarget = player.world.getClosestEntityWithinAABB(LivingEntity.class, visiblePredicate, player, projectilePos.getX(), projectilePos.getY(), projectilePos.getZ(), axisAlignedBB);
+				if(closestTarget != null)
+				{
+					if(closestTarget instanceof UnderlingEntity)
+						closestTarget.attackEntityFrom(DamageSource.MAGIC, damage * 1.5F);
+					else
+						closestTarget.attackEntityFrom(DamageSource.MAGIC, damage);
+					break;
+				}
+				world.addParticle(ParticleTypes.END_ROD, projectilePos.getX(), projectilePos.getY(), projectilePos.getZ(), 0.0D, 0.0D, 0.0D);
+				Debug.debugf("%s", projectilePos);
 			}
 			
-			player.getCooldownTracker().setCooldown(itemStackIn.getItem(), 100);
+			player.getCooldownTracker().setCooldown(itemStackIn.getItem(), 50);
 			if(player.isCreative())
 				player.getCooldownTracker().setCooldown(itemStackIn.getItem(), 10);
-			itemStackIn.damageItem(2, player, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
+			player.swing(hand, true);
+			itemStackIn.damageItem(4, player, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
 			player.addStat(Stats.ITEM_USED.get(itemStackIn.getItem()));
 			return ActionResult.resultPass(itemStackIn);
 		};
