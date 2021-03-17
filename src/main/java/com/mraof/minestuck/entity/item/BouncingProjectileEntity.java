@@ -62,7 +62,7 @@ public class BouncingProjectileEntity extends ProjectileItemEntity
 			{
 				Entity entity = ((EntityRayTraceResult) result).getEntity();
 				if(entity instanceof UnderlingEntity)
-					entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), damage * 2);
+					entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), damage * 1.5F);
 				else if(entity != this.getThrower())
 					entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), damage);
 				else
