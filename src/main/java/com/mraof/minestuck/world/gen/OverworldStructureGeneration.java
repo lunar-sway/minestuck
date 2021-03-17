@@ -21,11 +21,11 @@ public class OverworldStructureGeneration
 	{
 		for(Biome biome : ForgeRegistries.BIOMES)
 		{
-			if(BiomeDictionary.hasType(biome, BiomeDictionary.Type.OVERWORLD) && biome != Biomes.OCEAN)
+			if(BiomeDictionary.hasType(biome, BiomeDictionary.Type.OVERWORLD) /*&& biome != Biomes.OCEAN*/)
 			{
 				biome.addStructure(MSFeatures.FROG_TEMPLE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
-				biome.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MSFeatures.FROG_TEMPLE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.CHANCE_PASSTHROUGH.configure(new ChanceConfig(70))));
-				//biome.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MSFeatures.FROG_TEMPLE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.TOP_SOLID_HEIGHTMAP.configure(IPlacementConfig.NO_PLACEMENT_CONFIG)));
+				//biome.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MSFeatures.FROG_TEMPLE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.CHANCE_PASSTHROUGH.configure(new ChanceConfig(70))));
+				biome.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MSFeatures.FROG_TEMPLE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.TOP_SOLID_HEIGHTMAP.configure(IPlacementConfig.NO_PLACEMENT_CONFIG)));
 				//biome.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MSFeatures.FROG_TEMPLE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.TOP_SOLID_HEIGHTMAP_RANGE.configure(new TopSolidRangeConfig(-50, -30))));
 			}
 		}

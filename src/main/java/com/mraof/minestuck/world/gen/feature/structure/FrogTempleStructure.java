@@ -41,19 +41,19 @@ public class FrogTempleStructure extends ScatteredStructure<NoFeatureConfig>
 	@Override
 	public int getSize()
 	{
-		return 10;
+		return 16;
 	}
 	
 	@Override
 	protected int getBiomeFeatureDistance(ChunkGenerator<?> generator)
 	{
-		return 24;
+		return 128;
 	}
 	
 	@Override
 	protected int getBiomeFeatureSeparation(ChunkGenerator<?> generator)
 	{
-		return 16;
+		return 92;
 	}
 	
 	public static class Start extends StructureStart
