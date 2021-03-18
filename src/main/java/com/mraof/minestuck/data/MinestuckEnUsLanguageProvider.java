@@ -319,6 +319,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.CASSETTE_PLAYER, "Cassette Player");
 		add(MSBlocks.MINI_FROG_STATUE, "Frog Statue Replica");
 		addStoreTooltip(MSBlocks.MINI_FROG_STATUE, "Some say it's creepy, some say it's cute, others would say it's contraband, so keep it out of sight!");
+		add(MSBlocks.MINI_WIZARD_STATUE, "Small Wizard Statue");
 		add(MSBlocks.GLOWYSTONE_DUST, "Glowystone Dust");
 		add(MSBlocks.OIL, "Oil");
 		add(MSBlocks.BLOOD, "Blood");
@@ -351,7 +352,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.ESTROGEN_EMPOWERED_EVERYTHING_ERADICATOR, "Eradicate everything with girl power!");
 		add(MSItems.EEEEEEEEEEEE, "the swEEt bro and hElla jEff EstrogEn EmpowErEd EvErything Eradicator");
 		addTooltip(MSItems.EEEEEEEEEEEE, "Eradicate everything with girl power?");
-		add(MSItems.ZILLYHOO_HAMMER, "The Warhammer of Zillyhoo");
+		add(MSItems.ZILLYHOO_HAMMER, "Warhammer of Zillyhoo");
 		addTooltip(MSItems.ZILLYHOO_HAMMER, "HooHoo This zilly weapon is rumoured to be able to defeat the strongest enemies!");
 		add(MSItems.POPAMATIC_VRILLYHOO, "Pop-a-matic Vrillyhoo Hammer");
 		addTooltip(MSItems.POPAMATIC_VRILLYHOO, "Pop! Hit an enemy and let the dice fly for  damage bonus! It can Also Break blocks.");
@@ -577,6 +578,14 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.GOLDEN_SPORK, "A spoon and fork with all the awfulness of gold tools? Sign me up!");
 		add(MSItems.BIDENT, "Bident");
 		addTooltip(MSItems.BIDENT, "Double trouble for all your bubble scuffle needs");
+		add(MSItems.POINTY_STICK, "Pointy Stick");
+		add(MSItems.KNITTING_NEEDLE, "Knitting Needle");
+		add(MSItems.NEEDLE_WAND, "Needle Wand");
+		add(MSItems.THORN_OF_OGLOGOTH, "Thorn of Oglogoth");
+		addTooltip(MSItems.THORN_OF_OGLOGOTH, "Causer of woes, heart of darkness, also useful for knitting");
+		add(MSItems.THISTLE_OF_ZILLYWICH, "Thistle of Zillywich");
+		addTooltip(MSItems.THISTLE_OF_ZILLYWICH, "Flippety dippety doo bup bup shrubber double floppy mumblescurry noodlescoop pizzabubble pizzabubble mip mip mip mip mip mip.");
+		add(MSItems.QUILL_OF_ECHIDNA, "Quill of Echidna");
 		add(MSItems.SBAHJARANG, "SBaHJarang");
 		addTooltip(MSItems.SBAHJARANG, "Worst throwing weapon money can't buy");
 		add(MSItems.SHURIKEN, "Shuriken");
@@ -590,8 +599,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.UMBRAL_INFILTRATOR, "Phases through blocks like the shadowy abyss of the denizen Nyx");
 		add(MSItems.SORCERERS_PINBALL, "Sorcerer's Pinball");
 		addTooltip(MSItems.SORCERERS_PINBALL, "Enchanted with real bouncy majyyk");
-		add(MSItems.THORN_OF_OGLOGOTH, "Thorn of Oglogoth");
-		addTooltip(MSItems.THORN_OF_OGLOGOTH, "Causer of woes, heart of darkness, also useful for knitting");
 		add(MSItems.EMERALD_SWORD, "Emerald Sword");
 		add(MSItems.EMERALD_AXE, "Emerald Axe");
 		add(MSItems.EMERALD_PICKAXE, "Emerald Pickaxe");

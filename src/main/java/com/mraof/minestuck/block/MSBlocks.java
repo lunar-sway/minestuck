@@ -187,6 +187,7 @@ public class MSBlocks
 	public static final Block BLENDER = getNull();
 	public static final Block CHESSBOARD = getNull();
 	public static final Block MINI_FROG_STATUE = getNull();
+	public static final Block MINI_WIZARD_STATUE = getNull();
 	public static final Block GLOWYSTONE_DUST = getNull();
 	public static final CassettePlayerBlock CASSETTE_PLAYER = getNull();
 	
@@ -450,6 +451,7 @@ public class MSBlocks
 		registry.register(new DecorBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F).sound(SoundType.METAL), MSBlockShapes.BLENDER).setRegistryName("blender"));
 		registry.register(new DecorBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.5F), MSBlockShapes.CHESSBOARD).setRegistryName("chessboard"));
 		registry.register(new DecorBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.5F), MSBlockShapes.FROG_STATUE).setRegistryName("mini_frog_statue"));
+		registry.register(new DecorBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.5F), MSBlockShapes.WIZARD_STATUE).setRegistryName("mini_wizard_statue"));
 		registry.register(new CassettePlayerBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F).sound(SoundType.METAL), MSBlockShapes.CASSETTE_PLAYER).setRegistryName("cassette_player"));
 		registry.register(new GlowystoneWireBlock(Block.Properties.create(Material.MISCELLANEOUS).hardnessAndResistance(0.0F).lightValue(16).doesNotBlockMovement()).setRegistryName("glowystone_dust"));
 		

@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:thorn_of_oglogoth"
+  },
+  "grist_cost": {
+    "minestuck:iodine": 30,
+    "minestuck:chalk": 25,
+    "minestuck:amethyst": 20,
+    "minestuck:gold": 15,
+    "minestuck:tar": 6
+  }
+}
