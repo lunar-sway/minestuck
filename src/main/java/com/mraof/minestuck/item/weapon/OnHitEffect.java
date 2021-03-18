@@ -82,14 +82,18 @@ public interface OnHitEffect
 	};
 	
 	OnHitEffect HORRORTERROR = (stack, target, attacker) -> {
-		if(!attacker.world.isRemote && attacker instanceof PlayerEntity && attacker.getRNG().nextFloat() < .15)
+		if(!attacker.world.isRemote && attacker instanceof PlayerEntity && attacker.getRNG().nextFloat() < .1)
 		{
-			List<String> messages = ImmutableList.of("machinations", "stir", "suffering", "will", "done", "conspiracies");
+			List<String> messages = ImmutableList.of("machinations", "stir", "suffering", "will", "done", "conspiracies", "waiting", "strife", "search", "blessings", "seek", "shadow");
 			
 			String key = messages.get(attacker.getRNG().nextInt(messages.size()));
-			ITextComponent message = new TranslationTextComponent(stack.getTranslationKey() + ".message." + key);
+			ITextComponent message = new TranslationTextComponent("message." + key);
 			attacker.sendMessage(message.applyTextStyle(TextFormatting.DARK_PURPLE));
-			attacker.addPotionEffect(new EffectInstance(Effects.WITHER, 100, 2));
+			boolean potionBool = attacker.getRNG().nextBoolean();
+			if(potionBool)
+				attacker.addPotionEffect(new EffectInstance(Effects.WITHER, 100, 2));
+			else
+				attacker.addPotionEffect(new EffectInstance(Effects.BLINDNESS, 100, 0));
 		}
 	};
 	

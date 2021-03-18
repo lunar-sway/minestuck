@@ -1,17 +1,21 @@
 package com.mraof.minestuck.item.weapon;
 
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
-import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityPredicate;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.FireballEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.particles.BasicParticleType;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.PathType;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -26,7 +30,7 @@ public interface ItemRightClickEffect
 {
 	EntityPredicate visiblePredicate = (new EntityPredicate()).setLineOfSiteRequired();
 	
-	ActionResult<ItemStack> onRightClick(World world, PlayerEntity player, Hand hand);
+	ItemRightClickEffect HORRORTERROR_MAGIC = summonMagicProjectile(16, 5, () -> new EffectInstance(Effects.WITHER, 100, 2), () -> SoundEvents.ENTITY_EVOKER_CAST_SPELL, 1.2F, ParticleTypes.SMOKE);
 	
 	ItemRightClickEffect ACTIVE_HAND = (world, player, hand) -> {
 		player.setActiveHand(hand);
@@ -81,44 +85,56 @@ public interface ItemRightClickEffect
 		};
 	}
 	
-	static ItemRightClickEffect summonMagicProjectile(int distance, int damage)
+	static ItemRightClickEffect summonMagicProjectile(int distance, int damage, Supplier<EffectInstance> effect, Supplier<SoundEvent> sound, float pitch, BasicParticleType particle)
 	{
 		return (world, player, hand) -> {
 			ItemStack itemStackIn = player.getHeldItem(hand);
-			world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ENTITY_ILLUSIONER_CAST_SPELL, SoundCategory.PLAYERS, 0.8F, 1.6F);
+			world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), sound.get(), SoundCategory.PLAYERS, 1.0F, pitch);
+			Vec3d vec3dPath;
+			Vec3d vecPos;
+			BlockPos blockPos;
 			
-			//LivingEntity closestTarget = player.world.getClosestEntityWithinAABB(LivingEntity.class, visiblePredicate, player, player.getPosX(), player.getPosY(), player.getPosZ(), player.getBoundingBox().expand(player.getLookVec().scale(5.0D+velocity)).shrink(1.0D));
-			Vec3d vec3d;
-			
-			
-			for(float i = 0; i < distance*2; i++)
+			for(float i = 0; i < distance * 2; i++)
 			{
-				vec3d = player.getLookVec().scale(i/2);
-				BlockPos projectilePos = new BlockPos(player.getPosX() + vec3d.x, player.getPosYEye() + vec3d.y, player.getPosZ() + vec3d.z);
-				if(!world.getBlockState(projectilePos).allowsMovement(world, projectilePos, PathType.LAND))
+				vec3dPath = player.getLookVec().scale(i / 2);
+				vecPos = new Vec3d(player.getPosX() + vec3dPath.x, player.getPosYEye() + vec3dPath.y, player.getPosZ() + vec3dPath.z);
+				blockPos = new BlockPos(vecPos.x, vecPos.y, vecPos.z);
+				float randomParticleOffset = (player.getRNG().nextFloat() - .5F)/3;
+				world.addParticle(particle, vecPos.x + randomParticleOffset, vecPos.y + randomParticleOffset, vecPos.z + randomParticleOffset, 0.0D, 0.0D, 0.0D);
+				if(!world.getBlockState(blockPos).allowsMovement(world, blockPos, PathType.LAND))
 				{
-					break;
+					i = distance * 2;
 				}
-				AxisAlignedBB axisAlignedBB = new AxisAlignedBB(projectilePos);
-				//List<Entity> livingEntityList = world.getEntitiesWithinAABBExcludingEntity(player, axisAlignedBB);
-				LivingEntity closestTarget = player.world.getClosestEntityWithinAABB(LivingEntity.class, visiblePredicate, player, projectilePos.getX(), projectilePos.getY(), projectilePos.getZ(), axisAlignedBB);
-				if(closestTarget != null)
+				AxisAlignedBB axisAlignedBB = new AxisAlignedBB(blockPos);
+				LivingEntity closestTarget = player.world.getClosestEntityWithinAABB(LivingEntity.class, visiblePredicate, player, vecPos.x, vecPos.y, vecPos.z, axisAlignedBB);
+				if(closestTarget != null && player instanceof ServerPlayerEntity)
 				{
 					if(closestTarget instanceof UnderlingEntity)
-						closestTarget.attackEntityFrom(DamageSource.MAGIC, damage * 1.5F);
+						closestTarget.attackEntityFrom(DamageSource.causePlayerDamage(player).setMagicDamage(), damage * PlayerSavedData.getData((ServerPlayerEntity) player).getEcheladder().getRung()/2F);
 					else
-						closestTarget.attackEntityFrom(DamageSource.MAGIC, damage);
-					break;
+						closestTarget.attackEntityFrom(DamageSource.causePlayerDamage(player).setMagicDamage(), damage);
+					if(effect != null)
+						closestTarget.addPotionEffect(effect.get());
+					closestTarget.setRevengeTarget(player);
+					i = distance * 2;
 				}
-				world.addParticle(ParticleTypes.END_ROD, projectilePos.getX(), projectilePos.getY(), projectilePos.getZ(), 0.0D, 0.0D, 0.0D);
-				Debug.debugf("%s", projectilePos);
+				
+				if(i >= distance * 2 - 1)
+				{
+					world.playSound(null, blockPos, SoundEvents.ENTITY_SHULKER_BULLET_HIT, SoundCategory.BLOCKS, 1.0F, 0.4F);
+					for(int a = 0; a < 25+player.getRNG().nextInt(10); a++)
+					{
+						//world.addParticle(particle, vecPos.x + randomParticleOffset, vecPos.y + randomParticleOffset, vecPos.z + randomParticleOffset, player.getRNG().nextGaussian() * 0.07D, player.getRNG().nextGaussian() * 0.07D, player.getRNG().nextGaussian() * 0.07D);
+						world.addParticle(particle, true, vecPos.x + randomParticleOffset, vecPos.y + randomParticleOffset, vecPos.z + randomParticleOffset, player.getRNG().nextGaussian() * 0.07D, player.getRNG().nextGaussian() * 0.07D, player.getRNG().nextGaussian() * 0.07D);
+					}
+				}
 			}
 			
 			player.getCooldownTracker().setCooldown(itemStackIn.getItem(), 50);
 			if(player.isCreative())
 				player.getCooldownTracker().setCooldown(itemStackIn.getItem(), 10);
 			player.swing(hand, true);
-			itemStackIn.damageItem(4, player, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
+			itemStackIn.damageItem(6, player, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
 			player.addStat(Stats.ITEM_USED.get(itemStackIn.getItem()));
 			return ActionResult.resultPass(itemStackIn);
 		};
@@ -150,4 +166,15 @@ public interface ItemRightClickEffect
 			return ActionResult.resultPass(itemStackIn);
 		};
 	}
+	
+	/*static ItemRightClickEffect magicEffect(Supplier<EffectInstance> effect, Supplier<SoundEvent> sound, float pitch)
+	{
+		return (world, player, hand) -> {
+			world.playSound(null, player.getPosition(), sound.get(), SoundCategory.PLAYERS, 1.5F, pitch);
+			//livingentity.addPotionEffect(effect.get());
+			return ActionResult.resultPass(itemStackIn);
+		};
+	}*/
+	
+	ActionResult<ItemStack> onRightClick(World world, PlayerEntity player, Hand hand);
 }
