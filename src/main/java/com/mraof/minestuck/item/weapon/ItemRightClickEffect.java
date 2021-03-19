@@ -32,7 +32,7 @@ public interface ItemRightClickEffect
 	
 	ItemRightClickEffect STANDARD_MAGIC = magicAttack(15, 3, null, null, 1.0F, () -> ParticleTypes.ENCHANT, false);
 	ItemRightClickEffect HORRORTERROR_MAGIC = magicAttack(20, 5, () -> new EffectInstance(Effects.WITHER, 100, 2), () -> MSSoundEvents.ITEM_GRIMOIRE_USE, 1.2F, () -> ParticleTypes.SQUID_INK, true);
-	ItemRightClickEffect ZILLY_MAGIC = magicAttack(30, 8, null, null, 1.0F, () -> new RedstoneParticleData(20F, 20F, 20F, 2.25F), true);
+	ItemRightClickEffect ZILLY_MAGIC = magicAttack(30, 8, null, null, 1.0F, () -> new RedstoneParticleData(20F, 20F, 20F, 2F), true);
 	ItemRightClickEffect ECHIDNA_MAGIC = magicAttack(50, 8, null, null, 1.0F, () -> ParticleTypes.END_ROD, true);
 	
 	ItemRightClickEffect ACTIVE_HAND = (world, player, hand) -> {
