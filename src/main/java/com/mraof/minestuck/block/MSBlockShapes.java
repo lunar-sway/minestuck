@@ -31,7 +31,7 @@ public class MSBlockShapes
 	
 	public static final CustomVoxelShape FROG_STATUE = FROG_STATUE_BASE.merge(FROG_STATUE_BODY, FROG_STATUE_HEAD).rotate(Direction.SOUTH);
 	
-	public static final CustomVoxelShape WIZARD_STATUE = new CustomVoxelShape(new double[]{3, 0, 4, 13, 16, 12});
+	public static final CustomVoxelShape WIZARD_STATUE = new CustomVoxelShape(new double[]{3, 0, 3, 13, 16, 12});
 	
 	public static final CustomVoxelShape BLENDER_BASE = new CustomVoxelShape(new double[]{3, 0, 3, 13, 3, 13}, new double[]{4, 3, 4, 12, 4, 12});
 	public static final CustomVoxelShape BLENDER_CONTAINER = new CustomVoxelShape(new double[]{5, 4, 5, 11, 7, 11}, new double[]{4, 7, 4, 12, 13, 12}, new double[]{3, 13, 3, 13, 14, 13});
