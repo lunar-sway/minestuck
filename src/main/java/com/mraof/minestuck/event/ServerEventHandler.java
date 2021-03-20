@@ -31,6 +31,7 @@ import net.minecraft.item.Items;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
@@ -153,6 +154,15 @@ public class ServerEventHandler
 				{    //Increase damage to underling
 					double modifier = PlayerSavedData.getData(player).getEcheladder().getUnderlingDamageModifier();
 					event.setAmount((float) (event.getAmount() * modifier));
+				}
+				
+				Title title = PlayerSavedData.getData(player).getTitle();
+				boolean isVoid = title != null && title.getHeroAspect() == EnumAspect.VOID;
+				if (player.getActiveItemStack().getItem() == MSItems.DESOLATOR_MACE && player.getHeldItemMainhand().getItem() == MSItems.DESOLATOR_MACE && isVoid)
+				{
+					float damageAmount = event.getAmount();
+					event.setAmount(0F);
+					player.attackEntityFrom(DamageSource.causePlayerDamage(player).setDamageBypassesArmor(), damageAmount);
 				}
 			}
 			else if (event.getEntityLiving() instanceof ServerPlayerEntity && event.getSource().getTrueSource() instanceof UnderlingEntity)
