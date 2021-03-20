@@ -158,11 +158,9 @@ public class ServerEventHandler
 				
 				Title title = PlayerSavedData.getData(player).getTitle();
 				boolean isVoid = title != null && title.getHeroAspect() == EnumAspect.VOID;
-				if (player.getActiveItemStack().getItem() == MSItems.DESOLATOR_MACE && player.getHeldItemMainhand().getItem() == MSItems.DESOLATOR_MACE && isVoid)
+				if (player.getHeldItemMainhand().getItem() == MSItems.DESOLATOR_MACE && isVoid)
 				{
-					float damageAmount = event.getAmount();
-					event.setAmount(0F);
-					player.attackEntityFrom(DamageSource.causePlayerDamage(player).setDamageBypassesArmor(), damageAmount);
+					event.getSource().setDamageBypassesArmor();
 				}
 			}
 			else if (event.getEntityLiving() instanceof ServerPlayerEntity && event.getSource().getTrueSource() instanceof UnderlingEntity)
