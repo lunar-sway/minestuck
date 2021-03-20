@@ -1,14 +1,9 @@
 package com.mraof.minestuck.item.weapon;
 
-import com.mraof.minestuck.player.EnumAspect;
-import com.mraof.minestuck.player.Title;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.FireballEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -18,13 +13,10 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import java.util.List;
 import java.util.function.Supplier;
-
-import static com.mraof.minestuck.player.EnumAspect.LIGHT;
 
 public interface ItemRightClickEffect
 {
@@ -106,37 +98,6 @@ public interface ItemRightClickEffect
 				player.getCooldownTracker().setCooldown(itemStackIn.getItem(), 15);
 				itemStackIn.damageItem(1, player, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
 			}
-			return ActionResult.resultPass(itemStackIn);
-		};
-	}
-	
-	static ItemRightClickEffect propelForward(int mod)
-	{
-		return (world, player, hand) -> {
-			
-			ItemStack itemStackIn = player.getHeldItem(hand);
-			
-			/*
-			if(!world.isRemote && player instanceof ServerPlayerEntity)
-			{
-				Title title = PlayerSavedData.getData((ServerPlayerEntity) player).getTitle();
-				boolean isBreath = title != null && title.getHeroAspect() == EnumAspect.LIGHT;
-			}
-			
-			if(isBreath!= null && isBreath || player.getHeldItemMainhand().getItem() == MSItems.NEW_NONE_ASPECT_WEAPON)
-			{
-			
-			}*/
-			
-			world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ITEM_TRIDENT_RIPTIDE_2, SoundCategory.PLAYERS, 1.75F, 1.6F);
-			
-			Vec3d lookVec = player.getLookVec().scale(2 * mod);
-			//lookVec = new Vec3d(lookVec.x, lookVec.y * 0.15D, lookVec.z);
-			player.addVelocity(lookVec.x, lookVec.y * 0.15D, lookVec.z);
-			
-			player.swing(hand, true);
-			player.getCooldownTracker().setCooldown(itemStackIn.getItem(), 45);
-			itemStackIn.damageItem(4, player, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
 			return ActionResult.resultPass(itemStackIn);
 		};
 	}
