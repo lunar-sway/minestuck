@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 
 public class PropelEffect implements ItemRightClickEffect
 {
-	public static final PropelEffect BREATH_PROPEL = new PropelEffect(3, EnumAspect.LIGHT);
+	public static final PropelEffect BREATH_PROPEL = new PropelEffect(3, EnumAspect.BREATH);
 	
 	private final double velocity;
 	private final EnumAspect aspect;
@@ -28,11 +28,11 @@ public class PropelEffect implements ItemRightClickEffect
 	public ActionResult<ItemStack> onRightClick(World world, PlayerEntity player, Hand hand)
 	{
 		ItemStack itemStack = player.getHeldItem(hand);
-		propelAction(player, itemStack, getVelocityMod(itemStack), hand);
+		propelAction(player, itemStack, getVelocityMod(), hand);
 		return ActionResult.resultPass(itemStack);
 	}
 	
-	private double getVelocityMod(ItemStack stack)
+	private double getVelocityMod()
 	{
 		return velocity;
 	}
@@ -51,7 +51,7 @@ public class PropelEffect implements ItemRightClickEffect
 			Vec3d lookVec = player.getLookVec().scale(velocity);
 			if(player.isElytraFlying())
 			{
-				lookVec = lookVec.scale(velocity / 10D);
+				lookVec = lookVec.scale(velocity / 12D);
 			}
 			player.addVelocity(lookVec.x, lookVec.y * 0.4D, lookVec.z);
 			
