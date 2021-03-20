@@ -3,6 +3,6 @@
   "ingredient": {
     "item": "minestuck:shade_stone"
   },
-  "result": "minestuck:shade_brick_stairs",
+  "result": "minestuck:smooth_shade_stone",
   "count": 1
 }

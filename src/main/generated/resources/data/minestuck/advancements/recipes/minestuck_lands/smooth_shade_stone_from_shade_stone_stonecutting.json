@@ -2,7 +2,7 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "minestuck:shade_brick_stairs_from_shade_bricks_stonecutting"
+      "minestuck:smooth_shade_stone_from_shade_stone_stonecutting"
     ]
   },
   "criteria": {
@@ -19,7 +19,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "minestuck:shade_brick_stairs_from_shade_bricks_stonecutting"
+        "recipe": "minestuck:smooth_shade_stone_from_shade_stone_stonecutting"
       }
     }
   },

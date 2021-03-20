@@ -10,7 +10,6 @@ import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.ProbabilityConfig;
 
 import java.util.Random;
 import java.util.function.Function;
@@ -45,25 +44,4 @@ public class ParcelPyxisFeature extends Feature<NoFeatureConfig>
 		
 		return false;
 	}
-	
-	/*@Override
-	public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, ProbabilityConfig config)
-	{
-		BlockState state = MSBlocks.PARCEL_PYXIS.getDefaultState();
-		
-		if(state.isValidPosition(worldIn, pos) && !worldIn.getBlockState(pos).getMaterial().isLiquid())
-		{
-			setBlockState(worldIn, pos, state);
-			setBlockState(worldIn, pos.down(1), MSBlocks.PIPE_INTERSECTION.getDefaultState());
-			if(rand.nextBoolean())
-				setBlockState(worldIn, pos.up(1), MSBlocks.PYXIS_LID.getDefaultState());
-			for(int i = 1; i < rand.nextInt(20); i++){
-				setBlockState(worldIn, pos.down(i), MSBlocks.PIPE.getDefaultState());
-			}
-			setBlockState(worldIn, pos.down(20), MSBlocks.PIPE_INTERSECTION.getDefaultState());
-			return true;
-		}
-		
-		return false;
-	}*/
 }
