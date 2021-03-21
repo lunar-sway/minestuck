@@ -16,7 +16,6 @@ public class PropelEffect implements ItemRightClickEffect
 	
 	private final double velocity;
 	private final EnumAspect aspect;
-	private Title title;
 	
 	public PropelEffect(double velocity, EnumAspect aspect)
 	{
@@ -39,6 +38,7 @@ public class PropelEffect implements ItemRightClickEffect
 	
 	void propelAction(PlayerEntity player, ItemStack stack, double velocity, Hand hand)
 	{
+		Title title = null;
 		if(player instanceof ServerPlayerEntity) //TODO find way to assign title earlier as the first check does not save immediately in a loaded world
 		{
 			title = PlayerSavedData.getData((ServerPlayerEntity) player).getTitle();
