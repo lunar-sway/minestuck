@@ -454,6 +454,9 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.TYPHONIC_TRIVIALIZER).input(MSItems.FAN).or().namedInput(MSBlocks.SMOOTH_SHADE_STONE).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.NEEDLE_WAND).input(MSItems.KNITTING_NEEDLE).and().namedInput(MSBlocks.MINI_WIZARD_STATUE).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.ARTIFUCKER).input(MSItems.POINTER_WAND).and().namedInput(MSItems.SBAHJ_POSTER).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.POINTER_WAND).input(MSItems.NEEDLE_WAND).and().namedInput(MSBlocks.COMPUTER).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.POOL_CUE_WAND).input(MSItems.NEEDLE_WAND).and().namedInput(MSItems.CUESTICK).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.THORN_OF_OGLOGOTH).input(MSItems.NEEDLE_WAND).and().namedInput(MSItems.GRIMOIRE).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.SBAHJARANG).input(MSItems.SHURIKEN).and().namedInput(MSItems.SBAHJ_POSTER).build(consumer);

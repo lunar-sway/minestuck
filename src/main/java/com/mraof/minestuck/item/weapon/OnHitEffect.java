@@ -87,7 +87,7 @@ public interface OnHitEffect
 			List<String> messages = ImmutableList.of("machinations", "stir", "suffering", "will", "done", "conspiracies", "waiting", "strife", "search", "blessings", "seek", "shadow");
 			
 			String key = messages.get(attacker.getRNG().nextInt(messages.size()));
-			ITextComponent message = new TranslationTextComponent("message." + key);
+			ITextComponent message = new TranslationTextComponent("message.horrorterror." + key);
 			attacker.sendMessage(message.applyTextStyle(TextFormatting.DARK_PURPLE));
 			boolean potionBool = attacker.getRNG().nextBoolean();
 			if(potionBool)

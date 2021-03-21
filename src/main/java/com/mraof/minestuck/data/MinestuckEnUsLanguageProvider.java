@@ -580,7 +580,12 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.BIDENT, "Double trouble for all your bubble scuffle needs");
 		add(MSItems.POINTY_STICK, "Pointy Stick");
 		add(MSItems.KNITTING_NEEDLE, "Knitting Needle");
+		add(MSItems.ARTIFUCKER, "Artifucker");
+		addTooltip(MSItems.ARTIFUCKER, "What's the opposite of an aimbot?");
+		add(MSItems.POINTER_WAND, "Pointer Wand");
+		addTooltip(MSItems.POINTER_WAND, "Aimbot your way to victory!");
 		add(MSItems.NEEDLE_WAND, "Needle Wand");
+		add(MSItems.POOL_CUE_WAND, "Pool Cue Wand");
 		add(MSItems.THORN_OF_OGLOGOTH, "Thorn of Oglogoth");
 		addTooltip(MSItems.THORN_OF_OGLOGOTH, "Causer of woes, heart of darkness. Also useful for knitting");
 		add(MSItems.THISTLE_OF_ZILLYWICH, "Thistle of Zillywich");
@@ -852,18 +857,18 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.CASSETTE_RETRO_BATTLE, "Cassette");
 		addExtra(MSItems.CASSETTE_RETRO_BATTLE, "desc", "SinFrog - Retro Battle Theme");
 		
-		add("message.machinations", "Your blood shall fuel our machinations.");
-		add("message.stir", "They stir in your subconscious.");
-		add("message.suffering", "Your suffering grants us strength.");
-		add("message.will", "Our will is your will.");
-		add("message.done", "It is done.");
-		add("message.conspiracies", "You are a tool. A tool through which we we exert our conspiracies.");
-		add("message.waiting", "The moment will come when you embrace the darkness, you will accept it with open arms.");
-		add("message.strife", "Pain fuels us.");
-		add("message.search", "Search deeper. Gaze into the abyss with eyes wide open");
-		add("message.blessings", "With this struggle, we grant you our blessings.");
-		add("message.seek", "Seek out and consume the light.");
-		add("message.shadow", "The shadows do not work for you. They are your fellow vassals in service to us");
+		add("message.horrorterror.machinations", "Your blood shall fuel our machinations.");
+		add("message.horrorterror.stir", "They stir in your subconscious.");
+		add("message.horrorterror.suffering", "Your suffering grants us strength.");
+		add("message.horrorterror.will", "Our will is your will.");
+		add("message.horrorterror.done", "It is done.");
+		add("message.horrorterror.conspiracies", "You are a tool. A tool through which we we exert our conspiracies.");
+		add("message.horrorterror.waiting", "The moment will come when you embrace the darkness, you will accept it with open arms.");
+		add("message.horrorterror.strife", "Pain fuels us.");
+		add("message.horrorterror.search", "Search deeper. Gaze into the abyss with eyes wide open");
+		add("message.horrorterror.blessings", "With this struggle, we grant you our blessings.");
+		add("message.horrorterror.seek", "Seek out and consume the light.");
+		add("message.horrorterror.shadow", "The shadows do not work for you. They are your fellow vassals in service to us");
 
 		addStore(Items.PUMPKIN_PIE, "Tasty Pie");
 		addStoreTooltip(Items.PUMPKIN_PIE, "This pie appeared in storage a few days ago out of nowhere. No idea where it came from, but it sure is tasty!");
