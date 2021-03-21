@@ -582,7 +582,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.KNITTING_NEEDLE, "Knitting Needle");
 		add(MSItems.NEEDLE_WAND, "Needle Wand");
 		add(MSItems.THORN_OF_OGLOGOTH, "Thorn of Oglogoth");
-		addTooltip(MSItems.THORN_OF_OGLOGOTH, "Causer of woes, heart of darkness, also useful for knitting");
+		addTooltip(MSItems.THORN_OF_OGLOGOTH, "Causer of woes, heart of darkness. Also useful for knitting");
 		add(MSItems.THISTLE_OF_ZILLYWICH, "Thistle of Zillywich");
 		addTooltip(MSItems.THISTLE_OF_ZILLYWICH, "Flippety dippety doo bup bup shrubber double floppy mumblescurry noodlescoop pizzabubble pizzabubble mip mip mip mip mip mip.");
 		add(MSItems.QUILL_OF_ECHIDNA, "Quill of Echidna");
