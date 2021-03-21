@@ -60,16 +60,19 @@ public class MagicAttackRightClickEffect implements ItemRightClickEffect
 	{
 		ItemStack itemStackIn = player.getHeldItem(hand);
 		
-		magicAttack(world, player, itemStackIn);
-		
-		if(player.isCreative())
-			player.getCooldownTracker().setCooldown(itemStackIn.getItem(), 10);
-		else
-			player.getCooldownTracker().setCooldown(itemStackIn.getItem(), 50);
-		
-		player.swing(hand, true);
-		itemStackIn.damageItem(6, player, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
-		player.addStat(Stats.ITEM_USED.get(itemStackIn.getItem()));
+		if(hand == Hand.MAIN_HAND){
+			itemStackIn = player.getHeldItem(Hand.MAIN_HAND);
+			magicAttack(world, player, itemStackIn);
+			
+			if(player.isCreative())
+				player.getCooldownTracker().setCooldown(itemStackIn.getItem(), 10);
+			else
+				player.getCooldownTracker().setCooldown(itemStackIn.getItem(), 50);
+			
+			player.swing(Hand.MAIN_HAND, true);
+			itemStackIn.damageItem(6, player, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
+			player.addStat(Stats.ITEM_USED.get(itemStackIn.getItem()));
+		}
 		return ActionResult.resultPass(itemStackIn);
 	}
 	
@@ -89,7 +92,7 @@ public class MagicAttackRightClickEffect implements ItemRightClickEffect
 		}
 		if(itemStack.getItem() == MSItems.POINTER_WAND)
 		{
-			LivingEntity closestVisibleTarget = player.world.getClosestEntityWithinAABB(LivingEntity.class, visiblePredicate, player, player.getPosX(), player.getPosY(), player.getPosZ(), player.getBoundingBox().grow(14.5D, 14, 14.5D));
+			LivingEntity closestVisibleTarget = player.world.getClosestEntityWithinAABB(LivingEntity.class, visiblePredicate, player, player.getPosX(), player.getPosY(), player.getPosZ(), player.getBoundingBox().grow(14.15D, 14, 14.15D));
 			if(closestVisibleTarget != null)
 				player.lookAt(player.getCommandSource().getEntityAnchorType(), closestVisibleTarget.getPositionVec());
 		}
