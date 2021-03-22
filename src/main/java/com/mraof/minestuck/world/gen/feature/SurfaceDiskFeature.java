@@ -15,6 +15,7 @@ import java.util.function.Function;
 /**
  * A version of the {@link net.minecraft.world.gen.feature.SphereReplaceFeature}, but without the need to be placed in water
  * INTRODUCES randomized edges to the feature to look more natural
+ * If shouldCheckBlockAbove is true, blocks will only be placed is the block above is non-solid
  */
 public class SurfaceDiskFeature extends Feature<SphereReplaceConfig>
 {
@@ -26,61 +27,52 @@ public class SurfaceDiskFeature extends Feature<SphereReplaceConfig>
 		this.shouldCheckBlockAbove = shouldCheckBlockAbove;
 	}
 	
-	public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, SphereReplaceConfig config)
+	public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos featurePos, SphereReplaceConfig config)
 	{
-		int i = 0;
-		int j = rand.nextInt(config.radius - 2) + 2;
+		int affectedBlocks = 0;
+		int radius = rand.nextInt(config.radius - 2) + 2;
 		
-		for(int k = pos.getX() - j; k <= pos.getX() + j; ++k)
+		for(int x = featurePos.getX() - radius; x <= featurePos.getX() + radius; x++)
 		{
-			for(int l = pos.getZ() - j; l <= pos.getZ() + j; ++l)
+			for(int z = featurePos.getZ() - radius; z <= featurePos.getZ() + radius; z++)
 			{
-				int circleMathX = k - pos.getX();
-				int circleMathZ = l - pos.getZ();
-				if(circleMathX * circleMathX + circleMathZ * circleMathZ <= j * j)
+				int offsetX = x - featurePos.getX();
+				int offsetZ = z - featurePos.getZ();
+				if(offsetX * offsetX + offsetZ * offsetZ <= radius * radius)
 				{
-					for(int configuredY = pos.getY() - config.ySize; configuredY <= pos.getY() + config.ySize; ++configuredY)
+					for(int y = featurePos.getY() - config.ySize; y <= featurePos.getY() + config.ySize; y++)
 					{
-						BlockPos blockpos = new BlockPos(k, configuredY, l);
-						BlockPos blockposRand = new BlockPos(k + rand.nextInt(2) - 1, configuredY, l + rand.nextInt(2) - 1);
-						BlockState posBlockState = worldIn.getBlockState(blockpos);
+						BlockPos pos = new BlockPos(x, y, z);
+						BlockPos randPos = new BlockPos(x + rand.nextInt(2) - 1, y, z + rand.nextInt(2) - 1);
 						
-						for(BlockState configBlockState : config.targets)
-						{
-							if(configBlockState.getBlock() == posBlockState.getBlock())
-							{
-								boolean blockBelowIsNewBlock = worldIn.getBlockState(blockpos.down(1)) != config.state;
-								boolean blockBelowIsNewRandomBlock = worldIn.getBlockState(blockposRand.down(1)) != config.state;
-								if(shouldCheckBlockAbove)
-								{
-									if(!worldIn.getBlockState(blockpos.up(1)).getMaterial().isSolid())
-									{
-										worldIn.setBlockState(blockpos, config.state, 2);
-										if(blockBelowIsNewBlock)
-											worldIn.setBlockState(blockpos.down(1), config.targets.get(0), 2);
-									}
-									if(!worldIn.getBlockState(blockposRand.up(1)).getMaterial().isSolid() && configBlockState.getBlock() == worldIn.getBlockState(blockposRand).getBlock())
-									{
-										worldIn.setBlockState(blockposRand, config.state, 2);
-										if(blockBelowIsNewRandomBlock)
-											worldIn.setBlockState(blockposRand.down(1), config.targets.get(0), 2);
-									}
-								} else
-								{
-									worldIn.setBlockState(blockpos, config.state, 2);
-									if(configBlockState.getBlock() == worldIn.getBlockState(blockposRand).getBlock())
-										worldIn.setBlockState(blockposRand, config.state, 2);
-								}
-								
-								++i;
-								break;
-							}
-						}
+						if(tryPlaceBlock(worldIn, pos, config))
+							affectedBlocks++;
+						
+						if(!randPos.equals(pos) && tryPlaceBlock(worldIn, randPos, config))
+							affectedBlocks++;
 					}
 				}
 			}
 		}
 		
-		return i > 0;
+		return affectedBlocks > 0;
+	}
+	
+	private boolean tryPlaceBlock(IWorld world, BlockPos pos, SphereReplaceConfig config)
+	{
+		if(!shouldCheckBlockAbove || !world.getBlockState(pos.up(1)).getMaterial().isSolid())
+		{
+			BlockState existingState = world.getBlockState(pos);
+			
+			for(BlockState targetState : config.targets)
+			{
+				if(targetState.getBlock() == existingState.getBlock())
+				{
+					world.setBlockState(pos, config.state, 2);
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }
