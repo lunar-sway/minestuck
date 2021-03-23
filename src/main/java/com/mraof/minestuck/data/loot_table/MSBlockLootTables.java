@@ -275,6 +275,7 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(BLENDER);
 		registerDropSelfLootTable(CHESSBOARD);
 		registerDropSelfLootTable(MINI_FROG_STATUE);
+		registerDropSelfLootTable(MINI_WIZARD_STATUE);
 		registerDropSelfLootTable(CASSETTE_PLAYER);
 		registerDropSelfLootTable(GLOWYSTONE_DUST);
 	}

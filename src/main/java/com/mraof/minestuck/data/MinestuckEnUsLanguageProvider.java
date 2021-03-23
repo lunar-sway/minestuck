@@ -319,6 +319,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.CASSETTE_PLAYER, "Cassette Player");
 		add(MSBlocks.MINI_FROG_STATUE, "Frog Statue Replica");
 		addStoreTooltip(MSBlocks.MINI_FROG_STATUE, "Some say it's creepy, some say it's cute, others would say it's contraband, so keep it out of sight!");
+		add(MSBlocks.MINI_WIZARD_STATUE, "Small Wizard Statue");
 		add(MSBlocks.GLOWYSTONE_DUST, "Glowystone Dust");
 		add(MSBlocks.OIL, "Oil");
 		add(MSBlocks.BLOOD, "Blood");
@@ -351,7 +352,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.ESTROGEN_EMPOWERED_EVERYTHING_ERADICATOR, "Eradicate everything with girl power!");
 		add(MSItems.EEEEEEEEEEEE, "the swEEt bro and hElla jEff EstrogEn EmpowErEd EvErything Eradicator");
 		addTooltip(MSItems.EEEEEEEEEEEE, "Eradicate everything with girl power?");
-		add(MSItems.ZILLYHOO_HAMMER, "The Warhammer of Zillyhoo");
+		add(MSItems.ZILLYHOO_HAMMER, "Warhammer of Zillyhoo");
 		addTooltip(MSItems.ZILLYHOO_HAMMER, "HooHoo This zilly weapon is rumoured to be able to defeat the strongest enemies!");
 		add(MSItems.POPAMATIC_VRILLYHOO, "Pop-a-matic Vrillyhoo Hammer");
 		addTooltip(MSItems.POPAMATIC_VRILLYHOO, "Pop! Hit an enemy and let the dice fly for  damage bonus! It can Also Break blocks.");
@@ -472,12 +473,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.CLAW_SICKLE, "This crabby blade can hook and pinch your enemies for you!");
 		add(MSItems.CLAW_OF_NRUBYIGLITH, "Claw of Nrub'yiglith");
 		addTooltip(MSItems.CLAW_OF_NRUBYIGLITH, "Even though it's no longer a part of what you presume to be a living being, it still feels... alive.");
-		addExtra(MSItems.CLAW_OF_NRUBYIGLITH, "message.machinations", "Your blood shall fuel our machinations.");
-		addExtra(MSItems.CLAW_OF_NRUBYIGLITH, "message.stir", "They stir in your subconscious.");
-		addExtra(MSItems.CLAW_OF_NRUBYIGLITH, "message.suffering", "Your suffering grants us strength.");
-		addExtra(MSItems.CLAW_OF_NRUBYIGLITH, "message.will", "Our will is your will.");
-		addExtra(MSItems.CLAW_OF_NRUBYIGLITH, "message.done", "It is done.");
-		addExtra(MSItems.CLAW_OF_NRUBYIGLITH, "message.conspiracies", "You are a tool. A tool through which we we exert our conspiracies.");
 		add(MSItems.CANDY_SICKLE, "Candy Sickle");
 		add(MSItems.DEUCE_CLUB, "Deuce Club");
 		addTooltip(MSItems.DEUCE_CLUB, "The weakest club in the world");
@@ -583,6 +578,19 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.GOLDEN_SPORK, "A spoon and fork with all the awfulness of gold tools? Sign me up!");
 		add(MSItems.BIDENT, "Bident");
 		addTooltip(MSItems.BIDENT, "Double trouble for all your bubble scuffle needs");
+		add(MSItems.POINTY_STICK, "Pointy Stick");
+		add(MSItems.KNITTING_NEEDLE, "Knitting Needle");
+		add(MSItems.ARTIFUCKER, "Artifucker");
+		addTooltip(MSItems.ARTIFUCKER, "What's the opposite of an aimbot?");
+		add(MSItems.POINTER_WAND, "Pointer Wand");
+		addTooltip(MSItems.POINTER_WAND, "Aimbot your way to victory!");
+		add(MSItems.NEEDLE_WAND, "Needle Wand");
+		add(MSItems.POOL_CUE_WAND, "Pool Cue Wand");
+		add(MSItems.THORN_OF_OGLOGOTH, "Thorn of Oglogoth");
+		addTooltip(MSItems.THORN_OF_OGLOGOTH, "Causer of woes, heart of darkness. Also useful for knitting");
+		add(MSItems.THISTLE_OF_ZILLYWICH, "Thistle of Zillywich");
+		addTooltip(MSItems.THISTLE_OF_ZILLYWICH, "Flippety dippety doo bup bup shrubber double floppy mumblescurry noodlescoop pizzabubble pizzabubble mip mip mip mip mip mip.");
+		add(MSItems.QUILL_OF_ECHIDNA, "Quill of Echidna");
 		add(MSItems.SBAHJARANG, "SBaHJarang");
 		addTooltip(MSItems.SBAHJARANG, "Worst throwing weapon money can't buy");
 		add(MSItems.SHURIKEN, "Shuriken");
@@ -848,6 +856,19 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addExtra(MSItems.CASSETTE_DANCE_STAB, "desc", "Catboss - Dance-Stab-Dance");
 		add(MSItems.CASSETTE_RETRO_BATTLE, "Cassette");
 		addExtra(MSItems.CASSETTE_RETRO_BATTLE, "desc", "SinFrog - Retro Battle Theme");
+		
+		add("message.horrorterror.machinations", "Your blood shall fuel our machinations.");
+		add("message.horrorterror.stir", "They stir in your subconscious.");
+		add("message.horrorterror.suffering", "Your suffering grants us strength.");
+		add("message.horrorterror.will", "Our will is your will.");
+		add("message.horrorterror.done", "It is done.");
+		add("message.horrorterror.conspiracies", "You are a tool. A tool through which we we exert our conspiracies.");
+		add("message.horrorterror.waiting", "The moment will come when you embrace the darkness, you will accept it with open arms.");
+		add("message.horrorterror.strife", "Pain fuels us.");
+		add("message.horrorterror.search", "Search deeper. Gaze into the abyss with eyes wide open");
+		add("message.horrorterror.blessings", "With this struggle, we grant you our blessings.");
+		add("message.horrorterror.seek", "Seek out and consume the light.");
+		add("message.horrorterror.shadow", "The shadows do not work for you. They are your fellow vassals in service to us");
 
 		addStore(Items.PUMPKIN_PIE, "Tasty Pie");
 		addStoreTooltip(Items.PUMPKIN_PIE, "This pie appeared in storage a few days ago out of nowhere. No idea where it came from, but it sure is tasty!");

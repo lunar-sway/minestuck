@@ -4,7 +4,7 @@
     "item": "minecraft:iron_block"
   },
   "input2": {
-    "item": "minecraft:lapis_lazuli"
+    "item": "minestuck:mini_wizard_statue"
   },
   "mode": "or",
   "output": {
