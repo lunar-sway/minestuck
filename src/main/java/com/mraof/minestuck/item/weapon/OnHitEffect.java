@@ -8,7 +8,9 @@ import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.Blocks;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.item.ArmorStandEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -140,6 +142,28 @@ public interface OnHitEffect
 		float rng = (float) (attacker.getRNG().nextInt(7)+1) * (attacker.getRNG().nextInt(7)+1);
 		target.attackEntityFrom(source, rng);
 	};
+	
+	OnHitEffect SHIELD_DISABLE = (stack, target, attacker) -> {
+		if(target instanceof PlayerEntity){
+			PlayerEntity targetPlayer = (PlayerEntity) target;
+			if(targetPlayer.isActiveItemStackBlocking())
+				targetPlayer.disableShield(true);
+		}
+	};
+	
+	/*OnHitEffect SWIPE = (stack, target, attacker) -> {
+		float f3 = 1.0F + EnchantmentHelper.getSweepingDamageRatio(this) * f;
+		
+		for(LivingEntity livingentity : attacker.world.getEntitiesWithinAABB(LivingEntity.class, target.getBoundingBox().grow(1.0D, 0.25D, 1.0D))) {
+			if (livingentity != this && livingentity != targetEntity && !this.isOnSameTeam(livingentity) && (!(livingentity instanceof ArmorStandEntity) || !((ArmorStandEntity)livingentity).hasMarker()) && this.getDistanceSq(livingentity) < 9.0D) {
+				livingentity.knockBack(this, 0.4F, (double)MathHelper.sin(this.rotationYaw * ((float)Math.PI / 180F)), (double)(-MathHelper.cos(this.rotationYaw * ((float)Math.PI / 180F))));
+				livingentity.attackEntityFrom(DamageSource.causePlayerDamage(this), f3);
+			}
+		}
+		
+		this.world.playSound((PlayerEntity)null, this.getPosX(), this.getPosY(), this.getPosZ(), SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, this.getSoundCategory(), 1.0F, 1.0F);
+		this.spawnSweepParticles();
+	};*/
 	
 	OnHitEffect SPACE_TELEPORT = requireAspect(SPACE, onCrit((stack, target, attacker) -> {
 		double oldPosX = attacker.getPosX();

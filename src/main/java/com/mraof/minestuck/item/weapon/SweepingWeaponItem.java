@@ -1,15 +1,12 @@
 package com.mraof.minestuck.item.weapon;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Multimap;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
@@ -23,13 +20,11 @@ import net.minecraftforge.common.ToolType;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public class WeaponItem extends TieredItem
+public class SweepingWeaponItem extends SwordItem
 {
 	private final float efficiency;
 	//private static final HashMap<ToolType, Set<Material>> toolMaterials = new HashMap<>();
 	
-	private final int attackDamage;
-	private final float attackSpeed;
 	@Nullable
 	private final MSToolType toolType;
 	private final List<OnHitEffect> onHitEffects;
@@ -45,16 +40,14 @@ public class WeaponItem extends TieredItem
 	private final List<InventoryTickEffect> tickEffects;
 	
 	@Deprecated
-	public WeaponItem(IItemTier tier, int attackDamage, float attackSpeed, float efficiency, @Nullable MSToolType toolType, Properties properties)
+	public SweepingWeaponItem(IItemTier tier, int attackDamage, float attackSpeed, float efficiency, @Nullable MSToolType toolType, Properties properties)
 	{
 		this(new Builder(tier, attackDamage, attackSpeed).efficiency(efficiency).set(toolType), properties);
 	}
 	
-	public WeaponItem(Builder builder, Properties properties)
+	public SweepingWeaponItem(Builder builder, Properties properties)
 	{
-		super(builder.tier, properties);
-		attackDamage = builder.attackDamage;
-		attackSpeed = builder.attackSpeed;
+		super(builder.tier, builder.attackDamage, builder.attackSpeed, properties);
 		toolType = builder.toolType;
 		efficiency = builder.efficiency;
 		onHitEffects = ImmutableList.copyOf(builder.onHitEffects);
@@ -219,16 +212,6 @@ public class WeaponItem extends TieredItem
 			return false;
 		
 		return toolType.getEnchantments().contains(enchantment);
-	}
-	
-	public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType equipmentSlot) {
-		Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(equipmentSlot);
-		if (equipmentSlot == EquipmentSlotType.MAINHAND) {
-			multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", (double)this.attackDamage, AttributeModifier.Operation.ADDITION));
-			multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", (double)this.attackSpeed, AttributeModifier.Operation.ADDITION));
-		}
-		
-		return multimap;
 	}
 	
 	@Nullable
