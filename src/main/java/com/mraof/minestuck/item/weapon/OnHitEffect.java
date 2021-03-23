@@ -82,6 +82,9 @@ public interface OnHitEffect
 	};
 	
 	OnHitEffect HORRORTERROR = (stack, target, attacker) -> {
+		
+		target.addPotionEffect(new EffectInstance(Effects.WITHER, 100, 2));
+		
 		if(!attacker.world.isRemote && attacker instanceof PlayerEntity && attacker.getRNG().nextFloat() < .1)
 		{
 			List<String> messages = ImmutableList.of("machinations", "stir", "suffering", "will", "done", "conspiracies", "waiting", "strife", "search", "blessings", "seek", "shadow");

@@ -732,7 +732,7 @@ public class MSItems
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 9, -3.2F).efficiency(5.0F).set(MSItemTypes.AXE_TOOL), new Item.Properties().defaultMaxDamage(600).group(MSItemGroup.WEAPONS)).setRegistryName("bisector"));
 		
 		//Dice
-		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.STONE, 5, -3.0F).efficiency(1.0F), new Item.Properties().group(MSItemGroup.WEAPONS).defaultMaxDamage(500)).setRegistryName("dice"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.STONE, 0, -3.0F).efficiency(1.0F), new Item.Properties().group(MSItemGroup.WEAPONS).defaultMaxDamage(500)).setRegistryName("dice"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.DIAMOND, 4, -3.0F).efficiency(1.0F), new Item.Properties().group(MSItemGroup.WEAPONS).defaultMaxDamage(4096).rarity(Rarity.EPIC)).setRegistryName("fluorite_octet"));
 		//misc weapons
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 2, -1.5F).efficiency(10.0F).set(MSItemTypes.CLAWS_TOOL).set(ItemRightClickEffect.switchTo(() -> MSItems.CAT_CLAWS_SHEATHED)), new Item.Properties().defaultMaxDamage(500).group(MSItemGroup.WEAPONS)).setRegistryName("cat_claws_drawn"));
@@ -749,7 +749,7 @@ public class MSItems
 		
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.PRISMARINE_TIER, 2, -2.0F).efficiency(1.5F).set(MSItemTypes.MISC_TOOL), new Item.Properties().maxDamage(100).group(MSItemGroup.WEAPONS)).setRegistryName("obsidian_axe_knife"));
 		
-		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.WOOD, 1, -1.0F).efficiency(1.5F).set(MSItemTypes.MISC_TOOL).set(ItemRightClickEffect.extinguishFire(1)).add(OnHitEffect.enemyKnockback(1.5F)), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("fan"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.PAPER_TIER, 1, -1.0F).efficiency(1.5F).set(MSItemTypes.MISC_TOOL).set(ItemRightClickEffect.extinguishFire(1)).add(OnHitEffect.enemyKnockback(1.5F)), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("fan"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.DENIZEN_TIER, 2, -1.0F).efficiency(1.5F).set(MSItemTypes.MISC_TOOL).set(ItemRightClickEffect.extinguishFire(3)).add(OnHitEffect.BREATH_LEVITATION_AOE).add(OnHitEffect.enemyKnockback(2.0F)), new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.RARE)).setRegistryName("typhonic_trivializer"));
 		
 		//sickles
