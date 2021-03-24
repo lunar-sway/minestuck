@@ -583,6 +583,7 @@ public class MSItems
 		registerItemBlock(registry, PETRIFIED_GRASS, MSItemGroup.LANDS);
 		registerItemBlock(registry, PETRIFIED_POPPY, MSItemGroup.LANDS);
 		registerItemBlock(registry, STRAWBERRY, MSItemGroup.LANDS);
+		registerItemBlock(registry, TALL_END_GRASS, MSItemGroup.LANDS);
 		
 		registerItemBlock(registry, GLOWY_GOOP, MSItemGroup.LANDS);
 		registerItemBlock(registry, COAGULATED_BLOOD, MSItemGroup.LANDS);

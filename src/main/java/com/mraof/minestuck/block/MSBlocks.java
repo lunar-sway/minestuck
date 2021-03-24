@@ -14,6 +14,7 @@ import net.minecraft.block.material.MaterialColor;
 import net.minecraft.item.DyeColor;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.RegistryEvent;
@@ -113,6 +114,7 @@ public class MSBlocks
 	public static final Block PETRIFIED_GRASS = getNull();
 	public static final Block PETRIFIED_POPPY = getNull();
 	public static final Block STRAWBERRY = getNull(), ATTACHED_STRAWBERRY_STEM = getNull(), STRAWBERRY_STEM = getNull();
+	public static final Block TALL_END_GRASS = getNull();
 	
 	//Special Land Blocks
 	public static final Block GLOWY_GOOP = getNull();
@@ -375,6 +377,7 @@ public class MSBlocks
 		registry.register(new StrawberryBlock(Block.Properties.create(Material.GOURD, MaterialColor.RED).hardnessAndResistance(1.0F).sound(SoundType.WOOD)).setRegistryName("strawberry"));
 		registry.register(new StrawberryBlock.AttachedStem((StemGrownBlock) STRAWBERRY, Block.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0).sound(SoundType.WOOD)).setRegistryName("attached_strawberry_stem"));
 		registry.register(new StrawberryBlock.Stem((StemGrownBlock) STRAWBERRY, Block.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0).sound(SoundType.WOOD)).setRegistryName("strawberry_stem"));
+		registry.register(new TallEndGrassBlock(Block.Properties.create(Material.TALL_PLANTS, DyeColor.GREEN).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0.1F).sound(SoundType.NETHER_WART)).setRegistryName("tall_end_grass"));
 		
 		registry.register(new GoopBlock(Block.Properties.create(Material.CLAY).hardnessAndResistance(0.1F).sound(SoundType.SLIME).lightValue(14)).setRegistryName("glowy_goop"));
 		registry.register(new GoopBlock(Block.Properties.create(Material.CLAY).hardnessAndResistance(0.1F).sound(SoundType.SLIME)).setRegistryName("coagulated_blood"));
