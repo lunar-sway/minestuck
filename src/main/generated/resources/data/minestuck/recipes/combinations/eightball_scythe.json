@@ -1,13 +1,13 @@
 {
   "type": "minestuck:combination",
   "input1": {
-    "item": "minestuck:jousting_lance"
+    "item": "minestuck:scythe"
   },
   "input2": {
     "item": "minestuck:eightball"
   },
-  "mode": "or",
+  "mode": "and",
   "output": {
-    "item": "minestuck:cigarette_lance"
+    "item": "minestuck:eightball_scythe"
   }
 }

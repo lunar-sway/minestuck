@@ -212,6 +212,7 @@ public class MSBlockLootTables extends BlockLootTables
 		registerLootTable(ATTACHED_STRAWBERRY_STEM, func_218482_a());
 		registerLootTable(STRAWBERRY_STEM, MSBlockLootTables::strawberryStemDrop);
 		registerLootTable(TALL_END_GRASS, func_218482_a());
+		registerDropSelfLootTable(GLOWFLOWER);
 		
 		registerDropSelfLootTable(GLOWY_GOOP);
 		registerDropSelfLootTable(COAGULATED_BLOOD);

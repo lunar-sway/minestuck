@@ -238,6 +238,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.ATTACHED_STRAWBERRY_STEM, "Strawberry Stem");
 		add(MSBlocks.STRAWBERRY_STEM, "Strawberry Stem");
 		add(MSBlocks.TALL_END_GRASS, "End Grass");
+		add(MSBlocks.GLOWFLOWER, "Glowflower");
 		add(MSBlocks.GLOWY_GOOP, "Glowy Goop");
 		add(MSBlocks.COAGULATED_BLOOD, "Coagulated Blood");
 		add(MSBlocks.VEIN, "Vein");
@@ -449,6 +450,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.FISSION_FOCUSED_FAULT_FELLER, "Fission-Focused Fault Feller");
 		add(MSItems.BISECTOR, "Bisector");
 		addTooltip(MSItems.BISECTOR, "Cleave foes in twain... with pride :]");
+		add(MSItems.FINE_CHINA_AXE, "Fine China Axe");
 		add(MSItems.DICE, "Dice");
 		addTooltip(MSItems.DICE, "Dungeons and Dragons anybody?");
 		add(MSItems.FLUORITE_OCTET, "Fluorite Octet");
@@ -457,6 +459,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.CAT_CLAWS_SHEATHED, "Cat Claws");
 		add(MSItems.LIPSTICK_CHAINSAW, "Chainsaw");
 		add(MSItems.LIPSTICK, "Jade Lipstick");
+		add(MSItems.JOUSTING_LANCE, "Jousting Lance");
 		add(MSItems.CIGARETTE_LANCE, "Cigarette Holder Lance");
 		add(MSItems.LUCERNE_HAMMER, "Lucerne Hammer");
 		add(MSItems.LUCERNE_HAMMER_OF_UNDYING, "Lucerne Hammer of Undying");
@@ -482,6 +485,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.CLAW_OF_NRUBYIGLITH, "Claw of Nrub'yiglith");
 		addTooltip(MSItems.CLAW_OF_NRUBYIGLITH, "Even though it's no longer a part of what you presume to be a living being, it still feels... alive.");
 		add(MSItems.CANDY_SICKLE, "Candy Sickle");
+		add(MSItems.SCYTHE, "Scythe");
+		add(MSItems.EIGHTBALL_SCYTHE, "Eightball Scythe");
 		add(MSItems.DEUCE_CLUB, "Deuce Club");
 		addTooltip(MSItems.DEUCE_CLUB, "The weakest club in the world");
 		add(MSItems.STALE_BAGUETTE, "Stale Baguette");
@@ -489,6 +494,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.GLUB_CLUB, "Ever been smacked with a raw fish?");
 		add(MSItems.NIGHT_CLUB, "Nightclub");
 		addTooltip(MSItems.NIGHT_CLUB, "Wanna go...clubbing?");
+		add(MSItems.NIGHTSTICK, "Nightstick");
+		addTooltip(MSItems.NIGHTSTICK, "NO CLUBBING MOVE ALONG.");
 		add(MSItems.PRISMARINE_BASHER, "Prismarine Basher");
 		addTooltip(MSItems.PRISMARINE_BASHER, "Smells like sea salt, unsurprisingly.");
 		add(MSItems.CLUB_ZERO, "Club Zero");
@@ -496,6 +503,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.POGO_CLUB, "Pogo Club");
 		addTooltip(MSItems.POGO_CLUB, "Boing! Bounce back your foes with this bouncy weapon!");
 		addStoreTooltip(MSItems.POGO_CLUB, "Strive to touch the sky, and smash a few skulls on the way up!");
+		add(MSItems.BARBER_BASHER, "Barber Basher");
 		add(MSItems.METAL_BAT, "Metal Bat");
 		addTooltip(MSItems.METAL_BAT, "Regular weapons not working for you? Try beating foes with an average bat!");
 		add(MSItems.CLOWN_CLUB, "Clown Club");
@@ -504,6 +512,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.SPIKED_CLUB, "About what it sounds like");
 		add(MSItems.MACE, "Mace");
 		add(MSItems.M_ACE, "mACE");
+		add(MSItems.BLAZING_GLORY, "Blazing Glory");
 		add(MSItems.HORSE_HITCHER, "Cast Iron Horse Hitcher");
 		add(MSItems.ACE_OF_SPADES, "Ace of Spades");
 		addStore(MSItems.ACE_OF_SPADES, "Shovel Sigil");
@@ -581,6 +590,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.SKAIA_FORK, "Skaia War Fork");
 		addTooltip(MSItems.SKAIA_FORK, "The elegance and grace of Skaia, and the ability to poke things of a fork!");
 		add(MSItems.FORK, "Fork");
+		add(MSItems.CANDY_FORK, "Candy Fork");
 		add(MSItems.TUNING_FORK, "Tuning Fork");
 		addTooltip(MSItems.TUNING_FORK, "Does anyone hear a ringing?");
 		add(MSItems.ELECTRIC_FORK, "Electric Fork");
@@ -622,6 +632,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.EMERALD_PICKAXE, "Emerald Pickaxe");
 		add(MSItems.EMERALD_SHOVEL, "Emerald Shovel");
 		add(MSItems.EMERALD_HOE, "Emerald Hoe");
+		add(MSItems.MINE_AND_GRIST, "Mine and Grist");
 		add(MSItems.PRISMARINE_HELMET, "Prismarine Helmet");
 		add(MSItems.PRISMARINE_CHESTPLATE, "Prismarine Chestplate");
 		add(MSItems.PRISMARINE_LEGGINGS, "Prismarine Leggings");
@@ -732,6 +743,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.URANIUM_GUMMY_BEAR, "Uranium Gummy Bear");
 		add(MSItems.ARTIFACT_WARHEAD, "Artifact War Head");
 		add(MSItems.ZILLIUM_SKITTLES, "Zillium Skittles");
+		add(MSItems.APPLE_JUICE, "Apple Juice");
 		add(MSItems.TAB, "Tab");
 		addStore(MSItems.TAB, "Sugary Drink");
 		addStoreTooltip(MSItems.TAB, "This drink is too sweet for this world. Have a taste!");
@@ -841,6 +853,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.INK_SQUID_PRO_QUO, "Ink of Squid Pro Quo");
 		addTooltip(MSItems.INK_SQUID_PRO_QUO, "For the love of god, don't drink it.");
 		add(MSItems.CUEBALL, "Magic Cueball");
+		add(MSItems.EIGHTBALL, "Magic Eightball");
 		add(MSItems.CREW_POSTER, "Midnight Crew Poster");
 		add(MSItems.SBAHJ_POSTER, "Sweet Bro and Hella Jeff Poster");
 		add(MSItems.MUSIC_DISC_EMISSARY_OF_DANCE, "Music Disc");

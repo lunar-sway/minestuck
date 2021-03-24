@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:apple_juice"
+  },
+  "grist_cost": {
+    "minestuck:amber": 4,
+    "minestuck:sulfur": 1
+  }
+}
