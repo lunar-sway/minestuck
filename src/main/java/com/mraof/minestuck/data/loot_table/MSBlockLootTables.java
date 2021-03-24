@@ -104,8 +104,10 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(CHISELED_FROST_BRICKS);
 		registerDropSelfLootTable(CAST_IRON);
 		registerDropSelfLootTable(CHISELED_CAST_IRON);
+		registerDropSelfLootTable(STEEL_BEAM);
 		registerDropSelfLootTable(MYCELIUM_BRICKS);
 		registerDropSelfLootTable(BLACK_STONE);
+		registerDropSelfLootTable(BLACK_SAND);
 		registerDropSelfLootTable(FLOWERY_MOSSY_COBBLESTONE);
 		registerDropSelfLootTable(FLOWERY_MOSSY_STONE_BRICKS);
 		registerDropSelfLootTable(COARSE_END_STONE);

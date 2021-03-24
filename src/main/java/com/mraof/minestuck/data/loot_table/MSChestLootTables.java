@@ -149,6 +149,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 		lootProcessor.accept(locationFor(LandTypes.HEAT, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.builder()
 				.addLootPool(LootPool.builder().name(WEAPONS_POOL).rolls(ConstantRange.of(1))
 						.addEntry(ItemLootEntry.builder(MSItems.BLACKSMITH_HAMMER).weight(2).quality(1).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.75F, 1.0F))))
+						.addEntry(ItemLootEntry.builder(MSItems.BISICKLE).weight(2).quality(1).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.75F, 1.0F))))
 						.addEntry(ItemLootEntry.builder(MSItems.TOO_HOT_TO_HANDLE).weight(2).quality(1).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.75F, 1.0F)))))
 				.addLootPool(LootPool.builder().name(SUPPLIES_POOL).rolls(ConstantRange.of(1))
 						.addEntry(ItemLootEntry.builder(Items.COAL).weight(8).quality(0).acceptFunction(SetCount.builder(RandomValueRange.of(1, 5))))
@@ -388,7 +389,8 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.addEntry(ItemLootEntry.builder(MSItems.SBAHJ_POSTER).weight(4).quality(2))));
 		
 		lootProcessor.accept(locationFor(LandTypes.CLOCKWORK, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.builder()
-				.addLootPool(LootPool.builder().name(WEAPONS_POOL).rolls(ConstantRange.of(1)))
+				.addLootPool(LootPool.builder().name(WEAPONS_POOL).rolls(ConstantRange.of(1))
+						.addEntry(ItemLootEntry.builder(MSItems.BISICKLE).weight(5).quality(0)))
 				.addLootPool(LootPool.builder().name(SUPPLIES_POOL).rolls(ConstantRange.of(1))
 						.addEntry(ItemLootEntry.builder(Items.CLOCK).weight(10).quality(0).acceptFunction(SetCount.builder(RandomValueRange.of(1, 5))))
 						.addEntry(ItemLootEntry.builder(Items.COMPASS).weight(5).quality(0)))

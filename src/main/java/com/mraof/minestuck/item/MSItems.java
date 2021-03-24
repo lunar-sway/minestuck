@@ -71,6 +71,7 @@ public class MSItems
 	//blades
 	public static final Item SORD = getNull();
 	public static final Item PAPER_SWORD = getNull();
+	public static final Item SWONGE = getNull();
 	public static final Item CACTACEAE_CUTLASS = getNull();
 	public static final Item STEAK_SWORD = getNull();
 	public static final Item BEEF_SWORD = getNull();
@@ -107,6 +108,7 @@ public class MSItems
 	public static final Item STEEL_EDGE_CANDYCUTTER = getNull();
 	public static final Item BLACKSMITH_BANE = getNull();
 	public static final Item REGIAXE = getNull();
+	public static final Item GOTHY_AXE = getNull();
 	public static final Item SURPRISE_AXE = getNull();
 	public static final Item SHOCK_AXE = getNull();
 	public static final Item SHOCK_AXE_UNPOWERED = getNull();
@@ -136,12 +138,14 @@ public class MSItems
 	
 	//sickles
 	public static final Item SICKLE = getNull();
+	public static final Item BISICKLE = getNull();
 	public static final Item OW_THE_EDGE = getNull();
 	public static final Item HEMEOREAPER = getNull();
 	public static final Item THORNY_SUBJECT = getNull();
 	public static final Item HOMES_SMELL_YA_LATER = getNull();
 	public static final Item FUDGESICKLE = getNull();
 	public static final Item REGISICKLE = getNull();
+	public static final Item HERETICUS_AURURM = getNull();
 	public static final Item CLAW_SICKLE = getNull();
 	public static final Item CLAW_OF_NRUBYIGLITH = getNull();
 	public static final Item CANDY_SICKLE = getNull();
@@ -194,6 +198,8 @@ public class MSItems
 	//Spoons/forks
 	public static final Item WOODEN_SPOON = getNull();
 	public static final Item SILVER_SPOON = getNull();
+	public static final Item MELONBALLER = getNull();
+	public static final Item SIGHTSEEKER = getNull();
 	public static final Item TERRAIN_FLATENATOR = getNull();
 	public static final Item NOSFERATU_SPOON = getNull();
 	public static final Item CROCKER_SPOON = getNull();
@@ -201,6 +207,9 @@ public class MSItems
 	public static final Item SKAIA_FORK = getNull();
 	public static final Item FORK = getNull();
 	public static final Item TUNING_FORK = getNull();
+	public static final Item ELECTRIC_FORK = getNull();
+	public static final Item EATING_FORK_GEM = getNull();
+	public static final Item DEVIL_FORK = getNull();
 	public static final Item SPORK = getNull();
 	public static final Item GOLDEN_SPORK = getNull();
 	public static final Item BIDENT = getNull();
@@ -480,8 +489,10 @@ public class MSItems
 		registerItemBlock(registry, CHISELED_FROST_BRICKS, MSItemGroup.LANDS);
 		registerItemBlock(registry, CAST_IRON, MSItemGroup.LANDS);
 		registerItemBlock(registry, CHISELED_CAST_IRON, MSItemGroup.LANDS);
+		registerItemBlock(registry, STEEL_BEAM, MSItemGroup.LANDS);
 		registerItemBlock(registry, MYCELIUM_BRICKS, MSItemGroup.LANDS);
 		registerItemBlock(registry, BLACK_STONE, MSItemGroup.LANDS);
+		registerItemBlock(registry, BLACK_SAND, MSItemGroup.LANDS);
 		registerItemBlock(registry, FLOWERY_MOSSY_COBBLESTONE, MSItemGroup.LANDS);
 		registerItemBlock(registry, FLOWERY_MOSSY_STONE_BRICKS, MSItemGroup.LANDS);
 		registerItemBlock(registry, COARSE_END_STONE, MSItemGroup.LANDS);
@@ -684,6 +695,7 @@ public class MSItems
 		//blades
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.SBAHJ_TIER, 3, -3.0F).efficiency(1.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SORD_DROP), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("sord"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.PAPER_TIER, 2, -2.4F).efficiency(3.0F).set(MSItemTypes.SWORD_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("paper_sword"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.ORGANIC_TIER, 3, -2.4F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.playSound(() -> SoundEvents.ENTITY_COD_FLOP)), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("swonge"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.CACTUS_TIER, 3, -2.4F).efficiency(15.0F).set(MSItemTypes.SWORD_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("cactaceae_cutlass"));	//The sword harvestTool is only used against webs, hence the high efficiency.
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.MEAT_TIER, 4, -2.4F).efficiency(5.0F).set(MSItemTypes.SWORD_TOOL).setEating(FinishUseItemEffect.foodEffect(8, 1F)), new Item.Properties().defaultMaxDamage(250).group(MSItemGroup.WEAPONS)).setRegistryName("steak_sword"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.MEAT_TIER, 2, -2.4F).efficiency(5.0F).set(MSItemTypes.SWORD_TOOL).setEating(FinishUseItemEffect.foodEffect(3, 0.8F, 75)), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("beef_sword"));
@@ -719,8 +731,9 @@ public class MSItems
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.CANDY_TIER, 8, -3.0F).efficiency(2.0F).set(MSItemTypes.AXE_TOOL).add(OnHitEffect.SET_CANDY_DROP_FLAG), new Item.Properties().defaultMaxDamage(111).group(MSItemGroup.WEAPONS)).setRegistryName("candy_battleaxe"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.CANDY_TIER, 9, -3.0F).efficiency(2.0F).set(MSItemTypes.AXE_TOOL).setEating(FinishUseItemEffect.foodEffect(8, 0.4F)), new Item.Properties().defaultMaxDamage(350).group(MSItemGroup.WEAPONS)).setRegistryName("choco_loco_woodsplitter"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 8, -3.0F).efficiency(3.0F).set(MSItemTypes.AXE_TOOL).add(OnHitEffect.SET_CANDY_DROP_FLAG), new Item.Properties().defaultMaxDamage(800).group(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)).setRegistryName("steel_edge_candycutter"));
-		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.STONE, 8, -3.0F).efficiency(6.0F).set(MSItemTypes.AXE_TOOL).add(OnHitEffect.SET_CANDY_DROP_FLAG), new Item.Properties().defaultMaxDamage(413).group(MSItemGroup.WEAPONS)).setRegistryName("blacksmith_bane"));
-		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.REGI_TIER, 6, -3.0F).efficiency(6.0F).set(MSItemTypes.AXE_TOOL).add(OnHitEffect.SET_CANDY_DROP_FLAG), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("regiaxe"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.STONE, 8, -3.0F).efficiency(6.0F).set(MSItemTypes.AXE_TOOL), new Item.Properties().defaultMaxDamage(413).group(MSItemGroup.WEAPONS)).setRegistryName("blacksmith_bane"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.REGI_TIER, 6, -3.0F).efficiency(6.0F).set(MSItemTypes.AXE_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("regiaxe"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 8, -3.0F).efficiency(6.0F).set(MSItemTypes.AXE_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("gothy_axe"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 7, -3.0F).efficiency(6.0F).set(MSItemTypes.AXE_TOOL).add(OnHitEffect.KUNDLER_SURPRISE), new Item.Properties().defaultMaxDamage(600).group(MSItemGroup.WEAPONS)).setRegistryName("surprise_axe"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 8, -3.0F).efficiency(6.0F).set(MSItemTypes.AXE_TOOL).set(ItemRightClickEffect.switchTo(() -> SHOCK_AXE_UNPOWERED)).add(OnHitEffect.DROP_FOE_ITEM).add(InventoryTickEffect.DROP_WHEN_IN_WATER), new Item.Properties().defaultMaxDamage(800).group(MSItemGroup.WEAPONS)).setRegistryName("shock_axe"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 8, -3.0F).efficiency(6.0F).set(MSItemTypes.AXE_TOOL).set(ItemRightClickEffect.switchTo(() -> MSItems.SHOCK_AXE)), new Item.Properties().defaultMaxDamage(800)).setRegistryName("shock_axe_unpowered"));
@@ -755,12 +768,14 @@ public class MSItems
 		
 		//sickles
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 2, -2.2F).efficiency(1.5F).set(MSItemTypes.SICKLE_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("sickle"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 2, -2.2F).efficiency(1.5F).set(MSItemTypes.SICKLE_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("bisickle"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.SBAHJ_TIER, 3, -3.0F).efficiency(1.0F).set(MSItemTypes.SICKLE_TOOL).add(OnHitEffect.SORD_DROP), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("ow_the_edge"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.CACTUS_TIER, 4, -2.2F).efficiency(1.0F).set(MSItemTypes.SICKLE_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("thorny_subject"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 4, -2.2F).efficiency(3.0F).set(MSItemTypes.SICKLE_TOOL), new Item.Properties().defaultMaxDamage(400).group(MSItemGroup.WEAPONS)).setRegistryName("homes_smell_ya_later"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 5, -2.2F).efficiency(1.0F).set(MSItemTypes.SICKLE_TOOL), new Item.Properties().defaultMaxDamage(550).group(MSItemGroup.WEAPONS)).setRegistryName("hemeoreaper"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.CANDY_TIER, 5, -2.2F).efficiency(1.0F).set(MSItemTypes.SICKLE_TOOL).setEating(FinishUseItemEffect.foodEffect(7, 0.6F)), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("fudgesickle"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.REGI_TIER, 4, -2.2F).efficiency(4.0F).set(MSItemTypes.SICKLE_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("regisickle"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.GOLD, 9, -2.2F).efficiency(4.0F).set(MSItemTypes.SICKLE_TOOL), new Item.Properties().defaultMaxDamage(1024).group(MSItemGroup.WEAPONS)).setRegistryName("hereticus_aururm"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.ORGANIC_TIER, 8, -2.2F).efficiency(4.0F).set(MSItemTypes.SICKLE_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("claw_sickle"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.HORRORTERROR_TIER, 6, -2.2F).efficiency(4.0F).set(MSItemTypes.SICKLE_TOOL).add(OnHitEffect.HORRORTERROR), new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)).setRegistryName("claw_of_nrubyiglith"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.CANDY_TIER, 6, -2.2F).efficiency(2.5F).set(MSItemTypes.SICKLE_TOOL).add(OnHitEffect.SET_CANDY_DROP_FLAG), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("candy_sickle"));
@@ -816,6 +831,8 @@ public class MSItems
 		//Spoons/forks
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.WOOD, 2, -2.4F).efficiency(1.0F).set(MSItemTypes.SHOVEL_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("wooden_spoon"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 1, -2.4F).efficiency(1.0F).set(MSItemTypes.SHOVEL_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("silver_spoon"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 2, -2.4F).efficiency(1.0F).set(MSItemTypes.SHOVEL_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("melonballer"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.ORGANIC_TIER, 6, -2.4F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("sightseeker"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 3, -2.4F).efficiency(10.0F).set(MSItemTypes.SHOVEL_TOOL).set(new FarmineEffect(Integer.MAX_VALUE, 50)), new Item.Properties().defaultMaxDamage(1024).group(MSItemGroup.WEAPONS)).setRegistryName("terrain_flatenator"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 5, -2.4F).efficiency(1.0F).set(MSItemTypes.SHOVEL_TOOL).add(OnHitEffect.LIFE_SATURATION), new Item.Properties().defaultMaxDamage(2048).group(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)).setRegistryName("nosferatu_spoon"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.DIAMOND, 5, -2.4F).efficiency(1.0F).set(MSItemTypes.SHOVEL_TOOL).set(ItemRightClickEffect.switchTo(() -> MSItems.CROCKER_FORK)), new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)).setRegistryName("crocker_spoon"));
@@ -823,6 +840,9 @@ public class MSItems
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.REGI_TIER, 9, -2.6F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.RARE)).setRegistryName("skaia_fork"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.STONE, 3, -2.6F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("fork"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 3, -2.6F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.playSound(() -> SoundEvents.BLOCK_NOTE_BLOCK_CHIME)), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("tuning_fork"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.DIAMOND, 3, -2.6F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("eating_fork_gem"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 6, -2.6F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.DROP_FOE_ITEM).add(InventoryTickEffect.DROP_WHEN_IN_WATER), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("electric_fork"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.URANIUM_TIER, 6, -2.6F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.setOnFire(50)), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("devil_fork"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.STONE, 4, -2.5F).efficiency(1.0F).set(MSItemTypes.SHOVEL_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("spork"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.GOLD, 5, -2.5F).efficiency(1.0F).set(MSItemTypes.SHOVEL_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("golden_spork"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 7, -2.9F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("bident"));

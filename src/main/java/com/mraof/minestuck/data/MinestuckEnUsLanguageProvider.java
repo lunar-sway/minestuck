@@ -120,8 +120,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.CHISELED_FROST_BRICKS, "Chiseled Frost Bricks");
 		add(MSBlocks.CAST_IRON, "Cast-Iron");
 		add(MSBlocks.CHISELED_CAST_IRON, "Chiseled Cast-Iron");
+		add(MSBlocks.STEEL_BEAM, "Steel Beam");
 		add(MSBlocks.MYCELIUM_BRICKS, "Mycelium Bricks");
 		add(MSBlocks.BLACK_STONE, "Black Stone");
+		add(MSBlocks.BLACK_SAND, "Black Sand");
 		add(MSBlocks.FLOWERY_MOSSY_COBBLESTONE, "Flowery Mossy Cobblestone");
 		add(MSBlocks.FLOWERY_MOSSY_STONE_BRICKS, "Flowery Mossy Stone Bricks");
 		add(MSBlocks.COARSE_END_STONE, "Coarse End Stone");
@@ -365,6 +367,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addExtra(MSItems.SORD, OnHitEffect.SORD_DROP_MESSAGE, "The shittiness of the sord made it phase through your hand");
 		add(MSItems.PAPER_SWORD, "Paper Sword");
 		addTooltip(MSItems.PAPER_SWORD, "None shall be the wiser. It is the perfect crime.");
+		add(MSItems.SWONGE, "Swonge");
+		addTooltip(MSItems.SWONGE, "Splorch.");
 		add(MSItems.CACTACEAE_CUTLASS, "Cactaceae Cutlass");
 		addTooltip(MSItems.CACTACEAE_CUTLASS, "A spiny sword made of cactus, you might hurt yourself more on the spines then the blade would your enemies");
 		addStoreTooltip(MSItems.CACTACEAE_CUTLASS, "It's not as quenchy, but if it comes down to it you can always drink the blood of your foes.");
@@ -428,6 +432,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.STEEL_EDGE_CANDYCUTTER, "All the benefits of the Choco Loco Woodsplitter, now with more bloodshed! Perfect!");
 		add(MSItems.BLACKSMITH_BANE, "Blacksmith's Bane");
 		add(MSItems.REGIAXE, "Regiaxe");
+		add(MSItems.GOTHY_AXE, "Gothy Axe");
         add(MSItems.SURPRISE_AXE, "Kundler Surprise Axe");
         addTooltip(MSItems.SURPRISE_AXE, "Who knows what surprises this bad boy has in store!");
 		addExtra(MSItems.SURPRISE_AXE, "message", "WOW! NO WAY! You found a %s from your opponent!");
@@ -461,6 +466,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.TYPHONIC_TRIVIALIZER, "Typhonic Trivializer");
 		addTooltip(MSItems.TYPHONIC_TRIVIALIZER, "It's easy being breezy, with this denizen's boon");
 		add(MSItems.SICKLE, "Sickle");
+		add(MSItems.BISICKLE, "Bisickle");
 		add(MSItems.OW_THE_EDGE, "oW THE EDGE");
 		add(MSItems.THORNY_SUBJECT, "A Thorny Subject");
 		add(MSItems.HEMEOREAPER, "Hemeoreaper");
@@ -470,6 +476,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.FUDGESICKLE, "Whose idea was this?");
 		add(MSItems.REGISICKLE, "Regisickle");
 		addTooltip(MSItems.REGISICKLE, "A black sickle wielded by Dersites and Agents!");
+		add(MSItems.HERETICUS_AURURM, "Hereticus Aururm");
 		add(MSItems.CLAW_SICKLE, "Clawsickle");
 		addTooltip(MSItems.CLAW_SICKLE, "This crabby blade can hook and pinch your enemies for you!");
 		add(MSItems.CLAW_OF_NRUBYIGLITH, "Claw of Nrub'yiglith");
@@ -561,6 +568,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.WOODEN_SPOON, "Like the kind you would eat your soup with");
 		add(MSItems.SILVER_SPOON, "Silver Spoon");
 		addTooltip(MSItems.SILVER_SPOON, "Could be the first silver object you've seen so far");
+		add(MSItems.MELONBALLER, "Melonballer");
+		add(MSItems.SIGHTSEEKER, "Sightseeker");
 		add(MSItems.TERRAIN_FLATENATOR, "Terrain Flatenator");
 		addTooltip(MSItems.TERRAIN_FLATENATOR, "Construction worker's pride and joy!");
 		add(MSItems.NOSFERATU_SPOON, "Nosferatu Spoon");
@@ -574,6 +583,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.FORK, "Fork");
 		add(MSItems.TUNING_FORK, "Tuning Fork");
 		addTooltip(MSItems.TUNING_FORK, "Does anyone hear a ringing?");
+		add(MSItems.ELECTRIC_FORK, "Electric Fork");
+		add(MSItems.EATING_FORK_GEM, "Eating Fork Gem");
+		add(MSItems.DEVIL_FORK, "Devil Fork");
 		add(MSItems.SPORK, "Spork");
 		add(MSItems.GOLDEN_SPORK, "Golden Spork");
 		addTooltip(MSItems.GOLDEN_SPORK, "A spoon and fork with all the awfulness of gold tools? Sign me up!");
