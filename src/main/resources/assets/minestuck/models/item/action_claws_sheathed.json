@@ -1,7 +1,7 @@
 {
     "parent": "item/handheld",
     "textures": {
-        "layer0": "minestuck:item/cat_claws_drawn"
+        "layer0": "minestuck:item/action_claws_sheathed"
     },
     "display": {
         "thirdperson_righthand": {

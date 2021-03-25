@@ -129,6 +129,8 @@ public class MSItems
 	//misc weapons
 	public static final Item CAT_CLAWS_DRAWN = getNull();
 	public static final Item CAT_CLAWS_SHEATHED = getNull();
+	public static final Item ACTION_CLAWS_DRAWN = getNull();
+	public static final Item ACTION_CLAWS_SHEATHED = getNull();
 	public static final Item LIPSTICK_CHAINSAW = getNull();
 	public static final Item LIPSTICK = getNull();
 	public static final Item JOUSTING_LANCE = getNull();
@@ -766,8 +768,9 @@ public class MSItems
 		
 		//misc weapons
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 2, -1.5F).efficiency(10.0F).set(MSItemTypes.CLAWS_TOOL).set(ItemRightClickEffect.switchTo(() -> MSItems.CAT_CLAWS_SHEATHED)), new Item.Properties().defaultMaxDamage(500).group(MSItemGroup.WEAPONS)).setRegistryName("cat_claws_drawn"));
-		
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, -1, -1.0F).efficiency(10.0F).set(ItemRightClickEffect.switchTo(() -> MSItems.CAT_CLAWS_DRAWN)), new Item.Properties().defaultMaxDamage(500)).setRegistryName("cat_claws_sheathed"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.DIAMOND, 5, -1.5F).efficiency(10.0F).set(MSItemTypes.CLAWS_TOOL).set(ItemRightClickEffect.switchTo(() -> MSItems.ACTION_CLAWS_SHEATHED)), new Item.Properties().defaultMaxDamage(4096).group(MSItemGroup.WEAPONS).rarity(Rarity.RARE)).setRegistryName("action_claws_drawn"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.DIAMOND, -1, -1.0F).efficiency(10.0F).set(ItemRightClickEffect.switchTo(() -> MSItems.ACTION_CLAWS_DRAWN)), new Item.Properties().defaultMaxDamage(4096).rarity(Rarity.RARE)).setRegistryName("action_claws_sheathed"));
 		
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 2, -1.5F).efficiency(10.0F).set(MSItemTypes.AXE_TOOL).set(ItemRightClickEffect.switchTo(() -> MSItems.LIPSTICK)), new Item.Properties().defaultMaxDamage(250).group(MSItemGroup.WEAPONS)).setRegistryName("lipstick_chainsaw"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.WOOD, -1, -0.5F).efficiency(10.0F).set(ItemRightClickEffect.switchTo(() -> MSItems.LIPSTICK_CHAINSAW)), new Item.Properties().defaultMaxDamage(250)).setRegistryName("lipstick"));

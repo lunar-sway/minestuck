@@ -459,6 +459,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.FLUORITE_OCTET, "Magical Dice! Let 'em roll!");
 		add(MSItems.CAT_CLAWS_DRAWN, "Cat Claws");
 		add(MSItems.CAT_CLAWS_SHEATHED, "Cat Claws");
+		add(MSItems.ACTION_CLAWS_DRAWN, "Action Claws");
+		add(MSItems.ACTION_CLAWS_SHEATHED, "Action Claws");
 		add(MSItems.LIPSTICK_CHAINSAW, "Chainsaw");
 		add(MSItems.LIPSTICK, "Jade Lipstick");
 		add(MSItems.JOUSTING_LANCE, "Jousting Lance");
