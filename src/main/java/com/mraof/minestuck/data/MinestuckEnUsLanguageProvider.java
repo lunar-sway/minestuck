@@ -369,7 +369,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.PAPER_SWORD, "Paper Sword");
 		addTooltip(MSItems.PAPER_SWORD, "None shall be the wiser. It is the perfect crime.");
 		add(MSItems.SWONGE, "Swonge");
-		addTooltip(MSItems.SWONGE, "Splorch.");
+		addTooltip(MSItems.SWONGE, "Schlorp.");
+		add(MSItems.WET_SWONGE, "Wet Swonge");
+		addTooltip(MSItems.WET_SWONGE, "Splorch.");
 		add(MSItems.CACTACEAE_CUTLASS, "Cactaceae Cutlass");
 		addTooltip(MSItems.CACTACEAE_CUTLASS, "A spiny sword made of cactus, you might hurt yourself more on the spines then the blade would your enemies");
 		addStoreTooltip(MSItems.CACTACEAE_CUTLASS, "It's not as quenchy, but if it comes down to it you can always drink the blood of your foes.");

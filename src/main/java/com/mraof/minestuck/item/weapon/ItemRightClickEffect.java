@@ -1,5 +1,6 @@
 package com.mraof.minestuck.item.weapon;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.LivingEntity;
@@ -8,8 +9,7 @@ import net.minecraft.entity.projectile.FireballEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -95,6 +95,34 @@ public interface ItemRightClickEffect
 				itemStackIn.damageItem(1, player, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
 			}
 			return ActionResult.resultPass(itemStackIn);
+		};
+	}
+	
+	static ItemRightClickEffect absorbFluid(Supplier<Block> fluidBlock, Supplier<Item> otherItem)
+	{
+		return (world, player, hand) -> {
+			Vec3d eyePos = player.getEyePosition(1.0F);
+			Vec3d lookVec = player.getLookVec();
+			BlockState state;
+			ItemStack itemStack = player.getHeldItem(hand);
+			
+			for(int step = 0; step < player.getAttribute(PlayerEntity.REACH_DISTANCE).getValue() * 10; step++) //raytraces from the players current eye position to the maximum their reach distance allows
+			{
+				Vec3d vecPos = eyePos.add(lookVec.scale(step / 10D));
+				BlockPos blockPos = new BlockPos(vecPos);
+				state = world.getBlockState(blockPos);
+				
+				if(state.getBlock() == fluidBlock.get() && state.getFluidState().isSource()) //may cause error if fed non-fluid "fluidBlock" parameter
+				{
+					world.setBlockState(blockPos, Blocks.AIR.getDefaultState());
+					ItemStack newItem = new ItemStack(otherItem.get(), itemStack.getCount());
+					newItem.setTag(itemStack.getTag()); //It is important that the item it is switching to has the same durability
+					world.playSound(null, blockPos, SoundEvents.ITEM_BUCKET_FILL, SoundCategory.BLOCKS, 1F, 2F);
+					player.getCooldownTracker().setCooldown(otherItem.get(), 5);
+					return ActionResult.resultSuccess(newItem);
+				}
+			}
+			return ActionResult.resultFail(itemStack);
 		};
 	}
 	

@@ -72,6 +72,7 @@ public class MSItems
 	public static final Item SORD = getNull();
 	public static final Item PAPER_SWORD = getNull();
 	public static final Item SWONGE = getNull();
+	public static final Item WET_SWONGE = getNull();
 	public static final Item CACTACEAE_CUTLASS = getNull();
 	public static final Item STEAK_SWORD = getNull();
 	public static final Item BEEF_SWORD = getNull();
@@ -708,7 +709,8 @@ public class MSItems
 		//blades
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.SBAHJ_TIER, 3, -3.0F).efficiency(1.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SORD_DROP), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("sord"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.PAPER_TIER, 2, -2.4F).efficiency(3.0F).set(MSItemTypes.SWORD_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("paper_sword"));
-		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.ORGANIC_TIER, 3, -2.4F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.playSound(() -> SoundEvents.ENTITY_COD_FLOP)), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("swonge"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.ORGANIC_TIER, 3, -2.4F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).set(ItemRightClickEffect.absorbFluid(() -> Blocks.WATER, () -> MSItems.WET_SWONGE)), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("swonge"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.ORGANIC_TIER, 3, -2.4F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).set(RightClickBlockEffect.placeFluid(() -> Blocks.WATER, () -> MSItems.SWONGE)).add(OnHitEffect.playSound(() -> SoundEvents.ENTITY_GUARDIAN_FLOP)), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("wet_swonge"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.CACTUS_TIER, 3, -2.4F).efficiency(15.0F).set(MSItemTypes.SWORD_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("cactaceae_cutlass"));	//The sword harvestTool is only used against webs, hence the high efficiency.
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.MEAT_TIER, 4, -2.4F).efficiency(5.0F).set(MSItemTypes.SWORD_TOOL).setEating(FinishUseItemEffect.foodEffect(8, 1F)), new Item.Properties().defaultMaxDamage(250).group(MSItemGroup.WEAPONS)).setRegistryName("steak_sword"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.MEAT_TIER, 2, -2.4F).efficiency(5.0F).set(MSItemTypes.SWORD_TOOL).setEating(FinishUseItemEffect.foodEffect(3, 0.8F, 75)), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("beef_sword"));
@@ -851,7 +853,7 @@ public class MSItems
 		//spoons/forks
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.WOOD, 2, -2.4F).efficiency(1.0F).set(MSItemTypes.SHOVEL_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("wooden_spoon"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 1, -2.4F).efficiency(1.0F).set(MSItemTypes.SHOVEL_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("silver_spoon"));
-		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 2, -2.4F).efficiency(1.0F).set(MSItemTypes.SHOVEL_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("melonballer"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 2, -2.4F).efficiency(1.0F).set(MSItemTypes.SHOVEL_TOOL).set(RightClickBlockEffect.scoopBlock(() -> Blocks.MELON)), new Item.Properties().group(MSItemGroup.WEAPONS).defaultMaxDamage(500)).setRegistryName("melonballer"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.ORGANIC_TIER, 6, -2.4F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("sightseeker"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 3, -2.4F).efficiency(10.0F).set(MSItemTypes.SHOVEL_TOOL).set(new FarmineEffect(Integer.MAX_VALUE, 50)), new Item.Properties().defaultMaxDamage(1024).group(MSItemGroup.WEAPONS)).setRegistryName("terrain_flatenator"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 5, -2.4F).efficiency(1.0F).set(MSItemTypes.SHOVEL_TOOL).add(OnHitEffect.LIFE_SATURATION), new Item.Properties().defaultMaxDamage(2048).group(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)).setRegistryName("nosferatu_spoon"));
