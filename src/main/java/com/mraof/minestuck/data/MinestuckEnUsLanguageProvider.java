@@ -502,7 +502,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.MACE, "Mace");
 		add(MSItems.M_ACE, "mACE");
 		add(MSItems.DESOLATOR_MACE, "Desolator Mace");
-		addTooltip(MSItems.DESOLATOR_MACE, "Void your enemies existence.");
+		addTooltip(MSItems.DESOLATOR_MACE, "Void your enemies existence. Is the damage really that low?");
 		add(MSItems.HORSE_HITCHER, "Cast Iron Horse Hitcher");
 		add(MSItems.ACE_OF_SPADES, "Ace of Spades");
 		addStore(MSItems.ACE_OF_SPADES, "Shovel Sigil");

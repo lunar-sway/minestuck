@@ -155,13 +155,6 @@ public class ServerEventHandler
 					double modifier = PlayerSavedData.getData(player).getEcheladder().getUnderlingDamageModifier();
 					event.setAmount((float) (event.getAmount() * modifier));
 				}
-				
-				Title title = PlayerSavedData.getData(player).getTitle();
-				boolean isVoid = title != null && title.getHeroAspect() == EnumAspect.VOID;
-				if (player.getHeldItemMainhand().getItem() == MSItems.DESOLATOR_MACE && isVoid)
-				{
-					event.getSource().setDamageBypassesArmor();
-				}
 			}
 			else if (event.getEntityLiving() instanceof ServerPlayerEntity && event.getSource().getTrueSource() instanceof UnderlingEntity)
 			{    //Decrease damage to player

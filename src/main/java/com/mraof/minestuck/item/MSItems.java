@@ -18,6 +18,7 @@ import com.mraof.minestuck.item.weapon.*;
 import com.mraof.minestuck.item.weapon.projectiles.BouncingProjectileWeaponItem;
 import com.mraof.minestuck.item.weapon.projectiles.ConsumableProjectileWeaponItem;
 import com.mraof.minestuck.item.weapon.projectiles.ReturningProjectileWeaponItem;
+import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -766,7 +767,7 @@ public class MSItems
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.WOOD, 5, -2.8F).efficiency(2.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().defaultMaxDamage(100).group(MSItemGroup.WEAPONS)).setRegistryName("spiked_club"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 5, -2.8F).efficiency(2.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().defaultMaxDamage(500).group(MSItemGroup.WEAPONS)).setRegistryName("mace"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 6, -2.8F).efficiency(2.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().defaultMaxDamage(750).group(MSItemGroup.WEAPONS)).setRegistryName("m_ace"));
-		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 5, -2.8F).efficiency(2.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().defaultMaxDamage(2048).group(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)).setRegistryName("desolator_mace"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 1, -2.8F).efficiency(2.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.armorBypassingDamageMod(4, EnumAspect.VOID)), new Item.Properties().defaultMaxDamage(2048).group(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)).setRegistryName("desolator_mace"));
 		
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 7, -2.8F).efficiency(2.0F).set(MSItemTypes.MISC_TOOL).set(ItemRightClickEffect.switchTo(() -> MSItems.ACE_OF_SPADES)), new Item.Properties().defaultMaxDamage(500).group(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)).setRegistryName("horse_hitcher"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.PAPER_TIER, 0, -1.8F).efficiency(0.0F).set(ItemRightClickEffect.switchTo(() -> MSItems.HORSE_HITCHER)), new Item.Properties().defaultMaxDamage(500)).setRegistryName("ace_of_spades"));
