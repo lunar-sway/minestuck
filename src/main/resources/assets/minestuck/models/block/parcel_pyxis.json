@@ -50,9 +50,9 @@
             }
         },
         {
-            "from": [1.5, 0, 1.5],
-            "to": [14.5, 3, 14.5],
-            "rotation": {"angle": 0, "axis": "y", "origin": [10, 8, 10]},
+            "from": [2, 0, 2],
+            "to": [14, 3, 14],
+            "rotation": {"angle": 0, "axis": "y", "origin": [11, 8, 11]},
             "faces": {
                 "north": {"uv": [0, 10.5, 9, 13.5], "texture": "#0"},
                 "east": {"uv": [0, 10.5, 9, 13.5], "texture": "#0"},

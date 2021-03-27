@@ -560,6 +560,12 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSBlocks.CHISELED_COARSE_STONE).input(Items.CHISELED_STONE_BRICKS).and().namedInput(MSBlocks.COARSE_STONE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.SHADE_STONE).input(Items.STONE).or().namedInput(MSBlocks.BLUE_DIRT).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.SHADE_STONE).input(Items.STONE).or().namedInput(Items.BLUE_DYE).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.SHADE_BRICKS).input(Items.STONE_BRICKS).or().namedInput(MSBlocks.BLUE_DIRT).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.SHADE_BRICKS).input(Items.STONE_BRICKS).or().namedInput(Items.LAPIS_LAZULI).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.SMOOTH_SHADE_STONE).input(Items.SMOOTH_STONE).or().namedInput(MSBlocks.BLUE_DIRT).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.SMOOTH_SHADE_STONE).input(Items.SMOOTH_STONE).or().namedInput(Items.LAPIS_LAZULI).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.SHADE_BRICK_STAIRS).input(Items.STONE_BRICK_STAIRS).or().namedInput(MSBlocks.BLUE_DIRT).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.SHADE_BRICK_STAIRS).input(Items.STONE_BRICK_STAIRS).or().namedInput(Items.LAPIS_LAZULI).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.FROST_TILE).input(Tags.Items.STONE).and().namedInput(Items.ICE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.FROST_TILE).input(Tags.Items.STONE).and().namedInput(Items.PACKED_ICE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.FROST_BRICKS).input(Items.STONE_BRICKS).and().namedInput(Items.ICE).build(consumer);
