@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:pool_cue_wand"
+  },
+  "grist_cost": {
+    "minestuck:quartz": 50,
+    "minestuck:chalk": 70,
+    "minestuck:tar": 90,
+    "minestuck:uranium": 45
+  }
+}
