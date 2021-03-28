@@ -76,6 +76,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.DARK_GRAY_CASTLE_BRICK_TRIM, "Dark Gray Castle Brick Trim");
 		add(MSBlocks.LIGHT_GRAY_CASTLE_BRICK_TRIM, "Light Gray Castle Brick Trim");
 		add(MSBlocks.WHITE_CASTLE_BRICK_TRIM, "White Castle Brick Trim");
+		add(MSBlocks.CHECKERED_STAINED_GLASS, "Checkered Stained Glass");
 		add(MSBlocks.BLACK_CROWN_STAINED_GLASS, "Black Crown Stained Glass");
 		add(MSBlocks.BLACK_PAWN_STAINED_GLASS, "Black Pawn Stained Glass");
 		add(MSBlocks.WHITE_CROWN_STAINED_GLASS, "White Crown Stained Glass");
@@ -86,6 +87,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.RED_SANDSTONE_CRUXITE_ORE, "Cruxite Ore");
 		add(MSBlocks.NETHERRACK_CRUXITE_ORE, "Cruxite Ore");
 		add(MSBlocks.END_STONE_CRUXITE_ORE, "Cruxite Ore");
+		add(MSBlocks.SHADE_STONE_CRUXITE_ORE, "Cruxite Ore");
 		add(MSBlocks.PINK_STONE_CRUXITE_ORE, "Cruxite Ore");
 		add(MSBlocks.STONE_URANIUM_ORE, "Uranium Ore");
 		add(MSBlocks.COBBLESTONE_URANIUM_ORE, "Uranium Ore");
@@ -93,14 +95,17 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.RED_SANDSTONE_URANIUM_ORE, "Uranium Ore");
 		add(MSBlocks.NETHERRACK_URANIUM_ORE, "Uranium Ore");
 		add(MSBlocks.END_STONE_URANIUM_ORE, "Uranium Ore");
+		add(MSBlocks.SHADE_STONE_URANIUM_ORE, "Uranium Ore");
 		add(MSBlocks.PINK_STONE_URANIUM_ORE, "Uranium Ore");
 		add(MSBlocks.NETHERRACK_COAL_ORE, "Coal Ore");
+		add(MSBlocks.SHADE_STONE_COAL_ORE, "Coal Ore");
 		add(MSBlocks.PINK_STONE_COAL_ORE, "Coal Ore");
 		add(MSBlocks.SANDSTONE_IRON_ORE, "Iron Ore");
 		add(MSBlocks.RED_SANDSTONE_IRON_ORE, "Iron Ore");
 		add(MSBlocks.END_STONE_IRON_ORE, "Iron Ore");
 		add(MSBlocks.SANDSTONE_GOLD_ORE, "Gold Ore");
 		add(MSBlocks.RED_SANDSTONE_GOLD_ORE, "Gold Ore");
+		add(MSBlocks.SHADE_STONE_GOLD_ORE, "Gold Ore");
 		add(MSBlocks.PINK_STONE_GOLD_ORE, "Gold Ore");
 		add(MSBlocks.END_STONE_REDSTONE_ORE, "Redstone Ore");
 		add(MSBlocks.STONE_QUARTZ_ORE, "Quartz Ore");
@@ -113,8 +118,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.THOUGHT_DIRT, "Thought Dirt");
 		add(MSBlocks.COARSE_STONE, "Coarse Stone");
 		add(MSBlocks.CHISELED_COARSE_STONE, "Chiseled Coarse Stone");
+		add(MSBlocks.SHADE_STONE, "Shade Stone");
 		add(MSBlocks.SHADE_BRICKS, "Shade Bricks");
-		add(MSBlocks.SMOOTH_SHADE_STONE, "Shade Stone");
+		add(MSBlocks.SMOOTH_SHADE_STONE, "Smooth Shade Stone");
 		add(MSBlocks.FROST_BRICKS, "Frost Bricks");
 		add(MSBlocks.FROST_TILE, "Frost Tiles");
 		add(MSBlocks.CHISELED_FROST_BRICKS, "Chiseled Frost Bricks");
@@ -136,6 +142,11 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.CHISELED_PINK_STONE_BRICKS, "Chiseled Pink Stone Bricks");
 		add(MSBlocks.CRACKED_PINK_STONE_BRICKS, "Cracked Pink Stone Bricks");
 		add(MSBlocks.MOSSY_PINK_STONE_BRICKS, "Mossy Pink Stone Bricks");
+		add(MSBlocks.BROWN_STONE, "Brown Stone");
+		add(MSBlocks.POLISHED_BROWN_STONE, "Polished Brown Stone");
+		add(MSBlocks.BROWN_STONE_BRICKS, "Brown Stone Bricks");
+		add(MSBlocks.BROWN_STONE_COLUMN, "Brown Stone Column");
+		add(MSBlocks.CRACKED_BROWN_STONE_BRICKS, "Cracked Brown Stone Bricks");
 		add(MSBlocks.DENSE_CLOUD, "Dense Cloud");
 		add(MSBlocks.BRIGHT_DENSE_CLOUD, "Bright Dense Cloud");
 		add(MSBlocks.SUGAR_CUBE, "Sugar Cube");
@@ -243,6 +254,12 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSBlocks.VEIN_CORNER, "Corner");
 		add(MSBlocks.INVERTED_VEIN_CORNER, "Vein");
 		addTooltip(MSBlocks.INVERTED_VEIN_CORNER, "Corner (Inverted Flow)");
+		add(MSBlocks.PIPE, "Pipe");
+		add(MSBlocks.PIPE_INTERSECTION, "Pipe Intersection");
+		addTooltip(MSBlocks.PIPE_INTERSECTION, "Astute engineers may note the lack of any openings and inability for anything to cross this intersection. In the business this is called 'useless'");
+		add(MSBlocks.PARCEL_PYXIS, "Parcel Pyxis");
+		addTooltip(MSBlocks.PARCEL_PYXIS, "This doesn't actually seem to do anything");
+		add(MSBlocks.PYXIS_LID, "Parcel Pyxis Lid");
 		add(MSBlocks.COARSE_STONE_STAIRS, "Coarse Stone Stairs");
 		add(MSBlocks.SHADE_BRICK_STAIRS, "Shade Brick Stairs");
 		add(MSBlocks.FROST_BRICK_STAIRS, "Frost Brick Stairs");
@@ -251,6 +268,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.CHALK_STAIRS, "Chalk Stairs");
 		add(MSBlocks.CHALK_BRICK_STAIRS, "Chalk Brick Stairs");
 		add(MSBlocks.PINK_STONE_BRICK_STAIRS, "Pink Stone Brick Stairs");
+		add(MSBlocks.BROWN_STONE_BRICK_STAIRS, "Brown Stone Brick Stairs");
 		add(MSBlocks.RAINBOW_PLANKS_STAIRS, "Rainbow Planks Stairs");
 		add(MSBlocks.END_PLANKS_STAIRS, "End Planks Stairs");
 		add(MSBlocks.DEAD_PLANKS_STAIRS, "Dead Planks Stairs");
@@ -258,6 +276,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.CHALK_SLAB, "Chalk Slab");
 		add(MSBlocks.CHALK_BRICK_SLAB, "Chalk Brick Slab");
 		add(MSBlocks.PINK_STONE_BRICK_SLAB, "Pink Stone Brick Slab");
+		add(MSBlocks.BROWN_STONE_BRICK_SLAB, "Brown Stone Brick Slab");
 		add(MSBlocks.RAINBOW_PLANKS_SLAB, "Rainbow Planks Slab");
 		add(MSBlocks.END_PLANKS_SLAB, "End Planks Slab");
 		add(MSBlocks.DEAD_PLANKS_SLAB, "Dead Planks Slab");

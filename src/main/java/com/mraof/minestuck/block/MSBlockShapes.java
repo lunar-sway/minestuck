@@ -43,6 +43,10 @@ public class MSBlockShapes
 	
 	public static final CustomVoxelShape CASSETTE_PLAYER = new CustomVoxelShape(new double[]{4, 0, 4, 12, 2, 15});
 	
+	public static final CustomVoxelShape PIPE = new CustomVoxelShape(new double[]{0, 0, 0, 2, 14, 16}, new double[]{0, 16, 0, 14, 14, 16}, new double[]{16, 16, 0, 14, 2, 16}, new double[]{16, 0, 0, 2, 2, 16});
+	public static final CustomVoxelShape PARCEL_PYXIS = new CustomVoxelShape(new double[]{4, 0, 4, 12, 16, 12}, new double[]{3, 0, 3, 13, 3.5, 13});
+	public static final CustomVoxelShape PYXIS_LID = new CustomVoxelShape(new double[]{4, 0, 4, 12, 2.5, 12});
+	
 	//Machines
 	public static final CustomVoxelShape ALCHEMITER_CENTER = new CustomVoxelShape(new double[]{0, 0, 0, 16, 16, 16});
 	public static final CustomVoxelShape ALCHEMITER_CORNER = new CustomVoxelShape(new double[]{0, 0, 0, 16, 8, 16}, new double[]{0, 8, 6, 10, 12, 16}, new double[]{0, 12, 8, 8, 16, 16});
