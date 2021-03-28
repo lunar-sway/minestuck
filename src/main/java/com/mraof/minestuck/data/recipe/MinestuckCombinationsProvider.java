@@ -500,7 +500,9 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSBlocks.GOLD_SEEDS).input(Items.WHEAT_SEEDS).and().namedInput(Items.GOLD_INGOT).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.OBSIDIAN_BUCKET).input(Items.WATER_BUCKET).or().input(Items.LAVA_BUCKET).namedSource("buckets").build(consumer);
 		CombinationRecipeBuilder.of(MSItems.OBSIDIAN_BUCKET).input(Items.BUCKET).and().namedInput(Items.OBSIDIAN).build(consumer);
-		CombinationRecipeBuilder.of(MSItems.STONE_SLAB).input(Items.STONE).and().input(MSItems.CARVING_TOOL).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.STONE_SLAB).input(Items.STONE).or().namedInput(MSItems.CARVING_TOOL).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.STONE_SLAB).input(Items.STONE).and().namedInput(Items.WRITABLE_BOOK).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.STONE_SLAB).input(Items.STONE).or().namedInput(MSItems.CAPTCHA_CARD).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.GLOWYSTONE_DUST).input(Items.REDSTONE).or().input(Items.GLOWSTONE_DUST).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.CASSETTE_13).input(Items.MUSIC_DISC_13).or().namedInput(MSBlocks.CASSETTE_PLAYER).build(consumer);
