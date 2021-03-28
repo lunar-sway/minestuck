@@ -2,7 +2,9 @@ package com.mraof.minestuck.item.weapon;
 
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.Title;
+import com.mraof.minestuck.world.storage.ClientPlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -39,7 +41,12 @@ public class PropelEffect implements ItemRightClickEffect
 	void propelAction(PlayerEntity player, ItemStack stack, double velocity, Hand hand)
 	{
 		Title title = null;
-		if(player instanceof ServerPlayerEntity) //TODO find way to assign title earlier as the first check does not save immediately in a loaded world
+		if(player instanceof ClientPlayerEntity)
+		{
+			title = ClientPlayerData.getTitle();
+		}
+		
+		if(player instanceof ServerPlayerEntity)
 		{
 			title = PlayerSavedData.getData((ServerPlayerEntity) player).getTitle();
 			if(player.getCooldownTracker().getCooldown(stack.getItem(), 1F) <= 0 && title != null && title.getHeroAspect() == aspect)
