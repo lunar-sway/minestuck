@@ -382,6 +382,7 @@ public class MSItems
 	public static final Item CREW_POSTER = getNull();
 	public static final Item SBAHJ_POSTER = getNull();
 	public static final Item BI_DYE = getNull();
+	public static final Item LIP_BALM = getNull();
 	
 	//Other
 	public static final Item CAPTCHAROID_CAMERA = getNull();
@@ -761,7 +762,7 @@ public class MSItems
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.CORUNDUM_TIER, 7, -3.0F).efficiency(9.0F).set(MSItemTypes.AXE_TOOL).add(OnHitEffect.setOnFire(30)), new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.RARE)).setRegistryName("hephaestus_lumberjack"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 7, -3.0F).efficiency(5.0F).set(MSItemTypes.AXE_HAMMER_TOOL).set(new FarmineEffect(Integer.MAX_VALUE, 100)).set(PogoEffect.EFFECT_07).add(PogoEffect.EFFECT_07), new Item.Properties().defaultMaxDamage(2048).group(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)).setRegistryName("fission_focused_fault_feller"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 9, -3.2F).efficiency(5.0F).set(MSItemTypes.AXE_TOOL), new Item.Properties().defaultMaxDamage(600).group(MSItemGroup.WEAPONS)).setRegistryName("bisector"));
-		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.DIAMOND, 9, -3.2F).efficiency(1.0F).set(MSItemTypes.AXE_TOOL), new Item.Properties().defaultMaxDamage(20).group(MSItemGroup.WEAPONS)).setRegistryName("fine_china_axe"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.DIAMOND, 9, -3.2F).efficiency(1.0F).set(MSItemTypes.AXE_TOOL), new Item.Properties().defaultMaxDamage(8).group(MSItemGroup.WEAPONS)).setRegistryName("fine_china_axe"));
 		
 		//Dice
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.DIAMOND, 4, -3.0F).efficiency(1.0F), new Item.Properties().group(MSItemGroup.WEAPONS).defaultMaxDamage(4096).rarity(Rarity.EPIC)).setRegistryName("fluorite_octet"));
@@ -1051,6 +1052,7 @@ public class MSItems
 		registry.register(new HangingItem((world, pos, facing, stack) -> new CrewPosterEntity(world, pos, facing), new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("crew_poster"));
 		registry.register(new HangingItem((world, pos, facing, stack) -> new SbahjPosterEntity(world, pos, facing), new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("sbahj_poster"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("bi_dye"));
+		registry.register(new RightClickMessageItem(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("lip_balm"));
 		
 		//Music disks
 		registry.register(new MusicDiscItem(1, () -> MSSoundEvents.MUSIC_DISC_EMISSARY_OF_DANCE, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_emissary_of_dance"));

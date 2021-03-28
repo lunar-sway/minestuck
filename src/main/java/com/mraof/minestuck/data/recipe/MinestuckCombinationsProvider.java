@@ -162,6 +162,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(Items.COMPASS).namedInput(Items.REDSTONE).or().input(Items.IRON_INGOT).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.CLOCK).namedInput(Items.COMPASS).and().input(Items.GOLD_INGOT).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.CLOCK).namedInput(Items.REDSTONE).and().input(Items.GOLD_INGOT).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(Items.BELL).namedInput(MSItems.HORN).and().input(Items.CLOCK).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.GLOWSTONE_DUST).input(Items.TORCH).or().input(Items.REDSTONE).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.WRITABLE_BOOK).input(Items.BOOK).or().input(ItemTags.SIGNS).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.NAME_TAG).input(ItemTags.SIGNS).and().input(Items.LEAD).buildFor(consumer, Minestuck.MOD_ID);
@@ -464,6 +465,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		
 		CombinationRecipeBuilder.of(MSItems.CAT_CLAWS_SHEATHED).input(Items.IRON_BARS).and().input(Items.LEATHER).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.ACTION_CLAWS_SHEATHED).input(MSItems.CAT_CLAWS_SHEATHED).and().input(MSItems.FLUORITE_OCTET).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.LIPSTICK).input(MSItems.LIP_BALM).and().input(Items.GREEN_DYE).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.JOUSTING_LANCE).input(Items.IRON_SWORD).and().input(Tags.Items.RODS_WOODEN).build(consumer);
         CombinationRecipeBuilder.of(MSItems.CIGARETTE_LANCE).input(MSItems.JOUSTING_LANCE).or().input(MSItems.EIGHTBALL).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.LUCERNE_HAMMER).input(MSItems.SPEAR_CANE).and().namedInput(MSItems.CLAW_HAMMER).build(consumer);

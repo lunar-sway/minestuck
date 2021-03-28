@@ -854,6 +854,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addStoreTooltip(MSItems.BATTERY, "This one's tough to crunch into, and the effort's barely even worth it!");
 		add(MSItems.BI_DYE, "Bi Dye");
 		addTooltip(MSItems.BI_DYE, "Show off your pride to friends! Make gear to help vanquish your foes!");
+		add(MSItems.LIP_BALM, "Lip Balm");
+		addTooltip(MSItems.LIP_BALM, "I see you there with those dry lips. Aht aht don't lick them now.");
+		addExtra(MSItems.LIP_BALM, "message", "Your lips are slightly more moisturized, but is it enough?");
 		add(MSItems.INK_SQUID_PRO_QUO, "Ink of Squid Pro Quo");
 		addTooltip(MSItems.INK_SQUID_PRO_QUO, "For the love of god, don't drink it.");
 		add(MSItems.CUEBALL, "Magic Cueball");

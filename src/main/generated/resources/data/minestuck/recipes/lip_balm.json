@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "   ",
+    "nwn",
+    " n "
+  ],
+  "key": {
+    "n": {
+      "item": "minecraft:iron_nugget"
+    },
+    "w": {
+      "item": "minecraft:honeycomb"
+    }
+  },
+  "result": {
+    "item": "minestuck:lip_balm"
+  }
+}
