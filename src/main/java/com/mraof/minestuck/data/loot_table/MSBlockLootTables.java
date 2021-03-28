@@ -216,6 +216,7 @@ public class MSBlockLootTables extends BlockLootTables
 		registerLootTable(VEIN, func_218482_a());
 		registerLootTable(VEIN_CORNER, func_218482_a());
 		registerLootTable(INVERTED_VEIN_CORNER, func_218482_a());
+		registerLootTable(STONE_SLAB_BLOCK, MSBlockLootTables::droppingWithTEItem);
 		
 		registerDropSelfLootTable(COARSE_STONE_STAIRS);
 		registerDropSelfLootTable(SHADE_BRICK_STAIRS);

@@ -122,6 +122,7 @@ public class MSBlocks
 	public static final Block VEIN = getNull();
 	public static final Block VEIN_CORNER = getNull();
 	public static final Block INVERTED_VEIN_CORNER = getNull();
+	public static final Block STONE_SLAB_BLOCK = getNull();
 	
 	//Structure Land Blocks
 	public static final Block COARSE_STONE_STAIRS = getNull(), SHADE_BRICK_STAIRS = getNull(), FROST_BRICK_STAIRS = getNull(), CAST_IRON_STAIRS = getNull();
@@ -384,6 +385,7 @@ public class MSBlocks
 		registry.register(new VeinBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(0.45F).sound(SoundType.SLIME)).setRegistryName("vein"));
 		registry.register(new VeinCornerBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(0.45F).sound(SoundType.SLIME)).setRegistryName("vein_corner"));
 		registry.register(new VeinCornerBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(0.45F).sound(SoundType.SLIME)).setRegistryName("inverted_vein_corner"));
+		registry.register(new StoneTabletBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.1F), MSBlockShapes.STONE_TABLET).setRegistryName("stone_slab_block")); //same thing as stone tablet
 		
 		registry.register(new StairsBlock(() -> MSBlocks.COARSE_STONE.getDefaultState(), Block.Properties.from(coarseStone)).setRegistryName("coarse_stone_stairs"));
 		registry.register(new StairsBlock(() -> MSBlocks.SHADE_BRICKS.getDefaultState(), Block.Properties.from(shadeBricks)).setRegistryName("shade_brick_stairs"));

@@ -597,6 +597,7 @@ public class MSItems
 		registerItemBlock(registry, VEIN);
 		registerItemBlock(registry, VEIN_CORNER);
 		registerItemBlock(registry, INVERTED_VEIN_CORNER);
+		registerItemBlock(registry, STONE_SLAB_BLOCK);
 		
 		registerItemBlock(registry, COARSE_STONE_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, SHADE_BRICK_STAIRS, MSItemGroup.LANDS);
@@ -964,7 +965,8 @@ public class MSItems
 		registry.register(new Item(new Item.Properties().maxStackSize(1).group(MSItemGroup.LANDS)).setRegistryName("carving_tool"));
 		registry.register(new Item(new Item.Properties().maxStackSize(1).group(MSItemGroup.LANDS)).setRegistryName("crumply_hat"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.LANDS)).setRegistryName("stone_eyeballs"));
-		registry.register(new StoneTabletItem(new Item.Properties().group(MSItemGroup.LANDS)).setRegistryName("stone_slab"));
+		registry.register(new StoneTabletItem(new Item.Properties().group(MSItemGroup.LANDS)).setRegistryName("stone_slab")); //same thing as stone tablet
+		//registerItemBlock(registry, new StoneTabletItem(STONE_TABLET, new Item.Properties().group(MSItemGroup.MAIN)));
 		//registry.register(new HangingItem((world, pos, facing, stack) -> new EntityShopPoster(world, pos, facing, stack, 0), new Item.Properties().maxStackSize(1).group(ModItemGroup.LANDS)).setRegistryName("shop_poster"));
 		
 		registry.register(new BucketItem(MSFluids.OIL, new Item.Properties().containerItem(Items.BUCKET).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("oil_bucket"));

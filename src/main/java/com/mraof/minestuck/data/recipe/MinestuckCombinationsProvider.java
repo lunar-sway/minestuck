@@ -378,6 +378,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.METAL_BAT).input(MSItems.DEUCE_CLUB).and().input(Items.IRON_INGOT).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CLOWN_CLUB).input(MSItems.METAL_BAT).or().input(MSItems.HORN).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.SPIKED_CLUB).input(MSItems.METAL_BAT).or().input(ItemTags.LOGS).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.M_ACE).input(MSItems.MACE).and().input(MSItems.NONBINARY_CODE).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.SLEDGE_HAMMER).input(MSItems.CLAW_HAMMER).and().namedInput(Items.BRICKS).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.SLEDGE_HAMMER).input(MSItems.CLAW_HAMMER).and().namedInput(Items.COBBLESTONE).build(consumer);

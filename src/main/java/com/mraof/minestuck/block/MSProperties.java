@@ -20,6 +20,7 @@ public class MSProperties
 	public static final BooleanProperty RED = BooleanProperty.create("red");
 	public static final BooleanProperty GREEN = BooleanProperty.create("green");
 	public static final BooleanProperty BLUE = BooleanProperty.create("blue");
+	public static final BooleanProperty CARVED = BooleanProperty.create("carved");
 	
 	public static final IntegerProperty COUNT_0_2 = IntegerProperty.create("count", 0, 2);
 	
@@ -27,6 +28,8 @@ public class MSProperties
 	public static final EnumProperty<EnumDowelType> DOWEL = EnumProperty.create("dowel", EnumDowelType.class, EnumDowelType.DOWEL, EnumDowelType.CARVED_DOWEL);
 	public static final EnumProperty<EnumDowelType> DOWEL_OR_NONE = EnumProperty.create("dowel", EnumDowelType.class);
 	public static final EnumProperty<CruxiteDowelBlock.Type> DOWEL_BLOCK = EnumProperty.create("dowel", CruxiteDowelBlock.Type.class);
+	//public static final EnumProperty<EnumStoneTabletType> TABLET = EnumProperty.create("tablet", EnumStoneTabletType.class, EnumStoneTabletType.UNCARVED, EnumStoneTabletType.CARVED);
+	//public static final EnumProperty<StoneTabletBlock.Type> TABLET_BLOCK = EnumProperty.create("tablet", StoneTabletBlock.Type.class);
 	public static final EnumProperty<Direction.Axis> AXIS_2 = EnumProperty.create("axis_2", Direction.Axis.class);
 	public static final EnumProperty<ComputerBlock.State> COMPUTER_STATE = EnumProperty.create("state", ComputerBlock.State.class);
 }
