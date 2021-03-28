@@ -28,8 +28,6 @@ public class MSProperties
 	public static final EnumProperty<EnumDowelType> DOWEL = EnumProperty.create("dowel", EnumDowelType.class, EnumDowelType.DOWEL, EnumDowelType.CARVED_DOWEL);
 	public static final EnumProperty<EnumDowelType> DOWEL_OR_NONE = EnumProperty.create("dowel", EnumDowelType.class);
 	public static final EnumProperty<CruxiteDowelBlock.Type> DOWEL_BLOCK = EnumProperty.create("dowel", CruxiteDowelBlock.Type.class);
-	//public static final EnumProperty<EnumStoneTabletType> TABLET = EnumProperty.create("tablet", EnumStoneTabletType.class, EnumStoneTabletType.UNCARVED, EnumStoneTabletType.CARVED);
-	//public static final EnumProperty<StoneTabletBlock.Type> TABLET_BLOCK = EnumProperty.create("tablet", StoneTabletBlock.Type.class);
 	public static final EnumProperty<Direction.Axis> AXIS_2 = EnumProperty.create("axis_2", Direction.Axis.class);
 	public static final EnumProperty<ComputerBlock.State> COMPUTER_STATE = EnumProperty.create("state", ComputerBlock.State.class);
 }

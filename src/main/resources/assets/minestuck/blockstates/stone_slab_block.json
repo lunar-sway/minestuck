@@ -26,11 +26,11 @@
         },
         {
             "when":  { "facing": "west", "carved": "true" },
-            "apply": { "model": "minestuck:block/stone_slab_written", "y": 270 }
+            "apply": { "model": "minestuck:block/stone_slab_written_block", "y": 270 }
         },
         {
             "when":  { "facing": "east", "carved": "true" },
-            "apply": { "model": "minestuck:block/stone_slab_written", "y": 90 }
+            "apply": { "model": "minestuck:block/stone_slab_written_block", "y": 90 }
         }
     ]
 }

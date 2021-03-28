@@ -385,7 +385,7 @@ public class MSBlocks
 		registry.register(new VeinBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(0.45F).sound(SoundType.SLIME)).setRegistryName("vein"));
 		registry.register(new VeinCornerBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(0.45F).sound(SoundType.SLIME)).setRegistryName("vein_corner"));
 		registry.register(new VeinCornerBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(0.45F).sound(SoundType.SLIME)).setRegistryName("inverted_vein_corner"));
-		registry.register(new StoneTabletBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.1F), MSBlockShapes.STONE_TABLET).setRegistryName("stone_slab_block")); //same thing as stone tablet
+		registry.register(new StoneTabletBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.3F), MSBlockShapes.STONE_TABLET).setRegistryName("stone_slab_block")); //same thing as stone tablet
 		
 		registry.register(new StairsBlock(() -> MSBlocks.COARSE_STONE.getDefaultState(), Block.Properties.from(coarseStone)).setRegistryName("coarse_stone_stairs"));
 		registry.register(new StairsBlock(() -> MSBlocks.SHADE_BRICKS.getDefaultState(), Block.Properties.from(shadeBricks)).setRegistryName("shade_brick_stairs"));

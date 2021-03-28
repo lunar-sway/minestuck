@@ -11,9 +11,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
@@ -22,8 +20,6 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
@@ -35,24 +31,13 @@ import java.util.List;
 
 public class StoneTabletBlock extends DecorBlock //stone slab is the same as stone tablet, both are used in different circumstances
 {
-	//public static final VoxelShape TABLET_SHAPE = Block.makeCuboidShape(3, 0, 5, 13, 2, 11);
-	//public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
 	public static final BooleanProperty CARVED = MSProperties.CARVED;
-	//public static final EnumProperty<Type> TABLET_TYPE = MSProperties.TABLET_BLOCK;
 	
 	public StoneTabletBlock(Properties properties, CustomVoxelShape shape)
 	{
 		super(properties, shape);
-		//setDefaultState(this.stateContainer.getBaseState().with(TABLET_TYPE, Type.UNCARVED));
 		setDefaultState(this.stateContainer.getBaseState().with(CARVED, false));
 	}
-	
-	/*@Override
-	@SuppressWarnings("deprecation")
-	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
-	{
-		return TABLET_SHAPE;
-	}*/
 	
 	@Override
 	public boolean hasTileEntity(BlockState state)
