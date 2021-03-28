@@ -94,6 +94,7 @@ public class MinestuckConfig
 		public final BooleanValue playerSelectedTitle;
 		public final IntValue preEntryRungLimit;
 		public final BooleanValue rungHealthOnRespawn;
+		public final IntValue dialogueRenewalSpeed;
 		
 		//Entry
 		public final BooleanValue entryCrater;
@@ -139,6 +140,8 @@ public class MinestuckConfig
 					.define("aspectEffects", true);
 			playerSelectedTitle = builder.comment("Enable this to let players select their own title. They will however not be able to select the Lord or Muse as class.")
 					.define("playerSelectedTitle", true);
+			dialogueRenewalSpeed = builder.comment("Determines how quickly consort dialogue and store stocks are renewed.")
+					.defineInRange("dialogueRenewalSpeed", 2, 0, 1000);
 			builder.pop();
 			
 			builder.push("sylladex");

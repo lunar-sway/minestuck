@@ -71,6 +71,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.addEntry(ItemLootEntry.builder(MSItems.INK_SQUID_PRO_QUO).weight(8).quality(0))
 						.addEntry(ItemLootEntry.builder(MSItems.BARBASOL).weight(10).quality(0).acceptFunction(SetCount.builder(RandomValueRange.of(1, 8))))
 						.addEntry(ItemLootEntry.builder(MSBlocks.GENERIC_OBJECT).weight(10).quality(-1))
+						.addEntry(ItemLootEntry.builder(MSBlocks.MINI_WIZARD_STATUE).weight(5).quality(3))
 						.addEntry(ItemLootEntry.builder(MSBlocks.CASSETTE_PLAYER).weight(1).quality(0))
 						.addEntry(ItemLootEntry.builder(MSBlocks.SENDIFICATOR).weight(1).quality(0))
 						.addEntry(ItemLootEntry.builder(MSBlocks.TRANSPORTALIZER).weight(1).quality(2))

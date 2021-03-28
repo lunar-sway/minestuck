@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:needle_wand"
+  },
+  "input2": {
+    "item": "minestuck:computer"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:pointer_wand"
+  }
+}
