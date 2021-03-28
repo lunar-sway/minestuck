@@ -440,6 +440,7 @@ public class MSItems
 		registerItemBlock(registry, DARK_GRAY_CASTLE_BRICK_TRIM, MSItemGroup.MAIN);
 		registerItemBlock(registry, LIGHT_GRAY_CASTLE_BRICK_TRIM, MSItemGroup.MAIN);
 		registerItemBlock(registry, WHITE_CASTLE_BRICK_TRIM, MSItemGroup.MAIN);
+		registerItemBlock(registry, CHECKERED_STAINED_GLASS, MSItemGroup.MAIN);
 		registerItemBlock(registry, BLACK_CROWN_STAINED_GLASS, MSItemGroup.MAIN);
 		registerItemBlock(registry, BLACK_PAWN_STAINED_GLASS, MSItemGroup.MAIN);
 		registerItemBlock(registry, WHITE_CROWN_STAINED_GLASS, MSItemGroup.MAIN);
@@ -451,6 +452,7 @@ public class MSItems
 		registerItemBlock(registry, SANDSTONE_CRUXITE_ORE, MSItemGroup.LANDS);
 		registerItemBlock(registry, RED_SANDSTONE_CRUXITE_ORE, MSItemGroup.LANDS);
 		registerItemBlock(registry, END_STONE_CRUXITE_ORE, MSItemGroup.LANDS);
+		registerItemBlock(registry, SHADE_STONE_CRUXITE_ORE, MSItemGroup.LANDS);
 		registerItemBlock(registry, PINK_STONE_CRUXITE_ORE, MSItemGroup.LANDS);
 		registerItemBlock(registry, STONE_URANIUM_ORE, MSItemGroup.LANDS);
 		registerItemBlock(registry, NETHERRACK_URANIUM_ORE, MSItemGroup.LANDS);
@@ -458,14 +460,17 @@ public class MSItems
 		registerItemBlock(registry, SANDSTONE_URANIUM_ORE, MSItemGroup.LANDS);
 		registerItemBlock(registry, RED_SANDSTONE_URANIUM_ORE, MSItemGroup.LANDS);
 		registerItemBlock(registry, END_STONE_URANIUM_ORE, MSItemGroup.LANDS);
+		registerItemBlock(registry, SHADE_STONE_URANIUM_ORE, MSItemGroup.LANDS);
 		registerItemBlock(registry, PINK_STONE_URANIUM_ORE, MSItemGroup.LANDS);
 		registerItemBlock(registry, NETHERRACK_COAL_ORE, MSItemGroup.LANDS);
+		registerItemBlock(registry, SHADE_STONE_COAL_ORE, MSItemGroup.LANDS);
 		registerItemBlock(registry, PINK_STONE_COAL_ORE, MSItemGroup.LANDS);
 		registerItemBlock(registry, END_STONE_IRON_ORE, MSItemGroup.LANDS);
 		registerItemBlock(registry, SANDSTONE_IRON_ORE, MSItemGroup.LANDS);
 		registerItemBlock(registry, RED_SANDSTONE_IRON_ORE, MSItemGroup.LANDS);
 		registerItemBlock(registry, SANDSTONE_GOLD_ORE, MSItemGroup.LANDS);
 		registerItemBlock(registry, RED_SANDSTONE_GOLD_ORE, MSItemGroup.LANDS);
+		registerItemBlock(registry, SHADE_STONE_GOLD_ORE, MSItemGroup.LANDS);
 		registerItemBlock(registry, PINK_STONE_GOLD_ORE, MSItemGroup.LANDS);
 		registerItemBlock(registry, END_STONE_REDSTONE_ORE, MSItemGroup.LANDS);
 		registerItemBlock(registry, STONE_QUARTZ_ORE, MSItemGroup.LANDS);
@@ -480,6 +485,7 @@ public class MSItems
 		registerItemBlock(registry, THOUGHT_DIRT, MSItemGroup.LANDS);
 		registerItemBlock(registry, COARSE_STONE, MSItemGroup.LANDS);
 		registerItemBlock(registry, CHISELED_COARSE_STONE, MSItemGroup.LANDS);
+		registerItemBlock(registry, SHADE_STONE, MSItemGroup.LANDS);
 		registerItemBlock(registry, SHADE_BRICKS, MSItemGroup.LANDS);
 		registerItemBlock(registry, SMOOTH_SHADE_STONE, MSItemGroup.LANDS);
 		registerItemBlock(registry, FROST_BRICKS, MSItemGroup.LANDS);
@@ -503,6 +509,11 @@ public class MSItems
 		registerItemBlock(registry, CRACKED_PINK_STONE_BRICKS, MSItemGroup.LANDS);
 		registerItemBlock(registry, MOSSY_PINK_STONE_BRICKS, MSItemGroup.LANDS);
 		registerItemBlock(registry, POLISHED_PINK_STONE, MSItemGroup.LANDS);
+		registerItemBlock(registry, BROWN_STONE, MSItemGroup.LANDS);
+		registerItemBlock(registry, BROWN_STONE_BRICKS, MSItemGroup.LANDS);
+		registerItemBlock(registry, BROWN_STONE_COLUMN, MSItemGroup.LANDS);
+		registerItemBlock(registry, CRACKED_BROWN_STONE_BRICKS, MSItemGroup.LANDS);
+		registerItemBlock(registry, POLISHED_BROWN_STONE, MSItemGroup.LANDS);
 		registerItemBlock(registry, DENSE_CLOUD, MSItemGroup.LANDS);
 		registerItemBlock(registry, BRIGHT_DENSE_CLOUD, MSItemGroup.LANDS);
 		registerItemBlock(registry, SUGAR_CUBE, MSItemGroup.LANDS);
@@ -597,6 +608,10 @@ public class MSItems
 		registerItemBlock(registry, VEIN);
 		registerItemBlock(registry, VEIN_CORNER);
 		registerItemBlock(registry, INVERTED_VEIN_CORNER);
+		registerItemBlock(registry, PIPE, MSItemGroup.LANDS);
+		registerItemBlock(registry, PIPE_INTERSECTION, MSItemGroup.LANDS);
+		registerItemBlock(registry, PARCEL_PYXIS, MSItemGroup.LANDS);
+		registerItemBlock(registry, PYXIS_LID, MSItemGroup.LANDS);
 		registerItemBlock(registry, STONE_SLAB_BLOCK);
 		
 		registerItemBlock(registry, COARSE_STONE_STAIRS, MSItemGroup.LANDS);
@@ -607,6 +622,7 @@ public class MSItems
 		registerItemBlock(registry, CHALK_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, CHALK_BRICK_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, PINK_STONE_BRICK_STAIRS, MSItemGroup.LANDS);
+		registerItemBlock(registry, BROWN_STONE_BRICK_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, RAINBOW_PLANKS_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, END_PLANKS_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, DEAD_PLANKS_STAIRS, MSItemGroup.LANDS);
@@ -614,6 +630,7 @@ public class MSItems
 		registerItemBlock(registry, CHALK_SLAB, MSItemGroup.LANDS);
 		registerItemBlock(registry, CHALK_BRICK_SLAB, MSItemGroup.LANDS);
 		registerItemBlock(registry, PINK_STONE_BRICK_SLAB, MSItemGroup.LANDS);
+		registerItemBlock(registry, BROWN_STONE_BRICK_SLAB, MSItemGroup.LANDS);
 		registerItemBlock(registry, RAINBOW_PLANKS_SLAB, MSItemGroup.LANDS);
 		registerItemBlock(registry, END_PLANKS_SLAB, MSItemGroup.LANDS);
 		registerItemBlock(registry, DEAD_PLANKS_SLAB, MSItemGroup.LANDS);

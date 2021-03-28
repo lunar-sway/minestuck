@@ -81,6 +81,8 @@ public class ClientProxy
 		RenderTypeLookup.setRenderLayer(MSBlocks.MINI_FROG_STATUE, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.MINI_WIZARD_STATUE, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.CASSETTE_PLAYER, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.PIPE, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.PARCEL_PYXIS, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.GLOWYSTONE_DUST, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.GOLD_SEEDS, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.RAINBOW_SAPLING, RenderType.getCutout());
@@ -91,6 +93,7 @@ public class ClientProxy
 		RenderTypeLookup.setRenderLayer(MSBlocks.PETRIFIED_GRASS, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.PETRIFIED_POPPY, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.TALL_END_GRASS, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.CHECKERED_STAINED_GLASS, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(MSBlocks.BLACK_CROWN_STAINED_GLASS, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(MSBlocks.BLACK_PAWN_STAINED_GLASS, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(MSBlocks.WHITE_CROWN_STAINED_GLASS, RenderType.getTranslucent());

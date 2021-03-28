@@ -1,0 +1,7 @@
+{
+    "parent": "block/cube_column",
+    "textures": {
+        "end": "minestuck:block/polished_brown_stone",
+        "side": "minestuck:block/brown_stone_column"
+    }
+}
