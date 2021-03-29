@@ -1,20 +1,23 @@
 package com.mraof.minestuck.data.loot_table;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.block.plant.TallEndGrassBlock;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.tileentity.ItemStackTileEntity;
 import net.minecraft.advancements.criterion.EnchantmentPredicate;
 import net.minecraft.advancements.criterion.ItemPredicate;
 import net.minecraft.advancements.criterion.MinMaxBounds;
+import net.minecraft.advancements.criterion.StatePropertiesPredicate;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.DoublePlantBlock;
 import net.minecraft.data.loot.BlockLootTables;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.Items;
+import net.minecraft.state.properties.DoubleBlockHalf;
 import net.minecraft.world.storage.loot.*;
-import net.minecraft.world.storage.loot.conditions.ILootCondition;
-import net.minecraft.world.storage.loot.conditions.MatchTool;
-import net.minecraft.world.storage.loot.conditions.TableBonus;
+import net.minecraft.world.storage.loot.conditions.*;
 import net.minecraft.world.storage.loot.functions.ApplyBonus;
 import net.minecraft.world.storage.loot.functions.CopyName;
 import net.minecraft.world.storage.loot.functions.CopyNbt;
@@ -217,6 +220,7 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(STRAWBERRY);
 		registerLootTable(ATTACHED_STRAWBERRY_STEM, func_218482_a());
 		registerLootTable(STRAWBERRY_STEM, MSBlockLootTables::strawberryStemDrop);
+		registerLootTable(TALL_END_GRASS, func_218482_a());
 		
 		registerDropSelfLootTable(GLOWY_GOOP);
 		registerDropSelfLootTable(COAGULATED_BLOOD);
@@ -292,6 +296,7 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(BLENDER);
 		registerDropSelfLootTable(CHESSBOARD);
 		registerDropSelfLootTable(MINI_FROG_STATUE);
+		registerDropSelfLootTable(MINI_WIZARD_STATUE);
 		registerDropSelfLootTable(CASSETTE_PLAYER);
 		//registerDropSelfLootTable(LOTUS_TIME_CAPSULE_BLOCK);
 		registerDropSelfLootTable(GLOWYSTONE_DUST);

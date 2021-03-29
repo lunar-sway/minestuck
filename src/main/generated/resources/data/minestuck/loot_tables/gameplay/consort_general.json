@@ -42,6 +42,21 @@
         },
         {
           "type": "minecraft:item",
+          "weight": 8,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 5.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minestuck:mini_wizard_statue"
+        },
+        {
+          "type": "minecraft:item",
           "weight": 10,
           "functions": [
             {

@@ -34,17 +34,4 @@ public class PipeBlock extends MSDirectionalBlock
 	{
 		return shape.get(state.get(FACING));
 	}
-	
-	/*@Override
-	public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn)
-	{
-		super.onEntityCollision(state, worldIn, pos, entityIn);
-		//cause it not to follow the facing of the tube but the direction coming in?
-		int directionX = state.get(FACING).getDirectionVec().getX();
-		int directionY = state.get(FACING).getDirectionVec().getY();
-		int directionZ = state.get(FACING).getDirectionVec().getZ();
-		//make particle
-		entityIn.setMotion(directionX*.5, directionY*.5, directionZ*.5);
-		Debug.debugf("%s is going %s", entityIn, entityIn.getMotion());
-	}*/
 }
