@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:iron_cane"
+  },
+  "input2": {
+    "item": "minecraft:feather"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:zephyr_cane"
+  }
+}
