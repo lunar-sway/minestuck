@@ -173,14 +173,15 @@ public interface OnHitEffect
 			DamageSource source;
 			float damage = additionalDamage * 3.3F;
 			
-			if(attacker instanceof PlayerEntity)
+			if(attacker instanceof ServerPlayerEntity)
 			{
-				source = DamageSource.causePlayerDamage((PlayerEntity) attacker);
-				Title title = PlayerSavedData.getData((ServerPlayerEntity) attacker).getTitle();
+				ServerPlayerEntity serverPlayer = (ServerPlayerEntity) attacker;
+				source = DamageSource.causePlayerDamage(serverPlayer);
+				Title title = PlayerSavedData.getData(serverPlayer).getTitle();
 				
 				if(target instanceof UnderlingEntity)
 				{
-					float modifier = (float) (PlayerSavedData.getData((ServerPlayerEntity) attacker).getEcheladder().getUnderlingDamageModifier());
+					float modifier = (float) (PlayerSavedData.getData(serverPlayer).getEcheladder().getUnderlingDamageModifier());
 					
 					if(title == null || title.getHeroAspect() != aspect)
 						modifier = modifier / 1.2F;
