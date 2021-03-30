@@ -535,6 +535,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.SPIKED_CLUB, "About what it sounds like");
 		add(MSItems.MACE, "Mace");
 		add(MSItems.M_ACE, "mACE");
+		add(MSItems.DESOLATOR_MACE, "Desolator Mace");
+		addTooltip(MSItems.DESOLATOR_MACE, "Void your enemies existence. Is the damage really that low?");
 		add(MSItems.BLAZING_GLORY, "Blazing Glory");
 		add(MSItems.HORSE_HITCHER, "Cast Iron Horse Hitcher");
 		add(MSItems.ACE_OF_SPADES, "Ace of Spades");
@@ -569,6 +571,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.IRON_CANE, "Iron-Tipped Cane");
 		addTooltip(MSItems.IRON_CANE, "A regular cane, except that it is tipped with the power of metal!");
 		addStoreTooltip(MSItems.IRON_CANE, "This metal rod is perfect for attracting thunder!");
+		add(MSItems.ZEPHYR_CANE, "Zephyr Cane");
+		addTooltip(MSItems.ZEPHYR_CANE, "Catch your breath and relax with this casual weapon by your side.");
 		add(MSItems.SPEAR_CANE, "Spear Cane");
 		addTooltip(MSItems.SPEAR_CANE, "Replace with blind persons cane for hilarious results.");
 		add(MSItems.PARADISES_PORTABELLO, "Paradise's Portabello");
