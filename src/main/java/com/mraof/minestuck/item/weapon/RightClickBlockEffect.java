@@ -60,16 +60,16 @@ public interface RightClickBlockEffect
 			
 			if(player != null && state.getBlock() == validBlock.get().getBlock())
 			{
-				if(!player.inventory.addItemStackToInventory(new ItemStack(lookedAtBlockItem)))
+				if(!worldIn.isRemote)
 				{
-					if(!worldIn.isRemote)
+					if(!player.inventory.addItemStackToInventory(new ItemStack(lookedAtBlockItem)))
+					{
 						player.dropItem(new ItemStack(lookedAtBlockItem), false);
+					}
+					context.getItem().damageItem(1, player, (playerEntity) -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
+					worldIn.setBlockState(blockRayTrace.getPos(), Blocks.AIR.getDefaultState());
 				}
-				
-				context.getItem().damageItem(1, player, (playerEntity) -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
-				
 				worldIn.playSound(null, pos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.NEUTRAL, 1F, 1F);
-				worldIn.setBlockState(blockRayTrace.getPos(), Blocks.AIR.getDefaultState());
 				
 				return ActionResultType.SUCCESS;
 			}

@@ -1047,9 +1047,9 @@ public class MSItems
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("barbasol"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("clothes_iron"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("ink_squid_pro_quo"));
-		registry.register(new RightClickMessageItem(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("dice"));
+		registry.register(new RightClickMessageItem(new Item.Properties().group(MSItemGroup.MAIN), 2).setRegistryName("dice"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("cueball"));
-		registry.register(new RightClickMessageItem(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("eightball"));
+		registry.register(new RightClickMessageItem(new Item.Properties().group(MSItemGroup.MAIN), 1).setRegistryName("eightball"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN).maxStackSize(1)).setRegistryName("uranium_powered_stick"));
 		registry.register(new ScalemateItem(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("scalemate_applescab"));
 		registry.register(new ScalemateItem(new Item.Properties()).setRegistryName("scalemate_berrybreath"));
@@ -1069,7 +1069,7 @@ public class MSItems
 		registry.register(new HangingItem((world, pos, facing, stack) -> new CrewPosterEntity(world, pos, facing), new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("crew_poster"));
 		registry.register(new HangingItem((world, pos, facing, stack) -> new SbahjPosterEntity(world, pos, facing), new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("sbahj_poster"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("bi_dye"));
-		registry.register(new RightClickMessageItem(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("lip_balm"));
+		registry.register(new RightClickMessageItem(new Item.Properties().group(MSItemGroup.MAIN), 0).setRegistryName("lip_balm"));
 		
 		//Music disks
 		registry.register(new MusicDiscItem(1, () -> MSSoundEvents.MUSIC_DISC_EMISSARY_OF_DANCE, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_emissary_of_dance"));

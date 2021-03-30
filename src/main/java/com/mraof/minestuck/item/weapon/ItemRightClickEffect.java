@@ -32,9 +32,8 @@ public interface ItemRightClickEffect
 			int key = player.getRNG().nextInt(20);
 			ITextComponent message = new TranslationTextComponent("message.eightball." + key);
 			player.sendMessage(message.applyTextStyle(TextFormatting.BLUE));
-			player.swing(hand, true);
 		}
-		return ActionResult.resultPass(player.getHeldItem(hand));
+		return ActionResult.resultSuccess(player.getHeldItem(hand));
 	};
 	
 	static ItemRightClickEffect switchTo(Supplier<Item> otherItem)

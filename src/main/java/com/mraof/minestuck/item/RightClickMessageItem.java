@@ -11,10 +11,12 @@ import net.minecraft.world.World;
 
 public class RightClickMessageItem extends Item
 {
+	private final int itemVariety;
 	
-	public RightClickMessageItem(Properties properties)
+	public RightClickMessageItem(Properties properties, int itemVariety)
 	{
 		super(properties);
+		this.itemVariety = itemVariety;
 	}
 	
 	@Override
@@ -22,23 +24,22 @@ public class RightClickMessageItem extends Item
 	{
 		if(worldIn.isRemote)
 		{
-			if(playerIn.getHeldItem(handIn).getItem() == MSItems.EIGHTBALL)
+			if(itemVariety == 1)
 			{
 				int key = playerIn.getRNG().nextInt(20);
 				ITextComponent message = new TranslationTextComponent("message.eightball." + key);
 				playerIn.sendMessage(message.applyTextStyle(TextFormatting.BLUE));
-			} else if(playerIn.getHeldItem(handIn).getItem() == MSItems.DICE)
+			} else if(itemVariety == 2)
 			{
 				int key = playerIn.getRNG().nextInt(6);
 				ITextComponent message = new TranslationTextComponent("message.dice." + key);
 				playerIn.sendMessage(message.applyTextStyle(TextFormatting.WHITE));
 			} else
 			{
-				playerIn.sendMessage(new TranslationTextComponent(getTranslationKey() + ".message")); //default, if you
+				playerIn.sendMessage(new TranslationTextComponent(getTranslationKey() + ".message")); //default, creates message for that item under that item's "addExtra" in MSEnUsLang provider
 			}
 		}
 		
-		playerIn.swing(handIn, true);
-		return super.onItemRightClick(worldIn, playerIn, handIn);
+		return ActionResult.resultSuccess(playerIn.getHeldItem(handIn));
 	}
 }
