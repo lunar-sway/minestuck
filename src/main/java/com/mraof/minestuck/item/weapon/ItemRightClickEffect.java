@@ -7,10 +7,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.FireballEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -20,7 +17,6 @@ import java.util.function.Supplier;
 
 public interface ItemRightClickEffect
 {
-	ActionResult<ItemStack> onRightClick(World world, PlayerEntity player, Hand hand);
 	
 	ItemRightClickEffect ACTIVE_HAND = (world, player, hand) -> {
 		player.setActiveHand(hand);
@@ -101,4 +97,6 @@ public interface ItemRightClickEffect
 			return ActionResult.resultPass(itemStackIn);
 		};
 	}
+	
+	ActionResult<ItemStack> onRightClick(World world, PlayerEntity player, Hand hand);
 }

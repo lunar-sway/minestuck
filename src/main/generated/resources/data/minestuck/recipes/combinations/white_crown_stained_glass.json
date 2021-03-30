@@ -4,7 +4,7 @@
     "item": "minestuck:white_pawn_stained_glass"
   },
   "input2": {
-    "item": "minestuck:chessboard"
+    "item": "minestuck:prim_and_proper_walking_pole"
   },
   "mode": "and",
   "output": {

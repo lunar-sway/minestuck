@@ -11,7 +11,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
@@ -23,8 +22,6 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 public class ConsumableProjectileEntity extends ProjectileItemEntity
 {
-	//private int damage = 0;
-	
 	public ConsumableProjectileEntity(EntityType<? extends ConsumableProjectileEntity> type, World worldIn)
 	{
 		super(type, worldIn);

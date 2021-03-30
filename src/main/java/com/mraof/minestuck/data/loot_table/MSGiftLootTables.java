@@ -53,6 +53,7 @@ public class MSGiftLootTables implements Consumer<BiConsumer<ResourceLocation, L
 						.addEntry(LandTableLootEntry.builder(MSLootTables.CONSORT_GENERAL_STOCK).setPool(ITEM_POOL))
 						.addEntry(ItemLootEntry.builder(MSItems.CARVING_TOOL).weight(10).acceptFunction(SetCount.builder(RandomValueRange.of(1, 5))))
 						.addEntry(ItemLootEntry.builder(MSBlocks.MINI_FROG_STATUE).weight(8).acceptFunction(SetCount.builder(RandomValueRange.of(1, 5))))
+						.addEntry(ItemLootEntry.builder(MSBlocks.MINI_WIZARD_STATUE).weight(8).acceptFunction(SetCount.builder(RandomValueRange.of(1, 5))))
 						.addEntry(ItemLootEntry.builder(MSItems.STONE_SLAB).weight(10).acceptFunction(SetCount.builder(RandomValueRange.of(1, 5))))
 						.addEntry(ItemLootEntry.builder(MSItems.THRESH_DVD).weight(5).acceptFunction(SetCount.builder(RandomValueRange.of(1, 3))))
 						.addEntry(ItemLootEntry.builder(MSItems.CREW_POSTER).weight(5).acceptFunction(SetCount.builder(RandomValueRange.of(1, 3))))
