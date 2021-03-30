@@ -10,6 +10,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
 import net.minecraft.util.math.*;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -21,6 +24,17 @@ public interface ItemRightClickEffect
 	ItemRightClickEffect ACTIVE_HAND = (world, player, hand) -> {
 		player.setActiveHand(hand);
 		return ActionResult.resultConsume(player.getHeldItem(hand));
+	};
+	
+	ItemRightClickEffect EIGHTBALL = (world, player, hand) -> {
+		if(world.isRemote)
+		{
+			int key = player.getRNG().nextInt(20);
+			ITextComponent message = new TranslationTextComponent("message.eightball." + key);
+			player.sendMessage(message.applyTextStyle(TextFormatting.BLUE));
+			player.swing(hand, true);
+		}
+		return ActionResult.resultPass(player.getHeldItem(hand));
 	};
 	
 	static ItemRightClickEffect switchTo(Supplier<Item> otherItem)

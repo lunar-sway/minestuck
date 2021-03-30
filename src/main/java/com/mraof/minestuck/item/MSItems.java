@@ -801,7 +801,7 @@ public class MSItems
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.HORRORTERROR_TIER, 6, -2.2F).efficiency(4.0F).set(MSItemTypes.SICKLE_TOOL).add(OnHitEffect.HORRORTERROR), new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)).setRegistryName("claw_of_nrubyiglith"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.CANDY_TIER, 6, -2.2F).efficiency(2.5F).set(MSItemTypes.SICKLE_TOOL).add(OnHitEffect.SET_CANDY_DROP_FLAG), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("candy_sickle"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 4, -2.6F).efficiency(1.5F).set(MSItemTypes.SICKLE_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("scythe"));
-		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 3, -2.6F).efficiency(1.5F).set(MSItemTypes.SICKLE_TOOL).add(OnHitEffect.RANDOM_DAMAGE), new Item.Properties().defaultMaxDamage(600).group(MSItemGroup.WEAPONS)).setRegistryName("eightball_scythe"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 3, -2.6F).efficiency(1.5F).set(MSItemTypes.SICKLE_TOOL).add(OnHitEffect.RANDOM_DAMAGE).set(ItemRightClickEffect.EIGHTBALL), new Item.Properties().defaultMaxDamage(600).group(MSItemGroup.WEAPONS)).setRegistryName("eightball_scythe"));
 		
 		//clubs
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.WOOD, 3, -2.8F).efficiency(2.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("deuce_club"));
@@ -1030,9 +1030,9 @@ public class MSItems
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("barbasol"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("clothes_iron"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("ink_squid_pro_quo"));
-		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("dice"));
+		registry.register(new RightClickMessageItem(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("dice"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("cueball"));
-		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("eightball"));
+		registry.register(new RightClickMessageItem(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("eightball"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN).maxStackSize(1)).setRegistryName("uranium_powered_stick"));
 		registry.register(new ScalemateItem(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("scalemate_applescab"));
 		registry.register(new ScalemateItem(new Item.Properties()).setRegistryName("scalemate_berrybreath"));

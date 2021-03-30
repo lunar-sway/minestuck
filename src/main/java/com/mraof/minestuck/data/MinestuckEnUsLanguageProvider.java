@@ -902,6 +902,34 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add("message.horrorterror.blessings", "With this struggle, we grant you our blessings.");
 		add("message.horrorterror.seek", "Seek out and consume the light.");
 		add("message.horrorterror.shadow", "The shadows do not work for you. They are your fellow vassals in service to us");
+		
+		add("message.eightball.0", "As I see it, yes.");
+		add("message.eightball.1", "Ask again later.");
+		add("message.eightball.2", "Better not tell you now.");
+		add("message.eightball.3", "Cannot predict now.");
+		add("message.eightball.4", "Concentrate and ask again.");
+		add("message.eightball.5", "Don’t count on it.");
+		add("message.eightball.6", "It is certain.");
+		add("message.eightball.7", "It is decidedly so.");
+		add("message.eightball.8", "Most likely.");
+		add("message.eightball.9", "My reply is no.");
+		add("message.eightball.10", "My sources say no.");
+		add("message.eightball.11", "Outlook not so good.");
+		add("message.eightball.12", "Outlook good.");
+		add("message.eightball.13", "Reply hazy, try again.");
+		add("message.eightball.14", "Signs point to yes.");
+		add("message.eightball.15", "Very doubtful.");
+		add("message.eightball.16", "Without a doubt.");
+		add("message.eightball.17", "Yes.");
+		add("message.eightball.18", "Yes – definitely.");
+		add("message.eightball.19", "You may rely on it.");
+		
+		add("message.dice.0", "You rolled a 1.");
+		add("message.dice.1", "You rolled a 2.");
+		add("message.dice.2", "You rolled a 3.");
+		add("message.dice.3", "You rolled a 4.");
+		add("message.dice.4", "You rolled a 5.");
+		add("message.dice.5", "You rolled a 6.");
 
 		addStore(Items.PUMPKIN_PIE, "Tasty Pie");
 		addStoreTooltip(Items.PUMPKIN_PIE, "This pie appeared in storage a few days ago out of nowhere. No idea where it came from, but it sure is tasty!");

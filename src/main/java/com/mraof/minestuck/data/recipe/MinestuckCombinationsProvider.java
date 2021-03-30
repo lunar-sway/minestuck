@@ -722,7 +722,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.IRRADIATED_STEAK).input(MSItems.RAW_URANIUM).or().input(Items.COOKED_BEEF).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.QUANTUM_SABRE).input(MSItems.URANIUM_POWERED_STICK).and().input(MSItems.ENERGY_CORE).build(consumer);
 		
-		CombinationRecipeBuilder.of(MSItems.APPLE_JUICE).input(Items.GLASS_BOTTLE).and().input(Items.SUGAR).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.APPLE_JUICE).input(Items.GLASS_BOTTLE).and().input(Items.APPLE).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.TAB).input(Items.POTION).or().input(Items.SUGAR).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.ORANGE_FAYGO).input(Items.POTION).or().input(Items.ORANGE_DYE).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CANDY_APPLE_FAYGO).input(MSItems.ORANGE_FAYGO).or().input(Items.APPLE).build(consumer);

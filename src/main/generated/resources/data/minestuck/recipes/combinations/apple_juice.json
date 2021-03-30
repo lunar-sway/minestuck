@@ -4,7 +4,7 @@
     "item": "minecraft:glass_bottle"
   },
   "input2": {
-    "item": "minecraft:sugar"
+    "item": "minecraft:apple"
   },
   "mode": "and",
   "output": {

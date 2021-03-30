@@ -27,11 +27,10 @@ public interface RightClickBlockEffect
 			Direction facing = context.getFace();
 			BlockPos pos = context.getPos().offset(facing);
 			
-			if(!worldIn.isRemote && player != null)
+			BlockState state = worldIn.getBlockState(pos);
+			if(state.getBlock() == Blocks.AIR || state.getBlock() == fluidBlock.get())
 			{
-				BlockState state = worldIn.getBlockState(pos);
-				
-				if(state.getBlock() == Blocks.AIR || state.getBlock() == fluidBlock.get())
+				if(!worldIn.isRemote && player != null)
 				{
 					worldIn.setBlockState(pos, fluidBlock.get().getDefaultState());
 					ItemStack newItem = new ItemStack(otherItem.get(), itemStack.getCount());
@@ -39,8 +38,8 @@ public interface RightClickBlockEffect
 					player.setHeldItem(context.getHand(), newItem);
 					worldIn.playSound(null, pos, SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.BLOCKS, 1F, 2F);
 					player.getCooldownTracker().setCooldown(otherItem.get(), 5);
-					return ActionResultType.SUCCESS;
 				}
+				return ActionResultType.SUCCESS;
 			}
 			return ActionResultType.PASS;
 		};
@@ -55,21 +54,24 @@ public interface RightClickBlockEffect
 			Direction facing = context.getFace();
 			boolean inside = context.isInside();
 			
-			if(!worldIn.isRemote && player != null)
+			BlockState state = worldIn.getBlockState(pos);
+			BlockRayTraceResult blockRayTrace = new BlockRayTraceResult(context.getHitVec(), facing, pos, inside);
+			Item lookedAtBlockItem = state.getPickBlock(blockRayTrace, worldIn, pos, player).getItem();
+			
+			if(player != null && state.getBlock() == validBlock.get().getBlock())
 			{
-				BlockState state = worldIn.getBlockState(pos);
-				
-				if(state.getBlock() == validBlock.get().getBlock())
+				if(!player.inventory.addItemStackToInventory(new ItemStack(lookedAtBlockItem)))
 				{
-					ItemStack block = state.getPickBlock(new BlockRayTraceResult(context.getHitVec(), facing, pos, inside), worldIn, pos, player);
-					player.inventory.addItemStackToInventory(block);
-					context.getItem().damageItem(1, player, (playerEntity) -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
-					
-					worldIn.playSound(null, pos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.NEUTRAL, 1F, 1F);
-					worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
-					
-					return ActionResultType.SUCCESS;
+					if(!worldIn.isRemote)
+						player.dropItem(new ItemStack(lookedAtBlockItem), false);
 				}
+				
+				context.getItem().damageItem(1, player, (playerEntity) -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
+				
+				worldIn.playSound(null, pos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.NEUTRAL, 1F, 1F);
+				worldIn.setBlockState(blockRayTrace.getPos(), Blocks.AIR.getDefaultState());
+				
+				return ActionResultType.SUCCESS;
 			}
 			
 			return ActionResultType.PASS;
