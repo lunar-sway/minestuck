@@ -43,7 +43,7 @@ public interface OnHitEffect
 					.and(enemyPotionEffect(() -> new EffectInstance(Effects.HUNGER, 60, 100)))));
 	
 	OnHitEffect BREATH_LEVITATION_AOE = requireAspect(BREATH, chanceWithCritMod(
-			potionAOE(() -> new EffectInstance(Effects.LEVITATION, 30, 2), () -> SoundEvents.ENTITY_ENDER_DRAGON_FLAP,1.4F)));
+			potionAOE(() -> new EffectInstance(Effects.LEVITATION, 30, 2), () -> SoundEvents.ENTITY_ENDER_DRAGON_FLAP, 1.4F)));
 	OnHitEffect TIME_SLOWNESS_AOE = requireAspect(TIME, chanceWithCritMod(
 			potionAOE(() -> new EffectInstance(Effects.SLOWNESS, 100, 4), () -> SoundEvents.BLOCK_BELL_RESONATE, 2F)));
 	
@@ -141,7 +141,7 @@ public interface OnHitEffect
 			source = DamageSource.causePlayerDamage((PlayerEntity) attacker);
 		else source = DamageSource.causeMobDamage(attacker);
 		
-		float rng = (float) (attacker.getRNG().nextInt(7)+1) * (attacker.getRNG().nextInt(7)+1);
+		float rng = (float) (attacker.getRNG().nextInt(7) + 1) * (attacker.getRNG().nextInt(7) + 1);
 		target.attackEntityFrom(source, rng);
 	};
 	
@@ -172,6 +172,40 @@ public interface OnHitEffect
 	static OnHitEffect setOnFire(int duration)
 	{
 		return (itemStack, target, attacker) -> target.setFire(duration);
+	}
+	
+	static OnHitEffect armorBypassingDamageMod(float additionalDamage, EnumAspect aspect)
+	{
+		return (stack, target, attacker) -> {
+			DamageSource source;
+			float damage = additionalDamage * 3.3F;
+			
+			if(attacker instanceof ServerPlayerEntity)
+			{
+				ServerPlayerEntity serverPlayer = (ServerPlayerEntity) attacker;
+				source = DamageSource.causePlayerDamage(serverPlayer);
+				Title title = PlayerSavedData.getData(serverPlayer).getTitle();
+				
+				if(target instanceof UnderlingEntity)
+				{
+					float modifier = (float) (PlayerSavedData.getData(serverPlayer).getEcheladder().getUnderlingDamageModifier());
+					
+					if(title == null || title.getHeroAspect() != aspect)
+						modifier = modifier / 1.2F;
+					
+					damage = damage * modifier;
+				} else
+				{
+					if(title == null || title.getHeroAspect() != aspect)
+						damage = damage / 1.2F;
+				}
+			} else
+			{
+				source = DamageSource.causeMobDamage(attacker);
+			}
+			
+			target.attackEntityFrom(source.setDamageBypassesArmor(), damage);
+		};
 	}
 	
 	static OnHitEffect playSound(Supplier<SoundEvent> sound)
@@ -248,7 +282,7 @@ public interface OnHitEffect
 			AxisAlignedBB axisalignedbb = attacker.getBoundingBox().grow(4.0D, 2.0D, 4.0D);
 			List<LivingEntity> list = attacker.world.getEntitiesWithinAABB(LivingEntity.class, axisalignedbb);
 			list.remove(attacker);
-			if (!list.isEmpty())
+			if(!list.isEmpty())
 			{
 				attacker.world.playSound(null, attacker.getPosition(), sound.get(), SoundCategory.PLAYERS, 1.5F, pitch);
 				for(LivingEntity livingentity : list)
