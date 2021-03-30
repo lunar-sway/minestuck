@@ -1,13 +1,13 @@
 {
   "type": "minestuck:combination",
   "input1": {
-    "item": "minecraft:stone_bricks"
+    "item": "minestuck:vein"
   },
   "input2": {
-    "item": "minestuck:blue_dirt"
+    "item": "minecraft:iron_ingot"
   },
   "mode": "or",
   "output": {
-    "item": "minestuck:shade_bricks"
+    "item": "minestuck:pipe"
   }
 }

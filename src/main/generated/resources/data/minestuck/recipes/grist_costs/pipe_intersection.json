@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:pipe_intersection"
+  },
+  "grist_cost": {
+    "minestuck:build": 4,
+    "minestuck:marble": 4,
+    "minestuck:chalk": 1
+  }
+}

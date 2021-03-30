@@ -56,6 +56,7 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(WHITE_CASTLE_BRICK_TRIM);
 		registerDropSelfLootTable(LIGHT_GRAY_CASTLE_BRICK_TRIM);
 		registerDropSelfLootTable(DARK_GRAY_CASTLE_BRICK_TRIM);
+		registerDropSelfLootTable(CHECKERED_STAINED_GLASS);
 		registerDropSelfLootTable(BLACK_CROWN_STAINED_GLASS);
 		registerDropSelfLootTable(BLACK_PAWN_STAINED_GLASS);
 		registerDropSelfLootTable(WHITE_CROWN_STAINED_GLASS);
@@ -67,6 +68,7 @@ public class MSBlockLootTables extends BlockLootTables
 		registerLootTable(RED_SANDSTONE_CRUXITE_ORE, MSBlockLootTables::cruxiteOreDrop);
 		registerLootTable(NETHERRACK_CRUXITE_ORE, MSBlockLootTables::cruxiteOreDrop);
 		registerLootTable(END_STONE_CRUXITE_ORE, MSBlockLootTables::cruxiteOreDrop);
+		registerLootTable(SHADE_STONE_CRUXITE_ORE, MSBlockLootTables::cruxiteOreDrop);
 		registerLootTable(PINK_STONE_CRUXITE_ORE, MSBlockLootTables::cruxiteOreDrop);
 		registerLootTable(STONE_URANIUM_ORE, MSBlockLootTables::uraniumOreDrop);
 		registerLootTable(COBBLESTONE_URANIUM_ORE, MSBlockLootTables::uraniumOreDrop);
@@ -74,15 +76,18 @@ public class MSBlockLootTables extends BlockLootTables
 		registerLootTable(RED_SANDSTONE_URANIUM_ORE, MSBlockLootTables::uraniumOreDrop);
 		registerLootTable(NETHERRACK_URANIUM_ORE, MSBlockLootTables::uraniumOreDrop);
 		registerLootTable(END_STONE_URANIUM_ORE, MSBlockLootTables::uraniumOreDrop);
+		registerLootTable(SHADE_STONE_URANIUM_ORE, MSBlockLootTables::uraniumOreDrop);
 		registerLootTable(PINK_STONE_URANIUM_ORE, MSBlockLootTables::uraniumOreDrop);
 		
 		registerLootTable(NETHERRACK_COAL_ORE, MSBlockLootTables::coalOreDrop);
+		registerLootTable(SHADE_STONE_COAL_ORE, MSBlockLootTables::coalOreDrop);
 		registerLootTable(PINK_STONE_COAL_ORE, MSBlockLootTables::coalOreDrop);
 		registerDropSelfLootTable(SANDSTONE_IRON_ORE);
 		registerDropSelfLootTable(RED_SANDSTONE_IRON_ORE);
 		registerDropSelfLootTable(END_STONE_IRON_ORE);
 		registerDropSelfLootTable(SANDSTONE_GOLD_ORE);
 		registerDropSelfLootTable(RED_SANDSTONE_GOLD_ORE);
+		registerDropSelfLootTable(SHADE_STONE_GOLD_ORE);
 		registerDropSelfLootTable(PINK_STONE_GOLD_ORE);
 		registerLootTable(END_STONE_REDSTONE_ORE, MSBlockLootTables::redstoneOreDrop);
 		registerLootTable(STONE_QUARTZ_ORE, MSBlockLootTables::quartzOreDrop);
@@ -97,6 +102,7 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(THOUGHT_DIRT);
 		registerDropSelfLootTable(COARSE_STONE);
 		registerDropSelfLootTable(CHISELED_COARSE_STONE);
+		registerDropSelfLootTable(SHADE_STONE);
 		registerDropSelfLootTable(SHADE_BRICKS);
 		registerDropSelfLootTable(SMOOTH_SHADE_STONE);
 		registerDropSelfLootTable(FROST_BRICKS);
@@ -122,6 +128,11 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(CHISELED_PINK_STONE_BRICKS);
 		registerDropSelfLootTable(CRACKED_PINK_STONE_BRICKS);
 		registerDropSelfLootTable(MOSSY_PINK_STONE_BRICKS);
+		registerDropSelfLootTable(BROWN_STONE);
+		registerDropSelfLootTable(POLISHED_BROWN_STONE);
+		registerDropSelfLootTable(BROWN_STONE_BRICKS);
+		registerDropSelfLootTable(BROWN_STONE_COLUMN);
+		registerDropSelfLootTable(CRACKED_BROWN_STONE_BRICKS);
 		registerDropSelfLootTable(DENSE_CLOUD);
 		registerDropSelfLootTable(BRIGHT_DENSE_CLOUD);
 		registerDropSelfLootTable(SUGAR_CUBE);
@@ -219,6 +230,10 @@ public class MSBlockLootTables extends BlockLootTables
 		registerLootTable(VEIN, func_218482_a());
 		registerLootTable(VEIN_CORNER, func_218482_a());
 		registerLootTable(INVERTED_VEIN_CORNER, func_218482_a());
+		registerDropSelfLootTable(PIPE);
+		registerDropSelfLootTable(PIPE_INTERSECTION);
+		registerDropSelfLootTable(PARCEL_PYXIS);
+		registerDropSelfLootTable(PYXIS_LID);
 		
 		registerDropSelfLootTable(COARSE_STONE_STAIRS);
 		registerDropSelfLootTable(SHADE_BRICK_STAIRS);
@@ -228,6 +243,7 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(CHALK_STAIRS);
 		registerDropSelfLootTable(CHALK_BRICK_STAIRS);
 		registerDropSelfLootTable(PINK_STONE_BRICK_STAIRS);
+		registerDropSelfLootTable(BROWN_STONE_BRICK_STAIRS);
 		registerDropSelfLootTable(RAINBOW_PLANKS_STAIRS);
 		registerDropSelfLootTable(END_PLANKS_STAIRS);
 		registerDropSelfLootTable(DEAD_PLANKS_STAIRS);
@@ -235,6 +251,7 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(CHALK_SLAB);
 		registerDropSelfLootTable(CHALK_BRICK_SLAB);
 		registerDropSelfLootTable(PINK_STONE_BRICK_SLAB);
+		registerDropSelfLootTable(BROWN_STONE_BRICK_SLAB);
 		registerDropSelfLootTable(RAINBOW_PLANKS_SLAB);
 		registerDropSelfLootTable(END_PLANKS_SLAB);
 		registerDropSelfLootTable(DEAD_PLANKS_SLAB);

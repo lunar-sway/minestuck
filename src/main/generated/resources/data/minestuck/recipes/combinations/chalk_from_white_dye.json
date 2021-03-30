@@ -4,10 +4,10 @@
     "tag": "forge:stone"
   },
   "input2": {
-    "item": "minestuck:blue_dirt"
+    "item": "minecraft:white_dye"
   },
-  "mode": "or",
+  "mode": "and",
   "output": {
-    "item": "minestuck:smooth_shade_stone"
+    "item": "minestuck:chalk"
   }
 }
