@@ -6,10 +6,12 @@ import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.Title;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.item.ArmorStandEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -151,19 +153,31 @@ public interface OnHitEffect
 		}
 	};
 	
-	/*OnHitEffect SWIPE = (stack, target, attacker) -> {
-		float f3 = 1.0F + EnchantmentHelper.getSweepingDamageRatio(this) * f;
-		
-		for(LivingEntity livingentity : attacker.world.getEntitiesWithinAABB(LivingEntity.class, target.getBoundingBox().grow(1.0D, 0.25D, 1.0D))) {
-			if (livingentity != this && livingentity != targetEntity && !this.isOnSameTeam(livingentity) && (!(livingentity instanceof ArmorStandEntity) || !((ArmorStandEntity)livingentity).hasMarker()) && this.getDistanceSq(livingentity) < 9.0D) {
-				livingentity.knockBack(this, 0.4F, (double)MathHelper.sin(this.rotationYaw * ((float)Math.PI / 180F)), (double)(-MathHelper.cos(this.rotationYaw * ((float)Math.PI / 180F))));
-				livingentity.attackEntityFrom(DamageSource.causePlayerDamage(this), f3);
+	OnHitEffect SWEEP = (stack, target, attacker) -> {
+		if(attacker instanceof PlayerEntity)
+		{
+			PlayerEntity playerAttacker = (PlayerEntity) attacker;
+			boolean notSpamming = playerAttacker.getCooledAttackStrength(0.5F) > 0.8F;
+			boolean slowMoving = (double)(playerAttacker.distanceWalkedModified - playerAttacker.prevDistanceWalkedModified) < (double)playerAttacker.getAIMoveSpeed();
+			boolean lastHitWasCrit = ServerEventHandler.wasLastHitCrit(playerAttacker);
+			Debug.debugf("notSpamming = %s(cooledAttack value = %s), slowMoving = %s, lastHitWasCrit = %s, playerAttacker.onGround = %s", notSpamming, playerAttacker.getCooledAttackStrength(0.5F), slowMoving, lastHitWasCrit, playerAttacker.onGround);
+			if(notSpamming && slowMoving && !lastHitWasCrit && playerAttacker.onGround)
+			{
+				float attackDamage = (float)playerAttacker.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue();
+				float sweepEnchantMod = 1.0F + EnchantmentHelper.getSweepingDamageRatio(playerAttacker) * attackDamage;
+				
+				for(LivingEntity livingentity : playerAttacker.world.getEntitiesWithinAABB(LivingEntity.class, target.getBoundingBox().grow(1.0D, 0.25D, 1.0D))) {
+					if (livingentity != playerAttacker && livingentity != target && !playerAttacker.isOnSameTeam(livingentity) && (!(livingentity instanceof ArmorStandEntity) || !((ArmorStandEntity)livingentity).hasMarker()) && playerAttacker.getDistanceSq(livingentity) < 9.0D) {
+						livingentity.knockBack(playerAttacker, 0.4F, (double)MathHelper.sin(playerAttacker.rotationYaw * ((float)Math.PI / 180F)), (double)(-MathHelper.cos(playerAttacker.rotationYaw * ((float)Math.PI / 180F))));
+						livingentity.attackEntityFrom(DamageSource.causePlayerDamage(playerAttacker), sweepEnchantMod);
+					}
+				}
+				
+				playerAttacker.world.playSound(null, playerAttacker.getPosX(), playerAttacker.getPosY(), playerAttacker.getPosZ(), SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, playerAttacker.getSoundCategory(), 1.0F, 1.0F);
+				playerAttacker.spawnSweepParticles();
 			}
 		}
-		
-		this.world.playSound((PlayerEntity)null, this.getPosX(), this.getPosY(), this.getPosZ(), SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, this.getSoundCategory(), 1.0F, 1.0F);
-		this.spawnSweepParticles();
-	};*/
+	};
 	
 	OnHitEffect SPACE_TELEPORT = requireAspect(SPACE, onCrit((stack, target, attacker) -> {
 		double oldPosX = attacker.getPosX();

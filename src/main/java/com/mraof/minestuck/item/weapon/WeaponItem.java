@@ -75,36 +75,47 @@ public class WeaponItem extends TieredItem
 				return efficiency;
 		if(toolType != null && toolType.canHarvest(state))
 			return efficiency;
-			
+		
 		return super.getDestroySpeed(stack, state);
+	}
+	
+	public boolean canPlayerBreakBlockWhileHolding(BlockState state, World worldIn, BlockPos pos, PlayerEntity player)
+	{
+		ToolType blockTool = state.getHarvestTool();
+		Set<ToolType> itemTools = getToolTypes(new ItemStack(this));
+		if(blockTool != null && itemTools.contains(blockTool))
+		{
+			return true;
+		}
+		return !player.isCreative();
 	}
 	
 	//Thanks to Mraof for supplying the base for this method.
 	@Override
 	public boolean canHarvestBlock(BlockState blockIn)
 	{
-        ToolType blockTool = blockIn.getHarvestTool();
+		ToolType blockTool = blockIn.getHarvestTool();
 		Set<ToolType> itemTools = getToolTypes(new ItemStack(this));
 		int blockHarvestLevel = blockIn.getHarvestLevel();
 		int toolHarvestLevel = getHarvestLevel(new ItemStack(this), blockTool, null, blockIn);
 		
-        if(blockTool != null && itemTools.contains(blockTool))
-        {
-            return toolHarvestLevel >= blockHarvestLevel;
-        } else		//We know that no specific harvestTool is specified, meaning any harvestTool efficiency is defined in the harvestTool itself.
-        {			//This also means that there's no harvestTool *level* specified, so any harvestTool of that class is sufficient.
-        	Material mat = blockIn.getMaterial();
-        	if(mat.isToolNotRequired())
-        		return true;
-        	
-        	if(toolType != null)
+		if(blockTool != null && itemTools.contains(blockTool))
+		{
+			return toolHarvestLevel >= blockHarvestLevel;
+		} else        //We know that no specific harvestTool is specified, meaning any harvestTool efficiency is defined in the harvestTool itself.
+		{            //This also means that there's no harvestTool *level* specified, so any harvestTool of that class is sufficient.
+			Material mat = blockIn.getMaterial();
+			if(mat.isToolNotRequired())
+				return true;
+			
+			if(toolType != null)
 			{
 				if(toolType.getHarvestMaterials().contains(mat) && toolHarvestLevel >= blockHarvestLevel)
 					return true;
 			}
 			return super.canHarvestBlock(blockIn);
-        }
-        
+		}
+		
 	}
 	
 	@Override
@@ -113,7 +124,7 @@ public class WeaponItem extends TieredItem
 		if(destroyBlockEffect != null)
 			destroyBlockEffect.onDestroyBlock(stack, worldIn, state, pos, entityLiving);
 		
-		if (state.getBlockHardness(worldIn, pos) != 0.0F)
+		if(state.getBlockHardness(worldIn, pos) != 0.0F)
 		{
 			int damage = 2;
 			
@@ -221,19 +232,28 @@ public class WeaponItem extends TieredItem
 		return toolType.getEnchantments().contains(enchantment);
 	}
 	
-	public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType equipmentSlot) {
+	public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType equipmentSlot)
+	{
 		Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(equipmentSlot);
-		if (equipmentSlot == EquipmentSlotType.MAINHAND) {
-			multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", (double)this.attackDamage, AttributeModifier.Operation.ADDITION));
-			multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", (double)this.attackSpeed, AttributeModifier.Operation.ADDITION));
+		if(equipmentSlot == EquipmentSlotType.MAINHAND)
+		{
+			multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", (double) this.attackDamage + getTier().getAttackDamage(), AttributeModifier.Operation.ADDITION));
+			multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", (double) this.attackSpeed, AttributeModifier.Operation.ADDITION));
 		}
 		
 		return multimap;
 	}
 	
 	@Nullable
-	public MSToolType getToolType() {return toolType;}
-	public float getEfficiency()		{return efficiency;}
+	public MSToolType getToolType()
+	{
+		return toolType;
+	}
+	
+	public float getEfficiency()
+	{
+		return efficiency;
+	}
 	
 	public static class Builder
 	{
