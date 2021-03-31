@@ -88,14 +88,18 @@ public interface OnHitEffect
 		
 		target.addPotionEffect(new EffectInstance(Effects.WITHER, 100, 2));
 		
-		if(!attacker.world.isRemote && attacker instanceof PlayerEntity && attacker.getRNG().nextFloat() < .15)
+		if(!attacker.world.isRemote && attacker instanceof PlayerEntity && attacker.getRNG().nextFloat() < .1)
 		{
-			List<String> messages = ImmutableList.of("machinations", "stir", "suffering", "will", "done", "conspiracies");
+			List<String> messages = ImmutableList.of("machinations", "stir", "suffering", "will", "done", "conspiracies", "waiting", "strife", "search", "blessings", "seek", "shadow");
 			
 			String key = messages.get(attacker.getRNG().nextInt(messages.size()));
-			ITextComponent message = new TranslationTextComponent(stack.getTranslationKey() + ".message." + key);
+			ITextComponent message = new TranslationTextComponent("message.horrorterror." + key);
 			attacker.sendMessage(message.applyTextStyle(TextFormatting.DARK_PURPLE));
-			attacker.addPotionEffect(new EffectInstance(Effects.WITHER, 100, 2));
+			boolean potionBool = attacker.getRNG().nextBoolean();
+			if(potionBool)
+				attacker.addPotionEffect(new EffectInstance(Effects.WITHER, 100, 2));
+			else
+				attacker.addPotionEffect(new EffectInstance(Effects.BLINDNESS, 100, 0));
 		}
 	};
 	
@@ -206,6 +210,40 @@ public interface OnHitEffect
 	static OnHitEffect setOnFire(int duration)
 	{
 		return (itemStack, target, attacker) -> target.setFire(duration);
+	}
+	
+	static OnHitEffect armorBypassingDamageMod(float additionalDamage, EnumAspect aspect)
+	{
+		return (stack, target, attacker) -> {
+			DamageSource source;
+			float damage = additionalDamage * 3.3F;
+			
+			if(attacker instanceof ServerPlayerEntity)
+			{
+				ServerPlayerEntity serverPlayer = (ServerPlayerEntity) attacker;
+				source = DamageSource.causePlayerDamage(serverPlayer);
+				Title title = PlayerSavedData.getData(serverPlayer).getTitle();
+				
+				if(target instanceof UnderlingEntity)
+				{
+					float modifier = (float) (PlayerSavedData.getData(serverPlayer).getEcheladder().getUnderlingDamageModifier());
+					
+					if(title == null || title.getHeroAspect() != aspect)
+						modifier = modifier / 1.2F;
+					
+					damage = damage * modifier;
+				} else
+				{
+					if(title == null || title.getHeroAspect() != aspect)
+						damage = damage / 1.2F;
+				}
+			} else
+			{
+				source = DamageSource.causeMobDamage(attacker);
+			}
+			
+			target.attackEntityFrom(source.setDamageBypassesArmor(), damage);
+		};
 	}
 	
 	static OnHitEffect playSound(Supplier<SoundEvent> sound)

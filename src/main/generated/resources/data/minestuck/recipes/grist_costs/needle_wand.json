@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:needle_wand"
+  },
+  "grist_cost": {
+    "minestuck:diamond": 20,
+    "minestuck:chalk": 30,
+    "minestuck:garnet": 40,
+    "minestuck:gold": 16
+  }
+}

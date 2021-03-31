@@ -137,7 +137,8 @@ public class LandTypes
 		
 		registry.register(new NullTitleLandType().setRegistryName("null"));
 		registry.register(new FrogsLandType().setRegistryName("frogs"));
-		registry.register(new WindLandType().setRegistryName("wind"));
+		registry.register(new WindLandType(WindLandType.Variant.WIND).setRegistryName("wind"));
+		//registry.register(new WindLandType(WindLandType.Variant.WINDMILLS).setRegistryName("windmills"));
 		registry.register(new LightLandType().setRegistryName("light"));
 		registry.register(new ClockworkLandType().setRegistryName("clockwork"));
 		registry.register(new SilenceLandType().setRegistryName("silence"));

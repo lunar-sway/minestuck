@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:pointer_wand"
+  },
+  "grist_cost": {
+    "minestuck:build": 200,
+    "minestuck:caulk": 40,
+    "minestuck:amber": 50,
+    "minestuck:rust": 30
+  }
+}
