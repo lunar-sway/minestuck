@@ -47,7 +47,7 @@ public interface OnHitEffect
 					.and(enemyPotionEffect(() -> new EffectInstance(Effects.HUNGER, 60, 100)))));
 	
 	OnHitEffect BREATH_LEVITATION_AOE = requireAspect(BREATH, chanceWithCritMod(
-			potionAOE(() -> new EffectInstance(Effects.LEVITATION, 30, 2), () -> SoundEvents.ENTITY_ENDER_DRAGON_FLAP,1.4F)));
+			potionAOE(() -> new EffectInstance(Effects.LEVITATION, 30, 2), () -> SoundEvents.ENTITY_ENDER_DRAGON_FLAP, 1.4F)));
 	OnHitEffect TIME_SLOWNESS_AOE = requireAspect(TIME, chanceWithCritMod(
 			potionAOE(() -> new EffectInstance(Effects.SLOWNESS, 100, 4), () -> SoundEvents.BLOCK_BELL_RESONATE, 2F)));
 	
@@ -141,12 +141,13 @@ public interface OnHitEffect
 			source = DamageSource.causePlayerDamage((PlayerEntity) attacker);
 		else source = DamageSource.causeMobDamage(attacker);
 		
-		float rng = (float) (attacker.getRNG().nextInt(7)+1) * (attacker.getRNG().nextInt(7)+1);
+		float rng = (float) (attacker.getRNG().nextInt(7) + 1) * (attacker.getRNG().nextInt(7) + 1);
 		target.attackEntityFrom(source, rng);
 	};
 	
 	OnHitEffect SHIELD_DISABLE = (stack, target, attacker) -> {
-		if(target instanceof PlayerEntity){
+		if(target instanceof PlayerEntity)
+		{
 			PlayerEntity targetPlayer = (PlayerEntity) target;
 			if(targetPlayer.isActiveItemStackBlocking())
 				targetPlayer.disableShield(true);
@@ -157,19 +158,19 @@ public interface OnHitEffect
 		if(attacker instanceof PlayerEntity)
 		{
 			PlayerEntity playerAttacker = (PlayerEntity) attacker;
-			boolean notSpamming = playerAttacker.getCooledAttackStrength(0.5F) > 0.8F;
-			boolean slowMoving = (double)(playerAttacker.distanceWalkedModified - playerAttacker.prevDistanceWalkedModified) < (double)playerAttacker.getAIMoveSpeed();
+			boolean slowMoving = (double) (playerAttacker.distanceWalkedModified - playerAttacker.prevDistanceWalkedModified) < (double) playerAttacker.getAIMoveSpeed();
 			boolean lastHitWasCrit = ServerEventHandler.wasLastHitCrit(playerAttacker);
-			Debug.debugf("notSpamming = %s(cooledAttack value = %s), slowMoving = %s, lastHitWasCrit = %s, playerAttacker.onGround = %s", notSpamming, playerAttacker.getCooledAttackStrength(0.5F), slowMoving, lastHitWasCrit, playerAttacker.onGround);
-			if(notSpamming && slowMoving && !lastHitWasCrit && playerAttacker.onGround)
+			if(slowMoving && !lastHitWasCrit && playerAttacker.onGround)
 			{
-				float attackDamage = (float)playerAttacker.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue();
+				float attackDamage = (float) playerAttacker.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue();
 				float sweepEnchantMod = 1.0F + EnchantmentHelper.getSweepingDamageRatio(playerAttacker) * attackDamage;
 				
-				for(LivingEntity livingentity : playerAttacker.world.getEntitiesWithinAABB(LivingEntity.class, target.getBoundingBox().grow(1.0D, 0.25D, 1.0D))) {
-					if (livingentity != playerAttacker && livingentity != target && !playerAttacker.isOnSameTeam(livingentity) && (!(livingentity instanceof ArmorStandEntity) || !((ArmorStandEntity)livingentity).hasMarker()) && playerAttacker.getDistanceSq(livingentity) < 9.0D) {
-						livingentity.knockBack(playerAttacker, 0.4F, (double)MathHelper.sin(playerAttacker.rotationYaw * ((float)Math.PI / 180F)), (double)(-MathHelper.cos(playerAttacker.rotationYaw * ((float)Math.PI / 180F))));
-						livingentity.attackEntityFrom(DamageSource.causePlayerDamage(playerAttacker), sweepEnchantMod);
+				for(LivingEntity livingEntity : playerAttacker.world.getEntitiesWithinAABB(LivingEntity.class, target.getBoundingBox().grow(1.0D, 0.25D, 1.0D)))
+				{
+					if(livingEntity != playerAttacker && livingEntity != target && !playerAttacker.isOnSameTeam(livingEntity) && (!(livingEntity instanceof ArmorStandEntity) || !((ArmorStandEntity) livingEntity).hasMarker()) && playerAttacker.getDistanceSq(livingEntity) < 9.0D)
+					{
+						livingEntity.knockBack(playerAttacker, 0.4F, (double) MathHelper.sin(playerAttacker.rotationYaw * ((float) Math.PI / 180F)), (double) (-MathHelper.cos(playerAttacker.rotationYaw * ((float) Math.PI / 180F))));
+						livingEntity.attackEntityFrom(DamageSource.causePlayerDamage(playerAttacker), sweepEnchantMod);
 					}
 				}
 				
@@ -282,7 +283,7 @@ public interface OnHitEffect
 			AxisAlignedBB axisalignedbb = attacker.getBoundingBox().grow(4.0D, 2.0D, 4.0D);
 			List<LivingEntity> list = attacker.world.getEntitiesWithinAABB(LivingEntity.class, axisalignedbb);
 			list.remove(attacker);
-			if (!list.isEmpty())
+			if(!list.isEmpty())
 			{
 				attacker.world.playSound(null, attacker.getPosition(), sound.get(), SoundCategory.PLAYERS, 1.5F, pitch);
 				for(LivingEntity livingentity : list)
