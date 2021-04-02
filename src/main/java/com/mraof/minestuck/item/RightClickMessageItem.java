@@ -9,14 +9,22 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
+import java.util.function.Supplier;
+
 public class RightClickMessageItem extends Item
 {
-	private final int itemVariety;
+	private final Supplier<Type> type;
 	
-	public RightClickMessageItem(Properties properties, int itemVariety)
+	public enum Type {
+		EIGHTBALL,
+		DICE,
+		DEFAULT;
+	}
+	
+	public RightClickMessageItem(Properties properties, Supplier<Type> type)
 	{
 		super(properties);
-		this.itemVariety = itemVariety;
+		this.type = type;
 	}
 	
 	@Override
@@ -24,12 +32,12 @@ public class RightClickMessageItem extends Item
 	{
 		if(worldIn.isRemote)
 		{
-			if(itemVariety == 1)
+			if(type.get() == Type.EIGHTBALL)
 			{
 				int key = playerIn.getRNG().nextInt(20);
 				ITextComponent message = new TranslationTextComponent("message.eightball." + key);
 				playerIn.sendMessage(message.applyTextStyle(TextFormatting.BLUE));
-			} else if(itemVariety == 2)
+			} else if(type.get() == Type.DICE)
 			{
 				int key = playerIn.getRNG().nextInt(6);
 				ITextComponent message = new TranslationTextComponent("message.dice." + key);
