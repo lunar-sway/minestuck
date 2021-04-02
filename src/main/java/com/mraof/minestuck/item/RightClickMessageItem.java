@@ -13,15 +13,15 @@ import java.util.function.Supplier;
 
 public class RightClickMessageItem extends Item
 {
-	private final Supplier<Type> type;
+	private final Type type;
 	
 	public enum Type {
 		EIGHTBALL,
 		DICE,
-		DEFAULT;
+		DEFAULT
 	}
 	
-	public RightClickMessageItem(Properties properties, Supplier<Type> type)
+	public RightClickMessageItem(Properties properties, Type type)
 	{
 		super(properties);
 		this.type = type;
@@ -32,12 +32,12 @@ public class RightClickMessageItem extends Item
 	{
 		if(worldIn.isRemote)
 		{
-			if(type.get() == Type.EIGHTBALL)
+			if(type == Type.EIGHTBALL)
 			{
 				int key = playerIn.getRNG().nextInt(20);
 				ITextComponent message = new TranslationTextComponent("message.eightball." + key);
 				playerIn.sendMessage(message.applyTextStyle(TextFormatting.BLUE));
-			} else if(type.get() == Type.DICE)
+			} else if(type == Type.DICE)
 			{
 				int key = playerIn.getRNG().nextInt(6);
 				ITextComponent message = new TranslationTextComponent("message.dice." + key);
