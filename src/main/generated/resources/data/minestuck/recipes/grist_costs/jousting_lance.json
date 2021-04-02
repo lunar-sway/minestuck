@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:jousting_lance"
+  },
+  "grist_cost": {
+    "minestuck:rust": 20,
+    "minestuck:quartz": 1
+  }
+}
