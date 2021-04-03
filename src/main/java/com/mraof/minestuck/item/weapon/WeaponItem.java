@@ -46,9 +46,9 @@ public class WeaponItem extends TieredItem
 	private final List<InventoryTickEffect> tickEffects;
 	
 	@Deprecated
-	public WeaponItem(IItemTier tier, int attackDamage, float attackSpeed, float efficiency, boolean disableShield, @Nullable MSToolType toolType, Properties properties)
+	public WeaponItem(IItemTier tier, int attackDamage, float attackSpeed, float efficiency, @Nullable MSToolType toolType, Properties properties)
 	{
-		this(new Builder(tier, attackDamage, attackSpeed).efficiency(efficiency).disableShield(disableShield).set(toolType), properties);
+		this(new Builder(tier, attackDamage, attackSpeed).efficiency(efficiency).disableShield().set(toolType), properties);
 	}
 	
 	public WeaponItem(Builder builder, Properties properties)
@@ -333,9 +333,9 @@ public class WeaponItem extends TieredItem
 			return this;
 		}
 		
-		public Builder disableShield(boolean disableShield)
+		public Builder disableShield()
 		{
-			this.disableShield = disableShield;
+			disableShield = true;
 			return this;
 		}
 		
