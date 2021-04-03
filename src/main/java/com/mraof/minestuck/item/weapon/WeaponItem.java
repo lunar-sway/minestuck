@@ -2,8 +2,6 @@ package com.mraof.minestuck.item.weapon;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
-import com.mraof.minestuck.item.MSItemTypes;
-import com.mraof.minestuck.util.Debug;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
@@ -157,17 +155,6 @@ public class WeaponItem extends TieredItem
 	@Override
 	public boolean canDisableShield(ItemStack stack, ItemStack shield, LivingEntity entity, LivingEntity attacker)
 	{
-		/*Set<ToolType> itemTools = getToolTypes(new ItemStack(this));
-		ToolType[] toolTypeSet = new ToolType[]{{new MSToolType(MSItemTypes.AXE_TOOL)}, MSItemTypes.SICKLE_TOOL, MSItemTypes.AXE_HAMMER_TOOL, MSItemTypes.AXE_PICK_TOOL, MSItemTypes.SHOVEL_AXE_TOOL};
-		for(int i = 0; i < toolTypeSet.length; i++)
-		{
-			Debug.debugf("itemTools = %s, toolTypeSet[i] = %s, i = %s", itemTools, toolTypeSet[i], i);
-			if(itemTools.contains(toolTypeSet[i]))
-			{
-				Debug.debugf("WeaponItem itemTools contains toolTypeSet, itemTools = %s, toolTypeSet[i] = %s, i = %s", itemTools, toolTypeSet[i], i);
-				return true;
-			}
-		}*/
 		return disableShield;
 	}
 	

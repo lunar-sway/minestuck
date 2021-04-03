@@ -148,15 +148,6 @@ public interface OnHitEffect
 		target.attackEntityFrom(source, rng);
 	};
 	
-	OnHitEffect SHIELD_DISABLE = (stack, target, attacker) -> {
-		if(target instanceof PlayerEntity)
-		{
-			PlayerEntity targetPlayer = (PlayerEntity) target;
-			if(targetPlayer.isActiveItemStackBlocking())
-				targetPlayer.disableShield(true);
-		}
-	};
-	
 	OnHitEffect SWEEP = (stack, target, attacker) -> {
 		if(attacker instanceof PlayerEntity)
 		{
