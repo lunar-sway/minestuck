@@ -2,6 +2,8 @@ package com.mraof.minestuck.item.weapon;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
+import com.mraof.minestuck.item.MSItemTypes;
+import com.mraof.minestuck.util.Debug;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
@@ -26,6 +28,7 @@ import java.util.*;
 public class WeaponItem extends TieredItem
 {
 	private final float efficiency;
+	private final boolean disableShield;
 	//private static final HashMap<ToolType, Set<Material>> toolMaterials = new HashMap<>();
 	
 	private final int attackDamage;
@@ -45,9 +48,9 @@ public class WeaponItem extends TieredItem
 	private final List<InventoryTickEffect> tickEffects;
 	
 	@Deprecated
-	public WeaponItem(IItemTier tier, int attackDamage, float attackSpeed, float efficiency, @Nullable MSToolType toolType, Properties properties)
+	public WeaponItem(IItemTier tier, int attackDamage, float attackSpeed, float efficiency, boolean disableShield, @Nullable MSToolType toolType, Properties properties)
 	{
-		this(new Builder(tier, attackDamage, attackSpeed).efficiency(efficiency).set(toolType), properties);
+		this(new Builder(tier, attackDamage, attackSpeed).efficiency(efficiency).disableShield(disableShield).set(toolType), properties);
 	}
 	
 	public WeaponItem(Builder builder, Properties properties)
@@ -57,6 +60,7 @@ public class WeaponItem extends TieredItem
 		attackSpeed = builder.attackSpeed;
 		toolType = builder.toolType;
 		efficiency = builder.efficiency;
+		disableShield = builder.disableShield;
 		onHitEffects = ImmutableList.copyOf(builder.onHitEffects);
 		destroyBlockEffect = builder.destroyBlockEffect;
 		rightClickBlockEffect = builder.rightClickBlockEffect;
@@ -148,6 +152,23 @@ public class WeaponItem extends TieredItem
 		if(rightClickBlockEffect != null)
 			return rightClickBlockEffect.onClick(context);
 		else return super.onItemUse(context);
+	}
+	
+	@Override
+	public boolean canDisableShield(ItemStack stack, ItemStack shield, LivingEntity entity, LivingEntity attacker)
+	{
+		/*Set<ToolType> itemTools = getToolTypes(new ItemStack(this));
+		ToolType[] toolTypeSet = new ToolType[]{{new MSToolType(MSItemTypes.AXE_TOOL)}, MSItemTypes.SICKLE_TOOL, MSItemTypes.AXE_HAMMER_TOOL, MSItemTypes.AXE_PICK_TOOL, MSItemTypes.SHOVEL_AXE_TOOL};
+		for(int i = 0; i < toolTypeSet.length; i++)
+		{
+			Debug.debugf("itemTools = %s, toolTypeSet[i] = %s, i = %s", itemTools, toolTypeSet[i], i);
+			if(itemTools.contains(toolTypeSet[i]))
+			{
+				Debug.debugf("WeaponItem itemTools contains toolTypeSet, itemTools = %s, toolTypeSet[i] = %s, i = %s", itemTools, toolTypeSet[i], i);
+				return true;
+			}
+		}*/
+		return disableShield;
 	}
 	
 	@Override
@@ -255,6 +276,11 @@ public class WeaponItem extends TieredItem
 		return efficiency;
 	}
 	
+	public boolean getDisableShield()
+	{
+		return disableShield;
+	}
+	
 	public static class Builder
 	{
 		private final IItemTier tier;
@@ -263,6 +289,7 @@ public class WeaponItem extends TieredItem
 		@Nullable
 		private MSToolType toolType;
 		private float efficiency;
+		private boolean disableShield;
 		private final List<OnHitEffect> onHitEffects = new ArrayList<>();
 		@Nullable
 		private DestroyBlockEffect destroyBlockEffect = null;
@@ -316,6 +343,12 @@ public class WeaponItem extends TieredItem
 		public Builder efficiency(float efficiency)
 		{
 			this.efficiency = efficiency;
+			return this;
+		}
+		
+		public Builder disableShield(boolean disableShield)
+		{
+			this.disableShield = disableShield;
 			return this;
 		}
 		

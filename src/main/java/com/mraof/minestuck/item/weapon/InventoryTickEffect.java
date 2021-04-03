@@ -2,10 +2,12 @@ package com.mraof.minestuck.item.weapon;
 
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.Title;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
@@ -33,6 +35,23 @@ public interface InventoryTickEffect
 			stack.shrink(1);
 			
 			entityIn.attackEntityFrom(DamageSource.LIGHTNING_BOLT, 5);
+		}
+	};
+	
+	InventoryTickEffect TEST_DISABLE = (stack, worldIn, entityIn, itemSlot, isSelected) -> {
+		if(entityIn instanceof PlayerEntity)
+		{
+			PlayerEntity playerEntity = (PlayerEntity) entityIn;
+			if(playerEntity.isActiveItemStackBlocking())
+			{
+				Debug.debugf("Active stack is blocking");
+				
+				if(stack.canDisableShield(playerEntity.getActiveItemStack(), null, playerEntity))
+				{
+					Debug.debugf("canDisableShield");
+					playerEntity.disableShield(true);
+				}
+			}
 		}
 	};
 	
