@@ -58,6 +58,8 @@ public class ShadeLandType extends TerrainLandType
 		registry.setBlockState("bush", MSBlocks.GLOWING_MUSHROOM.getDefaultState());
 		registry.setBlockState("structure_wool_1", Blocks.CYAN_WOOL.getDefaultState());
 		registry.setBlockState("structure_wool_3", Blocks.GRAY_WOOL.getDefaultState());
+		registry.setBlockState("cruxite_ore", MSBlocks.SHADE_STONE_CRUXITE_ORE.getDefaultState());
+		registry.setBlockState("uranium_ore", MSBlocks.SHADE_STONE_URANIUM_ORE.getDefaultState());
 	}
 	
 	@Override

@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:scythe"
+  },
+  "grist_cost": {
+    "minestuck:build": 30,
+    "minestuck:rust": 20
+  }
+}

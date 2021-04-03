@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:silver_spoon"
+  },
+  "input2": {
+    "item": "minecraft:melon_slice"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:melonballer"
+  }
+}

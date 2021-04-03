@@ -126,8 +126,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.CHISELED_FROST_BRICKS, "Chiseled Frost Bricks");
 		add(MSBlocks.CAST_IRON, "Cast-Iron");
 		add(MSBlocks.CHISELED_CAST_IRON, "Chiseled Cast-Iron");
+		add(MSBlocks.STEEL_BEAM, "Steel Beam");
 		add(MSBlocks.MYCELIUM_BRICKS, "Mycelium Bricks");
 		add(MSBlocks.BLACK_STONE, "Black Stone");
+		add(MSBlocks.BLACK_SAND, "Black Sand");
 		add(MSBlocks.FLOWERY_MOSSY_COBBLESTONE, "Flowery Mossy Cobblestone");
 		add(MSBlocks.FLOWERY_MOSSY_STONE_BRICKS, "Flowery Mossy Stone Bricks");
 		add(MSBlocks.COARSE_END_STONE, "Coarse End Stone");
@@ -247,6 +249,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.ATTACHED_STRAWBERRY_STEM, "Strawberry Stem");
 		add(MSBlocks.STRAWBERRY_STEM, "Strawberry Stem");
 		add(MSBlocks.TALL_END_GRASS, "End Grass");
+		add(MSBlocks.GLOWFLOWER, "Glowflower");
 		add(MSBlocks.GLOWY_GOOP, "Glowy Goop");
 		add(MSBlocks.COAGULATED_BLOOD, "Coagulated Blood");
 		add(MSBlocks.VEIN, "Vein");
@@ -384,6 +387,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addExtra(MSItems.SORD, OnHitEffect.SORD_DROP_MESSAGE, "The shittiness of the sord made it phase through your hand");
 		add(MSItems.PAPER_SWORD, "Paper Sword");
 		addTooltip(MSItems.PAPER_SWORD, "None shall be the wiser. It is the perfect crime.");
+		add(MSItems.SWONGE, "Swonge");
+		addTooltip(MSItems.SWONGE, "Schlorp.");
+		add(MSItems.WET_SWONGE, "Wet Swonge");
+		addTooltip(MSItems.WET_SWONGE, "Splorch.");
 		add(MSItems.CACTACEAE_CUTLASS, "Cactaceae Cutlass");
 		addTooltip(MSItems.CACTACEAE_CUTLASS, "A spiny sword made of cactus, you might hurt yourself more on the spines then the blade would your enemies");
 		addStoreTooltip(MSItems.CACTACEAE_CUTLASS, "It's not as quenchy, but if it comes down to it you can always drink the blood of your foes.");
@@ -447,6 +454,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.STEEL_EDGE_CANDYCUTTER, "All the benefits of the Choco Loco Woodsplitter, now with more bloodshed! Perfect!");
 		add(MSItems.BLACKSMITH_BANE, "Blacksmith's Bane");
 		add(MSItems.REGIAXE, "Regiaxe");
+		add(MSItems.GOTHY_AXE, "Gothy Axe");
         add(MSItems.SURPRISE_AXE, "Kundler Surprise Axe");
         addTooltip(MSItems.SURPRISE_AXE, "Who knows what surprises this bad boy has in store!");
 		addExtra(MSItems.SURPRISE_AXE, "message", "WOW! NO WAY! You found a %s from your opponent!");
@@ -463,14 +471,18 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.FISSION_FOCUSED_FAULT_FELLER, "Fission-Focused Fault Feller");
 		add(MSItems.BISECTOR, "Bisector");
 		addTooltip(MSItems.BISECTOR, "Cleave foes in twain... with pride :]");
+		add(MSItems.FINE_CHINA_AXE, "Fine China Axe");
 		add(MSItems.DICE, "Dice");
 		addTooltip(MSItems.DICE, "Dungeons and Dragons anybody?");
 		add(MSItems.FLUORITE_OCTET, "Fluorite Octet");
 		addTooltip(MSItems.FLUORITE_OCTET, "Magical Dice! Let 'em roll!");
 		add(MSItems.CAT_CLAWS_DRAWN, "Cat Claws");
 		add(MSItems.CAT_CLAWS_SHEATHED, "Cat Claws");
+		add(MSItems.ACTION_CLAWS_DRAWN, "Action Claws");
+		add(MSItems.ACTION_CLAWS_SHEATHED, "Action Claws");
 		add(MSItems.LIPSTICK_CHAINSAW, "Chainsaw");
 		add(MSItems.LIPSTICK, "Jade Lipstick");
+		add(MSItems.JOUSTING_LANCE, "Jousting Lance");
 		add(MSItems.CIGARETTE_LANCE, "Cigarette Holder Lance");
 		add(MSItems.LUCERNE_HAMMER, "Lucerne Hammer");
 		add(MSItems.LUCERNE_HAMMER_OF_UNDYING, "Lucerne Hammer of Undying");
@@ -480,6 +492,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.TYPHONIC_TRIVIALIZER, "Typhonic Trivializer");
 		addTooltip(MSItems.TYPHONIC_TRIVIALIZER, "It's easy being breezy, with this denizen's boon");
 		add(MSItems.SICKLE, "Sickle");
+		add(MSItems.BISICKLE, "Bisickle");
 		add(MSItems.OW_THE_EDGE, "oW THE EDGE");
 		add(MSItems.THORNY_SUBJECT, "A Thorny Subject");
 		add(MSItems.HEMEOREAPER, "Hemeoreaper");
@@ -489,11 +502,14 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.FUDGESICKLE, "Whose idea was this?");
 		add(MSItems.REGISICKLE, "Regisickle");
 		addTooltip(MSItems.REGISICKLE, "A black sickle wielded by Dersites and Agents!");
+		add(MSItems.HERETICUS_AURURM, "Hereticus Aururm");
 		add(MSItems.CLAW_SICKLE, "Clawsickle");
 		addTooltip(MSItems.CLAW_SICKLE, "This crabby blade can hook and pinch your enemies for you!");
 		add(MSItems.CLAW_OF_NRUBYIGLITH, "Claw of Nrub'yiglith");
 		addTooltip(MSItems.CLAW_OF_NRUBYIGLITH, "Even though it's no longer a part of what you presume to be a living being, it still feels... alive.");
 		add(MSItems.CANDY_SICKLE, "Candy Sickle");
+		add(MSItems.SCYTHE, "Scythe");
+		add(MSItems.EIGHTBALL_SCYTHE, "Eightball Scythe");
 		add(MSItems.DEUCE_CLUB, "Deuce Club");
 		addTooltip(MSItems.DEUCE_CLUB, "The weakest club in the world");
 		add(MSItems.STALE_BAGUETTE, "Stale Baguette");
@@ -501,6 +517,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.GLUB_CLUB, "Ever been smacked with a raw fish?");
 		add(MSItems.NIGHT_CLUB, "Nightclub");
 		addTooltip(MSItems.NIGHT_CLUB, "Wanna go...clubbing?");
+		add(MSItems.NIGHTSTICK, "Nightstick");
+		addTooltip(MSItems.NIGHTSTICK, "NO CLUBBING MOVE ALONG.");
 		add(MSItems.PRISMARINE_BASHER, "Prismarine Basher");
 		addTooltip(MSItems.PRISMARINE_BASHER, "Smells like sea salt, unsurprisingly.");
 		add(MSItems.CLUB_ZERO, "Club Zero");
@@ -508,6 +526,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.POGO_CLUB, "Pogo Club");
 		addTooltip(MSItems.POGO_CLUB, "Boing! Bounce back your foes with this bouncy weapon!");
 		addStoreTooltip(MSItems.POGO_CLUB, "Strive to touch the sky, and smash a few skulls on the way up!");
+		add(MSItems.BARBER_BASHER, "Barber Basher");
 		add(MSItems.METAL_BAT, "Metal Bat");
 		addTooltip(MSItems.METAL_BAT, "Regular weapons not working for you? Try beating foes with an average bat!");
 		add(MSItems.CLOWN_CLUB, "Clown Club");
@@ -518,6 +537,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.M_ACE, "mACE");
 		add(MSItems.DESOLATOR_MACE, "Desolator Mace");
 		addTooltip(MSItems.DESOLATOR_MACE, "Void your enemies existence. Is the damage really that low?");
+		add(MSItems.BLAZING_GLORY, "Blazing Glory");
 		add(MSItems.HORSE_HITCHER, "Cast Iron Horse Hitcher");
 		add(MSItems.ACE_OF_SPADES, "Ace of Spades");
 		addStore(MSItems.ACE_OF_SPADES, "Shovel Sigil");
@@ -584,6 +604,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.WOODEN_SPOON, "Like the kind you would eat your soup with");
 		add(MSItems.SILVER_SPOON, "Silver Spoon");
 		addTooltip(MSItems.SILVER_SPOON, "Could be the first silver object you've seen so far");
+		add(MSItems.MELONBALLER, "Melonballer");
+		add(MSItems.SIGHTSEEKER, "Sightseeker");
 		add(MSItems.TERRAIN_FLATENATOR, "Terrain Flatenator");
 		addTooltip(MSItems.TERRAIN_FLATENATOR, "Construction worker's pride and joy!");
 		add(MSItems.NOSFERATU_SPOON, "Nosferatu Spoon");
@@ -595,8 +617,12 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.SKAIA_FORK, "Skaia War Fork");
 		addTooltip(MSItems.SKAIA_FORK, "The elegance and grace of Skaia, and the ability to poke things of a fork!");
 		add(MSItems.FORK, "Fork");
+		add(MSItems.CANDY_FORK, "Candy Fork");
 		add(MSItems.TUNING_FORK, "Tuning Fork");
 		addTooltip(MSItems.TUNING_FORK, "Does anyone hear a ringing?");
+		add(MSItems.ELECTRIC_FORK, "Electric Fork");
+		add(MSItems.EATING_FORK_GEM, "Eating Fork Gem");
+		add(MSItems.DEVIL_FORK, "Devil Fork");
 		add(MSItems.SPORK, "Spork");
 		add(MSItems.GOLDEN_SPORK, "Golden Spork");
 		addTooltip(MSItems.GOLDEN_SPORK, "A spoon and fork with all the awfulness of gold tools? Sign me up!");
@@ -633,6 +659,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.EMERALD_PICKAXE, "Emerald Pickaxe");
 		add(MSItems.EMERALD_SHOVEL, "Emerald Shovel");
 		add(MSItems.EMERALD_HOE, "Emerald Hoe");
+		add(MSItems.MINE_AND_GRIST, "Mine and Grist");
 		add(MSItems.PRISMARINE_HELMET, "Prismarine Helmet");
 		add(MSItems.PRISMARINE_CHESTPLATE, "Prismarine Chestplate");
 		add(MSItems.PRISMARINE_LEGGINGS, "Prismarine Leggings");
@@ -743,6 +770,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.URANIUM_GUMMY_BEAR, "Uranium Gummy Bear");
 		add(MSItems.ARTIFACT_WARHEAD, "Artifact War Head");
 		add(MSItems.ZILLIUM_SKITTLES, "Zillium Skittles");
+		add(MSItems.APPLE_JUICE, "Apple Juice");
 		add(MSItems.TAB, "Tab");
 		addStore(MSItems.TAB, "Sugary Drink");
 		addStoreTooltip(MSItems.TAB, "This drink is too sweet for this world. Have a taste!");
@@ -849,9 +877,13 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addStoreTooltip(MSItems.BATTERY, "This one's tough to crunch into, and the effort's barely even worth it!");
 		add(MSItems.BI_DYE, "Bi Dye");
 		addTooltip(MSItems.BI_DYE, "Show off your pride to friends! Make gear to help vanquish your foes!");
+		add(MSItems.LIP_BALM, "Lip Balm");
+		addTooltip(MSItems.LIP_BALM, "I see you there with those dry lips. Aht aht don't lick them now.");
+		addExtra(MSItems.LIP_BALM, "message", "Your lips are slightly more moisturized, but is it enough?");
 		add(MSItems.INK_SQUID_PRO_QUO, "Ink of Squid Pro Quo");
 		addTooltip(MSItems.INK_SQUID_PRO_QUO, "For the love of god, don't drink it.");
 		add(MSItems.CUEBALL, "Magic Cueball");
+		add(MSItems.EIGHTBALL, "Magic Eightball");
 		add(MSItems.CREW_POSTER, "Midnight Crew Poster");
 		add(MSItems.SBAHJ_POSTER, "Sweet Bro and Hella Jeff Poster");
 		add(MSItems.MUSIC_DISC_EMISSARY_OF_DANCE, "Music Disc");
@@ -893,6 +925,34 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add("message.horrorterror.blessings", "With this struggle, we grant you our blessings.");
 		add("message.horrorterror.seek", "Seek out and consume the light.");
 		add("message.horrorterror.shadow", "The shadows do not work for you. They are your fellow vassals in service to us");
+		
+		add("message.eightball.0", "As I see it, yes.");
+		add("message.eightball.1", "Ask again later.");
+		add("message.eightball.2", "Better not tell you now.");
+		add("message.eightball.3", "Cannot predict now.");
+		add("message.eightball.4", "Concentrate and ask again.");
+		add("message.eightball.5", "Don’t count on it.");
+		add("message.eightball.6", "It is certain.");
+		add("message.eightball.7", "It is decidedly so.");
+		add("message.eightball.8", "Most likely.");
+		add("message.eightball.9", "My reply is no.");
+		add("message.eightball.10", "My sources say no.");
+		add("message.eightball.11", "Outlook not so good.");
+		add("message.eightball.12", "Outlook good.");
+		add("message.eightball.13", "Reply hazy, try again.");
+		add("message.eightball.14", "Signs point to yes.");
+		add("message.eightball.15", "Very doubtful.");
+		add("message.eightball.16", "Without a doubt.");
+		add("message.eightball.17", "Yes.");
+		add("message.eightball.18", "Yes – definitely.");
+		add("message.eightball.19", "You may rely on it.");
+		
+		add("message.dice.0", "You rolled a 1.");
+		add("message.dice.1", "You rolled a 2.");
+		add("message.dice.2", "You rolled a 3.");
+		add("message.dice.3", "You rolled a 4.");
+		add("message.dice.4", "You rolled a 5.");
+		add("message.dice.5", "You rolled a 6.");
 
 		addStore(Items.PUMPKIN_PIE, "Tasty Pie");
 		addStoreTooltip(Items.PUMPKIN_PIE, "This pie appeared in storage a few days ago out of nowhere. No idea where it came from, but it sure is tasty!");

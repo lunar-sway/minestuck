@@ -53,6 +53,7 @@ public class MSFoods
     public static final Food ARTIFACT_WARHEAD = (new Food.Builder()).hunger(2).saturation(0.5F).build();
     public static final Food ZILLIUM_SKITTLES = (new Food.Builder()).hunger(2).saturation(0.6F).build();
     //Drinks
+    public static final Food APPLE_JUICE = (new Food.Builder()).hunger(1).saturation(0.4F).setAlwaysEdible().build();
     public static final Food TAB = (new Food.Builder()).hunger(1).saturation(0.0F).setAlwaysEdible().build();
     public static final Food FAYGO = (new Food.Builder()).hunger(1).saturation(0.0F).setAlwaysEdible().build();
     public static final Food FAYGO_CANDY_APPLE = (new Food.Builder()).hunger(1).saturation(0.0F).setAlwaysEdible().build();

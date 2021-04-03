@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:diamond_pickaxe"
+  },
+  "input2": {
+    "item": "minestuck:grist_widget"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:mine_and_grist"
+  }
+}

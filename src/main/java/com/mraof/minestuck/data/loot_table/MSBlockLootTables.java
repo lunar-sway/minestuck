@@ -110,8 +110,10 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(CHISELED_FROST_BRICKS);
 		registerDropSelfLootTable(CAST_IRON);
 		registerDropSelfLootTable(CHISELED_CAST_IRON);
+		registerDropSelfLootTable(STEEL_BEAM);
 		registerDropSelfLootTable(MYCELIUM_BRICKS);
 		registerDropSelfLootTable(BLACK_STONE);
+		registerDropSelfLootTable(BLACK_SAND);
 		registerDropSelfLootTable(FLOWERY_MOSSY_COBBLESTONE);
 		registerDropSelfLootTable(FLOWERY_MOSSY_STONE_BRICKS);
 		registerDropSelfLootTable(COARSE_END_STONE);
@@ -221,6 +223,7 @@ public class MSBlockLootTables extends BlockLootTables
 		registerLootTable(ATTACHED_STRAWBERRY_STEM, func_218482_a());
 		registerLootTable(STRAWBERRY_STEM, MSBlockLootTables::strawberryStemDrop);
 		registerLootTable(TALL_END_GRASS, func_218482_a());
+		registerDropSelfLootTable(GLOWFLOWER);
 		
 		registerDropSelfLootTable(GLOWY_GOOP);
 		registerDropSelfLootTable(COAGULATED_BLOOD);

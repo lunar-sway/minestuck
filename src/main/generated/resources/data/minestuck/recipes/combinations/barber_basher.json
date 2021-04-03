@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:deuce_club"
+  },
+  "input2": {
+    "item": "minestuck:barbasol"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:barber_basher"
+  }
+}

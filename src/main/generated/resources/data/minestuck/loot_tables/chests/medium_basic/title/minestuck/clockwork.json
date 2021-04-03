@@ -4,7 +4,13 @@
     {
       "name": "weapons",
       "rolls": 1,
-      "entries": []
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "name": "minestuck:bisickle"
+        }
+      ]
     },
     {
       "name": "supplies",
