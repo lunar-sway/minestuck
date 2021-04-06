@@ -4,9 +4,9 @@
     "item": "minestuck:cobalt_sabre"
   },
   "grist_cost": {
-    "minestuck:build": 1300,
-    "minestuck:uranium": 90,
-    "minestuck:cobalt": 175,
-    "minestuck:diamond": 30
+    "minestuck:build": 850,
+    "minestuck:uranium": 34,
+    "minestuck:cobalt": 204,
+    "minestuck:diamond": 34
   }
 }

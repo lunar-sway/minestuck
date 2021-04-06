@@ -4,9 +4,9 @@
     "item": "minestuck:angel_apocalypse"
   },
   "grist_cost": {
-    "minestuck:build": 150,
-    "minestuck:amber": 5,
-    "minestuck:quartz": 20,
-    "minestuck:gold": 15
+    "minestuck:build": 1300,
+    "minestuck:amber": 25,
+    "minestuck:quartz": 80,
+    "minestuck:gold": 30
   }
 }
