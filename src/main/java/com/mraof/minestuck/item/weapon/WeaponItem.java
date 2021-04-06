@@ -48,7 +48,7 @@ public class WeaponItem extends TieredItem
 	@Deprecated
 	public WeaponItem(IItemTier tier, int attackDamage, float attackSpeed, float efficiency, @Nullable MSToolType toolType, Properties properties)
 	{
-		this(new Builder(tier, attackDamage, attackSpeed).efficiency(efficiency).disableShield().set(toolType), properties);
+		this(new Builder(tier, attackDamage, attackSpeed).efficiency(efficiency).set(toolType), properties);
 	}
 	
 	public WeaponItem(Builder builder, Properties properties)
