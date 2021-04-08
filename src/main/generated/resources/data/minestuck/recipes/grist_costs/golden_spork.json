@@ -4,8 +4,8 @@
     "item": "minestuck:golden_spork"
   },
   "grist_cost": {
-    "minestuck:build": 70,
-    "minestuck:gold": 40,
+    "minestuck:build": 19,
+    "minestuck:gold": 11,
     "minestuck:diamond": 1
   }
 }

@@ -4,8 +4,8 @@
     "item": "minestuck:sightseeker"
   },
   "grist_cost": {
-    "minestuck:build": 40,
-    "minestuck:rust": 20,
-    "minestuck:caulk": 20
+    "minestuck:build": 53,
+    "minestuck:rust": 16,
+    "minestuck:caulk": 27
   }
 }

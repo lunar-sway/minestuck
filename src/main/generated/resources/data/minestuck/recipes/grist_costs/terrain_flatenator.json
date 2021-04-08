@@ -4,7 +4,7 @@
     "item": "minestuck:terrain_flatenator"
   },
   "grist_cost": {
-    "minestuck:build": 200,
-    "minestuck:rust": 5
+    "minestuck:build": 170,
+    "minestuck:rust": 4
   }
 }

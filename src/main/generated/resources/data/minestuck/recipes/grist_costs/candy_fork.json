@@ -4,7 +4,7 @@
     "item": "minestuck:candy_fork"
   },
   "grist_cost": {
-    "minestuck:build": 50,
-    "minestuck:iodine": 20
+    "minestuck:build": 42,
+    "minestuck:iodine": 18
   }
 }
