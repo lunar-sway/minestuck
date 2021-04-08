@@ -4,7 +4,7 @@
     "item": "minestuck:stale_baguette"
   },
   "grist_cost": {
-    "minestuck:iodine": 15,
-    "minestuck:amber": 11
+    "minestuck:iodine": 6,
+    "minestuck:amber": 4
   }
 }

@@ -4,8 +4,8 @@
     "item": "minestuck:night_club"
   },
   "grist_cost": {
-    "minestuck:tar": 28,
-    "minestuck:shale": 19,
-    "minestuck:cobalt": 6
+    "minestuck:tar": 8,
+    "minestuck:shale": 8,
+    "minestuck:cobalt": 2
   }
 }
