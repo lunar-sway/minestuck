@@ -4,9 +4,9 @@
     "item": "minestuck:fission_focused_fault_feller"
   },
   "grist_cost": {
-    "minestuck:build": 800,
-    "minestuck:shale": 128,
-    "minestuck:uranium": 64,
-    "minestuck:rust": 30
+    "minestuck:build": 1360,
+    "minestuck:shale": 510,
+    "minestuck:uranium": 136,
+    "minestuck:rust": 102
   }
 }
