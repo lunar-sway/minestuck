@@ -1,12 +1,15 @@
 package com.mraof.minestuck.item.weapon;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Multimap;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
@@ -20,11 +23,14 @@ import net.minecraftforge.common.ToolType;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public class WeaponItem extends SwordItem //To allow weapons to have the sweep effect
+public class WeaponItem extends TieredItem
 {
 	private final float efficiency;
+	private final boolean disableShield;
 	//private static final HashMap<ToolType, Set<Material>> toolMaterials = new HashMap<>();
 	
+	private final int attackDamage;
+	private final float attackSpeed;
 	@Nullable
 	private final MSToolType toolType;
 	private final List<OnHitEffect> onHitEffects;
@@ -47,9 +53,12 @@ public class WeaponItem extends SwordItem //To allow weapons to have the sweep e
 	
 	public WeaponItem(Builder builder, Properties properties)
 	{
-		super(builder.tier, builder.attackDamage, builder.attackSpeed, properties);
+		super(builder.tier, properties);
+		attackDamage = builder.attackDamage;
+		attackSpeed = builder.attackSpeed;
 		toolType = builder.toolType;
 		efficiency = builder.efficiency;
+		disableShield = builder.disableShield;
 		onHitEffects = ImmutableList.copyOf(builder.onHitEffects);
 		destroyBlockEffect = builder.destroyBlockEffect;
 		rightClickBlockEffect = builder.rightClickBlockEffect;
@@ -68,36 +77,47 @@ public class WeaponItem extends SwordItem //To allow weapons to have the sweep e
 				return efficiency;
 		if(toolType != null && toolType.canHarvest(state))
 			return efficiency;
-			
+		
 		return super.getDestroySpeed(stack, state);
+	}
+	
+	public boolean canPlayerBreakBlockWhileHolding(BlockState state, World worldIn, BlockPos pos, PlayerEntity player)
+	{
+		ToolType blockTool = state.getHarvestTool();
+		Set<ToolType> itemTools = getToolTypes(new ItemStack(this));
+		if(blockTool != null && itemTools.contains(blockTool))
+		{
+			return true;
+		}
+		return !player.isCreative();
 	}
 	
 	//Thanks to Mraof for supplying the base for this method.
 	@Override
 	public boolean canHarvestBlock(BlockState blockIn)
 	{
-        ToolType blockTool = blockIn.getHarvestTool();
+		ToolType blockTool = blockIn.getHarvestTool();
 		Set<ToolType> itemTools = getToolTypes(new ItemStack(this));
 		int blockHarvestLevel = blockIn.getHarvestLevel();
 		int toolHarvestLevel = getHarvestLevel(new ItemStack(this), blockTool, null, blockIn);
 		
-        if(blockTool != null && itemTools.contains(blockTool))
-        {
-            return toolHarvestLevel >= blockHarvestLevel;
-        } else		//We know that no specific harvestTool is specified, meaning any harvestTool efficiency is defined in the harvestTool itself.
-        {			//This also means that there's no harvestTool *level* specified, so any harvestTool of that class is sufficient.
-        	Material mat = blockIn.getMaterial();
-        	if(mat.isToolNotRequired())
-        		return true;
-        	
-        	if(toolType != null)
+		if(blockTool != null && itemTools.contains(blockTool))
+		{
+			return toolHarvestLevel >= blockHarvestLevel;
+		} else        //We know that no specific harvestTool is specified, meaning any harvestTool efficiency is defined in the harvestTool itself.
+		{            //This also means that there's no harvestTool *level* specified, so any harvestTool of that class is sufficient.
+			Material mat = blockIn.getMaterial();
+			if(mat.isToolNotRequired())
+				return true;
+			
+			if(toolType != null)
 			{
 				if(toolType.getHarvestMaterials().contains(mat) && toolHarvestLevel >= blockHarvestLevel)
 					return true;
 			}
 			return super.canHarvestBlock(blockIn);
-        }
-        
+		}
+		
 	}
 	
 	@Override
@@ -106,7 +126,7 @@ public class WeaponItem extends SwordItem //To allow weapons to have the sweep e
 		if(destroyBlockEffect != null)
 			destroyBlockEffect.onDestroyBlock(stack, worldIn, state, pos, entityLiving);
 		
-		if (state.getBlockHardness(worldIn, pos) != 0.0F)
+		if(state.getBlockHardness(worldIn, pos) != 0.0F)
 		{
 			int damage = 2;
 			
@@ -130,6 +150,12 @@ public class WeaponItem extends SwordItem //To allow weapons to have the sweep e
 		if(rightClickBlockEffect != null)
 			return rightClickBlockEffect.onClick(context);
 		else return super.onItemUse(context);
+	}
+	
+	@Override
+	public boolean canDisableShield(ItemStack stack, ItemStack shield, LivingEntity entity, LivingEntity attacker)
+	{
+		return disableShield;
 	}
 	
 	@Override
@@ -214,9 +240,33 @@ public class WeaponItem extends SwordItem //To allow weapons to have the sweep e
 		return toolType.getEnchantments().contains(enchantment);
 	}
 	
+	public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType equipmentSlot)
+	{
+		Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(equipmentSlot);
+		if(equipmentSlot == EquipmentSlotType.MAINHAND)
+		{
+			multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", (double) this.attackDamage + getTier().getAttackDamage(), AttributeModifier.Operation.ADDITION));
+			multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", (double) this.attackSpeed, AttributeModifier.Operation.ADDITION));
+		}
+		
+		return multimap;
+	}
+	
 	@Nullable
-	public MSToolType getToolType() {return toolType;}
-	public float getEfficiency()		{return efficiency;}
+	public MSToolType getToolType()
+	{
+		return toolType;
+	}
+	
+	public float getEfficiency()
+	{
+		return efficiency;
+	}
+	
+	public boolean getDisableShield()
+	{
+		return disableShield;
+	}
 	
 	public static class Builder
 	{
@@ -226,6 +276,7 @@ public class WeaponItem extends SwordItem //To allow weapons to have the sweep e
 		@Nullable
 		private MSToolType toolType;
 		private float efficiency;
+		private boolean disableShield;
 		private final List<OnHitEffect> onHitEffects = new ArrayList<>();
 		@Nullable
 		private DestroyBlockEffect destroyBlockEffect = null;
@@ -279,6 +330,12 @@ public class WeaponItem extends SwordItem //To allow weapons to have the sweep e
 		public Builder efficiency(float efficiency)
 		{
 			this.efficiency = efficiency;
+			return this;
+		}
+		
+		public Builder disableShield()
+		{
+			disableShield = true;
 			return this;
 		}
 		
