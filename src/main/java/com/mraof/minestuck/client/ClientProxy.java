@@ -87,6 +87,18 @@ public class ClientProxy
 		RenderTypeLookup.setRenderLayer(MSBlocks.GOLD_SEEDS, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.RAINBOW_SAPLING, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.END_SAPLING, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.BREATH_ASPECT_SAPLING, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.LIFE_ASPECT_SAPLING, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.LIGHT_ASPECT_SAPLING, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.TIME_ASPECT_SAPLING, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.HEART_ASPECT_SAPLING, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.RAGE_ASPECT_SAPLING, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.BLOOD_ASPECT_SAPLING, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.DOOM_ASPECT_SAPLING, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.VOID_ASPECT_SAPLING, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.SPACE_ASPECT_SAPLING, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.MIND_ASPECT_SAPLING, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.HOPE_ASPECT_SAPLING, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.GLOWING_MUSHROOM, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.DESERT_BUSH, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.BLOOMING_CACTUS, RenderType.getCutout());
