@@ -8,6 +8,6 @@
   },
   "mode": "and",
   "output": {
-    "item": "minestuck:cat_claws_sheathed"
+    "item": "minestuck:cat_claws_drawn"
   }
 }
