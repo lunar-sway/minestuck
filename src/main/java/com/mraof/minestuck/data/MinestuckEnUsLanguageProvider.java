@@ -433,6 +433,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.SHATTER_BEACON, "ShatterBeacon");
 		add(MSItems.BATLEACKS, "batleacks!!");
 		addTooltip(MSItems.BATLEACKS, "A shitty axe. Not much more to it.");
+		addExtra(MSItems.BATLEACKS, OnHitEffect.SORD_DROP_MESSAGE, "The shittiness of the batleacks made it phase through your hand");
 		add(MSItems.COPSE_CRUSHER, "Coppice Crusher");
 		addStoreTooltip(MSItems.COPSE_CRUSHER, "Good for crushing trees and your enemies!");
 		add(MSItems.QUENCH_CRUSHER, "Quench Crusher");
@@ -472,6 +473,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.BISECTOR, "Bisector");
 		addTooltip(MSItems.BISECTOR, "Cleave foes in twain... with pride :]");
 		add(MSItems.FINE_CHINA_AXE, "Fine China Axe");
+		addTooltip(MSItems.FINE_CHINA_AXE, "Physically I'm here but mentally I'm still thinking about that ceramic battle axe...");
 		add(MSItems.DICE, "Dice");
 		addTooltip(MSItems.DICE, "Dungeons and Dragons anybody?");
 		add(MSItems.FLUORITE_OCTET, "Fluorite Octet");
@@ -503,6 +505,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.REGISICKLE, "Regisickle");
 		addTooltip(MSItems.REGISICKLE, "A black sickle wielded by Dersites and Agents!");
 		add(MSItems.HERETICUS_AURURM, "Hereticus Aururm");
+		addTooltip(MSItems.HERETICUS_AURURM, "Did the Dersites get their Latin correct? I dunno, probably not. Go ask a Roman.");
 		add(MSItems.CLAW_SICKLE, "Clawsickle");
 		addTooltip(MSItems.CLAW_SICKLE, "This crabby blade can hook and pinch your enemies for you!");
 		add(MSItems.CLAW_OF_NRUBYIGLITH, "Claw of Nrub'yiglith");

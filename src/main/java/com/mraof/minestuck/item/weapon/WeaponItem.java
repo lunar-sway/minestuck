@@ -196,6 +196,7 @@ public class WeaponItem extends TieredItem
 	@Override
 	public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker)
 	{
+		stack.damageItem(1, attacker, (PlayerEntity) -> PlayerEntity.sendBreakAnimation(EquipmentSlotType.MAINHAND));
 		onHitEffects.forEach(effect -> effect.onHit(stack, target, attacker));
 		return super.hitEntity(stack, target, attacker);
 	}
