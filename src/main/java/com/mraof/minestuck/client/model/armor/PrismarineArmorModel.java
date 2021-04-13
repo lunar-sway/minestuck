@@ -1,59 +1,25 @@
 package com.mraof.minestuck.client.model.armor;// Made with Blockbench 3.8.3 by Doro
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 
 public class PrismarineArmorModel extends BipedModel<LivingEntity>
 {
-	//private final ModelRenderer bipedRightLeg;
 	private final ModelRenderer RightLeg;
-	//private final ModelRenderer bipedLeftLeg;
 	private final ModelRenderer LeftLeg;
-	//private final ModelRenderer bipedBody;
 	private final ModelRenderer Torso;
 	private final ModelRenderer Torso_r1;
 	private final ModelRenderer Torso_r2;
 	private final ModelRenderer Torso_r3;
-	//private final ModelRenderer bipedRightArm;
 	private final ModelRenderer RightArm;
 	private final ModelRenderer RightArm_r1;
-	//private final ModelRenderer bipedLeftArm;
 	private final ModelRenderer LeftArm;
 	private final ModelRenderer LeftArm_r1;
-	//private final ModelRenderer bipedHead;
 	private final ModelRenderer Head;
 	private final ModelRenderer RightArm_r2;
 	private final ModelRenderer RightArm_r3;
 	private final ModelRenderer RightArm_r4;
-	//private final ModelRenderer bipedHeadwear;
-	
-	/*
-	private final ModelRenderer bipedRightLeg;
-	//private final ModelRenderer RightLeg;
-	private final ModelRenderer bipedLeftLeg;
-	//private final ModelRenderer LeftLeg;
-	private final ModelRenderer bipedBody;
-	//private final ModelRenderer Torso;
-	//private final ModelRenderer Torso_r1;
-	//private final ModelRenderer Torso_r2;
-	//private final ModelRenderer Torso_r3;
-	private final ModelRenderer bipedRightArm;
-	//private final ModelRenderer RightArm;
-	//private final ModelRenderer RightArm_r1;
-	private final ModelRenderer bipedLeftArm;
-	//private final ModelRenderer LeftArm;
-	//private final ModelRenderer LeftArm_r1;
-	private final ModelRenderer bipedHead;
-	//private final ModelRenderer Head;
-	//private final ModelRenderer RightArm_r2;
-	//private final ModelRenderer RightArm_r3;
-	//private final ModelRenderer RightArm_r4;
-	private final ModelRenderer bipedHeadwear;
-	 */
 	
 	public PrismarineArmorModel()
 	{
@@ -198,14 +164,7 @@ public class PrismarineArmorModel extends BipedModel<LivingEntity>
 		
 	}
 	
-	/*
-	public void setRotationAngles(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch)
-	{
-		//previously the render function, render code was moved to a method below
-	}
-	*/
-	
-	@Override
+	/*@Override
 	public void setRotationAngles(LivingEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch)
 	{
 		super.setRotationAngles(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
@@ -221,35 +180,12 @@ public class PrismarineArmorModel extends BipedModel<LivingEntity>
 		bipedLeftArm.render(matrixStack, buffer, packedLight, packedOverlay);
 		bipedHead.render(matrixStack, buffer, packedLight, packedOverlay);
 		bipedHeadwear.render(matrixStack, buffer, packedLight, packedOverlay);
-	}
-	
-	public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z)
-	{
-		modelRenderer.rotateAngleX = x;
-		modelRenderer.rotateAngleY = y;
-		modelRenderer.rotateAngleZ = z;
-	}
-	
-	/*public void setRotationAngles(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
-		//previously the render function, render code was moved to a method below
-	}
-	
-	public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z)
-	{
-		modelRenderer.rotateAngleX = x;
-		modelRenderer.rotateAngleY = y;
-		modelRenderer.rotateAngleZ = z;
-	}
-	
-	@Override
-	public void render(MatrixStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha)
-	{
-		bipedRightLeg.render(matrixStack, buffer, packedLight, packedOverlay);
-		bipedLeftLeg.render(matrixStack, buffer, packedLight, packedOverlay);
-		bipedBody.render(matrixStack, buffer, packedLight, packedOverlay);
-		bipedRightArm.render(matrixStack, buffer, packedLight, packedOverlay);
-		bipedLeftArm.render(matrixStack, buffer, packedLight, packedOverlay);
-		bipedHead.render(matrixStack, buffer, packedLight, packedOverlay);
-		bipedHeadwear.render(matrixStack, buffer, packedLight, packedOverlay);
 	}*/
+	
+	public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z)
+	{
+		modelRenderer.rotateAngleX = x;
+		modelRenderer.rotateAngleY = y;
+		modelRenderer.rotateAngleZ = z;
+	}
 }
