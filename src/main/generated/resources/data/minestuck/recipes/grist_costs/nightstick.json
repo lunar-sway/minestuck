@@ -4,8 +4,8 @@
     "item": "minestuck:nightstick"
   },
   "grist_cost": {
-    "minestuck:tar": 60,
-    "minestuck:marble": 30,
-    "minestuck:gold": 6
+    "minestuck:tar": 18,
+    "minestuck:marble": 7,
+    "minestuck:gold": 1
   }
 }

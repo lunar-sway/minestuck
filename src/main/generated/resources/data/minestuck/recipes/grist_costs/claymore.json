@@ -4,7 +4,7 @@
     "item": "minestuck:claymore"
   },
   "grist_cost": {
-    "minestuck:build": 400,
-    "minestuck:rust": 240
+    "minestuck:build": 210,
+    "minestuck:rust": 45
   }
 }

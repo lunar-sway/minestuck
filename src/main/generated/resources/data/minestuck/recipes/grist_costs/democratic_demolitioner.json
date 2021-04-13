@@ -5,7 +5,7 @@
   },
   "grist_cost": {
     "minestuck:build": 50,
-    "minestuck:gold": 5,
-    "minestuck:marble": 25
+    "minestuck:gold": 1,
+    "minestuck:marble": 10
   }
 }

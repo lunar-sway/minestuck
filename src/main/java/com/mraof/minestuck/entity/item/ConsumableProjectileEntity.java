@@ -59,7 +59,7 @@ public class ConsumableProjectileEntity extends ProjectileItemEntity
 		{
 			if(rand.nextFloat() < 0.99F)
 			{
-				ItemEntity itemEntity = new ItemEntity(this.world, this.getPosX(), this.getPosY(), this.getPosZ(), this.getItem());
+				ItemEntity itemEntity = new ItemEntity(this.world, this.getPosX(), this.getPosY(), this.getPosZ(), this.getItemFromItemStack());
 				world.addEntity(itemEntity);
 			} else
 			{

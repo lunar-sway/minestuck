@@ -4,7 +4,7 @@
     "item": "minestuck:prim_and_proper_walking_pole"
   },
   "grist_cost": {
-    "minestuck:build": 60,
-    "minestuck:iodine": 54
+    "minestuck:build": 15,
+    "minestuck:iodine": 10
   }
 }

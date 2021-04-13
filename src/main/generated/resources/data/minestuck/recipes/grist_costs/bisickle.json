@@ -4,7 +4,7 @@
     "item": "minestuck:bisickle"
   },
   "grist_cost": {
-    "minestuck:build": 30,
-    "minestuck:rust": 10
+    "minestuck:build": 35,
+    "minestuck:rust": 11
   }
 }

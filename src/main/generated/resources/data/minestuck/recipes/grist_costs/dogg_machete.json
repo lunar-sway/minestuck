@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:dogg_machete"
+  },
+  "grist_cost": {
+    "minestuck:build": 400,
+    "minestuck:chalk": 200,
+    "minestuck:mercury": 160
+  }
+}

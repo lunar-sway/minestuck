@@ -4,8 +4,8 @@
     "item": "minestuck:too_hot_to_handle"
   },
   "grist_cost": {
-    "minestuck:amber": 10,
-    "minestuck:ruby": 15,
-    "minestuck:sulfur": 10
+    "minestuck:amber": 40,
+    "minestuck:ruby": 36,
+    "minestuck:sulfur": 24
   }
 }

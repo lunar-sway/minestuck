@@ -4,7 +4,7 @@
     "item": "minestuck:scythe"
   },
   "grist_cost": {
-    "minestuck:build": 30,
-    "minestuck:rust": 20
+    "minestuck:build": 56,
+    "minestuck:rust": 25
   }
 }

@@ -4,9 +4,9 @@
     "item": "minestuck:scraxe"
   },
   "grist_cost": {
-    "minestuck:build": 139,
-    "minestuck:tar": 86,
-    "minestuck:rust": 43,
-    "minestuck:ruby": 8
+    "minestuck:build": 272,
+    "minestuck:tar": 102,
+    "minestuck:rust": 41,
+    "minestuck:ruby": 20
   }
 }
