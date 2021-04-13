@@ -102,11 +102,13 @@ public class ConsortDialogue
 		
 		//Frogs
 		addMessage("frog_creation").landTitle(FROGS);
+		addMessage("frog_location").landTitle(FROGS);
 		addMessage("frog_imitation").landTitle(FROGS);
 		addMessage(new ChainMessage(new SingleMessage("frog_variants.1"), new SingleMessage("frog_variants.2", "land_name"))).landTitle(FROGS);
 		addMessage("frog_hatred").landTitle(FROGS);
 		addMessage(new ChainMessage(new SingleMessage("grasshopper_fishing.1"), new SingleMessage("grasshopper_fishing.2"))).landTitle(FROGS).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);
 		addMessage("gay_frogs").landTitle(FROGS).landTerrainSpecific(RAINBOW);
+		addMessage("non_teleporting_frogs").landTitle(FROGS).landTerrainSpecific(END);
 		
 		//Buckets
 		addMessage("lewd_buckets").landTitle(BUCKETS);
@@ -201,7 +203,7 @@ public class ConsortDialogue
 		addMessage("chorus_fruit").landTerrain(END);
 		addMessage("end_grass").landTerrain(END);
 		addMessage("grass_curse", "denizen").landTerrain(END);
-		addMessage("useless_pogo").landTerrain(END);
+		addMessage("tall_grass").landTerrain(END);
 		addMessage("useless_elytra").landTerrain(END);
 		
 		//Rain terrain
@@ -277,6 +279,7 @@ public class ConsortDialogue
 			).setAcceptNull()
 		).consort(EnumConsort.NAKAGATOR, EnumConsort.IGUANA);
 		
+		addMessage("useless_pogo");
 		addMessage("await_hero", "land_name", "consort_types", "player_title_land").reqLand();
 		addMessage(new ConditionedMessage("skaia", (ConsortEntity consort, ServerPlayerEntity player) -> !consort.visitedSkaia, new SingleMessage("watch_skaia"),
 				new ConditionedMessage((ConsortEntity consort, ServerPlayerEntity player) -> MSDimensions.isSkaia(consort.world.getDimensionKey()),

@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:mailbox"
+  },
+  "input2": {
+    "item": "minestuck:food_can"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:democratic_demolitioner"
+  }
+}

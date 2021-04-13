@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:desolator_mace"
+  },
+  "grist_cost": {
+    "minestuck:build": 595,
+    "minestuck:rust": 102,
+    "minestuck:tar": 170,
+    "minestuck:marble": 170
+  }
+}

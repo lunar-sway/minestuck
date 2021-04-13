@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:umbral_infiltrator"
+  },
+  "grist_cost": {
+    "minestuck:build": 1200,
+    "minestuck:tar": 150,
+    "minestuck:diamond": 55,
+    "minestuck:mercury": 55,
+    "minestuck:quartz": 1
+  }
+}

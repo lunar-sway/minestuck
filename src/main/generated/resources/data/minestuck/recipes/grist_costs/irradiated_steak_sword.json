@@ -4,8 +4,8 @@
     "item": "minestuck:irradiated_steak_sword"
   },
   "grist_cost": {
-    "minestuck:iodine": 55,
-    "minestuck:tar": 10,
+    "minestuck:iodine": 3,
+    "minestuck:tar": 3,
     "minestuck:uranium": 8
   }
 }

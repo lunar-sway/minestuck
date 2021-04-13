@@ -4,9 +4,9 @@
     "item": "minestuck:clown_club"
   },
   "grist_cost": {
-    "minestuck:build": 150,
-    "minestuck:mercury": 20,
-    "minestuck:cobalt": 20,
-    "minestuck:iodine": 15
+    "minestuck:build": 356,
+    "minestuck:mercury": 71,
+    "minestuck:cobalt": 71,
+    "minestuck:iodine": 89
   }
 }

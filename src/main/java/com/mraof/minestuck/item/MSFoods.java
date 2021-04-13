@@ -22,6 +22,7 @@ public class MSFoods
     public static final Food MOREL_MUSHROOM = (new Food.Builder()).hunger(3).saturation(0.9F).build();
     public static final Food FRENCH_FRY = (new Food.Builder()).hunger(1).saturation(0.1F).build();
     public static final Food STRAWBERRY_CHUNK = (new Food.Builder()).hunger(4).saturation(0.5F).build();
+    public static final Food FOOD_CAN = (new Food.Builder()).hunger(4).saturation(0.6F).build();
     public static final Food IRRADIATED_STEAK = (new Food.Builder()).hunger(4).saturation(0.4F).effect(new EffectInstance(Effects.WITHER, 100, 1), 0.9F).build();
     public static final Food WOODEN_CARROT = (new Food.Builder()).hunger(0).saturation(0.1F).effect(new EffectInstance(Effects.INSTANT_DAMAGE, 1), 0.5F).effect(new EffectInstance(Effects.POISON, 100), 1.0F).build();
     public static final Food SURPRISE_EMBRYO = (new Food.Builder()).hunger(3).saturation(0.2F).build();
@@ -52,6 +53,7 @@ public class MSFoods
     public static final Food ARTIFACT_WARHEAD = (new Food.Builder()).hunger(2).saturation(0.5F).build();
     public static final Food ZILLIUM_SKITTLES = (new Food.Builder()).hunger(2).saturation(0.6F).build();
     //Drinks
+    public static final Food APPLE_JUICE = (new Food.Builder()).hunger(1).saturation(0.4F).setAlwaysEdible().build();
     public static final Food TAB = (new Food.Builder()).hunger(1).saturation(0.0F).setAlwaysEdible().build();
     public static final Food FAYGO = (new Food.Builder()).hunger(1).saturation(0.0F).setAlwaysEdible().build();
     public static final Food FAYGO_CANDY_APPLE = (new Food.Builder()).hunger(1).saturation(0.0F).setAlwaysEdible().build();

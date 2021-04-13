@@ -1,7 +1,8 @@
 package com.mraof.minestuck.entity.consort;
 
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
-import com.mraof.minestuck.entity.MinestuckEntity;
+import com.mraof.minestuck.entity.SimpleTexturedEntity;
 import com.mraof.minestuck.inventory.ConsortMerchantContainer;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.player.IdentifierHandler;
@@ -33,9 +34,10 @@ import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
-public class ConsortEntity extends MinestuckEntity implements IContainerProvider
+public class ConsortEntity extends SimpleTexturedEntity implements IContainerProvider
 {
 	
 	private final EnumConsort consortType;
@@ -104,10 +106,11 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 				if(message == null)
 				{
 					message = ConsortDialogue.getRandomMessage(this, hasHadMessage);
-					messageTicksLeft = 24000 + world.rand.nextInt(24000);
-					messageData = new CompoundNBT();
 					hasHadMessage = true;
 				}
+				
+				checkMessageData();
+				
 				try
 				{
 					ITextComponent text = message.getMessage(this, serverPlayer);
@@ -124,6 +127,23 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 			return ActionResultType.SUCCESS;
 		} else
 			return super.func_230254_b_(player, hand);
+	}
+	
+	private void checkMessageData()
+	{
+		if(messageData == null)
+		{
+			messageData = new CompoundNBT();
+			messageTicksLeft = 24000 + world.rand.nextInt(24000);
+		}
+	}
+	
+	private void clearDialogueData()
+	{
+		messageData = null;
+		updatingMessage = null;
+		stocks = null;
+		talkRepPlayerList.clear();
 	}
 	
 	private void handleConsortRepFromTalking(ServerPlayerEntity player)
@@ -152,33 +172,24 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 			return;
 		
 		if(messageTicksLeft > 0)
-			messageTicksLeft--;
-		else if(messageTicksLeft == 0)
+			messageTicksLeft -= MinestuckConfig.SERVER.dialogueRenewalSpeed.get();
+		else if(messageData != null)
 		{
+			clearDialogueData();
 			if(message != null && !message.isLockedToConsort())
 				message = null;
-			messageData = null;
-			updatingMessage = null;
-			stocks = null;
-			talkRepPlayerList.clear();
 		}
 		
 		if(updatingMessage != null)
-		{
 			updatingMessage.onTickUpdate(this);
-		}
 		
 		if(MSDimensions.isSkaia(world.getDimensionKey()))
 			visitedSkaia = true;
 		
 		if(eventTimer > 0)
-		{
 			eventTimer--;
-		}
 		else if(eventTimer == 0)
-		{
 			explode();
-		}
 	}
 	
 	private void explode()
@@ -201,12 +212,15 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 		if(message != null)
 		{
 			compound.putString("Dialogue", message.getString());
-			compound.putInt("MessageTicks", messageTicksLeft);
-			compound.put("MessageData", messageData);
-			ListNBT list = new ListNBT();
-			for(PlayerIdentifier id : talkRepPlayerList)
-				list.add(id.saveToNBT(new CompoundNBT(), "id"));
-			compound.put("talkRepList", list);
+			if(messageData != null)
+			{
+				compound.putInt("MessageTicks", messageTicksLeft);
+				compound.put("MessageData", messageData);
+				ListNBT list = new ListNBT();
+				for(PlayerIdentifier id : talkRepPlayerList)
+					list.add(id.saveToNBT(new CompoundNBT(), "id"));
+				compound.put("talkRepList", list);
+			}
 		}
 		compound.putBoolean("HasHadMessage", hasHadMessage);
 		
@@ -239,15 +253,16 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 		if(compound.contains("Dialogue", Constants.NBT.TAG_STRING))
 		{
 			message = ConsortDialogue.getMessageFromString(compound.getString("Dialogue"));
-			if(compound.contains("MessageTicks", Constants.NBT.TAG_ANY_NUMERIC))
+			if(compound.contains("MessageData", Constants.NBT.TAG_COMPOUND))
+			{
+				messageData = compound.getCompound("MessageData");
 				messageTicksLeft = compound.getInt("MessageTicks");
-			else messageTicksLeft = 24000;	//Used to make summoning with a specific message slightly easier
-			messageData = compound.getCompound("MessageData");
-			
-			talkRepPlayerList.clear();
-			ListNBT list = compound.getList("talkRepList", Constants.NBT.TAG_COMPOUND);
-			for(int i = 0; i < list.size(); i++)
-				talkRepPlayerList.add(IdentifierHandler.load(list.getCompound(i), "id"));
+				
+				talkRepPlayerList.clear();
+				ListNBT list = compound.getList("talkRepList", Constants.NBT.TAG_COMPOUND);
+				for(int i = 0; i < list.size(); i++)
+					talkRepPlayerList.add(IdentifierHandler.load(list.getCompound(i), "id"));
+			}
 			
 			hasHadMessage = true;
 		} else hasHadMessage = compound.getBoolean("HasHadMessage");
@@ -383,5 +398,10 @@ public class ConsortEntity extends MinestuckEntity implements IContainerProvider
 	public RegistryKey<World> getHomeDimension()
 	{
 		return homeDimension;
+	}
+	
+	public static boolean canConsortSpawnOn(EntityType<ConsortEntity> entityType, IWorld world, SpawnReason reason, BlockPos pos, Random random)
+	{
+		return true;
 	}
 }

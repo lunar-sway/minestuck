@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "half=lower": { "model": "minestuck:block/tall_end_grass_bottom" },
+        "half=upper":    { "model": "minestuck:block/tall_end_grass_top" }
+    }
+}

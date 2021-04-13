@@ -31,6 +31,8 @@ public class MSBlockShapes
 	
 	public static final CustomVoxelShape FROG_STATUE = FROG_STATUE_BASE.merge(FROG_STATUE_BODY, FROG_STATUE_HEAD).rotate(Direction.SOUTH);
 	
+	public static final CustomVoxelShape WIZARD_STATUE = new CustomVoxelShape(new double[]{3, 0, 3, 13, 16, 12});
+	
 	public static final CustomVoxelShape BLENDER_BASE = new CustomVoxelShape(new double[]{3, 0, 3, 13, 3, 13}, new double[]{4, 3, 4, 12, 4, 12});
 	public static final CustomVoxelShape BLENDER_CONTAINER = new CustomVoxelShape(new double[]{5, 4, 5, 11, 7, 11}, new double[]{4, 7, 4, 12, 13, 12}, new double[]{3, 13, 3, 13, 14, 13});
 	public static final CustomVoxelShape BLENDER_HANDLE = new CustomVoxelShape(new double[]{3, 6, 7, 5, 7, 9}, new double[]{2, 7, 7, 3, 11, 9}, new double[]{3, 11, 7, 4, 12, 9});
@@ -40,6 +42,10 @@ public class MSBlockShapes
 	public static final CustomVoxelShape CHESSBOARD = new CustomVoxelShape(new double[]{0, 0, 0, 16, 1, 16});
 	
 	public static final CustomVoxelShape CASSETTE_PLAYER = new CustomVoxelShape(new double[]{4, 0, 4, 12, 2, 15});
+	
+	public static final CustomVoxelShape PIPE = new CustomVoxelShape(new double[]{0, 0, 0, 2, 14, 16}, new double[]{0, 16, 0, 14, 14, 16}, new double[]{16, 16, 0, 14, 2, 16}, new double[]{16, 0, 0, 2, 2, 16});
+	public static final CustomVoxelShape PARCEL_PYXIS = new CustomVoxelShape(new double[]{3, 0, 3, 13, 16, 13}, new double[]{2, 0, 2, 14, 3, 14});
+	public static final CustomVoxelShape PYXIS_LID = new CustomVoxelShape(new double[]{3, 0, 3, 13, 3, 13});
 	
 	//Machines
 	public static final CustomVoxelShape ALCHEMITER_CENTER = new CustomVoxelShape(new double[]{0, 0, 0, 16, 16, 16});
@@ -102,8 +108,10 @@ public static CustomVoxelShape PUNCH_DESIGNIX_TOP_RIGHT = PUNCH_DESIGNIX_TOP_RIG
 	
 	//Misc Machines
 	public static CustomVoxelShape TRANSPORTALIZER = new CustomVoxelShape(new double[]{0,0,0,16,6,16}, new double[]{1,6,1,15,8,15});
+	public static CustomVoxelShape SENDIFICATOR = new CustomVoxelShape(new double[]{0,0,0,16,1,16},new double[]{0,16,0,16,15,16},new double[]{0,1,0,1,15,16},new double[]{16,1,0,15,15,16},new double[]{1,1,15,15,15,16});
 	public static CustomVoxelShape GRIST_WIDGET = new CustomVoxelShape(new double[]{6,0,5,10,1.5,11.7}, new double[]{2.5,1,5.3,13.5,2.1,11.15}, new double[]{10,0,5,14,1.75,12}, new double[]{11,0.3,11.2,13,1.3,12.2}, new double[]{2,0,5,6,1.75,11}, new double[]{6,0,5,4,1.75,7}).rotate(Direction.SOUTH);
 	public static CustomVoxelShape COMPUTER = new CustomVoxelShape(/*mouse*/new double[]{0.5,0,2.5,2.5,1,5}, /*keyboard*/new double[]{3.5,0,0.5,15.5,1,7}, /*base*/new double[]{0.5,0,8.5,15.5,3,15.5}, /*stand*/new double[]{3.5,3,11,12,4.5,13}, /*screen*/new double[]{1,4.5,11.5,15,15.5,12.5});
 	public static CustomVoxelShape LAPTOP_CLOSED = new CustomVoxelShape(new double[]{1,0,3,15,2,14}, new double[]{1,0.5,14,15,1.5,14.5});
 	public static CustomVoxelShape LAPTOP_OPEN = new CustomVoxelShape(new double[]{1,0,3,15,1,14}, new double[]{1,0.5,14,15,1,14.5}, new double[]{1,1,14,15,12,15});
+	public static CustomVoxelShape OLD_COMPUTER = new CustomVoxelShape(/*mouse*/new double[]{0,0,0,3,1,4}, /*keyboard*/new double[]{4,0,0,16,1,5}, /*body*/new double[]{1,0,6,15,13,16});
 }

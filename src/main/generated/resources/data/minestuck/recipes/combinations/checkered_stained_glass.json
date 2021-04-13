@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:blue_stained_glass"
+  },
+  "input2": {
+    "item": "minestuck:chessboard"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:checkered_stained_glass"
+  }
+}

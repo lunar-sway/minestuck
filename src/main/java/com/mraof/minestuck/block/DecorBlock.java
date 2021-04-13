@@ -12,7 +12,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -29,13 +28,6 @@ public class DecorBlock extends Block
 		super(properties);
 		this.shape = shape.createRotatedShapes();
 	}
-	
-	@Override
-	@SuppressWarnings("deprecation")
-	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos)
-	{
-        return Block.hasEnoughSolidSide(worldIn, pos.down(), Direction.UP);
-    }
 	
 	@Nullable
 	@Override

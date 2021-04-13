@@ -24,19 +24,16 @@ import java.util.function.Supplier;
 
 public class GristHelper
 {
-	private static Random random = new Random();
-	
 	/**
 	 * Returns a random grist type. Used for creating randomly aligned underlings.
 	 */
-	public static GristType getPrimaryGrist()
+	public static GristType getPrimaryGrist(Random random)
 	{
 		float totalWeight = 0;
 		List<GristType> typeList = new ArrayList<>();
 		for(GristType type : GristTypes.values())
 		{
-			//Artifact grist is a special case that is an underling type, but does not naturally spawn
-			if(type.isUnderlingType() && type != GristTypes.ARTIFACT.get())
+			if(type.isUnderlingType() && type.isInCategory(GristType.SpawnCategory.ANY))
 			{
 				typeList.add(type);
 				totalWeight += type.getRarity();
@@ -56,7 +53,7 @@ public class GristHelper
 	/**
 	 * Returns a secondary grist type based on primary grist
 	 */
-	public static GristType getSecondaryGrist(GristType primary)
+	public static GristType getSecondaryGrist(Random random, GristType primary)
 	{
 		List<GristType> secondaryTypes = primary.getSecondaryTypes();
 		if(secondaryTypes.size() > 0)
@@ -70,8 +67,9 @@ public class GristHelper
 	 */
 	public static GristSet generateUnderlingGristDrops(UnderlingEntity entity, Map<PlayerIdentifier, Double> damageMap, double multiplier)
 	{
+		Random random = entity.getRNG();
 		GristType primary = entity.getGristType();
-		GristType secondary = getSecondaryGrist(primary);
+		GristType secondary = getSecondaryGrist(random, primary);
 		
 		GristSet set = new GristSet();
 		set.addGrist(GristTypes.BUILD, (int) (2 * multiplier + random.nextDouble() * 18 * multiplier));

@@ -20,17 +20,18 @@ public class TitleSelectorScreen extends Screen
 	public static final String TITLE = "minestuck.title_selector";
 	public static final String SELECT_TITLE = "minestuck.select_title";
 	public static final String USED_TITLE = "minestuck.select_title.used";
+	public static final String SELECT = "minestuck.select_title.select";
+	public static final String RANDOMIZE = "minestuck.select_title.randomize";
 	
 	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/title_selector.png");
 	private static final int guiWidth = 186, guiHeight = 157;
 	
 	private EnumClass currentClass;
 	private EnumAspect currentAspect;
-	private Button[] classButtons = new Button[12], aspectButtons = new Button[12];
+	private final Button[] classButtons = new Button[12], aspectButtons = new Button[12];
 	private Button selectButton;
 	
-	private Title previous;
-	private boolean sendPacket = true;
+	private final Title previous;
 	
 	TitleSelectorScreen(Title title)
 	{
@@ -41,13 +42,14 @@ public class TitleSelectorScreen extends Screen
 	@Override
 	public void init()
 	{
+		int leftX = (width - guiWidth) / 2, topY = (height - guiHeight) / 2;
 		for(EnumClass c : EnumClass.values())
 		{
 			int i = EnumClass.getIntFromClass(c);
 			if(i < 12)
 			{
 				ITextComponent className = c.asTextComponent();
-				Button button = new ExtendedButton((width - guiWidth) / 2 + 4 + (i % 2) * 40, (height - guiHeight) / 2 + 24 + (i / 2) * 16, 40, 16, className, button1 -> pickClass(c));
+				Button button = new ExtendedButton(leftX + 4 + (i % 2) * 40, topY + 24 + (i / 2) * 16, 40, 16, className, button1 -> pickClass(c));
 				addButton(button);
 				classButtons[i] = button;
 			}
@@ -58,13 +60,14 @@ public class TitleSelectorScreen extends Screen
 			if(i < 12)
 			{
 				ITextComponent aspectName = a.asTextComponent();
-				Button button = new ExtendedButton((width - guiWidth) / 2 + 102 + (i % 2) * 40, (height - guiHeight) / 2 + 24 + (i / 2) * 16, 40, 16, aspectName, button1 -> pickAspect(a));
+				Button button = new ExtendedButton(leftX + 102 + (i % 2) * 40, topY + 24 + (i / 2) * 16, 40, 16, aspectName, button1 -> pickAspect(a));
 				addButton(button);
 				aspectButtons[i] = button;
 			}
 		}
-		selectButton = new ExtendedButton((width - guiWidth)/2 + 63, (height - guiHeight)/2 + 128, 60, 20, new StringTextComponent("Select"), button -> select());	//TODO translation key
-		addButton(selectButton);
+		
+		addButton(selectButton = new ExtendedButton(leftX + 24, topY + 128, 60, 20, new TranslationTextComponent(SELECT), button -> select()));
+		addButton(new ExtendedButton(leftX + 102, topY + 128, 60, 20, new TranslationTextComponent(RANDOMIZE), button -> random()));
 	}
 	
 	@Override
@@ -81,10 +84,10 @@ public class TitleSelectorScreen extends Screen
 		this.blit(matrixStack, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
 		String message = previous == null ? I18n.format(SELECT_TITLE) : I18n.format(USED_TITLE, previous.asTextComponent().getString());
-		font.drawString(matrixStack, message, (this.width / 2F) - font.getStringWidth(message) / 2F, yOffset + 12, 0x404040);
+		font.drawString(matrixStack, message, (this.width / 2F) - font.getStringWidth(message) / 2F, yOffset + 10, 0x404040);
 		
 		message = I18n.format(Title.FORMAT, "", "");
-		font.drawString(matrixStack, message, (this.width / 2F) - font.getStringWidth(message) / 2F, yOffset + 56 - font.FONT_HEIGHT/2F, 0x404040);
+		font.drawString(matrixStack, message, (this.width / 2F) - font.getStringWidth(message) / 2F, yOffset + 72 - font.FONT_HEIGHT/2F, 0x404040);
 		
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
 		
@@ -109,15 +112,18 @@ public class TitleSelectorScreen extends Screen
 	private void select()
 	{
 		MSPacketHandler.sendToServer(new TitleSelectPacket(new Title(currentClass, currentAspect)));
-		sendPacket = false;
-		minecraft.displayGuiScreen(null);
+		onClose();
+	}
+	
+	private void random()
+	{
+		MSPacketHandler.sendToServer(new TitleSelectPacket());
+		onClose();
 	}
 	
 	@Override
-	public void onClose()
+	public boolean shouldCloseOnEsc()
 	{
-		if(sendPacket)
-			MSPacketHandler.sendToServer(new TitleSelectPacket());
+		return false;
 	}
-	
 }

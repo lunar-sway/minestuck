@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:chakram"
+  },
+  "grist_cost": {
+    "minestuck:build": 200,
+    "minestuck:ruby": 10,
+    "minestuck:rust": 20
+  }
+}

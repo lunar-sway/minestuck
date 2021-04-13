@@ -39,6 +39,7 @@ public class RazorBladeItem extends Item
 					attacker.sendMessage(message, Util.DUMMY_UUID);
 				}
 				attacker.setHealth(attacker.getHealth() - 1);
+				return true;
 			}
 		}
 		return super.hitEntity(stack, target, attacker);

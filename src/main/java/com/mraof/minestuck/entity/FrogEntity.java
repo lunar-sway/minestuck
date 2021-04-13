@@ -18,8 +18,10 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.*;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import java.util.Random;
@@ -518,8 +520,8 @@ public class FrogEntity extends CreatureEntity
 
 	protected void setFrogSize(float size, boolean p_70799_2_)
 	{
-		if(this.dataManager.get(TYPE) == 6) this.dataManager.set(FROG_SIZE, Float.valueOf(0.6f));
-		else this.dataManager.set(FROG_SIZE, Float.valueOf(size));
+		if(this.dataManager.get(TYPE) == 6) this.dataManager.set(FROG_SIZE, 0.6f);
+		else this.dataManager.set(FROG_SIZE, size);
 		this.setPosition(this.getPosX(), this.getPosY(), this.getPosZ());
 		this.getAttribute(Attributes.MAX_HEALTH).setBaseValue((double)(BASE_HEALTH * size));
 		this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(BASE_SPEED * size);
@@ -587,7 +589,7 @@ public class FrogEntity extends CreatureEntity
 		return getRandomFrogType(20, 50, 500);
 	}
 	
-	public class JumpHelperController extends JumpController
+	public static class JumpHelperController extends JumpController
 	{
 		private final FrogEntity frog;
 		private boolean canJump;
@@ -670,5 +672,10 @@ public class FrogEntity extends CreatureEntity
 	public boolean canDespawn(double distanceToClosestPlayer)
 	{
 		return false;
+	}
+	
+	public static boolean canFrogSpawnOn(EntityType<FrogEntity> entityType, IWorld world, SpawnReason reason, BlockPos pos, Random random)
+	{
+		return true;
 	}
 }

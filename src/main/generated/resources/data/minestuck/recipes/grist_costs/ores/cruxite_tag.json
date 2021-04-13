@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:source_grist_cost",
+  "ingredient": {
+    "tag": "minestuck:ores/cruxite"
+  },
+  "grist_cost": {
+    "minestuck:build": 4
+  },
+  "sources": [
+    "minestuck:raw_cruxite"
+  ],
+  "multiplier": 4.0
+}

@@ -1,6 +1,7 @@
 package com.mraof.minestuck.world.gen.feature.structure.blocks;
 
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.world.biome.BiomeType;
 import net.minecraft.block.*;
 import net.minecraft.state.Property;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -74,6 +75,7 @@ public final class StructureBlockRegistry
 		registerBlock("ground", Blocks.STONE.getDefaultState());
 		registerBlock("upper", "ground", Blocks.DIRT);
 		registerBlock("surface", "upper", Blocks.GRASS_BLOCK);
+		registerBlock("surface_rough", "surface", Blocks.PODZOL);
 		registerBlock("ocean", Blocks.WATER.getDefaultState());
 		registerBlock("ocean_surface", "upper", Blocks.GRAVEL);
 		registerBlock("river", "ocean", Blocks.BLUE_WOOL);
@@ -216,9 +218,9 @@ public final class StructureBlockRegistry
 		} else return state;
 	}
 	
-	public SurfaceBuilderConfig getSurfaceBuilderConfig()
+	public SurfaceBuilderConfig getSurfaceBuilderConfig(BiomeType biomeType)
 	{
-		return new SurfaceBuilderConfig(getBlockState("surface"), getBlockState("upper"), getBlockState("ocean_surface"));
+		return new SurfaceBuilderConfig(getBlockState(biomeType == BiomeType.ROUGH ? "surface_rough" : "surface"), getBlockState("upper"), getBlockState("ocean_surface"));
 	}
 	
 	private static <T extends Comparable<T>> BlockState with(BlockState fromState, BlockState toState, Property<T> property)

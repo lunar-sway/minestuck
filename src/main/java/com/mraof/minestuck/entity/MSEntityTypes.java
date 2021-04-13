@@ -27,6 +27,7 @@ import javax.annotation.Nonnull;
 public final class MSEntityTypes
 {
 	public static EntityClassification UNDERLING = EntityClassification.create("UNDERLING", "underling", 35, false, false, 128);
+	public static EntityClassification CONSORT = EntityClassification.create("CONSORT", "consort", 10, true, false);
 	
 	public static final EntityType<FrogEntity> FROG = getNull();
 	public static final EntityType<ConsortEntity> SALAMANDER = getNull();
@@ -59,6 +60,10 @@ public final class MSEntityTypes
 	public static final EntityType<ShopPosterEntity> SHOP_POSTER = getNull();
 	public static final EntityType<HologramEntity> HOLOGRAM = getNull();
 	
+	public static final EntityType<ConsumableProjectileEntity> CONSUMABLE_PROJECTILE = getNull();
+	public static final EntityType<ReturningProjectileEntity> RETURNING_PROJECTILE = getNull();
+	public static final EntityType<BouncingProjectileEntity> BOUNCING_PROJECTILE = getNull();
+	
 	@Nonnull
 	@SuppressWarnings("ConstantConditions")
 	private static <T> T getNull()
@@ -72,10 +77,10 @@ public final class MSEntityTypes
 	{
 		IForgeRegistry<EntityType<?>> registry = event.getRegistry();
 		register(registry, EntityType.Builder.<FrogEntity>create(FrogEntity::new, EntityClassification.CREATURE).size(0.51F, 0.51F), "frog");
-		register(registry, EntityType.Builder.create(EnumConsort.SALAMANDER::create, EntityClassification.CREATURE).size(0.45F, 1.0F), "salamander");
-		register(registry, EntityType.Builder.create(EnumConsort.TURTLE::create, EntityClassification.CREATURE).size(0.45F, 1.0F), "turtle");
-		register(registry, EntityType.Builder.create(EnumConsort.NAKAGATOR::create, EntityClassification.CREATURE).size(0.45F, 1.1F), "nakagator");
-		register(registry, EntityType.Builder.create(EnumConsort.IGUANA::create, EntityClassification.CREATURE).size(0.45F, 1.0F), "iguana");
+		register(registry, EntityType.Builder.create(EnumConsort.SALAMANDER::create, CONSORT).size(0.45F, 1.0F), "salamander");
+		register(registry, EntityType.Builder.create(EnumConsort.TURTLE::create, CONSORT).size(0.45F, 1.0F), "turtle");
+		register(registry, EntityType.Builder.create(EnumConsort.NAKAGATOR::create, CONSORT).size(0.45F, 1.1F), "nakagator");
+		register(registry, EntityType.Builder.create(EnumConsort.IGUANA::create, CONSORT).size(0.45F, 1.0F), "iguana");
 		
 		register(registry, EntityType.Builder.create(ImpEntity::new, UNDERLING).size(0.7F, 1.2F), "imp");
 		register(registry, EntityType.Builder.create(OgreEntity::new, UNDERLING).size(2.8F, 4.3F), "ogre");
@@ -101,6 +106,10 @@ public final class MSEntityTypes
 		register(registry, EntityType.Builder.<SbahjPosterEntity>create(SbahjPosterEntity::new, EntityClassification.MISC).size(0.5F, 0.5F).setShouldReceiveVelocityUpdates(false).setTrackingRange(10).setUpdateInterval(Integer.MAX_VALUE), "sbahj_poster");
 		register(registry, EntityType.Builder.<ShopPosterEntity>create(ShopPosterEntity::new, EntityClassification.MISC).size(0.5F, 0.5F).setShouldReceiveVelocityUpdates(false).setTrackingRange(10).setUpdateInterval(Integer.MAX_VALUE), "shop_poster");
 		register(registry, EntityType.Builder.<HologramEntity>create(HologramEntity::new, EntityClassification.MISC).size(0.25F, 0.25F).setShouldReceiveVelocityUpdates(false).setTrackingRange(10).setUpdateInterval(Integer.MAX_VALUE), "hologram");
+		
+		register(registry, EntityType.Builder.<ConsumableProjectileEntity>create(ConsumableProjectileEntity::new, EntityClassification.MISC).size(0.25F, 0.25F).setTrackingRange(4).setUpdateInterval(10), "consumable_projectile");
+		register(registry, EntityType.Builder.<ReturningProjectileEntity>create(ReturningProjectileEntity::new, EntityClassification.MISC).size(0.25F, 0.25F).setTrackingRange(6).setUpdateInterval(2), "returning_projectile"); //TODO smaller update interval value is temporary solution to improve client rendering
+		register(registry, EntityType.Builder.<BouncingProjectileEntity>create(BouncingProjectileEntity::new, EntityClassification.MISC).size(0.25F, 0.25F).setTrackingRange(6).setUpdateInterval(2), "bouncing_projectile");
 	}
 	
 	/**
@@ -119,6 +128,13 @@ public final class MSEntityTypes
 		EntitySpawnPlacementRegistry.register(BASILISK, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, UnderlingEntity::canSpawnOnAndNotPeaceful);
 		EntitySpawnPlacementRegistry.register(LICH, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, UnderlingEntity::canSpawnOnAndNotPeaceful);
 		EntitySpawnPlacementRegistry.register(GICLOPS, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, UnderlingEntity::canSpawnOnAndNotPeaceful);
+		
+		EntitySpawnPlacementRegistry.register(FROG, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, FrogEntity::canFrogSpawnOn);
+		
+		EntitySpawnPlacementRegistry.register(SALAMANDER, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ConsortEntity::canConsortSpawnOn);
+		EntitySpawnPlacementRegistry.register(TURTLE, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ConsortEntity::canConsortSpawnOn);
+		EntitySpawnPlacementRegistry.register(NAKAGATOR, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ConsortEntity::canConsortSpawnOn);
+		EntitySpawnPlacementRegistry.register(IGUANA, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ConsortEntity::canConsortSpawnOn);
 	}
 	
 	public static void registerAttributes()

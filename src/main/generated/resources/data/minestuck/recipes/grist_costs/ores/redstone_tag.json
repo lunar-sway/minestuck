@@ -1,10 +1,13 @@
 {
-  "type": "minestuck:grist_cost",
+  "type": "minestuck:source_grist_cost",
   "ingredient": {
     "tag": "forge:ores/redstone"
   },
   "grist_cost": {
-    "minestuck:build": 4,
-    "minestuck:garnet": 16
-  }
+    "minestuck:build": 4
+  },
+  "sources": [
+    "minecraft:redstone"
+  ],
+  "multiplier": 4.0
 }

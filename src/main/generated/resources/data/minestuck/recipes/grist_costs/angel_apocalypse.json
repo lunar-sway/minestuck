@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:angel_apocalypse"
+  },
+  "grist_cost": {
+    "minestuck:build": 1300,
+    "minestuck:amber": 25,
+    "minestuck:quartz": 80,
+    "minestuck:gold": 30
+  }
+}

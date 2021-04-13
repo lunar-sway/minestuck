@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:fine_china_axe"
+  },
+  "grist_cost": {
+    "minestuck:marble": 269,
+    "minestuck:shale": 84
+  }
+}

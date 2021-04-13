@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:source_grist_cost",
+  "ingredient": {
+    "tag": "minestuck:ores/uranium"
+  },
+  "grist_cost": {
+    "minestuck:build": 4
+  },
+  "sources": [
+    "minestuck:raw_uranium"
+  ]
+}

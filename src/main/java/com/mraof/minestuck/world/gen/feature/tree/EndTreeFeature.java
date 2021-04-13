@@ -91,8 +91,8 @@ public class EndTreeFeature extends AbstractTreeFeature<TreeFeatureConfig>
 		
 		if (!flag)
 		{
-			setLog(world, rand, curr.up(height), logBlocks, bounds, config);
 			generateLeaves(world, rand, curr.up(height), foliageBlocks, bounds, config, Direction.Axis.Y, Direction.Axis.Y);
+			setLog(world, rand, curr.up(height), logBlocks, bounds, config);
 		}
 		return true;
 	}
@@ -126,8 +126,8 @@ public class EndTreeFeature extends AbstractTreeFeature<TreeFeatureConfig>
 	{
 		if(primary == Direction.Axis.X || secondary == Direction.Axis.X)
 		{
-			leaves(world, rand, pos.east(), changedBlocks, boundsIn, config, 1);
-			leaves(world, rand, pos.west(), changedBlocks, boundsIn, config, 1);
+			leaves(world, rand, pos.east(), changedBlocks, boundsIn, config, 2);
+			leaves(world, rand, pos.west(), changedBlocks, boundsIn, config, 2);
 		}
 		if(primary == Direction.Axis.Y || secondary == Direction.Axis.Y)
 		{

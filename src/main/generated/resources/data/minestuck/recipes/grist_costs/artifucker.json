@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:artifucker"
+  },
+  "grist_cost": {
+    "minestuck:artifact": -100
+  }
+}

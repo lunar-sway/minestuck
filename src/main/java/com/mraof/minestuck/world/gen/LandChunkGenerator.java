@@ -1,15 +1,20 @@
 package com.mraof.minestuck.world.gen;
 /*
 import com.mraof.minestuck.entity.MSEntityTypes;
+import com.mraof.minestuck.item.crafting.alchemy.GristType;
+import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.UnderlingController;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.lands.GristTypeLayer;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.util.SharedSeedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeManager;
@@ -22,13 +27,17 @@ import net.minecraft.world.gen.WorldGenRegion;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.spawner.WorldEntitySpawner;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 {
+	public static final String GRIST_LAYER_INFO = "grist_layer.info";
+	
 	private static final float[] biomeWeight;
 	
 	static {
@@ -41,6 +50,7 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 	public final LandTypePair landTypes;
 	public final StructureBlockRegistry blockRegistry;
 	public final LandBiomeHolder biomeHolder;
+	private final GristTypeLayer anyGristLayer, commonGristLayer, uncommonGristLayer;
 	
 	public LandChunkGenerator(IWorld worldIn, BiomeProvider biomeProviderIn, LandGenSettings settings)
 	{
@@ -50,6 +60,30 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 		blockRegistry = Objects.requireNonNull(settings.getBlockRegistry());
 		
 		biomeHolder = Objects.requireNonNull(settings.getBiomeHolder());
+		//Server not available from the world as it is still being constructed. Is a different solution reliable here?
+		GristType baseType = SburbHandler.getConnectionForDimension(ServerLifecycleHooks.getCurrentServer(), worldIn.getDimension().getType()).getBaseGrist();
+		
+		commonGristLayer = GristTypeLayer.createLayer(GristType.SpawnCategory.COMMON, 0, worldIn.getSeed(), 10, null);
+		anyGristLayer = GristTypeLayer.createLayer(GristType.SpawnCategory.ANY, 1, worldIn.getSeed(), 8, baseType);
+		uncommonGristLayer = GristTypeLayer.createLayer(GristType.SpawnCategory.UNCOMMON, 2, worldIn.getSeed(), 7, baseType);
+	}
+	
+	public GristTypeLayer randomLayer(Random rand)
+	{
+		switch(rand.nextInt(3))
+		{
+			case 0: return commonGristLayer;
+			case 1: return uncommonGristLayer;
+			default: return anyGristLayer;
+		}
+	}
+	public ITextComponent getGristLayerInfo(int x, int z)
+	{
+		GristType commonType = commonGristLayer.getTypeAt(x, z);
+		GristType uncommonType = uncommonGristLayer.getTypeAt(x, z);
+		GristType anyType = anyGristLayer.getTypeAt(x, z);
+		
+		return new TranslationTextComponent(GRIST_LAYER_INFO, commonType.getDisplayName(), uncommonType.getDisplayName(), anyType.getDisplayName());
 	}
 	
 	@Override
@@ -106,14 +140,16 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 		sharedRandom.setBaseChunkSeed(chunkIn.getPos().x, chunkIn.getPos().z);
 
 		int xOffset = chunkIn.getPos().getXStart(), zOffset = chunkIn.getPos().getZStart();
+		BlockPos.Mutable mutable = new BlockPos.Mutable();
 
 		for(int x = 0; x < 16; x++)
 		{
 			for(int z = 0; z < 16; z++)
 			{
 				int y = chunkIn.getTopBlockY(Heightmap.Type.WORLD_SURFACE_WG, x, z);
-
-				biomeHolder.localBiomeFrom(biomeProvider.getNoiseBiome(x, y, z)).buildSurface(sharedRandom, chunkIn, x + xOffset, z + zOffset, y, 0, getSettings().getDefaultBlock(), getSettings().getDefaultFluid(), getSeaLevel(),  world.getSeed());
+				//So far we've skipped providing a noise value, but perhaps that's something we might actually want in the future?
+				biomeHolder.localBiomeFrom(worldGenRegion.getBiome(mutable.setPos(x + xOffset, y, z + zOffset)))
+						.buildSurface(sharedRandom, chunkIn, x + xOffset, z + zOffset, y, 0, getSettings().getDefaultBlock(), getSettings().getDefaultFluid(), getSeaLevel(),  world.getSeed());
 			}
 		}
 
@@ -125,7 +161,7 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 	{
 		int x = region.getMainChunkX();
 		int z = region.getMainChunkZ();
-		Biome biome = region.getBiome((new ChunkPos(x, z)).asBlockPos());
+		Biome biome = biomeHolder.localBiomeFrom(region.getBiome((new ChunkPos(x, z)).asBlockPos()));
 		SharedSeedRandom rand = new SharedSeedRandom();
 		rand.setDecorationSeed(region.getSeed(), x << 4, z << 4);
 		WorldEntitySpawner.performWorldGenSpawning(region, biome, x, z, rand);
@@ -136,7 +172,7 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 	{
 		if(creatureType == MSEntityTypes.UNDERLING)
 			return UnderlingController.getUnderlingList(pos, world.getWorld());
-		else return super.getPossibleCreatures(creatureType, pos);
+		else return getBiome(world.getBiomeManager(), pos).getSpawns(creatureType);
 	}
 	
 	@Override

@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:leather_chestplate"
+  },
+  "input2": {
+    "item": "minecraft:phantom_membrane"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minecraft:elytra"
+  }
+}

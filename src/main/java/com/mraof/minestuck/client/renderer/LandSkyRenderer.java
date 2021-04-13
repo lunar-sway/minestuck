@@ -1,12 +1,20 @@
 package com.mraof.minestuck.client.renderer;
 
 /*
+@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE, modid = Minestuck.MOD_ID, value = Dist.CLIENT)
 public class LandSkyRenderer implements SkyRenderHandler	//TODO
 {
-	private LandDimension dimension;
+	private final LandDimension dimension;
 	public LandSkyRenderer(LandDimension provider)
 	{
 		dimension = provider;
+	}
+	
+	@SubscribeEvent
+	public static void onWorldLoad(WorldEvent.Load event)
+	{
+		if(event.getWorld().isRemote() && event.getWorld().getDimension() instanceof LandDimension)
+			event.getWorld().getDimension().setSkyRenderer(new LandSkyRenderer((LandDimension) event.getWorld().getDimension()));
 	}
 	
 	@Override

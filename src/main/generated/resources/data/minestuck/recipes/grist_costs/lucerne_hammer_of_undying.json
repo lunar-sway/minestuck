@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:lucerne_hammer_of_undying"
+  },
+  "grist_cost": {
+    "minestuck:build": 836,
+    "minestuck:diamond": 76,
+    "minestuck:chalk": 190,
+    "minestuck:marble": 152
+  }
+}

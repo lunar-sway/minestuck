@@ -1,7 +1,7 @@
 {
   "type": "minestuck:combination",
   "input1": {
-    "tag": "forge:stone"
+    "item": "minecraft:smooth_stone"
   },
   "input2": {
     "item": "minestuck:blue_dirt"

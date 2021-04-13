@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:honey_bottle"
+  },
+  "grist_cost": {
+    "minestuck:build": 5,
+    "minestuck:amber": 1,
+    "minestuck:gold": 1
+  }
+}

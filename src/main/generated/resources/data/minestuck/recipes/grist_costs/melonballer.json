@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:melonballer"
+  },
+  "grist_cost": {
+    "minestuck:build": 53,
+    "minestuck:ruby": 16
+  }
+}
