@@ -197,7 +197,7 @@ public class WeaponItem extends TieredItem
 	public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker)
 	{
 		onHitEffects.forEach(effect -> effect.onHit(stack, target, attacker));
-		return super.hitEntity(stack, target, attacker);
+		return true;
 	}
 	
 	@Override
