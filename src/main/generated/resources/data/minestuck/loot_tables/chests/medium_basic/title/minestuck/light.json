@@ -30,6 +30,12 @@
         },
         {
           "type": "minecraft:item",
+          "weight": 8,
+          "quality": 2,
+          "name": "minestuck:dice"
+        },
+        {
+          "type": "minecraft:item",
           "weight": 12,
           "quality": -1,
           "functions": [

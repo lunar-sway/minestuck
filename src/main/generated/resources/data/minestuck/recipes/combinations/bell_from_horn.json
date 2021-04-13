@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:horn"
+  },
+  "input2": {
+    "item": "minecraft:clock"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minecraft:bell"
+  }
+}

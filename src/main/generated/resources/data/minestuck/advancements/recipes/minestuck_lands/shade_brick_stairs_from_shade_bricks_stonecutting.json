@@ -6,12 +6,12 @@
     ]
   },
   "criteria": {
-    "has_shade_stone": {
+    "has_shade_bricks": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "minestuck:shade_stone"
+            "item": "minestuck:shade_bricks"
           }
         ]
       }
@@ -25,7 +25,7 @@
   },
   "requirements": [
     [
-      "has_shade_stone",
+      "has_shade_bricks",
       "has_the_recipe"
     ]
   ]

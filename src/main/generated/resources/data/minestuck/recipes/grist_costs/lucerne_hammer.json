@@ -4,7 +4,7 @@
     "item": "minestuck:lucerne_hammer"
   },
   "grist_cost": {
-    "minestuck:build": 20,
-    "minestuck:rust": 6
+    "minestuck:build": 35,
+    "minestuck:rust": 11
   }
 }

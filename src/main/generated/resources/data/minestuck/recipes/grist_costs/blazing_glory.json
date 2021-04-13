@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:blazing_glory"
+  },
+  "grist_cost": {
+    "minestuck:build": 940,
+    "minestuck:sulfur": 94,
+    "minestuck:gold": 5
+  }
+}

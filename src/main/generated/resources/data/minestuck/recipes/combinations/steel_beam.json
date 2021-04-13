@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:quartz_pillar"
+  },
+  "input2": {
+    "item": "minestuck:cast_iron"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:steel_beam"
+  }
+}

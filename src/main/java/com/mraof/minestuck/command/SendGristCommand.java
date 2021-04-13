@@ -22,6 +22,7 @@ import java.util.Optional;
 public class SendGristCommand
 {
 	public static final String SUCCESS = "commands.minestuck.send_grist.success";
+	public static final String RECEIVE = "commands.minestuck.send_grist.receive";
 	public static final String NOT_PERMITTED = "commands.minestuck.send_grist.not_permitted";
 	public static final String CANT_AFFORD = "commands.minestuck.send_grist.cant_afford";
 	private static final DynamicCommandExceptionType PERMISSION_EXCEPTION = new DynamicCommandExceptionType(o -> new TranslationTextComponent(NOT_PERMITTED, o));
@@ -43,6 +44,7 @@ public class SendGristCommand
 				GristHelper.decrease(player.world, IdentifierHandler.encode(player), grist);
 				GristHelper.increase(player.world, IdentifierHandler.encode(target), grist);
 				source.sendFeedback(new TranslationTextComponent(SUCCESS, target.getDisplayName(), grist.asTextComponent()), true);
+				target.sendMessage(new TranslationTextComponent(RECEIVE, player.getDisplayName(), grist.asTextComponent()));
 				return 1;
 			} else throw CANT_AFFORD_EXCEPTION.create(grist);
 		} else throw PERMISSION_EXCEPTION.create(target.getDisplayName());

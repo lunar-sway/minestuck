@@ -4,9 +4,9 @@
     "item": "minestuck:crop_chop"
   },
   "grist_cost": {
-    "minestuck:build": 130,
-    "minestuck:iodine": 93,
-    "minestuck:amber": 72,
-    "minestuck:gold": 45
+    "minestuck:build": 78,
+    "minestuck:iodine": 39,
+    "minestuck:amber": 22,
+    "minestuck:gold": 9
   }
 }

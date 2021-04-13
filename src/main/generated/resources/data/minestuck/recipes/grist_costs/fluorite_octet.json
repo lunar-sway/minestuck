@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:fluorite_octet"
+  },
+  "grist_cost": {
+    "minestuck:diamond": 5600,
+    "minestuck:cobalt": 8,
+    "minestuck:chalk": 1
+  }
+}

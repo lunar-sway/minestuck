@@ -39,12 +39,12 @@ public class MagicAttackRightClickEffect implements ItemRightClickEffect
 	EntityPredicate visiblePredicate = (new EntityPredicate()).setLineOfSiteRequired();
 	
 	public static final MagicAttackRightClickEffect SBAHJ_AIMBOT_MAGIC = new SbahjMagicEffect(10, 1, null, null, 1.0F, MagicEffect.Type.GREEN);
-	public static final MagicAttackRightClickEffect AIMBOT_MAGIC = new AimbotMagicEffect(15, 2, null, null, 1.0F, MagicEffect.Type.CRIT);
+	public static final MagicAttackRightClickEffect AIMBOT_MAGIC = new AimbotMagicEffect(14, 2, null, null, 1.0F, MagicEffect.Type.CRIT);
 	public static final MagicAttackRightClickEffect STANDARD_MAGIC = new MagicAttackRightClickEffect(15, 3, null, null, 1.0F, MagicEffect.Type.ENCHANT);
 	public static final MagicAttackRightClickEffect POOL_CUE_MAGIC = new MagicAttackRightClickEffect(18, 4, null, null, 1.0F, MagicEffect.Type.RED);
-	public static final MagicAttackRightClickEffect HORRORTERROR_MAGIC = new MagicAttackRightClickEffect(20, 5, () -> new EffectInstance(Effects.WITHER, 100, 2), () -> MSSoundEvents.ITEM_GRIMOIRE_USE, 1.2F, MagicEffect.Type.INK);
+	public static final MagicAttackRightClickEffect HORRORTERROR_MAGIC = new MagicAttackRightClickEffect(20, 5, () -> new EffectInstance(Effects.WITHER, 100, 0), () -> MSSoundEvents.ITEM_GRIMOIRE_USE, 1.2F, MagicEffect.Type.INK);
 	public static final MagicAttackRightClickEffect ZILLY_MAGIC = new MagicAttackRightClickEffect(30, 8, null, null, 1.0F, MagicEffect.Type.ZILLY);
-	public static final MagicAttackRightClickEffect ECHIDNA_MAGIC = new MagicAttackRightClickEffect(50, 8, null, null, 1.0F, MagicEffect.Type.ECHIDNA);
+	public static final MagicAttackRightClickEffect ECHIDNA_MAGIC = new MagicAttackRightClickEffect(50, 9, null, null, 1.0F, MagicEffect.Type.ECHIDNA);
 	
 	protected MagicAttackRightClickEffect(int distance, int damage, Supplier<EffectInstance> effect, Supplier<SoundEvent> sound, float pitch, @Nullable MagicEffect.Type type)
 	{
@@ -111,7 +111,8 @@ public class MagicAttackRightClickEffect implements ItemRightClickEffect
 	}
 	
 	protected void targetEffect(ServerPlayerEntity player)
-	{}
+	{
+	}
 	
 	private boolean checkCollisionInPath(World world, ServerPlayerEntity player, Vec3d vecPos)
 	{
@@ -165,7 +166,8 @@ public class MagicAttackRightClickEffect implements ItemRightClickEffect
 		@Override
 		protected void targetEffect(ServerPlayerEntity player)
 		{
-			LivingEntity closestVisibleTarget = player.world.getClosestEntityWithinAABB(LivingEntity.class, visiblePredicate, player, player.getPosX(), player.getPosY(), player.getPosZ(), player.getBoundingBox().grow(14.15D, 14, 14.15D));
+			BlockPos playerEyePos = new BlockPos(player.getPosX(), player.getPosYEye(), player.getPosZ());
+			LivingEntity closestVisibleTarget = player.world.getClosestEntityWithinAABB(LivingEntity.class, visiblePredicate, player, player.getPosX(), player.getPosYEye(), player.getPosZ(), new AxisAlignedBB(playerEyePos).grow(11));
 			if(closestVisibleTarget != null)
 				player.lookAt(EntityAnchorArgument.Type.EYES, closestVisibleTarget, EntityAnchorArgument.Type.EYES);
 		}

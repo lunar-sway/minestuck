@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:nosferatu_spoon"
+  },
+  "input2": {
+    "item": "minecraft:prismarine_crystals"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:eating_fork_gem"
+  }
+}

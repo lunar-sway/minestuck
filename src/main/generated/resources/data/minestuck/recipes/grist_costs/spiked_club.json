@@ -4,8 +4,8 @@
     "item": "minestuck:spiked_club"
   },
   "grist_cost": {
-    "minestuck:build": 46,
-    "minestuck:garnet": 38,
-    "minestuck:iodine": 13
+    "minestuck:build": 40,
+    "minestuck:garnet": 2,
+    "minestuck:iodine": 3
   }
 }
