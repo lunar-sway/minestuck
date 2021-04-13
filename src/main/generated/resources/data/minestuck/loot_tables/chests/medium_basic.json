@@ -146,6 +146,123 @@
         },
         {
           "type": "minecraft:item",
+          "quality": 2,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.75,
+                "max": 1.0
+              }
+            }
+          ],
+          "name": "minestuck:scythe"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 4,
+          "quality": -1,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.75,
+                "max": 1.0
+              }
+            }
+          ],
+          "name": "minestuck:knitting_needle"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 8,
+          "quality": -2,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.75,
+                "max": 1.0
+              }
+            }
+          ],
+          "name": "minestuck:shuriken"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 4,
+          "quality": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.75,
+                "max": 1.0
+              }
+            }
+          ],
+          "name": "minestuck:metal_bat"
+        },
+        {
+          "type": "minecraft:item",
+          "quality": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.75,
+                "max": 1.0
+              }
+            }
+          ],
+          "name": "minestuck:mace"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 2,
+          "quality": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.75,
+                "max": 1.0
+              }
+            }
+          ],
+          "name": "minestuck:jousting_lance"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 4,
+          "quality": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.75,
+                "max": 1.0
+              }
+            }
+          ],
+          "name": "minestuck:fan"
+        },
+        {
+          "type": "minecraft:item",
+          "quality": 2,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.75,
+                "max": 1.0
+              }
+            }
+          ],
+          "name": "minestuck:lucerne_hammer"
+        },
+        {
+          "type": "minecraft:item",
           "weight": 4,
           "quality": -1,
           "functions": [
@@ -347,21 +464,6 @@
         },
         {
           "type": "minecraft:item",
-          "quality": 2,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1.0,
-                "max": 2.0,
-                "type": "minecraft:uniform"
-              }
-            }
-          ],
-          "name": "minecraft:diamond"
-        },
-        {
-          "type": "minecraft:item",
           "weight": 8,
           "quality": 1,
           "functions": [
@@ -381,11 +483,6 @@
           "weight": 2,
           "quality": 2,
           "name": "minecraft:ender_pearl"
-        },
-        {
-          "type": "minecraft:item",
-          "quality": 1,
-          "name": "minestuck:grimoire"
         },
         {
           "type": "minecraft:item",
@@ -412,23 +509,6 @@
           "weight": 10,
           "quality": -1,
           "name": "minestuck:generic_object"
-        },
-        {
-          "type": "minecraft:item",
-          "name": "minestuck:cassette_player"
-        },
-        {
-          "type": "minecraft:item",
-          "name": "minestuck:sendificator"
-        },
-        {
-          "type": "minecraft:item",
-          "quality": 2,
-          "name": "minestuck:transportalizer"
-        },
-        {
-          "type": "minecraft:item",
-          "name": "minestuck:cueball"
         },
         {
           "type": "minecraft:item",
@@ -461,6 +541,150 @@
             }
           ],
           "name": "minestuck:raw_uranium"
+        }
+      ]
+    },
+    {
+      "name": "rare",
+      "rolls": {
+        "min": 0.0,
+        "max": 1.0,
+        "type": "minecraft:uniform"
+      },
+      "entries": [
+        {
+          "type": "minestuck:land_table",
+          "name": "minestuck:chests/medium_basic",
+          "pool": "rare"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 20,
+          "quality": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 0.0,
+                "max": 5.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minecraft:iron_ingot"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 15,
+          "quality": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 0.0,
+                "max": 4.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minecraft:gold_ingot"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 15,
+          "quality": 2,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 0.0,
+                "max": 2.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minecraft:diamond"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 3,
+          "quality": 1,
+          "name": "minestuck:grimoire"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "quality": 1,
+          "name": "minestuck:mini_wizard_statue"
+        },
+        {
+          "type": "minecraft:item",
+          "quality": 3,
+          "name": "minestuck:cassette_player"
+        },
+        {
+          "type": "minecraft:item",
+          "quality": 3,
+          "name": "minestuck:sendificator"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 2,
+          "quality": 2,
+          "name": "minestuck:transportalizer"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "name": "minestuck:dice"
+        },
+        {
+          "type": "minecraft:item",
+          "quality": 4,
+          "name": "minestuck:cueball"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:computer"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:laptop"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 2,
+          "name": "minestuck:chessboard"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 2,
+          "name": "minestuck:cigarette_lance"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 2,
+          "name": "minestuck:ace_of_clubs"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 2,
+          "name": "minestuck:ace_of_diamonds"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 2,
+          "name": "minestuck:ace_of_hearts"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 2,
+          "name": "minestuck:ace_of_spades"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "name": "minestuck:energy_core"
         }
       ]
     },

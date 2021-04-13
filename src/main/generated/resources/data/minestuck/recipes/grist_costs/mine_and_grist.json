@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:mine_and_grist"
+  },
+  "grist_cost": {
+    "minestuck:build": 10000,
+    "minestuck:diamond": 1,
+    "minestuck:ruby": 1,
+    "minestuck:amethyst": 1,
+    "minestuck:quartz": 1
+  }
+}

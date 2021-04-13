@@ -4,7 +4,7 @@
     "item": "minestuck:battleaxe"
   },
   "grist_cost": {
-    "minestuck:build": 400,
-    "minestuck:rust": 240
+    "minestuck:build": 272,
+    "minestuck:rust": 122
   }
 }

@@ -4,7 +4,7 @@
     "item": "minestuck:pogo_club"
   },
   "grist_cost": {
-    "minestuck:build": 15,
-    "minestuck:shale": 12
+    "minestuck:build": 60,
+    "minestuck:shale": 35
   }
 }

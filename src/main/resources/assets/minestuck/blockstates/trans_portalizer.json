@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=south": { "model": "minestuck:block/trans_portalizer" },
+        "facing=west":  { "model": "minestuck:block/trans_portalizer", "y": 90 },
+        "facing=north": { "model": "minestuck:block/trans_portalizer", "y": 180 },
+        "facing=east":  { "model": "minestuck:block/trans_portalizer", "y": 270 }
+    }
+}

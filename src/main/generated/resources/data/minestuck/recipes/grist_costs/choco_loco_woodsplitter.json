@@ -4,10 +4,10 @@
     "item": "minestuck:choco_loco_woodsplitter"
   },
   "grist_cost": {
-    "minestuck:build": 300,
-    "minestuck:iodine": 265,
-    "minestuck:gold": 200,
-    "minestuck:chalk": 120,
-    "minestuck:amber": 41
+    "minestuck:build": 100,
+    "minestuck:iodine": 75,
+    "minestuck:gold": 25,
+    "minestuck:chalk": 38,
+    "minestuck:amber": 25
   }
 }

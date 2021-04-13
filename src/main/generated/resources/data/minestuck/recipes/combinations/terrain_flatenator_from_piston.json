@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:iron_shovel"
+  },
+  "input2": {
+    "item": "minecraft:piston"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:terrain_flatenator"
+  }
+}

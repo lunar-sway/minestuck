@@ -3,7 +3,10 @@ package com.mraof.minestuck.item;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
 import java.util.function.Supplier;
@@ -23,6 +26,6 @@ public class SoundItem extends Item
     {
         worldIn.playSound(player, player.getPosX(), player.getPosY(), player.getPosZ(), sound.get(), SoundCategory.PLAYERS, 1.0F, 1.0F);
     
-        return new ActionResult<>(ActionResultType.SUCCESS, player.getHeldItem(handIn));
+        return ActionResult.resultSuccess(player.getHeldItem(handIn));
     }
 }

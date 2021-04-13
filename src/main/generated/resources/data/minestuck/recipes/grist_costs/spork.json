@@ -4,6 +4,7 @@
     "item": "minestuck:spork"
   },
   "grist_cost": {
-    "minestuck:build": 13
+    "minestuck:build": 50,
+    "minestuck:rust": 9
   }
 }

@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:nightstick"
+  },
+  "grist_cost": {
+    "minestuck:tar": 18,
+    "minestuck:marble": 7,
+    "minestuck:gold": 1
+  }
+}

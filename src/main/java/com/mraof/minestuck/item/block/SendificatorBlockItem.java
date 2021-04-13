@@ -12,7 +12,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
@@ -31,9 +30,9 @@ public class SendificatorBlockItem extends BlockItem
 		{
 			playerIn.replaceItemInInventory(103, new ItemStack(MSBlocks.SENDIFICATOR));
 			
-			return new ActionResult<>(ActionResultType.SUCCESS, new ItemStack(Blocks.AIR));
+			return ActionResult.resultSuccess(new ItemStack(Blocks.AIR));
 		}
-		return new ActionResult<>(ActionResultType.PASS, itemStackIn);
+		return ActionResult.resultPass(itemStackIn);
 	}
 	
 	@Override

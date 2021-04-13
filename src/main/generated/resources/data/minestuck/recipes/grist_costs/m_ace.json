@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:m_ace"
+  },
+  "grist_cost": {
+    "minestuck:build": 135,
+    "minestuck:marble": 18,
+    "minestuck:chalk": 30
+  }
+}

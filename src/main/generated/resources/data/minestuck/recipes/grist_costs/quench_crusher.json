@@ -4,8 +4,8 @@
     "item": "minestuck:quench_crusher"
   },
   "grist_cost": {
-    "minestuck:build": 125,
-    "minestuck:iodine": 34,
-    "minestuck:caulk": 23
+    "minestuck:build": 134,
+    "minestuck:iodine": 15,
+    "minestuck:caulk": 15
   }
 }

@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:vine"
+  },
+  "input2": {
+    "item": "minecraft:gunpowder"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:creeper_head"
+  }
+}

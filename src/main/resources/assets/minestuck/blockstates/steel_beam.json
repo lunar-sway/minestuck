@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "facing=up":    { "model": "minestuck:block/steel_beam" },
+    "facing=down":  { "model": "minestuck:block/steel_beam"},
+    "facing=east":  { "model": "minestuck:block/steel_beam", "y": 90, "x": 90 },
+    "facing=south": { "model": "minestuck:block/steel_beam", "y": 180, "x": 90 },
+    "facing=west":  { "model": "minestuck:block/steel_beam", "y": 270, "x": 90 },
+    "facing=north": { "model": "minestuck:block/steel_beam", "y": 0, "x": 90 }
+  }
+}
