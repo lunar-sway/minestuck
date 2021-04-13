@@ -3,6 +3,7 @@ package com.mraof.minestuck.client;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.client.model.*;
+import com.mraof.minestuck.client.model.armor.CrumplyHatModel;
 import com.mraof.minestuck.client.renderer.entity.*;
 import com.mraof.minestuck.client.renderer.entity.frog.FrogRenderer;
 import com.mraof.minestuck.client.renderer.tileentity.GateRenderer;
@@ -118,8 +119,13 @@ public class ClientProxy
 		ComputerProgram.registerProgramClass(0, SburbClient.class);
 		ComputerProgram.registerProgramClass(1, SburbServer.class);
 
-		MSItems.registerArmorModels();
+		registerArmorModels();
 
 		//MinecraftForge.EVENT_BUS.register(new MinestuckConfig()); Does not currently use any events to reload config
+	}
+	
+	private static void registerArmorModels()
+	{
+		MSItems.CRUMPLY_HAT.setArmorModel(new CrumplyHatModel());
 	}
 }
