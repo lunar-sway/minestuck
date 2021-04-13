@@ -59,7 +59,6 @@ public class PrismarineArmorModel extends BipedModel<LivingEntity>
 		LeftLeg.setTextureOffset(59, 86).addBox(-1.9F, 10.05F, -2.175F, 4.0F, 2.0F, 4.0F, 0.0F, false);
 		LeftLeg.setTextureOffset(59, 86).addBox(-1.9F, 10.05F, -1.925F, 4.0F, 2.0F, 4.0F, 0.0F, false);
 		
-		//bipedBody = new ModelRenderer(this);
 		bipedBody = new ModelRenderer(this);
 		bipedBody.setRotationPoint(0.0F, 0.0F, 0.0F);
 		
@@ -151,7 +150,7 @@ public class PrismarineArmorModel extends BipedModel<LivingEntity>
 		RightArm_r3.setRotationPoint(-4.703F, -8.931F, 2.384F);
 		Head.addChild(RightArm_r3);
 		setRotationAngle(RightArm_r3, 0.096F, -0.624F, 0.0F);
-		RightArm_r3.setTextureOffset(17, 83).addBox(0.0F, -3.0F, -4.0F, 0.0F, 15.0F, 7.0F, 0.0F, true);
+		RightArm_r3.setTextureOffset(17, 82).addBox(0.0F, -4.175F, -4.0F, 0.0F, 15.0F, 7.0F, 0.0F, true);
 		
 		RightArm_r4 = new ModelRenderer(this);
 		RightArm_r4.setRotationPoint(0.022F, -9.956F, 5.459F);
@@ -163,24 +162,6 @@ public class PrismarineArmorModel extends BipedModel<LivingEntity>
 		bipedHeadwear.setRotationPoint(0.0F, 24.0F, 0.0F);
 		
 	}
-	
-	/*@Override
-	public void setRotationAngles(LivingEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch)
-	{
-		super.setRotationAngles(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
-	}
-	
-	@Override
-	public void render(MatrixStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha)
-	{
-		bipedRightLeg.render(matrixStack, buffer, packedLight, packedOverlay);
-		bipedLeftLeg.render(matrixStack, buffer, packedLight, packedOverlay);
-		bipedBody.render(matrixStack, buffer, packedLight, packedOverlay);
-		bipedRightArm.render(matrixStack, buffer, packedLight, packedOverlay);
-		bipedLeftArm.render(matrixStack, buffer, packedLight, packedOverlay);
-		bipedHead.render(matrixStack, buffer, packedLight, packedOverlay);
-		bipedHeadwear.render(matrixStack, buffer, packedLight, packedOverlay);
-	}*/
 	
 	public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z)
 	{

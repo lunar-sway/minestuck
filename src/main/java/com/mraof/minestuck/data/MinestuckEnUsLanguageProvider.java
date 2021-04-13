@@ -677,6 +677,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.DERSE_SHIRT, "Derse Shirt");
 		add(MSItems.DERSE_PANTS, "Derse Pants");
 		add(MSItems.DERSE_SHOES, "Derse Shoes");
+		add(MSItems.STANDARD_BLACK_SUIT_JACKET, "Standard Black Suit Jacket");
+		add(MSItems.STANDARD_BLACK_SUIT_PANTS, "Standard Black Suit Pants");
+		add(MSItems.BOONDOLLARS, "Boondollars");
+		add(MSItems.CRUMPLY_HAT, "Crumply Hat");
 		add(MSItems.BOONDOLLARS, "Boondollars");
 		addExtra(MSItems.BOONDOLLARS, "amount", "Amount: %s");
 		add(MSItems.RAW_CRUXITE, "Raw Cruxite");
@@ -821,7 +825,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addExtra(MSItems.FROG, "size.4", "Huge");
 		add(MSItems.CARVING_TOOL, "Carving Tool");
 		addStoreTooltip(MSItems.CARVING_TOOL, "You gotta BE the marble!");
-		add(MSItems.CRUMPLY_HAT, "Crumply Hat");
 		add(MSItems.STONE_EYEBALLS, "Stone Eyeballs");
 		add(MSItems.STONE_SLAB, "Stone Tablet");
 		addExtra(MSItems.STONE_SLAB, "carved", "Looks like something has been carved into it!");

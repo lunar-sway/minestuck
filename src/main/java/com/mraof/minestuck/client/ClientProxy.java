@@ -5,6 +5,7 @@ import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.client.model.*;
 import com.mraof.minestuck.client.model.armor.CrumplyHatModel;
 import com.mraof.minestuck.client.model.armor.PrismarineArmorModel;
+import com.mraof.minestuck.client.model.armor.StandardBlackSuitModel;
 import com.mraof.minestuck.client.renderer.entity.*;
 import com.mraof.minestuck.client.renderer.entity.frog.FrogRenderer;
 import com.mraof.minestuck.client.renderer.tileentity.GateRenderer;
@@ -132,5 +133,7 @@ public class ClientProxy
 		MSItems.PRISMARINE_CHESTPLATE.setArmorModel(new PrismarineArmorModel());
 		MSItems.PRISMARINE_LEGGINGS.setArmorModel(new PrismarineArmorModel());
 		MSItems.PRISMARINE_BOOTS.setArmorModel(new PrismarineArmorModel());
+		MSItems.STANDARD_BLACK_SUIT_JACKET.setArmorModel(new StandardBlackSuitModel());
+		MSItems.STANDARD_BLACK_SUIT_PANTS.setArmorModel(new StandardBlackSuitModel());
 	}
 }

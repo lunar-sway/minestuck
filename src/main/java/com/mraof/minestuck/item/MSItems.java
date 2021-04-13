@@ -276,6 +276,11 @@ public class MSItems
 	public static final Item DERSE_PANTS = getNull();
 	public static final Item DERSE_SHOES = getNull();
 	
+	public static final MSArmorItem STANDARD_BLACK_SUIT_JACKET = getNull();
+	public static final MSArmorItem STANDARD_BLACK_SUIT_PANTS = getNull();
+	
+	public static final MSArmorItem CRUMPLY_HAT = getNull();
+	
 	//Core Items
 	public static final Item BOONDOLLARS = getNull();
 	public static final Item RAW_CRUXITE = getNull();
@@ -357,7 +362,6 @@ public class MSItems
 	public static final Item BUG_NET = getNull();
 	public static final Item FROG = getNull();
 	public static final Item CARVING_TOOL = getNull();
-	public static final MSArmorItem CRUMPLY_HAT = getNull();
 	public static final Item STONE_EYEBALLS = getNull();
 	public static final Item STONE_SLAB = getNull();
 	public static /*final*/ Item SHOP_POSTER = getNull();
@@ -934,12 +938,17 @@ public class MSItems
 		registry.register(new ArmorItem(MSItemTypes.IRON_LASS_ARMOR, EquipmentSlotType.LEGS, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("iron_lass_skirt"));
 		registry.register(new ArmorItem(MSItemTypes.IRON_LASS_ARMOR, EquipmentSlotType.FEET, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("iron_lass_shoes"));
 		
-		registry.register(new ArmorItem(MSItemTypes.PROSPIT_PAJAMAS, EquipmentSlotType.CHEST, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("prospit_shirt"));
-		registry.register(new ArmorItem(MSItemTypes.PROSPIT_PAJAMAS, EquipmentSlotType.LEGS, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("prospit_pants"));
-		registry.register(new ArmorItem(MSItemTypes.PROSPIT_PAJAMAS, EquipmentSlotType.FEET, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("prospit_shoes"));
-		registry.register(new ArmorItem(MSItemTypes.DERSE_PAJAMAS, EquipmentSlotType.CHEST, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("derse_shirt"));
-		registry.register(new ArmorItem(MSItemTypes.DERSE_PAJAMAS, EquipmentSlotType.LEGS, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("derse_pants"));
-		registry.register(new ArmorItem(MSItemTypes.DERSE_PAJAMAS, EquipmentSlotType.FEET, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("derse_shoes"));
+		registry.register(new ArmorItem(MSItemTypes.DREAM_PAJAMAS, EquipmentSlotType.CHEST, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("prospit_shirt"));
+		registry.register(new ArmorItem(MSItemTypes.DREAM_PAJAMAS, EquipmentSlotType.LEGS, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("prospit_pants"));
+		registry.register(new ArmorItem(MSItemTypes.DREAM_PAJAMAS, EquipmentSlotType.FEET, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("prospit_shoes"));
+		registry.register(new ArmorItem(MSItemTypes.DREAM_PAJAMAS, EquipmentSlotType.CHEST, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("derse_shirt"));
+		registry.register(new ArmorItem(MSItemTypes.DREAM_PAJAMAS, EquipmentSlotType.LEGS, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("derse_pants"));
+		registry.register(new ArmorItem(MSItemTypes.DREAM_PAJAMAS, EquipmentSlotType.FEET, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("derse_shoes"));
+		
+		registry.register(new MSArmorItem("standard_black_suit", MSItemTypes.CLOTH_ARMOR, EquipmentSlotType.CHEST, new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("standard_black_suit_jacket"));
+		registry.register(new MSArmorItem("standard_black_suit", MSItemTypes.CLOTH_ARMOR, EquipmentSlotType.LEGS, new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("standard_black_suit_pants"));
+		
+		registry.register(new MSArmorItem(MSItemTypes.CLOTH_ARMOR, EquipmentSlotType.HEAD, new Item.Properties().maxStackSize(1).group(MSItemGroup.LANDS)).setRegistryName("crumply_hat"));
 		
 		//core items
 		registry.register(new BoondollarsItem(new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("boondollars"));
@@ -1025,7 +1034,6 @@ public class MSItems
 		registry.register(new BugNetItem(new Item.Properties().defaultMaxDamage(64).group(MSItemGroup.LANDS)).setRegistryName("bug_net"));
 		registry.register(new FrogItem(new Item.Properties().maxStackSize(1).group(MSItemGroup.LANDS)).setRegistryName("frog"));
 		registry.register(new Item(new Item.Properties().maxStackSize(1).group(MSItemGroup.LANDS)).setRegistryName("carving_tool"));
-		registry.register(new MSArmorItem(MSItemTypes.CLOTH_ARMOR, EquipmentSlotType.HEAD, new Item.Properties().maxStackSize(1).group(MSItemGroup.LANDS)).setRegistryName("crumply_hat"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.LANDS)).setRegistryName("stone_eyeballs"));
 		registry.register(new StoneTabletItem(new Item.Properties().group(MSItemGroup.LANDS)).setRegistryName("stone_slab"));
 		//registry.register(new HangingItem((world, pos, facing, stack) -> new EntityShopPoster(world, pos, facing, stack, 0), new Item.Properties().maxStackSize(1).group(ModItemGroup.LANDS)).setRegistryName("shop_poster"));
