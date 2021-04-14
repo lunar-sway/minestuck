@@ -463,7 +463,7 @@ public class EntryProcess
 		for(int i = 0; i < 9; i++)
 			if(i == 4)
 			{
-				world.setBlockState(pos, MSBlocks.GATE.getDefaultState().func_235896_a_(GateBlock.MAIN), 0);	//cycle
+				world.setBlockState(pos, MSBlocks.GATE.getDefaultState().cycleValue(GateBlock.MAIN), 0);
 				GateTileEntity tileEntity = (GateTileEntity) world.getTileEntity(pos);
 				tileEntity.gateType = gateType;
 			}

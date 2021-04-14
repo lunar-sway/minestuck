@@ -98,7 +98,7 @@ public final class InfoTracker
 		
 		if(cannotAccess(player, p1))
 		{
-			player.sendMessage(new StringTextComponent("[Minestuck] ").mergeStyle(TextFormatting.RED).append(new TranslationTextComponent(SkaianetHandler.PRIVATE_COMPUTER)), Util.DUMMY_UUID);
+			player.sendMessage(new StringTextComponent("[Minestuck] ").mergeStyle(TextFormatting.RED).appendSibling(new TranslationTextComponent(SkaianetHandler.PRIVATE_COMPUTER)), Util.DUMMY_UUID);
 			return;
 		}
 		if(!getSet(p1).add(p0))

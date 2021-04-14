@@ -305,7 +305,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 		updateInventory(player, c);
 		updatePosition(player, range, center.getX(), center.getZ());
 		
-		player.func_242279_ag(); //setPortalCooldown
+		player.setPortalCooldown();
 	}
 	
 	@SubscribeEvent

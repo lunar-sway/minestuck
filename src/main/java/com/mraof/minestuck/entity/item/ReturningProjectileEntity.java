@@ -4,7 +4,9 @@ import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.weapon.projectiles.ProjectileDamaging;
 import net.minecraft.block.Block;
-import net.minecraft.entity.*;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileItemEntity;
 import net.minecraft.item.Item;
@@ -15,7 +17,11 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.EntityRayTraceResult;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
@@ -57,9 +63,9 @@ public class ReturningProjectileEntity extends ProjectileItemEntity
 				Entity entity = ((EntityRayTraceResult) result).getEntity();
 				
 				if(entity instanceof UnderlingEntity)
-					entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), damage * 1.5F);
-				else if(entity != this.getThrower())
-					entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), damage);
+					entity.attackEntityFrom(DamageSource.causeThrownDamage(this, getShooter()), damage * 1.5F);
+				else if(entity != getShooter())
+					entity.attackEntityFrom(DamageSource.causeThrownDamage(this, getShooter()), damage);
 				else
 				{
 					resetThrower();
@@ -94,16 +100,16 @@ public class ReturningProjectileEntity extends ProjectileItemEntity
 	
 	public void resetThrower()
 	{
-		if(this.getThrower() instanceof PlayerEntity)
+		if(getShooter() instanceof PlayerEntity)
 		{
-			((PlayerEntity)this.getThrower()).getCooldownTracker().setCooldown(func_213882_k().getItem(), 5);
+			((PlayerEntity)getShooter()).getCooldownTracker().setCooldown(func_213882_k().getItem(), 5);
 			this.remove(); //TODO find a better set of conditions to remove entity(ticksExisted?)
 		}
 	}
 	
 	public void tick()
 	{
-		Vec3d pos = getPositionVec();
+		Vector3d pos = getPositionVec();
 		this.lastTickPosX = pos.x;
 		this.lastTickPosY = pos.y;
 		this.lastTickPosZ = pos.z;

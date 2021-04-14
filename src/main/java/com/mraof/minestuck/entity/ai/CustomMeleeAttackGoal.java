@@ -24,10 +24,11 @@ public class CustomMeleeAttackGoal extends MeleeAttackGoal
 		this.distanceMultiplier = distanceMultiplier;
 	}
 	
+	
 	@Override
-	protected void func_234039_g_()
+	protected void resetSwingCooldown()
 	{
-		field_234037_i_ = attackRate;
+		swingCooldown = attackRate;
 	}
 	
 	@Override

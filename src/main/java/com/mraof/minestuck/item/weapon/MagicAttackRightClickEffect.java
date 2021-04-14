@@ -19,7 +19,7 @@ import net.minecraft.stats.Stats;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.PacketDistributor;
 
@@ -36,7 +36,7 @@ public class MagicAttackRightClickEffect implements ItemRightClickEffect
 	@Nullable
 	private final MagicEffect.Type type;
 	
-	EntityPredicate visiblePredicate = (new EntityPredicate()).setLineOfSiteRequired();
+	private static final EntityPredicate visiblePredicate = (new EntityPredicate());//.setLineOfSiteRequired(); TODO should something else be done with the predicate?
 	
 	public static final MagicAttackRightClickEffect SBAHJ_AIMBOT_MAGIC = new SbahjMagicEffect(10, 1, null, null, 1.0F, MagicEffect.Type.GREEN);
 	public static final MagicAttackRightClickEffect AIMBOT_MAGIC = new AimbotMagicEffect(14, 2, null, null, 1.0F, MagicEffect.Type.CRIT);
@@ -84,12 +84,12 @@ public class MagicAttackRightClickEffect implements ItemRightClickEffect
 		
 		targetEffect(player);
 		
-		Vec3d eyePos = player.getEyePosition(1.0F);
-		Vec3d lookVec = player.getLookVec();
+		Vector3d eyePos = player.getEyePosition(1.0F);
+		Vector3d lookVec = player.getLookVec();
 		
 		for(int step = 0; step < distance * 2; step++) //uses the float i value to increase the distance away from where the player is looking and creating a sort of raytrace
 		{
-			Vec3d vecPos = eyePos.add(lookVec.scale(step / 2D));
+			Vector3d vecPos = eyePos.add(lookVec.scale(step / 2D));
 			
 			boolean hitObstacle = checkCollisionInPath(world, player, vecPos);
 			
@@ -103,18 +103,18 @@ public class MagicAttackRightClickEffect implements ItemRightClickEffect
 	}
 	
 	// If you're an addon that want to use this class with your own effect, override this to use your own network packet
-	protected void sendEffectPacket(World world, Vec3d pos, Vec3d lookVec, int length, boolean collides)
+	protected void sendEffectPacket(World world, Vector3d pos, Vector3d lookVec, int length, boolean collides)
 	{
 		if(type != null)
 			MSPacketHandler.sendToNear(new MagicEffectPacket(type, pos, lookVec, length, collides),
-					new PacketDistributor.TargetPoint(pos.x, pos.y, pos.z, 64, world.getDimension().getType()));
+					new PacketDistributor.TargetPoint(pos.x, pos.y, pos.z, 64, world.getDimensionKey()));
 	}
 	
 	protected void targetEffect(ServerPlayerEntity player)
 	{
 	}
 	
-	private boolean checkCollisionInPath(World world, ServerPlayerEntity player, Vec3d vecPos)
+	private boolean checkCollisionInPath(World world, ServerPlayerEntity player, Vector3d vecPos)
 	{
 		BlockPos blockPos = new BlockPos(vecPos);
 		
@@ -151,7 +151,7 @@ public class MagicAttackRightClickEffect implements ItemRightClickEffect
 		@Override
 		protected void targetEffect(ServerPlayerEntity player)
 		{
-			Vec3d randomFacingVecPos = new Vec3d(player.getPosX() + player.getRNG().nextInt(10) - 5, player.getPosY() + player.getRNG().nextInt(10) - 5, player.getPosZ() + player.getRNG().nextInt(10) - 5);
+			Vector3d randomFacingVecPos = new Vector3d(player.getPosX() + player.getRNG().nextInt(10) - 5, player.getPosY() + player.getRNG().nextInt(10) - 5, player.getPosZ() + player.getRNG().nextInt(10) - 5);
 			player.lookAt(player.getCommandSource().getEntityAnchorType(), randomFacingVecPos);
 		}
 	}

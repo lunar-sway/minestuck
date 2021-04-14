@@ -1,16 +1,15 @@
 package com.mraof.minestuck.world.gen.feature;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.SphereReplaceConfig;
 
 import java.util.Random;
-import java.util.function.Function;
 
 /**
  * A version of the {@link net.minecraft.world.gen.feature.SphereReplaceFeature}, but without the need to be placed in water
@@ -21,16 +20,17 @@ public class SurfaceDiskFeature extends Feature<SphereReplaceConfig>
 {
 	private final boolean shouldCheckBlockAbove;
 	
-	public SurfaceDiskFeature(Function<Dynamic<?>, ? extends SphereReplaceConfig> configFactoryIn, boolean shouldCheckBlockAbove)
+	public SurfaceDiskFeature(Codec<SphereReplaceConfig> codec, boolean shouldCheckBlockAbove)
 	{
-		super(configFactoryIn);
+		super(codec);
 		this.shouldCheckBlockAbove = shouldCheckBlockAbove;
 	}
 	
-	public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos featurePos, SphereReplaceConfig config)
+	@Override
+	public boolean generate(ISeedReader worldIn, ChunkGenerator generator, Random rand, BlockPos featurePos, SphereReplaceConfig config)
 	{
-		int affectedBlocks = 0;
-		int radius = rand.nextInt(config.radius - 2) + 2;
+		boolean affectedBlocks = false;
+		int radius = config.radius.getSpread(rand);
 		
 		for(int x = featurePos.getX() - radius; x <= featurePos.getX() + radius; x++)
 		{
@@ -40,22 +40,21 @@ public class SurfaceDiskFeature extends Feature<SphereReplaceConfig>
 				int offsetZ = z - featurePos.getZ();
 				if(offsetX * offsetX + offsetZ * offsetZ <= radius * radius)
 				{
-					for(int y = featurePos.getY() - config.ySize; y <= featurePos.getY() + config.ySize; y++)
+					for(int y = featurePos.getY() - config.halfHeight; y <= featurePos.getY() + config.halfHeight; y++)
 					{
 						BlockPos pos = new BlockPos(x, y, z);
 						BlockPos randPos = new BlockPos(x + rand.nextInt(2) - 1, y, z + rand.nextInt(2) - 1);
 						
-						if(tryPlaceBlock(worldIn, pos, config))
-							affectedBlocks++;
+						affectedBlocks |= tryPlaceBlock(worldIn, pos, config);
 						
-						if(!randPos.equals(pos) && tryPlaceBlock(worldIn, randPos, config))
-							affectedBlocks++;
+						affectedBlocks |= !randPos.equals(pos) && tryPlaceBlock(worldIn, randPos, config);
+						
 					}
 				}
 			}
 		}
 		
-		return affectedBlocks > 0;
+		return affectedBlocks;
 	}
 	
 	private boolean tryPlaceBlock(IWorld world, BlockPos pos, SphereReplaceConfig config)

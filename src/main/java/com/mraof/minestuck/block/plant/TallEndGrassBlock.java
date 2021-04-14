@@ -77,7 +77,7 @@ public class TallEndGrassBlock extends DoublePlantBlock
 		for(int i = 0; i < 16; ++i)
 		{
 			double newPosX = livingEntity.getPosX() + (livingEntity.getRNG().nextDouble() - 0.5D) * 16.0D;
-			double newPosY = MathHelper.clamp(livingEntity.getPosY() + (double) (livingEntity.getRNG().nextInt(16) - 8), 0.0D, worldIn.getActualHeight() - 1);
+			double newPosY = MathHelper.clamp(livingEntity.getPosY() + (double) (livingEntity.getRNG().nextInt(16) - 8), 0.0D, worldIn.func_234938_ad_() - 1);//getAcutalHeight/getLogicalHeight
 			double newPosZ = livingEntity.getPosZ() + (livingEntity.getRNG().nextDouble() - 0.5D) * 16.0D;
 			if(livingEntity.isPassenger())
 			{

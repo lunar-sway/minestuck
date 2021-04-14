@@ -59,19 +59,19 @@ public class BucketFeature extends Feature<NoFeatureConfig>
 		if(rand.nextBoolean())
 		{
 			WeightedList<BlockState> list = new WeightedList<>();
-			list.func_226313_a_(Blocks.AIR.getDefaultState(), 50);
+			list.addWeighted(Blocks.AIR.getDefaultState(), 50);
 			for(Fluid fluid : ForgeRegistries.FLUIDS)
 			{
 				Rarity rarity = fluid.getAttributes().getRarity();
 				if(rarity == Rarity.COMMON)
-					list.func_226313_a_(fluid.getDefaultState().getBlockState(), 50);
+					list.addWeighted(fluid.getDefaultState().getBlockState(), 50);
 				else if(rarity == Rarity.UNCOMMON)
-					list.func_226313_a_(fluid.getDefaultState().getBlockState(), 10);
+					list.addWeighted(fluid.getDefaultState().getBlockState(), 10);
 				else if(rarity == Rarity.RARE)
-					list.func_226313_a_(fluid.getDefaultState().getBlockState(), 1);
+					list.addWeighted(fluid.getDefaultState().getBlockState(), 1);
 			}
 			
-			bucketFluid = list.func_226318_b_(rand);
+			bucketFluid = list.getRandomValue(rand);
 		} else
 		{
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(generator);

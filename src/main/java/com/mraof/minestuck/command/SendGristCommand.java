@@ -15,6 +15,7 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.arguments.EntityArgument;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.Util;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.Optional;
@@ -44,7 +45,7 @@ public class SendGristCommand
 				GristHelper.decrease(player.world, IdentifierHandler.encode(player), grist);
 				GristHelper.increase(player.world, IdentifierHandler.encode(target), grist);
 				source.sendFeedback(new TranslationTextComponent(SUCCESS, target.getDisplayName(), grist.asTextComponent()), true);
-				target.sendMessage(new TranslationTextComponent(RECEIVE, player.getDisplayName(), grist.asTextComponent()));
+				target.sendMessage(new TranslationTextComponent(RECEIVE, player.getDisplayName(), grist.asTextComponent()), Util.DUMMY_UUID);
 				return 1;
 			} else throw CANT_AFFORD_EXCEPTION.create(grist);
 		} else throw PERMISSION_EXCEPTION.create(target.getDisplayName());

@@ -7,10 +7,7 @@ import com.mraof.minestuck.world.gen.feature.structure.SmallRuinStructure;
 import com.mraof.minestuck.world.gen.feature.structure.castle.CastleStructure;
 import com.mraof.minestuck.world.gen.feature.structure.village.ConsortVillageStructure;
 import com.mraof.minestuck.world.gen.feature.tree.LeaflessTreeFeature;
-import net.minecraft.world.gen.feature.BlockStateFeatureConfig;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.ProbabilityConfig;
+import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -71,11 +68,11 @@ public final class MSFeatures
 	{
 		IForgeRegistry<Structure<?>> registry = event.getRegistry();
 		
-		registry.register(new GateStructure(NoFeatureConfig.field_236558_a_).setRegistryName("land_gate"));
-		registry.register(new SmallRuinStructure(NoFeatureConfig.field_236558_a_).setRegistryName("small_ruin"));
-		registry.register(new ImpDungeonStructure(NoFeatureConfig.field_236558_a_).setRegistryName("imp_dungeon"));
-		registry.register(new ConsortVillageStructure(NoFeatureConfig.field_236558_a_).setRegistryName("consort_village"));
-		registry.register(new CastleStructure(NoFeatureConfig.field_236558_a_).setRegistryName("skaia_castle"));
+		registry.register(new GateStructure(NoFeatureConfig.CODEC).setRegistryName("land_gate"));
+		registry.register(new SmallRuinStructure(NoFeatureConfig.CODEC).setRegistryName("small_ruin"));
+		registry.register(new ImpDungeonStructure(NoFeatureConfig.CODEC).setRegistryName("imp_dungeon"));
+		registry.register(new ConsortVillageStructure(NoFeatureConfig.CODEC).setRegistryName("consort_village"));
+		registry.register(new CastleStructure(NoFeatureConfig.CODEC).setRegistryName("skaia_castle"));
 	}
 	
 	@SubscribeEvent
@@ -84,33 +81,33 @@ public final class MSFeatures
 		IForgeRegistry<Feature<?>> registry = event.getRegistry();
 		
 		//registry.register(new EndTreeFeature(TreeFeatureConfig::func_227338_a_).setRegistryName("end_tree"));
-		registry.register(new LeaflessTreeFeature(BlockStateFeatureConfig.field_236455_a_).setRegistryName("leafless_tree"));
+		registry.register(new LeaflessTreeFeature(BlockStateFeatureConfig.CODEC).setRegistryName("leafless_tree"));
 		
-		registry.register(new ReturnNodeFeature(NoFeatureConfig.field_236558_a_).setRegistryName("return_node"));
-		registry.register(new FireFieldFeature(NoFeatureConfig.field_236558_a_).setRegistryName("fire_field"));
+		registry.register(new ReturnNodeFeature(NoFeatureConfig.CODEC).setRegistryName("return_node"));
+		registry.register(new FireFieldFeature(NoFeatureConfig.CODEC).setRegistryName("fire_field"));
 		registry.register(new CakeFeature(ProbabilityConfig.CODEC).setRegistryName("cake"));
-		registry.register(new PillarFeature(BlockStateFeatureConfig.field_236455_a_, false).setRegistryName("pillar"));
-		registry.register(new PillarFeature(BlockStateFeatureConfig.field_236455_a_, true).setRegistryName("large_pillar"));
-		registry.register(new ConditionFreeBlobFeature(BlockStateFeatureConfig.field_236455_a_).setRegistryName("block_blob"));
-		registry.register(new RandomRockConditionFreeBlobFeature(RandomRockBlockBlobConfig::deserialize).setRegistryName("random_rock_block_blob"));
-		registry.register(new SurfaceDiskFeature(SphereReplaceConfig::deserialize, false).setRegistryName("surface_disk"));
-		registry.register(new SurfaceDiskFeature(SphereReplaceConfig::deserialize, true).setRegistryName("grassy_surface_disk"));
-		registry.register(new OceanRundownFeature(NoFeatureConfig.field_236558_a_).setRegistryName("ocean_rundown"));
-		registry.register(new RabbitPlacementFeature(NoFeatureConfig.field_236558_a_).setRegistryName("rabbit_placement"));
+		registry.register(new PillarFeature(BlockStateFeatureConfig.CODEC, false).setRegistryName("pillar"));
+		registry.register(new PillarFeature(BlockStateFeatureConfig.CODEC, true).setRegistryName("large_pillar"));
+		registry.register(new ConditionFreeBlobFeature(BlockStateFeatureConfig.CODEC).setRegistryName("block_blob"));
+		registry.register(new RandomRockConditionFreeBlobFeature(RandomRockBlockBlobConfig.CODEC).setRegistryName("random_rock_block_blob"));
+		registry.register(new SurfaceDiskFeature(SphereReplaceConfig.CODEC, false).setRegistryName("surface_disk"));
+		registry.register(new SurfaceDiskFeature(SphereReplaceConfig.CODEC, true).setRegistryName("grassy_surface_disk"));
+		registry.register(new OceanRundownFeature(NoFeatureConfig.CODEC).setRegistryName("ocean_rundown"));
+		registry.register(new RabbitPlacementFeature(NoFeatureConfig.CODEC).setRegistryName("rabbit_placement"));
 		
-		registry.register(new SmallLibraryFeature(NoFeatureConfig.field_236558_a_).setRegistryName("small_library"));
-		registry.register(new CakePedestalFeature(NoFeatureConfig.field_236558_a_).setRegistryName("cake_pedestal"));
-		registry.register(new CogFeature(NoFeatureConfig.field_236558_a_).setRegistryName("cog"));
-		registry.register(new FloorCogFeature(NoFeatureConfig.field_236558_a_).setRegistryName("floor_cog"));
-		registry.register(new OasisFeature(NoFeatureConfig.field_236558_a_).setRegistryName("oasis"));
-		registry.register(new MesaFeature(NoFeatureConfig.field_236558_a_).setRegistryName("mesa"));
-		registry.register(new RockSpikeFeature(NoFeatureConfig.field_236558_a_).setRegistryName("rock_spike"));
-		registry.register(new ParcelPyxisFeature(NoFeatureConfig::field_236558_a_).setRegistryName("parcel_pyxis"));
-		registry.register(new SurfaceFossilsFeature(NoFeatureConfig::field_236558_a_).setRegistryName("surface_fossil"));
-		registry.register(new BucketFeature(NoFeatureConfig.field_236558_a_).setRegistryName("bucket"));
-		registry.register(new BrokenSwordFeature(NoFeatureConfig.field_236558_a_).setRegistryName("broken_sword"));
-		registry.register(new TowerFeature(NoFeatureConfig.field_236558_a_).setRegistryName("tower"));
-		registry.register(new StoneMoundFeature(BlockStateFeatureConfig::field_236455_a_).setRegistryName("stone_mound"));
+		registry.register(new SmallLibraryFeature(NoFeatureConfig.CODEC).setRegistryName("small_library"));
+		registry.register(new CakePedestalFeature(NoFeatureConfig.CODEC).setRegistryName("cake_pedestal"));
+		registry.register(new CogFeature(NoFeatureConfig.CODEC).setRegistryName("cog"));
+		registry.register(new FloorCogFeature(NoFeatureConfig.CODEC).setRegistryName("floor_cog"));
+		registry.register(new OasisFeature(NoFeatureConfig.CODEC).setRegistryName("oasis"));
+		registry.register(new MesaFeature(NoFeatureConfig.CODEC).setRegistryName("mesa"));
+		registry.register(new RockSpikeFeature(NoFeatureConfig.CODEC).setRegistryName("rock_spike"));
+		registry.register(new ParcelPyxisFeature(NoFeatureConfig.CODEC).setRegistryName("parcel_pyxis"));
+		registry.register(new SurfaceFossilsFeature(NoFeatureConfig.CODEC).setRegistryName("surface_fossil"));
+		registry.register(new BucketFeature(NoFeatureConfig.CODEC).setRegistryName("bucket"));
+		registry.register(new BrokenSwordFeature(NoFeatureConfig.CODEC).setRegistryName("broken_sword"));
+		registry.register(new TowerFeature(NoFeatureConfig.CODEC).setRegistryName("tower"));
+		registry.register(new StoneMoundFeature(BlockStateFeatureConfig.CODEC).setRegistryName("stone_mound"));
 		
 		MSStructurePieces.init();
 		MSStructureProcessorTypes.init();

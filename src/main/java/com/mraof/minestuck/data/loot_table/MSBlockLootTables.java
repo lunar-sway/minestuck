@@ -1,28 +1,24 @@
 package com.mraof.minestuck.data.loot_table;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.block.plant.TallEndGrassBlock;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.tileentity.ItemStackTileEntity;
 import net.minecraft.advancements.criterion.EnchantmentPredicate;
 import net.minecraft.advancements.criterion.ItemPredicate;
 import net.minecraft.advancements.criterion.MinMaxBounds;
-import net.minecraft.advancements.criterion.StatePropertiesPredicate;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.DoublePlantBlock;
 import net.minecraft.data.loot.BlockLootTables;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.Items;
 import net.minecraft.loot.*;
-import net.minecraft.loot.conditions.*;
+import net.minecraft.loot.conditions.ILootCondition;
+import net.minecraft.loot.conditions.MatchTool;
 import net.minecraft.loot.conditions.TableBonus;
 import net.minecraft.loot.functions.ApplyBonus;
 import net.minecraft.loot.functions.CopyName;
 import net.minecraft.loot.functions.CopyNbt;
 import net.minecraft.loot.functions.SetCount;
-import net.minecraft.state.properties.DoubleBlockHalf;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.stream.Collectors;
@@ -223,7 +219,7 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(STRAWBERRY);
 		registerLootTable(ATTACHED_STRAWBERRY_STEM, blockNoDrop());	//TODO vanilla has a different loot table for their attached stems, should we replicate?
 		registerLootTable(STRAWBERRY_STEM, MSBlockLootTables::strawberryStemDrop);
-		registerLootTable(TALL_END_GRASS, func_218482_a());
+		registerLootTable(TALL_END_GRASS, blockNoDrop());
 		registerDropSelfLootTable(GLOWFLOWER);
 		
 		registerDropSelfLootTable(GLOWY_GOOP);

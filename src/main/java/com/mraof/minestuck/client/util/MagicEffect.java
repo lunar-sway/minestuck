@@ -6,7 +6,7 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.particles.RedstoneParticleData;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.function.Supplier;
 
@@ -46,12 +46,12 @@ public class MagicEffect
 		}
 	}
 	
-	public static void particleEffect(Type type, ClientWorld world, Vec3d pos, Vec3d lookVector, int length, boolean collides)
+	public static void particleEffect(Type type, ClientWorld world, Vector3d pos, Vector3d lookVector, int length, boolean collides)
 	{
 		particleEffect(type.particle.get(), type.explosiveFinish, type.extraParticles, world, pos, lookVector, length, collides);
 	}
 	
-	public static void particleEffect(IParticleData particle, boolean explosiveFinish, boolean extraParticles, ClientWorld world, Vec3d pos, Vec3d lookVector, int length, boolean collides)
+	public static void particleEffect(IParticleData particle, boolean explosiveFinish, boolean extraParticles, ClientWorld world, Vector3d pos, Vector3d lookVector, int length, boolean collides)
 	{
 		for(int step = 0; step <= length; step++)
 		{
@@ -65,7 +65,7 @@ public class MagicEffect
 		}
 	}
 	
-	private static void pathParticles(IParticleData particle, boolean extraParticles, ClientWorld world, Vec3d vecPos, int i)
+	private static void pathParticles(IParticleData particle, boolean extraParticles, ClientWorld world, Vector3d vecPos, int i)
 	{
 		// starts creating particle trail along vector path after a few runs, its away from the players vision so they do not obscure everything
 		if(i >= 5)
@@ -88,7 +88,7 @@ public class MagicEffect
 		}
 	}
 	
-	private static void collisionEffect(IParticleData particle, boolean explosiveFinish, ClientWorld world, Vec3d vecPos)
+	private static void collisionEffect(IParticleData particle, boolean explosiveFinish, ClientWorld world, Vector3d vecPos)
 	{
 		int particles = 25 + world.rand.nextInt(10);
 		

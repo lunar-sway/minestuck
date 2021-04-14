@@ -66,10 +66,10 @@ public class EndSaplingBlock extends BushBlock implements IGrowable
 		}
 		if(rand.nextFloat() < 0.5)
 		{
-			state = state.func_235896_a_(ALPHA);	//cycle
+			state = state.cycleValue(ALPHA);
 		} else
 		{
-			state = state.func_235896_a_(OMEGA);
+			state = state.cycleValue(OMEGA);
 		}
 		
 		if(state.get(ALPHA) && !state.get(OMEGA))

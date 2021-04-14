@@ -10,7 +10,7 @@ import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.item.ArmorStandEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -22,7 +22,7 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -79,8 +79,8 @@ public interface OnHitEffect
 			ItemEntity item = new ItemEntity(target.world, target.getPosX(), target.getPosY(), target.getPosZ(), items[num].copy());
 			target.world.addEntity(item);
 			
-			ITextComponent message = new TranslationTextComponent(stack.getTranslationKey() + ".message", items[num].getDisplayName());
-			attacker.sendMessage(message.applyTextStyle(TextFormatting.GOLD));
+			IFormattableTextComponent message = new TranslationTextComponent(stack.getTranslationKey() + ".message", items[num].getDisplayName());
+			attacker.sendMessage(message.mergeStyle(TextFormatting.GOLD), Util.DUMMY_UUID);
 		}
 	};
 	
@@ -93,8 +93,8 @@ public interface OnHitEffect
 			List<String> messages = ImmutableList.of("machinations", "stir", "suffering", "will", "done", "conspiracies", "waiting", "strife", "search", "blessings", "seek", "shadow");
 			
 			String key = messages.get(attacker.getRNG().nextInt(messages.size()));
-			ITextComponent message = new TranslationTextComponent("message.horrorterror." + key);
-			attacker.sendMessage(message.applyTextStyle(TextFormatting.DARK_PURPLE));
+			IFormattableTextComponent message = new TranslationTextComponent("message.horrorterror." + key);
+			attacker.sendMessage(message.mergeStyle(TextFormatting.DARK_PURPLE), Util.DUMMY_UUID);
 			boolean potionBool = attacker.getRNG().nextBoolean();
 			if(potionBool)
 				attacker.addPotionEffect(new EffectInstance(Effects.WITHER, 100, 2));
@@ -134,7 +134,7 @@ public interface OnHitEffect
 			sord.setPickupDelay(40);
 			attacker.world.addEntity(sord);
 			stack.shrink(1);
-			attacker.sendMessage(new TranslationTextComponent(sord.getItem().getTranslationKey() + "." + SORD_DROP_MESSAGE));
+			attacker.sendMessage(new TranslationTextComponent(sord.getItem().getTranslationKey() + "." + SORD_DROP_MESSAGE), Util.DUMMY_UUID);
 		}
 	};
 	
@@ -154,16 +154,16 @@ public interface OnHitEffect
 			PlayerEntity playerAttacker = (PlayerEntity) attacker;
 			boolean slowMoving = (double) (playerAttacker.distanceWalkedModified - playerAttacker.prevDistanceWalkedModified) < (double) playerAttacker.getAIMoveSpeed();
 			boolean lastHitWasCrit = ServerEventHandler.wasLastHitCrit(playerAttacker);
-			if(slowMoving && !lastHitWasCrit && playerAttacker.onGround)
+			if(slowMoving && !lastHitWasCrit && playerAttacker.isOnGround())
 			{
-				float attackDamage = (float) playerAttacker.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue();
+				float attackDamage = (float) playerAttacker.getAttribute(Attributes.ATTACK_DAMAGE).getValue();
 				float sweepEnchantMod = 1.0F + EnchantmentHelper.getSweepingDamageRatio(playerAttacker) * attackDamage;
 				
 				for(LivingEntity livingEntity : playerAttacker.world.getEntitiesWithinAABB(LivingEntity.class, target.getBoundingBox().grow(1.0D, 0.25D, 1.0D)))
 				{
 					if(livingEntity != playerAttacker && livingEntity != target && !playerAttacker.isOnSameTeam(livingEntity) && (!(livingEntity instanceof ArmorStandEntity) || !((ArmorStandEntity) livingEntity).hasMarker()) && playerAttacker.getDistanceSq(livingEntity) < 9.0D)
 					{
-						livingEntity.knockBack(playerAttacker, 0.4F, (double) MathHelper.sin(playerAttacker.rotationYaw * ((float) Math.PI / 180F)), (double) (-MathHelper.cos(playerAttacker.rotationYaw * ((float) Math.PI / 180F))));
+						livingEntity.applyKnockback(0.4F, MathHelper.sin(playerAttacker.rotationYaw * ((float) Math.PI / 180F)), -MathHelper.cos(playerAttacker.rotationYaw * ((float) Math.PI / 180F)));
 						livingEntity.attackEntityFrom(DamageSource.causePlayerDamage(playerAttacker), sweepEnchantMod);
 					}
 				}
@@ -183,7 +183,7 @@ public interface OnHitEffect
 		for(int i = 0; i < 16; ++i)
 		{
 			double newPosX = attacker.getPosX() + (attacker.getRNG().nextDouble() - 0.5D) * 16.0D;
-			double newPosY = MathHelper.clamp(attacker.getPosY() + (double) (attacker.getRNG().nextInt(16) - 8), 0.0D, worldIn.getActualHeight() - 1);
+			double newPosY = MathHelper.clamp(attacker.getPosY() + (double) (attacker.getRNG().nextInt(16) - 8), 0.0D, worldIn.func_234938_ad_() - 1);//getAcutalHeight/getLogicalHeight
 			double newPosZ = attacker.getPosZ() + (attacker.getRNG().nextDouble() - 0.5D) * 16.0D;
 			if(attacker.isPassenger())
 				attacker.stopRiding();

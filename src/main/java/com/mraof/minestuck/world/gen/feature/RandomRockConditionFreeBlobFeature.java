@@ -1,28 +1,26 @@
 package com.mraof.minestuck.world.gen.feature;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import com.mraof.minestuck.block.MSBlocks;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.feature.Feature;
 
 import java.util.Iterator;
 import java.util.Random;
-import java.util.function.Function;
 
 public class RandomRockConditionFreeBlobFeature extends Feature<RandomRockBlockBlobConfig>
 {
-	public RandomRockConditionFreeBlobFeature(Function<Dynamic<?>, ? extends RandomRockBlockBlobConfig> configFactoryIn)
+	public RandomRockConditionFreeBlobFeature(Codec<RandomRockBlockBlobConfig> codec)
 	{
-		super(configFactoryIn);
+		super(codec);
 	}
 	
 	@Override
-	public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, RandomRockBlockBlobConfig config)
+	public boolean generate(ISeedReader worldIn, ChunkGenerator generator, Random rand, BlockPos pos, RandomRockBlockBlobConfig config)
 	{
 		float randFloat = rand.nextFloat();
 		BlockState randomStone;

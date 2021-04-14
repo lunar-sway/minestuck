@@ -7,7 +7,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
@@ -67,7 +66,7 @@ public class CaptchaCardItem extends Item
 			{
 				ITextComponent contentName = content.getDisplayName();
 				tooltip.add(makeTooltipInfo((AlchemyHelper.isPunchedCard(stack) || AlchemyHelper.isGhostCard(stack))
-						? contentName : new StringTextComponent(content.getCount() + "x").append(contentName)));
+						? contentName : new StringTextComponent(content.getCount() + "x").appendSibling(contentName)));
 				
 				if(AlchemyHelper.isPunchedCard(stack))
 					tooltip.add(makeTooltipInfo(new TranslationTextComponent(getTranslationKey() + ".punched")));
@@ -80,6 +79,6 @@ public class CaptchaCardItem extends Item
 	
 	private ITextComponent makeTooltipInfo(ITextComponent info)
 	{
-		return new StringTextComponent("(").append(info).appendString(")").mergeStyle(TextFormatting.GRAY);
+		return new StringTextComponent("(").appendSibling(info).appendString(")").mergeStyle(TextFormatting.GRAY);
 	}
 }

@@ -172,7 +172,7 @@ public class ColorSelectorScreen extends Screen
 			if(ClientPlayerData.getPlayerColor() == ColorHandler.DEFAULT_COLOR)
 				message = new TranslationTextComponent(DEFAULT_COLOR_SELECTED);
 			else message = new TranslationTextComponent(COLOR_SELECTED);
-			this.minecraft.player.sendMessage(new StringTextComponent("[Minestuck] ").append(message), Util.DUMMY_UUID);
+			this.minecraft.player.sendMessage(new StringTextComponent("[Minestuck] ").appendSibling(message), Util.DUMMY_UUID);
 		}
 	}
 	

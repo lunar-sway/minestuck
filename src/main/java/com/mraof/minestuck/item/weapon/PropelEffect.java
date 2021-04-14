@@ -7,8 +7,11 @@ import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.*;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 public class PropelEffect implements ItemRightClickEffect
@@ -52,7 +55,7 @@ public class PropelEffect implements ItemRightClickEffect
 		
 		if(title != null && title.getHeroAspect() == aspect)
 		{
-			Vec3d lookVec = player.getLookVec().scale(velocity);
+			Vector3d lookVec = player.getLookVec().scale(velocity);
 			if(player.isElytraFlying())
 			{
 				lookVec = lookVec.scale(velocity / 12D);

@@ -27,7 +27,7 @@ import javax.annotation.Nonnull;
 public final class MSEntityTypes
 {
 	public static EntityClassification UNDERLING = EntityClassification.create("UNDERLING", "underling", 35, false, false, 128);
-	public static EntityClassification CONSORT = EntityClassification.create("CONSORT", "consort", 10, true, false);
+	public static EntityClassification CONSORT = EntityClassification.create("CONSORT", "consort", 10, true, false, 128);
 	
 	public static final EntityType<FrogEntity> FROG = getNull();
 	public static final EntityType<ConsortEntity> SALAMANDER = getNull();

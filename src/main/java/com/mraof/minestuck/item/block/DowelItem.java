@@ -46,11 +46,11 @@ public class DowelItem extends BlockItem implements AlchemizedColored
 			
 			if(!containedStack.isEmpty())
 			{
-				tooltip.add(new StringTextComponent("(").append(containedStack.getDisplayName()).appendString(")").mergeStyle(TextFormatting.GRAY));
+				tooltip.add(new StringTextComponent("(").appendSibling(containedStack.getDisplayName()).appendString(")").mergeStyle(TextFormatting.GRAY));
 			}
 			else
 			{
-				tooltip.add(new StringTextComponent("(").append(new StringTextComponent("item.captchaCard.invalid")).appendString(")").mergeStyle(TextFormatting.GRAY));//TODO translation key
+				tooltip.add(new StringTextComponent("(").appendSibling(new StringTextComponent("item.captchaCard.invalid")).appendString(")").mergeStyle(TextFormatting.GRAY));//TODO translation key
 			}
 		}
 	}

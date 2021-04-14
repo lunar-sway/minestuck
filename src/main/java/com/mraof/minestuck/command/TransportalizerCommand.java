@@ -57,7 +57,7 @@ public class TransportalizerCommand
 			Entity newEntity = Teleport.teleportEntity(entity, world, destination.getPos().getX() + 0.5, destination.getPos().getY() + 0.6, destination.getPos().getZ() + 0.5, entity.rotationYaw, entity.rotationPitch);
 			if(newEntity != null)
 			{
-				newEntity.func_242279_ag(); //setPortalCooldown
+				newEntity.setPortalCooldown();
 				count++;
 			} else source.sendErrorMessage(new TranslationTextComponent(FAILURE, entity.getDisplayName()));
 		}

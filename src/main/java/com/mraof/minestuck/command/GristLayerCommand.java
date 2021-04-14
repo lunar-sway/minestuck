@@ -3,13 +3,10 @@ package com.mraof.minestuck.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import com.mraof.minestuck.world.gen.LandChunkGenerator;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.gen.ChunkGenerator;
 
 public class GristLayerCommand
 {
@@ -24,14 +21,14 @@ public class GristLayerCommand
 	private static int execute(CommandSource source) throws CommandSyntaxException
 	{
 		ServerPlayerEntity player = source.asPlayer();
-		
+		/*TODO
 		ChunkGenerator<?> chunkGenerator = player.getServerWorld().getChunkProvider().getChunkGenerator();
 		if(chunkGenerator instanceof LandChunkGenerator)
 		{
 			ITextComponent layerInfo = ((LandChunkGenerator) chunkGenerator).getGristLayerInfo(player.getPosition().getX(), player.getPosition().getZ());
 			source.sendFeedback(layerInfo, false);
 			return 1;
-		} else
+		} else*/
 		{
 			throw FAIL_EXCEPTION.create();
 		}

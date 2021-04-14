@@ -31,7 +31,7 @@ public class GateHandler
 	
 	public static void teleport(Type gateType, ServerWorld world, ServerPlayerEntity player)
 	{
-		player.func_242279_ag();	//setPortalCooldown(); Basically to avoid message spam when something goes wrong
+		player.setPortalCooldown();	//Basically to avoid message spam when something goes wrong
 		
 		GlobalPos destination = gateType.getDestination(world);
 		

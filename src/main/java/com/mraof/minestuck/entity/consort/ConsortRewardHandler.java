@@ -20,7 +20,7 @@ public class ConsortRewardHandler
 	public static List<Pair<ItemStack, Integer>> generateStock(ResourceLocation lootTable, ConsortEntity consort, Random rand)
 	{
 		LootContext.Builder contextBuilder = new LootContext.Builder((ServerWorld) consort.world)
-				.withParameter(LootParameters.THIS_ENTITY, consort).withParameter(LootParameters.field_237457_g_, consort.getPositionVec());
+				.withParameter(LootParameters.THIS_ENTITY, consort).withParameter(LootParameters.ORIGIN, consort.getPositionVec());
 		List<ItemStack> itemStacks = Objects.requireNonNull(consort.getServer()).getLootTableManager()
 				.getLootTableFromLocation(lootTable).generate(contextBuilder.build(LootParameterSets.GIFT));
 		List<Pair<ItemStack, Integer>> itemPriceList = new ArrayList<>();

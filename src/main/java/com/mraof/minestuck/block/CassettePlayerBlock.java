@@ -44,7 +44,7 @@ public class CassettePlayerBlock extends DecorBlock
 	{
 		if(player.isSneaking())
 		{
-			state = state.func_235896_a_(OPEN); //cycle
+			state = state.cycleValue(OPEN);
 			TileEntity tileentity = worldIn.getTileEntity(pos);
 			worldIn.setBlockState(pos, state, 2);
 			if(tileentity instanceof CassettePlayerTileEntity && !state.get(OPEN))

@@ -97,7 +97,7 @@ public class TransportalizerTileEntity extends OnCollisionTeleporterTileEntity<E
 		GlobalPos location = TransportalizerSavedData.get(world).get(this.destId);
 		if(!enabled)
 		{
-			entity.func_242279_ag(); //setPortalCooldown
+			entity.setPortalCooldown();
 			if(entity instanceof ServerPlayerEntity)
 				entity.sendMessage(new TranslationTextComponent(DISABLED), Util.DUMMY_UUID);
 			return;
@@ -118,14 +118,14 @@ public class TransportalizerTileEntity extends OnCollisionTeleporterTileEntity<E
 			
 			if(isDimensionForbidden(world.getDimensionKey()))
 			{
-				entity.func_242279_ag(); //setPortalCooldown
+				entity.setPortalCooldown();
 				if(entity instanceof ServerPlayerEntity)
 					entity.sendMessage(new TranslationTextComponent(FORBIDDEN), Util.DUMMY_UUID);
 				return;
 			}
 			if(isDimensionForbidden(location.getDimension()))
 			{
-				entity.func_242279_ag(); //setPortalCooldown
+				entity.setPortalCooldown();
 				if(entity instanceof ServerPlayerEntity)
 					entity.sendMessage(new TranslationTextComponent(FORBIDDEN_DESTINATION), Util.DUMMY_UUID);
 				return;
@@ -133,7 +133,7 @@ public class TransportalizerTileEntity extends OnCollisionTeleporterTileEntity<E
 			
 			if(isBlocked(this.world, this.pos))
 			{
-				entity.func_242279_ag(); //setPortalCooldown
+				entity.setPortalCooldown();
 				if(entity instanceof ServerPlayerEntity)
 					entity.sendMessage(new TranslationTextComponent(BLOCKED), Util.DUMMY_UUID);
 				return;
@@ -141,7 +141,7 @@ public class TransportalizerTileEntity extends OnCollisionTeleporterTileEntity<E
 			
 			if(isBlocked(world, location.getPos()))
 			{
-				entity.func_242279_ag(); //setPortalCooldown
+				entity.setPortalCooldown();
 				if(entity instanceof ServerPlayerEntity)
 					entity.sendMessage(new TranslationTextComponent(BLOCKED_DESTINATION), Util.DUMMY_UUID);
 				return;
@@ -149,7 +149,7 @@ public class TransportalizerTileEntity extends OnCollisionTeleporterTileEntity<E
 			
 			entity = Teleport.teleportEntity(entity, (ServerWorld) destTransportalizer.world, location.getPos().getX() + 0.5, location.getPos().getY() + 0.6, location.getPos().getZ() + 0.5, entity.rotationYaw, entity.rotationPitch);
 			if(entity != null)
-				entity.func_242279_ag(); //setPortalCooldown
+				entity.setPortalCooldown();
 		}
 	}
 	
@@ -208,7 +208,7 @@ public class TransportalizerTileEntity extends OnCollisionTeleporterTileEntity<E
 	
 	public void tryReactivate()
 	{
-		active = TransportalizerSavedData.get(world).set(id, GlobalPos.of(world.dimension.getType(), pos));
+		active = TransportalizerSavedData.get(world).set(id, GlobalPos.getPosition(world.getDimensionKey(), pos));
 	}
 	
 	public void setEnabled(boolean enabled)

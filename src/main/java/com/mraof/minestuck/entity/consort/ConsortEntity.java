@@ -26,10 +26,7 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.*;
 import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
@@ -96,7 +93,7 @@ public class ConsortEntity extends SimpleTexturedEntity implements IContainerPro
 	}
 	
 	@Override
-	protected ActionResultType func_230254_b_(PlayerEntity player, Hand hand)
+	protected ActionResultType getEntityInteractionResult(PlayerEntity player, Hand hand)
 	{
 		if(this.isAlive() && !player.isSneaking() && eventTimer < 0)
 		{
@@ -126,7 +123,7 @@ public class ConsortEntity extends SimpleTexturedEntity implements IContainerPro
 			
 			return ActionResultType.SUCCESS;
 		} else
-			return super.func_230254_b_(player, hand);
+			return super.getEntityInteractionResult(player, hand);
 	}
 	
 	private void checkMessageData()

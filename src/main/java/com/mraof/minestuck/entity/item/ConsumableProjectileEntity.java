@@ -37,7 +37,7 @@ public class ConsumableProjectileEntity extends ProjectileItemEntity
 		super(type, livingEntityIn, worldIn);
 	}
 	
-	private static boolean isNonCreativePlayer(LivingEntity entity)
+	private static boolean isNonCreativePlayer(Entity entity)
 	{
 		return entity instanceof PlayerEntity && !((PlayerEntity) entity).isCreative();
 	}
@@ -51,11 +51,11 @@ public class ConsumableProjectileEntity extends ProjectileItemEntity
 		{
 			Entity entity = ((EntityRayTraceResult) result).getEntity();
 			if(entity instanceof UnderlingEntity)
-				entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), damage * 1.5F);
+				entity.attackEntityFrom(DamageSource.causeThrownDamage(this, getShooter()), damage * 1.5F);
 			else
-				entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), damage);
+				entity.attackEntityFrom(DamageSource.causeThrownDamage(this, getShooter()), damage);
 		}
-		if(isNonCreativePlayer(this.getThrower()))
+		if(isNonCreativePlayer(getShooter()))
 		{
 			if(rand.nextFloat() < 0.99F)
 			{

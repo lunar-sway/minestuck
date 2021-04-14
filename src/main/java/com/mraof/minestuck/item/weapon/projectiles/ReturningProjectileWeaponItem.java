@@ -41,7 +41,7 @@ public class ReturningProjectileWeaponItem extends ConsumableProjectileWeaponIte
 			
 			ReturningProjectileEntity projectileEntity = new ReturningProjectileEntity(MSEntityTypes.RETURNING_PROJECTILE, playerIn, worldIn, maxTick, noBlockCollision);
 			projectileEntity.setItem(item);
-			projectileEntity.shoot(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, velocity, accuracy);
+			projectileEntity.setDirectionAndMovement(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, velocity, accuracy);
 			projectileEntity.setNoGravity(true);
 			if(noBlockCollision)
 				projectileEntity.setGlowing(true);

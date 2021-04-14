@@ -9,11 +9,14 @@ import net.minecraft.entity.projectile.FireballEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
-import net.minecraft.util.math.*;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeMod;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -30,8 +33,8 @@ public interface ItemRightClickEffect
 		if(world.isRemote)
 		{
 			int key = player.getRNG().nextInt(20);
-			ITextComponent message = new TranslationTextComponent("message.eightball." + key);
-			player.sendMessage(message.applyTextStyle(TextFormatting.BLUE));
+			IFormattableTextComponent message = new TranslationTextComponent("message.eightball." + key);
+			player.sendMessage(message.mergeStyle(TextFormatting.BLUE), Util.DUMMY_UUID);
 		}
 		return ActionResult.resultSuccess(player.getHeldItem(hand));
 	};
@@ -114,14 +117,14 @@ public interface ItemRightClickEffect
 	static ItemRightClickEffect absorbFluid(Supplier<Block> fluidBlock, Supplier<Item> otherItem)
 	{
 		return (world, player, hand) -> {
-			Vec3d eyePos = player.getEyePosition(1.0F);
-			Vec3d lookVec = player.getLookVec();
+			Vector3d eyePos = player.getEyePosition(1.0F);
+			Vector3d lookVec = player.getLookVec();
 			BlockState state;
 			ItemStack itemStack = player.getHeldItem(hand);
 			
-			for(int step = 0; step < player.getAttribute(PlayerEntity.REACH_DISTANCE).getValue() * 10; step++) //raytraces from the players current eye position to the maximum their reach distance allows
+			for(int step = 0; step < player.getAttribute(ForgeMod.REACH_DISTANCE.get()).getValue() * 10; step++) //raytraces from the players current eye position to the maximum their reach distance allows
 			{
-				Vec3d vecPos = eyePos.add(lookVec.scale(step / 10D));
+				Vector3d vecPos = eyePos.add(lookVec.scale(step / 10D));
 				BlockPos blockPos = new BlockPos(vecPos);
 				state = world.getBlockState(blockPos);
 				

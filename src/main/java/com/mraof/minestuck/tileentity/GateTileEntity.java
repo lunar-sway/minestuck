@@ -45,7 +45,7 @@ public class GateTileEntity extends OnCollisionTeleporterTileEntity<ServerPlayer
 			if(pos == null)
 				return;
 			Teleport.teleportEntity(player, (ServerWorld) world, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
-			player.func_242279_ag();	//setPortalCooldown
+			player.setPortalCooldown();
 			player.setMotion(Vector3d.ZERO);
 			player.fallDistance = 0;
 		} else

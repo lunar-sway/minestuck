@@ -117,7 +117,7 @@ public final class ClientEditHandler
 		{
 			GristType grist = amount.getType();
 			TextFormatting color = amount.getAmount() <= have.getGrist(grist) ? TextFormatting.GREEN : TextFormatting.RED;
-			toolTip.add(new StringTextComponent(amount.getAmount()+" ").append(grist.getDisplayName()).appendString(" ("+have.getGrist(grist) + ")").mergeStyle(color));
+			toolTip.add(new StringTextComponent(amount.getAmount()+" ").appendSibling(grist.getDisplayName()).appendString(" ("+have.getGrist(grist) + ")").mergeStyle(color));
 		}
 		if(cost.isEmpty())
 			toolTip.add(new TranslationTextComponent(GuiUtil.FREE).mergeStyle(TextFormatting.GREEN));

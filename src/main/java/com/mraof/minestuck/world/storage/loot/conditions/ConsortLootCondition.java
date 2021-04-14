@@ -21,7 +21,7 @@ public class ConsortLootCondition implements ILootCondition
 	}
 	
 	@Override
-	public LootConditionType func_230419_b_()	//getType
+	public LootConditionType getConditionType()
 	{
 		return MSLootTables.consortConditionType();
 	}

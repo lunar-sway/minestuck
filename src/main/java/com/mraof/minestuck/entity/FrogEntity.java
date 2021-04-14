@@ -69,8 +69,8 @@ public class FrogEntity extends CreatureEntity
 		this.dataManager.register(BELLY_TYPE, random(maxBelly()));
 	}
 	
-	@Override	//Right-click interact
-	protected ActionResultType func_230254_b_(PlayerEntity player, Hand hand)
+	@Override
+	protected ActionResultType getEntityInteractionResult(PlayerEntity player, Hand hand)
 	{
 		ItemStack itemstack = player.getHeldItem(hand);
 		
@@ -96,7 +96,7 @@ public class FrogEntity extends CreatureEntity
 				this.setType(5);
 			}
 		}
-		return super.func_230254_b_(player, hand);
+		return super.getEntityInteractionResult(player, hand);
 	}
 	
 	protected CompoundNBT getFrogData()

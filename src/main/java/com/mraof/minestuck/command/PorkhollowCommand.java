@@ -15,6 +15,7 @@ import net.minecraft.command.arguments.EntityArgument;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Util;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public class PorkhollowCommand    //Much like /gristSend and /land, is a temporary command until a proper feature is in place
@@ -49,7 +50,7 @@ public class PorkhollowCommand    //Much like /gristSend and /land, is a tempora
 		{
 			PlayerSavedData.getData(target).addBoondollars(amount);
 			source.sendFeedback(new TranslationTextComponent(SEND, amount, target.getDisplayName()), true);
-			target.sendMessage(new TranslationTextComponent(RECEIVE, amount, player.getDisplayName()));
+			target.sendMessage(new TranslationTextComponent(RECEIVE, amount, player.getDisplayName()), Util.DUMMY_UUID);
 			return 1;
 		} else throw NOT_ENOUGH.create();
 	}

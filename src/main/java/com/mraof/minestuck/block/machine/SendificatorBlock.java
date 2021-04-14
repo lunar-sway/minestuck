@@ -4,7 +4,9 @@ import com.mraof.minestuck.block.DecorBlock;
 import com.mraof.minestuck.util.CustomVoxelShape;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -30,7 +32,7 @@ public class SendificatorBlock extends DecorBlock
 			//Function will store information about item and pass it along to TileEntity, currently useless
 			if(!worldIn.isRemote)
 			{
-				player.sendMessage(new TranslationTextComponent(getTranslationKey() + "." + ACTIVATION_MESSAGE));
+				player.sendMessage(new TranslationTextComponent(getTranslationKey() + "." + ACTIVATION_MESSAGE), Util.DUMMY_UUID);
 			}
 			return ActionResultType.SUCCESS;
 		} else

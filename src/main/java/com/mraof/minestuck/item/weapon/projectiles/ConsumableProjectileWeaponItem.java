@@ -34,7 +34,7 @@ public class ConsumableProjectileWeaponItem extends Item implements ProjectileDa
 		{
 			ConsumableProjectileEntity projectileEntity = new ConsumableProjectileEntity(MSEntityTypes.CONSUMABLE_PROJECTILE, playerIn, worldIn);
 			projectileEntity.setItem(item);
-			projectileEntity.shoot(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, velocity, accuracy);
+			projectileEntity.setDirectionAndMovement(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, velocity, accuracy);
 			worldIn.addEntity(projectileEntity);
 		}
 		if(!playerIn.isCreative())

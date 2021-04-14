@@ -9,8 +9,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.ITag;
+import net.minecraft.tags.TagCollectionManager;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -120,11 +120,11 @@ public class SourceGristCost extends GeneratedGristCost
 	
 	private static class TagSource implements Source
 	{
-		final Tag<Item> tag;
+		final ITag<Item> tag;
 		
 		private TagSource(ResourceLocation name)
 		{
-			this.tag = ItemTags.getCollection().get(name);
+			this.tag = TagCollectionManager.getManager().getItemTags().get(name);
 		}
 		
 		@Override
@@ -142,8 +142,8 @@ public class SourceGristCost extends GeneratedGristCost
 		}
 	}
 	
-	public static String tagString(Tag<Item> tag)
+	public static String tagString(ITag<Item> tag)
 	{
-		return "#" + tag.getId().toString();
+		return "#" + TagCollectionManager.getManager().getItemTags().getValidatedIdFromTag(tag).toString();
 	}
 }

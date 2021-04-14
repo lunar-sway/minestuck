@@ -75,7 +75,7 @@ public class SkaiaPortalTileEntity extends TileEntity //implements ITeleporter
 				placeDestPlatform(entity.world);
 		}
 		if(entity != null)
-				entity.func_242279_ag();	//setPortalCooldown
+				entity.setPortalCooldown();
 	}
 	
 	private void placeDestPlatform(World world)

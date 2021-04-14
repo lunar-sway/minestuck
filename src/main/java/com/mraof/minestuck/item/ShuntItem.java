@@ -27,10 +27,10 @@ public class ShuntItem extends Item
 			ItemStack content = AlchemyHelper.getDecodedItem(stack);
 			
 			if (!content.isEmpty())
-				tooltip.add(new StringTextComponent("(").append(content.getDisplayName()).appendString(")"));
+				tooltip.add(new StringTextComponent("(").appendSibling(content.getDisplayName()).appendString(")"));
 			else
-				tooltip.add(new StringTextComponent("(").append(new TranslationTextComponent(getTranslationKey()+".invalid")).appendString(")"));
+				tooltip.add(new StringTextComponent("(").appendSibling(new TranslationTextComponent(getTranslationKey()+".invalid")).appendString(")"));
 		} else
-			tooltip.add(new StringTextComponent("(").append(new TranslationTextComponent(getTranslationKey()+".empty")).appendString(")"));
+			tooltip.add(new StringTextComponent("(").appendSibling(new TranslationTextComponent(getTranslationKey()+".empty")).appendString(")"));
 	}
 }

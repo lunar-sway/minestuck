@@ -17,7 +17,7 @@ public class TransportalizerBlockProcess implements EntryBlockProcessing
 	{
 		if(oldTE instanceof TransportalizerTileEntity && newTE instanceof TransportalizerTileEntity)
 		{
-			TransportalizerSavedData.get(oldWorld).replace(((TransportalizerTileEntity) newTE).getId(), GlobalPos.of(oldWorld.dimension.getType(), oldPos), GlobalPos.of(newWorld.dimension.getType(), newPos));
+			TransportalizerSavedData.get(oldWorld).replace(((TransportalizerTileEntity) newTE).getId(), GlobalPos.getPosition(oldWorld.getDimensionKey(), oldPos), GlobalPos.getPosition(newWorld.getDimensionKey(), newPos));
 			if(((TransportalizerTileEntity) oldTE).isActive())
 				((TransportalizerTileEntity) newTE).tryReactivate();
 		}

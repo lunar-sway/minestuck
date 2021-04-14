@@ -6,13 +6,10 @@ import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.event.UnderlingSpawnListEvent;
 import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
-import com.mraof.minestuck.world.gen.LandChunkGenerator;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.MobSpawnInfo;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
 
 import java.util.ArrayList;
@@ -26,14 +23,14 @@ import java.util.List;
 public final class UnderlingController
 {
 	public static GristType getUnderlingType(UnderlingEntity entity)
-	{
+	{/*TODO
 		ChunkGenerator<?> chunkGenerator = entity.world.isRemote ? null : ((ServerWorld)entity.world).getChunkProvider().getChunkGenerator();
 		if(chunkGenerator instanceof LandChunkGenerator)
 		{
 			BlockPos pos = entity.getPosition();
 			return ((LandChunkGenerator)chunkGenerator).randomLayer(entity.getRNG()).getTypeAt(pos.getX(), pos.getZ());
 		}
-		else return GristHelper.getPrimaryGrist(entity.getRNG());
+		else*/ return GristHelper.getPrimaryGrist(entity.getRNG());
 	}
 	
 	private static final List<MobSpawnInfo.Spawners>[] difficultyList = new List[31];

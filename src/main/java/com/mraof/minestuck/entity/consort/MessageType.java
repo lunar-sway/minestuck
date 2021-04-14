@@ -255,7 +255,7 @@ public abstract class MessageType
 			
 			IFormattableTextComponent message = messageOne.getMessage(consort, player, chainIdentifier);
 			message.appendString("\n");
-			message.append(messageTwo.getMessage(consort, player, chainIdentifier));
+			message.appendSibling(messageTwo.getMessage(consort, player, chainIdentifier));
 			return message;
 		}
 		
@@ -312,7 +312,7 @@ public abstract class MessageType
 			message.appendString("\n");
 			IFormattableTextComponent desc = createMessage(consort, player, unlocalizedMessage, args, false);
 			desc.setStyle(desc.getStyle().setItalic(true).applyFormatting(TextFormatting.GRAY));
-			message.append(desc);
+			message.appendSibling(desc);
 			return message;
 		}
 		
@@ -349,7 +349,7 @@ public abstract class MessageType
 			desc.setStyle(desc.getStyle().setItalic(true).applyFormatting(TextFormatting.GRAY));
 			
 			IFormattableTextComponent message = new StringTextComponent("");
-			message.append(desc);
+			message.appendSibling(desc);
 			return message;
 		}
 		
@@ -654,12 +654,12 @@ public abstract class MessageType
 				{
 					question.appendString("\n");
 					IFormattableTextComponent option = new StringTextComponent(">");
-					option.append(
+					option.appendSibling(
 							createMessage(consort, player, options[i].unlocalizedMessage, options[i].args, false));
 					option.getStyle().setClickEvent(
 							new ClickEvent(ClickEvent.Action.RUN_COMMAND, commandStart + options[i].getString()));
 					option.mergeStyle(TextFormatting.GRAY);
-					question.append(option);
+					question.appendSibling(option);
 				}
 				
 				nbt.putString("currentMessage", this.getString());
@@ -936,7 +936,7 @@ public abstract class MessageType
 					nbt.putBoolean(nbtName, true);
 				
 				LootContext.Builder contextBuilder = new LootContext.Builder((ServerWorld) consort.world).withRandom(consort.world.rand)
-						.withParameter(LootParameters.THIS_ENTITY, consort).withParameter(LootParameters.field_237457_g_, consort.getPositionVec());
+						.withParameter(LootParameters.THIS_ENTITY, consort).withParameter(LootParameters.ORIGIN, consort.getPositionVec());
 				List<ItemStack> loot = consort.getServer().getLootTableManager().getLootTableFromLocation(lootTableId)
 						.generate(contextBuilder.build(LootParameterSets.GIFT));
 				
