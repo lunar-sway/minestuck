@@ -679,8 +679,14 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.DERSE_SHOES, "Derse Shoes");
 		add(MSItems.STANDARD_BLACK_SUIT_JACKET, "Standard Black Suit Jacket");
 		add(MSItems.STANDARD_BLACK_SUIT_PANTS, "Standard Black Suit Pants");
-		add(MSItems.BOONDOLLARS, "Boondollars");
+		add(MSItems.RED_CLOCKWORK_SUIT_JACKET, "Red Clockwork Suit Jacket");
+		add(MSItems.RED_CLOCKWORK_SUIT_PANTS, "Red Clockwork Suit Pants");
+		add(MSItems.RED_CLOCKWORK_SUIT_SHOES, "Red Clockwork Suit Shoes");
 		add(MSItems.CRUMPLY_HAT, "Crumply Hat");
+		add(MSItems.LAUREL_WREATH, "Laurel Wreath");
+		add(MSItems.FUNNY_CAT_MASK, "Funny Cat Mask");
+		add(MSItems.FLAME_DECAL_GAS_MASK, "Flame Decal Gas Mask");
+		add(MSItems.GREEN_SKULL_GAS_MASK, "Green Skull Gas Mask");
 		add(MSItems.BOONDOLLARS, "Boondollars");
 		addExtra(MSItems.BOONDOLLARS, "amount", "Amount: %s");
 		add(MSItems.RAW_CRUXITE, "Raw Cruxite");

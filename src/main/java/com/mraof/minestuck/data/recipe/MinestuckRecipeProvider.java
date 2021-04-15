@@ -123,6 +123,8 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		ShapedRecipeBuilder.shapedRecipe(MSItems.KNITTING_NEEDLE, 2).key('i', Items.IRON_INGOT).key('n', Items.IRON_NUGGET).patternLine("  n").patternLine(" i ").patternLine("i  ").addCriterion("has_iron_ingot", hasItem(Items.IRON_INGOT)).build(recipeBuilder);
 		ShapedRecipeBuilder.shapedRecipe(MSItems.SHURIKEN, 2).key('i', Items.IRON_INGOT).key('n', Items.IRON_NUGGET).patternLine(" i ").patternLine("ini").patternLine(" i ").addCriterion("has_iron_ingot", hasItem(Items.IRON_INGOT)).build(recipeBuilder);
 		
+		ShapedRecipeBuilder.shapedRecipe(MSItems.LAUREL_WREATH, 1).key('l', ItemTags.LEAVES).patternLine("l l").patternLine(" l ").addCriterion("has_leaves", hasItem(ItemTags.LEAVES)).build(recipeBuilder);
+		
 		ShapedRecipeBuilder.shapedRecipe(MSItems.ENERGY_CORE).key('u', ExtraForgeTags.Items.URANIUM_CHUNKS).key('c', MSItems.RAW_CRUXITE).patternLine("cuc").patternLine("ucu").patternLine("cuc").addCriterion("has_raw_uranium", hasItem(MSItems.RAW_URANIUM)).build(recipeBuilder);
 		ShapedRecipeBuilder.shapedRecipe(MSItems.CLIENT_DISK).key('i', Tags.Items.INGOTS_IRON).key('c', MSItems.RAW_CRUXITE).patternLine("c c").patternLine(" i ").patternLine("c c").setGroup("sburb_disk").addCriterion("has_raw_cruxite", hasItem(MSItems.RAW_CRUXITE)).build(recipeBuilder);
 		ShapedRecipeBuilder.shapedRecipe(MSItems.SERVER_DISK).key('i', Tags.Items.INGOTS_IRON).key('c', MSItems.RAW_CRUXITE).patternLine(" c ").patternLine("cic").patternLine(" c ").setGroup("sburb_disk").addCriterion("has_raw_cruxite", hasItem(MSItems.RAW_CRUXITE)).build(recipeBuilder);

@@ -3,9 +3,7 @@ package com.mraof.minestuck.client;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.client.model.*;
-import com.mraof.minestuck.client.model.armor.CrumplyHatModel;
-import com.mraof.minestuck.client.model.armor.PrismarineArmorModel;
-import com.mraof.minestuck.client.model.armor.StandardBlackSuitModel;
+import com.mraof.minestuck.client.model.armor.*;
 import com.mraof.minestuck.client.renderer.entity.*;
 import com.mraof.minestuck.client.renderer.entity.frog.FrogRenderer;
 import com.mraof.minestuck.client.renderer.tileentity.GateRenderer;
@@ -128,12 +126,19 @@ public class ClientProxy
 	
 	private static void registerArmorModels()
 	{
-		MSItems.CRUMPLY_HAT.setArmorModel(new CrumplyHatModel());
 		MSItems.PRISMARINE_HELMET.setArmorModel(new PrismarineArmorModel());
 		MSItems.PRISMARINE_CHESTPLATE.setArmorModel(new PrismarineArmorModel());
 		MSItems.PRISMARINE_LEGGINGS.setArmorModel(new PrismarineArmorModel());
 		MSItems.PRISMARINE_BOOTS.setArmorModel(new PrismarineArmorModel());
 		MSItems.STANDARD_BLACK_SUIT_JACKET.setArmorModel(new StandardBlackSuitModel());
 		MSItems.STANDARD_BLACK_SUIT_PANTS.setArmorModel(new StandardBlackSuitModel());
+		MSItems.RED_CLOCKWORK_SUIT_JACKET.setArmorModel(new RedClockworkSuitModel());
+		MSItems.RED_CLOCKWORK_SUIT_PANTS.setArmorModel(new RedClockworkSuitModel());
+		MSItems.RED_CLOCKWORK_SUIT_SHOES.setArmorModel(new RedClockworkSuitModel());
+		MSItems.CRUMPLY_HAT.setArmorModel(new CrumplyHatModel());
+		MSItems.LAUREL_WREATH.setArmorModel(new LaurelWreathModel());
+		MSItems.FUNNY_CAT_MASK.setArmorModel(new FunnyCatMaskModel());
+		MSItems.FLAME_DECAL_GAS_MASK.setArmorModel(new FlameDecalGasMaskModel());
+		MSItems.GREEN_SKULL_GAS_MASK.setArmorModel(new GreenSkullGasMaskModel());
 	}
 }

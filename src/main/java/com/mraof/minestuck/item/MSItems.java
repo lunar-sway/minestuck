@@ -278,8 +278,15 @@ public class MSItems
 	
 	public static final MSArmorItem STANDARD_BLACK_SUIT_JACKET = getNull();
 	public static final MSArmorItem STANDARD_BLACK_SUIT_PANTS = getNull();
+	public static final MSArmorItem RED_CLOCKWORK_SUIT_JACKET = getNull();
+	public static final MSArmorItem RED_CLOCKWORK_SUIT_PANTS = getNull();
+	public static final MSArmorItem RED_CLOCKWORK_SUIT_SHOES = getNull();
 	
 	public static final MSArmorItem CRUMPLY_HAT = getNull();
+	public static final MSArmorItem LAUREL_WREATH = getNull();
+	public static final MSArmorItem FUNNY_CAT_MASK = getNull();
+	public static final MSArmorItem FLAME_DECAL_GAS_MASK = getNull();
+	public static final MSArmorItem GREEN_SKULL_GAS_MASK = getNull();
 	
 	//Core Items
 	public static final Item BOONDOLLARS = getNull();
@@ -947,8 +954,15 @@ public class MSItems
 		
 		registry.register(new MSArmorItem("standard_black_suit", MSItemTypes.CLOTH_ARMOR, EquipmentSlotType.CHEST, new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("standard_black_suit_jacket"));
 		registry.register(new MSArmorItem("standard_black_suit", MSItemTypes.CLOTH_ARMOR, EquipmentSlotType.LEGS, new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("standard_black_suit_pants"));
+		registry.register(new MSArmorItem("red_clockwork_suit", MSItemTypes.CLOTH_ARMOR, EquipmentSlotType.CHEST, new Item.Properties().group(MSItemGroup.LANDS)).setRegistryName("red_clockwork_suit_jacket"));
+		registry.register(new MSArmorItem("red_clockwork_suit", MSItemTypes.CLOTH_ARMOR, EquipmentSlotType.LEGS, new Item.Properties().group(MSItemGroup.LANDS)).setRegistryName("red_clockwork_suit_pants"));
+		registry.register(new MSArmorItem("red_clockwork_suit", MSItemTypes.CLOTH_ARMOR, EquipmentSlotType.FEET, new Item.Properties().group(MSItemGroup.LANDS)).setRegistryName("red_clockwork_suit_shoes"));
 		
 		registry.register(new MSArmorItem(MSItemTypes.CLOTH_ARMOR, EquipmentSlotType.HEAD, new Item.Properties().maxStackSize(1).group(MSItemGroup.LANDS)).setRegistryName("crumply_hat"));
+		registry.register(new MSArmorItem(MSItemTypes.GENERIC_ARMOR, EquipmentSlotType.HEAD, new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("laurel_wreath"));
+		registry.register(new MSArmorItem(MSItemTypes.GENERIC_ARMOR, EquipmentSlotType.HEAD, new Item.Properties().maxStackSize(1).group(MSItemGroup.LANDS)).setRegistryName("funny_cat_mask"));
+		registry.register(new MSArmorItem(MSItemTypes.GENERIC_ARMOR, EquipmentSlotType.HEAD, new Item.Properties().maxStackSize(1).group(MSItemGroup.LANDS)).setRegistryName("flame_decal_gas_mask"));
+		registry.register(new MSArmorItem(MSItemTypes.GENERIC_ARMOR, EquipmentSlotType.HEAD, new Item.Properties().maxStackSize(1).group(MSItemGroup.LANDS)).setRegistryName("green_skull_gas_mask"));
 		
 		//core items
 		registry.register(new BoondollarsItem(new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("boondollars"));
