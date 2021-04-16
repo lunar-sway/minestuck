@@ -260,10 +260,18 @@ public class MSItems
 	public static final Item MINE_AND_GRIST = getNull();
 	
 	//Armor
+	public static final MSArmorItem GUMBRAWLLERS_GAKURAN_HAT = getNull();
+	public static final MSArmorItem GUMBRAWLLERS_GAKURAN_JACKET = getNull();
+	public static final MSArmorItem GUMBRAWLLERS_GAKURAN_PANTS = getNull();
+	public static final MSArmorItem GUMBRAWLLERS_GAKURAN_SHOES = getNull();
 	public static final MSArmorItem PRISMARINE_HELMET = getNull();
 	public static final MSArmorItem PRISMARINE_CHESTPLATE = getNull();
 	public static final MSArmorItem PRISMARINE_LEGGINGS = getNull();
 	public static final MSArmorItem PRISMARINE_BOOTS = getNull();
+	public static final MSArmorItem HEAVY_METAL_HELMET = getNull();
+	public static final MSArmorItem HEAVY_METAL_CHESTPLATE = getNull();
+	public static final MSArmorItem HEAVY_METAL_LEGGINGS = getNull();
+	public static final MSArmorItem HEAVY_METAL_BOOTS = getNull();
 	public static final Item IRON_LASS_GLASSES = getNull();
 	public static final Item IRON_LASS_CHESTPLATE = getNull();
 	public static final Item IRON_LASS_SKIRT = getNull();
@@ -276,14 +284,23 @@ public class MSItems
 	public static final Item DERSE_PANTS = getNull();
 	public static final Item DERSE_SHOES = getNull();
 	
-	public static final MSArmorItem STANDARD_BLACK_SUIT_JACKET = getNull();
-	public static final MSArmorItem STANDARD_BLACK_SUIT_PANTS = getNull();
+	public static final MSArmorItem BLACK_SUIT_JACKET = getNull();
+	public static final MSArmorItem BLACK_SUIT_PANTS = getNull();
+	public static final MSArmorItem WHITE_SUIT_JACKET = getNull();
+	public static final MSArmorItem WHITE_SUIT_PANTS = getNull();
+	public static final MSArmorItem BLACK_DRESS_SHOES = getNull();
+	public static final MSArmorItem SLIMER_SUIT_JACKET = getNull();
+	public static final MSArmorItem SLIMER_SUIT_PANTS = getNull();
+	public static final MSArmorItem JUNIOR_ECTOBIOLOGISTS_LAB_SUIT_JACKET = getNull();
+	public static final MSArmorItem JUNIOR_ECTOBIOLOGISTS_LAB_SUIT_PANTS = getNull();
+	public static final MSArmorItem JUNIOR_ECTOBIOLOGISTS_LAB_SUIT_SHOES = getNull();
 	public static final MSArmorItem RED_CLOCKWORK_SUIT_JACKET = getNull();
 	public static final MSArmorItem RED_CLOCKWORK_SUIT_PANTS = getNull();
 	public static final MSArmorItem RED_CLOCKWORK_SUIT_SHOES = getNull();
 	
 	public static final MSArmorItem CRUMPLY_HAT = getNull();
 	public static final MSArmorItem LAUREL_WREATH = getNull();
+	public static final MSArmorItem GRAY_CAT_MASK = getNull();
 	public static final MSArmorItem FUNNY_CAT_MASK = getNull();
 	public static final MSArmorItem FLAME_DECAL_GAS_MASK = getNull();
 	public static final MSArmorItem GREEN_SKULL_GAS_MASK = getNull();
@@ -936,10 +953,18 @@ public class MSItems
 		registry.register(new PickaxeItem(ItemTier.DIAMOND, 1 , -2.8F, new Item.Properties()/*.group(MSItemGroup.WEAPONS)*/).setRegistryName("mine_and_grist"));
 		
 		//armor
+		registry.register(new MSArmorItem("gumbrawllers_gakuran", ArmorMaterial.LEATHER, EquipmentSlotType.HEAD, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("gumbrawllers_gakuran_hat"));
+		registry.register(new MSArmorItem("gumbrawllers_gakuran", ArmorMaterial.LEATHER, EquipmentSlotType.CHEST, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("gumbrawllers_gakuran_jacket"));
+		registry.register(new MSArmorItem("gumbrawllers_gakuran", ArmorMaterial.LEATHER, EquipmentSlotType.LEGS, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("gumbrawllers_gakuran_pants"));
+		registry.register(new MSArmorItem("gumbrawllers_gakuran", ArmorMaterial.LEATHER, EquipmentSlotType.FEET, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("gumbrawllers_gakuran_shoes"));
 		registry.register(new MSArmorItem("prismarine_armor", MSItemTypes.PRISMARINE_ARMOR, EquipmentSlotType.HEAD, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("prismarine_helmet"));
 		registry.register(new MSArmorItem("prismarine_armor", MSItemTypes.PRISMARINE_ARMOR, EquipmentSlotType.CHEST, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("prismarine_chestplate"));
 		registry.register(new MSArmorItem("prismarine_armor", MSItemTypes.PRISMARINE_ARMOR, EquipmentSlotType.LEGS, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("prismarine_leggings"));
 		registry.register(new MSArmorItem("prismarine_armor", MSItemTypes.PRISMARINE_ARMOR, EquipmentSlotType.FEET, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("prismarine_boots"));
+		registry.register(new MSArmorItem("heavy_metal_armor", MSItemTypes.HEAVY_METAL_ARMOR, EquipmentSlotType.HEAD, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("heavy_metal_helmet"));
+		registry.register(new MSArmorItem("heavy_metal_armor", MSItemTypes.HEAVY_METAL_ARMOR, EquipmentSlotType.CHEST, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("heavy_metal_chestplate"));
+		registry.register(new MSArmorItem("heavy_metal_armor", MSItemTypes.HEAVY_METAL_ARMOR, EquipmentSlotType.LEGS, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("heavy_metal_leggings"));
+		registry.register(new MSArmorItem("heavy_metal_armor", MSItemTypes.HEAVY_METAL_ARMOR, EquipmentSlotType.FEET, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("heavy_metal_boots"));
 		registry.register(new ArmorItem(MSItemTypes.IRON_LASS_ARMOR, EquipmentSlotType.HEAD, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("iron_lass_glasses"));
 		registry.register(new ArmorItem(MSItemTypes.IRON_LASS_ARMOR, EquipmentSlotType.CHEST, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("iron_lass_chestplate"));
 		registry.register(new ArmorItem(MSItemTypes.IRON_LASS_ARMOR, EquipmentSlotType.LEGS, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("iron_lass_skirt"));
@@ -952,14 +977,23 @@ public class MSItems
 		registry.register(new ArmorItem(MSItemTypes.DREAM_PAJAMAS, EquipmentSlotType.LEGS, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("derse_pants"));
 		registry.register(new ArmorItem(MSItemTypes.DREAM_PAJAMAS, EquipmentSlotType.FEET, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("derse_shoes"));
 		
-		registry.register(new MSArmorItem("standard_black_suit", MSItemTypes.CLOTH_ARMOR, EquipmentSlotType.CHEST, new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("standard_black_suit_jacket"));
-		registry.register(new MSArmorItem("standard_black_suit", MSItemTypes.CLOTH_ARMOR, EquipmentSlotType.LEGS, new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("standard_black_suit_pants"));
+		registry.register(new MSArmorItem("black_suit", MSItemTypes.CLOTH_ARMOR, EquipmentSlotType.CHEST, new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("black_suit_jacket"));
+		registry.register(new MSArmorItem("black_suit", MSItemTypes.CLOTH_ARMOR, EquipmentSlotType.LEGS, new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("black_suit_pants"));
+		registry.register(new MSArmorItem("white_suit", MSItemTypes.CLOTH_ARMOR, EquipmentSlotType.CHEST, new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("white_suit_jacket"));
+		registry.register(new MSArmorItem("white_suit", MSItemTypes.CLOTH_ARMOR, EquipmentSlotType.LEGS, new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("white_suit_pants"));
+		registry.register(new MSArmorItem("white_suit", MSItemTypes.CLOTH_ARMOR, EquipmentSlotType.FEET, new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("black_dress_shoes"));
+		registry.register(new MSArmorItem("slimer_suit", MSItemTypes.CLOTH_ARMOR, EquipmentSlotType.CHEST, new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("slimer_suit_jacket"));
+		registry.register(new MSArmorItem("slimer_suit", MSItemTypes.CLOTH_ARMOR, EquipmentSlotType.LEGS, new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("slimer_suit_pants"));
+		registry.register(new MSArmorItem("junior_ectobiologists_lab_suit", MSItemTypes.CLOTH_ARMOR, EquipmentSlotType.CHEST, new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("junior_ectobiologists_lab_suit_jacket"));
+		registry.register(new MSArmorItem("junior_ectobiologists_lab_suit", MSItemTypes.CLOTH_ARMOR, EquipmentSlotType.LEGS, new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("junior_ectobiologists_lab_suit_pants"));
+		registry.register(new MSArmorItem("junior_ectobiologists_lab_suit", MSItemTypes.CLOTH_ARMOR, EquipmentSlotType.FEET, new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("junior_ectobiologists_lab_suit_shoes"));
 		registry.register(new MSArmorItem("red_clockwork_suit", MSItemTypes.CLOTH_ARMOR, EquipmentSlotType.CHEST, new Item.Properties().group(MSItemGroup.LANDS)).setRegistryName("red_clockwork_suit_jacket"));
 		registry.register(new MSArmorItem("red_clockwork_suit", MSItemTypes.CLOTH_ARMOR, EquipmentSlotType.LEGS, new Item.Properties().group(MSItemGroup.LANDS)).setRegistryName("red_clockwork_suit_pants"));
 		registry.register(new MSArmorItem("red_clockwork_suit", MSItemTypes.CLOTH_ARMOR, EquipmentSlotType.FEET, new Item.Properties().group(MSItemGroup.LANDS)).setRegistryName("red_clockwork_suit_shoes"));
 		
 		registry.register(new MSArmorItem(MSItemTypes.CLOTH_ARMOR, EquipmentSlotType.HEAD, new Item.Properties().maxStackSize(1).group(MSItemGroup.LANDS)).setRegistryName("crumply_hat"));
 		registry.register(new MSArmorItem(MSItemTypes.GENERIC_ARMOR, EquipmentSlotType.HEAD, new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("laurel_wreath"));
+		registry.register(new MSArmorItem(MSItemTypes.GENERIC_ARMOR, EquipmentSlotType.HEAD, new Item.Properties().maxStackSize(1).group(MSItemGroup.LANDS)).setRegistryName("gray_cat_mask"));
 		registry.register(new MSArmorItem(MSItemTypes.GENERIC_ARMOR, EquipmentSlotType.HEAD, new Item.Properties().maxStackSize(1).group(MSItemGroup.LANDS)).setRegistryName("funny_cat_mask"));
 		registry.register(new MSArmorItem(MSItemTypes.GENERIC_ARMOR, EquipmentSlotType.HEAD, new Item.Properties().maxStackSize(1).group(MSItemGroup.LANDS)).setRegistryName("flame_decal_gas_mask"));
 		registry.register(new MSArmorItem(MSItemTypes.GENERIC_ARMOR, EquipmentSlotType.HEAD, new Item.Properties().maxStackSize(1).group(MSItemGroup.LANDS)).setRegistryName("green_skull_gas_mask"));

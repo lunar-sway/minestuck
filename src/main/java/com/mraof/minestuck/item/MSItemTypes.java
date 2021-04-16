@@ -39,6 +39,7 @@ public class MSItemTypes
 	public static final IItemTier WELSH_TIER = new ModItemTier(5, 5120, 15.0F, 5.0F, 25, () -> Ingredient.fromItems(MSItems.CUEBALL));
 	
 	public static final IArmorMaterial PRISMARINE_ARMOR = new ModArmorMaterial("minestuck:prismarine", 20, new int[]{3, 7, 6, 2}, 15, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0.0F, () -> Ingredient.fromItems(Items.PRISMARINE_SHARD));
+	public static final IArmorMaterial HEAVY_METAL_ARMOR = new ModArmorMaterial("minestuck:heavy_metal", 30, new int[]{5, 4, 3, 3}, 8, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 1.0F, () -> Ingredient.EMPTY);
 	public static final IArmorMaterial IRON_LASS_ARMOR = new ModArmorMaterial("minestuck:iron_lass", 50, new int[]{4, 7, 8, 3}, 15, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0.0F, () -> Ingredient.EMPTY);
 	public static final IArmorMaterial CLOTH_ARMOR = new ModArmorMaterial("minestuck:cloth", -1, new int[]{0, 0, 0, 0}, 5, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0.0F, () -> Ingredient.EMPTY);
 	public static final IArmorMaterial GENERIC_ARMOR = new ModArmorMaterial("minestuck:generic", -1, new int[]{0, 0, 0, 0}, 0, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 0.0F, () -> Ingredient.EMPTY);

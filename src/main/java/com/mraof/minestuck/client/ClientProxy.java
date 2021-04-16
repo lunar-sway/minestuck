@@ -126,17 +126,34 @@ public class ClientProxy
 	
 	private static void registerArmorModels()
 	{
+		MSItems.GUMBRAWLLERS_GAKURAN_HAT.setArmorModel(new GumbrawllersGakuranModel());
+		MSItems.GUMBRAWLLERS_GAKURAN_JACKET.setArmorModel(new GumbrawllersGakuranModel());
+		MSItems.GUMBRAWLLERS_GAKURAN_PANTS.setArmorModel(new GumbrawllersGakuranModel());
+		MSItems.GUMBRAWLLERS_GAKURAN_SHOES.setArmorModel(new GumbrawllersGakuranModel());
 		MSItems.PRISMARINE_HELMET.setArmorModel(new PrismarineArmorModel());
 		MSItems.PRISMARINE_CHESTPLATE.setArmorModel(new PrismarineArmorModel());
 		MSItems.PRISMARINE_LEGGINGS.setArmorModel(new PrismarineArmorModel());
 		MSItems.PRISMARINE_BOOTS.setArmorModel(new PrismarineArmorModel());
-		MSItems.STANDARD_BLACK_SUIT_JACKET.setArmorModel(new StandardBlackSuitModel());
-		MSItems.STANDARD_BLACK_SUIT_PANTS.setArmorModel(new StandardBlackSuitModel());
+		MSItems.HEAVY_METAL_HELMET.setArmorModel(new HeavyMetalArmorModel());
+		MSItems.HEAVY_METAL_CHESTPLATE.setArmorModel(new HeavyMetalArmorModel());
+		MSItems.HEAVY_METAL_LEGGINGS.setArmorModel(new HeavyMetalArmorModel());
+		MSItems.HEAVY_METAL_BOOTS.setArmorModel(new HeavyMetalArmorModel());
+		MSItems.BLACK_SUIT_JACKET.setArmorModel(new BlackSuitModel());
+		MSItems.BLACK_SUIT_PANTS.setArmorModel(new BlackSuitModel());
+		MSItems.WHITE_SUIT_JACKET.setArmorModel(new WhiteSuitModel());
+		MSItems.WHITE_SUIT_PANTS.setArmorModel(new WhiteSuitModel());
+		MSItems.BLACK_DRESS_SHOES.setArmorModel(new WhiteSuitModel());
+		MSItems.SLIMER_SUIT_JACKET.setArmorModel(new SlimerSuitModel());
+		MSItems.SLIMER_SUIT_PANTS.setArmorModel(new SlimerSuitModel());
+		MSItems.JUNIOR_ECTOBIOLOGISTS_LAB_SUIT_JACKET.setArmorModel(new JuniorEctobiologistsLabSuitModel());
+		MSItems.JUNIOR_ECTOBIOLOGISTS_LAB_SUIT_PANTS.setArmorModel(new JuniorEctobiologistsLabSuitModel());
+		MSItems.JUNIOR_ECTOBIOLOGISTS_LAB_SUIT_SHOES.setArmorModel(new JuniorEctobiologistsLabSuitModel());
 		MSItems.RED_CLOCKWORK_SUIT_JACKET.setArmorModel(new RedClockworkSuitModel());
 		MSItems.RED_CLOCKWORK_SUIT_PANTS.setArmorModel(new RedClockworkSuitModel());
 		MSItems.RED_CLOCKWORK_SUIT_SHOES.setArmorModel(new RedClockworkSuitModel());
 		MSItems.CRUMPLY_HAT.setArmorModel(new CrumplyHatModel());
 		MSItems.LAUREL_WREATH.setArmorModel(new LaurelWreathModel());
+		MSItems.GRAY_CAT_MASK.setArmorModel(new GrayCatMaskModel());
 		MSItems.FUNNY_CAT_MASK.setArmorModel(new FunnyCatMaskModel());
 		MSItems.FLAME_DECAL_GAS_MASK.setArmorModel(new FlameDecalGasMaskModel());
 		MSItems.GREEN_SKULL_GAS_MASK.setArmorModel(new GreenSkullGasMaskModel());
