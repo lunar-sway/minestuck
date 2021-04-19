@@ -322,6 +322,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.COBALT_SABRE).input(MSItems.TOO_HOT_TO_HANDLE).or().input(Items.LAPIS_BLOCK).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.SCARLET_RIBBITAR).input(MSItems.CALEDSCRATCH).and().input(MSItems.FROG).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.SHATTER_BEACON).input(Items.BEACON).and().input(Items.DIAMOND_SWORD).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.SHATTER_BACON).input(Items.PORKCHOP).and().input(MSItems.SHATTER_BEACON).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CALEDFWLCH).input(MSItems.ROYAL_DERINGER).or().input(MSItems.CUEBALL).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.BATLEACKS).namedInput(MSItems.BATTLEAXE).and().input(MSItems.SBAHJ_POSTER).build(consumer);

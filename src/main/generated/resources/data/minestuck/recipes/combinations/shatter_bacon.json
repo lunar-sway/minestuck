@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:porkchop"
+  },
+  "input2": {
+    "item": "minestuck:shatter_beacon"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:shatter_bacon"
+  }
+}
