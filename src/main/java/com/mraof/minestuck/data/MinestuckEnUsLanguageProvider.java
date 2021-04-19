@@ -522,6 +522,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.NIGHT_CLUB, "Wanna go...clubbing?");
 		add(MSItems.NIGHTSTICK, "Nightstick");
 		addTooltip(MSItems.NIGHTSTICK, "NO CLUBBING MOVE ALONG.");
+		add(MSItems.RED_EYES, "Red Eyes");
 		add(MSItems.PRISMARINE_BASHER, "Prismarine Basher");
 		addTooltip(MSItems.PRISMARINE_BASHER, "Smells like sea salt, unsurprisingly.");
 		add(MSItems.CLUB_ZERO, "Club Zero");
