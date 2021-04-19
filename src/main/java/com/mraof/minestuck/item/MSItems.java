@@ -957,10 +957,10 @@ public class MSItems
 		registry.register(new MSArmorItem("gumbrawllers_gakuran", ArmorMaterial.LEATHER, EquipmentSlotType.CHEST, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("gumbrawllers_gakuran_jacket"));
 		registry.register(new MSArmorItem("gumbrawllers_gakuran", ArmorMaterial.LEATHER, EquipmentSlotType.LEGS, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("gumbrawllers_gakuran_pants"));
 		registry.register(new MSArmorItem("gumbrawllers_gakuran", ArmorMaterial.LEATHER, EquipmentSlotType.FEET, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("gumbrawllers_gakuran_shoes"));
-		registry.register(new MSArmorItem("prismarine_armor", MSItemTypes.PRISMARINE_ARMOR, EquipmentSlotType.HEAD, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("prismarine_helmet"));
-		registry.register(new MSArmorItem("prismarine_armor", MSItemTypes.PRISMARINE_ARMOR, EquipmentSlotType.CHEST, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("prismarine_chestplate"));
-		registry.register(new MSArmorItem("prismarine_armor", MSItemTypes.PRISMARINE_ARMOR, EquipmentSlotType.LEGS, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("prismarine_leggings"));
-		registry.register(new MSArmorItem("prismarine_armor", MSItemTypes.PRISMARINE_ARMOR, EquipmentSlotType.FEET, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("prismarine_boots"));
+		registry.register(new MSArmorItem("prismarine_armor_legless", MSItemTypes.PRISMARINE_ARMOR, EquipmentSlotType.HEAD, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("prismarine_helmet"));
+		registry.register(new MSArmorItem("prismarine_armor_legless", MSItemTypes.PRISMARINE_ARMOR, EquipmentSlotType.CHEST, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("prismarine_chestplate"));
+		registry.register(new MSArmorItem("prismarine_armor_legs", MSItemTypes.PRISMARINE_ARMOR, EquipmentSlotType.LEGS, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("prismarine_leggings"));
+		registry.register(new MSArmorItem("prismarine_armor_legless", MSItemTypes.PRISMARINE_ARMOR, EquipmentSlotType.FEET, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("prismarine_boots"));
 		registry.register(new MSArmorItem("heavy_metal_armor", MSItemTypes.HEAVY_METAL_ARMOR, EquipmentSlotType.HEAD, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("heavy_metal_helmet"));
 		registry.register(new MSArmorItem("heavy_metal_armor", MSItemTypes.HEAVY_METAL_ARMOR, EquipmentSlotType.CHEST, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("heavy_metal_chestplate"));
 		registry.register(new MSArmorItem("heavy_metal_armor", MSItemTypes.HEAVY_METAL_ARMOR, EquipmentSlotType.LEGS, new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("heavy_metal_leggings"));
