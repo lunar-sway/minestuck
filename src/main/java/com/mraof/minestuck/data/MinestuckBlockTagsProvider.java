@@ -42,7 +42,7 @@ public class MinestuckBlockTagsProvider extends BlockTagsProvider
 		getBuilder(Tags.Blocks.ORES_LAPIS).add(LAPIS_ORES);
 		getBuilder(Tags.Blocks.ORES_QUARTZ).add(QUARTZ_ORES);
 		getBuilder(Tags.Blocks.ORES_REDSTONE).add(REDSTONE_ORES);
-		getBuilder(Tags.Blocks.STONE).add(COARSE_STONE, SHADE_STONE, BLACK_STONE, COARSE_END_STONE, PINK_STONE, BROWN_STONE);
+		getBuilder(Tags.Blocks.STONE).add(COARSE_STONE, SHADE_STONE, BLACK_STONE, COARSE_END_STONE, PINK_STONE, BROWN_STONE, GREEN_STONE);
 		getBuilder(Tags.Blocks.STORAGE_BLOCKS).add(CRUXITE_STORAGE_BLOCKS, ExtraForgeTags.Blocks.URANIUM_STORAGE_BLOCKS);
 		
 		getBuilder(ExtraForgeTags.Blocks.URANIUM_ORES).add(URANIUM_ORES);

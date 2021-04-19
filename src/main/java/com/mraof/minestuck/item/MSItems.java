@@ -534,6 +534,7 @@ public class MSItems
 		registerItemBlock(registry, MOSSY_PINK_STONE_BRICKS, MSItemGroup.LANDS);
 		registerItemBlock(registry, POLISHED_PINK_STONE, MSItemGroup.LANDS);
 		registerItemBlock(registry, BROWN_STONE, MSItemGroup.LANDS);
+		registerItemBlock(registry, GREEN_STONE, MSItemGroup.LANDS);
 		registerItemBlock(registry, BROWN_STONE_BRICKS, MSItemGroup.LANDS);
 		registerItemBlock(registry, BROWN_STONE_COLUMN, MSItemGroup.LANDS);
 		registerItemBlock(registry, CRACKED_BROWN_STONE_BRICKS, MSItemGroup.LANDS);
