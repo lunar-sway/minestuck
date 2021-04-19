@@ -4,8 +4,8 @@
     "item": "minestuck:m_ace"
   },
   "grist_cost": {
-    "minestuck:build": 200,
-    "minestuck:marble": 10,
-    "minestuck:chalk": 22
+    "minestuck:build": 135,
+    "minestuck:marble": 18,
+    "minestuck:chalk": 30
   }
 }

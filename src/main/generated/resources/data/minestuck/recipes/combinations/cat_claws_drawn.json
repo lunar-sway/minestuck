@@ -1,13 +1,13 @@
 {
   "type": "minestuck:combination",
   "input1": {
-    "item": "minecraft:stone_sword"
+    "item": "minecraft:iron_bars"
   },
   "input2": {
-    "item": "minestuck:sbahj_poster"
+    "item": "minecraft:leather"
   },
   "mode": "and",
   "output": {
-    "item": "minestuck:sord"
+    "item": "minestuck:cat_claws_drawn"
   }
 }

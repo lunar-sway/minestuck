@@ -433,6 +433,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.SHATTER_BEACON, "ShatterBeacon");
 		add(MSItems.BATLEACKS, "batleacks!!");
 		addTooltip(MSItems.BATLEACKS, "A shitty axe. Not much more to it.");
+		addExtra(MSItems.BATLEACKS, OnHitEffect.SORD_DROP_MESSAGE, "The shittiness of the batleacks made it phase through your hand");
 		add(MSItems.COPSE_CRUSHER, "Coppice Crusher");
 		addStoreTooltip(MSItems.COPSE_CRUSHER, "Good for crushing trees and your enemies!");
 		add(MSItems.QUENCH_CRUSHER, "Quench Crusher");
@@ -472,6 +473,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.BISECTOR, "Bisector");
 		addTooltip(MSItems.BISECTOR, "Cleave foes in twain... with pride :]");
 		add(MSItems.FINE_CHINA_AXE, "Fine China Axe");
+		addTooltip(MSItems.FINE_CHINA_AXE, "Physically I'm here but mentally I'm still thinking about that ceramic battle axe...");
 		add(MSItems.DICE, "Dice");
 		addTooltip(MSItems.DICE, "Dungeons and Dragons anybody?");
 		add(MSItems.FLUORITE_OCTET, "Fluorite Octet");
@@ -503,6 +505,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.REGISICKLE, "Regisickle");
 		addTooltip(MSItems.REGISICKLE, "A black sickle wielded by Dersites and Agents!");
 		add(MSItems.HERETICUS_AURURM, "Hereticus Aururm");
+		addTooltip(MSItems.HERETICUS_AURURM, "Did the Dersites get their Latin correct? I dunno, probably not. Go ask a Roman.");
 		add(MSItems.CLAW_SICKLE, "Clawsickle");
 		addTooltip(MSItems.CLAW_SICKLE, "This crabby blade can hook and pinch your enemies for you!");
 		add(MSItems.CLAW_OF_NRUBYIGLITH, "Claw of Nrub'yiglith");
@@ -1372,6 +1375,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(CheckLandCommand.CHECK, "You are currently in %s.");
 		add(CheckLandCommand.FAIL, "You are currently not in a land dimension.");
 		add(SendGristCommand.SUCCESS, "Successfully gave grist to %s: %s");
+		add(SendGristCommand.RECEIVE, "Received grist from %s: %s");
 		add(SendGristCommand.NOT_PERMITTED, "You are not permitted to send grist to %s.");
 		add(SendGristCommand.CANT_AFFORD, "You do not have enough grist to send %s.");
 		add(GristCommand.GET, "%s has: %s");
@@ -1381,6 +1385,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(GristCommand.SET, "Set the grist cache for %s players to %s.");
 		add(SetRungCommand.SUCCESS, "Successfully changed the echeladder of %s players to rung %d with %d%% progress.");
 		add(PorkhollowCommand.SEND, "Successfully sent %s boondollars to %s.");
+		add(PorkhollowCommand.RECEIVE, "Received %s boondollars from %s.");
 		add(PorkhollowCommand.TAKE, "Successfully took out %s boondollars from your porkhollow.");
 		add(PorkhollowCommand.INSUFFICIENT, "You do not have enough boondollars to do that.");
 		add(TransportalizerCommand.NOT_FOUND, "Couldn't find transportalizer with ID \"%s\"");

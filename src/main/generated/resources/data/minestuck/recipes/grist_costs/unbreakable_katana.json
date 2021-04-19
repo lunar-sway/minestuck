@@ -4,9 +4,9 @@
     "item": "minestuck:unbreakable_katana"
   },
   "grist_cost": {
-    "minestuck:build": 1800,
-    "minestuck:uranium": 93,
-    "minestuck:quartz": 155,
-    "minestuck:ruby": 84
+    "minestuck:build": 35000,
+    "minestuck:uranium": 200,
+    "minestuck:quartz": 1200,
+    "minestuck:ruby": 600
   }
 }

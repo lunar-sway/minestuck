@@ -1,13 +1,13 @@
 {
   "type": "minestuck:combination",
   "input1": {
-    "item": "minecraft:iron_bars"
+    "item": "minestuck:battleaxe"
   },
   "input2": {
-    "item": "minecraft:leather"
+    "item": "minestuck:sbahj_poster"
   },
   "mode": "and",
   "output": {
-    "item": "minestuck:cat_claws_sheathed"
+    "item": "minestuck:batleacks"
   }
 }

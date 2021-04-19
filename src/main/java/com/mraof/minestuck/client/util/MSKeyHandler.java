@@ -9,15 +9,15 @@ import com.mraof.minestuck.network.EffectTogglePacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.screen.inventory.CreativeScreen;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.client.util.InputMappings;
 import net.minecraft.inventory.container.Slot;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -38,7 +38,6 @@ public class MSKeyHandler
 	public static KeyBinding captchaKey;
 	public static KeyBinding effectToggleKey;
 	public static KeyBinding sylladexKey;
-	static boolean captchaKeyPressed = false;
 	
 	public static void registerKeys()
 	{
@@ -47,62 +46,71 @@ public class MSKeyHandler
 		
 		statKey = new KeyBinding(STATS_GUI, GLFW.GLFW_KEY_G, CATEGORY);
 		ClientRegistry.registerKeyBinding(statKey);
-		editKey = new KeyBinding(EXIT_EDIT_MODE, GLFW.GLFW_KEY_K, CATEGORY);
+		editKey = new KeyBinding(EXIT_EDIT_MODE, KeyConflictContext.IN_GAME, InputMappings.Type.KEYSYM, GLFW.GLFW_KEY_K, CATEGORY);
 		ClientRegistry.registerKeyBinding(editKey);
 		captchaKey = new KeyBinding(CAPTCHALOGUE, GLFW.GLFW_KEY_V, CATEGORY);
 		ClientRegistry.registerKeyBinding(captchaKey);
-		effectToggleKey = new KeyBinding(ASPECT_EFFECT_TOGGLE, GLFW.GLFW_KEY_BACKSLASH, CATEGORY);
+		effectToggleKey = new KeyBinding(ASPECT_EFFECT_TOGGLE, KeyConflictContext.IN_GAME, InputMappings.Type.KEYSYM, GLFW.GLFW_KEY_BACKSLASH, CATEGORY);
 		ClientRegistry.registerKeyBinding(effectToggleKey);
-		sylladexKey = new KeyBinding(SYLLADEX, -1, CATEGORY);
+		sylladexKey = new KeyBinding(SYLLADEX, GLFW.GLFW_KEY_UNKNOWN, CATEGORY);
 		ClientRegistry.registerKeyBinding(sylladexKey);
 	}
 	
 	@SubscribeEvent
-	public static void onKeyInput(InputEvent event)	//This is only called during the game, when no gui is active
+	public static void guiKeyInput(GuiScreenEvent.KeyboardKeyPressedEvent.Post event)
 	{
-		while(statKey.isPressed())
-		{
-			PlayerStatsScreen.openGui(false);
-		}
+		InputMappings.Input input = InputMappings.getInputByCode(event.getKeyCode(), event.getScanCode());
 		
-		while(editKey.isPressed())
+		if(captchaKey.isActiveAndMatches(input) && Minecraft.getInstance().currentScreen instanceof ContainerScreen<?>)
 		{
-			ClientEditHandler.onKeyPressed();
+			captchalogueInGui((ContainerScreen<?>) Minecraft.getInstance().currentScreen);
+			event.setCanceled(true);
 		}
-		
-		while(captchaKey.isPressed())
-		{
-			if(!Minecraft.getInstance().player.getHeldItemMainhand().isEmpty())
-				MSPacketHandler.sendToServer(CaptchaDeckPacket.captchalogue());
-		}
-		
-		while(effectToggleKey.isPressed())
-		{
-			MSPacketHandler.sendToServer(new EffectTogglePacket());
-		}
-		
-		while(sylladexKey.isPressed())
-		{
-			if(ClientPlayerData.getModus() != null)
-				MSScreenFactories.displaySylladexScreen(ClientPlayerData.getModus());
-		}
+	}
+	
+	private static boolean isNotRelease(InputEvent.KeyInputEvent event)
+	{
+		return event.getAction() != 0;
 	}
 	
 	@SubscribeEvent
-	public static void onTick(TickEvent.ClientTickEvent event)
+	public static void onKeyInput(InputEvent.KeyInputEvent event)	//This is only called during the game, when no gui is active
 	{
-		if(InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), captchaKey.getKey().getKeyCode()) && !captchaKeyPressed) {
-
-			Screen screen = Minecraft.getInstance().currentScreen;
-			if(screen instanceof ContainerScreen<?> && screen.getFocused() == null && !(screen instanceof CreativeScreen))
-			{
-				Slot slot = ((ContainerScreen<?>) screen).getSlotUnderMouse();
-				if(slot != null)
-					MSPacketHandler.sendToServer(CaptchaDeckPacket.captchalogueInv(slot.slotNumber, ((ContainerScreen<?>) screen).getContainer().windowId));
-			}
+		if(isNotRelease(event) && Minecraft.getInstance().currentScreen == null)
+		{
+			InputMappings.Input input = InputMappings.getInputByCode(event.getKey(), event.getScanCode());
+			
+			if(statKey.isActiveAndMatches(input))
+				PlayerStatsScreen.openGui(false);
+			
+			if(editKey.isActiveAndMatches(input))
+				ClientEditHandler.onKeyPressed();
+			
+			if(captchaKey.isActiveAndMatches(input))
+				captchalogueInGame();
+			
+			if(effectToggleKey.isActiveAndMatches(input))
+				MSPacketHandler.sendToServer(new EffectTogglePacket());
+			
+			if(sylladexKey.isActiveAndMatches(input) && ClientPlayerData.getModus() != null)
+				MSScreenFactories.displaySylladexScreen(ClientPlayerData.getModus());
 		}
 		
-		captchaKeyPressed = InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), captchaKey.getKey().getKeyCode());
 	}
 	
+	private static void captchalogueInGame()
+	{
+		if(!Minecraft.getInstance().player.getHeldItemMainhand().isEmpty())
+			MSPacketHandler.sendToServer(CaptchaDeckPacket.captchalogue());
+	}
+	
+	private static void captchalogueInGui(ContainerScreen<?> screen)
+	{
+		if(!(screen instanceof CreativeScreen))
+		{
+			Slot slot = screen.getSlotUnderMouse();
+			if(slot != null && slot.getHasStack())
+				MSPacketHandler.sendToServer(CaptchaDeckPacket.captchalogueInv(slot.slotNumber, screen.getContainer().windowId));
+		}
+	}
 }

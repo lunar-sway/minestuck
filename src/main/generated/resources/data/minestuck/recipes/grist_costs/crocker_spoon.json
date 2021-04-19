@@ -4,9 +4,9 @@
     "item": "minestuck:crocker_spoon"
   },
   "grist_cost": {
-    "minestuck:build": 90,
-    "minestuck:iodine": 34,
-    "minestuck:chalk": 34,
-    "minestuck:ruby": 6
+    "minestuck:build": 850,
+    "minestuck:iodine": 170,
+    "minestuck:chalk": 170,
+    "minestuck:ruby": 51
   }
 }

@@ -4,8 +4,8 @@
     "item": "minestuck:piston_powered_pogo_axehammer"
   },
   "grist_cost": {
-    "minestuck:build": 150,
-    "minestuck:shale": 64,
-    "minestuck:rust": 15
+    "minestuck:build": 304,
+    "minestuck:shale": 152,
+    "minestuck:rust": 46
   }
 }

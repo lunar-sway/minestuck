@@ -4,7 +4,7 @@
     "item": "minestuck:cat_claws_drawn"
   },
   "grist_cost": {
-    "minestuck:build": 15,
-    "minestuck:rust": 5
+    "minestuck:build": 105,
+    "minestuck:rust": 9
   }
 }

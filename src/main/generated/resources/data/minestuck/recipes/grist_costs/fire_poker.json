@@ -4,9 +4,9 @@
     "item": "minestuck:fire_poker"
   },
   "grist_cost": {
-    "minestuck:amber": 41,
-    "minestuck:ruby": 14,
-    "minestuck:sulfur": 38,
-    "minestuck:gold": 3
+    "minestuck:amber": 75,
+    "minestuck:ruby": 9,
+    "minestuck:sulfur": 40,
+    "minestuck:gold": 4
   }
 }

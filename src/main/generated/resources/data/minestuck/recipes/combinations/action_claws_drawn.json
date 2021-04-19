@@ -1,13 +1,13 @@
 {
   "type": "minestuck:combination",
   "input1": {
-    "item": "minestuck:cat_claws_sheathed"
+    "item": "minestuck:cat_claws_drawn"
   },
   "input2": {
     "item": "minestuck:fluorite_octet"
   },
   "mode": "and",
   "output": {
-    "item": "minestuck:action_claws_sheathed"
+    "item": "minestuck:action_claws_drawn"
   }
 }
