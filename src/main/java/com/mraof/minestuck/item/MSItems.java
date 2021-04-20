@@ -316,6 +316,7 @@ public class MSItems
 	public static final Item FOOD_CAN = getNull();
 	
 	public static final Item CANDY_CORN = getNull();
+	public static final Item TUIX_BAR = getNull();
 	public static final Item BUILD_GUSHERS = getNull();
 	public static final Item AMBER_GUMMY_WORM = getNull();
 	public static final Item CAULK_PRETZEL = getNull();
@@ -987,6 +988,7 @@ public class MSItems
 		
 		
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN).food(MSFoods.CANDY_CORN)).setRegistryName("candy_corn"));
+		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN).food(MSFoods.TUIX_BAR)).setRegistryName("tuix_bar"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN).food(MSFoods.BUILD_GUSHERS)).setRegistryName("build_gushers"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN).food(MSFoods.AMBER_GUMMY_WORM)).setRegistryName("amber_gummy_worm"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN).food(MSFoods.CAULK_PRETZEL)).setRegistryName("caulk_pretzel"));

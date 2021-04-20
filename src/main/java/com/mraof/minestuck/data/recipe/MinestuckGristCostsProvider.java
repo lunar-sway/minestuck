@@ -534,7 +534,8 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		
 		GristCostRecipeBuilder.of(MSItems.SPORK).grist(BUILD, 13).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CANDY_CORN).grist(CHALK, 1).grist(SULFUR, 1).grist(IODINE, 1).build(recipeSaver);
-		for(GristType type : GristTypes.values())
+		GristCostRecipeBuilder.of(MSItems.TUIX_BAR).grist(BUILD, 5).grist(IODINE, 1).build(recipeSaver);
+		for(GristType type : values())
 		{
 			if(type.getRegistryName().getNamespace().equals(Minestuck.MOD_ID))
 				GristCostRecipeBuilder.of(type.getCandyItem().getItem()).grist(type, 3).build(recipeSaver);

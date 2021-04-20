@@ -755,6 +755,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.FOOD_CAN, "Food Can");
 		addTooltip(MSItems.FOOD_CAN, "You could be at the forefront of carapacian fashion if you turned the label into a sash");
 		add(MSItems.CANDY_CORN, "Candy Corn");
+		add(MSItems.TUIX_BAR, "Tuix Bar");
 		add(MSItems.BUILD_GUSHERS, "Build Gushers");
 		add(MSItems.AMBER_GUMMY_WORM, "Amber Gummy Worm");
 		add(MSItems.CAULK_PRETZEL, "Caulk Pretzel");

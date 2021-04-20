@@ -625,6 +625,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSBlocks.FROST_LOG).input(ItemTags.LOGS).or().namedInput(Items.SNOWBALL).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.CANDY_CORN).input(Items.SUGAR).and().input(Items.WHEAT_SEEDS).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.TUIX_BAR).input(Items.COCOA_BEANS).or().input(Items.BRICK).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.GOLDEN_GRASSHOPPER).input(MSItems.GRASSHOPPER).or().input(Items.GOLD_INGOT).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.BUG_NET).input(Items.STICK).or().namedInput(Items.COBWEB).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.BUG_NET).input(Items.STRING).and().namedInput(Items.BUCKET).build(consumer);
