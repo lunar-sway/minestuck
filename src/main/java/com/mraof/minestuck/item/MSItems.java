@@ -639,6 +639,10 @@ public class MSItems
 		registerItemBlock(registry, PARCEL_PYXIS, MSItemGroup.LANDS);
 		registerItemBlock(registry, PYXIS_LID, MSItemGroup.LANDS);
 		
+		registerItemBlock(registry, BLACK_CASTLE_BRICK_STAIRS, MSItemGroup.MAIN);
+		registerItemBlock(registry, DARK_GRAY_CASTLE_BRICK_STAIRS, MSItemGroup.MAIN);
+		registerItemBlock(registry, LIGHT_GRAY_CASTLE_BRICK_STAIRS, MSItemGroup.MAIN);
+		registerItemBlock(registry, WHITE_CASTLE_BRICK_STAIRS, MSItemGroup.MAIN);
 		registerItemBlock(registry, COARSE_STONE_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, SHADE_BRICK_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, FROST_BRICK_STAIRS, MSItemGroup.LANDS);
@@ -652,6 +656,10 @@ public class MSItems
 		registerItemBlock(registry, END_PLANKS_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, DEAD_PLANKS_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, TREATED_PLANKS_STAIRS, MSItemGroup.LANDS);
+		registerItemBlock(registry, BLACK_CASTLE_BRICK_SLAB, MSItemGroup.MAIN);
+		registerItemBlock(registry, DARK_GRAY_CASTLE_BRICK_SLAB, MSItemGroup.MAIN);
+		registerItemBlock(registry, LIGHT_GRAY_CASTLE_BRICK_SLAB, MSItemGroup.MAIN);
+		registerItemBlock(registry, WHITE_CASTLE_BRICK_SLAB, MSItemGroup.MAIN);
 		registerItemBlock(registry, CHALK_SLAB, MSItemGroup.LANDS);
 		registerItemBlock(registry, CHALK_BRICK_SLAB, MSItemGroup.LANDS);
 		registerItemBlock(registry, PINK_STONE_BRICK_SLAB, MSItemGroup.LANDS);

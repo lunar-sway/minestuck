@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "minestuck:dark_gray_castle_bricks"
+  },
+  "result": "minestuck:dark_gray_castle_brick_slab",
+  "count": 2
+}
