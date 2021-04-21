@@ -431,6 +431,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.COBALT_SABRE, "Cobalt Cobeam Coblade");
 		add(MSItems.QUANTUM_SABRE, "Quantum Sabre");
 		add(MSItems.SHATTER_BEACON, "ShatterBeacon");
+		add(MSItems.SHATTER_BACON, "ShatterBacon");
+		addTooltip(MSItems.SHATTER_BACON, "This thing is so unspeakably greasy you are having a hard time even holding it.");
+		addExtra(MSItems.SHATTER_BACON, OnHitEffect.SORD_DROP_MESSAGE, "The grease caused the ShatterBacon to slip from your grasp!");
 		add(MSItems.BATLEACKS, "batleacks!!");
 		addTooltip(MSItems.BATLEACKS, "A shitty axe. Not much more to it.");
 		addExtra(MSItems.BATLEACKS, OnHitEffect.SORD_DROP_MESSAGE, "The shittiness of the batleacks made it phase through your hand");
@@ -752,6 +755,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.FOOD_CAN, "Food Can");
 		addTooltip(MSItems.FOOD_CAN, "You could be at the forefront of carapacian fashion if you turned the label into a sash");
 		add(MSItems.CANDY_CORN, "Candy Corn");
+		add(MSItems.TUIX_BAR, "Tuix Bar");
 		add(MSItems.BUILD_GUSHERS, "Build Gushers");
 		add(MSItems.AMBER_GUMMY_WORM, "Amber Gummy Worm");
 		add(MSItems.CAULK_PRETZEL, "Caulk Pretzel");
