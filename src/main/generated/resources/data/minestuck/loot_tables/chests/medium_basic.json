@@ -486,6 +486,41 @@
         },
         {
           "type": "minecraft:item",
+          "weight": 2,
+          "name": "minestuck:flarp_manual"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 2,
+          "name": "minestuck:sassacre_text"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 2,
+          "name": "minestuck:wiseguy"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 2,
+          "name": "minestuck:tablestuck_manual"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 2,
+          "name": "minestuck:tilldeath_handbook"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 2,
+          "name": "minestuck:binary_code"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 2,
+          "name": "minestuck:nonbinary_code"
+        },
+        {
+          "type": "minecraft:item",
           "weight": 8,
           "name": "minestuck:ink_squid_pro_quo"
         },

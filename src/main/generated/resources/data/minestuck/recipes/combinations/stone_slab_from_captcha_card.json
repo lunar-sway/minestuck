@@ -1,13 +1,13 @@
 {
   "type": "minestuck:combination",
   "input1": {
-    "item": "minecraft:stick"
+    "item": "minecraft:stone"
   },
   "input2": {
-    "item": "minestuck:wiseguy"
+    "item": "minestuck:captcha_card"
   },
   "mode": "or",
   "output": {
-    "item": "minestuck:vaudeville_hook"
+    "item": "minestuck:stone_slab"
   }
 }

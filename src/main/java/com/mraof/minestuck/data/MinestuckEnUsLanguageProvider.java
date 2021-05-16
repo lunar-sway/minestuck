@@ -879,6 +879,16 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.SCALEMATE_WITNESS, "The Witness");
 		add(MSItems.IRON_BOAT, "Iron Boat");
 		add(MSItems.GOLD_BOAT, "Golden Boat");
+		add(MSItems.FLARP_MANUAL, "Flarp Manual");
+		add(MSItems.SASSACRE_TEXT, "Sassacre Text");
+		add(MSItems.WISEGUY, "Wise Guy");
+		add(MSItems.TABLESTUCK_MANUAL, "Tablestuck Manual");
+		add(MSItems.TILLDEATH_HANDBOOK, "~ATH Handbook");
+		addTooltip(MSItems.TILLDEATH_HANDBOOK, "A Handbook for the Imminently Deceased");
+		add(MSItems.BINARY_CODE, "Binary code");
+		addTooltip(MSItems.BINARY_CODE, "01101010 01110101 01110011 01110100 00100000 01100001 00100000 01100010 01110101 01101110 01100011 01101000 00100000 01101111 01100110 00100000 01101111 01101110 01100101 01110011 00100000 01100001 01101110 01100100 00100000 01111010 01100101 01110010 01101111 01110011");
+		add(MSItems.NONBINARY_CODE, "Nonbinary code");
+		addTooltip(MSItems.NONBINARY_CODE, "6e 6f 74 20 6a 75 73 74 20 61 20 62 75 6e 63 68 20 6f 66 20 6f 6e 65 73 20 61 6e 64 20 7a 65 72 6f 73");
 		add(MSItems.THRESH_DVD, "Thresh Prince DVD");
 		add(MSItems.GAMEBRO_MAGAZINE, "Game Bro Magazine");
 		add(MSItems.GAMEGRL_MAGAZINE, "Game Grl Magazine");

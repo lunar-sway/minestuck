@@ -33,6 +33,8 @@ public class MSBlockShapes
 	
 	public static final CustomVoxelShape WIZARD_STATUE = new CustomVoxelShape(new double[]{3, 0, 3, 13, 16, 12});
 	
+	public static final CustomVoxelShape STONE_TABLET = new CustomVoxelShape(new double[]{3, 0, 3, 13, 1, 15}, new double[]{3, 0, 2, 12, 1, 3}, new double[]{3, 0, 1, 11, 1, 2});
+	
 	public static final CustomVoxelShape BLENDER_BASE = new CustomVoxelShape(new double[]{3, 0, 3, 13, 3, 13}, new double[]{4, 3, 4, 12, 4, 12});
 	public static final CustomVoxelShape BLENDER_CONTAINER = new CustomVoxelShape(new double[]{5, 4, 5, 11, 7, 11}, new double[]{4, 7, 4, 12, 13, 12}, new double[]{3, 13, 3, 13, 14, 13});
 	public static final CustomVoxelShape BLENDER_HANDLE = new CustomVoxelShape(new double[]{3, 6, 7, 5, 7, 9}, new double[]{2, 7, 7, 3, 11, 9}, new double[]{3, 11, 7, 4, 12, 9});
