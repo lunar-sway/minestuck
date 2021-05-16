@@ -2,35 +2,35 @@
     "multipart": [
         {
             "when":  { "facing": "north", "carved": "false" },
-            "apply": { "model": "minestuck:block/stone_slab_block" }
+            "apply": { "model": "minestuck:block/stone_slab" }
         },
         {
             "when":  { "facing": "south", "carved": "false" },
-            "apply": { "model": "minestuck:block/stone_slab_block", "y": 180 }
+            "apply": { "model": "minestuck:block/stone_slab", "y": 180 }
         },
         {
             "when":  { "facing": "west", "carved": "false" },
-            "apply": { "model": "minestuck:block/stone_slab_block", "y": 270 }
+            "apply": { "model": "minestuck:block/stone_slab", "y": 270 }
         },
         {
             "when":  { "facing": "east", "carved": "false" },
-            "apply": { "model": "minestuck:block/stone_slab_block", "y": 90 }
+            "apply": { "model": "minestuck:block/stone_slab", "y": 90 }
         },
         {
             "when":  { "facing": "north", "carved": "true" },
-            "apply": { "model": "minestuck:block/stone_slab_written_block" }
+            "apply": { "model": "minestuck:block/stone_slab_written" }
         },
         {
             "when":  { "facing": "south", "carved": "true" },
-            "apply": { "model": "minestuck:block/stone_slab_written_block", "y": 180 }
+            "apply": { "model": "minestuck:block/stone_slab_written", "y": 180 }
         },
         {
             "when":  { "facing": "west", "carved": "true" },
-            "apply": { "model": "minestuck:block/stone_slab_written_block", "y": 270 }
+            "apply": { "model": "minestuck:block/stone_slab_written", "y": 270 }
         },
         {
             "when":  { "facing": "east", "carved": "true" },
-            "apply": { "model": "minestuck:block/stone_slab_written_block", "y": 90 }
+            "apply": { "model": "minestuck:block/stone_slab_written", "y": 90 }
         }
     ]
 }

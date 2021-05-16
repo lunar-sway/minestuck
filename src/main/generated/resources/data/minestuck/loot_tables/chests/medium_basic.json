@@ -486,11 +486,6 @@
         },
         {
           "type": "minecraft:item",
-          "quality": 1,
-          "name": "minestuck:grimoire"
-        },
-        {
-          "type": "minecraft:item",
           "weight": 2,
           "name": "minestuck:flarp_manual"
         },
