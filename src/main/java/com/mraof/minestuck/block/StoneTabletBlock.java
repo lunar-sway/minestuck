@@ -1,6 +1,7 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.client.gui.MSScreenFactories;
+import com.mraof.minestuck.item.block.StoneTabletItem;
 import com.mraof.minestuck.tileentity.ItemStackTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -57,9 +58,9 @@ public class StoneTabletBlock extends DecorBlock //stone slab is the same as sto
 	public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
 	{
 		TileEntity te = builder.get(LootParameters.BLOCK_ENTITY);
-		if (te instanceof ItemStackTileEntity)
+		if(te instanceof ItemStackTileEntity)
 		{
-			ItemStackTileEntity itemTE = (ItemStackTileEntity)te;
+			ItemStackTileEntity itemTE = (ItemStackTileEntity) te;
 			builder = builder.withDynamicDrop(ItemStackTileEntity.ITEM_DYNAMIC, (context, consumer) -> consumer.accept(itemTE.getStack()));
 		}
 		
@@ -73,10 +74,10 @@ public class StoneTabletBlock extends DecorBlock //stone slab is the same as sto
 		if(!player.isSneaking())
 		{
 			TileEntity tileEntity = worldIn.getTileEntity(pos);
-			if (tileEntity instanceof ItemStackTileEntity)
+			if(tileEntity instanceof ItemStackTileEntity)
 			{
 				ItemStackTileEntity itemStackTE = (ItemStackTileEntity) tileEntity;
-				String text = hasText(itemStackTE.getStack()) ? itemStackTE.getStack().getTag().getString("text") : "";
+				String text = StoneTabletItem.hasText(itemStackTE.getStack()) ? itemStackTE.getStack().getTag().getString("text") : "";
 				MSScreenFactories.displayStoneTabletScreen(player, hand, text, false);
 			}
 		} else
@@ -123,12 +124,6 @@ public class StoneTabletBlock extends DecorBlock //stone slab is the same as sto
 	public PushReaction getPushReaction(BlockState state)
 	{
 		return PushReaction.DESTROY;
-	}
-	
-	public static boolean hasText(ItemStack stack)
-	{
-		CompoundNBT nbt = stack.getTag();
-		return (nbt != null && nbt.contains("text") && !nbt.getString("text").isEmpty());
 	}
 	
 	@Override
