@@ -22,12 +22,16 @@ public class StoneTabletPacket implements PlayToServerPacket
 	public void execute(ServerPlayerEntity player)
 	{
 		ItemStack tablet = player.getHeldItem(hand);
-		if(!tablet.isItemEqual(new ItemStack(MSItems.STONE_SLAB)))
-			return;
+		ItemStack tool = player.getHeldItem(hand == Hand.MAIN_HAND ? Hand.OFF_HAND : Hand.MAIN_HAND);
 		
-		CompoundNBT nbt = tablet.getOrCreateTag();
-		nbt.putString("text", text);
-		tablet.setTag(nbt);
+		if(tablet.getItem() == MSItems.STONE_SLAB &&
+				tool.getItem() == MSItems.CARVING_TOOL)
+		{
+			CompoundNBT nbt = tablet.getOrCreateTag();
+			nbt.putString("text", text);
+			tablet.setTag(nbt);
+		}
+		
 	}
 	
 	public static StoneTabletPacket decode(PacketBuffer buffer)
