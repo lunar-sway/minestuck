@@ -6,7 +6,7 @@
   "input2": {
     "item": "minecraft:writable_book"
   },
-  "mode": "and",
+  "mode": "or",
   "output": {
     "item": "minestuck:stone_slab"
   }

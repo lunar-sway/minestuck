@@ -2,7 +2,6 @@ package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.tileentity.ItemStackTileEntity;
-import com.mraof.minestuck.util.CustomVoxelShape;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -16,7 +15,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
-import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
@@ -33,9 +31,9 @@ public class StoneTabletBlock extends DecorBlock //stone slab is the same as sto
 {
 	public static final BooleanProperty CARVED = MSProperties.CARVED;
 	
-	public StoneTabletBlock(Properties properties, CustomVoxelShape shape)
+	public StoneTabletBlock(Properties properties)
 	{
-		super(properties, shape);
+		super(properties, MSBlockShapes.STONE_TABLET);
 		setDefaultState(this.stateContainer.getBaseState().with(CARVED, false));
 	}
 	
@@ -125,18 +123,6 @@ public class StoneTabletBlock extends DecorBlock //stone slab is the same as sto
 	public PushReaction getPushReaction(BlockState state)
 	{
 		return PushReaction.DESTROY;
-	}
-	
-	public enum Type implements IStringSerializable
-	{
-		UNCARVED,
-		CARVED;
-		
-		@Override
-		public String getName()
-		{
-			return this.name().toLowerCase();
-		}
 	}
 	
 	public static boolean hasText(ItemStack stack)
