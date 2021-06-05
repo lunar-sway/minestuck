@@ -8,7 +8,10 @@ import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.Blocks;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.item.ArmorStandEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -43,7 +46,7 @@ public interface OnHitEffect
 					.and(enemyPotionEffect(() -> new EffectInstance(Effects.HUNGER, 60, 100)))));
 	
 	OnHitEffect BREATH_LEVITATION_AOE = requireAspect(BREATH, chanceWithCritMod(
-			potionAOE(() -> new EffectInstance(Effects.LEVITATION, 30, 2), () -> SoundEvents.ENTITY_ENDER_DRAGON_FLAP,1.4F)));
+			potionAOE(() -> new EffectInstance(Effects.LEVITATION, 30, 2), () -> SoundEvents.ENTITY_ENDER_DRAGON_FLAP, 1.4F)));
 	OnHitEffect TIME_SLOWNESS_AOE = requireAspect(TIME, chanceWithCritMod(
 			potionAOE(() -> new EffectInstance(Effects.SLOWNESS, 100, 4), () -> SoundEvents.BLOCK_BELL_RESONATE, 2F)));
 	
@@ -141,8 +144,34 @@ public interface OnHitEffect
 			source = DamageSource.causePlayerDamage((PlayerEntity) attacker);
 		else source = DamageSource.causeMobDamage(attacker);
 		
-		float rng = (float) (attacker.getRNG().nextInt(7)+1) * (attacker.getRNG().nextInt(7)+1);
+		float rng = (float) (attacker.getRNG().nextInt(7) + 1) * (attacker.getRNG().nextInt(7) + 1);
 		target.attackEntityFrom(source, rng);
+	};
+	
+	OnHitEffect SWEEP = (stack, target, attacker) -> {
+		if(attacker instanceof PlayerEntity)
+		{
+			PlayerEntity playerAttacker = (PlayerEntity) attacker;
+			boolean slowMoving = (double) (playerAttacker.distanceWalkedModified - playerAttacker.prevDistanceWalkedModified) < (double) playerAttacker.getAIMoveSpeed();
+			boolean lastHitWasCrit = ServerEventHandler.wasLastHitCrit(playerAttacker);
+			if(slowMoving && !lastHitWasCrit && playerAttacker.onGround)
+			{
+				float attackDamage = (float) playerAttacker.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue();
+				float sweepEnchantMod = 1.0F + EnchantmentHelper.getSweepingDamageRatio(playerAttacker) * attackDamage;
+				
+				for(LivingEntity livingEntity : playerAttacker.world.getEntitiesWithinAABB(LivingEntity.class, target.getBoundingBox().grow(1.0D, 0.25D, 1.0D)))
+				{
+					if(livingEntity != playerAttacker && livingEntity != target && !playerAttacker.isOnSameTeam(livingEntity) && (!(livingEntity instanceof ArmorStandEntity) || !((ArmorStandEntity) livingEntity).hasMarker()) && playerAttacker.getDistanceSq(livingEntity) < 9.0D)
+					{
+						livingEntity.knockBack(playerAttacker, 0.4F, (double) MathHelper.sin(playerAttacker.rotationYaw * ((float) Math.PI / 180F)), (double) (-MathHelper.cos(playerAttacker.rotationYaw * ((float) Math.PI / 180F))));
+						livingEntity.attackEntityFrom(DamageSource.causePlayerDamage(playerAttacker), sweepEnchantMod);
+					}
+				}
+				
+				playerAttacker.world.playSound(null, playerAttacker.getPosX(), playerAttacker.getPosY(), playerAttacker.getPosZ(), SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, playerAttacker.getSoundCategory(), 1.0F, 1.0F);
+				playerAttacker.spawnSweepParticles();
+			}
+		}
 	};
 	
 	OnHitEffect SPACE_TELEPORT = requireAspect(SPACE, onCrit((stack, target, attacker) -> {
@@ -172,6 +201,40 @@ public interface OnHitEffect
 	static OnHitEffect setOnFire(int duration)
 	{
 		return (itemStack, target, attacker) -> target.setFire(duration);
+	}
+	
+	static OnHitEffect armorBypassingDamageMod(float additionalDamage, EnumAspect aspect)
+	{
+		return (stack, target, attacker) -> {
+			DamageSource source;
+			float damage = additionalDamage * 3.3F;
+			
+			if(attacker instanceof ServerPlayerEntity)
+			{
+				ServerPlayerEntity serverPlayer = (ServerPlayerEntity) attacker;
+				source = DamageSource.causePlayerDamage(serverPlayer);
+				Title title = PlayerSavedData.getData(serverPlayer).getTitle();
+				
+				if(target instanceof UnderlingEntity)
+				{
+					float modifier = (float) (PlayerSavedData.getData(serverPlayer).getEcheladder().getUnderlingDamageModifier());
+					
+					if(title == null || title.getHeroAspect() != aspect)
+						modifier = modifier / 1.2F;
+					
+					damage = damage * modifier;
+				} else
+				{
+					if(title == null || title.getHeroAspect() != aspect)
+						damage = damage / 1.2F;
+				}
+			} else
+			{
+				source = DamageSource.causeMobDamage(attacker);
+			}
+			
+			target.attackEntityFrom(source.setDamageBypassesArmor(), damage);
+		};
 	}
 	
 	static OnHitEffect playSound(Supplier<SoundEvent> sound)
@@ -248,7 +311,7 @@ public interface OnHitEffect
 			AxisAlignedBB axisalignedbb = attacker.getBoundingBox().grow(4.0D, 2.0D, 4.0D);
 			List<LivingEntity> list = attacker.world.getEntitiesWithinAABB(LivingEntity.class, axisalignedbb);
 			list.remove(attacker);
-			if (!list.isEmpty())
+			if(!list.isEmpty())
 			{
 				attacker.world.playSound(null, attacker.getPosition(), sound.get(), SoundCategory.PLAYERS, 1.5F, pitch);
 				for(LivingEntity livingentity : list)

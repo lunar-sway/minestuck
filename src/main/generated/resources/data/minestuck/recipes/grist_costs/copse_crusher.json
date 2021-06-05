@@ -4,7 +4,7 @@
     "item": "minestuck:copse_crusher"
   },
   "grist_cost": {
-    "minestuck:build": 25,
-    "minestuck:rust": 15
+    "minestuck:build": 62,
+    "minestuck:rust": 28
   }
 }

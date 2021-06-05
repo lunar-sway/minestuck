@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:scythe"
+  },
+  "input2": {
+    "item": "minestuck:eightball"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:eightball_scythe"
+  }
+}

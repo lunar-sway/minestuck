@@ -37,7 +37,8 @@ public interface DestroyBlockEffect
 				int harvestCounter = 0;
 				for(float i = entity.getRNG().nextFloat(); i <= percentage && harvestCounter < maxBonusItems; i = entity.getRNG().nextFloat())
 				{
-					ItemEntity item = new ItemEntity(worldIn, pos.getX(), pos.getY(), pos.getZ(), itemDropped.get().getDefaultInstance());
+					ItemStack harvestItemStack = new ItemStack(itemDropped.get(), 1);
+					ItemEntity item = new ItemEntity(worldIn, pos.getX(), pos.getY(), pos.getZ(), harvestItemStack);
 					worldIn.addEntity(item);
 					
 					harvestCounter++;

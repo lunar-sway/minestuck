@@ -4,7 +4,7 @@
     "item": "minestuck:mace"
   },
   "grist_cost": {
-    "minestuck:build": 130,
-    "minestuck:rust": 20
+    "minestuck:build": 90,
+    "minestuck:rust": 15
   }
 }

@@ -31,7 +31,8 @@ public class ParcelPyxisFeature extends Feature<NoFeatureConfig>
 			int randInt = 10 + rand.nextInt(5);
 			setBlockState(worldIn, pos.up(1), state);
 			setBlockState(worldIn, pos, MSBlocks.PIPE_INTERSECTION.getDefaultState());
-			for(int i = 1; i < randInt; i++){
+			for(int i = 1; i < randInt; i++)
+			{
 				setBlockState(worldIn, pos.down(i), MSBlocks.PIPE.getDefaultState());
 			}
 			setBlockState(worldIn, pos.down(randInt), MSBlocks.PIPE_INTERSECTION.getDefaultState());

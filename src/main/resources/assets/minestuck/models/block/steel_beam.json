@@ -1,0 +1,7 @@
+{
+  "parent": "block/cube_column",
+  "textures": {
+    "end": "minestuck:block/steel_beam_top",
+    "side": "minestuck:block/steel_beam_side"
+  }
+}

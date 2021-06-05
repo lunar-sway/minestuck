@@ -4,9 +4,9 @@
     "item": "minestuck:ruby_croak"
   },
   "grist_cost": {
-    "minestuck:build": 900,
-    "minestuck:garnet": 103,
-    "minestuck:ruby": 64,
-    "minestuck:diamond": 16
+    "minestuck:build": 2800,
+    "minestuck:garnet": 630,
+    "minestuck:ruby": 420,
+    "minestuck:diamond": 140
   }
 }

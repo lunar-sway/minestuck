@@ -1,12 +1,12 @@
 {
   "type": "minestuck:combination",
   "input1": {
-    "item": "minecraft:iron_sword"
+    "item": "minestuck:jousting_lance"
   },
   "input2": {
-    "tag": "forge:rods/wooden"
+    "item": "minestuck:eightball"
   },
-  "mode": "and",
+  "mode": "or",
   "output": {
     "item": "minestuck:cigarette_lance"
   }

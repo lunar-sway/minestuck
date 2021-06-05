@@ -149,10 +149,10 @@ public final class DefaultSessionHandler extends SessionHandler
 	{
 		for(Session session : sessions)
 		{
-			sessions.remove(session);
+			this.sessions.remove(session);
 			sessionsByName.remove(session.name);
 		}
-		sessions.add(result);
+		this.sessions.add(result);
 		if(result.isCustom())
 			sessionsByName.put(result.name, result);
 		result.finishMergeOrSplit();
