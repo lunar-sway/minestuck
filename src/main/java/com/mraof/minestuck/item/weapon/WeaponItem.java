@@ -1,6 +1,7 @@
 package com.mraof.minestuck.item.weapon;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
@@ -30,8 +31,6 @@ public class WeaponItem extends TieredItem
 	private final boolean disableShield;
 	//private static final HashMap<ToolType, Set<Material>> toolMaterials = new HashMap<>();
 	
-	private final int attackDamage;
-	private final float attackSpeed;
 	@Nullable
 	private final MSToolType toolType;
 	private final List<OnHitEffect> onHitEffects;
@@ -45,6 +44,8 @@ public class WeaponItem extends TieredItem
 	private final UseAction useAction;
 	private final List<FinishUseItemEffect> itemUsageEffects;
 	private final List<InventoryTickEffect> tickEffects;
+	//Item attributes that are applied when the weapon is in the main hand.
+	private final Multimap<Attribute, AttributeModifier> attributeModifiers;
 	
 	@Deprecated
 	public WeaponItem(IItemTier tier, int attackDamage, float attackSpeed, float efficiency, @Nullable MSToolType toolType, Properties properties)
@@ -55,8 +56,6 @@ public class WeaponItem extends TieredItem
 	public WeaponItem(Builder builder, Properties properties)
 	{
 		super(builder.tier, properties);
-		attackDamage = builder.attackDamage;
-		attackSpeed = builder.attackSpeed;
 		toolType = builder.toolType;
 		efficiency = builder.efficiency;
 		disableShield = builder.disableShield;
@@ -68,6 +67,11 @@ public class WeaponItem extends TieredItem
 		useAction = builder.useAction;
 		itemUsageEffects = ImmutableList.copyOf(builder.itemUsageEffects);
 		tickEffects = ImmutableList.copyOf(builder.tickEffects);
+		
+		ImmutableMultimap.Builder<Attribute, AttributeModifier> modifiers = ImmutableMultimap.builder();
+		modifiers.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", (double) builder.attackDamage + getTier().getAttackDamage(), AttributeModifier.Operation.ADDITION));
+		modifiers.put(Attributes.ATTACK_SPEED, new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", builder.attackSpeed, AttributeModifier.Operation.ADDITION));
+		attributeModifiers = modifiers.build();
 	}
 	
 	@Override
@@ -245,14 +249,7 @@ public class WeaponItem extends TieredItem
 	@Override
 	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack)
 	{
-		Multimap<Attribute, AttributeModifier> multimap = super.getAttributeModifiers(slot, stack);
-		if(slot == EquipmentSlotType.MAINHAND)
-		{
-			multimap.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", (double) this.attackDamage + getTier().getAttackDamage(), AttributeModifier.Operation.ADDITION));
-			multimap.put(Attributes.ATTACK_SPEED, new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", (double) this.attackSpeed, AttributeModifier.Operation.ADDITION));
-		}
-		
-		return multimap;
+		return slot == EquipmentSlotType.MAINHAND ? attributeModifiers : super.getAttributeModifiers(slot, stack);
 	}
 	
 	@Nullable
