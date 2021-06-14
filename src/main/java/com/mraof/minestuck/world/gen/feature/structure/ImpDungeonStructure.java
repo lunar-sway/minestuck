@@ -14,7 +14,7 @@ public class ImpDungeonStructure extends Structure<NoFeatureConfig>
 	}
 	
 	@Override
-	public GenerationStage.Decoration getDecorationStage()
+	public GenerationStage.Decoration step()
 	{
 		return GenerationStage.Decoration.SURFACE_STRUCTURES;	//Could probably also count as an underground structure, but I'm guessing the surface component takes importance
 	}
@@ -26,7 +26,7 @@ public class ImpDungeonStructure extends Structure<NoFeatureConfig>
 	}
 	
 	@Override
-	public String getStructureName()
+	public String getFeatureName()
 	{
 		return Minestuck.MOD_ID + ":imp_dungeon";
 	}

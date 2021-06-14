@@ -26,7 +26,6 @@ import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 
-
 public class CassettePlayerBlock extends DecorBlock
 {
 	public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
@@ -35,36 +34,36 @@ public class CassettePlayerBlock extends DecorBlock
 	public CassettePlayerBlock(Properties properties, CustomVoxelShape shape)
 	{
 		super(properties, shape);
-		this.setDefaultState(this.stateContainer.getBaseState().with(CASSETTE, EnumCassetteType.NONE));
+		this.registerDefaultState(this.stateDefinition.any().setValue(CASSETTE, EnumCassetteType.NONE));
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
 	{
-		if(player.isSneaking())
+		if(player.isShiftKeyDown())
 		{
-			state = state.cycleValue(OPEN);
-			TileEntity tileentity = worldIn.getTileEntity(pos);
-			worldIn.setBlockState(pos, state, 2);
-			if(tileentity instanceof CassettePlayerTileEntity && !state.get(OPEN))
+			state = state.cycle(OPEN);
+			TileEntity tileentity = worldIn.getBlockEntity(pos);
+			worldIn.setBlock(pos, state, 2);
+			if(tileentity instanceof CassettePlayerTileEntity && !state.getValue(OPEN))
 			{
 				ItemStack itemStack = ((CassettePlayerTileEntity) tileentity).getCassette();
-				worldIn.playEvent(Constants.WorldEvents.PLAY_RECORD_SOUND, pos, Item.getIdFromItem(itemStack.getItem()));
+				worldIn.levelEvent(Constants.WorldEvents.PLAY_RECORD_SOUND, pos, Item.getId(itemStack.getItem()));
 				if(player != null)
 				{
-					player.addStat(Stats.PLAY_RECORD);
+					player.awardStat(Stats.PLAY_RECORD);
 				}
-			} else if(tileentity instanceof CassettePlayerTileEntity && state.get(OPEN))
+			} else if(tileentity instanceof CassettePlayerTileEntity && state.getValue(OPEN))
 			{
-				worldIn.playEvent(Constants.WorldEvents.PLAY_RECORD_SOUND, pos, 0);
+				worldIn.levelEvent(Constants.WorldEvents.PLAY_RECORD_SOUND, pos, 0);
 			}
 			return ActionResultType.SUCCESS;
-		} else if(state.get(CASSETTE) != EnumCassetteType.NONE && state.get(OPEN))
+		} else if(state.getValue(CASSETTE) != EnumCassetteType.NONE && state.getValue(OPEN))
 		{
 			this.dropCassette(worldIn, pos);
-			state = state.with(CASSETTE, EnumCassetteType.NONE);
-			worldIn.setBlockState(pos, state, 2);
+			state = state.setValue(CASSETTE, EnumCassetteType.NONE);
+			worldIn.setBlock(pos, state, 2);
 			return ActionResultType.SUCCESS;
 		} else
 		{
@@ -74,49 +73,49 @@ public class CassettePlayerBlock extends DecorBlock
 	
 	public void insertCassette(IWorld worldIn, BlockPos pos, BlockState state, ItemStack cassetteStack)
 	{
-		TileEntity tileentity = worldIn.getTileEntity(pos);
-		if(tileentity instanceof CassettePlayerTileEntity && state.get(OPEN) && state.get(CASSETTE) == EnumCassetteType.NONE)
+		TileEntity tileentity = worldIn.getBlockEntity(pos);
+		if(tileentity instanceof CassettePlayerTileEntity && state.getValue(OPEN) && state.getValue(CASSETTE) == EnumCassetteType.NONE)
 		{
 			((CassettePlayerTileEntity) tileentity).setCassette(cassetteStack.copy());
 			if(cassetteStack.getItem() instanceof CassetteItem)
 			{
-				worldIn.setBlockState(pos, state.with(CASSETTE, ((CassetteItem) cassetteStack.getItem()).cassetteID), 2);
+				worldIn.setBlock(pos, state.setValue(CASSETTE, ((CassetteItem) cassetteStack.getItem()).cassetteID), 2);
 			}
 		}
 	}
 	
 	private void dropCassette(World worldIn, BlockPos pos)
 	{
-		if(!worldIn.isRemote)
+		if(!worldIn.isClientSide)
 		{
-			TileEntity tileentity = worldIn.getTileEntity(pos);
+			TileEntity tileentity = worldIn.getBlockEntity(pos);
 			if(tileentity instanceof CassettePlayerTileEntity)
 			{
 				CassettePlayerTileEntity cassettePlayer = (CassettePlayerTileEntity) tileentity;
 				ItemStack itemstack = cassettePlayer.getCassette();
 				if(!itemstack.isEmpty())
 				{
-					worldIn.playEvent(Constants.WorldEvents.PLAY_RECORD_SOUND, pos, 0);
-					cassettePlayer.clear();
+					worldIn.levelEvent(Constants.WorldEvents.PLAY_RECORD_SOUND, pos, 0);
+					cassettePlayer.clearContent();
 					float f = 0.7F;
-					double xOffset = f * worldIn.rand.nextFloat() + 0.15;
-					double yOffset = f * worldIn.rand.nextFloat() + 0.66;
-					double zOffset = f * worldIn.rand.nextFloat() + 0.15;
+					double xOffset = f * worldIn.random.nextFloat() + 0.15;
+					double yOffset = f * worldIn.random.nextFloat() + 0.66;
+					double zOffset = f * worldIn.random.nextFloat() + 0.15;
 					ItemStack itemstack1 = itemstack.copy();
 					ItemEntity itementity = new ItemEntity(worldIn, (double) pos.getX() + xOffset, (double) pos.getY() + yOffset, (double) pos.getZ() + zOffset, itemstack1);
-					itementity.setDefaultPickupDelay();
-					worldIn.addEntity(itementity);
+					itementity.setDefaultPickUpDelay();
+					worldIn.addFreshEntity(itementity);
 				}
 			}
 		}
 	}
 	
-	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving)
+	public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving)
 	{
 		if(state.getBlock() != newState.getBlock())
 		{
 			this.dropCassette(worldIn, pos);
-			super.onReplaced(state, worldIn, pos, newState, isMoving);
+			super.onRemove(state, worldIn, pos, newState, isMoving);
 		}
 	}
 	
@@ -133,20 +132,20 @@ public class CassettePlayerBlock extends DecorBlock
 		return new CassettePlayerTileEntity();
 	}
 	
-	public boolean hasComparatorInputOverride(BlockState state)
+	public boolean hasAnalogOutputSignal(BlockState state)
 	{
 		return true;
 	}
 	
-	public int getComparatorInputOverride(BlockState blockState, World worldIn, BlockPos pos)
+	public int getAnalogOutputSignal(BlockState blockState, World worldIn, BlockPos pos)
 	{
-		TileEntity tileentity = worldIn.getTileEntity(pos);
+		TileEntity tileentity = worldIn.getBlockEntity(pos);
 		if(tileentity instanceof CassettePlayerTileEntity)
 		{
 			Item item = ((CassettePlayerTileEntity) tileentity).getCassette().getItem();
 			if(item instanceof CassetteItem)
 			{
-				return ((CassetteItem) item).getComparatorValue();
+				return ((CassetteItem) item).getAnalogOutput();
 			}
 		}
 		
@@ -154,7 +153,7 @@ public class CassettePlayerBlock extends DecorBlock
 	}
 	
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
 	{
 		builder.add(FACING);
 		builder.add(CASSETTE);

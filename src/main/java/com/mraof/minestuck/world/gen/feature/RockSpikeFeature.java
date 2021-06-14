@@ -24,16 +24,16 @@ public class RockSpikeFeature extends Feature<NoFeatureConfig>
 	}
 	
 	@Override
-	public boolean generate(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
+	public boolean place(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
 	{
 		int height = rand.nextInt(7) + 10;
 		
-		if(world.getBlockState(pos.up(height*2/3)).getMaterial().isLiquid())	//At least 1/3rd of the height should be above the liquid surface
+		if(world.getBlockState(pos.above(height*2/3)).getMaterial().isLiquid())	//At least 1/3rd of the height should be above the liquid surface
 			return false;
 		float plateauSize = 0.2F + rand.nextFloat()*(height/25F);
-		BlockState ground = Blocks.STONE.getDefaultState();//generator.getSettings().getDefaultBlock(); TODO
+		BlockState ground = Blocks.STONE.defaultBlockState();//generator.getSettings().getDefaultBlock(); TODO
 		
-		BlockPos nodePos = generateRock(pos.up(height), height, plateauSize, world, rand, ground);
+		BlockPos nodePos = generateRock(pos.above(height), height, plateauSize, world, rand, ground);
 		
 		float rockRarity = plateauSize + height/15F + rand.nextFloat()*0.5F - 0.5F;
 		
@@ -53,7 +53,7 @@ public class RockSpikeFeature extends Feature<NoFeatureConfig>
 	private void generateSubRock(BlockPos pos, int heightOld, float plateauOld, IWorld world, Random rand, BlockState ground)
 	{
 		int height = 5 + rand.nextInt((int) ((heightOld - 6)*0.75));
-		BlockPos newPos = pos.add(rand.nextInt(10) - 5, 0, rand.nextInt(10) - 5);
+		BlockPos newPos = pos.offset(rand.nextInt(10) - 5, 0, rand.nextInt(10) - 5);
 		//newPos = world.getTopSolidOrLiquidBlock(newPos).up(height);
 		float plateauSize = rand.nextFloat()*plateauOld*0.75F;
 		
@@ -161,8 +161,8 @@ public class RockSpikeFeature extends Feature<NoFeatureConfig>
 					break;
 				}*/
 				was.put(pos, world.getBlockState(pos));
-				world.setBlockState(pos, ground, Constants.BlockFlags.BLOCK_UPDATE);
-				pos = pos.down();
+				world.setBlock(pos, ground, Constants.BlockFlags.BLOCK_UPDATE);
+				pos = pos.below();
 			} while(!world.getBlockState(pos).equals(ground));
 		}
 		
@@ -189,7 +189,7 @@ public class RockSpikeFeature extends Feature<NoFeatureConfig>
 		
 		if(stomps)
 		{
-			was.forEach((t, u) -> world.setBlockState(t, u, Constants.BlockFlags.BLOCK_UPDATE));
+			was.forEach((t, u) -> world.setBlock(t, u, Constants.BlockFlags.BLOCK_UPDATE));
 		}
 		
 		return corePosition;

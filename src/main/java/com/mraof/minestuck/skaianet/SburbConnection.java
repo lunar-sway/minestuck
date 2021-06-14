@@ -385,8 +385,8 @@ public final class SburbConnection
 			buffer.writeBoolean(hasEntered());
 		}
 		buffer.writeInt(getClientIdentifier().getId());
-		buffer.writeString(getClientIdentifier().getUsername(), 16);
+		buffer.writeUtf(getClientIdentifier().getUsername(), 16);
 		buffer.writeInt(getServerIdentifier().getId());
-		buffer.writeString(getServerIdentifier().getUsername(), 16);
+		buffer.writeUtf(getServerIdentifier().getUsername(), 16);
 	}
 }

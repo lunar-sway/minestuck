@@ -28,7 +28,7 @@ public class CastleSolidPiece extends CastlePiece
 	}
 	
 	@Override
-	protected void readAdditional(CompoundNBT nbt)
+	protected void addAdditionalSaveData(CompoundNBT nbt)
 	{
 	
 	}
@@ -40,10 +40,10 @@ public class CastleSolidPiece extends CastlePiece
     }
 	
 	@Override
-	public boolean func_230383_a_(ISeedReader world, StructureManager manager, ChunkGenerator generator, Random random, MutableBoundingBox structureBoundingBox, ChunkPos chunkPosIn, BlockPos pos)
+	public boolean postProcess(ISeedReader world, StructureManager manager, ChunkGenerator generator, Random random, MutableBoundingBox structureBoundingBox, ChunkPos chunkPosIn, BlockPos pos)
 	{
-		BlockState chessTile = (isBlack ? MSBlocks.BLACK_CHESS_DIRT : MSBlocks.WHITE_CHESS_DIRT).getDefaultState();
-		BlockState chessTile1 = (isBlack ? MSBlocks.DARK_GRAY_CHESS_DIRT : MSBlocks.LIGHT_GRAY_CHESS_DIRT).getDefaultState();
+		BlockState chessTile = (isBlack ? MSBlocks.BLACK_CHESS_DIRT : MSBlocks.WHITE_CHESS_DIRT).defaultBlockState();
+		BlockState chessTile1 = (isBlack ? MSBlocks.DARK_GRAY_CHESS_DIRT : MSBlocks.LIGHT_GRAY_CHESS_DIRT).defaultBlockState();
   
 		this.fillWithAlternatingBlocks(world, structureBoundingBox, 0, 0, 0, 7 ,7, 7, chessTile, chessTile1, false);
 

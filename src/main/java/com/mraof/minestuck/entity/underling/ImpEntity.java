@@ -27,8 +27,8 @@ public class ImpEntity extends UnderlingEntity
 	
 	public static AttributeModifierMap.MutableAttribute impAttributes()
 	{
-		return UnderlingEntity.underlingAttributes().createMutableAttribute(Attributes.MAX_HEALTH, 6)
-				.createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.28).createMutableAttribute(Attributes.ATTACK_DAMAGE, 1);
+		return UnderlingEntity.underlingAttributes().add(Attributes.MAX_HEALTH, 6)
+				.add(Attributes.MOVEMENT_SPEED, 0.28).add(Attributes.ATTACK_DAMAGE, 1);
 	}
 	
 	@Override
@@ -62,7 +62,7 @@ public class ImpEntity extends UnderlingEntity
 	@Override
 	protected int getVitalityGel()
 	{
-		return rand.nextInt(3)+1;
+		return random.nextInt(3)+1;
 	}
 	
 	@Override
@@ -71,15 +71,15 @@ public class ImpEntity extends UnderlingEntity
 		super.onGristTypeUpdated(type);
 		applyGristModifier(Attributes.MAX_HEALTH, 8 * type.getPower(), AttributeModifier.Operation.ADDITION);
 		applyGristModifier(Attributes.ATTACK_DAMAGE, Math.ceil(type.getPower()), AttributeModifier.Operation.ADDITION);
-		this.experienceValue = (int) (3 * type.getPower() + 1);
+		this.xpReward = (int) (3 * type.getPower() + 1);
 	}
 	
 	@Override
-	public void onDeath(DamageSource cause)
+	public void die(DamageSource cause)
 	{
-		super.onDeath(cause);
-		Entity entity = cause.getTrueSource();
-		if(this.dead && !this.world.isRemote)
+		super.die(cause);
+		Entity entity = cause.getEntity();
+		if(this.dead && !this.level.isClientSide)
 		{
 			computePlayerProgress((int) (2 + 3* getGristType().getPower()));
 			if(entity instanceof ServerPlayerEntity)

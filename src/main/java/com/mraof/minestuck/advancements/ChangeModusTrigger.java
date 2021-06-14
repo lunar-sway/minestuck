@@ -25,15 +25,15 @@ public class ChangeModusTrigger extends AbstractCriterionTrigger<ChangeModusTrig
 	}
 	
 	@Override
-	protected Instance deserializeTrigger(JsonObject json, EntityPredicate.AndPredicate predicate, ConditionArrayParser conditionsParser)
+	protected Instance createInstance(JsonObject json, EntityPredicate.AndPredicate predicate, ConditionArrayParser conditionsParser)
 	{
-		ModusType<?> modusType = json.has("modus") ? ModusTypes.REGISTRY.getValue(new ResourceLocation(JSONUtils.getString(json, "modus"))) : null;
+		ModusType<?> modusType = json.has("modus") ? ModusTypes.REGISTRY.getValue(new ResourceLocation(JSONUtils.getAsString(json, "modus"))) : null;
 		return new Instance(predicate, modusType);
 	}
 	
 	public void trigger(ServerPlayerEntity player, Modus modus)
 	{
-		triggerListeners(player, instance -> instance.test(modus.getType()));
+		trigger(player, instance -> instance.test(modus.getType()));
 	}
 	
 	public static class Instance extends CriterionInstance
@@ -47,12 +47,12 @@ public class ChangeModusTrigger extends AbstractCriterionTrigger<ChangeModusTrig
 		
 		public static Instance any()
 		{
-			return new Instance(EntityPredicate.AndPredicate.ANY_AND, null);
+			return new Instance(EntityPredicate.AndPredicate.ANY, null);
 		}
 		
 		public static Instance to(ModusType<?> type)
 		{
-			return new Instance(EntityPredicate.AndPredicate.ANY_AND, type);
+			return new Instance(EntityPredicate.AndPredicate.ANY, type);
 		}
 		
 		public boolean test(ModusType<?> modusType)
@@ -61,9 +61,9 @@ public class ChangeModusTrigger extends AbstractCriterionTrigger<ChangeModusTrig
 		}
 		
 		@Override
-		public JsonObject serialize(ConditionArraySerializer conditions)
+		public JsonObject serializeToJson(ConditionArraySerializer conditions)
 		{
-			JsonObject json = super.serialize(conditions);
+			JsonObject json = super.serializeToJson(conditions);
 			if(modusType != null)
 				json.addProperty("modus", modusType.getRegistryName().toString());
 			return json;

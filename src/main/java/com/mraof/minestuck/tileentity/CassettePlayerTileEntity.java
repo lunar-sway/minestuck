@@ -16,23 +16,23 @@ public class CassettePlayerTileEntity extends TileEntity implements IClearable
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT nbt)
+	public void load(BlockState state, CompoundNBT nbt)
 	{
-		super.read(state, nbt);
+		super.load(state, nbt);
 		if(nbt.contains("CassetteItem", 10))
 		{
-			this.setCassette(ItemStack.read(nbt.getCompound("CassetteItem")));
+			this.setCassette(ItemStack.of(nbt.getCompound("CassetteItem")));
 		}
 		
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound)
+	public CompoundNBT save(CompoundNBT compound)
 	{
-		super.write(compound);
+		super.save(compound);
 		if(!this.getCassette().isEmpty())
 		{
-			compound.put("CassetteItem", this.getCassette().write(new CompoundNBT()));
+			compound.put("CassetteItem", this.getCassette().save(new CompoundNBT()));
 		}
 		
 		return compound;
@@ -46,11 +46,11 @@ public class CassettePlayerTileEntity extends TileEntity implements IClearable
 	public void setCassette(ItemStack stack)
 	{
 		this.cassette = stack;
-		this.markDirty();
+		this.setChanged();
 	}
 	
 	@Override
-	public void clear()
+	public void clearContent()
 	{
 		this.setCassette(ItemStack.EMPTY);
 	}

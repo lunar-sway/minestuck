@@ -23,7 +23,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -103,7 +102,7 @@ public class Echeladder
 				boondollarsGained += BOONDOLLARS[Math.min(rung, BOONDOLLARS.length - 1)];
 				exp -= (expReq - progress);
 				progress = 0;
-				savedData.markDirty();
+				savedData.setDirty();
 				expReq = getRungProgressReq();
 				if(rung >= topRung)
 					break increment;
@@ -114,7 +113,7 @@ public class Echeladder
 			if(exp >= expReq/50)
 			{
 				progress += exp;
-				savedData.markDirty();
+				savedData.setDirty();
 				Debug.debugf("Added remainder exp to progress, which is now at %s", progress);
 			} else Debug.debugf("Remaining exp %s is below the threshold of 1/50 out of the exp requirement, which is %s, and will therefore be ignored", exp, expReq/50);
 		}
@@ -129,7 +128,7 @@ public class Echeladder
 			if(rung != prevRung)
 			{
 				updateEcheladderBonuses(player);
-				player.world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), MSSoundEvents.EVENT_ECHELADDER_INCREASE, SoundCategory.AMBIENT, 1F, 1F);
+				player.level.playSound(null, player.getX(), player.getY(), player.getZ(), MSSoundEvents.EVENT_ECHELADDER_INCREASE, SoundCategory.AMBIENT, 1F, 1F);
 			}
 		}
 	}
@@ -139,12 +138,12 @@ public class Echeladder
 		if(type >= UNDERLING_BONUS_OFFSET && type < UNDERLING_BONUS_OFFSET + underlingBonuses.length && !underlingBonuses[type - UNDERLING_BONUS_OFFSET])
 		{
 			underlingBonuses[type - UNDERLING_BONUS_OFFSET] = true;
-			savedData.markDirty();
+			savedData.setDirty();
 			increaseProgress(UNDERLING_BONUSES[type - UNDERLING_BONUS_OFFSET]);
 		} else if(type >= ALCHEMY_BONUS_OFFSET && type < ALCHEMY_BONUS_OFFSET + alchemyBonuses.length && !alchemyBonuses[type - ALCHEMY_BONUS_OFFSET])
 		{
 			alchemyBonuses[type - ALCHEMY_BONUS_OFFSET] = true;
-			savedData.markDirty();
+			savedData.setDirty();
 			increaseProgress(ALCHEMY_BONUSES[type - ALCHEMY_BONUS_OFFSET]);
 		}
 	}
@@ -181,8 +180,8 @@ public class Echeladder
 	public void updateAttribute(ModifiableAttributeInstance attribute, AttributeModifier modifier)
 	{
 		if(attribute.hasModifier(modifier))
-			attribute.removeModifier(attribute.getModifier(modifier.getID()));
-		attribute.applyPersistentModifier(modifier);
+			attribute.removeModifier(attribute.getModifier(modifier.getId()));
+		attribute.addPermanentModifier(modifier);
 	}
 	
 	public void resendAttributes(PlayerEntity player)
@@ -253,7 +252,7 @@ public class Echeladder
 		
 		if(prevProgress != this.progress || prevRung != this.rung)
 		{
-			savedData.markDirty();
+			savedData.setDirty();
 			ServerPlayerEntity player = identifier.getPlayer(savedData.mcServer);
 			if(player != null && (MinestuckConfig.SERVER.echeladderProgress.get() || prevRung != this.rung))
 			{

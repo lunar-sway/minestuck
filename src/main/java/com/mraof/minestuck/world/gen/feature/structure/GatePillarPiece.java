@@ -27,7 +27,7 @@ public class GatePillarPiece extends GatePiece
 	}
 	
 	@Override
-	protected void readAdditional(CompoundNBT tagCompound)
+	protected void addAdditionalSaveData(CompoundNBT tagCompound)
 	{
 	
 	}
@@ -39,25 +39,25 @@ public class GatePillarPiece extends GatePiece
 	}
 	
 	@Override
-	public boolean func_230383_a_(ISeedReader world, StructureManager manager, ChunkGenerator chunkGenerator, Random random, MutableBoundingBox mutableBoundingBox, ChunkPos chunkPos, BlockPos pos)
+	public boolean postProcess(ISeedReader world, StructureManager manager, ChunkGenerator chunkGenerator, Random random, MutableBoundingBox mutableBoundingBox, ChunkPos chunkPos, BlockPos pos)
 	{
 		StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGenerator);
 		
 		BlockState ground = blocks.getBlockState("ground");
 		
-		fillWithBlocks(world, boundingBox, 0, 0, 1, 2, 20, 1, ground, ground, false);
-		fillWithBlocks(world, boundingBox, 1, 0, 0, 1, 20, 0, ground, ground, false);
-		fillWithBlocks(world, boundingBox, 1, 0, 2, 1, 20, 2, ground, ground, false);
+		generateBox(world, boundingBox, 0, 0, 1, 2, 20, 1, ground, ground, false);
+		generateBox(world, boundingBox, 1, 0, 0, 1, 20, 0, ground, ground, false);
+		generateBox(world, boundingBox, 1, 0, 2, 1, 20, 2, ground, ground, false);
 		
 		for(int y = 0; y <= 20; y++)
 		{
-			randomlyPlaceBlock(world, boundingBox, random, 0.5F, 0, y, 0, ground);
-			randomlyPlaceBlock(world, boundingBox, random, 0.5F, 2, y, 0, ground);
-			randomlyPlaceBlock(world, boundingBox, random, 0.5F, 0, y, 2, ground);
-			randomlyPlaceBlock(world, boundingBox, random, 0.5F, 2, y, 2, ground);
+			maybeGenerateBlock(world, boundingBox, random, 0.5F, 0, y, 0, ground);
+			maybeGenerateBlock(world, boundingBox, random, 0.5F, 2, y, 0, ground);
+			maybeGenerateBlock(world, boundingBox, random, 0.5F, 0, y, 2, ground);
+			maybeGenerateBlock(world, boundingBox, random, 0.5F, 2, y, 2, ground);
 		}
 
-		super.func_230383_a_(world, manager, chunkGenerator, random, boundingBox, chunkPos, pos);
+		super.postProcess(world, manager, chunkGenerator, random, boundingBox, chunkPos, pos);
 		
 		return true;
 	}

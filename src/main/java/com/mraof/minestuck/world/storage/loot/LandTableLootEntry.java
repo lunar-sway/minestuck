@@ -34,7 +34,7 @@ public class LandTableLootEntry extends LootEntry
 	}
 	
 	@Override
-		public LootPoolEntryType func_230420_a_()	//getType
+		public LootPoolEntryType getType()	//getType
 	{
 		return MSLootTables.landTableEntryType();
 	}
@@ -42,8 +42,8 @@ public class LandTableLootEntry extends LootEntry
 	@Override
 	public boolean expand(LootContext context, Consumer<ILootGenerator> lootGenCollector)
 	{
-		LandTypePair aspects = MSDimensions.getAspects(context.getWorld().getServer(), context.getWorld().getDimensionKey());
-		if(test(context) && aspects != null)
+		LandTypePair aspects = MSDimensions.getAspects(context.getLevel().getServer(), context.getLevel().dimension());
+		if(canRun(context) && aspects != null)
 		{
 			ResourceLocation terrainTableName = new ResourceLocation(table.getNamespace(), table.getPath() + "/terrain/" + Objects.requireNonNull(aspects.terrain.getRegistryName()).toString().replace(':', '/'));
 			ResourceLocation titleTableName = new ResourceLocation(table.getNamespace(), table.getPath() + "/title/" + Objects.requireNonNull(aspects.title.getRegistryName()).toString().replace(':', '/'));
@@ -66,7 +66,7 @@ public class LandTableLootEntry extends LootEntry
 			LOGGER.warn("Could not find loot table {}", tableName);
 			return;
 		}
-		if(context.addLootTable(lootTable))
+		if(context.addVisitedTable(lootTable))
 		{
 			LootPool pool = lootTable.getPool(poolName);
 			//noinspection ConstantConditions
@@ -82,15 +82,15 @@ public class LandTableLootEntry extends LootEntry
 					lootGenCollector.accept(new ILootGenerator()
 					{
 						@Override
-						public int getEffectiveWeight(float v)
+						public int getWeight(float v)
 						{
 							return 30;
 						}
 						
 						@Override
-						public void func_216188_a(Consumer<ItemStack> consumer, LootContext lootContext)
+						public void createItemStack(Consumer<ItemStack> consumer, LootContext lootContext)
 						{
-							pool.generate(consumer, lootContext);
+							pool.addRandomItems(consumer, lootContext);
 						}
 					});
 				}
@@ -98,7 +98,7 @@ public class LandTableLootEntry extends LootEntry
 			{
 				LOGGER.warn("Could not find pool by name {} in loot table {}", poolName, tableName);
 			}
-			context.removeLootTable(lootTable);
+			context.removeVisitedTable(lootTable);
 		} else
 		{
 			LOGGER.warn("Detected infinite loop in loot tables");
@@ -111,7 +111,7 @@ public class LandTableLootEntry extends LootEntry
 	{
 		try
 		{
-			return ObfuscationReflectionHelper.findField(LootPool.class, "field_186453_a");
+			return ObfuscationReflectionHelper.findField(LootPool.class, "entries");
 		} catch(ObfuscationReflectionHelper.UnableToFindFieldException e)
 		{
 			LOGGER.error("Unable to get field for lootPool.lootEntries. Will be unable to fully insert loot from land type loot tables.", e);
@@ -140,16 +140,16 @@ public class LandTableLootEntry extends LootEntry
 	public static class SerializerImpl extends Serializer<LandTableLootEntry>
 	{
 		@Override
-		public void doSerialize(JsonObject json, LandTableLootEntry entryIn, JsonSerializationContext context)
+		public void serializeCustom(JsonObject json, LandTableLootEntry entryIn, JsonSerializationContext context)
 		{
 			json.addProperty("name", entryIn.table.toString());
 			json.addProperty("pool", entryIn.poolName);
 		}
 		
-		public final LandTableLootEntry deserialize(JsonObject json, JsonDeserializationContext context, ILootCondition[] conditions)
+		public final LandTableLootEntry deserializeCustom(JsonObject json, JsonDeserializationContext context, ILootCondition[] conditions)
 		{
-			ResourceLocation table = new ResourceLocation(JSONUtils.getString(json, "name"));
-			String pool = JSONUtils.getString(json, "pool");
+			ResourceLocation table = new ResourceLocation(JSONUtils.getAsString(json, "name"));
+			String pool = JSONUtils.getAsString(json, "pool");
 			return new LandTableLootEntry(table, pool, conditions);
 		}
 	}
@@ -170,7 +170,7 @@ public class LandTableLootEntry extends LootEntry
 		}
 		
 		@Override
-		protected BuilderImpl func_212845_d_()
+		protected BuilderImpl getThis()
 		{
 			return this;
 		}
@@ -186,7 +186,7 @@ public class LandTableLootEntry extends LootEntry
 		{
 			if(pool == null)
 				throw new IllegalArgumentException("Pool not set");
-			return new LandTableLootEntry(table, pool, this.func_216079_f());
+			return new LandTableLootEntry(table, pool, this.getConditions());
 		}
 	}
 }

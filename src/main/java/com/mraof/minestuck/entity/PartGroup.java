@@ -57,7 +57,7 @@ public class PartGroup
         {
             EntityBigPart part = new EntityBigPart(parent.getType(), world, this, (float) sizes.get(i).x, (float) sizes.get(i).y);
             Vector3d position = positions.get(i);
-            part.setPosition(parent.getPosX() + position.x, parent.getPosY() + position.y, parent.getPosZ() + position.z);
+            part.setPos(parent.getX() + position.x, parent.getY() + position.y, parent.getZ() + position.z);
             part.setPartId(parts.size());
             parts.add(part);
             //world.addEntity(part); TODO Not safe to add entities to world on creation. A different solution is needed
@@ -66,16 +66,16 @@ public class PartGroup
 
     public void updatePositions()
     {
-        float yaw = -parent.renderYawOffset * 3.141592f / 180f;
+        float yaw = -parent.yBodyRot * 3.141592f / 180f;
         if(parts.size() != positions.size())
         {
-            System.out.println("Size mismatch: " + parts.size() + " parts, " + positions.size() + " positions (remote: " + parent.world.isRemote + ")");
+            System.out.println("Size mismatch: " + parts.size() + " parts, " + positions.size() + " positions (remote: " + parent.level.isClientSide + ")");
         }
         for(int i = 0; i < parts.size(); i++)
         {
             EntityBigPart part = parts.get(i);
-            Vector3d position = positions.get(i).rotateYaw(yaw);
-            part.setPosition(parent.getPosX() + position.x, parent.getPosY() + position.y, parent.getPosZ() + position.z);
+            Vector3d position = positions.get(i).yRot(yaw);
+            part.setPos(parent.getX() + position.x, parent.getY() + position.y, parent.getZ() + position.z);
             if(parent.removed != part.removed)
             {
                 if(parent.removed)
@@ -87,13 +87,13 @@ public class PartGroup
 
     public void applyCollision(Entity entity)
     {
-        parent.world.getProfiler().startSection("partGroupCollision");
-        float yaw = -parent.renderYawOffset * 3.141592f / 180f;
+        parent.level.getProfiler().push("partGroupCollision");
+        float yaw = -parent.yBodyRot * 3.141592f / 180f;
         boolean positionChanged = false;
-        Vector3d position = new Vector3d(entity.getPosX() - parent.getPosX(), entity.getPosY() - parent.getPosY(), entity.getPosZ() - parent.getPosZ()).rotateYaw(yaw);
+        Vector3d position = new Vector3d(entity.getX() - parent.getX(), entity.getY() - parent.getY(), entity.getZ() - parent.getZ()).yRot(yaw);
         for (AxisAlignedBB box : boxes)
         {
-            AxisAlignedBB relativeBox = new AxisAlignedBB(position.x, position.y, position.z, entity.getWidth(), entity.getHeight(), entity.getWidth());
+            AxisAlignedBB relativeBox = new AxisAlignedBB(position.x, position.y, position.z, entity.getBbWidth(), entity.getBbHeight(), entity.getBbWidth());
             if(box.intersects(relativeBox))
             {
                 positionChanged = true;
@@ -112,15 +112,15 @@ public class PartGroup
             }
             if(positionChanged)
             {
-                position = position.rotateYaw(-yaw);
-                entity.move(MoverType.SELF, position.add(parent.getPositionVec()));	//TODO change to velocity, or lookup MoverType?
+                position = position.yRot(-yaw);
+                entity.move(MoverType.SELF, position.add(parent.position()));	//TODO change to velocity, or lookup MoverType?
             }
         }
-        parent.world.getProfiler().endSection();
+        parent.level.getProfiler().pop();
     }
 
     boolean attackFrom(DamageSource damageSource, float amount)
     {
-        return parent != null && parent.attackEntityFrom(damageSource, amount);
+        return parent != null && parent.hurt(damageSource, amount);
     }
 }

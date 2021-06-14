@@ -20,17 +20,17 @@ public class ShuntItem extends Item
 	}
 	
 	@Override
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
+	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
 	{
 		if(AlchemyHelper.hasDecodedItem(stack))
 		{
 			ItemStack content = AlchemyHelper.getDecodedItem(stack);
 			
 			if (!content.isEmpty())
-				tooltip.add(new StringTextComponent("(").appendSibling(content.getDisplayName()).appendString(")"));
+				tooltip.add(new StringTextComponent("(").append(content.getHoverName()).append(")"));
 			else
-				tooltip.add(new StringTextComponent("(").appendSibling(new TranslationTextComponent(getTranslationKey()+".invalid")).appendString(")"));
+				tooltip.add(new StringTextComponent("(").append(new TranslationTextComponent(getDescriptionId()+".invalid")).append(")"));
 		} else
-			tooltip.add(new StringTextComponent("(").appendSibling(new TranslationTextComponent(getTranslationKey()+".empty")).appendString(")"));
+			tooltip.add(new StringTextComponent("(").append(new TranslationTextComponent(getDescriptionId()+".empty")).append(")"));
 	}
 }

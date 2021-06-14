@@ -9,7 +9,6 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-
 public class HangingItem extends Item
 {
 	protected final EntityProvider provider;
@@ -20,24 +19,24 @@ public class HangingItem extends Item
 	}
 	
 	@Override
-	public ActionResultType onItemUse(ItemUseContext context)
+	public ActionResultType useOn(ItemUseContext context)
 	{
-		ItemStack stack = context.getItem();
-		Direction facing = context.getFace();
-		World worldIn = context.getWorld();
-		BlockPos blockPos = context.getPos().offset(facing);
+		ItemStack stack = context.getItemInHand();
+		Direction facing = context.getClickedFace();
+		World worldIn = context.getLevel();
+		BlockPos blockPos = context.getClickedPos().relative(facing);
 		
 		if (facing != Direction.DOWN && facing != Direction.UP
-				&& (context.getPlayer() == null || context.getPlayer().canPlayerEdit(blockPos, facing, stack)))
+				&& (context.getPlayer() == null || context.getPlayer().mayUseItemAt(blockPos, facing, stack)))
 		{
 			HangingEntity entityhanging = provider.createEntity(worldIn, blockPos, facing, stack);
 			
-			if (entityhanging != null && entityhanging.onValidSurface())
+			if (entityhanging != null && entityhanging.survives())
 			{
-				if (!worldIn.isRemote)
+				if (!worldIn.isClientSide)
 				{
-					entityhanging.playPlaceSound();
-					worldIn.addEntity(entityhanging);
+					entityhanging.playPlacementSound();
+					worldIn.addFreshEntity(entityhanging);
 				}
 				
 				stack.shrink(1);

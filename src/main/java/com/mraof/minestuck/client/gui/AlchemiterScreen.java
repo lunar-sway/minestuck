@@ -43,7 +43,7 @@ public class AlchemiterScreen extends Screen implements Positioned
 	@Override
 	public BlockPos getPosition()
 	{
-		return getAlchemiter().getPos();
+		return getAlchemiter().getBlockPos();
 	}
 	
 	@Override
@@ -83,12 +83,12 @@ public class AlchemiterScreen extends Screen implements Positioned
 		
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		
-		this.minecraft.getTextureManager().bindTexture(guiBackground);
+		this.minecraft.getTextureManager().bind(guiBackground);
 		this.blit(matrixStack, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
-		font.drawString(matrixStack, Integer.toString(((int) (itemQuantity / Math.pow(10, 2)) % 10)), (width - guiWidth) / 2F + 15, (height - guiHeight) / 2F + 46, 16777215);
-		font.drawString(matrixStack, Integer.toString(((int) (itemQuantity / Math.pow(10, 1)) % 10)), (width - guiWidth) / 2F + 36, (height - guiHeight) / 2F + 46, 16777215);
-		font.drawString(matrixStack, Integer.toString(((int) (itemQuantity / Math.pow(10, 0)) % 10)), (width - guiWidth) / 2F + 57, (height - guiHeight) / 2F + 46, 16777215);
+		font.draw(matrixStack, Integer.toString(((int) (itemQuantity / Math.pow(10, 2)) % 10)), (width - guiWidth) / 2F + 15, (height - guiHeight) / 2F + 46, 16777215);
+		font.draw(matrixStack, Integer.toString(((int) (itemQuantity / Math.pow(10, 1)) % 10)), (width - guiWidth) / 2F + 36, (height - guiHeight) / 2F + 46, 16777215);
+		font.draw(matrixStack, Integer.toString(((int) (itemQuantity / Math.pow(10, 0)) % 10)), (width - guiWidth) / 2F + 57, (height - guiHeight) / 2F + 46, 16777215);
 		
 		//Render grist requirements
 		
@@ -113,9 +113,9 @@ public class AlchemiterScreen extends Screen implements Positioned
 	
 	private void alchemize()
 	{
-		AlchemiterPacket packet = new AlchemiterPacket(alchemiter.getPos(), itemQuantity);
+		AlchemiterPacket packet = new AlchemiterPacket(alchemiter.getBlockPos(), itemQuantity);
 		MSPacketHandler.sendToServer(packet);
-		this.minecraft.displayGuiScreen(null);
+		this.minecraft.setScreen(null);
 	}
 	
 	private void changeAmount(int change)
@@ -130,12 +130,12 @@ public class AlchemiterScreen extends Screen implements Positioned
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton)
 	{
-		if(mouseButton == 0 && minecraft.player.inventory.getItemStack().isEmpty()
+		if(mouseButton == 0 && minecraft.player.inventory.getCarried().isEmpty()
 				&& alchemiter.getDowel() != null && AlchemyHelper.getDecodedItem(alchemiter.getDowel()).getItem() == MSItems.CAPTCHA_CARD
 				&& mouseX >= (width-guiWidth)/2F +80  && mouseX < (width-guiWidth)/2F + 150 && mouseY >= (height-guiHeight)/2F + 8 && mouseY < (height-guiHeight)/2F + 93)
 		{
-			minecraft.currentScreen = new GristSelectorScreen(this);
-			minecraft.currentScreen.init(minecraft, width, height);
+			minecraft.screen = new GristSelectorScreen(this);
+			minecraft.screen.init(minecraft, width, height);
 			return true;
 		}
 		return super.mouseClicked(mouseX, mouseY, mouseButton);

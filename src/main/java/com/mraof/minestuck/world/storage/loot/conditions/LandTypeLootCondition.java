@@ -41,7 +41,7 @@ public class LandTypeLootCondition implements ILootCondition
 	}
 	
 	@Override
-	public LootConditionType getConditionType()
+	public LootConditionType getType()
 	{
 		return MSLootTables.landTypeConditionType();
 	}
@@ -49,11 +49,11 @@ public class LandTypeLootCondition implements ILootCondition
 	@Override
 	public boolean test(LootContext context)
 	{
-		ServerWorld world = context.getWorld();
+		ServerWorld world = context.getLevel();
 		
-		if(world != null && MSDimensions.isLandDimension(world.getDimensionKey()))
+		if(world != null && MSDimensions.isLandDimension(world.dimension()))
 		{
-			LandTypePair aspects = MSDimensions.getAspects(world.getServer(), world.getDimensionKey());
+			LandTypePair aspects = MSDimensions.getAspects(world.getServer(), world.dimension());
 			
 			if(aspects != null && (terrainTypes.contains(aspects.terrain) || titleTypes.contains(aspects.title)
 					|| terrainGroups.contains(aspects.terrain.getGroup()) || titleGroups.contains(aspects.title.getGroup())))
@@ -82,7 +82,7 @@ public class LandTypeLootCondition implements ILootCondition
 			Set<ResourceLocation> titleGroups = deserializeSet(json, "title_group", ResourceLocation::new);
 			Set<TerrainLandType> terrainTypes = deserializeSet(json, "terrain_type", s -> LandTypes.TERRAIN_REGISTRY.getValue(new ResourceLocation(s)));
 			Set<TitleLandType> titleTypes = deserializeSet(json, "title_type", s -> LandTypes.TITLE_REGISTRY.getValue(new ResourceLocation(s)));
-			boolean inverted = JSONUtils.getBoolean(json, "inverse", false);
+			boolean inverted = JSONUtils.getAsBoolean(json, "inverse", false);
 			return new LandTypeLootCondition(terrainGroups, titleGroups, terrainTypes, titleTypes, inverted);
 		}
 	}
@@ -114,13 +114,13 @@ public class LandTypeLootCondition implements ILootCondition
 				ImmutableSet.Builder<T> builder = ImmutableSet.builder();
 				for(int i = 0; i < list.size(); i++)
 				{
-					String str = JSONUtils.getString(list.get(i), name);
+					String str = JSONUtils.convertToString(list.get(i), name);
 					builder.add(Objects.requireNonNull(fromString.apply(str), "Unable to parse "+str+" for type "+name));
 				}
 				return builder.build();
 			} else
 			{
-				String str = JSONUtils.getString(json, name);
+				String str = JSONUtils.getAsString(json, name);
 				return ImmutableSet.of(Objects.requireNonNull(fromString.apply(str), "Unable to parse "+str+" for type "+name));
 			}
 		} else return Collections.emptySet();

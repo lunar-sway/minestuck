@@ -20,24 +20,24 @@ public class ParcelPyxisFeature extends Feature<NoFeatureConfig>
 	}
 	
 	@Override
-	public boolean generate(ISeedReader worldIn, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
+	public boolean place(ISeedReader worldIn, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
 	{
-		Rotation rotation = Rotation.randomRotation(rand);
-		BlockState state = MSBlocks.PARCEL_PYXIS.getDefaultState().rotate(worldIn, pos, rotation);
+		Rotation rotation = Rotation.getRandom(rand);
+		BlockState state = MSBlocks.PARCEL_PYXIS.defaultBlockState().rotate(worldIn, pos, rotation);
 		
-		if(state.isValidPosition(worldIn, pos) && !worldIn.getBlockState(pos).getMaterial().isLiquid())
+		if(state.canSurvive(worldIn, pos) && !worldIn.getBlockState(pos).getMaterial().isLiquid())
 		{
 			int randInt = 10 + rand.nextInt(5);
-			setBlockState(worldIn, pos.up(1), state);
-			setBlockState(worldIn, pos, MSBlocks.PIPE_INTERSECTION.getDefaultState());
+			setBlock(worldIn, pos.above(1), state);
+			setBlock(worldIn, pos, MSBlocks.PIPE_INTERSECTION.defaultBlockState());
 			for(int i = 1; i < randInt; i++)
 			{
-				setBlockState(worldIn, pos.down(i), MSBlocks.PIPE.getDefaultState());
+				setBlock(worldIn, pos.below(i), MSBlocks.PIPE.defaultBlockState());
 			}
-			setBlockState(worldIn, pos.down(randInt), MSBlocks.PIPE_INTERSECTION.getDefaultState());
+			setBlock(worldIn, pos.below(randInt), MSBlocks.PIPE_INTERSECTION.defaultBlockState());
 			if(rand.nextBoolean())
 			{
-				setBlockState(worldIn, pos.up(2), MSBlocks.PYXIS_LID.getDefaultState().rotate(worldIn, pos, rotation));
+				setBlock(worldIn, pos.above(2), MSBlocks.PYXIS_LID.defaultBlockState().rotate(worldIn, pos, rotation));
 			}
 			return true;
 		}

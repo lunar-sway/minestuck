@@ -34,7 +34,7 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	{
 		super(type, world, 7);
 		
-		this.stepHeight = 2;
+		this.maxUpStep = 2;
 		partGroup = new PartGroup(this);
 		partGroup.addBox(-4, 2, -1.5, 8, 8, 5);
 		partGroup.addBox(-5, 0, -0.5, 3, 2, 3);
@@ -44,9 +44,9 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	
 	public static AttributeModifierMap.MutableAttribute giclopsAttributes()
 	{
-		return UnderlingEntity.underlingAttributes().createMutableAttribute(Attributes.MAX_HEALTH, 210)
-				.createMutableAttribute(Attributes.KNOCKBACK_RESISTANCE, 0.9).createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.23)
-				.createMutableAttribute(Attributes.ATTACK_DAMAGE, 10);
+		return UnderlingEntity.underlingAttributes().add(Attributes.MAX_HEALTH, 210)
+				.add(Attributes.KNOCKBACK_RESISTANCE, 0.9).add(Attributes.MOVEMENT_SPEED, 0.23)
+				.add(Attributes.ATTACK_DAMAGE, 10);
 	}
 	
 	@Override
@@ -80,7 +80,7 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	@Override
 	protected int getVitalityGel()
 	{
-		return rand.nextInt(4) + 5;
+		return random.nextInt(4) + 5;
 	}
 	
 	@Override
@@ -89,7 +89,7 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 		super.onGristTypeUpdated(type);
 		applyGristModifier(Attributes.MAX_HEALTH, 46 * type.getPower(), AttributeModifier.Operation.ADDITION);
 		applyGristModifier(Attributes.ATTACK_DAMAGE, 4.5 * type.getPower(), AttributeModifier.Operation.ADDITION);
-		this.experienceValue = (int) (7 * type.getPower() + 5);
+		this.xpReward = (int) (7 * type.getPower() + 5);
 	}
 	
 	@Override
@@ -97,39 +97,39 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	{
 		super.baseTick();
 		partGroup.updatePositions();
-		if(!world.isRemote && MinestuckConfig.SERVER.disableGiclops.get())
+		if(!level.isClientSide && MinestuckConfig.SERVER.disableGiclops.get())
 			this.remove();
 	}
 	
 	@Override
-	public void setPositionAndRotation(double par1, double par3, double par5, float par7, float par8) 
+	public void absMoveTo(double par1, double par3, double par5, float par7, float par8) 
 	{
-		super.setPositionAndRotation(par1, par3, par5, par7, par8);
+		super.absMoveTo(par1, par3, par5, par7, par8);
 		partGroup.updatePositions();
 	}
 	
 	@Override
-	protected void collideWithEntity(Entity par1Entity)
+	protected void doPush(Entity par1Entity)
 	{
 		if(!(par1Entity instanceof EntityBigPart))
-			super.collideWithEntity(par1Entity);
+			super.doPush(par1Entity);
 	}
 
 	@Override
-	public void applyEntityCollision(Entity entityIn)
+	public void push(Entity entityIn)
 	{
-	    if(!entityIn.noClip)
+	    if(!entityIn.noPhysics)
 		{
 			partGroup.applyCollision(entityIn);
 		}
 	}
 
 	@Override
-	public void onDeath(DamageSource cause)
+	public void die(DamageSource cause)
 	{
-		super.onDeath(cause);
-		Entity entity = cause.getTrueSource();
-		if(this.dead && !this.world.isRemote)
+		super.die(cause);
+		Entity entity = cause.getEntity();
+		if(this.dead && !this.level.isClientSide)
 		{
 			computePlayerProgress((int) (500* getGristType().getPower() + 1000));
 			if(entity instanceof ServerPlayerEntity)
@@ -142,7 +142,7 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	
 	//Reduced lag is worth not taking damage for being inside a wall
 	@Override
-	public boolean isEntityInsideOpaqueBlock()
+	public boolean isInWall()
 	{
 		return false;
 	}
@@ -150,11 +150,11 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	//Only pay attention to the top for water
 	
 	@Override
-	public boolean handleFluidAcceleration(ITag<Fluid> fluidTag, double fluidFactor)
+	public boolean updateFluidHeightAndDoFluidPushing(ITag<Fluid> fluidTag, double fluidFactor)
 	{
 		AxisAlignedBB realBox = this.getBoundingBox();
 		this.setBoundingBox(new AxisAlignedBB(realBox.minX, realBox.maxY - 1, realBox.minZ, realBox.maxX, realBox.maxY, realBox.maxZ));
-		boolean result = super.handleFluidAcceleration(fluidTag, fluidFactor);
+		boolean result = super.updateFluidHeightAndDoFluidPushing(fluidTag, fluidFactor);
 		this.setBoundingBox(realBox);
 		return result;
 	}
@@ -174,8 +174,8 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 		this.setBoundingBox(new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ));
 		super.move(typeIn, pos);
 		AxisAlignedBB changedBox = this.getBoundingBox();
-		this.setBoundingBox(realBox.offset(changedBox.minX - minX, changedBox.minY - minY, changedBox.minZ - minZ));
-		this.resetPositionToBB();
+		this.setBoundingBox(realBox.move(changedBox.minX - minX, changedBox.minY - minY, changedBox.minZ - minZ));
+		this.setLocationFromBoundingbox();
 	}
 
 	@Override
@@ -195,7 +195,7 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	}
 
 	@Override
-	public boolean canBeCollidedWith()
+	public boolean isPickable()
 	{
 		return true;
 	}

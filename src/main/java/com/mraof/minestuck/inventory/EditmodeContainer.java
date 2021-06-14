@@ -48,30 +48,30 @@ public class EditmodeContainer extends Container
 	}
 	
 	@Override
-	public boolean canInteractWith(PlayerEntity player)
+	public boolean stillValid(PlayerEntity player)
 	{
 		return player == this.player;
 	}
 	
 	@Override
-	public ItemStack transferStackInSlot(PlayerEntity player, int slotIndex)
+	public ItemStack quickMoveStack(PlayerEntity player, int slotIndex)
 	{
-		if(slotIndex >= 14 && slotIndex < this.inventorySlots.size())
+		if(slotIndex >= 14 && slotIndex < this.slots.size())
 		{
-			Slot slot = this.inventorySlots.get(slotIndex);
-			ItemStack stack = slot.getStack();
-			slot.putStack(ItemStack.EMPTY);
+			Slot slot = this.slots.get(slotIndex);
+			ItemStack stack = slot.getItem();
+			slot.set(ItemStack.EMPTY);
 			return stack;
 		}
 		if(slotIndex >= 0 && slotIndex < 14)
 		{
-			Slot slot = this.inventorySlots.get(slotIndex);
-			ItemStack stack = slot.getStack();
+			Slot slot = this.slots.get(slotIndex);
+			ItemStack stack = slot.getItem();
 			if(!stack.isEmpty())
-				for(int i = 14; i < inventorySlots.size(); i++)
-					if(!getSlot(i).getHasStack())
+				for(int i = 14; i < slots.size(); i++)
+					if(!getSlot(i).hasItem())
 					{
-						getSlot(i).putStack(stack);
+						getSlot(i).set(stack);
 						return stack;
 					}
 		}
@@ -104,14 +104,14 @@ public class EditmodeContainer extends Container
 		for(int i = 0; i < Math.max(tools.size(), deployItems.size()); i++)
 		{
 			itemList.add(i >= tools.size() ? ItemStack.EMPTY : tools.get(i));
-			itemList.add(i >= deployItems.size() ? ItemStack.EMPTY : deployItems.get(i).getItemStack(c, player.world));
+			itemList.add(i >= deployItems.size() ? ItemStack.EMPTY : deployItems.get(i).getItemStack(c, player.level));
 		}
 		
 		boolean changed = false;
 		if(itemList.size() != this.items.size())
 			changed = true;
 		else for(int i = 0; i < itemList.size(); i++)
-			if(!ItemStack.areItemStacksEqual(itemList.get(i), this.items.get(i)))
+			if(!ItemStack.matches(itemList.get(i), this.items.get(i)))
 			{
 				changed = true;
 				break;
@@ -133,7 +133,7 @@ public class EditmodeContainer extends Container
 		for(int i = 0; i < 14; i++)
 		{
 			itemList.add(this.items.size() <= i + scroll*2? ItemStack.EMPTY:this.items.get(i + scroll*2));
-			this.inventory.setInventorySlotContents(i, itemList.get(i));
+			this.inventory.setItem(i, itemList.get(i));
 		}
 		
 		EditmodeInventoryPacket packet = EditmodeInventoryPacket.update(itemList, scroll > 0, scroll*2 + 14 < items.size());
@@ -142,11 +142,11 @@ public class EditmodeContainer extends Container
 	
 	public void receiveUpdatePacket(EditmodeInventoryPacket packet)
 	{
-		if(!player.world.isRemote)
+		if(!player.level.isClientSide)
 			throw new IllegalStateException("Should not receive update packet here for server-side container");
 		for(int i = 0; i < packet.getInventory().size(); i++)
 		{
-			inventory.setInventorySlotContents(i, packet.getInventory().get(i));
+			inventory.setItem(i, packet.getInventory().get(i));
 		}
 	}
 	
@@ -159,7 +159,7 @@ public class EditmodeContainer extends Container
 		}
 		
 		@Override
-		public int getSlotStackLimit()
+		public int getMaxStackSize()
 		{
 			return 1;
 		}
@@ -175,19 +175,19 @@ public class EditmodeContainer extends Container
 		}
 		
 		@Override
-		public ItemStack decrStackSize(int index)
+		public ItemStack remove(int index)
 		{
-			return this.getStack();
+			return this.getItem();
 		}
 		
 		@Override
-		public ItemStack getStack()
+		public ItemStack getItem()
 		{
-			return this.inventory.getStackInSlot(this.slotNumber).copy();
+			return this.container.getItem(this.index).copy();
 		}
 		
 		@Override
-		public void putStack(ItemStack stack)
+		public void set(ItemStack stack)
 		{}
 		
 	}

@@ -30,7 +30,7 @@ public final class UnderlingController
 			BlockPos pos = entity.getPosition();
 			return ((LandChunkGenerator)chunkGenerator).randomLayer(entity.getRNG()).getTypeAt(pos.getX(), pos.getZ());
 		}
-		else*/ return GristHelper.getPrimaryGrist(entity.getRNG());
+		else*/ return GristHelper.getPrimaryGrist(entity.getRandom());
 	}
 	
 	private static final List<MobSpawnInfo.Spawners>[] difficultyList = new List[31];
@@ -40,7 +40,7 @@ public final class UnderlingController
 		
 		BlockPos spawn = new BlockPos(0, 0, 0);//world.getSpawnPoint(); TODO
 		
-		int difficulty = (int) Math.round(Math.sqrt(new Vector3i(pos.getX() >> 4, 0, pos.getZ() >> 4).distanceSq(new Vector3i(spawn.getX() >> 4, 0, spawn.getZ() >> 4))));
+		int difficulty = (int) Math.round(Math.sqrt(new Vector3i(pos.getX() >> 4, 0, pos.getZ() >> 4).distSqr(new Vector3i(spawn.getX() >> 4, 0, spawn.getZ() >> 4))));
 		
 		difficulty = Math.min(30, difficulty/3);
 		

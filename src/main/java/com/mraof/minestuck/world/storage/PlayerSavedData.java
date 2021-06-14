@@ -47,9 +47,9 @@ public class PlayerSavedData extends WorldSavedData
 	
 	public static PlayerSavedData get(MinecraftServer mcServer)
 	{
-		ServerWorld world = mcServer.func_241755_D_();
+		ServerWorld world = mcServer.overworld();
 		
-		DimensionSavedDataManager storage = world.getSavedData();
+		DimensionSavedDataManager storage = world.getDataStorage();
 		PlayerSavedData instance = storage.get(() -> new PlayerSavedData(mcServer), DATA_NAME);
 		
 		if(instance == null)	//There is no save data
@@ -62,7 +62,7 @@ public class PlayerSavedData extends WorldSavedData
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound)
+	public CompoundNBT save(CompoundNBT compound)
 	{
 		ListNBT list = new ListNBT();
 		for (PlayerData data : dataMap.values())
@@ -73,7 +73,7 @@ public class PlayerSavedData extends WorldSavedData
 	}
 	
 	@Override
-	public void read(CompoundNBT nbt)
+	public void load(CompoundNBT nbt)
 	{
 		ListNBT list = nbt.getList("playerData", Constants.NBT.TAG_COMPOUND);
 		for (int i = 0; i < list.size(); i++)
@@ -111,7 +111,7 @@ public class PlayerSavedData extends WorldSavedData
 		{
 			PlayerData data = new PlayerData(this, player);
 			dataMap.put(player, data);
-			markDirty();
+			setDirty();
 		}
 		return dataMap.get(player);
 	}

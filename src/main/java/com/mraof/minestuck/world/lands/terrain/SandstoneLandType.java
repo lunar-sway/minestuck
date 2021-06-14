@@ -45,32 +45,32 @@ public class SandstoneLandType extends TerrainLandType
 	{
 		if(type == Variant.SANDSTONE)
 		{
-			registry.setBlockState("sand", Blocks.SAND.getDefaultState());
-			registry.setBlockState("ocean_surface", Blocks.SAND.getDefaultState());
-			registry.setBlockState("upper", Blocks.SANDSTONE.getDefaultState());
-			registry.setBlockState("structure_primary", Blocks.SMOOTH_SANDSTONE.getDefaultState());
-			registry.setBlockState("structure_primary_decorative", Blocks.CHISELED_SANDSTONE.getDefaultState());
-			registry.setBlockState("structure_primary_stairs", Blocks.SANDSTONE_STAIRS.getDefaultState());
-			registry.setBlockState("village_path", Blocks.RED_SAND.getDefaultState());
+			registry.setBlockState("sand", Blocks.SAND.defaultBlockState());
+			registry.setBlockState("ocean_surface", Blocks.SAND.defaultBlockState());
+			registry.setBlockState("upper", Blocks.SANDSTONE.defaultBlockState());
+			registry.setBlockState("structure_primary", Blocks.SMOOTH_SANDSTONE.defaultBlockState());
+			registry.setBlockState("structure_primary_decorative", Blocks.CHISELED_SANDSTONE.defaultBlockState());
+			registry.setBlockState("structure_primary_stairs", Blocks.SANDSTONE_STAIRS.defaultBlockState());
+			registry.setBlockState("village_path", Blocks.RED_SAND.defaultBlockState());
 		} else
 		{
-			registry.setBlockState("sand", Blocks.RED_SAND.getDefaultState());
-			registry.setBlockState("ocean_surface", Blocks.RED_SAND.getDefaultState());
-			registry.setBlockState("upper", Blocks.RED_SANDSTONE.getDefaultState());
-			registry.setBlockState("structure_primary", Blocks.SMOOTH_RED_SANDSTONE.getDefaultState());
-			registry.setBlockState("structure_primary_decorative", Blocks.CHISELED_RED_SANDSTONE.getDefaultState());
-			registry.setBlockState("structure_primary_stairs", Blocks.RED_SANDSTONE_STAIRS.getDefaultState());
-			registry.setBlockState("village_path", Blocks.SAND.getDefaultState());
+			registry.setBlockState("sand", Blocks.RED_SAND.defaultBlockState());
+			registry.setBlockState("ocean_surface", Blocks.RED_SAND.defaultBlockState());
+			registry.setBlockState("upper", Blocks.RED_SANDSTONE.defaultBlockState());
+			registry.setBlockState("structure_primary", Blocks.SMOOTH_RED_SANDSTONE.defaultBlockState());
+			registry.setBlockState("structure_primary_decorative", Blocks.CHISELED_RED_SANDSTONE.defaultBlockState());
+			registry.setBlockState("structure_primary_stairs", Blocks.RED_SANDSTONE_STAIRS.defaultBlockState());
+			registry.setBlockState("village_path", Blocks.SAND.defaultBlockState());
 		}
-		registry.setBlockState("structure_secondary", Blocks.STONE_BRICKS.getDefaultState());
-		registry.setBlockState("structure_secondary_decorative", Blocks.CHISELED_STONE_BRICKS.getDefaultState());
-		registry.setBlockState("structure_secondary_stairs", Blocks.STONE_BRICK_STAIRS.getDefaultState());
-		registry.setBlockState("structure_planks", Blocks.ACACIA_PLANKS.getDefaultState());
-		registry.setBlockState("structure_planks_slab", Blocks.ACACIA_SLAB.getDefaultState());
-		registry.setBlockState("torch", Blocks.REDSTONE_TORCH.getDefaultState());
-		registry.setBlockState("wall_torch", Blocks.REDSTONE_WALL_TORCH.getDefaultState());
-		registry.setBlockState("structure_wool_1", Blocks.WHITE_WOOL.getDefaultState());
-		registry.setBlockState("structure_wool_3", Blocks.MAGENTA_WOOL.getDefaultState());
+		registry.setBlockState("structure_secondary", Blocks.STONE_BRICKS.defaultBlockState());
+		registry.setBlockState("structure_secondary_decorative", Blocks.CHISELED_STONE_BRICKS.defaultBlockState());
+		registry.setBlockState("structure_secondary_stairs", Blocks.STONE_BRICK_STAIRS.defaultBlockState());
+		registry.setBlockState("structure_planks", Blocks.ACACIA_PLANKS.defaultBlockState());
+		registry.setBlockState("structure_planks_slab", Blocks.ACACIA_SLAB.defaultBlockState());
+		registry.setBlockState("torch", Blocks.REDSTONE_TORCH.defaultBlockState());
+		registry.setBlockState("wall_torch", Blocks.REDSTONE_WALL_TORCH.defaultBlockState());
+		registry.setBlockState("structure_wool_1", Blocks.WHITE_WOOL.defaultBlockState());
+		registry.setBlockState("structure_wool_3", Blocks.MAGENTA_WOOL.defaultBlockState());
 	}
 	
 	@Override

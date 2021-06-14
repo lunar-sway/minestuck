@@ -70,7 +70,7 @@ public class PostEntryTask
 		if(isDone())
 			return false;
 		
-		ServerWorld world = dimension != null ? server.getWorld(dimension) : null;
+		ServerWorld world = dimension != null ? server.getLevel(dimension) : null;
 		
 		if(world == null)
 		{
@@ -108,7 +108,7 @@ public class PostEntryTask
 				}
 			}
 			
-			Debug.infof("Completed entry block updates for dimension %s.", dimension.getLocation());
+			Debug.infof("Completed entry block updates for dimension %s.", dimension.location());
 			setDone();
 			return true;
 		}
@@ -132,15 +132,15 @@ public class PostEntryTask
 		if(i >= index)
 		{
 			if(blockUpdate)
-				world.notifyNeighborsOfStateChange(pos, world.getBlockState(pos).getBlock());
-			world.getChunkProvider().getLightManager().checkBlock(pos);
+				world.updateNeighborsAt(pos, world.getBlockState(pos).getBlock());
+			world.getChunkSource().getLightEngine().checkBlock(pos);
 			IChunk chunk = world.getChunk(pos);
 			BlockState state = chunk.getBlockState(pos);
 			int x = pos.getX() & 15, y = pos.getY(), z = pos.getZ() & 15;
-			chunk.getHeightmap(Heightmap.Type.MOTION_BLOCKING).update(x, y, z, state);
-			chunk.getHeightmap(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES).update(x, y, z, state);
-			chunk.getHeightmap(Heightmap.Type.OCEAN_FLOOR).update(x, y, z, state);
-			chunk.getHeightmap(Heightmap.Type.WORLD_SURFACE).update(x, y, z, state);
+			chunk.getOrCreateHeightmapUnprimed(Heightmap.Type.MOTION_BLOCKING).update(x, y, z, state);
+			chunk.getOrCreateHeightmapUnprimed(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES).update(x, y, z, state);
+			chunk.getOrCreateHeightmapUnprimed(Heightmap.Type.OCEAN_FLOOR).update(x, y, z, state);
+			chunk.getOrCreateHeightmapUnprimed(Heightmap.Type.WORLD_SURFACE).update(x, y, z, state);
 			index++;
 		}
 		return i + 1;

@@ -21,8 +21,8 @@ public class StoneTabletPacket implements PlayToServerPacket
 	@Override
 	public void execute(ServerPlayerEntity player)
 	{
-		ItemStack tablet = player.getHeldItem(hand);
-		if(!tablet.isItemEqual(new ItemStack(MSItems.STONE_SLAB)))
+		ItemStack tablet = player.getItemInHand(hand);
+		if(!tablet.sameItem(new ItemStack(MSItems.STONE_SLAB)))
 			return;
 		
 		CompoundNBT nbt = tablet.getOrCreateTag();
@@ -32,13 +32,13 @@ public class StoneTabletPacket implements PlayToServerPacket
 	
 	public static StoneTabletPacket decode(PacketBuffer buffer)
 	{
-		return new StoneTabletPacket(buffer.readString(32767), Hand.values()[buffer.readInt()]);
+		return new StoneTabletPacket(buffer.readUtf(32767), Hand.values()[buffer.readInt()]);
 	}
 	
 	@Override
 	public void encode(PacketBuffer buffer)
 	{
-		buffer.writeString(text);
+		buffer.writeUtf(text);
 		buffer.writeInt(hand.ordinal());
 	}
 }

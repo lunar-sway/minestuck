@@ -53,7 +53,7 @@ public class MiniCruxtruderTileEntity extends MachineProcessTileEntity implement
 	public boolean contentsValid()
 	{
 		ItemStack stack1 = itemHandler.getStackInSlot(1);
-		return (!world.isBlockPowered(this.getPos()) && !itemHandler.getStackInSlot(0).isEmpty() && (stack1.isEmpty() || stack1.getCount() < stack1.getMaxStackSize() && ColorHandler.getColorFromStack(stack1) == this.color));
+		return (!level.hasNeighborSignal(this.getBlockPos()) && !itemHandler.getStackInSlot(0).isEmpty() && (stack1.isEmpty() || stack1.getCount() < stack1.getMaxStackSize() && ColorHandler.getColorFromStack(stack1) == this.color));
 	}
 	
 	@Override
@@ -68,17 +68,17 @@ public class MiniCruxtruderTileEntity extends MachineProcessTileEntity implement
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT nbt)
+	public void load(BlockState state, CompoundNBT nbt)
 	{
-		super.read(state, nbt);
+		super.load(state, nbt);
 		this.color = nbt.getInt("color");
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound)
+	public CompoundNBT save(CompoundNBT compound)
 	{
 		compound.putInt("color", color);
-		return super.write(compound);
+		return super.save(compound);
 	}
 	
 	@Override
@@ -105,6 +105,6 @@ public class MiniCruxtruderTileEntity extends MachineProcessTileEntity implement
 	@Override
 	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity player)
 	{
-		return new MiniCruxtruderContainer(windowId, playerInventory, itemHandler, parameters, IWorldPosCallable.of(world, pos), pos);
+		return new MiniCruxtruderContainer(windowId, playerInventory, itemHandler, parameters, IWorldPosCallable.create(level, worldPosition), worldPosition);
 	}
 }

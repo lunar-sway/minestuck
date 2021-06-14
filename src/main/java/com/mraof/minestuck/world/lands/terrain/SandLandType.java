@@ -54,33 +54,33 @@ public class SandLandType extends TerrainLandType
 	{
 		if(type == Variant.SAND || type == Variant.LUSH_DESERTS)
 		{
-			registry.setGroundState(Blocks.SANDSTONE.getDefaultState(), MSFillerBlockTypes.SANDSTONE);
-			registry.setBlockState("upper", Blocks.SAND.getDefaultState());
-			registry.setBlockState("structure_primary", Blocks.SMOOTH_SANDSTONE.getDefaultState());
-			registry.setBlockState("structure_primary_decorative", Blocks.CHISELED_SANDSTONE.getDefaultState());
-			registry.setBlockState("structure_primary_stairs", Blocks.SANDSTONE_STAIRS.getDefaultState());
-			registry.setBlockState("village_path", Blocks.RED_SAND.getDefaultState());
-			registry.setBlockState("cruxite_ore", MSBlocks.SANDSTONE_CRUXITE_ORE.getDefaultState());
-			registry.setBlockState("uranium_ore", MSBlocks.SANDSTONE_URANIUM_ORE.getDefaultState());
+			registry.setGroundState(Blocks.SANDSTONE.defaultBlockState(), MSFillerBlockTypes.SANDSTONE);
+			registry.setBlockState("upper", Blocks.SAND.defaultBlockState());
+			registry.setBlockState("structure_primary", Blocks.SMOOTH_SANDSTONE.defaultBlockState());
+			registry.setBlockState("structure_primary_decorative", Blocks.CHISELED_SANDSTONE.defaultBlockState());
+			registry.setBlockState("structure_primary_stairs", Blocks.SANDSTONE_STAIRS.defaultBlockState());
+			registry.setBlockState("village_path", Blocks.RED_SAND.defaultBlockState());
+			registry.setBlockState("cruxite_ore", MSBlocks.SANDSTONE_CRUXITE_ORE.defaultBlockState());
+			registry.setBlockState("uranium_ore", MSBlocks.SANDSTONE_URANIUM_ORE.defaultBlockState());
 		} else
 		{
-			registry.setGroundState(Blocks.RED_SANDSTONE.getDefaultState(), MSFillerBlockTypes.RED_SANDSTONE);
-			registry.setBlockState("upper", Blocks.RED_SAND.getDefaultState());
-			registry.setBlockState("structure_primary", Blocks.SMOOTH_RED_SANDSTONE.getDefaultState());
-			registry.setBlockState("structure_primary_decorative", Blocks.CHISELED_RED_SANDSTONE.getDefaultState());
-			registry.setBlockState("structure_primary_stairs", Blocks.RED_SANDSTONE_STAIRS.getDefaultState());
-			registry.setBlockState("village_path", Blocks.SAND.getDefaultState());
-			registry.setBlockState("cruxite_ore", MSBlocks.RED_SANDSTONE_CRUXITE_ORE.getDefaultState());
-			registry.setBlockState("uranium_ore", MSBlocks.RED_SANDSTONE_URANIUM_ORE.getDefaultState());
+			registry.setGroundState(Blocks.RED_SANDSTONE.defaultBlockState(), MSFillerBlockTypes.RED_SANDSTONE);
+			registry.setBlockState("upper", Blocks.RED_SAND.defaultBlockState());
+			registry.setBlockState("structure_primary", Blocks.SMOOTH_RED_SANDSTONE.defaultBlockState());
+			registry.setBlockState("structure_primary_decorative", Blocks.CHISELED_RED_SANDSTONE.defaultBlockState());
+			registry.setBlockState("structure_primary_stairs", Blocks.RED_SANDSTONE_STAIRS.defaultBlockState());
+			registry.setBlockState("village_path", Blocks.SAND.defaultBlockState());
+			registry.setBlockState("cruxite_ore", MSBlocks.RED_SANDSTONE_CRUXITE_ORE.defaultBlockState());
+			registry.setBlockState("uranium_ore", MSBlocks.RED_SANDSTONE_URANIUM_ORE.defaultBlockState());
 		}
-		registry.setBlockState("structure_secondary", Blocks.STONE_BRICKS.getDefaultState());
-		registry.setBlockState("structure_secondary_decorative", Blocks.CHISELED_STONE_BRICKS.getDefaultState());
-		registry.setBlockState("structure_secondary_stairs", Blocks.STONE_BRICK_STAIRS.getDefaultState());
-		registry.setBlockState("structure_planks", Blocks.ACACIA_PLANKS.getDefaultState());
-		registry.setBlockState("structure_planks_slab", Blocks.ACACIA_SLAB.getDefaultState());
+		registry.setBlockState("structure_secondary", Blocks.STONE_BRICKS.defaultBlockState());
+		registry.setBlockState("structure_secondary_decorative", Blocks.CHISELED_STONE_BRICKS.defaultBlockState());
+		registry.setBlockState("structure_secondary_stairs", Blocks.STONE_BRICK_STAIRS.defaultBlockState());
+		registry.setBlockState("structure_planks", Blocks.ACACIA_PLANKS.defaultBlockState());
+		registry.setBlockState("structure_planks_slab", Blocks.ACACIA_SLAB.defaultBlockState());
 		registry.setBlockState("river", registry.getBlockState("upper"));
-		registry.setBlockState("structure_wool_1", Blocks.YELLOW_WOOL.getDefaultState());
-		registry.setBlockState("structure_wool_3", Blocks.MAGENTA_WOOL.getDefaultState());
+		registry.setBlockState("structure_wool_1", Blocks.YELLOW_WOOL.defaultBlockState());
+		registry.setBlockState("structure_wool_3", Blocks.MAGENTA_WOOL.defaultBlockState());
 	}
 	
 	@Override

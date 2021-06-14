@@ -30,20 +30,20 @@ public class SmallLibraryFeature extends Feature<NoFeatureConfig>
 	}
 	
 	@Override
-	public boolean generate(ISeedReader worldIn, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
+	public boolean place(ISeedReader worldIn, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
 	{
-		Rotation rotation = Rotation.randomRotation(rand);
-		TemplateManager templates = worldIn.getWorld().getStructureTemplateManager();
-		Template template = templates.getTemplateDefaulted(STRUCTURE_SMALL_LIBRARY);
+		Rotation rotation = Rotation.getRandom(rand);
+		TemplateManager templates = worldIn.getLevel().getStructureManager();
+		Template template = templates.getOrCreate(STRUCTURE_SMALL_LIBRARY);
 		
-		PlacementSettings settings = new PlacementSettings().setRotation(rotation).setChunk(new ChunkPos(pos)).setRandom(rand).addProcessor(StructureBlockRegistryProcessor.INSTANCE);
+		PlacementSettings settings = new PlacementSettings().setRotation(rotation).setChunkPos(new ChunkPos(pos)).setRandom(rand).addProcessor(StructureBlockRegistryProcessor.INSTANCE);
 		
 		if(rand.nextBoolean())
 		{	//Replace 20% of bookcases with air
-			settings.addProcessor(new RuleStructureProcessor(ImmutableList.of(new RuleEntry(new RandomBlockMatchRuleTest(Blocks.BOOKSHELF, 0.2F), AlwaysTrueRuleTest.INSTANCE, Blocks.AIR.getDefaultState()))));
+			settings.addProcessor(new RuleStructureProcessor(ImmutableList.of(new RuleEntry(new RandomBlockMatchRuleTest(Blocks.BOOKSHELF, 0.2F), AlwaysTrueRuleTest.INSTANCE, Blocks.AIR.defaultBlockState()))));
 		}
 		
-		BlockPos size = template.transformedSize(rotation);
+		BlockPos size = template.getSize(rotation);
 		int xOffset = rand.nextInt(16 - size.getX()), zOffset = rand.nextInt(16 - size.getZ());
 		int minX = template.getSize().getX()/2 - 1, maxX = template.getSize().getX()/2 + 1, z1 = 0, z2 = template.getSize().getZ();
 		MutableBoundingBox door1, door2;
@@ -58,19 +58,19 @@ public class SmallLibraryFeature extends Feature<NoFeatureConfig>
 		}
 		
 		int y1 = 0;
-		for(BlockPos doorPos : BlockPos.getAllInBoxMutable(door1.minX, 0, door1.minZ, door1.maxX, 0, door1.maxZ))
+		for(BlockPos doorPos : BlockPos.betweenClosed(door1.x0, 0, door1.z0, door1.x1, 0, door1.z1))
 		{
 			y1 = Math.max(y1, worldIn.getHeight(Heightmap.Type.OCEAN_FLOOR_WG, pos.getX() + doorPos.getX() + xOffset, pos.getZ() + doorPos.getZ() + zOffset));
 		}
 		int y2 = 0;
-		for(BlockPos doorPos : BlockPos.getAllInBoxMutable(door2.minX, 0, door2.minZ, door2.maxX, 0, door2.maxZ))
+		for(BlockPos doorPos : BlockPos.betweenClosed(door2.x0, 0, door2.z0, door2.x1, 0, door2.z1))
 		{
 			y2 = Math.max(y2, worldIn.getHeight(Heightmap.Type.OCEAN_FLOOR_WG, pos.getX() + doorPos.getX() + xOffset, pos.getZ() + doorPos.getZ() + zOffset));
 		}
 		int y = Math.min(y1, y2) - 1;
 		
 		BlockPos structurePos = template.getZeroPositionWithTransform(new BlockPos(pos.getX() + xOffset, y, pos.getZ() + zOffset), Mirror.NONE, rotation);
-		template.func_237146_a_(worldIn, structurePos, structurePos, settings, rand, Constants.BlockFlags.NO_RERENDER);
+		template.placeInWorld(worldIn, structurePos, structurePos, settings, rand, Constants.BlockFlags.NO_RERENDER);
 		
 		return true;
 	}

@@ -21,16 +21,16 @@ public class ConsortMerchantSlot extends Slot
 	}
 	
 	@Override
-	public boolean isItemValid(ItemStack stack)
+	public boolean mayPlace(ItemStack stack)
 	{
 		return false;
 	}
 	
 	@Override
-	public ItemStack decrStackSize(int amount)
+	public ItemStack remove(int amount)
 	{
 		if(merchant != null && player instanceof ServerPlayerEntity)
-			merchant.handlePurchase((ServerPlayerEntity) player, false, this.slotNumber);
+			merchant.handlePurchase((ServerPlayerEntity) player, false, this.index);
 		return ItemStack.EMPTY;
 	}
 }

@@ -24,8 +24,8 @@ public class TowersLandType extends TitleLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("structure_wool_2", Blocks.LIGHT_BLUE_WOOL.getDefaultState());
-		registry.setBlockState("carpet", Blocks.YELLOW_CARPET.getDefaultState());
+		registry.setBlockState("structure_wool_2", Blocks.LIGHT_BLUE_WOOL.defaultBlockState());
+		registry.setBlockState("carpet", Blocks.YELLOW_CARPET.defaultBlockState());
 	}
 	/*
 	@Override

@@ -151,12 +151,12 @@ public class SkaiaClient
 		connections.removeIf(c -> c.getClientId() == data.playerId || c.getServerId() == data.playerId);
 		connections.addAll(data.connectionsTo);
 		
-		Screen gui = Minecraft.getInstance().currentScreen;
+		Screen gui = Minecraft.getInstance().screen;
 		if(gui instanceof ComputerScreen)
 			((ComputerScreen)gui).updateGui();
 		else if(te != null && te.ownerId == data.playerId)
 		{
-			if(!Minecraft.getInstance().player.isSneaking())
+			if(!Minecraft.getInstance().player.isShiftKeyDown())
 				MSScreenFactories.displayComputerScreen(te);
 			te = null;
 		}

@@ -21,13 +21,13 @@ public class TransportalizerPacket implements PlayToServerPacket
 	public void encode(PacketBuffer buffer)
 	{
 		buffer.writeBlockPos(pos);
-		buffer.writeString(destId, 4);
+		buffer.writeUtf(destId, 4);
 	}
 	
 	public static TransportalizerPacket decode(PacketBuffer buffer)
 	{
 		BlockPos pos = buffer.readBlockPos();
-		String destId = buffer.readString(4);
+		String destId = buffer.readUtf(4);
 		
 		return new TransportalizerPacket(pos, destId);
 	}
@@ -35,9 +35,9 @@ public class TransportalizerPacket implements PlayToServerPacket
 	@Override
 	public void execute(ServerPlayerEntity player)
 	{
-		if(player.getEntityWorld().isAreaLoaded(pos, 0))
+		if(player.getCommandSenderWorld().isAreaLoaded(pos, 0))
 		{
-			TileEntity te = player.world.getTileEntity(pos);
+			TileEntity te = player.level.getBlockEntity(pos);
 			if(te instanceof TransportalizerTileEntity)
 			{
 				((TransportalizerTileEntity) te).setDestId(destId);

@@ -32,11 +32,11 @@ public class CastleLibraryPiece extends CastleRoomPiece
 	}
 	
 	@Override
-	public boolean func_230383_a_(ISeedReader world, StructureManager manager, ChunkGenerator generator, Random random, MutableBoundingBox structureBoundingBox, ChunkPos chunkPosIn, BlockPos pos)
+	public boolean postProcess(ISeedReader world, StructureManager manager, ChunkGenerator generator, Random random, MutableBoundingBox structureBoundingBox, ChunkPos chunkPosIn, BlockPos pos)
 	{
-		super.func_230383_a_(world, manager, generator, random, structureBoundingBox, chunkPosIn, pos);
-		this.fillWithBlocks(world, structureBoundingBox, 1, 1, 1, 1, 3, 6, Blocks.BOOKSHELF.getDefaultState(), Blocks.AIR.getDefaultState(), false);
-		this.fillWithBlocks(world, structureBoundingBox, 6, 1, 1, 6, 3, 6, Blocks.BOOKSHELF.getDefaultState(), Blocks.AIR.getDefaultState(), false);
+		super.postProcess(world, manager, generator, random, structureBoundingBox, chunkPosIn, pos);
+		this.generateBox(world, structureBoundingBox, 1, 1, 1, 1, 3, 6, Blocks.BOOKSHELF.defaultBlockState(), Blocks.AIR.defaultBlockState(), false);
+		this.generateBox(world, structureBoundingBox, 6, 1, 1, 6, 3, 6, Blocks.BOOKSHELF.defaultBlockState(), Blocks.AIR.defaultBlockState(), false);
 		return true;
 	}
 	

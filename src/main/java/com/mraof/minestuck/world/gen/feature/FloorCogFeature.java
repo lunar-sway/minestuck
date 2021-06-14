@@ -30,18 +30,18 @@ public class FloorCogFeature extends Feature<NoFeatureConfig>
 	}
 	
 	@Override
-	public boolean generate(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
+	public boolean place(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
 	{
-		TemplateManager templates = world.getWorld().getStructureTemplateManager();
-		Template template = templates.getTemplateDefaulted(rand.nextBoolean() ? STRUCTURE_LARGE_FLOOR_COG_1 : STRUCTURE_LARGE_FLOOR_COG_2);
+		TemplateManager templates = world.getLevel().getStructureManager();
+		Template template = templates.getOrCreate(rand.nextBoolean() ? STRUCTURE_LARGE_FLOOR_COG_1 : STRUCTURE_LARGE_FLOOR_COG_2);
 		
-		PlacementSettings settings = new PlacementSettings().setChunk(new ChunkPos(pos)).setRandom(rand).addProcessor(StructureBlockRegistryProcessor.INSTANCE);
+		PlacementSettings settings = new PlacementSettings().setChunkPos(new ChunkPos(pos)).setRandom(rand).addProcessor(StructureBlockRegistryProcessor.INSTANCE);
 		
 		BlockPos size = template.getSize();
 		int xOffset = rand.nextInt(16 - size.getX()), zOffset = rand.nextInt(16 - size.getZ());
 		
 		int yMin = Integer.MAX_VALUE, yMax = 0;
-		for(BlockPos floorPos : BlockPos.getAllInBoxMutable(0, 0, 0, size.getX(), 0, size.getZ()))
+		for(BlockPos floorPos : BlockPos.betweenClosed(0, 0, 0, size.getX(), 0, size.getZ()))
 		{
 			int y = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, pos.getX() + floorPos.getX() + xOffset, pos.getZ() + floorPos.getZ() + zOffset);
 			yMax = Math.max(yMax, y);
@@ -54,7 +54,7 @@ public class FloorCogFeature extends Feature<NoFeatureConfig>
 		else y = yMin - size.getY() + 2;
 		
 		BlockPos structurePos = template.getZeroPositionWithTransform(new BlockPos(pos.getX() + xOffset, y, pos.getZ() + zOffset), Mirror.NONE, Rotation.NONE);
-		template.func_237146_a_(world, structurePos, structurePos, settings, rand, Constants.BlockFlags.NO_RERENDER);
+		template.placeInWorld(world, structurePos, structurePos, settings, rand, Constants.BlockFlags.NO_RERENDER);
 		
 		return true;
 	}

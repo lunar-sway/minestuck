@@ -30,7 +30,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 	}
 	
 	@Override
-	protected void registerRecipes(Consumer<IFinishedRecipe> consumer)
+	protected void buildShapelessRecipes(Consumer<IFinishedRecipe> consumer)
 	{
 		//Wood
 		final IItemProvider[][] woodItems = {

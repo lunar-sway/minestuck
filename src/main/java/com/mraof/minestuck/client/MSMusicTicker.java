@@ -24,7 +24,7 @@ public class MSMusicTicker	//TODO Introduce types (something similar to vanilla)
 	@SubscribeEvent
 	public static void clientTick(TickEvent.ClientTickEvent event)
 	{
-		if(event.phase == TickEvent.Phase.END && !Minecraft.getInstance().isGamePaused())
+		if(event.phase == TickEvent.Phase.END && !Minecraft.getInstance().isPaused())
 		{
 			tick(Minecraft.getInstance());
 		}
@@ -34,8 +34,8 @@ public class MSMusicTicker	//TODO Introduce types (something similar to vanilla)
 	public static void playSound(PlaySoundEvent event)
 	{
 		Minecraft mc = Minecraft.getInstance();
-		if(mc.world != null && MSDimensions.isLandDimension(mc.world.getDimensionKey())
-				&& event.getSound().getSoundLocation().equals(mc.getBackgroundMusicSelector().getSoundEvent().getName()))
+		if(mc.level != null && MSDimensions.isLandDimension(mc.level.dimension())
+				&& event.getSound().getLocation().equals(mc.getSituationalMusic().getEvent().getLocation()))
 			event.setResultSound(null);
 	}
 	
@@ -45,11 +45,11 @@ public class MSMusicTicker	//TODO Introduce types (something similar to vanilla)
 	
 	private static void tick(Minecraft mc)
 	{
-		if(mc.world != null && MSDimensions.isLandDimension(mc.world.getDimensionKey()))
+		if(mc.level != null && MSDimensions.isLandDimension(mc.level.dimension()))
 		{
 			if(!wasInLand)
 			{
-				ticksUntilMusic = MathHelper.nextInt(mc.world.rand, 0, 6000);
+				ticksUntilMusic = MathHelper.nextInt(mc.level.random, 0, 6000);
 				LOGGER.debug("Entered a land. Land music scheduled to play in {} ticks", ticksUntilMusic);
 			}
 			
@@ -58,14 +58,14 @@ public class MSMusicTicker	//TODO Introduce types (something similar to vanilla)
 				ticksUntilMusic--;
 				if(ticksUntilMusic < 0)
 				{
-					currentMusic = SimpleSound.music(getLandSoundEvent(mc));
-					mc.getSoundHandler().play(currentMusic);
+					currentMusic = SimpleSound.forMusic(getLandSoundEvent(mc));
+					mc.getSoundManager().play(currentMusic);
 					LOGGER.debug("Land music started.");
 				}
-			} else if(!mc.getSoundHandler().isPlaying(currentMusic))
+			} else if(!mc.getSoundManager().isActive(currentMusic))
 			{
 				currentMusic = null;
-				ticksUntilMusic = MathHelper.nextInt(mc.world.rand, 12000, 24000);
+				ticksUntilMusic = MathHelper.nextInt(mc.level.random, 12000, 24000);
 				LOGGER.debug("Land music finished playing. Scheduling music to be played again in {} ticks.", ticksUntilMusic);
 			}
 			
@@ -75,7 +75,7 @@ public class MSMusicTicker	//TODO Introduce types (something similar to vanilla)
 			wasInLand = false;
 			if(currentMusic != null)
 			{
-				mc.getSoundHandler().stop(currentMusic);
+				mc.getSoundManager().stop(currentMusic);
 				currentMusic = null;
 				LOGGER.debug("Left land, stopped music.");
 			}
@@ -88,7 +88,7 @@ public class MSMusicTicker	//TODO Introduce types (something similar to vanilla)
 		
 		LandTypePair pair = null;//dim.landTypes;
 		
-		if(mc.world.rand.nextBoolean())
+		if(mc.level.random.nextBoolean())
 			return pair.terrain.getBackgroundMusic();
 		else return pair.title.getBackgroundMusic();
 	}

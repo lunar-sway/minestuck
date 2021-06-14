@@ -960,7 +960,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addStoreTooltip(Items.WHEAT_SEEDS, "You know what tastes even better than those plant grains? Their seeds, of course!");
 		addStoreTooltip(Items.MUSHROOM_STEW, "Do you enjoy mushrooms? Then this'll be a delicacy!");
 		addStoreTooltip(Items.BEEF, "You want something RAW? We've got BEEF.");
-		addStoreTooltip(PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.WATER), "Stay hydrated with our oasis water.");
+		addStoreTooltip(PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER), "Stay hydrated with our oasis water.");
 		addStoreTooltip(Items.CARROT, "Want to try something orange? We've got carrots straight from the ground.");
 		addStoreTooltip(Items.MILK_BUCKET, "You won't find this in a regular bucket!");
 		addStore(Items.POISONOUS_POTATO, "Green Potato");

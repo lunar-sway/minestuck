@@ -34,9 +34,9 @@ public class CaptchaCardItem extends Item
 	}
 	
 	@Override
-	public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items)
+	public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items)
 	{
-		if(this.isInGroup(group))
+		if(this.allowdedIn(group))
 		{
 			items.add(new ItemStack(this));
 			items.add(AlchemyHelper.createCard(new ItemStack(MSItems.CRUXITE_APPLE), true));
@@ -44,41 +44,41 @@ public class CaptchaCardItem extends Item
 	}
 	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
 		
-		ItemStack stack = playerIn.getHeldItem(handIn);
+		ItemStack stack = playerIn.getItemInHand(handIn);
 		
-		if(playerIn.isSneaking() && stack.hasTag() && ((AlchemyHelper.isGhostCard(stack) && !AlchemyHelper.isPunchedCard(stack)) || !AlchemyHelper.hasDecodedItem(stack)))
+		if(playerIn.isShiftKeyDown() && stack.hasTag() && ((AlchemyHelper.isGhostCard(stack) && !AlchemyHelper.isPunchedCard(stack)) || !AlchemyHelper.hasDecodedItem(stack)))
 		{
 			AlchemyHelper.removeItemFromCard(stack);
-			return ActionResult.resultSuccess(new ItemStack(playerIn.getHeldItem(handIn).getItem(), playerIn.getHeldItem(handIn).getCount()));
+			return ActionResult.success(new ItemStack(playerIn.getItemInHand(handIn).getItem(), playerIn.getItemInHand(handIn).getCount()));
 		}
-		else return ActionResult.resultPass(playerIn.getHeldItem(handIn));
+		else return ActionResult.pass(playerIn.getItemInHand(handIn));
 	}
 	
 	@Override
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
+	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
 	{
 		if(AlchemyHelper.hasDecodedItem(stack))
 		{
 			ItemStack content = AlchemyHelper.getDecodedItem(stack);
 			if(!content.isEmpty())
 			{
-				ITextComponent contentName = content.getDisplayName();
+				ITextComponent contentName = content.getHoverName();
 				tooltip.add(makeTooltipInfo((AlchemyHelper.isPunchedCard(stack) || AlchemyHelper.isGhostCard(stack))
-						? contentName : new StringTextComponent(content.getCount() + "x").appendSibling(contentName)));
+						? contentName : new StringTextComponent(content.getCount() + "x").append(contentName)));
 				
 				if(AlchemyHelper.isPunchedCard(stack))
-					tooltip.add(makeTooltipInfo(new TranslationTextComponent(getTranslationKey() + ".punched")));
+					tooltip.add(makeTooltipInfo(new TranslationTextComponent(getDescriptionId() + ".punched")));
 				else if(AlchemyHelper.isGhostCard(stack))
-					tooltip.add(makeTooltipInfo(new TranslationTextComponent(getTranslationKey() + ".ghost")));
-			} else tooltip.add(makeTooltipInfo(new TranslationTextComponent(getTranslationKey() + ".invalid")));
+					tooltip.add(makeTooltipInfo(new TranslationTextComponent(getDescriptionId() + ".ghost")));
+			} else tooltip.add(makeTooltipInfo(new TranslationTextComponent(getDescriptionId() + ".invalid")));
 		} else
-			tooltip.add(makeTooltipInfo(new TranslationTextComponent(getTranslationKey() + ".empty")));
+			tooltip.add(makeTooltipInfo(new TranslationTextComponent(getDescriptionId() + ".empty")));
 	}
 	
 	private ITextComponent makeTooltipInfo(ITextComponent info)
 	{
-		return new StringTextComponent("(").appendSibling(info).appendString(")").mergeStyle(TextFormatting.GRAY);
+		return new StringTextComponent("(").append(info).append(")").withStyle(TextFormatting.GRAY);
 	}
 }

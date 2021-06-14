@@ -40,30 +40,30 @@ public class TowerFeature extends Feature<NoFeatureConfig>
 	}
 	
 	@Override
-	public boolean generate(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
+	public boolean place(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
 	{
-		Rotation rotation = Rotation.randomRotation(rand);
+		Rotation rotation = Rotation.getRandom(rand);
 		ResourceLocation tower = rand.nextInt(50) == 0 ? STRUCTURE_TOWER_WITH_CHEST : STRUCTURE_TOWER;
-		TemplateManager templates = world.getWorld().getStructureTemplateManager();
-		Template template = templates.getTemplateDefaulted(tower);
+		TemplateManager templates = world.getLevel().getStructureManager();
+		Template template = templates.getOrCreate(tower);
 		
-		PlacementSettings settings = new PlacementSettings().setChunk(new ChunkPos(pos)).setRandom(rand).addProcessor(StructureBlockRegistryProcessor.INSTANCE);
+		PlacementSettings settings = new PlacementSettings().setChunkPos(new ChunkPos(pos)).setRandom(rand).addProcessor(StructureBlockRegistryProcessor.INSTANCE);
 		
-		BlockPos size = template.transformedSize(rotation);
+		BlockPos size = template.getSize(rotation);
 		int xOffset = rand.nextInt(16 - size.getX() - 2) + 1, zOffset = rand.nextInt(16 - size.getZ() - 2) + 1;
 		
 		int y = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, pos.getX() + xOffset + size.getX()/2, pos.getZ() + zOffset + size.getZ()/2) - 2;
 		
-		BlockPos center = pos.add(xOffset + size.getX()/2, y - pos.getY(), zOffset + size.getZ()/2);
+		BlockPos center = pos.offset(xOffset + size.getX()/2, y - pos.getY(), zOffset + size.getZ()/2);
 		final int doorSide = 1, doorFront = 4;
 		for(Direction direction : Direction.Plane.HORIZONTAL)
 		{
-			BlockPos doorPos = center.offset(direction, doorFront);
+			BlockPos doorPos = center.relative(direction, doorFront);
 			
 			ResourceLocation doorType;
-			if(world.getBlockState(doorPos.up(2)).isSolid())
+			if(world.getBlockState(doorPos.above(2)).canOcclude())
 			{
-				if(world.getBlockState(doorPos.up(3)).isSolid())
+				if(world.getBlockState(doorPos.above(3)).canOcclude())
 				{
 					doorType = STRUCTURE_TOWER_WALL;
 				} else
@@ -72,7 +72,7 @@ public class TowerFeature extends Feature<NoFeatureConfig>
 				}
 			} else
 			{
-				if(world.getBlockState(doorPos.up()).isSolid())
+				if(world.getBlockState(doorPos.above()).canOcclude())
 				{
 					doorType = STRUCTURE_TOWER_DOOR;
 				} else
@@ -81,7 +81,7 @@ public class TowerFeature extends Feature<NoFeatureConfig>
 				}
 			}
 			
-			Template door = templates.getTemplateDefaulted(doorType);
+			Template door = templates.getOrCreate(doorType);
 			
 			Rotation doorRotation;
 			switch(direction)
@@ -101,15 +101,15 @@ public class TowerFeature extends Feature<NoFeatureConfig>
 			}
 			
 			settings.setRotation(doorRotation);
-			BlockPos structurePos = doorPos.offset(direction.rotateYCCW(), doorSide).offset(direction, door.transformedSize(doorRotation).getZ() - 2);
-			door.func_237146_a_(world, structurePos, structurePos, settings, rand, Constants.BlockFlags.NO_RERENDER);
+			BlockPos structurePos = doorPos.relative(direction.getCounterClockWise(), doorSide).relative(direction, door.getSize(doorRotation).getZ() - 2);
+			door.placeInWorld(world, structurePos, structurePos, settings, rand, Constants.BlockFlags.NO_RERENDER);
 		}
 		
 		settings.setRotation(rotation);
 		BlockPos structurePos = template.getZeroPositionWithTransform(new BlockPos(pos.getX() + xOffset, y, pos.getZ() + zOffset), Mirror.NONE, rotation);
-		template.func_237146_a_(world, structurePos, structurePos, settings, rand, Constants.BlockFlags.NO_RERENDER);
+		template.placeInWorld(world, structurePos, structurePos, settings, rand, Constants.BlockFlags.NO_RERENDER);
 		
-		for(Template.BlockInfo blockInfo : template.func_215381_a(structurePos, settings, Blocks.STRUCTURE_BLOCK))
+		for(Template.BlockInfo blockInfo : template.filterBlocks(structurePos, settings, Blocks.STRUCTURE_BLOCK))
 		{
 			if(blockInfo.nbt != null)
 			{
@@ -119,8 +119,8 @@ public class TowerFeature extends Feature<NoFeatureConfig>
 					String data = blockInfo.nbt.getString("metadata");
 					if(data.equals("basic_chest"))
 					{
-						world.setBlockState(blockInfo.pos, Blocks.AIR.getDefaultState(), Constants.BlockFlags.DEFAULT);
-						TileEntity tileentity = world.getTileEntity(blockInfo.pos.down());
+						world.setBlock(blockInfo.pos, Blocks.AIR.defaultBlockState(), Constants.BlockFlags.DEFAULT);
+						TileEntity tileentity = world.getBlockEntity(blockInfo.pos.below());
 						if (tileentity instanceof ChestTileEntity)
 						{
 							((ChestTileEntity) tileentity).setLootTable(MSLootTables.BASIC_MEDIUM_CHEST, rand.nextLong());

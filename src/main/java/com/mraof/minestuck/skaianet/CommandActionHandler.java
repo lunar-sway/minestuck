@@ -30,7 +30,7 @@ public final class CommandActionHandler
 		{
 			if(forceConnection(skaianet, client, server))
 			{
-				source.sendFeedback(new TranslationTextComponent(SburbConnectionCommand.SUCCESS, client.getUsername(), server.getUsername()), true);
+				source.sendSuccess(new TranslationTextComponent(SburbConnectionCommand.SUCCESS, client.getUsername(), server.getUsername()), true);
 				return 1;
 			} else
 			{
@@ -126,7 +126,7 @@ public final class CommandActionHandler
 			if(serverConnection.isActive())
 				skaianet.closeConnection(clientConnection);
 			serverConnection.removeServerPlayer();
-			source.sendFeedback(new StringTextComponent(identifier.getUsername()+"'s old client player "+serverConnection.getClientIdentifier().getUsername()+" is now without a server player.").mergeStyle(TextFormatting.YELLOW), true);
+			source.sendSuccess(new StringTextComponent(identifier.getUsername()+"'s old client player "+serverConnection.getClientIdentifier().getUsername()+" is now without a server player.").withStyle(TextFormatting.YELLOW), true);
 		}
 		
 		try
@@ -182,7 +182,7 @@ public final class CommandActionHandler
 		SburbHandler.onConnectionCreated(c);
 		
 		//The land types used by generation is set during connection init above, so placing gates currently has to go after that
-		ServerWorld world = skaianet.mcServer.getWorld(dimensionName);
+		ServerWorld world = skaianet.mcServer.getLevel(dimensionName);
 		EntryProcess.placeGates(world);
 		
 		return c;

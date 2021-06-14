@@ -38,7 +38,7 @@ public class BucketFeature extends Feature<NoFeatureConfig>
 	}
 	
 	@Override
-	public boolean generate(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
+	public boolean place(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
 	{
 		ResourceLocation structure;
 		if(rand.nextFloat() < 0.6F)
@@ -49,29 +49,29 @@ public class BucketFeature extends Feature<NoFeatureConfig>
 			structure = rand.nextFloat() < 0.7F ? STRUCTURE_BUCKET_WITH_HANDLE_0 : STRUCTURE_BUCKET_WITH_HANDLE_1;
 		}
 		
-		Rotation rotation = Rotation.randomRotation(rand);
-		TemplateManager templates = world.getWorld().getStructureTemplateManager();
-		Template template = templates.getTemplateDefaulted(structure);
+		Rotation rotation = Rotation.getRandom(rand);
+		TemplateManager templates = world.getLevel().getStructureManager();
+		Template template = templates.getOrCreate(structure);
 		
-		PlacementSettings settings = new PlacementSettings().setRotation(rotation).setChunk(new ChunkPos(pos)).setRandom(rand).addProcessor(StructureBlockRegistryProcessor.INSTANCE);
+		PlacementSettings settings = new PlacementSettings().setRotation(rotation).setChunkPos(new ChunkPos(pos)).setRandom(rand).addProcessor(StructureBlockRegistryProcessor.INSTANCE);
 		
 		BlockState bucketFluid;
 		if(rand.nextBoolean())
 		{
 			WeightedList<BlockState> list = new WeightedList<>();
-			list.addWeighted(Blocks.AIR.getDefaultState(), 50);
+			list.add(Blocks.AIR.defaultBlockState(), 50);
 			for(Fluid fluid : ForgeRegistries.FLUIDS)
 			{
 				Rarity rarity = fluid.getAttributes().getRarity();
 				if(rarity == Rarity.COMMON)
-					list.addWeighted(fluid.getDefaultState().getBlockState(), 50);
+					list.add(fluid.defaultFluidState().createLegacyBlock(), 50);
 				else if(rarity == Rarity.UNCOMMON)
-					list.addWeighted(fluid.getDefaultState().getBlockState(), 10);
+					list.add(fluid.defaultFluidState().createLegacyBlock(), 10);
 				else if(rarity == Rarity.RARE)
-					list.addWeighted(fluid.getDefaultState().getBlockState(), 1);
+					list.add(fluid.defaultFluidState().createLegacyBlock(), 1);
 			}
 			
-			bucketFluid = list.getRandomValue(rand);
+			bucketFluid = list.getOne(rand);
 		} else
 		{
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(generator);
@@ -80,14 +80,14 @@ public class BucketFeature extends Feature<NoFeatureConfig>
 		
 		settings.addProcessor(new RuleStructureProcessor(ImmutableList.of(new RuleEntry(new BlockMatchRuleTest(Blocks.BLUE_STAINED_GLASS), AlwaysTrueRuleTest.INSTANCE, bucketFluid))));
 		
-		BlockPos size = template.transformedSize(rotation);
+		BlockPos size = template.getSize(rotation);
 		int xOffset = rand.nextInt(16 - size.getX()), zOffset = rand.nextInt(16 - size.getZ());
-		pos = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, pos.add(xOffset + size.getX()/2, 0, zOffset + size.getZ()/2));
-		if(!world.getFluidState(pos.down()).isEmpty())
+		pos = world.getHeightmapPos(Heightmap.Type.WORLD_SURFACE_WG, pos.offset(xOffset + size.getX()/2, 0, zOffset + size.getZ()/2));
+		if(!world.getFluidState(pos.below()).isEmpty())
 			return false;
 		
-		BlockPos structurePos = template.getZeroPositionWithTransform(pos.add(-size.getX()/2, -rand.nextInt(3), -size.getZ()/2), Mirror.NONE, rotation);
-		template.func_237146_a_(world, structurePos, structurePos, settings, rand, Constants.BlockFlags.NO_RERENDER);
+		BlockPos structurePos = template.getZeroPositionWithTransform(pos.offset(-size.getX()/2, -rand.nextInt(3), -size.getZ()/2), Mirror.NONE, rotation);
+		template.placeInWorld(world, structurePos, structurePos, settings, rand, Constants.BlockFlags.NO_RERENDER);
 		
 		return true;
 	}

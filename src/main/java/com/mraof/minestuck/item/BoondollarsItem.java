@@ -9,10 +9,8 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -29,19 +27,19 @@ public class BoondollarsItem extends Item	//TODO Add custom crafting recipe that
 	}
 	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn)
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn)
 	{
-		if(!worldIn.isRemote)
+		if(!worldIn.isClientSide)
 		{
-			PlayerSavedData.getData((ServerPlayerEntity) playerIn).addBoondollars(getCount(playerIn.getHeldItem(handIn)));
+			PlayerSavedData.getData((ServerPlayerEntity) playerIn).addBoondollars(getCount(playerIn.getItemInHand(handIn)));
 		}
-		return ActionResult.resultSuccess(ItemStack.EMPTY);
+		return ActionResult.success(ItemStack.EMPTY);
 	}
 	
 	@Override
-	public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items)
+	public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items)
 	{
-		if(isInGroup(group))
+		if(allowdedIn(group))
 		{
 			items.add(new ItemStack(this));
 			items.add(setCount(new ItemStack(this), 10));
@@ -52,7 +50,7 @@ public class BoondollarsItem extends Item	//TODO Add custom crafting recipe that
 	}
 	
 	@Override
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
+	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
 	{
 		long amount = getCount(stack);
 		tooltip.add(new TranslationTextComponent("item.minestuck.boondollars.amount", amount));

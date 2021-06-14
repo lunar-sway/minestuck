@@ -27,9 +27,9 @@ public class LichEntity extends UnderlingEntity
 	
 	public static AttributeModifierMap.MutableAttribute lichAttributes()
 	{
-		return UnderlingEntity.underlingAttributes().createMutableAttribute(Attributes.MAX_HEALTH, 175)
-				.createMutableAttribute(Attributes.KNOCKBACK_RESISTANCE, 0.3).createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.2)
-				.createMutableAttribute(Attributes.ATTACK_DAMAGE, 8);
+		return UnderlingEntity.underlingAttributes().add(Attributes.MAX_HEALTH, 175)
+				.add(Attributes.KNOCKBACK_RESISTANCE, 0.3).add(Attributes.MOVEMENT_SPEED, 0.2)
+				.add(Attributes.ATTACK_DAMAGE, 8);
 	}
 	
 	@Override
@@ -63,7 +63,7 @@ public class LichEntity extends UnderlingEntity
 	@Override
 	protected int getVitalityGel()
 	{
-		return rand.nextInt(3)+6;
+		return random.nextInt(3)+6;
 	}
 	
 	@Override
@@ -72,15 +72,15 @@ public class LichEntity extends UnderlingEntity
 		super.onGristTypeUpdated(type);
 		applyGristModifier(Attributes.MAX_HEALTH, 30 * type.getPower(), AttributeModifier.Operation.ADDITION);
 		applyGristModifier(Attributes.ATTACK_DAMAGE, 3.4 * type.getPower(), AttributeModifier.Operation.ADDITION);
-		this.experienceValue = (int) (6.5 * type.getPower() + 4);
+		this.xpReward = (int) (6.5 * type.getPower() + 4);
 	}
 	
 	@Override
-	public void onDeath(DamageSource cause)
+	public void die(DamageSource cause)
 	{
-		super.onDeath(cause);
-		Entity entity = cause.getTrueSource();
-		if(this.dead && !this.world.isRemote)
+		super.die(cause);
+		Entity entity = cause.getEntity();
+		if(this.dead && !this.level.isClientSide)
 		{
 			computePlayerProgress((int) (300* getGristType().getPower() + 650));
 			if(entity instanceof ServerPlayerEntity)

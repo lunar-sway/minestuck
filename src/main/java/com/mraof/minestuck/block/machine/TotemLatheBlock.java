@@ -44,18 +44,18 @@ public class TotemLatheBlock extends MultiMachineBlock
 	@SuppressWarnings("deprecation")
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
 	{
-		return shape.get(state.get(FACING));
+		return shape.get(state.getValue(FACING));
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
 	{
-		if(worldIn.isRemote)
+		if(worldIn.isClientSide)
 			return ActionResultType.SUCCESS;
 		
 		BlockPos mainPos = getMainPos(state, pos);
-		TileEntity te = worldIn.getTileEntity(mainPos);
+		TileEntity te = worldIn.getBlockEntity(mainPos);
 		if(te instanceof TotemLatheTileEntity)
 			((TotemLatheTileEntity) te).onRightClick(player, state);
 		return ActionResultType.SUCCESS;
@@ -63,27 +63,27 @@ public class TotemLatheBlock extends MultiMachineBlock
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving)
+	public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving)
 	{
 		if(!hasTileEntity(state))
 		{
 			BlockPos mainPos = getMainPos(state, pos);
-			TileEntity te = worldIn.getTileEntity(mainPos);
+			TileEntity te = worldIn.getBlockEntity(mainPos);
 			BlockState otherState = worldIn.getBlockState(mainPos);
-			if(te instanceof TotemLatheTileEntity && otherState.get(FACING) == state.get(FACING))
+			if(te instanceof TotemLatheTileEntity && otherState.getValue(FACING) == state.getValue(FACING))
 			{
 				((TotemLatheTileEntity) te).setBroken();
 			}
 		}
 		
-		super.onReplaced(state, worldIn, pos, newState, isMoving);
+		super.onRemove(state, worldIn, pos, newState, isMoving);
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
 	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
 	{
-		TileEntity te = worldIn.getTileEntity(pos);
+		TileEntity te = worldIn.getBlockEntity(pos);
 		if(te instanceof TotemLatheTileEntity)
 			((TotemLatheTileEntity) te).checkStates();
 	}
@@ -94,9 +94,9 @@ public class TotemLatheBlock extends MultiMachineBlock
      */
 	public BlockPos getMainPos(BlockState state, BlockPos pos)
 	{
-		Rotation rotation = MSRotationUtil.fromDirection(state.get(FACING));
+		Rotation rotation = MSRotationUtil.fromDirection(state.getValue(FACING));
 		
-		return pos.add(mainPos.rotate(rotation));
+		return pos.offset(mainPos.rotate(rotation));
 	}
 	
 	public static class Rod extends TotemLatheBlock
@@ -111,16 +111,16 @@ public class TotemLatheBlock extends MultiMachineBlock
 		}
 		
 		@Override
-		protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+		protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
 		{
-			super.fillStateContainer(builder);
+			super.createBlockStateDefinition(builder);
 			builder.add(ACTIVE);
 		}
 		
 		@Override
 		public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
 		{
-			return state.get(ACTIVE) ? activeShape.get(state.get(FACING)) : super.getShape(state, worldIn, pos, context);
+			return state.getValue(ACTIVE) ? activeShape.get(state.getValue(FACING)) : super.getShape(state, worldIn, pos, context);
 		}
 	}
 	
@@ -138,7 +138,7 @@ public class TotemLatheBlock extends MultiMachineBlock
 		@Override
 		public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
 		{
-			return state.get(DOWEL).equals(EnumDowelType.CARVED_DOWEL) ? carvedShape.get(state.get(FACING)) : super.getShape(state, worldIn, pos, context);
+			return state.getValue(DOWEL).equals(EnumDowelType.CARVED_DOWEL) ? carvedShape.get(state.getValue(FACING)) : super.getShape(state, worldIn, pos, context);
 		}
 		
 		@Override
@@ -155,9 +155,9 @@ public class TotemLatheBlock extends MultiMachineBlock
 		}
 		
 		@Override
-		protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+		protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
 		{
-			super.fillStateContainer(builder);
+			super.createBlockStateDefinition(builder);
 			builder.add(DOWEL);
 		}
 
@@ -191,9 +191,9 @@ public class TotemLatheBlock extends MultiMachineBlock
 		}
 		
 		@Override
-		protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+		protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
 		{
-			super.fillStateContainer(builder);
+			super.createBlockStateDefinition(builder);
 			builder.add(COUNT);
 		}
 	}

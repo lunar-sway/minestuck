@@ -22,7 +22,7 @@ public class CakeFeature extends Feature<ProbabilityConfig>
 	}
 	
 	@Override
-	public boolean generate(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, ProbabilityConfig config)
+	public boolean place(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, ProbabilityConfig config)
 	{
 		int bites = Math.max(0, (int) (rand.nextDouble()*10) - 6);
 		float f = rand.nextFloat();
@@ -42,11 +42,11 @@ public class CakeFeature extends Feature<ProbabilityConfig>
 		else
 			cake = Blocks.CAKE;
 		
-		BlockState state = cake.getDefaultState().with(CakeBlock.BITES, bites);
+		BlockState state = cake.defaultBlockState().setValue(CakeBlock.BITES, bites);
 		
-		if(state.isValidPosition(world, pos) && !world.getBlockState(pos).getMaterial().isLiquid())
+		if(state.canSurvive(world, pos) && !world.getBlockState(pos).getMaterial().isLiquid())
 		{
-			setBlockState(world, pos, state);
+			setBlock(world, pos, state);
 			return true;
 		}
 		

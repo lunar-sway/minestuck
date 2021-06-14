@@ -20,19 +20,19 @@ public class StoneMoundFeature extends Feature<BlockStateFeatureConfig>
 	}
 	
 	@Override
-	public boolean generate(ISeedReader worldIn, ChunkGenerator generator, Random rand, BlockPos pos, BlockStateFeatureConfig config)
+	public boolean place(ISeedReader worldIn, ChunkGenerator generator, Random rand, BlockPos pos, BlockStateFeatureConfig config)
 	{
 		float randFloat = rand.nextFloat();
 		BlockState state;
 		if(randFloat >= .95)
 		{
-			state = Blocks.GRANITE.getDefaultState();
+			state = Blocks.GRANITE.defaultBlockState();
 		} else if(randFloat >= .9)
 		{
-			state = Blocks.ANDESITE.getDefaultState();
+			state = Blocks.ANDESITE.defaultBlockState();
 		} else if(randFloat >= .85)
 		{
-			state = Blocks.DIORITE.getDefaultState();
+			state = Blocks.DIORITE.defaultBlockState();
 		} else
 		{
 			state = config.state;
@@ -43,7 +43,7 @@ public class StoneMoundFeature extends Feature<BlockStateFeatureConfig>
 		double maxJ = width + rand.nextInt(10);
 		double maxK = width + rand.nextInt(10);
 		
-		if(!worldIn.getBlockState(pos.down(15)).getMaterial().isSolid())
+		if(!worldIn.getBlockState(pos.below(15)).getMaterial().isSolid())
 			return false;
 		
 		for(int i = 0; i < height; i++)
@@ -59,8 +59,8 @@ public class StoneMoundFeature extends Feature<BlockStateFeatureConfig>
 					
 					if((doubleX * doubleX) + (doubleZ * doubleZ) <= radius)
 					{
-						setBlockState(worldIn, pos.add(x, i - 10, z), state);
-						setBlockState(worldIn, pos.add(x, -i - 10, z), state);
+						setBlock(worldIn, pos.offset(x, i - 10, z), state);
+						setBlock(worldIn, pos.offset(x, -i - 10, z), state);
 					}
 				}
 			}

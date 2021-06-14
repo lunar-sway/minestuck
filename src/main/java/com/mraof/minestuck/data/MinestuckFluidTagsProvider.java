@@ -20,15 +20,15 @@ public class MinestuckFluidTagsProvider extends FluidTagsProvider
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	protected void registerTags()
+	protected void addTags()
 	{
-		getOrCreateBuilder(FluidTags.WATER).addTags(Fluids.OIL, Fluids.BLOOD, Fluids.BRAIN_JUICE, Fluids.WATER_COLORS, Fluids.ENDER, Fluids.LIGHT_WATER);
-		getOrCreateBuilder(Fluids.OIL).add(OIL.get(), FLOWING_OIL.get());
-		getOrCreateBuilder(Fluids.BLOOD).add(BLOOD.get(), FLOWING_BLOOD.get());
-		getOrCreateBuilder(Fluids.BRAIN_JUICE).add(BRAIN_JUICE.get(), FLOWING_BRAIN_JUICE.get());
-		getOrCreateBuilder(Fluids.WATER_COLORS).add(WATER_COLORS.get(), FLOWING_WATER_COLORS.get());
-		getOrCreateBuilder(Fluids.ENDER).add(ENDER.get(), FLOWING_ENDER.get());
-		getOrCreateBuilder(Fluids.LIGHT_WATER).add(LIGHT_WATER.get(), FLOWING_LIGHT_WATER.get());
+		tag(FluidTags.WATER).addTags(Fluids.OIL, Fluids.BLOOD, Fluids.BRAIN_JUICE, Fluids.WATER_COLORS, Fluids.ENDER, Fluids.LIGHT_WATER);
+		tag(Fluids.OIL).add(OIL.get(), FLOWING_OIL.get());
+		tag(Fluids.BLOOD).add(BLOOD.get(), FLOWING_BLOOD.get());
+		tag(Fluids.BRAIN_JUICE).add(BRAIN_JUICE.get(), FLOWING_BRAIN_JUICE.get());
+		tag(Fluids.WATER_COLORS).add(WATER_COLORS.get(), FLOWING_WATER_COLORS.get());
+		tag(Fluids.ENDER).add(ENDER.get(), FLOWING_ENDER.get());
+		tag(Fluids.LIGHT_WATER).add(LIGHT_WATER.get(), FLOWING_LIGHT_WATER.get());
 	}
 	
 	@Override

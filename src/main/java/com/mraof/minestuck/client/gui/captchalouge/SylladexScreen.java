@@ -113,24 +113,24 @@ public abstract class SylladexScreen extends Screen
 		for(GuiCard card : visibleCards)
 			card.drawItemBackground(matrixStack);
 
-		RenderHelper.enableStandardItemLighting();
+		RenderHelper.turnBackOn();
 		RenderSystem.enableRescaleNormal();
 		RenderSystem.glMultiTexCoord2f(GL13.GL_TEXTURE2, 240F, 240F);
 		for(GuiCard card : visibleCards)
 			card.drawItem(matrixStack);
 		RenderSystem.disableDepthTest();
-		RenderHelper.disableStandardItemLighting();
+		RenderHelper.turnOff();
 		RenderSystem.color4f(1F, 1F, 1F, 1F);
 		
 		finishMap();
 		
-		minecraft.getTextureManager().bindTexture(sylladexFrame);
+		minecraft.getTextureManager().bind(sylladexFrame);
 		blit(matrixStack, xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 		
-		font.drawString(matrixStack, getTitle().getString(), xOffset + 15, yOffset + 5, 0x404040);
+		font.draw(matrixStack, getTitle().getString(), xOffset + 15, yOffset + 5, 0x404040);
 		
 		String str = ClientPlayerData.getModus().getName().getString();
-		font.drawString(matrixStack, str, xOffset + GUI_WIDTH - font.getStringWidth(str) - 16, yOffset + 5, 0x404040);
+		font.draw(matrixStack, str, xOffset + GUI_WIDTH - font.width(str) - 16, yOffset + 5, 0x404040);
 		
 		super.render(matrixStack, xcor, ycor, f);
 		
@@ -210,16 +210,16 @@ public abstract class SylladexScreen extends Screen
 	
 	private void emptySylladex()
 	{
-		minecraft.currentScreen = new ConfirmScreen(this::onEmptyConfirm, new TranslationTextComponent(EMPTY_SYLLADEX_1), new TranslationTextComponent(EMPTY_SYLLADEX_2));
-		minecraft.currentScreen.init(minecraft, width, height);
+		minecraft.screen = new ConfirmScreen(this::onEmptyConfirm, new TranslationTextComponent(EMPTY_SYLLADEX_1), new TranslationTextComponent(EMPTY_SYLLADEX_2));
+		minecraft.screen.init(minecraft, width, height);
 	}
 	
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int i)
 	{
-		if(MSKeyHandler.sylladexKey.isActiveAndMatches(InputMappings.getInputByCode(keyCode, scanCode)))
+		if(MSKeyHandler.sylladexKey.isActiveAndMatches(InputMappings.getKey(keyCode, scanCode)))
 		{
-			minecraft.displayGuiScreen(null);
+			minecraft.setScreen(null);
 			return true;
 		}
 		return super.keyPressed(keyCode, scanCode, i);
@@ -257,7 +257,7 @@ public abstract class SylladexScreen extends Screen
 	{
 		if(result)
 			MSPacketHandler.sendToServer(CaptchaDeckPacket.get(CaptchaDeckHandler.EMPTY_SYLLADEX, false));
-		minecraft.currentScreen = this;
+		minecraft.screen = this;
 	}
 	
 	@Override
@@ -356,7 +356,7 @@ public abstract class SylladexScreen extends Screen
 
 		protected void drawItemBackground(MatrixStack matrixStack)
 		{
-			gui.minecraft.getTextureManager().bindTexture(gui.getCardTexture(this));
+			gui.minecraft.getTextureManager().bind(gui.getCardTexture(this));
 			int minX = 0, maxX = CARD_WIDTH, minY = 0, maxY = CARD_HEIGHT;
 			if(this.xPos + minX < gui.mapX)
 				minX += gui.mapX - (this.xPos + minX);
@@ -380,8 +380,8 @@ public abstract class SylladexScreen extends Screen
 				int y = this.yPos +7 - gui.mapY;
 				if(x >= gui.mapWidth || y >= gui.mapHeight || x + 16 < 0 || y + 16 < 0)
 					return;
-				gui.minecraft.getItemRenderer().renderItemAndEffectIntoGUI(item, x, y);
-				gui.minecraft.getItemRenderer().renderItemOverlayIntoGUI(gui.font, item, x, y, null);
+				gui.minecraft.getItemRenderer().renderAndDecorateItem(item, x, y);
+				gui.minecraft.getItemRenderer().renderGuiItemDecorations(gui.font, item, x, y, null);
 			}
 		}
 		
@@ -416,14 +416,14 @@ public abstract class SylladexScreen extends Screen
 			if(size > 1)
 			{
 				String stackSize = String.valueOf(size);
-				int x = this.xPos - gui.mapX + 18 - gui.font.getStringWidth(stackSize);
+				int x = this.xPos - gui.mapX + 18 - gui.font.width(stackSize);
 				int y = this.yPos - gui.mapY + 15;
-				if(x >= gui.mapWidth || y >= gui.mapHeight || x + gui.font.getStringWidth(stackSize) < 0 || y + gui.font.FONT_HEIGHT < 0)
+				if(x >= gui.mapWidth || y >= gui.mapHeight || x + gui.font.width(stackSize) < 0 || y + gui.font.lineHeight < 0)
 					return;
 				RenderSystem.disableLighting();
 				RenderSystem.disableDepthTest();
 				RenderSystem.disableBlend();
-				gui.font.drawStringWithShadow(matrixStack, stackSize, x, y, 0xC6C6C6);
+				gui.font.drawShadow(matrixStack, stackSize, x, y, 0xC6C6C6);
 				RenderSystem.enableLighting();
 				RenderSystem.enableDepthTest();
 				RenderSystem.enableBlend();

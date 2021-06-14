@@ -137,29 +137,29 @@ public class EditData
 		
 		private PlayerRecovery(DecoyEntity decoy)
 		{
-			dimension = decoy.world.getDimensionKey();
-			posX = decoy.getPosX();
-			posY = decoy.getPosY();
-			posZ = decoy.getPosZ();
-			rotationYaw = decoy.rotationYaw;
-			rotationPitch = decoy.rotationPitch;
+			dimension = decoy.level.dimension();
+			posX = decoy.getX();
+			posY = decoy.getY();
+			posZ = decoy.getZ();
+			rotationYaw = decoy.yRot;
+			rotationPitch = decoy.xRot;
 			gameType = decoy.gameType;
 			capabilities = decoy.capabilities.copy();
 			health = decoy.getHealth();
 			foodStats = decoy.getFoodStatsNBT();
-			inventory = decoy.inventory.write(new ListNBT());
+			inventory = decoy.inventory.save(new ListNBT());
 		}
 		
 		private PlayerRecovery(CompoundNBT nbt)
 		{
-			dimension = World.CODEC.parse(NBTDynamicOps.INSTANCE, nbt.get("dim")).resultOrPartial(LOGGER::error).orElse(null);
+			dimension = World.RESOURCE_KEY_CODEC.parse(NBTDynamicOps.INSTANCE, nbt.get("dim")).resultOrPartial(LOGGER::error).orElse(null);
 			posX = nbt.getDouble("x");
 			posY = nbt.getDouble("y");
 			posZ = nbt.getDouble("z");
 			rotationYaw = nbt.getFloat("rot_yaw");
 			rotationPitch = nbt.getFloat("rot_pitch");
 			
-			gameType = GameType.getByID(nbt.getInt("game_type"));
+			gameType = GameType.byId(nbt.getInt("game_type"));
 			capabilities = nbt.getCompound("capabilities");
 			health = nbt.getFloat("health");
 			foodStats = nbt.getCompound("food");
@@ -169,7 +169,7 @@ public class EditData
 		public CompoundNBT write(CompoundNBT nbt)
 		{
 			if(dimension != null)
-				ResourceLocation.CODEC.encodeStart(NBTDynamicOps.INSTANCE, dimension.getLocation()).resultOrPartial(LOGGER::error)
+				ResourceLocation.CODEC.encodeStart(NBTDynamicOps.INSTANCE, dimension.location()).resultOrPartial(LOGGER::error)
 						.ifPresent(tag -> nbt.put("dim", tag));
 			nbt.putDouble("x", posX);
 			nbt.putDouble("y", posY);
@@ -177,7 +177,7 @@ public class EditData
 			nbt.putFloat("rot_yaw", rotationYaw);
 			nbt.putFloat("rot_pitch", rotationPitch);
 			
-			nbt.putInt("game_type", gameType.getID());
+			nbt.putInt("game_type", gameType.getId());
 			nbt.put("capabilities", capabilities);
 			nbt.putFloat("health", health);
 			nbt.put("food", foodStats);
@@ -188,29 +188,29 @@ public class EditData
 		
 		void recover(ServerPlayerEntity player, boolean throwException)
 		{
-			player.closeScreen();
+			player.closeContainer();
 			RegistryKey<World> dim = dimension;
 			if(dim == null)
 			{
 				LOGGER.warn("Couldn't load original dimension for player {}. Defaulting to overworld.", player.getGameProfile().getName());
 				dim = World.OVERWORLD;
 			}
-			ServerWorld world = player.server.getWorld(dim);
-			if(player.world.getDimensionKey() != dim && (world == null || Teleport.teleportEntity(player, world) == null))
+			ServerWorld world = player.server.getLevel(dim);
+			if(player.level.dimension() != dim && (world == null || Teleport.teleportEntity(player, world) == null))
 			{
 				if(throwException)
 					throw new IllegalStateException("Unable to teleport editmode player "+player.getGameProfile().getName()+" to their original dimension with world: " + world);
 				else LOGGER.warn("Unable to teleport editmode player {} to their original dimension with world: {}", player.getGameProfile().getName(), world);
 			}
-			player.connection.setPlayerLocation(posX, posY, posZ, rotationYaw, rotationPitch);
-			player.setGameType(gameType);
-			player.abilities.read(capabilities);
-			player.sendPlayerAbilities();
+			player.connection.teleport(posX, posY, posZ, rotationYaw, rotationPitch);
+			player.setGameMode(gameType);
+			player.abilities.loadSaveData(capabilities);
+			player.onUpdateAbilities();
 			player.fallDistance = 0;
 			
 			player.setHealth(health);
-			player.getFoodStats().read(foodStats);
-			player.inventory.read(inventory);
+			player.getFoodData().readAdditionalSaveData(foodStats);
+			player.inventory.load(inventory);
 		}
 	}
 	
@@ -222,7 +222,7 @@ public class EditData
 		private ConnectionRecovery(EditData data)
 		{
 			clientPlayer = data.connection.getClientIdentifier();
-			inventory = data.player.inventory.write(new ListNBT());
+			inventory = data.player.inventory.save(new ListNBT());
 		}
 		
 		private ConnectionRecovery(CompoundNBT nbt)
@@ -254,7 +254,7 @@ public class EditData
 				connection.putEditmodeInventory(this.inventory);
 				if(editPlayer != null)
 				{
-					ServerEditHandler.lastEditmodePos.put(connection, new Vector3d(editPlayer.getPosX(), editPlayer.getPosY(), editPlayer.getPosZ()));
+					ServerEditHandler.lastEditmodePos.put(connection, new Vector3d(editPlayer.getX(), editPlayer.getY(), editPlayer.getZ()));
 				}
 			} else LOGGER.warn("Unable to perform editmode recovery for the connection for client player {}. Got null connection.", clientPlayer.getUsername());
 		}

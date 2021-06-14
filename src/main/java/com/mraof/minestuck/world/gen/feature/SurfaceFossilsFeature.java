@@ -39,22 +39,22 @@ public class SurfaceFossilsFeature extends Feature<NoFeatureConfig>
 	}
 	
 	@Override
-	public boolean generate(ISeedReader worldIn, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
+	public boolean place(ISeedReader worldIn, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
 	{
 		Random random = worldIn.getRandom();
 		Rotation[] arotation = Rotation.values();
 		Rotation rotation = arotation[random.nextInt(arotation.length)];
 		int i = random.nextInt(FOSSILS.length);
-		TemplateManager templatemanager = worldIn.getWorld().getStructureTemplateManager();
-		Template template = templatemanager.getTemplateDefaulted(FOSSILS[i]);
+		TemplateManager templatemanager = worldIn.getLevel().getStructureManager();
+		Template template = templatemanager.getOrCreate(FOSSILS[i]);
 		
-		PlacementSettings settings = new PlacementSettings().setRotation(rotation).setChunk(new ChunkPos(pos)).setRandom(rand).addProcessor(StructureBlockRegistryProcessor.INSTANCE);
+		PlacementSettings settings = new PlacementSettings().setRotation(rotation).setChunkPos(new ChunkPos(pos)).setRandom(rand).addProcessor(StructureBlockRegistryProcessor.INSTANCE);
 		
 		BlockPos size = template.getSize();
 		int xOffset = rand.nextInt(16 - size.getX()), zOffset = rand.nextInt(16 - size.getZ());
 		
 		int yMin = Integer.MAX_VALUE, yMax = 0;
-		for(BlockPos floorPos : BlockPos.getAllInBoxMutable(0, 0, 0, size.getX(), 0, size.getZ()))
+		for(BlockPos floorPos : BlockPos.betweenClosed(0, 0, 0, size.getX(), 0, size.getZ()))
 		{
 			int y = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, pos.getX() + floorPos.getX() + xOffset, pos.getZ() + floorPos.getZ() + zOffset);
 			yMax = Math.max(yMax, y);
@@ -67,7 +67,7 @@ public class SurfaceFossilsFeature extends Feature<NoFeatureConfig>
 		else y = yMin - size.getY() + 2;
 		
 		BlockPos structurePos = template.getZeroPositionWithTransform(new BlockPos(pos.getX() + xOffset, y, pos.getZ() + zOffset), Mirror.NONE, Rotation.NONE);
-		template.func_237146_a_(worldIn, structurePos, structurePos, settings, rand, Constants.BlockFlags.NO_RERENDER);
+		template.placeInWorld(worldIn, structurePos, structurePos, settings, rand, Constants.BlockFlags.NO_RERENDER);
 		
 		return true;
 	}

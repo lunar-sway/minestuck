@@ -48,13 +48,13 @@ public class ComputerTileEntity extends TileEntity implements ISburbComputer
 	public int programSelected = -1;
 	
 	@Override
-	public void read(BlockState state, CompoundNBT nbt)
+	public void load(BlockState state, CompoundNBT nbt)
 	{
-		super.read(state, nbt);
+		super.load(state, nbt);
 		if (nbt.contains("programs"))
 		{
 			CompoundNBT programs = nbt.getCompound("programs");
-			for (Object name : programs.keySet())
+			for (Object name : programs.getAllKeys())
 			{
 				installedPrograms.put(programs.getInt((String)name), true);
 			}
@@ -75,9 +75,9 @@ public class ComputerTileEntity extends TileEntity implements ISburbComputer
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound)
+	public CompoundNBT save(CompoundNBT compound)
 	{
-		super.write(compound);
+		super.save(compound);
 		CompoundNBT programs = new CompoundNBT();
 		Iterator<Entry<Integer, Boolean>> it = this.installedPrograms.entrySet().iterator();
 		//int place = 0;
@@ -100,7 +100,7 @@ public class ComputerTileEntity extends TileEntity implements ISburbComputer
 	@Override
 	public CompoundNBT getUpdateTag()
 	{
-		CompoundNBT tagCompound = this.write(new CompoundNBT());
+		CompoundNBT tagCompound = this.save(new CompoundNBT());
 		tagCompound.remove("owner");
 		tagCompound.remove("ownerMost");
 		tagCompound.remove("ownerLeast");
@@ -108,7 +108,7 @@ public class ComputerTileEntity extends TileEntity implements ISburbComputer
 			tagCompound.putInt("ownerId", owner.getId());
 		if(hasProgram(1))
 		{
-			SburbConnection c = SkaianetHandler.get(getWorld()).getServerConnection(this);
+			SburbConnection c = SkaianetHandler.get(getLevel()).getServerConnection(this);
 			if(c != null)
 				tagCompound.getCompound("programData").getCompound("program_1").putInt("connectedClient", c.getClientIdentifier().getId());
 		}
@@ -119,13 +119,13 @@ public class ComputerTileEntity extends TileEntity implements ISburbComputer
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket()
 	{
-		return new SUpdateTileEntityPacket(this.pos, 2, getUpdateTag());
+		return new SUpdateTileEntityPacket(this.worldPosition, 2, getUpdateTag());
 	}
 	
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
 	{
-		this.read(getBlockState(), pkt.getNbtCompound());
+		this.load(getBlockState(), pkt.getTag());
 	}
 
 	public boolean hasProgram(int id) 
@@ -159,7 +159,7 @@ public class ComputerTileEntity extends TileEntity implements ISburbComputer
 		{
 			getData(1).putBoolean("isOpen", false);
 		}
-		markDirty();
+		setChanged();
 		markBlockForUpdate();
 	}
 	
@@ -191,7 +191,7 @@ public class ComputerTileEntity extends TileEntity implements ISburbComputer
 	public void putClientBoolean(String name, boolean value)
 	{
 		getData(0).putBoolean(name, value);
-		markDirty();
+		setChanged();
 		markBlockForUpdate();
 	}
 	
@@ -199,7 +199,7 @@ public class ComputerTileEntity extends TileEntity implements ISburbComputer
 	public void putServerBoolean(String name, boolean value)
 	{
 		getData(1).putBoolean(name, value);
-		markDirty();
+		setChanged();
 		markBlockForUpdate();
 	}
 	
@@ -207,7 +207,7 @@ public class ComputerTileEntity extends TileEntity implements ISburbComputer
 	public void clearConnectedClient()
 	{
 		getData(1).putString("connectedClient", "");
-		markDirty();
+		setChanged();
 		markBlockForUpdate();
 	}
 	
@@ -215,7 +215,7 @@ public class ComputerTileEntity extends TileEntity implements ISburbComputer
 	public void putClientMessage(String message)
 	{
 		latestmessage.put(0, message);
-		markDirty();
+		setChanged();
 		markBlockForUpdate();
 	}
 	
@@ -223,27 +223,27 @@ public class ComputerTileEntity extends TileEntity implements ISburbComputer
 	public void putServerMessage(String message)
 	{
 		latestmessage.put(1, message);
-		markDirty();
+		setChanged();
 		markBlockForUpdate();
 	}
 	
 	public void markBlockForUpdate()
 	{
-		BlockState state = world.getBlockState(pos);
-		this.world.notifyBlockUpdate(pos, state, state, 3);
+		BlockState state = level.getBlockState(worldPosition);
+		this.level.sendBlockUpdated(worldPosition, state, state, 3);
 	}
 	
 	public static void forNetworkIfPresent(ServerPlayerEntity player, BlockPos pos, Consumer<ComputerTileEntity> consumer)
 	{
-		if(player.world.isAreaLoaded(pos, 0))	//TODO also check distance to the computer pos (together with a continual check clientside)
+		if(player.level.isAreaLoaded(pos, 0))	//TODO also check distance to the computer pos (together with a continual check clientside)
 		{
-			TileEntity te = player.world.getTileEntity(pos);
+			TileEntity te = player.level.getBlockEntity(pos);
 			if(te instanceof ComputerTileEntity)
 			{
 				ComputerTileEntity computer = (ComputerTileEntity) te;
 				MinecraftServer mcServer = Objects.requireNonNull(player.getServer());
-				OpEntry opsEntry = mcServer.getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
-				if((!MinestuckConfig.SERVER.privateComputers.get() || IdentifierHandler.encode(player) == computer.owner || opsEntry != null && opsEntry.getPermissionLevel() >= 2) && ServerEditHandler.getData(player) == null)
+				OpEntry opsEntry = mcServer.getPlayerList().getOps().get(player.getGameProfile());
+				if((!MinestuckConfig.SERVER.privateComputers.get() || IdentifierHandler.encode(player) == computer.owner || opsEntry != null && opsEntry.getLevel() >= 2) && ServerEditHandler.getData(player) == null)
 					consumer.accept(computer);
 			}
 		}

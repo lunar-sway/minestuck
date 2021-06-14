@@ -28,17 +28,17 @@ public class ConsortItemTrigger extends AbstractCriterionTrigger<ConsortItemTrig
 	}
 	
 	@Override
-	protected Instance deserializeTrigger(JsonObject json, EntityPredicate.AndPredicate predicate, ConditionArrayParser conditionsParser)
+	protected Instance createInstance(JsonObject json, EntityPredicate.AndPredicate predicate, ConditionArrayParser conditionsParser)
 	{
-		String table = json.has("table") ? JSONUtils.getString(json, "table") : null;
-		ItemPredicate item = ItemPredicate.deserialize(json.get("item"));
-		EnumConsort.MerchantType type = json.has("type") ? EnumConsort.MerchantType.getFromName(JSONUtils.getString(json, "type")) : null;
+		String table = json.has("table") ? JSONUtils.getAsString(json, "table") : null;
+		ItemPredicate item = ItemPredicate.fromJson(json.get("item"));
+		EnumConsort.MerchantType type = json.has("type") ? EnumConsort.MerchantType.getFromName(JSONUtils.getAsString(json, "type")) : null;
 		return new Instance(predicate, table, item, type);
 	}
 	
 	public void trigger(ServerPlayerEntity player, String table, ItemStack item, ConsortEntity consort)
 	{
-		triggerListeners(player, instance -> instance.test(table, item, consort.merchantType));
+		trigger(player, instance -> instance.test(table, item, consort.merchantType));
 	}
 	
 	public static class Instance extends CriterionInstance
@@ -57,21 +57,21 @@ public class ConsortItemTrigger extends AbstractCriterionTrigger<ConsortItemTrig
 		
 		public static Instance forType(EnumConsort.MerchantType type)
 		{
-			return new Instance(EntityPredicate.AndPredicate.ANY_AND, null, ItemPredicate.ANY, type);
+			return new Instance(EntityPredicate.AndPredicate.ANY, null, ItemPredicate.ANY, type);
 		}
 		
 		public boolean test(String table, ItemStack item, EnumConsort.MerchantType type)
 		{
-			return (this.table == null || this.table.equals(table)) && this.item.test(item) && (this.type == null || this.type == type);
+			return (this.table == null || this.table.equals(table)) && this.item.matches(item) && (this.type == null || this.type == type);
 		}
 		
 		@Override
-		public JsonObject serialize(ConditionArraySerializer conditions)
+		public JsonObject serializeToJson(ConditionArraySerializer conditions)
 		{
-			JsonObject json = super.serialize(conditions);
+			JsonObject json = super.serializeToJson(conditions);
 			if(table != null)
 				json.addProperty("table", table);
-			json.add("item", item.serialize());
+			json.add("item", item.serializeToJson());
 			if(type != null)
 				json.addProperty("type", type.toString().toLowerCase());
 			

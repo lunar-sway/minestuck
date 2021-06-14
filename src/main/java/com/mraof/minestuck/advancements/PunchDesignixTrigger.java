@@ -25,18 +25,18 @@ public class PunchDesignixTrigger extends AbstractCriterionTrigger<PunchDesignix
 	}
 	
 	@Override
-	protected Instance deserializeTrigger(JsonObject json, EntityPredicate.AndPredicate predicate, ConditionArrayParser conditionsParser)
+	protected Instance createInstance(JsonObject json, EntityPredicate.AndPredicate predicate, ConditionArrayParser conditionsParser)
 	{
 		
-		ItemPredicate input = ItemPredicate.deserialize(json.get("input"));
-		ItemPredicate target = ItemPredicate.deserialize(json.get("target"));
-		ItemPredicate output = ItemPredicate.deserialize(json.get("output"));
+		ItemPredicate input = ItemPredicate.fromJson(json.get("input"));
+		ItemPredicate target = ItemPredicate.fromJson(json.get("target"));
+		ItemPredicate output = ItemPredicate.fromJson(json.get("output"));
 		return new Instance(predicate, input, target, output);
 	}
 	
 	public void trigger(ServerPlayerEntity player, ItemStack input, ItemStack target, ItemStack result)
 	{
-		triggerListeners(player, instance -> instance.test(input, target, result));
+		trigger(player, instance -> instance.test(input, target, result));
 	}
 	
 	public static class Instance extends CriterionInstance
@@ -60,21 +60,21 @@ public class PunchDesignixTrigger extends AbstractCriterionTrigger<PunchDesignix
 		
 		public static Instance create(ItemPredicate input, ItemPredicate target, ItemPredicate output)
 		{
-			return new Instance(EntityPredicate.AndPredicate.ANY_AND, input, target, output);
+			return new Instance(EntityPredicate.AndPredicate.ANY, input, target, output);
 		}
 		
 		public boolean test(ItemStack input, ItemStack target, ItemStack output)
 		{
-			return this.input.test(input) && this.target.test(target) && this.output.test(output);
+			return this.input.matches(input) && this.target.matches(target) && this.output.matches(output);
 		}
 		
 		@Override
-		public JsonObject serialize(ConditionArraySerializer conditions)
+		public JsonObject serializeToJson(ConditionArraySerializer conditions)
 		{
-			JsonObject json = super.serialize(conditions);
-			json.add("input", input.serialize());
-			json.add("target", target.serialize());
-			json.add("output", output.serialize());
+			JsonObject json = super.serializeToJson(conditions);
+			json.add("input", input.serializeToJson());
+			json.add("target", target.serializeToJson());
+			json.add("output", output.serializeToJson());
 			
 			return json;
 		}

@@ -90,16 +90,16 @@ public class HashMapSylladexScreen extends SylladexScreen
 	public void drawGuiMap(MatrixStack matrixStack, int mouseX, int mouseY)
 	{
 		super.drawGuiMap(matrixStack, mouseX, mouseY);
-		int y = mapHeight/2 - CARD_HEIGHT/2 - 3 - font.FONT_HEIGHT;
+		int y = mapHeight/2 - CARD_HEIGHT/2 - 3 - font.lineHeight;
 		int start = Math.max(5, (mapWidth - (cards.size()*CARD_WIDTH + (cards.size() - 1)*5))/2);
 		
 		for(int i = 0; i < cards.size(); i++)
 		{
 			String s = String.valueOf(i);
-			int width = font.getStringWidth(s);
+			int width = font.width(s);
 			int x = start + i*(CARD_WIDTH + 5) + CARD_WIDTH/2 - mapX - width/2;
 			if(x + width > 0 && x < mapWidth)
-				font.drawString(matrixStack, s, x, y, 0x000000);
+				font.draw(matrixStack, s, x, y, 0x000000);
 		}
 	}
 	

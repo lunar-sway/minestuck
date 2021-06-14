@@ -42,12 +42,12 @@ public class MetalBoatEntity extends BoatEntity implements IEntityAdditionalSpaw
 	public MetalBoatEntity(World world, double x, double y, double z, @Nonnull Type type)
 	{
 		super(MSEntityTypes.METAL_BOAT, world);
-		this.preventEntitySpawning = false;
-		this.setPosition(x, y, z);
-		this.setMotion(Vector3d.ZERO);
-		this.prevPosX = x;
-		this.prevPosY = y;
-		this.prevPosZ = z;
+		this.blocksBuilding = false;
+		this.setPos(x, y, z);
+		this.setDeltaMovement(Vector3d.ZERO);
+		this.xo = x;
+		this.yo = y;
+		this.zo = z;
 		this.type = type;
 	}
 	
@@ -57,43 +57,43 @@ public class MetalBoatEntity extends BoatEntity implements IEntityAdditionalSpaw
 	}
 	
 	@Override
-	public boolean attackEntityFrom(DamageSource source, float amount)
+	public boolean hurt(DamageSource source, float amount)
 	{
-		return super.attackEntityFrom(source, amount*type.damageModifier);
+		return super.hurt(source, amount*type.damageModifier);
 	}
 	
 	@Override
 	public void tick()
 	{
-		Status status = getBoatStatus();
+		Status status = getStatus();
 		if(status == Status.IN_WATER)
-			setMotion(getMotion().add(0, -0.1, 0));
+			setDeltaMovement(getDeltaMovement().add(0, -0.1, 0));
 		else if(status == Status.UNDER_WATER)
-			setMotion(getMotion().add(0, -0.02, 0));
+			setDeltaMovement(getDeltaMovement().add(0, -0.02, 0));
 		super.tick();
 	}
 	
 	@Override
-	public void setMotion(Vector3d motionIn)
+	public void setDeltaMovement(Vector3d motionIn)
 	{
-		super.setMotion(new Vector3d(motionIn.x, -Math.abs(motionIn.y), motionIn.z));
+		super.setDeltaMovement(new Vector3d(motionIn.x, -Math.abs(motionIn.y), motionIn.z));
 	}
 	
 	private final List<ItemEntity> captureDropsCache = new ArrayList<>(5);
 	
 	@Override
-	protected void updateFallState(double y, boolean onGroundIn, BlockState state, BlockPos pos)
+	protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos)
 	{
 		Collection<ItemEntity> prevCapture = captureDrops(captureDropsCache);
 		
-		super.updateFallState(y, onGroundIn, state, pos);
+		super.checkFallDamage(y, onGroundIn, state, pos);
 		
 		//If the boat is broken from the fall, capture the vanilla drops and drop ingots instead
 		if(!captureDrops(prevCapture).isEmpty())
 		{
 			captureDropsCache.clear();
 			for(int i = 0; i < 3; i++)
-				entityDropItem(getDroppedItem());
+				spawnAtLocation(getDroppedItem());
 		}
 	}
 	
@@ -103,25 +103,25 @@ public class MetalBoatEntity extends BoatEntity implements IEntityAdditionalSpaw
 	}
 	
 	@Override
-	public Item getItemBoat()
+	public Item getDropItem()
 	{
 		return type.boatItem.get();
 	}
 	
 	@Override
-	public void setBoatType(BoatEntity.Type boatType)
+	public void setType(BoatEntity.Type boatType)
 	{
 		throw new UnsupportedOperationException();
 	}
 	
 	@Override
-	protected void writeAdditional(CompoundNBT compound)
+	protected void addAdditionalSaveData(CompoundNBT compound)
 	{
 		compound.putString("Type", type.asString());
 	}
 	
 	@Override
-	protected void readAdditional(CompoundNBT compound)
+	protected void readAdditionalSaveData(CompoundNBT compound)
 	{
 		this.type = Type.fromString(compound.getString("Type"));
 	}
@@ -129,17 +129,17 @@ public class MetalBoatEntity extends BoatEntity implements IEntityAdditionalSpaw
 	@Override
 	public void writeSpawnData(PacketBuffer buffer)
 	{
-		buffer.writeString(type.asString());
+		buffer.writeUtf(type.asString());
 	}
 	
 	@Override
 	public void readSpawnData(PacketBuffer additionalData)
 	{
-		this.type = Type.fromString(additionalData.readString(16));
+		this.type = Type.fromString(additionalData.readUtf(16));
 	}
 	
 	@Override
-	public IPacket<?> createSpawnPacket()
+	public IPacket<?> getAddEntityPacket()
 	{
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}

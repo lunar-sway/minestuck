@@ -40,7 +40,7 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 	
 	public static Optional<GristCostRecipe> findRecipeForItem(ItemStack input, World world, RecipeManager recipeManager)
 	{
-		return recipeManager.getRecipes(MSRecipeTypes.GRIST_COST_TYPE, new Inventory(input), world).stream().max(Comparator.comparingInt(GristCostRecipe::getPriority));
+		return recipeManager.getRecipesFor(MSRecipeTypes.GRIST_COST_TYPE, new Inventory(input), world).stream().max(Comparator.comparingInt(GristCostRecipe::getPriority));
 	}
 	
 	public final ResourceLocation id;
@@ -58,29 +58,29 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 	@Override
 	public boolean matches(IInventory inv, World worldIn)
 	{
-		return ingredient.test(inv.getStackInSlot(0));
+		return ingredient.test(inv.getItem(0));
 	}
 	
 	@Override
-	public ItemStack getCraftingResult(IInventory inv)
+	public ItemStack assemble(IInventory inv)
 	{
-		return inv.getStackInSlot(0);
+		return inv.getItem(0);
 	}
 	
 	@Override
-	public boolean canFit(int width, int height)
-	{
-		return true;
-	}
-	
-	@Override
-	public boolean isDynamic()	//Makes sure that the recipe is not unlockable (because recipe book categories are hardcoded to vanilla categories)
+	public boolean canCraftInDimensions(int width, int height)
 	{
 		return true;
 	}
 	
 	@Override
-	public ItemStack getRecipeOutput()
+	public boolean isSpecial()	//Makes sure that the recipe is not unlockable (because recipe book categories are hardcoded to vanilla categories)
+	{
+		return true;
+	}
+	
+	@Override
+	public ItemStack getResultItem()
 	{
 		return ItemStack.EMPTY;
 	}
@@ -88,7 +88,7 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 	@Override
 	public NonNullList<Ingredient> getIngredients()
 	{
-		return NonNullList.from(this.ingredient);
+		return NonNullList.of(this.ingredient);
 	}
 	
 	@Override
@@ -120,7 +120,7 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 	public void addCostProvider(BiConsumer<Item, GeneratedCostProvider> consumer)
 	{
 		GeneratedCostProvider provider = new DefaultProvider();
-		for(ItemStack stack : ingredient.getMatchingStacks())
+		for(ItemStack stack : ingredient.getItems())
 			consumer.accept(stack.getItem(), provider);
 	}
 	
@@ -142,7 +142,7 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 	
 	private static int priorityFromIngredient(Ingredient ingredient)
 	{
-		return 100 - (ingredient.getMatchingStacks().length - 1)*10;
+		return 100 - (ingredient.getItems().length - 1)*10;
 	}
 	
 	public static GristSet scaleToCountAndDurability(GristSet cost, ItemStack stack, boolean shouldRoundDown)
@@ -167,10 +167,10 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 	public abstract static class AbstractSerializer<T extends GristCostRecipe> extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<T>
 	{
 		@Override
-		public T read(ResourceLocation recipeId, JsonObject json)
+		public T fromJson(ResourceLocation recipeId, JsonObject json)
 		{
-			Ingredient ingredient = Ingredient.deserialize(json.get("ingredient"));
-			Integer priority = json.has("priority") ? JSONUtils.getInt(json, "priority") : null;
+			Ingredient ingredient = Ingredient.fromJson(json.get("ingredient"));
+			Integer priority = json.has("priority") ? JSONUtils.getAsInt(json, "priority") : null;
 			
 			return read(recipeId, json, ingredient, priority);
 		}
@@ -179,9 +179,9 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 		
 		@Nullable
 		@Override
-		public T read(ResourceLocation recipeId, PacketBuffer buffer)
+		public T fromNetwork(ResourceLocation recipeId, PacketBuffer buffer)
 		{
-			Ingredient ingredient = Ingredient.read(buffer);
+			Ingredient ingredient = Ingredient.fromNetwork(buffer);
 			int priority = buffer.readInt();
 			
 			return read(recipeId, buffer, ingredient, priority);
@@ -190,9 +190,9 @@ public abstract class GristCostRecipe implements IRecipe<IInventory>
 		protected abstract T read(ResourceLocation recipeId, PacketBuffer buffer, Ingredient ingredient, int priority);
 		
 		@Override
-		public void write(PacketBuffer buffer, T recipe)
+		public void toNetwork(PacketBuffer buffer, T recipe)
 		{
-			recipe.ingredient.write(buffer);
+			recipe.ingredient.toNetwork(buffer);
 			buffer.writeInt(recipe.getPriority());
 		}
 	}

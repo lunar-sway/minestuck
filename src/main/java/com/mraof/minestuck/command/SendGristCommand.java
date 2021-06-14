@@ -37,15 +37,15 @@ public class SendGristCommand
 	
 	private static int execute(CommandSource source, ServerPlayerEntity target, NonNegativeGristSet grist) throws CommandSyntaxException
 	{
-		ServerPlayerEntity player = source.asPlayer();
+		ServerPlayerEntity player = source.getPlayerOrException();
 		if(isPermittedFor(player, target))
 		{
 			if(GristHelper.canAfford(player, grist))
 			{
-				GristHelper.decrease(player.world, IdentifierHandler.encode(player), grist);
-				GristHelper.increase(player.world, IdentifierHandler.encode(target), grist);
-				source.sendFeedback(new TranslationTextComponent(SUCCESS, target.getDisplayName(), grist.asTextComponent()), true);
-				target.sendMessage(new TranslationTextComponent(RECEIVE, player.getDisplayName(), grist.asTextComponent()), Util.DUMMY_UUID);
+				GristHelper.decrease(player.level, IdentifierHandler.encode(player), grist);
+				GristHelper.increase(player.level, IdentifierHandler.encode(target), grist);
+				source.sendSuccess(new TranslationTextComponent(SUCCESS, target.getDisplayName(), grist.asTextComponent()), true);
+				target.sendMessage(new TranslationTextComponent(RECEIVE, player.getDisplayName(), grist.asTextComponent()), Util.NIL_UUID);
 				return 1;
 			} else throw CANT_AFFORD_EXCEPTION.create(grist);
 		} else throw PERMISSION_EXCEPTION.create(target.getDisplayName());

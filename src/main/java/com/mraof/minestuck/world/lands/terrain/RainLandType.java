@@ -42,23 +42,23 @@ public class RainLandType extends TerrainLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setGroundState(MSBlocks.PINK_STONE.getDefaultState(), MSFillerBlockTypes.PINK_STONE);
-		registry.setBlockState("surface", MSBlocks.CHALK.getDefaultState());
-		registry.setBlockState("upper", MSBlocks.CHALK.getDefaultState());
-		registry.setBlockState("ocean", Blocks.WATER.getDefaultState());
-		registry.setBlockState("structure_primary", MSBlocks.PINK_STONE_BRICKS.getDefaultState());
-		registry.setBlockState("structure_primary_stairs", MSBlocks.PINK_STONE_BRICK_STAIRS.getDefaultState());
-		registry.setBlockState("structure_primary_decorative", MSBlocks.CHISELED_PINK_STONE_BRICKS.getDefaultState());
-		registry.setBlockState("structure_secondary", MSBlocks.POLISHED_PINK_STONE.getDefaultState());
-		registry.setBlockState("structure_secondary_stairs", MSBlocks.CHALK_BRICK_STAIRS.getDefaultState());
-		registry.setBlockState("structure_secondary_decorative", MSBlocks.CHISELED_PINK_STONE_BRICKS.getDefaultState());
-		registry.setBlockState("structure_planks", MSBlocks.DEAD_PLANKS.getDefaultState());
-		registry.setBlockState("structure_planks_slab", MSBlocks.DEAD_PLANKS_SLAB.getDefaultState());
-		registry.setBlockState("bush", Blocks.DEAD_BUSH.getDefaultState());
-		registry.setBlockState("structure_wool_1", Blocks.YELLOW_WOOL.getDefaultState());
-		registry.setBlockState("structure_wool_3", Blocks.MAGENTA_WOOL.getDefaultState());
-		registry.setBlockState("cruxite_ore", MSBlocks.PINK_STONE_CRUXITE_ORE.getDefaultState());
-		registry.setBlockState("uranium_ore", MSBlocks.PINK_STONE_URANIUM_ORE.getDefaultState());
+		registry.setGroundState(MSBlocks.PINK_STONE.defaultBlockState(), MSFillerBlockTypes.PINK_STONE);
+		registry.setBlockState("surface", MSBlocks.CHALK.defaultBlockState());
+		registry.setBlockState("upper", MSBlocks.CHALK.defaultBlockState());
+		registry.setBlockState("ocean", Blocks.WATER.defaultBlockState());
+		registry.setBlockState("structure_primary", MSBlocks.PINK_STONE_BRICKS.defaultBlockState());
+		registry.setBlockState("structure_primary_stairs", MSBlocks.PINK_STONE_BRICK_STAIRS.defaultBlockState());
+		registry.setBlockState("structure_primary_decorative", MSBlocks.CHISELED_PINK_STONE_BRICKS.defaultBlockState());
+		registry.setBlockState("structure_secondary", MSBlocks.POLISHED_PINK_STONE.defaultBlockState());
+		registry.setBlockState("structure_secondary_stairs", MSBlocks.CHALK_BRICK_STAIRS.defaultBlockState());
+		registry.setBlockState("structure_secondary_decorative", MSBlocks.CHISELED_PINK_STONE_BRICKS.defaultBlockState());
+		registry.setBlockState("structure_planks", MSBlocks.DEAD_PLANKS.defaultBlockState());
+		registry.setBlockState("structure_planks_slab", MSBlocks.DEAD_PLANKS_SLAB.defaultBlockState());
+		registry.setBlockState("bush", Blocks.DEAD_BUSH.defaultBlockState());
+		registry.setBlockState("structure_wool_1", Blocks.YELLOW_WOOL.defaultBlockState());
+		registry.setBlockState("structure_wool_3", Blocks.MAGENTA_WOOL.defaultBlockState());
+		registry.setBlockState("cruxite_ore", MSBlocks.PINK_STONE_CRUXITE_ORE.defaultBlockState());
+		registry.setBlockState("uranium_ore", MSBlocks.PINK_STONE_URANIUM_ORE.defaultBlockState());
 
 	}
 	

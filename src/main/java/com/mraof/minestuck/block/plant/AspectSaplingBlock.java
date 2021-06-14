@@ -15,7 +15,7 @@ import java.util.Random;
 
 public class AspectSaplingBlock extends BushBlock implements IGrowable
 {
-	protected static final VoxelShape SHAPE = Block.makeCuboidShape(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
+	protected static final VoxelShape SHAPE = Block.box(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
 	
 	public AspectSaplingBlock(Properties properties)
 	{
@@ -30,19 +30,19 @@ public class AspectSaplingBlock extends BushBlock implements IGrowable
 	}
 	
 	@Override
-	public boolean canGrow(IBlockReader worldIn, BlockPos pos, BlockState state, boolean isClient)
+	public boolean isValidBonemealTarget(IBlockReader worldIn, BlockPos pos, BlockState state, boolean isClient)
 	{
 		return false;
 	}
 
 	@Override
-	public boolean canUseBonemeal(World worldIn, Random rand, BlockPos pos, BlockState state)
+	public boolean isBonemealSuccess(World worldIn, Random rand, BlockPos pos, BlockState state)
 	{
 		return false;
 	}
 
 	@Override
-	public void grow(ServerWorld worldIn, Random rand, BlockPos pos, BlockState state) {
+	public void performBonemeal(ServerWorld worldIn, Random rand, BlockPos pos, BlockState state) {
 
 		//Nothing here yet as the trees are unfinished
 	}

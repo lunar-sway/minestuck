@@ -26,14 +26,14 @@ public class CustomMeleeAttackGoal extends MeleeAttackGoal
 	
 	
 	@Override
-	protected void resetSwingCooldown()
+	protected void resetAttackCooldown()
 	{
-		swingCooldown = attackRate;
+		ticksUntilNextAttack = attackRate;
 	}
 	
 	@Override
 	protected double getAttackReachSqr(LivingEntity attackTarget)
 	{
-		return attacker.getWidth() * distanceMultiplier * attacker.getWidth() * distanceMultiplier + attackTarget.getWidth();
+		return mob.getBbWidth() * distanceMultiplier * mob.getBbWidth() * distanceMultiplier + attackTarget.getBbWidth();
 	}
 }

@@ -50,22 +50,22 @@ public class ReturningProjectileEntity extends ProjectileItemEntity
 	}
 	
 	@Override
-	protected void onImpact(RayTraceResult result) //TODO onImpact does not trigger if already used within a couple ticks, allowing it to pass through blocks or entities
+	protected void onHit(RayTraceResult result) //TODO onImpact does not trigger if already used within a couple ticks, allowing it to pass through blocks or entities
 	{
 		int damage = ProjectileDamaging.getDamageFromItem(getItemFromItemStack().getItem());
 		
 		if(result.getType() == RayTraceResult.Type.ENTITY)
 		{
-			this.setMotion(getMotion().scale(-1.05));
-			if(!world.isRemote)
+			this.setDeltaMovement(getDeltaMovement().scale(-1.05));
+			if(!level.isClientSide)
 			{
 				++bounce;
 				Entity entity = ((EntityRayTraceResult) result).getEntity();
 				
 				if(entity instanceof UnderlingEntity)
-					entity.attackEntityFrom(DamageSource.causeThrownDamage(this, getShooter()), damage * 1.5F);
-				else if(entity != getShooter())
-					entity.attackEntityFrom(DamageSource.causeThrownDamage(this, getShooter()), damage);
+					entity.hurt(DamageSource.thrown(this, getOwner()), damage * 1.5F);
+				else if(entity != getOwner())
+					entity.hurt(DamageSource.thrown(this, getOwner()), damage);
 				else
 				{
 					resetThrower();
@@ -74,19 +74,19 @@ public class ReturningProjectileEntity extends ProjectileItemEntity
 		} else if(result.getType() == RayTraceResult.Type.BLOCK && !noBlockCollision)
 		{
 			BlockRayTraceResult blockResult = (BlockRayTraceResult) result;
-			Direction blockFace = blockResult.getFace();
-			BlockPos blockPos = blockResult.getPos();
-			if(Block.hasEnoughSolidSide(world, blockPos, blockFace))
+			Direction blockFace = blockResult.getDirection();
+			BlockPos blockPos = blockResult.getBlockPos();
+			if(Block.canSupportCenter(level, blockPos, blockFace))
 			{
-				this.setMotion(getMotion().scale(-1.05));
-				if(!world.isRemote)
+				this.setDeltaMovement(getDeltaMovement().scale(-1.05));
+				if(!level.isClientSide)
 				{
 					++bounce;
-					this.world.playSound(null, this.getPosX(), this.getPosY(), this.getPosZ(), SoundEvents.ITEM_SHIELD_BLOCK, SoundCategory.NEUTRAL, 0.6F, 4.0F);
+					this.level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.SHIELD_BLOCK, SoundCategory.NEUTRAL, 0.6F, 4.0F);
 				}
 			}
 			
-			if(Block.hasEnoughSolidSide(world, blockPos, blockFace) && blockResult.isInside())
+			if(Block.canSupportCenter(level, blockPos, blockFace) && blockResult.isInside())
 			{
 				++inBlockTicks;
 			}
@@ -100,26 +100,26 @@ public class ReturningProjectileEntity extends ProjectileItemEntity
 	
 	public void resetThrower()
 	{
-		if(getShooter() instanceof PlayerEntity)
+		if(getOwner() instanceof PlayerEntity)
 		{
-			((PlayerEntity)getShooter()).getCooldownTracker().setCooldown(func_213882_k().getItem(), 5);
+			((PlayerEntity)getOwner()).getCooldowns().addCooldown(getItemRaw().getItem(), 5);
 			this.remove(); //TODO find a better set of conditions to remove entity(ticksExisted?)
 		}
 	}
 	
 	public void tick()
 	{
-		Vector3d pos = getPositionVec();
-		this.lastTickPosX = pos.x;
-		this.lastTickPosY = pos.y;
-		this.lastTickPosZ = pos.z;
+		Vector3d pos = position();
+		this.xOld = pos.x;
+		this.yOld = pos.y;
+		this.zOld = pos.z;
 		
 		if(this.isInWater())
-			this.setMotion(getMotion().scale(1.2));
+			this.setDeltaMovement(getDeltaMovement().scale(1.2));
 		else
-			this.setMotion(getMotion().scale(1.005));
+			this.setDeltaMovement(getDeltaMovement().scale(1.005));
 		
-		if(this.ticksExisted >= maxTick || inBlockTicks >= 2)
+		if(this.tickCount >= maxTick || inBlockTicks >= 2)
 		{
 			resetThrower();
 		}
@@ -128,9 +128,9 @@ public class ReturningProjectileEntity extends ProjectileItemEntity
 	}
 	
 	@Override
-	public void readAdditional(CompoundNBT compound)
+	public void readAdditionalSaveData(CompoundNBT compound)
 	{
-		super.readAdditional(compound);
+		super.readAdditionalSaveData(compound);
 		bounce = compound.getInt("bounce");
 		maxTick = compound.getInt("maxTick");
 		inBlockTicks = compound.getInt("inBlockTicks");;
@@ -138,9 +138,9 @@ public class ReturningProjectileEntity extends ProjectileItemEntity
 	}
 	
 	@Override
-	public void writeAdditional(CompoundNBT compound)
+	public void addAdditionalSaveData(CompoundNBT compound)
 	{
-		super.writeAdditional(compound);
+		super.addAdditionalSaveData(compound);
 		compound.putInt("bounce", bounce);
 		compound.putInt("maxTick", maxTick);
 		compound.putInt("inBlockTicks", inBlockTicks);
@@ -148,7 +148,7 @@ public class ReturningProjectileEntity extends ProjectileItemEntity
 	}
 	
 	@Override
-	public IPacket<?> createSpawnPacket()
+	public IPacket<?> getAddEntityPacket()
 	{
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
@@ -160,7 +160,7 @@ public class ReturningProjectileEntity extends ProjectileItemEntity
 	}
 	
 	public ItemStack getItemFromItemStack() {
-		ItemStack itemstack = this.func_213882_k();
+		ItemStack itemstack = this.getItemRaw();
 		return itemstack.isEmpty() ? new ItemStack(this.getDefaultItem()) : itemstack;
 	}
 }

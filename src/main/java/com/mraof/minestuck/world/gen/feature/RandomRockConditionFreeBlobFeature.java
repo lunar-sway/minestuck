@@ -20,40 +20,40 @@ public class RandomRockConditionFreeBlobFeature extends Feature<RandomRockBlockB
 	}
 	
 	@Override
-	public boolean generate(ISeedReader worldIn, ChunkGenerator generator, Random rand, BlockPos pos, RandomRockBlockBlobConfig config)
+	public boolean place(ISeedReader worldIn, ChunkGenerator generator, Random rand, BlockPos pos, RandomRockBlockBlobConfig config)
 	{
 		float randFloat = rand.nextFloat();
 		BlockState randomStone;
 		if(randFloat >= .95)
 		{
-			randomStone = Blocks.GRANITE.getDefaultState();
+			randomStone = Blocks.GRANITE.defaultBlockState();
 		} else if(randFloat >= .9)
 		{
-			randomStone = Blocks.ANDESITE.getDefaultState();
+			randomStone = Blocks.ANDESITE.defaultBlockState();
 		} else if(randFloat >= .85)
 		{
-			randomStone = Blocks.DIORITE.getDefaultState();
+			randomStone = Blocks.DIORITE.defaultBlockState();
 		} else if(randFloat >= .8)
 		{
-			randomStone = Blocks.COBBLESTONE.getDefaultState();
+			randomStone = Blocks.COBBLESTONE.defaultBlockState();
 		} else if(randFloat >= .75)
 		{
-			randomStone = MSBlocks.CHALK.getDefaultState();
+			randomStone = MSBlocks.CHALK.defaultBlockState();
 		} else if(randFloat >= .7)
 		{
-			randomStone = MSBlocks.BLACK_STONE.getDefaultState();
+			randomStone = MSBlocks.BLACK_STONE.defaultBlockState();
 		} else if(randFloat >= .65)
 		{
-			randomStone = MSBlocks.SHADE_STONE.getDefaultState();
+			randomStone = MSBlocks.SHADE_STONE.defaultBlockState();
 		} else if(randFloat >= .6)
 		{
-			randomStone = MSBlocks.PINK_STONE.getDefaultState();
+			randomStone = MSBlocks.PINK_STONE.defaultBlockState();
 		} else if(randFloat >= .55)
 		{
-			randomStone = MSBlocks.BROWN_STONE.getDefaultState();
+			randomStone = MSBlocks.BROWN_STONE.defaultBlockState();
 		} else
 		{
-			randomStone = Blocks.STONE.getDefaultState();
+			randomStone = Blocks.STONE.defaultBlockState();
 		}
 		
 		for(int i1 = 0; i1 < 3; i1++)
@@ -62,17 +62,17 @@ public class RandomRockConditionFreeBlobFeature extends Feature<RandomRockBlockB
 			int ySize = config.startRadius + rand.nextInt(2);
 			int zSize = config.startRadius + rand.nextInt(2);
 			float f = (float) (xSize + ySize + zSize) * 0.333F + 0.5F;
-			Iterator iterator = BlockPos.getAllInBox(pos.add(-xSize, -ySize, -zSize), pos.add(xSize, ySize, zSize)).iterator();
+			Iterator iterator = BlockPos.betweenClosedStream(pos.offset(-xSize, -ySize, -zSize), pos.offset(xSize, ySize, zSize)).iterator();
 			
 			while(iterator.hasNext())
 			{
 				BlockPos blockpos1 = (BlockPos) iterator.next();
 				
-				if(blockpos1.distanceSq(pos) <= (double) (f * f))
-					setBlockState(worldIn, blockpos1, randomStone);
+				if(blockpos1.distSqr(pos) <= (double) (f * f))
+					setBlock(worldIn, blockpos1, randomStone);
 			}
 			
-			pos = pos.add(-(config.startRadius + 1) + rand.nextInt(2 + config.startRadius * 2), 0 - rand.nextInt(2), -(config.startRadius + 1) + rand.nextInt(2 + config.startRadius * 2));
+			pos = pos.offset(-(config.startRadius + 1) + rand.nextInt(2 + config.startRadius * 2), 0 - rand.nextInt(2), -(config.startRadius + 1) + rand.nextInt(2 + config.startRadius * 2));
 		}
 		
 		return true;

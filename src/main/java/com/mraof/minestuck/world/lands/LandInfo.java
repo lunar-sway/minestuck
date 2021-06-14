@@ -123,7 +123,7 @@ public class LandInfo
 	
 	public ResourceLocation getDimensionName()
 	{
-		return dimension.getLocation();
+		return dimension.location();
 	}
 	
 	public BlockPos getSpawn()
@@ -144,7 +144,7 @@ public class LandInfo
 	public CompoundNBT write(CompoundNBT nbt)
 	{
 		landAspects.write(nbt);
-		ResourceLocation.CODEC.encodeStart(NBTDynamicOps.INSTANCE, dimension.getLocation()).resultOrPartial(LOGGER::error)
+		ResourceLocation.CODEC.encodeStart(NBTDynamicOps.INSTANCE, dimension.location()).resultOrPartial(LOGGER::error)
 				.ifPresent(tag -> nbt.put("dim_type", tag));
 		nbt.putBoolean("reverse_order", useReverseOrder);
 		nbt.putInt("terrain_name_index", terrainNameIndex);
@@ -163,7 +163,7 @@ public class LandInfo
 	public static LandInfo read(CompoundNBT nbt, SkaianetHandler handler, PlayerIdentifier identifier)
 	{
 		LandTypePair.LazyInstance aspects = LandTypePair.LazyInstance.read(nbt);
-		RegistryKey<World> dimension = World.CODEC.parse(NBTDynamicOps.INSTANCE, nbt.get("dim_type")).resultOrPartial(LOGGER::error).get();	//TODO properly use optional, maybe by writing LandInfo with codec
+		RegistryKey<World> dimension = World.RESOURCE_KEY_CODEC.parse(NBTDynamicOps.INSTANCE, nbt.get("dim_type")).resultOrPartial(LOGGER::error).get();	//TODO properly use optional, maybe by writing LandInfo with codec
 		boolean reverse = nbt.getBoolean("reverse_order");
 		int terrainIndex = nbt.getInt("terrain_name_index");
 		int titleIndex = nbt.getInt("title_name_index");
@@ -182,6 +182,6 @@ public class LandInfo
 	public void sendLandEntryMessage(ServerPlayerEntity player)
 	{
 		ITextComponent toSend = new TranslationTextComponent(LAND_ENTRY, this.landAsTextComponent());
-		player.sendMessage(toSend, Util.DUMMY_UUID);
+		player.sendMessage(toSend, Util.NIL_UUID);
 	}
 }

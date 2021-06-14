@@ -29,31 +29,31 @@ public class EventTrigger extends AbstractCriterionTrigger<EventTrigger.Instance
 	}
 	
 	@Override
-	protected Instance deserializeTrigger(JsonObject json, EntityPredicate.AndPredicate predicate, ConditionArrayParser conditionsParser)
+	protected Instance createInstance(JsonObject json, EntityPredicate.AndPredicate predicate, ConditionArrayParser conditionsParser)
 	{
 		return new Instance(predicate, id);
 	}
 	
 	public void trigger(ServerPlayerEntity player)
 	{
-		triggerListeners(player, Instance::test);
+		trigger(player, Instance::test);
 	}
 	
 	public static class Instance extends CriterionInstance
 	{
 		public static Instance sburbConnection()
 		{
-			return new Instance(EntityPredicate.AndPredicate.ANY_AND, SBURB_CONNECTION_ID);
+			return new Instance(EntityPredicate.AndPredicate.ANY, SBURB_CONNECTION_ID);
 		}
 		
 		public static Instance cruxiteArtifact()
 		{
-			return new Instance(EntityPredicate.AndPredicate.ANY_AND, CRUXITE_ARTIFACT_ID);
+			return new Instance(EntityPredicate.AndPredicate.ANY, CRUXITE_ARTIFACT_ID);
 		}
 		
 		public static Instance melonOverload()
 		{
-			return new Instance(EntityPredicate.AndPredicate.ANY_AND, MELON_OVERLOAD_ID);
+			return new Instance(EntityPredicate.AndPredicate.ANY, MELON_OVERLOAD_ID);
 		}
 		public Instance(EntityPredicate.AndPredicate predicate, ResourceLocation id)
 		{

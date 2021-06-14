@@ -35,19 +35,19 @@ public class CastleStaircasePiece extends CastleRoomPiece
 	}
 	
 	@Override
-	public void buildComponent(StructurePiece componentIn, List<StructurePiece> pieces, Random rand)
+	public void addChildren(StructurePiece componentIn, List<StructurePiece> pieces, Random rand)
 	{
 		this.direction = rand.nextInt(4);
 	}
 	
 	@Override
-	public boolean func_230383_a_(ISeedReader world, StructureManager manager, ChunkGenerator generator, Random random, MutableBoundingBox structureBoundingBox, ChunkPos chunkPosIn, BlockPos pos)
+	public boolean postProcess(ISeedReader world, StructureManager manager, ChunkGenerator generator, Random random, MutableBoundingBox structureBoundingBox, ChunkPos chunkPosIn, BlockPos pos)
 	{
 //		super.create(world, chunkGeneratorIn, randomIn, structureBoundingBox, chunkPosIn);
 //		do what that would have done but set the offset correctly
-		BlockState chessTile = (isBlack ? MSBlocks.BLACK_CHESS_DIRT : MSBlocks.WHITE_CHESS_DIRT).getDefaultState();
-		BlockState chessTile1 = (isBlack ? MSBlocks.DARK_GRAY_CHESS_DIRT : MSBlocks.LIGHT_GRAY_CHESS_DIRT).getDefaultState();
-		this.fillWithAir(world, structureBoundingBox, 0, 1, 0, 7, 14, 7);
+		BlockState chessTile = (isBlack ? MSBlocks.BLACK_CHESS_DIRT : MSBlocks.WHITE_CHESS_DIRT).defaultBlockState();
+		BlockState chessTile1 = (isBlack ? MSBlocks.DARK_GRAY_CHESS_DIRT : MSBlocks.LIGHT_GRAY_CHESS_DIRT).defaultBlockState();
+		this.generateAirBox(world, structureBoundingBox, 0, 1, 0, 7, 14, 7);
 		this.fillWithAlternatingBlocks(world, structureBoundingBox, 0, 15, 0, 7, 15, 7, chessTile, chessTile1, false);
 		for(int step = 0; step < 8; step++) //Come on, step it up!
 			switch(this.direction)

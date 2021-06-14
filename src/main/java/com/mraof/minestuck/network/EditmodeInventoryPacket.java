@@ -41,7 +41,7 @@ public class EditmodeInventoryPacket implements PlayToBothPacket
 		{
 			buffer.writeBoolean(b2);
 			for(ItemStack stack : inventory)
-				buffer.writeItemStack(stack);
+				buffer.writeItem(stack);
 		}
 	}
 	
@@ -54,7 +54,7 @@ public class EditmodeInventoryPacket implements PlayToBothPacket
 			List<ItemStack> inventory = new ArrayList<>();
 			while(buffer.readableBytes() > 0)
 			{
-				inventory.add(buffer.readItemStack());
+				inventory.add(buffer.readItem());
 			}
 			return update(inventory, b1, b2);
 		}
@@ -65,20 +65,20 @@ public class EditmodeInventoryPacket implements PlayToBothPacket
 	@Override
 	public void execute()
 	{
-		if(Minecraft.getInstance().currentScreen instanceof InventoryEditmodeScreen)
+		if(Minecraft.getInstance().screen instanceof InventoryEditmodeScreen)
 		{
-			InventoryEditmodeScreen gui = (InventoryEditmodeScreen) Minecraft.getInstance().currentScreen;
+			InventoryEditmodeScreen gui = (InventoryEditmodeScreen) Minecraft.getInstance().screen;
 			gui.less = b1;
 			gui.more = b2;
-			gui.getContainer().receiveUpdatePacket(this);
+			gui.getMenu().receiveUpdatePacket(this);
 		}
 	}
 	
 	@Override
 	public void execute(ServerPlayerEntity player)
 	{
-		if(player.openContainer instanceof EditmodeContainer)
-			((EditmodeContainer)player.openContainer).updateScroll(b1);
+		if(player.containerMenu instanceof EditmodeContainer)
+			((EditmodeContainer)player.containerMenu).updateScroll(b1);
 	}
 	
 	public List<ItemStack> getInventory()

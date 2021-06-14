@@ -30,7 +30,7 @@ public class GristIngredientRenderer implements IIngredientRenderer<GristAmount>
 		RenderSystem.color4f(1, 1, 1, 1);
 
 		ResourceLocation icon = ingredient.getType().getIcon();
-		Minecraft.getInstance().getTextureManager().bindTexture(icon);
+		Minecraft.getInstance().getTextureManager().bind(icon);
 
 		float scale = (float) 1 / 16;
 
@@ -39,13 +39,13 @@ public class GristIngredientRenderer implements IIngredientRenderer<GristAmount>
 		int iconU = 0;
 		int iconV = 0;
 
-		BufferBuilder render = Tessellator.getInstance().getBuffer();
+		BufferBuilder render = Tessellator.getInstance().getBuilder();
 		render.begin(7, DefaultVertexFormats.POSITION_TEX);
-		render.pos(xPosition, yPosition + iconY, 0D).tex((iconU) * scale, (iconV + iconY) * scale).endVertex();
-		render.pos(xPosition + iconX, yPosition + iconY, 0D).tex((iconU + iconX) * scale, (iconV + iconY) * scale).endVertex();
-		render.pos(xPosition + iconX, yPosition, 0D).tex((iconU + iconX) * scale, (iconV) * scale).endVertex();
-		render.pos(xPosition, yPosition, 0D).tex((iconU) * scale, (iconV) * scale).endVertex();
-		Tessellator.getInstance().draw();
+		render.vertex(xPosition, yPosition + iconY, 0D).uv((iconU) * scale, (iconV + iconY) * scale).endVertex();
+		render.vertex(xPosition + iconX, yPosition + iconY, 0D).uv((iconU + iconX) * scale, (iconV + iconY) * scale).endVertex();
+		render.vertex(xPosition + iconX, yPosition, 0D).uv((iconU + iconX) * scale, (iconV) * scale).endVertex();
+		render.vertex(xPosition, yPosition, 0D).uv((iconU) * scale, (iconV) * scale).endVertex();
+		Tessellator.getInstance().end();
 		
 		RenderSystem.disableAlphaTest();
 		RenderSystem.disableBlend();
@@ -56,7 +56,7 @@ public class GristIngredientRenderer implements IIngredientRenderer<GristAmount>
 	{
 		List<ITextComponent> list = new ArrayList<>();
 		list.add(ingredient.getType().getDisplayName());
-		list.add(new StringTextComponent(String.valueOf(ingredient.getType().getRegistryName())).mergeStyle(TextFormatting.DARK_GRAY));
+		list.add(new StringTextComponent(String.valueOf(ingredient.getType().getRegistryName())).withStyle(TextFormatting.DARK_GRAY));
 		return list;
 	}
 }

@@ -25,7 +25,7 @@ public class SburbConnectionCommand
 	
 	public static void register(CommandDispatcher<CommandSource> dispatcher)
 	{
-		dispatcher.register(Commands.literal("sburbconnection").requires(source -> source.hasPermissionLevel(2)).then(Commands.argument("client", EntityArgument.player()).then(Commands.argument("server", EntityArgument.player())
+		dispatcher.register(Commands.literal("sburbconnection").requires(source -> source.hasPermission(2)).then(Commands.argument("client", EntityArgument.player()).then(Commands.argument("server", EntityArgument.player())
 				.executes(context -> connect(context.getSource(), EntityArgument.getPlayer(context, "client"), EntityArgument.getPlayer(context, "server"))))));
 	}
 	

@@ -28,14 +28,14 @@ public class AttackByDistanceGoal extends Goal
 	private int rangedAttackTime;
 	private float entityMoveSpeed;
 	private int ticksSeeingTarget;
-	private int field_96561_g;
+	private int attackIntervalMin;
 
 	/**
 	 * The maximum time the AI has to wait before peforming another ranged attack.
 	 */
 	private int maxRangedAttackTime;
-	private float field_96562_i;
-	private float field_82642_h;
+	private float attackRadius;
+	private float attackRadiusSqr;
 
 	public AttackByDistanceGoal(IRangedAttackMob par1IRangedAttackMob, float par2, int par3, float par4)
 	{
@@ -56,11 +56,11 @@ public class AttackByDistanceGoal extends Goal
 			this.attacker = (MobEntity) par1IRangedAttackMob;
 			this.entityHost = (MobEntity)par1IRangedAttackMob;
 			this.entityMoveSpeed = par2;
-			this.field_96561_g = par3;
+			this.attackIntervalMin = par3;
 			this.maxRangedAttackTime = par4;
-			this.field_96562_i = par5;
-			this.field_82642_h = par5 * par5;
-			this.setMutexFlags(EnumSet.of(Flag.TARGET, Flag.MOVE));
+			this.attackRadius = par5;
+			this.attackRadiusSqr = par5 * par5;
+			this.setFlags(EnumSet.of(Flag.TARGET, Flag.MOVE));
 		}
 	}
 
@@ -68,9 +68,9 @@ public class AttackByDistanceGoal extends Goal
 	 * Returns whether the EntityAIBase should begin execution.
 	 */
 	@Override
-	public boolean shouldExecute()
+	public boolean canUse()
 	{
-		LivingEntity entityliving = this.entityHost.getAttackTarget();
+		LivingEntity entityliving = this.entityHost.getTarget();
 
 		if (entityliving == null)
 			return false;
@@ -90,16 +90,16 @@ public class AttackByDistanceGoal extends Goal
 	 * Returns whether an in-progress EntityAIBase should continue executing
 	 */
 	@Override
-	public boolean shouldContinueExecuting()
+	public boolean canContinueToUse()
 	{
-		return this.shouldExecute() || !this.entityHost.getNavigator().noPath();
+		return this.canUse() || !this.entityHost.getNavigation().isDone();
 	}
 
 	/**
 	 * Resets the task
 	 */
 	@Override
-	public void resetTask()
+	public void stop()
 	{
 		this.attackTarget = null;
 		this.ticksSeeingTarget = 0;
@@ -110,8 +110,8 @@ public class AttackByDistanceGoal extends Goal
 	@Override
 	public void tick()
 	{
-		double d0 = this.entityHost.getDistanceSq(this.attackTarget.getPosX(), this.attackTarget.getBoundingBox().minY, this.attackTarget.getPosZ());
-		boolean flag = this.entityHost.getEntitySenses().canSee(this.attackTarget);
+		double d0 = this.entityHost.distanceToSqr(this.attackTarget.getX(), this.attackTarget.getBoundingBox().minY, this.attackTarget.getZ());
+		boolean flag = this.entityHost.getSensing().canSee(this.attackTarget);
 
 		if (flag)
 		{
@@ -122,28 +122,28 @@ public class AttackByDistanceGoal extends Goal
 			this.ticksSeeingTarget = 0;
 		}
 
-		if (d0 <= (double)this.field_82642_h && this.ticksSeeingTarget >= 20)
+		if (d0 <= (double)this.attackRadiusSqr && this.ticksSeeingTarget >= 20)
 		{
-			this.entityHost.getNavigator().clearPath();
+			this.entityHost.getNavigation().stop();
 		}
 		else
 		{
-			this.entityHost.getNavigator().tryMoveToEntityLiving(this.attackTarget, this.entityMoveSpeed);
+			this.entityHost.getNavigation().moveTo(this.attackTarget, this.entityMoveSpeed);
 		}
 
-		this.entityHost.getLookController().setLookPositionWithEntity(this.attackTarget, 30.0F, 30.0F);
+		this.entityHost.getLookControl().setLookAt(this.attackTarget, 30.0F, 30.0F);
 		float f;
-		double meleeRange = (double)(this.attacker.getWidth() * 2.0F * this.attacker.getWidth() * 2.0F);
+		double meleeRange = (double)(this.attacker.getBbWidth() * 2.0F * this.attacker.getBbWidth() * 2.0F);
 		if(d0 > meleeRange)
 		{
 			if (--this.rangedAttackTime == 0)
 			{
-				if (d0 > (double)this.field_82642_h || !flag)
+				if (d0 > (double)this.attackRadiusSqr || !flag)
 				{
 					return;
 				}
 	
-				f = MathHelper.sqrt(d0) / this.field_96562_i;
+				f = MathHelper.sqrt(d0) / this.attackRadius;
 				float f1 = f;
 	
 				if (f < 0.1F)
@@ -156,30 +156,30 @@ public class AttackByDistanceGoal extends Goal
 					f1 = 1.0F;
 				}
 	
-				((IRangedAttackMob) this.attacker).attackEntityWithRangedAttack(this.attackTarget, f1);
-				this.rangedAttackTime = MathHelper.floor(f * (float)(this.maxRangedAttackTime - this.field_96561_g) + (float)this.field_96561_g);
+				((IRangedAttackMob) this.attacker).performRangedAttack(this.attackTarget, f1);
+				this.rangedAttackTime = MathHelper.floor(f * (float)(this.maxRangedAttackTime - this.attackIntervalMin) + (float)this.attackIntervalMin);
 			}
 			else if (this.rangedAttackTime < 0)
 			{
-				f = MathHelper.sqrt(d0) / this.field_96562_i;
-				this.rangedAttackTime = MathHelper.floor(f * (float)(this.maxRangedAttackTime - this.field_96561_g) + (float)this.field_96561_g);
+				f = MathHelper.sqrt(d0) / this.attackRadius;
+				this.rangedAttackTime = MathHelper.floor(f * (float)(this.maxRangedAttackTime - this.attackIntervalMin) + (float)this.attackIntervalMin);
 			}
 		}
 		else
 		{
 			this.rangedAttackTime = Math.max(this.rangedAttackTime - 1, 0);
-			if(this.attacker.getDistanceSq(this.attackTarget.getPosX(), this.attackTarget.getBoundingBox().minY, this.attackTarget.getPosZ()) <= d0)
+			if(this.attacker.distanceToSqr(this.attackTarget.getX(), this.attackTarget.getBoundingBox().minY, this.attackTarget.getZ()) <= d0)
 			{
 				if(this.rangedAttackTime <= 0)
 				{
 					this.rangedAttackTime = 20;
 	
-					if(!this.attacker.getItemStackFromSlot(EquipmentSlotType.MAINHAND).isEmpty())
+					if(!this.attacker.getItemBySlot(EquipmentSlotType.MAINHAND).isEmpty())
 					{
-						this.attacker.swingArm(Hand.MAIN_HAND);
+						this.attacker.swing(Hand.MAIN_HAND);
 					}
 	
-					this.attacker.attackEntityAsMob(this.attackTarget);
+					this.attacker.doHurtTarget(this.attackTarget);
 				}
 			}
 		}

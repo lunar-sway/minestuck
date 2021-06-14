@@ -27,32 +27,32 @@ public interface DestroyBlockEffect
 	
 	DestroyBlockEffect DOUBLE_FARM = (stack, worldIn, state, pos, entity) -> {
 		if((state.getBlock() instanceof CropsBlock && ((CropsBlock) state.getBlock()).isMaxAge(state)))
-			CropsBlock.spawnDrops(state, worldIn, pos);
+			CropsBlock.dropResources(state, worldIn, pos);
 	};
 	
 	static DestroyBlockEffect extraHarvests(boolean melonOverload, float percentage, int maxBonusItems, Supplier<Item> itemDropped, Supplier<Block> harvestedBlock)
 	{
 		return (stack, worldIn, state, pos, entity) -> {
-			if(state == harvestedBlock.get().getDefaultState() && !worldIn.isRemote)
+			if(state == harvestedBlock.get().defaultBlockState() && !worldIn.isClientSide)
 			{
 				int harvestCounter = 0;
-				for(float i = entity.getRNG().nextFloat(); i <= percentage && harvestCounter < maxBonusItems; i = entity.getRNG().nextFloat())
+				for(float i = entity.getRandom().nextFloat(); i <= percentage && harvestCounter < maxBonusItems; i = entity.getRandom().nextFloat())
 				{
 					ItemStack harvestItemStack = new ItemStack(itemDropped.get(), 1);
 					ItemEntity item = new ItemEntity(worldIn, pos.getX(), pos.getY(), pos.getZ(), harvestItemStack);
-					worldIn.addEntity(item);
+					worldIn.addFreshEntity(item);
 					
 					harvestCounter++;
 				}
 				
 				if(melonOverload && harvestCounter >= 9 && entity instanceof PlayerEntity)
 				{
-					IFormattableTextComponent message = new TranslationTextComponent(stack.getTranslationKey() + ".message");
-					entity.sendMessage(message.mergeStyle(TextFormatting.GREEN, TextFormatting.BOLD), Util.DUMMY_UUID);
+					IFormattableTextComponent message = new TranslationTextComponent(stack.getDescriptionId() + ".message");
+					entity.sendMessage(message.withStyle(TextFormatting.GREEN, TextFormatting.BOLD), Util.NIL_UUID);
 					
-					entity.addPotionEffect(new EffectInstance(Effects.STRENGTH, 1800, 3));
-					entity.addPotionEffect(new EffectInstance(Effects.RESISTANCE, 1800, 3));
-					entity.addPotionEffect(new EffectInstance(Effects.HASTE, 1800, 3));
+					entity.addEffect(new EffectInstance(Effects.DAMAGE_BOOST, 1800, 3));
+					entity.addEffect(new EffectInstance(Effects.DAMAGE_RESISTANCE, 1800, 3));
+					entity.addEffect(new EffectInstance(Effects.DIG_SPEED, 1800, 3));
 					
 					MSCriteriaTriggers.MELON_OVERLOAD.trigger((ServerPlayerEntity) entity);
 				}

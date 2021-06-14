@@ -69,8 +69,8 @@ public class WeaponItem extends TieredItem
 		tickEffects = ImmutableList.copyOf(builder.tickEffects);
 		
 		ImmutableMultimap.Builder<Attribute, AttributeModifier> modifiers = ImmutableMultimap.builder();
-		modifiers.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", (double) builder.attackDamage + getTier().getAttackDamage(), AttributeModifier.Operation.ADDITION));
-		modifiers.put(Attributes.ATTACK_SPEED, new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", builder.attackSpeed, AttributeModifier.Operation.ADDITION));
+		modifiers.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", (double) builder.attackDamage + getTier().getAttackDamageBonus(), AttributeModifier.Operation.ADDITION));
+		modifiers.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", builder.attackSpeed, AttributeModifier.Operation.ADDITION));
 		attributeModifiers = modifiers.build();
 	}
 	
@@ -86,7 +86,7 @@ public class WeaponItem extends TieredItem
 		return super.getDestroySpeed(stack, state);
 	}
 	
-	public boolean canPlayerBreakBlockWhileHolding(BlockState state, World worldIn, BlockPos pos, PlayerEntity player)
+	public boolean canAttackBlock(BlockState state, World worldIn, BlockPos pos, PlayerEntity player)
 	{
 		ToolType blockTool = state.getHarvestTool();
 		Set<ToolType> itemTools = getToolTypes(new ItemStack(this));
@@ -99,7 +99,7 @@ public class WeaponItem extends TieredItem
 	
 	//Thanks to Mraof for supplying the base for this method.
 	@Override
-	public boolean canHarvestBlock(BlockState blockIn)
+	public boolean isCorrectToolForDrops(BlockState blockIn)
 	{
 		ToolType blockTool = blockIn.getHarvestTool();
 		Set<ToolType> itemTools = getToolTypes(new ItemStack(this));
@@ -120,18 +120,18 @@ public class WeaponItem extends TieredItem
 				if(toolType.getHarvestMaterials().contains(mat) && toolHarvestLevel >= blockHarvestLevel)
 					return true;
 			}
-			return super.canHarvestBlock(blockIn);
+			return super.isCorrectToolForDrops(blockIn);
 		}
 		
 	}
 	
 	@Override
-	public boolean onBlockDestroyed(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving)
+	public boolean mineBlock(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving)
 	{
 		if(destroyBlockEffect != null)
 			destroyBlockEffect.onDestroyBlock(stack, worldIn, state, pos, entityLiving);
 		
-		if(state.getBlockHardness(worldIn, pos) != 0.0F)
+		if(state.getDestroySpeed(worldIn, pos) != 0.0F)
 		{
 			int damage = 2;
 			
@@ -143,18 +143,18 @@ public class WeaponItem extends TieredItem
 					damage = 1;
 			}
 			
-			stack.damageItem(damage, entityLiving, (entity) -> entity.sendBreakAnimation(EquipmentSlotType.MAINHAND));
+			stack.hurtAndBreak(damage, entityLiving, (entity) -> entity.broadcastBreakEvent(EquipmentSlotType.MAINHAND));
 		}
 		
 		return true;
 	}
 	
 	@Override
-	public ActionResultType onItemUse(ItemUseContext context)
+	public ActionResultType useOn(ItemUseContext context)
 	{
 		if(rightClickBlockEffect != null)
 			return rightClickBlockEffect.onClick(context);
-		else return super.onItemUse(context);
+		else return super.useOn(context);
 	}
 	
 	@Override
@@ -164,11 +164,11 @@ public class WeaponItem extends TieredItem
 	}
 	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn)
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn)
 	{
 		if(itemRightClickEffect != null)
 			return itemRightClickEffect.onRightClick(worldIn, playerIn, handIn);
-		else return super.onItemRightClick(worldIn, playerIn, handIn);
+		else return super.use(worldIn, playerIn, handIn);
 	}
 	
 	@Override
@@ -178,17 +178,17 @@ public class WeaponItem extends TieredItem
 	}
 	
 	@Override
-	public UseAction getUseAction(ItemStack stack)
+	public UseAction getUseAnimation(ItemStack stack)
 	{
 		return useAction;
 	}
 	
 	@Override
-	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityLiving)
+	public ItemStack finishUsingItem(ItemStack stack, World worldIn, LivingEntity entityLiving)
 	{
 		for(FinishUseItemEffect effect : itemUsageEffects)
 			stack = effect.onItemUseFinish(stack, worldIn, entityLiving);
-		return super.onItemUseFinish(stack, worldIn, entityLiving);
+		return super.finishUsingItem(stack, worldIn, entityLiving);
 	}
 	
 	@Override
@@ -199,9 +199,9 @@ public class WeaponItem extends TieredItem
 	}
 	
 	@Override
-	public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker)
+	public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker)
 	{
-		stack.damageItem(1, attacker, (PlayerEntity) -> PlayerEntity.sendBreakAnimation(EquipmentSlotType.MAINHAND));
+		stack.hurtAndBreak(1, attacker, (PlayerEntity) -> PlayerEntity.broadcastBreakEvent(EquipmentSlotType.MAINHAND));
 		onHitEffects.forEach(effect -> effect.onHit(stack, target, attacker));
 		return true;
 	}
@@ -211,7 +211,7 @@ public class WeaponItem extends TieredItem
 	{
 		int harvestLevel = super.getHarvestLevel(stack, tool, player, blockState);
 		if(harvestLevel == -1 && getToolTypes(stack).contains(tool))
-			return getTier().getHarvestLevel();
+			return getTier().getLevel();
 		return harvestLevel;
 	}
 	
@@ -232,13 +232,13 @@ public class WeaponItem extends TieredItem
 	@Override
 	public boolean isEnchantable(ItemStack stack)
 	{
-		return isDamageable() || (toolType != null && !toolType.getEnchantments().isEmpty());
+		return canBeDepleted() || (toolType != null && !toolType.getEnchantments().isEmpty());
 	}
 	
 	@Override
 	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment)
 	{
-		if(isDamageable() && enchantment.type == EnchantmentType.BREAKABLE)
+		if(canBeDepleted() && enchantment.category == EnchantmentType.BREAKABLE)
 			return true;
 		if(toolType == null)
 			return false;
@@ -294,7 +294,7 @@ public class WeaponItem extends TieredItem
 			this.tier = tier;
 			this.attackDamage = attackDamage;
 			this.attackSpeed = attackSpeed;
-			efficiency = tier.getEfficiency();
+			efficiency = tier.getSpeed();
 		}
 		
 		public Builder set(@Nullable MSToolType toolType)

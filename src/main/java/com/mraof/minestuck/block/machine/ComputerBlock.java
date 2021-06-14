@@ -46,27 +46,27 @@ public class ComputerBlock extends MachineBlock
 	public ComputerBlock(Map<Direction, VoxelShape> shapeOn, Map<Direction, VoxelShape> shapeOff, Properties properties)
 	{
 		super(properties);
-		setDefaultState(getDefaultState().with(STATE, State.OFF));
+		registerDefaultState(defaultBlockState().setValue(STATE, State.OFF));
 		this.shapeOn = shapeOn;
 		this.shapeOff = shapeOff;
 	}
 	
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
 	{
-		super.fillStateContainer(builder);
+		super.createBlockStateDefinition(builder);
 		builder.add(STATE);
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
 	{
-		if(player.isSneaking())
+		if(player.isShiftKeyDown())
 			return ActionResultType.PASS;
 		
-		ItemStack heldItem = player.getHeldItem(handIn);
-		if(state.get(STATE) == State.OFF)
+		ItemStack heldItem = player.getItemInHand(handIn);
+		if(state.getValue(STATE) == State.OFF)
 		{
 			if(!heldItem.isEmpty() && ProgramData.getProgramID(heldItem) == -2)
 				return ActionResultType.PASS;
@@ -76,7 +76,7 @@ public class ComputerBlock extends MachineBlock
 			return ActionResultType.SUCCESS;
 		} else
 		{
-			ComputerTileEntity tileEntity = (ComputerTileEntity) worldIn.getTileEntity(pos);
+			ComputerTileEntity tileEntity = (ComputerTileEntity) worldIn.getBlockEntity(pos);
 			
 			
 			if(tileEntity == null)
@@ -85,7 +85,7 @@ public class ComputerBlock extends MachineBlock
 			if(insertDisk(tileEntity, state, worldIn, pos, player, handIn))
 				return ActionResultType.SUCCESS;
 			
-			if(worldIn.isRemote && SkaiaClient.requestData(tileEntity))
+			if(worldIn.isClientSide && SkaiaClient.requestData(tileEntity))
 				MSScreenFactories.displayComputerScreen(tileEntity);
 			
 			return ActionResultType.SUCCESS;
@@ -94,34 +94,34 @@ public class ComputerBlock extends MachineBlock
 	
 	private void turnOn(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
 	{
-		if(!worldIn.isRemote)
+		if(!worldIn.isClientSide)
 		{
-			BlockState newState = state.with(STATE, State.ON);
-			worldIn.setBlockState(pos, newState, Constants.BlockFlags.BLOCK_UPDATE);
+			BlockState newState = state.setValue(STATE, State.ON);
+			worldIn.setBlock(pos, newState, Constants.BlockFlags.BLOCK_UPDATE);
 			
-			TileEntity te = worldIn.getTileEntity(pos);
+			TileEntity te = worldIn.getBlockEntity(pos);
 			if(te instanceof ComputerTileEntity)
 				((ComputerTileEntity) te).owner = IdentifierHandler.encode(player);
-			newState.onBlockActivated(worldIn, player, handIn, hit);
+			newState.use(worldIn, player, handIn, hit);
 		}
 	}
 	
 	private boolean insertDisk(ComputerTileEntity tileEntity, BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn)
 	{
-		int id = ProgramData.getProgramID(player.getHeldItem(handIn));
+		int id = ProgramData.getProgramID(player.getItemInHand(handIn));
 		if(id != -2 && !tileEntity.hasProgram(id) && tileEntity.installedPrograms.size() < 2 && !tileEntity.hasProgram(-1))
 		{
-			if(worldIn.isRemote)
+			if(worldIn.isClientSide)
 				return true;
-			player.setHeldItem(handIn, ItemStack.EMPTY);
+			player.setItemInHand(handIn, ItemStack.EMPTY);
 			if(id == -1)
 			{
 				tileEntity.closeAll();
-				worldIn.setBlockState(pos, state.with(STATE, State.BROKEN), Constants.BlockFlags.BLOCK_UPDATE);
+				worldIn.setBlock(pos, state.setValue(STATE, State.BROKEN), Constants.BlockFlags.BLOCK_UPDATE);
 			}
 			else tileEntity.installedPrograms.put(id, true);
-			tileEntity.markDirty();
-			worldIn.notifyBlockUpdate(pos, state, state, 3);
+			tileEntity.setChanged();
+			worldIn.sendBlockUpdated(pos, state, state, 3);
 			return true;
 		} else return false;
 	}
@@ -129,7 +129,7 @@ public class ComputerBlock extends MachineBlock
 	@Override
 	public boolean hasTileEntity(BlockState state)
 	{
-		return state.get(STATE) != State.OFF;
+		return state.getValue(STATE) != State.OFF;
 	}
 	
 	@Nullable
@@ -142,16 +142,16 @@ public class ComputerBlock extends MachineBlock
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving)
+	public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving)
 	{
 		dropItems(worldIn, pos.getX(), pos.getY(), pos.getZ(), state);
-		super.onReplaced(state, worldIn, pos, newState, isMoving);
+		super.onRemove(state, worldIn, pos, newState, isMoving);
 	}
 	
 	private void dropItems(World world, int x, int y, int z, BlockState state)
 	{
 		Random rand = new Random();
-		ComputerTileEntity te = (ComputerTileEntity) world.getTileEntity(new BlockPos(x, y, z));
+		ComputerTileEntity te = (ComputerTileEntity) world.getBlockEntity(new BlockPos(x, y, z));
 		if (te == null)
 		{
 			return;
@@ -169,17 +169,17 @@ public class ComputerBlock extends MachineBlock
 			float ry = rand.nextFloat() * 0.8F + 0.1F;
 			float rz = rand.nextFloat() * 0.8F + 0.1F;
 			ItemEntity entityItem = new ItemEntity(world, x + rx, y + ry, z + rz, ProgramData.getItem(program));
-			entityItem.setMotion(rand.nextGaussian() * factor, rand.nextGaussian() * factor + 0.2F, rand.nextGaussian() * factor);
-			world.addEntity(entityItem);
+			entityItem.setDeltaMovement(rand.nextGaussian() * factor, rand.nextGaussian() * factor + 0.2F, rand.nextGaussian() * factor);
+			world.addFreshEntity(entityItem);
 		}
-		if(state.get(STATE) == State.BROKEN)
+		if(state.getValue(STATE) == State.BROKEN)
 		{
 			float rx = rand.nextFloat() * 0.8F + 0.1F;
 			float ry = rand.nextFloat() * 0.8F + 0.1F;
 			float rz = rand.nextFloat() * 0.8F + 0.1F;
 			ItemEntity entityItem = new ItemEntity(world, x + rx, y + ry, z + rz, ProgramData.getItem(-1));
-			entityItem.setMotion(rand.nextGaussian() * factor, rand.nextGaussian() * factor + 0.2F, rand.nextGaussian() * factor);
-			world.addEntity(entityItem);
+			entityItem.setDeltaMovement(rand.nextGaussian() * factor, rand.nextGaussian() * factor + 0.2F, rand.nextGaussian() * factor);
+			world.addFreshEntity(entityItem);
 		}
 	}
 	
@@ -187,9 +187,9 @@ public class ComputerBlock extends MachineBlock
 	@SuppressWarnings("deprecation")
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
 	{
-		if(state.get(STATE) == State.OFF)
-			return shapeOff.get(state.get(FACING));
-		else return shapeOn.get(state.get(FACING));
+		if(state.getValue(STATE) == State.OFF)
+			return shapeOff.get(state.getValue(FACING));
+		else return shapeOn.get(state.getValue(FACING));
 	}
 	
 	
@@ -200,7 +200,7 @@ public class ComputerBlock extends MachineBlock
 		BROKEN;
 		
 		@Override
-		public String getString()
+		public String getSerializedName()
 		{
 			return name().toLowerCase();
 		}

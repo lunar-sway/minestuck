@@ -11,7 +11,6 @@ import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
 
@@ -80,14 +79,14 @@ public class TitleSelectorScreen extends Screen
 		
 		this.renderBackground(matrixStack);
 		
-		this.minecraft.getTextureManager().bindTexture(guiBackground);
+		this.minecraft.getTextureManager().bind(guiBackground);
 		this.blit(matrixStack, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
-		String message = previous == null ? I18n.format(SELECT_TITLE) : I18n.format(USED_TITLE, previous.asTextComponent().getString());
-		font.drawString(matrixStack, message, (this.width / 2F) - font.getStringWidth(message) / 2F, yOffset + 10, 0x404040);
+		String message = previous == null ? I18n.get(SELECT_TITLE) : I18n.get(USED_TITLE, previous.asTextComponent().getString());
+		font.draw(matrixStack, message, (this.width / 2F) - font.width(message) / 2F, yOffset + 10, 0x404040);
 		
-		message = I18n.format(Title.FORMAT, "", "");
-		font.drawString(matrixStack, message, (this.width / 2F) - font.getStringWidth(message) / 2F, yOffset + 72 - font.FONT_HEIGHT/2F, 0x404040);
+		message = I18n.get(Title.FORMAT, "", "");
+		font.draw(matrixStack, message, (this.width / 2F) - font.width(message) / 2F, yOffset + 72 - font.lineHeight/2F, 0x404040);
 		
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
 		
@@ -112,13 +111,13 @@ public class TitleSelectorScreen extends Screen
 	private void select()
 	{
 		MSPacketHandler.sendToServer(new TitleSelectPacket(new Title(currentClass, currentAspect)));
-		onClose();
+		removed();
 	}
 	
 	private void random()
 	{
 		MSPacketHandler.sendToServer(new TitleSelectPacket());
-		onClose();
+		removed();
 	}
 	
 	@Override

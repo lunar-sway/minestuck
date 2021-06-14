@@ -24,10 +24,10 @@ public class MSCFeatures
 		return Objects.requireNonNull(instance);
 	}
 	
-	public final ConfiguredFeature<BaseTreeFeatureConfig, ?> RAINBOW_TREE = register("rainbow_tree", Feature.TREE.withConfiguration(new BaseTreeFeatureConfig.Builder(
-			new SimpleBlockStateProvider(MSBlocks.RAINBOW_LOG.getDefaultState()), new SimpleBlockStateProvider(MSBlocks.RAINBOW_LEAVES.getDefaultState()),
-			new BlobFoliagePlacer(FeatureSpread.create(2), FeatureSpread.create(0), 3), new StraightTrunkPlacer(4, 2, 0),
-			new TwoLayerFeature(1, 0, 1)).setIgnoreVines().build()));
+	public final ConfiguredFeature<BaseTreeFeatureConfig, ?> RAINBOW_TREE = register("rainbow_tree", Feature.TREE.configured(new BaseTreeFeatureConfig.Builder(
+			new SimpleBlockStateProvider(MSBlocks.RAINBOW_LOG.defaultBlockState()), new SimpleBlockStateProvider(MSBlocks.RAINBOW_LEAVES.defaultBlockState()),
+			new BlobFoliagePlacer(FeatureSpread.fixed(2), FeatureSpread.fixed(0), 3), new StraightTrunkPlacer(4, 2, 0),
+			new TwoLayerFeature(1, 0, 1)).ignoreVines().build()));
 	
 	
 	

@@ -37,21 +37,21 @@ public class GateHandler
 		
 		if(destination != null)
 		{
-			ServerWorld destinationWorld = player.server.getWorld(destination.getDimension());
+			ServerWorld destinationWorld = player.server.getLevel(destination.dimension());
 			
 			if(gateType.isDestinationGate)
 			{
-				BlockState block = destinationWorld.getBlockState(destination.getPos());
+				BlockState block = destinationWorld.getBlockState(destination.pos());
 				
 				if(block.getBlock() != MSBlocks.GATE)
 				{
 					Debug.debugf("Can't find destination gate at %s. Probably broken.", destination);
-					player.sendMessage(new TranslationTextComponent(DESTROYED), Util.DUMMY_UUID);
+					player.sendMessage(new TranslationTextComponent(DESTROYED), Util.NIL_UUID);
 					return;
 				}
 			}
 			
-			Teleport.teleportEntity(player, destinationWorld, destination.getPos().getX() + 0.5, destination.getPos().getY(), destination.getPos().getZ() + 0.5);
+			Teleport.teleportEntity(player, destinationWorld, destination.pos().getX() + 0.5, destination.pos().getY(), destination.pos().getZ() + 0.5);
 		}
 	}
 	
@@ -75,7 +75,7 @@ public class GateHandler
 	private static GlobalPos findPosNearLandGate(ServerWorld world)
 	{
 		BlockPos pos = Type.LAND_GATE.getPosition(world);
-		Random rand = world.rand;
+		Random rand = world.random;
 		if(pos != null)
 			while(true)	//TODO replace with a more friendly version without a chance of freezing the game
 			{
@@ -87,23 +87,23 @@ public class GateHandler
 				if(rand.nextBoolean()) x = -x;
 				if(rand.nextBoolean()) z = -z;
 				
-				BlockPos placement = pos.add(x, 0, z);
+				BlockPos placement = pos.offset(x, 0, z);
 				
 				if(BiomeType.NORMAL.isBiomeOfType(world.getBiome(placement)))
 				{
 					//TODO Can and has placed the player into a lava ocean. Fix this (Also for other hazards)
-					int y = world.getChunk(placement).getTopBlockY(Heightmap.Type.MOTION_BLOCKING, placement.getX(), placement.getZ());
-					return GlobalPos.getPosition(world.getDimensionKey(), new BlockPos(placement.getX(), y + 1, placement.getZ()));
+					int y = world.getChunk(placement).getHeight(Heightmap.Type.MOTION_BLOCKING, placement.getX(), placement.getZ());
+					return GlobalPos.of(world.dimension(), new BlockPos(placement.getX(), y + 1, placement.getZ()));
 				}
 			}
 		else
-			Debug.errorf("Unexpected error: Couldn't find position for land gate for dimension %d.", world.getDimensionKey());
+			Debug.errorf("Unexpected error: Couldn't find position for land gate for dimension %d.", world.dimension());
 		return null;
 	}
 	
 	private static GlobalPos findClientLandGate(ServerWorld world)
 	{
-		SburbConnection landConnection = SburbHandler.getConnectionForDimension(world.getServer(), world.getDimensionKey());
+		SburbConnection landConnection = SburbHandler.getConnectionForDimension(world.getServer(), world.dimension());
 		if(landConnection != null)
 		{
 			SburbConnection clientConnection = SkaianetHandler.get(world.getServer()).getPrimaryConnection(landConnection.getClientIdentifier(), false).orElse(null);
@@ -111,22 +111,22 @@ public class GateHandler
 			if(clientConnection != null && clientConnection.hasEntered() && MSDimensions.isLandDimension(clientConnection.getClientDimension()))
 			{
 				RegistryKey<World> clientDim = clientConnection.getClientDimension();
-				ServerWorld clientWorld = world.getServer().getWorld(clientDim);
+				ServerWorld clientWorld = world.getServer().getLevel(clientDim);
 				BlockPos gatePos = Type.LAND_GATE.getPosition(clientWorld);
 				if(gatePos == null)
 				{Debug.errorf("Unexpected error: Can't initialize land gate placement for dimension %d!", clientDim); return null;}
 				
-				return GlobalPos.getPosition(clientDim, gatePos);
+				return GlobalPos.of(clientDim, gatePos);
 			}
 			//else player.sendMessage(new TranslationTextComponent(MISSING_LAND));
 		} else
-			Debug.errorf("Unexpected error: Can't find connection for dimension %d!", world.getDimensionKey());
+			Debug.errorf("Unexpected error: Can't find connection for dimension %d!", world.dimension());
 		return null;
 	}
 	
 	private static GlobalPos findServerSecondGate(ServerWorld world)
 	{
-		SburbConnection landConnection = SburbHandler.getConnectionForDimension(world.getServer(), world.getDimensionKey());
+		SburbConnection landConnection = SburbHandler.getConnectionForDimension(world.getServer(), world.dimension());
 		if(landConnection != null)
 		{
 			SburbConnection serverConnection = SkaianetHandler.get(world.getServer()).getPrimaryConnection(landConnection.getServerIdentifier(), true).orElse(null);
@@ -134,11 +134,11 @@ public class GateHandler
 			if(serverConnection != null && serverConnection.hasEntered() && MSDimensions.isLandDimension(serverConnection.getClientDimension()))	//Last shouldn't be necessary, but just in case something goes wrong elsewhere...
 			{
 				RegistryKey<World> serverDim = serverConnection.getClientDimension();
-				return GlobalPos.getPosition(serverDim, Type.GATE_2.getPosition(world.getServer().getWorld(serverDim)));
+				return GlobalPos.of(serverDim, Type.GATE_2.getPosition(world.getServer().getLevel(serverDim)));
 				
 			}// else player.sendMessage(new TranslationTextComponent(MISSING_LAND));
 			
-		} else Debug.errorf("Unexpected error: Can't find connection for dimension %d!", world.getDimensionKey());
+		} else Debug.errorf("Unexpected error: Can't find connection for dimension %d!", world.dimension());
 		return null;
 	}
 	

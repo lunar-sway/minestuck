@@ -22,49 +22,49 @@ public class RazorBladeItem extends Item
 	}
 	
 	@Override
-	public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker)
+	public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker)
 	{
 		if(attacker instanceof PlayerEntity)
 		{
 			if(!((PlayerEntity) attacker).isCreative())
 			{
-				ItemEntity razor = new ItemEntity(attacker.world, attacker.getPosX(), attacker.getPosY(), attacker.getPosZ(), stack.copy());
-				if(!attacker.world.isRemote)
+				ItemEntity razor = new ItemEntity(attacker.level, attacker.getX(), attacker.getY(), attacker.getZ(), stack.copy());
+				if(!attacker.level.isClientSide)
 				{
 					razor.getItem().setCount(1);
-					razor.setPickupDelay(40);
-					attacker.world.addEntity(razor);
+					razor.setPickUpDelay(40);
+					attacker.level.addFreshEntity(razor);
 					stack.shrink(1);
 					ITextComponent message = new TranslationTextComponent("While you handle the razor blade, you accidentally cut yourself and drop it.");
-					attacker.sendMessage(message, Util.DUMMY_UUID);
+					attacker.sendMessage(message, Util.NIL_UUID);
 				}
 				attacker.setHealth(attacker.getHealth() - 1);
 				return true;
 			}
 		}
-		return super.hitEntity(stack, target, attacker);
+		return super.hurtEnemy(stack, target, attacker);
 	}
 	
 	@Override
-	public boolean onBlockDestroyed(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving)
+	public boolean mineBlock(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving)
 	{
 		if(entityLiving instanceof PlayerEntity)
 		{
 			if(!((PlayerEntity) entityLiving).isCreative())
 			{
-				ItemEntity razor = new ItemEntity(entityLiving.world, entityLiving.getPosX(), entityLiving.getPosY(), entityLiving.getPosZ(), stack.copy());
-				if(!entityLiving.world.isRemote)
+				ItemEntity razor = new ItemEntity(entityLiving.level, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), stack.copy());
+				if(!entityLiving.level.isClientSide)
 				{
 					razor.getItem().setCount(1);
-					razor.setPickupDelay(40);
-					entityLiving.world.addEntity(razor);
+					razor.setPickUpDelay(40);
+					entityLiving.level.addFreshEntity(razor);
 					stack.shrink(1);
 					ITextComponent message = new TranslationTextComponent("While you handle the razor blade, you accidentally cut yourself and drop it.");
-					entityLiving.sendMessage(message, Util.DUMMY_UUID);
+					entityLiving.sendMessage(message, Util.NIL_UUID);
 				}
-				entityLiving.attackEntityFrom(DamageSource.GENERIC, 1);
+				entityLiving.hurt(DamageSource.GENERIC, 1);
 			}
 		}
-		return super.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);
+		return super.mineBlock(stack, worldIn, state, pos, entityLiving);
 	}
 }

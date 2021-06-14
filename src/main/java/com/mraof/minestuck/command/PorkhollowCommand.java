@@ -44,32 +44,32 @@ public class PorkhollowCommand    //Much like /gristSend and /land, is a tempora
 	
 	private static int send(CommandSource source, ServerPlayerEntity target, long amount) throws CommandSyntaxException
 	{
-		ServerPlayerEntity player = source.asPlayer();
+		ServerPlayerEntity player = source.getPlayerOrException();
 		
 		if(PlayerSavedData.getData(player).tryTakeBoondollars(amount))
 		{
 			PlayerSavedData.getData(target).addBoondollars(amount);
-			source.sendFeedback(new TranslationTextComponent(SEND, amount, target.getDisplayName()), true);
-			target.sendMessage(new TranslationTextComponent(RECEIVE, amount, player.getDisplayName()), Util.DUMMY_UUID);
+			source.sendSuccess(new TranslationTextComponent(SEND, amount, target.getDisplayName()), true);
+			target.sendMessage(new TranslationTextComponent(RECEIVE, amount, player.getDisplayName()), Util.NIL_UUID);
 			return 1;
 		} else throw NOT_ENOUGH.create();
 	}
 	
 	private static int take(CommandSource source, int amount) throws CommandSyntaxException
 	{
-		ServerPlayerEntity player = source.asPlayer();
+		ServerPlayerEntity player = source.getPlayerOrException();
 		
 		if(PlayerSavedData.getData(player).tryTakeBoondollars(amount))
 		{
 			ItemStack stack = BoondollarsItem.setCount(new ItemStack(MSItems.BOONDOLLARS), amount);
-			if(!player.addItemStackToInventory(stack))
+			if(!player.addItem(stack))
 			{
-				ItemEntity entity = player.dropItem(stack, false);
+				ItemEntity entity = player.drop(stack, false);
 				if (entity != null)
-					entity.setNoPickupDelay();
+					entity.setNoPickUpDelay();
 			}
 			
-			source.sendFeedback(new TranslationTextComponent(TAKE, amount), true);
+			source.sendSuccess(new TranslationTextComponent(TAKE, amount), true);
 			return 1;
 		} else throw NOT_ENOUGH.create();
 	}

@@ -48,6 +48,6 @@ public class MagicEffectPacket implements PlayToClientPacket
 	@Override
 	public void execute()
 	{
-		MagicEffect.particleEffect(type, Minecraft.getInstance().world, pos, lookVec, length, collides);
+		MagicEffect.particleEffect(type, Minecraft.getInstance().level, pos, lookVec, length, collides);
 	}
 }

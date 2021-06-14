@@ -58,7 +58,7 @@ public class EcheladderDataPacket implements PlayToClientPacket
 			for(prev++; prev <= rung; prev++)
 			{
 				TranslationTextComponent rung = new TranslationTextComponent(Echeladder.translationKey(prev));
-				Minecraft.getInstance().player.sendMessage(new TranslationTextComponent(Echeladder.NEW_RUNG, rung), Util.DUMMY_UUID);
+				Minecraft.getInstance().player.sendMessage(new TranslationTextComponent(Echeladder.NEW_RUNG, rung), Util.NIL_UUID);
 			}
 		else EcheladderScreen.animatedRung = EcheladderScreen.lastRung = rung;
 	}

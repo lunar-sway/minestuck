@@ -24,26 +24,26 @@ public class StoneTabletItem extends Item
 	}
 	
 	@Override
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
+	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
 	{
-		super.addInformation(stack, worldIn, tooltip, flagIn);
+		super.appendHoverText(stack, worldIn, tooltip, flagIn);
 		
 		if(hasText(stack))
-			tooltip.add(new TranslationTextComponent(getTranslationKey()+".carved").mergeStyle(TextFormatting.GRAY));
+			tooltip.add(new TranslationTextComponent(getDescriptionId()+".carved").withStyle(TextFormatting.GRAY));
 	}
 	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn)
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn)
 	{
-		ItemStack stack = playerIn.getHeldItem(handIn);
-		if(worldIn.isRemote)
+		ItemStack stack = playerIn.getItemInHand(handIn);
+		if(worldIn.isClientSide)
 		{
-			boolean canEdit = playerIn.getHeldItem(handIn == Hand.MAIN_HAND ? Hand.OFF_HAND : Hand.MAIN_HAND).isItemEqual(new ItemStack(MSItems.CARVING_TOOL));
+			boolean canEdit = playerIn.getItemInHand(handIn == Hand.MAIN_HAND ? Hand.OFF_HAND : Hand.MAIN_HAND).sameItem(new ItemStack(MSItems.CARVING_TOOL));
 			String text = hasText(stack) ? stack.getTag().getString("text") : "";
 			MSScreenFactories.displayStoneTabletScreen(playerIn, handIn, text, canEdit);
 		}
 		
-		return ActionResult.resultSuccess(stack);
+		return ActionResult.success(stack);
 	}
 	
 	public static boolean hasText(ItemStack stack)

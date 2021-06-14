@@ -67,16 +67,16 @@ public class GristSelectorScreen<T extends Screen & Positioned> extends Minestuc
 		
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-		this.minecraft.getTextureManager().bindTexture(guiGristcache);
+		this.minecraft.getTextureManager().bind(guiGristcache);
 		this.blit(matrixStack, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 
-		String cacheMessage = I18n.format(SELECT_GRIST);
-		minecraft.fontRenderer.drawString(matrixStack, cacheMessage, (this.width / 2F) - minecraft.fontRenderer.getStringWidth(cacheMessage) / 2F, yOffset + 12, 0x404040);
+		String cacheMessage = I18n.get(SELECT_GRIST);
+		minecraft.font.draw(matrixStack, cacheMessage, (this.width / 2F) - minecraft.font.width(cacheMessage) / 2F, yOffset + 12, 0x404040);
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
 
 		RenderSystem.color3f(1.0F, 1.0F, 1.0F);
 		RenderSystem.disableRescaleNormal();
-		RenderHelper.disableStandardItemLighting();
+		RenderHelper.turnOff();
 		RenderSystem.disableLighting();
 		RenderSystem.disableDepthTest();
 
@@ -115,7 +115,7 @@ public class GristSelectorScreen<T extends Screen & Positioned> extends Minestuc
 					
 					otherScreen.width = this.width;
 					otherScreen.height = this.height;
-					minecraft.currentScreen = otherScreen;
+					minecraft.screen = otherScreen;
 					GristWildcardPacket packet = new GristWildcardPacket(pos, type);
 					MSPacketHandler.INSTANCE.sendToServer(packet);
 					return true;
@@ -127,10 +127,10 @@ public class GristSelectorScreen<T extends Screen & Positioned> extends Minestuc
 	}
 	
 	@Override
-	public void onClose()
+	public void removed()
 	{
-		minecraft.currentScreen = otherScreen;
-		minecraft.player.closeScreen();
+		minecraft.screen = otherScreen;
+		minecraft.player.closeContainer();
 	}
 
 	protected boolean isPointInRegion(int regionX, int regionY, int regionWidth, int regionHeight, double pointX, double pointY)

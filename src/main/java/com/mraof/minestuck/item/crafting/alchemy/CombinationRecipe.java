@@ -20,8 +20,8 @@ import java.util.List;
 public class CombinationRecipe extends AbstractCombinationRecipe
 {
 	public static ItemStack findResult(ItemCombiner combiner, World world) {
-		return world.getRecipeManager().getRecipe(MSRecipeTypes.COMBINATION_TYPE, combiner, world)
-				.map(recipe -> recipe.getCraftingResult(combiner)).orElse(ItemStack.EMPTY);
+		return world.getRecipeManager().getRecipeFor(MSRecipeTypes.COMBINATION_TYPE, combiner, world)
+				.map(recipe -> recipe.assemble(combiner)).orElse(ItemStack.EMPTY);
 	}
 	
 	private final Ingredient input1, input2;
@@ -40,24 +40,24 @@ public class CombinationRecipe extends AbstractCombinationRecipe
 	@Override
 	public boolean matches(ItemCombiner inv, World worldIn)
 	{
-		ItemStack item1 = AlchemyHelper.getDecodedItem(inv.getStackInSlot(0)), item2 = AlchemyHelper.getDecodedItem(inv.getStackInSlot(1));
+		ItemStack item1 = AlchemyHelper.getDecodedItem(inv.getItem(0)), item2 = AlchemyHelper.getDecodedItem(inv.getItem(1));
 		return inv.getMode() == this.mode && (input1.test(item1) && input2.test(item2) || input2.test(item1) && input1.test(item2));
 	}
 	
 	@Override
-	public ItemStack getCraftingResult(ItemCombiner inv)
+	public ItemStack assemble(ItemCombiner inv)
 	{
 		return output;
 	}
 	
 	@Override
-	public boolean isDynamic()	//Makes sure that the recipe is not unlockable (because recipe book categories are hardcoded to vanilla categories)
+	public boolean isSpecial()	//Makes sure that the recipe is not unlockable (because recipe book categories are hardcoded to vanilla categories)
 	{
 		return true;
 	}
 	
 	@Override
-	public ItemStack getRecipeOutput()
+	public ItemStack getResultItem()
 	{
 		return ItemStack.EMPTY;
 	}
@@ -77,35 +77,35 @@ public class CombinationRecipe extends AbstractCombinationRecipe
 	public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<CombinationRecipe>
 	{
 		@Override
-		public CombinationRecipe read(ResourceLocation recipeId, JsonObject json)
+		public CombinationRecipe fromJson(ResourceLocation recipeId, JsonObject json)
 		{
-			Ingredient input1 = Ingredient.deserialize(json.get("input1"));
-			Ingredient input2 = Ingredient.deserialize(json.get("input2"));
-			CombinationMode mode = CombinationMode.fromString(JSONUtils.getString(json, "mode"));
-			ItemStack output = ShapedRecipe.deserializeItem(JSONUtils.getJsonObject(json, "output"));
+			Ingredient input1 = Ingredient.fromJson(json.get("input1"));
+			Ingredient input2 = Ingredient.fromJson(json.get("input2"));
+			CombinationMode mode = CombinationMode.fromString(JSONUtils.getAsString(json, "mode"));
+			ItemStack output = ShapedRecipe.itemFromJson(JSONUtils.getAsJsonObject(json, "output"));
 			
 			return new CombinationRecipe(recipeId, input1, input2, mode, output);
 		}
 		
 		@Nullable
 		@Override
-		public CombinationRecipe read(ResourceLocation recipeId, PacketBuffer buffer)
+		public CombinationRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer)
 		{
-			Ingredient input1 = Ingredient.read(buffer);
-			Ingredient input2 = Ingredient.read(buffer);
+			Ingredient input1 = Ingredient.fromNetwork(buffer);
+			Ingredient input2 = Ingredient.fromNetwork(buffer);
 			CombinationMode mode = CombinationMode.fromBoolean(buffer.readBoolean());
-			ItemStack output = buffer.readItemStack();
+			ItemStack output = buffer.readItem();
 			
 			return new CombinationRecipe(recipeId, input1, input2, mode, output);
 		}
 		
 		@Override
-		public void write(PacketBuffer buffer, CombinationRecipe recipe)
+		public void toNetwork(PacketBuffer buffer, CombinationRecipe recipe)
 		{
-			recipe.input1.write(buffer);
-			recipe.input2.write(buffer);
+			recipe.input1.toNetwork(buffer);
+			recipe.input2.toNetwork(buffer);
 			buffer.writeBoolean(recipe.mode.asBoolean());
-			buffer.writeItemStack(recipe.output);
+			buffer.writeItem(recipe.output);
 		}
 	}
 }

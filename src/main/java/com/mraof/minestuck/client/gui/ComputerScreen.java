@@ -38,7 +38,7 @@ public class ComputerScreen extends Screen
 		super(new StringTextComponent("Computer"));
 		
 		this.mc = mc;
-		this.font = mc.fontRenderer;
+		this.font = mc.font;
 		this.te = te;
 		te.gui = this;
 	}
@@ -50,19 +50,19 @@ public class ComputerScreen extends Screen
 		
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		if(te.hasProgram(-1)) {
-			this.mc.getTextureManager().bindTexture(guiBsod);
+			this.mc.getTextureManager().bind(guiBsod);
 			int yOffset = (this.height / 2) - (ySize / 2);
 			this.blit(matrixStack, (this.width / 2) - (xSize / 2), yOffset, 0, 0, xSize, ySize);
 		} else if(program != null)
 			program.paintGui(matrixStack, this, te);
 		else {
-			this.mc.getTextureManager().bindTexture(guiBackground);
+			this.mc.getTextureManager().bind(guiBackground);
 			int yOffset = (this.height / 2) - (ySize / 2);
 			this.blit(matrixStack, (this.width / 2) - (xSize / 2), yOffset, 0, 0, xSize, ySize);
-			font.drawString(matrixStack, "Insert disk.", (width - xSize) / 2F +15, (height - ySize) / 2F +45, 4210752);
+			font.draw(matrixStack, "Insert disk.", (width - xSize) / 2F +15, (height - ySize) / 2F +45, 4210752);
 		}
 		RenderSystem.disableRescaleNormal();
-		RenderHelper.disableStandardItemLighting();
+		RenderHelper.turnOff();
 		RenderSystem.disableLighting();
 		RenderSystem.disableDepthTest();
 

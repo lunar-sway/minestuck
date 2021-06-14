@@ -30,7 +30,7 @@ public class MiniCruxtruderContainer extends MachineContainer
 	
 	public MiniCruxtruderContainer(int windowId, PlayerInventory inventoryPlayer, PacketBuffer buffer)
 	{
-		this(MSContainerTypes.MINI_CRUXTRUDER, windowId, inventoryPlayer, new ItemStackHandler(2), new IntArray(3), IWorldPosCallable.DUMMY, buffer.readBlockPos());
+		this(MSContainerTypes.MINI_CRUXTRUDER, windowId, inventoryPlayer, new ItemStackHandler(2), new IntArray(3), IWorldPosCallable.NULL, buffer.readBlockPos());
 	}
 	
 	public MiniCruxtruderContainer(int windowId, PlayerInventory playerInventory, IItemHandler inventory, IIntArray parameters, IWorldPosCallable position, BlockPos machinePos)
@@ -69,15 +69,15 @@ public class MiniCruxtruderContainer extends MachineContainer
 	
 	@Nonnull
 	@Override
-	public ItemStack transferStackInSlot(PlayerEntity player, int slotNumber)
+	public ItemStack quickMoveStack(PlayerEntity player, int slotNumber)
 	{
 		ItemStack itemstack = ItemStack.EMPTY;
-		Slot slot = this.inventorySlots.get(slotNumber);
-		int allSlots = this.inventorySlots.size();
+		Slot slot = this.slots.get(slotNumber);
+		int allSlots = this.slots.size();
 		
-		if (slot != null && slot.getHasStack())
+		if (slot != null && slot.hasItem())
 		{
-			ItemStack itemstackOrig = slot.getStack();
+			ItemStack itemstackOrig = slot.getItem();
 			itemstack = itemstackOrig.copy();
 			boolean result = false;
 			
@@ -85,7 +85,7 @@ public class MiniCruxtruderContainer extends MachineContainer
 			if(slotNumber <= 1)
 			{
 				//if it's a machine slot
-				result = mergeItemStack(itemstackOrig, 2, allSlots, false);
+				result = moveItemStackTo(itemstackOrig, 2, allSlots, false);
 			} else if(slotNumber > 1)
 			{
 				//if it's an inventory slot with valid contents
@@ -93,7 +93,7 @@ public class MiniCruxtruderContainer extends MachineContainer
 				if(itemstackOrig.getItem() == MSItems.RAW_CRUXITE)
 				{
 					//Debug.print("Transferring...");
-					result = mergeItemStack(itemstackOrig, 0, 1, false);
+					result = moveItemStackTo(itemstackOrig, 0, 1, false);
 				}
 			}
 			
@@ -101,7 +101,7 @@ public class MiniCruxtruderContainer extends MachineContainer
 				return ItemStack.EMPTY;
 			
 			if(!itemstackOrig.isEmpty())
-				slot.onSlotChanged();
+				slot.setChanged();
 		}
 		
 		return itemstack;

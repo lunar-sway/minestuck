@@ -53,13 +53,13 @@ public class MiscContainerPacket implements PlayToServerPacket
 		{
 			if(!isInEditmode)
 			{
-				player.openContainer = new CaptchaDeckContainer(PlayerStatsScreen.WINDOW_ID_START + index, player.inventory);//ContainerHandler.windowIdStart + i;
+				player.containerMenu = new CaptchaDeckContainer(PlayerStatsScreen.WINDOW_ID_START + index, player.inventory);//ContainerHandler.windowIdStart + i;
 			} else
 			{
-				player.openContainer = new EditmodeContainer(PlayerStatsScreen.WINDOW_ID_START + index, player.inventory);
+				player.containerMenu = new EditmodeContainer(PlayerStatsScreen.WINDOW_ID_START + index, player.inventory);
 			}
 			
-			player.addSelfToInternalCraftingInventory();
+			player.initMenu();
 		}
 	}
 }

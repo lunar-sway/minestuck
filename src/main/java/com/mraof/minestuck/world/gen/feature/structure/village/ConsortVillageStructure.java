@@ -28,7 +28,7 @@ public class ConsortVillageStructure extends Structure<NoFeatureConfig>
 	}
 	
 	@Override
-	public GenerationStage.Decoration getDecorationStage()
+	public GenerationStage.Decoration step()
 	{
 		return GenerationStage.Decoration.SURFACE_STRUCTURES;
 	}
@@ -40,7 +40,7 @@ public class ConsortVillageStructure extends Structure<NoFeatureConfig>
 	}
 	
 	@Override
-	public String getStructureName()
+	public String getFeatureName()
 	{
 		return Minestuck.MOD_ID + ":consort_village";
 	}
@@ -54,29 +54,29 @@ public class ConsortVillageStructure extends Structure<NoFeatureConfig>
 		}
 		
 		@Override
-		public void func_230364_a_(DynamicRegistries registries, ChunkGenerator generator, TemplateManager templates, int chunkX, int chunkZ, Biome biome, NoFeatureConfig config)
+		public void generatePieces(DynamicRegistries registries, ChunkGenerator generator, TemplateManager templates, int chunkX, int chunkZ, Biome biome, NoFeatureConfig config)
 		{
 			LandTypePair landTypes = new LandTypePair(LandTypes.TERRAIN_NULL, LandTypes.TITLE_NULL); //TODO get land types from somewhere, either by some dimension-linked object like biome provider, or through the feature config
-			List<ConsortVillagePieces.PieceWeight> pieceWeightList = ConsortVillagePieces.getStructureVillageWeightedPieceList(rand, landTypes);
-			ConsortVillageCenter.VillageCenter start = ConsortVillageCenter.getVillageStart((chunkX << 4) + rand.nextInt(16), (chunkZ << 4) + rand.nextInt(16), rand, pieceWeightList, landTypes);
-			components.add(start);
-			start.buildComponent(start, components, rand);
+			List<ConsortVillagePieces.PieceWeight> pieceWeightList = ConsortVillagePieces.getStructureVillageWeightedPieceList(random, landTypes);
+			ConsortVillageCenter.VillageCenter start = ConsortVillageCenter.getVillageStart((chunkX << 4) + random.nextInt(16), (chunkZ << 4) + random.nextInt(16), random, pieceWeightList, landTypes);
+			pieces.add(start);
+			start.addChildren(start, pieces, random);
 			
 			while(!start.pendingHouses.isEmpty() || !start.pendingRoads.isEmpty())
 			{
 				if(!start.pendingRoads.isEmpty())
 				{
-					int index = rand.nextInt(start.pendingRoads.size());
+					int index = random.nextInt(start.pendingRoads.size());
 					StructurePiece component = start.pendingRoads.remove(index);
-					component.buildComponent(start, components, rand);
+					component.addChildren(start, pieces, random);
 				} else
 				{
-					int index = rand.nextInt(start.pendingHouses.size());
+					int index = random.nextInt(start.pendingHouses.size());
 					StructurePiece component = start.pendingHouses.remove(index);
-					component.buildComponent(start, components, rand);
+					component.addChildren(start, pieces, random);
 				}
 			}
-			recalculateStructureSize();
+			calculateBoundingBox();
 		}
 	}
 }

@@ -24,13 +24,13 @@ public class WildcardGristCostBuilder
 	
 	public static WildcardGristCostBuilder of(ITag<Item> tag)
 	{
-		ResourceLocation tagId = TagCollectionManager.getManager().getItemTags().getValidatedIdFromTag(tag);
-		return new WildcardGristCostBuilder(new ResourceLocation(tagId.getNamespace(), tagId.getPath()+"_tag"), Ingredient.fromTag(tag));
+		ResourceLocation tagId = TagCollectionManager.getInstance().getItems().getIdOrThrow(tag);
+		return new WildcardGristCostBuilder(new ResourceLocation(tagId.getNamespace(), tagId.getPath()+"_tag"), Ingredient.of(tag));
 	}
 	
 	public static WildcardGristCostBuilder of(IItemProvider item)
 	{
-		return new WildcardGristCostBuilder(item.asItem().getRegistryName(), Ingredient.fromItems(item));
+		return new WildcardGristCostBuilder(item.asItem().getRegistryName(), Ingredient.of(item));
 	}
 	
 	public static WildcardGristCostBuilder of(Ingredient ingredient)
@@ -63,13 +63,13 @@ public class WildcardGristCostBuilder
 	
 	public void build(Consumer<IFinishedRecipe> recipeSaver)
 	{
-		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ingredient.getMatchingStacks()[0].getItem().getRegistryName());
+		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ingredient.getItems()[0].getItem().getRegistryName());
 		build(recipeSaver, name);
 	}
 	
 	public void buildFor(Consumer<IFinishedRecipe> recipeSaver, String modId)
 	{
-		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ingredient.getMatchingStacks()[0].getItem().getRegistryName());
+		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ingredient.getItems()[0].getItem().getRegistryName());
 		build(recipeSaver, new ResourceLocation(modId, name.getPath()));
 	}
 	
@@ -96,36 +96,36 @@ public class WildcardGristCostBuilder
 		}
 		
 		@Override
-		public void serialize(JsonObject jsonObject)
+		public void serializeRecipeData(JsonObject jsonObject)
 		{
-			jsonObject.add("ingredient", ingredient.serialize());
+			jsonObject.add("ingredient", ingredient.toJson());
 			jsonObject.addProperty("grist_cost", cost);
 			if(priority != null)
 				jsonObject.addProperty("priority", priority);
 		}
 		
 		@Override
-		public ResourceLocation getID()
+		public ResourceLocation getId()
 		{
 			return id;
 		}
 		
 		@Override
-		public IRecipeSerializer<?> getSerializer()
+		public IRecipeSerializer<?> getType()
 		{
 			return MSRecipeTypes.WILDCARD_GRIST_COST;
 		}
 		
 		@Nullable
 		@Override
-		public JsonObject getAdvancementJson()
+		public JsonObject serializeAdvancement()
 		{
 			return null;
 		}
 		
 		@Nullable
 		@Override
-		public ResourceLocation getAdvancementID()
+		public ResourceLocation getAdvancementId()
 		{
 			return new ResourceLocation("");
 		}

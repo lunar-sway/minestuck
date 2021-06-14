@@ -22,7 +22,7 @@ public class DataCheckerManager
 	{
 		if(DataCheckerPermission.hasPermission(player))
 		{
-			CompoundNBT data = createDataTag(SessionHandler.get(player.world));
+			CompoundNBT data = createDataTag(SessionHandler.get(player.level));
 			MSPacketHandler.sendToPlayer(DataCheckerPacket.data(index, data), player);
 		}
 	}

@@ -27,7 +27,7 @@ public abstract class MachineMultiblock implements IItemProvider    //An abstrac
 	//No placed state or states are identical
 	public static final BiPredicate<BlockState, BlockState> BASE_PREDICATE = (state1, state2) -> state1 == null || state1.equals(state2);
 	//The above or states has the same block and direction
-	public static final BiPredicate<BlockState, BlockState> DEFAULT_PREDICATE = BASE_PREDICATE.or((state1, state2) -> state2 != null && state1.getBlock() == state2.getBlock() && state1.get(MachineBlock.FACING) == state2.get(MachineBlock.FACING));
+	public static final BiPredicate<BlockState, BlockState> DEFAULT_PREDICATE = BASE_PREDICATE.or((state1, state2) -> state2 != null && state1.getBlock() == state2.getBlock() && state1.getValue(MachineBlock.FACING) == state2.getValue(MachineBlock.FACING));
 	
 	private final String modId;
 	private final Map<RegistryObject<Block>, Supplier<? extends Block>> registryEntries = new LinkedHashMap<>();
@@ -98,7 +98,7 @@ public abstract class MachineMultiblock implements IItemProvider    //An abstrac
 	public MutableBoundingBox getBoundingBox(Rotation rotation)
 	{
 		MutableBoundingBox bb = new MutableBoundingBox();
-		blockEntries.forEach(entry -> bb.expandTo(new MutableBoundingBox(entry.pos.rotate(rotation), entry.pos.rotate(rotation))));
+		blockEntries.forEach(entry -> bb.expand(new MutableBoundingBox(entry.pos.rotate(rotation), entry.pos.rotate(rotation))));
 		return bb;
 	}
 	
@@ -144,7 +144,7 @@ public abstract class MachineMultiblock implements IItemProvider    //An abstrac
 		{
 			BlockState state = getRotatedState(rotation);
 			if(state != null)
-				world.setBlockState(pos.add(this.pos.rotate(rotation)), state, Constants.BlockFlags.DEFAULT);
+				world.setBlock(pos.offset(this.pos.rotate(rotation)), state, Constants.BlockFlags.DEFAULT);
 		}
 		
 		private boolean matchesWithRotation(IWorld world, BlockPos pos, Rotation rotation)
@@ -153,7 +153,7 @@ public abstract class MachineMultiblock implements IItemProvider    //An abstrac
 			
 			if(stateValidator != null)
 			{
-				BlockState worldState = world.getBlockState(pos.add(this.pos.rotate(rotation)));
+				BlockState worldState = world.getBlockState(pos.offset(this.pos.rotate(rotation)));
 				return stateValidator.test(machineState, worldState);
 			} else return true;
 		}
@@ -165,7 +165,7 @@ public abstract class MachineMultiblock implements IItemProvider    //An abstrac
 		
 		public BlockPos getPos(BlockPos pos, Rotation rotation)
 		{
-			return pos.add(this.pos.rotate(rotation));
+			return pos.offset(this.pos.rotate(rotation));
 		}
 		
 		public BlockPos getZeroPos(BlockPos pos, Rotation rotation)
@@ -191,6 +191,6 @@ public abstract class MachineMultiblock implements IItemProvider    //An abstrac
 	
 	protected static Supplier<BlockState> applyDirection(RegistryObject<Block> regBlock, Direction direction)
 	{
-		return regBlock.lazyMap(block -> block.getDefaultState().with(MachineBlock.FACING, direction));
+		return regBlock.lazyMap(block -> block.defaultBlockState().setValue(MachineBlock.FACING, direction));
 	}
 }

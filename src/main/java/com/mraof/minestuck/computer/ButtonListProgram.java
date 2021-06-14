@@ -51,7 +51,7 @@ public abstract class ButtonListProgram extends ComputerProgram
 			index++;
 		else if(data != null) {
 			if(!screen.te.latestmessage.get(this.getId()).isEmpty())
-				MSPacketHandler.sendToServer(new ClearMessagePacket(screen.te.getPos(), this.getId()));
+				MSPacketHandler.sendToServer(new ClearMessagePacket(screen.te.getBlockPos(), this.getId()));
 			onButtonPressed(screen.te, data.string, data.formatData);
 		}
 		screen.updateGui();
@@ -124,13 +124,13 @@ public abstract class ButtonListProgram extends ComputerProgram
 	@Override
 	public final void paintGui(MatrixStack matrixStack, ComputerScreen gui, ComputerTileEntity te) {
 		Minecraft mc = Minecraft.getInstance();
-		mc.getTextureManager().bindTexture(ComputerScreen.guiBackground);
+		mc.getTextureManager().bind(ComputerScreen.guiBackground);
 		int yOffset = (gui.height / 2) - (ComputerScreen.ySize / 2);
 		gui.blit(matrixStack, (gui.width / 2) - (ComputerScreen.xSize / 2), yOffset, 0, 0, ComputerScreen.xSize, ComputerScreen.ySize);
 		if(te.latestmessage.get(te.programSelected) == null || te.latestmessage.get(te.programSelected).isEmpty())
-			mc.fontRenderer.drawString(matrixStack, message, (gui.width - ComputerScreen.xSize) / 2 + 15, (gui.height - ComputerScreen.ySize) / 2 + 45, 4210752);
+			mc.font.draw(matrixStack, message, (gui.width - ComputerScreen.xSize) / 2 + 15, (gui.height - ComputerScreen.ySize) / 2 + 45, 4210752);
 		else 
-			mc.fontRenderer.drawString(matrixStack, I18n.format(te.latestmessage.get(te.programSelected)), (gui.width - ComputerScreen.xSize) / 2  + 15, (gui.height - ComputerScreen.ySize) / 2 + 45, 4210752);
+			mc.font.draw(matrixStack, I18n.get(te.latestmessage.get(te.programSelected)), (gui.width - ComputerScreen.xSize) / 2  + 15, (gui.height - ComputerScreen.ySize) / 2 + 45, 4210752);
 	}
 	
 	/**
@@ -147,7 +147,7 @@ public abstract class ButtonListProgram extends ComputerProgram
 		}
 		
 		public String translate() {
-			return I18n.format(string, formatData);
+			return I18n.get(string, formatData);
 		}
 		
 		public ITextComponent asTextComponent()

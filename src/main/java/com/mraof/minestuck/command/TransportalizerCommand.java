@@ -32,8 +32,8 @@ public class TransportalizerCommand
 	
 	public static void register(CommandDispatcher<CommandSource> dispatcher)
 	{
-		dispatcher.register(Commands.literal("tpz").requires(commandSource -> commandSource.hasPermissionLevel(2))
-				.then(Commands.argument("code", StringArgumentType.word()).executes(context -> teleport(context.getSource(), Collections.singleton(context.getSource().assertIsEntity()), StringArgumentType.getString(context, "code")))
+		dispatcher.register(Commands.literal("tpz").requires(commandSource -> commandSource.hasPermission(2))
+				.then(Commands.argument("code", StringArgumentType.word()).executes(context -> teleport(context.getSource(), Collections.singleton(context.getSource().getEntityOrException()), StringArgumentType.getString(context, "code")))
 				.then(Commands.argument("targets", EntityArgument.entities()).executes(context -> teleport(context.getSource(), EntityArgument.getEntities(context, "targets"), StringArgumentType.getString(context, "code"))))));
 	}
 	
@@ -43,28 +43,28 @@ public class TransportalizerCommand
 		if(destination == null)
 			throw NOT_FOUND_EXCEPTION.create(code);
 		
-		ServerWorld world = source.getServer().getWorld(destination.getDimension());
+		ServerWorld world = source.getServer().getLevel(destination.dimension());
 		
-		if(world == null || world.getBlockState(destination.getPos()).getBlock() != MSBlocks.TRANSPORTALIZER)
+		if(world == null || world.getBlockState(destination.pos()).getBlock() != MSBlocks.TRANSPORTALIZER)
 			throw NOT_FOUND_EXCEPTION.create(code);
 		
-		if(TransportalizerTileEntity.isBlocked(world, destination.getPos()))
+		if(TransportalizerTileEntity.isBlocked(world, destination.pos()))
 			throw BLOCKED_EXCEPTION.create();
 		
 		int count = 0;
 		for(Entity entity : entities)
 		{
-			Entity newEntity = Teleport.teleportEntity(entity, world, destination.getPos().getX() + 0.5, destination.getPos().getY() + 0.6, destination.getPos().getZ() + 0.5, entity.rotationYaw, entity.rotationPitch);
+			Entity newEntity = Teleport.teleportEntity(entity, world, destination.pos().getX() + 0.5, destination.pos().getY() + 0.6, destination.pos().getZ() + 0.5, entity.yRot, entity.xRot);
 			if(newEntity != null)
 			{
 				newEntity.setPortalCooldown();
 				count++;
-			} else source.sendErrorMessage(new TranslationTextComponent(FAILURE, entity.getDisplayName()));
+			} else source.sendFailure(new TranslationTextComponent(FAILURE, entity.getDisplayName()));
 		}
 		
 		if(count == 0)
 			throw RESULT_EXCEPTION.create();
-		else source.sendFeedback(new TranslationTextComponent(RESULT, count), true);
+		else source.sendSuccess(new TranslationTextComponent(RESULT, count), true);
 		
 		return count;
 	}

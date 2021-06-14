@@ -20,7 +20,7 @@ public class SmallRuinStructure extends Structure<NoFeatureConfig>
 	}
 	
 	@Override
-	public GenerationStage.Decoration getDecorationStage()
+	public GenerationStage.Decoration step()
 	{
 		return GenerationStage.Decoration.SURFACE_STRUCTURES;
 	}
@@ -32,7 +32,7 @@ public class SmallRuinStructure extends Structure<NoFeatureConfig>
 	}
 	
 	@Override
-	public String getStructureName()
+	public String getFeatureName()
 	{
 		return Minestuck.MOD_ID + ":small_ruin";
 	}
@@ -44,11 +44,11 @@ public class SmallRuinStructure extends Structure<NoFeatureConfig>
 		}
 		
 		@Override
-		public void func_230364_a_(DynamicRegistries registries, ChunkGenerator generator, TemplateManager templates, int chunkX, int chunkZ, Biome biome, NoFeatureConfig config)
+		public void generatePieces(DynamicRegistries registries, ChunkGenerator generator, TemplateManager templates, int chunkX, int chunkZ, Biome biome, NoFeatureConfig config)
 		{
-			SmallRuinPiece piece = new SmallRuinPiece(rand, chunkX * 16 + rand.nextInt(16), chunkZ * 16 + rand.nextInt(16), 0.5F);
-			components.add(piece);
-			recalculateStructureSize();
+			SmallRuinPiece piece = new SmallRuinPiece(random, chunkX * 16 + random.nextInt(16), chunkZ * 16 + random.nextInt(16), 0.5F);
+			pieces.add(piece);
+			calculateBoundingBox();
 		}
 	}
 }

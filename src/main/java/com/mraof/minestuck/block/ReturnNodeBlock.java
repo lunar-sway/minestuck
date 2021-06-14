@@ -24,8 +24,8 @@ public class ReturnNodeBlock extends GateBlock
 			for(int z = -1; z <= 0; z++)
 				if(x != 0 || z != 0)
 				{
-					BlockState block = world.getBlockState(pos.add(x, 0, z));
-					if(block.getBlock() != this || block.get(MAIN))
+					BlockState block = world.getBlockState(pos.offset(x, 0, z));
+					if(block.getBlock() != this || block.getValue(MAIN))
 						return false;
 				}
 		
@@ -39,9 +39,9 @@ public class ReturnNodeBlock extends GateBlock
 			for(int z = 0; z <= 1; z++)
 				if(x != 0 || z != 0)
 				{
-					BlockState block = world.getBlockState(pos.add(x, 0, z));
-					if(block.getBlock() == this && block.get(MAIN))
-						return pos.add(x, 0, z);
+					BlockState block = world.getBlockState(pos.offset(x, 0, z));
+					if(block.getBlock() == this && block.getValue(MAIN))
+						return pos.offset(x, 0, z);
 				}
 		
 		return null;
@@ -52,20 +52,20 @@ public class ReturnNodeBlock extends GateBlock
 	{
 		for(int x = -1; x <= 0; x++)
 			for(int z = -1; z <= 0; z++)
-				if(world.getBlockState(pos.add(x, 0, z)).getBlock() == this)
-					world.removeBlock(pos.add(x, 0, z), false);
+				if(world.getBlockState(pos.offset(x, 0, z)).getBlock() == this)
+					world.removeBlock(pos.offset(x, 0, z), false);
 	}
 	
 	public static void placeReturnNode(IWorld world, BlockPos nodePos, @Nullable MutableBoundingBox boundingBox)
 	{
 		for(int i = 0; i < 4; i++)
 		{
-			BlockPos pos = nodePos.add(i % 2, 0, i/2);
-			if(boundingBox == null || boundingBox.isVecInside(pos))
+			BlockPos pos = nodePos.offset(i % 2, 0, i/2);
+			if(boundingBox == null || boundingBox.isInside(pos))
 			{
 				if(i == 3)
-					world.setBlockState(pos, MSBlocks.RETURN_NODE.getDefaultState().with(GateBlock.MAIN, true), Constants.BlockFlags.BLOCK_UPDATE);
-				else world.setBlockState(pos, MSBlocks.RETURN_NODE.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
+					world.setBlock(pos, MSBlocks.RETURN_NODE.defaultBlockState().setValue(GateBlock.MAIN, true), Constants.BlockFlags.BLOCK_UPDATE);
+				else world.setBlock(pos, MSBlocks.RETURN_NODE.defaultBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
 			}
 		}
 	}

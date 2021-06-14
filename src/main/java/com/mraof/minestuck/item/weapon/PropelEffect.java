@@ -30,9 +30,9 @@ public class PropelEffect implements ItemRightClickEffect
 	@Override
 	public ActionResult<ItemStack> onRightClick(World world, PlayerEntity player, Hand hand)
 	{
-		ItemStack itemStack = player.getHeldItem(hand);
+		ItemStack itemStack = player.getItemInHand(hand);
 		propelAction(player, itemStack, getVelocityMod(), hand);
-		return ActionResult.resultPass(itemStack);
+		return ActionResult.pass(itemStack);
 	}
 	
 	private double getVelocityMod()
@@ -43,33 +43,33 @@ public class PropelEffect implements ItemRightClickEffect
 	void propelAction(PlayerEntity player, ItemStack stack, double velocity, Hand hand)
 	{
 		Title title = null;
-		if(player.world.isRemote)
+		if(player.level.isClientSide)
 		{
 			title = ClientPlayerData.getTitle();
 		} else if(player instanceof ServerPlayerEntity)
 		{
 			title = PlayerSavedData.getData((ServerPlayerEntity) player).getTitle();
-			if(player.getCooldownTracker().getCooldown(stack.getItem(), 1F) <= 0 && title != null && title.getHeroAspect() == aspect)
-				propelActionSound(player.world, player);
+			if(player.getCooldowns().getCooldownPercent(stack.getItem(), 1F) <= 0 && title != null && title.getHeroAspect() == aspect)
+				propelActionSound(player.level, player);
 		}
 		
 		if(title != null && title.getHeroAspect() == aspect)
 		{
-			Vector3d lookVec = player.getLookVec().scale(velocity);
-			if(player.isElytraFlying())
+			Vector3d lookVec = player.getLookAngle().scale(velocity);
+			if(player.isFallFlying())
 			{
 				lookVec = lookVec.scale(velocity / 12D);
 			}
-			player.addVelocity(lookVec.x, lookVec.y * 0.4D, lookVec.z);
+			player.push(lookVec.x, lookVec.y * 0.4D, lookVec.z);
 			
 			player.swing(hand, true);
-			player.getCooldownTracker().setCooldown(stack.getItem(), 100);
-			stack.damageItem(4, player, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
+			player.getCooldowns().addCooldown(stack.getItem(), 100);
+			stack.hurtAndBreak(4, player, playerEntity -> playerEntity.broadcastBreakEvent(Hand.MAIN_HAND));
 		}
 	}
 	
 	void propelActionSound(World world, PlayerEntity player)
 	{
-		world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ITEM_TRIDENT_RIPTIDE_2, SoundCategory.PLAYERS, 1.75F, 1.6F);
+		world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.TRIDENT_RIPTIDE_2, SoundCategory.PLAYERS, 1.75F, 1.6F);
 	}
 }

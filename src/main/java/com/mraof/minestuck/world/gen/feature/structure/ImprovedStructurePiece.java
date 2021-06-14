@@ -35,25 +35,25 @@ public abstract class ImprovedStructurePiece extends StructurePiece
 	
 	protected void generateDoor(ISeedReader worldIn, MutableBoundingBox sbb, Random rand, int x, int y, int z, Direction direction, Block door, DoorHingeSide hinge)
 	{
-		BlockState state = door.getDefaultState().with(DoorBlock.FACING, direction).with(DoorBlock.HINGE, hinge);
-		setBlockState(worldIn, state, x, y, z, sbb);
-		setBlockState(worldIn, state.with(DoorBlock.HALF, DoubleBlockHalf.UPPER), x, y + 1, z, sbb);
+		BlockState state = door.defaultBlockState().setValue(DoorBlock.FACING, direction).setValue(DoorBlock.HINGE, hinge);
+		placeBlock(worldIn, state, x, y, z, sbb);
+		placeBlock(worldIn, state.setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER), x, y + 1, z, sbb);
 	}
 	
 	protected void generateBed(ISeedReader worldIn, MutableBoundingBox sbb, Random rand, int x, int y, int z, Direction direction, BlockState state)
 	{
-		state = state.with(BedBlock.HORIZONTAL_FACING, direction);
-		setBlockState(worldIn, state, x, y, z, sbb);
-		setBlockState(worldIn, state.with(BedBlock.PART, BedPart.HEAD), x + direction.getXOffset(), y, z + direction.getZOffset(), sbb);
+		state = state.setValue(BedBlock.FACING, direction);
+		placeBlock(worldIn, state, x, y, z, sbb);
+		placeBlock(worldIn, state.setValue(BedBlock.PART, BedPart.HEAD), x + direction.getStepX(), y, z + direction.getStepZ(), sbb);
 	}
 	
 	protected void placeReturnNode(IWorld world, MutableBoundingBox boundingBox, int x, int y, int z)
 	{
-		int posX = getXWithOffset(x, z), posY = getYWithOffset(y), posZ = getZWithOffset(x, z);
+		int posX = getWorldX(x, z), posY = getWorldY(y), posZ = getWorldZ(x, z);
 		
-		if(getCoordBaseMode() == Direction.NORTH || getCoordBaseMode() == Direction.WEST)
+		if(getOrientation() == Direction.NORTH || getOrientation() == Direction.WEST)
 			posX--;
-		if(getCoordBaseMode() == Direction.NORTH || getCoordBaseMode() == Direction.EAST)
+		if(getOrientation() == Direction.NORTH || getOrientation() == Direction.EAST)
 			posZ--;
 		
 		ReturnNodeBlock.placeReturnNode(world, new BlockPos(posX, posY, posZ), boundingBox);
@@ -65,16 +65,16 @@ public abstract class ImprovedStructurePiece extends StructurePiece
 		int j = 0;
 		BlockPos.Mutable mutablePos = new BlockPos.Mutable();
 		
-		for (int k = boundingBox.minZ; k <= boundingBox.maxZ; ++k)
+		for (int k = boundingBox.z0; k <= boundingBox.z1; ++k)
 		{
-			for (int l = boundingBox.minX; l <= boundingBox.maxX; ++l)
+			for (int l = boundingBox.x0; l <= boundingBox.x1; ++l)
 			{
-				mutablePos.setPos(l, 64, k);
+				mutablePos.set(l, 64, k);
 				
-				if (structurebb.isVecInside(mutablePos))
+				if (structurebb.isInside(mutablePos))
 				{
-					i += Math.max(worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, mutablePos).getY(),
-							chunkGeneratorIn.getGroundHeight() - 1);
+					i += Math.max(worldIn.getHeightmapPos(Heightmap.Type.WORLD_SURFACE_WG, mutablePos).getY(),
+							chunkGeneratorIn.getSpawnHeight() - 1);
 					++j;
 				}
 			}
@@ -90,44 +90,44 @@ public abstract class ImprovedStructurePiece extends StructurePiece
 	}
 	
 	@Override
-	protected int getXWithOffset(int x, int z)
+	protected int getWorldX(int x, int z)
 	{
-		Direction direction = getCoordBaseMode();
+		Direction direction = getOrientation();
 		
 		if (direction == null)
 			return x;
 		else switch (direction)
 		{
 			case NORTH:
-				return boundingBox.maxX - x;
+				return boundingBox.x1 - x;
 			case SOUTH:
-				return boundingBox.minX + x;
+				return boundingBox.x0 + x;
 			case WEST:
-				return boundingBox.maxX - z;
+				return boundingBox.x1 - z;
 			case EAST:
-				return boundingBox.minX + z;
+				return boundingBox.x0 + z;
 			default:
 				return x;
 		}
 	}
 	
 	@Override
-	protected int getZWithOffset(int x, int z)
+	protected int getWorldZ(int x, int z)
 	{
-		Direction direction = getCoordBaseMode();
+		Direction direction = getOrientation();
 		
 		if (direction == null)
 			return z;
 		else switch (direction)
 		{
 			case NORTH:
-				return boundingBox.maxZ - z;
+				return boundingBox.z1 - z;
 			case SOUTH:
-				return boundingBox.minZ + z;
+				return boundingBox.z0 + z;
 			case WEST:
-				return boundingBox.minZ + x;
+				return boundingBox.z0 + x;
 			case EAST:
-				return boundingBox.maxZ - x;
+				return boundingBox.z1 - x;
 			default:
 				return z;
 		}
@@ -140,13 +140,13 @@ public abstract class ImprovedStructurePiece extends StructurePiece
 	
 	
 	@Override
-	protected void setBlockState(ISeedReader worldIn, BlockState blockstateIn, int x, int y, int z, MutableBoundingBox boundingboxIn)
+	protected void placeBlock(ISeedReader worldIn, BlockState blockstateIn, int x, int y, int z, MutableBoundingBox boundingboxIn)
 	{
-		BlockPos blockpos = new BlockPos(getXWithOffset(x, z), getYWithOffset(y), getZWithOffset(x, z));
+		BlockPos blockpos = new BlockPos(getWorldX(x, z), getWorldY(y), getWorldZ(x, z));
 		
-		if (boundingboxIn.isVecInside(blockpos))
+		if (boundingboxIn.isInside(blockpos))
 		{
-			Direction direction = getCoordBaseMode();
+			Direction direction = getOrientation();
 			switch(direction)
 			{
 				case NORTH:
@@ -161,14 +161,14 @@ public abstract class ImprovedStructurePiece extends StructurePiece
 				default:
 			}
 			
-			worldIn.setBlockState(blockpos, blockstateIn, Constants.BlockFlags.BLOCK_UPDATE);
+			worldIn.setBlock(blockpos, blockstateIn, Constants.BlockFlags.BLOCK_UPDATE);
 			
 			FluidState ifluidstate = worldIn.getFluidState(blockpos);
 			if(!ifluidstate.isEmpty())
-				worldIn.getPendingFluidTicks().scheduleTick(blockpos, ifluidstate.getFluid(), 0);
+				worldIn.getLiquidTicks().scheduleTick(blockpos, ifluidstate.getType(), 0);
 			
 			if(needPostprocessing(blockstateIn.getBlock()))
-				worldIn.getChunk(blockpos).markBlockForPostprocessing(blockpos);
+				worldIn.getChunk(blockpos).markPosForPostprocessing(blockpos);
 		}
 	}
 }

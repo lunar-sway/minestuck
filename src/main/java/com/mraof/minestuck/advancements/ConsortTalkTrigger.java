@@ -23,15 +23,15 @@ public class ConsortTalkTrigger extends AbstractCriterionTrigger<ConsortTalkTrig
 	}
 	
 	@Override
-	protected Instance deserializeTrigger(JsonObject json, EntityPredicate.AndPredicate predicate, ConditionArrayParser conditionsParser)
+	protected Instance createInstance(JsonObject json, EntityPredicate.AndPredicate predicate, ConditionArrayParser conditionsParser)
 	{
-		String message = json.has("message") ? JSONUtils.getString(json, "message") : null;
+		String message = json.has("message") ? JSONUtils.getAsString(json, "message") : null;
 		return new Instance(predicate, message);
 	}
 	
 	public void trigger(ServerPlayerEntity player, String message, ConsortEntity consort)
 	{
-		triggerListeners(player, instance -> instance.test(message));
+		trigger(player, instance -> instance.test(message));
 	}
 	
 	public static class Instance extends CriterionInstance
@@ -50,7 +50,7 @@ public class ConsortTalkTrigger extends AbstractCriterionTrigger<ConsortTalkTrig
 		
 		public static Instance forMessage(String message)
 		{
-			return new Instance(EntityPredicate.AndPredicate.ANY_AND, message);
+			return new Instance(EntityPredicate.AndPredicate.ANY, message);
 		}
 		
 		public boolean test(String message)
@@ -59,9 +59,9 @@ public class ConsortTalkTrigger extends AbstractCriterionTrigger<ConsortTalkTrig
 		}
 		
 		@Override
-		public JsonObject serialize(ConditionArraySerializer conditions)
+		public JsonObject serializeToJson(ConditionArraySerializer conditions)
 		{
-			JsonObject json = super.serialize(conditions);
+			JsonObject json = super.serializeToJson(conditions);
 			if(message != null)
 				json.addProperty("message", message);
 			

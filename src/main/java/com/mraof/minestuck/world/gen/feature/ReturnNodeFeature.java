@@ -20,9 +20,9 @@ public class ReturnNodeFeature extends Feature<NoFeatureConfig>
 	}
 	
 	@Override
-	public boolean generate(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
+	public boolean place(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
 	{
-		for(; !World.isOutsideBuildHeight(pos); pos = pos.up())
+		for(; !World.isOutsideBuildHeight(pos); pos = pos.above())
 		{
 			if(isAreaClear(world, pos))
 			{
@@ -37,8 +37,8 @@ public class ReturnNodeFeature extends Feature<NoFeatureConfig>
 	{
 		for(int i = 0; i < 4; i++)
 		{
-			BlockPos blockPos = pos.add(i % 2, 0, i / 2);
-			if(world.getBlockState(blockPos).isSolid())
+			BlockPos blockPos = pos.offset(i % 2, 0, i / 2);
+			if(world.getBlockState(blockPos).canOcclude())
 				return false;
 		}
 		return true;

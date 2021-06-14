@@ -39,9 +39,9 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 		for(T art : getArtSet())
 		{
 			this.art = art;
-			this.updateFacingWithBoundingBox(direction);
+			this.setDirection(direction);
 			
-			if(this.onValidSurface())
+			if(this.survives())
 			{
 				artList.add(art);
 				maxValidSize = Math.max(maxValidSize, art.getSizeX() * art.getSizeY());
@@ -53,10 +53,10 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 		artList.removeIf(art -> art.getSizeX() * art.getSizeY() < maxSize);
 		
 		if(!artList.isEmpty())
-				this.art = artList.get(this.rand.nextInt(artList.size()));
+				this.art = artList.get(this.random.nextInt(artList.size()));
 		
 		
-		this.updateFacingWithBoundingBox(direction);
+		this.setDirection(direction);
 	}
 	
 	public HangingArtEntity(EntityType<? extends HangingArtEntity<T>> type, World worldIn, BlockPos pos, Direction direction, String title)
@@ -72,18 +72,18 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 			}
 		}
 		
-		this.updateFacingWithBoundingBox(direction);
+		this.setDirection(direction);
 	}
 	
 	@Override
-	public void writeAdditional(CompoundNBT compound)
+	public void addAdditionalSaveData(CompoundNBT compound)
 	{
-		super.writeAdditional(compound);
+		super.addAdditionalSaveData(compound);
 		compound.putString("Motive", this.art.getTitle());
 	}
 	
 	@Override
-	public void readAdditional(CompoundNBT compound)
+	public void readAdditionalSaveData(CompoundNBT compound)
 	{
 		String s = compound.getString("Motive");
 		
@@ -97,72 +97,72 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 		if(this.art == null)
 		{
 			this.art = this.getDefault();
-			Debug.warnf("Could not load art %s for type %s, resorting to the default type.", s, this.getType().getTranslationKey());
+			Debug.warnf("Could not load art %s for type %s, resorting to the default type.", s, this.getType().getDescriptionId());
 		}
-		super.readAdditional(compound);
-		updateBoundingBox();	//Fixes a vanilla-related bug where pos and bb isn't updated when loaded from nbt
+		super.readAdditionalSaveData(compound);
+		recalculateBoundingBox();	//Fixes a vanilla-related bug where pos and bb isn't updated when loaded from nbt
 	}
 	
 	@Override
-	public int getWidthPixels()
+	public int getWidth()
 	{
 		return art == null ? 1 : art.getSizeX();
 	}
 	
 	@Override
-	public int getHeightPixels()
+	public int getHeight()
 	{
 		return art == null ? 1 : art.getSizeY();
 	}
 	
 	@Override
-	public void onBroken(Entity brokenEntity)
+	public void dropItem(Entity brokenEntity)
 	{
-		if(this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS))
+		if(this.level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS))
 		{
-			this.playSound(SoundEvents.ENTITY_PAINTING_BREAK, 1.0F, 1.0F);
+			this.playSound(SoundEvents.PAINTING_BREAK, 1.0F, 1.0F);
 			
 			if(brokenEntity instanceof PlayerEntity)
 			{
 				PlayerEntity entityplayer = (PlayerEntity) brokenEntity;
 				
-				if(entityplayer.abilities.isCreativeMode)
+				if(entityplayer.abilities.instabuild)
 					return;
 			}
 			
-			this.entityDropItem(this.getStackDropped());
+			this.spawnAtLocation(this.getStackDropped());
 		}
 			
 	}
 	
 	@Override
-	public void playPlaceSound()
+	public void playPlacementSound()
 	{
-		this.playSound(SoundEvents.ENTITY_PAINTING_PLACE, 1.0F, 1.0F);
+		this.playSound(SoundEvents.PAINTING_PLACE, 1.0F, 1.0F);
 	}
 	
 	@Override
-	public void setLocationAndAngles(double x, double y, double z, float yaw, float pitch)
+	public void moveTo(double x, double y, double z, float yaw, float pitch)
 	{
-		this.setPosition(x, y, z);
+		this.setPos(x, y, z);
 	}
 	
 	@Override
-	public void setPositionAndRotationDirect(double x, double y, double z, float yaw, float pitch, int posRotationIncrements,
+	public void lerpTo(double x, double y, double z, float yaw, float pitch, int posRotationIncrements,
 			boolean teleport)
 	{
-		BlockPos blockpos = this.hangingPosition.add(x - this.getPosX(), y - this.getPosY(), z - this.getPosZ());
-		this.setPosition((double) blockpos.getX(), (double) blockpos.getY(), (double) blockpos.getZ());
+		BlockPos blockpos = this.pos.offset(x - this.getX(), y - this.getY(), z - this.getZ());
+		this.setPos((double) blockpos.getX(), (double) blockpos.getY(), (double) blockpos.getZ());
 	}
 	
 	@Override
 	public void writeSpawnData(PacketBuffer buffer)
 	{
-		buffer.writeByte(this.facingDirection.ordinal());
+		buffer.writeByte(this.direction.ordinal());
 		
-		buffer.writeInt(this.hangingPosition.getX());
-		buffer.writeInt(this.hangingPosition.getY());
-		buffer.writeInt(this.hangingPosition.getZ());
+		buffer.writeInt(this.pos.getX());
+		buffer.writeInt(this.pos.getY());
+		buffer.writeInt(this.pos.getZ());
 		
 		String name = art.getTitle();
 		buffer.writeInt(name.length());
@@ -175,7 +175,7 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 	{
 		Direction facing = Direction.values()[data.readByte()%Direction.values().length];
 		
-		this.hangingPosition = new BlockPos(data.readInt(), data.readInt(), data.readInt());
+		this.pos = new BlockPos(data.readInt(), data.readInt(), data.readInt());
 		
 		int length = data.readInt();
 		StringBuilder str = new StringBuilder();
@@ -190,11 +190,11 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 				break;
 			}
 		
-		this.updateFacingWithBoundingBox(facing);
+		this.setDirection(facing);
 	}
 	
 	@Override
-	public IPacket<?> createSpawnPacket()
+	public IPacket<?> getAddEntityPacket()
 	{
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
@@ -216,5 +216,5 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 		int getOffsetY();
 	}
 
-	public Direction getFacingDirection() {return facingDirection;}
+	public Direction getFacingDirection() {return direction;}
 }

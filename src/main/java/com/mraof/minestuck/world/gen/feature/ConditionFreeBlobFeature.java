@@ -21,7 +21,7 @@ public class ConditionFreeBlobFeature extends Feature<BlockStateFeatureConfig>
 	}
 	
 	@Override
-	public boolean generate(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, BlockStateFeatureConfig config)
+	public boolean place(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, BlockStateFeatureConfig config)
 	{
 		final int startRadius = 0;
 		for (int i1 = 0; i1 < 3; i1++)
@@ -30,17 +30,17 @@ public class ConditionFreeBlobFeature extends Feature<BlockStateFeatureConfig>
 			int ySize = startRadius + rand.nextInt(2);
 			int zSize = startRadius + rand.nextInt(2);
 			float f = (float)(xSize + ySize + zSize) * 0.333F + 0.5F;
-			Iterator<BlockPos> iterator = BlockPos.getAllInBox(pos.add(-xSize, -ySize, -zSize), pos.add(xSize, ySize, zSize)).iterator();
+			Iterator<BlockPos> iterator = BlockPos.betweenClosedStream(pos.offset(-xSize, -ySize, -zSize), pos.offset(xSize, ySize, zSize)).iterator();
 			
 			while (iterator.hasNext())
 			{
 				BlockPos blockpos1 = iterator.next();
 				
-				if (blockpos1.distanceSq(pos) <= (double)(f * f))
-					setBlockState(world, blockpos1, config.state);
+				if (blockpos1.distSqr(pos) <= (double)(f * f))
+					setBlock(world, blockpos1, config.state);
 			}
 			
-			pos = pos.add(-(startRadius + 1) + rand.nextInt(2 + startRadius * 2), 0 - rand.nextInt(2), -(startRadius + 1) + rand.nextInt(2 + startRadius * 2));
+			pos = pos.offset(-(startRadius + 1) + rand.nextInt(2 + startRadius * 2), 0 - rand.nextInt(2), -(startRadius + 1) + rand.nextInt(2 + startRadius * 2));
 		}
 		
 		return true;

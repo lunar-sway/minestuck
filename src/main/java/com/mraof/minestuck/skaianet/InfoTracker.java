@@ -98,7 +98,7 @@ public final class InfoTracker
 		
 		if(cannotAccess(player, p1))
 		{
-			player.sendMessage(new StringTextComponent("[Minestuck] ").mergeStyle(TextFormatting.RED).appendSibling(new TranslationTextComponent(SkaianetHandler.PRIVATE_COMPUTER)), Util.DUMMY_UUID);
+			player.sendMessage(new StringTextComponent("[Minestuck] ").withStyle(TextFormatting.RED).append(new TranslationTextComponent(SkaianetHandler.PRIVATE_COMPUTER)), Util.NIL_UUID);
 			return;
 		}
 		if(!getSet(p1).add(p0))
@@ -132,7 +132,7 @@ public final class InfoTracker
 		if(c.isMain() && dimensionType != null && !checked.contains(dimensionType))
 		{
 			LinkedList<ResourceLocation> chain = new LinkedList<>();
-			chain.add(c.getClientDimension().getLocation());
+			chain.add(c.getClientDimension().location());
 			checked.add(c.getClientDimension());
 			SburbConnection cIter = c;
 			while(true)
@@ -142,7 +142,7 @@ public final class InfoTracker
 				{
 					if(!checked.contains(cIter.getClientDimension()))
 					{
-						chain.addLast(cIter.getClientDimension().getLocation());
+						chain.addLast(cIter.getClientDimension().location());
 						checked.add(cIter.getClientDimension());
 					} else break;
 				} else
@@ -157,7 +157,7 @@ public final class InfoTracker
 				cIter = skaianet.getPrimaryConnection(cIter.getServerIdentifier(), true).orElse(null);
 				if(cIter != null && cIter.hasEntered() && !checked.contains(cIter.getClientDimension()))
 				{
-					chain.addFirst(cIter.getClientDimension().getLocation());
+					chain.addFirst(cIter.getClientDimension().location());
 					checked.add(cIter.getClientDimension());
 				} else
 				{
@@ -250,6 +250,6 @@ public final class InfoTracker
 	private boolean cannotAccess(ServerPlayerEntity listener, PlayerIdentifier identifier)
 	{
 		return listener == null || (MinestuckConfig.SERVER.privateComputers.get() && !identifier.appliesTo(listener)
-				&& !listener.hasPermissionLevel(2));
+				&& !listener.hasPermissions(2));
 	}
 }

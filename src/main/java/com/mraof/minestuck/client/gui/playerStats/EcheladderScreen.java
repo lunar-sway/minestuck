@@ -120,7 +120,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 		
 		RenderSystem.color3f(1,1,1);
 		
-		this.mc.getTextureManager().bindTexture(guiEcheladder);
+		this.mc.getTextureManager().bind(guiEcheladder);
 		this.blit(matrixStack, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 
 		this.blit(matrixStack, xOffset + 80, yOffset + 42 + (int) (130*(1 - scrollIndex/(float) MAX_SCROLL)), 0, 243, 7, 13);
@@ -150,7 +150,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 	
 	private void drawLadder(MatrixStack matrixStack, int currentRung, boolean showLastRung)
 	{
-		this.mc.getTextureManager().bindTexture(guiEcheladder);
+		this.mc.getTextureManager().bind(guiEcheladder);
 		int scroll = scrollIndex % 14;
 		for(int i = 0; i < rows; i++)
 			blit(matrixStack, xOffset + 90, yOffset + 175 + scroll - i*14, 7, 242, 146, 14);
@@ -182,8 +182,8 @@ public class EcheladderScreen extends PlayerStatsScreen
 				fill(matrixStack, xOffset + 90, y + 10, xOffset + 90 + (int)(146* ClientPlayerData.getRungProgress()), y + 12, bg);
 			} else rand.nextInt(0xFFFFFF);
 			
-			String s = I18n.hasKey("echeladder.rung."+rung) ? I18n.format("echeladder.rung."+rung) : "Rung "+(rung+1);
-			mc.fontRenderer.drawString(matrixStack, s, xOffset+ladderXOffset - mc.fontRenderer.getStringWidth(s) / 2, y + 2, textColor);
+			String s = I18n.exists("echeladder.rung."+rung) ? I18n.get("echeladder.rung."+rung) : "Rung "+(rung+1);
+			mc.font.draw(matrixStack, s, xOffset+ladderXOffset - mc.font.width(s) / 2, y + 2, textColor);
 		}
 	}
 	
@@ -191,40 +191,40 @@ public class EcheladderScreen extends PlayerStatsScreen
 	private ITextComponent drawEffectIconsAndText(MatrixStack matrixStack, int currentRung, int mouseX, int mouseY)
 	{
 		boolean gristLimit = true;
-		PotionSpriteUploader sprites = this.minecraft.getPotionSpriteUploader();
-		TextureAtlasSprite strengthSprite = sprites.getSprite(Effects.STRENGTH);
-		TextureAtlasSprite healthSprite = sprites.getSprite(Effects.HEALTH_BOOST);
+		PotionSpriteUploader sprites = this.minecraft.getMobEffectTextures();
+		TextureAtlasSprite strengthSprite = sprites.get(Effects.DAMAGE_BOOST);
+		TextureAtlasSprite healthSprite = sprites.get(Effects.HEALTH_BOOST);
 		
-		minecraft.getTextureManager().bindTexture(strengthSprite.getAtlasTexture().getTextureLocation());
+		minecraft.getTextureManager().bind(strengthSprite.atlas().location());
 		blit(matrixStack, xOffset + 5, yOffset + 30, getBlitOffset(), 18, 18, strengthSprite);
-		minecraft.getTextureManager().bindTexture(healthSprite.getAtlasTexture().getTextureLocation());
+		minecraft.getTextureManager().bind(healthSprite.atlas().location());
 		blit(matrixStack, xOffset + 5, yOffset + 84, getBlitOffset(), 18, 18, healthSprite);
-		this.mc.getTextureManager().bindTexture(PlayerStatsScreen.icons);
+		this.mc.getTextureManager().bind(PlayerStatsScreen.icons);
 		this.blit(matrixStack, xOffset + 6, yOffset + 139, 48, 64, 16, 16);
 		this.blit(matrixStack, xOffset + 5, yOffset + 7, 238, 16, 18, 18);
 		
 		String msg = title.getString();
-		mc.fontRenderer.drawString(matrixStack, msg, xOffset + 168 - mc.fontRenderer.getStringWidth(msg)/2F, yOffset + 12, 0x404040);
+		mc.font.draw(matrixStack, msg, xOffset + 168 - mc.font.width(msg)/2F, yOffset + 12, 0x404040);
 		
 		int attack = (int) Math.round(100*(1 + Echeladder.attackBonus(currentRung)));
-		mc.fontRenderer.drawString(matrixStack, I18n.format(ATTACK), xOffset + 24, yOffset + 30, 0x404040);
-		mc.fontRenderer.drawString(matrixStack, attack+"%", xOffset + 26, yOffset + 39, 0x0094FF);
+		mc.font.draw(matrixStack, I18n.get(ATTACK), xOffset + 24, yOffset + 30, 0x404040);
+		mc.font.draw(matrixStack, attack+"%", xOffset + 26, yOffset + 39, 0x0094FF);
 		
 		double health = mc.player.getMaxHealth()/2;	//10 + Echeladder.healthBoost(currentRung)/2.0;
-		mc.fontRenderer.drawString(matrixStack, I18n.format(HEALTH), xOffset + 24, yOffset + 84, 0x404040);
-		mc.fontRenderer.drawString(matrixStack, String.valueOf(health), xOffset + 26, yOffset + 93, 0x0094FF);
+		mc.font.draw(matrixStack, I18n.get(HEALTH), xOffset + 24, yOffset + 84, 0x404040);
+		mc.font.draw(matrixStack, String.valueOf(health), xOffset + 26, yOffset + 93, 0x0094FF);
 		
-		mc.fontRenderer.drawString(matrixStack, "=", xOffset + 25, yOffset + 12, 0x404040);	//Should this be black, or the same blue as the numbers?
-		mc.fontRenderer.drawString(matrixStack, String.valueOf(ClientPlayerData.getBoondollars()), xOffset + 27 + mc.fontRenderer.getStringWidth("="), yOffset + 12, 0x0094FF);
+		mc.font.draw(matrixStack, "=", xOffset + 25, yOffset + 12, 0x404040);	//Should this be black, or the same blue as the numbers?
+		mc.font.draw(matrixStack, String.valueOf(ClientPlayerData.getBoondollars()), xOffset + 27 + mc.font.width("="), yOffset + 12, 0x0094FF);
 		//mc.fontRenderer.drawString("Rep: " + ClientPlayerData.getConsortReputation(), xOffset + 75 + mc.fontRenderer.getCharWidth('='), yOffset + 12, 0x0094FF);
 		
-		mc.fontRenderer.drawString(matrixStack, I18n.format(CACHE), xOffset + 24, yOffset + 138, 0x404040);
-		mc.fontRenderer.drawString(matrixStack, "Unlimited", xOffset + 26, yOffset + 147, 0x0094FF);
+		mc.font.draw(matrixStack, I18n.get(CACHE), xOffset + 24, yOffset + 138, 0x404040);
+		mc.font.draw(matrixStack, "Unlimited", xOffset + 26, yOffset + 147, 0x0094FF);
 		
-		if(mouseY >= yOffset + 39 && mouseY < yOffset + 39 + mc.fontRenderer.FONT_HEIGHT && mouseX >= xOffset + 26 && mouseX < xOffset + 26 + mc.fontRenderer.getStringWidth(attack+"%"))
-			return new TranslationTextComponent(DAMAGE_UNDERLING).appendString("\n" + Math.round(attack*Echeladder.getUnderlingDamageModifier(currentRung)) + "%");
-		if(mouseY >= yOffset + 93 && mouseY < yOffset + 93 + mc.fontRenderer.FONT_HEIGHT && mouseX >= xOffset + 26 && mouseX < xOffset + 26 + mc.fontRenderer.getStringWidth(String.valueOf(health)))
-			return new TranslationTextComponent(PROTECTION_UNDERLING).appendString("\n" + String.format("%.1f", 100*Echeladder.getUnderlingProtectionModifier(currentRung))+"%");
+		if(mouseY >= yOffset + 39 && mouseY < yOffset + 39 + mc.font.lineHeight && mouseX >= xOffset + 26 && mouseX < xOffset + 26 + mc.font.width(attack+"%"))
+			return new TranslationTextComponent(DAMAGE_UNDERLING).append("\n" + Math.round(attack*Echeladder.getUnderlingDamageModifier(currentRung)) + "%");
+		if(mouseY >= yOffset + 93 && mouseY < yOffset + 93 + mc.font.lineHeight && mouseX >= xOffset + 26 && mouseX < xOffset + 26 + mc.font.width(String.valueOf(health)))
+			return new TranslationTextComponent(PROTECTION_UNDERLING).append("\n" + String.format("%.1f", 100*Echeladder.getUnderlingProtectionModifier(currentRung))+"%");
 		return null;
 	}
 	
@@ -238,24 +238,24 @@ public class EcheladderScreen extends PlayerStatsScreen
 		
 		String str = "+"+(Math.round(100*Echeladder.attackBonus(rung)) - Math.round(100*Echeladder.attackBonus(rung - 1)))+"%!";
 		fill(matrixStack, xOffset + 5 + 32*(index%2), yOffset + 50 + 15*(index/2), xOffset + 35 + 32*(index%2), yOffset + 62 + 15*(index/2), bg);
-		int strX = xOffset + 20 + 32*(index%2) - mc.fontRenderer.getStringWidth(str)/2, strY = yOffset + 52 + 15*(index/2);
-		mc.fontRenderer.drawString(matrixStack, str, strX, strY, textColor);
+		int strX = xOffset + 20 + 32*(index%2) - mc.font.width(str)/2, strY = yOffset + 52 + 15*(index/2);
+		mc.font.draw(matrixStack, str, strX, strY, textColor);
 		
 		double d = (Echeladder.healthBoost(rung) - Echeladder.healthBoost(rung - 1))/2D;
 		str = "+"+(d == 0 ? d : d+"!");
 		fill(matrixStack, xOffset + 5 + 32*(index%2), yOffset + 104 + 15*(index/2), xOffset + 35 + 32*(index%2), yOffset + 116 + 15*(index/2), bg);
-		strX = xOffset + 20 + 32*(index%2) - mc.fontRenderer.getStringWidth(str)/2;
+		strX = xOffset + 20 + 32*(index%2) - mc.font.width(str)/2;
 		strY = yOffset + 106 + 15*(index/2);
-		mc.fontRenderer.drawString(matrixStack, str, strX, strY, textColor);
+		mc.font.draw(matrixStack, str, strX, strY, textColor);
 		
-		if(mouseY >= strY && mouseY < strY + mc.fontRenderer.FONT_HEIGHT && mouseX >= strX && mouseX < strX + mc.fontRenderer.getStringWidth(str))
+		if(mouseY >= strY && mouseY < strY + mc.font.lineHeight && mouseX >= strX && mouseX < strX + mc.font.width(str))
 		{
 			int diff = (int) Math.round(100*Echeladder.attackBonus(rung)*Echeladder.getUnderlingDamageModifier(rung));
 			diff -= Math.round(100*Echeladder.attackBonus(rung - 1)*Echeladder.getUnderlingDamageModifier(rung - 1));
 			return new TranslationTextComponent(DAMAGE_UNDERLING_INCREASE, diff);
 		}
 		
-		if(mouseY >= strY && mouseY < strY + mc.fontRenderer.FONT_HEIGHT && mouseX >= strX && mouseX < strX + mc.fontRenderer.getStringWidth(str))
+		if(mouseY >= strY && mouseY < strY + mc.font.lineHeight && mouseX >= strX && mouseX < strX + mc.font.width(str))
 		{
 			int diff = (int) Math.round(1000*Echeladder.getUnderlingProtectionModifier(rung - 1));
 			diff -= Math.round(1000*Echeladder.getUnderlingProtectionModifier(rung));

@@ -20,12 +20,12 @@ public class CloseSburbConnectionPacket implements PlayToServerPacket
 	
 	public static CloseSburbConnectionPacket asClient(ComputerTileEntity te)
 	{
-		return new CloseSburbConnectionPacket(te.getPos(), true);
+		return new CloseSburbConnectionPacket(te.getBlockPos(), true);
 	}
 	
 	public static CloseSburbConnectionPacket asServer(ComputerTileEntity te)
 	{
-		return new CloseSburbConnectionPacket(te.getPos(), false);
+		return new CloseSburbConnectionPacket(te.getBlockPos(), false);
 	}
 	
 	@Override

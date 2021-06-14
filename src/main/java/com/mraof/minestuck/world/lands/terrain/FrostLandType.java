@@ -32,21 +32,21 @@ public class FrostLandType extends TerrainLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("surface", Blocks.GRASS_BLOCK.getDefaultState());
-		registry.setBlockState("upper", Blocks.DIRT.getDefaultState());
-		registry.setBlockState("structure_primary", Blocks.PRISMARINE.getDefaultState());
-		registry.setBlockState("structure_primary_decorative", Blocks.PRISMARINE_BRICKS.getDefaultState());
-		registry.setBlockState("structure_secondary", MSBlocks.FROST_BRICKS.getDefaultState());
-		registry.setBlockState("structure_secondary_stairs", MSBlocks.FROST_BRICK_STAIRS.getDefaultState());
-		registry.setBlockState("structure_secondary_decorative", MSBlocks.CHISELED_FROST_BRICKS.getDefaultState());
-		registry.setBlockState("structure_planks", Blocks.SPRUCE_PLANKS.getDefaultState());
-		registry.setBlockState("structure_planks_slab", Blocks.SPRUCE_SLAB.getDefaultState());
-		registry.setBlockState("river", Blocks.ICE.getDefaultState());
-		registry.setBlockState("light_block", Blocks.SEA_LANTERN.getDefaultState());
-		registry.setBlockState("bucket_1", Blocks.SNOW_BLOCK.getDefaultState());
-		registry.setBlockState("bush", Blocks.FERN.getDefaultState());
-		registry.setBlockState("structure_wool_1", Blocks.WHITE_WOOL.getDefaultState());
-		registry.setBlockState("structure_wool_3", Blocks.CYAN_WOOL.getDefaultState());
+		registry.setBlockState("surface", Blocks.GRASS_BLOCK.defaultBlockState());
+		registry.setBlockState("upper", Blocks.DIRT.defaultBlockState());
+		registry.setBlockState("structure_primary", Blocks.PRISMARINE.defaultBlockState());
+		registry.setBlockState("structure_primary_decorative", Blocks.PRISMARINE_BRICKS.defaultBlockState());
+		registry.setBlockState("structure_secondary", MSBlocks.FROST_BRICKS.defaultBlockState());
+		registry.setBlockState("structure_secondary_stairs", MSBlocks.FROST_BRICK_STAIRS.defaultBlockState());
+		registry.setBlockState("structure_secondary_decorative", MSBlocks.CHISELED_FROST_BRICKS.defaultBlockState());
+		registry.setBlockState("structure_planks", Blocks.SPRUCE_PLANKS.defaultBlockState());
+		registry.setBlockState("structure_planks_slab", Blocks.SPRUCE_SLAB.defaultBlockState());
+		registry.setBlockState("river", Blocks.ICE.defaultBlockState());
+		registry.setBlockState("light_block", Blocks.SEA_LANTERN.defaultBlockState());
+		registry.setBlockState("bucket_1", Blocks.SNOW_BLOCK.defaultBlockState());
+		registry.setBlockState("bush", Blocks.FERN.defaultBlockState());
+		registry.setBlockState("structure_wool_1", Blocks.WHITE_WOOL.defaultBlockState());
+		registry.setBlockState("structure_wool_3", Blocks.CYAN_WOOL.defaultBlockState());
 	}
 	
 	@Override

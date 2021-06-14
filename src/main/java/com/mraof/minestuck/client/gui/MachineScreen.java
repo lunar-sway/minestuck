@@ -39,13 +39,13 @@ public abstract class MachineScreen<T extends MachineContainer> extends Containe
 	{
 		if(keyCode == GLFW.GLFW_KEY_ENTER && goButton != null)
 		{
-			this.minecraft.getSoundHandler().play(SimpleSound.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+			this.minecraft.getSoundManager().play(SimpleSound.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 
 			boolean mode = runType == MachineProcessTileEntity.RunType.BUTTON_OVERRIDE && hasShiftDown();
-			GoButtonPacket packet = new GoButtonPacket(true, mode && !container.overrideStop());
+			GoButtonPacket packet = new GoButtonPacket(true, mode && !menu.overrideStop());
 			MSPacketHandler.sendToServer(packet);
 			
-			goButton.setMessage(new TranslationTextComponent(mode && !container.overrideStop() ? STOP : GO));
+			goButton.setMessage(new TranslationTextComponent(mode && !menu.overrideStop() ? STOP : GO));
 			return true;
 		}
 		return super.keyPressed(keyCode, scanCode, i);
@@ -76,7 +76,7 @@ public abstract class MachineScreen<T extends MachineContainer> extends Containe
 				if (this.isValidClickButton(mouseKey)) {
 					boolean flag = this.clicked(mouseX, mouseY);
 					if (flag) {
-						this.playDownSound(Minecraft.getInstance().getSoundHandler());
+						this.playDownSound(Minecraft.getInstance().getSoundManager());
 						this.onClick(mouseKey);
 						return true;
 					}
@@ -92,7 +92,7 @@ public abstract class MachineScreen<T extends MachineContainer> extends Containe
 		{
 			if(mouseKey == GLFW.GLFW_MOUSE_BUTTON_1)
 			{
-				if(!container.overrideStop())
+				if(!menu.overrideStop())
 				{
 					//Tell the machine to go once
 					GoButtonPacket packet = new GoButtonPacket(true, false);
@@ -103,10 +103,10 @@ public abstract class MachineScreen<T extends MachineContainer> extends Containe
 			} else if(mouseKey == GLFW.GLFW_MOUSE_BUTTON_2 && runType == MachineProcessTileEntity.RunType.BUTTON_OVERRIDE)
 			{
 				//Tell the machine to go until stopped
-				GoButtonPacket packet = new GoButtonPacket(true, !container.overrideStop());
+				GoButtonPacket packet = new GoButtonPacket(true, !menu.overrideStop());
 				MSPacketHandler.sendToServer(packet);
 				
-				setMessage(new TranslationTextComponent(container.overrideStop() ? STOP : GO));
+				setMessage(new TranslationTextComponent(menu.overrideStop() ? STOP : GO));
 			}
 		}
 	}

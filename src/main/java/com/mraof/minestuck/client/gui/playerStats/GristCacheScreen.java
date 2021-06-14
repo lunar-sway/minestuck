@@ -50,21 +50,21 @@ public class GristCacheScreen extends PlayerStatsScreen
 
 		drawTabs(matrixStack);
 
-		this.mc.getTextureManager().bindTexture(guiGristcache);
+		this.mc.getTextureManager().bind(guiGristcache);
 		this.blit(matrixStack, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 
 		String cacheMessage;
 		if(ClientEditHandler.isActive() || ClientPlayerData.getTitle() == null)
 			cacheMessage = getTitle().getString();
 		else cacheMessage = ClientPlayerData.getTitle().asTextComponent().getString();
-		mc.fontRenderer.drawString(matrixStack, cacheMessage, (this.width / 2F) - mc.fontRenderer.getStringWidth(cacheMessage) / 2F, yOffset + 12, 0x404040);
+		mc.font.draw(matrixStack, cacheMessage, (this.width / 2F) - mc.font.width(cacheMessage) / 2F, yOffset + 12, 0x404040);
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
 
 		drawActiveTabAndOther(matrixStack, mouseX, mouseY);
 
 		RenderSystem.color3f(1, 1, 1);
 		RenderSystem.disableRescaleNormal();
-		RenderHelper.disableStandardItemLighting();
+		RenderHelper.turnOff();
 		RenderSystem.disableLighting();
 		RenderSystem.disableDepthTest();
 

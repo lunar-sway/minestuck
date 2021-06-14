@@ -19,19 +19,19 @@ public class PipeBlock extends MSDirectionalBlock
 	{
 		super(properties);
 		this.shape = shape.createRotatedShapesAllDirections();
-		this.setDefaultState(stateContainer.getBaseState().with(FACING, Direction.DOWN));
+		this.registerDefaultState(stateDefinition.any().setValue(FACING, Direction.DOWN));
 	}
 	
 	@Override
 	public BlockState rotate(BlockState state, IWorld world, BlockPos pos, Rotation direction)
 	{
-		return state.with(FACING, direction.rotate(state.get(FACING)));
+		return state.setValue(FACING, direction.rotate(state.getValue(FACING)));
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
 	{
-		return shape.get(state.get(FACING));
+		return shape.get(state.getValue(FACING));
 	}
 }

@@ -57,7 +57,7 @@ public class HashMapModus extends Modus
 		
 		for(int i = 0; i < size; i++)
 			if(nbt.contains("item"+i))
-				list.add(ItemStack.read(nbt.getCompound("item"+i)));
+				list.add(ItemStack.of(nbt.getCompound("item"+i)));
 			else list.add(ItemStack.EMPTY);
 		if(side == LogicalSide.CLIENT)
 		{
@@ -77,7 +77,7 @@ public class HashMapModus extends Modus
 		{
 			ItemStack stack = iterator.next();
 			if(!stack.isEmpty())
-				nbt.put("item"+i, stack.write(new CompoundNBT()));
+				nbt.put("item"+i, stack.save(new CompoundNBT()));
 		}
 		return nbt;
 	}
@@ -90,7 +90,7 @@ public class HashMapModus extends Modus
 		
 		String itemName = item.getItem().getRegistryName().getPath().replace('_', ' ');
 		
-		int index = ((item.hasDisplayName()) ? item.getDisplayName() : itemName).hashCode() % list.size();	//TODO Perhaps use a custom hashcode function that behaves more like the one in comic
+		int index = ((item.hasCustomHoverName()) ? item.getHoverName() : itemName).hashCode() % list.size();	//TODO Perhaps use a custom hashcode function that behaves more like the one in comic
 		
 		if(index < 0)
 			index += list.size();
@@ -98,7 +98,7 @@ public class HashMapModus extends Modus
 		if(!list.get(index).isEmpty())
 		{
 			ItemStack otherItem = list.get(index);
-			if(otherItem.getItem() == item.getItem() && ItemStack.areItemStackTagsEqual(otherItem, item)
+			if(otherItem.getItem() == item.getItem() && ItemStack.tagMatches(otherItem, item)
 					&& otherItem.getCount() + item.getCount() <= otherItem.getMaxStackSize())
 			{
 				otherItem.grow(item.getCount());
@@ -111,7 +111,7 @@ public class HashMapModus extends Modus
 		markDirty();
 		
 		if(ejectByChat && MinestuckConfig.SERVER.hashmapChatModusSetting.get() != MinestuckConfig.AvailableOptions.OFF || MinestuckConfig.SERVER.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.ON)
-			player.sendMessage(new TranslationTextComponent(MESSAGE, item.getTextComponent(), getSize(), index), Util.DUMMY_UUID);
+			player.sendMessage(new TranslationTextComponent(MESSAGE, item.getDisplayName(), getSize(), index), Util.NIL_UUID);
 		
 		return true;
 	}
@@ -265,11 +265,11 @@ public class HashMapModus extends Modus
 		if(stack == null)
 			return;
 		
-		if(player.inventory.getCurrentItem().isEmpty())
-			player.inventory.setInventorySlotContents(player.inventory.currentItem, stack);
+		if(player.inventory.getSelected().isEmpty())
+			player.inventory.setItem(player.inventory.selected, stack);
 		else CaptchaDeckHandler.launchAnyItem(player, stack);
 		
-		player.sendMessage(new TranslationTextComponent("message.hash_map", i, getSize(), index, stack.getTextComponent()), Util.DUMMY_UUID);
+		player.sendMessage(new TranslationTextComponent("message.hash_map", i, getSize(), index, stack.getDisplayName()), Util.NIL_UUID);
 	}
 	
 }

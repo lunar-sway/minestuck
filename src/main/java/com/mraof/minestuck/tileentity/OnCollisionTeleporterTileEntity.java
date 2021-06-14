@@ -22,7 +22,7 @@ public abstract class OnCollisionTeleporterTileEntity<E extends Entity> extends 
 	
 	protected boolean shouldTeleport(E entity)
 	{
-		return!entity.isPassenger() && !entity.isBeingRidden();
+		return!entity.isPassenger() && !entity.isVehicle();
 	}
 	
 	protected abstract AxisAlignedBB getTeleportField();
@@ -34,7 +34,7 @@ public abstract class OnCollisionTeleporterTileEntity<E extends Entity> extends 
 	 */
 	public void onCollision(E entity)
 	{
-		if(!entity.world.isRemote && canTeleport(entity) && shouldTeleport(entity))
+		if(!entity.level.isClientSide && canTeleport(entity) && shouldTeleport(entity))
 		{
 			hasCollision = true;
 		}
@@ -43,14 +43,14 @@ public abstract class OnCollisionTeleporterTileEntity<E extends Entity> extends 
 	@Override
 	public void tick()
 	{
-		if(hasCollision && world instanceof ServerWorld)
+		if(hasCollision && level instanceof ServerWorld)
 		{
 			AxisAlignedBB boundingBox = getTeleportField();
 			
-			List<E> entities = world.getEntitiesWithinAABB(entityClass, boundingBox, entity -> canTeleport(entity) && shouldTeleport(entity));
+			List<E> entities = level.getEntitiesOfClass(entityClass, boundingBox, entity -> canTeleport(entity) && shouldTeleport(entity));
 			for(E entity : entities)
 			{
-				if(entity.hasPortalCooldown())
+				if(entity.isOnPortalCooldown())
 					entity.setPortalCooldown();
 				else teleport(entity);
 			}
@@ -60,6 +60,6 @@ public abstract class OnCollisionTeleporterTileEntity<E extends Entity> extends 
 	
 	private static boolean canTeleport(Entity entity)
 	{
-		return !entity.noClip && entity.canChangeDimension();
+		return !entity.noPhysics && entity.canChangeDimensions();
 	}
 }

@@ -26,17 +26,17 @@ public class CaptchalogueTrigger extends AbstractCriterionTrigger<CaptchalogueTr
 	}
 	
 	@Override
-	protected Instance deserializeTrigger(JsonObject json, EntityPredicate.AndPredicate predicate, ConditionArrayParser conditionsParser)
+	protected Instance createInstance(JsonObject json, EntityPredicate.AndPredicate predicate, ConditionArrayParser conditionsParser)
 	{
-		ModusType<?> modus = json.has("modus") ? ModusTypes.REGISTRY.getValue(new ResourceLocation(JSONUtils.getString(json, "modus"))) : null;
-		ItemPredicate item = json.has("item") ? ItemPredicate.deserialize(json.get("item")) : null;
+		ModusType<?> modus = json.has("modus") ? ModusTypes.REGISTRY.getValue(new ResourceLocation(JSONUtils.getAsString(json, "modus"))) : null;
+		ItemPredicate item = json.has("item") ? ItemPredicate.fromJson(json.get("item")) : null;
 		MinMaxBounds.IntBound count = MinMaxBounds.IntBound.fromJson(json.get("count"));
 		return new Instance(predicate, modus, item, count);
 	}
 	
 	public void trigger(ServerPlayerEntity player, Modus modus, ItemStack item)
 	{
-		triggerListeners(player, instance -> instance.test(modus.getType(), item, modus.getNonEmptyCards()));
+		trigger(player, instance -> instance.test(modus.getType(), item, modus.getNonEmptyCards()));
 	}
 	
 	public static class Instance extends CriterionInstance
@@ -54,17 +54,17 @@ public class CaptchalogueTrigger extends AbstractCriterionTrigger<CaptchalogueTr
 		
 		public boolean test(ModusType<?> modus, ItemStack item, int count)
 		{
-			return (this.modus == null || this.modus.equals(modus)) && this.item.test(item) && this.count.test(count);
+			return (this.modus == null || this.modus.equals(modus)) && this.item.matches(item) && this.count.matches(count);
 		}
 		
 		@Override
-		public JsonObject serialize(ConditionArraySerializer conditions)
+		public JsonObject serializeToJson(ConditionArraySerializer conditions)
 		{
-			JsonObject json = super.serialize(conditions);
+			JsonObject json = super.serializeToJson(conditions);
 			if(modus != null)
 				json.addProperty("modus", modus.getRegistryName().toString());
-			json.add("item", item.serialize());
-			json.add("count", count.serialize());
+			json.add("item", item.serializeToJson());
+			json.add("count", count.serializeToJson());
 			
 			return json;
 		}

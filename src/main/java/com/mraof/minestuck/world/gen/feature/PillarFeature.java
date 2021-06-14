@@ -21,12 +21,12 @@ public class PillarFeature extends Feature<BlockStateFeatureConfig>
 	}
 	
 	@Override
-	public boolean generate(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, BlockStateFeatureConfig config)
+	public boolean place(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, BlockStateFeatureConfig config)
 	{
 		BlockState state = config.state;
 		int height = 4 + rand.nextInt(4);
 		
-		if(world.getBlockState(pos.up(height - 1)).getMaterial().isLiquid())
+		if(world.getBlockState(pos.above(height - 1)).getMaterial().isLiquid())
 			return false;
 		
 		boolean size = large && rand.nextFloat() < 0.4;
@@ -35,15 +35,15 @@ public class PillarFeature extends Feature<BlockStateFeatureConfig>
 		{
 			for(int i = 0; i < height + 3; i++)
 			{
-				setBlockState(world, pos.add(0, i, 0), state);
-				setBlockState(world, pos.add(1, i, 0), state);
-				setBlockState(world, pos.add(1, i, 1), state);
-				setBlockState(world, pos.add(0, i, 1), state);
+				setBlock(world, pos.offset(0, i, 0), state);
+				setBlock(world, pos.offset(1, i, 0), state);
+				setBlock(world, pos.offset(1, i, 1), state);
+				setBlock(world, pos.offset(0, i, 1), state);
 			}
 		} else
 		{
 			for(int i = 0; i < height; i++)
-				setBlockState(world, pos.up(i), state);
+				setBlock(world, pos.above(i), state);
 		}
 		return true;
 	}

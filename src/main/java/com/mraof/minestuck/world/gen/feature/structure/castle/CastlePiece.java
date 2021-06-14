@@ -23,7 +23,7 @@ public abstract class CastlePiece extends StructurePiece
 		super(pieceType, componentType);
 		this.boundingBox = new MutableBoundingBox(0, 0, 0, 256, 7, 256);
 		this.isBlack = isBlack;
-		setCoordBaseMode(Direction.SOUTH);
+		setOrientation(Direction.SOUTH);
 		this.direction = 0;
 	}
 	
@@ -34,7 +34,7 @@ public abstract class CastlePiece extends StructurePiece
 	}
 	
 	@Override
-	protected void readAdditional(CompoundNBT nbt)
+	protected void addAdditionalSaveData(CompoundNBT nbt)
 	{
 		nbt.putBoolean("isBlack", isBlack);
 	}
@@ -48,7 +48,7 @@ public abstract class CastlePiece extends StructurePiece
 	protected StructurePiece getNextComponentNormal(
 			CastleStartPiece castleStartPiece, List<StructurePiece> components, Random random, int xShift, int yShift, int zShift)
 	{
-			return this.getNextComponent(castleStartPiece, components, random, this.boundingBox.minX + xShift, this.boundingBox.minY + yShift, this.boundingBox.minZ + zShift, this.direction, this.getComponentType());
+			return this.getNextComponent(castleStartPiece, components, random, this.boundingBox.x0 + xShift, this.boundingBox.y0 + yShift, this.boundingBox.z0 + zShift, this.direction, this.getGenDepth());
 	}
 
 	protected StructurePiece getNextComponent(
@@ -65,11 +65,11 @@ public abstract class CastlePiece extends StructurePiece
 		int var3 = 0;
 		int var4 = 0;
 
-		for (int var5 = this.boundingBox.minZ; var5 <= this.boundingBox.maxZ; ++var5)
+		for (int var5 = this.boundingBox.z0; var5 <= this.boundingBox.z1; ++var5)
 		{
-			for (int var6 = this.boundingBox.minX; var6 <= this.boundingBox.maxX; ++var6)
+			for (int var6 = this.boundingBox.x0; var6 <= this.boundingBox.x1; ++var6)
 			{
-				if (par2StructureBoundingBox.isVecInside(new BlockPos(var6, 64, var5)))	//isVecInside
+				if (par2StructureBoundingBox.isInside(new BlockPos(var6, 64, var5)))	//isVecInside
 				{
 					var3 += par1World.getHeight(Heightmap.Type.MOTION_BLOCKING, var6, var5);
 					++var4;
@@ -101,11 +101,11 @@ public abstract class CastlePiece extends StructurePiece
 					if(((x + y + z) % 2 == 0) ^ b)
 					{
 //						Debug.print("Placing block at " + x + " " + y + " " + z + " " + blockID + " " + metadata1);
-						this.setBlockState(world, block1, x, y, z, structureboundingbox);	//placeBlockAtCurrentPosition
+						this.placeBlock(world, block1, x, y, z, structureboundingbox);	//placeBlockAtCurrentPosition
 					}
 					else
 					{
-						this.setBlockState(world, block2, x, y, z, structureboundingbox);
+						this.placeBlock(world, block2, x, y, z, structureboundingbox);
 //						Debug.print("Placing block at " + x + " " + y + " " + z + " " + blockID2 + " " + metadata2);
 					}
 				}

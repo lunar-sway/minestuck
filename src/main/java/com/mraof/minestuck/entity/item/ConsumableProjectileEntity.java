@@ -43,7 +43,7 @@ public class ConsumableProjectileEntity extends ProjectileItemEntity
 	}
 	
 	@Override
-	protected void onImpact(RayTraceResult result)
+	protected void onHit(RayTraceResult result)
 	{
 		int damage = ProjectileDamaging.getDamageFromItem(getItemFromItemStack().getItem());
 		
@@ -51,26 +51,26 @@ public class ConsumableProjectileEntity extends ProjectileItemEntity
 		{
 			Entity entity = ((EntityRayTraceResult) result).getEntity();
 			if(entity instanceof UnderlingEntity)
-				entity.attackEntityFrom(DamageSource.causeThrownDamage(this, getShooter()), damage * 1.5F);
+				entity.hurt(DamageSource.thrown(this, getOwner()), damage * 1.5F);
 			else
-				entity.attackEntityFrom(DamageSource.causeThrownDamage(this, getShooter()), damage);
+				entity.hurt(DamageSource.thrown(this, getOwner()), damage);
 		}
-		if(isNonCreativePlayer(getShooter()))
+		if(isNonCreativePlayer(getOwner()))
 		{
-			if(rand.nextFloat() < 0.99F)
+			if(random.nextFloat() < 0.99F)
 			{
-				ItemEntity itemEntity = new ItemEntity(this.world, this.getPosX(), this.getPosY(), this.getPosZ(), this.getItemFromItemStack());
-				world.addEntity(itemEntity);
+				ItemEntity itemEntity = new ItemEntity(this.level, this.getX(), this.getY(), this.getZ(), this.getItemFromItemStack());
+				level.addFreshEntity(itemEntity);
 			} else
 			{
-				this.world.playSound(null, this.getPosX(), this.getPosY(), this.getPosZ(), SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.NEUTRAL, 0.8F, 1.5F);
+				this.level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ITEM_BREAK, SoundCategory.NEUTRAL, 0.8F, 1.5F);
 			}
 		}
 		this.remove();
 	}
 	
 	@Override
-	public IPacket<?> createSpawnPacket()
+	public IPacket<?> getAddEntityPacket()
 	{
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
@@ -82,7 +82,7 @@ public class ConsumableProjectileEntity extends ProjectileItemEntity
 	}
 	
 	public ItemStack getItemFromItemStack() {
-		ItemStack itemstack = this.func_213882_k();
+		ItemStack itemstack = this.getItemRaw();
 		return itemstack.isEmpty() ? new ItemStack(this.getDefaultItem()) : itemstack;
 	}
 }

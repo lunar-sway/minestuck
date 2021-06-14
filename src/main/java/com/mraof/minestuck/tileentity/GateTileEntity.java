@@ -31,9 +31,9 @@ public class GateTileEntity extends OnCollisionTeleporterTileEntity<ServerPlayer
 	protected AxisAlignedBB getTeleportField()
 	{
 		if(getBlockState().getBlock() == MSBlocks.RETURN_NODE)
-			return new AxisAlignedBB(pos.getX() - 1, pos.getY() + 7D / 16, pos.getZ() - 1, pos.getX() + 1, pos.getY() + 9D / 16, pos.getZ() + 1);
+			return new AxisAlignedBB(worldPosition.getX() - 1, worldPosition.getY() + 7D / 16, worldPosition.getZ() - 1, worldPosition.getX() + 1, worldPosition.getY() + 9D / 16, worldPosition.getZ() + 1);
 		else
-			return new AxisAlignedBB(pos.getX(), pos.getY() + 7D / 16, pos.getZ(), pos.getX() + 1, pos.getY() + 9D / 16, pos.getZ() + 1);
+			return new AxisAlignedBB(worldPosition.getX(), worldPosition.getY() + 7D / 16, worldPosition.getZ(), worldPosition.getX() + 1, worldPosition.getY() + 9D / 16, worldPosition.getZ() + 1);
 	}
 	
 	@Override
@@ -41,37 +41,37 @@ public class GateTileEntity extends OnCollisionTeleporterTileEntity<ServerPlayer
 	{
 		if(getBlockState().getBlock() == MSBlocks.RETURN_NODE)
 		{
-			BlockPos pos = ((ServerWorld)world).getSpawnPoint();
+			BlockPos pos = ((ServerWorld)level).getSharedSpawnPos();
 			if(pos == null)
 				return;
-			Teleport.teleportEntity(player, (ServerWorld) world, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
+			Teleport.teleportEntity(player, (ServerWorld) level, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
 			player.setPortalCooldown();
-			player.setMotion(Vector3d.ZERO);
+			player.setDeltaMovement(Vector3d.ZERO);
 			player.fallDistance = 0;
 		} else
 		{
-			GateHandler.teleport(gateType, (ServerWorld) world, player);
+			GateHandler.teleport(gateType, (ServerWorld) level, player);
 		}
 	}
 	
 	@Override
 	public AxisAlignedBB getRenderBoundingBox()
 	{
-		return new AxisAlignedBB(this.getPos().add(-1, 0, -1), this.getPos().add(1, 1, 1));
+		return new AxisAlignedBB(this.getBlockPos().offset(-1, 0, -1), this.getBlockPos().offset(1, 1, 1));
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT nbt)
+	public void load(BlockState state, CompoundNBT nbt)
 	{
-		super.read(state, nbt);
+		super.load(state, nbt);
 		if(nbt.contains("gate_type"))
 			this.gateType = GateHandler.Type.fromString(nbt.getString("gate_type"));
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound)
+	public CompoundNBT save(CompoundNBT compound)
 	{
-		super.write(compound);
+		super.save(compound);
 		if(this.gateType != null)
 			compound.putString("gate_type", gateType.toString());
 		return compound;
@@ -81,14 +81,14 @@ public class GateTileEntity extends OnCollisionTeleporterTileEntity<ServerPlayer
 	public CompoundNBT getUpdateTag()
 	{
 		CompoundNBT nbt = super.getUpdateTag();
-		nbt.putInt("color", ColorHandler.getColorForDimension((ServerWorld) world));
+		nbt.putInt("color", ColorHandler.getColorForDimension((ServerWorld) level));
 		return nbt;
 	}
 	
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket()
 	{
-		return new SUpdateTileEntityPacket(this.pos, 0, getUpdateTag());
+		return new SUpdateTileEntityPacket(this.worldPosition, 0, getUpdateTag());
 	}
 	
 	@Override
@@ -100,16 +100,16 @@ public class GateTileEntity extends OnCollisionTeleporterTileEntity<ServerPlayer
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
 	{
-		handleUpdateTag(getBlockState(), pkt.getNbtCompound());
+		handleUpdateTag(getBlockState(), pkt.getTag());
 	}
 	
 	public boolean isGate()
 	{
-		return this.world != null ? this.world.getBlockState(this.getPos()).getBlock() != MSBlocks.RETURN_NODE : this.gateType != null;
+		return this.level != null ? this.level.getBlockState(this.getBlockPos()).getBlock() != MSBlocks.RETURN_NODE : this.gateType != null;
 	}
 	
 	@Override
-	public double getMaxRenderDistanceSquared()
+	public double getViewDistance()
 	{
 		return isGate() ? 65536.0D : 4096.0D;
 	}

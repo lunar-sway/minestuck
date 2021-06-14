@@ -19,17 +19,17 @@ public class ConsortRewardHandler
 	
 	public static List<Pair<ItemStack, Integer>> generateStock(ResourceLocation lootTable, ConsortEntity consort, Random rand)
 	{
-		LootContext.Builder contextBuilder = new LootContext.Builder((ServerWorld) consort.world)
-				.withParameter(LootParameters.THIS_ENTITY, consort).withParameter(LootParameters.ORIGIN, consort.getPositionVec());
-		List<ItemStack> itemStacks = Objects.requireNonNull(consort.getServer()).getLootTableManager()
-				.getLootTableFromLocation(lootTable).generate(contextBuilder.build(LootParameterSets.GIFT));
+		LootContext.Builder contextBuilder = new LootContext.Builder((ServerWorld) consort.level)
+				.withParameter(LootParameters.THIS_ENTITY, consort).withParameter(LootParameters.ORIGIN, consort.position());
+		List<ItemStack> itemStacks = Objects.requireNonNull(consort.getServer()).getLootTables()
+				.get(lootTable).getRandomItems(contextBuilder.create(LootParameterSets.GIFT));
 		List<Pair<ItemStack, Integer>> itemPriceList = new ArrayList<>();
 		stackLoop:
 		for (ItemStack stack : itemStacks)
 		{
 			for (Pair<ItemStack, Integer> pair : itemPriceList)
 			{
-				if (ItemStack.areItemsEqual(pair.getKey(), stack) && ItemStack.areItemStackTagsEqual(pair.getKey(), stack))
+				if (ItemStack.isSame(pair.getKey(), stack) && ItemStack.tagMatches(pair.getKey(), stack))
 				{
 					pair.getKey().grow(stack.getCount());
 					continue stackLoop;

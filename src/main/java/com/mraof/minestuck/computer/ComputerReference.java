@@ -11,7 +11,7 @@ public interface ComputerReference
 {
 	static ComputerReference of(ComputerTileEntity te)
 	{
-		return new TEComputerReference(GlobalPos.getPosition(Objects.requireNonNull(te.getWorld()).getDimensionKey(), te.getPos()));
+		return new TEComputerReference(GlobalPos.of(Objects.requireNonNull(te.getLevel()).dimension(), te.getBlockPos()));
 	}
 	
 	static ComputerReference read(CompoundNBT nbt)

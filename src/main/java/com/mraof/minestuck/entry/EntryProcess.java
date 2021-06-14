@@ -73,26 +73,26 @@ public class EntryProcess
 	{
 		try
 		{
-			if(player.world.getDimensionKey() != World.THE_NETHER)
+			if(player.level.dimension() != World.NETHER)
 			{
 				if(!TitleSelectionHook.performEntryCheck(player))
 					return;
 				
 				PlayerIdentifier identifier = IdentifierHandler.encode(player);
-				Optional<SburbConnection> c = SkaianetHandler.get(player.world).getPrimaryConnection(identifier, true);
+				Optional<SburbConnection> c = SkaianetHandler.get(player.level).getPrimaryConnection(identifier, true);
 				
 				//Only performs Entry if you have no connection, haven't Entered, or you're not in a Land and additional Entries are permitted.
-				if(!c.isPresent() || !c.get().hasEntered() || !MinestuckConfig.SERVER.stopSecondEntry.get() && !MSDimensions.isLandDimension(player.world.getDimensionKey()))
+				if(!c.isPresent() || !c.get().hasEntered() || !MinestuckConfig.SERVER.stopSecondEntry.get() && !MSDimensions.isLandDimension(player.level.dimension()))
 				{
-					if(!canModifyEntryBlocks(player.world, player))
+					if(!canModifyEntryBlocks(player.level, player))
 					{
-						player.sendMessage(new StringTextComponent("You are not allowed to enter here."), Util.DUMMY_UUID);	//TODO translation key
+						player.sendMessage(new StringTextComponent("You are not allowed to enter here."), Util.NIL_UUID);	//TODO translation key
 						return;
 					}
 					
 					if(c.isPresent() && c.get().hasEntered())
 					{
-						ServerWorld landWorld = Objects.requireNonNull(player.getServer()).getWorld(c.get().getClientDimension());
+						ServerWorld landWorld = Objects.requireNonNull(player.getServer()).getLevel(c.get().getClientDimension());
 						if(landWorld == null)
 						{
 							return;
@@ -100,35 +100,35 @@ public class EntryProcess
 						
 						//Teleports the player to their home in the Medium, without any bells or whistles.
 						BlockPos pos = new BlockPos(0, 100, 0);//landWorld.getDimension().getSpawnPoint(); TODO
-						Teleport.teleportEntity(player, landWorld, pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F, player.rotationYaw, player.rotationPitch);
+						Teleport.teleportEntity(player, landWorld, pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F, player.yRot, player.xRot);
 						
 						return;
 					}
 					
-					RegistryKey<World> landDimension = SkaianetHandler.get(player.world).prepareEntry(identifier);
+					RegistryKey<World> landDimension = SkaianetHandler.get(player.level).prepareEntry(identifier);
 					if(landDimension == null)
 					{
-						player.sendMessage(new StringTextComponent("Something went wrong while creating your Land. More details in the server console."), Util.DUMMY_UUID);
+						player.sendMessage(new StringTextComponent("Something went wrong while creating your Land. More details in the server console."), Util.NIL_UUID);
 					}
 					else
 					{
-						ServerWorld oldWorld = (ServerWorld) player.world;
-						ServerWorld newWorld = Objects.requireNonNull(player.getServer()).getWorld(landDimension);
+						ServerWorld oldWorld = (ServerWorld) player.level;
+						ServerWorld newWorld = Objects.requireNonNull(player.getServer()).getLevel(landDimension);
 						if(newWorld == null)
 						{
 							return;
 						}
 						
-						if(this.prepareDestination(player.getPosition(), player, oldWorld))
+						if(this.prepareDestination(player.blockPosition(), player, oldWorld))
 						{
 							moveBlocks(oldWorld, newWorld);
 							if(Teleport.teleportEntity(player, newWorld) != null)
 							{
 								finalizeDestination(player, oldWorld, newWorld);
-								SkaianetHandler.get(player.world).onEntry(identifier);
+								SkaianetHandler.get(player.level).onEntry(identifier);
 							} else
 							{
-								player.sendMessage(new StringTextComponent("Entry failed. Unable to teleport you!"), Util.DUMMY_UUID);
+								player.sendMessage(new StringTextComponent("Entry failed. Unable to teleport you!"), Util.NIL_UUID);
 							}
 						}
 					}
@@ -137,7 +137,7 @@ public class EntryProcess
 		} catch(Exception e)
 		{
 			LOGGER.error("Exception when {} tried to enter their land.", player.getName().getString(), e);
-			player.sendMessage(new StringTextComponent("[Minestuck] Something went wrong during entry. "+ (player.getServer().isDedicatedServer()?"Check the console for the error message.":"Notify the server owner about this.")).mergeStyle(TextFormatting.RED), Util.DUMMY_UUID);
+			player.sendMessage(new StringTextComponent("[Minestuck] Something went wrong during entry. "+ (player.getServer().isDedicatedServer()?"Check the console for the error message.":"Notify the server owner about this.")).withStyle(TextFormatting.RED), Util.NIL_UUID);
 		}
 	}
 	
@@ -152,7 +152,7 @@ public class EntryProcess
 		int z = origin.getZ();
 		this.origin = origin;
 		
-		creative = player.interactionManager.isCreative();
+		creative = player.gameMode.isCreative();
 		
 		topY = MinestuckConfig.SERVER.adaptEntryBlockHeight.get() ? getTopHeight(worldserver0, x, y, z) : y + artifactRange;
 		yDiff = 127 - topY;
@@ -176,26 +176,26 @@ public class EntryProcess
 				for(blockY = Math.max(0, y - height); blockY <= Math.min(topY, y + height); blockY++)
 				{
 					BlockPos pos = new BlockPos(blockX, blockY, blockZ);
-					BlockPos pos1 = pos.add(xDiff, yDiff, zDiff);
+					BlockPos pos1 = pos.offset(xDiff, yDiff, zDiff);
 					BlockState block = worldserver0.getBlockState(pos);
-					TileEntity te = worldserver0.getTileEntity(pos);
+					TileEntity te = worldserver0.getBlockEntity(pos);
 					
 					Block gotBlock = block.getBlock();
 					
 					if(gotBlock == Blocks.BEDROCK || gotBlock == Blocks.NETHER_PORTAL)
 					{
-						blockMoves.add(new BlockMove(c, pos, pos1, Blocks.AIR.getDefaultState(), true));
+						blockMoves.add(new BlockMove(c, pos, pos1, Blocks.AIR.defaultBlockState(), true));
 						continue;
 					}
 					else if(!creative && (gotBlock == Blocks.COMMAND_BLOCK || gotBlock == Blocks.CHAIN_COMMAND_BLOCK || gotBlock == Blocks.REPEATING_COMMAND_BLOCK))
 					{
-						player.sendStatusMessage(new StringTextComponent("You are not allowed to move command blocks."), false);
+						player.displayClientMessage(new StringTextComponent("You are not allowed to move command blocks."), false);
 						return false;
 					} else if(te instanceof ComputerTileEntity)		//If the block is a computer
 					{
 						if(!((ComputerTileEntity)te).owner.equals(IdentifierHandler.encode((PlayerEntity) player)))	//You can't Enter with someone else's computer
 						{
-							player.sendStatusMessage(new StringTextComponent("You are not allowed to move other players' computers."), false);
+							player.displayClientMessage(new StringTextComponent("You are not allowed to move other players' computers."), false);
 							return false;
 						}
 						
@@ -210,14 +210,14 @@ public class EntryProcess
 				for(blockY += yDiff; blockY <= 255; blockY++)
 				{
 					//The first BlockPos isn't used for this operation.
-					blockMoves.add(new BlockMove(c, BlockPos.ZERO, new BlockPos(blockX + xDiff, blockY, blockZ + zDiff), Blocks.AIR.getDefaultState(), false));
+					blockMoves.add(new BlockMove(c, BlockPos.ZERO, new BlockPos(blockX + xDiff, blockY, blockZ + zDiff), Blocks.AIR.defaultBlockState(), false));
 				}
 			}
 		}
 		
 		if(!foundComputer && MinestuckConfig.SERVER.needComputer.get())
 		{
-			player.sendStatusMessage(new StringTextComponent("There is no computer in range."), false);
+			player.displayClientMessage(new StringTextComponent("There is no computer in range."), false);
 			return false;
 		}
 		
@@ -256,13 +256,13 @@ public class EntryProcess
 			LOGGER.debug("Teleporting entities...");
 			//The fudge here is to ensure that the AABB will always contain every entity meant to be moved.
 			// As entities outside the radius will be excluded from transport anyway, this is fine.
-			AxisAlignedBB entityTeleportBB = player.getBoundingBox().grow(artifactRange + 0.5);
-			List<Entity> list = worldserver0.getEntitiesWithinAABBExcludingEntity(player, entityTeleportBB);
+			AxisAlignedBB entityTeleportBB = player.getBoundingBox().inflate(artifactRange + 0.5);
+			List<Entity> list = worldserver0.getEntities(player, entityTeleportBB);
 			Iterator<Entity> iterator = list.iterator();
 			while (iterator.hasNext())
 			{
 				Entity e = iterator.next();
-				if(origin.distanceSq(e.getPosX(), e.getPosY(), e.getPosZ(), true) <= artifactRange*artifactRange)
+				if(origin.distSqr(e.getX(), e.getY(), e.getZ(), true) <= artifactRange*artifactRange)
 				{
 					if(MinestuckConfig.SERVER.entryCrater.get() || e instanceof PlayerEntity || !creative && e instanceof ItemEntity)
 					{
@@ -270,7 +270,7 @@ public class EntryProcess
 							ServerEditHandler.reset(ServerEditHandler.getData((PlayerEntity) e));
 						else
 						{
-							Teleport.teleportEntity(e, worldserver1, e.getPosX() + xDiff, e.getPosY() + yDiff, e.getPosZ() + zDiff);
+							Teleport.teleportEntity(e, worldserver1, e.getX() + xDiff, e.getY() + yDiff, e.getZ() + zDiff);
 						}
 						//These entities should no longer be in the world, and this list is later used for entities that *should* remain.
 						iterator.remove();
@@ -280,9 +280,9 @@ public class EntryProcess
 						Entity newEntity = e.getType().create(worldserver1);
 						if (newEntity != null)
 						{
-							newEntity.copyDataFromOld(e);
-							newEntity.setPosition(newEntity.getPosX() + xDiff, newEntity.getPosY() + yDiff, newEntity.getPosZ() + zDiff);
-							worldserver1.addEntity(newEntity);
+							newEntity.restoreFrom(e);
+							newEntity.setPos(newEntity.getX() + xDiff, newEntity.getY() + yDiff, newEntity.getZ() + zDiff);
+							worldserver1.addFreshEntity(newEntity);
 						}
 					}
 				}
@@ -296,21 +296,21 @@ public class EntryProcess
 				if(MinestuckConfig.SERVER.entryCrater.get() && worldserver0.getBlockState(move.source).getBlock() != Blocks.BEDROCK)
 				{
 					if(move.update)
-						worldserver0.setBlockState(move.source, Blocks.AIR.getDefaultState(), Constants.BlockFlags.DEFAULT);
+						worldserver0.setBlock(move.source, Blocks.AIR.defaultBlockState(), Constants.BlockFlags.DEFAULT);
 					else
-						worldserver0.setBlockState(move.source, Blocks.AIR.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
+						worldserver0.setBlock(move.source, Blocks.AIR.defaultBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
 				}
 			}
 			blockMoves.clear();
 			
-			player.setPositionAndUpdate(player.getPosX() + xDiff, player.getPosY() + yDiff, player.getPosZ() + zDiff);
+			player.teleportTo(player.getX() + xDiff, player.getY() + yDiff, player.getZ() + zDiff);
 			
 			//Remove entities that were generated in the process of teleporting entities and removing blocks.
 			// This is usually caused by "anchored" blocks being updated between the removal of their anchor and their own removal.
 			if(!creative || MinestuckConfig.SERVER.entryCrater.get())
 			{
 				LOGGER.debug("Removing entities left in the crater...");
-				List<Entity> removalList = worldserver0.getEntitiesWithinAABBExcludingEntity(player, entityTeleportBB);
+				List<Entity> removalList = worldserver0.getEntities(player, entityTeleportBB);
 				
 				//We check if the old list contains the entity, because that means it was there before the entities were teleported and blocks removed.
 				// This can be caused by them being outside the Entry radius but still within the AABB,
@@ -339,9 +339,9 @@ public class EntryProcess
 			LOGGER.debug("Placing gates...");
 			placeGates(worldserver1);
 			
-			MSExtraData.get(worldserver1).addPostEntryTask(new PostEntryTask(worldserver1.getDimensionKey(), x + xDiff, y + yDiff, z + zDiff, artifactRange, (byte) 0));
+			MSExtraData.get(worldserver1).addPostEntryTask(new PostEntryTask(worldserver1.dimension(), x + xDiff, y + yDiff, z + zDiff, artifactRange, (byte) 0));
 			
-			MSDimensions.getLandInfo(worldserver1).setSpawn(MathHelper.floor(player.getPosY()));
+			MSDimensions.getLandInfo(worldserver1).setSpawn(MathHelper.floor(player.getY()));
 			
 			LOGGER.info("Entry finished");
 		}
@@ -358,14 +358,14 @@ public class EntryProcess
 	 */
 	private static void removeTileEntity(ServerWorld worldserver0, BlockPos pos, boolean creative)
 	{
-		TileEntity tileEntity = worldserver0.getTileEntity(pos);
+		TileEntity tileEntity = worldserver0.getBlockEntity(pos);
 		if(tileEntity != null)
 		{
 			if(MinestuckConfig.SERVER.entryCrater.get() || !creative)
 			{
 				String name = worldserver0.getBlockState(pos).getBlock().getRegistryName().toString();
 				try {
-					worldserver0.removeTileEntity(pos);
+					worldserver0.removeBlockEntity(pos);
 					worldserver0.removeBlock(pos, true);
 				} catch (Exception e) {
 					LOGGER.warn("Exception encountered when removing tile entity " + name + " during entry:", e);
@@ -375,23 +375,23 @@ public class EntryProcess
 				if(tileEntity instanceof ComputerTileEntity)	//Avoid duplicating computer data when a computer is kept in the overworld
 					((ComputerTileEntity) tileEntity).programData = new CompoundNBT();
 				else if(tileEntity instanceof TransportalizerTileEntity)
-					worldserver0.removeTileEntity(pos);
+					worldserver0.removeBlockEntity(pos);
 			}
 		}
 	}
 	
 	private boolean canModifyEntryBlocks(World world, PlayerEntity player)
 	{
-		int x = (int) player.getPosX();
-		if(player.getPosX() < 0) x--;
-		int y = (int) player.getPosY();
-		int z = (int) player.getPosZ();
-		if(player.getPosZ() < 0) z--;
+		int x = (int) player.getX();
+		if(player.getX() < 0) x--;
+		int y = (int) player.getY();
+		int z = (int) player.getZ();
+		if(player.getZ() < 0) z--;
 		for(int blockX = x - artifactRange; blockX <= x + artifactRange; blockX++)
 		{
 			int zWidth = (int) Math.sqrt(artifactRange * artifactRange - (blockX - x) * (blockX - x));
 			for(int blockZ = z - zWidth; blockZ <= z + zWidth; blockZ++)
-				if(!world.isBlockModifiable(player, new BlockPos(blockX, y, blockZ)))
+				if(!world.mayInteract(player, new BlockPos(blockX, y, blockZ)))
 					return false;
 		}
 		
@@ -410,12 +410,12 @@ public class EntryProcess
 		BlockState state = blockStorageSrc.getBlockState(xSrc, ySrc, zSrc);
 		blockStorageDst.setBlockState(xDst, yDst, zDst, state);
 		if(isEmpty != blockStorageDst.isEmpty())
-			world.getChunkProvider().getLightManager().func_215567_a(dest, blockStorageDst.isEmpty());	//I assume this adds or removes a light storage section here depending on if it is needed (because a section with just air doesn't have to be regarded)
+			world.getChunkSource().getLightEngine().updateSectionStatus(dest, blockStorageDst.isEmpty());	//I assume this adds or removes a light storage section here depending on if it is needed (because a section with just air doesn't have to be regarded)
 		
-		cDst.getHeightmap(Heightmap.Type.MOTION_BLOCKING).update(xDst, y, zDst, state);
-		cDst.getHeightmap(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES).update(xDst, y, zDst, state);
-		cDst.getHeightmap(Heightmap.Type.OCEAN_FLOOR).update(xDst, y, zDst, state);
-		cDst.getHeightmap(Heightmap.Type.WORLD_SURFACE).update(xDst, y, zDst, state);
+		cDst.getOrCreateHeightmapUnprimed(Heightmap.Type.MOTION_BLOCKING).update(xDst, y, zDst, state);
+		cDst.getOrCreateHeightmapUnprimed(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES).update(xDst, y, zDst, state);
+		cDst.getOrCreateHeightmapUnprimed(Heightmap.Type.OCEAN_FLOOR).update(xDst, y, zDst, state);
+		cDst.getOrCreateHeightmapUnprimed(Heightmap.Type.WORLD_SURFACE).update(xDst, y, zDst, state);
 	}
 	
 	private static ChunkSection getBlockStorage(IChunk c, int y)
@@ -440,7 +440,7 @@ public class EntryProcess
 			{
 				int height = (int) (Math.sqrt(artifactRange * artifactRange - (((blockX - x) * (blockX - x) + (blockZ - z) * (blockZ - z)) / 2F)));
 				for(int blockY = Math.min(255, y + height); blockY > maxY; blockY--)
-					if(!world.isAirBlock(new BlockPos(blockX, blockY, blockZ)))
+					if(!world.isEmptyBlock(new BlockPos(blockX, blockY, blockZ)))
 					{
 						maxY = blockY;
 						break;
@@ -463,11 +463,11 @@ public class EntryProcess
 		for(int i = 0; i < 9; i++)
 			if(i == 4)
 			{
-				world.setBlockState(pos, MSBlocks.GATE.getDefaultState().cycleValue(GateBlock.MAIN), 0);
-				GateTileEntity tileEntity = (GateTileEntity) world.getTileEntity(pos);
+				world.setBlock(pos, MSBlocks.GATE.defaultBlockState().cycle(GateBlock.MAIN), 0);
+				GateTileEntity tileEntity = (GateTileEntity) world.getBlockEntity(pos);
 				tileEntity.gateType = gateType;
 			}
-			else world.setBlockState(pos.add((i % 3) - 1, 0, i/3 - 1), MSBlocks.GATE.getDefaultState(), 0);
+			else world.setBlock(pos.offset((i % 3) - 1, 0, i/3 - 1), MSBlocks.GATE.defaultBlockState(), 0);
 	}
 	
 	private static class BlockMove
@@ -497,33 +497,33 @@ public class EntryProcess
 			if(update)
 			{
 				chunkTo.setBlockState(dest, block, true);
-			} else if(block == Blocks.AIR.getDefaultState())
+			} else if(block == Blocks.AIR.defaultBlockState())
 			{
-				world.setBlockState(dest, block, 0);
+				world.setBlock(dest, block, 0);
 			} else
 			{
 				copyBlockDirect(world, chunkFrom, chunkTo, source.getX(), source.getY(), source.getZ(), dest.getX(), dest.getY(), dest.getZ());
 			}
 			
-			TileEntity tileEntity = chunkFrom.getTileEntity(source, Chunk.CreateEntityType.CHECK);
+			TileEntity tileEntity = chunkFrom.getBlockEntity(source, Chunk.CreateEntityType.CHECK);
 			TileEntity newTE = null;
 			if(tileEntity != null)
 			{
 				CompoundNBT nbt = new CompoundNBT();
-				tileEntity.write(nbt);
+				tileEntity.save(nbt);
 				nbt.putInt("x", dest.getX());
 				nbt.putInt("y", dest.getY());
 				nbt.putInt("z", dest.getZ());
-				newTE = TileEntity.readTileEntity(block, nbt);
+				newTE = TileEntity.loadStatic(block, nbt);
 				if(newTE != null)
-					world.setTileEntity(dest, newTE);
+					world.setBlockEntity(dest, newTE);
 				else LOGGER.warn("Unable to create a new tile entity {} when teleporting blocks to the medium!", tileEntity.getType().getRegistryName());
 				
 			}
 			
 			for(EntryBlockProcessing processing : blockProcessors)
 			{
-				processing.copyOver((ServerWorld) chunkFrom.getWorld(), source, world, dest, block, tileEntity, newTE);
+				processing.copyOver((ServerWorld) chunkFrom.getLevel(), source, world, dest, block, tileEntity, newTE);
 			}
 		}
 	}

@@ -25,11 +25,11 @@ public class OceanRundownFeature extends Feature<NoFeatureConfig>
 	}
 	
 	@Override
-	public boolean generate(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
+	public boolean place(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
 	{
 		Biome oceanBiome = LandBiomeSet.getSet(generator).OCEAN.get();
 		BlockPos pos2, pos3;
-		if(generator.getBiomeProvider().getBiomes(pos.getX(), world.getSeaLevel(), pos.getZ(), 3).contains(oceanBiome))
+		if(generator.getBiomeSource().getBiomesWithin(pos.getX(), world.getSeaLevel(), pos.getZ(), 3).contains(oceanBiome))
 		{
 			return false;
 		}
@@ -39,8 +39,8 @@ public class OceanRundownFeature extends Feature<NoFeatureConfig>
 		{
 			for(int posZ = 0; posZ < 16; posZ++)
 			{
-				if(generator.getBiomeProvider().getNoiseBiome(pos.getX() + posX - 8 >> 2, pos.getY(), pos.getZ() + posZ - 8 >> 2).equals(oceanBiome))
-					oceanPos.add(pos.add(posX - 8, 0, posZ - 8));
+				if(generator.getBiomeSource().getNoiseBiome(pos.getX() + posX - 8 >> 2, pos.getY(), pos.getZ() + posZ - 8 >> 2).equals(oceanBiome))
+					oceanPos.add(pos.offset(posX - 8, 0, posZ - 8));
 			}
 		}
 		if(oceanPos.size() < 10)
@@ -48,7 +48,7 @@ public class OceanRundownFeature extends Feature<NoFeatureConfig>
 		pos2 = oceanPos.remove(rand.nextInt(oceanPos.size()));
 		pos3 = oceanPos.get(rand.nextInt(oceanPos.size()));
 		
-		BlockState fluid = Blocks.WATER.getDefaultState();//generator.getSettings().getDefaultFluid(); TODO
+		BlockState fluid = Blocks.WATER.defaultBlockState();//generator.getSettings().getDefaultFluid(); TODO
 		int minX = Math.min(pos.getX(), Math.min(pos2.getX(), pos3.getX()));
 		int maxX = Math.max(pos.getX(), Math.max(pos2.getX(), pos3.getX()));
 		for(int posX = minX; posX <= maxX; posX++)
@@ -91,9 +91,9 @@ public class OceanRundownFeature extends Feature<NoFeatureConfig>
 			}
 			for(int posZ = z1; posZ <= z2; posZ++)
 			{
-				BlockPos groundPos = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, new BlockPos(posX, 0, posZ));
+				BlockPos groundPos = world.getHeightmapPos(Heightmap.Type.WORLD_SURFACE_WG, new BlockPos(posX, 0, posZ));
 				if(!world.getBlockState(groundPos).getMaterial().isLiquid())
-					setBlockState(world, groundPos.down(), fluid);
+					setBlock(world, groundPos.below(), fluid);
 			}
 		}
 		

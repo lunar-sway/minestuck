@@ -48,14 +48,14 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 		if(newDowel.getItem() == MSBlocks.CRUXITE_DOWEL.asItem() || newDowel.isEmpty())
 		{
 			dowel = newDowel;
-			markDirty();
-			if(world != null)
+			setChanged();
+			if(level != null)
 			{
-				BlockState state = world.getBlockState(pos);
+				BlockState state = level.getBlockState(worldPosition);
 				if(state.hasProperty(AlchemiterBlock.Pad.DOWEL))	//If not, then the machine has likely been destroyed; don't bother doing anything about it
 				{
-					state = state.with(AlchemiterBlock.Pad.DOWEL, EnumDowelType.getForDowel(newDowel));
-					world.setBlockState(pos, state, Constants.BlockFlags.BLOCK_UPDATE);
+					state = state.setValue(AlchemiterBlock.Pad.DOWEL, EnumDowelType.getForDowel(newDowel));
+					level.setBlock(worldPosition, state, Constants.BlockFlags.BLOCK_UPDATE);
 				}
 			}
 		}
@@ -97,10 +97,10 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 	public void breakMachine()
 	{
 		broken = true;
-		if(world != null)
+		if(level != null)
 		{
-			BlockState state = world.getBlockState(pos);
-			world.notifyBlockUpdate(pos, state, state, 2);
+			BlockState state = level.getBlockState(worldPosition);
+			level.sendBlockUpdated(worldPosition, state, state, 2);
 		}
 	}
 
@@ -108,25 +108,25 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 		public void unbreakMachine()
 		{
 			broken = false;
-			if(world != null)
+			if(level != null)
 			{
-				BlockState state = world.getBlockState(pos);
-				world.notifyBlockUpdate(pos, state, state, 2);
+				BlockState state = level.getBlockState(worldPosition);
+				level.sendBlockUpdated(worldPosition, state, state, 2);
 			}
 		}
 	
 	public void dropItem(Direction direction)
 	{
-		if(world == null)
+		if(level == null)
 		{
 			Debug.warn("Tried to drop alchemiter dowel before the tile entity was given a world!");
 			return;
 		}
-		BlockPos dropPos = direction == null ? this.pos : this.pos.offset(direction);
-		if(direction != null && Block.hasEnoughSolidSide(world, pos.offset(direction), direction.getOpposite()))
-			dropPos = this.pos;
+		BlockPos dropPos = direction == null ? this.worldPosition : this.worldPosition.relative(direction);
+		if(direction != null && Block.canSupportCenter(level, worldPosition.relative(direction), direction.getOpposite()))
+			dropPos = this.worldPosition;
 		
-		InventoryHelper.spawnItemStack(world, dropPos.getX(), dropPos.getY(), dropPos.getZ(), dowel);
+		InventoryHelper.dropItemStack(level, dropPos.getX(), dropPos.getY(), dropPos.getZ(), dowel);
 		setDowel(ItemStack.EMPTY);
 	}
 	
@@ -136,29 +136,29 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 		{
 			checkStates();
 			if(broken)
-				Debug.warnf("Failed to notice a block being broken or misplaced at the alchemiter at %s", getPos());
+				Debug.warnf("Failed to notice a block being broken or misplaced at the alchemiter at %s", getBlockPos());
 		}
 		return !broken;
 	}
 	
 	public void checkStates()
 	{
-		if(this.broken || world == null)
+		if(this.broken || level == null)
 			return;
 		
-		if(MSBlocks.ALCHEMITER.isInvalidFromPad(world, pos))
+		if(MSBlocks.ALCHEMITER.isInvalidFromPad(level, worldPosition))
 			breakMachine();
 	}
 	
 	public Direction getFacing()
 	{
-		return getBlockState().get(AlchemiterBlock.FACING);
+		return getBlockState().getValue(AlchemiterBlock.FACING);
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT nbt)
+	public void load(BlockState state, CompoundNBT nbt)
 	{
-		super.read(state, nbt);
+		super.load(state, nbt);
 		
 		wildcardGrist = GristType.read(nbt, "gristType");
 		
@@ -178,23 +178,23 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 		
 		ItemStack oldDowel = dowel;
 		if(nbt.contains("dowel"))
-			dowel = ItemStack.read(nbt.getCompound("dowel"));
+			dowel = ItemStack.of(nbt.getCompound("dowel"));
 		
 		//This a slight hack to force a rerender (since it at the time of writing normally happens before we get the update packet). This should not be done normally
-		if(world != null && world.isRemote && !ItemStack.areItemStacksEqual(oldDowel, dowel))
-			world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), Constants.BlockFlags.RERENDER_MAIN_THREAD);
+		if(level != null && level.isClientSide && !ItemStack.matches(oldDowel, dowel))
+			level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Constants.BlockFlags.RERENDER_MAIN_THREAD);
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound)
+	public CompoundNBT save(CompoundNBT compound)
 	{
-		super.write(compound);
+		super.save(compound);
 
 		compound.putString("gristType", wildcardGrist.getRegistryName().toString());
 		compound.putBoolean("broken", isBroken());
 		
 		if(dowel!= null)
-			compound.put("dowel", dowel.write(new CompoundNBT()));
+			compound.put("dowel", dowel.save(new CompoundNBT()));
 		
 		return compound;
 	}
@@ -202,30 +202,30 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 	@Override
 	public CompoundNBT getUpdateTag()
 	{
-		return write(new CompoundNBT());
+		return save(new CompoundNBT());
 	}
 	
 	
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket()
 	{
-		return new SUpdateTileEntityPacket(this.pos, 0, getUpdateTag());
+		return new SUpdateTileEntityPacket(this.worldPosition, 0, getUpdateTag());
 	}
 	
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
 	{
-		handleUpdateTag(getBlockState(), pkt.getNbtCompound());
+		handleUpdateTag(getBlockState(), pkt.getTag());
 	}
 	
 	public void onRightClick(World worldIn, PlayerEntity playerIn, BlockState state, Direction side)
 	{
-		if(worldIn.isRemote)
+		if(worldIn.isClientSide)
 		{
 			if(state.getBlock() == MSBlocks.ALCHEMITER.CENTER.get() || state.getBlock() == MSBlocks.ALCHEMITER.CORNER.get() || state.getBlock() == MSBlocks.ALCHEMITER.LEFT_SIDE.get()
 					|| state.getBlock() == MSBlocks.ALCHEMITER.RIGHT_SIDE.get() || state.getBlock() == MSBlocks.ALCHEMITER.TOTEM_CORNER.get())
 			{
-				BlockPos mainPos = pos;
+				BlockPos mainPos = worldPosition;
 				if(!isBroken())
 				{
 					MSScreenFactories.displayAlchemiterScreen(this);
@@ -245,16 +245,16 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 			{
 				if (!dowel.isEmpty())
 				{    //Remove dowel from pad
-					if (player.getHeldItemMainhand().isEmpty())
-						player.setHeldItem(Hand.MAIN_HAND, dowel);
-					else if (!player.inventory.addItemStackToInventory(dowel))
+					if (player.getMainHandItem().isEmpty())
+						player.setItemInHand(Hand.MAIN_HAND, dowel);
+					else if (!player.inventory.add(dowel))
 						dropItem(side);
-					else player.container.detectAndSendChanges();
+					else player.inventoryMenu.broadcastChanges();
 					
 					setDowel(ItemStack.EMPTY);
 				} else
 				{
-					ItemStack heldStack = player.getHeldItemMainhand();
+					ItemStack heldStack = player.getMainHandItem();
 					if (!heldStack.isEmpty() && heldStack.getItem() == MSBlocks.CRUXITE_DOWEL.asItem())
 						setDowel(heldStack.split(1));    //Put a dowel on the pad
 				}
@@ -268,13 +268,13 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 		//Clamp quantity
 		quantity = Math.min(newItem.getMaxStackSize() * MinestuckConfig.SERVER.alchemiterMaxStacks.get(), Math.max(1, quantity));
 		
-		Direction facing = world.getBlockState(pos).get(AlchemiterBlock.FACING);
+		Direction facing = level.getBlockState(worldPosition).getValue(AlchemiterBlock.FACING);
 		//get the position to spawn the item
-		BlockPos spawnPos = this.getPos().offset(facing.getOpposite()).offset(facing.rotateYCCW());
+		BlockPos spawnPos = this.getBlockPos().relative(facing.getOpposite()).relative(facing.getCounterClockWise());
 		if(facing.getAxisDirection() == Direction.AxisDirection.NEGATIVE)
-			spawnPos = spawnPos.offset(facing.getOpposite());
-		if(facing.rotateY().getAxisDirection() == Direction.AxisDirection.NEGATIVE)
-			spawnPos = spawnPos.offset(facing.rotateYCCW());
+			spawnPos = spawnPos.relative(facing.getOpposite());
+		if(facing.getClockWise().getAxisDirection() == Direction.AxisDirection.NEGATIVE)
+			spawnPos = spawnPos.relative(facing.getCounterClockWise());
 		//get the grist cost
 		GristSet cost = getGristCost(quantity);
 		
@@ -285,7 +285,7 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 			
 			
 			PlayerIdentifier pid = IdentifierHandler.encode(player);
-			GristHelper.decrease(world, pid, cost);
+			GristHelper.decrease(level, pid, cost);
 			
 			AlchemyEvent event = new AlchemyEvent(pid, this, getDowel(), newItem, cost);
 			MinecraftForge.EVENT_BUS.post(event);
@@ -296,8 +296,8 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 				ItemStack stack = newItem.copy();
 				stack.setCount(Math.min(stack.getMaxStackSize(), quantity));
 				quantity -= stack.getCount();
-				ItemEntity item = new ItemEntity(world, spawnPos.getX(), spawnPos.getY() + 0.5, spawnPos.getZ(), stack);
-				world.addEntity(item);
+				ItemEntity item = new ItemEntity(level, spawnPos.getX(), spawnPos.getY() + 0.5, spawnPos.getZ(), stack);
+				level.addFreshEntity(item);
 			}
 		}
 	}
@@ -307,12 +307,12 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 		ItemStack dowel = getDowel();
 		GristSet set;
 		ItemStack stack = getOutput();
-		if(dowel.isEmpty() || world == null)
+		if(dowel.isEmpty() || level == null)
 			return null;
 		
 		stack.setCount(quantity);
 		//get the grist cost of stack
-		set = GristCostRecipe.findCostForItem(stack, getWildcardGrist(), false, world);
+		set = GristCostRecipe.findCostForItem(stack, getWildcardGrist(), false, level);
 		
 		return set;
 	}
@@ -328,9 +328,9 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 		if(this.wildcardGrist != wildcardGrist)
 		{
 			this.wildcardGrist = wildcardGrist;
-			this.markDirty();
-			if(world != null && !world.isRemote)
-				world.notifyBlockUpdate(getPos(), getBlockState(), getBlockState(), 0);
+			this.setChanged();
+			if(level != null && !level.isClientSide)
+				level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 0);
 		}
 	}
 }

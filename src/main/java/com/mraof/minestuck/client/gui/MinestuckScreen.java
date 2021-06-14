@@ -73,7 +73,7 @@ public abstract class MinestuckScreen extends Screen
 			}
 
 			this.drawIcon(gristXOffset + gristIconX, gristYOffset + gristIconY, type.getIcon());
-			minecraft.fontRenderer.drawString(matrixStack, amount, gristXOffset + gristCountX, gristYOffset + gristCountY, 0xddddee);
+			minecraft.font.draw(matrixStack, amount, gristXOffset + gristCountX, gristYOffset + gristCountY, 0xddddee);
 			
 			offset++;
 		}
@@ -96,7 +96,7 @@ public abstract class MinestuckScreen extends Screen
 		if(icon == null || minecraft == null)
 			return;
 		
-		this.minecraft.getTextureManager().bindTexture(icon);
+		this.minecraft.getTextureManager().bind(icon);
 		RenderSystem.enableAlphaTest();
 
 		float scale = (float) 1 / 16;
@@ -106,13 +106,13 @@ public abstract class MinestuckScreen extends Screen
 		int iconU = 0;
 		int iconV = 0;
 
-		BufferBuilder render = Tessellator.getInstance().getBuffer();
+		BufferBuilder render = Tessellator.getInstance().getBuilder();
 		render.begin(7, DefaultVertexFormats.POSITION_TEX);
-		render.pos(x, y + iconY, 0D).tex((iconU) * scale, (iconV + iconY) * scale).endVertex();
-		render.pos(x + iconX, y + iconY, 0D).tex((iconU + iconX) * scale, (iconV + iconY) * scale).endVertex();
-		render.pos(x + iconX, y, 0D).tex((iconU + iconX) * scale, (iconV) * scale).endVertex();
-		render.pos(x, y, 0D).tex((iconU) * scale, (iconV) * scale).endVertex();
-		Tessellator.getInstance().draw();
+		render.vertex(x, y + iconY, 0D).uv((iconU) * scale, (iconV + iconY) * scale).endVertex();
+		render.vertex(x + iconX, y + iconY, 0D).uv((iconU + iconX) * scale, (iconV + iconY) * scale).endVertex();
+		render.vertex(x + iconX, y, 0D).uv((iconU + iconX) * scale, (iconV) * scale).endVertex();
+		render.vertex(x, y, 0D).uv((iconU) * scale, (iconV) * scale).endVertex();
+		Tessellator.getInstance().end();
 	}
 
 	protected boolean isPointInRegion(int regionX, int regionY, int regionWidth, int regionHeight, int pointX, int pointY)

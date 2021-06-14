@@ -23,7 +23,7 @@ public class EndSaplingBlock extends BushBlock implements IGrowable
 {
 	public static final BooleanProperty ALPHA = MSProperties.ALPHA;
 	public static final BooleanProperty OMEGA = MSProperties.OMEGA;
-	protected static final VoxelShape SHAPE = Block.makeCuboidShape(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
+	protected static final VoxelShape SHAPE = Block.box(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
 	
 	
 	private final Tree tree = null;//new EndTree(); TODO
@@ -31,7 +31,7 @@ public class EndSaplingBlock extends BushBlock implements IGrowable
 	public EndSaplingBlock(Properties properties)
 	{
 		super(properties);
-		this.setDefaultState(this.stateContainer.getBaseState().with(ALPHA, false).with(OMEGA, false));
+		this.registerDefaultState(this.stateDefinition.any().setValue(ALPHA, false).setValue(OMEGA, false));
 	}
 	
 	@Override
@@ -42,13 +42,13 @@ public class EndSaplingBlock extends BushBlock implements IGrowable
 	}
 	
 	@Override
-	public boolean canGrow(IBlockReader worldIn, BlockPos pos, BlockState state, boolean isClient)
+	public boolean isValidBonemealTarget(IBlockReader worldIn, BlockPos pos, BlockState state, boolean isClient)
 	{
 		return true;
 	}
 	
 	@Override
-	public boolean canUseBonemeal(World worldIn, Random rand, BlockPos pos, BlockState state)
+	public boolean isBonemealSuccess(World worldIn, Random rand, BlockPos pos, BlockState state)
 	{
 		return true;
 	}
@@ -58,26 +58,26 @@ public class EndSaplingBlock extends BushBlock implements IGrowable
 	 * If Alpha is true and omega is false, then the tree will generate.
 	 */
 	@Override
-	public void grow(ServerWorld worldIn, Random rand, BlockPos pos, BlockState state)
+	public void performBonemeal(ServerWorld worldIn, Random rand, BlockPos pos, BlockState state)
 	{
-		if(worldIn.isRemote || worldIn.getDimensionType().getMoonPhase(worldIn.getDayTime()) == 4)
+		if(worldIn.isClientSide || worldIn.dimensionType().moonPhase(worldIn.getDayTime()) == 4)
 		{
 			return;
 		}
 		if(rand.nextFloat() < 0.5)
 		{
-			state = state.cycleValue(ALPHA);
+			state = state.cycle(ALPHA);
 		} else
 		{
-			state = state.cycleValue(OMEGA);
+			state = state.cycle(OMEGA);
 		}
 		
-		if(state.get(ALPHA) && !state.get(OMEGA))
+		if(state.getValue(ALPHA) && !state.getValue(OMEGA))
 		{
 			generateTree(worldIn, pos, state, rand);
 		} else
 		{
-			worldIn.setBlockState(pos, state);
+			worldIn.setBlockAndUpdate(pos, state);
 		}
 	}
 	
@@ -85,24 +85,24 @@ public class EndSaplingBlock extends BushBlock implements IGrowable
 	{
 		if(!net.minecraftforge.event.ForgeEventFactory.saplingGrowTree(worldIn, rand, pos))
 			return;
-		tree.attemptGrowTree(worldIn, worldIn.getChunkProvider().getChunkGenerator(), pos, state, rand);
+		tree.growTree(worldIn, worldIn.getChunkSource().getGenerator(), pos, state, rand);
 	}
 	
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
 	{
 		builder.add(ALPHA, OMEGA);
 	}
 	
 	@Override
-	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos)
+	public boolean canSurvive(BlockState state, IWorldReader worldIn, BlockPos pos)
 	{
-		BlockPos groundPos = pos.down();
-		return isValidGround(worldIn.getBlockState(groundPos), worldIn, groundPos);
+		BlockPos groundPos = pos.below();
+		return mayPlaceOn(worldIn.getBlockState(groundPos), worldIn, groundPos);
 	}
 	
 	@Override
-	protected boolean isValidGround(BlockState state, IBlockReader worldIn, BlockPos pos)
+	protected boolean mayPlaceOn(BlockState state, IBlockReader worldIn, BlockPos pos)
 	{
 		return MSTags.Blocks.END_SAPLING_DIRT.contains(state.getBlock());
 	}
@@ -111,13 +111,13 @@ public class EndSaplingBlock extends BushBlock implements IGrowable
 	@SuppressWarnings("deprecation")
 	public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random)
 	{
-		if (!worldIn.isRemote)
+		if (!worldIn.isClientSide)
 		{
 			super.tick(state, worldIn, pos, random);
 			
-			if (canGrow(worldIn, pos, state, false) && random.nextInt(7) == 0)	//The world is not remote, therefore the side is not client.
+			if (isValidBonemealTarget(worldIn, pos, state, false) && random.nextInt(7) == 0)	//The world is not remote, therefore the side is not client.
 			{
-				this.grow(worldIn, random, pos, state);
+				this.performBonemeal(worldIn, random, pos, state);
 			}
 		}
 	}

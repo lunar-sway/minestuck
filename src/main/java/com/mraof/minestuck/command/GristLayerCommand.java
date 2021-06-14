@@ -15,12 +15,12 @@ public class GristLayerCommand
 	
 	public static void register(CommandDispatcher<CommandSource> dispatcher)
 	{
-		dispatcher.register(Commands.literal("gristlayers").requires(source -> source.hasPermissionLevel(2)).executes(context -> execute(context.getSource())));
+		dispatcher.register(Commands.literal("gristlayers").requires(source -> source.hasPermission(2)).executes(context -> execute(context.getSource())));
 	}
 	
 	private static int execute(CommandSource source) throws CommandSyntaxException
 	{
-		ServerPlayerEntity player = source.asPlayer();
+		ServerPlayerEntity player = source.getPlayerOrException();
 		/*TODO
 		ChunkGenerator<?> chunkGenerator = player.getServerWorld().getChunkProvider().getChunkGenerator();
 		if(chunkGenerator instanceof LandChunkGenerator)

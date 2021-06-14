@@ -16,7 +16,7 @@ public class RookEntity extends CarapacianEntity implements IMob
 	protected RookEntity(EntityType<? extends RookEntity> type, EnumEntityKingdom kingdom, World world)
 	{
 		super(type, kingdom, world);
-		this.experienceValue = 10;
+		this.xpReward = 10;
 	}
 	
 	public static RookEntity createProspitian(EntityType<? extends RookEntity> type, World world)
@@ -31,8 +31,8 @@ public class RookEntity extends CarapacianEntity implements IMob
 	
 	public static AttributeModifierMap.MutableAttribute rookAttributes()
 	{
-		return CarapacianEntity.carapacianAttributes().createMutableAttribute(Attributes.MAX_HEALTH, 50)
-				.createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3);
+		return CarapacianEntity.carapacianAttributes().add(Attributes.MAX_HEALTH, 50)
+				.add(Attributes.MOVEMENT_SPEED, 0.3);
 	}
 	
 	@Override
@@ -49,10 +49,10 @@ public class RookEntity extends CarapacianEntity implements IMob
 	}
 
 	@Override
-	public boolean attackEntityAsMob(Entity entity)
+	public boolean doHurtTarget(Entity entity)
 	{
 		float damage = this.getAttackStrength(entity);
-		return entity.attackEntityFrom(DamageSource.causeMobDamage(this), damage);
+		return entity.hurt(DamageSource.mobAttack(this), damage);
 	}
 
 //	@Override

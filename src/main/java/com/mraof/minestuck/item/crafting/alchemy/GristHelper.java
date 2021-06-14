@@ -67,7 +67,7 @@ public class GristHelper
 	 */
 	public static GristSet generateUnderlingGristDrops(UnderlingEntity entity, Map<PlayerIdentifier, Double> damageMap, double multiplier)
 	{
-		Random random = entity.getRNG();
+		Random random = entity.getRandom();
 		GristType primary = entity.getGristType();
 		GristType secondary = getSecondaryGrist(random, primary);
 		
@@ -197,7 +197,7 @@ public class GristHelper
 			ServerPlayerEntity client = player.getPlayer(server);
 			if(client != null)
 			{
-				client.sendStatusMessage(message, true);
+				client.displayClientMessage(message, true);
 			}
 		}
 	}

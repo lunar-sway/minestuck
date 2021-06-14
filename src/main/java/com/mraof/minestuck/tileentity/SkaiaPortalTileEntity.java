@@ -20,7 +20,7 @@ import net.minecraftforge.common.util.Constants;
 
 public class SkaiaPortalTileEntity extends TileEntity //implements ITeleporter
 {
-	private GlobalPos destination = GlobalPos.getPosition(MSDimensions.skaiaDimension, new BlockPos(0, -1, 0));
+	private GlobalPos destination = GlobalPos.of(MSDimensions.skaiaDimension, new BlockPos(0, -1, 0));
 	
 	public SkaiaPortalTileEntity()
 	{
@@ -28,25 +28,25 @@ public class SkaiaPortalTileEntity extends TileEntity //implements ITeleporter
 	}
 	
 	@Override
-	public void setWorldAndPos(World worldIn, BlockPos pos)
+	public void setLevelAndPosition(World worldIn, BlockPos pos)
 	{
-		super.setWorldAndPos(worldIn, pos);
-		if(!worldIn.isRemote && destination.getDimension() == worldIn.getDimensionKey())
-			destination = GlobalPos.getPosition(worldIn.getDimensionKey() == MSDimensions.skaiaDimension ? World.OVERWORLD : MSDimensions.skaiaDimension, destination.getPos());
+		super.setLevelAndPosition(worldIn, pos);
+		if(!worldIn.isClientSide && destination.dimension() == worldIn.dimension())
+			destination = GlobalPos.of(worldIn.dimension() == MSDimensions.skaiaDimension ? World.OVERWORLD : MSDimensions.skaiaDimension, destination.pos());
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT nbt)
+	public void load(BlockState state, CompoundNBT nbt)
 	{
-		super.read(state, nbt);
+		super.load(state, nbt);
 		if(nbt.contains("dest", Constants.NBT.TAG_COMPOUND))
 			destination = GlobalPos.CODEC.parse(NBTDynamicOps.INSTANCE, nbt.get("dest")).resultOrPartial(Debug::error).orElse(destination);
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound)
+	public CompoundNBT save(CompoundNBT compound)
 	{
-		super.write(compound);
+		super.save(compound);
 		GlobalPos.CODEC.encodeStart(NBTDynamicOps.INSTANCE, destination).resultOrPartial(Debug::error)
 				.ifPresent(tag -> compound.put("dest", tag));
 		
@@ -56,23 +56,23 @@ public class SkaiaPortalTileEntity extends TileEntity //implements ITeleporter
 	public void teleportEntity(Entity entity)
 	{
 		MinecraftServer server = entity.getServer();
-		if(server == null || world == null)
+		if(server == null || level == null)
 			return;
 		
-		if(destination.getDimension() != this.world.getDimensionKey())
+		if(destination.dimension() != this.level.dimension())
 		{
-			if(destination.getPos().getY() < 0)
+			if(destination.pos().getY() < 0)
 			{
-				ServerWorld world = server.getWorld(destination.getDimension());
+				ServerWorld world = server.getLevel(destination.dimension());
 				if(world == null)
 					return;
 				//TODO gets world height on a chunk that doesn't exist
 				// However doesn't matter a lot since the position isn't used yet
-				destination = GlobalPos.getPosition(destination.getDimension(), world.getHeight(Heightmap.Type.WORLD_SURFACE, entity.getPosition()).up(5));
+				destination = GlobalPos.of(destination.dimension(), world.getHeightmapPos(Heightmap.Type.WORLD_SURFACE, entity.blockPosition()).above(5));
 			}
-			entity = Teleport.teleportEntity(entity, server.getWorld(destination.getDimension()), pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+			entity = Teleport.teleportEntity(entity, server.getLevel(destination.dimension()), worldPosition.getX() + 0.5, worldPosition.getY(), worldPosition.getZ() + 0.5);
 			if(entity != null)
-				placeDestPlatform(entity.world);
+				placeDestPlatform(entity.level);
 		}
 		if(entity != null)
 				entity.setPortalCooldown();
@@ -80,15 +80,15 @@ public class SkaiaPortalTileEntity extends TileEntity //implements ITeleporter
 	
 	private void placeDestPlatform(World world)
 	{
-		double x = pos.getX();
-		double y = pos.getY();
-		double z = pos.getZ();
+		double x = worldPosition.getX();
+		double y = worldPosition.getY();
+		double z = worldPosition.getZ();
 		Block[] blocks = {MSBlocks.BLACK_CHESS_DIRT, MSBlocks.LIGHT_GRAY_CHESS_DIRT, MSBlocks.WHITE_CHESS_DIRT, MSBlocks.DARK_GRAY_CHESS_DIRT};
 		for(int blockX = (int) x - 2; blockX < x + 2; blockX++)
 		{
 			for(int blockZ = (int) z - 2; blockZ < z + 2; blockZ++)
 			{
-				world.setBlockState(new BlockPos(blockX, (int) y - 1, blockZ), blocks[(blockX + blockZ) & 3].getDefaultState(), Constants.BlockFlags.DEFAULT);
+				world.setBlock(new BlockPos(blockX, (int) y - 1, blockZ), blocks[(blockX + blockZ) & 3].defaultBlockState(), Constants.BlockFlags.DEFAULT);
 				for(int blockY = (int) y; blockY < y + 6; blockY++)
 					world.removeBlock(new BlockPos(blockX, blockY, blockZ), false);
 			}

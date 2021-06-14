@@ -34,12 +34,12 @@ public class CastleWallPiece extends CastlePiece
 	}
 	
 	@Override
-	protected void readAdditional(CompoundNBT nbt)
+	protected void addAdditionalSaveData(CompoundNBT nbt)
 	{
 	}
 	
 	@Override
-	public void buildComponent(StructurePiece componentIn, List<StructurePiece> pieces, Random rand)
+	public void addChildren(StructurePiece componentIn, List<StructurePiece> pieces, Random rand)
 	{
 		CastleStartPiece startPiece = (CastleStartPiece) componentIn;
 //		if(Math.abs(this.startPiece.x - this.boundingBox.minX) >= this.startPiece.castleWidth && ((this.direction & 1) == 0) || (this.startPiece.z - this.boundingBox.minZ >= this.startPiece.castleLength && ((this.direction & 1) == 1)))
@@ -48,19 +48,19 @@ public class CastleWallPiece extends CastlePiece
 		switch(this.direction)
 		{
 		case 0:
-			if(this.boundingBox.minX - startPiece.x >= startPiece.castleWidth)incrementDirection = true;
+			if(this.boundingBox.x0 - startPiece.x >= startPiece.castleWidth)incrementDirection = true;
 			break;
 		case 1:
-			if(Math.abs(startPiece.z - this.boundingBox.minZ) >= startPiece.castleLength)incrementDirection = true;
+			if(Math.abs(startPiece.z - this.boundingBox.z0) >= startPiece.castleLength)incrementDirection = true;
 			break;
 		case 2:
-			if(startPiece.x - this.boundingBox.minX >= startPiece.castleWidth)incrementDirection = true;
+			if(startPiece.x - this.boundingBox.x0 >= startPiece.castleWidth)incrementDirection = true;
 			break;
 		case 3:
-			if(this.boundingBox.minZ <= startPiece.z)incrementDirection = true;
+			if(this.boundingBox.z0 <= startPiece.z)incrementDirection = true;
 			break;
 		case 4:
-			if(this.boundingBox.minX >= startPiece.x)incrementDirection = true;
+			if(this.boundingBox.x0 >= startPiece.x)incrementDirection = true;
 			break;
 		}
 		if(incrementDirection)
@@ -70,12 +70,12 @@ public class CastleWallPiece extends CastlePiece
 		}
 		if(startPiece.bottom)
 		{
-			this.componentType = 0;
+			this.genDepth = 0;
 			this.getNextComponentNormal(startPiece, pieces, rand, 0, -8, 0);
 		}
 		if(this.direction == 5 && startPiece.castleLength > 16 && startPiece.castleWidth > 8)
 		{
-			this.componentType = 3;
+			this.genDepth = 3;
 			for(int depth = 8; depth < startPiece.castleLength; depth += 8)
 				for(int row = -startPiece.castleWidth + 8; row < startPiece.castleWidth; row += 8)
 					this.getNextComponentNormal(startPiece, pieces, rand,  row, depth, true);//TODO change this so it generates the whole floor smartly
@@ -86,9 +86,9 @@ public class CastleWallPiece extends CastlePiece
 			startPiece.averageGroundLevel += 8;
 			startPiece.bottom = false;
 			this.direction = 0;
-			this.boundingBox.offset(0, 8, 8);
+			this.boundingBox.move(0, 8, 8);
 		}
-		this.componentType = 1;
+		this.genDepth = 1;
 		switch(this.direction)
 		{
 		case 4:
@@ -107,7 +107,7 @@ public class CastleWallPiece extends CastlePiece
 		default:
 //			Debug.print("Wall done");
 		}
-		this.componentType = 3;
+		this.genDepth = 3;
 //		if(!this.cornerPiece)
 //			if((this.direction & 3) == 0)
 				
@@ -120,12 +120,12 @@ public class CastleWallPiece extends CastlePiece
 	}
 	
 	@Override
-	public boolean func_230383_a_(ISeedReader world, StructureManager manager, ChunkGenerator generator, Random random, MutableBoundingBox structureBoundingBox, ChunkPos chunkPosIn, BlockPos pos)
+	public boolean postProcess(ISeedReader world, StructureManager manager, ChunkGenerator generator, Random random, MutableBoundingBox structureBoundingBox, ChunkPos chunkPosIn, BlockPos pos)
 	{
 		
-		BlockState chessTile = (isBlack ? MSBlocks.BLACK_CHESS_DIRT : MSBlocks.WHITE_CHESS_DIRT).getDefaultState();
-		BlockState chessTile1 = (isBlack ? MSBlocks.DARK_GRAY_CHESS_DIRT : MSBlocks.LIGHT_GRAY_CHESS_DIRT).getDefaultState();
-		if (this.isLiquidInStructureBoundingBox(world, structureBoundingBox))
+		BlockState chessTile = (isBlack ? MSBlocks.BLACK_CHESS_DIRT : MSBlocks.WHITE_CHESS_DIRT).defaultBlockState();
+		BlockState chessTile1 = (isBlack ? MSBlocks.DARK_GRAY_CHESS_DIRT : MSBlocks.LIGHT_GRAY_CHESS_DIRT).defaultBlockState();
+		if (this.edgesLiquid(world, structureBoundingBox))
 		{
 			return false;
 		}
@@ -134,7 +134,7 @@ public class CastleWallPiece extends CastlePiece
 			if(!(this.direction == 5 && this.cornerPiece))
 			{
 				this.fillWithAlternatingBlocks(world, structureBoundingBox, 0, 0, 0, 7 ,6, 7, chessTile, chessTile1, false);
-				this.fillWithAir(world, structureBoundingBox, 0, 7, 0, 7, 6, 7);
+				this.generateAirBox(world, structureBoundingBox, 0, 7, 0, 7, 6, 7);
 			}
 			if(!this.cornerPiece)
 				switch(this.direction)

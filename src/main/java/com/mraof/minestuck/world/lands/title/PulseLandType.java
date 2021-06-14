@@ -30,12 +30,12 @@ public class PulseLandType extends TitleLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("structure_wool_2", Blocks.RED_WOOL.getDefaultState());
-		registry.setBlockState("carpet", Blocks.BROWN_CARPET.getDefaultState());
+		registry.setBlockState("structure_wool_2", Blocks.RED_WOOL.defaultBlockState());
+		registry.setBlockState("carpet", Blocks.BROWN_CARPET.defaultBlockState());
 		
-		registry.setBlockState("ocean", MSBlocks.BLOOD.getDefaultState());
-		registry.setBlockState("river", MSBlocks.BLOOD.getDefaultState());
-		registry.setBlockState("slime", MSBlocks.COAGULATED_BLOOD.getDefaultState());
+		registry.setBlockState("ocean", MSBlocks.BLOOD.defaultBlockState());
+		registry.setBlockState("river", MSBlocks.BLOOD.defaultBlockState());
+		registry.setBlockState("slime", MSBlocks.COAGULATED_BLOOD.defaultBlockState());
 	}
 	
 	@Override

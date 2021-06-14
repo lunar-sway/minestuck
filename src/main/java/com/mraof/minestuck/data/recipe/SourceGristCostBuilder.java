@@ -34,13 +34,13 @@ public class SourceGristCostBuilder
 	
 	public static SourceGristCostBuilder of(ITag<Item> tag)
 	{
-		ResourceLocation tagId = TagCollectionManager.getManager().getItemTags().getValidatedIdFromTag(tag);
-		return new SourceGristCostBuilder(new ResourceLocation(tagId.getNamespace(), tagId.getPath()+"_tag"), Ingredient.fromTag(tag));
+		ResourceLocation tagId = TagCollectionManager.getInstance().getItems().getIdOrThrow(tag);
+		return new SourceGristCostBuilder(new ResourceLocation(tagId.getNamespace(), tagId.getPath()+"_tag"), Ingredient.of(tag));
 	}
 	
 	public static SourceGristCostBuilder of(IItemProvider item)
 	{
-		return new SourceGristCostBuilder(item.asItem().getRegistryName(), Ingredient.fromItems(item));
+		return new SourceGristCostBuilder(item.asItem().getRegistryName(), Ingredient.of(item));
 	}
 	
 	public static SourceGristCostBuilder of(Ingredient ingredient)
@@ -97,13 +97,13 @@ public class SourceGristCostBuilder
 	
 	public void build(Consumer<IFinishedRecipe> recipeSaver)
 	{
-		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ingredient.getMatchingStacks()[0].getItem().getRegistryName());
+		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ingredient.getItems()[0].getItem().getRegistryName());
 		build(recipeSaver, name);
 	}
 	
 	public void buildFor(Consumer<IFinishedRecipe> recipeSaver, String modId)
 	{
-		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ingredient.getMatchingStacks()[0].getItem().getRegistryName());
+		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ingredient.getItems()[0].getItem().getRegistryName());
 		build(recipeSaver, new ResourceLocation(modId, name.getPath()));
 	}
 	
@@ -125,9 +125,9 @@ public class SourceGristCostBuilder
 		}
 		
 		@Override
-		public void serialize(JsonObject jsonObject)
+		public void serializeRecipeData(JsonObject jsonObject)
 		{
-			super.serialize(jsonObject);
+			super.serializeRecipeData(jsonObject);
 			JsonArray sourceArray = new JsonArray();
 			sources.forEach(sourceArray::add);
 			jsonObject.add("sources", sourceArray);
@@ -136,7 +136,7 @@ public class SourceGristCostBuilder
 		}
 		
 		@Override
-		public IRecipeSerializer<?> getSerializer()
+		public IRecipeSerializer<?> getType()
 		{
 			return MSRecipeTypes.SOURCE_GRIST_COST;
 		}

@@ -31,24 +31,24 @@ public class RainbowLandType extends TerrainLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("upper", Blocks.WHITE_TERRACOTTA.getDefaultState());
-		registry.setBlockState("surface", Blocks.WHITE_WOOL.getDefaultState());
-		registry.setBlockState("ocean", MSBlocks.WATER_COLORS.getDefaultState());
-		registry.setBlockState("structure_primary", MSBlocks.RAINBOW_WOOD.getDefaultState());
-		registry.setBlockState("structure_primary_decorative", Blocks.ACACIA_LOG.getDefaultState());
-		registry.setBlockState("structure_primary_stairs", Blocks.DARK_OAK_STAIRS.getDefaultState());
-		registry.setBlockState("structure_secondary", MSBlocks.RAINBOW_PLANKS.getDefaultState());
-		registry.setBlockState("structure_secondary_decorative", Blocks.SPRUCE_PLANKS.getDefaultState());
-		registry.setBlockState("structure_secondary_stairs", Blocks.JUNGLE_STAIRS.getDefaultState());
-		registry.setBlockState("salamander_floor", Blocks.STONE_BRICKS.getDefaultState());
-		registry.setBlockState("light_block", MSBlocks.GLOWING_WOOD.getDefaultState());
-		BlockState rainbow_leaves = MSBlocks.RAINBOW_LEAVES.getDefaultState();
+		registry.setBlockState("upper", Blocks.WHITE_TERRACOTTA.defaultBlockState());
+		registry.setBlockState("surface", Blocks.WHITE_WOOL.defaultBlockState());
+		registry.setBlockState("ocean", MSBlocks.WATER_COLORS.defaultBlockState());
+		registry.setBlockState("structure_primary", MSBlocks.RAINBOW_WOOD.defaultBlockState());
+		registry.setBlockState("structure_primary_decorative", Blocks.ACACIA_LOG.defaultBlockState());
+		registry.setBlockState("structure_primary_stairs", Blocks.DARK_OAK_STAIRS.defaultBlockState());
+		registry.setBlockState("structure_secondary", MSBlocks.RAINBOW_PLANKS.defaultBlockState());
+		registry.setBlockState("structure_secondary_decorative", Blocks.SPRUCE_PLANKS.defaultBlockState());
+		registry.setBlockState("structure_secondary_stairs", Blocks.JUNGLE_STAIRS.defaultBlockState());
+		registry.setBlockState("salamander_floor", Blocks.STONE_BRICKS.defaultBlockState());
+		registry.setBlockState("light_block", MSBlocks.GLOWING_WOOD.defaultBlockState());
+		BlockState rainbow_leaves = MSBlocks.RAINBOW_LEAVES.defaultBlockState();
 		//	rainbow_leaves = rainbow_leaves.with(BlockMinestuckLeaves1.CHECK_DECAY, false).withProperty(BlockMinestuckLeaves1.DECAYABLE, false);
 		registry.setBlockState("bush", rainbow_leaves);
 		registry.setBlockState("mushroom_1", rainbow_leaves);
 		registry.setBlockState("mushroom_2", rainbow_leaves);
-		registry.setBlockState("structure_wool_1", Blocks.YELLOW_WOOL.getDefaultState());
-		registry.setBlockState("structure_wool_3", Blocks.GREEN_WOOL.getDefaultState());
+		registry.setBlockState("structure_wool_1", Blocks.YELLOW_WOOL.defaultBlockState());
+		registry.setBlockState("structure_wool_3", Blocks.GREEN_WOOL.defaultBlockState());
 	}
 	
 	@Override

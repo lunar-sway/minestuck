@@ -31,9 +31,9 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 	
 	public static AttributeModifierMap.MutableAttribute basiliskAttributes()
 	{
-		return UnderlingEntity.underlingAttributes().createMutableAttribute(Attributes.MAX_HEALTH, 85)
-				.createMutableAttribute(Attributes.KNOCKBACK_RESISTANCE, 0.6).createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.25)
-				.createMutableAttribute(Attributes.ATTACK_DAMAGE, 6);
+		return UnderlingEntity.underlingAttributes().add(Attributes.MAX_HEALTH, 85)
+				.add(Attributes.KNOCKBACK_RESISTANCE, 0.6).add(Attributes.MOVEMENT_SPEED, 0.25)
+				.add(Attributes.ATTACK_DAMAGE, 6);
 	}
 	
 	@Override
@@ -67,7 +67,7 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 	@Override
 	protected int getVitalityGel()
 	{
-		return rand.nextInt(3) + 4;
+		return random.nextInt(3) + 4;
 	}
 	
 	@Override
@@ -76,13 +76,13 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 		super.onGristTypeUpdated(type);
 		applyGristModifier(Attributes.MAX_HEALTH, 20 * type.getPower(), AttributeModifier.Operation.ADDITION);
 		applyGristModifier(Attributes.ATTACK_DAMAGE, 2.7 * type.getPower(), AttributeModifier.Operation.ADDITION);
-		this.experienceValue = (int) (6 * type.getPower() + 4);
+		this.xpReward = (int) (6 * type.getPower() + 4);
 	}
 	
 	@Override
 	public World getWorld() 
 	{
-		return this.world;
+		return this.level;
 	}
 	
 	@Override
@@ -95,18 +95,18 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 	@Override
 	public boolean attackEntityFromPart(Entity entityPart, DamageSource source, float damage) 
 	{
-		return this.attackEntityFrom(source, damage);
+		return this.hurt(source, damage);
 	}
 	
 	@Override
-	protected void collideWithEntity(Entity par1Entity) 
+	protected void doPush(Entity par1Entity) 
 	{
 		if(par1Entity != this.tail)
-			super.collideWithEntity(par1Entity);
+			super.doPush(par1Entity);
 	}
 	@Override
-	public void setPositionAndRotation(double par1, double par3, double par5, float par7, float par8) {
-		super.setPositionAndRotation(par1, par3, par5, par7, par8);
+	public void absMoveTo(double par1, double par3, double par5, float par7, float par8) {
+		super.absMoveTo(par1, par3, par5, par7, par8);
 		this.updatePartPositions();
 	}
 	
@@ -115,11 +115,11 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 	{
 		if(tail == null)
 			return;
-		float f1 = this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw);
-		double tailPosX = (this.getPosX() +  Math.sin(f1 / 180.0 * Math.PI) * tail.getWidth());
-		double tailPosZ = (this.getPosZ() + -Math.cos(f1 / 180.0 * Math.PI) * tail.getWidth());
+		float f1 = this.yRotO + (this.yRot - this.yRotO);
+		double tailPosX = (this.getX() +  Math.sin(f1 / 180.0 * Math.PI) * tail.getBbWidth());
+		double tailPosZ = (this.getZ() + -Math.cos(f1 / 180.0 * Math.PI) * tail.getBbWidth());
 
-		tail.setPositionAndRotation(tailPosX, this.getPosY(), tailPosZ, this.rotationYaw, this.rotationPitch);
+		tail.absMoveTo(tailPosX, this.getY(), tailPosZ, this.yRot, this.xRot);
 	}
 
 	@Override
@@ -135,11 +135,11 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 	}
 	
 	@Override
-	public void onDeath(DamageSource cause)
+	public void die(DamageSource cause)
 	{
-		super.onDeath(cause);
-		Entity entity = cause.getTrueSource();
-		if(this.dead && !this.world.isRemote)
+		super.die(cause);
+		Entity entity = cause.getEntity();
+		if(this.dead && !this.level.isClientSide)
 		{
 			computePlayerProgress((int) (100* getGristType().getPower() + 160));
 			if(entity instanceof ServerPlayerEntity)

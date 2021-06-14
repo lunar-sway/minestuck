@@ -53,11 +53,11 @@ public class StoneTabletScreen extends Screen
 	
 	public StoneTabletScreen(PlayerEntity player, Hand hand, String text, boolean canEdit)
 	{
-		super(NarratorChatListener.EMPTY);
+		super(NarratorChatListener.NO_TITLE);
 		
 		this.canEdit = canEdit;
 		this.hand = hand;
-		this.tablet = player.getHeldItem(hand);
+		this.tablet = player.getItemInHand(hand);
 		editingPlayer = player;
 		this.text = text;
 	}
@@ -69,30 +69,30 @@ public class StoneTabletScreen extends Screen
 		++updateCount;
 	}
 	@Override
-	public void onClose() {
-		this.minecraft.keyboardListener.enableRepeatEvents(false);
+	public void removed() {
+		this.minecraft.keyboardHandler.setSendRepeatsToGui(false);
 	}
 	@Override
 	protected void init() {
-		this.minecraft.keyboardListener.enableRepeatEvents(true);
+		this.minecraft.keyboardHandler.setSendRepeatsToGui(true);
 		
 		
 		if(canEdit)
 		{
 			this.buttonDone = this.addButton(new Button(this.width / 2 - 100, 196, 98, 20, new TranslationTextComponent("gui.done"), (button) ->
 			{
-				this.minecraft.displayGuiScreen(null);
+				this.minecraft.setScreen(null);
 				this.sendTabletToServer();
 			}));
 			this.buttonCancel = this.addButton(new Button(this.width / 2 + 2, 196, 98, 20, new TranslationTextComponent("gui.cancel"), (button) ->
 			{
-				minecraft.displayGuiScreen(null);
+				minecraft.setScreen(null);
 			}));
 		}
 		else
 		{
 			this.addButton(new Button(this.width / 2 - 100, 196, 200, 20, new TranslationTextComponent("gui.done"), (p_214161_1_) -> {
-				this.minecraft.displayGuiScreen((Screen)null);
+				this.minecraft.setScreen((Screen)null);
 			}));
 		}
 	}
@@ -101,9 +101,9 @@ public class StoneTabletScreen extends Screen
 	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
 	{
 		this.renderBackground(matrixStack);
-		this.setListener(null);
+		this.setFocused(null);
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.minecraft.getTextureManager().bindTexture(TABLET_TEXTURES);
+		this.minecraft.getTextureManager().bind(TABLET_TEXTURES);
 		int i = (this.width - 192) / 2;
 		int j = 2;
 		this.blit(matrixStack, i, 2, 0, 0, 192, 192);
@@ -114,7 +114,7 @@ public class StoneTabletScreen extends Screen
 			if (this.updateCount / 6 % 2 == 0) 
 			{
 				Point point = StoneTabletUtils.createPointer(font, s5, this.selectionEnd);
-				if (this.font.getBidiFlag()) 
+				if (this.font.isBidirectional()) 
 				{
 					StoneTabletUtils.adjustPointerAForBidi(font, point);
 					point.x = point.x - 4;
@@ -128,7 +128,7 @@ public class StoneTabletScreen extends Screen
 						AbstractGui.fill(matrixStack, point.x, point.y - 1, point.x + 1, point.y + 9, -16777216);
 					} else
 					{
-						this.font.drawString(matrixStack, "_", (float) point.x, (float) point.y, 0);
+						this.font.draw(matrixStack, "_", (float) point.x, (float) point.y, 0);
 					}
 				}
 			}
@@ -168,8 +168,8 @@ public class StoneTabletScreen extends Screen
 				String s2 = s.substring(0, l);
 				char c0 = s.charAt(l);
 				boolean flag = c0 == ' ' || c0 == '\n';
-				s = TextFormatting.getTextWithoutFormattingCodes(s2) + s.substring(l + (flag ? 1 : 0));	//TODO was getFormatString(String). Make sure that this is the right replacement
-				s1 = TextFormatting.getTextWithoutFormattingCodes(s2) + s1.substring(l + (flag ? 1 : 0));
+				s = TextFormatting.stripFormatting(s2) + s.substring(l + (flag ? 1 : 0));	//TODO was getFormatString(String). Make sure that this is the right replacement
+				s1 = TextFormatting.stripFormatting(s2) + s1.substring(l + (flag ? 1 : 0));
 				point1.x = point.x + this.getTextWidth(s2 + " ");
 				this.drawSelectionBox(point, point1);
 				point.x = 0;
@@ -187,7 +187,7 @@ public class StoneTabletScreen extends Screen
 	{
 		Point point = new Point(topLeft.x, topLeft.y);
 		Point point1 = new Point(bottomRight.x, bottomRight.y);
-		if (this.font.getBidiFlag()) 
+		if (this.font.isBidirectional()) 
 		{
 			StoneTabletUtils.adjustPointerAForBidi(font, point);
 			StoneTabletUtils.adjustPointerAForBidi(font, point1);
@@ -199,17 +199,17 @@ public class StoneTabletScreen extends Screen
 		StoneTabletUtils.adjustPointerB(point, width);
 		StoneTabletUtils.adjustPointerB(point1, width);
 		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder bufferbuilder = tessellator.getBuffer();
+		BufferBuilder bufferbuilder = tessellator.getBuilder();
 		RenderSystem.color4f(0.0F, 0.0F, 1.0F, 1.0F);
 		RenderSystem.disableTexture();
 		RenderSystem.enableColorLogicOp();
 		RenderSystem.logicOp(GlStateManager.LogicOp.OR_REVERSE);
 		bufferbuilder.begin(7, DefaultVertexFormats.POSITION);
-		bufferbuilder.pos(point.x, point1.y, 0.0D).endVertex();
-		bufferbuilder.pos(point1.x, point1.y, 0.0D).endVertex();
-		bufferbuilder.pos(point1.x, point.y, 0.0D).endVertex();
-		bufferbuilder.pos(point.x, point.y, 0.0D).endVertex();
-		tessellator.draw();
+		bufferbuilder.vertex(point.x, point1.y, 0.0D).endVertex();
+		bufferbuilder.vertex(point1.x, point1.y, 0.0D).endVertex();
+		bufferbuilder.vertex(point1.x, point.y, 0.0D).endVertex();
+		bufferbuilder.vertex(point.x, point.y, 0.0D).endVertex();
+		tessellator.end();
 		RenderSystem.disableColorLogicOp();
 		RenderSystem.enableTexture();
 	}
@@ -228,7 +228,7 @@ public class StoneTabletScreen extends Screen
 	{
 		if (super.charTyped(p_charTyped_1_, p_charTyped_2_) || !canEdit) 
 			return true;
-		else if (SharedConstants.isAllowedCharacter(p_charTyped_1_)) 
+		else if (SharedConstants.isAllowedChatCharacter(p_charTyped_1_)) 
 		{
 			this.insertTextIntoPage(Character.toString(p_charTyped_1_));
 			return true;
@@ -279,7 +279,7 @@ public class StoneTabletScreen extends Screen
 		String s = this.text;
 		this.selectionEnd = MathHelper.clamp(this.selectionEnd, 0, s.length());
 		String s1 = (new StringBuilder(s)).insert(this.selectionEnd, text).toString();
-		int i = this.font.getWordWrappedHeight(s1 + "" + TextFormatting.BLACK + "_", 114);
+		int i = this.font.wordWrapHeight(s1 + "" + TextFormatting.BLACK + "_", 114);
 		if (i <= 128 && s1.length() < 1024) 
 		{
 			this.setText(s1);
@@ -304,14 +304,14 @@ public class StoneTabletScreen extends Screen
 	 */
 	private int getTextWidth(String text) 
 	{
-		return this.font.getStringWidth(this.font.getBidiFlag() ? this.font.bidiReorder(text) : text);
+		return this.font.width(this.font.isBidirectional() ? this.font.bidirectionalShaping(text) : text);
 	}
 	
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
 		if (mouseButton == 0) 
 		{
-			long i = Util.milliTime();
+			long i = Util.getMillis();
 			String s = this.text;
 			if (!s.isEmpty()) 
 			{
@@ -374,16 +374,16 @@ public class StoneTabletScreen extends Screen
 			return true;
 		} else if (Screen.isCopy(keyCode)) 
 		{
-			this.minecraft.keyboardListener.setClipboardString(this.getSelectedText());
+			this.minecraft.keyboardHandler.setClipboard(this.getSelectedText());
 			return true;
 		} else if (Screen.isPaste(keyCode)) 
 		{
-			this.insertTextIntoPage(this.removeUnprintableChars(TextFormatting.getTextWithoutFormattingCodes(this.minecraft.keyboardListener.getClipboardString().replaceAll("\\r", ""))));
+			this.insertTextIntoPage(this.removeUnprintableChars(TextFormatting.stripFormatting(this.minecraft.keyboardHandler.getClipboard().replaceAll("\\r", ""))));
 			this.selectionStart = this.selectionEnd;
 			return true;
 		} else if (Screen.isCut(keyCode)) 
 		{
-			this.minecraft.keyboardListener.setClipboardString(this.getSelectedText());
+			this.minecraft.keyboardHandler.setClipboard(this.getSelectedText());
 			this.removeSelectedText();
 			return true;
 		} else 
@@ -469,7 +469,7 @@ public class StoneTabletScreen extends Screen
 	 */
 	private void leftPressed(String pageText) 
 	{
-		int i = this.font.getBidiFlag() ? 1 : -1;
+		int i = this.font.isBidirectional() ? 1 : -1;
 		if (Screen.hasControlDown()) 
 			this.selectionEnd = 0;//this.font.getWordPosition(pageText, i, this.selectionEnd, true); TODO
 		else
@@ -485,7 +485,7 @@ public class StoneTabletScreen extends Screen
 	 */
 	private void rightPressed(String pageText) 
 	{
-		int i = this.font.getBidiFlag() ? -1 : 1;
+		int i = this.font.isBidirectional() ? -1 : 1;
 		if (Screen.hasControlDown())
 			this.selectionEnd = 0;//this.font.getWordPosition(pageText, i, this.selectionEnd, true); TODO
 		else
@@ -532,7 +532,7 @@ public class StoneTabletScreen extends Screen
 		if (!pageText.isEmpty()) 
 		{
 			Point point = StoneTabletUtils.createPointer(font, pageText, this.selectionEnd);
-			int i = this.font.getWordWrappedHeight(pageText + "" + TextFormatting.BLACK + "_", 114);
+			int i = this.font.wordWrapHeight(pageText + "" + TextFormatting.BLACK + "_", 114);
 			if (point.y + 9 == i) 
 			{
 				this.selectionEnd = pageText.length();

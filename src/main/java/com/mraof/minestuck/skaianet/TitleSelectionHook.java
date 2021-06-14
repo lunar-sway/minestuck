@@ -37,13 +37,13 @@ public class TitleSelectionHook
 			return true;
 		
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
-		Session s = SessionHandler.get(player.world).getPlayerSession(identifier);
+		Session s = SessionHandler.get(player.level).getPlayerSession(identifier);
 		
 		if(s != null && s.predefinedPlayers.containsKey(identifier) && s.predefinedPlayers.get(identifier).getTitle() != null
 				|| PlayerSavedData.getData(identifier, player.server).getTitle() != null)
 			return true;
 		
-		playersInTitleSelection.put(player, new Vector3d(player.getPosX(), player.getPosY(), player.getPosZ()));
+		playersInTitleSelection.put(player, new Vector3d(player.getX(), player.getY(), player.getZ()));
 		TitleSelectPacket packet = new TitleSelectPacket();
 		MSPacketHandler.sendToPlayer(packet, player);
 		return false;
@@ -61,7 +61,7 @@ public class TitleSelectionHook
 			PlayerIdentifier identifier = IdentifierHandler.encode(player);
 			
 			if(title == null)
-				SburbHandler.generateAndSetTitle(player.world, identifier);
+				SburbHandler.generateAndSetTitle(player.level, identifier);
 			else
 			{
 				Session s = SessionHandler.get(player.server).getPlayerSession(identifier);
@@ -78,7 +78,7 @@ public class TitleSelectionHook
 			//Once the title selection has finished successfully, restore player position and trigger entry
 			Vector3d pos = playersInTitleSelection.remove(player);
 			
-			player.setPosition(pos.x, pos.y, pos.z);
+			player.setPos(pos.x, pos.y, pos.z);
 			
 			EntryProcess process = new EntryProcess();
 			process.onArtifactActivated(player);

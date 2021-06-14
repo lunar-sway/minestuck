@@ -38,23 +38,23 @@ public class RockLandType extends TerrainLandType
 	{
 		if(type == Variant.PETRIFICATION)
 		{
-			registry.setBlockState("surface", Blocks.STONE.getDefaultState());
+			registry.setBlockState("surface", Blocks.STONE.defaultBlockState());
 		} else
 		{
-			registry.setBlockState("surface", Blocks.GRAVEL.getDefaultState());
+			registry.setBlockState("surface", Blocks.GRAVEL.defaultBlockState());
 		}
 		
-		registry.setBlockState("upper", Blocks.COBBLESTONE.getDefaultState());
-		registry.setBlockState("structure_primary_decorative", Blocks.CHISELED_STONE_BRICKS.getDefaultState());
-		registry.setBlockState("structure_primary_stairs", Blocks.STONE_BRICK_STAIRS.getDefaultState());
-		registry.setBlockState("structure_secondary", MSBlocks.COARSE_STONE.getDefaultState());
-		registry.setBlockState("structure_secondary_decorative", MSBlocks.CHISELED_COARSE_STONE.getDefaultState());
-		registry.setBlockState("structure_secondary_stairs", MSBlocks.COARSE_STONE_STAIRS.getDefaultState());
-		registry.setBlockState("structure_planks_slab", Blocks.BRICK_SLAB.getDefaultState());
-		registry.setBlockState("village_path", Blocks.MOSSY_COBBLESTONE.getDefaultState());
-		registry.setBlockState("village_fence", Blocks.COBBLESTONE_WALL.getDefaultState());
-		registry.setBlockState("structure_wool_1", Blocks.BROWN_WOOL.getDefaultState());
-		registry.setBlockState("structure_wool_3", Blocks.GRAY_WOOL.getDefaultState());
+		registry.setBlockState("upper", Blocks.COBBLESTONE.defaultBlockState());
+		registry.setBlockState("structure_primary_decorative", Blocks.CHISELED_STONE_BRICKS.defaultBlockState());
+		registry.setBlockState("structure_primary_stairs", Blocks.STONE_BRICK_STAIRS.defaultBlockState());
+		registry.setBlockState("structure_secondary", MSBlocks.COARSE_STONE.defaultBlockState());
+		registry.setBlockState("structure_secondary_decorative", MSBlocks.CHISELED_COARSE_STONE.defaultBlockState());
+		registry.setBlockState("structure_secondary_stairs", MSBlocks.COARSE_STONE_STAIRS.defaultBlockState());
+		registry.setBlockState("structure_planks_slab", Blocks.BRICK_SLAB.defaultBlockState());
+		registry.setBlockState("village_path", Blocks.MOSSY_COBBLESTONE.defaultBlockState());
+		registry.setBlockState("village_fence", Blocks.COBBLESTONE_WALL.defaultBlockState());
+		registry.setBlockState("structure_wool_1", Blocks.BROWN_WOOL.defaultBlockState());
+		registry.setBlockState("structure_wool_3", Blocks.GRAY_WOOL.defaultBlockState());
 	}
 	
 	@Override

@@ -35,13 +35,13 @@ public class FrogEntity extends CreatureEntity
 	private int jumpDuration;
 	private boolean wasOnGround;
 	private int currentMoveTypeDuration;
-	private static final DataParameter<Float> FROG_SIZE = EntityDataManager.createKey(FrogEntity.class, DataSerializers.FLOAT);
-	private static final DataParameter<Integer> SKIN_COLOR = EntityDataManager.createKey(FrogEntity.class, DataSerializers.VARINT);
-	private static final DataParameter<Integer> EYE_COLOR = EntityDataManager.createKey(FrogEntity.class, DataSerializers.VARINT);
-	private static final DataParameter<Integer> BELLY_COLOR = EntityDataManager.createKey(FrogEntity.class, DataSerializers.VARINT);
-	private static final DataParameter<Integer> EYE_TYPE = EntityDataManager.createKey(FrogEntity.class, DataSerializers.VARINT);
-	private static final DataParameter<Integer> BELLY_TYPE = EntityDataManager.createKey(FrogEntity.class, DataSerializers.VARINT);
-	private static final DataParameter<Integer> TYPE = EntityDataManager.createKey(FrogEntity.class, DataSerializers.VARINT);
+	private static final DataParameter<Float> FROG_SIZE = EntityDataManager.defineId(FrogEntity.class, DataSerializers.FLOAT);
+	private static final DataParameter<Integer> SKIN_COLOR = EntityDataManager.defineId(FrogEntity.class, DataSerializers.INT);
+	private static final DataParameter<Integer> EYE_COLOR = EntityDataManager.defineId(FrogEntity.class, DataSerializers.INT);
+	private static final DataParameter<Integer> BELLY_COLOR = EntityDataManager.defineId(FrogEntity.class, DataSerializers.INT);
+	private static final DataParameter<Integer> EYE_TYPE = EntityDataManager.defineId(FrogEntity.class, DataSerializers.INT);
+	private static final DataParameter<Integer> BELLY_TYPE = EntityDataManager.defineId(FrogEntity.class, DataSerializers.INT);
+	private static final DataParameter<Integer> TYPE = EntityDataManager.defineId(FrogEntity.class, DataSerializers.INT);
 	
 	public FrogEntity(World world)
 	{
@@ -51,52 +51,52 @@ public class FrogEntity extends CreatureEntity
 	public FrogEntity(EntityType<? extends FrogEntity> type, World world)
 	{
 		super(type, world);
-		this.jumpController = new JumpHelperController(this);
-		this.moveController = new MoveHelperController(this);
+		this.jumpControl = new JumpHelperController(this);
+		this.moveControl = new MoveHelperController(this);
 		this.setMovementSpeed(0.0D);
 	}
 	
 	@Override
-	protected void registerData()
+	protected void defineSynchedData()
 	{
-		super.registerData();
-		this.dataManager.register(TYPE, getRandomFrogType());
-		this.dataManager.register(FROG_SIZE, randomFloat(1)+0.6F);
-		this.dataManager.register(SKIN_COLOR, random(16777215));
-		this.dataManager.register(EYE_COLOR, random(16777215));
-		this.dataManager.register(BELLY_COLOR, random(16777215));
-		this.dataManager.register(EYE_TYPE, random(maxEyes()));
-		this.dataManager.register(BELLY_TYPE, random(maxBelly()));
+		super.defineSynchedData();
+		this.entityData.define(TYPE, getRandomFrogType());
+		this.entityData.define(FROG_SIZE, randomFloat(1)+0.6F);
+		this.entityData.define(SKIN_COLOR, random(16777215));
+		this.entityData.define(EYE_COLOR, random(16777215));
+		this.entityData.define(BELLY_COLOR, random(16777215));
+		this.entityData.define(EYE_TYPE, random(maxEyes()));
+		this.entityData.define(BELLY_TYPE, random(maxBelly()));
 	}
 	
 	@Override
-	protected ActionResultType getEntityInteractionResult(PlayerEntity player, Hand hand)
+	protected ActionResultType mobInteract(PlayerEntity player, Hand hand)
 	{
-		ItemStack itemstack = player.getHeldItem(hand);
+		ItemStack itemstack = player.getItemInHand(hand);
 		
-		if(player.getDistanceSq(this) < 9.0D && !this.world.isRemote)
+		if(player.distanceToSqr(this) < 9.0D && !this.level.isClientSide)
 		{
 			if(itemstack.getItem() == MSItems.BUG_NET)
 			{
-				itemstack.damageItem(1, player, (entityPlayer) -> entityPlayer.sendBreakAnimation(hand));
+				itemstack.hurtAndBreak(1, player, (entityPlayer) -> entityPlayer.broadcastBreakEvent(hand));
 				ItemStack frogItem = new ItemStack(MSItems.FROG);
 				
 				frogItem.setTag(getFrogData());
-				if(this.hasCustomName())frogItem.setDisplayName(this.getCustomName());
+				if(this.hasCustomName())frogItem.setHoverName(this.getCustomName());
 				
-				entityDropItem(frogItem, 0);
+				spawnAtLocation(frogItem, 0);
 				this.remove();
 			}
 			else if(itemstack.getItem() == MSItems.GOLDEN_GRASSHOPPER && this.getFrogType() != 5)
 			{
 				if(!player.isCreative())itemstack.shrink(1);
 				
-				this.world.addParticle(ParticleTypes.EXPLOSION, this.getPosX(), this.getPosY() + (double)(this.getHeight() / 2.0F), this.getPosZ(), 0.0D, 0.0D, 0.0D);
-				this.playSound(SoundEvents.BLOCK_ANVIL_HIT, this.getSoundVolume(), ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F) * 0.8F);
+				this.level.addParticle(ParticleTypes.EXPLOSION, this.getX(), this.getY() + (double)(this.getBbHeight() / 2.0F), this.getZ(), 0.0D, 0.0D, 0.0D);
+				this.playSound(SoundEvents.ANVIL_HIT, this.getSoundVolume(), ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F) * 0.8F);
 				this.setType(5);
 			}
 		}
-		return super.getEntityInteractionResult(player, hand);
+		return super.mobInteract(player, hand);
 	}
 	
 	protected CompoundNBT getFrogData()
@@ -130,14 +130,14 @@ public class FrogEntity extends CreatureEntity
 	}
 	
 	@Override
-	public EntitySize getSize(Pose poseIn)
+	public EntitySize getDimensions(Pose poseIn)
 	{
-		return super.getSize(poseIn).scale((this.getFrogType() == 6) ? 0.6F :this.getFrogSize());
+		return super.getDimensions(poseIn).scale((this.getFrogType() == 6) ? 0.6F :this.getFrogSize());
 	}
 	
 	public static AttributeModifierMap.MutableAttribute frogAttributes()
 	{
-		return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, BASE_HEALTH);
+		return MobEntity.createMobAttributes().add(Attributes.MAX_HEALTH, BASE_HEALTH);
 	}
 	
 	//Entity AI
@@ -148,30 +148,30 @@ public class FrogEntity extends CreatureEntity
 		
 		this.goalSelector.addGoal(1, new SwimGoal(this));
 		this.goalSelector.addGoal(1, new PanicGoal(this, 2.2D));
-		this.goalSelector.addGoal(3, new TemptGoal(this, 1.0D, Ingredient.fromItems(MSItems.CONE_OF_FLIES, MSItems.BUG_ON_A_STICK, MSItems.GRASSHOPPER, MSItems.JAR_OF_BUGS), false));	//TODO use bug item tag
+		this.goalSelector.addGoal(3, new TemptGoal(this, 1.0D, Ingredient.of(MSItems.CONE_OF_FLIES, MSItems.BUG_ON_A_STICK, MSItems.GRASSHOPPER, MSItems.JAR_OF_BUGS), false));	//TODO use bug item tag
 		this.goalSelector.addGoal(6, new WaterAvoidingRandomWalkingGoal(this, 0.6D));
 		this.goalSelector.addGoal(11, new LookAtGoal(this, PlayerEntity.class, 10.0F));
 		
 	}
 	
 	@Override
-	protected float getJumpUpwardsMotion()
+	protected float getJumpPower()
 	{
-		if (!this.collidedHorizontally && (!this.moveController.isUpdating() || this.moveController.getY() <= this.getPosY() + 0.5D))
+		if (!this.horizontalCollision && (!this.moveControl.hasWanted() || this.moveControl.getWantedY() <= this.getY() + 0.5D))
 		{
-			Path path = this.navigator.getPath();
+			Path path = this.navigation.getPath();
 
-			if (path != null && path.getCurrentPathIndex() < path.getCurrentPathLength())
+			if (path != null && path.getNextNodeIndex() < path.getNodeCount())
 			{
-				Vector3d vec3d = path.getPosition(this);
+				Vector3d vec3d = path.getNextEntityPos(this);
 
-				if (vec3d.y > this.getPosY() + 0.5D)
+				if (vec3d.y > this.getY() + 0.5D)
 				{
 					return 0.5F;
 				}
 			}
 
-			return this.moveController.getSpeed() <= 0.6D ? 0.2F : 0.3F;
+			return this.moveControl.getSpeedModifier() <= 0.6D ? 0.2F : 0.3F;
 		}
 		else
 		{
@@ -180,14 +180,14 @@ public class FrogEntity extends CreatureEntity
 	}
 
 	@Override
-	protected void jump()
+	protected void jumpFromGround()
 	{
-		super.jump();
-		double d0 = this.moveController.getSpeed();
+		super.jumpFromGround();
+		double d0 = this.moveControl.getSpeedModifier();
 
 		if (d0 > 0.0D)
 		{
-			double d1 = horizontalMag(this.getMotion());
+			double d1 = getHorizontalDistanceSqr(this.getDeltaMovement());
 
 			if (d1 < 0.01D)
 			{
@@ -195,13 +195,13 @@ public class FrogEntity extends CreatureEntity
 			}
 		}
 
-		if (!this.world.isRemote)
+		if (!this.level.isClientSide)
 		{
-			this.world.setEntityState(this, (byte)1);
+			this.level.broadcastEntityEvent(this, (byte)1);
 		}
 	}
 	
-	public void handleStatusUpdate(byte id)
+	public void handleEntityEvent(byte id)
 	{
 		if (id == 1)
 		{
@@ -210,7 +210,7 @@ public class FrogEntity extends CreatureEntity
 		}
 		else
 		{
-			super.handleStatusUpdate(id);
+			super.handleEntityEvent(id);
 		}
 	}
 	
@@ -222,8 +222,8 @@ public class FrogEntity extends CreatureEntity
 
 	public void setMovementSpeed(double newSpeed)
 	{
-		this.getNavigator().setSpeed(newSpeed);
-		this.moveController.setMoveTo(this.moveController.getX(), this.moveController.getY(), this.moveController.getZ(), newSpeed);
+		this.getNavigation().setSpeedModifier(newSpeed);
+		this.moveControl.setWantedPosition(this.moveControl.getWantedX(), this.moveControl.getWantedY(), this.moveControl.getWantedZ(), newSpeed);
 	}
 
 	public void setJumping(boolean jumping)
@@ -232,7 +232,7 @@ public class FrogEntity extends CreatureEntity
 
 		if (jumping)
 		{
-			this.playSound(this.getJumpSound(), this.getSoundVolume(), ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F) * 0.8F);
+			this.playSound(this.getJumpSound(), this.getSoundVolume(), ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F) * 0.8F);
 		}
 	}
 
@@ -243,7 +243,7 @@ public class FrogEntity extends CreatureEntity
 		this.jumpTicks = 0;
 	}
 
-	public void updateAITasks()
+	public void customServerAiStep()
 	{
 		if (this.currentMoveTypeDuration > 0)
 		{
@@ -259,18 +259,18 @@ public class FrogEntity extends CreatureEntity
 			}
 
 
-			JumpHelperController jumpHelper = (JumpHelperController)this.jumpController;
+			JumpHelperController jumpHelper = (JumpHelperController)this.jumpControl;
 
 			if (!jumpHelper.getIsJumping())
 			{
-				if (this.moveController.isUpdating() && this.currentMoveTypeDuration == 0)
+				if (this.moveControl.hasWanted() && this.currentMoveTypeDuration == 0)
 				{
-					Path path = this.navigator.getPath();
-					Vector3d vec3d = new Vector3d(this.moveController.getX(), this.moveController.getY(), this.moveController.getZ());
+					Path path = this.navigation.getPath();
+					Vector3d vec3d = new Vector3d(this.moveControl.getWantedX(), this.moveControl.getWantedY(), this.moveControl.getWantedZ());
 
-					if (path != null && path.getCurrentPathIndex() < path.getCurrentPathLength())
+					if (path != null && path.getNextNodeIndex() < path.getNodeCount())
 					{
-						vec3d = path.getPosition(this);
+						vec3d = path.getNextEntityPos(this);
 					}
 
 					this.calculateRotationYaw(vec3d.x, vec3d.z);
@@ -288,22 +288,22 @@ public class FrogEntity extends CreatureEntity
 	
 	private void calculateRotationYaw(double x, double z)
 	{
-		this.rotationYaw = (float)(MathHelper.atan2(z - this.getPosZ(), x - this.getPosX()) * (180D / Math.PI)) - 90.0F;
+		this.yRot = (float)(MathHelper.atan2(z - this.getZ(), x - this.getX()) * (180D / Math.PI)) - 90.0F;
 	}
 
 	private void enableJumpControl()
 	{
-		((JumpHelperController)this.jumpController).setCanJump(true);
+		((JumpHelperController)this.jumpControl).setCanJump(true);
 	}
 
 	private void disableJumpControl()
 	{
-		((JumpHelperController) this.jumpController).setCanJump(false);
+		((JumpHelperController) this.jumpControl).setCanJump(false);
 	}
 
 	private void updateMoveTypeDuration()
 	{
-		if (this.moveController.getSpeed() < 2.2D)
+		if (this.moveControl.getSpeedModifier() < 2.2D)
 		{
 			this.currentMoveTypeDuration = 10;
 		}
@@ -320,9 +320,9 @@ public class FrogEntity extends CreatureEntity
 	}
 	
 	@Override
-	public void livingTick()
+	public void aiStep()
 	{
-		super.livingTick();
+		super.aiStep();
 
 		if (this.jumpTicks != this.jumpDuration)
 		{
@@ -357,20 +357,20 @@ public class FrogEntity extends CreatureEntity
 	
 	protected SoundEvent getJumpSound()
 	{
-		return SoundEvents.ENTITY_RABBIT_JUMP;
+		return SoundEvents.RABBIT_JUMP;
 	}
 	
 	@Override
-	protected float getSoundPitch()
+	protected float getVoicePitch()
 	{
-		return (this.rand.nextFloat() - this.rand.nextFloat()) / (this.getFrogSize()+0.4f) * 0.2F + 1.0F;
+		return (this.random.nextFloat() - this.random.nextFloat()) / (this.getFrogSize()+0.4f) * 0.2F + 1.0F;
 	}
 	
 	//NBT
 	@Override
-	public void writeAdditional(CompoundNBT compound)
+	public void addAdditionalSaveData(CompoundNBT compound)
 	{
-		super.writeAdditional(compound);
+		super.addAdditionalSaveData(compound);
 		compound.putInt("Type", this.getFrogType());
 		if(getFrogType() != 6) compound.putFloat("Size", this.getFrogSize()+0.4f);
 		else compound.putFloat("Size", 0.6f);
@@ -383,9 +383,9 @@ public class FrogEntity extends CreatureEntity
 	}
 	
 	@Override
-	public void readAdditional(CompoundNBT compound)
+	public void readAdditionalSaveData(CompoundNBT compound)
 	{
-		super.readAdditional(compound);
+		super.readAdditionalSaveData(compound);
 		
 		if(compound.contains("Type")) setType(compound.getInt("Type"));
 		else setType(getRandomFrogType());
@@ -448,81 +448,81 @@ public class FrogEntity extends CreatureEntity
 	}
 	
 	@Override
-	public void notifyDataManagerChange(DataParameter<?> key)
+	public void onSyncedDataUpdated(DataParameter<?> key)
 	{
-		recalculateSize();
+		refreshDimensions();
 		if (FROG_SIZE.equals(key))
 		{
-			this.rotationYaw = this.rotationYawHead;
-			this.renderYawOffset = this.rotationYawHead;
+			this.yRot = this.yHeadRot;
+			this.yBodyRot = this.yHeadRot;
 
-			if (this.isInWater() && this.rand.nextInt(20) == 0)
+			if (this.isInWater() && this.random.nextInt(20) == 0)
 			{
 				this.doWaterSplashEffect();
 			}
 		}
 
-		super.notifyDataManagerChange(key);
+		super.onSyncedDataUpdated(key);
 	}
 	
 
 	private void setSkinColor(int i) 
 	{
-		this.dataManager.set(SKIN_COLOR, i);
+		this.entityData.set(SKIN_COLOR, i);
 	}
 
 	public int getSkinColor() 
 	{
-		return this.dataManager.get(SKIN_COLOR);
+		return this.entityData.get(SKIN_COLOR);
 	}
 	
 	private void setEyeColor(int i)
 	{
-		this.dataManager.set(EYE_COLOR, i);
+		this.entityData.set(EYE_COLOR, i);
 	}
 	
 	public int getEyeColor() 
 	{
-		return this.dataManager.get(EYE_COLOR);
+		return this.entityData.get(EYE_COLOR);
 	}
 
 	private void setBellyColor(int i)
 	{
-		this.dataManager.set(BELLY_COLOR, i);
+		this.entityData.set(BELLY_COLOR, i);
 	}
 	
 	public int getBellyColor() 
 	{
-		return this.dataManager.get(BELLY_COLOR);
+		return this.entityData.get(BELLY_COLOR);
 	}
 	
 
 	private void setEyeType(int i)
 	{
-		this.dataManager.set(EYE_TYPE, i);
+		this.entityData.set(EYE_TYPE, i);
 	}
 	
 	public int getEyeType() 
 	{
-		return this.dataManager.get(EYE_TYPE);
+		return this.entityData.get(EYE_TYPE);
 	}
 
 	private void setBellyType(int i)
 	{
-		this.dataManager.set(BELLY_TYPE, i);
+		this.entityData.set(BELLY_TYPE, i);
 	}
 	
 	public int getBellyType() 
 	{
-		return this.dataManager.get(BELLY_TYPE);
+		return this.entityData.get(BELLY_TYPE);
 	}
 	
 
 	protected void setFrogSize(float size, boolean p_70799_2_)
 	{
-		if(this.dataManager.get(TYPE) == 6) this.dataManager.set(FROG_SIZE, 0.6f);
-		else this.dataManager.set(FROG_SIZE, size);
-		this.setPosition(this.getPosX(), this.getPosY(), this.getPosZ());
+		if(this.entityData.get(TYPE) == 6) this.entityData.set(FROG_SIZE, 0.6f);
+		else this.entityData.set(FROG_SIZE, size);
+		this.setPos(this.getX(), this.getY(), this.getZ());
 		this.getAttribute(Attributes.MAX_HEALTH).setBaseValue((double)(BASE_HEALTH * size));
 		this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(BASE_SPEED * size);
 
@@ -531,22 +531,22 @@ public class FrogEntity extends CreatureEntity
 			this.setHealth(this.getMaxHealth());
 		}
 
-		this.experienceValue = (int)size;
+		this.xpReward = (int)size;
 	}
 	
 	public float getFrogSize()
 	{
-		return this.dataManager.get(FROG_SIZE);
+		return this.entityData.get(FROG_SIZE);
 	}
 	
 	private void setType(int i)
 	{
-		this.dataManager.set(TYPE, i);
+		this.entityData.set(TYPE, i);
 	}
 	
 	public int getFrogType()
 	{
-		return this.dataManager.get(TYPE);
+		return this.entityData.get(TYPE);
 	}
 	
 	
@@ -602,7 +602,7 @@ public class FrogEntity extends CreatureEntity
 
 		public boolean getIsJumping()
 		{
-			return this.isJumping;
+			return this.jump;
 		}
 
 		public boolean canJump()
@@ -618,10 +618,10 @@ public class FrogEntity extends CreatureEntity
 		@Override
 		public void tick()
 		{
-			if (this.isJumping)
+			if (this.jump)
 			{
 				this.frog.startJumping();
-				this.isJumping = false;
+				this.jump = false;
 			}
 		}
 	}
@@ -640,10 +640,10 @@ public class FrogEntity extends CreatureEntity
 		@Override
 		public void tick()
 		{
-			if(this.frog.onGround && !this.frog.isJumping && !((JumpHelperController) this.frog.jumpController).getIsJumping())
+			if(this.frog.onGround && !this.frog.jumping && !((JumpHelperController) this.frog.jumpControl).getIsJumping())
 			{
 				this.frog.setMovementSpeed(0.0D);
-			} else if(this.isUpdating())
+			} else if(this.hasWanted())
 			{
 				this.frog.setMovementSpeed(this.nextJumpSpeed);
 			}
@@ -652,14 +652,14 @@ public class FrogEntity extends CreatureEntity
 		}
 		
 		@Override
-		public void setMoveTo(double x, double y, double z, double speedIn)
+		public void setWantedPosition(double x, double y, double z, double speedIn)
 		{
 			if(this.frog.isInWater())
 			{
 				speedIn = 1.5D;
 			}
 			
-			super.setMoveTo(x, y, z, speedIn);
+			super.setWantedPosition(x, y, z, speedIn);
 			
 			if(speedIn > 0.0D)
 			{
@@ -669,7 +669,7 @@ public class FrogEntity extends CreatureEntity
 	}
 	
 	@Override
-	public boolean canDespawn(double distanceToClosestPlayer)
+	public boolean removeWhenFarAway(double distanceToClosestPlayer)
 	{
 		return false;
 	}

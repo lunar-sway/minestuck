@@ -34,31 +34,31 @@ public class BarbasolBombEntity extends ProjectileItemEntity implements RendersA
     }
     
     @Override
-    public void writeAdditional(CompoundNBT compound)
+    public void addAdditionalSaveData(CompoundNBT compound)
     {
-        super.writeAdditional(compound);
+        super.addAdditionalSaveData(compound);
         compound.putBoolean("shouldDestroy", shouldDestroy);
     }
     
     @Override
-    public void readAdditional(CompoundNBT compound)
+    public void readAdditionalSaveData(CompoundNBT compound)
     {
-        super.readAdditional(compound);
+        super.readAdditionalSaveData(compound);
         shouldDestroy = compound.getBoolean("shouldDestroy");
     }
     
     @Override
-    protected void onImpact(RayTraceResult result)
+    protected void onHit(RayTraceResult result)
     {
-        if(!this.world.isRemote)
+        if(!this.level.isClientSide)
         {
-            world.createExplosion(null, result.getHitVec().x, result.getHitVec().y, result.getHitVec().z, 3F, shouldDestroy ? Explosion.Mode.DESTROY : Explosion.Mode.NONE);
+            level.explode(null, result.getLocation().x, result.getLocation().y, result.getLocation().z, 3F, shouldDestroy ? Explosion.Mode.DESTROY : Explosion.Mode.NONE);
         }
         this.remove();
     }
     
     @Override
-    public IPacket<?> createSpawnPacket()
+    public IPacket<?> getAddEntityPacket()
     {
         return NetworkHooks.getEntitySpawningPacket(this);
     }

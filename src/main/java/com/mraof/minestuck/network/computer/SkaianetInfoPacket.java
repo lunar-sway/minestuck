@@ -64,8 +64,8 @@ public class SkaianetInfoPacket implements PlayToBothPacket
 				for(ResourceLocation land : list)
 				{
 					if(land == null)
-						buffer.writeString("");
-					else buffer.writeString(land.toString());
+						buffer.writeUtf("");
+					else buffer.writeUtf(land.toString());
 				}
 			}
 		} else
@@ -83,7 +83,7 @@ public class SkaianetInfoPacket implements PlayToBothPacket
 				for(Map.Entry<Integer, String> entry : openServers.entrySet())
 				{
 					buffer.writeInt(entry.getKey());
-					buffer.writeString(entry.getValue(), 16);
+					buffer.writeUtf(entry.getValue(), 16);
 				}
 				
 				for(SburbConnection connection : connectionsFrom)
@@ -104,10 +104,10 @@ public class SkaianetInfoPacket implements PlayToBothPacket
 				List<ResourceLocation> list = new ArrayList<>();
 				for(int k = 0; k < size; k++)
 				{
-					String landName = buffer.readString(32767);
+					String landName = buffer.readUtf(32767);
 					if(landName.isEmpty())
 						list.add(null);
-					else list.add(ResourceLocation.tryCreate(landName));
+					else list.add(ResourceLocation.tryParse(landName));
 				}
 				packet.landChains.add(list);
 			}
@@ -122,7 +122,7 @@ public class SkaianetInfoPacket implements PlayToBothPacket
 				int size = buffer.readInt();
 				packet.openServers = new HashMap<>();
 				for(int i = 0; i < size; i++)
-					packet.openServers.put(buffer.readInt(), buffer.readString(16));
+					packet.openServers.put(buffer.readInt(), buffer.readUtf(16));
 				packet.connectionsTo = new ArrayList<>();
 				while(buffer.readableBytes() > 0)
 					packet.connectionsTo.add(ReducedConnection.read(buffer));

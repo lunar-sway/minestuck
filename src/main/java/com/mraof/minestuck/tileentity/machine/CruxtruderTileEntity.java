@@ -53,17 +53,17 @@ public class CruxtruderTileEntity extends TileEntity	//TODO check if it is broke
 	{
 		if(!isBroken())
 		{
-			BlockPos pos = getPos().up();
-			BlockState state = getWorld().getBlockState(pos);
-			if(top && MinestuckConfig.SERVER.cruxtruderIntake.get() && state.isAir(getWorld(), pos) && material < 64 && material > -1)
+			BlockPos pos = getBlockPos().above();
+			BlockState state = getLevel().getBlockState(pos);
+			if(top && MinestuckConfig.SERVER.cruxtruderIntake.get() && state.isAir(getLevel(), pos) && material < 64 && material > -1)
 			{
-				ItemStack stack = player.getHeldItemMainhand();
+				ItemStack stack = player.getMainHandItem();
 				if(stack.getItem() != MSItems.RAW_CRUXITE)
-					stack = player.getHeldItemOffhand();
+					stack = player.getOffhandItem();
 				if(stack.getItem() == MSItems.RAW_CRUXITE)
 				{
 					int count = 1;
-					if(player.isSneaking())	//Doesn't actually work just yet
+					if(player.isShiftKeyDown())	//Doesn't actually work just yet
 						count = Math.min(64 - material, stack.getCount());
 					stack.shrink(count);
 					material += count;
@@ -72,17 +72,17 @@ public class CruxtruderTileEntity extends TileEntity	//TODO check if it is broke
 			{
 				if(state.getBlock() == MSBlocks.CRUXITE_DOWEL)
 				{
-					CruxiteDowelBlock.dropDowel(getWorld(), pos);
-				} else if(state.isAir(getWorld(), pos))
+					CruxiteDowelBlock.dropDowel(getLevel(), pos);
+				} else if(state.isAir(getLevel(), pos))
 				{
 					if(MinestuckConfig.SERVER.cruxtruderIntake.get() && material == 0)
 					{
-						world.playEvent(Constants.WorldEvents.DISPENSER_FAIL_SOUND, pos, 0);
-						player.sendMessage(new TranslationTextComponent(EMPTY), Util.DUMMY_UUID);
+						level.levelEvent(Constants.WorldEvents.DISPENSER_FAIL_SOUND, pos, 0);
+						player.sendMessage(new TranslationTextComponent(EMPTY), Util.NIL_UUID);
 					} else
 					{
-						world.setBlockState(pos, MSBlocks.CRUXITE_DOWEL.getDefaultState().with(CruxiteDowelBlock.DOWEL_TYPE, CruxiteDowelBlock.Type.CRUXTRUDER));
-						TileEntity te = world.getTileEntity(pos);
+						level.setBlockAndUpdate(pos, MSBlocks.CRUXITE_DOWEL.defaultBlockState().setValue(CruxiteDowelBlock.DOWEL_TYPE, CruxiteDowelBlock.Type.CRUXTRUDER));
+						TileEntity te = level.getBlockEntity(pos);
 						if(te instanceof ItemStackTileEntity)
 							ColorHandler.setColor(((ItemStackTileEntity) te).getStack(), color);
 						if(material > 0)
@@ -94,9 +94,9 @@ public class CruxtruderTileEntity extends TileEntity	//TODO check if it is broke
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT nbt)
+	public void load(BlockState state, CompoundNBT nbt)
 	{
-		super.read(state, nbt);
+		super.load(state, nbt);
 		
 		if(nbt.contains("color"))
 			color = nbt.getInt("color");
@@ -106,9 +106,9 @@ public class CruxtruderTileEntity extends TileEntity	//TODO check if it is broke
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound)
+	public CompoundNBT save(CompoundNBT compound)
 	{
-		super.write(compound);
+		super.save(compound);
 		compound.putInt("color", color);
 		compound.putBoolean("broken", broken);
 		compound.putInt("material", material);

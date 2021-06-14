@@ -24,7 +24,7 @@ public class FireFieldFeature extends Feature<NoFeatureConfig>
 	}
 	
 	@Override
-	public boolean generate(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
+	public boolean place(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
 	{
 		StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(generator);
 		BlockState surface = blocks.getBlockState("surface");
@@ -32,13 +32,13 @@ public class FireFieldFeature extends Feature<NoFeatureConfig>
 		
 		for(int i2 = 0; i2 < BLOCK_COUNT; i2++)
 		{
-			BlockPos pos1 = pos.add(rand.nextInt(8) - rand.nextInt(8), rand.nextInt(4) - rand.nextInt(4), rand.nextInt(8) - rand.nextInt(8));
+			BlockPos pos1 = pos.offset(rand.nextInt(8) - rand.nextInt(8), rand.nextInt(4) - rand.nextInt(4), rand.nextInt(8) - rand.nextInt(8));
 			BlockState block = world.getBlockState(pos1);
 			if(block == surface || block == upper)
 			{
-				world.setBlockState(pos1, Blocks.NETHERRACK.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
-				if(world.isAirBlock(pos1.up()) && rand.nextFloat() < FIRE_CHANCE)
-					world.setBlockState(pos1.up(), Blocks.FIRE.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
+				world.setBlock(pos1, Blocks.NETHERRACK.defaultBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
+				if(world.isEmptyBlock(pos1.above()) && rand.nextFloat() < FIRE_CHANCE)
+					world.setBlock(pos1.above(), Blocks.FIRE.defaultBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
 			}
 		}
 		

@@ -27,8 +27,8 @@ public class ClockworkLandType extends TitleLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("structure_wool_2", Blocks.LIGHT_GRAY_WOOL.getDefaultState());
-		registry.setBlockState("carpet", Blocks.RED_CARPET.getDefaultState());
+		registry.setBlockState("structure_wool_2", Blocks.LIGHT_GRAY_WOOL.defaultBlockState());
+		registry.setBlockState("carpet", Blocks.RED_CARPET.defaultBlockState());
 	}
 	
 	@Override

@@ -30,8 +30,8 @@ public class ThunderLandType extends TitleLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("structure_wool_2", Blocks.BLUE_WOOL.getDefaultState());
-		registry.setBlockState("carpet", Blocks.GREEN_CARPET.getDefaultState());
+		registry.setBlockState("structure_wool_2", Blocks.BLUE_WOOL.defaultBlockState());
+		registry.setBlockState("carpet", Blocks.GREEN_CARPET.defaultBlockState());
 		
 	}
 	

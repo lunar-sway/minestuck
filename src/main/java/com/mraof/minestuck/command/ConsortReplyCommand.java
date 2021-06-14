@@ -20,10 +20,10 @@ public class ConsortReplyCommand
 	
 	public static int execute(CommandSource source, int id, String path) throws CommandSyntaxException
 	{
-		ServerPlayerEntity player = source.asPlayer();
-		Entity entity = player.world.getEntityByID(id);
-		if(entity instanceof ConsortEntity && player.getPositionVec()
-				.squareDistanceTo(entity.getPositionVec()) < 100)
+		ServerPlayerEntity player = source.getPlayerOrException();
+		Entity entity = player.level.getEntity(id);
+		if(entity instanceof ConsortEntity && player.position()
+				.distanceToSqr(entity.position()) < 100)
 		{
 			ConsortEntity consort = (ConsortEntity) entity;
 			consort.commandReply(player, path);

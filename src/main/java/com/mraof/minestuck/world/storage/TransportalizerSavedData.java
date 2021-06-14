@@ -34,10 +34,10 @@ public class TransportalizerSavedData extends WorldSavedData
 	}
 	
 	@Override
-	public void read(CompoundNBT nbt)
+	public void load(CompoundNBT nbt)
 	{
 		locations.clear();
-		for(String id : nbt.keySet())
+		for(String id : nbt.getAllKeys())
 		{
 			INBT locationTag = nbt.get(id);
 			GlobalPos.CODEC.parse(NBTDynamicOps.INSTANCE, locationTag).resultOrPartial(LOGGER::error).ifPresent(location -> locations.put(id, location));
@@ -45,7 +45,7 @@ public class TransportalizerSavedData extends WorldSavedData
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound)
+	public CompoundNBT save(CompoundNBT compound)
 	{
 		for(Map.Entry<String, GlobalPos> entry : locations.entrySet())
 		{
@@ -67,7 +67,7 @@ public class TransportalizerSavedData extends WorldSavedData
 		if(!locations.containsKey(id))
 		{
 			locations.put(id, location);
-			this.markDirty();
+			this.setDirty();
 			return true;
 		} else return locations.get(id).equals(location);
 	}
@@ -76,7 +76,7 @@ public class TransportalizerSavedData extends WorldSavedData
 	{
 		boolean removed = locations.remove(id, location);
 		if(removed)
-			this.markDirty();
+			this.setDirty();
 		return removed;
 	}
 	
@@ -94,14 +94,14 @@ public class TransportalizerSavedData extends WorldSavedData
 		while(locations.containsKey(unusedId));
 		
 		locations.put(unusedId, location);
-		this.markDirty();
+		this.setDirty();
 		return unusedId;
 	}
 	
 	public void replace(String id, GlobalPos oldPos, GlobalPos newPos)
 	{
 		if(locations.replace(id, oldPos, newPos))
-			markDirty();
+			setDirty();
 	}
 	
 	public static TransportalizerSavedData get(World world)
@@ -114,9 +114,9 @@ public class TransportalizerSavedData extends WorldSavedData
 	
 	public static TransportalizerSavedData get(MinecraftServer mcServer)
 	{
-		ServerWorld world = mcServer.getWorld(World.OVERWORLD);
+		ServerWorld world = mcServer.getLevel(World.OVERWORLD);
 		
-		DimensionSavedDataManager storage = world.getSavedData();
+		DimensionSavedDataManager storage = world.getDataStorage();
 		TransportalizerSavedData instance = storage.get(TransportalizerSavedData::new, DATA_NAME);
 		
 		if(instance == null)	//There is no save data

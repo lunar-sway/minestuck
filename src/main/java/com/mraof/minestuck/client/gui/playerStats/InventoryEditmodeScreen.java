@@ -33,11 +33,11 @@ public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<Editmode
 	}
 	
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float par1, int xcor, int ycor)
+	protected void renderBg(MatrixStack matrixStack, float par1, int xcor, int ycor)
 	{
 		drawTabs(matrixStack);
 		
-		minecraft.getTextureManager().bindTexture(guiBackground);
+		minecraft.getTextureManager().bind(guiBackground);
 		this.blit(matrixStack, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
 		LocalDate localdate = LocalDate.now();
@@ -62,11 +62,11 @@ public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<Editmode
 			EditmodeInventoryPacket packet = null;
 			if(less && xcor >= xOffset + leftArrowX && xcor < xOffset + leftArrowX + 18)
 			{
-				minecraft.getSoundHandler().play(SimpleSound.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+				minecraft.getSoundManager().play(SimpleSound.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 				packet = EditmodeInventoryPacket.scroll(false);
 			} else if(more && xcor >= xOffset + rightArrowX && xcor < xOffset + rightArrowX + 18)
 			{
-				minecraft.getSoundHandler().play(SimpleSound.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+				minecraft.getSoundManager().play(SimpleSound.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 				packet = EditmodeInventoryPacket.scroll(true);
 			}
 			if(packet != null)

@@ -21,7 +21,7 @@ public class ConsortLootCondition implements ILootCondition
 	}
 	
 	@Override
-	public LootConditionType getConditionType()
+	public LootConditionType getType()
 	{
 		return MSLootTables.consortConditionType();
 	}
@@ -29,7 +29,7 @@ public class ConsortLootCondition implements ILootCondition
 	@Override
 	public boolean test(LootContext context)
 	{
-		Entity entity = context.get(LootParameters.THIS_ENTITY);
+		Entity entity = context.getParamOrNull(LootParameters.THIS_ENTITY);
 		if(entity != null)
 			for(EnumConsort type : consorts)
 				if(type.isConsort(entity))
@@ -68,9 +68,9 @@ public class ConsortLootCondition implements ILootCondition
 				JsonArray list = json.getAsJsonArray("consort");
 				consorts = new EnumConsort[list.size()];
 				for(int i = 0; i < list.size(); i++)
-					consorts[i] = getType(JSONUtils.getString(list.get(i), "consort"));
+					consorts[i] = getType(JSONUtils.convertToString(list.get(i), "consort"));
 				
-			} else consorts = new EnumConsort[] {getType(JSONUtils.getString(json, "consort"))};
+			} else consorts = new EnumConsort[] {getType(JSONUtils.getAsString(json, "consort"))};
 			return new ConsortLootCondition(consorts);
 		}
 		

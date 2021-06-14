@@ -29,18 +29,18 @@ public class WoodLandType extends TerrainLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("upper", Blocks.OAK_LOG.getDefaultState());
-		registry.setBlockState("surface", MSBlocks.TREATED_PLANKS.getDefaultState());
-		registry.setBlockState("structure_primary", Blocks.JUNGLE_WOOD.getDefaultState());
-		registry.setBlockState("structure_primary_decorative", Blocks.DARK_OAK_LOG.getDefaultState());
-		registry.setBlockState("structure_primary_stairs", Blocks.DARK_OAK_STAIRS.getDefaultState());
-		registry.setBlockState("structure_secondary", Blocks.JUNGLE_PLANKS.getDefaultState());
-		registry.setBlockState("structure_secondary_decorative", Blocks.DARK_OAK_PLANKS.getDefaultState());
-		registry.setBlockState("structure_secondary_stairs", Blocks.JUNGLE_STAIRS.getDefaultState());
-		registry.setBlockState("light_block", MSBlocks.GLOWING_WOOD.getDefaultState());
-		registry.setBlockState("bush", Blocks.RED_MUSHROOM.getDefaultState());
-		registry.setBlockState("structure_wool_1", Blocks.PURPLE_WOOL.getDefaultState());
-		registry.setBlockState("structure_wool_3", Blocks.GREEN_WOOL.getDefaultState());
+		registry.setBlockState("upper", Blocks.OAK_LOG.defaultBlockState());
+		registry.setBlockState("surface", MSBlocks.TREATED_PLANKS.defaultBlockState());
+		registry.setBlockState("structure_primary", Blocks.JUNGLE_WOOD.defaultBlockState());
+		registry.setBlockState("structure_primary_decorative", Blocks.DARK_OAK_LOG.defaultBlockState());
+		registry.setBlockState("structure_primary_stairs", Blocks.DARK_OAK_STAIRS.defaultBlockState());
+		registry.setBlockState("structure_secondary", Blocks.JUNGLE_PLANKS.defaultBlockState());
+		registry.setBlockState("structure_secondary_decorative", Blocks.DARK_OAK_PLANKS.defaultBlockState());
+		registry.setBlockState("structure_secondary_stairs", Blocks.JUNGLE_STAIRS.defaultBlockState());
+		registry.setBlockState("light_block", MSBlocks.GLOWING_WOOD.defaultBlockState());
+		registry.setBlockState("bush", Blocks.RED_MUSHROOM.defaultBlockState());
+		registry.setBlockState("structure_wool_1", Blocks.PURPLE_WOOL.defaultBlockState());
+		registry.setBlockState("structure_wool_3", Blocks.GREEN_WOOL.defaultBlockState());
 	}
 	
 	@Override

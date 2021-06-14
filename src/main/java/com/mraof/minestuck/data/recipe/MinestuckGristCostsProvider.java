@@ -29,7 +29,7 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 	}
 	
 	@Override
-	protected void registerRecipes(Consumer<IFinishedRecipe> recipeSaver)
+	protected void buildShapelessRecipes(Consumer<IFinishedRecipe> recipeSaver)
 	{
 		GeneratedGristCostBuilder.create().build(recipeSaver, new ResourceLocation(Minestuck.MOD_ID, "generated"));
 		

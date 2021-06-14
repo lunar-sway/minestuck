@@ -14,7 +14,7 @@ public class BlockColorCruxite implements IBlockColor
 	@Override
 	public int getColor(BlockState state, @Nullable IBlockDisplayReader worldIn, @Nullable BlockPos pos, int tintIndex)
 	{
-		TileEntity tileEntity = worldIn != null && pos != null ? worldIn.getTileEntity(pos) : null;
+		TileEntity tileEntity = worldIn != null && pos != null ? worldIn.getBlockEntity(pos) : null;
 		if(tileEntity instanceof IColored)
 			return handleColorTint(((IColored) tileEntity).getColor(), tintIndex);
 		

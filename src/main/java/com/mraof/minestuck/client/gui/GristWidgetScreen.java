@@ -43,56 +43,56 @@ public class GristWidgetScreen extends MachineScreen<GristWidgetContainer>
 	{
 		this.renderBackground(matrixStack);
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
-		this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
+		this.renderTooltip(matrixStack, mouseX, mouseY);
 	}
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY)
+	protected void renderLabels(MatrixStack matrixStack, int mouseX, int mouseY)
 	{
-		font.drawString(matrixStack, this.title.getString(), 8, 6, 0xFFFFFF);
+		font.draw(matrixStack, this.title.getString(), 8, 6, 0xFFFFFF);
 		//draws "Inventory" or your regional equivalent
-		font.drawString(matrixStack, this.playerInventory.getDisplayName().getString(), 8, ySize - 96 + 2, 0xFFFFFF);
-		if (container.getSlot(0).getHasStack())
+		font.draw(matrixStack, this.inventory.getDisplayName().getString(), 8, imageHeight - 96 + 2, 0xFFFFFF);
+		if (menu.getSlot(0).hasItem())
 		{
 			//Render grist requirements
-			GristSet set = GristWidgetTileEntity.getGristWidgetResult(container.getSlot(0).getStack(), minecraft.world);
+			GristSet set = GristWidgetTileEntity.getGristWidgetResult(menu.getSlot(0).getItem(), minecraft.level);
 
 			GuiUtil.drawGristBoard(matrixStack, set, GuiUtil.GristboardMode.GRIST_WIDGET, 9, 45, font);
 			
 			int cost = GristWidgetTileEntity.getGristWidgetBoondollarValue(set);
 			long has = ClientPlayerData.getBoondollars();
 			String costText = GuiUtil.addSuffix(cost)+"\u00a3("+GuiUtil.addSuffix(has)+")";
-			font.drawString(matrixStack, costText, xSize - 9 - font.getStringWidth(costText), ySize - 96 + 3, cost > has ? 0xFF0000 : 0x00FF00);
+			font.draw(matrixStack, costText, imageWidth - 9 - font.width(costText), imageHeight - 96 + 3, cost > has ? 0xFF0000 : 0x00FF00);
 			
-			ITextComponent tooltip = GuiUtil.getGristboardTooltip(set, GuiUtil.GristboardMode.GRIST_WIDGET, mouseX - this.guiLeft, mouseY - this.guiTop, 9, 45, font);
+			ITextComponent tooltip = GuiUtil.getGristboardTooltip(set, GuiUtil.GristboardMode.GRIST_WIDGET, mouseX - this.leftPos, mouseY - this.topPos, 9, 45, font);
 			if(tooltip != null)
-				this.renderTooltip(matrixStack, tooltip, mouseX - this.guiLeft, mouseY - this.guiTop);
-			else if(mouseY - guiTop >= ySize - 96 + 3 && mouseY - guiTop < ySize - 96 + 3 + font.FONT_HEIGHT)
+				this.renderTooltip(matrixStack, tooltip, mouseX - this.leftPos, mouseY - this.topPos);
+			else if(mouseY - topPos >= imageHeight - 96 + 3 && mouseY - topPos < imageHeight - 96 + 3 + font.lineHeight)
 			{
-				if(!GuiUtil.addSuffix(cost).equals(String.valueOf(cost)) && mouseX - guiLeft < xSize - 9 - font.getStringWidth("£("+GuiUtil.addSuffix(has)+")")
-						&& mouseX - guiLeft >= xSize - 9 - font.getStringWidth(costText))
-					renderTooltip(matrixStack, new StringTextComponent(String.valueOf(cost)), mouseX - this.guiLeft, mouseY - this.guiTop);
-				else if(!GuiUtil.addSuffix(has).equals(String.valueOf(has)) && mouseX - guiLeft < xSize - 9 - font.getStringWidth(")")
-						&& mouseX - guiLeft >= xSize - 9 - font.getStringWidth(GuiUtil.addSuffix(has)+")"))
-					renderTooltip(matrixStack, new StringTextComponent(String.valueOf(has)), mouseX - this.guiLeft, mouseY - this.guiTop);
+				if(!GuiUtil.addSuffix(cost).equals(String.valueOf(cost)) && mouseX - leftPos < imageWidth - 9 - font.width("£("+GuiUtil.addSuffix(has)+")")
+						&& mouseX - leftPos >= imageWidth - 9 - font.width(costText))
+					renderTooltip(matrixStack, new StringTextComponent(String.valueOf(cost)), mouseX - this.leftPos, mouseY - this.topPos);
+				else if(!GuiUtil.addSuffix(has).equals(String.valueOf(has)) && mouseX - leftPos < imageWidth - 9 - font.width(")")
+						&& mouseX - leftPos >= imageWidth - 9 - font.width(GuiUtil.addSuffix(has)+")"))
+					renderTooltip(matrixStack, new StringTextComponent(String.valueOf(has)), mouseX - this.leftPos, mouseY - this.topPos);
 			}
 		}
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float par1, int par2, int par3)
+	protected void renderBg(MatrixStack matrixStack, float par1, int par2, int par3)
 	{
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		//draw background
-		this.minecraft.getTextureManager().bindTexture(BACKGROUND);
-		int x = (width - xSize) / 2;
-		int y = (height - ySize) / 2;
-		this.blit(matrixStack, x, y, 0, 0, xSize, ySize);
+		this.minecraft.getTextureManager().bind(BACKGROUND);
+		int x = (width - imageWidth) / 2;
+		int y = (height - imageHeight) / 2;
+		this.blit(matrixStack, x, y, 0, 0, imageWidth, imageHeight);
 
 		//draw progress bar
-		this.minecraft.getTextureManager().bindTexture(PROGRESS);
-		int width = getScaledValue(container.getProgress(), GristWidgetTileEntity.DEFAULT_MAX_PROGRESS, progressWidth);
+		this.minecraft.getTextureManager().bind(PROGRESS);
+		int width = getScaledValue(menu.getProgress(), GristWidgetTileEntity.DEFAULT_MAX_PROGRESS, progressWidth);
 		int height = progressHeight;
 		blit(matrixStack, x + progressX, y + progressY, 0, 0, width, height, progressWidth, progressHeight);
 	}
@@ -102,7 +102,7 @@ public class GristWidgetScreen extends MachineScreen<GristWidgetContainer>
 	{
 		super.init();
 		
-		goButton = new GoButton((width - xSize) / 2 + goX, (height - ySize) / 2 + goY, 30, 12, new StringTextComponent(container.overrideStop() ? "STOP" : "GO"));
+		goButton = new GoButton((width - imageWidth) / 2 + goX, (height - imageHeight) / 2 + goY, 30, 12, new StringTextComponent(menu.overrideStop() ? "STOP" : "GO"));
 		addButton(goButton);
 		if(MinestuckConfig.SERVER.disableGristWidget.get())
 			goButton.active = false;

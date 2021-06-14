@@ -73,17 +73,17 @@ public class UraniumCookerTileEntity extends MachineProcessTileEntity implements
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound)
+	public CompoundNBT save(CompoundNBT compound)
 	{
-		super.write(compound);
+		super.save(compound);
 		compound.putShort("fuel", fuel);
 		return compound;
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT nbt)
+	public void load(BlockState state, CompoundNBT nbt)
 	{
-		super.read(state, nbt);
+		super.load(state, nbt);
 		fuel = nbt.getShort("fuel");
 	}
 	
@@ -96,7 +96,7 @@ public class UraniumCookerTileEntity extends MachineProcessTileEntity implements
 	@Override
 	public boolean contentsValid()
 	{
-		if(world.isBlockPowered(this.getPos()))
+		if(level.hasNeighborSignal(this.getBlockPos()))
 		{
 			return false;
 		}
@@ -109,17 +109,17 @@ public class UraniumCookerTileEntity extends MachineProcessTileEntity implements
 	
 	private ItemStack irradiate()	//TODO Handle the recipe and make sure to use its exp/cooking time
 	{
-		if(world == null)
+		if(level == null)
 			return ItemStack.EMPTY;
 		
 		//List of all recipes that match to the current input
-		Stream<IrradiatingRecipe> stream = world.getRecipeManager().getRecipes(MSRecipeTypes.IRRADIATING_TYPE, recipeInventory, world).stream();
+		Stream<IrradiatingRecipe> stream = level.getRecipeManager().getRecipesFor(MSRecipeTypes.IRRADIATING_TYPE, recipeInventory, level).stream();
 		//Sort the stream to get non-fallback recipes first, and fallback recipes second
 		stream = stream.sorted(Comparator.comparingInt(o -> (o.isFallback() ? 1 : 0)));
 		//Let the recipe return the recipe actually used (for fallbacks), to clear out all that are not present, and then get the first
-		Optional<? extends AbstractCookingRecipe> cookingRecipe = stream.flatMap(recipe -> Util.streamOptional(recipe.getCookingRecipe(recipeInventory, world))).findFirst();
+		Optional<? extends AbstractCookingRecipe> cookingRecipe = stream.flatMap(recipe -> Util.toStream(recipe.getCookingRecipe(recipeInventory, level))).findFirst();
 		
-		return cookingRecipe.map(abstractCookingRecipe -> abstractCookingRecipe.getCraftingResult(recipeInventory)).orElse(ItemStack.EMPTY);
+		return cookingRecipe.map(abstractCookingRecipe -> abstractCookingRecipe.assemble(recipeInventory)).orElse(ItemStack.EMPTY);
 	}
 	
 	@Override
@@ -161,7 +161,7 @@ public class UraniumCookerTileEntity extends MachineProcessTileEntity implements
 			{
 				return true;
 			}
-			else if(out.getMaxStackSize() >= output.getCount() + out.getCount() && out.isItemEqual(output))
+			else if(out.getMaxStackSize() >= output.getCount() + out.getCount() && out.sameItem(output))
 			{
 				return true;
 			}
@@ -189,7 +189,7 @@ public class UraniumCookerTileEntity extends MachineProcessTileEntity implements
 	@Override
 	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity player)
 	{
-		return new UraniumCookerContainer(windowId, playerInventory, itemHandler, parameters, fuelHolder, IWorldPosCallable.of(world, pos), pos);
+		return new UraniumCookerContainer(windowId, playerInventory, itemHandler, parameters, fuelHolder, IWorldPosCallable.create(level, worldPosition), worldPosition);
 	}
 	
 	@Override

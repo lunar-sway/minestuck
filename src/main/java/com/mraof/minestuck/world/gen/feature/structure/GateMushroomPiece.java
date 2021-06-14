@@ -28,7 +28,7 @@ public class GateMushroomPiece extends GatePiece
 	}
 	
 	@Override
-	protected void readAdditional(CompoundNBT tagCompound)
+	protected void addAdditionalSaveData(CompoundNBT tagCompound)
 	{
 	
 	}
@@ -40,25 +40,25 @@ public class GateMushroomPiece extends GatePiece
 	}
 	
 	@Override
-	public boolean func_230383_a_(ISeedReader worldIn, StructureManager manager, ChunkGenerator chunkGenerator, Random random, MutableBoundingBox boundingBoxIn, ChunkPos chunkPos, BlockPos pos)
+	public boolean postProcess(ISeedReader worldIn, StructureManager manager, ChunkGenerator chunkGenerator, Random random, MutableBoundingBox boundingBoxIn, ChunkPos chunkPos, BlockPos pos)
 	{
 		
-		BlockState stem = Blocks.MUSHROOM_STEM.getDefaultState().with(HugeMushroomBlock.DOWN, false);
-		BlockState mushroom = Blocks.BROWN_MUSHROOM_BLOCK.getDefaultState().with(HugeMushroomBlock.UP, false).with(HugeMushroomBlock.DOWN, false);
+		BlockState stem = Blocks.MUSHROOM_STEM.defaultBlockState().setValue(HugeMushroomBlock.DOWN, false);
+		BlockState mushroom = Blocks.BROWN_MUSHROOM_BLOCK.defaultBlockState().setValue(HugeMushroomBlock.UP, false).setValue(HugeMushroomBlock.DOWN, false);
 		
-		fillWithBlocks(worldIn, boundingBoxIn, 5, 0, 5, 5, 19, 5, stem, stem, false);
+		generateBox(worldIn, boundingBoxIn, 5, 0, 5, 5, 19, 5, stem, stem, false);
 		
-		fillWithBlocks(worldIn, boundingBoxIn, 4, 20, 0, 6, 20, 0, mushroom, mushroom, false);
-		fillWithBlocks(worldIn, boundingBoxIn, 3, 20, 1, 7, 20, 1, mushroom, mushroom, false);
-		fillWithBlocks(worldIn, boundingBoxIn, 2, 20, 2, 8, 20, 2, mushroom, mushroom, false);
-		fillWithBlocks(worldIn, boundingBoxIn, 1, 20, 3, 9, 20, 3, mushroom, mushroom, false);
-		fillWithBlocks(worldIn, boundingBoxIn, 0, 20, 4, 10, 20, 6, mushroom, mushroom, false);
-		fillWithBlocks(worldIn, boundingBoxIn, 1, 20, 7, 9, 20, 7, mushroom, mushroom, false);
-		fillWithBlocks(worldIn, boundingBoxIn, 2, 20, 8, 8, 20, 8, mushroom, mushroom, false);
-		fillWithBlocks(worldIn, boundingBoxIn, 3, 20, 9, 7, 20, 9, mushroom, mushroom, false);
-		fillWithBlocks(worldIn, boundingBoxIn, 4, 20, 10, 6, 20, 10, mushroom, mushroom, false);
+		generateBox(worldIn, boundingBoxIn, 4, 20, 0, 6, 20, 0, mushroom, mushroom, false);
+		generateBox(worldIn, boundingBoxIn, 3, 20, 1, 7, 20, 1, mushroom, mushroom, false);
+		generateBox(worldIn, boundingBoxIn, 2, 20, 2, 8, 20, 2, mushroom, mushroom, false);
+		generateBox(worldIn, boundingBoxIn, 1, 20, 3, 9, 20, 3, mushroom, mushroom, false);
+		generateBox(worldIn, boundingBoxIn, 0, 20, 4, 10, 20, 6, mushroom, mushroom, false);
+		generateBox(worldIn, boundingBoxIn, 1, 20, 7, 9, 20, 7, mushroom, mushroom, false);
+		generateBox(worldIn, boundingBoxIn, 2, 20, 8, 8, 20, 8, mushroom, mushroom, false);
+		generateBox(worldIn, boundingBoxIn, 3, 20, 9, 7, 20, 9, mushroom, mushroom, false);
+		generateBox(worldIn, boundingBoxIn, 4, 20, 10, 6, 20, 10, mushroom, mushroom, false);
 		
-		super.func_230383_a_(worldIn, manager, chunkGenerator, random, boundingBoxIn, chunkPos, pos);
+		super.postProcess(worldIn, manager, chunkGenerator, random, boundingBoxIn, chunkPos, pos);
 		
 		return true;
 	}

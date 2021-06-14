@@ -51,7 +51,7 @@ public abstract class CarapacianEntity extends SimpleTexturedEntity
 	
 	public static AttributeModifierMap.MutableAttribute carapacianAttributes()
 	{
-		return MobEntity.func_233666_p_().createMutableAttribute(Attributes.FOLLOW_RANGE, 32);
+		return MobEntity.createMobAttributes().add(Attributes.FOLLOW_RANGE, 32);
 	}
 	
 	private void setEnemies()
@@ -59,25 +59,25 @@ public abstract class CarapacianEntity extends SimpleTexturedEntity
 		switch(this.getKingdom())
 		{
 			case PROSPITIAN:
-				enemyTypes.addAll(MSTags.EntityTypes.DERSITE_CARAPACIANS.getAllElements());	//TODO Should refer to tags directly. Entities will otherwise need to be reconstructed for resource reload changes to take place
+				enemyTypes.addAll(MSTags.EntityTypes.DERSITE_CARAPACIANS.getValues());	//TODO Should refer to tags directly. Entities will otherwise need to be reconstructed for resource reload changes to take place
 				break;
 			case DERSITE:
-				enemyTypes.addAll(MSTags.EntityTypes.PROSPITIAN_CARAPACIANS.getAllElements());
+				enemyTypes.addAll(MSTags.EntityTypes.PROSPITIAN_CARAPACIANS.getValues());
 		}
 	}
 	
 	public void addEnemy(EntityType<?> enemyType)
 	{
-		if(canAttack(enemyType) && !enemyTypes.contains(enemyType))
+		if(canAttackType(enemyType) && !enemyTypes.contains(enemyType))
 		{
 			enemyTypes.add(enemyType);
 		}
 	}
 	
 	@Override
-	public void setAttackTarget(LivingEntity entity)
+	public void setTarget(LivingEntity entity)
 	{
-		super.setAttackTarget(entity);
+		super.setTarget(entity);
 		if(entity != null)
 		{
 			this.addEnemy(entity.getType());
@@ -85,7 +85,7 @@ public abstract class CarapacianEntity extends SimpleTexturedEntity
 	}
 	
 	@Override
-	public boolean canAttack(EntityType<?> typeIn)
+	public boolean canAttackType(EntityType<?> typeIn)
 	{
 		return !allyTag.contains(typeIn);
 	}

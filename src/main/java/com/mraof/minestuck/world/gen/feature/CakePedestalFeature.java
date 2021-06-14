@@ -29,22 +29,22 @@ public class CakePedestalFeature extends Feature<NoFeatureConfig>
 	}
 	
 	@Override
-	public boolean generate(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
+	public boolean place(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
 	{
-		TemplateManager templates = world.getWorld().getStructureTemplateManager();
-		Template template = templates.getTemplateDefaulted(STRUCTURE_CAKE_PEDESTAL);
+		TemplateManager templates = world.getLevel().getStructureManager();
+		Template template = templates.getOrCreate(STRUCTURE_CAKE_PEDESTAL);
 		
-		PlacementSettings settings = new PlacementSettings().setChunk(new ChunkPos(pos)).setRandom(rand).addProcessor(StructureBlockRegistryProcessor.INSTANCE);
+		PlacementSettings settings = new PlacementSettings().setChunkPos(new ChunkPos(pos)).setRandom(rand).addProcessor(StructureBlockRegistryProcessor.INSTANCE);
 		
 		BlockPos size = template.getSize();
 		int xOffset = rand.nextInt(16 - size.getX()), zOffset = rand.nextInt(16 - size.getX());
 		
 		int yMin = Integer.MAX_VALUE;
-		for(BlockPos floorPos : BlockPos.getAllInBoxMutable(pos, pos.add(xOffset, 0, zOffset)))
-			yMin = Math.min(yMin, world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, floorPos).getY());
+		for(BlockPos floorPos : BlockPos.betweenClosed(pos, pos.offset(xOffset, 0, zOffset)))
+			yMin = Math.min(yMin, world.getHeightmapPos(Heightmap.Type.WORLD_SURFACE_WG, floorPos).getY());
 		
 		BlockPos structurePos = template.getZeroPositionWithTransform(new BlockPos(pos.getX() + xOffset, yMin, pos.getZ() + zOffset), Mirror.NONE, Rotation.NONE);
-		template.func_237146_a_(world, structurePos, structurePos, settings, rand, Constants.BlockFlags.NO_RERENDER);
+		template.placeInWorld(world, structurePos, structurePos, settings, rand, Constants.BlockFlags.NO_RERENDER);
 		
 		return true;
 	}

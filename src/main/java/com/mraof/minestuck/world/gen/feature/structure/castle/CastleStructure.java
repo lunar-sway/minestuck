@@ -22,7 +22,7 @@ public class CastleStructure extends Structure<NoFeatureConfig>
 	}
 	
 	@Override
-	protected boolean func_230363_a_(ChunkGenerator generator, BiomeProvider biomeProvider, long seed, SharedSeedRandom rand, int chunkX, int chunkZ, Biome biome, ChunkPos pos, NoFeatureConfig config)
+	protected boolean isFeatureChunk(ChunkGenerator generator, BiomeProvider biomeProvider, long seed, SharedSeedRandom rand, int chunkX, int chunkZ, Biome biome, ChunkPos pos, NoFeatureConfig config)
 	{
         int var3 = chunkX >> 4;
         int var4 = chunkZ >> 4;
@@ -32,7 +32,7 @@ public class CastleStructure extends Structure<NoFeatureConfig>
     }
 	
 	@Override
-	public GenerationStage.Decoration getDecorationStage()
+	public GenerationStage.Decoration step()
 	{
 		return GenerationStage.Decoration.SURFACE_STRUCTURES;
 	}
@@ -44,7 +44,7 @@ public class CastleStructure extends Structure<NoFeatureConfig>
     }
 	
 	@Override
-	public String getStructureName()
+	public String getFeatureName()
 	{
 		return "SkaiaCastle";
 	}

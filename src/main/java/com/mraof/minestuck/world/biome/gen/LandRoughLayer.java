@@ -2,11 +2,8 @@ package com.mraof.minestuck.world.biome.gen;
 
 import com.mraof.minestuck.world.biome.BiomeType;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.INoiseRandom;
 import net.minecraft.world.gen.layer.traits.IC1Transformer;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.ForgeRegistry;
 
 public class LandRoughLayer implements IC1Transformer
 {
@@ -22,7 +19,7 @@ public class LandRoughLayer implements IC1Transformer
 	@Override
 	public int apply(INoiseRandom context, int value)
 	{
-		if(value == NORMAL_BIOME && context.random(Integer.MAX_VALUE) < roughChance)
+		if(value == NORMAL_BIOME && context.nextRandom(Integer.MAX_VALUE) < roughChance)
 			return ROUGH_BIOME;
 		else return value;
 	}

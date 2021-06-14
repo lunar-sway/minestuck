@@ -79,7 +79,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 	@Override
 	public boolean contentsValid()
 	{
-		if(!world.isBlockPowered(this.getPos()) && !itemHandler.getStackInSlot(INPUT).isEmpty() && this.owner != null)
+		if(!level.hasNeighborSignal(this.getBlockPos()) && !itemHandler.getStackInSlot(INPUT).isEmpty() && this.owner != null)
 		{
 			//Check owner's cache: Do they have everything they need?
 			ItemStack newItem = AlchemyHelper.getDecodedItem(itemHandler.getStackInSlot(INPUT));
@@ -91,9 +91,9 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 			{
 				return false;
 			}
-			GristSet cost = GristCostRecipe.findCostForItem(newItem, wildcardGrist, false, world);
+			GristSet cost = GristCostRecipe.findCostForItem(newItem, wildcardGrist, false, level);
 			
-			return GristHelper.canAfford(world, owner, cost);
+			return GristHelper.canAfford(level, owner, cost);
 		}
 		else
 		{
@@ -109,9 +109,9 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 		if (newItem.isEmpty())
 			newItem = new ItemStack(MSBlocks.GENERIC_OBJECT);
 		
-		GristSet cost = GristCostRecipe.findCostForItem(newItem, wildcardGrist, false, world);
+		GristSet cost = GristCostRecipe.findCostForItem(newItem, wildcardGrist, false, level);
 		
-		GristHelper.decrease(world, owner, cost);
+		GristHelper.decrease(level, owner, cost);
 		
 		AlchemyEvent event = new AlchemyEvent(owner, this, itemHandler.getStackInSlot(INPUT), newItem, cost);
 		MinecraftForge.EVENT_BUS.post(event);
@@ -130,7 +130,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 		super.tick();
 		if (this.ticks_since_update == 20)
 		{
-			world.updateComparatorOutputLevel(this.getPos(), this.getBlockState().getBlock());
+			level.updateNeighbourForOutputSignal(this.getBlockPos(), this.getBlockState().getBlock());
 			this.ticks_since_update = 0;
 		}
 		else
@@ -140,9 +140,9 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT nbt)
+	public void load(BlockState state, CompoundNBT nbt)
 	{
-		super.read(state, nbt);
+		super.load(state, nbt);
 		
 		this.wildcardGrist = GristType.read(nbt, "gristType");
 		
@@ -151,14 +151,14 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound)
+	public CompoundNBT save(CompoundNBT compound)
 	{
 		compound.putString("gristType", wildcardGrist.getRegistryName().toString());
 		
 		if(owner != null)
 			owner.saveToNBT(compound, "owner");
 		
-		return super.write(compound);
+		return super.save(compound);
 	}
 	
 	@Override
@@ -198,7 +198,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 			{
 				return 0;
 			}
-			GristSet cost = GristCostRecipe.findCostForItem(newItem, wildcardGrist, false, world);
+			GristSet cost = GristCostRecipe.findCostForItem(newItem, wildcardGrist, false, level);
 			// We need to run the check 16 times. Don't want to hammer the game with too many of these, so the comparators are only told to update every 20 ticks.
 			// Additionally, we need to check if the item in the slot is empty. Otherwise, it will attempt to check the cost for air, which cannot be alchemized anyway.
 			if (cost != null && !input.isEmpty())
@@ -213,7 +213,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 					}
 					// We need to make a copy to preserve the original grist amounts and avoid scaling values that have already been scaled. Keeps scaling linear as opposed to exponential.
 					scale_cost = cost.copy().scale(lvl);
-					if (!GristHelper.canAfford(world, owner, scale_cost))
+					if (!GristHelper.canAfford(level, owner, scale_cost))
 					{
 						return lvl - 1;
 					}
@@ -227,7 +227,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 	@Override
 	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity player)
 	{
-		return new MiniAlchemiterContainer(windowId, playerInventory, itemHandler, parameters, wildcardGristHolder, IWorldPosCallable.of(world, pos), pos);
+		return new MiniAlchemiterContainer(windowId, playerInventory, itemHandler, parameters, wildcardGristHolder, IWorldPosCallable.create(level, worldPosition), worldPosition);
 	}
 	
 	public GristType getWildcardGrist()
@@ -241,7 +241,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 		if(this.wildcardGrist != wildcardGrist)
 		{
 			this.wildcardGrist = wildcardGrist;
-			markDirty();
+			setChanged();
 		}
 	}
 	

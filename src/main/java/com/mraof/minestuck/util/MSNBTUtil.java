@@ -56,7 +56,7 @@ public class MSNBTUtil
 	@Nonnull
 	public static RegistryKey<World> readDimensionType(CompoundNBT nbt, String key)
 	{
-		return World.CODEC.parse(NBTDynamicOps.INSTANCE, nbt.get(key)).getOrThrow(false, LOGGER::error);
+		return World.RESOURCE_KEY_CODEC.parse(NBTDynamicOps.INSTANCE, nbt.get(key)).getOrThrow(false, LOGGER::error);
 	}
 	
 	/**
@@ -67,7 +67,7 @@ public class MSNBTUtil
 	@Nullable
 	public static RegistryKey<World> tryReadDimensionType(CompoundNBT nbt, String key)
 	{
-		return World.CODEC.parse(NBTDynamicOps.INSTANCE, nbt.get(key)).resultOrPartial(LOGGER::error).orElse(null);
+		return World.RESOURCE_KEY_CODEC.parse(NBTDynamicOps.INSTANCE, nbt.get(key)).resultOrPartial(LOGGER::error).orElse(null);
 	}
 	
 	/**
@@ -75,7 +75,7 @@ public class MSNBTUtil
 	 */
 	public static CompoundNBT writeDimensionType(CompoundNBT nbt, String key, RegistryKey<World> dimension)
 	{
-		nbt.put(key, World.CODEC.encodeStart(NBTDynamicOps.INSTANCE, dimension).getOrThrow(false, LOGGER::error));
+		nbt.put(key, World.RESOURCE_KEY_CODEC.encodeStart(NBTDynamicOps.INSTANCE, dimension).getOrThrow(false, LOGGER::error));
 		return nbt;
 	}
 	
@@ -84,7 +84,7 @@ public class MSNBTUtil
 	 */
 	public static boolean tryWriteDimensionType(CompoundNBT nbt, String key, RegistryKey<World> dimension)
 	{
-		Optional<INBT> optional = World.CODEC.encodeStart(NBTDynamicOps.INSTANCE, dimension).resultOrPartial(LOGGER::error);
+		Optional<INBT> optional = World.RESOURCE_KEY_CODEC.encodeStart(NBTDynamicOps.INSTANCE, dimension).resultOrPartial(LOGGER::error);
 		optional.ifPresent(inbt -> nbt.put(key, inbt));
 		return optional.isPresent();
 	}

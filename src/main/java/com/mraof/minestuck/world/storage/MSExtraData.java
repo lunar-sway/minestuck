@@ -43,7 +43,7 @@ public class MSExtraData extends WorldSavedData
 	}
 	
 	@Override
-	public void read(CompoundNBT nbt)
+	public void load(CompoundNBT nbt)
 	{
 		activeEditData.clear();
 		editPlayerRecovery.clear();
@@ -55,7 +55,7 @@ public class MSExtraData extends WorldSavedData
 		for(int i = 0; i < editRecoveryList.size(); i++)
 		{
 			CompoundNBT dataTag = editRecoveryList.getCompound(i);
-			UUID playerID = dataTag.getUniqueId("player");
+			UUID playerID = dataTag.getUUID("player");
 			editPlayerRecovery.put(playerID, EditData.readRecovery(dataTag));
 			EditData.ConnectionRecovery recovery = EditData.readExtraRecovery(dataTag);
 			if(recovery != null)
@@ -71,7 +71,7 @@ public class MSExtraData extends WorldSavedData
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound)
+	public CompoundNBT save(CompoundNBT compound)
 	{
 		ListNBT editRecoveryList = new ListNBT();
 		editRecoveryList.addAll(editPlayerRecovery.entrySet().stream().map(MSExtraData::writeRecovery).collect(Collectors.toList()));
@@ -90,14 +90,14 @@ public class MSExtraData extends WorldSavedData
 	private static CompoundNBT writeRecovery(EditData data)
 	{
 		CompoundNBT nbt = data.writeRecoveryData();
-		nbt.putUniqueId("player", data.getEditor().getGameProfile().getId());
+		nbt.putUUID("player", data.getEditor().getGameProfile().getId());
 		return nbt;
 	}
 	
 	private static CompoundNBT writeRecovery(Map.Entry<UUID, EditData.PlayerRecovery> data)
 	{
 		CompoundNBT nbt = data.getValue().write(new CompoundNBT());
-		nbt.putUniqueId("player", data.getKey());
+		nbt.putUUID("player", data.getKey());
 		return nbt;
 	}
 	
@@ -111,9 +111,9 @@ public class MSExtraData extends WorldSavedData
 	
 	public static MSExtraData get(MinecraftServer mcServer)
 	{
-		ServerWorld world = mcServer.getWorld(World.OVERWORLD);
+		ServerWorld world = mcServer.getLevel(World.OVERWORLD);
 		
-		DimensionSavedDataManager storage = world.getSavedData();
+		DimensionSavedDataManager storage = world.getDataStorage();
 		MSExtraData instance = storage.get(MSExtraData::new, DATA_NAME);
 		
 		if(instance == null)	//There is no save data, so insert a new instance
@@ -138,13 +138,13 @@ public class MSExtraData extends WorldSavedData
 	public void addEditData(EditData data)
 	{
 		activeEditData.add(data);
-		markDirty();
+		setDirty();
 	}
 	
 	public void removeEditData(EditData data)
 	{
 		if(activeEditData.remove(data))
-			markDirty();
+			setDirty();
 	}
 	
 	public void forEach(Consumer<EditData> consumer)
@@ -158,7 +158,7 @@ public class MSExtraData extends WorldSavedData
 		{
 			forEach(consumer);
 			activeEditData.clear();
-			markDirty();
+			setDirty();
 		}
 	}
 	
@@ -166,7 +166,7 @@ public class MSExtraData extends WorldSavedData
 	{
 		EditData.PlayerRecovery recovery = editPlayerRecovery.remove(playerID);
 		if(recovery != null)
-			markDirty();
+			setDirty();
 		return recovery;
 	}
 	
@@ -177,14 +177,14 @@ public class MSExtraData extends WorldSavedData
 			LOGGER.warn("Recovering extra connection data for {} players that were in editmode when the server shut down abruptly last session. An attempt to recover players will be made when they rejoin the server.", editConnectionRecovery.size());
 			editConnectionRecovery.forEach(recover);
 			editConnectionRecovery.clear();
-			markDirty();
+			setDirty();
 		}
 	}
 	
 	public void addPostEntryTask(PostEntryTask task)
 	{
 		postEntryTasks.add(task);
-		markDirty();
+		setDirty();
 	}
 	
 	public void executeEntryTasks(MinecraftServer server)
@@ -192,11 +192,11 @@ public class MSExtraData extends WorldSavedData
 		for(PostEntryTask task : postEntryTasks)
 		{
 			if(task.onTick(server))
-				markDirty();
+				setDirty();
 		}
 		
 		if(postEntryTasks.removeIf(PostEntryTask::isDone))
-			markDirty();
+			setDirty();
 	}
 	
 	@Override

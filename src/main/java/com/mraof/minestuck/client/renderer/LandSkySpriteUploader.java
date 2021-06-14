@@ -37,7 +37,7 @@ public class LandSkySpriteUploader extends SpriteUploader
 	{
 		System.out.println("Creating land planet resource");
 		Minecraft mc = Minecraft.getInstance();
-		((IReloadableResourceManager) mc.getResourceManager()).addReloadListener(INSTANCE = new LandSkySpriteUploader(mc.getTextureManager()));
+		((IReloadableResourceManager) mc.getResourceManager()).registerReloadListener(INSTANCE = new LandSkySpriteUploader(mc.getTextureManager()));
 	}
 	
 	public LandSkySpriteUploader(TextureManager textureManagerIn)
@@ -46,7 +46,7 @@ public class LandSkySpriteUploader extends SpriteUploader
 	}
 	
 	@Override
-	protected Stream<ResourceLocation> getResourceLocations()
+	protected Stream<ResourceLocation> getResourcesToLoad()
 	{
 		return Stream.concat(extras(), addVariantIndex(Stream.concat(planetLocations(), overlayLocations())));
 	}

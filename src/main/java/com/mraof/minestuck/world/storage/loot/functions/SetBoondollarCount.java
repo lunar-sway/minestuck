@@ -20,20 +20,20 @@ public class SetBoondollarCount extends LootFunction
 	}
 	
 	@Override
-	public LootFunctionType getFunctionType()
+	public LootFunctionType getType()
 	{
 		return MSLootTables.setBoondollarFunctionType();
 	}
 	
 	@Override
-	protected ItemStack doApply(ItemStack stack, LootContext context)
+	protected ItemStack run(ItemStack stack, LootContext context)
 	{
-		return BoondollarsItem.setCount(stack, countRange.generateInt(context.getRandom()));
+		return BoondollarsItem.setCount(stack, countRange.getInt(context.getRandom()));
 	}
 	
 	public static LootFunction.Builder<?> builder(IRandomRange range)
 	{
-		return builder((conditions) -> new SetBoondollarCount(conditions, range));
+		return simpleBuilder((conditions) -> new SetBoondollarCount(conditions, range));
 	}
 	
 	public static class Serializer extends LootFunction.Serializer<SetBoondollarCount>

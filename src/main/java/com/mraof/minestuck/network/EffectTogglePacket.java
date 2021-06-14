@@ -28,10 +28,10 @@ public class EffectTogglePacket implements PlayToServerPacket
 		data.effectToggle(!data.effectToggle());
 		if(data.effectToggle())
 		{
-			player.sendStatusMessage(new TranslationTextComponent(ON), true);
+			player.displayClientMessage(new TranslationTextComponent(ON), true);
 		} else
 		{
-			player.sendStatusMessage(new TranslationTextComponent(OFF), true);
+			player.displayClientMessage(new TranslationTextComponent(OFF), true);
 		}
 	}
 }

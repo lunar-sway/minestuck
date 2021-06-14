@@ -39,18 +39,18 @@ public class SmallMachineBlock<T extends TileEntity> extends MachineProcessBlock
 	@SuppressWarnings("deprecation")
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
 	{
-		return shape.get(state.get(FACING));
+		return shape.get(state.getValue(FACING));
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
 	{
-		if(!player.isSneaking())
+		if(!player.isShiftKeyDown())
 		{
-			if(!worldIn.isRemote)
+			if(!worldIn.isClientSide)
 			{
-				TileEntity tileEntity = worldIn.getTileEntity(pos);
+				TileEntity tileEntity = worldIn.getBlockEntity(pos);
 				if(tileEntity != null && tileEntity.getType() == this.tileType.get())
 				{
 					if(tileEntity instanceof IOwnable)

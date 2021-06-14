@@ -24,9 +24,9 @@ public class GoopBlock extends SlimeBlock
 	}
 	
 	@Override
-	public int getOpacity(BlockState state, IBlockReader worldIn, BlockPos pos)
+	public int getLightBlock(BlockState state, IBlockReader worldIn, BlockPos pos)
 	{
-		if (state.isOpaqueCube(worldIn, pos)) {
+		if (state.isSolidRender(worldIn, pos)) {
 			return worldIn.getMaxLightLevel();
 		} else {
 			return state.propagatesSkylightDown(worldIn, pos) ? 0 : 1;

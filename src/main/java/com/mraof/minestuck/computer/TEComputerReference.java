@@ -37,10 +37,10 @@ class TEComputerReference implements ComputerReference
 	@Override
 	public ISburbComputer getComputer(MinecraftServer server)
 	{
-		World world = server.getWorld(location.getDimension());
+		World world = server.getLevel(location.dimension());
 		if(world == null)
 			return null;
-		TileEntity te = world.getTileEntity(location.getPos());
+		TileEntity te = world.getBlockEntity(location.pos());
 		if(te instanceof ISburbComputer)
 			return (ISburbComputer) te;
 		else return null;
@@ -52,14 +52,14 @@ class TEComputerReference implements ComputerReference
 		if(computer instanceof ComputerTileEntity)
 		{
 			ComputerTileEntity te = (ComputerTileEntity) computer;
-			return location.getDimension() == Objects.requireNonNull(te.getWorld()).getDimensionKey() && location.getPos().equals(te.getPos());
+			return location.dimension() == Objects.requireNonNull(te.getLevel()).dimension() && location.pos().equals(te.getBlockPos());
 		} else return false;
 	}
 	
 	@Override
 	public boolean isInNether()
 	{
-		return location.getDimension() == World.THE_NETHER;
+		return location.dimension() == World.NETHER;
 	}
 	
 	@Override

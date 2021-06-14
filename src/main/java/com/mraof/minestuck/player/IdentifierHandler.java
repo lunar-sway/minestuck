@@ -54,7 +54,7 @@ public class IdentifierHandler
 			case "null":
 				return NULL_IDENTIFIER;
 			case "uuid":
-				identifier = new UUIDIdentifier(nextIdentifierId, nbt.getUniqueId(key));
+				identifier = new UUIDIdentifier(nextIdentifierId, nbt.getUUID(key));
 				break;
 			case "fake":
 				identifier = new FakeIdentifier(nextIdentifierId, nbt.getInt(key+"_count"));
@@ -170,7 +170,7 @@ public class IdentifierHandler
 			PlayerList list = server == null ? null : server.getPlayerList();
 			if(list == null)
 				return null;
-			return list.getPlayerByUUID(uuid);
+			return list.getPlayer(uuid);
 		}
 		
 		@Override
@@ -183,7 +183,7 @@ public class IdentifierHandler
 		public CompoundNBT saveToNBT(CompoundNBT nbt, String key)
 		{
 			nbt.putString(key, "uuid");
-			nbt.putUniqueId(key, uuid);
+			nbt.putUUID(key, uuid);
 			return nbt;
 		}
 		

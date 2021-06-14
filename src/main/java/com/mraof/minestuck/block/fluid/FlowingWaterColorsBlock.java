@@ -33,9 +33,9 @@ public class FlowingWaterColorsBlock extends FlowingFluidBlock implements IMSFog
 	public Vector3d getFogColor(BlockState state, IWorldReader world, BlockPos pos, Entity entity, Vector3d originalColor, float partialTicks)
 	{
 		Vector3d newColor = new Vector3d(0.0, 20.0, 30.0);
-		newColor = newColor.rotateYaw((float) (entity.getPosX() / 2.0));
-		newColor = newColor.rotatePitch((float) (entity.getPosZ() / 2.0));
-		newColor = newColor.rotateYaw((float) (entity.getPosY()));
+		newColor = newColor.yRot((float) (entity.getX() / 2.0));
+		newColor = newColor.xRot((float) (entity.getZ() / 2.0));
+		newColor = newColor.yRot((float) (entity.getY()));
 		newColor = newColor.normalize();
 		newColor = new Vector3d(newColor.x % 1.0, newColor.y % 1.0, newColor.z % 1.0);
 		

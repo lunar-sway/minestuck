@@ -17,24 +17,24 @@ import java.util.*;
 
 public class MesaFeature extends Feature<NoFeatureConfig>
 {
-	private final BlockState[] baseBlock = {Blocks.RED_TERRACOTTA.getDefaultState(),
-			Blocks.ORANGE_TERRACOTTA.getDefaultState(),
-			Blocks.YELLOW_TERRACOTTA.getDefaultState(),
-			Blocks.GREEN_TERRACOTTA.getDefaultState(),
-			Blocks.CYAN_TERRACOTTA.getDefaultState(),
-			Blocks.BLUE_TERRACOTTA.getDefaultState(),
-			Blocks.PURPLE_TERRACOTTA.getDefaultState(),
-			Blocks.MAGENTA_TERRACOTTA.getDefaultState()};
-	private final BlockState[] altBlock = {Blocks.RED_GLAZED_TERRACOTTA.getDefaultState(),
-			Blocks.ORANGE_GLAZED_TERRACOTTA.getDefaultState(),
-			Blocks.YELLOW_GLAZED_TERRACOTTA.getDefaultState(),
-			Blocks.GREEN_GLAZED_TERRACOTTA.getDefaultState(),
-			Blocks.CYAN_GLAZED_TERRACOTTA.getDefaultState(),
-			Blocks.BLUE_GLAZED_TERRACOTTA.getDefaultState(),
-			Blocks.PURPLE_GLAZED_TERRACOTTA.getDefaultState(),
-			Blocks.MAGENTA_GLAZED_TERRACOTTA.getDefaultState() };
-	private final BlockState baseCore = Blocks.AIR.getDefaultState();
-	private final BlockState altCore = Blocks.BEACON.getDefaultState();
+	private final BlockState[] baseBlock = {Blocks.RED_TERRACOTTA.defaultBlockState(),
+			Blocks.ORANGE_TERRACOTTA.defaultBlockState(),
+			Blocks.YELLOW_TERRACOTTA.defaultBlockState(),
+			Blocks.GREEN_TERRACOTTA.defaultBlockState(),
+			Blocks.CYAN_TERRACOTTA.defaultBlockState(),
+			Blocks.BLUE_TERRACOTTA.defaultBlockState(),
+			Blocks.PURPLE_TERRACOTTA.defaultBlockState(),
+			Blocks.MAGENTA_TERRACOTTA.defaultBlockState()};
+	private final BlockState[] altBlock = {Blocks.RED_GLAZED_TERRACOTTA.defaultBlockState(),
+			Blocks.ORANGE_GLAZED_TERRACOTTA.defaultBlockState(),
+			Blocks.YELLOW_GLAZED_TERRACOTTA.defaultBlockState(),
+			Blocks.GREEN_GLAZED_TERRACOTTA.defaultBlockState(),
+			Blocks.CYAN_GLAZED_TERRACOTTA.defaultBlockState(),
+			Blocks.BLUE_GLAZED_TERRACOTTA.defaultBlockState(),
+			Blocks.PURPLE_GLAZED_TERRACOTTA.defaultBlockState(),
+			Blocks.MAGENTA_GLAZED_TERRACOTTA.defaultBlockState() };
+	private final BlockState baseCore = Blocks.AIR.defaultBlockState();
+	private final BlockState altCore = Blocks.BEACON.defaultBlockState();
 	
 	private final boolean stomps = false;
 	
@@ -44,26 +44,26 @@ public class MesaFeature extends Feature<NoFeatureConfig>
 	}
 	
 	@Override
-	public boolean generate(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
+	public boolean place(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
 	{
 		int tallness = 7;
 		int height = rand.nextInt(tallness) + tallness + 3;
 		
-		if(world.getBlockState(pos.up(height*2/3)).getMaterial().isLiquid())	//At least 1/3rd of the height should be above the liquid surface
+		if(world.getBlockState(pos.above(height*2/3)).getMaterial().isLiquid())	//At least 1/3rd of the height should be above the liquid surface
 			return false;
 		
 		float plateauSize = 0.6F + rand.nextFloat()*(height/10F);
 		float altFrequency = 0.01F;
 		boolean isAlt = rand.nextFloat() < altFrequency;
 		
-		BlockPos nodePos = generateMesa(pos.up(height), height, plateauSize, world, rand, isAlt, Blocks.STONE.getDefaultState());//generator.getSettings().getDefaultBlock()); TODO
+		BlockPos nodePos = generateMesa(pos.above(height), height, plateauSize, world, rand, isAlt, Blocks.STONE.defaultBlockState());//generator.getSettings().getDefaultBlock()); TODO
 		
 		if(!stomps)
 		{
-				world.setBlockState(nodePos, isAlt?altCore:baseCore, Constants.BlockFlags.BLOCK_UPDATE);
+				world.setBlock(nodePos, isAlt?altCore:baseCore, Constants.BlockFlags.BLOCK_UPDATE);
 		} else
 		{
-			world.setBlockState(nodePos, Blocks.AIR.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
+			world.setBlock(nodePos, Blocks.AIR.defaultBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
 		}
 		
 		return true;
@@ -99,7 +99,7 @@ public class MesaFeature extends Feature<NoFeatureConfig>
 				stomps = true;
 				break;
 			}*/
-			if(!boundingBox.isVecInside(pos))
+			if(!boundingBox.isInside(pos))
 				continue;
 			
 			if(random.nextFloat()*xSlope < plateauSize)
@@ -136,7 +136,7 @@ public class MesaFeature extends Feature<NoFeatureConfig>
 				continue;
 			}
 			
-			if(!boundingBox.isVecInside(new BlockPos(entry.pos.x, 64, entry.pos.z)) || !checkCoord(entry.pos, heightMap))
+			if(!boundingBox.isInside(new BlockPos(entry.pos.x, 64, entry.pos.z)) || !checkCoord(entry.pos, heightMap))
 				continue;
 			if(random.nextFloat() < entry.spreadChance)
 			{
@@ -169,8 +169,8 @@ public class MesaFeature extends Feature<NoFeatureConfig>
 			do
 			{
 				was.put(pos, world.getBlockState(pos));
-				world.setBlockState(pos, isAlt?altBlock[pos.getY() % altBlock.length]:baseBlock[pos.getY() % baseBlock.length], Constants.BlockFlags.BLOCK_UPDATE);
-				pos = pos.down();
+				world.setBlock(pos, isAlt?altBlock[pos.getY() % altBlock.length]:baseBlock[pos.getY() % baseBlock.length], Constants.BlockFlags.BLOCK_UPDATE);
+				pos = pos.below();
 			} while(!world.getBlockState(pos).equals(groundBlock));
 		}
 		
@@ -197,7 +197,7 @@ public class MesaFeature extends Feature<NoFeatureConfig>
 		
 		if(stomps)
 		{
-			was.forEach((t, u) -> world.setBlockState(t, u, Constants.BlockFlags.BLOCK_UPDATE));
+			was.forEach((t, u) -> world.setBlock(t, u, Constants.BlockFlags.BLOCK_UPDATE));
 		}
 		
 		return corePosition;

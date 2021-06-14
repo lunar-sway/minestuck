@@ -34,9 +34,9 @@ public class FrogItem extends Item
 	}
 	
 	@Override
-	public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items)
+	public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items)
 	{
-		if(this.isInGroup(group))
+		if(this.allowdedIn(group))
 		{
 			items.add(new ItemStack(this));
 			for (int i = 1; i <= FrogEntity.maxTypes(); ++i)
@@ -52,7 +52,7 @@ public class FrogItem extends Item
 	}
 	
 	@Override
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
+	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
 	{
 		if(stack.hasTag())
 		{
@@ -67,12 +67,12 @@ public class FrogItem extends Item
 
 					if(nbt.contains("EyeType"))for(int i = 0; i <= FrogEntity.maxEyes(); i++)
 					{
-						if(eyeType == i)tooltip.add(new TranslationTextComponent(getTranslationKey() + ".eyes."+i));
+						if(eyeType == i)tooltip.add(new TranslationTextComponent(getDescriptionId() + ".eyes."+i));
 					}
 
 					if(nbt.contains("EyeType"))for(int i = 1; i <= FrogEntity.maxBelly(); i++)
 					{
-						if(bellyType == i)tooltip.add(new TranslationTextComponent(getTranslationKey() + ".belly."+i));
+						if(bellyType == i)tooltip.add(new TranslationTextComponent(getDescriptionId() + ".belly."+i));
 					}
 
 			}
@@ -80,8 +80,8 @@ public class FrogItem extends Item
 			{
 				switch(type)
 				{
-					case 4: tooltip.add(new TranslationTextComponent(getTranslationKey() + ".desc.4")); break;
-					case 6: tooltip.add(new TranslationTextComponent(getTranslationKey() + ".desc.6")); break;
+					case 4: tooltip.add(new TranslationTextComponent(getDescriptionId() + ".desc.4")); break;
+					case 6: tooltip.add(new TranslationTextComponent(getDescriptionId() + ".desc.6")); break;
 				}
 			}
 
@@ -91,38 +91,38 @@ public class FrogItem extends Item
 
 				if(nbt.contains("Size"))
 				{
-					if(size <= 0.4f) 	tooltip.add(new TranslationTextComponent(getTranslationKey() + ".size.0"));
-					else if(size <= 0.8f) tooltip.add(new TranslationTextComponent(getTranslationKey() + ".size.1"));
-					else if(size <= 1.4f) tooltip.add(new TranslationTextComponent(getTranslationKey() + ".size.2"));
-					else if(size <= 2f) tooltip.add(new TranslationTextComponent(getTranslationKey() + ".size.3"));
-					else				tooltip.add(new TranslationTextComponent(getTranslationKey() + ".size.4"));
+					if(size <= 0.4f) 	tooltip.add(new TranslationTextComponent(getDescriptionId() + ".size.0"));
+					else if(size <= 0.8f) tooltip.add(new TranslationTextComponent(getDescriptionId() + ".size.1"));
+					else if(size <= 1.4f) tooltip.add(new TranslationTextComponent(getDescriptionId() + ".size.2"));
+					else if(size <= 2f) tooltip.add(new TranslationTextComponent(getDescriptionId() + ".size.3"));
+					else				tooltip.add(new TranslationTextComponent(getDescriptionId() + ".size.4"));
 				}
 			}
 		}
-		else tooltip.add(new TranslationTextComponent(getTranslationKey() + ".random"));
+		else tooltip.add(new TranslationTextComponent(getDescriptionId() + ".random"));
 	}
 
 	@Override
-	public ITextComponent getDisplayName(ItemStack stack)
+	public ITextComponent getName(ItemStack stack)
 	{
 		int type = !stack.hasTag() ? 0 : stack.getTag().getInt("Type");
 
-		return new TranslationTextComponent(getTranslationKey() + ".type."+type);
+		return new TranslationTextComponent(getDescriptionId() + ".type."+type);
 
 	}
 
 	@Override
-	public ActionResultType onItemUse(ItemUseContext context)
+	public ActionResultType useOn(ItemUseContext context)
 	{
-		ItemStack itemstack = context.getItem();
-		Direction face = context.getFace();
+		ItemStack itemstack = context.getItemInHand();
+		Direction face = context.getClickedFace();
 		PlayerEntity player = context.getPlayer();
-		World world = context.getWorld();
-		BlockPos pos = context.getPos();
+		World world = context.getLevel();
+		BlockPos pos = context.getClickedPos();
 		
-		if (world.isRemote)
+		if (world.isClientSide)
 			return ActionResultType.SUCCESS;
-		else if (player != null && !player.canPlayerEdit(pos.offset(face), face, itemstack))
+		else if (player != null && !player.mayUseItemAt(pos.relative(face), face, itemstack))
 		{
 			return ActionResultType.FAIL;
 		}
@@ -131,21 +131,21 @@ public class FrogItem extends Item
 			BlockState blockState = world.getBlockState(pos);
 			
 			BlockPos spawnPos;
-			if (blockState.getCollisionShape(world, pos).isEmpty())
+			if (blockState.getBlockSupportShape(world, pos).isEmpty())
 				spawnPos = pos;
 			else
-				spawnPos = pos.offset(face);
+				spawnPos = pos.relative(face);
 			
 			Entity entity =  createFrog((ServerWorld) world, (double)spawnPos.getX() + 0.5D, (double)spawnPos.getY(), (double)spawnPos.getZ() + 0.5D, 0);
 			
 			if (entity != null)
 			{
-				if (entity instanceof LivingEntity && itemstack.hasDisplayName())
+				if (entity instanceof LivingEntity && itemstack.hasCustomHoverName())
 				{
-					entity.setCustomName(itemstack.getDisplayName());
+					entity.setCustomName(itemstack.getHoverName());
 				}
 				applyItemEntityDataToEntity(world, player, itemstack,(FrogEntity) entity);
-				world.addEntity(entity);
+				world.addFreshEntity(entity);
 				if (player == null || !player.isCreative())
 				{
 					itemstack.shrink(1);
@@ -163,10 +163,10 @@ public class FrogItem extends Item
 		FrogEntity frog = null;
 
 			frog = new FrogEntity(worldIn);
-			frog.setLocationAndAngles(x, y, z, MathHelper.wrapDegrees(worldIn.rand.nextFloat() * 360.0F), 0.0F);
-			frog.rotationYawHead = frog.rotationYaw;
-			frog.renderYawOffset = frog.rotationYaw;
-			frog.onInitialSpawn(worldIn, worldIn.getDifficultyForLocation(new BlockPos(x,y,z)), null, null, null);
+			frog.moveTo(x, y, z, MathHelper.wrapDegrees(worldIn.random.nextFloat() * 360.0F), 0.0F);
+			frog.yHeadRot = frog.yRot;
+			frog.yBodyRot = frog.yRot;
+			frog.finalizeSpawn(worldIn, worldIn.getCurrentDifficultyAt(new BlockPos(x,y,z)), null, null, null);
 
 			frog.playAmbientSound();
 
@@ -183,18 +183,18 @@ public class FrogItem extends Item
 			
 			if (CompoundNBT != null)
 			{
-				if (!entityWorld.isRemote && targetEntity.ignoreItemEntityData() && (player == null || !minecraftserver.getPlayerList().canSendCommands(player.getGameProfile())))
+				if (!entityWorld.isClientSide && targetEntity.onlyOpCanSetNbt() && (player == null || !minecraftserver.getPlayerList().isOp(player.getGameProfile())))
 				{
 					return;
 				}
 				
 				CompoundNBT.putBoolean("PersistenceRequired", true);
 				CompoundNBT CompoundNBT1 = new CompoundNBT();
-				targetEntity.writeUnlessRemoved(CompoundNBT1);
-				UUID uuid = targetEntity.getUniqueID();
+				targetEntity.saveAsPassenger(CompoundNBT1);
+				UUID uuid = targetEntity.getUUID();
 				CompoundNBT1.merge(CompoundNBT);
-				targetEntity.setUniqueId(uuid);
-				targetEntity.read(CompoundNBT1);
+				targetEntity.setUUID(uuid);
+				targetEntity.load(CompoundNBT1);
 
 
 			}

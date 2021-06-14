@@ -32,12 +32,12 @@ public class SpecialTNTBlock extends TNTBlock
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public void onBlockClicked(BlockState state, World worldIn, BlockPos pos, PlayerEntity player)
+	public void attack(BlockState state, World worldIn, BlockPos pos, PlayerEntity player)
 	{
 		if(primed)
 		{
 			this.explode(worldIn, pos, player);
-			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), Constants.BlockFlags.DEFAULT_AND_RERENDER);
+			worldIn.setBlock(pos, Blocks.AIR.defaultBlockState(), Constants.BlockFlags.DEFAULT_AND_RERENDER);
 		}
 	}
 	
@@ -49,26 +49,26 @@ public class SpecialTNTBlock extends TNTBlock
 	
 	private void explode(World worldIn, BlockPos pos, LivingEntity igniter)
 	{
-		if(!worldIn.isRemote)
+		if(!worldIn.isClientSide)
 		{
 			TNTEntity entity = new TNTEntity(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, igniter);
 			if(instant)
 				entity.setFuse(0);
-			worldIn.addEntity(entity);
-			worldIn.playSound(null, entity.getPosX(), entity.getPosY(), entity.getPosZ(), SoundEvents.ENTITY_TNT_PRIMED, SoundCategory.BLOCKS, 1.0F, 1.0F);
+			worldIn.addFreshEntity(entity);
+			worldIn.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.TNT_PRIMED, SoundCategory.BLOCKS, 1.0F, 1.0F);
 		}
 	}
 	
 	@Override
-	public void onExplosionDestroy(World worldIn, BlockPos pos, Explosion explosionIn)
+	public void wasExploded(World worldIn, BlockPos pos, Explosion explosionIn)
 	{
-		if(!worldIn.isRemote)
+		if(!worldIn.isClientSide)
 		{
-			TNTEntity entity = new TNTEntity(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, explosionIn.getExplosivePlacedBy());
-			entity.setFuse(worldIn.rand.nextInt(entity.getFuse() / 4) + entity.getFuse() / 8);
+			TNTEntity entity = new TNTEntity(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, explosionIn.getSourceMob());
+			entity.setFuse(worldIn.random.nextInt(entity.getLife() / 4) + entity.getLife() / 8);
 			if(instant)
-				entity.setFuse(entity.getFuse() / 2);
-			worldIn.addEntity(entity);
+				entity.setFuse(entity.getLife() / 2);
+			worldIn.addFreshEntity(entity);
 		}
 	}
 	

@@ -27,10 +27,10 @@ public class SurfaceDiskFeature extends Feature<SphereReplaceConfig>
 	}
 	
 	@Override
-	public boolean generate(ISeedReader worldIn, ChunkGenerator generator, Random rand, BlockPos featurePos, SphereReplaceConfig config)
+	public boolean place(ISeedReader worldIn, ChunkGenerator generator, Random rand, BlockPos featurePos, SphereReplaceConfig config)
 	{
 		boolean affectedBlocks = false;
-		int radius = config.radius.getSpread(rand);
+		int radius = config.radius.sample(rand);
 		
 		for(int x = featurePos.getX() - radius; x <= featurePos.getX() + radius; x++)
 		{
@@ -59,7 +59,7 @@ public class SurfaceDiskFeature extends Feature<SphereReplaceConfig>
 	
 	private boolean tryPlaceBlock(IWorld world, BlockPos pos, SphereReplaceConfig config)
 	{
-		if(!shouldCheckBlockAbove || !world.getBlockState(pos.up(1)).getMaterial().isSolid())
+		if(!shouldCheckBlockAbove || !world.getBlockState(pos.above(1)).getMaterial().isSolid())
 		{
 			BlockState existingState = world.getBlockState(pos);
 			
@@ -67,7 +67,7 @@ public class SurfaceDiskFeature extends Feature<SphereReplaceConfig>
 			{
 				if(targetState.getBlock() == existingState.getBlock())
 				{
-					world.setBlockState(pos, config.state, 2);
+					world.setBlock(pos, config.state, 2);
 					return true;
 				}
 			}

@@ -38,7 +38,7 @@ public class DowelItem extends BlockItem implements AlchemizedColored
 	}
 	
 	@Override
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
+	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
 	{
 		if(AlchemyHelper.hasDecodedItem(stack))
 		{
@@ -46,35 +46,35 @@ public class DowelItem extends BlockItem implements AlchemizedColored
 			
 			if(!containedStack.isEmpty())
 			{
-				tooltip.add(new StringTextComponent("(").appendSibling(containedStack.getDisplayName()).appendString(")").mergeStyle(TextFormatting.GRAY));
+				tooltip.add(new StringTextComponent("(").append(containedStack.getHoverName()).append(")").withStyle(TextFormatting.GRAY));
 			}
 			else
 			{
-				tooltip.add(new StringTextComponent("(").appendSibling(new StringTextComponent("item.captchaCard.invalid")).appendString(")").mergeStyle(TextFormatting.GRAY));//TODO translation key
+				tooltip.add(new StringTextComponent("(").append(new StringTextComponent("item.captchaCard.invalid")).append(")").withStyle(TextFormatting.GRAY));//TODO translation key
 			}
 		}
 	}
 	
 	@Nullable
 	@Override
-	protected BlockState getStateForPlacement(BlockItemUseContext context)
+	protected BlockState getPlacementState(BlockItemUseContext context)
 	{
-		BlockState state = super.getStateForPlacement(context);
+		BlockState state = super.getPlacementState(context);
 		if(state == null)
 			return null;
 		
-		ItemStack stack = context.getItem();
+		ItemStack stack = context.getItemInHand();
 		if(AlchemyHelper.hasDecodedItem(stack))
-			state = state.with(CruxiteDowelBlock.DOWEL_TYPE, CruxiteDowelBlock.Type.TOTEM);
+			state = state.setValue(CruxiteDowelBlock.DOWEL_TYPE, CruxiteDowelBlock.Type.TOTEM);
 		else
-			state = state.with(CruxiteDowelBlock.DOWEL_TYPE, CruxiteDowelBlock.Type.DOWEL);
+			state = state.setValue(CruxiteDowelBlock.DOWEL_TYPE, CruxiteDowelBlock.Type.DOWEL);
 		return state;
 	}
 	
 	@Override
-	protected boolean onBlockPlaced(BlockPos pos, World world, @Nullable PlayerEntity player, ItemStack stack, BlockState state)
+	protected boolean updateCustomBlockEntityTag(BlockPos pos, World world, @Nullable PlayerEntity player, ItemStack stack, BlockState state)
 	{
-		TileEntity te = world.getTileEntity(pos);
+		TileEntity te = world.getBlockEntity(pos);
 		if(te instanceof ItemStackTileEntity)
 		{
 			ItemStack newStack = stack.copy();

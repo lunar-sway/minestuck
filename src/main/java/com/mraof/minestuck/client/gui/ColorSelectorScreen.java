@@ -54,11 +54,11 @@ public class ColorSelectorScreen extends Screen
 		int xOffset = (width - guiWidth)/2;
 		int yOffset = (height - guiHeight)/2;
 		
-		this.minecraft.getTextureManager().bindTexture(guiBackground);
+		this.minecraft.getTextureManager().bind(guiBackground);
 		this.blit(matrixStack, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
-		String cacheMessage = I18n.format(SELECT_COLOR);
-		minecraft.fontRenderer.drawString(matrixStack, cacheMessage, (this.width / 2F) - font.getStringWidth(cacheMessage) / 2F, yOffset + 12, 0x404040);
+		String cacheMessage = I18n.get(SELECT_COLOR);
+		minecraft.font.draw(matrixStack, cacheMessage, (this.width / 2F) - font.width(cacheMessage) / 2F, yOffset + 12, 0x404040);
 		
 		renderColorBoxes(matrixStack);
 		
@@ -115,7 +115,7 @@ public class ColorSelectorScreen extends Screen
 			if(selectedIndex >= 8)
 				y += 3;
 			RenderSystem.color3f(1.0F, 1.0F, 1.0F);
-			this.minecraft.getTextureManager().bindTexture(guiBackground);
+			this.minecraft.getTextureManager().bind(guiBackground);
 			this.blit(matrixStack, xOffset + x, yOffset + y, guiWidth, 0, 36, 20);
 		}
 	}
@@ -160,11 +160,11 @@ public class ColorSelectorScreen extends Screen
 	private void selectColor()
 	{
 		ClientPlayerData.selectColor(selectedIndex);
-		this.minecraft.displayGuiScreen(null);
+		this.minecraft.setScreen(null);
 	}
 	
 	@Override
-	public void onClose()
+	public void removed()
 	{
 		if(firstTime && minecraft != null && minecraft.player != null)
 		{
@@ -172,7 +172,7 @@ public class ColorSelectorScreen extends Screen
 			if(ClientPlayerData.getPlayerColor() == ColorHandler.DEFAULT_COLOR)
 				message = new TranslationTextComponent(DEFAULT_COLOR_SELECTED);
 			else message = new TranslationTextComponent(COLOR_SELECTED);
-			this.minecraft.player.sendMessage(new StringTextComponent("[Minestuck] ").appendSibling(message), Util.DUMMY_UUID);
+			this.minecraft.player.sendMessage(new StringTextComponent("[Minestuck] ").append(message), Util.NIL_UUID);
 		}
 	}
 	

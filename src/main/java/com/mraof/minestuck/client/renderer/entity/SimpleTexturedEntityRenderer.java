@@ -15,7 +15,7 @@ public class SimpleTexturedEntityRenderer<T extends SimpleTexturedEntity, M exte
 	}
 	
 	@Override
-	public ResourceLocation getEntityTexture(T entity)
+	public ResourceLocation getTextureLocation(T entity)
 	{
 		return entity.getTextureResource();
 	}

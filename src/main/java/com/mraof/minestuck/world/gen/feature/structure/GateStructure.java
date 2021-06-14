@@ -35,7 +35,7 @@ public class GateStructure extends Structure<NoFeatureConfig>
 	}
 	
 	@Override
-	public GenerationStage.Decoration getDecorationStage()
+	public GenerationStage.Decoration step()
 	{
 		return GenerationStage.Decoration.SURFACE_STRUCTURES;
 	}
@@ -61,7 +61,7 @@ public class GateStructure extends Structure<NoFeatureConfig>
 	}
 	
 	@Override
-	public String getStructureName()
+	public String getFeatureName()
 	{
 		return Minestuck.MOD_ID + ":land_gate";
 	}
@@ -107,7 +107,7 @@ public class GateStructure extends Structure<NoFeatureConfig>
 			int posZ = (int) Math.round(Math.sin(angle) * radius);
 			
 			//TODO Could there be a better way to search for a position? (Look for possible positions with the "surrounded by normal biomes" property rather than pick a random one and then check if it has this property)
-			BlockPos pos = chunkGenerator.getBiomeProvider().func_225531_a_((posX << 4) + 8, 0,(posZ << 4) + 8, 96, Collections.singletonList(normalBiome), worldRand);
+			BlockPos pos = chunkGenerator.getBiomeProvider().findBiomeHorizontal((posX << 4) + 8, 0,(posZ << 4) + 8, 96, Collections.singletonList(normalBiome), worldRand);
 
 			if(pos != null && chunkGenerator.getBiomeProvider().getBiomes(pos.getX(), 0, pos.getZ(), 16).stream().allMatch(biome -> biome == normalBiome))
 				return new ChunkPos(pos.getX() >> 4, pos.getZ() >> 4);
@@ -117,7 +117,7 @@ public class GateStructure extends Structure<NoFeatureConfig>
 		int posZ = (int) Math.round(Math.sin(angle) * radius);
 		LOGGER.warn("Did not come across a decent location for land gates. Placing it without regard to any biomes.");
 		
-		BlockPos pos = chunkGenerator.getBiomeProvider().func_225531_a_((posX << 4) + 8, 0, (posZ << 4) + 8, 96, Collections.singletonList(normalBiome), worldRand);
+		BlockPos pos = chunkGenerator.getBiomeProvider().findBiomeHorizontal((posX << 4) + 8, 0, (posZ << 4) + 8, 96, Collections.singletonList(normalBiome), worldRand);
 		
 		ChunkPos gatePos;
 		if(pos != null)
@@ -146,7 +146,7 @@ public class GateStructure extends Structure<NoFeatureConfig>
 		}
 		
 		@Override
-		public void func_230364_a_(DynamicRegistries registries, ChunkGenerator generator, TemplateManager templates, int chunkX, int chunkZ, Biome biome, NoFeatureConfig config)
+		public void generatePieces(DynamicRegistries registries, ChunkGenerator generator, TemplateManager templates, int chunkX, int chunkZ, Biome biome, NoFeatureConfig config)
 		{
 			PieceFactory factory = null;
 			/*if(generator.getSettings() instanceof LandGenSettings) TODO
@@ -158,19 +158,19 @@ public class GateStructure extends Structure<NoFeatureConfig>
 			if(factory == null)
 				factory = GatePillarPiece::new;
 			
-			components.add(factory.create(generator, rand, chunkX * 16 + rand.nextInt(16), chunkZ * 16 + rand.nextInt(16)));
-			recalculateStructureSize();
+			pieces.add(factory.create(generator, random, chunkX * 16 + random.nextInt(16), chunkZ * 16 + random.nextInt(16)));
+			calculateBoundingBox();
 		}
 		
 		private BlockPos findGatePos()
 		{
-			for(StructurePiece piece : components)
+			for(StructurePiece piece : pieces)
 			{
 				if(piece instanceof GatePiece)
 					return ((GatePiece) piece).getGatePos();
 			}
 			
-			LOGGER.error("Did not find a gate piece in gate structure. Instead had components {}.", components);
+			LOGGER.error("Did not find a gate piece in gate structure. Instead had components {}.", pieces);
 			return null;
 		}
 	}

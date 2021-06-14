@@ -47,12 +47,12 @@ public class CombinationRecipeBuilder
 	
 	public CombinationRecipeBuilder input(ITag<Item> tag)
 	{
-		return input(Ingredient.fromTag(tag));
+		return input(Ingredient.of(tag));
 	}
 	
 	public CombinationRecipeBuilder input(IItemProvider item)
 	{
-		return input(Ingredient.fromItems(item));
+		return input(Ingredient.of(item));
 	}
 	
 	public CombinationRecipeBuilder input(Ingredient ingredient)
@@ -67,13 +67,13 @@ public class CombinationRecipeBuilder
 	
 	public CombinationRecipeBuilder namedInput(ITag<Item> tag)
 	{
-		input(Ingredient.fromTag(tag));
-		return namedSource(TagCollectionManager.getManager().getItemTags().getValidatedIdFromTag(tag).getPath());
+		input(Ingredient.of(tag));
+		return namedSource(TagCollectionManager.getInstance().getItems().getIdOrThrow(tag).getPath());
 	}
 	
 	public CombinationRecipeBuilder namedInput(IItemProvider item)
 	{
-		input(Ingredient.fromItems(item));
+		input(Ingredient.of(item));
 		return namedSource(Objects.requireNonNull(item.asItem().getRegistryName()).getPath());
 	}
 	
@@ -137,10 +137,10 @@ public class CombinationRecipeBuilder
 		}
 		
 		@Override
-		public void serialize(JsonObject json)
+		public void serializeRecipeData(JsonObject json)
 		{
-			json.add("input1", input1.serialize());
-			json.add("input2", input2.serialize());
+			json.add("input1", input1.toJson());
+			json.add("input2", input2.toJson());
 			json.addProperty("mode", mode.asString());
 			JsonObject outputJson = new JsonObject();
 			outputJson.addProperty("item", output.getItem().getRegistryName().toString());
@@ -152,27 +152,27 @@ public class CombinationRecipeBuilder
 		}
 		
 		@Override
-		public ResourceLocation getID()
+		public ResourceLocation getId()
 		{
 			return id;
 		}
 		
 		@Override
-		public IRecipeSerializer<?> getSerializer()
+		public IRecipeSerializer<?> getType()
 		{
 			return MSRecipeTypes.COMBINATION;
 		}
 		
 		@Nullable
 		@Override
-		public JsonObject getAdvancementJson()
+		public JsonObject serializeAdvancement()
 		{
 			return null;
 		}
 		
 		@Nullable
 		@Override
-		public ResourceLocation getAdvancementID()
+		public ResourceLocation getAdvancementId()
 		{
 			return null;
 		}

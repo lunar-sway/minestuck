@@ -24,7 +24,7 @@ public class TreeModusRootTrigger extends AbstractCriterionTrigger<TreeModusRoot
 	}
 	
 	@Override
-	protected Instance deserializeTrigger(JsonObject json, EntityPredicate.AndPredicate predicate, ConditionArrayParser conditionsParser)
+	protected Instance createInstance(JsonObject json, EntityPredicate.AndPredicate predicate, ConditionArrayParser conditionsParser)
 	{
 		MinMaxBounds.IntBound count = MinMaxBounds.IntBound.fromJson(json.get("count"));
 		return new Instance(predicate, count);
@@ -32,7 +32,7 @@ public class TreeModusRootTrigger extends AbstractCriterionTrigger<TreeModusRoot
 	
 	public void trigger(ServerPlayerEntity player, int count)
 	{
-		triggerListeners(player, instance -> instance.test(count));
+		trigger(player, instance -> instance.test(count));
 	}
 	
 	public static class Instance extends CriterionInstance
@@ -46,19 +46,19 @@ public class TreeModusRootTrigger extends AbstractCriterionTrigger<TreeModusRoot
 		
 		public static Instance count(MinMaxBounds.IntBound count)
 		{
-			return new Instance(EntityPredicate.AndPredicate.ANY_AND, count);
+			return new Instance(EntityPredicate.AndPredicate.ANY, count);
 		}
 		
 		public boolean test(int count)
 		{
-			return this.count.test(count);
+			return this.count.matches(count);
 		}
 		
 		@Override
-		public JsonObject serialize(ConditionArraySerializer conditions)
+		public JsonObject serializeToJson(ConditionArraySerializer conditions)
 		{
-			JsonObject json = super.serialize(conditions);
-			json.add("count", count.serialize());
+			JsonObject json = super.serializeToJson(conditions);
+			json.add("count", count.serializeToJson());
 			
 			return json;
 		}

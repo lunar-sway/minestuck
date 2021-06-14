@@ -22,7 +22,7 @@ public class CombinerWrapper implements ItemCombiner
 	}
 	
 	@Override
-	public int getSizeInventory()
+	public int getContainerSize()
 	{
 		return 2;
 	}
@@ -34,7 +34,7 @@ public class CombinerWrapper implements ItemCombiner
 	}
 	
 	@Override
-	public ItemStack getStackInSlot(int index)
+	public ItemStack getItem(int index)
 	{
 		if(index == 0)
 			return item1.copy();
@@ -44,37 +44,37 @@ public class CombinerWrapper implements ItemCombiner
 	}
 	
 	@Override
-	public ItemStack decrStackSize(int index, int count)
+	public ItemStack removeItem(int index, int count)
 	{
 		throw new UnsupportedOperationException();
 	}
 	
 	@Override
-	public ItemStack removeStackFromSlot(int index)
+	public ItemStack removeItemNoUpdate(int index)
 	{
 		throw new UnsupportedOperationException();
 	}
 	
 	@Override
-	public void setInventorySlotContents(int index, ItemStack stack)
+	public void setItem(int index, ItemStack stack)
 	{
 		throw new UnsupportedOperationException();
 	}
 	
 	@Override
-	public void markDirty()
+	public void setChanged()
 	{
 		throw new UnsupportedOperationException();
 	}
 	
 	@Override
-	public boolean isUsableByPlayer(PlayerEntity player)
+	public boolean stillValid(PlayerEntity player)
 	{
 		return true;
 	}
 	
 	@Override
-	public void clear()
+	public void clearContent()
 	{
 		throw new UnsupportedOperationException();
 	}

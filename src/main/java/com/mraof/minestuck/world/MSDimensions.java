@@ -70,12 +70,12 @@ public class MSDimensions
 	
 	public static LandInfo getLandInfo(World world)
 	{
-		return getLandInfo(world.getServer(), world.getDimensionKey());
+		return getLandInfo(world.getServer(), world.dimension());
 	}
 	
 	public static LandInfo getLandInfo(MinecraftServer server, RegistryKey<World> dimension)
 	{
-		return typeToInfoContainer.get(dimension.getLocation());
+		return typeToInfoContainer.get(dimension.location());
 	}
 	
 	public static boolean isLandDimension(RegistryKey<World> dimension)

@@ -32,63 +32,63 @@ public class GateRenderer extends TileEntityRenderer<GateTileEntity>
 		int g = ((color >> 8) & 255);
 		int b = (color & 255);
 
-		float tick = tileEntityIn.getWorld().getGameTime() + partialTicks;
+		float tick = tileEntityIn.getLevel().getGameTime() + partialTicks;
 
 		if (tileEntityIn.isGate())
 		{
-			matrixStackIn.push();
+			matrixStackIn.pushPose();
 			matrixStackIn.translate(0.5F, 0.0F, 0.5F);
-			matrixStackIn.rotate(Vector3f.YP.rotation(tick / 75));
-			MatrixStack.Entry matrixstack = matrixStackIn.getLast();
-			Matrix4f matrix4f = matrixstack.getMatrix();
-			Matrix3f matrix3f = matrixstack.getNormal();
+			matrixStackIn.mulPose(Vector3f.YP.rotation(tick / 75));
+			MatrixStack.Entry matrixstack = matrixStackIn.last();
+			Matrix4f matrix4f = matrixstack.pose();
+			Matrix3f matrix3f = matrixstack.normal();
 			float y = 0.5F;
-			IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.getEntityCutoutNoCull(INNER_NODE));
-			ivertexbuilder.pos(matrix4f, -1.5F, y, -1.5F).color(r, g, b, 255).tex(0, 0)
-					.overlay(OverlayTexture.NO_OVERLAY).lightmap(combinedLightIn).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
-			ivertexbuilder.pos(matrix4f, -1.5F, y, 1.5F).color(r, g, b, 255).tex(0, 1)
-					.overlay(OverlayTexture.NO_OVERLAY).lightmap(combinedLightIn).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
-			ivertexbuilder.pos(matrix4f, 1.5F, y, 1.5F).color(r, g, b, 255).tex(1, 1)
-					.overlay(OverlayTexture.NO_OVERLAY).lightmap(combinedLightIn).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
-			ivertexbuilder.pos(matrix4f, 1.5F, y, -1.5F).color(r, g, b, 255).tex(1, 0)
-					.overlay(OverlayTexture.NO_OVERLAY).lightmap(combinedLightIn).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
-			matrixStackIn.pop();
+			IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.entityCutoutNoCull(INNER_NODE));
+			ivertexbuilder.vertex(matrix4f, -1.5F, y, -1.5F).color(r, g, b, 255).uv(0, 0)
+					.overlayCoords(OverlayTexture.NO_OVERLAY).uv2(combinedLightIn).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
+			ivertexbuilder.vertex(matrix4f, -1.5F, y, 1.5F).color(r, g, b, 255).uv(0, 1)
+					.overlayCoords(OverlayTexture.NO_OVERLAY).uv2(combinedLightIn).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
+			ivertexbuilder.vertex(matrix4f, 1.5F, y, 1.5F).color(r, g, b, 255).uv(1, 1)
+					.overlayCoords(OverlayTexture.NO_OVERLAY).uv2(combinedLightIn).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
+			ivertexbuilder.vertex(matrix4f, 1.5F, y, -1.5F).color(r, g, b, 255).uv(1, 0)
+					.overlayCoords(OverlayTexture.NO_OVERLAY).uv2(combinedLightIn).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
+			matrixStackIn.popPose();
 		}
 		else
 		{
-			matrixStackIn.push();
-			matrixStackIn.rotate(Vector3f.YP.rotation(tick / 75));
-			MatrixStack.Entry matrixstack = matrixStackIn.getLast();
-			Matrix4f matrix4f = matrixstack.getMatrix();
-			Matrix3f matrix3f = matrixstack.getNormal();
+			matrixStackIn.pushPose();
+			matrixStackIn.mulPose(Vector3f.YP.rotation(tick / 75));
+			MatrixStack.Entry matrixstack = matrixStackIn.last();
+			Matrix4f matrix4f = matrixstack.pose();
+			Matrix3f matrix3f = matrixstack.normal();
 			float y = 0.5F;
-			IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.getEntityCutoutNoCull(INNER_NODE));
-			ivertexbuilder.pos(matrix4f, -1F, y, -1F).color(r, g, b, 255).tex(0, 0)
-					.overlay(OverlayTexture.NO_OVERLAY).lightmap(combinedLightIn).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
-			ivertexbuilder.pos(matrix4f, -1F, y, 1F).color(r, g, b, 255).tex(0, 1)
-					.overlay(OverlayTexture.NO_OVERLAY).lightmap(combinedLightIn).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
-			ivertexbuilder.pos(matrix4f, 1F, y, 1F).color(r, g, b, 255).tex(1, 1)
-					.overlay(OverlayTexture.NO_OVERLAY).lightmap(combinedLightIn).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
-			ivertexbuilder.pos(matrix4f, 1F, y, -1F).color(r, g, b, 255).tex(1, 0)
-					.overlay(OverlayTexture.NO_OVERLAY).lightmap(combinedLightIn).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
-			matrixStackIn.pop();
+			IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.entityCutoutNoCull(INNER_NODE));
+			ivertexbuilder.vertex(matrix4f, -1F, y, -1F).color(r, g, b, 255).uv(0, 0)
+					.overlayCoords(OverlayTexture.NO_OVERLAY).uv2(combinedLightIn).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
+			ivertexbuilder.vertex(matrix4f, -1F, y, 1F).color(r, g, b, 255).uv(0, 1)
+					.overlayCoords(OverlayTexture.NO_OVERLAY).uv2(combinedLightIn).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
+			ivertexbuilder.vertex(matrix4f, 1F, y, 1F).color(r, g, b, 255).uv(1, 1)
+					.overlayCoords(OverlayTexture.NO_OVERLAY).uv2(combinedLightIn).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
+			ivertexbuilder.vertex(matrix4f, 1F, y, -1F).color(r, g, b, 255).uv(1, 0)
+					.overlayCoords(OverlayTexture.NO_OVERLAY).uv2(combinedLightIn).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
+			matrixStackIn.popPose();
 
-			matrixStackIn.push();
-			matrixStackIn.rotate(Vector3f.YP.rotation(-(tick / 75) / 1.5F));
-			MatrixStack.Entry matrixstack2 = matrixStackIn.getLast();
-			Matrix4f matrix4f2 = matrixstack2.getMatrix();
-			Matrix3f matrix3f2 = matrixstack2.getNormal();
+			matrixStackIn.pushPose();
+			matrixStackIn.mulPose(Vector3f.YP.rotation(-(tick / 75) / 1.5F));
+			MatrixStack.Entry matrixstack2 = matrixStackIn.last();
+			Matrix4f matrix4f2 = matrixstack2.pose();
+			Matrix3f matrix3f2 = matrixstack2.normal();
 			y = (float) (0.5 + MathHelper.sin(tick/50)*0.1);
-			IVertexBuilder ivertexbuilder2 = bufferIn.getBuffer(RenderType.getEntityCutoutNoCull(OUTER_NODE));
-			ivertexbuilder2.pos(matrix4f2, -1F, y, -1F).color(r, g, b, 255).tex(0, 0)
-					.overlay(OverlayTexture.NO_OVERLAY).lightmap(combinedLightIn).normal(matrix3f2, 0.0F, 1.0F, 0.0F).endVertex();
-			ivertexbuilder2.pos(matrix4f2, -1F, y, 1F).color(r, g, b, 255).tex(0, 1)
-					.overlay(OverlayTexture.NO_OVERLAY).lightmap(combinedLightIn).normal(matrix3f2, 0.0F, 1.0F, 0.0F).endVertex();
-			ivertexbuilder2.pos(matrix4f2, 1F, y, 1F).color(r, g, b, 255).tex(1, 1)
-					.overlay(OverlayTexture.NO_OVERLAY).lightmap(combinedLightIn).normal(matrix3f2, 0.0F, 1.0F, 0.0F).endVertex();
-			ivertexbuilder2.pos(matrix4f2, 1F, y, -1F).color(r, g, b, 255).tex(1, 0)
-					.overlay(OverlayTexture.NO_OVERLAY).lightmap(combinedLightIn).normal(matrix3f2, 0.0F, 1.0F, 0.0F).endVertex();
-			matrixStackIn.pop();
+			IVertexBuilder ivertexbuilder2 = bufferIn.getBuffer(RenderType.entityCutoutNoCull(OUTER_NODE));
+			ivertexbuilder2.vertex(matrix4f2, -1F, y, -1F).color(r, g, b, 255).uv(0, 0)
+					.overlayCoords(OverlayTexture.NO_OVERLAY).uv2(combinedLightIn).normal(matrix3f2, 0.0F, 1.0F, 0.0F).endVertex();
+			ivertexbuilder2.vertex(matrix4f2, -1F, y, 1F).color(r, g, b, 255).uv(0, 1)
+					.overlayCoords(OverlayTexture.NO_OVERLAY).uv2(combinedLightIn).normal(matrix3f2, 0.0F, 1.0F, 0.0F).endVertex();
+			ivertexbuilder2.vertex(matrix4f2, 1F, y, 1F).color(r, g, b, 255).uv(1, 1)
+					.overlayCoords(OverlayTexture.NO_OVERLAY).uv2(combinedLightIn).normal(matrix3f2, 0.0F, 1.0F, 0.0F).endVertex();
+			ivertexbuilder2.vertex(matrix4f2, 1F, y, -1F).color(r, g, b, 255).uv(1, 0)
+					.overlayCoords(OverlayTexture.NO_OVERLAY).uv2(combinedLightIn).normal(matrix3f2, 0.0F, 1.0F, 0.0F).endVertex();
+			matrixStackIn.popPose();
 		}
 	}
 }

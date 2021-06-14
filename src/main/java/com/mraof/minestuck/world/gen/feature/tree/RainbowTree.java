@@ -12,7 +12,7 @@ public class RainbowTree extends Tree
 {
 	@Nullable
 	@Override
-	protected ConfiguredFeature<BaseTreeFeatureConfig, ?> getTreeFeature(Random randomIn, boolean hasFlowers)
+	protected ConfiguredFeature<BaseTreeFeatureConfig, ?> getConfiguredFeature(Random randomIn, boolean hasFlowers)
 	{
 		return MSCFeatures.get().RAINBOW_TREE;
 	}

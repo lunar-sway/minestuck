@@ -25,33 +25,33 @@ public class StructureCastleStart extends StructureStart<NoFeatureConfig>
 	}
 	
 	@Override
-	public void func_230364_a_(DynamicRegistries registries, ChunkGenerator generator, TemplateManager templateManager, int chunkX, int chunkZ, Biome biome, NoFeatureConfig config)
+	public void generatePieces(DynamicRegistries registries, ChunkGenerator generator, TemplateManager templateManager, int chunkX, int chunkZ, Biome biome, NoFeatureConfig config)
 	{
-		boolean isBlack = rand.nextBoolean();
+		boolean isBlack = random.nextBoolean();
 		
 		
 		CastleStartPiece startPiece = new CastleStartPiece((chunkX << 4), (chunkZ << 4), isBlack);
-		this.components.add(startPiece);
-		startPiece.buildComponent(startPiece, this.components, rand);
+		this.pieces.add(startPiece);
+		startPiece.addChildren(startPiece, this.pieces, random);
 		List<CastlePiece> pendingPieces = startPiece.pendingPieces;
 		while(!pendingPieces.isEmpty())
 		{
-			int k = rand.nextInt(pendingPieces.size());
+			int k = random.nextInt(pendingPieces.size());
 			CastlePiece structurePiece = pendingPieces.remove(k);
-			structurePiece.buildComponent(startPiece, this.components, rand);
+			structurePiece.addChildren(startPiece, this.pieces, random);
 		}
-		recalculateStructureSize();
+		calculateBoundingBox();
 		
 		int minY = Integer.MAX_VALUE;
-		for(int xPos = bounds.minX; xPos <= bounds.maxX; xPos++)
-			for(int zPos = bounds.minZ; zPos <= bounds.maxZ; zPos++)
+		for(int xPos = boundingBox.x0; xPos <= boundingBox.x1; xPos++)
+			for(int zPos = boundingBox.z0; zPos <= boundingBox.z1; zPos++)
 			{
-				int posHeight = generator.getHeight(xPos, zPos, Heightmap.Type.OCEAN_FLOOR_WG);
+				int posHeight = generator.getBaseHeight(xPos, zPos, Heightmap.Type.OCEAN_FLOOR_WG);
 				minY = Math.min(minY, posHeight);
 			}
 		
-		for(StructurePiece piece : components)
-			piece.offset(0, minY, 0);
+		for(StructurePiece piece : pieces)
+			piece.move(0, minY, 0);
 	}
 	
 	

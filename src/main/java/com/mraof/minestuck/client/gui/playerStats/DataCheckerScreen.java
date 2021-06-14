@@ -95,13 +95,13 @@ public class DataCheckerScreen extends Screen
 		
 		renderBackground(matrixStack);
 		
-		this.minecraft.getTextureManager().bindTexture(guiBackground);
+		this.minecraft.getTextureManager().bind(guiBackground);
 		
 		blit(matrixStack, xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 		
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
 		
-		this.minecraft.getTextureManager().bindTexture(icons);
+		this.minecraft.getTextureManager().bind(icons);
 		
 		if(this.returnButton.active)
 			RenderSystem.color3f(1, 1, 1);
@@ -117,21 +117,21 @@ public class DataCheckerScreen extends Screen
 			List<IDataComponent> list = guiComponent.getComponentList();
 			for(int i = 0; i < 5; i++)
 			{
-				 font.drawString(matrixStack, guiComponent.getName(), xOffset + 9, yOffset + 15 - font.FONT_HEIGHT/2, 0);
+				 font.draw(matrixStack, guiComponent.getName(), xOffset + 9, yOffset + 15 - font.lineHeight/2, 0);
 				IDataComponent component = i + index < list.size() ? list.get(i + index) : null;
 				if(component != null && !component.isButton())
 				{
 					RenderSystem.color3f(1, 1, 1);
-					this.minecraft.getTextureManager().bindTexture(guiBackground);
+					this.minecraft.getTextureManager().bind(guiBackground);
 					blit(matrixStack, xOffset + 5, yOffset + LIST_Y + i*22, 0, 236, 180, 20);
-					font.drawString(matrixStack, component.getName(), xOffset + 9, yOffset + LIST_Y + 10 - font.FONT_HEIGHT/2 + i*22, 0);
+					font.draw(matrixStack, component.getName(), xOffset + 9, yOffset + LIST_Y + 10 - font.lineHeight/2 + i*22, 0);
 				}
 			}
-		} else font.drawString(matrixStack, "Retrieving data from server...", xOffset + 9, yOffset + 15 - font.FONT_HEIGHT/2, 0);
+		} else font.draw(matrixStack, "Retrieving data from server...", xOffset + 9, yOffset + 15 - font.lineHeight/2, 0);
 
 		RenderSystem.color3f(1, 1, 1);
 		int textureIndex = canScroll ? 232 : 244;
-		this.minecraft.getTextureManager().bindTexture(guiBackground);
+		this.minecraft.getTextureManager().bind(guiBackground);
 		blit(matrixStack, (width - GUI_WIDTH)/2 + 190, (height - GUI_HEIGHT)/2 + LIST_Y + 1 + (int) displayIndex*91, textureIndex, 0, 12, 15);
 	}
 	
@@ -141,7 +141,7 @@ public class DataCheckerScreen extends Screen
 		if(guiComponent != activeComponent)
 			componentChanged();
 		if(!ClientPlayerData.hasDataCheckerAccess())
-			minecraft.displayGuiScreen(null);
+			minecraft.setScreen(null);
 	}
 	
 	@Override
@@ -255,9 +255,9 @@ public class DataCheckerScreen extends Screen
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int i)
 	{
-		if(MSKeyHandler.statKey.isActiveAndMatches(InputMappings.getInputByCode(keyCode, scanCode)))
+		if(MSKeyHandler.statKey.isActiveAndMatches(InputMappings.getKey(keyCode, scanCode)))
 		{
-			minecraft.displayGuiScreen(null);
+			minecraft.setScreen(null);
 			return true;
 		}
 		else return super.keyPressed(keyCode, scanCode, i);
@@ -327,7 +327,7 @@ public class DataCheckerScreen extends Screen
 		@Override
 		public String getName()
 		{
-			return I18n.format(message, params);
+			return I18n.get(message, params);
 		}
 	}
 	
@@ -532,7 +532,7 @@ public class DataCheckerScreen extends Screen
 		public IDataComponent onButtonPressed()
 		{
 			ChatScreen chat = new ChatScreen("/grist @"+name+" get");
-			Minecraft.getInstance().displayGuiScreen(chat);
+			Minecraft.getInstance().setScreen(chat);
 			return null;
 		}
 		@Override

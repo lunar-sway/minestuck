@@ -23,22 +23,22 @@ public class SurpriseEmbryoItem extends Item
 	}
 	
 	@Override
-	public ItemStack onItemUseFinish(ItemStack stack, World world, LivingEntity player)
+	public ItemStack finishUsingItem(ItemStack stack, World world, LivingEntity player)
 	{
-		if(player instanceof PlayerEntity && !player.world.isRemote)
+		if(player instanceof PlayerEntity && !player.level.isClientSide)
 		{
 			Random ran = new Random();
 			ItemStack[] items = new ItemStack[]{new ItemStack(Items.MELON_SLICE), new ItemStack(Items.STICK), new ItemStack(Items.EGG),
 					new ItemStack(Blocks.DIRT), new ItemStack(Blocks.PUMPKIN), new ItemStack(Blocks.COBBLESTONE)};
 			int num = ran.nextInt(items.length);
-			if(!((PlayerEntity) player).inventory.addItemStackToInventory(items[num].copy()))
-				if(!world.isRemote)
-					((PlayerEntity) player).dropItem(items[num].copy(), false);
+			if(!((PlayerEntity) player).inventory.add(items[num].copy()))
+				if(!world.isClientSide)
+					((PlayerEntity) player).drop(items[num].copy(), false);
 			
-			IFormattableTextComponent message = new TranslationTextComponent(getTranslationKey() + ".message", items[num].getDisplayName());
-			message.mergeStyle(TextFormatting.GOLD);
-			player.sendMessage(message, Util.DUMMY_UUID);
+			IFormattableTextComponent message = new TranslationTextComponent(getDescriptionId() + ".message", items[num].getHoverName());
+			message.withStyle(TextFormatting.GOLD);
+			player.sendMessage(message, Util.NIL_UUID);
 		}
-		return super.onItemUseFinish(stack, world, player);
+		return super.finishUsingItem(stack, world, player);
 	}
 }

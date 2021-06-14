@@ -74,7 +74,7 @@ public class RecipeGeneratedCostHandler extends ReloadListener<List<RecipeGenera
 		buffer.writeInt(generatedCosts.size());
 		for(Map.Entry<Item, GristSet> entry : generatedCosts.entrySet())
 		{
-			buffer.writeVarInt(Item.getIdFromItem(entry.getKey()));
+			buffer.writeVarInt(Item.getId(entry.getKey()));
 			entry.getValue().write(buffer);
 		}
 	}
@@ -88,7 +88,7 @@ public class RecipeGeneratedCostHandler extends ReloadListener<List<RecipeGenera
 		ImmutableMap.Builder<Item, GristSet> builder = new ImmutableMap.Builder<>();
 		for(int i = 0; i < size; i++)
 		{
-			Item item = Item.getItemById(buffer.readVarInt());
+			Item item = Item.byId(buffer.readVarInt());
 			GristSet cost = GristSet.read(buffer);
 			builder.put(item, cost);
 		}
@@ -101,7 +101,7 @@ public class RecipeGeneratedCostHandler extends ReloadListener<List<RecipeGenera
 		for(Map.Entry<Item, GristSet> entries : generatedCosts.entrySet())
 		{
 			if(entries.getValue() != null)
-				costs.add(new JeiGristCost.Set(Ingredient.fromItems(entries.getKey()), entries.getValue()));
+				costs.add(new JeiGristCost.Set(Ingredient.of(entries.getKey()), entries.getValue()));
 		}
 		return costs;
 	}
@@ -110,7 +110,7 @@ public class RecipeGeneratedCostHandler extends ReloadListener<List<RecipeGenera
 	protected List<SourceEntry> prepare(IResourceManager resourceManagerIn, IProfiler profilerIn)
 	{
 		List<SourceEntry> sources = new ArrayList<>();
-		for(String namespace : resourceManagerIn.getResourceNamespaces())
+		for(String namespace : resourceManagerIn.getNamespaces())
 		{
 			try
 			{
@@ -125,7 +125,7 @@ public class RecipeGeneratedCostHandler extends ReloadListener<List<RecipeGenera
 						
 					} catch(RuntimeException runtimeexception)
 					{
-						LOGGER.warn("Invalid grist_cost_generation.json in data pack: '{}'", resource.getPackName(), runtimeexception);
+						LOGGER.warn("Invalid grist_cost_generation.json in data pack: '{}'", resource.getSourceName(), runtimeexception);
 					}
 				}
 			} catch(IOException ignored)
@@ -141,7 +141,7 @@ public class RecipeGeneratedCostHandler extends ReloadListener<List<RecipeGenera
 		try
 		{
 			TypeToken<List<SourceEntry>> type = new TypeToken<List<SourceEntry>>(){};
-			sources = JSONUtils.fromJSON(GSON, new InputStreamReader(input), type, false);
+			sources = JSONUtils.fromJson(GSON, new InputStreamReader(input), type, false);
 		} finally
 		{
 			IOUtils.closeQuietly(input);
@@ -151,11 +151,11 @@ public class RecipeGeneratedCostHandler extends ReloadListener<List<RecipeGenera
 	
 	private static SourceEntry deserializeSourceEntry(JsonElement json, Type typeOfT, JsonDeserializationContext context)
 	{
-		JsonObject obj = JSONUtils.getJsonObject(json, "source entry");
+		JsonObject obj = JSONUtils.convertToJsonObject(json, "source entry");
 		
 		Source source = deserializeSource(obj);
 		
-		ResourceLocation name = new ResourceLocation(JSONUtils.getString(obj, "interpreter_type"));
+		ResourceLocation name = new ResourceLocation(JSONUtils.getAsString(obj, "interpreter_type"));
 		InterpreterSerializer<?> serializer = InterpreterSerializer.REGISTRY.getValue(name);
 		
 		if(serializer == null)
@@ -167,20 +167,20 @@ public class RecipeGeneratedCostHandler extends ReloadListener<List<RecipeGenera
 	
 	private static Source deserializeSource(JsonObject json)
 	{
-		String type = JSONUtils.getString(json, "source_type");
+		String type = JSONUtils.getAsString(json, "source_type");
 		switch(type)
 		{
 			case "recipe":
-				ResourceLocation recipe = new ResourceLocation(JSONUtils.getString(json, "source"));
+				ResourceLocation recipe = new ResourceLocation(JSONUtils.getAsString(json, "source"));
 				return new RecipeSource(recipe);
 			case "recipe_serializer":
-				ResourceLocation serializerName = new ResourceLocation(JSONUtils.getString(json, "source"));
+				ResourceLocation serializerName = new ResourceLocation(JSONUtils.getAsString(json, "source"));
 				IRecipeSerializer<?> recipeSerializer = ForgeRegistries.RECIPE_SERIALIZERS.getValue(serializerName);
 				if(recipeSerializer == null)
 					throw new JsonParseException("No recipe type by name " + serializerName);
 				return new RecipeSerializerSource(recipeSerializer);
 			case "recipe_type":
-				ResourceLocation typeName = new ResourceLocation(JSONUtils.getString(json, "source"));
+				ResourceLocation typeName = new ResourceLocation(JSONUtils.getAsString(json, "source"));
 				IRecipeType<?> recipeType = Registry.RECIPE_TYPE.getOptional(typeName).orElseThrow(() -> new JsonParseException("No recipe type by name " + typeName));
 				return new RecipeTypeSource(recipeType);
 		}
@@ -305,7 +305,7 @@ public class RecipeGeneratedCostHandler extends ReloadListener<List<RecipeGenera
 		@Override
 		public List<IRecipe<?>> findRecipes(RecipeManager recipeManager)
 		{
-			Optional<? extends IRecipe<?>> recipe = recipeManager.getRecipe(this.recipe);
+			Optional<? extends IRecipe<?>> recipe = recipeManager.byKey(this.recipe);
 			return recipe.<List<IRecipe<?>>>map(Collections::singletonList).orElse(Collections.emptyList());
 		}
 		

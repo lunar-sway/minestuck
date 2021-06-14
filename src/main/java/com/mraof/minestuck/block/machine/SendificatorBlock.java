@@ -12,7 +12,6 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
-
 public class SendificatorBlock extends DecorBlock
 {
 	public static final String ACTIVATION_MESSAGE = "activation_message";
@@ -24,20 +23,20 @@ public class SendificatorBlock extends DecorBlock
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
 	{
-		if(!player.isSneaking() && player.getHeldItemMainhand().isEmpty())
+		if(!player.isShiftKeyDown() && player.getMainHandItem().isEmpty())
 		{
 			//ItemStack itemStackIn = player.getHeldItem(handIn);
 			//Function will store information about item and pass it along to TileEntity, currently useless
-			if(!worldIn.isRemote)
+			if(!worldIn.isClientSide)
 			{
-				player.sendMessage(new TranslationTextComponent(getTranslationKey() + "." + ACTIVATION_MESSAGE), Util.DUMMY_UUID);
+				player.sendMessage(new TranslationTextComponent(getDescriptionId() + "." + ACTIVATION_MESSAGE), Util.NIL_UUID);
 			}
 			return ActionResultType.SUCCESS;
 		} else
 		{
-			return super.onBlockActivated(state, worldIn, pos, player, handIn, hit);
+			return super.use(state, worldIn, pos, player, handIn, hit);
 		}
 	}
 }

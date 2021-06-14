@@ -20,14 +20,14 @@ public class RabbitPlacementFeature extends Feature<NoFeatureConfig>
 	}
 	
 	@Override
-	public boolean generate(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
+	public boolean place(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
 	{
 		if(!world.getBlockState(pos).getMaterial().isLiquid())
 		{
-			RabbitEntity rabbit = new RabbitEntity(EntityType.RABBIT, world.getWorld());
-			rabbit.setPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
-			rabbit.onInitialSpawn(world, world.getDifficultyForLocation(rabbit.getPosition()), SpawnReason.CHUNK_GENERATION, null, null);
-			world.addEntity(rabbit);
+			RabbitEntity rabbit = new RabbitEntity(EntityType.RABBIT, world.getLevel());
+			rabbit.setPos(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+			rabbit.finalizeSpawn(world, world.getCurrentDifficultyAt(rabbit.blockPosition()), SpawnReason.CHUNK_GENERATION, null, null);
+			world.addFreshEntity(rabbit);
 			return true;
 		}
 		return false;

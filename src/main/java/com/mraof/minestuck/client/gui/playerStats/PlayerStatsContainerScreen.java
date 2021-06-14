@@ -2,7 +2,6 @@ package com.mraof.minestuck.client.gui.playerStats;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen.*;
 import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.computer.editmode.ClientEditHandler;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
@@ -36,12 +35,12 @@ public abstract class PlayerStatsContainerScreen<T extends Container> extends Co
 	public void init()
 	{
 		super.init();
-		minecraft.player.openContainer = this.container;
+		minecraft.player.containerMenu = this.menu;
 		
 		xOffset = (width - guiWidth)/2;
 		yOffset = (height - guiHeight + tabHeight - tabOverlap)/2;
-		this.guiTop = yOffset;
-		this.guiLeft = xOffset;
+		this.topPos = yOffset;
+		this.leftPos = xOffset;
 	}
 	
 	@Override
@@ -54,12 +53,12 @@ public abstract class PlayerStatsContainerScreen<T extends Container> extends Co
 	{
 		RenderSystem.color3f(1,1,1);
 		
-		minecraft.getTextureManager().bindTexture(PlayerStatsScreen.icons);
+		minecraft.getTextureManager().bind(PlayerStatsScreen.icons);
 		
 		if(mode)
 		{
 			for(NormalGuiType type : NormalGuiType.values())
-				if(type != normalTab && (!type.reqMedium() || SkaiaClient.enteredMedium(SkaiaClient.playerId) || minecraft.playerController.isInCreativeMode()))
+				if(type != normalTab && (!type.reqMedium() || SkaiaClient.enteredMedium(SkaiaClient.playerId) || minecraft.gameMode.hasInfiniteItems()))
 				{
 					int i = type.ordinal();
 					blit(matrixStack, xOffset + i*(tabWidth + 2), yOffset - tabHeight + tabOverlap, i==0? 0:tabWidth, 0, tabWidth, tabHeight);
@@ -83,7 +82,7 @@ public abstract class PlayerStatsContainerScreen<T extends Container> extends Co
 	{
 		this.renderBackground(matrixStack);
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
-		this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
+		this.renderTooltip(matrixStack, mouseX, mouseY);
 		drawTabTooltip(matrixStack, mouseX, mouseY);
 	}
 	
@@ -91,14 +90,14 @@ public abstract class PlayerStatsContainerScreen<T extends Container> extends Co
 	{
 		RenderSystem.color3f(1,1,1);
 		
-		minecraft.getTextureManager().bindTexture(PlayerStatsScreen.icons);
+		minecraft.getTextureManager().bind(PlayerStatsScreen.icons);
 		
 		int index = (mode? normalTab:editmodeTab).ordinal();
 		blit(matrixStack, xOffset + index*(tabWidth+2), yOffset - tabHeight + tabOverlap,
 				index == 0? 0:tabWidth, tabHeight, tabWidth, tabHeight);
 		
 		for(int i = 0; i < (mode? NormalGuiType.values():EditmodeGuiType.values()).length; i++)
-			if(!mode || !NormalGuiType.values()[i].reqMedium() || SkaiaClient.enteredMedium(SkaiaClient.playerId) || minecraft.playerController.isInCreativeMode())
+			if(!mode || !NormalGuiType.values()[i].reqMedium() || SkaiaClient.enteredMedium(SkaiaClient.playerId) || minecraft.gameMode.hasInfiniteItems())
 				blit(matrixStack, xOffset + (tabWidth - 16)/2 + (tabWidth+2)*i, yOffset - tabHeight + tabOverlap + 8, i*16, tabHeight*2 + (mode? 0:16), 16, 16);
 		
 		if(ClientPlayerData.hasDataCheckerAccess())
@@ -114,7 +113,7 @@ public abstract class PlayerStatsContainerScreen<T extends Container> extends Co
 				if(mouseX < xOffset + i*(tabWidth + 2))
 					break;
 				else if(mouseX < xOffset + i*(tabWidth + 2) + tabWidth
-						&& (!mode || !NormalGuiType.values()[i].reqMedium() || SkaiaClient.enteredMedium(SkaiaClient.playerId) || minecraft.playerController.isInCreativeMode()))
+						&& (!mode || !NormalGuiType.values()[i].reqMedium() || SkaiaClient.enteredMedium(SkaiaClient.playerId) || minecraft.gameMode.hasInfiniteItems()))
 					renderTooltip(matrixStack, new TranslationTextComponent(mode ? NormalGuiType.values()[i].name : EditmodeGuiType.values()[i].name),
 							mouseX, mouseY);
 		RenderSystem.enableDepthTest();
@@ -131,9 +130,9 @@ public abstract class PlayerStatsContainerScreen<T extends Container> extends Co
 					break;
 				else if(xcor < xOffset + i*(tabWidth + 2) + tabWidth)
 				{
-					if(mode && NormalGuiType.values()[i].reqMedium() && !SkaiaClient.enteredMedium(SkaiaClient.playerId) && minecraft.playerController.isNotCreative())
+					if(mode && NormalGuiType.values()[i].reqMedium() && !SkaiaClient.enteredMedium(SkaiaClient.playerId) && minecraft.gameMode.hasMissTime())
 						return true;
-					minecraft.getSoundHandler().play(SimpleSound.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+					minecraft.getSoundManager().play(SimpleSound.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 					if(i != (mode? normalTab:editmodeTab).ordinal())
 					{
 						if(mode)
@@ -145,7 +144,7 @@ public abstract class PlayerStatsContainerScreen<T extends Container> extends Co
 				}
 			if(ClientPlayerData.hasDataCheckerAccess() && xcor < xOffset + guiWidth && xcor >= xOffset + guiWidth - tabWidth)
 			{
-				minecraft.displayGuiScreen(new DataCheckerScreen());
+				minecraft.setScreen(new DataCheckerScreen());
 				return true;
 			}
 		}
@@ -155,9 +154,9 @@ public abstract class PlayerStatsContainerScreen<T extends Container> extends Co
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int i)
 	{
-		if(MSKeyHandler.statKey.isActiveAndMatches(InputMappings.getInputByCode(keyCode, scanCode)))
+		if(MSKeyHandler.statKey.isActiveAndMatches(InputMappings.getKey(keyCode, scanCode)))
 		{
-			minecraft.displayGuiScreen(null);
+			minecraft.setScreen(null);
 			return true;
 		}
 		else return super.keyPressed(keyCode, scanCode, i);

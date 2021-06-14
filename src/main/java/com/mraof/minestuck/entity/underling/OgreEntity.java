@@ -23,14 +23,14 @@ public class OgreEntity extends UnderlingEntity
 	public OgreEntity(EntityType<? extends OgreEntity> type, World world)
 	{
 		super(type, world, 3);
-		this.stepHeight = 1.0F;
+		this.maxUpStep = 1.0F;
 	}
 	
 	public static AttributeModifierMap.MutableAttribute ogreAttributes()
 	{
-		return UnderlingEntity.underlingAttributes().createMutableAttribute(Attributes.MAX_HEALTH, 50)
-				.createMutableAttribute(Attributes.KNOCKBACK_RESISTANCE, 0.4).createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.22)
-				.createMutableAttribute(Attributes.ATTACK_DAMAGE, 6);
+		return UnderlingEntity.underlingAttributes().add(Attributes.MAX_HEALTH, 50)
+				.add(Attributes.KNOCKBACK_RESISTANCE, 0.4).add(Attributes.MOVEMENT_SPEED, 0.22)
+				.add(Attributes.ATTACK_DAMAGE, 6);
 	}
 	
 	@Override
@@ -64,7 +64,7 @@ public class OgreEntity extends UnderlingEntity
 	@Override
 	protected int getVitalityGel()
 	{
-		return rand.nextInt(3) + 3;
+		return random.nextInt(3) + 3;
 	}
 	
 	@Override
@@ -73,15 +73,15 @@ public class OgreEntity extends UnderlingEntity
 		super.onGristTypeUpdated(type);
 		applyGristModifier(Attributes.MAX_HEALTH, 13 * type.getPower(), AttributeModifier.Operation.ADDITION);
 		applyGristModifier(Attributes.ATTACK_DAMAGE, 2.1 * type.getPower(), AttributeModifier.Operation.ADDITION);
-		this.experienceValue = (int) (5 * type.getPower() + 4);
+		this.xpReward = (int) (5 * type.getPower() + 4);
 	}
 	
 	@Override
-	public void onDeath(DamageSource cause)
+	public void die(DamageSource cause)
 	{
-		super.onDeath(cause);
-		Entity entity = cause.getTrueSource();
-		if(this.dead && !this.world.isRemote)
+		super.die(cause);
+		Entity entity = cause.getEntity();
+		if(this.dead && !this.level.isClientSide)
 		{
 			computePlayerProgress((int) (40* getGristType().getPower() + 50));
 			if(entity instanceof ServerPlayerEntity)

@@ -113,7 +113,7 @@ public final class PlayerData
 		for(int i = 0; i < list.size(); i++)
 		{
 			CompoundNBT dimensionRep = list.getCompound(i);
-			ResourceLocation dimension = ResourceLocation.tryCreate(dimensionRep.getString("dim"));
+			ResourceLocation dimension = ResourceLocation.tryParse(dimensionRep.getString("dim"));
 			if(dimension != null)
 				consortReputation.put(dimension, dimensionRep.getInt("rep"));
 		}
@@ -156,7 +156,7 @@ public final class PlayerData
 	
 	private void markDirty()
 	{
-		savedData.markDirty();
+		savedData.setDirty();
 	}
 	
 	public Echeladder getEcheladder()
@@ -267,7 +267,7 @@ public final class PlayerData
 	
 	public int getConsortReputation(RegistryKey<World> dim)
 	{
-		return consortReputation.getOrDefault(dim.getLocation(), 0);
+		return consortReputation.getOrDefault(dim.location(), 0);
 	}
 	
 	public void addConsortReputation(int amount, RegistryKey<World> dim)
@@ -277,7 +277,7 @@ public final class PlayerData
 		
 		if(newRep != oldRep)
 		{
-			consortReputation.put(dim.getLocation(), newRep);
+			consortReputation.put(dim.location(), newRep);
 			markDirty();
 			sendConsortReputation(getPlayer());
 		}
@@ -329,13 +329,13 @@ public final class PlayerData
 		List<String> startingTypes = MinestuckConfig.SERVER.startingModusTypes.get();
 		if(!startingTypes.isEmpty())
 		{
-			String type = startingTypes.get(player.world.rand.nextInt(startingTypes.size()));
+			String type = startingTypes.get(player.level.random.nextInt(startingTypes.size()));
 			if(type.isEmpty())
 			{
 				setGivenModus();
 				return;
 			}
-			ResourceLocation name = ResourceLocation.tryCreate(type);
+			ResourceLocation name = ResourceLocation.tryParse(type);
 			if(name == null)
 				LOGGER.error("Unable to parse starting modus type {} as a resource location!", type);
 			else
@@ -397,7 +397,7 @@ public final class PlayerData
 	{
 		if(player == null)
 			return;
-		ConsortReputationDataPacket packet = ConsortReputationDataPacket.create(getConsortReputation(player.world.getDimensionKey()));
+		ConsortReputationDataPacket packet = ConsortReputationDataPacket.create(getConsortReputation(player.level.dimension()));
 		//MSPacketHandler.sendToPlayer(packet, player);
 	}
 	

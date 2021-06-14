@@ -84,7 +84,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	 */
 	public static void onPlayerExit(PlayerEntity player)
 	{
-		if(!player.world.isRemote)
+		if(!player.level.isClientSide)
 			reset(getData(player));
 	}
 	
@@ -116,7 +116,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			//take measures to prevent editmode data from ending up with an invalid player entity
 			LOGGER.error("Minestuck failed to prevent death or different cloning event for player {}. Applying measure to reduce problems", event.getPlayer().getName().getString());
 			
-			MSExtraData data = MSExtraData.get(event.getEntity().world);
+			MSExtraData data = MSExtraData.get(event.getEntity().level);
 			data.removeEditData(prevData);
 			data.addEditData(new EditData(prevData.getDecoy(), (ServerPlayerEntity) event.getPlayer(), prevData.connection));
 		}
@@ -154,7 +154,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 		if(editData == null)
 			return;
 		
-		MSExtraData data = MSExtraData.get(editData.getEditor().world);
+		MSExtraData data = MSExtraData.get(editData.getEditor().level);
 		data.removeEditData(editData);
 	}
 	
@@ -176,33 +176,33 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 		
 		editData.getDecoy().markedForDespawn = true;
 		
-		if(damageSource != null && damageSource.getImmediateSource() != player)
-			player.attackEntityFrom(damageSource, damage);
+		if(damageSource != null && damageSource.getDirectEntity() != player)
+			player.hurt(damageSource, damage);
 	}
 	
 	public static void newServerEditor(ServerPlayerEntity player, PlayerIdentifier computerOwner, PlayerIdentifier computerTarget)
 	{
 		if(player.isPassenger())
 		{
-			player.sendMessage(new StringTextComponent("You may not activate editmode while riding something"), Util.DUMMY_UUID);
+			player.sendMessage(new StringTextComponent("You may not activate editmode while riding something"), Util.NIL_UUID);
 			return;    //Don't want to bother making the decoy able to ride anything right now.
 		}
 		SburbConnection c = SkaianetHandler.get(player.getServer()).getActiveConnection(computerTarget);
 		if(c != null && c.getServerIdentifier().equals(computerOwner) && getData(player.server, c) == null && getData(player) == null)
 		{
 			Debug.info("Activating edit mode on player \""+player.getName().getString()+"\", target player: \""+computerTarget+"\".");
-			DecoyEntity decoy = new DecoyEntity((ServerWorld) player.world, player);
+			DecoyEntity decoy = new DecoyEntity((ServerWorld) player.level, player);
 			EditData data = new EditData(decoy, player, c);
 
 			if(!setPlayerStats(player, c))
 			{
-				player.sendMessage(new StringTextComponent("Failed to activate edit mode.").mergeStyle(TextFormatting.RED), Util.DUMMY_UUID);
+				player.sendMessage(new StringTextComponent("Failed to activate edit mode.").withStyle(TextFormatting.RED), Util.NIL_UUID);
 				return;
 			}
 			if(c.getEditmodeInventory() != null)
-				player.inventory.read(c.getEditmodeInventory());
-			decoy.world.addEntity(decoy);
-			MSExtraData.get(player.world).addEditData(data);
+				player.inventory.load(c.getEditmodeInventory());
+			decoy.level.addFreshEntity(decoy);
+			MSExtraData.get(player.level).addEditData(data);
 
 			BlockPos center = getEditmodeCenter(c);
 			ServerEditPacket packet = ServerEditPacket.activate(computerTarget.getUsername(), center.getX(), center.getZ(), DeployList.getDeployListTag(player.getServer(), c));
@@ -215,7 +215,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	{
 		
 		double posX, posY, posZ;
-		ServerWorld world = player.getServer().getWorld(c.hasEntered() ? c.getClientDimension() : c.getClientComputer().getPosForEditmode().getDimension());
+		ServerWorld world = player.getServer().getLevel(c.hasEntered() ? c.getClientDimension() : c.getClientComputer().getPosForEditmode().dimension());
 		
 		if(lastEditmodePos.containsKey(c))
 		{
@@ -233,11 +233,11 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 		if(Teleport.teleportEntity(player, world, posX, posY, posZ) == null)
 			return false;
 		
-		player.closeScreen();
-		player.inventory.clear();
+		player.closeContainer();
+		player.inventory.clearContent();
 		
-		player.setGameType(GameType.CREATIVE);
-		player.sendPlayerAbilities();
+		player.setGameMode(GameType.CREATIVE);
+		player.onUpdateAbilities();
 		
 		return true;
 	}
@@ -245,7 +245,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	//Helper function to force a chunk to load, to then get the top block
 	private static int getMotionBlockingY(ServerWorld world, int x, int z)
 	{
-		return world.getChunk(x >> 4, z >> 4, ChunkStatus.FULL, true).getTopBlockY(Heightmap.Type.MOTION_BLOCKING, x & 0xF, x & 0xF) + 1;
+		return world.getChunk(x >> 4, z >> 4, ChunkStatus.FULL, true).getHeight(Heightmap.Type.MOTION_BLOCKING, x & 0xF, x & 0xF) + 1;
 	}
 	
 	public static void resendEditmodeStatus(ServerPlayerEntity editor)
@@ -266,7 +266,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	
 	public static EditData getData(PlayerEntity editor)
 	{
-		return MSExtraData.get(editor.world).findEditData(editData -> editData.getEditor() == editor);
+		return MSExtraData.get(editor.level).findEditData(editData -> editData.getEditor() == editor);
 	}
 	
 	public static EditData getData(MinecraftServer server, SburbConnection c)
@@ -275,7 +275,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	}
 	
 	public static EditData getData(DecoyEntity decoy) {
-		return MSExtraData.get(decoy.getEntityWorld()).findEditData(editData -> editData.getDecoy() == decoy);
+		return MSExtraData.get(decoy.getCommandSenderWorld()).findEditData(editData -> editData.getDecoy() == decoy);
 	}
 
 	private static BlockPos getEditmodeCenter(SburbConnection connection)
@@ -285,7 +285,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			throw new IllegalStateException("Connection has to be active with a computer position to be used here");
 		if(connection.hasEntered())
 			return new BlockPos(0, 0, 0);
-		else return computerPos.getPos();
+		else return computerPos.pos();
 	}
 
 	@SubscribeEvent
@@ -299,7 +299,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			return;
 		
 		SburbConnection c = data.connection;
-		int range = MSDimensions.isLandDimension(player.world.getDimensionKey()) ? MinestuckConfig.SERVER.landEditRange.get() : MinestuckConfig.SERVER.overworldEditRange.get();
+		int range = MSDimensions.isLandDimension(player.level.dimension()) ? MinestuckConfig.SERVER.landEditRange.get() : MinestuckConfig.SERVER.overworldEditRange.get();
 		BlockPos center = getEditmodeCenter(c);
 
 		updateInventory(player, c);
@@ -312,18 +312,18 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	public static void onTossEvent(ItemTossEvent event)
 	{
 		PlayerInventory inventory = event.getPlayer().inventory;
-		if(!event.getEntity().world.isRemote && getData(event.getPlayer()) != null)
+		if(!event.getEntity().level.isClientSide && getData(event.getPlayer()) != null)
 		{
 			EditData data = getData(event.getPlayer());
 			ItemStack stack = event.getEntityItem().getItem();
-			DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getEntity().world);
+			DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getEntity().level);
 			if(entry != null && !isBlockItem(stack.getItem()))
 			{
 				GristSet cost = entry.getCurrentCost(data.connection);
-				if(GristHelper.canAfford(PlayerSavedData.getData(data.connection.getClientIdentifier(), event.getPlayer().world).getGristCache(), cost))
+				if(GristHelper.canAfford(PlayerSavedData.getData(data.connection.getClientIdentifier(), event.getPlayer().level).getGristCache(), cost))
 				{
-					GristHelper.decrease(event.getPlayer().world, data.connection.getClientIdentifier(), cost);
-					GristHelper.notifyEditPlayer(event.getPlayer().world.getServer(), data.connection.getClientIdentifier(), cost, false);
+					GristHelper.decrease(event.getPlayer().level, data.connection.getClientIdentifier(), cost);
+					GristHelper.notifyEditPlayer(event.getPlayer().level.getServer(), data.connection.getClientIdentifier(), cost, false);
 					data.connection.setHasGivenItem(entry);
 					if(!data.connection.isMain())
 						SburbHandler.giveItems(event.getPlayer().getServer(), data.connection.getClientIdentifier());
@@ -337,9 +337,9 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			if(event.isCanceled())
 			{
 				event.getEntityItem().remove();
-				if(!inventory.getItemStack().isEmpty())
-					inventory.setItemStack(ItemStack.EMPTY);
-				else inventory.setInventorySlotContents(inventory.currentItem, ItemStack.EMPTY);
+				if(!inventory.getCarried().isEmpty())
+					inventory.setCarried(ItemStack.EMPTY);
+				else inventory.setItem(inventory.selected, ItemStack.EMPTY);
 			}
 		}
 	}
@@ -347,7 +347,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	@SubscribeEvent
 	public static void onItemPickupEvent(EntityItemPickupEvent event)
 	{
-		if(!event.getEntity().world.isRemote && getData(event.getPlayer()) != null)
+		if(!event.getEntity().level.isClientSide && getData(event.getPlayer()) != null)
 			event.setCanceled(true);
 	}
 	
@@ -355,11 +355,11 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	@SubscribeEvent(priority=EventPriority.NORMAL)
 	public static void onRightClickBlockControl(PlayerInteractEvent.RightClickBlock event)
 	{
-		if(!event.getWorld().isRemote && getData(event.getPlayer()) != null)
+		if(!event.getWorld().isClientSide && getData(event.getPlayer()) != null)
 		{
 			EditData data = getData(event.getPlayer());
 			Block block = event.getWorld().getBlockState(event.getPos()).getBlock();
-			ItemStack stack = event.getPlayer().getHeldItemMainhand();
+			ItemStack stack = event.getPlayer().getMainHandItem();
 			event.setUseBlock(stack.isEmpty() && (block instanceof DoorBlock || block instanceof TrapDoorBlock || block instanceof FenceGateBlock) ? Event.Result.ALLOW : Event.Result.DENY);
 			if(event.getUseBlock() == Event.Result.ALLOW)
 				return;
@@ -371,14 +371,14 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			
 			cleanStackNBT(stack, data.connection, event.getWorld());
 			
-			DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getEntity().world);
+			DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getEntity().level);
 			if(entry != null)
 			{
 				GristSet cost = entry.getCurrentCost(data.connection);
 				if(!GristHelper.canAfford(event.getWorld(), data.connection.getClientIdentifier(), cost))
 				{
 					if(cost != null)
-						event.getPlayer().sendMessage(cost.createMissingMessage(), Util.DUMMY_UUID);
+						event.getPlayer().sendMessage(cost.createMissingMessage(), Util.NIL_UUID);
 					event.setCanceled(true);
 				}
 			}
@@ -394,12 +394,12 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	@SubscribeEvent(priority=EventPriority.NORMAL)
 	public static void onLeftClickBlockControl(PlayerInteractEvent.LeftClickBlock event)
 	{
-		if(!event.getWorld().isRemote && getData(event.getPlayer()) != null)
+		if(!event.getWorld().isClientSide && getData(event.getPlayer()) != null)
 		{
 			EditData data = getData(event.getPlayer());
 			BlockState block = event.getWorld().getBlockState(event.getPos());
-			if(block.getBlockHardness(event.getWorld(), event.getPos()) < 0 || block.getMaterial() == Material.PORTAL
-					|| (GristHelper.getGrist(event.getEntity().world, data.connection.getClientIdentifier(), GristTypes.BUILD) <= 0 && !MinestuckConfig.SERVER.gristRefund.get()))
+			if(block.getDestroySpeed(event.getWorld(), event.getPos()) < 0 || block.getMaterial() == Material.PORTAL
+					|| (GristHelper.getGrist(event.getEntity().level, data.connection.getClientIdentifier(), GristTypes.BUILD) <= 0 && !MinestuckConfig.SERVER.gristRefund.get()))
 				event.setCanceled(true);
 		}
 	}
@@ -407,7 +407,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	@SubscribeEvent(priority=EventPriority.NORMAL)
 	public static void onItemUseControl(PlayerInteractEvent.RightClickItem event)
 	{
-		if(!event.getWorld().isRemote && getData(event.getPlayer()) != null)
+		if(!event.getWorld().isClientSide && getData(event.getPlayer()) != null)
 		{
 			event.setCanceled(true);
 		}
@@ -416,7 +416,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public static void onBlockBreak(PlayerInteractEvent.LeftClickBlock event)
 	{
-		if(!event.getEntity().world.isRemote && getData(event.getPlayer()) != null)
+		if(!event.getEntity().level.isClientSide && getData(event.getPlayer()) != null)
 		{
 			EditData data = getData(event.getPlayer());
 			if(!MinestuckConfig.SERVER.gristRefund.get())
@@ -451,9 +451,9 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 					return;
 				}
 				
-				ItemStack stack = player.getHeldItemMainhand();	//TODO Make sure offhand isn't used in editmode?
+				ItemStack stack = player.getMainHandItem();	//TODO Make sure offhand isn't used in editmode?
 				SburbConnection c = data.connection;
-				DeployEntry entry = DeployList.getEntryForItem(stack, c, player.world);
+				DeployEntry entry = DeployList.getEntryForItem(stack, c, player.level);
 				if(entry != null)
 				{
 					GristSet cost = entry.getCurrentCost(c);
@@ -462,14 +462,14 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 						SburbHandler.giveItems(player.server, c.getClientIdentifier());
 					if(!cost.isEmpty())
 					{
-						GristHelper.decrease(player.world, c.getClientIdentifier(), cost);
-						GristHelper.notifyEditPlayer(player.world.getServer(), c.getClientIdentifier(), cost, false);
+						GristHelper.decrease(player.level, c.getClientIdentifier(), cost);
+						GristHelper.notifyEditPlayer(player.level.getServer(), c.getClientIdentifier(), cost, false);
 					}
-					player.inventory.mainInventory.set(player.inventory.currentItem, ItemStack.EMPTY);
+					player.inventory.items.set(player.inventory.selected, ItemStack.EMPTY);
 				} else
 				{
-					GristHelper.decrease(player.world, data.connection.getClientIdentifier(), GristCostRecipe.findCostForItem(stack, null, false, player.getEntityWorld()));
-					GristHelper.notifyEditPlayer(player.world.getServer(), data.connection.getClientIdentifier(), GristCostRecipe.findCostForItem(stack, null, false, player.getEntityWorld()), false);
+					GristHelper.decrease(player.level, data.connection.getClientIdentifier(), GristCostRecipe.findCostForItem(stack, null, false, player.getCommandSenderWorld()));
+					GristHelper.notifyEditPlayer(player.level.getServer(), data.connection.getClientIdentifier(), GristCostRecipe.findCostForItem(stack, null, false, player.getCommandSenderWorld()), false);
 				}
 			}
 		}
@@ -478,21 +478,21 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	@SubscribeEvent(priority=EventPriority.NORMAL)
 	public static void onAttackEvent(AttackEntityEvent event)
 	{
-		if(!event.getEntity().world.isRemote && getData(event.getPlayer()) != null)
+		if(!event.getEntity().level.isClientSide && getData(event.getPlayer()) != null)
 			event.setCanceled(true);
 	}
 	
 	@SubscribeEvent(priority=EventPriority.NORMAL)
 	public static void onInteractEvent(PlayerInteractEvent.EntityInteract event)
 	{
-		if(!event.getEntity().world.isRemote && getData(event.getPlayer()) != null)
+		if(!event.getEntity().level.isClientSide && getData(event.getPlayer()) != null)
 			event.setCanceled(true);
 	}
 	
 	@SubscribeEvent(priority=EventPriority.NORMAL)
 	public static void onInteractEvent(PlayerInteractEvent.EntityInteractSpecific event)
 	{
-		if(!event.getEntity().world.isRemote && getData(event.getPlayer()) != null)
+		if(!event.getEntity().level.isClientSide && getData(event.getPlayer()) != null)
 			event.setCanceled(true);
 	}
 	
@@ -500,39 +500,39 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	 * Used on both server and client side.
 	 */
 	public static void updatePosition(PlayerEntity player, double range, int centerX, int centerZ) {
-		double y = player.getPosY();
+		double y = player.getY();
 		if(y < 0) {
 			y = 0;
-			player.setMotion(player.getMotion().mul(1, 0, 1));
-			player.abilities.isFlying = true;
+			player.setDeltaMovement(player.getDeltaMovement().multiply(1, 0, 1));
+			player.abilities.flying = true;
 		}
 		
-		double newX = player.getPosX();
-		double newZ = player.getPosZ();
-		double offset = player.getBoundingBox().maxX-player.getPosX();
+		double newX = player.getX();
+		double newZ = player.getZ();
+		double offset = player.getBoundingBox().maxX-player.getX();
 		
 		if(range >= 1) {
-			if(player.getPosX() > centerX+range-offset)
+			if(player.getX() > centerX+range-offset)
 				newX = centerX+range-offset;
-			else if(player.getPosX() < centerX-range+offset)
+			else if(player.getX() < centerX-range+offset)
 				newX = centerX-range+offset;
-			if(player.getPosZ() > centerZ+range-offset)
+			if(player.getZ() > centerZ+range-offset)
 				newZ = centerZ+range-offset;
-			else if(player.getPosZ() < centerZ-range+offset)
+			else if(player.getZ() < centerZ-range+offset)
 				newZ = centerZ-range+offset;
 		}
 		
-		if(newX != player.getPosX())
-			player.setMotion(player.getMotion().mul(0, 1, 1));
+		if(newX != player.getX())
+			player.setDeltaMovement(player.getDeltaMovement().multiply(0, 1, 1));
 		
-		if(newZ != player.getPosZ())
-			player.setMotion(player.getMotion().mul(1, 1, 0));
+		if(newZ != player.getZ())
+			player.setDeltaMovement(player.getDeltaMovement().multiply(1, 1, 0));
 		
-		if(newX != player.getPosX() || newZ != player.getPosZ() || y != player.getPosY())
+		if(newX != player.getX() || newZ != player.getZ() || y != player.getY())
 		{
-			if(player.world.isRemote)
-				player.setPosition(newX, y, newZ);
-			else player.setPositionAndUpdate(newX, y, newZ);
+			if(player.level.isClientSide)
+				player.setPos(newX, y, newZ);
+			else player.teleportTo(newX, y, newZ);
 		}
 	}
 	
@@ -541,22 +541,22 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 		List<DeployEntry> deployList = DeployList.getItemList(player.getServer(), connection);
 		deployList.removeIf(entry -> entry.getCurrentCost(connection) == null);
 		List<ItemStack> itemList = new ArrayList<>();
-		deployList.forEach(deployEntry -> itemList.add(deployEntry.getItemStack(connection, player.world)));
+		deployList.forEach(deployEntry -> itemList.add(deployEntry.getItemStack(connection, player.level)));
 		
 		boolean inventoryChanged = false;
-		for(int i = 0; i < player.inventory.mainInventory.size(); i++)
+		for(int i = 0; i < player.inventory.items.size(); i++)
 		{
-			ItemStack stack = player.inventory.mainInventory.get(i);
+			ItemStack stack = player.inventory.items.get(i);
 			if(stack.isEmpty())
 				continue;
-			if(GristCostRecipe.findCostForItem(stack, null, false, player.getEntityWorld()) == null || !isBlockItem(stack.getItem()))
+			if(GristCostRecipe.findCostForItem(stack, null, false, player.getCommandSenderWorld()) == null || !isBlockItem(stack.getItem()))
 			{
 				listSearch :
 				{
 					for(ItemStack deployStack : itemList)
-						if(ItemStack.areItemStacksEqual(deployStack, stack))
+						if(ItemStack.matches(deployStack, stack))
 							break listSearch;
-					player.inventory.mainInventory.set(i, ItemStack.EMPTY);
+					player.inventory.items.set(i, ItemStack.EMPTY);
 					inventoryChanged = true;
 				}
 			} else if(stack.hasTag())
@@ -564,7 +564,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 				listSearch :
 				{
 					for(ItemStack deployStack : itemList)
-						if(ItemStack.areItemStacksEqual(deployStack, stack))
+						if(ItemStack.matches(deployStack, stack))
 							break listSearch;
 					stack.setTag(null);
 					inventoryChanged = true;
@@ -578,7 +578,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 		}
 		
 		if(inventoryChanged)
-			player.getServer().getPlayerList().sendInventory(player);
+			player.getServer().getPlayerList().sendAllPlayerInfo(player);
 	}
 	
 	/*@SubscribeEvent(priority=EventPriority.LOWEST, receiveCanceled=false) TODO Do something about command security
@@ -674,7 +674,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	{
 		ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
 		UUID id = player.getGameProfile().getId();
-		EditData.PlayerRecovery recovery = MSExtraData.get(player.world).removePlayerRecovery(id);
+		EditData.PlayerRecovery recovery = MSExtraData.get(player.level).removePlayerRecovery(id);
 		if(recovery != null)
 			recovery.recover(player, false);
 	}

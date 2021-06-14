@@ -29,7 +29,7 @@ public class GristWidgetContainer extends MachineContainer
 	
 	public GristWidgetContainer(int windowId, PlayerInventory playerInventory, PacketBuffer buffer)
 	{
-		this(MSContainerTypes.GRIST_WIDGET, windowId, playerInventory, new ItemStackHandler(1), new IntArray(3), IWorldPosCallable.DUMMY, buffer.readBlockPos());
+		this(MSContainerTypes.GRIST_WIDGET, windowId, playerInventory, new ItemStackHandler(1), new IntArray(3), IWorldPosCallable.NULL, buffer.readBlockPos());
 	}
 	
 	public GristWidgetContainer(int windowId, PlayerInventory playerInventory, IItemHandler inventory, IIntArray parameters, IWorldPosCallable position, BlockPos machinePos)
@@ -48,7 +48,7 @@ public class GristWidgetContainer extends MachineContainer
 		addSlot(new SlotItemHandler(inventory, 0, gristWidgetInputX, gristWidgetInputY)
 		{
 			@Override
-			public boolean isItemValid(ItemStack stack)
+			public boolean mayPlace(ItemStack stack)
 			{
 				return stack.getItem() == MSItems.CAPTCHA_CARD && AlchemyHelper.hasDecodedItem(stack) && !AlchemyHelper.isPunchedCard(stack);
 			}
@@ -76,15 +76,15 @@ public class GristWidgetContainer extends MachineContainer
 	
 	@Nonnull
 	@Override
-	public ItemStack transferStackInSlot(PlayerEntity player, int slotNumber)
+	public ItemStack quickMoveStack(PlayerEntity player, int slotNumber)
 	{
 		ItemStack itemstack = ItemStack.EMPTY;
-		Slot slot = this.inventorySlots.get(slotNumber);
-		int allSlots = this.inventorySlots.size();
+		Slot slot = this.slots.get(slotNumber);
+		int allSlots = this.slots.size();
 		
-		if (slot != null && slot.getHasStack())
+		if (slot != null && slot.hasItem())
 		{
-			ItemStack itemstackOrig = slot.getStack();
+			ItemStack itemstackOrig = slot.getItem();
 			itemstack = itemstackOrig.copy();
 			boolean result = false;
 			
@@ -92,18 +92,18 @@ public class GristWidgetContainer extends MachineContainer
 			if(slotNumber <= 0)
 			{
 				//if it's a machine slot
-				result = mergeItemStack(itemstackOrig, 2, allSlots, false);
-			} else if(slotNumber > 0 && getSlot(0).isItemValid(itemstackOrig))
+				result = moveItemStackTo(itemstackOrig, 2, allSlots, false);
+			} else if(slotNumber > 0 && getSlot(0).mayPlace(itemstackOrig))
 			{
 				//if it's an inventory slot with valid contents
-				result = mergeItemStack(itemstackOrig, 0, 1, false);
+				result = moveItemStackTo(itemstackOrig, 0, 1, false);
 			}
 			
 			if(!result)
 				return ItemStack.EMPTY;
 			
 			if(!itemstackOrig.isEmpty())
-				slot.onSlotChanged();
+				slot.setChanged();
 		}
 		
 		return itemstack;

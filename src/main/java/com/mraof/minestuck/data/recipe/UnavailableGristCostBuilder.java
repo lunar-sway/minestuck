@@ -23,13 +23,13 @@ public class UnavailableGristCostBuilder
 	
 	public static UnavailableGristCostBuilder of(ITag<Item> tag)
 	{
-		ResourceLocation tagId = TagCollectionManager.getManager().getItemTags().getValidatedIdFromTag(tag);
-		return new UnavailableGristCostBuilder(new ResourceLocation(tagId.getNamespace(), tagId.getPath()+"_tag"), Ingredient.fromTag(tag));
+		ResourceLocation tagId = TagCollectionManager.getInstance().getItems().getIdOrThrow(tag);
+		return new UnavailableGristCostBuilder(new ResourceLocation(tagId.getNamespace(), tagId.getPath()+"_tag"), Ingredient.of(tag));
 	}
 	
 	public static UnavailableGristCostBuilder of(IItemProvider item)
 	{
-		return new UnavailableGristCostBuilder(item.asItem().getRegistryName(), Ingredient.fromItems(item));
+		return new UnavailableGristCostBuilder(item.asItem().getRegistryName(), Ingredient.of(item));
 	}
 	
 	public static UnavailableGristCostBuilder of(Ingredient ingredient)
@@ -56,13 +56,13 @@ public class UnavailableGristCostBuilder
 	
 	public void build(Consumer<IFinishedRecipe> recipeSaver)
 	{
-		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ingredient.getMatchingStacks()[0].getItem().getRegistryName());
+		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ingredient.getItems()[0].getItem().getRegistryName());
 		build(recipeSaver, name);
 	}
 	
 	public void buildFor(Consumer<IFinishedRecipe> recipeSaver, String modId)
 	{
-		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ingredient.getMatchingStacks()[0].getItem().getRegistryName());
+		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ingredient.getItems()[0].getItem().getRegistryName());
 		build(recipeSaver, new ResourceLocation(modId, name.getPath()));
 	}
 	
@@ -85,35 +85,35 @@ public class UnavailableGristCostBuilder
 		}
 		
 		@Override
-		public void serialize(JsonObject jsonObject)
+		public void serializeRecipeData(JsonObject jsonObject)
 		{
-			jsonObject.add("ingredient", ingredient.serialize());
+			jsonObject.add("ingredient", ingredient.toJson());
 			if(priority != null)
 				jsonObject.addProperty("priority", priority);
 		}
 		
 		@Override
-		public ResourceLocation getID()
+		public ResourceLocation getId()
 		{
 			return id;
 		}
 		
 		@Override
-		public IRecipeSerializer<?> getSerializer()
+		public IRecipeSerializer<?> getType()
 		{
 			return MSRecipeTypes.UNAVAILABLE_GRIST_COST;
 		}
 		
 		@Nullable
 		@Override
-		public JsonObject getAdvancementJson()
+		public JsonObject serializeAdvancement()
 		{
 			return null;
 		}
 		
 		@Nullable
 		@Override
-		public ResourceLocation getAdvancementID()
+		public ResourceLocation getAdvancementId()
 		{
 			return new ResourceLocation("");
 		}

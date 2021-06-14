@@ -32,12 +32,12 @@ public class MonstersLandType extends TitleLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("structure_wool_2", Blocks.LIGHT_GRAY_WOOL.getDefaultState());
-		registry.setBlockState("carpet", Blocks.PURPLE_CARPET.getDefaultState());
+		registry.setBlockState("structure_wool_2", Blocks.LIGHT_GRAY_WOOL.defaultBlockState());
+		registry.setBlockState("carpet", Blocks.PURPLE_CARPET.defaultBlockState());
 		if(registry.getCustomBlock("torch") == null)
-			registry.setBlockState("torch", Blocks.REDSTONE_TORCH.getDefaultState());
+			registry.setBlockState("torch", Blocks.REDSTONE_TORCH.defaultBlockState());
 		if(registry.getCustomBlock("wall_torch") == null)
-			registry.setBlockState("wall_torch", Blocks.REDSTONE_WALL_TORCH.getDefaultState());
+			registry.setBlockState("wall_torch", Blocks.REDSTONE_WALL_TORCH.defaultBlockState());
 	}
 	
 	@Override

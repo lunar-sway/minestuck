@@ -3,6 +3,7 @@ package com.mraof.minestuck.entity.consort;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
 import com.mraof.minestuck.entity.consort.EnumConsort.MerchantType;
+import com.mraof.minestuck.entity.consort.MessageType.*;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.world.MSDimensions;
@@ -22,7 +23,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
-import static com.mraof.minestuck.entity.consort.MessageType.*;
 import static com.mraof.minestuck.world.lands.LandTypes.*;
 import static com.mraof.minestuck.world.storage.loot.MSLootTables.CONSORT_FOOD_STOCK;
 import static com.mraof.minestuck.world.storage.loot.MSLootTables.CONSORT_GENERAL_STOCK;
@@ -134,9 +134,9 @@ public class ConsortDialogue
 		
 		//Towers
 		addMessage("climb_high").landTitle(TOWERS, WIND).consort(EnumConsort.IGUANA);
-		addMessage(new ConditionedMessage((ConsortEntity consort, ServerPlayerEntity player) -> consort.getPosY() < 78, new ChainMessage(new SingleMessage("height_fear.towers.1"), new SingleMessage("height_fear.towers.2")),
+		addMessage(new ConditionedMessage((ConsortEntity consort, ServerPlayerEntity player) -> consort.getY() < 78, new ChainMessage(new SingleMessage("height_fear.towers.1"), new SingleMessage("height_fear.towers.2")),
 				new SingleMessage("height_fear.panic"))).landTitle(TOWERS).consort(EnumConsort.TURTLE);
-		addMessage(new ConditionedMessage((ConsortEntity consort, ServerPlayerEntity player) -> consort.getPosY() < 78, new ChainMessage(new SingleMessage("height_fear.rock.1"), new SingleMessage("height_fear.rock.2")),
+		addMessage(new ConditionedMessage((ConsortEntity consort, ServerPlayerEntity player) -> consort.getY() < 78, new ChainMessage(new SingleMessage("height_fear.rock.1"), new SingleMessage("height_fear.rock.2")),
 				new SingleMessage("height_fear.panic"))).landTitle(WIND).consort(EnumConsort.TURTLE);
 		
 		//Shade
@@ -171,7 +171,7 @@ public class ConsortDialogue
 		addMessage(new ChoiceMessage(new SingleMessage("fur_coat"), new SingleMessage[]{new SingleMessage("fur_coat.pay"), new SingleMessage("fur_coat.ignore")},
 				new MessageType[]{new PurchaseMessage(MSLootTables.CONSORT_JUNK_REWARD, 100, new ChainMessage(1, new SingleMessage("fur_coat.grattitude"), new SingleMessage("thank_you"))),
 						new SingleMessage("fur_coat.death")})).landTerrain(FROST);
-		addMessage("tent_protection").landTerrain(FROST).consortReq(ConsortEntity::detachHome);
+		addMessage("tent_protection").landTerrain(FROST).consortReq(ConsortEntity::hasRestriction);
 		addMessage("all_ores").landTerrain(ROCK);
 		addMessage("rockfu", "land_name").landTerrain(ROCK);
 		addMessage("all_trees").landTerrain(FOREST);
@@ -224,7 +224,7 @@ public class ConsortDialogue
 
 		//Misc
 		addMessage("denizen_mention").reqLand();
-		addMessage("floating_island").consortReq(consort -> consort.getDistanceSq(new Vector3d(consort.world.getWorldInfo().getSpawnX(), consort.world.getWorldInfo().getSpawnY(), consort.world.getWorldInfo().getSpawnZ())) < 65536).reqLand();
+		addMessage("floating_island").consortReq(consort -> consort.distanceToSqr(new Vector3d(consort.level.getLevelData().getXSpawn(), consort.level.getLevelData().getYSpawn(), consort.level.getLevelData().getZSpawn())) < 65536).reqLand();
 		addMessage("ring_fishing").consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);
 		addMessage("frog_walk").consort(EnumConsort.TURTLE);
 		addMessage("delicious_hair").consort(EnumConsort.IGUANA);
@@ -282,10 +282,10 @@ public class ConsortDialogue
 		addMessage("useless_pogo");
 		addMessage("await_hero", "land_name", "consort_types", "player_title_land").reqLand();
 		addMessage(new ConditionedMessage("skaia", (ConsortEntity consort, ServerPlayerEntity player) -> !consort.visitedSkaia, new SingleMessage("watch_skaia"),
-				new ConditionedMessage((ConsortEntity consort, ServerPlayerEntity player) -> MSDimensions.isSkaia(consort.world.getDimensionKey()),
+				new ConditionedMessage((ConsortEntity consort, ServerPlayerEntity player) -> MSDimensions.isSkaia(consort.level.dimension()),
 						new SingleMessage("at_skaia.1", "consort_sound_2"), new SingleMessage("visited_skaia")))).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA, EnumConsort.NAKAGATOR).reqLand();
 		addMessage(new ConditionedMessage("skaia_turtle", (ConsortEntity consort, ServerPlayerEntity player) -> !consort.visitedSkaia, new SingleMessage("watch_skaia"),
-				new ConditionedMessage((ConsortEntity consort, ServerPlayerEntity player) -> MSDimensions.isSkaia(consort.world.getDimensionKey()),
+				new ConditionedMessage((ConsortEntity consort, ServerPlayerEntity player) -> MSDimensions.isSkaia(consort.level.dimension()),
 						new SingleMessage("at_skaia.2"), new SingleMessage("visited_skaia")))).consort(EnumConsort.TURTLE).reqLand();
 		
 		addMessage(new SingleMessage("zazzerpan")).consort(EnumConsort.TURTLE);
@@ -493,7 +493,7 @@ public class ConsortDialogue
 			list.add(message);
 		}
 		
-		return WeightedRandom.getRandomItem(consort.world.rand, list);
+		return WeightedRandom.getRandomItem(consort.level.random, list);
 	}
 	
 	public static DialogueWrapper getMessageFromString(String name)

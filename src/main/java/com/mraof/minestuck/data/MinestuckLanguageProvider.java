@@ -53,7 +53,7 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
 	}
 	protected void addExtra(IItemProvider key, String type, String value)
 	{
-		add(key.asItem().getTranslationKey()+"."+type, value);
+		add(key.asItem().getDescriptionId()+"."+type, value);
 	}
 	protected void addBlockStore(Supplier<Block> key, String value)
 	{
@@ -65,7 +65,7 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
 	}
 	protected void addStore(IItemProvider key, String value)
 	{
-		add("store."+key.asItem().getTranslationKey(), value);
+		add("store."+key.asItem().getDescriptionId(), value);
 	}
 	protected void addItemStackStore(Supplier<ItemStack> key, String value)
 	{
@@ -73,7 +73,7 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
 	}
 	protected void addStore(ItemStack key, String value)
 	{
-		add("store."+key.getTranslationKey(), value);
+		add("store."+key.getDescriptionId(), value);
 	}
 	protected void addBlockStoreTooltip(Supplier<Block> key, String value)
 	{
@@ -85,7 +85,7 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
 	}
 	protected void addStoreTooltip(IItemProvider key, String value)
 	{
-		add("store."+key.asItem().getTranslationKey()+".tooltip", value);
+		add("store."+key.asItem().getDescriptionId()+".tooltip", value);
 	}
 	protected void addItemStackStoreTooltip(Supplier<ItemStack> key, String value)
 	{
@@ -93,11 +93,11 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
 	}
 	protected void addStoreTooltip(ItemStack key, String value)
 	{
-		add("store."+key.getTranslationKey()+".tooltip", value);
+		add("store."+key.getDescriptionId()+".tooltip", value);
 	}
 	protected void add(ItemGroup key, String value)
 	{
-		add(((TranslationTextComponent)key.getGroupName()).getKey(), value);
+		add(((TranslationTextComponent)key.getDisplayName()).getKey(), value);
 	}
 	protected void addEntityTypeExtra(Supplier<EntityType<?>> key, String type, String value)
 	{
@@ -105,7 +105,7 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
 	}
 	protected void addExtra(EntityType<?> key, String type, String value)
 	{
-		add(key.getTranslationKey()+"."+type, value);
+		add(key.getDescriptionId()+"."+type, value);
 	}
 	protected void addGristType(Supplier<GristType> key, String value)
 	{
@@ -154,7 +154,7 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
 	}
 	protected void addEntitySubtitles(EntityType<?> type, String key, String value)
 	{
-		add("subtitles."+type.getTranslationKey()+"."+key, value);
+		add("subtitles."+type.getDescriptionId()+"."+key, value);
 	}
 	protected void addColor(String key, String value)
 	{

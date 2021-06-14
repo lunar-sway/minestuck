@@ -47,9 +47,9 @@ public final class PredefineData
 		lockedToSession = nbt.getBoolean("locked");
 		title = Title.tryRead(nbt, "title");
 		if(nbt.contains("landTerrain", Constants.NBT.TAG_STRING))
-			terrainLandType = LandTypes.TERRAIN_REGISTRY.getValue(ResourceLocation.tryCreate(nbt.getString("landTerrain")));
+			terrainLandType = LandTypes.TERRAIN_REGISTRY.getValue(ResourceLocation.tryParse(nbt.getString("landTerrain")));
 		if(nbt.contains("landTitle", Constants.NBT.TAG_STRING))
-			titleLandType = LandTypes.TITLE_REGISTRY.getValue(ResourceLocation.tryCreate(nbt.getString("landTitle")));
+			titleLandType = LandTypes.TITLE_REGISTRY.getValue(ResourceLocation.tryParse(nbt.getString("landTitle")));
 		
 		return this;
 	}
@@ -91,7 +91,7 @@ public final class PredefineData
 		
 		if(terrainLandType != null && !landType.isAspectCompatible(terrainLandType))
 		{
-			source.sendFeedback(new TranslationTextComponent(RESETTING_TERRAIN_TYPE, terrainLandType.getRegistryName()).mergeStyle(TextFormatting.YELLOW), true);
+			source.sendSuccess(new TranslationTextComponent(RESETTING_TERRAIN_TYPE, terrainLandType.getRegistryName()).withStyle(TextFormatting.YELLOW), true);
 			terrainLandType = null;
 		}
 		this.titleLandType = landType;
@@ -112,8 +112,8 @@ public final class PredefineData
 			}
 			
 			if(previous == null)
-				source.sendFeedback(new TranslationTextComponent(GENERATED_TITLE, title.asTextComponent()), true);
-			else source.sendFeedback(new TranslationTextComponent(CHANGED_TITLE, previous.asTextComponent(), title.asTextComponent()).mergeStyle(TextFormatting.YELLOW), true);
+				source.sendSuccess(new TranslationTextComponent(GENERATED_TITLE, title.asTextComponent()), true);
+			else source.sendSuccess(new TranslationTextComponent(CHANGED_TITLE, previous.asTextComponent(), title.asTextComponent()).withStyle(TextFormatting.YELLOW), true);
 		}
 	}
 	
@@ -142,8 +142,8 @@ public final class PredefineData
 			}
 			
 			if(previous == null)
-				source.sendFeedback(new TranslationTextComponent(GENERATED_TITLE_LAND, titleLandType.getRegistryName()), true);
-			else source.sendFeedback(new TranslationTextComponent(CHANGED_TITLE_LAND, previous.getRegistryName(), titleLandType.getRegistryName()).mergeStyle(TextFormatting.YELLOW), true);
+				source.sendSuccess(new TranslationTextComponent(GENERATED_TITLE_LAND, titleLandType.getRegistryName()), true);
+			else source.sendSuccess(new TranslationTextComponent(CHANGED_TITLE_LAND, previous.getRegistryName(), titleLandType.getRegistryName()).withStyle(TextFormatting.YELLOW), true);
 		}
 	}
 	

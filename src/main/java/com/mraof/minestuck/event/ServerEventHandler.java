@@ -31,7 +31,6 @@ import net.minecraft.item.Items;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
@@ -67,7 +66,7 @@ public class ServerEventHandler
 		//if(!event.getServer().isDedicatedServer() && Minestuck.class.getAnnotation(Mod.class).version().startsWith("@")) TODO Find an alternative to detect dev environment
 		//event.getServer().setOnlineMode(false);	//Makes it possible to use LAN in a development environment
 		
-		lastDay = event.getServer().func_241755_D_().getGameTime() / 24000L;
+		lastDay = event.getServer().overworld().getGameTime() / 24000L;
 	}
 	
 	@SubscribeEvent
@@ -85,7 +84,7 @@ public class ServerEventHandler
 		if(event.phase == TickEvent.Phase.END)
 		{
 			
-			if(!MinestuckConfig.SERVER.hardMode && event.world.getDimensionKey() == World.OVERWORLD)
+			if(!MinestuckConfig.SERVER.hardMode && event.world.dimension() == World.OVERWORLD)
 			{
 				long time = event.world.getGameTime() / 24000L;
 				if(time != lastDay)
@@ -104,9 +103,9 @@ public class ServerEventHandler
 	@SubscribeEvent(priority=EventPriority.LOWEST, receiveCanceled=false)
 	public static void onEntityDeath(LivingDeathEvent event)
 	{
-		if(event.getEntity() instanceof IMob && event.getSource().getTrueSource() instanceof ServerPlayerEntity)
+		if(event.getEntity() instanceof IMob && event.getSource().getEntity() instanceof ServerPlayerEntity)
 		{
-			ServerPlayerEntity player = (ServerPlayerEntity) event.getSource().getTrueSource();
+			ServerPlayerEntity player = (ServerPlayerEntity) event.getSource().getEntity();
 			int exp = 0;
 			if(event.getEntity() instanceof ZombieEntity || event.getEntity() instanceof SkeletonEntity)
 				exp = 6;
@@ -115,7 +114,7 @@ public class ServerEventHandler
 			else if(event.getEntity() instanceof EndermanEntity || event.getEntity() instanceof BlazeEntity || event.getEntity() instanceof WitchEntity || event.getEntity() instanceof GuardianEntity)
 				exp = 12;
 			else if(event.getEntity() instanceof SlimeEntity)
-				exp = ((SlimeEntity) event.getEntity()).getSlimeSize() - 1;
+				exp = ((SlimeEntity) event.getEntity()).getSize() - 1;
 			
 			if(exp > 0)
 				Echeladder.increaseProgress(player, exp);
@@ -133,7 +132,7 @@ public class ServerEventHandler
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onCrit(CriticalHitEvent event)
 	{
-		if(!event.getEntity().world.isRemote)
+		if(!event.getEntity().level.isClientSide)
 			cachedCrit = event.getResult() == Event.Result.ALLOW || event.getResult() == Event.Result.DEFAULT && event.isVanillaCritical();
 	}
 	
@@ -145,18 +144,18 @@ public class ServerEventHandler
 	@SubscribeEvent(priority=EventPriority.NORMAL)
 	public static void onEntityAttack(LivingHurtEvent event)
 	{
-		if(event.getSource().getTrueSource() != null)
+		if(event.getSource().getEntity() != null)
 		{
-			if (event.getSource().getTrueSource() instanceof ServerPlayerEntity)
+			if (event.getSource().getEntity() instanceof ServerPlayerEntity)
 			{
-				ServerPlayerEntity player = (ServerPlayerEntity) event.getSource().getTrueSource();
+				ServerPlayerEntity player = (ServerPlayerEntity) event.getSource().getEntity();
 				if (event.getEntityLiving() instanceof UnderlingEntity)
 				{    //Increase damage to underling
 					double modifier = PlayerSavedData.getData(player).getEcheladder().getUnderlingDamageModifier();
 					event.setAmount((float) (event.getAmount() * modifier));
 				}
 			}
-			else if (event.getEntityLiving() instanceof ServerPlayerEntity && event.getSource().getTrueSource() instanceof UnderlingEntity)
+			else if (event.getEntityLiving() instanceof ServerPlayerEntity && event.getSource().getEntity() instanceof UnderlingEntity)
 			{    //Decrease damage to player
 				ServerPlayerEntity player = (ServerPlayerEntity) event.getEntityLiving();
 					double modifier = PlayerSavedData.getData(player).getEcheladder().getUnderlingProtectionModifier();
@@ -182,35 +181,35 @@ public class ServerEventHandler
 			PlayerEntity injuredPlayer = ((PlayerEntity) event.getEntity());
 			Title title = PlayerSavedData.getData((ServerPlayerEntity) injuredPlayer).getTitle();
 			boolean isDoom = title != null && title.getHeroAspect() == EnumAspect.DOOM;
-			ItemStack handItem = injuredPlayer.getHeldItemMainhand();
+			ItemStack handItem = injuredPlayer.getMainHandItem();
 			if(handItem.getItem() == MSItems.LUCERNE_HAMMER_OF_UNDYING){
-				if((isDoom && injuredPlayer.getHealth() <= 3.0F && injuredPlayer.getRNG().nextFloat() <= .08) || (!isDoom && injuredPlayer.getHealth() <= 2.0F && injuredPlayer.getRNG().nextFloat() <= .02))
+				if((isDoom && injuredPlayer.getHealth() <= 3.0F && injuredPlayer.getRandom().nextFloat() <= .08) || (!isDoom && injuredPlayer.getHealth() <= 2.0F && injuredPlayer.getRandom().nextFloat() <= .02))
 				{
-					injuredPlayer.world.playSound(null, injuredPlayer.getPosX(), injuredPlayer.getPosY(), injuredPlayer.getPosZ(), SoundEvents.ITEM_TOTEM_USE, SoundCategory.PLAYERS, 1.0F, 1.4F);
+					injuredPlayer.level.playSound(null, injuredPlayer.getX(), injuredPlayer.getY(), injuredPlayer.getZ(), SoundEvents.TOTEM_USE, SoundCategory.PLAYERS, 1.0F, 1.4F);
 					injuredPlayer.setHealth(injuredPlayer.getHealth() + 3);
-					injuredPlayer.addPotionEffect(new EffectInstance(Effects.REGENERATION, 450, 0));
+					injuredPlayer.addEffect(new EffectInstance(Effects.REGENERATION, 450, 0));
 					if(isDoom){
-						injuredPlayer.addPotionEffect(new EffectInstance(Effects.ABSORPTION, 100, 0));
-						handItem.damageItem(400, injuredPlayer, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
+						injuredPlayer.addEffect(new EffectInstance(Effects.ABSORPTION, 100, 0));
+						handItem.hurtAndBreak(400, injuredPlayer, playerEntity -> playerEntity.broadcastBreakEvent(Hand.MAIN_HAND));
 					} else {
-						handItem.damageItem(1000, injuredPlayer, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
+						handItem.hurtAndBreak(1000, injuredPlayer, playerEntity -> playerEntity.broadcastBreakEvent(Hand.MAIN_HAND));
 					}
 				}
 			}
 			if(handItem.getItem() == MSItems.CRUEL_FATE_CRUCIBLE){
-				if((isDoom && injuredPlayer.getHealth() <= 12.0F && injuredPlayer.getRNG().nextFloat() <= .25) || (!isDoom && injuredPlayer.getHealth() <= 8.0F && injuredPlayer.getRNG().nextFloat() <= .10))
+				if((isDoom && injuredPlayer.getHealth() <= 12.0F && injuredPlayer.getRandom().nextFloat() <= .25) || (!isDoom && injuredPlayer.getHealth() <= 8.0F && injuredPlayer.getRandom().nextFloat() <= .10))
 				{
-					AxisAlignedBB axisalignedbb = injuredPlayer.getBoundingBox().grow(4.0D, 2.0D, 4.0D);
-					List<LivingEntity> list = injuredPlayer.world.getEntitiesWithinAABB(LivingEntity.class, axisalignedbb);
+					AxisAlignedBB axisalignedbb = injuredPlayer.getBoundingBox().inflate(4.0D, 2.0D, 4.0D);
+					List<LivingEntity> list = injuredPlayer.level.getEntitiesOfClass(LivingEntity.class, axisalignedbb);
 					list.remove(injuredPlayer);
 					if (!list.isEmpty()) {
-						injuredPlayer.world.playSound(null, injuredPlayer.getPosX(), injuredPlayer.getPosY(), injuredPlayer.getPosZ(), SoundEvents.ENTITY_WITHER_HURT, SoundCategory.PLAYERS, 0.5F, 1.6F);
+						injuredPlayer.level.playSound(null, injuredPlayer.getX(), injuredPlayer.getY(), injuredPlayer.getZ(), SoundEvents.WITHER_HURT, SoundCategory.PLAYERS, 0.5F, 1.6F);
 						if(isDoom)
-							handItem.damageItem(1, injuredPlayer, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
+							handItem.hurtAndBreak(1, injuredPlayer, playerEntity -> playerEntity.broadcastBreakEvent(Hand.MAIN_HAND));
 						else
-							handItem.damageItem(4, injuredPlayer, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
+							handItem.hurtAndBreak(4, injuredPlayer, playerEntity -> playerEntity.broadcastBreakEvent(Hand.MAIN_HAND));
 						for(LivingEntity livingentity : list) {
-							livingentity.addPotionEffect(new EffectInstance(Effects.INSTANT_DAMAGE, 1, 1));
+							livingentity.addEffect(new EffectInstance(Effects.HARM, 1, 1));
 						}
 					}
 				}
@@ -238,10 +237,10 @@ public class ServerEventHandler
 	@SubscribeEvent
 	public static void onPlayerUseHoe(UseHoeEvent event)	//TODO replace by an extension to block.getToolModifiedState()
 	{
-		if(event.getContext().getWorld().getBlockState(event.getContext().getPos()).getBlock() == MSBlocks.COARSE_END_STONE)
+		if(event.getContext().getLevel().getBlockState(event.getContext().getClickedPos()).getBlock() == MSBlocks.COARSE_END_STONE)
 		{
-			event.getContext().getWorld().setBlockState(event.getContext().getPos(), Blocks.END_STONE.getDefaultState());
-			event.getContext().getWorld().playSound(null, event.getContext().getPos(), SoundEvents.ITEM_HOE_TILL, SoundCategory.BLOCKS, 1.0F, 	1.0F);
+			event.getContext().getLevel().setBlockAndUpdate(event.getContext().getClickedPos(), Blocks.END_STONE.defaultBlockState());
+			event.getContext().getLevel().playSound(null, event.getContext().getClickedPos(), SoundEvents.HOE_TILL, SoundCategory.BLOCKS, 1.0F, 	1.0F);
 			event.setResult(Event.Result.ALLOW);
 		}
 	}
@@ -256,7 +255,7 @@ public class ServerEventHandler
 	@SubscribeEvent
 	public static void onPlayerTickEvent(TickEvent.PlayerTickEvent event)
 	{
-		if(!event.player.world.isRemote)
+		if(!event.player.level.isClientSide)
 		{
 			PlayerData data = PlayerSavedData.getData((ServerPlayerEntity) event.player);
 			if(data.getTitle() != null)
@@ -269,8 +268,8 @@ public class ServerEventHandler
 	{
 		ItemEntity e = event.getEntityItem();
 		if(e.getItem().getCount() == 1 && (e.getItem().getItem() == Items.BREAD)) {
-			ItemEntity stalebread = new ItemEntity(e.world, e.getPosX(), e.getPosY(), e.getPosZ(), new ItemStack(MSItems.STALE_BAGUETTE));
-			e.world.addEntity(stalebread);
+			ItemEntity stalebread = new ItemEntity(e.level, e.getX(), e.getY(), e.getZ(), new ItemStack(MSItems.STALE_BAGUETTE));
+			e.level.addFreshEntity(stalebread);
 		}
 	}
 }

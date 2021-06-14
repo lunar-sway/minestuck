@@ -22,7 +22,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.RegistryKey;
-import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import org.apache.logging.log4j.LogManager;
@@ -113,7 +112,7 @@ public final class SburbHandler
 	
 	public static SburbConnection getConnectionForDimension(ServerWorld world)
 	{
-		return getConnectionForDimension(world.getServer(), world.getDimensionKey());
+		return getConnectionForDimension(world.getServer(), world.dimension());
 	}
 	public static SburbConnection getConnectionForDimension(MinecraftServer mcServer, RegistryKey<World> dim)
 	{
@@ -205,7 +204,7 @@ public final class SburbHandler
 	{
 		PlayerIdentifier identifier = c.getClientIdentifier();
 		
-		generateAndSetTitle(mcServer.getWorld(World.OVERWORLD), c.getClientIdentifier());
+		generateAndSetTitle(mcServer.getLevel(World.OVERWORLD), c.getClientIdentifier());
 		LandTypePair landTypes = genLandAspects(mcServer, c);		//This is where the Land dimension is actually registered, but it also needs the player's Title to be determined.
 		RegistryKey<World> dimType = LandTypes.createLandType(mcServer, identifier, landTypes);
 		c.setLand(landTypes, dimType);

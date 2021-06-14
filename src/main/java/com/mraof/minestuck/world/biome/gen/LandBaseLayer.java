@@ -2,11 +2,8 @@ package com.mraof.minestuck.world.biome.gen;
 
 import com.mraof.minestuck.world.biome.BiomeType;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.INoiseRandom;
 import net.minecraft.world.gen.layer.traits.IAreaTransformer0;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.ForgeRegistry;
 
 public class LandBaseLayer implements IAreaTransformer0
 {
@@ -20,9 +17,9 @@ public class LandBaseLayer implements IAreaTransformer0
 	}
 	
 	@Override
-	public int apply(INoiseRandom random, int x, int z)
+	public int applyPixel(INoiseRandom random, int x, int z)
 	{
-		if(random.random(Integer.MAX_VALUE) >= oceanChance)
+		if(random.nextRandom(Integer.MAX_VALUE) >= oceanChance)
 			return NORMAL_BIOME;
 		return OCEAN_BIOME;
 	}

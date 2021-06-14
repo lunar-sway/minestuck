@@ -238,7 +238,7 @@ public class BoondollarPricingProvider implements IDataProvider
 	protected void add(IItemProvider item, int min, int max)
 	{
 		//Just set the name manually if this throws an exception
-		add(Ingredient.fromItems(item), new RandomValueRange(min, max), Objects.requireNonNull(item.asItem().getRegistryName()).getPath());
+		add(Ingredient.of(item), new RandomValueRange(min, max), Objects.requireNonNull(item.asItem().getRegistryName()).getPath());
 	}
 	
 	protected void add(Ingredient ingredient, IRandomRange range, String name)
@@ -252,7 +252,7 @@ public class BoondollarPricingProvider implements IDataProvider
 	}
 	
 	@Override
-	public void act(DirectoryCache cache)
+	public void run(DirectoryCache cache)
 	{
 		registerPricings();
 		
