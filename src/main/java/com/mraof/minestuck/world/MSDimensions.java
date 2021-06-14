@@ -80,12 +80,12 @@ public class MSDimensions
 	
 	public static boolean isLandDimension(RegistryKey<World> dimension)
 	{
-		return dimension != null;//TODO && dimension.getModType() == MSDimensionTypes.LANDS;
+		return false;//TODO dimension != null && dimension.getModType() == MSDimensionTypes.LANDS;
 	}
 	
 	public static boolean isSkaia(RegistryKey<World> dimension)
 	{
-		return dimension != null;//TODO && dimension.getModType() == MSDimensionTypes.SKAIA;
+		return false;//TODO dimension != null && dimension.getModType() == MSDimensionTypes.SKAIA;
 	}
 	
 	public static void updateLandMaps(SburbConnection connection)

@@ -4,15 +4,17 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.NBTDynamicOps;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -24,18 +26,18 @@ import java.util.Random;
  */
 public class LandInfo
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	public static final String LAND_ENTRY = "minestuck.land_entry";
 	
 	public final PlayerIdentifier identifier;
 	private final LandTypePair.LazyInstance landAspects;
-	private final ResourceLocation dimensionName;
+	private final RegistryKey<World> dimension;
 	private final boolean useReverseOrder;
 	private final int terrainNameIndex, titleNameIndex;
 	@Nullable
 	private BlockPos gatePos = null;
 	private int spawnY = -1;
-	@Nullable
-	private RegistryKey<World> cachedDimension;
 	@Nullable
 	private LandTypePair cachedAspects;
 	
@@ -44,18 +46,17 @@ public class LandInfo
 		this.identifier = Objects.requireNonNull(identifier);
 		cachedAspects = Objects.requireNonNull(landTypes);
 		this.landAspects = landTypes.createLazy();
-		cachedDimension = Objects.requireNonNull(dimensionType);
-		dimensionName = dimensionType.getLocation();
+		dimension = dimensionType;
 		useReverseOrder = random.nextBoolean();
 		terrainNameIndex = random.nextInt(landTypes.terrain.getNames().length);
 		titleNameIndex = random.nextInt(landTypes.title.getNames().length);
 	}
 	
-	private LandInfo(SkaianetHandler handler, PlayerIdentifier identifier, LandTypePair.LazyInstance landAspects, ResourceLocation dimensionType, boolean reverseOrder, int terrainNameIndex, int titleNameIndex)
+	private LandInfo(SkaianetHandler handler, PlayerIdentifier identifier, LandTypePair.LazyInstance landAspects, RegistryKey<World> dimensionType, boolean reverseOrder, int terrainNameIndex, int titleNameIndex)
 	{
 		this.identifier = identifier;
 		this.landAspects = landAspects;
-		dimensionName = dimensionType;
+		dimension = dimensionType;
 		useReverseOrder = reverseOrder;
 		this.terrainNameIndex = terrainNameIndex;
 		this.titleNameIndex = titleNameIndex;
@@ -117,18 +118,12 @@ public class LandInfo
 	 */
 	public RegistryKey<World> getDimensionType()
 	{
-		if(cachedDimension == null)
-		{
-			cachedDimension = RegistryKey.getOrCreateKey(Registry.WORLD_KEY, dimensionName);	//TODO will the cache be needed anymore?
-			if(cachedDimension == null)
-				throw new IllegalStateException("Unable to load dimenison "+dimensionName+". Either the name is wrong, or this is called before dimensions have been loaded.");
-		}
-		return cachedDimension;
+		return dimension;
 	}
 	
 	public ResourceLocation getDimensionName()
 	{
-		return dimensionName;
+		return dimension.getLocation();
 	}
 	
 	public BlockPos getSpawn()
@@ -140,7 +135,7 @@ public class LandInfo
 	{
 		if(spawnY == -1)
 			spawnY = y;
-		else throw new IllegalStateException("Has already set spawn for dimension " + dimensionName);
+		else throw new IllegalStateException("Has already set spawn for dimension " + dimension);
 	}
 	
 	/**
@@ -149,7 +144,8 @@ public class LandInfo
 	public CompoundNBT write(CompoundNBT nbt)
 	{
 		landAspects.write(nbt);
-		nbt.putString("dim_type", dimensionName.toString());
+		ResourceLocation.CODEC.encodeStart(NBTDynamicOps.INSTANCE, dimension.getLocation()).resultOrPartial(LOGGER::error)
+				.ifPresent(tag -> nbt.put("dim_type", tag));
 		nbt.putBoolean("reverse_order", useReverseOrder);
 		nbt.putInt("terrain_name_index", terrainNameIndex);
 		nbt.putInt("title_name_index", titleNameIndex);
@@ -167,12 +163,12 @@ public class LandInfo
 	public static LandInfo read(CompoundNBT nbt, SkaianetHandler handler, PlayerIdentifier identifier)
 	{
 		LandTypePair.LazyInstance aspects = LandTypePair.LazyInstance.read(nbt);
-		ResourceLocation dimName = new ResourceLocation(nbt.getString("dim_type"));
+		RegistryKey<World> dimension = World.CODEC.parse(NBTDynamicOps.INSTANCE, nbt.get("dim_type")).resultOrPartial(LOGGER::error).get();	//TODO properly use optional, maybe by writing LandInfo with codec
 		boolean reverse = nbt.getBoolean("reverse_order");
 		int terrainIndex = nbt.getInt("terrain_name_index");
 		int titleIndex = nbt.getInt("title_name_index");
 		
-		LandInfo info = new LandInfo(handler, identifier, aspects, dimName, reverse, terrainIndex, titleIndex);
+		LandInfo info = new LandInfo(handler, identifier, aspects, dimension, reverse, terrainIndex, titleIndex);
 		
 		if(nbt.contains("gate_x", Constants.NBT.TAG_ANY_NUMERIC))
 		{
