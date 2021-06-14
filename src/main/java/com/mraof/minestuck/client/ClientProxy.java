@@ -8,6 +8,7 @@ import com.mraof.minestuck.client.renderer.entity.*;
 import com.mraof.minestuck.client.renderer.entity.frog.FrogRenderer;
 import com.mraof.minestuck.client.renderer.tileentity.GateRenderer;
 import com.mraof.minestuck.client.renderer.tileentity.HolopadRenderer;
+import com.mraof.minestuck.client.renderer.tileentity.LotusFlowerRenderer;
 import com.mraof.minestuck.client.renderer.tileentity.SkaiaPortalRenderer;
 import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.computer.ComputerProgram;
@@ -32,6 +33,7 @@ public class ClientProxy
 		ClientRegistry.bindTileEntityRenderer(MSTileEntityTypes.SKAIA_PORTAL.get(), SkaiaPortalRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(MSTileEntityTypes.GATE.get(), GateRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(MSTileEntityTypes.HOLOPAD.get(), HolopadRenderer::new);
+		ClientRegistry.bindTileEntityRenderer(MSTileEntityTypes.LOTUS_FLOWER.get(), LotusFlowerRenderer::new);
 //		MinecraftForgeClient.registerItemRenderer(Minestuck.captchaCard, new CardRenderer());
 	}
 	

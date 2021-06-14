@@ -137,7 +137,8 @@ public class MSBlocks
 	public static final Block RAINBOW_PLANKS_STAIRS = getNull(), END_PLANKS_STAIRS = getNull(), DEAD_PLANKS_STAIRS = getNull(), TREATED_PLANKS_STAIRS = getNull();
 	public static final Block CHALK_SLAB = getNull(), CHALK_BRICK_SLAB = getNull(), PINK_STONE_BRICK_SLAB = getNull(), BROWN_STONE_BRICK_SLAB = getNull();
 	public static final Block RAINBOW_PLANKS_SLAB = getNull(), END_PLANKS_SLAB = getNull(), DEAD_PLANKS_SLAB = getNull(), TREATED_PLANKS_SLAB = getNull();
-	
+	public static final Block LOTUS_FLOWER = getNull();
+
 	//Core Functional Land Blocks
 	public static final Block GATE = getNull();
 	public static final Block RETURN_NODE = getNull();
@@ -489,7 +490,9 @@ public class MSBlocks
 		registry.register(new GlowystoneWireBlock(Block.Properties.create(Material.MISCELLANEOUS).hardnessAndResistance(0.0F).lightValue(16).doesNotBlockMovement()).setRegistryName("glowystone_dust"));
 		registry.register(new DecorBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(4.0F), MSBlockShapes.PARCEL_PYXIS).setRegistryName("parcel_pyxis"));
 		registry.register(new DecorBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(1.0F), MSBlockShapes.PYXIS_LID).setRegistryName("pyxis_lid"));
-		
+
+		registry.register(new LotusFlowerBlock(Block.Properties.create(Material.LEAVES, MaterialColor.GREEN).doesNotBlockMovement().hardnessAndResistance(-1.0F, 3600000.0F).noDrops(), MSBlockShapes.LOTUS_FLOWER).setRegistryName("lotus_flower"));
+
 		LOTUS_TIME_CAPSULE_BLOCK.registerBlocks(registry);
 		
 		registry.register(new FlowingModFluidBlock(MSFluids.OIL, new Vec3d(0.0, 0.0, 0.0), 0.75f, Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()).setRegistryName("oil"));
