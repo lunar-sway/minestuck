@@ -18,10 +18,10 @@ import com.mraof.minestuck.player.KindAbstratusList;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.MSSurfaceBuilders;
+import com.mraof.minestuck.world.gen.feature.MSCFeatures;
 import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.WorldPersistenceHooks;
@@ -66,7 +66,7 @@ public class Minestuck
 	 */
 	private void setup(final FMLCommonSetupEvent event)
 	{
-		DeferredWorkQueue.runLater(this::mainThreadSetup);
+		event.enqueueWork(this::mainThreadSetup);
 		
 		//register channel handler
 		MSPacketHandler.setupChannel();
@@ -82,6 +82,7 @@ public class Minestuck
 		MSEntityTypes.registerAttributes();
 		MSEntityTypes.registerPlacements();
 		MSFillerBlockTypes.init();	//Not sure if this is thread safe, but better safe than sorry
+		MSCFeatures.init();
 		
 		//register ore generation
 		setupOverworldOreGeneration();

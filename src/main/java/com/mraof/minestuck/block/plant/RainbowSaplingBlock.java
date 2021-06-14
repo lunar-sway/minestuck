@@ -1,6 +1,7 @@
 package com.mraof.minestuck.block.plant;
 
 import com.mraof.minestuck.block.MSProperties;
+import com.mraof.minestuck.world.gen.feature.tree.RainbowTree;
 import net.minecraft.block.*;
 import net.minecraft.block.trees.Tree;
 import net.minecraft.entity.player.PlayerEntity;
@@ -29,7 +30,7 @@ public class RainbowSaplingBlock extends BushBlock implements IGrowable
 	public static final BooleanProperty BLUE = MSProperties.BLUE;
 	protected static final VoxelShape SHAPE = Block.makeCuboidShape(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
 	
-	private final Tree tree = null;//new RainbowTree(); TODO
+	private final Tree tree = new RainbowTree();
 	
 	public RainbowSaplingBlock(Properties properties)
 	{
