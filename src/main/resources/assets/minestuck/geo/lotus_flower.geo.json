@@ -7,8 +7,8 @@
 				"texture_width": 128,
 				"texture_height": 128,
 				"visible_bounds_width": 3,
-				"visible_bounds_height": 2.5,
-				"visible_bounds_offset": [0, 0.75, 0]
+				"visible_bounds_height": 1.5,
+				"visible_bounds_offset": [0, 0.25, 0]
 			},
 			"bones": [
 				{
@@ -27,13 +27,13 @@
 					]
 				},
 				{
-					"name": "4petals",
+					"name": "fourpetals",
 					"parent": "root",
 					"pivot": [0, 0.5, 0]
 				},
 				{
 					"name": "petal1",
-					"parent": "4petals",
+					"parent": "fourpetals",
 					"pivot": [2.25, 0.5, 0],
 					"cubes": [
 						{"origin": [2.25, 0.5, -2], "size": [0, 5, 4], "uv": [4, 7]}
@@ -49,7 +49,7 @@
 				},
 				{
 					"name": "petal2",
-					"parent": "4petals",
+					"parent": "fourpetals",
 					"pivot": [0, 0.5, 2.45],
 					"cubes": [
 						{"origin": [-2, 0.5, 2.45], "size": [4, 5, 0], "uv": [4, 11]}
@@ -65,7 +65,7 @@
 				},
 				{
 					"name": "petal3",
-					"parent": "4petals",
+					"parent": "fourpetals",
 					"pivot": [-2.65, 0.5, 0],
 					"cubes": [
 						{"origin": [-2.65, 0.5, -2], "size": [0, 5, 4], "uv": [8, 7]}
@@ -81,7 +81,7 @@
 				},
 				{
 					"name": "petal4",
-					"parent": "4petals",
+					"parent": "fourpetals",
 					"pivot": [0, 0.5, -2.75],
 					"cubes": [
 						{"origin": [-2, 0.5, -2.75], "size": [4, 5, 0], "uv": [8, 11]}
@@ -96,14 +96,14 @@
 					]
 				},
 				{
-					"name": "4petals2",
+					"name": "fourpetals2",
 					"parent": "root",
 					"pivot": [0, 0.5, 0],
 					"rotation": [0, -45, 0]
 				},
 				{
 					"name": "petal5",
-					"parent": "4petals2",
+					"parent": "fourpetals2",
 					"pivot": [2.01294, 0.47, 0],
 					"cubes": [
 						{"origin": [2.14142, 0.5, -2], "size": [0, 4.7, 4], "uv": [4, 7]}
@@ -119,7 +119,7 @@
 				},
 				{
 					"name": "petal6",
-					"parent": "4petals2",
+					"parent": "fourpetals2",
 					"pivot": [0, 0.47, 2.27881],
 					"cubes": [
 						{"origin": [-2, 0.5, 2.42426], "size": [4, 4.7, 0], "uv": [4, 11]}
@@ -135,7 +135,7 @@
 				},
 				{
 					"name": "petal7",
-					"parent": "4petals2",
+					"parent": "fourpetals2",
 					"pivot": [-2.54468, 0.47, 0],
 					"cubes": [
 						{"origin": [-2.70711, 0.5, -2], "size": [0, 4.7, 4], "uv": [8, 7]}
@@ -151,7 +151,7 @@
 				},
 				{
 					"name": "petal8",
-					"parent": "4petals2",
+					"parent": "fourpetals2",
 					"pivot": [-0.13294, 0.47, -2.39477],
 					"cubes": [
 						{"origin": [-2.14142, 0.5, -2.56569], "size": [4, 4.7, 0], "uv": [8, 11]}

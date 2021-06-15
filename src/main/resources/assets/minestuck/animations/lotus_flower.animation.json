@@ -1,7 +1,7 @@
 {
 	"format_version": "1.8.0",
 	"animations": {
-		"lotusidle": {
+		"lotus.idle": {
 			"loop": true,
 			"animation_length": 4,
 			"bones": {
@@ -78,7 +78,7 @@
 						"vector": [-42.5, 0, 0]
 					}
 				},
-				"4petals2": {
+				"fourpetals2": {
 					"scale": {
 						"vector": [1, 0.9, 1]
 					}
@@ -125,7 +125,7 @@
 				}
 			}
 		},
-		"lotusopen": {
+		"lotus.open": {
 			"animation_length": 6,
 			"bones": {
 				"root": {
@@ -248,7 +248,7 @@
 						}
 					}
 				},
-				"4petals2": {
+				"fourpetals2": {
 					"scale": {
 						"vector": [1, 0.9, 1]
 					}
@@ -335,7 +335,7 @@
 				}
 			}
 		},
-		"lotusopenidle": {
+		"lotus.open.idle": {
 			"loop": true,
 			"animation_length": 4,
 			"bones": {
@@ -435,7 +435,7 @@
 				}
 			}
 		},
-		"lotusvanish": {
+		"lotus.vanish": {
 			"animation_length": 0.68,
 			"bones": {
 				"root": {

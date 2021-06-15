@@ -1,3 +1,4 @@
+package com.mraof.minestuck.client.model;
 // Made with Blockbench 3.8.4
 // Exported for Minecraft version 1.15 - 1.16
 // Paste this class into your mod and generate all required imports
@@ -5,12 +6,50 @@
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.item.LotusFlowerEntity;
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.ResourceLocation;
+import software.bernie.geckolib3.GeckoLib;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.processor.IBone;
+import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib3.model.provider.data.EntityModelData;
 
-public class LotusFlowerModel extends EntityModel<LotusFlowerEntity>
+public class LotusFlowerModel extends AnimatedGeoModel
+{
+	@Override
+	public ResourceLocation getAnimationFileLocation(Object entity) {
+		return new ResourceLocation("minestuck", "animations/lotus_flower.animation.json");
+	}
+	
+	@Override
+	public ResourceLocation getModelLocation(Object entity) {
+		return new ResourceLocation("minestuck", "geo/lotus_flower.geo.json");
+	}
+	
+	@Override
+	public ResourceLocation getTextureLocation(Object entity) {
+		return new ResourceLocation("minestuck", "textures/entity/lotus_flower.png");
+	}
+	
+	@Override
+	public void setLivingAnimations(IAnimatable entity, Integer uniqueID, AnimationEvent customPredicate) {
+		super.setLivingAnimations(entity, uniqueID, customPredicate);
+		/*IBone head = this.getAnimationProcessor().getBone("head");
+		
+		LivingEntity entityIn = (LivingEntity) entity;
+		EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
+		head.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
+		head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));*/
+	}
+}
+
+/*public class LotusFlowerModel extends EntityModel<LotusFlowerEntity>
 {
 	private final ModelRenderer base;
 	private final ModelRenderer root;
@@ -144,12 +183,13 @@ public class LotusFlowerModel extends EntityModel<LotusFlowerEntity>
 	
 	}
 
+*/
 	/*@Override
 	public void setRotationAngles(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
 		//previously the render function, render code was moved to a method below
 	}*/
 
-	@Override
+	/* @Override
 	public void render(MatrixStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
 		base.render(matrixStack, buffer, packedLight, packedOverlay);
 	}
@@ -159,4 +199,4 @@ public class LotusFlowerModel extends EntityModel<LotusFlowerEntity>
 		modelRenderer.rotateAngleY = y;
 		modelRenderer.rotateAngleZ = z;
 	}
-}
+}*/

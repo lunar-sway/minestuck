@@ -8,6 +8,7 @@ import com.mraof.minestuck.entity.consort.ConsortDialogue;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.goal.LookAtGoal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -33,12 +34,42 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public class LotusFlowerEntity extends Entity implements IAnimatable
+public class LotusFlowerEntity extends CreatureEntity implements IAnimatable {
+	private AnimationFactory factory = new AnimationFactory(this);
+	
+	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
+		event.getController().setAnimation(new AnimationBuilder().addAnimation("lotus.idle", true));
+		return PlayState.CONTINUE;
+	}
+	
+	public LotusFlowerEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+		super(type, worldIn);
+		this.ignoreFrustumCheck = true;
+	}
+	
+	@Override
+	public void registerControllers(AnimationData data) {
+		data.addAnimationController(new AnimationController(this, "controller", 0, this::predicate));
+	}
+	
+	@Override
+	public AnimationFactory getFactory() {
+		return this.factory;
+	}
+	
+	@Override
+	protected void registerGoals() {
+		//this.goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 6.0F));
+		super.registerGoals();
+	}
+}
+
+/*public class LotusFlowerEntity extends Entity implements IAnimatable
 {
 	private AnimationFactory factory = new AnimationFactory(this);
 	
 	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-		event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.bat.fly", true));
+		event.getController().setAnimation(new AnimationBuilder().addAnimation("lotus.idle", true));
 		return PlayState.CONTINUE;
 	}
 	
@@ -71,7 +102,7 @@ public class LotusFlowerEntity extends Entity implements IAnimatable
 		return super.applyPlayerInteraction(player, vec, hand);
 	}*/
 	
-	@Override
+	/*@Override
 	protected void registerData()
 	{
 	}
@@ -111,4 +142,4 @@ public class LotusFlowerEntity extends Entity implements IAnimatable
 	{
 		return this.factory;
 	}
-}
+}*/

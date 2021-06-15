@@ -1058,6 +1058,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSEntityTypes.SBAHJ_POSTER, "SBAHJ Poster");
 		add(MSEntityTypes.SHOP_POSTER, "Shop Sign");
 		add(MSEntityTypes.HOLOGRAM, "Hologram");
+		add(MSEntityTypes.LOTUS_FLOWER, "Lotus Flower");
 		
 		addGristType(GristTypes.BUILD, "Build");
 		addGristType(GristTypes.AMBER, "Amber");
