@@ -1,0 +1,8 @@
+{
+    "parent": "block/inner_stairs",
+    "textures": {
+        "bottom": "minestuck:block/light_gray_castle_bricks",
+        "top": "minestuck:block/light_gray_castle_bricks",
+        "side": "minestuck:block/light_gray_castle_bricks"
+    }
+}

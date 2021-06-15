@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:shatter_bacon"
+  },
+  "grist_cost": {
+    "minestuck:build": 50,
+    "minestuck:iodine": 25
+  }
+}

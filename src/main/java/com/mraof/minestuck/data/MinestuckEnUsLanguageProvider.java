@@ -149,6 +149,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.BROWN_STONE_BRICKS, "Brown Stone Bricks");
 		add(MSBlocks.BROWN_STONE_COLUMN, "Brown Stone Column");
 		add(MSBlocks.CRACKED_BROWN_STONE_BRICKS, "Cracked Brown Stone Bricks");
+		add(MSBlocks.GREEN_STONE, "Green Stone");
 		add(MSBlocks.DENSE_CLOUD, "Dense Cloud");
 		add(MSBlocks.BRIGHT_DENSE_CLOUD, "Bright Dense Cloud");
 		add(MSBlocks.SUGAR_CUBE, "Sugar Cube");
@@ -263,6 +264,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.PARCEL_PYXIS, "Parcel Pyxis");
 		addTooltip(MSBlocks.PARCEL_PYXIS, "This doesn't actually seem to do anything");
 		add(MSBlocks.PYXIS_LID, "Parcel Pyxis Lid");
+		add(MSBlocks.BLACK_CASTLE_BRICK_STAIRS, "Black Castle Brick Stairs");
+		add(MSBlocks.DARK_GRAY_CASTLE_BRICK_STAIRS, "Dark Gray Castle Brick Stairs");
+		add(MSBlocks.LIGHT_GRAY_CASTLE_BRICK_STAIRS, "Light Gray Castle Brick Stairs");
+		add(MSBlocks.WHITE_CASTLE_BRICK_STAIRS, "White Castle Brick Stairs");
 		add(MSBlocks.COARSE_STONE_STAIRS, "Coarse Stone Stairs");
 		add(MSBlocks.SHADE_BRICK_STAIRS, "Shade Brick Stairs");
 		add(MSBlocks.FROST_BRICK_STAIRS, "Frost Brick Stairs");
@@ -276,6 +281,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.END_PLANKS_STAIRS, "End Planks Stairs");
 		add(MSBlocks.DEAD_PLANKS_STAIRS, "Dead Planks Stairs");
 		add(MSBlocks.TREATED_PLANKS_STAIRS, "Treated Planks Stairs");
+		add(MSBlocks.BLACK_CASTLE_BRICK_SLAB, "Black Castle Brick Slab");
+		add(MSBlocks.DARK_GRAY_CASTLE_BRICK_SLAB, "Dark Gray Castle Brick Slab");
+		add(MSBlocks.LIGHT_GRAY_CASTLE_BRICK_SLAB, "Light Gray Castle Brick Slab");
+		add(MSBlocks.WHITE_CASTLE_BRICK_SLAB, "White Castle Brick Slab");
 		add(MSBlocks.CHALK_SLAB, "Chalk Slab");
 		add(MSBlocks.CHALK_BRICK_SLAB, "Chalk Brick Slab");
 		add(MSBlocks.PINK_STONE_BRICK_SLAB, "Pink Stone Brick Slab");
@@ -432,6 +441,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.COBALT_SABRE, "Cobalt Cobeam Coblade");
 		add(MSItems.QUANTUM_SABRE, "Quantum Sabre");
 		add(MSItems.SHATTER_BEACON, "ShatterBeacon");
+		add(MSItems.SHATTER_BACON, "ShatterBacon");
+		addTooltip(MSItems.SHATTER_BACON, "This thing is so unspeakably greasy you are having a hard time even holding it.");
+		addExtra(MSItems.SHATTER_BACON, OnHitEffect.SORD_DROP_MESSAGE, "The grease caused the ShatterBacon to slip from your grasp!");
 		add(MSItems.BATLEACKS, "batleacks!!");
 		addTooltip(MSItems.BATLEACKS, "A shitty axe. Not much more to it.");
 		addExtra(MSItems.BATLEACKS, OnHitEffect.SORD_DROP_MESSAGE, "The shittiness of the batleacks made it phase through your hand");
@@ -523,6 +535,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.NIGHT_CLUB, "Wanna go...clubbing?");
 		add(MSItems.NIGHTSTICK, "Nightstick");
 		addTooltip(MSItems.NIGHTSTICK, "NO CLUBBING MOVE ALONG.");
+		add(MSItems.RED_EYES, "Red Eyes");
 		add(MSItems.PRISMARINE_BASHER, "Prismarine Basher");
 		addTooltip(MSItems.PRISMARINE_BASHER, "Smells like sea salt, unsurprisingly.");
 		add(MSItems.CLUB_ZERO, "Club Zero");
@@ -756,6 +769,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.FOOD_CAN, "Food Can");
 		addTooltip(MSItems.FOOD_CAN, "You could be at the forefront of carapacian fashion if you turned the label into a sash");
 		add(MSItems.CANDY_CORN, "Candy Corn");
+		add(MSItems.TUIX_BAR, "Tuix Bar");
 		add(MSItems.BUILD_GUSHERS, "Build Gushers");
 		add(MSItems.AMBER_GUMMY_WORM, "Amber Gummy Worm");
 		add(MSItems.CAULK_PRETZEL, "Caulk Pretzel");
