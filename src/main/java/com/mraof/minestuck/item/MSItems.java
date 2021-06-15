@@ -450,7 +450,6 @@ public class MSItems
 		registerItemBlock(registry, DARK_GRAY_CHESS_DIRT, MSItemGroup.MAIN);
 		registerItemBlock(registry, LIGHT_GRAY_CHESS_DIRT, MSItemGroup.MAIN);
 		registerItemBlock(registry, SKAIA_PORTAL, new Item.Properties().group(MSItemGroup.MAIN).rarity(Rarity.EPIC));
-		registerItemBlock(registry, LOTUS_FLOWER, new Item.Properties().group(MSItemGroup.LANDS));
 		
 		registerItemBlock(registry, BLACK_CASTLE_BRICKS, MSItemGroup.MAIN);
 		registerItemBlock(registry, DARK_GRAY_CASTLE_BRICKS, MSItemGroup.MAIN);

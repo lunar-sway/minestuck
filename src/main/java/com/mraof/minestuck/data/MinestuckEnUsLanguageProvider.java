@@ -64,7 +64,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.DARK_GRAY_CHESS_DIRT, "Dark Gray Chess Tile");
 		add(MSBlocks.LIGHT_GRAY_CHESS_DIRT, "Light Gray Chess Tile");
 		add(MSBlocks.SKAIA_PORTAL, "Skaia Portal");
-		add(MSBlocks.LOTUS_FLOWER, "Lotus Flower");
 		add(MSBlocks.BLACK_CASTLE_BRICKS, "Black Castle Bricks");
 		add(MSBlocks.DARK_GRAY_CASTLE_BRICKS, "Dark Gray Castle Bricks");
 		add(MSBlocks.LIGHT_GRAY_CASTLE_BRICKS, "Light Gray Castle Bricks");

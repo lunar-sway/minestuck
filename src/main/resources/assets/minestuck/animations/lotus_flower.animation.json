@@ -122,6 +122,11 @@
 					"rotation": {
 						"vector": [-35, 0, 0]
 					}
+				},
+				"base": {
+					"scale": {
+						"vector": [2, 2, 2]
+					}
 				}
 			}
 		},
@@ -332,6 +337,11 @@
 							"vector": [25, 0, 0]
 						}
 					}
+				},
+				"base": {
+					"scale": {
+						"vector": [2, 2, 2]
+					}
 				}
 			}
 		},
@@ -432,11 +442,16 @@
 					"rotation": {
 						"vector": [25, 0, 0]
 					}
+				},
+				"base": {
+					"scale": {
+						"vector": [2, 2, 2]
+					}
 				}
 			}
 		},
 		"lotus.vanish": {
-			"animation_length": 0.68,
+			"animation_length": 0.65,
 			"bones": {
 				"root": {
 					"rotation": {
@@ -628,6 +643,36 @@
 						"0.64": {
 							"vector": [25, 0, 0]
 						}
+					}
+				},
+				"base": {
+					"scale": {
+						"vector": [2, 2, 2]
+					}
+				}
+			}
+		},
+		"lotus.empty": {
+			"loop": true,
+			"bones": {
+				"base": {
+					"scale": {
+						"vector": [2, 2, 2]
+					}
+				},
+				"root": {
+					"scale": {
+						"vector": [1, 0, 1]
+					}
+				},
+				"fourpetals": {
+					"scale": {
+						"vector": [1, 0, 1]
+					}
+				},
+				"fourpetals2": {
+					"scale": {
+						"vector": [1, 0, 1]
 					}
 				}
 			}

@@ -1,20 +1,20 @@
 package com.mraof.minestuck.world.gen.feature.structure;
 
-import com.mraof.minestuck.block.LotusTimeCapsuleBlock;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.MSDirectionalBlock;
+import com.mraof.minestuck.entity.MSEntityTypes;
+import com.mraof.minestuck.entity.LotusFlowerEntity;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.storage.loot.MSLootTables;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ChestBlock;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
@@ -53,6 +53,7 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 	@Override
 	public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox boundingBoxIn, ChunkPos chunkPosIn)
 	{
+		//TODO Everything seems to generate several times over, first noticed with lotus flower
 		if(!isInsideBounds(worldIn, boundingBoxIn, 0))
 			return false;
 		
@@ -82,7 +83,7 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 	
 	private void generateLoot(IWorld worldIn, MutableBoundingBox boundingBoxIn, Random randomIn, Direction direction, ResourceLocation lootTable, ChunkPos chunkPos)
 	{
-		
+		Debug.debugf("generateLoot");
 		Direction modifiedDirection = direction.rotateYCCW();
 		setBlockState(worldIn, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, direction), 20 + 20, 17, 11 + 38 + 20, boundingBox);
 		
@@ -99,6 +100,14 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 		
 		BlockPos lotusBlockPos = new BlockPos(this.getXWithOffset(20 + 20, 22 + 38 + 20), this.getYWithOffset(49), this.getZWithOffset(20 + 20, 22 + 38 + 20)); //TODO temples whose main entrance opens south(and presumedly west) generate one block closer to entrance
 		MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.placeWithRotation(worldIn, lotusBlockPos, getRotation());
+		
+		LotusFlowerEntity lotusFlowerEntity = MSEntityTypes.LOTUS_FLOWER.create(worldIn.getWorld());
+		if(lotusFlowerEntity == null)
+			throw new IllegalStateException("Unable to create a new lotus flower. Entity factory returned null!");
+		lotusFlowerEntity.enablePersistence();
+		lotusFlowerEntity.setNoAI(true);
+		lotusFlowerEntity.setLocationAndAngles(this.getXWithOffset(20 + 20, 22 + 38 + 20) + 0.5D, this.getYWithOffset(50), this.getZWithOffset(20 + 20, 22 + 38 + 20) + 0.5D, 0F, 0);
+		worldIn.addEntity(lotusFlowerEntity);
 		
 		/*
 		BlockPos blockPos = new BlockPos(18,17,9);
