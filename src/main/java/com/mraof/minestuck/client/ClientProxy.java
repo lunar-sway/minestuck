@@ -8,7 +8,6 @@ import com.mraof.minestuck.client.renderer.entity.*;
 import com.mraof.minestuck.client.renderer.entity.frog.FrogRenderer;
 import com.mraof.minestuck.client.renderer.tileentity.GateRenderer;
 import com.mraof.minestuck.client.renderer.tileentity.HolopadRenderer;
-import com.mraof.minestuck.client.renderer.tileentity.LotusFlowerRenderer;
 import com.mraof.minestuck.client.renderer.tileentity.SkaiaPortalRenderer;
 import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.computer.ComputerProgram;
@@ -33,7 +32,7 @@ public class ClientProxy
 		ClientRegistry.bindTileEntityRenderer(MSTileEntityTypes.SKAIA_PORTAL.get(), SkaiaPortalRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(MSTileEntityTypes.GATE.get(), GateRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(MSTileEntityTypes.HOLOPAD.get(), HolopadRenderer::new);
-		ClientRegistry.bindTileEntityRenderer(MSTileEntityTypes.LOTUS_FLOWER.get(), LotusFlowerRenderer::new);
+		//ClientRegistry.bindTileEntityRenderer(MSTileEntityTypes.LOTUS_FLOWER.get(), LotusFlowerRenderer::new);
 //		MinecraftForgeClient.registerItemRenderer(Minestuck.captchaCard, new CardRenderer());
 	}
 	
@@ -45,6 +44,7 @@ public class ClientProxy
 
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.FROG, FrogRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.HOLOGRAM, HologramRenderer::new);
+		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.LOTUS_FLOWER, LotusFlowerRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.NAKAGATOR, manager -> new SimpleTexturedEntityRenderer<>(manager, new NakagatorModel<>(), 0.5F));
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.SALAMANDER, manager -> new SimpleTexturedEntityRenderer<>(manager, new SalamanderModel<>(), 0.5F));
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.IGUANA, manager -> new SimpleTexturedEntityRenderer<>(manager, new IguanaModel<>(), 0.5F));
