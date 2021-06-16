@@ -28,6 +28,7 @@ public class MSCFeatures
 			new SimpleBlockStateProvider(MSBlocks.RAINBOW_LOG.defaultBlockState()), new SimpleBlockStateProvider(MSBlocks.RAINBOW_LEAVES.defaultBlockState()),
 			new BlobFoliagePlacer(FeatureSpread.fixed(2), FeatureSpread.fixed(0), 3), new StraightTrunkPlacer(4, 2, 0),
 			new TwoLayerFeature(1, 0, 1)).ignoreVines().build()));
+	public final ConfiguredFeature<?, ?> END_TREE = register("end_tree", MSFeatures.END_TREE.configured(NoFeatureConfig.INSTANCE));
 	
 	
 	
