@@ -54,7 +54,7 @@ public class IdentifierHandler
 			case "null":
 				return NULL_IDENTIFIER;
 			case "uuid":
-				identifier = new UUIDIdentifier(nextIdentifierId, nbt.getUUID(key));
+				identifier = new UUIDIdentifier(nextIdentifierId, nbt.getUUID(key + "_uuid"));
 				break;
 			case "fake":
 				identifier = new FakeIdentifier(nextIdentifierId, nbt.getInt(key+"_count"));
@@ -183,7 +183,7 @@ public class IdentifierHandler
 		public CompoundNBT saveToNBT(CompoundNBT nbt, String key)
 		{
 			nbt.putString(key, "uuid");
-			nbt.putUUID(key, uuid);
+			nbt.putUUID(key + "_uuid", uuid);
 			return nbt;
 		}
 		
