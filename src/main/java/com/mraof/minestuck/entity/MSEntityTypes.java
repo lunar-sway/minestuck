@@ -12,9 +12,9 @@ import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -137,29 +137,30 @@ public final class MSEntityTypes
 		EntitySpawnPlacementRegistry.register(IGUANA, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ConsortEntity::canConsortSpawnOn);
 	}
 	
-	public static void registerAttributes()
+	@SubscribeEvent
+	public static void onEntityAttributeCreation(EntityAttributeCreationEvent event)
 	{
-		GlobalEntityTypeAttributes.put(FROG, FrogEntity.frogAttributes().build());
-		GlobalEntityTypeAttributes.put(SALAMANDER, ConsortEntity.consortAttributes().build());
-		GlobalEntityTypeAttributes.put(TURTLE, ConsortEntity.consortAttributes().build());
-		GlobalEntityTypeAttributes.put(NAKAGATOR, ConsortEntity.consortAttributes().build());
-		GlobalEntityTypeAttributes.put(IGUANA, ConsortEntity.consortAttributes().build());
+		event.put(FROG, FrogEntity.frogAttributes().build());
+		event.put(SALAMANDER, ConsortEntity.consortAttributes().build());
+		event.put(TURTLE, ConsortEntity.consortAttributes().build());
+		event.put(NAKAGATOR, ConsortEntity.consortAttributes().build());
+		event.put(IGUANA, ConsortEntity.consortAttributes().build());
 		
-		GlobalEntityTypeAttributes.put(IMP, ImpEntity.impAttributes().build());
-		GlobalEntityTypeAttributes.put(OGRE, OgreEntity.ogreAttributes().build());
-		GlobalEntityTypeAttributes.put(BASILISK, BasiliskEntity.basiliskAttributes().build());
-		GlobalEntityTypeAttributes.put(LICH, LichEntity.lichAttributes().build());
-		GlobalEntityTypeAttributes.put(GICLOPS, GiclopsEntity.giclopsAttributes().build());
-		GlobalEntityTypeAttributes.put(WYRM, UnderlingEntity.underlingAttributes().build());
+		event.put(IMP, ImpEntity.impAttributes().build());
+		event.put(OGRE, OgreEntity.ogreAttributes().build());
+		event.put(BASILISK, BasiliskEntity.basiliskAttributes().build());
+		event.put(LICH, LichEntity.lichAttributes().build());
+		event.put(GICLOPS, GiclopsEntity.giclopsAttributes().build());
+		event.put(WYRM, UnderlingEntity.underlingAttributes().build());
 		
-		GlobalEntityTypeAttributes.put(DERSITE_PAWN, PawnEntity.pawnAttributes().build());
-		GlobalEntityTypeAttributes.put(PROSPITIAN_PAWN, PawnEntity.pawnAttributes().build());
-		GlobalEntityTypeAttributes.put(DERSITE_BISHOP, BishopEntity.bishopAttributes().build());
-		GlobalEntityTypeAttributes.put(PROSPITIAN_BISHOP, BishopEntity.bishopAttributes().build());
-		GlobalEntityTypeAttributes.put(DERSITE_ROOK, RookEntity.rookAttributes().build());
-		GlobalEntityTypeAttributes.put(PROSPITIAN_ROOK, RookEntity.rookAttributes().build());
+		event.put(DERSITE_PAWN, PawnEntity.pawnAttributes().build());
+		event.put(PROSPITIAN_PAWN, PawnEntity.pawnAttributes().build());
+		event.put(DERSITE_BISHOP, BishopEntity.bishopAttributes().build());
+		event.put(PROSPITIAN_BISHOP, BishopEntity.bishopAttributes().build());
+		event.put(DERSITE_ROOK, RookEntity.rookAttributes().build());
+		event.put(PROSPITIAN_ROOK, RookEntity.rookAttributes().build());
 		
-		GlobalEntityTypeAttributes.put(PLAYER_DECOY, MobEntity.createMobAttributes().build());
+		event.put(PLAYER_DECOY, MobEntity.createMobAttributes().build());
 	}
 	
 	private static void register(IForgeRegistry<EntityType<?>> registry, EntityType.Builder<?> builder, String name)
