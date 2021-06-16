@@ -3,10 +3,7 @@ package com.mraof.minestuck.item;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -27,25 +24,49 @@ public class TempleScannerItem extends Item
 		worldIn.playSound(playerIn, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.UI_BUTTON_CLICK, SoundCategory.AMBIENT, 0.8F, 1.3F);
 		
 		ItemStack item = playerIn.getHeldItem(handIn);
+		ItemStack uraniumStack = new ItemStack(MSItems.RAW_URANIUM);
+		boolean foundItem = false;
+		
+		for(ItemStack invItem : playerIn.inventory.mainInventory)
+		{
+			if(ItemStack.areItemsEqual(invItem, uraniumStack))
+			{
+				foundItem = true;
+				if(random.nextFloat() >= 0.95F)
+				{
+					invItem.shrink(1);
+					worldIn.playSound(playerIn, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.ENTITY_BLAZE_SHOOT, SoundCategory.AMBIENT, 0.3F, 2F);
+				}
+				
+				break;
+			}
+		}
+		
 		if(worldIn instanceof ServerWorld)
 		{
-			BlockPos structureBlockPos = ((ServerWorld) worldIn).getChunkProvider().getChunkGenerator().findNearestStructure(worldIn, "minestuck:frog_temple", new BlockPos(playerIn), 100, false);
-			
-			
-			if(structureBlockPos != null)
+			if(foundItem || playerIn.isCreative())
 			{
-				BlockPos playerBlockPos = playerIn.getPosition();
-				ITextComponent message = new TranslationTextComponent(getTranslationKey() + ".successMessage", (int)Math.sqrt(playerBlockPos.distanceSq(structureBlockPos.up(64))));
-				message.getStyle().setColor(TextFormatting.AQUA);
-				playerIn.sendMessage(message);
+				BlockPos structureBlockPos = ((ServerWorld) worldIn).getChunkProvider().getChunkGenerator().findNearestStructure(worldIn, "minestuck:frog_temple", new BlockPos(playerIn), 100, false);
+				
+				if(structureBlockPos != null)
+				{
+					BlockPos playerBlockPos = playerIn.getPosition();
+					ITextComponent message = new TranslationTextComponent(getTranslationKey() + ".successMessage", (int) Math.sqrt(playerBlockPos.distanceSq(structureBlockPos.up(64))));
+					message.getStyle().setColor(TextFormatting.AQUA);
+					playerIn.sendMessage(message);
+				} else
+				{
+					ITextComponent message = new TranslationTextComponent(getTranslationKey() + ".failMessage");
+					message.getStyle().setColor(TextFormatting.RED);
+					playerIn.sendMessage(message);
+				}
 			} else
 			{
-				ITextComponent message = new TranslationTextComponent(getTranslationKey() + ".failMessage");
+				ITextComponent message = new TranslationTextComponent(getTranslationKey() + ".noUraniumMessage");
 				message.getStyle().setColor(TextFormatting.RED);
 				playerIn.sendMessage(message);
 			}
 		}
-		
 		return ActionResult.resultSuccess(item);
 	}
 }

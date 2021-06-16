@@ -156,6 +156,17 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.CHISELED_GREEN_STONE_BRICKS, "Chiseled Green Stone Bricks");
 		add(MSBlocks.HORIZONTAL_GREEN_STONE_BRICKS, "Horizontal Green Stone Bricks");
 		add(MSBlocks.VERTICAL_GREEN_STONE_BRICKS, "Vertical Green Stone Bricks");
+		add(MSBlocks.GREEN_STONE_BRICK_TRIM, "Green Stone Brick Trim");
+		add(MSBlocks.GREEN_STONE_BRICK_FROG, "Green Stone Brick Frog Hieroglyph");
+		add(MSBlocks.GREEN_STONE_BRICK_IGUANA_LEFT, "Green Stone Brick Iguana Left Hieroglyph");
+		add(MSBlocks.GREEN_STONE_BRICK_IGUANA_RIGHT, "Green Stone Brick Iguana Right Hieroglyph");
+		add(MSBlocks.GREEN_STONE_BRICK_LOTUS, "Green Stone Brick Lotus Hieroglyph");
+		add(MSBlocks.GREEN_STONE_BRICK_NAK_LEFT, "Green Stone Brick Nakagator Left Hieroglyph");
+		add(MSBlocks.GREEN_STONE_BRICK_NAK_RIGHT, "Green Stone Brick Nakagator Right Hieroglyph");
+		add(MSBlocks.GREEN_STONE_BRICK_SALAMANDER_LEFT, "Green Stone Brick Salamander Left Hieroglyph");
+		add(MSBlocks.GREEN_STONE_BRICK_SALAMANDER_RIGHT, "Green Stone Brick Salamander Right Hieroglyph");
+		add(MSBlocks.GREEN_STONE_BRICK_SKAIA, "Green Stone Brick Skaia Hieroglyph");
+		add(MSBlocks.GREEN_STONE_BRICK_TURTLE, "Green Stone Brick Turtle Hieroglyph");
 		add(MSBlocks.DENSE_CLOUD, "Dense Cloud");
 		add(MSBlocks.BRIGHT_DENSE_CLOUD, "Bright Dense Cloud");
 		add(MSBlocks.SUGAR_CUBE, "Sugar Cube");
@@ -283,10 +294,13 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.CHALK_BRICK_STAIRS, "Chalk Brick Stairs");
 		add(MSBlocks.PINK_STONE_BRICK_STAIRS, "Pink Stone Brick Stairs");
 		add(MSBlocks.BROWN_STONE_BRICK_STAIRS, "Brown Stone Brick Stairs");
+		add(MSBlocks.GREEN_STONE_BRICK_STAIRS, "Green Stone Brick Stairs");
 		add(MSBlocks.RAINBOW_PLANKS_STAIRS, "Rainbow Planks Stairs");
 		add(MSBlocks.END_PLANKS_STAIRS, "End Planks Stairs");
 		add(MSBlocks.DEAD_PLANKS_STAIRS, "Dead Planks Stairs");
 		add(MSBlocks.TREATED_PLANKS_STAIRS, "Treated Planks Stairs");
+		add(MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE, "Steep Green Stone Brick Stairs Base");
+		add(MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_TOP, "Steep Green Stone Brick Stairs Top");
 		add(MSBlocks.BLACK_CASTLE_BRICK_SLAB, "Black Castle Brick Slab");
 		add(MSBlocks.DARK_GRAY_CASTLE_BRICK_SLAB, "Dark Gray Castle Brick Slab");
 		add(MSBlocks.LIGHT_GRAY_CASTLE_BRICK_SLAB, "Light Gray Castle Brick Slab");
@@ -295,6 +309,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.CHALK_BRICK_SLAB, "Chalk Brick Slab");
 		add(MSBlocks.PINK_STONE_BRICK_SLAB, "Pink Stone Brick Slab");
 		add(MSBlocks.BROWN_STONE_BRICK_SLAB, "Brown Stone Brick Slab");
+		add(MSBlocks.GREEN_STONE_BRICK_SLAB, "Green Stone Brick Slab");
 		add(MSBlocks.RAINBOW_PLANKS_SLAB, "Rainbow Planks Slab");
 		add(MSBlocks.END_PLANKS_SLAB, "End Planks Slab");
 		add(MSBlocks.DEAD_PLANKS_SLAB, "Dead Planks Slab");
@@ -705,8 +720,15 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.TEMPLE_SCANNER, "Temple Scanner");
 		addExtra(MSItems.TEMPLE_SCANNER, "successMessage", "Closest detected temple around %s blocks away");
 		addExtra(MSItems.TEMPLE_SCANNER, "failMessage", "No temple detected nearby");
+		addExtra(MSItems.TEMPLE_SCANNER, "noUraniumMessage", "This device requires uranium to run");
 		add(MSItems.CRUXITE_APPLE, "Cruxite Artifact");
 		add(MSItems.CRUXITE_POTION, "Cruxite Artifact");
+		add(MSItems.SBURB_CODE, "SBURB Code");
+		addTooltip(MSItems.SBURB_CODE, "It seems temple hieroglyphs can be translated into computer game code using a Book and Quill.");
+		add(MSItems.COMPUTER_PARTS, "Computer Parts");
+		addTooltip(MSItems.COMPUTER_PARTS, "Looks like it needs some additional components to get working.");
+		add(MSItems.BLANK_DISK, "Blank Disk");
+		addTooltip(MSItems.BLANK_DISK, "Can be put into a computer once there is a program on it to run.");
 		add(MSItems.CLIENT_DISK, "SBURB Client Disk");
 		add(MSItems.SERVER_DISK, "SBURB Server Disk");
 		add(MSItems.CAPTCHA_CARD, "Captchalogue Card");
@@ -1199,6 +1221,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addRung(49, "Master Of Mods");
 		
 		addAdvancement(MSAvancementProvider.ROOT, "Minestuck", "The Beginning of Something Really Excellent");
+		addAdvancement(MSAvancementProvider.SEARCHING, "Searching For Purpose", "Build a Temple Scanner to find special ruins scattered around the land");
+		addAdvancement(MSAvancementProvider.LONG_TIME_COMING, "Long Time Coming", "Collect SBURB code from a Frog Temple! You get the sense that you need to find a disk to write it onto");
 		addAdvancement(MSAvancementProvider.CONNECT, "Connect", "Create a connection with someone");
 		addAdvancement(MSAvancementProvider.ENTRY, "A New World", "Create, and use the Cruxite Artifact");
 		addAdvancement(MSAvancementProvider.ALCHEMY, "Step Towards Alchemy", "Getting a punch designix is the first step to alchemizing something else!");
@@ -1214,7 +1238,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addAdvancement(MSAvancementProvider.COMMUNE, "Commune", "Visit a village and talk to a consort");
 		addAdvancement(MSAvancementProvider.BUGS, "Crunchy and High in Protein", "Eat a bug");
 		addAdvancement(MSAvancementProvider.SHADY_BUYER, "Buyer Beware", "Buy an item from a shady consort");
-		addAdvancement(MSAvancementProvider.LONG_TIME_COMING, "Long Time Coming", "Collect a server disk, but where did it come from?");
 		
 		addLand(FungiLandType.FUNGI, "Fungi");
 		addLand(FungiLandType.DANK, "Dank");

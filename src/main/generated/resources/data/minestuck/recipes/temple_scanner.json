@@ -1,7 +1,7 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    " i ",
+    "igi",
     "iei",
     "crc"
   ],
@@ -17,6 +17,9 @@
     },
     "r": {
       "item": "minecraft:redstone"
+    },
+    "g": {
+      "item": "minecraft:glass_pane"
     }
   },
   "result": {

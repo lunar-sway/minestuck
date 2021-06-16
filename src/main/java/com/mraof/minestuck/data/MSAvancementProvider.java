@@ -36,6 +36,8 @@ import java.util.function.Consumer;
 public class MSAvancementProvider implements IDataProvider
 {
 	public static final String ROOT = "minestuck.root";
+	public static final String SEARCHING = "minestuck.searching";
+	public static final String LONG_TIME_COMING = "minestuck.long_time_coming";
 	public static final String CONNECT = "minestuck.connect";
 	public static final String ENTRY = "minestuck.entry";
 	public static final String ALCHEMY = "minestuck.alchemy";
@@ -51,7 +53,6 @@ public class MSAvancementProvider implements IDataProvider
 	public static final String COMMUNE = "minestuck.commune";
 	public static final String BUGS = "minestuck.bugs";
 	public static final String SHADY_BUYER = "minestuck.shady_buyer";
-	public static final String LONG_TIME_COMING = "minestuck.long_time_coming";
 	
 	private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
 	private final DataGenerator generator;
@@ -64,6 +65,8 @@ public class MSAvancementProvider implements IDataProvider
 	protected void buildAdvancements(Consumer<Advancement> advancementSaver)
 	{
 		Advancement root = Advancement.Builder.builder().withDisplay(MSItems.RAW_CRUXITE, new TranslationTextComponent(title(ROOT)), new TranslationTextComponent(desc(ROOT)), new ResourceLocation("minestuck:textures/gui/advancement_bg.png"), FrameType.TASK, false, false, false).withCriterion("raw_cruxite", InventoryChangeTrigger.Instance.forItems(MSItems.RAW_CRUXITE)).register(advancementSaver, Minestuck.MOD_ID+":minestuck/root");
+		Advancement searching = Advancement.Builder.builder().withParent(root).withDisplay(Items.COMPASS, new TranslationTextComponent(title(SEARCHING)), new TranslationTextComponent(desc(SEARCHING)), null, FrameType.TASK, true, true, false).withCriterion("possess_scanner", InventoryChangeTrigger.Instance.forItems(MSItems.TEMPLE_SCANNER)).register(advancementSaver, Minestuck.MOD_ID+":minestuck/searching");
+		Advancement longTimeComing = Advancement.Builder.builder().withParent(root).withDisplay(MSItems.SBURB_CODE, new TranslationTextComponent(title(LONG_TIME_COMING)), new TranslationTextComponent(desc(LONG_TIME_COMING)), null, FrameType.TASK, true, true, false).withCriterion("possess_code", InventoryChangeTrigger.Instance.forItems(MSItems.SBURB_CODE)).register(advancementSaver, Minestuck.MOD_ID+":minestuck/long_time_coming");
 		Advancement connect = Advancement.Builder.builder().withParent(root).withDisplay(MSItems.CLIENT_DISK, new TranslationTextComponent(title(CONNECT)), new TranslationTextComponent(desc(CONNECT)), null, FrameType.TASK, true, true, false).withCriterion("connection", EventTrigger.Instance.sburbConnection()).register(advancementSaver, Minestuck.MOD_ID+":minestuck/connect");
 		Advancement entry = Advancement.Builder.builder().withParent(connect).withDisplay(ColorHandler.setDefaultColor(new ItemStack(MSItems.CRUXITE_APPLE)), new TranslationTextComponent(title(ENTRY)), new TranslationTextComponent(desc(ENTRY)), null, FrameType.TASK, true, true, false).withCriterion("use_artifact", EventTrigger.Instance.cruxiteArtifact()).register(advancementSaver, Minestuck.MOD_ID+":minestuck/entry");
 		Advancement alchemy = Advancement.Builder.builder().withParent(entry).withDisplay(MSItems.CAPTCHA_CARD, new TranslationTextComponent(title(ALCHEMY)), new TranslationTextComponent(desc(ALCHEMY)), null, FrameType.TASK, true, true, false).withCriterion("use_punch_designix", PunchDesignixTrigger.Instance.any()).register(advancementSaver, Minestuck.MOD_ID+":minestuck/alchemy");
@@ -79,7 +82,6 @@ public class MSAvancementProvider implements IDataProvider
 		Advancement commune = Advancement.Builder.builder().withParent(entry).withDisplay(MSItems.STONE_SLAB, new TranslationTextComponent(title(COMMUNE)), new TranslationTextComponent(desc(COMMUNE)), null, FrameType.TASK, true, true, false).withRequirementsStrategy(IRequirementsStrategy.AND).withCriterion("talk_to_consort", ConsortTalkTrigger.Instance.any()).withCriterion("visit_village", PositionTrigger.Instance.forLocation(LocationPredicate.forFeature(MSFeatures.CONSORT_VILLAGE))).register(advancementSaver, Minestuck.MOD_ID+":minestuck/commune");
 		Advancement bugs = consumeBugCriteria(Advancement.Builder.builder().withParent(commune).withDisplay(MSItems.CHOCOLATE_BEETLE, new TranslationTextComponent(title(BUGS)), new TranslationTextComponent(desc(BUGS)), null, FrameType.TASK, true, true, false).withRequirementsStrategy(IRequirementsStrategy.OR)).register(advancementSaver, Minestuck.MOD_ID+":minestuck/bugs");
 		Advancement shadyBuyer = Advancement.Builder.builder().withParent(commune).withDisplay(MSItems.ROCK_COOKIE, new TranslationTextComponent(title(SHADY_BUYER)), new TranslationTextComponent(desc(SHADY_BUYER)), null, FrameType.TASK, true, true, false).withCriterion("buy_item", ConsortItemTrigger.Instance.forType(EnumConsort.MerchantType.SHADY)).register(advancementSaver, Minestuck.MOD_ID+":minestuck/shady_buyer");
-		Advancement longTimeComing = Advancement.Builder.builder().withParent(root).withDisplay(MSItems.SERVER_DISK, new TranslationTextComponent(title(LONG_TIME_COMING)), new TranslationTextComponent(desc(LONG_TIME_COMING)), null, FrameType.TASK, true, true, false).withCriterion("click_capsule", InventoryChangeTrigger.Instance.forItems(MSItems.SERVER_DISK)).register(advancementSaver, Minestuck.MOD_ID+":minestuck/long_time_coming");
 	}
 	
 	private static Advancement.Builder changeModusCriteria(Advancement.Builder builder)

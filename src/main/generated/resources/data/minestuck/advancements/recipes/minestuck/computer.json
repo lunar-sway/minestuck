@@ -16,6 +16,46 @@
         ]
       }
     },
+    "has_computer_parts": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minestuck:computer_parts"
+          }
+        ]
+      }
+    },
+    "has_quartz": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:quartz"
+          }
+        ]
+      }
+    },
+    "has_redstone": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:redstone"
+          }
+        ]
+      }
+    },
+    "has_raw_cruxite": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minestuck:raw_cruxite"
+          }
+        ]
+      }
+    },
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
@@ -26,6 +66,10 @@
   "requirements": [
     [
       "has_energy_core",
+      "has_computer_parts",
+      "has_quartz",
+      "has_redstone",
+      "has_raw_cruxite",
       "has_the_recipe"
     ]
   ]

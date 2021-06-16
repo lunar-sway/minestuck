@@ -82,7 +82,9 @@ public class MSBlocks
 	public static final Block PINK_STONE = getNull(), POLISHED_PINK_STONE = getNull(), PINK_STONE_BRICKS = getNull(), CHISELED_PINK_STONE_BRICKS = getNull();
 	public static final Block CRACKED_PINK_STONE_BRICKS = getNull(), MOSSY_PINK_STONE_BRICKS = getNull();
 	public static final Block BROWN_STONE = getNull(), POLISHED_BROWN_STONE = getNull(), BROWN_STONE_BRICKS = getNull(), CRACKED_BROWN_STONE_BRICKS = getNull(), BROWN_STONE_COLUMN = getNull();
-	public static final Block GREEN_STONE = getNull(), POLISHED_GREEN_STONE = getNull(), GREEN_STONE_BRICKS = getNull(), GREEN_STONE_COLUMN = getNull(), CHISELED_GREEN_STONE_BRICKS = getNull(), HORIZONTAL_GREEN_STONE_BRICKS = getNull(), VERTICAL_GREEN_STONE_BRICKS = getNull();
+	public static final Block GREEN_STONE = getNull(), POLISHED_GREEN_STONE = getNull(), GREEN_STONE_BRICKS = getNull(), GREEN_STONE_COLUMN = getNull(), CHISELED_GREEN_STONE_BRICKS = getNull(), HORIZONTAL_GREEN_STONE_BRICKS = getNull(), VERTICAL_GREEN_STONE_BRICKS = getNull()
+			, GREEN_STONE_BRICK_TRIM = getNull(), GREEN_STONE_BRICK_FROG = getNull(), GREEN_STONE_BRICK_IGUANA_LEFT = getNull(), GREEN_STONE_BRICK_IGUANA_RIGHT = getNull(), GREEN_STONE_BRICK_LOTUS = getNull(), GREEN_STONE_BRICK_NAK_LEFT = getNull(), GREEN_STONE_BRICK_NAK_RIGHT = getNull()
+			, GREEN_STONE_BRICK_SALAMANDER_LEFT = getNull(), GREEN_STONE_BRICK_SALAMANDER_RIGHT = getNull(), GREEN_STONE_BRICK_SKAIA = getNull(), GREEN_STONE_BRICK_TURTLE = getNull();
 	public static final Block DENSE_CLOUD = getNull(), BRIGHT_DENSE_CLOUD = getNull();
 	public static final Block SUGAR_CUBE = getNull();
 	
@@ -136,6 +138,7 @@ public class MSBlocks
 	public static final Block COARSE_STONE_STAIRS = getNull(), SHADE_BRICK_STAIRS = getNull(), FROST_BRICK_STAIRS = getNull(), CAST_IRON_STAIRS = getNull();
 	public static final Block MYCELIUM_BRICK_STAIRS = getNull(), CHALK_STAIRS = getNull(), CHALK_BRICK_STAIRS = getNull(), PINK_STONE_BRICK_STAIRS = getNull(), BROWN_STONE_BRICK_STAIRS = getNull(), GREEN_STONE_BRICK_STAIRS = getNull();
 	public static final Block RAINBOW_PLANKS_STAIRS = getNull(), END_PLANKS_STAIRS = getNull(), DEAD_PLANKS_STAIRS = getNull(), TREATED_PLANKS_STAIRS = getNull();
+	public static final Block STEEP_GREEN_STONE_BRICK_STAIRS_BASE = getNull(), STEEP_GREEN_STONE_BRICK_STAIRS_TOP = getNull();
 	public static final Block BLACK_CASTLE_BRICK_SLAB = getNull(), DARK_GRAY_CASTLE_BRICK_SLAB = getNull(), LIGHT_GRAY_CASTLE_BRICK_SLAB = getNull(), WHITE_CASTLE_BRICK_SLAB = getNull();
 	public static final Block CHALK_SLAB = getNull(), CHALK_BRICK_SLAB = getNull(), PINK_STONE_BRICK_SLAB = getNull(), BROWN_STONE_BRICK_SLAB = getNull(), GREEN_STONE_BRICK_SLAB = getNull();
 	public static final Block RAINBOW_PLANKS_SLAB = getNull(), END_PLANKS_SLAB = getNull(), DEAD_PLANKS_SLAB = getNull(), TREATED_PLANKS_SLAB = getNull();
@@ -321,6 +324,17 @@ public class MSBlocks
 		registry.register(new Block(Block.Properties.create(Material.ROCK, MaterialColor.GREEN).hardnessAndResistance(2.5F, 7.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1)).setRegistryName("chiseled_green_stone_bricks"));
 		registry.register(new Block(Block.Properties.create(Material.ROCK, MaterialColor.GREEN).hardnessAndResistance(2.5F, 7.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1)).setRegistryName("horizontal_green_stone_bricks"));
 		registry.register(new Block(Block.Properties.create(Material.ROCK, MaterialColor.GREEN).hardnessAndResistance(2.5F, 7.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1)).setRegistryName("vertical_green_stone_bricks"));
+		registry.register(new MSDirectionalBlock(Block.Properties.create(Material.ROCK, MaterialColor.GREEN).hardnessAndResistance(2.5F, 7.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1)).setRegistryName("green_stone_brick_trim"));
+		registry.register(new HieroglyphBlock(Block.Properties.create(Material.ROCK, MaterialColor.GREEN).hardnessAndResistance(2.5F, 7.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1)).setRegistryName("green_stone_brick_frog"));
+		registry.register(new HieroglyphBlock(Block.Properties.create(Material.ROCK, MaterialColor.GREEN).hardnessAndResistance(2.5F, 7.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1)).setRegistryName("green_stone_brick_iguana_left"));
+		registry.register(new HieroglyphBlock(Block.Properties.create(Material.ROCK, MaterialColor.GREEN).hardnessAndResistance(2.5F, 7.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1)).setRegistryName("green_stone_brick_iguana_right"));
+		registry.register(new HieroglyphBlock(Block.Properties.create(Material.ROCK, MaterialColor.GREEN).hardnessAndResistance(2.5F, 7.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1)).setRegistryName("green_stone_brick_lotus"));
+		registry.register(new HieroglyphBlock(Block.Properties.create(Material.ROCK, MaterialColor.GREEN).hardnessAndResistance(2.5F, 7.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1)).setRegistryName("green_stone_brick_nak_left"));
+		registry.register(new HieroglyphBlock(Block.Properties.create(Material.ROCK, MaterialColor.GREEN).hardnessAndResistance(2.5F, 7.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1)).setRegistryName("green_stone_brick_nak_right"));
+		registry.register(new HieroglyphBlock(Block.Properties.create(Material.ROCK, MaterialColor.GREEN).hardnessAndResistance(2.5F, 7.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1)).setRegistryName("green_stone_brick_salamander_left"));
+		registry.register(new HieroglyphBlock(Block.Properties.create(Material.ROCK, MaterialColor.GREEN).hardnessAndResistance(2.5F, 7.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1)).setRegistryName("green_stone_brick_salamander_right"));
+		registry.register(new HieroglyphBlock(Block.Properties.create(Material.ROCK, MaterialColor.GREEN).hardnessAndResistance(2.5F, 7.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1)).setRegistryName("green_stone_brick_skaia"));
+		registry.register(new HieroglyphBlock(Block.Properties.create(Material.ROCK, MaterialColor.GREEN).hardnessAndResistance(2.5F, 7.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1)).setRegistryName("green_stone_brick_turtle"));
 		registry.register(new Block(Block.Properties.create(Material.GLASS, MaterialColor.YELLOW).hardnessAndResistance(0.5F).sound(SoundType.SNOW)).setRegistryName("dense_cloud"));
 		registry.register(new Block(Block.Properties.create(Material.GLASS, MaterialColor.LIGHT_GRAY).hardnessAndResistance(0.5F).sound(SoundType.SNOW)).setRegistryName("bright_dense_cloud"));
 		registry.register(new Block(Block.Properties.create(Material.SAND, MaterialColor.SNOW).hardnessAndResistance(0.4F).sound(SoundType.SAND)).setRegistryName("sugar_cube"));
@@ -439,6 +453,8 @@ public class MSBlocks
 		registry.register(new StairsBlock(() -> MSBlocks.END_PLANKS.getDefaultState(), Block.Properties.from(endPlanks)).setRegistryName("end_planks_stairs"));
 		registry.register(new StairsBlock(() -> MSBlocks.DEAD_PLANKS.getDefaultState(), Block.Properties.from(deadPlanks)).setRegistryName("dead_planks_stairs"));
 		registry.register(new StairsBlock(() -> MSBlocks.TREATED_PLANKS.getDefaultState(), Block.Properties.from(treatedPlanks)).setRegistryName("treated_planks_stairs"));
+		registry.register(new DecorBlock(Block.Properties.from(greenStoneBricks), MSBlockShapes.STEEP_STAIRS_BASE).setRegistryName("steep_green_stone_brick_stairs_base"));
+		registry.register(new DecorBlock(Block.Properties.from(greenStoneBricks), MSBlockShapes.STEEP_STAIRS_TOP).setRegistryName("steep_green_stone_brick_stairs_top"));
 		registry.register(new SlabBlock(Block.Properties.from(blackCastleBricks)).setRegistryName("black_castle_brick_slab"));
 		registry.register(new SlabBlock(Block.Properties.from(darkGrayCastleBricks)).setRegistryName("dark_gray_castle_brick_slab"));
 		registry.register(new SlabBlock(Block.Properties.from(lightGrayCastleBricks)).setRegistryName("light_gray_castle_brick_slab"));

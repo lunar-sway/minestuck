@@ -1,0 +1,116 @@
+{
+    "credit": "crafted with love by the grease artisan mysterymeat",
+    "texture_size": [64, 64],
+    "textures": {
+        "0": "minestuck:block/steep_green_stone_brick_stairs_base",
+        "particle": "minestuck:block/steep_green_stone_brick_stairs_base"
+    },
+    "elements": [
+        {
+            "from": [0, 0, 0],
+            "to": [16, 4, 16],
+            "faces": {
+                "north": {"uv": [8, 7, 12, 8], "texture": "#0"},
+                "east": {"uv": [12, 3, 16, 4], "texture": "#0"},
+                "south": {"uv": [8, 3, 12, 4], "texture": "#0"},
+                "west": {"uv": [4, 3, 8, 4], "texture": "#0"},
+                "up": {"uv": [8, 11.5, 4, 7.5], "texture": "#0"},
+                "down": {"uv": [4, 4, 0, 8], "texture": "#0"}
+            }
+        },
+        {
+            "from": [0, 8, 4],
+            "to": [16, 12, 16],
+            "rotation": {"angle": 0, "axis": "y", "origin": [8, 16, 10]},
+            "faces": {
+                "north": {"uv": [8, 5, 12, 6], "texture": "#0"},
+                "east": {"uv": [12, 1, 15, 2], "texture": "#0"},
+                "south": {"uv": [8, 1, 12, 2], "texture": "#0"},
+                "west": {"uv": [5, 1, 8, 2], "texture": "#0"},
+                "up": {"uv": [16, 11, 12, 8], "texture": "#0"},
+                "down": {"uv": [4, 8, 0, 11], "texture": "#0"}
+            }
+        },
+        {
+            "from": [0, 4, 2],
+            "to": [16, 8, 16],
+            "rotation": {"angle": 0, "axis": "y", "origin": [8, 12, 9]},
+            "faces": {
+                "north": {"uv": [8, 6, 12, 7], "texture": "#0"},
+                "east": {"uv": [12, 2, 15.5, 3], "texture": "#0"},
+                "south": {"uv": [8, 2, 12, 3], "texture": "#0"},
+                "west": {"uv": [4.5, 2, 8, 3], "texture": "#0"},
+                "up": {"uv": [8, 7.5, 4, 4], "texture": "#0"},
+                "down": {"uv": [4, 0, 0, 3.5], "texture": "#0"}
+            }
+        },
+        {
+            "from": [0, 12, 6],
+            "to": [16, 16, 16],
+            "rotation": {"angle": 0, "axis": "y", "origin": [8, 20, 11]},
+            "faces": {
+                "north": {"uv": [8, 4, 12, 5], "texture": "#0"},
+                "east": {"uv": [12, 0, 14.5, 1], "texture": "#0"},
+                "south": {"uv": [8, 0, 12, 1], "texture": "#0"},
+                "west": {"uv": [5.5, 0, 8, 1], "texture": "#0"},
+                "up": {"uv": [12, 10.5, 8, 8], "texture": "#0"},
+                "down": {"uv": [4, 0, 0, 2.5], "texture": "#0"}
+            }
+        }
+    ],
+    "display": {
+        "head": {
+            "translation": [0, -29, 0],
+            "scale": [1.6, 1.6, 1.6]
+        }
+    },
+    "groups": [
+        {
+            "name": "stairbase",
+            "origin": [8, 8, 8],
+            "children": [0, 1, 2, 3]
+        }
+    ],
+    "display": {
+        "thirdperson_righthand": {
+            "rotation": [75, 45, 0],
+            "translation": [0, 2.5, 0],
+            "scale": [0.375, 0.375, 0.375]
+        },
+        "thirdperson_lefthand": {
+            "rotation": [75, 45, 0],
+            "translation": [0, 2.5, 0],
+            "scale": [0.375, 0.375, 0.375]
+        },
+        "firstperson_righthand": {
+            "rotation": [0, 45, 0],
+            "scale": [0.4, 0.4, 0.4]
+        },
+        "firstperson_lefthand": {
+            "rotation": [0, 225, 0],
+            "scale": [0.4, 0.4, 0.4]
+        },
+        "ground": {
+            "translation": [0, 3, 0],
+            "scale": [0.25, 0.25, 0.25]
+        },
+        "gui": {
+            "rotation": [30, 225, 0],
+            "scale": [0.625, 0.625, 0.625]
+        },
+        "head": {
+            "translation": [0, -29, 0],
+            "scale": [1.6, 1.6, 1.6]
+        },
+        "fixed": {
+            "scale": [0.5, 0.5, 0.5]
+        }
+    },
+    "groups": [
+        {
+            "name": "stairbase",
+            "origin": [8, 8, 8],
+            "children": [0, 1, 2, 3]
+        }
+    ]
+}

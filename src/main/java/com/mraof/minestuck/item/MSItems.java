@@ -286,6 +286,9 @@ public class MSItems
 	public static final Item ENERGY_CORE = getNull();
 	public static final Item CRUXITE_APPLE = getNull();
 	public static final Item CRUXITE_POTION = getNull();
+	public static final Item SBURB_CODE = getNull();
+	public static final Item COMPUTER_PARTS = getNull();
+	public static final Item BLANK_DISK = getNull();
 	public static final Item CLIENT_DISK = getNull();
 	public static final Item SERVER_DISK = getNull();
 	public static final Item CAPTCHA_CARD = getNull();
@@ -549,6 +552,17 @@ public class MSItems
 		registerItemBlock(registry, CHISELED_GREEN_STONE_BRICKS, MSItemGroup.MAIN);
 		registerItemBlock(registry, HORIZONTAL_GREEN_STONE_BRICKS, MSItemGroup.MAIN);
 		registerItemBlock(registry, VERTICAL_GREEN_STONE_BRICKS, MSItemGroup.MAIN);
+		registerItemBlock(registry, GREEN_STONE_BRICK_TRIM, MSItemGroup.MAIN);
+		registerItemBlock(registry, GREEN_STONE_BRICK_FROG, MSItemGroup.MAIN);
+		registerItemBlock(registry, GREEN_STONE_BRICK_IGUANA_LEFT, MSItemGroup.MAIN);
+		registerItemBlock(registry, GREEN_STONE_BRICK_IGUANA_RIGHT, MSItemGroup.MAIN);
+		registerItemBlock(registry, GREEN_STONE_BRICK_LOTUS, MSItemGroup.MAIN);
+		registerItemBlock(registry, GREEN_STONE_BRICK_NAK_LEFT, MSItemGroup.MAIN);
+		registerItemBlock(registry, GREEN_STONE_BRICK_NAK_RIGHT, MSItemGroup.MAIN);
+		registerItemBlock(registry, GREEN_STONE_BRICK_SALAMANDER_LEFT, MSItemGroup.MAIN);
+		registerItemBlock(registry, GREEN_STONE_BRICK_SALAMANDER_RIGHT, MSItemGroup.MAIN);
+		registerItemBlock(registry, GREEN_STONE_BRICK_SKAIA, MSItemGroup.MAIN);
+		registerItemBlock(registry, GREEN_STONE_BRICK_TURTLE, MSItemGroup.MAIN);
 		registerItemBlock(registry, DENSE_CLOUD, MSItemGroup.LANDS);
 		registerItemBlock(registry, BRIGHT_DENSE_CLOUD, MSItemGroup.LANDS);
 		registerItemBlock(registry, SUGAR_CUBE, MSItemGroup.LANDS);
@@ -667,6 +681,8 @@ public class MSItems
 		registerItemBlock(registry, END_PLANKS_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, DEAD_PLANKS_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, TREATED_PLANKS_STAIRS, MSItemGroup.LANDS);
+		registerItemBlock(registry, STEEP_GREEN_STONE_BRICK_STAIRS_BASE, MSItemGroup.MAIN);
+		registerItemBlock(registry, STEEP_GREEN_STONE_BRICK_STAIRS_TOP, MSItemGroup.MAIN);
 		registerItemBlock(registry, BLACK_CASTLE_BRICK_SLAB, MSItemGroup.MAIN);
 		registerItemBlock(registry, DARK_GRAY_CASTLE_BRICK_SLAB, MSItemGroup.MAIN);
 		registerItemBlock(registry, LIGHT_GRAY_CASTLE_BRICK_SLAB, MSItemGroup.MAIN);
@@ -972,11 +988,14 @@ public class MSItems
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("raw_cruxite"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("raw_uranium"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("energy_core"));
+		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("sburb_code"));
+		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("computer_parts"));
 		//have to fix Cruxite artifact classes
 		
 		registry.register(new CruxiteAppleItem(new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN).rarity(Rarity.UNCOMMON)).setRegistryName("cruxite_apple"));
 		registry.register(new CruxitePotionItem(new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN).rarity(Rarity.UNCOMMON)).setRegistryName("cruxite_potion"));
 		
+		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("blank_disk"));
 		registry.register(new Item(new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("client_disk"));
 		registry.register(new Item(new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("server_disk"));
 		registry.register(new CaptchaCardItem(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("captcha_card"));

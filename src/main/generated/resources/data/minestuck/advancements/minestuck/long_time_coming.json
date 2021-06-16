@@ -2,7 +2,7 @@
   "parent": "minestuck:minestuck/root",
   "display": {
     "icon": {
-      "item": "minestuck:server_disk"
+      "item": "minestuck:sburb_code"
     },
     "title": {
       "translate": "advancements.minestuck.long_time_coming.title"
@@ -16,12 +16,12 @@
     "hidden": false
   },
   "criteria": {
-    "click_capsule": {
+    "possess_code": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "minestuck:server_disk"
+            "item": "minestuck:sburb_code"
           }
         ]
       }
@@ -29,7 +29,7 @@
   },
   "requirements": [
     [
-      "click_capsule"
+      "possess_code"
     ]
   ]
 }

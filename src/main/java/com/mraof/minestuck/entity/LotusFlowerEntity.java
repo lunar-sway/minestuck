@@ -29,7 +29,7 @@ public class LotusFlowerEntity extends CreatureEntity implements IAnimatable
 	
 	private AnimationFactory factory = new AnimationFactory(this);
 	
-	private int eventTimer = -1;
+	public int eventTimer = -1;
 	
 	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event)
 	{
@@ -51,7 +51,7 @@ public class LotusFlowerEntity extends CreatureEntity implements IAnimatable
 	{
 		super(type, worldIn);
 		this.ignoreFrustumCheck = true;
-		entityCollisionReduction = 2F;
+		entityCollisionReduction = 0F;
 		canBeCollidedWith();
 	}
 	
@@ -120,15 +120,16 @@ public class LotusFlowerEntity extends CreatureEntity implements IAnimatable
 		World worldIn = this.world;
 		Vec3d posVec = this.getPositionVec();
 		
-		ItemEntity unpoweredComputerItemEntity = new ItemEntity(worldIn, posVec.getX(), posVec.getY() + 1D, posVec.getZ(), new ItemStack(MSItems.SERVER_DISK, 1));
+		ItemEntity unpoweredComputerItemEntity = new ItemEntity(worldIn, posVec.getX(), posVec.getY() + 1D, posVec.getZ(), new ItemStack(MSItems.COMPUTER_PARTS, 1));
 		worldIn.addEntity(unpoweredComputerItemEntity);
 		
-		this.world.addParticle(ParticleTypes.FLASH, posVec.x, posVec.y + 0.5D, posVec.z, 0.0D, 0.0D, 0.0D);
+		/*ItemEntity blankDiskItemEntity = new ItemEntity(worldIn, posVec.getX(), posVec.getY() + 1D, posVec.getZ(), new ItemStack(MSItems.BLANK_DISK, 2));
+		worldIn.addEntity(blankDiskItemEntity);*/
 		
-		/*ItemEntity serverDiscItemEntity = new ItemEntity(worldIn, posVec.getX(), posVec.getY() + 1D, posVec.getZ(), new ItemStack(MSItems.SERVER_DISK, 1));
-		worldIn.addEntity(serverDiscItemEntity);
-		ItemEntity clientDiscItemEntity = new ItemEntity(worldIn, posVec.getX(), posVec.getY() + 1D, posVec.getZ(), new ItemStack(MSItems.CLIENT_DISK, 1));
-		worldIn.addEntity(clientDiscItemEntity);*/
+		ItemEntity sburbCodeItemEntity = new ItemEntity(worldIn, posVec.getX(), posVec.getY() + 1D, posVec.getZ(), new ItemStack(MSItems.SBURB_CODE, 1));
+		worldIn.addEntity(sburbCodeItemEntity);
+		
+		this.world.addParticle(ParticleTypes.FLASH, posVec.x, posVec.y + 0.5D, posVec.z, 0.0D, 0.0D, 0.0D);
 	}
 	
 	protected void lotusResetEffects()

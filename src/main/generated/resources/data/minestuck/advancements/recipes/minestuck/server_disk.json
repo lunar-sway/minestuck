@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minestuck:server_disk"
+    ]
+  },
+  "criteria": {
+    "has_sburb_code": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minestuck:sburb_code"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minestuck:server_disk"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_sburb_code",
+      "has_the_recipe"
+    ]
+  ]
+}

@@ -1,0 +1,10 @@
+{
+    "variants": {
+        "facing=up":    { "model": "minestuck:block/green_stone_brick_trim" },
+        "facing=down":  { "model": "minestuck:block/green_stone_brick_trim"},
+        "facing=east":  { "model": "minestuck:block/green_stone_brick_trim", "y": 90, "x": 90 },
+        "facing=south": { "model": "minestuck:block/green_stone_brick_trim", "y": 180, "x": 90 },
+        "facing=west":  { "model": "minestuck:block/green_stone_brick_trim", "y": 270, "x": 90 },
+        "facing=north": { "model": "minestuck:block/green_stone_brick_trim", "y": 0, "x": 90 }
+    }
+}
