@@ -397,8 +397,8 @@ public class MSBlocks
 		registry.register(new GlowingMushroomBlock(AbstractBlock.Properties.of(Material.PLANT, MaterialColor.DIAMOND).noCollission().randomTicks().strength(0).sound(SoundType.GRASS).lightLevel(state -> 11)).setRegistryName("glowing_mushroom"));
 		registry.register(new DesertFloraBlock(AbstractBlock.Properties.of(Material.PLANT).noCollission().strength(0).sound(SoundType.GRASS)).setRegistryName("desert_bush"));
 		registry.register(new DesertFloraBlock(AbstractBlock.Properties.of(Material.PLANT).noCollission().strength(0).sound(SoundType.GRASS)).setRegistryName("blooming_cactus"));
-		registry.register(new PetrifiedFloraBlock(AbstractBlock.Properties.of(Material.STONE, DyeColor.GRAY).noCollission().strength(0).sound(SoundType.STONE)).setRegistryName("petrified_grass"));
-		registry.register(new PetrifiedFloraBlock(AbstractBlock.Properties.of(Material.STONE, DyeColor.GRAY).noCollission().strength(0).sound(SoundType.STONE)).setRegistryName("petrified_poppy"));
+		registry.register(new PetrifiedFloraBlock(AbstractBlock.Properties.of(Material.STONE, DyeColor.GRAY).requiresCorrectToolForDrops().noCollission().strength(0).harvestTool(ToolType.PICKAXE).harvestLevel(0).sound(SoundType.STONE)).setRegistryName("petrified_grass"));
+		registry.register(new PetrifiedFloraBlock(AbstractBlock.Properties.of(Material.STONE, DyeColor.GRAY).requiresCorrectToolForDrops().noCollission().strength(0).harvestTool(ToolType.PICKAXE).harvestLevel(0).sound(SoundType.STONE)).setRegistryName("petrified_poppy"));
 		registry.register(new StrawberryBlock(AbstractBlock.Properties.of(Material.VEGETABLE, MaterialColor.COLOR_RED).strength(1.0F).sound(SoundType.WOOD)).setRegistryName("strawberry"));
 		registry.register(new StrawberryBlock.AttachedStem((StemGrownBlock) STRAWBERRY, AbstractBlock.Properties.of(Material.PLANT).noCollission().randomTicks().strength(0).sound(SoundType.WOOD)).setRegistryName("attached_strawberry_stem"));
 		registry.register(new StrawberryBlock.Stem((StemGrownBlock) STRAWBERRY, AbstractBlock.Properties.of(Material.PLANT).noCollission().randomTicks().strength(0).sound(SoundType.WOOD)).setRegistryName("strawberry_stem"));
@@ -410,8 +410,8 @@ public class MSBlocks
 		registry.register(new VeinBlock(AbstractBlock.Properties.of(Material.WOOD).strength(0.45F).sound(SoundType.SLIME_BLOCK)).setRegistryName("vein"));
 		registry.register(new VeinCornerBlock(AbstractBlock.Properties.of(Material.WOOD).strength(0.45F).sound(SoundType.SLIME_BLOCK)).setRegistryName("vein_corner"));
 		registry.register(new VeinCornerBlock(AbstractBlock.Properties.of(Material.WOOD).strength(0.45F).sound(SoundType.SLIME_BLOCK)).setRegistryName("inverted_vein_corner"));
-		registry.register(new PipeBlock(AbstractBlock.Properties.of(Material.METAL).strength(4.0F).sound(SoundType.METAL), MSBlockShapes.PIPE).setRegistryName("pipe"));
-		registry.register(new Block(AbstractBlock.Properties.of(Material.METAL).strength(4.0F).sound(SoundType.METAL)).setRegistryName("pipe_intersection"));
+		registry.register(new PipeBlock(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(4.0F).sound(SoundType.METAL).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.PIPE).setRegistryName("pipe"));
+		registry.register(new Block(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(4.0F).sound(SoundType.METAL).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("pipe_intersection"));
 		
 		registry.register(new StairsBlock(() -> MSBlocks.COARSE_STONE.defaultBlockState(), AbstractBlock.Properties.copy(coarseStone)).setRegistryName("coarse_stone_stairs"));
 		registry.register(new StairsBlock(() -> MSBlocks.SHADE_BRICKS.defaultBlockState(), AbstractBlock.Properties.copy(shadeBricks)).setRegistryName("shade_brick_stairs"));
@@ -439,27 +439,27 @@ public class MSBlocks
 		registry.register(new ReturnNodeBlock(AbstractBlock.Properties.of(Material.PORTAL).noCollission().strength(-1.0F, 10.0F).sound(SoundType.GLASS).lightLevel(state -> 11).noDrops()).setRegistryName("return_node"));
 		
 		CRUXTRUDER.registerBlocks(registry);
-		registry.register(new CruxtruderLidBlock(AbstractBlock.Properties.of(Material.METAL).strength(1.0F)).setRegistryName("cruxtruder_lid"));
+		registry.register(new CruxtruderLidBlock(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(1.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("cruxtruder_lid"));
 		TOTEM_LATHE.registerBlocks(registry);
 		ALCHEMITER.registerBlocks(registry);
 		PUNCH_DESIGNIX.registerBlocks(registry);
-		registry.register(new SmallMachineBlock<>(MSBlockShapes.SMALL_CRUXTRUDER.createRotatedShapes(), MSTileEntityTypes.MINI_CRUXTRUDER, AbstractBlock.Properties.of(Material.METAL).strength(3.0F)).setRegistryName("mini_cruxtruder"));
-		registry.register(new SmallMachineBlock<>(MSBlockShapes.SMALL_TOTEM_LATHE.createRotatedShapes(), MSTileEntityTypes.MINI_TOTEM_LATHE, AbstractBlock.Properties.of(Material.METAL).strength(3.0F)).setRegistryName("mini_totem_lathe"));
-		registry.register(new MiniAlchemiterBlock(AbstractBlock.Properties.of(Material.METAL).strength(3.0F)).setRegistryName("mini_alchemiter"));
-		registry.register(new SmallMachineBlock<>(MSBlockShapes.SMALL_PUNCH_DESIGNIX.createRotatedShapes(), MSTileEntityTypes.MINI_PUNCH_DESIGNIX, AbstractBlock.Properties.of(Material.METAL).strength(3.0F)).setRegistryName("mini_punch_designix"));
-		registry.register(new HolopadBlock(AbstractBlock.Properties.of(Material.METAL, MaterialColor.SNOW).strength(3.0F)).setRegistryName("holopad"));
+		registry.register(new SmallMachineBlock<>(MSBlockShapes.SMALL_CRUXTRUDER.createRotatedShapes(), MSTileEntityTypes.MINI_CRUXTRUDER, AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("mini_cruxtruder"));
+		registry.register(new SmallMachineBlock<>(MSBlockShapes.SMALL_TOTEM_LATHE.createRotatedShapes(), MSTileEntityTypes.MINI_TOTEM_LATHE, AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("mini_totem_lathe"));
+		registry.register(new MiniAlchemiterBlock(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("mini_alchemiter"));
+		registry.register(new SmallMachineBlock<>(MSBlockShapes.SMALL_PUNCH_DESIGNIX.createRotatedShapes(), MSTileEntityTypes.MINI_PUNCH_DESIGNIX, AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("mini_punch_designix"));
+		registry.register(new HolopadBlock(AbstractBlock.Properties.of(Material.METAL, MaterialColor.SNOW).requiresCorrectToolForDrops().strength(3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("holopad"));
 		
-		registry.register(new ComputerBlock(ComputerBlock.COMPUTER_SHAPE, ComputerBlock.COMPUTER_SHAPE, AbstractBlock.Properties.of(Material.METAL).strength(4.0F)).setRegistryName("computer"));
-		registry.register(new ComputerBlock(ComputerBlock.LAPTOP_OPEN_SHAPE, ComputerBlock.LAPTOP_CLOSED_SHAPE, AbstractBlock.Properties.of(Material.METAL).strength(4.0F)).setRegistryName("laptop"));
-		registry.register(new ComputerBlock(ComputerBlock.LAPTOP_OPEN_SHAPE, ComputerBlock.LAPTOP_CLOSED_SHAPE, AbstractBlock.Properties.of(Material.METAL, MaterialColor.COLOR_RED).strength(4.0F)).setRegistryName("crockertop"));
-		registry.register(new ComputerBlock(ComputerBlock.LAPTOP_OPEN_SHAPE, ComputerBlock.LAPTOP_CLOSED_SHAPE, AbstractBlock.Properties.of(Material.METAL, MaterialColor.COLOR_GREEN).strength(4.0F)).setRegistryName("hubtop"));
-		registry.register(new ComputerBlock(ComputerBlock.LUNCHTOP_SHAPE, ComputerBlock.LUNCHTOP_SHAPE, AbstractBlock.Properties.of(Material.METAL, MaterialColor.COLOR_RED).strength(4.0F)).setRegistryName("lunchtop"));
-		registry.register(new ComputerBlock(ComputerBlock.OLD_COMPUTER_SHAPE, ComputerBlock.OLD_COMPUTER_SHAPE, AbstractBlock.Properties.of(Material.METAL).strength(4.0F)).setRegistryName("old_computer"));
-		registry.register(new TransportalizerBlock(AbstractBlock.Properties.of(Material.METAL).strength(3.0F)).setRegistryName("transportalizer"));
-		registry.register(new TransportalizerBlock(AbstractBlock.Properties.of(Material.METAL).strength(3.0F)).setRegistryName("trans_portalizer"));
-		registry.register(new SendificatorBlock(AbstractBlock.Properties.of(Material.METAL).strength(3.0F), MSBlockShapes.SENDIFICATOR).setRegistryName("sendificator"));
-		registry.register(new GristWidgetBlock(AbstractBlock.Properties.of(Material.METAL).strength(3.0F)).setRegistryName("grist_widget"));
-		registry.register(new SmallMachineBlock<>(new CustomVoxelShape(new double[]{4, 0, 4, 12, 6, 12}).createRotatedShapes(), MSTileEntityTypes.URANIUM_COOKER, AbstractBlock.Properties.of(Material.METAL).strength(3.0F)).setRegistryName("uranium_cooker"));
+		registry.register(new ComputerBlock(ComputerBlock.COMPUTER_SHAPE, ComputerBlock.COMPUTER_SHAPE, AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(4.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("computer"));
+		registry.register(new ComputerBlock(ComputerBlock.LAPTOP_OPEN_SHAPE, ComputerBlock.LAPTOP_CLOSED_SHAPE, AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(4.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("laptop"));
+		registry.register(new ComputerBlock(ComputerBlock.LAPTOP_OPEN_SHAPE, ComputerBlock.LAPTOP_CLOSED_SHAPE, AbstractBlock.Properties.of(Material.METAL, MaterialColor.COLOR_RED).requiresCorrectToolForDrops().strength(4.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("crockertop"));
+		registry.register(new ComputerBlock(ComputerBlock.LAPTOP_OPEN_SHAPE, ComputerBlock.LAPTOP_CLOSED_SHAPE, AbstractBlock.Properties.of(Material.METAL, MaterialColor.COLOR_GREEN).requiresCorrectToolForDrops().strength(4.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("hubtop"));
+		registry.register(new ComputerBlock(ComputerBlock.LUNCHTOP_SHAPE, ComputerBlock.LUNCHTOP_SHAPE, AbstractBlock.Properties.of(Material.METAL, MaterialColor.COLOR_RED).requiresCorrectToolForDrops().strength(4.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("lunchtop"));
+		registry.register(new ComputerBlock(ComputerBlock.OLD_COMPUTER_SHAPE, ComputerBlock.OLD_COMPUTER_SHAPE, AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(4.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("old_computer"));
+		registry.register(new TransportalizerBlock(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("transportalizer"));
+		registry.register(new TransportalizerBlock(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("trans_portalizer"));
+		registry.register(new SendificatorBlock(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.SENDIFICATOR).setRegistryName("sendificator"));
+		registry.register(new GristWidgetBlock(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("grist_widget"));
+		registry.register(new SmallMachineBlock<>(new CustomVoxelShape(new double[]{4, 0, 4, 12, 6, 12}).createRotatedShapes(), MSTileEntityTypes.URANIUM_COOKER, AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("uranium_cooker"));
 		
 		registry.register(new CruxiteDowelBlock(AbstractBlock.Properties.of(Material.GLASS).strength(0.0F)).setRegistryName("cruxite_dowel"));
 		
@@ -481,14 +481,14 @@ public class MSBlocks
 		registry.register(new SpecialButtonBlock(AbstractBlock.Properties.of(Material.DECORATION).noCollission().strength(0.5F).sound(SoundType.WOOD), true, true).setRegistryName("wooden_explosive_button"));
 		registry.register(new SpecialButtonBlock(AbstractBlock.Properties.of(Material.DECORATION).noCollission().strength(0.5F).sound(SoundType.STONE), true, false).setRegistryName("stone_explosive_button"));
 		
-		registry.register(new DecorBlock(AbstractBlock.Properties.of(Material.METAL).strength(0.5F).sound(SoundType.METAL), MSBlockShapes.BLENDER).setRegistryName("blender"));
-		registry.register(new DecorBlock(AbstractBlock.Properties.of(Material.STONE).strength(0.5F), MSBlockShapes.CHESSBOARD).setRegistryName("chessboard"));
-		registry.register(new DecorBlock(AbstractBlock.Properties.of(Material.STONE).strength(0.5F), MSBlockShapes.FROG_STATUE).setRegistryName("mini_frog_statue"));
-		registry.register(new DecorBlock(AbstractBlock.Properties.of(Material.STONE).strength(0.5F), MSBlockShapes.WIZARD_STATUE).setRegistryName("mini_wizard_statue"));
-		registry.register(new CassettePlayerBlock(AbstractBlock.Properties.of(Material.METAL).strength(0.5F).sound(SoundType.METAL), MSBlockShapes.CASSETTE_PLAYER).setRegistryName("cassette_player"));
+		registry.register(new DecorBlock(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(0.5F).harvestTool(ToolType.PICKAXE).harvestLevel(0).sound(SoundType.METAL), MSBlockShapes.BLENDER).setRegistryName("blender"));
+		registry.register(new DecorBlock(AbstractBlock.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(0.5F).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.CHESSBOARD).setRegistryName("chessboard"));
+		registry.register(new DecorBlock(AbstractBlock.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(0.5F).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.FROG_STATUE).setRegistryName("mini_frog_statue"));
+		registry.register(new DecorBlock(AbstractBlock.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(0.5F).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.WIZARD_STATUE).setRegistryName("mini_wizard_statue"));
+		registry.register(new CassettePlayerBlock(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(0.5F).sound(SoundType.METAL).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.CASSETTE_PLAYER).setRegistryName("cassette_player"));
 		registry.register(new GlowystoneWireBlock(AbstractBlock.Properties.of(Material.DECORATION).strength(0.0F).lightLevel(state -> 16).noCollission()).setRegistryName("glowystone_dust"));
-		registry.register(new DecorBlock(AbstractBlock.Properties.of(Material.METAL).strength(4.0F), MSBlockShapes.PARCEL_PYXIS).setRegistryName("parcel_pyxis"));
-		registry.register(new DecorBlock(AbstractBlock.Properties.of(Material.METAL).strength(1.0F), MSBlockShapes.PYXIS_LID).setRegistryName("pyxis_lid"));
+		registry.register(new DecorBlock(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(4.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.PARCEL_PYXIS).setRegistryName("parcel_pyxis"));
+		registry.register(new DecorBlock(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(1.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.PYXIS_LID).setRegistryName("pyxis_lid"));
 		
 		registry.register(new FlowingModFluidBlock(MSFluids.OIL, new Vector3d(0.0, 0.0, 0.0), 0.75f, AbstractBlock.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()).setRegistryName("oil"));
 		registry.register(new FlowingModFluidBlock(MSFluids.BLOOD, new Vector3d(0.8, 0.0, 0.0), 0.25f, AbstractBlock.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()).setRegistryName("blood"));
