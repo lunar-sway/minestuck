@@ -150,6 +150,12 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.BROWN_STONE_COLUMN, "Brown Stone Column");
 		add(MSBlocks.CRACKED_BROWN_STONE_BRICKS, "Cracked Brown Stone Bricks");
 		add(MSBlocks.GREEN_STONE, "Green Stone");
+		add(MSBlocks.POLISHED_GREEN_STONE, "Polished Green Stone");
+		add(MSBlocks.GREEN_STONE_BRICKS, "Green Stone Bricks");
+		add(MSBlocks.GREEN_STONE_COLUMN, "Green Stone Column");
+		add(MSBlocks.CHISELED_GREEN_STONE_BRICKS, "Chiseled Green Stone Bricks");
+		add(MSBlocks.HORIZONTAL_GREEN_STONE_BRICKS, "Horizontal Green Stone Bricks");
+		add(MSBlocks.VERTICAL_GREEN_STONE_BRICKS, "Vertical Green Stone Bricks");
 		add(MSBlocks.DENSE_CLOUD, "Dense Cloud");
 		add(MSBlocks.BRIGHT_DENSE_CLOUD, "Bright Dense Cloud");
 		add(MSBlocks.SUGAR_CUBE, "Sugar Cube");

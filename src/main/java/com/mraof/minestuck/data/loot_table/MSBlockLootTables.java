@@ -134,6 +134,12 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(BROWN_STONE_COLUMN);
 		registerDropSelfLootTable(CRACKED_BROWN_STONE_BRICKS);
 		registerDropSelfLootTable(GREEN_STONE);
+		registerDropSelfLootTable(POLISHED_GREEN_STONE);
+		registerDropSelfLootTable(GREEN_STONE_BRICKS);
+		registerDropSelfLootTable(GREEN_STONE_COLUMN);
+		registerDropSelfLootTable(CHISELED_GREEN_STONE_BRICKS);
+		registerDropSelfLootTable(HORIZONTAL_GREEN_STONE_BRICKS);
+		registerDropSelfLootTable(VERTICAL_GREEN_STONE_BRICKS);
 		registerDropSelfLootTable(DENSE_CLOUD);
 		registerDropSelfLootTable(BRIGHT_DENSE_CLOUD);
 		registerDropSelfLootTable(SUGAR_CUBE);
@@ -249,6 +255,7 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(CHALK_BRICK_STAIRS);
 		registerDropSelfLootTable(PINK_STONE_BRICK_STAIRS);
 		registerDropSelfLootTable(BROWN_STONE_BRICK_STAIRS);
+		registerDropSelfLootTable(GREEN_STONE_BRICK_STAIRS);
 		registerDropSelfLootTable(RAINBOW_PLANKS_STAIRS);
 		registerDropSelfLootTable(END_PLANKS_STAIRS);
 		registerDropSelfLootTable(DEAD_PLANKS_STAIRS);
@@ -261,6 +268,7 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(CHALK_BRICK_SLAB);
 		registerDropSelfLootTable(PINK_STONE_BRICK_SLAB);
 		registerDropSelfLootTable(BROWN_STONE_BRICK_SLAB);
+		registerDropSelfLootTable(GREEN_STONE_BRICK_SLAB);
 		registerDropSelfLootTable(RAINBOW_PLANKS_SLAB);
 		registerDropSelfLootTable(END_PLANKS_SLAB);
 		registerDropSelfLootTable(DEAD_PLANKS_SLAB);

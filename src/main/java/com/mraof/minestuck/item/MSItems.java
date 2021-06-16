@@ -538,11 +538,17 @@ public class MSItems
 		registerItemBlock(registry, MOSSY_PINK_STONE_BRICKS, MSItemGroup.LANDS);
 		registerItemBlock(registry, POLISHED_PINK_STONE, MSItemGroup.LANDS);
 		registerItemBlock(registry, BROWN_STONE, MSItemGroup.LANDS);
-		registerItemBlock(registry, GREEN_STONE, MSItemGroup.LANDS);
 		registerItemBlock(registry, BROWN_STONE_BRICKS, MSItemGroup.LANDS);
 		registerItemBlock(registry, BROWN_STONE_COLUMN, MSItemGroup.LANDS);
 		registerItemBlock(registry, CRACKED_BROWN_STONE_BRICKS, MSItemGroup.LANDS);
 		registerItemBlock(registry, POLISHED_BROWN_STONE, MSItemGroup.LANDS);
+		registerItemBlock(registry, GREEN_STONE, MSItemGroup.MAIN);
+		registerItemBlock(registry, GREEN_STONE_BRICKS, MSItemGroup.MAIN);
+		registerItemBlock(registry, GREEN_STONE_COLUMN, MSItemGroup.MAIN);
+		registerItemBlock(registry, POLISHED_GREEN_STONE, MSItemGroup.MAIN);
+		registerItemBlock(registry, CHISELED_GREEN_STONE_BRICKS, MSItemGroup.MAIN);
+		registerItemBlock(registry, HORIZONTAL_GREEN_STONE_BRICKS, MSItemGroup.MAIN);
+		registerItemBlock(registry, VERTICAL_GREEN_STONE_BRICKS, MSItemGroup.MAIN);
 		registerItemBlock(registry, DENSE_CLOUD, MSItemGroup.LANDS);
 		registerItemBlock(registry, BRIGHT_DENSE_CLOUD, MSItemGroup.LANDS);
 		registerItemBlock(registry, SUGAR_CUBE, MSItemGroup.LANDS);
@@ -656,6 +662,7 @@ public class MSItems
 		registerItemBlock(registry, CHALK_BRICK_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, PINK_STONE_BRICK_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, BROWN_STONE_BRICK_STAIRS, MSItemGroup.LANDS);
+		registerItemBlock(registry, GREEN_STONE_BRICK_STAIRS, MSItemGroup.MAIN);
 		registerItemBlock(registry, RAINBOW_PLANKS_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, END_PLANKS_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, DEAD_PLANKS_STAIRS, MSItemGroup.LANDS);
@@ -668,6 +675,7 @@ public class MSItems
 		registerItemBlock(registry, CHALK_BRICK_SLAB, MSItemGroup.LANDS);
 		registerItemBlock(registry, PINK_STONE_BRICK_SLAB, MSItemGroup.LANDS);
 		registerItemBlock(registry, BROWN_STONE_BRICK_SLAB, MSItemGroup.LANDS);
+		registerItemBlock(registry, GREEN_STONE_BRICK_SLAB, MSItemGroup.MAIN);
 		registerItemBlock(registry, RAINBOW_PLANKS_SLAB, MSItemGroup.LANDS);
 		registerItemBlock(registry, END_PLANKS_SLAB, MSItemGroup.LANDS);
 		registerItemBlock(registry, DEAD_PLANKS_SLAB, MSItemGroup.LANDS);
