@@ -36,14 +36,14 @@ repositories {
     maven {
         // Refined Storage
         name "Raoulvdberge Repo"
-        url "https://repo.raoulvdberge.com/"
+        url "https://repo.refinedmods.com/"
     }
 }
 
 //apply plugin: 'forge'
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "1.12.2-1.4." + System.getenv()['BUILD_NUMBER']
+version = "1.12.2-1.4.300"
 group= "com.mraof.minestuck"
 archivesBaseName = "Minestuck"
 

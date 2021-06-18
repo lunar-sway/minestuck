@@ -18,6 +18,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.common.util.FakePlayer;
 
 import java.util.Objects;
 import java.util.Set;
@@ -40,7 +41,8 @@ public class Echeladder
 	
 	public static void increaseProgress(EntityPlayerMP player, int progress)
 	{
-		MinestuckPlayerData.getData(player).echeladder.increaseProgress(progress);
+		if (!(player instanceof FakePlayer))
+			MinestuckPlayerData.getData(player).echeladder.increaseProgress(progress);
 	}
 	
 	private final PlayerIdentifier identifier;

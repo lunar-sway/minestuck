@@ -12,6 +12,7 @@ import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.*;
 import net.java.games.input.Component;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -20,6 +21,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.util.FakePlayer;
@@ -115,9 +117,10 @@ public class ServerEventHandler
 	{
 		if(event.getSource().getTrueSource() != null)
 		{
-			if (event.getSource().getTrueSource() instanceof EntityPlayerMP)
+			Entity trueSource = event.getSource().getTrueSource();
+			if (trueSource instanceof EntityPlayerMP && !(trueSource instanceof FakePlayer))
 			{
-				EntityPlayerMP player = (EntityPlayerMP) event.getSource().getTrueSource();
+				EntityPlayerMP player = (EntityPlayerMP) trueSource;
 				if (event.getEntityLiving() instanceof EntityUnderling)
 				{    //Increase damage to underling
 					double modifier = MinestuckPlayerData.getData(player).echeladder.getUnderlingDamageModifier();
@@ -134,7 +137,7 @@ public class ServerEventHandler
 					else event.getEntityLiving().addPotionEffect(((ItemPotionWeapon) player.getHeldItemMainhand().getItem()).getEffect(player));
 				}
 			}
-			else if (event.getEntityLiving() instanceof EntityPlayerMP && event.getSource().getTrueSource() instanceof EntityUnderling)
+			else if (event.getEntityLiving() instanceof EntityPlayerMP && !(event.getEntityLiving() instanceof FakePlayer) && trueSource instanceof EntityUnderling)
 			{    //Decrease damage to player
 					EntityPlayerMP player = (EntityPlayerMP) event.getEntityLiving();
 					double modifier = MinestuckPlayerData.getData(player).echeladder.getUnderlingProtectionModifier();
