@@ -11,6 +11,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.FakePlayer;
 
 import javax.annotation.Nullable;
 
@@ -105,7 +106,7 @@ public class EntityOgre extends EntityUnderling
 		if(this.dead && !this.world.isRemote && type != null)
 		{
 			computePlayerProgress((int) (40*type.getPower() + 50));
-			if(entity != null && entity instanceof EntityPlayerMP)
+			if(entity != null && entity instanceof EntityPlayerMP && !(entity instanceof FakePlayer))
 			{
 				//((EntityPlayerMP) entity).addStat(MinestuckAchievementHandler.killOgre);
 				Echeladder ladder = MinestuckPlayerData.getData((EntityPlayerMP) entity).echeladder;

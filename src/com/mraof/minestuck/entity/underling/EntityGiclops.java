@@ -22,6 +22,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.util.FakePlayer;
 
 import javax.annotation.Nullable;
 
@@ -191,7 +192,7 @@ public class EntityGiclops extends EntityUnderling implements IBigEntity
 		if(this.dead && !this.world.isRemote && type != null)
 		{
 			computePlayerProgress((int) (500*type.getPower() + 1000));
-			if(entity != null && entity instanceof EntityPlayerMP)
+			if(entity != null && entity instanceof EntityPlayerMP && !(entity instanceof FakePlayer))
 			{
 				//((EntityPlayerMP) entity).addStat(MinestuckAchievementHandler.killGiclops);
 				Echeladder ladder = MinestuckPlayerData.getData((EntityPlayerMP) entity).echeladder;
