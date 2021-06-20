@@ -1,5 +1,6 @@
 package com.mraof.minestuck.util;
 
+import com.mraof.minestuck.client.gui.StoneTabletScreen;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.Style;
@@ -23,7 +24,7 @@ public class StoneTabletUtils
 	{
 		Point point = new Point();
 		
-		font.getSplitter().splitLines(pageText, 114, Style.EMPTY, true, (style, start, end) -> {
+		font.getSplitter().splitLines(pageText, StoneTabletScreen.TEXT_WIDTH, Style.EMPTY, true, (style, start, end) -> {
 			if(index >= end)
 				point.y += font.lineHeight;
 			if(index >= start)
@@ -36,19 +37,19 @@ public class StoneTabletUtils
 	public static void adjustPointerAForBidi(FontRenderer font, Point pointer)
 	{
 		if (font.isBidirectional())
-			pointer.x = 114 - pointer.x;
+			pointer.x = StoneTabletScreen.TEXT_WIDTH - pointer.x;
 	}
 	
 	public static void pointerToRelative(Point pointer, int width)
 	{
-		pointer.x = pointer.x - (width - 192) / 2 - 36;
-		pointer.y = pointer.y - 32;
+		pointer.x = pointer.x - (width - StoneTabletScreen.GUI_WIDTH) / 2 - StoneTabletScreen.TEXT_OFFSET_X;
+		pointer.y = pointer.y - StoneTabletScreen.TEXT_OFFSET_Y;
 	}
 	
 	public static void pointerToPrecise(Point pointer, int width)
 	{
-		pointer.x = pointer.x + (width - 192) / 2 + 36;
-		pointer.y = pointer.y + 32;
+		pointer.x = pointer.x + (width - StoneTabletScreen.GUI_WIDTH) / 2 + StoneTabletScreen.TEXT_OFFSET_X;
+		pointer.y = pointer.y + StoneTabletScreen.TEXT_OFFSET_Y;
 	}
 	
 	
@@ -106,7 +107,7 @@ public class StoneTabletUtils
 			MutableInt lineY = new MutableInt();
 			MutableInt index = new MutableInt(text.length());
 			
-			font.getSplitter().splitLines(text, 114, Style.EMPTY, true, (style, start, end) -> {
+			font.getSplitter().splitLines(text, StoneTabletScreen.TEXT_WIDTH, Style.EMPTY, true, (style, start, end) -> {
 				int nextLineY = lineY.intValue() + font.lineHeight;
 				if(pointer.y >= lineY.intValue() && pointer.y < nextLineY)
 				{
@@ -123,12 +124,6 @@ public class StoneTabletUtils
 	public static int getSelectionWidth(FontRenderer font, String pageText, int selectionEnd)
 	{
 		return font.width(String.valueOf(pageText.charAt(MathHelper.clamp(selectionEnd, 0, pageText.length() - 1))));
-	}
-	
-	@Deprecated
-	public static int sizeStringToWidth(FontRenderer font, String text, int wrapWidth)
-	{
-		return font.wordWrapHeight(text, wrapWidth);	//TODO was called sizeStringToWidth(). This was the only function with matching types. Check if this is the right replacement
 	}
 	
 	public static class Point

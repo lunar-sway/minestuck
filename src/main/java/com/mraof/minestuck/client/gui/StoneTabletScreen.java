@@ -30,6 +30,12 @@ public class StoneTabletScreen extends Screen
 {
 	public static final ResourceLocation TABLET_TEXTURES = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/stone_tablet.png");
 	
+	//GUI sizes
+	public static final int GUI_WIDTH = 192;
+	public static final int GUI_HEIGHT = 192;
+	public static final int TEXT_WIDTH = 114;
+	public static final int TEXT_OFFSET_X = 36, TEXT_OFFSET_Y = 32;
+	
 	private final boolean canEdit;
 	private boolean isModified;
 	private String text;
@@ -40,9 +46,6 @@ public class StoneTabletScreen extends Screen
 	private final PlayerEntity editingPlayer;
 	private final Hand hand;
 	private final ItemStack tablet;
-	//GUI size
-	private final int guiWidth = 192;
-	private final int guiHeight = 192;
 	//GUI buttons
 	private Button buttonDone;
 	private Button buttonCancel;
@@ -77,19 +80,19 @@ public class StoneTabletScreen extends Screen
 		
 		if(canEdit)
 		{
-			this.buttonDone = this.addButton(new Button(this.width / 2 - 100, 196, 98, 20, new TranslationTextComponent("gui.done"), (button) ->
+			this.buttonDone = this.addButton(new Button(this.width / 2 - 100, GUI_HEIGHT + 4, 98, 20, new TranslationTextComponent("gui.done"), (button) ->
 			{
 				this.minecraft.setScreen(null);
 				this.sendTabletToServer();
 			}));
-			this.buttonCancel = this.addButton(new Button(this.width / 2 + 2, 196, 98, 20, new TranslationTextComponent("gui.cancel"), (button) ->
+			this.buttonCancel = this.addButton(new Button(this.width / 2 + 2, GUI_HEIGHT + 4, 98, 20, new TranslationTextComponent("gui.cancel"), (button) ->
 			{
 				minecraft.setScreen(null);
 			}));
 		}
 		else
 		{
-			this.addButton(new Button(this.width / 2 - 100, 196, 200, 20, new TranslationTextComponent("gui.done"), (p_214161_1_) -> {
+			this.addButton(new Button(this.width / 2 - 100, GUI_HEIGHT + 4, 200, 20, new TranslationTextComponent("gui.done"), (p_214161_1_) -> {
 				this.minecraft.setScreen(null);
 			}));
 		}
@@ -102,23 +105,22 @@ public class StoneTabletScreen extends Screen
 		this.setFocused(null);
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.minecraft.getTextureManager().bind(TABLET_TEXTURES);
-		int topX = (this.width - 192) / 2;
+		int topX = (this.width - GUI_WIDTH) / 2;
 		int topY = 2;
-		this.blit(matrixStack, topX, topY, 0, 0, 192, 192);
+		this.blit(matrixStack, topX, topY, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 		{
-			String s5 = this.text;
 			
 			MutableInt lineY = new MutableInt();
-			font.getSplitter().splitLines(s5, 114, Style.EMPTY, true, (style, start, end) -> {
-				ITextComponent line = new StringTextComponent(s5.substring(start, end)).setStyle(style);
-				font.draw(matrixStack, line, (this.width - 192) / 2F + 36, lineY.intValue() + 32, -16777216);
+			font.getSplitter().splitLines(text, TEXT_WIDTH, Style.EMPTY, true, (style, start, end) -> {
+				ITextComponent line = new StringTextComponent(text.substring(start, end)).setStyle(style);
+				font.draw(matrixStack, line, (this.width - GUI_WIDTH) / 2F + TEXT_OFFSET_X, lineY.intValue() + TEXT_OFFSET_Y, 0xFFFFFF);
 				lineY.add(font.lineHeight);
 			});
 			
-			this.highlightSelectedText(s5);
+			this.highlightSelectedText();
 			if (this.updateCount / 6 % 2 == 0) 
 			{
-				Point point = StoneTabletUtils.createPointer(font, s5, this.cursor);
+				Point point = StoneTabletUtils.createPointer(font, text, this.cursor);
 				if (this.font.isBidirectional()) 
 				{
 					StoneTabletUtils.adjustPointerAForBidi(font, point);
@@ -128,9 +130,9 @@ public class StoneTabletScreen extends Screen
 				StoneTabletUtils.pointerToPrecise(point, width);
 				if(canEdit)
 				{
-					if(this.cursor < s5.length())
+					if(this.cursor < text.length())
 					{
-						AbstractGui.fill(matrixStack, point.x, point.y - 1, point.x + 1, point.y + 9, -16777216);
+						AbstractGui.fill(matrixStack, point.x, point.y - 1, point.x + 1, point.y + font.lineHeight, 0xFFFFFF);
 					} else
 					{
 						this.font.draw(matrixStack, "_", (float) point.x, (float) point.y, 0);
@@ -145,9 +147,8 @@ public class StoneTabletScreen extends Screen
 	/**
 	 * Uses drawSelectionBox to draw one or more boxes behind any selected text
 	 *
-	 * @param pageText Text on the current page as a string
 	 */
-	private void highlightSelectedText(String pageText) 
+	private void highlightSelectedText()
 	{
 		if (this.selection != this.cursor)
 		{
@@ -155,7 +156,7 @@ public class StoneTabletScreen extends Screen
 			int selectionEnd = Math.max(this.cursor, this.selection);
 			
 			MutableInt lineY = new MutableInt();
-			font.getSplitter().splitLines(text, 114, Style.EMPTY, true, (style, start, end) -> {
+			font.getSplitter().splitLines(text, TEXT_WIDTH, Style.EMPTY, true, (style, start, end) -> {
 				if(selectionEnd >= start && selectionStart <= end)
 				{
 					int startIndex = Math.max(selectionStart, start);
@@ -204,7 +205,7 @@ public class StoneTabletScreen extends Screen
 	}
 	
 	@Override
-	public boolean keyPressed(int keyCode, int scanCode, int modifiers) 
+	public boolean keyPressed(int keyCode, int scanCode, int modifiers)
 	{
 		if (super.keyPressed(keyCode, scanCode, modifiers) || !canEdit) 
 			return true;
@@ -213,13 +214,13 @@ public class StoneTabletScreen extends Screen
 	}
 	
 	@Override
-	public boolean charTyped(char p_charTyped_1_, int p_charTyped_2_) 
+	public boolean charTyped(char keycode, int modifiers)
 	{
-		if (super.charTyped(p_charTyped_1_, p_charTyped_2_) || !canEdit) 
+		if (super.charTyped(keycode, modifiers) || !canEdit)
 			return true;
-		else if (SharedConstants.isAllowedChatCharacter(p_charTyped_1_)) 
+		else if (SharedConstants.isAllowedChatCharacter(keycode))
 		{
-			this.insertTextIntoPage(Character.toString(p_charTyped_1_));
+			this.insertTextIntoPage(Character.toString(keycode));
 			return true;
 		} else
 			return false;
@@ -240,10 +241,8 @@ public class StoneTabletScreen extends Screen
 		StringBuilder stringbuilder = new StringBuilder();
 		
 		for(char c0 : text.toCharArray())
-			if (c0 != 167 && c0 != 127) 
+			if (c0 != 167 && c0 != 127)
 				stringbuilder.append(c0);
-			
-		
 		
 		return stringbuilder.toString();
 	}
@@ -268,7 +267,7 @@ public class StoneTabletScreen extends Screen
 		String s = this.text;
 		this.cursor = MathHelper.clamp(this.cursor, 0, s.length());
 		String s1 = (new StringBuilder(s)).insert(this.cursor, text).toString();
-		int i = this.font.wordWrapHeight(s1 + "" + TextFormatting.BLACK + "_", 114);
+		int i = this.font.wordWrapHeight(s1 + "" + TextFormatting.BLACK + "_", TEXT_WIDTH);
 		if (i <= 128 && s1.length() < 1024) 
 		{
 			this.setText(s1);
@@ -501,7 +500,7 @@ public class StoneTabletScreen extends Screen
 				
 			} else 
 			{
-				int i = StoneTabletUtils.getSelectionIndex(font, pageText, new Point(point.x + StoneTabletUtils.getSelectionWidth(font, pageText, this.cursor) / 3, point.y - 9));
+				int i = StoneTabletUtils.getSelectionIndex(font, pageText, new Point(point.x + StoneTabletUtils.getSelectionWidth(font, pageText, this.cursor) / 3, point.y - font.lineHeight));
 				if (i >= 0) 
 				{
 					this.cursor = i;
@@ -521,15 +520,15 @@ public class StoneTabletScreen extends Screen
 		if (!pageText.isEmpty()) 
 		{
 			Point point = StoneTabletUtils.createPointer(font, pageText, this.cursor);
-			int i = this.font.wordWrapHeight(pageText + "" + TextFormatting.BLACK + "_", 114);
-			if (point.y + 9 == i) 
+			int i = this.font.wordWrapHeight(pageText + "" + TextFormatting.BLACK + "_", TEXT_WIDTH);
+			if (point.y + font.lineHeight == i)
 			{
 				this.cursor = pageText.length();
 				if (!Screen.hasShiftDown())
 					this.selection = this.cursor;
 			} else 
 			{
-				int j = StoneTabletUtils.getSelectionIndex(font, pageText, new Point(point.x + StoneTabletUtils.getSelectionWidth(font, pageText, this.cursor) / 3, point.y + 9));
+				int j = StoneTabletUtils.getSelectionIndex(font, pageText, new Point(point.x + StoneTabletUtils.getSelectionWidth(font, pageText, this.cursor) / 3, point.y + font.lineHeight));
 				if (j >= 0) 
 				{
 					this.cursor = j;
