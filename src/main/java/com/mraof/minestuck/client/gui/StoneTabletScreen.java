@@ -22,8 +22,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SharedConstants;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
+import org.apache.commons.lang3.mutable.MutableInt;
 
 
 public class StoneTabletScreen extends Screen
@@ -46,10 +46,8 @@ public class StoneTabletScreen extends Screen
 	//GUI buttons
 	private Button buttonDone;
 	private Button buttonCancel;
-	/** Note that this can be less than selectionStart if you select text right-to-left */
-	private int selectionEnd;
-	/** Note that this will be greater than selectionEnd if you select text right-to-left */
-	private int selectionStart;
+	private int cursor;
+	private int selection;
 	
 	public StoneTabletScreen(PlayerEntity player, Hand hand, String text, boolean canEdit)
 	{
@@ -92,7 +90,7 @@ public class StoneTabletScreen extends Screen
 		else
 		{
 			this.addButton(new Button(this.width / 2 - 100, 196, 200, 20, new TranslationTextComponent("gui.done"), (p_214161_1_) -> {
-				this.minecraft.setScreen((Screen)null);
+				this.minecraft.setScreen(null);
 			}));
 		}
 	}
@@ -104,26 +102,33 @@ public class StoneTabletScreen extends Screen
 		this.setFocused(null);
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.minecraft.getTextureManager().bind(TABLET_TEXTURES);
-		int i = (this.width - 192) / 2;
-		int j = 2;
-		this.blit(matrixStack, i, 2, 0, 0, 192, 192);
+		int topX = (this.width - 192) / 2;
+		int topY = 2;
+		this.blit(matrixStack, topX, topY, 0, 0, 192, 192);
 		{
 			String s5 = this.text;
-			//this.font.drawSplitString(s5, i + 36, 32, 114, 0); TODO no obvious replacement found. Continue looking
+			
+			MutableInt lineY = new MutableInt();
+			font.getSplitter().splitLines(s5, 114, Style.EMPTY, true, (style, start, end) -> {
+				ITextComponent line = new StringTextComponent(s5.substring(start, end)).setStyle(style);
+				font.draw(matrixStack, line, (this.width - 192) / 2F + 36, lineY.intValue() + 32, -16777216);
+				lineY.add(font.lineHeight);
+			});
+			
 			this.highlightSelectedText(s5);
 			if (this.updateCount / 6 % 2 == 0) 
 			{
-				Point point = StoneTabletUtils.createPointer(font, s5, this.selectionEnd);
+				Point point = StoneTabletUtils.createPointer(font, s5, this.cursor);
 				if (this.font.isBidirectional()) 
 				{
 					StoneTabletUtils.adjustPointerAForBidi(font, point);
 					point.x = point.x - 4;
 				}
 				
-				StoneTabletUtils.adjustPointerB(point, width);
+				StoneTabletUtils.pointerToPrecise(point, width);
 				if(canEdit)
 				{
-					if(this.selectionEnd < s5.length())
+					if(this.cursor < s5.length())
 					{
 						AbstractGui.fill(matrixStack, point.x, point.y - 1, point.x + 1, point.y + 9, -16777216);
 					} else
@@ -144,39 +149,23 @@ public class StoneTabletScreen extends Screen
 	 */
 	private void highlightSelectedText(String pageText) 
 	{
-		if (this.selectionStart != this.selectionEnd) 
+		if (this.selection != this.cursor)
 		{
-			int i = Math.min(this.selectionEnd, this.selectionStart);
-			int j = Math.max(this.selectionEnd, this.selectionStart);
-			String s = pageText.substring(i, j);
-			int k = 0;//this.font.getWordPosition(pageText, 1, j, true); TODO
-			String s1 = pageText.substring(i, k);
-			Point point = StoneTabletUtils.createPointer(font, pageText, i);
-			Point point1 = new Point(point.x, point.y + 9);
+			int selectionStart = Math.min(this.cursor, this.selection);
+			int selectionEnd = Math.max(this.cursor, this.selection);
 			
-			while(!s.isEmpty()) 
-			{
-				int l = StoneTabletUtils.sizeStringToWidth(font, s1, 114 - point.x);
-				if (s.length() <= l) 
+			MutableInt lineY = new MutableInt();
+			font.getSplitter().splitLines(text, 114, Style.EMPTY, true, (style, start, end) -> {
+				if(selectionEnd >= start && selectionStart <= end)
 				{
-					point1.x = point.x + this.getTextWidth(s);
-					this.drawSelectionBox(point, point1);
-					break;
+					int startIndex = Math.max(selectionStart, start);
+					int endIndex = Math.min(selectionEnd, end);
+					Point startPos = new Point(font.width(text.substring(start, startIndex)), lineY.intValue());
+					Point endPos = new Point(font.width(text.substring(start, endIndex)), lineY.intValue() + font.lineHeight);
+					drawSelectionBox(startPos, endPos);
 				}
-				
-				l = Math.min(l, s.length() - 1);
-				String s2 = s.substring(0, l);
-				char c0 = s.charAt(l);
-				boolean flag = c0 == ' ' || c0 == '\n';
-				s = TextFormatting.stripFormatting(s2) + s.substring(l + (flag ? 1 : 0));	//TODO was getFormatString(String). Make sure that this is the right replacement
-				s1 = TextFormatting.stripFormatting(s2) + s1.substring(l + (flag ? 1 : 0));
-				point1.x = point.x + this.getTextWidth(s2 + " ");
-				this.drawSelectionBox(point, point1);
-				point.x = 0;
-				point.y = point.y + 9;
-				point1.y = point1.y + 9;
-			}
-			
+				lineY.add(font.lineHeight);
+			});
 		}
 	}
 	
@@ -196,8 +185,8 @@ public class StoneTabletScreen extends Screen
 			point.x = i;
 		}
 		
-		StoneTabletUtils.adjustPointerB(point, width);
-		StoneTabletUtils.adjustPointerB(point1, width);
+		StoneTabletUtils.pointerToPrecise(point, width);
+		StoneTabletUtils.pointerToPrecise(point1, width);
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuilder();
 		RenderSystem.color4f(0.0F, 0.0F, 1.0F, 1.0F);
@@ -272,18 +261,18 @@ public class StoneTabletScreen extends Screen
 	 */
 	private void insertTextIntoPage(String text) 
 	{
-		if (this.selectionStart != this.selectionEnd) 
+		if (this.selection != this.cursor)
 			this.removeSelectedText();
 		
 		
 		String s = this.text;
-		this.selectionEnd = MathHelper.clamp(this.selectionEnd, 0, s.length());
-		String s1 = (new StringBuilder(s)).insert(this.selectionEnd, text).toString();
+		this.cursor = MathHelper.clamp(this.cursor, 0, s.length());
+		String s1 = (new StringBuilder(s)).insert(this.cursor, text).toString();
 		int i = this.font.wordWrapHeight(s1 + "" + TextFormatting.BLACK + "_", 114);
 		if (i <= 128 && s1.length() < 1024) 
 		{
 			this.setText(s1);
-			this.selectionStart = this.selectionEnd = Math.min(this.text.length(), this.selectionEnd + text.length());
+			this.selection = this.cursor = Math.min(this.text.length(), this.cursor + text.length());
 		}
 		
 	}
@@ -294,8 +283,8 @@ public class StoneTabletScreen extends Screen
 	private String getSelectedText() 
 	{
 		String s = this.text;
-		int i = Math.min(this.selectionEnd, this.selectionStart);
-		int j = Math.max(this.selectionEnd, this.selectionStart);
+		int i = Math.min(this.cursor, this.selection);
+		int j = Math.max(this.cursor, this.selection);
 		return s.substring(i, j);
 	}
 	
@@ -316,25 +305,25 @@ public class StoneTabletScreen extends Screen
 			if (!s.isEmpty()) 
 			{
 				Point point = new Point((int)mouseX, (int)mouseY);
-				StoneTabletUtils.adjustPointerA(point, width);
+				StoneTabletUtils.pointerToRelative(point, width);
 				StoneTabletUtils.adjustPointerAForBidi(font, point);
 				int j = StoneTabletUtils.getSelectionIndex(font, s, point);
 				if (j >= 0) 
 				{
 					if (i - this.lastClickTime < 250L) {
-						if (this.selectionStart == this.selectionEnd) {
-							this.selectionStart = 0;//this.font.getWordPosition(s, -1, j, false); TODO
-							this.selectionEnd = 0;//this.font.getWordPosition(s, 1, j, false);
+						if (this.selection == this.cursor) {
+							this.selection = CharacterManager.getWordPosition(s, -1, j, false);
+							this.cursor = CharacterManager.getWordPosition(s, 1, j, false);
 						} else 
 							{
-							this.selectionStart = 0;
-							this.selectionEnd = this.text.length();
+							this.selection = 0;
+							this.cursor = this.text.length();
 						}
 					} else 
 					{
-						this.selectionEnd = j;
+						this.cursor = j;
 						if (!Screen.hasShiftDown()) 
-							this.selectionStart = this.selectionEnd;
+							this.selection = this.cursor;
 						
 					}
 				}
@@ -352,11 +341,11 @@ public class StoneTabletScreen extends Screen
 		{
 			String s = this.text;
 			Point point = new Point((int)p_mouseDragged_1_, (int)p_mouseDragged_3_);
-			StoneTabletUtils.adjustPointerA(point, width);
+			StoneTabletUtils.pointerToRelative(point, width);
 			StoneTabletUtils.adjustPointerAForBidi(font, point);
 			int i = StoneTabletUtils.getSelectionIndex(font, s, point);
 			if (i >= 0) 
-				this.selectionEnd = i;
+				this.cursor = i;
 		}
 		
 		return super.mouseDragged(p_mouseDragged_1_, p_mouseDragged_3_, p_mouseDragged_5_, p_mouseDragged_6_, p_mouseDragged_8_);
@@ -369,8 +358,8 @@ public class StoneTabletScreen extends Screen
 		String s = text;
 		if (Screen.isSelectAll(keyCode)) 
 		{
-			this.selectionStart = 0;
-			this.selectionEnd = s.length();
+			this.selection = 0;
+			this.cursor = s.length();
 			return true;
 		} else if (Screen.isCopy(keyCode)) 
 		{
@@ -379,7 +368,7 @@ public class StoneTabletScreen extends Screen
 		} else if (Screen.isPaste(keyCode)) 
 		{
 			this.insertTextIntoPage(this.removeUnprintableChars(TextFormatting.stripFormatting(this.minecraft.keyboardHandler.getClipboard().replaceAll("\\r", ""))));
-			this.selectionStart = this.selectionEnd;
+			this.selection = this.cursor;
 			return true;
 		} else if (Screen.isCut(keyCode)) 
 		{
@@ -432,14 +421,14 @@ public class StoneTabletScreen extends Screen
 	{
 		if (!pageText.isEmpty()) 
 		{
-			if (this.selectionStart != this.selectionEnd) 
+			if (this.selection != this.cursor)
 				this.removeSelectedText();
-			else if (this.selectionEnd > 0) 
+			else if (this.cursor > 0)
 			{
-				String s = (new StringBuilder(pageText)).deleteCharAt(Math.max(0, this.selectionEnd - 1)).toString();
+				String s = (new StringBuilder(pageText)).deleteCharAt(Math.max(0, this.cursor - 1)).toString();
 				this.setText(s);
-				this.selectionEnd = Math.max(0, this.selectionEnd - 1);
-				this.selectionStart = this.selectionEnd;
+				this.cursor = Math.max(0, this.cursor - 1);
+				this.selection = this.cursor;
 			}
 		}
 		
@@ -453,11 +442,11 @@ public class StoneTabletScreen extends Screen
 	{
 		if (!pageText.isEmpty()) 
 		{
-			if (this.selectionStart != this.selectionEnd) 
+			if (this.selection != this.cursor)
 				this.removeSelectedText();
-			else if (this.selectionEnd < pageText.length()) 
+			else if (this.cursor < pageText.length())
 			{
-				String s = (new StringBuilder(pageText)).deleteCharAt(Math.max(0, this.selectionEnd)).toString();
+				String s = (new StringBuilder(pageText)).deleteCharAt(Math.max(0, this.cursor)).toString();
 				this.setText(s);
 			}
 		}
@@ -471,12 +460,12 @@ public class StoneTabletScreen extends Screen
 	{
 		int i = this.font.isBidirectional() ? 1 : -1;
 		if (Screen.hasControlDown()) 
-			this.selectionEnd = 0;//this.font.getWordPosition(pageText, i, this.selectionEnd, true); TODO
+			this.cursor = CharacterManager.getWordPosition(pageText, i, this.cursor, true);
 		else
-			this.selectionEnd = Math.max(0, this.selectionEnd + i);
+			this.cursor = Math.max(0, this.cursor + i);
 		
 		if (!Screen.hasShiftDown())
-			this.selectionStart = this.selectionEnd;
+			this.selection = this.cursor;
 				
 	}
 	
@@ -487,12 +476,12 @@ public class StoneTabletScreen extends Screen
 	{
 		int i = this.font.isBidirectional() ? -1 : 1;
 		if (Screen.hasControlDown())
-			this.selectionEnd = 0;//this.font.getWordPosition(pageText, i, this.selectionEnd, true); TODO
+			this.cursor = CharacterManager.getWordPosition(pageText, i, this.cursor, true);
 		else
-			this.selectionEnd = Math.min(pageText.length(), this.selectionEnd + i);
+			this.cursor = Math.min(pageText.length(), this.cursor + i);
 				
 		if (!Screen.hasShiftDown())
-			this.selectionStart = this.selectionEnd;
+			this.selection = this.cursor;
 		
 	}
 	
@@ -503,21 +492,21 @@ public class StoneTabletScreen extends Screen
 	{
 		if (!pageText.isEmpty()) 
 		{
-			Point point = StoneTabletUtils.createPointer(font, pageText, this.selectionEnd);
+			Point point = StoneTabletUtils.createPointer(font, pageText, this.cursor);
 			if (point.y == 0) 
 			{
-				this.selectionEnd = 0;
+				this.cursor = 0;
 				if (!Screen.hasShiftDown())
-					this.selectionStart = this.selectionEnd;
+					this.selection = this.cursor;
 				
 			} else 
 			{
-				int i = StoneTabletUtils.getSelectionIndex(font, pageText, new Point(point.x + StoneTabletUtils.getSelectionWidth(font, pageText, this.selectionEnd) / 3, point.y - 9));
+				int i = StoneTabletUtils.getSelectionIndex(font, pageText, new Point(point.x + StoneTabletUtils.getSelectionWidth(font, pageText, this.cursor) / 3, point.y - 9));
 				if (i >= 0) 
 				{
-					this.selectionEnd = i;
+					this.cursor = i;
 					if (!Screen.hasShiftDown())
-						this.selectionStart = this.selectionEnd;
+						this.selection = this.cursor;
 				}
 			}
 		}
@@ -531,21 +520,21 @@ public class StoneTabletScreen extends Screen
 	{
 		if (!pageText.isEmpty()) 
 		{
-			Point point = StoneTabletUtils.createPointer(font, pageText, this.selectionEnd);
+			Point point = StoneTabletUtils.createPointer(font, pageText, this.cursor);
 			int i = this.font.wordWrapHeight(pageText + "" + TextFormatting.BLACK + "_", 114);
 			if (point.y + 9 == i) 
 			{
-				this.selectionEnd = pageText.length();
+				this.cursor = pageText.length();
 				if (!Screen.hasShiftDown())
-					this.selectionStart = this.selectionEnd;
+					this.selection = this.cursor;
 			} else 
 			{
-				int j = StoneTabletUtils.getSelectionIndex(font, pageText, new Point(point.x + StoneTabletUtils.getSelectionWidth(font, pageText, this.selectionEnd) / 3, point.y + 9));
+				int j = StoneTabletUtils.getSelectionIndex(font, pageText, new Point(point.x + StoneTabletUtils.getSelectionWidth(font, pageText, this.cursor) / 3, point.y + 9));
 				if (j >= 0) 
 				{
-					this.selectionEnd = j;
+					this.cursor = j;
 					if (!Screen.hasShiftDown())
-						this.selectionStart = this.selectionEnd;
+						this.selection = this.cursor;
 				}
 			}
 		}
@@ -557,9 +546,9 @@ public class StoneTabletScreen extends Screen
 	 */
 	private void homePressed(String pageText) 
 	{
-		this.selectionEnd = StoneTabletUtils.getSelectionIndex(font, pageText, new Point(0, StoneTabletUtils.createPointer(font, pageText, this.selectionEnd).y));
+		this.cursor = StoneTabletUtils.getSelectionIndex(font, pageText, new Point(0, StoneTabletUtils.createPointer(font, pageText, this.cursor).y));
 		if (!Screen.hasShiftDown())
-			this.selectionStart = this.selectionEnd;		
+			this.selection = this.cursor;
 	}
 	
 	/**
@@ -567,9 +556,9 @@ public class StoneTabletScreen extends Screen
 	 */
 	private void endPressed(String pageText) 
 	{
-		this.selectionEnd = StoneTabletUtils.getSelectionIndex(font, pageText, new Point(113, StoneTabletUtils.createPointer(font, pageText, this.selectionEnd).y));
+		this.cursor = StoneTabletUtils.getSelectionIndex(font, pageText, new Point(113, StoneTabletUtils.createPointer(font, pageText, this.cursor).y));
 		if (!Screen.hasShiftDown())
-			this.selectionStart = this.selectionEnd;		
+			this.selection = this.cursor;
 	}
 	
 	/**
@@ -577,14 +566,14 @@ public class StoneTabletScreen extends Screen
 	 */
 	private void removeSelectedText() 
 	{
-		if (this.selectionStart != this.selectionEnd) 
+		if (this.selection != this.cursor)
 		{
 			String s = this.text;
-			int i = Math.min(this.selectionEnd, this.selectionStart);
-			int j = Math.max(this.selectionEnd, this.selectionStart);
+			int i = Math.min(this.cursor, this.selection);
+			int j = Math.max(this.cursor, this.selection);
 			String s1 = s.substring(0, i) + s.substring(j);
-			this.selectionEnd = i;
-			this.selectionStart = this.selectionEnd;
+			this.cursor = i;
+			this.selection = this.cursor;
 			this.setText(s1);
 		}
 	}
