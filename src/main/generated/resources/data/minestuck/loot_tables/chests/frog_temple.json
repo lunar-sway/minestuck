@@ -125,6 +125,7 @@
         },
         {
           "type": "minecraft:item",
+          "weight": 3,
           "quality": -1,
           "functions": [
             {
@@ -140,6 +141,7 @@
         },
         {
           "type": "minecraft:item",
+          "weight": 3,
           "quality": -1,
           "functions": [
             {
@@ -155,6 +157,7 @@
         },
         {
           "type": "minecraft:item",
+          "weight": 3,
           "quality": -1,
           "functions": [
             {
@@ -170,6 +173,7 @@
         },
         {
           "type": "minecraft:item",
+          "weight": 3,
           "quality": -1,
           "functions": [
             {
@@ -182,6 +186,22 @@
             }
           ],
           "name": "minestuck:grasshopper"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 3,
+          "quality": -1,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 5.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minestuck:cone_of_flies"
         },
         {
           "type": "minecraft:item",

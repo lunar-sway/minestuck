@@ -1,7 +1,6 @@
 package com.mraof.minestuck.entity;
 
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.util.Debug;
 import net.minecraft.entity.*;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -52,7 +51,9 @@ public class LotusFlowerEntity extends CreatureEntity implements IAnimatable
 		super(type, worldIn);
 		this.ignoreFrustumCheck = true;
 		entityCollisionReduction = 0F;
-		canBeCollidedWith();
+		this.setInvulnerable(true);
+		this.setNoAI(true);
+		this.enablePersistence();
 	}
 	
 	@Override
@@ -152,8 +153,6 @@ public class LotusFlowerEntity extends CreatureEntity implements IAnimatable
 		
 		if(eventTimer == 0)
 			lotusResetEffects();
-		
-		//Debug.debugf("eventTimer = %s", eventTimer);
 	}
 	
 	@Override
