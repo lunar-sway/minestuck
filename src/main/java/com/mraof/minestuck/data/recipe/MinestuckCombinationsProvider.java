@@ -322,6 +322,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.COBALT_SABRE).input(MSItems.TOO_HOT_TO_HANDLE).or().input(Items.LAPIS_BLOCK).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.SCARLET_RIBBITAR).input(MSItems.CALEDSCRATCH).and().input(MSItems.FROG).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.SHATTER_BEACON).input(Items.BEACON).and().input(Items.DIAMOND_SWORD).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.SHATTER_BACON).input(Items.PORKCHOP).and().input(MSItems.SHATTER_BEACON).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CALEDFWLCH).input(MSItems.ROYAL_DERINGER).or().input(MSItems.CUEBALL).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.BATLEACKS).namedInput(MSItems.BATTLEAXE).and().input(MSItems.SBAHJ_POSTER).build(consumer);
@@ -385,9 +386,11 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.BARBER_BASHER).input(MSItems.DEUCE_CLUB).and().input(MSItems.BARBASOL).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.NIGHT_CLUB).input(MSItems.DEUCE_CLUB).and().input(MSItems.CREW_POSTER).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.NIGHTSTICK).input(MSItems.NIGHT_CLUB).and().input(MSItems.SCALEMATE_APPLESCAB).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.RED_EYES).input(MSItems.NIGHT_CLUB).and().namedInput(Items.SPIDER_EYE).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.METAL_BAT).input(MSItems.DEUCE_CLUB).and().input(Items.IRON_INGOT).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CLOWN_CLUB).input(MSItems.METAL_BAT).or().input(MSItems.HORN).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.SPIKED_CLUB).input(MSItems.METAL_BAT).or().input(ItemTags.LOGS).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.M_ACE).input(MSItems.MACE).and().input(MSItems.NONBINARY_CODE).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.DESOLATOR_MACE).input(MSItems.MACE).or().input(Items.FLINT).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.BLAZING_GLORY).input(MSItems.MACE).and().namedInput(Items.BLAZE_POWDER).build(consumer);
 		
@@ -401,7 +404,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.DEMOCRATIC_DEMOLITIONER).input(MSItems.MAILBOX).or().input(MSItems.FOOD_CAN).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.REGI_HAMMER).input(MSItems.CLAW_HAMMER).and().input(MSBlocks.CHESSBOARD).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.FEAR_NO_ANVIL).input(MSItems.BLACKSMITH_HAMMER).or().input(Items.CLOCK).build(consumer);
-		CombinationRecipeBuilder.of(MSItems.TELESCOPIC_SASSACRUSHER).input(MSItems.SLEDGE_HAMMER).and().input(Items.BOOK).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.TELESCOPIC_SASSACRUSHER).input(MSItems.SLEDGE_HAMMER).and().input(MSItems.SASSACRE_TEXT).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.MELT_MASHER).input(MSItems.FEAR_NO_ANVIL).or().input(Items.LAVA_BUCKET).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.ESTROGEN_EMPOWERED_EVERYTHING_ERADICATOR).input(MSItems.FISSION_FOCUSED_FAULT_FELLER).or().input(MSItems.GAMEGRL_MAGAZINE).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.EEEEEEEEEEEE).input(MSItems.ESTROGEN_EMPOWERED_EVERYTHING_ERADICATOR).and().input(MSItems.SBAHJ_POSTER).build(consumer);
@@ -410,7 +413,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.MWRTHWL).input(MSItems.REGI_HAMMER).or().input(MSItems.CUEBALL).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.VAUDEVILLE_HOOK).namedInput(MSItems.CANE).and().input(Items.FISHING_ROD).build(consumer);
-		CombinationRecipeBuilder.of(MSItems.VAUDEVILLE_HOOK).namedInput(Items.STICK).and().input(Items.FISHING_ROD).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.VAUDEVILLE_HOOK).namedInput(Items.STICK).or().input(MSItems.WISEGUY).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.BEAR_POKING_STICK).namedInput(MSItems.CANE).or().input(Items.LEATHER).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.BEAR_POKING_STICK).namedInput(Items.STICK).or().input(Items.LEATHER).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.UMBRELLA).input(Items.STICK).and().namedInput(Items.BLACK_WOOL).build(consumer);
@@ -522,7 +525,9 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSBlocks.GOLD_SEEDS).input(Items.WHEAT_SEEDS).and().namedInput(Items.GOLD_INGOT).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.OBSIDIAN_BUCKET).input(Items.WATER_BUCKET).or().input(Items.LAVA_BUCKET).namedSource("buckets").build(consumer);
 		CombinationRecipeBuilder.of(MSItems.OBSIDIAN_BUCKET).input(Items.BUCKET).and().namedInput(Items.OBSIDIAN).build(consumer);
-		CombinationRecipeBuilder.of(MSItems.STONE_SLAB).input(Items.STONE).and().input(MSItems.CARVING_TOOL).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.STONE_SLAB).input(Items.STONE).or().namedInput(MSItems.CARVING_TOOL).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.STONE_SLAB).input(Items.STONE).or().namedInput(Items.WRITABLE_BOOK).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.STONE_SLAB).input(Items.STONE).or().namedInput(MSItems.CAPTCHA_CARD).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.GLOWYSTONE_DUST).input(Items.REDSTONE).or().input(Items.GLOWSTONE_DUST).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.CASSETTE_13).input(Items.MUSIC_DISC_13).or().namedInput(MSBlocks.CASSETTE_PLAYER).build(consumer);
@@ -615,6 +620,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSBlocks.CHALK).input(Tags.Items.STONE).and().namedInput(Items.WHITE_DYE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.PINK_STONE).input(Tags.Items.STONE).and().namedInput(Items.PINK_DYE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.BROWN_STONE).input(Tags.Items.STONE).and().namedInput(Items.BROWN_DYE).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.GREEN_STONE).input(Tags.Items.STONE).and().namedInput(Items.GREEN_DYE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.TREATED_PLANKS).input(ItemTags.PLANKS).or().input(Items.NETHERRACK).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.FROST_PLANKS).input(ItemTags.PLANKS).or().namedInput(Items.SNOW_BLOCK).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.FROST_PLANKS).input(ItemTags.PLANKS).or().namedInput(Items.SNOW).build(consumer);
@@ -624,6 +630,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSBlocks.FROST_LOG).input(ItemTags.LOGS).or().namedInput(Items.SNOWBALL).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.CANDY_CORN).input(Items.SUGAR).and().input(Items.WHEAT_SEEDS).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.TUIX_BAR).input(Items.COCOA_BEANS).or().input(Items.BRICK).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.GOLDEN_GRASSHOPPER).input(MSItems.GRASSHOPPER).or().input(Items.GOLD_INGOT).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.BUG_NET).input(Items.STICK).or().namedInput(Items.COBWEB).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.BUG_NET).input(Items.STRING).and().namedInput(Items.BUCKET).build(consumer);

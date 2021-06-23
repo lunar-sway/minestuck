@@ -51,6 +51,9 @@ public class RandomRockConditionFreeBlobFeature extends Feature<RandomRockBlockB
 		} else if(randFloat >= .55)
 		{
 			randomStone = MSBlocks.BROWN_STONE.defaultBlockState();
+		} else if(randFloat >= .5)
+		{
+			randomStone = MSBlocks.GREEN_STONE.defaultBlockState();
 		} else
 		{
 			randomStone = Blocks.STONE.defaultBlockState();

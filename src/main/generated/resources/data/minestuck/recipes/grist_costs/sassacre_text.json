@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:sassacre_text"
+  },
+  "grist_cost": {
+    "minestuck:caulk": 10,
+    "minestuck:mercury": 4
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:stone"
+  },
+  "input2": {
+    "item": "minestuck:captcha_card"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:stone_slab"
+  }
+}

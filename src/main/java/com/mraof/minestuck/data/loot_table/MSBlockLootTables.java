@@ -130,6 +130,7 @@ public class MSBlockLootTables extends BlockLootTables
 		dropSelf(BROWN_STONE_BRICKS);
 		dropSelf(BROWN_STONE_COLUMN);
 		dropSelf(CRACKED_BROWN_STONE_BRICKS);
+		dropSelf(GREEN_STONE);
 		dropSelf(DENSE_CLOUD);
 		dropSelf(BRIGHT_DENSE_CLOUD);
 		dropSelf(SUGAR_CUBE);
@@ -231,7 +232,12 @@ public class MSBlockLootTables extends BlockLootTables
 		dropSelf(PIPE_INTERSECTION);
 		dropSelf(PARCEL_PYXIS);
 		dropSelf(PYXIS_LID);
+		add(STONE_SLAB, MSBlockLootTables::droppingWithTEItem);
 		
+		dropSelf(BLACK_CASTLE_BRICK_STAIRS);
+		dropSelf(DARK_GRAY_CASTLE_BRICK_STAIRS);
+		dropSelf(LIGHT_GRAY_CASTLE_BRICK_STAIRS);
+		dropSelf(WHITE_CASTLE_BRICK_STAIRS);
 		dropSelf(COARSE_STONE_STAIRS);
 		dropSelf(SHADE_BRICK_STAIRS);
 		dropSelf(FROST_BRICK_STAIRS);
@@ -245,6 +251,10 @@ public class MSBlockLootTables extends BlockLootTables
 		dropSelf(END_PLANKS_STAIRS);
 		dropSelf(DEAD_PLANKS_STAIRS);
 		dropSelf(TREATED_PLANKS_STAIRS);
+		dropSelf(BLACK_CASTLE_BRICK_SLAB);
+		dropSelf(DARK_GRAY_CASTLE_BRICK_SLAB);
+		dropSelf(LIGHT_GRAY_CASTLE_BRICK_SLAB);
+		dropSelf(WHITE_CASTLE_BRICK_SLAB);
 		dropSelf(CHALK_SLAB);
 		dropSelf(CHALK_BRICK_SLAB);
 		dropSelf(PINK_STONE_BRICK_SLAB);
