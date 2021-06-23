@@ -39,7 +39,7 @@ public class StoneTabletScreen extends Screen
 	
 	private final boolean canEdit;
 	private boolean isModified;
-	private String text;
+	private String text = "";
 	private int updateCount;
 	/** In milliseconds */
 	private long lastClickTime;
