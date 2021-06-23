@@ -6,13 +6,13 @@ import com.mraof.minestuck.block.MSDirectionalBlock;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.LotusFlowerEntity;
 import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
-import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockUtil;
 import com.mraof.minestuck.world.storage.loot.MSLootTables;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.properties.ChestType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
@@ -26,9 +26,6 @@ import java.util.Random;
 
 public class FrogTemplePiece extends ScatteredStructurePiece
 {
-	//private final boolean[] torches = new boolean[4];
-	//private boolean placedChest;
-	//private int randomDepth;
 	private boolean createRan = false;
 	private static final FrogTemplePiece.Selector HIEROGLYPHS = new FrogTemplePiece.Selector();
 	
@@ -40,15 +37,6 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 	public FrogTemplePiece(TemplateManager templates, CompoundNBT nbt)
 	{
 		super(MSStructurePieces.FROG_TEMPLE, nbt);
-		
-		//placedChest = nbt.getBoolean("placed_chest");
-	}
-	
-	@Override
-	protected void readAdditional(CompoundNBT nbt)    //Note: incorrectly mapped. Should be writeAdditional
-	{
-		super.readAdditional(nbt);
-		//nbt.putBoolean("placed_chest", placedChest);
 	}
 	
 	@Override
@@ -57,13 +45,10 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 		if(!isInsideBounds(worldIn, boundingBoxIn, 0))
 			return false;
 		
-		StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
 		BlockState wallBlock = MSBlocks.GREEN_STONE_BRICKS.getDefaultState();
 		BlockState columnBlock = MSBlocks.GREEN_STONE_COLUMN.getDefaultState().with(MSDirectionalBlock.FACING, Direction.UP);
 		BlockState floorBlock = MSBlocks.POLISHED_GREEN_STONE.getDefaultState();
 		BlockState stoneBlock = MSBlocks.GREEN_STONE.getDefaultState();
-		
-		//randomDepth = randomIn.nextInt(5);
 		
 		//Debug.debugf("create function has run");
 		for(int a = 0; a < 7; a++)
@@ -83,24 +68,32 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 	
 	private void generateLoot(IWorld worldIn, MutableBoundingBox boundingBoxIn, Random randomIn, Direction direction, ChunkPos chunkPos)
 	{
-		/*
+		
 		//TODO There is only a percent chance of the rotateYCCW applying correctly
-		setBlockState(worldIn, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.getMainBlock().getDefaultState().with(LotusTimeCapsuleBlock.FACING, Direction.NORTH), 21 + 20, 49, 23 + 38 + 20, boundingBox);
+		//setBlockState(worldIn, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.getMainBlock().getDefaultState().with(LotusTimeCapsuleBlock.FACING, /*Direction.NORTH*/getCoordBaseMode()), 21 + 20, 49, 23 + 38 + 20, boundingBox);
 		//modifiedDirection = modifiedDirection.rotateYCCW();
-		setBlockState(worldIn, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.getMainBlock().getDefaultState().with(LotusTimeCapsuleBlock.FACING, Direction.EAST), 21 + 20, 49, 22 + 38 + 20, boundingBox);
+		//setBlockState(worldIn, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.getMainBlock().getDefaultState().with(LotusTimeCapsuleBlock.FACING, getCoordBaseMode().rotateY()), 21 + 20, 49, 22 + 38 + 20, boundingBox); //east
 		//modifiedDirection = modifiedDirection.rotateYCCW();
-		setBlockState(worldIn, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.getMainBlock().getDefaultState().with(LotusTimeCapsuleBlock.FACING, Direction.SOUTH), 20 + 20, 49, 22 + 38 + 20, boundingBox);
+		//setBlockState(worldIn, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.getMainBlock().getDefaultState().with(LotusTimeCapsuleBlock.FACING, getCoordBaseMode().getOpposite()), 20 + 20, 49, 22 + 38 + 20, boundingBox); //south
 		//modifiedDirection = modifiedDirection.rotateYCCW();
-		setBlockState(worldIn, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.getMainBlock().getDefaultState().with(LotusTimeCapsuleBlock.FACING, Direction.WEST), 20 + 20, 49, 23 + 38 + 20, boundingBox);
-		*/
+		//setBlockState(worldIn, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.getMainBlock().getDefaultState().with(LotusTimeCapsuleBlock.FACING, getCoordBaseMode().rotateYCCW()), 20 + 20, 49, 23 + 38 + 20, boundingBox); //west
 		
-		BlockPos lotusBlockPos = new BlockPos(this.getXWithOffset(20 + 20, 22 + 38 + 20), this.getYWithOffset(49), this.getZWithOffset(20 + 20, 22 + 38 + 20)); //TODO temples whose main entrance opens south(and presumedly west) generate one block closer to entrance
-		MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.placeWithRotation(worldIn, lotusBlockPos, getRotation());
 		
-		BlockPos chestPos = new BlockPos(this.getXWithOffset(19 + 20, 11 + 38 + 20), this.getYWithOffset(17), this.getZWithOffset(19 + 20, 11 + 38 + 20));
-		StructureBlockUtil.placeLootChest(chestPos, worldIn, boundingBoxIn, getCoordBaseMode(), ChestType.RIGHT, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
-		chestPos = new BlockPos(this.getXWithOffset(18 + 20, 11 + 38 + 20), this.getYWithOffset(17), this.getZWithOffset(18 + 20, 11 + 38 + 20));
+		if(this.getRotation() == Rotation.NONE || this.getRotation() == Rotation.CLOCKWISE_180)
+		{
+			BlockPos lotusBlockPos = new BlockPos(this.getXWithOffset(20 + 20, 21 + 38 + 20), this.getYWithOffset(49), this.getZWithOffset(20 + 20, 21 + 38 + 20)); //TODO temples whose main entrance opens south(and presumedly west) generate one block closer to entrance
+			MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.placeWithRotation(worldIn, lotusBlockPos, getRotation());
+		}
+		else if(this.getRotation() == Rotation.CLOCKWISE_90 || this.getRotation() == Rotation.COUNTERCLOCKWISE_90)
+		{
+			BlockPos lotusBlockPos = new BlockPos(this.getXWithOffset(20 + 20, 20 + 38 + 20), this.getYWithOffset(49), this.getZWithOffset(20 + 20, 20 + 38 + 20)); //TODO temples whose main entrance opens south(and presumedly west) generate one block closer to entrance
+			MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.placeWithRotation(worldIn, lotusBlockPos, getRotation());
+		}
+		
+		BlockPos chestPos = new BlockPos(this.getXWithOffset(20 + 20, 11 + 38 + 20), this.getYWithOffset(17), this.getZWithOffset(20 + 20, 11 + 38 + 20));
 		StructureBlockUtil.placeLootChest(chestPos, worldIn, boundingBoxIn, getCoordBaseMode(), ChestType.LEFT, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
+		chestPos = new BlockPos(this.getXWithOffset(19 + 20, 11 + 38 + 20), this.getYWithOffset(17), this.getZWithOffset(19 + 20, 11 + 38 + 20));
+		StructureBlockUtil.placeLootChest(chestPos, worldIn, boundingBoxIn, getCoordBaseMode(), ChestType.RIGHT, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
 		
 		//TODO Everything seems to generate several times over, first noticed with lotus flower entity, find better fix than below
 		if(!createRan)
@@ -109,8 +102,8 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 			if(lotusFlowerEntity == null)
 				throw new IllegalStateException("Unable to create a new lotus flower. Entity factory returned null!");
 			lotusFlowerEntity.enablePersistence();
-			//lotusFlowerEntity.setNoAI(true);
-			//lotusFlowerEntity.setInvulnerable(true);
+			lotusFlowerEntity.setNoAI(true);
+			lotusFlowerEntity.setInvulnerable(true);
 			lotusFlowerEntity.setLocationAndAngles(this.getXWithOffset(21 + 20, 21 + 38 + 20), this.getYWithOffset(50), this.getZWithOffset(21 + 20, 21 + 38 + 20), 0F, 0);
 			//lotusFlowerEntity.setLocationAndAngles(this.getXWithOffset(20 + 20, 22 + 38 + 20) + 0.5D, this.getYWithOffset(50), this.getZWithOffset(20 + 20, 22 + 38 + 20) + 0.5D, 0F, 0);
 			worldIn.addEntity(lotusFlowerEntity);
@@ -144,9 +137,10 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 		
 		fillWithBlocks(world, boundingBox, 17 + 20, 48, 24 + 20 + 24, 24 + 20, 48, 24 + 20 + 24, MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE.getDefaultState().with(DecorBlock.FACING, this.getCoordBaseMode().getOpposite()), MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE.getDefaultState().with(DecorBlock.FACING, this.getCoordBaseMode().getOpposite()), false); //stairs base
 		
+		fillWithBlocks(world, boundingBox, 20, -10, 38 + 20, 41 + 20, 0, 79 + 20, block, block, false); //underneath main platform
 		for(int i = 0; i < 28; i++)
 		{
-			fillWithBlocks(world, boundingBox, i + 20, -i, i + 38 + 20, 41 - i + 20, -i, 75 - i + 20, block, block, false); //underneath main platform
+			fillWithBlocks(world, boundingBox, i + 20, -i - 10, i + 38 + 20, 41 - i + 20, -i - 10, 79 - i + 20, block, block, false); //underneath main platform
 		}
 	}
 	
@@ -182,42 +176,6 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 			{
 				int randReduction = random.nextInt(5);
 				fillWithBlocks(world, boundingBox, 18 + 20, -20, 1, 23, 30 - randReduction, 4, block, block, false); //bottom right pillar
-			}
-		}
-		if(random.nextBoolean())
-		{
-			if(random.nextBoolean())
-			{
-				fillWithBlocks(world, boundingBox, 1, -20, 57 + 20, 4, 30, 60 + 20, block, block, false); //west pillar
-				fillWithBlocks(world, boundingBox, 0, 31, 56 + 20, 5, 36, 61 + 20, MSBlocks.GREEN_STONE.getDefaultState(), MSBlocks.URANIUM_BLOCK.getDefaultState(), false);
-			} else
-			{
-				int randReduction = random.nextInt(5);
-				fillWithBlocks(world, boundingBox, 1, -20, 57 + 20, 4, 30 - randReduction, 60 + 20, block, block, false); //west pillar
-			}
-		}
-		if(random.nextBoolean())
-		{
-			if(random.nextBoolean())
-			{
-				fillWithBlocks(world, boundingBox, 18 + 20, -20, 103 + 20, 21 + 20, 30, 108 + 20, block, block, false); //north pillar
-				fillWithBlocks(world, boundingBox, 17 + 20, 31, 102 + 20, 22 + 20, 36, 109 + 20, MSBlocks.GREEN_STONE.getDefaultState(), MSBlocks.CRUXITE_BLOCK.getDefaultState(), false);
-			} else
-			{
-				int randReduction = random.nextInt(5);
-				fillWithBlocks(world, boundingBox, 18 + 20, -20, 103 + 20, 21 + 20, 30 - randReduction, 108 + 20, block, block, false); //north pillar
-			}
-		}
-		if(random.nextBoolean())
-		{
-			if(random.nextBoolean())
-			{
-				fillWithBlocks(world, boundingBox, 67 + 20, -20, 57 + 20, 70 + 20, 30, 60 + 20, block, block, false); //east pillar
-				fillWithBlocks(world, boundingBox, 66 + 20, 31, 56 + 20, 71 + 20, 36, 61 + 20, MSBlocks.GREEN_STONE.getDefaultState(), MSBlocks.URANIUM_BLOCK.getDefaultState(), false);
-			} else
-			{
-				int randReduction = random.nextInt(5);
-				fillWithBlocks(world, boundingBox, 67 + 20, -20, 57 + 20, 70 + 20, 30 - randReduction, 60 + 20, block, block, false); //east pillar
 			}
 		}
 		
@@ -277,8 +235,10 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 		fillWithBlocks(world, boundingBox, 14 + 20, 57, 14 + 38 + 20, 18 + 20, 58, 55 + 20, block, block, false); //left front leg
 		fillWithBlocks(world, boundingBox, 23 + 20, 57, 23 + 38 + 20, 27 + 20, 61, 64 + 20, block, block, false); //right back leg
 		fillWithBlocks(world, boundingBox, 14 + 20, 57, 23 + 38 + 20, 18 + 20, 61, 64 + 20, block, block, false); //left back leg
-		fillWithBlocks(world, boundingBox, 16 + 20, 57, 16 + 38 + 20, 25 + 20, 67, 63 + 20, block, block, false); //body
-		fillWithBlocks(world, boundingBox, 15 + 20, 65, 14 + 38 + 20, 26 + 20, 72, 59 + 20, block, block, false); //head
+		fillWithBlocks(world, boundingBox, 16 + 20, 57, 16 + 38 + 20, 25 + 20, 65, 63 + 20, block, block, false); //body
+		fillWithBlocks(world, boundingBox, 15 + 20, 62, 14 + 38 + 20, 26 + 20, 67, 59 + 20, block, block, false); //head
+		fillWithBlocks(world, boundingBox, 23 + 20, 65, 15 + 38 + 20, 27 + 20, 68, 57 + 20, block, block, false); //right eye
+		fillWithBlocks(world, boundingBox, 14 + 20, 65, 15 + 38 + 20, 18 + 20, 68, 57 + 20, block, block, false); //left eye
 	}
 	
 	static class Selector extends StructurePiece.BlockSelector

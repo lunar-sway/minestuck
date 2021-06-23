@@ -110,6 +110,7 @@
         },
         {
           "type": "minecraft:item",
+          "weight": 2,
           "quality": 1,
           "functions": [
             {
@@ -125,7 +126,7 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 3,
+          "weight": 4,
           "quality": -1,
           "functions": [
             {
@@ -141,7 +142,7 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 3,
+          "weight": 4,
           "quality": -1,
           "functions": [
             {
@@ -157,7 +158,7 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 3,
+          "weight": 4,
           "quality": -1,
           "functions": [
             {
@@ -173,7 +174,7 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 3,
+          "weight": 4,
           "quality": -1,
           "functions": [
             {
@@ -189,7 +190,7 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 3,
+          "weight": 4,
           "quality": -1,
           "functions": [
             {
@@ -235,7 +236,7 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 2,
+          "weight": 5,
           "functions": [
             {
               "function": "minecraft:set_count",

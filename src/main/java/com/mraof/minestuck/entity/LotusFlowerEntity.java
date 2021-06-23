@@ -1,6 +1,7 @@
 package com.mraof.minestuck.entity;
 
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.util.Debug;
 import net.minecraft.entity.*;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -14,6 +15,8 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -23,24 +26,26 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+import javax.annotation.Nullable;
+
 public class LotusFlowerEntity extends CreatureEntity implements IAnimatable
 {
 	
-	private AnimationFactory factory = new AnimationFactory(this);
+	private final AnimationFactory factory = new AnimationFactory(this);
 	
-	public int eventTimer = -1;
+	private int eventTimer;
 	
 	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event)
 	{
-		if(eventTimer == -1)
+		if(this.eventTimer == -1)
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("lotus.idle", true));
-		if(eventTimer == 10000)
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("lotus.open", false));
-		if(eventTimer == 9880) //6 sec open animation * 20 ticks/sec, 10000 - 120 = 9880
+		if(this.eventTimer == 10000)
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("lotus.open", true));
+		if(this.eventTimer == 9880) //6 sec open animation * 20 ticks/sec, 10000 - 120 = 9880
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("lotus.open.idle", true));
-		if(eventTimer == 9560) //4 sec idle animation * 4 loops * 20 ticks/sec, 9880 - 320 = 9560
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("lotus.vanish", false));
-		if(eventTimer == 9547) //0.65 sec vanish animation * 20 ticks/sec, 9560 - 13 = 9547
+		if(this.eventTimer == 9560) //4 sec idle animation * 4 loops * 20 ticks/sec, 9880 - 320 = 9560
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("lotus.vanish", true));
+		if(this.eventTimer == 9547) //0.65 sec vanish animation * 20 ticks/sec, 9560 - 13 = 9547
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("lotus.empty", true));
 		
 		return PlayState.CONTINUE;
@@ -49,11 +54,6 @@ public class LotusFlowerEntity extends CreatureEntity implements IAnimatable
 	public LotusFlowerEntity(EntityType<? extends CreatureEntity> type, World worldIn)
 	{
 		super(type, worldIn);
-		this.ignoreFrustumCheck = true;
-		entityCollisionReduction = 0F;
-		this.setInvulnerable(true);
-		this.setNoAI(true);
-		this.enablePersistence();
 	}
 	
 	@Override
@@ -77,7 +77,7 @@ public class LotusFlowerEntity extends CreatureEntity implements IAnimatable
 	@Override
 	protected boolean processInteract(PlayerEntity player, Hand hand)
 	{
-		if(this.isAlive() && !player.isSneaking() && eventTimer < 0)
+		if(this.isAlive() && !player.isSneaking() && this.eventTimer < 0)
 		{
 			Vec3d posVec = this.getPositionVec();
 			
@@ -86,14 +86,14 @@ public class LotusFlowerEntity extends CreatureEntity implements IAnimatable
 			
 			return true;
 		}
-		if(this.isAlive() && eventTimer > 2 && eventTimer <= 9547)
+		if(this.isAlive() && this.eventTimer > 2 && this.eventTimer <= 9547)
 		{
 			ItemStack itemstack = player.getHeldItem(hand);
 			
 			if(player.getDistanceSq(this) < 9.0D && itemstack.getItem() == Items.BONE_MEAL && player.isCreative())
 			{
 				Vec3d posVec = this.getPositionVec();
-				eventTimer = 2;
+				this.eventTimer = 2;
 				for(int i = 0; i < 10; i++)
 				{
 					this.world.addParticle(ParticleTypes.COMPOSTER, posVec.x, posVec.y + 0.5D, posVec.z, 0.5D - this.rand.nextDouble(), 0.5D - this.rand.nextDouble(), 0.5D - this.rand.nextDouble());
@@ -113,7 +113,7 @@ public class LotusFlowerEntity extends CreatureEntity implements IAnimatable
 	
 	protected void setLotusActivatedTimer()
 	{
-		eventTimer = 10001;
+		this.eventTimer = 10001;
 	}
 	
 	protected void spawnLoot()
@@ -145,14 +145,16 @@ public class LotusFlowerEntity extends CreatureEntity implements IAnimatable
 	{
 		super.livingTick();
 		
-		if(eventTimer >= 0)
-			eventTimer--;
+		if(this.eventTimer >= 0)
+			this.eventTimer--;
 		
-		if(eventTimer == 9880)
+		if(this.eventTimer == 9880)
 			spawnLoot();
 		
-		if(eventTimer == 0)
+		if(this.eventTimer == 0)
 			lotusResetEffects();
+		
+		Debug.debugf("this.eventTimer = %s", this.eventTimer);
 	}
 	
 	@Override
@@ -166,7 +168,7 @@ public class LotusFlowerEntity extends CreatureEntity implements IAnimatable
 	{
 		super.writeAdditional(compound);
 		
-		compound.putInt("eventTimer", eventTimer);
+		compound.putInt("EventTimer", eventTimer);
 	}
 	
 	@Override
@@ -174,6 +176,22 @@ public class LotusFlowerEntity extends CreatureEntity implements IAnimatable
 	{
 		super.readAdditional(compound);
 		
-		eventTimer = compound.getInt("eventTimer");
+		eventTimer = compound.getInt("EventTimer");
+	}
+	
+	@Nullable
+	@Override
+	public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag)
+	{
+		Debug.debugf("onInitialSpawn");
+		
+		this.eventTimer = -1;
+		
+		this.entityCollisionReduction = 1F;
+		this.setInvulnerable(true);
+		this.setNoAI(true);
+		this.enablePersistence();
+		
+		return super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
 	}
 }

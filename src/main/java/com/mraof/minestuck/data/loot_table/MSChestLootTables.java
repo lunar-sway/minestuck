@@ -35,16 +35,16 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.addEntry(ItemLootEntry.builder(MSItems.DEUCE_CLUB).weight(10).quality(-1).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.75F, 1.0F))))
 				));*/
 		
-		/*lootProcessor.accept(LootTables.CHESTS_SIMPLE_DUNGEON, LootTable.builder()
-				.addLootPool(LootPool.builder().name(SUPPLIES_POOL).rolls(RandomValueRange.of(0, 1))
-						.addEntry(LandTableLootEntry.builder(LootTables.CHESTS_SIMPLE_DUNGEON).setPool(SUPPLIES_POOL))
+		lootProcessor.accept(locationForExternal(LootTables.CHESTS_PILLAGER_OUTPOST), LootTable.builder()
+				.addLootPool(LootPool.builder().name("minestuck").rolls(ConstantRange.of(5))
 						.addEntry(ItemLootEntry.builder(MSItems.BLANK_DISK).weight(5).quality(3).acceptFunction(SetCount.builder(RandomValueRange.of(1, 2))))
 						.addEntry(ItemLootEntry.builder(MSItems.HASHMAP_MODUS_CARD).weight(1).quality(1).acceptFunction(SetCount.builder(RandomValueRange.of(0, 1))))
 						.addEntry(ItemLootEntry.builder(MSItems.QUEUE_MODUS_CARD).weight(1).quality(1).acceptFunction(SetCount.builder(RandomValueRange.of(0, 1))))
 						.addEntry(ItemLootEntry.builder(MSItems.QUEUESTACK_MODUS_CARD).weight(1).quality(1).acceptFunction(SetCount.builder(RandomValueRange.of(0, 1))))
 						.addEntry(ItemLootEntry.builder(MSItems.SET_MODUS_CARD).weight(1).quality(1).acceptFunction(SetCount.builder(RandomValueRange.of(0, 1))))
 						.addEntry(ItemLootEntry.builder(MSItems.STACK_MODUS_CARD).weight(1).quality(1).acceptFunction(SetCount.builder(RandomValueRange.of(0, 1))))
-						.addEntry(ItemLootEntry.builder(MSItems.TREE_MODUS_CARD).weight(1).quality(1).acceptFunction(SetCount.builder(RandomValueRange.of(0, 1))))));*/
+						.addEntry(ItemLootEntry.builder(MSItems.TREE_MODUS_CARD).weight(1).quality(1).acceptFunction(SetCount.builder(RandomValueRange.of(0, 1))))
+				));
 		
 		lootProcessor.accept(MSLootTables.FROG_TEMPLE_CHEST, LootTable.builder()
 				.addLootPool(LootPool.builder().name(SUPPLIES_POOL).rolls(RandomValueRange.of(2, 6))
@@ -578,6 +578,11 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.addEntry(ItemLootEntry.builder(MSItems.THRESH_DVD).weight(4).quality(2))));
 		
 		
+	}
+	
+	public static ResourceLocation locationForExternal(ResourceLocation baseLoot)
+	{
+		return new ResourceLocation(baseLoot.getNamespace(), baseLoot.getPath() + "/minestuck/");
 	}
 	
 	public static ResourceLocation locationFor(TerrainLandType landAspect, ResourceLocation baseLoot)
