@@ -17,7 +17,7 @@ import com.mraof.minestuck.computer.SburbServer;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.item.BoondollarsItem;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.StoneTabletItem;
+import com.mraof.minestuck.item.block.StoneTabletItem;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import net.minecraft.client.Minecraft;

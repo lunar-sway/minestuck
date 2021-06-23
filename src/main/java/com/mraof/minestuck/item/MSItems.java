@@ -649,7 +649,7 @@ public class MSItems
 		registerItemBlock(registry, PIPE_INTERSECTION, MSItemGroup.LANDS);
 		registerItemBlock(registry, PARCEL_PYXIS, MSItemGroup.LANDS);
 		registerItemBlock(registry, PYXIS_LID, MSItemGroup.LANDS);
-		registerItemBlock(registry, new StoneTabletItem(MSBlocks.STONE_SLAB, new Item.Properties().group(MSItemGroup.LANDS)));
+		registerItemBlock(registry, new StoneTabletItem(MSBlocks.STONE_SLAB, new Item.Properties().tab(MSItemGroup.LANDS)));
 		
 		registerItemBlock(registry, BLACK_CASTLE_BRICK_STAIRS, MSItemGroup.MAIN);
 		registerItemBlock(registry, DARK_GRAY_CASTLE_BRICK_STAIRS, MSItemGroup.MAIN);
@@ -1051,7 +1051,6 @@ public class MSItems
 		registry.register(new Item(new Item.Properties().stacksTo(1).tab(MSItemGroup.LANDS)).setRegistryName("carving_tool"));
 		registry.register(new MSArmorItem(MSItemTypes.CLOTH_ARMOR, EquipmentSlotType.HEAD,new Item.Properties().stacksTo(1).tab(MSItemGroup.LANDS)).setRegistryName("crumply_hat"));
 		registry.register(new Item(new Item.Properties().tab(MSItemGroup.LANDS)).setRegistryName("stone_eyeballs"));
-		registry.register(new StoneTabletItem(new Item.Properties().tab(MSItemGroup.LANDS)).setRegistryName("stone_slab"));
 		//registry.register(new HangingItem((world, pos, facing, stack) -> new EntityShopPoster(world, pos, facing, stack, 0), new Item.Properties().maxStackSize(1).group(ModItemGroup.LANDS)).setRegistryName("shop_poster"));
 		
 		registry.register(new BucketItem(MSFluids.OIL, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1).tab(MSItemGroup.MAIN)).setRegistryName("oil_bucket"));
