@@ -21,11 +21,11 @@ public class MinestuckData
 		
 		if(event.includeServer())
 		{
-			BlockTagsProvider blockTags = new MinestuckBlockTagsProvider(gen, null);
+			BlockTagsProvider blockTags = new MinestuckBlockTagsProvider(gen, event.getExistingFileHelper());
 			gen.addProvider(blockTags);
-			gen.addProvider(new MinestuckItemTagsProvider(gen, blockTags, null));
-			gen.addProvider(new MinestuckFluidTagsProvider(gen, null));
-			gen.addProvider(new MinestuckEntityTypeTagsProvider(gen, null));
+			gen.addProvider(new MinestuckItemTagsProvider(gen, blockTags, event.getExistingFileHelper()));
+			gen.addProvider(new MinestuckFluidTagsProvider(gen, event.getExistingFileHelper()));
+			gen.addProvider(new MinestuckEntityTypeTagsProvider(gen, event.getExistingFileHelper()));
 			
 			gen.addProvider(new MinestuckRecipeProvider(gen));
 			gen.addProvider(new MinestuckGristCostsProvider(gen));

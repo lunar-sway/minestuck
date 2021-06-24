@@ -17,7 +17,8 @@
   },
   "criteria": {
     "connection": {
-      "trigger": "minestuck:sburb_connection"
+      "trigger": "minestuck:sburb_connection",
+      "conditions": {}
     }
   },
   "requirements": [

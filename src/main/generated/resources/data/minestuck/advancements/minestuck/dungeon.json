@@ -19,7 +19,9 @@
     "imp_dungeon": {
       "trigger": "minecraft:location",
       "conditions": {
-        "feature": "minestuck:imp_dungeon"
+        "location": {
+          "feature": "minestuck:imp_dungeon"
+        }
       }
     }
   },

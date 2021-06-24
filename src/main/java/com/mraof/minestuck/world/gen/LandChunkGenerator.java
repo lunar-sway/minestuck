@@ -1,43 +1,9 @@
 package com.mraof.minestuck.world.gen;
-/*
-import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
-import com.mraof.minestuck.skaianet.SburbHandler;
-import com.mraof.minestuck.skaianet.UnderlingController;
-import com.mraof.minestuck.world.biome.LandBiomeHolder;
-import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
-import com.mraof.minestuck.world.lands.GristTypeLayer;
-import com.mraof.minestuck.world.lands.LandTypePair;
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.util.SharedSeedRandom;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeManager;
-import net.minecraft.world.biome.provider.BiomeProvider;
-import net.minecraft.world.chunk.IChunk;
-import net.minecraft.world.dimension.DimensionType;
-import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.gen.NoiseChunkGenerator;
-import net.minecraft.world.gen.WorldGenRegion;
-import net.minecraft.world.gen.feature.IFeatureConfig;
-import net.minecraft.world.gen.feature.structure.Structure;
-import net.minecraft.world.spawner.WorldEntitySpawner;
-import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
-
-public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
+public class LandChunkGenerator //extends NoiseChunkGenerator<LandGenSettings>
 {
 	public static final String GRIST_LAYER_INFO = "grist_layer.info";
-	
+	/*
 	private static final float[] biomeWeight;
 	
 	static {
@@ -203,5 +169,5 @@ public class LandChunkGenerator extends NoiseChunkGenerator<LandGenSettings>
 	public DimensionType getDimensionType()
 	{
 		return world.getDimension().getType();
-	}
-}*/
+	}*/
+}
