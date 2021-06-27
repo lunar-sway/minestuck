@@ -52,11 +52,7 @@ public class ServerEventHandler
 	public static long lastDay;
 	
 	public static List<PostEntryTask> tickTasks = new ArrayList<PostEntryTask>();
-	
-	static Potion[] aspectEffects = { MobEffects.ABSORPTION, MobEffects.SPEED, MobEffects.RESISTANCE, MobEffects.ABSORPTION, MobEffects.FIRE_RESISTANCE, MobEffects.REGENERATION, MobEffects.LUCK, MobEffects.NIGHT_VISION, MobEffects.STRENGTH, MobEffects.JUMP_BOOST, MobEffects.HASTE, MobEffects.INVISIBILITY }; //Blood, Breath, Doom, Heart, Hope, Life, Light, Mind, Rage, Space, Time, Void
-	// Increase the starting rungs
-	static float[] aspectStrength = new float[] {1.0F/14, 1.0F/15, 1.0F/28, 1.0F/14, 1.0F/18, 1.0F/20, 1.0F/10, 1.0F/12, 1.0F/25, 1.0F/10, 1.0F/13, 1.0F/12}; //Absorption, Speed, Resistance, Saturation, Fire Resistance, Regeneration, Luck, Night Vision, Strength, Jump Boost, Haste, Invisibility
-	
+
 	@SubscribeEvent
 	public void onWorldTick(TickEvent.WorldTickEvent event)
 	{
@@ -188,27 +184,5 @@ public class ServerEventHandler
 	{
 		if(event.getItemStack().getItem() == Item.getItemFromBlock(MinestuckBlocks.treatedPlanks))
 			event.setBurnTime(50);	//Do not set this number to 0.
-	}
-	
-	@SubscribeEvent
-	public void aspectPotionEffect(TickEvent.PlayerTickEvent event)
-	{
-		IdentifierHandler.PlayerIdentifier identifier = IdentifierHandler.encode(event.player);
-		SburbConnection c = SkaianetHandler.getMainConnection(identifier, true);
-		if(c == null || !c.enteredGame() || MinestuckConfig.aspectEffects == false || !MinestuckPlayerData.getEffectToggle(identifier))
-			return;
-		int rung = MinestuckPlayerData.getData(identifier).echeladder.getRung();
-		EnumAspect aspect = MinestuckPlayerData.getTitle(identifier).getHeroAspect();
-		int potionLevel = (int) (aspectStrength[aspect.ordinal()] * rung); //Blood, Breath, Doom, Heart, Hope, Life, Light, Mind, Rage, Space, Time, Void
-		
-		if(event.player.getEntityWorld().getTotalWorldTime() % 380 == identifier.hashCode() % 380) {
-			if(rung > 18 && aspect == HOPE) {
-				event.player.addPotionEffect(new PotionEffect(MobEffects.WATER_BREATHING, 600, 0));
-			}
-			
-			if(potionLevel > 0) {
-				event.player.addPotionEffect(new PotionEffect(aspectEffects[aspect.ordinal()], 600, potionLevel-1));
-			}
-		}
 	}
 }
