@@ -4,8 +4,8 @@
     {
       "name": "supplies",
       "rolls": {
-        "min": 2.0,
-        "max": 6.0,
+        "min": 3.0,
+        "max": 8.0,
         "type": "minecraft:uniform"
       },
       "entries": [

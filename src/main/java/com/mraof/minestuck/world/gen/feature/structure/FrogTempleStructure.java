@@ -47,7 +47,7 @@ public class FrogTempleStructure extends ScatteredStructure<NoFeatureConfig>
 	@Override
 	protected int getBiomeFeatureDistance(ChunkGenerator<?> generator)
 	{
-		return 128;
+		return 140;
 	}
 	
 	@Override

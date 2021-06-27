@@ -124,9 +124,6 @@ public class LotusFlowerEntity extends CreatureEntity implements IAnimatable
 		ItemEntity unpoweredComputerItemEntity = new ItemEntity(worldIn, posVec.getX(), posVec.getY() + 1D, posVec.getZ(), new ItemStack(MSItems.COMPUTER_PARTS, 1));
 		worldIn.addEntity(unpoweredComputerItemEntity);
 		
-		/*ItemEntity blankDiskItemEntity = new ItemEntity(worldIn, posVec.getX(), posVec.getY() + 1D, posVec.getZ(), new ItemStack(MSItems.BLANK_DISK, 2));
-		worldIn.addEntity(blankDiskItemEntity);*/
-		
 		ItemEntity sburbCodeItemEntity = new ItemEntity(worldIn, posVec.getX(), posVec.getY() + 1D, posVec.getZ(), new ItemStack(MSItems.SBURB_CODE, 1));
 		worldIn.addEntity(sburbCodeItemEntity);
 		
@@ -154,7 +151,7 @@ public class LotusFlowerEntity extends CreatureEntity implements IAnimatable
 		if(this.eventTimer == 0)
 			lotusResetEffects();
 		
-		Debug.debugf("this.eventTimer = %s", this.eventTimer);
+		//Debug.debugf("this.eventTimer = %s", this.eventTimer);
 	}
 	
 	@Override
@@ -183,7 +180,7 @@ public class LotusFlowerEntity extends CreatureEntity implements IAnimatable
 	@Override
 	public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag)
 	{
-		Debug.debugf("onInitialSpawn");
+		//Debug.debugf("onInitialSpawn");
 		
 		this.eventTimer = -1;
 		

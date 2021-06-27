@@ -58,13 +58,6 @@ Adds Homestuck to your Minecraft!
     # Side this dependency is applied on - BOTH, CLIENT or SERVER
     side="BOTH"
 
-[[dependencies.minestuck]]
-    modId="geckolib3"
-    mandatory=true
-    versionRange="[3.0.33]"
-    ordering="NONE"
-    side="BOTH"
-
 # Here's another dependency
 [[dependencies.minestuck]]
     modId="minecraft"

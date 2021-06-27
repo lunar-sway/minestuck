@@ -47,7 +47,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 				));
 		
 		lootProcessor.accept(MSLootTables.FROG_TEMPLE_CHEST, LootTable.builder()
-				.addLootPool(LootPool.builder().name(SUPPLIES_POOL).rolls(RandomValueRange.of(2, 6))
+				.addLootPool(LootPool.builder().name(SUPPLIES_POOL).rolls(RandomValueRange.of(3, 8))
 						.addEntry(LandTableLootEntry.builder(MSLootTables.FROG_TEMPLE_CHEST).setPool(SUPPLIES_POOL))
 						.addEntry(ItemLootEntry.builder(Items.GOLD_INGOT).weight(2).quality(2).acceptFunction(SetCount.builder(RandomValueRange.of(2, 5))))
 						.addEntry(ItemLootEntry.builder(Items.DIAMOND).weight(1).quality(3).acceptFunction(SetCount.builder(RandomValueRange.of(1, 3))))
