@@ -35,6 +35,7 @@ import net.minecraft.util.datafix.DataFixer;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -91,29 +92,29 @@ public class EntityFrog extends EntityMinestuck
         
         this.canDespawn = true;
     }
-	
+
 	@Override
 	protected boolean processInteract(EntityPlayer player, EnumHand hand) {
 		ItemStack itemstack = player.getHeldItem(hand);
-		
-		if(player.getDistanceSq(this) < 9.0D && !this.world.isRemote)
+
+		if(!isDead && player.getDistanceSq(this) < 9.0D && !this.world.isRemote)
 		{
 			if(itemstack.getItem() == MinestuckItems.bugNet)
 			{
 				itemstack.damageItem(1, player);
 				ItemStack frogItem = new ItemStack(MinestuckItems.itemFrog,1,this.dataManager.get(TYPE));
-				
+
 				frogItem.setTagCompound(getFrogData());
 				if(this.hasCustomName())frogItem.setStackDisplayName(this.getCustomNameTag());
-				
+
 				entityDropItem(frogItem, 0);
 				this.setDead();
 			}
 			else if(itemstack.getItem() == MinestuckItems.goldenGrasshopper && this.getType() != 5)
 			{
 				if(!player.isCreative())itemstack.shrink(1);
-				
-				this.world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX, this.posY + (double)(this.height / 2.0F), this.posZ, 0.0D, 0.0D, 0.0D);
+
+				((WorldServer)this.world).spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX, this.posY+0.5, this.posZ, 1, 0, 0, 0, 0d);
 				this.playSound(SoundEvents.BLOCK_ANVIL_HIT, this.getSoundVolume(), ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F) * 0.8F);
 				this.setType(5);
 			}
