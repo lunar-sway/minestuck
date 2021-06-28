@@ -53,7 +53,31 @@ public class SessionHandler
 	 * An array list of the current worlds sessions.
 	 */
 	static List<Session> sessions = new ArrayList<Session>();
-	static Map<String, Session> sessionsByName = new HashMap<String, Session>();
+	static Map<String, Session> sessionsByName = new HashMap<String, Session>()
+	{
+		@Override
+		public Session get(Object key)
+		{
+			Session superSession = super.get(key);
+			if (superSession != null)
+				return superSession;
+
+			if (key.toString().startsWith("Session"))
+			{
+				try
+				{
+					int nameIndexToGet = Integer.parseInt(key.toString().substring(7));
+					int nameIndex = 0;
+					for (Session session : sessions)
+						if (session.name == null && (++nameIndex) == nameIndexToGet)
+							return session;
+				}
+				catch (NumberFormatException e) { }
+			}
+
+			return null;
+		}
+	};
 	
 	/**
 	 * Called when the server loads a new world, after
@@ -577,9 +601,12 @@ public class SessionHandler
 	public static List<String> getSessionNames()
 	{
 		List<String> list = Lists.<String>newArrayList();
+		int nameIndex = 0;
 		for(Session session : sessions)
 			if(session.name != null)
 				list.add(session.name);
+			else
+				list.add("Session"+(++nameIndex));
 		return list;
 	}
 	
