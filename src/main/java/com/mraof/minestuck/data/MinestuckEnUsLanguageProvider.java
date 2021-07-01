@@ -492,6 +492,18 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.FLUORITE_OCTET, "Magical Dice! Let 'em roll!");
 		add(MSItems.CAT_CLAWS_DRAWN, "Cat Claws");
 		add(MSItems.CAT_CLAWS_SHEATHED, "Cat Claws");
+		add(MSItems.SKELETONIZER_DRAWN, "Skeletonizer");
+		addTooltip(MSItems.SKELETONIZER_DRAWN, "Why don't skeletons get upset? Because nothing gets under their skin! This weapon sure might however.");
+		add(MSItems.SKELETONIZER_SHEATHED, "Skeletonizer");
+		addTooltip(MSItems.SKELETONIZER_SHEATHED, "Why don't skeletons get upset? Because nothing gets under their skin! This weapon sure might however.");
+		add(MSItems.SKELETON_DISPLACER_DRAWN, "Skeleton Displacer");
+		addTooltip(MSItems.SKELETON_DISPLACER_DRAWN, "Effective against skeletons!");
+		add(MSItems.SKELETON_DISPLACER_SHEATHED, "Skeleton Displacer");
+		addTooltip(MSItems.SKELETON_DISPLACER_SHEATHED, "Effective against skeletons!");
+		add(MSItems.TEARS_OF_THE_ENDERLICH_DRAWN, "Tears of the Enderlich");
+		addTooltip(MSItems.TEARS_OF_THE_ENDERLICH_DRAWN, "Effective against liches!");
+		add(MSItems.TEARS_OF_THE_ENDERLICH_SHEATHED, "Tears of the Enderlich");
+		addTooltip(MSItems.TEARS_OF_THE_ENDERLICH_SHEATHED, "Effective against liches!");
 		add(MSItems.ACTION_CLAWS_DRAWN, "Action Claws");
 		add(MSItems.ACTION_CLAWS_SHEATHED, "Action Claws");
 		add(MSItems.LIPSTICK_CHAINSAW, "Chainsaw");
@@ -600,6 +612,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.DRAGON_CANE, "The most Powerful and awe inspiring of canes!");
 		add(MSItems.DRAGON_CANE_UNSHEATHED, "Dragon Cane");
 		addTooltip(MSItems.DRAGON_CANE_UNSHEATHED, "The most Powerful and awe inspiring of canes!");
+		add(MSItems.CHANCEWYRMS_EXTRA_FORTUNATE_STABBING_IMPLEMENT, "Chancewyrm's Extra Fortunate Stabbing Implement");
+		add(MSItems.CHANCEWYRMS_EXTRA_FORTUNATE_STABBING_IMPLEMENT_UNSHEATHED, "Chancewyrm's Extra Fortunate Stabbing Implement");
 		add(MSItems.POGO_CANE, "Pogo Cane");
 		addTooltip(MSItems.POGO_CANE, "Now without leg or hand holds for even more danger!");
 		add(MSItems.CANDY_CANE, "Candy Cane");
@@ -745,6 +759,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addStoreTooltip(MSItems.ROCK_COOKIE, "This here is a true wonder-cookie! Totally! And they are even cheaper than regular cookies!");
 		add(MSItems.WOODEN_CARROT, "Wooden Carrot");
 		addTooltip(MSItems.WOODEN_CARROT, "It's as edible as a plank.");
+		add(MSItems.COCOA_WART, "Cocoa Wart");
+		addTooltip(MSItems.COCOA_WART, "It has a... unique smell.");
 		add(MSItems.FUNGAL_SPORE, "Fungal Spore");
 		addTooltip(MSItems.FUNGAL_SPORE, "You must live off the land, and in this land, it means eating this.");
 		addStore(MSItems.FUNGAL_SPORE, "Mushroom Skittles");
@@ -897,6 +913,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.LIP_BALM, "Lip Balm");
 		addTooltip(MSItems.LIP_BALM, "I see you there with those dry lips. Aht aht don't lick them now.");
 		addExtra(MSItems.LIP_BALM, "message", "Your lips are slightly more moisturized, but is it enough?");
+		add(MSItems.CARDBOARD_TUBE, "Cardboard Tube");
 		add(MSItems.INK_SQUID_PRO_QUO, "Ink of Squid Pro Quo");
 		addTooltip(MSItems.INK_SQUID_PRO_QUO, "For the love of god, don't drink it.");
 		add(MSItems.CUEBALL, "Magic Cueball");

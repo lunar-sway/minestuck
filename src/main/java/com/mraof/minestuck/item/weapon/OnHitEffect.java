@@ -237,6 +237,23 @@ public interface OnHitEffect
 		};
 	}
 	
+	static OnHitEffect targetSpecificAdditionalDamage(float additionalDamage, String targetEntity)
+	{
+		return (stack, target, attacker) -> {
+			float damage = additionalDamage * 3.3F;
+			
+			if(attacker instanceof ServerPlayerEntity)
+			{
+				ServerPlayerEntity serverPlayer = (ServerPlayerEntity) attacker;
+				
+				if(target.getEntityString().equals(targetEntity))
+				{
+					target.attackEntityFrom(DamageSource.causePlayerDamage(serverPlayer), damage);
+				}
+			}
+		};
+	}
+	
 	static OnHitEffect playSound(Supplier<SoundEvent> sound)
 	{
 		return playSound(sound, 1, 1);
