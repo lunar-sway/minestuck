@@ -349,12 +349,12 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSItems.FIRE_POKER).grist(AMBER, 75).grist(RUBY, 9).grist(SULFUR, 40).grist(GOLD, 4).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.TOO_HOT_TO_HANDLE).grist(AMBER, 40).grist(RUBY, 36).grist(SULFUR, 24).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CALEDSCRATCH).grist(BUILD, 6000).grist(GARNET, 360).grist(MERCURY, 720).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSItems.CALEDFWLCH).grist(BUILD, 26250).grist(GOLD, 1050).grist(RUST, 3150).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSItems.ROYAL_DERINGER).grist(BUILD, 24600).grist(GOLD, 1025).grist(MARBLE, 4510).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.CALEDFWLCH).grist(BUILD, 6563).grist(GOLD, 4988).grist(RUST, 3150).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.ROYAL_DERINGER).grist(BUILD, 6150).grist(GOLD, 4715).grist(MARBLE, 4510).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CLAYMORE).grist(BUILD, 210).grist(RUST, 45).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.REGISWORD).grist(AMETHYST, 32).grist(TAR, 117).grist(GOLD, 32).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSItems.CRUEL_FATE_CRUCIBLE).grist(BUILD, 15000).grist(TAR, 1500).grist(COBALT, 400).grist(GOLD, 200).grist(QUARTZ, 1).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSItems.SCARLET_RIBBITAR).grist(BUILD, 2500).grist(RUBY, 1350).grist(DIAMOND, 400).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.CRUEL_FATE_CRUCIBLE).grist(BUILD, 7500).grist(TAR, 5250).grist(COBALT, 400).grist(GOLD, 200).grist(QUARTZ, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.SCARLET_RIBBITAR).grist(BUILD, 1250).grist(RUBY, 1725).grist(DIAMOND, 400).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.DOGG_MACHETE).grist(BUILD, 400).grist(CHALK, 200).grist(MERCURY, 160).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.COBALT_SABRE).grist(BUILD, 850).grist(URANIUM, 34).grist(COBALT, 204).grist(DIAMOND, 34).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.QUANTUM_SABRE).grist(BUILD, 413).grist(URANIUM, 796).grist(CAULK, 1659).build(recipeSaver);
@@ -368,7 +368,7 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSItems.NOSFERATU_SPOON).grist(BUILD, 380).grist(MERCURY, 15).grist(AMETHYST, 46).grist(GARNET, 34).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CROCKER_SPOON).grist(BUILD, 850).grist(IODINE, 170).grist(CHALK, 170).grist(RUBY, 51).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CROCKER_FORK).grist(BUILD, 850).grist(IODINE, 170).grist(CHALK, 170).grist(RUBY, 51).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSItems.SKAIA_FORK).grist(BUILD, 900).grist(QUARTZ, 94).grist(GOLD, 58).grist(AMETHYST, 63).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.SKAIA_FORK).grist(BUILD, 450).grist(QUARTZ, 274).grist(GOLD, 58).grist(AMETHYST, 63).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CANDY_FORK).grist(BUILD, 42).grist(IODINE, 18).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.TUNING_FORK).grist(BUILD, 27).grist(RUST, 16).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.ELECTRIC_FORK).grist(BUILD, 180).grist(RUST, 122).grist(MERCURY, 144).grist(URANIUM, 63).build(recipeSaver);
@@ -450,7 +450,7 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSItems.LESS_PROPER_WALKING_STICK).grist(BUILD, 75).grist(RUST, 18).grist(IODINE, 8).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.ROCKEFELLERS_WALKING_BLADECANE).grist(BUILD, 413).grist(RUST, 222).grist(TAR, 22).grist(DIAMOND, 2).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.DRAGON_CANE).grist(BUILD, 7166).grist(RUBY, 666).grist(RUST, 111).grist(CHALK, 222).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSItems.CHANCEWYRMS_EXTRA_FORTUNATE_STABBING_IMPLEMENT).grist(BUILD, 41346).grist(COBALT, 22254).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.CHANCEWYRMS_EXTRA_FORTUNATE_STABBING_IMPLEMENT).grist(BUILD, 41300).grist(COBALT, 22254).build(recipeSaver);
 		
 		GristCostRecipeBuilder.of(MSItems.NEEDLE_WAND).grist(DIAMOND, 20).grist(CHALK, 30).grist(GARNET, 40).grist(GOLD, 16).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.ARTIFUCKER).grist(ARTIFACT, -100).build(recipeSaver);
@@ -464,7 +464,7 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSItems.HEARTS_SUITARANG).grist(BUILD, 20).grist(TAR, 4).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.SPADES_SUITARANG).grist(BUILD, 20).grist(TAR, 4).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CHAKRAM).grist(BUILD, 200).grist(RUBY, 10).grist(RUST, 20).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSItems.UMBRAL_INFILTRATOR).grist(BUILD, 1200).grist(TAR, 150).grist(DIAMOND, 55).grist(MERCURY, 55).grist(QUARTZ, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.UMBRAL_INFILTRATOR).grist(BUILD, 600).grist(TAR, 450).grist(DIAMOND, 55).grist(MERCURY, 55).grist(QUARTZ, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.SORCERERS_PINBALL).grist(BUILD, 200).grist(MERCURY, 30).grist(IODINE, 5).build(recipeSaver);
 		
 		GristCostRecipeBuilder.of(MSItems.CAPTCHAROID_CAMERA).grist(BUILD, 5000).grist(CAULK, 500).grist(GOLD, 500).grist(MARBLE, 500).grist(MERCURY, 500).grist(SHALE, 500).build(recipeSaver);
