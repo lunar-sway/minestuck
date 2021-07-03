@@ -32,7 +32,6 @@ import net.minecraft.item.Items;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
@@ -195,7 +194,7 @@ public class ServerEventHandler
 				activateThreshold = activateThreshold + injuredPlayer.getRNG().nextFloat() * .9F;
 				Debug.debugf("UNDYING activateThreshold with random and doom mod = %s", activateThreshold);
 				
-				if(activateThreshold >= 1.0F && injuredPlayer.getRNG().nextFloat() <= .5)
+				if(activateThreshold >= 1.0F && injuredPlayer.getRNG().nextFloat() >= .75)
 				{
 					injuredPlayer.world.playSound(null, injuredPlayer.getPosX(), injuredPlayer.getPosY(), injuredPlayer.getPosZ(), SoundEvents.ITEM_TOTEM_USE, SoundCategory.PLAYERS, 1.0F, 1.4F);
 					injuredPlayer.setHealth(injuredPlayer.getHealth() + 3);
@@ -213,10 +212,10 @@ public class ServerEventHandler
 			
 			if(handItem.getItem() == MSItems.CRUEL_FATE_CRUCIBLE)
 			{
-				activateThreshold = activateThreshold * 3 + injuredPlayer.getRNG().nextFloat() * .9F;
+				activateThreshold = activateThreshold * 8 + injuredPlayer.getRNG().nextFloat() * .9F;
 				Debug.debugf("CRUEL FATE activateThreshold with random and multiplier = %s", activateThreshold);
 				
-				if((isDoom && activateThreshold >= 1.0F && injuredPlayer.getRNG().nextFloat() <= .75) || (!isDoom && activateThreshold >= 1.0F && injuredPlayer.getRNG().nextFloat() <= .25))
+				if((isDoom && activateThreshold >= 1.0F && injuredPlayer.getRNG().nextFloat() <= .2) || (!isDoom && activateThreshold >= 1.0F && injuredPlayer.getRNG().nextFloat() <= .05))
 				{
 					AxisAlignedBB axisalignedbb = injuredPlayer.getBoundingBox().grow(4.0D, 2.0D, 4.0D);
 					List<LivingEntity> list = injuredPlayer.world.getEntitiesWithinAABB(LivingEntity.class, axisalignedbb);
