@@ -15,6 +15,7 @@ import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.skaianet.TitleSelectionHook;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.storage.MSExtraData;
@@ -183,33 +184,52 @@ public class ServerEventHandler
 			Title title = PlayerSavedData.getData((ServerPlayerEntity) injuredPlayer).getTitle();
 			boolean isDoom = title != null && title.getHeroAspect() == EnumAspect.DOOM;
 			ItemStack handItem = injuredPlayer.getHeldItemMainhand();
-			if(handItem.getItem() == MSItems.LUCERNE_HAMMER_OF_UNDYING){
-				if((isDoom && injuredPlayer.getHealth() <= 3.0F && injuredPlayer.getRNG().nextFloat() <= .08) || (!isDoom && injuredPlayer.getHealth() <= 2.0F && injuredPlayer.getRNG().nextFloat() <= .02))
+			float activateThreshold = ((injuredPlayer.getMaxHealth() / (injuredPlayer.getHealth() + 1)) / injuredPlayer.getMaxHealth()); //fraction of players health that rises dramatically the more injured they are
+			Debug.debugf("activateThreshold on creation = %s", activateThreshold);
+			
+			if(handItem.getItem() == MSItems.LUCERNE_HAMMER_OF_UNDYING)
+			{
+				if(isDoom)
+					activateThreshold = activateThreshold * 1.5F;
+				
+				activateThreshold = activateThreshold + injuredPlayer.getRNG().nextFloat() * .9F;
+				Debug.debugf("UNDYING activateThreshold with random and doom mod = %s", activateThreshold);
+				
+				if(activateThreshold >= 1.0F && injuredPlayer.getRNG().nextFloat() <= .5)
 				{
 					injuredPlayer.world.playSound(null, injuredPlayer.getPosX(), injuredPlayer.getPosY(), injuredPlayer.getPosZ(), SoundEvents.ITEM_TOTEM_USE, SoundCategory.PLAYERS, 1.0F, 1.4F);
 					injuredPlayer.setHealth(injuredPlayer.getHealth() + 3);
 					injuredPlayer.addPotionEffect(new EffectInstance(Effects.REGENERATION, 450, 0));
-					if(isDoom){
+					if(isDoom)
+					{
 						injuredPlayer.addPotionEffect(new EffectInstance(Effects.ABSORPTION, 100, 0));
-						handItem.damageItem(400, injuredPlayer, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
-					} else {
-						handItem.damageItem(1000, injuredPlayer, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
+						handItem.damageItem(100, injuredPlayer, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
+					} else
+					{
+						handItem.damageItem(250, injuredPlayer, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
 					}
 				}
 			}
-			if(handItem.getItem() == MSItems.CRUEL_FATE_CRUCIBLE){
-				if((isDoom && injuredPlayer.getHealth() <= 12.0F && injuredPlayer.getRNG().nextFloat() <= .25) || (!isDoom && injuredPlayer.getHealth() <= 8.0F && injuredPlayer.getRNG().nextFloat() <= .10))
+			
+			if(handItem.getItem() == MSItems.CRUEL_FATE_CRUCIBLE)
+			{
+				activateThreshold = activateThreshold * 3 + injuredPlayer.getRNG().nextFloat() * .9F;
+				Debug.debugf("CRUEL FATE activateThreshold with random and multiplier = %s", activateThreshold);
+				
+				if((isDoom && activateThreshold >= 1.0F && injuredPlayer.getRNG().nextFloat() <= .75) || (!isDoom && activateThreshold >= 1.0F && injuredPlayer.getRNG().nextFloat() <= .25))
 				{
 					AxisAlignedBB axisalignedbb = injuredPlayer.getBoundingBox().grow(4.0D, 2.0D, 4.0D);
 					List<LivingEntity> list = injuredPlayer.world.getEntitiesWithinAABB(LivingEntity.class, axisalignedbb);
 					list.remove(injuredPlayer);
-					if (!list.isEmpty()) {
+					if(!list.isEmpty())
+					{
 						injuredPlayer.world.playSound(null, injuredPlayer.getPosX(), injuredPlayer.getPosY(), injuredPlayer.getPosZ(), SoundEvents.ENTITY_WITHER_HURT, SoundCategory.PLAYERS, 0.5F, 1.6F);
 						if(isDoom)
-							handItem.damageItem(1, injuredPlayer, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
+							handItem.damageItem(2, injuredPlayer, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
 						else
-							handItem.damageItem(4, injuredPlayer, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
-						for(LivingEntity livingentity : list) {
+							handItem.damageItem(10, injuredPlayer, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
+						for(LivingEntity livingentity : list)
+						{
 							livingentity.addPotionEffect(new EffectInstance(Effects.INSTANT_DAMAGE, 1, 1));
 						}
 					}
