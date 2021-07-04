@@ -15,7 +15,6 @@ import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.skaianet.TitleSelectionHook;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.storage.MSExtraData;
@@ -184,7 +183,6 @@ public class ServerEventHandler
 			boolean isDoom = title != null && title.getHeroAspect() == EnumAspect.DOOM;
 			ItemStack handItem = injuredPlayer.getHeldItemMainhand();
 			float activateThreshold = ((injuredPlayer.getMaxHealth() / (injuredPlayer.getHealth() + 1)) / injuredPlayer.getMaxHealth()); //fraction of players health that rises dramatically the more injured they are
-			Debug.debugf("activateThreshold on creation = %s", activateThreshold);
 			
 			if(handItem.getItem() == MSItems.LUCERNE_HAMMER_OF_UNDYING)
 			{
@@ -192,7 +190,6 @@ public class ServerEventHandler
 					activateThreshold = activateThreshold * 1.5F;
 				
 				activateThreshold = activateThreshold + injuredPlayer.getRNG().nextFloat() * .9F;
-				Debug.debugf("UNDYING activateThreshold with random and doom mod = %s", activateThreshold);
 				
 				if(activateThreshold >= 1.0F && injuredPlayer.getRNG().nextFloat() >= .75)
 				{
@@ -213,7 +210,6 @@ public class ServerEventHandler
 			if(handItem.getItem() == MSItems.CRUEL_FATE_CRUCIBLE)
 			{
 				activateThreshold = activateThreshold * 8 + injuredPlayer.getRNG().nextFloat() * .9F;
-				Debug.debugf("CRUEL FATE activateThreshold with random and multiplier = %s", activateThreshold);
 				
 				if((isDoom && activateThreshold >= 1.0F && injuredPlayer.getRNG().nextFloat() <= .2) || (!isDoom && activateThreshold >= 1.0F && injuredPlayer.getRNG().nextFloat() <= .05))
 				{
