@@ -3,7 +3,6 @@ package com.mraof.minestuck.item;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.EnumCassetteType;
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.item.CrewPosterEntity;
 import com.mraof.minestuck.entity.item.MetalBoatEntity;
 import com.mraof.minestuck.entity.item.SbahjPosterEntity;
@@ -313,7 +312,9 @@ public class MSItems
 	public static final Item CHOCOLATE_BEETLE = getNull();
 	public static final Item CONE_OF_FLIES = getNull();
 	public static final Item GRASSHOPPER = getNull();
+	public static final Item CICADA = getNull();
 	public static final Item JAR_OF_BUGS = getNull();
+	public static final Item BUG_MAC = getNull();
 	public static final Item ONION = getNull();
 	public static final Item SALAD = getNull();
 	public static final Item DESERT_FRUIT = getNull();
@@ -359,6 +360,7 @@ public class MSItems
 	public static final Item MOON_MIST_FAYGO = getNull();
 	public static final Item PEACH_FAYGO = getNull();
 	public static final Item REDPOP_FAYGO = getNull();
+	public static final Item GRUB_SAUCE = getNull();
 	public static final Item IRRADIATED_STEAK = getNull();
 	public static final Item SURPRISE_EMBRYO = getNull();
 	public static final Item UNKNOWABLE_EGG = getNull();
@@ -1003,7 +1005,9 @@ public class MSItems
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.LANDS).food(MSFoods.CHOCOLATE_BEETLE)).setRegistryName("chocolate_beetle"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.LANDS).food(MSFoods.CONE_OF_FLIES)).setRegistryName("cone_of_flies"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.LANDS).food(MSFoods.GRASSHOPPER)).setRegistryName("grasshopper"));
+		registry.register(new Item(new Item.Properties().group(MSItemGroup.LANDS).food(MSFoods.CICADA)).setRegistryName("cicada"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.LANDS).food(MSFoods.JAR_OF_BUGS)).setRegistryName("jar_of_bugs"));
+		registry.register(new Item(new Item.Properties().group(MSItemGroup.LANDS).food(MSFoods.BUG_MAC)).setRegistryName("bug_mac"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.LANDS).food(MSFoods.ONION)).setRegistryName("onion"));
 		registry.register(new SoupItem(new Item.Properties().group(MSItemGroup.LANDS).food(MSFoods.SALAD).maxStackSize(1)).setRegistryName("salad"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.LANDS).food(MSFoods.DESERT_FRUIT)).setRegistryName("desert_fruit"));
@@ -1051,6 +1055,7 @@ public class MSItems
 		registry.register(new DrinkableItem(new Item.Properties().maxStackSize(16).group(MSItemGroup.MAIN).food(MSFoods.FAYGO_MOON_MIST)).setRegistryName("moon_mist_faygo"));
 		registry.register(new DrinkableItem(new Item.Properties().maxStackSize(16).group(MSItemGroup.MAIN).food(MSFoods.FAYGO_PEACH)).setRegistryName("peach_faygo"));
 		registry.register(new DrinkableItem(new Item.Properties().maxStackSize(16).group(MSItemGroup.MAIN).food(MSFoods.FAYGO_REDPOP)).setRegistryName("redpop_faygo"));
+		registry.register(new DrinkableItem(new Item.Properties().maxStackSize(16).group(MSItemGroup.LANDS).food(MSFoods.GRUB_SAUCE)).setRegistryName("grub_sauce"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN).food(MSFoods.IRRADIATED_STEAK)).setRegistryName("irradiated_steak"));
 		registry.register(new SurpriseEmbryoItem(new Item.Properties().group(MSItemGroup.MAIN).food(MSFoods.SURPRISE_EMBRYO)).setRegistryName("surprise_embryo"));
 		registry.register(new UnknowableEggItem(new Item.Properties().maxStackSize(16).group(MSItemGroup.MAIN).food(MSFoods.UNKNOWABLE_EGG)).setRegistryName("unknowable_egg"));

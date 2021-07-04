@@ -740,8 +740,13 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addStoreTooltip(MSItems.CONE_OF_FLIES, "Want a cone of flies? They're quite popular with the kids. Everyone else too, honestly.");
 		add(MSItems.GRASSHOPPER, "Grasshopper");
 		addStoreTooltip(MSItems.GRASSHOPPER, "This extra-large grasshopper makes a perfect dinner.");
+		add(MSItems.CICADA, "Cicada");
+		addTooltip(MSItems.CICADA, "Why this looks like a member of the Magicicada genus! Known for popping out the ground in large numbers every 13 or 17 years to- hey are you still listening?");
 		add(MSItems.JAR_OF_BUGS, "Jar Of Bugs");
 		addStoreTooltip(MSItems.JAR_OF_BUGS, "It's like a bug on a stick but in a jar! What's not to love about it?");
+		add(MSItems.BUG_MAC, "Bug Mac");
+		addStoreTooltip(MSItems.BUG_MAC, "Does this come with a toy?");
+		addTooltip(MSItems.BUG_MAC, "If you don't think about the ingredients, this delicious meal will fill you up.");
 		add(MSItems.ONION, "Onion");
 		addTooltip(MSItems.ONION, "This \"cool\" vegetable is actually just an onion.");
 		addStore(MSItems.ONION, "Cool Veggie");
@@ -816,6 +821,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.MOON_MIST_FAYGO, "Moonmist Faygo");
 		add(MSItems.PEACH_FAYGO, "Peach Faygo");
 		add(MSItems.REDPOP_FAYGO, "Redpop Faygo");
+		add(MSItems.GRUB_SAUCE, "Grub Sauce");
 		add(MSItems.IRRADIATED_STEAK, "Irradiated Steak");
 		addTooltip(MSItems.IRRADIATED_STEAK, "Steak (over)cooked using the power of uranium!");
 		add(MSItems.SURPRISE_EMBRYO, "Kundler Shelled Surprise Embryo");

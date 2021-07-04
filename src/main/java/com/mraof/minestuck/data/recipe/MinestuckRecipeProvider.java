@@ -140,6 +140,8 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		NonMirroredRecipeBuilder.nonMirroredRecipe(MSItems.QUEUE_MODUS_CARD).key('a', Ingredient.fromItems(MSItems.CAPTCHA_CARD)).key('c', MSItems.RAW_CRUXITE).key('C', MSBlocks.CRUXITE_BLOCK).patternLine("caC").addCriterion("has_card", hasItem(MSItems.CAPTCHA_CARD)).build(recipeBuilder);
 		
 		ShapelessRecipeBuilder.shapelessRecipe(MSItems.BUG_ON_A_STICK, 3).addIngredient(Ingredient.fromTag(Tags.Items.RODS_WOODEN), 3).addIngredient(MSItems.JAR_OF_BUGS).addCriterion("has_jag_of_bugs", hasItem(MSItems.JAR_OF_BUGS)).build(recipeBuilder);
+		ShapedRecipeBuilder.shapedRecipe(MSItems.GRUB_SAUCE,3).key('p', Items.PAPER).key('b', MSTags.Items.BUGS).patternLine("bbb").patternLine("p p").patternLine(" p ").addCriterion("has_bugs", hasItem(MSTags.Items.BUGS)).build(recipeBuilder);
+		ShapelessRecipeBuilder.shapelessRecipe(MSItems.BUG_MAC, 2).addIngredient(Items.BREAD, 1).addIngredient(MSTags.Items.BUGS).addIngredient(MSTags.Items.BUGS).addIngredient(MSItems.FRENCH_FRY, 4).addIngredient(MSItems.GRUB_SAUCE, 1).addCriterion("has_grub_sauce", hasItem(MSItems.GRUB_SAUCE)).build(recipeBuilder);
 		ShapelessRecipeBuilder.shapelessRecipe(MSItems.SALAD).addIngredient(Items.BOWL).addIngredient(ItemTags.LEAVES).addCriterion("has_bowl", hasItem(Items.BOWL)).build(recipeBuilder);
 		
 		ShapelessRecipeBuilder.shapelessRecipe(MSBlocks.TRANS_PORTALIZER).addIngredient(MSBlocks.TRANSPORTALIZER).addIngredient(Items.PINK_DYE).addIngredient(Items.LIGHT_BLUE_DYE).addCriterion("has_transportalizer", hasItem(MSBlocks.TRANSPORTALIZER)).build(recipeBuilder);

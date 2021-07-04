@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "bbb",
+    "p p",
+    " p "
+  ],
+  "key": {
+    "p": {
+      "item": "minecraft:paper"
+    },
+    "b": {
+      "tag": "minestuck:bugs"
+    }
+  },
+  "result": {
+    "item": "minestuck:grub_sauce",
+    "count": 3
+  }
+}
