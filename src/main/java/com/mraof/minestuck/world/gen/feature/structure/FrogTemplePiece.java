@@ -82,15 +82,14 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 		//setBlockState(worldIn, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.getMainBlock().getDefaultState().with(LotusTimeCapsuleBlock.FACING, getCoordBaseMode().getOpposite()), 20 + 20, 49, 22 + 38 + 20, boundingBox); //south
 		//modifiedDirection = modifiedDirection.rotateYCCW();
 		//setBlockState(worldIn, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.getMainBlock().getDefaultState().with(LotusTimeCapsuleBlock.FACING, getCoordBaseMode().rotateYCCW()), 20 + 20, 49, 23 + 38 + 20, boundingBox); //west
-		
+		BlockPos lotusBlockPos = new BlockPos(this.getXWithOffset(20 + 20, 21 + 38 + 20), this.getYWithOffset(49), this.getZWithOffset(20 + 20, 21 + 38 + 20)); //TODO temples whose main entrance opens south(and presumedly west) generate one block closer to entrance;
 		
 		if(this.getRotation() == Rotation.NONE || this.getRotation() == Rotation.CLOCKWISE_180)
 		{
-			BlockPos lotusBlockPos = new BlockPos(this.getXWithOffset(20 + 20, 21 + 38 + 20), this.getYWithOffset(49), this.getZWithOffset(20 + 20, 21 + 38 + 20)); //TODO temples whose main entrance opens south(and presumedly west) generate one block closer to entrance
 			MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.placeWithRotation(worldIn, lotusBlockPos, getRotation());
 		} else if(this.getRotation() == Rotation.CLOCKWISE_90 || this.getRotation() == Rotation.COUNTERCLOCKWISE_90)
 		{
-			BlockPos lotusBlockPos = new BlockPos(this.getXWithOffset(20 + 20, 20 + 38 + 20), this.getYWithOffset(49), this.getZWithOffset(20 + 20, 20 + 38 + 20)); //TODO temples whose main entrance opens south(and presumedly west) generate one block closer to entrance
+			lotusBlockPos = new BlockPos(this.getXWithOffset(20 + 20, 20 + 38 + 20), this.getYWithOffset(49), this.getZWithOffset(20 + 20, 20 + 38 + 20)); //TODO temples whose main entrance opens south(and presumedly west) generate one block closer to entrance
 			MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.placeWithRotation(worldIn, lotusBlockPos, getRotation());
 		}
 		
@@ -100,14 +99,13 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 		StructureBlockUtil.placeLootChest(chestPos, worldIn, boundingBoxIn, getCoordBaseMode(), ChestType.RIGHT, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
 		*/
 		BlockPos chestFarPos = new BlockPos(this.getXWithOffset(21 + 20, 12 + 38 + 20), this.getYWithOffset(21), this.getZWithOffset(21 + 20, 12 + 38 + 20));
-		fillWithBlocks(worldIn, boundingBoxIn, 20 + 20, 20, 12 + 38 + 20, 21 + 20, 20, 12 + 38 + 20, MSBlocks.GREEN_STONE_BRICK_STAIRS.getDefaultState().with(StairsBlock.FACING, getCoordBaseMode().getOpposite()).with(StairsBlock.HALF, Half.TOP), MSBlocks.GREEN_STONE_BRICK_STAIRS.getDefaultState(), false);
-		setBlockState(worldIn, MSBlocks.GREEN_STONE_BRICK_STAIRS.getDefaultState().with(StairsBlock.FACING, getCoordBaseMode().getOpposite()).with(StairsBlock.HALF, Half.TOP), 20 + 20, 20, 12 + 38 + 20, boundingBoxIn);
+		fillWithBlocks(worldIn, boundingBoxIn, 20 + 20, 20, 12 + 38 + 20, 21 + 20, 20, 12 + 38 + 20, MSBlocks.GREEN_STONE_BRICK_STAIRS.getDefaultState().with(StairsBlock.FACING, this.getCoordBaseMode().getOpposite()).with(StairsBlock.HALF, Half.TOP), MSBlocks.GREEN_STONE_BRICK_STAIRS.getDefaultState(), false);
 		StructureBlockUtil.placeLootChest(chestFarPos, worldIn, boundingBoxIn, getCoordBaseMode(), ChestType.LEFT, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
 		chestFarPos = new BlockPos(this.getXWithOffset(20 + 20, 12 + 38 + 20), this.getYWithOffset(21), this.getZWithOffset(20 + 20, 12 + 38 + 20));
 		StructureBlockUtil.placeLootChest(chestFarPos, worldIn, boundingBoxIn, getCoordBaseMode(), ChestType.RIGHT, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
 		
 		BlockPos chestNearDoorPos = new BlockPos(this.getXWithOffset(11 + 20, 29 + 38 + 20), this.getYWithOffset(21), this.getZWithOffset(11 + 20, 29 + 38 + 20));
-		fillWithBlocks(worldIn, boundingBoxIn, chestNearDoorPos.getX(), chestNearDoorPos.getY() - 1, chestNearDoorPos.getZ(), chestFarPos.getX() - 1, chestNearDoorPos.getY() - 1, chestFarPos.getZ(), MSBlocks.GREEN_STONE_BRICK_STAIRS.getDefaultState().with(StairsBlock.FACING, getCoordBaseMode()).with(StairsBlock.HALF, Half.TOP), MSBlocks.GREEN_STONE_BRICK_TRIM.getDefaultState(), false); //lotus room trim floor
+		fillWithBlocks(worldIn, boundingBoxIn, 10 + 20, 20, 29 + 38 + 20, 11 + 20, 20, 29 + 38 + 20, MSBlocks.GREEN_STONE_BRICK_STAIRS.getDefaultState().with(StairsBlock.FACING, this.getCoordBaseMode()).with(StairsBlock.HALF, Half.TOP), MSBlocks.GREEN_STONE_BRICK_STAIRS.getDefaultState(), false);
 		StructureBlockUtil.placeLootChest(chestNearDoorPos, worldIn, boundingBoxIn, getCoordBaseMode().getOpposite(), ChestType.LEFT, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
 		chestNearDoorPos = new BlockPos(this.getXWithOffset(10 + 20, 29 + 38 + 20), this.getYWithOffset(21), this.getZWithOffset(10 + 20, 29 + 38 + 20));
 		StructureBlockUtil.placeLootChest(chestNearDoorPos, worldIn, boundingBoxIn, getCoordBaseMode().getOpposite(), ChestType.RIGHT, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
@@ -122,7 +120,7 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 			lotusFlowerEntity.setNoAI(true);
 			lotusFlowerEntity.setInvulnerable(true);
 			lotusFlowerEntity.setLocationAndAngles(this.getXWithOffset(21 + 20, 21 + 38 + 20), this.getYWithOffset(50), this.getZWithOffset(21 + 20, 21 + 38 + 20), 0F, 0);
-			//lotusFlowerEntity.setLocationAndAngles(this.getXWithOffset(20 + 20, 22 + 38 + 20) + 0.5D, this.getYWithOffset(50), this.getZWithOffset(20 + 20, 22 + 38 + 20) + 0.5D, 0F, 0);
+			//lotusFlowerEntity.setLocationAndAngles(lotusBlockPos.getX(), this.getYWithOffset(50), lotusBlockPos.getZ(), 0F, 0);
 			worldIn.addEntity(lotusFlowerEntity);
 			createRan = true;
 		}
@@ -130,14 +128,7 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 	
 	private void buildMainPlatform(BlockState block, IWorld world, Random rand, MutableBoundingBox boundingBox, int a)
 	{
-		//fillWithBlocks(world, boundingBox, a*2, 0+30, a*2+38, (int)(40 * (1-(float)a/20)), 8+(8*a)+30, (int)(40 * (1-(float)a/20))+38, block, block, false);
 		fillWithBlocks(world, boundingBox, a * 2 + 20, 8 * a, a * 2 + 38 + 20, (int) (40 * (1F - a / 20F)) + 1 + 20, (8 * a) + 8, (int) (40 * (1F - a / 20F)) + 1 + 38 + 20, block, block, false);
-		//fillWithBlocks(world, boundingBox, a * 2 + 20, 8 * a, a * 2 + 37 + 20, (int) (45 * (1F - a / 20F)) + 20, (8 * a) + 8, (int) (45 * (1F - a / 20F)) + 36 + 20, block, block, false);
-		
-		if(a == 0)
-		{
-			//fillWithBlocks(world, boundingBox, 0, 0, 0, 0, 16, 0, Blocks.DIAMOND_BLOCK.getDefaultState(), Blocks.DIAMOND_BLOCK.getDefaultState(), false);
-		}
 	}
 	
 	private void buildStairsAndUnderneath(BlockState block, IWorld world, MutableBoundingBox boundingBox)
@@ -152,7 +143,8 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 			pushUp = pushUp + 2;
 		}
 		
-		fillWithBlocks(world, boundingBox, 17 + 20, 48, 24 + 20 + 24, 24 + 20, 48, 24 + 20 + 24, MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE.getDefaultState().with(DecorBlock.FACING, this.getCoordBaseMode().getOpposite()), MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE.getDefaultState().with(DecorBlock.FACING, this.getCoordBaseMode().getOpposite()), false); //stairs base
+		fillWithBlocks(world, boundingBox, 17 + 20, 48, 24 + 20 + 24, 24 + 20, 48, 24 + 20 + 24, MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE.getDefaultState().with(DecorBlock.FACING, this.getCoordBaseMode().getOpposite()), MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE.getDefaultState().with(DecorBlock.FACING, this.getCoordBaseMode().getOpposite()), false); //stairs base at top
+		fillWithBlocks(world, boundingBox, 17 + 20, -10, 20 + 24, 24 + 20, 0, 24 + 20 + 24, MSBlocks.GREEN_STONE_BRICKS.getDefaultState(), MSBlocks.GREEN_STONE_BRICKS.getDefaultState(), false); //underneath stairs
 		
 		fillWithBlocks(world, boundingBox, 20, -10, 38 + 20, 41 + 20, 0, 79 + 20, block, block, false); //underneath main platform
 		for(int i = 0; i < 28; i++)

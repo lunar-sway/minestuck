@@ -246,7 +246,8 @@ public class LotusFlowerEntity extends CreatureEntity implements IAnimatable, IE
 		super.writeAdditional(compound);
 		
 		compound.putInt("EventTimer", eventTimer);
-		compound.putInt("AnimationOrdinal", animation.ordinal());
+		if(animation != null)
+			compound.putInt("AnimationOrdinal", animation.ordinal());
 	}
 	
 	@Override
