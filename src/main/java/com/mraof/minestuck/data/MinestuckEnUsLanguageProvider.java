@@ -400,6 +400,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.SWONGE, "Schlorp.");
 		add(MSItems.WET_SWONGE, "Wet Swonge");
 		addTooltip(MSItems.WET_SWONGE, "Splorch.");
+		add(MSItems.PUMORD, "Pumord");
+		addTooltip(MSItems.PUMORD, "A sword made of pumice. Is it really much of a blade anymore?");
+		add(MSItems.WET_PUMORD, "Wet Pumord");
+		addTooltip(MSItems.WET_PUMORD, "Yeoch! Looks preddy hot.");
 		add(MSItems.CACTACEAE_CUTLASS, "Cactaceae Cutlass");
 		addTooltip(MSItems.CACTACEAE_CUTLASS, "A spiny sword made of cactus, you might hurt yourself more on the spines then the blade would your enemies");
 		addStoreTooltip(MSItems.CACTACEAE_CUTLASS, "It's not as quenchy, but if it comes down to it you can always drink the blood of your foes.");
