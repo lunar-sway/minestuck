@@ -645,5 +645,15 @@
         "stream": false
       }
     ]
+  },
+  "event.electric_shock": {
+    "category": "ambient",
+    "subtitle": "subtitles.minestuck.electric_shock",
+    "sounds": [
+      {
+        "name": "minestuck:random/electric_shock",
+        "stream": false
+      }
+    ]
   }
 }
