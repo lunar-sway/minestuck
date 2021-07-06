@@ -4,8 +4,8 @@
     "item": "minestuck:shatter_beacon"
   },
   "grist_cost": {
-    "minestuck:build": 630,
-    "minestuck:cobalt": 168,
+    "minestuck:build": 315,
+    "minestuck:cobalt": 294,
     "minestuck:diamond": 210,
     "minestuck:uranium": 630
   }

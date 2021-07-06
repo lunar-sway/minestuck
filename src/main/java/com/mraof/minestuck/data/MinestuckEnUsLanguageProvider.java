@@ -400,6 +400,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.SWONGE, "Schlorp.");
 		add(MSItems.WET_SWONGE, "Wet Swonge");
 		addTooltip(MSItems.WET_SWONGE, "Splorch.");
+		add(MSItems.PUMORD, "Pumord");
+		addTooltip(MSItems.PUMORD, "A sword made of pumice. Is it really much of a blade anymore?");
+		add(MSItems.WET_PUMORD, "Wet Pumord");
+		addTooltip(MSItems.WET_PUMORD, "Yeoch! Looks preddy hot.");
 		add(MSItems.CACTACEAE_CUTLASS, "Cactaceae Cutlass");
 		addTooltip(MSItems.CACTACEAE_CUTLASS, "A spiny sword made of cactus, you might hurt yourself more on the spines then the blade would your enemies");
 		addStoreTooltip(MSItems.CACTACEAE_CUTLASS, "It's not as quenchy, but if it comes down to it you can always drink the blood of your foes.");
@@ -492,6 +496,18 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.FLUORITE_OCTET, "Magical Dice! Let 'em roll!");
 		add(MSItems.CAT_CLAWS_DRAWN, "Cat Claws");
 		add(MSItems.CAT_CLAWS_SHEATHED, "Cat Claws");
+		add(MSItems.SKELETONIZER_DRAWN, "Skeletonizer");
+		addTooltip(MSItems.SKELETONIZER_DRAWN, "Why don't skeletons get upset? Because nothing gets under their skin! This weapon sure might however.");
+		add(MSItems.SKELETONIZER_SHEATHED, "Skeletonizer");
+		addTooltip(MSItems.SKELETONIZER_SHEATHED, "Why don't skeletons get upset? Because nothing gets under their skin! This weapon sure might however.");
+		add(MSItems.SKELETON_DISPLACER_DRAWN, "Skeleton Displacer");
+		addTooltip(MSItems.SKELETON_DISPLACER_DRAWN, "Effective against skeletons!");
+		add(MSItems.SKELETON_DISPLACER_SHEATHED, "Skeleton Displacer");
+		addTooltip(MSItems.SKELETON_DISPLACER_SHEATHED, "Effective against skeletons!");
+		add(MSItems.TEARS_OF_THE_ENDERLICH_DRAWN, "Tears of the Enderlich");
+		addTooltip(MSItems.TEARS_OF_THE_ENDERLICH_DRAWN, "Effective against liches!");
+		add(MSItems.TEARS_OF_THE_ENDERLICH_SHEATHED, "Tears of the Enderlich");
+		addTooltip(MSItems.TEARS_OF_THE_ENDERLICH_SHEATHED, "Effective against liches!");
 		add(MSItems.ACTION_CLAWS_DRAWN, "Action Claws");
 		add(MSItems.ACTION_CLAWS_SHEATHED, "Action Claws");
 		add(MSItems.LIPSTICK_CHAINSAW, "Chainsaw");
@@ -600,6 +616,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.DRAGON_CANE, "The most Powerful and awe inspiring of canes!");
 		add(MSItems.DRAGON_CANE_UNSHEATHED, "Dragon Cane");
 		addTooltip(MSItems.DRAGON_CANE_UNSHEATHED, "The most Powerful and awe inspiring of canes!");
+		add(MSItems.CHANCEWYRMS_EXTRA_FORTUNATE_STABBING_IMPLEMENT, "Chancewyrm's Extra Fortunate Stabbing Implement");
+		add(MSItems.CHANCEWYRMS_EXTRA_FORTUNATE_STABBING_IMPLEMENT_UNSHEATHED, "Chancewyrm's Extra Fortunate Stabbing Implement");
 		add(MSItems.POGO_CANE, "Pogo Cane");
 		addTooltip(MSItems.POGO_CANE, "Now without leg or hand holds for even more danger!");
 		add(MSItems.CANDY_CANE, "Candy Cane");
@@ -726,8 +744,13 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addStoreTooltip(MSItems.CONE_OF_FLIES, "Want a cone of flies? They're quite popular with the kids. Everyone else too, honestly.");
 		add(MSItems.GRASSHOPPER, "Grasshopper");
 		addStoreTooltip(MSItems.GRASSHOPPER, "This extra-large grasshopper makes a perfect dinner.");
+		add(MSItems.CICADA, "Cicada");
+		addTooltip(MSItems.CICADA, "Why this looks like a member of the Magicicada genus! Known for popping out the ground in large numbers every 13 or 17 years to- hey are you still listening?");
 		add(MSItems.JAR_OF_BUGS, "Jar Of Bugs");
 		addStoreTooltip(MSItems.JAR_OF_BUGS, "It's like a bug on a stick but in a jar! What's not to love about it?");
+		add(MSItems.BUG_MAC, "Bug Mac");
+		addStoreTooltip(MSItems.BUG_MAC, "Does this come with a toy?");
+		addTooltip(MSItems.BUG_MAC, "If you don't think about the ingredients, this delicious meal will fill you up.");
 		add(MSItems.ONION, "Onion");
 		addTooltip(MSItems.ONION, "This \"cool\" vegetable is actually just an onion.");
 		addStore(MSItems.ONION, "Cool Veggie");
@@ -745,6 +768,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addStoreTooltip(MSItems.ROCK_COOKIE, "This here is a true wonder-cookie! Totally! And they are even cheaper than regular cookies!");
 		add(MSItems.WOODEN_CARROT, "Wooden Carrot");
 		addTooltip(MSItems.WOODEN_CARROT, "It's as edible as a plank.");
+		add(MSItems.COCOA_WART, "Cocoa Wart");
+		addTooltip(MSItems.COCOA_WART, "It has a... unique smell.");
 		add(MSItems.FUNGAL_SPORE, "Fungal Spore");
 		addTooltip(MSItems.FUNGAL_SPORE, "You must live off the land, and in this land, it means eating this.");
 		addStore(MSItems.FUNGAL_SPORE, "Mushroom Skittles");
@@ -800,6 +825,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.MOON_MIST_FAYGO, "Moonmist Faygo");
 		add(MSItems.PEACH_FAYGO, "Peach Faygo");
 		add(MSItems.REDPOP_FAYGO, "Redpop Faygo");
+		add(MSItems.GRUB_SAUCE, "Grub Sauce");
 		add(MSItems.IRRADIATED_STEAK, "Irradiated Steak");
 		addTooltip(MSItems.IRRADIATED_STEAK, "Steak (over)cooked using the power of uranium!");
 		add(MSItems.SURPRISE_EMBRYO, "Kundler Shelled Surprise Embryo");
@@ -907,6 +933,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.LIP_BALM, "Lip Balm");
 		addTooltip(MSItems.LIP_BALM, "I see you there with those dry lips. Aht aht don't lick them now.");
 		addExtra(MSItems.LIP_BALM, "message", "Your lips are slightly more moisturized, but is it enough?");
+		add(MSItems.CARDBOARD_TUBE, "Cardboard Tube");
 		add(MSItems.INK_SQUID_PRO_QUO, "Ink of Squid Pro Quo");
 		addTooltip(MSItems.INK_SQUID_PRO_QUO, "For the love of god, don't drink it.");
 		add(MSItems.CUEBALL, "Magic Cueball");
@@ -1844,6 +1871,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addSubtitles("horn", "Horn honks");
 		addSubtitles("screech", "Estrogen-empowered screech");
 		addSubtitles("upcheladder", "Echeladder levels up");
+		addSubtitles("electric_shock", "Electric Shock");
 		
 		addEntitySubtitles(MSEntityTypes.NAKAGATOR, "ambient", "Nakagator naks");
 		addEntitySubtitles(MSEntityTypes.NAKAGATOR, "hurt", "Nakagator hurts");

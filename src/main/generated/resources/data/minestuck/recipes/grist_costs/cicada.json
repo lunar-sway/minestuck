@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:cicada"
+  },
+  "grist_cost": {
+    "minestuck:caulk": 3,
+    "minestuck:marble": 8
+  }
+}
