@@ -1,5 +1,7 @@
 package com.mraof.minestuck.data.loot_table;
 
+import net.minecraft.item.ItemStack;
+
 public class MSLootModifier extends LootModifier {
 	private final int numSeedsToConvert;
 	private final Item itemToCheck;
@@ -13,7 +15,7 @@ public class MSLootModifier extends LootModifier {
 	
 	@Nonnull
 	@Override
-	public List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context) {
+	public List<ItemStack> doApply(List<ItemStack> generatedLoot, LootModifier context) {
 		//
 		// Additional conditions can be checked, though as much as possible should be parameterized via JSON data.
 		// It is better to write a new ILootCondition implementation than to do things here.
