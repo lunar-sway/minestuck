@@ -18,8 +18,6 @@ import java.util.Map;
 
 public class DecorBlock extends Block
 {
-	
-	
 	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 	public final Map<Direction, VoxelShape> shape;
 	

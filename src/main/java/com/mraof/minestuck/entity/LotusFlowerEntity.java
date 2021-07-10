@@ -1,5 +1,6 @@
 package com.mraof.minestuck.entity;
 
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.network.LotusFlowerPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
@@ -38,12 +39,12 @@ import java.util.Collections;
 
 public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEntityAdditionalSpawnData
 {
-	private static final int RESTORATION_TIME = 10000; //500 seconds from animation start to flower restoration
+	private static final int RESTORATION_TIME = MinestuckConfig.SERVER.lotusRestorationTime.get() * 20;	//600(default) seconds from animation start to flower restoration
 	
 	// Animation lengths
-	private static final int OPENING_LENGTH = 120;	//6 sec open animation * 20 ticks/sec = 120
+	private static final int OPENING_LENGTH = 120;		//6 sec open animation * 20 ticks/sec = 120
 	private static final int OPEN_IDLE_LENGTH = 320;	//4 sec idle animation * 4 loops * 20 ticks/sec = 320
-	private static final int VANISHING_LENGTH = 13;	//0.65 sec vanish animation * 20 ticks/sec = 13
+	private static final int VANISHING_LENGTH = 13;		//0.65 sec vanish animation * 20 ticks/sec = 13
 	
 	// Animation start times
 	private static final int IDLE_TIME = -1;
@@ -197,7 +198,7 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 		ItemEntity sburbCodeItemEntity = new ItemEntity(worldIn, posVec.getX(), posVec.getY() + 1D, posVec.getZ(), new ItemStack(MSItems.SBURB_CODE, 1));
 		worldIn.addEntity(sburbCodeItemEntity);
 		
-		this.world.addParticle(ParticleTypes.FLASH, posVec.x, posVec.y + 0.5D, posVec.z, 0.0D, 0.0D, 0.0D);
+		this.world.addParticle(ParticleTypes.FLASH, posVec.x, posVec.y + 0.5D, posVec.z, 0.0D, 0.0D, 0.0D); //TODO spawnLoot happens server-side so this particle does not show
 	}
 	
 	@Override
@@ -263,7 +264,8 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 	
 	@Override
 	public void move(MoverType typeIn, Vec3d pos)
-	{}
+	{
+	}
 	
 	@Override
 	public Iterable<ItemStack> getArmorInventoryList()
@@ -279,7 +281,8 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 	
 	@Override
 	public void setItemStackToSlot(EquipmentSlotType slotIn, ItemStack stack)
-	{}
+	{
+	}
 	
 	@Override
 	public HandSide getPrimaryHand()
