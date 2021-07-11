@@ -9,6 +9,7 @@ import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.item.ArmorStandEntity;
@@ -234,6 +235,23 @@ public interface OnHitEffect
 			}
 			
 			target.attackEntityFrom(source.setDamageBypassesArmor(), damage);
+		};
+	}
+	
+	static OnHitEffect targetSpecificAdditionalDamage(float additionalDamage, Supplier<EntityType<?>> targetEntity)
+	{
+		return (stack, target, attacker) -> {
+			float damage = additionalDamage * 3.3F;
+			
+			if(attacker instanceof ServerPlayerEntity)
+			{
+				ServerPlayerEntity serverPlayer = (ServerPlayerEntity) attacker;
+				
+				if(target.getType() == targetEntity.get())
+				{
+					target.attackEntityFrom(DamageSource.causePlayerDamage(serverPlayer), damage);
+				}
+			}
 		};
 	}
 	

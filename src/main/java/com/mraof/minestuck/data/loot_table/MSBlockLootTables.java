@@ -1,21 +1,16 @@
 package com.mraof.minestuck.data.loot_table;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.block.plant.TallEndGrassBlock;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.tileentity.ItemStackTileEntity;
 import net.minecraft.advancements.criterion.EnchantmentPredicate;
 import net.minecraft.advancements.criterion.ItemPredicate;
 import net.minecraft.advancements.criterion.MinMaxBounds;
-import net.minecraft.advancements.criterion.StatePropertiesPredicate;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.DoublePlantBlock;
 import net.minecraft.data.loot.BlockLootTables;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.Items;
-import net.minecraft.state.properties.DoubleBlockHalf;
 import net.minecraft.world.storage.loot.*;
 import net.minecraft.world.storage.loot.conditions.*;
 import net.minecraft.world.storage.loot.functions.ApplyBonus;
@@ -252,6 +247,7 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(PIPE_INTERSECTION);
 		registerDropSelfLootTable(PARCEL_PYXIS);
 		registerDropSelfLootTable(PYXIS_LID);
+		registerLootTable(STONE_SLAB, MSBlockLootTables::droppingWithTEItem);
 		
 		registerDropSelfLootTable(BLACK_CASTLE_BRICK_STAIRS);
 		registerDropSelfLootTable(DARK_GRAY_CASTLE_BRICK_STAIRS);

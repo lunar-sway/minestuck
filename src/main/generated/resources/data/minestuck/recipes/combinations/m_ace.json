@@ -1,13 +1,13 @@
 {
   "type": "minestuck:combination",
   "input1": {
-    "item": "minecraft:stone"
+    "item": "minestuck:mace"
   },
   "input2": {
-    "item": "minestuck:carving_tool"
+    "item": "minestuck:nonbinary_code"
   },
   "mode": "and",
   "output": {
-    "item": "minestuck:stone_slab"
+    "item": "minestuck:m_ace"
   }
 }
