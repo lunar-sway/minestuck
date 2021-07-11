@@ -1,21 +1,16 @@
 package com.mraof.minestuck.data.loot_table;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.block.plant.TallEndGrassBlock;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.tileentity.ItemStackTileEntity;
 import net.minecraft.advancements.criterion.EnchantmentPredicate;
 import net.minecraft.advancements.criterion.ItemPredicate;
 import net.minecraft.advancements.criterion.MinMaxBounds;
-import net.minecraft.advancements.criterion.StatePropertiesPredicate;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.DoublePlantBlock;
 import net.minecraft.data.loot.BlockLootTables;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.Items;
-import net.minecraft.state.properties.DoubleBlockHalf;
 import net.minecraft.world.storage.loot.*;
 import net.minecraft.world.storage.loot.conditions.*;
 import net.minecraft.world.storage.loot.functions.ApplyBonus;
@@ -133,6 +128,7 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(BROWN_STONE_BRICKS);
 		registerDropSelfLootTable(BROWN_STONE_COLUMN);
 		registerDropSelfLootTable(CRACKED_BROWN_STONE_BRICKS);
+		registerDropSelfLootTable(GREEN_STONE);
 		registerDropSelfLootTable(DENSE_CLOUD);
 		registerDropSelfLootTable(BRIGHT_DENSE_CLOUD);
 		registerDropSelfLootTable(SUGAR_CUBE);
@@ -234,7 +230,12 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(PIPE_INTERSECTION);
 		registerDropSelfLootTable(PARCEL_PYXIS);
 		registerDropSelfLootTable(PYXIS_LID);
+		registerLootTable(STONE_SLAB, MSBlockLootTables::droppingWithTEItem);
 		
+		registerDropSelfLootTable(BLACK_CASTLE_BRICK_STAIRS);
+		registerDropSelfLootTable(DARK_GRAY_CASTLE_BRICK_STAIRS);
+		registerDropSelfLootTable(LIGHT_GRAY_CASTLE_BRICK_STAIRS);
+		registerDropSelfLootTable(WHITE_CASTLE_BRICK_STAIRS);
 		registerDropSelfLootTable(COARSE_STONE_STAIRS);
 		registerDropSelfLootTable(SHADE_BRICK_STAIRS);
 		registerDropSelfLootTable(FROST_BRICK_STAIRS);
@@ -248,6 +249,10 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(END_PLANKS_STAIRS);
 		registerDropSelfLootTable(DEAD_PLANKS_STAIRS);
 		registerDropSelfLootTable(TREATED_PLANKS_STAIRS);
+		registerDropSelfLootTable(BLACK_CASTLE_BRICK_SLAB);
+		registerDropSelfLootTable(DARK_GRAY_CASTLE_BRICK_SLAB);
+		registerDropSelfLootTable(LIGHT_GRAY_CASTLE_BRICK_SLAB);
+		registerDropSelfLootTable(WHITE_CASTLE_BRICK_SLAB);
 		registerDropSelfLootTable(CHALK_SLAB);
 		registerDropSelfLootTable(CHALK_BRICK_SLAB);
 		registerDropSelfLootTable(PINK_STONE_BRICK_SLAB);

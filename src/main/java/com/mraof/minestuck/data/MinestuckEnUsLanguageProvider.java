@@ -149,6 +149,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.BROWN_STONE_BRICKS, "Brown Stone Bricks");
 		add(MSBlocks.BROWN_STONE_COLUMN, "Brown Stone Column");
 		add(MSBlocks.CRACKED_BROWN_STONE_BRICKS, "Cracked Brown Stone Bricks");
+		add(MSBlocks.GREEN_STONE, "Green Stone");
 		add(MSBlocks.DENSE_CLOUD, "Dense Cloud");
 		add(MSBlocks.BRIGHT_DENSE_CLOUD, "Bright Dense Cloud");
 		add(MSBlocks.SUGAR_CUBE, "Sugar Cube");
@@ -263,6 +264,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.PARCEL_PYXIS, "Parcel Pyxis");
 		addTooltip(MSBlocks.PARCEL_PYXIS, "This doesn't actually seem to do anything");
 		add(MSBlocks.PYXIS_LID, "Parcel Pyxis Lid");
+		add(MSBlocks.BLACK_CASTLE_BRICK_STAIRS, "Black Castle Brick Stairs");
+		add(MSBlocks.DARK_GRAY_CASTLE_BRICK_STAIRS, "Dark Gray Castle Brick Stairs");
+		add(MSBlocks.LIGHT_GRAY_CASTLE_BRICK_STAIRS, "Light Gray Castle Brick Stairs");
+		add(MSBlocks.WHITE_CASTLE_BRICK_STAIRS, "White Castle Brick Stairs");
 		add(MSBlocks.COARSE_STONE_STAIRS, "Coarse Stone Stairs");
 		add(MSBlocks.SHADE_BRICK_STAIRS, "Shade Brick Stairs");
 		add(MSBlocks.FROST_BRICK_STAIRS, "Frost Brick Stairs");
@@ -276,6 +281,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.END_PLANKS_STAIRS, "End Planks Stairs");
 		add(MSBlocks.DEAD_PLANKS_STAIRS, "Dead Planks Stairs");
 		add(MSBlocks.TREATED_PLANKS_STAIRS, "Treated Planks Stairs");
+		add(MSBlocks.BLACK_CASTLE_BRICK_SLAB, "Black Castle Brick Slab");
+		add(MSBlocks.DARK_GRAY_CASTLE_BRICK_SLAB, "Dark Gray Castle Brick Slab");
+		add(MSBlocks.LIGHT_GRAY_CASTLE_BRICK_SLAB, "Light Gray Castle Brick Slab");
+		add(MSBlocks.WHITE_CASTLE_BRICK_SLAB, "White Castle Brick Slab");
 		add(MSBlocks.CHALK_SLAB, "Chalk Slab");
 		add(MSBlocks.CHALK_BRICK_SLAB, "Chalk Brick Slab");
 		add(MSBlocks.PINK_STONE_BRICK_SLAB, "Pink Stone Brick Slab");
@@ -391,6 +400,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.SWONGE, "Schlorp.");
 		add(MSItems.WET_SWONGE, "Wet Swonge");
 		addTooltip(MSItems.WET_SWONGE, "Splorch.");
+		add(MSItems.PUMORD, "Pumord");
+		addTooltip(MSItems.PUMORD, "A sword made of pumice. Is it really much of a blade anymore?");
+		add(MSItems.WET_PUMORD, "Wet Pumord");
+		addTooltip(MSItems.WET_PUMORD, "Yeoch! Looks preddy hot.");
 		add(MSItems.CACTACEAE_CUTLASS, "Cactaceae Cutlass");
 		addTooltip(MSItems.CACTACEAE_CUTLASS, "A spiny sword made of cactus, you might hurt yourself more on the spines then the blade would your enemies");
 		addStoreTooltip(MSItems.CACTACEAE_CUTLASS, "It's not as quenchy, but if it comes down to it you can always drink the blood of your foes.");
@@ -431,6 +444,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.COBALT_SABRE, "Cobalt Cobeam Coblade");
 		add(MSItems.QUANTUM_SABRE, "Quantum Sabre");
 		add(MSItems.SHATTER_BEACON, "ShatterBeacon");
+		add(MSItems.SHATTER_BACON, "ShatterBacon");
+		addTooltip(MSItems.SHATTER_BACON, "This thing is so unspeakably greasy you are having a hard time even holding it.");
+		addExtra(MSItems.SHATTER_BACON, OnHitEffect.SORD_DROP_MESSAGE, "The grease caused the ShatterBacon to slip from your grasp!");
 		add(MSItems.BATLEACKS, "batleacks!!");
 		addTooltip(MSItems.BATLEACKS, "A shitty axe. Not much more to it.");
 		addExtra(MSItems.BATLEACKS, OnHitEffect.SORD_DROP_MESSAGE, "The shittiness of the batleacks made it phase through your hand");
@@ -480,6 +496,18 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.FLUORITE_OCTET, "Magical Dice! Let 'em roll!");
 		add(MSItems.CAT_CLAWS_DRAWN, "Cat Claws");
 		add(MSItems.CAT_CLAWS_SHEATHED, "Cat Claws");
+		add(MSItems.SKELETONIZER_DRAWN, "Skeletonizer");
+		addTooltip(MSItems.SKELETONIZER_DRAWN, "Why don't skeletons get upset? Because nothing gets under their skin! This weapon sure might however.");
+		add(MSItems.SKELETONIZER_SHEATHED, "Skeletonizer");
+		addTooltip(MSItems.SKELETONIZER_SHEATHED, "Why don't skeletons get upset? Because nothing gets under their skin! This weapon sure might however.");
+		add(MSItems.SKELETON_DISPLACER_DRAWN, "Skeleton Displacer");
+		addTooltip(MSItems.SKELETON_DISPLACER_DRAWN, "Effective against skeletons!");
+		add(MSItems.SKELETON_DISPLACER_SHEATHED, "Skeleton Displacer");
+		addTooltip(MSItems.SKELETON_DISPLACER_SHEATHED, "Effective against skeletons!");
+		add(MSItems.TEARS_OF_THE_ENDERLICH_DRAWN, "Tears of the Enderlich");
+		addTooltip(MSItems.TEARS_OF_THE_ENDERLICH_DRAWN, "Effective against liches!");
+		add(MSItems.TEARS_OF_THE_ENDERLICH_SHEATHED, "Tears of the Enderlich");
+		addTooltip(MSItems.TEARS_OF_THE_ENDERLICH_SHEATHED, "Effective against liches!");
 		add(MSItems.ACTION_CLAWS_DRAWN, "Action Claws");
 		add(MSItems.ACTION_CLAWS_SHEATHED, "Action Claws");
 		add(MSItems.LIPSTICK_CHAINSAW, "Chainsaw");
@@ -522,6 +550,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.NIGHT_CLUB, "Wanna go...clubbing?");
 		add(MSItems.NIGHTSTICK, "Nightstick");
 		addTooltip(MSItems.NIGHTSTICK, "NO CLUBBING MOVE ALONG.");
+		add(MSItems.RED_EYES, "Red Eyes");
 		add(MSItems.PRISMARINE_BASHER, "Prismarine Basher");
 		addTooltip(MSItems.PRISMARINE_BASHER, "Smells like sea salt, unsurprisingly.");
 		add(MSItems.CLUB_ZERO, "Club Zero");
@@ -587,6 +616,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.DRAGON_CANE, "The most Powerful and awe inspiring of canes!");
 		add(MSItems.DRAGON_CANE_UNSHEATHED, "Dragon Cane");
 		addTooltip(MSItems.DRAGON_CANE_UNSHEATHED, "The most Powerful and awe inspiring of canes!");
+		add(MSItems.CHANCEWYRMS_EXTRA_FORTUNATE_STABBING_IMPLEMENT, "Chancewyrm's Extra Fortunate Stabbing Implement");
+		add(MSItems.CHANCEWYRMS_EXTRA_FORTUNATE_STABBING_IMPLEMENT_UNSHEATHED, "Chancewyrm's Extra Fortunate Stabbing Implement");
 		add(MSItems.POGO_CANE, "Pogo Cane");
 		addTooltip(MSItems.POGO_CANE, "Now without leg or hand holds for even more danger!");
 		add(MSItems.CANDY_CANE, "Candy Cane");
@@ -740,8 +771,13 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addStoreTooltip(MSItems.CONE_OF_FLIES, "Want a cone of flies? They're quite popular with the kids. Everyone else too, honestly.");
 		add(MSItems.GRASSHOPPER, "Grasshopper");
 		addStoreTooltip(MSItems.GRASSHOPPER, "This extra-large grasshopper makes a perfect dinner.");
+		add(MSItems.CICADA, "Cicada");
+		addTooltip(MSItems.CICADA, "Why this looks like a member of the Magicicada genus! Known for popping out the ground in large numbers every 13 or 17 years to- hey are you still listening?");
 		add(MSItems.JAR_OF_BUGS, "Jar Of Bugs");
 		addStoreTooltip(MSItems.JAR_OF_BUGS, "It's like a bug on a stick but in a jar! What's not to love about it?");
+		add(MSItems.BUG_MAC, "Bug Mac");
+		addStoreTooltip(MSItems.BUG_MAC, "Does this come with a toy?");
+		addTooltip(MSItems.BUG_MAC, "If you don't think about the ingredients, this delicious meal will fill you up.");
 		add(MSItems.ONION, "Onion");
 		addTooltip(MSItems.ONION, "This \"cool\" vegetable is actually just an onion.");
 		addStore(MSItems.ONION, "Cool Veggie");
@@ -759,6 +795,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addStoreTooltip(MSItems.ROCK_COOKIE, "This here is a true wonder-cookie! Totally! And they are even cheaper than regular cookies!");
 		add(MSItems.WOODEN_CARROT, "Wooden Carrot");
 		addTooltip(MSItems.WOODEN_CARROT, "It's as edible as a plank.");
+		add(MSItems.COCOA_WART, "Cocoa Wart");
+		addTooltip(MSItems.COCOA_WART, "It has a... unique smell.");
 		add(MSItems.FUNGAL_SPORE, "Fungal Spore");
 		addTooltip(MSItems.FUNGAL_SPORE, "You must live off the land, and in this land, it means eating this.");
 		addStore(MSItems.FUNGAL_SPORE, "Mushroom Skittles");
@@ -779,6 +817,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.FOOD_CAN, "Food Can");
 		addTooltip(MSItems.FOOD_CAN, "You could be at the forefront of carapacian fashion if you turned the label into a sash");
 		add(MSItems.CANDY_CORN, "Candy Corn");
+		add(MSItems.TUIX_BAR, "Tuix Bar");
 		add(MSItems.BUILD_GUSHERS, "Build Gushers");
 		add(MSItems.AMBER_GUMMY_WORM, "Amber Gummy Worm");
 		add(MSItems.CAULK_PRETZEL, "Caulk Pretzel");
@@ -813,6 +852,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.MOON_MIST_FAYGO, "Moonmist Faygo");
 		add(MSItems.PEACH_FAYGO, "Peach Faygo");
 		add(MSItems.REDPOP_FAYGO, "Redpop Faygo");
+		add(MSItems.GRUB_SAUCE, "Grub Sauce");
 		add(MSItems.IRRADIATED_STEAK, "Irradiated Steak");
 		addTooltip(MSItems.IRRADIATED_STEAK, "Steak (over)cooked using the power of uranium!");
 		add(MSItems.SURPRISE_EMBRYO, "Kundler Shelled Surprise Embryo");
@@ -891,6 +931,16 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.SCALEMATE_WITNESS, "The Witness");
 		add(MSItems.IRON_BOAT, "Iron Boat");
 		add(MSItems.GOLD_BOAT, "Golden Boat");
+		add(MSItems.FLARP_MANUAL, "Flarp Manual");
+		add(MSItems.SASSACRE_TEXT, "Sassacre Text");
+		add(MSItems.WISEGUY, "Wise Guy");
+		add(MSItems.TABLESTUCK_MANUAL, "Tablestuck Manual");
+		add(MSItems.TILLDEATH_HANDBOOK, "~ATH Handbook");
+		addTooltip(MSItems.TILLDEATH_HANDBOOK, "A Handbook for the Imminently Deceased");
+		add(MSItems.BINARY_CODE, "Binary code");
+		addTooltip(MSItems.BINARY_CODE, "01101010 01110101 01110011 01110100 00100000 01100001 00100000 01100010 01110101 01101110 01100011 01101000 00100000 01101111 01100110 00100000 01101111 01101110 01100101 01110011 00100000 01100001 01101110 01100100 00100000 01111010 01100101 01110010 01101111 01110011");
+		add(MSItems.NONBINARY_CODE, "Nonbinary code");
+		addTooltip(MSItems.NONBINARY_CODE, "6e 6f 74 20 6a 75 73 74 20 61 20 62 75 6e 63 68 20 6f 66 20 6f 6e 65 73 20 61 6e 64 20 7a 65 72 6f 73");
 		add(MSItems.THRESH_DVD, "Thresh Prince DVD");
 		add(MSItems.GAMEBRO_MAGAZINE, "Game Bro Magazine");
 		add(MSItems.GAMEGRL_MAGAZINE, "Game Grl Magazine");
@@ -909,6 +959,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.LIP_BALM, "Lip Balm");
 		addTooltip(MSItems.LIP_BALM, "I see you there with those dry lips. Aht aht don't lick them now.");
 		addExtra(MSItems.LIP_BALM, "message", "Your lips are slightly more moisturized, but is it enough?");
+		add(MSItems.CARDBOARD_TUBE, "Cardboard Tube");
 		add(MSItems.INK_SQUID_PRO_QUO, "Ink of Squid Pro Quo");
 		addTooltip(MSItems.INK_SQUID_PRO_QUO, "For the love of god, don't drink it.");
 		add(MSItems.CUEBALL, "Magic Cueball");
@@ -1846,6 +1897,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addSubtitles("horn", "Horn honks");
 		addSubtitles("screech", "Estrogen-empowered screech");
 		addSubtitles("upcheladder", "Echeladder levels up");
+		addSubtitles("electric_shock", "Electric Shock");
 		
 		addEntitySubtitles(MSEntityTypes.NAKAGATOR, "ambient", "Nakagator naks");
 		addEntitySubtitles(MSEntityTypes.NAKAGATOR, "hurt", "Nakagator hurts");

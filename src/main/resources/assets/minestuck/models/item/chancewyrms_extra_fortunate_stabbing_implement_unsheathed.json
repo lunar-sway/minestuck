@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "minestuck:item/chancewyrms_extra_fortunate_stabbing_implement_unsheathed"
+  }
+}

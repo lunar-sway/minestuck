@@ -31,7 +31,6 @@ import net.minecraft.item.Items;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
@@ -183,33 +182,49 @@ public class ServerEventHandler
 			Title title = PlayerSavedData.getData((ServerPlayerEntity) injuredPlayer).getTitle();
 			boolean isDoom = title != null && title.getHeroAspect() == EnumAspect.DOOM;
 			ItemStack handItem = injuredPlayer.getHeldItemMainhand();
-			if(handItem.getItem() == MSItems.LUCERNE_HAMMER_OF_UNDYING){
-				if((isDoom && injuredPlayer.getHealth() <= 3.0F && injuredPlayer.getRNG().nextFloat() <= .08) || (!isDoom && injuredPlayer.getHealth() <= 2.0F && injuredPlayer.getRNG().nextFloat() <= .02))
+			float activateThreshold = ((injuredPlayer.getMaxHealth() / (injuredPlayer.getHealth() + 1)) / injuredPlayer.getMaxHealth()); //fraction of players health that rises dramatically the more injured they are
+			
+			if(handItem.getItem() == MSItems.LUCERNE_HAMMER_OF_UNDYING)
+			{
+				if(isDoom)
+					activateThreshold = activateThreshold * 1.5F;
+				
+				activateThreshold = activateThreshold + injuredPlayer.getRNG().nextFloat() * .9F;
+				
+				if(activateThreshold >= 1.0F && injuredPlayer.getRNG().nextFloat() >= .75)
 				{
 					injuredPlayer.world.playSound(null, injuredPlayer.getPosX(), injuredPlayer.getPosY(), injuredPlayer.getPosZ(), SoundEvents.ITEM_TOTEM_USE, SoundCategory.PLAYERS, 1.0F, 1.4F);
 					injuredPlayer.setHealth(injuredPlayer.getHealth() + 3);
 					injuredPlayer.addPotionEffect(new EffectInstance(Effects.REGENERATION, 450, 0));
-					if(isDoom){
+					if(isDoom)
+					{
 						injuredPlayer.addPotionEffect(new EffectInstance(Effects.ABSORPTION, 100, 0));
-						handItem.damageItem(400, injuredPlayer, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
-					} else {
-						handItem.damageItem(1000, injuredPlayer, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
+						handItem.damageItem(100, injuredPlayer, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
+					} else
+					{
+						handItem.damageItem(250, injuredPlayer, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
 					}
 				}
 			}
-			if(handItem.getItem() == MSItems.CRUEL_FATE_CRUCIBLE){
-				if((isDoom && injuredPlayer.getHealth() <= 12.0F && injuredPlayer.getRNG().nextFloat() <= .25) || (!isDoom && injuredPlayer.getHealth() <= 8.0F && injuredPlayer.getRNG().nextFloat() <= .10))
+			
+			if(handItem.getItem() == MSItems.CRUEL_FATE_CRUCIBLE)
+			{
+				activateThreshold = activateThreshold * 8 + injuredPlayer.getRNG().nextFloat() * .9F;
+				
+				if((isDoom && activateThreshold >= 1.0F && injuredPlayer.getRNG().nextFloat() <= .2) || (!isDoom && activateThreshold >= 1.0F && injuredPlayer.getRNG().nextFloat() <= .05))
 				{
 					AxisAlignedBB axisalignedbb = injuredPlayer.getBoundingBox().grow(4.0D, 2.0D, 4.0D);
 					List<LivingEntity> list = injuredPlayer.world.getEntitiesWithinAABB(LivingEntity.class, axisalignedbb);
 					list.remove(injuredPlayer);
-					if (!list.isEmpty()) {
+					if(!list.isEmpty())
+					{
 						injuredPlayer.world.playSound(null, injuredPlayer.getPosX(), injuredPlayer.getPosY(), injuredPlayer.getPosZ(), SoundEvents.ENTITY_WITHER_HURT, SoundCategory.PLAYERS, 0.5F, 1.6F);
 						if(isDoom)
-							handItem.damageItem(1, injuredPlayer, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
+							handItem.damageItem(2, injuredPlayer, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
 						else
-							handItem.damageItem(4, injuredPlayer, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
-						for(LivingEntity livingentity : list) {
+							handItem.damageItem(10, injuredPlayer, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
+						for(LivingEntity livingentity : list)
+						{
 							livingentity.addPotionEffect(new EffectInstance(Effects.INSTANT_DAMAGE, 1, 1));
 						}
 					}
