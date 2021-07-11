@@ -14,11 +14,9 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.LadderBlock;
 import net.minecraft.block.StairsBlock;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.state.properties.ChestType;
 import net.minecraft.state.properties.Half;
 import net.minecraft.util.Direction;
-import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
@@ -34,8 +32,6 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 {
 	private boolean createRan = false;
 	private static final FrogTemplePiece.Selector HIEROGLYPHS = new FrogTemplePiece.Selector();
-	private final Direction structureDirection = getCoordBaseMode();
-	private final Direction structureDirectionOpposite = getCoordBaseMode().getOpposite();
 	
 	public FrogTemplePiece(Random random, int minX, int minZ, float skyLight)
 	{
@@ -58,7 +54,6 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 		BlockState floorBlock = MSBlocks.POLISHED_GREEN_STONE.getDefaultState();
 		BlockState stoneBlock = MSBlocks.GREEN_STONE.getDefaultState();
 		
-		//Debug.debugf("create function has run");
 		for(int a = 0; a < 7; a++)
 		{
 			buildMainPlatform(wallBlock, worldIn, randomIn, boundingBoxIn, a);
@@ -82,17 +77,25 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 		setBlockState(worldIn, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.CORNER.get().getDefaultState().with(LotusTimeCapsuleBlock.FACING, Direction.WEST), 20 + 20, 49, 21 + 38 + 20, boundingBox); //south
 		setBlockState(worldIn, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.CORNER.get().getDefaultState().with(LotusTimeCapsuleBlock.FACING, Direction.SOUTH), 20 + 20, 49, 20 + 38 + 20, boundingBox); //west
 		
+		ChestType leftChestType = ChestType.LEFT;
+		ChestType rightChestType = ChestType.RIGHT;
+		if(this.getCoordBaseMode() == Direction.SOUTH || this.getCoordBaseMode() == Direction.WEST)
+		{
+			leftChestType = ChestType.RIGHT;
+			rightChestType = ChestType.LEFT;
+		}
+		
 		BlockPos chestFarPos = new BlockPos(this.getXWithOffset(21 + 20, 12 + 38 + 20), this.getYWithOffset(21), this.getZWithOffset(21 + 20, 12 + 38 + 20));
-		fillWithBlocks(worldIn, boundingBoxIn, 20 + 20, 20, 12 + 38 + 20, 21 + 20, 20, 12 + 38 + 20, MSBlocks.GREEN_STONE_BRICK_STAIRS.getDefaultState().with(StairsBlock.HALF, Half.TOP), MSBlocks.GREEN_STONE_BRICK_STAIRS.getDefaultState(), false);
-		StructureBlockUtil.placeLootChest(chestFarPos, worldIn, boundingBoxIn, structureDirection, ChestType.LEFT, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
+		fillWithBlocks(worldIn, boundingBoxIn, 20 + 20, 20, 12 + 38 + 20, 21 + 20, 20, 12 + 38 + 20, MSBlocks.GREEN_STONE_BRICK_STAIRS.getDefaultState().with(StairsBlock.HALF, Half.TOP).with(StairsBlock.FACING, Direction.SOUTH), MSBlocks.GREEN_STONE_BRICK_STAIRS.getDefaultState(), false);
+		StructureBlockUtil.placeLootChest(chestFarPos, worldIn, boundingBoxIn, getCoordBaseMode(), rightChestType, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
 		chestFarPos = new BlockPos(this.getXWithOffset(20 + 20, 12 + 38 + 20), this.getYWithOffset(21), this.getZWithOffset(20 + 20, 12 + 38 + 20));
-		StructureBlockUtil.placeLootChest(chestFarPos, worldIn, boundingBoxIn, structureDirection, ChestType.RIGHT, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
+		StructureBlockUtil.placeLootChest(chestFarPos, worldIn, boundingBoxIn, getCoordBaseMode(), leftChestType, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
 		
 		BlockPos chestNearDoorPos = new BlockPos(this.getXWithOffset(11 + 20, 29 + 38 + 20), this.getYWithOffset(21), this.getZWithOffset(11 + 20, 29 + 38 + 20));
 		fillWithBlocks(worldIn, boundingBoxIn, 10 + 20, 20, 29 + 38 + 20, 11 + 20, 20, 29 + 38 + 20, MSBlocks.GREEN_STONE_BRICK_STAIRS.getDefaultState().with(StairsBlock.HALF, Half.TOP), MSBlocks.GREEN_STONE_BRICK_STAIRS.getDefaultState(), false);
-		StructureBlockUtil.placeLootChest(chestNearDoorPos, worldIn, boundingBoxIn, structureDirectionOpposite, ChestType.LEFT, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
+		StructureBlockUtil.placeLootChest(chestNearDoorPos, worldIn, boundingBoxIn, getCoordBaseMode().getOpposite(), leftChestType, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
 		chestNearDoorPos = new BlockPos(this.getXWithOffset(10 + 20, 29 + 38 + 20), this.getYWithOffset(21), this.getZWithOffset(10 + 20, 29 + 38 + 20));
-		StructureBlockUtil.placeLootChest(chestNearDoorPos, worldIn, boundingBoxIn, structureDirectionOpposite, ChestType.RIGHT, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
+		StructureBlockUtil.placeLootChest(chestNearDoorPos, worldIn, boundingBoxIn, getCoordBaseMode().getOpposite(), rightChestType, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
 		
 		//TODO Everything seems to generate several times over, first noticed with lotus flower entity, find better fix than below
 		if(!createRan)
@@ -125,7 +128,7 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 		}
 		
 		fillWithBlocks(world, boundingBox, 17 + 20, 48, 24 + 20 + 24, 24 + 20, 48, 24 + 20 + 24, MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE.getDefaultState().with(DecorBlock.FACING, this.getCoordBaseMode().getOpposite()), MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE.getDefaultState().with(DecorBlock.FACING, this.getCoordBaseMode().getOpposite()), false); //stairs base at top
-		fillWithBlocks(world, boundingBox, 17 + 20, -10, 20 + 24, 24 + 20, 0, 24 + 20 + 24, MSBlocks.GREEN_STONE_BRICKS.getDefaultState(), MSBlocks.GREEN_STONE_BRICKS.getDefaultState(), false); //underneath stairs
+		fillWithBlocks(world, boundingBox, 17 + 20, -10, 20 + 24, 24 + 20, -1, 24 + 20 + 24, MSBlocks.GREEN_STONE_BRICKS.getDefaultState(), MSBlocks.GREEN_STONE_BRICKS.getDefaultState(), false); //underneath stairs
 		
 		fillWithBlocks(world, boundingBox, 20, -10, 38 + 20, 41 + 20, 0, 79 + 20, block, block, false); //underneath main platform
 		for(int i = 0; i < 28; i++)
@@ -167,8 +170,7 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 		fillWithBlocks(world, boundingBox, 14 + 20, 16, 48 + 20, 14 + 20, 16, 49 + 20, MSBlocks.CHISELED_GREEN_STONE_BRICKS.getDefaultState(), MSBlocks.CHISELED_GREEN_STONE_BRICKS.getDefaultState(), false); //sixth step
 		
 		//lower room ladder
-		fillWithBlocks(world, boundingBox, 20 + 20, 5, 72 + 20, 20 + 20, 16, 72 + 20, Blocks.LADDER.getDefaultState(), Blocks.LADDER.getDefaultState(), false);
-		fillWithBlocks(world, boundingBox, 21 + 20, 5, 72 + 20, 21 + 20, 16, 72 + 20, Blocks.LADDER.getDefaultState(), Blocks.LADDER.getDefaultState(), false);
+		fillWithBlocks(world, boundingBox, 20 + 20, 5, 72 + 20, 21 + 20, 16, 72 + 20, Blocks.LADDER.getDefaultState().with(LadderBlock.FACING, Direction.SOUTH), Blocks.LADDER.getDefaultState(), false);
 	}
 	
 	private void carveRooms(IWorld world, MutableBoundingBox boundingBox)

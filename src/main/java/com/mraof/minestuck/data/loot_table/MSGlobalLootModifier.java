@@ -3,7 +3,7 @@ package com.mraof.minestuck.data.loot_table;
 import com.mraof.minestuck.Minestuck;
 import net.minecraftforge.fml.common.Mod;
 
-/*//@Mod(Minestuck.MOD_ID) //TODO DONT USE THIS
+/*//@Mod(Minestuck.MOD_ID) //TODO DONT USE THIS MODID
 public class MSGlobalLootModifier {
 	public static final String MODID = "minestuck";
 	public static final boolean ENABLE = true;

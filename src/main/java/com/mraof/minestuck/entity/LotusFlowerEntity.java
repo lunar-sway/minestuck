@@ -39,12 +39,12 @@ import java.util.Collections;
 
 public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEntityAdditionalSpawnData
 {
-	private static final int RESTORATION_TIME = MinestuckConfig.SERVER.lotusRestorationTime.get() * 20;	//600(default) seconds from animation start to flower restoration
+	private static final int RESTORATION_TIME = MinestuckConfig.SERVER.lotusRestorationTime.get() * 20;    //600(default) seconds from animation start to flower restoration
 	
 	// Animation lengths
-	private static final int OPENING_LENGTH = 120;		//6 sec open animation * 20 ticks/sec = 120
-	private static final int OPEN_IDLE_LENGTH = 320;	//4 sec idle animation * 4 loops * 20 ticks/sec = 320
-	private static final int VANISHING_LENGTH = 13;		//0.65 sec vanish animation * 20 ticks/sec = 13
+	private static final int OPENING_LENGTH = 120;        //6 sec open animation * 20 ticks/sec = 120
+	private static final int OPEN_IDLE_LENGTH = 320;    //4 sec idle animation * 4 loops * 20 ticks/sec = 320
+	private static final int VANISHING_LENGTH = 13;        //0.65 sec vanish animation * 20 ticks/sec = 13
 	
 	// Animation start times
 	private static final int IDLE_TIME = -1;
@@ -102,10 +102,10 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 		{
 			ItemStack itemstack = player.getHeldItem(hand);
 			
-			if(player.getDistanceSq(this) < 9 && itemstack.getItem() == Items.BONE_MEAL && player.isCreative())
+			if(player.getDistanceSq(this) < 36 && itemstack.getItem() == Items.BONE_MEAL && player.isCreative())
 			{
 				restoreFromBonemeal();
-			} else if(world.isRemote)
+			} else if(world.isRemote && player.getDistanceSq(this) < 36)
 			{
 				player.sendMessage(new TranslationTextComponent(REGROW));
 			}
@@ -197,8 +197,6 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 		
 		ItemEntity sburbCodeItemEntity = new ItemEntity(worldIn, posVec.getX(), posVec.getY() + 1D, posVec.getZ(), new ItemStack(MSItems.SBURB_CODE, 1));
 		worldIn.addEntity(sburbCodeItemEntity);
-		
-		this.world.addParticle(ParticleTypes.FLASH, posVec.x, posVec.y + 0.5D, posVec.z, 0.0D, 0.0D, 0.0D); //TODO spawnLoot happens server-side so this particle does not show
 	}
 	
 	@Override
@@ -241,11 +239,13 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 	
 	public void setAnimationFromPacket(Animation newAnimation)
 	{
-		if(world.isRemote)
+		if(world.isRemote) //allows client-side effects tied to server-side events
 		{
 			animation = newAnimation;
 			if(animation == Animation.IDLE)
 				addRestoreEffects();
+			if(animation == Animation.OPEN_IDLE)
+				addLootSpawnEffects();
 		}
 	}
 	
@@ -254,6 +254,15 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 		Vec3d posVec = this.getPositionVec();
 		this.world.addParticle(ParticleTypes.FLASH, posVec.x, posVec.y + 0.5D, posVec.z, 0.0D, 0.0D, 0.0D);
 		this.world.playSound(posVec.getX(), posVec.getY(), posVec.getZ(), SoundEvents.BLOCK_BEEHIVE_EXIT, SoundCategory.NEUTRAL, 1.0F, 1.0F, false);
+	}
+	
+	protected void addLootSpawnEffects()
+	{
+		Vec3d posVec = this.getPositionVec();
+		this.world.addParticle(ParticleTypes.FLASH, posVec.x, posVec.y + 0.5D, posVec.z, 0.0D, 0.0D, 0.0D);
+		this.world.playSound(posVec.getX(), posVec.getY(), posVec.getZ(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.NEUTRAL, 1.0F, 1.3F, false);
+		this.world.playSound(posVec.getX(), posVec.getY(), posVec.getZ(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.NEUTRAL, 1.0F, 0.7F, false);
+		this.world.playSound(posVec.getX(), posVec.getY(), posVec.getZ(), SoundEvents.ENTITY_BOAT_PADDLE_LAND, SoundCategory.NEUTRAL, 2.0F, 2.0F, false);
 	}
 	
 	@Override
