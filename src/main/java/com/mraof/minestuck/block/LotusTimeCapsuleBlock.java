@@ -5,6 +5,7 @@ import com.mraof.minestuck.block.machine.MultiMachineBlock;
 import com.mraof.minestuck.util.CustomVoxelShape;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Mirror;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -43,5 +44,20 @@ public class LotusTimeCapsuleBlock extends MultiMachineBlock
 		{
 			super.onReplaced(state, worldIn, pos, newState, isMoving);
 		}
+	}
+	
+	@Override
+	public BlockState mirror(BlockState state, Mirror mirror)
+	{
+		Direction direction = state.get(FACING);
+		if(mirror != Mirror.NONE)
+		{
+			boolean clockwise = (mirror == Mirror.LEFT_RIGHT) ^ (direction.getAxis() == Direction.Axis.X);
+			if(clockwise)
+				return state.with(FACING, direction.rotateY());
+			else
+				return state.with(FACING, direction.rotateYCCW());
+		}
+		return state;
 	}
 }

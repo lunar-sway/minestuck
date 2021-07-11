@@ -1,6 +1,9 @@
 package com.mraof.minestuck.data.loot_table;
 
-@Mod(Minestuck.MODID)
+import com.mraof.minestuck.Minestuck;
+import net.minecraftforge.fml.common.Mod;
+
+/*//@Mod(Minestuck.MOD_ID) //TODO DONT USE THIS
 public class MSGlobalLootModifier {
 	public static final String MODID = "minestuck";
 	public static final boolean ENABLE = true;
@@ -76,7 +79,7 @@ public class MSGlobalLootModifier {
 	 * The smelting enchantment causes this modifier to be invoked, via the smelting loot_modifier json
 	 *
 	 */
-	private static class SmeltingEnchantmentModifier extends LootModifier {
+	/*private static class SmeltingEnchantmentModifier extends LootModifier {
 		public SmeltingEnchantmentModifier(ILootCondition[] conditionsIn) {
 			super(conditionsIn);
 		}
@@ -114,7 +117,7 @@ public class MSGlobalLootModifier {
 	 * When harvesting blocks with bamboo, this modifier is invoked, via the silk_touch_bamboo loot_modifier json
 	 *
 	 */
-	private static class SilkTouchTestModifier extends LootModifier {
+	/*private static class SilkTouchTestModifier extends LootModifier {
 		public SilkTouchTestModifier(ILootCondition[] conditionsIn) {
 			super(conditionsIn);
 		}
@@ -152,7 +155,7 @@ public class MSGlobalLootModifier {
 	 * This modifier checks how many seeds were harvested and turns X seeds into Y wheat (3:1)
 	 *
 	 */
-	private static class WheatSeedsConverterModifier extends LootModifier {
+	/*private static class WheatSeedsConverterModifier extends LootModifier {
 		private final int numSeedsToConvert;
 		private final Item itemToCheck;
 		private final Item itemReward;
@@ -241,5 +244,5 @@ public class MSGlobalLootModifier {
 				return obj;
 			}
 		}
-	}
-}
+	}*//*
+}*/

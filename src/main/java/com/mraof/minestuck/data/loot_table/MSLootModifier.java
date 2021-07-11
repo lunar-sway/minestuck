@@ -1,8 +1,16 @@
 package com.mraof.minestuck.data.loot_table;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.storage.loot.conditions.ILootCondition;
+import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
+import net.minecraftforge.common.loot.LootModifier;
 
-public class MSLootModifier extends LootModifier {
+import javax.annotation.Nonnull;
+import java.util.List;
+
+/*public class MSLootModifier extends LootModifier
+{
 	private final int numSeedsToConvert;
 	private final Item itemToCheck;
 	private final Item itemReward;
@@ -14,7 +22,7 @@ public class MSLootModifier extends LootModifier {
 	}
 	
 	@Nonnull
-	@Override
+	//@Override
 	public List<ItemStack> doApply(List<ItemStack> generatedLoot, LootModifier context) {
 		//
 		// Additional conditions can be checked, though as much as possible should be parameterized via JSON data.
@@ -35,7 +43,8 @@ public class MSLootModifier extends LootModifier {
 		return generatedLoot;
 	}
 	
-	public static class Serializer extends GlobalLootModifierSerializer<MSLootModifier> {
+	/*public static class Serializer extends GlobalLootModifierSerializer<MSLootModifier>
+	{
 		
 		@Override
 		public MSLootModifier read(ResourceLocation name, JsonObject object, ILootCondition[] conditionsIn) {
@@ -44,5 +53,5 @@ public class MSLootModifier extends LootModifier {
 			Item wheat = ForgeRegistries.ITEMS.getValue(new ResourceLocation(JSONUtils.getString(object, "replacement")));
 			return new WheatSeedsConverterModifier(conditionsIn, numSeeds, seed, wheat);
 		}
-	}
-}
+	}*//*
+}*/

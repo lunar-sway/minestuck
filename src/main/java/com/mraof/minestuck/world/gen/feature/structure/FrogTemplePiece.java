@@ -1,6 +1,7 @@
 package com.mraof.minestuck.world.gen.feature.structure;
 
 import com.mraof.minestuck.block.DecorBlock;
+import com.mraof.minestuck.block.LotusTimeCapsuleBlock;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.MSDirectionalBlock;
 import com.mraof.minestuck.entity.MSEntityTypes;
@@ -76,30 +77,10 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 	
 	private void generateLoot(IWorld worldIn, MutableBoundingBox boundingBoxIn, Random randomIn, ChunkPos chunkPos)
 	{
-		//TODO There is only a percent chance of the rotateYCCW applying correctly
-		//setBlockState(worldIn, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.getMainBlock().getDefaultState().with(LotusTimeCapsuleBlock.FACING, /*Direction.NORTH*/getCoordBaseMode()), 21 + 20, 49, 23 + 38 + 20, boundingBox);
-		//modifiedDirection = modifiedDirection.rotateYCCW();
-		//setBlockState(worldIn, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.getMainBlock().getDefaultState().with(LotusTimeCapsuleBlock.FACING, getCoordBaseMode().rotateY()), 21 + 20, 49, 22 + 38 + 20, boundingBox); //east
-		//modifiedDirection = modifiedDirection.rotateYCCW();
-		//setBlockState(worldIn, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.getMainBlock().getDefaultState().with(LotusTimeCapsuleBlock.FACING, getCoordBaseMode().getOpposite()), 20 + 20, 49, 22 + 38 + 20, boundingBox); //south
-		//modifiedDirection = modifiedDirection.rotateYCCW();
-		//setBlockState(worldIn, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.getMainBlock().getDefaultState().with(LotusTimeCapsuleBlock.FACING, getCoordBaseMode().rotateYCCW()), 20 + 20, 49, 23 + 38 + 20, boundingBox); //west
-		BlockPos lotusBlockPos = new BlockPos(this.getXWithOffset(20 + 20, 21 + 38 + 20), this.getYWithOffset(49), this.getZWithOffset(20 + 20, 21 + 38 + 20)); //TODO temples whose main entrance opens south(and presumedly west) generate one block closer to entrance;
-		
-		if(this.getRotation() == Rotation.NONE || this.getRotation() == Rotation.CLOCKWISE_180)
-		{
-			MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.placeWithRotation(worldIn, lotusBlockPos, getRotation());
-		} else if(this.getRotation() == Rotation.CLOCKWISE_90 || this.getRotation() == Rotation.COUNTERCLOCKWISE_90)
-		{
-			lotusBlockPos = new BlockPos(this.getXWithOffset(20 + 20, 20 + 38 + 20), this.getYWithOffset(49), this.getZWithOffset(20 + 20, 20 + 38 + 20)); //TODO temples whose main entrance opens south(and presumedly west) generate one block closer to entrance
-			MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.placeWithRotation(worldIn, lotusBlockPos, getRotation());
-		}
-		
-		/*BlockPos chestPos = new BlockPos(this.getXWithOffset(20 + 20, 12 + 38 + 20), this.getYWithOffset(17), this.getZWithOffset(20 + 20, 12 + 38 + 20));
-		StructureBlockUtil.placeLootChest(chestPos, worldIn, boundingBoxIn, getCoordBaseMode(), ChestType.LEFT, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
-		chestPos = new BlockPos(this.getXWithOffset(19 + 20, 12 + 38 + 20), this.getYWithOffset(17), this.getZWithOffset(19 + 20, 12 + 38 + 20));
-		StructureBlockUtil.placeLootChest(chestPos, worldIn, boundingBoxIn, getCoordBaseMode(), ChestType.RIGHT, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
-		*/
+		setBlockState(worldIn, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.CORNER.get().getDefaultState().with(LotusTimeCapsuleBlock.FACING, Direction.EAST), 21 + 20, 49, 20 + 38 + 20, boundingBox); //north
+		setBlockState(worldIn, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.CORNER.get().getDefaultState().with(LotusTimeCapsuleBlock.FACING, Direction.NORTH), 21 + 20, 49, 21 + 38 + 20, boundingBox); //east
+		setBlockState(worldIn, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.CORNER.get().getDefaultState().with(LotusTimeCapsuleBlock.FACING, Direction.WEST), 20 + 20, 49, 21 + 38 + 20, boundingBox); //south
+		setBlockState(worldIn, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.CORNER.get().getDefaultState().with(LotusTimeCapsuleBlock.FACING, Direction.SOUTH), 20 + 20, 49, 20 + 38 + 20, boundingBox); //west
 		
 		BlockPos chestFarPos = new BlockPos(this.getXWithOffset(21 + 20, 12 + 38 + 20), this.getYWithOffset(21), this.getZWithOffset(21 + 20, 12 + 38 + 20));
 		fillWithBlocks(worldIn, boundingBoxIn, 20 + 20, 20, 12 + 38 + 20, 21 + 20, 20, 12 + 38 + 20, MSBlocks.GREEN_STONE_BRICK_STAIRS.getDefaultState().with(StairsBlock.HALF, Half.TOP), MSBlocks.GREEN_STONE_BRICK_STAIRS.getDefaultState(), false);
