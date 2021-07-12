@@ -55,7 +55,7 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 	
 	private final AnimationFactory factory = new AnimationFactory(this);
 	
-	//Only used serverside. Used to track the flower state and the progression of the animation
+	//Only used server-side. Used to track the flower state and the progression of the animation
 	private int eventTimer = IDLE_TIME;
 	
 	public static final String REGROW = "minestuck.lotusflowerentity.regrow";
