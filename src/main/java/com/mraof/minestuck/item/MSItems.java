@@ -254,6 +254,17 @@ public class MSItems
 	public static final Item THISTLE_OF_ZILLYWICH = getNull();
 	public static final Item QUILL_OF_ECHIDNA = getNull();
 	
+	//guns
+	public static final Item FLINTLOCK_PISTOL = getNull();
+	public static final Item RIFLE = getNull();
+	public static final Item SHOTGUN = getNull();
+	public static final Item SNIPER_RIFLE = getNull();
+	public static final Item GIRLS_BEST_FRIEND = getNull();
+	public static final Item GREEN_SUN_STREETSWEEPER = getNull();
+	
+	//bullets
+	public static final Item BULLET = getNull();
+	
 	//projectiles
 	public static final Item SBAHJARANG = getNull();
 	public static final Item SHURIKEN = getNull();
@@ -946,6 +957,17 @@ public class MSItems
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.HORRORTERROR_TIER, 0, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.HORRORTERROR).set(MagicAttackRightClickEffect.HORRORTERROR_MAGIC), new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)).setRegistryName("thorn_of_oglogoth"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.ZILLY_TIER, 0, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).set(MagicAttackRightClickEffect.ZILLY_MAGIC), new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.EPIC)).setRegistryName("thistle_of_zillywich"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.DENIZEN_TIER, -1, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).set(MagicAttackRightClickEffect.ECHIDNA_MAGIC), new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.EPIC)).setRegistryName("quill_of_echidna"));
+		
+		//guns
+		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, -2, -2.8F).efficiency(0.0F).set(MSItemTypes.MISC_TOOL).set(GunRightClickEffect.STANDARD_DISTANCE_LOW_SPEED), new Item.Properties().defaultMaxDamage(512).group(MSItemGroup.WEAPONS)).setRegistryName("flintlock_pistol"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, -2, -2.8F).efficiency(0.0F).set(MSItemTypes.MISC_TOOL).set(GunRightClickEffect.IMPROVED_DISTANCE), new Item.Properties().defaultMaxDamage(768).group(MSItemGroup.WEAPONS)).setRegistryName("rifle"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, -2, -2.8F).efficiency(0.0F).set(MSItemTypes.MISC_TOOL).set(GunRightClickEffect.SHORT_DISTANCE), new Item.Properties().defaultMaxDamage(768).group(MSItemGroup.WEAPONS)).setRegistryName("shotgun"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, -2, -2.8F).efficiency(0.0F).set(MSItemTypes.MISC_TOOL).set(GunRightClickEffect.LONG_DISTANCE), new Item.Properties().defaultMaxDamage(1024).group(MSItemGroup.WEAPONS)).setRegistryName("sniper_rifle"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, -2, -2.8F).efficiency(0.0F).set(MSItemTypes.MISC_TOOL).set(GunRightClickEffect.STANDARD_DISTANCE_HIGH_SPEED), new Item.Properties().defaultMaxDamage(2048).group(MSItemGroup.WEAPONS)).setRegistryName("girls_best_friend"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, -2, -2.8F).efficiency(0.0F).set(MSItemTypes.MISC_TOOL).set(GunRightClickEffect.GREEN_SUN_STREETSWEEPER), new Item.Properties().defaultMaxDamage(4096).group(MSItemGroup.WEAPONS)).setRegistryName("green_sun_streetsweeper"));
+		
+		//bullets
+		registry.register(new BulletItem(new Item.Properties().group(MSItemGroup.WEAPONS), 1, 2, 1, null).setRegistryName("bullet"));
 		
 		//projectiles
 		registry.register(new ConsumableProjectileWeaponItem(new Item.Properties().group(MSItemGroup.WEAPONS), 0.5F, 20.0F, 1).setRegistryName("sbahjarang"));
