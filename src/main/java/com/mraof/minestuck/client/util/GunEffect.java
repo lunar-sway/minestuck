@@ -90,9 +90,9 @@ public class GunEffect
 	
 	private static void collisionEffect(IParticleData particle, boolean explosiveFinish, ClientWorld world, Vec3d vecPos)
 	{
-		int particles = 25 + world.rand.nextInt(10);
+		int particles = 20 + world.rand.nextInt(10);
 		
-		//if a block or entity has been hit and the wand is true for explosiveFinish boolean, adds a sound and flash
+		//if a block or entity has been hit and the gun is true for explosiveFinish boolean, adds a sound and flash
 		if(explosiveFinish)
 		{
 			world.playSound(vecPos.x, vecPos.y, vecPos.z, SoundEvents.ENTITY_SHULKER_BULLET_HIT, SoundCategory.BLOCKS, 1.2F, 0.6F, false);
@@ -100,8 +100,10 @@ public class GunEffect
 			world.addParticle(ParticleTypes.FLASH, vecPos.x, vecPos.y, vecPos.z, 0.0D, 0.0D, 0.0D);
 			for(int a = 0; a < particles; a++)
 				world.addParticle(particle, true, vecPos.x, vecPos.y, vecPos.z, world.rand.nextGaussian() * 0.12D, world.rand.nextGaussian() * 0.12D, world.rand.nextGaussian() * 0.12D);
-		} else  //if a block or entity has been hit and the wand is false for explosiveFinish boolean, adds a small particle effect
+		} else  //if a block or entity has been hit and the gun is false for explosiveFinish boolean, adds a small particle effect
 		{
+			world.playSound(vecPos.x, vecPos.y, vecPos.z, SoundEvents.ENTITY_GENERIC_BIG_FALL, SoundCategory.BLOCKS, 1F, 1.6F, false);
+			
 			for(int a = 0; a < particles; a++)
 				world.addParticle(ParticleTypes.CRIT, true, vecPos.x, vecPos.y, vecPos.z, world.rand.nextGaussian(), world.rand.nextGaussian(), world.rand.nextGaussian());
 		}

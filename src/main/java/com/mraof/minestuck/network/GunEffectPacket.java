@@ -1,7 +1,6 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.client.util.GunEffect;
-import com.mraof.minestuck.client.util.MagicEffect;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.Vec3d;

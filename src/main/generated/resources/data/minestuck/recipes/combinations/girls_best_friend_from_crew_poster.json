@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:rifle"
+  },
+  "input2": {
+    "item": "minestuck:crew_poster"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:girls_best_friend"
+  }
+}

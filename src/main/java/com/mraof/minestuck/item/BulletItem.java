@@ -10,14 +10,16 @@ public class BulletItem extends Item	//TODO Add custom crafting recipe that merg
 	private final double accuracy;
 	private final int damage;
 	private final int distance;
+	private final int penetratingPower;
 	private final Supplier<EffectInstance> effect;
 	
-	public BulletItem(Properties properties, double accuracy, int damage, int distance, Supplier<EffectInstance> effect)
+	public BulletItem(Properties properties, double accuracy, int damage, int distance, int penetratingPower, Supplier<EffectInstance> effect)
 	{
 		super(properties);
 		this.accuracy = accuracy;
 		this.damage = damage;
 		this.distance = distance;
+		this.penetratingPower = penetratingPower;
 		this.effect = effect;
 	}
 	
@@ -34,6 +36,11 @@ public class BulletItem extends Item	//TODO Add custom crafting recipe that merg
 	public int getDistance()
 	{
 		return this.distance;
+	}
+	
+	public int getPenetratingPower()
+	{
+		return this.penetratingPower;
 	}
 	
 	public Supplier<EffectInstance> getEffect()

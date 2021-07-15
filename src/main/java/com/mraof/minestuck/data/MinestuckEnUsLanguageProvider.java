@@ -677,12 +677,16 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.QUILL_OF_ECHIDNA, "Quill of Echidna");
 		add(MSItems.FLINTLOCK_PISTOL, "Flintlock Pistol");
 		addTooltip(MSItems.FLINTLOCK_PISTOL, "Pew pew!");
+		addExtra(MSItems.FLINTLOCK_PISTOL, "values", "Accuracy modifier: %s \n Damage modifier: %s \n Max distance: %s \n Reload speed: %s sec");
 		add(MSItems.RIFLE, "Rifle");
 		add(MSItems.SHOTGUN, "Shotgun");
 		add(MSItems.SNIPER_RIFLE, "Sniper Rifle");
 		add(MSItems.GIRLS_BEST_FRIEND, "Girl's Best Friend");
 		add(MSItems.GREEN_SUN_STREETSWEEPER, "Green Sun Streetsweeper");
 		add(MSItems.BULLET, "Bullet");
+		add(MSItems.HIGH_CALIBER_BULLET, "High Caliber Bullet");
+		add(MSItems.GEIGER_WRECKER, "Geiger Wrecker");
+		add(MSItems.LOW_DRAG_BULLET, "Low-Drag Bullet");
 		add(MSItems.SBAHJARANG, "SBaHJarang");
 		addTooltip(MSItems.SBAHJARANG, "Worst throwing weapon money can't buy");
 		add(MSItems.SHURIKEN, "Shuriken");

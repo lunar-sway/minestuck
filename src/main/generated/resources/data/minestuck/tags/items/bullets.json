@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "minestuck:bullet"
+    "minestuck:bullet",
+    "minestuck:high_caliber_bullet",
+    "minestuck:low_drag_bullet",
+    "minestuck:geiger_wrecker"
   ]
 }

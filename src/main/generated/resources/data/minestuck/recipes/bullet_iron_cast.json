@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " n ",
+    "ngn",
+    "nin"
+  ],
+  "key": {
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "n": {
+      "item": "minecraft:iron_nugget"
+    },
+    "g": {
+      "item": "minecraft:gunpowder"
+    }
+  },
+  "result": {
+    "item": "minestuck:bullet",
+    "count": 16
+  }
+}

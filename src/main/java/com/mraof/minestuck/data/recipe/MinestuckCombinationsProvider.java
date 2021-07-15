@@ -489,6 +489,9 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.POOL_CUE_WAND).input(MSItems.NEEDLE_WAND).and().namedInput(MSItems.CUESTICK).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.THORN_OF_OGLOGOTH).input(MSItems.NEEDLE_WAND).and().namedInput(MSItems.GRIMOIRE).build(consumer);
 		
+		CombinationRecipeBuilder.of(MSItems.GIRLS_BEST_FRIEND).input(MSItems.RIFLE).and().namedInput(MSItems.CREW_POSTER).build(consumer);
+		//CombinationRecipeBuilder.of(MSItems.GREEN_SUN_STREETSWEEPER).input(MSItems.GIRLS_BEST_FRIEND).and().namedInput(MSItems.GREEN_SUN).build(consumer);
+		
 		CombinationRecipeBuilder.of(MSItems.SBAHJARANG).input(MSItems.SHURIKEN).and().namedInput(MSItems.SBAHJ_POSTER).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CLUBS_SUITARANG).input(MSItems.SHURIKEN).and().namedInput(MSItems.ACE_OF_CLUBS).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.DIAMONDS_SUITARANG).input(MSItems.SHURIKEN).and().namedInput(MSItems.ACE_OF_DIAMONDS).build(consumer);

@@ -264,6 +264,9 @@ public class MSItems
 	
 	//bullets
 	public static final Item BULLET = getNull();
+	public static final Item HIGH_CALIBER_BULLET = getNull();
+	public static final Item GEIGER_WRECKER = getNull();
+	public static final Item LOW_DRAG_BULLET = getNull();
 	
 	//projectiles
 	public static final Item SBAHJARANG = getNull();
@@ -959,15 +962,18 @@ public class MSItems
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.DENIZEN_TIER, -1, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).set(MagicAttackRightClickEffect.ECHIDNA_MAGIC), new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.EPIC)).setRegistryName("quill_of_echidna"));
 		
 		//guns
-		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, -2, -2.8F).efficiency(0.0F).set(MSItemTypes.MISC_TOOL).set(GunRightClickEffect.STANDARD_DISTANCE_LOW_SPEED), new Item.Properties().defaultMaxDamage(512).group(MSItemGroup.WEAPONS)).setRegistryName("flintlock_pistol"));
+		registry.register(new GunItem(new GunItem.Builder(10, 4, 35, 70), new Item.Properties().defaultMaxDamage(512).group(MSItemGroup.WEAPONS)).setRegistryName("flintlock_pistol"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, -2, -2.8F).efficiency(0.0F).set(MSItemTypes.MISC_TOOL).set(GunRightClickEffect.IMPROVED_DISTANCE), new Item.Properties().defaultMaxDamage(768).group(MSItemGroup.WEAPONS)).setRegistryName("rifle"));
-		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, -2, -2.8F).efficiency(0.0F).set(MSItemTypes.MISC_TOOL).set(GunRightClickEffect.SHORT_DISTANCE), new Item.Properties().defaultMaxDamage(768).group(MSItemGroup.WEAPONS)).setRegistryName("shotgun"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, -2, -2.8F).efficiency(0.0F).set(MSItemTypes.MISC_TOOL).set(GunRightClickEffect.SHOTGUN), new Item.Properties().defaultMaxDamage(768).group(MSItemGroup.WEAPONS)).setRegistryName("shotgun"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, -2, -2.8F).efficiency(0.0F).set(MSItemTypes.MISC_TOOL).set(GunRightClickEffect.LONG_DISTANCE), new Item.Properties().defaultMaxDamage(1024).group(MSItemGroup.WEAPONS)).setRegistryName("sniper_rifle"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, -2, -2.8F).efficiency(0.0F).set(MSItemTypes.MISC_TOOL).set(GunRightClickEffect.STANDARD_DISTANCE_HIGH_SPEED), new Item.Properties().defaultMaxDamage(2048).group(MSItemGroup.WEAPONS)).setRegistryName("girls_best_friend"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, -2, -2.8F).efficiency(0.0F).set(MSItemTypes.MISC_TOOL).set(GunRightClickEffect.GREEN_SUN_STREETSWEEPER), new Item.Properties().defaultMaxDamage(4096).group(MSItemGroup.WEAPONS)).setRegistryName("green_sun_streetsweeper"));
 		
 		//bullets
-		registry.register(new BulletItem(new Item.Properties().group(MSItemGroup.WEAPONS), 1, 2, 1, null).setRegistryName("bullet"));
+		registry.register(new BulletItem(new Item.Properties().group(MSItemGroup.WEAPONS), 1, 2, 1, 0, null).setRegistryName("bullet"));
+		registry.register(new BulletItem(new Item.Properties().group(MSItemGroup.WEAPONS), 2, 4, 10, 2, null).setRegistryName("high_caliber_bullet"));
+		registry.register(new BulletItem(new Item.Properties().group(MSItemGroup.WEAPONS), -1, 5, -10, 0, () -> new EffectInstance(Effects.WITHER, 120, 2)).setRegistryName("geiger_wrecker"));
+		registry.register(new BulletItem(new Item.Properties().group(MSItemGroup.WEAPONS), 5, 3, 20, 0, null).setRegistryName("low_drag_bullet"));
 		
 		//projectiles
 		registry.register(new ConsumableProjectileWeaponItem(new Item.Properties().group(MSItemGroup.WEAPONS), 0.5F, 20.0F, 1).setRegistryName("sbahjarang"));
