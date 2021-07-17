@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:girls_best_friend"
+  },
+  "grist_cost": {
+    "minestuck:diamond": 400
+  }
+}

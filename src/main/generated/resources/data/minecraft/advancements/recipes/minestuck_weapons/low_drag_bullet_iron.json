@@ -2,16 +2,16 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "minestuck:bullet_copper_cast"
+      "minecraft:low_drag_bullet_iron"
     ]
   },
   "criteria": {
-    "has_gunpowder": {
+    "has_bullet": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "minecraft:gunpowder"
+            "item": "minestuck:bullet"
           }
         ]
       }
@@ -19,13 +19,13 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "minestuck:bullet_copper_cast"
+        "recipe": "minecraft:low_drag_bullet_iron"
       }
     }
   },
   "requirements": [
     [
-      "has_gunpowder",
+      "has_bullet",
       "has_the_recipe"
     ]
   ]

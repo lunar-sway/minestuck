@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:black_assault_rifle"
+  },
+  "grist_cost": {
+    "minestuck:rust": 4605,
+    "minestuck:tar": 7670
+  }
+}

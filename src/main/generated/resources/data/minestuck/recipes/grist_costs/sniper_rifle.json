@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:sniper_rifle"
+  },
+  "grist_cost": {
+    "minestuck:rust": 420,
+    "minestuck:amber": 695,
+    "minestuck:gold": 280
+  }
+}

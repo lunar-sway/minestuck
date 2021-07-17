@@ -3,6 +3,7 @@ package com.mraof.minestuck.item;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.EnumCassetteType;
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.client.util.GunEffect;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.item.CrewPosterEntity;
 import com.mraof.minestuck.entity.item.MetalBoatEntity;
@@ -195,6 +196,8 @@ public class MSItems
 	public static final Item CUESTICK = getNull();
 	public static final Item ACE_OF_DIAMONDS = getNull();
 	public static final Item ACE_OF_HEARTS = getNull();
+	public static final Item BLACK_STAFF = getNull();
+	public static final Item GOLD_STAFF = getNull();
 	public static final Item WHITE_KINGS_SCEPTER = getNull();
 	public static final Item BLACK_KINGS_SCEPTER = getNull();
 	
@@ -261,12 +264,18 @@ public class MSItems
 	public static final Item SNIPER_RIFLE = getNull();
 	public static final Item GIRLS_BEST_FRIEND = getNull();
 	public static final Item GREEN_SUN_STREETSWEEPER = getNull();
+	public static final Item BLACK_ASSAULT_RIFLE = getNull();
+	public static final Item GOLD_ASSAULT_RIFLE = getNull();
+	public static final Item GOLD_BERETTA = getNull();
+	public static final Item AHABS_CROSSHAIRS = getNull();
 	
 	//bullets
 	public static final Item BULLET = getNull();
 	public static final Item HIGH_CALIBER_BULLET = getNull();
 	public static final Item GEIGER_WRECKER = getNull();
 	public static final Item LOW_DRAG_BULLET = getNull();
+	public static final Item VEIL_PIERCER_SHOT = getNull();
+	public static final Item DRAGON_SHOT = getNull();
 	
 	//projectiles
 	public static final Item SBAHJARANG = getNull();
@@ -900,6 +909,8 @@ public class MSItems
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 5, -2.0F).efficiency(2.0F).set(MSItemTypes.MISC_TOOL).set(ItemRightClickEffect.switchTo(() -> MSItems.ACE_OF_DIAMONDS)), new Item.Properties().defaultMaxDamage(500).group(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)).setRegistryName("cuestick"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.PAPER_TIER, 0, -1.8F).efficiency(0.0F).set(ItemRightClickEffect.switchTo(() -> MSItems.CUESTICK)), new Item.Properties().defaultMaxDamage(500)).setRegistryName("ace_of_diamonds"));
 		registry.register(new Item(new Item.Properties().defaultMaxDamage(500)).setRegistryName("ace_of_hearts"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.REGI_TIER, 6, -2.8F).efficiency(4.0F).set(MSItemTypes.MISC_TOOL).set(ItemRightClickEffect.switchTo(() -> MSItems.BLACK_ASSAULT_RIFLE)), new Item.Properties().defaultMaxDamage(5000).group(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)).setRegistryName("black_staff"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.REGI_TIER, 7, -2.8F).efficiency(4.0F).set(MSItemTypes.MISC_TOOL).set(ItemRightClickEffect.switchTo(() -> MSItems.GOLD_ASSAULT_RIFLE)), new Item.Properties().defaultMaxDamage(10000).group(MSItemGroup.WEAPONS).rarity(Rarity.RARE)).setRegistryName("gold_staff"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.REGI_TIER, 8, -2.8F).efficiency(4.0F).set(MSItemTypes.MISC_TOOL).set(ItemRightClickEffect.summonFireball()), new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.EPIC)).setRegistryName("white_kings_scepter"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.REGI_TIER, 8, -2.8F).efficiency(4.0F).set(MSItemTypes.MISC_TOOL).set(ItemRightClickEffect.summonFireball()), new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.EPIC)).setRegistryName("black_kings_scepter"));
 		
@@ -962,18 +973,24 @@ public class MSItems
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.DENIZEN_TIER, -1, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).set(MagicAttackRightClickEffect.ECHIDNA_MAGIC), new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.EPIC)).setRegistryName("quill_of_echidna"));
 		
 		//guns
-		registry.register(new GunItem(new GunItem.Builder(10, 4, 35, 70), new Item.Properties().defaultMaxDamage(512).group(MSItemGroup.WEAPONS)).setRegistryName("flintlock_pistol"));
-		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, -2, -2.8F).efficiency(0.0F).set(MSItemTypes.MISC_TOOL).set(GunRightClickEffect.IMPROVED_DISTANCE), new Item.Properties().defaultMaxDamage(768).group(MSItemGroup.WEAPONS)).setRegistryName("rifle"));
-		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, -2, -2.8F).efficiency(0.0F).set(MSItemTypes.MISC_TOOL).set(GunRightClickEffect.SHOTGUN), new Item.Properties().defaultMaxDamage(768).group(MSItemGroup.WEAPONS)).setRegistryName("shotgun"));
-		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, -2, -2.8F).efficiency(0.0F).set(MSItemTypes.MISC_TOOL).set(GunRightClickEffect.LONG_DISTANCE), new Item.Properties().defaultMaxDamage(1024).group(MSItemGroup.WEAPONS)).setRegistryName("sniper_rifle"));
-		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, -2, -2.8F).efficiency(0.0F).set(MSItemTypes.MISC_TOOL).set(GunRightClickEffect.STANDARD_DISTANCE_HIGH_SPEED), new Item.Properties().defaultMaxDamage(2048).group(MSItemGroup.WEAPONS)).setRegistryName("girls_best_friend"));
-		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, -2, -2.8F).efficiency(0.0F).set(MSItemTypes.MISC_TOOL).set(GunRightClickEffect.GREEN_SUN_STREETSWEEPER), new Item.Properties().defaultMaxDamage(4096).group(MSItemGroup.WEAPONS)).setRegistryName("green_sun_streetsweeper"));
+		registry.register(new GunItem(new GunItem.Builder(8, 3, 35, 70), new Item.Properties().defaultMaxDamage(512).group(MSItemGroup.WEAPONS)).setRegistryName("flintlock_pistol"));
+		registry.register(new GunItem(new GunItem.Builder(20, 4, 50, 15), new Item.Properties().defaultMaxDamage(768).group(MSItemGroup.WEAPONS)).setRegistryName("rifle"));
+		registry.register(new GunItem(new GunItem.Builder(2, 6, 20, 70).multipleProjectiles(5), new Item.Properties().defaultMaxDamage(768).group(MSItemGroup.WEAPONS)).setRegistryName("shotgun"));
+		registry.register(new GunItem(new GunItem.Builder(35, 8, 75, 90), new Item.Properties().defaultMaxDamage(1024).group(MSItemGroup.WEAPONS)).setRegistryName("sniper_rifle"));
+		registry.register(new GunItem(new GunItem.Builder(10, 4, 35, 2).set(ItemRightClickEffect.EIGHTBALL), new Item.Properties().defaultMaxDamage(2048).group(MSItemGroup.WEAPONS)).setRegistryName("girls_best_friend"));
+		registry.register(new GunItem(new GunItem.Builder(4, 5, 45, 0).potionEffect(() -> new EffectInstance(Effects.WITHER, 120, 2)).gunEffectType(GunEffect.Type.GREEN), new Item.Properties().defaultMaxDamage(4096).rarity(Rarity.UNCOMMON).group(MSItemGroup.WEAPONS)).setRegistryName("green_sun_streetsweeper"));
+		registry.register(new GunItem(new GunItem.Builder(8, 5, 45, 0).set(ItemRightClickEffect.switchTo(() -> MSItems.BLACK_STAFF)), new Item.Properties().defaultMaxDamage(5000).rarity(Rarity.UNCOMMON).group(MSItemGroup.WEAPONS)).setRegistryName("black_assault_rifle"));
+		registry.register(new GunItem(new GunItem.Builder(9, 6, 50, 0).set(ItemRightClickEffect.switchTo(() -> MSItems.GOLD_STAFF)).doNotProceedIfShiftClick(), new Item.Properties().defaultMaxDamage(10000).rarity(Rarity.RARE).group(MSItemGroup.WEAPONS)).setRegistryName("gold_assault_rifle"));
+		registry.register(new GunItem(new GunItem.Builder(20, 5, 60, 5), new Item.Properties().defaultMaxDamage(10000).rarity(Rarity.RARE).group(MSItemGroup.WEAPONS)).setRegistryName("gold_beretta"));
+		registry.register(new GunItem(new GunItem.Builder(35, 12, 75, 10).gunEffectType(GunEffect.Type.AHAB), new Item.Properties().defaultMaxDamage(50000).rarity(Rarity.EPIC).group(MSItemGroup.WEAPONS)).setRegistryName("ahabs_crosshairs"));
 		
 		//bullets
-		registry.register(new BulletItem(new Item.Properties().group(MSItemGroup.WEAPONS), 1, 2, 1, 0, null).setRegistryName("bullet"));
-		registry.register(new BulletItem(new Item.Properties().group(MSItemGroup.WEAPONS), 2, 4, 10, 2, null).setRegistryName("high_caliber_bullet"));
-		registry.register(new BulletItem(new Item.Properties().group(MSItemGroup.WEAPONS), -1, 5, -10, 0, () -> new EffectInstance(Effects.WITHER, 120, 2)).setRegistryName("geiger_wrecker"));
-		registry.register(new BulletItem(new Item.Properties().group(MSItemGroup.WEAPONS), 5, 3, 20, 0, null).setRegistryName("low_drag_bullet"));
+		registry.register(new BulletItem(new Item.Properties().group(MSItemGroup.WEAPONS), 1, 4, 1, 0, null).setRegistryName("bullet"));
+		registry.register(new BulletItem(new Item.Properties().group(MSItemGroup.WEAPONS), 2, 5, 10, 2, null).setRegistryName("high_caliber_bullet"));
+		registry.register(new BulletItem(new Item.Properties().group(MSItemGroup.WEAPONS), -1, 6, -10, 0, BulletItem.Type.URANIUM).setRegistryName("geiger_wrecker"));
+		registry.register(new BulletItem(new Item.Properties().group(MSItemGroup.WEAPONS), 5, 4, 20, 0, null).setRegistryName("low_drag_bullet"));
+		registry.register(new BulletItem(new Item.Properties().group(MSItemGroup.WEAPONS), 1, 6, 1, 3, null).setRegistryName("veil_piercer_shot"));
+		registry.register(new BulletItem(new Item.Properties().group(MSItemGroup.WEAPONS), -1, 6, 1, 2, BulletItem.Type.DRAGON).setRegistryName("dragon_shot"));
 		
 		//projectiles
 		registry.register(new ConsumableProjectileWeaponItem(new Item.Properties().group(MSItemGroup.WEAPONS), 0.5F, 20.0F, 1).setRegistryName("sbahjarang"));

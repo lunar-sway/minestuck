@@ -263,6 +263,48 @@
         },
         {
           "type": "minecraft:item",
+          "quality": 2,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.75,
+                "max": 1.0
+              }
+            }
+          ],
+          "name": "minestuck:flintlock_pistol"
+        },
+        {
+          "type": "minecraft:item",
+          "quality": 3,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.75,
+                "max": 1.0
+              }
+            }
+          ],
+          "name": "minestuck:rifle"
+        },
+        {
+          "type": "minecraft:item",
+          "quality": 3,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.75,
+                "max": 1.0
+              }
+            }
+          ],
+          "name": "minestuck:shotgun"
+        },
+        {
+          "type": "minecraft:item",
           "weight": 4,
           "quality": -1,
           "functions": [
@@ -301,6 +343,22 @@
             }
           ],
           "name": "minecraft:arrow"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "quality": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 16.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minestuck:bullet"
         },
         {
           "type": "minecraft:item",

@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:gold_beretta"
+  },
+  "grist_cost": {
+    "minestuck:gold": 9850,
+    "minestuck:mercury": 19690
+  }
+}

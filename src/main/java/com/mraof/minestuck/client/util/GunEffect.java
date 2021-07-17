@@ -15,12 +15,8 @@ public class GunEffect
 	public enum Type
 	{
 		GREEN(() -> new RedstoneParticleData(0F, 1F, 0F, 1F), false, false),
-		CRIT(() -> ParticleTypes.ENCHANTED_HIT, false, false),
 		SMOKE(() -> ParticleTypes.SMOKE, false, false),
-		RED(() -> new RedstoneParticleData(20F, 0F, 0F, 2F), false, false),
-		INK(() -> ParticleTypes.SQUID_INK, true, false),
-		ZILLY(() -> new RedstoneParticleData(20F, 20F, 20F, 2F), true, false),
-		ECHIDNA(() -> ParticleTypes.END_ROD, true, false);
+		AHAB(() -> new RedstoneParticleData(0F, 0F, 20F, 2F), false, true);
 		
 		private final Supplier<IParticleData> particle;
 		private final boolean explosiveFinish;

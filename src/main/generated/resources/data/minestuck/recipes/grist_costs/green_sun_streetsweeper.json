@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:green_sun_streetsweeper"
+  },
+  "grist_cost": {
+    "minestuck:rust": 3500,
+    "minestuck:diamond": 2335,
+    "minestuck:uranium": 2340
+  }
+}

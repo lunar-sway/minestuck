@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minestuck:high_caliber_bullet"
+    ]
+  },
+  "criteria": {
+    "has_bullet": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minestuck:bullet"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minestuck:high_caliber_bullet"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_bullet",
+      "has_the_recipe"
+    ]
+  ]
+}

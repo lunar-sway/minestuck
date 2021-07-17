@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:dragon_shot"
+  },
+  "grist_cost": {
+    "minestuck:garnet": 5,
+    "minestuck:caulk": 6
+  }
+}

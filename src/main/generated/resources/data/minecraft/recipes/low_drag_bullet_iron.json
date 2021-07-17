@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minestuck:bullet"
+    },
+    {
+      "item": "minestuck:bullet"
+    },
+    {
+      "item": "minestuck:bullet"
+    },
+    {
+      "item": "minestuck:bullet"
+    },
+    {
+      "item": "minecraft:iron_ingot"
+    }
+  ],
+  "result": {
+    "item": "minestuck:low_drag_bullet",
+    "count": 4
+  }
+}

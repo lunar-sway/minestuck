@@ -4,6 +4,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.BlockCollections;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.util.ExtraForgeTags;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -489,8 +490,11 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.POOL_CUE_WAND).input(MSItems.NEEDLE_WAND).and().namedInput(MSItems.CUESTICK).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.THORN_OF_OGLOGOTH).input(MSItems.NEEDLE_WAND).and().namedInput(MSItems.GRIMOIRE).build(consumer);
 		
+		CombinationRecipeBuilder.of(MSItems.SNIPER_RIFLE).input(MSItems.RIFLE).or().namedInput(Items.GLASS_PANE).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.GIRLS_BEST_FRIEND).input(MSItems.RIFLE).and().namedInput(MSItems.CREW_POSTER).build(consumer);
 		//CombinationRecipeBuilder.of(MSItems.GREEN_SUN_STREETSWEEPER).input(MSItems.GIRLS_BEST_FRIEND).and().namedInput(MSItems.GREEN_SUN).build(consumer);
+		
+		CombinationRecipeBuilder.of(MSItems.GEIGER_WRECKER).input(MSItems.BULLET).and().namedInput(ExtraForgeTags.Items.URANIUM_CHUNKS).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.SBAHJARANG).input(MSItems.SHURIKEN).and().namedInput(MSItems.SBAHJ_POSTER).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CLUBS_SUITARANG).input(MSItems.SHURIKEN).and().namedInput(MSItems.ACE_OF_CLUBS).build(consumer);

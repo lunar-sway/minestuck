@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:gold_assault_rifle"
+  },
+  "grist_cost": {
+    "minestuck:gold": 19670,
+    "minestuck:mercury": 39335
+  }
+}

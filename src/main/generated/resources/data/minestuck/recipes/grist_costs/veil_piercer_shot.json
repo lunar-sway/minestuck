@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:veil_piercer_shot"
+  },
+  "grist_cost": {
+    "minestuck:quartz": 2,
+    "minestuck:marble": 6
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:geiger_wrecker"
+  },
+  "grist_cost": {
+    "minestuck:rust": 2,
+    "minestuck:uranium": 5
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:shotgun"
+  },
+  "grist_cost": {
+    "minestuck:rust": 58,
+    "minestuck:chalk": 97,
+    "minestuck:tar": 97
+  }
+}

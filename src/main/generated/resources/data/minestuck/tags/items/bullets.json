@@ -4,6 +4,8 @@
     "minestuck:bullet",
     "minestuck:high_caliber_bullet",
     "minestuck:low_drag_bullet",
-    "minestuck:geiger_wrecker"
+    "minestuck:geiger_wrecker",
+    "minestuck:veil_piercer_shot",
+    "minestuck:dragon_shot"
   ]
 }

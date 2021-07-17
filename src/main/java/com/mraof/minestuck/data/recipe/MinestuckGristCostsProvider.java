@@ -459,6 +459,20 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSItems.POOL_CUE_WAND).grist(QUARTZ, 50).grist(CHALK, 70).grist(TAR, 90).grist(URANIUM, 45).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.THORN_OF_OGLOGOTH).grist(IODINE, 200).grist(CHALK, 160).grist(AMETHYST, 120).grist(GOLD, 100).grist(TAR, 64).build(recipeSaver);
 		
+		GristCostRecipeBuilder.of(MSItems.RIFLE).grist(RUST, 160).grist(CHALK, 260).grist(TAR, 260).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.SHOTGUN).grist(RUST, 58).grist(CHALK, 97).grist(TAR, 97).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.SNIPER_RIFLE).grist(RUST, 420).grist(AMBER, 695).grist(GOLD, 280).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.GIRLS_BEST_FRIEND).grist(DIAMOND, 400).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.GREEN_SUN_STREETSWEEPER).grist(RUST, 3500).grist(DIAMOND, 2335).grist(URANIUM, 2340).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.BLACK_ASSAULT_RIFLE).grist(RUST, 4605).grist(TAR, 7670).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.GOLD_ASSAULT_RIFLE).grist(GOLD, 19670).grist(MERCURY, 39335).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.GOLD_BERETTA).grist(GOLD, 9850).grist(MERCURY, 19690).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.AHABS_CROSSHAIRS).grist(BUILD, 16777215).grist(ZILLIUM, 1).build(recipeSaver);
+		
+		GristCostRecipeBuilder.of(MSItems.GEIGER_WRECKER).grist(RUST, 2).grist(URANIUM, 5).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.VEIL_PIERCER_SHOT).grist(QUARTZ, 2).grist(MARBLE, 6).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.DRAGON_SHOT).grist(GARNET, 5).grist(CAULK, 6).build(recipeSaver);
+		
 		GristCostRecipeBuilder.of(MSItems.SBAHJARANG).grist(ARTIFACT, 10).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CLUBS_SUITARANG).grist(BUILD, 20).grist(TAR, 4).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.DIAMONDS_SUITARANG).grist(BUILD, 20).grist(TAR, 4).build(recipeSaver);
