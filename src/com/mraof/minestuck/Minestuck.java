@@ -21,14 +21,14 @@ import net.minecraftforge.fml.common.event.*;
 
 import java.util.Random;
 
-import static com.mraof.minestuck.Minestuck.MOD_ID;
-import static com.mraof.minestuck.Minestuck.MOD_NAME;
+import static com.mraof.minestuck.Minestuck.*;
 
-@Mod(modid = MOD_ID, name = MOD_NAME, version = "@VERSION@", guiFactory = "com.mraof.minestuck.client.gui.MinestuckGuiFactory", acceptedMinecraftVersions = "[1.12,1.12.2]")
+@Mod(modid = MOD_ID, name = MOD_NAME, version = VERSION, guiFactory = "com.mraof.minestuck.client.gui.MinestuckGuiFactory", acceptedMinecraftVersions = "[1.12,1.12.2]")
 public class Minestuck
 {
 	public static final String MOD_NAME = "Minestuck";
 	public static final String MOD_ID = "minestuck";
+	public static final String VERSION = "@VERSION@";
 	
 	/**
 	 * True only if the minecraft application is client-sided 
