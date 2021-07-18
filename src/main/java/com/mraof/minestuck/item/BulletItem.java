@@ -48,18 +48,6 @@ public class BulletItem extends Item
 			this.flame = flameIn;
 			this.ricochet = ricochetIn;
 		}
-		
-		public int toInt()
-		{
-			return ordinal();
-		}
-		
-		public static BulletItem.Type fromInt(int i)
-		{
-			if(i >= 0 && i < values().length)
-				return values()[i];
-			else return DEFAULT;
-		}
 	}
 	
 	public double getAccuracy()
@@ -82,19 +70,27 @@ public class BulletItem extends Item
 		return this.penetratingPower;
 	}
 	
-	public Supplier<EffectInstance> getEffect()
+	public Supplier<EffectInstance> getEffectFromType()
 	{
-		return type.effect;
+		return getType().effect;
 	}
 	
-	public int getFlame()
+	public int getFlameFromType()
 	{
-		return type.flame;
+		return getType().flame;
 	}
 	
-	public boolean getRicochet()
+	public boolean getRicochetFromType()
 	{
-		return type.ricochet;
+		return getType().ricochet;
+	}
+	
+	public BulletItem.Type getType()
+	{
+		if(this.type == null)
+			return Type.DEFAULT;
+		else
+			return this.type;
 	}
 	
 	@Override
