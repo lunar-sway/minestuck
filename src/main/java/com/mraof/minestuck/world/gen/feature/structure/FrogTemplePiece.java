@@ -22,6 +22,7 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.structure.ScatteredStructurePiece;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.template.TemplateManager;
@@ -33,9 +34,19 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 	private boolean createRan = false;
 	private static final FrogTemplePiece.Selector HIEROGLYPHS = new FrogTemplePiece.Selector();
 	
-	public FrogTemplePiece(Random random, int minX, int minZ, float skyLight)
+	public FrogTemplePiece(ChunkGenerator<?> generator, Random random, int x, int z, float skyLight)
 	{
-		super(MSStructurePieces.FROG_TEMPLE, random, minX, 64, minZ, 140, 100, 140);
+		super(MSStructurePieces.FROG_TEMPLE, random, x - 70, 64, z - 70, 140, 100, 140);
+		
+		int posHeightPicked = Integer.MAX_VALUE;
+		for(int xPos = boundingBox.minX; xPos <= boundingBox.maxX; xPos++)
+			for(int zPos = boundingBox.minZ; zPos <= boundingBox.maxZ; zPos++)
+			{
+				int posHeight = generator.getHeight(xPos, zPos, Heightmap.Type.OCEAN_FLOOR_WG); //posHeight picks the first solid block, ignoring water
+				posHeightPicked =  Math.min(posHeightPicked, posHeight); //with each new x/z coord it checks whether or not it is lower than the previous
+			}
+		
+		boundingBox.offset(0, posHeightPicked - boundingBox.minY, 0); //takes the lowest Ocean Floor gen viable height
 	}
 	
 	public FrogTemplePiece(TemplateManager templates, CompoundNBT nbt)
@@ -46,9 +57,6 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 	@Override
 	public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox boundingBoxIn, ChunkPos chunkPosIn)
 	{
-		if(!isInsideBounds(worldIn, boundingBoxIn, 0))
-			return false;
-		
 		BlockState wallBlock = MSBlocks.GREEN_STONE_BRICKS.getDefaultState();
 		BlockState columnBlock = MSBlocks.GREEN_STONE_COLUMN.getDefaultState().with(MSDirectionalBlock.FACING, Direction.UP);
 		BlockState floorBlock = MSBlocks.POLISHED_GREEN_STONE.getDefaultState();
@@ -103,8 +111,7 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 			LotusFlowerEntity lotusFlowerEntity = MSEntityTypes.LOTUS_FLOWER.create(worldIn.getWorld());
 			if(lotusFlowerEntity == null)
 				throw new IllegalStateException("Unable to create a new lotus flower. Entity factory returned null!");
-			lotusFlowerEntity.setLocationAndAngles(this.getXWithOffset(21 + 20, 21 + 38 + 20), this.getYWithOffset(50), this.getZWithOffset(21 + 20, 21 + 38 + 20), 0F, 0);
-			//lotusFlowerEntity.setLocationAndAngles(lotusBlockPos.getX(), this.getYWithOffset(50), lotusBlockPos.getZ(), 0F, 0);
+			lotusFlowerEntity.setLocationAndAngles(getEntityXWithOffset(21 + 20, 21 + 38 + 20), this.getYWithOffset(50), getEntityZWithOffset(21 + 20, 21 + 38 + 20), 0F, 0);
 			worldIn.addEntity(lotusFlowerEntity);
 			createRan = true;
 		}
@@ -243,6 +250,22 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 		fillWithBlocks(world, boundingBox, 15 + 20, 62, 14 + 38 + 20, 26 + 20, 67, 59 + 20, block, block, false); //head
 		fillWithBlocks(world, boundingBox, 23 + 20, 65, 15 + 38 + 20, 27 + 20, 68, 57 + 20, block, block, false); //right eye
 		fillWithBlocks(world, boundingBox, 14 + 20, 65, 15 + 38 + 20, 18 + 20, 68, 57 + 20, block, block, false); //left eye
+	}
+	
+	protected int getEntityXWithOffset(int x, int z)
+	{
+		int posX = getXWithOffset(x, z);
+		if(getCoordBaseMode() == Direction.WEST)
+			posX++;
+		return posX;
+	}
+	
+	protected int getEntityZWithOffset(int x, int z)
+	{
+		int posZ = getZWithOffset(x, z);
+		if(getCoordBaseMode() == Direction.NORTH)
+			posZ++;
+		return posZ;
 	}
 	
 	static class Selector extends StructurePiece.BlockSelector
