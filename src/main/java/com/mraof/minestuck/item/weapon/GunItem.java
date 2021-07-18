@@ -68,10 +68,8 @@ public class GunItem extends Item
 	@Nullable
 	private GunEffect.Type type;
 	
-	@Nullable
+	//@Nullable
 	//public BulletItem.Type bulletType;
-	
-	
 	
 	@Deprecated
 	public GunItem(Properties properties, double accuracy, int damage, int distance, int reloadTime)
@@ -232,6 +230,10 @@ public class GunItem extends Item
 		{
 			int playerRung = PlayerSavedData.getData(player).getEcheladder().getRung();
 			
+			EffectInstance bulletEffect;
+			if(bulletItem.getEffect().get() != null)
+				bulletEffect = bulletItem.getEffect().get();
+			
 			float strikePowerPercentage = (float) ((penetratingPower + 0.00001) / (bulletItem.getPenetratingPower() + 0.00001)); //reduces damage for each successive entity
 			Debug.debugf("strikePowerPercentage = %s", strikePowerPercentage);
 			int combinedDamages = damage + bulletItem.getDamage();
@@ -245,10 +247,10 @@ public class GunItem extends Item
 			
 			if(effect != null && player.getRNG().nextFloat() < .1F) //gun EffectInstance
 				closestTarget.addPotionEffect(effect.get());
-			if(bulletItem.getEffectFromType().get() != null && player.getRNG().nextFloat() < .75F) //bullet EffectInstance //TODO causes non-fatal error with null bullet effects
-				closestTarget.addPotionEffect(bulletItem.getEffectFromType().get());
-			if(bulletItem.getFlameFromType() > 0 && player.getRNG().nextFloat() < .75F)
-				closestTarget.setFire(bulletItem.getFlameFromType());
+			if(bulletItem.getEffect() != null && player.getRNG().nextFloat() < .75F) //bullet EffectInstance //TODO causes non-crashing error with null bullet effects
+				closestTarget.addPotionEffect(bulletItem.getEffect().get());
+			if(bulletItem.getFlame() > 0 && player.getRNG().nextFloat() < .75F)
+				closestTarget.setFire(bulletItem.getFlame());
 			
 			if(penetratingPower > 0)
 			{

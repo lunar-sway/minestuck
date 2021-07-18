@@ -985,12 +985,12 @@ public class MSItems
 		registry.register(new GunItem(new GunItem.Builder(35, 12, 75, 10).gunEffectType(GunEffect.Type.AHAB), new Item.Properties().defaultMaxDamage(50000).rarity(Rarity.EPIC).group(MSItemGroup.WEAPONS)).setRegistryName("ahabs_crosshairs"));
 		
 		//bullets
-		registry.register(new BulletItem(new Item.Properties().group(MSItemGroup.WEAPONS), 1, 4, 1, 0, null).setRegistryName("bullet"));
-		registry.register(new BulletItem(new Item.Properties().group(MSItemGroup.WEAPONS), 2, 5, 10, 2, null).setRegistryName("high_caliber_bullet"));
-		registry.register(new BulletItem(new Item.Properties().group(MSItemGroup.WEAPONS), -1, 6, -10, 0, BulletItem.Type.URANIUM).setRegistryName("geiger_wrecker"));
-		registry.register(new BulletItem(new Item.Properties().group(MSItemGroup.WEAPONS), 5, 4, 20, 0, null).setRegistryName("low_drag_bullet"));
-		registry.register(new BulletItem(new Item.Properties().group(MSItemGroup.WEAPONS), 1, 6, 1, 3, null).setRegistryName("veil_piercer_shot"));
-		registry.register(new BulletItem(new Item.Properties().group(MSItemGroup.WEAPONS), -1, 6, 1, 2, BulletItem.Type.DRAGON).setRegistryName("dragon_shot"));
+		registry.register(new BulletItem(new BulletItem.Builder( 1, 4, 1, 0), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("bullet"));
+		registry.register(new BulletItem(new BulletItem.Builder( 2, 5, 10, 2), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("high_caliber_bullet"));
+		registry.register(new BulletItem(new BulletItem.Builder( -1, 6, -10, 0).potionEffect(() -> new EffectInstance(Effects.WITHER, 120, 2)), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("geiger_wrecker"));
+		registry.register(new BulletItem(new BulletItem.Builder( 5, 4, 20, 0), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("low_drag_bullet"));
+		registry.register(new BulletItem(new BulletItem.Builder( 1, 6, 1, 3), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("veil_piercer_shot"));
+		registry.register(new BulletItem(new BulletItem.Builder( -1, 6, 1, 2).flame(5), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("dragon_shot"));
 		
 		//projectiles
 		registry.register(new ConsumableProjectileWeaponItem(new Item.Properties().group(MSItemGroup.WEAPONS), 0.5F, 20.0F, 1).setRegistryName("sbahjarang"));
