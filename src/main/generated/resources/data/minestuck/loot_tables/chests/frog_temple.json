@@ -2,10 +2,277 @@
   "type": "minecraft:chest",
   "pools": [
     {
+      "name": "weapons",
+      "rolls": {
+        "min": 0.0,
+        "max": 2.0,
+        "type": "minecraft:uniform"
+      },
+      "entries": [
+        {
+          "type": "minestuck:overworld_table",
+          "name": "minestuck:chests/frog_temple",
+          "pool": "weapons"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "quality": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.75,
+                "max": 1.0
+              }
+            }
+          ],
+          "name": "minecraft:bow"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "quality": -1,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.75,
+                "max": 1.0
+              }
+            }
+          ],
+          "name": "minecraft:stone_sword"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 3,
+          "quality": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.75,
+                "max": 1.0
+              }
+            }
+          ],
+          "name": "minecraft:iron_sword"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "quality": -1,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.75,
+                "max": 1.0
+              }
+            }
+          ],
+          "name": "minestuck:claw_hammer"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "quality": -1,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.75,
+                "max": 1.0
+              }
+            }
+          ],
+          "name": "minestuck:sickle"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 3,
+          "quality": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.75,
+                "max": 1.0
+              }
+            }
+          ],
+          "name": "minestuck:katana"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 3,
+          "quality": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.75,
+                "max": 1.0
+              }
+            }
+          ],
+          "name": "minestuck:sledge_hammer"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "quality": -2,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.75,
+                "max": 1.0
+              }
+            }
+          ],
+          "name": "minestuck:wooden_spoon"
+        },
+        {
+          "type": "minecraft:item",
+          "quality": 2,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.75,
+                "max": 1.0
+              }
+            }
+          ],
+          "name": "minestuck:scythe"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 4,
+          "quality": -1,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.75,
+                "max": 1.0
+              }
+            }
+          ],
+          "name": "minestuck:knitting_needle"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 8,
+          "quality": -2,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.75,
+                "max": 1.0
+              }
+            }
+          ],
+          "name": "minestuck:shuriken"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 4,
+          "quality": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.75,
+                "max": 1.0
+              }
+            }
+          ],
+          "name": "minestuck:metal_bat"
+        },
+        {
+          "type": "minecraft:item",
+          "quality": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.75,
+                "max": 1.0
+              }
+            }
+          ],
+          "name": "minestuck:mace"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 2,
+          "quality": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.75,
+                "max": 1.0
+              }
+            }
+          ],
+          "name": "minestuck:jousting_lance"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 4,
+          "quality": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.75,
+                "max": 1.0
+              }
+            }
+          ],
+          "name": "minestuck:fan"
+        },
+        {
+          "type": "minecraft:item",
+          "quality": 2,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.75,
+                "max": 1.0
+              }
+            }
+          ],
+          "name": "minestuck:lucerne_hammer"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 4,
+          "quality": -1,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.75,
+                "max": 1.0
+              }
+            }
+          ],
+          "name": "minestuck:fork"
+        }
+      ]
+    },
+    {
       "name": "supplies",
       "rolls": {
-        "min": 3.0,
-        "max": 8.0,
+        "min": 2.0,
+        "max": 6.0,
         "type": "minecraft:uniform"
       },
       "entries": [

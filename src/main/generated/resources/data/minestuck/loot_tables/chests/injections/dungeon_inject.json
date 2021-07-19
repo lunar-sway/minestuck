@@ -10,7 +10,7 @@
       },
       "entries": [
         {
-          "type": "minestuck:land_table",
+          "type": "minestuck:overworld_table",
           "name": "minestuck:chests/injections/dungeon_inject",
           "pool": "minestuck"
         },

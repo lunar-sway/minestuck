@@ -15,7 +15,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class OreGeneration
 {
 	public static final int cruxiteVeinsPerChunk = 10;
-	public static final int uraniumVeinsPerChunk = 7;
+	public static final int uraniumVeinsPerChunk = 5;
 	public static final int baseCruxiteVeinSize = 6;
 	public static final int baseUraniumVeinSize = 5;
 	public static final int bonusCruxiteVeinSize = 3;

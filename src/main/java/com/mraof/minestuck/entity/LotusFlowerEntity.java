@@ -171,13 +171,13 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 		if(eventTimer >= ANIMATION_END)
 			return Animation.EMPTY;
 		else if(eventTimer >= VANISH_START)
-			return Animation.VANISH;
+			return Animation.VANISH; //TODO Lotus Flower petals spazz out underneath the petals for just a tick here
 		else if(eventTimer >= OPEN_IDLE_START)
 			return Animation.OPEN_IDLE;
 		else if(eventTimer >= OPEN_START)
 			return Animation.OPEN;
 		else
-			return Animation.IDLE;
+			return Animation.IDLE; //TODO relevant to all animation steps but looping of animations is choppy
 	}
 	
 	protected void updateAndSendAnimation(Animation animation)

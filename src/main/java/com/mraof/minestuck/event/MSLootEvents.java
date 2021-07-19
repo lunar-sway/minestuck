@@ -22,7 +22,7 @@ public class MSLootEvents
 	{
 		if(LOOT_INJECT.contains(event.getName()))
 		{
-			LootPool pool = LootPool.builder().addEntry(TableLootEntry.builder(new ResourceLocation(Minestuck.MOD_ID, "chests/injections/dungeon_inject")).weight(100).quality(1)).name("dungeon_loot_inject").build();
+			LootPool pool = LootPool.builder().addEntry(TableLootEntry.builder(new ResourceLocation(Minestuck.MOD_ID, "chests/injections/dungeon_inject")).weight(1).quality(1)).name("dungeon_loot_inject").build();
 			event.getTable().addPool(pool);
 		}
 	}
