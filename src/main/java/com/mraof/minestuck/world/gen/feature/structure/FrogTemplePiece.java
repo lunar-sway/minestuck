@@ -13,7 +13,10 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.LadderBlock;
 import net.minecraft.block.StairsBlock;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.fluid.IFluidState;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.state.properties.ChestType;
 import net.minecraft.state.properties.Half;
 import net.minecraft.util.Direction;
@@ -43,7 +46,7 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 			for(int zPos = boundingBox.minZ; zPos <= boundingBox.maxZ; zPos++)
 			{
 				int posHeight = generator.getHeight(xPos, zPos, Heightmap.Type.OCEAN_FLOOR_WG); //posHeight picks the first solid block, ignoring water
-				posHeightPicked =  Math.min(posHeightPicked, posHeight); //with each new x/z coord it checks whether or not it is lower than the previous
+				posHeightPicked = Math.min(posHeightPicked, posHeight); //with each new x/z coord it checks whether or not it is lower than the previous
 			}
 		
 		boundingBox.offset(0, posHeightPicked - boundingBox.minY, 0); //takes the lowest Ocean Floor gen viable height
@@ -87,7 +90,7 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 		
 		ChestType leftChestType = ChestType.LEFT;
 		ChestType rightChestType = ChestType.RIGHT;
-		if(this.getCoordBaseMode() == Direction.SOUTH || this.getCoordBaseMode() == Direction.WEST)
+		if(this.getCoordBaseMode() == Direction.SOUTH || this.getCoordBaseMode() == Direction.WEST) //flips which side is left or right to prevent them from being two single chests
 		{
 			leftChestType = ChestType.RIGHT;
 			rightChestType = ChestType.LEFT;
@@ -127,14 +130,14 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 		int pushUp = 0;
 		for(int i = 0; i < 24; i++)
 		{
-			fillWithBlocks(world, boundingBox, 17 + 20, pushUp, i + 20 + 24, 24 + 20, pushUp, i + 20 + 24, MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE.getDefaultState().with(DecorBlock.FACING, this.getCoordBaseMode().getOpposite()), MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE.getDefaultState().with(DecorBlock.FACING, this.getCoordBaseMode().getOpposite()), false); //stairs base
-			fillWithBlocks(world, boundingBox, 17 + 20, pushUp + 1, i + 20 + 24, 24 + 20, pushUp + 1, i + 20 + 24, MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_TOP.getDefaultState().with(DecorBlock.FACING, this.getCoordBaseMode().getOpposite()), MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_TOP.getDefaultState().with(DecorBlock.FACING, this.getCoordBaseMode().getOpposite()), false); //stairs top
+			fillWithBlocksCheckWater(world, boundingBox, 17 + 20, pushUp, i + 20 + 24, 24 + 20, pushUp, i + 20 + 24, MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE.getDefaultState().with(DecorBlock.FACING, this.getCoordBaseMode().getOpposite())); //stairs base
+			fillWithBlocksCheckWater(world, boundingBox, 17 + 20, pushUp + 1, i + 20 + 24, 24 + 20, pushUp + 1, i + 20 + 24, MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_TOP.getDefaultState().with(DecorBlock.FACING, this.getCoordBaseMode().getOpposite())); //stairs top
 			fillWithBlocks(world, boundingBox, 17 + 20, pushUp, i + 20 + 1 + 24, 24 + 20, pushUp, 50 + 20, MSBlocks.GREEN_STONE_BRICKS.getDefaultState(), MSBlocks.GREEN_STONE_BRICKS.getDefaultState(), false); //stairs base fill in
 			fillWithBlocks(world, boundingBox, 17 + 20, pushUp + 1, i + 20 + 1 + 24, 24 + 20, pushUp + 1, 50 + 20, MSBlocks.GREEN_STONE_BRICKS.getDefaultState(), MSBlocks.GREEN_STONE_BRICKS.getDefaultState(), false); //stairs top fill in
-			pushUp = pushUp + 2;
+			pushUp = pushUp + 2; //allows the stairs height to increment twice as fast as sideways placement
 		}
 		
-		fillWithBlocks(world, boundingBox, 17 + 20, 48, 24 + 20 + 24, 24 + 20, 48, 24 + 20 + 24, MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE.getDefaultState().with(DecorBlock.FACING, this.getCoordBaseMode().getOpposite()), MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE.getDefaultState().with(DecorBlock.FACING, this.getCoordBaseMode().getOpposite()), false); //stairs base at top
+		fillWithBlocksCheckWater(world, boundingBox, 17 + 20, 48, 24 + 20 + 24, 24 + 20, 48, 24 + 20 + 24, MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE.getDefaultState().with(DecorBlock.FACING, this.getCoordBaseMode().getOpposite())); //stairs base at top
 		fillWithBlocks(world, boundingBox, 17 + 20, -10, 20 + 24, 24 + 20, -1, 24 + 20 + 24, MSBlocks.GREEN_STONE_BRICKS.getDefaultState(), MSBlocks.GREEN_STONE_BRICKS.getDefaultState(), false); //underneath stairs
 		
 		fillWithBlocks(world, boundingBox, 20, -10, 38 + 20, 41 + 20, 0, 79 + 20, block, block, false); //underneath main platform
@@ -183,9 +186,9 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 	private void carveRooms(IWorld world, MutableBoundingBox boundingBox)
 	{
 		fillWithAir(world, boundingBox, 14 + 20, 49, 52 + 20, 27 + 20, 55, 65 + 20); //lotus room
-		fillWithAir(world, boundingBox, 19 + 20, 49, 49 + 20, 22 + 20, 52, 51 + 20); //lotus room entry
+		fillWithAirCheckWater(world, boundingBox, 19 + 20, 49, 49 + 20, 22 + 20, 52, 51 + 20); //lotus room entry
 		fillWithAir(world, boundingBox, 7 + 20, 5, 45 + 20, 34 + 20, 23, 72 + 20); //lower room
-		fillWithAir(world, boundingBox, 19 + 20, 17, 71 + 20, 22 + 20, 20, 79 + 20); //lower room entry
+		fillWithAirCheckWater(world, boundingBox, 19 + 20, 17, 71 + 20, 22 + 20, 20, 79 + 20); //lower room entry //TODO this entrance will occasionally generate below water and cause this to generate awkwardly
 	}
 	
 	private void buildPillars(BlockState block, IWorld world, MutableBoundingBox boundingBox, Random random) //TODO pieces of pillars often fail to generate, which is why it is not in use currently
@@ -255,7 +258,7 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 	protected int getEntityXWithOffset(int x, int z)
 	{
 		int posX = getXWithOffset(x, z);
-		if(getCoordBaseMode() == Direction.WEST)
+		if(getCoordBaseMode() == Direction.WEST) //fixes direction specific shifting which had been moving the lotus flower one block farther towards or away from the entrance
 			posX++;
 		return posX;
 	}
@@ -266,6 +269,38 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 		if(getCoordBaseMode() == Direction.NORTH)
 			posZ++;
 		return posZ;
+	}
+	
+	protected void fillWithBlocksCheckWater(IWorld worldIn, MutableBoundingBox boundingboxIn, int xMin, int yMin, int zMin, int xMax, int yMax, int zMax, BlockState blockState)
+	{
+		for(int y = yMin; y <= yMax; ++y)
+		{
+			for(int x = xMin; x <= xMax; ++x)
+			{
+				for(int z = zMin; z <= zMax; ++z)
+				{
+					if(this.getBlockStateFromPos(worldIn, x, y, z, boundingboxIn).getFluidState().getFluid().isEquivalentTo(Fluids.WATER)) //normal fill command, except that it waterlogs blocks if it is replacing water and has inside vs outside blockstates removed + existingOnly
+						blockState = blockState.with(BlockStateProperties.WATERLOGGED, true); //only works with waterloggable blocks
+					this.setBlockState(worldIn, blockState, x, y, z, boundingboxIn);
+				}
+			}
+		}
+	}
+	
+	protected void fillWithAirCheckWater(IWorld worldIn, MutableBoundingBox structurebb, int minX, int minY, int minZ, int maxX, int maxY, int maxZ)
+	{
+		for(int y = minY; y <= maxY; ++y)
+		{
+			for(int x = minX; x <= maxX; ++x)
+			{
+				for(int z = minZ; z <= maxZ; ++z)
+				{
+					BlockPos pos = new BlockPos(this.getXWithOffset(x, z), this.getYWithOffset(y), this.getZWithOffset(x, z));
+					if(structurebb.isVecInside(pos) && !this.getBlockStateFromPos(worldIn, x, y, z, structurebb).getFluidState().getFluid().isEquivalentTo(Fluids.WATER)) //ensures that the chunk is loaded before attempted to remove block, setBlockState already does this check
+						worldIn.removeBlock(pos, false);
+				}
+			}
+		}
 	}
 	
 	static class Selector extends StructurePiece.BlockSelector

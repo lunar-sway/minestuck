@@ -50,11 +50,12 @@ public class WheatSeedsConverterModifier extends LootModifier {
 	public static class Serializer extends GlobalLootModifierSerializer<WheatSeedsConverterModifier> {
 		
 		@Override
-		public WheatSeedsConverterModifier read(ResourceLocation name, JsonObject object, ILootCondition[] conditionsIn) {
+		public WheatSeedsConverterModifier read(ResourceLocation location, JsonObject object, ILootCondition[] ailootcondition)
+		{
 			int numSeeds = JSONUtils.getInt(object, "numSeeds");
 			Item seed = ForgeRegistries.ITEMS.getValue(new ResourceLocation((JSONUtils.getString(object, "seedItem"))));
 			Item wheat = ForgeRegistries.ITEMS.getValue(new ResourceLocation(JSONUtils.getString(object, "replacement")));
-			return new WheatSeedsConverterModifier(conditionsIn, numSeeds, seed, wheat);
+			return new WheatSeedsConverterModifier(ailootcondition, numSeeds, seed, wheat);
 		}
 	}
 }

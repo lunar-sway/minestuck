@@ -1,0 +1,26 @@
+{
+    "type": "minecraft:chest",
+    "pools": [
+        {
+            "name": "main",
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "item",
+                    "name": "minestuck:blank_disk",
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 0.0,
+                                "max": 2.0,
+                                "type": "minecraft:uniform"
+                            }
+                        }
+                    ],
+                    "weight": 5
+                }
+            ]
+        }
+    ]
+}
