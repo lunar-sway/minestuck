@@ -1,7 +1,5 @@
 package com.mraof.minestuck.data.loot_table;
 
-import com.google.common.collect.Sets;
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.MSTags;
@@ -11,27 +9,14 @@ import com.mraof.minestuck.world.lands.title.TitleLandType;
 import com.mraof.minestuck.world.storage.loot.LandTableLootEntry;
 import com.mraof.minestuck.world.storage.loot.MSLootTables;
 import com.mraof.minestuck.world.storage.loot.functions.SetBoondollarCount;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.*;
-import net.minecraft.world.storage.loot.conditions.LootConditionManager;
-import net.minecraft.world.storage.loot.conditions.Reference;
 import net.minecraft.world.storage.loot.functions.SetCount;
 import net.minecraft.world.storage.loot.functions.SetDamage;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.event.LootTableLoadEvent;
-import net.minecraftforge.event.entity.living.LivingDropsEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import javax.annotation.Nonnull;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Random;
-import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -45,22 +30,10 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 	@Override
 	public void accept(BiConsumer<ResourceLocation, LootTable.Builder> lootProcessor)
 	{
-		/*lootProcessor.accept(LootTables.CHESTS_PILLAGER_OUTPOST, LootTable.builder()
-				.addLootPool(LootPool.builder().rolls(RandomValueRange.of(5.0F, 15.0F))
-						.addEntry(ItemLootEntry.builder(MSItems.CANE).weight(10).quality(-1).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.75F, 1.0F))))
-						.addEntry(ItemLootEntry.builder(MSItems.DEUCE_CLUB).weight(10).quality(-1).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.75F, 1.0F))))
-				));*/
-		
-		/*lootProcessor.accept(locationForExternal(LootTables.CHESTS_PILLAGER_OUTPOST), LootTable.builder()
-				.addLootPool(LootPool.builder().name("minestuck").rolls(ConstantRange.of(5))
-						.addEntry(ItemLootEntry.builder(MSItems.BLANK_DISK).weight(5).quality(3).acceptFunction(SetCount.builder(RandomValueRange.of(1, 2))))
-						.addEntry(ItemLootEntry.builder(MSItems.HASHMAP_MODUS_CARD).weight(1).quality(1).acceptFunction(SetCount.builder(RandomValueRange.of(0, 1))))
-						.addEntry(ItemLootEntry.builder(MSItems.QUEUE_MODUS_CARD).weight(1).quality(1).acceptFunction(SetCount.builder(RandomValueRange.of(0, 1))))
-						.addEntry(ItemLootEntry.builder(MSItems.QUEUESTACK_MODUS_CARD).weight(1).quality(1).acceptFunction(SetCount.builder(RandomValueRange.of(0, 1))))
-						.addEntry(ItemLootEntry.builder(MSItems.SET_MODUS_CARD).weight(1).quality(1).acceptFunction(SetCount.builder(RandomValueRange.of(0, 1))))
-						.addEntry(ItemLootEntry.builder(MSItems.STACK_MODUS_CARD).weight(1).quality(1).acceptFunction(SetCount.builder(RandomValueRange.of(0, 1))))
-						.addEntry(ItemLootEntry.builder(MSItems.TREE_MODUS_CARD).weight(1).quality(1).acceptFunction(SetCount.builder(RandomValueRange.of(0, 1))))
-				));*/
+		lootProcessor.accept(MSLootTables.DUNGEON_LOOT_INJECT, LootTable.builder()
+				.addLootPool(LootPool.builder().name("minestuck").rolls(RandomValueRange.of(0, 1))
+						.addEntry(LandTableLootEntry.builder(MSLootTables.DUNGEON_LOOT_INJECT).setPool("minestuck"))
+						.addEntry(ItemLootEntry.builder(MSItems.BLANK_DISK).weight(1).quality(1).acceptFunction(SetCount.builder(RandomValueRange.of(0, 2))))));
 		
 		lootProcessor.accept(MSLootTables.FROG_TEMPLE_CHEST, LootTable.builder()
 				.addLootPool(LootPool.builder().name(SUPPLIES_POOL).rolls(RandomValueRange.of(3, 8))
@@ -603,11 +576,6 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 		
 	}
 	
-	public static ResourceLocation locationForExternal(ResourceLocation baseLoot)
-	{
-		return new ResourceLocation(baseLoot.getNamespace(), baseLoot.getPath() + "/minestuck/");
-	}
-	
 	public static ResourceLocation locationFor(TerrainLandType landAspect, ResourceLocation baseLoot)
 	{
 		ResourceLocation landName = Objects.requireNonNull(landAspect.getRegistryName());
@@ -619,98 +587,4 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 		ResourceLocation landName = Objects.requireNonNull(landAspect.getRegistryName());
 		return new ResourceLocation(baseLoot.getNamespace(), baseLoot.getPath() + "/title/" + landName.toString().replace(':', '/'));
 	}
-	
-	/*private static final Set<ResourceLocation> DUNGEON_LOOT_INJECT = Sets.newHashSet(LootTables.CHESTS_PILLAGER_OUTPOST);
-	
-	@SubscribeEvent
-	public static void onInjectLoot(LootTableLoadEvent event) {
-		if (DUNGEON_LOOT_INJECT.contains(event.getName())) {
-			LootPool pool = LootPool.builder().addEntry(TableLootEntry.builder(new ResourceLocation(Minestuck.MOD_ID, "injections/dungeon_inject")).weight(1).quality(0)).name("dungeon_inject").build();
-			event.getTable().addPool(pool);
-		}
-	}*/
-	
-	/*private static final @Nonnull LootConditionManager[] NO_CONDITIONS = new LootConditionManager[0];
-	
-	private static final @Nonnull
-	Set<ResourceLocation> MC_TABLES = new HashSet<>();
-	static {
-		MC_TABLES.add(LootTables.CHESTS_SIMPLE_DUNGEON);
-	}
-	
-	private static void injectTables(@Nonnull LootTableLoadEvent evt) {
-		if (MC_TABLES.contains(evt.getName())) {
-			LootPool lp = new LootPool(new LootEntry[0], NO_CONDITIONS, new RandomValueRange(1, 3), new RandomValueRange(0, 0), Minestuck.MOD_NAME);
-			addTable(lp, eio(evt.getName()));
-			evt.getTable().addPool(lp);
-		}
-	}
-	
-	@SubscribeEvent
-	public static void onLootTableLoad(@Nonnull LootTableLoadEvent evt)
-	{
-		
-		switch(PersonalConfig.lootGeneration.get())
-		{
-			case VANILLA:
-				injectTables(evt); // fallthrough on purpose
-			case DISABLED:
-				return;
-			case DEVELOPMENT:
-			default:
-				break;
-		}
-		
-		LootTable table = evt.getTable();
-		
-		LootPool lp = new LootPool(new LootEntry[0], NO_CONDITIONS, new RandomValueRange(1, 3), new RandomValueRange(0, 0), Minestuck.MOD_NAME);
-		
-		if(evt.getName().equals(LootTables.CHESTS_SIMPLE_DUNGEON))
-		{
-			
-			lp.addEntry(createLootEntry(Alloy.DARK_STEEL.getStackIngot(), 1, 3, 0.25F));
-			lp.addEntry(createLootEntry(itemConduitProbe.getItemNN(), 0.10F));
-			lp.addEntry(createLootEntry(Items.QUARTZ, 3, 16, 0.25F));
-			lp.addEntry(createLootEntry(Items.NETHER_WART, 1, 4, 0.20F));
-			lp.addEntry(createLootEntry(Items.ENDER_PEARL, 1, 2, 0.30F));
-			lp.addEntry(createDarkSteelLootEntry(ModObject.itemDarkSteelSword.getItemNN(), 0.1F));
-			lp.addEntry(createDarkSteelLootEntry(ModObject.itemDarkSteelBoots.getItemNN(), 0.1F));
-			lp.addEntry(createLootEntry(Material.GEAR_WOOD.getStack(), 1, 2, 0.5F));
-			lp.addEntry(createLootCapacitor(0.15F));
-			lp.addEntry(createLootCapacitor(0.15F));
-			lp.addEntry(createLootCapacitor(0.15F));
-		}
-	}LootTables
-	
-	private static void addTable(@Nonnull LootPool pool, @Nonnull ResourceLocation resourceLocation) {
-		pool.addEntry(new LootEntryTable(resourceLocation, 1, 1, NO_CONDITIONS, resourceLocation.toString()));
-	}
-	
-	private @Nonnull static LootEntry createLootEntry(@Nonnull Item item, float chance) {
-		return createLootEntry(item, 1, 1, chance);
-	}
-	
-	private @Nonnull static LootEntry createLootEntry(@Nonnull Item item, int minSize, int maxSize, float chance) {
-		return createLootEntry(item, 0, minSize, maxSize, chance);
-	}
-	
-	private @Nonnull static LootEntry createLootEntry(@Nonnull Item item, int meta, int minStackSize, int maxStackSize, float chance) {
-		LootCondition[] chanceCond = new LootCondition[] { new RandomChance(chance) };
-		final ResourceLocation registryName = NullHelper.notnull(item.getRegistryName(), ERROR_UNREGISTERED_ITEM);
-		if (item.isDamageable()) {
-			return new LootEntryItem(item, 1, 1, new LootFunction[] { setCount(minStackSize, maxStackSize), setDamage(item, meta), setEnergy() }, chanceCond,
-					registryName.toString() + ":" + meta);
-		} else {
-			return new LootEntryItem(item, 1, 1, new LootFunction[] { setCount(minStackSize, maxStackSize), setMetadata(meta) }, chanceCond,
-					registryName.toString() + ":" + meta);
-		}
-	}
-	
-	private @Nonnull static LootEntry createLootEntry(@Nonnull ItemStack stack, int minStackSize, int maxStackSize, float chance) {
-		LootCondition[] chanceCond = new LootCondition[] { new RandomChance(chance) };
-		final ResourceLocation registryName = NullHelper.notnull(stack.getItem().getRegistryName(), ERROR_UNREGISTERED_ITEM);
-		return new LootEntryItem(stack.getItem(), 1, 1, new LootFunction[] { setCount(minStackSize, maxStackSize), setMetadata(stack.getMetadata()) }, chanceCond,
-				registryName.toString() + ":" + stack.getMetadata());
-	}*/
-	
 }

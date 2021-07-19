@@ -33,7 +33,7 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public class MSAvancementProvider implements IDataProvider
+public class MSAdvancementProvider implements IDataProvider
 {
 	public static final String ROOT = "minestuck.root";
 	public static final String SEARCHING = "minestuck.searching";
@@ -57,7 +57,7 @@ public class MSAvancementProvider implements IDataProvider
 	private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
 	private final DataGenerator generator;
 	
-	public MSAvancementProvider(DataGenerator generator)
+	public MSAdvancementProvider(DataGenerator generator)
 	{
 		this.generator = generator;
 	}
