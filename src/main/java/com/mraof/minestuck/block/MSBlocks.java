@@ -177,6 +177,7 @@ public class MSBlocks
 	
 	//Misc Core Objects
 	public static final Block CRUXITE_DOWEL = getNull();
+	public static LotusTimeCapsuleMultiblock LOTUS_TIME_CAPSULE_BLOCK = new LotusTimeCapsuleMultiblock(Minestuck.MOD_ID);
 	
 	//Misc Alchemy Semi-Plants
 	public static final Block GOLD_SEEDS = getNull();
@@ -206,9 +207,6 @@ public class MSBlocks
 	public static final Block MINI_WIZARD_STATUE = getNull();
 	public static final Block GLOWYSTONE_DUST = getNull();
 	public static final CassettePlayerBlock CASSETTE_PLAYER = getNull();
-	
-	//Loot Block
-	public static LotusTimeCapsuleMultiblock LOTUS_TIME_CAPSULE_BLOCK = new LotusTimeCapsuleMultiblock(Minestuck.MOD_ID);
 	
 	public static final FlowingFluidBlock OIL = getNull(), BLOOD = getNull(), BRAIN_JUICE = getNull();
 	public static final FlowingFluidBlock WATER_COLORS = getNull(), ENDER = getNull(), LIGHT_WATER = getNull();

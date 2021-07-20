@@ -21,6 +21,7 @@ import com.mraof.minestuck.item.weapon.projectiles.ConsumableProjectileWeaponIte
 import com.mraof.minestuck.item.weapon.projectiles.ReturningProjectileWeaponItem;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
+import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
@@ -1130,7 +1131,7 @@ public class MSItems
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("ice_shard"));
 		registry.register(new SoundItem(() -> MSSoundEvents.ITEM_HORN_USE, new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("horn"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("cake_mix"));
-		registry.register(new TempleScannerItem(new Item.Properties().group(MSItemGroup.MAIN).maxStackSize(1)).setRegistryName("temple_scanner"));
+		registry.register(new StructureScannerItem(new Item.Properties().group(MSItemGroup.MAIN).maxStackSize(1), () -> MSFeatures.FROG_TEMPLE, () -> MSItems.RAW_URANIUM).setRegistryName("temple_scanner"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("battery"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("barbasol"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("clothes_iron"));

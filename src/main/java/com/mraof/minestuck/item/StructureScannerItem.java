@@ -9,13 +9,21 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.server.ServerWorld;
 
-public class TempleScannerItem extends Item
+import java.util.function.Supplier;
+
+public class StructureScannerItem extends Item
 {
-	public TempleScannerItem(Properties properties)
+	private final Supplier<Structure> structure;
+	private final Supplier<Item> fuelItem;
+	
+	public StructureScannerItem(Properties properties, Supplier<Structure> structure, Supplier<Item> fuelItem)
 	{
 		super(properties);
+		this.structure = structure;
+		this.fuelItem = fuelItem;
 	}
 	
 	@Override
@@ -24,29 +32,36 @@ public class TempleScannerItem extends Item
 		worldIn.playSound(playerIn, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.UI_BUTTON_CLICK, SoundCategory.AMBIENT, 0.8F, 1.3F);
 		
 		ItemStack item = playerIn.getHeldItem(handIn);
-		ItemStack uraniumStack = new ItemStack(MSItems.RAW_URANIUM);
 		boolean foundItem = false;
 		
-		for(ItemStack invItem : playerIn.inventory.mainInventory)
+		if(fuelItem != null)
 		{
-			if(ItemStack.areItemsEqual(invItem, uraniumStack))
+			ItemStack fuelStack = new ItemStack(fuelItem.get());
+			
+			for(ItemStack invItem : playerIn.inventory.mainInventory)
 			{
-				foundItem = true;
-				if(random.nextFloat() >= 0.95F)
+				if(ItemStack.areItemsEqual(invItem, fuelStack))
 				{
-					invItem.shrink(1);
-					worldIn.playSound(playerIn, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.ENTITY_BLAZE_SHOOT, SoundCategory.AMBIENT, 0.3F, 2F);
+					foundItem = true;
+					if(random.nextFloat() >= 0.95F)
+					{
+						invItem.shrink(1);
+						worldIn.playSound(playerIn, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.ENTITY_BLAZE_SHOOT, SoundCategory.AMBIENT, 0.4F, 2F);
+					}
+					
+					break;
 				}
-				
-				break;
 			}
+		} else
+		{
+			foundItem = true;
 		}
 		
 		if(worldIn instanceof ServerWorld)
 		{
 			if(foundItem || playerIn.isCreative())
 			{
-				BlockPos structureBlockPos = ((ServerWorld) worldIn).getChunkProvider().getChunkGenerator().findNearestStructure(worldIn, "minestuck:frog_temple", new BlockPos(playerIn), 100, false);
+				BlockPos structureBlockPos = ((ServerWorld) worldIn).getChunkProvider().getChunkGenerator().findNearestStructure(worldIn, structure.get().getStructureName(), new BlockPos(playerIn), 100, false);
 				
 				if(structureBlockPos != null)
 				{
@@ -62,7 +77,7 @@ public class TempleScannerItem extends Item
 				}
 			} else
 			{
-				ITextComponent message = new TranslationTextComponent(getTranslationKey() + ".noUraniumMessage");
+				ITextComponent message = new TranslationTextComponent(getTranslationKey() + ".noFuelMessage");
 				message.getStyle().setColor(TextFormatting.RED);
 				playerIn.sendMessage(message);
 			}

@@ -183,7 +183,7 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 	protected void updateAndSendAnimation(Animation animation)
 	{
 		this.animation = animation;
-		LotusFlowerPacket packet = LotusFlowerPacket.createPacket(this, animation);
+		LotusFlowerPacket packet = LotusFlowerPacket.createPacket(this, animation); //this packet allows information to be exchanged between server and client where one side cant access the other easily or reliably
 		MSPacketHandler.sendToTracking(packet, this);
 	}
 	
@@ -299,7 +299,7 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 		return HandSide.RIGHT;
 	}
 	
-	public enum Animation
+	public enum Animation //animationName set in assets/minestuck/animations/lotus_flower.animation.json. Animated blocks/entities also need a section in assets/minestuck/geo
 	{
 		IDLE("lotus.idle"),
 		OPEN("lotus.open"),

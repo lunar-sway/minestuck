@@ -1424,7 +1424,7 @@
   "item.minestuck.telescopic_sassacrusher.tooltip": "OH ho! The perfect hammer for the dashing young gent who loves a pranksters gambit or a good grist horde!",
   "item.minestuck.temple_scanner": "Temple Scanner",
   "item.minestuck.temple_scanner.failMessage": "No temple detected nearby",
-  "item.minestuck.temple_scanner.noUraniumMessage": "This device requires uranium to run",
+  "item.minestuck.temple_scanner.noFuelMessage": "This device requires uranium to run",
   "item.minestuck.temple_scanner.successMessage": "Closest detected temple around %s blocks away",
   "item.minestuck.terrain_flatenator": "Terrain Flatenator",
   "item.minestuck.terrain_flatenator.tooltip": "Construction worker's pride and joy!",

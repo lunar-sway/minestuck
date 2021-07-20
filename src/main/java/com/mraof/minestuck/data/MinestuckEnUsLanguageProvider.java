@@ -341,6 +341,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.GRIST_WIDGET, "GristWidget 12000");
 		add(MSBlocks.URANIUM_COOKER, "Cookalyzer");
 		add(MSBlocks.CRUXITE_DOWEL, "Cruxite Dowel");
+		MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.forEachBlock(block -> add(block, "Lotus Time Capsule"));
 		add(MSBlocks.GOLD_SEEDS, "Golden Seeds");
 		addTooltip(MSBlocks.GOLD_SEEDS, "These seeds are made out of 24-karat gold!");
 		addStoreTooltip(MSBlocks.GOLD_SEEDS, "Do you like regular seeds? This here is the luxury variant!");
@@ -374,7 +375,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.MINI_FROG_STATUE, "Frog Statue Replica");
 		addStoreTooltip(MSBlocks.MINI_FROG_STATUE, "Some say it's creepy, some say it's cute, others would say it's contraband, so keep it out of sight!");
 		add(MSBlocks.MINI_WIZARD_STATUE, "Small Wizard Statue");
-		MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.forEachBlock(block -> add(block, "Lotus Time Capsule"));
 		add(MSBlocks.GLOWYSTONE_DUST, "Glowystone Dust");
 		add(MSBlocks.OIL, "Oil");
 		add(MSBlocks.BLOOD, "Blood");
@@ -739,7 +739,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.TEMPLE_SCANNER, "Temple Scanner");
 		addExtra(MSItems.TEMPLE_SCANNER, "successMessage", "Closest detected temple around %s blocks away");
 		addExtra(MSItems.TEMPLE_SCANNER, "failMessage", "No temple detected nearby");
-		addExtra(MSItems.TEMPLE_SCANNER, "noUraniumMessage", "This device requires uranium to run");
+		addExtra(MSItems.TEMPLE_SCANNER, "noFuelMessage", "This device requires uranium to run");
 		add(MSItems.CRUXITE_APPLE, "Cruxite Artifact");
 		add(MSItems.CRUXITE_POTION, "Cruxite Artifact");
 		add(MSItems.SBURB_CODE, "SBURB Code");
