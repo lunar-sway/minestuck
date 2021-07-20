@@ -52,7 +52,7 @@ public class LotusTimeCapsuleBlock extends MultiMachineBlock
 		Direction direction = state.get(FACING);
 		if(mirror != Mirror.NONE)
 		{
-			boolean clockwise = (mirror == Mirror.LEFT_RIGHT) ^ (direction.getAxis() == Direction.Axis.X);
+			boolean clockwise = (mirror == Mirror.LEFT_RIGHT) ^ (direction.getAxis() == Direction.Axis.X); //fixes generation issue
 			if(clockwise)
 				return state.with(FACING, direction.rotateY());
 			else

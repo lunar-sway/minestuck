@@ -40,7 +40,8 @@ public class HieroglyphBlock extends Block
 				itemstack.shrink(amountInHandStack);
 			}
 			return ActionResultType.SUCCESS;
-		} else {
+		} else
+		{
 			return ActionResultType.FAIL;
 		}
 	}
