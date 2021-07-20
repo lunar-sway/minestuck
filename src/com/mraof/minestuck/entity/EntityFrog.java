@@ -5,8 +5,6 @@ import java.util.Random;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.MinestuckSoundHandler;
 
-import net.minecraft.client.audio.Sound;
-import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -39,7 +37,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
+import static com.mraof.minestuck.MinestuckConfig.landAnimalSpawnRange;
 
 public class EntityFrog extends EntityMinestuck
 {
@@ -760,7 +758,17 @@ public class EntityFrog extends EntityMinestuck
 	@Override
 	protected boolean canDespawn() 
 	{
-		return false;
+		return true;
 	}
 
+	@Override
+	public boolean getCanSpawnHere()
+	{
+		return super.getCanSpawnHere() && isAreaClearOfEntityType(this);
+	}
+
+	public static boolean isAreaClearOfEntityType(Entity entity)
+	{
+		return landAnimalSpawnRange == 0 || entity.world.getEntities(entity.getClass(), (entity1) -> entity.getDistance(entity1) < landAnimalSpawnRange).isEmpty();
+	}
 }

@@ -1,15 +1,18 @@
 package com.mraof.minestuck.world.lands.title;
 
+import com.mraof.minestuck.entity.EntityFrog;
+import com.mraof.minestuck.entity.EntityRabbitMedium;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
-import com.mraof.minestuck.world.lands.decorator.RabbitSpawner;
 import com.mraof.minestuck.world.lands.decorator.structure.RabbitHoleDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import net.minecraft.block.BlockColored;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
+import net.minecraft.world.biome.Biome;
 
 public class LandAspectRabbits extends TitleLandAspect
 {
@@ -31,9 +34,9 @@ public class LandAspectRabbits extends TitleLandAspect
 	{
 		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.PINK));
 		chunkProvider.blockRegistry.setBlockState("carpet", Blocks.CARPET.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.SILVER));
-		
-		chunkProvider.decorators.add(new RabbitSpawner(6, BiomeMinestuck.mediumNormal));
-		chunkProvider.decorators.add(new RabbitSpawner(3, BiomeMinestuck.mediumRough));
+
+		chunkProvider.ambientMobsList.add(new Biome.SpawnListEntry(EntityRabbitMedium.class, 1, 1, 1));
+
 		chunkProvider.decorators.add(new RabbitHoleDecorator(BiomeMinestuck.mediumNormal, BiomeMinestuck.mediumRough));
 		chunkProvider.sortDecorators();
 	}
