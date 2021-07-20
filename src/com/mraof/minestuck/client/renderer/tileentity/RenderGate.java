@@ -1,5 +1,6 @@
 package com.mraof.minestuck.client.renderer.tileentity;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.tileentity.TileEntityGate;
 import com.mraof.minestuck.util.ColorCollector;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -46,7 +47,7 @@ public class RenderGate extends TileEntitySpecialRenderer<TileEntityGate>
 	public void renderGateAt(TileEntityGate tileEntity, double posX, double posY, double posZ, float f, int p_180535_9_)
 	{
 		BufferBuilder buffer = Tessellator.getInstance().getBuffer();
-		float tick = tileEntity.getWorld().getTotalWorldTime() + f;
+		float tick = (System.currentTimeMillis() - Minestuck.startTime) / 50f; //tileEntity.getWorld().getTotalWorldTime() + f;
 		GlStateManager.translate(posX + 0.5, posY, posZ + 0.5);
 		
 		GlStateManager.pushMatrix();
@@ -65,7 +66,7 @@ public class RenderGate extends TileEntitySpecialRenderer<TileEntityGate>
 	public void renderReturnNodeAt(TileEntityGate tileEntity, double posX, double posY, double posZ, float f, int p_180535_9_)
 	{
 		BufferBuilder buffer = Tessellator.getInstance().getBuffer();
-		float tick = tileEntity.getWorld().getTotalWorldTime() + f;
+		float tick = (System.currentTimeMillis() - Minestuck.startTime) / 50f; //tileEntity.getWorld().getTotalWorldTime() + f;
 		GlStateManager.translate(posX, posY, posZ);
 		
 		GlStateManager.pushMatrix();

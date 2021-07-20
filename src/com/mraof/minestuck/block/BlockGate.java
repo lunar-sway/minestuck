@@ -111,7 +111,7 @@ public class BlockGate extends Block
 			
 			
 			BlockPos mainPos = pos;
-			if(!(Boolean) state.getValue(isMainComponent))
+			if(!state.getValue(isMainComponent))
 			{
 				if(this != MinestuckBlocks.gate)
 					mainPos = this.findMainComponent(pos, worldIn);
@@ -134,7 +134,7 @@ public class BlockGate extends Block
 	
 	protected boolean isValid(BlockPos pos, World world, IBlockState state)
 	{
-		if((Boolean) state.getValue(isMainComponent))
+		if(state.getValue(isMainComponent))
 			return isValid(pos, world);
 		else
 		{
@@ -152,7 +152,7 @@ public class BlockGate extends Block
 				if(x != 0 || z != 0)
 				{
 					IBlockState block = world.getBlockState(pos.add(x, 0, z));
-					if(block.getBlock() != this || (Boolean) block.getValue(isMainComponent))
+					if(block.getBlock() != this || block.getValue(isMainComponent))
 						return false;
 				}
 		
@@ -174,7 +174,7 @@ public class BlockGate extends Block
 				if(x != 0 || z != 0)
 				{
 					IBlockState block = world.getBlockState(pos.add(x, 0, z));
-					if(block.getBlock() == this && (Boolean) block.getValue(isMainComponent))
+					if(block.getBlock() == this && block.getValue(isMainComponent))
 						return pos.add(x, 0, z);
 				}
 		
@@ -185,7 +185,7 @@ public class BlockGate extends Block
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
 	{
 		super.breakBlock(worldIn, pos, state);
-		if((Boolean) state.getValue(isMainComponent))
+		if(state.getValue(isMainComponent))
 			removePortal(pos, worldIn);
 		else
 		{
@@ -201,7 +201,7 @@ public class BlockGate extends Block
 		if(!this.isValid(pos, worldIn, state))
 		{
 			BlockPos mainPos = pos;
-			if(!(Boolean) state.getValue(isMainComponent))
+			if(!state.getValue(isMainComponent))
 				mainPos = findMainComponent(pos, worldIn);
 			
 			if(mainPos == null)
