@@ -28,6 +28,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
@@ -763,6 +764,9 @@ public class SkaianetHandler {
 		MinestuckDimensionHandler.setSpawn(dimensionId, new BlockPos(x, 128 - MinestuckConfig.artifactRange, z));
 		c.clientHomeLand = dimensionId;
 		SburbHandler.onLandCreated(c);
+
+		DimensionManager.initDimension(dimensionId);
+		MinestuckPlayerTracker.updateLands();
 		
 		if(teleport != null && Teleport.teleportEntity(player, dimensionId, teleport))
 		{
