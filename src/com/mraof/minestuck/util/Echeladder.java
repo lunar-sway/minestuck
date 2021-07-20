@@ -48,6 +48,7 @@ public class Echeladder
 	private final PlayerIdentifier identifier;
 	private int rung;
 	private int progress;
+	private boolean canGainEcheExp = true;
 	
 	private boolean[] underlingBonuses = new boolean[UNDERLING_BONUSES.length];
 	private boolean[] alchemyBonuses = new boolean[ALCHEMY_BONUSES.length];
@@ -61,13 +62,13 @@ public class Echeladder
 	{
 		// was 9 * 1.4^rung
 		// now 4000 * ((1.06^rung) - 1) + 10
-		return (int) (4000 * (Math.pow(1.06, rung) - 1) + 10);
+		return (int) (2000 * (Math.pow(1.06, rung) - 1) + 10);
 	}
 	
 	public void increaseProgress(int exp)
 	{
 		SburbConnection c = SkaianetHandler.getMainConnection(identifier, true);
-		int topRung = c != null && c.enteredGame() ? RUNG_COUNT - 1 : MinestuckConfig.preEntryRungLimit;
+		int topRung = !canGainEcheExp ? rung : c != null && c.enteredGame() ? RUNG_COUNT - 1 : MinestuckConfig.preEntryRungLimit;
 		int expReq = getRungProgressReq();
 		if(rung >= topRung || exp < expReq*MIN_PROGRESS_MODIFIER)
 			return;
@@ -129,10 +130,30 @@ public class Echeladder
 	{
 		return rung;
 	}
+
+	public void setRung(int rung)
+	{
+		setProgress(rung, 0);
+	}
 	
 	public float getProgress()
 	{
 		return ((float) progress)/getRungProgressReq();
+	}
+
+	public void setProgress(int rung, double progress)
+	{
+		setByCommand(rung, progress);
+	}
+
+	public boolean isProgressEnabled()
+	{
+		return canGainEcheExp;
+	}
+
+	public void setProgressEnabled(boolean enabled)
+	{
+		canGainEcheExp = enabled;
 	}
 	
 	public double getUnderlingDamageModifier()
@@ -172,6 +193,7 @@ public class Echeladder
 	{
 		nbt.setInteger("rung", rung);
 		nbt.setInteger("rungProgress", progress);
+		nbt.setBoolean("canGainEcheExp", canGainEcheExp);
 		
 		byte[] bonuses = new byte[ALCHEMY_BONUS_OFFSET + alchemyBonuses.length];	//Booleans would be stored as bytes anyways
 		for(int i = 0; i < underlingBonuses.length; i++)
@@ -185,6 +207,7 @@ public class Echeladder
 	{
 		rung = nbt.getInteger("rung");
 		progress = nbt.getInteger("rungProgress");
+		canGainEcheExp = nbt.getBoolean("canGainEcheExp");
 		
 		byte[] bonuses = nbt.getByteArray("rungBonuses");
 		for(int i = 0; i < underlingBonuses.length && i + UNDERLING_BONUS_OFFSET < bonuses.length; i++)
