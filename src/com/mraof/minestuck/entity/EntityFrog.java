@@ -769,6 +769,6 @@ public class EntityFrog extends EntityMinestuck
 
 	public static boolean isAreaClearOfEntityType(Entity entity)
 	{
-		return landAnimalSpawnRange == 0 || entity.world.getEntities(entity.getClass(), (entity1) -> entity.getDistance(entity1) < landAnimalSpawnRange).isEmpty();
+		return landAnimalSpawnRange == 0 || entity.world.getEntities(entity.getClass(), (entity1) -> entity.getDistanceSq(entity1) < landAnimalSpawnRange * landAnimalSpawnRange).isEmpty();
 	}
 }
