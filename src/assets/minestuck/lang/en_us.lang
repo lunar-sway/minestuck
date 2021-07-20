@@ -673,6 +673,7 @@ entity.minestuck.prospitianRook.name=Prospitian Rook
 
 #Consort Names
 entity.minestuck.frog.name=Frog
+entity.minestuck.rabbitMedium.name=Rabbit
 entity.minestuck.salamander.name=Salamander
 entity.minestuck.nakagator.name=Nakagator
 entity.minestuck.iguana.name=Iguana
@@ -1256,6 +1257,8 @@ minestuck.config.alchemiterMaxStacks=Alchemiter Max Stacks
 minestuck.config.alchemiterMaxStacks.tooltip=The number of stacks that can be alchemized at the same time with the alchemiter.
 minestuck.config.skaianetCheck=Skaianet Check
 minestuck.config.skaianetCheck.tooltip=If enabled, will during certain moments perform a check on all connections and computers that are in use. Recommended to turn off if there is a need to improve performance, however skaianet-related bugs might appear when done so.
+minestuck.config.landAnimalSpawnRange=Land Animal Spawn Range
+minestuck.config.landAnimalSpawnRange.tooltip=The distance between spawns of a Land's animals, eg frogs and rabbits. You will regret it if this is a low number.
 
 #Chat Messages
 message.selectDefaultColor=Default color selected. You can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!

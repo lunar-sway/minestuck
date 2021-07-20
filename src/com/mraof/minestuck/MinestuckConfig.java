@@ -108,6 +108,7 @@ public class MinestuckConfig
 	 */
 	public static byte sylladexDropMode;
 	public static byte dataCheckerPermission;
+	public static int landAnimalSpawnRange = 5;
 	
 	public static boolean[] deployConfigurations;
 	
@@ -252,6 +253,8 @@ public class MinestuckConfig
 		else if(setting.equals("gamemode")) dataCheckerPermission = 2;
 		else if(setting.equals("anyone")) dataCheckerPermission = 4;
 		else dataCheckerPermission = 3;
+
+		landAnimalSpawnRange = config.get("General", "landAnimalSpawnRange", 5, "The distance between spawns of a Land's animals, eg frogs and rabbits.", 0, 64).setLanguageKey("minestuck.config.landAnimalSpawnRange").getInt();
 		
 		if(gameSide.isClient())	//Client sided config values
 		{

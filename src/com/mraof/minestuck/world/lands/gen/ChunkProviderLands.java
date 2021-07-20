@@ -242,7 +242,7 @@ public class ChunkProviderLands implements IChunkGenerator
 			break;
 		case CREATURE:
 			list.addAll(this.consortList);
-			list.addAll(animalList);
+			list.addAll(this.animalList);
 			break;
 		case AMBIENT:
 			list.addAll(this.ambientMobsList);

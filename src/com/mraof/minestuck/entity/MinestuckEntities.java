@@ -38,6 +38,7 @@ public final class MinestuckEntities
 	{
 		//register entities
 		registerEntity(EntityFrog.class, "frog", 1100060, 11656884);
+		registerEntity(EntityRabbitMedium.class, "rabbitMedium", "rabbit_medium");
 		registerEntity(EntitySalamander.class, EnumConsort.SALAMANDER.getName());
 		registerEntity(EntityNakagator.class, EnumConsort.NAKAGATOR.getName());
 		registerEntity(EntityIguana.class, EnumConsort.IGUANA.getName());
