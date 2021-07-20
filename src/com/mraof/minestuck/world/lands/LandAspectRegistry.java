@@ -287,8 +287,6 @@ public class LandAspectRegistry
 		if(id != newLandId)			//This happens iff the player has a "home dimension" Land already registered
 			newLandId = id;
 		
-		MinestuckPlayerTracker.updateLands();
-		
 		return newLandId;
 	}
 	
