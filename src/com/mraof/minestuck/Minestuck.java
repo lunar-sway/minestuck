@@ -47,6 +47,8 @@ public class Minestuck
 	public static CommonProxy proxy;
 
 	public static long worldSeed = 0;	//TODO proper usage of seed when generating titles, land aspects, and land dimension data
+
+	public static final long startTime = System.currentTimeMillis(); // Yes I'm being very stupid, for render effects
 	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) 

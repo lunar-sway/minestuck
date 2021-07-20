@@ -21,7 +21,7 @@ public class TileEntityGate extends TileEntity
 	
 	@SideOnly(Side.CLIENT)
 	public int colorIndex;
-	
+
 	public int gateCount;
 	
 	public void teleportEntity(World world, EntityPlayerMP player, Block block)
@@ -104,5 +104,5 @@ public class TileEntityGate extends TileEntity
 	{
 		return isGate() ? 65536.0D : 4096.0D;
 	}
-	
+
 }
