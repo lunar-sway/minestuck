@@ -9,7 +9,10 @@ import com.mraof.minestuck.network.GristCachePacket;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.PlayerDataPacket;
+import com.mraof.minestuck.network.skaianet.SburbConnection;
+import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -156,6 +159,17 @@ public class MinestuckPlayerData
 		if(player != null)
 			MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(MinestuckPacket.Type.PLAYER_DATA, PlayerDataPacket.BOONDOLLAR, data.boondollars), player);
 		return true;
+	}
+
+	public static boolean hasEntered(EntityLivingBase entity)
+	{
+		if (!(entity instanceof EntityPlayer))
+			return false;
+
+		IdentifierHandler.PlayerIdentifier targetIdentifier = IdentifierHandler.encode((EntityPlayer) entity);
+		SburbConnection tC = SkaianetHandler.getMainConnection(targetIdentifier, true);
+
+		return tC != null && tC.enteredGame();
 	}
 	
 	public static class PlayerData
