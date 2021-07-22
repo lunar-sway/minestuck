@@ -2,6 +2,7 @@ package com.mraof.minestuck.event;
 
 import com.google.common.collect.Sets;
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.world.storage.loot.MSLootTables;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.LootTables;
@@ -22,7 +23,7 @@ public class MSLootEvents
 	{
 		if(LOOT_INJECT.contains(event.getName()))
 		{
-			LootPool pool = LootPool.builder().addEntry(TableLootEntry.builder(new ResourceLocation(Minestuck.MOD_ID, "chests/injections/dungeon_inject")).weight(1).quality(1)).name("dungeon_loot_inject").build();
+			LootPool pool = LootPool.builder().addEntry(TableLootEntry.builder(MSLootTables.DUNGEON_LOOT_INJECT)).name("dungeon_loot_inject").build();
 			event.getTable().addPool(pool);
 		}
 	}

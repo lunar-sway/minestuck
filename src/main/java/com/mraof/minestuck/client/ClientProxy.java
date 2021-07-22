@@ -83,8 +83,6 @@ public class ClientProxy
 		RenderTypeLookup.setRenderLayer(MSBlocks.CHESSBOARD, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.MINI_FROG_STATUE, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.MINI_WIZARD_STATUE, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_TOP, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.CASSETTE_PLAYER, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.PIPE, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.PARCEL_PYXIS, RenderType.getCutout());

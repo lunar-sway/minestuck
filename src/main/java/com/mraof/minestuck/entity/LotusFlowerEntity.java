@@ -39,8 +39,6 @@ import java.util.Collections;
 
 public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEntityAdditionalSpawnData
 {
-	private static final int RESTORATION_TIME = MinestuckConfig.SERVER.lotusRestorationTime.get() * 20;    //600(default) seconds from animation start to flower restoration
-	
 	// Animation lengths
 	private static final int OPENING_LENGTH = 120;        //6 sec open animation * 20 ticks/sec = 120
 	private static final int OPEN_IDLE_LENGTH = 320;    //4 sec idle animation * 4 loops * 20 ticks/sec = 320
@@ -128,7 +126,7 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 			
 			if(eventTimer == OPEN_IDLE_START)
 				spawnLoot();
-			else if(eventTimer >= RESTORATION_TIME)
+			else if(eventTimer >= MinestuckConfig.SERVER.lotusRestorationTime.get() * 20) //600(default) seconds from animation start to flower restoration
 				setEventTimer(IDLE_TIME);
 		}
 	}

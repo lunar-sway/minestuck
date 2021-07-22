@@ -17,16 +17,11 @@ import java.util.Map;
 public class LotusTimeCapsuleBlock extends MultiMachineBlock
 {
 	protected final Map<Direction, VoxelShape> shape;
-	protected final boolean recursive, corner;
-	protected final BlockPos mainPos;
 	
-	public LotusTimeCapsuleBlock(MachineMultiblock machine, CustomVoxelShape shape, boolean recursive, boolean corner, BlockPos mainPos, Properties properties)
+	public LotusTimeCapsuleBlock(MachineMultiblock machine, CustomVoxelShape shape, Properties properties)
 	{
 		super(machine, properties);
 		this.shape = shape.createRotatedShapes();
-		this.recursive = recursive;
-		this.corner = corner;
-		this.mainPos = mainPos;
 	}
 	
 	@Override

@@ -61,7 +61,7 @@ Adds Homestuck to your Minecraft!
 [[dependencies.minestuck]]
     modId="geckolib3"
     mandatory=true
-    versionRange="[3.0.32]"
+    versionRange="[3.0,)"
     ordering="NONE"
     side="BOTH"
 
