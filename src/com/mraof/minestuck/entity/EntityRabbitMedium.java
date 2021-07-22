@@ -25,6 +25,6 @@ public class EntityRabbitMedium extends EntityRabbit
 	{
 		// Gotta override all the way down :/
 		IBlockState iblockstate = this.world.getBlockState((new BlockPos(this)).down());
-		return iblockstate.canEntitySpawn(this) && isAreaClearOfEntityType(this);
+		return iblockstate.canEntitySpawn(this);
 	}
 }

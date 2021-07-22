@@ -760,15 +760,4 @@ public class EntityFrog extends EntityMinestuck
 	{
 		return true;
 	}
-
-	@Override
-	public boolean getCanSpawnHere()
-	{
-		return super.getCanSpawnHere() && isAreaClearOfEntityType(this);
-	}
-
-	public static boolean isAreaClearOfEntityType(Entity entity)
-	{
-		return landAnimalSpawnRange == 0 || entity.world.getEntities(entity.getClass(), (entity1) -> entity.getDistanceSq(entity1) < landAnimalSpawnRange * landAnimalSpawnRange).isEmpty();
-	}
 }

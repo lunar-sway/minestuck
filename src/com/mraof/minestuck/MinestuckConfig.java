@@ -108,7 +108,7 @@ public class MinestuckConfig
 	 */
 	public static byte sylladexDropMode;
 	public static byte dataCheckerPermission;
-	public static int landAnimalSpawnRange = 5;
+	public static int landAnimalSpawnAmount = 10;
 	
 	public static boolean[] deployConfigurations;
 	
@@ -254,7 +254,7 @@ public class MinestuckConfig
 		else if(setting.equals("anyone")) dataCheckerPermission = 4;
 		else dataCheckerPermission = 3;
 
-		landAnimalSpawnRange = config.get("General", "landAnimalSpawnRange", 5, "The distance between spawns of a Land's animals, eg frogs and rabbits.", 0, 64).setLanguageKey("minestuck.config.landAnimalSpawnRange").getInt();
+		landAnimalSpawnAmount = config.get("General", "landAnimalSpawnAmount", 10, "The maximum number of Land animals (eg frogs and rabbits) in a spawn cluster.", 4, 32).setLanguageKey("minestuck.config.landAnimalSpawnAmount").getInt();
 		
 		if(gameSide.isClient())	//Client sided config values
 		{

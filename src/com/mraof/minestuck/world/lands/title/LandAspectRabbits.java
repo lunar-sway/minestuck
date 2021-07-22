@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.lands.title;
 
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entity.EntityFrog;
 import com.mraof.minestuck.entity.EntityRabbitMedium;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
@@ -35,7 +36,7 @@ public class LandAspectRabbits extends TitleLandAspect
 		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.PINK));
 		chunkProvider.blockRegistry.setBlockState("carpet", Blocks.CARPET.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.SILVER));
 
-		chunkProvider.ambientMobsList.add(new Biome.SpawnListEntry(EntityRabbitMedium.class, 1, 1, 1));
+		chunkProvider.monsterList.add(new Biome.SpawnListEntry(EntityRabbitMedium.class, 10, MinestuckConfig.landAnimalSpawnAmount - 4, MinestuckConfig.landAnimalSpawnAmount));
 
 		chunkProvider.decorators.add(new RabbitHoleDecorator(BiomeMinestuck.mediumNormal, BiomeMinestuck.mediumRough));
 		chunkProvider.sortDecorators();
