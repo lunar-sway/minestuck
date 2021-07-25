@@ -1595,6 +1595,7 @@
   "minestuck.connect_message": "Connected to %s",
   "minestuck.default_color_selected": "Default color selected. You can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!",
   "minestuck.deploy_list": "Deploy List",
+  "minestuck.dialogue": "Dialogue",
   "minestuck.echeladder": "Echeladder",
   "minestuck.echeladder.attack": "Attack",
   "minestuck.echeladder.cache": "Cache Limit",

@@ -15,7 +15,9 @@ import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ResourceLocation;
 
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -91,5 +93,11 @@ public class MSScreenFactories
 		Screen currentScreen = Minecraft.getInstance().currentScreen;
 		if(currentScreen instanceof SylladexScreen)
 			((SylladexScreen) currentScreen).updateContent();
+	}
+	
+	public static void displayDialogueScreen(List<String> paragraphs)
+	{
+		ResourceLocation test = new ResourceLocation("minestuck", "textures/gui/dialogue/salamander.png");
+		Minecraft.getInstance().displayGuiScreen(new PortraitDialogueScreen(paragraphs, test));
 	}
 }

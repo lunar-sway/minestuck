@@ -23,6 +23,9 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.glfw.GLFW;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class MSKeyHandler
 {
@@ -39,6 +42,8 @@ public class MSKeyHandler
 	public static KeyBinding effectToggleKey;
 	public static KeyBinding sylladexKey;
 	
+	public static KeyBinding testKey;
+	
 	public static void registerKeys()
 	{
 		if(statKey != null)
@@ -53,6 +58,9 @@ public class MSKeyHandler
 		effectToggleKey = new KeyBinding(ASPECT_EFFECT_TOGGLE, KeyConflictContext.IN_GAME, InputMappings.Type.KEYSYM, GLFW.GLFW_KEY_BACKSLASH, CATEGORY);
 		ClientRegistry.registerKeyBinding(effectToggleKey);
 		sylladexKey = new KeyBinding(SYLLADEX, GLFW.GLFW_KEY_UNKNOWN, CATEGORY);
+		ClientRegistry.registerKeyBinding(sylladexKey);
+		
+		testKey = new KeyBinding("key.minestuck.dialoguetest", GLFW.GLFW_KEY_J, CATEGORY);
 		ClientRegistry.registerKeyBinding(sylladexKey);
 	}
 	
@@ -94,6 +102,16 @@ public class MSKeyHandler
 			
 			if(sylladexKey.isActiveAndMatches(input) && ClientPlayerData.getModus() != null)
 				MSScreenFactories.displaySylladexScreen(ClientPlayerData.getModus());
+			
+			if(testKey.isActiveAndMatches(input)) {
+				List<String> paragraphs = new ArrayList<String>();
+				
+				paragraphs.add("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.");
+				paragraphs.add("Lobortis elementum nibh tellus molestie. Velit egestas dui id ornare arcu odio ut. Quis risus sed vulputate odio ut enim blandit. Tortor consequat id porta nibh. Dolor morbi non arcu risus quis varius quam quisque.");
+				paragraphs.add("Sit amet consectetur adipiscing elit duis. Nunc vel risus commodo viverra. Justo eget magna fermentum iaculis. Fermentum odio eu feugiat pretium nibh ipsum consequat nisl. Risus pretium quam vulputate dignissim suspendisse in est ante in. Tortor pretium viverra suspendisse potenti.");
+				MSScreenFactories.displayDialogueScreen(paragraphs);
+			}
+			
 		}
 		
 	}
