@@ -10,11 +10,6 @@
       },
       "entries": [
         {
-          "type": "minestuck:overworld_table",
-          "name": "minestuck:chests/frog_temple",
-          "pool": "weapons"
-        },
-        {
           "type": "minecraft:item",
           "weight": 5,
           "quality": 1,
@@ -276,11 +271,6 @@
         "type": "minecraft:uniform"
       },
       "entries": [
-        {
-          "type": "minestuck:land_table",
-          "name": "minestuck:chests/frog_temple",
-          "pool": "supplies"
-        },
         {
           "type": "minecraft:item",
           "weight": 2,

@@ -8,7 +8,6 @@ import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import com.mraof.minestuck.world.storage.loot.LandTableLootEntry;
 import com.mraof.minestuck.world.storage.loot.MSLootTables;
-import com.mraof.minestuck.world.storage.loot.OverworldTableLootEntry;
 import com.mraof.minestuck.world.storage.loot.functions.SetBoondollarCount;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
@@ -33,12 +32,10 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 	{
 		lootProcessor.accept(MSLootTables.DUNGEON_LOOT_INJECT, LootTable.builder()
 				.addLootPool(LootPool.builder().name("minestuck").rolls(RandomValueRange.of(0, 1))
-						.addEntry(OverworldTableLootEntry.builder(MSLootTables.DUNGEON_LOOT_INJECT).setPool("minestuck"))
 						.addEntry(ItemLootEntry.builder(MSItems.BLANK_DISK).weight(1).quality(1).acceptFunction(SetCount.builder(RandomValueRange.of(0, 2))))));
 		
 		lootProcessor.accept(MSLootTables.FROG_TEMPLE_CHEST, LootTable.builder()
 				.addLootPool(LootPool.builder().name(WEAPONS_POOL).rolls(RandomValueRange.of(0, 2))
-						.addEntry(OverworldTableLootEntry.builder(MSLootTables.FROG_TEMPLE_CHEST).setPool(WEAPONS_POOL))
 						.addEntry(ItemLootEntry.builder(Items.BOW).weight(5).quality(1).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.75F, 1.0F))))
 						.addEntry(ItemLootEntry.builder(Items.STONE_SWORD).weight(5).quality(-1).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.75F, 1.0F))))
 						.addEntry(ItemLootEntry.builder(Items.IRON_SWORD).weight(3).quality(1).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.75F, 1.0F))))
@@ -57,7 +54,6 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.addEntry(ItemLootEntry.builder(MSItems.LUCERNE_HAMMER).weight(1).quality(2).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.75F, 1.0F))))
 						.addEntry(ItemLootEntry.builder(MSItems.FORK).weight(4).quality(-1).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.75F, 1.0F)))))
 				.addLootPool(LootPool.builder().name(SUPPLIES_POOL).rolls(RandomValueRange.of(2, 6))
-						.addEntry(LandTableLootEntry.builder(MSLootTables.FROG_TEMPLE_CHEST).setPool(SUPPLIES_POOL))
 						.addEntry(ItemLootEntry.builder(Items.GOLD_INGOT).weight(2).quality(2).acceptFunction(SetCount.builder(RandomValueRange.of(2, 5))))
 						.addEntry(ItemLootEntry.builder(Items.DIAMOND).weight(1).quality(3).acceptFunction(SetCount.builder(RandomValueRange.of(1, 3))))
 						.addEntry(ItemLootEntry.builder(Items.PUMPKIN).weight(3).quality(-1).acceptFunction(SetCount.builder(RandomValueRange.of(1, 5))))

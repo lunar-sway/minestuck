@@ -1,116 +1,67 @@
 package com.mraof.minestuck.world.gen.feature.structure;
 
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.block.MSDirectionalBlock;
 import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
-import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.feature.structure.ScatteredStructurePiece;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 
 import java.util.Random;
 
-public class FrogTemplePillarPiece extends FrogTemplePiece
+public class FrogTemplePillarPiece extends ScatteredStructurePiece
 {
-	public FrogTemplePillarPiece(ChunkGenerator<?> generator, Random random, int x, int z)
+	private final boolean eroded;
+	private final boolean uraniumFilled;
+	private final int randReduction;
+	
+	public FrogTemplePillarPiece(ChunkGenerator<?> generator, Random random, int x, int y, int z) //this constructor is used when the structure is first initialized
 	{
-		super(MSStructurePieces.FROG_TEMPLE_PILLAR, random, x - 70, 64, z - 70, 140, 100, 140);
+		super(MSStructurePieces.FROG_TEMPLE_PILLAR, random, x - 2, y, z - 2, 5, 46, 5);
+		eroded = random.nextBoolean();
+		uraniumFilled = random.nextBoolean();
+		randReduction = random.nextInt(10);
 	}
 	
-	public FrogTemplePillarPiece(TemplateManager templates, CompoundNBT nbt)
+	public FrogTemplePillarPiece(TemplateManager templates, CompoundNBT nbt) //this constructor is used for reading from data
 	{
 		super(MSStructurePieces.FROG_TEMPLE_PILLAR, nbt);
+		eroded = nbt.getBoolean("eroded");
+		uraniumFilled = nbt.getBoolean("uraniumFilled");
+		randReduction = nbt.getInt("randReduction");
 	}
 	
 	@Override
-	protected void readAdditional(CompoundNBT tagCompound)
+	protected void readAdditional(CompoundNBT tagCompound) //actually writeAdditional
 	{
-	
+		tagCompound.putBoolean("eroded", eroded);
+		tagCompound.putBoolean("uraniumFilled", uraniumFilled);
+		tagCompound.putInt("randReduction", randReduction);
+		super.readAdditional(tagCompound);
 	}
 	
-	@Override
-	protected BlockPos getRelativeGatePos()
-	{
-		return new BlockPos(1, 24, 1);
-	}
-
+	
 	@Override
 	public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGenerator, Random randomIn, MutableBoundingBox boundingBoxIn, ChunkPos chunkPosIn)
 	{
-		StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGenerator.getSettings());
-		
-		BlockState ground = blocks.getBlockState("ground");
-		
-		fillWithBlocks(worldIn, boundingBoxIn, 0, 0, 1, 2, 20, 1, ground, ground, false);
-		fillWithBlocks(worldIn, boundingBoxIn, 1, 0, 0, 1, 20, 0, ground, ground, false);
-		fillWithBlocks(worldIn, boundingBoxIn, 1, 0, 2, 1, 20, 2, ground, ground, false);
-		
-		for(int y = 0; y <= 20; y++)
+		BlockState columnBlock = MSBlocks.GREEN_STONE_COLUMN.getDefaultState().with(MSDirectionalBlock.FACING, Direction.UP);
+		if(eroded)
 		{
-			randomlyPlaceBlock(worldIn, boundingBoxIn, randomIn, 0.5F, 0, y, 0, ground);
-			randomlyPlaceBlock(worldIn, boundingBoxIn, randomIn, 0.5F, 2, y, 0, ground);
-			randomlyPlaceBlock(worldIn, boundingBoxIn, randomIn, 0.5F, 0, y, 2, ground);
-			randomlyPlaceBlock(worldIn, boundingBoxIn, randomIn, 0.5F, 2, y, 2, ground);
+			fillWithBlocks(worldIn, boundingBoxIn, 1, -20, 1, 3, 40 - randReduction, 3, columnBlock, columnBlock, false);
+		} else
+		{
+			Block innerBlock = uraniumFilled ? MSBlocks.URANIUM_BLOCK : MSBlocks.CRUXITE_BLOCK;
+			fillWithBlocks(worldIn, boundingBoxIn, 1, -20, 1, 3, 40, 3, columnBlock, columnBlock, false);
+			fillWithBlocks(worldIn, boundingBoxIn, 0, 41, 0, 4, 45, 4, MSBlocks.GREEN_STONE.getDefaultState(), innerBlock.getDefaultState(), false); //top of pillar with a randomly filled center picked by uraniumFilled
 		}
-
-		super.create(worldIn, chunkGenerator, randomIn, boundingBoxIn, chunkPosIn);
 		
 		return true;
-	}
-	
-	private void buildPillars(BlockState block, IWorld world, MutableBoundingBox boundingBox, Random random) //TODO pieces of pillars often fail to generate, which is why it is not in use currently
-	{
-		if(random.nextBoolean())
-		{
-			if(random.nextBoolean())
-			{
-				fillWithBlocks(world, boundingBox, 19 + 20, -20, 1, 22, 30, 4, block, block, false); //front/south pillar
-				fillWithBlocks(world, boundingBox, 18 + 20, 31, 0, 23 + 20, 36, 5, MSBlocks.GREEN_STONE.getDefaultState(), MSBlocks.CRUXITE_BLOCK.getDefaultState(), false);
-			} else
-			{
-				int randReduction = random.nextInt(5);
-				fillWithBlocks(world, boundingBox, 18 + 20, -20, 1, 23, 30 - randReduction, 4, block, block, false); //front/south pillar
-			}
-		}
-		if(random.nextBoolean())
-		{
-			if(random.nextBoolean())
-			{
-				fillWithBlocks(world, boundingBox, 1, -20, 57 + 20, 4, 30, 60 + 20, block, block, false); //west pillar
-				fillWithBlocks(world, boundingBox, 0, 31, 56 + 20, 5, 36, 61 + 20, MSBlocks.GREEN_STONE.getDefaultState(), MSBlocks.URANIUM_BLOCK.getDefaultState(), false);
-			} else
-			{
-				int randReduction = random.nextInt(5);
-				fillWithBlocks(world, boundingBox, 1, -20, 57 + 20, 4, 30 - randReduction, 60 + 20, block, block, false); //west pillar
-			}
-		}
-		if(random.nextBoolean())
-		{
-			if(random.nextBoolean())
-			{
-				fillWithBlocks(world, boundingBox, 18 + 20, -20, 103 + 20, 21 + 20, 30, 108 + 20, block, block, false); //north pillar
-				fillWithBlocks(world, boundingBox, 17 + 20, 31, 102 + 20, 22 + 20, 36, 109 + 20, MSBlocks.GREEN_STONE.getDefaultState(), MSBlocks.CRUXITE_BLOCK.getDefaultState(), false);
-			} else
-			{
-				int randReduction = random.nextInt(5);
-				fillWithBlocks(world, boundingBox, 18 + 20, -20, 103 + 20, 21 + 20, 30 - randReduction, 108 + 20, block, block, false); //north pillar
-			}
-		}
-		if(random.nextBoolean())
-		{
-			if(random.nextBoolean())
-			{
-				fillWithBlocks(world, boundingBox, 67 + 20, -20, 57 + 20, 70 + 20, 30, 60 + 20, block, block, false); //east pillar
-				fillWithBlocks(world, boundingBox, 66 + 20, 31, 56 + 20, 71 + 20, 36, 61 + 20, MSBlocks.GREEN_STONE.getDefaultState(), MSBlocks.URANIUM_BLOCK.getDefaultState(), false);
-			} else
-			{
-				int randReduction = random.nextInt(5);
-				fillWithBlocks(world, boundingBox, 67 + 20, -20, 57 + 20, 70 + 20, 30 - randReduction, 60 + 20, block, block, false); //east pillar
-			}
-		}
 	}
 }

@@ -7,7 +7,6 @@ import com.mraof.minestuck.block.MSDirectionalBlock;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.LotusFlowerEntity;
 import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
-import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockUtil;
 import com.mraof.minestuck.world.storage.loot.MSLootTables;
 import net.minecraft.block.*;
@@ -36,7 +35,7 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 	
 	public FrogTemplePiece(ChunkGenerator<?> generator, Random random, int x, int z)
 	{
-		super(MSStructurePieces.FROG_TEMPLE, random, x - 70, 64, z - 70, 140, 100, 140);
+		super(MSStructurePieces.FROG_TEMPLE, random, x - 21, 64, z - 35, 42, 100, 70);
 		
 		int posHeightPicked = Integer.MAX_VALUE;
 		for(int xPos = boundingBox.minX; xPos <= boundingBox.maxX; xPos++)
@@ -64,7 +63,7 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 		
 		for(int a = 0; a < 7; a++)
 		{
-			buildMainPlatform(wallBlock, worldIn, randomIn, boundingBoxIn, a);
+			buildMainPlatform(wallBlock, worldIn, boundingBoxIn, a);
 		}
 		
 		buildStairsAndUnderneath(wallBlock, worldIn, boundingBoxIn);
@@ -73,17 +72,16 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 		buildIndoorBlocks(columnBlock, worldIn, boundingBoxIn);
 		generateLoot(worldIn, boundingBoxIn, randomIn, chunkPosIn);
 		buildFrog(stoneBlock, worldIn, boundingBoxIn);
-		//buildPillars(columnBlock, worldIn, boundingBoxIn, randomIn);
 		
 		return true;
 	}
 	
 	private void generateLoot(IWorld worldIn, MutableBoundingBox boundingBoxIn, Random randomIn, ChunkPos chunkPos)
 	{
-		setBlockState(worldIn, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.CORNER.get().getDefaultState().with(LotusTimeCapsuleBlock.FACING, Direction.EAST), 21 + 20, 49, 20 + 38 + 20, boundingBox);
-		setBlockState(worldIn, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.CORNER.get().getDefaultState().with(LotusTimeCapsuleBlock.FACING, Direction.NORTH), 21 + 20, 49, 21 + 38 + 20, boundingBox);
-		setBlockState(worldIn, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.CORNER.get().getDefaultState().with(LotusTimeCapsuleBlock.FACING, Direction.WEST), 20 + 20, 49, 21 + 38 + 20, boundingBox);
-		setBlockState(worldIn, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.CORNER.get().getDefaultState().with(LotusTimeCapsuleBlock.FACING, Direction.SOUTH), 20 + 20, 49, 20 + 38 + 20, boundingBox);
+		setBlockState(worldIn, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.CORNER.get().getDefaultState().with(LotusTimeCapsuleBlock.FACING, Direction.EAST), 21, 49, 20 + 14, boundingBox);
+		setBlockState(worldIn, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.CORNER.get().getDefaultState().with(LotusTimeCapsuleBlock.FACING, Direction.NORTH), 21, 49, 21 + 14, boundingBox);
+		setBlockState(worldIn, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.CORNER.get().getDefaultState().with(LotusTimeCapsuleBlock.FACING, Direction.WEST), 20, 49, 21 + 14, boundingBox);
+		setBlockState(worldIn, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.CORNER.get().getDefaultState().with(LotusTimeCapsuleBlock.FACING, Direction.SOUTH), 20, 49, 20 + 14, boundingBox);
 		
 		ChestType leftChestType = ChestType.LEFT;
 		ChestType rightChestType = ChestType.RIGHT;
@@ -93,33 +91,33 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 			rightChestType = ChestType.LEFT;
 		}
 		
-		BlockPos chestFarPos = new BlockPos(this.getXWithOffset(21 + 20, 12 + 38 + 20), this.getYWithOffset(21), this.getZWithOffset(21 + 20, 12 + 38 + 20));
-		fillWithBlocks(worldIn, boundingBoxIn, 20 + 20, 20, 12 + 38 + 20, 21 + 20, 20, 12 + 38 + 20, MSBlocks.GREEN_STONE_BRICK_STAIRS.getDefaultState().with(StairsBlock.HALF, Half.TOP).with(StairsBlock.FACING, Direction.SOUTH), MSBlocks.GREEN_STONE_BRICK_STAIRS.getDefaultState(), false);
+		BlockPos chestFarPos = new BlockPos(this.getXWithOffset(21, 12 + 14), this.getYWithOffset(21), this.getZWithOffset(21, 12 + 14));
+		fillWithBlocks(worldIn, boundingBoxIn, 20, 20, 12 + 14, 21, 20, 12 + 14, MSBlocks.GREEN_STONE_BRICK_STAIRS.getDefaultState().with(StairsBlock.HALF, Half.TOP).with(StairsBlock.FACING, Direction.SOUTH), MSBlocks.GREEN_STONE_BRICK_STAIRS.getDefaultState(), false);
 		StructureBlockUtil.placeLootChest(chestFarPos, worldIn, boundingBoxIn, getCoordBaseMode(), rightChestType, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
-		chestFarPos = new BlockPos(this.getXWithOffset(20 + 20, 12 + 38 + 20), this.getYWithOffset(21), this.getZWithOffset(20 + 20, 12 + 38 + 20));
+		chestFarPos = new BlockPos(this.getXWithOffset(20, 12 + 14), this.getYWithOffset(21), this.getZWithOffset(20, 12 + 14));
 		StructureBlockUtil.placeLootChest(chestFarPos, worldIn, boundingBoxIn, getCoordBaseMode(), leftChestType, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
 		
-		BlockPos chestNearDoorPos = new BlockPos(this.getXWithOffset(11 + 20, 29 + 38 + 20), this.getYWithOffset(21), this.getZWithOffset(11 + 20, 29 + 38 + 20));
-		fillWithBlocks(worldIn, boundingBoxIn, 10 + 20, 20, 29 + 38 + 20, 11 + 20, 20, 29 + 38 + 20, MSBlocks.GREEN_STONE_BRICK_STAIRS.getDefaultState().with(StairsBlock.HALF, Half.TOP), MSBlocks.GREEN_STONE_BRICK_STAIRS.getDefaultState(), false);
+		BlockPos chestNearDoorPos = new BlockPos(this.getXWithOffset(11, 29 + 14), this.getYWithOffset(21), this.getZWithOffset(11, 29 + 14));
+		fillWithBlocks(worldIn, boundingBoxIn, 10, 20, 29 + 14, 11, 20, 29 + 14, MSBlocks.GREEN_STONE_BRICK_STAIRS.getDefaultState().with(StairsBlock.HALF, Half.TOP), MSBlocks.GREEN_STONE_BRICK_STAIRS.getDefaultState(), false);
 		StructureBlockUtil.placeLootChest(chestNearDoorPos, worldIn, boundingBoxIn, getCoordBaseMode().getOpposite(), leftChestType, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
-		chestNearDoorPos = new BlockPos(this.getXWithOffset(10 + 20, 29 + 38 + 20), this.getYWithOffset(21), this.getZWithOffset(10 + 20, 29 + 38 + 20));
+		chestNearDoorPos = new BlockPos(this.getXWithOffset(10, 29 + 14), this.getYWithOffset(21), this.getZWithOffset(10, 29 + 14));
 		StructureBlockUtil.placeLootChest(chestNearDoorPos, worldIn, boundingBoxIn, getCoordBaseMode().getOpposite(), rightChestType, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
 		
-		//TODO Everything seems to generate several times over, first noticed with lotus flower entity, find better fix than below
+		//TODO Find out if there is a better fix than the createRan boolean to prevent the lotus entity from generating several times
 		if(!createRan)
 		{
 			LotusFlowerEntity lotusFlowerEntity = MSEntityTypes.LOTUS_FLOWER.create(worldIn.getWorld());
 			if(lotusFlowerEntity == null)
 				throw new IllegalStateException("Unable to create a new lotus flower. Entity factory returned null!");
-			lotusFlowerEntity.setLocationAndAngles(getEntityXWithOffset(21 + 20, 21 + 38 + 20), this.getYWithOffset(50), getEntityZWithOffset(21 + 20, 21 + 38 + 20), 0F, 0);
+			lotusFlowerEntity.setLocationAndAngles(getEntityXWithOffset(21, 21 + 14), this.getYWithOffset(50), getEntityZWithOffset(21, 21 + 14), 0F, 0);
 			worldIn.addEntity(lotusFlowerEntity);
 			createRan = true;
 		}
 	}
 	
-	private void buildMainPlatform(BlockState block, IWorld world, Random rand, MutableBoundingBox boundingBox, int a)
+	private void buildMainPlatform(BlockState block, IWorld world, MutableBoundingBox boundingBox, int a)
 	{
-		fillWithBlocks(world, boundingBox, a * 2 + 20, 8 * a, a * 2 + 38 + 20, (int) (40 * (1F - a / 20F)) + 1 + 20, (8 * a) + 8, (int) (40 * (1F - a / 20F)) + 1 + 38 + 20, block, block, false);
+		fillWithBlocks(world, boundingBox, a * 2, 8 * a, a * 2 + 14, (int) (40 * (1F - a / 20F)) + 1, (8 * a) + 8, (int) (40 * (1F - a / 20F)) + 1 + 14, block, block, false);
 	}
 	
 	private void buildStairsAndUnderneath(BlockState block, IWorld world, MutableBoundingBox boundingBox)
@@ -127,33 +125,33 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 		int pushUp = 0;
 		for(int i = 0; i < 24; i++)
 		{
-			fillWithBlocksCheckWater(world, boundingBox, 17 + 20, pushUp, i + 20 + 24, 24 + 20, pushUp, i + 20 + 24, MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE.getDefaultState().with(DecorBlock.FACING, this.getCoordBaseMode().getOpposite())); //stairs base
-			fillWithBlocksCheckWater(world, boundingBox, 17 + 20, pushUp + 1, i + 20 + 24, 24 + 20, pushUp + 1, i + 20 + 24, MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_TOP.getDefaultState().with(DecorBlock.FACING, this.getCoordBaseMode().getOpposite())); //stairs top
-			fillWithBlocks(world, boundingBox, 17 + 20, pushUp, i + 20 + 1 + 24, 24 + 20, pushUp, 50 + 20, MSBlocks.GREEN_STONE_BRICKS.getDefaultState(), MSBlocks.GREEN_STONE_BRICKS.getDefaultState(), false); //stairs base fill in
-			fillWithBlocks(world, boundingBox, 17 + 20, pushUp + 1, i + 20 + 1 + 24, 24 + 20, pushUp + 1, 50 + 20, MSBlocks.GREEN_STONE_BRICKS.getDefaultState(), MSBlocks.GREEN_STONE_BRICKS.getDefaultState(), false); //stairs top fill in
+			fillWithBlocksCheckWater(world, boundingBox, 17, pushUp, i, 24, pushUp, i, MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE.getDefaultState().with(DecorBlock.FACING, this.getCoordBaseMode().getOpposite())); //stairs base
+			fillWithBlocksCheckWater(world, boundingBox, 17, pushUp + 1, i, 24, pushUp + 1, i, MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_TOP.getDefaultState().with(DecorBlock.FACING, this.getCoordBaseMode().getOpposite())); //stairs top
+			fillWithBlocks(world, boundingBox, 17, pushUp, i + 1, 24, pushUp, 26, MSBlocks.GREEN_STONE_BRICKS.getDefaultState(), MSBlocks.GREEN_STONE_BRICKS.getDefaultState(), false); //stairs base fill in
+			fillWithBlocks(world, boundingBox, 17, pushUp + 1, i + 1, 24, pushUp + 1, 26, MSBlocks.GREEN_STONE_BRICKS.getDefaultState(), MSBlocks.GREEN_STONE_BRICKS.getDefaultState(), false); //stairs top fill in
 			pushUp = pushUp + 2; //allows the stairs height to increment twice as fast as sideways placement
 		}
 		
-		fillWithBlocksCheckWater(world, boundingBox, 17 + 20, 48, 24 + 20 + 24, 24 + 20, 48, 24 + 20 + 24, MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE.getDefaultState().with(DecorBlock.FACING, this.getCoordBaseMode().getOpposite())); //stairs base at top
-		fillWithBlocks(world, boundingBox, 17 + 20, -10, 20 + 24, 24 + 20, -1, 24 + 20 + 24, MSBlocks.GREEN_STONE_BRICKS.getDefaultState(), MSBlocks.GREEN_STONE_BRICKS.getDefaultState(), false); //underneath stairs
+		fillWithBlocksCheckWater(world, boundingBox, 17, 48, 24, 24, 48, 24, MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE.getDefaultState().with(DecorBlock.FACING, this.getCoordBaseMode().getOpposite())); //stairs base at top
+		fillWithBlocks(world, boundingBox, 17, -10, 20 + 24, 24, -1, 24, MSBlocks.GREEN_STONE_BRICKS.getDefaultState(), MSBlocks.GREEN_STONE_BRICKS.getDefaultState(), false); //underneath stairs
 		
-		fillWithBlocks(world, boundingBox, 20, -10, 38 + 20, 41 + 20, 0, 79 + 20, block, block, false); //underneath main platform
+		fillWithBlocks(world, boundingBox, 20, -10, 14, 41, 0, 55, block, block, false); //underneath main platform
 		for(int i = 0; i < 28; i++)
 		{
-			fillWithBlocks(world, boundingBox, i + 20, -i - 10, i + 38 + 20, 41 - i + 20, -i - 10, 79 - i + 20, block, block, false); //underneath main platform
+			fillWithBlocks(world, boundingBox, i, -i - 10, i + 14, 41 - i, -i - 10, 55 - i, block, block, false); //underneath main platform
 		}
 	}
 	
 	private void buildWallsAndFloors(BlockState block, IWorld world, MutableBoundingBox boundingBox, Random rand)
 	{
-		fillWithBlocks(world, boundingBox, 14 + 20, 48, 51 + 20, 27 + 20, 48, 65 + 20, block, block, false); //lotus room floor
-		fillWithRandomizedBlocks(world, boundingBox, 13 + 20, 50, 51 + 20, 28 + 20, 54, 66 + 20, true, rand, HIEROGLYPHS); //lotus room hieroglyphs
-		fillWithBlocks(world, boundingBox, 13 + 20, 49, 51 + 20, 28 + 20, 49, 66 + 20, MSBlocks.GREEN_STONE_BRICK_TRIM.getDefaultState().with(MSDirectionalBlock.FACING, Direction.UP), MSBlocks.GREEN_STONE_BRICK_TRIM.getDefaultState(), false); //lotus room trim floor
-		fillWithBlocks(world, boundingBox, 13 + 20, 55, 51 + 20, 28 + 20, 55, 66 + 20, MSBlocks.GREEN_STONE_BRICK_TRIM.getDefaultState().with(MSDirectionalBlock.FACING, Direction.DOWN), MSBlocks.GREEN_STONE_BRICK_TRIM.getDefaultState(), false); //lotus room trim ceiling
+		fillWithBlocks(world, boundingBox, 14, 48, 27, 27, 48, 41, block, block, false); //lotus room floor
+		fillWithRandomizedBlocks(world, boundingBox, 13, 50, 27, 28, 54, 42, true, rand, HIEROGLYPHS); //lotus room hieroglyphs
+		fillWithBlocks(world, boundingBox, 13, 49, 27, 28, 49, 42, MSBlocks.GREEN_STONE_BRICK_TRIM.getDefaultState().with(MSDirectionalBlock.FACING, Direction.UP), MSBlocks.GREEN_STONE_BRICK_TRIM.getDefaultState(), false); //lotus room trim floor
+		fillWithBlocks(world, boundingBox, 13, 55, 27, 28, 55, 42, MSBlocks.GREEN_STONE_BRICK_TRIM.getDefaultState().with(MSDirectionalBlock.FACING, Direction.DOWN), MSBlocks.GREEN_STONE_BRICK_TRIM.getDefaultState(), false); //lotus room trim ceiling
 		
-		fillWithRandomizedBlocks(world, boundingBox, 6 + 20, 6, 44 + 20, 35 + 20, 15, 73 + 20, true, rand, HIEROGLYPHS); //lower room hieroglyphs
-		fillWithBlocks(world, boundingBox, 6 + 20, 5, 44 + 20, 35 + 20, 5, 73 + 20, MSBlocks.GREEN_STONE_BRICK_TRIM.getDefaultState().with(MSDirectionalBlock.FACING, Direction.UP), MSBlocks.GREEN_STONE_BRICK_TRIM.getDefaultState(), false); //lotus room trim floor
-		fillWithBlocks(world, boundingBox, 6 + 20, 16, 44 + 20, 35 + 20, 16, 73 + 20, MSBlocks.GREEN_STONE_BRICK_TRIM.getDefaultState().with(MSDirectionalBlock.FACING, Direction.DOWN), MSBlocks.GREEN_STONE_BRICK_TRIM.getDefaultState(), false); //lotus room trim ceiling
+		fillWithRandomizedBlocks(world, boundingBox, 6, 6, 20, 35, 15, 49, true, rand, HIEROGLYPHS); //lower room hieroglyphs
+		fillWithBlocks(world, boundingBox, 6, 5, 20, 35, 5, 49, MSBlocks.GREEN_STONE_BRICK_TRIM.getDefaultState().with(MSDirectionalBlock.FACING, Direction.UP), MSBlocks.GREEN_STONE_BRICK_TRIM.getDefaultState(), false); //lotus room trim floor
+		fillWithBlocks(world, boundingBox, 6, 16, 20, 35, 16, 49, MSBlocks.GREEN_STONE_BRICK_TRIM.getDefaultState().with(MSDirectionalBlock.FACING, Direction.DOWN), MSBlocks.GREEN_STONE_BRICK_TRIM.getDefaultState(), false); //lotus room trim ceiling
 	}
 	
 	private void buildIndoorBlocks(BlockState columnBlock, IWorld world, MutableBoundingBox boundingBox)
@@ -163,95 +161,41 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 		{
 			for(int j = 0; j < 3; j++)
 			{
-				fillWithBlocks(world, boundingBox, 10 + 20 + i * 10, 5, 48 + 20 + j * 10, 11 + 20 + i * 10, 23, 49 + 20 + j * 10, columnBlock.with(MSDirectionalBlock.FACING, Direction.UP), columnBlock.with(MSDirectionalBlock.FACING, Direction.UP), false);
-				fillWithBlocks(world, boundingBox, 8 + 20 + i * 10, 16, 46 + 20 + j * 10, 13 + 20 + i * 10, 16, 51 + 20 + j * 10, MSBlocks.CHISELED_GREEN_STONE_BRICKS.getDefaultState(), MSBlocks.CHISELED_GREEN_STONE_BRICKS.getDefaultState(), false); //platform around columns
+				fillWithBlocks(world, boundingBox, 10 + i * 10, 5, 24 + j * 10, 11 + i * 10, 23, 25 + j * 10, columnBlock.with(MSDirectionalBlock.FACING, Direction.UP), columnBlock.with(MSDirectionalBlock.FACING, Direction.UP), false);
+				fillWithBlocks(world, boundingBox, 8 + i * 10, 16, 22 + j * 10, 13 + i * 10, 16, 27 + j * 10, MSBlocks.CHISELED_GREEN_STONE_BRICKS.getDefaultState(), MSBlocks.CHISELED_GREEN_STONE_BRICKS.getDefaultState(), false); //platform around columns
 			}
 		}
 		
 		//lower room stepping stones
-		fillWithBlocks(world, boundingBox, 24 + 20, 16, 68 + 20, 24 + 20, 16, 69 + 20, MSBlocks.CHISELED_GREEN_STONE_BRICKS.getDefaultState(), MSBlocks.CHISELED_GREEN_STONE_BRICKS.getDefaultState(), false); //first step
-		fillWithBlocks(world, boundingBox, 30 + 20, 16, 65 + 20, 31 + 20, 16, 65 + 20, MSBlocks.CHISELED_GREEN_STONE_BRICKS.getDefaultState(), MSBlocks.CHISELED_GREEN_STONE_BRICKS.getDefaultState(), false); //second step
-		fillWithBlocks(world, boundingBox, 27 + 20, 16, 58 + 20, 27 + 20, 16, 59 + 20, MSBlocks.CHISELED_GREEN_STONE_BRICKS.getDefaultState(), MSBlocks.CHISELED_GREEN_STONE_BRICKS.getDefaultState(), false); //third step
-		fillWithBlocks(world, boundingBox, 17 + 20, 16, 58 + 20, 17 + 20, 16, 59 + 20, MSBlocks.CHISELED_GREEN_STONE_BRICKS.getDefaultState(), MSBlocks.CHISELED_GREEN_STONE_BRICKS.getDefaultState(), false); //fourth step
-		fillWithBlocks(world, boundingBox, 10 + 20, 16, 55 + 20, 11 + 20, 16, 55 + 20, MSBlocks.CHISELED_GREEN_STONE_BRICKS.getDefaultState(), MSBlocks.CHISELED_GREEN_STONE_BRICKS.getDefaultState(), false); //fifth step
-		fillWithBlocks(world, boundingBox, 14 + 20, 16, 48 + 20, 14 + 20, 16, 49 + 20, MSBlocks.CHISELED_GREEN_STONE_BRICKS.getDefaultState(), MSBlocks.CHISELED_GREEN_STONE_BRICKS.getDefaultState(), false); //sixth step
+		fillWithBlocks(world, boundingBox, 24, 16, 44, 24, 16, 45, MSBlocks.CHISELED_GREEN_STONE_BRICKS.getDefaultState(), MSBlocks.CHISELED_GREEN_STONE_BRICKS.getDefaultState(), false); //first step
+		fillWithBlocks(world, boundingBox, 30, 16, 41, 31, 16, 41, MSBlocks.CHISELED_GREEN_STONE_BRICKS.getDefaultState(), MSBlocks.CHISELED_GREEN_STONE_BRICKS.getDefaultState(), false); //second step
+		fillWithBlocks(world, boundingBox, 27, 16, 34, 27, 16, 35, MSBlocks.CHISELED_GREEN_STONE_BRICKS.getDefaultState(), MSBlocks.CHISELED_GREEN_STONE_BRICKS.getDefaultState(), false); //third step
+		fillWithBlocks(world, boundingBox, 17, 16, 34, 17, 16, 35, MSBlocks.CHISELED_GREEN_STONE_BRICKS.getDefaultState(), MSBlocks.CHISELED_GREEN_STONE_BRICKS.getDefaultState(), false); //fourth step
+		fillWithBlocks(world, boundingBox, 10, 16, 31, 11, 16, 31, MSBlocks.CHISELED_GREEN_STONE_BRICKS.getDefaultState(), MSBlocks.CHISELED_GREEN_STONE_BRICKS.getDefaultState(), false); //fifth step
+		fillWithBlocks(world, boundingBox, 14, 16, 24, 14, 16, 25, MSBlocks.CHISELED_GREEN_STONE_BRICKS.getDefaultState(), MSBlocks.CHISELED_GREEN_STONE_BRICKS.getDefaultState(), false); //sixth step
 		
 		//lower room ladder
-		fillWithBlocks(world, boundingBox, 20 + 20, 5, 72 + 20, 21 + 20, 16, 72 + 20, Blocks.LADDER.getDefaultState().with(LadderBlock.FACING, Direction.SOUTH), Blocks.LADDER.getDefaultState(), false);
+		fillWithBlocks(world, boundingBox, 20, 5, 48, 21, 16, 48, Blocks.LADDER.getDefaultState().with(LadderBlock.FACING, Direction.SOUTH), Blocks.LADDER.getDefaultState(), false);
 	}
 	
 	private void carveRooms(IWorld world, MutableBoundingBox boundingBox)
 	{
-		fillWithAir(world, boundingBox, 14 + 20, 49, 52 + 20, 27 + 20, 55, 65 + 20); //lotus room
-		fillWithAirCheckWater(world, boundingBox, 19 + 20, 49, 49 + 20, 22 + 20, 52, 51 + 20); //lotus room entry
-		fillWithAir(world, boundingBox, 7 + 20, 5, 45 + 20, 34 + 20, 23, 72 + 20); //lower room
-		fillWithAirCheckWater(world, boundingBox, 19 + 20, 17, 71 + 20, 22 + 20, 20, 79 + 20); //lower room entry //TODO this entrance will occasionally generate below water and cause this to generate awkwardly
+		fillWithAir(world, boundingBox, 14, 49, 28, 27, 55, 41); //lotus room
+		fillWithAirCheckWater(world, boundingBox, 19, 49, 25, 22, 52, 27); //lotus room entry
+		fillWithAir(world, boundingBox, 7, 5, 21, 34, 23, 48); //lower room
+		fillWithAirCheckWater(world, boundingBox, 19, 17, 47, 22, 20, 55); //lower room entry //TODO this entrance will occasionally generate below water and cause this to generate awkwardly
 	}
-	
-	/*
-	private void buildPillars(BlockState block, IWorld world, MutableBoundingBox boundingBox, Random random) //TODO pieces of pillars often fail to generate, which is why it is not in use currently
-	{
-		if(random.nextBoolean())
-		{
-			if(random.nextBoolean())
-			{
-				fillWithBlocks(world, boundingBox, 19 + 20, -20, 1, 22, 30, 4, block, block, false); //front/south pillar
-				fillWithBlocks(world, boundingBox, 18 + 20, 31, 0, 23 + 20, 36, 5, MSBlocks.GREEN_STONE.getDefaultState(), MSBlocks.CRUXITE_BLOCK.getDefaultState(), false);
-			} else
-			{
-				int randReduction = random.nextInt(5);
-				fillWithBlocks(world, boundingBox, 18 + 20, -20, 1, 23, 30 - randReduction, 4, block, block, false); //front/south pillar
-			}
-		}
-		if(random.nextBoolean())
-		{
-			if(random.nextBoolean())
-			{
-				fillWithBlocks(world, boundingBox, 1, -20, 57 + 20, 4, 30, 60 + 20, block, block, false); //west pillar
-				fillWithBlocks(world, boundingBox, 0, 31, 56 + 20, 5, 36, 61 + 20, MSBlocks.GREEN_STONE.getDefaultState(), MSBlocks.URANIUM_BLOCK.getDefaultState(), false);
-			} else
-			{
-				int randReduction = random.nextInt(5);
-				fillWithBlocks(world, boundingBox, 1, -20, 57 + 20, 4, 30 - randReduction, 60 + 20, block, block, false); //west pillar
-			}
-		}
-		if(random.nextBoolean())
-		{
-			if(random.nextBoolean())
-			{
-				fillWithBlocks(world, boundingBox, 18 + 20, -20, 103 + 20, 21 + 20, 30, 108 + 20, block, block, false); //north pillar
-				fillWithBlocks(world, boundingBox, 17 + 20, 31, 102 + 20, 22 + 20, 36, 109 + 20, MSBlocks.GREEN_STONE.getDefaultState(), MSBlocks.CRUXITE_BLOCK.getDefaultState(), false);
-			} else
-			{
-				int randReduction = random.nextInt(5);
-				fillWithBlocks(world, boundingBox, 18 + 20, -20, 103 + 20, 21 + 20, 30 - randReduction, 108 + 20, block, block, false); //north pillar
-			}
-		}
-		if(random.nextBoolean())
-		{
-			if(random.nextBoolean())
-			{
-				fillWithBlocks(world, boundingBox, 67 + 20, -20, 57 + 20, 70 + 20, 30, 60 + 20, block, block, false); //east pillar
-				fillWithBlocks(world, boundingBox, 66 + 20, 31, 56 + 20, 71 + 20, 36, 61 + 20, MSBlocks.GREEN_STONE.getDefaultState(), MSBlocks.URANIUM_BLOCK.getDefaultState(), false);
-			} else
-			{
-				int randReduction = random.nextInt(5);
-				fillWithBlocks(world, boundingBox, 67 + 20, -20, 57 + 20, 70 + 20, 30 - randReduction, 60 + 20, block, block, false); //east pillar
-			}
-		}
-	}
-	 */
 	
 	private void buildFrog(BlockState block, IWorld world, MutableBoundingBox boundingBox)
 	{
-		fillWithBlocks(world, boundingBox, 23 + 20, 57, 14 + 38 + 20, 27 + 20, 58, 55 + 20, block, block, false); //right front leg
-		fillWithBlocks(world, boundingBox, 14 + 20, 57, 14 + 38 + 20, 18 + 20, 58, 55 + 20, block, block, false); //left front leg
-		fillWithBlocks(world, boundingBox, 23 + 20, 57, 23 + 38 + 20, 27 + 20, 61, 64 + 20, block, block, false); //right back leg
-		fillWithBlocks(world, boundingBox, 14 + 20, 57, 23 + 38 + 20, 18 + 20, 61, 64 + 20, block, block, false); //left back leg
-		fillWithBlocks(world, boundingBox, 16 + 20, 57, 16 + 38 + 20, 25 + 20, 65, 63 + 20, block, block, false); //body
-		fillWithBlocks(world, boundingBox, 15 + 20, 62, 14 + 38 + 20, 26 + 20, 67, 59 + 20, block, block, false); //head
-		fillWithBlocks(world, boundingBox, 23 + 20, 65, 15 + 38 + 20, 27 + 20, 68, 57 + 20, block, block, false); //right eye
-		fillWithBlocks(world, boundingBox, 14 + 20, 65, 15 + 38 + 20, 18 + 20, 68, 57 + 20, block, block, false); //left eye
+		fillWithBlocks(world, boundingBox, 23, 57, 14 + 14, 27, 58, 31, block, block, false); //right front leg
+		fillWithBlocks(world, boundingBox, 14, 57, 14 + 14, 18, 58, 31, block, block, false); //left front leg
+		fillWithBlocks(world, boundingBox, 23, 57, 23 + 14, 27, 61, 40, block, block, false); //right back leg
+		fillWithBlocks(world, boundingBox, 14, 57, 23 + 14, 18, 61, 40, block, block, false); //left back leg
+		fillWithBlocks(world, boundingBox, 16, 57, 16 + 14, 25, 65, 39, block, block, false); //body
+		fillWithBlocks(world, boundingBox, 15, 62, 14 + 14, 26, 67, 35, block, block, false); //head
+		fillWithBlocks(world, boundingBox, 23, 65, 15 + 14, 27, 68, 33, block, block, false); //right eye
+		fillWithBlocks(world, boundingBox, 14, 65, 15 + 14, 18, 68, 33, block, block, false); //left eye
 	}
 	
 	protected int getEntityXWithOffset(int x, int z)

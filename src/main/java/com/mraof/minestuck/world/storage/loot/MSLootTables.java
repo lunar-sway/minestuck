@@ -23,6 +23,5 @@ public class MSLootTables
 		LootConditionManager.registerCondition(new ConsortLootCondition.Serializer());
 		LootFunctionManager.registerFunction(new SetBoondollarCount.Serializer());
 		LootEntryManager.func_216194_a(new LandTableLootEntry.SerializerImpl());
-		LootEntryManager.func_216194_a(new OverworldTableLootEntry.SerializerImpl());
 	}
 }

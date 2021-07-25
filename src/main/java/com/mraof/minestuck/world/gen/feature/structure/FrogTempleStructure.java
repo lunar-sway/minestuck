@@ -65,8 +65,27 @@ public class FrogTempleStructure extends ScatteredStructure<NoFeatureConfig>
 		@Override
 		public void init(ChunkGenerator<?> generator, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn)
 		{
-			FrogTemplePiece piece = new FrogTemplePiece(generator, rand, chunkX * 16 + rand.nextInt(16), chunkZ * 16 + rand.nextInt(16));
-			components.add(piece);
+			int x = chunkX * 16 + rand.nextInt(16);
+			int z = chunkZ * 16 + rand.nextInt(16);
+			FrogTemplePiece mainPiece = new FrogTemplePiece(generator, rand, x, z);
+			components.add(mainPiece);
+			
+			int y = mainPiece.getBoundingBox().minY; //determines height of pillars from the variable height of the main structure
+			
+			int pillarOffset = 40;
+			for(int i = 0; i < 2; i++) //x iterate
+			{
+				for(int j = 0; j < 2; j++) //z iterate
+				{
+					if(rand.nextBoolean())
+					{
+						FrogTemplePillarPiece pillarPiece = new FrogTemplePillarPiece(generator, rand,
+								x + (pillarOffset - 2 * i * pillarOffset), y,
+								z + (pillarOffset - 2 * j * pillarOffset));
+						components.add(pillarPiece); //50% chance of generating a pillar for every corner of the frog temple structure
+					}
+				}
+			}
 			recalculateStructureSize();
 		}
 	}

@@ -16,10 +16,10 @@ import java.util.function.Supplier;
 
 public class StructureScannerItem extends Item
 {
-	private final Supplier<Structure> structure;
+	private final Supplier<Structure<?>> structure;
 	private final Supplier<Item> fuelItem;
 	
-	public StructureScannerItem(Properties properties, Supplier<Structure> structure, Supplier<Item> fuelItem)
+	public StructureScannerItem(Properties properties, Supplier<Structure<?>> structure, Supplier<Item> fuelItem)
 	{
 		super(properties);
 		this.structure = structure;
@@ -43,7 +43,7 @@ public class StructureScannerItem extends Item
 				if(ItemStack.areItemsEqual(invItem, fuelStack))
 				{
 					foundItem = true;
-					if(random.nextFloat() >= 0.95F)
+					if(!worldIn.isRemote && random.nextFloat() >= 0.95F)
 					{
 						invItem.shrink(1);
 						worldIn.playSound(playerIn, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.ENTITY_BLAZE_SHOOT, SoundCategory.AMBIENT, 0.4F, 2F);

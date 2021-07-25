@@ -10,11 +10,6 @@
       },
       "entries": [
         {
-          "type": "minestuck:overworld_table",
-          "name": "minestuck:chests/injections/dungeon_inject",
-          "pool": "minestuck"
-        },
-        {
           "type": "minecraft:item",
           "quality": 1,
           "functions": [
