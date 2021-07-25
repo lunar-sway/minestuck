@@ -7,14 +7,11 @@ import com.mraof.minestuck.block.MSDirectionalBlock;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.LotusFlowerEntity;
 import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
+import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockUtil;
 import com.mraof.minestuck.world.storage.loot.MSLootTables;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.LadderBlock;
-import net.minecraft.block.StairsBlock;
+import net.minecraft.block.*;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.fluid.IFluidState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.state.properties.ChestType;
@@ -34,10 +31,10 @@ import java.util.Random;
 
 public class FrogTemplePiece extends ScatteredStructurePiece
 {
-	private boolean createRan = false;
+	private boolean createRan = false; //boolean check to prevent certain objects(the lotus flower entity) from spawning several times over
 	private static final FrogTemplePiece.Selector HIEROGLYPHS = new FrogTemplePiece.Selector();
 	
-	public FrogTemplePiece(ChunkGenerator<?> generator, Random random, int x, int z, float skyLight)
+	public FrogTemplePiece(ChunkGenerator<?> generator, Random random, int x, int z)
 	{
 		super(MSStructurePieces.FROG_TEMPLE, random, x - 70, 64, z - 70, 140, 100, 140);
 		
@@ -83,10 +80,10 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 	
 	private void generateLoot(IWorld worldIn, MutableBoundingBox boundingBoxIn, Random randomIn, ChunkPos chunkPos)
 	{
-		setBlockState(worldIn, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.CORNER.get().getDefaultState().with(LotusTimeCapsuleBlock.FACING, Direction.EAST), 21 + 20, 49, 20 + 38 + 20, boundingBox); //north
-		setBlockState(worldIn, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.CORNER.get().getDefaultState().with(LotusTimeCapsuleBlock.FACING, Direction.NORTH), 21 + 20, 49, 21 + 38 + 20, boundingBox); //east
-		setBlockState(worldIn, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.CORNER.get().getDefaultState().with(LotusTimeCapsuleBlock.FACING, Direction.WEST), 20 + 20, 49, 21 + 38 + 20, boundingBox); //south
-		setBlockState(worldIn, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.CORNER.get().getDefaultState().with(LotusTimeCapsuleBlock.FACING, Direction.SOUTH), 20 + 20, 49, 20 + 38 + 20, boundingBox); //west
+		setBlockState(worldIn, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.CORNER.get().getDefaultState().with(LotusTimeCapsuleBlock.FACING, Direction.EAST), 21 + 20, 49, 20 + 38 + 20, boundingBox);
+		setBlockState(worldIn, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.CORNER.get().getDefaultState().with(LotusTimeCapsuleBlock.FACING, Direction.NORTH), 21 + 20, 49, 21 + 38 + 20, boundingBox);
+		setBlockState(worldIn, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.CORNER.get().getDefaultState().with(LotusTimeCapsuleBlock.FACING, Direction.WEST), 20 + 20, 49, 21 + 38 + 20, boundingBox);
+		setBlockState(worldIn, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.CORNER.get().getDefaultState().with(LotusTimeCapsuleBlock.FACING, Direction.SOUTH), 20 + 20, 49, 20 + 38 + 20, boundingBox);
 		
 		ChestType leftChestType = ChestType.LEFT;
 		ChestType rightChestType = ChestType.RIGHT;
@@ -191,6 +188,7 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 		fillWithAirCheckWater(world, boundingBox, 19 + 20, 17, 71 + 20, 22 + 20, 20, 79 + 20); //lower room entry //TODO this entrance will occasionally generate below water and cause this to generate awkwardly
 	}
 	
+	/*
 	private void buildPillars(BlockState block, IWorld world, MutableBoundingBox boundingBox, Random random) //TODO pieces of pillars often fail to generate, which is why it is not in use currently
 	{
 		if(random.nextBoolean())
@@ -242,6 +240,7 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 			}
 		}
 	}
+	 */
 	
 	private void buildFrog(BlockState block, IWorld world, MutableBoundingBox boundingBox)
 	{

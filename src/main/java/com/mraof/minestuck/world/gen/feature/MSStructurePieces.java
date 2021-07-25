@@ -9,7 +9,7 @@ import net.minecraft.world.gen.feature.structure.IStructurePieceType;
 
 public final class MSStructurePieces
 {
-	public static IStructurePieceType FROG_TEMPLE;
+	public static IStructurePieceType FROG_TEMPLE, FROG_TEMPLE_PILLAR;
 	
 	public static IStructurePieceType GATE_PILLAR;
 	public static IStructurePieceType GATE_MUSHROOM;
@@ -42,6 +42,7 @@ public final class MSStructurePieces
 	static void init()
 	{
 		FROG_TEMPLE = register(FrogTemplePiece::new, Minestuck.MOD_ID+":frog_temple");
+		FROG_TEMPLE_PILLAR = register(FrogTemplePillarPiece::new, Minestuck.MOD_ID+":frog_temple_pillar");
 		
 		GATE_PILLAR = register(GatePillarPiece::new, Minestuck.MOD_ID+":gate_pillar");
 		GATE_MUSHROOM = register(GateMushroomPiece::new, Minestuck.MOD_ID+":gate_mushroom");

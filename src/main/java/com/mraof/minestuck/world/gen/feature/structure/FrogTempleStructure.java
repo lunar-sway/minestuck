@@ -65,7 +65,7 @@ public class FrogTempleStructure extends ScatteredStructure<NoFeatureConfig>
 		@Override
 		public void init(ChunkGenerator<?> generator, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn)
 		{
-			FrogTemplePiece piece = new FrogTemplePiece(generator, rand, chunkX * 16 + rand.nextInt(16), chunkZ * 16 + rand.nextInt(16), 0.5F);
+			FrogTemplePiece piece = new FrogTemplePiece(generator, rand, chunkX * 16 + rand.nextInt(16), chunkZ * 16 + rand.nextInt(16));
 			components.add(piece);
 			recalculateStructureSize();
 		}

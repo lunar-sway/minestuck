@@ -2,7 +2,7 @@
     "credit": "crafted with love by the grease artisan mysterymeat",
     "texture_size": [64, 64],
     "textures": {
-        "1": "minestuck:block/steep_green_stone_brick_stairs_top",
+        "texture": "minestuck:block/steep_green_stone_brick_stairs_top",
         "particle": "minestuck:block/steep_green_stone_brick_stairs_top"
     },
     "elements": [
@@ -11,12 +11,12 @@
             "to": [16, 4, 16],
             "rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 16]},
             "faces": {
-                "north": {"uv": [4, 3, 8, 4], "texture": "#1"},
-                "east": {"uv": [0, 3, 2, 4], "texture": "#1"},
-                "south": {"uv": [0, 3, 4, 4], "texture": "#1"},
-                "west": {"uv": [2, 3, 4, 4], "texture": "#1"},
-                "up": {"uv": [8, 6, 4, 4], "texture": "#1"},
-                "down": {"uv": [4, 4, 0, 6], "texture": "#1"}
+                "north": {"uv": [4, 3, 8, 4], "texture": "#texture"},
+                "east": {"uv": [0, 3, 2, 4], "texture": "#texture"},
+                "south": {"uv": [0, 3, 4, 4], "texture": "#texture"},
+                "west": {"uv": [2, 3, 4, 4], "texture": "#texture"},
+                "up": {"uv": [8, 6, 4, 4], "texture": "#texture"},
+                "down": {"uv": [4, 4, 0, 6], "texture": "#texture"}
             }
         },
         {
@@ -24,11 +24,11 @@
             "to": [16, 8, 16],
             "rotation": {"angle": 0, "axis": "y", "origin": [8, 12, 17]},
             "faces": {
-                "north": {"uv": [4, 2, 8, 3], "texture": "#1"},
-                "east": {"uv": [0, 2, 1.5, 3], "texture": "#1"},
-                "south": {"uv": [0, 2, 4, 3], "texture": "#1"},
-                "west": {"uv": [2.5, 2, 4, 3], "texture": "#1"},
-                "up": {"uv": [8, 5.5, 4, 4], "texture": "#1"}
+                "north": {"uv": [4, 2, 8, 3], "texture": "#texture"},
+                "east": {"uv": [0, 2, 1.5, 3], "texture": "#texture"},
+                "south": {"uv": [0, 2, 4, 3], "texture": "#texture"},
+                "west": {"uv": [2.5, 2, 4, 3], "texture": "#texture"},
+                "up": {"uv": [8, 5.5, 4, 4], "texture": "#texture"}
             }
         },
         {
@@ -36,11 +36,11 @@
             "to": [16, 12, 16],
             "rotation": {"angle": 0, "axis": "y", "origin": [8, 16, 18]},
             "faces": {
-                "north": {"uv": [4, 1, 8, 2], "texture": "#1"},
-                "east": {"uv": [0, 1, 1, 2], "texture": "#1"},
-                "south": {"uv": [0, 1, 4, 2], "texture": "#1"},
-                "west": {"uv": [3, 1, 4, 2], "texture": "#1"},
-                "up": {"uv": [8, 5, 4, 4], "texture": "#1"}
+                "north": {"uv": [4, 1, 8, 2], "texture": "#texture"},
+                "east": {"uv": [0, 1, 1, 2], "texture": "#texture"},
+                "south": {"uv": [0, 1, 4, 2], "texture": "#texture"},
+                "west": {"uv": [3, 1, 4, 2], "texture": "#texture"},
+                "up": {"uv": [8, 5, 4, 4], "texture": "#texture"}
             }
         },
         {
@@ -48,11 +48,11 @@
             "to": [16, 16, 16],
             "rotation": {"angle": 0, "axis": "y", "origin": [8, 20, 19]},
             "faces": {
-                "north": {"uv": [4, 0, 8, 1], "texture": "#1"},
-                "east": {"uv": [0, 0, 0.5, 1], "texture": "#1"},
-                "south": {"uv": [0, 0, 4, 1], "texture": "#1"},
-                "west": {"uv": [3.5, 0, 4, 1], "texture": "#1"},
-                "up": {"uv": [8, 4.5, 4, 4], "texture": "#1"}
+                "north": {"uv": [4, 0, 8, 1], "texture": "#texture"},
+                "east": {"uv": [0, 0, 0.5, 1], "texture": "#texture"},
+                "south": {"uv": [0, 0, 4, 1], "texture": "#texture"},
+                "west": {"uv": [3.5, 0, 4, 1], "texture": "#texture"},
+                "up": {"uv": [8, 4.5, 4, 4], "texture": "#texture"}
             }
         }
     ],
