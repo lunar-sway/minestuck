@@ -3,7 +3,7 @@
     "texture_size": [64, 64],
     "textures": {
         "texture": "minestuck:block/steep_green_stone_brick_stairs_top",
-        "particle": "minestuck:block/steep_green_stone_brick_stairs_top"
+        "particle": "minestuck:block/green_stone_bricks"
     },
     "elements": [
         {

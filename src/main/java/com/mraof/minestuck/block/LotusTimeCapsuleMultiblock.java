@@ -9,7 +9,7 @@ import net.minecraftforge.fml.RegistryObject;
 
 public class LotusTimeCapsuleMultiblock extends MachineMultiblock
 {
-	public final RegistryObject<Block> CORNER = register("lotus_time_capsule_base", () -> new LotusTimeCapsuleBlock(this, MSBlockShapes.ALCHEMITER_CORNER, Block.Properties.create(Material.IRON).hardnessAndResistance(-1F).noDrops()));
+	public final RegistryObject<Block> CORNER = register("lotus_time_capsule_base", () -> new LotusTimeCapsuleBlock(this, MSBlockShapes.LOTUS_TIME_CAPSULE, Block.Properties.create(Material.ROCK).hardnessAndResistance(-1F).noDrops()));
 	
 	public LotusTimeCapsuleMultiblock(String modId)
 	{
