@@ -94,10 +94,4 @@ public class MSScreenFactories
 		if(currentScreen instanceof SylladexScreen)
 			((SylladexScreen) currentScreen).updateContent();
 	}
-	
-	public static void displayDialogueScreen(List<String> paragraphs)
-	{
-		ResourceLocation test = new ResourceLocation("minestuck", "textures/gui/dialogue/salamander.png");
-		Minecraft.getInstance().displayGuiScreen(new PortraitDialogueScreen(paragraphs, test));
-	}
 }

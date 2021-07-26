@@ -1,6 +1,7 @@
 package com.mraof.minestuck.client.util;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.client.gui.DialogueScreen;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.computer.editmode.ClientEditHandler;
@@ -14,6 +15,7 @@ import net.minecraft.client.gui.screen.inventory.CreativeScreen;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.client.util.InputMappings;
 import net.minecraft.inventory.container.Slot;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.InputEvent;
@@ -104,12 +106,21 @@ public class MSKeyHandler
 				MSScreenFactories.displaySylladexScreen(ClientPlayerData.getModus());
 			
 			if(testKey.isActiveAndMatches(input)) {
-				List<String> paragraphs = new ArrayList<String>();
+				String[] paragraphs = new String[] {
+					"One time, I saw a guy with some weird wing-looking things on his back. He could glide with them, but without being able to stay in the air, what's the point?",
+					"The Denizen is the One that Slumbers in our very soil. It is eternally waiting for the %s to awaken it. Then they will be given The Choice, and their victory will be determined by what they choose.",
+					"When mixing red and blue to get magenta, the blue overpowers the red and you get purple. You have to mix the purple with not just red, but pink to get magenta."
+				};
 				
-				paragraphs.add("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.");
-				paragraphs.add("Lobortis elementum nibh tellus molestie. Velit egestas dui id ornare arcu odio ut. Quis risus sed vulputate odio ut enim blandit. Tortor consequat id porta nibh. Dolor morbi non arcu risus quis varius quam quisque.");
-				paragraphs.add("Sit amet consectetur adipiscing elit duis. Nunc vel risus commodo viverra. Justo eget magna fermentum iaculis. Fermentum odio eu feugiat pretium nibh ipsum consequat nisl. Risus pretium quam vulputate dignissim suspendisse in est ante in. Tortor pretium viverra suspendisse potenti.");
-				MSScreenFactories.displayDialogueScreen(paragraphs);
+				ResourceLocation test = new ResourceLocation("minestuck", "textures/gui/dialogue/salamander.png");
+				
+				String[] options = new String[] {
+					"Yes.",
+					"No Way.",
+					"..."
+				};
+				
+				Minecraft.getInstance().displayGuiScreen(new DialogueScreen(paragraphs, test, options));
 			}
 			
 		}
