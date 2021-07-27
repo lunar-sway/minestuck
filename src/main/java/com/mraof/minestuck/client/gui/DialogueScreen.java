@@ -1,19 +1,12 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mraof.minestuck.computer.ComputerProgram;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.Widget;
-import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.client.gui.GuiUtils;
 import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
 import org.lwjgl.glfw.GLFW;
-
-import java.util.List;
-import java.util.Map;
 
 public class DialogueScreen extends Screen
 {
@@ -31,7 +24,7 @@ public class DialogueScreen extends Screen
 	private ResourceLocation portrait;
 	private String renderedText;
 	
-	private int currentTextIndex;
+	private int currentParagraphIndex;
 	private boolean doneWriting;
 	private int frame;
 	
@@ -41,7 +34,7 @@ public class DialogueScreen extends Screen
 		this.paragraphs = paragraphs;
 		this.portrait = portrait;
 		this.options = options;
-		this.currentTextIndex = 0;
+		this.currentParagraphIndex = 0;
 		resetWriter();
 	}
 	
@@ -70,28 +63,14 @@ public class DialogueScreen extends Screen
 		super.render(mouseX, mouseY, partialTicks);
 	}
 	
-	@Override
-	public void init() {
-		super.init();
-		
-		int xOffset = ((width - GUI_WIDTH) / 2) + PORTRAIT_SIZE + 16;
-		int yOffset = ((height - GUI_HEIGHT) / 2) + GUI_HEIGHT + 8;
-		
-		for (int i = 0; i < options.length; i++) {
-			addButton(new DialogueButton(xOffset, yOffset + (10 * i), GUI_WIDTH, 10, options[i], btn -> test()));
-		}
-		
-		this.changeFocus(true);
-	}
-	
 	public void test() {
-	
+		close();
 	}
 	
 	@Override
 	public void tick() {
 		if(!doneWriting) {
-			String text = paragraphs[currentTextIndex];
+			String text = paragraphs[currentParagraphIndex];
 			int amount = Math.min(frame * WRITE_SPEED, text.length());
 			
 			if (amount == text.length()) {
@@ -106,9 +85,20 @@ public class DialogueScreen extends Screen
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int i)
 	{
-		if(keyCode == GLFW.GLFW_KEY_SPACE && !this.doneWriting) {
-			skip();
-			return false;
+		if(keyCode == GLFW.GLFW_KEY_SPACE) {
+			if(!this.doneWriting) {
+				renderedText = paragraphs[currentParagraphIndex];
+				doneWriting = true;
+				return false;
+			}
+			else if(currentParagraphIndex < paragraphs.length - 1) {
+				currentParagraphIndex++;
+				resetWriter();
+				return false;
+			}
+			else {
+				showDialogues();
+			}
 		}
 		
 		if(keyCode == GLFW.GLFW_KEY_UP || keyCode == GLFW.GLFW_KEY_W) {
@@ -128,6 +118,16 @@ public class DialogueScreen extends Screen
 		return super.keyPressed(keyCode, scanCode, i);
 	}
 	
+	private void showDialogues() {
+		int xOffset = ((width - GUI_WIDTH) / 2) + PORTRAIT_SIZE + 16;
+		int yOffset = ((height - GUI_HEIGHT) / 2) + GUI_HEIGHT + 8;
+		
+		for (int i = 0; i < options.length; i++) {
+			addButton(new DialogueButton(xOffset, yOffset + (10 * i), GUI_WIDTH, 10, options[i], btn -> test()));
+		}
+		this.changeFocus(true);
+	}
+	
 	private int getAnimationOffset() {
 		if(!this.doneWriting)
 			return (this.frame % 4) / 2;
@@ -139,20 +139,6 @@ public class DialogueScreen extends Screen
 		doneWriting = false;
 		renderedText = "";
 		frame = 1;
-	}
-	
-	private void skip() {
-		if(!doneWriting) {
-			renderedText = paragraphs[currentTextIndex];
-			doneWriting = true;
-		}
-		else if(currentTextIndex >= paragraphs.length - 1) {
-			close();
-		}
-		else {
-			currentTextIndex++;
-			resetWriter();
-		}
 	}
 	
 	private void close() {
@@ -181,7 +167,7 @@ public class DialogueScreen extends Screen
 			if (isFocused()) {
 				buttonText = "> " + buttonText;
 				color = 0xFFFFFF;
-				offset = 0;
+				offset = 9;
 			}
 			this.drawString(mc.fontRenderer, buttonText, this.x - offset, this.y, color);
 		}
