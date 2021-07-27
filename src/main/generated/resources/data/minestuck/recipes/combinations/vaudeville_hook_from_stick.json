@@ -4,9 +4,9 @@
     "item": "minecraft:stick"
   },
   "input2": {
-    "item": "minecraft:fishing_rod"
+    "item": "minestuck:wiseguy"
   },
-  "mode": "and",
+  "mode": "or",
   "output": {
     "item": "minestuck:vaudeville_hook"
   }

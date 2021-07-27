@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:wiseguy"
+  },
+  "grist_cost": {
+    "minestuck:chalk": 10,
+    "minestuck:sulfur": 4
+  }
+}
