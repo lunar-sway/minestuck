@@ -1,0 +1,102 @@
+{
+    "credit": "crafted with love by the grease artisan mysterymeat",
+    "texture_size": [64, 64],
+    "textures": {
+        "texture": "minestuck:block/steep_green_stone_brick_stairs_top",
+        "particle": "minestuck:block/green_stone_bricks"
+    },
+    "elements": [
+        {
+            "from": [0, 0, 8],
+            "to": [16, 4, 16],
+            "rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 16]},
+            "faces": {
+                "north": {"uv": [4, 3, 8, 4], "texture": "#texture"},
+                "east": {"uv": [0, 3, 2, 4], "texture": "#texture", "cullface": "east"},
+                "south": {"uv": [0, 3, 4, 4], "texture": "#texture", "cullface": "south"},
+                "west": {"uv": [2, 3, 4, 4], "texture": "#texture", "cullface": "west"},
+                "up": {"uv": [8, 6, 4, 4], "texture": "#texture"},
+                "down": {"uv": [4, 4, 0, 6], "texture": "#texture", "cullface": "down"}
+            }
+        },
+        {
+            "from": [0, 4, 10],
+            "to": [16, 8, 16],
+            "rotation": {"angle": 0, "axis": "y", "origin": [8, 12, 17]},
+            "faces": {
+                "north": {"uv": [4, 2, 8, 3], "texture": "#texture"},
+                "east": {"uv": [0, 2, 1.5, 3], "texture": "#texture", "cullface": "east"},
+                "south": {"uv": [0, 2, 4, 3], "texture": "#texture", "cullface": "south"},
+                "west": {"uv": [2.5, 2, 4, 3], "texture": "#texture", "cullface": "west"},
+                "up": {"uv": [8, 5.5, 4, 4], "texture": "#texture"}
+            }
+        },
+        {
+            "from": [0, 8, 12],
+            "to": [16, 12, 16],
+            "rotation": {"angle": 0, "axis": "y", "origin": [8, 16, 18]},
+            "faces": {
+                "north": {"uv": [4, 1, 8, 2], "texture": "#texture"},
+                "east": {"uv": [0, 1, 1, 2], "texture": "#texture", "cullface": "east"},
+                "south": {"uv": [0, 1, 4, 2], "texture": "#texture", "cullface": "south"},
+                "west": {"uv": [3, 1, 4, 2], "texture": "#texture", "cullface": "west"},
+                "up": {"uv": [8, 5, 4, 4], "texture": "#texture"}
+            }
+        },
+        {
+            "from": [0, 12, 14],
+            "to": [16, 16, 16],
+            "rotation": {"angle": 0, "axis": "y", "origin": [8, 20, 19]},
+            "faces": {
+                "north": {"uv": [4, 0, 8, 1], "texture": "#texture"},
+                "east": {"uv": [0, 0, 0.5, 1], "texture": "#texture", "cullface": "east"},
+                "south": {"uv": [0, 0, 4, 1], "texture": "#texture", "cullface": "south"},
+                "west": {"uv": [3.5, 0, 4, 1], "texture": "#texture", "cullface": "west"},
+                "up": {"uv": [8, 4.5, 4, 4], "texture": "#texture"}
+            }
+        }
+    ],
+    "display": {
+        "thirdperson_righthand": {
+            "rotation": [75, 45, 0],
+            "translation": [0, 2.5, 0],
+            "scale": [0.375, 0.375, 0.375]
+        },
+        "thirdperson_lefthand": {
+            "rotation": [75, 45, 0],
+            "translation": [0, 2.5, 0],
+            "scale": [0.375, 0.375, 0.375]
+        },
+        "firstperson_righthand": {
+            "rotation": [0, 45, 0],
+            "scale": [0.4, 0.4, 0.4]
+        },
+        "firstperson_lefthand": {
+            "rotation": [0, 225, 0],
+            "scale": [0.4, 0.4, 0.4]
+        },
+        "ground": {
+            "translation": [0, 3, 0],
+            "scale": [0.25, 0.25, 0.25]
+        },
+        "gui": {
+            "rotation": [30, 225, 0],
+            "scale": [0.625, 0.625, 0.625]
+        },
+        "head": {
+            "translation": [0, -29, 0],
+            "scale": [1.6, 1.6, 1.6]
+        },
+        "fixed": {
+            "scale": [0.5, 0.5, 0.5]
+        }
+    },
+    "groups": [
+        {
+            "name": "stairtop",
+            "origin": [8, 8, 8],
+            "color": 0,
+            "children": [0, 1, 2, 3]
+        }
+    ]
+}

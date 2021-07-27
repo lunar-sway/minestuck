@@ -26,9 +26,58 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 	//Pools in basic medium chest
 	public static final String WEAPONS_POOL = "weapons", SUPPLIES_POOL = "supplies", MISC_POOL = "misc", RARE_POOL = "rare";
 	
+	
 	@Override
 	public void accept(BiConsumer<ResourceLocation, LootTable.Builder> lootProcessor)
 	{
+		lootProcessor.accept(MSLootTables.DUNGEON_LOOT_INJECT, LootTable.builder()
+				.addLootPool(LootPool.builder().name("minestuck").rolls(RandomValueRange.of(0, 1))
+						.addEntry(ItemLootEntry.builder(MSItems.BLANK_DISK).weight(1).quality(1).acceptFunction(SetCount.builder(RandomValueRange.of(0, 2))))));
+		
+		lootProcessor.accept(MSLootTables.FROG_TEMPLE_CHEST, LootTable.builder()
+				.addLootPool(LootPool.builder().name(WEAPONS_POOL).rolls(RandomValueRange.of(0, 2))
+						.addEntry(ItemLootEntry.builder(Items.BOW).weight(5).quality(1).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.75F, 1.0F))))
+						.addEntry(ItemLootEntry.builder(Items.STONE_SWORD).weight(5).quality(-1).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.75F, 1.0F))))
+						.addEntry(ItemLootEntry.builder(Items.IRON_SWORD).weight(3).quality(1).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.75F, 1.0F))))
+						.addEntry(ItemLootEntry.builder(MSItems.CLAW_HAMMER).weight(5).quality(-1).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.75F, 1.0F))))
+						.addEntry(ItemLootEntry.builder(MSItems.SICKLE).weight(5).quality(-1).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.75F, 1.0F))))
+						.addEntry(ItemLootEntry.builder(MSItems.KATANA).weight(3).quality(1).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.75F, 1.0F))))
+						.addEntry(ItemLootEntry.builder(MSItems.SLEDGE_HAMMER).weight(3).quality(1).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.75F, 1.0F))))
+						.addEntry(ItemLootEntry.builder(MSItems.WOODEN_SPOON).weight(5).quality(-2).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.75F, 1.0F))))
+						.addEntry(ItemLootEntry.builder(MSItems.SCYTHE).weight(1).quality(2).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.75F, 1.0F))))
+						.addEntry(ItemLootEntry.builder(MSItems.KNITTING_NEEDLE).weight(4).quality(-1).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.75F, 1.0F))))
+						.addEntry(ItemLootEntry.builder(MSItems.SHURIKEN).weight(8).quality(-2).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.75F, 1.0F))))
+						.addEntry(ItemLootEntry.builder(MSItems.METAL_BAT).weight(4).quality(1).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.75F, 1.0F))))
+						.addEntry(ItemLootEntry.builder(MSItems.MACE).weight(1).quality(1).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.75F, 1.0F))))
+						.addEntry(ItemLootEntry.builder(MSItems.JOUSTING_LANCE).weight(2).quality(1).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.75F, 1.0F))))
+						.addEntry(ItemLootEntry.builder(MSItems.FAN).weight(4).quality(1).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.75F, 1.0F))))
+						.addEntry(ItemLootEntry.builder(MSItems.LUCERNE_HAMMER).weight(1).quality(2).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.75F, 1.0F))))
+						.addEntry(ItemLootEntry.builder(MSItems.FORK).weight(4).quality(-1).acceptFunction(SetDamage.func_215931_a(RandomValueRange.of(0.75F, 1.0F)))))
+				.addLootPool(LootPool.builder().name(SUPPLIES_POOL).rolls(RandomValueRange.of(2, 6))
+						.addEntry(ItemLootEntry.builder(Items.GOLD_INGOT).weight(2).quality(2).acceptFunction(SetCount.builder(RandomValueRange.of(2, 5))))
+						.addEntry(ItemLootEntry.builder(Items.DIAMOND).weight(1).quality(3).acceptFunction(SetCount.builder(RandomValueRange.of(1, 3))))
+						.addEntry(ItemLootEntry.builder(Items.PUMPKIN).weight(3).quality(-1).acceptFunction(SetCount.builder(RandomValueRange.of(1, 5))))
+						.addEntry(ItemLootEntry.builder(Items.WRITABLE_BOOK).weight(2).quality(1).acceptFunction(SetCount.builder(RandomValueRange.of(0, 1))))
+						.addEntry(ItemLootEntry.builder(MSItems.BLANK_DISK).weight(5).quality(3).acceptFunction(SetCount.builder(RandomValueRange.of(1, 2))))
+						.addEntry(ItemLootEntry.builder(MSItems.RAW_CRUXITE).weight(4).quality(0).acceptFunction(SetCount.builder(RandomValueRange.of(1, 7))))
+						.addEntry(ItemLootEntry.builder(MSItems.RAW_URANIUM).weight(2).quality(1).acceptFunction(SetCount.builder(RandomValueRange.of(1, 5))))
+						.addEntry(ItemLootEntry.builder(MSItems.BUG_ON_A_STICK).weight(4).quality(-1).acceptFunction(SetCount.builder(RandomValueRange.of(1, 5))))
+						.addEntry(ItemLootEntry.builder(MSItems.CHOCOLATE_BEETLE).weight(4).quality(-1).acceptFunction(SetCount.builder(RandomValueRange.of(1, 5))))
+						.addEntry(ItemLootEntry.builder(MSItems.FOOD_CAN).weight(4).quality(-1).acceptFunction(SetCount.builder(RandomValueRange.of(1, 5))))
+						.addEntry(ItemLootEntry.builder(MSItems.GRASSHOPPER).weight(4).quality(-1).acceptFunction(SetCount.builder(RandomValueRange.of(1, 5))))
+						.addEntry(ItemLootEntry.builder(MSItems.CONE_OF_FLIES).weight(4).quality(-1).acceptFunction(SetCount.builder(RandomValueRange.of(1, 5))))
+						.addEntry(ItemLootEntry.builder(MSItems.GOLDEN_GRASSHOPPER).weight(1).quality(1).acceptFunction(SetCount.builder(RandomValueRange.of(1, 2))))
+						.addEntry(ItemLootEntry.builder(MSBlocks.MINI_FROG_STATUE).weight(1).quality(1).acceptFunction(SetCount.builder(RandomValueRange.of(0, 1))))
+						.addEntry(ItemLootEntry.builder(MSItems.CARVING_TOOL).weight(5).quality(0).acceptFunction(SetCount.builder(RandomValueRange.of(1, 2))))
+						.addEntry(ItemLootEntry.builder(MSItems.STONE_SLAB).weight(2).quality(0).acceptFunction(SetCount.builder(RandomValueRange.of(1, 2))))
+						.addEntry(ItemLootEntry.builder(MSItems.HASHMAP_MODUS_CARD).weight(1).quality(1).acceptFunction(SetCount.builder(RandomValueRange.of(0, 1))))
+						.addEntry(ItemLootEntry.builder(MSItems.QUEUE_MODUS_CARD).weight(1).quality(1).acceptFunction(SetCount.builder(RandomValueRange.of(0, 1))))
+						.addEntry(ItemLootEntry.builder(MSItems.QUEUESTACK_MODUS_CARD).weight(1).quality(1).acceptFunction(SetCount.builder(RandomValueRange.of(0, 1))))
+						.addEntry(ItemLootEntry.builder(MSItems.SET_MODUS_CARD).weight(1).quality(1).acceptFunction(SetCount.builder(RandomValueRange.of(0, 1))))
+						.addEntry(ItemLootEntry.builder(MSItems.STACK_MODUS_CARD).weight(1).quality(1).acceptFunction(SetCount.builder(RandomValueRange.of(0, 1))))
+						.addEntry(ItemLootEntry.builder(MSItems.TREE_MODUS_CARD).weight(1).quality(1).acceptFunction(SetCount.builder(RandomValueRange.of(0, 1))))));
+		
+		
 		lootProcessor.accept(MSLootTables.BASIC_MEDIUM_CHEST, LootTable.builder()
 				.addLootPool(LootPool.builder().name(WEAPONS_POOL).rolls(ConstantRange.of(1))
 						.addEntry(LandTableLootEntry.builder(MSLootTables.BASIC_MEDIUM_CHEST).setPool(WEAPONS_POOL))

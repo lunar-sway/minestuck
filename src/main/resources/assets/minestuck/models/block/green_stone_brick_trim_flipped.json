@@ -1,0 +1,7 @@
+{
+    "parent": "block/cube_column",
+    "textures": {
+        "end": "minestuck:block/green_stone_bricks",
+        "side": "minestuck:block/green_stone_brick_trim_flipped"
+    }
+}

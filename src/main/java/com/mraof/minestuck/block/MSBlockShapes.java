@@ -33,6 +33,11 @@ public class MSBlockShapes
 	
 	public static final CustomVoxelShape WIZARD_STATUE = new CustomVoxelShape(new double[]{3, 0, 3, 13, 16, 12});
 	
+	public static final CustomVoxelShape STEEP_STAIRS_BASE = new CustomVoxelShape(new double[]{0, 0, 0, 16, 4, 16}, new double[]{0, 4, 2, 16, 8, 16}, new double[]{0, 8, 4, 16, 12, 16}, new double[]{0, 12, 6, 16, 16, 16});
+	public static final CustomVoxelShape STEEP_STAIRS_TOP = new CustomVoxelShape(new double[]{0, 0, 8, 16, 4, 16}, new double[]{0, 4, 10, 16, 8, 16}, new double[]{0, 8, 12, 16, 12, 16}, new double[]{0, 12, 14, 16, 16, 16});
+	
+	public static final CustomVoxelShape LOTUS_TIME_CAPSULE = new CustomVoxelShape(new double[]{0, 0, 0, 16, 7, 16}, new double[]{0, 7, 1, 15, 9, 16}, new double[]{0, 9, 0, 16, 11, 16}, new double[]{0, 11, 2, 14, 14, 16}, new double[]{0, 11, 7, 9, 15, 16}, new double[]{0, 15, 9, 7, 16, 16});
+	
 	public static final CustomVoxelShape STONE_TABLET = new CustomVoxelShape(new double[]{3, 0, 3, 13, 1, 15}, new double[]{3, 0, 2, 12, 1, 3}, new double[]{3, 0, 1, 11, 1, 2});
 	
 	public static final CustomVoxelShape BLENDER_BASE = new CustomVoxelShape(new double[]{3, 0, 3, 13, 3, 13}, new double[]{4, 3, 4, 12, 4, 12});

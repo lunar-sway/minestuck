@@ -33,6 +33,10 @@ repositories {
         name = "RS maven"
         url = "https://repo.refinedmods.com"
     }
+    maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
+}
+dependencies{
+    compile fg.deobf('software.bernie.geckolib:geckolib-forge-1.15.2:3.0.32')
 }
 
 version = project.getProperty('mc_ms_version') +'.' + System.env.BUILD_NUMBER
