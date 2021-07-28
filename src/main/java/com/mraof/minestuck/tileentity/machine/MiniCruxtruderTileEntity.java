@@ -61,7 +61,7 @@ public class MiniCruxtruderTileEntity extends MachineProcessTileEntity implement
 		// Process the Raw Cruxite
 		
 		if (itemHandler.getStackInSlot(1).isEmpty())
-			itemHandler.setStackInSlot(1, ColorHandler.setColor(new ItemStack(MSBlocks.CRUXITE_DOWEL), color));
+			itemHandler.setStackInSlot(1, ColorHandler.setStackColor(new ItemStack(MSBlocks.CRUXITE_DOWEL), color));
 		else itemHandler.extractItem(1, -1, false);
 		itemHandler.extractItem(0, 1, false);
 	}

@@ -83,7 +83,7 @@ public class CruxtruderTileEntity extends TileEntity	//TODO check if it is broke
 						world.setBlockState(pos, MSBlocks.CRUXITE_DOWEL.getDefaultState().with(CruxiteDowelBlock.DOWEL_TYPE, CruxiteDowelBlock.Type.CRUXTRUDER));
 						TileEntity te = world.getTileEntity(pos);
 						if(te instanceof ItemStackTileEntity)
-							ColorHandler.setColor(((ItemStackTileEntity) te).getStack(), color);
+							ColorHandler.setStackColor(((ItemStackTileEntity) te).getStack(), color);
 						if(material > 0)
 							material--;
 					}

@@ -2,14 +2,18 @@ package com.mraof.minestuck.entity.consort;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
+import com.mraof.minestuck.client.gui.DialogueScreen;
 import com.mraof.minestuck.entity.SimpleTexturedEntity;
 import com.mraof.minestuck.inventory.ConsortMerchantContainer;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.util.ColorHandler;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MSNBTUtil;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,10 +24,7 @@ import net.minecraft.inventory.container.IContainerProvider;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityPredicates;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
@@ -54,7 +55,7 @@ public class ConsortEntity extends SimpleTexturedEntity implements IContainerPro
 	boolean visitedSkaia;
 	MessageType.DelayMessage updatingMessage; //TODO Change to an interface/array if more message components need tick updates
 	public ConsortMerchantInventory stocks;
-	private int eventTimer = -1;	//TODO use the interface mentioned in the todo above to implement consort explosion instead
+	private int eventTimer = -1;    //TODO use the interface mentioned in the todo above to implement consort explosion instead
 	
 	public ConsortEntity(EnumConsort consortType, EntityType<? extends ConsortEntity> type, World world)
 	{
@@ -117,9 +118,40 @@ public class ConsortEntity extends SimpleTexturedEntity implements IContainerPro
 				
 				try
 				{
+					int color = ColorHandler.getColorForPlayer(serverPlayer);
+					
 					ITextComponent text = message.getMessage(this, serverPlayer);
+					
+					String consortType = this.consortType.getName();
+					
+					ResourceLocation speakerSprite = new ResourceLocation("minestuck", "textures/gui/dialogue/" + consortType + ".png");
+					
 					if(text != null)
-						player.sendMessage(text);
+					{
+						String[] dialogueText = new String[]{
+								text.getFormattedText()
+						};
+						
+						String[] responseOptions = new String[]{
+								"=>" //was thinking of making it so that if this is what shows up(instead of the commented out section below), then it either is responsible for bringing the dialogue to the next segment should there be one or for exiting out of the gui
+						};
+						
+						/*Debug.debugf("text.getString() = %s, text contains reply = %s, message = %s, message string = %s", text, text.getString().contains(".reply"), message, message.getString());
+						
+						if(message.getString().contains(".reply"))
+						{
+							responseOptions = new String[]{
+									text.getString()
+							};
+						}*/ //TODO not sure what to change(either here, in ConsortDialogue, or in MinestuckEnUsLanguageProvider) in order to get the previous response options to show up here instead of in the speaker's box
+						
+						DialogueScreen.DialogueBoxType dialogueBoxType = DialogueScreen.DialogueBoxType.STANDARD;
+						if(this.consortType.equals(EnumConsort.IGUANA))
+							dialogueBoxType = DialogueScreen.DialogueBoxType.DARK;
+						
+						Minecraft.getInstance().displayGuiScreen(new DialogueScreen(dialogueText, speakerSprite, responseOptions, color, dialogueBoxType)); //TODO dialogueText breaks under nonstandard dialogue conditions, like with the "hungry" dialogue before food is held in hand
+					}
+					
 					handleConsortRepFromTalking(serverPlayer);
 					MSCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, message.getString(), this);
 				} catch(Exception e)
@@ -198,7 +230,7 @@ public class ConsortEntity extends SimpleTexturedEntity implements IContainerPro
 	
 	private void explode()
 	{
-		if (!this.world.isRemote)
+		if(!this.world.isRemote)
 		{
 			boolean flag = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this);
 			this.dead = true;
@@ -302,7 +334,7 @@ public class ConsortEntity extends SimpleTexturedEntity implements IContainerPro
 		{
 			merchantType = EnumConsort.MerchantType.SHADY;
 			if(detachHome())
-				setHomePosAndDistance(getHomePosition(), (int) (getMaximumHomeDistance()*0.4F));
+				setHomePosAndDistance(getHomePosition(), (int) (getMaximumHomeDistance() * 0.4F));
 		}
 		
 		homeDimension = world.getDimension().getType();

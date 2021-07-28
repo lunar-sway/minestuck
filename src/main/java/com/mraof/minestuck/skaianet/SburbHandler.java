@@ -107,7 +107,7 @@ public final class SburbHandler
 		default: artifact = MSItems.CRUXITE_APPLE;
 		}
 		
-		return ColorHandler.setColor(new ItemStack(artifact), color);
+		return ColorHandler.setStackColor(new ItemStack(artifact), color);
 	}
 	
 	public static SburbConnection getConnectionForDimension(ServerWorld world)

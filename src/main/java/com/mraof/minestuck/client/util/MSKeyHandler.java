@@ -44,8 +44,6 @@ public class MSKeyHandler
 	public static KeyBinding effectToggleKey;
 	public static KeyBinding sylladexKey;
 	
-	public static KeyBinding testKey;
-	
 	public static void registerKeys()
 	{
 		if(statKey != null)
@@ -60,9 +58,6 @@ public class MSKeyHandler
 		effectToggleKey = new KeyBinding(ASPECT_EFFECT_TOGGLE, KeyConflictContext.IN_GAME, InputMappings.Type.KEYSYM, GLFW.GLFW_KEY_BACKSLASH, CATEGORY);
 		ClientRegistry.registerKeyBinding(effectToggleKey);
 		sylladexKey = new KeyBinding(SYLLADEX, GLFW.GLFW_KEY_UNKNOWN, CATEGORY);
-		ClientRegistry.registerKeyBinding(sylladexKey);
-		
-		testKey = new KeyBinding("key.minestuck.dialoguetest", GLFW.GLFW_KEY_J, CATEGORY);
 		ClientRegistry.registerKeyBinding(sylladexKey);
 	}
 	
@@ -84,7 +79,7 @@ public class MSKeyHandler
 	}
 	
 	@SubscribeEvent
-	public static void onKeyInput(InputEvent.KeyInputEvent event)	//This is only called during the game, when no gui is active
+	public static void onKeyInput(InputEvent.KeyInputEvent event)    //This is only called during the game, when no gui is active
 	{
 		if(isNotRelease(event) && Minecraft.getInstance().currentScreen == null)
 		{
@@ -105,26 +100,7 @@ public class MSKeyHandler
 			if(sylladexKey.isActiveAndMatches(input) && ClientPlayerData.getModus() != null)
 				MSScreenFactories.displaySylladexScreen(ClientPlayerData.getModus());
 			
-			if(testKey.isActiveAndMatches(input)) {
-				String[] paragraphs = new String[] {
-					"One time, I saw a guy with some weird wing-looking things on his back. He could glide with them, but without being able to stay in the air, what's the point?",
-					"The Denizen is the One that Slumbers in our very soil. It is eternally waiting for the %s to awaken it. Then they will be given The Choice, and their victory will be determined by what they choose.",
-					"When mixing red and blue to get magenta, the blue overpowers the red and you get purple. You have to mix the purple with not just red, but pink to get magenta."
-				};
-				
-				ResourceLocation test = new ResourceLocation("minestuck", "textures/gui/dialogue/salamander.png");
-				
-				String[] options = new String[] {
-					"Yes.",
-					"No Way.",
-					"..."
-				};
-				
-				Minecraft.getInstance().displayGuiScreen(new DialogueScreen(paragraphs, test, options));
-			}
-			
 		}
-		
 	}
 	
 	private static void captchalogueInGame()

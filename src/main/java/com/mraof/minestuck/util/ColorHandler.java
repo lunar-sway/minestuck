@@ -92,10 +92,10 @@ public class ColorHandler
 	
 	public static ItemStack setDefaultColor(ItemStack stack)
 	{
-		return setColor(stack, DEFAULT_COLOR);
+		return setStackColor(stack, DEFAULT_COLOR);
 	}
 	
-	public static ItemStack setColor(ItemStack stack, int color)
+	public static ItemStack setStackColor(ItemStack stack, int color)
 	{
 		stack.getOrCreateTag().putInt("color", color);
 		return stack;

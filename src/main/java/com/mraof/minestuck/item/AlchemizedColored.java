@@ -11,6 +11,6 @@ public interface AlchemizedColored
 {
 	default ItemStack setColor(ItemStack stack, int color)
 	{
-		return ColorHandler.setColor(stack, color);
+		return ColorHandler.setStackColor(stack, color);
 	}
 }

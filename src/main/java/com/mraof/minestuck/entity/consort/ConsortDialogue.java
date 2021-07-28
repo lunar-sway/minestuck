@@ -30,7 +30,7 @@ import static com.mraof.minestuck.world.storage.loot.MSLootTables.CONSORT_GENERA
 /**
  * Handles message registry, message selection and contains the main message
  * class, which combines conditioning and a MessageType
- * 
+ *
  * @author Kirderf1
  */
 public class ConsortDialogue
@@ -42,7 +42,7 @@ public class ConsortDialogue
 	/**
 	 * Make sure to call after land registry
 	 */
-	public static void init()	//TODO Could likely be exported to a json format
+	public static void init()    //TODO Could likely be exported to a json format
 	{
 		// Wind
 		addMessage("dad_wind").landTitle(WIND);
@@ -221,7 +221,7 @@ public class ConsortDialogue
 		addMessage("sharp_slide").landTerrain(FLORA);
 		addMessage(new ChainMessage(new SingleMessage("immortality_herb.1"), new SingleMessage("immortality_herb.2"), new ExplosionMessage("immortality_herb.3"))).landTerrain(FLORA).lockToConsort();
 		addMessage(new ChainMessage(new SingleMessage("spices.1"), new SingleMessage("spices.2", "land_name"))).landTerrain(FLORA);
-
+		
 		//Misc
 		addMessage("denizen_mention").reqLand();
 		addMessage("floating_island").consortReq(consort -> consort.getDistanceSq(new Vec3d(consort.world.getSpawnPoint())) < 65536).reqLand();
@@ -235,48 +235,48 @@ public class ConsortDialogue
 				new SingleMessage("heroic_stench"), new SingleMessage("leech_stench"))).reqLand();
 		
 		MessageType raps = new RandomMessage("rap_battles", RandomKeepResult.KEEP_CONSORT,
-				new DelayMessage(new int[] {17, 17, 30},
-					new SingleMessage("rap_battle.a1"), new SingleMessage("rap_battle.a2"),
-					new SingleMessage("rap_battle.a3"), new SingleMessage("rap_battle.a4")
-				), new DelayMessage(new int[] {25},
-					new SingleMessage("rap_battle.b1"),new SingleMessage("rap_battle.b2"),
-					new SingleMessage("rap_battle.b3"),new SingleMessage("rap_battle.b4")
-				), new DelayMessage(new int[] {17},
-					new SingleMessage("rap_battle.c1"),new SingleMessage("rap_battle.c2"),
-					new SingleMessage("rap_battle.c3", "consort_sound"), new SingleMessage("rap_battle.c4")
-				), new DelayMessage(new int[] {25, 20, 30},
-					new SingleMessage("rap_battle.d1"),new SingleMessage("rap_battle.d2"),
-					new SingleMessage("rap_battle.d3"),new SingleMessage("rap_battle.d4")
-				), new DelayMessage(new int[] {17, 20, 30},
-					new SingleMessage("rap_battle.e1"),new SingleMessage("rap_battle.e2"),
-					new SingleMessage("rap_battle.e3"),new SingleMessage("rap_battle.e4")
-				), new DelayMessage(new int[] {25},
-					new SingleMessage("rap_battle.f1"),new SingleMessage("rap_battle.f2"),
-					new SingleMessage("rap_battle.f3"),new SingleMessage("rap_battle.f4")));
+				new DelayMessage(new int[]{17, 17, 30},
+						new SingleMessage("rap_battle.a1"), new SingleMessage("rap_battle.a2"),
+						new SingleMessage("rap_battle.a3"), new SingleMessage("rap_battle.a4")
+				), new DelayMessage(new int[]{25},
+				new SingleMessage("rap_battle.b1"), new SingleMessage("rap_battle.b2"),
+				new SingleMessage("rap_battle.b3"), new SingleMessage("rap_battle.b4")
+		), new DelayMessage(new int[]{17},
+				new SingleMessage("rap_battle.c1"), new SingleMessage("rap_battle.c2"),
+				new SingleMessage("rap_battle.c3", "consort_sound"), new SingleMessage("rap_battle.c4")
+		), new DelayMessage(new int[]{25, 20, 30},
+				new SingleMessage("rap_battle.d1"), new SingleMessage("rap_battle.d2"),
+				new SingleMessage("rap_battle.d3"), new SingleMessage("rap_battle.d4")
+		), new DelayMessage(new int[]{17, 20, 30},
+				new SingleMessage("rap_battle.e1"), new SingleMessage("rap_battle.e2"),
+				new SingleMessage("rap_battle.e3"), new SingleMessage("rap_battle.e4")
+		), new DelayMessage(new int[]{25},
+				new SingleMessage("rap_battle.f1"), new SingleMessage("rap_battle.f2"),
+				new SingleMessage("rap_battle.f3"), new SingleMessage("rap_battle.f4")));
 		addMessage(new ChoiceMessage(false, new SingleMessage("rap_battle"),
-				new SingleMessage[]
-				{
-					new SingleMessage("rap_battle.accept"),
-					new SingleMessage("rap_battle.deny")
-				},
-				new MessageType[] {
-					//If you accepted the challenge
-					new ChoiceMessage(false,
-							new DescriptionMessage(raps, "rap_battle.raps_desc"),
-							new SingleMessage[] {
-									new SingleMessage("rap_battle_school"),
-									new SingleMessage("rap_battle_concede")
-							},
-							new MessageType[] {
-									new DoubleMessage(new DescriptiveMessage("rap_battle_school.rap", "player_title", "land_name"),
-											new SingleMessage("rap_battle_school.final", "consort_sound")).setSayFirstOnce(),
-									new SingleMessage("rap_battle_concede.final", "consort_sound")
-							}
-					),
-					//If you didn't accept the challenge
-					new SingleMessage("rap_battle.deny_answer")
-				}
-			).setAcceptNull()
+						new SingleMessage[]
+								{
+										new SingleMessage("rap_battle.accept"),
+										new SingleMessage("rap_battle.deny")
+								},
+						new MessageType[]{
+								//If you accepted the challenge
+								new ChoiceMessage(false,
+										new DescriptionMessage(raps, "rap_battle.raps_desc"),
+										new SingleMessage[]{
+												new SingleMessage("rap_battle_school"),
+												new SingleMessage("rap_battle_concede")
+										},
+										new MessageType[]{
+												new DoubleMessage(new DescriptiveMessage("rap_battle_school.rap", "player_title", "land_name"),
+														new SingleMessage("rap_battle_school.final", "consort_sound")).setSayFirstOnce(),
+												new SingleMessage("rap_battle_concede.final", "consort_sound")
+										}
+								),
+								//If you didn't accept the challenge
+								new SingleMessage("rap_battle.deny_answer")
+						}
+				).setAcceptNull()
 		).consort(EnumConsort.NAKAGATOR, EnumConsort.IGUANA);
 		
 		addMessage("useless_pogo");
@@ -300,22 +300,22 @@ public class ConsortDialogue
 		addMessage(new ChainMessage(0, new SingleMessage("college.1"), new SingleMessage("college.2")));
 		addMessage(new ChainMessage(1, new SingleMessage("unknown.1"), new SingleMessage("unknown.2"))).consort(EnumConsort.TURTLE);
 		addMessage(new ChainMessage(1, new SingleMessage("cult.1", "player_title"), new SingleMessage("cult.2"))).consort(EnumConsort.TURTLE, EnumConsort.SALAMANDER);
-
+		
 		addMessage(new ChoiceMessage(new DescriptionMessage("peppy_offer"),
-				new SingleMessage[] { new SingleMessage("peppy_offer.buy"), new SingleMessage("peppy_offer.deny") },
-				new MessageType[] {
+				new SingleMessage[]{new SingleMessage("peppy_offer.buy"), new SingleMessage("peppy_offer.deny")},
+				new MessageType[]{
 						new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 1000, -15, "purchase",
 								new ChainMessage(1, new SingleMessage("peppy_offer.item"), new SingleMessage("peppy_offer.purchase"))),
 						new ChoiceMessage(new SingleMessage("peppy_offer.next"),
-								new SingleMessage[] { new SingleMessage("peppy_offer.deny_again"), new SingleMessage("peppy_offer.buy_2") },
-								new MessageType[] { new SingleMessage("dots"),
+								new SingleMessage[]{new SingleMessage("peppy_offer.deny_again"), new SingleMessage("peppy_offer.buy_2")},
+								new MessageType[]{new SingleMessage("dots"),
 										new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 500, -35, "purchase",
-												new SingleMessage("peppy_offer.purchase")) }) })).type(MerchantType.SHADY).consort(EnumConsort.NAKAGATOR, EnumConsort.IGUANA);
-
-
+												new SingleMessage("peppy_offer.purchase"))})})).type(MerchantType.SHADY).consort(EnumConsort.NAKAGATOR, EnumConsort.IGUANA);
+		
+		
 		addMessage(new ChoiceMessage(true, new SingleMessage("title_presence", "player_title"),
-				new SingleMessage[] { new SingleMessage("title_presence.iam", "player_title"), new SingleMessage("title_presence.agree") },
-				new MessageType[] { new SingleMessage("title_presence.iam_answer", "consort_sound_2"), new SingleMessage("thanks") })).consort(EnumConsort.IGUANA, EnumConsort.SALAMANDER).reqLand();
+				new SingleMessage[]{new SingleMessage("title_presence.iam", "player_title"), new SingleMessage("title_presence.agree")},
+				new MessageType[]{new SingleMessage("title_presence.iam_answer", "consort_sound_2"), new SingleMessage("thanks")})).consort(EnumConsort.IGUANA, EnumConsort.SALAMANDER).reqLand();
 		
 		addMessage(new ChoiceMessage(new DescriptionMessage("shady_offer"),
 				new SingleMessage[]
@@ -323,8 +323,8 @@ public class ConsortDialogue
 								new SingleMessage("shady_offer.buy"),
 								new SingleMessage("shady_offer.deny")
 						},
-				new MessageType[] {
-						new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 1000, -15,"purchase",
+				new MessageType[]{
+						new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 1000, -15, "purchase",
 								new ChainMessage(1,
 										new SingleMessage("shady_offer.item"),
 										new SingleMessage("shady_offer.purchase")
@@ -332,51 +332,51 @@ public class ConsortDialogue
 						),
 						new ChoiceMessage(new SingleMessage("shady_offer.next", "consort_sound"),
 								new SingleMessage[]
-								{
-										new SingleMessage("shady_offer.deny_again"),
-										new SingleMessage("shady_offer.buy_2")
-								},
+										{
+												new SingleMessage("shady_offer.deny_again"),
+												new SingleMessage("shady_offer.buy_2")
+										},
 								new MessageType[]
-								{
-										new SingleMessage("dots"),
-										new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 500, -35, "purchase",
-												new SingleMessage("shady_offer.purchase")
-										)
-								}
+										{
+												new SingleMessage("dots"),
+												new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 500, -35, "purchase",
+														new SingleMessage("shady_offer.purchase")
+												)
+										}
 						)
 				}
 		)).type(MerchantType.SHADY).consort(EnumConsort.SALAMANDER, EnumConsort.TURTLE);
 		
 		addMessage(new ChoiceMessage(true, new SingleMessage("denizen", "denizen"),
-				new SingleMessage[] { new SingleMessage("denizen.what"), new SingleMessage("denizen.ask_alignment") },
-				new MessageType[] { new SingleMessage("denizen.explain", "player_class_land"), new SingleMessage("denizen.alignment") })).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA, EnumConsort.TURTLE).reqLand();
+				new SingleMessage[]{new SingleMessage("denizen.what"), new SingleMessage("denizen.ask_alignment")},
+				new MessageType[]{new SingleMessage("denizen.explain", "player_class_land"), new SingleMessage("denizen.alignment")})).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA, EnumConsort.TURTLE).reqLand();
 		
 		List<ItemStack> hungryList = ImmutableList.of(new ItemStack(Items.COOKIE), new ItemStack(MSItems.BUG_ON_A_STICK),
-				new ItemStack(MSItems.GRASSHOPPER), new ItemStack(MSItems.CHOCOLATE_BEETLE),	//TODO Use item tags for these kind of things
+				new ItemStack(MSItems.GRASSHOPPER), new ItemStack(MSItems.CHOCOLATE_BEETLE),    //TODO Use item tags for these kind of things
 				new ItemStack(MSItems.CONE_OF_FLIES));
 		addMessage(new ItemRequirement(hungryList, false, true, new SingleMessage("hungry"),
-						new ChoiceMessage(new SingleMessage("hungry.ask_food", "nbt_item:hungry.item"),
-								new SingleMessage[] { new SingleMessage("hungry.accept"), new SingleMessage("hungry.deny") },
-								new MessageType[] { new GiveItemMessage("hungry.thanks", "hungry.item", 0, 15, new SingleMessage("hungry.thanks")),
-										new SingleMessage("sadface") }))).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);
+				new ChoiceMessage(new SingleMessage("hungry.ask_food", "nbt_item:hungry.item"),
+						new SingleMessage[]{new SingleMessage("hungry.accept"), new SingleMessage("hungry.deny")},
+						new MessageType[]{new GiveItemMessage("hungry.thanks", "hungry.item", 0, 15, new SingleMessage("hungry.thanks")),
+								new SingleMessage("sadface")}))).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);
 		addMessage(new ItemRequirement("hungry2", hungryList, false, true, false,
-						new SingleMessage(
-								"hungry"),
-						new ChoiceMessage(
-								new SingleMessage("hungry.ask_food",
-										"nbt_item:hungry2.item"),
-								new SingleMessage[] {
-										new SingleMessage(
-												"hungry.accept"),
-										new SingleMessage("hungry.deny") },
-								new MessageType[] { new GiveItemMessage("hungry.thanks", "hungry2.item", 0, 15, new SingleMessage("hungry.thanks")),
-										new ChoiceMessage(new SingleMessage("hungry.starving"),
-												new SingleMessage[] { new SingleMessage("hungry.agree"),
-														new SingleMessage("hungry.too_cheap") },
-												new MessageType[] { new GiveItemMessage("hungry.sell_item", "hungry2.item", 10, 0,
-														new ChainMessage(1, new DescriptionMessage("hungry.finally", "nbt_item:hungry2.item"),
-																new SingleMessage("hungry.finally"))),
-														new SingleMessage("hungry.end") }) }))).consort(EnumConsort.SALAMANDER, EnumConsort.NAKAGATOR);
+				new SingleMessage(
+						"hungry"),
+				new ChoiceMessage(
+						new SingleMessage("hungry.ask_food",
+								"nbt_item:hungry2.item"),
+						new SingleMessage[]{
+								new SingleMessage(
+										"hungry.accept"),
+								new SingleMessage("hungry.deny")},
+						new MessageType[]{new GiveItemMessage("hungry.thanks", "hungry2.item", 0, 15, new SingleMessage("hungry.thanks")),
+								new ChoiceMessage(new SingleMessage("hungry.starving"),
+										new SingleMessage[]{new SingleMessage("hungry.agree"),
+												new SingleMessage("hungry.too_cheap")},
+										new MessageType[]{new GiveItemMessage("hungry.sell_item", "hungry2.item", 10, 0,
+												new ChainMessage(1, new DescriptionMessage("hungry.finally", "nbt_item:hungry2.item"),
+														new SingleMessage("hungry.finally"))),
+												new SingleMessage("hungry.end")})}))).consort(EnumConsort.SALAMANDER, EnumConsort.NAKAGATOR);
 		
 		addMessage(new MerchantGuiMessage(new SingleMessage("food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).consort(EnumConsort.SALAMANDER).lockToConsort();
 		addMessage(new MerchantGuiMessage(new SingleMessage("fast_food"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).consort(EnumConsort.NAKAGATOR).lockToConsort();

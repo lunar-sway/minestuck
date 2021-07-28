@@ -103,7 +103,7 @@ public class MiniTotemLatheTileEntity extends MachineProcessTileEntity implement
 		
 		ItemStack outputDowel = output.getItem().equals(MSBlocks.GENERIC_OBJECT.asItem())
 				? new ItemStack(MSBlocks.CRUXITE_DOWEL) : AlchemyHelper.createEncodedItem(output, false);
-		ColorHandler.setColor(outputDowel, ColorHandler.getColorFromStack(dowelInput));	//Setting color
+		ColorHandler.setStackColor(outputDowel, ColorHandler.getColorFromStack(dowelInput));	//Setting color
 		return outputDowel;
 	}
 	
