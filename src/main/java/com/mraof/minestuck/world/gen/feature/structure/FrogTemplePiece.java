@@ -16,9 +16,7 @@ import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.state.properties.ChestType;
 import net.minecraft.state.properties.Half;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.util.math.*;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
@@ -51,6 +49,14 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 	public FrogTemplePiece(TemplateManager templates, CompoundNBT nbt)
 	{
 		super(MSStructurePieces.FROG_TEMPLE, nbt);
+		createRan = nbt.getBoolean("createRan");
+	}
+	
+	@Override
+	protected void readAdditional(CompoundNBT tagCompound) //actually writeAdditional
+	{
+		tagCompound.putBoolean("createRan", createRan);
+		super.readAdditional(tagCompound);
 	}
 	
 	@Override
@@ -103,8 +109,8 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 		chestNearDoorPos = new BlockPos(this.getXWithOffset(10, 29 + 14), this.getYWithOffset(21), this.getZWithOffset(10, 29 + 14));
 		StructureBlockUtil.placeLootChest(chestNearDoorPos, worldIn, boundingBoxIn, getCoordBaseMode().getOpposite(), rightChestType, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
 		
-		//TODO Find out if there is a better fix than the createRan boolean to prevent the lotus entity from generating several times
-		if(!createRan)
+		Vec3i entityVec = new Vec3i(getEntityXWithOffset(21, 21 + 14), this.getYWithOffset(50), getEntityZWithOffset(21, 21 + 14));
+		if(!createRan && boundingBoxIn.isVecInside(entityVec))
 		{
 			LotusFlowerEntity lotusFlowerEntity = MSEntityTypes.LOTUS_FLOWER.create(worldIn.getWorld());
 			if(lotusFlowerEntity == null)
