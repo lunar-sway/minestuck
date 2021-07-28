@@ -70,11 +70,13 @@ public class LandWrapperBiome extends LandBiome
 		if(type == BiomeType.NORMAL || type == BiomeType.ROUGH)
 		{
 			addStructure(MSFeatures.IMP_DUNGEON.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
+			addStructure(MSFeatures.TIER_ONE_DUNGEON.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
 		}
 
 		addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MSFeatures.LAND_GATE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.NOPE.configure(IPlacementConfig.NO_PLACEMENT_CONFIG)));
 		addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MSFeatures.SMALL_RUIN.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.NOPE.configure(IPlacementConfig.NO_PLACEMENT_CONFIG)));
 		addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MSFeatures.IMP_DUNGEON.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.NOPE.configure(IPlacementConfig.NO_PLACEMENT_CONFIG)));
+		addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MSFeatures.TIER_ONE_DUNGEON.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.NOPE.configure(IPlacementConfig.NO_PLACEMENT_CONFIG)));
 		addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MSFeatures.CONSORT_VILLAGE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.NOPE.configure(IPlacementConfig.NO_PLACEMENT_CONFIG)));
 	}
 	

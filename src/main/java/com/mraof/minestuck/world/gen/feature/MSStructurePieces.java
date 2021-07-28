@@ -21,6 +21,8 @@ public final class MSStructurePieces
 	public static IStructurePieceType IMP_SPAWNER_ROOM, IMP_SPAWNER_CORRIDOR, IMP_LARGE_SPAWNER_CORRIDOR;
 	public static IStructurePieceType IMP_BOOKCASE_ROOM, IMP_OGRE_CORRIDOR;
 	
+	public static IStructurePieceType TIER_ONE_DUNGEON;
+	
 	public static IStructurePieceType VILLAGE_PATH;
 	public static IStructurePieceType MARKET_CENTER;
 	public static IStructurePieceType ROCK_CENTER;
@@ -60,6 +62,8 @@ public final class MSStructurePieces
 		IMP_LARGE_SPAWNER_CORRIDOR = register(ImpDungeonPieces.LargeSpawnerCorridor::new, Minestuck.MOD_ID+":imp_large_spawner_corridor");
 		IMP_BOOKCASE_ROOM = register(ImpDungeonPieces.BookcaseRoom::new, Minestuck.MOD_ID+":imp_bookcase_room");
 		IMP_OGRE_CORRIDOR = register(ImpDungeonPieces.OgreCorridor::new, Minestuck.MOD_ID+":imp_ogre_corridor");
+		
+		TIER_ONE_DUNGEON = register(FrogTemplePiece::new, Minestuck.MOD_ID+":tier_one_dungeon");
 		
 		VILLAGE_PATH = register(ConsortVillagePieces.VillagePath::new, Minestuck.MOD_ID+":village_path");
 		MARKET_CENTER = register(ConsortVillageCenter.VillageMarketCenter::new, Minestuck.MOD_ID+":market_center");

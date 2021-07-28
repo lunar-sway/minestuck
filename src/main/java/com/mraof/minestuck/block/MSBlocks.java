@@ -144,6 +144,10 @@ public class MSBlocks
 	public static final Block CHALK_SLAB = getNull(), CHALK_BRICK_SLAB = getNull(), PINK_STONE_BRICK_SLAB = getNull(), BROWN_STONE_BRICK_SLAB = getNull(), GREEN_STONE_BRICK_SLAB = getNull();
 	public static final Block RAINBOW_PLANKS_SLAB = getNull(), END_PLANKS_SLAB = getNull(), DEAD_PLANKS_SLAB = getNull(), TREATED_PLANKS_SLAB = getNull();
 
+	//Dungeon Functional Blocks
+	public static final Block DUNGEON_DOOR_INTERFACE = getNull();
+	public static final Block DUNGEON_DOOR = getNull();
+	
 	//Core Functional Land Blocks
 	public static final Block GATE = getNull();
 	public static final Block RETURN_NODE = getNull();
@@ -468,6 +472,9 @@ public class MSBlocks
 		registry.register(new SlabBlock(Block.Properties.from(endPlanks)).setRegistryName("end_planks_slab"));
 		registry.register(new SlabBlock(Block.Properties.from(deadPlanks)).setRegistryName("dead_planks_slab"));
 		registry.register(new SlabBlock(Block.Properties.from(treatedPlanks)).setRegistryName("treated_planks_slab"));
+		
+		registry.register(new DungeonDoorInterfaceBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(-1F).sound(SoundType.STONE)).setRegistryName("dungeon_door_interface"));
+		registry.register(new Block(Block.Properties.create(Material.ROCK).hardnessAndResistance(-1F).sound(SoundType.STONE)).setRegistryName("dungeon_door"));
 		
 		registry.register(new GateBlock(Block.Properties.create(Material.PORTAL).doesNotBlockMovement().hardnessAndResistance(-1.0F, 25.0F).sound(SoundType.GLASS).lightValue(11).noDrops()).setRegistryName("gate"));
 		registry.register(new ReturnNodeBlock(Block.Properties.create(Material.PORTAL).doesNotBlockMovement().hardnessAndResistance(-1.0F, 10.0F).sound(SoundType.GLASS).lightValue(11).noDrops()).setRegistryName("return_node"));

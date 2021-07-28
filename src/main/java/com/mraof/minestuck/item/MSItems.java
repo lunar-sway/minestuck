@@ -448,6 +448,9 @@ public class MSItems
 	public static final Item WOODEN_CARROT = getNull();
 	public static final Item COCOA_WART = getNull();
 	
+	//Dungeon/Puzzle Items
+	public static final Item TIER_1_KEY = getNull();
+	
 	//Music Discs
 	public static final Item MUSIC_DISC_EMISSARY_OF_DANCE = getNull();
 	public static final Item MUSIC_DISC_DANCE_STAB_DANCE = getNull();
@@ -1168,6 +1171,9 @@ public class MSItems
 		registry.register(new HangingItem((world, pos, facing, stack) -> new SbahjPosterEntity(world, pos, facing), new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("sbahj_poster"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("bi_dye"));
 		registry.register(new RightClickMessageItem(new Item.Properties().group(MSItemGroup.MAIN), RightClickMessageItem.Type.DEFAULT).setRegistryName("lip_balm"));
+		
+		//Dungeon/Puzzle items
+		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("tier_1_key"));
 
 		//Music disks
 		registry.register(new MusicDiscItem(1, () -> MSSoundEvents.MUSIC_DISC_EMISSARY_OF_DANCE, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_emissary_of_dance"));
