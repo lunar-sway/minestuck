@@ -18,6 +18,7 @@ import com.mraof.minestuck.player.KindAbstratusList;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.MSSurfaceBuilders;
+import com.mraof.minestuck.world.gen.MSWorldGenTypes;
 import com.mraof.minestuck.world.gen.feature.MSCFeatures;
 import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
 import net.minecraft.item.ItemStack;
@@ -82,6 +83,7 @@ public class Minestuck
 		MSEntityTypes.registerPlacements();
 		MSFillerBlockTypes.init();	//Not sure if this is thread safe, but better safe than sorry
 		MSCFeatures.init();
+		MSWorldGenTypes.register();
 		
 		//register ore generation
 		setupOverworldOreGeneration();
