@@ -1,7 +1,6 @@
 package com.mraof.minestuck.world.gen.feature.structure;
 
 import com.mojang.serialization.Codec;
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.biome.LandBiomeSet;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.SharedSeedRandom;
@@ -57,12 +56,6 @@ public class GateStructure extends Structure<NoFeatureConfig>
 	public IStartFactory<NoFeatureConfig> getStartFactory()
 	{
 		return GateStructure.Start::new;
-	}
-	
-	@Override
-	public String getFeatureName()
-	{
-		return Minestuck.MOD_ID + ":land_gate";
 	}
 	
 	public BlockPos findLandGatePos(ServerWorld world)

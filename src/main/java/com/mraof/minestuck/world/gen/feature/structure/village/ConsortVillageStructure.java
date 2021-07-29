@@ -1,7 +1,6 @@
 package com.mraof.minestuck.world.gen.feature.structure.village;
 
 import com.mojang.serialization.Codec;
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import net.minecraft.util.math.MutableBoundingBox;
@@ -37,12 +36,6 @@ public class ConsortVillageStructure extends Structure<NoFeatureConfig>
 	public IStartFactory<NoFeatureConfig> getStartFactory()
 	{
 		return Start::new;
-	}
-	
-	@Override
-	public String getFeatureName()
-	{
-		return Minestuck.MOD_ID + ":consort_village";
 	}
 	
 	private static class Start extends StructureStart<NoFeatureConfig>

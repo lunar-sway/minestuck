@@ -69,11 +69,17 @@ public final class MSFeatures
 	{
 		IForgeRegistry<Structure<?>> registry = event.getRegistry();
 		
-		registry.register(new GateStructure(NoFeatureConfig.CODEC).setRegistryName("land_gate"));
-		registry.register(new SmallRuinStructure(NoFeatureConfig.CODEC).setRegistryName("small_ruin"));
-		registry.register(new ImpDungeonStructure(NoFeatureConfig.CODEC).setRegistryName("imp_dungeon"));
-		registry.register(new ConsortVillageStructure(NoFeatureConfig.CODEC).setRegistryName("consort_village"));
-		registry.register(new CastleStructure(NoFeatureConfig.CODEC).setRegistryName("skaia_castle"));
+		register(registry, new GateStructure(NoFeatureConfig.CODEC).setRegistryName("land_gate"));
+		register(registry, new SmallRuinStructure(NoFeatureConfig.CODEC).setRegistryName("small_ruin"));
+		register(registry, new ImpDungeonStructure(NoFeatureConfig.CODEC).setRegistryName("imp_dungeon"));
+		register(registry, new ConsortVillageStructure(NoFeatureConfig.CODEC).setRegistryName("consort_village"));
+		register(registry, new CastleStructure(NoFeatureConfig.CODEC).setRegistryName("skaia_castle"));
+	}
+	
+	private static void register(IForgeRegistry<Structure<?>> registry, Structure<?> structure)
+	{
+		registry.register(structure);
+		Structure.STRUCTURES_REGISTRY.put(structure.getRegistryName().toString(), structure);
 	}
 	
 	@SubscribeEvent

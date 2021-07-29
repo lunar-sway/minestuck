@@ -42,10 +42,4 @@ public class CastleStructure extends Structure<NoFeatureConfig>
 	{
         return StructureCastleStart::new;
     }
-	
-	@Override
-	public String getFeatureName()
-	{
-		return "SkaiaCastle";
-	}
 }

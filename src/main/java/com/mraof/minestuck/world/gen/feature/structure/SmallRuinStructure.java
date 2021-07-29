@@ -1,7 +1,6 @@
 package com.mraof.minestuck.world.gen.feature.structure;
 
 import com.mojang.serialization.Codec;
-import com.mraof.minestuck.Minestuck;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.util.registry.DynamicRegistries;
 import net.minecraft.world.biome.Biome;
@@ -29,12 +28,6 @@ public class SmallRuinStructure extends Structure<NoFeatureConfig>
 	public IStartFactory<NoFeatureConfig> getStartFactory()
 	{
 		return Start::new;
-	}
-	
-	@Override
-	public String getFeatureName()
-	{
-		return Minestuck.MOD_ID + ":small_ruin";
 	}
 	
 	public static class Start extends StructureStart<NoFeatureConfig>
