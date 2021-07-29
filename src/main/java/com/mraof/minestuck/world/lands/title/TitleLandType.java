@@ -1,7 +1,10 @@
 package com.mraof.minestuck.world.lands.title;
 
+import com.mojang.serialization.Codec;
 import com.mraof.minestuck.player.EnumAspect;
+import com.mraof.minestuck.util.CodecUtil;
 import com.mraof.minestuck.world.lands.ILandType;
+import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistryEntry;
@@ -10,6 +13,7 @@ import javax.annotation.Nullable;
 
 public abstract class TitleLandType extends ForgeRegistryEntry<TitleLandType> implements ILandType<TitleLandType>
 {
+	public static final Codec<TitleLandType> CODEC = CodecUtil.registryCodec(() -> LandTypes.TITLE_REGISTRY);
 	private final ResourceLocation groupName;
 	private final EnumAspect aspectType;
 	private final boolean pickedAtRandom;
