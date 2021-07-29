@@ -43,6 +43,7 @@ public class ClientProxy
 
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.FROG, FrogRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.HOLOGRAM, HologramRenderer::new);
+		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.LOTUS_FLOWER, LotusFlowerRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.NAKAGATOR, manager -> new SimpleTexturedEntityRenderer<>(manager, new NakagatorModel<>(), 0.5F));
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.SALAMANDER, manager -> new SimpleTexturedEntityRenderer<>(manager, new SalamanderModel<>(), 0.5F));
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.IGUANA, manager -> new SimpleTexturedEntityRenderer<>(manager, new IguanaModel<>(), 0.5F));

@@ -15,6 +15,7 @@ import com.mraof.minestuck.command.argument.*;
 import com.mraof.minestuck.computer.ButtonListProgram;
 import com.mraof.minestuck.computer.SburbClient;
 import com.mraof.minestuck.computer.SburbServer;
+import com.mraof.minestuck.entity.LotusFlowerEntity;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.MessageType;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
@@ -150,6 +151,23 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.BROWN_STONE_COLUMN, "Brown Stone Column");
 		add(MSBlocks.CRACKED_BROWN_STONE_BRICKS, "Cracked Brown Stone Bricks");
 		add(MSBlocks.GREEN_STONE, "Green Stone");
+		add(MSBlocks.POLISHED_GREEN_STONE, "Polished Green Stone");
+		add(MSBlocks.GREEN_STONE_BRICKS, "Green Stone Bricks");
+		add(MSBlocks.GREEN_STONE_COLUMN, "Green Stone Column");
+		add(MSBlocks.CHISELED_GREEN_STONE_BRICKS, "Chiseled Green Stone Bricks");
+		add(MSBlocks.HORIZONTAL_GREEN_STONE_BRICKS, "Horizontal Green Stone Bricks");
+		add(MSBlocks.VERTICAL_GREEN_STONE_BRICKS, "Vertical Green Stone Bricks");
+		add(MSBlocks.GREEN_STONE_BRICK_TRIM, "Green Stone Brick Trim");
+		add(MSBlocks.GREEN_STONE_BRICK_FROG, "Green Stone Brick Frog Hieroglyph");
+		add(MSBlocks.GREEN_STONE_BRICK_IGUANA_LEFT, "Green Stone Brick Iguana Left Hieroglyph");
+		add(MSBlocks.GREEN_STONE_BRICK_IGUANA_RIGHT, "Green Stone Brick Iguana Right Hieroglyph");
+		add(MSBlocks.GREEN_STONE_BRICK_LOTUS, "Green Stone Brick Lotus Hieroglyph");
+		add(MSBlocks.GREEN_STONE_BRICK_NAK_LEFT, "Green Stone Brick Nakagator Left Hieroglyph");
+		add(MSBlocks.GREEN_STONE_BRICK_NAK_RIGHT, "Green Stone Brick Nakagator Right Hieroglyph");
+		add(MSBlocks.GREEN_STONE_BRICK_SALAMANDER_LEFT, "Green Stone Brick Salamander Left Hieroglyph");
+		add(MSBlocks.GREEN_STONE_BRICK_SALAMANDER_RIGHT, "Green Stone Brick Salamander Right Hieroglyph");
+		add(MSBlocks.GREEN_STONE_BRICK_SKAIA, "Green Stone Brick Skaia Hieroglyph");
+		add(MSBlocks.GREEN_STONE_BRICK_TURTLE, "Green Stone Brick Turtle Hieroglyph");
 		add(MSBlocks.DENSE_CLOUD, "Dense Cloud");
 		add(MSBlocks.BRIGHT_DENSE_CLOUD, "Bright Dense Cloud");
 		add(MSBlocks.SUGAR_CUBE, "Sugar Cube");
@@ -277,10 +295,13 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.CHALK_BRICK_STAIRS, "Chalk Brick Stairs");
 		add(MSBlocks.PINK_STONE_BRICK_STAIRS, "Pink Stone Brick Stairs");
 		add(MSBlocks.BROWN_STONE_BRICK_STAIRS, "Brown Stone Brick Stairs");
+		add(MSBlocks.GREEN_STONE_BRICK_STAIRS, "Green Stone Brick Stairs");
 		add(MSBlocks.RAINBOW_PLANKS_STAIRS, "Rainbow Planks Stairs");
 		add(MSBlocks.END_PLANKS_STAIRS, "End Planks Stairs");
 		add(MSBlocks.DEAD_PLANKS_STAIRS, "Dead Planks Stairs");
 		add(MSBlocks.TREATED_PLANKS_STAIRS, "Treated Planks Stairs");
+		add(MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE, "Steep Green Stone Brick Stairs Base");
+		add(MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_TOP, "Steep Green Stone Brick Stairs Top");
 		add(MSBlocks.BLACK_CASTLE_BRICK_SLAB, "Black Castle Brick Slab");
 		add(MSBlocks.DARK_GRAY_CASTLE_BRICK_SLAB, "Dark Gray Castle Brick Slab");
 		add(MSBlocks.LIGHT_GRAY_CASTLE_BRICK_SLAB, "Light Gray Castle Brick Slab");
@@ -289,6 +310,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.CHALK_BRICK_SLAB, "Chalk Brick Slab");
 		add(MSBlocks.PINK_STONE_BRICK_SLAB, "Pink Stone Brick Slab");
 		add(MSBlocks.BROWN_STONE_BRICK_SLAB, "Brown Stone Brick Slab");
+		add(MSBlocks.GREEN_STONE_BRICK_SLAB, "Green Stone Brick Slab");
 		add(MSBlocks.RAINBOW_PLANKS_SLAB, "Rainbow Planks Slab");
 		add(MSBlocks.END_PLANKS_SLAB, "End Planks Slab");
 		add(MSBlocks.DEAD_PLANKS_SLAB, "Dead Planks Slab");
@@ -319,6 +341,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.GRIST_WIDGET, "GristWidget 12000");
 		add(MSBlocks.URANIUM_COOKER, "Cookalyzer");
 		add(MSBlocks.CRUXITE_DOWEL, "Cruxite Dowel");
+		MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.forEachBlock(block -> add(block, "Lotus Time Capsule"));
 		add(MSBlocks.GOLD_SEEDS, "Golden Seeds");
 		addTooltip(MSBlocks.GOLD_SEEDS, "These seeds are made out of 24-karat gold!");
 		addStoreTooltip(MSBlocks.GOLD_SEEDS, "Do you like regular seeds? This here is the luxury variant!");
@@ -713,8 +736,18 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.RAW_CRUXITE, "Raw Cruxite");
 		add(MSItems.RAW_URANIUM, "Uranium Lump");
 		add(MSItems.ENERGY_CORE, "Energy Core");
+		add(MSItems.TEMPLE_SCANNER, "Temple Scanner");
+		addExtra(MSItems.TEMPLE_SCANNER, "successMessage", "Closest detected temple around %s blocks away");
+		addExtra(MSItems.TEMPLE_SCANNER, "failMessage", "No temple detected nearby");
+		addExtra(MSItems.TEMPLE_SCANNER, "noFuelMessage", "This device requires uranium to run");
 		add(MSItems.CRUXITE_APPLE, "Cruxite Artifact");
 		add(MSItems.CRUXITE_POTION, "Cruxite Artifact");
+		add(MSItems.SBURB_CODE, "SBURB Code");
+		addTooltip(MSItems.SBURB_CODE, "It seems temple hieroglyphs can be translated into computer game code using a Book and Quill.");
+		add(MSItems.COMPUTER_PARTS, "Computer Parts");
+		addTooltip(MSItems.COMPUTER_PARTS, "Looks like it needs some additional components to get working.");
+		add(MSItems.BLANK_DISK, "Blank Disk");
+		addTooltip(MSItems.BLANK_DISK, "Can be put into a computer once there is a program on it to run.");
 		add(MSItems.CLIENT_DISK, "SBURB Client Disk");
 		add(MSItems.SERVER_DISK, "SBURB Server Disk");
 		add(MSItems.CAPTCHA_CARD, "Captchalogue Card");
@@ -1104,6 +1137,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSEntityTypes.SBAHJ_POSTER, "SBAHJ Poster");
 		add(MSEntityTypes.SHOP_POSTER, "Shop Sign");
 		add(MSEntityTypes.HOLOGRAM, "Hologram");
+		add(MSEntityTypes.LOTUS_FLOWER, "Lotus Flower");
 		
 		addGristType(GristTypes.BUILD, "Build");
 		addGristType(GristTypes.AMBER, "Amber");
@@ -1224,22 +1258,24 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addRung(48, "Installed Initiate");
 		addRung(49, "Master Of Mods");
 		
-		addAdvancement(MSAvancementProvider.ROOT, "Minestuck", "The Beginning of Something Really Excellent");
-		addAdvancement(MSAvancementProvider.CONNECT, "Connect", "Create a connection with someone");
-		addAdvancement(MSAvancementProvider.ENTRY, "A New World", "Create, and use the Cruxite Artifact");
-		addAdvancement(MSAvancementProvider.ALCHEMY, "Step Towards Alchemy", "Getting a punch designix is the first step to alchemizing something else!");
-		addAdvancement(MSAvancementProvider.NEW_MODUS, "A New Type of Frustrating", "Equip a new modus");
-		addAdvancement(MSAvancementProvider.ALL_MODI, "A Full Set", "Try a new modus type");
-		addAdvancement(MSAvancementProvider.GOLD_SEEDS, "Gold Farming", "It begins to dawn on you that everything you just did may have been a colossal waste of time");
-		addAdvancement(MSAvancementProvider.FRENCH_FRY, "Can I Get A, Uh...", "Successfully place and consume an order");
-		addAdvancement(MSAvancementProvider.MELON_OVERLOAD, "M- M- M- MELON OVERLOAAAAD!", "Become overloaded with melons");
-		addAdvancement(MSAvancementProvider.TREE_MODUS, "Uprooting", "Remove the root card in a tree modus with a bunch of items");
-		addAdvancement(MSAvancementProvider.KILL_OGRE, "The Big One", "Kill an ogre");
-		addAdvancement(MSAvancementProvider.RETURN_NODE, "There's No Place Like Home", "Find a Return Node and jump in to return home");
-		addAdvancement(MSAvancementProvider.DUNGEON, "Dungeon Explorer", "Find a Dungeon to explore!");
-		addAdvancement(MSAvancementProvider.COMMUNE, "Commune", "Visit a village and talk to a consort");
-		addAdvancement(MSAvancementProvider.BUGS, "Crunchy and High in Protein", "Eat a bug");
-		addAdvancement(MSAvancementProvider.SHADY_BUYER, "Buyer Beware", "Buy an item from a shady consort");
+		addAdvancement(MSAdvancementProvider.ROOT, "Minestuck", "The Beginning of Something Really Excellent");
+		addAdvancement(MSAdvancementProvider.SEARCHING, "Searching For Purpose", "Build a Temple Scanner to find special ruins scattered around the land");
+		addAdvancement(MSAdvancementProvider.LONG_TIME_COMING, "Long Time Coming", "Collect SBURB code from a Frog Temple! You get the sense that you need to find a disk to write it onto");
+		addAdvancement(MSAdvancementProvider.CONNECT, "Connect", "Create a connection with someone");
+		addAdvancement(MSAdvancementProvider.ENTRY, "A New World", "Create, and use the Cruxite Artifact");
+		addAdvancement(MSAdvancementProvider.ALCHEMY, "Step Towards Alchemy", "Getting a punch designix is the first step to alchemizing something else!");
+		addAdvancement(MSAdvancementProvider.NEW_MODUS, "A New Type of Frustrating", "Equip a new modus");
+		addAdvancement(MSAdvancementProvider.ALL_MODI, "A Full Set", "Try a new modus type");
+		addAdvancement(MSAdvancementProvider.GOLD_SEEDS, "Gold Farming", "It begins to dawn on you that everything you just did may have been a colossal waste of time");
+		addAdvancement(MSAdvancementProvider.FRENCH_FRY, "Can I Get A, Uh...", "Successfully place and consume an order");
+		addAdvancement(MSAdvancementProvider.MELON_OVERLOAD, "M- M- M- MELON OVERLOAAAAD!", "Become overloaded with melons");
+		addAdvancement(MSAdvancementProvider.TREE_MODUS, "Uprooting", "Remove the root card in a tree modus with a bunch of items");
+		addAdvancement(MSAdvancementProvider.KILL_OGRE, "The Big One", "Kill an ogre");
+		addAdvancement(MSAdvancementProvider.RETURN_NODE, "There's No Place Like Home", "Find a Return Node and jump in to return home");
+		addAdvancement(MSAdvancementProvider.DUNGEON, "Dungeon Explorer", "Find a Dungeon to explore!");
+		addAdvancement(MSAdvancementProvider.COMMUNE, "Commune", "Visit a village and talk to a consort");
+		addAdvancement(MSAdvancementProvider.BUGS, "Crunchy and High in Protein", "Eat a bug");
+		addAdvancement(MSAdvancementProvider.SHADY_BUYER, "Buyer Beware", "Buy an item from a shady consort");
 		
 		addLand(FungiLandType.FUNGI, "Fungi");
 		addLand(FungiLandType.DANK, "Dank");
@@ -1477,6 +1513,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSKeyHandler.CAPTCHALOGUE, "Captchalogue Held Item");
 		add(MSKeyHandler.ASPECT_EFFECT_TOGGLE, "Toggle Aspect Effects");
 		add(MSKeyHandler.SYLLADEX, "Open Sylladex");
+		
+		add(LotusFlowerEntity.REGROW, "There are no petals on this plant, maybe it will regrow?");
 		
 		add(ConsortMerchantInventory.CANT_AFFORD, "You don't have enough boondollars for that!");
 		add(MessageType.MISSING_ITEM, "You need a %s for that!");

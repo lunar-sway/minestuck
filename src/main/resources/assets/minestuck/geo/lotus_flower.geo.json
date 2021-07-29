@@ -1,0 +1,171 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.unknown",
+				"texture_width": 128,
+				"texture_height": 128,
+				"visible_bounds_width": 5,
+				"visible_bounds_height": 1.5,
+				"visible_bounds_offset": [0, 0.25, 0]
+			},
+			"bones": [
+				{
+					"name": "base",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [-9, 0.05, -9], "size": [18, 0, 18], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "root",
+					"parent": "base",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [-3, 0.5, -3], "size": [6, 0, 6], "uv": [1, 16], "mirror": true}
+					]
+				},
+				{
+					"name": "fourpetals",
+					"parent": "root",
+					"pivot": [0, 0.5, 0]
+				},
+				{
+					"name": "petal1",
+					"parent": "fourpetals",
+					"pivot": [2.25, 0.5, 0],
+					"cubes": [
+						{"origin": [2.25, 0.5, -2], "size": [0, 5, 4], "uv": [4, 7]}
+					]
+				},
+				{
+					"name": "petaltip1",
+					"parent": "petal1",
+					"pivot": [2.25, 5.5, 0],
+					"cubes": [
+						{"origin": [2.25, 5.5, -2], "size": [0, 7, 4], "uv": [4, 0]}
+					]
+				},
+				{
+					"name": "petal2",
+					"parent": "fourpetals",
+					"pivot": [0, 0.5, 2.45],
+					"cubes": [
+						{"origin": [-2, 0.5, 2.45], "size": [4, 5, 0], "uv": [4, 11]}
+					]
+				},
+				{
+					"name": "petaltip2",
+					"parent": "petal2",
+					"pivot": [0, 5.5, 2.45],
+					"cubes": [
+						{"origin": [-2, 5.5, 2.45], "size": [4, 7, 0], "uv": [4, 4]}
+					]
+				},
+				{
+					"name": "petal3",
+					"parent": "fourpetals",
+					"pivot": [-2.65, 0.5, 0],
+					"cubes": [
+						{"origin": [-2.65, 0.5, -2], "size": [0, 5, 4], "uv": [8, 7]}
+					]
+				},
+				{
+					"name": "petaltip3",
+					"parent": "petal3",
+					"pivot": [-2.65, 5.5, 0],
+					"cubes": [
+						{"origin": [-2.65, 5.5, -2], "size": [0, 7, 4], "uv": [8, 0]}
+					]
+				},
+				{
+					"name": "petal4",
+					"parent": "fourpetals",
+					"pivot": [0, 0.5, -2.75],
+					"cubes": [
+						{"origin": [-2, 0.5, -2.75], "size": [4, 5, 0], "uv": [8, 11]}
+					]
+				},
+				{
+					"name": "petaltip4",
+					"parent": "petal4",
+					"pivot": [0, 5.5, -2.75],
+					"cubes": [
+						{"origin": [-2, 5.5, -2.75], "size": [4, 7, 0], "uv": [8, 4]}
+					]
+				},
+				{
+					"name": "fourpetals2",
+					"parent": "root",
+					"pivot": [0, 0.5, 0],
+					"rotation": [0, -45, 0]
+				},
+				{
+					"name": "petal5",
+					"parent": "fourpetals2",
+					"pivot": [2.01294, 0.47, 0],
+					"cubes": [
+						{"origin": [2.14142, 0.5, -2], "size": [0, 4.7, 4], "uv": [4, 7]}
+					]
+				},
+				{
+					"name": "petaltip5",
+					"parent": "petal5",
+					"pivot": [2.16284, 5.17, 0],
+					"cubes": [
+						{"origin": [2.14142, 5.2, -2], "size": [0, 6.58, 4], "uv": [4, 0]}
+					]
+				},
+				{
+					"name": "petal6",
+					"parent": "fourpetals2",
+					"pivot": [0, 0.47, 2.27881],
+					"cubes": [
+						{"origin": [-2, 0.5, 2.42426], "size": [4, 4.7, 0], "uv": [4, 11]}
+					]
+				},
+				{
+					"name": "petaltip6",
+					"parent": "petal6",
+					"pivot": [-0.00429, 5.195, 2.41594],
+					"cubes": [
+						{"origin": [-2, 5.2, 2.42426], "size": [4, 6.58, 0], "uv": [4, 4]}
+					]
+				},
+				{
+					"name": "petal7",
+					"parent": "fourpetals2",
+					"pivot": [-2.54468, 0.47, 0],
+					"cubes": [
+						{"origin": [-2.70711, 0.5, -2], "size": [0, 4.7, 4], "uv": [8, 7]}
+					]
+				},
+				{
+					"name": "petaltip7",
+					"parent": "petal7",
+					"pivot": [-2.70378, 5.195, -0.01768],
+					"cubes": [
+						{"origin": [-2.70611, 5.2, -2], "size": [0, 6.58, 4], "uv": [8, 0]}
+					]
+				},
+				{
+					"name": "petal8",
+					"parent": "fourpetals2",
+					"pivot": [-0.13294, 0.47, -2.39477],
+					"cubes": [
+						{"origin": [-2.14142, 0.5, -2.56569], "size": [4, 4.7, 0], "uv": [8, 11]}
+					]
+				},
+				{
+					"name": "petaltip8",
+					"parent": "petal8",
+					"pivot": [-0.13294, 5.195, -2.5612],
+					"cubes": [
+						{"origin": [-2.14142, 5.2, -2.56569], "size": [4, 6.58, 0], "uv": [8, 4]}
+					]
+				}
+			]
+		}
+	]
+}

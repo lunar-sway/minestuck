@@ -1,17 +1,16 @@
 {
   "type": "minecraft:crafting_shaped",
-  "group": "sburb_disk",
   "pattern": [
     "c c",
-    " i ",
+    " d ",
     "c c"
   ],
   "key": {
-    "i": {
-      "tag": "forge:ingots/iron"
+    "d": {
+      "item": "minestuck:blank_disk"
     },
     "c": {
-      "item": "minestuck:raw_cruxite"
+      "item": "minestuck:sburb_code"
     }
   },
   "result": {

@@ -68,7 +68,7 @@ public class SmallRuinPiece extends ScatteredStructurePiece
 	@Override
 	public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox boundingBoxIn, ChunkPos chunkPosIn)
 	{
-		if(!isInsideBounds(worldIn, boundingBoxIn, 0))
+		if(!isInsideBounds(worldIn, boundingBoxIn, 0)) //where the height is determined, uses ScatteredStructurePiece "Heightmap.Type.MOTION_BLOCKING_NO_LEAVES"
 			return false;
 
 		StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());

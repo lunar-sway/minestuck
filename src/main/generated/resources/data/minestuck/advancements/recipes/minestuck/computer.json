@@ -6,12 +6,12 @@
     ]
   },
   "criteria": {
-    "has_energy_core": {
+    "has_computer_parts": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "minestuck:energy_core"
+            "item": "minestuck:computer_parts"
           }
         ]
       }
@@ -25,7 +25,7 @@
   },
   "requirements": [
     [
-      "has_energy_core",
+      "has_computer_parts",
       "has_the_recipe"
     ]
   ]
