@@ -109,13 +109,13 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 		chestNearDoorPos = new BlockPos(this.getXWithOffset(10, 29 + 14), this.getYWithOffset(21), this.getZWithOffset(10, 29 + 14));
 		StructureBlockUtil.placeLootChest(chestNearDoorPos, worldIn, boundingBoxIn, getCoordBaseMode().getOpposite(), rightChestType, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
 		
-		Vec3i entityVec = new Vec3i(getEntityXWithOffset(21, 21 + 14), this.getYWithOffset(50), getEntityZWithOffset(21, 21 + 14));
+		Vec3i entityVec = new Vec3i(getEntityXWithOffset(21, 21 + 14), this.getYWithOffset(50), getEntityZWithOffset(21, 21 + 14)); //BlockPos also suitable instead of Vec3i
 		if(!createRan && boundingBoxIn.isVecInside(entityVec))
 		{
 			LotusFlowerEntity lotusFlowerEntity = MSEntityTypes.LOTUS_FLOWER.create(worldIn.getWorld());
 			if(lotusFlowerEntity == null)
 				throw new IllegalStateException("Unable to create a new lotus flower. Entity factory returned null!");
-			lotusFlowerEntity.setLocationAndAngles(getEntityXWithOffset(21, 21 + 14), this.getYWithOffset(50), getEntityZWithOffset(21, 21 + 14), 0F, 0);
+			lotusFlowerEntity.setLocationAndAngles(entityVec.getX(), entityVec.getY(), entityVec.getZ(), 0F, 0);
 			worldIn.addEntity(lotusFlowerEntity);
 			createRan = true;
 		}
@@ -139,9 +139,9 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 		}
 		
 		fillWithBlocksCheckWater(world, boundingBox, 17, 48, 24, 24, 48, 24, MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE.getDefaultState().with(DecorBlock.FACING, this.getCoordBaseMode().getOpposite())); //stairs base at top
-		fillWithBlocks(world, boundingBox, 17, -10, 20 + 24, 24, -1, 24, MSBlocks.GREEN_STONE_BRICKS.getDefaultState(), MSBlocks.GREEN_STONE_BRICKS.getDefaultState(), false); //underneath stairs
+		fillWithBlocks(world, boundingBox, 17, -10, 0, 24, -1, 24, MSBlocks.GREEN_STONE_BRICKS.getDefaultState(), MSBlocks.GREEN_STONE_BRICKS.getDefaultState(), false); //underneath stairs
 		
-		fillWithBlocks(world, boundingBox, 20, -10, 14, 41, 0, 55, block, block, false); //underneath main platform
+		fillWithBlocks(world, boundingBox, 0, -10, 14, 41, 0, 55, block, block, false); //underneath main platform
 		for(int i = 0; i < 28; i++)
 		{
 			fillWithBlocks(world, boundingBox, i, -i - 10, i + 14, 41 - i, -i - 10, 55 - i, block, block, false); //underneath main platform
