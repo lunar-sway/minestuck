@@ -58,7 +58,8 @@ public class FrogTempleStructure extends ScatteredStructure<NoFeatureConfig>
 	
 	public static class Start extends StructureStart
 	{
-		private Start(Structure<?> structure, int chunkX, int chunkZ, MutableBoundingBox boundingBox, int reference, long seed) {
+		private Start(Structure<?> structure, int chunkX, int chunkZ, MutableBoundingBox boundingBox, int reference, long seed)
+		{
 			super(structure, chunkX, chunkZ, boundingBox, reference, seed);
 		}
 		
@@ -80,8 +81,8 @@ public class FrogTempleStructure extends ScatteredStructure<NoFeatureConfig>
 					if(rand.nextBoolean())
 					{
 						FrogTemplePillarPiece pillarPiece = new FrogTemplePillarPiece(generator, rand,
-								x + (pillarOffset - 2 * i * pillarOffset), y,
-								z + (pillarOffset - 2 * j * pillarOffset));
+								(mainPiece.getBoundingBox().minX + mainPiece.getBoundingBox().getXSize() / 2) + (pillarOffset - 2 * i * pillarOffset), y, //uses frog temple location instead of x and z, so it gets the center of the temple structure
+								(mainPiece.getBoundingBox().minZ + mainPiece.getBoundingBox().getZSize() / 2) + (pillarOffset - 2 * j * pillarOffset)); //center of temple + distance from center with +/- coordinate factor
 						components.add(pillarPiece); //50% chance of generating a pillar for every corner of the frog temple structure
 					}
 				}
