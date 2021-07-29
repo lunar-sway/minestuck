@@ -8,6 +8,7 @@ import com.mraof.minestuck.world.lands.LandTypes;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
@@ -20,13 +21,12 @@ import java.util.Map;
 public class MSDimensions
 {
 	private static final Logger LOGGER = LogManager.getLogger();
-	private static final ResourceLocation SKAIA_ID = new ResourceLocation(Minestuck.MOD_ID, "skaia");
 	/**
 	 * Changes to this map must also be done to {@link MSDimensionTypes#LANDS#dimToLandAspects}
 	 */
 	private static final Map<ResourceLocation, LandInfo> typeToInfoContainer = new HashMap<>();
 	
-	public static RegistryKey<World> skaiaDimension;
+	public static RegistryKey<World> SKAIA = RegistryKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(Minestuck.MOD_ID, "skaia"));
 	
 	/**
 	 * On server init, this function is called to register dimensions.

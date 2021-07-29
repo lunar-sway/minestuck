@@ -20,7 +20,7 @@ import net.minecraftforge.common.util.Constants;
 
 public class SkaiaPortalTileEntity extends TileEntity //implements ITeleporter
 {
-	private GlobalPos destination = GlobalPos.of(MSDimensions.skaiaDimension, new BlockPos(0, -1, 0));
+	private GlobalPos destination = GlobalPos.of(MSDimensions.SKAIA, new BlockPos(0, -1, 0));
 	
 	public SkaiaPortalTileEntity()
 	{
@@ -32,7 +32,7 @@ public class SkaiaPortalTileEntity extends TileEntity //implements ITeleporter
 	{
 		super.setLevelAndPosition(worldIn, pos);
 		if(!worldIn.isClientSide && destination.dimension() == worldIn.dimension())
-			destination = GlobalPos.of(worldIn.dimension() == MSDimensions.skaiaDimension ? World.OVERWORLD : MSDimensions.skaiaDimension, destination.pos());
+			destination = GlobalPos.of(worldIn.dimension() == MSDimensions.SKAIA ? World.OVERWORLD : MSDimensions.SKAIA, destination.pos());
 	}
 	
 	@Override
