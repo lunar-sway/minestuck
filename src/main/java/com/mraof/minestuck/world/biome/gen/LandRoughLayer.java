@@ -1,6 +1,6 @@
 package com.mraof.minestuck.world.biome.gen;
 
-import com.mraof.minestuck.world.biome.BiomeType;
+import com.mraof.minestuck.world.biome.LandBiomeType;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.gen.INoiseRandom;
 import net.minecraft.world.gen.layer.traits.IC1Transformer;
@@ -8,8 +8,8 @@ import net.minecraft.world.gen.layer.traits.IC1Transformer;
 public class LandRoughLayer implements IC1Transformer
 {
 	private final int roughChance;
-	private final int NORMAL_BIOME = BiomeType.NORMAL.ordinal();
-	private final int ROUGH_BIOME = BiomeType.ROUGH.ordinal();
+	private final int NORMAL_BIOME = LandBiomeType.NORMAL.ordinal();
+	private final int ROUGH_BIOME = LandBiomeType.ROUGH.ordinal();
 	
 	public LandRoughLayer(float roughChance)
 	{

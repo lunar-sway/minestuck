@@ -2,7 +2,7 @@ package com.mraof.minestuck.world.biome;
 
 import net.minecraft.world.biome.Biome;
 
-public enum BiomeType
+public enum LandBiomeType
 {
 	NORMAL, ROUGH, OCEAN;
 	

@@ -8,7 +8,7 @@ import net.minecraftforge.registries.DeferredRegister;
 
 import java.util.Set;
 
-public class LandBiomeSet
+public class LandBiomeSet implements ILandBiomeSet
 {
 	public final RegistryObject<Biome> NORMAL, ROUGH, OCEAN;
 	
@@ -24,7 +24,8 @@ public class LandBiomeSet
 		return ImmutableSet.of(NORMAL.get(), ROUGH.get(), OCEAN.get());
 	}
 	
-	public Biome fromType(BiomeType type)
+	@Override
+	public Biome fromType(LandBiomeType type)
 	{
 		switch(type)
 		{
