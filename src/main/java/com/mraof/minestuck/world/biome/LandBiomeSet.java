@@ -14,9 +14,9 @@ public class LandBiomeSet implements ILandBiomeSet
 	
 	public LandBiomeSet(DeferredRegister<Biome> register, String name, Biome.RainType precipitation, float temperature, float downfall)
 	{
-		NORMAL = null;//register.register("land_"+name+"_normal", () -> new LandBiome.Normal(precipitation, temperature, downfall));
-		ROUGH = null;//register.register("land_"+name+"_rough", () -> new LandBiome.Rough(precipitation, temperature, downfall));
-		OCEAN = null;//register.register("land_"+name+"_ocean", () -> new LandBiome.Ocean(precipitation, temperature, downfall));
+		NORMAL = register.register("land_"+name+"_normal", () -> LandBiome.createNormalBiome(precipitation, temperature, downfall));
+		ROUGH = register.register("land_"+name+"_rough", () -> LandBiome.createRoughBiome(precipitation, temperature, downfall));
+		OCEAN = register.register("land_"+name+"_ocean", () -> LandBiome.createOceanBiome(precipitation, temperature, downfall));
 	}
 	
 	public Set<Biome> getAll()
