@@ -150,6 +150,32 @@ public interface OnHitEffect
 		target.attackEntityFrom(source, rng);
 	};
 	
+	OnHitEffect SWEEP = (stack, target, attacker) -> {
+		if(attacker instanceof PlayerEntity)
+		{
+			PlayerEntity playerAttacker = (PlayerEntity) attacker;
+			boolean slowMoving = (double) (playerAttacker.distanceWalkedModified - playerAttacker.prevDistanceWalkedModified) < (double) playerAttacker.getAIMoveSpeed();
+			boolean lastHitWasCrit = ServerEventHandler.wasLastHitCrit(playerAttacker);
+			if(slowMoving && !lastHitWasCrit && playerAttacker.onGround)
+			{
+				float attackDamage = (float) playerAttacker.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue();
+				float sweepEnchantMod = 1.0F + EnchantmentHelper.getSweepingDamageRatio(playerAttacker) * attackDamage;
+				
+				for(LivingEntity livingEntity : playerAttacker.world.getEntitiesWithinAABB(LivingEntity.class, target.getBoundingBox().grow(1.0D, 0.25D, 1.0D)))
+				{
+					if(livingEntity != playerAttacker && livingEntity != target && !playerAttacker.isOnSameTeam(livingEntity) && (!(livingEntity instanceof ArmorStandEntity) || !((ArmorStandEntity) livingEntity).hasMarker()) && playerAttacker.getDistanceSq(livingEntity) < 9.0D)
+					{
+						livingEntity.knockBack(playerAttacker, 0.4F, (double) MathHelper.sin(playerAttacker.rotationYaw * ((float) Math.PI / 180F)), (double) (-MathHelper.cos(playerAttacker.rotationYaw * ((float) Math.PI / 180F))));
+						livingEntity.attackEntityFrom(DamageSource.causePlayerDamage(playerAttacker), sweepEnchantMod);
+					}
+				}
+				
+				playerAttacker.world.playSound(null, playerAttacker.getPosX(), playerAttacker.getPosY(), playerAttacker.getPosZ(), SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, playerAttacker.getSoundCategory(), 1.0F, 1.0F);
+				playerAttacker.spawnSweepParticles();
+			}
+		}
+	};
+	
 	OnHitEffect SPACE_TELEPORT = requireAspect(LIFE, onCrit((stack, target, attacker) -> {
 		RandomLocalTeleport.teleportEntity((LivingEntity) attacker, attacker.world);
 		attacker.lookAt(attacker.getCommandSource().getEntityAnchorType(), target.getPositionVec());
