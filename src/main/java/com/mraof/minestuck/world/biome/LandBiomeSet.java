@@ -1,12 +1,12 @@
 package com.mraof.minestuck.world.biome;
 
-import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 
-import java.util.Set;
+import java.util.List;
 
 public class LandBiomeSet implements ILandBiomeSet
 {
@@ -19,9 +19,10 @@ public class LandBiomeSet implements ILandBiomeSet
 		OCEAN = register.register("land_"+name+"_ocean", () -> LandBiome.createOceanBiome(precipitation, temperature, downfall));
 	}
 	
-	public Set<Biome> getAll()
+	@Override
+	public List<Biome> getAll()
 	{
-		return ImmutableSet.of(NORMAL.get(), ROUGH.get(), OCEAN.get());
+		return ImmutableList.of(NORMAL.get(), ROUGH.get(), OCEAN.get());
 	}
 	
 	@Override
