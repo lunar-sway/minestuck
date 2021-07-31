@@ -58,6 +58,7 @@ public class MSPacketHandler
 		registerMessage(NegativeOtherEffectPacket.class, NegativeOtherEffectPacket::decode);
 		registerMessage(PassiveEffectTogglePacket.class, PassiveEffectTogglePacket::decode);
 		registerMessage(StoneTabletPacket.class, StoneTabletPacket::decode);
+		registerMessage(MagicEffectPacket.class, MagicEffectPacket::decode);
 	}
 	
 	private static int nextIndex;
@@ -79,6 +80,11 @@ public class MSPacketHandler
 	public static <MSG> void sendToAll(MSG message)
 	{
 		INSTANCE.send(PacketDistributor.ALL.noArg(), message);
+	}
+	
+	public static <MSG> void sendToNear(MSG message, PacketDistributor.TargetPoint point)
+	{
+		INSTANCE.send(PacketDistributor.NEAR.with(() -> point), message);
 	}
 	
 	public static <MSG> void sendToServer(MSG message)

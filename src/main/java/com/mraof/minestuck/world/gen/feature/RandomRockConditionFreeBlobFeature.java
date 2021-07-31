@@ -46,7 +46,16 @@ public class RandomRockConditionFreeBlobFeature extends Feature<RandomRockBlockB
 			randomStone = MSBlocks.BLACK_STONE.getDefaultState();
 		} else if(randFloat >= .65)
 		{
+			randomStone = MSBlocks.SHADE_STONE.getDefaultState();
+		} else if(randFloat >= .6)
+		{
 			randomStone = MSBlocks.PINK_STONE.getDefaultState();
+		} else if(randFloat >= .55)
+		{
+			randomStone = MSBlocks.BROWN_STONE.getDefaultState();
+		} else if(randFloat >= .5)
+		{
+			randomStone = MSBlocks.GREEN_STONE.getDefaultState();
 		} else
 		{
 			randomStone = Blocks.STONE.getDefaultState();

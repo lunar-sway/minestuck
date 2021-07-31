@@ -9,7 +9,11 @@ import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.util.RandomLocalTeleport;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.Blocks;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.item.ArmorStandEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -44,7 +48,7 @@ public interface OnHitEffect
 					.and(enemyPotionEffect(() -> new EffectInstance(Effects.HUNGER, 60, 100)))));
 	
 	OnHitEffect BREATH_LEVITATION_AOE = requireAspect(BREATH, chanceWithCritMod(
-			potionAOE(() -> new EffectInstance(Effects.LEVITATION, 30, 2), () -> SoundEvents.ENTITY_ENDER_DRAGON_FLAP,1.4F)));
+			potionAOE(() -> new EffectInstance(Effects.LEVITATION, 30, 2), () -> SoundEvents.ENTITY_ENDER_DRAGON_FLAP, 1.4F)));
 	OnHitEffect TIME_SLOWNESS_AOE = requireAspect(TIME, chanceWithCritMod(
 			potionAOE(() -> new EffectInstance(Effects.SLOWNESS, 100, 4), () -> SoundEvents.BLOCK_BELL_RESONATE, 2F)));
 	
@@ -83,14 +87,21 @@ public interface OnHitEffect
 	};
 	
 	OnHitEffect HORRORTERROR = (stack, target, attacker) -> {
-		if(!attacker.world.isRemote && attacker instanceof PlayerEntity && attacker.getRNG().nextFloat() < .15)
+		
+		target.addPotionEffect(new EffectInstance(Effects.WITHER, 100, 2));
+		
+		if(!attacker.world.isRemote && attacker instanceof PlayerEntity && attacker.getRNG().nextFloat() < .1)
 		{
-			List<String> messages = ImmutableList.of("machinations", "stir", "suffering", "will", "done", "conspiracies");
+			List<String> messages = ImmutableList.of("machinations", "stir", "suffering", "will", "done", "conspiracies", "waiting", "strife", "search", "blessings", "seek", "shadow");
 			
 			String key = messages.get(attacker.getRNG().nextInt(messages.size()));
-			ITextComponent message = new TranslationTextComponent(stack.getTranslationKey() + ".message." + key);
+			ITextComponent message = new TranslationTextComponent("message.horrorterror." + key);
 			attacker.sendMessage(message.applyTextStyle(TextFormatting.DARK_PURPLE));
-			attacker.addPotionEffect(new EffectInstance(Effects.WITHER, 100, 2));
+			boolean potionBool = attacker.getRNG().nextBoolean();
+			if(potionBool)
+				attacker.addPotionEffect(new EffectInstance(Effects.WITHER, 100, 2));
+			else
+				attacker.addPotionEffect(new EffectInstance(Effects.BLINDNESS, 100, 0));
 		}
 	};
 	
@@ -135,7 +146,7 @@ public interface OnHitEffect
 			source = DamageSource.causePlayerDamage((PlayerEntity) attacker);
 		else source = DamageSource.causeMobDamage(attacker);
 		
-		float rng = (float) (attacker.getRNG().nextInt(7)+1) * (attacker.getRNG().nextInt(7)+1);
+		float rng = (float) (attacker.getRNG().nextInt(7) + 1) * (attacker.getRNG().nextInt(7) + 1);
 		target.attackEntityFrom(source, rng);
 	};
 	
@@ -147,6 +158,57 @@ public interface OnHitEffect
 	static OnHitEffect setOnFire(int duration)
 	{
 		return (itemStack, target, attacker) -> target.setFire(duration);
+	}
+	
+	static OnHitEffect armorBypassingDamageMod(float additionalDamage, EnumAspect aspect)
+	{
+		return (stack, target, attacker) -> {
+			DamageSource source;
+			float damage = additionalDamage * 3.3F;
+			
+			if(attacker instanceof ServerPlayerEntity)
+			{
+				ServerPlayerEntity serverPlayer = (ServerPlayerEntity) attacker;
+				source = DamageSource.causePlayerDamage(serverPlayer);
+				Title title = PlayerSavedData.getData(serverPlayer).getTitle();
+				
+				if(target instanceof UnderlingEntity)
+				{
+					float modifier = (float) (PlayerSavedData.getData(serverPlayer).getEcheladder().getUnderlingDamageModifier());
+					
+					if(title == null || title.getHeroAspect() != aspect)
+						modifier = modifier / 1.2F;
+					
+					damage = damage * modifier;
+				} else
+				{
+					if(title == null || title.getHeroAspect() != aspect)
+						damage = damage / 1.2F;
+				}
+			} else
+			{
+				source = DamageSource.causeMobDamage(attacker);
+			}
+			
+			target.attackEntityFrom(source.setDamageBypassesArmor(), damage);
+		};
+	}
+	
+	static OnHitEffect targetSpecificAdditionalDamage(float additionalDamage, Supplier<EntityType<?>> targetEntity)
+	{
+		return (stack, target, attacker) -> {
+			float damage = additionalDamage * 3.3F;
+			
+			if(attacker instanceof ServerPlayerEntity)
+			{
+				ServerPlayerEntity serverPlayer = (ServerPlayerEntity) attacker;
+				
+				if(target.getType() == targetEntity.get())
+				{
+					target.attackEntityFrom(DamageSource.causePlayerDamage(serverPlayer), damage);
+				}
+			}
+		};
 	}
 	
 	static OnHitEffect playSound(Supplier<SoundEvent> sound)
@@ -223,7 +285,7 @@ public interface OnHitEffect
 			AxisAlignedBB axisalignedbb = attacker.getBoundingBox().grow(4.0D, 2.0D, 4.0D);
 			List<LivingEntity> list = attacker.world.getEntitiesWithinAABB(LivingEntity.class, axisalignedbb);
 			list.remove(attacker);
-			if (!list.isEmpty())
+			if(!list.isEmpty())
 			{
 				attacker.world.playSound(null, attacker.getPosition(), sound.get(), SoundCategory.PLAYERS, 1.5F, pitch);
 				for(LivingEntity livingentity : list)

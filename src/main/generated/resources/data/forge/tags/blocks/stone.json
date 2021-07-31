@@ -2,8 +2,11 @@
   "replace": false,
   "values": [
     "minestuck:coarse_stone",
+    "minestuck:shade_stone",
     "minestuck:black_stone",
     "minestuck:coarse_end_stone",
-    "minestuck:pink_stone"
+    "minestuck:pink_stone",
+    "minestuck:brown_stone",
+    "minestuck:green_stone"
   ]
 }

@@ -3,6 +3,7 @@ package com.mraof.minestuck.client.renderer;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.LandDimension;
@@ -17,18 +18,30 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.SkyRenderHandler;
+import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.opengl.GL11;
 
 import java.util.List;
 import java.util.Random;
 
+@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE, modid = Minestuck.MOD_ID, value = Dist.CLIENT)
 public class LandSkyRenderer implements SkyRenderHandler
 {
-	private LandDimension dimension;
+	private final LandDimension dimension;
 	public LandSkyRenderer(LandDimension provider)
 	{
 		dimension = provider;
+	}
+	
+	@SubscribeEvent
+	public static void onWorldLoad(WorldEvent.Load event)
+	{
+		if(event.getWorld().isRemote() && event.getWorld().getDimension() instanceof LandDimension)
+			event.getWorld().getDimension().setSkyRenderer(new LandSkyRenderer((LandDimension) event.getWorld().getDimension()));
 	}
 	
 	@Override

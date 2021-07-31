@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:iron_bars"
+  },
+  "input2": {
+    "item": "minecraft:leather"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:cat_claws_drawn"
+  }
+}

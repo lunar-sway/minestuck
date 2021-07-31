@@ -3,6 +3,7 @@ package com.mraof.minestuck.world.biome;
 import com.google.common.collect.ImmutableSet;
 import com.mraof.minestuck.block.MSBlocks;
 import net.minecraft.block.Blocks;
+import net.minecraft.world.gen.blockplacer.DoublePlantBlockPlacer;
 import net.minecraft.world.gen.blockplacer.SimpleBlockPlacer;
 import net.minecraft.world.gen.blockstateprovider.SimpleBlockStateProvider;
 import net.minecraft.world.gen.feature.BlockClusterFeatureConfig;
@@ -15,4 +16,5 @@ public class MinestuckBiomeFeatures
 	public static final BlockClusterFeatureConfig GLOWING_MUSHROOM_CONFIG = new BlockClusterFeatureConfig.Builder(new SimpleBlockStateProvider(MSBlocks.GLOWING_MUSHROOM.getDefaultState()), new SimpleBlockPlacer()).tries(32).build();
 	public static final BlockClusterFeatureConfig PETRIFIED_GRASS_CONFIG = new BlockClusterFeatureConfig.Builder(new SimpleBlockStateProvider(MSBlocks.PETRIFIED_GRASS.getDefaultState()), new SimpleBlockPlacer()).tries(32).build();
 	public static final BlockClusterFeatureConfig PETRIFIED_POPPY_CONFIG = new BlockClusterFeatureConfig.Builder(new SimpleBlockStateProvider(MSBlocks.PETRIFIED_POPPY.getDefaultState()), new SimpleBlockPlacer()).tries(32).build();
+	public static final BlockClusterFeatureConfig TALL_END_GRASS_CONFIG = new BlockClusterFeatureConfig.Builder(new SimpleBlockStateProvider(MSBlocks.TALL_END_GRASS.getDefaultState()), new DoublePlantBlockPlacer()).tries(32).build();
 }

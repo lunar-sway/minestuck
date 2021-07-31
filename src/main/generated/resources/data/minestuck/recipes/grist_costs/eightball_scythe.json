@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:eightball_scythe"
+  },
+  "grist_cost": {
+    "minestuck:build": 715,
+    "minestuck:tar": 743
+  }
+}

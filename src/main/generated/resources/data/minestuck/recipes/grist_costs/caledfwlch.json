@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:caledfwlch"
+  },
+  "grist_cost": {
+    "minestuck:build": 6563,
+    "minestuck:gold": 4988,
+    "minestuck:rust": 3150
+  }
+}

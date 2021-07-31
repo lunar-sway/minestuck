@@ -3,6 +3,7 @@ package com.mraof.minestuck.client;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.client.model.*;
+import com.mraof.minestuck.client.model.armor.CrumplyHatModel;
 import com.mraof.minestuck.client.renderer.entity.*;
 import com.mraof.minestuck.client.renderer.entity.frog.FrogRenderer;
 import com.mraof.minestuck.client.renderer.tileentity.GateRenderer;
@@ -13,6 +14,7 @@ import com.mraof.minestuck.computer.ComputerProgram;
 import com.mraof.minestuck.computer.SburbClient;
 import com.mraof.minestuck.computer.SburbServer;
 import com.mraof.minestuck.entity.MSEntityTypes;
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
@@ -64,6 +66,9 @@ public class ClientProxy
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.PLAYER_DECOY, DecoyRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.METAL_BOAT, MetalBoatRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.BARBASOL_BOMB, manager -> new SpriteRenderer<>(manager, Minecraft.getInstance().getItemRenderer()));
+		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.CONSUMABLE_PROJECTILE, manager -> new SpriteRenderer<>(manager, Minecraft.getInstance().getItemRenderer()));
+		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.RETURNING_PROJECTILE, manager -> new SpriteRenderer<>(manager, Minecraft.getInstance().getItemRenderer()));
+		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.BOUNCING_PROJECTILE, manager -> new SpriteRenderer<>(manager, Minecraft.getInstance().getItemRenderer()));
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.MIDNIGHT_CREW_POSTER, manager -> new RenderHangingArt<>(manager, new ResourceLocation("minestuck:midnight_poster")));
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.SBAHJ_POSTER, manager -> new RenderHangingArt<>(manager, new ResourceLocation("minestuck:sbahj_poster")));
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.SHOP_POSTER, manager -> new RenderHangingArt<>(manager, new ResourceLocation("minestuck:shop_poster")));
@@ -76,26 +81,52 @@ public class ClientProxy
 		RenderTypeLookup.setRenderLayer(MSBlocks.BLENDER, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.CHESSBOARD, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.MINI_FROG_STATUE, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.MINI_WIZARD_STATUE, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.CASSETTE_PLAYER, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.PIPE, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.PARCEL_PYXIS, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.GLOWYSTONE_DUST, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.GOLD_SEEDS, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.RAINBOW_SAPLING, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.END_SAPLING, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.BREATH_ASPECT_SAPLING, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.LIFE_ASPECT_SAPLING, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.LIGHT_ASPECT_SAPLING, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.TIME_ASPECT_SAPLING, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.HEART_ASPECT_SAPLING, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.RAGE_ASPECT_SAPLING, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.BLOOD_ASPECT_SAPLING, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.DOOM_ASPECT_SAPLING, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.VOID_ASPECT_SAPLING, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.SPACE_ASPECT_SAPLING, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.MIND_ASPECT_SAPLING, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.HOPE_ASPECT_SAPLING, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.GLOWING_MUSHROOM, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.DESERT_BUSH, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.BLOOMING_CACTUS, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.PETRIFIED_GRASS, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.PETRIFIED_POPPY, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.TALL_END_GRASS, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.GLOWFLOWER, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.CHECKERED_STAINED_GLASS, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(MSBlocks.BLACK_CROWN_STAINED_GLASS, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(MSBlocks.BLACK_PAWN_STAINED_GLASS, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(MSBlocks.WHITE_CROWN_STAINED_GLASS, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(MSBlocks.WHITE_PAWN_STAINED_GLASS, RenderType.getTranslucent());
+		RenderTypeLookup.setRenderLayer(MSBlocks.LUNCHTOP, RenderType.getTranslucent());
 
 		MSKeyHandler.registerKeys();
 		
 		ComputerProgram.registerProgramClass(0, SburbClient.class);
 		ComputerProgram.registerProgramClass(1, SburbServer.class);
 
+		registerArmorModels();
+
 		//MinecraftForge.EVENT_BUS.register(new MinestuckConfig()); Does not currently use any events to reload config
+	}
+	
+	private static void registerArmorModels()
+	{
+		MSItems.CRUMPLY_HAT.setArmorModel(new CrumplyHatModel());
 	}
 }

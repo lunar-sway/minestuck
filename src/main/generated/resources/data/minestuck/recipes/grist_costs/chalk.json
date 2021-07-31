@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:chalk"
+  },
+  "grist_cost": {
+    "minestuck:build": 2,
+    "minestuck:chalk": 1
+  }
+}

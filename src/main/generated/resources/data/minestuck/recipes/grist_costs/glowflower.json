@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:glowflower"
+  },
+  "grist_cost": {
+    "minestuck:chalk": 10,
+    "minestuck:amber": 2
+  }
+}

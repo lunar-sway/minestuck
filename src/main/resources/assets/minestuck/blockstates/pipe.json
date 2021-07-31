@@ -1,0 +1,10 @@
+{
+    "variants": {
+        "facing=up":    { "model": "minestuck:block/pipe" },
+        "facing=down":  { "model": "minestuck:block/pipe"},
+        "facing=east":  { "model": "minestuck:block/pipe", "y": 90, "x": 90 },
+        "facing=south": { "model": "minestuck:block/pipe", "y": 180, "x": 90 },
+        "facing=west":  { "model": "minestuck:block/pipe", "y": 270, "x": 90 },
+        "facing=north": { "model": "minestuck:block/pipe", "y": 0, "x": 90 }
+    }
+}

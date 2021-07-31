@@ -4,8 +4,8 @@
     "item": "minestuck:paradises_portabello"
   },
   "grist_cost": {
-    "minestuck:build": 40,
-    "minestuck:iodine": 30,
-    "minestuck:ruby": 20
+    "minestuck:build": 18,
+    "minestuck:iodine": 5,
+    "minestuck:ruby": 1
   }
 }

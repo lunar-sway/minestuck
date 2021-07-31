@@ -4,9 +4,9 @@
     "item": "minestuck:the_last_straw"
   },
   "grist_cost": {
-    "minestuck:build": 270,
-    "minestuck:gold": 124,
-    "minestuck:iodine": 103,
-    "minestuck:amber": 95
+    "minestuck:build": 180,
+    "minestuck:gold": 36,
+    "minestuck:iodine": 90,
+    "minestuck:amber": 45
   }
 }

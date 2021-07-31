@@ -4,10 +4,10 @@
     "item": "minestuck:cruel_fate_crucible"
   },
   "grist_cost": {
-    "minestuck:build": 1200,
-    "minestuck:tar": 300,
-    "minestuck:cobalt": 100,
-    "minestuck:gold": 50,
+    "minestuck:build": 7500,
+    "minestuck:tar": 5250,
+    "minestuck:cobalt": 400,
+    "minestuck:gold": 200,
     "minestuck:quartz": 1
   }
 }

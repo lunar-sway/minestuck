@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:red_eyes"
+  },
+  "grist_cost": {
+    "minestuck:tar": 45,
+    "minestuck:sulfur": 45,
+    "minestuck:amethyst": 1
+  }
+}

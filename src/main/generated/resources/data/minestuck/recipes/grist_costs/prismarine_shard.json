@@ -4,7 +4,7 @@
     "item": "minecraft:prismarine_shard"
   },
   "grist_cost": {
-    "minestuck:cobalt": 3,
+    "minestuck:cobalt": 1,
     "minestuck:build": 3
   }
 }

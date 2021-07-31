@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:tears_of_the_enderlich_drawn"
+  },
+  "grist_cost": {
+    "minestuck:quartz": 1425,
+    "minestuck:rust": 3205
+  }
+}
