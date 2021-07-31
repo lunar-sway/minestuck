@@ -2,6 +2,7 @@ package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.EnumCassetteType;
+import com.mraof.minestuck.block.EnumKeyType;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.item.CrewPosterEntity;
@@ -726,6 +727,9 @@ public class MSItems
 		registerItemBlock(registry, DEAD_PLANKS_SLAB, MSItemGroup.LANDS);
 		registerItemBlock(registry, TREATED_PLANKS_SLAB, MSItemGroup.LANDS);
 		
+		registerItemBlock(registry, DUNGEON_DOOR_INTERFACE, MSItemGroup.LANDS);
+		registerItemBlock(registry, DUNGEON_DOOR, MSItemGroup.LANDS);
+		
 		registry.register(new CruxtruderItem(MSBlocks.CRUXTRUDER, new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("cruxtruder"));
 		registerItemBlock(registry, CRUXTRUDER_LID, MSItemGroup.MAIN);
 		registry.register(new MultiblockItem(MSBlocks.TOTEM_LATHE, new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("totem_lathe"));
@@ -806,7 +810,7 @@ public class MSItems
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.STONE, 3, -2.4F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.SWEEP).set(ItemRightClickEffect.absorbFluid(() -> Blocks.LAVA, () -> MSItems.WET_PUMORD)), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("pumord"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.STONE, 3, -2.6F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.SWEEP).set(RightClickBlockEffect.placeFluid(() -> Blocks.LAVA, () -> MSItems.PUMORD)).add(OnHitEffect.playSound(() -> SoundEvents.ITEM_BUCKET_EMPTY_LAVA, 1.0F, 0.2F)).add(OnHitEffect.setOnFire(10)), new Item.Properties()).setRegistryName("wet_pumord"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.CACTUS_TIER, 3, -2.4F).efficiency(15.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("cactaceae_cutlass"));	//The sword harvestTool is only used against webs, hence the high efficiency.
-		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.MEAT_TIER, 4, -2.4F).efficiency(5.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP).setEating(FinishUseItemEffect.foodEffect(8, 1F)), new Item.Properties().defaultMaxDamage(250).group(MSItemGroup.WEAPONS)).setRegistryName("steak_sword"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.MEAT_TIER, 4, -2.4F).efficiency(5.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP).setEating(FinishUseItemEffect.foodEffect(8, 1F)).add(InventoryTickEffect.SURF_N_TURF), new Item.Properties().defaultMaxDamage(250).group(MSItemGroup.WEAPONS)).setRegistryName("steak_sword"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.MEAT_TIER, 2, -2.4F).efficiency(5.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP).setEating(FinishUseItemEffect.foodEffect(3, 0.8F, 75)), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("beef_sword"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.MEAT_TIER, 5, -2.4F).efficiency(5.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP).setEating(FinishUseItemEffect.potionEffect(() -> new EffectInstance(Effects.WITHER, 100, 1), 0.9F), FinishUseItemEffect.foodEffect(4, 0.4F, 25)), new Item.Properties().defaultMaxDamage(300).group(MSItemGroup.WEAPONS)).setRegistryName("irradiated_steak_sword"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.PRISMARINE_TIER, 3, -2.4F).efficiency(1.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP), new Item.Properties().defaultMaxDamage(100).group(MSItemGroup.WEAPONS)).setRegistryName("macuahuitl"));
@@ -1173,7 +1177,7 @@ public class MSItems
 		registry.register(new RightClickMessageItem(new Item.Properties().group(MSItemGroup.MAIN), RightClickMessageItem.Type.DEFAULT).setRegistryName("lip_balm"));
 		
 		//Dungeon/Puzzle items
-		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("tier_1_key"));
+		registry.register(new KeyItem(new Item.Properties().group(MSItemGroup.MAIN), EnumKeyType.tier_1_key).setRegistryName("tier_1_key"));
 
 		//Music disks
 		registry.register(new MusicDiscItem(1, () -> MSSoundEvents.MUSIC_DISC_EMISSARY_OF_DANCE, new Item.Properties().rarity(Rarity.RARE).maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("music_disc_emissary_of_dance"));

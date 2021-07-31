@@ -73,6 +73,7 @@ public class MSTags
 		public static final Tag<Item> MODUS_CARD = tag("modus_card");
 		public static final Tag<Item> CASSETTES = tag("cassettes");
 		public static final Tag<Item> BUGS = tag("bugs");
+		public static final Tag<Item> KEYS = tag("keys");
 
 		private static Tag<Item> tag(String name)
 		{

@@ -316,6 +316,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.DEAD_PLANKS_SLAB, "Dead Planks Slab");
 		add(MSBlocks.TREATED_PLANKS_SLAB, "Treated Planks Slab");
 		add(MSBlocks.DUNGEON_DOOR_INTERFACE, "Dungeon Door Interface Block");
+		addExtra(MSBlocks.DUNGEON_DOOR_INTERFACE, "key", "Key needed: %s");
 		add(MSBlocks.DUNGEON_DOOR, "Dungeon Door Block");
 		add(MSBlocks.GATE, "Gate");
 		add(MSBlocks.RETURN_NODE, "Return Node");
@@ -1272,6 +1273,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addAdvancement(MSAdvancementProvider.GOLD_SEEDS, "Gold Farming", "It begins to dawn on you that everything you just did may have been a colossal waste of time");
 		addAdvancement(MSAdvancementProvider.FRENCH_FRY, "Can I Get A, Uh...", "Successfully place and consume an order");
 		addAdvancement(MSAdvancementProvider.MELON_OVERLOAD, "M- M- M- MELON OVERLOAAAAD!", "Become overloaded with melons");
+		addAdvancement(MSAdvancementProvider.SURFNTURF, "Surf n' Turf", "Dual wield steak and prismarine weapons");
 		addAdvancement(MSAdvancementProvider.TREE_MODUS, "Uprooting", "Remove the root card in a tree modus with a bunch of items");
 		addAdvancement(MSAdvancementProvider.KILL_OGRE, "The Big One", "Kill an ogre");
 		addAdvancement(MSAdvancementProvider.RETURN_NODE, "There's No Place Like Home", "Find a Return Node and jump in to return home");

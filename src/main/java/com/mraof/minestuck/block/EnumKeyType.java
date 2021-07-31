@@ -4,8 +4,9 @@ import net.minecraft.util.IStringSerializable;
 
 public enum EnumKeyType implements IStringSerializable
 {
-	TIER_ONE,
-	TIER_TWO;
+	none,
+	tier_1_key,
+	tier_2_key;
 	
 	@Override
 	public String getName()

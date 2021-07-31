@@ -21,6 +21,7 @@ public class EventTrigger implements ICriterionTrigger<EventTrigger.Instance>
 	public static final ResourceLocation SBURB_CONNECTION_ID = new ResourceLocation(Minestuck.MOD_ID, "sburb_connection");
 	public static final ResourceLocation CRUXITE_ARTIFACT_ID = new ResourceLocation(Minestuck.MOD_ID, "cruxite_artifact");
 	public static final ResourceLocation MELON_OVERLOAD_ID = new ResourceLocation(Minestuck.MOD_ID, "melon_overload");
+	public static final ResourceLocation SURF_N_TURF_ID = new ResourceLocation(Minestuck.MOD_ID, "surf_n_turf");
 	private final Map<PlayerAdvancements, Listeners> listenersMap = Maps.newHashMap();
 	private final ResourceLocation id;
 	
@@ -94,6 +95,12 @@ public class EventTrigger implements ICriterionTrigger<EventTrigger.Instance>
 		{
 			return new Instance(MELON_OVERLOAD_ID);
 		}
+		
+		public static Instance surfNTurf()
+		{
+			return new Instance(SURF_N_TURF_ID);
+		}
+		
 		public Instance(ResourceLocation id)
 		{
 			super(id);

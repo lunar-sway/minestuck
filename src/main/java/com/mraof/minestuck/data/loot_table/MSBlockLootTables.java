@@ -283,6 +283,9 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(DEAD_PLANKS_SLAB);
 		registerDropSelfLootTable(TREATED_PLANKS_SLAB);
 		
+		registerDropSelfLootTable(DUNGEON_DOOR_INTERFACE);
+		registerDropSelfLootTable(DUNGEON_DOOR);
+		
 		registerDropSelfLootTable(HOLOPAD);
 		registerDropSelfLootTable(CRUXTRUDER_LID);
 		registerLootTable(MINI_CRUXTRUDER, MSBlockLootTables::droppingWithColor);
