@@ -15,6 +15,7 @@ import com.mraof.minestuck.command.argument.*;
 import com.mraof.minestuck.computer.ButtonListProgram;
 import com.mraof.minestuck.computer.SburbClient;
 import com.mraof.minestuck.computer.SburbServer;
+import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.LotusFlowerEntity;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.MessageType;
@@ -1346,6 +1347,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addLand(TowersLandType.TOWERS, "Towers");
 		add(LandTypePair.FORMAT, "Land of %s and %s");
 		add(LandInfo.LAND_ENTRY, "Welcome to %s.");
+		
+		addEffect(MSEffects.CREATIVE_SHOCK, "Creative Shock");
 		
 		addStrife(KindAbstratusList.SWORD, "Bladekind");
 		addStrife(KindAbstratusList.BOW, "Bowkind");

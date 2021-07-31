@@ -1,6 +1,5 @@
 package com.mraof.minestuck.item.weapon;
 
-import com.mraof.minestuck.effects.MSEffects;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -9,7 +8,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.FireballEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.*;
 import net.minecraft.util.math.*;
 import net.minecraft.util.text.ITextComponent;
@@ -57,9 +55,8 @@ public interface ItemRightClickEffect
 	{
 		return (world, player, hand) -> {
 			ItemStack itemStackIn = player.getHeldItem(hand);
-			g
-			player.addPotionEffect(new EffectInstance(MSEffects.CREATIVE_SHOCK, 150, 0));
-			/*world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ENTITY_BLAZE_SHOOT, SoundCategory.PLAYERS, 1.0F, 0.8F);
+			
+			world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ENTITY_BLAZE_SHOOT, SoundCategory.PLAYERS, 1.0F, 0.8F);
 			
 			AxisAlignedBB axisalignedbb = player.getBoundingBox().grow(32.0D, 32.0D, 32.0D);
 			List<LivingEntity> list = player.world.getEntitiesWithinAABB(LivingEntity.class, axisalignedbb);
@@ -83,7 +80,7 @@ public interface ItemRightClickEffect
 				player.getCooldownTracker().setCooldown(itemStackIn.getItem(), 20);
 				itemStackIn.damageItem(2, player, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
 				world.addEntity(fireball);
-			}*/
+			}
 			return ActionResult.resultPass(itemStackIn);
 		};
 	}

@@ -8,6 +8,8 @@ import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.network.StopBuildInhibitEffectPacket;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.IdentifierHandler;
@@ -280,9 +282,9 @@ public class ServerEventHandler
 				data.getTitle().handleAspectEffects((ServerPlayerEntity) event.player);
 		}
 		
-		if(!event.player.isCreative() && event.player.isPotionActive(MSEffects.CREATIVE_SHOCK))
+		if(!event.player.isCreative() && event.player.isPotionActive(MSEffects.CREATIVE_SHOCK.get()))
 		{
-			int duration = event.player.getActivePotionEffect(MSEffects.CREATIVE_SHOCK).getDuration();
+			int duration = event.player.getActivePotionEffect(MSEffects.CREATIVE_SHOCK.get()).getDuration();
 			if(duration >= 5)
 				event.player.abilities.allowEdit = false;
 			else
@@ -296,27 +298,28 @@ public class ServerEventHandler
 	@SubscribeEvent
 	public static void onEffectRemove(PotionEvent.PotionRemoveEvent event)
 	{
-		onEffectEnd(event.getEntityLiving(), event.getPotion());
+		//onEffectEnd(event.getEntityLiving(), event.getPotionEffect().getPotion());
 	}
 	
 	@SubscribeEvent
-	public static void onPotionExpire(PotionEvent.PotionExpiryEvent expiryEvent)
+	public static void onEffectExpire(PotionEvent.PotionExpiryEvent expiryEvent)
 	{
-		onEffectEnd(expiryEvent.getEntityLiving(), expiryEvent.getPotionEffect().getPotion());
+		//onEffectEnd(expiryEvent.getEntityLiving(), expiryEvent.getPotionEffect().getPotion());
 	}
 	
-	private static void onEffectEnd(LivingEntity entityLiving, Effect effect)
+	private static void onEffectEnd(LivingEntity entityLiving, Effect effect) //TODO MSPacketHandler.sendToPlayer recieves an invalid message
 	{
 		if(entityLiving instanceof PlayerEntity)
 		{
 			PlayerEntity player = (PlayerEntity) entityLiving;
 			
-			if(!player.isCreative() && effect == MSEffects.CREATIVE_SHOCK)
+			if(player instanceof ServerPlayerEntity && !player.isCreative() && effect == MSEffects.CREATIVE_SHOCK.get())
 			{
-				player.abilities.allowEdit = !((ServerPlayerEntity) player).interactionManager.getGameType().hasLimitedInteractions();
+				ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player;
+				player.abilities.allowEdit = !serverPlayerEntity.interactionManager.getGameType().hasLimitedInteractions();
 				
-				//StopBuildInhibitEffectPacket packet = StopBuildInhibitEffectPacket(player.getEntityId());
-				//MSPacketHandler.sendToPlayer(packet., (ServerPlayerEntity) player);
+				StopBuildInhibitEffectPacket packet = new StopBuildInhibitEffectPacket(serverPlayerEntity.interactionManager.getGameType());
+				MSPacketHandler.sendToPlayer(packet, serverPlayerEntity);
 			}
 		}
 	}
@@ -324,14 +327,14 @@ public class ServerEventHandler
 	@SubscribeEvent
 	public static void onBreakSpeed(PlayerEvent.BreakSpeed event)
 	{
-		if(event.getPlayer().isPotionActive(MSEffects.CREATIVE_SHOCK))
+		if(event.getPlayer().isPotionActive(MSEffects.CREATIVE_SHOCK.get()))
 			event.setNewSpeed(0);
 	}
 	
 	@SubscribeEvent
 	public static void onHarvestCheck(PlayerEvent.HarvestCheck event)
 	{
-		if(event.getPlayer().isPotionActive(MSEffects.CREATIVE_SHOCK))
+		if(event.getPlayer().isPotionActive(MSEffects.CREATIVE_SHOCK.get()))
 			event.setCanHarvest(false);
 	}
 	

@@ -4,6 +4,7 @@ import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.computer.ProgramData;
 import com.mraof.minestuck.computer.editmode.DeployList;
+import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortDialogue;
 import com.mraof.minestuck.entry.ComputerBlockProcess;
@@ -62,6 +63,7 @@ public class Minestuck
 		MSBiomes.REGISTER.register(eventBus);
 		MSTileEntityTypes.REGISTER.register(eventBus);
 		GristTypes.GRIST_TYPES.register(eventBus);
+		MSEffects.REGISTER.register(eventBus);
 	}
 	
 	/**

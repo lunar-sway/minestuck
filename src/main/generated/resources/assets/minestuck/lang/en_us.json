@@ -848,6 +848,7 @@
   "echeladder.rung.7": "Imp Crusher",
   "echeladder.rung.8": "Slime Enthusiast",
   "echeladder.rung.9": "Burly Pocketeer",
+  "effect.minestuck.creative_shock": "Creative Shock",
   "entity.minestuck.basilisk": "Basilisk",
   "entity.minestuck.basilisk.type": "%s Basilisk",
   "entity.minestuck.dersite_bishop": "Dersite Bishop",
