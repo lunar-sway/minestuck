@@ -8,6 +8,7 @@ import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeSet;
 import com.mraof.minestuck.world.biome.MSBiomes;
+import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.feature.structure.village.ConsortVillageCenter;
@@ -104,13 +105,13 @@ public class SandLandType extends TerrainLandType
 	{
 		properties.category = Biome.Category.DESERT;
 	}
-	/*
+	
 	@Override
 	public void setGenSettings(LandGenSettings settings)
 	{
 		settings.oceanChance = 0.0F;
 	}
-	
+	/*
 	@Override
 	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
 	{

@@ -6,6 +6,7 @@ import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeSet;
 import com.mraof.minestuck.world.biome.MSBiomes;
+import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.block.Blocks;
@@ -66,13 +67,13 @@ public class FrostLandType extends TerrainLandType
 		properties.category = Biome.Category.ICY;
 		properties.forceRain = LandProperties.ForceType.ON;
 	}
-	/*
+	
 	@Override
 	public void setGenSettings(LandGenSettings settings)
 	{
 		settings.oceanChance = 1/4F;
 	}
-	
+	/*
 	@Override
 	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
 	{

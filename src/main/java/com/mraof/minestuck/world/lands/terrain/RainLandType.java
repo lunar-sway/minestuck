@@ -6,6 +6,7 @@ import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeSet;
 import com.mraof.minestuck.world.biome.MSBiomes;
+import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
@@ -82,13 +83,13 @@ public class RainLandType extends TerrainLandType
 		properties.roughBiomeScale += 0.1;
 		properties.roughBiomeDepth -= 0.2;
 	}
-	/*
+	
 	@Override
 	public void setGenSettings(LandGenSettings settings)
 	{
 		settings.oceanChance = 3/4F;
 	}
-	
+	/*
 	@Override
 	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
 	{

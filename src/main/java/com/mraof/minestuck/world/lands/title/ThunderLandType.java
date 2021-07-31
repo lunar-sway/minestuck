@@ -2,6 +2,7 @@ package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
+import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
@@ -42,13 +43,13 @@ public class ThunderLandType extends TitleLandType
 		properties.forceRain = LandProperties.ForceType.ON;
 		properties.forceThunder = LandProperties.ForceType.ON;
 	}
-	/*
+	
 	@Override
 	public void setGenSettings(LandGenSettings settings)
 	{
 		settings.oceanChance = Math.min(Math.max(0.5F, settings.oceanChance), settings.oceanChance*1.2F);	//Increase ocean chance by a factor 1.2, but not higher than to 0.5F
 	}
-	*/
+	
 	@Override
 	public boolean isAspectCompatible(TerrainLandType aspect)
 	{

@@ -4,6 +4,8 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.MSSoundEvents;
+import com.mraof.minestuck.world.gen.LandGenSettings;
+import com.mraof.minestuck.world.gen.feature.structure.GateMushroomPiece;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.block.Blocks;
@@ -64,13 +66,13 @@ public class FungiLandType extends TerrainLandType
 		properties.category = Biome.Category.MUSHROOM;
 		properties.forceRain = LandProperties.ForceType.ON;
 	}
-	/*
+	
 	@Override
 	public void setGenSettings(LandGenSettings settings)
 	{
 		settings.setGatePiece(GateMushroomPiece::new);
 	}
-	
+	/*
 	@Override
 	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
 	{

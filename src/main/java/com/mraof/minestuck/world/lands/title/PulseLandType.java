@@ -3,6 +3,7 @@ package com.mraof.minestuck.world.lands.title;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
+import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
@@ -43,13 +44,13 @@ public class PulseLandType extends TitleLandType
 	{
 		properties.mergeFogColor(new Vector3d(0.8, 0, 0), 0.8F);
 	}
-	/*
+	
 	@Override
 	public void setGenSettings(LandGenSettings settings)
 	{
 		settings.oceanChance = Math.max(settings.oceanChance, 0.2F);
 	}
-	
+	/*
 	@Override
 	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
 	{

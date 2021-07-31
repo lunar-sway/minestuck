@@ -147,7 +147,7 @@ public final class StructureBlockRegistry
 	}
 	
 	//Nonstatic stuff
-	private Map<String, BlockState> blockRegistry = new HashMap<>();
+	private final Map<String, BlockState> blockRegistry = new HashMap<>();
 	private RuleTest groundType = OreFeatureConfig.FillerBlockType.NATURAL_STONE;
 	
 	public void setBlockState(String name, BlockState state)
@@ -218,9 +218,9 @@ public final class StructureBlockRegistry
 		} else return state;
 	}
 	
-	public SurfaceBuilderConfig getSurfaceBuilderConfig(BiomeType biomeType)
+	public SurfaceBuilderConfig getSurfaceBuilderConfig(LandBiomeType biomeType)
 	{
-		return new SurfaceBuilderConfig(getBlockState(biomeType == BiomeType.ROUGH ? "surface_rough" : "surface"), getBlockState("upper"), getBlockState("ocean_surface"));
+		return new SurfaceBuilderConfig(getBlockState(biomeType == LandBiomeType.ROUGH ? "surface_rough" : "surface"), getBlockState("upper"), getBlockState("ocean_surface"));
 	}
 	
 	private static <T extends Comparable<T>> BlockState with(BlockState fromState, BlockState toState, Property<T> property)
