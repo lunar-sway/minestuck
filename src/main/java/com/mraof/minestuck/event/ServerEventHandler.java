@@ -12,6 +12,7 @@ import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.Title;
+import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.skaianet.TitleSelectionHook;
@@ -28,6 +29,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.server.MinecraftServer;
@@ -41,6 +43,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.living.PotionEvent;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.UseHoeEvent;
@@ -54,7 +57,7 @@ import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
 
 import java.util.List;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ServerEventHandler
 {
 	public static long lastDay;
@@ -100,7 +103,7 @@ public class ServerEventHandler
 		}
 	}
 	
-	@SubscribeEvent(priority=EventPriority.LOWEST, receiveCanceled=false)
+	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public static void onEntityDeath(LivingDeathEvent event)
 	{
 		if(event.getEntity() instanceof IMob && event.getSource().getTrueSource() instanceof ServerPlayerEntity)
@@ -124,11 +127,11 @@ public class ServerEventHandler
 			TitleSelectionHook.cancelSelection((ServerPlayerEntity) event.getEntity());
 		}
 	}
-
+	
 	// Stores the crit result from the CriticalHitEvent, to be used during LivingHurtEvent to trigger special effects of any weapons.
 	// This method is reliable only as long as LivingHurtEvent is posted only on the main thread and after a matching CriticalHitEvent
 	private static boolean cachedCrit;
-
+	
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onCrit(CriticalHitEvent event)
 	{
@@ -141,25 +144,24 @@ public class ServerEventHandler
 		return entity instanceof ServerPlayerEntity && cachedCrit;
 	}
 	
-	@SubscribeEvent(priority=EventPriority.NORMAL)
+	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public static void onEntityAttack(LivingHurtEvent event)
 	{
 		if(event.getSource().getTrueSource() != null)
 		{
-			if (event.getSource().getTrueSource() instanceof ServerPlayerEntity)
+			if(event.getSource().getTrueSource() instanceof ServerPlayerEntity)
 			{
 				ServerPlayerEntity player = (ServerPlayerEntity) event.getSource().getTrueSource();
-				if (event.getEntityLiving() instanceof UnderlingEntity)
+				if(event.getEntityLiving() instanceof UnderlingEntity)
 				{    //Increase damage to underling
 					double modifier = PlayerSavedData.getData(player).getEcheladder().getUnderlingDamageModifier();
 					event.setAmount((float) (event.getAmount() * modifier));
 				}
-			}
-			else if (event.getEntityLiving() instanceof ServerPlayerEntity && event.getSource().getTrueSource() instanceof UnderlingEntity)
+			} else if(event.getEntityLiving() instanceof ServerPlayerEntity && event.getSource().getTrueSource() instanceof UnderlingEntity)
 			{    //Decrease damage to player
 				ServerPlayerEntity player = (ServerPlayerEntity) event.getEntityLiving();
-					double modifier = PlayerSavedData.getData(player).getEcheladder().getUnderlingProtectionModifier();
-					event.setAmount((float) (event.getAmount() * modifier));
+				double modifier = PlayerSavedData.getData(player).getEcheladder().getUnderlingProtectionModifier();
+				event.setAmount((float) (event.getAmount() * modifier));
 			}
 		}
 	}
@@ -241,7 +243,7 @@ public class ServerEventHandler
 		PlayerSavedData.getData((ServerPlayerEntity) event.getPlayer()).getEcheladder().resendAttributes(event.getPlayer());
 	}
 	
-	@SubscribeEvent(priority=EventPriority.LOW, receiveCanceled=false)
+	@SubscribeEvent(priority = EventPriority.LOW, receiveCanceled = false)
 	public static void onServerChat(ServerChatEvent event)
 	{
 		Modus modus = PlayerSavedData.getData(event.getPlayer()).getModus();
@@ -256,7 +258,7 @@ public class ServerEventHandler
 		if(event.getContext().getWorld().getBlockState(event.getContext().getPos()).getBlock() == MSBlocks.COARSE_END_STONE)
 		{
 			event.getContext().getWorld().setBlockState(event.getContext().getPos(), Blocks.END_STONE.getDefaultState());
-			event.getContext().getWorld().playSound(null, event.getContext().getPos(), SoundEvents.ITEM_HOE_TILL, SoundCategory.BLOCKS, 1.0F, 	1.0F);
+			event.getContext().getWorld().playSound(null, event.getContext().getPos(), SoundEvents.ITEM_HOE_TILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
 			event.setResult(Event.Result.ALLOW);
 		}
 	}
@@ -265,7 +267,7 @@ public class ServerEventHandler
 	public static void onGetItemBurnTime(FurnaceFuelBurnTimeEvent event)
 	{
 		if(event.getItemStack().getItem() == MSBlocks.TREATED_PLANKS.asItem())
-			event.setBurnTime(50);	//Do not set this number to 0.
+			event.setBurnTime(50);    //Do not set this number to 0.
 	}
 	
 	@SubscribeEvent
@@ -277,13 +279,69 @@ public class ServerEventHandler
 			if(data.getTitle() != null)
 				data.getTitle().handleAspectEffects((ServerPlayerEntity) event.player);
 		}
+		
+		if(!event.player.isCreative() && event.player.isPotionActive(MSEffects.CREATIVE_SHOCK))
+		{
+			int duration = event.player.getActivePotionEffect(MSEffects.CREATIVE_SHOCK).getDuration();
+			if(duration >= 5)
+				event.player.abilities.allowEdit = false;
+			else
+			{
+				if(!event.player.world.isRemote)
+					event.player.abilities.allowEdit = ((ServerPlayerEntity) event.player).interactionManager.getGameType().hasLimitedInteractions();
+			}
+		}
 	}
+	
+	@SubscribeEvent
+	public static void onEffectRemove(PotionEvent.PotionRemoveEvent event)
+	{
+		onEffectEnd(event.getEntityLiving(), event.getPotion());
+	}
+	
+	@SubscribeEvent
+	public static void onPotionExpire(PotionEvent.PotionExpiryEvent expiryEvent)
+	{
+		onEffectEnd(expiryEvent.getEntityLiving(), expiryEvent.getPotionEffect().getPotion());
+	}
+	
+	private static void onEffectEnd(LivingEntity entityLiving, Effect effect)
+	{
+		if(entityLiving instanceof PlayerEntity)
+		{
+			PlayerEntity player = (PlayerEntity) entityLiving;
+			
+			if(!player.isCreative() && effect == MSEffects.CREATIVE_SHOCK)
+			{
+				player.abilities.allowEdit = !((ServerPlayerEntity) player).interactionManager.getGameType().hasLimitedInteractions();
+				
+				//StopBuildInhibitEffectPacket packet = StopBuildInhibitEffectPacket(player.getEntityId());
+				//MSPacketHandler.sendToPlayer(packet., (ServerPlayerEntity) player);
+			}
+		}
+	}
+	
+	@SubscribeEvent
+	public static void onBreakSpeed(PlayerEvent.BreakSpeed event)
+	{
+		if(event.getPlayer().isPotionActive(MSEffects.CREATIVE_SHOCK))
+			event.setNewSpeed(0);
+	}
+	
+	@SubscribeEvent
+	public static void onHarvestCheck(PlayerEvent.HarvestCheck event)
+	{
+		if(event.getPlayer().isPotionActive(MSEffects.CREATIVE_SHOCK))
+			event.setCanHarvest(false);
+	}
+	
 	
 	@SubscribeEvent
 	public static void breadStaling(ItemExpireEvent event)
 	{
 		ItemEntity e = event.getEntityItem();
-		if(e.getItem().getCount() == 1 && (e.getItem().getItem() == Items.BREAD)) {
+		if(e.getItem().getCount() == 1 && (e.getItem().getItem() == Items.BREAD))
+		{
 			ItemEntity stalebread = new ItemEntity(e.world, e.getPosX(), e.getPosY(), e.getPosZ(), new ItemStack(MSItems.STALE_BAGUETTE));
 			e.world.addEntity(stalebread);
 		}
