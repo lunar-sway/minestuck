@@ -9,6 +9,7 @@ import com.mraof.minestuck.world.lands.title.TitleLandType;
 import com.mraof.minestuck.world.storage.loot.LandTableLootEntry;
 import com.mraof.minestuck.world.storage.loot.MSLootTables;
 import com.mraof.minestuck.world.storage.loot.functions.SetBoondollarCount;
+import com.mraof.minestuck.world.storage.loot.functions.SetKeyValues;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.*;
@@ -151,6 +152,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.addEntry(ItemLootEntry.builder(MSItems.ENERGY_CORE).weight(10).quality(0)))
 				.addLootPool(LootPool.builder().name("boondollars").rolls(ConstantRange.of(1))
 						.addEntry(ItemLootEntry.builder(MSItems.SORROW_GUSHERS).weight(7).quality(-1).acceptFunction(SetCount.builder(RandomValueRange.of(3, 7))))
+						.addEntry(ItemLootEntry.builder(MSItems.DUNGEON_KEY).weight(10).quality(-1).acceptFunction(SetKeyValues.builder(ConstantRange.of(1))))
 						.addEntry(ItemLootEntry.builder(MSItems.BOONDOLLARS).weight(10).quality(-1).acceptFunction(SetBoondollarCount.builder(RandomValueRange.of(5, 50))))
 						.addEntry(ItemLootEntry.builder(MSItems.BOONDOLLARS).weight(5).quality(0).acceptFunction(SetBoondollarCount.builder(RandomValueRange.of(50, 250))))
 						.addEntry(ItemLootEntry.builder(MSItems.BOONDOLLARS).weight(2).quality(0).acceptFunction(SetBoondollarCount.builder(RandomValueRange.of(250, 1000))))));

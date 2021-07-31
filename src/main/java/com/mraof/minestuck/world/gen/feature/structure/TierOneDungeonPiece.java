@@ -1,31 +1,16 @@
 package com.mraof.minestuck.world.gen.feature.structure;
 
 import com.mraof.minestuck.block.*;
-import com.mraof.minestuck.entity.LotusFlowerEntity;
-import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.tileentity.DungeonDoorInterfaceTileEntity;
-import com.mraof.minestuck.tileentity.GateTileEntity;
-import com.mraof.minestuck.tileentity.ItemStackTileEntity;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
-import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockUtil;
-import com.mraof.minestuck.world.storage.loot.MSLootTables;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.LadderBlock;
-import net.minecraft.block.StairsBlock;
-import net.minecraft.fluid.Fluids;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.state.properties.ChestType;
-import net.minecraft.state.properties.Half;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.structure.ScatteredStructurePiece;
@@ -75,17 +60,8 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 	{
 		fillWithBlocks(world, boundingBox, 0, 0, 0, 20, 20, 20, block, block, false);
 		
-		BlockPos doorInterfacePos = new BlockPos(this.getXWithOffset(1, 0), this.getYWithOffset(10), this.getZWithOffset(1,0));
+		BlockPos doorInterfacePos = new BlockPos(this.getXWithOffset(1, 0), this.getYWithOffset(10), this.getZWithOffset(1, 0));
 		BlockState doorInterfaceBlockState = MSBlocks.DUNGEON_DOOR_INTERFACE.getDefaultState();
-		//BlockState doorInterfaceBlockState = MSBlocks.DUNGEON_DOOR_INTERFACE.getDefaultState().with(DungeonDoorInterfaceBlock.KEY, EnumKeyType.tier_1_key);
-		//setBlockState(world, doorInterfaceBlockState, 1, 10, 0, boundingBox);
-		
-		//CompoundNBT nbt = new CompoundNBT();
-		//nbt.putInt("x", doorInterfacePos.getX());
-		//nbt.putInt("y", doorInterfacePos.getY());
-		//nbt.putInt("z", doorInterfacePos.getZ());
-		//nbt.putString("key", EnumKeyType.tier_1_key.toString());
-		//DungeonDoorInterfaceTileEntity interfaceTE = (DungeonDoorInterfaceTileEntity) world.getTileEntity(doorInterfacePos);
 		doorInterfaceBlockState.createTileEntity(world);
 		world.setBlockState(doorInterfacePos, doorInterfaceBlockState, Constants.BlockFlags.BLOCK_UPDATE);
 		TileEntity interfaceTE = world.getTileEntity(doorInterfacePos);
@@ -94,24 +70,11 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 			interfaceTE = new DungeonDoorInterfaceTileEntity();
 			world.getWorld().setTileEntity(doorInterfacePos, interfaceTE);
 		}
-		
-		//world.getWorld().setTileEntity(doorInterfacePos, new DungeonDoorInterfaceTileEntity());
-		//DungeonDoorInterfaceTileEntity interfaceTE = (DungeonDoorInterfaceTileEntity) TE;
-		//world.getWorld().setTileEntity(doorInterfacePos, interfaceTE);
-		
 		if(interfaceTE != null)
 		{
-			((DungeonDoorInterfaceTileEntity) interfaceTE).keyType = EnumKeyType.tier_1_key;
-			//interfaceTE.keyType = EnumKeyType.tier_1_key;
-			//interfaceTE.write(nbt);
-		} else throw new IllegalStateException("Unable to create a new dungeon door interface tile entity. Returned null!");
-		
-		//Debug.debugf("interfaceTE = %s", interfaceTE);
-		Debug.debugf("interfaceTE = %s", interfaceTE);
-		
-		//setBlockState(world, doorInterfaceBlockState, doorInterfacePos.getX(), doorInterfacePos.getY(), doorInterfacePos.getZ(), boundingBox);
-		//DungeonDoorInterfaceBlock.setKey(world.getBlockState(doorInterfacePos).getBlock().getItem(world, doorInterfacePos, doorInterfaceBlockState), doorInterfaceBlockState);
-		//Debug.debugf("doorInterfacePos = %s, blockstate = %s, intendedblockstate = %s", doorInterfacePos, world.getBlockState(doorInterfacePos).getBlock().getItem(world, doorInterfacePos, doorInterfaceBlockState), doorInterfaceBlockState);
+			((DungeonDoorInterfaceTileEntity) interfaceTE).setKey(EnumKeyType.tier_1_key);
+		} else
+			throw new IllegalStateException("Unable to create a new dungeon door interface tile entity. Returned null!");
 		
 		fillWithBlocks(world, boundingBox, 2, 1, 0, 19, 19, 0, MSBlocks.DUNGEON_DOOR.getDefaultState(), block, false);
 	}

@@ -1,7 +1,5 @@
 {
     "variants": {
-        "key=none": { "model": "minestuck:block/dungeon_door_interface" },
-        "key=tier_1_key": { "model": "minestuck:block/dungeon_door_interface" },
-        "key=tier_2_key": { "model": "minestuck:block/dungeon_door_interface" }
+        "": { "model": "minestuck:block/dungeon_door_interface" }
     }
 }

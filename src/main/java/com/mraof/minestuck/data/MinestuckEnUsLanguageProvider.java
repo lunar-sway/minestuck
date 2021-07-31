@@ -976,7 +976,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.EIGHTBALL, "Magic Eightball");
 		add(MSItems.CREW_POSTER, "Midnight Crew Poster");
 		add(MSItems.SBAHJ_POSTER, "Sweet Bro and Hella Jeff Poster");
-		add(MSItems.TIER_1_KEY, "Tier 1 Key");
+		add(MSItems.DUNGEON_KEY, "Dungeon Key");
+		addExtra(MSItems.DUNGEON_KEY, "key", "%s");
 		add(MSItems.MUSIC_DISC_EMISSARY_OF_DANCE, "Music Disc");
 		addExtra(MSItems.MUSIC_DISC_EMISSARY_OF_DANCE, "desc", "Catboss - Emissary of Dance");
 		add(MSItems.MUSIC_DISC_DANCE_STAB_DANCE, "Music Disc");

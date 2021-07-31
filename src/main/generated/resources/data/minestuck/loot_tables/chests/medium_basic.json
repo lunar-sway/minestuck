@@ -749,6 +749,18 @@
           "quality": -1,
           "functions": [
             {
+              "function": "minestuck:set_key_values",
+              "key": 1
+            }
+          ],
+          "name": "minestuck:dungeon_key"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "quality": -1,
+          "functions": [
+            {
               "function": "minestuck:set_boondollar_count",
               "count": {
                 "min": 5.0,

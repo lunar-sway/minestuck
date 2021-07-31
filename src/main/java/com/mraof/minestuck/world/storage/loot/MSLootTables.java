@@ -3,6 +3,7 @@ package com.mraof.minestuck.world.storage.loot;
 import com.mraof.minestuck.world.storage.loot.conditions.ConsortLootCondition;
 import com.mraof.minestuck.world.storage.loot.conditions.LandTypeLootCondition;
 import com.mraof.minestuck.world.storage.loot.functions.SetBoondollarCount;
+import com.mraof.minestuck.world.storage.loot.functions.SetKeyValues;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootEntryManager;
 import net.minecraft.world.storage.loot.conditions.LootConditionManager;
@@ -22,6 +23,7 @@ public class MSLootTables
 		LootConditionManager.registerCondition(new LandTypeLootCondition.Serializer());
 		LootConditionManager.registerCondition(new ConsortLootCondition.Serializer());
 		LootFunctionManager.registerFunction(new SetBoondollarCount.Serializer());
+		LootFunctionManager.registerFunction(new SetKeyValues.Serializer());
 		LootEntryManager.func_216194_a(new LandTableLootEntry.SerializerImpl());
 	}
 }

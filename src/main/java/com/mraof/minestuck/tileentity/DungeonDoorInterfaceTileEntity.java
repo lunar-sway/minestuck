@@ -1,18 +1,13 @@
 package com.mraof.minestuck.tileentity;
 
-import com.mraof.minestuck.block.DungeonDoorInterfaceBlock;
 import com.mraof.minestuck.block.EnumKeyType;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.world.GateHandler;
-import net.minecraft.inventory.IClearable;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 
 public class DungeonDoorInterfaceTileEntity extends TileEntity
 {
-	private ItemStack key = ItemStack.EMPTY;
-	public EnumKeyType keyType;
+	private EnumKeyType keyType;
+	private boolean alreadyActivated;
 	
 	public DungeonDoorInterfaceTileEntity()
 	{
@@ -23,15 +18,13 @@ public class DungeonDoorInterfaceTileEntity extends TileEntity
 	public void read(CompoundNBT compound)
 	{
 		super.read(compound);
-		if(compound.contains("key"))
-			this.keyType = fromString(compound.getString("key"));
 		
-		/*Debug.debugf("DoorTile read = %s", ItemStack.read(compound.getCompound("KeyItem")));
-		super.read(compound);
-		if(compound.contains("KeyItem", 10))
-		{
-			this.setKey(ItemStack.read(compound.getCompound("KeyItem")));
-		}*/
+		if(compound.contains("key"))
+			this.keyType = EnumKeyType.fromString(compound.getString("key"));
+		else
+			this.keyType = EnumKeyType.none;
+		
+		this.alreadyActivated = compound.getBoolean("alreadyActivated");
 	}
 	
 	@Override
@@ -39,37 +32,32 @@ public class DungeonDoorInterfaceTileEntity extends TileEntity
 	{
 		super.write(compound);
 		if(this.keyType != null)
-			compound.putString("key", keyType.toString());
+			compound.putString("key", keyType.toString()); //enum turned into string in order to store
+		
+		compound.putBoolean("alreadyActivated", alreadyActivated);
+		
 		return compound;
-		
-		/*if(!this.getKey().isEmpty())
-		{
-			compound.put("KeyItem", this.getKey().write(new CompoundNBT()));
-		}
-		
-		return compound;*/
 	}
 	
 	public EnumKeyType getKey()
 	{
-		//key = this.world.getBlockState(pos).get(DungeonDoorInterfaceBlock.KEY);
-		
 		return this.keyType;
 	}
 	
-	public void setKey(ItemStack stack)
+	public void setKey(EnumKeyType keyTypeIn)
 	{
-		this.key = stack;
-		this.markDirty();
+		this.keyType = keyTypeIn;
 	}
 	
-	public static EnumKeyType fromString(String str)
+	public boolean getAlreadyActivated()
 	{
-		for(EnumKeyType type : EnumKeyType.values())
-		{
-			if(type.toString().equals(str))
-				return type;
-		}
-		return null;
+		return this.alreadyActivated;
 	}
+	
+	public void setAlreadyActivated(boolean alreadyActivatedIn)
+	{
+		this.alreadyActivated = alreadyActivatedIn;
+	}
+	
+	
 }
