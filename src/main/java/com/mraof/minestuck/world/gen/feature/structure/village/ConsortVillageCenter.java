@@ -47,8 +47,8 @@ public class ConsortVillageCenter
 		List<CenterEntry> weightList = Lists.newArrayList();
 		
 		ILandType.CenterRegister register = (factory, weight) -> weightList.add(new CenterEntry(factory, weight));
-		landTypes.terrain.addVillageCenters(register);
-		landTypes.title.addVillageCenters(register);
+		landTypes.getTerrain().addVillageCenters(register);
+		landTypes.getTitle().addVillageCenters(register);
 		
 		if(weightList.isEmpty())
 			return new ConsortVillageCenter.VillageMarketCenter(list, x, z, rand);

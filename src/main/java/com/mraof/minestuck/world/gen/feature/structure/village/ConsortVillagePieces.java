@@ -37,8 +37,8 @@ public class ConsortVillagePieces
 		List<PieceWeight> list = Lists.newArrayList();
 		
 		ILandType.PieceRegister register = (factory, weight, limit) -> list.add(new PieceWeight(factory, weight, limit));
-		landTypes.terrain.addVillagePieces(register, random);
-		landTypes.title.addVillagePieces(register, random);
+		landTypes.getTerrain().addVillagePieces(register, random);
+		landTypes.getTitle().addVillagePieces(register, random);
 		
 		list.removeIf(pieceWeight -> pieceWeight.villagePiecesLimit == 0);
 		

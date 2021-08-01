@@ -55,8 +55,8 @@ public class LandTypeLootCondition implements ILootCondition
 		{
 			LandTypePair aspects = MSDimensions.getAspects(world.getServer(), world.dimension());
 			
-			if(aspects != null && (terrainTypes.contains(aspects.terrain) || titleTypes.contains(aspects.title)
-					|| terrainGroups.contains(aspects.terrain.getGroup()) || titleGroups.contains(aspects.title.getGroup())))
+			if(aspects != null && (terrainTypes.contains(aspects.getTerrain()) || titleTypes.contains(aspects.getTitle())
+					|| terrainGroups.contains(aspects.getTerrain().getGroup()) || titleGroups.contains(aspects.getTitle().getGroup())))
 					return !inverted;
 		}
 		

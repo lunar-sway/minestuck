@@ -45,8 +45,8 @@ public class LandTableLootEntry extends LootEntry
 		LandTypePair aspects = MSDimensions.getAspects(context.getLevel().getServer(), context.getLevel().dimension());
 		if(canRun(context) && aspects != null)
 		{
-			ResourceLocation terrainTableName = new ResourceLocation(table.getNamespace(), table.getPath() + "/terrain/" + Objects.requireNonNull(aspects.terrain.getRegistryName()).toString().replace(':', '/'));
-			ResourceLocation titleTableName = new ResourceLocation(table.getNamespace(), table.getPath() + "/title/" + Objects.requireNonNull(aspects.title.getRegistryName()).toString().replace(':', '/'));
+			ResourceLocation terrainTableName = new ResourceLocation(table.getNamespace(), table.getPath() + "/terrain/" + Objects.requireNonNull(aspects.getTerrain().getRegistryName()).toString().replace(':', '/'));
+			ResourceLocation titleTableName = new ResourceLocation(table.getNamespace(), table.getPath() + "/title/" + Objects.requireNonNull(aspects.getTitle().getRegistryName()).toString().replace(':', '/'));
 			
 			expandFrom(terrainTableName, context, lootGenCollector);
 			expandFrom(titleTableName, context, lootGenCollector);

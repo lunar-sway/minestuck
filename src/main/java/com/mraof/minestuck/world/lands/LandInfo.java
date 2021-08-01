@@ -48,8 +48,8 @@ public class LandInfo
 		this.landAspects = landTypes.createLazy();
 		dimension = dimensionType;
 		useReverseOrder = random.nextBoolean();
-		terrainNameIndex = random.nextInt(landTypes.terrain.getNames().length);
-		titleNameIndex = random.nextInt(landTypes.title.getNames().length);
+		terrainNameIndex = random.nextInt(landTypes.getTerrain().getNames().length);
+		titleNameIndex = random.nextInt(landTypes.getTitle().getNames().length);
 	}
 	
 	private LandInfo(SkaianetHandler handler, PlayerIdentifier identifier, LandTypePair.LazyInstance landAspects, RegistryKey<World> dimensionType, boolean reverseOrder, int terrainNameIndex, int titleNameIndex)
@@ -72,15 +72,15 @@ public class LandInfo
 	public String landName1()
 	{
 		if(!useReverseOrder)
-			return getLandAspects().terrain.getNames()[terrainNameIndex];
-		else return getLandAspects().title.getNames()[titleNameIndex];
+			return getLandAspects().getTerrain().getNames()[terrainNameIndex];
+		else return getLandAspects().getTitle().getNames()[titleNameIndex];
 	}
 	
 	public String landName2()
 	{
 		if(useReverseOrder)
-			return getLandAspects().terrain.getNames()[terrainNameIndex];
-		else return getLandAspects().title.getNames()[titleNameIndex];
+			return getLandAspects().getTerrain().getNames()[terrainNameIndex];
+		else return getLandAspects().getTitle().getNames()[titleNameIndex];
 	}
 	
 	@Nullable

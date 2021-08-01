@@ -89,7 +89,7 @@ public class MSMusicTicker	//TODO Introduce types (something similar to vanilla)
 		LandTypePair pair = null;//dim.landTypes;
 		
 		if(mc.level.random.nextBoolean())
-			return pair.terrain.getBackgroundMusic();
-		else return pair.title.getBackgroundMusic();
+			return pair.getTerrain().getBackgroundMusic();
+		else return pair.getTitle().getBackgroundMusic();
 	}
 }
