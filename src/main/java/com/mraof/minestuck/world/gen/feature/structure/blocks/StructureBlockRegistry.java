@@ -1,7 +1,8 @@
 package com.mraof.minestuck.world.gen.feature.structure.blocks;
 
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.world.biome.BiomeType;
+import com.mraof.minestuck.world.biome.LandBiomeType;
+import com.mraof.minestuck.world.gen.LandChunkGenerator;
 import net.minecraft.block.*;
 import net.minecraft.state.Property;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -115,11 +116,11 @@ public final class StructureBlockRegistry
 		defaultRegistry.setBlockState("ocean_surface", Blocks.GRAVEL.defaultBlockState());
 	}
 	
-	public static StructureBlockRegistry getOrDefault(ChunkGenerator settings)
+	public static StructureBlockRegistry getOrDefault(ChunkGenerator generator)
 	{
-		/*if(settings instanceof LandGenSettings) TODO
-			return ((LandGenSettings) settings).getBlockRegistry();
-		else*/ return defaultRegistry;
+		if(generator instanceof LandChunkGenerator)
+			return ((LandChunkGenerator) generator).blockRegistry;
+		else return defaultRegistry;
 	}
 	
 	private static class BlockEntry

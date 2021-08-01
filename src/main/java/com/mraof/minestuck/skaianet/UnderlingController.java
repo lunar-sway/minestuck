@@ -8,7 +8,6 @@ import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3i;
-import net.minecraft.world.World;
 import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -35,7 +34,7 @@ public final class UnderlingController
 	
 	private static final List<MobSpawnInfo.Spawners>[] difficultyList = new List[31];
 	
-	public static List<MobSpawnInfo.Spawners> getUnderlingList(BlockPos pos, World world)
+	public static List<MobSpawnInfo.Spawners> getUnderlingList(BlockPos pos)
 	{
 		
 		BlockPos spawn = new BlockPos(0, 0, 0);//world.getSpawnPoint(); TODO

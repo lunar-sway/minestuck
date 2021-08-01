@@ -28,14 +28,22 @@ import static com.mraof.minestuck.world.gen.OreGeneration.*;
 public class LandBiomeHolder implements ILandBiomeSet
 {
 	private final Biome normalBiome, oceanBiome, roughBiome;
+	private final LandBiomeSet biomeSet;
 	
 	public LandBiomeHolder(LandGenSettings settings, LandProperties properties)
 	{
 		StructureBlockRegistry blocks = settings.getBlockRegistry();
 		
+		biomeSet = properties.biomes;
+		
 		normalBiome = createNormal(blocks, properties, settings.getLandTypes());
 		roughBiome = createRough(blocks, properties, settings.getLandTypes());
 		oceanBiome = createOcean(blocks, properties, settings.getLandTypes());
+	}
+	
+	public Biome getBiomeFromBase(Biome biome)
+	{
+		return fromType(biomeSet.getTypeFromBiome(biome));
 	}
 	
 	@Override

@@ -113,7 +113,7 @@ public abstract class AbstractChunkGenerator extends ChunkGenerator
 				int surfaceY = chunk.getHeight(Heightmap.Type.WORLD_SURFACE_WG, relX, relZ) + 1;
 				double noise = surfaceNoise.getSurfaceNoiseValue(x * noiseScale, z * noiseScale, noiseScale, relX * noiseScale) * 15.0D;
 				
-				Biome biome = region.getBiome(pos.set(startX + relX, surfaceY, startZ + relZ));
+				Biome biome = getBiome(region, pos.set(startX + relX, surfaceY, startZ + relZ));
 				biome.buildSurfaceAt(rand, chunk, x, z, surfaceY, noise, defaultBlock, defaultFluid, getSeaLevel(), region.getSeed());
 			}
 		}
@@ -484,9 +484,14 @@ public abstract class AbstractChunkGenerator extends ChunkGenerator
 	{
 		int x = region.getCenterX();
 		int z = region.getCenterZ();
-		Biome biome = region.getBiome((new ChunkPos(x, z)).getWorldPosition());
+		Biome biome = getBiome(region, new ChunkPos(x, z).getWorldPosition());
 		SharedSeedRandom sharedseedrandom = new SharedSeedRandom();
 		sharedseedrandom.setDecorationSeed(region.getSeed(), x << 4, z << 4);
 		WorldEntitySpawner.spawnMobsForChunkGeneration(region, biome, x, z, sharedseedrandom);
+	}
+	
+	protected Biome getBiome(WorldGenRegion region, BlockPos pos)
+	{
+		return region.getBiome(pos);
 	}
 }

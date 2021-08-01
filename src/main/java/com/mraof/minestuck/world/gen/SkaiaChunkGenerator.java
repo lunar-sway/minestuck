@@ -12,7 +12,7 @@ import java.util.stream.IntStream;
 
 public class SkaiaChunkGenerator extends AbstractChunkGenerator
 {
-	public static final Codec<SkaiaChunkGenerator> CODEC = RecordCodecBuilder.create((instance) -> instance.group(
+	public static final Codec<SkaiaChunkGenerator> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 					BiomeProvider.CODEC.fieldOf("biome_source").forGetter(generator -> generator.biomeSource),
 					Codec.LONG.fieldOf("seed").stable().forGetter(generator -> generator.seed),
 					DimensionSettings.CODEC.fieldOf("settings").forGetter(generator -> generator.settings))
