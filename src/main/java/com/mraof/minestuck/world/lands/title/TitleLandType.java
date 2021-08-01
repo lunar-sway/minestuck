@@ -40,7 +40,7 @@ public abstract class TitleLandType extends ForgeRegistryEntry<TitleLandType> im
 		this.pickedAtRandom = pickedAtRandom;
 	}
 	
-	public boolean isAspectCompatible(TerrainLandType aspect)
+	public boolean isAspectCompatible(TerrainLandType otherType)
 	{
 		return true;
 	}

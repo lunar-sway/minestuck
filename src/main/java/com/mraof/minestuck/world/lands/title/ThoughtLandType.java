@@ -3,7 +3,9 @@ package com.mraof.minestuck.world.lands.title;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
+import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.LandGenSettings;
+import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
@@ -11,6 +13,10 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeGenerationSettings;
+import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.feature.IFeatureConfig;
 
 public class ThoughtLandType extends TitleLandType
 {
@@ -47,21 +53,21 @@ public class ThoughtLandType extends TitleLandType
 	{
 		settings.oceanChance = Math.max(settings.oceanChance, 0.2F);
 	}
-	/*
+	
 	@Override
-	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
+	public void setBiomeGeneration(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks, LandBiomeType type, Biome baseBiome)
 	{
-		if(biome.type == BiomeType.NORMAL)
+		if(type == LandBiomeType.NORMAL)
 		{
-			biome.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MSFeatures.SMALL_LIBRARY.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.CHANCE_PASSTHROUGH.configure(new ChanceConfig(64))));
+			builder.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MSFeatures.SMALL_LIBRARY.configured(IFeatureConfig.NONE).chance(64));
 		}
 	}
-	*/
+	
 	@Override
-	public boolean isAspectCompatible(TerrainLandType aspect)
+	public boolean isAspectCompatible(TerrainLandType otherType)
 	{
 		StructureBlockRegistry registry = new StructureBlockRegistry();
-		aspect.registerBlocks(registry);
+		otherType.registerBlocks(registry);
 		return registry.getBlockState("ocean").getMaterial() != Material.LAVA;
 	}
 	

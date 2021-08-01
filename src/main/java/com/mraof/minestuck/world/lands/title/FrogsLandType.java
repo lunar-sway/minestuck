@@ -1,12 +1,24 @@
 package com.mraof.minestuck.world.lands.title;
 
+import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
+import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.EntityClassification;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeGenerationSettings;
+import net.minecraft.world.biome.MobSpawnInfo;
+import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.blockplacer.SimpleBlockPlacer;
+import net.minecraft.world.gen.blockstateprovider.SimpleBlockStateProvider;
+import net.minecraft.world.gen.feature.BlockClusterFeatureConfig;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.Features;
 
 public class FrogsLandType extends TitleLandType
 {
@@ -29,31 +41,37 @@ public class FrogsLandType extends TitleLandType
 		registry.setBlockState("structure_wool_2", Blocks.GREEN_WOOL.defaultBlockState());
 		registry.setBlockState("carpet", Blocks.LIME_CARPET.defaultBlockState());
 	}
-	/*
+	
 	@Override
-	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blockRegistry)
+	public void setSpawnInfo(MobSpawnInfo.Builder builder, LandBiomeType type)
 	{
-		if(biome.type == BiomeType.OCEAN)
+		if(type == LandBiomeType.NORMAL)
 		{
-			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_PATCH.withConfiguration(DefaultBiomeFeatures.LILY_PAD_CONFIG).withPlacement(Placement.COUNT_HEIGHTMAP_DOUBLE.configure(new FrequencyConfig(1))));
+			builder.addSpawn(EntityClassification.CREATURE, new MobSpawnInfo.Spawners(MSEntityTypes.FROG, 1, 0, 1));
 		}
 		
-		if(biome.type == BiomeType.NORMAL)
+		if(type == LandBiomeType.ROUGH)
 		{
-			biome.addSpawn(EntityClassification.CREATURE, new Biome.SpawnListEntry(MSEntityTypes.FROG, 1, 0, 1));
-		}
-		
-		if(biome.type == BiomeType.ROUGH)
-		{
-			biome.addSpawn(EntityClassification.CREATURE, new Biome.SpawnListEntry(MSEntityTypes.FROG, 10, 1, 6));
+			builder.addSpawn(EntityClassification.CREATURE, new MobSpawnInfo.Spawners(MSEntityTypes.FROG, 10, 1, 6));
 		}
 	}
-	*/
+	
 	@Override
-	public boolean isAspectCompatible(TerrainLandType aspect)
+	public void setBiomeGeneration(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks, LandBiomeType type, Biome baseBiome)
+	{
+		if(type == LandBiomeType.OCEAN)
+		{
+			builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_PATCH.configured(
+					new BlockClusterFeatureConfig.Builder(new SimpleBlockStateProvider(Blocks.LILY_PAD.defaultBlockState()), SimpleBlockPlacer.INSTANCE).tries(10).build())
+					.decorated(Features.Placements.HEIGHTMAP_DOUBLE_SQUARE));
+		}
+	}
+	
+	@Override
+	public boolean isAspectCompatible(TerrainLandType otherType)
 	{
 		StructureBlockRegistry registry = new StructureBlockRegistry();
-		aspect.registerBlocks(registry);
+		otherType.registerBlocks(registry);
 		return registry.getBlockState("ocean").getMaterial() != Material.LAVA;
 	}
 	

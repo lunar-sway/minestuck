@@ -1,11 +1,16 @@
 package com.mraof.minestuck.world.lands.terrain;
 
+import com.google.common.collect.Lists;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.MSSoundEvents;
+import com.mraof.minestuck.world.biome.LandBiomeType;
+import com.mraof.minestuck.world.biome.MinestuckBiomeFeatures;
 import com.mraof.minestuck.world.gen.LandGenSettings;
+import com.mraof.minestuck.world.gen.feature.MSFeatures;
+import com.mraof.minestuck.world.gen.feature.RandomRockBlockBlobConfig;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.feature.structure.village.ConsortVillageCenter;
 import com.mraof.minestuck.world.lands.LandProperties;
@@ -15,6 +20,12 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeGenerationSettings;
+import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.carver.WorldCarver;
+import net.minecraft.world.gen.feature.*;
+import net.minecraft.world.gen.placement.AtSurfaceWithExtraConfig;
+import net.minecraft.world.gen.placement.Placement;
 
 import java.util.Random;
 
@@ -81,66 +92,120 @@ public class RockLandType extends TerrainLandType
 	{
 		settings.oceanChance = 1 / 4F;
 	}
-	/*
+	
 	@Override
-	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
+	public void setBiomeGeneration(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks, LandBiomeType type, Biome baseBiome)
 	{
-		int biomeMultiplier = biome.type == BiomeType.ROUGH || biome.type == BiomeType.OCEAN ? 2 : 1;
+		int biomeMultiplier = type == LandBiomeType.ROUGH || type == LandBiomeType.OCEAN ? 2 : 1;
 		
-		if(biome.type == BiomeType.OCEAN)
+		if(type == LandBiomeType.OCEAN)
 		{
-			biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.DISK.withConfiguration(new SphereReplaceConfig(Blocks.CLAY.getDefaultState(), 6, 2, Lists.newArrayList(blocks.getBlockState("ocean_surface"), Blocks.CLAY.getDefaultState()))).withPlacement(Placement.COUNT_TOP_SOLID.configure(new FrequencyConfig(25))));
+			builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.DISK
+					.configured(new SphereReplaceConfig(Blocks.CLAY.defaultBlockState(), FeatureSpread.of(2, 3), 2, Lists.newArrayList(blocks.getBlockState("ocean_surface"), Blocks.CLAY.defaultBlockState())))
+					.decorated(Features.Placements.TOP_SOLID_HEIGHTMAP_SQUARE).count(25));
 		}
 		
-		if(biome.type == BiomeType.NORMAL)
+		if(type == LandBiomeType.NORMAL)
 		{
-			if(type == Variant.ROCK)
+			if(this.type == Variant.ROCK)
 			{
-				biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.RANDOM_ROCK_BLOCK_BLOB.withConfiguration(new RandomRockBlockBlobConfig(3)).withPlacement(Placement.CHANCE_HEIGHTMAP.configure(new ChanceConfig(20))));
-				biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_PATCH.withConfiguration(MinestuckBiomeFeatures.PETRIFIED_GRASS_CONFIG).withPlacement(Placement.COUNT_HEIGHTMAP_DOUBLE.configure(new FrequencyConfig(1))));
-				biome.addFeature(GenerationStage.Decoration.TOP_LAYER_MODIFICATION, MSFeatures.GRASSY_SURFACE_DISK.withConfiguration(new SphereReplaceConfig(Blocks.COBBLESTONE.getDefaultState(), 6, 1, Lists.newArrayList(blocks.getBlockState("surface"), Blocks.COBBLESTONE.getDefaultState()))).withPlacement(Placement.CHANCE_HEIGHTMAP.configure(new ChanceConfig(20))));
-				biome.addFeature(GenerationStage.Decoration.TOP_LAYER_MODIFICATION, MSFeatures.GRASSY_SURFACE_DISK.withConfiguration(new SphereReplaceConfig(Blocks.STONE.getDefaultState(), 5, 2, Lists.newArrayList(blocks.getBlockState("surface"), Blocks.STONE.getDefaultState()))).withPlacement(Placement.CHANCE_HEIGHTMAP.configure(new ChanceConfig(20))));
-			} else if(type == Variant.PETRIFICATION)
+				builder.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.RANDOM_ROCK_BLOCK_BLOB
+						.configured(new RandomRockBlockBlobConfig(3)).decorated(Features.Placements.HEIGHTMAP_SQUARE).chance(20));
+				builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_PATCH
+						.configured(MinestuckBiomeFeatures.PETRIFIED_GRASS_CONFIG).decorated(Features.Placements.HEIGHTMAP_DOUBLE_SQUARE));
+				builder.addFeature(GenerationStage.Decoration.TOP_LAYER_MODIFICATION, MSFeatures.GRASSY_SURFACE_DISK
+						.configured(new SphereReplaceConfig(Blocks.COBBLESTONE.defaultBlockState(), FeatureSpread.of(2, 3), 1, Lists.newArrayList(blocks.getBlockState("surface"), Blocks.COBBLESTONE.defaultBlockState())))
+						.decorated(Features.Placements.HEIGHTMAP_SQUARE).chance(20));
+				builder.addFeature(GenerationStage.Decoration.TOP_LAYER_MODIFICATION, MSFeatures.GRASSY_SURFACE_DISK
+						.configured(new SphereReplaceConfig(Blocks.STONE.defaultBlockState(), FeatureSpread.of(2, 2), 2, Lists.newArrayList(blocks.getBlockState("surface"), Blocks.STONE.defaultBlockState())))
+						.decorated(Features.Placements.HEIGHTMAP_SQUARE).chance(20));
+			} else if(this.type == Variant.PETRIFICATION)
 			{
-				biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, MSFeatures.LEAFLESS_TREE.withConfiguration(new BlockStateFeatureConfig(MSBlocks.PETRIFIED_LOG.getDefaultState())).withPlacement(Placement.CHANCE_HEIGHTMAP.configure(new ChanceConfig(10))));
-				biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.BLOCK_BLOB.withConfiguration(new BlockBlobConfig(Blocks.COBBLESTONE.getDefaultState(), 3)).withPlacement(Placement.CHANCE_HEIGHTMAP.configure(new ChanceConfig(20))));
-				biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_PATCH.withConfiguration(MinestuckBiomeFeatures.PETRIFIED_GRASS_CONFIG).withPlacement(Placement.COUNT_HEIGHTMAP_DOUBLE.configure(new FrequencyConfig(2))));
-				biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_PATCH.withConfiguration(MinestuckBiomeFeatures.PETRIFIED_POPPY_CONFIG).withPlacement(Placement.COUNT_HEIGHTMAP_32.configure(new FrequencyConfig(2))));
+				builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, MSFeatures.LEAFLESS_TREE
+						.configured(new BlockStateFeatureConfig(MSBlocks.PETRIFIED_LOG.defaultBlockState()))
+						.decorated(Features.Placements.HEIGHTMAP_SQUARE).chance(10));
+				builder.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.BLOCK_BLOB
+						.configured(new BlockStateFeatureConfig(Blocks.COBBLESTONE.defaultBlockState()))
+						.decorated(Features.Placements.HEIGHTMAP_SQUARE).chance(20));
+				builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_PATCH
+						.configured(MinestuckBiomeFeatures.PETRIFIED_GRASS_CONFIG)
+						.decorated(Features.Placements.HEIGHTMAP_DOUBLE_SQUARE).count(2));
+				builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_PATCH
+						.configured(MinestuckBiomeFeatures.PETRIFIED_POPPY_CONFIG)
+						.decorated(Features.Placements.ADD_32).decorated(Features.Placements.HEIGHTMAP_SQUARE).count(2));
 			}
 		}
 		
-		if(biome.type == BiomeType.ROUGH)
+		if(type == LandBiomeType.ROUGH)
 		{
-			if(type == Variant.ROCK)
+			if(this.type == Variant.ROCK)
 			{
-				biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, MSFeatures.LEAFLESS_TREE.withConfiguration(new BlockStateFeatureConfig(MSBlocks.PETRIFIED_LOG.getDefaultState())).withPlacement(Placement.CHANCE_HEIGHTMAP.configure(new ChanceConfig(20))));
-				biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.RANDOM_ROCK_BLOCK_BLOB.withConfiguration(new RandomRockBlockBlobConfig(5)).withPlacement(Placement.CHANCE_HEIGHTMAP.configure(new ChanceConfig(30))));
-				biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_PATCH.withConfiguration(MinestuckBiomeFeatures.PETRIFIED_GRASS_CONFIG).withPlacement(Placement.COUNT_HEIGHTMAP_DOUBLE.configure(new FrequencyConfig(2))));
-				biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.STONE_MOUND.withConfiguration(new BlockStateFeatureConfig(blocks.getBlockState("ground"))).withPlacement(Placement.TOP_SOLID_HEIGHTMAP.configure(IPlacementConfig.NO_PLACEMENT_CONFIG)));
-				biome.addFeature(GenerationStage.Decoration.TOP_LAYER_MODIFICATION, MSFeatures.GRASSY_SURFACE_DISK.withConfiguration(new SphereReplaceConfig(Blocks.COBBLESTONE.getDefaultState(), 6, 1, Lists.newArrayList(blocks.getBlockState("surface"), Blocks.COBBLESTONE.getDefaultState()))).withPlacement(Placement.CHANCE_HEIGHTMAP.configure(new ChanceConfig(20))));
-				biome.addFeature(GenerationStage.Decoration.TOP_LAYER_MODIFICATION, MSFeatures.GRASSY_SURFACE_DISK.withConfiguration(new SphereReplaceConfig(Blocks.STONE.getDefaultState(), 5, 2, Lists.newArrayList(blocks.getBlockState("surface"), Blocks.STONE.getDefaultState()))).withPlacement(Placement.CHANCE_HEIGHTMAP.configure(new ChanceConfig(20))));
-			} else if(type == Variant.PETRIFICATION)
+				builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, MSFeatures.LEAFLESS_TREE
+						.configured(new BlockStateFeatureConfig(MSBlocks.PETRIFIED_LOG.defaultBlockState()))
+						.decorated(Features.Placements.HEIGHTMAP_SQUARE).chance(20));
+				builder.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.RANDOM_ROCK_BLOCK_BLOB
+						.configured(new RandomRockBlockBlobConfig(5))
+						.decorated(Features.Placements.HEIGHTMAP_SQUARE).chance(30));
+				builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_PATCH
+						.configured(MinestuckBiomeFeatures.PETRIFIED_GRASS_CONFIG)
+						.decorated(Features.Placements.HEIGHTMAP_DOUBLE_SQUARE).count(2));
+				builder.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.STONE_MOUND
+						.configured(new BlockStateFeatureConfig(blocks.getBlockState("ground")))
+						.decorated(Features.Placements.TOP_SOLID_HEIGHTMAP_SQUARE));
+				builder.addFeature(GenerationStage.Decoration.TOP_LAYER_MODIFICATION, MSFeatures.GRASSY_SURFACE_DISK
+						.configured(new SphereReplaceConfig(Blocks.COBBLESTONE.defaultBlockState(), FeatureSpread.of(2, 3), 1, Lists.newArrayList(blocks.getBlockState("surface"), Blocks.COBBLESTONE.defaultBlockState())))
+						.decorated(Features.Placements.HEIGHTMAP_SQUARE).chance(20));
+				builder.addFeature(GenerationStage.Decoration.TOP_LAYER_MODIFICATION, MSFeatures.GRASSY_SURFACE_DISK
+						.configured(new SphereReplaceConfig(Blocks.STONE.defaultBlockState(), FeatureSpread.of(2, 2), 2, Lists.newArrayList(blocks.getBlockState("surface"), Blocks.STONE.defaultBlockState())))
+						.decorated(Features.Placements.HEIGHTMAP_SQUARE).chance(20));
+			} else if(this.type == Variant.PETRIFICATION)
 			{
-				biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, MSFeatures.LEAFLESS_TREE.withConfiguration(new BlockStateFeatureConfig(MSBlocks.PETRIFIED_LOG.getDefaultState())).withPlacement(Placement.COUNT_EXTRA_HEIGHTMAP.configure(new AtSurfaceWithExtraConfig(2, 0.5F, 1))));
-				biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.BLOCK_BLOB.withConfiguration(new BlockBlobConfig(Blocks.COBBLESTONE.getDefaultState(), 5)).withPlacement(Placement.CHANCE_HEIGHTMAP.configure(new ChanceConfig(30))));
-				biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_PATCH.withConfiguration(MinestuckBiomeFeatures.PETRIFIED_GRASS_CONFIG).withPlacement(Placement.COUNT_HEIGHTMAP_DOUBLE.configure(new FrequencyConfig(1))));
-				biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_PATCH.withConfiguration(MinestuckBiomeFeatures.PETRIFIED_POPPY_CONFIG).withPlacement(Placement.COUNT_HEIGHTMAP_32.configure(new FrequencyConfig(1))));
+				builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, MSFeatures.LEAFLESS_TREE
+						.configured(new BlockStateFeatureConfig(MSBlocks.PETRIFIED_LOG.defaultBlockState()))
+						.decorated(Features.Placements.HEIGHTMAP_SQUARE).decorated(Placement.COUNT_EXTRA.configured(new AtSurfaceWithExtraConfig(2, 0.5F, 1))));
+				builder.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.BLOCK_BLOB
+						.configured(new BlockStateFeatureConfig(Blocks.COBBLESTONE.defaultBlockState()))
+						.decorated(Features.Placements.HEIGHTMAP_SQUARE).chance(30));
+				builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_PATCH
+						.configured(MinestuckBiomeFeatures.PETRIFIED_GRASS_CONFIG)
+						.decorated(Features.Placements.HEIGHTMAP_DOUBLE_SQUARE));
+				builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_PATCH
+						.configured(MinestuckBiomeFeatures.PETRIFIED_POPPY_CONFIG)
+						.decorated(Features.Placements.ADD_32).decorated(Features.Placements.HEIGHTMAP_SQUARE));
 			}
 		}
-		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), Blocks.GRAVEL.getDefaultState(), 33)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(10 * biomeMultiplier, 0, 0, 256))));
-		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), Blocks.INFESTED_STONE.getDefaultState(), 9)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(7 * biomeMultiplier, 0, 0, 64 * biomeMultiplier))));
-		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), Blocks.COAL_ORE.getDefaultState(), 9)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(15 * biomeMultiplier, 0, 0, 64 * biomeMultiplier))));
-		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), Blocks.IRON_ORE.getDefaultState(), 5)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(15 * biomeMultiplier, 0, 0, 64 * biomeMultiplier))));
-		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), Blocks.REDSTONE_ORE.getDefaultState(), 5)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(8 * biomeMultiplier, 0, 0, 32 * biomeMultiplier))));
-		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), Blocks.LAPIS_ORE.getDefaultState(), 4)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(3 * biomeMultiplier, 0, 0, 24 * biomeMultiplier))));
-		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), MSBlocks.STONE_QUARTZ_ORE.getDefaultState(), 4)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(3 * biomeMultiplier, 0, 0, 24 * biomeMultiplier))));
-		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), Blocks.GOLD_ORE.getDefaultState(), 5)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(3 * biomeMultiplier, 0, 0, 32 * biomeMultiplier))));
-		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), Blocks.DIAMOND_ORE.getDefaultState(), 4)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(2 * biomeMultiplier, 0, 0, 24 * biomeMultiplier))));
+		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE
+				.configured(new OreFeatureConfig(blocks.getGroundType(), Blocks.GRAVEL.defaultBlockState(), 33))
+				.range(256).squared().count(10 * biomeMultiplier));
+		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE
+				.configured(new OreFeatureConfig(blocks.getGroundType(), Blocks.INFESTED_STONE.defaultBlockState(), 9))
+				.range(64 * biomeMultiplier).squared().count(7 * biomeMultiplier));
+		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE
+				.configured(new OreFeatureConfig(blocks.getGroundType(), Blocks.COAL_ORE.defaultBlockState(), 9))
+				.range(64 * biomeMultiplier).squared().count(15 * biomeMultiplier));
+		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE
+				.configured(new OreFeatureConfig(blocks.getGroundType(), Blocks.IRON_ORE.defaultBlockState(), 5))
+				.range(64 * biomeMultiplier).squared().count(15 * biomeMultiplier));
+		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE
+				.configured(new OreFeatureConfig(blocks.getGroundType(), Blocks.REDSTONE_ORE.defaultBlockState(), 5))
+				.range(32 * biomeMultiplier).squared().count(8 * biomeMultiplier));
+		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE
+				.configured(new OreFeatureConfig(blocks.getGroundType(), Blocks.LAPIS_ORE.defaultBlockState(), 4))
+				.range(24 * biomeMultiplier).squared().count(3 * biomeMultiplier));
+		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE
+				.configured(new OreFeatureConfig(blocks.getGroundType(), MSBlocks.STONE_QUARTZ_ORE.defaultBlockState(), 4))
+				.range(24 * biomeMultiplier).squared().count(3 * biomeMultiplier));
+		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE
+				.configured(new OreFeatureConfig(blocks.getGroundType(), Blocks.GOLD_ORE.defaultBlockState(), 5))
+				.range(32 * biomeMultiplier).squared().count(3 * biomeMultiplier));
+		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE
+				.configured(new OreFeatureConfig(blocks.getGroundType(), Blocks.DIAMOND_ORE.defaultBlockState(), 4))
+				.range(24 * biomeMultiplier).squared().count(2 * biomeMultiplier));
 		
-		biome.addCarver(GenerationStage.Carving.AIR, Biome.createCarver(WorldCarver.CANYON, new ProbabilityConfig(0.4F)));
+		builder.addCarver(GenerationStage.Carving.AIR, WorldCarver.CANYON.configured(new ProbabilityConfig(0.4F)));
 		
 	}
-	*/
+	
 	@Override
 	public float getSkylightBase()
 	{

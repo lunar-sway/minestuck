@@ -4,6 +4,9 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.MSSoundEvents;
+import com.mraof.minestuck.world.biome.LandBiomeType;
+import com.mraof.minestuck.world.biome.MinestuckBiomeFeatures;
+import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
@@ -12,6 +15,12 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeGenerationSettings;
+import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.feature.BlockStateFeatureConfig;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.Features;
+import net.minecraft.world.gen.feature.OreFeatureConfig;
 
 import java.util.Random;
 
@@ -61,28 +70,46 @@ public class ShadeLandType extends TerrainLandType
 		properties.category = Biome.Category.MUSHROOM;
 		properties.forceRain = LandProperties.ForceType.DEFAULT;
 	}
-	/*
+	
 	@Override
-	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
+	public void setBiomeGeneration(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks, LandBiomeType type, Biome baseBiome)
 	{
-		if(biome.type == BiomeType.NORMAL)
+		if(type == LandBiomeType.NORMAL)
 		{
-			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_PATCH.withConfiguration(MinestuckBiomeFeatures.GLOWING_MUSHROOM_CONFIG).withPlacement(Placement.COUNT_CHANCE_HEIGHTMAP.configure(new HeightWithChanceConfig(1, 1/2F))));
-			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, MSFeatures.LEAFLESS_TREE.withConfiguration(new BlockStateFeatureConfig(MSBlocks.GLOWING_LOG.getDefaultState())).withPlacement(Placement.CHANCE_HEIGHTMAP.configure(new ChanceConfig(2))));
+			builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_PATCH
+					.configured(MinestuckBiomeFeatures.GLOWING_MUSHROOM_CONFIG)
+					.decorated(Features.Placements.HEIGHTMAP_SQUARE).chance(2));
+			builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, MSFeatures.LEAFLESS_TREE
+					.configured(new BlockStateFeatureConfig(MSBlocks.GLOWING_LOG.defaultBlockState()))
+					.decorated(Features.Placements.HEIGHTMAP_SQUARE).chance(2));
 		}
-		if(biome.type == BiomeType.ROUGH)
+		if(type == LandBiomeType.ROUGH)
 		{
-			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_PATCH.withConfiguration(MinestuckBiomeFeatures.GLOWING_MUSHROOM_CONFIG).withPlacement(Placement.COUNT_CHANCE_HEIGHTMAP.configure(new HeightWithChanceConfig(1, 1/4F))));
-			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, MSFeatures.LEAFLESS_TREE.withConfiguration(new BlockStateFeatureConfig(MSBlocks.GLOWING_LOG.getDefaultState())).withPlacement(Placement.CHANCE_HEIGHTMAP.configure(new ChanceConfig(2))));
+			builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_PATCH
+					.configured(MinestuckBiomeFeatures.GLOWING_MUSHROOM_CONFIG)
+					.decorated(Features.Placements.HEIGHTMAP_SQUARE).chance(4));
+			builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, MSFeatures.LEAFLESS_TREE
+					.configured(new BlockStateFeatureConfig(MSBlocks.GLOWING_LOG.defaultBlockState()))
+					.decorated(Features.Placements.HEIGHTMAP_SQUARE).chance(2));
 		}
-
-		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), MSBlocks.BLUE_DIRT.getDefaultState(), 25)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(8, 0, 0, 256))));
-		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), MSBlocks.SHADE_STONE_COAL_ORE.getDefaultState(), 9)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(24, 0, 0, 64))));
-		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), MSBlocks.SHADE_STONE_GOLD_ORE.getDefaultState(), 7)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(6, 0, 0, 32))));
-		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), MSBlocks.SHADE_STONE_CRUXITE_ORE.getDefaultState(), 4)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(12, 0, 0, 64))));
-		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), MSBlocks.SHADE_STONE_URANIUM_ORE.getDefaultState(), 2)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(4, 0, 0, 32))));
+		
+		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE
+				.configured(new OreFeatureConfig(blocks.getGroundType(), MSBlocks.BLUE_DIRT.defaultBlockState(), 25))
+				.range(256).squared().count(8));
+		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE
+				.configured(new OreFeatureConfig(blocks.getGroundType(), MSBlocks.SHADE_STONE_COAL_ORE.defaultBlockState(), 9))
+				.range(64).squared().count(24));
+		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE
+				.configured(new OreFeatureConfig(blocks.getGroundType(), MSBlocks.SHADE_STONE_GOLD_ORE.defaultBlockState(), 7))
+				.range(32).squared().count(6));
+		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE
+				.configured(new OreFeatureConfig(blocks.getGroundType(), MSBlocks.SHADE_STONE_CRUXITE_ORE.defaultBlockState(), 4))
+				.range(64).squared().count(12));
+		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE
+				.configured(new OreFeatureConfig(blocks.getGroundType(), MSBlocks.SHADE_STONE_URANIUM_ORE.defaultBlockState(), 2))
+				.range(32).squared().count(4));
 	}
-	*/
+	
 	@Override
 	public float getSkylightBase()
 	{

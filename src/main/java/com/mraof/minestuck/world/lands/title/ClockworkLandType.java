@@ -2,11 +2,17 @@ package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
+import com.mraof.minestuck.world.biome.LandBiomeType;
+import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeGenerationSettings;
+import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.feature.IFeatureConfig;
 
 public class ClockworkLandType extends TitleLandType
 {
@@ -36,26 +42,26 @@ public class ClockworkLandType extends TitleLandType
 	{
 		properties.mergeFogColor(new Vector3d(0.5, 0.5, 0.5), 0.5F);
 	}
-	/*
+	
 	@Override
-	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
+	public void setBiomeGeneration(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks, LandBiomeType type, Biome baseBiome)
 	{
-		if(biome.type == BiomeType.ROUGH)
+		if(type == LandBiomeType.ROUGH)
 		{
-			biome.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MSFeatures.COG.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.CHANCE_PASSTHROUGH.configure(new ChanceConfig(2))));
+			builder.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MSFeatures.COG.configured(IFeatureConfig.NONE).chance(2));
 		} else
 		{
-			biome.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MSFeatures.COG.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.CHANCE_PASSTHROUGH.configure(new ChanceConfig(10))));
+			builder.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MSFeatures.COG.configured(IFeatureConfig.NONE).chance(10));
 		}
 		
-		if(biome.type == BiomeType.OCEAN)
+		if(type == LandBiomeType.OCEAN)
 		{
-			biome.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MSFeatures.FLOOR_COG.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.CHANCE_PASSTHROUGH.configure(new ChanceConfig(3))));
+			builder.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MSFeatures.FLOOR_COG.configured(IFeatureConfig.NONE).chance(3));
 		} else
 		{
-			biome.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MSFeatures.FLOOR_COG.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.CHANCE_PASSTHROUGH.configure(new ChanceConfig(20))));
+			builder.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MSFeatures.FLOOR_COG.configured(IFeatureConfig.NONE).chance(20));
 		}
-	}*/
+	}
 	
 	@Override
 	public SoundEvent getBackgroundMusic()

@@ -2,9 +2,15 @@ package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
+import com.mraof.minestuck.world.biome.LandBiomeType;
+import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeGenerationSettings;
+import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.feature.IFeatureConfig;
 
 public class BucketsLandType extends TitleLandType    //Yes, buckets
 {
@@ -27,16 +33,15 @@ public class BucketsLandType extends TitleLandType    //Yes, buckets
 		registry.setBlockState("structure_wool_2", Blocks.BLUE_WOOL.defaultBlockState());
 		registry.setBlockState("carpet", Blocks.BLACK_CARPET.defaultBlockState());
 	}
-	/*
+	
 	@Override
-	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
+	public void setBiomeGeneration(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks, LandBiomeType type, Biome baseBiome)
 	{
-		if(biome.type != BiomeType.OCEAN)
+		if(type != LandBiomeType.OCEAN)
 		{
-			biome.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MSFeatures.BUCKET.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.CHANCE_PASSTHROUGH.configure(new ChanceConfig(16))));
+			builder.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MSFeatures.BUCKET.configured(IFeatureConfig.NONE).chance(16));
 		}
 	}
-	*/
 	
 	@Override
 	public SoundEvent getBackgroundMusic()

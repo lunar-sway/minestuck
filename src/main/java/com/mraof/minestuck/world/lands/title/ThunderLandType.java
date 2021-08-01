@@ -51,10 +51,10 @@ public class ThunderLandType extends TitleLandType
 	}
 	
 	@Override
-	public boolean isAspectCompatible(TerrainLandType aspect)
+	public boolean isAspectCompatible(TerrainLandType otherType)
 	{
-		LandProperties properties = new LandProperties(aspect);
-		aspect.setProperties(properties);
+		LandProperties properties = LandProperties.createPartial(otherType);
+		
 		return properties.biomes.NORMAL.get().getPrecipitation() == Biome.RainType.RAIN;
 	}
 	

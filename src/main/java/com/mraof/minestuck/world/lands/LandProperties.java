@@ -19,18 +19,29 @@ public class LandProperties
 	public float roughBiomeDepth = MSBiomes.DEFAULT_LAND.ROUGH.get().getDepth(), roughBiomeScale = MSBiomes.DEFAULT_LAND.ROUGH.get().getScale();
 	public float oceanBiomeDepth = MSBiomes.DEFAULT_LAND.OCEAN.get().getDepth(), oceanBiomeScale = MSBiomes.DEFAULT_LAND.OCEAN.get().getScale();
 	
-	public LandProperties(TerrainLandType landType)
+	public static LandProperties create(LandTypePair types)
 	{
-		biomes = landType.getBiomeSet();
-		skylightBase = landType.getSkylightBase();
-		skyColor = landType.getSkyColor();
-		fogColor = landType.getFogColor();
+		LandProperties properties = createPartial(types.getTerrain());
+		types.getTitle().setProperties(properties);
+		
+		return properties;
 	}
 	
-	public void load(LandTypePair types)
+	public static LandProperties createPartial(TerrainLandType type)
 	{
-		types.terrain.setProperties(this);
-		types.title.setProperties(this);
+		LandProperties properties = new LandProperties(type);
+		type.setProperties(properties);
+		
+		return properties;
+	}
+	
+	private LandProperties(TerrainLandType type)
+	{
+		biomes = type.getBiomeSet();
+		skylightBase = type.getSkylightBase();
+		skyColor = type.getSkyColor();
+		fogColor = type.getFogColor();
+		
 	}
 	
 	public void mergeFogColor(Vector3d fogColor, float strength)

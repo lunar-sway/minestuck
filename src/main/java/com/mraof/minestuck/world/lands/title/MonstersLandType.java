@@ -3,12 +3,16 @@ package com.mraof.minestuck.world.lands.title;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
+import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.EntityClassification;
+import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.biome.MobSpawnInfo;
 
 public class MonstersLandType extends TitleLandType
 {
@@ -46,23 +50,22 @@ public class MonstersLandType extends TitleLandType
 		properties.skylightBase = Math.min(1/4F, properties.skylightBase);
 		properties.mergeFogColor(new Vector3d(0.1, 0, 0), 0.5F);
 	}
-	/*
+	
 	@Override
-	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blockRegistry)
+	public void setSpawnInfo(MobSpawnInfo.Builder builder, LandBiomeType type)
 	{
 		if(this.type == Variant.MONSTERS)
 		{
-			biome.addSpawn(EntityClassification.MONSTER, new SpawnListEntry(EntityType.CREEPER, 1, 1, 1));
-			biome.addSpawn(EntityClassification.MONSTER, new SpawnListEntry(EntityType.SPIDER, 1, 1, 2));
-			biome.addSpawn(EntityClassification.MONSTER, new SpawnListEntry(EntityType.ZOMBIE, 1, 1, 2));
+			builder.addSpawn(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(EntityType.CREEPER, 1, 1, 1));
+			builder.addSpawn(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(EntityType.SPIDER, 1, 1, 2));
+			builder.addSpawn(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(EntityType.ZOMBIE, 1, 1, 2));
 		}
 		else if(this.type == Variant.UNDEAD)
 		{
-			biome.addSpawn(EntityClassification.MONSTER, new SpawnListEntry(EntityType.ZOMBIE, 2, 1, 3));
-			biome.addSpawn(EntityClassification.MONSTER, new SpawnListEntry(EntityType.SKELETON, 1, 1, 2));
+			builder.addSpawn(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(EntityType.ZOMBIE, 2, 1, 3));
+			builder.addSpawn(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(EntityType.SKELETON, 1, 1, 2));
 		}
 	}
-	*/
 	
 	@Override
 	public SoundEvent getBackgroundMusic()
