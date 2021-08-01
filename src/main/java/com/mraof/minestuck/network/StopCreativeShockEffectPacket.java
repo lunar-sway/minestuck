@@ -5,11 +5,11 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.GameType;
 
-public class StopBuildInhibitEffectPacket implements PlayToClientPacket
+public class StopCreativeShockEffectPacket implements PlayToClientPacket
 {
 	public GameType playerGameType;
 	
-	public StopBuildInhibitEffectPacket(GameType playerGameTypeIn)
+	public StopCreativeShockEffectPacket(GameType playerGameTypeIn)
 	{
 		this.playerGameType = playerGameTypeIn;
 	}
@@ -20,11 +20,11 @@ public class StopBuildInhibitEffectPacket implements PlayToClientPacket
 		buffer.writeInt(playerGameType.getID());
 	}
 	
-	public static StopBuildInhibitEffectPacket decode(PacketBuffer buffer)
+	public static StopCreativeShockEffectPacket decode(PacketBuffer buffer)
 	{
 		GameType gameType = GameType.getByID(buffer.readInt());
 		
-		return new StopBuildInhibitEffectPacket(gameType);
+		return new StopCreativeShockEffectPacket(gameType);
 	}
 	
 	@Override
@@ -33,7 +33,6 @@ public class StopBuildInhibitEffectPacket implements PlayToClientPacket
 		PlayerEntity playerEntity = Minecraft.getInstance().player;
 		if(!playerEntity.isCreative())
 		{
-			//gameType.configurePlayerCapabilities(playerEntity.abilities);
 			playerEntity.abilities.allowEdit = !playerGameType.hasLimitedInteractions();
 		}
 	}

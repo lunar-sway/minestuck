@@ -9,7 +9,7 @@ import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.network.StopBuildInhibitEffectPacket;
+import com.mraof.minestuck.network.StopCreativeShockEffectPacket;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.IdentifierHandler;
@@ -318,7 +318,7 @@ public class ServerEventHandler
 				ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player;
 				player.abilities.allowEdit = !serverPlayerEntity.interactionManager.getGameType().hasLimitedInteractions();
 				
-				StopBuildInhibitEffectPacket packet = new StopBuildInhibitEffectPacket(serverPlayerEntity.interactionManager.getGameType());
+				StopCreativeShockEffectPacket packet = new StopCreativeShockEffectPacket(serverPlayerEntity.interactionManager.getGameType());
 				MSPacketHandler.sendToPlayer(packet, serverPlayerEntity);
 			}
 		}
