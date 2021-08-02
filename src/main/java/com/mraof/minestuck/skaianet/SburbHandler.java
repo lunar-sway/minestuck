@@ -206,7 +206,7 @@ public final class SburbHandler
 		
 		generateAndSetTitle(mcServer.getLevel(World.OVERWORLD), c.getClientIdentifier());
 		LandTypePair landTypes = genLandAspects(mcServer, c);		//This is where the Land dimension is actually registered, but it also needs the player's Title to be determined.
-		RegistryKey<World> dimType = LandTypes.createLandType(mcServer, identifier, landTypes);
+		RegistryKey<World> dimType = LandTypes.createLandDimension(mcServer, identifier, landTypes);
 		c.setLand(landTypes, dimType);
 	}
 	
