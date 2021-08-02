@@ -36,7 +36,8 @@ public abstract class LandBiome
 	{
 		Biome.Builder builder = new Biome.Builder();
 		
-		BiomeAmbience.Builder ambience = new BiomeAmbience.Builder().waterColor(0x3F76E4).waterFogColor(0x050533);
+		BiomeAmbience.Builder ambience = new BiomeAmbience.Builder().waterColor(0x3F76E4).waterFogColor(0x050533)
+				.fogColor(0xC0D8FF).skyColor(0x7AA4FF);
 		
 		BiomeGenerationSettings.Builder generation = new BiomeGenerationSettings.Builder()
 				.surfaceBuilder(() -> SurfaceBuilder.DEFAULT.configured(SurfaceBuilder.CONFIG_GRASS));
