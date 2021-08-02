@@ -1,7 +1,7 @@
 package com.mraof.minestuck.world.lands;
 
+import com.mraof.minestuck.world.biome.LandBiome;
 import com.mraof.minestuck.world.biome.LandBiomeSet;
-import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.biome.Biome;
@@ -15,9 +15,9 @@ public class LandProperties
 	
 	public Biome.Category category = Biome.Category.NONE;
 	public ForceType forceRain = ForceType.OFF, forceThunder = ForceType.OFF;	//TODO Make private and set up setters that'd prevent combinations that doesn't make sense, + also setting forceRain + rainType at the same time
-	public float normalBiomeDepth = MSBiomes.DEFAULT_LAND.NORMAL.get().getDepth(), normalBiomeScale = MSBiomes.DEFAULT_LAND.NORMAL.get().getScale();
-	public float roughBiomeDepth = MSBiomes.DEFAULT_LAND.ROUGH.get().getDepth(), roughBiomeScale = MSBiomes.DEFAULT_LAND.ROUGH.get().getScale();
-	public float oceanBiomeDepth = MSBiomes.DEFAULT_LAND.OCEAN.get().getDepth(), oceanBiomeScale = MSBiomes.DEFAULT_LAND.OCEAN.get().getScale();
+	public float normalBiomeDepth = LandBiome.DEFAULT_NORMAL_DEPTH, normalBiomeScale = LandBiome.DEFAULT_NORMAL_SCALE;
+	public float roughBiomeDepth = LandBiome.DEFAULT_ROUGH_DEPTH, roughBiomeScale = LandBiome.DEFAULT_ROUGH_SCALE;
+	public float oceanBiomeDepth = LandBiome.DEFAULT_OCEAN_DEPTH, oceanBiomeScale = LandBiome.DEFAULT_OCEAN_SCALE;
 	
 	public static LandProperties create(LandTypePair types)
 	{

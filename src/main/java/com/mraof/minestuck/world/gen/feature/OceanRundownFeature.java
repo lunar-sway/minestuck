@@ -1,7 +1,6 @@
 package com.mraof.minestuck.world.gen.feature;
 
 import com.mojang.serialization.Codec;
-import com.mraof.minestuck.world.biome.LandBiomeSet;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -27,9 +26,9 @@ public class OceanRundownFeature extends Feature<NoFeatureConfig>
 	@Override
 	public boolean place(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
 	{
-		Biome oceanBiome = LandBiomeSet.getSet(generator).OCEAN.get();
 		BlockPos pos2, pos3;
-		if(generator.getBiomeSource().getBiomesWithin(pos.getX(), world.getSeaLevel(), pos.getZ(), 3).contains(oceanBiome))
+		if(generator.getBiomeSource().getBiomesWithin(pos.getX(), world.getSeaLevel(), pos.getZ(), 3)
+				.stream().anyMatch(biome -> biome.getBiomeCategory() == Biome.Category.OCEAN))
 		{
 			return false;
 		}
@@ -39,7 +38,8 @@ public class OceanRundownFeature extends Feature<NoFeatureConfig>
 		{
 			for(int posZ = 0; posZ < 16; posZ++)
 			{
-				if(generator.getBiomeSource().getNoiseBiome(pos.getX() + posX - 8 >> 2, pos.getY(), pos.getZ() + posZ - 8 >> 2).equals(oceanBiome))
+				if(generator.getBiomeSource().getNoiseBiome(pos.getX() + posX - 8 >> 2, pos.getY(), pos.getZ() + posZ - 8 >> 2)
+						.getBiomeCategory() == Biome.Category.OCEAN)
 					oceanPos.add(pos.offset(posX - 8, 0, posZ - 8));
 			}
 		}

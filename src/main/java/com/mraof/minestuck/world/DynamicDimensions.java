@@ -47,7 +47,7 @@ public class DynamicDimensions
 		IServerConfiguration serverConfig = server.getWorldData();
 		DimensionGeneratorSettings genSettings = serverConfig.worldGenSettings();
 		
-		ChunkGenerator chunkGenerator = new LandChunkGenerator(genSettings.seed(), landTypes);
+		ChunkGenerator chunkGenerator = new LandChunkGenerator(genSettings.seed(), landTypes, server.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY));
 		Dimension dimension = new Dimension(() -> server.registryAccess().dimensionTypes().get(LAND_TYPE), chunkGenerator);
 		
 		genSettings.dimensions().register(dimensionKey, dimension, Lifecycle.experimental());

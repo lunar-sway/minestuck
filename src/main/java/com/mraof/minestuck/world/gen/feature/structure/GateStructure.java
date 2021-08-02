@@ -93,7 +93,7 @@ public class GateStructure extends Structure<NoFeatureConfig>
 		double angle = 2 * Math.PI * worldRand.nextDouble();
 		int radius = 38 + worldRand.nextInt(12);
 		
-		Biome normalBiome = LandBiomeSet.getSet(chunkGenerator).NORMAL.get();
+		Biome normalBiome = LandBiomeSet.getSet(chunkGenerator).map(set -> set.NORMAL).orElse(null);
 		
 		for(; radius < 65; radius += 6)
 		{

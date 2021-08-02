@@ -47,7 +47,7 @@ public class SilenceLandType extends TitleLandType
 	@Override
 	public void setProperties(LandProperties properties)
 	{
-		if(properties.biomes.NORMAL.get().getPrecipitation() == Biome.RainType.RAIN)
+		if(properties.biomes.getPrecipitation() == Biome.RainType.RAIN)
 			properties.forceRain = LandProperties.ForceType.OFF;
 		properties.skylightBase = Math.min(1/2F, properties.skylightBase);
 		properties.mergeFogColor(new Vector3d(0, 0, 0.1), 0.5F);
@@ -67,7 +67,7 @@ public class SilenceLandType extends TitleLandType
 	{
 		LandProperties properties = LandProperties.createPartial(otherType);
 		
-		return properties.forceRain != LandProperties.ForceType.ON || properties.biomes.NORMAL.get().getPrecipitation() != Biome.RainType.RAIN;
+		return properties.forceRain != LandProperties.ForceType.ON || properties.biomes.getPrecipitation() != Biome.RainType.RAIN;
 	}
 	
 	@Override

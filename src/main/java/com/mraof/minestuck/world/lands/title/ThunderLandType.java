@@ -55,7 +55,7 @@ public class ThunderLandType extends TitleLandType
 	{
 		LandProperties properties = LandProperties.createPartial(otherType);
 		
-		return properties.biomes.NORMAL.get().getPrecipitation() == Biome.RainType.RAIN;
+		return properties.biomes.getPrecipitation() == Biome.RainType.RAIN;
 	}
 	
 	@Override

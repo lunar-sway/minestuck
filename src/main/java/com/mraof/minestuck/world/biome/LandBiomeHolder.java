@@ -28,22 +28,22 @@ import static com.mraof.minestuck.world.gen.OreGeneration.*;
 public class LandBiomeHolder implements ILandBiomeSet
 {
 	private final Biome normalBiome, oceanBiome, roughBiome;
-	private final LandBiomeSet biomeSet;
+	public final LandBiomeSetWrapper baseBiomes;
 	
-	public LandBiomeHolder(LandGenSettings settings, LandProperties properties)
+	public LandBiomeHolder(LandBiomeSetWrapper biomes, LandGenSettings settings, LandProperties properties)
 	{
 		StructureBlockRegistry blocks = settings.getBlockRegistry();
 		
-		biomeSet = properties.biomes;
+		baseBiomes = biomes;
 		
-		normalBiome = createNormal(blocks, properties, settings.getLandTypes());
-		roughBiome = createRough(blocks, properties, settings.getLandTypes());
-		oceanBiome = createOcean(blocks, properties, settings.getLandTypes());
+		normalBiome = createNormal(biomes, blocks, properties, settings.getLandTypes());
+		roughBiome = createRough(biomes, blocks, properties, settings.getLandTypes());
+		oceanBiome = createOcean(biomes, blocks, properties, settings.getLandTypes());
 	}
 	
 	public Biome getBiomeFromBase(Biome biome)
 	{
-		return fromType(biomeSet.getTypeFromBiome(biome));
+		return fromType(baseBiomes.getTypeFromBiome(biome));
 	}
 	
 	@Override
@@ -63,27 +63,27 @@ public class LandBiomeHolder implements ILandBiomeSet
 		}
 	}
 	
-	private static Biome createNormal(StructureBlockRegistry blocks, LandProperties properties, LandTypePair landTypes)
+	private static Biome createNormal(LandBiomeSetWrapper baseBiomes, StructureBlockRegistry blocks, LandProperties properties, LandTypePair landTypes)
 	{
-		return createBiomeBase(blocks, landTypes, LandBiomeType.NORMAL).biomeCategory(properties.category)
+		return createBiomeBase(baseBiomes, blocks, landTypes, LandBiomeType.NORMAL).biomeCategory(properties.category)
 				.depth(properties.normalBiomeDepth).scale(properties.normalBiomeScale).build();
 	}
 	
-	private static Biome createRough(StructureBlockRegistry blocks, LandProperties properties, LandTypePair landTypes)
+	private static Biome createRough(LandBiomeSetWrapper baseBiomes, StructureBlockRegistry blocks, LandProperties properties, LandTypePair landTypes)
 	{
-		return createBiomeBase(blocks, landTypes, LandBiomeType.ROUGH).biomeCategory(properties.category)
+		return createBiomeBase(baseBiomes, blocks, landTypes, LandBiomeType.ROUGH).biomeCategory(properties.category)
 				.depth(properties.roughBiomeDepth).scale(properties.roughBiomeScale).build();
 	}
 	
-	private static Biome createOcean(StructureBlockRegistry blocks, LandProperties properties, LandTypePair landTypes)
+	private static Biome createOcean(LandBiomeSetWrapper baseBiomes, StructureBlockRegistry blocks, LandProperties properties, LandTypePair landTypes)
 	{
-		return createBiomeBase(blocks, landTypes, LandBiomeType.OCEAN).biomeCategory(Biome.Category.OCEAN)
+		return createBiomeBase(baseBiomes, blocks, landTypes, LandBiomeType.OCEAN).biomeCategory(Biome.Category.OCEAN)
 				.depth(properties.oceanBiomeDepth).scale(properties.oceanBiomeScale).build();
 	}
 	
-	private static Biome.Builder createBiomeBase(StructureBlockRegistry blocks, LandTypePair landTypes, LandBiomeType type)
+	private static Biome.Builder createBiomeBase(LandBiomeSetWrapper baseBiomes, StructureBlockRegistry blocks, LandTypePair landTypes, LandBiomeType type)
 	{
-		Biome base = landTypes.getTerrain().getBiomeSet().fromType(type);
+		Biome base = baseBiomes.fromType(type);
 		Biome.Builder builder = new Biome.Builder().precipitation(base.getPrecipitation())
 				.temperature(base.getBaseTemperature()).downfall(base.getDownfall()).specialEffects(base.getSpecialEffects());
 		

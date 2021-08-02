@@ -36,6 +36,11 @@ public class MinestuckBiomeProvider implements IDataProvider
 	protected void generateBiomes(BiConsumer<RegistryKey<Biome>, Biome> consumer)
 	{
 		consumer.accept(MSBiomes.SKAIA, SkaiaBiome.makeBiome());
+		
+		MSBiomes.DEFAULT_LAND.createForDataGen(consumer);
+		MSBiomes.HIGH_HUMID_LAND.createForDataGen(consumer);
+		MSBiomes.NO_RAIN_LAND.createForDataGen(consumer);
+		MSBiomes.SNOW_LAND.createForDataGen(consumer);
 	}
 	
 	@Override

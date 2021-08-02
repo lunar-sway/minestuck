@@ -8,10 +8,14 @@ import net.minecraft.world.gen.surfacebuilders.SurfaceBuilder;
 
 public abstract class LandBiome
 {
+	public static final float DEFAULT_NORMAL_DEPTH = 0.125F, DEFAULT_NORMAL_SCALE = 0.05F;
+	public static final float DEFAULT_ROUGH_DEPTH = 0.45F, DEFAULT_ROUGH_SCALE = 0.3F;
+	public static final float DEFAULT_OCEAN_DEPTH = -1.0F, DEFAULT_OCEAN_SCALE = 0.1F;
+	
 	public static Biome createNormalBiome(Biome.RainType precipitation, float temperature, float downfall)
 	{
 		Biome.Builder builder = createBiomeBase().precipitation(precipitation).biomeCategory(Biome.Category.NONE)
-				.depth(0.125F).scale(0.05F).temperature(temperature).downfall(downfall);
+				.depth(DEFAULT_NORMAL_DEPTH).scale(DEFAULT_NORMAL_SCALE).temperature(temperature).downfall(downfall);
 		
 		return builder.build();
 	}
@@ -19,7 +23,7 @@ public abstract class LandBiome
 	public static Biome createRoughBiome(Biome.RainType precipitation, float temperature, float downfall)
 	{
 		Biome.Builder builder = createBiomeBase().precipitation(precipitation).biomeCategory(Biome.Category.NONE)
-				.depth(0.45F).scale(0.3F).temperature(temperature).downfall(downfall);
+				.depth(DEFAULT_ROUGH_DEPTH).scale(DEFAULT_ROUGH_SCALE).temperature(temperature).downfall(downfall);
 		
 		return builder.build();
 	}
@@ -27,7 +31,7 @@ public abstract class LandBiome
 	public static Biome createOceanBiome(Biome.RainType precipitation, float temperature, float downfall)
 	{
 		Biome.Builder builder = createBiomeBase().precipitation(precipitation).biomeCategory(Biome.Category.OCEAN)
-				.depth(-1.0F).scale(0.1F).temperature(temperature).downfall(downfall);
+				.depth(DEFAULT_OCEAN_DEPTH).scale(DEFAULT_OCEAN_SCALE).temperature(temperature).downfall(downfall);
 		
 		return builder.build();
 	}
