@@ -3,6 +3,7 @@ package com.mraof.minestuck.world.gen.feature;
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.ResourceLocation;
@@ -36,7 +37,8 @@ public class SmallLibraryFeature extends Feature<NoFeatureConfig>
 		TemplateManager templates = worldIn.getLevel().getStructureManager();
 		Template template = templates.getOrCreate(STRUCTURE_SMALL_LIBRARY);
 		
-		PlacementSettings settings = new PlacementSettings().setRotation(rotation).setChunkPos(new ChunkPos(pos)).setRandom(rand).addProcessor(StructureBlockRegistryProcessor.INSTANCE);
+		PlacementSettings settings = new PlacementSettings().setRotation(rotation).setChunkPos(new ChunkPos(pos)).setRandom(rand)
+				.addProcessor(new StructureBlockRegistryProcessor(StructureBlockRegistry.getOrDefault(generator)));
 		
 		if(rand.nextBoolean())
 		{	//Replace 20% of bookcases with air

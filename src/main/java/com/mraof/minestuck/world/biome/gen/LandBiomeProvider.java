@@ -11,7 +11,7 @@ import net.minecraft.world.biome.provider.BiomeProvider;
 
 public class LandBiomeProvider extends BiomeProvider
 {
-	public final Codec<LandBiomeProvider> CODEC = Codec.of(Encoder.error("LandBiomeProvider is not serializable."), Decoder.error("LandBiomeProvider is not serializable."));
+	public static final Codec<LandBiomeProvider> CODEC = Codec.of(Encoder.error("LandBiomeProvider is not serializable."), Decoder.error("LandBiomeProvider is not serializable."));
 	private final LandBiomeLayer genLevelLayer;
 	private final ILandBiomeSet biomes;
 	private final LandGenSettings settings;

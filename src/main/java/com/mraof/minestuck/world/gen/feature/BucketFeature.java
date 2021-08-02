@@ -53,7 +53,8 @@ public class BucketFeature extends Feature<NoFeatureConfig>
 		TemplateManager templates = world.getLevel().getStructureManager();
 		Template template = templates.getOrCreate(structure);
 		
-		PlacementSettings settings = new PlacementSettings().setRotation(rotation).setChunkPos(new ChunkPos(pos)).setRandom(rand).addProcessor(StructureBlockRegistryProcessor.INSTANCE);
+		PlacementSettings settings = new PlacementSettings().setRotation(rotation).setChunkPos(new ChunkPos(pos)).setRandom(rand)
+				.addProcessor(new StructureBlockRegistryProcessor(StructureBlockRegistry.getOrDefault(generator)));
 		
 		BlockState bucketFluid;
 		if(rand.nextBoolean())

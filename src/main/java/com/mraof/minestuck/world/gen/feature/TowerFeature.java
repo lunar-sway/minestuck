@@ -2,6 +2,7 @@ package com.mraof.minestuck.world.gen.feature;
 
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.storage.loot.MSLootTables;
 import net.minecraft.block.Blocks;
 import net.minecraft.state.properties.StructureMode;
@@ -47,7 +48,8 @@ public class TowerFeature extends Feature<NoFeatureConfig>
 		TemplateManager templates = world.getLevel().getStructureManager();
 		Template template = templates.getOrCreate(tower);
 		
-		PlacementSettings settings = new PlacementSettings().setChunkPos(new ChunkPos(pos)).setRandom(rand).addProcessor(StructureBlockRegistryProcessor.INSTANCE);
+		PlacementSettings settings = new PlacementSettings().setChunkPos(new ChunkPos(pos)).setRandom(rand)
+				.addProcessor(new StructureBlockRegistryProcessor(StructureBlockRegistry.getOrDefault(generator)));
 		
 		BlockPos size = template.getSize(rotation);
 		int xOffset = rand.nextInt(16 - size.getX() - 2) + 1, zOffset = rand.nextInt(16 - size.getZ() - 2) + 1;
