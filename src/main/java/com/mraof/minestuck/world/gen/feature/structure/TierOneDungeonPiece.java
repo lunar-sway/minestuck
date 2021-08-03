@@ -47,24 +47,14 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 	{
 		super(MSStructurePieces.TIER_ONE_DUNGEON, random, x, 64, z, 50, 50, 50);
 		
-		/*int posHeightPicked = Integer.MAX_VALUE;
-		//int posXPicked = boundingBox.minX;
-		//int posZPicked = boundingBox.minZ;
+		int posHeightPicked = Integer.MAX_VALUE;
 		for(int xPos = boundingBox.minX; xPos <= boundingBox.maxX; xPos++)
 			for(int zPos = boundingBox.minZ; zPos <= boundingBox.maxZ; zPos++)
 			{
 				int posHeight = generator.getHeight(xPos, zPos, Heightmap.Type.OCEAN_FLOOR_WG); //posHeight picks the first solid block, ignoring water
-				/*if(posHeight <= posHeightPicked)
-				{
-					posXPicked = xPos;
-					posZPicked = zPos;
-				}*/
-				/*posHeightPicked = Math.min(posHeightPicked, posHeight); //with each new x/z coord it checks whether or not it is lower than the previous
+				posHeightPicked = Math.min(posHeightPicked, posHeight); //with each new x/z coord it checks whether or not it is lower than the previous
 			}
-		
-		boundingBox.offset(0, posHeightPicked - boundingBox.minY, 0); //takes the lowest Ocean Floor gen viable height
-		//boundingBox.offset(posXPicked - boundingBox.minX, posHeightPicked - boundingBox.minY, posZPicked - boundingBox.minZ); //takes the lowest Ocean Floor gen viable height
-		 */
+		boundingBox.offset(0, posHeightPicked + 5 - boundingBox.minY, 0); //takes the lowest Ocean Floor gen viable height + 5
 	}
 	
 	public TierOneDungeonPiece(TemplateManager templates, CompoundNBT nbt)
@@ -86,15 +76,21 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 		buildStructureFoundation(worldIn, boundingBoxIn);
 		buildWallsAndFloors(worldIn, boundingBoxIn, randomIn);
 		carveRooms(worldIn, boundingBoxIn);
-		//buildIndoorBlocks(columnBlock, worldIn, boundingBoxIn);
+		buildIndoorBlocks(worldIn, boundingBoxIn);
 		
 		return true;
 	}
 	
 	private void buildStructureFoundation(IWorld world, MutableBoundingBox boundingBox)
 	{
-		fillWithBlocks(world, boundingBox, entryRoomMinX, entryRoomMinY, entryRoomMinZ, entryRoomMaxX, entryRoomMaxY, entryRoomMaxZ, primaryBlock, air, false); //exposed entry structure
-		fillWithBlocks(world, boundingBox, entryRoomMinX - 5, entryRoomMinY - 10, entryRoomMinZ - 5, entryRoomMaxX + 5, entryRoomMinY, entryRoomMaxZ + 5, primaryBlock, air, false); //chamber below-connected to entry
+		fillWithBlocks(world, boundingBox,
+				entryRoomMinX, entryRoomMinY, entryRoomMinZ,
+				entryRoomMaxX, entryRoomMaxY, entryRoomMaxZ,
+				primaryBlock, air, false); //exposed entry structure
+		fillWithBlocks(world, boundingBox,
+				entryRoomMinX - 5, entryRoomMinY - 12, entryRoomMinZ - 5,
+				entryRoomMaxX + 5, entryRoomMinY, entryRoomMaxZ + 5,
+				primaryBlock, primaryBlock, false); //chamber below-connected to entry, not filled with air because of thick floor
 	}
 	
 	private void buildWallsAndFloors(IWorld world, MutableBoundingBox boundingBox, Random rand)
@@ -102,7 +98,7 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 		BlockPos doorInterfacePos = new BlockPos(getXWithOffset(entryRoomMinX + 5, entryRoomMinZ), getYWithOffset(entryRoomMinY + 4), getZWithOffset(entryRoomMinX + 5, entryRoomMinZ));
 		if(boundingBox.isVecInside(doorInterfacePos) || getBoundingBox().isVecInside(doorInterfacePos))
 		{
-			Debug.debugf("doorInterfacePos = %s", doorInterfacePos);
+			Debug.debugf("buildWallsAndFloors. doorInterfacePos = %s", doorInterfacePos);
 			BlockState doorInterfaceBlockState = MSBlocks.DUNGEON_DOOR_INTERFACE.getDefaultState();
 			doorInterfaceBlockState.createTileEntity(world);
 			world.setBlockState(doorInterfacePos, doorInterfaceBlockState, Constants.BlockFlags.BLOCK_UPDATE);
@@ -119,22 +115,34 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 				throw new IllegalStateException("Unable to create a new dungeon door interface tile entity. Returned null!");
 		}
 		
-		fillWithBlocks(world, boundingBox, entryRoomMinX + 6, entryRoomMinY + 1, entryRoomMinZ, entryRoomMaxX - 6, entryRoomMaxY - 6, entryRoomMinZ, MSBlocks.DUNGEON_DOOR.getDefaultState(), MSBlocks.DUNGEON_DOOR.getDefaultState(), false);
+		fillWithBlocks(world, boundingBox,
+				entryRoomMinX + 6, entryRoomMinY + 1, entryRoomMinZ,
+				entryRoomMaxX - 6, entryRoomMaxY - 6, entryRoomMinZ,
+				MSBlocks.DUNGEON_DOOR.getDefaultState(), MSBlocks.DUNGEON_DOOR.getDefaultState(), false);
 		
-		fillWithBlocks(world, boundingBox, entryRoomMinX - 4, entryRoomMinY, entryRoomMinZ - 4, entryRoomMaxX + 4, entryRoomMinY, entryRoomMaxZ + 4, secondaryBlock, air, false); //floor
-		
-		BlockPos staircaseMinPos = new BlockPos(getXWithOffset(entryRoomMinX + 6, entryRoomMinZ + 6), getYWithOffset(entryRoomMinY - 10), getZWithOffset(entryRoomMinX + 6, entryRoomMinZ + 6));
-		BlockPos staircaseMaxPos = new BlockPos(getXWithOffset(entryRoomMaxX - 6, entryRoomMaxZ - 6), getYWithOffset(entryRoomMinY + 20), getZWithOffset(entryRoomMaxX - 6, entryRoomMaxZ - 6));
-		
-		Debug.debugf("staircaseMinPos = %s, isPosMinInsideBounding = %s, boundingBox = %s, getBoundingBox = %s", staircaseMinPos, boundingBox.isVecInside(staircaseMinPos), boundingBox, getBoundingBox());
-		PlacementFunctionsUtil.fillWithBlocksFromPos(world, boundingBox, secondaryDecorativeBlock, staircaseMinPos.up(30), staircaseMaxPos.up(30));
-		PlacementFunctionsUtil.createPlainSpiralStaircase(PlacementFunctionsUtil.axisAlignBlockPosGetMin(staircaseMinPos, staircaseMaxPos), PlacementFunctionsUtil.axisAlignBlockPosGetMax(staircaseMinPos, staircaseMaxPos), primaryDecorativeBlock, world, boundingBox, getBoundingBox()); //TODO seems to be breaking generation??
-		
+		fillWithBlocks(world, boundingBox,
+				entryRoomMinX - 4, entryRoomMinY, entryRoomMinZ - 4,
+				entryRoomMaxX + 4, entryRoomMinY, entryRoomMaxZ + 4,
+				secondaryBlock, air, false); //floor
 	}
 	
-	private void buildIndoorBlocks(BlockState block, IWorld world, MutableBoundingBox boundingBox)
+	private void buildIndoorBlocks(IWorld world, MutableBoundingBox boundingBox)
 	{
-	
+		BlockPos staircaseMinPos = new BlockPos(getXWithOffset(entryRoomMinX + 6, entryRoomMinZ + 6), getYWithOffset(entryRoomMinY - 10), getZWithOffset(entryRoomMinX + 6, entryRoomMinZ + 6));
+		BlockPos staircaseMaxPos = new BlockPos(getXWithOffset(entryRoomMaxX - 6, entryRoomMaxZ - 6), getYWithOffset(entryRoomMinY + 40), getZWithOffset(entryRoomMaxX - 6, entryRoomMaxZ - 6));
+		
+		Debug.debugf("buildIndoorBlocks. staircaseMinPos = %s, isPosMinInsideBounding = %s, boundingBox = %s, getBoundingBox = %s", staircaseMinPos, boundingBox.isVecInside(staircaseMinPos), boundingBox, getBoundingBox());
+		//PlacementFunctionsUtil.fillWithBlocksFromPos(world, boundingBox, secondaryDecorativeBlock, PlacementFunctionsUtil.axisAlignBlockPosGetMin(staircaseMinPos, staircaseMaxPos).up(30), PlacementFunctionsUtil.axisAlignBlockPosGetMax(staircaseMinPos, staircaseMaxPos).up(30));
+		PlacementFunctionsUtil.createPlainSpiralStaircase(
+				PlacementFunctionsUtil.axisAlignBlockPosGetMin(staircaseMinPos, staircaseMaxPos),
+				PlacementFunctionsUtil.axisAlignBlockPosGetMax(staircaseMinPos, staircaseMaxPos),
+				primaryDecorativeBlock, world, boundingBox, getBoundingBox());
+		
+		fillWithBlocks(world, boundingBox, entryRoomMinX + 8, entryRoomMinY - 11, entryRoomMinZ + 8, entryRoomMaxX - 8, entryRoomMinY - 10, entryRoomMaxZ - 8, fluid, fluid, false);
+		PlacementFunctionsUtil.fillWithBlocksCheckWater(world, boundingBox,
+				getXWithOffset(entryRoomMinX + 9, entryRoomMinZ + 9), getYWithOffset(entryRoomMinY - 11), getZWithOffset(entryRoomMinX + 9, entryRoomMinZ + 9),
+				getXWithOffset(entryRoomMaxX - 9, entryRoomMaxZ - 9), getYWithOffset(entryRoomMinY - 11), getZWithOffset(entryRoomMaxX - 9, entryRoomMaxZ - 9),
+				MSBlocks.MINI_FROG_STATUE.getDefaultState());
 	}
 	
 	private void carveRooms(IWorld world, MutableBoundingBox boundingBox)
@@ -144,6 +152,8 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 		//BlockPos lowerChamberMinCarve = new BlockPos(lowerChamberMin.getX() - 5, lowerChamberMin.getY() - 10, lowerChamberMin.getZ() - 5);
 		//BlockPos lowerChamberMaxCarve = new BlockPos(lowerChamberMax.getX() + 5, lowerChamberMax.getY() - 1, lowerChamberMax.getZ() + 5);
 		
+		fillWithAir(world, boundingBox, entryRoomMinX + 6, entryRoomMinY, entryRoomMinZ + 6, entryRoomMaxX - 6, entryRoomMinY, entryRoomMaxZ - 6); //stairway hole
+		fillWithAir(world, boundingBox, entryRoomMinX - 4, entryRoomMinY - 9, entryRoomMinZ - 4, entryRoomMaxX + 4, entryRoomMinY - 1, entryRoomMaxZ + 4); //lower secondary chamber
 		//fillWithBlocksFromPos(world, boundingBox, Blocks.AIR.getDefaultState(), startChamberMinCarve, startChamberMaxCarve); //top chamber carver
 		//fillWithBlocksFromPos(world, boundingBox, Blocks.AIR.getDefaultState(), lowerChamberMinCarve, lowerChamberMaxCarve); //second chamber carver
 	}

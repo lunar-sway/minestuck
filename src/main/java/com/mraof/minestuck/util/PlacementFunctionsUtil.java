@@ -2,146 +2,92 @@ package com.mraof.minestuck.util;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraftforge.common.util.Constants;
 
+/**
+ * Functions in this often require using get[X/Y/Z]WithOffset
+ */
 public class PlacementFunctionsUtil
 {
 	/**
-	 * takes in two blockpos, resorts the coordinates to match the positive direction. Within the region it starts at 0,0,0
+	 * Use reordered min and max blockpos. Will start from min blockpos and start building up in the positive x direction first
 	 */
 	public static void createPlainSpiralStaircase(BlockPos minBlockPosIn, BlockPos maxBlockPosIn, BlockState blockState, IWorld world, MutableBoundingBox boundingBox1, MutableBoundingBox boundingBox2)
 	{
-		//TODO placement happens twice(because of two bounding boxes?), stairs can go beyond intended x/z bounds, stairs are fragmented(because it tries to generate in two bounding boxes?), stairs do not reverse
-		int staircaseMinX = Math.min(minBlockPosIn.getX(), maxBlockPosIn.getX());
-		int staircaseMinY = Math.min(minBlockPosIn.getY(), maxBlockPosIn.getY());
-		int staircaseMinZ = Math.min(minBlockPosIn.getZ(), maxBlockPosIn.getZ());
-		int staircaseMaxX = Math.max(minBlockPosIn.getX(), maxBlockPosIn.getX());
-		int staircaseMaxY = Math.max(minBlockPosIn.getY(), maxBlockPosIn.getY());
-		int staircaseMaxZ = Math.max(minBlockPosIn.getZ(), maxBlockPosIn.getZ());
+		//TODO placement happens twice(because of two bounding boxes?), one set of stairs can go beyond intended x/z bounds, stairs are fragmented(because it tries to generate in two bounding boxes?)
 		
-		BlockPos minBlockPos = new BlockPos(staircaseMinX, staircaseMinY, staircaseMinZ); //resorts the two blockpos so that it doesnt try to count from positive to negative
-		BlockPos maxBlockPos = new BlockPos(staircaseMaxX, staircaseMaxY, staircaseMaxZ);
+		world.setBlockState(minBlockPosIn, Blocks.GOLD_BLOCK.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
+		world.setBlockState(maxBlockPosIn, Blocks.DIAMOND_BLOCK.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
 		
-		world.setBlockState(minBlockPos, Blocks.GOLD_BLOCK.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
-		world.setBlockState(maxBlockPos, Blocks.DIAMOND_BLOCK.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
+		Debug.debugf("createPlainSpiralStaircase. boundingBox = %s", boundingBox1);
+		int xIterator = minBlockPosIn.getX();
 		
-		Debug.debugf("boundingBox = %s", boundingBox1);
-		int xIterator = minBlockPos.getX();
+		int zIterator = minBlockPosIn.getZ();
 		
-		int zIterator = minBlockPos.getZ();
-		
-		boolean isXIterating = true; //spiral staircase starts moving up and in the positive x direction, but it switches to z once its hit the edge
-		int xIteratingReverse = 1;
-		int zIteratingReverse = 1;
-		for(int yIterator = minBlockPos.getY(); yIterator <= maxBlockPos.getY(); yIterator++)
+		boolean isXIterating = true; //toggles between moving in x or z direction
+		boolean isXIterateReversed = false; //moving in negative x direction if positive
+		boolean isZIterateReversed = false; //moving in negative z direction if positive
+		for(int yIterator = minBlockPosIn.getY(); yIterator <= maxBlockPosIn.getY(); yIterator++)
 		{
-			//BlockPos placementPos = new BlockPos(xPos, yPos, zPos);
 			BlockPos iteratorPos = new BlockPos(xIterator, yIterator, zIterator);
 			
-			Debug.debugf("isXIterating = %s, isPosInsideBounding = %s, iteratorPos = %s", isXIterating, boundingBox1.isVecInside(iteratorPos), iteratorPos);
+			Debug.debugf("createPlainSpiralStaircase. isXIterating = %s, isPosInsideBounding = %s, iteratorPos = %s",
+					isXIterating, boundingBox1.isVecInside(iteratorPos), iteratorPos);
 			
-			if(xIterator >= maxBlockPos.getX())
+			if(xIterator >= maxBlockPosIn.getX() && !isXIterateReversed) //moving positive x
 			{
 				isXIterating = false;
-			} else if(zIterator >= maxBlockPos.getZ())
+				isXIterateReversed = true;
+			} else if(zIterator >= maxBlockPosIn.getZ() && !isZIterateReversed) //moving positive z
 			{
 				isXIterating = true;
+				isZIterateReversed = true;
+			} else if(xIterator <= minBlockPosIn.getX() && isXIterateReversed) //moving negative x
+			{
+				isXIterating = false;
+				isXIterateReversed = false;
+			} else if(zIterator <= minBlockPosIn.getZ() && isZIterateReversed) //moving negative z
+			{
+				isXIterating = true;
+				isZIterateReversed = true;
 			}
 			
 			if(boundingBox1.isVecInside(iteratorPos) || boundingBox2.isVecInside(iteratorPos))
 			{
-				Debug.debugf("placed at %s", iteratorPos);
+				Debug.debugf("createPlainSpiralStaircase. placed at %s", iteratorPos);
 				world.setBlockState(iteratorPos, blockState, Constants.BlockFlags.BLOCK_UPDATE);
-				//
 				
-				//yIterator++;
-				
-				if(isXIterating)
-					xIterator = xIterator + xIteratingReverse;
-				else
-					zIterator = zIterator + zIteratingReverse;
+				if(isXIterating && !isXIterateReversed)
+				{
+					xIterator++;
+				}
+				else if(!isXIterating && !isZIterateReversed)
+				{
+					zIterator++;
+				}else if(isXIterating && isXIterateReversed)
+				{
+					xIterator--;
+				}else if(!isXIterating && isZIterateReversed)
+				{
+					zIterator--;
+				}
 			}
 			
-			if(yIterator >= maxBlockPos.getY())
+			if(yIterator >= maxBlockPosIn.getY())
 			{
 				break;
 			}
 		}
-		
-		//boundingBox.offset(0, minBlockPosIn.getY() - boundingBox.minY, 0);
-		/*int staircaseMinX = Math.min(minBlockPosIn.getX(), maxBlockPosIn.getX());
-		int staircaseMinY = Math.min(minBlockPosIn.getY(), maxBlockPosIn.getY());
-		int staircaseMinZ = Math.min(minBlockPosIn.getZ(), maxBlockPosIn.getZ());
-		int staircaseMaxX = Math.max(minBlockPosIn.getX(), maxBlockPosIn.getX());
-		int staircaseMaxY = Math.max(minBlockPosIn.getY(), maxBlockPosIn.getY());;
-		int staircaseMaxZ = Math.max(minBlockPosIn.getZ(), maxBlockPosIn.getZ());;
-		
-		BlockPos minBlockPos = new BlockPos(staircaseMinX, staircaseMinY, staircaseMinZ); //resorts the two blockpos so that it doesnt try to count from positive to negative
-		BlockPos maxBlockPos = new BlockPos(staircaseMaxX, staircaseMaxY, staircaseMaxZ);
-		
-		Debug.debugf("boundingBox = %s", boundingBox);
-		int xIterator = minBlockPos.getX();
-		int yIterator = minBlockPos.getY();
-		int zIterator = minBlockPos.getZ();
-		
-		boolean isXIterating = true; //spiral staircase starts moving up and in the positive x direction, but it switches to z once its hit the edge
-		int xIteratingReverse = 1;
-		int zIteratingReverse = 1;
-		for(int xPos = minBlockPos.getX(); xPos <= maxBlockPos.getX(); xPos++)
-		{
-			for(int yPos = minBlockPos.getY(); yPos <= maxBlockPos.getY(); yPos++)
-			{
-				for(int zPos = minBlockPos.getZ(); zPos <= maxBlockPos.getZ(); zPos++)
-				{
-					BlockPos placementPos = new BlockPos(xPos, yPos, zPos);
-					BlockPos iteratorPos = new BlockPos(xIterator, yIterator, zIterator);
-					
-					Debug.debugf("placementPos = %s, isXIterating = %s, isPosInsideBounding = %s, iteratorPosSet = %s, placement same as iterator = %s", placementPos, isXIterating, boundingBox.isVecInside(placementPos), iteratorPos, placementPos == iteratorPos);
-					
-					if(placementPos == iteratorPos/* && boundingBox.isVecInside(placementPos)*//*)
-					{
-						if(xIterator >= maxBlockPos.getX())
-						{
-							isXIterating = false;
-						} else if(zIterator >= maxBlockPos.getZ())
-						{
-							isXIterating = true;
-						}
-						
-						
-						Debug.debugf("placed at %s", placementPos);
-						world.setBlockState(placementPos, blockState, Constants.BlockFlags.BLOCK_UPDATE);
-						
-						
-						yIterator++;
-						
-						if(isXIterating)
-							xIterator = xIterator + xIteratingReverse;
-						else
-							zIterator = zIterator + zIteratingReverse;
-					}
-					
-					if(yIterator >= maxBlockPos.getY())
-					{
-						break;
-					}
-				}
-			}
-		}*/
 	}
 	
-	/*
-	public static void createPlainRoundStaircase(int minX, int minY, int minZ, int maxX, int maxY, int maxZ, BlockState blockState)
-	{
-	
-	}
+	/**
+	 * Use reordered blockpos for min and max BlockPos parameters(axisAlignBlockPosGetMin/Max)
 	 */
-	
 	public static void fillWithBlocksFromPos(IWorld worldIn, MutableBoundingBox structurebb, BlockState blockState, BlockPos minBlockPos, BlockPos maxBlockPos)
 	{
 		for(int y = minBlockPos.getY(); y <= maxBlockPos.getY(); ++y)
@@ -150,9 +96,49 @@ public class PlacementFunctionsUtil
 			{
 				for(int z = minBlockPos.getZ(); z <= maxBlockPos.getZ(); ++z)
 				{
-					BlockPos currentPos = new BlockPos(x,y,z);
+					BlockPos currentPos = new BlockPos(x, y, z);
 					if(structurebb.isVecInside(currentPos))
 					{
+						worldIn.setBlockState(currentPos, blockState, Constants.BlockFlags.BLOCK_UPDATE);
+					}
+				}
+			}
+		}
+	}
+	
+	/*public static void fillWithAirCheckWater(IWorld worldIn, MutableBoundingBox structurebb, int minX, int minY, int minZ, int maxX, int maxY, int maxZ)
+	{
+		for(int y = minY; y <= maxY; ++y)
+		{
+			for(int x = minX; x <= maxX; ++x)
+			{
+				for(int z = minZ; z <= maxZ; ++z)
+				{
+					BlockPos pos = new BlockPos(this.getXWithOffset(x, z), this.getYWithOffset(y), this.getZWithOffset(x, z));
+					if(structurebb.isVecInside(pos) && !this.getBlockStateFromPos(worldIn, x, y, z, structurebb).getFluidState().getFluid().isEquivalentTo(Fluids.WATER)) //ensures that the chunk is loaded before attempted to remove block, setBlockState already does this check
+						worldIn.removeBlock(pos, false);
+				}
+			}
+		}
+	}*/
+	
+	/**
+	 * normal trimmed down fill command except that it waterlogs blocks if it is replacing water, blockState parameter must be waterloggable
+	 */
+	public static void fillWithBlocksCheckWater(IWorld worldIn, MutableBoundingBox boundingboxIn, int xMin, int yMin, int zMin, int xMax, int yMax, int zMax, BlockState blockState)
+	{
+		for(int y = yMin; y <= yMax; ++y)
+		{
+			for(int x = xMin; x <= xMax; ++x)
+			{
+				for(int z = zMin; z <= zMax; ++z)
+				{
+					BlockPos currentPos = new BlockPos(x, y, z);
+					Debug.debugf("fillWithBlocksCheckWater. currentPos = %s, bb = %s", currentPos, boundingboxIn);
+					if(boundingboxIn.isVecInside(currentPos))
+					{
+						if(worldIn.getBlockState(currentPos).getFluidState().getFluid().isEquivalentTo(Fluids.WATER)) //has no inside vs outside blockstates or existingOnly
+							blockState = blockState.with(BlockStateProperties.WATERLOGGED, true); //only works with waterloggable blocks
 						worldIn.setBlockState(currentPos, blockState, Constants.BlockFlags.BLOCK_UPDATE);
 					}
 				}
