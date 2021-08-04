@@ -14,6 +14,7 @@ public class MSLootTables
 	public static final ResourceLocation DUNGEON_LOOT_INJECT = new ResourceLocation("minestuck", "chests/injections/dungeon_inject");
 	public static final ResourceLocation FROG_TEMPLE_CHEST = new ResourceLocation("minestuck", "chests/frog_temple");
 	public static final ResourceLocation BASIC_MEDIUM_CHEST = new ResourceLocation("minestuck", "chests/medium_basic");
+	public static final ResourceLocation TIER_ONE_MEDIUM_CHEST = new ResourceLocation("minestuck", "chests/medium_tier_one");
 	public static final ResourceLocation CONSORT_JUNK_REWARD = new ResourceLocation("minestuck", "gameplay/consort_junk");
 	public static final ResourceLocation CONSORT_FOOD_STOCK = new ResourceLocation("minestuck", "gameplay/consort_food");
 	public static final ResourceLocation CONSORT_GENERAL_STOCK = new ResourceLocation("minestuck", "gameplay/consort_general");

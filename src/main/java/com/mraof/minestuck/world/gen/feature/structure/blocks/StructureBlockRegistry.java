@@ -81,7 +81,9 @@ public final class StructureBlockRegistry
 		registerBlock("river", "ocean", Blocks.BLUE_WOOL);
 		registerBlock("sand", Blocks.SAND.getDefaultState());
 		registerBlock("structure_primary", Blocks.STONE_BRICKS.getDefaultState());
+		registerBlock("structure_primary_cracked", Blocks.CRACKED_STONE_BRICKS.getDefaultState());
 		registerBlock("structure_primary_decorative", "structure_primary", Blocks.CHISELED_STONE_BRICKS);
+		registerBlock("structure_primary_pillar", Blocks.QUARTZ_PILLAR.getDefaultState());
 		registerBlock("structure_primary_stairs", "structure_primary", Blocks.STONE_BRICK_STAIRS);
 		registerBlock("structure_secondary", "structure_primary", Blocks.NETHER_BRICKS);
 		registerBlock("structure_secondary_decorative", "structure_secondary", Blocks.RED_NETHER_BRICKS);
@@ -109,6 +111,7 @@ public final class StructureBlockRegistry
 		registerBlock("stained_glass_1", Blocks.GRAY_STAINED_GLASS.getDefaultState());
 		registerBlock("stained_glass_2", Blocks.LIGHT_GRAY_STAINED_GLASS.getDefaultState());
 		registerBlock("slime", Blocks.SLIME_BLOCK.getDefaultState());
+		registerBlock("aspect_sapling", MSBlocks.BREATH_ASPECT_SAPLING.getDefaultState());
 		
 		defaultRegistry.setBlockState("surface", Blocks.GRASS_BLOCK.getDefaultState());
 		defaultRegistry.setBlockState("upper", Blocks.DIRT.getDefaultState());

@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.lands.title;
 
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.BiomeType;
@@ -33,6 +34,7 @@ public class BucketsLandType extends TitleLandType    //Yes, buckets
 	{
 		registry.setBlockState("structure_wool_2", Blocks.BLUE_WOOL.getDefaultState());
 		registry.setBlockState("carpet", Blocks.BLACK_CARPET.getDefaultState());
+		registry.setBlockState("aspect_sapling", MSBlocks.SPACE_ASPECT_SAPLING.getDefaultState());
 	}
 	
 	@Override

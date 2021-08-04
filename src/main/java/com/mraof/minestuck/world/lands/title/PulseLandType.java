@@ -45,6 +45,7 @@ public class PulseLandType extends TitleLandType
 		registry.setBlockState("ocean", MSBlocks.BLOOD.getDefaultState());
 		registry.setBlockState("river", MSBlocks.BLOOD.getDefaultState());
 		registry.setBlockState("slime", MSBlocks.COAGULATED_BLOOD.getDefaultState());
+		registry.setBlockState("aspect_sapling", MSBlocks.BLOOD_ASPECT_SAPLING.getDefaultState());
 	}
 	
 	@Override

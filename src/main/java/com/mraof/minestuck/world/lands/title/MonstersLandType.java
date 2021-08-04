@@ -1,6 +1,7 @@
 package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandWrapperBiome;
@@ -42,6 +43,7 @@ public class MonstersLandType extends TitleLandType
 			registry.setBlockState("torch", Blocks.REDSTONE_TORCH.getDefaultState());
 		if(registry.getCustomBlock("wall_torch") == null)
 			registry.setBlockState("wall_torch", Blocks.REDSTONE_WALL_TORCH.getDefaultState());
+		registry.setBlockState("aspect_sapling", MSBlocks.RAGE_ASPECT_SAPLING.getDefaultState());
 	}
 	
 	@Override

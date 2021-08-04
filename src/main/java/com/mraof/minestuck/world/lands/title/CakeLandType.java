@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.lands.title;
 
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.BiomeType;
@@ -36,6 +37,7 @@ public class CakeLandType extends TitleLandType
 	{
 		registry.setBlockState("structure_wool_2", Blocks.ORANGE_WOOL.getDefaultState());
 		registry.setBlockState("carpet", Blocks.MAGENTA_CARPET.getDefaultState());
+		registry.setBlockState("aspect_sapling", MSBlocks.HEART_ASPECT_SAPLING.getDefaultState());
 	}
 	
 	@Override

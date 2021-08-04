@@ -33,7 +33,7 @@ public class MSFoods
     public static final Food SALAD = new Food.Builder().hunger(1).saturation(0.6F).build();
     //Candies
     public static final Food CANDY_CORN = (new Food.Builder()).hunger(2).saturation(0.3F).build();
-    public static final Food TUIX_BAR = (new Food.Builder()).hunger(2).saturation(0.6F).build();
+    public static final Food TUIX_BAR = (new Food.Builder()).hunger(4).saturation(0.7F).build();
     public static final Food BUILD_GUSHERS = (new Food.Builder()).hunger(2).saturation(0.0F).build();
     public static final Food AMBER_GUMMY_WORM = (new Food.Builder()).hunger(2).saturation(0.1F).build();
     public static final Food CAULK_PRETZEL = (new Food.Builder()).hunger(2).saturation(0.1F).build();

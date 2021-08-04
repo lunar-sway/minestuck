@@ -63,7 +63,7 @@ public final class MSStructurePieces
 		IMP_BOOKCASE_ROOM = register(ImpDungeonPieces.BookcaseRoom::new, Minestuck.MOD_ID+":imp_bookcase_room");
 		IMP_OGRE_CORRIDOR = register(ImpDungeonPieces.OgreCorridor::new, Minestuck.MOD_ID+":imp_ogre_corridor");
 		
-		TIER_ONE_DUNGEON = register(FrogTemplePiece::new, Minestuck.MOD_ID+":tier_one_dungeon");
+		TIER_ONE_DUNGEON = register(TierOneDungeonPiece::new, Minestuck.MOD_ID+":tier_one_dungeon");
 		
 		VILLAGE_PATH = register(ConsortVillagePieces.VillagePath::new, Minestuck.MOD_ID+":village_path");
 		MARKET_CENTER = register(ConsortVillageCenter.VillageMarketCenter::new, Minestuck.MOD_ID+":market_center");

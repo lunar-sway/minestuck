@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.lands.title;
 
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
@@ -38,6 +39,7 @@ public class FrogsLandType extends TitleLandType
 	{
 		registry.setBlockState("structure_wool_2", Blocks.GREEN_WOOL.getDefaultState());
 		registry.setBlockState("carpet", Blocks.LIME_CARPET.getDefaultState());
+		registry.setBlockState("aspect_sapling", MSBlocks.SPACE_ASPECT_SAPLING.getDefaultState());
 	}
 	
 	@Override

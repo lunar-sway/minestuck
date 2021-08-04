@@ -7,12 +7,11 @@
       "entries": [
         {
           "type": "minestuck:land_table",
-          "name": "minestuck:chests/medium_basic",
+          "name": "minestuck:chests/medium_tier_one",
           "pool": "weapons"
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
           "quality": 1,
           "functions": [
             {
@@ -23,115 +22,11 @@
               }
             }
           ],
-          "name": "minecraft:bow"
+          "name": "minestuck:lipstick"
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
-          "quality": -1,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "min": 0.75,
-                "max": 1.0
-              }
-            }
-          ],
-          "name": "minecraft:stone_sword"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 3,
-          "quality": 1,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "min": 0.75,
-                "max": 1.0
-              }
-            }
-          ],
-          "name": "minecraft:iron_sword"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 5,
-          "quality": -1,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "min": 0.75,
-                "max": 1.0
-              }
-            }
-          ],
-          "name": "minestuck:claw_hammer"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 5,
-          "quality": -1,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "min": 0.75,
-                "max": 1.0
-              }
-            }
-          ],
-          "name": "minestuck:sickle"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 3,
-          "quality": 1,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "min": 0.75,
-                "max": 1.0
-              }
-            }
-          ],
-          "name": "minestuck:katana"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 3,
-          "quality": 1,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "min": 0.75,
-                "max": 1.0
-              }
-            }
-          ],
-          "name": "minestuck:sledge_hammer"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 5,
-          "quality": -2,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "min": 0.75,
-                "max": 1.0
-              }
-            }
-          ],
-          "name": "minestuck:wooden_spoon"
-        },
-        {
-          "type": "minecraft:item",
+          "weight": 4,
           "quality": 2,
           "functions": [
             {
@@ -146,29 +41,14 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 4,
-          "quality": -1,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "min": 0.75,
-                "max": 1.0
-              }
-            }
-          ],
-          "name": "minestuck:knitting_needle"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 8,
+          "weight": 12,
           "quality": -2,
           "functions": [
             {
               "function": "minecraft:set_count",
               "count": {
                 "min": 1.0,
-                "max": 12.0,
+                "max": 24.0,
                 "type": "minecraft:uniform"
               }
             }
@@ -177,7 +57,7 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 4,
+          "weight": 6,
           "quality": 1,
           "functions": [
             {
@@ -192,6 +72,7 @@
         },
         {
           "type": "minecraft:item",
+          "weight": 6,
           "quality": 1,
           "functions": [
             {
@@ -206,7 +87,7 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 2,
+          "weight": 6,
           "quality": 1,
           "functions": [
             {
@@ -222,20 +103,6 @@
         {
           "type": "minecraft:item",
           "weight": 4,
-          "quality": 1,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "min": 0.75,
-                "max": 1.0
-              }
-            }
-          ],
-          "name": "minestuck:fan"
-        },
-        {
-          "type": "minecraft:item",
           "quality": 2,
           "functions": [
             {
@@ -250,18 +117,28 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 4,
-          "quality": -1,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "min": 0.75,
-                "max": 1.0
-              }
-            }
-          ],
-          "name": "minestuck:fork"
+          "quality": 2,
+          "name": "minestuck:cigarette_lance"
+        },
+        {
+          "type": "minecraft:item",
+          "quality": 1,
+          "name": "minestuck:ace_of_clubs"
+        },
+        {
+          "type": "minecraft:item",
+          "quality": 1,
+          "name": "minestuck:ace_of_diamonds"
+        },
+        {
+          "type": "minecraft:item",
+          "quality": 1,
+          "name": "minestuck:ace_of_hearts"
+        },
+        {
+          "type": "minecraft:item",
+          "quality": 1,
+          "name": "minestuck:ace_of_spades"
         }
       ]
     },
@@ -271,7 +148,7 @@
       "entries": [
         {
           "type": "minestuck:land_table",
-          "name": "minestuck:chests/medium_basic",
+          "name": "minestuck:chests/medium_tier_one",
           "pool": "supplies"
         },
         {
@@ -282,7 +159,7 @@
               "function": "minecraft:set_count",
               "count": {
                 "min": 1.0,
-                "max": 16.0,
+                "max": 32.0,
                 "type": "minecraft:uniform"
               }
             }
@@ -297,7 +174,7 @@
               "function": "minecraft:set_count",
               "count": {
                 "min": 1.0,
-                "max": 3.0,
+                "max": 6.0,
                 "type": "minecraft:uniform"
               }
             }
@@ -306,7 +183,7 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 15,
+          "weight": 10,
           "functions": [
             {
               "function": "minecraft:set_count",
@@ -317,22 +194,82 @@
               }
             }
           ],
-          "name": "minecraft:wheat"
+          "name": "minecraft:cooked_beef"
         },
         {
           "type": "minecraft:item",
-          "weight": 15,
+          "weight": 10,
           "functions": [
             {
               "function": "minecraft:set_count",
               "count": {
                 "min": 1.0,
-                "max": 3.0,
+                "max": 4.0,
                 "type": "minecraft:uniform"
               }
             }
           ],
-          "name": "minecraft:apple"
+          "name": "minecraft:cooked_chicken"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 4.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minecraft:mushroom_stew"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 2.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minestuck:grub_sauce"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 5.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minestuck:french_fry"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 2.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minestuck:tuix_bar"
         },
         {
           "type": "minecraft:item",
@@ -353,70 +290,6 @@
           "type": "minecraft:item",
           "quality": 2,
           "name": "minecraft:golden_apple"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 15,
-          "quality": -2,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1.0,
-                "max": 5.0,
-                "type": "minecraft:uniform"
-              }
-            }
-          ],
-          "name": "minecraft:rotten_flesh"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 12,
-          "quality": -1,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1.0,
-                "max": 3.0,
-                "type": "minecraft:uniform"
-              }
-            }
-          ],
-          "name": "minecraft:bone"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 6,
-          "quality": -1,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 3.0,
-                "max": 7.0,
-                "type": "minecraft:uniform"
-              }
-            }
-          ],
-          "name": "minestuck:sorrow_gushers"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 7,
-          "quality": 1,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 3.0,
-                "max": 7.0,
-                "type": "minecraft:uniform"
-              }
-            }
-          ],
-          "name": "minestuck:phlegm_gushers"
         }
       ]
     },
@@ -430,7 +303,7 @@
       "entries": [
         {
           "type": "minestuck:land_table",
-          "name": "minestuck:chests/medium_basic",
+          "name": "minestuck:chests/medium_tier_one",
           "pool": "misc"
         },
         {
@@ -464,22 +337,6 @@
             }
           ],
           "name": "minecraft:gold_ingot"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 8,
-          "quality": 1,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1.0,
-                "max": 3.0,
-                "type": "minecraft:uniform"
-              }
-            }
-          ],
-          "name": "minecraft:redstone"
         },
         {
           "type": "minecraft:item",
@@ -524,24 +381,8 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1.0,
-                "max": 8.0,
-                "type": "minecraft:uniform"
-              }
-            }
-          ],
-          "name": "minestuck:barbasol"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 10,
-          "quality": -1,
-          "name": "minestuck:generic_object"
+          "weight": 8,
+          "name": "minestuck:ink_squid_pro_quo"
         },
         {
           "type": "minecraft:item",
@@ -587,7 +428,7 @@
       "entries": [
         {
           "type": "minestuck:land_table",
-          "name": "minestuck:chests/medium_basic",
+          "name": "minestuck:chests/medium_tier_one",
           "pool": "rare"
         },
         {
@@ -599,7 +440,7 @@
               "function": "minecraft:set_count",
               "count": {
                 "min": 0.0,
-                "max": 5.0,
+                "max": 6.0,
                 "type": "minecraft:uniform"
               }
             }
@@ -615,7 +456,7 @@
               "function": "minecraft:set_count",
               "count": {
                 "min": 0.0,
-                "max": 4.0,
+                "max": 5.0,
                 "type": "minecraft:uniform"
               }
             }
@@ -631,7 +472,7 @@
               "function": "minecraft:set_count",
               "count": {
                 "min": 0.0,
-                "max": 2.0,
+                "max": 3.0,
                 "type": "minecraft:uniform"
               }
             }
@@ -652,6 +493,16 @@
         },
         {
           "type": "minecraft:item",
+          "quality": 3,
+          "name": "minestuck:cassette_player"
+        },
+        {
+          "type": "minecraft:item",
+          "quality": 3,
+          "name": "minestuck:sendificator"
+        },
+        {
+          "type": "minecraft:item",
           "weight": 2,
           "quality": 2,
           "name": "minestuck:transportalizer"
@@ -660,6 +511,11 @@
           "type": "minecraft:item",
           "weight": 5,
           "name": "minestuck:dice"
+        },
+        {
+          "type": "minecraft:item",
+          "quality": 4,
+          "name": "minestuck:cueball"
         },
         {
           "type": "minecraft:item",
@@ -687,12 +543,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 3,
           "quality": 1,
           "functions": [
             {
               "function": "minestuck:set_key_values",
-              "key": 1
+              "key": 2
             }
           ],
           "name": "minestuck:dungeon_key"
@@ -701,21 +556,6 @@
           "type": "minecraft:item",
           "weight": 10,
           "quality": -1,
-          "functions": [
-            {
-              "function": "minestuck:set_boondollar_count",
-              "count": {
-                "min": 5.0,
-                "max": 50.0,
-                "type": "minecraft:uniform"
-              }
-            }
-          ],
-          "name": "minestuck:boondollars"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 5,
           "functions": [
             {
               "function": "minestuck:set_boondollar_count",
@@ -730,14 +570,29 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 2,
-          "quality": 1,
+          "weight": 5,
           "functions": [
             {
               "function": "minestuck:set_boondollar_count",
               "count": {
                 "min": 250.0,
                 "max": 1000.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minestuck:boondollars"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 2,
+          "quality": 1,
+          "functions": [
+            {
+              "function": "minestuck:set_boondollar_count",
+              "count": {
+                "min": 1000.0,
+                "max": 4000.0,
                 "type": "minecraft:uniform"
               }
             }

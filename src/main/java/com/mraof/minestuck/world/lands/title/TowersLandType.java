@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.lands.title;
 
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.BiomeType;
@@ -35,6 +36,7 @@ public class TowersLandType extends TitleLandType
 	{
 		registry.setBlockState("structure_wool_2", Blocks.LIGHT_BLUE_WOOL.getDefaultState());
 		registry.setBlockState("carpet", Blocks.YELLOW_CARPET.getDefaultState());
+		registry.setBlockState("aspect_sapling", MSBlocks.HOPE_ASPECT_SAPLING.getDefaultState());
 	}
 	
 	@Override

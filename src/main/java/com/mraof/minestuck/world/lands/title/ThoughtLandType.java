@@ -41,6 +41,7 @@ public class ThoughtLandType extends TitleLandType
 		registry.setBlockState("river", MSBlocks.BRAIN_JUICE.getDefaultState());
 		registry.setBlockState("structure_wool_2", Blocks.LIME_WOOL.getDefaultState());
 		registry.setBlockState("carpet", Blocks.LIME_CARPET.getDefaultState());
+		registry.setBlockState("aspect_sapling", MSBlocks.MIND_ASPECT_SAPLING.getDefaultState());
 	}
 	
 	@Override

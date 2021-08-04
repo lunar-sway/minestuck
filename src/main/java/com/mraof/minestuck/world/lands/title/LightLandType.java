@@ -42,6 +42,7 @@ public class LightLandType extends TitleLandType
 		registry.setBlockState("carpet", Blocks.ORANGE_CARPET.getDefaultState());
 		registry.setBlockState("torch", Blocks.TORCH.getDefaultState());
 		registry.setBlockState("slime", MSBlocks.GLOWY_GOOP.getDefaultState());
+		registry.setBlockState("aspect_sapling", MSBlocks.LIGHT_ASPECT_SAPLING.getDefaultState());
 	}
 	
 	@Override

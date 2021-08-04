@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.lands.title;
 
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.gen.LandGenSettings;
@@ -33,6 +34,7 @@ public class ThunderLandType extends TitleLandType
 	{
 		registry.setBlockState("structure_wool_2", Blocks.BLUE_WOOL.getDefaultState());
 		registry.setBlockState("carpet", Blocks.GREEN_CARPET.getDefaultState());
+		registry.setBlockState("aspect_sapling", MSBlocks.DOOM_ASPECT_SAPLING.getDefaultState());
 		
 	}
 	

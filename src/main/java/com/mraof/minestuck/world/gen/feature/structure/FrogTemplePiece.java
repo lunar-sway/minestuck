@@ -13,7 +13,6 @@ import com.mraof.minestuck.world.storage.loot.MSLootTables;
 import net.minecraft.block.*;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.state.properties.ChestType;
 import net.minecraft.state.properties.Half;
 import net.minecraft.util.Direction;

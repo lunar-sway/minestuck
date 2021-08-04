@@ -42,12 +42,12 @@ public class ImpDungeonStructure extends ScatteredStructure<NoFeatureConfig>
 	@Override
 	protected int getBiomeFeatureDistance(ChunkGenerator<?> chunkGenerator)
 	{
-		return 16;
+		return 24;
 	}
 	
 	@Override
 	protected int getBiomeFeatureSeparation(ChunkGenerator<?> chunkGenerator)
 	{
-		return 4;
+		return 6;
 	}
 }

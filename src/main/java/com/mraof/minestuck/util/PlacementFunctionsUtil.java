@@ -24,7 +24,7 @@ public class PlacementFunctionsUtil
 		world.setBlockState(minBlockPosIn, Blocks.GOLD_BLOCK.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
 		world.setBlockState(maxBlockPosIn, Blocks.DIAMOND_BLOCK.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
 		
-		Debug.debugf("createPlainSpiralStaircase. boundingBox = %s", boundingBox1);
+		//Debug.debugf("createPlainSpiralStaircase. boundingBox = %s", boundingBox1);
 		int xIterator = minBlockPosIn.getX();
 		
 		int zIterator = minBlockPosIn.getZ();
@@ -36,8 +36,8 @@ public class PlacementFunctionsUtil
 		{
 			BlockPos iteratorPos = new BlockPos(xIterator, yIterator, zIterator);
 			
-			Debug.debugf("createPlainSpiralStaircase. isXIterating = %s, isPosInsideBounding = %s, iteratorPos = %s",
-					isXIterating, boundingBox1.isVecInside(iteratorPos), iteratorPos);
+			/*Debug.debugf("createPlainSpiralStaircase. isXIterating = %s, isPosInsideBounding = %s, iteratorPos = %s",
+					isXIterating, boundingBox1.isVecInside(iteratorPos), iteratorPos);*/
 			
 			if(xIterator >= maxBlockPosIn.getX() && !isXIterateReversed) //moving positive x
 			{
@@ -59,23 +59,40 @@ public class PlacementFunctionsUtil
 			
 			if(boundingBox1.isVecInside(iteratorPos) || boundingBox2.isVecInside(iteratorPos))
 			{
-				Debug.debugf("createPlainSpiralStaircase. placed at %s", iteratorPos);
+				//Debug.debugf("createPlainSpiralStaircase. placed at %s", iteratorPos);
 				world.setBlockState(iteratorPos, blockState, Constants.BlockFlags.BLOCK_UPDATE);
 				
 				if(isXIterating && !isXIterateReversed)
 				{
 					xIterator++;
-				}
-				else if(!isXIterating && !isZIterateReversed)
+				} else if(!isXIterating && !isZIterateReversed)
 				{
 					zIterator++;
-				}else if(isXIterating && isXIterateReversed)
+				} else if(isXIterating && isXIterateReversed)
 				{
 					xIterator--;
-				}else if(!isXIterating && isZIterateReversed)
+				} else if(!isXIterating && isZIterateReversed)
 				{
 					zIterator--;
 				}
+				/*
+				if(isXIterating && !isXIterateReversed)
+				{
+					xIterator++;
+				}
+				if(!isXIterating && !isZIterateReversed)
+				{
+					zIterator++;
+				}
+				if(isXIterating && isXIterateReversed)
+				{
+					xIterator--;
+				}
+				if(!isXIterating && isZIterateReversed)
+				{
+					zIterator--;
+				}
+				 */
 			}
 			
 			if(yIterator >= maxBlockPosIn.getY())
@@ -134,7 +151,7 @@ public class PlacementFunctionsUtil
 				for(int z = zMin; z <= zMax; ++z)
 				{
 					BlockPos currentPos = new BlockPos(x, y, z);
-					Debug.debugf("fillWithBlocksCheckWater. currentPos = %s, bb = %s", currentPos, boundingboxIn);
+					//Debug.debugf("fillWithBlocksCheckWater. currentPos = %s, bb = %s", currentPos, boundingboxIn);
 					if(boundingboxIn.isVecInside(currentPos))
 					{
 						if(worldIn.getBlockState(currentPos).getFluidState().getFluid().isEquivalentTo(Fluids.WATER)) //has no inside vs outside blockstates or existingOnly
