@@ -53,11 +53,12 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 	private BlockState primaryPillarBlock;
 	private BlockState secondaryBlock;
 	private BlockState secondaryDecorativeBlock;
+	private BlockState aspectSapling;
 	private BlockState fluid;
 	
 	public TierOneDungeonPiece(ChunkGenerator<?> generator, Random random, int x, int z)
 	{
-		super(MSStructurePieces.TIER_ONE_DUNGEON, random, x, 64, z, 50, 50, 50);
+		super(MSStructurePieces.TIER_ONE_DUNGEON, random, x, 64, z, 60, 60, 60);
 		
 		int posHeightPicked = Integer.MAX_VALUE;
 		for(int xPos = boundingBox.minX; xPos <= boundingBox.maxX; xPos++)
@@ -89,6 +90,7 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 		primaryPillarBlock = blocks.getBlockState("structure_primary_pillar");
 		secondaryBlock = blocks.getBlockState("structure_secondary");
 		secondaryDecorativeBlock = blocks.getBlockState("structure_secondary_decorative");
+		aspectSapling = blocks.getBlockState("aspect_sapling");
 		fluid = blocks.getBlockState("fall_fluid");
 		
 		if(!createRan)
@@ -109,10 +111,11 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 	
 	private void buildStructureFoundation(IWorld world, MutableBoundingBox boundingBox, Random rand, int randomRoomType)
 	{
-		fillWithBlocks(world, boundingBox,
+		buildAspectThemedEntrance(world, boundingBox, rand);
+		/*fillWithBlocks(world, boundingBox,
 				entryRoomMinX, entryRoomMinY, entryRoomMinZ,
 				entryRoomMaxX, entryRoomMaxY, entryRoomMaxZ,
-				primaryBlock, air, false); //exposed entry structure
+				primaryBlock, air, false);*/ //exposed entry structure
 		if(randomRoomType != 4)
 		{
 			fillWithBlocks(world, boundingBox,
@@ -131,7 +134,7 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 	private void buildWallsAndFloors(IWorld world, MutableBoundingBox boundingBox, Random rand)
 	{
 		BlockPos doorInterfacePos = new BlockPos(getXWithOffset(entryRoomMinX + 5, entryRoomMinZ), getYWithOffset(entryRoomMinY + 3), getZWithOffset(entryRoomMinX + 5, entryRoomMinZ));
-		if(boundingBox.isVecInside(doorInterfacePos) || getBoundingBox().isVecInside(doorInterfacePos)) //TODO needs to work with just one bounding box
+		if(boundingBox.isVecInside(doorInterfacePos)/* || getBoundingBox().isVecInside(doorInterfacePos)*/) //TODO needs to work with just one bounding box
 		{
 			Debug.debugf("buildWallsAndFloors. doorInterfacePos = %s", doorInterfacePos);
 			BlockState doorInterfaceBlockState = MSBlocks.DUNGEON_DOOR_INTERFACE.getDefaultState();
@@ -169,7 +172,12 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 	
 	private void buildIndoorBlocks(IWorld world, MutableBoundingBox boundingBox, Random rand, int randomRoomType)
 	{
-		placeReturnNode(world, new BlockPos(getXWithOffset(entryRoomMaxX / 2, entryRoomMaxZ / 2), getYWithOffset(entryRoomMinY + 4), getZWithOffset(entryRoomMaxX / 2, entryRoomMaxZ / 2)), boundingBox);
+		setBlockState(world, Blocks.DIRT.getDefaultState(), entryRoomMaxX - 3,entryRoomMinY, entryRoomMaxZ - 3, boundingBox);
+		setBlockState(world, aspectSapling, entryRoomMaxX - 3,entryRoomMinY + 1, entryRoomMaxZ - 3, boundingBox);
+		//placeReturnNode(world, new BlockPos(getXWithOffset(entryRoomMaxX / 2, entryRoomMaxZ / 2), getYWithOffset(entryRoomMinY + 4), getZWithOffset(entryRoomMaxX / 2, entryRoomMaxZ / 2)), boundingBox);
+		
+		//PlacementFunctionsUtil.createSphere(world, boundingBox, primaryDecorativeBlock, new BlockPos(getXWithOffset(entryRoomMaxX - 5, entryRoomMaxZ - 5), getYWithOffset(entryRoomMaxY + 15), getZWithOffset(entryRoomMaxX - 5, entryRoomMaxZ - 5)), 10);
+		//PlacementFunctionsUtil.createCylinder(world, boundingBox, primaryDecorativeBlock, new BlockPos(getXWithOffset(entryRoomMaxX - 5, entryRoomMaxZ - 5), getYWithOffset(entryRoomMaxY + 15), getZWithOffset(entryRoomMaxX - 5, entryRoomMaxZ - 5)), 5, 10);
 		
 		BlockPos staircaseMinPos = new BlockPos(getXWithOffset(entryRoomMinX + 6, entryRoomMinZ + 6), getYWithOffset(entryRoomMinY - 10), getZWithOffset(entryRoomMinX + 6, entryRoomMinZ + 6));
 		BlockPos staircaseMaxPos = new BlockPos(getXWithOffset(entryRoomMaxX - 6, entryRoomMaxZ - 6), getYWithOffset(entryRoomMinY + 40), getZWithOffset(entryRoomMaxX - 6, entryRoomMaxZ - 6));
@@ -241,11 +249,13 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 		{
 			if(rand.nextBoolean())
 			{
-				BlockPos webPos = new BlockPos(
+				/*BlockPos webPos = new BlockPos(
 						getXWithOffset(entryRoomMaxX / 2 + 10 - rand.nextInt(20), entryRoomMaxZ / 2 + 10 - rand.nextInt(20)),
 						getYWithOffset(entryRoomMinY - 9),
-						getZWithOffset(entryRoomMaxX / 2 + 10 - rand.nextInt(20), entryRoomMaxZ / 2 + 10 - rand.nextInt(20)));
-				world.setBlockState(webPos, Blocks.COBWEB.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
+						getZWithOffset(entryRoomMaxX / 2 + 10 - rand.nextInt(20), entryRoomMaxZ / 2 + 10 - rand.nextInt(20)));*/
+				
+				setBlockState(world, Blocks.COBWEB.getDefaultState(), entryRoomMaxX / 2 + 10 - rand.nextInt(20),entryRoomMinY - 9, entryRoomMaxX / 2 + 10 - rand.nextInt(20), boundingBox);
+				//world.setBlockState(webPos, Blocks.COBWEB.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
 			}
 		}
 	}
@@ -286,7 +296,7 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 		Debug.debugf("bottomRoomSkippingStonesType");
 		
 		fillWithBlocks(world, boundingBox, entryRoomMinX - 3, entryRoomMinY - 11, entryRoomMinZ - 3, entryRoomMaxX + 3, entryRoomMinY - 10, entryRoomMaxZ + 3, fluid, fluid, false);
-		fillWithBlocks(world, boundingBox, entryRoomMinX + 2, entryRoomMinY - 11, entryRoomMinZ + 2, entryRoomMaxX - 2, entryRoomMinY - 10, entryRoomMaxZ - 2, primaryBlock, primaryBlock, false);
+		fillWithBlocks(world, boundingBox, entryRoomMinX + 6, entryRoomMinY - 11, entryRoomMinZ + 6, entryRoomMaxX - 6, entryRoomMinY - 10, entryRoomMaxZ - 6, primaryBlock, primaryBlock, false);
 		
 		placePillars(world, boundingBox, rand, false);
 	}
@@ -300,7 +310,7 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 	
 	private void placePillars(IWorld world, MutableBoundingBox boundingBox, Random rand, boolean breakDown)
 	{
-		if(breakDown)
+		if(breakDown) //TODO the following booleans may need to be saved to nbt
 		{
 			if(rand.nextBoolean())
 			{
@@ -351,12 +361,92 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 		}
 	}
 	
+	private void buildAspectThemedEntrance(IWorld world, MutableBoundingBox boundingBox, Random rand)
+	{
+		
+		if(aspectSapling == MSBlocks.BREATH_ASPECT_SAPLING.getDefaultState())
+		{
+			fillWithBlocks(world, boundingBox,
+					entryRoomMinX, entryRoomMinY, entryRoomMinZ,
+					entryRoomMaxX, entryRoomMaxY, entryRoomMaxZ,
+					primaryBlock, air, false);
+		} else if(aspectSapling == MSBlocks.LIFE_ASPECT_SAPLING.getDefaultState())
+		{
+			fillWithBlocks(world, boundingBox,
+					entryRoomMinX, entryRoomMinY, entryRoomMinZ,
+					entryRoomMaxX, entryRoomMaxY, entryRoomMaxZ,
+					primaryBlock, air, false);
+			setBlockState(world, secondaryDecorativeBlock, entryRoomMaxX, entryRoomMaxY, entryRoomMaxZ, boundingBox);
+		} else if(aspectSapling == MSBlocks.LIGHT_ASPECT_SAPLING.getDefaultState())
+		{
+			fillWithBlocks(world, boundingBox,
+					entryRoomMinX, entryRoomMinY, entryRoomMinZ,
+					entryRoomMaxX, entryRoomMaxY, entryRoomMaxZ,
+					primaryBlock, air, false);
+		} else if(aspectSapling == MSBlocks.TIME_ASPECT_SAPLING.getDefaultState())
+		{
+			fillWithBlocks(world, boundingBox,
+					entryRoomMinX, entryRoomMinY, entryRoomMinZ,
+					entryRoomMaxX, entryRoomMaxY, entryRoomMaxZ,
+					primaryBlock, air, false);
+		} else if(aspectSapling == MSBlocks.HEART_ASPECT_SAPLING.getDefaultState())
+		{
+			fillWithBlocks(world, boundingBox,
+					entryRoomMinX, entryRoomMinY, entryRoomMinZ,
+					entryRoomMaxX, entryRoomMaxY, entryRoomMaxZ,
+					primaryBlock, air, false);
+		} else if(aspectSapling == MSBlocks.RAGE_ASPECT_SAPLING.getDefaultState())
+		{
+			fillWithBlocks(world, boundingBox,
+					entryRoomMinX, entryRoomMinY, entryRoomMinZ,
+					entryRoomMaxX, entryRoomMaxY, entryRoomMaxZ,
+					primaryBlock, air, false);
+		} else if(aspectSapling == MSBlocks.BLOOD_ASPECT_SAPLING.getDefaultState())
+		{
+			fillWithBlocks(world, boundingBox,
+					entryRoomMinX, entryRoomMinY, entryRoomMinZ,
+					entryRoomMaxX, entryRoomMaxY, entryRoomMaxZ,
+					primaryBlock, air, false);
+		} else if(aspectSapling == MSBlocks.DOOM_ASPECT_SAPLING.getDefaultState())
+		{
+			fillWithBlocks(world, boundingBox,
+					entryRoomMinX, entryRoomMinY, entryRoomMinZ,
+					entryRoomMaxX, entryRoomMaxY, entryRoomMaxZ,
+					primaryBlock, air, false);
+		} else if(aspectSapling == MSBlocks.VOID_ASPECT_SAPLING.getDefaultState())
+		{
+			fillWithBlocks(world, boundingBox,
+					entryRoomMinX, entryRoomMinY, entryRoomMinZ,
+					entryRoomMaxX, entryRoomMaxY, entryRoomMaxZ,
+					primaryBlock, air, false);
+		} else if(aspectSapling == MSBlocks.SPACE_ASPECT_SAPLING.getDefaultState())
+		{
+			fillWithBlocks(world, boundingBox,
+					entryRoomMinX, entryRoomMinY, entryRoomMinZ,
+					entryRoomMaxX, entryRoomMaxY, entryRoomMaxZ,
+					primaryBlock, air, false);
+		} else if(aspectSapling == MSBlocks.MIND_ASPECT_SAPLING.getDefaultState())
+		{
+			fillWithBlocks(world, boundingBox,
+					entryRoomMinX, entryRoomMinY, entryRoomMinZ,
+					entryRoomMaxX, entryRoomMaxY, entryRoomMaxZ,
+					primaryBlock, air, false);
+		} else if(aspectSapling == MSBlocks.HOPE_ASPECT_SAPLING.getDefaultState())
+		{
+			fillWithBlocks(world, boundingBox,
+					entryRoomMinX, entryRoomMinY, entryRoomMinZ,
+					entryRoomMaxX, entryRoomMaxY, entryRoomMaxZ,
+					primaryBlock, air, false);
+		}
+		
+	}
+	
 	@Override
 	protected void readAdditional(CompoundNBT tagCompound)
 	{
 		super.readAdditional(tagCompound);
-		tagCompound.putBoolean("sp1", spawner1);
-		tagCompound.putBoolean("sp2", spawner2);
+		tagCompound.putBoolean("sp1", spawner1); //spawner type room only
+		tagCompound.putBoolean("sp2", spawner2); //spawner type room only
 		tagCompound.putInt("randomRoomType", randomRoomType);
 	}
 	

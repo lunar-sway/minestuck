@@ -102,6 +102,45 @@ public class PlacementFunctionsUtil
 		}
 	}
 	
+	public static void createSphere(IWorld worldIn, MutableBoundingBox structurebb, BlockState blockState, BlockPos centerPos, int radius)
+	{
+		for(int y = centerPos.getY() - radius; y <= centerPos.getY() + radius; ++y)
+		{
+			for(int x = centerPos.getX() - radius; x <= centerPos.getX() + radius; ++x)
+			{
+				for(int z = centerPos.getZ() - radius; z <= centerPos.getZ() + radius; ++z)
+				{
+					BlockPos currentPos = new BlockPos(x, y, z);
+					if(structurebb.isVecInside(currentPos) && Math.sqrt(centerPos.distanceSq(currentPos)) <= radius)
+					{
+						worldIn.setBlockState(currentPos, blockState, Constants.BlockFlags.BLOCK_UPDATE);
+					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Cylinder is upright
+	 */
+	public static void createCylinder(IWorld worldIn, MutableBoundingBox structurebb, BlockState blockState, BlockPos bottomPos, int radius, int height)
+	{
+		for(int y = bottomPos.getY(); y <= bottomPos.getY() + height - 1; ++y)
+		{
+			for(int x = bottomPos.getX() - radius; x <= bottomPos.getX() + radius; ++x)
+			{
+				for(int z = bottomPos.getZ() - radius; z <= bottomPos.getZ() + radius; ++z)
+				{
+					BlockPos currentPos = new BlockPos(x, y, z);
+					if(structurebb.isVecInside(currentPos) && Math.sqrt(currentPos.distanceSq(bottomPos.up(y - bottomPos.getY()))) <= radius)
+					{
+						worldIn.setBlockState(currentPos, blockState, Constants.BlockFlags.BLOCK_UPDATE);
+					}
+				}
+			}
+		}
+	}
+	
 	/**
 	 * Use reordered blockpos for min and max BlockPos parameters(axisAlignBlockPosGetMin/Max)
 	 */

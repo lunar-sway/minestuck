@@ -41,7 +41,7 @@ public class TierOneDungeonStructure extends ScatteredStructure<NoFeatureConfig>
 	@Override
 	public int getSize()
 	{
-		return 4;
+		return 8;
 	}
 	
 	@Override
