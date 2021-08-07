@@ -102,7 +102,10 @@ public class PlacementFunctionsUtil
 		}
 	}
 	
-	public static void createSphere(IWorld worldIn, MutableBoundingBox structurebb, BlockState blockState, BlockPos centerPos, int radius)
+	/**
+	 * skipReplaceBlockState takes in one blockstate that will not be overwritten by the sphere
+	*/
+	public static void createSphere(IWorld worldIn, MutableBoundingBox structurebb, BlockState blockState, BlockPos centerPos, int radius, BlockState skipReplaceBlockState)
 	{
 		for(int y = centerPos.getY() - radius; y <= centerPos.getY() + radius; ++y)
 		{
@@ -111,7 +114,11 @@ public class PlacementFunctionsUtil
 				for(int z = centerPos.getZ() - radius; z <= centerPos.getZ() + radius; ++z)
 				{
 					BlockPos currentPos = new BlockPos(x, y, z);
-					if(structurebb.isVecInside(currentPos) && Math.sqrt(centerPos.distanceSq(currentPos)) <= radius)
+					
+					if(skipReplaceBlockState == null)
+						skipReplaceBlockState = blockState;
+					
+					if(structurebb.isVecInside(currentPos) && Math.sqrt(centerPos.distanceSq(currentPos)) <= radius && worldIn.getBlockState(currentPos) != skipReplaceBlockState)
 					{
 						worldIn.setBlockState(currentPos, blockState, Constants.BlockFlags.BLOCK_UPDATE);
 					}

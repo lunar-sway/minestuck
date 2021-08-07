@@ -3,7 +3,11 @@
   "pools": [
     {
       "name": "weapons",
-      "rolls": 1,
+      "rolls": {
+        "min": 0.0,
+        "max": 1.0,
+        "type": "minecraft:uniform"
+      },
       "entries": [
         {
           "type": "minestuck:land_table",
@@ -144,7 +148,11 @@
     },
     {
       "name": "supplies",
-      "rolls": 3,
+      "rolls": {
+        "min": 1.0,
+        "max": 3.0,
+        "type": "minecraft:uniform"
+      },
       "entries": [
         {
           "type": "minestuck:land_table",
@@ -153,13 +161,13 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 15,
+          "weight": 25,
           "functions": [
             {
               "function": "minecraft:set_count",
               "count": {
                 "min": 1.0,
-                "max": 32.0,
+                "max": 16.0,
                 "type": "minecraft:uniform"
               }
             }
@@ -296,8 +304,8 @@
     {
       "name": "misc",
       "rolls": {
-        "min": 2.0,
-        "max": 4.0,
+        "min": 1.0,
+        "max": 2.0,
         "type": "minecraft:uniform"
       },
       "entries": [

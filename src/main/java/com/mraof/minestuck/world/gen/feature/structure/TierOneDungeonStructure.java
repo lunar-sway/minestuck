@@ -2,6 +2,7 @@ package com.mraof.minestuck.world.gen.feature.structure;
 
 import com.mojang.datafixers.Dynamic;
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.util.Debug;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
@@ -41,7 +42,7 @@ public class TierOneDungeonStructure extends ScatteredStructure<NoFeatureConfig>
 	@Override
 	public int getSize()
 	{
-		return 8;
+		return 12;
 	}
 	
 	@Override
@@ -69,7 +70,27 @@ public class TierOneDungeonStructure extends ScatteredStructure<NoFeatureConfig>
 			int z = chunkZ * 16 + rand.nextInt(16);
 			TierOneDungeonPiece mainPiece = new TierOneDungeonPiece(generator, rand, x, z);
 			components.add(mainPiece);
+			/*
+			int y = mainPiece.getBoundingBox().minY; //determines height of pillars from the variable height of the main structure
 			
+			int firstRoomOffset = mainPiece.getBoundingBox().maxX; //x and y should be same for this to work
+			TierOneDungeonFirstRoomPiece firstRoomPiece = new TierOneDungeonFirstRoomPiece(generator, rand, x + (firstRoomOffset), y, z);
+			Debug.debugf("firstRoomPiece = %s", firstRoomPiece);
+			components.add(firstRoomPiece);*/
+			/*for(int i = 0; i < 2; i++) //x iterate
+			{
+				for(int j = 0; j < 2; j++) //z iterate
+				{
+					if(rand.nextBoolean() && i != 0)
+					{
+						Debug.debugf("additional piece");
+						/*TierOneDungeonFirstRoomPiece additionalRoomPiece = new TierOneDungeonFirstRoomPiece(generator, rand,
+								x + (firstRoomOffset - 2 * i * firstRoomOffset), y,
+								z + (firstRoomOffset - 2 * j * firstRoomOffset));
+						components.add(additionalRoomPiece);*/ //50% chance of generating additional room in the remaining directions after original
+					/*}
+				}
+			}*/
 			recalculateStructureSize();
 		}
 	}

@@ -95,7 +95,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.addEntry(ItemLootEntry.builder(MSItems.ACE_OF_SPADES).weight(1).quality(1)))
 				.addLootPool(LootPool.builder().name(SUPPLIES_POOL).rolls(RandomValueRange.of(1, 3))
 						.addEntry(LandTableLootEntry.builder(MSLootTables.TIER_ONE_MEDIUM_CHEST).setPool(SUPPLIES_POOL))
-						.addEntry(ItemLootEntry.builder(Items.ARROW).weight(15).quality(0).acceptFunction(SetCount.builder(RandomValueRange.of(1, 32))))
+						.addEntry(ItemLootEntry.builder(Items.ARROW).weight(25).quality(0).acceptFunction(SetCount.builder(RandomValueRange.of(1, 16))))
 						.addEntry(ItemLootEntry.builder(Items.BREAD).weight(20).quality(0).acceptFunction(SetCount.builder(RandomValueRange.of(1, 6))))
 						.addEntry(ItemLootEntry.builder(Items.COOKED_BEEF).weight(10).quality(0).acceptFunction(SetCount.builder(RandomValueRange.of(1, 4))))
 						.addEntry(ItemLootEntry.builder(Items.COOKED_CHICKEN).weight(10).quality(0).acceptFunction(SetCount.builder(RandomValueRange.of(1, 4))))
