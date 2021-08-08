@@ -145,6 +145,12 @@ public class MSItems
 	public static final Item ACTION_CLAWS_SHEATHED = getNull();
 	public static final Item LIPSTICK_CHAINSAW = getNull();
 	public static final Item LIPSTICK = getNull();
+	public static final Item EMERALD_IMMOLATOR = getNull();
+	public static final Item EMERALD_IMMOLATOR_LIPSTICK = getNull();
+	public static final Item OBSIDIATOR = getNull();
+	public static final Item OBSIDIATOR_LIPSTICK = getNull();
+	public static final Item FROSTTOOTH = getNull();
+	public static final Item FROSTTOOTH_LIPSTICK = getNull();
 	public static final Item JOUSTING_LANCE = getNull();
 	public static final Item CIGARETTE_LANCE = getNull();
 	public static final Item LUCERNE_HAMMER = getNull();
@@ -832,6 +838,15 @@ public class MSItems
 		
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 2, -1.5F).efficiency(10.0F).set(MSItemTypes.AXE_TOOL).set(ItemRightClickEffect.switchTo(() -> MSItems.LIPSTICK)), new Item.Properties().defaultMaxDamage(250).group(MSItemGroup.WEAPONS)).setRegistryName("lipstick_chainsaw"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.WOOD, -1, -0.5F).efficiency(10.0F).set(ItemRightClickEffect.switchTo(() -> MSItems.LIPSTICK_CHAINSAW)), new Item.Properties().defaultMaxDamage(250)).setRegistryName("lipstick"));
+		
+		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.EMERALD_TIER, 3, -1.5F).efficiency(10.0F).set(MSItemTypes.AXE_TOOL).set(ItemRightClickEffect.switchTo(() -> MSItems.EMERALD_IMMOLATOR_LIPSTICK)).add(OnHitEffect.setOnFire(5)), new Item.Properties().defaultMaxDamage(1024).group(MSItemGroup.WEAPONS)).setRegistryName("emerald_immolator"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.WOOD, -1, -0.5F).efficiency(10.0F).set(ItemRightClickEffect.switchTo(() -> MSItems.EMERALD_IMMOLATOR)), new Item.Properties().defaultMaxDamage(1024)).setRegistryName("emerald_immolator_lipstick"));
+		
+		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.ICE_TIER, 5, -1.5F).efficiency(10.0F).set(MSItemTypes.AXE_TOOL).set(ItemRightClickEffect.switchTo(() -> MSItems.FROSTTOOTH_LIPSTICK)).add(OnHitEffect.ICE_SHARD), new Item.Properties().defaultMaxDamage(1536).group(MSItemGroup.WEAPONS)).setRegistryName("frosttooth"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.WOOD, -1, -0.5F).efficiency(10.0F).set(ItemRightClickEffect.switchTo(() -> MSItems.FROSTTOOTH)), new Item.Properties().defaultMaxDamage(1536)).setRegistryName("frosttooth_lipstick"));
+		
+		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.CORUNDUM_TIER, 4, -1.5F).efficiency(10.0F).set(MSItemTypes.AXE_TOOL).set(ItemRightClickEffect.switchTo(() -> MSItems.OBSIDIATOR_LIPSTICK)), new Item.Properties().defaultMaxDamage(2048).group(MSItemGroup.WEAPONS)).setRegistryName("obsidiator"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.WOOD, -1, -0.5F).efficiency(10.0F).set(ItemRightClickEffect.switchTo(() -> MSItems.OBSIDIATOR)), new Item.Properties().defaultMaxDamage(2048)).setRegistryName("obsidiator_lipstick"));
 		
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 4, -2.8F).efficiency(2.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("jousting_lance"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.REGI_TIER, 4, -2.8F).efficiency(2.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)).setRegistryName("cigarette_lance"));

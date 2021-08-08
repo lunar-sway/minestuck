@@ -477,6 +477,9 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.TEARS_OF_THE_ENDERLICH_DRAWN).input(MSItems.SKELETON_DISPLACER_DRAWN).and().input(Items.GHAST_TEAR).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.ACTION_CLAWS_DRAWN).input(MSItems.CAT_CLAWS_DRAWN).and().input(MSItems.FLUORITE_OCTET).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.LIPSTICK).input(MSItems.LIP_BALM).and().input(Items.GREEN_DYE).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.EMERALD_IMMOLATOR).input(MSItems.LIPSTICK_CHAINSAW).and().input(MSItems.EMERALD_SWORD).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.FROSTTOOTH).input(MSItems.EMERALD_IMMOLATOR).or().input(MSItems.CLUB_ZERO).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.OBSIDIATOR).input(MSItems.FROSTTOOTH).and().input(Items.OBSIDIAN).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.JOUSTING_LANCE).input(Items.IRON_SWORD).and().input(Tags.Items.RODS_WOODEN).build(consumer);
         CombinationRecipeBuilder.of(MSItems.CIGARETTE_LANCE).input(MSItems.JOUSTING_LANCE).or().input(MSItems.EIGHTBALL).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.LUCERNE_HAMMER).input(MSItems.SPEAR_CANE).and().namedInput(MSItems.CLAW_HAMMER).build(consumer);

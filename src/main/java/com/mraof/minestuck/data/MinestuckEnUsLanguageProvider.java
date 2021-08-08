@@ -512,6 +512,13 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.ACTION_CLAWS_SHEATHED, "Action Claws");
 		add(MSItems.LIPSTICK_CHAINSAW, "Chainsaw");
 		add(MSItems.LIPSTICK, "Jade Lipstick");
+		add(MSItems.EMERALD_IMMOLATOR, "Emerald Immolator");
+		add(MSItems.EMERALD_IMMOLATOR_LIPSTICK, "Lipodemic Lipstick");
+		add(MSItems.FROSTTOOTH, "Frosttooth");
+		add(MSItems.FROSTTOOTH_LIPSTICK, "Calcium Froststick");
+		addTooltip(MSItems.FROSTTOOTH_LIPSTICK, "Feels cold and sharp");
+		add(MSItems.OBSIDIATOR, "Obsidiator");
+		add(MSItems.OBSIDIATOR_LIPSTICK, "Fuschia Lipstick");
 		add(MSItems.JOUSTING_LANCE, "Jousting Lance");
 		add(MSItems.CIGARETTE_LANCE, "Cigarette Holder Lance");
 		add(MSItems.LUCERNE_HAMMER, "Lucerne Hammer");
