@@ -3,6 +3,7 @@ package com.mraof.minestuck.block;
 import com.mraof.minestuck.item.KeyItem;
 import com.mraof.minestuck.tileentity.DungeonDoorInterfaceTileEntity;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.world.storage.loot.MSLootTables;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -14,6 +15,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootParameterSets;
+import net.minecraft.world.storage.loot.LootTable;
 
 import javax.annotation.Nullable;
 
@@ -54,6 +59,14 @@ public class DungeonDoorInterfaceBlock extends Block
 			{
 			
 			}
+			
+			if(interfaceTileEntity.getWorld() instanceof ServerWorld)
+			{
+				LootTable lootTable = ((ServerWorld) interfaceTileEntity.getWorld()).getServer().getLootTableManager().getLootTableFromLocation(MSLootTables.TIER_ONE_MEDIUM_CHEST);
+				//lootTable.fillInventory(player.inventory, new LootContext.Builder((ServerWorld) interfaceTileEntity.getWorld()).build(LootParameterSets.CHEST));
+				lootTable.generate(new LootContext.Builder((ServerWorld) interfaceTileEntity.getWorld()).build(LootParameterSets.EMPTY), player::entityDropItem);
+			}
+			
 		}
 		
 		return ActionResultType.FAIL;

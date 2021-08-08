@@ -1,9 +1,11 @@
 package com.mraof.minestuck.world.gen.feature.structure.blocks;
 
 import com.mraof.minestuck.block.ReturnNodeBlock;
+import com.mraof.minestuck.util.Debug;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ChestBlock;
+import net.minecraft.block.StairsBlock;
 import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -172,6 +174,58 @@ public class StructureBlockUtil
 			if(yIterator >= maxBlockPosIn.getY())
 			{
 				break;
+			}
+		}
+	}
+	/**
+	 * bottomPos is at the bottom and to the left, with the width increasing how many blocks it is 90 degrees clockwise from the direction
+	*/
+	public static void createStairs(IWorld worldIn, MutableBoundingBox structurebb, BlockState bodyBlockState, BlockState tipBlockState, BlockPos bottomPos, int height, int width, Direction direction, boolean flipped)
+	{
+		//int xPos = bottomPos.getX(), zPos = bottomPos.getZ();
+		
+		BlockPos backEdge = bottomPos;
+		if(direction == Direction.NORTH)
+			backEdge = backEdge.north(height - 1).east(width);
+		else if(direction == Direction.EAST)
+			backEdge = backEdge.east(height - 1).south(width);
+		else if(direction == Direction.SOUTH)
+			backEdge = backEdge.south(height - 1).west(width);
+		else if(direction == Direction.WEST)
+			backEdge = backEdge.west(height - 1).north(width);
+		
+		for(int y = 0; y < height; ++y)
+		{
+			BlockPos frontEdge = bottomPos.up(y);
+			if(direction == Direction.NORTH)
+				frontEdge = frontEdge.north(y);
+			else if(direction == Direction.EAST)
+				frontEdge = frontEdge.east(y);
+			else if(direction == Direction.SOUTH)
+				frontEdge = frontEdge.south(y);
+			else if(direction == Direction.WEST)
+				frontEdge = frontEdge.west(y);
+			
+			//Debug.debugf("frontEdge = %s, backEdge = %s", frontEdge, backEdge.up(y));
+			
+			fillWithBlocksFromPos(worldIn, structurebb, bodyBlockState, axisAlignBlockPosGetMin(frontEdge, backEdge.up(y)), axisAlignBlockPosGetMax(frontEdge, backEdge.up(y)));
+			
+			BlockPos frontEdgeWidth = frontEdge;
+			for(int frontWidth = 0; frontWidth < width + 1; ++frontWidth)
+			{
+				if(direction == Direction.NORTH)
+					frontEdgeWidth = frontEdgeWidth.east(frontWidth);
+				else if(direction == Direction.EAST)
+					frontEdgeWidth = frontEdgeWidth.south(frontWidth);
+				else if(direction == Direction.SOUTH)
+					frontEdgeWidth = frontEdgeWidth.west(frontWidth);
+				else if(direction == Direction.WEST)
+					frontEdgeWidth = frontEdgeWidth.north(frontWidth);
+				
+				if(structurebb.isVecInside(frontEdgeWidth))
+				{
+					worldIn.setBlockState(frontEdgeWidth, tipBlockState, Constants.BlockFlags.BLOCK_UPDATE);
+				}
 			}
 		}
 	}
