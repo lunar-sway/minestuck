@@ -6,7 +6,6 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.MSDirectionalBlock;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.LotusFlowerEntity;
-import com.mraof.minestuck.util.PlacementFunctionsUtil;
 import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockUtil;
 import com.mraof.minestuck.world.storage.loot.MSLootTables;
@@ -125,11 +124,11 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 		int pushUp = 0;
 		for(int i = 0; i < 24; i++)
 		{
-			PlacementFunctionsUtil.fillWithBlocksCheckWater(world, boundingBox,
+			StructureBlockUtil.fillWithBlocksCheckWater(world, boundingBox,
 					getXWithOffset(17, i), getYWithOffset(pushUp), getZWithOffset(17, i),
 					getXWithOffset(24, i), getYWithOffset(pushUp), getZWithOffset(24, i),
 					MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE.getDefaultState().with(DecorBlock.FACING, this.getCoordBaseMode().getOpposite())); //stairs base
-			PlacementFunctionsUtil.fillWithBlocksCheckWater(world, boundingBox,
+			StructureBlockUtil.fillWithBlocksCheckWater(world, boundingBox,
 					getXWithOffset(17, i), getYWithOffset(pushUp + 1), getZWithOffset(17, i),
 					getXWithOffset(24, i), getYWithOffset(pushUp + 1), getZWithOffset(24, i),
 					MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_TOP.getDefaultState().with(DecorBlock.FACING, this.getCoordBaseMode().getOpposite())); //stairs top
@@ -138,7 +137,7 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 			pushUp = pushUp + 2; //allows the stairs height to increment twice as fast as sideways placement
 		}
 		
-		PlacementFunctionsUtil.fillWithBlocksCheckWater(world, boundingBox, 17, 48, 24, 24, 48, 24, MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE.getDefaultState().with(DecorBlock.FACING, this.getCoordBaseMode().getOpposite())); //stairs base at top
+		StructureBlockUtil.fillWithBlocksCheckWater(world, boundingBox, 17, 48, 24, 24, 48, 24, MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE.getDefaultState().with(DecorBlock.FACING, this.getCoordBaseMode().getOpposite())); //stairs base at top
 		fillWithBlocks(world, boundingBox, 17, -10, 20 + 24, 24, -1, 24, MSBlocks.GREEN_STONE_BRICKS.getDefaultState(), MSBlocks.GREEN_STONE_BRICKS.getDefaultState(), false); //underneath stairs
 		
 		fillWithBlocks(world, boundingBox, 20, -10, 14, 41, 0, 55, block, block, false); //underneath main platform
