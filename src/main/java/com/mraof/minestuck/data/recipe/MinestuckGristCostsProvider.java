@@ -315,6 +315,9 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSItems.TEARS_OF_THE_ENDERLICH_DRAWN).grist(QUARTZ, 1425).grist(RUST, 3205).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.LIPSTICK_CHAINSAW).grist(BUILD, 45).grist(MARBLE, 18).grist(SHALE, 30).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.LIPSTICK).grist(BUILD, 45).grist(MARBLE, 18).grist(SHALE, 30).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.EMERALD_IMMOLATOR).grist(BUILD, 198).grist(TAR, 99).grist(RUBY, 59).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.FROSTTOOTH).grist(BUILD, 291).grist(TAR, 145).grist(AMETHYST, 87).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.OBSIDIATOR).grist(BUILD, 405).grist(TAR, 405).grist(GARNET, 365).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.JOUSTING_LANCE).grist(RUST, 113).grist(QUARTZ, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CIGARETTE_LANCE).grist(SHALE, 74).grist(TAR, 111).grist(DIAMOND, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.LUCERNE_HAMMER).grist(BUILD, 35).grist(RUST, 11).build(recipeSaver);
