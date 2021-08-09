@@ -478,6 +478,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.TEARS_OF_THE_ENDERLICH_DRAWN).input(MSItems.SKELETON_DISPLACER_DRAWN).and().input(Items.GHAST_TEAR).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.ACTION_CLAWS_DRAWN).input(MSItems.CAT_CLAWS_DRAWN).and().input(MSItems.FLUORITE_OCTET).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.LIPSTICK).input(MSItems.LIP_BALM).and().input(Items.GREEN_DYE).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.THISTLEBLOWER).input(MSItems.LIPSTICK_CHAINSAW).or().input(Items.ROSE_BUSH).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.EMERALD_IMMOLATOR).input(MSItems.LIPSTICK_CHAINSAW).and().input(MSItems.EMERALD_SWORD).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.FROSTTOOTH).input(MSItems.EMERALD_IMMOLATOR).or().input(MSItems.CLUB_ZERO).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.OBSIDIATOR).input(MSItems.FROSTTOOTH).and().input(Items.OBSIDIAN).build(consumer);
