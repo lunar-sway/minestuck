@@ -942,6 +942,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.LIP_BALM, "Lip Balm");
 		addTooltip(MSItems.LIP_BALM, "I see you there with those dry lips. Aht aht don't lick them now.");
 		addExtra(MSItems.LIP_BALM, "message", "Your lips are slightly more moisturized, but is it enough?");
+		add(MSItems.ELECTRIC_AUTOHARP, "Electric Autoharp");
 		add(MSItems.CARDBOARD_TUBE, "Cardboard Tube");
 		add(MSItems.INK_SQUID_PRO_QUO, "Ink of Squid Pro Quo");
 		addTooltip(MSItems.INK_SQUID_PRO_QUO, "For the love of god, don't drink it.");
@@ -1881,6 +1882,15 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addSubtitles("screech", "Estrogen-empowered screech");
 		addSubtitles("upcheladder", "Echeladder levels up");
 		addSubtitles("electric_shock", "Electric Shock");
+		addSubtitles("amajor_electric_autoharp_stroke", "A Major plays on electric autoharp");
+		addSubtitles("bmajor_electric_autoharp_stroke", "B Major plays on electric autoharp");
+		addSubtitles("bbmajor_electric_autoharp_stroke", "Bb Major plays on electric autoharp");
+		addSubtitles("cmajor_electric_autoharp_stroke", "C Major plays on electric autoharp");
+		addSubtitles("dmajor_electric_autoharp_stroke", "D Major plays on electric autoharp");
+		addSubtitles("ebmajor_electric_autoharp_stroke", "Eb Major plays on electric autoharp");
+		addSubtitles("emajor_electric_autoharp_stroke", "E Major plays on electric autoharp");
+		addSubtitles("fmajor_electric_autoharp_stroke", "F Major plays on electric autoharp");
+		addSubtitles("gmajor_electric_autoharp_stroke", "G Major plays on electric autoharp");
 		
 		addEntitySubtitles(MSEntityTypes.NAKAGATOR, "ambient", "Nakagator naks");
 		addEntitySubtitles(MSEntityTypes.NAKAGATOR, "hurt", "Nakagator hurts");
