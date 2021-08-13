@@ -18,12 +18,14 @@ import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.skaianet.TitleSelectionHook;
+import com.mraof.minestuck.tileentity.StatStorerTileEntity;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.monster.*;
@@ -35,10 +37,12 @@ import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.TickEvent;
@@ -174,6 +178,18 @@ public class ServerEventHandler
 		if(event.getEntityLiving() instanceof UnderlingEntity)
 		{
 			((UnderlingEntity) event.getEntityLiving()).onEntityDamaged(event.getSource(), event.getAmount());
+		}
+		
+		Entity injuredEntity = event.getEntity();
+		//AxisAlignedBB axisalignedbb = injuredEntity.getBoundingBox().grow(4.0D, 2.0D, 4.0D);
+		for(BlockPos blockPos : BlockPos.getAllInBoxMutable(injuredEntity.getPosition().add(4, 4, 4), injuredEntity.getPosition().add(-4, -4, -4)))
+		{
+			TileEntity tileEntity = injuredEntity.world.getTileEntity(blockPos);
+			if(tileEntity instanceof StatStorerTileEntity)
+			{
+				StatStorerTileEntity storerTileEntity = (StatStorerTileEntity) tileEntity;
+				storerTileEntity.setStoredStatValue(storerTileEntity.getStoredStatValue() + event.getAmount(), storerTileEntity.getPos(), true);
+			}
 		}
 	}
 	

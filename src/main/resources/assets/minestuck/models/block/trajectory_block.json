@@ -1,0 +1,7 @@
+{
+    "parent": "block/cube_column",
+    "textures": {
+        "end": "minestuck:block/generic_object",
+        "side": "minestuck:block/green_stone_column"
+    }
+}

@@ -1,0 +1,10 @@
+{
+    "variants": {
+        "facing=up":    { "model": "minestuck:block/trajectory_block" },
+        "facing=down":  { "model": "minestuck:block/trajectory_block"},
+        "facing=east":  { "model": "minestuck:block/trajectory_block", "y": 90, "x": 90 },
+        "facing=south": { "model": "minestuck:block/trajectory_block", "y": 180, "x": 90 },
+        "facing=west":  { "model": "minestuck:block/trajectory_block", "y": 270, "x": 90 },
+        "facing=north": { "model": "minestuck:block/trajectory_block", "y": 0, "x": 90 }
+    }
+}

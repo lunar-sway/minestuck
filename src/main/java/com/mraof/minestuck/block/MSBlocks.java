@@ -147,6 +147,8 @@ public class MSBlocks
 	//Dungeon Functional Blocks
 	public static final Block DUNGEON_DOOR_INTERFACE = getNull();
 	public static final Block DUNGEON_DOOR = getNull();
+	public static final Block TRAJECTORY_BLOCK = getNull();
+	public static final Block STAT_STORER_BLOCK = getNull();
 	
 	//Core Functional Land Blocks
 	public static final Block GATE = getNull();
@@ -475,6 +477,8 @@ public class MSBlocks
 		
 		registry.register(new DungeonDoorInterfaceBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(-1F).sound(SoundType.STONE)).setRegistryName("dungeon_door_interface"));
 		registry.register(new Block(Block.Properties.create(Material.ROCK).hardnessAndResistance(-1F).sound(SoundType.STONE)).setRegistryName("dungeon_door"));
+		registry.register(new TrajectoryBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(-1F).sound(SoundType.STONE)).setRegistryName("trajectory_block"));
+		registry.register(new StatStorerBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(-1F).sound(SoundType.STONE)).setRegistryName("stat_storer_block"));
 		
 		registry.register(new GateBlock(Block.Properties.create(Material.PORTAL).doesNotBlockMovement().hardnessAndResistance(-1.0F, 25.0F).sound(SoundType.GLASS).lightValue(11).noDrops()).setRegistryName("gate"));
 		registry.register(new ReturnNodeBlock(Block.Properties.create(Material.PORTAL).doesNotBlockMovement().hardnessAndResistance(-1.0F, 10.0F).sound(SoundType.GLASS).lightValue(11).noDrops()).setRegistryName("return_node"));
