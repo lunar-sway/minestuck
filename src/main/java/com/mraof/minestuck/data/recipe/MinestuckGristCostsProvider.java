@@ -539,6 +539,7 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSItems.RAW_URANIUM).grist(URANIUM, 3).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.GOLDEN_GRASSHOPPER).grist(GOLD, 4000).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.BUG_NET).grist(BUILD, 40).grist(CHALK, 25).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.STONE_SLAB).grist(BUILD, 30).build(recipeSaver);
 		
 		GristCostRecipeBuilder.of(MSItems.SPORK).grist(BUILD, 50).grist(RUST, 9).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CANDY_CORN).grist(CHALK, 1).grist(SULFUR, 1).grist(IODINE, 1).build(recipeSaver);
@@ -638,6 +639,13 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		
 		GristCostRecipeBuilder.of(MSItems.SBAHJ_POSTER).grist(BUILD, 4).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CREW_POSTER).grist(TAR, 3).grist(RUST, 2).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.FLARP_MANUAL).grist(AMBER, 10).grist(TAR, 4).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.SASSACRE_TEXT).grist(CAULK, 10).grist(MERCURY, 4).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.WISEGUY).grist(CHALK, 10).grist(SULFUR, 4).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.TABLESTUCK_MANUAL).grist(MARBLE, 10).grist(COBALT, 4).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.TILLDEATH_HANDBOOK).grist(TAR, 10).grist(AMETHYST, 4).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.BINARY_CODE).grist(IODINE, 10).grist(SHALE, 4).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.NONBINARY_CODE).grist(BUILD, 10).grist(URANIUM, 4).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.THRESH_DVD).grist(IODINE, 3).grist(AMETHYST, 2).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.GAMEBRO_MAGAZINE).grist(CHALK, 3).grist(GARNET, 2).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.GAMEGRL_MAGAZINE).grist(CHALK, 3).grist(AMBER, 2).build(recipeSaver);

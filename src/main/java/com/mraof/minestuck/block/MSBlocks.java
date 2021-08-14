@@ -130,6 +130,7 @@ public class MSBlocks
 	public static final Block PIPE_INTERSECTION = getNull();
 	public static final Block PARCEL_PYXIS = getNull();
 	public static final Block PYXIS_LID = getNull();
+	public static final Block STONE_SLAB = getNull();
 	
 	//Structure Land Blocks
 	public static final Block BLACK_CASTLE_BRICK_STAIRS = getNull(), DARK_GRAY_CASTLE_BRICK_STAIRS = getNull(), LIGHT_GRAY_CASTLE_BRICK_STAIRS = getNull(), WHITE_CASTLE_BRICK_STAIRS = getNull();
@@ -411,6 +412,7 @@ public class MSBlocks
 		registry.register(new VeinCornerBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(0.45F).sound(SoundType.SLIME)).setRegistryName("inverted_vein_corner"));
 		registry.register(new PipeBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(4.0F).sound(SoundType.METAL), MSBlockShapes.PIPE).setRegistryName("pipe"));
 		registry.register(new Block(Block.Properties.create(Material.IRON).hardnessAndResistance(4.0F).sound(SoundType.METAL)).setRegistryName("pipe_intersection"));
+		registry.register(new StoneTabletBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.3F)).setRegistryName("stone_slab")); //same thing as stone tablet
 		
 		registry.register(new StairsBlock(() -> MSBlocks.BLACK_CASTLE_BRICKS.getDefaultState(), Block.Properties.from(blackCastleBricks)).setRegistryName("black_castle_brick_stairs"));
 		registry.register(new StairsBlock(() -> MSBlocks.DARK_GRAY_CASTLE_BRICKS.getDefaultState(), Block.Properties.from(darkGrayCastleBricks)).setRegistryName("dark_gray_castle_brick_stairs"));
@@ -460,7 +462,7 @@ public class MSBlocks
 		registry.register(new ComputerBlock(ComputerBlock.LAPTOP_OPEN_SHAPE, ComputerBlock.LAPTOP_CLOSED_SHAPE, Block.Properties.create(Material.IRON).hardnessAndResistance(4.0F)).setRegistryName("laptop"));
 		registry.register(new ComputerBlock(ComputerBlock.LAPTOP_OPEN_SHAPE, ComputerBlock.LAPTOP_CLOSED_SHAPE, Block.Properties.create(Material.IRON, MaterialColor.RED).hardnessAndResistance(4.0F)).setRegistryName("crockertop"));
 		registry.register(new ComputerBlock(ComputerBlock.LAPTOP_OPEN_SHAPE, ComputerBlock.LAPTOP_CLOSED_SHAPE, Block.Properties.create(Material.IRON, MaterialColor.GREEN).hardnessAndResistance(4.0F)).setRegistryName("hubtop"));
-		registry.register(new ComputerBlock(ComputerBlock.LUNCHTOP_SHAPE, ComputerBlock.LUNCHTOP_SHAPE, Block.Properties.create(Material.IRON, MaterialColor.RED).hardnessAndResistance(4.0F)).setRegistryName("lunchtop"));
+		registry.register(new ComputerBlock(ComputerBlock.LUNCHTOP_OPEN_SHAPE, ComputerBlock.LUNCHTOP_CLOSED_SHAPE, Block.Properties.create(Material.IRON, MaterialColor.RED).hardnessAndResistance(4.0F)).setRegistryName("lunchtop"));
 		registry.register(new ComputerBlock(ComputerBlock.OLD_COMPUTER_SHAPE, ComputerBlock.OLD_COMPUTER_SHAPE, Block.Properties.create(Material.IRON).hardnessAndResistance(4.0F)).setRegistryName("old_computer"));
 		registry.register(new TransportalizerBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("transportalizer"));
 		registry.register(new TransportalizerBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F)).setRegistryName("trans_portalizer"));
