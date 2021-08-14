@@ -54,6 +54,7 @@ public class StatStorerTileEntity extends TileEntity
 				this.world.addParticle(ParticleTypes.HEART,true, blockPos.getX(), blockPos.getY() + 1, blockPos.getZ(), 0.01, 0.01,0.01);
 			}
 		}
+		//this.world.getBlockState(blockPos)
 		
 		this.damageStored = damageStoredIn;
 	}

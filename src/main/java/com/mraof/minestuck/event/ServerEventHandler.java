@@ -181,7 +181,6 @@ public class ServerEventHandler
 		}
 		
 		Entity injuredEntity = event.getEntity();
-		//AxisAlignedBB axisalignedbb = injuredEntity.getBoundingBox().grow(4.0D, 2.0D, 4.0D);
 		for(BlockPos blockPos : BlockPos.getAllInBoxMutable(injuredEntity.getPosition().add(4, 4, 4), injuredEntity.getPosition().add(-4, -4, -4)))
 		{
 			TileEntity tileEntity = injuredEntity.world.getTileEntity(blockPos);

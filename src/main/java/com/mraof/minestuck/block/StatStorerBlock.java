@@ -1,10 +1,16 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.tileentity.StatStorerTileEntity;
+import com.mraof.minestuck.util.Debug;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.tileentity.LecternTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
@@ -15,24 +21,36 @@ public class StatStorerBlock extends Block
 		super(properties);
 	}
 	
-	/*@Override
-	public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand)
+	@Override
+	public void updateNeighbors(BlockState stateIn, IWorld worldIn, BlockPos pos, int flags)
 	{
-		super.tick(state, worldIn, pos, rand);
-		
+		Debug.debugf("updateNeighbors");
+		super.updateNeighbors(stateIn, worldIn, pos, flags);
+		worldIn.notifyNeighbors(pos.down(), stateIn.getBlock());
+	}
+	
+	/*@Override
+	public boolean canProvidePower(BlockState state)
+	{
+		return true;
+	}
+	
+	@Override
+	public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side)
+	{
+		return true;
+	}
+	
+	@Override
+	public int getComparatorInputOverride(BlockState blockState, World worldIn, BlockPos pos)
+	{
+		Debug.debugf("getComparatorInputOverride");
 		TileEntity tileentity = worldIn.getTileEntity(pos);
-		if(tileentity instanceof StatStorerTileEntity && !worldIn.isRemote)
+		if(tileentity instanceof StatStorerTileEntity)
 		{
-			StatStorerTileEntity statStorerTileEntity = (StatStorerTileEntity) tileentity;
-			
-			LivingEntity livingEntity;
-			livingEntity.;
-			
-			EnumKeyType tileEntityKeyType = interfaceTileEntity.getKey();
-			
-			Debug.debugf("DoorBlock activated. itemKeyType = %s, tileEntityKeyType = %s", itemKeyType, tileEntityKeyType);
-			
+			return (int) ((StatStorerTileEntity) tileentity).getStoredStatValue() / 15;
 		}
+		return super.getComparatorInputOverride(blockState, worldIn, pos);
 	}*/
 	
 	@Override

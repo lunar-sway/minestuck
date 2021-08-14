@@ -1,17 +1,24 @@
 package com.mraof.minestuck.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
+import com.mraof.minestuck.util.Debug;
+import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.ItemFrameEntity;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.state.properties.ComparatorMode;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
+import net.minecraft.world.TickPriority;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
+
+import java.util.Random;
 
 public class TrajectoryBlock extends MSDirectionalBlock
 {
@@ -58,20 +65,202 @@ public class TrajectoryBlock extends MSDirectionalBlock
 		//Debug.debugf("motion BEFORE = %s", entityIn.getMotion());
 		entityIn.onGround = false;
 		double powerMod = blockState.get(POWER) / 4D + 1;
+		Debug.debugf("blockState.get(POWER) = %s", blockState.get(POWER));
 		entityIn.setMotion(entityIn.getMotion().x + blockState.get(FACING).getXOffset() * powerMod, entityIn.getMotion().y + blockState.get(FACING).getYOffset() * powerMod, entityIn.getMotion().z + blockState.get(FACING).getZOffset() * powerMod);
 		//entityIn.setMotion(state.get(FACING).getDirectionVec().offset(state.get(FACING), 5/*POWER*/));
 		//Debug.debugf("motion AFTER = %s", entityIn.getMotion());
 	}
 	
-	@Override
-	public void onNeighborChange(BlockState state, IWorldReader world, BlockPos pos, BlockPos neighbor)
+	/*@Override
+	public boolean hasComparatorInputOverride(BlockState state)
 	{
-		super.onNeighborChange(state, world, pos, neighbor);
+		return super.hasComparatorInputOverride(state);
+	}
+	*/
+	/*private int calculateInputStrength(World worldIn, BlockPos pos, BlockState state)
+	{
+		int i = 0;
+		//int i = super.calculateInputStrength(worldIn, pos, state);
+		//Direction direction = state.get(HORIZONTAL_FACING);
+		for(int directionInt = 0; directionInt < 6; directionInt++)
+		{
+			BlockPos blockpos = pos.offset(Direction.byIndex(directionInt));
+			BlockState blockstate = worldIn.getBlockState(blockpos);
+			
+			blockstate = worldIn.getBlockState(blockpos);
+			if(blockstate.hasComparatorInputOverride())
+			{
+				i = blockstate.getComparatorInputOverride(worldIn, blockpos);
+			}
+			/*if(blockstate.hasComparatorInputOverride())
+			{
+				i = blockstate.getComparatorInputOverride(worldIn, blockpos);
+			} else if(i < 15 && blockstate.isNormalCube(worldIn, blockpos))
+			{
+				blockpos = blockpos.offset(direction);
+				blockstate = worldIn.getBlockState(blockpos);
+				if(blockstate.hasComparatorInputOverride())
+				{
+					i = blockstate.getComparatorInputOverride(worldIn, blockpos);
+				} else if(blockstate.isAir(worldIn, blockpos))
+				{
+					ItemFrameEntity itemframeentity = this.findItemFrame(worldIn, direction, blockpos);
+					if(itemframeentity != null)
+					{
+						i = itemframeentity.getAnalogOutput();
+					}
+				}
+			}*//*
+		}
+		
+		
+		return i;
+	}*/
+	/*
+	private int calculateOutput(World worldIn, BlockPos pos, BlockState state) {
+		return this.calculateInputStrength(worldIn, pos, state);
+	}
+	
+	public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand)
+	{
+		if(!this.isLocked(worldIn, pos, state))
+		{
+			boolean flag = state.get(POWERED);
+			boolean flag1 = this.shouldBePowered(worldIn, pos, state);
+			if(flag && !flag1)
+			{
+				worldIn.setBlockState(pos, state.with(POWERED, Boolean.valueOf(false)), 2);
+			} else if(!flag)
+			{
+				worldIn.setBlockState(pos, state.with(POWERED, Boolean.valueOf(true)), 2);
+				if(!flag1)
+				{
+					worldIn.getPendingBlockTicks().scheduleTick(pos, this, this.getDelay(state), TickPriority.VERY_HIGH);
+				}
+			}
+			
+		}
+	}
+	
+	@Override
+	public int getStrongPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side)
+	{
+		return super.getStrongPower(blockState, blockAccess, pos, side);
+	}
+	
+	@Override
+	public int getWeakPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side)
+	{
+		if(!blockState.get(POWERED))
+		{
+			return 0;
+		} else
+		{
+			return blockState.get(FACING) == side ? this.getActiveSignal(blockAccess, pos, blockState) : 0;
+		}
+	}
+	
+	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+	{
+		if(state.isValidPosition(worldIn, pos))
+		{
+			this.updateState(worldIn, pos, state);
+		} else
+		{
+			TileEntity tileentity = state.hasTileEntity() ? worldIn.getTileEntity(pos) : null;
+			spawnDrops(state, worldIn, pos, tileentity);
+			worldIn.removeBlock(pos, false);
+			
+			for(Direction direction : Direction.values())
+			{
+				worldIn.notifyNeighborsOfStateChange(pos.offset(direction), this);
+			}
+			
+		}
+	}
+	
+	protected void updateState(World worldIn, BlockPos pos, BlockState state)
+	{
+		boolean flag = state.get(POWERED);
+		boolean flag1 = this.shouldBePowered(worldIn, pos, state);
+		if(flag != flag1 && !worldIn.getPendingBlockTicks().isTickPending(pos, this))
+		{
+			TickPriority tickpriority = TickPriority.HIGH;
+			if(this.isFacingTowardsRepeater(worldIn, pos, state))
+			{
+				tickpriority = TickPriority.EXTREMELY_HIGH;
+			} else if(flag)
+			{
+				tickpriority = TickPriority.VERY_HIGH;
+			}
+			
+			worldIn.getPendingBlockTicks().scheduleTick(pos, this, state.get(), tickpriority);
+		}
+	}
+	
+	protected boolean shouldBePowered(World worldIn, BlockPos pos, BlockState state)
+	{
+		return this.calculateInputStrength(worldIn, pos, state) > 0;
+	}
+	
+	protected int calculateInputStrength(World worldIn, BlockPos pos, BlockState state)
+	{
+		Direction direction = state.get(FACING);
+		BlockPos blockpos = pos.offset(direction);
+		int i = worldIn.getRedstonePower(blockpos, direction);
+		if(i >= 15)
+		{
+			return i;
+		} else
+		{
+			BlockState blockstate = worldIn.getBlockState(blockpos);
+			return Math.max(i, blockstate.getBlock() == Blocks.REDSTONE_WIRE ? blockstate.get(RedstoneWireBlock.POWER) : 0);
+		}
+	}
+	
+	public boolean isFacingTowardsRepeater(IBlockReader worldIn, BlockPos pos, BlockState state)
+	{
+		Direction direction = state.get(FACING).getOpposite();
+		BlockState blockstate = worldIn.getBlockState(pos.offset(direction));
+		return isTrajectoryBlock(blockstate) && blockstate.get(FACING) != direction;
+	}
+	
+	public static boolean isTrajectoryBlock(BlockState state)
+	{
+		return state.getBlock() instanceof RedstoneDiodeBlock;
+	}
+	
+	protected int getActiveSignal(IBlockReader worldIn, BlockPos pos, BlockState state)
+	{
+		return 15;
+	}
+	
+	//protected abstract int getDelay(BlockState state);
+	
+	@Override
+	public void onNeighborChange(BlockState stateIn, IWorldReader world, BlockPos posIn, BlockPos neighborPos)
+	{
+		super.onNeighborChange(stateIn, world, posIn, neighborPos);
+		
+		if(world.getDimension().getWorld().getBlockState(neighborPos).getValues().get(POWER) != null) //Cannot get property IntegerProperty{name=power, clazz=class java.lang.Integer, values=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]} as it does not exist in Block{minecraft:air}
+		{
+			Debug.debugf("POWER = %s, neighbor get power = %s", POWER, world.getDimension().getWorld().getBlockState(neighborPos).get(POWER));
+			world.getDimension().getWorld().notifyBlockUpdate(posIn, stateIn, stateIn.with(POWER, world.getDimension().getWorld().getBlockState(neighborPos).get(POWER)), 3);
+		}
+		
+		//updatePostPlacement(stateIn, stateIn.get(FACING), world.getDimension().getWorld().getBlockState(neighborPos), world.getDimension().getWorld(), posIn, neighborPos);
+		
+		BlockState thisState = world.getDimension().getWorld().getBlockState(posIn);
+		if(stateIn.canProvidePower())
+		{
+			//thisState = thisState.with(POWER, state.getComparatorInputOverride(world.getDimension().getWorld(), neighbor));
+			//POWER = state.getComparatorInputOverride(world.getDimension().getWorld(), neighbor);
+		}
 		//state;
 		//world.getRedstonePowerFromNeighbors;
 		//POWER = IntegerProperty.create(POWER.getName(), )world.getBlockState(neighbor).get(POWER).;
 	}
-	
+	*/
 	/*@Override
 	public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn)
 	{
