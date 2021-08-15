@@ -62,7 +62,6 @@ public class ServerEventHandler
 	@SubscribeEvent
 	public static void serverStarting(FMLServerStartingEvent event)
 	{
-		ConsortDialogue.serverStarting();
 		//if(!event.getServer().isDedicatedServer() && Minestuck.class.getAnnotation(Mod.class).version().startsWith("@")) TODO Find an alternative to detect dev environment
 		//event.getServer().setOnlineMode(false);	//Makes it possible to use LAN in a development environment
 		

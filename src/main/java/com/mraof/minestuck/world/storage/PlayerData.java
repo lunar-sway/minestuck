@@ -4,6 +4,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
+import com.mraof.minestuck.entity.consort.MessageType;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
@@ -20,6 +21,7 @@ import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.ColorHandler;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -41,6 +43,7 @@ import java.util.Objects;
 /**
  * Stores and sends any data connected to a specific player.
  * This class is for server-side use only.
+ *
  * @author kirderf1
  */
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -71,7 +74,7 @@ public final class PlayerData
 	private boolean givenModus;
 	private Modus modus;
 	private long boondollars;
-	private ImmutableGristSet gristCache;	//This is immutable in order to control where it can be changed
+	private ImmutableGristSet gristCache;    //This is immutable in order to control where it can be changed
 	
 	private final Map<ResourceLocation, Integer> consortReputation = new HashMap<>();
 	
@@ -79,6 +82,10 @@ public final class PlayerData
 	private boolean effectToggle;
 	
 	private boolean hasLoggedIn;
+	
+	// not persisted
+	private Entity currentDialogueTarget;
+	private MessageType currentDialogue;
 	
 	PlayerData(PlayerSavedData savedData, PlayerIdentifier player)
 	{
@@ -96,15 +103,14 @@ public final class PlayerData
 		
 		echeladder = new Echeladder(savedData, identifier);
 		echeladder.loadEcheladder(nbt);
-		if (nbt.contains("color"))
+		if(nbt.contains("color"))
 			this.color = nbt.getInt("color");
 		
-		if (nbt.contains("modus"))
+		if(nbt.contains("modus"))
 		{
 			this.modus = CaptchaDeckHandler.readFromNBT(nbt.getCompound("modus"), savedData);
 			givenModus = true;
-		}
-		else givenModus = nbt.getBoolean("given_modus");
+		} else givenModus = nbt.getBoolean("given_modus");
 		boondollars = nbt.getLong("boondollars");
 		gristCache = NonNegativeGristSet.read(nbt.getList("grist_cache", Constants.NBT.TAG_COMPOUND)).asImmutable();
 		
@@ -130,7 +136,7 @@ public final class PlayerData
 		echeladder.saveEcheladder(nbt);
 		nbt.putInt("color", color);
 		
-		if (this.modus != null)
+		if(this.modus != null)
 			nbt.put("modus", CaptchaDeckHandler.writeToNBT(modus));
 		else nbt.putBoolean("given_modus", givenModus);
 		nbt.putLong("boondollars", boondollars);
@@ -306,7 +312,8 @@ public final class PlayerData
 			title = Objects.requireNonNull(newTitle);
 			markDirty();
 			sendTitle(getPlayer());
-		} else throw new IllegalStateException("Can't set title for player "+ identifier.getUsername()+" because they already have one");
+		} else
+			throw new IllegalStateException("Can't set title for player " + identifier.getUsername() + " because they already have one");
 	}
 	
 	public boolean effectToggle()
@@ -435,5 +442,21 @@ public final class PlayerData
 	private ServerPlayerEntity getPlayer()
 	{
 		return identifier.getPlayer(savedData.mcServer);
+	}
+	
+	public void setDialogue(Entity target, MessageType message)
+	{
+		currentDialogueTarget = target;
+		currentDialogue = message;
+	}
+	
+	public Entity getCurrentDialogueTarget()
+	{
+		return currentDialogueTarget;
+	}
+	
+	public MessageType getCurrentDialogue()
+	{
+		return currentDialogue;
 	}
 }

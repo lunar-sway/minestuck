@@ -7,7 +7,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class MSCommands
 {
 	@SubscribeEvent
@@ -23,7 +23,6 @@ public class MSCommands
 		SburbPredefineCommand.register(dispatcher);
 		SburbConnectionCommand.register(dispatcher);
 		SetRungCommand.register(dispatcher);
-		ConsortReplyCommand.register(dispatcher);
 		PorkhollowCommand.register(dispatcher);
 		DebugLandsCommand.register(dispatcher);
 	}

@@ -56,6 +56,8 @@ public class MSPacketHandler
 		registerMessage(EffectTogglePacket.class, EffectTogglePacket::decode);
 		registerMessage(StoneTabletPacket.class, StoneTabletPacket::decode);
 		registerMessage(MagicEffectPacket.class, MagicEffectPacket::decode);
+		registerMessage(DialogueUpdatePacket.class, DialogueUpdatePacket::decode);
+		registerMessage(DialogueOptionPacket.class, DialogueOptionPacket::decode);
 	}
 	
 	private static int nextIndex;

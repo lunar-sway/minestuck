@@ -16,7 +16,6 @@ import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.ITextComponent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -167,7 +166,7 @@ public class ConsortDialogue
 		addMessage("yellow_better").landTerrainSpecific(SAND, SANDSTONE);
 		
 		//Frost
-		addMessage(new ChainMessage(new SingleMessage("frozen.1"), new DescriptionMessage("frozen.2"))).landTerrain(FROST);
+		addMessage(new ChainMessage(new SingleMessage("frozen.1"), new SingleMessage("frozen.2"), new DescriptionMessage("frozen.2.desc"))).landTerrain(FROST);
 		addMessage(new ChoiceMessage(new SingleMessage("fur_coat"), new SingleMessage[]{new SingleMessage("fur_coat.pay"), new SingleMessage("fur_coat.ignore")},
 				new MessageType[]{new PurchaseMessage(MSLootTables.CONSORT_JUNK_REWARD, 100, new ChainMessage(1, new SingleMessage("fur_coat.grattitude"), new SingleMessage("thank_you"))),
 						new SingleMessage("fur_coat.death")})).landTerrain(FROST);
@@ -234,26 +233,26 @@ public class ConsortDialogue
 		addMessage(new ConditionedMessage((consort, player) -> SburbHandler.hasEntered(player),
 				new SingleMessage("heroic_stench"), new SingleMessage("leech_stench"))).reqLand();
 		
-		MessageType raps = new RandomMessage("rap_battles", RandomKeepResult.KEEP_CONSORT,
-				new DelayMessage(new int[]{17, 17, 30},
+		SingleMessage raps = new RandomMessage("rap_battles",
+				new ChainMessage(
 						new SingleMessage("rap_battle.a1"), new SingleMessage("rap_battle.a2"),
 						new SingleMessage("rap_battle.a3"), new SingleMessage("rap_battle.a4")
-				), new DelayMessage(new int[]{25},
+				), new ChainMessage(
 				new SingleMessage("rap_battle.b1"), new SingleMessage("rap_battle.b2"),
 				new SingleMessage("rap_battle.b3"), new SingleMessage("rap_battle.b4")
-		), new DelayMessage(new int[]{17},
+		), new ChainMessage(
 				new SingleMessage("rap_battle.c1"), new SingleMessage("rap_battle.c2"),
 				new SingleMessage("rap_battle.c3", "consort_sound"), new SingleMessage("rap_battle.c4")
-		), new DelayMessage(new int[]{25, 20, 30},
+		), new ChainMessage(
 				new SingleMessage("rap_battle.d1"), new SingleMessage("rap_battle.d2"),
 				new SingleMessage("rap_battle.d3"), new SingleMessage("rap_battle.d4")
-		), new DelayMessage(new int[]{17, 20, 30},
+		), new ChainMessage(
 				new SingleMessage("rap_battle.e1"), new SingleMessage("rap_battle.e2"),
 				new SingleMessage("rap_battle.e3"), new SingleMessage("rap_battle.e4")
-		), new DelayMessage(new int[]{25},
+		), new ChainMessage(
 				new SingleMessage("rap_battle.f1"), new SingleMessage("rap_battle.f2"),
 				new SingleMessage("rap_battle.f3"), new SingleMessage("rap_battle.f4")));
-		addMessage(new ChoiceMessage(false, new SingleMessage("rap_battle"),
+		addMessage(new ChoiceMessage(new SingleMessage("rap_battle"),
 						new SingleMessage[]
 								{
 										new SingleMessage("rap_battle.accept"),
@@ -261,22 +260,22 @@ public class ConsortDialogue
 								},
 						new MessageType[]{
 								//If you accepted the challenge
-								new ChoiceMessage(false,
-										new DescriptionMessage(raps, "rap_battle.raps_desc"),
+								new ChoiceMessage(
+										new ChainMessage(raps, new DescriptionMessage("rap_battle.raps_desc")),
 										new SingleMessage[]{
 												new SingleMessage("rap_battle_school"),
 												new SingleMessage("rap_battle_concede")
 										},
 										new MessageType[]{
-												new DoubleMessage(new DescriptiveMessage("rap_battle_school.rap", "player_title", "land_name"),
-														new SingleMessage("rap_battle_school.final", "consort_sound")).setSayFirstOnce(),
+												new ChainMessage(new DescriptionMessage("rap_battle_school.rap", "player_title", "land_name"),
+														new SingleMessage("rap_battle_school.final", "consort_sound")),
 												new SingleMessage("rap_battle_concede.final", "consort_sound")
 										}
 								),
 								//If you didn't accept the challenge
 								new SingleMessage("rap_battle.deny_answer")
 						}
-				).setAcceptNull()
+				)
 		).consort(EnumConsort.NAKAGATOR, EnumConsort.IGUANA);
 		
 		addMessage("useless_pogo");
@@ -301,30 +300,30 @@ public class ConsortDialogue
 		addMessage(new ChainMessage(1, new SingleMessage("unknown.1"), new SingleMessage("unknown.2"))).consort(EnumConsort.TURTLE);
 		addMessage(new ChainMessage(1, new SingleMessage("cult.1", "player_title"), new SingleMessage("cult.2"))).consort(EnumConsort.TURTLE, EnumConsort.SALAMANDER);
 		
-		addMessage(new ChoiceMessage(new DescriptionMessage("peppy_offer"),
+		addMessage(new ChoiceMessage(new ChainMessage(new SingleMessage("peppy_offer"), new DescriptionMessage("peppy_offer.desc")),
 				new SingleMessage[]{new SingleMessage("peppy_offer.buy"), new SingleMessage("peppy_offer.deny")},
 				new MessageType[]{
-						new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 1000, -15, "purchase",
+						new PurchaseMessage(MSLootTables.CONSORT_JUNK_REWARD, 1000, -15, "purchase",
 								new ChainMessage(1, new SingleMessage("peppy_offer.item"), new SingleMessage("peppy_offer.purchase"))),
 						new ChoiceMessage(new SingleMessage("peppy_offer.next"),
 								new SingleMessage[]{new SingleMessage("peppy_offer.deny_again"), new SingleMessage("peppy_offer.buy_2")},
 								new MessageType[]{new SingleMessage("dots"),
-										new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 500, -35, "purchase",
+										new PurchaseMessage(MSLootTables.CONSORT_JUNK_REWARD, 500, -35, "purchase",
 												new SingleMessage("peppy_offer.purchase"))})})).type(MerchantType.SHADY).consort(EnumConsort.NAKAGATOR, EnumConsort.IGUANA);
 		
 		
-		addMessage(new ChoiceMessage(true, new SingleMessage("title_presence", "player_title"),
+		addMessage(new ChoiceMessage(new SingleMessage("title_presence", "player_title"),
 				new SingleMessage[]{new SingleMessage("title_presence.iam", "player_title"), new SingleMessage("title_presence.agree")},
 				new MessageType[]{new SingleMessage("title_presence.iam_answer", "consort_sound_2"), new SingleMessage("thanks")})).consort(EnumConsort.IGUANA, EnumConsort.SALAMANDER).reqLand();
 		
-		addMessage(new ChoiceMessage(new DescriptionMessage("shady_offer"),
+		addMessage(new ChoiceMessage(new ChainMessage(new SingleMessage("shady_offer"), new SingleMessage("shady_offer.desc")),
 				new SingleMessage[]
 						{
 								new SingleMessage("shady_offer.buy"),
 								new SingleMessage("shady_offer.deny")
 						},
 				new MessageType[]{
-						new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 1000, -15, "purchase",
+						new PurchaseMessage(MSLootTables.CONSORT_JUNK_REWARD, 1000, -15, "purchase",
 								new ChainMessage(1,
 										new SingleMessage("shady_offer.item"),
 										new SingleMessage("shady_offer.purchase")
@@ -339,7 +338,7 @@ public class ConsortDialogue
 								new MessageType[]
 										{
 												new SingleMessage("dots"),
-												new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 500, -35, "purchase",
+												new PurchaseMessage(MSLootTables.CONSORT_JUNK_REWARD, 500, -35, "purchase",
 														new SingleMessage("shady_offer.purchase")
 												)
 										}
@@ -347,7 +346,7 @@ public class ConsortDialogue
 				}
 		)).type(MerchantType.SHADY).consort(EnumConsort.SALAMANDER, EnumConsort.TURTLE);
 		
-		addMessage(new ChoiceMessage(true, new SingleMessage("denizen", "denizen"),
+		addMessage(new ChoiceMessage(new SingleMessage("denizen", "denizen"),
 				new SingleMessage[]{new SingleMessage("denizen.what"), new SingleMessage("denizen.ask_alignment")},
 				new MessageType[]{new SingleMessage("denizen.explain", "player_class_land"), new SingleMessage("denizen.alignment")})).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA, EnumConsort.TURTLE).reqLand();
 		
@@ -358,7 +357,7 @@ public class ConsortDialogue
 				new ChoiceMessage(new SingleMessage("hungry.ask_food", "nbt_item:hungry.item"),
 						new SingleMessage[]{new SingleMessage("hungry.accept"), new SingleMessage("hungry.deny")},
 						new MessageType[]{new GiveItemMessage("hungry.thanks", "hungry.item", 0, 15, new SingleMessage("hungry.thanks")),
-								new SingleMessage("sadface")}))).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);
+								new SingleMessage("sadface")}), new SingleMessage("dots"))).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);
 		addMessage(new ItemRequirement("hungry2", hungryList, false, true, false,
 				new SingleMessage(
 						"hungry"),
@@ -374,9 +373,10 @@ public class ConsortDialogue
 										new SingleMessage[]{new SingleMessage("hungry.agree"),
 												new SingleMessage("hungry.too_cheap")},
 										new MessageType[]{new GiveItemMessage("hungry.sell_item", "hungry2.item", 10, 0,
-												new ChainMessage(1, new DescriptionMessage("hungry.finally", "nbt_item:hungry2.item"),
+												new ChainMessage(1, new SingleMessage("hungry.finally", "nbt_item:hungry2.item"), new DescriptionMessage("hungry.finally.desc", "nbt_item:hungry2.item"),
 														new SingleMessage("hungry.finally"))),
-												new SingleMessage("hungry.end")})}))).consort(EnumConsort.SALAMANDER, EnumConsort.NAKAGATOR);
+												new SingleMessage("hungry.end")})}),
+				new SingleMessage("dots"))).consort(EnumConsort.SALAMANDER, EnumConsort.NAKAGATOR);
 		
 		addMessage(new MerchantGuiMessage(new SingleMessage("food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).consort(EnumConsort.SALAMANDER).lockToConsort();
 		addMessage(new MerchantGuiMessage(new SingleMessage("fast_food"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).consort(EnumConsort.NAKAGATOR).lockToConsort();
@@ -395,7 +395,7 @@ public class ConsortDialogue
 		addMessage(new MerchantGuiMessage(new SingleMessage("light_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(LIGHT).lockToConsort();
 		addMessage(new MerchantGuiMessage(new SingleMessage("silence_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(SILENCE).lockToConsort();
 		addMessage(new MerchantGuiMessage(new SingleMessage("rage_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(MONSTERS).lockToConsort();
-		addMessage(new MerchantGuiMessage(new DescriptionMessage("hope_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(TOWERS).lockToConsort();
+		addMessage(new MerchantGuiMessage(new ChainMessage(new SingleMessage("hope_food_shop"), new DescriptionMessage("hope_food_shop.desc")), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(TOWERS).lockToConsort();
 		addMessage(new MerchantGuiMessage(new SingleMessage("buckets_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(BUCKETS).lockToConsort();
 		
 		addMessage(new MerchantGuiMessage(new SingleMessage("general_shop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).lockToConsort();
@@ -440,7 +440,7 @@ public class ConsortDialogue
 	public static DialogueWrapper addMessage(int weight, MessageType message)
 	{
 		DialogueWrapper msg = new DialogueWrapper(weight);
-		msg.messageStart = message;
+		msg.message = message;
 		messages.add(msg);
 		return msg;
 	}
@@ -514,7 +514,7 @@ public class ConsortDialogue
 		private boolean reqLand;
 		private boolean lockToConsort;
 		
-		private MessageType messageStart;
+		private MessageType message;
 		
 		private Set<ResourceLocation> aspect1Requirement;
 		private Set<ResourceLocation> aspect2Requirement;
@@ -544,7 +544,7 @@ public class ConsortDialogue
 		public DialogueWrapper landTerrain(TerrainLandType... aspects)
 		{
 			if(isAnyNull(aspects))
-				LOGGER.warn("Land aspect is null for consort message {}, this is probably not intended", messageStart.getString());
+				LOGGER.warn("Land aspect is null for consort message {}, this is probably not intended", message.getString());
 			reqLand = true;
 			aspect1Requirement = Sets.newHashSet();
 			for(TerrainLandType aspect : aspects)
@@ -560,7 +560,7 @@ public class ConsortDialogue
 		{
 			
 			if(isAnyNull(aspects))
-				LOGGER.warn("Land aspect is null for consort message {}, this is probably not intended", messageStart.getString());
+				LOGGER.warn("Land aspect is null for consort message {}, this is probably not intended", message.getString());
 			reqLand = true;
 			aspect1RequirementS = Sets.newHashSet(aspects);
 			return this;
@@ -569,7 +569,7 @@ public class ConsortDialogue
 		public DialogueWrapper landTitle(TitleLandType... aspects)
 		{
 			if(isAnyNull(aspects))
-				LOGGER.warn("Land aspect is null for consort message {}, this is probably not intended", messageStart.getString());
+				LOGGER.warn("Land aspect is null for consort message {}, this is probably not intended", message.getString());
 			reqLand = true;
 			aspect2Requirement = Sets.newHashSet();
 			for(TitleLandType aspect : aspects)
@@ -581,7 +581,7 @@ public class ConsortDialogue
 		public DialogueWrapper landTitleSpecific(TitleLandType... aspects)
 		{
 			if(isAnyNull(aspects))
-				LOGGER.warn("Land aspect is null for consort message {}, this is probably not intended", messageStart.getString());
+				LOGGER.warn("Land aspect is null for consort message {}, this is probably not intended", message.getString());
 			reqLand = true;
 			aspect2RequirementS = Sets.newHashSet(aspects);
 			return this;
@@ -605,21 +605,20 @@ public class ConsortDialogue
 			return this;
 		}
 		
-		public ITextComponent getMessage(ConsortEntity consort, ServerPlayerEntity player)
+		public void showMessage(ConsortEntity consort, ServerPlayerEntity player)
 		{
-			return messageStart.getMessage(consort, player, "");
-		}
-		
-		public ITextComponent getFromChain(ConsortEntity consort, ServerPlayerEntity player, String fromChain)
-		{
-			return messageStart.getFromChain(consort, player, "", fromChain);
+			message.showMessage(consort, player);
 		}
 		
 		public String getString()
 		{
-			return messageStart.getString();
+			return message.getString();
 		}
 		
+		public MessageType getMessage()
+		{
+			return message;
+		}
 	}
 	
 	private static boolean isAnyNull(Object[] objects)
@@ -635,22 +634,5 @@ public class ConsortDialogue
 	public interface ConsortRequirement
 	{
 		boolean apply(ConsortEntity consort);
-	}
-	
-	public static void serverStarting()
-	{
-		//debugPrintAll();
-	}
-	
-	private static void debugPrintAll()
-	{
-		List<ITextComponent> list = new ArrayList<>();
-		for(DialogueWrapper wrapper : messages)
-		{
-			wrapper.messageStart.debugAddAllMessages(list);
-		}
-		
-		for(ITextComponent textComponent : list)
-			LOGGER.info(textComponent.getFormattedText());
 	}
 }

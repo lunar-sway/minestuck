@@ -1702,7 +1702,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("wyrm", "Legends speak of the Wyrm, a giant ivory pillar that radiates joy and happiness and uselessness.");
 		addDialogue("heroic_stench", "You smell kind of... heroic... like a hero, perhaps? It makes me kinda nervous to be around you!");
 		addDialogue("leech_stench", "You smell like you're leeching from the success from another hero... is this true?");
-		addDialogue("rap_battle", "I challenge you to a rap battle! Accept challenge? Y/N");
+		addDialogue("rap_battle", "I challenge you to a rap battle!");
 		addDialogue("rap_battle.accept", "Accept this consort's challenge!");
 		addDialogue("rap_battle.accept.reply", "Y! I'll take you on! You can even go first.");
 		addDialogue("rap_battle.deny", "Don't bother with this guy.");
@@ -1858,6 +1858,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("got_the_goods", "You want the goods? We got the goods.");
 		addDialogue("rising_shop", "We have top tier goods for a top tier god!");
 		addDialogue("boring_shop", "Looking for something that won't catch your eye? You've come to the right place!");
+		addDialogue("show_shop", "Take a look");
 		
 		//TODO Here are some unimplemented dialogue
 		addDialogue("cant_see", "We spent a lot of time making this shop looks really nice, we may have overdone it though, I can barely see over this counter.");

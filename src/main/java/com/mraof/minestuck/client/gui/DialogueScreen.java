@@ -2,8 +2,12 @@ package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.entity.consort.DialogueCard;
+import com.mraof.minestuck.network.DialogueOptionPacket;
+import com.mraof.minestuck.network.MSPacketHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
@@ -11,52 +15,26 @@ import org.lwjgl.glfw.GLFW;
 
 public class DialogueScreen extends Screen
 {
-	public static final String TITLE = "minestuck.dialogue";
-	private final DialogueBoxType dialogueBoxType;
+	private static final ResourceLocation BACKGROUND = new ResourceLocation("minestuck", "textures/gui/dialogue.png");
 	
 	private static final int GUI_WIDTH = 256;
-	private static final int GUI_HEIGHT = 180;
+	private static final int GUI_HEIGHT = 106;
 	private static final int PORTRAIT_SIZE = 32;
 	
-	private static final int RESPONSE_TEXT_OFFSET = 40;
-	
-	private String[] dialogueTexts;
+	private DialogueCard[] dialogueCards;
 	private String[] responseOptions;
-	private ResourceLocation portrait;
-	private String renderedText;
 	
-	private int currentTextIndex;
+	private String renderedText;
+	private int currentCardIndex;
 	private boolean doneWriting;
 	private int frame;
-	private int playerTextColor;
 	
-	public enum DialogueBoxType
+	public DialogueScreen(DialogueCard[] dialogueCards, String[] responseOptions)
 	{
-		STANDARD(new ResourceLocation("minestuck", "textures/gui/dialogue.png")),
-		DARK(new ResourceLocation("minestuck", "textures/gui/dialogue_dark.png")); //same as dialogue but better fitted for light colored texts like iguanas
-		
-		public final ResourceLocation background;
-		
-		DialogueBoxType(ResourceLocation background)
-		{
-			this.background = background;
-		}
-		
-		public final ResourceLocation getTextBackgroundBox()
-		{
-			return background;
-		}
-	}
-	
-	public DialogueScreen(String[] dialogueTexts, ResourceLocation portrait, String[] responseOptions, int color, DialogueBoxType dialogueBoxType)
-	{
-		super(new TranslationTextComponent(TITLE));
-		this.dialogueTexts = dialogueTexts;
-		this.portrait = portrait;
-		this.currentTextIndex = 0;
+		super(new TranslationTextComponent("minestuck.dialogue"));
+		this.dialogueCards = dialogueCards;
+		this.currentCardIndex = 0;
 		this.responseOptions = responseOptions;
-		this.playerTextColor = color;
-		this.dialogueBoxType = dialogueBoxType;
 		resetWriter();
 	}
 	
@@ -67,26 +45,23 @@ public class DialogueScreen extends Screen
 		
 		int xOffset = (width - GUI_WIDTH) / 2;
 		int yOffset = (height - GUI_HEIGHT) / 2;
+		int leftStart = xOffset + PORTRAIT_SIZE + 16;
 		
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		
-		this.minecraft.getTextureManager().bindTexture(dialogueBoxType.getTextBackgroundBox());
+		this.minecraft.getTextureManager().bindTexture(BACKGROUND);
 		this.blit(xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 		
-		int leftStart = xOffset + PORTRAIT_SIZE + 16;
-		int topStart = yOffset + GUI_HEIGHT + 8;
-		int lineHeight = 10;
+		DialogueCard currentDialogue = dialogueCards[currentCardIndex];
+		font.drawSplitString(renderedText, leftStart, yOffset + 12, GUI_WIDTH - PORTRAIT_SIZE - 28, currentDialogue.getTextColor());
+		ResourceLocation portrait = currentDialogue.getPortraitResource();
 		
-		font.drawSplitString(renderedText, leftStart, yOffset + 12, GUI_WIDTH - PORTRAIT_SIZE - 28, 0x000000);
-		
-		this.minecraft.getTextureManager().bindTexture(portrait);
-		this.blit(xOffset + 8, yOffset + 44, getAnimationOffset() * PORTRAIT_SIZE, 0, PORTRAIT_SIZE, PORTRAIT_SIZE);
+		if(portrait != null)
+		{
+			this.minecraft.getTextureManager().bindTexture(portrait);
+			this.blit(xOffset + 8, yOffset + GUI_HEIGHT - PORTRAIT_SIZE - 8, getAnimationOffset() * PORTRAIT_SIZE, 0, PORTRAIT_SIZE, PORTRAIT_SIZE);
+		}
 		
 		super.render(mouseX, mouseY, partialTicks);
-	}
-	
-	public void test() {
-		close();
 	}
 	
 	@Override
@@ -94,12 +69,16 @@ public class DialogueScreen extends Screen
 	{
 		if(!doneWriting)
 		{
-			String text = dialogueTexts[currentTextIndex];
+			String text = dialogueCards[currentCardIndex].getText();
 			int amount = Math.min(frame * MinestuckConfig.CLIENT.dialogueSpeed.get(), text.length());
 			
 			if(amount == text.length())
 			{
 				doneWriting = true;
+				if(currentCardIndex >= dialogueCards.length - 1)
+				{
+					addOptions();
+				}
 			}
 			
 			renderedText = text.substring(0, amount);
@@ -110,19 +89,23 @@ public class DialogueScreen extends Screen
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int i)
 	{
-		if(keyCode == GLFW.GLFW_KEY_SPACE) {
-			if(!this.doneWriting) {
-				renderedText = dialogueTexts[currentTextIndex];
+		if(keyCode == GLFW.GLFW_KEY_SPACE)
+		{
+			if(!this.doneWriting)
+			{
+				renderedText = dialogueCards[currentCardIndex].getText();
 				doneWriting = true;
+				if(currentCardIndex >= dialogueCards.length - 1)
+				{
+					addOptions();
+				}
+				
 				return false;
-			}
-			else if(currentTextIndex < dialogueTexts.length - 1) {
-				currentTextIndex++;
+			} else if(currentCardIndex < dialogueCards.length - 1)
+			{
+				currentCardIndex++;
 				resetWriter();
 				return false;
-			}
-			else {
-				showOptions();
 			}
 		}
 		
@@ -147,13 +130,21 @@ public class DialogueScreen extends Screen
 		return super.keyPressed(keyCode, scanCode, i);
 	}
 	
-	private void showOptions() {
+	private void addOptions()
+	{
 		int xOffset = ((width - GUI_WIDTH) / 2) + PORTRAIT_SIZE + 16;
 		int yOffset = ((height - GUI_HEIGHT) / 2) + GUI_HEIGHT + 8;
 		
-		for (int i = 0; i < responseOptions.length; i++) {
-			addButton(new DialogueButton(xOffset, yOffset + (10 * i), GUI_WIDTH, 10, responseOptions[i], btn -> test()));
+		for(int i = 0; i < responseOptions.length; i++)
+		{
+			int optionIndex = i;
+			Button.IPressable lambda = btn -> {
+				MSPacketHandler.sendToServer(new DialogueOptionPacket(optionIndex));
+				close();
+			};
+			addButton(new DialogueButton(xOffset, yOffset + (10 * i), GUI_WIDTH, 10, responseOptions[i], lambda));
 		}
+		
 		this.changeFocus(true);
 	}
 	
@@ -172,12 +163,12 @@ public class DialogueScreen extends Screen
 		frame = 1;
 	}
 	
-	private void close()
+	public void close()
 	{
-		this.minecraft.displayGuiScreen((Screen) null);
+		this.minecraft.displayGuiScreen(null);
 	}
 	
-	class DialogueButton extends ExtendedButton
+	static class DialogueButton extends ExtendedButton
 	{
 		
 		DialogueButton(int xPos, int yPos, int width, int height, String displayString, IPressable handler)
@@ -195,13 +186,13 @@ public class DialogueScreen extends Screen
 			
 			if(isHovered)
 			{
-				color = playerTextColor;
+				color = 0xFFFFFF;
 			}
 			
 			if(isFocused())
 			{
 				buttonText = "> " + buttonText;
-				color = playerTextColor;
+				color = 0xFFFFFF;
 				offset = 9;
 			}
 			
