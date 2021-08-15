@@ -26,7 +26,7 @@ import net.minecraft.world.World;
 public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 {
 	private PartGroup partGroup;
-
+	
 	public GiclopsEntity(EntityType<? extends GiclopsEntity> type, World world)
 	{
 		super(type, world, 7);
@@ -77,7 +77,7 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	{
 		return GristHelper.generateUnderlingGristDrops(this, damageMap, 10);
 	}
-
+	
 	@Override
 	protected int getVitalityGel()
 	{
@@ -103,7 +103,7 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	}
 	
 	@Override
-	public void setPositionAndRotation(double par1, double par3, double par5, float par7, float par8) 
+	public void setPositionAndRotation(double par1, double par3, double par5, float par7, float par8)
 	{
 		super.setPositionAndRotation(par1, par3, par5, par7, par8);
 		partGroup.updatePositions();
@@ -115,16 +115,16 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 		if(!(par1Entity instanceof EntityBigPart))
 			super.collideWithEntity(par1Entity);
 	}
-
+	
 	@Override
 	public void applyEntityCollision(Entity entityIn)
 	{
-	    if(!entityIn.noClip)
+		if(!entityIn.noClip)
 		{
 			partGroup.applyCollision(entityIn);
 		}
 	}
-
+	
 	@Override
 	public void onDeath(DamageSource cause)
 	{
@@ -132,7 +132,7 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 		Entity entity = cause.getTrueSource();
 		if(this.dead && !this.world.isRemote)
 		{
-			computePlayerProgress((int) (500* getGristType().getPower() + 1000));
+			computePlayerProgress((int) (200 + 3 * getGristType().getPower()));
 			if(entity instanceof ServerPlayerEntity)
 			{
 				Echeladder ladder = PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder();
@@ -147,7 +147,7 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	{
 		return false;
 	}
-
+	
 	//Only pay attention to the top for water
 	@Override
 	public boolean handleWaterMovement()
@@ -164,7 +164,7 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	{
 		AxisAlignedBB realBox = this.getBoundingBox();
 		double minX = pos.x > 0 ? realBox.maxX - pos.x : realBox.minX;
-/*				y > 0 ? realBox.maxY - y : realBox.minY,*/
+		/*				y > 0 ? realBox.maxY - y : realBox.minY,*/
 		double minY = realBox.minY;
 		double minZ = pos.z > 0 ? realBox.maxZ - pos.z : realBox.minZ;
 		double maxX = pos.x < 0 ? realBox.minX - pos.x : realBox.maxX;
@@ -176,13 +176,13 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 		this.setBoundingBox(realBox.offset(changedBox.minX - minX, changedBox.minY - minY, changedBox.minZ - minZ));
 		this.resetPositionToBB();
 	}
-
+	
 	@Override
 	public PartGroup getGroup()
 	{
 		return partGroup;
 	}
-
+	
 	/**
 	 * Will get destroyed next tick.
 	 */
@@ -192,7 +192,7 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 		super.remove();
 		partGroup.updatePositions();
 	}
-
+	
 	@Override
 	public boolean canBeCollidedWith()
 	{

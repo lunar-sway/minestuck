@@ -64,7 +64,7 @@ public class ImpEntity extends UnderlingEntity
 	@Override
 	protected int getVitalityGel()
 	{
-		return rand.nextInt(3)+1;
+		return rand.nextInt(3) + 1;
 	}
 	
 	@Override
@@ -83,7 +83,7 @@ public class ImpEntity extends UnderlingEntity
 		Entity entity = cause.getTrueSource();
 		if(this.dead && !this.world.isRemote)
 		{
-			computePlayerProgress((int) (2 + 3* getGristType().getPower()));
+			computePlayerProgress((int) (5 + 2 * getGristType().getPower()));
 			if(entity instanceof ServerPlayerEntity)
 			{
 				Echeladder ladder = PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder();
