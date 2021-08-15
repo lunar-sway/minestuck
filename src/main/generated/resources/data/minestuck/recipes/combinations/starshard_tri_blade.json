@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:light_of_my_knife"
+  },
+  "input2": {
+    "item": "minecraft:nether_star"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:starshard_tri_blade"
+  }
+}
