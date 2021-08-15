@@ -82,7 +82,7 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 	}
 	
 	@Override
-	public World getWorld() 
+	public World getWorld()
 	{
 		return this.world;
 	}
@@ -93,47 +93,49 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 		super.baseTick();
 		this.updatePartPositions();
 	}
-
+	
 	@Override
-	public boolean attackEntityFromPart(Entity entityPart, DamageSource source, float damage) 
+	public boolean attackEntityFromPart(Entity entityPart, DamageSource source, float damage)
 	{
 		return this.attackEntityFrom(source, damage);
 	}
 	
 	@Override
-	protected void collideWithEntity(Entity par1Entity) 
+	protected void collideWithEntity(Entity par1Entity)
 	{
 		if(par1Entity != this.tail)
 			super.collideWithEntity(par1Entity);
 	}
+	
 	@Override
-	public void setPositionAndRotation(double par1, double par3, double par5, float par7, float par8) {
+	public void setPositionAndRotation(double par1, double par3, double par5, float par7, float par8)
+	{
 		super.setPositionAndRotation(par1, par3, par5, par7, par8);
 		this.updatePartPositions();
 	}
 	
 	@Override
-	public void updatePartPositions() 
+	public void updatePartPositions()
 	{
 		if(tail == null)
 			return;
 		float f1 = this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw);
-		double tailPosX = (this.getPosX() +  Math.sin(f1 / 180.0 * Math.PI) * tail.getWidth());
+		double tailPosX = (this.getPosX() + Math.sin(f1 / 180.0 * Math.PI) * tail.getWidth());
 		double tailPosZ = (this.getPosZ() + -Math.cos(f1 / 180.0 * Math.PI) * tail.getWidth());
-
+		
 		tail.setPositionAndRotation(tailPosX, this.getPosY(), tailPosZ, this.rotationYaw, this.rotationPitch);
 	}
-
+	
 	@Override
-	public void addPart(Entity entityPart, int id) 
+	public void addPart(Entity entityPart, int id)
 	{
 		this.tail = (UnderlingPartEntity) entityPart;
 	}
-
+	
 	@Override
-	public void onPartDeath(Entity entityPart, int id) 
+	public void onPartDeath(Entity entityPart, int id)
 	{
-
+	
 	}
 	
 	@Override
@@ -143,7 +145,7 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 		Entity entity = cause.getTrueSource();
 		if(this.dead && !this.world.isRemote)
 		{
-			computePlayerProgress((int) (100* getGristType().getPower() + 160));
+			computePlayerProgress((int) (30 + 2.4 * getGristType().getPower())); //most basilisks stop giving xp at rung 32
 			if(entity instanceof ServerPlayerEntity)
 			{
 				Echeladder ladder = PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder();
