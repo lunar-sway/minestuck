@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:toothripper"
+  },
+  "grist_cost": {
+    "minestuck:rust": 73,
+    "minestuck:caulk": 121
+  }
+}

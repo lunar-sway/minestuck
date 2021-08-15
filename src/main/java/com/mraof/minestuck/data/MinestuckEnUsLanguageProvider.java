@@ -447,6 +447,12 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.SHATTER_BACON, "ShatterBacon");
 		addTooltip(MSItems.SHATTER_BACON, "This thing is so unspeakably greasy you are having a hard time even holding it.");
 		addExtra(MSItems.SHATTER_BACON, OnHitEffect.SORD_DROP_MESSAGE, "The grease caused the ShatterBacon to slip from your grasp!");
+		add(MSItems.DAGGER, "Dagger");
+		add(MSItems.NIFE, "nife.");
+		addExtra(MSItems.NIFE, OnHitEffect.SORD_DROP_MESSAGE, "Whoopsies doopsies you dwopped the nife!!");
+		add(MSItems.LIGHT_OF_MY_KNIFE, "Light Of My Knife");
+		add(MSItems.STARSHARD_TRI_BLADE, "Starshard Tri-Blade");
+		add(MSItems.TOOTHRIPPER, "Toothripper");
 		add(MSItems.BATLEACKS, "batleacks!!");
 		addTooltip(MSItems.BATLEACKS, "A shitty axe. Not much more to it.");
 		addExtra(MSItems.BATLEACKS, OnHitEffect.SORD_DROP_MESSAGE, "The shittiness of the batleacks made it phase through your hand");

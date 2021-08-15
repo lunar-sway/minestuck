@@ -16,13 +16,14 @@ import net.minecraft.entity.item.ArmorStandEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.*;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.*;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -235,6 +236,35 @@ public interface OnHitEffect
 			}
 			
 			target.attackEntityFrom(source.setDamageBypassesArmor(), damage);
+		};
+	}
+	
+	/**
+	 * Checks for attacks within three blocks of a point three blocks behind the targets back(covering the whole standard attack range of a player)
+	*/
+	static OnHitEffect backstab(float backstabDamage)
+	{
+		return (stack, target, attacker) -> {
+			Vec3i reversedBackVec = target.getHorizontalFacing().getOpposite().getDirectionVec();
+			Vec3i targetBackVec3i = target.getPosition().add(reversedBackVec).add(reversedBackVec).add(reversedBackVec); //three blocks behind the targets back
+			if(targetBackVec3i.withinDistance(attacker.getPosition(), 3))
+			{
+				for(int i = 0; i < 4; i++)
+				{
+					target.world.addParticle(ParticleTypes.DAMAGE_INDICATOR, true, target.getPosition().add(reversedBackVec).getX(), target.getEyePosition(1F).y - 1, target.getPosition().add(reversedBackVec).getZ(), 0.1,0.1,0.1);
+				}
+				
+				DamageSource source;
+				if(attacker instanceof PlayerEntity)
+					source = DamageSource.causePlayerDamage((PlayerEntity) attacker);
+				else source = DamageSource.causeMobDamage(attacker);
+				
+				Item usedItem = stack.getItem();
+				if(usedItem instanceof WeaponItem)
+				{
+					target.attackEntityFrom(source, backstabDamage);
+				}
+			}
 		};
 	}
 	

@@ -326,6 +326,12 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.SHATTER_BACON).input(Items.PORKCHOP).and().input(MSItems.SHATTER_BEACON).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CALEDFWLCH).input(MSItems.ROYAL_DERINGER).or().input(MSItems.CUEBALL).build(consumer);
 		
+		CombinationRecipeBuilder.of(MSItems.NIFE).input(MSItems.DAGGER).and().input(MSItems.SBAHJ_POSTER).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.LIGHT_OF_MY_KNIFE).input(MSItems.DAGGER).and().input(Items.LANTERN).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.STARSHARD_TRI_BLADE).input(MSItems.LIGHT_OF_MY_KNIFE).or().input(Items.NETHER_STAR).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.TOOTHRIPPER).input(MSItems.DAGGER).or().namedInput(Items.ROTTEN_FLESH).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.TOOTHRIPPER).input(MSItems.DAGGER).or().namedInput(Items.BONE).build(consumer);
+		
 		CombinationRecipeBuilder.of(MSItems.BATLEACKS).namedInput(MSItems.BATTLEAXE).and().input(MSItems.SBAHJ_POSTER).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.BATLEACKS).namedInput(Items.WOODEN_AXE).and().input(MSItems.SBAHJ_POSTER).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.COPSE_CRUSHER).input(Items.IRON_AXE).and().input(Items.PISTON).build(consumer);
