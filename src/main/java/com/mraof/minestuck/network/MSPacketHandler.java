@@ -3,6 +3,7 @@ package com.mraof.minestuck.network;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.computer.*;
 import com.mraof.minestuck.network.data.*;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
@@ -56,6 +57,7 @@ public class MSPacketHandler
 		registerMessage(EffectTogglePacket.class, EffectTogglePacket::decode);
 		registerMessage(StoneTabletPacket.class, StoneTabletPacket::decode);
 		registerMessage(MagicEffectPacket.class, MagicEffectPacket::decode);
+		registerMessage(LotusFlowerPacket.class, LotusFlowerPacket::decode);
 		registerMessage(DialogueUpdatePacket.class, DialogueUpdatePacket::decode);
 		registerMessage(DialogueOptionPacket.class, DialogueOptionPacket::decode);
 	}
@@ -89,5 +91,10 @@ public class MSPacketHandler
 	public static <MSG> void sendToServer(MSG message)
 	{
 		INSTANCE.sendToServer(message);
+	}
+	
+	public static <MSG> void sendToTracking(MSG message, Entity entity)
+	{
+		INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), message);
 	}
 }

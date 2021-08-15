@@ -9,7 +9,6 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.material.PushReaction;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
@@ -35,7 +34,7 @@ public class StoneTabletBlock extends DecorBlock //stone slab is the same as sto
 	public StoneTabletBlock(Properties properties)
 	{
 		super(properties, MSBlockShapes.STONE_TABLET);
-		setDefaultState(this.stateContainer.getBaseState().with(CARVED, false));
+		setDefaultState(getDefaultState().with(CARVED, false)); //defaultState set in decor block has waterlogged
 	}
 	
 	@Override
@@ -129,7 +128,7 @@ public class StoneTabletBlock extends DecorBlock //stone slab is the same as sto
 	@Override
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
 	{
-		builder.add(FACING);
+		super.fillStateContainer(builder);
 		builder.add(CARVED);
 	}
 }

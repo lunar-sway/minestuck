@@ -293,7 +293,8 @@ public interface OnHitEffect
 			if(attacker instanceof ServerPlayerEntity)
 			{
 				Title title = PlayerSavedData.getData((ServerPlayerEntity) attacker).getTitle();
-				if(title != null && title.getHeroAspect() == aspect)
+				
+				if((title != null && title.getHeroAspect() == aspect) || ((ServerPlayerEntity) attacker).isCreative())
 					effect.onHit(stack, target, attacker);
 			}
 		};

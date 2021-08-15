@@ -103,6 +103,17 @@ public interface ItemRightClickEffect
 					}
 				}
 				
+				AxisAlignedBB axisalignedbb = player.getBoundingBox().grow(2 * mod, mod, 2 * mod);
+				List<LivingEntity> list = player.world.getEntitiesWithinAABB(LivingEntity.class, axisalignedbb);
+				for(LivingEntity livingentity : list)
+				{
+					if(livingentity.getFireTimer() > 0)
+					{
+						livingentity.extinguish();
+						world.playSound(null, livingentity.getPosX(), livingentity.getPosY(), livingentity.getPosZ(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.NEUTRAL, 0.5F, 1.0F);
+					}
+				}
+				
 				player.swing(hand, true);
 				player.getCooldownTracker().setCooldown(itemStackIn.getItem(), 15);
 				itemStackIn.damageItem(1, player, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));

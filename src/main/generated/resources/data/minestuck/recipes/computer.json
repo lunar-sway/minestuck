@@ -1,18 +1,22 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "iii",
-    "iei",
-    "iii"
-  ],
-  "key": {
-    "e": {
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
       "item": "minestuck:energy_core"
     },
-    "i": {
-      "tag": "forge:ingots/iron"
+    {
+      "item": "minestuck:computer_parts"
+    },
+    {
+      "item": "minecraft:quartz"
+    },
+    {
+      "item": "minecraft:redstone"
+    },
+    {
+      "item": "minestuck:raw_cruxite"
     }
-  },
+  ],
   "result": {
     "item": "minestuck:computer"
   }

@@ -1,0 +1,35 @@
+{
+  "parent": "minestuck:minestuck/root",
+  "display": {
+    "icon": {
+      "item": "minestuck:sburb_code"
+    },
+    "title": {
+      "translate": "advancements.minestuck.long_time_coming.title"
+    },
+    "description": {
+      "translate": "advancements.minestuck.long_time_coming.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "possess_code": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minestuck:sburb_code"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "possess_code"
+    ]
+  ]
+}
