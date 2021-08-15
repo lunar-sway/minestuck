@@ -15,9 +15,7 @@ import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
 
-import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
