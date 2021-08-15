@@ -85,7 +85,7 @@ public class OgreEntity extends UnderlingEntity
 		Entity entity = cause.getTrueSource();
 		if(this.dead && !this.world.isRemote)
 		{
-			computePlayerProgress((int) (15 + 2.2 * getGristType().getPower()));
+			computePlayerProgress((int) (15 + 2.2 * getGristType().getPower())); //most ogres stop giving xp at rung 18
 			if(entity instanceof ServerPlayerEntity)
 			{
 				Echeladder ladder = PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder();

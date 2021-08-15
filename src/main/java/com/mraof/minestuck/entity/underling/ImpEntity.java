@@ -83,7 +83,7 @@ public class ImpEntity extends UnderlingEntity
 		Entity entity = cause.getTrueSource();
 		if(this.dead && !this.world.isRemote)
 		{
-			computePlayerProgress((int) (5 + 2 * getGristType().getPower()));
+			computePlayerProgress((int) (5 + 2 * getGristType().getPower())); //most imps stop giving xp at rung 8
 			if(entity instanceof ServerPlayerEntity)
 			{
 				Echeladder ladder = PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder();

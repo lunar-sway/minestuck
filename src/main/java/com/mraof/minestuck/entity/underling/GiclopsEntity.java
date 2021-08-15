@@ -132,7 +132,7 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 		Entity entity = cause.getTrueSource();
 		if(this.dead && !this.world.isRemote)
 		{
-			computePlayerProgress((int) (200 + 3 * getGristType().getPower()));
+			computePlayerProgress((int) (200 + 3 * getGristType().getPower())); //still give xp up to top rung
 			if(entity instanceof ServerPlayerEntity)
 			{
 				Echeladder ladder = PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder();

@@ -145,7 +145,7 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 		Entity entity = cause.getTrueSource();
 		if(this.dead && !this.world.isRemote)
 		{
-			computePlayerProgress((int) (30 + 2.4 * getGristType().getPower()));
+			computePlayerProgress((int) (30 + 2.4 * getGristType().getPower())); //most basilisks stop giving xp at rung 32
 			if(entity instanceof ServerPlayerEntity)
 			{
 				Echeladder ladder = PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder();

@@ -36,7 +36,6 @@ public class Echeladder
 	public static final int RUNG_COUNT = 50;
 	public static final byte UNDERLING_BONUS_OFFSET = 0;
 	public static final byte ALCHEMY_BONUS_OFFSET = 15;
-	//public static final double MIN_PROGRESS_MODIFIER = 1 / 100D;
 	
 	private static final UUID echeladderHealthBoostModifierUUID = UUID.fromString("5b49a45b-ff22-4720-8f10-dfd745c3abb8");    //TODO Might be so that only one is needed, as we only add one modifier for each attribute.
 	private static final UUID echeladderDamageBoostModifierUUID = UUID.fromString("a74176fd-bf4e-4153-bb68-197dbe4109b2");
@@ -85,19 +84,18 @@ public class Echeladder
 	
 	public void increaseProgress(int exp)
 	{
-		Debug.debugf("exp before mod = %s, rung = %s, exp divided by %s", exp, rung, exp / (rung + 1) * 2 + .5D);
-		exp = (int) ((exp / (rung + 1) * 2) + .5D); //for each rung, the experience is divided and approaches 0(at infinity). That means there is a certain rung for each experience amount where it becomes less than one and no longer capable of contributing
+		//for each rung, the experience is divided and approaches 0(at infinity). That means there is a certain rung for each experience amount where it becomes less than one and no longer capable of contributing
+		exp = (int) ((exp / (rung + 1) * 2) + .5D);
 		Optional<SburbConnection> c = SkaianetHandler.get(savedData.mcServer).getPrimaryConnection(identifier, true);
 		int topRung = c.map(SburbConnection::hasEntered).orElse(false) ? RUNG_COUNT - 1 : MinestuckConfig.SERVER.preEntryRungLimit.get();
 		int expReq = getRungProgressReq();
-		Debug.debugf("exp after mod = %s, progress = %s, expReq = %s", exp, progress, expReq);
 		
-		if(rung >= topRung/* || exp < expReq * MIN_PROGRESS_MODIFIER*/)
+		if(rung >= topRung)
 			return;
 		
 		int prevRung = rung;
 		int prevExp = exp;
-		Debug.debugf("Adding %s exp to player %s's echeladder (previously at rung %s progress %s)", exp, identifier.getUsername(), rung, progress);
+		Debug.debugf("Adding %s exp(modified) to player %s's echeladder (previously at rung %s progress %s/%s)", exp, identifier.getUsername(), rung, progress, expReq);
 		long boondollarsGained = 0;
 		
 		increment:
@@ -116,7 +114,6 @@ public class Echeladder
 					exp = (int) (exp / 1.5);
 				Debug.debugf("Increased rung to %s, remaining exp is %s", rung, exp);
 			}
-			//Debug.debugf("expReq / 5000 = %s, expReq = %s", expReq / 95000, expReq);
 			if(exp >= 1)
 			{
 				progress += exp;
@@ -124,7 +121,6 @@ public class Echeladder
 				Debug.debugf("Added remainder exp to progress, which is now at %s", progress);
 			} else
 				Debug.debugf("Remaining exp %s is below 1, and will therefore be ignored", exp);
-			//Debug.debugf("Remaining exp %s is below the threshold of 1/15000 out of the exp requirement, which is %s, and will therefore be ignored", exp, expReq / 95000);
 		}
 		
 		savedData.getData(identifier).addBoondollars(boondollarsGained);
@@ -227,7 +223,7 @@ public class Echeladder
 	
 	public static double attackBonus(int rung)
 	{
-		return Math.pow(1.015, rung) - 1;    //rung*0.05D; 8/14/21 was Math.pow(1.035, rung) - 1
+		return Math.pow(1.015, rung) - 1;
 	}
 	
 	public static int healthBoost(int rung)

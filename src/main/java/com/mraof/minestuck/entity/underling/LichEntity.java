@@ -84,7 +84,7 @@ public class LichEntity extends UnderlingEntity
 		Entity entity = cause.getTrueSource();
 		if(this.dead && !this.world.isRemote)
 		{
-			computePlayerProgress((int) (50 + 2.6 * getGristType().getPower()));
+			computePlayerProgress((int) (50 + 2.6 * getGristType().getPower())); //still give xp up to top rung
 			if(entity instanceof ServerPlayerEntity)
 			{
 				Echeladder ladder = PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder();
