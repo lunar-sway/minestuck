@@ -79,7 +79,7 @@ public class Echeladder
 	
 	private int getRungProgressReq()
 	{
-		return (int) (Math.pow(1.3, rung / 2D) + 25 * rung + 10);
+		return 15 * rung + 10;
 	}
 	
 	public void increaseProgress(int exp)
