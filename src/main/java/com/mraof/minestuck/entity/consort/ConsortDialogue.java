@@ -316,7 +316,7 @@ public class ConsortDialogue
 				new SingleMessage[]{new SingleMessage("title_presence.iam", "player_title"), new SingleMessage("title_presence.agree")},
 				new MessageType[]{new SingleMessage("title_presence.iam_answer", "consort_sound_2"), new SingleMessage("thanks")})).consort(EnumConsort.IGUANA, EnumConsort.SALAMANDER).reqLand();
 		
-		addMessage(new ChoiceMessage(new ChainMessage(new SingleMessage("shady_offer"), new SingleMessage("shady_offer.desc")),
+		addMessage(new ChoiceMessage(new ChainMessage(new SingleMessage("shady_offer"), new DescriptionMessage("shady_offer.desc")),
 				new SingleMessage[]
 						{
 								new SingleMessage("shady_offer.buy"),

@@ -451,7 +451,7 @@ public abstract class MessageType
 				message.showMessage(consort, player);
 			} else
 			{
-				new SingleMessage("cant_afford").showMessage(consort, player);
+				new DescriptionMessage("cant_afford").showMessage(consort, player);
 			}
 		}
 		
