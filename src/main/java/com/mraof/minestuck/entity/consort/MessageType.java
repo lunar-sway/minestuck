@@ -30,10 +30,8 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Class where message content is defined. Also things such as if it's a chain
@@ -51,7 +49,7 @@ public abstract class MessageType
 	
 	public abstract void showMessage(ConsortEntity consort, ServerPlayerEntity player);
 	
-	public abstract DialogueCard[] getDialogueCards(ConsortEntity consort, ServerPlayerEntity player);
+	public abstract List<DialogueCard> getDialogueCards(ConsortEntity consort, ServerPlayerEntity player);
 	
 	protected static ITextComponent createMessage(ConsortEntity consort, ServerPlayerEntity player, String unlocalizedMessage, String[] args)
 	{
@@ -161,11 +159,11 @@ public abstract class MessageType
 		}
 		
 		@Override
-		public DialogueCard[] getDialogueCards(ConsortEntity consort, ServerPlayerEntity player)
+		public List<DialogueCard> getDialogueCards(ConsortEntity consort, ServerPlayerEntity player)
 		{
 			ITextComponent message = createMessage(consort, player, unlocalizedMessage, args);
 			String resourcePath = consort.getConsortType().getDialogueSpriteResourcePath();
-			return new DialogueCard[]{new DialogueCard(message.getFormattedText(), resourcePath, consort.getConsortType().getColor())};
+			return Collections.singletonList(new DialogueCard(message.getFormattedText(), resourcePath, consort.getConsortType().getColor()));
 		}
 	}
 	
@@ -185,11 +183,11 @@ public abstract class MessageType
 		}
 		
 		@Override
-		public DialogueCard[] getDialogueCards(ConsortEntity consort, ServerPlayerEntity player)
+		public List<DialogueCard> getDialogueCards(ConsortEntity consort, ServerPlayerEntity player)
 		{
 			ITextComponent message = createMessage(consort, player, unlocalizedMessage, args);
 			message.getStyle().setItalic(true);
-			return new DialogueCard[]{new DialogueCard(message.getFormattedText(), null, 0)};
+			return Collections.singletonList(new DialogueCard(message.getFormattedText(), null, 0));
 		}
 	}
 	
@@ -232,21 +230,21 @@ public abstract class MessageType
 		@Override
 		public void showMessage(ConsortEntity consort, ServerPlayerEntity player)
 		{
-			DialogueCard[] dialogueCards = getDialogueCards(consort, player);
+			List<DialogueCard> dialogueCards = getDialogueCards(consort, player);
 			PlayerSavedData.getData(player).setDialogue(consort, this);
 			MSPacketHandler.sendToPlayer(new DialogueUpdatePacket(dialogueCards, null), player);
 		}
 		
 		@Override
-		public DialogueCard[] getDialogueCards(ConsortEntity consort, ServerPlayerEntity player)
+		public List<DialogueCard> getDialogueCards(ConsortEntity consort, ServerPlayerEntity player)
 		{
 			List<DialogueCard> messages = new LinkedList<>();
 			for(SingleMessage chainable : this.messages)
 			{
-				messages.addAll(Arrays.asList(chainable.getDialogueCards(consort, player)));
+				messages.addAll(chainable.getDialogueCards(consort, player));
 			}
 			
-			return messages.toArray(new DialogueCard[0]);
+			return messages;
 		}
 	}
 	
@@ -285,7 +283,7 @@ public abstract class MessageType
 		}
 		
 		@Override
-		public DialogueCard[] getDialogueCards(ConsortEntity consort, ServerPlayerEntity player)
+		public List<DialogueCard> getDialogueCards(ConsortEntity consort, ServerPlayerEntity player)
 		{
 			if(condition.testFor(consort, player))
 				return message1.getDialogueCards(consort, player);
@@ -326,7 +324,7 @@ public abstract class MessageType
 		}
 		
 		@Override
-		public DialogueCard[] getDialogueCards(ConsortEntity consort, ServerPlayerEntity player)
+		public List<DialogueCard> getDialogueCards(ConsortEntity consort, ServerPlayerEntity player)
 		{
 			int i = consort.getRNG().nextInt(messages.length);
 			return messages[i].getDialogueCards(consort, player);
@@ -380,13 +378,13 @@ public abstract class MessageType
 		@Override
 		public void showMessage(ConsortEntity consort, ServerPlayerEntity player)
 		{
-			String[] localizedOptions = Arrays.stream(options).map(option -> createMessage(consort, player, option.unlocalizedMessage, option.args).getFormattedText()).toArray(String[]::new);
+			List<String> localizedOptions = Arrays.stream(options).map(option -> createMessage(consort, player, option.unlocalizedMessage, option.args).getFormattedText()).collect(Collectors.toList());
 			PlayerSavedData.getData(player).setDialogue(consort, this);
 			MSPacketHandler.sendToPlayer(new DialogueUpdatePacket(message.getDialogueCards(consort, player), localizedOptions), player);
 		}
 		
 		@Override
-		public DialogueCard[] getDialogueCards(ConsortEntity consort, ServerPlayerEntity player)
+		public List<DialogueCard> getDialogueCards(ConsortEntity consort, ServerPlayerEntity player)
 		{
 			return message.getDialogueCards(consort, player);
 		}
@@ -458,7 +456,7 @@ public abstract class MessageType
 		}
 		
 		@Override
-		public DialogueCard[] getDialogueCards(ConsortEntity consort, ServerPlayerEntity player)
+		public List<DialogueCard> getDialogueCards(ConsortEntity consort, ServerPlayerEntity player)
 		{
 			return message.getDialogueCards(consort, player);
 		}
@@ -567,9 +565,9 @@ public abstract class MessageType
 		}
 		
 		@Override
-		public DialogueCard[] getDialogueCards(ConsortEntity consort, ServerPlayerEntity player)
+		public List<DialogueCard> getDialogueCards(ConsortEntity consort, ServerPlayerEntity player)
 		{
-			return new DialogueCard[0];
+			return defaultMessage.getDialogueCards(consort, player);
 		}
 		
 		private boolean lookFor(ItemStack stack, ServerPlayerEntity player)
@@ -662,7 +660,7 @@ public abstract class MessageType
 		}
 		
 		@Override
-		public DialogueCard[] getDialogueCards(ConsortEntity consort, ServerPlayerEntity player)
+		public List<DialogueCard> getDialogueCards(ConsortEntity consort, ServerPlayerEntity player)
 		{
 			return message.getDialogueCards(consort, player);
 		}

@@ -13,6 +13,8 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
 import org.lwjgl.glfw.GLFW;
 
+import java.util.List;
+
 public class DialogueScreen extends Screen
 {
 	private static final ResourceLocation BACKGROUND = new ResourceLocation("minestuck", "textures/gui/dialogue.png");
@@ -21,15 +23,15 @@ public class DialogueScreen extends Screen
 	private static final int GUI_HEIGHT = 106;
 	private static final int PORTRAIT_SIZE = 32;
 	
-	private DialogueCard[] dialogueCards;
-	private String[] responseOptions;
+	private final List<DialogueCard> dialogueCards;
+	private final List<String> responseOptions;
 	
 	private String renderedText;
 	private int currentCardIndex;
 	private boolean doneWriting;
 	private int frame;
 	
-	public DialogueScreen(DialogueCard[] dialogueCards, String[] responseOptions)
+	public DialogueScreen(List<DialogueCard> dialogueCards, List<String> responseOptions)
 	{
 		super(new TranslationTextComponent("minestuck.dialogue"));
 		this.dialogueCards = dialogueCards;
@@ -51,7 +53,7 @@ public class DialogueScreen extends Screen
 		this.minecraft.getTextureManager().bindTexture(BACKGROUND);
 		this.blit(xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 		
-		DialogueCard currentDialogue = dialogueCards[currentCardIndex];
+		DialogueCard currentDialogue = dialogueCards.get(currentCardIndex);
 		font.drawSplitString(renderedText, leftStart, yOffset + 12, GUI_WIDTH - PORTRAIT_SIZE - 28, currentDialogue.getTextColor());
 		ResourceLocation portrait = currentDialogue.getPortraitResource();
 		
@@ -69,13 +71,13 @@ public class DialogueScreen extends Screen
 	{
 		if(!doneWriting)
 		{
-			String text = dialogueCards[currentCardIndex].getText();
+			String text = dialogueCards.get(currentCardIndex).getText();
 			int amount = Math.min(frame * MinestuckConfig.CLIENT.dialogueSpeed.get(), text.length());
 			
 			if(amount == text.length())
 			{
 				doneWriting = true;
-				if(currentCardIndex >= dialogueCards.length - 1)
+				if(currentCardIndex >= dialogueCards.size() - 1)
 				{
 					addOptions();
 				}
@@ -93,15 +95,15 @@ public class DialogueScreen extends Screen
 		{
 			if(!this.doneWriting)
 			{
-				renderedText = dialogueCards[currentCardIndex].getText();
+				renderedText = dialogueCards.get(currentCardIndex).getText();
 				doneWriting = true;
-				if(currentCardIndex >= dialogueCards.length - 1)
+				if(currentCardIndex >= dialogueCards.size() - 1)
 				{
 					addOptions();
 				}
 				
 				return false;
-			} else if(currentCardIndex < dialogueCards.length - 1)
+			} else if(currentCardIndex < dialogueCards.size() - 1)
 			{
 				currentCardIndex++;
 				resetWriter();
@@ -135,14 +137,14 @@ public class DialogueScreen extends Screen
 		int xOffset = ((width - GUI_WIDTH) / 2) + PORTRAIT_SIZE + 16;
 		int yOffset = ((height - GUI_HEIGHT) / 2) + GUI_HEIGHT + 8;
 		
-		for(int i = 0; i < responseOptions.length; i++)
+		for(int i = 0; i < responseOptions.size(); i++)
 		{
 			int optionIndex = i;
 			Button.IPressable lambda = btn -> {
 				MSPacketHandler.sendToServer(new DialogueOptionPacket(optionIndex));
 				close();
 			};
-			addButton(new DialogueButton(xOffset, yOffset + (10 * i), GUI_WIDTH, 10, responseOptions[i], lambda));
+			addButton(new DialogueButton(xOffset, yOffset + (10 * i), GUI_WIDTH, 10, responseOptions.get(i), lambda));
 		}
 		
 		this.changeFocus(true);

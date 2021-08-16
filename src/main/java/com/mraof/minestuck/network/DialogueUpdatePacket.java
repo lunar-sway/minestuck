@@ -5,23 +5,25 @@ import com.mraof.minestuck.entity.consort.DialogueCard;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 public class DialogueUpdatePacket implements PlayToClientPacket
 {
-	private final DialogueCard[] dialogueCards;
-	private final String[] localizedOptions;
+	private final List<DialogueCard> dialogueCards;
+	private final List<String> localizedOptions;
 	
-	public DialogueUpdatePacket(DialogueCard[] dialogueCards, String[] localizedOptions)
+	public DialogueUpdatePacket(List<DialogueCard> dialogueCards, List<String> localizedOptions)
 	{
-		this.dialogueCards = dialogueCards != null ? dialogueCards : new DialogueCard[0];
-		this.localizedOptions = localizedOptions != null ? localizedOptions : new String[0];
+		this.dialogueCards = dialogueCards != null ? dialogueCards : new ArrayList<>();
+		this.localizedOptions = localizedOptions != null ? localizedOptions : new ArrayList<>();
 	}
 	
 	@Override
 	public void encode(PacketBuffer buffer)
 	{
-		buffer.writeInt(dialogueCards.length);
+		buffer.writeInt(dialogueCards.size());
 		for(DialogueCard item : dialogueCards)
 		{
 			buffer.writeString(item.getText());
@@ -29,7 +31,7 @@ public class DialogueUpdatePacket implements PlayToClientPacket
 			buffer.writeInt(item.getTextColor());
 		}
 		
-		buffer.writeInt(localizedOptions.length);
+		buffer.writeInt(localizedOptions.size());
 		for(String item : localizedOptions)
 		{
 			buffer.writeString(item);
@@ -45,12 +47,12 @@ public class DialogueUpdatePacket implements PlayToClientPacket
 			cards.add(new DialogueCard(buffer.readString(), buffer.readString(), buffer.readInt()));
 		}
 		
-		String[] localizedOptions = readStringArray(buffer);
+		List<String> localizedOptions = readStringList(buffer);
 		
-		return new DialogueUpdatePacket(cards.toArray(new DialogueCard[0]), localizedOptions);
+		return new DialogueUpdatePacket(cards, localizedOptions);
 	}
 	
-	private static String[] readStringArray(PacketBuffer buffer)
+	private static List<String> readStringList(PacketBuffer buffer)
 	{
 		int length = buffer.readInt();
 		LinkedList<String> strings = new LinkedList<>();
@@ -60,7 +62,7 @@ public class DialogueUpdatePacket implements PlayToClientPacket
 			strings.add(buffer.readString());
 		}
 		
-		return strings.toArray(new String[0]);
+		return strings;
 	}
 	
 	@Override
