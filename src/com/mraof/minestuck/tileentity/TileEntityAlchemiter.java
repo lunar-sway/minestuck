@@ -10,6 +10,7 @@ import com.mraof.minestuck.block.BlockAlchemiter;
 import com.mraof.minestuck.block.BlockAlchemiter.EnumParts;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.event.AlchemizeItemEvent;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.*;
@@ -28,6 +29,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 
 public class TileEntityAlchemiter extends TileEntity
 {
@@ -388,7 +390,7 @@ public class TileEntityAlchemiter extends TileEntity
 		ItemStack newItem = getOutput();
 		//Clamp quantity
 		quantity = Math.min(newItem.getMaxStackSize() * MinestuckConfig.alchemiterMaxStacks, Math.max(1, quantity));
-		
+
 		EnumFacing facing = world.getBlockState(pos).getValue(BlockAlchemiter.DIRECTION);
 		//get the position to spawn the item
 		BlockPos spawnPos = this.getPos().offset(facing).offset(facing.rotateY());
@@ -401,11 +403,13 @@ public class TileEntityAlchemiter extends TileEntity
 			newItem.setItemDamage(0);
 		//get the grist cost
 		GristSet cost = getGristCost(quantity);
-		
+
 		boolean canAfford = GristHelper.canAfford(MinestuckPlayerData.getGristSet(player), cost);
+		AlchemizeItemEvent alchemizeItemEvent = new AlchemizeItemEvent(world, spawnPos, this, dowel, newItem);
 		
-		if(canAfford)
+		if(canAfford && MinecraftForge.EVENT_BUS.post(alchemizeItemEvent))
 		{
+			newItem = alchemizeItemEvent.getResultItem();
 			while(quantity > 0)
 			{
 				ItemStack stack = newItem.copy();
