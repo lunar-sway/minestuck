@@ -8,10 +8,12 @@ import javax.annotation.Nonnull;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
 
+import com.mraof.minestuck.event.AlchemyCombinationEvent;
 import com.mraof.minestuck.util.Debug;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class CombinationRegistry {
@@ -117,32 +119,37 @@ public class CombinationRegistry {
 	{
 		ItemStack item;
 		if (input1.isEmpty() || input2.isEmpty()) {return ItemStack.EMPTY;}
-		
-		if((item = getCombination(input1.getItem(), input1.getItemDamage(), input2.getItem(), input2.getItemDamage(), mode)).isEmpty())
-		{
-			String[] itemNames2 = getDictionaryNames(input2);
-			
+
+		String[] itemNames1 = getDictionaryNames(input1);
+		String[] itemNames2 = getDictionaryNames(input2);
+
+		item = getCombination(input1.getItem(), input1.getItemDamage(), input2.getItem(), input2.getItemDamage(), mode);
+
+		if(item.isEmpty())
 			for(String str2 : itemNames2)
 				if(!(item = getCombination(input1.getItem(), input1.getItemDamage(), str2, OreDictionary.WILDCARD_VALUE, mode)).isEmpty())
-					return item;
-			
-			String[] itemNames1 = getDictionaryNames(input1);
+					break;
+
+		if(item.isEmpty())
 			for(String str1 : itemNames1)
 				if(!(item = getCombination(str1, OreDictionary.WILDCARD_VALUE, input2.getItem(), input2.getItemDamage(), mode)).isEmpty())
-					return item;
-			
+					break;
+
+		if(item.isEmpty())
 			for(String str1 : itemNames1)
 				for(String str2 : itemNames2)
 					if(!(item = getCombination(str1, OreDictionary.WILDCARD_VALUE, str2, OreDictionary.WILDCARD_VALUE, mode)).isEmpty())
-						return item;
-		}
-		
+						break;
+
 		if(item.isEmpty())
 			if(input1.getItem().equals(Item.getItemFromBlock(MinestuckBlocks.genericObject)))
-				return mode == Mode.MODE_AND ? input1 : input2;
+				item = mode == Mode.MODE_AND ? input1 : input2;
 			else if(input2.getItem().equals(Item.getItemFromBlock(MinestuckBlocks.genericObject)))
-				return mode == Mode.MODE_AND ? input2 : input1;
-		return item;
+				item = mode == Mode.MODE_AND ? input2 : input1;
+
+		AlchemyCombinationEvent alchemyCombinationEvent = new AlchemyCombinationEvent(input1, input2, item);
+		MinecraftForge.EVENT_BUS.post(alchemyCombinationEvent);
+		return alchemyCombinationEvent.getResultItem();
 	}
 	
 	@Nonnull
