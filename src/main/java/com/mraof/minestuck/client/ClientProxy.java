@@ -44,10 +44,10 @@ public class ClientProxy
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.FROG, FrogRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.HOLOGRAM, HologramRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.LOTUS_FLOWER, LotusFlowerRenderer::new);
-		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.NAKAGATOR, manager -> new SimpleTexturedEntityRenderer<>(manager, new NakagatorModel<>(), 0.5F));
-		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.SALAMANDER, manager -> new SimpleTexturedEntityRenderer<>(manager, new SalamanderModel<>(), 0.5F));
-		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.IGUANA, manager -> new SimpleTexturedEntityRenderer<>(manager, new IguanaModel<>(), 0.5F));
-		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.TURTLE, manager -> new SimpleTexturedEntityRenderer<>(manager, new TurtleModel<>(), 0.5F));
+		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.NAKAGATOR, IguanaRenderer::new);
+		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.SALAMANDER, IguanaRenderer::new);
+		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.IGUANA, IguanaRenderer::new);
+		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.TURTLE, TurtleRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.IMP, manager -> new UnderlingEntityRenderer<>(manager, new ImpModel<>(), 0.5F));
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.OGRE, manager -> new UnderlingEntityRenderer<>(manager, new OgreModel<>(), 2.8F));
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.BASILISK, manager -> new UnderlingEntityRenderer<>(manager, new BasiliskModel<>(), 2.8F));

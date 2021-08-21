@@ -2,11 +2,15 @@ package com.mraof.minestuck.entity.consort;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
-import com.mraof.minestuck.entity.SimpleTexturedEntity;
+import com.mraof.minestuck.entity.ai.AnimatedMoveTowardsRestrictionGoal;
+import com.mraof.minestuck.entity.ai.AnimatedPanicGoal;
 import com.mraof.minestuck.inventory.ConsortMerchantContainer;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
+import com.mraof.minestuck.network.ConsortPacket;
+import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MSNBTUtil;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
@@ -33,15 +37,24 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.util.Constants;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
+import java.util.function.Predicate;
 
-public class ConsortEntity extends SimpleTexturedEntity implements IContainerProvider
+public class ConsortEntity extends CreatureEntity implements IContainerProvider, IAnimatable
 {
-	
+	private boolean shouldLoop;
 	private final EnumConsort consortType;
 	
 	private boolean hasHadMessage = false;
@@ -75,8 +88,10 @@ public class ConsortEntity extends SimpleTexturedEntity implements IContainerPro
 	protected void registerGoals()
 	{
 		goalSelector.addGoal(0, new SwimGoal(this));
-		goalSelector.addGoal(1, new PanicGoal(this, 1.0D));
-		goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 0.6F));
+		goalSelector.addGoal(1, new AnimatedPanicGoal(this, 1.4D));
+		//goalSelector.addGoal(1, new PanicGoal(this, 1.0D));
+		goalSelector.addGoal(4, new AnimatedMoveTowardsRestrictionGoal(this, 0.6F));
+		//goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 0.6F));
 		goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 8.0F));
 		goalSelector.addGoal(7, new LookRandomlyGoal(this));
 		goalSelector.addGoal(4, new AvoidEntityGoal<>(this, PlayerEntity.class, 16F, 1.0D, 1.4D, this::shouldFleeFrom));
@@ -121,6 +136,7 @@ public class ConsortEntity extends SimpleTexturedEntity implements IContainerPro
 					if(text != null)
 						player.sendMessage(text);
 					handleConsortRepFromTalking(serverPlayer);
+					updateAndSendAnimation(Animation.TALK, false);
 					MSCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, message.getString(), this);
 				} catch(Exception e)
 				{
@@ -172,6 +188,9 @@ public class ConsortEntity extends SimpleTexturedEntity implements IContainerPro
 	public void livingTick()
 	{
 		super.livingTick();
+		
+		//goalSelector.getRunningGoals().anyMatch(EntityPredicates.)
+		
 		if(world.isRemote)
 			return;
 		
@@ -406,5 +425,92 @@ public class ConsortEntity extends SimpleTexturedEntity implements IContainerPro
 	public static boolean canConsortSpawnOn(EntityType<ConsortEntity> entityType, IWorld world, SpawnReason reason, BlockPos pos, Random random)
 	{
 		return true;
+	}
+	
+	@Nonnull
+	private ConsortEntity.Animation animation = Animation.IDLE;
+	
+	private final AnimationFactory factory = new AnimationFactory(this);
+	
+	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event)
+	{
+		//TODO the pose is working properly but no other animations show up anymore
+		if(event.isMoving())
+		{
+			event.getController().setAnimation(new AnimationBuilder()
+					.addAnimation(this.consortType.getName() + Animation.POSE.animationName, true) //Pose animation always needs to be playing in order for the other components to work correctly
+					.addAnimation(this.consortType.getName() + Animation.WALK.animationName, true)
+					.addAnimation(this.consortType.getName() + animation.animationName, shouldLoop));
+		}
+		else
+		{
+			event.getController().setAnimation(new AnimationBuilder()
+					.addAnimation(this.consortType.getName() + Animation.POSE.animationName, true) //Pose animation always needs to be playing in order for the other components to work correctly
+					.addAnimation(this.consortType.getName() + animation.animationName, shouldLoop));
+		}
+		
+		
+		Debug.debugf("is moving = %s, limb swing amount = %s", event.isMoving(), event.getLimbSwingAmount());
+		
+		
+		return PlayState.CONTINUE;
+	}
+	
+	@Override
+	public void registerControllers(AnimationData data)
+	{
+		data.addAnimationController(new AnimationController<>(this, "controller", 0, this::predicate));
+	}
+	
+	@Override
+	public AnimationFactory getFactory()
+	{
+		return this.factory;
+	}
+	
+	public enum Animation //animationName set in assets/minestuck/animations/[consort].animation.json. Animated blocks/entities also need a section in assets/minestuck/geo
+	{
+		POSE(".pose"),
+		IDLE(".walkarms"),
+		WALK(".walk"),
+		WALK_ARMS(".walkarms"),
+		TALK(".talk"),
+		PANIC(".panic"),
+		PANIC_RUN(".panic.run"),
+		DIE(".die"),
+		ARMFIX(".armfix");
+		
+		private final String animationName;
+		
+		Animation(String animationName)
+		{
+			this.animationName = animationName;
+		}
+		
+	}
+	
+	public void setAnimation(@Nonnull ConsortEntity.Animation animation)
+	{
+		this.animation = animation;
+	}
+	
+	public void setAnimationFromPacket(ConsortEntity.Animation newAnimation)
+	{
+		if(world.isRemote) //allows client-side effects tied to server-side events
+		{
+			animation = newAnimation;
+			if(animation == ConsortEntity.Animation.IDLE)
+			{
+			
+			}
+		}
+	}
+	
+	public void updateAndSendAnimation(ConsortEntity.Animation animation, boolean shouldLoop)
+	{
+		this.animation = animation;
+		this.shouldLoop = shouldLoop;
+		ConsortPacket packet = ConsortPacket.createPacket(this, animation); //this packet allows information to be exchanged between server and client where one side cant access the other easily or reliably
+		MSPacketHandler.sendToTracking(packet, this);
 	}
 }

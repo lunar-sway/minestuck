@@ -6,6 +6,7 @@ import com.mraof.minestuck.entity.carapacian.PawnEntity;
 import com.mraof.minestuck.entity.carapacian.RookEntity;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.consort.EnumConsort;
+import com.mraof.minestuck.entity.consort.TutleEntity;
 import com.mraof.minestuck.entity.item.*;
 import com.mraof.minestuck.entity.underling.*;
 import net.minecraft.entity.EntityClassification;
@@ -77,10 +78,10 @@ public final class MSEntityTypes
 	{
 		IForgeRegistry<EntityType<?>> registry = event.getRegistry();
 		register(registry, EntityType.Builder.<FrogEntity>create(FrogEntity::new, EntityClassification.CREATURE).size(0.51F, 0.51F), "frog");
-		register(registry, EntityType.Builder.create(EnumConsort.SALAMANDER::create, CONSORT).size(0.45F, 1.0F), "salamander");
-		register(registry, EntityType.Builder.create(EnumConsort.TURTLE::create, CONSORT).size(0.45F, 1.0F), "turtle");
-		register(registry, EntityType.Builder.create(EnumConsort.NAKAGATOR::create, CONSORT).size(0.45F, 1.1F), "nakagator");
-		register(registry, EntityType.Builder.create(EnumConsort.IGUANA::create, CONSORT).size(0.45F, 1.0F), "iguana");
+		register(registry, EntityType.Builder.create(EnumConsort.SALAMANDER::create, CONSORT).size(0.52F, 1.2F), "salamander");
+		register(registry, EntityType.Builder.create(EnumConsort.TURTLE::create, CONSORT).size(0.52F, 1.3F), "turtle");
+		register(registry, EntityType.Builder.create(EnumConsort.NAKAGATOR::create, CONSORT).size(0.52F, 1.2F), "nakagator");
+		register(registry, EntityType.Builder.create(EnumConsort.IGUANA::create, CONSORT).size(0.52F, 1.2F), "iguana");
 		
 		register(registry, EntityType.Builder.create(ImpEntity::new, UNDERLING).size(0.7F, 1.2F), "imp");
 		register(registry, EntityType.Builder.create(OgreEntity::new, UNDERLING).size(2.8F, 4.3F), "ogre");

@@ -58,6 +58,7 @@ public class MSPacketHandler
 		registerMessage(StoneTabletPacket.class, StoneTabletPacket::decode);
 		registerMessage(MagicEffectPacket.class, MagicEffectPacket::decode);
 		registerMessage(LotusFlowerPacket.class, LotusFlowerPacket::decode);
+		registerMessage(ConsortPacket.class, ConsortPacket::decode);
 	}
 	
 	private static int nextIndex;
