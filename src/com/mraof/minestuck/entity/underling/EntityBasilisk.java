@@ -58,13 +58,13 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	@Override
 	public GristSet getGristSpoils()
 	{
-		return GristHelper.getRandomDrop(type, 6);
+		return GristHelper.getRandomDrop(getGristType(), 6);
 	}
 	
 	@Override
 	protected float getMaximumHealth() 
 	{
-		return type != null ? 20 * type.getPower() + 85 : 1;
+		return getGristType() != null ? 20 * getGristType().getPower() + 85 : 1;
 	}
 
 	@Override
@@ -82,7 +82,7 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	@Override
 	protected double getAttackDamage()
 	{
-		return this.type.getPower()*2.7 + 6;
+		return getGristType().getPower()*2.7 + 6;
 	}
 	
 	@Override
@@ -92,7 +92,7 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	}
 	
 	@Override
-	protected void applyGristType(GristType type, boolean fullHeal)
+	public void applyGristType(GristType type, boolean fullHeal)
 	{
 		super.applyGristType(type, fullHeal);
 		this.experienceValue = (int) (6 * type.getPower() + 4);
@@ -165,9 +165,9 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	{
 		super.onDeath(cause);
 		Entity entity = cause.getTrueSource();
-		if(this.dead && !this.world.isRemote && type != null)
+		if(this.dead && !this.world.isRemote && getGristType() != null)
 		{
-			computePlayerProgress((int) (100*type.getPower() + 160));
+			computePlayerProgress((int) (100*getGristType().getPower() + 160));
 			if(entity != null && entity instanceof EntityPlayerMP && !(entity instanceof FakePlayer))
 			{
 				Echeladder ladder = MinestuckPlayerData.getData((EntityPlayerMP) entity).echeladder;

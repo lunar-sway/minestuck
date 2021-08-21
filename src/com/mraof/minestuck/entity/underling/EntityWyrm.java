@@ -68,7 +68,7 @@ public class EntityWyrm extends EntityUnderling implements IEntityMultiPart
 	@Override
 	public GristSet getGristSpoils()
 	{
-		return GristHelper.getRandomDrop(type, 87);
+		return GristHelper.getRandomDrop(getGristType(), 87);
 	}
 
 	@Override
