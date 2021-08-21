@@ -30,6 +30,7 @@ public class MinestuckSoundHandler
 	public static SoundEvent soundFrogAmbient;
 	public static SoundEvent soundFrogHurt;
 	public static SoundEvent soundFrogDeath;
+	public static SoundEvent soundFrogGold;
 	public static SoundEvent soundImpAmbient;
 	public static SoundEvent soundImpHurt;
 	public static SoundEvent soundImpDeath;
@@ -100,6 +101,8 @@ public class MinestuckSoundHandler
 		soundFrogHurt = new SoundEvent(soundLocation).setRegistryName(soundLocation);
 		soundLocation = new ResourceLocation("minestuck","frogDeath");
 		soundFrogDeath = new SoundEvent(soundLocation).setRegistryName(soundLocation);
+		soundLocation = new ResourceLocation("minestuck","frogGold");
+		soundFrogGold = new SoundEvent(soundLocation).setRegistryName(soundLocation);
 		
 		//Imps
 		soundLocation = new ResourceLocation("minestuck", "impAmbient");
@@ -164,7 +167,8 @@ public class MinestuckSoundHandler
 		event.getRegistry().register(soundFrogAmbient);
 		event.getRegistry().register(soundFrogHurt);
 		event.getRegistry().register(soundFrogDeath);
-		
+		event.getRegistry().register(soundFrogGold);
+
 		event.getRegistry().register(soundImpAmbient);
 		event.getRegistry().register(soundImpHurt);
 		event.getRegistry().register(soundImpDeath);

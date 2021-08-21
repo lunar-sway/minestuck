@@ -37,8 +37,6 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import static com.mraof.minestuck.MinestuckConfig.landAnimalSpawnRange;
-
 public class EntityFrog extends EntityMinestuck
 {
 	
@@ -113,7 +111,7 @@ public class EntityFrog extends EntityMinestuck
 				if(!player.isCreative())itemstack.shrink(1);
 
 				((WorldServer)this.world).spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX, this.posY+0.5, this.posZ, 1, 0, 0, 0, 0d);
-				this.playSound(SoundEvents.BLOCK_ANVIL_HIT, this.getSoundVolume(), ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F) * 0.8F);
+				this.playSound(MinestuckSoundHandler.soundFrogGold, this.getSoundVolume(), ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F) * 0.8F);
 				this.setType(5);
 			}
 		}
@@ -758,6 +756,6 @@ public class EntityFrog extends EntityMinestuck
 	@Override
 	protected boolean canDespawn() 
 	{
-		return true;
+		return canDespawn;
 	}
 }
