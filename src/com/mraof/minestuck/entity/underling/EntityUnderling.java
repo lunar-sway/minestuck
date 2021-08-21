@@ -9,8 +9,10 @@ import com.mraof.minestuck.entity.ai.EntityAIHurtByTargetAllied;
 import com.mraof.minestuck.entity.ai.EntityAINearestAttackableTargetWithHeight;
 import com.mraof.minestuck.entity.item.EntityGrist;
 import com.mraof.minestuck.entity.item.EntityVitalityGel;
+import com.mraof.minestuck.event.UnderlingSpoilsEvent;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
-import com.mraof.minestuck.util.*;
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.Echeladder;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -23,6 +25,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -30,9 +35,9 @@ import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
-import javax.annotation.Nonnull;
 import java.util.*;
 
 public abstract class EntityUnderling extends EntityMinestuck implements IEntityAdditionalSpawnData, IMob
@@ -41,8 +46,8 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	protected static EntityListFilter underlingSelector = new EntityListFilter(Arrays.asList(EntityImp.class, EntityOgre.class, EntityBasilisk.class, EntityLich.class, EntityGiclops.class));
 	protected EntityListFilter attackEntitySelector;
 	//The type of the underling
-	@Nonnull
-	protected GristType type = GristType.Artifact;
+	protected static final DataParameter<String> GRIST_TYPE = EntityDataManager.createKey(EntityUnderling.class, DataSerializers.STRING);
+
 	public boolean fromSpawner;
 	public boolean dropCandy;
 	
@@ -54,7 +59,13 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	{
 		super(par1World);
 	}
-	
+
+	@Override
+	protected void entityInit() {
+		super.entityInit();
+		dataManager.register(GRIST_TYPE, GristType.Artifact.getRegistryName().toString());
+	}
+
 	@Override
 	protected void initEntityAI()
 	{
@@ -81,17 +92,25 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(this.getWanderSpeed());
 	}
 	
-	protected void applyGristType(GristType type, boolean fullHeal)
+	public void applyGristType(GristType type, boolean fullHeal)
 	{
-		this.type = Objects.requireNonNull(type);
-		if(this.type.getRarity() == 0)	//Utility grist type
-			this.type = SburbHandler.getUnderlingType(this);
+		type = Objects.requireNonNull(type);
+		if(type.getRarity() == 0)	//Utility grist type
+			type = SburbHandler.getUnderlingType(this);
+
+		dataManager.set(GRIST_TYPE, type.getRegistryName().toString());
+
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(this.getMaximumHealth());
 		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(this.getAttackDamage());
 		if(fullHeal)
 			this.setHealth(this.getMaxHealth());
 	}
-	
+
+	public GristType getGristType()
+	{
+		return GristType.getTypeFromString(dataManager.get(GRIST_TYPE));
+	}
+
 	//used when getting how much grist should be dropped on death
 	public abstract GristSet getGristSpoils();
 	
@@ -118,7 +137,11 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 		super.onDeathUpdate();
 		if(this.deathTime == 20 && !this.world.isRemote)
 		{
-			GristSet grist = this.getGristSpoils();
+
+			UnderlingSpoilsEvent event = new UnderlingSpoilsEvent(this, getAttackingEntity(), getGristSpoils());
+			MinecraftForge.EVENT_BUS.post(event);
+			GristSet grist = event.getSpoils();
+
 			if(grist == null)
 				return;
 			if(fromSpawner)
@@ -161,13 +184,13 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	@Override
 	public String getTexture() 
 	{
-		return "textures/mobs/underlings/" + type.getName() + '_' + getUnderlingName() + ".png";
+		return "textures/mobs/underlings/" + getGristType().getName() + '_' + getUnderlingName() + ".png";
 	}
 	
 	@Override
 	public String getName() 
 	{
-		return I18n.translateToLocalFormatted("entity.minestuck." + getUnderlingName() + ".type", type.getDisplayName());
+		return I18n.translateToLocalFormatted("entity.minestuck." + getUnderlingName() + ".type", getGristType().getDisplayName());
 	}
 	
 	@Override
@@ -192,7 +215,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	public void writeEntityToNBT(NBTTagCompound tagCompound) 
 	{
 		super.writeEntityToNBT(tagCompound);
-		tagCompound.setString("type", type.getRegistryName().toString());
+		tagCompound.setString("type", getGristType().getRegistryName().toString());
 		tagCompound.setBoolean("spawned", fromSpawner);
 		if(hasHome())
 		{
@@ -236,7 +259,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	@Override
 	public void writeSpawnData(ByteBuf buffer)
 	{
-		buffer.writeInt(type.getId());
+		buffer.writeInt(getGristType().getId());
 	}
 	
 	@Override
@@ -249,12 +272,12 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	@Override
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingData)
 	{
-		
+
 		if(!(livingData instanceof UnderlingData))
 		{
-			if(this.type == GristType.Artifact)
+			if(this.getGristType() == GristType.Artifact)
 				applyGristType(SburbHandler.getUnderlingType(this), true);
-			livingData = new UnderlingData(this.type);
+			livingData = new UnderlingData(this.getGristType());
 		} else
 		{
 			applyGristType(((UnderlingData)livingData).type, true);
