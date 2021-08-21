@@ -259,11 +259,7 @@ public interface OnHitEffect
 					source = DamageSource.causePlayerDamage((PlayerEntity) attacker);
 				else source = DamageSource.causeMobDamage(attacker);
 				
-				Item usedItem = stack.getItem();
-				if(usedItem instanceof WeaponItem)
-				{
-					target.attackEntityFrom(source, backstabDamage);
-				}
+				target.attackEntityFrom(source, backstabDamage);
 			}
 		};
 	}
