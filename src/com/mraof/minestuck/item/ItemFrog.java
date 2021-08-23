@@ -154,18 +154,14 @@ public class ItemFrog extends Item
             
             BlockPos blockpos = pos.offset(facing);
             double d0 = this.getYOffset(worldIn, blockpos);
-            Entity entity =  spawnCreature(worldIn, (double)blockpos.getX() + 0.5D, (double)blockpos.getY() + d0, (double)blockpos.getZ() + 0.5D, dmg);
+            EntityFrog entity =  spawnCreature(worldIn, (double)blockpos.getX() + 0.5D, (double)blockpos.getY() + d0, (double)blockpos.getZ() + 0.5D, dmg);
 
             if (entity != null)
             {
-            	
-            	
-                if (entity instanceof EntityLivingBase && itemstack.hasDisplayName())
-                {
-                    entity.setCustomNameTag(itemstack.getDisplayName());
-                }
 
-                applyItemEntityDataToEntity(worldIn, player, itemstack,(EntityFrog) entity, dmg);
+                if (itemstack.hasDisplayName())
+                    entity.setCustomNameTag(itemstack.getDisplayName());
+                applyItemEntityDataToEntity(worldIn, player, itemstack, entity, dmg);
 
                 if (!player.capabilities.isCreativeMode)
                 {
@@ -178,27 +174,24 @@ public class ItemFrog extends Item
     }
     
     @Nullable
-    public static Entity spawnCreature(World worldIn, double x, double y, double z, int type)
+    public static EntityFrog spawnCreature(World worldIn, double x, double y, double z, int type)
     {
-            Entity entity = null;
+	        EntityFrog frog = null;
 
             for (int i = 0; i < 1; ++i)
             {
-                entity = new EntityFrog(worldIn, type);
+	            frog = new EntityFrog(worldIn, type);
 
-                if (entity instanceof EntityLiving)
-                {
-                    EntityLiving entityliving = (EntityLiving)entity;
-                    entity.setLocationAndAngles(x, y, z, MathHelper.wrapDegrees(worldIn.rand.nextFloat() * 360.0F), 0.0F);
-                    entityliving.rotationYawHead = entityliving.rotationYaw;
-                    entityliving.renderYawOffset = entityliving.rotationYaw;
-                    entityliving.onInitialSpawn(worldIn.getDifficultyForLocation(new BlockPos(entityliving)), (IEntityLivingData)null);
-                    worldIn.spawnEntity(entity);
-                    entityliving.playLivingSound();
-                }
+	            frog.setLocationAndAngles(x, y, z, MathHelper.wrapDegrees(worldIn.rand.nextFloat() * 360.0F), 0.0F);
+	            frog.rotationYawHead = frog.rotationYaw;
+	            frog.renderYawOffset = frog.rotationYaw;
+	            frog.onInitialSpawn(worldIn.getDifficultyForLocation(new BlockPos(frog)), null);
+                worldIn.spawnEntity(frog);
+	            frog.playLivingSound();
+
             }
 
-            return entity;
+            return frog;
     }
     
     public static void applyItemEntityDataToEntity(World entityWorld, @Nullable EntityPlayer player, ItemStack stack, @Nullable EntityFrog targetEntity, int dmg)
@@ -225,7 +218,6 @@ public class ItemFrog extends Item
                 targetEntity.setUniqueId(uuid);
                 targetEntity.readEntityFromNBT(nbttagcompound1);
 
-                System.out.println("Type: " + nbttagcompound.getInteger("Type"));
             }
         }
     }

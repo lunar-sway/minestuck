@@ -31,7 +31,7 @@ public class EntityImp extends EntityUnderling
 	@Override
 	public GristSet getGristSpoils()
 	{
-		return GristHelper.getRandomDrop(type, 1);
+		return GristHelper.getRandomDrop(getGristType(), 1);
 	}
 	
 	@Override
@@ -65,7 +65,7 @@ public class EntityImp extends EntityUnderling
 	@Override
 	protected float getMaximumHealth() 
 	{
-		return type != null ? 8*type.getPower() + 6 : 1;
+		return getGristType() != null ? 8*getGristType().getPower() + 6 : 1;
 	}
 	
 	@Override
@@ -77,7 +77,7 @@ public class EntityImp extends EntityUnderling
 	@Override
 	protected double getAttackDamage()
 	{
-		return Math.ceil(this.type.getPower() + 1);
+		return Math.ceil(this.getGristType().getPower() + 1);
 	}
 	
 	@Override
@@ -87,7 +87,7 @@ public class EntityImp extends EntityUnderling
 	}
 	
 	@Override
-	protected void applyGristType(GristType type, boolean fullHeal)
+	public void applyGristType(GristType type, boolean fullHeal)
 	{
 		super.applyGristType(type, fullHeal);
 		this.experienceValue = (int) (3 * type.getPower() + 1);
@@ -98,9 +98,9 @@ public class EntityImp extends EntityUnderling
 	{
 		super.onDeath(cause);
 		Entity entity = cause.getTrueSource();
-		if(this.dead && !this.world.isRemote && type != null)
+		if(this.dead && !this.world.isRemote && getGristType() != null)
 		{
-			computePlayerProgress((int) (2 + 3*type.getPower()));
+			computePlayerProgress((int) (2 + 3*getGristType().getPower()));
 			if(entity != null && entity instanceof EntityPlayerMP && !(entity instanceof FakePlayer))
 			{
 				Echeladder ladder = MinestuckPlayerData.getData((EntityPlayerMP) entity).echeladder;
