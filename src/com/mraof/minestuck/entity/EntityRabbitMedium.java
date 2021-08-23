@@ -5,8 +5,6 @@ import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import static com.mraof.minestuck.entity.EntityFrog.isAreaClearOfEntityType;
-
 public class EntityRabbitMedium extends EntityRabbit
 {
 	public EntityRabbitMedium(World worldIn)
