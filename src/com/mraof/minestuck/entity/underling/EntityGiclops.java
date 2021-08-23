@@ -76,7 +76,7 @@ public class EntityGiclops extends EntityUnderling implements IBigEntity
 	@Override
 	public GristSet getGristSpoils()
 	{
-		return GristHelper.getRandomDrop(type, 10);
+		return GristHelper.getRandomDrop(getGristType(), 10);
 	}
 
 	@Override
@@ -94,7 +94,7 @@ public class EntityGiclops extends EntityUnderling implements IBigEntity
 	@Override
 	protected double getAttackDamage()
 	{
-		return this.type.getPower()*4.5 + 10;
+		return this.getGristType().getPower()*4.5 + 10;
 	}
 	
 	@Override
@@ -104,7 +104,7 @@ public class EntityGiclops extends EntityUnderling implements IBigEntity
 	}
 	
 	@Override
-	protected void applyGristType(GristType type, boolean fullHeal)
+	public void applyGristType(GristType type, boolean fullHeal)
 	{
 		super.applyGristType(type, fullHeal);
 		this.experienceValue = (int) (7 * type.getPower() + 5);
@@ -142,7 +142,7 @@ public class EntityGiclops extends EntityUnderling implements IBigEntity
 	@Override
 	protected float getMaximumHealth() 
 	{
-		return type != null ? 46*type.getPower() + 210 : 1;
+		return getGristType() != null ? 46*getGristType().getPower() + 210 : 1;
 	}
 	
 	@Override
@@ -189,9 +189,9 @@ public class EntityGiclops extends EntityUnderling implements IBigEntity
 	{
 		super.onDeath(cause);
 		Entity entity = cause.getTrueSource();
-		if(this.dead && !this.world.isRemote && type != null)
+		if(this.dead && !this.world.isRemote && getGristType() != null)
 		{
-			computePlayerProgress((int) (500*type.getPower() + 1000));
+			computePlayerProgress((int) (500*getGristType().getPower() + 1000));
 			if(entity != null && entity instanceof EntityPlayerMP && !(entity instanceof FakePlayer))
 			{
 				//((EntityPlayerMP) entity).addStat(MinestuckAchievementHandler.killGiclops);

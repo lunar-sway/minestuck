@@ -78,6 +78,13 @@
       "minestuck:soundeffects/mobs/frog_death"
     ]
   },
+  "frogGold": {
+    "category": "friendly",
+    "subtitle": "subtitle.frogGold",
+    "sounds": [
+      "minestuck:soundeffects/mobs/frog_gold"
+    ]
+  },
   "nakagatorAmbient": {
     "category": "friendly",
     "subtitle": "subtitle.nakagatorAmbient",
