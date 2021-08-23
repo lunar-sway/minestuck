@@ -147,7 +147,7 @@ public class CombinationRegistry {
 			else if(input2.getItem().equals(Item.getItemFromBlock(MinestuckBlocks.genericObject)))
 				item = mode == Mode.MODE_AND ? input2 : input1;
 
-		AlchemyCombinationEvent alchemyCombinationEvent = new AlchemyCombinationEvent(input1, input2, item);
+		AlchemyCombinationEvent alchemyCombinationEvent = new AlchemyCombinationEvent(input1, input2, mode, item);
 		MinecraftForge.EVENT_BUS.post(alchemyCombinationEvent);
 		return alchemyCombinationEvent.getResultItem();
 	}
