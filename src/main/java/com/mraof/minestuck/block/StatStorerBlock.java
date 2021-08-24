@@ -26,10 +26,33 @@ public class StatStorerBlock extends Block
 	{
 		Debug.debugf("updateNeighbors");
 		super.updateNeighbors(stateIn, worldIn, pos, flags);
+		
+		for(int i = 0; i < 4; i++) //TODO I want this to update the neighbors for redstone, but I might need those neighbor blocks themselves to get updated
+		{
+			worldIn.notifyNeighbors(pos.offset(Direction.byHorizontalIndex(i)), stateIn.getBlock());
+		}
 		worldIn.notifyNeighbors(pos.down(), stateIn.getBlock());
 	}
 	
-	/*@Override
+	@Override
+	public int getComparatorInputOverride(BlockState blockState, World worldIn, BlockPos pos)
+	{
+		TileEntity tileentity = worldIn.getTileEntity(pos);
+		if(tileentity instanceof StatStorerTileEntity)
+		{
+			return Math.min(16, (int) ((StatStorerTileEntity) tileentity).getStoredStatValue() / 2);
+		}
+		
+		return super.getComparatorInputOverride(blockState, worldIn, pos);
+	}
+	
+	@Override
+	public boolean hasComparatorInputOverride(BlockState state)
+	{
+		return true;
+	}
+	
+	@Override
 	public boolean canProvidePower(BlockState state)
 	{
 		return true;
@@ -41,7 +64,9 @@ public class StatStorerBlock extends Block
 		return true;
 	}
 	
-	@Override
+	
+	
+	/*@Override
 	public int getComparatorInputOverride(BlockState blockState, World worldIn, BlockPos pos)
 	{
 		Debug.debugf("getComparatorInputOverride");

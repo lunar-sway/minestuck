@@ -9,6 +9,7 @@ import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
+import com.mraof.minestuck.tileentity.WirelessRedstoneTransmitterTileEntity;
 import com.mraof.minestuck.tileentity.machine.AlchemiterTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
@@ -60,6 +61,11 @@ public class MSScreenFactories
 	public static void displayTransportalizerScreen(TransportalizerTileEntity tileEntity)
 	{
 		Minecraft.getInstance().displayGuiScreen(new TransportalizerScreen(tileEntity));
+	}
+	
+	public static void displayWirelessRedstoneTransmitterScreen(WirelessRedstoneTransmitterTileEntity tileEntity)
+	{
+		Minecraft.getInstance().displayGuiScreen(new WirelessRedstoneTransmitterScreen(tileEntity));
 	}
 	
 	public static void displayAlchemiterScreen(AlchemiterTileEntity tileEntity)

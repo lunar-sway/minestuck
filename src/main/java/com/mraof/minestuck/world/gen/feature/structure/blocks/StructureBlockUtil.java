@@ -1,6 +1,7 @@
 package com.mraof.minestuck.world.gen.feature.structure.blocks;
 
 import com.mraof.minestuck.block.ReturnNodeBlock;
+import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.Debug;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -91,11 +92,63 @@ public class StructureBlockUtil
 	}
 	
 	/**
-	 * Use reordered min and max blockpos. Will start from min blockpos and start building up in the positive x direction first
+	 * Will generate the circular structure with the blockPosIn as the center. 16x resolution. Structure is 25 blocks wide and 1 block thick
+	 */
+	public static void placeLargeAspectSymbol(BlockPos blockPosIn, IWorld world, MutableBoundingBox boundingBox, BlockState blockStateIn, EnumAspect aspectIn)
+	{
+		createCylinder(world, boundingBox, blockStateIn, blockPosIn, 12, 1);
+		BlockState aspectBlockStateLight = Blocks.LIGHT_GRAY_CONCRETE.getDefaultState();
+		BlockState aspectBlockStateDark = Blocks.LIGHT_GRAY_CONCRETE.getDefaultState();
+		if(aspectIn == EnumAspect.BLOOD) //based on banner art by Riotmode
+		{
+			aspectBlockStateLight = Blocks.RED_CONCRETE.getDefaultState();
+			aspectBlockStateDark = Blocks.BLACK_CONCRETE.getDefaultState();
+			
+			//gash from left to right
+			world.setBlockState(blockPosIn.west(10).south(2), aspectBlockStateDark, Constants.BlockFlags.BLOCK_UPDATE);
+			fillWithBlocksFromPos(world, boundingBox, aspectBlockStateDark, blockPosIn.west(9).south(2), blockPosIn.west(9).south(1));
+			world.setBlockState(blockPosIn.west(8), aspectBlockStateDark, Constants.BlockFlags.BLOCK_UPDATE);
+			fillWithBlocksFromPos(world, boundingBox, aspectBlockStateLight, blockPosIn.west(8).south(1), blockPosIn.west(7).south(1));
+			fillWithBlocksFromPos(world, boundingBox, aspectBlockStateLight, blockPosIn.west(7), blockPosIn.west(5));
+			fillWithBlocksFromPos(world, boundingBox, aspectBlockStateLight, blockPosIn.west(6).north(1), blockPosIn.west(3).north(1));
+			world.setBlockState(blockPosIn.west(5).north(2), aspectBlockStateDark, Constants.BlockFlags.BLOCK_UPDATE);
+			world.setBlockState(blockPosIn.west(4), aspectBlockStateDark, Constants.BlockFlags.BLOCK_UPDATE);
+			fillWithBlocksFromPos(world, boundingBox, aspectBlockStateLight, blockPosIn.west(4).north(2), blockPosIn.north(2));
+			fillWithBlocksFromPos(world, boundingBox, aspectBlockStateLight, blockPosIn.west(2).north(3), blockPosIn.east(1).north(3));
+			fillWithBlocksFromPos(world, boundingBox, aspectBlockStateLight, blockPosIn.north(4), blockPosIn.east(3).north(4));
+			fillWithBlocksFromPos(world, boundingBox, aspectBlockStateLight, blockPosIn.east(2).north(5), blockPosIn.east(5).north(5));
+			fillWithBlocksFromPos(world, boundingBox, aspectBlockStateLight, blockPosIn.east(4).north(6), blockPosIn.east(6).north(6));
+			fillWithBlocksFromPos(world, boundingBox, aspectBlockStateLight, blockPosIn.east(6).north(7), blockPosIn.east(7).north(7));
+			
+			//left drip
+			fillWithBlocksFromPos(world, boundingBox, aspectBlockStateLight, blockPosIn.west(3), blockPosIn.west(3).south(3));
+			fillWithBlocksFromPos(world, boundingBox, aspectBlockStateDark, blockPosIn.west(4).south(2), blockPosIn.west(4).south(3));
+			fillWithBlocksFromPos(world, boundingBox, aspectBlockStateDark, blockPosIn.west(2).south(2), blockPosIn.west(2).south(3));
+			world.setBlockState(blockPosIn.west(3).south(4), aspectBlockStateDark, Constants.BlockFlags.BLOCK_UPDATE);
+			
+			//middle drip
+			fillWithBlocksFromPos(world, boundingBox, aspectBlockStateLight, blockPosIn.up(1), blockPosIn.south(7));
+			fillWithBlocksFromPos(world, boundingBox, aspectBlockStateDark, blockPosIn.west(1).south(6), blockPosIn.west(1).south(7));
+			fillWithBlocksFromPos(world, boundingBox, aspectBlockStateDark, blockPosIn.east(1).south(6), blockPosIn.east(1).south(7));
+			world.setBlockState(blockPosIn.south(8), aspectBlockStateDark, Constants.BlockFlags.BLOCK_UPDATE);
+			
+			//right drip
+			fillWithBlocksFromPos(world, boundingBox, aspectBlockStateLight, blockPosIn.east(3).up(3), blockPosIn.east(3).south(2));
+			fillWithBlocksFromPos(world, boundingBox, aspectBlockStateDark, blockPosIn.east(4).south(1), blockPosIn.east(4).south(2));
+			fillWithBlocksFromPos(world, boundingBox, aspectBlockStateDark, blockPosIn.east(2).south(1), blockPosIn.east(2).south(2));
+			world.setBlockState(blockPosIn.east(3).south(3), aspectBlockStateDark, Constants.BlockFlags.BLOCK_UPDATE);
+		}
+	}
+	
+	/**
+	 * Built in use of axisAlignBlockPos. Will start from min blockpos and start building up in the positive x direction first
 	 */
 	public static void createPlainSpiralStaircase(BlockPos minBlockPosIn, BlockPos maxBlockPosIn, BlockState blockState, IWorld world, MutableBoundingBox boundingBox1/*, MutableBoundingBox boundingBox2*/)
 	{
 		//TODO placement happens twice(because of two bounding boxes?), one set of stairs can go beyond intended x/z bounds, stairs are fragmented(because it tries to generate in two bounding boxes?)
+		
+		minBlockPosIn = axisAlignBlockPosGetMin(minBlockPosIn, maxBlockPosIn);
+		maxBlockPosIn = axisAlignBlockPosGetMax(minBlockPosIn, maxBlockPosIn);
 		
 		world.setBlockState(minBlockPosIn, Blocks.GOLD_BLOCK.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
 		world.setBlockState(maxBlockPosIn, Blocks.DIAMOND_BLOCK.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
@@ -111,6 +164,8 @@ public class StructureBlockUtil
 		for(int yIterator = minBlockPosIn.getY(); yIterator <= maxBlockPosIn.getY(); yIterator++)
 		{
 			BlockPos iteratorPos = new BlockPos(xIterator, yIterator, zIterator);
+			
+			//TODO use Direction variable and rotate direction as it reaches end of line
 			
 			/*Debug.debugf("createPlainSpiralStaircase. isXIterating = %s, isPosInsideBounding = %s, iteratorPos = %s",
 					isXIterating, boundingBox1.isVecInside(iteratorPos), iteratorPos);*/
@@ -133,24 +188,27 @@ public class StructureBlockUtil
 				isZIterateReversed = true;
 			}
 			
+			
+			
+			//Debug.debugf("createPlainSpiralStaircase. placed at %s", iteratorPos);
 			if(boundingBox1.isVecInside(iteratorPos)/* || boundingBox2.isVecInside(iteratorPos)*/)
 			{
-				//Debug.debugf("createPlainSpiralStaircase. placed at %s", iteratorPos);
 				world.setBlockState(iteratorPos, blockState, Constants.BlockFlags.BLOCK_UPDATE);
-				
-				if(isXIterating && !isXIterateReversed)
-				{
-					xIterator++;
-				} else if(!isXIterating && !isZIterateReversed)
-				{
-					zIterator++;
-				} else if(isXIterating && isXIterateReversed)
-				{
-					xIterator--;
-				} else if(!isXIterating && isZIterateReversed)
-				{
-					zIterator--;
-				}
+			}
+			
+			if(isXIterating && !isXIterateReversed)
+			{
+				xIterator++;
+			} else if(!isXIterating && !isZIterateReversed)
+			{
+				zIterator++;
+			} else if(isXIterating && isXIterateReversed)
+			{
+				xIterator--;
+			} else if(!isXIterating && isZIterateReversed)
+			{
+				zIterator--;
+			}
 				/*
 				if(isXIterating && !isXIterateReversed)
 				{
@@ -169,7 +227,7 @@ public class StructureBlockUtil
 					zIterator--;
 				}
 				 */
-			}
+			
 			
 			if(yIterator >= maxBlockPosIn.getY())
 			{
@@ -182,7 +240,7 @@ public class StructureBlockUtil
 	*/
 	public static void createStairs(IWorld worldIn, MutableBoundingBox structurebb, BlockState bodyBlockState, BlockState tipBlockState, BlockPos bottomPos, int height, int width, Direction direction, boolean flipped)
 	{
-		//int xPos = bottomPos.getX(), zPos = bottomPos.getZ();
+		//TODO create flipped option, where the stairs generate upside down
 		
 		BlockPos backEdge = bottomPos;
 		if(direction == Direction.NORTH)
@@ -208,7 +266,7 @@ public class StructureBlockUtil
 			
 			//Debug.debugf("frontEdge = %s, backEdge = %s", frontEdge, backEdge.up(y));
 			
-			fillWithBlocksFromPos(worldIn, structurebb, bodyBlockState, axisAlignBlockPosGetMin(frontEdge, backEdge.up(y)), axisAlignBlockPosGetMax(frontEdge, backEdge.up(y)));
+			fillWithBlocksFromPos(worldIn, structurebb, bodyBlockState, frontEdge, backEdge.up(y));
 			
 			BlockPos frontEdgeWidth = frontEdge;
 			for(int frontWidth = 0; frontWidth < width + 1; ++frontWidth)
@@ -277,10 +335,13 @@ public class StructureBlockUtil
 	}
 	
 	/**
-	 * Use reordered blockpos for min and max BlockPos parameters(axisAlignBlockPosGetMin/Max)
+	 * Built in use of axisAlignBlockPos
 	 */
 	public static void fillWithBlocksFromPos(IWorld worldIn, MutableBoundingBox structurebb, BlockState blockState, BlockPos minBlockPos, BlockPos maxBlockPos)
 	{
+		minBlockPos = axisAlignBlockPosGetMin(minBlockPos, maxBlockPos);
+		maxBlockPos = axisAlignBlockPosGetMax(minBlockPos, maxBlockPos);
+		
 		for(int y = minBlockPos.getY(); y <= maxBlockPos.getY(); ++y)
 		{
 			for(int x = minBlockPos.getX(); x <= maxBlockPos.getX(); ++x)

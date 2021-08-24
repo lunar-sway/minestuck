@@ -30,7 +30,7 @@ public class PipeBlock extends MSDirectionalBlock implements IWaterLoggable
 	{
 		super(properties);
 		this.shape = shape.createRotatedShapesAllDirections();
-		this.setDefaultState(stateContainer.getBaseState().with(FACING, Direction.DOWN));
+		this.setDefaultState(stateContainer.getBaseState().with(FACING, Direction.DOWN).with(WATERLOGGED, false));
 	}
 	
 	@Nullable
@@ -38,7 +38,7 @@ public class PipeBlock extends MSDirectionalBlock implements IWaterLoggable
 	public BlockState getStateForPlacement(BlockItemUseContext context)
 	{
 		IFluidState iFluidState = context.getWorld().getFluidState(context.getPos());
-		return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite()).with(WATERLOGGED, iFluidState.getFluid() == Fluids.WATER);
+		return this.getDefaultState().with(FACING, context.getNearestLookingDirection().getOpposite()).with(WATERLOGGED, iFluidState.getFluid() == Fluids.WATER);
 	}
 	
 	@Override

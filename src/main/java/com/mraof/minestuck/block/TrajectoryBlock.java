@@ -1,9 +1,12 @@
 package com.mraof.minestuck.block;
 
+import com.mraof.minestuck.block.machine.ComputerBlock;
+import com.mraof.minestuck.tileentity.WirelessRedstoneTransmitterTileEntity;
 import com.mraof.minestuck.util.Debug;
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ItemFrameEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -17,6 +20,7 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.TickPriority;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.util.Constants;
 
 import java.util.Random;
 
@@ -64,11 +68,29 @@ public class TrajectoryBlock extends MSDirectionalBlock
 		BlockState blockState = worldIn.getBlockState(pos);
 		//Debug.debugf("motion BEFORE = %s", entityIn.getMotion());
 		entityIn.onGround = false;
-		double powerMod = blockState.get(POWER) / 4D + 1;
-		Debug.debugf("blockState.get(POWER) = %s", blockState.get(POWER));
-		entityIn.setMotion(entityIn.getMotion().x + blockState.get(FACING).getXOffset() * powerMod, entityIn.getMotion().y + blockState.get(FACING).getYOffset() * powerMod, entityIn.getMotion().z + blockState.get(FACING).getZOffset() * powerMod);
+		updatePower(worldIn, pos, blockState);
+		double powerMod = blockState.get(POWER) / 16D + 1;
+		if(entityIn instanceof PlayerEntity)
+			Debug.debugf("blockState.get(POWER) = %s", blockState.get(POWER));
+		//entityIn.setMotion(blockState.get(FACING).getXOffset() * powerMod, blockState.get(FACING).getYOffset() * powerMod, blockState.get(FACING).getZOffset() * powerMod);
+		entityIn.setMotion(entityIn.getMotion().x / 1.2 + blockState.get(FACING).getXOffset() * powerMod, entityIn.getMotion().y / 1.2 + blockState.get(FACING).getYOffset() * powerMod, entityIn.getMotion().z / 1.2 + blockState.get(FACING).getZOffset() * powerMod);
 		//entityIn.setMotion(state.get(FACING).getDirectionVec().offset(state.get(FACING), 5/*POWER*/));
 		//Debug.debugf("motion AFTER = %s", entityIn.getMotion());
+	}
+	
+	@Override
+	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+	{
+		super.neighborChanged(state, worldIn, pos, blockIn, fromPos, isMoving);
+		updatePower(worldIn, pos, state);
+	}
+	
+	public void updatePower(World worldIn, BlockPos pos, BlockState state)
+	{
+		int powerInt = worldIn.getWorld().getRedstonePowerFromNeighbors(pos);
+		worldIn.setBlockState(pos, state.with(POWER, powerInt), Constants.BlockFlags.BLOCK_UPDATE);
+		//worldIn.notifyBlockUpdate(pos, state, state.with(POWER, powerInt), 3);
+		//Debug.debugf("blockState.get(POWER) = %s, power from neighbors = %s", state.get(POWER), powerInt);
 	}
 	
 	/*@Override

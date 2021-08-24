@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "powered=true": { "model": "minestuck:block/wireless_redstone_reciever" },
+        "powered=false": { "model": "minestuck:block/wireless_redstone_reciever" }
+    }
+}

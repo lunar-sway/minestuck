@@ -187,7 +187,7 @@ public class ServerEventHandler
 			if(tileEntity instanceof StatStorerTileEntity)
 			{
 				StatStorerTileEntity storerTileEntity = (StatStorerTileEntity) tileEntity;
-				storerTileEntity.setStoredStatValue(storerTileEntity.getStoredStatValue() + event.getAmount(), storerTileEntity.getPos(), true);
+				storerTileEntity.setStoredStatValue(storerTileEntity.getStoredStatValue() + event.getAmount(), blockPos.up(), true);
 			}
 		}
 	}

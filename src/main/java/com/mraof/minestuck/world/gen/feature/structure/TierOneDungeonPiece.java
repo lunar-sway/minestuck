@@ -3,6 +3,7 @@ package com.mraof.minestuck.world.gen.feature.structure;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.*;
 import com.mraof.minestuck.entity.MSEntityTypes;
+import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.tileentity.DungeonDoorInterfaceTileEntity;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
@@ -26,6 +27,7 @@ import net.minecraft.world.gen.feature.structure.ScatteredStructurePiece;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 import net.minecraftforge.common.util.Constants;
+import org.lwjgl.system.CallbackI;
 
 import java.util.Random;
 
@@ -272,10 +274,7 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 		if(randomRoomType != 4) //decrepit room types have broken down stairs
 		{
 			//Debug.debugf("buildIndoorBlocks. staircaseMinPos = %s, isPosMinInsideBounding = %s, boundingBox = %s, getBoundingBox = %s", staircaseMinPos, boundingBox.isVecInside(staircaseMinPos), boundingBox, getBoundingBox());
-			StructureBlockUtil.createPlainSpiralStaircase(
-					StructureBlockUtil.axisAlignBlockPosGetMin(staircaseMinPos, staircaseMaxPos),
-					StructureBlockUtil.axisAlignBlockPosGetMax(staircaseMinPos, staircaseMaxPos),
-					primaryDecorativeBlock, world, boundingBox/*, getBoundingBox()*/);
+			StructureBlockUtil.createPlainSpiralStaircase(staircaseMinPos, staircaseMaxPos, primaryDecorativeBlock, world, boundingBox/*, getBoundingBox()*/);
 		}
 		
 		if(randomRoomType == 5 || randomRoomType == 6 || randomRoomType == 7)
@@ -431,8 +430,8 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 		} else
 		{
 			fillWithBlocks(world, boundingBox,
-					lowerRoomMaxX - 2, lowerRoomMinY + 1, lowerRoomMaxZ - 2,
-					lowerRoomMaxX - 4, lowerRoomMaxY - 1, lowerRoomMaxZ - 4,
+					lowerRoomMaxX - 4, lowerRoomMinY + 1, lowerRoomMaxZ - 4,
+					lowerRoomMaxX - 2, lowerRoomMaxY - 1, lowerRoomMaxZ - 2,
 					primaryPillarBlock, primaryPillarBlock, false); //max max //TODO not appearing
 			fillWithBlocks(world, boundingBox,
 					lowerRoomMinX + 4, lowerRoomMinY + 1, lowerRoomMinZ + 4,
@@ -443,29 +442,35 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 					lowerRoomMinX + 6, lowerRoomMaxY - 1, lowerRoomMinZ + 6,
 					primaryPillarBlock, primaryPillarBlock, false); //max min //TODO not appearing
 			fillWithBlocks(world, boundingBox,
-					lowerRoomMaxX - 2, lowerRoomMinY + 1, lowerRoomMaxZ - 2,
-					lowerRoomMaxX - 4, lowerRoomMaxY - 1, lowerRoomMaxZ - 4,
+					lowerRoomMaxX - 2, lowerRoomMinY + 1, lowerRoomMaxZ - 4,
+					lowerRoomMaxX - 4, lowerRoomMaxY - 1, lowerRoomMaxZ - 2,
 					primaryPillarBlock, primaryPillarBlock, false); //min max //TODO not appearing
 		}
 	}
 	
 	private void buildAspectThemedEntrance(IWorld world, MutableBoundingBox boundingBox, Random rand)
 	{
-		
-		if(aspectSapling == MSBlocks.BREATH_ASPECT_SAPLING.getDefaultState())
+		if(aspectSapling == MSBlocks.BREATH_ASPECT_SAPLING.getDefaultState()) //pipes moving around
 		{
 		
-		} else if(aspectSapling == MSBlocks.LIFE_ASPECT_SAPLING.getDefaultState())
+		} else if(aspectSapling == MSBlocks.LIFE_ASPECT_SAPLING.getDefaultState()) //rabbit statue
 		{
+			StructureBlockUtil.placeLargeAspectSymbol(new BlockPos(getXWithOffset(entryRoomMinX, entryRoomMinZ), getYWithOffset(entryRoomMaxY + 20), getZWithOffset(entryRoomMinX, entryRoomMinZ)), world, boundingBox, primaryBlock, EnumAspect.BLOOD);
+			
+			fillWithBlocks(world, boundingBox, entryRoomMinX - 2, entryRoomMaxY - 10, entryRoomMinZ + 6, entryRoomMinX - 2, entryRoomMaxY - 3, entryRoomMinZ + 6, MSBlocks.PIPE.getDefaultState().with(PipeBlock.FACING, Direction.UP), MSBlocks.PIPE.getDefaultState(), false); //pipe 1
+			setBlockState(world, MSBlocks.PIPE_INTERSECTION.getDefaultState(), entryRoomMinX - 2, entryRoomMaxY - 2, entryRoomMinZ + 6, boundingBox);
+			fillWithBlocks(world, boundingBox, entryRoomMinX - 1, entryRoomMaxY - 2, entryRoomMinZ + 6, entryRoomMinX + 3, entryRoomMaxY - 2, entryRoomMinZ + 6, MSBlocks.PIPE.getDefaultState().with(PipeBlock.FACING, Direction.NORTH), MSBlocks.PIPE.getDefaultState(), false);
+			
+			/* //TODO Will be for Life
 			fillWithBlocks(world, boundingBox, entryRoomMinX + 6, entryRoomMaxY + 4, entryRoomMinZ + 4, entryRoomMaxX - 6, entryRoomMaxY + 8, entryRoomMaxZ - 4, secondaryBlock, secondaryBlock, false); //body
 			fillWithBlocks(world, boundingBox, entryRoomMinX + 7, entryRoomMaxY + 7, entryRoomMinZ + 2, entryRoomMaxX - 7, entryRoomMaxY + 10, entryRoomMinZ + 5, secondaryBlock, secondaryBlock, false); //head
 			fillWithBlocks(world, boundingBox, entryRoomMinX + 7, entryRoomMaxY + 11, entryRoomMinZ + 5, entryRoomMinX + 7, entryRoomMaxY + 14, entryRoomMinZ + 5, secondaryBlock, secondaryBlock, false); //left ear
 			fillWithBlocks(world, boundingBox, entryRoomMaxX - 7, entryRoomMaxY + 11, entryRoomMinZ + 5, entryRoomMaxX - 7, entryRoomMaxY + 14, entryRoomMinZ + 5, secondaryBlock, secondaryBlock, false); //right ear
 			fillWithBlocks(world, boundingBox, entryRoomMinX + 6, entryRoomMaxY + 1, entryRoomMinZ + 4, entryRoomMinX + 7, entryRoomMaxY + 4, entryRoomMinZ + 5, secondaryBlock, secondaryBlock, false); //front left leg
-			fillWithBlocks(world, boundingBox, entryRoomMaxX - 6, entryRoomMaxY + 1, entryRoomMinZ + 4, entryRoomMaxX - 7, entryRoomMaxY + 4, entryRoomMinZ + 5, secondaryBlock, secondaryBlock, false); //front right leg //TODO not appearing
-			fillWithBlocks(world, boundingBox, entryRoomMinX + 5, entryRoomMaxY + 1, entryRoomMaxZ - 4, entryRoomMinX + 7, entryRoomMaxY + 6, entryRoomMaxZ - 5, secondaryBlock, secondaryBlock, false); //back left leg //TODO not appearing
-			fillWithBlocks(world, boundingBox, entryRoomMaxX - 5, entryRoomMaxY + 1, entryRoomMaxZ - 4, entryRoomMaxX - 7, entryRoomMaxY + 6, entryRoomMaxZ - 5, secondaryBlock, secondaryBlock, false); //back right leg //TODO not appearing
-			
+			fillWithBlocks(world, boundingBox, entryRoomMaxX - 7, entryRoomMaxY + 1, entryRoomMinZ + 4, entryRoomMaxX - 6, entryRoomMaxY + 4, entryRoomMinZ + 5, secondaryBlock, secondaryBlock, false); //front right leg
+			fillWithBlocks(world, boundingBox, entryRoomMinX + 5, entryRoomMaxY + 1, entryRoomMaxZ - 5, entryRoomMinX + 7, entryRoomMaxY + 6, entryRoomMaxZ - 4, secondaryBlock, secondaryBlock, false); //back left leg
+			fillWithBlocks(world, boundingBox, entryRoomMaxX - 7, entryRoomMaxY + 1, entryRoomMaxZ - 5, entryRoomMaxX - 5, entryRoomMaxY + 6, entryRoomMaxZ - 4, secondaryBlock, secondaryBlock, false); //back right leg
+			*/
 		} else if(aspectSapling == MSBlocks.LIGHT_ASPECT_SAPLING.getDefaultState())
 		{
 		
@@ -511,16 +516,10 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 					firstRoomMinX + 1, firstRoomMaxY - 9, firstRoomMinZ + 4,
 					firstRoomMaxX - 1, firstRoomMaxY - 5, firstRoomMaxZ - 4); //makes walls of raised areas
 			
-			if(fluid == Blocks.LAVA.getDefaultState())
-				fillWithBlocks(world, boundingBox,
+			fillWithBlocks(world, boundingBox,
 					firstRoomMinX + 1, firstRoomMaxY - 10, firstRoomMinZ + 4,
 					firstRoomMaxX - 4, firstRoomMaxY - 10, firstRoomMaxZ - 4,
-						Blocks.WATER.getDefaultState(), Blocks.WATER.getDefaultState(), false);
-			else
-				fillWithBlocks(world, boundingBox,
-						firstRoomMinX + 1, firstRoomMaxY - 10, firstRoomMinZ + 4,
-						firstRoomMaxX - 4, firstRoomMaxY - 10, firstRoomMaxZ - 4,
-						fluid, fluid, false);
+					MSBlocks.BLOOD.getDefaultState(), MSBlocks.BLOOD.getDefaultState(), false);
 			
 			fillWithBlocks(world, boundingBox,
 					firstRoomMinX + 8, firstRoomMaxY - 10, firstRoomMinZ + 8,
@@ -545,7 +544,7 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 			BlockPos stairsAreaMin = new BlockPos(getXWithOffset(firstRoomMaxX - 2, firstRoomMinZ + 4), getYWithOffset(firstRoomMaxY - 19), getZWithOffset(firstRoomMaxX - 2, firstRoomMinZ + 4));
 			BlockPos stairsAreaMax = new BlockPos(getXWithOffset(firstRoomMaxX - 1, firstRoomMaxZ - 5), getYWithOffset(firstRoomMaxY - 5), getZWithOffset(firstRoomMaxX - 1, firstRoomMaxZ - 5));
 			
-			StructureBlockUtil.fillWithBlocksFromPos(world, boundingBox, air, StructureBlockUtil.axisAlignBlockPosGetMin(stairsAreaMax, stairsAreaMin), StructureBlockUtil.axisAlignBlockPosGetMax(stairsAreaMax, stairsAreaMin));
+			StructureBlockUtil.fillWithBlocksFromPos(world, boundingBox, air, stairsAreaMin, stairsAreaMax);
 			
 			//fillWithAir(world, boundingBox, firstRoomMaxX - 1, firstRoomMaxY - 20, firstRoomMinZ + 5, firstRoomMaxX - 2, firstRoomMaxY - 5, firstRoomMaxZ - 5);
 			StructureBlockUtil.createStairs(world, boundingBox, primaryBlock, primaryStairBlock.with(StairsBlock.FACING, getCoordBaseMode()), stairsAreaMin.offset(getCoordBaseMode(), 19), 10, 2, getCoordBaseMode(), false);
@@ -573,9 +572,12 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 						getZWithOffset(firstRoomMinX + 5 + xIterate * 10, firstRoomMaxZ - 2));
 				StructureBlockUtil.placeSpawner(spawnerPos, world, boundingBox, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
 				
-				fillWithAir(world, boundingBox, firstRoomMinX + 3 + xIterate * 10, firstRoomMaxY - 7, firstRoomMaxZ - 3, firstRoomMinX + 3 + xIterate * 10, firstRoomMaxY - 5, firstRoomMaxZ - 1); //TODO may not be generating?
+				fillWithAir(world, boundingBox, firstRoomMinX + 3 + xIterate * 10, firstRoomMaxY - 7, firstRoomMaxZ - 3, firstRoomMinX + 3 + xIterate * 10, firstRoomMaxY - 5, firstRoomMaxZ - 1);
 				fillWithAir(world, boundingBox, firstRoomMinX + 3 + xIterate * 10, firstRoomMaxY - 7, firstRoomMinZ + 1, firstRoomMinX + 3 + xIterate * 10, firstRoomMaxY - 5, firstRoomMinZ + 3);
 			}
+			
+			fillWithBlocks(world, boundingBox, firstRoomMinX + 5, firstRoomMaxY - 10, firstRoomMaxZ, firstRoomMinX + 20, firstRoomMaxY - 3, firstRoomMaxZ + 12, primaryBlock, air, false); //first side room
+			fillWithAir(world, boundingBox, firstRoomMinX + 9, firstRoomMaxY - 9, firstRoomMaxZ - 3, firstRoomMinX + 10, firstRoomMaxY - 7, firstRoomMaxZ); //first side room entrance
 			
 			/*//TODO will be for Breath
 			fillWithAir(world, boundingBox,

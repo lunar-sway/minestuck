@@ -1,0 +1,48 @@
+package com.mraof.minestuck.network;
+
+import com.mraof.minestuck.tileentity.WirelessRedstoneTransmitterTileEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
+
+public class WirelessRedstoneTransmitterPacket implements PlayToServerPacket
+{
+	private final BlockPos destinationBlockPos;
+	private final BlockPos tileBlockPos;
+	//private final String destId;
+	
+	public WirelessRedstoneTransmitterPacket(BlockPos pos, BlockPos tileBlockPos)
+	{
+		this.destinationBlockPos = pos;
+		this.tileBlockPos = tileBlockPos;
+		//this.destId = destId;
+	}
+	
+	@Override
+	public void encode(PacketBuffer buffer)
+	{
+		buffer.writeBlockPos(destinationBlockPos);
+		buffer.writeBlockPos(tileBlockPos);
+		//buffer.writeString(destId, 4);
+	}
+	
+	public static WirelessRedstoneTransmitterPacket decode(PacketBuffer buffer)
+	{
+		BlockPos destinationBlockPos = buffer.readBlockPos();
+		BlockPos tileBlockPos = buffer.readBlockPos();
+		//String destId = buffer.readString(4);
+		
+		return new WirelessRedstoneTransmitterPacket(destinationBlockPos, tileBlockPos);
+	}
+	
+	@Override
+	public void execute(ServerPlayerEntity player)
+	{
+		TileEntity te = player.world.getTileEntity(tileBlockPos);
+		if(te instanceof WirelessRedstoneTransmitterTileEntity)
+		{
+			((WirelessRedstoneTransmitterTileEntity) te).setDestinationBlockPos(destinationBlockPos);
+		}
+	}
+}
