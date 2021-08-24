@@ -4,7 +4,6 @@ import com.mraof.minestuck.tileentity.StatStorerTileEntity;
 import com.mraof.minestuck.util.Debug;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.tileentity.LecternTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -63,20 +62,6 @@ public class StatStorerBlock extends Block
 	{
 		return true;
 	}
-	
-	
-	
-	/*@Override
-	public int getComparatorInputOverride(BlockState blockState, World worldIn, BlockPos pos)
-	{
-		Debug.debugf("getComparatorInputOverride");
-		TileEntity tileentity = worldIn.getTileEntity(pos);
-		if(tileentity instanceof StatStorerTileEntity)
-		{
-			return (int) ((StatStorerTileEntity) tileentity).getStoredStatValue() / 15;
-		}
-		return super.getComparatorInputOverride(blockState, worldIn, pos);
-	}*/
 	
 	@Override
 	public boolean hasTileEntity(BlockState state)

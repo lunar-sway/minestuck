@@ -32,9 +32,9 @@ import java.util.List;
 public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements INameable
 {
 	private BlockPos destBlockPos;
-	private int destX;
-	private int destY;
-	private int destZ;
+	//private int destX;
+	//private int destY;
+	//private int destZ;
 	
 	public WirelessRedstoneTransmitterTileEntity()
 	{
@@ -57,14 +57,14 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 	
 	public BlockPos getDestinationBlockPos()
 	{
-		return new BlockPos(destX, destY, destZ);
+		return destBlockPos;
 	}
 	
 	public void setDestinationBlockPos(BlockPos destinationPosIn)
 	{
-		this.destX = destinationPosIn.getX();
-		this.destY = destinationPosIn.getY();
-		this.destZ = destinationPosIn.getZ();
+		//this.destX = destinationPosIn.getX();
+		//this.destY = destinationPosIn.getY();
+		//this.destZ = destinationPosIn.getZ();
 		this.destBlockPos = destinationPosIn;
 		BlockState state = world.getBlockState(pos);
 		this.markDirty();
@@ -108,9 +108,9 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 	public void read(CompoundNBT compound)
 	{
 		super.read(compound);
-		this.destX = compound.getInt("destX");
-		this.destY = compound.getInt("destY");
-		this.destZ = compound.getInt("destZ");
+		int destX = compound.getInt("destX");
+		int destY = compound.getInt("destY");
+		int destZ = compound.getInt("destZ");
 		this.destBlockPos = new BlockPos(destX, destY, destZ);
 	}
 	
@@ -119,9 +119,9 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 	{
 		super.write(compound);
 		
-		compound.putInt("destX", destX);
-		compound.putInt("destY", destY);
-		compound.putInt("destZ", destZ);
+		compound.putInt("destX", destBlockPos.getX());
+		compound.putInt("destY", destBlockPos.getY());
+		compound.putInt("destZ", destBlockPos.getZ());
 		
 		return compound;
 	}

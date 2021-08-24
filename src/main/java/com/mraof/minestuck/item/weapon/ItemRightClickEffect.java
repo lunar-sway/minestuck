@@ -1,5 +1,6 @@
 package com.mraof.minestuck.item.weapon;
 
+import com.mraof.minestuck.effects.MSEffects;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -150,6 +151,14 @@ public interface ItemRightClickEffect
 			return ActionResult.resultFail(itemStack);
 		};
 	}
+	
+	/*static ItemRightClickEffect noCreativeShock(ItemRightClickEffect effect)
+	{
+		return (world, player, hand) -> {
+			if(!player.isPotionActive(MSEffects.CREATIVE_SHOCK.get()))
+				effect.onRightClick(world, player, hand);
+		};
+	}*/
 	
 	ActionResult<ItemStack> onRightClick(World world, PlayerEntity player, Hand hand);
 }

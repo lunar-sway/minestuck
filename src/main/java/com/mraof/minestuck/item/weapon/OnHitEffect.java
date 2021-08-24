@@ -1,6 +1,7 @@
 package com.mraof.minestuck.item.weapon;
 
 import com.google.common.collect.ImmutableList;
+import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.item.MSItems;
@@ -175,7 +176,7 @@ public interface OnHitEffect
 		}
 	};
 	
-	OnHitEffect SPACE_TELEPORT = requireAspect(SPACE, onCrit((stack, target, attacker) -> {
+	OnHitEffect SPACE_TELEPORT = noCreativeShock(requireAspect(SPACE, onCrit((stack, target, attacker) -> {
 		double oldPosX = attacker.getPosX();
 		double oldPosY = attacker.getPosY();
 		double oldPosZ = attacker.getPosZ();
@@ -197,7 +198,7 @@ public interface OnHitEffect
 				break;
 			}
 		}
-	}));
+	})));
 	
 	static OnHitEffect setOnFire(int duration)
 	{
@@ -297,6 +298,14 @@ public interface OnHitEffect
 				if((title != null && title.getHeroAspect() == aspect) || ((ServerPlayerEntity) attacker).isCreative())
 					effect.onHit(stack, target, attacker);
 			}
+		};
+	}
+	
+	static OnHitEffect noCreativeShock(OnHitEffect effect)
+	{
+		return (stack, target, attacker) -> {
+			if(!attacker.isPotionActive(MSEffects.CREATIVE_SHOCK.get()))
+				effect.onHit(stack, target, attacker);
 		};
 	}
 	
