@@ -319,6 +319,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.DUNGEON_DOOR_INTERFACE, "Dungeon Door Interface Block");
 		addExtra(MSBlocks.DUNGEON_DOOR_INTERFACE, "key", "Key needed: %s");
 		add(MSBlocks.DUNGEON_DOOR, "Dungeon Door Block");
+		add(MSBlocks.TRAJECTORY_BLOCK, "Trajectory Block");
+		add(MSBlocks.WIRELESS_REDSTONE_TRANSMITTER, "Wireless Redstone Transmitter");
+		add(MSBlocks.WIRELESS_REDSTONE_RECIEVER, "Wireless Redstone Reciever");
 		add(MSBlocks.GATE, "Gate");
 		add(MSBlocks.RETURN_NODE, "Return Node");
 		MSBlocks.CRUXTRUDER.forEachBlock(block -> add(block, "Cruxtruder"));

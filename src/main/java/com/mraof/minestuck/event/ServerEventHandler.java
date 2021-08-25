@@ -132,6 +132,17 @@ public class ServerEventHandler
 		{
 			TitleSelectionHook.cancelSelection((ServerPlayerEntity) event.getEntity());
 		}
+		
+		Entity killedEntity = event.getEntity();
+		for(BlockPos blockPos : BlockPos.getAllInBoxMutable(killedEntity.getPosition().add(4, 4, 4), killedEntity.getPosition().add(-4, -4, -4)))
+		{
+			TileEntity tileEntity = killedEntity.world.getTileEntity(blockPos);
+			if(tileEntity instanceof StatStorerTileEntity)
+			{
+				StatStorerTileEntity storerTileEntity = (StatStorerTileEntity) tileEntity;
+				storerTileEntity.setStoredDeathValue(storerTileEntity.getDeathsStored() + 1, blockPos.up(), true);
+			}
+		}
 	}
 	
 	// Stores the crit result from the CriticalHitEvent, to be used during LivingHurtEvent to trigger special effects of any weapons.
@@ -187,7 +198,7 @@ public class ServerEventHandler
 			if(tileEntity instanceof StatStorerTileEntity)
 			{
 				StatStorerTileEntity storerTileEntity = (StatStorerTileEntity) tileEntity;
-				storerTileEntity.setStoredStatValue(storerTileEntity.getStoredStatValue() + event.getAmount(), blockPos.up(), true);
+				storerTileEntity.setStoredDamageValue(storerTileEntity.getDamageStored() + event.getAmount(), blockPos.up(), true);
 			}
 		}
 	}
@@ -313,13 +324,13 @@ public class ServerEventHandler
 	@SubscribeEvent
 	public static void onEffectRemove(PotionEvent.PotionRemoveEvent event)
 	{
-		//onEffectEnd(event.getEntityLiving(), event.getPotionEffect().getPotion());
+		onEffectEnd(event.getEntityLiving(), event.getPotionEffect().getPotion());
 	}
 	
 	@SubscribeEvent
 	public static void onEffectExpire(PotionEvent.PotionExpiryEvent expiryEvent)
 	{
-		//onEffectEnd(expiryEvent.getEntityLiving(), expiryEvent.getPotionEffect().getPotion());
+		onEffectEnd(expiryEvent.getEntityLiving(), expiryEvent.getPotionEffect().getPotion());
 	}
 	
 	private static void onEffectEnd(LivingEntity entityLiving, Effect effect) //TODO MSPacketHandler.sendToPlayer recieves an invalid message

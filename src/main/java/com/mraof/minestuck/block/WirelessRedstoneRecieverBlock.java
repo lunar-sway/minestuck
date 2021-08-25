@@ -13,6 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -32,12 +33,17 @@ public class WirelessRedstoneRecieverBlock extends Block
 	@Override
 	public void updateNeighbors(BlockState stateIn, IWorld worldIn, BlockPos pos, int flags)
 	{
-		Debug.debugf("updateNeighbors");
+		Debug.debugf("reciever updateNeighbors");
 		super.updateNeighbors(stateIn, worldIn, pos, flags);
 		
-		if (this.isValidPosition(stateIn, worldIn, pos))
+		if(this.isValidPosition(stateIn, worldIn, pos))
 		{
 			this.updateSurroundingBlocks(worldIn.getWorld(), pos, stateIn);
+		}
+		
+		for(Direction direction : Direction.values())
+		{
+			worldIn.setBlockState(pos.offset(direction), worldIn.getBlockState(pos.offset(direction)), Constants.BlockFlags.BLOCK_UPDATE);
 		}
 		
 		/*
@@ -47,12 +53,14 @@ public class WirelessRedstoneRecieverBlock extends Block
 		 */
 	}
 	
-	private BlockState updateSurroundingBlocks(World worldIn, BlockPos pos, BlockState state)
+	public BlockState updateSurroundingBlocks(World worldIn, BlockPos pos, BlockState state)
 	{
+		Debug.debugf("reciever updateSurroundingBlocks");
 		List<BlockPos> list = Lists.newArrayList(this.blocksNeedingUpdate);
 		this.blocksNeedingUpdate.clear();
 		
-		for(BlockPos blockpos : list) {
+		for(BlockPos blockpos : list)
+		{
 			worldIn.notifyNeighborsOfStateChange(blockpos, this);
 		}
 		

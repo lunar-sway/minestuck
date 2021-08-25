@@ -1,12 +1,19 @@
 package com.mraof.minestuck.block;
 
+import com.mraof.minestuck.client.gui.MSScreenFactories;
+import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.tileentity.StatStorerTileEntity;
+import com.mraof.minestuck.tileentity.WirelessRedstoneTransmitterTileEntity;
 import com.mraof.minestuck.util.Debug;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
@@ -21,9 +28,27 @@ public class StatStorerBlock extends Block
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
+	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+	{
+		if(!player.isSneaking() && !player.isPotionActive(MSEffects.CREATIVE_SHOCK.get()))
+		{
+			TileEntity tileEntity = worldIn.getTileEntity(pos);
+			if(tileEntity instanceof StatStorerTileEntity)
+			{
+				StatStorerTileEntity te = (StatStorerTileEntity) tileEntity;
+				
+				MSScreenFactories.displayStatStorerScreen(te);
+			}
+		}
+		
+		return ActionResultType.SUCCESS;
+	}
+	
+	@Override
 	public void updateNeighbors(BlockState stateIn, IWorld worldIn, BlockPos pos, int flags)
 	{
-		Debug.debugf("updateNeighbors");
+		Debug.debugf("stat storer updateNeighbors");
 		super.updateNeighbors(stateIn, worldIn, pos, flags);
 		
 		for(int i = 0; i < 4; i++) //TODO I want this to update the neighbors for redstone, but I might need those neighbor blocks themselves to get updated
@@ -39,7 +64,7 @@ public class StatStorerBlock extends Block
 		TileEntity tileentity = worldIn.getTileEntity(pos);
 		if(tileentity instanceof StatStorerTileEntity)
 		{
-			return Math.min(16, (int) ((StatStorerTileEntity) tileentity).getStoredStatValue() / 2);
+			return Math.min(16, ((StatStorerTileEntity) tileentity).getActiveStoredStatValue() / 2);
 		}
 		
 		return super.getComparatorInputOverride(blockState, worldIn, pos);

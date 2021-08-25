@@ -29,7 +29,7 @@ public class PropelEffect implements ItemRightClickEffect
 	public ActionResult<ItemStack> onRightClick(World world, PlayerEntity player, Hand hand)
 	{
 		ItemStack itemStack = player.getHeldItem(hand);
-		if(!player.isPotionActive(MSEffects.CREATIVE_SHOCK.get()))
+		if(!player.isPotionActive(MSEffects.CREATIVE_SHOCK.get()) || player.isCreative())
 			propelAction(player, itemStack, getVelocityMod(), hand);
 		return ActionResult.resultPass(itemStack);
 	}

@@ -88,7 +88,7 @@ public interface ItemRightClickEffect
 	
 	static ItemRightClickEffect extinguishFire(int mod)
 	{
-		return (world, player, hand) -> {
+		return withoutCreativeShock((world, player, hand) -> {
 			ItemStack itemStackIn = player.getHeldItem(hand);
 			
 			if(!world.isRemote)
@@ -121,12 +121,12 @@ public interface ItemRightClickEffect
 				itemStackIn.damageItem(1, player, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
 			}
 			return ActionResult.resultPass(itemStackIn);
-		};
+		});
 	}
 	
 	static ItemRightClickEffect absorbFluid(Supplier<Block> fluidBlock, Supplier<Item> otherItem)
 	{
-		return (world, player, hand) -> {
+		return withoutCreativeShock((world, player, hand) -> {
 			Vec3d eyePos = player.getEyePosition(1.0F);
 			Vec3d lookVec = player.getLookVec();
 			BlockState state;
@@ -149,16 +149,27 @@ public interface ItemRightClickEffect
 				}
 			}
 			return ActionResult.resultFail(itemStack);
-		};
+		});
 	}
 	
-	/*static ItemRightClickEffect noCreativeShock(ItemRightClickEffect effect)
+	/**
+	 * Prevents effect from working if the entity is subject to the effects of creative shock
+	 */
+	static ItemRightClickEffect withoutCreativeShock(ItemRightClickEffect effect) //TODO action result for client side may not work
 	{
 		return (world, player, hand) -> {
-			if(!player.isPotionActive(MSEffects.CREATIVE_SHOCK.get()))
+			ItemStack itemStackIn = player.getHeldItem(hand);
+			
+			if(!player.isPotionActive(MSEffects.CREATIVE_SHOCK.get()) || player.isCreative())
+			{
 				effect.onRightClick(world, player, hand);
+				if(effect.onRightClick(world, player, hand).getType().isSuccess())
+					return ActionResult.resultSuccess(itemStackIn);
+			}
+			
+			return ActionResult.resultPass(itemStackIn);
 		};
-	}*/
+	}
 	
 	ActionResult<ItemStack> onRightClick(World world, PlayerEntity player, Hand hand);
 }

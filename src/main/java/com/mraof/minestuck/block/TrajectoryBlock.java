@@ -74,10 +74,13 @@ public class TrajectoryBlock extends MSDirectionalBlock
 	
 	public void updatePower(World worldIn, BlockPos pos, BlockState state)
 	{
-		int powerInt = worldIn.getWorld().getRedstonePowerFromNeighbors(pos);
-		worldIn.setBlockState(pos, state.with(POWER, powerInt), Constants.BlockFlags.BLOCK_UPDATE);
-		//worldIn.notifyBlockUpdate(pos, state, state.with(POWER, powerInt), 3);
-		//Debug.debugf("blockState.get(POWER) = %s, power from neighbors = %s", state.get(POWER), powerInt);
+		if(!worldIn.isRemote)
+		{
+			int powerInt = worldIn.getWorld().getRedstonePowerFromNeighbors(pos);
+			worldIn.setBlockState(pos, state.with(POWER, powerInt), Constants.BlockFlags.BLOCK_UPDATE);
+			//worldIn.notifyBlockUpdate(pos, state, state.with(POWER, powerInt), 3);
+			//Debug.debugf("blockState.get(POWER) = %s, power from neighbors = %s", state.get(POWER), powerInt);
+		}
 	}
 	
 	@Override

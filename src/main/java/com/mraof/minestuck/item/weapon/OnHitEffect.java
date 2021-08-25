@@ -176,7 +176,7 @@ public interface OnHitEffect
 		}
 	};
 	
-	OnHitEffect SPACE_TELEPORT = noCreativeShock(requireAspect(SPACE, onCrit((stack, target, attacker) -> {
+	OnHitEffect SPACE_TELEPORT = withoutCreativeShock(requireAspect(SPACE, onCrit((stack, target, attacker) -> {
 		double oldPosX = attacker.getPosX();
 		double oldPosY = attacker.getPosY();
 		double oldPosZ = attacker.getPosZ();
@@ -301,11 +301,25 @@ public interface OnHitEffect
 		};
 	}
 	
-	static OnHitEffect noCreativeShock(OnHitEffect effect)
+	/**
+	 * Prevents effect from working if the entity is subject to the effects of creative shock
+	 */
+	static OnHitEffect withoutCreativeShock(OnHitEffect effect) //TODO action result for client side may not work
 	{
 		return (stack, target, attacker) -> {
 			if(!attacker.isPotionActive(MSEffects.CREATIVE_SHOCK.get()))
-				effect.onHit(stack, target, attacker);
+			{
+				boolean creativeMode = true;
+				if(attacker instanceof PlayerEntity)
+				{
+					PlayerEntity playerAttacker = (PlayerEntity) attacker;
+					if(!playerAttacker.isCreative())
+						creativeMode = false;
+				}
+				
+				if(creativeMode)
+					effect.onHit(stack, target, attacker);
+			}
 		};
 	}
 	

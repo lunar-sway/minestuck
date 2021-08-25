@@ -1,5 +1,6 @@
 package com.mraof.minestuck.item.weapon;
 
+import com.mraof.minestuck.effects.MSEffects;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -20,7 +21,7 @@ public interface RightClickBlockEffect
 	
 	static RightClickBlockEffect placeFluid(Supplier<Block> fluidBlock, Supplier<Item> otherItem)
 	{
-		return (context) -> {
+		return withoutCreativeShock((context) -> {
 			World worldIn = context.getWorld();
 			PlayerEntity player = context.getPlayer();
 			ItemStack itemStack = context.getItem();
@@ -42,12 +43,12 @@ public interface RightClickBlockEffect
 				return ActionResultType.SUCCESS;
 			}
 			return ActionResultType.PASS;
-		};
+		});
 	}
 	
 	static RightClickBlockEffect scoopBlock(Supplier<Block> validBlock)
 	{
-		return (context) -> {
+		return withoutCreativeShock((context) -> {
 			World worldIn = context.getWorld();
 			BlockPos pos = context.getPos();
 			PlayerEntity player = context.getPlayer();
@@ -72,6 +73,27 @@ public interface RightClickBlockEffect
 				worldIn.playSound(null, pos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.NEUTRAL, 1F, 1F);
 				
 				return ActionResultType.SUCCESS;
+			}
+			
+			return ActionResultType.PASS;
+		});
+	}
+	
+	/**
+	 * Prevents effect from working if the entity is subject to the effects of creative shock
+	 */
+	static RightClickBlockEffect withoutCreativeShock(RightClickBlockEffect effect) //TODO action result for client side may not work
+	{
+		return (context) -> {
+			PlayerEntity player = context.getPlayer();
+			if(player != null)
+			{
+				if(!player.isPotionActive(MSEffects.CREATIVE_SHOCK.get()) || player.isCreative())
+				{
+					effect.onClick(context);
+					if(effect.onClick(context).isSuccess())
+						return ActionResultType.SUCCESS;
+				}
 			}
 			
 			return ActionResultType.PASS;

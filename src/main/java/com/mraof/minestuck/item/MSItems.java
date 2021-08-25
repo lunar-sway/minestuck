@@ -730,6 +730,8 @@ public class MSItems
 		registerItemBlock(registry, DUNGEON_DOOR, MSItemGroup.LANDS);
 		registerItemBlock(registry, TRAJECTORY_BLOCK, MSItemGroup.LANDS);
 		registerItemBlock(registry, STAT_STORER_BLOCK, MSItemGroup.LANDS);
+		registerItemBlock(registry, WIRELESS_REDSTONE_TRANSMITTER, MSItemGroup.LANDS);
+		registerItemBlock(registry, WIRELESS_REDSTONE_RECIEVER, MSItemGroup.LANDS);
 		
 		registry.register(new CruxtruderItem(MSBlocks.CRUXTRUDER, new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("cruxtruder"));
 		registerItemBlock(registry, CRUXTRUDER_LID, MSItemGroup.MAIN);
