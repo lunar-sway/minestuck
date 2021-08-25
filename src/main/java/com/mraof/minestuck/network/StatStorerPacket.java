@@ -1,7 +1,6 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.tileentity.StatStorerTileEntity;
-import com.mraof.minestuck.tileentity.WirelessRedstoneTransmitterTileEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
@@ -11,13 +10,13 @@ public class StatStorerPacket implements PlayToServerPacket
 {
 	private final StatStorerTileEntity.ActiveType activeType;
 	private final BlockPos tileBlockPos;
-	//private final String destId;
+	private int divideValueBy;
 	
-	public StatStorerPacket(StatStorerTileEntity.ActiveType activeType, BlockPos tileBlockPos)
+	public StatStorerPacket(StatStorerTileEntity.ActiveType activeType, BlockPos tileBlockPos, int divideValueBy)
 	{
 		this.activeType = activeType;
 		this.tileBlockPos = tileBlockPos;
-		//this.destId = destId;
+		this.divideValueBy = divideValueBy;
 	}
 	
 	@Override
@@ -25,16 +24,16 @@ public class StatStorerPacket implements PlayToServerPacket
 	{
 		buffer.writeEnumValue(activeType);
 		buffer.writeBlockPos(tileBlockPos);
-		//buffer.writeString(destId, 4);
+		buffer.writeInt(divideValueBy);
 	}
 	
 	public static StatStorerPacket decode(PacketBuffer buffer)
 	{
 		StatStorerTileEntity.ActiveType activeType = buffer.readEnumValue(StatStorerTileEntity.ActiveType.class);
 		BlockPos tileBlockPos = buffer.readBlockPos();
-		//String destId = buffer.readString(4);
+		int divideValueBy = buffer.readInt();
 		
-		return new StatStorerPacket(activeType, tileBlockPos);
+		return new StatStorerPacket(activeType, tileBlockPos, divideValueBy);
 	}
 	
 	@Override
@@ -44,6 +43,9 @@ public class StatStorerPacket implements PlayToServerPacket
 		if(te instanceof StatStorerTileEntity)
 		{
 			((StatStorerTileEntity) te).setActiveType(activeType);
+			if(divideValueBy <= 0)
+				divideValueBy = 1;
+			((StatStorerTileEntity) te).setDivideValue(divideValueBy);
 		}
 	}
 }

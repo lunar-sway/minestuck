@@ -43,17 +43,17 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.EntityStruckByLightningEvent;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.living.PotionEvent;
-import net.minecraftforge.event.entity.player.CriticalHitEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.entity.player.UseHoeEvent;
+import net.minecraftforge.event.entity.living.*;
+import net.minecraftforge.event.entity.player.*;
 import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
+import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.world.SaplingGrowTreeEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -133,16 +133,7 @@ public class ServerEventHandler
 			TitleSelectionHook.cancelSelection((ServerPlayerEntity) event.getEntity());
 		}
 		
-		Entity killedEntity = event.getEntity();
-		for(BlockPos blockPos : BlockPos.getAllInBoxMutable(killedEntity.getPosition().add(4, 4, 4), killedEntity.getPosition().add(-4, -4, -4)))
-		{
-			TileEntity tileEntity = killedEntity.world.getTileEntity(blockPos);
-			if(tileEntity instanceof StatStorerTileEntity)
-			{
-				StatStorerTileEntity storerTileEntity = (StatStorerTileEntity) tileEntity;
-				storerTileEntity.setStoredDeathValue(storerTileEntity.getDeathsStored() + 1, blockPos.up(), true);
-			}
-		}
+		statStorer(1, StatStorerTileEntity.ActiveType.DEATHS, event.getEntity().getPosition(), event.getEntity().world);
 	}
 	
 	// Stores the crit result from the CriticalHitEvent, to be used during LivingHurtEvent to trigger special effects of any weapons.
@@ -159,6 +150,60 @@ public class ServerEventHandler
 	public static boolean wasLastHitCrit(LivingEntity entity)
 	{
 		return entity instanceof ServerPlayerEntity && cachedCrit;
+	}
+	
+	public static void statStorer(float eventAmount, StatStorerTileEntity.ActiveType activeType, BlockPos eventPos, World world)
+	{
+		for(BlockPos blockPos : BlockPos.getAllInBoxMutable(eventPos.add(10, 10, 10), eventPos.add(-10, -10, -10)))
+		{
+			TileEntity tileEntity = world.getTileEntity(blockPos);
+			if(tileEntity instanceof StatStorerTileEntity)
+			{
+				StatStorerTileEntity storerTileEntity = (StatStorerTileEntity) tileEntity;
+				
+				if(activeType == storerTileEntity.getActiveType())
+					storerTileEntity.setActiveStoredStatValue(storerTileEntity.getActiveStoredStatValue() + eventAmount, blockPos.up(), true);
+			}
+		}
+	}
+	
+	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
+	public static void onEntityHeal(LivingHealEvent event)
+	{
+		statStorer(event.getAmount(), StatStorerTileEntity.ActiveType.HEALTH_RECOVERED, event.getEntity().getPosition(), event.getEntity().world);
+	}
+	
+	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
+	public static void onSaplingGrow(SaplingGrowTreeEvent event)
+	{
+		statStorer(1, StatStorerTileEntity.ActiveType.SAPLING_GROWN, event.getPos(), event.getWorld().getWorld());
+	}
+	
+	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
+	public static void onEntityStruck(EntityStruckByLightningEvent event)
+	{
+		statStorer(1, StatStorerTileEntity.ActiveType.LIGHTNING_STRUCK, event.getEntity().getPosition(), event.getEntity().world);
+	}
+	
+	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
+	public static void onBlockRightClick(PlayerInteractEvent.RightClickBlock event)
+	{
+		//conditions check does not work
+		if(event.getUseBlock() == Event.Result.ALLOW)
+			statStorer(1, StatStorerTileEntity.ActiveType.BLOCK_RIGHT_CLICK, event.getEntity().getPosition(), event.getEntity().world);
+	}
+	
+	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
+	public static void onEntitySetTarget(LivingSetAttackTargetEvent event)
+	{
+		//adds value every tick
+		//statStorer(1, StatStorerTileEntity.ActiveType.ENTITY_SET_TARGET, event.getEntity().getPosition(), event.getEntity().world);
+	}
+	
+	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
+	public static void onAlchemy(AlchemyEvent event)
+	{
+		statStorer(1, StatStorerTileEntity.ActiveType.ALCHEMY_ACTIVATED, event.getAlchemiter().getPos(), event.getWorld());
 	}
 	
 	@SubscribeEvent(priority = EventPriority.NORMAL)
@@ -191,16 +236,7 @@ public class ServerEventHandler
 			((UnderlingEntity) event.getEntityLiving()).onEntityDamaged(event.getSource(), event.getAmount());
 		}
 		
-		Entity injuredEntity = event.getEntity();
-		for(BlockPos blockPos : BlockPos.getAllInBoxMutable(injuredEntity.getPosition().add(4, 4, 4), injuredEntity.getPosition().add(-4, -4, -4)))
-		{
-			TileEntity tileEntity = injuredEntity.world.getTileEntity(blockPos);
-			if(tileEntity instanceof StatStorerTileEntity)
-			{
-				StatStorerTileEntity storerTileEntity = (StatStorerTileEntity) tileEntity;
-				storerTileEntity.setStoredDamageValue(storerTileEntity.getDamageStored() + event.getAmount(), blockPos.up(), true);
-			}
-		}
+		statStorer(event.getAmount(), StatStorerTileEntity.ActiveType.DAMAGE, event.getEntity().getPosition(), event.getEntity().world);
 	}
 	
 	@SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = false)

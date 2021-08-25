@@ -3,7 +3,6 @@ package com.mraof.minestuck.block;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.tileentity.StatStorerTileEntity;
-import com.mraof.minestuck.tileentity.WirelessRedstoneTransmitterTileEntity;
 import com.mraof.minestuck.util.Debug;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -31,7 +30,7 @@ public class StatStorerBlock extends Block
 	@SuppressWarnings("deprecation")
 	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
 	{
-		if(!player.isSneaking() && !player.isPotionActive(MSEffects.CREATIVE_SHOCK.get()))
+		if(!player.isSneaking() && (!player.isPotionActive(MSEffects.CREATIVE_SHOCK.get()) || player.isCreative()))
 		{
 			TileEntity tileEntity = worldIn.getTileEntity(pos);
 			if(tileEntity instanceof StatStorerTileEntity)
@@ -64,7 +63,8 @@ public class StatStorerBlock extends Block
 		TileEntity tileentity = worldIn.getTileEntity(pos);
 		if(tileentity instanceof StatStorerTileEntity)
 		{
-			return Math.min(16, ((StatStorerTileEntity) tileentity).getActiveStoredStatValue() / 2);
+			//return Math.min(16, ((StatStorerTileEntity) tileentity).getActiveStoredStatValue() / ((StatStorerTileEntity) tileentity).getDivideValueBy());
+			return ((StatStorerTileEntity) tileentity).getActiveStoredStatValue() / ((StatStorerTileEntity) tileentity).getDivideValueBy();
 		}
 		
 		return super.getComparatorInputOverride(blockState, worldIn, pos);
