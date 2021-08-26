@@ -1,6 +1,8 @@
-package com.mraof.minestuck.tileentity;
+package com.mraof.minestuck.tileentity.redstone;
 
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.StatStorerBlock;
+import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.util.Debug;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
@@ -61,12 +63,11 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 		if(world == null || !world.isAreaLoaded(pos, 1))
 			return; // Forge: prevent loading unloaded chunks
 		
-		if(tickCycle % 10 == 1)
+		if(tickCycle % MinestuckConfig.SERVER.wirelessBlocksTickRate.get() == 1)
 		{
 			world.setBlockState(pos, world.getBlockState(pos).with(StatStorerBlock.POWER, Math.min(15, getActiveStoredStatValue() / getDivideValueBy())));
-			tickCycle = 1;
-		} else
-			++tickCycle;
+		}
+		tickCycle++;
 	}
 	
 	@Override
@@ -168,8 +169,6 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 	
 	public ActiveType getActiveType()
 	{
-		//Debug.debugf("getActiveType. activeType = %s", activeType);
-		
 		if(this.activeType == null)
 		{
 			activeType = ActiveType.DAMAGE;

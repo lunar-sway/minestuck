@@ -2,7 +2,7 @@ package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.effects.MSEffects;
-import com.mraof.minestuck.tileentity.WirelessRedstoneTransmitterTileEntity;
+import com.mraof.minestuck.tileentity.redstone.WirelessRedstoneTransmitterTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -13,7 +13,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
 
@@ -56,20 +55,4 @@ public class WirelessRedstoneTransmitterBlock extends Block
 		
 		return ActionResultType.SUCCESS;
 	}
-	
-	/*@Override
-	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
-	{
-		super.neighborChanged(state, worldIn, pos, blockIn, fromPos, isMoving);
-		if(worldIn instanceof ServerWorld)
-		{
-			ServerWorld serverWorld = (ServerWorld) worldIn;
-			TileEntity te = serverWorld.getTileEntity(pos);
-			if(te instanceof WirelessRedstoneTransmitterTileEntity)
-			{
-				WirelessRedstoneTransmitterTileEntity wirelessTE = (WirelessRedstoneTransmitterTileEntity) te;
-				wirelessTE.sendUpdateToPosition(serverWorld, serverWorld.getRedstonePowerFromNeighbors(pos));
-			}
-		}
-	}*/
 }

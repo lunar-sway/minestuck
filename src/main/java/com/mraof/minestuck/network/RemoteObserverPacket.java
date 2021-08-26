@@ -1,7 +1,6 @@
 package com.mraof.minestuck.network;
 
-import com.mraof.minestuck.tileentity.RemoteObserverTileEntity;
-import com.mraof.minestuck.tileentity.StatStorerTileEntity;
+import com.mraof.minestuck.tileentity.redstone.RemoteObserverTileEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;

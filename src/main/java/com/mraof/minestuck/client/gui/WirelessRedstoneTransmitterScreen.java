@@ -1,10 +1,12 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mraof.minestuck.block.WirelessRedstoneRecieverBlock;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.WirelessRedstoneTransmitterPacket;
-import com.mraof.minestuck.tileentity.WirelessRedstoneTransmitterTileEntity;
+import com.mraof.minestuck.tileentity.redstone.WirelessRedstoneTransmitterTileEntity;
 import com.mraof.minestuck.util.Debug;
+import net.minecraft.block.Block;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.button.Button;
@@ -25,7 +27,10 @@ public class WirelessRedstoneTransmitterScreen extends Screen
 	private TextFieldWidget destinationTextFieldX;
 	private TextFieldWidget destinationTextFieldY;
 	private TextFieldWidget destinationTextFieldZ;
+	private Button findRecieverButton;
 	private Button doneButton;
+	
+	private BlockPos outgoingDestinationPos;
 	
 	
 	WirelessRedstoneTransmitterScreen(WirelessRedstoneTransmitterTileEntity te)
@@ -40,36 +45,31 @@ public class WirelessRedstoneTransmitterScreen extends Screen
 	{
 		int yOffset = (this.height / 2) - (guiHeight / 2);
 		
-		this.destinationTextFieldX = new TextFieldWidget(this.font, this.width / 2 - 60, yOffset + 25, 40, 20, "");
-		this.destinationTextFieldX.setMaxStringLength(9);
+		this.destinationTextFieldX = new TextFieldWidget(this.font, this.width / 2 - 60, yOffset + 10, 40, 20, "");
+		this.destinationTextFieldX.setMaxStringLength(12);
 		this.destinationTextFieldX.setText(String.valueOf(te.getDestinationBlockPos().getX()));
 		this.destinationTextFieldX.setFocused2(true);
-		//destinationTextField.setResponder(s -> doneButton.active = s.length() == 4);
 		addButton(destinationTextFieldX);
 		if(this.destinationTextFieldX.active)
 			this.destinationTextFieldX.setFocused2(true);
 		
-		
-		this.destinationTextFieldY = new TextFieldWidget(this.font, this.width / 2 - 20, yOffset + 25, 40, 20, "Wireless signal destination code");    //TODO Use translation instead, and maybe look at other text fields for what the text should be
-		this.destinationTextFieldY.setMaxStringLength(9);
+		this.destinationTextFieldY = new TextFieldWidget(this.font, this.width / 2 - 20, yOffset + 10, 40, 20, "Wireless signal destination code");    //TODO Use translation instead, and maybe look at other text fields for what the text should be
+		this.destinationTextFieldY.setMaxStringLength(12);
 		this.destinationTextFieldY.setText(String.valueOf(te.getDestinationBlockPos().getY()));
 		if(this.destinationTextFieldY.active)
 			this.destinationTextFieldY.setFocused2(true);
-		//destinationTextField.setResponder(s -> doneButton.active = s.length() == 4);
 		addButton(destinationTextFieldY);
-		//setFocusedDefault(destinationTextFieldY);
 		
-		this.destinationTextFieldZ = new TextFieldWidget(this.font, this.width / 2 + 20, yOffset + 25, 40, 20, "");
-		this.destinationTextFieldZ.setMaxStringLength(9);
+		this.destinationTextFieldZ = new TextFieldWidget(this.font, this.width / 2 + 20, yOffset + 10, 40, 20, ""); //was yOffset + 25
+		this.destinationTextFieldZ.setMaxStringLength(12);
 		this.destinationTextFieldZ.setText(String.valueOf(te.getDestinationBlockPos().getZ()));
 		if(this.destinationTextFieldZ.active)
 			this.destinationTextFieldZ.setFocused2(true);
-		//destinationTextField.setResponder(s -> doneButton.active = s.length() == 4);
 		addButton(destinationTextFieldZ);
-		//setFocusedDefault(destinationTextFieldZ);
 		
-		addButton(doneButton = new ExtendedButton(this.width / 2 - 20, yOffset + 50, 40, 20, I18n.format("gui.done"), button -> finish()));
-		//doneButton.active = destinationTextFieldX.getText().length() == 4;
+		addButton(findRecieverButton = new ExtendedButton(this.width / 2 - 45, yOffset + 40, 90, 20, "Find Reciever", button -> findReciever()));
+		
+		addButton(doneButton = new ExtendedButton(this.width / 2 - 20, yOffset + 70, 40, 20, I18n.format("gui.done"), button -> finish()));
 	}
 	
 	@Override
@@ -84,11 +84,34 @@ public class WirelessRedstoneTransmitterScreen extends Screen
 		super.render(mouseX, mouseY, partialTicks);
 	}
 	
+	private void findReciever()
+	{
+		for(BlockPos blockPos : BlockPos.getAllInBoxMutable(te.getPos().add(24, 24, 24), te.getPos().add(-24, -24, -24)))
+		{
+			Block block = te.getWorld().getBlockState(blockPos).getBlock();
+			if(block instanceof WirelessRedstoneRecieverBlock)
+			{
+				outgoingDestinationPos = blockPos;
+				return;
+			}
+		}
+		
+		outgoingDestinationPos();
+	}
+	
 	private void finish()
 	{
-		WirelessRedstoneTransmitterPacket packet = new WirelessRedstoneTransmitterPacket(textToIntToBlockPos(), te.getPos());
+		WirelessRedstoneTransmitterPacket packet = new WirelessRedstoneTransmitterPacket(outgoingDestinationPos(), te.getPos());
 		MSPacketHandler.sendToServer(packet);
 		this.minecraft.displayGuiScreen(null);
+	}
+	
+	private BlockPos outgoingDestinationPos()
+	{
+		if(outgoingDestinationPos != null)
+			return outgoingDestinationPos;
+		else
+			return textToIntToBlockPos();
 	}
 	
 	private BlockPos textToIntToBlockPos()
