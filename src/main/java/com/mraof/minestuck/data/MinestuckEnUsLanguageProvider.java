@@ -320,8 +320,15 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addExtra(MSBlocks.DUNGEON_DOOR_INTERFACE, "key", "Key needed: %s");
 		add(MSBlocks.DUNGEON_DOOR, "Dungeon Door Block");
 		add(MSBlocks.TRAJECTORY_BLOCK, "Trajectory Block");
+		addTooltip(MSBlocks.TRAJECTORY_BLOCK, "Propels entities in the direction it faces, with an incoming redstone strength modifier.");
+		add(MSBlocks.STAT_STORER, "Stat Storer");
+		addTooltip(MSBlocks.STAT_STORER, "Lets off a redstone signal with the strength of the signal based on the active value type stored.");
+		add(MSBlocks.REMOTE_OBSERVER, "Remote Observer");
+		addTooltip(MSBlocks.REMOTE_OBSERVER, "Lets off a full strength redstone signal if the active condition is met.");
 		add(MSBlocks.WIRELESS_REDSTONE_TRANSMITTER, "Wireless Redstone Transmitter");
+		addTooltip(MSBlocks.WIRELESS_REDSTONE_TRANSMITTER, "Sends a signal to Wireless Redstone Reciever at the input coordinates if the coordinates are loaded.");
 		add(MSBlocks.WIRELESS_REDSTONE_RECIEVER, "Wireless Redstone Reciever");
+		addTooltip(MSBlocks.WIRELESS_REDSTONE_RECIEVER, "Recieves signals from Wireless Redstone Transmitters.");
 		add(MSBlocks.GATE, "Gate");
 		add(MSBlocks.RETURN_NODE, "Return Node");
 		MSBlocks.CRUXTRUDER.forEachBlock(block -> add(block, "Cruxtruder"));

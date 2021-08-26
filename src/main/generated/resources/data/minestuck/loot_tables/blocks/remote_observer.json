@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minestuck:stat_storer_block"
+          "name": "minestuck:remote_observer"
         }
       ],
       "conditions": [

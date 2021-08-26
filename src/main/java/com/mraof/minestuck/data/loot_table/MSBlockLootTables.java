@@ -286,7 +286,8 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(DUNGEON_DOOR_INTERFACE);
 		registerDropSelfLootTable(DUNGEON_DOOR);
 		registerDropSelfLootTable(TRAJECTORY_BLOCK);
-		registerDropSelfLootTable(STAT_STORER_BLOCK);
+		registerDropSelfLootTable(STAT_STORER);
+		registerDropSelfLootTable(REMOTE_OBSERVER);
 		registerDropSelfLootTable(WIRELESS_REDSTONE_TRANSMITTER);
 		registerDropSelfLootTable(WIRELESS_REDSTONE_RECIEVER);
 		

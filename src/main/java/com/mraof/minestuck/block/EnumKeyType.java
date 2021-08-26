@@ -14,6 +14,11 @@ public enum EnumKeyType implements IStringSerializable
 		return name().toLowerCase();
 	}
 	
+	public String getNameNoSpaces()
+	{
+		return name().replace('_', ' ');
+	}
+	
 	public static EnumKeyType fromString(String str) //converts string back into enum, used primarily in Dungeon Interface block/tile entity
 	{
 		for(EnumKeyType type : EnumKeyType.values())

@@ -1,0 +1,5 @@
+{
+    "variants": {
+        "": { "model": "minestuck:block/remote_observer" }
+    }
+}

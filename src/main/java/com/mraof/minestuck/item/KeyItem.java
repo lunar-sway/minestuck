@@ -70,6 +70,6 @@ public class KeyItem extends Item
 	{
 		super.addInformation(stack, worldIn, tooltip, flagIn);
 		EnumKeyType keyTypeFromInt = EnumKeyType.fromInt(getKeyType(stack));
-		tooltip.add(new TranslationTextComponent("item.minestuck." + this + ".key", keyTypeFromInt));
+		tooltip.add(new TranslationTextComponent("item.minestuck." + this + ".key", keyTypeFromInt.getNameNoSpaces()));
 	}
 }

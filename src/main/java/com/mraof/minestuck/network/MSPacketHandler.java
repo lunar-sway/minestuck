@@ -56,6 +56,7 @@ public class MSPacketHandler
 		registerMessage(TransportalizerPacket.class, TransportalizerPacket::decode);
 		registerMessage(WirelessRedstoneTransmitterPacket.class, WirelessRedstoneTransmitterPacket::decode);
 		registerMessage(StatStorerPacket.class, StatStorerPacket::decode);
+		registerMessage(RemoteObserverPacket.class, RemoteObserverPacket::decode);
 		registerMessage(EffectTogglePacket.class, EffectTogglePacket::decode);
 		registerMessage(StoneTabletPacket.class, StoneTabletPacket::decode);
 		registerMessage(MagicEffectPacket.class, MagicEffectPacket::decode);

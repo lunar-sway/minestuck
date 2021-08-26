@@ -1,6 +1,7 @@
 package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.block.StatStorerBlock;
 import com.mraof.minestuck.block.WirelessRedstoneRecieverBlock;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Teleport;
@@ -11,6 +12,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.INameable;
@@ -29,9 +31,10 @@ import net.minecraftforge.common.util.Constants;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements INameable
+public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements INameable, ITickableTileEntity
 {
 	private BlockPos destBlockPos;
+	private int tickCycle;
 	//private int destX;
 	//private int destY;
 	//private int destZ;
@@ -42,17 +45,30 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 	}
 	
 	@Override
+	public void tick()
+	{
+		if(world == null || !world.isAreaLoaded(pos, 1))
+			return; // Forge: prevent loading unloaded chunks
+		
+		if(tickCycle % 10 == 1)
+		{
+			sendUpdateToPosition(world, world.getRedstonePowerFromNeighbors(pos));
+			//world.setBlockState(pos, world.getBlockState(pos).with(StatStorerBlock.POWER, Math.min(15, getActiveStoredStatValue() / getDivideValueBy())));
+			tickCycle = 1;
+		} else
+			++tickCycle;
+	}
+	
+	@Override
 	public void validate()
 	{
 		super.validate();
-		
 	}
 	
 	@Override
 	public void remove()
 	{
 		super.remove();
-		
 	}
 	
 	public BlockPos getDestinationBlockPos()
@@ -71,7 +87,7 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 		world.notifyBlockUpdate(pos, state, state, 0);
 	}
 	
-	public void sendUpdateToPosition(ServerWorld worldIn, int powerIn)
+	public void sendUpdateToPosition(World worldIn, int powerIn)
 	{
 		/*for(Direction direction : Direction.values()) {
 			worldIn.notifyNeighborsOfStateChange(pos.offset(direction), world.getBlockState(destBlockPos).getBlock());
@@ -85,7 +101,7 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 			BlockState blockStateIn = worldIn.getBlockState(destBlockPos);
 			if(blockStateIn.getBlock() instanceof WirelessRedstoneRecieverBlock)
 			{
-				worldIn.setBlockState(destBlockPos, blockStateIn.with(WirelessRedstoneRecieverBlock.POWER, powerIn), Constants.BlockFlags.BLOCK_UPDATE);
+				worldIn.setBlockState(destBlockPos, blockStateIn.with(WirelessRedstoneRecieverBlock.POWER, powerIn));
 				//worldIn.notifyBlockUpdate(destBlockPos, blockStateIn, blockStateIn.with(WirelessRedstoneRecieverBlock.POWERED, isPowered), 3);
 			}
 		}

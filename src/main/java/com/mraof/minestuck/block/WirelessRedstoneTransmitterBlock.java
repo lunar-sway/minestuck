@@ -57,7 +57,7 @@ public class WirelessRedstoneTransmitterBlock extends Block
 		return ActionResultType.SUCCESS;
 	}
 	
-	@Override
+	/*@Override
 	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
 	{
 		super.neighborChanged(state, worldIn, pos, blockIn, fromPos, isMoving);
@@ -71,5 +71,5 @@ public class WirelessRedstoneTransmitterBlock extends Block
 				wirelessTE.sendUpdateToPosition(serverWorld, serverWorld.getRedstonePowerFromNeighbors(pos));
 			}
 		}
-	}
+	}*/
 }

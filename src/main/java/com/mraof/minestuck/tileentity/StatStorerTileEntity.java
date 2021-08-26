@@ -4,10 +4,11 @@ import com.mraof.minestuck.block.StatStorerBlock;
 import com.mraof.minestuck.util.Debug;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 
-public class StatStorerTileEntity extends TileEntity
+public class StatStorerTileEntity extends TileEntity implements ITickableTileEntity
 {
 	private float damageStored;
 	private int deathsStored;
@@ -20,6 +21,7 @@ public class StatStorerTileEntity extends TileEntity
 	
 	private ActiveType activeType;
 	private int divideValueBy;
+	private int tickCycle;
 	
 	public enum ActiveType
 	{
@@ -51,6 +53,20 @@ public class StatStorerTileEntity extends TileEntity
 	public StatStorerTileEntity()
 	{
 		super(MSTileEntityTypes.STAT_STORER.get());
+	}
+	
+	@Override
+	public void tick()
+	{
+		if(world == null || !world.isAreaLoaded(pos, 1))
+			return; // Forge: prevent loading unloaded chunks
+		
+		if(tickCycle % 10 == 1)
+		{
+			world.setBlockState(pos, world.getBlockState(pos).with(StatStorerBlock.POWER, Math.min(15, getActiveStoredStatValue() / getDivideValueBy())));
+			tickCycle = 1;
+		} else
+			++tickCycle;
 	}
 	
 	@Override
@@ -99,6 +115,7 @@ public class StatStorerTileEntity extends TileEntity
 			this.alcehemyActivatedStored = 0;
 		
 		
+		this.tickCycle = compound.getInt("tickCycle");
 		this.activeType = ActiveType.fromInt(compound.getInt("activeTypeOrdinal"));
 		if(compound.contains("divideValueBy"))
 			this.divideValueBy = compound.getInt("divideValueBy");
@@ -119,6 +136,7 @@ public class StatStorerTileEntity extends TileEntity
 		compound.putInt("entitySetTargetStored", entitySetTargetStored);
 		compound.putInt("alcehemyActivatedStored", alcehemyActivatedStored);
 		
+		compound.putInt("tickCycle", tickCycle);
 		compound.putInt("activeTypeOrdinal", activeType.ordinal());
 		compound.putInt("divideValueBy", divideValueBy);
 		
@@ -150,7 +168,7 @@ public class StatStorerTileEntity extends TileEntity
 	
 	public ActiveType getActiveType()
 	{
-		Debug.debugf("getActiveType. activeType = %s", activeType);
+		//Debug.debugf("getActiveType. activeType = %s", activeType);
 		
 		if(this.activeType == null)
 		{

@@ -50,8 +50,9 @@ public class RainbowSaplingBlock extends BushBlock implements IGrowable
 	public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random)
 	{
 		super.tick(state, worldIn, pos, random);
-		if (!worldIn.isAreaLoaded(pos, 1)) return; // Forge: prevent loading unloaded chunks when checking neighbor's light
-		if (worldIn.getLight(pos.up()) >= 9 && random.nextInt(3) == 0)
+		if(!worldIn.isAreaLoaded(pos, 1))
+			return; // Forge: prevent loading unloaded chunks when checking neighbor's light
+		if(worldIn.getLight(pos.up()) >= 9 && random.nextInt(3) == 0)
 			this.grow(worldIn, random, pos, state);
 	}
 	
@@ -64,7 +65,7 @@ public class RainbowSaplingBlock extends BushBlock implements IGrowable
 	@Override
 	public boolean canUseBonemeal(World worldIn, Random rand, BlockPos pos, BlockState state)
 	{
-		return (double)worldIn.rand.nextFloat() < 0.45D;
+		return (double) worldIn.rand.nextFloat() < 0.45D;
 	}
 	
 	@Override
@@ -77,9 +78,9 @@ public class RainbowSaplingBlock extends BushBlock implements IGrowable
 		{
 			float f = rand.nextFloat();
 			BooleanProperty property;
-			if(f < 1/3F)
+			if(f < 1 / 3F)
 				property = RED;
-			else if(f < 2/3F)
+			else if(f < 2 / 3F)
 				property = GREEN;
 			else property = BLUE;
 			if(!state.get(property))
@@ -123,8 +124,8 @@ public class RainbowSaplingBlock extends BushBlock implements IGrowable
 		} else if(soil.getBlock() == Blocks.MAGENTA_WOOL)
 		{
 			if(worldIn.rand.nextFloat() < 0.5)
-			state = state.with(RED, true);
-		else state = state.with(BLUE, true);
+				state = state.with(RED, true);
+			else state = state.with(BLUE, true);
 		} else if(soil.getBlock() == Blocks.PURPLE_WOOL)
 		{
 			if(worldIn.rand.nextFloat() < 0.25)

@@ -7,10 +7,7 @@ import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.inventory.captchalogue.ModusType;
 import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
 import com.mraof.minestuck.player.Title;
-import com.mraof.minestuck.tileentity.ComputerTileEntity;
-import com.mraof.minestuck.tileentity.StatStorerTileEntity;
-import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
-import com.mraof.minestuck.tileentity.WirelessRedstoneTransmitterTileEntity;
+import com.mraof.minestuck.tileentity.*;
 import com.mraof.minestuck.tileentity.machine.AlchemiterTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
@@ -72,6 +69,11 @@ public class MSScreenFactories
 	public static void displayStatStorerScreen(StatStorerTileEntity tileEntity)
 	{
 		Minecraft.getInstance().displayGuiScreen(new StatStorerScreen(tileEntity));
+	}
+	
+	public static void displayRemoteObserverScreen(RemoteObserverTileEntity tileEntity)
+	{
+		Minecraft.getInstance().displayGuiScreen(new RemoteObserverScreen(tileEntity));
 	}
 	
 	public static void displayAlchemiterScreen(AlchemiterTileEntity tileEntity)

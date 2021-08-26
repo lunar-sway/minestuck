@@ -148,7 +148,8 @@ public class MSBlocks
 	public static final Block DUNGEON_DOOR_INTERFACE = getNull();
 	public static final Block DUNGEON_DOOR = getNull();
 	public static final Block TRAJECTORY_BLOCK = getNull();
-	public static final Block STAT_STORER_BLOCK = getNull();
+	public static final Block STAT_STORER = getNull();
+	public static final Block REMOTE_OBSERVER = getNull();
 	public static final Block WIRELESS_REDSTONE_TRANSMITTER = getNull();
 	public static final Block WIRELESS_REDSTONE_RECIEVER = getNull();
 	
@@ -477,12 +478,13 @@ public class MSBlocks
 		registry.register(new SlabBlock(Block.Properties.from(deadPlanks)).setRegistryName("dead_planks_slab"));
 		registry.register(new SlabBlock(Block.Properties.from(treatedPlanks)).setRegistryName("treated_planks_slab"));
 		
-		registry.register(new DungeonDoorInterfaceBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(-1F).sound(SoundType.STONE)).setRegistryName("dungeon_door_interface"));
-		registry.register(new Block(Block.Properties.create(Material.ROCK).hardnessAndResistance(-1F).sound(SoundType.STONE)).setRegistryName("dungeon_door"));
-		registry.register(new TrajectoryBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(-1F).sound(SoundType.STONE)).setRegistryName("trajectory_block"));
-		registry.register(new StatStorerBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(-1F).sound(SoundType.STONE)).setRegistryName("stat_storer_block"));
-		registry.register(new WirelessRedstoneTransmitterBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(-1F).sound(SoundType.STONE)).setRegistryName("wireless_redstone_transmitter"));
-		registry.register(new WirelessRedstoneRecieverBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(-1F).sound(SoundType.STONE)).setRegistryName("wireless_redstone_reciever"));
+		registry.register(new DungeonDoorInterfaceBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(3).sound(SoundType.STONE)).setRegistryName("dungeon_door_interface"));
+		registry.register(new Block(Block.Properties.create(Material.ROCK).hardnessAndResistance(3).sound(SoundType.STONE)).setRegistryName("dungeon_door"));
+		registry.register(new TrajectoryBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(3).sound(SoundType.STONE)).setRegistryName("trajectory_block"));
+		registry.register(new StatStorerBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(3).sound(SoundType.STONE)).setRegistryName("stat_storer"));
+		registry.register(new RemoteObserverBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(3).sound(SoundType.STONE)).setRegistryName("remote_observer"));
+		registry.register(new WirelessRedstoneTransmitterBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(3).sound(SoundType.STONE)).setRegistryName("wireless_redstone_transmitter"));
+		registry.register(new WirelessRedstoneRecieverBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(3).sound(SoundType.STONE)).setRegistryName("wireless_redstone_reciever"));
 		
 		registry.register(new GateBlock(Block.Properties.create(Material.PORTAL).doesNotBlockMovement().hardnessAndResistance(-1.0F, 25.0F).sound(SoundType.GLASS).lightValue(11).noDrops()).setRegistryName("gate"));
 		registry.register(new ReturnNodeBlock(Block.Properties.create(Material.PORTAL).doesNotBlockMovement().hardnessAndResistance(-1.0F, 10.0F).sound(SoundType.GLASS).lightValue(11).noDrops()).setRegistryName("return_node"));
