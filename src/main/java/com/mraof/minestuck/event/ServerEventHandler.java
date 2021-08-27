@@ -152,8 +152,11 @@ public class ServerEventHandler
 	
 	public static void statStorer(float eventAmount, StatStorerTileEntity.ActiveType activeType, BlockPos eventPos, World world)
 	{
-		for(BlockPos blockPos : BlockPos.getAllInBoxMutable(eventPos.add(10, 10, 10), eventPos.add(-10, -10, -10)))
+		for(BlockPos blockPos : BlockPos.getAllInBoxMutable(eventPos.add(16, 16, 16), eventPos.add(-16, -16, -16)))
 		{
+			if(world == null || !world.isAreaLoaded(blockPos, 0))
+				return; // Forge: prevent loading unloaded chunks
+			
 			TileEntity tileEntity = world.getTileEntity(blockPos);
 			if(tileEntity instanceof StatStorerTileEntity)
 			{

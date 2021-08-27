@@ -1953,7 +1953,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addEntitySubtitles(MSEntityTypes.BASILISK, "ambient", "Basilisk hisses");
 		addEntitySubtitles(MSEntityTypes.BASILISK, "hurt", "Basilisk hurts");
 		addEntitySubtitles(MSEntityTypes.BASILISK, "death", "Basilisk dies");
-		addEntitySubtitles(MSEntityTypes.LICH, "ambient", "Lich wispers");
+		addEntitySubtitles(MSEntityTypes.LICH, "ambient", "Lich whispers");
 		addEntitySubtitles(MSEntityTypes.LICH, "hurt", "Lich hurts");
 		addEntitySubtitles(MSEntityTypes.LICH, "death", "Lich dies");
 		addEntitySubtitles(MSEntityTypes.GICLOPS, "ambient", "Giclops wants to eat'cha");

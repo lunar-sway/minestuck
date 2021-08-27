@@ -58,6 +58,8 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 		if(tickCycle % MinestuckConfig.SERVER.wirelessBlocksTickRate.get() == 1)
 		{
 			checkRelaventType();
+			if(tickCycle >= 5000) //setting arbitrarily high value that the tick cannot go past
+				tickCycle = 0;
 		}
 		tickCycle++;
 	}
@@ -106,7 +108,7 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 		super.write(compound);
 		
 		compound.putInt("tickCycle", tickCycle);
-		compound.putInt("activeTypeOrdinal", activeType.ordinal());
+		compound.putInt("activeTypeOrdinal", getActiveType().ordinal());
 		
 		return compound;
 	}

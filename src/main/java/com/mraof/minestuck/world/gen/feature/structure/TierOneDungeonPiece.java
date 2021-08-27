@@ -5,6 +5,7 @@ import com.mraof.minestuck.block.*;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.tileentity.DungeonDoorInterfaceTileEntity;
+import com.mraof.minestuck.tileentity.redstone.WirelessRedstoneTransmitterTileEntity;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
@@ -38,6 +39,7 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 	private boolean createRan = false; //boolean check to prevent certain aspects from generating several times over or changing
 	private boolean bottomRoomSpawner1, bottomRoomSpawner2;
 	private int randomRoomType;
+	private int roomVariable1;
 	
 	private final int entryRoomMinX = 20;
 	private final int entryRoomMinY = 0;
@@ -47,17 +49,17 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 	private final int entryRoomMaxZ = 47;
 	
 	private final int lowerRoomMinX = entryRoomMinX - 5;
-	private final int lowerRoomMinY = entryRoomMinY - 42;
+	private final int lowerRoomMinY = entryRoomMinY - 32;
 	private final int lowerRoomMinZ = entryRoomMinZ - 5;
 	private final int lowerRoomMaxX = entryRoomMaxX + 5;
-	private final int lowerRoomMaxY = entryRoomMinY - 30;
+	private final int lowerRoomMaxY = entryRoomMinY - 20;
 	private final int lowerRoomMaxZ = entryRoomMaxZ + 5;
 	
 	private final int firstRoomMinX = entryRoomMaxX + 5;
 	private final int firstRoomMinY = entryRoomMinY - 50;
 	private final int firstRoomMinZ = 20;
 	private final int firstRoomMaxX = entryRoomMaxX + 45; //37+45 = 82
-	private final int firstRoomMaxY = entryRoomMinY - 30;
+	private final int firstRoomMaxY = entryRoomMinY - 20;
 	private final int firstRoomMaxZ = 57;
 	private final BlockState air = Blocks.AIR.getDefaultState();
 	//private BlockState ground;
@@ -94,6 +96,7 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 		bottomRoomSpawner1 = nbt.getBoolean("bottomRoomSpawner1");
 		bottomRoomSpawner2 = nbt.getBoolean("bottomRoomSpawner2");
 		randomRoomType = nbt.getInt("randomRoomType");
+		roomVariable1 = nbt.getInt("roomVariable1");
 	}
 	
 	@Override
@@ -175,30 +178,27 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 	
 	private void buildWallsAndFloors(IWorld world, MutableBoundingBox boundingBox, Random rand)
 	{
-		BlockPos doorInterfacePos = new BlockPos(getXWithOffset(entryRoomMinX + 5, entryRoomMinZ), getYWithOffset(entryRoomMinY + 3), getZWithOffset(entryRoomMinX + 5, entryRoomMinZ));
-		if(boundingBox.isVecInside(doorInterfacePos)/* || getBoundingBox().isVecInside(doorInterfacePos)*/) //TODO needs to work with just one bounding box
+		BlockPos doorInterfacePos = new BlockPos(
+				getXWithOffset(entryRoomMinX + 5, entryRoomMinZ),
+				getYWithOffset(entryRoomMinY + 3),
+				getZWithOffset(entryRoomMinX + 5, entryRoomMinZ));
+		/*if(boundingBox.isVecInside(doorInterfacePos)/* || getBoundingBox().isVecInside(doorInterfacePos)*//*) //TODO needs to work with just one bounding box
 		{
 			Debug.debugf("buildWallsAndFloors. doorInterfacePos = %s", doorInterfacePos);
-			BlockState doorInterfaceBlockState = MSBlocks.DUNGEON_DOOR_INTERFACE.getDefaultState();
-			doorInterfaceBlockState.createTileEntity(world);
-			world.setBlockState(doorInterfacePos, doorInterfaceBlockState, Constants.BlockFlags.BLOCK_UPDATE);
-			TileEntity interfaceTE = world.getTileEntity(doorInterfacePos);
-			if(!(interfaceTE instanceof DungeonDoorInterfaceTileEntity) && interfaceTE != null)
-			{
-				interfaceTE = new DungeonDoorInterfaceTileEntity();
-				world.getWorld().setTileEntity(doorInterfacePos, interfaceTE);
-			}
-			if(interfaceTE != null)
-			{
-				((DungeonDoorInterfaceTileEntity) interfaceTE).setKey(EnumKeyType.tier_1_key);
-			} else
-				throw new IllegalStateException("Unable to create a new dungeon door interface tile entity. Returned null!");
-		}
+			//BlockState doorInterfaceBlockState = MSBlocks.DUNGEON_DOOR_INTERFACE.getDefaultState();
+			
+		}*/
+		BlockPos minDoorPos = new BlockPos(
+				getXWithOffset(entryRoomMinX + 6, entryRoomMinZ),
+				getYWithOffset(entryRoomMinY + 1),
+				getZWithOffset(entryRoomMinX + 6, entryRoomMinZ));
+		BlockPos maxDoorPos = new BlockPos(
+				getXWithOffset(entryRoomMaxX - 6, entryRoomMinZ),
+				getYWithOffset(entryRoomMaxY - 3),
+				getZWithOffset(entryRoomMaxX - 6, entryRoomMinZ));
 		
-		fillWithBlocks(world, boundingBox,
-				entryRoomMinX + 6, entryRoomMinY + 1, entryRoomMinZ,
-				entryRoomMaxX - 6, entryRoomMaxY - 3, entryRoomMinZ,
-				MSBlocks.DUNGEON_DOOR.getDefaultState(), MSBlocks.DUNGEON_DOOR.getDefaultState(), false);
+		//entryRoomMinX + 6, entryRoomMinY + 1, entryRoomMinZ, entryRoomMaxX - 6, entryRoomMaxY - 3, entryRoomMinZ;
+		StructureBlockUtil.placeDungeonDoor(world, boundingBox, doorInterfacePos, minDoorPos, maxDoorPos, EnumKeyType.tier_1_key);
 		
 		fillWithBlocks(world, boundingBox,
 				entryRoomMinX + 1, entryRoomMinY, entryRoomMinZ + 1,
@@ -455,7 +455,7 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 		
 		} else if(aspectSapling == MSBlocks.LIFE_ASPECT_SAPLING.getDefaultState()) //rabbit statue
 		{
-			StructureBlockUtil.placeLargeAspectSymbol(new BlockPos(getXWithOffset(entryRoomMinX, entryRoomMinZ), getYWithOffset(entryRoomMaxY + 20), getZWithOffset(entryRoomMinX, entryRoomMinZ)), world, boundingBox, primaryBlock, EnumAspect.BLOOD);
+			//StructureBlockUtil.placeLargeAspectSymbol(new BlockPos(getXWithOffset(entryRoomMinX, entryRoomMinZ), getYWithOffset(entryRoomMaxY + 20), getZWithOffset(entryRoomMinX, entryRoomMinZ)), world, boundingBox, primaryBlock, EnumAspect.BLOOD);
 			
 			fillWithBlocks(world, boundingBox, entryRoomMinX - 2, entryRoomMaxY - 10, entryRoomMinZ + 6, entryRoomMinX - 2, entryRoomMaxY - 3, entryRoomMinZ + 6, MSBlocks.PIPE.getDefaultState().with(PipeBlock.FACING, Direction.UP), MSBlocks.PIPE.getDefaultState(), false); //pipe 1
 			setBlockState(world, MSBlocks.PIPE_INTERSECTION.getDefaultState(), entryRoomMinX - 2, entryRoomMaxY - 2, entryRoomMinZ + 6, boundingBox);
@@ -501,7 +501,7 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 		fillWithBlocks(world, boundingBox,
 				firstRoomMinX, firstRoomMinY, firstRoomMinZ,
 				firstRoomMaxX, firstRoomMaxY, firstRoomMaxZ,
-				primaryBlock, primaryBlock, false);
+				secondaryBlock, secondaryBlock, false);
 		
 		if(aspectSapling == MSBlocks.BREATH_ASPECT_SAPLING.getDefaultState()) //parkour like frog temple lower room
 		{
@@ -509,6 +509,8 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 		} else if(aspectSapling == MSBlocks.LIFE_ASPECT_SAPLING.getDefaultState())
 		{
 			//TODO will be for Blood
+			roomVariable1 = rand.nextInt(6); //blood diving to flick switch
+			
 			fillWithAir(world, boundingBox,
 					firstRoomMinX + 1, firstRoomMaxY - 5, firstRoomMinZ + 1,
 					firstRoomMaxX - 1, firstRoomMaxY - 1, firstRoomMaxZ - 1); //ceiling down to raised areas
@@ -528,8 +530,8 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 			
 			fillWithBlocks(world, boundingBox,
 					firstRoomMinX + 16, firstRoomMaxY - 10, firstRoomMinZ + 4,
-					firstRoomMinX + 16, firstRoomMaxY - 6, firstRoomMaxZ - 8,
-					primaryBlock, primaryBlock, false); //second barrier
+					firstRoomMinX + 16, firstRoomMaxY - 6, firstRoomMaxZ - 5,
+					primaryBlock, primaryBlock, false); //second barrier, ends close to edge wall to form barrier with wireless piston setup below!
 			
 			fillWithBlocks(world, boundingBox,
 					firstRoomMinX + 24, firstRoomMaxY - 10, firstRoomMinZ + 8,
@@ -541,43 +543,97 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 					firstRoomMinX + 32, firstRoomMaxY - 6, firstRoomMaxZ - 8,
 					primaryBlock, primaryBlock, false); //fourth barrier
 			
-			BlockPos stairsAreaMin = new BlockPos(getXWithOffset(firstRoomMaxX - 2, firstRoomMinZ + 4), getYWithOffset(firstRoomMaxY - 19), getZWithOffset(firstRoomMaxX - 2, firstRoomMinZ + 4));
-			BlockPos stairsAreaMax = new BlockPos(getXWithOffset(firstRoomMaxX - 1, firstRoomMaxZ - 5), getYWithOffset(firstRoomMaxY - 5), getZWithOffset(firstRoomMaxX - 1, firstRoomMaxZ - 5));
-			
-			StructureBlockUtil.fillWithBlocksFromPos(world, boundingBox, air, stairsAreaMin, stairsAreaMax);
-			
-			//fillWithAir(world, boundingBox, firstRoomMaxX - 1, firstRoomMaxY - 20, firstRoomMinZ + 5, firstRoomMaxX - 2, firstRoomMaxY - 5, firstRoomMaxZ - 5);
-			StructureBlockUtil.createStairs(world, boundingBox, primaryBlock, primaryStairBlock.with(StairsBlock.FACING, getCoordBaseMode()), stairsAreaMin.offset(getCoordBaseMode(), 19), 10, 2, getCoordBaseMode(), false);
+			for(int lightIterate = 0; lightIterate < 4; lightIterate++)
+			{
+				fillWithBlocks(world, boundingBox,
+						firstRoomMinX + 4 + (lightIterate * 8), firstRoomMaxY - 11, firstRoomMinZ + 8,
+						firstRoomMinX + 4 + (lightIterate * 8), firstRoomMaxY - 11, firstRoomMaxZ - 8,
+						lightBlock, lightBlock, false);
+			}
 			
 			BlockPos spawnerPos;
 			for(int xIterate = 0; xIterate < 4; xIterate++)
 			{
-				CompoundNBT spawnerNBT = new CompoundNBT();
+				//CompoundNBT spawnerNBT = new CompoundNBT();
 				//spawnerNBT.("SpawnData", 4);
 				
 				spawnerPos = new BlockPos(
 						getXWithOffset(firstRoomMinX + 5 + xIterate * 10, firstRoomMinZ + 2),
 						getYWithOffset(firstRoomMaxY - 5),
 						getZWithOffset(firstRoomMinX + 5 + xIterate * 10, firstRoomMinZ + 2));
+				world.setBlockState(spawnerPos.down(), lightBlock, Constants.BlockFlags.BLOCK_UPDATE);
 				StructureBlockUtil.placeSpawner(spawnerPos, world, boundingBox, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
-				TileEntity spawnerTE = world.getTileEntity(spawnerPos); //TODO figure out how to change potion effects of spawned entities(give them speed) and increase range at which they spawn
+				/*TileEntity spawnerTE = world.getTileEntity(spawnerPos); //TODO figure out how to change potion effects of spawned entities(give them speed) and increase range at which they spawn
 				if((spawnerTE instanceof MobSpawnerTileEntity))
 				{
 					((MobSpawnerTileEntity) spawnerTE).write(spawnerNBT);
-				}
-				
+				}*/
+				//TODO every maxY value below this line has been shifted down, shift down the above
 				spawnerPos = new BlockPos(
 						getXWithOffset(firstRoomMinX + 5 + xIterate * 10, firstRoomMaxZ - 2),
 						getYWithOffset(firstRoomMaxY - 5),
 						getZWithOffset(firstRoomMinX + 5 + xIterate * 10, firstRoomMaxZ - 2));
+				world.setBlockState(spawnerPos.down(), lightBlock, Constants.BlockFlags.BLOCK_UPDATE);
 				StructureBlockUtil.placeSpawner(spawnerPos, world, boundingBox, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
 				
 				fillWithAir(world, boundingBox, firstRoomMinX + 3 + xIterate * 10, firstRoomMaxY - 7, firstRoomMaxZ - 3, firstRoomMinX + 3 + xIterate * 10, firstRoomMaxY - 5, firstRoomMaxZ - 1);
 				fillWithAir(world, boundingBox, firstRoomMinX + 3 + xIterate * 10, firstRoomMaxY - 7, firstRoomMinZ + 1, firstRoomMinX + 3 + xIterate * 10, firstRoomMaxY - 5, firstRoomMinZ + 3);
 			}
 			
-			fillWithBlocks(world, boundingBox, firstRoomMinX + 5, firstRoomMaxY - 10, firstRoomMaxZ, firstRoomMinX + 20, firstRoomMaxY - 3, firstRoomMaxZ + 12, primaryBlock, air, false); //first side room
+			fillWithBlocks(world, boundingBox, firstRoomMinX + 5, firstRoomMaxY - 20, firstRoomMaxZ, firstRoomMinX + 20, firstRoomMaxY - 3, firstRoomMaxZ + 12, secondaryBlock, air, false); //first side room
+			fillWithBlocks(world, boundingBox, firstRoomMinX + 6, firstRoomMaxY - 19, firstRoomMaxZ + 1, firstRoomMinX + 19, firstRoomMaxY - 10, firstRoomMaxZ + 11, MSBlocks.BLOOD.getDefaultState(), MSBlocks.BLOOD.getDefaultState(), false); //first side room liquid
+			fillWithBlocks(world, boundingBox, firstRoomMinX + 6, firstRoomMaxY - 19, firstRoomMaxZ + 1, firstRoomMinX + 20, firstRoomMaxY - 10, firstRoomMaxZ + 1, primaryBlock, primaryBlock, false); //ledge into liquid
+			
+			BlockPos transmitterPos = new BlockPos(
+					getXWithOffset(firstRoomMinX + 12 + (roomVariable1 - 3), firstRoomMaxZ + 6),
+					getYWithOffset(firstRoomMaxY - 21),
+					getZWithOffset(firstRoomMinX + 12 + (roomVariable1 - 3), firstRoomMaxZ + 6));
+			BlockPos receiverPos = new BlockPos(
+					getXWithOffset(firstRoomMinX + 16, firstRoomMaxZ - 1),
+					getYWithOffset(firstRoomMaxY - 9),
+					getZWithOffset(firstRoomMinX + 16, firstRoomMaxZ - 1));
+			StructureBlockUtil.placeWirelessRelay(world, boundingBox, transmitterPos, receiverPos);
+			
+			setBlockState(world, Blocks.REDSTONE_BLOCK.getDefaultState(), firstRoomMinX + 12 + (roomVariable1 - 3), firstRoomMaxY - 20, firstRoomMaxZ + 6, boundingBox); //power for transmitter
+			setBlockState(world, Blocks.REDSTONE_WIRE.getDefaultState(), firstRoomMinX + 16, firstRoomMaxY - 8, firstRoomMaxZ - 1, boundingBox); //wire above receiver, both power pistons
+			fillWithAir(world, boundingBox, firstRoomMinX + 16, firstRoomMaxY - 9, firstRoomMaxZ - 3, firstRoomMinX + 16, firstRoomMaxY - 8, firstRoomMaxZ - 3); //hole for piston
+			fillWithBlocks(world, boundingBox, firstRoomMinX + 16, firstRoomMaxY - 9, firstRoomMaxZ - 2, firstRoomMinX + 16, firstRoomMaxY - 8, firstRoomMaxZ - 2, Blocks.STICKY_PISTON.getDefaultState().with(PistonBlock.FACING, Direction.SOUTH), Blocks.STICKY_PISTON.getDefaultState(), false);
+			fillWithBlocks(world, boundingBox, firstRoomMinX + 16, firstRoomMaxY - 9, firstRoomMaxZ - 4, firstRoomMinX + 16, firstRoomMaxY - 8, firstRoomMaxZ - 4, MSBlocks.DUNGEON_DOOR.getDefaultState(), MSBlocks.DUNGEON_DOOR.getDefaultState(), false);
 			fillWithAir(world, boundingBox, firstRoomMinX + 9, firstRoomMaxY - 9, firstRoomMaxZ - 3, firstRoomMinX + 10, firstRoomMaxY - 7, firstRoomMaxZ); //first side room entrance
+			
+			BlockPos stairsAreaMin = new BlockPos(getXWithOffset(firstRoomMaxX - 2, firstRoomMinZ + 4), getYWithOffset(firstRoomMaxY - 25), getZWithOffset(firstRoomMaxX - 2, firstRoomMinZ + 4));
+			BlockPos stairsAreaMax = new BlockPos(getXWithOffset(firstRoomMaxX - 1, firstRoomMaxZ - 5), getYWithOffset(firstRoomMaxY - 7), getZWithOffset(firstRoomMaxX - 1, firstRoomMaxZ - 5));
+			
+			//StructureBlockUtil.fillWithBlocksFromPos(world, boundingBox, air, stairsAreaMin, stairsAreaMax);
+			fillWithAir(world, boundingBox, firstRoomMaxX - 2, firstRoomMaxY - 25, firstRoomMinZ + 4, firstRoomMaxX - 1, firstRoomMaxY - 7, firstRoomMaxZ - 5);
+			StructureBlockUtil.createStairs(world, boundingBox, primaryBlock, primaryStairBlock.with(StairsBlock.FACING, getCoordBaseMode()), stairsAreaMin.offset(getCoordBaseMode(), 19), 10, 2, getCoordBaseMode(), false);
+			
+			fillWithAir(world, boundingBox,
+					firstRoomMinX + 1, firstRoomMinY + 10, firstRoomMinZ + 1,
+					firstRoomMaxX - 3, firstRoomMinY + 14, firstRoomMaxZ - 1); //lower section ceiling
+			fillWithAir(world, boundingBox,
+					firstRoomMinX + 5, firstRoomMinY + 5, firstRoomMinZ + 1,
+					firstRoomMaxX - 3, firstRoomMinY + 9, firstRoomMaxZ - 1); //lower section chamber(exception of blood fluid)
+			fillWithBlocks(world, boundingBox,
+					firstRoomMinX + 5, firstRoomMinY + 1, firstRoomMinZ + 1,
+					firstRoomMaxX - 3, firstRoomMinY + 4, firstRoomMaxZ - 1,
+					MSBlocks.BLOOD.getDefaultState(), MSBlocks.BLOOD.getDefaultState(), false);
+			
+			BlockPos aspectSymbolPos = new BlockPos(
+					getXWithOffset((firstRoomMinX + 5 + firstRoomMaxX - 3) / 2, (firstRoomMinZ + firstRoomMaxZ) / 2),
+					getYWithOffset(firstRoomMinY + 4),
+					getZWithOffset((firstRoomMinX + 5 + firstRoomMaxX - 3) / 2, (firstRoomMinZ + firstRoomMaxZ) / 2)); //middle of lower room on top of blood
+			StructureBlockUtil.createCylinder(world, boundingBox, secondaryBlock, aspectSymbolPos.down(3), 12, 3);
+			StructureBlockUtil.placeLargeAspectSymbol(world, boundingBox, aspectSymbolPos, primaryBlock, EnumAspect.BLOOD);
+			
+			fillWithBlocks(world, boundingBox, firstRoomMinX + 3, firstRoomMinY + 4, (firstRoomMinZ + firstRoomMaxZ) / 2 - 3, firstRoomMinX + 3, firstRoomMinY + 8, (firstRoomMinZ + firstRoomMaxZ) / 2 + 2, lightBlock, lightBlock, false);
+			//TODO Add remote observer closer to far edge on player detect mode connected to mob summoning blocks, and set stat storer near center on death mode and add wireless relays at different distances using for loop for each summoned entity(allows players to see progress)
+			for(int stairPuzzleIterate = 0; stairPuzzleIterate < 5; stairPuzzleIterate++)
+			{
+				setBlockState(world, Blocks.STICKY_PISTON.getDefaultState().with(PistonBlock.FACING, Direction.EAST), firstRoomMinX + 3, firstRoomMinY + 4 + stairPuzzleIterate, (firstRoomMinZ + firstRoomMaxZ) / 2 - 2 + stairPuzzleIterate, boundingBox);
+				setBlockState(world, secondaryDecorativeBlock, firstRoomMinX + 4, firstRoomMinY + 4 + stairPuzzleIterate, (firstRoomMinZ + firstRoomMaxZ) / 2 - 3 + stairPuzzleIterate, boundingBox);
+			}
+
 			
 			/*//TODO will be for Breath
 			fillWithAir(world, boundingBox,
@@ -643,6 +699,7 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 		tagCompound.putBoolean("bottomRoomSpawner1", bottomRoomSpawner1); //spawner type room only
 		tagCompound.putBoolean("bottomRoomSpawner2", bottomRoomSpawner2); //spawner type room only
 		tagCompound.putInt("randomRoomType", randomRoomType);
+		tagCompound.putInt("roomVariable1", roomVariable1);
 	}
 	
 	public class Selector extends StructurePiece.BlockSelector

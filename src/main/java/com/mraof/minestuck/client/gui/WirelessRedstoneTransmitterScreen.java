@@ -1,12 +1,10 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mraof.minestuck.block.WirelessRedstoneRecieverBlock;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.WirelessRedstoneTransmitterPacket;
 import com.mraof.minestuck.tileentity.redstone.WirelessRedstoneTransmitterTileEntity;
 import com.mraof.minestuck.util.Debug;
-import net.minecraft.block.Block;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.button.Button;
@@ -86,15 +84,7 @@ public class WirelessRedstoneTransmitterScreen extends Screen
 	
 	private void findReciever()
 	{
-		for(BlockPos blockPos : BlockPos.getAllInBoxMutable(te.getPos().add(24, 24, 24), te.getPos().add(-24, -24, -24)))
-		{
-			Block block = te.getWorld().getBlockState(blockPos).getBlock();
-			if(block instanceof WirelessRedstoneRecieverBlock)
-			{
-				outgoingDestinationPos = blockPos;
-				return;
-			}
-		}
+		outgoingDestinationPos = te.findReciever(te);
 		
 		outgoingDestinationPos();
 	}
@@ -142,7 +132,6 @@ public class WirelessRedstoneTransmitterScreen extends Screen
 		}
 		Debug.debugf("%s %s %s, pos = %s", x, y, z, new BlockPos(x, y, z));
 		
-		//if(Integer.parseInt(destinationTextFieldX.getText())  >= Integer.MIN_VALUE)
 		return new BlockPos(x, y, z);
 	}
 }

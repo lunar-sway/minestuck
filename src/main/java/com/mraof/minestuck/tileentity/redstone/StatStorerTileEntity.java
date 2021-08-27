@@ -66,6 +66,8 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 		if(tickCycle % MinestuckConfig.SERVER.wirelessBlocksTickRate.get() == 1)
 		{
 			world.setBlockState(pos, world.getBlockState(pos).with(StatStorerBlock.POWER, Math.min(15, getActiveStoredStatValue() / getDivideValueBy())));
+			if(tickCycle >= 5000) //setting arbitrarily high value that the tick cannot go past
+				tickCycle = 0;
 		}
 		tickCycle++;
 	}

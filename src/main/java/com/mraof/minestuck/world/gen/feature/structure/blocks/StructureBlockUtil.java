@@ -1,12 +1,14 @@
 package com.mraof.minestuck.world.gen.feature.structure.blocks;
 
+import com.mraof.minestuck.block.EnumKeyType;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.ReturnNodeBlock;
 import com.mraof.minestuck.player.EnumAspect;
-import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.tileentity.DungeonDoorInterfaceTileEntity;
+import com.mraof.minestuck.tileentity.redstone.WirelessRedstoneTransmitterTileEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ChestBlock;
-import net.minecraft.block.StairsBlock;
 import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -91,10 +93,73 @@ public class StructureBlockUtil
 		ReturnNodeBlock.placeReturnNode(world, new BlockPos(posX, posY, posZ), boundingBox);
 	}
 	
+	
+	/**
+	 * Creates a wireless redstone transmitter in the first blockpos, then creates a wireless redstone reciever in the second blockpos. The transmitter is linked to the reciever
+	 */
+	public static void placeWirelessRelay(IWorld world, MutableBoundingBox boundingBox, BlockPos transmitterBlockPos, BlockPos recieverBlockPos)
+	{
+		if(boundingBox.isVecInside(transmitterBlockPos))
+		{
+			world.setBlockState(transmitterBlockPos, MSBlocks.WIRELESS_REDSTONE_TRANSMITTER.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
+			MSBlocks.WIRELESS_REDSTONE_TRANSMITTER.getDefaultState().createTileEntity(world);
+			TileEntity TE = world.getTileEntity(transmitterBlockPos);
+			if(!(TE instanceof WirelessRedstoneTransmitterTileEntity))
+			{
+				TE = new WirelessRedstoneTransmitterTileEntity();
+				world.getWorld().setTileEntity(transmitterBlockPos, TE);
+			}
+			WirelessRedstoneTransmitterTileEntity transmitterTE = (WirelessRedstoneTransmitterTileEntity) TE;
+			transmitterTE.setDestinationBlockPos(recieverBlockPos);
+		}
+		
+		if(boundingBox.isVecInside(recieverBlockPos))
+		{
+			world.setBlockState(recieverBlockPos, MSBlocks.WIRELESS_REDSTONE_RECIEVER.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
+		}
+	}
+	
+	/**
+	 * Creates a dungeon door interface(with relevant data) and then the dungeon door blocks it will be meant to unlock
+	 */
+	public static void placeDungeonDoor(IWorld world, MutableBoundingBox boundingBox, BlockPos interfaceBlockPos, BlockPos minDoorBlockPos, BlockPos maxDoorBlockPos, EnumKeyType keyType)
+	{
+		if(boundingBox.isVecInside(interfaceBlockPos))
+		{
+			world.setBlockState(interfaceBlockPos, MSBlocks.DUNGEON_DOOR_INTERFACE.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
+			MSBlocks.DUNGEON_DOOR_INTERFACE.getDefaultState().createTileEntity(world);
+			TileEntity TE = world.getTileEntity(interfaceBlockPos);
+			if(!(TE instanceof DungeonDoorInterfaceTileEntity))
+			{
+				TE = new DungeonDoorInterfaceTileEntity();
+				world.getWorld().setTileEntity(interfaceBlockPos, TE);
+			}
+			DungeonDoorInterfaceTileEntity interfaceTE = (DungeonDoorInterfaceTileEntity) TE;
+			interfaceTE.setKey(keyType);
+			
+			/*world.setBlockState(interfaceBlockPos, MSBlocks.DUNGEON_DOOR_INTERFACE.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
+			TileEntity interfaceTE = world.getTileEntity(interfaceBlockPos);
+			if(!(interfaceTE instanceof DungeonDoorInterfaceTileEntity) && interfaceTE != null)
+			{
+				interfaceTE = new DungeonDoorInterfaceTileEntity();
+				world.getWorld().setTileEntity(interfaceBlockPos, interfaceTE);
+			}
+			if(interfaceTE != null)
+			{
+				((DungeonDoorInterfaceTileEntity) interfaceTE).setKey(keyType);
+			} else
+				throw new IllegalStateException("Unable to create a new dungeon door interface tile entity. Returned null!");
+		
+		doorInterfaceBlockState.createTileEntity(world);*/
+		}
+		fillWithBlocksFromPos(world, boundingBox, MSBlocks.DUNGEON_DOOR.getDefaultState(), minDoorBlockPos, maxDoorBlockPos);
+		
+	}
+	
 	/**
 	 * Will generate the circular structure with the blockPosIn as the center. 16x resolution. Structure is 25 blocks wide and 1 block thick
 	 */
-	public static void placeLargeAspectSymbol(BlockPos blockPosIn, IWorld world, MutableBoundingBox boundingBox, BlockState blockStateIn, EnumAspect aspectIn)
+	public static void placeLargeAspectSymbol(IWorld world, MutableBoundingBox boundingBox, BlockPos blockPosIn, BlockState blockStateIn, EnumAspect aspectIn)
 	{
 		createCylinder(world, boundingBox, blockStateIn, blockPosIn, 12, 1);
 		BlockState aspectBlockStateLight = Blocks.LIGHT_GRAY_CONCRETE.getDefaultState();

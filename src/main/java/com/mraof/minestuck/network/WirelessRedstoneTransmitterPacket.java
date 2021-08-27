@@ -10,13 +10,11 @@ public class WirelessRedstoneTransmitterPacket implements PlayToServerPacket
 {
 	private final BlockPos destinationBlockPos;
 	private final BlockPos tileBlockPos;
-	//private final String destId;
 	
 	public WirelessRedstoneTransmitterPacket(BlockPos pos, BlockPos tileBlockPos)
 	{
 		this.destinationBlockPos = pos;
 		this.tileBlockPos = tileBlockPos;
-		//this.destId = destId;
 	}
 	
 	@Override
@@ -24,14 +22,12 @@ public class WirelessRedstoneTransmitterPacket implements PlayToServerPacket
 	{
 		buffer.writeBlockPos(destinationBlockPos);
 		buffer.writeBlockPos(tileBlockPos);
-		//buffer.writeString(destId, 4);
 	}
 	
 	public static WirelessRedstoneTransmitterPacket decode(PacketBuffer buffer)
 	{
 		BlockPos destinationBlockPos = buffer.readBlockPos();
 		BlockPos tileBlockPos = buffer.readBlockPos();
-		//String destId = buffer.readString(4);
 		
 		return new WirelessRedstoneTransmitterPacket(destinationBlockPos, tileBlockPos);
 	}
