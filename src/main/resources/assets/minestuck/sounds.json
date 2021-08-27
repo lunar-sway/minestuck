@@ -655,5 +655,15 @@
         "stream": false
       }
     ]
+  },
+  "event.loot_block.open": {
+    "category": "ambient",
+    "subtitle": "subtitles.minestuck.loot_block_open",
+    "sounds": [
+      {
+        "name": "minestuck:random/loot_block_open",
+        "stream": false
+      }
+    ]
   }
 }

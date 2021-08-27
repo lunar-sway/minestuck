@@ -291,6 +291,8 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(WIRELESS_REDSTONE_TRANSMITTER);
 		registerDropSelfLootTable(WIRELESS_REDSTONE_RECIEVER);
 		
+		registerLootTable(LOOT_CHEST, func_218482_a());
+		
 		registerDropSelfLootTable(HOLOPAD);
 		registerDropSelfLootTable(CRUXTRUDER_LID);
 		registerLootTable(MINI_CRUXTRUDER, MSBlockLootTables::droppingWithColor);

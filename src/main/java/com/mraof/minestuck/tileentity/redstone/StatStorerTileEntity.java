@@ -3,7 +3,6 @@ package com.mraof.minestuck.tileentity.redstone;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.StatStorerBlock;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
-import com.mraof.minestuck.util.Debug;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tileentity.ITickableTileEntity;
@@ -200,35 +199,35 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 		if(this.activeType == ActiveType.DAMAGE)
 		{
 			this.damageStored = storedStatIn;
-			((StatStorerBlock) world.getBlockState(pos).getBlock()).updateNeighbors(world.getBlockState(pos), world, pos, 3);
+			world.getBlockState(pos).getBlock().updateNeighbors(world.getBlockState(pos), world, pos, 3);
 		} else if(this.activeType == ActiveType.DEATHS)
 		{
 			this.deathsStored = (int) storedStatIn;
-			((StatStorerBlock) world.getBlockState(pos).getBlock()).updateNeighbors(world.getBlockState(pos), world, pos, 3);
+			world.getBlockState(pos).getBlock().updateNeighbors(world.getBlockState(pos), world, pos, 3);
 		} else if(this.activeType == ActiveType.SAPLING_GROWN)
 		{
 			this.saplingsGrownStored = (int) storedStatIn;
-			((StatStorerBlock) world.getBlockState(pos).getBlock()).updateNeighbors(world.getBlockState(pos), world, pos, 3);
+			world.getBlockState(pos).getBlock().updateNeighbors(world.getBlockState(pos), world, pos, 3);
 		} else if(this.activeType == ActiveType.HEALTH_RECOVERED)
 		{
 			this.healthRecoveredStored = storedStatIn;
-			((StatStorerBlock) world.getBlockState(pos).getBlock()).updateNeighbors(world.getBlockState(pos), world, pos, 3);
+			world.getBlockState(pos).getBlock().updateNeighbors(world.getBlockState(pos), world, pos, 3);
 		} else if(this.activeType == ActiveType.LIGHTNING_STRUCK)
 		{
 			this.lightningStruckStored = (int) storedStatIn;
-			((StatStorerBlock) world.getBlockState(pos).getBlock()).updateNeighbors(world.getBlockState(pos), world, pos, 3);
+			world.getBlockState(pos).getBlock().updateNeighbors(world.getBlockState(pos), world, pos, 3);
 		} else if(this.activeType == ActiveType.BLOCK_RIGHT_CLICK)
 		{
 			this.blockRightClickStored = (int) storedStatIn;
-			((StatStorerBlock) world.getBlockState(pos).getBlock()).updateNeighbors(world.getBlockState(pos), world, pos, 3);
+			world.getBlockState(pos).getBlock().updateNeighbors(world.getBlockState(pos), world, pos, 3);
 		} else if(this.activeType == ActiveType.ENTITY_SET_TARGET)
 		{
 			this.entitySetTargetStored = (int) storedStatIn;
-			((StatStorerBlock) world.getBlockState(pos).getBlock()).updateNeighbors(world.getBlockState(pos), world, pos, 3);
+			world.getBlockState(pos).getBlock().updateNeighbors(world.getBlockState(pos), world, pos, 3);
 		} else if(this.activeType == ActiveType.ALCHEMY_ACTIVATED)
 		{
 			this.alcehemyActivatedStored = (int) storedStatIn;
-			((StatStorerBlock) world.getBlockState(pos).getBlock()).updateNeighbors(world.getBlockState(pos), world, pos, 3);
+			world.getBlockState(pos).getBlock().updateNeighbors(world.getBlockState(pos), world, pos, 3);
 		}
 	}
 	

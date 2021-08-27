@@ -59,14 +59,6 @@ public class DungeonDoorInterfaceBlock extends Block
 			{
 			
 			}
-			
-			if(interfaceTileEntity.getWorld() instanceof ServerWorld)
-			{
-				LootTable lootTable = ((ServerWorld) interfaceTileEntity.getWorld()).getServer().getLootTableManager().getLootTableFromLocation(MSLootTables.TIER_ONE_MEDIUM_CHEST);
-				//lootTable.fillInventory(player.inventory, new LootContext.Builder((ServerWorld) interfaceTileEntity.getWorld()).build(LootParameterSets.CHEST));
-				lootTable.generate(new LootContext.Builder((ServerWorld) interfaceTileEntity.getWorld()).build(LootParameterSets.EMPTY), player::entityDropItem);
-			}
-			
 		}
 		
 		return ActionResultType.FAIL;

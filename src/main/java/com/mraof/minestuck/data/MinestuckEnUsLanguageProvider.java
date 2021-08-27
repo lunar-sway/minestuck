@@ -329,6 +329,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSBlocks.WIRELESS_REDSTONE_TRANSMITTER, "Sends a signal to Wireless Redstone Reciever at the input coordinates if the coordinates are loaded.");
 		add(MSBlocks.WIRELESS_REDSTONE_RECIEVER, "Wireless Redstone Reciever");
 		addTooltip(MSBlocks.WIRELESS_REDSTONE_RECIEVER, "Recieves signals from Wireless Redstone Transmitters.");
+		add(MSBlocks.LOOT_CHEST, "Loot Chest");
 		add(MSBlocks.GATE, "Gate");
 		add(MSBlocks.RETURN_NODE, "Return Node");
 		MSBlocks.CRUXTRUDER.forEachBlock(block -> add(block, "Cruxtruder"));
@@ -466,7 +467,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.CALEDSCRATCH, "Caledscratch");
 		addTooltip(MSItems.CALEDSCRATCH, "The chosen weapon of Hephaestus, Guardian of the land of heat and clockwork. They say if you break this blade you incur their godly wrath.");
 		add(MSItems.CALEDFWLCH, "Caledfwlch");
-		addTooltip(MSItems.CALEDFWLCH, "Dumb Welsh Sword. Probably has some chamic destiny.");
+		addTooltip(MSItems.CALEDFWLCH, "Dumb Welsh Sword. Probably has some karmic destiny.");
 		add(MSItems.ROYAL_DERINGER, "Royal Deringer");
 		add(MSItems.CLAYMORE, "Claymore");
 		addTooltip(MSItems.CLAYMORE, "A featherweight amongst greatswords. It's still bloody heavy, though!");
@@ -1929,6 +1930,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addSubtitles("screech", "Estrogen-empowered screech");
 		addSubtitles("upcheladder", "Echeladder levels up");
 		addSubtitles("electric_shock", "Electric Shock");
+		addSubtitles("loot_block_open", "Loot block opens");
 		
 		addEntitySubtitles(MSEntityTypes.NAKAGATOR, "ambient", "Nakagator naks");
 		addEntitySubtitles(MSEntityTypes.NAKAGATOR, "hurt", "Nakagator hurts");

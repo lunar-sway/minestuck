@@ -8,6 +8,7 @@ import com.mraof.minestuck.block.plant.*;
 import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.util.CustomVoxelShape;
+import com.mraof.minestuck.world.storage.loot.MSLootTables;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
@@ -152,6 +153,8 @@ public class MSBlocks
 	public static final Block REMOTE_OBSERVER = getNull();
 	public static final Block WIRELESS_REDSTONE_TRANSMITTER = getNull();
 	public static final Block WIRELESS_REDSTONE_RECIEVER = getNull();
+	
+	public static final Block LOOT_CHEST = getNull();
 	
 	//Core Functional Land Blocks
 	public static final Block GATE = getNull();
@@ -485,6 +488,8 @@ public class MSBlocks
 		registry.register(new RemoteObserverBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(3).sound(SoundType.STONE)).setRegistryName("remote_observer"));
 		registry.register(new WirelessRedstoneTransmitterBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(3).sound(SoundType.STONE)).setRegistryName("wireless_redstone_transmitter"));
 		registry.register(new WirelessRedstoneRecieverBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(3).sound(SoundType.STONE)).setRegistryName("wireless_redstone_reciever"));
+		
+		registry.register(new LootBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(3).sound(SoundType.METAL), MSBlockShapes.LOOT_CHEST, MSBlockShapes.LOOT_CHEST_EMPTY, MSLootTables.BASIC_MEDIUM_CHEST).setRegistryName("loot_chest"));
 		
 		registry.register(new GateBlock(Block.Properties.create(Material.PORTAL).doesNotBlockMovement().hardnessAndResistance(-1.0F, 25.0F).sound(SoundType.GLASS).lightValue(11).noDrops()).setRegistryName("gate"));
 		registry.register(new ReturnNodeBlock(Block.Properties.create(Material.PORTAL).doesNotBlockMovement().hardnessAndResistance(-1.0F, 10.0F).sound(SoundType.GLASS).lightValue(11).noDrops()).setRegistryName("return_node"));

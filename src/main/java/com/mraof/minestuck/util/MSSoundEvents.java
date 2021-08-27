@@ -88,6 +88,7 @@ public class MSSoundEvents
 	public static final SoundEvent ITEM_EEEEEEEEEEEE_HIT = getNull();
 	public static final SoundEvent EVENT_ECHELADDER_INCREASE = getNull();
 	public static final SoundEvent EVENT_ELECTRIC_SHOCK = getNull();
+	public static final SoundEvent LOOT_BLOCK_OPEN = getNull();
     
     @Nonnull
 	@SuppressWarnings("ConstantConditions")
@@ -118,7 +119,8 @@ public class MSSoundEvents
 				"entity.lich.ambient", "entity.lich.hurt", "entity.lich.death",
 				"entity.giclops.ambient", "entity.giclops.hurt", "entity.giclops.death",
 				"item.long_forgotten_warhorn.use", "item.grimoire.use",  "item.horn.use",
-				"item.eeeeeeeeeeee.hit", "event.echeladder.increase", "event.electric_shock");
+				"item.eeeeeeeeeeee.hit", "event.echeladder.increase", "event.electric_shock",
+				"event.loot_block.open");
 		
 		for(String path : paths)
 		{

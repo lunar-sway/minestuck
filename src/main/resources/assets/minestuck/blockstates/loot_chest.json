@@ -1,0 +1,12 @@
+{
+    "variants": {
+        "facing=south,open=false": { "model": "minestuck:block/loot_chest" },
+        "facing=west,open=false":  { "model": "minestuck:block/loot_chest", "y": 90 },
+        "facing=north,open=false": { "model": "minestuck:block/loot_chest", "y": 180 },
+        "facing=east,open=false":  { "model": "minestuck:block/loot_chest", "y": 270 },
+        "facing=south,open=true": { "model": "minestuck:block/loot_chest_empty" },
+        "facing=west,open=true":  { "model": "minestuck:block/loot_chest_empty", "y": 90 },
+        "facing=north,open=true": { "model": "minestuck:block/loot_chest_empty", "y": 180 },
+        "facing=east,open=true":  { "model": "minestuck:block/loot_chest_empty", "y": 270 }
+    }
+}

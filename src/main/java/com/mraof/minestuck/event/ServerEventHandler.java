@@ -370,7 +370,7 @@ public class ServerEventHandler
 		onEffectEnd(expiryEvent.getEntityLiving(), expiryEvent.getPotionEffect().getPotion());
 	}
 	
-	private static void onEffectEnd(LivingEntity entityLiving, Effect effect) //TODO MSPacketHandler.sendToPlayer recieves an invalid message
+	private static void onEffectEnd(LivingEntity entityLiving, Effect effect)
 	{
 		if(entityLiving instanceof PlayerEntity)
 		{

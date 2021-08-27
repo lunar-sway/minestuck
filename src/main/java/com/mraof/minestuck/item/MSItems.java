@@ -734,6 +734,8 @@ public class MSItems
 		registerItemBlock(registry, WIRELESS_REDSTONE_TRANSMITTER, MSItemGroup.LANDS);
 		registerItemBlock(registry, WIRELESS_REDSTONE_RECIEVER, MSItemGroup.LANDS);
 		
+		registerItemBlock(registry, LOOT_CHEST, MSItemGroup.LANDS);
+		
 		registry.register(new CruxtruderItem(MSBlocks.CRUXTRUDER, new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("cruxtruder"));
 		registerItemBlock(registry, CRUXTRUDER_LID, MSItemGroup.MAIN);
 		registry.register(new MultiblockItem(MSBlocks.TOTEM_LATHE, new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("totem_lathe"));

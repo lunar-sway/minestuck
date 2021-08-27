@@ -37,9 +37,19 @@ public class GlowystoneWireBlock extends Block
 	public static final EnumProperty<RedstoneSide> WEST = BlockStateProperties.REDSTONE_WEST;
 	
 	public static final Map<Direction, EnumProperty<RedstoneSide>> FACING_PROPERTY_MAP = Maps.newEnumMap(ImmutableMap.of(Direction.NORTH, NORTH, Direction.EAST, EAST, Direction.SOUTH, SOUTH, Direction.WEST, WEST));
-	protected static final VoxelShape[] SHAPES = new VoxelShape[]{Block.makeCuboidShape(3.0D, 0.0D, 3.0D, 13.0D, 1.0D, 13.0D), Block.makeCuboidShape(3.0D, 0.0D, 3.0D, 13.0D, 1.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 3.0D, 13.0D, 1.0D, 13.0D), Block.makeCuboidShape(0.0D, 0.0D, 3.0D, 13.0D, 1.0D, 16.0D), Block.makeCuboidShape(3.0D, 0.0D, 0.0D, 13.0D, 1.0D, 13.0D), Block.makeCuboidShape(3.0D, 0.0D, 0.0D, 13.0D, 1.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 13.0D, 1.0D, 13.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 13.0D, 1.0D, 16.0D), Block.makeCuboidShape(3.0D, 0.0D, 3.0D, 16.0D, 1.0D, 13.0D), Block.makeCuboidShape(3.0D, 0.0D, 3.0D, 16.0D, 1.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 3.0D, 16.0D, 1.0D, 13.0D), Block.makeCuboidShape(0.0D, 0.0D, 3.0D, 16.0D, 1.0D, 16.0D), Block.makeCuboidShape(3.0D, 0.0D, 0.0D, 16.0D, 1.0D, 13.0D), Block.makeCuboidShape(3.0D, 0.0D, 0.0D, 16.0D, 1.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 1.0D, 13.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 1.0D, 16.0D)};
+	protected static final VoxelShape[] SHAPES = new VoxelShape[]{
+			Block.makeCuboidShape(3.0D, 0.0D, 3.0D, 13.0D, 1.0D, 13.0D), Block.makeCuboidShape(3.0D, 0.0D, 3.0D, 13.0D, 1.0D, 16.0D),
+			Block.makeCuboidShape(0.0D, 0.0D, 3.0D, 13.0D, 1.0D, 13.0D), Block.makeCuboidShape(0.0D, 0.0D, 3.0D, 13.0D, 1.0D, 16.0D),
+			Block.makeCuboidShape(3.0D, 0.0D, 0.0D, 13.0D, 1.0D, 13.0D), Block.makeCuboidShape(3.0D, 0.0D, 0.0D, 13.0D, 1.0D, 16.0D),
+			Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 13.0D, 1.0D, 13.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 13.0D, 1.0D, 16.0D),
+			Block.makeCuboidShape(3.0D, 0.0D, 3.0D, 16.0D, 1.0D, 13.0D), Block.makeCuboidShape(3.0D, 0.0D, 3.0D, 16.0D, 1.0D, 16.0D),
+			Block.makeCuboidShape(0.0D, 0.0D, 3.0D, 16.0D, 1.0D, 13.0D), Block.makeCuboidShape(0.0D, 0.0D, 3.0D, 16.0D, 1.0D, 16.0D),
+			Block.makeCuboidShape(3.0D, 0.0D, 0.0D, 16.0D, 1.0D, 13.0D), Block.makeCuboidShape(3.0D, 0.0D, 0.0D, 16.0D, 1.0D, 16.0D),
+			Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 1.0D, 13.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 1.0D, 16.0D)};
 	
-	/** List of blocks to update with glowystone. */
+	/**
+	 * List of blocks to update with glowystone.
+	 */
 	private final Set<BlockPos> blocksNeedingUpdate = Sets.newHashSet();
 	
 	public GlowystoneWireBlock(Properties properties)
@@ -61,22 +71,22 @@ public class GlowystoneWireBlock extends Block
 		boolean flag1 = state.get(EAST) != RedstoneSide.NONE;
 		boolean flag2 = state.get(SOUTH) != RedstoneSide.NONE;
 		boolean flag3 = state.get(WEST) != RedstoneSide.NONE;
-		if (flag || flag2 && !flag && !flag1 && !flag3)
+		if(flag || flag2 && !flag && !flag1 && !flag3)
 		{
 			i |= 1 << Direction.NORTH.getHorizontalIndex();
 		}
 		
-		if (flag1 || flag3 && !flag && !flag1 && !flag2)
+		if(flag1 || flag3 && !flag && !flag1 && !flag2)
 		{
 			i |= 1 << Direction.EAST.getHorizontalIndex();
 		}
 		
-		if (flag2 || flag && !flag1 && !flag2 && !flag3)
+		if(flag2 || flag && !flag1 && !flag2 && !flag3)
 		{
 			i |= 1 << Direction.SOUTH.getHorizontalIndex();
 		}
 		
-		if (flag3 || flag1 && !flag && !flag2 && !flag3)
+		if(flag3 || flag1 && !flag && !flag2 && !flag3)
 		{
 			i |= 1 << Direction.WEST.getHorizontalIndex();
 		}
@@ -111,10 +121,13 @@ public class GlowystoneWireBlock extends Block
 		BlockState blockstate = worldIn.getBlockState(blockpos);
 		BlockPos blockpos1 = pos.up();
 		BlockState blockstate1 = worldIn.getBlockState(blockpos1);
-		if (!blockstate1.isNormalCube(worldIn, blockpos1)) {
+		if(!blockstate1.isNormalCube(worldIn, blockpos1))
+		{
 			boolean flag = Block.hasSolidSide(blockstate, worldIn, blockpos, Direction.UP);
-			if (flag && canConnectTo(worldIn.getBlockState(blockpos.up()))) {
-				if (isOpaque(blockstate.getCollisionShape(worldIn, blockpos))) {
+			if(flag && canConnectTo(worldIn.getBlockState(blockpos.up())))
+			{
+				if(isOpaque(blockstate.getCollisionShape(worldIn, blockpos)))
+				{
 					return RedstoneSide.UP;
 				}
 				
@@ -138,7 +151,8 @@ public class GlowystoneWireBlock extends Block
 		List<BlockPos> list = Lists.newArrayList(this.blocksNeedingUpdate);
 		this.blocksNeedingUpdate.clear();
 		
-		for(BlockPos blockpos : list) {
+		for(BlockPos blockpos : list)
+		{
 			worldIn.notifyNeighborsOfStateChange(blockpos, this);
 		}
 		
@@ -147,11 +161,11 @@ public class GlowystoneWireBlock extends Block
 	
 	private void notifyWireNeighborsOfStateChange(World worldIn, BlockPos pos)
 	{
-		if (worldIn.getBlockState(pos).getBlock() == this)
+		if(worldIn.getBlockState(pos).getBlock() == this)
 		{
 			worldIn.notifyNeighborsOfStateChange(pos, this);
-
-			for (Direction direction : Direction.values())
+			
+			for(Direction direction : Direction.values())
 			{
 				worldIn.notifyNeighborsOfStateChange(pos.offset(direction), this);
 			}
@@ -161,29 +175,28 @@ public class GlowystoneWireBlock extends Block
 	@Override
 	public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving)
 	{
-		if (!worldIn.isRemote)
+		if(!worldIn.isRemote)
 		{
 			this.updateSurroundingGlowystone(worldIn, pos, state);
-
-			for (Direction direction : Direction.Plane.VERTICAL)
+			
+			for(Direction direction : Direction.Plane.VERTICAL)
 			{
 				worldIn.notifyNeighborsOfStateChange(pos.offset(direction), this);
 			}
-
-			for (Direction direction : Direction.Plane.HORIZONTAL)
+			
+			for(Direction direction : Direction.Plane.HORIZONTAL)
 			{
 				this.notifyWireNeighborsOfStateChange(worldIn, pos.offset(direction));
 			}
-
-			for (Direction direction : Direction.Plane.HORIZONTAL)
+			
+			for(Direction direction : Direction.Plane.HORIZONTAL)
 			{
 				BlockPos blockpos = pos.offset(direction);
-
-				if (worldIn.getBlockState(blockpos).isNormalCube(worldIn, blockpos))
+				
+				if(worldIn.getBlockState(blockpos).isNormalCube(worldIn, blockpos))
 				{
 					this.notifyWireNeighborsOfStateChange(worldIn, blockpos.up());
-				}
-				else
+				} else
 				{
 					this.notifyWireNeighborsOfStateChange(worldIn, blockpos.down());
 				}
@@ -195,30 +208,29 @@ public class GlowystoneWireBlock extends Block
 	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving)
 	{
 		super.onReplaced(state, worldIn, pos, newState, isMoving);
-
-		if (!worldIn.isRemote)
+		
+		if(!worldIn.isRemote)
 		{
-			for (Direction direction : Direction.values())
+			for(Direction direction : Direction.values())
 			{
 				worldIn.notifyNeighborsOfStateChange(pos.offset(direction), this);
 			}
-
+			
 			this.updateSurroundingGlowystone(worldIn, pos, state);
-
-			for (Direction direction : Direction.Plane.HORIZONTAL)
+			
+			for(Direction direction : Direction.Plane.HORIZONTAL)
 			{
 				this.notifyWireNeighborsOfStateChange(worldIn, pos.offset(direction));
 			}
-
-			for (Direction direction : Direction.Plane.HORIZONTAL)
+			
+			for(Direction direction : Direction.Plane.HORIZONTAL)
 			{
 				BlockPos blockpos = pos.offset(direction);
-
-				if (worldIn.getBlockState(blockpos).isNormalCube(worldIn, blockpos))
+				
+				if(worldIn.getBlockState(blockpos).isNormalCube(worldIn, blockpos))
 				{
 					this.notifyWireNeighborsOfStateChange(worldIn, blockpos.up());
-				}
-				else
+				} else
 				{
 					this.notifyWireNeighborsOfStateChange(worldIn, blockpos.down());
 				}
@@ -229,13 +241,12 @@ public class GlowystoneWireBlock extends Block
 	@Override
 	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
 	{
-		if (!worldIn.isRemote)
+		if(!worldIn.isRemote)
 		{
-			if (this.isValidPosition(state, worldIn, pos))
+			if(this.isValidPosition(state, worldIn, pos))
 			{
 				this.updateSurroundingGlowystone(worldIn, pos, state);
-			}
-			else
+			} else
 			{
 				spawnDrops(state, worldIn, pos);
 				worldIn.removeBlock(pos, false);
@@ -252,22 +263,22 @@ public class GlowystoneWireBlock extends Block
 	{
 		float f = 1.0F;
 		float f1 = 1.0F;
-
+		
 		float f2 = 0.2F;
 		float f3 = 0.0F;
-
-		int i = MathHelper.clamp((int)(f1 * 255.0F), 0, 255);
-		int j = MathHelper.clamp((int)(f2 * 255.0F), 0, 255);
-		int k = MathHelper.clamp((int)(f3 * 255.0F), 0, 255);
+		
+		int i = MathHelper.clamp((int) (f1 * 255.0F), 0, 255);
+		int j = MathHelper.clamp((int) (f2 * 255.0F), 0, 255);
+		int k = MathHelper.clamp((int) (f3 * 255.0F), 0, 255);
 		return -16777216 | i << 16 | j << 8 | k;
 	}
 	
 	@Override
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
 	{
-		double d0 = (double)pos.getX() + 0.5D + ((double)rand.nextFloat() - 0.5D) * 0.2D;
-		double d1 = (double)((float)pos.getY() + 0.0625F);
-		double d2 = (double)pos.getZ() + 0.5D + ((double)rand.nextFloat() - 0.5D) * 0.2D;
+		double d0 = (double) pos.getX() + 0.5D + ((double) rand.nextFloat() - 0.5D) * 0.2D;
+		double d1 = (double) ((float) pos.getY() + 0.0625F);
+		double d2 = (double) pos.getZ() + 0.5D + ((double) rand.nextFloat() - 0.5D) * 0.2D;
 		
 		worldIn.addParticle(new RedstoneParticleData(1F, 0.8F, 0F, 1F), d0, d1, d2, 0, 0, 0);
 	}
