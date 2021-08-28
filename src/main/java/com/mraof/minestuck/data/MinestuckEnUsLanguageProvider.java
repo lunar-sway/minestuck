@@ -326,9 +326,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.REMOTE_OBSERVER, "Remote Observer");
 		addTooltip(MSBlocks.REMOTE_OBSERVER, "Lets off a full strength redstone signal if the active condition is met.");
 		add(MSBlocks.WIRELESS_REDSTONE_TRANSMITTER, "Wireless Redstone Transmitter");
-		addTooltip(MSBlocks.WIRELESS_REDSTONE_TRANSMITTER, "Sends a signal to Wireless Redstone Reciever at the input coordinates if the coordinates are loaded.");
-		add(MSBlocks.WIRELESS_REDSTONE_RECIEVER, "Wireless Redstone Reciever");
-		addTooltip(MSBlocks.WIRELESS_REDSTONE_RECIEVER, "Recieves signals from Wireless Redstone Transmitters.");
+		addTooltip(MSBlocks.WIRELESS_REDSTONE_TRANSMITTER, "Sends a signal to Wireless Redstone Receiver at the input coordinates if the coordinates are loaded.");
+		add(MSBlocks.WIRELESS_REDSTONE_RECEIVER, "Wireless Redstone Receiver");
+		addTooltip(MSBlocks.WIRELESS_REDSTONE_RECEIVER, "Receives signals from Wireless Redstone Transmitters.");
+		add(MSBlocks.SOLID_SWITCH, "Solid Switch");
 		add(MSBlocks.LOOT_CHEST, "Loot Chest");
 		add(MSBlocks.GATE, "Gate");
 		add(MSBlocks.RETURN_NODE, "Return Node");

@@ -1,7 +1,7 @@
 package com.mraof.minestuck.tileentity.redstone;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.block.WirelessRedstoneRecieverBlock;
+import com.mraof.minestuck.block.WirelessRedstoneReceiverBlock;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -71,9 +71,9 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 		{
 			//Debug.debugf("not null destination of %s and area loaded, powerIn = %s", destBlockPos, powerIn);
 			BlockState blockStateIn = worldIn.getBlockState(destBlockPos);
-			if(blockStateIn.getBlock() instanceof WirelessRedstoneRecieverBlock)
+			if(blockStateIn.getBlock() instanceof WirelessRedstoneReceiverBlock)
 			{
-				worldIn.setBlockState(destBlockPos, blockStateIn.with(WirelessRedstoneRecieverBlock.POWER, powerIn));
+				worldIn.setBlockState(destBlockPos, blockStateIn.with(WirelessRedstoneReceiverBlock.POWER, powerIn));
 			}
 		}
 	}
@@ -85,7 +85,7 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 			for(BlockPos blockPos : BlockPos.getAllInBoxMutable(te.getPos().add(24, 24, 24), te.getPos().add(-24, -24, -24)))
 			{
 				Block block = te.getWorld().getBlockState(blockPos).getBlock();
-				if(block instanceof WirelessRedstoneRecieverBlock)
+				if(block instanceof WirelessRedstoneReceiverBlock)
 				{
 					return blockPos;
 				}

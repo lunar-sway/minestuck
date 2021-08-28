@@ -5,6 +5,8 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.ReturnNodeBlock;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.tileentity.DungeonDoorInterfaceTileEntity;
+import com.mraof.minestuck.tileentity.redstone.RemoteObserverTileEntity;
+import com.mraof.minestuck.tileentity.redstone.StatStorerTileEntity;
 import com.mraof.minestuck.tileentity.redstone.WirelessRedstoneTransmitterTileEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -24,6 +26,7 @@ import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.IWorld;
 import net.minecraftforge.common.util.Constants;
 
+import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.Random;
 
@@ -95,9 +98,9 @@ public class StructureBlockUtil
 	
 	
 	/**
-	 * Creates a wireless redstone transmitter in the first blockpos, then creates a wireless redstone reciever in the second blockpos. The transmitter is linked to the reciever
+	 * Creates a wireless redstone transmitter in the first blockpos, then creates a wireless redstone receiver in the second blockpos. The transmitter is linked to the receiver
 	 */
-	public static void placeWirelessRelay(IWorld world, MutableBoundingBox boundingBox, BlockPos transmitterBlockPos, BlockPos recieverBlockPos)
+	public static void placeWirelessRelay(IWorld world, MutableBoundingBox boundingBox, BlockPos transmitterBlockPos, BlockPos receiverBlockPos)
 	{
 		if(boundingBox.isVecInside(transmitterBlockPos))
 		{
@@ -110,12 +113,57 @@ public class StructureBlockUtil
 				world.getWorld().setTileEntity(transmitterBlockPos, TE);
 			}
 			WirelessRedstoneTransmitterTileEntity transmitterTE = (WirelessRedstoneTransmitterTileEntity) TE;
-			transmitterTE.setDestinationBlockPos(recieverBlockPos);
+			transmitterTE.setDestinationBlockPos(receiverBlockPos);
 		}
 		
-		if(boundingBox.isVecInside(recieverBlockPos))
+		if(boundingBox.isVecInside(receiverBlockPos))
 		{
-			world.setBlockState(recieverBlockPos, MSBlocks.WIRELESS_REDSTONE_RECIEVER.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
+			world.setBlockState(receiverBlockPos, MSBlocks.WIRELESS_REDSTONE_RECEIVER.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
+		}
+	}
+	
+	/**
+	 * Creates a remote observer with the designated active type(null will be converted to player detection)
+	 */
+	public static void placeRemoteObserver(IWorld world, MutableBoundingBox boundingBox, BlockPos blockPos, RemoteObserverTileEntity.ActiveType activeType)
+	{
+		if(boundingBox.isVecInside(blockPos))
+		{
+			world.setBlockState(blockPos, MSBlocks.REMOTE_OBSERVER.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
+			MSBlocks.REMOTE_OBSERVER.getDefaultState().createTileEntity(world);
+			TileEntity TE = world.getTileEntity(blockPos);
+			if(!(TE instanceof RemoteObserverTileEntity))
+			{
+				TE = new RemoteObserverTileEntity();
+				world.getWorld().setTileEntity(blockPos, TE);
+			}
+			RemoteObserverTileEntity observerTE = (RemoteObserverTileEntity) TE;
+			if(activeType == null)
+				activeType = RemoteObserverTileEntity.ActiveType.IS_PLAYER_PRESENT;
+			observerTE.setActiveType(activeType);
+		}
+	}
+	
+	/**
+	 * Creates a stat storer with the designated active type(null will be converted to measuring deaths)
+	 */
+	public static void placeStatStorer(IWorld world, MutableBoundingBox boundingBox, BlockPos blockPos, StatStorerTileEntity.ActiveType activeType, int statDivideBy)
+	{
+		if(boundingBox.isVecInside(blockPos))
+		{
+			world.setBlockState(blockPos, MSBlocks.STAT_STORER.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
+			MSBlocks.STAT_STORER.getDefaultState().createTileEntity(world);
+			TileEntity TE = world.getTileEntity(blockPos);
+			if(!(TE instanceof StatStorerTileEntity))
+			{
+				TE = new StatStorerTileEntity();
+				world.getWorld().setTileEntity(blockPos, TE);
+			}
+			StatStorerTileEntity storerTE = (StatStorerTileEntity) TE;
+			if(activeType == null)
+				activeType = StatStorerTileEntity.ActiveType.DEATHS;
+			storerTE.setActiveType(activeType);
+			storerTE.setDivideValue(statDivideBy);
 		}
 	}
 	

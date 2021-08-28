@@ -1,7 +1,6 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.util.CustomVoxelShape;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -18,14 +17,16 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootParameterSets;
+import net.minecraft.world.storage.loot.LootTable;
 
 import java.util.Map;
 
 public class LootBlock extends DecorBlock
 {
 	public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
-	public static ResourceLocation lootTable;
-	//public static CustomVoxelShape openShape;
+	public final ResourceLocation lootTable;
 	private Map<Direction, VoxelShape> closedShape;
 	public final Map<Direction, VoxelShape> openShape;
 	
@@ -58,9 +59,9 @@ public class LootBlock extends DecorBlock
 			if(worldIn instanceof ServerWorld)
 			{
 				player.sendMessage(new TranslationTextComponent("Wahoo!"));
-				/*LootTable lootTable = ((ServerWorld) worldIn).getServer().getLootTableManager().getLootTableFromLocation(lootTable);
+				LootTable lootTable = ((ServerWorld) worldIn).getServer().getLootTableManager().getLootTableFromLocation(this.lootTable);
 				//lootTable.fillInventory(player.inventory, new LootContext.Builder((ServerWorld) interfaceTileEntity.getWorld()).build(LootParameterSets.CHEST));
-				lootTable.generate(new LootContext.Builder((ServerWorld) worldIn).build(LootParameterSets.EMPTY), player::entityDropItem);*/
+				lootTable.generate(new LootContext.Builder((ServerWorld) worldIn).build(LootParameterSets.EMPTY), player::entityDropItem);
 				worldIn.setBlockState(pos, state.with(OPEN, true));
 			}
 			worldIn.playSound(null, pos, MSSoundEvents.LOOT_BLOCK_OPEN, SoundCategory.BLOCKS, 1.0F, 1.0F);

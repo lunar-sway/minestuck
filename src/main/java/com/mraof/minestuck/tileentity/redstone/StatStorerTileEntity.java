@@ -233,6 +233,8 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 	
 	public void setDivideValue(int divideValueBy)
 	{
+		if(divideValueBy <= 0)
+			divideValueBy = 1;
 		this.divideValueBy = divideValueBy;
 	}
 	

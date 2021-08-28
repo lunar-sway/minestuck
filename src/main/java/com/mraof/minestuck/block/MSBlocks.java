@@ -152,7 +152,8 @@ public class MSBlocks
 	public static final Block STAT_STORER = getNull();
 	public static final Block REMOTE_OBSERVER = getNull();
 	public static final Block WIRELESS_REDSTONE_TRANSMITTER = getNull();
-	public static final Block WIRELESS_REDSTONE_RECIEVER = getNull();
+	public static final Block WIRELESS_REDSTONE_RECEIVER = getNull();
+	public static final Block SOLID_SWITCH = getNull();
 	
 	public static final Block LOOT_CHEST = getNull();
 	
@@ -487,7 +488,8 @@ public class MSBlocks
 		registry.register(new StatStorerBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(3).sound(SoundType.STONE)).setRegistryName("stat_storer"));
 		registry.register(new RemoteObserverBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(3).sound(SoundType.STONE)).setRegistryName("remote_observer"));
 		registry.register(new WirelessRedstoneTransmitterBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(3).sound(SoundType.STONE)).setRegistryName("wireless_redstone_transmitter"));
-		registry.register(new WirelessRedstoneRecieverBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(3).sound(SoundType.STONE)).setRegistryName("wireless_redstone_reciever"));
+		registry.register(new WirelessRedstoneReceiverBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(3).sound(SoundType.STONE)).setRegistryName("wireless_redstone_receiver"));
+		registry.register(new SolidSwitchBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(3).sound(SoundType.STONE).lightValue(15)).setRegistryName("solid_switch"));
 		
 		registry.register(new LootBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(3).sound(SoundType.METAL), MSBlockShapes.LOOT_CHEST, MSBlockShapes.LOOT_CHEST_EMPTY, MSLootTables.BASIC_MEDIUM_CHEST).setRegistryName("loot_chest"));
 		

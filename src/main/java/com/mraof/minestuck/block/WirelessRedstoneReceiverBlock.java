@@ -11,11 +11,11 @@ import net.minecraft.world.IBlockReader;
 
 import javax.annotation.Nullable;
 
-public class WirelessRedstoneRecieverBlock extends Block
+public class WirelessRedstoneReceiverBlock extends Block
 {
 	public static final IntegerProperty POWER = BlockStateProperties.POWER_0_15;
 	
-	public WirelessRedstoneRecieverBlock(Properties properties)
+	public WirelessRedstoneReceiverBlock(Properties properties)
 	{
 		super(properties);
 		setDefaultState(getDefaultState().with(POWER, 0));

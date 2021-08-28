@@ -5,6 +5,8 @@ import com.mraof.minestuck.block.*;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.tileentity.DungeonDoorInterfaceTileEntity;
+import com.mraof.minestuck.tileentity.redstone.RemoteObserverTileEntity;
+import com.mraof.minestuck.tileentity.redstone.StatStorerTileEntity;
 import com.mraof.minestuck.tileentity.redstone.WirelessRedstoneTransmitterTileEntity;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
@@ -14,6 +16,8 @@ import com.mraof.minestuck.world.storage.loot.MSLootTables;
 import net.minecraft.block.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.properties.ChestType;
+import net.minecraft.state.properties.Half;
+import net.minecraft.state.properties.RedstoneSide;
 import net.minecraft.state.properties.SlabType;
 import net.minecraft.tileentity.MobSpawnerTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -120,6 +124,7 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 		if(!createRan)
 		{
 			randomRoomType = randomIn.nextInt(8);
+			roomVariable1 = randomIn.nextInt(6);
 			createRan = true;
 		}
 		bottomRoomSpawner1 = false;
@@ -251,8 +256,8 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 		chestPosRight = new BlockPos(this.getXWithOffset(lowerRoomMinX - 1, lowerRoomMaxZ - 9), this.getYWithOffset(lowerRoomMinY + 3), this.getZWithOffset(lowerRoomMinX - 1, lowerRoomMaxZ - 9));
 		StructureBlockUtil.placeLootChest(chestPosRight, world, boundingBox, getCoordBaseMode().getOpposite(), leftChestType, MSLootTables.TIER_ONE_MEDIUM_CHEST, rand);
 		
-		StructureBlockUtil.placeReturnNode(world, boundingBox, new BlockPos(getXWithOffset(lowerRoomMinX - 4, (lowerRoomMaxZ + lowerRoomMinZ) / 2), getYWithOffset(lowerRoomMinY + 3), getZWithOffset(lowerRoomMinX - 4, (lowerRoomMaxZ + lowerRoomMinZ) / 2)), getCoordBaseMode());
-		StructureBlockUtil.placeReturnNode(world, boundingBox, new BlockPos(getXWithOffset(entryRoomMinX - 8, (entryRoomMaxZ + entryRoomMinZ) / 2), getYWithOffset(lowerRoomMinY + 3), getZWithOffset(entryRoomMinX - 8, (entryRoomMaxZ + entryRoomMinZ) / 2)), getCoordBaseMode());
+		StructureBlockUtil.placeReturnNode(world, boundingBox, new BlockPos(getXWithOffset(lowerRoomMinX - 7, (lowerRoomMaxZ + lowerRoomMinZ) / 2), getYWithOffset(lowerRoomMinY + 3), getZWithOffset(lowerRoomMinX - 7, (lowerRoomMaxZ + lowerRoomMinZ) / 2)), getCoordBaseMode());
+		//StructureBlockUtil.placeReturnNode(world, boundingBox, new BlockPos(getXWithOffset(entryRoomMinX - 8, (entryRoomMaxZ + entryRoomMinZ) / 2), getYWithOffset(lowerRoomMinY + 3), getZWithOffset(entryRoomMinX - 8, (entryRoomMaxZ + entryRoomMinZ) / 2)), getCoordBaseMode());
 		//placeReturnNode(world, new BlockPos(getXWithOffset(entryRoomMinX - 8, (entryRoomMaxZ + entryRoomMinZ) / 2 - 1), getYWithOffset(entryRoomMinY - 19), getZWithOffset(entryRoomMinX - 8, (entryRoomMaxZ + entryRoomMinZ) / 2) - 1), boundingBox);
 		
 		setBlockState(world, lightBlock, lowerRoomMinX, lowerRoomMinY + 5, lowerRoomMinZ + 10, boundingBox); //left side light
@@ -509,7 +514,7 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 		} else if(aspectSapling == MSBlocks.LIFE_ASPECT_SAPLING.getDefaultState())
 		{
 			//TODO will be for Blood
-			roomVariable1 = rand.nextInt(6); //blood diving to flick switch
+			//roomVariable1 = rand.nextInt(6); //blood diving to flick switch
 			
 			fillWithAir(world, boundingBox,
 					firstRoomMinX + 1, firstRoomMaxY - 5, firstRoomMinZ + 1,
@@ -543,6 +548,7 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 					firstRoomMinX + 32, firstRoomMaxY - 6, firstRoomMaxZ - 8,
 					primaryBlock, primaryBlock, false); //fourth barrier
 			
+			//lighting between barriers
 			for(int lightIterate = 0; lightIterate < 4; lightIterate++)
 			{
 				fillWithBlocks(world, boundingBox,
@@ -580,10 +586,13 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 				fillWithAir(world, boundingBox, firstRoomMinX + 3 + xIterate * 10, firstRoomMaxY - 7, firstRoomMinZ + 1, firstRoomMinX + 3 + xIterate * 10, firstRoomMaxY - 5, firstRoomMinZ + 3);
 			}
 			
-			fillWithBlocks(world, boundingBox, firstRoomMinX + 5, firstRoomMaxY - 20, firstRoomMaxZ, firstRoomMinX + 20, firstRoomMaxY - 3, firstRoomMaxZ + 12, secondaryBlock, air, false); //first side room
+			//first side room
+			fillWithBlocks(world, boundingBox, firstRoomMinX + 5, firstRoomMaxY - 20, firstRoomMaxZ, firstRoomMinX + 20, firstRoomMaxY - 3, firstRoomMaxZ + 12, secondaryBlock, air, false);
 			fillWithBlocks(world, boundingBox, firstRoomMinX + 6, firstRoomMaxY - 19, firstRoomMaxZ + 1, firstRoomMinX + 19, firstRoomMaxY - 10, firstRoomMaxZ + 11, MSBlocks.BLOOD.getDefaultState(), MSBlocks.BLOOD.getDefaultState(), false); //first side room liquid
 			fillWithBlocks(world, boundingBox, firstRoomMinX + 6, firstRoomMaxY - 19, firstRoomMaxZ + 1, firstRoomMinX + 20, firstRoomMaxY - 10, firstRoomMaxZ + 1, primaryBlock, primaryBlock, false); //ledge into liquid
+			fillWithAir(world, boundingBox, firstRoomMinX + 9, firstRoomMaxY - 9, firstRoomMaxZ - 3, firstRoomMinX + 10, firstRoomMaxY - 7, firstRoomMaxZ); //first side room entrance
 			
+			//blood diving challenge associated with first side room
 			BlockPos transmitterPos = new BlockPos(
 					getXWithOffset(firstRoomMinX + 12 + (roomVariable1 - 3), firstRoomMaxZ + 6),
 					getYWithOffset(firstRoomMaxY - 21),
@@ -593,47 +602,127 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 					getYWithOffset(firstRoomMaxY - 9),
 					getZWithOffset(firstRoomMinX + 16, firstRoomMaxZ - 1));
 			StructureBlockUtil.placeWirelessRelay(world, boundingBox, transmitterPos, receiverPos);
-			
-			setBlockState(world, Blocks.REDSTONE_BLOCK.getDefaultState(), firstRoomMinX + 12 + (roomVariable1 - 3), firstRoomMaxY - 20, firstRoomMaxZ + 6, boundingBox); //power for transmitter
+			setBlockState(world, MSBlocks.SOLID_SWITCH.getDefaultState().with(SolidSwitchBlock.POWERED, true), firstRoomMinX + 12 + (roomVariable1 - 3), firstRoomMaxY - 20, firstRoomMaxZ + 6, boundingBox); //power for transmitter
 			setBlockState(world, Blocks.REDSTONE_WIRE.getDefaultState(), firstRoomMinX + 16, firstRoomMaxY - 8, firstRoomMaxZ - 1, boundingBox); //wire above receiver, both power pistons
 			fillWithAir(world, boundingBox, firstRoomMinX + 16, firstRoomMaxY - 9, firstRoomMaxZ - 3, firstRoomMinX + 16, firstRoomMaxY - 8, firstRoomMaxZ - 3); //hole for piston
 			fillWithBlocks(world, boundingBox, firstRoomMinX + 16, firstRoomMaxY - 9, firstRoomMaxZ - 2, firstRoomMinX + 16, firstRoomMaxY - 8, firstRoomMaxZ - 2, Blocks.STICKY_PISTON.getDefaultState().with(PistonBlock.FACING, Direction.SOUTH), Blocks.STICKY_PISTON.getDefaultState(), false);
 			fillWithBlocks(world, boundingBox, firstRoomMinX + 16, firstRoomMaxY - 9, firstRoomMaxZ - 4, firstRoomMinX + 16, firstRoomMaxY - 8, firstRoomMaxZ - 4, MSBlocks.DUNGEON_DOOR.getDefaultState(), MSBlocks.DUNGEON_DOOR.getDefaultState(), false);
-			fillWithAir(world, boundingBox, firstRoomMinX + 9, firstRoomMaxY - 9, firstRoomMaxZ - 3, firstRoomMinX + 10, firstRoomMaxY - 7, firstRoomMaxZ); //first side room entrance
 			
+			//stairs leading from puzzle room to lower level
 			BlockPos stairsAreaMin = new BlockPos(getXWithOffset(firstRoomMaxX - 2, firstRoomMinZ + 4), getYWithOffset(firstRoomMaxY - 25), getZWithOffset(firstRoomMaxX - 2, firstRoomMinZ + 4));
 			BlockPos stairsAreaMax = new BlockPos(getXWithOffset(firstRoomMaxX - 1, firstRoomMaxZ - 5), getYWithOffset(firstRoomMaxY - 7), getZWithOffset(firstRoomMaxX - 1, firstRoomMaxZ - 5));
-			
 			//StructureBlockUtil.fillWithBlocksFromPos(world, boundingBox, air, stairsAreaMin, stairsAreaMax);
 			fillWithAir(world, boundingBox, firstRoomMaxX - 2, firstRoomMaxY - 25, firstRoomMinZ + 4, firstRoomMaxX - 1, firstRoomMaxY - 7, firstRoomMaxZ - 5);
-			StructureBlockUtil.createStairs(world, boundingBox, primaryBlock, primaryStairBlock.with(StairsBlock.FACING, getCoordBaseMode()), stairsAreaMin.offset(getCoordBaseMode(), 19), 19, 2, getCoordBaseMode(), false);
-			
-			fillWithAir(world, boundingBox,
-					firstRoomMinX + 1, firstRoomMinY + 10, firstRoomMinZ + 1,
-					firstRoomMaxX - 3, firstRoomMinY + 14, firstRoomMaxZ - 1); //lower section ceiling
-			fillWithAir(world, boundingBox,
-					firstRoomMinX + 5, firstRoomMinY + 5, firstRoomMinZ + 1,
-					firstRoomMaxX - 3, firstRoomMinY + 9, firstRoomMaxZ - 1); //lower section chamber(exception of blood fluid)
+			StructureBlockUtil.createStairs(world, boundingBox, primaryBlock, primaryStairBlock.with(StairsBlock.FACING, getCoordBaseMode()), stairsAreaMin.offset(getCoordBaseMode(), 13), 16, 2, getCoordBaseMode(), false);
 			fillWithBlocks(world, boundingBox,
-					firstRoomMinX + 5, firstRoomMinY + 1, firstRoomMinZ + 1,
-					firstRoomMaxX - 3, firstRoomMinY + 4, firstRoomMaxZ - 1,
-					MSBlocks.BLOOD.getDefaultState(), MSBlocks.BLOOD.getDefaultState(), false);
+					firstRoomMaxX - 1, firstRoomMaxY - 23, firstRoomMinZ + 12,
+					firstRoomMaxX - 1, firstRoomMaxY - 22, firstRoomMinZ + 12,
+					primaryPillarBlock, primaryPillarBlock, false);
+			setBlockState(world, lightBlock, firstRoomMaxX - 1, firstRoomMaxY - 21, firstRoomMinZ + 12, boundingBox);
+			setBlockState(world, primaryStairBlock.with(StairsBlock.FACING, getCoordBaseMode().rotateY()).with(StairsBlock.HALF, Half.TOP), firstRoomMaxX - 1, firstRoomMaxY - 24, firstRoomMinZ + 12, boundingBox);
+			fillWithBlocks(world, boundingBox,
+					firstRoomMaxX - 1, firstRoomMaxY - 23, firstRoomMaxZ - 12,
+					firstRoomMaxX - 1, firstRoomMaxY - 22, firstRoomMaxZ - 12,
+					primaryPillarBlock, primaryPillarBlock, false);
+			setBlockState(world, lightBlock, firstRoomMaxX - 1, firstRoomMaxY - 21, firstRoomMaxZ - 12, boundingBox);
+			setBlockState(world, primaryStairBlock.with(StairsBlock.FACING, getCoordBaseMode().rotateY()).with(StairsBlock.HALF, Half.TOP), firstRoomMaxX - 1, firstRoomMaxY - 24, firstRoomMaxZ - 12, boundingBox);
 			
+			//edges of lower level
+			fillWithAir(world, boundingBox,
+					firstRoomMinX + 1, firstRoomMinY + 10, firstRoomMinZ + 3,
+					firstRoomMaxX - 3, firstRoomMinY + 14, firstRoomMaxZ - 3); //lower section ceiling
+			fillWithAir(world, boundingBox,
+					firstRoomMinX + 5, firstRoomMinY + 5, firstRoomMinZ + 3,
+					firstRoomMaxX - 3, firstRoomMinY + 9, firstRoomMaxZ - 3); //lower section chamber(exception of blood fluid)
+			fillWithBlocks(world, boundingBox,
+					firstRoomMinX + 5, firstRoomMinY + 1, firstRoomMinZ + 3,
+					firstRoomMaxX - 3, firstRoomMinY + 4, firstRoomMaxZ - 3,
+					MSBlocks.BLOOD.getDefaultState(), MSBlocks.BLOOD.getDefaultState(), false); //liquid of floor
+			fillWithBlocks(world, boundingBox,
+					firstRoomMinX + 9, firstRoomMinY + 11, firstRoomMinZ + 1,
+					firstRoomMaxX - 9, firstRoomMinY + 11, firstRoomMinZ + 2,
+					MSBlocks.BLOOD.getDefaultState(), MSBlocks.BLOOD.getDefaultState(), false); //side waterfall
+			fillWithBlocks(world, boundingBox,
+					firstRoomMinX + 9, firstRoomMinY + 11, firstRoomMaxZ - 2,
+					firstRoomMaxX - 9, firstRoomMinY + 11, firstRoomMaxZ - 1,
+					MSBlocks.BLOOD.getDefaultState(), MSBlocks.BLOOD.getDefaultState(), false); //side waterfall
+			StructureBlockUtil.createCylinder(world, boundingBox, lightBlock, new BlockPos(
+					getXWithOffset((firstRoomMinX + firstRoomMaxX) / 2 - 10, (firstRoomMinZ + firstRoomMaxZ) / 2),
+					getYWithOffset(firstRoomMinY + 13),
+					getXWithOffset((firstRoomMinX + firstRoomMaxX) / 2 - 10, (firstRoomMinZ + firstRoomMaxZ) / 2)),
+					6, 1); //ceiling light //TODO not generating
+			
+			//lighting
+			fillWithBlocks(world, boundingBox,
+					firstRoomMinX + 3, firstRoomMinY + 10, firstRoomMinZ + 8,
+					firstRoomMinX + 3, firstRoomMinY + 11, firstRoomMinZ + 8,
+					primaryPillarBlock, primaryPillarBlock, false);
+			setBlockState(world, lightBlock, firstRoomMinX + 3, firstRoomMinY + 12, firstRoomMinZ + 6, boundingBox);
+			fillWithBlocks(world, boundingBox,
+					firstRoomMinX + 3, firstRoomMinY + 10, firstRoomMaxZ - 8,
+					firstRoomMinX + 3, firstRoomMinY + 11, firstRoomMaxZ - 8,
+					primaryPillarBlock, primaryPillarBlock, false);
+			setBlockState(world, lightBlock, firstRoomMinX + 3, firstRoomMinY + 12, firstRoomMaxZ - 6, boundingBox);
+			
+			//secret redstone lamp setup
+			fillWithBlocks(world, boundingBox,
+					(firstRoomMinX + firstRoomMaxX) / 2, firstRoomMinY + 10, firstRoomMinZ + 1,
+					(firstRoomMinX + firstRoomMaxX) / 2, firstRoomMinY + 12, firstRoomMinZ + 4,
+					primaryDecorativeBlock, primaryDecorativeBlock, false);
+			fillWithBlocks(world, boundingBox,
+					(firstRoomMinX + firstRoomMaxX) / 2, firstRoomMinY + 1, firstRoomMinZ + 1,
+					(firstRoomMinX + firstRoomMaxX) / 2, firstRoomMinY + 9, firstRoomMinZ + 4,
+					primaryBlock, primaryBlock, false);
+			BlockPos side1SwitchLampPos = new BlockPos(
+					getXWithOffset((firstRoomMinX + firstRoomMaxX) / 2, firstRoomMinZ + 3),
+					getYWithOffset(firstRoomMinY + 10),
+					getZWithOffset((firstRoomMinX + firstRoomMaxX) / 2, firstRoomMinZ + 3));
+			StructureBlockUtil.placeWirelessRelay(world, boundingBox, side1SwitchLampPos.offset(getCoordBaseMode().getOpposite()), side1SwitchLampPos.offset(getCoordBaseMode().getOpposite(), 2).down(5));
+			world.setBlockState(side1SwitchLampPos, MSBlocks.SOLID_SWITCH.getDefaultState().with(SolidSwitchBlock.POWERED, true), Constants.BlockFlags.BLOCK_UPDATE);
+			world.setBlockState(side1SwitchLampPos.offset(getCoordBaseMode()), Blocks.REDSTONE_LAMP.getDefaultState().with(RedstoneLampBlock.LIT, true), Constants.BlockFlags.BLOCK_UPDATE);
+			fillWithBlocks(world, boundingBox,
+					(firstRoomMinX + firstRoomMaxX) / 2, firstRoomMinY + 10, firstRoomMaxZ - 4,
+					(firstRoomMinX + firstRoomMaxX) / 2, firstRoomMinY + 12, firstRoomMaxZ - 1,
+					primaryDecorativeBlock, primaryDecorativeBlock, false);
+			fillWithBlocks(world, boundingBox,
+					(firstRoomMinX + firstRoomMaxX) / 2, firstRoomMinY + 1, firstRoomMaxZ - 4,
+					(firstRoomMinX + firstRoomMaxX) / 2, firstRoomMinY + 9, firstRoomMaxZ - 1,
+					primaryBlock, primaryBlock, false);
+			BlockPos side2SwitchLampPos = new BlockPos(
+					getXWithOffset((firstRoomMinX + firstRoomMaxX) / 2, firstRoomMaxZ - 3),
+					getYWithOffset(firstRoomMinY + 10),
+					getZWithOffset((firstRoomMinX + firstRoomMaxX) / 2, firstRoomMaxZ - 3));
+			StructureBlockUtil.placeWirelessRelay(world, boundingBox, side2SwitchLampPos.offset(getCoordBaseMode()), side2SwitchLampPos.offset(getCoordBaseMode(), 2).down(5));
+			world.setBlockState(side2SwitchLampPos, MSBlocks.SOLID_SWITCH.getDefaultState().with(SolidSwitchBlock.POWERED, true), Constants.BlockFlags.BLOCK_UPDATE);
+			world.setBlockState(side2SwitchLampPos.offset(getCoordBaseMode().getOpposite()), Blocks.REDSTONE_LAMP.getDefaultState().with(RedstoneLampBlock.LIT, true), Constants.BlockFlags.BLOCK_UPDATE);
+			
+			//aspect symbol platform, lower level
 			BlockPos aspectSymbolPos = new BlockPos(
 					getXWithOffset((firstRoomMinX + 5 + firstRoomMaxX - 3) / 2, (firstRoomMinZ + firstRoomMaxZ) / 2),
 					getYWithOffset(firstRoomMinY + 4),
 					getZWithOffset((firstRoomMinX + 5 + firstRoomMaxX - 3) / 2, (firstRoomMinZ + firstRoomMaxZ) / 2)); //middle of lower room on top of blood
 			StructureBlockUtil.createCylinder(world, boundingBox, secondaryBlock, aspectSymbolPos.down(3), 12, 3);
+			StructureBlockUtil.createCylinder(world, boundingBox, lightBlock, aspectSymbolPos.down(1), 12, 1);
 			StructureBlockUtil.placeLargeAspectSymbol(world, boundingBox, aspectSymbolPos, primaryBlock, EnumAspect.BLOOD);
+			
+			//redstone components for lich fight and piston stairway unlock, inside aspect platform
+			StructureBlockUtil.placeRemoteObserver(world, boundingBox, aspectSymbolPos.down(2).offset(getCoordBaseMode().rotateY(), 8), RemoteObserverTileEntity.ActiveType.IS_PLAYER_PRESENT); //checks for presence of player
+			StructureBlockUtil.placeStatStorer(world, boundingBox, aspectSymbolPos.down(2), StatStorerTileEntity.ActiveType.DEATHS, 1); //counts how many deaths there have been(need 10 kills to activate all 5 pistons)
+			StructureBlockUtil.fillWithBlocksFromPos(world, boundingBox, Blocks.REDSTONE_WIRE.getDefaultState(), aspectSymbolPos.down(2).offset(getCoordBaseMode().rotateYCCW(), 9), aspectSymbolPos.down(2).offset(getCoordBaseMode().rotateYCCW()));
+			//world.setBlockState(aspectSymbolPos.down(2), Blocks.REDSTONE_WIRE.getDefaultState().with(RedstoneWireBlock.NORTH, RedstoneSide.SIDE).with(RedstoneWireBlock.WEST, RedstoneSide.SIDE), Constants.BlockFlags.BLOCK_UPDATE);
 			
 			fillWithBlocks(world, boundingBox, firstRoomMinX + 3, firstRoomMinY + 4, (firstRoomMinZ + firstRoomMaxZ) / 2 - 3, firstRoomMinX + 3, firstRoomMinY + 8, (firstRoomMinZ + firstRoomMaxZ) / 2 + 2, lightBlock, lightBlock, false);
 			//TODO Add remote observer closer to far edge on player detect mode connected to mob summoning blocks, and set stat storer near center on death mode and add wireless relays at different distances using for loop for each summoned entity(allows players to see progress)
 			for(int stairPuzzleIterate = 0; stairPuzzleIterate < 5; stairPuzzleIterate++)
 			{
+				StructureBlockUtil.placeWirelessRelay(world, boundingBox, aspectSymbolPos.down(3).offset(getCoordBaseMode().rotateYCCW(), stairPuzzleIterate * 2 + 1), new BlockPos(
+						getXWithOffset(firstRoomMinX + 2, (firstRoomMinZ + firstRoomMaxZ) / 2 - 2 + stairPuzzleIterate),
+						getYWithOffset(firstRoomMinY + 4 + stairPuzzleIterate),
+						getZWithOffset(firstRoomMinX + 2, (firstRoomMinZ + firstRoomMaxZ) / 2 - 2 + stairPuzzleIterate)));
 				setBlockState(world, Blocks.STICKY_PISTON.getDefaultState().with(PistonBlock.FACING, Direction.EAST), firstRoomMinX + 3, firstRoomMinY + 4 + stairPuzzleIterate, (firstRoomMinZ + firstRoomMaxZ) / 2 - 2 + stairPuzzleIterate, boundingBox);
 				setBlockState(world, secondaryDecorativeBlock, firstRoomMinX + 4, firstRoomMinY + 4 + stairPuzzleIterate, (firstRoomMinZ + firstRoomMaxZ) / 2 - 2 + stairPuzzleIterate, boundingBox);
 			}
-
+			
 			
 			/*//TODO will be for Breath
 			fillWithAir(world, boundingBox,
