@@ -7,6 +7,7 @@ import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.tileentity.DungeonDoorInterfaceTileEntity;
 import com.mraof.minestuck.tileentity.redstone.RemoteObserverTileEntity;
 import com.mraof.minestuck.tileentity.redstone.StatStorerTileEntity;
+import com.mraof.minestuck.tileentity.redstone.SummonerTileEntity;
 import com.mraof.minestuck.tileentity.redstone.WirelessRedstoneTransmitterTileEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -26,7 +27,6 @@ import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.IWorld;
 import net.minecraftforge.common.util.Constants;
 
-import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.Random;
 
@@ -35,7 +35,6 @@ import java.util.Random;
  */
 public class StructureBlockUtil
 {
-	
 	public static boolean placeSpawner(BlockPos pos, IWorld world, MutableBoundingBox bb, EntityType<?> entityType)
 	{
 		WeightedSpawnerEntity entity = new WeightedSpawnerEntity();
@@ -164,6 +163,28 @@ public class StructureBlockUtil
 				activeType = StatStorerTileEntity.ActiveType.DEATHS;
 			storerTE.setActiveType(activeType);
 			storerTE.setDivideValue(statDivideBy);
+		}
+	}
+	
+	/**
+	 * Creates a summoner with the designated active type(null will be converted to measuring deaths)
+	 */
+	public static void placeSummoner(IWorld world, MutableBoundingBox boundingBox, BlockPos blockPos, SummonerTileEntity.SummonType summonType)
+	{
+		if(boundingBox.isVecInside(blockPos))
+		{
+			world.setBlockState(blockPos, MSBlocks.SUMMONER.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
+			MSBlocks.SUMMONER.getDefaultState().createTileEntity(world);
+			TileEntity TE = world.getTileEntity(blockPos);
+			if(!(TE instanceof SummonerTileEntity))
+			{
+				TE = new SummonerTileEntity();
+				world.getWorld().setTileEntity(blockPos, TE);
+			}
+			SummonerTileEntity summonerTE = (SummonerTileEntity) TE;
+			if(summonType == null)
+				summonType = SummonerTileEntity.SummonType.IMP;
+			summonerTE.setSummonedEntity(summonType);
 		}
 	}
 	
@@ -357,6 +378,16 @@ public class StructureBlockUtil
 		
 		BlockPos backEdge = bottomPos;
 		if(direction == Direction.NORTH)
+			backEdge = backEdge.north(height - 1).offset(direction.rotateY());
+		else if(direction == Direction.EAST)
+			backEdge = backEdge.east(height - 1).offset(direction.rotateY());
+		else if(direction == Direction.SOUTH)
+			backEdge = backEdge.south(height - 1).offset(direction.rotateY());
+		else if(direction == Direction.WEST)
+			backEdge = backEdge.west(height - 1).offset(direction.rotateY());
+		
+		/*
+		if(direction == Direction.NORTH)
 			backEdge = backEdge.north(height - 1).east(width);
 		else if(direction == Direction.EAST)
 			backEdge = backEdge.east(height - 1).south(width);
@@ -364,6 +395,7 @@ public class StructureBlockUtil
 			backEdge = backEdge.south(height - 1).west(width);
 		else if(direction == Direction.WEST)
 			backEdge = backEdge.west(height - 1).north(width);
+		 */
 		
 		for(int y = 0; y < height; ++y)
 		{
@@ -385,6 +417,16 @@ public class StructureBlockUtil
 			for(int frontWidth = 0; frontWidth < width + 1; ++frontWidth)
 			{
 				if(direction == Direction.NORTH)
+					frontEdgeWidth = frontEdgeWidth.offset(direction.rotateY(), frontWidth);
+				else if(direction == Direction.EAST)
+					frontEdgeWidth = frontEdgeWidth.offset(direction.rotateY(), frontWidth);
+				else if(direction == Direction.SOUTH)
+					frontEdgeWidth = frontEdgeWidth.offset(direction.rotateY(), frontWidth);
+				else if(direction == Direction.WEST)
+					frontEdgeWidth = frontEdgeWidth.offset(direction.rotateY(), frontWidth);
+				
+				/*
+				if(direction == Direction.NORTH)
 					frontEdgeWidth = frontEdgeWidth.east(frontWidth);
 				else if(direction == Direction.EAST)
 					frontEdgeWidth = frontEdgeWidth.south(frontWidth);
@@ -392,6 +434,7 @@ public class StructureBlockUtil
 					frontEdgeWidth = frontEdgeWidth.west(frontWidth);
 				else if(direction == Direction.WEST)
 					frontEdgeWidth = frontEdgeWidth.north(frontWidth);
+				*/
 				
 				if(structurebb.isVecInside(frontEdgeWidth))
 				{

@@ -330,6 +330,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.WIRELESS_REDSTONE_RECEIVER, "Wireless Redstone Receiver");
 		addTooltip(MSBlocks.WIRELESS_REDSTONE_RECEIVER, "Receives signals from Wireless Redstone Transmitters.");
 		add(MSBlocks.SOLID_SWITCH, "Solid Switch");
+		addTooltip(MSBlocks.SOLID_SWITCH, "KACHUNK");
+		add(MSBlocks.SUMMONER, "Summoner");
 		add(MSBlocks.LOOT_CHEST, "Loot Chest");
 		add(MSBlocks.GATE, "Gate");
 		add(MSBlocks.RETURN_NODE, "Return Node");

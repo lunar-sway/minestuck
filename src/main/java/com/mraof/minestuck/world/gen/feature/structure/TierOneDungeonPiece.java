@@ -7,6 +7,7 @@ import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.tileentity.DungeonDoorInterfaceTileEntity;
 import com.mraof.minestuck.tileentity.redstone.RemoteObserverTileEntity;
 import com.mraof.minestuck.tileentity.redstone.StatStorerTileEntity;
+import com.mraof.minestuck.tileentity.redstone.SummonerTileEntity;
 import com.mraof.minestuck.tileentity.redstone.WirelessRedstoneTransmitterTileEntity;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
@@ -615,17 +616,17 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 			fillWithAir(world, boundingBox, firstRoomMaxX - 2, firstRoomMaxY - 25, firstRoomMinZ + 4, firstRoomMaxX - 1, firstRoomMaxY - 7, firstRoomMaxZ - 5);
 			StructureBlockUtil.createStairs(world, boundingBox, primaryBlock, primaryStairBlock.with(StairsBlock.FACING, getCoordBaseMode()), stairsAreaMin.offset(getCoordBaseMode(), 13), 16, 2, getCoordBaseMode(), false);
 			fillWithBlocks(world, boundingBox,
-					firstRoomMaxX - 1, firstRoomMaxY - 23, firstRoomMinZ + 12,
-					firstRoomMaxX - 1, firstRoomMaxY - 22, firstRoomMinZ + 12,
+					firstRoomMaxX - 1, firstRoomMaxY - 9, firstRoomMinZ + 12,
+					firstRoomMaxX - 1, firstRoomMaxY - 8, firstRoomMinZ + 12,
 					primaryPillarBlock, primaryPillarBlock, false);
-			setBlockState(world, lightBlock, firstRoomMaxX - 1, firstRoomMaxY - 21, firstRoomMinZ + 12, boundingBox);
-			setBlockState(world, primaryStairBlock.with(StairsBlock.FACING, getCoordBaseMode().rotateY()).with(StairsBlock.HALF, Half.TOP), firstRoomMaxX - 1, firstRoomMaxY - 24, firstRoomMinZ + 12, boundingBox);
+			setBlockState(world, lightBlock, firstRoomMaxX - 1, firstRoomMaxY - 7, firstRoomMinZ + 12, boundingBox);
+			setBlockState(world, primaryStairBlock.with(StairsBlock.FACING, getCoordBaseMode().rotateY()).with(StairsBlock.HALF, Half.TOP), firstRoomMaxX - 1, firstRoomMaxY - 10, firstRoomMinZ + 12, boundingBox);
 			fillWithBlocks(world, boundingBox,
-					firstRoomMaxX - 1, firstRoomMaxY - 23, firstRoomMaxZ - 12,
-					firstRoomMaxX - 1, firstRoomMaxY - 22, firstRoomMaxZ - 12,
+					firstRoomMaxX - 1, firstRoomMaxY - 9, firstRoomMaxZ - 12,
+					firstRoomMaxX - 1, firstRoomMaxY - 8, firstRoomMaxZ - 12,
 					primaryPillarBlock, primaryPillarBlock, false);
-			setBlockState(world, lightBlock, firstRoomMaxX - 1, firstRoomMaxY - 21, firstRoomMaxZ - 12, boundingBox);
-			setBlockState(world, primaryStairBlock.with(StairsBlock.FACING, getCoordBaseMode().rotateY()).with(StairsBlock.HALF, Half.TOP), firstRoomMaxX - 1, firstRoomMaxY - 24, firstRoomMaxZ - 12, boundingBox);
+			setBlockState(world, lightBlock, firstRoomMaxX - 1, firstRoomMaxY - 7, firstRoomMaxZ - 12, boundingBox);
+			setBlockState(world, primaryStairBlock.with(StairsBlock.FACING, getCoordBaseMode().rotateY()).with(StairsBlock.HALF, Half.TOP), firstRoomMaxX - 1, firstRoomMaxY - 10, firstRoomMaxZ - 12, boundingBox);
 			
 			//edges of lower level
 			fillWithAir(world, boundingBox,
@@ -649,7 +650,7 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 			StructureBlockUtil.createCylinder(world, boundingBox, lightBlock, new BlockPos(
 					getXWithOffset((firstRoomMinX + firstRoomMaxX) / 2 - 10, (firstRoomMinZ + firstRoomMaxZ) / 2),
 					getYWithOffset(firstRoomMinY + 13),
-					getXWithOffset((firstRoomMinX + firstRoomMaxX) / 2 - 10, (firstRoomMinZ + firstRoomMaxZ) / 2)),
+					getZWithOffset((firstRoomMinX + firstRoomMaxX) / 2 - 10, (firstRoomMinZ + firstRoomMaxZ) / 2)),
 					6, 1); //ceiling light //TODO not generating
 			
 			//lighting
@@ -657,14 +658,14 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 					firstRoomMinX + 3, firstRoomMinY + 10, firstRoomMinZ + 8,
 					firstRoomMinX + 3, firstRoomMinY + 11, firstRoomMinZ + 8,
 					primaryPillarBlock, primaryPillarBlock, false);
-			setBlockState(world, lightBlock, firstRoomMinX + 3, firstRoomMinY + 12, firstRoomMinZ + 6, boundingBox);
+			setBlockState(world, lightBlock, firstRoomMinX + 3, firstRoomMinY + 12, firstRoomMinZ + 8, boundingBox);
 			fillWithBlocks(world, boundingBox,
 					firstRoomMinX + 3, firstRoomMinY + 10, firstRoomMaxZ - 8,
 					firstRoomMinX + 3, firstRoomMinY + 11, firstRoomMaxZ - 8,
 					primaryPillarBlock, primaryPillarBlock, false);
-			setBlockState(world, lightBlock, firstRoomMinX + 3, firstRoomMinY + 12, firstRoomMaxZ - 6, boundingBox);
+			setBlockState(world, lightBlock, firstRoomMinX + 3, firstRoomMinY + 12, firstRoomMaxZ - 8, boundingBox);
 			
-			//secret redstone lamp setup
+			//secret redstone lamp setup //TODO create thing this puzzle actually does
 			fillWithBlocks(world, boundingBox,
 					(firstRoomMinX + firstRoomMaxX) / 2, firstRoomMinY + 10, firstRoomMinZ + 1,
 					(firstRoomMinX + firstRoomMaxX) / 2, firstRoomMinY + 12, firstRoomMinZ + 4,
@@ -706,9 +707,13 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 			StructureBlockUtil.placeLargeAspectSymbol(world, boundingBox, aspectSymbolPos, primaryBlock, EnumAspect.BLOOD);
 			
 			//redstone components for lich fight and piston stairway unlock, inside aspect platform
+			StructureBlockUtil.placeSummoner(world, boundingBox, aspectSymbolPos.down(2).offset(getCoordBaseMode().rotateY(), 7), SummonerTileEntity.SummonType.LICH);
+			StructureBlockUtil.placeSummoner(world, boundingBox, aspectSymbolPos.down(2).offset(getCoordBaseMode().rotateY(), 8).offset(getCoordBaseMode()), SummonerTileEntity.SummonType.LICH);
+			StructureBlockUtil.placeSummoner(world, boundingBox, aspectSymbolPos.down(2).offset(getCoordBaseMode().rotateY(), 8).offset(getCoordBaseMode().getOpposite()), SummonerTileEntity.SummonType.LICH);
+			StructureBlockUtil.placeSummoner(world, boundingBox, aspectSymbolPos.down(2).offset(getCoordBaseMode().rotateY(), 9), SummonerTileEntity.SummonType.LICH);
 			StructureBlockUtil.placeRemoteObserver(world, boundingBox, aspectSymbolPos.down(2).offset(getCoordBaseMode().rotateY(), 8), RemoteObserverTileEntity.ActiveType.IS_PLAYER_PRESENT); //checks for presence of player
 			StructureBlockUtil.placeStatStorer(world, boundingBox, aspectSymbolPos.down(2), StatStorerTileEntity.ActiveType.DEATHS, 1); //counts how many deaths there have been(need 10 kills to activate all 5 pistons)
-			StructureBlockUtil.fillWithBlocksFromPos(world, boundingBox, Blocks.REDSTONE_WIRE.getDefaultState(), aspectSymbolPos.down(2).offset(getCoordBaseMode().rotateYCCW(), 9), aspectSymbolPos.down(2).offset(getCoordBaseMode().rotateYCCW()));
+			StructureBlockUtil.fillWithBlocksFromPos(world, boundingBox, Blocks.REDSTONE_WIRE.getDefaultState(), aspectSymbolPos.down(2).offset(getCoordBaseMode().rotateYCCW()), aspectSymbolPos.down(2).offset(getCoordBaseMode().rotateYCCW(), 9));
 			//world.setBlockState(aspectSymbolPos.down(2), Blocks.REDSTONE_WIRE.getDefaultState().with(RedstoneWireBlock.NORTH, RedstoneSide.SIDE).with(RedstoneWireBlock.WEST, RedstoneSide.SIDE), Constants.BlockFlags.BLOCK_UPDATE);
 			
 			fillWithBlocks(world, boundingBox, firstRoomMinX + 3, firstRoomMinY + 4, (firstRoomMinZ + firstRoomMaxZ) / 2 - 3, firstRoomMinX + 3, firstRoomMinY + 8, (firstRoomMinZ + firstRoomMaxZ) / 2 + 2, lightBlock, lightBlock, false);
