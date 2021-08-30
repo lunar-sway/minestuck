@@ -653,6 +653,13 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSBlocks.PIPE_INTERSECTION).input(MSBlocks.CHALK).and().input(Items.CHISELED_STONE_BRICKS).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(MSBlocks.PARCEL_PYXIS).input(MSBlocks.PIPE).or().input(MSItems.MAILBOX).buildFor(consumer, Minestuck.MOD_ID);
 		
+		CombinationRecipeBuilder.of(MSBlocks.TRAJECTORY_BLOCK).input(Items.POWERED_RAIL).or().input(Items.SLIME_BLOCK).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(MSBlocks.STAT_STORER).input(Items.COMPARATOR).and().input(MSBlocks.REMOTE_OBSERVER).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(MSBlocks.REMOTE_OBSERVER).input(Items.OBSERVER).or().input(Items.ENDER_EYE).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(MSBlocks.WIRELESS_REDSTONE_TRANSMITTER).input(Items.REPEATER).or().input(Items.ENDER_EYE).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(MSBlocks.WIRELESS_REDSTONE_RECEIVER).input(Items.COMPARATOR).or().input(Items.ENDER_EYE).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(MSBlocks.SOLID_SWITCH).input(Items.LEVER).and().input(Items.REDSTONE_LAMP).buildFor(consumer, Minestuck.MOD_ID);
+		
 		CombinationRecipeBuilder.of(MSBlocks.STONE_CRUXITE_ORE).input(MSItems.RAW_CRUXITE).and().input(Items.STONE).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(MSBlocks.NETHERRACK_CRUXITE_ORE).input(MSItems.RAW_CRUXITE).and().input(Items.NETHERRACK).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(MSBlocks.COBBLESTONE_CRUXITE_ORE).input(MSItems.RAW_CRUXITE).and().input(Items.COBBLESTONE).buildFor(consumer, Minestuck.MOD_ID);

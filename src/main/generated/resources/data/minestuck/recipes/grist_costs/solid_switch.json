@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:solid_switch"
+  },
+  "grist_cost": {
+    "minestuck:tar": 5,
+    "minestuck:build": 2,
+    "minestuck:garnet": 1
+  }
+}

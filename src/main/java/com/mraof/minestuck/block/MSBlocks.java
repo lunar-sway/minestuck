@@ -490,7 +490,7 @@ public class MSBlocks
 		registry.register(new RemoteObserverBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(3).sound(SoundType.STONE)).setRegistryName("remote_observer"));
 		registry.register(new WirelessRedstoneTransmitterBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(3).sound(SoundType.STONE)).setRegistryName("wireless_redstone_transmitter"));
 		registry.register(new WirelessRedstoneReceiverBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(3).sound(SoundType.STONE)).setRegistryName("wireless_redstone_receiver"));
-		registry.register(new SolidSwitchBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(3).sound(SoundType.STONE).lightValue(15)).setRegistryName("solid_switch"));
+		registry.register(new SolidSwitchBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(3).sound(SoundType.STONE).lightValue(12)).setRegistryName("solid_switch"));
 		registry.register(new SummonerBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(3).sound(SoundType.STONE)).setRegistryName("summoner"));
 		
 		registry.register(new LootBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(3).sound(SoundType.METAL), MSBlockShapes.LOOT_CHEST, MSBlockShapes.LOOT_CHEST_EMPTY, MSLootTables.BASIC_MEDIUM_CHEST).setRegistryName("loot_chest"));
