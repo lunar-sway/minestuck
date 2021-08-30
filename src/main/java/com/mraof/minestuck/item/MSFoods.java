@@ -7,7 +7,7 @@ import net.minecraft.potion.Effects;
 public class MSFoods
 {
     //gushers
-    public static final Food PHLEGM_GUSHERS = (new Food.Builder()).hunger(2).saturation(0.2F).setAlwaysEdible().build();
+    public static final Food PHLEGM_GUSHERS = (new Food.Builder()).hunger(2).saturation(0.2F).setAlwaysEdible().fastToEat().build();
     public static final Food SORROW_GUSHERS = (new Food.Builder()).hunger(0).saturation(0.0F).setAlwaysEdible().effect(new EffectInstance(Effects.INSTANT_DAMAGE, 1), 1.0F).effect(new EffectInstance(Effects.POISON, 200, 2), 1.0F).build();
     //foods
     public static final Food BUG_ON_A_STICK = (new Food.Builder()).hunger(3).saturation(0.2F).build();
@@ -18,43 +18,43 @@ public class MSFoods
     public static final Food JAR_OF_BUGS = (new Food.Builder()).hunger(6).saturation(0.4F).build();
     public static final Food BUG_MAC = (new Food.Builder()).hunger(10).saturation(0.9F).build();
     public static final Food ONION = (new Food.Builder()).hunger(3).saturation(0.2F).build();
-    public static final Food DESERT_FRUIT = (new Food.Builder()).hunger(3).saturation(0.2F).build();
+    public static final Food DESERT_FRUIT = (new Food.Builder()).hunger(3).saturation(0.2F).fastToEat().build();
     public static final Food FUNGAL_SPORE = (new Food.Builder()).hunger(1).saturation(0.2F).effect(new EffectInstance(Effects.POISON, 60, 3), 0.7F).build();
-    public static final Food SPOREO = (new Food.Builder()).hunger(3).saturation(0.4F).build();
-    public static final Food MOREL_MUSHROOM = (new Food.Builder()).hunger(3).saturation(0.9F).build();
-    public static final Food FRENCH_FRY = (new Food.Builder()).hunger(1).saturation(0.1F).build();
-    public static final Food STRAWBERRY_CHUNK = (new Food.Builder()).hunger(4).saturation(0.5F).build();
+    public static final Food SPOREO = (new Food.Builder()).hunger(3).saturation(0.4F).fastToEat().build();
+    public static final Food MOREL_MUSHROOM = (new Food.Builder()).hunger(3).saturation(0.9F).fastToEat().build();
+    public static final Food FRENCH_FRY = (new Food.Builder()).hunger(1).saturation(0.1F).fastToEat().build();
+    public static final Food STRAWBERRY_CHUNK = (new Food.Builder()).hunger(4).saturation(0.5F).fastToEat().build();
     public static final Food FOOD_CAN = (new Food.Builder()).hunger(4).saturation(0.6F).build();
-    public static final Food IRRADIATED_STEAK = (new Food.Builder()).hunger(10).saturation(0.9F).effect(new EffectInstance(Effects.WITHER, 100, 1), 0.9F).build();
+    public static final Food IRRADIATED_STEAK = (new Food.Builder()).hunger(10).saturation(0.9F).meat().effect(new EffectInstance(Effects.WITHER, 100, 1), 0.9F).build();
     public static final Food WOODEN_CARROT = (new Food.Builder()).hunger(0).saturation(0.1F).effect(new EffectInstance(Effects.INSTANT_DAMAGE, 1), 0.5F).effect(new EffectInstance(Effects.POISON, 100), 1.0F).build();
     public static final Food SURPRISE_EMBRYO = (new Food.Builder()).hunger(3).saturation(0.2F).build();
     public static final Food UNKNOWABLE_EGG = (new Food.Builder()).hunger(3).saturation(0.3F).build();
     public static final Food BREADCRUMBS = (new Food.Builder()).hunger(1).saturation(0.1F).fastToEat().build();
-    public static final Food SALAD = new Food.Builder().hunger(1).saturation(0.6F).build();
+    public static final Food SALAD = new Food.Builder().hunger(1).saturation(0.6F).fastToEat().build();
     //Candies
-    public static final Food CANDY_CORN = (new Food.Builder()).hunger(2).saturation(0.3F).build();
-    public static final Food TUIX_BAR = (new Food.Builder()).hunger(4).saturation(0.7F).build();
-    public static final Food BUILD_GUSHERS = (new Food.Builder()).hunger(2).saturation(0.0F).build();
-    public static final Food AMBER_GUMMY_WORM = (new Food.Builder()).hunger(2).saturation(0.1F).build();
-    public static final Food CAULK_PRETZEL = (new Food.Builder()).hunger(2).saturation(0.1F).build();
-    public static final Food CHALK_CANDY_CIGARETTE = (new Food.Builder()).hunger(2).saturation(0.1F).build();
-    public static final Food IODINE_LICORICE = (new Food.Builder()).hunger(2).saturation(0.1F).build();
-    public static final Food SHALE_PEEP = (new Food.Builder()).hunger(2).saturation(0.1F).build();
-    public static final Food TAR_LICORICE = (new Food.Builder()).hunger(2).saturation(0.1F).build();
-    public static final Food COBALT_GUM = (new Food.Builder()).hunger(2).saturation(0.2F).build();
-    public static final Food MARBLE_JAWBREAKER = (new Food.Builder()).hunger(2).saturation(0.2F).build();
-    public static final Food MERCURY_SIXLETS = (new Food.Builder()).hunger(2).saturation(0.2F).build();
-    public static final Food QUARTZ_JELLY_BEAN = (new Food.Builder()).hunger(2).saturation(0.2F).build();
-    public static final Food SULFUR_CANDY_APPLE = (new Food.Builder()).hunger(2).saturation(0.2F).build();
-    public static final Food AMETHYST_HARD_CANDY = (new Food.Builder()).hunger(2).saturation(0.3F).build();
-    public static final Food GARNET_TWIX = (new Food.Builder()).hunger(2).saturation(0.3F).build();
-    public static final Food RUBY_LOLLIPOP = (new Food.Builder()).hunger(2).saturation(0.3F).build();
-    public static final Food RUST_GUMMY_EYE = (new Food.Builder()).hunger(2).saturation(0.3F).build();
-    public static final Food DIAMOND_MINT = (new Food.Builder()).hunger(2).saturation(0.4F).build();
-    public static final Food GOLD_CANDY_RIBBON = (new Food.Builder()).hunger(2).saturation(0.4F).build();
-    public static final Food URANIUM_GUMMY_BEAR = (new Food.Builder()).hunger(2).saturation(0.4F).build();
-    public static final Food ARTIFACT_WARHEAD = (new Food.Builder()).hunger(2).saturation(0.5F).build();
-    public static final Food ZILLIUM_SKITTLES = (new Food.Builder()).hunger(2).saturation(0.6F).build();
+    public static final Food CANDY_CORN = (new Food.Builder()).hunger(2).saturation(0.3F).fastToEat().build();
+    public static final Food TUIX_BAR = (new Food.Builder()).hunger(4).saturation(0.7F).fastToEat().build();
+    public static final Food BUILD_GUSHERS = (new Food.Builder()).hunger(2).saturation(0.0F).fastToEat().build();
+    public static final Food AMBER_GUMMY_WORM = (new Food.Builder()).hunger(2).saturation(0.1F).fastToEat().build();
+    public static final Food CAULK_PRETZEL = (new Food.Builder()).hunger(2).saturation(0.1F).fastToEat().build();
+    public static final Food CHALK_CANDY_CIGARETTE = (new Food.Builder()).hunger(2).saturation(0.1F).fastToEat().build();
+    public static final Food IODINE_LICORICE = (new Food.Builder()).hunger(2).saturation(0.1F).fastToEat().build();
+    public static final Food SHALE_PEEP = (new Food.Builder()).hunger(2).saturation(0.1F).fastToEat().build();
+    public static final Food TAR_LICORICE = (new Food.Builder()).hunger(2).saturation(0.1F).fastToEat().build();
+    public static final Food COBALT_GUM = (new Food.Builder()).hunger(2).saturation(0.2F).fastToEat().build();
+    public static final Food MARBLE_JAWBREAKER = (new Food.Builder()).hunger(2).saturation(0.2F).fastToEat().build();
+    public static final Food MERCURY_SIXLETS = (new Food.Builder()).hunger(2).saturation(0.2F).fastToEat().build();
+    public static final Food QUARTZ_JELLY_BEAN = (new Food.Builder()).hunger(2).saturation(0.2F).fastToEat().build();
+    public static final Food SULFUR_CANDY_APPLE = (new Food.Builder()).hunger(2).saturation(0.2F).fastToEat().build();
+    public static final Food AMETHYST_HARD_CANDY = (new Food.Builder()).hunger(2).saturation(0.3F).fastToEat().build();
+    public static final Food GARNET_TWIX = (new Food.Builder()).hunger(2).saturation(0.3F).fastToEat().build();
+    public static final Food RUBY_LOLLIPOP = (new Food.Builder()).hunger(2).saturation(0.3F).fastToEat().build();
+    public static final Food RUST_GUMMY_EYE = (new Food.Builder()).hunger(2).saturation(0.3F).fastToEat().build();
+    public static final Food DIAMOND_MINT = (new Food.Builder()).hunger(2).saturation(0.4F).fastToEat().build();
+    public static final Food GOLD_CANDY_RIBBON = (new Food.Builder()).hunger(2).saturation(0.4F).fastToEat().build();
+    public static final Food URANIUM_GUMMY_BEAR = (new Food.Builder()).hunger(2).saturation(0.4F).fastToEat().build();
+    public static final Food ARTIFACT_WARHEAD = (new Food.Builder()).hunger(2).saturation(0.5F).fastToEat().build();
+    public static final Food ZILLIUM_SKITTLES = (new Food.Builder()).hunger(2).saturation(0.6F).fastToEat().build();
     //Drinks
     public static final Food APPLE_JUICE = (new Food.Builder()).hunger(1).saturation(0.4F).setAlwaysEdible().build();
     public static final Food TAB = (new Food.Builder()).hunger(1).saturation(0.0F).setAlwaysEdible().build();
@@ -67,5 +67,5 @@ public class MSFoods
     public static final Food FAYGO_MOON_MIST = (new Food.Builder()).hunger(1).saturation(0.0F).setAlwaysEdible().build();
     public static final Food FAYGO_PEACH = (new Food.Builder()).hunger(1).saturation(0.0F).setAlwaysEdible().build();
     public static final Food FAYGO_REDPOP = (new Food.Builder()).hunger(1).saturation(0.0F).setAlwaysEdible().build();
-    public static final Food GRUB_SAUCE = (new Food.Builder()).hunger(1).saturation(0.1F).setAlwaysEdible().build();
+    public static final Food GRUB_SAUCE = (new Food.Builder()).hunger(1).saturation(0.1F).setAlwaysEdible().fastToEat().build();
 }

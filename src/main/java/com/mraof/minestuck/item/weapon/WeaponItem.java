@@ -352,9 +352,9 @@ public class WeaponItem extends TieredItem
 			return this;
 		}
 		
-		public Builder setEating(FinishUseItemEffect... effects)
+		public Builder setEating(int useDuration, FinishUseItemEffect... effects)
 		{
-			return addItemUses(32, UseAction.EAT, effects);
+			return addItemUses(useDuration, UseAction.EAT, effects);
 		}
 		
 		public Builder addItemUses(int duration, UseAction action, FinishUseItemEffect... effects)
