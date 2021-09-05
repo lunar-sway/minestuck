@@ -3,12 +3,9 @@ package com.mraof.minestuck.world.gen.feature.structure;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.*;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.player.EnumAspect;
-import com.mraof.minestuck.tileentity.DungeonDoorInterfaceTileEntity;
 import com.mraof.minestuck.tileentity.redstone.RemoteObserverTileEntity;
 import com.mraof.minestuck.tileentity.redstone.StatStorerTileEntity;
 import com.mraof.minestuck.tileentity.redstone.SummonerTileEntity;
-import com.mraof.minestuck.tileentity.redstone.WirelessRedstoneTransmitterTileEntity;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
@@ -18,10 +15,7 @@ import net.minecraft.block.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.properties.ChestType;
 import net.minecraft.state.properties.Half;
-import net.minecraft.state.properties.RedstoneSide;
 import net.minecraft.state.properties.SlabType;
-import net.minecraft.tileentity.MobSpawnerTileEntity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -33,11 +27,10 @@ import net.minecraft.world.gen.feature.structure.ScatteredStructurePiece;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 import net.minecraftforge.common.util.Constants;
-import org.lwjgl.system.CallbackI;
 
 import java.util.Random;
 
-public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends ScatteredStructurePiece
+public class TierOneDungeonPiece extends ScatteredStructurePiece
 {
 	private final TierOneDungeonPiece.Selector DECAYED_BLOCKS = new TierOneDungeonPiece.Selector();
 	
@@ -131,7 +124,7 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 		bottomRoomSpawner1 = false;
 		bottomRoomSpawner2 = false;
 		
-		buildStructureFoundation(worldIn, boundingBoxIn, randomIn, randomRoomType);
+		buildStructureFoundation(worldIn, boundingBoxIn, randomIn, randomRoomType, chunkGeneratorIn);
 		buildWallsAndFloors(worldIn, boundingBoxIn, randomIn);
 		carveRooms(worldIn, boundingBoxIn);
 		buildIndoorBlocks(worldIn, boundingBoxIn, randomIn, randomRoomType);
@@ -139,7 +132,7 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 		return true;
 	}
 	
-	private void buildStructureFoundation(IWorld world, MutableBoundingBox boundingBox, Random rand, int randomRoomType)
+	private void buildStructureFoundation(IWorld world, MutableBoundingBox boundingBox, Random rand, int randomRoomType, ChunkGenerator<?> chunkGeneratorIn)
 	{
 		StructureBlockUtil.createSphere(world, boundingBox, air, new BlockPos(
 						getXWithOffset((entryRoomMaxX + entryRoomMinX) / 2, entryRoomMinZ),
@@ -179,7 +172,7 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 		}
 		
 		buildTreasureAndEscapeChamber(world, boundingBox, rand);
-		buildAspectThemedPuzzle(world, boundingBox, rand);
+		buildAspectThemedPuzzle(world, boundingBox, rand, chunkGeneratorIn);
 	}
 	
 	private void buildWallsAndFloors(IWorld world, MutableBoundingBox boundingBox, Random rand)
@@ -188,12 +181,7 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 				getXWithOffset(entryRoomMinX + 5, entryRoomMinZ),
 				getYWithOffset(entryRoomMinY + 3),
 				getZWithOffset(entryRoomMinX + 5, entryRoomMinZ));
-		/*if(boundingBox.isVecInside(doorInterfacePos)/* || getBoundingBox().isVecInside(doorInterfacePos)*//*) //TODO needs to work with just one bounding box
-		{
-			Debug.debugf("buildWallsAndFloors. doorInterfacePos = %s", doorInterfacePos);
-			//BlockState doorInterfaceBlockState = MSBlocks.DUNGEON_DOOR_INTERFACE.getDefaultState();
-			
-		}*/
+		
 		BlockPos minDoorPos = new BlockPos(
 				getXWithOffset(entryRoomMinX + 6, entryRoomMinZ),
 				getYWithOffset(entryRoomMinY + 1),
@@ -203,7 +191,6 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 				getYWithOffset(entryRoomMaxY - 3),
 				getZWithOffset(entryRoomMaxX - 6, entryRoomMinZ));
 		
-		//entryRoomMinX + 6, entryRoomMinY + 1, entryRoomMinZ, entryRoomMaxX - 6, entryRoomMaxY - 3, entryRoomMinZ;
 		StructureBlockUtil.placeDungeonDoor(world, boundingBox, doorInterfacePos, minDoorPos, maxDoorPos, EnumKeyType.tier_1_key);
 		
 		fillWithBlocks(world, boundingBox,
@@ -211,7 +198,6 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 				entryRoomMaxX - 1, entryRoomMinY, entryRoomMaxZ - 1,
 				secondaryBlock, air, false); //floor
 		
-		//fillWithBlocks(world, boundingBox, entryRoomMinX + 5, lowerRoomMaxY + 1, entryRoomMinZ + 5, entryRoomMaxX - 5, entryRoomMinY - 1, entryRoomMaxZ - 5, primaryBlock, air, false); //stairway walls
 	}
 	
 	private void carveRooms(IWorld world, MutableBoundingBox boundingBox)
@@ -258,8 +244,6 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 		StructureBlockUtil.placeLootChest(chestPosRight, world, boundingBox, getCoordBaseMode().getOpposite(), leftChestType, MSLootTables.TIER_ONE_MEDIUM_CHEST, rand);
 		
 		StructureBlockUtil.placeReturnNode(world, boundingBox, new BlockPos(getXWithOffset(lowerRoomMinX - 7, (lowerRoomMaxZ + lowerRoomMinZ) / 2), getYWithOffset(lowerRoomMinY + 3), getZWithOffset(lowerRoomMinX - 7, (lowerRoomMaxZ + lowerRoomMinZ) / 2)), getCoordBaseMode());
-		//StructureBlockUtil.placeReturnNode(world, boundingBox, new BlockPos(getXWithOffset(entryRoomMinX - 8, (entryRoomMaxZ + entryRoomMinZ) / 2), getYWithOffset(lowerRoomMinY + 3), getZWithOffset(entryRoomMinX - 8, (entryRoomMaxZ + entryRoomMinZ) / 2)), getCoordBaseMode());
-		//placeReturnNode(world, new BlockPos(getXWithOffset(entryRoomMinX - 8, (entryRoomMaxZ + entryRoomMinZ) / 2 - 1), getYWithOffset(entryRoomMinY - 19), getZWithOffset(entryRoomMinX - 8, (entryRoomMaxZ + entryRoomMinZ) / 2) - 1), boundingBox);
 		
 		setBlockState(world, lightBlock, lowerRoomMinX, lowerRoomMinY + 5, lowerRoomMinZ + 10, boundingBox); //left side light
 		setBlockState(world, lightBlock, lowerRoomMinX, lowerRoomMinY + 5, lowerRoomMaxZ - 10, boundingBox); //right side light
@@ -267,12 +251,6 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 	
 	private void buildIndoorBlocks(IWorld world, MutableBoundingBox boundingBox, Random rand, int randomRoomType)
 	{
-		//setBlockState(world, Blocks.DIRT.getDefaultState(), entryRoomMaxX - 3,entryRoomMinY, entryRoomMaxZ - 3, boundingBox);
-		//setBlockState(world, aspectSapling, entryRoomMaxX - 3,entryRoomMinY + 1, entryRoomMaxZ - 3, boundingBox);
-		
-		//PlacementFunctionsUtil.createSphere(world, boundingBox, primaryDecorativeBlock, new BlockPos(getXWithOffset(entryRoomMaxX - 5, entryRoomMaxZ - 5), getYWithOffset(entryRoomMaxY + 15), getZWithOffset(entryRoomMaxX - 5, entryRoomMaxZ - 5)), 10);
-		//PlacementFunctionsUtil.createCylinder(world, boundingBox, primaryDecorativeBlock, new BlockPos(getXWithOffset(entryRoomMaxX - 5, entryRoomMaxZ - 5), getYWithOffset(entryRoomMaxY + 15), getZWithOffset(entryRoomMaxX - 5, entryRoomMaxZ - 5)), 5, 10);
-		
 		BlockPos staircaseMinPos = new BlockPos(getXWithOffset(entryRoomMinX + 6, entryRoomMinZ + 6), getYWithOffset(lowerRoomMinY + 2), getZWithOffset(entryRoomMinX + 6, entryRoomMinZ + 6));
 		BlockPos staircaseMaxPos = new BlockPos(getXWithOffset(entryRoomMaxX - 6, entryRoomMaxZ - 6), getYWithOffset(entryRoomMinY), getZWithOffset(entryRoomMaxX - 6, entryRoomMaxZ - 6));
 		
@@ -302,11 +280,6 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 		{
 			bottomRoomTrappedType(world, boundingBox, rand);
 		}
-		
-		/*PlacementFunctionsUtil.fillWithBlocksCheckWater(world, boundingBox,
-				getXWithOffset(entryRoomMinX + 9, entryRoomMinZ + 9), getYWithOffset(entryRoomMinY - 11), getZWithOffset(entryRoomMinX + 9, entryRoomMinZ + 9),
-				getXWithOffset(entryRoomMaxX - 9, entryRoomMaxZ - 9), getYWithOffset(entryRoomMinY - 11), getZWithOffset(entryRoomMaxX - 9, entryRoomMaxZ - 9),
-				MSBlocks.MINI_FROG_STATUE.getDefaultState());*/
 	}
 	
 	private void bottomRoomPlainType(IWorld world, MutableBoundingBox boundingBox, Random rand)
@@ -502,7 +475,7 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 		
 	}
 	
-	private void buildAspectThemedPuzzle(IWorld world, MutableBoundingBox boundingBox, Random rand)
+	private void buildAspectThemedPuzzle(IWorld world, MutableBoundingBox boundingBox, Random rand, ChunkGenerator<?> chunkGeneratorIn)
 	{
 		fillWithBlocks(world, boundingBox,
 				firstRoomMinX, firstRoomMinY, firstRoomMinZ,
@@ -648,9 +621,9 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 					firstRoomMaxX - 9, firstRoomMinY + 11, firstRoomMaxZ - 1,
 					MSBlocks.BLOOD.getDefaultState(), MSBlocks.BLOOD.getDefaultState(), false); //side waterfall
 			StructureBlockUtil.createCylinder(world, boundingBox, lightBlock, new BlockPos(
-					getXWithOffset((firstRoomMinX + firstRoomMaxX) / 2 - 10, (firstRoomMinZ + firstRoomMaxZ) / 2),
-					getYWithOffset(firstRoomMinY + 13),
-					getZWithOffset((firstRoomMinX + firstRoomMaxX) / 2 - 10, (firstRoomMinZ + firstRoomMaxZ) / 2)),
+							getXWithOffset((firstRoomMinX + firstRoomMaxX) / 2 - 10, (firstRoomMinZ + firstRoomMaxZ) / 2),
+							getYWithOffset(firstRoomMinY + 12),
+							getZWithOffset((firstRoomMinX + firstRoomMaxX) / 2 - 10, (firstRoomMinZ + firstRoomMaxZ) / 2)),
 					6, 1); //ceiling light //TODO not generating
 			
 			//lighting
@@ -704,7 +677,8 @@ public class TierOneDungeonPiece /*extends ImprovedStructurePiece*/ extends Scat
 					getZWithOffset((firstRoomMinX + 5 + firstRoomMaxX - 3) / 2, (firstRoomMinZ + firstRoomMaxZ) / 2)); //middle of lower room on top of blood
 			StructureBlockUtil.createCylinder(world, boundingBox, secondaryBlock, aspectSymbolPos.down(3), 12, 3);
 			StructureBlockUtil.createCylinder(world, boundingBox, lightBlock, aspectSymbolPos.down(1), 12, 1);
-			StructureBlockUtil.placeLargeAspectSymbol(world, boundingBox, aspectSymbolPos, primaryBlock, EnumAspect.BLOOD);
+			StructureBlockUtil.createCylinder(world, boundingBox, primaryBlock, aspectSymbolPos, 12, 1);
+			StructureBlockUtil.placeFeature(world, boundingBox, aspectSymbolPos, getRotation(), getCoordBaseMode(), rand, StructureBlockUtil.FeatureType.BLOOD_ASPECT_SYMBOL);
 			
 			//redstone components for lich fight and piston stairway unlock, inside aspect platform
 			StructureBlockUtil.placeSummoner(world, boundingBox, aspectSymbolPos.down(2).offset(getCoordBaseMode().rotateY(), 7), SummonerTileEntity.SummonType.LICH);

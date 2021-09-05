@@ -1,14 +1,16 @@
 package com.mraof.minestuck.world.gen.feature.structure.blocks;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.EnumKeyType;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.ReturnNodeBlock;
-import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.tileentity.DungeonDoorInterfaceTileEntity;
 import com.mraof.minestuck.tileentity.redstone.RemoteObserverTileEntity;
 import com.mraof.minestuck.tileentity.redstone.StatStorerTileEntity;
 import com.mraof.minestuck.tileentity.redstone.SummonerTileEntity;
 import com.mraof.minestuck.tileentity.redstone.WirelessRedstoneTransmitterTileEntity;
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.world.gen.feature.StructureBlockRegistryProcessor;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ChestBlock;
@@ -19,12 +21,15 @@ import net.minecraft.state.properties.ChestType;
 import net.minecraft.tileentity.ChestTileEntity;
 import net.minecraft.tileentity.MobSpawnerTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.WeightedSpawnerEntity;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.gen.feature.template.PlacementSettings;
+import net.minecraft.world.gen.feature.template.Template;
+import net.minecraft.world.gen.feature.template.TemplateManager;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.Constants;
 
 import java.util.Objects;
@@ -35,6 +40,58 @@ import java.util.Random;
  */
 public class StructureBlockUtil
 {
+	public enum FeatureType
+	{
+		BREATH_ASPECT_SYMBOL,
+		LIFE_ASPECT_SYMBOL,
+		LIGHT_ASPECT_SYMBOL,
+		TIME_ASPECT_SYMBOL,
+		HEART_ASPECT_SYMBOL,
+		RAGE_ASPECT_SYMBOL,
+		BLOOD_ASPECT_SYMBOL,
+		DOOM_ASPECT_SYMBOL,
+		VOID_ASPECT_SYMBOL,
+		SPACE_ASPECT_SYMBOL,
+		MIND_ASPECT_SYMBOL,
+		HOPE_ASPECT_SYMBOL,
+		SMALL_COG,
+		LARGE_COG;
+		
+		public static ResourceLocation getFeatureResourceLocation(FeatureType featureType)
+		{
+			if(featureType == BREATH_ASPECT_SYMBOL)
+				return new ResourceLocation(Minestuck.MOD_ID, "large_floor_cog_1");
+			else if(featureType == LIFE_ASPECT_SYMBOL)
+				return new ResourceLocation(Minestuck.MOD_ID, "large_floor_cog_1");
+			else if(featureType == LIGHT_ASPECT_SYMBOL)
+				return new ResourceLocation(Minestuck.MOD_ID, "large_floor_cog_1");
+			else if(featureType == TIME_ASPECT_SYMBOL)
+				return new ResourceLocation(Minestuck.MOD_ID, "large_floor_cog_1");
+			else if(featureType == HEART_ASPECT_SYMBOL)
+				return new ResourceLocation(Minestuck.MOD_ID, "large_floor_cog_1");
+			else if(featureType == RAGE_ASPECT_SYMBOL)
+				return new ResourceLocation(Minestuck.MOD_ID, "large_floor_cog_1");
+			else if(featureType == BLOOD_ASPECT_SYMBOL)
+				return new ResourceLocation(Minestuck.MOD_ID, "blood_aspect_symbol");
+			else if(featureType == DOOM_ASPECT_SYMBOL)
+				return new ResourceLocation(Minestuck.MOD_ID, "large_floor_cog_1");
+			else if(featureType == VOID_ASPECT_SYMBOL)
+				return new ResourceLocation(Minestuck.MOD_ID, "large_floor_cog_1");
+			else if(featureType == SPACE_ASPECT_SYMBOL)
+				return new ResourceLocation(Minestuck.MOD_ID, "large_floor_cog_1");
+			else if(featureType == MIND_ASPECT_SYMBOL)
+				return new ResourceLocation(Minestuck.MOD_ID, "large_floor_cog_1");
+			else if(featureType == HOPE_ASPECT_SYMBOL)
+				return new ResourceLocation(Minestuck.MOD_ID, "large_floor_cog_1");
+			else if(featureType == SMALL_COG)
+				return new ResourceLocation(Minestuck.MOD_ID, "small_cog");
+			else if(featureType == LARGE_COG)
+				return new ResourceLocation(Minestuck.MOD_ID, "large_floor_cog_1");
+			else
+				return new ResourceLocation(Minestuck.MOD_ID, "cake_pedestal");
+		}
+	}
+	
 	public static boolean placeSpawner(BlockPos pos, IWorld world, MutableBoundingBox bb, EntityType<?> entityType)
 	{
 		WeightedSpawnerEntity entity = new WeightedSpawnerEntity();
@@ -226,11 +283,29 @@ public class StructureBlockUtil
 	}
 	
 	/**
-	 * Will generate the circular structure with the blockPosIn as the center. 16x resolution. Structure is 25 blocks wide and 1 block thick
+	 * Will generate a feature from the enum FeatureType
 	 */
-	public static void placeLargeAspectSymbol(IWorld world, MutableBoundingBox boundingBox, BlockPos blockPosIn, BlockState blockStateIn, EnumAspect aspectIn)
+	public static void placeFeature(IWorld world, MutableBoundingBox boundingBox, BlockPos blockPosIn, /*BlockState blockStateIn, EnumAspect aspectIn, */Rotation rotation, Direction direction, Random random, FeatureType featureTypeIn)
 	{
-		createCylinder(world, boundingBox, blockStateIn, blockPosIn, 12, 1);
+		TemplateManager templates = ((ServerWorld) world.getWorld()).getSaveHandler().getStructureTemplateManager();
+		Template template = templates.getTemplateDefaulted(FeatureType.getFeatureResourceLocation(featureTypeIn));
+		PlacementSettings settings = new PlacementSettings().setRotation(rotation).setChunk(new ChunkPos(blockPosIn)).setBoundingBox(boundingBox).setRandom(random).addProcessor(StructureBlockRegistryProcessor.INSTANCE);
+		int sizeX = template.transformedSize(rotation).getX();
+		int sizeZ = template.transformedSize(rotation).getZ();
+		Debug.debugf("rotation.ordinal() = %s, Direction.byHorizontalIndex(rotation.ordinal()) = %s", rotation.ordinal(), Direction.byHorizontalIndex(rotation.ordinal()));
+		
+		//int xOffset = rand.nextInt(16 - size.getX()), zOffset = rand.nextInt(16 - size.getZ());
+		//BlockPos structurePos = template.getZeroPositionWithTransform(new BlockPos(blockPosIn.getX(), blockPosIn.getY(), blockPosIn.getZ()), Mirror.NONE, rotation);
+		if(direction == Direction.SOUTH || direction == Direction.WEST)
+		{
+			sizeX = -sizeX;
+			sizeZ = -sizeZ;
+		}
+		
+		template.addBlocksToWorld(world, blockPosIn.offset(direction, sizeX / 2).offset(direction.rotateY(), sizeZ / 2), settings);
+		//template.addBlocksToWorld(world, blockPosIn.offset(Direction.byHorizontalIndex(rotation.ordinal()), sizeX).offset(Direction.byHorizontalIndex(rotation.ordinal()).rotateY(), sizeZ), settings);
+		
+		/*createCylinder(world, boundingBox, blockStateIn, blockPosIn, 12, 1);
 		BlockState aspectBlockStateLight = Blocks.LIGHT_GRAY_CONCRETE.getDefaultState();
 		BlockState aspectBlockStateDark = Blocks.LIGHT_GRAY_CONCRETE.getDefaultState();
 		if(aspectIn == EnumAspect.BLOOD) //based on banner art by Riotmode
@@ -271,7 +346,7 @@ public class StructureBlockUtil
 			fillWithBlocksFromPos(world, boundingBox, aspectBlockStateDark, blockPosIn.east(4).south(1), blockPosIn.east(4).south(2));
 			fillWithBlocksFromPos(world, boundingBox, aspectBlockStateDark, blockPosIn.east(2).south(1), blockPosIn.east(2).south(2));
 			world.setBlockState(blockPosIn.east(3).south(3), aspectBlockStateDark, Constants.BlockFlags.BLOCK_UPDATE);
-		}
+		}*/
 	}
 	
 	/**
@@ -323,7 +398,6 @@ public class StructureBlockUtil
 			}
 			
 			
-			
 			//Debug.debugf("createPlainSpiralStaircase. placed at %s", iteratorPos);
 			if(boundingBox1.isVecInside(iteratorPos)/* || boundingBox2.isVecInside(iteratorPos)*/)
 			{
@@ -369,9 +443,10 @@ public class StructureBlockUtil
 			}
 		}
 	}
+	
 	/**
 	 * bottomPos is at the bottom and to the left, with the width increasing how many blocks it is 90 degrees clockwise from the direction
-	*/
+	 */
 	public static void createStairs(IWorld worldIn, MutableBoundingBox structurebb, BlockState bodyBlockState, BlockState tipBlockState, BlockPos bottomPos, int height, int width, Direction direction, boolean flipped)
 	{
 		//TODO create flipped option, where the stairs generate upside down

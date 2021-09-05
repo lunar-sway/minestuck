@@ -45,7 +45,7 @@ public class SummonerBlock extends Block
 		super.neighborChanged(state, worldIn, pos, blockIn, fromPos, isMoving);
 		boolean blockPowered = worldIn.isBlockPowered(pos) || worldIn.isBlockPowered(pos.up());
 		//Debug.debugf("blockPowered = %s, triggered = %s", blockPowered, state.get(TRIGGERED));
-		if(blockPowered && !state.get(TRIGGERED))
+		if(!worldIn.isRemote && blockPowered && !state.get(TRIGGERED))
 		{
 			TileEntity tileEntity = worldIn.getTileEntity(pos);
 			Debug.debugf("summonerTileEntity = %s", tileEntity instanceof SummonerTileEntity);
