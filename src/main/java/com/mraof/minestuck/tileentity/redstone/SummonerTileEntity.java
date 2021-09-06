@@ -1,7 +1,5 @@
 package com.mraof.minestuck.tileentity.redstone;
 
-import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.block.WirelessRedstoneReceiverBlock;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.underling.BasiliskEntity;
 import com.mraof.minestuck.entity.underling.ImpEntity;
@@ -9,22 +7,14 @@ import com.mraof.minestuck.entity.underling.LichEntity;
 import com.mraof.minestuck.entity.underling.OgreEntity;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.util.Debug;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.pathfinding.PathType;
-import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.INameable;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 
 public class SummonerTileEntity extends TileEntity

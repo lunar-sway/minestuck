@@ -484,10 +484,64 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 		
 		if(aspectSapling == MSBlocks.BREATH_ASPECT_SAPLING.getDefaultState()) //parkour like frog temple lower room
 		{
-		
+			/*//TODO will be for Breath
+			fillWithAir(world, boundingBox,
+					firstRoomMinX + 1, firstRoomMinY + 1, firstRoomMinZ + 1,
+					firstRoomMaxX - 1, firstRoomMaxY - 1, firstRoomMaxZ - 1);
+			
+			for(int i = 0; i < 3; i++)
+			{
+				for(int j = 0; j < 3; j++)
+				{
+					fillWithBlocks(world, boundingBox,
+							firstRoomMinX + 6 + i * 9, firstRoomMinY + 1, firstRoomMinZ + 9 + j * 9,
+							firstRoomMinX + 7 + i * 9, firstRoomMaxY - 1, firstRoomMinZ + 10 + j * 9,
+							primaryPillarBlock.with(RotatedPillarBlock.AXIS, Direction.Axis.Y), primaryPillarBlock.with(RotatedPillarBlock.AXIS, Direction.Axis.Y), false);
+					fillWithBlocks(world, boundingBox,
+							firstRoomMinX + 4 + i * 9, firstRoomMinY + 10, firstRoomMinZ + 7 + j * 9,
+							firstRoomMinX + 9 + i * 9, firstRoomMinY + 10, firstRoomMinZ + 12 + j * 9,
+							primaryDecorativeBlock, primaryDecorativeBlock, false); //platform around columns
+							
+							//TODO do a lower or higher level of platforms to expand puzzle
+					fillWithAir(world, boundingBox,
+							firstRoomMinX + 4 + 9, firstRoomMinY + 1, firstRoomMinZ + 7 + 9,
+							firstRoomMinX + 9 + 9, firstRoomMaxY - 1, firstRoomMinZ + 12 + 9);
+				}
+			}
+			
+			fillWithBlocks(world, boundingBox, //TODO not appearing
+					firstRoomMinX + 14, firstRoomMinY + 10, firstRoomMinZ,
+					firstRoomMinX + 22, firstRoomMinY + 16, firstRoomMinZ - 20,
+					primaryBlock, air, false); //TODO side rooms will require fighting past ogres to get to a switch
+			fillWithBlocks(world, boundingBox,
+					firstRoomMinX + 1, firstRoomMinY + 1, firstRoomMinZ + 18,
+					firstRoomMinX + 1, firstRoomMinY + 10, firstRoomMinZ + 19,
+					Blocks.LADDER.getDefaultState().with(LadderBlock.FACING, Direction.EAST), Blocks.LADDER.getDefaultState(), false); //ladder*/
 		} else if(aspectSapling == MSBlocks.LIFE_ASPECT_SAPLING.getDefaultState())
 		{
-			//TODO will be for Blood
+			//TODO will be for Space
+			fillWithAir(world, boundingBox,
+					firstRoomMinX + 1, firstRoomMaxY - 12, firstRoomMinZ + 1,
+					firstRoomMaxX - 1, firstRoomMaxY - 1, firstRoomMaxZ - 1); //ceiling down to main area
+			fillWithAir(world, boundingBox,
+					firstRoomMinX + 15, firstRoomMaxY - 25, firstRoomMinZ + 1,
+					firstRoomMaxX - 1, firstRoomMaxY - 12, firstRoomMaxZ - 1); //pit area
+			fillWithBlocks(world, boundingBox,
+					firstRoomMinX + 10, firstRoomMaxY - 13, (firstRoomMinZ + firstRoomMaxZ) / 2,
+					firstRoomMinX + 14, firstRoomMaxY - 13, (firstRoomMinZ + firstRoomMaxZ) / 2,
+					MSBlocks.TRAJECTORY_BLOCK.getDefaultState().with(TrajectoryBlock.FACING, getCoordBaseMode().rotateYCCW()), MSBlocks.TRAJECTORY_BLOCK.getDefaultState(), false); //sideways facing trajectory blocks
+			
+		} else if(aspectSapling == MSBlocks.LIGHT_ASPECT_SAPLING.getDefaultState())
+		{
+		} else if(aspectSapling == MSBlocks.TIME_ASPECT_SAPLING.getDefaultState()) //spikes that shoot up on a timed interval so you have to match the rythym to pass
+		{
+		} else if(aspectSapling == MSBlocks.HEART_ASPECT_SAPLING.getDefaultState()) //stairs going all throughout the structure leading to different small rooms with levers that all need pulling in order to pass
+		{
+		} else if(aspectSapling == MSBlocks.RAGE_ASPECT_SAPLING.getDefaultState()) //difficult terrain made by odd geometric shapes blocking path
+		{
+		} else if(aspectSapling == MSBlocks.BLOOD_ASPECT_SAPLING.getDefaultState()) //nonhazardous liquid that player has to trudge through while enemies approach on all sides
+		{
+			/*//TODO will be for Blood
 			//roomVariable1 = rand.nextInt(6); //blood diving to flick switch
 			
 			fillWithAir(world, boundingBox,
@@ -543,11 +597,11 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 						getZWithOffset(firstRoomMinX + 5 + xIterate * 10, firstRoomMinZ + 2));
 				world.setBlockState(spawnerPos.down(), lightBlock, Constants.BlockFlags.BLOCK_UPDATE);
 				StructureBlockUtil.placeSpawner(spawnerPos, world, boundingBox, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
-				/*TileEntity spawnerTE = world.getTileEntity(spawnerPos); //TODO figure out how to change potion effects of spawned entities(give them speed) and increase range at which they spawn
-				if((spawnerTE instanceof MobSpawnerTileEntity))
-				{
-					((MobSpawnerTileEntity) spawnerTE).write(spawnerNBT);
-				}*/
+				//TileEntity spawnerTE = world.getTileEntity(spawnerPos); //TODO figure out how to change potion effects of spawned entities(give them speed) and increase range at which they spawn
+				//				if((spawnerTE instanceof MobSpawnerTileEntity))
+				//				{
+				//					((MobSpawnerTileEntity) spawnerTE).write(spawnerNBT);
+				//				}
 				//TODO every maxY value below this line has been shifted down, shift down the above
 				spawnerPos = new BlockPos(
 						getXWithOffset(firstRoomMinX + 5 + xIterate * 10, firstRoomMaxZ - 2),
@@ -700,53 +754,7 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 						getZWithOffset(firstRoomMinX + 2, (firstRoomMinZ + firstRoomMaxZ) / 2 - 2 + stairPuzzleIterate)));
 				setBlockState(world, Blocks.STICKY_PISTON.getDefaultState().with(PistonBlock.FACING, Direction.EAST), firstRoomMinX + 3, firstRoomMinY + 4 + stairPuzzleIterate, (firstRoomMinZ + firstRoomMaxZ) / 2 - 2 + stairPuzzleIterate, boundingBox);
 				setBlockState(world, secondaryDecorativeBlock, firstRoomMinX + 4, firstRoomMinY + 4 + stairPuzzleIterate, (firstRoomMinZ + firstRoomMaxZ) / 2 - 2 + stairPuzzleIterate, boundingBox);
-			}
-			
-			
-			/*//TODO will be for Breath
-			fillWithAir(world, boundingBox,
-					firstRoomMinX + 1, firstRoomMinY + 1, firstRoomMinZ + 1,
-					firstRoomMaxX - 1, firstRoomMaxY - 1, firstRoomMaxZ - 1);
-			
-			for(int i = 0; i < 3; i++)
-			{
-				for(int j = 0; j < 3; j++)
-				{
-					fillWithBlocks(world, boundingBox,
-							firstRoomMinX + 6 + i * 9, firstRoomMinY + 1, firstRoomMinZ + 9 + j * 9,
-							firstRoomMinX + 7 + i * 9, firstRoomMaxY - 1, firstRoomMinZ + 10 + j * 9,
-							primaryPillarBlock.with(RotatedPillarBlock.AXIS, Direction.Axis.Y), primaryPillarBlock.with(RotatedPillarBlock.AXIS, Direction.Axis.Y), false);
-					fillWithBlocks(world, boundingBox,
-							firstRoomMinX + 4 + i * 9, firstRoomMinY + 10, firstRoomMinZ + 7 + j * 9,
-							firstRoomMinX + 9 + i * 9, firstRoomMinY + 10, firstRoomMinZ + 12 + j * 9,
-							primaryDecorativeBlock, primaryDecorativeBlock, false); //platform around columns
-							
-							//TODO do a lower or higher level of platforms to expand puzzle
-					fillWithAir(world, boundingBox,
-							firstRoomMinX + 4 + 9, firstRoomMinY + 1, firstRoomMinZ + 7 + 9,
-							firstRoomMinX + 9 + 9, firstRoomMaxY - 1, firstRoomMinZ + 12 + 9);
-				}
-			}
-			
-			fillWithBlocks(world, boundingBox, //TODO not appearing
-					firstRoomMinX + 14, firstRoomMinY + 10, firstRoomMinZ,
-					firstRoomMinX + 22, firstRoomMinY + 16, firstRoomMinZ - 20,
-					primaryBlock, air, false); //TODO side rooms will require fighting past ogres to get to a switch
-			fillWithBlocks(world, boundingBox,
-					firstRoomMinX + 1, firstRoomMinY + 1, firstRoomMinZ + 18,
-					firstRoomMinX + 1, firstRoomMinY + 10, firstRoomMinZ + 19,
-					Blocks.LADDER.getDefaultState().with(LadderBlock.FACING, Direction.EAST), Blocks.LADDER.getDefaultState(), false); //ladder*/
-			
-		} else if(aspectSapling == MSBlocks.LIGHT_ASPECT_SAPLING.getDefaultState())
-		{
-		} else if(aspectSapling == MSBlocks.TIME_ASPECT_SAPLING.getDefaultState()) //spikes that shoot up on a timed interval so you have to match the rythym to pass
-		{
-		} else if(aspectSapling == MSBlocks.HEART_ASPECT_SAPLING.getDefaultState()) //stairs going all throughout the structure leading to different small rooms with levers that all need pulling in order to pass
-		{
-		} else if(aspectSapling == MSBlocks.RAGE_ASPECT_SAPLING.getDefaultState()) //difficult terrain made by odd geometric shapes blocking path
-		{
-		} else if(aspectSapling == MSBlocks.BLOOD_ASPECT_SAPLING.getDefaultState()) //nonhazardous liquid that player has to trudge through while enemies approach on all sides
-		{
+			}*/
 		} else if(aspectSapling == MSBlocks.DOOM_ASPECT_SAPLING.getDefaultState())
 		{
 		} else if(aspectSapling == MSBlocks.VOID_ASPECT_SAPLING.getDefaultState()) //invisible platforms or barriers

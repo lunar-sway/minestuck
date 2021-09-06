@@ -36,7 +36,7 @@ import java.util.Objects;
 import java.util.Random;
 
 /**
- * Functions in this often require using get[X/Y/Z]WithOffset
+ * Functions in this often have usage of axisAlignBlockPos internal functions
  */
 public class StructureBlockUtil
 {
@@ -262,21 +262,6 @@ public class StructureBlockUtil
 			}
 			DungeonDoorInterfaceTileEntity interfaceTE = (DungeonDoorInterfaceTileEntity) TE;
 			interfaceTE.setKey(keyType);
-			
-			/*world.setBlockState(interfaceBlockPos, MSBlocks.DUNGEON_DOOR_INTERFACE.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
-			TileEntity interfaceTE = world.getTileEntity(interfaceBlockPos);
-			if(!(interfaceTE instanceof DungeonDoorInterfaceTileEntity) && interfaceTE != null)
-			{
-				interfaceTE = new DungeonDoorInterfaceTileEntity();
-				world.getWorld().setTileEntity(interfaceBlockPos, interfaceTE);
-			}
-			if(interfaceTE != null)
-			{
-				((DungeonDoorInterfaceTileEntity) interfaceTE).setKey(keyType);
-			} else
-				throw new IllegalStateException("Unable to create a new dungeon door interface tile entity. Returned null!");
-		
-		doorInterfaceBlockState.createTileEntity(world);*/
 		}
 		fillWithBlocksFromPos(world, boundingBox, MSBlocks.DUNGEON_DOOR.getDefaultState(), minDoorBlockPos, maxDoorBlockPos);
 		
@@ -304,49 +289,6 @@ public class StructureBlockUtil
 		
 		template.addBlocksToWorld(world, blockPosIn.offset(direction, sizeX / 2).offset(direction.rotateY(), sizeZ / 2), settings);
 		//template.addBlocksToWorld(world, blockPosIn.offset(Direction.byHorizontalIndex(rotation.ordinal()), sizeX).offset(Direction.byHorizontalIndex(rotation.ordinal()).rotateY(), sizeZ), settings);
-		
-		/*createCylinder(world, boundingBox, blockStateIn, blockPosIn, 12, 1);
-		BlockState aspectBlockStateLight = Blocks.LIGHT_GRAY_CONCRETE.getDefaultState();
-		BlockState aspectBlockStateDark = Blocks.LIGHT_GRAY_CONCRETE.getDefaultState();
-		if(aspectIn == EnumAspect.BLOOD) //based on banner art by Riotmode
-		{
-			aspectBlockStateLight = Blocks.RED_CONCRETE.getDefaultState();
-			aspectBlockStateDark = Blocks.BLACK_CONCRETE.getDefaultState();
-			
-			//gash from left to right
-			world.setBlockState(blockPosIn.west(10).south(2), aspectBlockStateDark, Constants.BlockFlags.BLOCK_UPDATE);
-			fillWithBlocksFromPos(world, boundingBox, aspectBlockStateDark, blockPosIn.west(9).south(2), blockPosIn.west(9).south(1));
-			world.setBlockState(blockPosIn.west(8), aspectBlockStateDark, Constants.BlockFlags.BLOCK_UPDATE);
-			fillWithBlocksFromPos(world, boundingBox, aspectBlockStateLight, blockPosIn.west(8).south(1), blockPosIn.west(7).south(1));
-			fillWithBlocksFromPos(world, boundingBox, aspectBlockStateLight, blockPosIn.west(7), blockPosIn.west(5));
-			fillWithBlocksFromPos(world, boundingBox, aspectBlockStateLight, blockPosIn.west(6).north(1), blockPosIn.west(3).north(1));
-			world.setBlockState(blockPosIn.west(5).north(2), aspectBlockStateDark, Constants.BlockFlags.BLOCK_UPDATE);
-			world.setBlockState(blockPosIn.west(4), aspectBlockStateDark, Constants.BlockFlags.BLOCK_UPDATE);
-			fillWithBlocksFromPos(world, boundingBox, aspectBlockStateLight, blockPosIn.west(4).north(2), blockPosIn.north(2));
-			fillWithBlocksFromPos(world, boundingBox, aspectBlockStateLight, blockPosIn.west(2).north(3), blockPosIn.east(1).north(3));
-			fillWithBlocksFromPos(world, boundingBox, aspectBlockStateLight, blockPosIn.north(4), blockPosIn.east(3).north(4));
-			fillWithBlocksFromPos(world, boundingBox, aspectBlockStateLight, blockPosIn.east(2).north(5), blockPosIn.east(5).north(5));
-			fillWithBlocksFromPos(world, boundingBox, aspectBlockStateLight, blockPosIn.east(4).north(6), blockPosIn.east(6).north(6));
-			fillWithBlocksFromPos(world, boundingBox, aspectBlockStateLight, blockPosIn.east(6).north(7), blockPosIn.east(7).north(7));
-			
-			//left drip
-			fillWithBlocksFromPos(world, boundingBox, aspectBlockStateLight, blockPosIn.west(3), blockPosIn.west(3).south(3));
-			fillWithBlocksFromPos(world, boundingBox, aspectBlockStateDark, blockPosIn.west(4).south(2), blockPosIn.west(4).south(3));
-			fillWithBlocksFromPos(world, boundingBox, aspectBlockStateDark, blockPosIn.west(2).south(2), blockPosIn.west(2).south(3));
-			world.setBlockState(blockPosIn.west(3).south(4), aspectBlockStateDark, Constants.BlockFlags.BLOCK_UPDATE);
-			
-			//middle drip
-			fillWithBlocksFromPos(world, boundingBox, aspectBlockStateLight, blockPosIn.up(1), blockPosIn.south(7));
-			fillWithBlocksFromPos(world, boundingBox, aspectBlockStateDark, blockPosIn.west(1).south(6), blockPosIn.west(1).south(7));
-			fillWithBlocksFromPos(world, boundingBox, aspectBlockStateDark, blockPosIn.east(1).south(6), blockPosIn.east(1).south(7));
-			world.setBlockState(blockPosIn.south(8), aspectBlockStateDark, Constants.BlockFlags.BLOCK_UPDATE);
-			
-			//right drip
-			fillWithBlocksFromPos(world, boundingBox, aspectBlockStateLight, blockPosIn.east(3).up(3), blockPosIn.east(3).south(2));
-			fillWithBlocksFromPos(world, boundingBox, aspectBlockStateDark, blockPosIn.east(4).south(1), blockPosIn.east(4).south(2));
-			fillWithBlocksFromPos(world, boundingBox, aspectBlockStateDark, blockPosIn.east(2).south(1), blockPosIn.east(2).south(2));
-			world.setBlockState(blockPosIn.east(3).south(3), aspectBlockStateDark, Constants.BlockFlags.BLOCK_UPDATE);
-		}*/
 	}
 	
 	/**
