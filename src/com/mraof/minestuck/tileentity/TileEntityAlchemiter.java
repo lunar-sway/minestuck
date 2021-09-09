@@ -1,8 +1,6 @@
 package com.mraof.minestuck.tileentity;
 
 
-import java.util.Arrays;
-
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.*;
@@ -20,7 +18,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -412,7 +409,7 @@ public class TileEntityAlchemiter extends TileEntity
 		{
 			newItem = alchemizeItemEvent.getResultItem();
 
-			while(quantity > 0)
+			while(quantity > 0 && !newItem.isEmpty())
 			{
 				ItemStack stack = newItem.copy();
 				//TODO
@@ -430,7 +427,7 @@ public class TileEntityAlchemiter extends TileEntity
 				world.spawnEntity(item);
 			}
 			
-			AlchemyRecipes.onAlchemizedItem(newItem, player);
+			AlchemyRecipes.giveAlchemyExperience(newItem, player);
 			
 			PlayerIdentifier pid = IdentifierHandler.encode(player);
 			GristHelper.decrease(pid, cost);
