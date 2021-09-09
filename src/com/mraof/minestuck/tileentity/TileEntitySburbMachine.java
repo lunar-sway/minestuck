@@ -358,6 +358,8 @@ public class TileEntitySburbMachine extends TileEntityMachine
 				if (newItem.isEmpty())
 					newItem = new ItemStack(MinestuckBlocks.genericObject);
 
+				GristSet cost = GristRegistry.getGristConversion(newItem);
+
 				AlchemizeItemEvent alchemizeItemEvent = new AlchemizeItemMinichemiterEvent(world, inv.get(0), newItem, this);
 				if (MinecraftForge.EVENT_BUS.post(alchemizeItemEvent))
 					break;
@@ -374,9 +376,8 @@ public class TileEntitySburbMachine extends TileEntityMachine
 
 				EntityPlayerMP player = owner.getPlayer();
 				if (player != null)
-					AlchemyRecipes.onAlchemizedItem(newItem, player);
+					AlchemyRecipes.giveAlchemyExperience(newItem, player);
 
-				GristSet cost = GristRegistry.getGristConversion(newItem);
 				if (newItem.getItem() == MinestuckItems.captchaCard)
 					cost = new GristSet(selectedGrist, MinestuckConfig.cardCost);
 				if (newItem.isItemDamaged())

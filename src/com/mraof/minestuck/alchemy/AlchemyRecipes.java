@@ -1128,7 +1128,7 @@ public class AlchemyRecipes
 		registerRecipes(new Minegicka3Support(), "minegicka3", true);
 	}
 	
-	public static void onAlchemizedItem(ItemStack stack, EntityPlayer player)
+	public static void giveAlchemyExperience(ItemStack stack, EntityPlayer player)
 	{
 		if(!(stack.getItem() instanceof ItemCruxiteArtifact))
 		{
