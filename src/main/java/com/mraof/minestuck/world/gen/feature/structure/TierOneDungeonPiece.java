@@ -526,14 +526,28 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 			fillWithAir(world, boundingBox,
 					firstRoomMinX + 15, firstRoomMaxY - 25, firstRoomMinZ + 1,
 					firstRoomMaxX - 1, firstRoomMaxY - 12, firstRoomMaxZ - 1); //pit area
+			
 			fillWithBlocks(world, boundingBox,
 					firstRoomMinX + 10, firstRoomMaxY - 13, (firstRoomMinZ + firstRoomMaxZ) / 2,
 					firstRoomMinX + 14, firstRoomMaxY - 13, (firstRoomMinZ + firstRoomMaxZ) / 2,
 					MSBlocks.TRAJECTORY_BLOCK.getDefaultState().with(TrajectoryBlock.FACING, getCoordBaseMode().rotateYCCW()), MSBlocks.TRAJECTORY_BLOCK.getDefaultState(), false); //sideways facing trajectory blocks
 			
+			fillWithBlocks(world, boundingBox,
+					firstRoomMinX + 1, firstRoomMaxY - 4, firstRoomMinZ + 1,
+					firstRoomMaxX - 1, firstRoomMaxY - 4, firstRoomMaxZ - 1,
+					primaryDecorativeBlock, primaryDecorativeBlock, false);
+			fillWithAir(world, boundingBox,
+					firstRoomMinX + 2, firstRoomMaxY - 4, firstRoomMinZ + 2,
+					firstRoomMaxX - 2, firstRoomMaxY - 4, firstRoomMaxZ - 2);
+			
+			StructureBlockUtil.fillWithGaps(world, boundingBox, primaryBlock,
+					new BlockPos(firstRoomMinX + 1, firstRoomMaxY - 3, firstRoomMinZ + 1),
+					new BlockPos(firstRoomMinX + 1, firstRoomMaxY - 3, firstRoomMaxZ - 1),
+					3); //TODO may not be working yet
+			
 		} else if(aspectSapling == MSBlocks.LIGHT_ASPECT_SAPLING.getDefaultState())
 		{
-		} else if(aspectSapling == MSBlocks.TIME_ASPECT_SAPLING.getDefaultState()) //spikes that shoot up on a timed interval so you have to match the rythym to pass
+		} else if(aspectSapling == MSBlocks.TIME_ASPECT_SAPLING.getDefaultState()) //spikes that shoot up on a timed interval so you have to match the rhythm to pass
 		{
 		} else if(aspectSapling == MSBlocks.HEART_ASPECT_SAPLING.getDefaultState()) //stairs going all throughout the structure leading to different small rooms with levers that all need pulling in order to pass
 		{

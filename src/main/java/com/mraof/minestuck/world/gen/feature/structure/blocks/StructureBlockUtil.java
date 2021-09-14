@@ -508,6 +508,34 @@ public class StructureBlockUtil
 	}
 	
 	/**
+	 * fills an area with blocks from one blockpos to another, but only places a block on certain iterations
+	 */
+	public static void fillWithGaps(IWorld worldIn, MutableBoundingBox structurebb, BlockState blockState, BlockPos minBlockPos, BlockPos maxBlockPos, int gapLength)
+	{
+		minBlockPos = axisAlignBlockPosGetMin(minBlockPos, maxBlockPos);
+		maxBlockPos = axisAlignBlockPosGetMax(minBlockPos, maxBlockPos);
+		
+		int gapIterate = 0;
+		//TODO confirm if it works
+		
+		for(int y = minBlockPos.getY(); y <= maxBlockPos.getY(); ++y)
+		{
+			for(int x = minBlockPos.getX(); x <= maxBlockPos.getX(); ++x)
+			{
+				for(int z = minBlockPos.getZ(); z <= maxBlockPos.getZ(); ++z)
+				{
+					BlockPos currentPos = new BlockPos(x, y, z);
+					if(structurebb.isVecInside(currentPos) && gapIterate % gapLength == 0)
+					{
+						worldIn.setBlockState(currentPos, blockState, Constants.BlockFlags.BLOCK_UPDATE);
+					}
+					gapIterate++;
+				}
+			}
+		}
+	}
+	
+	/**
 	 * Built in use of axisAlignBlockPos
 	 */
 	public static void fillWithBlocksFromPos(IWorld worldIn, MutableBoundingBox structurebb, BlockState blockState, BlockPos minBlockPos, BlockPos maxBlockPos)
