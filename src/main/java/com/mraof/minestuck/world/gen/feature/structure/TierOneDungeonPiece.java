@@ -4,6 +4,11 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.*;
 import com.mraof.minestuck.entity.MSEntityTypes;
+import com.mraof.minestuck.player.EnumAspect;
+import com.mraof.minestuck.player.EnumClass;
+import com.mraof.minestuck.player.Title;
+import com.mraof.minestuck.skaianet.SburbConnection;
+import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.tileentity.redstone.RemoteObserverTileEntity;
 import com.mraof.minestuck.tileentity.redstone.StatStorerTileEntity;
 import com.mraof.minestuck.tileentity.redstone.SummonerTileEntity;
@@ -11,6 +16,7 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockUtil;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import com.mraof.minestuck.world.storage.loot.MSLootTables;
 import net.minecraft.block.*;
 import net.minecraft.client.Minecraft;
@@ -43,27 +49,27 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 	private int randomRoomType;
 	private int roomVariable1;
 	
-	private final int entryRoomMinX = 20;
-	private final int entryRoomMinY = 0;
-	private final int entryRoomMinZ = 30;
-	private final int entryRoomMaxX = 37;
-	private final int entryRoomMaxY = 8;
-	private final int entryRoomMaxZ = 47;
+	private static final int entryRoomMinX = 20;
+	private static final int entryRoomMinY = 0;
+	private static final int entryRoomMinZ = 30;
+	private static final int entryRoomMaxX = 37;
+	private static final int entryRoomMaxY = 8;
+	private static final int entryRoomMaxZ = 47;
 	
-	private final int lowerRoomMinX = entryRoomMinX - 5;
-	private final int lowerRoomMinY = entryRoomMinY - 32;
-	private final int lowerRoomMinZ = entryRoomMinZ - 5;
-	private final int lowerRoomMaxX = entryRoomMaxX + 5;
-	private final int lowerRoomMaxY = entryRoomMinY - 20;
-	private final int lowerRoomMaxZ = entryRoomMaxZ + 5;
+	private static final int lowerRoomMinX = entryRoomMinX - 5;
+	private static final int lowerRoomMinY = entryRoomMinY - 32;
+	private static final int lowerRoomMinZ = entryRoomMinZ - 5;
+	private static final int lowerRoomMaxX = entryRoomMaxX + 5;
+	private static final int lowerRoomMaxY = entryRoomMinY - 20;
+	private static final int lowerRoomMaxZ = entryRoomMaxZ + 5;
 	
-	private final int firstRoomMinX = entryRoomMaxX + 5;
-	private final int firstRoomMinY = entryRoomMinY - 50;
-	private final int firstRoomMinZ = 20;
-	private final int firstRoomMaxX = entryRoomMaxX + 45; //37+45 = 82
-	private final int firstRoomMaxY = entryRoomMinY - 20;
-	private final int firstRoomMaxZ = 57;
-	private final BlockState air = Blocks.AIR.getDefaultState();
+	private static final int firstRoomMinX = entryRoomMaxX + 5;
+	private static final int firstRoomMinY = entryRoomMinY - 50;
+	private static final int firstRoomMinZ = 20;
+	private static final int firstRoomMaxX = entryRoomMaxX + 45; //37+45 = 82
+	private static final int firstRoomMaxY = entryRoomMinY - 20;
+	private static final int firstRoomMaxZ = 57;
+	private static final BlockState air = Blocks.AIR.getDefaultState();
 	//private BlockState ground;
 	private BlockState primaryBlock;
 	private BlockState primaryCrackedBlock;
@@ -76,6 +82,10 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 	private BlockState aspectSapling;
 	private BlockState fluid;
 	private BlockState lightBlock;
+	
+	private EnumAspect worldAspect;
+	private EnumClass worldClass;
+	
 	
 	public TierOneDungeonPiece(ChunkGenerator<?> generator, Random random, int x, int z)
 	{
@@ -119,6 +129,11 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 		fluid = blocks.getBlockState("fall_fluid");
 		lightBlock = blocks.getBlockState("light_block");
 		
+		SburbConnection sburbConnection = SburbHandler.getConnectionForDimension(worldIn.getWorld().getServer(), worldIn.getDimension().getType());
+		Title worldTitle = sburbConnection == null ? null : PlayerSavedData.getData(sburbConnection.getClientIdentifier(), worldIn.getWorld().getServer()).getTitle();
+		worldAspect = worldTitle == null ? null : worldTitle.getHeroAspect();
+		worldClass = worldTitle == null ? null : worldTitle.getHeroClass();
+		
 		if(!createRan)
 		{
 			randomRoomType = randomIn.nextInt(8);
@@ -143,6 +158,12 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 						getYWithOffset(entryRoomMaxY + 2),
 						getZWithOffset((entryRoomMaxX + entryRoomMinX) / 2, entryRoomMinZ)),
 				10, fluid); //clears area around structure in a more organic fashion
+		
+		BlockPos segsg = new BlockPos(
+				getXWithOffset((entryRoomMaxX + entryRoomMinX) / 2, entryRoomMinZ),
+				getYWithOffset(entryRoomMaxY + 8),
+				getZWithOffset((entryRoomMaxX + entryRoomMinX) / 2, entryRoomMinZ));
+		StructureBlockUtil.fillAsGrid(world, boundingBox, primaryBlock, segsg, segsg.up(15).west(15).south(15), 3);
 		
 		fillWithBlocks(world, boundingBox,
 				entryRoomMinX, entryRoomMinY, entryRoomMinZ,
@@ -433,10 +454,10 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 	
 	private void buildAspectThemedEntrance(IWorld world, MutableBoundingBox boundingBox, Random rand)
 	{
-		if(aspectSapling == MSBlocks.BREATH_ASPECT_SAPLING.getDefaultState()) //pipes moving around
+		if(worldAspect == EnumAspect.BREATH) //pipes moving around
 		{
 		
-		} else if(aspectSapling == MSBlocks.LIFE_ASPECT_SAPLING.getDefaultState()) //rabbit statue
+		} else if(worldAspect == EnumAspect.LIFE) //rabbit statue
 		{
 			//StructureBlockUtil.placeLargeAspectSymbol(new BlockPos(getXWithOffset(entryRoomMinX, entryRoomMinZ), getYWithOffset(entryRoomMaxY + 20), getZWithOffset(entryRoomMinX, entryRoomMinZ)), world, boundingBox, primaryBlock, EnumAspect.BLOOD);
 			
@@ -454,26 +475,25 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 			fillWithBlocks(world, boundingBox, entryRoomMinX + 5, entryRoomMaxY + 1, entryRoomMaxZ - 5, entryRoomMinX + 7, entryRoomMaxY + 6, entryRoomMaxZ - 4, secondaryBlock, secondaryBlock, false); //back left leg
 			fillWithBlocks(world, boundingBox, entryRoomMaxX - 7, entryRoomMaxY + 1, entryRoomMaxZ - 5, entryRoomMaxX - 5, entryRoomMaxY + 6, entryRoomMaxZ - 4, secondaryBlock, secondaryBlock, false); //back right leg
 			*/
-		} else if(aspectSapling == MSBlocks.LIGHT_ASPECT_SAPLING.getDefaultState())
+		} else if(worldAspect == EnumAspect.LIGHT)
 		{
-		
-		} else if(aspectSapling == MSBlocks.TIME_ASPECT_SAPLING.getDefaultState())
+		} else if(worldAspect == EnumAspect.TIME)
 		{
-		} else if(aspectSapling == MSBlocks.HEART_ASPECT_SAPLING.getDefaultState())
+		} else if(worldAspect == EnumAspect.HEART)
 		{
-		} else if(aspectSapling == MSBlocks.RAGE_ASPECT_SAPLING.getDefaultState())
+		} else if(worldAspect == EnumAspect.RAGE)
 		{
-		} else if(aspectSapling == MSBlocks.BLOOD_ASPECT_SAPLING.getDefaultState())
+		} else if(worldAspect == EnumAspect.BLOOD)
 		{
-		} else if(aspectSapling == MSBlocks.DOOM_ASPECT_SAPLING.getDefaultState())
+		} else if(worldAspect == EnumAspect.DOOM)
 		{
-		} else if(aspectSapling == MSBlocks.VOID_ASPECT_SAPLING.getDefaultState())
+		} else if(worldAspect == EnumAspect.VOID)
 		{
-		} else if(aspectSapling == MSBlocks.SPACE_ASPECT_SAPLING.getDefaultState())
+		} else if(worldAspect == EnumAspect.SPACE)
 		{
-		} else if(aspectSapling == MSBlocks.MIND_ASPECT_SAPLING.getDefaultState())
+		} else if(worldAspect == EnumAspect.MIND)
 		{
-		} else if(aspectSapling == MSBlocks.HOPE_ASPECT_SAPLING.getDefaultState())
+		} else if(worldAspect == EnumAspect.HOPE)
 		{
 		}
 		
@@ -486,7 +506,7 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 				firstRoomMaxX, firstRoomMaxY, firstRoomMaxZ,
 				secondaryBlock, secondaryBlock, false);
 		
-		if(aspectSapling == MSBlocks.BREATH_ASPECT_SAPLING.getDefaultState()) //parkour like frog temple lower room
+		if(worldAspect == EnumAspect.BREATH) //parkour like frog temple lower room
 		{
 			/*//TODO will be for Breath
 			fillWithAir(world, boundingBox,
@@ -521,7 +541,7 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 					firstRoomMinX + 1, firstRoomMinY + 1, firstRoomMinZ + 18,
 					firstRoomMinX + 1, firstRoomMinY + 10, firstRoomMinZ + 19,
 					Blocks.LADDER.getDefaultState().with(LadderBlock.FACING, Direction.EAST), Blocks.LADDER.getDefaultState(), false); //ladder*/
-		} else if(aspectSapling == MSBlocks.LIFE_ASPECT_SAPLING.getDefaultState())
+		} else if(worldAspect == EnumAspect.LIFE)
 		{
 			/*//TODO will be for Space
 			fillWithAir(world, boundingBox,
@@ -544,7 +564,7 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 					firstRoomMinX + 2, firstRoomMaxY - 4, firstRoomMinZ + 2,
 					firstRoomMaxX - 2, firstRoomMaxY - 4, firstRoomMaxZ - 2);
 			
-			StructureBlockUtil.fillWithGaps(world, boundingBox, primaryBlock,
+			StructureBlockUtil.fillAsGrid(world, boundingBox, primaryBlock,
 					new BlockPos(firstRoomMinX + 1, firstRoomMaxY - 3, firstRoomMinZ + 1),
 					new BlockPos(firstRoomMinX + 1, firstRoomMaxY - 3, firstRoomMaxZ - 1),
 					3); //TODO may not be working yet
@@ -749,7 +769,7 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 			StructureBlockUtil.createCylinder(world, boundingBox, secondaryBlock, aspectSymbolPos.down(3), 12, 3);
 			StructureBlockUtil.createCylinder(world, boundingBox, lightBlock, aspectSymbolPos.down(1), 12, 1);
 			StructureBlockUtil.createCylinder(world, boundingBox, primaryBlock, aspectSymbolPos, 12, 1);
-			StructureBlockUtil.placeFeature(world, boundingBox, aspectSymbolPos, getRotation(), getCoordBaseMode(), rand, new ResourceLocation(Minestuck.MOD_ID, "blood_aspect_symbol"));
+			StructureBlockUtil.placeFeature(world, boundingBox, aspectSymbolPos, getCoordBaseMode(), rand, new ResourceLocation(Minestuck.MOD_ID, "blood_aspect_symbol"));
 			
 			//redstone components for lich fight and piston stairway unlock, inside aspect platform
 			StructureBlockUtil.placeSummoner(world, boundingBox, aspectSymbolPos.down(2).offset(getCoordBaseMode().rotateY(), 7), SummonerTileEntity.SummonType.LICH);
@@ -758,6 +778,7 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 			StructureBlockUtil.placeSummoner(world, boundingBox, aspectSymbolPos.down(2).offset(getCoordBaseMode().rotateY(), 9), SummonerTileEntity.SummonType.LICH);
 			StructureBlockUtil.placeRemoteObserver(world, boundingBox, aspectSymbolPos.down(2).offset(getCoordBaseMode().rotateY(), 8), RemoteObserverTileEntity.ActiveType.IS_PLAYER_PRESENT); //checks for presence of player
 			StructureBlockUtil.placeStatStorer(world, boundingBox, aspectSymbolPos.down(2), StatStorerTileEntity.ActiveType.DEATHS, 1); //counts how many deaths there have been(need 10 kills to activate all 5 pistons)
+			//fillWithBlocks(world, boundingBox, aspectSymbolPos.getX(), aspectSymbolPos.down(2).getY(), aspectSymbolPos.offset(getCoordBaseMode().rotateYCCW()).getZ(), aspectSymbolPos.getX(), aspectSymbolPos.down(2).getY(), aspectSymbolPos.offset(getCoordBaseMode().rotateYCCW()).getZ());
 			StructureBlockUtil.fillWithBlocksFromPos(world, boundingBox, Blocks.REDSTONE_WIRE.getDefaultState(), aspectSymbolPos.down(2).offset(getCoordBaseMode().rotateYCCW()), aspectSymbolPos.down(2).offset(getCoordBaseMode().rotateYCCW(), 9));
 			//world.setBlockState(aspectSymbolPos.down(2), Blocks.REDSTONE_WIRE.getDefaultState().with(RedstoneWireBlock.NORTH, RedstoneSide.SIDE).with(RedstoneWireBlock.WEST, RedstoneSide.SIDE), Constants.BlockFlags.BLOCK_UPDATE);
 			
@@ -772,26 +793,26 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 				setBlockState(world, Blocks.STICKY_PISTON.getDefaultState().with(PistonBlock.FACING, Direction.EAST), firstRoomMinX + 3, firstRoomMinY + 4 + stairPuzzleIterate, (firstRoomMinZ + firstRoomMaxZ) / 2 - 2 + stairPuzzleIterate, boundingBox);
 				setBlockState(world, secondaryDecorativeBlock, firstRoomMinX + 4, firstRoomMinY + 4 + stairPuzzleIterate, (firstRoomMinZ + firstRoomMaxZ) / 2 - 2 + stairPuzzleIterate, boundingBox);
 			}
-		} else if(aspectSapling == MSBlocks.LIGHT_ASPECT_SAPLING.getDefaultState())
+		} else if(worldAspect == EnumAspect.LIGHT)
 		{
-		} else if(aspectSapling == MSBlocks.TIME_ASPECT_SAPLING.getDefaultState()) //spikes that shoot up on a timed interval so you have to match the rhythm to pass
+		
+		} else if(worldAspect == EnumAspect.TIME) //spikes that shoot up on a timed interval so you have to match the rhythm to pass
 		{
-		} else if(aspectSapling == MSBlocks.HEART_ASPECT_SAPLING.getDefaultState()) //stairs going all throughout the structure leading to different small rooms with levers that all need pulling in order to pass
+		} else if(worldAspect == EnumAspect.HEART) //stairs going all throughout the structure leading to different small rooms with levers that all need pulling in order to pass
 		{
-		} else if(aspectSapling == MSBlocks.RAGE_ASPECT_SAPLING.getDefaultState()) //difficult terrain made by odd geometric shapes blocking path
+		} else if(worldAspect == EnumAspect.RAGE) //difficult terrain made by odd geometric shapes blocking path
 		{
-		} else if(aspectSapling == MSBlocks.BLOOD_ASPECT_SAPLING.getDefaultState()) //nonhazardous liquid that player has to trudge through while enemies approach on all sides
+		} else if(worldAspect == EnumAspect.BLOOD) //nonhazardous liquid that player has to trudge through while enemies approach on all sides
 		{
-			/**/
-		} else if(aspectSapling == MSBlocks.DOOM_ASPECT_SAPLING.getDefaultState())
+		} else if(worldAspect == EnumAspect.DOOM)
 		{
-		} else if(aspectSapling == MSBlocks.VOID_ASPECT_SAPLING.getDefaultState()) //invisible platforms or barriers
+		} else if(worldAspect == EnumAspect.VOID) //invisible platforms or barriers? Somewhat overlapping with hope there
 		{
-		} else if(aspectSapling == MSBlocks.SPACE_ASPECT_SAPLING.getDefaultState()) //portal 2 gel puzzles
+		} else if(worldAspect == EnumAspect.SPACE) //portal 2 gel puzzles, may make two block tall barriers for aspect effect
 		{
-		} else if(aspectSapling == MSBlocks.MIND_ASPECT_SAPLING.getDefaultState()) //maze
+		} else if(worldAspect == EnumAspect.MIND) //maze, may make it dark for aspect effect
 		{
-		} else if(aspectSapling == MSBlocks.HOPE_ASPECT_SAPLING.getDefaultState())
+		} else if(worldAspect == EnumAspect.HOPE) //indiana jones leap of faith bridge with invisible blocks that dissapear if you crouch
 		{
 		}
 	}

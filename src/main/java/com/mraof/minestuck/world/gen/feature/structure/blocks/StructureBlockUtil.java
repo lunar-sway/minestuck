@@ -10,6 +10,7 @@ import com.mraof.minestuck.tileentity.redstone.StatStorerTileEntity;
 import com.mraof.minestuck.tileentity.redstone.SummonerTileEntity;
 import com.mraof.minestuck.tileentity.redstone.WirelessRedstoneTransmitterTileEntity;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.MSRotationUtil;
 import com.mraof.minestuck.world.gen.feature.StructureBlockRegistryProcessor;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -218,8 +219,9 @@ public class StructureBlockUtil
 	/**
 	 * Will generate a feature from the enum FeatureType
 	 */
-	public static void placeFeature(IWorld world, MutableBoundingBox boundingBox, BlockPos blockPosIn, /*BlockState blockStateIn, EnumAspect aspectIn, */Rotation rotation, Direction direction, Random random, ResourceLocation resourceLocation)
+	public static void placeFeature(IWorld world, MutableBoundingBox boundingBox, BlockPos blockPosIn, Direction direction, Random random, ResourceLocation resourceLocation)
 	{
+		Rotation rotation = MSRotationUtil.fromDirection(direction);
 		TemplateManager templates = ((ServerWorld) world.getWorld()).getSaveHandler().getStructureTemplateManager();
 		Template template = templates.getTemplateDefaulted(resourceLocation);
 		PlacementSettings settings = new PlacementSettings().setRotation(rotation).setChunk(new ChunkPos(blockPosIn)).setBoundingBox(boundingBox).setRandom(random).addProcessor(StructureBlockRegistryProcessor.INSTANCE);
@@ -457,30 +459,24 @@ public class StructureBlockUtil
 	}
 	
 	/**
-	 * fills an area with blocks from one blockpos to another, but only places a block on certain iterations
+	 * fills an area with blocks from one blockpos to another, but only places blocks a certain distance from one another
 	 */
-	public static void fillWithGaps(IWorld worldIn, MutableBoundingBox structurebb, BlockState blockState, BlockPos minBlockPos, BlockPos maxBlockPos, int gapLength)
+	public static void fillAsGrid(IWorld worldIn, MutableBoundingBox structurebb, BlockState blockState, BlockPos minBlockPos, BlockPos maxBlockPos, int toNextBlock)
 	{
 		minBlockPos = axisAlignBlockPosGetMin(minBlockPos, maxBlockPos);
 		maxBlockPos = axisAlignBlockPosGetMax(minBlockPos, maxBlockPos);
 		
-		int gapIterate = 0;
-		//TODO confirm if it works
-		Debug.debugf("fillWithGaps");
-		
-		for(int y = minBlockPos.getY(); y <= maxBlockPos.getY(); ++y)
+		for(int y = minBlockPos.getY(); y <= maxBlockPos.getY(); y += toNextBlock)
 		{
-			for(int x = minBlockPos.getX(); x <= maxBlockPos.getX(); ++x)
+			for(int x = minBlockPos.getX(); x <= maxBlockPos.getX(); x += toNextBlock)
 			{
-				for(int z = minBlockPos.getZ(); z <= maxBlockPos.getZ(); ++z)
+				for(int z = minBlockPos.getZ(); z <= maxBlockPos.getZ(); z += toNextBlock)
 				{
 					BlockPos currentPos = new BlockPos(x, y, z);
-					if(structurebb.isVecInside(currentPos) && gapIterate % gapLength == 0)
+					if(structurebb.isVecInside(currentPos))
 					{
-						Debug.debugf("fillWithGaps ran");
 						worldIn.setBlockState(currentPos, blockState, Constants.BlockFlags.BLOCK_UPDATE);
 					}
-					gapIterate++;
 				}
 			}
 		}
