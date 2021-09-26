@@ -275,6 +275,7 @@ public class StructureBlockUtil
 		TemplateManager templates = ((ServerWorld) world.getWorld()).getSaveHandler().getStructureTemplateManager();
 		Template template = templates.getTemplateDefaulted(FeatureType.getFeatureResourceLocation(featureTypeIn));
 		PlacementSettings settings = new PlacementSettings().setRotation(rotation).setChunk(new ChunkPos(blockPosIn)).setBoundingBox(boundingBox).setRandom(random).addProcessor(StructureBlockRegistryProcessor.INSTANCE);
+		//PlacementSettings settings = new PlacementSettings().setRotation(rotation).setChunk(new ChunkPos(blockPosIn)).setBoundingBox(boundingBox).setRandom(random).addProcessor(StructureBlockRegistryProcessor.INSTANCE);
 		int sizeX = template.transformedSize(rotation).getX();
 		int sizeZ = template.transformedSize(rotation).getZ();
 		Debug.debugf("rotation.ordinal() = %s, Direction.byHorizontalIndex(rotation.ordinal()) = %s", rotation.ordinal(), Direction.byHorizontalIndex(rotation.ordinal()));
@@ -517,6 +518,7 @@ public class StructureBlockUtil
 		
 		int gapIterate = 0;
 		//TODO confirm if it works
+		Debug.debugf("fillWithGaps");
 		
 		for(int y = minBlockPos.getY(); y <= maxBlockPos.getY(); ++y)
 		{
@@ -527,6 +529,7 @@ public class StructureBlockUtil
 					BlockPos currentPos = new BlockPos(x, y, z);
 					if(structurebb.isVecInside(currentPos) && gapIterate % gapLength == 0)
 					{
+						Debug.debugf("fillWithGaps ran");
 						worldIn.setBlockState(currentPos, blockState, Constants.BlockFlags.BLOCK_UPDATE);
 					}
 					gapIterate++;
