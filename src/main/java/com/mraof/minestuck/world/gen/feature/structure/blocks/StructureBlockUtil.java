@@ -40,58 +40,6 @@ import java.util.Random;
  */
 public class StructureBlockUtil
 {
-	public enum FeatureType
-	{
-		BREATH_ASPECT_SYMBOL,
-		LIFE_ASPECT_SYMBOL,
-		LIGHT_ASPECT_SYMBOL,
-		TIME_ASPECT_SYMBOL,
-		HEART_ASPECT_SYMBOL,
-		RAGE_ASPECT_SYMBOL,
-		BLOOD_ASPECT_SYMBOL,
-		DOOM_ASPECT_SYMBOL,
-		VOID_ASPECT_SYMBOL,
-		SPACE_ASPECT_SYMBOL,
-		MIND_ASPECT_SYMBOL,
-		HOPE_ASPECT_SYMBOL,
-		SMALL_COG,
-		LARGE_COG;
-		
-		public static ResourceLocation getFeatureResourceLocation(FeatureType featureType)
-		{
-			if(featureType == BREATH_ASPECT_SYMBOL)
-				return new ResourceLocation(Minestuck.MOD_ID, "large_floor_cog_1");
-			else if(featureType == LIFE_ASPECT_SYMBOL)
-				return new ResourceLocation(Minestuck.MOD_ID, "large_floor_cog_1");
-			else if(featureType == LIGHT_ASPECT_SYMBOL)
-				return new ResourceLocation(Minestuck.MOD_ID, "large_floor_cog_1");
-			else if(featureType == TIME_ASPECT_SYMBOL)
-				return new ResourceLocation(Minestuck.MOD_ID, "large_floor_cog_1");
-			else if(featureType == HEART_ASPECT_SYMBOL)
-				return new ResourceLocation(Minestuck.MOD_ID, "large_floor_cog_1");
-			else if(featureType == RAGE_ASPECT_SYMBOL)
-				return new ResourceLocation(Minestuck.MOD_ID, "large_floor_cog_1");
-			else if(featureType == BLOOD_ASPECT_SYMBOL)
-				return new ResourceLocation(Minestuck.MOD_ID, "blood_aspect_symbol");
-			else if(featureType == DOOM_ASPECT_SYMBOL)
-				return new ResourceLocation(Minestuck.MOD_ID, "large_floor_cog_1");
-			else if(featureType == VOID_ASPECT_SYMBOL)
-				return new ResourceLocation(Minestuck.MOD_ID, "large_floor_cog_1");
-			else if(featureType == SPACE_ASPECT_SYMBOL)
-				return new ResourceLocation(Minestuck.MOD_ID, "large_floor_cog_1");
-			else if(featureType == MIND_ASPECT_SYMBOL)
-				return new ResourceLocation(Minestuck.MOD_ID, "large_floor_cog_1");
-			else if(featureType == HOPE_ASPECT_SYMBOL)
-				return new ResourceLocation(Minestuck.MOD_ID, "large_floor_cog_1");
-			else if(featureType == SMALL_COG)
-				return new ResourceLocation(Minestuck.MOD_ID, "small_cog");
-			else if(featureType == LARGE_COG)
-				return new ResourceLocation(Minestuck.MOD_ID, "large_floor_cog_1");
-			else
-				return new ResourceLocation(Minestuck.MOD_ID, "cake_pedestal");
-		}
-	}
-	
 	public static boolean placeSpawner(BlockPos pos, IWorld world, MutableBoundingBox bb, EntityType<?> entityType)
 	{
 		WeightedSpawnerEntity entity = new WeightedSpawnerEntity();
@@ -270,10 +218,10 @@ public class StructureBlockUtil
 	/**
 	 * Will generate a feature from the enum FeatureType
 	 */
-	public static void placeFeature(IWorld world, MutableBoundingBox boundingBox, BlockPos blockPosIn, /*BlockState blockStateIn, EnumAspect aspectIn, */Rotation rotation, Direction direction, Random random, FeatureType featureTypeIn)
+	public static void placeFeature(IWorld world, MutableBoundingBox boundingBox, BlockPos blockPosIn, /*BlockState blockStateIn, EnumAspect aspectIn, */Rotation rotation, Direction direction, Random random, ResourceLocation resourceLocation)
 	{
 		TemplateManager templates = ((ServerWorld) world.getWorld()).getSaveHandler().getStructureTemplateManager();
-		Template template = templates.getTemplateDefaulted(FeatureType.getFeatureResourceLocation(featureTypeIn));
+		Template template = templates.getTemplateDefaulted(resourceLocation);
 		PlacementSettings settings = new PlacementSettings().setRotation(rotation).setChunk(new ChunkPos(blockPosIn)).setBoundingBox(boundingBox).setRandom(random).addProcessor(StructureBlockRegistryProcessor.INSTANCE);
 		//PlacementSettings settings = new PlacementSettings().setRotation(rotation).setChunk(new ChunkPos(blockPosIn)).setBoundingBox(boundingBox).setRandom(random).addProcessor(StructureBlockRegistryProcessor.INSTANCE);
 		int sizeX = template.transformedSize(rotation).getX();

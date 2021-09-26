@@ -80,7 +80,7 @@ public class SummonerTileEntity extends TileEntity
 			if(impEntity == null)
 				throw new IllegalStateException("Unable to create a new imp. Entity factory returned null!");
 			impEntity.enablePersistence();
-			impEntity.setLocationAndAngles(pickedBlockPos.getX() + 0.5, pickedBlockPos.getY(), pickedBlockPos.getY() + 0.5, worldIn.rand.nextFloat() * 360F, 0);
+			impEntity.setLocationAndAngles(pickedBlockPos.getX() + 0.5, pickedBlockPos.getY(), pickedBlockPos.getZ() + 0.5, worldIn.rand.nextFloat() * 360F, 0);
 			impEntity.onInitialSpawn(worldIn, worldIn.getDifficultyForLocation(pickedBlockPos), SpawnReason.TRIGGERED, null, null);
 			impEntity.setHomePosAndDistance(pickedBlockPos, 10);
 			worldIn.addEntity(impEntity);
@@ -90,7 +90,7 @@ public class SummonerTileEntity extends TileEntity
 			if(ogreEntity == null)
 				throw new IllegalStateException("Unable to create a new ogre. Entity factory returned null!");
 			ogreEntity.enablePersistence();
-			ogreEntity.setLocationAndAngles(pickedBlockPos.getX() + 0.5, pickedBlockPos.getY(), pickedBlockPos.getY() + 0.5, worldIn.rand.nextFloat() * 360F, 0);
+			ogreEntity.setLocationAndAngles(pickedBlockPos.getX() + 0.5, pickedBlockPos.getY(), pickedBlockPos.getZ() + 0.5, worldIn.rand.nextFloat() * 360F, 0);
 			ogreEntity.onInitialSpawn(worldIn, worldIn.getDifficultyForLocation(pickedBlockPos), SpawnReason.TRIGGERED, null, null);
 			ogreEntity.setHomePosAndDistance(pickedBlockPos, 10);
 			worldIn.addEntity(ogreEntity);
@@ -100,7 +100,7 @@ public class SummonerTileEntity extends TileEntity
 			if(basiliskEntity == null)
 				throw new IllegalStateException("Unable to create a new basilisk. Entity factory returned null!");
 			basiliskEntity.enablePersistence();
-			basiliskEntity.setLocationAndAngles(pickedBlockPos.getX() + 0.5, pickedBlockPos.getY(), pickedBlockPos.getY() + 0.5, worldIn.rand.nextFloat() * 360F, 0);
+			basiliskEntity.setLocationAndAngles(pickedBlockPos.getX() + 0.5, pickedBlockPos.getY(), pickedBlockPos.getZ() + 0.5, worldIn.rand.nextFloat() * 360F, 0);
 			basiliskEntity.onInitialSpawn(worldIn, worldIn.getDifficultyForLocation(pickedBlockPos), SpawnReason.TRIGGERED, null, null);
 			basiliskEntity.setHomePosAndDistance(pickedBlockPos, 10);
 			worldIn.addEntity(basiliskEntity);
@@ -110,7 +110,7 @@ public class SummonerTileEntity extends TileEntity
 			if(lichEntity == null)
 				throw new IllegalStateException("Unable to create a new lich. Entity factory returned null!");
 			lichEntity.enablePersistence();
-			lichEntity.setLocationAndAngles(pickedBlockPos.getX() + 0.5, pickedBlockPos.getY(), pickedBlockPos.getY() + 0.5, worldIn.rand.nextFloat() * 360F, 0);
+			lichEntity.setLocationAndAngles(pickedBlockPos.getX() + 0.5, pickedBlockPos.getY(), pickedBlockPos.getZ() + 0.5, worldIn.rand.nextFloat() * 360F, 0);
 			lichEntity.onInitialSpawn(worldIn, worldIn.getDifficultyForLocation(pickedBlockPos), SpawnReason.TRIGGERED, null, null);
 			lichEntity.setHomePosAndDistance(pickedBlockPos, 10);
 			worldIn.addEntity(lichEntity);

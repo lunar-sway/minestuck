@@ -4,7 +4,6 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.RemoteObserverBlock;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
-import com.mraof.minestuck.util.Debug;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -12,11 +11,14 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 
+import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.Objects;
 
 public class RemoteObserverTileEntity extends TileEntity implements ITickableTileEntity
 {
 	private int tickCycle;
+	@Nonnull
 	private ActiveType activeType;
 	
 	public enum ActiveType
@@ -35,7 +37,7 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 				if(type.ordinal() == ordinal)
 					return type;
 			}
-			return null;
+			throw new IllegalArgumentException("Invalid ordinal of " + ordinal + " for remote observer active type!");
 		}
 		
 		public String getNameNoSpaces()
@@ -47,6 +49,7 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 	public RemoteObserverTileEntity()
 	{
 		super(MSTileEntityTypes.REMOTE_OBSERVER.get());
+		activeType = ActiveType.IS_ENTITY_PRESENT;
 	}
 	
 	@Override
@@ -115,18 +118,11 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 	
 	public ActiveType getActiveType()
 	{
-		Debug.debugf("getActiveType. activeType = %s", activeType);
-		
-		if(this.activeType == null)
-		{
-			activeType = ActiveType.IS_ENTITY_PRESENT;
-		}
-		
 		return this.activeType;
 	}
 	
 	public void setActiveType(ActiveType activeTypeIn)
 	{
-		activeType = activeTypeIn;
+		activeType = Objects.requireNonNull(activeTypeIn);
 	}
 }

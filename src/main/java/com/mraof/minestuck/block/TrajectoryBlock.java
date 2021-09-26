@@ -2,6 +2,7 @@ package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.util.Debug;
 import net.minecraft.block.*;
+import net.minecraft.block.material.PushReaction;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.state.IntegerProperty;
@@ -58,11 +59,16 @@ public class TrajectoryBlock extends MSDirectionalBlock
 		BlockState blockState = worldIn.getBlockState(pos);
 		entityIn.onGround = false;
 		updatePower(worldIn, pos, blockState);
-		double powerMod = blockState.get(POWER) / 16D + 1;
-		if(entityIn instanceof PlayerEntity)
-			Debug.debugf("blockState.get(POWER) = %s", blockState.get(POWER));
-		//entityIn.setMotion(blockState.get(FACING).getXOffset() * powerMod, blockState.get(FACING).getYOffset() * powerMod, blockState.get(FACING).getZOffset() * powerMod);
-		entityIn.setMotion(entityIn.getMotion().x / 1.2 + blockState.get(FACING).getXOffset() * powerMod, entityIn.getMotion().y / 1.2 + blockState.get(FACING).getYOffset() * powerMod, entityIn.getMotion().z / 1.2 + blockState.get(FACING).getZOffset() * powerMod);
+		
+		if(blockState.get(POWER) != 0)
+		{
+			double powerMod = blockState.get(POWER) / 16D;
+			//if(entityIn instanceof PlayerEntity)
+			//Debug.debugf("blockState.get(POWER) = %s", blockState.get(POWER));
+			//entityIn.setMotion(blockState.get(FACING).getXOffset() * powerMod, blockState.get(FACING).getYOffset() * powerMod, blockState.get(FACING).getZOffset() * powerMod);
+			//entityIn.setMotion(entityIn.getMotion().x / 1.2 + blockState.get(FACING).getXOffset() * powerMod, entityIn.getMotion().y / 1.2 + blockState.get(FACING).getYOffset() * powerMod, entityIn.getMotion().z / 1.2 + blockState.get(FACING).getZOffset() * powerMod);
+			entityIn.setMotion(entityIn.getMotion().x + blockState.get(FACING).getXOffset() * powerMod, entityIn.getMotion().y + blockState.get(FACING).getYOffset() * powerMod, entityIn.getMotion().z + blockState.get(FACING).getZOffset() * powerMod);
+		}
 	}
 	
 	@Override

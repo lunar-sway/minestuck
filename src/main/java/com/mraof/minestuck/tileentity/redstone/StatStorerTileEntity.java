@@ -42,7 +42,7 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 				if(type.ordinal() == ordinal)
 					return type;
 			}
-			return null;
+			throw new IllegalArgumentException("Invalid ordinal of " + ordinal + " for stat storer active type!");
 		}
 		
 		public String getNameNoSpaces()

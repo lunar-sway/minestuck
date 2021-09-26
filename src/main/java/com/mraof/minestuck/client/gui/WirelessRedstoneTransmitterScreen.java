@@ -7,7 +7,6 @@ import com.mraof.minestuck.tileentity.redstone.WirelessRedstoneTransmitterTileEn
 import com.mraof.minestuck.util.Debug;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -25,10 +24,6 @@ public class WirelessRedstoneTransmitterScreen extends Screen
 	private TextFieldWidget destinationTextFieldX;
 	private TextFieldWidget destinationTextFieldY;
 	private TextFieldWidget destinationTextFieldZ;
-	private Button findRecieverButton;
-	private Button doneButton;
-	
-	private BlockPos outgoingDestinationPos;
 	
 	
 	WirelessRedstoneTransmitterScreen(WirelessRedstoneTransmitterTileEntity te)
@@ -46,28 +41,21 @@ public class WirelessRedstoneTransmitterScreen extends Screen
 		this.destinationTextFieldX = new TextFieldWidget(this.font, this.width / 2 - 60, yOffset + 10, 40, 20, "");
 		this.destinationTextFieldX.setMaxStringLength(12);
 		this.destinationTextFieldX.setText(String.valueOf(te.getDestinationBlockPos().getX()));
-		this.destinationTextFieldX.setFocused2(true);
 		addButton(destinationTextFieldX);
-		if(this.destinationTextFieldX.active)
-			this.destinationTextFieldX.setFocused2(true);
 		
 		this.destinationTextFieldY = new TextFieldWidget(this.font, this.width / 2 - 20, yOffset + 10, 40, 20, "Wireless signal destination code");    //TODO Use translation instead, and maybe look at other text fields for what the text should be
 		this.destinationTextFieldY.setMaxStringLength(12);
 		this.destinationTextFieldY.setText(String.valueOf(te.getDestinationBlockPos().getY()));
-		if(this.destinationTextFieldY.active)
-			this.destinationTextFieldY.setFocused2(true);
 		addButton(destinationTextFieldY);
 		
 		this.destinationTextFieldZ = new TextFieldWidget(this.font, this.width / 2 + 20, yOffset + 10, 40, 20, ""); //was yOffset + 25
 		this.destinationTextFieldZ.setMaxStringLength(12);
 		this.destinationTextFieldZ.setText(String.valueOf(te.getDestinationBlockPos().getZ()));
-		if(this.destinationTextFieldZ.active)
-			this.destinationTextFieldZ.setFocused2(true);
 		addButton(destinationTextFieldZ);
 		
-		addButton(findRecieverButton = new ExtendedButton(this.width / 2 - 45, yOffset + 40, 90, 20, "Find Reciever", button -> findReciever()));
+		addButton(new ExtendedButton(this.width / 2 - 45, yOffset + 40, 90, 20, "Find Receiver", button -> findReceiver()));
 		
-		addButton(doneButton = new ExtendedButton(this.width / 2 - 20, yOffset + 70, 40, 20, I18n.format("gui.done"), button -> finish()));
+		addButton(new ExtendedButton(this.width / 2 - 20, yOffset + 70, 40, 20, I18n.format("gui.done"), button -> finish()));
 	}
 	
 	@Override
@@ -81,54 +69,41 @@ public class WirelessRedstoneTransmitterScreen extends Screen
 		super.render(mouseX, mouseY, partialTicks);
 	}
 	
-	private void findReciever()
+	private void findReceiver()
 	{
-		outgoingDestinationPos = te.findReciever(te);
-		
-		outgoingDestinationPos();
+		BlockPos receiverPos = te.findReceiver();
+		if(receiverPos != null)
+		{
+			destinationTextFieldX.setText(String.valueOf(receiverPos.getX()));
+			destinationTextFieldY.setText(String.valueOf(receiverPos.getY()));
+			destinationTextFieldZ.setText(String.valueOf(receiverPos.getZ()));
+		}
 	}
 	
 	private void finish()
 	{
-		WirelessRedstoneTransmitterPacket packet = new WirelessRedstoneTransmitterPacket(outgoingDestinationPos(), te.getPos());
+		WirelessRedstoneTransmitterPacket packet = new WirelessRedstoneTransmitterPacket(parseBlockPos(), te.getPos()); //TODO consider creating a receiver tile entity and storing the transmitter pos in order to create singular connections to simplify mechanics
 		MSPacketHandler.sendToServer(packet);
-		this.minecraft.displayGuiScreen(null);
+		onClose();
 	}
 	
-	private BlockPos outgoingDestinationPos()
+	private static int parseInt(TextFieldWidget widget)
 	{
-		if(outgoingDestinationPos != null)
-			return outgoingDestinationPos;
-		else
-			return textToIntToBlockPos();
+		try
+		{
+			return Integer.parseInt(widget.getText());
+		} catch(NumberFormatException ignored)
+		{
+			return 0;
+		}
 	}
 	
-	private BlockPos textToIntToBlockPos()
+	private BlockPos parseBlockPos()
 	{
-		int x = 0;
-		int y = 0;
-		int z = 0;
+		int x = parseInt(destinationTextFieldX);
+		int y = parseInt(destinationTextFieldY);
+		int z = parseInt(destinationTextFieldZ);
 		
-		try
-		{
-			x = Integer.parseInt(destinationTextFieldX.getText());
-		} catch(NumberFormatException ignored)
-		{
-		}
-		
-		try
-		{
-			y = Integer.parseInt(destinationTextFieldY.getText());
-		} catch(NumberFormatException ignored)
-		{
-		}
-		
-		try
-		{
-			z = Integer.parseInt(destinationTextFieldZ.getText());
-		} catch(NumberFormatException ignored)
-		{
-		}
 		Debug.debugf("%s %s %s, pos = %s", x, y, z, new BlockPos(x, y, z));
 		
 		return new BlockPos(x, y, z);

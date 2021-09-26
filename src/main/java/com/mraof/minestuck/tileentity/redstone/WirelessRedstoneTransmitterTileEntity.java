@@ -71,20 +71,20 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 		{
 			//Debug.debugf("not null destination of %s and area loaded, powerIn = %s", destBlockPos, powerIn);
 			BlockState blockStateIn = worldIn.getBlockState(destBlockPos);
-			if(blockStateIn.getBlock() instanceof WirelessRedstoneReceiverBlock)
+			if(blockStateIn.getBlock() instanceof WirelessRedstoneReceiverBlock && blockStateIn.get(WirelessRedstoneReceiverBlock.POWER) != powerIn)
 			{
 				worldIn.setBlockState(destBlockPos, blockStateIn.with(WirelessRedstoneReceiverBlock.POWER, powerIn));
 			}
 		}
 	}
 	
-	public BlockPos findReciever(WirelessRedstoneTransmitterTileEntity te)
+	public BlockPos findReceiver()
 	{
-		if(te.getWorld() != null)
+		if(getWorld() != null)
 		{
-			for(BlockPos blockPos : BlockPos.getAllInBoxMutable(te.getPos().add(24, 24, 24), te.getPos().add(-24, -24, -24)))
+			for(BlockPos blockPos : BlockPos.getAllInBoxMutable(getPos().add(24, 24, 24), getPos().add(-24, -24, -24)))
 			{
-				Block block = te.getWorld().getBlockState(blockPos).getBlock();
+				Block block = getWorld().getBlockState(blockPos).getBlock();
 				if(block instanceof WirelessRedstoneReceiverBlock)
 				{
 					return blockPos;
@@ -92,7 +92,7 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 			}
 		}
 		
-		return new BlockPos(1, 1, 1);
+		return null;
 	}
 	
 	@Override

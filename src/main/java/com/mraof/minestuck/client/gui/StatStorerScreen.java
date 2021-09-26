@@ -23,15 +23,12 @@ public class StatStorerScreen extends Screen
 	private static final String divideValueMessage = "Divide power output by:";
 	
 	StatStorerTileEntity te;
-	private static StatStorerTileEntity.ActiveType activeType;
+	private StatStorerTileEntity.ActiveType activeType;
 	private static int divideValueBy;
 	
 	public Button typeButton;
 	
-	//public Button divideButton;
 	private TextFieldWidget divideTextField;
-	
-	private Button doneButton;
 	
 	
 	StatStorerScreen(StatStorerTileEntity te)
@@ -39,27 +36,20 @@ public class StatStorerScreen extends Screen
 		super(new StringTextComponent("Stat Storer"));
 		
 		this.te = te;
+		this.activeType = te.getActiveType();
 	}
 	
 	@Override
 	public void init()
 	{
-		activeType = te.getActiveType();
-		
 		addButton(typeButton = new ExtendedButton(this.width / 2 - 68, (height - guiHeight) / 2 + 12, 110, 20, activeType.getNameNoSpaces(), button -> changeActiveType()));
 		int yOffset = (this.height / 2) - (guiHeight / 2);
 		this.divideTextField = new TextFieldWidget(this.font, this.width / 2 - 30, yOffset + 50, 40, 18, "Divide comparator output strength");	//TODO Use translation instead, and maybe look at other text fields for what the text should be
-		//this.divideTextField.setMaxStringLength(4);
 		this.divideTextField.setText(String.valueOf(te.getDivideValueBy()));
-		this.divideTextField.setFocused2(true);
-		//destinationTextField.setResponder(s -> doneButton.active = s.length() == 4);
 		addButton(divideTextField);
 		setFocusedDefault(divideTextField);
 		
-		addButton(doneButton = new ExtendedButton(this.width / 2 - 30, yOffset + 70, 40, 20, I18n.format("gui.done"), button -> finish()));
-		doneButton.active = true;
-		
-		//updateGui();
+		addButton(new ExtendedButton(this.width / 2 - 30, yOffset + 70, 40, 20, I18n.format("gui.done"), button -> finish()));
 	}
 	
 	/**
@@ -67,9 +57,9 @@ public class StatStorerScreen extends Screen
 	 */
 	private void changeActiveType()
 	{
-		Debug.debugf("activeType = %s, current active ordinal = %s, ordinal length = %s", activeType, te.getActiveType().ordinal(), StatStorerTileEntity.ActiveType.values().length);
-		activeType = StatStorerTileEntity.ActiveType.fromInt(te.getActiveType().ordinal() < StatStorerTileEntity.ActiveType.values().length - 1 ? te.getActiveType().ordinal() + 1 : 0);
-		typeButton.setMessage(I18n.format(activeType.getNameNoSpaces()));
+		Debug.debugf("activeType = %s, current active ordinal = %s, ordinal length = %s", activeType, activeType.ordinal(), StatStorerTileEntity.ActiveType.values().length);
+		activeType = StatStorerTileEntity.ActiveType.fromInt(activeType.ordinal() < StatStorerTileEntity.ActiveType.values().length - 1 ? activeType.ordinal() + 1 : 0);
+		typeButton.setMessage(activeType.getNameNoSpaces());
 		Debug.debugf("new active type = %s", activeType);
 	}
 	
@@ -88,12 +78,9 @@ public class StatStorerScreen extends Screen
 	
 	private void finish()
 	{
-		if(activeType != null)
-		{
-			StatStorerPacket packet = new StatStorerPacket(activeType, te.getPos(), textToInt());
-			MSPacketHandler.sendToServer(packet);
-			this.minecraft.displayGuiScreen(null);
-		}
+		StatStorerPacket packet = new StatStorerPacket(activeType, te.getPos(), textToInt());
+		MSPacketHandler.sendToServer(packet);
+		onClose();
 	}
 	
 	private int textToInt()
