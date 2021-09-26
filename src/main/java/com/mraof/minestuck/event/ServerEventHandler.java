@@ -115,13 +115,13 @@ public class ServerEventHandler
 			ServerPlayerEntity player = (ServerPlayerEntity) event.getSource().getTrueSource();
 			int exp = 0;
 			if(event.getEntity() instanceof ZombieEntity || event.getEntity() instanceof SkeletonEntity)
-				exp = 6;
+				exp = 1;
 			else if(event.getEntity() instanceof CreeperEntity || event.getEntity() instanceof SpiderEntity || event.getEntity() instanceof SilverfishEntity)
-				exp = 5;
+				exp = 2;
 			else if(event.getEntity() instanceof EndermanEntity || event.getEntity() instanceof BlazeEntity || event.getEntity() instanceof WitchEntity || event.getEntity() instanceof GuardianEntity)
-				exp = 12;
+				exp = 3;
 			else if(event.getEntity() instanceof SlimeEntity)
-				exp = ((SlimeEntity) event.getEntity()).getSlimeSize() - 1;
+				exp = Math.min(((SlimeEntity) event.getEntity()).getSlimeSize() - 1, 9);
 			
 			if(exp > 0)
 				Echeladder.increaseProgress(player, exp);

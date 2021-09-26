@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:thistleblower"
+  },
+  "grist_cost": {
+    "minestuck:shale": 56,
+    "minestuck:mercury": 45
+  }
+}

@@ -665,5 +665,95 @@
         "stream": false
       }
     ]
+  },
+  "event.electric_autoharp.stroke.amajor": {
+    "category": "ambient",
+    "subtitle": "subtitles.minestuck.amajor_electric_autoharp_stroke",
+    "sounds": [
+      {
+        "name": "minestuck:random/amajor_electric_autoharp_stroke",
+        "stream": false
+      }
+    ]
+  },
+  "event.electric_autoharp.stroke.bmajor": {
+    "category": "ambient",
+    "subtitle": "subtitles.minestuck.bmajor_electric_autoharp_stroke",
+    "sounds": [
+      {
+        "name": "minestuck:random/bmajor_electric_autoharp_stroke",
+        "stream": false
+      }
+    ]
+  },
+  "event.electric_autoharp.stroke.bbmajor": {
+    "category": "ambient",
+    "subtitle": "subtitles.minestuck.bbmajor_electric_autoharp_stroke",
+    "sounds": [
+      {
+        "name": "minestuck:random/bbmajor_electric_autoharp_stroke",
+        "stream": false
+      }
+    ]
+  },
+  "event.electric_autoharp.stroke.cmajor": {
+    "category": "ambient",
+    "subtitle": "subtitles.minestuck.cmajor_electric_autoharp_stroke",
+    "sounds": [
+      {
+        "name": "minestuck:random/cmajor_electric_autoharp_stroke",
+        "stream": false
+      }
+    ]
+  },
+  "event.electric_autoharp.stroke.dmajor": {
+    "category": "ambient",
+    "subtitle": "subtitles.minestuck.dmajor_electric_autoharp_stroke",
+    "sounds": [
+      {
+        "name": "minestuck:random/dmajor_electric_autoharp_stroke",
+        "stream": false
+      }
+    ]
+  },
+  "event.electric_autoharp.stroke.ebmajor": {
+    "category": "ambient",
+    "subtitle": "subtitles.minestuck.ebmajor_electric_autoharp_stroke",
+    "sounds": [
+      {
+        "name": "minestuck:random/ebmajor_electric_autoharp_stroke",
+        "stream": false
+      }
+    ]
+  },
+  "event.electric_autoharp.stroke.emajor": {
+    "category": "ambient",
+    "subtitle": "subtitles.minestuck.emajor_electric_autoharp_stroke",
+    "sounds": [
+      {
+        "name": "minestuck:random/emajor_electric_autoharp_stroke",
+        "stream": false
+      }
+    ]
+  },
+  "event.electric_autoharp.stroke.fmajor": {
+    "category": "ambient",
+    "subtitle": "subtitles.minestuck.fmajor_electric_autoharp_stroke",
+    "sounds": [
+      {
+        "name": "minestuck:random/fmajor_electric_autoharp_stroke",
+        "stream": false
+      }
+    ]
+  },
+  "event.electric_autoharp.stroke.gmajor": {
+    "category": "ambient",
+    "subtitle": "subtitles.minestuck.gmajor_electric_autoharp_stroke",
+    "sounds": [
+      {
+        "name": "minestuck:random/gmajor_electric_autoharp_stroke",
+        "stream": false
+      }
+    ]
   }
 }

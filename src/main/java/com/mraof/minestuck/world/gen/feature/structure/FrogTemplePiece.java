@@ -50,6 +50,14 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 	public FrogTemplePiece(TemplateManager templates, CompoundNBT nbt)
 	{
 		super(MSStructurePieces.FROG_TEMPLE, nbt);
+		createRan = nbt.getBoolean("createRan");
+	}
+	
+	@Override
+	protected void readAdditional(CompoundNBT tagCompound) //actually writeAdditional
+	{
+		tagCompound.putBoolean("createRan", createRan);
+		super.readAdditional(tagCompound);
 	}
 	
 	@Override
@@ -102,13 +110,13 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 		chestNearDoorPos = new BlockPos(this.getXWithOffset(10, 29 + 14), this.getYWithOffset(21), this.getZWithOffset(10, 29 + 14));
 		StructureBlockUtil.placeLootChest(chestNearDoorPos, worldIn, boundingBoxIn, getCoordBaseMode().getOpposite(), rightChestType, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
 		
-		//TODO Find out if there is a better fix than the createRan boolean to prevent the lotus entity from generating several times
-		if(!createRan)
+		Vec3i entityVec = new Vec3i(getEntityXWithOffset(21, 21 + 14), this.getYWithOffset(50), getEntityZWithOffset(21, 21 + 14)); //BlockPos also suitable instead of Vec3i
+		if(!createRan && boundingBoxIn.isVecInside(entityVec))
 		{
 			LotusFlowerEntity lotusFlowerEntity = MSEntityTypes.LOTUS_FLOWER.create(worldIn.getWorld());
 			if(lotusFlowerEntity == null)
 				throw new IllegalStateException("Unable to create a new lotus flower. Entity factory returned null!");
-			lotusFlowerEntity.setLocationAndAngles(getEntityXWithOffset(21, 21 + 14), this.getYWithOffset(50), getEntityZWithOffset(21, 21 + 14), 0F, 0);
+			lotusFlowerEntity.setLocationAndAngles(entityVec.getX(), entityVec.getY(), entityVec.getZ(), 0F, 0);
 			worldIn.addEntity(lotusFlowerEntity);
 			createRan = true;
 		}

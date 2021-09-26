@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:light_of_my_knife"
+  },
+  "grist_cost": {
+    "minestuck:uranium": 43,
+    "minestuck:mercury": 85
+  }
+}

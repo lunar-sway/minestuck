@@ -89,6 +89,15 @@ public class MSSoundEvents
 	public static final SoundEvent EVENT_ECHELADDER_INCREASE = getNull();
 	public static final SoundEvent EVENT_ELECTRIC_SHOCK = getNull();
 	public static final SoundEvent LOOT_BLOCK_OPEN = getNull();
+	public static final SoundEvent EVENT_ELECTRIC_AUTOHARP_STROKE_AMAJOR = getNull();
+	public static final SoundEvent EVENT_ELECTRIC_AUTOHARP_STROKE_BMAJOR = getNull();
+	public static final SoundEvent EVENT_ELECTRIC_AUTOHARP_STROKE_BBMAJOR = getNull();
+	public static final SoundEvent EVENT_ELECTRIC_AUTOHARP_STROKE_CMAJOR = getNull();
+	public static final SoundEvent EVENT_ELECTRIC_AUTOHARP_STROKE_DMAJOR = getNull();
+	public static final SoundEvent EVENT_ELECTRIC_AUTOHARP_STROKE_EBMAJOR = getNull();
+	public static final SoundEvent EVENT_ELECTRIC_AUTOHARP_STROKE_EMAJOR = getNull();
+	public static final SoundEvent EVENT_ELECTRIC_AUTOHARP_STROKE_FMAJOR = getNull();
+	public static final SoundEvent EVENT_ELECTRIC_AUTOHARP_STROKE_GMAJOR = getNull();
     
     @Nonnull
 	@SuppressWarnings("ConstantConditions")
@@ -120,7 +129,12 @@ public class MSSoundEvents
 				"entity.giclops.ambient", "entity.giclops.hurt", "entity.giclops.death",
 				"item.long_forgotten_warhorn.use", "item.grimoire.use",  "item.horn.use",
 				"item.eeeeeeeeeeee.hit", "event.echeladder.increase", "event.electric_shock",
-				"event.loot_block.open");
+				"event.loot_block.open",
+				"event.electric_autoharp.stroke.amajor","event.electric_autoharp.stroke.bmajor",
+				"event.electric_autoharp.stroke.bbmajor", "event.electric_autoharp.stroke.cmajor",
+				"event.electric_autoharp.stroke.dmajor", "event.electric_autoharp.stroke.ebmajor",
+				"event.electric_autoharp.stroke.emajor","event.electric_autoharp.stroke.fmajor",
+				"event.electric_autoharp.stroke.gmajor");
 		
 		for(String path : paths)
 		{

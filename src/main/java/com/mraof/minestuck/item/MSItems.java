@@ -73,6 +73,7 @@ public class MSItems
 	public static final Item POPAMATIC_VRILLYHOO = getNull();
 	public static final Item SCARLET_ZILLYHOO = getNull();
 	public static final Item MWRTHWL = getNull();
+	
 	//blades
 	public static final Item SORD = getNull();
 	public static final Item PAPER_SWORD = getNull();
@@ -104,6 +105,13 @@ public class MSItems
 	public static final Item QUANTUM_SABRE = getNull();
 	public static final Item SHATTER_BEACON = getNull();
 	public static final Item SHATTER_BACON = getNull();
+	
+	public static final Item DAGGER = getNull();
+	public static final Item NIFE = getNull();
+	public static final Item LIGHT_OF_MY_KNIFE = getNull();
+	public static final Item STARSHARD_TRI_BLADE = getNull();
+	public static final Item TOOTHRIPPER = getNull();
+	
 	//axes
 	public static final Item BATLEACKS = getNull();
 	public static final Item COPSE_CRUSHER = getNull();
@@ -147,6 +155,14 @@ public class MSItems
 	public static final Item ACTION_CLAWS_SHEATHED = getNull();
 	public static final Item LIPSTICK_CHAINSAW = getNull();
 	public static final Item LIPSTICK = getNull();
+	public static final Item THISTLEBLOWER = getNull();
+	public static final Item THISTLEBLOWER_LIPSTICK = getNull();
+	public static final Item EMERALD_IMMOLATOR = getNull();
+	public static final Item EMERALD_IMMOLATOR_LIPSTICK = getNull();
+	public static final Item OBSIDIATOR = getNull();
+	public static final Item OBSIDIATOR_LIPSTICK = getNull();
+	public static final Item FROSTTOOTH = getNull();
+	public static final Item FROSTTOOTH_LIPSTICK = getNull();
 	public static final Item JOUSTING_LANCE = getNull();
 	public static final Item CIGARETTE_LANCE = getNull();
 	public static final Item LUCERNE_HAMMER = getNull();
@@ -416,6 +432,7 @@ public class MSItems
 	public static final Item SBAHJ_POSTER = getNull();
 	public static final Item BI_DYE = getNull();
 	public static final Item LIP_BALM = getNull();
+	public static final Item ELECTRIC_AUTOHARP = getNull();
 	public static final Item CARDBOARD_TUBE = getNull();
 	
 	//Other
@@ -841,7 +858,13 @@ public class MSItems
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.URANIUM_TIER, 4, -2.4F).efficiency(15.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP).add(OnHitEffect.onCrit(OnHitEffect.enemyPotionEffect(() -> new EffectInstance(Effects.WITHER, 100, 1)))), new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)).setRegistryName("quantum_sabre"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.DIAMOND, 7, -2.4F).efficiency(15.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP), new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.RARE)).setRegistryName("shatter_beacon"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.MEAT_TIER, 7, -2.4F).efficiency(5.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP).add(OnHitEffect.SORD_DROP), new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)).setRegistryName("shatter_bacon"));
-
+		
+		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 0, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.backstab(3)), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("dagger"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.SBAHJ_TIER, 1, -2.0F).add(OnHitEffect.SORD_DROP), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("nife"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.EMERALD_TIER, 1, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.backstab(4)), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("light_of_my_knife"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.CORUNDUM_TIER, 1, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.backstab(9)), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("starshard_tri_blade"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.ORGANIC_TIER, 3, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.backstab(4)), new Item.Properties().defaultMaxDamage(1200).group(MSItemGroup.WEAPONS)).setRegistryName("toothripper"));
+		
 		//axes
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.SBAHJ_TIER, 3, -3.5F).efficiency(1.0F).set(MSItemTypes.AXE_TOOL).add(OnHitEffect.SORD_DROP), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("batleacks"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.STONE, 5, -3.0F).efficiency(6.0F).disableShield().set(MSItemTypes.AXE_TOOL).set(new FarmineEffect(Integer.MAX_VALUE, 20)), new Item.Properties().defaultMaxDamage(400).group(MSItemGroup.WEAPONS)).setRegistryName("copse_crusher"));
@@ -884,6 +907,14 @@ public class MSItems
 		
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 2, -1.5F).efficiency(10.0F).set(MSItemTypes.AXE_TOOL).set(ItemRightClickEffect.switchTo(() -> MSItems.LIPSTICK)), new Item.Properties().defaultMaxDamage(250).group(MSItemGroup.WEAPONS)).setRegistryName("lipstick_chainsaw"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.WOOD, -1, -0.5F).efficiency(10.0F).set(ItemRightClickEffect.switchTo(() -> MSItems.LIPSTICK_CHAINSAW)), new Item.Properties().defaultMaxDamage(250)).setRegistryName("lipstick"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.ORGANIC_TIER, 4, -1.0F).efficiency(2.0F).set(ItemRightClickEffect.switchTo(() -> MSItems.THISTLEBLOWER_LIPSTICK)), new Item.Properties().defaultMaxDamage(500).group(MSItemGroup.WEAPONS)).setRegistryName("thistleblower"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.WOOD, -1, -0.5F).efficiency(10.0F).set(ItemRightClickEffect.switchTo(() -> MSItems.THISTLEBLOWER)), new Item.Properties().defaultMaxDamage(500)).setRegistryName("thistleblower_lipstick"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.EMERALD_TIER, 3, -1.5F).efficiency(10.0F).set(MSItemTypes.AXE_TOOL).set(ItemRightClickEffect.switchTo(() -> MSItems.EMERALD_IMMOLATOR_LIPSTICK)).add(OnHitEffect.setOnFire(5)), new Item.Properties().defaultMaxDamage(1024).group(MSItemGroup.WEAPONS)).setRegistryName("emerald_immolator"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.WOOD, -1, -0.5F).efficiency(10.0F).set(ItemRightClickEffect.switchTo(() -> MSItems.EMERALD_IMMOLATOR)), new Item.Properties().defaultMaxDamage(1024)).setRegistryName("emerald_immolator_lipstick"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.ICE_TIER, 5, -1.5F).efficiency(10.0F).set(MSItemTypes.AXE_TOOL).set(ItemRightClickEffect.switchTo(() -> MSItems.FROSTTOOTH_LIPSTICK)).add(OnHitEffect.ICE_SHARD), new Item.Properties().defaultMaxDamage(1536).group(MSItemGroup.WEAPONS)).setRegistryName("frosttooth"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.WOOD, -1, -0.5F).efficiency(10.0F).set(ItemRightClickEffect.switchTo(() -> MSItems.FROSTTOOTH)), new Item.Properties().defaultMaxDamage(1536)).setRegistryName("frosttooth_lipstick"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.CORUNDUM_TIER, 4, -1.5F).efficiency(10.0F).set(MSItemTypes.AXE_TOOL).set(ItemRightClickEffect.switchTo(() -> MSItems.OBSIDIATOR_LIPSTICK)), new Item.Properties().defaultMaxDamage(2048).group(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)).setRegistryName("obsidiator"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.WOOD, -1, -0.5F).efficiency(10.0F).set(ItemRightClickEffect.switchTo(() -> MSItems.OBSIDIATOR)), new Item.Properties().defaultMaxDamage(2048).rarity(Rarity.UNCOMMON)).setRegistryName("obsidiator_lipstick"));
 		
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 4, -2.8F).efficiency(2.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS)).setRegistryName("jousting_lance"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.REGI_TIER, 4, -2.8F).efficiency(2.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().group(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)).setRegistryName("cigarette_lance"));
@@ -1183,6 +1214,7 @@ public class MSItems
 		registry.register(new HangingItem((world, pos, facing, stack) -> new SbahjPosterEntity(world, pos, facing), new Item.Properties().maxStackSize(1).group(MSItemGroup.MAIN)).setRegistryName("sbahj_poster"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("bi_dye"));
 		registry.register(new RightClickMessageItem(new Item.Properties().group(MSItemGroup.MAIN), RightClickMessageItem.Type.DEFAULT).setRegistryName("lip_balm"));
+		registry.register(new RightClickMusicItem(new Item.Properties().group(MSItemGroup.MAIN), RightClickMusicItem.Type.ELECTRIC_AUTOHARP).setRegistryName("electric_autoharp"));
 		
 		//Dungeon/Puzzle items
 		registry.register(new KeyItem(new Item.Properties().group(MSItemGroup.LANDS)).setRegistryName("dungeon_key"));
