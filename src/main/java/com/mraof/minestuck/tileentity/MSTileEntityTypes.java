@@ -38,4 +38,5 @@ public class MSTileEntityTypes
 	public static final RegistryObject<TileEntityType<RemoteObserverTileEntity>> REMOTE_OBSERVER = REGISTER.register("remote_observer", () -> TileEntityType.Builder.create(RemoteObserverTileEntity::new, MSBlocks.REMOTE_OBSERVER).build(null));
 	public static final RegistryObject<TileEntityType<WirelessRedstoneTransmitterTileEntity>> WIRELESS_REDSTONE_TRANSMITTER = REGISTER.register("wireless_redstone_block", () -> TileEntityType.Builder.create(WirelessRedstoneTransmitterTileEntity::new, MSBlocks.WIRELESS_REDSTONE_TRANSMITTER).build(null));
 	public static final RegistryObject<TileEntityType<SummonerTileEntity>> SUMMONER = REGISTER.register("summoner", () -> TileEntityType.Builder.create(SummonerTileEntity::new, MSBlocks.SUMMONER).build(null));
+	public static final RegistryObject<TileEntityType<LootBlockTileEntity>> LOOT_BLOCK = REGISTER.register("loot_block", () -> TileEntityType.Builder.create(LootBlockTileEntity::new, MSBlocks.LOOT_CHEST).build(null));
 }

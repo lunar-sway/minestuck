@@ -13,14 +13,17 @@ import com.mraof.minestuck.tileentity.redstone.RemoteObserverTileEntity;
 import com.mraof.minestuck.tileentity.redstone.StatStorerTileEntity;
 import com.mraof.minestuck.tileentity.redstone.SummonerTileEntity;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockUtil;
+import com.mraof.minestuck.world.lands.LandInfo;
+import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import com.mraof.minestuck.world.storage.loot.MSLootTables;
 import net.minecraft.block.*;
-import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.state.properties.ChestType;
 import net.minecraft.state.properties.Half;
 import net.minecraft.state.properties.SlabType;
@@ -32,7 +35,6 @@ import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.structure.ScatteredStructurePiece;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.template.TemplateManager;
@@ -70,7 +72,7 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 	private static final int firstRoomMaxY = entryRoomMinY - 20;
 	private static final int firstRoomMaxZ = 57;
 	private static final BlockState air = Blocks.AIR.getDefaultState();
-	//private BlockState ground;
+	//private BlockState ground; //dont use because ores get embedded in it
 	private BlockState primaryBlock;
 	private BlockState primaryCrackedBlock;
 	private BlockState primaryDecorativeBlock;
@@ -79,12 +81,13 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 	private BlockState primaryStairBlock;
 	private BlockState secondaryBlock;
 	private BlockState secondaryDecorativeBlock;
-	private BlockState aspectSapling;
+	//private BlockState aspectSapling;
 	private BlockState fluid;
 	private BlockState lightBlock;
 	
 	private EnumAspect worldAspect;
 	private EnumClass worldClass;
+	private TerrainLandType worldTerrain;
 	
 	
 	public TierOneDungeonPiece(ChunkGenerator<?> generator, Random random, int x, int z)
@@ -114,7 +117,7 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 	@Override
 	public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox boundingBoxIn, ChunkPos chunkPosIn)
 	{
-		StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
+		StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings()); //creates set of blocks relevant to the terrain and aspect of a player's land(primarily terrain)
 		
 		//ground = blocks.getBlockState("ground");
 		primaryBlock = blocks.getBlockState("structure_primary");
@@ -125,14 +128,16 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 		primaryStairBlock = blocks.getBlockState("structure_primary_stairs");
 		secondaryBlock = blocks.getBlockState("structure_secondary");
 		secondaryDecorativeBlock = blocks.getBlockState("structure_secondary_decorative");
-		aspectSapling = blocks.getBlockState("aspect_sapling");
+		//aspectSapling = blocks.getBlockState("aspect_sapling");
 		fluid = blocks.getBlockState("fall_fluid");
 		lightBlock = blocks.getBlockState("light_block");
 		
 		SburbConnection sburbConnection = SburbHandler.getConnectionForDimension(worldIn.getWorld().getServer(), worldIn.getDimension().getType());
 		Title worldTitle = sburbConnection == null ? null : PlayerSavedData.getData(sburbConnection.getClientIdentifier(), worldIn.getWorld().getServer()).getTitle();
-		worldAspect = worldTitle == null ? null : worldTitle.getHeroAspect();
-		worldClass = worldTitle == null ? null : worldTitle.getHeroClass();
+		worldAspect = worldTitle == null ? null : worldTitle.getHeroAspect(); //aspect of this land's player
+		worldClass = worldTitle == null ? null : worldTitle.getHeroClass(); //class of this land's player
+		LandInfo landInfo = MSDimensions.getLandInfo(worldIn.getWorld().getServer(), worldIn.getDimension().getType());
+		worldTerrain = landInfo.getLandAspects().terrain;
 		
 		if(!createRan)
 		{
@@ -258,15 +263,25 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 			rightChestType = ChestType.LEFT;
 		}
 		
-		BlockPos chestPosLeft = new BlockPos(this.getXWithOffset(lowerRoomMinX - 2, lowerRoomMinZ + 9), this.getYWithOffset(lowerRoomMinY + 3), this.getZWithOffset(lowerRoomMinX - 2, lowerRoomMinZ + 9));
-		StructureBlockUtil.placeLootChest(chestPosLeft, world, boundingBox, getCoordBaseMode(), leftChestType, MSLootTables.TIER_ONE_MEDIUM_CHEST, rand);
-		chestPosLeft = new BlockPos(this.getXWithOffset(lowerRoomMinX - 1, lowerRoomMinZ + 9), this.getYWithOffset(lowerRoomMinY + 3), this.getZWithOffset(lowerRoomMinX - 1, lowerRoomMinZ + 9));
-		StructureBlockUtil.placeLootChest(chestPosLeft, world, boundingBox, getCoordBaseMode(), rightChestType, MSLootTables.TIER_ONE_MEDIUM_CHEST, rand);
+		BlockPos chestPosLeft = new BlockPos(this.getXWithOffset(lowerRoomMinX - 4, lowerRoomMinZ + 9), this.getYWithOffset(lowerRoomMinY + 3), this.getZWithOffset(lowerRoomMinX - 2, lowerRoomMinZ + 9));
+		StructureBlockUtil.placeLootBlock(chestPosLeft, world, boundingBox, MSBlocks.LOOT_CHEST.getDefaultState().with(BlockStateProperties.HORIZONTAL_FACING, getCoordBaseMode()), MSLootTables.TIER_ONE_MEDIUM_CHEST);
+		chestPosLeft = new BlockPos(this.getXWithOffset(lowerRoomMinX - 2, lowerRoomMinZ + 9), this.getYWithOffset(lowerRoomMinY + 3), this.getZWithOffset(lowerRoomMinX - 1, lowerRoomMinZ + 9));
+		StructureBlockUtil.placeLootBlock(chestPosLeft, world, boundingBox, MSBlocks.LOOT_CHEST.getDefaultState().with(BlockStateProperties.HORIZONTAL_FACING, getCoordBaseMode()), MSLootTables.TIER_ONE_MEDIUM_CHEST);
 		
-		BlockPos chestPosRight = new BlockPos(this.getXWithOffset(lowerRoomMinX - 2, lowerRoomMaxZ - 9), this.getYWithOffset(lowerRoomMinY + 3), this.getZWithOffset(lowerRoomMinX - 2, lowerRoomMaxZ - 9));
-		StructureBlockUtil.placeLootChest(chestPosRight, world, boundingBox, getCoordBaseMode().getOpposite(), rightChestType, MSLootTables.TIER_ONE_MEDIUM_CHEST, rand);
-		chestPosRight = new BlockPos(this.getXWithOffset(lowerRoomMinX - 1, lowerRoomMaxZ - 9), this.getYWithOffset(lowerRoomMinY + 3), this.getZWithOffset(lowerRoomMinX - 1, lowerRoomMaxZ - 9));
-		StructureBlockUtil.placeLootChest(chestPosRight, world, boundingBox, getCoordBaseMode().getOpposite(), leftChestType, MSLootTables.TIER_ONE_MEDIUM_CHEST, rand);
+		BlockPos chestPosRight = new BlockPos(this.getXWithOffset(lowerRoomMinX - 4, lowerRoomMaxZ - 9), this.getYWithOffset(lowerRoomMinY + 3), this.getZWithOffset(lowerRoomMinX - 2, lowerRoomMaxZ - 9));
+		StructureBlockUtil.placeLootBlock(chestPosRight, world, boundingBox, MSBlocks.LOOT_CHEST.getDefaultState().with(BlockStateProperties.HORIZONTAL_FACING, getCoordBaseMode().getOpposite()), MSLootTables.TIER_ONE_MEDIUM_CHEST);
+		chestPosRight = new BlockPos(this.getXWithOffset(lowerRoomMinX - 2, lowerRoomMaxZ - 9), this.getYWithOffset(lowerRoomMinY + 3), this.getZWithOffset(lowerRoomMinX - 1, lowerRoomMaxZ - 9));
+		StructureBlockUtil.placeLootBlock(chestPosRight, world, boundingBox, MSBlocks.LOOT_CHEST.getDefaultState().with(BlockStateProperties.HORIZONTAL_FACING, getCoordBaseMode().getOpposite()), MSLootTables.TIER_ONE_MEDIUM_CHEST);
+		
+		BlockPos chestPosLeftb = new BlockPos(this.getXWithOffset(lowerRoomMinX - 2, lowerRoomMinZ + 9), this.getYWithOffset(lowerRoomMinY + 5), this.getZWithOffset(lowerRoomMinX - 2, lowerRoomMinZ + 9));
+		StructureBlockUtil.placeChest(chestPosLeftb, world, boundingBox, getCoordBaseMode(), leftChestType, MSLootTables.TIER_ONE_MEDIUM_CHEST, rand);
+		chestPosLeftb = new BlockPos(this.getXWithOffset(lowerRoomMinX - 1, lowerRoomMinZ + 9), this.getYWithOffset(lowerRoomMinY + 5), this.getZWithOffset(lowerRoomMinX - 1, lowerRoomMinZ + 9));
+		StructureBlockUtil.placeChest(chestPosLeftb, world, boundingBox, getCoordBaseMode(), rightChestType, MSLootTables.TIER_ONE_MEDIUM_CHEST, rand);
+		
+		BlockPos chestPosRightb = new BlockPos(this.getXWithOffset(lowerRoomMinX - 2, lowerRoomMaxZ - 9), this.getYWithOffset(lowerRoomMinY + 5), this.getZWithOffset(lowerRoomMinX - 2, lowerRoomMaxZ - 9));
+		StructureBlockUtil.placeChest(chestPosRightb, world, boundingBox, getCoordBaseMode().getOpposite(), rightChestType, MSLootTables.TIER_ONE_MEDIUM_CHEST, rand);
+		chestPosRightb = new BlockPos(this.getXWithOffset(lowerRoomMinX - 1, lowerRoomMaxZ - 9), this.getYWithOffset(lowerRoomMinY + 5), this.getZWithOffset(lowerRoomMinX - 1, lowerRoomMaxZ - 9));
+		StructureBlockUtil.placeChest(chestPosRightb, world, boundingBox, getCoordBaseMode().getOpposite(), leftChestType, MSLootTables.TIER_ONE_MEDIUM_CHEST, rand);
 		
 		StructureBlockUtil.placeReturnNode(world, boundingBox, new BlockPos(getXWithOffset(lowerRoomMinX - 7, (lowerRoomMaxZ + lowerRoomMinZ) / 2), getYWithOffset(lowerRoomMinY + 3), getZWithOffset(lowerRoomMinX - 7, (lowerRoomMaxZ + lowerRoomMinZ) / 2)), getCoordBaseMode());
 		

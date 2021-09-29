@@ -1,10 +1,10 @@
 package com.mraof.minestuck.world.gen.feature.structure.blocks;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.EnumKeyType;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.ReturnNodeBlock;
 import com.mraof.minestuck.tileentity.DungeonDoorInterfaceTileEntity;
+import com.mraof.minestuck.tileentity.LootBlockTileEntity;
 import com.mraof.minestuck.tileentity.redstone.RemoteObserverTileEntity;
 import com.mraof.minestuck.tileentity.redstone.StatStorerTileEntity;
 import com.mraof.minestuck.tileentity.redstone.SummonerTileEntity;
@@ -66,12 +66,12 @@ public class StructureBlockUtil
 		return false;
 	}
 	
-	public static void placeLootChest(BlockPos pos, IWorld world, MutableBoundingBox bb, Direction direction, ResourceLocation lootTable, Random rand)
+	public static void placeChest(BlockPos pos, IWorld world, MutableBoundingBox bb, Direction direction, ResourceLocation lootTable, Random rand)
 	{
-		placeLootChest(pos, world, bb, direction, ChestType.SINGLE, lootTable, rand);
+		placeChest(pos, world, bb, direction, ChestType.SINGLE, lootTable, rand);
 	}
 	
-	public static void placeLootChest(BlockPos pos, IWorld world, MutableBoundingBox bb, Direction direction, ChestType type, ResourceLocation lootTable, Random rand)
+	public static void placeChest(BlockPos pos, IWorld world, MutableBoundingBox bb, Direction direction, ChestType type, ResourceLocation lootTable, Random rand)
 	{
 		if(bb == null || bb.isVecInside(pos))
 		{
@@ -82,6 +82,24 @@ public class StructureBlockUtil
 			{
 				ChestTileEntity chest = (ChestTileEntity) te;
 				chest.setLootTable(lootTable, rand.nextLong());
+			}
+			
+			if(bb != null)
+				world.getChunk(pos).markBlockForPostprocessing(pos);
+		}
+	}
+	
+	public static void placeLootBlock(BlockPos pos, IWorld world, MutableBoundingBox bb, BlockState blockState, ResourceLocation lootTable)
+	{
+		if(bb == null || bb.isVecInside(pos))
+		{
+			world.setBlockState(pos, blockState, Constants.BlockFlags.BLOCK_UPDATE);
+			
+			TileEntity te = world.getTileEntity(pos);
+			if(te instanceof LootBlockTileEntity)
+			{
+				LootBlockTileEntity chest = (LootBlockTileEntity) te;
+				chest.setLootTable(lootTable);
 			}
 			
 			if(bb != null)

@@ -2,17 +2,12 @@
   "type": "minecraft:chest",
   "pools": [
     {
-      "name": "weapons",
-      "rolls": 1,
-      "entries": []
-    },
-    {
-      "name": "supplies",
+      "name": "main",
       "rolls": 1,
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 10,
+          "weight": 100,
           "quality": -1,
           "functions": [
             {
@@ -61,13 +56,7 @@
             }
           ],
           "name": "minecraft:carrot"
-        }
-      ]
-    },
-    {
-      "name": "misc",
-      "rolls": 1,
-      "entries": [
+        },
         {
           "type": "minecraft:item",
           "weight": 8,
@@ -111,15 +100,6 @@
           "name": "minestuck:sbahj_poster"
         }
       ]
-    },
-    {
-      "name": "rare",
-      "rolls": {
-        "min": 0.0,
-        "max": 1.0,
-        "type": "minecraft:uniform"
-      },
-      "entries": []
     }
   ]
 }

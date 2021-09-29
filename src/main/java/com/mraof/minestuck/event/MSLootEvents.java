@@ -26,5 +26,7 @@ public class MSLootEvents
 			LootPool pool = LootPool.builder().addEntry(TableLootEntry.builder(MSLootTables.DUNGEON_LOOT_INJECT)).name("dungeon_loot_inject").build();
 			event.getTable().addPool(pool);
 		}
+		
+		
 	}
 }

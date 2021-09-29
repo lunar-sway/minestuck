@@ -765,9 +765,9 @@ public class ImpDungeonPieces
 			}
 			
 			BlockPos chestPos = new BlockPos(this.getXWithOffset(3, 5), this.getYWithOffset(1), this.getZWithOffset(3, 5));
-			StructureBlockUtil.placeLootChest(chestPos, worldIn, structureBoundingBoxIn, getCoordBaseMode().getOpposite(), ChestType.LEFT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
+			StructureBlockUtil.placeChest(chestPos, worldIn, structureBoundingBoxIn, getCoordBaseMode().getOpposite(), ChestType.LEFT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
 			chestPos = new BlockPos(this.getXWithOffset(4, 5), this.getYWithOffset(1), this.getZWithOffset(4, 5));
-			StructureBlockUtil.placeLootChest(chestPos, worldIn, structureBoundingBoxIn, getCoordBaseMode().getOpposite(), ChestType.RIGHT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
+			StructureBlockUtil.placeChest(chestPos, worldIn, structureBoundingBoxIn, getCoordBaseMode().getOpposite(), ChestType.RIGHT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
 			
 			return true;
 		}
@@ -986,7 +986,7 @@ public class ImpDungeonPieces
 			
 			int z = chestPos ? 4 : 5;
 			BlockPos chestPos = new BlockPos(this.getXWithOffset(4, z), this.getYWithOffset(1), this.getZWithOffset(4, z));
-			StructureBlockUtil.placeLootChest(chestPos, worldIn, structureBoundingBoxIn, getCoordBaseMode().rotateY(), MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
+			StructureBlockUtil.placeChest(chestPos, worldIn, structureBoundingBoxIn, getCoordBaseMode().rotateY(), MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
 			
 			if(corridors[0])
 				fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 0, 3, 3, 0, wallBlock, wallBlock, false);
@@ -1096,9 +1096,9 @@ public class ImpDungeonPieces
 			int x = chestPos ? 1 : 6;
 			Direction chestDirection = chestPos ? getCoordBaseMode().rotateYCCW() : getCoordBaseMode().rotateY();
 			BlockPos chestPos = new BlockPos(this.getXWithOffset(x, 4), this.getYWithOffset(1), this.getZWithOffset(x, 4));
-			StructureBlockUtil.placeLootChest(chestPos, worldIn, structureBoundingBoxIn, chestDirection, this.chestPos ? ChestType.LEFT : ChestType.RIGHT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
+			StructureBlockUtil.placeChest(chestPos, worldIn, structureBoundingBoxIn, chestDirection, this.chestPos ? ChestType.LEFT : ChestType.RIGHT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
 			chestPos = new BlockPos(this.getXWithOffset(x, 5), this.getYWithOffset(1), this.getZWithOffset(x, 5));
-			StructureBlockUtil.placeLootChest(chestPos, worldIn, structureBoundingBoxIn, chestDirection, this.chestPos ? ChestType.RIGHT : ChestType.LEFT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
+			StructureBlockUtil.placeChest(chestPos, worldIn, structureBoundingBoxIn, chestDirection, this.chestPos ? ChestType.RIGHT : ChestType.LEFT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
 			if(!ogreSpawned && structureBoundingBoxIn.isVecInside(new BlockPos(getXWithOffset(3, 4), getYWithOffset(1), getZWithOffset(3, 4))))
 			spawnOgre(3, 1, 4, worldIn, randomIn);
 			
@@ -1227,9 +1227,9 @@ public class ImpDungeonPieces
 			}
 			
 			BlockPos chestPos = new BlockPos(this.getXWithOffset(4, 4), this.getYWithOffset(1), this.getZWithOffset(4, 4));
-			StructureBlockUtil.placeLootChest(chestPos, worldIn, structureBoundingBoxIn, getCoordBaseMode().getOpposite(), ChestType.LEFT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
+			StructureBlockUtil.placeChest(chestPos, worldIn, structureBoundingBoxIn, getCoordBaseMode().getOpposite(), ChestType.LEFT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
 			chestPos = new BlockPos(this.getXWithOffset(5, 4), this.getYWithOffset(1), this.getZWithOffset(5, 4));
-			StructureBlockUtil.placeLootChest(chestPos, worldIn, structureBoundingBoxIn, getCoordBaseMode().getOpposite(), ChestType.RIGHT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
+			StructureBlockUtil.placeChest(chestPos, worldIn, structureBoundingBoxIn, getCoordBaseMode().getOpposite(), ChestType.RIGHT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
 			
 			if(corridors[0])
 				fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 0, 0, 5, 3, 0, wallBlock, wallBlock, false);

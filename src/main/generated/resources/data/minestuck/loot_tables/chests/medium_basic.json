@@ -2,14 +2,9 @@
   "type": "minecraft:chest",
   "pools": [
     {
-      "name": "weapons",
+      "name": "main",
       "rolls": 1,
       "entries": [
-        {
-          "type": "minestuck:land_table",
-          "name": "minestuck:chests/medium_basic",
-          "pool": "weapons"
-        },
         {
           "type": "minecraft:item",
           "weight": 5,
@@ -24,21 +19,6 @@
             }
           ],
           "name": "minecraft:bow"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 5,
-          "quality": -1,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "min": 0.75,
-                "max": 1.0
-              }
-            }
-          ],
-          "name": "minecraft:stone_sword"
         },
         {
           "type": "minecraft:item",
@@ -262,17 +242,6 @@
             }
           ],
           "name": "minestuck:fork"
-        }
-      ]
-    },
-    {
-      "name": "supplies",
-      "rolls": 3,
-      "entries": [
-        {
-          "type": "minestuck:land_table",
-          "name": "minestuck:chests/medium_basic",
-          "pool": "supplies"
         },
         {
           "type": "minecraft:item",
@@ -312,21 +281,6 @@
               "function": "minecraft:set_count",
               "count": {
                 "min": 1.0,
-                "max": 4.0,
-                "type": "minecraft:uniform"
-              }
-            }
-          ],
-          "name": "minecraft:wheat"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 15,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1.0,
                 "max": 3.0,
                 "type": "minecraft:uniform"
               }
@@ -336,6 +290,7 @@
         },
         {
           "type": "minecraft:item",
+          "weight": 5,
           "quality": 2,
           "functions": [
             {
@@ -351,40 +306,9 @@
         },
         {
           "type": "minecraft:item",
+          "weight": 3,
           "quality": 2,
           "name": "minecraft:golden_apple"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 15,
-          "quality": -2,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1.0,
-                "max": 5.0,
-                "type": "minecraft:uniform"
-              }
-            }
-          ],
-          "name": "minecraft:rotten_flesh"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 12,
-          "quality": -1,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1.0,
-                "max": 3.0,
-                "type": "minecraft:uniform"
-              }
-            }
-          ],
-          "name": "minecraft:bone"
         },
         {
           "type": "minecraft:item",
@@ -417,53 +341,6 @@
             }
           ],
           "name": "minestuck:phlegm_gushers"
-        }
-      ]
-    },
-    {
-      "name": "misc",
-      "rolls": {
-        "min": 2.0,
-        "max": 4.0,
-        "type": "minecraft:uniform"
-      },
-      "entries": [
-        {
-          "type": "minestuck:land_table",
-          "name": "minestuck:chests/medium_basic",
-          "pool": "misc"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 15,
-          "quality": 1,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1.0,
-                "max": 5.0,
-                "type": "minecraft:uniform"
-              }
-            }
-          ],
-          "name": "minecraft:iron_ingot"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 10,
-          "quality": 1,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1.0,
-                "max": 4.0,
-                "type": "minecraft:uniform"
-              }
-            }
-          ],
-          "name": "minecraft:gold_ingot"
         },
         {
           "type": "minecraft:item",
@@ -539,13 +416,13 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
+          "weight": 6,
           "quality": -1,
           "name": "minestuck:generic_object"
         },
         {
           "type": "minecraft:item",
-          "weight": 15,
+          "weight": 8,
           "quality": 1,
           "functions": [
             {
@@ -561,7 +438,7 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 12,
+          "weight": 4,
           "quality": 1,
           "functions": [
             {
@@ -574,25 +451,10 @@
             }
           ],
           "name": "minestuck:raw_uranium"
-        }
-      ]
-    },
-    {
-      "name": "rare",
-      "rolls": {
-        "min": 0.0,
-        "max": 1.0,
-        "type": "minecraft:uniform"
-      },
-      "entries": [
-        {
-          "type": "minestuck:land_table",
-          "name": "minestuck:chests/medium_basic",
-          "pool": "rare"
         },
         {
           "type": "minecraft:item",
-          "weight": 20,
+          "weight": 5,
           "quality": 1,
           "functions": [
             {
@@ -608,7 +470,6 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 15,
           "quality": 1,
           "functions": [
             {
@@ -624,7 +485,6 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 15,
           "quality": 2,
           "functions": [
             {
@@ -646,13 +506,12 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
+          "weight": 3,
           "quality": 1,
           "name": "minestuck:mini_wizard_statue"
         },
         {
           "type": "minecraft:item",
-          "weight": 2,
           "quality": 2,
           "name": "minestuck:transportalizer"
         },
@@ -676,18 +535,12 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
+          "weight": 2,
           "name": "minestuck:energy_core"
-        }
-      ]
-    },
-    {
-      "name": "boondollars",
-      "rolls": 1,
-      "entries": [
+        },
         {
           "type": "minecraft:item",
-          "weight": 3,
+          "weight": 4,
           "quality": 1,
           "functions": [
             {
@@ -699,7 +552,7 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
+          "weight": 20,
           "quality": -1,
           "functions": [
             {
@@ -715,7 +568,7 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
+          "weight": 10,
           "functions": [
             {
               "function": "minestuck:set_boondollar_count",
@@ -730,7 +583,7 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 2,
+          "weight": 4,
           "quality": 1,
           "functions": [
             {

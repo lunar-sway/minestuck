@@ -493,7 +493,7 @@ public class MSBlocks
 		registry.register(new SolidSwitchBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(3).sound(SoundType.STONE).lightValue(12)).setRegistryName("solid_switch"));
 		registry.register(new SummonerBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(3).sound(SoundType.STONE)).setRegistryName("summoner"));
 		
-		registry.register(new LootBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(3).sound(SoundType.METAL), MSBlockShapes.LOOT_CHEST, MSBlockShapes.LOOT_CHEST_EMPTY, MSLootTables.BASIC_MEDIUM_CHEST).setRegistryName("loot_chest"));
+		registry.register(new LootBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(3).sound(SoundType.METAL), MSBlockShapes.LOOT_CHEST, MSBlockShapes.LOOT_CHEST_EMPTY/*, MSLootTables.BASIC_MEDIUM_CHEST*/).setRegistryName("loot_chest"));
 		
 		registry.register(new GateBlock(Block.Properties.create(Material.PORTAL).doesNotBlockMovement().hardnessAndResistance(-1.0F, 25.0F).sound(SoundType.GLASS).lightValue(11).noDrops()).setRegistryName("gate"));
 		registry.register(new ReturnNodeBlock(Block.Properties.create(Material.PORTAL).doesNotBlockMovement().hardnessAndResistance(-1.0F, 10.0F).sound(SoundType.GLASS).lightValue(11).noDrops()).setRegistryName("return_node"));
