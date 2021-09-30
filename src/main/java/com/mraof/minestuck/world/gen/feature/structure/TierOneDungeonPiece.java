@@ -3,6 +3,7 @@ package com.mraof.minestuck.world.gen.feature.structure;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.*;
+import com.mraof.minestuck.block.redstone.SolidSwitchBlock;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;

@@ -349,11 +349,17 @@ public class ServerEventHandler
 		{
 			int duration = event.player.getActivePotionEffect(MSEffects.CREATIVE_SHOCK.get()).getDuration();
 			if(duration >= 5)
+			{
 				event.player.abilities.allowEdit = false;
+				event.player.stopFallFlying();
+			}
+			
 			else
 			{
 				if(!event.player.world.isRemote)
+				{
 					event.player.abilities.allowEdit = ((ServerPlayerEntity) event.player).interactionManager.getGameType().hasLimitedInteractions();
+				}
 			}
 		}
 	}

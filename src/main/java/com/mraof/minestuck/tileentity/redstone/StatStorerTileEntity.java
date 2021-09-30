@@ -1,7 +1,7 @@
 package com.mraof.minestuck.tileentity.redstone;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.block.StatStorerBlock;
+import com.mraof.minestuck.block.redstone.StatStorerBlock;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;

@@ -1,16 +1,18 @@
-package com.mraof.minestuck.block;
+package com.mraof.minestuck.block.redstone;
 
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.effects.MSEffects;
-import com.mraof.minestuck.tileentity.redstone.RemoteObserverTileEntity;
+import com.mraof.minestuck.tileentity.redstone.StatStorerTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
@@ -18,14 +20,13 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class RemoteObserverBlock extends Block
+public class StatStorerBlock extends Block
 {
-	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
+	public static final IntegerProperty POWER = BlockStateProperties.POWER_0_15;
 	
-	public RemoteObserverBlock(Properties properties)
+	public StatStorerBlock(Properties properties)
 	{
 		super(properties);
-		this.setDefaultState(this.stateContainer.getBaseState().with(POWERED, false));
 	}
 	
 	@Override
@@ -35,11 +36,11 @@ public class RemoteObserverBlock extends Block
 		if(!player.isSneaking() && (!player.isPotionActive(MSEffects.CREATIVE_SHOCK.get()) || player.isCreative()))
 		{
 			TileEntity tileEntity = worldIn.getTileEntity(pos);
-			if(tileEntity instanceof RemoteObserverTileEntity)
+			if(tileEntity instanceof StatStorerTileEntity)
 			{
-				RemoteObserverTileEntity te = (RemoteObserverTileEntity) tileEntity;
+				StatStorerTileEntity te = (StatStorerTileEntity) tileEntity;
 				
-				MSScreenFactories.displayRemoteObserverScreen(te);
+				MSScreenFactories.displayStatStorerScreen(te);
 			}
 		}
 		
@@ -47,15 +48,15 @@ public class RemoteObserverBlock extends Block
 	}
 	
 	@Override
-	public boolean canProvidePower(BlockState state)
+	public int getWeakPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side)
 	{
-		return state.get(POWERED);
+		return blockState.get(POWER);
 	}
 	
 	@Override
-	public int getWeakPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side)
+	public boolean canProvidePower(BlockState state)
 	{
-		return blockState.get(POWERED) ? 15 : 0;
+		return state.get(POWER) > 0;
 	}
 	
 	@Override
@@ -74,13 +75,13 @@ public class RemoteObserverBlock extends Block
 	@Override
 	public TileEntity createTileEntity(BlockState state, IBlockReader world)
 	{
-		return new RemoteObserverTileEntity();
+		return new StatStorerTileEntity();
 	}
 	
 	@Override
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
 	{
 		super.fillStateContainer(builder);
-		builder.add(POWERED);
+		builder.add(POWER);
 	}
 }

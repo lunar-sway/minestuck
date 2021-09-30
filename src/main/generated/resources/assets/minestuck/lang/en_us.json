@@ -1706,6 +1706,8 @@
   "minestuck.predefine.title_already_set": "That player already has their title set to %s",
   "minestuck.predefine.title_already_used": "The title %s is already used in that players session",
   "minestuck.private_computer": "You are not allowed to access other players computers.",
+  "minestuck.receiver_now_auto_reset": "Receiver will now unpower itself automatically.",
+  "minestuck.receiver_now_not_auto_reset": "Receiver will now store the highest input power indefinitely.",
   "minestuck.resume_button": "Resume connection",
   "minestuck.resume_client_message": "Waiting for server...",
   "minestuck.resume_server_message": "Waiting for client...",

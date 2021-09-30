@@ -1,11 +1,15 @@
-package com.mraof.minestuck.block;
+package com.mraof.minestuck.block.redstone;
 
+import com.mraof.minestuck.client.gui.MSScreenFactories;
+import com.mraof.minestuck.effects.MSEffects;
+import com.mraof.minestuck.tileentity.redstone.RemoteObserverTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -14,11 +18,11 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class SolidSwitchBlock extends Block
+public class RemoteObserverBlock extends Block
 {
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 	
-	public SolidSwitchBlock(Properties properties)
+	public RemoteObserverBlock(Properties properties)
 	{
 		super(properties);
 		this.setDefaultState(this.stateContainer.getBaseState().with(POWERED, false));
@@ -28,18 +32,18 @@ public class SolidSwitchBlock extends Block
 	@SuppressWarnings("deprecation")
 	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
 	{
-		
-		if(!player.isSneaking())
+		if(!player.isSneaking() && (!player.isPotionActive(MSEffects.CREATIVE_SHOCK.get()) || player.isCreative()))
 		{
-			worldIn.setBlockState(pos, state.with(POWERED, !state.get(POWERED)));
-			if(state.get(POWERED))
-				worldIn.playSound(null, pos, SoundEvents.BLOCK_PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 1.2F);
-			else
-				worldIn.playSound(null, pos, SoundEvents.BLOCK_PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, 1.2F);
-			return ActionResultType.SUCCESS;
+			TileEntity tileEntity = worldIn.getTileEntity(pos);
+			if(tileEntity instanceof RemoteObserverTileEntity)
+			{
+				RemoteObserverTileEntity te = (RemoteObserverTileEntity) tileEntity;
+				
+				MSScreenFactories.displayRemoteObserverScreen(te);
+			}
 		}
 		
-		return ActionResultType.PASS;
+		return ActionResultType.SUCCESS;
 	}
 	
 	@Override
@@ -61,9 +65,16 @@ public class SolidSwitchBlock extends Block
 	}
 	
 	@Override
-	public int getLightValue(BlockState state)
+	public boolean hasTileEntity(BlockState state)
 	{
-		return state.get(POWERED) ? super.getLightValue(state) : 0;
+		return true;
+	}
+	
+	@Nullable
+	@Override
+	public TileEntity createTileEntity(BlockState state, IBlockReader world)
+	{
+		return new RemoteObserverTileEntity();
 	}
 	
 	@Override

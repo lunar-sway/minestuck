@@ -1,4 +1,4 @@
-package com.mraof.minestuck.block;
+package com.mraof.minestuck.block.redstone;
 
 import com.mraof.minestuck.tileentity.redstone.SummonerTileEntity;
 import com.mraof.minestuck.util.Debug;

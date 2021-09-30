@@ -1,4 +1,4 @@
-package com.mraof.minestuck.block;
+package com.mraof.minestuck.block.redstone;
 
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.effects.MSEffects;
