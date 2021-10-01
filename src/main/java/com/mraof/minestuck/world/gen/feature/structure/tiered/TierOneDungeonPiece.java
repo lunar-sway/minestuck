@@ -299,7 +299,7 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 		if(randomRoomType != 4) //decrepit room types have broken down stairs
 		{
 			//Debug.debugf("buildIndoorBlocks. staircaseMinPos = %s, isPosMinInsideBounding = %s, boundingBox = %s, getBoundingBox = %s", staircaseMinPos, boundingBox.isVecInside(staircaseMinPos), boundingBox, getBoundingBox());
-			StructureBlockUtil.createPlainSpiralStaircase(staircaseMinPos, staircaseMaxPos, primaryDecorativeBlock, world, boundingBox/*, getBoundingBox()*/);
+			StructureBlockUtil.placeSpiralStaircase(world, boundingBox, staircaseMinPos, staircaseMaxPos, primaryDecorativeBlock);
 		}
 		
 		if(randomRoomType == 5 || randomRoomType == 6 || randomRoomType == 7)

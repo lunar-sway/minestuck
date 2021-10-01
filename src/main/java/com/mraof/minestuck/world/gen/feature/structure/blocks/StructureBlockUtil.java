@@ -265,97 +265,53 @@ public class StructureBlockUtil
 	}
 	
 	/**
-	 * Built in use of axisAlignBlockPos. Will start from min blockpos and start building up in the positive x direction first
+	 * Places a spiral staircase that:
+	 * - Goes clockwise
+	 * - Starts at minPos
+	 * - Is kept within the box defined by minPos and maxPos together
+	 * Placed blocks are not currently rotated, meaning that stair blocks currently aren't supported properly.
 	 */
-	public static void createPlainSpiralStaircase(BlockPos minBlockPosIn, BlockPos maxBlockPosIn, BlockState blockState, IWorld world, MutableBoundingBox boundingBox1/*, MutableBoundingBox boundingBox2*/)
+	public static void placeSpiralStaircase(IWorld world, MutableBoundingBox boundingBox, BlockPos minPos, BlockPos maxPos, BlockState blockState)
 	{
-		//TODO placement happens twice(because of two bounding boxes?), one set of stairs can go beyond intended x/z bounds, stairs are fragmented(because it tries to generate in two bounding boxes?)
+		int xSize = Math.abs(maxPos.getX() - minPos.getX());
+		int zSize = Math.abs(maxPos.getZ() - minPos.getZ());
+		boolean facingX = (maxPos.getX() - minPos.getX()) > 0;
+		boolean facingZ = (maxPos.getZ() - minPos.getZ()) > 0;
+		Direction dir;
+		if (facingX) {
+			dir = facingZ ? Direction.EAST : Direction.NORTH;
+		} else {
+			dir = facingZ ? Direction.SOUTH : Direction.WEST;
+		}
 		
-		minBlockPosIn = axisAlignBlockPosGetMin(minBlockPosIn, maxBlockPosIn);
-		maxBlockPosIn = axisAlignBlockPosGetMax(minBlockPosIn, maxBlockPosIn);
+		placeSpiralStaircase(world, boundingBox, minPos, xSize, zSize, maxPos.getY(), dir, blockState);
+	}
+	
+	/**
+	 * Places a spiral staircase that goes clockwise within the given bounds.
+	 * The top block will be placed at height maxY.
+	 * Placed blocks are not currently rotated, meaning that stair blocks currently aren't supported properly.
+	 */
+	public static void placeSpiralStaircase(IWorld world, MutableBoundingBox boundingBox, BlockPos startPos, int xSize, int zSize, int maxY, Direction startDirection, BlockState blockState)
+	{
+		BlockPos pos = startPos;
+		Direction direction = startDirection;
 		
-		world.setBlockState(minBlockPosIn, Blocks.GOLD_BLOCK.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
-		world.setBlockState(maxBlockPosIn, Blocks.DIAMOND_BLOCK.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
-		
-		//Debug.debugf("createPlainSpiralStaircase. boundingBox = %s", boundingBox1);
-		int xIterator = minBlockPosIn.getX();
-		
-		int zIterator = minBlockPosIn.getZ();
-		
-		boolean isXIterating = true; //toggles between moving in x or z direction
-		boolean isXIterateReversed = false; //moving in negative x direction if positive
-		boolean isZIterateReversed = false; //moving in negative z direction if positive
-		for(int yIterator = minBlockPosIn.getY(); yIterator <= maxBlockPosIn.getY(); yIterator++)
-		{
-			BlockPos iteratorPos = new BlockPos(xIterator, yIterator, zIterator);
+		while (true) {
+			int hSize = direction.getAxis() == Direction.Axis.X ? xSize : zSize;
 			
-			//TODO use Direction variable and rotate direction as it reaches end of line
-			
-			/*Debug.debugf("createPlainSpiralStaircase. isXIterating = %s, isPosInsideBounding = %s, iteratorPos = %s",
-					isXIterating, boundingBox1.isVecInside(iteratorPos), iteratorPos);*/
-			
-			if(xIterator >= maxBlockPosIn.getX() && !isXIterateReversed) //moving positive x
-			{
-				isXIterating = false;
-				isXIterateReversed = true;
-			} else if(zIterator >= maxBlockPosIn.getZ() && !isZIterateReversed) //moving positive z
-			{
-				isXIterating = true;
-				isZIterateReversed = true;
-			} else if(xIterator <= minBlockPosIn.getX() && isXIterateReversed) //moving negative x
-			{
-				isXIterating = false;
-				isXIterateReversed = false;
-			} else if(zIterator <= minBlockPosIn.getZ() && isZIterateReversed) //moving negative z
-			{
-				isXIterating = true;
-				isZIterateReversed = true;
+			for (int i = 0; i < hSize; i++) {
+				if (pos.getY() > maxY)
+					return;
+				
+				if (boundingBox.isVecInside(pos)) {
+					world.setBlockState(pos, blockState, Constants.BlockFlags.BLOCK_UPDATE);
+				}
+				
+				pos = pos.offset(direction).up();
 			}
 			
-			
-			//Debug.debugf("createPlainSpiralStaircase. placed at %s", iteratorPos);
-			if(boundingBox1.isVecInside(iteratorPos)/* || boundingBox2.isVecInside(iteratorPos)*/)
-			{
-				world.setBlockState(iteratorPos, blockState, Constants.BlockFlags.BLOCK_UPDATE);
-			}
-			
-			if(isXIterating && !isXIterateReversed)
-			{
-				xIterator++;
-			} else if(!isXIterating && !isZIterateReversed)
-			{
-				zIterator++;
-			} else if(isXIterating && isXIterateReversed)
-			{
-				xIterator--;
-			} else if(!isXIterating && isZIterateReversed)
-			{
-				zIterator--;
-			}
-				/*
-				if(isXIterating && !isXIterateReversed)
-				{
-					xIterator++;
-				}
-				if(!isXIterating && !isZIterateReversed)
-				{
-					zIterator++;
-				}
-				if(isXIterating && isXIterateReversed)
-				{
-					xIterator--;
-				}
-				if(!isXIterating && isZIterateReversed)
-				{
-					zIterator--;
-				}
-				 */
-			
-			
-			if(yIterator >= maxBlockPosIn.getY())
-			{
-				break;
-			}
+			direction = direction.rotateY();
 		}
 	}
 	
