@@ -3,6 +3,7 @@ package com.mraof.minestuck.world.gen.feature;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.gen.feature.structure.*;
 import com.mraof.minestuck.world.gen.feature.structure.castle.CastleStructure;
+import com.mraof.minestuck.world.gen.feature.structure.tiered.TierOneDungeonStructure;
 import com.mraof.minestuck.world.gen.feature.structure.village.ConsortVillageStructure;
 import com.mraof.minestuck.world.gen.feature.tree.EndTreeFeature;
 import com.mraof.minestuck.world.gen.feature.tree.LeaflessTreeFeature;

@@ -1,4 +1,4 @@
-package com.mraof.minestuck.world.gen.feature.structure;
+package com.mraof.minestuck.world.gen.feature.structure.tiered;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
@@ -682,7 +682,7 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 					getXWithOffset(firstRoomMinX + 16, firstRoomMaxZ - 1),
 					getYWithOffset(firstRoomMaxY - 9),
 					getZWithOffset(firstRoomMinX + 16, firstRoomMaxZ - 1));
-			StructureBlockUtil.placeWirelessRelay(world, boundingBox, transmitterPos, receiverPos);
+			StructureBlockUtil.placeWirelessRelay(world, boundingBox, transmitterPos, receiverPos, false);
 			setBlockState(world, MSBlocks.SOLID_SWITCH.getDefaultState().with(SolidSwitchBlock.POWERED, true), firstRoomMinX + 12 + (roomVariable1 - 3), firstRoomMaxY - 20, firstRoomMaxZ + 6, boundingBox); //power for transmitter
 			setBlockState(world, Blocks.REDSTONE_WIRE.getDefaultState(), firstRoomMinX + 16, firstRoomMaxY - 8, firstRoomMaxZ - 1, boundingBox); //wire above receiver, both power pistons
 			fillWithAir(world, boundingBox, firstRoomMinX + 16, firstRoomMaxY - 9, firstRoomMaxZ - 3, firstRoomMinX + 16, firstRoomMaxY - 8, firstRoomMaxZ - 3); //hole for piston
@@ -758,7 +758,7 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 					getXWithOffset((firstRoomMinX + firstRoomMaxX) / 2, firstRoomMinZ + 3),
 					getYWithOffset(firstRoomMinY + 10),
 					getZWithOffset((firstRoomMinX + firstRoomMaxX) / 2, firstRoomMinZ + 3));
-			StructureBlockUtil.placeWirelessRelay(world, boundingBox, side1SwitchLampPos.offset(getCoordBaseMode().getOpposite()), side1SwitchLampPos.offset(getCoordBaseMode().getOpposite(), 2).down(5));
+			StructureBlockUtil.placeWirelessRelay(world, boundingBox, side1SwitchLampPos.offset(getCoordBaseMode().getOpposite()), side1SwitchLampPos.offset(getCoordBaseMode().getOpposite(), 2).down(5), true);
 			world.setBlockState(side1SwitchLampPos, MSBlocks.SOLID_SWITCH.getDefaultState().with(SolidSwitchBlock.POWERED, true), Constants.BlockFlags.BLOCK_UPDATE);
 			world.setBlockState(side1SwitchLampPos.offset(getCoordBaseMode()), Blocks.REDSTONE_LAMP.getDefaultState().with(RedstoneLampBlock.LIT, true), Constants.BlockFlags.BLOCK_UPDATE);
 			fillWithBlocks(world, boundingBox,
@@ -773,7 +773,7 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 					getXWithOffset((firstRoomMinX + firstRoomMaxX) / 2, firstRoomMaxZ - 3),
 					getYWithOffset(firstRoomMinY + 10),
 					getZWithOffset((firstRoomMinX + firstRoomMaxX) / 2, firstRoomMaxZ - 3));
-			StructureBlockUtil.placeWirelessRelay(world, boundingBox, side2SwitchLampPos.offset(getCoordBaseMode()), side2SwitchLampPos.offset(getCoordBaseMode(), 2).down(5));
+			StructureBlockUtil.placeWirelessRelay(world, boundingBox, side2SwitchLampPos.offset(getCoordBaseMode()), side2SwitchLampPos.offset(getCoordBaseMode(), 2).down(5), true);
 			world.setBlockState(side2SwitchLampPos, MSBlocks.SOLID_SWITCH.getDefaultState().with(SolidSwitchBlock.POWERED, true), Constants.BlockFlags.BLOCK_UPDATE);
 			world.setBlockState(side2SwitchLampPos.offset(getCoordBaseMode().getOpposite()), Blocks.REDSTONE_LAMP.getDefaultState().with(RedstoneLampBlock.LIT, true), Constants.BlockFlags.BLOCK_UPDATE);
 			
@@ -805,7 +805,7 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 				StructureBlockUtil.placeWirelessRelay(world, boundingBox, aspectSymbolPos.down(3).offset(getCoordBaseMode().rotateYCCW(), stairPuzzleIterate * 2 + 1), new BlockPos(
 						getXWithOffset(firstRoomMinX + 2, (firstRoomMinZ + firstRoomMaxZ) / 2 - 2 + stairPuzzleIterate),
 						getYWithOffset(firstRoomMinY + 4 + stairPuzzleIterate),
-						getZWithOffset(firstRoomMinX + 2, (firstRoomMinZ + firstRoomMaxZ) / 2 - 2 + stairPuzzleIterate)));
+						getZWithOffset(firstRoomMinX + 2, (firstRoomMinZ + firstRoomMaxZ) / 2 - 2 + stairPuzzleIterate)), false);
 				setBlockState(world, Blocks.STICKY_PISTON.getDefaultState().with(PistonBlock.FACING, Direction.EAST), firstRoomMinX + 3, firstRoomMinY + 4 + stairPuzzleIterate, (firstRoomMinZ + firstRoomMaxZ) / 2 - 2 + stairPuzzleIterate, boundingBox);
 				setBlockState(world, secondaryDecorativeBlock, firstRoomMinX + 4, firstRoomMinY + 4 + stairPuzzleIterate, (firstRoomMinZ + firstRoomMaxZ) / 2 - 2 + stairPuzzleIterate, boundingBox);
 			}
@@ -824,7 +824,7 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 		{
 		} else if(worldAspect == EnumAspect.VOID) //invisible platforms or barriers? Somewhat overlapping with hope there
 		{
-		} else if(worldAspect == EnumAspect.SPACE) //portal 2 gel puzzles, may make two block tall barriers for aspect effect
+		} else if(worldAspect == EnumAspect.SPACE) //portal 2 gel puzzles(jumping), may make two block tall barriers for aspect effect
 		{
 		} else if(worldAspect == EnumAspect.MIND) //maze, may make it dark for aspect effect
 		{

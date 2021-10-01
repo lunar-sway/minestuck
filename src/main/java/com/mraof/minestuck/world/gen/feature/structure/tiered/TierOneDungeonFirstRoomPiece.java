@@ -1,4 +1,4 @@
-package com.mraof.minestuck.world.gen.feature.structure;
+package com.mraof.minestuck.world.gen.feature.structure.tiered;
 
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.MSDirectionalBlock;

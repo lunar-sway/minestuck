@@ -1,8 +1,7 @@
-package com.mraof.minestuck.world.gen.feature.structure;
+package com.mraof.minestuck.world.gen.feature.structure.tiered;
 
 import com.mojang.datafixers.Dynamic;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.util.Debug;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;

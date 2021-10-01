@@ -41,12 +41,22 @@ public class WirelessRedstoneReceiverBlock extends Block
 	{
 		super.tick(state, worldIn, pos, rand);
 		
-		//((int) worldIn.getGameTime()) % 20 == 0
-		Debug.debugf("Heebee, %s", worldIn.getGameTime());
 		if(state.get(AUTO_RESET) && state.get(POWER) != 0)
 		{
 			worldIn.setBlockState(pos, state.with(POWER, 0));
 		}
+		
+		if(!worldIn.getPendingBlockTicks().isTickScheduled(new BlockPos(pos), this))
+			worldIn.getPendingBlockTicks().scheduleTick(new BlockPos(pos), this, 200);
+	}
+	
+	@Override
+	public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random)
+	{
+		super.randomTick(state, worldIn, pos, random);
+		
+		if(!worldIn.getPendingBlockTicks().isTickScheduled(new BlockPos(pos), this))
+			worldIn.getPendingBlockTicks().scheduleTick(new BlockPos(pos), this, 200);
 	}
 	
 	@Override

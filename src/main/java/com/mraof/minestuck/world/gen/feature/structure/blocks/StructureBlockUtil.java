@@ -3,6 +3,7 @@ package com.mraof.minestuck.world.gen.feature.structure.blocks;
 import com.mraof.minestuck.block.EnumKeyType;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.ReturnNodeBlock;
+import com.mraof.minestuck.block.redstone.WirelessRedstoneReceiverBlock;
 import com.mraof.minestuck.tileentity.DungeonDoorInterfaceTileEntity;
 import com.mraof.minestuck.tileentity.LootBlockTileEntity;
 import com.mraof.minestuck.tileentity.redstone.RemoteObserverTileEntity;
@@ -123,7 +124,7 @@ public class StructureBlockUtil
 	/**
 	 * Creates a wireless redstone transmitter in the first blockpos, then creates a wireless redstone receiver in the second blockpos. The transmitter is linked to the receiver
 	 */
-	public static void placeWirelessRelay(IWorld world, MutableBoundingBox boundingBox, BlockPos transmitterBlockPos, BlockPos receiverBlockPos)
+	public static void placeWirelessRelay(IWorld world, MutableBoundingBox boundingBox, BlockPos transmitterBlockPos, BlockPos receiverBlockPos, boolean doesReceiverAutoReset)
 	{
 		if(boundingBox.isVecInside(transmitterBlockPos))
 		{
@@ -141,7 +142,10 @@ public class StructureBlockUtil
 		
 		if(boundingBox.isVecInside(receiverBlockPos))
 		{
-			world.setBlockState(receiverBlockPos, MSBlocks.WIRELESS_REDSTONE_RECEIVER.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
+			if(doesReceiverAutoReset)
+				world.setBlockState(receiverBlockPos, MSBlocks.WIRELESS_REDSTONE_RECEIVER.getDefaultState().with(WirelessRedstoneReceiverBlock.AUTO_RESET, true), Constants.BlockFlags.BLOCK_UPDATE);
+			else
+				world.setBlockState(receiverBlockPos, MSBlocks.WIRELESS_REDSTONE_RECEIVER.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
 		}
 	}
 	

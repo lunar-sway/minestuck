@@ -3,6 +3,8 @@ package com.mraof.minestuck.world.gen.feature;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.gen.feature.structure.*;
 import com.mraof.minestuck.world.gen.feature.structure.castle.*;
+import com.mraof.minestuck.world.gen.feature.structure.tiered.TierOneDungeonFirstRoomPiece;
+import com.mraof.minestuck.world.gen.feature.structure.tiered.TierOneDungeonPiece;
 import com.mraof.minestuck.world.gen.feature.structure.village.*;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
