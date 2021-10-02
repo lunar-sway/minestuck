@@ -390,10 +390,10 @@ public class StructureBlockUtil
 	/**
 	 * Built in use of axisAlignBlockPos
 	 */
-	public static void fillWithBlocksFromPos(IWorld worldIn, MutableBoundingBox structurebb, BlockState blockState, BlockPos minBlockPos, BlockPos maxBlockPos)
+	public static void fillWithBlocksFromPos(IWorld worldIn, MutableBoundingBox structurebb, BlockState blockState, BlockPos pos1, BlockPos pos2)
 	{
-		minBlockPos = axisAlignBlockPosGetMin(minBlockPos, maxBlockPos);
-		maxBlockPos = axisAlignBlockPosGetMax(minBlockPos, maxBlockPos);
+		BlockPos minBlockPos = axisAlignBlockPosGetMin(pos1, pos2);
+		BlockPos maxBlockPos = axisAlignBlockPosGetMax(pos1, pos2);
 		
 		for(int y = minBlockPos.getY(); y <= maxBlockPos.getY(); ++y)
 		{
