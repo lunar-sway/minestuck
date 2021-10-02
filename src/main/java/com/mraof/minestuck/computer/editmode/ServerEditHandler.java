@@ -299,7 +299,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			return;
 		
 		SburbConnection c = data.connection;
-		int range = MSDimensions.isLandDimension(player.level.dimension()) ? MinestuckConfig.SERVER.landEditRange.get() : MinestuckConfig.SERVER.overworldEditRange.get();
+		int range = MSDimensions.isLandDimension(player.server, player.level.dimension()) ? MinestuckConfig.SERVER.landEditRange.get() : MinestuckConfig.SERVER.overworldEditRange.get();
 		BlockPos center = getEditmodeCenter(c);
 
 		updateInventory(player, c);

@@ -1,7 +1,6 @@
 package com.mraof.minestuck.client;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
@@ -15,6 +14,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.Random;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, value = Dist.CLIENT)
 public class MSMusicTicker	//TODO Introduce types (something similar to vanilla) such that this class could be reused for prospit, derse etc
@@ -34,7 +35,7 @@ public class MSMusicTicker	//TODO Introduce types (something similar to vanilla)
 	public static void playSound(PlaySoundEvent event)
 	{
 		Minecraft mc = Minecraft.getInstance();
-		if(mc.level != null && MSDimensions.isLandDimension(mc.level.dimension())
+		if(mc.level != null && ClientDimensionData.isLand(mc.level.dimension())
 				&& event.getSound().getLocation().equals(mc.getSituationalMusic().getEvent().getLocation()))
 			event.setResultSound(null);
 	}
@@ -45,7 +46,8 @@ public class MSMusicTicker	//TODO Introduce types (something similar to vanilla)
 	
 	private static void tick(Minecraft mc)
 	{
-		if(mc.level != null && MSDimensions.isLandDimension(mc.level.dimension()))
+		LandTypePair types = mc.level != null ? ClientDimensionData.getLandTypes(mc.level.dimension()) : null;
+		if(types != null)
 		{
 			if(!wasInLand)
 			{
@@ -58,7 +60,7 @@ public class MSMusicTicker	//TODO Introduce types (something similar to vanilla)
 				ticksUntilMusic--;
 				if(ticksUntilMusic < 0)
 				{
-					currentMusic = SimpleSound.forMusic(getLandSoundEvent(mc));
+					currentMusic = SimpleSound.forMusic(getLandSoundEvent(mc.level.random, types));
 					mc.getSoundManager().play(currentMusic);
 					LOGGER.debug("Land music started.");
 				}
@@ -82,13 +84,9 @@ public class MSMusicTicker	//TODO Introduce types (something similar to vanilla)
 		}
 	}
 	
-	private static SoundEvent getLandSoundEvent(Minecraft mc)
+	private static SoundEvent getLandSoundEvent(Random rand, LandTypePair pair)
 	{
-		//LandDimension dim = (LandDimension) mc.world.getDimension(); TODO
-		
-		LandTypePair pair = null;//dim.landTypes;
-		
-		if(mc.level.random.nextBoolean())
+		if(rand.nextBoolean())
 			return pair.getTerrain().getBackgroundMusic();
 		else return pair.getTitle().getBackgroundMusic();
 	}

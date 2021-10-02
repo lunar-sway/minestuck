@@ -108,7 +108,7 @@ public class GateHandler
 		{
 			SburbConnection clientConnection = SkaianetHandler.get(world.getServer()).getPrimaryConnection(landConnection.getClientIdentifier(), false).orElse(null);
 			
-			if(clientConnection != null && clientConnection.hasEntered() && MSDimensions.isLandDimension(clientConnection.getClientDimension()))
+			if(clientConnection != null && clientConnection.hasEntered() && MSDimensions.isLandDimension(world.getServer(), clientConnection.getClientDimension()))
 			{
 				RegistryKey<World> clientDim = clientConnection.getClientDimension();
 				ServerWorld clientWorld = world.getServer().getLevel(clientDim);
@@ -131,7 +131,7 @@ public class GateHandler
 		{
 			SburbConnection serverConnection = SkaianetHandler.get(world.getServer()).getPrimaryConnection(landConnection.getServerIdentifier(), true).orElse(null);
 			
-			if(serverConnection != null && serverConnection.hasEntered() && MSDimensions.isLandDimension(serverConnection.getClientDimension()))	//Last shouldn't be necessary, but just in case something goes wrong elsewhere...
+			if(serverConnection != null && serverConnection.hasEntered() && MSDimensions.isLandDimension(world.getServer(), serverConnection.getClientDimension()))	//Last shouldn't be necessary, but just in case something goes wrong elsewhere...
 			{
 				RegistryKey<World> serverDim = serverConnection.getClientDimension();
 				return GlobalPos.of(serverDim, Type.GATE_2.getPosition(world.getServer().getLevel(serverDim)));

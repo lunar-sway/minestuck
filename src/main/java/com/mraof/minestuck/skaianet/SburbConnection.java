@@ -104,7 +104,7 @@ public final class SburbConnection
 		if(nbt.contains("ClientLand", Constants.NBT.TAG_COMPOUND))
 		{
 			clientLandInfo = LandInfo.read(nbt.getCompound("ClientLand"), skaianet, getClientIdentifier());
-			MSDimensions.updateLandMaps(this);
+			MSDimensions.updateLandMaps(this, false);
 			hasEntered = nbt.contains("has_entered") ? nbt.getBoolean("has_entered") : true;
 		}
 		artifactType = nbt.getInt("artifact");
@@ -309,7 +309,7 @@ public final class SburbConnection
 		else
 		{
 			clientLandInfo = new LandInfo(clientIdentifier, landTypes, dimension, new Random());	//TODO handle random better
-			MSDimensions.updateLandMaps(this);
+			MSDimensions.updateLandMaps(this, true);
 		}
 	}
 	void setHasEntered()

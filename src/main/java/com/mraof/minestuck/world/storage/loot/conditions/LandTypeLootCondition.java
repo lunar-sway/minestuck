@@ -51,7 +51,7 @@ public class LandTypeLootCondition implements ILootCondition
 	{
 		ServerWorld world = context.getLevel();
 		
-		if(world != null && MSDimensions.isLandDimension(world.dimension()))
+		if(world != null && MSDimensions.isLandDimension(world.getServer(), world.dimension()))
 		{
 			LandTypePair aspects = MSDimensions.getAspects(world.getServer(), world.dimension());
 			

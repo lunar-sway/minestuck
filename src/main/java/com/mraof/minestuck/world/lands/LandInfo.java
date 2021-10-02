@@ -111,19 +111,9 @@ public class LandInfo
 		return landAspects;
 	}
 	
-	/**
-	 * Should NOT be called during a very early loading stage (such as when reading data through {@link com.mraof.minestuck.MSWorldPersistenceHook}).
-	 * Because world persistence is loaded alongside the dimension type registry, there's not a guarrantee that it is loaded and ready before skaianet is loading data.
-	 * Note: It has indeed happened that Skaianet has loaded before world-specific dimension types.
-	 */
 	public RegistryKey<World> getDimensionType()
 	{
 		return dimension;
-	}
-	
-	public ResourceLocation getDimensionName()
-	{
-		return dimension.location();
 	}
 	
 	public BlockPos getSpawn()

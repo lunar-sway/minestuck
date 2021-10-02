@@ -26,7 +26,7 @@ public class CheckLandCommand
 	{
 		ServerPlayerEntity player = source.getPlayerOrException();
 		
-		if(MSDimensions.isLandDimension(player.level.dimension()))
+		if(MSDimensions.isLandDimension(player.server, player.level.dimension()))
 		{
 			LandInfo info = MSDimensions.getLandInfo(player.level);
 			ITextComponent toSend = new TranslationTextComponent(CHECK, info.landAsTextComponent());

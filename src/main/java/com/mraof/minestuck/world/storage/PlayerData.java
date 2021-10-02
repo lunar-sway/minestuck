@@ -20,6 +20,7 @@ import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.ColorHandler;
+import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -54,6 +55,7 @@ public final class PlayerData
 	{
 		ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
 		PlayerSavedData.getData(player).onPlayerLoggedIn(player);
+		MSDimensions.sendDimensionData(player);
 	}
 	
 	@SubscribeEvent
