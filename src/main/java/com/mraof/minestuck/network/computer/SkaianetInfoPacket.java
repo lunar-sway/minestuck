@@ -8,7 +8,10 @@ import com.mraof.minestuck.skaianet.client.ReducedConnection;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,9 +25,9 @@ public class SkaianetInfoPacket implements PlayToBothPacket
 	public Map<Integer, String> openServers;
 	public List<SburbConnection> connectionsFrom;
 	public List<ReducedConnection> connectionsTo;
-	public List<List<ResourceLocation>> landChains;
+	public List<List<RegistryKey<World>>> landChains;
 	
-	public static SkaianetInfoPacket landChains(List<List<ResourceLocation>> landChains)
+	public static SkaianetInfoPacket landChains(List<List<RegistryKey<World>>> landChains)
 	{
 		SkaianetInfoPacket packet = new SkaianetInfoPacket();
 		packet.landChains = landChains;
@@ -58,14 +61,14 @@ public class SkaianetInfoPacket implements PlayToBothPacket
 		if(landChains != null) //Land chain data
 		{
 			buffer.writeBoolean(true);
-			for(List<ResourceLocation> list : landChains)
+			for(List<RegistryKey<World>> list : landChains)
 			{
 				buffer.writeInt(list.size());
-				for(ResourceLocation land : list)
+				for(RegistryKey<World> land : list)
 				{
 					if(land == null)
 						buffer.writeUtf("");
-					else buffer.writeUtf(land.toString());
+					else buffer.writeUtf(land.location().toString());
 				}
 			}
 		} else
@@ -101,13 +104,13 @@ public class SkaianetInfoPacket implements PlayToBothPacket
 			while(buffer.readableBytes() > 0)
 			{
 				int size = buffer.readInt();
-				List<ResourceLocation> list = new ArrayList<>();
+				List<RegistryKey<World>> list = new ArrayList<>();
 				for(int k = 0; k < size; k++)
 				{
 					String landName = buffer.readUtf(32767);
 					if(landName.isEmpty())
 						list.add(null);
-					else list.add(ResourceLocation.tryParse(landName));
+					else list.add(RegistryKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(landName)));
 				}
 				packet.landChains.add(list);
 			}

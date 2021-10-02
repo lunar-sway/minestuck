@@ -140,13 +140,6 @@ public class LandDimension extends Dimension
 		return (float) (Math.acos((properties.skylightBase - 0.5F) / 2) / (Math.PI * 2F));
 	}
 	
-	public float calculateVeilAngle()
-	{
-		double d0 = MathHelper.frac((double)world.getDayTime() / 24000.0D - 0.25D);
-		double d1 = 0.5D - Math.cos(d0 * Math.PI) / 2.0D;
-		return (float)(d0 * 2.0D + d1) / 3.0F;
-	}
-	
 	@Override
 	public boolean doesXZShowFog(int x, int z)
 	{

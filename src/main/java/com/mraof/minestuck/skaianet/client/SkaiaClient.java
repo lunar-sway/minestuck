@@ -33,7 +33,7 @@ public class SkaiaClient
 	/**
 	 * A map used to track chains of lands, to be used by the skybox render
 	 */
-	private static final Map<ResourceLocation, List<ResourceLocation>> landChainMap = new HashMap<>();
+	private static final Map<RegistryKey<World>, List<RegistryKey<World>>> landChainMap = new HashMap<>();
 	private static ComputerTileEntity te = null;
 	public static int playerId;	//The id that this player is expected to have.
 	
@@ -91,9 +91,9 @@ public class SkaiaClient
 		return false;
 	}
 	
-	public static List<ResourceLocation> getLandChain(RegistryKey<World> id)
+	public static List<RegistryKey<World>> getLandChain(RegistryKey<World> id)
 	{
-		return landChainMap.get(id.getRegistryName());
+		return landChainMap.get(id);
 	}
 	
 	public static boolean isActive(int playerId, boolean isClient)
@@ -131,9 +131,9 @@ public class SkaiaClient
 		if(data.landChains != null)
 		{
 			landChainMap.clear();
-			for(List<ResourceLocation> list : data.landChains)
+			for(List<RegistryKey<World>> list : data.landChains)
 			{
-				for(ResourceLocation land : list)
+				for(RegistryKey<World> land : list)
 				{
 					landChainMap.put(land, list);
 				}
