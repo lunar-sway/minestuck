@@ -141,12 +141,6 @@ public class LandDimension extends Dimension
 	}
 	
 	@Override
-	public boolean doesXZShowFog(int x, int z)
-	{
-		return false;
-	}
-	
-	@Override
 	public BlockPos getSpawnPoint() 
 	{
 		if(world.isRemote)

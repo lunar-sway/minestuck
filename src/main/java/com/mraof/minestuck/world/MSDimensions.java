@@ -29,6 +29,7 @@ public class MSDimensions
 	private static final Map<RegistryKey<World>, LandInfo> typeToInfoContainer = new HashMap<>();
 	
 	public static RegistryKey<World> SKAIA = RegistryKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(Minestuck.MOD_ID, "skaia"));
+	public static final ResourceLocation LAND_EFFECTS = new ResourceLocation(Minestuck.MOD_ID, "land");
 	
 	public static LandTypePair getAspects(MinecraftServer server, RegistryKey<World> dimension)
 	{

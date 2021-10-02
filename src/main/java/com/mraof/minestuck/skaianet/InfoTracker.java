@@ -11,7 +11,6 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.LazyInstance;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -40,7 +39,7 @@ public final class InfoTracker
 	/**
 	 * Chains of lands to be used by the skybox render
 	 */
-	private final LazyInstance<List<List<ResourceLocation>>> landChains = new LazyInstance<>(this::createLandChains);
+	private final LazyInstance<List<List<RegistryKey<World>>>> landChains = new LazyInstance<>(this::createLandChains);
 	
 	InfoTracker(SkaianetHandler skaianet)
 	{
@@ -116,9 +115,9 @@ public final class InfoTracker
 		return SkaianetInfoPacket.landChains(landChains.get());
 	}
 	
-	private List<List<ResourceLocation>> createLandChains()
+	private List<List<RegistryKey<World>>> createLandChains()
 	{
-		List<List<ResourceLocation>> landChains = new ArrayList<>();
+		List<List<RegistryKey<World>>> landChains = new ArrayList<>();
 		
 		Set<RegistryKey<World>> checked = new HashSet<>();
 		skaianet.sessionHandler.getConnectionStream().forEach(c -> populateLandChain(landChains, checked, c));
@@ -126,13 +125,13 @@ public final class InfoTracker
 		return landChains;
 	}
 	
-	private void populateLandChain(List<List<ResourceLocation>> landChains, Set<RegistryKey<World>> checked, SburbConnection c)
+	private void populateLandChain(List<List<RegistryKey<World>>> landChains, Set<RegistryKey<World>> checked, SburbConnection c)
 	{
 		RegistryKey<World> dimensionType = c.getClientDimension();
 		if(c.isMain() && dimensionType != null && !checked.contains(dimensionType))
 		{
-			LinkedList<ResourceLocation> chain = new LinkedList<>();
-			chain.add(c.getClientDimension().location());
+			LinkedList<RegistryKey<World>> chain = new LinkedList<>();
+			chain.add(c.getClientDimension());
 			checked.add(c.getClientDimension());
 			SburbConnection cIter = c;
 			while(true)
@@ -142,7 +141,7 @@ public final class InfoTracker
 				{
 					if(!checked.contains(cIter.getClientDimension()))
 					{
-						chain.addLast(cIter.getClientDimension().location());
+						chain.addLast(cIter.getClientDimension());
 						checked.add(cIter.getClientDimension());
 					} else break;
 				} else
@@ -157,7 +156,7 @@ public final class InfoTracker
 				cIter = skaianet.getPrimaryConnection(cIter.getServerIdentifier(), true).orElse(null);
 				if(cIter != null && cIter.hasEntered() && !checked.contains(cIter.getClientDimension()))
 				{
-					chain.addFirst(cIter.getClientDimension().location());
+					chain.addFirst(cIter.getClientDimension());
 					checked.add(cIter.getClientDimension());
 				} else
 				{

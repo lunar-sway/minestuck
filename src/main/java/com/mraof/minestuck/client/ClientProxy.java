@@ -20,11 +20,13 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.block.StoneTabletItem;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
+import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.entity.SpriteRenderer;
 import net.minecraft.client.renderer.entity.model.BipedModel;
+import net.minecraft.client.world.DimensionRenderInfo;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemModelsProperties;
 import net.minecraft.util.ResourceLocation;
@@ -139,6 +141,8 @@ public class ClientProxy
 		ItemModelsProperties.register(MSItems.BOONDOLLARS, new ResourceLocation(Minestuck.MOD_ID, "count"), (stack, world, holder) -> BoondollarsItem.getCount(stack));
 		ItemModelsProperties.register(MSItems.FROG, new ResourceLocation(Minestuck.MOD_ID, "type"), (stack, world, holder) -> !stack.hasTag() ? 0 : stack.getTag().getInt("Type"));
 		ItemModelsProperties.register(MSItems.STONE_SLAB, new ResourceLocation(Minestuck.MOD_ID, "carved"), (stack, world, holder) -> StoneTabletItem.hasText(stack) ? 1 : 0);
+		
+		DimensionRenderInfo.EFFECTS.put(MSDimensions.LAND_EFFECTS, new LandRenderInfo());
 	}
 	
 	private static void registerArmorModels()
