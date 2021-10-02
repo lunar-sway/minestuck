@@ -239,29 +239,13 @@ public class StructureBlockUtil
 	}
 	
 	/**
-	 * Will generate a feature from the enum FeatureType
+	 * Places a template translated such that the given position marks the center of the template.
 	 */
-	public static void placeFeature(IWorld world, MutableBoundingBox boundingBox, BlockPos blockPosIn, Direction direction, Random random, ResourceLocation resourceLocation)
+	public static void placeCenteredTemplate(IWorld world, BlockPos pos, Template template, PlacementSettings settings)
 	{
-		Rotation rotation = MSRotationUtil.fromDirection(direction);
-		TemplateManager templates = ((ServerWorld) world.getWorld()).getSaveHandler().getStructureTemplateManager();
-		Template template = templates.getTemplateDefaulted(resourceLocation);
-		PlacementSettings settings = new PlacementSettings().setRotation(rotation).setChunk(new ChunkPos(blockPosIn)).setBoundingBox(boundingBox).setRandom(random).addProcessor(StructureBlockRegistryProcessor.INSTANCE);
-		//PlacementSettings settings = new PlacementSettings().setRotation(rotation).setChunk(new ChunkPos(blockPosIn)).setBoundingBox(boundingBox).setRandom(random).addProcessor(StructureBlockRegistryProcessor.INSTANCE);
-		int sizeX = template.transformedSize(rotation).getX();
-		int sizeZ = template.transformedSize(rotation).getZ();
-		Debug.debugf("rotation.ordinal() = %s, Direction.byHorizontalIndex(rotation.ordinal()) = %s", rotation.ordinal(), Direction.byHorizontalIndex(rotation.ordinal()));
+		BlockPos center = new BlockPos((template.getSize().getX() - 1)/2, 0, (template.getSize().getZ() - 1)/2);
 		
-		//int xOffset = rand.nextInt(16 - size.getX()), zOffset = rand.nextInt(16 - size.getZ());
-		//BlockPos structurePos = template.getZeroPositionWithTransform(new BlockPos(blockPosIn.getX(), blockPosIn.getY(), blockPosIn.getZ()), Mirror.NONE, rotation);
-		if(direction == Direction.SOUTH || direction == Direction.WEST)
-		{
-			sizeX = -sizeX;
-			sizeZ = -sizeZ;
-		}
-		
-		template.addBlocksToWorld(world, blockPosIn.offset(direction, sizeX / 2).offset(direction.rotateY(), sizeZ / 2), settings);
-		//template.addBlocksToWorld(world, blockPosIn.offset(Direction.byHorizontalIndex(rotation.ordinal()), sizeX).offset(Direction.byHorizontalIndex(rotation.ordinal()).rotateY(), sizeZ), settings);
+		template.addBlocksToWorld(world, pos.subtract(center), settings.setCenterOffset(center));
 	}
 	
 	/**

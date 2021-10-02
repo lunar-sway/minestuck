@@ -14,6 +14,7 @@ import com.mraof.minestuck.tileentity.redstone.RemoteObserverTileEntity;
 import com.mraof.minestuck.tileentity.redstone.StatStorerTileEntity;
 import com.mraof.minestuck.tileentity.redstone.SummonerTileEntity;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.MSRotationUtil;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
@@ -38,6 +39,8 @@ import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.structure.ScatteredStructurePiece;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
+import net.minecraft.world.gen.feature.template.PlacementSettings;
+import net.minecraft.world.gen.feature.template.Template;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 import net.minecraftforge.common.util.Constants;
 
@@ -89,9 +92,10 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 	private EnumAspect worldAspect;
 	private EnumClass worldClass;
 	private TerrainLandType worldTerrain;
+	private Template bloodSymbolTemplate;
 	
 	
-	public TierOneDungeonPiece(ChunkGenerator<?> generator, Random random, int x, int z)
+	public TierOneDungeonPiece(TemplateManager templates, ChunkGenerator<?> generator, Random random, int x, int z)
 	{
 		super(MSStructurePieces.TIER_ONE_DUNGEON, random, x, 64, z, 82, 60, 82); //x = 42, z = 32
 		/*
@@ -104,6 +108,8 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 			}
 		boundingBox.offset(0, posHeightPicked - boundingBox.minY, 0); //takes the lowest Ocean Floor gen viable height + 5*/
 		boundingBox.offset(0, generator.getHeight(x, z, Heightmap.Type.OCEAN_FLOOR_WG) - boundingBox.minY - 1, 0); //takes the Ocean Floor gen viable height of the spot
+		
+		initTemplates(templates);
 	}
 	
 	public TierOneDungeonPiece(TemplateManager templates, CompoundNBT nbt)
@@ -113,6 +119,12 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 		bottomRoomSpawner2 = nbt.getBoolean("bottomRoomSpawner2");
 		randomRoomType = nbt.getInt("randomRoomType");
 		roomVariable1 = nbt.getInt("roomVariable1");
+		initTemplates(templates);
+	}
+	
+	private void initTemplates(TemplateManager templates)
+	{
+		bloodSymbolTemplate = templates.getTemplateDefaulted(new ResourceLocation(Minestuck.MOD_ID, "blood_symbol_no_background"));
 	}
 	
 	@Override
@@ -785,7 +797,7 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 			StructureBlockUtil.createCylinder(world, boundingBox, secondaryBlock, aspectSymbolPos.down(3), 12, 3);
 			StructureBlockUtil.createCylinder(world, boundingBox, lightBlock, aspectSymbolPos.down(1), 12, 1);
 			StructureBlockUtil.createCylinder(world, boundingBox, primaryBlock, aspectSymbolPos, 12, 1);
-			StructureBlockUtil.placeFeature(world, boundingBox, aspectSymbolPos, getCoordBaseMode(), rand, new ResourceLocation(Minestuck.MOD_ID, "blood_aspect_symbol"));
+			StructureBlockUtil.placeCenteredTemplate(world, aspectSymbolPos, bloodSymbolTemplate, new PlacementSettings().setBoundingBox(boundingBox).setRotation(MSRotationUtil.fromDirection(getCoordBaseMode())).setRandom(rand));
 			
 			//redstone components for lich fight and piston stairway unlock, inside aspect platform
 			StructureBlockUtil.placeSummoner(world, boundingBox, aspectSymbolPos.down(2).offset(getCoordBaseMode().rotateY(), 7), SummonerTileEntity.SummonType.LICH);

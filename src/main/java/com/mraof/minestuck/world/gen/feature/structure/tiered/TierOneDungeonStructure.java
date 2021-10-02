@@ -67,7 +67,7 @@ public class TierOneDungeonStructure extends ScatteredStructure<NoFeatureConfig>
 		{
 			int x = chunkX * 16 + rand.nextInt(16);
 			int z = chunkZ * 16 + rand.nextInt(16);
-			TierOneDungeonPiece mainPiece = new TierOneDungeonPiece(generator, rand, x, z);
+			TierOneDungeonPiece mainPiece = new TierOneDungeonPiece(templateManagerIn, generator, rand, x, z);
 			components.add(mainPiece);
 			/*
 			int y = mainPiece.getBoundingBox().minY; //determines height of pillars from the variable height of the main structure
