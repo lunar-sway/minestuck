@@ -1,7 +1,8 @@
 package com.mraof.minestuck.client;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.renderer.LandSkyRenderer;
+import com.mraof.minestuck.world.lands.LandProperties;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.world.DimensionRenderInfo;
 import net.minecraft.util.math.vector.Vector3d;
 
@@ -16,7 +17,8 @@ public class LandRenderInfo extends DimensionRenderInfo
 	@Override
 	public Vector3d getBrightnessDependentFogColor(Vector3d biomeFogColor, float brightness)
 	{
-		return biomeFogColor;
+		LandProperties properties = ClientDimensionData.getProperties(Minecraft.getInstance());
+		return properties != null ? properties.getFogColor() : biomeFogColor;
 	}
 	
 	@Override
