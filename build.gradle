@@ -5,7 +5,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.+', changing: true
     }
 }
 
@@ -61,9 +61,6 @@ minecraft {
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
-            // It seems to default to Minestuck_main, but is not set because it's actually called Minestuck.main?
-            ideaModule project.getName() +  '.main'
-
             // Add an uuid arg if you have specified it in a relevant gradle.properties file. NOTE: Do not use the gradle.properties file in the project! (because that one is supposed to be shared among all devs) Create one in your "gradle user home" instead.
             if (project.hasProperty('mc_uuid')) {
                 args '--uuid', project.getProperty('mc_uuid')
@@ -89,9 +86,6 @@ minecraft {
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
-            // It seems to default to Minestuck_main, but is not set because it's actually called Minestuck.main?
-            ideaModule project.getName() +  '.main'
-
             mods {
                 minestuck {
                     source sourceSets.main
@@ -106,9 +100,6 @@ minecraft {
 
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
-
-            // It seems to default to Minestuck_main, but is not set because it's actually called Minestuck.main?
-            ideaModule project.getName() +  '.main'
 
             args '--mod', 'minestuck', '--all', '--output', file('src/main/generated/resources/'), '--existing', sourceSets.main.resources.srcDirs[0]
 
