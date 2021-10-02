@@ -7,6 +7,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.client.ClientDimensionData;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -41,10 +42,10 @@ public class LandSkyRenderer implements ISkyRenderHandler
 		float skaiaBrightness = 0.5F +0.5F*skyClearness*heightModifier;
 		
 		RenderSystem.disableTexture();
-		Vector3d vec3d = world.getSkyColor(mc.gameRenderer.getMainCamera().getBlockPosition(), partialTicks);
-		float r = (float)vec3d.x*heightModifierDiminish;
-		float g = (float)vec3d.y*heightModifierDiminish;
-		float b = (float)vec3d.z*heightModifierDiminish;
+		Vector3d skyColor = getSkyColor(mc, world, partialTicks);
+		float r = (float)skyColor.x*heightModifierDiminish;
+		float g = (float)skyColor.y*heightModifierDiminish;
+		float b = (float)skyColor.z*heightModifierDiminish;
 		
 		FogRenderer.levelFogColor();
 		BufferBuilder buffer = Tessellator.getInstance().getBuilder();
@@ -123,6 +124,15 @@ public class LandSkyRenderer implements ISkyRenderHandler
 		matrixStack.popPose();
 		RenderSystem.enableTexture();
 		RenderSystem.depthMask(true);
+	}
+	
+	private Vector3d getSkyColor(Minecraft mc, ClientWorld world, float partialTicks)
+	{
+		LandProperties properties = ClientDimensionData.getProperties(world);
+		if (properties != null)
+			return properties.getSkyColor();
+		else
+			return world.getSkyColor(mc.gameRenderer.getMainCamera().getBlockPosition(), partialTicks);
 	}
 	
 	private static float calculateVeilAngle(ClientWorld world)

@@ -5,6 +5,7 @@ import com.mraof.minestuck.network.data.LandTypesDataPacket;
 import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -34,10 +35,12 @@ public class ClientDimensionData
 		return landTypes.containsKey(world);
 	}
 	
-	public static LandProperties getProperties(Minecraft minecraft)
+	public static LandProperties getProperties(ClientWorld level)
 	{
-		Objects.requireNonNull(minecraft.level);
-		RegistryKey<World> key = minecraft.level.dimension();
+		if (level == null)
+			return null;
+		
+		RegistryKey<World> key = level.dimension();
 		if (currentWorld != key)
 		{
 			currentWorld = key;

@@ -174,11 +174,6 @@ public class LandDimension extends Dimension
 			world.thunderingStrength = 1.0F;
 	}
 	
-	public Vec3d getSkyColor()
-	{
-		return properties.getSkyColor();
-	}
-	
 	@Nullable
 	@Override
 	public MusicTicker.MusicType getMusicType()

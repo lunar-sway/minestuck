@@ -17,7 +17,7 @@ public class LandRenderInfo extends DimensionRenderInfo
 	@Override
 	public Vector3d getBrightnessDependentFogColor(Vector3d biomeFogColor, float brightness)
 	{
-		LandProperties properties = ClientDimensionData.getProperties(Minecraft.getInstance());
+		LandProperties properties = ClientDimensionData.getProperties(Minecraft.getInstance().level);
 		return properties != null ? properties.getFogColor() : biomeFogColor;
 	}
 	
