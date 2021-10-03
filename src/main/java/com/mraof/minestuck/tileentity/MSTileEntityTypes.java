@@ -3,10 +3,7 @@ package com.mraof.minestuck.tileentity;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.tileentity.machine.*;
-import com.mraof.minestuck.tileentity.redstone.RemoteObserverTileEntity;
-import com.mraof.minestuck.tileentity.redstone.StatStorerTileEntity;
-import com.mraof.minestuck.tileentity.redstone.SummonerTileEntity;
-import com.mraof.minestuck.tileentity.redstone.WirelessRedstoneTransmitterTileEntity;
+import com.mraof.minestuck.tileentity.redstone.*;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -38,5 +35,6 @@ public class MSTileEntityTypes
 	public static final RegistryObject<TileEntityType<RemoteObserverTileEntity>> REMOTE_OBSERVER = REGISTER.register("remote_observer", () -> TileEntityType.Builder.create(RemoteObserverTileEntity::new, MSBlocks.REMOTE_OBSERVER).build(null));
 	public static final RegistryObject<TileEntityType<WirelessRedstoneTransmitterTileEntity>> WIRELESS_REDSTONE_TRANSMITTER = REGISTER.register("wireless_redstone_block", () -> TileEntityType.Builder.create(WirelessRedstoneTransmitterTileEntity::new, MSBlocks.WIRELESS_REDSTONE_TRANSMITTER).build(null));
 	public static final RegistryObject<TileEntityType<SummonerTileEntity>> SUMMONER = REGISTER.register("summoner", () -> TileEntityType.Builder.create(SummonerTileEntity::new, MSBlocks.SUMMONER).build(null));
+	public static final RegistryObject<TileEntityType<AreaEffectTileEntity>> AREA_EFFECT = REGISTER.register("area_effect", () -> TileEntityType.Builder.create(AreaEffectTileEntity::new, MSBlocks.AREA_EFFECT_BLOCK).build(null));
 	public static final RegistryObject<TileEntityType<LootBlockTileEntity>> LOOT_BLOCK = REGISTER.register("loot_block", () -> TileEntityType.Builder.create(LootBlockTileEntity::new, MSBlocks.LOOT_CHEST).build(null));
 }

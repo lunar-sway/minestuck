@@ -333,6 +333,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.SOLID_SWITCH, "Solid Switch");
 		addTooltip(MSBlocks.SOLID_SWITCH, "KACHUNK");
 		add(MSBlocks.SUMMONER, "Summoner");
+		add(MSBlocks.AREA_EFFECT_BLOCK, "Area Effect Block");
 		add(MSBlocks.LOOT_CHEST, "Loot Chest");
 		add(MSBlocks.GATE, "Gate");
 		add(MSBlocks.RETURN_NODE, "Return Node");

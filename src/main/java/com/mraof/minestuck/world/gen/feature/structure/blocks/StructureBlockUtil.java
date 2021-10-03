@@ -6,18 +6,13 @@ import com.mraof.minestuck.block.ReturnNodeBlock;
 import com.mraof.minestuck.block.redstone.WirelessRedstoneReceiverBlock;
 import com.mraof.minestuck.tileentity.DungeonDoorInterfaceTileEntity;
 import com.mraof.minestuck.tileentity.LootBlockTileEntity;
-import com.mraof.minestuck.tileentity.redstone.RemoteObserverTileEntity;
-import com.mraof.minestuck.tileentity.redstone.StatStorerTileEntity;
-import com.mraof.minestuck.tileentity.redstone.SummonerTileEntity;
-import com.mraof.minestuck.tileentity.redstone.WirelessRedstoneTransmitterTileEntity;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.MSRotationUtil;
-import com.mraof.minestuck.world.gen.feature.StructureBlockRegistryProcessor;
+import com.mraof.minestuck.tileentity.redstone.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.Fluids;
+import net.minecraft.potion.Effect;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.state.properties.ChestType;
 import net.minecraft.tileentity.ChestTileEntity;
@@ -25,13 +20,10 @@ import net.minecraft.tileentity.MobSpawnerTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
 import net.minecraft.world.gen.feature.template.Template;
-import net.minecraft.world.gen.feature.template.TemplateManager;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.Constants;
 
 import java.util.Objects;
@@ -217,6 +209,57 @@ public class StructureBlockUtil
 	}
 	
 	/**
+	 * Creates an area effect block with the designated potion type and area of effect(from pos)
+	 */
+	public static void placeAreaEffectBlock(IWorld world, MutableBoundingBox boundingBox, BlockPos blockPos, Effect effect, int effectAmplifier, BlockPos minEffectPos, BlockPos maxEffectPos)
+	{
+		if(boundingBox.isVecInside(blockPos))
+		{
+			world.setBlockState(blockPos, MSBlocks.AREA_EFFECT_BLOCK.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
+			MSBlocks.AREA_EFFECT_BLOCK.getDefaultState().createTileEntity(world);
+			TileEntity TE = world.getTileEntity(blockPos);
+			if(!(TE instanceof AreaEffectTileEntity))
+			{
+				TE = new AreaEffectTileEntity();
+				world.getWorld().setTileEntity(blockPos, TE);
+			}
+			AreaEffectTileEntity areaEffectTE = (AreaEffectTileEntity) TE;
+			
+			areaEffectTE.setEffect(effect);
+			areaEffectTE.setEffectAmplifier(effectAmplifier);
+			areaEffectTE.setMinEffectPos(minEffectPos);
+			areaEffectTE.setMaxEffectPos(maxEffectPos);
+		}
+	}
+	
+	/**
+	 * Creates an area effect block with the designated potion type and area of effect(from int)
+	 */
+	public static void placeAreaEffectBlock(IWorld world, MutableBoundingBox boundingBox, BlockPos blockPos, Effect effect, int effectAmplifier, int minAreaX, int minAreaY, int minAreaZ, int maxAreaX, int maxAreaY, int maxAreaZ)
+	{
+		if(boundingBox.isVecInside(blockPos))
+		{
+			BlockPos minEffectPos = new BlockPos(minAreaX, minAreaY, minAreaZ);
+			BlockPos maxEffectPos = new BlockPos(maxAreaX, maxAreaY, maxAreaZ);
+			
+			world.setBlockState(blockPos, MSBlocks.AREA_EFFECT_BLOCK.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
+			MSBlocks.AREA_EFFECT_BLOCK.getDefaultState().createTileEntity(world);
+			TileEntity TE = world.getTileEntity(blockPos);
+			if(!(TE instanceof AreaEffectTileEntity))
+			{
+				TE = new AreaEffectTileEntity();
+				world.getWorld().setTileEntity(blockPos, TE);
+			}
+			AreaEffectTileEntity areaEffectTE = (AreaEffectTileEntity) TE;
+			
+			areaEffectTE.setEffect(effect);
+			areaEffectTE.setEffectAmplifier(effectAmplifier);
+			areaEffectTE.setMinEffectPos(minEffectPos);
+			areaEffectTE.setMaxEffectPos(maxEffectPos);
+		}
+	}
+	
+	/**
 	 * Creates a dungeon door interface(with relevant data) and then the dungeon door blocks it will be meant to unlock
 	 */
 	public static void placeDungeonDoor(IWorld world, MutableBoundingBox boundingBox, BlockPos interfaceBlockPos, BlockPos minDoorBlockPos, BlockPos maxDoorBlockPos, EnumKeyType keyType)
@@ -243,7 +286,7 @@ public class StructureBlockUtil
 	 */
 	public static void placeCenteredTemplate(IWorld world, BlockPos pos, Template template, PlacementSettings settings)
 	{
-		BlockPos center = new BlockPos((template.getSize().getX() - 1)/2, 0, (template.getSize().getZ() - 1)/2);
+		BlockPos center = new BlockPos((template.getSize().getX() - 1) / 2, 0, (template.getSize().getZ() - 1) / 2);
 		
 		template.addBlocksToWorld(world, pos.subtract(center), settings.setCenterOffset(center));
 	}
@@ -262,9 +305,11 @@ public class StructureBlockUtil
 		boolean facingX = (maxPos.getX() - minPos.getX()) > 0;
 		boolean facingZ = (maxPos.getZ() - minPos.getZ()) > 0;
 		Direction dir;
-		if (facingX) {
+		if(facingX)
+		{
 			dir = facingZ ? Direction.EAST : Direction.NORTH;
-		} else {
+		} else
+		{
 			dir = facingZ ? Direction.SOUTH : Direction.WEST;
 		}
 		
@@ -281,14 +326,17 @@ public class StructureBlockUtil
 		BlockPos pos = startPos;
 		Direction direction = startDirection;
 		
-		while (true) {
+		while(true)
+		{
 			int hSize = direction.getAxis() == Direction.Axis.X ? xSize : zSize;
 			
-			for (int i = 0; i < hSize; i++) {
-				if (pos.getY() > maxY)
+			for(int i = 0; i < hSize; i++)
+			{
+				if(pos.getY() > maxY)
 					return;
 				
-				if (boundingBox.isVecInside(pos)) {
+				if(boundingBox.isVecInside(pos))
+				{
 					world.setBlockState(pos, blockState, Constants.BlockFlags.BLOCK_UPDATE);
 				}
 				
@@ -306,7 +354,7 @@ public class StructureBlockUtil
 	{
 		//TODO create flipped option, where the stairs generate upside down
 		
-		BlockPos backEdge = bottomPos.offset(direction, height -1).offset(direction.rotateY(), width - 1);
+		BlockPos backEdge = bottomPos.offset(direction, height - 1).offset(direction.rotateY(), width - 1);
 		
 		for(int y = 0; y < height; ++y)
 		{

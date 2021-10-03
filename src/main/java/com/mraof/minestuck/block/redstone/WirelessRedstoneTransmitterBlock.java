@@ -42,7 +42,7 @@ public class WirelessRedstoneTransmitterBlock extends Block
 	@SuppressWarnings("deprecation")
 	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
 	{
-		if(!player.isSneaking() && !player.isPotionActive(MSEffects.CREATIVE_SHOCK.get()))
+		if(!player.isSneaking() && (!player.isPotionActive(MSEffects.CREATIVE_SHOCK.get()) || player.isCreative()))
 		{
 			TileEntity tileEntity = worldIn.getTileEntity(pos);
 			if(tileEntity instanceof WirelessRedstoneTransmitterTileEntity)

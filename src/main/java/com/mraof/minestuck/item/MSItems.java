@@ -752,6 +752,7 @@ public class MSItems
 		registerItemBlock(registry, WIRELESS_REDSTONE_RECEIVER, MSItemGroup.LANDS);
 		registerItemBlock(registry, SOLID_SWITCH, MSItemGroup.LANDS);
 		registerItemBlock(registry, SUMMONER, MSItemGroup.LANDS);
+		registerItemBlock(registry, AREA_EFFECT_BLOCK, MSItemGroup.LANDS);
 		
 		registerItemBlock(registry, LOOT_CHEST, MSItemGroup.LANDS);
 		

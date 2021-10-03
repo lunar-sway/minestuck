@@ -4,6 +4,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.*;
 import com.mraof.minestuck.block.redstone.SolidSwitchBlock;
+import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
@@ -75,6 +76,7 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 	private static final int firstRoomMaxX = entryRoomMaxX + 45; //37+45 = 82
 	private static final int firstRoomMaxY = entryRoomMinY - 20;
 	private static final int firstRoomMaxZ = 57;
+	
 	private static final BlockState air = Blocks.AIR.getDefaultState();
 	//private BlockState ground; //dont use because ores get embedded in it
 	private BlockState primaryBlock;
@@ -797,7 +799,7 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 			StructureBlockUtil.createCylinder(world, boundingBox, secondaryBlock, aspectSymbolPos.down(3), 12, 3);
 			StructureBlockUtil.createCylinder(world, boundingBox, lightBlock, aspectSymbolPos.down(1), 12, 1);
 			StructureBlockUtil.createCylinder(world, boundingBox, primaryBlock, aspectSymbolPos, 12, 1);
-			StructureBlockUtil.placeCenteredTemplate(world, aspectSymbolPos, bloodSymbolTemplate, new PlacementSettings().setBoundingBox(boundingBox).setRotation(MSRotationUtil.fromDirection(getCoordBaseMode())).setRandom(rand));
+			StructureBlockUtil.placeCenteredTemplate(world, aspectSymbolPos.offset(getCoordBaseMode().rotateY()), bloodSymbolTemplate, new PlacementSettings().setBoundingBox(boundingBox).setRotation(MSRotationUtil.fromDirection(getCoordBaseMode())));
 			
 			//redstone components for lich fight and piston stairway unlock, inside aspect platform
 			StructureBlockUtil.placeSummoner(world, boundingBox, aspectSymbolPos.down(2).offset(getCoordBaseMode().rotateY(), 7), SummonerTileEntity.SummonType.LICH);
@@ -817,10 +819,25 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 				StructureBlockUtil.placeWirelessRelay(world, boundingBox, aspectSymbolPos.down(3).offset(getCoordBaseMode().rotateYCCW(), stairPuzzleIterate * 2 + 1), new BlockPos(
 						getXWithOffset(firstRoomMinX + 2, (firstRoomMinZ + firstRoomMaxZ) / 2 - 2 + stairPuzzleIterate),
 						getYWithOffset(firstRoomMinY + 4 + stairPuzzleIterate),
-						getZWithOffset(firstRoomMinX + 2, (firstRoomMinZ + firstRoomMaxZ) / 2 - 2 + stairPuzzleIterate)), false);
+						getZWithOffset(firstRoomMinX + 2, (firstRoomMinZ + firstRoomMaxZ) / 2 - 2 + stairPuzzleIterate)), true);
 				setBlockState(world, Blocks.STICKY_PISTON.getDefaultState().with(PistonBlock.FACING, Direction.EAST), firstRoomMinX + 3, firstRoomMinY + 4 + stairPuzzleIterate, (firstRoomMinZ + firstRoomMaxZ) / 2 - 2 + stairPuzzleIterate, boundingBox);
 				setBlockState(world, secondaryDecorativeBlock, firstRoomMinX + 4, firstRoomMinY + 4 + stairPuzzleIterate, (firstRoomMinZ + firstRoomMaxZ) / 2 - 2 + stairPuzzleIterate, boundingBox);
 			}
+			
+			//area effect block/how to complete puzzle
+			BlockPos areaEffectBlockPos = new BlockPos(
+					getXWithOffset(firstRoomMinX + 2, (firstRoomMinZ + firstRoomMaxZ) / 2 - 2),
+					getYWithOffset(firstRoomMinY + 9),
+					getZWithOffset(firstRoomMinX + 2, (firstRoomMinZ + firstRoomMaxZ) / 2 - 2));
+			setBlockState(world, MSBlocks.SOLID_SWITCH.getDefaultState().with(SolidSwitchBlock.POWERED, true), areaEffectBlockPos.getX(), areaEffectBlockPos.up().getY(), areaEffectBlockPos.getZ(), boundingBox); //power for area effect block
+			StructureBlockUtil.placeAreaEffectBlock(world, boundingBox, areaEffectBlockPos,
+					MSEffects.CREATIVE_SHOCK.get(), 0, new BlockPos(
+					getXWithOffset(lowerRoomMinX, firstRoomMinZ),
+					getYWithOffset(firstRoomMinY),
+					getZWithOffset(lowerRoomMinX, firstRoomMinZ)), new BlockPos(
+					getXWithOffset(firstRoomMaxX, firstRoomMaxZ),
+					getYWithOffset(entryRoomMaxY),
+					getZWithOffset(firstRoomMaxX, firstRoomMaxZ)));
 		} else if(worldAspect == EnumAspect.LIGHT)
 		{
 		

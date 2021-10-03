@@ -1,7 +1,6 @@
 package com.mraof.minestuck.block.redstone;
 
 import com.mraof.minestuck.block.MSProperties;
-import com.mraof.minestuck.util.Debug;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -88,6 +87,15 @@ public class WirelessRedstoneReceiverBlock extends Block
 		}
 		
 		return ActionResultType.PASS;
+	}
+	
+	@Override
+	public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving)
+	{
+		super.onBlockAdded(state, worldIn, pos, oldState, isMoving);
+		
+		if(!worldIn.getPendingBlockTicks().isTickScheduled(new BlockPos(pos), this))
+			worldIn.getPendingBlockTicks().scheduleTick(new BlockPos(pos), this, 200);
 	}
 	
 	@Override
