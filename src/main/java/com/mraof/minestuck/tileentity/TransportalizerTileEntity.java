@@ -20,11 +20,13 @@ import net.minecraft.util.math.GlobalPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Optional;
 
 public class TransportalizerTileEntity extends OnCollisionTeleporterTileEntity<Entity> implements INameable
 {
@@ -116,14 +118,14 @@ public class TransportalizerTileEntity extends OnCollisionTeleporterTileEntity<E
 			
 			if(!destTransportalizer.getEnabled()) { return; } // Fail silently to make it look as though the player entered an ID that doesn't map to a transportalizer.
 			
-			if(isDimensionForbidden(world.dimension()))
+			if(isDimensionForbidden(level))
 			{
 				entity.setPortalCooldown();
 				if(entity instanceof ServerPlayerEntity)
 					entity.sendMessage(new TranslationTextComponent(FORBIDDEN), Util.NIL_UUID);
 				return;
 			}
-			if(isDimensionForbidden(location.dimension()))
+			if(isDimensionForbidden(world))
 			{
 				entity.setPortalCooldown();
 				if(entity instanceof ServerPlayerEntity)
@@ -160,12 +162,15 @@ public class TransportalizerTileEntity extends OnCollisionTeleporterTileEntity<E
 		return block0.getMaterial().blocksMotion() || block1.getMaterial().blocksMotion();
 	}
 	
-	private static boolean isDimensionForbidden(RegistryKey<World> dim)
+	private static boolean isDimensionForbidden(World world)
 	{
-		List<String> forbiddenTypes = MinestuckConfig.SERVER.forbiddenDimensionTypesTpz.get();
-		List<String> forbiddenDims = MinestuckConfig.SERVER.forbiddenModDimensionsTpz.get();
-		ResourceLocation modDim = null;//dim.getModType() != null ? dim.getModType().getRegistryName() : null; TODO
-		return forbiddenTypes.contains(String.valueOf(dim.getRegistryName())) || forbiddenDims.contains(String.valueOf(modDim));
+		List<String> forbiddenWorlds = MinestuckConfig.SERVER.forbiddenWorldsTpz.get();
+		List<String> forbiddenDimTypes = MinestuckConfig.SERVER.forbiddenDimensionTypesTpz.get();
+		
+		Optional<RegistryKey<DimensionType>> typeKey = world.registryAccess().dimensionTypes().getResourceKey(world.dimensionType());
+		
+		return forbiddenWorlds.contains(String.valueOf(world.dimension().location()))
+				|| typeKey.isPresent() && forbiddenDimTypes.contains(String.valueOf(typeKey.get().location()));
 	}
 	
 	public String getId()
