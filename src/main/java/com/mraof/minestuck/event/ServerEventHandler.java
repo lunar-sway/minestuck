@@ -221,8 +221,6 @@ public class ServerEventHandler
 	public static void playerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event)
 	{
 		TitleSelectionHook.cancelSelection((ServerPlayerEntity) event.getPlayer());
-		
-		PlayerSavedData.getData((ServerPlayerEntity) event.getPlayer()).getEcheladder().resendAttributes(event.getPlayer());
 	}
 	
 	@SubscribeEvent(priority=EventPriority.LOW, receiveCanceled=false)

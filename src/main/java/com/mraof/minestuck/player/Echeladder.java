@@ -184,13 +184,6 @@ public class Echeladder
 		attribute.addPermanentModifier(modifier);
 	}
 	
-	public void resendAttributes(PlayerEntity player)
-	{
-		/*Set<IAttributeInstance> attributesToSend = ((AttributeMap) player.getAttributes()).getDirtyInstances();
-		TODO is this still needed, and if so, how?
-		attributesToSend.add(player.getAttribute(SharedMonsterAttributes.MAX_HEALTH));*/
-	}
-	
 	public void saveEcheladder(CompoundNBT nbt)
 	{
 		nbt.putInt("rung", rung);
