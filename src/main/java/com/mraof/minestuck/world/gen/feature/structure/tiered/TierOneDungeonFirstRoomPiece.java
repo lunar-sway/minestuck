@@ -53,10 +53,10 @@ public class TierOneDungeonFirstRoomPiece extends ImprovedStructurePiece
 	
 	/**/ //these are offset way too much
 	private static final int firstRoomMinX = 42;
-	private static final int firstRoomMinY = 0;
+	private static final int firstRoomMinY = -50;
 	private static final int firstRoomMinZ = 20;
 	private static final int firstRoomMaxX = 82;
-	private static final int firstRoomMaxY = 30;
+	private static final int firstRoomMaxY = -20;
 	private static final int firstRoomMaxZ = 57;
 	/**/
 	
@@ -88,11 +88,11 @@ public class TierOneDungeonFirstRoomPiece extends ImprovedStructurePiece
 	private TerrainLandType worldTerrain;
 	private Template bloodSymbolTemplate;
 	
-	public TierOneDungeonFirstRoomPiece(TemplateManager templates, ChunkGenerator<?> generator, Random random, int x, int y, int z) //this constructor is used when the structure is first initialized
+	public TierOneDungeonFirstRoomPiece(TemplateManager templates, Direction direction, int x, int y, int z) //this constructor is used when the structure is first initialized
 	{
 		super(MSStructurePieces.TIER_ONE_DUNGEON_FIRST_ROOM, 0);
 		
-		setRandomDirection(random);
+		setCoordBaseMode(direction);
 		setBounds(x, y, z, 82, 50, 82);
 		
 		initTemplates(templates);
