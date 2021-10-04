@@ -307,27 +307,25 @@ public class TierOneDungeonFirstRoomPiece extends ImprovedStructurePiece
 			setBlockState(world, MSBlocks.SOLID_SWITCH.getDefaultState().with(SolidSwitchBlock.POWERED, true), firstRoomMinX + 12 + (roomVariable1 - 3), firstRoomMaxY - 20, firstRoomMaxZ + 6, boundingBox); //power for transmitter
 			setBlockState(world, Blocks.REDSTONE_WIRE.getDefaultState(), firstRoomMinX + 16, firstRoomMaxY - 8, firstRoomMaxZ - 1, boundingBox); //wire above receiver, both power pistons
 			fillWithAir(world, boundingBox, firstRoomMinX + 16, firstRoomMaxY - 9, firstRoomMaxZ - 3, firstRoomMinX + 16, firstRoomMaxY - 8, firstRoomMaxZ - 3); //hole for piston
-			fillWithBlocks(world, boundingBox, firstRoomMinX + 16, firstRoomMaxY - 9, firstRoomMaxZ - 2, firstRoomMinX + 16, firstRoomMaxY - 8, firstRoomMaxZ - 2, Blocks.STICKY_PISTON.getDefaultState().with(PistonBlock.FACING, Direction.SOUTH), Blocks.STICKY_PISTON.getDefaultState(), false);
+			fillWithBlocks(world, boundingBox, firstRoomMinX + 16, firstRoomMaxY - 9, firstRoomMaxZ - 2, firstRoomMinX + 16, firstRoomMaxY - 8, firstRoomMaxZ - 2, Blocks.STICKY_PISTON.getDefaultState().with(PistonBlock.FACING, Direction.NORTH), Blocks.STICKY_PISTON.getDefaultState(), false);
 			fillWithBlocks(world, boundingBox, firstRoomMinX + 16, firstRoomMaxY - 9, firstRoomMaxZ - 4, firstRoomMinX + 16, firstRoomMaxY - 8, firstRoomMaxZ - 4, MSBlocks.DUNGEON_DOOR.getDefaultState(), MSBlocks.DUNGEON_DOOR.getDefaultState(), false);
 			
 			//stairs leading from puzzle room to lower level
-			BlockPos stairsAreaMin = getActualPos(firstRoomMaxX - 2, firstRoomMaxY - 25, firstRoomMinZ + 4);
-			BlockPos stairsAreaMax = getActualPos(firstRoomMaxX - 1, firstRoomMaxY - 7, firstRoomMaxZ - 5);
-			//StructureBlockUtil.fillWithBlocksFromPos(world, boundingBox, air, stairsAreaMin, stairsAreaMax);
+			BlockPos stairsStart = getActualPos(firstRoomMaxX - 1, firstRoomMaxY - 25, firstRoomMinZ + 17);
 			fillWithAir(world, boundingBox, firstRoomMaxX - 2, firstRoomMaxY - 25, firstRoomMinZ + 4, firstRoomMaxX - 1, firstRoomMaxY - 7, firstRoomMaxZ - 5);
-			StructureBlockUtil.createStairs(world, boundingBox, primaryBlock, primaryStairBlock.with(StairsBlock.FACING, getCoordBaseMode()), stairsAreaMin.offset(getCoordBaseMode(), 13), 16, 2, getCoordBaseMode(), false);
+			StructureBlockUtil.createStairs(world, boundingBox, primaryBlock, primaryStairBlock.with(StairsBlock.FACING, getCoordBaseMode()), stairsStart, 16, 2, getCoordBaseMode(), false);
 			fillWithBlocks(world, boundingBox,
 					firstRoomMaxX - 1, firstRoomMaxY - 9, firstRoomMinZ + 12,
 					firstRoomMaxX - 1, firstRoomMaxY - 8, firstRoomMinZ + 12,
 					primaryPillarBlock, primaryPillarBlock, false);
 			setBlockState(world, lightBlock, firstRoomMaxX - 1, firstRoomMaxY - 7, firstRoomMinZ + 12, boundingBox);
-			setBlockState(world, primaryStairBlock.with(StairsBlock.FACING, getCoordBaseMode().rotateY()).with(StairsBlock.HALF, Half.TOP), firstRoomMaxX - 1, firstRoomMaxY - 10, firstRoomMinZ + 12, boundingBox);
+			setBlockState(world, primaryStairBlock.with(StairsBlock.FACING, Direction.EAST).with(StairsBlock.HALF, Half.TOP), firstRoomMaxX - 1, firstRoomMaxY - 10, firstRoomMinZ + 12, boundingBox);
 			fillWithBlocks(world, boundingBox,
 					firstRoomMaxX - 1, firstRoomMaxY - 9, firstRoomMaxZ - 12,
 					firstRoomMaxX - 1, firstRoomMaxY - 8, firstRoomMaxZ - 12,
 					primaryPillarBlock, primaryPillarBlock, false);
 			setBlockState(world, lightBlock, firstRoomMaxX - 1, firstRoomMaxY - 7, firstRoomMaxZ - 12, boundingBox);
-			setBlockState(world, primaryStairBlock.with(StairsBlock.FACING, getCoordBaseMode().rotateY()).with(StairsBlock.HALF, Half.TOP), firstRoomMaxX - 1, firstRoomMaxY - 10, firstRoomMaxZ - 12, boundingBox);
+			setBlockState(world, primaryStairBlock.with(StairsBlock.FACING, Direction.EAST).with(StairsBlock.HALF, Half.TOP), firstRoomMaxX - 1, firstRoomMaxY - 10, firstRoomMaxZ - 12, boundingBox);
 			
 			//edges of lower level
 			fillWithAir(world, boundingBox,
