@@ -119,25 +119,6 @@ public class LandDimension extends Dimension
 		return false;
 	}
 	
-	@Override
-	public void updateWeather(Runnable defaultLogic)
-	{
-		super.updateWeather(defaultLogic);
-		forceWeatherCheck();
-	}
-	
-	@Override
-	public void calculateInitialWeather()
-	{
-		super.calculateInitialWeather();
-		forceWeatherCheck();
-	}
-	
-	private void forceWeatherCheck()
-	{
-	
-	}
-	
 	@Nullable
 	@Override
 	public MusicTicker.MusicType getMusicType()

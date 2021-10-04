@@ -41,7 +41,6 @@ public class LandChunkGenerator extends AbstractChunkGenerator
 	public final LandTypePair landTypes;
 	public final StructureBlockRegistry blockRegistry;
 	public final LandBiomeHolder biomes;
-	public final LandProperties.ForceType forceRain, forceThunder;
 	private final Registry<Biome> registry;
 	private final GristTypeLayer anyGristLayer, commonGristLayer, uncommonGristLayer;
 	
@@ -52,17 +51,15 @@ public class LandChunkGenerator extends AbstractChunkGenerator
 	
 	private LandChunkGenerator(long seed, LandBiomeSetWrapper baseBiomes, Registry<Biome> registry, LandProperties properties, LandGenSettings genSettings)
 	{
-		this(seed, new LandBiomeHolder(baseBiomes, genSettings, properties), properties, registry, genSettings);
+		this(seed, new LandBiomeHolder(baseBiomes, genSettings, properties), registry, genSettings);
 	}
 	
-	private LandChunkGenerator(long seed, LandBiomeHolder biomes, LandProperties properties, Registry<Biome> registry, LandGenSettings genSettings)
+	private LandChunkGenerator(long seed, LandBiomeHolder biomes, Registry<Biome> registry, LandGenSettings genSettings)
 	{
 		super(new LandBiomeProvider(seed, biomes, genSettings), new LandBiomeProvider(seed, biomes.baseBiomes, genSettings),
 				seed, genSettings.createDimensionSettings());
 		
 		this.biomes = biomes;
-		forceRain = properties.forceRain;
-		forceThunder = properties.forceThunder;
 		this.registry = registry;
 		landTypes = genSettings.getLandTypes();
 		blockRegistry = genSettings.getBlockRegistry();
