@@ -77,9 +77,7 @@ public class TierOneDungeonPiece extends ImprovedStructurePiece
 	private BlockState primaryDecorativeBlock;
 	private BlockState primaryPillarBlock;
 	private BlockState primarySlabBlock;
-	private BlockState primaryStairBlock;
 	private BlockState secondaryBlock;
-	private BlockState secondaryDecorativeBlock;
 	//private BlockState aspectSapling;
 	private BlockState fluid;
 	private BlockState lightBlock;
@@ -87,7 +85,6 @@ public class TierOneDungeonPiece extends ImprovedStructurePiece
 	private EnumAspect worldAspect;
 	private EnumClass worldClass;
 	private TerrainLandType worldTerrain;
-	private Template bloodSymbolTemplate;
 	
 	
 	public TierOneDungeonPiece(TemplateManager templates, ChunkGenerator<?> generator, Random random, int x, int z)
@@ -96,8 +93,6 @@ public class TierOneDungeonPiece extends ImprovedStructurePiece
 		
 		setRandomDirection(random);
 		setBoundsWithWorldHeight(generator, x, z, 82, 60, 82, -1, Heightmap.Type.OCEAN_FLOOR_WG); //x = 42, z = 32
-		
-		initTemplates(templates);
 	}
 	
 	public TierOneDungeonPiece(TemplateManager templates, CompoundNBT nbt)
@@ -107,12 +102,6 @@ public class TierOneDungeonPiece extends ImprovedStructurePiece
 		bottomRoomSpawner2 = nbt.getBoolean("bottomRoomSpawner2");
 		randomRoomType = nbt.getInt("randomRoomType");
 		roomVariable1 = nbt.getInt("roomVariable1");
-		initTemplates(templates);
-	}
-	
-	private void initTemplates(TemplateManager templates)
-	{
-		bloodSymbolTemplate = templates.getTemplateDefaulted(new ResourceLocation(Minestuck.MOD_ID, "blood_symbol_no_background"));
 	}
 	
 	@Override
@@ -120,16 +109,12 @@ public class TierOneDungeonPiece extends ImprovedStructurePiece
 	{
 		StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings()); //creates set of blocks relevant to the terrain and aspect of a player's land(primarily terrain)
 		
-		//ground = blocks.getBlockState("ground");
 		primaryBlock = blocks.getBlockState("structure_primary");
 		primaryCrackedBlock = blocks.getBlockState("structure_primary_cracked");
 		primaryDecorativeBlock = blocks.getBlockState("structure_primary_decorative");
 		primaryPillarBlock = blocks.getBlockState("structure_primary_pillar");
 		primarySlabBlock = blocks.getBlockState("structure_primary_slab");
-		primaryStairBlock = blocks.getBlockState("structure_primary_stairs");
 		secondaryBlock = blocks.getBlockState("structure_secondary");
-		secondaryDecorativeBlock = blocks.getBlockState("structure_secondary_decorative");
-		//aspectSapling = blocks.getBlockState("aspect_sapling");
 		fluid = blocks.getBlockState("fall_fluid");
 		lightBlock = blocks.getBlockState("light_block");
 		

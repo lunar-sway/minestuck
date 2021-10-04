@@ -58,29 +58,14 @@ public class TierOneDungeonFirstRoomPiece extends ImprovedStructurePiece
 	private static final int firstRoomMaxX = 82;
 	private static final int firstRoomMaxY = -20;
 	private static final int firstRoomMaxZ = 57;
-	/**/
-	
-	/* //using these causes the world to no longer load new chunks
-	private static final int firstRoomMinX = 0;
-	private static final int firstRoomMinY = 0;
-	private static final int firstRoomMinZ = 0;
-	private static final int firstRoomMaxX = 40;
-	private static final int firstRoomMaxY = 30;
-	private static final int firstRoomMaxZ = 37;
-	/**/
 	
 	private static final BlockState air = Blocks.AIR.getDefaultState();
-	//private BlockState ground; //dont use because ores get embedded in it
 	private BlockState primaryBlock;
-	private BlockState primaryCrackedBlock;
 	private BlockState primaryDecorativeBlock;
 	private BlockState primaryPillarBlock;
-	private BlockState primarySlabBlock;
 	private BlockState primaryStairBlock;
 	private BlockState secondaryBlock;
 	private BlockState secondaryDecorativeBlock;
-	//private BlockState aspectSapling;
-	private BlockState fluid;
 	private BlockState lightBlock;
 	
 	private EnumAspect worldAspect;
@@ -125,19 +110,14 @@ public class TierOneDungeonFirstRoomPiece extends ImprovedStructurePiece
 	@Override
 	public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGenerator, Random randomIn, MutableBoundingBox boundingBoxIn, ChunkPos chunkPosIn)
 	{
-		Debug.debugf("TierOneDungeonFirstRoomPiece");
 		StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGenerator.getSettings());
 		
 		primaryBlock = blocks.getBlockState("structure_primary");
-		primaryCrackedBlock = blocks.getBlockState("structure_primary_cracked");
 		primaryDecorativeBlock = blocks.getBlockState("structure_primary_decorative");
 		primaryPillarBlock = blocks.getBlockState("structure_primary_pillar");
-		primarySlabBlock = blocks.getBlockState("structure_primary_slab");
 		primaryStairBlock = blocks.getBlockState("structure_primary_stairs");
 		secondaryBlock = blocks.getBlockState("structure_secondary");
 		secondaryDecorativeBlock = blocks.getBlockState("structure_secondary_decorative");
-		//aspectSapling = blocks.getBlockState("aspect_sapling");
-		fluid = blocks.getBlockState("fall_fluid");
 		lightBlock = blocks.getBlockState("light_block");
 		
 		SburbConnection sburbConnection = SburbHandler.getConnectionForDimension(worldIn.getWorld().getServer(), worldIn.getDimension().getType());
