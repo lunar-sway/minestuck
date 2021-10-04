@@ -18,6 +18,7 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MSRotationUtil;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
+import com.mraof.minestuck.world.gen.feature.structure.ImprovedStructurePiece;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockUtil;
 import com.mraof.minestuck.world.lands.LandInfo;
@@ -38,7 +39,6 @@ import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.gen.feature.structure.ScatteredStructurePiece;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
 import net.minecraft.world.gen.feature.template.Template;
@@ -47,7 +47,7 @@ import net.minecraftforge.common.util.Constants;
 
 import java.util.Random;
 
-public class TierOneDungeonPiece extends ScatteredStructurePiece
+public class TierOneDungeonPiece extends ImprovedStructurePiece
 {
 	private final TierOneDungeonPiece.Selector DECAYED_BLOCKS = new TierOneDungeonPiece.Selector();
 	
@@ -99,17 +99,10 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 	
 	public TierOneDungeonPiece(TemplateManager templates, ChunkGenerator<?> generator, Random random, int x, int z)
 	{
-		super(MSStructurePieces.TIER_ONE_DUNGEON, random, x, 64, z, 82, 60, 82); //x = 42, z = 32
-		/*
-		int posHeightPicked = Integer.MAX_VALUE;
-		for(int xPos = boundingBox.minX; xPos <= boundingBox.maxX; xPos++)
-			for(int zPos = boundingBox.minZ; zPos <= boundingBox.maxZ; zPos++)
-			{
-				int posHeight = generator.getHeight(xPos, zPos, Heightmap.Type.OCEAN_FLOOR_WG); //posHeight picks the first solid block, ignoring water
-				posHeightPicked = Math.min(posHeightPicked, posHeight); //with each new x/z coord it checks whether or not it is lower than the previous
-			}
-		boundingBox.offset(0, posHeightPicked - boundingBox.minY, 0); //takes the lowest Ocean Floor gen viable height + 5*/
-		boundingBox.offset(0, generator.getHeight(x, z, Heightmap.Type.OCEAN_FLOOR_WG) - boundingBox.minY - 1, 0); //takes the Ocean Floor gen viable height of the spot
+		super(MSStructurePieces.TIER_ONE_DUNGEON, 0);
+		
+		setRandomDirection(random);
+		setBoundsWithWorldHeight(generator, x, z, 82, 60, 82, -1, Heightmap.Type.OCEAN_FLOOR_WG); //x = 42, z = 32
 		
 		initTemplates(templates);
 	}
@@ -865,7 +858,6 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 	@Override
 	protected void readAdditional(CompoundNBT tagCompound)
 	{
-		super.readAdditional(tagCompound);
 		tagCompound.putBoolean("bottomRoomSpawner1", bottomRoomSpawner1); //spawner type room only
 		tagCompound.putBoolean("bottomRoomSpawner2", bottomRoomSpawner2); //spawner type room only
 		tagCompound.putInt("randomRoomType", randomRoomType);

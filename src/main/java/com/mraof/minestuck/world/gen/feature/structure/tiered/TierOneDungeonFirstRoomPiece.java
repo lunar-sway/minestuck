@@ -19,6 +19,7 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MSRotationUtil;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
+import com.mraof.minestuck.world.gen.feature.structure.ImprovedStructurePiece;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockUtil;
 import com.mraof.minestuck.world.lands.LandInfo;
@@ -43,7 +44,7 @@ import net.minecraftforge.common.util.Constants;
 
 import java.util.Random;
 
-public class TierOneDungeonFirstRoomPiece extends ScatteredStructurePiece
+public class TierOneDungeonFirstRoomPiece extends ImprovedStructurePiece
 {
 	private boolean createRan = false; //boolean check to prevent certain aspects from generating several times over or changing
 	private boolean spawner1, spawner2;
@@ -89,9 +90,10 @@ public class TierOneDungeonFirstRoomPiece extends ScatteredStructurePiece
 	
 	public TierOneDungeonFirstRoomPiece(TemplateManager templates, ChunkGenerator<?> generator, Random random, int x, int y, int z) //this constructor is used when the structure is first initialized
 	{
-		super(MSStructurePieces.TIER_ONE_DUNGEON_FIRST_ROOM, random, x, 64, z, 82, 50, 82);
-		//super(MSStructurePieces.TIER_ONE_DUNGEON_FIRST_ROOM, random, x - 20, y - 15, z - 20, 40, 30, 40);
-		boundingBox.offset(43, -20, 20);
+		super(MSStructurePieces.TIER_ONE_DUNGEON_FIRST_ROOM, 0);
+		
+		setRandomDirection(random);
+		setBounds(x, y, z, 82, 50, 82);
 		
 		initTemplates(templates);
 	}
@@ -113,7 +115,6 @@ public class TierOneDungeonFirstRoomPiece extends ScatteredStructurePiece
 		tagCompound.putBoolean("sp1", spawner1); //spawner type room only
 		tagCompound.putBoolean("sp2", spawner2); //spawner type room only
 		tagCompound.putInt("randomRoomType", randomRoomType);
-		super.readAdditional(tagCompound);
 	}
 	
 	private void initTemplates(TemplateManager templates)
