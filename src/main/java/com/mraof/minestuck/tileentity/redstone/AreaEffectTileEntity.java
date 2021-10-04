@@ -3,7 +3,6 @@ package com.mraof.minestuck.tileentity.redstone;
 import com.mraof.minestuck.block.redstone.AreaEffectBlock;
 import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
-import com.mraof.minestuck.util.Debug;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -61,8 +60,6 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 	
 	public Effect getEffect()
 	{
-		if(effect != null)
-			Debug.debugf("getEffect = %s", effect);
 		if(effect == null)
 			effect = MSEffects.CREATIVE_SHOCK.get();
 		return this.effect;
@@ -114,7 +111,6 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 		Effect effectRead = Effect.get(compound.getInt("effect"));
 		if(effectRead != null)
 		{
-			Debug.debugf("read effect = %s", effectRead);
 			effect = effectRead;
 		}
 		
@@ -137,7 +133,6 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 		super.write(compound);
 		
 		compound.putInt("effect", Effect.getId(getEffect()));
-		Debug.debugf("write effect id = %s", Effect.getId(getEffect()));
 		compound.putInt("effectAmplifier", effectAmplifier);
 		
 		getMinEffectPos();
