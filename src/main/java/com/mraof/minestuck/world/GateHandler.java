@@ -97,7 +97,7 @@ public class GateHandler
 				}
 			}
 		else
-			Debug.errorf("Unexpected error: Couldn't find position for land gate for dimension %d.", world.dimension());
+			Debug.errorf("Unexpected error: Couldn't find position for land gate for dimension %s.", world.dimension());
 		return null;
 	}
 	
