@@ -438,7 +438,7 @@ public class TierOneDungeonFirstRoomPiece extends ImprovedStructurePiece
 			StructureBlockUtil.createCylinder(world, boundingBox, secondaryBlock, aspectSymbolPos.down(3), 13, 3);
 			StructureBlockUtil.createCylinder(world, boundingBox, lightBlock, aspectSymbolPos.down(1), 13, 1);
 			StructureBlockUtil.createCylinder(world, boundingBox, primaryBlock, aspectSymbolPos, 13, 1);
-			StructureBlockUtil.placeCenteredTemplate(world, aspectSymbolPos.offset(getCoordBaseMode().rotateY()), bloodSymbolTemplate, new PlacementSettings().setBoundingBox(boundingBox).setRotation(MSRotationUtil.fromDirection(getCoordBaseMode())));
+			StructureBlockUtil.placeCenteredTemplate(world, aspectSymbolPos, bloodSymbolTemplate, new PlacementSettings().setBoundingBox(boundingBox).setRotation(MSRotationUtil.fromDirection(getCoordBaseMode().getOpposite())));
 			
 			//redstone components for lich fight and piston stairway unlock, inside aspect platform
 			StructureBlockUtil.placeSummoner(world, boundingBox, aspectSymbolPos.down(2).offset(getCoordBaseMode().rotateY(), 7), SummonerTileEntity.SummonType.LICH);
