@@ -297,10 +297,7 @@ public class TierOneDungeonFirstRoomPiece extends ImprovedStructurePiece
 				//CompoundNBT spawnerNBT = new CompoundNBT();
 				//spawnerNBT.("SpawnData", 4);
 				
-				spawnerPos = new BlockPos(
-						getXWithOffset(firstRoomMinX + 5 + xIterate * 10, firstRoomMinZ + 2),
-						getYWithOffset(firstRoomMaxY - 5),
-						getZWithOffset(firstRoomMinX + 5 + xIterate * 10, firstRoomMinZ + 2));
+				spawnerPos = getActualPos(firstRoomMinX + 5 + xIterate * 10, firstRoomMaxY - 5,  firstRoomMinZ + 2);
 				world.setBlockState(spawnerPos.down(), lightBlock, Constants.BlockFlags.BLOCK_UPDATE);
 				StructureBlockUtil.placeSpawner(spawnerPos, world, boundingBox, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
 				//TileEntity spawnerTE = world.getTileEntity(spawnerPos); //TODO figure out how to change potion effects of spawned entities(give them speed) and increase range at which they spawn
@@ -309,10 +306,7 @@ public class TierOneDungeonFirstRoomPiece extends ImprovedStructurePiece
 				//					((MobSpawnerTileEntity) spawnerTE).write(spawnerNBT);
 				//				}
 				//TODO every maxY value below this line has been shifted down, shift down the above
-				spawnerPos = new BlockPos(
-						getXWithOffset(firstRoomMinX + 5 + xIterate * 10, firstRoomMaxZ - 2),
-						getYWithOffset(firstRoomMaxY - 5),
-						getZWithOffset(firstRoomMinX + 5 + xIterate * 10, firstRoomMaxZ - 2));
+				spawnerPos = getActualPos(firstRoomMinX + 5 + xIterate * 10, firstRoomMaxY - 5, firstRoomMaxZ - 2);
 				world.setBlockState(spawnerPos.down(), lightBlock, Constants.BlockFlags.BLOCK_UPDATE);
 				StructureBlockUtil.placeSpawner(spawnerPos, world, boundingBox, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
 				
@@ -327,14 +321,8 @@ public class TierOneDungeonFirstRoomPiece extends ImprovedStructurePiece
 			fillWithAir(world, boundingBox, firstRoomMinX + 9, firstRoomMaxY - 9, firstRoomMaxZ - 3, firstRoomMinX + 10, firstRoomMaxY - 7, firstRoomMaxZ); //first side room entrance
 			
 			//blood diving challenge associated with first side room
-			BlockPos transmitterPos = new BlockPos(
-					getXWithOffset(firstRoomMinX + 12 + (roomVariable1 - 3), firstRoomMaxZ + 6),
-					getYWithOffset(firstRoomMaxY - 21),
-					getZWithOffset(firstRoomMinX + 12 + (roomVariable1 - 3), firstRoomMaxZ + 6));
-			BlockPos receiverPos = new BlockPos(
-					getXWithOffset(firstRoomMinX + 16, firstRoomMaxZ - 1),
-					getYWithOffset(firstRoomMaxY - 9),
-					getZWithOffset(firstRoomMinX + 16, firstRoomMaxZ - 1));
+			BlockPos transmitterPos = getActualPos(firstRoomMinX + 12 + (roomVariable1 - 3), firstRoomMaxY - 21, firstRoomMaxZ + 6);
+			BlockPos receiverPos = getActualPos(firstRoomMinX + 16, firstRoomMaxY - 9, firstRoomMaxZ - 1);
 			StructureBlockUtil.placeWirelessRelay(world, boundingBox, transmitterPos, receiverPos, false);
 			setBlockState(world, MSBlocks.SOLID_SWITCH.getDefaultState().with(SolidSwitchBlock.POWERED, true), firstRoomMinX + 12 + (roomVariable1 - 3), firstRoomMaxY - 20, firstRoomMaxZ + 6, boundingBox); //power for transmitter
 			setBlockState(world, Blocks.REDSTONE_WIRE.getDefaultState(), firstRoomMinX + 16, firstRoomMaxY - 8, firstRoomMaxZ - 1, boundingBox); //wire above receiver, both power pistons
@@ -343,8 +331,8 @@ public class TierOneDungeonFirstRoomPiece extends ImprovedStructurePiece
 			fillWithBlocks(world, boundingBox, firstRoomMinX + 16, firstRoomMaxY - 9, firstRoomMaxZ - 4, firstRoomMinX + 16, firstRoomMaxY - 8, firstRoomMaxZ - 4, MSBlocks.DUNGEON_DOOR.getDefaultState(), MSBlocks.DUNGEON_DOOR.getDefaultState(), false);
 			
 			//stairs leading from puzzle room to lower level
-			BlockPos stairsAreaMin = new BlockPos(getXWithOffset(firstRoomMaxX - 2, firstRoomMinZ + 4), getYWithOffset(firstRoomMaxY - 25), getZWithOffset(firstRoomMaxX - 2, firstRoomMinZ + 4));
-			BlockPos stairsAreaMax = new BlockPos(getXWithOffset(firstRoomMaxX - 1, firstRoomMaxZ - 5), getYWithOffset(firstRoomMaxY - 7), getZWithOffset(firstRoomMaxX - 1, firstRoomMaxZ - 5));
+			BlockPos stairsAreaMin = getActualPos(firstRoomMaxX - 2, firstRoomMaxY - 25, firstRoomMinZ + 4);
+			BlockPos stairsAreaMax = getActualPos(firstRoomMaxX - 1, firstRoomMaxY - 7, firstRoomMaxZ - 5);
 			//StructureBlockUtil.fillWithBlocksFromPos(world, boundingBox, air, stairsAreaMin, stairsAreaMax);
 			fillWithAir(world, boundingBox, firstRoomMaxX - 2, firstRoomMaxY - 25, firstRoomMinZ + 4, firstRoomMaxX - 1, firstRoomMaxY - 7, firstRoomMaxZ - 5);
 			StructureBlockUtil.createStairs(world, boundingBox, primaryBlock, primaryStairBlock.with(StairsBlock.FACING, getCoordBaseMode()), stairsAreaMin.offset(getCoordBaseMode(), 13), 16, 2, getCoordBaseMode(), false);
@@ -380,10 +368,8 @@ public class TierOneDungeonFirstRoomPiece extends ImprovedStructurePiece
 					firstRoomMinX + 9, firstRoomMinY + 11, firstRoomMaxZ - 2,
 					firstRoomMaxX - 9, firstRoomMinY + 11, firstRoomMaxZ - 1,
 					MSBlocks.BLOOD.getDefaultState(), MSBlocks.BLOOD.getDefaultState(), false); //side waterfall
-			StructureBlockUtil.createCylinder(world, boundingBox, lightBlock, new BlockPos(
-							getXWithOffset((firstRoomMinX + firstRoomMaxX) / 2 - 10, (firstRoomMinZ + firstRoomMaxZ) / 2),
-							getYWithOffset(firstRoomMinY + 14),
-							getZWithOffset((firstRoomMinX + firstRoomMaxX) / 2 - 10, (firstRoomMinZ + firstRoomMaxZ) / 2)),
+			StructureBlockUtil.createCylinder(world, boundingBox, lightBlock,
+					getActualPos((firstRoomMinX + firstRoomMaxX) / 2 - 10, firstRoomMinY + 14, (firstRoomMinZ + firstRoomMaxZ) / 2),
 					6, 1); //ceiling light
 			
 			//lighting
@@ -407,10 +393,7 @@ public class TierOneDungeonFirstRoomPiece extends ImprovedStructurePiece
 					(firstRoomMinX + firstRoomMaxX) / 2, firstRoomMinY + 1, firstRoomMinZ + 1,
 					(firstRoomMinX + firstRoomMaxX) / 2, firstRoomMinY + 9, firstRoomMinZ + 4,
 					primaryBlock, primaryBlock, false);
-			BlockPos side1SwitchLampPos = new BlockPos(
-					getXWithOffset((firstRoomMinX + firstRoomMaxX) / 2, firstRoomMinZ + 3),
-					getYWithOffset(firstRoomMinY + 10),
-					getZWithOffset((firstRoomMinX + firstRoomMaxX) / 2, firstRoomMinZ + 3));
+			BlockPos side1SwitchLampPos = getActualPos((firstRoomMinX + firstRoomMaxX) / 2, firstRoomMinY + 10, firstRoomMinZ + 3);
 			StructureBlockUtil.placeWirelessRelay(world, boundingBox, side1SwitchLampPos.offset(getCoordBaseMode().getOpposite()), side1SwitchLampPos.offset(getCoordBaseMode().getOpposite(), 2).down(5), true);
 			world.setBlockState(side1SwitchLampPos, MSBlocks.SOLID_SWITCH.getDefaultState().with(SolidSwitchBlock.POWERED, true), Constants.BlockFlags.BLOCK_UPDATE);
 			world.setBlockState(side1SwitchLampPos.offset(getCoordBaseMode()), Blocks.REDSTONE_LAMP.getDefaultState().with(RedstoneLampBlock.LIT, true), Constants.BlockFlags.BLOCK_UPDATE);
@@ -422,19 +405,13 @@ public class TierOneDungeonFirstRoomPiece extends ImprovedStructurePiece
 					(firstRoomMinX + firstRoomMaxX) / 2, firstRoomMinY + 1, firstRoomMaxZ - 4,
 					(firstRoomMinX + firstRoomMaxX) / 2, firstRoomMinY + 9, firstRoomMaxZ - 1,
 					primaryBlock, primaryBlock, false);
-			BlockPos side2SwitchLampPos = new BlockPos(
-					getXWithOffset((firstRoomMinX + firstRoomMaxX) / 2, firstRoomMaxZ - 3),
-					getYWithOffset(firstRoomMinY + 10),
-					getZWithOffset((firstRoomMinX + firstRoomMaxX) / 2, firstRoomMaxZ - 3));
+			BlockPos side2SwitchLampPos = getActualPos((firstRoomMinX + firstRoomMaxX) / 2, firstRoomMinY + 10, firstRoomMaxZ - 3);
 			StructureBlockUtil.placeWirelessRelay(world, boundingBox, side2SwitchLampPos.offset(getCoordBaseMode()), side2SwitchLampPos.offset(getCoordBaseMode(), 2).down(5), true);
 			world.setBlockState(side2SwitchLampPos, MSBlocks.SOLID_SWITCH.getDefaultState().with(SolidSwitchBlock.POWERED, true), Constants.BlockFlags.BLOCK_UPDATE);
 			world.setBlockState(side2SwitchLampPos.offset(getCoordBaseMode().getOpposite()), Blocks.REDSTONE_LAMP.getDefaultState().with(RedstoneLampBlock.LIT, true), Constants.BlockFlags.BLOCK_UPDATE);
 			
 			//aspect symbol platform, lower level
-			BlockPos aspectSymbolPos = new BlockPos(
-					getXWithOffset((firstRoomMinX + 5 + firstRoomMaxX - 3) / 2, (firstRoomMinZ + firstRoomMaxZ) / 2),
-					getYWithOffset(firstRoomMinY + 4),
-					getZWithOffset((firstRoomMinX + 5 + firstRoomMaxX - 3) / 2, (firstRoomMinZ + firstRoomMaxZ) / 2)); //middle of lower room on top of blood
+			BlockPos aspectSymbolPos = getActualPos((firstRoomMinX + 5 + firstRoomMaxX - 3) / 2, firstRoomMinY + 4, (firstRoomMinZ + firstRoomMaxZ) / 2); //middle of lower room on top of blood
 			StructureBlockUtil.createCylinder(world, boundingBox, secondaryBlock, aspectSymbolPos.down(3), 13, 3);
 			StructureBlockUtil.createCylinder(world, boundingBox, lightBlock, aspectSymbolPos.down(1), 13, 1);
 			StructureBlockUtil.createCylinder(world, boundingBox, primaryBlock, aspectSymbolPos, 13, 1);
@@ -455,28 +432,18 @@ public class TierOneDungeonFirstRoomPiece extends ImprovedStructurePiece
 			//TODO Add remote observer closer to far edge on player detect mode connected to mob summoning blocks, and set stat storer near center on death mode and add wireless relays at different distances using for loop for each summoned entity(allows players to see progress)
 			for(int stairPuzzleIterate = 0; stairPuzzleIterate < 5; stairPuzzleIterate++)
 			{
-				StructureBlockUtil.placeWirelessRelay(world, boundingBox, aspectSymbolPos.down(3).offset(getCoordBaseMode().rotateYCCW(), stairPuzzleIterate * 2 + 1), new BlockPos(
-						getXWithOffset(firstRoomMinX + 2, (firstRoomMinZ + firstRoomMaxZ) / 2 - 2 + stairPuzzleIterate),
-						getYWithOffset(firstRoomMinY + 4 + stairPuzzleIterate),
-						getZWithOffset(firstRoomMinX + 2, (firstRoomMinZ + firstRoomMaxZ) / 2 - 2 + stairPuzzleIterate)), true);
+				StructureBlockUtil.placeWirelessRelay(world, boundingBox, aspectSymbolPos.down(3).offset(getCoordBaseMode().rotateYCCW(), stairPuzzleIterate * 2 + 1),
+						getActualPos(firstRoomMinX + 2, firstRoomMinY + 4 + stairPuzzleIterate, (firstRoomMinZ + firstRoomMaxZ) / 2 - 2 + stairPuzzleIterate), true);
 				setBlockState(world, Blocks.STICKY_PISTON.getDefaultState().with(PistonBlock.FACING, Direction.EAST), firstRoomMinX + 3, firstRoomMinY + 4 + stairPuzzleIterate, (firstRoomMinZ + firstRoomMaxZ) / 2 - 2 + stairPuzzleIterate, boundingBox);
 				setBlockState(world, secondaryDecorativeBlock, firstRoomMinX + 4, firstRoomMinY + 4 + stairPuzzleIterate, (firstRoomMinZ + firstRoomMaxZ) / 2 - 2 + stairPuzzleIterate, boundingBox);
 			}
 			
 			//area effect block/how to complete puzzle
-			BlockPos areaEffectBlockPos = new BlockPos(
-					getXWithOffset(firstRoomMinX + 2, (firstRoomMinZ + firstRoomMaxZ) / 2 - 2),
-					getYWithOffset(firstRoomMinY + 9),
-					getZWithOffset(firstRoomMinX + 2, (firstRoomMinZ + firstRoomMaxZ) / 2 - 2));
+			BlockPos areaEffectBlockPos = getActualPos(firstRoomMinX + 2, firstRoomMinY + 9, (firstRoomMinZ + firstRoomMaxZ) / 2 - 2);
 			setBlockState(world, MSBlocks.SOLID_SWITCH.getDefaultState().with(SolidSwitchBlock.POWERED, true), areaEffectBlockPos.getX(), areaEffectBlockPos.up().getY(), areaEffectBlockPos.getZ(), boundingBox); //power for area effect block
-			StructureBlockUtil.placeAreaEffectBlock(world, boundingBox, areaEffectBlockPos,
-					MSEffects.CREATIVE_SHOCK.get(), 0, new BlockPos(
-							getXWithOffset(firstRoomMinX - 22, firstRoomMinZ),
-							getYWithOffset(firstRoomMinY),
-							getZWithOffset(firstRoomMinX - 22, firstRoomMinZ)), new BlockPos(
-							getXWithOffset(firstRoomMaxX, firstRoomMaxZ),
-							getYWithOffset(58),
-							getZWithOffset(firstRoomMaxX, firstRoomMaxZ)));
+			StructureBlockUtil.placeAreaEffectBlock(world, boundingBox, areaEffectBlockPos, MSEffects.CREATIVE_SHOCK.get(), 0,
+					getActualPos(firstRoomMinX - 22, firstRoomMinY, firstRoomMinZ),
+					getActualPos(firstRoomMaxX, 58, firstRoomMaxZ));
 		} else if(worldAspect == EnumAspect.LIGHT)
 		{
 		

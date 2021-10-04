@@ -159,16 +159,10 @@ public class TierOneDungeonPiece extends ImprovedStructurePiece
 	
 	private void buildStructureFoundation(IWorld world, MutableBoundingBox boundingBox, Random rand, int randomRoomType, ChunkGenerator<?> chunkGeneratorIn)
 	{
-		StructureBlockUtil.createSphere(world, boundingBox, air, new BlockPos(
-						getXWithOffset((entryRoomMaxX + entryRoomMinX) / 2, entryRoomMinZ),
-						getYWithOffset(entryRoomMaxY + 2),
-						getZWithOffset((entryRoomMaxX + entryRoomMinX) / 2, entryRoomMinZ)),
+		StructureBlockUtil.createSphere(world, boundingBox, air, getActualPos((entryRoomMaxX + entryRoomMinX) / 2, entryRoomMaxY + 2, entryRoomMinZ),
 				10, fluid); //clears area around structure in a more organic fashion
 		
-		BlockPos segsg = new BlockPos(
-				getXWithOffset((entryRoomMaxX + entryRoomMinX) / 2, entryRoomMinZ),
-				getYWithOffset(entryRoomMaxY + 8),
-				getZWithOffset((entryRoomMaxX + entryRoomMinX) / 2, entryRoomMinZ));
+		BlockPos segsg = getActualPos((entryRoomMaxX + entryRoomMinX) / 2, entryRoomMaxY + 8, entryRoomMinZ);
 		StructureBlockUtil.fillAsGrid(world, boundingBox, primaryBlock, segsg, segsg.up(15).west(15).south(15), 3);
 		
 		fillWithBlocks(world, boundingBox,
@@ -208,19 +202,10 @@ public class TierOneDungeonPiece extends ImprovedStructurePiece
 	
 	private void buildWallsAndFloors(IWorld world, MutableBoundingBox boundingBox, Random rand)
 	{
-		BlockPos doorInterfacePos = new BlockPos(
-				getXWithOffset(entryRoomMinX + 5, entryRoomMinZ),
-				getYWithOffset(entryRoomMinY + 3),
-				getZWithOffset(entryRoomMinX + 5, entryRoomMinZ));
+		BlockPos doorInterfacePos = getActualPos(entryRoomMinX + 5, entryRoomMinY + 3, entryRoomMinZ);
 		
-		BlockPos minDoorPos = new BlockPos(
-				getXWithOffset(entryRoomMinX + 6, entryRoomMinZ),
-				getYWithOffset(entryRoomMinY + 1),
-				getZWithOffset(entryRoomMinX + 6, entryRoomMinZ));
-		BlockPos maxDoorPos = new BlockPos(
-				getXWithOffset(entryRoomMaxX - 6, entryRoomMinZ),
-				getYWithOffset(entryRoomMaxY - 3),
-				getZWithOffset(entryRoomMaxX - 6, entryRoomMinZ));
+		BlockPos minDoorPos = getActualPos(entryRoomMinX + 6, entryRoomMinY + 1, entryRoomMinZ);
+		BlockPos maxDoorPos = getActualPos(entryRoomMaxX - 6, entryRoomMaxY - 3, entryRoomMinZ);
 		
 		StructureBlockUtil.placeDungeonDoor(world, boundingBox, doorInterfacePos, minDoorPos, maxDoorPos, EnumKeyType.tier_1_key);
 		
@@ -263,27 +248,27 @@ public class TierOneDungeonPiece extends ImprovedStructurePiece
 			rightChestType = ChestType.LEFT;
 		}
 		
-		BlockPos chestPosLeft = new BlockPos(this.getXWithOffset(lowerRoomMinX - 4, lowerRoomMinZ + 9), this.getYWithOffset(lowerRoomMinY + 3), this.getZWithOffset(lowerRoomMinX - 2, lowerRoomMinZ + 9));
+		BlockPos chestPosLeft = getActualPos(lowerRoomMinX - 4, lowerRoomMinY + 3, lowerRoomMinZ + 9);
 		StructureBlockUtil.placeLootBlock(chestPosLeft, world, boundingBox, MSBlocks.LOOT_CHEST.getDefaultState().with(BlockStateProperties.HORIZONTAL_FACING, getCoordBaseMode()), MSLootTables.TIER_ONE_MEDIUM_CHEST);
-		chestPosLeft = new BlockPos(this.getXWithOffset(lowerRoomMinX - 2, lowerRoomMinZ + 9), this.getYWithOffset(lowerRoomMinY + 3), this.getZWithOffset(lowerRoomMinX - 1, lowerRoomMinZ + 9));
+		chestPosLeft = getActualPos(lowerRoomMinX - 2, lowerRoomMinY + 3, lowerRoomMinZ + 9);
 		StructureBlockUtil.placeLootBlock(chestPosLeft, world, boundingBox, MSBlocks.LOOT_CHEST.getDefaultState().with(BlockStateProperties.HORIZONTAL_FACING, getCoordBaseMode()), MSLootTables.TIER_ONE_MEDIUM_CHEST);
 		
-		BlockPos chestPosRight = new BlockPos(this.getXWithOffset(lowerRoomMinX - 4, lowerRoomMaxZ - 9), this.getYWithOffset(lowerRoomMinY + 3), this.getZWithOffset(lowerRoomMinX - 2, lowerRoomMaxZ - 9));
+		BlockPos chestPosRight = getActualPos(lowerRoomMinX - 4, lowerRoomMinY + 3, lowerRoomMaxZ - 9);
 		StructureBlockUtil.placeLootBlock(chestPosRight, world, boundingBox, MSBlocks.LOOT_CHEST.getDefaultState().with(BlockStateProperties.HORIZONTAL_FACING, getCoordBaseMode().getOpposite()), MSLootTables.TIER_ONE_MEDIUM_CHEST);
-		chestPosRight = new BlockPos(this.getXWithOffset(lowerRoomMinX - 2, lowerRoomMaxZ - 9), this.getYWithOffset(lowerRoomMinY + 3), this.getZWithOffset(lowerRoomMinX - 1, lowerRoomMaxZ - 9));
+		chestPosRight = getActualPos(lowerRoomMinX - 2, lowerRoomMinY + 3, lowerRoomMaxZ - 9);
 		StructureBlockUtil.placeLootBlock(chestPosRight, world, boundingBox, MSBlocks.LOOT_CHEST.getDefaultState().with(BlockStateProperties.HORIZONTAL_FACING, getCoordBaseMode().getOpposite()), MSLootTables.TIER_ONE_MEDIUM_CHEST);
 		
-		BlockPos chestPosLeftb = new BlockPos(this.getXWithOffset(lowerRoomMinX - 2, lowerRoomMinZ + 9), this.getYWithOffset(lowerRoomMinY + 5), this.getZWithOffset(lowerRoomMinX - 2, lowerRoomMinZ + 9));
+		BlockPos chestPosLeftb = getActualPos(lowerRoomMinX - 2, lowerRoomMinY + 5, lowerRoomMinZ + 9);
 		StructureBlockUtil.placeChest(chestPosLeftb, world, boundingBox, getCoordBaseMode(), leftChestType, MSLootTables.TIER_ONE_MEDIUM_CHEST, rand);
-		chestPosLeftb = new BlockPos(this.getXWithOffset(lowerRoomMinX - 1, lowerRoomMinZ + 9), this.getYWithOffset(lowerRoomMinY + 5), this.getZWithOffset(lowerRoomMinX - 1, lowerRoomMinZ + 9));
+		chestPosLeftb = getActualPos(lowerRoomMinX - 1, lowerRoomMinY + 5, lowerRoomMinZ + 9);
 		StructureBlockUtil.placeChest(chestPosLeftb, world, boundingBox, getCoordBaseMode(), rightChestType, MSLootTables.TIER_ONE_MEDIUM_CHEST, rand);
 		
-		BlockPos chestPosRightb = new BlockPos(this.getXWithOffset(lowerRoomMinX - 2, lowerRoomMaxZ - 9), this.getYWithOffset(lowerRoomMinY + 5), this.getZWithOffset(lowerRoomMinX - 2, lowerRoomMaxZ - 9));
+		BlockPos chestPosRightb = getActualPos(lowerRoomMinX - 2, lowerRoomMinY + 5, lowerRoomMaxZ - 9);
 		StructureBlockUtil.placeChest(chestPosRightb, world, boundingBox, getCoordBaseMode().getOpposite(), rightChestType, MSLootTables.TIER_ONE_MEDIUM_CHEST, rand);
-		chestPosRightb = new BlockPos(this.getXWithOffset(lowerRoomMinX - 1, lowerRoomMaxZ - 9), this.getYWithOffset(lowerRoomMinY + 5), this.getZWithOffset(lowerRoomMinX - 1, lowerRoomMaxZ - 9));
+		chestPosRightb = getActualPos(lowerRoomMinX - 1, lowerRoomMinY + 5, lowerRoomMaxZ - 9);
 		StructureBlockUtil.placeChest(chestPosRightb, world, boundingBox, getCoordBaseMode().getOpposite(), leftChestType, MSLootTables.TIER_ONE_MEDIUM_CHEST, rand);
 		
-		StructureBlockUtil.placeReturnNode(world, boundingBox, new BlockPos(getXWithOffset(lowerRoomMinX - 7, (lowerRoomMaxZ + lowerRoomMinZ) / 2), getYWithOffset(lowerRoomMinY + 3), getZWithOffset(lowerRoomMinX - 7, (lowerRoomMaxZ + lowerRoomMinZ) / 2)), getCoordBaseMode());
+		StructureBlockUtil.placeReturnNode(world, boundingBox, getActualPos(lowerRoomMinX - 7, lowerRoomMinY + 3, (lowerRoomMaxZ + lowerRoomMinZ) / 2), getCoordBaseMode());
 		
 		setBlockState(world, lightBlock, lowerRoomMinX, lowerRoomMinY + 5, lowerRoomMinZ + 10, boundingBox); //left side light
 		setBlockState(world, lightBlock, lowerRoomMinX, lowerRoomMinY + 5, lowerRoomMaxZ - 10, boundingBox); //right side light
@@ -291,8 +276,8 @@ public class TierOneDungeonPiece extends ImprovedStructurePiece
 	
 	private void buildIndoorBlocks(IWorld world, MutableBoundingBox boundingBox, Random rand, int randomRoomType)
 	{
-		BlockPos staircaseMinPos = new BlockPos(getXWithOffset(entryRoomMinX + 6, entryRoomMinZ + 6), getYWithOffset(lowerRoomMinY + 2), getZWithOffset(entryRoomMinX + 6, entryRoomMinZ + 6));
-		BlockPos staircaseMaxPos = new BlockPos(getXWithOffset(entryRoomMaxX - 6, entryRoomMaxZ - 6), getYWithOffset(entryRoomMinY), getZWithOffset(entryRoomMaxX - 6, entryRoomMaxZ - 6));
+		BlockPos staircaseMinPos = getActualPos(entryRoomMinX + 6, lowerRoomMinY + 2, entryRoomMinZ + 6);
+		BlockPos staircaseMaxPos = getActualPos(entryRoomMaxX - 6, entryRoomMinY, entryRoomMaxZ - 6);
 		
 		//PlacementFunctionsUtil.fillWithBlocksFromPos(world, boundingBox, secondaryDecorativeBlock, PlacementFunctionsUtil.axisAlignBlockPosGetMin(staircaseMinPos, staircaseMaxPos).up(30), PlacementFunctionsUtil.axisAlignBlockPosGetMax(staircaseMinPos, staircaseMaxPos).up(30));
 		if(randomRoomType != 4) //decrepit room types have broken down stairs
@@ -362,15 +347,11 @@ public class TierOneDungeonPiece extends ImprovedStructurePiece
 		Debug.debugf("bottomRoomOrnateType");
 		
 		placePillars(world, boundingBox, rand, false);
-		StructureBlockUtil.createCylinder(world, boundingBox, primarySlabBlock.with(SlabBlock.TYPE, SlabType.BOTTOM), new BlockPos(
-						getXWithOffset(lowerRoomMinX + 14, lowerRoomMinZ + 13),
-						getYWithOffset(lowerRoomMinY + 3),
-						getZWithOffset(lowerRoomMinX + 14, lowerRoomMinZ + 13)),
+		StructureBlockUtil.createCylinder(world, boundingBox, primarySlabBlock.with(SlabBlock.TYPE, SlabType.BOTTOM),
+				getActualPos(lowerRoomMinX + 14, lowerRoomMinY + 3, lowerRoomMinZ + 13),
 				6, 1);
-		StructureBlockUtil.createCylinder(world, boundingBox, secondaryBlock, new BlockPos(
-						getXWithOffset(lowerRoomMinX + 14, lowerRoomMinZ + 13),
-						getYWithOffset(lowerRoomMinY + 3),
-						getZWithOffset(lowerRoomMinX + 14, lowerRoomMinZ + 13)),
+		StructureBlockUtil.createCylinder(world, boundingBox, secondaryBlock,
+				getActualPos(lowerRoomMinX + 14, lowerRoomMinY + 3, lowerRoomMinZ + 13),
 				5, 1);
 	}
 	
@@ -386,13 +367,13 @@ public class TierOneDungeonPiece extends ImprovedStructurePiece
 		if(bottomRoomSpawner1)
 		{
 			//fillWithBlocks(world, boundingBox, entryRoomMinX - 2, entryRoomMinY - 11, entryRoomMinZ - 2, entryRoomMinX - 2, entryRoomMinY - 8, entryRoomMinZ - 2, primaryDecorativeBlock, primaryDecorativeBlock, false);
-			BlockPos spawnerPos = new BlockPos(this.getXWithOffset(lowerRoomMinX + 4, lowerRoomMinZ + 4), this.getYWithOffset(lowerRoomMinY + 6), this.getZWithOffset(lowerRoomMinX + 4, lowerRoomMinZ + 4));
+			BlockPos spawnerPos = getActualPos(lowerRoomMinX + 4, lowerRoomMinY + 6, lowerRoomMinZ + 4);
 			bottomRoomSpawner1 = !StructureBlockUtil.placeSpawner(spawnerPos, world, boundingBox, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
 		}
 		if(bottomRoomSpawner2)
 		{
 			//fillWithBlocks(world, boundingBox, entryRoomMaxX - 2, entryRoomMinY - 11, entryRoomMaxZ - 2, entryRoomMaxX - 2, entryRoomMinY - 8, entryRoomMaxZ - 2, primaryDecorativeBlock, primaryDecorativeBlock, false);
-			BlockPos spawnerPos = new BlockPos(this.getXWithOffset(lowerRoomMaxX - 4, lowerRoomMaxZ - 4), this.getYWithOffset(lowerRoomMinY + 6), this.getZWithOffset(lowerRoomMaxX - 4, lowerRoomMaxZ - 4));
+			BlockPos spawnerPos = getActualPos(lowerRoomMaxX - 4, lowerRoomMinY + 6, lowerRoomMaxZ - 4);
 			bottomRoomSpawner2 = !StructureBlockUtil.placeSpawner(spawnerPos, world, boundingBox, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
 		}
 	}

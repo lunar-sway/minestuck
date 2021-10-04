@@ -68,14 +68,14 @@ public abstract class ImprovedStructurePiece extends StructurePiece
 	
 	protected void placeReturnNode(IWorld world, MutableBoundingBox boundingBox, int x, int y, int z)
 	{
-		int posX = getXWithOffset(x, z), posY = getYWithOffset(y), posZ = getZWithOffset(x, z);
+		BlockPos pos = getActualPos(x, y, z);
 		
 		if(getCoordBaseMode() == Direction.NORTH || getCoordBaseMode() == Direction.WEST)
-			posX--;
+			pos = pos.west();
 		if(getCoordBaseMode() == Direction.NORTH || getCoordBaseMode() == Direction.EAST)
-			posZ--;
+			pos = pos.north();
 		
-		ReturnNodeBlock.placeReturnNode(world, new BlockPos(posX, posY, posZ), boundingBox);
+		ReturnNodeBlock.placeReturnNode(world, pos, boundingBox);
 	}
 	
 	protected int getAverageGroundLevel(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, MutableBoundingBox structurebb)
@@ -106,6 +106,11 @@ public abstract class ImprovedStructurePiece extends StructurePiece
 		{
 			return i / j;
 		}
+	}
+	
+	protected BlockPos getActualPos(int x, int y, int z)
+	{
+		return new BlockPos(getXWithOffset(x, z), getYWithOffset(y), getZWithOffset(x, z));
 	}
 	
 	@Override
@@ -160,7 +165,7 @@ public abstract class ImprovedStructurePiece extends StructurePiece
 	@Override
 	protected void setBlockState(IWorld worldIn, BlockState blockstateIn, int x, int y, int z, MutableBoundingBox boundingboxIn)
 	{
-		BlockPos blockpos = new BlockPos(getXWithOffset(x, z), getYWithOffset(y), getZWithOffset(x, z));
+		BlockPos blockpos = getActualPos(x, y, z);
 		
 		if (boundingboxIn.isVecInside(blockpos))
 		{

@@ -755,18 +755,18 @@ public class ImpDungeonPieces
 			
 			if(spawner1)
 			{
-				BlockPos spawnerPos = new BlockPos(this.getXWithOffset(1, 2), this.getYWithOffset(1), this.getZWithOffset(1, 2));
+				BlockPos spawnerPos = getActualPos(1, 1, 2);
 				spawner1 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
 			}
 			if(spawner2)
 			{
-				BlockPos spawnerPos = new BlockPos(this.getXWithOffset(6, 2), this.getYWithOffset(1), this.getZWithOffset(6, 2));
+				BlockPos spawnerPos = getActualPos(6, 1, 2);
 				spawner2 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
 			}
 			
-			BlockPos chestPos = new BlockPos(this.getXWithOffset(3, 5), this.getYWithOffset(1), this.getZWithOffset(3, 5));
+			BlockPos chestPos = getActualPos(3, 1, 5);
 			StructureBlockUtil.placeChest(chestPos, worldIn, structureBoundingBoxIn, getCoordBaseMode().getOpposite(), ChestType.LEFT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
-			chestPos = new BlockPos(this.getXWithOffset(4, 5), this.getYWithOffset(1), this.getZWithOffset(4, 5));
+			chestPos = getActualPos(4, 1, 5);
 			StructureBlockUtil.placeChest(chestPos, worldIn, structureBoundingBoxIn, getCoordBaseMode().getOpposite(), ChestType.RIGHT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
 			
 			return true;
@@ -975,17 +975,17 @@ public class ImpDungeonPieces
 			
 			if(spawner1)
 			{
-				BlockPos spawnerPos = new BlockPos(this.getXWithOffset(1, 4), this.getYWithOffset(1), this.getZWithOffset(1, 4));
+				BlockPos spawnerPos = getActualPos(1, 1, 4);
 				spawner1 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
 			}
 			if(spawner2)
 			{
-				BlockPos spawnerPos = new BlockPos(this.getXWithOffset(1, 5), this.getYWithOffset(1), this.getZWithOffset(1, 5));
+				BlockPos spawnerPos = getActualPos(1, 1, 5);
 				spawner2 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
 			}
 			
 			int z = chestPos ? 4 : 5;
-			BlockPos chestPos = new BlockPos(this.getXWithOffset(4, z), this.getYWithOffset(1), this.getZWithOffset(4, z));
+			BlockPos chestPos = getActualPos(4, 1, z);
 			StructureBlockUtil.placeChest(chestPos, worldIn, structureBoundingBoxIn, getCoordBaseMode().rotateY(), MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
 			
 			if(corridors[0])
@@ -1095,12 +1095,12 @@ public class ImpDungeonPieces
 			
 			int x = chestPos ? 1 : 6;
 			Direction chestDirection = chestPos ? getCoordBaseMode().rotateYCCW() : getCoordBaseMode().rotateY();
-			BlockPos chestPos = new BlockPos(this.getXWithOffset(x, 4), this.getYWithOffset(1), this.getZWithOffset(x, 4));
+			BlockPos chestPos = getActualPos(x, 1, 4);
 			StructureBlockUtil.placeChest(chestPos, worldIn, structureBoundingBoxIn, chestDirection, this.chestPos ? ChestType.LEFT : ChestType.RIGHT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
-			chestPos = new BlockPos(this.getXWithOffset(x, 5), this.getYWithOffset(1), this.getZWithOffset(x, 5));
+			chestPos = getActualPos(x, 1, 5);
 			StructureBlockUtil.placeChest(chestPos, worldIn, structureBoundingBoxIn, chestDirection, this.chestPos ? ChestType.RIGHT : ChestType.LEFT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
-			if(!ogreSpawned && structureBoundingBoxIn.isVecInside(new BlockPos(getXWithOffset(3, 4), getYWithOffset(1), getZWithOffset(3, 4))))
-			spawnOgre(3, 1, 4, worldIn, randomIn);
+			if(!ogreSpawned && structureBoundingBoxIn.isVecInside(getActualPos(3, 1, 4)))
+				spawnOgre(3, 1, 4, worldIn, randomIn);
 			
 			if(corridors[0])
 				fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 0, 9, 4, 3, 9, wallBlock, wallBlock, false);
@@ -1110,7 +1110,7 @@ public class ImpDungeonPieces
 		
 		private void spawnOgre(int xPos, int yPos, int zPos, IWorld worldIn, Random rand)
 		{
-			BlockPos pos = new BlockPos(getXWithOffset(xPos, zPos), getYWithOffset(yPos), getZWithOffset(xPos, zPos));
+			BlockPos pos = getActualPos(xPos, yPos, zPos);
 			OgreEntity ogre = MSEntityTypes.OGRE.create(worldIn.getWorld());
 			ogre.setLocationAndAngles(pos.getX(), pos.getY(), pos.getZ(), rand.nextFloat()*360F, 0);
 			ogre.onInitialSpawn(worldIn, null, SpawnReason.STRUCTURE, null, null);
@@ -1217,18 +1217,18 @@ public class ImpDungeonPieces
 			
 			if(spawner1)
 			{
-				BlockPos spawnerPos = new BlockPos(this.getXWithOffset(1, 3), this.getYWithOffset(1), this.getZWithOffset(1, 3));
+				BlockPos spawnerPos = getActualPos(1, 1, 3);
 				spawner1 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
 			}
 			if(spawner2)
 			{
-				BlockPos spawnerPos = new BlockPos(this.getXWithOffset(8, 5), this.getYWithOffset(1), this.getZWithOffset(8, 5));
+				BlockPos spawnerPos = getActualPos(8, 1, 5);
 				spawner2 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
 			}
 			
-			BlockPos chestPos = new BlockPos(this.getXWithOffset(4, 4), this.getYWithOffset(1), this.getZWithOffset(4, 4));
+			BlockPos chestPos = getActualPos(4, 1, 4);
 			StructureBlockUtil.placeChest(chestPos, worldIn, structureBoundingBoxIn, getCoordBaseMode().getOpposite(), ChestType.LEFT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
-			chestPos = new BlockPos(this.getXWithOffset(5, 4), this.getYWithOffset(1), this.getZWithOffset(5, 4));
+			chestPos = getActualPos(5, 1, 4);
 			StructureBlockUtil.placeChest(chestPos, worldIn, structureBoundingBoxIn, getCoordBaseMode().getOpposite(), ChestType.RIGHT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
 			
 			if(corridors[0])

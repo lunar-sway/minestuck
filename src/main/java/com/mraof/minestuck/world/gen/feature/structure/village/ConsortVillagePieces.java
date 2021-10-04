@@ -232,10 +232,10 @@ public class ConsortVillagePieces
 		protected void clearFront(IWorld world, MutableBoundingBox structureBB, int minX, int maxX, int y, int z)
 		{
 			for (int x = minX; x <= maxX; x++)
-				if (structureBB.isVecInside(new Vec3i(this.getXWithOffset(x, z), this.getYWithOffset(y), this.getZWithOffset(x, z))))
+				if (structureBB.isVecInside(getActualPos(x, y, z)))
 				{
 					this.fillWithAir(world, structureBB, x, y, z, x, y + 4, z);
-					BlockPos pos = new BlockPos(this.getXWithOffset(x, z - 1), this.getYWithOffset(y), this.getZWithOffset(x, z - 1));
+					BlockPos pos = getActualPos(x, y, z - 1);
 					int i = 0;
 					for (int yOffset = 0; yOffset <= 4; yOffset++)
 					{
@@ -279,7 +279,7 @@ public class ConsortVillagePieces
 		
 		protected void blockPillar(int x, int y, int z, MutableBoundingBox boundingBox, IWorld world, BlockState block)
 		{
-			BlockPos pos = new BlockPos(this.getXWithOffset(x, z), this.getYWithOffset(y), this.getZWithOffset(x, z));
+			BlockPos pos = getActualPos(x, y, z);
 			
 			if(!boundingBox.isVecInside(pos))
 				return;
@@ -307,7 +307,7 @@ public class ConsortVillagePieces
 		
 		protected boolean spawnConsort(int x, int y, int z, MutableBoundingBox boundingBox, IWorld world, ChunkGenerator<?> chunkGenerator, EnumConsort.MerchantType type, int maxHomeDistance)
 		{
-			BlockPos pos = new BlockPos(this.getXWithOffset(x, z), this.getYWithOffset(y), this.getZWithOffset(x, z));
+			BlockPos pos = getActualPos(x, y, z);
 			
 			if(boundingBox.isVecInside(pos))
 			{
