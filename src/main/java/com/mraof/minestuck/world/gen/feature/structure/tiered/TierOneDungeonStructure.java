@@ -2,6 +2,7 @@ package com.mraof.minestuck.world.gen.feature.structure.tiered;
 
 import com.mojang.datafixers.Dynamic;
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.util.Debug;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
@@ -69,13 +70,14 @@ public class TierOneDungeonStructure extends ScatteredStructure<NoFeatureConfig>
 			int z = chunkZ * 16 + rand.nextInt(16);
 			TierOneDungeonPiece mainPiece = new TierOneDungeonPiece(templateManagerIn, generator, rand, x, z);
 			components.add(mainPiece);
-			/*
-			int y = mainPiece.getBoundingBox().minY; //determines height of pillars from the variable height of the main structure
+			
+			//int y = mainPiece.getBoundingBox().maxY - 58; //determines height of pillars from the variable height of the main structure
 			
 			int firstRoomOffset = mainPiece.getBoundingBox().maxX; //x and y should be same for this to work
-			TierOneDungeonFirstRoomPiece firstRoomPiece = new TierOneDungeonFirstRoomPiece(generator, rand, x + (firstRoomOffset), y, z);
+			//TierOneDungeonFirstRoomPiece firstRoomPiece = new TierOneDungeonFirstRoomPiece(templateManagerIn, generator, rand, x + (firstRoomOffset), y, z);
+			TierOneDungeonFirstRoomPiece firstRoomPiece = new TierOneDungeonFirstRoomPiece(templateManagerIn, generator, rand, x, 64, z);
 			Debug.debugf("firstRoomPiece = %s", firstRoomPiece);
-			components.add(firstRoomPiece);*/
+			components.add(firstRoomPiece);
 			/*for(int i = 0; i < 2; i++) //x iterate
 			{
 				for(int j = 0; j < 2; j++) //z iterate

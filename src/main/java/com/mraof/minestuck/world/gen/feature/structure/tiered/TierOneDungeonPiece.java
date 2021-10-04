@@ -217,7 +217,7 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 		}
 		
 		buildTreasureAndEscapeChamber(world, boundingBox, rand);
-		buildAspectThemedPuzzle(world, boundingBox, rand, chunkGeneratorIn);
+		//buildAspectThemedPuzzle(world, boundingBox, rand, chunkGeneratorIn);
 	}
 	
 	private void buildWallsAndFloors(IWorld world, MutableBoundingBox boundingBox, Random rand)
@@ -796,9 +796,9 @@ public class TierOneDungeonPiece extends ScatteredStructurePiece
 					getXWithOffset((firstRoomMinX + 5 + firstRoomMaxX - 3) / 2, (firstRoomMinZ + firstRoomMaxZ) / 2),
 					getYWithOffset(firstRoomMinY + 4),
 					getZWithOffset((firstRoomMinX + 5 + firstRoomMaxX - 3) / 2, (firstRoomMinZ + firstRoomMaxZ) / 2)); //middle of lower room on top of blood
-			StructureBlockUtil.createCylinder(world, boundingBox, secondaryBlock, aspectSymbolPos.down(3), 12, 3);
-			StructureBlockUtil.createCylinder(world, boundingBox, lightBlock, aspectSymbolPos.down(1), 12, 1);
-			StructureBlockUtil.createCylinder(world, boundingBox, primaryBlock, aspectSymbolPos, 12, 1);
+			StructureBlockUtil.createCylinder(world, boundingBox, secondaryBlock, aspectSymbolPos.down(3), 13, 3);
+			StructureBlockUtil.createCylinder(world, boundingBox, lightBlock, aspectSymbolPos.down(1), 13, 1);
+			StructureBlockUtil.createCylinder(world, boundingBox, primaryBlock, aspectSymbolPos, 13, 1);
 			StructureBlockUtil.placeCenteredTemplate(world, aspectSymbolPos.offset(getCoordBaseMode().rotateY()), bloodSymbolTemplate, new PlacementSettings().setBoundingBox(boundingBox).setRotation(MSRotationUtil.fromDirection(getCoordBaseMode())));
 			
 			//redstone components for lich fight and piston stairway unlock, inside aspect platform
