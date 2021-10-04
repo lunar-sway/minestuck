@@ -41,34 +41,12 @@ import java.util.function.BiFunction;
 
 public class LandDimension extends Dimension
 {
-	private LandBiomeHolder biomeHolder;
-	private LandProperties properties;
-	private StructureBlockRegistry blocks;
-	public final LandTypePair landTypes;
-	
-	private LandDimension(World worldIn, DimensionType typeIn, LandTypePair aspects)
-	{
-		super(worldIn, typeIn, 0.0F);
-	}
-	
 	private static final long GENERIC_BIG_PRIME = 661231563202688713L;
 	
 	@Override
 	public long getSeed()
 	{
 		return super.getSeed() + getType().getId()*GENERIC_BIG_PRIME;
-	}
-	
-	public LandWrapperBiome getWrapperBiome(Biome biome)
-	{
-		return biomeHolder.localBiomeFrom(biome);
-	}
-
-	@Nullable
-	@Override
-	public BlockPos findSpawn(ChunkPos chunkPos, boolean checkValid)
-	{
-		return findSpawn(chunkPos.getXStart(), chunkPos.getZStart(), checkValid);
 	}
 	
 	@Nullable
@@ -136,12 +114,6 @@ public class LandDimension extends Dimension
 	}
 	
 	@Override
-	public SleepResult canSleepAt(PlayerEntity player, BlockPos pos)
-	{
-		return SleepResult.ALLOW;
-	}
-	
-	@Override
 	public boolean canRespawnHere()
 	{
 		return false;
@@ -163,15 +135,7 @@ public class LandDimension extends Dimension
 	
 	private void forceWeatherCheck()
 	{
-		if(properties.forceRain == LandProperties.ForceType.OFF)
-			world.rainingStrength = 0.0F;
-		else if(properties.forceRain == LandProperties.ForceType.ON)
-			world.rainingStrength = 1.0F;
-		
-		if(properties.forceThunder == LandProperties.ForceType.OFF)
-			world.thunderingStrength = 0.0F;
-		else if(properties.forceThunder == LandProperties.ForceType.ON)
-			world.thunderingStrength = 1.0F;
+	
 	}
 	
 	@Nullable
