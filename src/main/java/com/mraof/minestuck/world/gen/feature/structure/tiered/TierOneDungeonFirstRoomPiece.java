@@ -163,11 +163,6 @@ public class TierOneDungeonFirstRoomPiece extends ImprovedStructurePiece
 		
 		buildAspectThemedPuzzle(worldIn, boundingBoxIn, randomIn, chunkGenerator);
 		
-		//buildStructureFoundation(worldIn, boundingBoxIn, randomIn, randomRoomType);
-		//buildWallsAndFloors(worldIn, boundingBoxIn, randomIn);
-		//carveRooms(worldIn, boundingBoxIn);
-		//buildIndoorBlocks(worldIn, boundingBoxIn, randomIn, randomRoomType);
-		
 		return true;
 	}
 	
@@ -177,6 +172,8 @@ public class TierOneDungeonFirstRoomPiece extends ImprovedStructurePiece
 				firstRoomMinX, firstRoomMinY, firstRoomMinZ,
 				firstRoomMaxX, firstRoomMaxY, firstRoomMaxZ,
 				secondaryBlock, secondaryBlock, false);
+		
+		fillWithAir(world, boundingBox, firstRoomMinX - 3, firstRoomMaxY - 9, firstRoomMinZ + 16, firstRoomMinX, firstRoomMaxY - 5, firstRoomMaxZ - 16); //first puzzle entrance
 		
 		if(worldAspect == EnumAspect.BREATH) //parkour like frog temple lower room
 		{
