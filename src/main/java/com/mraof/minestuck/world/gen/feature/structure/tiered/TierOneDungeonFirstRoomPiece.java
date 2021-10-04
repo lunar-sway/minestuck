@@ -156,12 +156,12 @@ public class TierOneDungeonFirstRoomPiece extends ImprovedStructurePiece
 		spawner1 = false;
 		spawner2 = false;
 		
-		fillWithBlocks(worldIn, boundingBox,
+		fillWithBlocks(worldIn, boundingBoxIn,
 				firstRoomMinX, firstRoomMinY, firstRoomMinZ,
 				firstRoomMaxX, firstRoomMaxY, firstRoomMaxZ,
 				primaryBlock, air, false);
 		
-		buildAspectThemedPuzzle(worldIn, boundingBox, randomIn, chunkGenerator);
+		buildAspectThemedPuzzle(worldIn, boundingBoxIn, randomIn, chunkGenerator);
 		
 		//buildStructureFoundation(worldIn, boundingBoxIn, randomIn, randomRoomType);
 		//buildWallsAndFloors(worldIn, boundingBoxIn, randomIn);
