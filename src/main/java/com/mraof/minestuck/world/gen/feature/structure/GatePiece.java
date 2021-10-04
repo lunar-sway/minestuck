@@ -19,11 +19,14 @@ import net.minecraftforge.common.util.Constants;
 
 import java.util.Random;
 
-public abstract class GatePiece extends ScatteredStructurePiece
+public abstract class GatePiece extends ImprovedStructurePiece
 {
 	public GatePiece(IStructurePieceType type, ChunkGenerator<?> generator, Random random, int x, int z, int width, int height, int depth, int heightOffset)
 	{
-		super(type, random, x, 64, z, width, height, depth);
+		super(type, 0);
+		
+		setRandomDirection(random);
+		setBounds(x, 64, z, width, height, depth);
 		
 		int count = 0;
 		int heightSum = 0;
@@ -48,16 +51,10 @@ public abstract class GatePiece extends ScatteredStructurePiece
 	{
 		BlockPos relativePos = getRelativeGatePos();
 		int x = relativePos.getX(), y = relativePos.getY(), z = relativePos.getZ();
-		return new BlockPos(this.getXWithOffset(x, z), this.getYWithOffset(y), this.getZWithOffset(x, z));
+		return getActualPos(x, y, z);
 	}
 	
 	protected abstract BlockPos getRelativeGatePos();
-	
-	@Override
-	protected boolean isInsideBounds(IWorld worldIn, MutableBoundingBox boundsIn, int heightIn)
-	{
-		throw new UnsupportedOperationException("Shouldn't change the bounding box after creating the gate piece. Look at other gate pieces for an example of what to do instead.");
-	}
 	
 	@Override
 	public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox mutableBoundingBoxIn, ChunkPos chunkPosIn)

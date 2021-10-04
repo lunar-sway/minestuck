@@ -28,14 +28,17 @@ import net.minecraft.world.gen.feature.template.TemplateManager;
 
 import java.util.Random;
 
-public class FrogTemplePiece extends ScatteredStructurePiece
+public class FrogTemplePiece extends ImprovedStructurePiece
 {
 	private boolean createRan = false; //boolean check to prevent certain objects(the lotus flower entity) from spawning several times over
 	private static final FrogTemplePiece.Selector HIEROGLYPHS = new FrogTemplePiece.Selector();
 	
 	public FrogTemplePiece(ChunkGenerator<?> generator, Random random, int x, int z)
 	{
-		super(MSStructurePieces.FROG_TEMPLE, random, x - 21, 64, z - 35, 42, 100, 70);
+		super(MSStructurePieces.FROG_TEMPLE, 0);
+		
+		setRandomDirection(random);
+		setBounds(x - 21, 64, z - 35, 42, 100, 70);
 		
 		int posHeightPicked = Integer.MAX_VALUE;
 		for(int xPos = boundingBox.minX; xPos <= boundingBox.maxX; xPos++)
@@ -58,7 +61,6 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 	protected void readAdditional(CompoundNBT tagCompound) //actually writeAdditional
 	{
 		tagCompound.putBoolean("createRan", createRan);
-		super.readAdditional(tagCompound);
 	}
 	
 	@Override
@@ -99,16 +101,16 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 			rightChestType = ChestType.LEFT;
 		}
 		
-		BlockPos chestFarPos = new BlockPos(this.getXWithOffset(21, 12 + 14), this.getYWithOffset(21), this.getZWithOffset(21, 12 + 14));
+		BlockPos chestFarPos = getActualPos(21, 21, 12 + 14);
 		fillWithBlocks(worldIn, boundingBoxIn, 20, 20, 12 + 14, 21, 20, 12 + 14, MSBlocks.GREEN_STONE_BRICK_STAIRS.getDefaultState().with(StairsBlock.HALF, Half.TOP).with(StairsBlock.FACING, Direction.SOUTH), MSBlocks.GREEN_STONE_BRICK_STAIRS.getDefaultState(), false);
 		StructureBlockUtil.placeChest(chestFarPos, worldIn, boundingBoxIn, getCoordBaseMode(), rightChestType, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
-		chestFarPos = new BlockPos(this.getXWithOffset(20, 12 + 14), this.getYWithOffset(21), this.getZWithOffset(20, 12 + 14));
+		chestFarPos = getActualPos(20, 21, 12 + 14);
 		StructureBlockUtil.placeChest(chestFarPos, worldIn, boundingBoxIn, getCoordBaseMode(), leftChestType, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
 		
-		BlockPos chestNearDoorPos = new BlockPos(this.getXWithOffset(11, 29 + 14), this.getYWithOffset(21), this.getZWithOffset(11, 29 + 14));
+		BlockPos chestNearDoorPos = getActualPos(11, 21, 29 + 14);
 		fillWithBlocks(worldIn, boundingBoxIn, 10, 20, 29 + 14, 11, 20, 29 + 14, MSBlocks.GREEN_STONE_BRICK_STAIRS.getDefaultState().with(StairsBlock.HALF, Half.TOP), MSBlocks.GREEN_STONE_BRICK_STAIRS.getDefaultState(), false);
 		StructureBlockUtil.placeChest(chestNearDoorPos, worldIn, boundingBoxIn, getCoordBaseMode().getOpposite(), leftChestType, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
-		chestNearDoorPos = new BlockPos(this.getXWithOffset(10, 29 + 14), this.getYWithOffset(21), this.getZWithOffset(10, 29 + 14));
+		chestNearDoorPos = getActualPos(10, 21, 29 + 14);
 		StructureBlockUtil.placeChest(chestNearDoorPos, worldIn, boundingBoxIn, getCoordBaseMode().getOpposite(), rightChestType, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
 		
 		Vec3i entityVec = new Vec3i(getEntityXWithOffset(21, 21 + 14), this.getYWithOffset(50), getEntityZWithOffset(21, 21 + 14)); //BlockPos also suitable instead of Vec3i
@@ -146,7 +148,8 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 			pushUp = pushUp + 2; //allows the stairs height to increment twice as fast as sideways placement
 		}
 		
-		StructureBlockUtil.fillWithBlocksCheckWater(world, boundingBox, 17, 48, 24, 24, 48, 24, MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE.getDefaultState().with(DecorBlock.FACING, this.getCoordBaseMode().getOpposite())); //stairs base at top
+		//TODO was not using the correct coordinate type
+		//StructureBlockUtil.fillWithBlocksCheckWater(world, boundingBox, 17, 48, 24, 24, 48, 24, MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE.getDefaultState().with(DecorBlock.FACING, this.getCoordBaseMode().getOpposite())); //stairs base at top
 		fillWithBlocks(world, boundingBox, 17, -10, 20 + 24, 24, -1, 24, MSBlocks.GREEN_STONE_BRICKS.getDefaultState(), MSBlocks.GREEN_STONE_BRICKS.getDefaultState(), false); //underneath stairs
 		
 		fillWithBlocks(world, boundingBox, 20, -10, 14, 41, 0, 55, block, block, false); //underneath main platform
@@ -236,7 +239,7 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 			{
 				for(int z = minZ; z <= maxZ; ++z)
 				{
-					BlockPos pos = new BlockPos(this.getXWithOffset(x, z), this.getYWithOffset(y), this.getZWithOffset(x, z));
+					BlockPos pos = getActualPos(x, y, z);
 					if(structurebb.isVecInside(pos) && !this.getBlockStateFromPos(worldIn, x, y, z, structurebb).getFluidState().getFluid().isEquivalentTo(Fluids.WATER)) //ensures that the chunk is loaded before attempted to remove block, setBlockState already does this check
 						worldIn.removeBlock(pos, false);
 				}

@@ -16,7 +16,7 @@ import net.minecraft.world.gen.feature.template.TemplateManager;
 
 import java.util.Random;
 
-public class FrogTemplePillarPiece extends ScatteredStructurePiece
+public class FrogTemplePillarPiece extends ImprovedStructurePiece
 {
 	private final boolean eroded;
 	private final boolean uraniumFilled;
@@ -24,7 +24,11 @@ public class FrogTemplePillarPiece extends ScatteredStructurePiece
 	
 	public FrogTemplePillarPiece(ChunkGenerator<?> generator, Random random, int x, int y, int z) //this constructor is used when the structure is first initialized
 	{
-		super(MSStructurePieces.FROG_TEMPLE_PILLAR, random, x - 2, y, z - 2, 5, 46, 5);
+		super(MSStructurePieces.FROG_TEMPLE_PILLAR, 0);
+		
+		setRandomDirection(random);
+		setBounds(x - 2, y, z - 2, 5, 46, 5);
+		
 		eroded = random.nextBoolean();
 		uraniumFilled = random.nextBoolean();
 		randReduction = random.nextInt(10);
@@ -44,9 +48,7 @@ public class FrogTemplePillarPiece extends ScatteredStructurePiece
 		tagCompound.putBoolean("eroded", eroded);
 		tagCompound.putBoolean("uraniumFilled", uraniumFilled);
 		tagCompound.putInt("randReduction", randReduction);
-		super.readAdditional(tagCompound);
 	}
-	
 	
 	@Override
 	public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGenerator, Random randomIn, MutableBoundingBox boundingBoxIn, ChunkPos chunkPosIn)
