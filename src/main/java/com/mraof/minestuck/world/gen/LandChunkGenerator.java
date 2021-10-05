@@ -7,23 +7,21 @@ import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.skaianet.UnderlingController;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
-import com.mraof.minestuck.world.biome.LandBiomeSet;
 import com.mraof.minestuck.world.biome.LandBiomeSetWrapper;
 import com.mraof.minestuck.world.biome.gen.LandBiomeProvider;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
+import com.mraof.minestuck.world.gen.feature.structure.GateStructure;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.GristTypeLayer;
 import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.entity.EntityClassification;
-import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryLookupCodec;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.gen.ChunkGenerator;
@@ -53,6 +51,7 @@ public class LandChunkGenerator extends AbstractChunkGenerator
 	public final LandTypePair landTypes;
 	public final StructureBlockRegistry blockRegistry;
 	public final LandBiomeHolder biomes;
+	public final GateStructure.PieceFactory gatePiece;
 	private final Registry<Biome> registry;
 	private final GristTypeLayer anyGristLayer, commonGristLayer, uncommonGristLayer;
 	
@@ -77,6 +76,7 @@ public class LandChunkGenerator extends AbstractChunkGenerator
 		this.registry = registry;
 		landTypes = genSettings.getLandTypes();
 		blockRegistry = genSettings.getBlockRegistry();
+		gatePiece = genSettings.getGatePiece();
 		
 		//TODO Server not available from the world as it is still being constructed. Is a different solution reliable here?
 		// Suggestion: attach it to the world using a capability

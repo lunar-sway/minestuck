@@ -121,6 +121,8 @@ public class GateStructure extends Structure<NoFeatureConfig>
 	
 	private static PieceFactory getFactory(ChunkGenerator generator)
 	{
-		return null; //TODO
+		if (generator instanceof LandChunkGenerator)
+			return ((LandChunkGenerator) generator).gatePiece;
+		else return null;
 	}
 }
