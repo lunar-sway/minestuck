@@ -8,10 +8,7 @@ import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.entity.item.*;
 import com.mraof.minestuck.entity.underling.*;
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.EntitySpawnPlacementRegistry;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.*;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
@@ -163,6 +160,8 @@ public final class MSEntityTypes
 		event.put(PROSPITIAN_ROOK, RookEntity.rookAttributes().build());
 		
 		event.put(PLAYER_DECOY, MobEntity.createMobAttributes().build());
+		
+		event.put(LOTUS_FLOWER, LivingEntity.createLivingAttributes().build());
 	}
 	
 	private static void register(IForgeRegistry<EntityType<?>> registry, EntityType.Builder<?> builder, String name)
