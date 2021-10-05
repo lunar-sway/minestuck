@@ -17,37 +17,12 @@ public class FrogTempleStructure extends Structure<NoFeatureConfig>
 	{
 		super(codec);
 	}
-	/*TODO
-	@Override
-	protected int getSeedModifier()
-	{
-		return 41361201;
-	}
-	*/
+	
 	@Override
 	public IStartFactory<NoFeatureConfig> getStartFactory()
 	{
 		return Start::new;
 	}
-	/*TODO
-	@Override
-	public String getStructureName()
-	{
-		return Minestuck.MOD_ID + ":frog_temple";
-	}
-	
-	@Override
-	protected int getBiomeFeatureDistance(ChunkGenerator<?> generator)
-	{
-		return 140;
-	}
-	
-	@Override
-	protected int getBiomeFeatureSeparation(ChunkGenerator<?> generator)
-	{
-		return 92;
-	}
-	*/
 	
 	@Override
 	public GenerationStage.Decoration step()

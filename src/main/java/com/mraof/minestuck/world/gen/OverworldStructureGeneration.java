@@ -1,26 +1,50 @@
 package com.mraof.minestuck.world.gen;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.util.RegistryKey;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.IFeatureConfig;
-import net.minecraft.world.gen.placement.IPlacementConfig;
-import net.minecraft.world.gen.placement.Placement;
+import net.minecraft.world.gen.settings.StructureSeparationSettings;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.event.world.BiomeLoadingEvent;
+import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID)
 public class OverworldStructureGeneration
 {
+	private static final StructureSeparationSettings FROG_TEMPLE_SETTINGS = new StructureSeparationSettings(140, 92, 41361201);
 	
-	public static void setupOverworldStructureGeneration()
-	{/*TODO
-		for(Biome biome : ForgeRegistries.BIOMES)
+	@SubscribeEvent(priority = EventPriority.HIGH)
+	public static void onWorldLoad(WorldEvent.Load event)
+	{
+		if (event.getWorld() instanceof ServerWorld)
 		{
-			if(BiomeDictionary.hasType(biome, BiomeDictionary.Type.OVERWORLD))
+			ServerWorld world = (ServerWorld) event.getWorld();
+			if (world.dimension() == World.OVERWORLD)
 			{
-				biome.addStructure(MSFeatures.FROG_TEMPLE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
-				biome.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MSFeatures.FROG_TEMPLE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.NOPE.configure(IPlacementConfig.NO_PLACEMENT_CONFIG)));
+				try
+				{
+					world.getChunkSource().getGenerator().getSettings().structureConfig().put(MSFeatures.FROG_TEMPLE, FROG_TEMPLE_SETTINGS);
+				} catch(UnsupportedOperationException ignored)
+				{}
 			}
-		}*/
+		}
+	}
+	
+	@SubscribeEvent(priority = EventPriority.HIGH)
+	public static void onBiomeLoad(BiomeLoadingEvent event)
+	{
+		ResourceLocation name = event.getName();
+		if (name != null && BiomeDictionary.hasType(RegistryKey.create(Registry.BIOME_REGISTRY, name), BiomeDictionary.Type.OVERWORLD))
+		{
+			event.getGeneration().addStructureStart(MSFeatures.FROG_TEMPLE.configured(IFeatureConfig.NONE));
+		}
 	}
 }
