@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minestuck:steep_green_stone_brick_stairs_top"
+    ]
+  },
+  "criteria": {
+    "has_green_stone_brick_stairs": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minestuck:green_stone_brick_stairs"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minestuck:steep_green_stone_brick_stairs_top"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_green_stone_brick_stairs",
+      "has_the_recipe"
+    ]
+  ]
+}

@@ -9,19 +9,22 @@ import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.item.ArmorStandEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.*;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.*;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -237,6 +240,48 @@ public interface OnHitEffect
 		};
 	}
 	
+	/**
+	 * Checks for attacks within three blocks of a point three blocks behind the targets back(covering the whole standard attack range of a player)
+	*/
+	static OnHitEffect backstab(float backstabDamage)
+	{
+		return (stack, target, attacker) -> {
+			Direction direction = target.getDirection().getOpposite();
+			Vector3i targetBackVec3i = target.blockPosition().relative(direction, 3); //three blocks behind the targets back
+			if(targetBackVec3i.closerThan(attacker.blockPosition(), 3))
+			{
+				for(int i = 0; i < 4; i++)
+				{
+					target.level.addParticle(ParticleTypes.DAMAGE_INDICATOR, true, target.blockPosition().relative(direction).getX(), target.getEyePosition(1F).y - 1, target.blockPosition().relative(direction).getZ(), 0.1,0.1,0.1);
+				}
+				
+				DamageSource source;
+				if(attacker instanceof PlayerEntity)
+					source = DamageSource.playerAttack((PlayerEntity) attacker);
+				else source = DamageSource.mobAttack(attacker);
+				
+				target.hurt(source, backstabDamage);
+			}
+		};
+	}
+	
+	static OnHitEffect targetSpecificAdditionalDamage(float additionalDamage, Supplier<EntityType<?>> targetEntity)
+	{
+		return (stack, target, attacker) -> {
+			float damage = additionalDamage * 3.3F;
+			
+			if(attacker instanceof ServerPlayerEntity)
+			{
+				ServerPlayerEntity serverPlayer = (ServerPlayerEntity) attacker;
+				
+				if(target.getType() == targetEntity.get())
+				{
+					target.hurt(DamageSource.playerAttack(serverPlayer), damage);
+				}
+			}
+		};
+	}
+	
 	static OnHitEffect playSound(Supplier<SoundEvent> sound)
 	{
 		return playSound(sound, 1, 1);
@@ -275,7 +320,8 @@ public interface OnHitEffect
 			if(attacker instanceof ServerPlayerEntity)
 			{
 				Title title = PlayerSavedData.getData((ServerPlayerEntity) attacker).getTitle();
-				if(title != null && title.getHeroAspect() == aspect)
+				
+				if((title != null && title.getHeroAspect() == aspect) || ((ServerPlayerEntity) attacker).isCreative())
 					effect.onHit(stack, target, attacker);
 			}
 		};

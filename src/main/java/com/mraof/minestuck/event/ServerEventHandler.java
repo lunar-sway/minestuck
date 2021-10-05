@@ -108,13 +108,13 @@ public class ServerEventHandler
 			ServerPlayerEntity player = (ServerPlayerEntity) event.getSource().getEntity();
 			int exp = 0;
 			if(event.getEntity() instanceof ZombieEntity || event.getEntity() instanceof SkeletonEntity)
-				exp = 6;
+				exp = 1;
 			else if(event.getEntity() instanceof CreeperEntity || event.getEntity() instanceof SpiderEntity || event.getEntity() instanceof SilverfishEntity)
-				exp = 5;
+				exp = 2;
 			else if(event.getEntity() instanceof EndermanEntity || event.getEntity() instanceof BlazeEntity || event.getEntity() instanceof WitchEntity || event.getEntity() instanceof GuardianEntity)
-				exp = 12;
+				exp = 3;
 			else if(event.getEntity() instanceof SlimeEntity)
-				exp = ((SlimeEntity) event.getEntity()).getSize() - 1;
+				exp = Math.min(((SlimeEntity) event.getEntity()).getSize() - 1, 9);
 			
 			if(exp > 0)
 				Echeladder.increaseProgress(player, exp);
@@ -182,33 +182,49 @@ public class ServerEventHandler
 			Title title = PlayerSavedData.getData((ServerPlayerEntity) injuredPlayer).getTitle();
 			boolean isDoom = title != null && title.getHeroAspect() == EnumAspect.DOOM;
 			ItemStack handItem = injuredPlayer.getMainHandItem();
-			if(handItem.getItem() == MSItems.LUCERNE_HAMMER_OF_UNDYING){
-				if((isDoom && injuredPlayer.getHealth() <= 3.0F && injuredPlayer.getRandom().nextFloat() <= .08) || (!isDoom && injuredPlayer.getHealth() <= 2.0F && injuredPlayer.getRandom().nextFloat() <= .02))
+			float activateThreshold = ((injuredPlayer.getMaxHealth() / (injuredPlayer.getHealth() + 1)) / injuredPlayer.getMaxHealth()); //fraction of players health that rises dramatically the more injured they are
+			
+			if(handItem.getItem() == MSItems.LUCERNE_HAMMER_OF_UNDYING)
+			{
+				if(isDoom)
+					activateThreshold = activateThreshold * 1.5F;
+				
+				activateThreshold = activateThreshold + injuredPlayer.getRandom().nextFloat() * .9F;
+				
+				if(activateThreshold >= 1.0F && injuredPlayer.getRandom().nextFloat() >= .75)
 				{
 					injuredPlayer.level.playSound(null, injuredPlayer.getX(), injuredPlayer.getY(), injuredPlayer.getZ(), SoundEvents.TOTEM_USE, SoundCategory.PLAYERS, 1.0F, 1.4F);
 					injuredPlayer.setHealth(injuredPlayer.getHealth() + 3);
 					injuredPlayer.addEffect(new EffectInstance(Effects.REGENERATION, 450, 0));
-					if(isDoom){
+					if(isDoom)
+					{
 						injuredPlayer.addEffect(new EffectInstance(Effects.ABSORPTION, 100, 0));
-						handItem.hurtAndBreak(400, injuredPlayer, playerEntity -> playerEntity.broadcastBreakEvent(Hand.MAIN_HAND));
-					} else {
-						handItem.hurtAndBreak(1000, injuredPlayer, playerEntity -> playerEntity.broadcastBreakEvent(Hand.MAIN_HAND));
+						handItem.hurtAndBreak(100, injuredPlayer, playerEntity -> playerEntity.broadcastBreakEvent(Hand.MAIN_HAND));
+					} else
+					{
+						handItem.hurtAndBreak(250, injuredPlayer, playerEntity -> playerEntity.broadcastBreakEvent(Hand.MAIN_HAND));
 					}
 				}
 			}
-			if(handItem.getItem() == MSItems.CRUEL_FATE_CRUCIBLE){
-				if((isDoom && injuredPlayer.getHealth() <= 12.0F && injuredPlayer.getRandom().nextFloat() <= .25) || (!isDoom && injuredPlayer.getHealth() <= 8.0F && injuredPlayer.getRandom().nextFloat() <= .10))
+			
+			if(handItem.getItem() == MSItems.CRUEL_FATE_CRUCIBLE)
+			{
+				activateThreshold = activateThreshold * 8 + injuredPlayer.getRandom().nextFloat() * .9F;
+				
+				if((isDoom && activateThreshold >= 1.0F && injuredPlayer.getRandom().nextFloat() <= .2) || (!isDoom && activateThreshold >= 1.0F && injuredPlayer.getRandom().nextFloat() <= .05))
 				{
 					AxisAlignedBB axisalignedbb = injuredPlayer.getBoundingBox().inflate(4.0D, 2.0D, 4.0D);
 					List<LivingEntity> list = injuredPlayer.level.getEntitiesOfClass(LivingEntity.class, axisalignedbb);
 					list.remove(injuredPlayer);
-					if (!list.isEmpty()) {
+					if(!list.isEmpty())
+					{
 						injuredPlayer.level.playSound(null, injuredPlayer.getX(), injuredPlayer.getY(), injuredPlayer.getZ(), SoundEvents.WITHER_HURT, SoundCategory.PLAYERS, 0.5F, 1.6F);
 						if(isDoom)
-							handItem.hurtAndBreak(1, injuredPlayer, playerEntity -> playerEntity.broadcastBreakEvent(Hand.MAIN_HAND));
+							handItem.hurtAndBreak(2, injuredPlayer, playerEntity -> playerEntity.broadcastBreakEvent(Hand.MAIN_HAND));
 						else
-							handItem.hurtAndBreak(4, injuredPlayer, playerEntity -> playerEntity.broadcastBreakEvent(Hand.MAIN_HAND));
-						for(LivingEntity livingentity : list) {
+							handItem.hurtAndBreak(10, injuredPlayer, playerEntity -> playerEntity.broadcastBreakEvent(Hand.MAIN_HAND));
+						for(LivingEntity livingentity : list)
+						{
 							livingentity.addEffect(new EffectInstance(Effects.HARM, 1, 1));
 						}
 					}

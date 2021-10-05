@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:dragon_cane"
+  },
+  "input2": {
+    "item": "minestuck:fluorite_octet"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:chancewyrms_extra_fortunate_stabbing_implement"
+  }
+}

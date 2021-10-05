@@ -30,9 +30,11 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import software.bernie.geckolib3.GeckoLib;
 
 import static com.mraof.minestuck.Minestuck.MOD_ID;
 import static com.mraof.minestuck.world.gen.OreGeneration.setupOverworldOreGeneration;
+import static com.mraof.minestuck.world.gen.OverworldStructureGeneration.setupOverworldStructureGeneration;
 
 @Mod(MOD_ID)
 public class Minestuck
@@ -51,6 +53,8 @@ public class Minestuck
 		ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, MinestuckConfig.serverSpec);
 		
 		WorldPersistenceHooks.addHook(new MSWorldPersistenceHook());
+
+		GeckoLib.initialize();
 		
 		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		MSFluids.FLUIDS.register(eventBus);
@@ -85,6 +89,9 @@ public class Minestuck
 		
 		//register ore generation
 		setupOverworldOreGeneration();
+		
+		//register structure generation
+		setupOverworldStructureGeneration();
 		
 		ConsortDialogue.init();
 		

@@ -1,0 +1,8 @@
+{
+    "parent": "block/inner_stairs",
+    "textures": {
+        "bottom": "minestuck:block/polished_green_stone",
+        "top": "minestuck:block/polished_green_stone",
+        "side": "minestuck:block/horizontal_green_stone_bricks"
+    }
+}

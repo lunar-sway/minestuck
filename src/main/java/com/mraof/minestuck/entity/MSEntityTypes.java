@@ -59,6 +59,7 @@ public final class MSEntityTypes
 	public static final EntityType<SbahjPosterEntity> SBAHJ_POSTER = getNull();
 	public static final EntityType<ShopPosterEntity> SHOP_POSTER = getNull();
 	public static final EntityType<HologramEntity> HOLOGRAM = getNull();
+	public static final EntityType<LotusFlowerEntity> LOTUS_FLOWER = getNull();
 	
 	public static final EntityType<ConsumableProjectileEntity> CONSUMABLE_PROJECTILE = getNull();
 	public static final EntityType<ReturningProjectileEntity> RETURNING_PROJECTILE = getNull();
@@ -106,6 +107,7 @@ public final class MSEntityTypes
 		register(registry, EntityType.Builder.<SbahjPosterEntity>of(SbahjPosterEntity::new, EntityClassification.MISC).sized(0.5F, 0.5F).setShouldReceiveVelocityUpdates(false).setTrackingRange(10).setUpdateInterval(Integer.MAX_VALUE), "sbahj_poster");
 		register(registry, EntityType.Builder.<ShopPosterEntity>of(ShopPosterEntity::new, EntityClassification.MISC).sized(0.5F, 0.5F).setShouldReceiveVelocityUpdates(false).setTrackingRange(10).setUpdateInterval(Integer.MAX_VALUE), "shop_poster");
 		register(registry, EntityType.Builder.<HologramEntity>of(HologramEntity::new, EntityClassification.MISC).sized(0.25F, 0.25F).setShouldReceiveVelocityUpdates(false).setTrackingRange(10).setUpdateInterval(Integer.MAX_VALUE), "hologram");
+		register(registry, EntityType.Builder.<LotusFlowerEntity>of(LotusFlowerEntity::new, EntityClassification.MISC).sized(2F, 2F).setShouldReceiveVelocityUpdates(false).setTrackingRange(10), "lotus_flower");
 		
 		register(registry, EntityType.Builder.<ConsumableProjectileEntity>of(ConsumableProjectileEntity::new, EntityClassification.MISC).sized(0.25F, 0.25F).setTrackingRange(4).setUpdateInterval(10), "consumable_projectile");
 		register(registry, EntityType.Builder.<ReturningProjectileEntity>of(ReturningProjectileEntity::new, EntityClassification.MISC).sized(0.25F, 0.25F).setTrackingRange(6).setUpdateInterval(2), "returning_projectile"); //TODO smaller update interval value is temporary solution to improve client rendering

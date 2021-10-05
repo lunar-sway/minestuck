@@ -37,7 +37,8 @@ public class ReturningProjectileWeaponItem extends ConsumableProjectileWeaponIte
 			if(title != null)
 			{
 				noBlockCollision = title.getHeroAspect() == EnumAspect.VOID && item.getItem() == MSItems.UMBRAL_INFILTRATOR;
-			}
+			} else if(playerIn.isCreative() && item.getItem() == MSItems.UMBRAL_INFILTRATOR)
+				noBlockCollision = true;
 			
 			ReturningProjectileEntity projectileEntity = new ReturningProjectileEntity(MSEntityTypes.RETURNING_PROJECTILE, playerIn, worldIn, maxTick, noBlockCollision);
 			projectileEntity.setItem(item);

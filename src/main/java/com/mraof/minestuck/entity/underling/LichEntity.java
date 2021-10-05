@@ -63,7 +63,7 @@ public class LichEntity extends UnderlingEntity
 	@Override
 	protected int getVitalityGel()
 	{
-		return random.nextInt(3)+6;
+		return random.nextInt(3) + 6;
 	}
 	
 	@Override
@@ -82,7 +82,7 @@ public class LichEntity extends UnderlingEntity
 		Entity entity = cause.getEntity();
 		if(this.dead && !this.level.isClientSide)
 		{
-			computePlayerProgress((int) (300* getGristType().getPower() + 650));
+			computePlayerProgress((int) (50 + 2.6 * getGristType().getPower())); //still give xp up to top rung
 			if(entity instanceof ServerPlayerEntity)
 			{
 				Echeladder ladder = PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder();

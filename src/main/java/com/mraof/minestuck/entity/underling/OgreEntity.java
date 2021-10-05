@@ -48,7 +48,7 @@ public class OgreEntity extends UnderlingEntity
 	protected SoundEvent getDeathSound()
 	{
 		return MSSoundEvents.ENTITY_OGRE_DEATH;
-	}	
+	}
 	
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
 	{
@@ -83,7 +83,7 @@ public class OgreEntity extends UnderlingEntity
 		Entity entity = cause.getEntity();
 		if(this.dead && !this.level.isClientSide)
 		{
-			computePlayerProgress((int) (40* getGristType().getPower() + 50));
+			computePlayerProgress((int) (15 + 2.2 * getGristType().getPower())); //most ogres stop giving xp at rung 18
 			if(entity instanceof ServerPlayerEntity)
 			{
 				Echeladder ladder = PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder();
