@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:warped_roots"
+  },
+  "grist_cost": {
+    "minestuck:chalk": 3,
+    "minestuck:mercury": 4
+  }
+}

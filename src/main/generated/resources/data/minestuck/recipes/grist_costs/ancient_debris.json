@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:ancient_debris"
+  },
+  "grist_cost": {
+    "minestuck:rust": 24,
+    "minestuck:sulfur": 48
+  }
+}

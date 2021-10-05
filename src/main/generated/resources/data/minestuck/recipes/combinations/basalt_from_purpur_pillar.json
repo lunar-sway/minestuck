@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:lava_bucket"
+  },
+  "input2": {
+    "item": "minecraft:purpur_pillar"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:basalt"
+  }
+}

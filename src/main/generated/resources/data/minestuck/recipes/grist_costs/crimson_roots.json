@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:crimson_roots"
+  },
+  "grist_cost": {
+    "minestuck:shale": 3,
+    "minestuck:mercury": 4
+  }
+}
