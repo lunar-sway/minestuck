@@ -4,7 +4,7 @@
     "item": "minecraft:mycelium"
   },
   "input2": {
-    "item": "minecraft:crimson_nylium"
+    "item": "minecraft:crimson_fungus"
   },
   "mode": "or",
   "output": {
