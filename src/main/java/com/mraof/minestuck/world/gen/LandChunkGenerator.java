@@ -7,6 +7,7 @@ import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.skaianet.UnderlingController;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
+import com.mraof.minestuck.world.biome.LandBiomeSet;
 import com.mraof.minestuck.world.biome.LandBiomeSetWrapper;
 import com.mraof.minestuck.world.biome.gen.LandBiomeProvider;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
@@ -14,22 +15,29 @@ import com.mraof.minestuck.world.lands.GristTypeLayer;
 import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.entity.EntityClassification;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryLookupCodec;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.WorldGenRegion;
 import net.minecraft.world.gen.feature.structure.StructureManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 import java.util.Random;
 
 public class LandChunkGenerator extends AbstractChunkGenerator
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	public static final Codec<LandChunkGenerator> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 					Codec.LONG.fieldOf("seed").stable().forGetter(generator -> generator.seed),
 					LandTypePair.CODEC.fieldOf("land_types").forGetter(generator -> generator.landTypes),
@@ -43,6 +51,8 @@ public class LandChunkGenerator extends AbstractChunkGenerator
 	public final LandBiomeHolder biomes;
 	private final Registry<Biome> registry;
 	private final GristTypeLayer anyGristLayer, commonGristLayer, uncommonGristLayer;
+	
+	private ChunkPos landGatePosition;
 	
 	public LandChunkGenerator(long seed, LandTypePair landTypes, Registry<Biome> registry)
 	{
@@ -119,5 +129,42 @@ public class LandChunkGenerator extends AbstractChunkGenerator
 		GristType anyType = anyGristLayer.getTypeAt(x, z);
 		
 		return new TranslationTextComponent(GRIST_LAYER_INFO, commonType.getDisplayName(), uncommonType.getDisplayName(), anyType.getDisplayName());
+	}
+	
+	public ChunkPos getOrFindLandGatePosition()
+	{
+		if (landGatePosition != null)
+			return landGatePosition;
+		
+		Random worldRand = new Random(seed);
+		
+		double angle = 2 * Math.PI * worldRand.nextDouble();
+		int radius = 38 + worldRand.nextInt(12);
+		
+		Biome normalBiome = biomes.baseBiomes.NORMAL;
+		
+		for(; radius < 65; radius += 6)
+		{
+			int posX = (int) Math.round(Math.cos(angle) * radius);
+			int posZ = (int) Math.round(Math.sin(angle) * radius);
+			
+			//TODO Could there be a better way to search for a position? (Look for possible positions with the "surrounded by normal biomes" property rather than pick a random one and then check if it has this property)
+			BlockPos pos = getBiomeSource().findBiomeHorizontal((posX << 4) + 8, 0,(posZ << 4) + 8, 96, biome -> biome == normalBiome, worldRand);
+			
+			if(pos != null && getBiomeSource().getBiomesWithin(pos.getX(), 0, pos.getZ(), 16).stream().allMatch(biome -> biome == normalBiome))
+				return new ChunkPos(pos.getX() >> 4, pos.getZ() >> 4);
+		}
+		
+		int posX = (int) Math.round(Math.cos(angle) * radius);
+		int posZ = (int) Math.round(Math.sin(angle) * radius);
+		LOGGER.warn("Did not come across a decent location for land gates. Placing it without regard to any biomes.");
+		
+		BlockPos pos = getBiomeSource().findBiomeHorizontal((posX << 4) + 8, 0, (posZ << 4) + 8, 96, biome -> biome == normalBiome, worldRand);
+		
+		if(pos != null)
+			landGatePosition = new ChunkPos(pos);
+		else landGatePosition = new ChunkPos(posX, posZ);
+		
+		return landGatePosition;
 	}
 }

@@ -75,7 +75,6 @@ public class ServerEventHandler
 		IdentifierHandler.clear();
 		SkaianetHandler.clear();
 		MSDimensions.clear();
-		MSFeatures.LAND_GATE.clearCache();
 	}
 	
 	@SubscribeEvent

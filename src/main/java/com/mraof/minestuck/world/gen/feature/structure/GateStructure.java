@@ -1,14 +1,12 @@
 package com.mraof.minestuck.world.gen.feature.structure;
 
 import com.mojang.serialization.Codec;
-import com.mraof.minestuck.world.biome.LandBiomeSet;
-import net.minecraft.util.RegistryKey;
+import com.mraof.minestuck.world.gen.LandChunkGenerator;
 import net.minecraft.util.SharedSeedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.util.registry.DynamicRegistries;
-import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.provider.BiomeProvider;
 import net.minecraft.world.chunk.ChunkStatus;
@@ -23,8 +21,6 @@ import net.minecraft.world.server.ServerWorld;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 //Note: placement is handled in a special way
@@ -32,8 +28,6 @@ import java.util.Random;
 public class GateStructure extends Structure<NoFeatureConfig>
 {
 	private static final Logger LOGGER = LogManager.getLogger();
-	
-	private final Map<RegistryKey<World>, ChunkPos> positionCache = new HashMap<>();
 	
 	public GateStructure(Codec<NoFeatureConfig> codec)
 	{
@@ -64,13 +58,17 @@ public class GateStructure extends Structure<NoFeatureConfig>
 		{
 			ChunkPos chunkPos = findGatePosition(world.getChunkSource().getGenerator());
 			
-			StructureStart<?> start = world.getChunk(chunkPos.x, chunkPos.z, ChunkStatus.STRUCTURE_STARTS).getStartForFeature(this);
-			
-			if(start instanceof Start)
+			if (chunkPos != null)
 			{
-				return ((Start) start).findGatePos();
+				StructureStart<?> start = world.getChunk(chunkPos.x, chunkPos.z, ChunkStatus.STRUCTURE_STARTS).getStartForFeature(this);
+				
+				if(start instanceof Start)
+				{
+					return ((Start) start).findGatePos();
+				} else
+					LOGGER.warn("Expected to find gate structure at chunk coords {}, in dimension {}, but found {}!", chunkPos, world.dimension(), start);
 			} else
-				LOGGER.warn("Expected to find gate structure at chunk coords {}, in dimension {}, but found {}!", chunkPos, world.dimension(), start);
+				LOGGER.warn("No land gate position could be found for dimension {}.", world.dimension());
 		}
 		
 		return null;
@@ -78,58 +76,13 @@ public class GateStructure extends Structure<NoFeatureConfig>
 	
 	private ChunkPos findGatePosition(ChunkGenerator chunkGenerator)
 	{
-		//Idea; Dimtype -> location map that is cleared on server stopped
-		RegistryKey<World> type = null; //TODO get world key (or other appropriate identifier) from the chunk generator, or move the cache to the chunk generator
-		if(type != null)
+		if (chunkGenerator instanceof LandChunkGenerator)
 		{
-			ChunkPos pos = positionCache.get(type);
-			if(pos != null)
-				return pos;
-		}
-		
-		long seed = 0; //TODO
-		Random worldRand = new Random(seed);
-		
-		double angle = 2 * Math.PI * worldRand.nextDouble();
-		int radius = 38 + worldRand.nextInt(12);
-		
-		Biome normalBiome = LandBiomeSet.getSet(chunkGenerator).map(set -> set.NORMAL).orElse(null);
-		
-		for(; radius < 65; radius += 6)
-		{
-			int posX = (int) Math.round(Math.cos(angle) * radius);
-			int posZ = (int) Math.round(Math.sin(angle) * radius);
+			LandChunkGenerator landGenerator = (LandChunkGenerator) chunkGenerator;
 			
-			//TODO Could there be a better way to search for a position? (Look for possible positions with the "surrounded by normal biomes" property rather than pick a random one and then check if it has this property)
-			BlockPos pos = chunkGenerator.getBiomeSource().findBiomeHorizontal((posX << 4) + 8, 0,(posZ << 4) + 8, 96, biome -> biome == normalBiome, worldRand);
-
-			if(pos != null && chunkGenerator.getBiomeSource().getBiomesWithin(pos.getX(), 0, pos.getZ(), 16).stream().allMatch(biome -> biome == normalBiome))
-				return new ChunkPos(pos.getX() >> 4, pos.getZ() >> 4);
-		}
-		
-		int posX = (int) Math.round(Math.cos(angle) * radius);
-		int posZ = (int) Math.round(Math.sin(angle) * radius);
-		LOGGER.warn("Did not come across a decent location for land gates. Placing it without regard to any biomes.");
-		
-		BlockPos pos = chunkGenerator.getBiomeSource().findBiomeHorizontal((posX << 4) + 8, 0, (posZ << 4) + 8, 96, biome -> biome == normalBiome, worldRand);
-		
-		ChunkPos gatePos;
-		if(pos != null)
-			gatePos = new ChunkPos(pos);
-		else gatePos = new ChunkPos(posX, posZ);
-		
-		if(type != null)
-			positionCache.put(type, gatePos);
-		
-		return gatePos;
-	}
-	
-	/**
-	 * Should be called during a ServerStopped event. Otherwise, cached gate positions might end up being used for dimensions in other worlds.
-	 */
-	public void clearCache()
-	{
-		positionCache.clear();
+			return landGenerator.getOrFindLandGatePosition();
+		} else
+			return null;
 	}
 	
 	public static class Start extends StructureStart<NoFeatureConfig>
