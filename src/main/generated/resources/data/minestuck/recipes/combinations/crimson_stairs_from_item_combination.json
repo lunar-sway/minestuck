@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:crimson_planks"
+  },
+  "input2": {
+    "item": "minecraft:crimson_slab"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:crimson_stairs"
+  }
+}
