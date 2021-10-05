@@ -10,6 +10,7 @@ import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.LandBiomeSet;
 import com.mraof.minestuck.world.biome.LandBiomeSetWrapper;
 import com.mraof.minestuck.world.biome.gen.LandBiomeProvider;
+import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.GristTypeLayer;
 import com.mraof.minestuck.world.lands.LandProperties;
@@ -27,10 +28,13 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.WorldGenRegion;
+import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.structure.StructureManager;
+import net.minecraft.world.server.ServerWorld;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
@@ -129,6 +133,18 @@ public class LandChunkGenerator extends AbstractChunkGenerator
 		GristType anyType = anyGristLayer.getTypeAt(x, z);
 		
 		return new TranslationTextComponent(GRIST_LAYER_INFO, commonType.getDisplayName(), uncommonType.getDisplayName(), anyType.getDisplayName());
+	}
+	
+	@Nullable
+	@Override
+	public BlockPos findNearestMapFeature(ServerWorld world, Structure<?> structure, BlockPos pos, int searchSize, boolean checkReference)
+	{
+		if (structure == MSFeatures.LAND_GATE)
+		{
+			ChunkPos gatePos = getOrFindLandGatePosition();
+			return new BlockPos((gatePos.x << 4) + 8, 32, (gatePos.z << 4) + 8);
+		} else
+			return super.findNearestMapFeature(world, structure, pos, searchSize, checkReference);
 	}
 	
 	public ChunkPos getOrFindLandGatePosition()

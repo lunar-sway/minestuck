@@ -54,22 +54,19 @@ public class GateStructure extends Structure<NoFeatureConfig>
 	
 	public BlockPos findLandGatePos(ServerWorld world)
 	{
-		if(world.getChunkSource().getGenerator().getBiomeSource().canGenerateStructure(this))
+		ChunkPos chunkPos = findGatePosition(world.getChunkSource().getGenerator());
+		
+		if (chunkPos != null)
 		{
-			ChunkPos chunkPos = findGatePosition(world.getChunkSource().getGenerator());
+			StructureStart<?> start = world.getChunk(chunkPos.x, chunkPos.z, ChunkStatus.STRUCTURE_STARTS).getStartForFeature(this);
 			
-			if (chunkPos != null)
+			if(start instanceof Start)
 			{
-				StructureStart<?> start = world.getChunk(chunkPos.x, chunkPos.z, ChunkStatus.STRUCTURE_STARTS).getStartForFeature(this);
-				
-				if(start instanceof Start)
-				{
-					return ((Start) start).findGatePos();
-				} else
-					LOGGER.warn("Expected to find gate structure at chunk coords {}, in dimension {}, but found {}!", chunkPos, world.dimension(), start);
+				return ((Start) start).findGatePos();
 			} else
-				LOGGER.warn("No land gate position could be found for dimension {}.", world.dimension());
-		}
+				LOGGER.warn("Expected to find gate structure at chunk coords {}, in dimension {}, but found {}!", chunkPos, world.dimension(), start);
+		} else
+			LOGGER.warn("No land gate position could be found for dimension {}.", world.dimension());
 		
 		return null;
 	}
