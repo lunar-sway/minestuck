@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:warped_wart_block"
+  },
+  "grist_cost": {
+    "minestuck:iodine": 6,
+    "minestuck:tar": 2,
+    "minestuck:mercury": 2
+  }
+}
