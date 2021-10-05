@@ -1,8 +1,8 @@
 package com.mraof.minestuck.world.gen.feature;
 
 import com.mojang.serialization.Codec;
+import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ISeedReader;
 import net.minecraft.world.biome.Biome;
@@ -48,7 +48,7 @@ public class OceanRundownFeature extends Feature<NoFeatureConfig>
 		pos2 = oceanPos.remove(rand.nextInt(oceanPos.size()));
 		pos3 = oceanPos.get(rand.nextInt(oceanPos.size()));
 		
-		BlockState fluid = Blocks.WATER.defaultBlockState();//generator.getSettings().getDefaultFluid(); TODO
+		BlockState fluid = StructureBlockRegistry.getOrDefault(generator).getBlockState("ocean");
 		int minX = Math.min(pos.getX(), Math.min(pos2.getX(), pos3.getX()));
 		int maxX = Math.max(pos.getX(), Math.max(pos2.getX(), pos3.getX()));
 		for(int posX = minX; posX <= maxX; posX++)
