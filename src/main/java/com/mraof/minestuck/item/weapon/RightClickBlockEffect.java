@@ -1,6 +1,6 @@
 package com.mraof.minestuck.item.weapon;
 
-import com.mraof.minestuck.effects.MSEffects;
+import com.mraof.minestuck.effects.CreativeShockEffect;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -88,7 +88,7 @@ public interface RightClickBlockEffect
 			PlayerEntity player = context.getPlayer();
 			if(player != null)
 			{
-				if(!player.isPotionActive(MSEffects.CREATIVE_SHOCK.get()) || player.isCreative())
+				if(!CreativeShockEffect.doesCreativeShockLimit(player, 0, 3) || effect instanceof PogoEffect) //TODO pogo is still inactivated for creative players with effect regardless, may not be occuring here
 				{
 					effect.onClick(context);
 					if(effect.onClick(context).isSuccess())

@@ -31,7 +31,7 @@ public class StopCreativeShockEffectPacket implements PlayToClientPacket
 	public void execute()
 	{
 		PlayerEntity playerEntity = Minecraft.getInstance().player;
-		if(!playerEntity.isCreative())
+		if(playerEntity != null)
 		{
 			playerEntity.abilities.allowEdit = !playerGameType.hasLimitedInteractions();
 		}

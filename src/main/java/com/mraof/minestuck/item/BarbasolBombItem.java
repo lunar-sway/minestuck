@@ -1,6 +1,6 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.effects.MSEffects;
+import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.item.BarbasolBombEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -25,7 +25,7 @@ public class BarbasolBombItem extends Item
     {
         ItemStack item = playerIn.getHeldItem(handIn);
         
-        if((!playerIn.isPotionActive(MSEffects.CREATIVE_SHOCK.get()) || playerIn.isCreative()))
+        if(!CreativeShockEffect.doesCreativeShockLimit(playerIn, 0, 3))
         {
             if(!playerIn.isCreative())
             {

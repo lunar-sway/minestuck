@@ -1,19 +1,14 @@
-package com.mraof.minestuck.world.gen.feature.structure.tiered;
+package com.mraof.minestuck.world.gen.feature.structure.tiered.tier1;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.*;
-import com.mraof.minestuck.block.redstone.SolidSwitchBlock;
-import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
-import com.mraof.minestuck.tileentity.redstone.RemoteObserverTileEntity;
-import com.mraof.minestuck.tileentity.redstone.StatStorerTileEntity;
-import com.mraof.minestuck.tileentity.redstone.SummonerTileEntity;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MSRotationUtil;
 import com.mraof.minestuck.world.MSDimensions;
@@ -29,7 +24,6 @@ import net.minecraft.block.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.state.properties.ChestType;
-import net.minecraft.state.properties.Half;
 import net.minecraft.state.properties.SlabType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
@@ -43,13 +37,12 @@ import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
 import net.minecraft.world.gen.feature.template.Template;
 import net.minecraft.world.gen.feature.template.TemplateManager;
-import net.minecraftforge.common.util.Constants;
 
 import java.util.Random;
 
-public class TierOneDungeonPiece extends ImprovedStructurePiece
+public class TierOneDungeonEntryPiece extends ImprovedStructurePiece
 {
-	private final TierOneDungeonPiece.Selector DECAYED_BLOCKS = new TierOneDungeonPiece.Selector();
+	private final TierOneDungeonEntryPiece.Selector DECAYED_BLOCKS = new TierOneDungeonEntryPiece.Selector();
 	
 	private boolean createRan = false; //boolean check to prevent certain aspects from generating several times over or changing
 	private boolean bottomRoomSpawner1, bottomRoomSpawner2;
@@ -85,23 +78,48 @@ public class TierOneDungeonPiece extends ImprovedStructurePiece
 	private EnumAspect worldAspect;
 	private EnumClass worldClass;
 	private TerrainLandType worldTerrain;
+	private Template rabbitTemplate;
 	
 	
-	public TierOneDungeonPiece(TemplateManager templates, ChunkGenerator<?> generator, Random random, int x, int z)
+	public TierOneDungeonEntryPiece(TemplateManager templates, ChunkGenerator<?> generator, Random random, int x, int z)
 	{
-		super(MSStructurePieces.TIER_ONE_DUNGEON, 0);
+		super(MSStructurePieces.TIER_ONE_DUNGEON_ENTRY, 0);
 		
 		setRandomDirection(random);
 		setBoundsWithWorldHeight(generator, x, z, 82, 60, 82, -1, Heightmap.Type.OCEAN_FLOOR_WG); //x = 42, z = 32
+		
+		initTemplates(templates);
 	}
 	
-	public TierOneDungeonPiece(TemplateManager templates, CompoundNBT nbt)
+	public TierOneDungeonEntryPiece(TemplateManager templates, CompoundNBT nbt)
 	{
-		super(MSStructurePieces.TIER_ONE_DUNGEON, nbt);
+		super(MSStructurePieces.TIER_ONE_DUNGEON_ENTRY, nbt);
 		bottomRoomSpawner1 = nbt.getBoolean("bottomRoomSpawner1");
 		bottomRoomSpawner2 = nbt.getBoolean("bottomRoomSpawner2");
 		randomRoomType = nbt.getInt("randomRoomType");
 		roomVariable1 = nbt.getInt("roomVariable1");
+		
+		initTemplates(templates);
+	}
+	
+	public EnumAspect getWorldAspect()
+	{
+		return worldAspect;
+	}
+	
+	public EnumClass getWorldClass()
+	{
+		return worldClass;
+	}
+	
+	public TerrainLandType getWorldTerrain()
+	{
+		return worldTerrain;
+	}
+	
+	private void initTemplates(TemplateManager templates)
+	{
+		rabbitTemplate = templates.getTemplateDefaulted(new ResourceLocation(Minestuck.MOD_ID, "stone_rabbit_statue"));
 	}
 	
 	@Override
@@ -294,7 +312,7 @@ public class TierOneDungeonPiece extends ImprovedStructurePiece
 	
 	private void bottomRoomPlainType(IWorld world, MutableBoundingBox boundingBox, Random rand)
 	{
-		Debug.debugf("bottomRoomPlainType");
+		//Debug.debugf("bottomRoomPlainType");
 		
 		placePillars(world, boundingBox, rand, false);
 		
@@ -302,7 +320,7 @@ public class TierOneDungeonPiece extends ImprovedStructurePiece
 	
 	private void bottomRoomDecrepitType(IWorld world, MutableBoundingBox boundingBox, Random rand)
 	{
-		Debug.debugf("bottomRoomDecrepitType");
+		//Debug.debugf("bottomRoomDecrepitType");
 		
 		placePillars(world, boundingBox, rand, true);
 		
@@ -329,7 +347,7 @@ public class TierOneDungeonPiece extends ImprovedStructurePiece
 	
 	private void bottomRoomOrnateType(IWorld world, MutableBoundingBox boundingBox, Random rand)
 	{
-		Debug.debugf("bottomRoomOrnateType");
+		//Debug.debugf("bottomRoomOrnateType");
 		
 		placePillars(world, boundingBox, rand, false);
 		StructureBlockUtil.createCylinder(world, boundingBox, primarySlabBlock.with(SlabBlock.TYPE, SlabType.BOTTOM),
@@ -342,7 +360,7 @@ public class TierOneDungeonPiece extends ImprovedStructurePiece
 	
 	private void bottomRoomSpawnersType(IWorld world, MutableBoundingBox boundingBox, Random rand)
 	{
-		Debug.debugf("bottomRoomSpawnersType");
+		//Debug.debugf("bottomRoomSpawnersType");
 		
 		placePillars(world, boundingBox, rand, false);
 		
@@ -365,7 +383,7 @@ public class TierOneDungeonPiece extends ImprovedStructurePiece
 	
 	private void bottomRoomSkippingStonesType(IWorld world, MutableBoundingBox boundingBox, Random rand)
 	{
-		Debug.debugf("bottomRoomSkippingStonesType");
+		//Debug.debugf("bottomRoomSkippingStonesType");
 		
 		fillWithBlocks(world, boundingBox, lowerRoomMinX + 2, lowerRoomMinY + 1, lowerRoomMinZ + 2, lowerRoomMaxX - 2, lowerRoomMinY + 2, lowerRoomMaxZ - 2, fluid, fluid, false);
 		fillWithBlocks(world, boundingBox, lowerRoomMinX + 11, lowerRoomMinY + 1, lowerRoomMinZ + 11, lowerRoomMaxX - 11, lowerRoomMinY + 2, lowerRoomMaxZ - 11, primaryBlock, primaryBlock, false);
@@ -375,7 +393,7 @@ public class TierOneDungeonPiece extends ImprovedStructurePiece
 	
 	private void bottomRoomTrappedType(IWorld world, MutableBoundingBox boundingBox, Random rand) //looks same as plain
 	{
-		Debug.debugf("bottomRoomTrappedType");
+		//Debug.debugf("bottomRoomTrappedType");
 		
 		placePillars(world, boundingBox, rand, false);
 	}
@@ -440,14 +458,16 @@ public class TierOneDungeonPiece extends ImprovedStructurePiece
 		
 		} else if(worldAspect == EnumAspect.LIFE) //rabbit statue
 		{
-			//StructureBlockUtil.placeLargeAspectSymbol(new BlockPos(getXWithOffset(entryRoomMinX, entryRoomMinZ), getYWithOffset(entryRoomMaxY + 20), getZWithOffset(entryRoomMinX, entryRoomMinZ)), world, boundingBox, primaryBlock, EnumAspect.BLOOD);
-			
+			/*
 			fillWithBlocks(world, boundingBox, entryRoomMinX - 2, entryRoomMaxY - 10, entryRoomMinZ + 6, entryRoomMinX - 2, entryRoomMaxY - 3, entryRoomMinZ + 6, MSBlocks.PIPE.getDefaultState().with(PipeBlock.FACING, Direction.UP), MSBlocks.PIPE.getDefaultState(), false); //pipe 1
 			setBlockState(world, MSBlocks.PIPE_INTERSECTION.getDefaultState(), entryRoomMinX - 2, entryRoomMaxY - 2, entryRoomMinZ + 6, boundingBox);
 			fillWithBlocks(world, boundingBox, entryRoomMinX - 1, entryRoomMaxY - 2, entryRoomMinZ + 6, entryRoomMinX + 3, entryRoomMaxY - 2, entryRoomMinZ + 6, MSBlocks.PIPE.getDefaultState().with(PipeBlock.FACING, Direction.NORTH), MSBlocks.PIPE.getDefaultState(), false);
+			/**/
+			
+			StructureBlockUtil.placeCenteredTemplate(world, new BlockPos(getActualPos((entryRoomMaxX + entryRoomMinX) / 2, entryRoomMaxY + 1, (entryRoomMaxZ + entryRoomMinZ) / 2)), rabbitTemplate, new PlacementSettings().setBoundingBox(boundingBox).setRotation(MSRotationUtil.fromDirection(getCoordBaseMode().getOpposite())));
 			
 			/* //TODO Will be for Life
-			fillWithBlocks(world, boundingBox, entryRoomMinX + 6, entryRoomMaxY + 4, entryRoomMinZ + 4, entryRoomMaxX - 6, entryRoomMaxY + 8, entryRoomMaxZ - 4, secondaryBlock, secondaryBlock, false); //body
+			fillWithBlocks(world, boundingBox, entryRoomMinX + 6, entryRoomMaxY + 4, entryRoomMinZ + 4, entryRoomMaxX - 6, entryRoomMaxY + 8, entryRoomMaxZ - 4, Blocks.STONE_BRICKS.getDefaultState(), secondaryBlock, false); //body
 			fillWithBlocks(world, boundingBox, entryRoomMinX + 7, entryRoomMaxY + 7, entryRoomMinZ + 2, entryRoomMaxX - 7, entryRoomMaxY + 10, entryRoomMinZ + 5, secondaryBlock, secondaryBlock, false); //head
 			fillWithBlocks(world, boundingBox, entryRoomMinX + 7, entryRoomMaxY + 11, entryRoomMinZ + 5, entryRoomMinX + 7, entryRoomMaxY + 14, entryRoomMinZ + 5, secondaryBlock, secondaryBlock, false); //left ear
 			fillWithBlocks(world, boundingBox, entryRoomMaxX - 7, entryRoomMaxY + 11, entryRoomMinZ + 5, entryRoomMaxX - 7, entryRoomMaxY + 14, entryRoomMinZ + 5, secondaryBlock, secondaryBlock, false); //right ear
@@ -455,7 +475,7 @@ public class TierOneDungeonPiece extends ImprovedStructurePiece
 			fillWithBlocks(world, boundingBox, entryRoomMaxX - 7, entryRoomMaxY + 1, entryRoomMinZ + 4, entryRoomMaxX - 6, entryRoomMaxY + 4, entryRoomMinZ + 5, secondaryBlock, secondaryBlock, false); //front right leg
 			fillWithBlocks(world, boundingBox, entryRoomMinX + 5, entryRoomMaxY + 1, entryRoomMaxZ - 5, entryRoomMinX + 7, entryRoomMaxY + 6, entryRoomMaxZ - 4, secondaryBlock, secondaryBlock, false); //back left leg
 			fillWithBlocks(world, boundingBox, entryRoomMaxX - 7, entryRoomMaxY + 1, entryRoomMaxZ - 5, entryRoomMaxX - 5, entryRoomMaxY + 6, entryRoomMaxZ - 4, secondaryBlock, secondaryBlock, false); //back right leg
-			*/
+			/**/
 		} else if(worldAspect == EnumAspect.LIGHT)
 		{
 		} else if(worldAspect == EnumAspect.TIME)

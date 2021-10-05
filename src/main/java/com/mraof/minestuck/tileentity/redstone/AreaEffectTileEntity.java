@@ -1,6 +1,7 @@
 package com.mraof.minestuck.tileentity.redstone;
 
 import com.mraof.minestuck.block.redstone.AreaEffectBlock;
+import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import net.minecraft.entity.LivingEntity;
@@ -31,13 +32,22 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 	{
 		for(LivingEntity livingEntity : world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(minEffectPos, maxEffectPos)))
 		{
-			if(livingEntity instanceof PlayerEntity)
+			if(effect instanceof CreativeShockEffect) //skips later creative/harmful specific checks as the effect should always be given
 			{
-				if(((PlayerEntity) livingEntity).isCreative())
-					break;
+				livingEntity.addPotionEffect(new EffectInstance(effect, 120, effectAmplifier, false, false));
+			} else
+			{
+				if(livingEntity instanceof PlayerEntity)
+				{
+					if(((PlayerEntity) livingEntity).isCreative() && !effect.isBeneficial())
+						break;
+				}
+				
+				if(effect.isInstant())
+					livingEntity.addPotionEffect(new EffectInstance(effect, 1, effectAmplifier, false, false));
+				else
+					livingEntity.addPotionEffect(new EffectInstance(effect, 120, effectAmplifier, false, false));
 			}
-			
-			livingEntity.addPotionEffect(new EffectInstance(effect, 120, effectAmplifier, false, false));
 		}
 	}
 	

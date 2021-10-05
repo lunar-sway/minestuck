@@ -1,6 +1,6 @@
 package com.mraof.minestuck.item.weapon;
 
-import com.mraof.minestuck.effects.MSEffects;
+import com.mraof.minestuck.effects.CreativeShockEffect;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -160,7 +160,7 @@ public interface ItemRightClickEffect
 		return (world, player, hand) -> {
 			ItemStack itemStackIn = player.getHeldItem(hand);
 			
-			if(!player.isPotionActive(MSEffects.CREATIVE_SHOCK.get()) || player.isCreative())
+			if(!CreativeShockEffect.doesCreativeShockLimit(player, 0, 3))
 			{
 				effect.onRightClick(world, player, hand);
 				if(effect.onRightClick(world, player, hand).getType().isSuccess())

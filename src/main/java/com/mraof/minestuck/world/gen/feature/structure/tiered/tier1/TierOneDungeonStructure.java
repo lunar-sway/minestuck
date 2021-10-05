@@ -1,4 +1,4 @@
-package com.mraof.minestuck.world.gen.feature.structure.tiered;
+package com.mraof.minestuck.world.gen.feature.structure.tiered.tier1;
 
 import com.mojang.datafixers.Dynamic;
 import com.mraof.minestuck.Minestuck;
@@ -58,7 +58,8 @@ public class TierOneDungeonStructure extends ScatteredStructure<NoFeatureConfig>
 	
 	public static class Start extends StructureStart
 	{
-		private Start(Structure<?> structure, int chunkX, int chunkZ, MutableBoundingBox boundingBox, int reference, long seed) {
+		private Start(Structure<?> structure, int chunkX, int chunkZ, MutableBoundingBox boundingBox, int reference, long seed)
+		{
 			super(structure, chunkX, chunkZ, boundingBox, reference, seed);
 		}
 		
@@ -67,26 +68,13 @@ public class TierOneDungeonStructure extends ScatteredStructure<NoFeatureConfig>
 		{
 			int x = chunkX * 16 + rand.nextInt(16);
 			int z = chunkZ * 16 + rand.nextInt(16);
-			TierOneDungeonPiece mainPiece = new TierOneDungeonPiece(templateManagerIn, generator, rand, x, z);
+			TierOneDungeonEntryPiece mainPiece = new TierOneDungeonEntryPiece(templateManagerIn, generator, rand, x, z);
 			components.add(mainPiece);
 			
-			TierOneDungeonFirstRoomPiece firstRoomPiece = new TierOneDungeonFirstRoomPiece(templateManagerIn, mainPiece.getCoordBaseMode(), x, mainPiece.getBoundingBox().minY, z);
+			TierOneDungeonSecondaryPiece secondaryPiece = new TierOneDungeonSecondaryPiece(templateManagerIn, mainPiece.getCoordBaseMode(), x, mainPiece.getBoundingBox().minY, z);
 			
-			components.add(firstRoomPiece);
-			/*for(int i = 0; i < 2; i++) //x iterate
-			{
-				for(int j = 0; j < 2; j++) //z iterate
-				{
-					if(rand.nextBoolean() && i != 0)
-					{
-						Debug.debugf("additional piece");
-						/*TierOneDungeonFirstRoomPiece additionalRoomPiece = new TierOneDungeonFirstRoomPiece(generator, rand,
-								x + (firstRoomOffset - 2 * i * firstRoomOffset), y,
-								z + (firstRoomOffset - 2 * j * firstRoomOffset));
-						components.add(additionalRoomPiece);*/ //50% chance of generating additional room in the remaining directions after original
-					/*}
-				}
-			}*/
+			components.add(secondaryPiece);
+			
 			recalculateStructureSize();
 		}
 	}

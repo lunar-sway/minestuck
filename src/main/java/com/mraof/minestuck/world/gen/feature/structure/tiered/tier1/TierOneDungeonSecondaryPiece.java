@@ -1,9 +1,8 @@
-package com.mraof.minestuck.world.gen.feature.structure.tiered;
+package com.mraof.minestuck.world.gen.feature.structure.tiered.tier1;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.block.MSDirectionalBlock;
 import com.mraof.minestuck.block.redstone.SolidSwitchBlock;
 import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.MSEntityTypes;
@@ -15,7 +14,6 @@ import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.tileentity.redstone.RemoteObserverTileEntity;
 import com.mraof.minestuck.tileentity.redstone.StatStorerTileEntity;
 import com.mraof.minestuck.tileentity.redstone.SummonerTileEntity;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MSRotationUtil;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
@@ -35,8 +33,6 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.gen.feature.structure.ScatteredStructurePiece;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
 import net.minecraft.world.gen.feature.template.Template;
 import net.minecraft.world.gen.feature.template.TemplateManager;
@@ -44,7 +40,7 @@ import net.minecraftforge.common.util.Constants;
 
 import java.util.Random;
 
-public class TierOneDungeonFirstRoomPiece extends ImprovedStructurePiece
+public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 {
 	private boolean createRan = false; //boolean check to prevent certain aspects from generating several times over or changing
 	private boolean spawner1, spawner2;
@@ -73,9 +69,9 @@ public class TierOneDungeonFirstRoomPiece extends ImprovedStructurePiece
 	private TerrainLandType worldTerrain;
 	private Template bloodSymbolTemplate;
 	
-	public TierOneDungeonFirstRoomPiece(TemplateManager templates, Direction direction, int x, int y, int z) //this constructor is used when the structure is first initialized
+	public TierOneDungeonSecondaryPiece(TemplateManager templates, Direction direction, int x, int y, int z) //this constructor is used when the structure is first initialized
 	{
-		super(MSStructurePieces.TIER_ONE_DUNGEON_FIRST_ROOM, 0);
+		super(MSStructurePieces.TIER_ONE_DUNGEON_SECONDARY, 0);
 		
 		setCoordBaseMode(direction);
 		setBounds(x, y, z, 82, 50, 82);
@@ -83,9 +79,9 @@ public class TierOneDungeonFirstRoomPiece extends ImprovedStructurePiece
 		initTemplates(templates);
 	}
 	
-	public TierOneDungeonFirstRoomPiece(TemplateManager templates, CompoundNBT nbt) //this constructor is used for reading from data
+	public TierOneDungeonSecondaryPiece(TemplateManager templates, CompoundNBT nbt) //this constructor is used for reading from data
 	{
-		super(MSStructurePieces.TIER_ONE_DUNGEON_FIRST_ROOM, nbt);
+		super(MSStructurePieces.TIER_ONE_DUNGEON_SECONDARY, nbt);
 		spawner1 = nbt.getBoolean("sp1");
 		spawner2 = nbt.getBoolean("sp2");
 		randomRoomType = nbt.getInt("randomRoomType");
@@ -136,10 +132,7 @@ public class TierOneDungeonFirstRoomPiece extends ImprovedStructurePiece
 		spawner1 = false;
 		spawner2 = false;
 		
-		fillWithBlocks(worldIn, boundingBoxIn,
-				firstRoomMinX, firstRoomMinY, firstRoomMinZ,
-				firstRoomMaxX, firstRoomMaxY, firstRoomMaxZ,
-				primaryBlock, air, false);
+		//fillWithBlocks(worldIn, boundingBoxIn,firstRoomMinX, firstRoomMinY, firstRoomMinZ,firstRoomMaxX, firstRoomMaxY, firstRoomMaxZ,primaryBlock, air, false);
 		
 		buildAspectThemedPuzzle(worldIn, boundingBoxIn, randomIn, chunkGenerator);
 		
@@ -277,7 +270,7 @@ public class TierOneDungeonFirstRoomPiece extends ImprovedStructurePiece
 				//CompoundNBT spawnerNBT = new CompoundNBT();
 				//spawnerNBT.("SpawnData", 4);
 				
-				spawnerPos = getActualPos(firstRoomMinX + 5 + xIterate * 10, firstRoomMaxY - 5,  firstRoomMinZ + 2);
+				spawnerPos = getActualPos(firstRoomMinX + 5 + xIterate * 10, firstRoomMaxY - 5, firstRoomMinZ + 2);
 				world.setBlockState(spawnerPos.down(), lightBlock, Constants.BlockFlags.BLOCK_UPDATE);
 				StructureBlockUtil.placeSpawner(spawnerPos, world, boundingBox, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
 				//TileEntity spawnerTE = world.getTileEntity(spawnerPos); //TODO figure out how to change potion effects of spawned entities(give them speed) and increase range at which they spawn
@@ -417,9 +410,9 @@ public class TierOneDungeonFirstRoomPiece extends ImprovedStructurePiece
 			}
 			
 			//area effect block/how to complete puzzle
-			BlockPos areaEffectBlockPos = getActualPos(firstRoomMinX + 2, firstRoomMinY + 9, (firstRoomMinZ + firstRoomMaxZ) / 2 - 2);
+			BlockPos areaEffectBlockPos = getActualPos(firstRoomMinX + 2, firstRoomMinY + 10, (firstRoomMinZ + firstRoomMaxZ) / 2 - 2);
 			setBlockState(world, MSBlocks.SOLID_SWITCH.getDefaultState().with(SolidSwitchBlock.POWERED, true), areaEffectBlockPos.getX(), areaEffectBlockPos.up().getY(), areaEffectBlockPos.getZ(), boundingBox); //power for area effect block
-			StructureBlockUtil.placeAreaEffectBlock(world, boundingBox, areaEffectBlockPos, MSEffects.CREATIVE_SHOCK.get(), 0,
+			StructureBlockUtil.placeAreaEffectBlock(world, boundingBox, areaEffectBlockPos, MSEffects.CREATIVE_SHOCK.get(), 2,
 					getActualPos(firstRoomMinX - 22, firstRoomMinY, firstRoomMinZ),
 					getActualPos(firstRoomMaxX, 58, firstRoomMaxZ));
 		} else if(worldAspect == EnumAspect.LIGHT)

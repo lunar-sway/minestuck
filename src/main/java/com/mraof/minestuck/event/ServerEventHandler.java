@@ -3,6 +3,7 @@ package com.mraof.minestuck.event;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.entity.consort.ConsortDialogue;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
@@ -345,15 +346,16 @@ public class ServerEventHandler
 				data.getTitle().handleAspectEffects((ServerPlayerEntity) event.player);
 		}
 		
-		if(!event.player.isCreative() && event.player.isPotionActive(MSEffects.CREATIVE_SHOCK.get()))
+		if(event.player.isPotionActive(MSEffects.CREATIVE_SHOCK.get()))
 		{
 			int duration = event.player.getActivePotionEffect(MSEffects.CREATIVE_SHOCK.get()).getDuration();
 			if(duration >= 5)
 			{
-				event.player.abilities.allowEdit = false;
-				event.player.stopFallFlying();
+				if(CreativeShockEffect.doesCreativeShockLimit(event.player, 0, 3))
+					event.player.abilities.allowEdit = false; //TODO creative players can still break blocks
+				if(CreativeShockEffect.doesCreativeShockLimit(event.player, 2, 5))
+					event.player.stopFallFlying();
 			}
-			
 			else
 			{
 				if(!event.player.world.isRemote)
@@ -382,7 +384,7 @@ public class ServerEventHandler
 		{
 			PlayerEntity player = (PlayerEntity) entityLiving;
 			
-			if(player instanceof ServerPlayerEntity && !player.isCreative() && effect == MSEffects.CREATIVE_SHOCK.get())
+			if(player instanceof ServerPlayerEntity && effect == MSEffects.CREATIVE_SHOCK.get())
 			{
 				ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player;
 				player.abilities.allowEdit = !serverPlayerEntity.interactionManager.getGameType().hasLimitedInteractions();
@@ -396,14 +398,14 @@ public class ServerEventHandler
 	@SubscribeEvent
 	public static void onBreakSpeed(PlayerEvent.BreakSpeed event)
 	{
-		if(event.getPlayer().isPotionActive(MSEffects.CREATIVE_SHOCK.get()))
+		if(CreativeShockEffect.doesCreativeShockLimit(event.getPlayer(), 0, 3))
 			event.setNewSpeed(0);
 	}
 	
 	@SubscribeEvent
 	public static void onHarvestCheck(PlayerEvent.HarvestCheck event)
 	{
-		if(event.getPlayer().isPotionActive(MSEffects.CREATIVE_SHOCK.get()))
+		if(CreativeShockEffect.doesCreativeShockLimit(event.getPlayer(), 0, 3))
 			event.setCanHarvest(false);
 	}
 	

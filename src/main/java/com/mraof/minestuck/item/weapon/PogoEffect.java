@@ -1,6 +1,6 @@
 package com.mraof.minestuck.item.weapon;
 
-import com.mraof.minestuck.effects.MSEffects;
+import com.mraof.minestuck.effects.CreativeShockEffect;
 import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -67,7 +67,7 @@ public class PogoEffect implements RightClickBlockEffect, OnHitEffect
 	private static ActionResultType onItemUse(PlayerEntity player, World worldIn, BlockPos pos, ItemStack stack, Direction facing, double pogoMotion)
 	{
 		pogoMotion = addEfficiencyModifier(pogoMotion, stack);
-		if (worldIn.getBlockState(pos).getBlock() != Blocks.AIR && (!player.isPotionActive(MSEffects.CREATIVE_SHOCK.get()) || player.isCreative()))
+		if (worldIn.getBlockState(pos).getBlock() != Blocks.AIR && !CreativeShockEffect.doesCreativeShockLimit(player, 2, 5))
 		{
 			double playerMotionX;
 			double playerMotionY;
