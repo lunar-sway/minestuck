@@ -116,6 +116,7 @@
   "block.minestuck.crockertop": "Crockertop",
   "block.minestuck.cruxite_block": "Cruxite Block",
   "block.minestuck.cruxite_dowel": "Cruxite Dowel",
+  "block.minestuck.cruxite_dowel.invalid": "Invalid Data",
   "block.minestuck.cruxtruder.empty": "The cruxtruder gives off an empty click. Perhaps it needs some sort of material to function?",
   "block.minestuck.cruxtruder_center": "Cruxtruder",
   "block.minestuck.cruxtruder_corner": "Cruxtruder",

@@ -16,6 +16,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -50,7 +51,7 @@ public class DowelItem extends BlockItem implements AlchemizedColored
 			}
 			else
 			{
-				tooltip.add(new StringTextComponent("(").append(new StringTextComponent("item.captchaCard.invalid")).append(")").withStyle(TextFormatting.GRAY));//TODO translation key
+				tooltip.add(new StringTextComponent("(").append(new TranslationTextComponent(getDescriptionId() + ".invalid")).append(")").withStyle(TextFormatting.GRAY));
 			}
 		}
 	}
