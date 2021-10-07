@@ -321,6 +321,10 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 			setBlockState(world, primaryStairBlock.with(StairsBlock.FACING, Direction.EAST).with(StairsBlock.HALF, Half.TOP), firstRoomMaxX - 1, firstRoomMaxY - 10, firstRoomMaxZ - 12, boundingBox);
 			
 			//edges of lower level
+			fillWithBlocks(world, boundingBox,
+					firstRoomMinX + 1, firstRoomMinY + 9, firstRoomMinZ + 2,
+					firstRoomMaxX - 1, firstRoomMinY + 9, firstRoomMaxZ - 2,
+					lightBlock, lightBlock, false); //light around wall
 			fillWithAir(world, boundingBox,
 					firstRoomMinX + 1, firstRoomMinY + 10, firstRoomMinZ + 3,
 					firstRoomMaxX - 3, firstRoomMinY + 14, firstRoomMaxZ - 3); //lower section ceiling
@@ -339,9 +343,6 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 					firstRoomMinX + 9, firstRoomMinY + 11, firstRoomMaxZ - 2,
 					firstRoomMaxX - 9, firstRoomMinY + 11, firstRoomMaxZ - 1,
 					MSBlocks.BLOOD.getDefaultState(), MSBlocks.BLOOD.getDefaultState(), false); //side waterfall
-			StructureBlockUtil.createCylinder(world, boundingBox, lightBlock,
-					getActualPos((firstRoomMinX + firstRoomMaxX) / 2 - 10, firstRoomMinY + 14, (firstRoomMinZ + firstRoomMaxZ) / 2),
-					6, 1); //ceiling light
 			
 			//lighting
 			fillWithBlocks(world, boundingBox,
@@ -381,12 +382,14 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 			world.setBlockState(side2SwitchLampPos, MSBlocks.SOLID_SWITCH.getDefaultState().with(SolidSwitchBlock.POWERED, true), Constants.BlockFlags.BLOCK_UPDATE);
 			world.setBlockState(side2SwitchLampPos.offset(getCoordBaseMode().getOpposite()), Blocks.REDSTONE_LAMP.getDefaultState().with(RedstoneLampBlock.LIT, true), Constants.BlockFlags.BLOCK_UPDATE);
 			
-			//aspect symbol platform, lower level
+			//aspect symbol platform
 			BlockPos aspectSymbolPos = getActualPos((firstRoomMinX + 5 + firstRoomMaxX - 3) / 2, firstRoomMinY + 4, (firstRoomMinZ + firstRoomMaxZ) / 2); //middle of lower room on top of blood
 			StructureBlockUtil.createCylinder(world, boundingBox, secondaryBlock, aspectSymbolPos.down(3), 13, 3);
 			StructureBlockUtil.createCylinder(world, boundingBox, lightBlock, aspectSymbolPos.down(1), 13, 1);
 			StructureBlockUtil.createCylinder(world, boundingBox, primaryBlock, aspectSymbolPos, 13, 1);
 			StructureBlockUtil.placeCenteredTemplate(world, aspectSymbolPos, bloodSymbolTemplate, new PlacementSettings().setBoundingBox(boundingBox).setRotation(MSRotationUtil.fromDirection(getCoordBaseMode().getOpposite())));
+			//StructureBlockUtil.createCylinder(world, boundingBox, lightBlock, getActualPos((firstRoomMinX + firstRoomMaxX) / 2 - 10, firstRoomMinY + 14, (firstRoomMinZ + firstRoomMaxZ) / 2), 6, 1); //ceiling light
+			StructureBlockUtil.createCylinder(world, boundingBox, lightBlock, aspectSymbolPos.up(10), 6, 1); //ceiling light
 			
 			//redstone components for lich fight and piston stairway unlock, inside aspect platform
 			StructureBlockUtil.placeSummoner(world, boundingBox, aspectSymbolPos.down(2).offset(getCoordBaseMode().rotateY(), 7), SummonerTileEntity.SummonType.LICH);
@@ -397,21 +400,23 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 			StructureBlockUtil.placeStatStorer(world, boundingBox, aspectSymbolPos.down(2), StatStorerTileEntity.ActiveType.DEATHS, 1); //counts how many deaths there have been(need 10 kills to activate all 5 pistons)
 			//fillWithBlocks(world, boundingBox, aspectSymbolPos.getX(), aspectSymbolPos.down(2).getY(), aspectSymbolPos.offset(getCoordBaseMode().rotateYCCW()).getZ(), aspectSymbolPos.getX(), aspectSymbolPos.down(2).getY(), aspectSymbolPos.offset(getCoordBaseMode().rotateYCCW()).getZ());
 			StructureBlockUtil.fillWithBlocksFromPos(world, boundingBox, Blocks.REDSTONE_WIRE.getDefaultState(), aspectSymbolPos.down(2).offset(getCoordBaseMode().rotateYCCW()), aspectSymbolPos.down(2).offset(getCoordBaseMode().rotateYCCW(), 9));
+			StructureBlockUtil.fillWithBlocksFromPos(world, boundingBox, Blocks.REDSTONE_WIRE.getDefaultState(), aspectSymbolPos.down(2).offset(getCoordBaseMode().rotateY()), aspectSymbolPos.down(2).offset(getCoordBaseMode().rotateY(), 4));
 			//world.setBlockState(aspectSymbolPos.down(2), Blocks.REDSTONE_WIRE.getDefaultState().with(RedstoneWireBlock.NORTH, RedstoneSide.SIDE).with(RedstoneWireBlock.WEST, RedstoneSide.SIDE), Constants.BlockFlags.BLOCK_UPDATE);
 			
 			fillWithBlocks(world, boundingBox, firstRoomMinX + 3, firstRoomMinY + 4, (firstRoomMinZ + firstRoomMaxZ) / 2 - 3, firstRoomMinX + 3, firstRoomMinY + 8, (firstRoomMinZ + firstRoomMaxZ) / 2 + 2, lightBlock, lightBlock, false);
-			//TODO Add remote observer closer to far edge on player detect mode connected to mob summoning blocks, and set stat storer near center on death mode and add wireless relays at different distances using for loop for each summoned entity(allows players to see progress)
 			for(int stairPuzzleIterate = 0; stairPuzzleIterate < 5; stairPuzzleIterate++)
 			{
 				StructureBlockUtil.placeWirelessRelay(world, boundingBox, aspectSymbolPos.down(3).offset(getCoordBaseMode().rotateYCCW(), stairPuzzleIterate * 2 + 1),
 						getActualPos(firstRoomMinX + 2, firstRoomMinY + 4 + stairPuzzleIterate, (firstRoomMinZ + firstRoomMaxZ) / 2 - 2 + stairPuzzleIterate), true);
+				StructureBlockUtil.placeSummoner(world, boundingBox, aspectSymbolPos.down(3).offset(getCoordBaseMode().rotateYCCW(), stairPuzzleIterate * 2 + 2), SummonerTileEntity.SummonType.LICH); //wedged between wireless transmitters
+				StructureBlockUtil.placeSummoner(world, boundingBox, aspectSymbolPos.down(3).offset(getCoordBaseMode().rotateY(), stairPuzzleIterate + 2), SummonerTileEntity.SummonType.LICH); //on other side of wireless transmitters
 				setBlockState(world, Blocks.STICKY_PISTON.getDefaultState().with(PistonBlock.FACING, Direction.EAST), firstRoomMinX + 3, firstRoomMinY + 4 + stairPuzzleIterate, (firstRoomMinZ + firstRoomMaxZ) / 2 - 2 + stairPuzzleIterate, boundingBox);
 				setBlockState(world, secondaryDecorativeBlock, firstRoomMinX + 4, firstRoomMinY + 4 + stairPuzzleIterate, (firstRoomMinZ + firstRoomMaxZ) / 2 - 2 + stairPuzzleIterate, boundingBox);
 			}
 			
 			//area effect block/how to complete puzzle
 			BlockPos areaEffectBlockPos = getActualPos(firstRoomMinX + 2, firstRoomMinY + 10, (firstRoomMinZ + firstRoomMaxZ) / 2 - 2);
-			setBlockState(world, MSBlocks.SOLID_SWITCH.getDefaultState().with(SolidSwitchBlock.POWERED, true), areaEffectBlockPos.getX(), areaEffectBlockPos.up().getY(), areaEffectBlockPos.getZ(), boundingBox); //power for area effect block
+			world.setBlockState(areaEffectBlockPos.up(), MSBlocks.SOLID_SWITCH.getDefaultState().with(SolidSwitchBlock.POWERED, true), Constants.BlockFlags.BLOCK_UPDATE); //power for area effect block
 			StructureBlockUtil.placeAreaEffectBlock(world, boundingBox, areaEffectBlockPos, MSEffects.CREATIVE_SHOCK.get(), 2,
 					getActualPos(firstRoomMinX - 22, firstRoomMinY, firstRoomMinZ),
 					getActualPos(firstRoomMaxX, 58, firstRoomMaxZ));

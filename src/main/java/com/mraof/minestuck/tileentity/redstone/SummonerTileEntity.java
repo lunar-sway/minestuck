@@ -6,8 +6,8 @@ import com.mraof.minestuck.entity.underling.ImpEntity;
 import com.mraof.minestuck.entity.underling.LichEntity;
 import com.mraof.minestuck.entity.underling.OgreEntity;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
-import com.mraof.minestuck.util.Debug;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
@@ -19,7 +19,6 @@ import net.minecraft.world.World;
 
 public class SummonerTileEntity extends TileEntity
 {
-	//private BlockPos destBlockPos;
 	private SummonType summonType;
 	
 	public enum SummonType
@@ -52,28 +51,8 @@ public class SummonerTileEntity extends TileEntity
 	
 	public void summonEntity(World worldIn, BlockState summonerState, BlockPos summonerBlockPos, boolean playParticles)
 	{
-		//double summonerPosX = summonerBlockPos.getX();
-		//double summonerPosY = summonerBlockPos.getY();
-		//double summonerPosZ = summonerBlockPos.getZ();
+		BlockPos pickedBlockPos = summonerBlockPos.up(1);
 		
-		//double distanceFromSummoner = 2000;
-		BlockPos pickedBlockPos = summonerBlockPos.up(4);
-		
-		//TODO overall this for loop does not work to pick the closest viable summoning spot
-		/*for(BlockPos newBlockPos : BlockPos.getAllInBoxMutable(summonerBlockPos.add(12, 12, 12), summonerBlockPos.add(-12, -12, -12)))
-		{
-			Debug.debugf("newBlockPos = %s, pickedBlockPos = %s", newBlockPos, pickedBlockPos);
-			double distanceToNewPos = Math.sqrt(summonerBlockPos.distanceSq(newBlockPos));
-			double distanceToPickedPos = Math.sqrt(summonerBlockPos.distanceSq(pickedBlockPos));
-			if(distanceToNewPos < distanceToPickedPos && isAreaClear(worldIn, newBlockPos.up(2), 2))
-			{
-				Debug.debugf("distanceToNewPos = %s, distanceToPickedPos = %s, is area clear = %s", distanceToNewPos, distanceToPickedPos, isAreaClear(worldIn, newBlockPos.up(2), 2));
-				pickedBlockPos = newBlockPos;
-				//distanceFromSummoner = summonerBlockPos.distanceSq(newBlockPos);
-			}
-		}*/
-		
-		Debug.debugf("pickedBlockPos = %s, summonType = %s", pickedBlockPos, summonType);
 		if(summonType == SummonType.IMP)
 		{
 			ImpEntity impEntity = MSEntityTypes.IMP.create(worldIn);
@@ -84,6 +63,7 @@ public class SummonerTileEntity extends TileEntity
 			impEntity.onInitialSpawn(worldIn, worldIn.getDifficultyForLocation(pickedBlockPos), SpawnReason.TRIGGERED, null, null);
 			impEntity.setHomePosAndDistance(pickedBlockPos, 10);
 			worldIn.addEntity(impEntity);
+			randomTeleport(worldIn, summonerBlockPos, impEntity);
 		} else if(summonType == SummonType.OGRE)
 		{
 			OgreEntity ogreEntity = MSEntityTypes.OGRE.create(worldIn);
@@ -94,6 +74,7 @@ public class SummonerTileEntity extends TileEntity
 			ogreEntity.onInitialSpawn(worldIn, worldIn.getDifficultyForLocation(pickedBlockPos), SpawnReason.TRIGGERED, null, null);
 			ogreEntity.setHomePosAndDistance(pickedBlockPos, 10);
 			worldIn.addEntity(ogreEntity);
+			randomTeleport(worldIn, summonerBlockPos, ogreEntity);
 		} else if(summonType == SummonType.BASILISK)
 		{
 			BasiliskEntity basiliskEntity = MSEntityTypes.BASILISK.create(worldIn);
@@ -104,6 +85,7 @@ public class SummonerTileEntity extends TileEntity
 			basiliskEntity.onInitialSpawn(worldIn, worldIn.getDifficultyForLocation(pickedBlockPos), SpawnReason.TRIGGERED, null, null);
 			basiliskEntity.setHomePosAndDistance(pickedBlockPos, 10);
 			worldIn.addEntity(basiliskEntity);
+			randomTeleport(worldIn, summonerBlockPos, basiliskEntity);
 		} else if(summonType == SummonType.LICH)
 		{
 			LichEntity lichEntity = MSEntityTypes.LICH.create(worldIn);
@@ -114,6 +96,7 @@ public class SummonerTileEntity extends TileEntity
 			lichEntity.onInitialSpawn(worldIn, worldIn.getDifficultyForLocation(pickedBlockPos), SpawnReason.TRIGGERED, null, null);
 			lichEntity.setHomePosAndDistance(pickedBlockPos, 10);
 			worldIn.addEntity(lichEntity);
+			randomTeleport(worldIn, summonerBlockPos, lichEntity);
 		}
 		
 		if(playParticles)
@@ -125,19 +108,22 @@ public class SummonerTileEntity extends TileEntity
 		}
 	}
 	
-	/**
-	 * Checks through each block in a cube and determines if even a single one of them would prevent movement or cause suffocation
-	 */
-	public boolean isAreaClear(World worldIn, BlockPos centerBlockPos, int radius)
+	private void randomTeleport(World worldIn, BlockPos summonerBlockPos, LivingEntity summonedEntity)
 	{
-		boolean isClear = true;
-		for(BlockPos blockPos : BlockPos.getAllInBoxMutable(centerBlockPos.add(radius, radius, radius), centerBlockPos.add(-radius, -radius, -radius)))
+		if(worldIn != null)
 		{
-			if(worldIn.getBlockState(blockPos).isSuffocating(worldIn, blockPos))
-				isClear = false;
+			for(int i = 0; i < 16; ++i)
+			{
+				double newPosX = summonerBlockPos.getX() + (worldIn.rand.nextDouble() - 0.5D) * 16.0D;
+				double newPosY = summonerBlockPos.getY() + (worldIn.rand.nextDouble() - 0.5D) * 16.0D;
+				double newPosZ = summonerBlockPos.getZ() + (worldIn.rand.nextDouble() - 0.5D) * 16.0D;
+				
+				if(summonedEntity.attemptTeleport(newPosX, newPosY, newPosZ, true))
+				{
+					break;
+				}
+			}
 		}
-		
-		return isClear;
 	}
 	
 	public void setSummonedEntity(SummonType summonTypeIn)

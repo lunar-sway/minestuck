@@ -1,7 +1,7 @@
 package com.mraof.minestuck.item.weapon;
 
 import com.google.common.collect.ImmutableList;
-import com.mraof.minestuck.effects.MSEffects;
+import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.item.MSItems;
@@ -17,7 +17,6 @@ import net.minecraft.entity.item.ArmorStandEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.particles.ParticleTypes;
@@ -333,19 +332,16 @@ public interface OnHitEffect
 	static OnHitEffect withoutCreativeShock(OnHitEffect effect) //TODO action result for client side may not work
 	{
 		return (stack, target, attacker) -> {
-			if(!attacker.isPotionActive(MSEffects.CREATIVE_SHOCK.get()))
+			if(attacker instanceof PlayerEntity)
 			{
-				boolean creativeMode = true;
-				if(attacker instanceof PlayerEntity)
-				{
-					PlayerEntity playerAttacker = (PlayerEntity) attacker;
-					if(!playerAttacker.isCreative())
-						creativeMode = false;
-				}
+				PlayerEntity playerAttacker = (PlayerEntity) attacker;
 				
-				if(creativeMode)
+				if(!CreativeShockEffect.doesCreativeShockLimit(playerAttacker, 2, 5))
+				{
 					effect.onHit(stack, target, attacker);
-			}
+				}
+			} else
+				effect.onHit(stack, target, attacker);
 		};
 	}
 	
