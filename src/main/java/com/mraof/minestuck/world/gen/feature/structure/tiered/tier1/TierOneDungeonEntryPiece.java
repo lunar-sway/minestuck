@@ -79,7 +79,9 @@ public class TierOneDungeonEntryPiece extends ImprovedStructurePiece
 	private EnumAspect worldAspect;
 	private EnumClass worldClass;
 	private TerrainLandType worldTerrain;
+	
 	private Template rabbitTemplate;
+	private Template pipesTemplate1;
 	
 	
 	public TierOneDungeonEntryPiece(TemplateManager templates, ChunkGenerator<?> generator, Random random, int x, int z)
@@ -125,6 +127,7 @@ public class TierOneDungeonEntryPiece extends ImprovedStructurePiece
 	private void initTemplates(TemplateManager templates)
 	{
 		rabbitTemplate = templates.getTemplateDefaulted(new ResourceLocation(Minestuck.MOD_ID, "stone_rabbit_statue"));
+		pipesTemplate1 = templates.getTemplateDefaulted(new ResourceLocation(Minestuck.MOD_ID, "tier_one_pipes_0"));
 	}
 	
 	@Override
@@ -164,6 +167,7 @@ public class TierOneDungeonEntryPiece extends ImprovedStructurePiece
 		buildStructureFoundation(worldIn, boundingBoxIn, randomIn, randomRoomType, chunkGeneratorIn);
 		buildWallsAndFloors(worldIn, boundingBoxIn, randomIn);
 		carveRooms(worldIn, boundingBoxIn);
+		buildAspectThemedEntrance(worldIn, boundingBox, randomIn);
 		buildIndoorBlocks(worldIn, boundingBoxIn, randomIn, randomRoomType);
 		
 		return true;
@@ -180,13 +184,12 @@ public class TierOneDungeonEntryPiece extends ImprovedStructurePiece
 		fillWithBlocks(world, boundingBox,
 				entryRoomMinX, entryRoomMinY, entryRoomMinZ,
 				entryRoomMaxX, entryRoomMaxY, entryRoomMaxZ,
-				primaryBlock, primaryBlock, false); //plain entrance before aspect modification
+				secondaryBlock, secondaryBlock, false); //plain entrance before aspect modification
 		fillWithBlocks(world, boundingBox,
 				entryRoomMinX - 3, lowerRoomMaxY, entryRoomMinZ - 3,
 				entryRoomMaxX + 3, entryRoomMinY, entryRoomMaxZ + 3,
 				primaryBlock, primaryBlock, false); //fills out section between rooms
 		
-		buildAspectThemedEntrance(world, boundingBox, rand);
 		/*fillWithBlocks(world, boundingBox,
 				entryRoomMinX, entryRoomMinY, entryRoomMinZ,
 				entryRoomMaxX, entryRoomMaxY, entryRoomMaxZ,
@@ -202,14 +205,14 @@ public class TierOneDungeonEntryPiece extends ImprovedStructurePiece
 		{
 			for(int ringIterate = 0; ringIterate < 5; ringIterate++)
 			{
-				fillWithBlocks(world, boundingBox, entryRoomMinX + 5, entryRoomMinY - 5 * ringIterate, entryRoomMinZ + 5, entryRoomMaxX - 5, entryRoomMinY - 3 * ringIterate, entryRoomMaxZ - 5, lightBlock, lightBlock, false);
+				fillWithBlocks(world, boundingBox, entryRoomMinX + 5, entryRoomMinY - 5 * ringIterate, entryRoomMinZ + 5, entryRoomMaxX - 5, entryRoomMinY - 5 * ringIterate, entryRoomMaxZ - 5, lightBlock, lightBlock, false);
 			}
 		} else //vertical line lighting
 		{
-			fillWithBlocks(world, boundingBox, (entryRoomMaxX + entryRoomMinX) / 2, lowerRoomMaxY + 1, entryRoomMinZ + 5, (entryRoomMaxX + entryRoomMinX) / 2, entryRoomMinY - 1, entryRoomMinZ + 5, lightBlock, lightBlock, false);
-			fillWithBlocks(world, boundingBox, entryRoomMinX + 5, lowerRoomMaxY + 1, (entryRoomMaxZ + entryRoomMinZ) / 2, entryRoomMinX + 5, entryRoomMinY - 1, (entryRoomMaxZ + entryRoomMinZ) / 2, lightBlock, lightBlock, false);
-			fillWithBlocks(world, boundingBox, (entryRoomMaxX + entryRoomMinX) / 2, lowerRoomMaxY + 1, entryRoomMaxZ - 5, (entryRoomMaxX + entryRoomMinX) / 2, entryRoomMinY - 1, entryRoomMaxZ - 5, lightBlock, lightBlock, false);
-			fillWithBlocks(world, boundingBox, entryRoomMaxX - 5, lowerRoomMaxY + 1, (entryRoomMaxZ + entryRoomMinZ) / 2, entryRoomMaxX - 5, entryRoomMinY - 1, (entryRoomMaxZ + entryRoomMinZ) / 2, lightBlock, lightBlock, false);
+			fillWithBlocks(world, boundingBox, (entryRoomMaxX + entryRoomMinX) / 2, lowerRoomMaxY + 1, entryRoomMinZ + 5, (entryRoomMaxX + entryRoomMinX) / 2 + 1, entryRoomMinY - 1, entryRoomMinZ + 5, lightBlock, lightBlock, false);
+			fillWithBlocks(world, boundingBox, entryRoomMinX + 5, lowerRoomMaxY + 1, (entryRoomMaxZ + entryRoomMinZ) / 2, entryRoomMinX + 5, entryRoomMinY - 1, (entryRoomMaxZ + entryRoomMinZ) / 2 + 1, lightBlock, lightBlock, false);
+			fillWithBlocks(world, boundingBox, (entryRoomMaxX + entryRoomMinX) / 2, lowerRoomMaxY + 1, entryRoomMaxZ - 5, (entryRoomMaxX + entryRoomMinX) / 2 + 1, entryRoomMinY - 1, entryRoomMaxZ - 5, lightBlock, lightBlock, false);
+			fillWithBlocks(world, boundingBox, entryRoomMaxX - 5, lowerRoomMaxY + 1, (entryRoomMaxZ + entryRoomMinZ) / 2, entryRoomMaxX - 5, entryRoomMinY - 1, (entryRoomMaxZ + entryRoomMinZ) / 2 + 1, lightBlock, lightBlock, false);
 		}
 		
 		if(randomRoomType != 4) //chamber below-connected to entry, not filled with air because of thick floor
@@ -491,12 +494,12 @@ public class TierOneDungeonEntryPiece extends ImprovedStructurePiece
 	{
 		if(worldAspect == EnumAspect.BREATH) //pipes moving around
 		{
-		
+			StructureBlockUtil.placeCenteredTemplate(world, new BlockPos(getActualPos((entryRoomMaxX + entryRoomMinX) / 2, entryRoomMinY - 1, (entryRoomMaxZ + entryRoomMinZ) / 2)), pipesTemplate1, new PlacementSettings().setBoundingBox(boundingBox).setRotation(MSRotationUtil.fromDirection(getCoordBaseMode().rotateYCCW())));
 		} else if(worldAspect == EnumAspect.LIFE) //rabbit statue
 		{
 			StructureBlockUtil.placeCenteredTemplate(world, new BlockPos(getActualPos((entryRoomMaxX + entryRoomMinX) / 2, entryRoomMaxY + 1, (entryRoomMaxZ + entryRoomMinZ) / 2)), rabbitTemplate, new PlacementSettings().setBoundingBox(boundingBox).setRotation(MSRotationUtil.fromDirection(getCoordBaseMode().getOpposite())));
 			
-			//TODO Will be for Breath
+			//TODO Will be for
 			
 		} else if(worldAspect == EnumAspect.LIGHT)
 		{

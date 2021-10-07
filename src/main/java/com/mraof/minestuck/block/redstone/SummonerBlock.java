@@ -1,7 +1,6 @@
 package com.mraof.minestuck.block.redstone;
 
 import com.mraof.minestuck.tileentity.redstone.SummonerTileEntity;
-import com.mraof.minestuck.util.Debug;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.state.BooleanProperty;
@@ -29,18 +28,15 @@ public class SummonerBlock extends Block
 	{
 		super.neighborChanged(state, worldIn, pos, blockIn, fromPos, isMoving);
 		boolean blockPowered = worldIn.isBlockPowered(pos) || worldIn.isBlockPowered(pos.up());
-		//Debug.debugf("blockPowered = %s, triggered = %s", blockPowered, state.get(TRIGGERED));
 		if(!worldIn.isRemote && blockPowered && !state.get(TRIGGERED))
 		{
 			TileEntity tileEntity = worldIn.getTileEntity(pos);
-			Debug.debugf("summonerTileEntity = %s", tileEntity instanceof SummonerTileEntity);
 			if(tileEntity instanceof SummonerTileEntity)
 			{
 				SummonerTileEntity summonerTE = (SummonerTileEntity) tileEntity;
 				
 				summonerTE.summonEntity(worldIn, state, pos, true);
 			}
-			//worldIn.getPendingBlockTicks().scheduleTick(pos, this, this.tickRate(worldIn));
 			worldIn.setBlockState(pos, state.with(TRIGGERED, true), 4);
 		}
 	}

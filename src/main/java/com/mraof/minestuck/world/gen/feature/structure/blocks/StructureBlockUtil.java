@@ -286,6 +286,7 @@ public class StructureBlockUtil
 	 */
 	public static void placeCenteredTemplate(IWorld world, BlockPos pos, Template template, PlacementSettings settings)
 	{
+		//TODO placement at some directions will improperly rotate the FACING property of at least pipe blocks
 		BlockPos center = new BlockPos((template.getSize().getX() - 1) / 2, 0, (template.getSize().getZ() - 1) / 2);
 		
 		template.addBlocksToWorld(world, pos.subtract(center), settings.setCenterOffset(center));
