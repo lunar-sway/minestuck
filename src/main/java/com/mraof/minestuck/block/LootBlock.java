@@ -6,7 +6,9 @@ import com.mraof.minestuck.util.CustomVoxelShape;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -20,8 +22,12 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootParameterSets;
+import net.minecraft.world.storage.loot.LootTable;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Map;
 
 public class LootBlock extends DecorBlock
@@ -64,9 +70,8 @@ public class LootBlock extends DecorBlock
 				{
 					player.sendMessage(new TranslationTextComponent("Wahoo!"));
 					
-					LootBlockTables.givePlayerItemFromLandTableArrays(worldIn, player, LootBlockTables.TIER_ONE_GENERIC, LootBlockTables.TIER_ONE_TEST, LootBlockTables.TIER_ONE_GENERIC, LootBlockTables.TIER_ONE_GENERIC);
+					//LootBlockTables.givePlayerItemFromLandTableArrays(worldIn, player, LootBlockTables.TIER_ONE_GENERIC, LootBlockTables.TIER_ONE_TEST, LootBlockTables.TIER_ONE_GENERIC, LootBlockTables.TIER_ONE_GENERIC);
 					
-					/*
 					LootTable lootTable = ((ServerWorld) worldIn).getServer().getLootTableManager().getLootTableFromLocation(((LootBlockTileEntity) tileentity).getLootTable());
 					//lootTable.fillInventory(player.inventory, new LootContext.Builder((ServerWorld) interfaceTileEntity.getWorld()).build(LootParameterSets.CHEST));
 					//lootTable.generate(new LootContext.Builder((ServerWorld) worldIn).build(LootParameterSets.EMPTY), player::entityDropItem);
@@ -74,14 +79,22 @@ public class LootBlock extends DecorBlock
 					if(loot.isEmpty())
 						LOGGER.warn("Tried to generate loot from {}, but no items were generated!", ((LootBlockTileEntity) tileentity).getLootTable());
 					
+					if(!player.inventory.addItemStackToInventory(loot.get(worldIn.rand.nextInt(loot.size()))))
+					{
+						ItemEntity itemEntity = player.entityDropItem(loot.get(worldIn.rand.nextInt(loot.size())), 0.0F);
+						if(itemEntity != null)
+							itemEntity.setNoPickupDelay();
+					}
+					
+					/*
 					for(ItemStack itemstack : loot)
 					{
-						
 						ItemEntity itemEntity = player.entityDropItem(itemstack, 0.0F);
 						if(itemEntity != null)
 							itemEntity.setNoPickupDelay();
 						//MSCriteriaTriggers.CONSORT_ITEM.trigger(player, this.lootTable.toString(), itemstack, consort);
-					}*/
+					}
+					/**/
 					
 					if(player.getHeldItem(handIn).getItem() != MSItems.DUNGEON_KEY)
 						worldIn.setBlockState(pos, state.with(OPEN, true));
