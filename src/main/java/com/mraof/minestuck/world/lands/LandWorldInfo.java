@@ -2,18 +2,15 @@ package com.mraof.minestuck.world.lands;
 
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.GameRules;
-import net.minecraft.world.storage.DerivedWorldInfo;
-import net.minecraft.world.storage.IServerConfiguration;
-import net.minecraft.world.storage.IServerWorldInfo;
 import net.minecraft.world.storage.ISpawnWorldInfo;
 
-public class ForcedWeatherWorldInfo implements ISpawnWorldInfo
+public class LandWorldInfo implements ISpawnWorldInfo
 {
 	private final ISpawnWorldInfo wrapped;
 	private final LandProperties.ForceType forceRain, forceThunder;
 	
-	public ForcedWeatherWorldInfo(ISpawnWorldInfo wrapped,
-								  LandProperties.ForceType forceRain, LandProperties.ForceType forceThunder)
+	public LandWorldInfo(ISpawnWorldInfo wrapped,
+						 LandProperties.ForceType forceRain, LandProperties.ForceType forceThunder)
 	{
 		this.wrapped = wrapped;
 		this.forceRain = forceRain;
@@ -67,7 +64,7 @@ public class ForcedWeatherWorldInfo implements ISpawnWorldInfo
 	@Override
 	public int getXSpawn()
 	{
-		return wrapped.getXSpawn();
+		return 0;
 	}
 	
 	@Override
@@ -79,7 +76,7 @@ public class ForcedWeatherWorldInfo implements ISpawnWorldInfo
 	@Override
 	public int getZSpawn()
 	{
-		return wrapped.getZSpawn();
+		return 0;
 	}
 	
 	@Override
