@@ -72,8 +72,10 @@ public class WirelessRedstoneReceiverTileEntity extends TileEntity implements IT
 			{
 				WirelessRedstoneTransmitterTileEntity te = (WirelessRedstoneTransmitterTileEntity) tileEntity;
 				
-				if(te.getDestinationBlockPos() == lastTransmitterBlockPos)
-					te.sendUpdateToPosition(world, pos);
+				te.sendUpdateToPosition(world, pos);
+			} else
+			{
+				world.setBlockState(pos, world.getBlockState(pos).with(WirelessRedstoneReceiverBlock.POWER, 0));
 			}
 		}
 	}

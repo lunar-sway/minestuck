@@ -32,12 +32,12 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 		if(world == null || !world.isAreaLoaded(pos, 1))
 			return; // Forge: prevent loading unloaded chunks
 		
-		if(tickCycle % MinestuckConfig.SERVER.wirelessBlocksTickRate.get() == 1)
+		if(tickCycle >= MinestuckConfig.SERVER.wirelessBlocksTickRate.get())
 		{
 			sendUpdateToPosition();
-			if(tickCycle >= 5000) //setting arbitrarily high value that the tick cannot go past
-				tickCycle = 0;
+			tickCycle = 0;
 		}
+		
 		tickCycle++;
 	}
 	
@@ -91,18 +91,28 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 	{
 		if(destBlockPos != null && worldIn != null && !worldIn.isRemote && worldIn.isAreaLoaded(destBlockPos, 1))
 		{
-			int powerIn = worldIn.getRedstonePowerFromNeighbors(pos);
-			
-			BlockState blockStateIn = worldIn.getBlockState(destBlockPos);
-			if(blockStateIn.getBlock() instanceof WirelessRedstoneReceiverBlock)
+			if(destBlockPos.equals(this.destBlockPos))
 			{
-				worldIn.setBlockState(destBlockPos, blockStateIn.with(WirelessRedstoneReceiverBlock.POWER, powerIn));
+				int powerIn = worldIn.getRedstonePowerFromNeighbors(pos);
 				
-				TileEntity tileEntity = worldIn.getTileEntity(destBlockPos);
-				if(tileEntity instanceof WirelessRedstoneReceiverTileEntity)
+				BlockState blockStateIn = worldIn.getBlockState(destBlockPos);
+				if(blockStateIn.getBlock() instanceof WirelessRedstoneReceiverBlock)
 				{
-					WirelessRedstoneReceiverTileEntity te = (WirelessRedstoneReceiverTileEntity) tileEntity;
-					te.setLastTransmitterBlockPos(pos);
+					worldIn.setBlockState(destBlockPos, blockStateIn.with(WirelessRedstoneReceiverBlock.POWER, powerIn));
+					
+					TileEntity tileEntity = worldIn.getTileEntity(destBlockPos);
+					if(tileEntity instanceof WirelessRedstoneReceiverTileEntity)
+					{
+						WirelessRedstoneReceiverTileEntity te = (WirelessRedstoneReceiverTileEntity) tileEntity;
+						te.setLastTransmitterBlockPos(pos);
+					}
+				}
+			} else
+			{
+				BlockState blockStateIn = worldIn.getBlockState(destBlockPos);
+				if(blockStateIn.getBlock() instanceof WirelessRedstoneReceiverBlock)
+				{
+					worldIn.setBlockState(destBlockPos, blockStateIn.with(WirelessRedstoneReceiverBlock.POWER, 0));
 				}
 			}
 		}
