@@ -44,7 +44,7 @@ public class LandChunkGenerator extends AbstractChunkGenerator
 					Codec.LONG.fieldOf("seed").stable().forGetter(generator -> generator.seed),
 					LandTypePair.CODEC.fieldOf("land_types").forGetter(generator -> generator.landTypes),
 					RegistryLookupCodec.create(Registry.BIOME_REGISTRY).forGetter(generator -> generator.registry))
-			.apply(instance, LandChunkGenerator::new));
+			.apply(instance, instance.stable(LandChunkGenerator::new)));
 	
 	public static final String GRIST_LAYER_INFO = "grist_layer.info";
 	
@@ -110,7 +110,7 @@ public class LandChunkGenerator extends AbstractChunkGenerator
 	{
 		if(classification == MSEntityTypes.UNDERLING)
 			return UnderlingController.getUnderlingList(pos);
-		else return super.getMobsAt(biome, structures, classification, pos);
+		else return biomes.getBiomeFromBase(biome).getMobSettings().getMobs(classification);
 	}
 	
 	public GristTypeLayer randomLayer(Random rand)
