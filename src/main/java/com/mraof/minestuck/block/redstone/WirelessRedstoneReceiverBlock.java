@@ -1,6 +1,7 @@
 package com.mraof.minestuck.block.redstone;
 
 import com.mraof.minestuck.block.MSProperties;
+import com.mraof.minestuck.tileentity.redstone.WirelessRedstoneReceiverTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -8,17 +9,15 @@ import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 public class WirelessRedstoneReceiverBlock extends Block
 {
@@ -31,37 +30,20 @@ public class WirelessRedstoneReceiverBlock extends Block
 	public WirelessRedstoneReceiverBlock(Properties properties)
 	{
 		super(properties);
-		setDefaultState(getDefaultState().with(POWER, 0).with(AUTO_RESET, false));
+		setDefaultState(getDefaultState().with(POWER, 0).with(AUTO_RESET, true));
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand)
+	public boolean hasTileEntity(BlockState state)
 	{
-		super.tick(state, worldIn, pos, rand);
-		
-		if(state.get(AUTO_RESET) && state.get(POWER) != 0)
-		{
-			worldIn.setBlockState(pos, state.with(POWER, 0));
-		}
-		
-		if(!worldIn.getPendingBlockTicks().isTickScheduled(new BlockPos(pos), this))
-			worldIn.getPendingBlockTicks().scheduleTick(new BlockPos(pos), this, 200);
+		return true;
 	}
 	
+	@Nullable
 	@Override
-	public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random)
+	public TileEntity createTileEntity(BlockState state, IBlockReader world)
 	{
-		super.randomTick(state, worldIn, pos, random);
-		
-		if(!worldIn.getPendingBlockTicks().isTickScheduled(new BlockPos(pos), this))
-			worldIn.getPendingBlockTicks().scheduleTick(new BlockPos(pos), this, 200);
-	}
-	
-	@Override
-	public int tickRate(IWorldReader worldIn)
-	{
-		return 1;
+		return new WirelessRedstoneReceiverTileEntity();
 	}
 	
 	@Override
@@ -87,15 +69,6 @@ public class WirelessRedstoneReceiverBlock extends Block
 		}
 		
 		return ActionResultType.PASS;
-	}
-	
-	@Override
-	public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving)
-	{
-		super.onBlockAdded(state, worldIn, pos, oldState, isMoving);
-		
-		if(!worldIn.getPendingBlockTicks().isTickScheduled(new BlockPos(pos), this))
-			worldIn.getPendingBlockTicks().scheduleTick(new BlockPos(pos), this, 200);
 	}
 	
 	@Override

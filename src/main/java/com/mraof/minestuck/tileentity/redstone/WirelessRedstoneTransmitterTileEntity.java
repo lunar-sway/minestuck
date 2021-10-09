@@ -34,7 +34,7 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 		
 		if(tickCycle % MinestuckConfig.SERVER.wirelessBlocksTickRate.get() == 1)
 		{
-			sendUpdateToPosition(world, world.getRedstonePowerFromNeighbors(pos));
+			sendUpdateToPosition();
 			if(tickCycle >= 5000) //setting arbitrarily high value that the tick cannot go past
 				tickCycle = 0;
 		}
@@ -65,15 +65,45 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 		this.destBlockPos = destinationPosIn;
 	}
 	
-	public void sendUpdateToPosition(World worldIn, int powerIn)
+	private void sendUpdateToPosition() //for internal use
 	{
-		if(destBlockPos != null && !worldIn.isRemote && worldIn.isAreaLoaded(destBlockPos, 1))
+		if(destBlockPos != null && world != null && !world.isRemote && world.isAreaLoaded(destBlockPos, 1))
 		{
+			int powerIn = world.getRedstonePowerFromNeighbors(pos);
+			
 			//Debug.debugf("not null destination of %s and area loaded, powerIn = %s", destBlockPos, powerIn);
-			BlockState blockStateIn = worldIn.getBlockState(destBlockPos);
+			BlockState blockStateIn = world.getBlockState(destBlockPos);
 			if(blockStateIn.getBlock() instanceof WirelessRedstoneReceiverBlock && blockStateIn.get(WirelessRedstoneReceiverBlock.POWER) < powerIn)
 			{
+				world.setBlockState(destBlockPos, blockStateIn.with(WirelessRedstoneReceiverBlock.POWER, powerIn));
+				
+				TileEntity tileEntity = world.getTileEntity(destBlockPos);
+				if(tileEntity instanceof WirelessRedstoneReceiverTileEntity)
+				{
+					WirelessRedstoneReceiverTileEntity te = (WirelessRedstoneReceiverTileEntity) tileEntity;
+					te.setLastTransmitterBlockPos(pos);
+				}
+			}
+		}
+	}
+	
+	public void sendUpdateToPosition(World worldIn, BlockPos destBlockPos) //for external use
+	{
+		if(destBlockPos != null && worldIn != null && !worldIn.isRemote && worldIn.isAreaLoaded(destBlockPos, 1))
+		{
+			int powerIn = worldIn.getRedstonePowerFromNeighbors(pos);
+			
+			BlockState blockStateIn = worldIn.getBlockState(destBlockPos);
+			if(blockStateIn.getBlock() instanceof WirelessRedstoneReceiverBlock)
+			{
 				worldIn.setBlockState(destBlockPos, blockStateIn.with(WirelessRedstoneReceiverBlock.POWER, powerIn));
+				
+				TileEntity tileEntity = worldIn.getTileEntity(destBlockPos);
+				if(tileEntity instanceof WirelessRedstoneReceiverTileEntity)
+				{
+					WirelessRedstoneReceiverTileEntity te = (WirelessRedstoneReceiverTileEntity) tileEntity;
+					te.setLastTransmitterBlockPos(pos);
+				}
 			}
 		}
 	}
@@ -111,6 +141,7 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 	public void read(CompoundNBT compound)
 	{
 		super.read(compound);
+		tickCycle = compound.getInt("tickCycle");
 		int destX = compound.getInt("destX");
 		int destY = compound.getInt("destY");
 		int destZ = compound.getInt("destZ");
@@ -121,6 +152,8 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 	public CompoundNBT write(CompoundNBT compound)
 	{
 		super.write(compound);
+		
+		compound.putInt("tickCycle", tickCycle);
 		
 		getDestinationBlockPos();
 		
