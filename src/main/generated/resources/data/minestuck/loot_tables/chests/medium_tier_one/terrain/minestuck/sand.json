@@ -63,7 +63,7 @@
               "function": "minecraft:set_count",
               "count": {
                 "min": 1.0,
-                "max": 5.0,
+                "max": 10.0,
                 "type": "minecraft:uniform"
               }
             }
@@ -214,6 +214,10 @@
             }
           ],
           "name": "minecraft:cactus"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:gamegrl_magazine"
         }
       ]
     }

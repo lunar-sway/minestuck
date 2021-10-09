@@ -2,7 +2,7 @@
   "type": "minecraft:chest",
   "pools": [
     {
-      "name": "main",
+      "name": "weapons",
       "rolls": 1,
       "entries": [
         {
@@ -19,7 +19,13 @@
             }
           ],
           "name": "minestuck:paradises_portabello"
-        },
+        }
+      ]
+    },
+    {
+      "name": "supplies",
+      "rolls": 1,
+      "entries": [
         {
           "type": "minecraft:item",
           "weight": 6,
@@ -39,7 +45,13 @@
           "type": "minecraft:item",
           "quality": 1,
           "name": "minestuck:morel_mushroom"
-        },
+        }
+      ]
+    },
+    {
+      "name": "misc",
+      "rolls": 1,
+      "entries": [
         {
           "type": "minecraft:item",
           "weight": 8,
@@ -87,7 +99,7 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 100,
+          "weight": 10,
           "functions": [
             {
               "function": "minecraft:set_count",

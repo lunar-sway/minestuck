@@ -7,8 +7,8 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 4,
-          "quality": 2,
+          "weight": 2,
+          "quality": 1,
           "functions": [
             {
               "function": "minecraft:set_damage",
@@ -18,11 +18,12 @@
               }
             }
           ],
-          "name": "minestuck:cactaceae_cutlass"
+          "name": "minestuck:blacksmith_hammer"
         },
         {
           "type": "minecraft:item",
-          "quality": 2,
+          "weight": 2,
+          "quality": 1,
           "functions": [
             {
               "function": "minecraft:set_damage",
@@ -32,11 +33,12 @@
               }
             }
           ],
-          "name": "minecraft:golden_sword"
+          "name": "minestuck:bisickle"
         },
         {
           "type": "minecraft:item",
-          "quality": 2,
+          "weight": 2,
+          "quality": 1,
           "functions": [
             {
               "function": "minecraft:set_damage",
@@ -46,7 +48,7 @@
               }
             }
           ],
-          "name": "minecraft:golden_axe"
+          "name": "minestuck:too_hot_to_handle"
         }
       ]
     },
@@ -56,8 +58,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 6,
-          "quality": 1,
+          "weight": 8,
           "functions": [
             {
               "function": "minecraft:set_count",
@@ -68,50 +69,64 @@
               }
             }
           ],
-          "name": "minecraft:gold_ingot"
+          "name": "minecraft:coal"
         },
         {
           "type": "minecraft:item",
-          "quality": 2,
+          "weight": 5,
+          "quality": 1,
           "functions": [
             {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "min": 0.75,
-                "max": 1.0
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 3.0,
+                "type": "minecraft:uniform"
               }
             }
           ],
-          "name": "minecraft:golden_pickaxe"
+          "name": "minecraft:blaze_powder"
         },
         {
           "type": "minecraft:item",
-          "quality": 2,
+          "weight": 3,
+          "quality": 1,
           "functions": [
             {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "min": 0.75,
-                "max": 1.0
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 2.0,
+                "type": "minecraft:uniform"
               }
             }
           ],
-          "name": "minecraft:golden_shovel"
+          "name": "minecraft:blaze_rod"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 6,
+          "name": "minecraft:lava_bucket"
         },
         {
           "type": "minecraft:item",
           "weight": 2,
-          "quality": 2,
+          "quality": 1,
           "functions": [
             {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "min": 0.75,
-                "max": 1.0
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 3.0,
+                "max": 6.0,
+                "type": "minecraft:uniform"
               }
+            },
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{Potion:\"minecraft:water\"}"
             }
           ],
-          "name": "minecraft:golden_hoe"
+          "name": "minecraft:potion"
         }
       ]
     },
@@ -119,6 +134,37 @@
       "name": "misc",
       "rolls": 1,
       "entries": [
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 2.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minecraft:magma_cream"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "quality": -1,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 8.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minecraft:brick"
+        },
         {
           "type": "minecraft:item",
           "weight": 15,
@@ -133,75 +179,11 @@
               }
             }
           ],
-          "name": "minecraft:sand"
+          "name": "minecraft:netherrack"
         },
         {
           "type": "minecraft:item",
           "weight": 5,
-          "quality": -2,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1.0,
-                "max": 5.0,
-                "type": "minecraft:uniform"
-              }
-            }
-          ],
-          "name": "minecraft:red_sand"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 10,
-          "quality": -2,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 2.0,
-                "max": 12.0,
-                "type": "minecraft:uniform"
-              }
-            }
-          ],
-          "name": "minecraft:sandstone"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 6,
-          "quality": -2,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1.0,
-                "max": 4.0,
-                "type": "minecraft:uniform"
-              }
-            }
-          ],
-          "name": "minecraft:smooth_sandstone"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 3,
-          "quality": -2,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1.0,
-                "max": 4.0,
-                "type": "minecraft:uniform"
-              }
-            }
-          ],
-          "name": "minecraft:red_sandstone"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 12,
           "quality": -1,
           "functions": [
             {
@@ -213,7 +195,43 @@
               }
             }
           ],
-          "name": "minecraft:cactus"
+          "name": "minecraft:obsidian"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "quality": -1,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 8.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minestuck:cast_iron"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 3,
+          "quality": -1,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 3.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minestuck:chiseled_cast_iron"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:gamebro_magazine"
         }
       ]
     }

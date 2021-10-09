@@ -4,51 +4,7 @@
     {
       "name": "weapons",
       "rolls": 1,
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "weight": 4,
-          "quality": 2,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "min": 0.75,
-                "max": 1.0
-              }
-            }
-          ],
-          "name": "minestuck:cactaceae_cutlass"
-        },
-        {
-          "type": "minecraft:item",
-          "quality": 2,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "min": 0.75,
-                "max": 1.0
-              }
-            }
-          ],
-          "name": "minecraft:golden_sword"
-        },
-        {
-          "type": "minecraft:item",
-          "quality": 2,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "min": 0.75,
-                "max": 1.0
-              }
-            }
-          ],
-          "name": "minecraft:golden_axe"
-        }
-      ]
+      "entries": []
     },
     {
       "name": "supplies",
@@ -56,14 +12,14 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 6,
-          "quality": 1,
+          "weight": 2,
+          "quality": 2,
           "functions": [
             {
               "function": "minecraft:set_count",
               "count": {
                 "min": 1.0,
-                "max": 5.0,
+                "max": 3.0,
                 "type": "minecraft:uniform"
               }
             }
@@ -72,21 +28,23 @@
         },
         {
           "type": "minecraft:item",
-          "quality": 2,
+          "weight": 5,
           "functions": [
             {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "min": 0.75,
-                "max": 1.0
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 7.0,
+                "type": "minecraft:uniform"
               }
             }
           ],
-          "name": "minecraft:golden_pickaxe"
+          "name": "minecraft:redstone"
         },
         {
           "type": "minecraft:item",
-          "quality": 2,
+          "weight": 3,
+          "quality": 1,
           "functions": [
             {
               "function": "minecraft:set_damage",
@@ -96,22 +54,7 @@
               }
             }
           ],
-          "name": "minecraft:golden_shovel"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 2,
-          "quality": 2,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "min": 0.75,
-                "max": 1.0
-              }
-            }
-          ],
-          "name": "minecraft:golden_hoe"
+          "name": "minecraft:diamond_pickaxe"
         }
       ]
     },
@@ -133,11 +76,59 @@
               }
             }
           ],
-          "name": "minecraft:sand"
+          "name": "minecraft:red_sandstone"
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
+          "weight": 10,
+          "quality": -2,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 8.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minecraft:smooth_red_sandstone"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 4,
+          "quality": -2,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 2.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minecraft:chiseled_red_sandstone"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 4,
+          "quality": -2,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 4.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minecraft:sandstone"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 8,
           "quality": -2,
           "functions": [
             {
@@ -153,67 +144,7 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
-          "quality": -2,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 2.0,
-                "max": 12.0,
-                "type": "minecraft:uniform"
-              }
-            }
-          ],
-          "name": "minecraft:sandstone"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 6,
-          "quality": -2,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1.0,
-                "max": 4.0,
-                "type": "minecraft:uniform"
-              }
-            }
-          ],
-          "name": "minecraft:smooth_sandstone"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 3,
-          "quality": -2,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1.0,
-                "max": 4.0,
-                "type": "minecraft:uniform"
-              }
-            }
-          ],
-          "name": "minecraft:red_sandstone"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 12,
-          "quality": -1,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1.0,
-                "max": 5.0,
-                "type": "minecraft:uniform"
-              }
-            }
-          ],
-          "name": "minecraft:cactus"
+          "name": "minestuck:gamegrl_magazine"
         }
       ]
     }

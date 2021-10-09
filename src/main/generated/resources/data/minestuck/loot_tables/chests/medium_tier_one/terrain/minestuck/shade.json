@@ -13,43 +13,47 @@
         {
           "type": "minecraft:item",
           "weight": 10,
-          "quality": -1,
           "functions": [
             {
               "function": "minecraft:set_count",
               "count": {
                 "min": 1.0,
-                "max": 2.0,
+                "max": 4.0,
                 "type": "minecraft:uniform"
               }
             }
           ],
-          "name": "minecraft:rabbit"
+          "name": "minecraft:red_mushroom"
         },
         {
           "type": "minecraft:item",
-          "weight": 7,
+          "weight": 10,
           "functions": [
             {
               "function": "minecraft:set_count",
               "count": {
                 "min": 1.0,
-                "max": 2.0,
+                "max": 4.0,
                 "type": "minecraft:uniform"
               }
             }
           ],
-          "name": "minecraft:cooked_rabbit"
+          "name": "minecraft:brown_mushroom"
         },
         {
           "type": "minecraft:item",
-          "weight": 4,
+          "weight": 5,
           "quality": 1,
-          "name": "minecraft:rabbit_stew"
+          "name": "minecraft:mushroom_stew"
         },
         {
           "type": "minecraft:item",
-          "weight": 12,
+          "weight": 5,
+          "name": "minestuck:oil_bucket"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 8,
           "functions": [
             {
               "function": "minecraft:set_count",
@@ -60,7 +64,7 @@
               }
             }
           ],
-          "name": "minecraft:carrot"
+          "name": "minecraft:torch"
         }
       ]
     },
@@ -70,7 +74,24 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 8,
+          "weight": 15,
+          "quality": -2,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 2.0,
+                "max": 16.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minestuck:blue_dirt"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 6,
+          "quality": -1,
           "functions": [
             {
               "function": "minecraft:set_count",
@@ -81,34 +102,27 @@
               }
             }
           ],
-          "name": "minecraft:rabbit_hide"
+          "name": "minestuck:glowing_log"
         },
         {
           "type": "minecraft:item",
-          "weight": 2,
-          "quality": 1,
-          "name": "minecraft:rabbit_foot"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 3,
+          "weight": 12,
+          "quality": -2,
           "functions": [
             {
               "function": "minecraft:set_count",
               "count": {
                 "min": 1.0,
-                "max": 3.0,
+                "max": 5.0,
                 "type": "minecraft:uniform"
               }
             }
           ],
-          "name": "minestuck:gold_seeds"
+          "name": "minestuck:glowing_mushroom"
         },
         {
           "type": "minecraft:item",
-          "weight": 4,
-          "quality": 2,
-          "name": "minestuck:sbahj_poster"
+          "name": "minestuck:gamegrl_magazine"
         }
       ]
     }

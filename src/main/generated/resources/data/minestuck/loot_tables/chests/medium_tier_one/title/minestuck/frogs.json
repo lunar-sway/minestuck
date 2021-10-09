@@ -67,6 +67,18 @@
             }
           ],
           "name": "minecraft:lily_pad"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "quality": 3,
+          "name": "minestuck:mini_frog_statue"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 4,
+          "quality": 2,
+          "name": "minestuck:thresh_dvd"
         }
       ]
     }

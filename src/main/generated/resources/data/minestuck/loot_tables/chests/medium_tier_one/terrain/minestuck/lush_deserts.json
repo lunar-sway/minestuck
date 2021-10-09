@@ -214,6 +214,10 @@
             }
           ],
           "name": "minecraft:cactus"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:gamebro_magazine"
         }
       ]
     }

@@ -4,7 +4,23 @@
     {
       "name": "weapons",
       "rolls": 1,
-      "entries": []
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "weight": 3,
+          "quality": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.75,
+                "max": 1.0
+              }
+            }
+          ],
+          "name": "minestuck:paradises_portabello"
+        }
+      ]
     },
     {
       "name": "supplies",
@@ -12,55 +28,23 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 10,
-          "quality": -1,
+          "weight": 6,
           "functions": [
             {
               "function": "minecraft:set_count",
               "count": {
                 "min": 1.0,
-                "max": 2.0,
+                "max": 4.0,
                 "type": "minecraft:uniform"
               }
             }
           ],
-          "name": "minecraft:rabbit"
+          "name": "minestuck:sporeo"
         },
         {
           "type": "minecraft:item",
-          "weight": 7,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1.0,
-                "max": 2.0,
-                "type": "minecraft:uniform"
-              }
-            }
-          ],
-          "name": "minecraft:cooked_rabbit"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 4,
           "quality": 1,
-          "name": "minecraft:rabbit_stew"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 12,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1.0,
-                "max": 5.0,
-                "type": "minecraft:uniform"
-              }
-            }
-          ],
-          "name": "minecraft:carrot"
+          "name": "minestuck:morel_mushroom"
         }
       ]
     },
@@ -75,40 +59,62 @@
             {
               "function": "minecraft:set_count",
               "count": {
-                "min": 1.0,
-                "max": 3.0,
+                "min": 2.0,
+                "max": 8.0,
                 "type": "minecraft:uniform"
               }
             }
           ],
-          "name": "minecraft:rabbit_hide"
+          "name": "minecraft:brown_mushroom"
         },
         {
           "type": "minecraft:item",
-          "weight": 2,
-          "quality": 1,
-          "name": "minecraft:rabbit_foot"
+          "weight": 8,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 2.0,
+                "max": 7.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minecraft:red_mushroom"
         },
         {
           "type": "minecraft:item",
-          "weight": 3,
+          "weight": 5,
           "functions": [
             {
               "function": "minecraft:set_count",
               "count": {
                 "min": 1.0,
-                "max": 3.0,
+                "max": 5.0,
                 "type": "minecraft:uniform"
               }
             }
           ],
-          "name": "minestuck:gold_seeds"
+          "name": "minecraft:slime_ball"
         },
         {
           "type": "minecraft:item",
-          "weight": 4,
-          "quality": 2,
-          "name": "minestuck:sbahj_poster"
+          "weight": 10,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 6.0,
+                "max": 11.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minestuck:fungal_spore"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:gamegrl_magazine"
         }
       ]
     }

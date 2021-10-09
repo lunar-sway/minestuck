@@ -7,8 +7,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 4,
-          "quality": 2,
+          "weight": 3,
           "functions": [
             {
               "function": "minecraft:set_damage",
@@ -18,35 +17,7 @@
               }
             }
           ],
-          "name": "minestuck:cactaceae_cutlass"
-        },
-        {
-          "type": "minecraft:item",
-          "quality": 2,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "min": 0.75,
-                "max": 1.0
-              }
-            }
-          ],
-          "name": "minecraft:golden_sword"
-        },
-        {
-          "type": "minecraft:item",
-          "quality": 2,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "min": 0.75,
-                "max": 1.0
-              }
-            }
-          ],
-          "name": "minecraft:golden_axe"
+          "name": "minestuck:pogo_hammer"
         }
       ]
     },
@@ -56,23 +27,39 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 6,
-          "quality": 1,
+          "weight": 4,
+          "quality": 2,
           "functions": [
             {
               "function": "minecraft:set_count",
               "count": {
                 "min": 1.0,
-                "max": 5.0,
+                "max": 3.0,
                 "type": "minecraft:uniform"
               }
             }
           ],
-          "name": "minecraft:gold_ingot"
+          "name": "minecraft:iron_ingot"
         },
         {
           "type": "minecraft:item",
-          "quality": 2,
+          "weight": 5,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 7.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minecraft:redstone"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 3,
+          "quality": 1,
           "functions": [
             {
               "function": "minecraft:set_damage",
@@ -82,36 +69,7 @@
               }
             }
           ],
-          "name": "minecraft:golden_pickaxe"
-        },
-        {
-          "type": "minecraft:item",
-          "quality": 2,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "min": 0.75,
-                "max": 1.0
-              }
-            }
-          ],
-          "name": "minecraft:golden_shovel"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 2,
-          "quality": 2,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "min": 0.75,
-                "max": 1.0
-              }
-            }
-          ],
-          "name": "minecraft:golden_hoe"
+          "name": "minecraft:iron_axe"
         }
       ]
     },
@@ -121,7 +79,23 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 15,
+          "weight": 5,
+          "quality": -2,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 8.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minecraft:dark_oak_planks"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 8,
           "quality": -2,
           "functions": [
             {
@@ -133,7 +107,39 @@
               }
             }
           ],
-          "name": "minecraft:sand"
+          "name": "minecraft:jungle_planks"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 8,
+          "quality": -2,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 2.0,
+                "max": 16.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minecraft:oak_planks"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 4,
+          "quality": -2,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 4.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minecraft:dark_oak_log"
         },
         {
           "type": "minecraft:item",
@@ -144,32 +150,64 @@
               "function": "minecraft:set_count",
               "count": {
                 "min": 1.0,
-                "max": 5.0,
+                "max": 8.0,
                 "type": "minecraft:uniform"
               }
             }
           ],
-          "name": "minecraft:red_sand"
+          "name": "minecraft:jungle_log"
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
+          "weight": 4,
           "quality": -2,
           "functions": [
             {
               "function": "minecraft:set_count",
               "count": {
-                "min": 2.0,
-                "max": 12.0,
+                "min": 1.0,
+                "max": 5.0,
                 "type": "minecraft:uniform"
               }
             }
           ],
-          "name": "minecraft:sandstone"
+          "name": "minecraft:oak_log"
         },
         {
           "type": "minecraft:item",
-          "weight": 6,
+          "weight": 4,
+          "quality": -2,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 2.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minecraft:dark_oak_sapling"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 4,
+          "quality": -2,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 2.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minecraft:jungle_sapling"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 4,
           "quality": -2,
           "functions": [
             {
@@ -181,39 +219,32 @@
               }
             }
           ],
-          "name": "minecraft:smooth_sandstone"
+          "name": "minecraft:oak_sapling"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 4,
+          "quality": -2,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 5.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minestuck:glowing_log"
         },
         {
           "type": "minecraft:item",
           "weight": 3,
-          "quality": -2,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1.0,
-                "max": 4.0,
-                "type": "minecraft:uniform"
-              }
-            }
-          ],
-          "name": "minecraft:red_sandstone"
+          "name": "minecraft:cocoa_beans"
         },
         {
           "type": "minecraft:item",
-          "weight": 12,
-          "quality": -1,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1.0,
-                "max": 5.0,
-                "type": "minecraft:uniform"
-              }
-            }
-          ],
-          "name": "minecraft:cactus"
+          "name": "minestuck:gamebro_magazine"
         }
       ]
     }

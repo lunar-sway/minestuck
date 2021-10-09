@@ -12,20 +12,6 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 15,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "min": 0.75,
-                "max": 1.0
-              }
-            }
-          ],
-          "name": "minecraft:stone_pickaxe"
-        },
-        {
-          "type": "minecraft:item",
           "weight": 7,
           "quality": 1,
           "functions": [
@@ -38,20 +24,6 @@
             }
           ],
           "name": "minecraft:iron_pickaxe"
-        },
-        {
-          "type": "minecraft:item",
-          "quality": 2,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "min": 0.75,
-                "max": 1.0
-              }
-            }
-          ],
-          "name": "minecraft:diamond_pickaxe"
         }
       ]
     },
@@ -140,15 +112,6 @@
           "name": "minecraft:bricks"
         }
       ]
-    },
-    {
-      "name": "rare",
-      "rolls": {
-        "min": 0.0,
-        "max": 1.0,
-        "type": "minecraft:uniform"
-      },
-      "entries": []
     }
   ]
 }

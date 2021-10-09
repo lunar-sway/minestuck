@@ -13,43 +13,20 @@
         {
           "type": "minecraft:item",
           "weight": 10,
-          "quality": -1,
           "functions": [
             {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1.0,
-                "max": 2.0,
-                "type": "minecraft:uniform"
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.0,
+                "max": 0.25
               }
             }
           ],
-          "name": "minecraft:rabbit"
+          "name": "minecraft:flint_and_steel"
         },
         {
           "type": "minecraft:item",
-          "weight": 7,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1.0,
-                "max": 2.0,
-                "type": "minecraft:uniform"
-              }
-            }
-          ],
-          "name": "minecraft:cooked_rabbit"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 4,
-          "quality": 1,
-          "name": "minecraft:rabbit_stew"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 12,
+          "weight": 8,
           "functions": [
             {
               "function": "minecraft:set_count",
@@ -60,7 +37,22 @@
               }
             }
           ],
-          "name": "minecraft:carrot"
+          "name": "minecraft:coal"
+        },
+        {
+          "type": "minecraft:item",
+          "quality": 2,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 5.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minecraft:diamond"
         }
       ]
     },
@@ -70,7 +62,40 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 8,
+          "weight": 20,
+          "quality": -1,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 10.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minecraft:snowball"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "quality": -2,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 2.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minecraft:snow"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "quality": -2,
           "functions": [
             {
               "function": "minecraft:set_count",
@@ -81,34 +106,17 @@
               }
             }
           ],
-          "name": "minecraft:rabbit_hide"
+          "name": "minecraft:snow_block"
         },
         {
           "type": "minecraft:item",
-          "weight": 2,
-          "quality": 1,
-          "name": "minecraft:rabbit_foot"
+          "weight": 15,
+          "quality": -1,
+          "name": "minecraft:spruce_sapling"
         },
         {
           "type": "minecraft:item",
-          "weight": 3,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1.0,
-                "max": 3.0,
-                "type": "minecraft:uniform"
-              }
-            }
-          ],
-          "name": "minestuck:gold_seeds"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 4,
-          "quality": 2,
-          "name": "minestuck:sbahj_poster"
+          "name": "minestuck:gamebro_magazine"
         }
       ]
     }

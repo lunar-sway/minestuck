@@ -4,7 +4,14 @@
     {
       "name": "weapons",
       "rolls": 1,
-      "entries": []
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "quality": 1,
+          "name": "minestuck:iron_cane"
+        }
+      ]
     },
     {
       "name": "supplies",
@@ -12,18 +19,19 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 8,
+          "weight": 10,
+          "quality": -1,
           "functions": [
             {
               "function": "minecraft:set_count",
               "count": {
-                "min": 1.0,
-                "max": 3.0,
+                "min": 3.0,
+                "max": 10.0,
                 "type": "minecraft:uniform"
               }
             }
           ],
-          "name": "minecraft:beef"
+          "name": "minecraft:ladder"
         }
       ]
     },
@@ -31,17 +39,6 @@
       "name": "misc",
       "rolls": 1,
       "entries": [
-        {
-          "type": "minecraft:item",
-          "weight": 2,
-          "name": "minecraft:repeater"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 4,
-          "quality": -1,
-          "name": "minestuck:razor_blade"
-        },
         {
           "type": "minecraft:item",
           "weight": 4,

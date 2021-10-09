@@ -83,18 +83,11 @@ public class LootBlock extends DecorBlock
 					{
 						ItemEntity itemEntity = player.entityDropItem(loot.get(worldIn.rand.nextInt(loot.size())), 0.0F);
 						if(itemEntity != null)
+						{
 							itemEntity.setNoPickupDelay();
+							//MSCriteriaTriggers.CONSORT_ITEM.trigger(player, this.lootTable.toString(), itemstack, consort);
+						}
 					}
-					
-					/*
-					for(ItemStack itemstack : loot)
-					{
-						ItemEntity itemEntity = player.entityDropItem(itemstack, 0.0F);
-						if(itemEntity != null)
-							itemEntity.setNoPickupDelay();
-						//MSCriteriaTriggers.CONSORT_ITEM.trigger(player, this.lootTable.toString(), itemstack, consort);
-					}
-					/**/
 					
 					if(player.getHeldItem(handIn).getItem() != MSItems.DUNGEON_KEY)
 						worldIn.setBlockState(pos, state.with(OPEN, true));
@@ -105,29 +98,6 @@ public class LootBlock extends DecorBlock
 			return ActionResultType.SUCCESS;
 		}
 		return ActionResultType.PASS;
-	}
-	
-	/*@Override
-	public boolean hasTileEntity(BlockState state)
-	{
-		return true;
-	}
-	
-	@Nullable
-	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world)
-	{
-		return new CassettePlayerTileEntity();
-	}*/
-	
-	public boolean hasComparatorInputOverride(BlockState state)
-	{
-		return true;
-	}
-	
-	public int getComparatorInputOverride(BlockState blockState, World worldIn, BlockPos pos)
-	{
-		return blockState.get(OPEN) ? 15 : 0;
 	}
 	
 	@Override

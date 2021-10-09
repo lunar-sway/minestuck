@@ -63,7 +63,7 @@
               "function": "minecraft:set_count",
               "count": {
                 "min": 1.0,
-                "max": 5.0,
+                "max": 10.0,
                 "type": "minecraft:uniform"
               }
             }
@@ -133,7 +133,7 @@
               }
             }
           ],
-          "name": "minecraft:sand"
+          "name": "minecraft:red_sand"
         },
         {
           "type": "minecraft:item",
@@ -149,7 +149,7 @@
               }
             }
           ],
-          "name": "minecraft:red_sand"
+          "name": "minecraft:sand"
         },
         {
           "type": "minecraft:item",
@@ -165,7 +165,7 @@
               }
             }
           ],
-          "name": "minecraft:sandstone"
+          "name": "minecraft:red_sandstone"
         },
         {
           "type": "minecraft:item",
@@ -181,7 +181,7 @@
               }
             }
           ],
-          "name": "minecraft:smooth_sandstone"
+          "name": "minecraft:smooth_red_sandstone"
         },
         {
           "type": "minecraft:item",
@@ -197,7 +197,7 @@
               }
             }
           ],
-          "name": "minecraft:red_sandstone"
+          "name": "minecraft:sandstone"
         },
         {
           "type": "minecraft:item",
@@ -214,6 +214,10 @@
             }
           ],
           "name": "minecraft:cactus"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:gamegrl_magazine"
         }
       ]
     }

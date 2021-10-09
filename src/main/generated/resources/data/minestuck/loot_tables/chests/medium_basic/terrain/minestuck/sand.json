@@ -216,15 +216,6 @@
           "name": "minecraft:cactus"
         }
       ]
-    },
-    {
-      "name": "rare",
-      "rolls": {
-        "min": 0.0,
-        "max": 1.0,
-        "type": "minecraft:uniform"
-      },
-      "entries": []
     }
   ]
 }

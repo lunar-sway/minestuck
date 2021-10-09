@@ -7,7 +7,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "quality": 2,
+          "weight": 2,
           "functions": [
             {
               "function": "minecraft:set_damage",
@@ -17,14 +17,21 @@
               }
             }
           ],
-          "name": "minestuck:pogo_hammer"
+          "name": "minestuck:spiked_club"
         }
       ]
     },
     {
       "name": "supplies",
       "rolls": 1,
-      "entries": []
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "quality": 2,
+          "name": "minecraft:ender_pearl"
+        }
+      ]
     },
     {
       "name": "misc",

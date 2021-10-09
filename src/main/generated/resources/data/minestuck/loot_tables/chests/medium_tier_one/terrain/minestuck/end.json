@@ -7,7 +7,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 2,
+          "weight": 5,
           "functions": [
             {
               "function": "minecraft:set_damage",
@@ -17,7 +17,7 @@
               }
             }
           ],
-          "name": "minestuck:spiked_club"
+          "name": "minecraft:diamond_hoe"
         }
       ]
     },
@@ -27,9 +27,49 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 5,
           "quality": 2,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.75,
+                "max": 1.0
+              }
+            }
+          ],
+          "name": "minecraft:elytra"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "quality": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 4.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
           "name": "minecraft:ender_pearl"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "quality": -5,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 4.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minecraft:chorus_fruit"
         }
       ]
     },
@@ -39,71 +79,80 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 15,
-          "quality": -2,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1.0,
-                "max": 3.0,
-                "type": "minecraft:uniform"
-              }
-            }
-          ],
-          "name": "minecraft:rotten_flesh"
+          "quality": 1,
+          "name": "minecraft:dragon_breath"
         },
         {
           "type": "minecraft:item",
-          "weight": 12,
+          "quality": 1,
+          "name": "minecraft:shulker_shell"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 8,
           "quality": -1,
           "functions": [
             {
               "function": "minecraft:set_count",
               "count": {
                 "min": 1.0,
-                "max": 3.0,
+                "max": 16.0,
                 "type": "minecraft:uniform"
               }
             }
           ],
-          "name": "minecraft:bone"
+          "name": "minecraft:end_stone"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 2.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minecraft:end_rod"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "quality": -1,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 16.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minestuck:end_grass"
         },
         {
           "type": "minecraft:item",
           "weight": 8,
+          "quality": -1,
           "functions": [
             {
               "function": "minecraft:set_count",
               "count": {
                 "min": 1.0,
-                "max": 3.0,
+                "max": 6.0,
                 "type": "minecraft:uniform"
               }
             }
           ],
-          "name": "minecraft:gunpowder"
+          "name": "minestuck:coarse_end_stone"
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1.0,
-                "max": 3.0,
-                "type": "minecraft:uniform"
-              }
-            }
-          ],
-          "name": "minecraft:string"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 4,
-          "quality": 2,
-          "name": "minestuck:crew_poster"
+          "name": "minestuck:gamegrl_magazine"
         }
       ]
     }

@@ -39,65 +39,39 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 15,
-          "quality": -2,
+          "weight": 2,
+          "quality": 2,
           "functions": [
             {
               "function": "minecraft:set_count",
               "count": {
                 "min": 1.0,
-                "max": 3.0,
+                "max": 2.0,
                 "type": "minecraft:uniform"
               }
             }
           ],
-          "name": "minecraft:rotten_flesh"
+          "name": "minecraft:golden_apple"
         },
         {
           "type": "minecraft:item",
-          "weight": 12,
-          "quality": -1,
+          "weight": 2,
+          "quality": 1,
           "functions": [
             {
               "function": "minecraft:set_count",
               "count": {
-                "min": 1.0,
-                "max": 3.0,
+                "min": 3.0,
+                "max": 6.0,
                 "type": "minecraft:uniform"
               }
-            }
-          ],
-          "name": "minecraft:bone"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 8,
-          "functions": [
+            },
             {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1.0,
-                "max": 3.0,
-                "type": "minecraft:uniform"
-              }
+              "function": "minecraft:set_nbt",
+              "tag": "{Potion:\"minecraft:weakness\"}"
             }
           ],
-          "name": "minecraft:gunpowder"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 10,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1.0,
-                "max": 3.0,
-                "type": "minecraft:uniform"
-              }
-            }
-          ],
-          "name": "minecraft:string"
+          "name": "minecraft:splash_potion"
         },
         {
           "type": "minecraft:item",
