@@ -257,6 +257,10 @@
         },
         {
           "type": "minecraft:item",
+          "name": "minestuck:electric_autoharp"
+        },
+        {
+          "type": "minecraft:item",
           "weight": 2,
           "functions": [
             {

@@ -470,6 +470,12 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.SHATTER_BACON, "ShatterBacon");
 		addTooltip(MSItems.SHATTER_BACON, "This thing is so unspeakably greasy you are having a hard time even holding it.");
 		addExtra(MSItems.SHATTER_BACON, OnHitEffect.SORD_DROP_MESSAGE, "The grease caused the ShatterBacon to slip from your grasp!");
+		add(MSItems.DAGGER, "Dagger");
+		add(MSItems.NIFE, "nife.");
+		addExtra(MSItems.NIFE, OnHitEffect.SORD_DROP_MESSAGE, "Whoopsies doopsies you dwopped the nife!!");
+		add(MSItems.LIGHT_OF_MY_KNIFE, "Light Of My Knife");
+		add(MSItems.STARSHARD_TRI_BLADE, "Starshard Tri-Blade");
+		add(MSItems.TOOTHRIPPER, "Toothripper");
 		add(MSItems.BATLEACKS, "batleacks!!");
 		addTooltip(MSItems.BATLEACKS, "A shitty axe. Not much more to it.");
 		addExtra(MSItems.BATLEACKS, OnHitEffect.SORD_DROP_MESSAGE, "The shittiness of the batleacks made it phase through your hand");
@@ -535,6 +541,15 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.ACTION_CLAWS_SHEATHED, "Action Claws");
 		add(MSItems.LIPSTICK_CHAINSAW, "Chainsaw");
 		add(MSItems.LIPSTICK, "Jade Lipstick");
+		add(MSItems.THISTLEBLOWER, "Thistleblower");
+		add(MSItems.THISTLEBLOWER_LIPSTICK, "Rosy Lipstick");
+		add(MSItems.EMERALD_IMMOLATOR, "Emerald Immolator");
+		add(MSItems.EMERALD_IMMOLATOR_LIPSTICK, "Lipodemic Lipstick");
+		add(MSItems.FROSTTOOTH, "Frosttooth");
+		add(MSItems.FROSTTOOTH_LIPSTICK, "Calcium Froststick");
+		addTooltip(MSItems.FROSTTOOTH_LIPSTICK, "Feels cold and sharp");
+		add(MSItems.OBSIDIATOR, "Obsidiator");
+		add(MSItems.OBSIDIATOR_LIPSTICK, "Fuschia Lipstick");
 		add(MSItems.JOUSTING_LANCE, "Jousting Lance");
 		add(MSItems.CIGARETTE_LANCE, "Cigarette Holder Lance");
 		add(MSItems.LUCERNE_HAMMER, "Lucerne Hammer");
@@ -966,6 +981,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.LIP_BALM, "Lip Balm");
 		addTooltip(MSItems.LIP_BALM, "I see you there with those dry lips. Aht aht don't lick them now.");
 		addExtra(MSItems.LIP_BALM, "message", "Your lips are slightly more moisturized, but is it enough?");
+		add(MSItems.ELECTRIC_AUTOHARP, "Electric Autoharp");
 		add(MSItems.CARDBOARD_TUBE, "Cardboard Tube");
 		add(MSItems.INK_SQUID_PRO_QUO, "Ink of Squid Pro Quo");
 		addTooltip(MSItems.INK_SQUID_PRO_QUO, "For the love of god, don't drink it.");
@@ -1910,6 +1926,15 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addSubtitles("screech", "Estrogen-empowered screech");
 		addSubtitles("upcheladder", "Echeladder levels up");
 		addSubtitles("electric_shock", "Electric Shock");
+		addSubtitles("amajor_electric_autoharp_stroke", "A Major plays on electric autoharp");
+		addSubtitles("bmajor_electric_autoharp_stroke", "B Major plays on electric autoharp");
+		addSubtitles("bbmajor_electric_autoharp_stroke", "Bb Major plays on electric autoharp");
+		addSubtitles("cmajor_electric_autoharp_stroke", "C Major plays on electric autoharp");
+		addSubtitles("dmajor_electric_autoharp_stroke", "D Major plays on electric autoharp");
+		addSubtitles("ebmajor_electric_autoharp_stroke", "Eb Major plays on electric autoharp");
+		addSubtitles("emajor_electric_autoharp_stroke", "E Major plays on electric autoharp");
+		addSubtitles("fmajor_electric_autoharp_stroke", "F Major plays on electric autoharp");
+		addSubtitles("gmajor_electric_autoharp_stroke", "G Major plays on electric autoharp");
 		
 		addEntitySubtitles(MSEntityTypes.NAKAGATOR, "ambient", "Nakagator naks");
 		addEntitySubtitles(MSEntityTypes.NAKAGATOR, "hurt", "Nakagator hurts");

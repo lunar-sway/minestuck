@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:lipstick_chainsaw"
+  },
+  "input2": {
+    "item": "minestuck:emerald_sword"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:emerald_immolator"
+  }
+}
