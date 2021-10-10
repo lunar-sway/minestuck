@@ -503,8 +503,11 @@ public class StructureBlockUtil
 	/**
 	 * normal trimmed down fill command that only places blocks when it can replace another specified blockstate
 	 */
-	public static void fillWithBlocksReplaceState(IWorld worldIn, MutableBoundingBox boundingboxIn, BlockPos minBlockPos, BlockPos maxBlockPos, BlockState replacementBlockState, BlockState replacedBlockState)
+	public static void fillWithBlocksReplaceState(IWorld worldIn, MutableBoundingBox boundingboxIn, BlockPos minBlockPosIn, BlockPos maxBlockPosIn, BlockState replacementBlockState, BlockState replacedBlockState)
 	{
+		BlockPos minBlockPos = axisAlignBlockPosGetMin(minBlockPosIn, maxBlockPosIn);
+		BlockPos maxBlockPos = axisAlignBlockPosGetMax(minBlockPosIn, maxBlockPosIn);
+		
 		for(int y = minBlockPos.getY(); y <= maxBlockPos.getY(); ++y)
 		{
 			for(int x = minBlockPos.getX(); x <= maxBlockPos.getX(); ++x)

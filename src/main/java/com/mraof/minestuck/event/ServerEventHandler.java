@@ -187,7 +187,7 @@ public class ServerEventHandler
 		statStorer(1, StatStorerTileEntity.ActiveType.LIGHTNING_STRUCK, event.getEntity().getPosition(), event.getEntity().world);
 	}
 	
-	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
+	/*@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public static void onBlockRightClick(PlayerInteractEvent.RightClickBlock event)
 	{
 		//conditions check does not work
@@ -200,7 +200,7 @@ public class ServerEventHandler
 	{
 		//adds value every tick
 		//statStorer(1, StatStorerTileEntity.ActiveType.ENTITY_SET_TARGET, event.getEntity().getPosition(), event.getEntity().world);
-	}
+	}*/
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public static void onAlchemy(AlchemyEvent event)

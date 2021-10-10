@@ -291,6 +291,8 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(WIRELESS_REDSTONE_TRANSMITTER);
 		registerDropSelfLootTable(WIRELESS_REDSTONE_RECEIVER);
 		registerDropSelfLootTable(SOLID_SWITCH);
+		registerDropSelfLootTable(ONE_SECOND_INTERVAL_TIMED_SOLID_SWITCH);
+		registerDropSelfLootTable(TWO_SECOND_INTERVAL_TIMED_SOLID_SWITCH);
 		registerLootTable(SUMMONER, func_218482_a());
 		registerLootTable(AREA_EFFECT_BLOCK, func_218482_a());
 		

@@ -751,6 +751,8 @@ public class MSItems
 		registerItemBlock(registry, WIRELESS_REDSTONE_TRANSMITTER, MSItemGroup.LANDS);
 		registerItemBlock(registry, WIRELESS_REDSTONE_RECEIVER, MSItemGroup.LANDS);
 		registerItemBlock(registry, SOLID_SWITCH, MSItemGroup.LANDS);
+		registerItemBlock(registry, ONE_SECOND_INTERVAL_TIMED_SOLID_SWITCH, MSItemGroup.LANDS);
+		registerItemBlock(registry, TWO_SECOND_INTERVAL_TIMED_SOLID_SWITCH, MSItemGroup.LANDS);
 		registerItemBlock(registry, SUMMONER, MSItemGroup.LANDS);
 		registerItemBlock(registry, AREA_EFFECT_BLOCK, MSItemGroup.LANDS);
 		

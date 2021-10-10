@@ -16,8 +16,8 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 	private int saplingsGrownStored;
 	private float healthRecoveredStored;
 	private int lightningStruckStored;
-	private int blockRightClickStored;
-	private int entitySetTargetStored;
+	//private int blockRightClickStored;
+	//private int entitySetTargetStored;
 	private int alcehemyActivatedStored;
 	
 	private ActiveType activeType;
@@ -31,8 +31,8 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 		SAPLING_GROWN,
 		HEALTH_RECOVERED,
 		LIGHTNING_STRUCK,
-		BLOCK_RIGHT_CLICK,
-		ENTITY_SET_TARGET,
+		//BLOCK_RIGHT_CLICK,
+		//ENTITY_SET_TARGET,
 		ALCHEMY_ACTIVATED;
 		
 		public static ActiveType fromInt(int ordinal) //converts int back into enum
@@ -101,7 +101,7 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 		else
 			this.lightningStruckStored = 0;
 		
-		if(compound.contains("blockRightClickStored"))
+		/*if(compound.contains("blockRightClickStored"))
 			this.blockRightClickStored = compound.getInt("blockRightClickStored");
 		else
 			this.blockRightClickStored = 0;
@@ -109,7 +109,7 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 		if(compound.contains("entitySetTargetStored"))
 			this.entitySetTargetStored = compound.getInt("entitySetTargetStored");
 		else
-			this.entitySetTargetStored = 0;
+			this.entitySetTargetStored = 0;*/
 		
 		if(compound.contains("alcehemyActivatedStored"))
 			this.alcehemyActivatedStored = compound.getInt("alcehemyActivatedStored");
@@ -134,8 +134,8 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 		compound.putInt("saplingsGrownStored", saplingsGrownStored);
 		compound.putFloat("healthRecoveredStored", healthRecoveredStored);
 		compound.putInt("lightningStruckStored", lightningStruckStored);
-		compound.putInt("blockRightClickStored", blockRightClickStored);
-		compound.putInt("entitySetTargetStored", entitySetTargetStored);
+		//compound.putInt("blockRightClickStored", blockRightClickStored);
+		//compound.putInt("entitySetTargetStored", entitySetTargetStored);
 		compound.putInt("alcehemyActivatedStored", alcehemyActivatedStored);
 		
 		compound.putInt("tickCycle", tickCycle);
@@ -158,10 +158,10 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 			return (int) this.healthRecoveredStored;
 		else if(this.activeType == ActiveType.LIGHTNING_STRUCK)
 			return this.lightningStruckStored;
-		else if(this.activeType == ActiveType.BLOCK_RIGHT_CLICK)
+	/*	else if(this.activeType == ActiveType.BLOCK_RIGHT_CLICK)
 			return this.blockRightClickStored;
 		else if(this.activeType == ActiveType.ENTITY_SET_TARGET)
-			return this.entitySetTargetStored;
+			return this.entitySetTargetStored;*/
 		else if(this.activeType == ActiveType.ALCHEMY_ACTIVATED)
 			return this.alcehemyActivatedStored;
 		
@@ -216,14 +216,14 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 		{
 			this.lightningStruckStored = (int) storedStatIn;
 			world.getBlockState(pos).getBlock().updateNeighbors(world.getBlockState(pos), world, pos, 3);
-		} else if(this.activeType == ActiveType.BLOCK_RIGHT_CLICK)
+		/*} else if(this.activeType == ActiveType.BLOCK_RIGHT_CLICK)
 		{
 			this.blockRightClickStored = (int) storedStatIn;
 			world.getBlockState(pos).getBlock().updateNeighbors(world.getBlockState(pos), world, pos, 3);
 		} else if(this.activeType == ActiveType.ENTITY_SET_TARGET)
 		{
 			this.entitySetTargetStored = (int) storedStatIn;
-			world.getBlockState(pos).getBlock().updateNeighbors(world.getBlockState(pos), world, pos, 3);
+			world.getBlockState(pos).getBlock().updateNeighbors(world.getBlockState(pos), world, pos, 3);*/
 		} else if(this.activeType == ActiveType.ALCHEMY_ACTIVATED)
 		{
 			this.alcehemyActivatedStored = (int) storedStatIn;

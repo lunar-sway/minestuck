@@ -154,6 +154,8 @@ public class MSBlocks
 	public static final Block WIRELESS_REDSTONE_TRANSMITTER = getNull();
 	public static final Block WIRELESS_REDSTONE_RECEIVER = getNull();
 	public static final Block SOLID_SWITCH = getNull();
+	public static final Block ONE_SECOND_INTERVAL_TIMED_SOLID_SWITCH = getNull();
+	public static final Block TWO_SECOND_INTERVAL_TIMED_SOLID_SWITCH = getNull();
 	public static final Block SUMMONER = getNull();
 	public static final Block AREA_EFFECT_BLOCK = getNull();
 	
@@ -491,7 +493,9 @@ public class MSBlocks
 		registry.register(new RemoteObserverBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(3).sound(SoundType.STONE)).setRegistryName("remote_observer"));
 		registry.register(new WirelessRedstoneTransmitterBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(3).sound(SoundType.STONE)).setRegistryName("wireless_redstone_transmitter"));
 		registry.register(new WirelessRedstoneReceiverBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(3).tickRandomly().sound(SoundType.STONE)).setRegistryName("wireless_redstone_receiver"));
-		registry.register(new SolidSwitchBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(3).sound(SoundType.STONE).lightValue(12)).setRegistryName("solid_switch"));
+		registry.register(new SolidSwitchBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(3).sound(SoundType.STONE).lightValue(15)).setRegistryName("solid_switch"));
+		registry.register(new TimedSolidSwitchBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(3).sound(SoundType.STONE).lightValue(12), 20).setRegistryName("one_second_interval_timed_solid_switch"));
+		registry.register(new TimedSolidSwitchBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(3).sound(SoundType.STONE).lightValue(15), 40).setRegistryName("two_second_interval_timed_solid_switch"));
 		registry.register(new SummonerBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(3).sound(SoundType.STONE)).setRegistryName("summoner"));
 		registry.register(new AreaEffectBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(6).sound(SoundType.STONE)).setRegistryName("area_effect_block"));
 		

@@ -527,6 +527,8 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSBlocks.WIRELESS_REDSTONE_TRANSMITTER).grist(GARNET, 4).grist(MARBLE, 2).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.WIRELESS_REDSTONE_RECEIVER).grist(GARNET, 2).grist(MARBLE, 2).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.SOLID_SWITCH).grist(TAR, 5).grist(BUILD, 2).grist(GARNET, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.ONE_SECOND_INTERVAL_TIMED_SOLID_SWITCH).grist(TAR, 5).grist(BUILD, 8).grist(GARNET, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.TWO_SECOND_INTERVAL_TIMED_SOLID_SWITCH).grist(TAR, 5).grist(BUILD, 8).grist(GARNET, 1).build(recipeSaver);
 		
 		GristCostRecipeBuilder.of(MSBlocks.PETRIFIED_LOG).grist(BUILD, 4).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.FROST_PLANKS).grist(BUILD, 1).build(recipeSaver);

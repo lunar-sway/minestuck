@@ -1,20 +1,14 @@
 package com.mraof.minestuck.world.gen.feature.structure.tiered.tier1;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.block.redstone.SolidSwitchBlock;
-import com.mraof.minestuck.effects.MSEffects;
-import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.tileentity.redstone.RemoteObserverTileEntity;
-import com.mraof.minestuck.tileentity.redstone.StatStorerTileEntity;
 import com.mraof.minestuck.tileentity.redstone.SummonerTileEntity;
-import com.mraof.minestuck.util.MSRotationUtil;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
 import com.mraof.minestuck.world.gen.feature.structure.ImprovedStructurePiece;
@@ -23,19 +17,14 @@ import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockUtil
 import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
-import com.mraof.minestuck.world.storage.loot.MSLootTables;
 import net.minecraft.block.*;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.state.properties.Half;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.feature.template.PlacementSettings;
 import net.minecraft.world.gen.feature.template.Template;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 import net.minecraftforge.common.util.Constants;
@@ -188,7 +177,11 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 			StructureBlockUtil.fillWithBlocksReplaceState(world, boundingBox,
 					getActualPos(pieceMinX + 4, pieceMaxY - 9, pieceMinZ + 4),
 					getActualPos(pieceMaxX - 4, pieceMaxY - 9, pieceMaxZ - 4),
-					lightBlock, primaryPillarBlock);
+					lightBlock, primaryPillarBlock); //above platform lighting
+			StructureBlockUtil.fillWithBlocksReplaceState(world, boundingBox,
+					getActualPos(pieceMinX + 4, pieceMaxY - 11, pieceMinZ + 4),
+					getActualPos(pieceMaxX - 4, pieceMaxY - 11, pieceMaxZ - 4),
+					lightBlock, primaryPillarBlock); //below platform lighting
 			fillWithBlocks(world, boundingBox,
 					pieceMinX + 1, pieceMinY + 1, pieceMinZ + 18,
 					pieceMinX + 1, pieceMaxY - 10, pieceMinZ + 20,
@@ -200,12 +193,14 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 					pieceMinX + 20, pieceMaxY, pieceMinZ + 3,
 					secondaryBlock, air, false);
 			fillWithAir(world, boundingBox,
-					pieceMinX + 14, pieceMaxY - 10, pieceMinZ + 3,
+					pieceMinX + 14, pieceMaxY - 9, pieceMinZ + 3,
 					pieceMinX + 18, pieceMaxY - 4, pieceMinZ + 3); //room entrance
 			StructureBlockUtil.placeRemoteObserver(world, boundingBox, getActualPos(pieceMinX + 16, pieceMaxY - 11, pieceMinZ - 11), RemoteObserverTileEntity.ActiveType.IS_PLAYER_PRESENT); //checks for presence of player
 			StructureBlockUtil.placeSummoner(world, boundingBox, getActualPos(pieceMinX + 15, pieceMaxY - 11, pieceMinZ - 11), SummonerTileEntity.SummonType.OGRE);
 			StructureBlockUtil.placeSummoner(world, boundingBox, getActualPos(pieceMinX + 17, pieceMaxY - 11, pieceMinZ - 11), SummonerTileEntity.SummonType.OGRE);
 			
+			StructureBlockUtil.placeWirelessRelay(world, boundingBox, getActualPos(pieceMinX + 16, pieceMaxY - 8, pieceMinZ - 14), getActualPos(pieceMinX + 16, pieceMaxY - 8, pieceMinZ - 11), true);
+			world.setBlockState(getActualPos(pieceMinX + 16, pieceMaxY - 8, pieceMinZ - 13), MSBlocks.ONE_SECOND_INTERVAL_TIMED_SOLID_SWITCH.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE); //power for wireless relay
 			/**/
 			
 			/*
