@@ -32,11 +32,11 @@ public class AnimatedPanicGoal extends PanicGoal
 		super.tick();
 		
 		if(eventTimer == 0)
-			((ConsortEntity) this.creature).updateAndSendAnimation(ConsortEntity.Animation.PANIC, false);
+			((ConsortEntity) this.creature).updateAndSendAnimation(ConsortEntity.Animation.PANIC, true, true);
 		
 		if(eventTimer == 10)
 		{
-			((ConsortEntity) this.creature).updateAndSendAnimation(ConsortEntity.Animation.PANIC_RUN, true);
+			((ConsortEntity) this.creature).updateAndSendAnimation(ConsortEntity.Animation.PANIC_RUN, true, true);
 			Debug.debugf("panic run");
 			if((eventTimer - 10) % 6 == 0) //.32 sec panic run animation * 20 ticks/sec = 6.4(cuts slightly into itself?)
 			{
@@ -70,7 +70,7 @@ public class AnimatedPanicGoal extends PanicGoal
 			if(this.creature instanceof ConsortEntity)
 			{
 				Debug.debugf("startExecuting in AnimatedPanicGoal");
-				((ConsortEntity) this.creature).updateAndSendAnimation(ConsortEntity.Animation.IDLE, true);
+				//((ConsortEntity) this.creature).updateAndSendAnimation(ConsortEntity.Animation.IDLE, true);
 			}
 		}
 		

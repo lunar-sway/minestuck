@@ -50,7 +50,6 @@ import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
-import java.util.function.Predicate;
 
 public class ConsortEntity extends CreatureEntity implements IContainerProvider, IAnimatable
 {
@@ -136,7 +135,7 @@ public class ConsortEntity extends CreatureEntity implements IContainerProvider,
 					if(text != null)
 						player.sendMessage(text);
 					handleConsortRepFromTalking(serverPlayer);
-					updateAndSendAnimation(Animation.TALK, false);
+					updateAndSendAnimation(Animation.TALK, true, true);
 					MSCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, message.getString(), this);
 				} catch(Exception e)
 				{
@@ -427,31 +426,91 @@ public class ConsortEntity extends CreatureEntity implements IContainerProvider,
 		return true;
 	}
 	
-	@Nonnull
-	private ConsortEntity.Animation animation = Animation.IDLE;
+	//@Nonnull
+	//private ConsortEntity.Animation animation = Animation.IDLE;
+	private ConsortEntity.Animation animation;
 	
 	private final AnimationFactory factory = new AnimationFactory(this);
 	
-	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event)
+	private <E extends IAnimatable> PlayState posePredicate(AnimationEvent<E> event)
 	{
+		event.getController().setAnimation(new AnimationBuilder().addAnimation(this.consortType.getName() + Animation.POSE.animationName, true));
+		
+		return PlayState.CONTINUE;
+	}
+	
+	private <E extends IAnimatable> PlayState walkPredicate(AnimationEvent<E> event)
+	{
+		if(!(event.getLimbSwingAmount() > -0.05F && event.getLimbSwingAmount() < 0.05F))
+		{
+			event.getController().setAnimation(new AnimationBuilder()
+							.addAnimation(this.consortType.getName() + Animation.WALK.animationName, true)
+					//.addAnimation(this.consortType.getName() + Animation.WALK_ARMS.animationName, true)
+			);
+		} else
+		{
+			event.getController().setAnimation(new AnimationBuilder()
+							.addAnimation(this.consortType.getName() + Animation.POSE.animationName, true)
+					//.addAnimation(this.consortType.getName() + Animation.WALK_ARMS.animationName, true)
+			);
+		}
+		
+		
+		
+		//event.getController().clearAnimationCache();
+		
+		/*if(animation == null)
+			animation = Animation.IDLE;
 		//TODO the pose is working properly but no other animations show up anymore
+		if(!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)/* && Math.round(event.animationTick) % 40 == 0*//*)
+		{
+			if(this.consortType == EnumConsort.TURTLE)
+			{
+				event.getController().setAnimation(new AnimationBuilder()
+						.addAnimation(this.consortType.getName() + Animation.POSE.animationName, true) //Pose animation always needs to be playing in order for the other components to work correctly
+						.addAnimation(this.consortType.getName() + Animation.WALK.animationName, true)
+						.addAnimation(this.consortType.getName() + Animation.WALK_ARMS.animationName, true)
+						.addAnimation(this.consortType.getName() + Animation.ARMFIX.animationName, true)
+						.addAnimation(this.consortType.getName() + animation.animationName, shouldLoop));
+			} else
+			{
+				event.getController().setAnimation(new AnimationBuilder()
+						.addAnimation(this.consortType.getName() + Animation.POSE.animationName, true) //Pose animation always needs to be playing in order for the other components to work correctly
+						.addAnimation(this.consortType.getName() + Animation.WALK.animationName, true)
+						.addAnimation(this.consortType.getName() + Animation.WALK_ARMS.animationName, true)
+						.addAnimation(this.consortType.getName() + animation.animationName, shouldLoop));
+			}
+		}
+		else/* if(Math.round(event.animationTick) % 40 == 0)*//*
+		{
+			event.getController().setAnimation(new AnimationBuilder()
+					.addAnimation(this.consortType.getName() + Animation.POSE.animationName, true) //Pose animation always needs to be playing in order for the other components to work correctly
+					.addAnimation(this.consortType.getName() + animation.animationName, shouldLoop));
+		}*/
+		
+		
+		//Debug.debugf("is moving = %s, limb swing amount = %s", event.isMoving(), event.getLimbSwingAmount());
+		//Debug.debugf("current animation = %s, animation state = %s", event.getController().getCurrentAnimation(), event.getController().getAnimationState());
+		//Debug.debugf("current animation = %s, animation name = %s, event just starting = %s, animation modulo = %s", Math.round(event.animationTick), animation.animationName, event.getController().isJustStarting, Math.round(event.animationTick) % 40 == 0);
+		
+		return PlayState.CONTINUE;
+	}
+	
+	private <E extends IAnimatable> PlayState additionalAnimationPredicate(AnimationEvent<E> event)
+	{
 		if(event.isMoving())
 		{
-			event.getController().setAnimation(new AnimationBuilder()
-					.addAnimation(this.consortType.getName() + Animation.POSE.animationName, true) //Pose animation always needs to be playing in order for the other components to work correctly
-					.addAnimation(this.consortType.getName() + Animation.WALK.animationName, true)
-					.addAnimation(this.consortType.getName() + animation.animationName, shouldLoop));
+		
 		}
-		else
+		if(animation == null && !(event.getLimbSwingAmount() > -0.05F && event.getLimbSwingAmount() < 0.05F))
 		{
-			event.getController().setAnimation(new AnimationBuilder()
-					.addAnimation(this.consortType.getName() + Animation.POSE.animationName, true) //Pose animation always needs to be playing in order for the other components to work correctly
-					.addAnimation(this.consortType.getName() + animation.animationName, shouldLoop));
+			//animation = Animation.WALK_ARMS; //handled in AnimatedMoveTowardsRestrictionGoal
 		}
 		
-		
-		Debug.debugf("is moving = %s, limb swing amount = %s", event.isMoving(), event.getLimbSwingAmount());
-		
+		if(animation != null)
+		{
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(this.consortType.getName() + animation.animationName, shouldLoop));
+		}
 		
 		return PlayState.CONTINUE;
 	}
@@ -459,7 +518,9 @@ public class ConsortEntity extends CreatureEntity implements IContainerProvider,
 	@Override
 	public void registerControllers(AnimationData data)
 	{
-		data.addAnimationController(new AnimationController<>(this, "controller", 0, this::predicate));
+		data.addAnimationController(new AnimationController<>(this, "pose_controller", 0, this::posePredicate));
+		data.addAnimationController(new AnimationController<>(this, "walk_controller", 0, this::walkPredicate));
+		data.addAnimationController(new AnimationController<>(this, "additional_animation_controller", 0, this::additionalAnimationPredicate));
 	}
 	
 	@Override
@@ -470,15 +531,16 @@ public class ConsortEntity extends CreatureEntity implements IContainerProvider,
 	
 	public enum Animation //animationName set in assets/minestuck/animations/[consort].animation.json. Animated blocks/entities also need a section in assets/minestuck/geo
 	{
+		//ordered by priority
 		POSE(".pose"),
-		IDLE(".walkarms"),
+		//IDLE(".walkarms"),
 		WALK(".walk"),
 		WALK_ARMS(".walkarms"),
+		ARMFIX(".armfix"),
 		TALK(".talk"),
 		PANIC(".panic"),
 		PANIC_RUN(".panic.run"),
-		DIE(".die"),
-		ARMFIX(".armfix");
+		DIE(".die");
 		
 		private final String animationName;
 		
@@ -487,6 +549,15 @@ public class ConsortEntity extends CreatureEntity implements IContainerProvider,
 			this.animationName = animationName;
 		}
 		
+		public static boolean isNewAnimationPrioritized(Animation newAnimation, Animation currentAnimation)
+		{
+			if(newAnimation != null && currentAnimation != null)
+			{
+				Debug.debugf("newAnimation = %s with ordinal of %s, currentAnimation = %s with ordinal of %s", newAnimation.animationName, newAnimation.ordinal(), currentAnimation.animationName, currentAnimation.ordinal());
+				return newAnimation.ordinal() > currentAnimation.ordinal();
+			}
+			else return newAnimation != null;
+		}
 	}
 	
 	public void setAnimation(@Nonnull ConsortEntity.Animation animation)
@@ -494,23 +565,31 @@ public class ConsortEntity extends CreatureEntity implements IContainerProvider,
 		this.animation = animation;
 	}
 	
+	public @Nonnull ConsortEntity.Animation getAnimation()
+	{
+		return animation;
+	}
+	
 	public void setAnimationFromPacket(ConsortEntity.Animation newAnimation)
 	{
 		if(world.isRemote) //allows client-side effects tied to server-side events
 		{
 			animation = newAnimation;
-			if(animation == ConsortEntity.Animation.IDLE)
-			{
-			
-			}
 		}
 	}
 	
-	public void updateAndSendAnimation(ConsortEntity.Animation animation, boolean shouldLoop)
+	public void updateAndSendAnimation(ConsortEntity.Animation animation, boolean shouldLoop, boolean onlyIfPriority)
 	{
-		this.animation = animation;
-		this.shouldLoop = shouldLoop;
-		ConsortPacket packet = ConsortPacket.createPacket(this, animation); //this packet allows information to be exchanged between server and client where one side cant access the other easily or reliably
-		MSPacketHandler.sendToTracking(packet, this);
+		if(this.animation == null)
+		{
+			this.animation = Animation.POSE;
+		}
+		if((!onlyIfPriority || Animation.isNewAnimationPrioritized(animation, this.animation)))
+		{
+			this.animation = animation;
+			this.shouldLoop = shouldLoop;
+			ConsortPacket packet = ConsortPacket.createPacket(this, animation); //this packet allows information to be exchanged between server and client where one side cant access the other easily or reliably
+			MSPacketHandler.sendToTracking(packet, this);
+		}
 	}
 }

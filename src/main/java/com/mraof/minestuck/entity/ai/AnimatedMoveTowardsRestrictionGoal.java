@@ -26,7 +26,7 @@ public class AnimatedMoveTowardsRestrictionGoal extends MoveTowardsRestrictionGo
       super.startExecuting();
       if(this.creature instanceof ConsortEntity)
       {
-         ((ConsortEntity) this.creature).updateAndSendAnimation(ConsortEntity.Animation.WALK_ARMS, true);
+         ((ConsortEntity) this.creature).updateAndSendAnimation(ConsortEntity.Animation.WALK_ARMS, true, true);
          Debug.debugf("startExecuting in AnimatedMoveTowardsRestrictionGoal");
       }
    }
@@ -38,7 +38,7 @@ public class AnimatedMoveTowardsRestrictionGoal extends MoveTowardsRestrictionGo
       Debug.debugf("walk tick");
       if(!shouldContinueExecuting())
       {
-         ((ConsortEntity) this.creature).updateAndSendAnimation(ConsortEntity.Animation.IDLE, true);
+         //((ConsortEntity) this.creature).updateAndSendAnimation(ConsortEntity.Animation.IDLE, true);
          Debug.debugf("idle");
       }
    }
