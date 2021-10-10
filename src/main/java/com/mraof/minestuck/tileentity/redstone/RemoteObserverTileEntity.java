@@ -58,11 +58,10 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 		if(this.getWorld() == null || !this.getWorld().isAreaLoaded(pos, 1))
 			return; // Forge: prevent loading unloaded chunks
 		
-		if(tickCycle % MinestuckConfig.SERVER.wirelessBlocksTickRate.get() == 1)
+		if(tickCycle >= MinestuckConfig.SERVER.wirelessBlocksTickRate.get())
 		{
 			checkRelaventType();
-			if(tickCycle >= 5000) //setting arbitrarily high value that the tick cannot go past
-				tickCycle = 0;
+			tickCycle = 0;
 		}
 		tickCycle++;
 	}

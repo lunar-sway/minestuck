@@ -55,7 +55,7 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 	private static final int pieceMinZ = 20;
 	private static final int pieceMaxX = 82;
 	private static final int pieceMaxY = -20;
-	private static final int pieceMaxZ = 57;
+	private static final int pieceMaxZ = 58;
 	
 	private static final BlockState air = Blocks.AIR.getDefaultState();
 	private BlockState primaryBlock;
@@ -156,42 +156,60 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 		
 		if(worldAspect == EnumAspect.BREATH) //parkour like frog temple lower room
 		{
-			/*//TODO will be for Breath
+		
+		} else if(worldAspect == EnumAspect.LIFE)
+		{
+			/**///TODO will be for Breath
 			fillWithAir(world, boundingBox,
-					firstRoomMinX + 1, firstRoomMinY + 1, firstRoomMinZ + 1,
-					firstRoomMaxX - 1, firstRoomMaxY - 1, firstRoomMaxZ - 1);
+					pieceMinX + 1, pieceMinY + 1, pieceMinZ + 4,
+					pieceMaxX - 9, pieceMaxY - 1, pieceMaxZ - 4);
 			
 			for(int i = 0; i < 3; i++)
 			{
 				for(int j = 0; j < 3; j++)
 				{
 					fillWithBlocks(world, boundingBox,
-							firstRoomMinX + 6 + i * 9, firstRoomMinY + 1, firstRoomMinZ + 9 + j * 9,
-							firstRoomMinX + 7 + i * 9, firstRoomMaxY - 1, firstRoomMinZ + 10 + j * 9,
+							pieceMinX + 6 + i * 9, pieceMinY + 1, pieceMinZ + 9 + j * 9,
+							pieceMinX + 8 + i * 9, pieceMaxY - 1, pieceMinZ + 11 + j * 9,
 							primaryPillarBlock.with(RotatedPillarBlock.AXIS, Direction.Axis.Y), primaryPillarBlock.with(RotatedPillarBlock.AXIS, Direction.Axis.Y), false);
 					fillWithBlocks(world, boundingBox,
-							firstRoomMinX + 4 + i * 9, firstRoomMinY + 10, firstRoomMinZ + 7 + j * 9,
-							firstRoomMinX + 9 + i * 9, firstRoomMinY + 10, firstRoomMinZ + 12 + j * 9,
+							pieceMinX + 4 + i * 9, pieceMaxY - 10, pieceMinZ + 7 + j * 9,
+							pieceMinX + 10 + i * 9, pieceMaxY - 10, pieceMinZ + 13 + j * 9,
 							primaryDecorativeBlock, primaryDecorativeBlock, false); //platform around columns
-							
-							//TODO do a lower or higher level of platforms to expand puzzle
+					
+					
+					//TODO do a lower or higher level of platforms to expand puzzle
 					fillWithAir(world, boundingBox,
-							firstRoomMinX + 4 + 9, firstRoomMinY + 1, firstRoomMinZ + 7 + 9,
-							firstRoomMinX + 9 + 9, firstRoomMaxY - 1, firstRoomMinZ + 12 + 9);
+							pieceMinX + 4 + 9, pieceMinY + 1, pieceMinZ + 7 + 9,
+							pieceMinX + 10 + 9, pieceMinY - 1, pieceMinZ + 13 + 9);
 				}
 			}
 			
-			fillWithBlocks(world, boundingBox, //TODO not appearing
-					firstRoomMinX + 14, firstRoomMinY + 10, firstRoomMinZ,
-					firstRoomMinX + 22, firstRoomMinY + 16, firstRoomMinZ - 20,
-					primaryBlock, air, false); //TODO side rooms will require fighting past ogres to get to a switch
+			StructureBlockUtil.fillWithBlocksReplaceState(world, boundingBox,
+					getActualPos(pieceMinX + 4, pieceMaxY - 9, pieceMinZ + 4),
+					getActualPos(pieceMaxX - 4, pieceMaxY - 9, pieceMaxZ - 4),
+					lightBlock, primaryPillarBlock);
 			fillWithBlocks(world, boundingBox,
-					firstRoomMinX + 1, firstRoomMinY + 1, firstRoomMinZ + 18,
-					firstRoomMinX + 1, firstRoomMinY + 10, firstRoomMinZ + 19,
-					Blocks.LADDER.getDefaultState().with(LadderBlock.FACING, Direction.EAST), Blocks.LADDER.getDefaultState(), false); //ladder*/
-		} else if(worldAspect == EnumAspect.LIFE)
-		{
-			/*//TODO will be for Space
+					pieceMinX + 1, pieceMinY + 1, pieceMinZ + 18,
+					pieceMinX + 1, pieceMaxY - 10, pieceMinZ + 20,
+					Blocks.LADDER.getDefaultState().with(LadderBlock.FACING, Direction.EAST), Blocks.LADDER.getDefaultState(), false); //ladder
+			
+			//first side room, ogres separate player from timed switch
+			fillWithBlocks(world, boundingBox,
+					pieceMinX + 12, pieceMaxY - 10, pieceMinZ - 13,
+					pieceMinX + 20, pieceMaxY, pieceMinZ + 3,
+					secondaryBlock, air, false);
+			fillWithAir(world, boundingBox,
+					pieceMinX + 14, pieceMaxY - 10, pieceMinZ + 3,
+					pieceMinX + 18, pieceMaxY - 4, pieceMinZ + 3); //room entrance
+			StructureBlockUtil.placeRemoteObserver(world, boundingBox, getActualPos(pieceMinX + 16, pieceMaxY - 11, pieceMinZ - 11), RemoteObserverTileEntity.ActiveType.IS_PLAYER_PRESENT); //checks for presence of player
+			StructureBlockUtil.placeSummoner(world, boundingBox, getActualPos(pieceMinX + 15, pieceMaxY - 11, pieceMinZ - 11), SummonerTileEntity.SummonType.OGRE);
+			StructureBlockUtil.placeSummoner(world, boundingBox, getActualPos(pieceMinX + 17, pieceMaxY - 11, pieceMinZ - 11), SummonerTileEntity.SummonType.OGRE);
+			
+			/**/
+			
+			/*
+			//TODO will be for Space
 			fillWithAir(world, boundingBox,
 					firstRoomMinX + 1, firstRoomMaxY - 12, firstRoomMinZ + 1,
 					firstRoomMaxX - 1, firstRoomMaxY - 1, firstRoomMaxZ - 1); //ceiling down to main area
@@ -224,9 +242,11 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 			StructureBlockUtil.placeFeature(world, boundingBox, aspectSymbolPos, getRotation(), getCoordBaseMode(), rand, new ResourceLocation(Minestuck.MOD_ID, "blood_symbol_no_background"));
 			StructureBlockUtil.placeFeature(world, boundingBox, aspectSymbolPos.down(3), getRotation(), getCoordBaseMode(), rand, new ResourceLocation(Minestuck.MOD_ID, "breath_symbol_no_background"));
 			StructureBlockUtil.placeFeature(world, boundingBox, aspectSymbolPos.down(9), getRotation(), getCoordBaseMode(), rand, Feature.PILLAGER_OUTPOST.getRegistryName());
-			*/
+			/**/
 			
 			//TODO will be for Blood
+			/*
+			
 			//roomVariable1 = rand.nextInt(6); //blood diving to flick switch
 			
 			fillWithAir(world, boundingBox,
@@ -248,8 +268,12 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 			
 			fillWithBlocks(world, boundingBox,
 					pieceMinX + 16, pieceMaxY - 10, pieceMinZ + 4,
-					pieceMinX + 16, pieceMaxY - 6, pieceMaxZ - 4,
+					pieceMinX + 16, pieceMaxY - 5, pieceMaxZ - 4,
 					primaryBlock, primaryBlock, false); //second barrier, ends close to edge wall to form barrier with wireless piston setup below!
+			fillWithBlocks(world, boundingBox,
+					pieceMinX + 16, pieceMaxY - 6, pieceMinZ + 4,
+					pieceMinX + 16, pieceMaxY - 6, pieceMaxZ - 4,
+					secondaryBlock, secondaryBlock, false); //line of secondary blocks that are used as a path for the player to travel across once passing theses barriers from the floor
 			
 			fillWithBlocks(world, boundingBox,
 					pieceMinX + 24, pieceMaxY - 10, pieceMinZ + 8,
@@ -385,7 +409,7 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 					primaryPillarBlock, primaryPillarBlock, false);
 			setBlockState(world, lightBlock, pieceMinX + 3, pieceMinY + 12, pieceMaxZ - 8, boundingBox);
 			
-			//secret redstone lamp setup //TODO create thing this puzzle actually does
+			//waterfall light
 			fillWithBlocks(world, boundingBox,
 					(pieceMinX + pieceMaxX) / 2, pieceMinY + 10, pieceMinZ + 1,
 					(pieceMinX + pieceMaxX) / 2, pieceMinY + 12, pieceMinZ + 4,
@@ -395,12 +419,11 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 					(pieceMinX + pieceMaxX) / 2, pieceMinY + 9, pieceMinZ + 4,
 					primaryBlock, primaryBlock, false);
 			BlockPos side1SwitchLampPos = getActualPos((pieceMinX + pieceMaxX) / 2, pieceMinY + 10, pieceMinZ + 3);
-			//TODO receiver does not seem to be generating
-			StructureBlockUtil.placeWirelessRelay(world, boundingBox, side1SwitchLampPos.offset(getCoordBaseMode().getOpposite()), side1SwitchLampPos.offset(getCoordBaseMode(), 4).down(9).offset(getCoordBaseMode().rotateY(), 2), true);
-			world.setBlockState(side1SwitchLampPos.offset(getCoordBaseMode(), 4).down(8).offset(getCoordBaseMode().rotateY(), 2), Blocks.STICKY_PISTON.getDefaultState().with(PistonBlock.FACING, Direction.SOUTH), Constants.BlockFlags.BLOCK_UPDATE);
-			world.setBlockState(side1SwitchLampPos.offset(getCoordBaseMode(), 3).down(8), MSBlocks.BLOOD.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
-			StructureBlockUtil.placeLootBlock(side1SwitchLampPos.offset(getCoordBaseMode(), 5).down(8), world, boundingBox, MSBlocks.LOOT_CHEST.getDefaultState().with(BlockStateProperties.HORIZONTAL_FACING, getCoordBaseMode().rotateY()), MSLootTables.TIER_ONE_MEDIUM_CHEST);
-			world.setBlockState(side1SwitchLampPos.offset(getCoordBaseMode(), 3).down(7), MSBlocks.BLOOD.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
+			//world.setBlockState(side1SwitchLampPos.offset(getCoordBaseMode(), 4).down(8).offset(getCoordBaseMode().rotateY(), 2), Blocks.STICKY_PISTON.getDefaultState().with(PistonBlock.FACING, Direction.WEST), Constants.BlockFlags.BLOCK_UPDATE);
+			//world.setBlockState(side1SwitchLampPos.offset(getCoordBaseMode(), 3).down(8), MSBlocks.BLOOD.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
+			//StructureBlockUtil.placeWirelessRelay(world, boundingBox, side1SwitchLampPos.offset(getCoordBaseMode().getOpposite()), side1SwitchLampPos.offset(getCoordBaseMode(), 4).down(9).offset(getCoordBaseMode().rotateY(), 2), true);
+			//StructureBlockUtil.placeLootBlock(side1SwitchLampPos.offset(getCoordBaseMode(), 5).down(8), world, boundingBox, MSBlocks.LOOT_CHEST.getDefaultState().with(BlockStateProperties.HORIZONTAL_FACING, getCoordBaseMode().rotateY()), MSLootTables.TIER_ONE_MEDIUM_CHEST);
+			//world.setBlockState(side1SwitchLampPos.offset(getCoordBaseMode(), 3).down(7), MSBlocks.BLOOD.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
 			world.setBlockState(side1SwitchLampPos, MSBlocks.SOLID_SWITCH.getDefaultState().with(SolidSwitchBlock.POWERED, true), Constants.BlockFlags.BLOCK_UPDATE);
 			world.setBlockState(side1SwitchLampPos.offset(getCoordBaseMode()), Blocks.REDSTONE_LAMP.getDefaultState().with(RedstoneLampBlock.LIT, true), Constants.BlockFlags.BLOCK_UPDATE);
 			fillWithBlocks(world, boundingBox,
@@ -412,16 +435,17 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 					(pieceMinX + pieceMaxX) / 2, pieceMinY + 9, pieceMaxZ - 1,
 					primaryBlock, primaryBlock, false);
 			BlockPos side2SwitchLampPos = getActualPos((pieceMinX + pieceMaxX) / 2, pieceMinY + 10, pieceMaxZ - 3);
-			StructureBlockUtil.placeWirelessRelay(world, boundingBox, side2SwitchLampPos.offset(getCoordBaseMode()), side2SwitchLampPos.offset(getCoordBaseMode(), 2).down(5), true);
+			//StructureBlockUtil.placeWirelessRelay(world, boundingBox, side2SwitchLampPos.offset(getCoordBaseMode()), side2SwitchLampPos.offset(getCoordBaseMode(), 2).down(5), true);
 			world.setBlockState(side2SwitchLampPos, MSBlocks.SOLID_SWITCH.getDefaultState().with(SolidSwitchBlock.POWERED, true), Constants.BlockFlags.BLOCK_UPDATE);
 			world.setBlockState(side2SwitchLampPos.offset(getCoordBaseMode().getOpposite()), Blocks.REDSTONE_LAMP.getDefaultState().with(RedstoneLampBlock.LIT, true), Constants.BlockFlags.BLOCK_UPDATE);
 			
 			//aspect symbol platform
-			BlockPos aspectSymbolPos = getActualPos((pieceMinX + 5 + pieceMaxX - 3) / 2, pieceMinY + 4, (pieceMinZ + pieceMaxZ) / 2); //middle of lower room on top of blood
+			BlockPos aspectSymbolPos = getActualPos(pieceMaxX - 19, pieceMinY + 4, pieceMinZ + 19); //TODO get this pos to be dependent on rotation or adjust piece size by 1
+			//BlockPos aspectSymbolPos = getActualPos((pieceMinX + 5 + pieceMaxX - 3) / 2, pieceMinY + 4, (pieceMinZ + pieceMaxZ) / 2); //middle of lower room on top of blood
 			StructureBlockUtil.createCylinder(world, boundingBox, secondaryBlock, aspectSymbolPos.down(3), 13, 3);
 			StructureBlockUtil.createCylinder(world, boundingBox, lightBlock, aspectSymbolPos.down(1), 13, 1);
 			StructureBlockUtil.createCylinder(world, boundingBox, primaryBlock, aspectSymbolPos, 13, 1);
-			StructureBlockUtil.placeCenteredTemplate(world, aspectSymbolPos, bloodSymbolTemplate, new PlacementSettings().setBoundingBox(boundingBox).setRotation(MSRotationUtil.fromDirection(getCoordBaseMode().getOpposite())));
+			StructureBlockUtil.placeCenteredTemplate(world, aspectSymbolPos.offset(getCoordBaseMode().rotateYCCW(), 2), bloodSymbolTemplate, new PlacementSettings().setBoundingBox(boundingBox).setRotation(MSRotationUtil.fromDirection(getCoordBaseMode().getOpposite())));
 			//StructureBlockUtil.createCylinder(world, boundingBox, lightBlock, getActualPos((firstRoomMinX + firstRoomMaxX) / 2 - 10, firstRoomMinY + 14, (firstRoomMinZ + firstRoomMaxZ) / 2), 6, 1); //ceiling light
 			StructureBlockUtil.createCylinder(world, boundingBox, lightBlock, aspectSymbolPos.up(10), 6, 1); //ceiling light
 			
@@ -449,11 +473,16 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 			}
 			
 			//area effect block/how to complete puzzle
-			BlockPos areaEffectBlockPos = getActualPos(pieceMinX + 2, pieceMinY + 10, (pieceMinZ + pieceMaxZ) / 2);
-			world.setBlockState(areaEffectBlockPos.up(), MSBlocks.SOLID_SWITCH.getDefaultState().with(SolidSwitchBlock.POWERED, true), Constants.BlockFlags.BLOCK_UPDATE); //power for area effect block
+			fillWithBlocks(world, boundingBox, pieceMinX + 1, pieceMinY + 10, (pieceMinZ + pieceMaxZ) / 2 + 1, pieceMinX + 1, pieceMinY + 11, (pieceMinZ + pieceMaxZ) / 2 + 1, MSBlocks.COARSE_STONE_STAIRS.getDefaultState().with(StairsBlock.FACING, Direction.NORTH), MSBlocks.COARSE_STONE_STAIRS.getDefaultState(), false);
+			fillWithBlocks(world, boundingBox, pieceMinX + 1, pieceMinY + 10, (pieceMinZ + pieceMaxZ) / 2 - 1, pieceMinX + 1, pieceMinY + 11, (pieceMinZ + pieceMaxZ) / 2 - 1, MSBlocks.COARSE_STONE_STAIRS.getDefaultState().with(StairsBlock.FACING, Direction.SOUTH), MSBlocks.COARSE_STONE_STAIRS.getDefaultState(), false);
+			BlockPos areaEffectBlockPos = getActualPos(pieceMinX, pieceMinY + 11, (pieceMinZ + pieceMaxZ) / 2);
+			world.setBlockState(areaEffectBlockPos.down().offset(getCoordBaseMode().rotateYCCW()), MSBlocks.CHISELED_COARSE_STONE.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
+			world.setBlockState(areaEffectBlockPos.offset(getCoordBaseMode().rotateYCCW()), MSBlocks.SOLID_SWITCH.getDefaultState().with(SolidSwitchBlock.POWERED, true), Constants.BlockFlags.BLOCK_UPDATE); //power for area effect block
 			StructureBlockUtil.placeAreaEffectBlock(world, boundingBox, areaEffectBlockPos, MSEffects.CREATIVE_SHOCK.get(), 2,
 					getActualPos(pieceMinX - 35, pieceMinY, pieceMinZ - 13),
 					getActualPos(pieceMaxX, pieceMaxY + 58, pieceMaxZ + 13));
+			
+			/**/
 			
 		} else if(worldAspect == EnumAspect.LIGHT)
 		{

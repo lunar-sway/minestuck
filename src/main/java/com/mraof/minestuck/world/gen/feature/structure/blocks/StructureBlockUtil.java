@@ -500,6 +500,27 @@ public class StructureBlockUtil
 		}
 	}
 	
+	/**
+	 * normal trimmed down fill command that only places blocks when it can replace another specified blockstate
+	 */
+	public static void fillWithBlocksReplaceState(IWorld worldIn, MutableBoundingBox boundingboxIn, BlockPos minBlockPos, BlockPos maxBlockPos, BlockState replacementBlockState, BlockState replacedBlockState)
+	{
+		for(int y = minBlockPos.getY(); y <= maxBlockPos.getY(); ++y)
+		{
+			for(int x = minBlockPos.getX(); x <= maxBlockPos.getX(); ++x)
+			{
+				for(int z = minBlockPos.getZ(); z <= maxBlockPos.getZ(); ++z)
+				{
+					BlockPos currentPos = new BlockPos(x, y, z);
+					if(boundingboxIn.isVecInside(currentPos) && worldIn.getBlockState(currentPos) == replacedBlockState)
+					{
+						worldIn.setBlockState(currentPos, replacementBlockState, Constants.BlockFlags.BLOCK_UPDATE);
+					}
+				}
+			}
+		}
+	}
+	
 	public static BlockPos axisAlignBlockPosGetMin(BlockPos minBlockPosIn, BlockPos maxBlockPosIn)
 	{
 		int blockPosMinX = Math.min(minBlockPosIn.getX(), maxBlockPosIn.getX());
