@@ -6,7 +6,6 @@ import com.mraof.minestuck.entity.carapacian.PawnEntity;
 import com.mraof.minestuck.entity.carapacian.RookEntity;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.consort.EnumConsort;
-import com.mraof.minestuck.entity.consort.TutleEntity;
 import com.mraof.minestuck.entity.item.*;
 import com.mraof.minestuck.entity.underling.*;
 import net.minecraft.entity.EntityClassification;

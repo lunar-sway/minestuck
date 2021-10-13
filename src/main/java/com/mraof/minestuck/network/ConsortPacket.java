@@ -9,16 +9,18 @@ public class ConsortPacket implements PlayToClientPacket
 {
 	private final int entityID;
 	private final ConsortEntity.Animation animation;
+	private final int animationTimer;
 	
-	public static ConsortPacket createPacket(ConsortEntity entity, ConsortEntity.Animation animation)
+	public static ConsortPacket createPacket(ConsortEntity entity, ConsortEntity.Animation animation, int animationTimer)
 	{
-		return new ConsortPacket(entity.getEntityId(), animation);
+		return new ConsortPacket(entity.getEntityId(), animation, animationTimer);
 	}
 	
-	private ConsortPacket(int entityID, ConsortEntity.Animation animation)
+	private ConsortPacket(int entityID, ConsortEntity.Animation animation, int animationTimer)
 	{
 		this.entityID = entityID;
 		this.animation = animation;
+		this.animationTimer = animationTimer;
 	}
 	
 	@Override
@@ -26,14 +28,16 @@ public class ConsortPacket implements PlayToClientPacket
 	{
 		buffer.writeInt(entityID);
 		buffer.writeInt(animation.ordinal());
+		buffer.writeInt(animationTimer);
 	}
 	
 	public static ConsortPacket decode(PacketBuffer buffer)
 	{
 		int entityID = buffer.readInt(); //readInt spits out the values you gave to the PacketBuffer in encode in that order
 		ConsortEntity.Animation animation = ConsortEntity.Animation.values()[buffer.readInt()];
+		int animationTimer = buffer.readInt();
 		
-		return new ConsortPacket(entityID, animation);
+		return new ConsortPacket(entityID, animation, animationTimer);
 	}
 	
 	@Override
@@ -42,7 +46,7 @@ public class ConsortPacket implements PlayToClientPacket
 		Entity entity = Minecraft.getInstance().world.getEntityByID(entityID);
 		if(entity instanceof ConsortEntity)
 		{
-			((ConsortEntity) entity).setAnimationFromPacket(animation);
+			((ConsortEntity) entity).setAnimationFromPacket(animation, animationTimer);
 		}
 	}
 }

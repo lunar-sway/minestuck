@@ -1,7 +1,6 @@
 package com.mraof.minestuck.entity.ai;
 
 import com.mraof.minestuck.entity.consort.ConsortEntity;
-import com.mraof.minestuck.entity.consort.TutleEntity;
 import com.mraof.minestuck.util.Debug;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.ai.goal.PanicGoal;
@@ -19,10 +18,7 @@ public class AnimatedPanicGoal extends PanicGoal
 	public void startExecuting()
 	{
 		super.startExecuting();
-		if(this.creature instanceof TutleEntity)
-		{
-			Debug.debugf("startExecuting in AnimatedPanicGoal");
-		}
+		
 		eventTimer = 0;
 	}
 	
