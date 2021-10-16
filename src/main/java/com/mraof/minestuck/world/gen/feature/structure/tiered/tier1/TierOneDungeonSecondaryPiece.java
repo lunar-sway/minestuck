@@ -1,14 +1,20 @@
 package com.mraof.minestuck.world.gen.feature.structure.tiered.tier1;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.block.redstone.SolidSwitchBlock;
+import com.mraof.minestuck.effects.MSEffects;
+import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.tileentity.redstone.RemoteObserverTileEntity;
+import com.mraof.minestuck.tileentity.redstone.StatStorerTileEntity;
 import com.mraof.minestuck.tileentity.redstone.SummonerTileEntity;
+import com.mraof.minestuck.util.MSRotationUtil;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
 import com.mraof.minestuck.world.gen.feature.structure.ImprovedStructurePiece;
@@ -17,14 +23,19 @@ import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockUtil
 import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
+import com.mraof.minestuck.world.storage.loot.MSLootTables;
 import net.minecraft.block.*;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.state.properties.Half;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.feature.template.PlacementSettings;
 import net.minecraft.world.gen.feature.template.Template;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 import net.minecraftforge.common.util.Constants;
@@ -148,7 +159,7 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 		
 		} else if(worldAspect == EnumAspect.LIFE)
 		{
-			/**///TODO will be for Breath
+			/*//TODO will be for Breath
 			fillWithAir(world, boundingBox,
 					pieceMinX + 1, pieceMinY + 1, pieceMinZ + 4,
 					pieceMaxX - 9, pieceMaxY - 1, pieceMaxZ - 4);
@@ -240,7 +251,7 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 			/**/
 			
 			//TODO will be for Blood
-			/*
+			/**/
 			
 			//roomVariable1 = rand.nextInt(6); //blood diving to flick switch
 			
