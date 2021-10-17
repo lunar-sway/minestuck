@@ -301,6 +301,17 @@ public class ServerEventHandler
 		}
 	}
 	
+	@SubscribeEvent(priority=EventPriority.NORMAL)
+	public static void onLeftClickBlockEvent(PlayerInteractEvent.LeftClickBlock event)
+	{
+		if(event.getEntity() instanceof PlayerEntity)
+		{
+			PlayerEntity playerEntity = (PlayerEntity) event.getEntity();
+			if(CreativeShockEffect.doesCreativeShockLimit(playerEntity, 0, 3))
+				event.setCanceled(true);
+		}
+	}
+	
 	@SubscribeEvent
 	public static void playerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event)
 	{
