@@ -3,14 +3,13 @@ package com.mraof.minestuck.tileentity.redstone;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.redstone.PlatformGeneratorBlock;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
-import com.mraof.minestuck.util.Debug;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.pathfinding.PathType;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class PlatformGeneratorTileEntity extends TileEntity implements ITickableTileEntity
 {
@@ -44,20 +43,17 @@ public class PlatformGeneratorTileEntity extends TileEntity implements ITickable
 			int powerIn = world.getRedstonePowerFromNeighbors(pos);
 			platformLength = powerIn;
 			
-			//Debug.debugf("sendUpdate. platformLength = %s", platformLength);
-			
 			if(powerIn > 0)
 			{
 				for(int blockIterate = 1; blockIterate < platformLength + 1; blockIterate++)
 				{
 					BlockPos iteratePos = new BlockPos(pos.offset(getBlockState().get(PlatformGeneratorBlock.FACING), blockIterate));
-					if(!world.isAreaLoaded(pos, blockIterate)) //allows platform blocks to be placed up until it runs out of bounds
+					if(!world.isAreaLoaded(pos, blockIterate) || World.isYOutOfBounds(iteratePos.getY())) //allows platform blocks to be placed up until it runs out of bounds
 						break;
 					
-					if(world.getBlockState(iteratePos).allowsMovement(world, iteratePos, PathType.LAND)/* && world.getBlockState(iteratePos).getBlock() != MSBlocks.PLATFORM_BLOCK*/)
+					if(world.getBlockState(iteratePos).getMaterial().isLiquid() || world.getBlockState(iteratePos).isAir())
 					{
-						//Debug.debugf("placed block at %s", iteratePos);
-						world.setBlockState(iteratePos, MSBlocks.PLATFORM_BLOCK.getDefaultState());
+						world.setBlockState(iteratePos, MSBlocks.PLATFORM_BLOCK.getDefaultState().with(PlatformGeneratorBlock.INVISIBLE_MODE, getBlockState().get(PlatformGeneratorBlock.INVISIBLE_MODE)));
 					}
 				}
 			}

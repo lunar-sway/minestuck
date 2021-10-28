@@ -1,9 +1,8 @@
 package com.mraof.minestuck.block.redstone;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.pathfinding.PathType;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -16,19 +15,13 @@ import java.util.Random;
 
 public class PlatformBlock extends Block
 {
-	//public static final BooleanProperty PLAYER_PERMEABLE = BlockStateProperties.ENABLED;
+	public static final BooleanProperty INVISIBLE = BlockStateProperties.ENABLED;
 	
 	public PlatformBlock(Properties properties)
 	{
 		super(properties);
-		//this.setDefaultState(this.stateContainer.getBaseState().with(PLAYER_PERMEABLE, false));
+		this.setDefaultState(this.stateContainer.getBaseState().with(INVISIBLE, false));
 	}
-	
-	/*@Override
-	public boolean allowsMovement(BlockState state, IBlockReader worldIn, BlockPos pos, PathType type)
-	{
-		return !state.get(PLAYER_PERMEABLE); //TODO Does not work
-	}*/
 	
 	@Override
 	public boolean causesSuffocation(BlockState state, IBlockReader worldIn, BlockPos pos)
@@ -37,11 +30,32 @@ public class PlatformBlock extends Block
 	}
 	
 	@Override
+	public float getAmbientOcclusionLightValue(BlockState state, IBlockReader worldIn, BlockPos pos)
+	{
+		return 1.0F;
+	}
+	
+	@Override
+	public boolean propagatesSkylightDown(BlockState state, IBlockReader reader, BlockPos pos)
+	{
+		return true;
+	}
+	
+	@Override
+	public BlockRenderType getRenderType(BlockState state)
+	{
+		if(state.get(INVISIBLE))
+			return BlockRenderType.INVISIBLE;
+		else
+			return BlockRenderType.MODEL;
+	}
+	
+	@Override
 	public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand)
 	{
 		super.tick(state, worldIn, pos, rand);
 		
-		worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
+		worldIn.removeBlock(pos, false);
 	}
 	
 	@Override
@@ -55,6 +69,6 @@ public class PlatformBlock extends Block
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
 	{
 		super.fillStateContainer(builder);
-		//builder.add(PLAYER_PERMEABLE);
+		builder.add(INVISIBLE);
 	}
 }
