@@ -71,6 +71,7 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 	private EnumAspect worldAspect;
 	private EnumClass worldClass;
 	private TerrainLandType worldTerrain;
+	private Template breathPuzzleDoorTemplate;
 	private Template bloodSymbolTemplate;
 	private Template bloodFirstSideRoomTemplate;
 	private Template bloodSecondSideRoomTemplate;
@@ -107,6 +108,7 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 	
 	private void initTemplates(TemplateManager templates)
 	{
+		breathPuzzleDoorTemplate = templates.getTemplateDefaulted(new ResourceLocation(Minestuck.MOD_ID, "dungeons/breath_puzzle_door"));
 		bloodSymbolTemplate = templates.getTemplateDefaulted(new ResourceLocation(Minestuck.MOD_ID, "aspect/blood_symbol_no_background"));
 		bloodFirstSideRoomTemplate = templates.getTemplateDefaulted(new ResourceLocation(Minestuck.MOD_ID, "dungeons/blood_first_side_room"));
 		bloodSecondSideRoomTemplate = templates.getTemplateDefaulted(new ResourceLocation(Minestuck.MOD_ID, "dungeons/blood_second_side_room"));
@@ -167,12 +169,12 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 		
 		} else if(worldAspect == EnumAspect.LIFE)
 		{
-			/*//TODO will be for Breath
+			/**///TODO will be for Breath
 			fillWithAir(world, boundingBox,
 					pieceMinX + 1, pieceMinY + 1, pieceMinZ + 4,
 					pieceMaxX - 9, pieceMaxY - 1, pieceMaxZ - 4);
 			
-			for(int i = 0; i < 3; i++)
+			/*for(int i = 0; i < 3; i++)
 			{
 				for(int j = 0; j < 3; j++)
 				{
@@ -181,8 +183,8 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 							pieceMinX + 8 + i * 9, pieceMaxY - 1, pieceMinZ + 11 + j * 9,
 							primaryPillarBlock.with(RotatedPillarBlock.AXIS, Direction.Axis.Y), primaryPillarBlock.with(RotatedPillarBlock.AXIS, Direction.Axis.Y), false);
 					fillWithBlocks(world, boundingBox,
-							pieceMinX + 4 + i * 9, pieceMaxY - 10, pieceMinZ + 7 + j * 9,
-							pieceMinX + 10 + i * 9, pieceMaxY - 10, pieceMinZ + 13 + j * 9,
+							pieceMinX + 5 + i * 9, pieceMaxY - 10, pieceMinZ + 6 + j * 9,
+							pieceMinX + 11 + i * 9, pieceMaxY - 10, pieceMinZ + 12 + j * 9,
 							primaryDecorativeBlock, primaryDecorativeBlock, false); //platform around columns
 					
 					
@@ -191,7 +193,86 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 							pieceMinX + 4 + 9, pieceMinY + 1, pieceMinZ + 7 + 9,
 							pieceMinX + 10 + 9, pieceMinY - 1, pieceMinZ + 13 + 9);
 				}
-			}
+			}*/
+			
+			//pathway connecting each pillar, made by filling an area and then carving off everything except one block on the edge as well as excess,
+			//excludes pathways for entrance and exit as they are placed further down to prevent override
+			fillWithBlocks(world, boundingBox,
+					pieceMinX + 7, pieceMaxY - 10, pieceMinZ + 10,
+					pieceMinX + 7 + 2 * 9, pieceMaxY - 10, pieceMinZ + 10 + 2 * 9,
+					primaryDecorativeBlock, primaryDecorativeBlock, false);
+			fillWithAir(world, boundingBox,
+					pieceMinX + 8, pieceMaxY - 10, pieceMinZ + 11,
+					pieceMinX + 6 + 2 * 9, pieceMaxY - 10, pieceMinZ + 9 + 2 * 9);
+			fillWithAir(world, boundingBox,
+					pieceMinX + 7 + 9, pieceMaxY - 10, pieceMinZ + 10,
+					pieceMinX + 7 + 2 * 9, pieceMaxY - 10, pieceMinZ + 10 + 9); //removes section of rectangle that does not immediately connect pillars
+			fillWithBlocks(world, boundingBox,
+					pieceMinX + 7 + 9, pieceMaxY - 10, pieceMinZ + 4,
+					pieceMinX + 7 + 9, pieceMaxY - 10, pieceMinZ + 9,
+					primaryDecorativeBlock, primaryDecorativeBlock, false); //pathway connecting to side room
+			
+			//first row
+			fillWithBlocks(world, boundingBox,
+					pieceMinX + 6, pieceMinY + 1, pieceMinZ + 9,
+					pieceMinX + 8, pieceMaxY - 1, pieceMinZ + 11,
+					primaryPillarBlock.with(RotatedPillarBlock.AXIS, Direction.Axis.Y), primaryPillarBlock.with(RotatedPillarBlock.AXIS, Direction.Axis.Y), false);
+			fillWithBlocks(world, boundingBox,
+					pieceMinX + 5, pieceMaxY - 10, pieceMinZ + 8,
+					pieceMinX + 9, pieceMaxY - 10, pieceMinZ + 12,
+					primaryDecorativeBlock, primaryDecorativeBlock, false); //platform around columns
+			fillWithBlocks(world, boundingBox,
+					pieceMinX + 6, pieceMinY + 1, pieceMinZ + 9 + 9,
+					pieceMinX + 8, pieceMaxY - 1, pieceMinZ + 11 + 9,
+					primaryPillarBlock.with(RotatedPillarBlock.AXIS, Direction.Axis.Y), primaryPillarBlock.with(RotatedPillarBlock.AXIS, Direction.Axis.Y), false);
+			fillWithBlocks(world, boundingBox,
+					pieceMinX + 5, pieceMaxY - 10, pieceMinZ + 8 + 9,
+					pieceMinX + 9, pieceMaxY - 10, pieceMinZ + 12 + 9,
+					primaryDecorativeBlock, primaryDecorativeBlock, false); //platform around columns
+			fillWithBlocks(world, boundingBox,
+					pieceMinX + 6, pieceMinY + 1, pieceMinZ + 9 + 2 * 9,
+					pieceMinX + 8, pieceMaxY - 1, pieceMinZ + 11 + 2 * 9,
+					primaryPillarBlock.with(RotatedPillarBlock.AXIS, Direction.Axis.Y), primaryPillarBlock.with(RotatedPillarBlock.AXIS, Direction.Axis.Y), false);
+			fillWithBlocks(world, boundingBox,
+					pieceMinX + 5, pieceMaxY - 10, pieceMinZ + 8 + 2 * 9,
+					pieceMinX + 9, pieceMaxY - 10, pieceMinZ + 12 + 2 * 9,
+					primaryDecorativeBlock, primaryDecorativeBlock, false); //platform around columns
+			
+			//second row
+			fillWithBlocks(world, boundingBox,
+					pieceMinX + 6 + 9, pieceMinY + 1, pieceMinZ + 9,
+					pieceMinX + 8 + 9, pieceMaxY - 1, pieceMinZ + 11,
+					primaryPillarBlock.with(RotatedPillarBlock.AXIS, Direction.Axis.Y), primaryPillarBlock.with(RotatedPillarBlock.AXIS, Direction.Axis.Y), false);
+			fillWithBlocks(world, boundingBox,
+					pieceMinX + 5 + 9, pieceMaxY - 10, pieceMinZ + 8,
+					pieceMinX + 9 + 9, pieceMaxY - 10, pieceMinZ + 12,
+					primaryDecorativeBlock, primaryDecorativeBlock, false); //platform around columns
+			fillWithBlocks(world, boundingBox,
+					pieceMinX + 6 + 9, pieceMinY + 1, pieceMinZ + 9 + 2 * 9,
+					pieceMinX + 8 + 9, pieceMaxY - 1, pieceMinZ + 11 + 2 * 9,
+					primaryPillarBlock.with(RotatedPillarBlock.AXIS, Direction.Axis.Y), primaryPillarBlock.with(RotatedPillarBlock.AXIS, Direction.Axis.Y), false);
+			fillWithBlocks(world, boundingBox,
+					pieceMinX + 5 + 9, pieceMaxY - 10, pieceMinZ + 8 + 2 * 9,
+					pieceMinX + 9 + 9, pieceMaxY - 10, pieceMinZ + 12 + 2 * 9,
+					primaryDecorativeBlock, primaryDecorativeBlock, false); //platform around columns
+			
+			//third row
+			fillWithBlocks(world, boundingBox,
+					pieceMinX + 6 + 9 * 2, pieceMinY + 1, pieceMinZ + 9 + 9,
+					pieceMinX + 8 + 9 * 2, pieceMaxY - 1, pieceMinZ + 11 + 9,
+					primaryPillarBlock.with(RotatedPillarBlock.AXIS, Direction.Axis.Y), primaryPillarBlock.with(RotatedPillarBlock.AXIS, Direction.Axis.Y), false);
+			fillWithBlocks(world, boundingBox,
+					pieceMinX + 5 + 9 * 2, pieceMaxY - 10, pieceMinZ + 8 + 9,
+					pieceMinX + 9 + 9 * 2, pieceMaxY - 10, pieceMinZ + 12 + 9,
+					primaryDecorativeBlock, primaryDecorativeBlock, false); //platform around columns
+			fillWithBlocks(world, boundingBox,
+					pieceMinX + 6 + 9 * 2, pieceMinY + 1, pieceMinZ + 9 + 2 * 9,
+					pieceMinX + 8 + 9 * 2, pieceMaxY - 1, pieceMinZ + 11 + 2 * 9,
+					primaryPillarBlock.with(RotatedPillarBlock.AXIS, Direction.Axis.Y), primaryPillarBlock.with(RotatedPillarBlock.AXIS, Direction.Axis.Y), false);
+			fillWithBlocks(world, boundingBox,
+					pieceMinX + 5 + 9 * 2, pieceMaxY - 10, pieceMinZ + 8 + 2 * 9,
+					pieceMinX + 9 + 9 * 2, pieceMaxY - 10, pieceMinZ + 12 + 2 * 9,
+					primaryDecorativeBlock, primaryDecorativeBlock, false); //platform around columns
 			
 			StructureBlockUtil.fillWithBlocksReplaceState(world, boundingBox,
 					getActualPos(pieceMinX + 4, pieceMaxY - 9, pieceMinZ + 4),
@@ -218,8 +299,19 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 			StructureBlockUtil.placeSummoner(world, boundingBox, getActualPos(pieceMinX + 15, pieceMaxY - 11, pieceMinZ - 11), SummonerTileEntity.SummonType.OGRE);
 			StructureBlockUtil.placeSummoner(world, boundingBox, getActualPos(pieceMinX + 17, pieceMaxY - 11, pieceMinZ - 11), SummonerTileEntity.SummonType.OGRE);
 			
-			StructureBlockUtil.placeWirelessRelay(world, boundingBox, getActualPos(pieceMinX + 16, pieceMaxY - 8, pieceMinZ - 14), getActualPos(pieceMinX + 16, pieceMaxY - 8, pieceMinZ - 11), true);
+			StructureBlockUtil.placeCenteredTemplate(world, getActualPos(pieceMaxX - 7, pieceMaxY - 11, pieceMinZ + 19), breathPuzzleDoorTemplate, new PlacementSettings().setBoundingBox(boundingBox).setRotation(MSRotationUtil.fromDirection(getCoordBaseMode().rotateYCCW())).addProcessor(StructureBlockRegistryProcessor.INSTANCE));
+			StructureBlockUtil.placeWirelessRelay(world, boundingBox, getActualPos(pieceMaxX - 5, pieceMaxY - 10, pieceMinZ + 16), getActualPos(pieceMaxX - 7, pieceMaxY - 3, pieceMinZ + 16), true);
+			StructureBlockUtil.placeWirelessRelay(world, boundingBox, getActualPos(pieceMinX + 16, pieceMaxY - 8, pieceMinZ - 14), getActualPos(pieceMaxX - 6, pieceMaxY - 10, pieceMinZ + 16), true);
 			world.setBlockState(getActualPos(pieceMinX + 16, pieceMaxY - 8, pieceMinZ - 13), MSBlocks.ONE_SECOND_INTERVAL_TIMED_SOLID_SWITCH.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE); //power for wireless relay
+			
+			fillWithBlocks(world, boundingBox,
+					pieceMinX + 1, pieceMaxY - 10, pieceMinZ + 10 + 9,
+					pieceMinX + 4, pieceMaxY - 10, pieceMinZ + 10 + 9,
+					primaryDecorativeBlock, primaryDecorativeBlock, false); //pathway connecting to entrance
+			fillWithBlocks(world, boundingBox,
+					pieceMinX + 10 + 9 * 2, pieceMaxY - 10, pieceMinZ + 10 + 9,
+					pieceMinX + 13 + 9 * 2, pieceMaxY - 10, pieceMinZ + 10 + 9,
+					primaryDecorativeBlock, primaryDecorativeBlock, false); //pathway connecting to exit
 			/**/
 			
 			/*
@@ -259,7 +351,7 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 			/**/
 			
 			//TODO will be for Blood
-			/**/
+			/*
 			
 			//roomVariable1 = rand.nextInt(6); //blood diving to flick switch
 			
@@ -331,13 +423,12 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 			
 			//first side room
 			StructureBlockUtil.placeCenteredTemplate(world, getActualPos(pieceMinX + 12 , pieceMaxY - 20, pieceMaxZ + 4), bloodFirstSideRoomTemplate, new PlacementSettings().setBoundingBox(boundingBox).setRotation(MSRotationUtil.fromDirection(getCoordBaseMode().rotateYCCW())).addProcessor(StructureBlockRegistryProcessor.INSTANCE));
-			/*fillWithBlocks(world, boundingBox, pieceMinX + 5, pieceMaxY - 20, pieceMaxZ, pieceMinX + 20, pieceMaxY - 3, pieceMaxZ + 12, secondaryBlock, air, false);
-			fillWithBlocks(world, boundingBox, pieceMinX + 6, pieceMaxY - 19, pieceMaxZ + 1, pieceMinX + 19, pieceMaxY - 10, pieceMaxZ + 11, MSBlocks.BLOOD.getDefaultState(), MSBlocks.BLOOD.getDefaultState(), false); //first side room liquid
-			fillWithBlocks(world, boundingBox, pieceMinX + 6, pieceMaxY - 19, pieceMaxZ + 1, pieceMinX + 20, pieceMaxY - 10, pieceMaxZ + 1, primaryBlock, primaryBlock, false); //ledge into liquid
-			fillWithAir(world, boundingBox, pieceMinX + 9, pieceMaxY - 9, pieceMaxZ - 3, pieceMinX + 10, pieceMaxY - 7, pieceMaxZ); //first side room entrance
-			setBlockState(world, lightBlock, pieceMinX + 5 , pieceMaxY - 7, pieceMaxZ + 6, boundingBox); //lighting
-			setBlockState(world, lightBlock, pieceMinX + 20 , pieceMaxY - 7, pieceMaxZ + 6, boundingBox); //lighting
-			 */
+			//fillWithBlocks(world, boundingBox, pieceMinX + 5, pieceMaxY - 20, pieceMaxZ, pieceMinX + 20, pieceMaxY - 3, pieceMaxZ + 12, secondaryBlock, air, false);
+			//fillWithBlocks(world, boundingBox, pieceMinX + 6, pieceMaxY - 19, pieceMaxZ + 1, pieceMinX + 19, pieceMaxY - 10, pieceMaxZ + 11, MSBlocks.BLOOD.getDefaultState(), MSBlocks.BLOOD.getDefaultState(), false); //first side room liquid
+			//fillWithBlocks(world, boundingBox, pieceMinX + 6, pieceMaxY - 19, pieceMaxZ + 1, pieceMinX + 20, pieceMaxY - 10, pieceMaxZ + 1, primaryBlock, primaryBlock, false); //ledge into liquid
+			//fillWithAir(world, boundingBox, pieceMinX + 9, pieceMaxY - 9, pieceMaxZ - 3, pieceMinX + 10, pieceMaxY - 7, pieceMaxZ); //first side room entrance
+			//setBlockState(world, lightBlock, pieceMinX + 5 , pieceMaxY - 7, pieceMaxZ + 6, boundingBox); //lighting
+			//setBlockState(world, lightBlock, pieceMinX + 20 , pieceMaxY - 7, pieceMaxZ + 6, boundingBox); //lighting
 			
 			//blood diving challenge associated with first side room
 			BlockPos transmitterPos = getActualPos(pieceMinX + 12 + (roomVariable1 - 3), pieceMaxY - 21, pieceMaxZ + 6);
@@ -351,15 +442,13 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 			
 			//second side room
 			StructureBlockUtil.placeCenteredTemplate(world, getActualPos(pieceMaxX - 7, pieceMaxY - 10, pieceMinZ - 4), bloodSecondSideRoomTemplate, new PlacementSettings().setBoundingBox(boundingBox).setRotation(MSRotationUtil.fromDirection(getCoordBaseMode().rotateYCCW())).addProcessor(StructureBlockRegistryProcessor.INSTANCE));
-			/*
-			fillWithBlocks(world, boundingBox, pieceMaxX - 10, pieceMaxY - 10, pieceMinZ - 10, pieceMaxX - 5, pieceMaxY, pieceMinZ, secondaryBlock, air, false);
-			fillWithAir(world, boundingBox, pieceMaxX - 7, pieceMaxY - 9, pieceMinZ - 3, pieceMaxX - 6, pieceMaxY - 7, pieceMinZ + 3); //second side room entrance
-			fillWithAir(world, boundingBox, pieceMaxX - 7, pieceMaxY - 5, pieceMinZ - 3, pieceMaxX - 6, pieceMaxY - 3, pieceMinZ + 3); //second side room exit
-			StructureBlockUtil.placeSpiralStaircase(world, boundingBox, getActualPos(pieceMaxX - 9, pieceMaxY - 9, pieceMinZ - 9), getActualPos(pieceMaxX - 6, pieceMaxY - 6, pieceMinZ + 1), primaryDecorativeBlock);
-			fillWithBlocks(world, boundingBox, pieceMaxX - 9, pieceMaxY - 6, pieceMinZ - 8, pieceMaxX - 6, pieceMaxY - 6, pieceMinZ + 1, secondaryBlock, air, false); //second level floor
-			fillWithBlocks(world, boundingBox, pieceMaxX - 9, pieceMaxY - 6, pieceMinZ - 10, pieceMaxX - 6, pieceMaxY - 6, pieceMinZ - 10, lightBlock, lightBlock, false); //second level floor
-			StructureBlockUtil.placeLootBlock(getActualPos(pieceMaxX - 6, pieceMaxY - 9, pieceMinZ - 5), world, boundingBox, MSBlocks.LOOT_CHEST.getDefaultState().with(BlockStateProperties.HORIZONTAL_FACING, getCoordBaseMode().rotateY()), MSLootTables.TIER_ONE_MEDIUM_CHEST);
-			 */
+			//fillWithBlocks(world, boundingBox, pieceMaxX - 10, pieceMaxY - 10, pieceMinZ - 10, pieceMaxX - 5, pieceMaxY, pieceMinZ, secondaryBlock, air, false);
+			//fillWithAir(world, boundingBox, pieceMaxX - 7, pieceMaxY - 9, pieceMinZ - 3, pieceMaxX - 6, pieceMaxY - 7, pieceMinZ + 3); //second side room entrance
+			//fillWithAir(world, boundingBox, pieceMaxX - 7, pieceMaxY - 5, pieceMinZ - 3, pieceMaxX - 6, pieceMaxY - 3, pieceMinZ + 3); //second side room exit
+			//StructureBlockUtil.placeSpiralStaircase(world, boundingBox, getActualPos(pieceMaxX - 9, pieceMaxY - 9, pieceMinZ - 9), getActualPos(pieceMaxX - 6, pieceMaxY - 6, pieceMinZ + 1), primaryDecorativeBlock);
+			//fillWithBlocks(world, boundingBox, pieceMaxX - 9, pieceMaxY - 6, pieceMinZ - 8, pieceMaxX - 6, pieceMaxY - 6, pieceMinZ + 1, secondaryBlock, air, false); //second level floor
+			//fillWithBlocks(world, boundingBox, pieceMaxX - 9, pieceMaxY - 6, pieceMinZ - 10, pieceMaxX - 6, pieceMaxY - 6, pieceMinZ - 10, lightBlock, lightBlock, false); //second level floor
+			//StructureBlockUtil.placeLootBlock(getActualPos(pieceMaxX - 6, pieceMaxY - 9, pieceMinZ - 5), world, boundingBox, MSBlocks.LOOT_CHEST.getDefaultState().with(BlockStateProperties.HORIZONTAL_FACING, getCoordBaseMode().rotateY()), MSLootTables.TIER_ONE_MEDIUM_CHEST);
 			
 			fillWithBlocks(world, boundingBox,
 					pieceMinX, pieceMinY + 10, pieceMinZ + 2,
@@ -371,6 +460,10 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 			BlockPos stairsStart = getActualPos(pieceMaxX - 1, pieceMaxY - 25, pieceMinZ + 17);
 			fillWithAir(world, boundingBox, pieceMaxX - 2, pieceMaxY - 25, pieceMinZ + 4, pieceMaxX - 1, pieceMaxY - 1, pieceMaxZ - 1);
 			StructureBlockUtil.createStairs(world, boundingBox, primaryBlock, primaryStairBlock.with(StairsBlock.FACING, getCoordBaseMode()), stairsStart, 20, 2, getCoordBaseMode(), false);
+			fillWithBlocks(world, boundingBox,
+					pieceMaxX - 2, pieceMaxY - 25, pieceMaxZ - 1,
+					pieceMaxX - 1, pieceMaxY - 6, pieceMaxZ - 1,
+					primaryBlock, primaryBlock, false);
 			fillWithBlocks(world, boundingBox,
 					pieceMaxX - 1, pieceMaxY - 9, pieceMinZ + 12,
 					pieceMaxX - 1, pieceMaxY - 8, pieceMinZ + 12,
@@ -411,32 +504,14 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 			setBlockState(world, lightBlock, pieceMinX + 3, pieceMinY + 12, pieceMaxZ - 8, boundingBox);
 			
 			//waterfall light
-			/*fillWithBlocks(world, boundingBox,
-					(pieceMinX + pieceMaxX) / 2, pieceMinY + 10, pieceMinZ + 1,
-					(pieceMinX + pieceMaxX) / 2, pieceMinY + 12, pieceMinZ + 4,
-					primaryDecorativeBlock, primaryDecorativeBlock, false);
-			fillWithBlocks(world, boundingBox,
-					(pieceMinX + pieceMaxX) / 2, pieceMinY + 1, pieceMinZ + 1,
-					(pieceMinX + pieceMaxX) / 2, pieceMinY + 9, pieceMinZ + 4,
-					primaryBlock, primaryBlock, false);*/
-			BlockPos side1SwitchLampPos = getActualPos((pieceMinX + pieceMaxX) / 2, pieceMinY + 10, pieceMinZ + 3);
+			BlockPos side1SwitchLampPos = getActualPos((pieceMinX + pieceMaxX) / 2, pieceMinY + 10, pieceMinZ + 2);
 			StructureBlockUtil.placeCenteredTemplate(world, side1SwitchLampPos.down(9), bloodWallFountainTemplate, new PlacementSettings().setBoundingBox(boundingBox).setRotation(MSRotationUtil.fromDirection(getCoordBaseMode().rotateYCCW())).addProcessor(StructureBlockRegistryProcessor.INSTANCE));
 			//world.setBlockState(side1SwitchLampPos.offset(getCoordBaseMode(), 4).down(8).offset(getCoordBaseMode().rotateY(), 2), Blocks.STICKY_PISTON.getDefaultState().with(PistonBlock.FACING, Direction.WEST), Constants.BlockFlags.BLOCK_UPDATE);
 			//world.setBlockState(side1SwitchLampPos.offset(getCoordBaseMode(), 3).down(8), MSBlocks.BLOOD.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
 			//StructureBlockUtil.placeWirelessRelay(world, boundingBox, side1SwitchLampPos.offset(getCoordBaseMode().getOpposite()), side1SwitchLampPos.offset(getCoordBaseMode(), 4).down(9).offset(getCoordBaseMode().rotateY(), 2), true);
 			//StructureBlockUtil.placeLootBlock(side1SwitchLampPos.offset(getCoordBaseMode(), 5).down(8), world, boundingBox, MSBlocks.LOOT_CHEST.getDefaultState().with(BlockStateProperties.HORIZONTAL_FACING, getCoordBaseMode().rotateY()), MSLootTables.TIER_ONE_MEDIUM_CHEST);
 			//world.setBlockState(side1SwitchLampPos.offset(getCoordBaseMode(), 3).down(7), MSBlocks.BLOOD.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
-			/*world.setBlockState(side1SwitchLampPos, MSBlocks.SOLID_SWITCH.getDefaultState().with(SolidSwitchBlock.POWERED, true), Constants.BlockFlags.BLOCK_UPDATE);
-			world.setBlockState(side1SwitchLampPos.offset(getCoordBaseMode()), Blocks.REDSTONE_LAMP.getDefaultState().with(RedstoneLampBlock.LIT, true), Constants.BlockFlags.BLOCK_UPDATE);
-			fillWithBlocks(world, boundingBox,
-					(pieceMinX + pieceMaxX) / 2, pieceMinY + 10, pieceMaxZ - 4,
-					(pieceMinX + pieceMaxX) / 2, pieceMinY + 12, pieceMaxZ - 1,
-					primaryDecorativeBlock, primaryDecorativeBlock, false);
-			fillWithBlocks(world, boundingBox,
-					(pieceMinX + pieceMaxX) / 2, pieceMinY + 1, pieceMaxZ - 4,
-					(pieceMinX + pieceMaxX) / 2, pieceMinY + 9, pieceMaxZ - 1,
-					primaryBlock, primaryBlock, false);*/
-			BlockPos side2SwitchLampPos = getActualPos((pieceMinX + pieceMaxX) / 2, pieceMinY + 10, pieceMaxZ - 3);
+			BlockPos side2SwitchLampPos = getActualPos((pieceMinX + pieceMaxX) / 2, pieceMinY + 10, pieceMaxZ - 2);
 			StructureBlockUtil.placeCenteredTemplate(world, side2SwitchLampPos.down(9), bloodWallFountainTemplate, new PlacementSettings().setBoundingBox(boundingBox).setRotation(MSRotationUtil.fromDirection(getCoordBaseMode().rotateY())).addProcessor(StructureBlockRegistryProcessor.INSTANCE));
 			//StructureBlockUtil.placeWirelessRelay(world, boundingBox, side2SwitchLampPos.offset(getCoordBaseMode()), side2SwitchLampPos.offset(getCoordBaseMode(), 2).down(5), true);
 			//world.setBlockState(side2SwitchLampPos, MSBlocks.SOLID_SWITCH.getDefaultState().with(SolidSwitchBlock.POWERED, true), Constants.BlockFlags.BLOCK_UPDATE);
