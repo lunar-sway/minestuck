@@ -295,6 +295,8 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(TWO_SECOND_INTERVAL_TIMED_SOLID_SWITCH);
 		registerLootTable(SUMMONER, func_218482_a());
 		registerLootTable(AREA_EFFECT_BLOCK, func_218482_a());
+		registerDropSelfLootTable(PLATFORM_GENERATOR);
+		registerLootTable(PLATFORM_BLOCK, func_218482_a());
 		
 		registerLootTable(LOOT_CHEST, func_218482_a());
 		

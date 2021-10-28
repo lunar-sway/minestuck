@@ -37,5 +37,6 @@ public class MSTileEntityTypes
 	public static final RegistryObject<TileEntityType<WirelessRedstoneReceiverTileEntity>> WIRELESS_REDSTONE_RECEIVER = REGISTER.register("wireless_redstone_receiver", () -> TileEntityType.Builder.create(WirelessRedstoneReceiverTileEntity::new, MSBlocks.WIRELESS_REDSTONE_RECEIVER).build(null));
 	public static final RegistryObject<TileEntityType<SummonerTileEntity>> SUMMONER = REGISTER.register("summoner", () -> TileEntityType.Builder.create(SummonerTileEntity::new, MSBlocks.SUMMONER).build(null));
 	public static final RegistryObject<TileEntityType<AreaEffectTileEntity>> AREA_EFFECT = REGISTER.register("area_effect", () -> TileEntityType.Builder.create(AreaEffectTileEntity::new, MSBlocks.AREA_EFFECT_BLOCK).build(null));
+	public static final RegistryObject<TileEntityType<PlatformGeneratorTileEntity>> PLATFORM_GENERATOR = REGISTER.register("platform_generator", () -> TileEntityType.Builder.create(PlatformGeneratorTileEntity::new, MSBlocks.PLATFORM_GENERATOR).build(null));
 	public static final RegistryObject<TileEntityType<LootBlockTileEntity>> LOOT_BLOCK = REGISTER.register("loot_block", () -> TileEntityType.Builder.create(LootBlockTileEntity::new, MSBlocks.LOOT_CHEST).build(null));
 }

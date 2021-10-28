@@ -338,6 +338,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSBlocks.TWO_SECOND_INTERVAL_TIMED_SOLID_SWITCH, "Loses one value of power every two seconds until it turns off.");
 		add(MSBlocks.SUMMONER, "Summoner");
 		add(MSBlocks.AREA_EFFECT_BLOCK, "Area Effect Block");
+		add(MSBlocks.PLATFORM_GENERATOR, "Platform Generator");
+		add(MSBlocks.PLATFORM_BLOCK, "Platform Block");
 		add(MSBlocks.LOOT_CHEST, "Loot Chest");
 		add(MSBlocks.GATE, "Gate");
 		add(MSBlocks.RETURN_NODE, "Return Node");

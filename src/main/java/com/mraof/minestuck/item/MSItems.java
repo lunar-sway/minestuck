@@ -755,6 +755,7 @@ public class MSItems
 		registerItemBlock(registry, TWO_SECOND_INTERVAL_TIMED_SOLID_SWITCH, MSItemGroup.LANDS);
 		registerItemBlock(registry, SUMMONER, MSItemGroup.LANDS);
 		registerItemBlock(registry, AREA_EFFECT_BLOCK, MSItemGroup.LANDS);
+		registerItemBlock(registry, PLATFORM_GENERATOR, MSItemGroup.LANDS);
 		
 		registerItemBlock(registry, LOOT_CHEST, MSItemGroup.LANDS);
 		

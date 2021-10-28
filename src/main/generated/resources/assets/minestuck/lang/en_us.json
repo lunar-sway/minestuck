@@ -291,6 +291,8 @@
   "block.minestuck.pipe": "Pipe",
   "block.minestuck.pipe_intersection": "Pipe Intersection",
   "block.minestuck.pipe_intersection.tooltip": "Astute engineers may note the lack of any openings and inability for anything to cross this intersection. In the business this is called 'useless'",
+  "block.minestuck.platform_block": "Platform Block",
+  "block.minestuck.platform_generator": "Platform Generator",
   "block.minestuck.polished_brown_stone": "Polished Brown Stone",
   "block.minestuck.polished_chalk": "Polished Chalk",
   "block.minestuck.polished_green_stone": "Polished Green Stone",
