@@ -54,7 +54,6 @@ public class PlatformBlock extends Block
 	public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand)
 	{
 		super.tick(state, worldIn, pos, rand);
-		
 		worldIn.removeBlock(pos, false);
 	}
 	
