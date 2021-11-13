@@ -8,7 +8,6 @@ import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.item.crafting.alchemy.*;
 import com.mraof.minestuck.network.ClientEditPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -128,14 +127,14 @@ public final class ClientEditHandler
 	@SubscribeEvent
 	public static void tickEnd(TickEvent.PlayerTickEvent event)
 	{
-		if(event.phase != TickEvent.Phase.END || event.player != Minecraft.getInstance().player || !isActive())
-			return;
-		PlayerEntity player = event.player;
-		
-		double range = ClientDimensionData.isLand(player.level.dimension()) ? MinestuckConfig.SERVER.landEditRange.get() : MinestuckConfig.SERVER.overworldEditRange.get();
-		
-		ServerEditHandler.updatePosition(player, range, centerX, centerZ);
-		
+		if(event.side == LogicalSide.CLIENT && event.phase == TickEvent.Phase.END && event.player == Minecraft.getInstance().player && isActive())
+		{
+			PlayerEntity player = event.player;
+			
+			double range = ClientDimensionData.isLand(player.level.dimension()) ? MinestuckConfig.SERVER.landEditRange.get() : MinestuckConfig.SERVER.overworldEditRange.get();
+			
+			ServerEditHandler.updatePosition(player, range, centerX, centerZ);
+		}
 	}
 	
 	@SubscribeEvent
