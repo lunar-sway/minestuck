@@ -3,7 +3,7 @@ package com.mraof.minestuck.world.gen.feature.structure.tiered.tier1;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.block.redstone.SolidSwitchBlock;
+import com.mraof.minestuck.block.redstone.WirelessRedstoneReceiverBlock;
 import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.player.EnumAspect;
@@ -24,11 +24,8 @@ import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockUtil
 import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
-import com.mraof.minestuck.world.storage.loot.MSLootTables;
 import net.minecraft.block.*;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.state.properties.Half;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -37,7 +34,6 @@ import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
-import net.minecraft.world.gen.feature.template.StructureProcessor;
 import net.minecraft.world.gen.feature.template.Template;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 import net.minecraftforge.common.util.Constants;
@@ -71,6 +67,7 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 	private EnumAspect worldAspect;
 	private EnumClass worldClass;
 	private TerrainLandType worldTerrain;
+	private Template breathSymbolTemplate;
 	private Template breathPuzzleDoorTemplate;
 	private Template breathFirstSideRoomTemplate;
 	private Template breathSecondSideRoomBarrierTemplate;
@@ -111,6 +108,7 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 	
 	private void initTemplates(TemplateManager templates)
 	{
+		breathSymbolTemplate = templates.getTemplateDefaulted(new ResourceLocation(Minestuck.MOD_ID, "aspect/breath_symbol_no_background"));
 		breathPuzzleDoorTemplate = templates.getTemplateDefaulted(new ResourceLocation(Minestuck.MOD_ID, "dungeons/breath_puzzle_door"));
 		breathFirstSideRoomTemplate = templates.getTemplateDefaulted(new ResourceLocation(Minestuck.MOD_ID, "dungeons/breath_first_side_room"));
 		breathSecondSideRoomBarrierTemplate = templates.getTemplateDefaulted(new ResourceLocation(Minestuck.MOD_ID, "dungeons/breath_second_side_room_barrier"));
@@ -177,7 +175,7 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 		{
 			/**///TODO will be for Breath
 			fillWithAir(world, boundingBox,
-					pieceMinX + 1, pieceMinY + 15, pieceMinZ + 4,
+					pieceMinX + 1, pieceMinY + 16, pieceMinZ + 4,
 					pieceMaxX - 9, pieceMaxY - 1, pieceMaxZ - 4); //upper room
 			
 			/*for(int i = 0; i < 3; i++)
@@ -220,26 +218,26 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 			
 			//first row
 			fillWithBlocks(world, boundingBox,
-					pieceMinX + 6, pieceMinY + 15, pieceMinZ + 9,
+					pieceMinX + 6, pieceMinY + 16, pieceMinZ + 9,
 					pieceMinX + 8, pieceMaxY - 1, pieceMinZ + 11,
-					primaryPillarBlock.with(RotatedPillarBlock.AXIS, Direction.Axis.Y), primaryPillarBlock.with(RotatedPillarBlock.AXIS, Direction.Axis.Y), false);
+					MSBlocks.PIPE.getDefaultState(), MSBlocks.PIPE.getDefaultState(), false);
 			fillWithBlocks(world, boundingBox,
 					pieceMinX + 5, pieceMaxY - 10, pieceMinZ + 8,
 					pieceMinX + 9, pieceMaxY - 10, pieceMinZ + 12,
 					primaryDecorativeBlock, primaryDecorativeBlock, false); //platform around columns
 			fillWithBlocks(world, boundingBox,
-					pieceMinX + 6, pieceMinY + 15, pieceMinZ + 9 + 9,
+					pieceMinX + 6, pieceMinY + 16, pieceMinZ + 9 + 9,
 					pieceMinX + 8, pieceMaxY - 1, pieceMinZ + 11 + 9,
-					primaryPillarBlock.with(RotatedPillarBlock.AXIS, Direction.Axis.Y), primaryPillarBlock.with(RotatedPillarBlock.AXIS, Direction.Axis.Y), false);
+					MSBlocks.PIPE.getDefaultState(), MSBlocks.PIPE.getDefaultState(), false);
 			fillWithBlocks(world, boundingBox,
 					pieceMinX + 5, pieceMaxY - 10, pieceMinZ + 8 + 9,
 					pieceMinX + 9, pieceMaxY - 10, pieceMinZ + 12 + 9,
 					primaryDecorativeBlock, primaryDecorativeBlock, false); //platform around columns
 			StructureBlockUtil.placeSpawner(getActualPos(pieceMinX + 7,pieceMinY + 16,pieceMinZ + 10 + 9), world, boundingBox, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
 			fillWithBlocks(world, boundingBox,
-					pieceMinX + 6, pieceMinY + 15, pieceMinZ + 9 + 2 * 9,
+					pieceMinX + 6, pieceMinY + 16, pieceMinZ + 9 + 2 * 9,
 					pieceMinX + 8, pieceMaxY - 1, pieceMinZ + 11 + 2 * 9,
-					primaryPillarBlock.with(RotatedPillarBlock.AXIS, Direction.Axis.Y), primaryPillarBlock.with(RotatedPillarBlock.AXIS, Direction.Axis.Y), false);
+					MSBlocks.PIPE.getDefaultState(), MSBlocks.PIPE.getDefaultState(), false);
 			fillWithBlocks(world, boundingBox,
 					pieceMinX + 5, pieceMaxY - 10, pieceMinZ + 8 + 2 * 9,
 					pieceMinX + 9, pieceMaxY - 10, pieceMinZ + 12 + 2 * 9,
@@ -247,17 +245,17 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 			
 			//second row
 			fillWithBlocks(world, boundingBox,
-					pieceMinX + 6 + 9, pieceMinY + 15, pieceMinZ + 9,
+					pieceMinX + 6 + 9, pieceMinY + 16, pieceMinZ + 9,
 					pieceMinX + 8 + 9, pieceMaxY - 1, pieceMinZ + 11,
-					primaryPillarBlock.with(RotatedPillarBlock.AXIS, Direction.Axis.Y), primaryPillarBlock.with(RotatedPillarBlock.AXIS, Direction.Axis.Y), false);
+					MSBlocks.PIPE.getDefaultState(), MSBlocks.PIPE.getDefaultState(), false);
 			fillWithBlocks(world, boundingBox,
 					pieceMinX + 5 + 9, pieceMaxY - 10, pieceMinZ + 8,
 					pieceMinX + 9 + 9, pieceMaxY - 10, pieceMinZ + 12,
 					primaryDecorativeBlock, primaryDecorativeBlock, false); //platform around columns
 			fillWithBlocks(world, boundingBox,
-					pieceMinX + 6 + 9, pieceMinY + 15, pieceMinZ + 9 + 2 * 9,
+					pieceMinX + 6 + 9, pieceMinY + 16, pieceMinZ + 9 + 2 * 9,
 					pieceMinX + 8 + 9, pieceMaxY - 1, pieceMinZ + 11 + 2 * 9,
-					primaryPillarBlock.with(RotatedPillarBlock.AXIS, Direction.Axis.Y), primaryPillarBlock.with(RotatedPillarBlock.AXIS, Direction.Axis.Y), false);
+					MSBlocks.PIPE.getDefaultState(), MSBlocks.PIPE.getDefaultState(), false);
 			fillWithBlocks(world, boundingBox,
 					pieceMinX + 5 + 9, pieceMaxY - 10, pieceMinZ + 8 + 2 * 9,
 					pieceMinX + 9 + 9, pieceMaxY - 10, pieceMinZ + 12 + 2 * 9,
@@ -266,18 +264,18 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 			
 			//third row
 			fillWithBlocks(world, boundingBox,
-					pieceMinX + 6 + 9 * 2, pieceMinY + 15, pieceMinZ + 9 + 9,
+					pieceMinX + 6 + 9 * 2, pieceMinY + 16, pieceMinZ + 9 + 9,
 					pieceMinX + 8 + 9 * 2, pieceMaxY - 1, pieceMinZ + 11 + 9,
-					primaryPillarBlock.with(RotatedPillarBlock.AXIS, Direction.Axis.Y), primaryPillarBlock.with(RotatedPillarBlock.AXIS, Direction.Axis.Y), false);
+					MSBlocks.PIPE.getDefaultState(), MSBlocks.PIPE.getDefaultState(), false);
 			fillWithBlocks(world, boundingBox,
 					pieceMinX + 5 + 9 * 2, pieceMaxY - 10, pieceMinZ + 8 + 9,
 					pieceMinX + 9 + 9 * 2, pieceMaxY - 10, pieceMinZ + 12 + 9,
 					primaryDecorativeBlock, primaryDecorativeBlock, false); //platform around columns
 			StructureBlockUtil.placeSpawner(getActualPos(pieceMinX + 7 + 9 * 2,pieceMinY + 16,pieceMinZ + 10 + 9), world, boundingBox, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
 			fillWithBlocks(world, boundingBox,
-					pieceMinX + 6 + 9 * 2, pieceMinY + 15, pieceMinZ + 9 + 2 * 9,
+					pieceMinX + 6 + 9 * 2, pieceMinY + 16, pieceMinZ + 9 + 2 * 9,
 					pieceMinX + 8 + 9 * 2, pieceMaxY - 1, pieceMinZ + 11 + 2 * 9,
-					primaryPillarBlock.with(RotatedPillarBlock.AXIS, Direction.Axis.Y), primaryPillarBlock.with(RotatedPillarBlock.AXIS, Direction.Axis.Y), false);
+					MSBlocks.PIPE.getDefaultState(), MSBlocks.PIPE.getDefaultState(), false);
 			fillWithBlocks(world, boundingBox,
 					pieceMinX + 5 + 9 * 2, pieceMaxY - 10, pieceMinZ + 8 + 2 * 9,
 					pieceMinX + 9 + 9 * 2, pieceMaxY - 10, pieceMinZ + 12 + 2 * 9,
@@ -286,18 +284,18 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 			StructureBlockUtil.fillWithBlocksReplaceState(world, boundingBox,
 					getActualPos(pieceMinX + 4, pieceMaxY - 9, pieceMinZ + 4),
 					getActualPos(pieceMaxX - 4, pieceMaxY - 9, pieceMaxZ - 4),
-					lightBlock, primaryPillarBlock); //above platform lighting
+					lightBlock, MSBlocks.PIPE.getDefaultState()); //above platform lighting
 			StructureBlockUtil.fillWithBlocksReplaceState(world, boundingBox,
 					getActualPos(pieceMinX + 4, pieceMaxY - 11, pieceMinZ + 4),
 					getActualPos(pieceMaxX - 4, pieceMaxY - 11, pieceMaxZ - 4),
-					lightBlock, primaryPillarBlock); //below platform lighting
+					lightBlock, MSBlocks.PIPE.getDefaultState()); //below platform lighting
 			fillWithBlocks(world, boundingBox,
-					pieceMinX + 1, pieceMaxY - 10, pieceMinZ + 18,
-					pieceMinX + 1, pieceMinY + 15, pieceMinZ + 20,
-					Blocks.LADDER.getDefaultState().with(LadderBlock.FACING, Direction.EAST), Blocks.LADDER.getDefaultState(), false); //ladder //TODO broken, flip y
+					pieceMinX + 1, pieceMinY + 17, pieceMinZ + 18,
+					pieceMinX + 1, pieceMaxY - 9, pieceMinZ + 20,
+					Blocks.LADDER.getDefaultState().with(LadderBlock.FACING, Direction.EAST), Blocks.LADDER.getDefaultState(), false); //ladder
 			
 			//first side room, opens path for second side room
-			StructureBlockUtil.placeCenteredTemplate(world, getActualPos(pieceMinX + 7 + 9, pieceMaxY - 11, pieceMaxZ - 4), breathFirstSideRoomTemplate, new PlacementSettings().setBoundingBox(boundingBox).setRotation(MSRotationUtil.fromDirection(getCoordBaseMode().rotateYCCW())).addProcessor(StructureBlockRegistryProcessor.INSTANCE));
+			StructureBlockUtil.placeCenteredTemplate(world, getActualPos(pieceMinX + 7 + 9, pieceMaxY - 11, pieceMaxZ - 4), breathFirstSideRoomTemplate, new PlacementSettings().setBoundingBox(boundingBox).setRotation(MSRotationUtil.fromDirection(getCoordBaseMode())).addProcessor(StructureBlockRegistryProcessor.INSTANCE));
 			
 			//second side room, ogres separate player from timed switch
 			fillWithBlocks(world, boundingBox,
@@ -331,6 +329,13 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 					pieceMinX + 13 + 9 * 2, pieceMaxY - 10, pieceMinZ + 10 + 9,
 					primaryDecorativeBlock, primaryDecorativeBlock, false); //pathway connecting to exit
 			
+			//staircase down
+			fillWithAir(world, boundingBox, pieceMaxX - 4, pieceMaxY - 8, pieceMinZ + 4, pieceMaxX - 3, pieceMaxY - 6, pieceMaxZ - 9);
+			BlockPos stairsStart = getActualPos(pieceMaxX - 1, pieceMinY + 2, pieceMinZ + 10);
+			fillWithAir(world, boundingBox, pieceMaxX - 2, pieceMinY + 2, pieceMinZ + 4, pieceMaxX - 1, pieceMaxY - 6, pieceMaxZ - 9);
+			StructureBlockUtil.createStairs(world, boundingBox, primaryBlock, primaryStairBlock.with(StairsBlock.FACING, getCoordBaseMode()), stairsStart, 20, 2, getCoordBaseMode(), false);
+			fillWithAir(world, boundingBox, pieceMaxX - 8, pieceMinY + 2, pieceMinZ + 6, pieceMaxX - 3, pieceMinY + 4, pieceMinZ + 7);
+			
 			//lower room
 			fillWithAir(world, boundingBox,
 					pieceMinX + 1, pieceMinY + 2, pieceMinZ + 4,
@@ -344,11 +349,32 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 					pieceMaxX - 10, pieceMinY + 1, pieceMaxZ - 5,
 					secondaryBlock, secondaryBlock, false);
 			
+			BlockPos aspectSymbolPos = getActualPos(pieceMinX + 16, pieceMinY + 2, pieceMinZ + 19);
+			StructureBlockUtil.placeCenteredTemplate(world, aspectSymbolPos.down(), breathSymbolTemplate, new PlacementSettings().setBoundingBox(boundingBox).setRotation(MSRotationUtil.fromDirection(getCoordBaseMode().getOpposite())).addProcessor(StructureBlockRegistryProcessor.INSTANCE));
+			StructureBlockUtil.placeSummoner(world, boundingBox, aspectSymbolPos.down(2).offset(getCoordBaseMode().rotateY(), 7), SummonerTileEntity.SummonType.LICH);
+			StructureBlockUtil.placeSummoner(world, boundingBox, aspectSymbolPos.down(2).offset(getCoordBaseMode().rotateY(), 8).offset(getCoordBaseMode()), SummonerTileEntity.SummonType.LICH);
+			StructureBlockUtil.placeSummoner(world, boundingBox, aspectSymbolPos.down(2).offset(getCoordBaseMode().rotateY(), 8).offset(getCoordBaseMode().getOpposite()), SummonerTileEntity.SummonType.LICH);
+			StructureBlockUtil.placeSummoner(world, boundingBox, aspectSymbolPos.down(2).offset(getCoordBaseMode().rotateY(), 9), SummonerTileEntity.SummonType.LICH);
+			StructureBlockUtil.placeRemoteObserver(world, boundingBox, aspectSymbolPos.down(2).offset(getCoordBaseMode().rotateY(), 8), RemoteObserverTileEntity.ActiveType.IS_PLAYER_PRESENT); //checks for presence of player
+			StructureBlockUtil.placeStatStorer(world, boundingBox, aspectSymbolPos.down(2), StatStorerTileEntity.ActiveType.DEATHS, 1); //counts how many deaths there have been(need 10 kills to activate all 5 pistons)
+			StructureBlockUtil.fillWithBlocksFromPos(world, boundingBox, Blocks.REDSTONE_WIRE.getDefaultState(), aspectSymbolPos.down(2).offset(getCoordBaseMode().rotateYCCW()), aspectSymbolPos.down(2).offset(getCoordBaseMode().rotateYCCW(), 10));
+			StructureBlockUtil.fillWithBlocksFromPos(world, boundingBox, Blocks.REDSTONE_WIRE.getDefaultState(), aspectSymbolPos.down(2).offset(getCoordBaseMode().rotateY()), aspectSymbolPos.down(2).offset(getCoordBaseMode().rotateY(), 5));
+			for(int summonerIterate = 0; summonerIterate < 5; summonerIterate++)
+			{
+				//StructureBlockUtil.placeWirelessRelay(world, boundingBox, aspectSymbolPos.down(3).offset(getCoordBaseMode().rotateYCCW(), summonerIterate * 2 + 1), getActualPos(pieceMinX + 2, pieceMinY + 4 + summonerIterate, (pieceMinZ + pieceMaxZ) / 2 - 2 + summonerIterate), false);
+				StructureBlockUtil.placeSummoner(world, boundingBox, aspectSymbolPos.down(2).offset(getCoordBaseMode().rotateYCCW(), summonerIterate * 2 + 2).offset(getCoordBaseMode(), 2), SummonerTileEntity.SummonType.LICH); //wedged between wireless transmitters
+				world.setBlockState(aspectSymbolPos.down(2).offset(getCoordBaseMode().rotateYCCW(), summonerIterate * 2 + 2).offset(getCoordBaseMode(), 1), Blocks.REPEATER.getDefaultState().with(RedstoneDiodeBlock.HORIZONTAL_FACING, getCoordBaseMode().getOpposite()), Constants.BlockFlags.BLOCK_UPDATE);
+				StructureBlockUtil.placeSummoner(world, boundingBox, aspectSymbolPos.down(2).offset(getCoordBaseMode().rotateYCCW(), summonerIterate * 2 + 2).offset(getCoordBaseMode().getOpposite(), 2), SummonerTileEntity.SummonType.LICH); //wedged between wireless transmitters
+				world.setBlockState(aspectSymbolPos.down(2).offset(getCoordBaseMode().rotateYCCW(), summonerIterate * 2 + 2).offset(getCoordBaseMode().getOpposite(), 1), Blocks.REPEATER.getDefaultState().with(RedstoneDiodeBlock.HORIZONTAL_FACING, getCoordBaseMode()), Constants.BlockFlags.BLOCK_UPDATE);
+			}
+			
 			//area effect block/how to complete puzzle
-			StructureBlockUtil.placeCenteredTemplate(world, getActualPos(pieceMinX + 16, pieceMinY + 2, pieceMinZ + 19), breathAreaEffectChamberTemplate, new PlacementSettings().setBoundingBox(boundingBox).setRotation(MSRotationUtil.fromDirection(getCoordBaseMode())).addProcessor(StructureBlockRegistryProcessor.INSTANCE));
-			StructureBlockUtil.placeAreaEffectBlock(world, boundingBox, getActualPos(pieceMinX + 16, pieceMinY + 2, pieceMinZ + 19), MSEffects.CREATIVE_SHOCK.get(), 2,
+			StructureBlockUtil.placeCenteredTemplate(world, aspectSymbolPos, breathAreaEffectChamberTemplate, new PlacementSettings().setBoundingBox(boundingBox).setRotation(MSRotationUtil.fromDirection(getCoordBaseMode())).addProcessor(StructureBlockRegistryProcessor.INSTANCE));
+			StructureBlockUtil.placeAreaEffectBlock(world, boundingBox, aspectSymbolPos, MSEffects.CREATIVE_SHOCK.get(), 2,
 					getActualPos(pieceMinX - 35, pieceMinY, pieceMinZ - 13),
-					getActualPos(pieceMaxX, pieceMaxY + 58, pieceMaxZ + 13));
+					getActualPos(pieceMaxX, pieceMaxY + 58, pieceMaxZ + 13)); //TODO it is possible to bomb the structure from this distance or mine into the treasure room (-x direction then?)
+			StructureBlockUtil.placeWirelessRelay(world, boundingBox, aspectSymbolPos.down(3).offset(getCoordBaseMode().rotateYCCW(), 4 * 2 + 1), aspectSymbolPos.up(5), false);
+			world.setBlockState(aspectSymbolPos.up(5), MSBlocks.WIRELESS_REDSTONE_RECEIVER.getDefaultState().with(WirelessRedstoneReceiverBlock.POWER, 15), Constants.BlockFlags.UPDATE_NEIGHBORS);
 			/**/
 			
 			/*

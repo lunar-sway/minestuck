@@ -51,7 +51,7 @@ public class PlatformGeneratorTileEntity extends TileEntity implements ITickable
 					if(!world.isAreaLoaded(pos, blockIterate) || World.isYOutOfBounds(iteratePos.getY())) //allows platform blocks to be placed up until it runs out of bounds
 						break;
 					
-					if(world.getBlockState(iteratePos).getMaterial().isLiquid() || world.getBlockState(iteratePos).isAir())
+					if(world.getBlockState(iteratePos).getMaterial().isLiquid() || world.getBlockState(iteratePos).isAir()/* || (world.getBlockState(iteratePos).getBlock() == MSBlocks.PLATFORM_BLOCK && world.getPendingBlockTicks().isTickScheduled(iteratePos, MSBlocks.PLATFORM_BLOCK))*/)
 					{
 						world.setBlockState(iteratePos, MSBlocks.PLATFORM_BLOCK.getDefaultState().with(PlatformGeneratorBlock.INVISIBLE_MODE, getBlockState().get(PlatformGeneratorBlock.INVISIBLE_MODE)));
 					}
