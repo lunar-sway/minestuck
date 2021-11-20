@@ -233,7 +233,7 @@ public class MinestuckConfig
 			naturalBasiliskSpawn = builder.comment("Determines if basilisks will spawn naturally. Note that this does not affect other spawning methods or any basilisks that has already spawned.")
 					.define("naturalBasiliskSpawn",true);
 			naturalLichSpawn = builder.comment("Determines if liches will spawn naturally. Note that this does not affect other spawning methods or any liches that has already spawned.")
-					.define("naturalLichSpawn",true);
+					.define("naturalLichSpawn",false);
 			allowSecondaryConnections = builder.comment("Set this to true to allow so-called 'secondary connections' to be created.")
 					.define("secondaryConnections", true);
 			builder.pop();

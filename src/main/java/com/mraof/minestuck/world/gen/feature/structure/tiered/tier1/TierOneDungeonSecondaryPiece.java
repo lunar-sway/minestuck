@@ -178,27 +178,6 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 					pieceMinX + 1, pieceMinY + 16, pieceMinZ + 4,
 					pieceMaxX - 9, pieceMaxY - 1, pieceMaxZ - 4); //upper room
 			
-			/*for(int i = 0; i < 3; i++)
-			{
-				for(int j = 0; j < 3; j++)
-				{
-					fillWithBlocks(world, boundingBox,
-							pieceMinX + 6 + i * 9, pieceMinY + 1, pieceMinZ + 9 + j * 9,
-							pieceMinX + 8 + i * 9, pieceMaxY - 1, pieceMinZ + 11 + j * 9,
-							primaryPillarBlock.with(RotatedPillarBlock.AXIS, Direction.Axis.Y), primaryPillarBlock.with(RotatedPillarBlock.AXIS, Direction.Axis.Y), false);
-					fillWithBlocks(world, boundingBox,
-							pieceMinX + 5 + i * 9, pieceMaxY - 10, pieceMinZ + 6 + j * 9,
-							pieceMinX + 11 + i * 9, pieceMaxY - 10, pieceMinZ + 12 + j * 9,
-							primaryDecorativeBlock, primaryDecorativeBlock, false); //platform around columns
-					
-					
-					//TODO do a lower or higher level of platforms to expand puzzle
-					fillWithAir(world, boundingBox,
-							pieceMinX + 4 + 9, pieceMinY + 1, pieceMinZ + 7 + 9,
-							pieceMinX + 10 + 9, pieceMinY - 1, pieceMinZ + 13 + 9);
-				}
-			}*/
-			
 			//pathway connecting each pillar, made by filling an area and then carving off everything except one block on the edge as well as excess,
 			//excludes pathways for entrance and exit as they are placed further down to prevent override
 			fillWithBlocks(world, boundingBox,
@@ -233,7 +212,7 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 					pieceMinX + 5, pieceMaxY - 10, pieceMinZ + 8 + 9,
 					pieceMinX + 9, pieceMaxY - 10, pieceMinZ + 12 + 9,
 					primaryDecorativeBlock, primaryDecorativeBlock, false); //platform around columns
-			StructureBlockUtil.placeSpawner(getActualPos(pieceMinX + 7,pieceMinY + 16,pieceMinZ + 10 + 9), world, boundingBox, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
+			StructureBlockUtil.placeSpawner(getActualPos(pieceMinX + 7,pieceMinY + 16,pieceMinZ + 10 + 9), world, boundingBox, MSEntityTypes.IMP);
 			fillWithBlocks(world, boundingBox,
 					pieceMinX + 6, pieceMinY + 16, pieceMinZ + 9 + 2 * 9,
 					pieceMinX + 8, pieceMaxY - 1, pieceMinZ + 11 + 2 * 9,
@@ -260,7 +239,7 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 					pieceMinX + 5 + 9, pieceMaxY - 10, pieceMinZ + 8 + 2 * 9,
 					pieceMinX + 9 + 9, pieceMaxY - 10, pieceMinZ + 12 + 2 * 9,
 					primaryDecorativeBlock, primaryDecorativeBlock, false); //platform around columns
-			StructureBlockUtil.placeSpawner(getActualPos(pieceMinX + 7 + 9,pieceMinY + 16,pieceMinZ + 10 + 2 * 9), world, boundingBox, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
+			StructureBlockUtil.placeSpawner(getActualPos(pieceMinX + 7 + 9,pieceMinY + 16,pieceMinZ + 10 + 2 * 9), world, boundingBox, MSEntityTypes.IMP);
 			
 			//third row
 			fillWithBlocks(world, boundingBox,
@@ -271,7 +250,7 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 					pieceMinX + 5 + 9 * 2, pieceMaxY - 10, pieceMinZ + 8 + 9,
 					pieceMinX + 9 + 9 * 2, pieceMaxY - 10, pieceMinZ + 12 + 9,
 					primaryDecorativeBlock, primaryDecorativeBlock, false); //platform around columns
-			StructureBlockUtil.placeSpawner(getActualPos(pieceMinX + 7 + 9 * 2,pieceMinY + 16,pieceMinZ + 10 + 9), world, boundingBox, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
+			StructureBlockUtil.placeSpawner(getActualPos(pieceMinX + 7 + 9 * 2,pieceMinY + 16,pieceMinZ + 10 + 9), world, boundingBox, MSEntityTypes.IMP);
 			fillWithBlocks(world, boundingBox,
 					pieceMinX + 6 + 9 * 2, pieceMinY + 16, pieceMinZ + 9 + 2 * 9,
 					pieceMinX + 8 + 9 * 2, pieceMaxY - 1, pieceMinZ + 11 + 2 * 9,

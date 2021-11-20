@@ -27,13 +27,12 @@ public final class UnderlingController
 {
 	public static GristType getUnderlingType(UnderlingEntity entity)
 	{
-		ChunkGenerator<?> chunkGenerator = entity.world.isRemote ? null : ((ServerWorld)entity.world).getChunkProvider().getChunkGenerator();
+		ChunkGenerator<?> chunkGenerator = entity.world.isRemote ? null : ((ServerWorld) entity.world).getChunkProvider().getChunkGenerator();
 		if(chunkGenerator instanceof LandChunkGenerator)
 		{
 			BlockPos pos = entity.getPosition();
-			return ((LandChunkGenerator)chunkGenerator).randomLayer(entity.getRNG()).getTypeAt(pos.getX(), pos.getZ());
-		}
-		else return GristHelper.getPrimaryGrist(entity.getRNG());
+			return ((LandChunkGenerator) chunkGenerator).randomLayer(entity.getRNG()).getTypeAt(pos.getX(), pos.getZ());
+		} else return GristHelper.getPrimaryGrist(entity.getRNG());
 	}
 	
 	private static final List<Biome.SpawnListEntry>[] difficultyList = new List[31];
@@ -45,7 +44,7 @@ public final class UnderlingController
 		
 		int difficulty = (int) Math.round(Math.sqrt(new Vec3i(pos.getX() >> 4, 0, pos.getZ() >> 4).distanceSq(new Vec3i(spawn.getX() >> 4, 0, spawn.getZ() >> 4))));
 		
-		difficulty = Math.min(30, difficulty/3);
+		difficulty = Math.min(30, difficulty / 3);
 		
 		if(difficultyList[difficulty] != null)
 			return difficultyList[difficulty];
@@ -58,36 +57,36 @@ public final class UnderlingController
 			impWeight = difficulty + 1;
 		else
 		{
-			impWeight = 8 - (difficulty - 8)/3;
+			impWeight = 8 - (difficulty - 8) / 3;
 			if(difficulty < 20)
-				ogreWeight = (difficulty - 5)/3;
-			else ogreWeight = 5 - (difficulty - 20)/3;
+				ogreWeight = (difficulty - 5) / 3;
+			else ogreWeight = 5 - (difficulty - 20) / 3;
 			
 			if(difficulty >= 16)
 			{
 				if(difficulty < 26)
-					basiliskWeight = (difficulty - 14)/2;
+					basiliskWeight = (difficulty - 14) / 2;
 				else basiliskWeight = 6;
 				if(difficulty < 28)
-					lichWeight = (difficulty - 12)/3;
+					lichWeight = (difficulty - 12) / 3;
 				else lichWeight = 6;
 				if(difficulty >= 20)
 					if(difficulty < 30)
-						giclopsWeight = (difficulty - 17)/3;
+						giclopsWeight = (difficulty - 17) / 3;
 					else giclopsWeight = 5;
 			}
 		}
 		
 		if(impWeight > 0 && MinestuckConfig.SERVER.naturalImpSpawn.get())
-			list.add(new Biome.SpawnListEntry(MSEntityTypes.IMP, impWeight, Math.max(1, (int)(impWeight/2.5)), Math.max(3, impWeight)));
+			list.add(new Biome.SpawnListEntry(MSEntityTypes.IMP, impWeight, Math.max(1, (int) (impWeight / 2.5)), Math.max(3, impWeight)));
 		if(ogreWeight > 0 && MinestuckConfig.SERVER.naturalOgreSpawn.get())
-			list.add(new Biome.SpawnListEntry(MSEntityTypes.OGRE, ogreWeight, ogreWeight >= 5 ? 2 : 1, Math.max(1, ogreWeight/2)));
+			list.add(new Biome.SpawnListEntry(MSEntityTypes.OGRE, ogreWeight, ogreWeight >= 5 ? 2 : 1, Math.max(1, ogreWeight / 2)));
 		if(basiliskWeight > 0 && MinestuckConfig.SERVER.naturalBasiliskSpawn.get())
-			list.add(new Biome.SpawnListEntry(MSEntityTypes.BASILISK, basiliskWeight, 1, Math.max(1, basiliskWeight/2)));
+			list.add(new Biome.SpawnListEntry(MSEntityTypes.BASILISK, basiliskWeight, 1, Math.max(1, basiliskWeight / 2)));
 		if(lichWeight > 0 && MinestuckConfig.SERVER.naturalLichSpawn.get())
-			list.add(new Biome.SpawnListEntry(MSEntityTypes.LICH, lichWeight, 1, Math.max(1, lichWeight/2)));
+			list.add(new Biome.SpawnListEntry(MSEntityTypes.LICH, lichWeight, 1, Math.max(1, lichWeight / 2)));
 		if(giclopsWeight > 0 && !MinestuckConfig.SERVER.disableGiclops.get())
-			list.add(new Biome.SpawnListEntry(MSEntityTypes.GICLOPS, giclopsWeight, 1, Math.max(1, giclopsWeight/2)));
+			list.add(new Biome.SpawnListEntry(MSEntityTypes.GICLOPS, giclopsWeight, 1, Math.max(1, giclopsWeight / 2)));
 		
 		MinecraftForge.EVENT_BUS.post(new UnderlingSpawnListEvent(difficulty, list));
 		

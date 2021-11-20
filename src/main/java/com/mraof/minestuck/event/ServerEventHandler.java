@@ -9,6 +9,7 @@ import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.artifact.CruxiteArtifactItem;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.StopCreativeShockEffectPacket;
 import com.mraof.minestuck.player.Echeladder;
@@ -420,6 +421,12 @@ public class ServerEventHandler
 			event.setCanHarvest(false);
 	}
 	
+	@SubscribeEvent
+	public static void onRightClickItem(PlayerInteractEvent.RightClickItem event)
+	{
+		if(CreativeShockEffect.doesCreativeShockLimit(event.getPlayer(), 0, 3) && event.getItemStack().getItem() instanceof CruxiteArtifactItem)
+			event.setCanceled(true);
+	}
 	
 	@SubscribeEvent
 	public static void breadStaling(ItemExpireEvent event)

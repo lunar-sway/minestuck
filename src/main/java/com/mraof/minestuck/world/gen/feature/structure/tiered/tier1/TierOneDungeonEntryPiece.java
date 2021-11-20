@@ -406,13 +406,13 @@ public class TierOneDungeonEntryPiece extends ImprovedStructurePiece
 		{
 			//fillWithBlocks(world, boundingBox, entryRoomMinX - 2, entryRoomMinY - 11, entryRoomMinZ - 2, entryRoomMinX - 2, entryRoomMinY - 8, entryRoomMinZ - 2, primaryDecorativeBlock, primaryDecorativeBlock, false);
 			BlockPos spawnerPos = getActualPos(lowerRoomMinX + 4, lowerRoomMinY + 6, lowerRoomMinZ + 4);
-			bottomRoomSpawner1 = !StructureBlockUtil.placeSpawner(spawnerPos, world, boundingBox, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
+			bottomRoomSpawner1 = !StructureBlockUtil.placeSpawner(spawnerPos, world, boundingBox, MSEntityTypes.IMP);
 		}
 		if(bottomRoomSpawner2)
 		{
 			//fillWithBlocks(world, boundingBox, entryRoomMaxX - 2, entryRoomMinY - 11, entryRoomMaxZ - 2, entryRoomMaxX - 2, entryRoomMinY - 8, entryRoomMaxZ - 2, primaryDecorativeBlock, primaryDecorativeBlock, false);
 			BlockPos spawnerPos = getActualPos(lowerRoomMaxX - 4, lowerRoomMinY + 6, lowerRoomMaxZ - 4);
-			bottomRoomSpawner2 = !StructureBlockUtil.placeSpawner(spawnerPos, world, boundingBox, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
+			bottomRoomSpawner2 = !StructureBlockUtil.placeSpawner(spawnerPos, world, boundingBox, MSEntityTypes.IMP);
 		}
 	}
 	

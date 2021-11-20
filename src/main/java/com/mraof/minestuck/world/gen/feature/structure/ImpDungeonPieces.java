@@ -756,12 +756,12 @@ public class ImpDungeonPieces
 			if(spawner1)
 			{
 				BlockPos spawnerPos = getActualPos(1, 1, 2);
-				spawner1 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
+				spawner1 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MSEntityTypes.IMP);
 			}
 			if(spawner2)
 			{
 				BlockPos spawnerPos = getActualPos(6, 1, 2);
-				spawner2 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
+				spawner2 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MSEntityTypes.IMP);
 			}
 			
 			BlockPos chestPos = getActualPos(3, 1, 5);
@@ -976,12 +976,12 @@ public class ImpDungeonPieces
 			if(spawner1)
 			{
 				BlockPos spawnerPos = getActualPos(1, 1, 4);
-				spawner1 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
+				spawner1 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MSEntityTypes.IMP);
 			}
 			if(spawner2)
 			{
 				BlockPos spawnerPos = getActualPos(1, 1, 5);
-				spawner2 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
+				spawner2 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MSEntityTypes.IMP);
 			}
 			
 			int z = chestPos ? 4 : 5;
@@ -1218,12 +1218,12 @@ public class ImpDungeonPieces
 			if(spawner1)
 			{
 				BlockPos spawnerPos = getActualPos(1, 1, 3);
-				spawner1 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
+				spawner1 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MSEntityTypes.IMP);
 			}
 			if(spawner2)
 			{
 				BlockPos spawnerPos = getActualPos(8, 1, 5);
-				spawner2 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
+				spawner2 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MSEntityTypes.IMP);
 			}
 			
 			BlockPos chestPos = getActualPos(4, 1, 4);
