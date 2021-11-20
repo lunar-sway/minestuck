@@ -297,6 +297,7 @@ public class MSBlockLootTables extends BlockLootTables
 		registerLootTable(AREA_EFFECT_BLOCK, func_218482_a());
 		registerDropSelfLootTable(PLATFORM_GENERATOR);
 		registerLootTable(PLATFORM_BLOCK, func_218482_a());
+		registerDropSelfLootTable(ITEM_MAGNET);
 		
 		registerLootTable(LOOT_CHEST, func_218482_a());
 		

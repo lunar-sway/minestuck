@@ -340,6 +340,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.AREA_EFFECT_BLOCK, "Area Effect Block");
 		add(MSBlocks.PLATFORM_GENERATOR, "Platform Generator");
 		add(MSBlocks.PLATFORM_BLOCK, "Platform Block");
+		add(MSBlocks.ITEM_MAGNET, "Item Magnet");
 		add(MSBlocks.LOOT_CHEST, "Loot Chest");
 		add(MSBlocks.GATE, "Gate");
 		add(MSBlocks.RETURN_NODE, "Return Node");

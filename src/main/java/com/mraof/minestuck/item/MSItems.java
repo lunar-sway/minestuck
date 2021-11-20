@@ -756,6 +756,7 @@ public class MSItems
 		registerItemBlock(registry, SUMMONER, MSItemGroup.LANDS);
 		registerItemBlock(registry, AREA_EFFECT_BLOCK, MSItemGroup.LANDS);
 		registerItemBlock(registry, PLATFORM_GENERATOR, MSItemGroup.LANDS);
+		registerItemBlock(registry, ITEM_MAGNET, MSItemGroup.LANDS);
 		
 		registerItemBlock(registry, LOOT_CHEST, MSItemGroup.LANDS);
 		

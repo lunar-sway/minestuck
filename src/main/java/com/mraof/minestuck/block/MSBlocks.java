@@ -160,6 +160,7 @@ public class MSBlocks
 	public static final Block AREA_EFFECT_BLOCK = getNull();
 	public static final Block PLATFORM_GENERATOR = getNull();
 	public static final Block PLATFORM_BLOCK = getNull();
+	public static final Block ITEM_MAGNET = getNull();
 	
 	public static final Block LOOT_CHEST = getNull();
 	
@@ -502,6 +503,7 @@ public class MSBlocks
 		registry.register(new AreaEffectBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(6).sound(SoundType.METAL)).setRegistryName("area_effect_block"));
 		registry.register(new PlatformGeneratorBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(6).sound(SoundType.METAL)).setRegistryName("platform_generator"));
 		registry.register(new PlatformBlock(Block.Properties.create(Material.MISCELLANEOUS).hardnessAndResistance(0.2F).sound(SoundType.SCAFFOLDING).lightValue(6).notSolid()).setRegistryName("platform_block"));
+		registry.register(new ItemMagnetBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3).sound(SoundType.METAL)).setRegistryName("item_magnet"));
 		
 		registry.register(new LootBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(3).sound(SoundType.METAL), MSBlockShapes.LOOT_CHEST, MSBlockShapes.LOOT_CHEST_EMPTY/*, MSLootTables.BASIC_MEDIUM_CHEST*/).setRegistryName("loot_chest"));
 		

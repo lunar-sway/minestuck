@@ -173,7 +173,15 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 		
 		} else if(worldAspect == EnumAspect.LIFE)
 		{
-			/**///TODO will be for Breath
+			/**///TODO will be for Hope
+			fillWithAir(world, boundingBox,
+					pieceMinX + 15, pieceMinY + 16, pieceMinZ + 4,
+					pieceMaxX - 9, pieceMaxY - 1, pieceMaxZ - 4); //upper room
+			
+			
+			/**/
+			
+			/*//TODO will be for Breath
 			fillWithAir(world, boundingBox,
 					pieceMinX + 1, pieceMinY + 16, pieceMinZ + 4,
 					pieceMaxX - 9, pieceMaxY - 1, pieceMaxZ - 4); //upper room
