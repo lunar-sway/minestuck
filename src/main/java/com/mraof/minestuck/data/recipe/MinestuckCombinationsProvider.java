@@ -607,6 +607,8 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSBlocks.RAINBOW_SAPLING).input(MSBlocks.RAINBOW_LEAVES).or().input(MSBlocks.RAINBOW_LOG).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.END_SAPLING).input(MSBlocks.END_LEAVES).or().input(MSBlocks.END_LOG).build(consumer);
 		
+		CombinationRecipeBuilder.of(MSBlocks.SPIKES).input(Items.CACTUS).and().input(Items.IRON_SWORD).build(consumer);
+		
 		CombinationRecipeBuilder.of(MSBlocks.COARSE_STONE).input(Items.STONE).and().input(Items.GRAVEL).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.CHISELED_COARSE_STONE).input(Items.CHISELED_STONE_BRICKS).and().namedInput(Items.GRAVEL).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.CHISELED_COARSE_STONE).input(Items.CHISELED_STONE_BRICKS).and().namedInput(MSBlocks.COARSE_STONE).build(consumer);
@@ -671,6 +673,8 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSBlocks.SOLID_SWITCH).input(Items.LEVER).and().input(Items.REDSTONE_LAMP).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(MSBlocks.ONE_SECOND_INTERVAL_TIMED_SOLID_SWITCH).input(MSBlocks.SOLID_SWITCH).or().input(Items.STONE_BUTTON).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(MSBlocks.TWO_SECOND_INTERVAL_TIMED_SOLID_SWITCH).input(MSBlocks.SOLID_SWITCH).or().input(ItemTags.WOODEN_BUTTONS).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(MSBlocks.PLATFORM_GENERATOR).input(Items.PISTON).or().input(Items.SHIELD).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(MSBlocks.ITEM_MAGNET).input(Items.PISTON).or().input(Items.FISHING_ROD).buildFor(consumer, Minestuck.MOD_ID);
 		
 		CombinationRecipeBuilder.of(MSBlocks.STONE_CRUXITE_ORE).input(MSItems.RAW_CRUXITE).and().input(Items.STONE).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(MSBlocks.NETHERRACK_CRUXITE_ORE).input(MSItems.RAW_CRUXITE).and().input(Items.NETHERRACK).buildFor(consumer, Minestuck.MOD_ID);

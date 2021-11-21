@@ -149,6 +149,7 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(DENSE_CLOUD);
 		registerDropSelfLootTable(BRIGHT_DENSE_CLOUD);
 		registerDropSelfLootTable(SUGAR_CUBE);
+		registerDropSelfLootTable(SPIKES);
 		
 		registerDropSelfLootTable(GLOWING_LOG);
 		registerDropSelfLootTable(FROST_LOG);

@@ -1,10 +1,7 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.util.Debug;
 import net.minecraft.block.*;
-import net.minecraft.block.material.PushReaction;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -28,7 +25,6 @@ public class TrajectoryBlock extends MSDirectionalBlock
 	@Override
 	public void onFallenUpon(World worldIn, BlockPos pos, Entity entityIn, float fallDistance)
 	{
-		super.onFallenUpon(worldIn, pos, entityIn, fallDistance);
 		if(entityIn.isSuppressingBounce())
 		{
 			super.onFallenUpon(worldIn, pos, entityIn, fallDistance);
@@ -41,14 +37,17 @@ public class TrajectoryBlock extends MSDirectionalBlock
 	@Override
 	public void onLanded(IBlockReader worldIn, Entity entityIn)
 	{
-		super.onLanded(worldIn, entityIn);
 		if(entityIn.isSuppressingBounce())
 		{
 			super.onLanded(worldIn, entityIn);
 		} else
 		{
 			Vec3d entityMotion = entityIn.getMotion();
-			entityIn.setMotion(entityMotion.x, 0, entityMotion.z);
+			
+			if(entityMotion.y < 0.0D)
+			{
+				entityIn.setMotion(entityMotion.x, -entityMotion.y * 0.1D, entityMotion.z);
+			}
 		}
 	}
 	
@@ -57,16 +56,12 @@ public class TrajectoryBlock extends MSDirectionalBlock
 	{
 		super.onEntityWalk(worldIn, pos, entityIn);
 		BlockState blockState = worldIn.getBlockState(pos);
-		entityIn.onGround = false;
+		//entityIn.onGround = false;
 		updatePower(worldIn, pos, blockState);
 		
 		if(blockState.get(POWER) != 0)
 		{
 			double powerMod = blockState.get(POWER) / 16D;
-			//if(entityIn instanceof PlayerEntity)
-			//Debug.debugf("blockState.get(POWER) = %s", blockState.get(POWER));
-			//entityIn.setMotion(blockState.get(FACING).getXOffset() * powerMod, blockState.get(FACING).getYOffset() * powerMod, blockState.get(FACING).getZOffset() * powerMod);
-			//entityIn.setMotion(entityIn.getMotion().x / 1.2 + blockState.get(FACING).getXOffset() * powerMod, entityIn.getMotion().y / 1.2 + blockState.get(FACING).getYOffset() * powerMod, entityIn.getMotion().z / 1.2 + blockState.get(FACING).getZOffset() * powerMod);
 			entityIn.setMotion(entityIn.getMotion().x + blockState.get(FACING).getXOffset() * powerMod, entityIn.getMotion().y + blockState.get(FACING).getYOffset() * powerMod, entityIn.getMotion().z + blockState.get(FACING).getZOffset() * powerMod);
 		}
 	}
@@ -84,8 +79,6 @@ public class TrajectoryBlock extends MSDirectionalBlock
 		{
 			int powerInt = worldIn.getWorld().getRedstonePowerFromNeighbors(pos);
 			worldIn.setBlockState(pos, state.with(POWER, powerInt), Constants.BlockFlags.BLOCK_UPDATE);
-			//worldIn.notifyBlockUpdate(pos, state, state.with(POWER, powerInt), 3);
-			//Debug.debugf("blockState.get(POWER) = %s, power from neighbors = %s", state.get(POWER), powerInt);
 		}
 	}
 	

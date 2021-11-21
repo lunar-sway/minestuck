@@ -348,6 +348,7 @@
   "block.minestuck.space_aspect_planks": "Space Planks",
   "block.minestuck.space_aspect_sapling": "Space Sapling",
   "block.minestuck.space_aspect_sapling.tooltip": "Not yet implemented",
+  "block.minestuck.spikes": "Spikes",
   "block.minestuck.stat_storer": "Stat Storer",
   "block.minestuck.stat_storer.tooltip": "Lets off a redstone signal with the strength of the signal based on the active value type stored.",
   "block.minestuck.steel_beam": "Steel Beam",

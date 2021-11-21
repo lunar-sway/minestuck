@@ -611,6 +611,7 @@ public class MSItems
 		registerItemBlock(registry, DENSE_CLOUD, MSItemGroup.LANDS);
 		registerItemBlock(registry, BRIGHT_DENSE_CLOUD, MSItemGroup.LANDS);
 		registerItemBlock(registry, SUGAR_CUBE, MSItemGroup.LANDS);
+		registerItemBlock(registry, SPIKES, MSItemGroup.MAIN);
 		
 		registerItemBlock(registry, GLOWING_LOG, MSItemGroup.LANDS);
 		registerItemBlock(registry, FROST_LOG, MSItemGroup.LANDS);

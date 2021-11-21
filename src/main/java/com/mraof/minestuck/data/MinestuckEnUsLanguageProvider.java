@@ -173,6 +173,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.DENSE_CLOUD, "Dense Cloud");
 		add(MSBlocks.BRIGHT_DENSE_CLOUD, "Bright Dense Cloud");
 		add(MSBlocks.SUGAR_CUBE, "Sugar Cube");
+		add(MSBlocks.SPIKES, "Spikes");
 		add(MSBlocks.GLOWING_LOG, "Glowing Log");
 		add(MSBlocks.FROST_LOG, "Frost Log");
 		add(MSBlocks.RAINBOW_LOG, "Rainbow Log");

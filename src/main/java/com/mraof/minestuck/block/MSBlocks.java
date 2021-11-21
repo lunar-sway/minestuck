@@ -88,6 +88,7 @@ public class MSBlocks
 			, GREEN_STONE_BRICK_SALAMANDER_LEFT = getNull(), GREEN_STONE_BRICK_SALAMANDER_RIGHT = getNull(), GREEN_STONE_BRICK_SKAIA = getNull(), GREEN_STONE_BRICK_TURTLE = getNull();
 	public static final Block DENSE_CLOUD = getNull(), BRIGHT_DENSE_CLOUD = getNull();
 	public static final Block SUGAR_CUBE = getNull();
+	public static final Block SPIKES = getNull();
 	
 	//Land Tree Blocks
 	public static final Block GLOWING_LOG = getNull(), FROST_LOG = getNull(), RAINBOW_LOG = getNull(), END_LOG = getNull();
@@ -357,6 +358,7 @@ public class MSBlocks
 		registry.register(new Block(Block.Properties.create(Material.GLASS, MaterialColor.YELLOW).hardnessAndResistance(0.5F).sound(SoundType.SNOW)).setRegistryName("dense_cloud"));
 		registry.register(new Block(Block.Properties.create(Material.GLASS, MaterialColor.LIGHT_GRAY).hardnessAndResistance(0.5F).sound(SoundType.SNOW)).setRegistryName("bright_dense_cloud"));
 		registry.register(new Block(Block.Properties.create(Material.SAND, MaterialColor.SNOW).hardnessAndResistance(0.4F).sound(SoundType.SAND)).setRegistryName("sugar_cube"));
+		registry.register(new SpikeBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(2).sound(SoundType.METAL), MSBlockShapes.SPIKES).setRegistryName("spikes"));
 		
 		registry.register(new FlammableLogBlock(MaterialColor.LIGHT_BLUE, Block.Properties.create(Material.WOOD, MaterialColor.LIGHT_BLUE).hardnessAndResistance(2.0F).harvestTool(ToolType.AXE).lightValue(11).sound(SoundType.WOOD)).setRegistryName("glowing_log"));
 		registry.register(new FlammableLogBlock(MaterialColor.ICE, Block.Properties.create(Material.WOOD, MaterialColor.ICE).hardnessAndResistance(2.0F).harvestTool(ToolType.AXE).sound(SoundType.WOOD)).setRegistryName("frost_log"));

@@ -29,6 +29,8 @@ public class MSBlockShapes
 					new double[]{5.5,12,2.5,10.5,13,14.5}
 			);
 	
+	public static final CustomVoxelShape SPIKES = new CustomVoxelShape(new double[]{0, 0, 0, 16, 4, 16}/*, new double[]{1, 1, 1, 15, 15, 15}*/);
+	
 	public static final CustomVoxelShape FROG_STATUE = FROG_STATUE_BASE.merge(FROG_STATUE_BODY, FROG_STATUE_HEAD).rotate(Direction.SOUTH);
 	
 	public static final CustomVoxelShape WIZARD_STATUE = new CustomVoxelShape(new double[]{3, 0, 3, 13, 16, 12});
