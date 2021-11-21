@@ -56,11 +56,12 @@ public class TrajectoryBlock extends MSDirectionalBlock
 	{
 		super.onEntityWalk(worldIn, pos, entityIn);
 		BlockState blockState = worldIn.getBlockState(pos);
-		//entityIn.onGround = false;
 		updatePower(worldIn, pos, blockState);
 		
 		if(blockState.get(POWER) != 0)
 		{
+			if(entityIn.onGround)
+				entityIn.onGround = false;
 			double powerMod = blockState.get(POWER) / 16D;
 			entityIn.setMotion(entityIn.getMotion().x + blockState.get(FACING).getXOffset() * powerMod, entityIn.getMotion().y + blockState.get(FACING).getYOffset() * powerMod, entityIn.getMotion().z + blockState.get(FACING).getZOffset() * powerMod);
 		}

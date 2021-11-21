@@ -285,6 +285,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.PARCEL_PYXIS, "Parcel Pyxis");
 		addTooltip(MSBlocks.PARCEL_PYXIS, "This doesn't actually seem to do anything");
 		add(MSBlocks.PYXIS_LID, "Parcel Pyxis Lid");
+		add(MSBlocks.NAKAGATOR_STATUE, "Nakagator Statue");
 		add(MSBlocks.BLACK_CASTLE_BRICK_STAIRS, "Black Castle Brick Stairs");
 		add(MSBlocks.DARK_GRAY_CASTLE_BRICK_STAIRS, "Dark Gray Castle Brick Stairs");
 		add(MSBlocks.LIGHT_GRAY_CASTLE_BRICK_STAIRS, "Light Gray Castle Brick Stairs");

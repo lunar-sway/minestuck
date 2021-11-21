@@ -241,7 +241,7 @@ public interface OnHitEffect
 	
 	/**
 	 * Checks for attacks within three blocks of a point three blocks behind the targets back(covering the whole standard attack range of a player)
-	*/
+	 */
 	static OnHitEffect backstab(float backstabDamage)
 	{
 		return (stack, target, attacker) -> {
@@ -251,8 +251,10 @@ public interface OnHitEffect
 			{
 				for(int i = 0; i < 4; i++)
 				{
-					target.world.addParticle(ParticleTypes.DAMAGE_INDICATOR, true, target.getPosition().add(reversedBackVec).getX(), target.getEyePosition(1F).y - 1, target.getPosition().add(reversedBackVec).getZ(), 0.1,0.1,0.1);
+					target.world.addParticle(ParticleTypes.DAMAGE_INDICATOR, true, target.getPosition().add(reversedBackVec).getX(), target.getEyePosition(1F).y - 1, target.getPosition().add(reversedBackVec).getZ(), 0.1, 0.1, 0.1);
 				}
+				
+				target.world.playSound(null, attacker.getPosition(), SoundEvents.ENTITY_PLAYER_HURT_SWEET_BERRY_BUSH, SoundCategory.PLAYERS, 2.0F, 0.6F);
 				
 				DamageSource source;
 				if(attacker instanceof PlayerEntity)

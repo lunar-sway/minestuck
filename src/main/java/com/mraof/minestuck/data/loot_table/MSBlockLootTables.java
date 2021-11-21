@@ -249,6 +249,7 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(PARCEL_PYXIS);
 		registerDropSelfLootTable(PYXIS_LID);
 		registerLootTable(STONE_SLAB, MSBlockLootTables::droppingWithTEItem);
+		registerDropSelfLootTable(NAKAGATOR_STATUE);
 		
 		registerDropSelfLootTable(BLACK_CASTLE_BRICK_STAIRS);
 		registerDropSelfLootTable(DARK_GRAY_CASTLE_BRICK_STAIRS);
