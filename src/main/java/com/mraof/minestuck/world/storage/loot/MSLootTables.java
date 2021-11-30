@@ -11,7 +11,8 @@ import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 
 public class MSLootTables
 {
-	public static final ResourceLocation DUNGEON_LOOT_INJECT = new ResourceLocation("minestuck", "chests/injections/dungeon_inject");
+	public static final ResourceLocation OVERWORLD_DUNGEON_LOOT_INJECT = new ResourceLocation("minestuck", "chests/injections/overworld_dungeon_inject");
+	public static final ResourceLocation TIER_ONE_DUNGEON_LOOT_INJECT = new ResourceLocation("minestuck", "chests/injections/tier_one_dungeon_inject");
 	public static final ResourceLocation FROG_TEMPLE_CHEST = new ResourceLocation("minestuck", "chests/frog_temple");
 	public static final ResourceLocation BASIC_MEDIUM_CHEST = new ResourceLocation("minestuck", "chests/medium_basic");
 	public static final ResourceLocation TIER_ONE_MEDIUM_CHEST = new ResourceLocation("minestuck", "chests/medium_tier_one");
