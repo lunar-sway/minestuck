@@ -1,5 +1,6 @@
 package com.mraof.minestuck.item.weapon;
 
+import com.mraof.minestuck.effects.CreativeShockEffect;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -86,7 +87,7 @@ public interface ItemRightClickEffect
 	
 	static ItemRightClickEffect extinguishFire(int mod)
 	{
-		return (world, player, hand) -> {
+		return withoutCreativeShock((world, player, hand) -> {
 			ItemStack itemStackIn = player.getHeldItem(hand);
 			
 			if(!world.isRemote)
@@ -119,12 +120,12 @@ public interface ItemRightClickEffect
 				itemStackIn.damageItem(1, player, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
 			}
 			return ActionResult.resultPass(itemStackIn);
-		};
+		});
 	}
 	
 	static ItemRightClickEffect absorbFluid(Supplier<Block> fluidBlock, Supplier<Item> otherItem)
 	{
-		return (world, player, hand) -> {
+		return withoutCreativeShock((world, player, hand) -> {
 			Vec3d eyePos = player.getEyePosition(1.0F);
 			Vec3d lookVec = player.getLookVec();
 			BlockState state;
@@ -147,6 +148,25 @@ public interface ItemRightClickEffect
 				}
 			}
 			return ActionResult.resultFail(itemStack);
+		});
+	}
+	
+	/**
+	 * Prevents effect from working if the entity is subject to the effects of creative shock
+	 */
+	static ItemRightClickEffect withoutCreativeShock(ItemRightClickEffect effect) //TODO action result for client side may not work
+	{
+		return (world, player, hand) -> {
+			ItemStack itemStackIn = player.getHeldItem(hand);
+			
+			if(!CreativeShockEffect.doesCreativeShockLimit(player, 0, 3))
+			{
+				effect.onRightClick(world, player, hand);
+				if(effect.onRightClick(world, player, hand).getType().isSuccess())
+					return ActionResult.resultSuccess(itemStackIn);
+			}
+			
+			return ActionResult.resultPass(itemStackIn);
 		};
 	}
 	

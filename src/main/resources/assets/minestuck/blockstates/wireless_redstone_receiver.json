@@ -1,0 +1,20 @@
+{
+    "variants": {
+        "power=0": { "model": "minestuck:block/wireless_redstone_receiver" },
+        "power=1": { "model": "minestuck:block/wireless_redstone_receiver" },
+        "power=2": { "model": "minestuck:block/wireless_redstone_receiver" },
+        "power=3": { "model": "minestuck:block/wireless_redstone_receiver" },
+        "power=4": { "model": "minestuck:block/wireless_redstone_receiver" },
+        "power=5": { "model": "minestuck:block/wireless_redstone_receiver" },
+        "power=6": { "model": "minestuck:block/wireless_redstone_receiver" },
+        "power=7": { "model": "minestuck:block/wireless_redstone_receiver" },
+        "power=8": { "model": "minestuck:block/wireless_redstone_receiver" },
+        "power=9": { "model": "minestuck:block/wireless_redstone_receiver" },
+        "power=10": { "model": "minestuck:block/wireless_redstone_receiver" },
+        "power=11": { "model": "minestuck:block/wireless_redstone_receiver" },
+        "power=12": { "model": "minestuck:block/wireless_redstone_receiver" },
+        "power=13": { "model": "minestuck:block/wireless_redstone_receiver" },
+        "power=14": { "model": "minestuck:block/wireless_redstone_receiver" },
+        "power=15": { "model": "minestuck:block/wireless_redstone_receiver" }
+    }
+}

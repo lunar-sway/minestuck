@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:wireless_redstone_transmitter"
+  },
+  "grist_cost": {
+    "minestuck:garnet": 4,
+    "minestuck:marble": 2
+  }
+}

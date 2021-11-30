@@ -3,11 +3,16 @@ package com.mraof.minestuck.event;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.effects.CreativeShockEffect;
+import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.consort.ConsortDialogue;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.artifact.CruxiteArtifactItem;
+import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.network.StopCreativeShockEffectPacket;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.IdentifierHandler;
@@ -15,6 +20,7 @@ import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.skaianet.TitleSelectionHook;
+import com.mraof.minestuck.tileentity.redstone.StatStorerTileEntity;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.storage.MSExtraData;
@@ -28,23 +34,32 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.EntityStruckByLightningEvent;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingHealEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.living.PotionEvent;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.UseHoeEvent;
 import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
+import net.minecraftforge.event.world.SaplingGrowTreeEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -123,6 +138,8 @@ public class ServerEventHandler
 		{
 			TitleSelectionHook.cancelSelection((ServerPlayerEntity) event.getEntity());
 		}
+		
+		statStorer(1, StatStorerTileEntity.ActiveType.DEATHS, event.getEntity().getPosition(), event.getEntity().world);
 	}
 
 	// Stores the crit result from the CriticalHitEvent, to be used during LivingHurtEvent to trigger special effects of any weapons.
@@ -141,7 +158,64 @@ public class ServerEventHandler
 		return entity instanceof ServerPlayerEntity && cachedCrit;
 	}
 	
-	@SubscribeEvent(priority=EventPriority.NORMAL)
+	public static void statStorer(float eventAmount, StatStorerTileEntity.ActiveType activeType, BlockPos eventPos, World world)
+	{
+		for(BlockPos blockPos : BlockPos.getAllInBoxMutable(eventPos.add(16, 16, 16), eventPos.add(-16, -16, -16)))
+		{
+			if(world == null || !world.isAreaLoaded(blockPos, 0))
+				return; // Forge: prevent loading unloaded chunks
+			
+			TileEntity tileEntity = world.getTileEntity(blockPos);
+			if(tileEntity instanceof StatStorerTileEntity)
+			{
+				StatStorerTileEntity storerTileEntity = (StatStorerTileEntity) tileEntity;
+				
+				if(activeType == storerTileEntity.getActiveType())
+					storerTileEntity.setActiveStoredStatValue(storerTileEntity.getActiveStoredStatValue() + eventAmount, blockPos.up(), true);
+			}
+		}
+	}
+	
+	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
+	public static void onEntityHeal(LivingHealEvent event)
+	{
+		statStorer(event.getAmount(), StatStorerTileEntity.ActiveType.HEALTH_RECOVERED, event.getEntity().getPosition(), event.getEntity().world);
+	}
+	
+	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
+	public static void onSaplingGrow(SaplingGrowTreeEvent event)
+	{
+		statStorer(1, StatStorerTileEntity.ActiveType.SAPLING_GROWN, event.getPos(), event.getWorld().getWorld());
+	}
+	
+	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
+	public static void onEntityStruck(EntityStruckByLightningEvent event)
+	{
+		statStorer(1, StatStorerTileEntity.ActiveType.LIGHTNING_STRUCK, event.getEntity().getPosition(), event.getEntity().world);
+	}
+
+	/*@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
+	public static void onBlockRightClick(PlayerInteractEvent.RightClickBlock event)
+	{
+		//conditions check does not work
+		if(event.getUseBlock() == Event.Result.ALLOW)
+			statStorer(1, StatStorerTileEntity.ActiveType.BLOCK_RIGHT_CLICK, event.getEntity().getPosition(), event.getEntity().world);
+	}
+	
+	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
+	public static void onEntitySetTarget(LivingSetAttackTargetEvent event)
+	{
+		//adds value every tick
+		//statStorer(1, StatStorerTileEntity.ActiveType.ENTITY_SET_TARGET, event.getEntity().getPosition(), event.getEntity().world);
+	}*/
+	
+	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
+	public static void onAlchemy(AlchemyEvent event)
+	{
+		statStorer(1, StatStorerTileEntity.ActiveType.ALCHEMY_ACTIVATED, event.getAlchemiter().getPos(), event.getWorld());
+	}
+	
+	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public static void onEntityAttack(LivingHurtEvent event)
 	{
 		if(event.getSource().getTrueSource() != null)
@@ -171,6 +245,8 @@ public class ServerEventHandler
 		{
 			((UnderlingEntity) event.getEntityLiving()).onEntityDamaged(event.getSource(), event.getAmount());
 		}
+		
+		statStorer(event.getAmount(), StatStorerTileEntity.ActiveType.DAMAGE, event.getEntity().getPosition(), event.getEntity().world);
 	}
 	
 	@SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = false)
@@ -233,6 +309,17 @@ public class ServerEventHandler
 		}
 	}
 	
+	@SubscribeEvent(priority=EventPriority.NORMAL)
+	public static void onLeftClickBlockEvent(PlayerInteractEvent.LeftClickBlock event)
+	{
+		if(event.getEntity() instanceof PlayerEntity)
+		{
+			PlayerEntity playerEntity = (PlayerEntity) event.getEntity();
+			if(CreativeShockEffect.doesCreativeShockLimit(playerEntity, 0, 3))
+				event.setCanceled(true);
+		}
+	}
+	
 	@SubscribeEvent
 	public static void playerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event)
 	{
@@ -277,6 +364,75 @@ public class ServerEventHandler
 			if(data.getTitle() != null)
 				data.getTitle().handleAspectEffects((ServerPlayerEntity) event.player);
 		}
+		
+		if(event.player.isPotionActive(MSEffects.CREATIVE_SHOCK.get()))
+		{
+			int duration = event.player.getActivePotionEffect(MSEffects.CREATIVE_SHOCK.get()).getDuration();
+			if(duration >= 5)
+			{
+				if(CreativeShockEffect.doesCreativeShockLimit(event.player, 0, 3))
+					event.player.abilities.allowEdit = false;
+				if(CreativeShockEffect.doesCreativeShockLimit(event.player, 2, 5))
+					event.player.stopFallFlying();
+			}
+			else
+			{
+				if(!event.player.world.isRemote)
+				{
+					event.player.abilities.allowEdit = ((ServerPlayerEntity) event.player).interactionManager.getGameType().hasLimitedInteractions();
+				}
+			}
+		}
+	}
+	
+	@SubscribeEvent
+	public static void onEffectRemove(PotionEvent.PotionRemoveEvent event)
+	{
+		onEffectEnd(event.getEntityLiving(), event.getPotionEffect().getPotion());
+	}
+	
+	@SubscribeEvent
+	public static void onEffectExpire(PotionEvent.PotionExpiryEvent expiryEvent)
+	{
+		onEffectEnd(expiryEvent.getEntityLiving(), expiryEvent.getPotionEffect().getPotion());
+	}
+	
+	private static void onEffectEnd(LivingEntity entityLiving, Effect effect)
+	{
+		if(entityLiving instanceof PlayerEntity)
+		{
+			PlayerEntity player = (PlayerEntity) entityLiving;
+			
+			if(player instanceof ServerPlayerEntity && effect == MSEffects.CREATIVE_SHOCK.get())
+			{
+				ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player;
+				player.abilities.allowEdit = !serverPlayerEntity.interactionManager.getGameType().hasLimitedInteractions();
+				
+				StopCreativeShockEffectPacket packet = new StopCreativeShockEffectPacket(serverPlayerEntity.interactionManager.getGameType());
+				MSPacketHandler.sendToPlayer(packet, serverPlayerEntity);
+			}
+		}
+	}
+	
+	@SubscribeEvent
+	public static void onBreakSpeed(PlayerEvent.BreakSpeed event)
+	{
+		if(CreativeShockEffect.doesCreativeShockLimit(event.getPlayer(), 0, 3))
+			event.setNewSpeed(0);
+	}
+	
+	@SubscribeEvent
+	public static void onHarvestCheck(PlayerEvent.HarvestCheck event)
+	{
+		if(CreativeShockEffect.doesCreativeShockLimit(event.getPlayer(), 0, 3))
+			event.setCanHarvest(false);
+	}
+	
+	@SubscribeEvent
+	public static void onRightClickItem(PlayerInteractEvent.RightClickItem event)
+	{
+		if(CreativeShockEffect.doesCreativeShockLimit(event.getPlayer(), 0, 3) && event.getItemStack().getItem() instanceof CruxiteArtifactItem) //prevents players from using an artifact to enter while under effects of Creative Shock
+			event.setCanceled(true);
 	}
 	
 	@SubscribeEvent

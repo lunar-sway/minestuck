@@ -87,6 +87,8 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		ShapedRecipeBuilder.shapedRecipe(MSBlocks.BROWN_STONE_BRICK_SLAB, 6).key('#', MSBlocks.BROWN_STONE_BRICKS).patternLine("###").addCriterion("has_brown_stone_bricks", hasItem(MSBlocks.BROWN_STONE_BRICKS)).build(recipeBuilder);
 		ShapedRecipeBuilder.shapedRecipe(MSBlocks.GREEN_STONE_BRICK_SLAB, 6).key('#', MSBlocks.GREEN_STONE_BRICKS).patternLine("###").addCriterion("has_green_stone_bricks", hasItem(MSBlocks.GREEN_STONE_BRICKS)).build(recipeBuilder);
 		
+		ShapedRecipeBuilder.shapedRecipe(MSBlocks.SPIKES).key('#', Items.IRON_INGOT).key('n', Items.IRON_NUGGET).patternLine("n n").patternLine("# #").patternLine("###").addCriterion("has_iron_ingot", hasItem(Items.IRON_INGOT)).build(recipeBuilder);
+		
 		ShapedRecipeBuilder.shapedRecipe(MSBlocks.GLOWING_WOOD, 3).key('#', MSBlocks.GLOWING_LOG).patternLine("##").patternLine("##").setGroup("bark").addCriterion("has_log", hasItem(MSTags.Items.GLOWING_LOGS)).build(recipeBuilder);
 		ShapelessRecipeBuilder.shapelessRecipe(MSBlocks.GLOWING_PLANKS, 4).addIngredient(MSTags.Items.GLOWING_LOGS).setGroup("planks").addCriterion("has_log", hasItem(MSTags.Items.GLOWING_LOGS)).build(recipeBuilder);
 		ShapedRecipeBuilder.shapedRecipe(MSBlocks.FROST_WOOD, 3).key('#', MSBlocks.FROST_LOG).patternLine("##").patternLine("##").setGroup("bark").addCriterion("has_log", hasItem(MSTags.Items.FROST_LOGS)).build(recipeBuilder);

@@ -521,6 +521,15 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSBlocks.PARCEL_PYXIS).grist(BUILD, 25).grist(RUST, 10).grist(MERCURY, 5).grist(CHALK,2).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.PYXIS_LID).grist(BUILD, 2).grist(RUST, 1).build(recipeSaver);
 		
+		GristCostRecipeBuilder.of(MSBlocks.TRAJECTORY_BLOCK).grist(URANIUM, 2).grist(AMBER, 4).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.STAT_STORER).grist(GARNET, 12).grist(MARBLE, 6).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.REMOTE_OBSERVER).grist(GARNET, 8).grist(MARBLE, 4).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.WIRELESS_REDSTONE_TRANSMITTER).grist(GARNET, 4).grist(MARBLE, 2).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.WIRELESS_REDSTONE_RECEIVER).grist(GARNET, 2).grist(MARBLE, 2).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.SOLID_SWITCH).grist(TAR, 5).grist(BUILD, 2).grist(GARNET, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.ONE_SECOND_INTERVAL_TIMED_SOLID_SWITCH).grist(TAR, 5).grist(BUILD, 8).grist(GARNET, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.TWO_SECOND_INTERVAL_TIMED_SOLID_SWITCH).grist(TAR, 5).grist(BUILD, 8).grist(GARNET, 1).build(recipeSaver);
+		
 		GristCostRecipeBuilder.of(MSBlocks.PETRIFIED_LOG).grist(BUILD, 4).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.FROST_PLANKS).grist(BUILD, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.PETRIFIED_GRASS).grist(BUILD, 1).build(recipeSaver);

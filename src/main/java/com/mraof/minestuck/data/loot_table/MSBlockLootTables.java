@@ -149,6 +149,7 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(DENSE_CLOUD);
 		registerDropSelfLootTable(BRIGHT_DENSE_CLOUD);
 		registerDropSelfLootTable(SUGAR_CUBE);
+		registerDropSelfLootTable(SPIKES);
 		
 		registerDropSelfLootTable(GLOWING_LOG);
 		registerDropSelfLootTable(FROST_LOG);
@@ -248,6 +249,7 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(PARCEL_PYXIS);
 		registerDropSelfLootTable(PYXIS_LID);
 		registerLootTable(STONE_SLAB, MSBlockLootTables::droppingWithTEItem);
+		registerDropSelfLootTable(NAKAGATOR_STATUE);
 		
 		registerDropSelfLootTable(BLACK_CASTLE_BRICK_STAIRS);
 		registerDropSelfLootTable(DARK_GRAY_CASTLE_BRICK_STAIRS);
@@ -282,6 +284,20 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(END_PLANKS_SLAB);
 		registerDropSelfLootTable(DEAD_PLANKS_SLAB);
 		registerDropSelfLootTable(TREATED_PLANKS_SLAB);
+		
+		registerDropSelfLootTable(TRAJECTORY_BLOCK);
+		registerDropSelfLootTable(STAT_STORER);
+		registerDropSelfLootTable(REMOTE_OBSERVER);
+		registerDropSelfLootTable(WIRELESS_REDSTONE_TRANSMITTER);
+		registerDropSelfLootTable(WIRELESS_REDSTONE_RECEIVER);
+		registerDropSelfLootTable(SOLID_SWITCH);
+		registerDropSelfLootTable(ONE_SECOND_INTERVAL_TIMED_SOLID_SWITCH);
+		registerDropSelfLootTable(TWO_SECOND_INTERVAL_TIMED_SOLID_SWITCH);
+		registerLootTable(SUMMONER, func_218482_a());
+		registerLootTable(AREA_EFFECT_BLOCK, func_218482_a());
+		registerDropSelfLootTable(PLATFORM_GENERATOR);
+		registerLootTable(PLATFORM_BLOCK, func_218482_a());
+		registerDropSelfLootTable(ITEM_MAGNET);
 		
 		registerDropSelfLootTable(HOLOPAD);
 		registerDropSelfLootTable(CRUXTRUDER_LID);

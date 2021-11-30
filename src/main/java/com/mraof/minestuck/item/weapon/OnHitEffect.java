@@ -1,6 +1,7 @@
 package com.mraof.minestuck.item.weapon;
 
 import com.google.common.collect.ImmutableList;
+import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.item.MSItems;
@@ -176,7 +177,7 @@ public interface OnHitEffect
 		}
 	};
 	
-	OnHitEffect SPACE_TELEPORT = requireAspect(SPACE, onCrit((stack, target, attacker) -> {
+	OnHitEffect SPACE_TELEPORT = withoutCreativeShock(requireAspect(SPACE, onCrit((stack, target, attacker) -> {
 		double oldPosX = attacker.getPosX();
 		double oldPosY = attacker.getPosY();
 		double oldPosZ = attacker.getPosZ();
@@ -198,7 +199,7 @@ public interface OnHitEffect
 				break;
 			}
 		}
-	}));
+	})));
 	
 	static OnHitEffect setOnFire(int duration)
 	{
@@ -325,6 +326,26 @@ public interface OnHitEffect
 			}
 		};
 	}
+	
+	/**
+	 * Prevents effect from working if the entity is subject to the effects of creative shock
+	 */
+	static OnHitEffect withoutCreativeShock(OnHitEffect effect) //TODO action result for client side may not work
+	{
+		return (stack, target, attacker) -> {
+			if(attacker instanceof PlayerEntity)
+			{
+				PlayerEntity playerAttacker = (PlayerEntity) attacker;
+				
+				if(!CreativeShockEffect.doesCreativeShockLimit(playerAttacker, 2, 5))
+				{
+					effect.onHit(stack, target, attacker);
+				}
+			} else
+				effect.onHit(stack, target, attacker);
+		};
+	}
+	
 	
 	static OnHitEffect onCrit(OnHitEffect effect)
 	{

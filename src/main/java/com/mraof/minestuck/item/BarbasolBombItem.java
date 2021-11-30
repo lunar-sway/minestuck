@@ -1,5 +1,6 @@
 package com.mraof.minestuck.item;
 
+import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.item.BarbasolBombEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -14,33 +15,37 @@ import net.minecraft.world.World;
 
 public class BarbasolBombItem extends Item
 {
-    public BarbasolBombItem(Properties properties)
-    {
-        super(properties);
-    }
-    
-    @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn)
-    {
-        ItemStack item = playerIn.getHeldItem(handIn);
-        
-        if(!playerIn.isCreative())
-        {
-            item.shrink(1);
-        }
-    
-        worldIn.playSound(null, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.ENTITY_TNT_PRIMED, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-        
-        if(!worldIn.isRemote)
-        {
-            
-            BarbasolBombEntity bomb = new BarbasolBombEntity(MSEntityTypes.BARBASOL_BOMB, playerIn, worldIn, playerIn.abilities.allowEdit);
-            bomb.setItem(item);
-            bomb.shoot(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, -20.0F, 0.7F, 1.0F);
-            worldIn.addEntity(bomb);
-        }
-        
-        playerIn.addStat(Stats.ITEM_USED.get(this));
-        return ActionResult.resultSuccess(item);
-    }
+	public BarbasolBombItem(Properties properties)
+	{
+		super(properties);
+	}
+	
+	@Override
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn)
+	{
+		ItemStack item = playerIn.getHeldItem(handIn);
+		
+		if(!CreativeShockEffect.doesCreativeShockLimit(playerIn, 0, 3))
+		{
+			if(!playerIn.isCreative())
+			{
+				item.shrink(1);
+			}
+			
+			worldIn.playSound(null, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.ENTITY_TNT_PRIMED, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+			
+			if(!worldIn.isRemote)
+			{
+				BarbasolBombEntity bomb = new BarbasolBombEntity(MSEntityTypes.BARBASOL_BOMB, playerIn, worldIn, playerIn.abilities.allowEdit);
+				bomb.setItem(item);
+				bomb.shoot(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, -20.0F, 0.7F, 1.0F);
+				worldIn.addEntity(bomb);
+			}
+			
+			playerIn.addStat(Stats.ITEM_USED.get(this));
+			return ActionResult.resultSuccess(item);
+		}
+		
+		return ActionResult.resultPass(item);
+	}
 }

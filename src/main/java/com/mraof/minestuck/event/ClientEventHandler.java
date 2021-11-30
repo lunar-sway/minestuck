@@ -5,6 +5,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.ColorSelectorScreen;
+import com.mraof.minestuck.effects.CreativeShockEffect;
+import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.fluid.IMSFog;
 import com.mraof.minestuck.inventory.ConsortMerchantContainer;
@@ -13,6 +15,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -24,6 +27,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -118,6 +122,27 @@ public class ClientEventHandler
 			event.setRed((float) fogColor.getX());
 			event.setGreen((float) fogColor.getY());
 			event.setBlue((float) fogColor.getZ());
+		}
+	}
+	
+	@SubscribeEvent(priority=EventPriority.NORMAL)
+	public static void onLeftClickBlockEvent(PlayerInteractEvent.LeftClickBlock event)
+	{
+		if(event.getEntity() instanceof PlayerEntity)
+		{
+			PlayerEntity playerEntity = (PlayerEntity) event.getEntity();
+			if(CreativeShockEffect.doesCreativeShockLimit(playerEntity, 0, 3))
+				event.setCanceled(true); //It is necessary to do this here in order to prevent creative mode players from breaking blocks
+		}
+	}
+	
+	@SubscribeEvent(priority = EventPriority.LOW)
+	public static void onPlayerTickEvent(TickEvent.PlayerTickEvent event)
+	{
+		if(event.player.isPotionActive(MSEffects.CREATIVE_SHOCK.get()))
+		{
+			if(CreativeShockEffect.doesCreativeShockLimit(event.player, 2, 5))
+				event.player.stopFallFlying(); //Stopping elytra moment on client side prevent visual disruptions
 		}
 	}
 }

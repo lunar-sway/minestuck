@@ -81,8 +81,10 @@ public class ClientProxy
 		RenderTypeLookup.setRenderLayer(MSBlocks.CRUXITE_DOWEL, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.BLENDER, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.CHESSBOARD, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.SPIKES, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.MINI_FROG_STATUE, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.MINI_WIZARD_STATUE, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.NAKAGATOR_STATUE, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.CASSETTE_PLAYER, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.PIPE, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.PARCEL_PYXIS, RenderType.getCutout());
@@ -115,6 +117,7 @@ public class ClientProxy
 		RenderTypeLookup.setRenderLayer(MSBlocks.WHITE_CROWN_STAINED_GLASS, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(MSBlocks.WHITE_PAWN_STAINED_GLASS, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(MSBlocks.LUNCHTOP, RenderType.getTranslucent());
+		RenderTypeLookup.setRenderLayer(MSBlocks.PLATFORM_BLOCK, RenderType.getTranslucent());
 
 		MSKeyHandler.registerKeys();
 		

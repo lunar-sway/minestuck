@@ -5,6 +5,7 @@ import com.mraof.minestuck.block.fluid.FlowingModFluidBlock;
 import com.mraof.minestuck.block.fluid.FlowingWaterColorsBlock;
 import com.mraof.minestuck.block.machine.*;
 import com.mraof.minestuck.block.plant.*;
+import com.mraof.minestuck.block.redstone.*;
 import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.util.CustomVoxelShape;
@@ -87,6 +88,7 @@ public class MSBlocks
 			, GREEN_STONE_BRICK_SALAMANDER_LEFT = getNull(), GREEN_STONE_BRICK_SALAMANDER_RIGHT = getNull(), GREEN_STONE_BRICK_SKAIA = getNull(), GREEN_STONE_BRICK_TURTLE = getNull();
 	public static final Block DENSE_CLOUD = getNull(), BRIGHT_DENSE_CLOUD = getNull();
 	public static final Block SUGAR_CUBE = getNull();
+	public static final Block SPIKES = getNull();
 	
 	//Land Tree Blocks
 	public static final Block GLOWING_LOG = getNull(), FROST_LOG = getNull(), RAINBOW_LOG = getNull(), END_LOG = getNull();
@@ -133,6 +135,7 @@ public class MSBlocks
 	public static final Block PARCEL_PYXIS = getNull();
 	public static final Block PYXIS_LID = getNull();
 	public static final Block STONE_SLAB = getNull();
+	public static final Block NAKAGATOR_STATUE = getNull();
 	
 	//Structure Land Blocks
 	public static final Block BLACK_CASTLE_BRICK_STAIRS = getNull(), DARK_GRAY_CASTLE_BRICK_STAIRS = getNull(), LIGHT_GRAY_CASTLE_BRICK_STAIRS = getNull(), WHITE_CASTLE_BRICK_STAIRS = getNull();
@@ -143,7 +146,22 @@ public class MSBlocks
 	public static final Block BLACK_CASTLE_BRICK_SLAB = getNull(), DARK_GRAY_CASTLE_BRICK_SLAB = getNull(), LIGHT_GRAY_CASTLE_BRICK_SLAB = getNull(), WHITE_CASTLE_BRICK_SLAB = getNull();
 	public static final Block CHALK_SLAB = getNull(), CHALK_BRICK_SLAB = getNull(), PINK_STONE_BRICK_SLAB = getNull(), BROWN_STONE_BRICK_SLAB = getNull(), GREEN_STONE_BRICK_SLAB = getNull();
 	public static final Block RAINBOW_PLANKS_SLAB = getNull(), END_PLANKS_SLAB = getNull(), DEAD_PLANKS_SLAB = getNull(), TREATED_PLANKS_SLAB = getNull();
-
+	
+	//Dungeon Functional Blocks
+	public static final Block TRAJECTORY_BLOCK = getNull();
+	public static final Block STAT_STORER = getNull();
+	public static final Block REMOTE_OBSERVER = getNull();
+	public static final Block WIRELESS_REDSTONE_TRANSMITTER = getNull();
+	public static final Block WIRELESS_REDSTONE_RECEIVER = getNull();
+	public static final Block SOLID_SWITCH = getNull();
+	public static final Block ONE_SECOND_INTERVAL_TIMED_SOLID_SWITCH = getNull();
+	public static final Block TWO_SECOND_INTERVAL_TIMED_SOLID_SWITCH = getNull();
+	public static final Block SUMMONER = getNull();
+	public static final Block AREA_EFFECT_BLOCK = getNull();
+	public static final Block PLATFORM_GENERATOR = getNull();
+	public static final Block PLATFORM_BLOCK = getNull();
+	public static final Block ITEM_MAGNET = getNull();
+	
 	//Core Functional Land Blocks
 	public static final Block GATE = getNull();
 	public static final Block RETURN_NODE = getNull();
@@ -337,6 +355,7 @@ public class MSBlocks
 		registry.register(new Block(Block.Properties.create(Material.GLASS, MaterialColor.YELLOW).hardnessAndResistance(0.5F).sound(SoundType.SNOW)).setRegistryName("dense_cloud"));
 		registry.register(new Block(Block.Properties.create(Material.GLASS, MaterialColor.LIGHT_GRAY).hardnessAndResistance(0.5F).sound(SoundType.SNOW)).setRegistryName("bright_dense_cloud"));
 		registry.register(new Block(Block.Properties.create(Material.SAND, MaterialColor.SNOW).hardnessAndResistance(0.4F).sound(SoundType.SAND)).setRegistryName("sugar_cube"));
+		registry.register(new SpikeBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(2).sound(SoundType.METAL), MSBlockShapes.SPIKES).setRegistryName("spikes"));
 		
 		registry.register(new FlammableLogBlock(MaterialColor.LIGHT_BLUE, Block.Properties.create(Material.WOOD, MaterialColor.LIGHT_BLUE).hardnessAndResistance(2.0F).harvestTool(ToolType.AXE).lightValue(11).sound(SoundType.WOOD)).setRegistryName("glowing_log"));
 		registry.register(new FlammableLogBlock(MaterialColor.ICE, Block.Properties.create(Material.WOOD, MaterialColor.ICE).hardnessAndResistance(2.0F).harvestTool(ToolType.AXE).sound(SoundType.WOOD)).setRegistryName("frost_log"));
@@ -434,6 +453,7 @@ public class MSBlocks
 		registry.register(new PipeBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(4.0F).sound(SoundType.METAL), MSBlockShapes.PIPE).setRegistryName("pipe"));
 		registry.register(new Block(Block.Properties.create(Material.IRON).hardnessAndResistance(4.0F).sound(SoundType.METAL)).setRegistryName("pipe_intersection"));
 		registry.register(new StoneTabletBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.3F)).setRegistryName("stone_slab")); //same thing as stone tablet
+		registry.register(new DecorBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.5F), MSBlockShapes.NAKAGATOR_STATUE).setRegistryName("nakagator_statue"));
 		
 		registry.register(new StairsBlock(() -> MSBlocks.BLACK_CASTLE_BRICKS.getDefaultState(), Block.Properties.from(blackCastleBricks)).setRegistryName("black_castle_brick_stairs"));
 		registry.register(new StairsBlock(() -> MSBlocks.DARK_GRAY_CASTLE_BRICKS.getDefaultState(), Block.Properties.from(darkGrayCastleBricks)).setRegistryName("dark_gray_castle_brick_stairs"));
@@ -468,6 +488,20 @@ public class MSBlocks
 		registry.register(new SlabBlock(Block.Properties.from(endPlanks)).setRegistryName("end_planks_slab"));
 		registry.register(new SlabBlock(Block.Properties.from(deadPlanks)).setRegistryName("dead_planks_slab"));
 		registry.register(new SlabBlock(Block.Properties.from(treatedPlanks)).setRegistryName("treated_planks_slab"));
+		
+		registry.register(new TrajectoryBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3).sound(SoundType.METAL)).setRegistryName("trajectory_block"));
+		registry.register(new StatStorerBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3).sound(SoundType.METAL)).setRegistryName("stat_storer"));
+		registry.register(new RemoteObserverBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3).sound(SoundType.METAL)).setRegistryName("remote_observer"));
+		registry.register(new WirelessRedstoneTransmitterBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3).sound(SoundType.METAL)).setRegistryName("wireless_redstone_transmitter"));
+		registry.register(new WirelessRedstoneReceiverBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3).tickRandomly().sound(SoundType.METAL)).setRegistryName("wireless_redstone_receiver"));
+		registry.register(new SolidSwitchBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3).sound(SoundType.METAL).lightValue(15)).setRegistryName("solid_switch"));
+		registry.register(new TimedSolidSwitchBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3).sound(SoundType.METAL).lightValue(12), 20).setRegistryName("one_second_interval_timed_solid_switch"));
+		registry.register(new TimedSolidSwitchBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3).sound(SoundType.METAL).lightValue(15), 40).setRegistryName("two_second_interval_timed_solid_switch"));
+		registry.register(new SummonerBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3).sound(SoundType.METAL)).setRegistryName("summoner"));
+		registry.register(new AreaEffectBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(6).sound(SoundType.METAL)).setRegistryName("area_effect_block"));
+		registry.register(new PlatformGeneratorBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(6).sound(SoundType.METAL)).setRegistryName("platform_generator"));
+		registry.register(new PlatformBlock(Block.Properties.create(Material.MISCELLANEOUS).hardnessAndResistance(0.2F).sound(SoundType.SCAFFOLDING).lightValue(6).notSolid()).setRegistryName("platform_block"));
+		registry.register(new ItemMagnetBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3).sound(SoundType.METAL)).setRegistryName("item_magnet"));
 		
 		registry.register(new GateBlock(Block.Properties.create(Material.PORTAL).doesNotBlockMovement().hardnessAndResistance(-1.0F, 25.0F).sound(SoundType.GLASS).lightValue(11).noDrops()).setRegistryName("gate"));
 		registry.register(new ReturnNodeBlock(Block.Properties.create(Material.PORTAL).doesNotBlockMovement().hardnessAndResistance(-1.0F, 10.0F).sound(SoundType.GLASS).lightValue(11).noDrops()).setRegistryName("return_node"));
