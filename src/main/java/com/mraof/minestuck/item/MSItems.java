@@ -411,6 +411,7 @@ public class MSItems
 	public static final Item OBSIDIAN_BUCKET = getNull();
 	
 	//Alchemy Items
+	public static final Item PLUTONIUM_CORE = getNull();
 	public static final Item GRIMOIRE = getNull();
 	public static final Item BATTERY = getNull();
 	public static final Item BARBASOL = getNull();
@@ -1070,6 +1071,7 @@ public class MSItems
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("raw_cruxite"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("raw_uranium"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("energy_core"));
+		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("plutonium_core"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("sburb_code"));
 		registry.register(new Item(new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("computer_parts"));
 		//have to fix Cruxite artifact classes

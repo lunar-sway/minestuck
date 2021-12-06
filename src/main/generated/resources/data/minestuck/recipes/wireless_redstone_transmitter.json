@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "rqr",
+    "iei",
+    "iii"
+  ],
+  "key": {
+    "e": {
+      "item": "minestuck:plutonium_core"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    },
+    "q": {
+      "item": "minecraft:quartz"
+    }
+  },
+  "result": {
+    "item": "minestuck:wireless_redstone_transmitter"
+  }
+}

@@ -775,7 +775,11 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addExtra(MSItems.BOONDOLLARS, "amount", "Amount: %s");
 		add(MSItems.RAW_CRUXITE, "Raw Cruxite");
 		add(MSItems.RAW_URANIUM, "Uranium Lump");
+		addTooltip(MSItems.RAW_URANIUM, "Is this even safe to be around?");
 		add(MSItems.ENERGY_CORE, "Energy Core");
+		addTooltip(MSItems.ENERGY_CORE, "The power of radiation in a neat little packet.");
+		add(MSItems.PLUTONIUM_CORE, "Plutonium Spatial Core");
+		addTooltip(MSItems.PLUTONIUM_CORE, "It seems to pulse gently, moving its immediate surroundings slightly each time.");
 		add(MSItems.TEMPLE_SCANNER, "Temple Scanner");
 		addExtra(MSItems.TEMPLE_SCANNER, "successMessage", "Closest detected temple around %s blocks away");
 		addExtra(MSItems.TEMPLE_SCANNER, "failMessage", "No temple detected nearby");
