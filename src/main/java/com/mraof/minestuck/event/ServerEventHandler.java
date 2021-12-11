@@ -32,6 +32,8 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.ChorusFruitItem;
+import net.minecraft.item.EnderPearlItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.potion.Effect;
@@ -431,8 +433,13 @@ public class ServerEventHandler
 	@SubscribeEvent
 	public static void onRightClickItem(PlayerInteractEvent.RightClickItem event)
 	{
-		if(CreativeShockEffect.doesCreativeShockLimit(event.getPlayer(), 0, 3) && event.getItemStack().getItem() instanceof CruxiteArtifactItem) //prevents players from using an artifact to enter while under effects of Creative Shock
-			event.setCanceled(true);
+		if(CreativeShockEffect.doesCreativeShockLimit(event.getPlayer(), 0, 3))
+		{
+			if(event.getItemStack().getItem() instanceof CruxiteArtifactItem //Cruxite check prevents players from using an artifact to enter while under effects of Creative Shock
+					|| event.getItemStack().getItem() instanceof EnderPearlItem
+					|| event.getItemStack().getItem() instanceof ChorusFruitItem)
+				event.setCanceled(true);
+		}
 	}
 	
 	@SubscribeEvent

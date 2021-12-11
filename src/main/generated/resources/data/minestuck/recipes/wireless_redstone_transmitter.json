@@ -20,6 +20,7 @@
     }
   },
   "result": {
-    "item": "minestuck:wireless_redstone_transmitter"
+    "item": "minestuck:wireless_redstone_transmitter",
+    "count": 2
   }
 }

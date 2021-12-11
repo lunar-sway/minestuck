@@ -17,6 +17,7 @@
     }
   },
   "result": {
-    "item": "minestuck:solid_switch"
+    "item": "minestuck:solid_switch",
+    "count": 2
   }
 }

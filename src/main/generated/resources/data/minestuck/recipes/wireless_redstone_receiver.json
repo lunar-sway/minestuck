@@ -23,6 +23,7 @@
     }
   },
   "result": {
-    "item": "minestuck:wireless_redstone_receiver"
+    "item": "minestuck:wireless_redstone_receiver",
+    "count": 2
   }
 }
