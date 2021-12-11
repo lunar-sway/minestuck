@@ -1,6 +1,8 @@
 {
-    "parent": "block/cube_all",
+    "parent": "block/cube_bottom_top",
     "textures": {
-        "all": "minestuck:block/remote_observer"
+        "bottom": "minecraft:block/smooth_stone",
+        "top": "minestuck:block/area_effect_block",
+        "side": "minestuck:block/remote_observer"
     }
 }
