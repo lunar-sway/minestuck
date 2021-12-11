@@ -2,16 +2,16 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "minestuck:stat_storer"
+      "minestuck:and_gate_block"
     ]
   },
   "criteria": {
-    "has_plutonium_core": {
+    "has_redstone_torch": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "minestuck:plutonium_core"
+            "item": "minecraft:redstone_torch"
           }
         ]
       }
@@ -19,13 +19,13 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "minestuck:stat_storer"
+        "recipe": "minestuck:and_gate_block"
       }
     }
   },
   "requirements": [
     [
-      "has_plutonium_core",
+      "has_redstone_torch",
       "has_the_recipe"
     ]
   ]

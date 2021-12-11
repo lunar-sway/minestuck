@@ -24,8 +24,6 @@ public class LogicGateBlock extends RedstoneDiodeBlock
 		this.setDefaultState(this.stateContainer.getBaseState().with(STATE, gateState).with(HORIZONTAL_FACING, Direction.NORTH).with(POWERED, false));
 	}
 	
-	//TODO power output direction seems reversed to the block model
-	//TODO make sure it doesnt need a solid block to stand on
 	//TODO allow power sources other than vanilla as valid input if possible
 	//TODO add Inverter block for NOT gate functions, use that block as a crafting ingredient for NAND/NOR/XNOR
 	
@@ -63,6 +61,12 @@ public class LogicGateBlock extends RedstoneDiodeBlock
 	protected int getDelay(BlockState state)
 	{
 		return 2;
+	}
+	
+	@Override
+	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos)
+	{
+		return true; //default for RedstoneDiode means it cannot rest on air, now it can
 	}
 	
 	@Override

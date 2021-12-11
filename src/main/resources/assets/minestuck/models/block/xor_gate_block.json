@@ -1,10 +1,10 @@
 {
     "parent": "block/block",
     "textures": {
-        "back": "minestuck:block/and_gate_back",
+        "back": "minestuck:block/xor_gate_back",
         "right_side": "minestuck:block/logic_gate_right_side",
         "left_side": "minestuck:block/logic_gate_left_side",
-        "top": "minestuck:block/and_gate_top",
+        "top": "minestuck:block/xor_gate_top",
         "bottom": "minestuck:block/logic_gate_bottom",
         "front": "minestuck:block/logic_gate_front",
         "particle": "minestuck:block/and_gate_top"

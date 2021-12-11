@@ -340,6 +340,12 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.PLATFORM_GENERATOR, "Platform Generator");
 		add(MSBlocks.PLATFORM_BLOCK, "Platform Block");
 		add(MSBlocks.ITEM_MAGNET, "Item Magnet");
+		add(MSBlocks.AND_GATE_BLOCK, "AND Gate");
+		add(MSBlocks.OR_GATE_BLOCK, "OR Gate");
+		add(MSBlocks.XOR_GATE_BLOCK, "XOR Gate");
+		add(MSBlocks.NAND_GATE_BLOCK, "NAND Gate");
+		add(MSBlocks.NOR_GATE_BLOCK, "NOR Gate");
+		add(MSBlocks.XNOR_GATE_BLOCK, "XNOR Gate");
 		add(MSBlocks.GATE, "Gate");
 		add(MSBlocks.RETURN_NODE, "Return Node");
 		MSBlocks.CRUXTRUDER.forEachBlock(block -> add(block, "Cruxtruder"));

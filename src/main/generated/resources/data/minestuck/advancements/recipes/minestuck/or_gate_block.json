@@ -2,16 +2,16 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "minestuck:one_second_interval_timed_solid_switch"
+      "minestuck:or_gate_block"
     ]
   },
   "criteria": {
-    "has_solid_switch": {
+    "has_redstone_torch": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "minestuck:solid_switch"
+            "item": "minecraft:redstone_torch"
           }
         ]
       }
@@ -19,13 +19,13 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "minestuck:one_second_interval_timed_solid_switch"
+        "recipe": "minestuck:or_gate_block"
       }
     }
   },
   "requirements": [
     [
-      "has_solid_switch",
+      "has_redstone_torch",
       "has_the_recipe"
     ]
   ]
