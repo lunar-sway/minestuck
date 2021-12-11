@@ -1,9 +1,11 @@
 package com.mraof.minestuck.block.redstone;
 
 import com.mraof.minestuck.block.MSProperties;
+import com.mraof.minestuck.util.ParticlesAroundSolidBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.RedstoneDiodeBlock;
+import net.minecraft.particles.RedstoneParticleData;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.*;
@@ -13,6 +15,8 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+
+import java.util.Random;
 
 public class LogicGateBlock extends RedstoneDiodeBlock
 {
@@ -24,7 +28,6 @@ public class LogicGateBlock extends RedstoneDiodeBlock
 		this.setDefaultState(this.stateContainer.getBaseState().with(STATE, gateState).with(HORIZONTAL_FACING, Direction.NORTH).with(POWERED, false));
 	}
 	
-	//TODO allow power sources other than vanilla as valid input if possible
 	//TODO add Inverter block for NOT gate functions, use that block as a crafting ingredient for NAND/NOR/XNOR
 	
 	@Override
@@ -32,8 +35,8 @@ public class LogicGateBlock extends RedstoneDiodeBlock
 	{
 		Direction leftInput = state.get(HORIZONTAL_FACING).rotateYCCW();
 		Direction rightInput = state.get(HORIZONTAL_FACING).rotateY();
-		boolean leftInputSendingPower = getPowerOnSide(worldIn, pos.offset(leftInput), leftInput) > 0;
-		boolean rightInputSendingPower = getPowerOnSide(worldIn, pos.offset(rightInput), rightInput) > 0;
+		boolean leftInputSendingPower = getPowerOnSide(worldIn, pos, leftInput) > 0;
+		boolean rightInputSendingPower = getPowerOnSide(worldIn, pos, rightInput) > 0;
 		State assignedLogicState = state.get(STATE);
 		
 		if(assignedLogicState == State.AND)
@@ -51,10 +54,16 @@ public class LogicGateBlock extends RedstoneDiodeBlock
 	}
 	
 	@Override
+	protected int getPowerOnSide(IWorldReader worldIn, BlockPos pos, Direction side)
+	{
+		return worldIn.getDimension().getWorld().getRedstonePower(pos.offset(side), side);
+	}
+	
+	@Override
 	public boolean isLocked(IWorldReader worldIn, BlockPos pos, BlockState state)
 	{
-		Direction behind = state.get(HORIZONTAL_FACING).getOpposite();
-		return getPowerOnSide(worldIn, pos.offset(behind), behind) > 0;
+		Direction behind = state.get(HORIZONTAL_FACING);
+		return getPowerOnSide(worldIn, pos, behind) > 0;
 	}
 	
 	@Override
@@ -73,6 +82,13 @@ public class LogicGateBlock extends RedstoneDiodeBlock
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
 	{
 		return Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+	}
+	
+	@Override
+	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
+	{
+		if(shouldBePowered(worldIn, pos, stateIn))
+			ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE_DUST);
 	}
 	
 	@Override

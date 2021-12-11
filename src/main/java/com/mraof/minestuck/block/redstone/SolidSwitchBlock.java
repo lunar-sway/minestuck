@@ -1,8 +1,10 @@
 package com.mraof.minestuck.block.redstone;
 
+import com.mraof.minestuck.util.ParticlesAroundSolidBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.particles.RedstoneParticleData;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -13,6 +15,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
+import java.util.Random;
 
 public class SolidSwitchBlock extends Block
 {
@@ -64,6 +67,13 @@ public class SolidSwitchBlock extends Block
 	public int getLightValue(BlockState state)
 	{
 		return state.get(POWERED) ? super.getLightValue(state) : 0;
+	}
+	
+	@Override
+	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
+	{
+		if(stateIn.get(POWERED))
+			ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE_DUST);
 	}
 	
 	@Override
