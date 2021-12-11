@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minestuck:wireless_redstone_transmitter"
+    ]
+  },
+  "criteria": {
+    "has_plutonium_core": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minestuck:plutonium_core"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minestuck:wireless_redstone_transmitter"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_plutonium_core",
+      "has_the_recipe"
+    ]
+  ]
+}

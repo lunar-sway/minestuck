@@ -744,17 +744,23 @@ public class MSItems
 		registerItemBlock(registry, TREATED_PLANKS_SLAB, MSItemGroup.LANDS);
 		
 		registerItemBlock(registry, TRAJECTORY_BLOCK, MSItemGroup.LANDS);
-		registerItemBlock(registry, STAT_STORER, MSItemGroup.LANDS);
-		registerItemBlock(registry, REMOTE_OBSERVER, MSItemGroup.LANDS);
-		registerItemBlock(registry, WIRELESS_REDSTONE_TRANSMITTER, MSItemGroup.LANDS);
-		registerItemBlock(registry, WIRELESS_REDSTONE_RECEIVER, MSItemGroup.LANDS);
-		registerItemBlock(registry, SOLID_SWITCH, MSItemGroup.LANDS);
-		registerItemBlock(registry, ONE_SECOND_INTERVAL_TIMED_SOLID_SWITCH, MSItemGroup.LANDS);
-		registerItemBlock(registry, TWO_SECOND_INTERVAL_TIMED_SOLID_SWITCH, MSItemGroup.LANDS);
+		registerItemBlock(registry, STAT_STORER, MSItemGroup.MAIN);
+		registerItemBlock(registry, REMOTE_OBSERVER, MSItemGroup.MAIN);
+		registerItemBlock(registry, WIRELESS_REDSTONE_TRANSMITTER, MSItemGroup.MAIN);
+		registerItemBlock(registry, WIRELESS_REDSTONE_RECEIVER, MSItemGroup.MAIN);
+		registerItemBlock(registry, SOLID_SWITCH, MSItemGroup.MAIN);
+		registerItemBlock(registry, ONE_SECOND_INTERVAL_TIMED_SOLID_SWITCH, MSItemGroup.MAIN);
+		registerItemBlock(registry, TWO_SECOND_INTERVAL_TIMED_SOLID_SWITCH, MSItemGroup.MAIN);
 		registerItemBlock(registry, SUMMONER, MSItemGroup.LANDS);
 		registerItemBlock(registry, AREA_EFFECT_BLOCK, MSItemGroup.LANDS);
 		registerItemBlock(registry, PLATFORM_GENERATOR, MSItemGroup.LANDS);
-		registerItemBlock(registry, ITEM_MAGNET, MSItemGroup.LANDS);
+		registerItemBlock(registry, ITEM_MAGNET, MSItemGroup.MAIN);
+		registerItemBlock(registry, AND_GATE_BLOCK, MSItemGroup.MAIN);
+		registerItemBlock(registry, OR_GATE_BLOCK, MSItemGroup.MAIN);
+		registerItemBlock(registry, XOR_GATE_BLOCK, MSItemGroup.MAIN);
+		registerItemBlock(registry, NAND_GATE_BLOCK, MSItemGroup.MAIN);
+		registerItemBlock(registry, NOR_GATE_BLOCK, MSItemGroup.MAIN);
+		registerItemBlock(registry, XNOR_GATE_BLOCK, MSItemGroup.MAIN);
 		
 		registry.register(new CruxtruderItem(MSBlocks.CRUXTRUDER, new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("cruxtruder"));
 		registerItemBlock(registry, CRUXTRUDER_LID, MSItemGroup.MAIN);

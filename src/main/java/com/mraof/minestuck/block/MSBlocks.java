@@ -161,6 +161,12 @@ public class MSBlocks
 	public static final Block PLATFORM_GENERATOR = getNull();
 	public static final Block PLATFORM_BLOCK = getNull();
 	public static final Block ITEM_MAGNET = getNull();
+	public static final Block AND_GATE_BLOCK = getNull();
+	public static final Block OR_GATE_BLOCK = getNull();
+	public static final Block XOR_GATE_BLOCK = getNull();
+	public static final Block NAND_GATE_BLOCK = getNull();
+	public static final Block NOR_GATE_BLOCK = getNull();
+	public static final Block XNOR_GATE_BLOCK = getNull();
 	
 	//Core Functional Land Blocks
 	public static final Block GATE = getNull();
@@ -502,6 +508,12 @@ public class MSBlocks
 		registry.register(new PlatformGeneratorBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(6).sound(SoundType.METAL)).setRegistryName("platform_generator"));
 		registry.register(new PlatformBlock(Block.Properties.create(Material.MISCELLANEOUS).hardnessAndResistance(0.2F).sound(SoundType.SCAFFOLDING).lightValue(6).notSolid()).setRegistryName("platform_block"));
 		registry.register(new ItemMagnetBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3).sound(SoundType.METAL)).setRegistryName("item_magnet"));
+		registry.register(new LogicGateBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(1).sound(SoundType.STONE), LogicGateBlock.State.AND).setRegistryName("and_gate_block"));
+		registry.register(new LogicGateBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(1).sound(SoundType.STONE), LogicGateBlock.State.OR).setRegistryName("or_gate_block"));
+		registry.register(new LogicGateBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(1).sound(SoundType.STONE), LogicGateBlock.State.XOR).setRegistryName("xor_gate_block"));
+		registry.register(new LogicGateBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(1).sound(SoundType.STONE), LogicGateBlock.State.NAND).setRegistryName("nand_gate_block"));
+		registry.register(new LogicGateBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(1).sound(SoundType.STONE), LogicGateBlock.State.NOR).setRegistryName("nor_gate_block"));
+		registry.register(new LogicGateBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(1).sound(SoundType.STONE), LogicGateBlock.State.XNOR).setRegistryName("xnor_gate_block"));
 		
 		registry.register(new GateBlock(Block.Properties.create(Material.PORTAL).doesNotBlockMovement().hardnessAndResistance(-1.0F, 25.0F).sound(SoundType.GLASS).lightValue(11).noDrops()).setRegistryName("gate"));
 		registry.register(new ReturnNodeBlock(Block.Properties.create(Material.PORTAL).doesNotBlockMovement().hardnessAndResistance(-1.0F, 10.0F).sound(SoundType.GLASS).lightValue(11).noDrops()).setRegistryName("return_node"));
