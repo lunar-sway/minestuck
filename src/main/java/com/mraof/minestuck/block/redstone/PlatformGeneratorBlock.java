@@ -64,8 +64,11 @@ public class PlatformGeneratorBlock extends MSDirectionalBlock
 	@Override
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
 	{
-		if(worldIn.isBlockPowered(pos))
-			ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE_DUST);
+		if(worldIn.getRedstonePowerFromNeighbors(pos) > 0)
+		{
+			if(rand.nextInt(16 - worldIn.getRedstonePowerFromNeighbors(pos)) == 0)
+				ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE_DUST);
+		}
 	}
 	
 	@Override

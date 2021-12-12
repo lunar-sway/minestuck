@@ -393,6 +393,8 @@
   "block.minestuck.unstable_tnt": "Unstable TNT",
   "block.minestuck.uranium_block": "Uranium Block",
   "block.minestuck.uranium_cooker": "Cookalyzer",
+  "block.minestuck.variable_solid_switch": "Variable Solid Switch",
+  "block.minestuck.variable_solid_switch.tooltip": "The functionality of a solid switch but throw in the ability to change what redstone power it gives off.",
   "block.minestuck.vein": "Vein",
   "block.minestuck.vein_corner": "Vein",
   "block.minestuck.vein_corner.tooltip": "Corner",

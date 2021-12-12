@@ -96,7 +96,10 @@ public class WirelessRedstoneReceiverBlock extends Block
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
 	{
 		if(stateIn.get(POWER) > 0)
-			ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE_DUST);
+		{
+			if(rand.nextInt(16 - stateIn.get(POWER)) == 0)
+				ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE_DUST);
+		}
 	}
 	
 	@Override

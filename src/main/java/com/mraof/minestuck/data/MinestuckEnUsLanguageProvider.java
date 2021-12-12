@@ -331,6 +331,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSBlocks.WIRELESS_REDSTONE_RECEIVER, "Receives signals from Wireless Redstone Transmitters.");
 		add(MSBlocks.SOLID_SWITCH, "Solid Switch");
 		addTooltip(MSBlocks.SOLID_SWITCH, "KACHUNK");
+		add(MSBlocks.VARIABLE_SOLID_SWITCH, "Variable Solid Switch");
+		addTooltip(MSBlocks.VARIABLE_SOLID_SWITCH, "The functionality of a solid switch but throw in the ability to change what redstone power it gives off.");
 		add(MSBlocks.ONE_SECOND_INTERVAL_TIMED_SOLID_SWITCH, "Timed Solid Switch(One Second)");
 		addTooltip(MSBlocks.ONE_SECOND_INTERVAL_TIMED_SOLID_SWITCH, "Loses one value of power every second until it turns off.");
 		add(MSBlocks.TWO_SECOND_INTERVAL_TIMED_SOLID_SWITCH, "Timed Solid Switch(Two Second)");
