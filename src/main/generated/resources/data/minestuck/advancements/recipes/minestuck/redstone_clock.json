@@ -2,16 +2,16 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "minestuck:or_gate_block"
+      "minestuck:redstone_clock"
     ]
   },
   "criteria": {
-    "has_redstone_torch": {
+    "has_clock": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "minecraft:redstone_torch"
+            "item": "minecraft:clock"
           }
         ]
       }
@@ -19,13 +19,13 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "minestuck:or_gate_block"
+        "recipe": "minestuck:redstone_clock"
       }
     }
   },
   "requirements": [
     [
-      "has_redstone_torch",
+      "has_clock",
       "has_the_recipe"
     ]
   ]

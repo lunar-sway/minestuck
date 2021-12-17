@@ -299,6 +299,7 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(PLATFORM_GENERATOR);
 		registerLootTable(PLATFORM_BLOCK, func_218482_a());
 		registerDropSelfLootTable(ITEM_MAGNET);
+		registerDropSelfLootTable(REDSTONE_CLOCK);
 		registerDropSelfLootTable(AND_GATE_BLOCK);
 		registerDropSelfLootTable(OR_GATE_BLOCK);
 		registerDropSelfLootTable(XOR_GATE_BLOCK);

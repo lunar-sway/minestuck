@@ -162,6 +162,7 @@ public class MSBlocks
 	public static final Block PLATFORM_GENERATOR = getNull();
 	public static final Block PLATFORM_BLOCK = getNull();
 	public static final Block ITEM_MAGNET = getNull();
+	public static final Block REDSTONE_CLOCK = getNull();
 	public static final Block AND_GATE_BLOCK = getNull();
 	public static final Block OR_GATE_BLOCK = getNull();
 	public static final Block XOR_GATE_BLOCK = getNull();
@@ -510,6 +511,7 @@ public class MSBlocks
 		registry.register(new PlatformGeneratorBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(6).sound(SoundType.METAL)).setRegistryName("platform_generator"));
 		registry.register(new PlatformBlock(Block.Properties.create(Material.MISCELLANEOUS).hardnessAndResistance(0.2F).sound(SoundType.SCAFFOLDING).lightValue(6).notSolid()).setRegistryName("platform_block"));
 		registry.register(new ItemMagnetBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3).sound(SoundType.METAL)).setRegistryName("item_magnet"));
+		registry.register(new RedstoneClockBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3).sound(SoundType.METAL)).setRegistryName("redstone_clock"));
 		registry.register(new LogicGateBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(1).sound(SoundType.STONE), LogicGateBlock.State.AND).setRegistryName("and_gate_block"));
 		registry.register(new LogicGateBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(1).sound(SoundType.STONE), LogicGateBlock.State.OR).setRegistryName("or_gate_block"));
 		registry.register(new LogicGateBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(1).sound(SoundType.STONE), LogicGateBlock.State.XOR).setRegistryName("xor_gate_block"));

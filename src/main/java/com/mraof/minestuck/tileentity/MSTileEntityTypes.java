@@ -38,4 +38,5 @@ public class MSTileEntityTypes
 	public static final RegistryObject<TileEntityType<AreaEffectTileEntity>> AREA_EFFECT = REGISTER.register("area_effect", () -> TileEntityType.Builder.create(AreaEffectTileEntity::new, MSBlocks.AREA_EFFECT_BLOCK).build(null));
 	public static final RegistryObject<TileEntityType<PlatformGeneratorTileEntity>> PLATFORM_GENERATOR = REGISTER.register("platform_generator", () -> TileEntityType.Builder.create(PlatformGeneratorTileEntity::new, MSBlocks.PLATFORM_GENERATOR).build(null));
 	public static final RegistryObject<TileEntityType<ItemMagnetTileEntity>> ITEM_MAGNET = REGISTER.register("item_magnet", () -> TileEntityType.Builder.create(ItemMagnetTileEntity::new, MSBlocks.ITEM_MAGNET).build(null));
+	public static final RegistryObject<TileEntityType<RedstoneClockTileEntity>> REDSTONE_CLOCK = REGISTER.register("redstone_clock", () -> TileEntityType.Builder.create(RedstoneClockTileEntity::new, MSBlocks.REDSTONE_CLOCK).build(null));
 }

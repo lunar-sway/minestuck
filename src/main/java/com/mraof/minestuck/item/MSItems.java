@@ -756,12 +756,13 @@ public class MSItems
 		registerItemBlock(registry, AREA_EFFECT_BLOCK, MSItemGroup.LANDS);
 		registerItemBlock(registry, PLATFORM_GENERATOR, MSItemGroup.LANDS);
 		registerItemBlock(registry, ITEM_MAGNET, MSItemGroup.MAIN);
-		registerItemBlock(registry, AND_GATE_BLOCK, MSItemGroup.MAIN);
-		registerItemBlock(registry, OR_GATE_BLOCK, MSItemGroup.MAIN);
-		registerItemBlock(registry, XOR_GATE_BLOCK, MSItemGroup.MAIN);
-		registerItemBlock(registry, NAND_GATE_BLOCK, MSItemGroup.MAIN);
-		registerItemBlock(registry, NOR_GATE_BLOCK, MSItemGroup.MAIN);
-		registerItemBlock(registry, XNOR_GATE_BLOCK, MSItemGroup.MAIN);
+		registerItemBlock(registry, REDSTONE_CLOCK, MSItemGroup.MAIN);
+		registerItemBlock(registry, AND_GATE_BLOCK);
+		registerItemBlock(registry, OR_GATE_BLOCK);
+		registerItemBlock(registry, XOR_GATE_BLOCK);
+		registerItemBlock(registry, NAND_GATE_BLOCK);
+		registerItemBlock(registry, NOR_GATE_BLOCK);
+		registerItemBlock(registry, XNOR_GATE_BLOCK);
 		
 		registry.register(new CruxtruderItem(MSBlocks.CRUXTRUDER, new Item.Properties().group(MSItemGroup.MAIN)).setRegistryName("cruxtruder"));
 		registerItemBlock(registry, CRUXTRUDER_LID, MSItemGroup.MAIN);

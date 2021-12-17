@@ -65,11 +65,11 @@ public class TrajectoryBlock extends MSDirectionalBlock
 		if(blockState.get(POWER) != 0)
 		{
 			int power = blockState.get(POWER);
-			if(entityIn.onGround)
-				entityIn.onGround = false;
 			double powerMod = power / 16D;
 			if(!(blockState.get(FACING) == Direction.UP && blockState.get(POWER) < 7))
 			{
+				if(entityIn.onGround)
+					entityIn.onGround = false;
 				entityIn.setMotion(entityIn.getMotion().x * 0.8 + blockState.get(FACING).getXOffset() * powerMod, entityIn.getMotion().y * 0.8 + blockState.get(FACING).getYOffset() * powerMod, entityIn.getMotion().z * 0.8 + blockState.get(FACING).getZOffset() * powerMod);
 			}
 		}
@@ -94,7 +94,7 @@ public class TrajectoryBlock extends MSDirectionalBlock
 	@Override
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
 	{
-		if(rand.nextInt(5) == 0 && stateIn.get(POWER) != 0)
+		if(rand.nextInt(8) == 0 && stateIn.get(POWER) != 0)
 		{
 			double powerMod = stateIn.get(POWER) / 120D + 0.075;
 			worldIn.addParticle(ParticleTypes.CLOUD, pos.getX() + 0.5, pos.up().getY() + 0.25, pos.getZ() + 0.5, stateIn.get(FACING).getXOffset() * powerMod, stateIn.get(FACING).getYOffset() * powerMod, stateIn.get(FACING).getZOffset() * powerMod);

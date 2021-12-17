@@ -38,6 +38,7 @@ import com.mraof.minestuck.skaianet.PredefineData;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
 import com.mraof.minestuck.tileentity.machine.*;
+import com.mraof.minestuck.tileentity.redstone.RedstoneClockTileEntity;
 import com.mraof.minestuck.world.GateHandler;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.LandChunkGenerator;
@@ -342,6 +343,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.PLATFORM_GENERATOR, "Platform Generator");
 		add(MSBlocks.PLATFORM_BLOCK, "Platform Block");
 		add(MSBlocks.ITEM_MAGNET, "Item Magnet");
+		add(MSBlocks.REDSTONE_CLOCK, "Redstone Clock");
 		add(MSBlocks.AND_GATE_BLOCK, "AND Gate");
 		add(MSBlocks.OR_GATE_BLOCK, "OR Gate");
 		add(MSBlocks.XOR_GATE_BLOCK, "XOR Gate");
@@ -1434,6 +1436,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MiniPunchDesignixTileEntity.TITLE, "Miniature Punch Designix");
 		add(UraniumCookerTileEntity.TITLE, "Cookalyzer");
 		add(GristWidgetTileEntity.TITLE, "GristWidget 12000");
+		add(RedstoneClockTileEntity.TIME_CHANGE, "The clock now pulses every %s seconds");
 		add(GuiUtil.NOT_ALCHEMIZABLE, "Not Alchemizable");
 		add(GuiUtil.FREE, "Free!");
 		add(MachineScreen.GO, "GO");

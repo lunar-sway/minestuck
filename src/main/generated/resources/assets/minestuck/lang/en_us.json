@@ -320,6 +320,8 @@
   "block.minestuck.red_sandstone_gold_ore": "Gold Ore",
   "block.minestuck.red_sandstone_iron_ore": "Iron Ore",
   "block.minestuck.red_sandstone_uranium_ore": "Uranium Ore",
+  "block.minestuck.redstone_clock": "Redstone Clock",
+  "block.minestuck.redstone_clock.time_change": "The clock now pulses every %s seconds",
   "block.minestuck.remote_observer": "Remote Observer",
   "block.minestuck.remote_observer.tooltip": "Lets off a full strength redstone signal if the active condition is met.",
   "block.minestuck.return_node": "Return Node",
