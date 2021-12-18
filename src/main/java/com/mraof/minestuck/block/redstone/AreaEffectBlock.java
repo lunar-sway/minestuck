@@ -18,6 +18,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
@@ -26,6 +27,8 @@ import java.util.Random;
 
 public class AreaEffectBlock extends Block
 {
+	public static final String EFFECT_CHANGE_MESSAGE = "effect_change_message";
+	
 	public AreaEffectBlock(Properties properties)
 	{
 		super(properties);
@@ -62,7 +65,8 @@ public class AreaEffectBlock extends Block
 					te.setEffect(firstEffect.getPotion());
 					te.setEffectAmplifier(firstEffect.getAmplifier());
 					
-					worldIn.playSound(null, pos, SoundEvents.BLOCK_BREWING_STAND_BREW, SoundCategory.BLOCKS, 0.6F, 0.8F);
+					player.sendStatusMessage(new TranslationTextComponent(getTranslationKey() + "." + EFFECT_CHANGE_MESSAGE, firstEffect.getPotion().getRegistryName(), firstEffect.getAmplifier()), true);
+					worldIn.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 1F);
 				}
 			}
 			

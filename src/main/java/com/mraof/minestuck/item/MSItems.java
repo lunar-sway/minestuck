@@ -757,7 +757,7 @@ public class MSItems
 		registerItemBlock(registry, PLATFORM_GENERATOR, MSItemGroup.LANDS);
 		registerItemBlock(registry, ITEM_MAGNET, MSItemGroup.MAIN);
 		registerItemBlock(registry, REDSTONE_CLOCK, MSItemGroup.MAIN);
-		registerItemBlock(registry, AND_GATE_BLOCK);
+		registerItemBlock(registry, AND_GATE_BLOCK); //Logic gates have no item group as they are discordant with the aesthetics and intended mechanics of Minestuck(but are kept for some utility)
 		registerItemBlock(registry, OR_GATE_BLOCK);
 		registerItemBlock(registry, XOR_GATE_BLOCK);
 		registerItemBlock(registry, NAND_GATE_BLOCK);

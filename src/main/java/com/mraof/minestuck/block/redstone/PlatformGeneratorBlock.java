@@ -39,9 +39,9 @@ public class PlatformGeneratorBlock extends MSDirectionalBlock
 		{
 			worldIn.setBlockState(pos, state.with(INVISIBLE_MODE, !state.get(INVISIBLE_MODE)));
 			if(state.get(INVISIBLE_MODE))
-				worldIn.playSound(null, pos, SoundEvents.BLOCK_CONDUIT_ACTIVATE, SoundCategory.BLOCKS, 0.75F, 1.6F);
+				worldIn.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 1.5F);
 			else
-				worldIn.playSound(null, pos, SoundEvents.BLOCK_CONDUIT_DEACTIVATE, SoundCategory.BLOCKS, 0.75F, 1.6F);
+				worldIn.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 0.5F);
 			return ActionResultType.SUCCESS;
 		}
 		

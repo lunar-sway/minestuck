@@ -1,140 +1,80 @@
 package com.mraof.minestuck.tileentity.redstone;
 
+import com.mraof.minestuck.block.redstone.SummonerBlock;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.entity.underling.BasiliskEntity;
-import com.mraof.minestuck.entity.underling.ImpEntity;
-import com.mraof.minestuck.entity.underling.LichEntity;
-import com.mraof.minestuck.entity.underling.OgreEntity;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.*;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
+import java.util.Optional;
 
 public class SummonerTileEntity extends TileEntity
 {
-	private SummonType summonType;
+	private EntityType<?> summonType;
 	
-	public enum SummonType
-	{
-		IMP,
-		OGRE,
-		BASILISK,
-		LICH;
-		
-		public static SummonerTileEntity.SummonType fromInt(int ordinal) //converts int back into enum
-		{
-			for(SummonerTileEntity.SummonType type : SummonerTileEntity.SummonType.values())
-			{
-				if(type.ordinal() == ordinal)
-					return type;
-			}
-			return null;
-		}
-		
-		public String getNameNoSpaces()
-		{
-			return name().replace('_', ' ');
-		}
-	}
+	public static final String SUMMON_TYPE_CHANGE = "block.minestuck.summoner_block.summon_type_change";
 	
 	public SummonerTileEntity()
 	{
 		super(MSTileEntityTypes.SUMMONER.get());
 	}
 	
-	public void summonEntity(World worldIn, BlockState summonerState, BlockPos summonerBlockPos, boolean playParticles)
+	public void summonEntity(World worldIn, BlockPos summonerBlockPos, EntityType<?> type, boolean triggerActivate, boolean playParticles)
 	{
-		BlockPos pickedBlockPos = summonerBlockPos.up(1);
+		if(type == null)
+			throw new IllegalStateException("SummonerTileEntity unable to create a new entity. Entity factory returned null!");
 		
-		if(summonType == SummonType.IMP)
+		int iterateTracker = 0;
+		for(int i = 0; i < 60; i++) //arbitrarily high
 		{
-			ImpEntity impEntity = MSEntityTypes.IMP.create(worldIn);
-			if(impEntity == null)
-				throw new IllegalStateException("Unable to create a new imp. Entity factory returned null!");
-			impEntity.enablePersistence();
-			impEntity.setLocationAndAngles(pickedBlockPos.getX() + 0.5, pickedBlockPos.getY(), pickedBlockPos.getZ() + 0.5, worldIn.rand.nextFloat() * 360F, 0);
-			impEntity.onInitialSpawn(worldIn, worldIn.getDifficultyForLocation(pickedBlockPos), SpawnReason.TRIGGERED, null, null);
-			impEntity.setHomePosAndDistance(pickedBlockPos, 10);
-			worldIn.addEntity(impEntity);
-			randomTeleport(worldIn, summonerBlockPos, impEntity);
-		} else if(summonType == SummonType.OGRE)
-		{
-			OgreEntity ogreEntity = MSEntityTypes.OGRE.create(worldIn);
-			if(ogreEntity == null)
-				throw new IllegalStateException("Unable to create a new ogre. Entity factory returned null!");
-			ogreEntity.enablePersistence();
-			ogreEntity.setLocationAndAngles(pickedBlockPos.getX() + 0.5, pickedBlockPos.getY(), pickedBlockPos.getZ() + 0.5, worldIn.rand.nextFloat() * 360F, 0);
-			ogreEntity.onInitialSpawn(worldIn, worldIn.getDifficultyForLocation(pickedBlockPos), SpawnReason.TRIGGERED, null, null);
-			ogreEntity.setHomePosAndDistance(pickedBlockPos, 10);
-			worldIn.addEntity(ogreEntity);
-			randomTeleport(worldIn, summonerBlockPos, ogreEntity);
-		} else if(summonType == SummonType.BASILISK)
-		{
-			BasiliskEntity basiliskEntity = MSEntityTypes.BASILISK.create(worldIn);
-			if(basiliskEntity == null)
-				throw new IllegalStateException("Unable to create a new basilisk. Entity factory returned null!");
-			basiliskEntity.enablePersistence();
-			basiliskEntity.setLocationAndAngles(pickedBlockPos.getX() + 0.5, pickedBlockPos.getY(), pickedBlockPos.getZ() + 0.5, worldIn.rand.nextFloat() * 360F, 0);
-			basiliskEntity.onInitialSpawn(worldIn, worldIn.getDifficultyForLocation(pickedBlockPos), SpawnReason.TRIGGERED, null, null);
-			basiliskEntity.setHomePosAndDistance(pickedBlockPos, 10);
-			worldIn.addEntity(basiliskEntity);
-			randomTeleport(worldIn, summonerBlockPos, basiliskEntity);
-		} else if(summonType == SummonType.LICH)
-		{
-			LichEntity lichEntity = MSEntityTypes.LICH.create(worldIn);
-			if(lichEntity == null)
-				throw new IllegalStateException("Unable to create a new lich. Entity factory returned null!");
-			lichEntity.enablePersistence();
-			lichEntity.setLocationAndAngles(pickedBlockPos.getX() + 0.5, pickedBlockPos.getY(), pickedBlockPos.getZ() + 0.5, worldIn.rand.nextFloat() * 360F, 0);
-			lichEntity.onInitialSpawn(worldIn, worldIn.getDifficultyForLocation(pickedBlockPos), SpawnReason.TRIGGERED, null, null);
-			lichEntity.setHomePosAndDistance(pickedBlockPos, 10);
-			worldIn.addEntity(lichEntity);
-			randomTeleport(worldIn, summonerBlockPos, lichEntity);
-		}
-		
-		if(playParticles)
-		{
-			for(int i = 0; i < 5; i++)
+			iterateTracker = i;
+			double newPosX = summonerBlockPos.getX() + (worldIn.rand.nextDouble() - 0.5D) * 16.0D;
+			double newPosY = summonerBlockPos.getY() + (worldIn.rand.nextDouble() - 0.5D) * 16.0D;
+			double newPosZ = summonerBlockPos.getZ() + (worldIn.rand.nextDouble() - 0.5D) * 16.0D;
+			if(worldIn.hasNoCollisions(type.getBoundingBoxWithSizeApplied(newPosX, newPosY, newPosZ)) && //checks that entity wont suffocate
+					EntitySpawnPlacementRegistry.func_223515_a(type, worldIn, SpawnReason.TRIGGERED, new BlockPos(newPosX, newPosY, newPosZ), worldIn.getRandom())) //helps spawn entity on a valid floor
 			{
-				worldIn.addParticle(ParticleTypes.POOF, true, pickedBlockPos.getX(),  pickedBlockPos.getY(), pickedBlockPos.getZ(), 0.1,0.1,0.1);
-			}
-		}
-	}
-	
-	private void randomTeleport(World worldIn, BlockPos summonerBlockPos, LivingEntity summonedEntity)
-	{
-		if(worldIn != null)
-		{
-			for(int i = 0; i < 16; ++i)
-			{
-				double newPosX = summonerBlockPos.getX() + (worldIn.rand.nextDouble() - 0.5D) * 16.0D;
-				double newPosY = summonerBlockPos.getY() + (worldIn.rand.nextDouble() - 0.5D) * 16.0D;
-				double newPosZ = summonerBlockPos.getZ() + (worldIn.rand.nextDouble() - 0.5D) * 16.0D;
+				BlockPos newBlockPos = new BlockPos(newPosX, newPosY, newPosZ);
+				type.spawn(worldIn, null, null, null, newBlockPos, SpawnReason.TRIGGERED, true, true);
 				
-				if(summonedEntity.attemptTeleport(newPosX, newPosY, newPosZ, true))
+				if(playParticles)
 				{
-					break;
+					for(int particleIterate = 0; particleIterate < 5; particleIterate++)
+					{
+						worldIn.addParticle(ParticleTypes.POOF, true, newPosX, newPosY, newPosZ, 0.1, 0.1, 0.1);
+					}
 				}
+				break;
 			}
 		}
+		
+		if(iterateTracker == 59)
+			worldIn.getPendingBlockTicks().scheduleTick(new BlockPos(summonerBlockPos), worldIn.getBlockState(summonerBlockPos).getBlock(), 30); //if a valid resting spot was not found in the 59 checks of the for loop then the block will be reset and will try again in 1.5 seconds
+		else if(triggerActivate)
+			worldIn.setBlockState(summonerBlockPos, worldIn.getBlockState(summonerBlockPos).with(SummonerBlock.TRIGGERED, true), 4);
 	}
 	
-	public void setSummonedEntity(SummonType summonTypeIn)
+	public void setSummonedEntity(EntityType<?> entityTypeIn, @Nullable PlayerEntity playerEntityIn)
 	{
-		this.summonType = summonTypeIn;
+		this.summonType = entityTypeIn;
+		
+		if(playerEntityIn != null)
+			playerEntityIn.sendStatusMessage(new TranslationTextComponent(SUMMON_TYPE_CHANGE, summonType.getRegistryName()), true);
 	}
 	
-	public SummonType getSummonedEntity()
+	public EntityType<?> getSummonedEntity()
 	{
 		if(summonType == null)
-			summonType = SummonType.IMP;
+			summonType = MSEntityTypes.IMP;
 		return this.summonType;
 	}
 	
@@ -142,7 +82,8 @@ public class SummonerTileEntity extends TileEntity
 	public void read(CompoundNBT compound)
 	{
 		super.read(compound);
-		summonType = SummonType.fromInt(compound.getInt("summonType"));
+		Optional<EntityType<?>> attemptedSummonType = EntityType.byKey(compound.getString("summonType"));
+		attemptedSummonType.ifPresent(entityType -> summonType = entityType);
 	}
 	
 	@Override
@@ -150,7 +91,7 @@ public class SummonerTileEntity extends TileEntity
 	{
 		super.write(compound);
 		
-		compound.putInt("summonType", getSummonedEntity().ordinal());
+		compound.putString("summonType", EntityType.getKey(getSummonedEntity()).toString());
 		
 		return compound;
 	}

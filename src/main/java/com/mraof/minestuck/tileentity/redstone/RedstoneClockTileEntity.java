@@ -45,7 +45,7 @@ public class RedstoneClockTileEntity extends TileEntity implements ITickableTile
 		{
 			world.setBlockState(pos, getBlockState().with(RedstoneClockBlock.POWERED, true));
 			world.getPendingBlockTicks().scheduleTick(new BlockPos(pos), world.getBlockState(pos).getBlock(), 10); //set to half a second
-			world.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 1.2F);
+			world.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.05F, 1.2F);
 		}
 	}
 	
@@ -68,11 +68,11 @@ public class RedstoneClockTileEntity extends TileEntity implements ITickableTile
 		if(clockSpeed >= 30) //mins out at 20 ticks or 1 second
 		{
 			clockSpeed = clockSpeed - 10;
-			world.playSound(null, pos, SoundEvents.BLOCK_PISTON_CONTRACT, SoundCategory.BLOCKS, 0.2F, 1.6F);
+			world.playSound(null, pos, SoundEvents.BLOCK_PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, 1.6F);
 		} else
 		{
 			clockSpeed = 1200;
-			world.playSound(null, pos, SoundEvents.BLOCK_PISTON_EXTEND, SoundCategory.BLOCKS, 0.2F, 1.6F);
+			world.playSound(null, pos, SoundEvents.BLOCK_PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 1.6F);
 		}
 		playerEntity.sendStatusMessage(new TranslationTextComponent(TIME_CHANGE, (double) clockSpeed / 20), true);
 	}
