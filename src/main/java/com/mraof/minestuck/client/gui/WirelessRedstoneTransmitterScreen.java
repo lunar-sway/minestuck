@@ -4,7 +4,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.WirelessRedstoneTransmitterPacket;
 import com.mraof.minestuck.tileentity.redstone.WirelessRedstoneTransmitterTileEntity;
-import com.mraof.minestuck.util.Debug;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.resources.I18n;
@@ -82,7 +81,7 @@ public class WirelessRedstoneTransmitterScreen extends Screen
 	
 	private void finish()
 	{
-		WirelessRedstoneTransmitterPacket packet = new WirelessRedstoneTransmitterPacket(parseBlockPos(), te.getPos()); //TODO consider creating a receiver tile entity and storing the transmitter pos in order to create singular connections to simplify mechanics
+		WirelessRedstoneTransmitterPacket packet = new WirelessRedstoneTransmitterPacket(parseBlockPos(), te.getPos());
 		MSPacketHandler.sendToServer(packet);
 		onClose();
 	}
@@ -103,8 +102,6 @@ public class WirelessRedstoneTransmitterScreen extends Screen
 		int x = parseInt(destinationTextFieldX);
 		int y = parseInt(destinationTextFieldY);
 		int z = parseInt(destinationTextFieldZ);
-		
-		Debug.debugf("%s %s %s, pos = %s", x, y, z, new BlockPos(x, y, z));
 		
 		return new BlockPos(x, y, z);
 	}

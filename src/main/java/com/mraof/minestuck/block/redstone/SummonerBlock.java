@@ -51,7 +51,8 @@ public class SummonerBlock extends Block
 					SummonerTileEntity summonerTE = (SummonerTileEntity) tileEntity;
 					SpawnEggItem eggItem = (SpawnEggItem) stackIn.getItem();
 					
-					summonerTE.setSummonedEntity(eggItem.getType(stackIn.getTag()), player); //TODO does not work for certain mobs(so far, tested mobs that dont work are Drowned and Slimes), may have to do with conditional placement
+					if(!worldIn.isRemote)
+						summonerTE.setSummonedEntity(eggItem.getType(stackIn.getTag()), player);
 				}
 			} else
 			{

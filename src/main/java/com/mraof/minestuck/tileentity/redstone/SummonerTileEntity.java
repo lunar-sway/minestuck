@@ -9,6 +9,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -17,9 +18,10 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-public class SummonerTileEntity extends TileEntity
+public class SummonerTileEntity extends TileEntity implements ITickableTileEntity
 {
 	private EntityType<?> summonType;
+	private int cooldownTimer;
 	
 	public static final String SUMMON_TYPE_CHANGE = "block.minestuck.summoner_block.summon_type_change";
 	
@@ -28,39 +30,62 @@ public class SummonerTileEntity extends TileEntity
 		super(MSTileEntityTypes.SUMMONER.get());
 	}
 	
+	@Override
+	public void tick()
+	{
+		if(world == null)
+			return; // Forge: prevent loading unloaded chunks
+		
+		if(cooldownTimer >= 200) //summoner has a cooldown of 10 seconds(10 sec * 20 tick) to prevent entity spamming
+		{
+			cooldownTimer = 0;
+		}
+		
+		if(cooldownTimer != 0)
+			cooldownTimer++;
+	}
+	
 	public void summonEntity(World worldIn, BlockPos summonerBlockPos, EntityType<?> type, boolean triggerActivate, boolean playParticles)
 	{
 		if(type == null)
 			throw new IllegalStateException("SummonerTileEntity unable to create a new entity. Entity factory returned null!");
 		
-		int iterateTracker = 0;
-		for(int i = 0; i < 60; i++) //arbitrarily high
+		if(cooldownTimer == 0)
 		{
-			iterateTracker = i;
-			double newPosX = summonerBlockPos.getX() + (worldIn.rand.nextDouble() - 0.5D) * 16.0D;
-			double newPosY = summonerBlockPos.getY() + (worldIn.rand.nextDouble() - 0.5D) * 16.0D;
-			double newPosZ = summonerBlockPos.getZ() + (worldIn.rand.nextDouble() - 0.5D) * 16.0D;
-			if(worldIn.hasNoCollisions(type.getBoundingBoxWithSizeApplied(newPosX, newPosY, newPosZ)) && //checks that entity wont suffocate
-					EntitySpawnPlacementRegistry.func_223515_a(type, worldIn, SpawnReason.TRIGGERED, new BlockPos(newPosX, newPosY, newPosZ), worldIn.getRandom())) //helps spawn entity on a valid floor
+			int iterateTracker = 0;
+			for(int i = 0; i < 60; i++) //arbitrarily high
 			{
-				BlockPos newBlockPos = new BlockPos(newPosX, newPosY, newPosZ);
-				type.spawn(worldIn, null, null, null, newBlockPos, SpawnReason.TRIGGERED, true, true);
-				
-				if(playParticles)
+				iterateTracker = i;
+				double newPosX = summonerBlockPos.getX() + (worldIn.rand.nextDouble() - 0.5D) * 16.0D;
+				double newPosY = summonerBlockPos.getY() + (worldIn.rand.nextDouble() - 0.5D) * 16.0D;
+				double newPosZ = summonerBlockPos.getZ() + (worldIn.rand.nextDouble() - 0.5D) * 16.0D;
+				if(worldIn.hasNoCollisions(type.getBoundingBoxWithSizeApplied(newPosX, newPosY, newPosZ)) && //checks that entity wont suffocate
+						EntitySpawnPlacementRegistry.func_223515_a(type, worldIn, SpawnReason.SPAWN_EGG, new BlockPos(newPosX, newPosY, newPosZ), worldIn.getRandom())) //helps spawn entity on a valid floor
 				{
-					for(int particleIterate = 0; particleIterate < 5; particleIterate++)
+					BlockPos newBlockPos = new BlockPos(newPosX, newPosY, newPosZ);
+					type.spawn(worldIn, null, null, null, newBlockPos, SpawnReason.SPAWN_EGG, true, true); //TODO mob spawning conforms to light level/spawning surface/other conditions of normal generation which limits undead mob use
+					
+					if(playParticles)
 					{
-						worldIn.addParticle(ParticleTypes.POOF, true, newPosX, newPosY, newPosZ, 0.1, 0.1, 0.1);
+						for(int particleIterate = 0; particleIterate < 5; particleIterate++)
+						{
+							worldIn.addParticle(ParticleTypes.POOF, true, newPosX, newPosY, newPosZ, 0.1, 0.1, 0.1);
+						}
 					}
+					break;
 				}
-				break;
+			}
+			
+			if(iterateTracker == 59)
+				worldIn.getPendingBlockTicks().scheduleTick(new BlockPos(summonerBlockPos), worldIn.getBlockState(summonerBlockPos).getBlock(), 30); //if a valid resting spot was not found in the 59 checks of the for loop then the block will be reset and will try again in 1.5 seconds
+			else
+			{
+				if(triggerActivate)
+					worldIn.setBlockState(summonerBlockPos, worldIn.getBlockState(summonerBlockPos).with(SummonerBlock.TRIGGERED, true), 4);
+				
+				cooldownTimer = 1;
 			}
 		}
-		
-		if(iterateTracker == 59)
-			worldIn.getPendingBlockTicks().scheduleTick(new BlockPos(summonerBlockPos), worldIn.getBlockState(summonerBlockPos).getBlock(), 30); //if a valid resting spot was not found in the 59 checks of the for loop then the block will be reset and will try again in 1.5 seconds
-		else if(triggerActivate)
-			worldIn.setBlockState(summonerBlockPos, worldIn.getBlockState(summonerBlockPos).with(SummonerBlock.TRIGGERED, true), 4);
 	}
 	
 	public void setSummonedEntity(EntityType<?> entityTypeIn, @Nullable PlayerEntity playerEntityIn)
@@ -82,6 +107,7 @@ public class SummonerTileEntity extends TileEntity
 	public void read(CompoundNBT compound)
 	{
 		super.read(compound);
+		cooldownTimer = compound.getInt("cooldownTimer");
 		Optional<EntityType<?>> attemptedSummonType = EntityType.byKey(compound.getString("summonType"));
 		attemptedSummonType.ifPresent(entityType -> summonType = entityType);
 	}
@@ -91,6 +117,7 @@ public class SummonerTileEntity extends TileEntity
 	{
 		super.write(compound);
 		
+		compound.putInt("cooldownTimer", cooldownTimer);
 		compound.putString("summonType", EntityType.getKey(getSummonedEntity()).toString());
 		
 		return compound;

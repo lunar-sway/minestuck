@@ -10,6 +10,7 @@ import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
 import com.mraof.minestuck.tileentity.machine.AlchemiterTileEntity;
+import com.mraof.minestuck.tileentity.redstone.AreaEffectTileEntity;
 import com.mraof.minestuck.tileentity.redstone.RemoteObserverTileEntity;
 import com.mraof.minestuck.tileentity.redstone.StatStorerTileEntity;
 import com.mraof.minestuck.tileentity.redstone.WirelessRedstoneTransmitterTileEntity;
@@ -63,6 +64,11 @@ public class MSScreenFactories
 	public static void displayTransportalizerScreen(TransportalizerTileEntity tileEntity)
 	{
 		Minecraft.getInstance().displayGuiScreen(new TransportalizerScreen(tileEntity));
+	}
+	
+	public static void displayAreaEffectScreen(AreaEffectTileEntity tileEntity)
+	{
+		Minecraft.getInstance().displayGuiScreen(new AreaEffectScreen(tileEntity));
 	}
 	
 	public static void displayWirelessRedstoneTransmitterScreen(WirelessRedstoneTransmitterTileEntity tileEntity)

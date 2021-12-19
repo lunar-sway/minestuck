@@ -18,7 +18,7 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 	private int lightningStruckStored;
 	//private int blockRightClickStored;
 	//private int entitySetTargetStored;
-	private int alcehemyActivatedStored;
+	private int alchemyActivatedStored;
 	
 	private ActiveType activeType;
 	private int divideValueBy;
@@ -111,10 +111,10 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 		else
 			this.entitySetTargetStored = 0;*/
 		
-		if(compound.contains("alcehemyActivatedStored"))
-			this.alcehemyActivatedStored = compound.getInt("alcehemyActivatedStored");
+		if(compound.contains("alchemyActivatedStored"))
+			this.alchemyActivatedStored = compound.getInt("alchemyActivatedStored");
 		else
-			this.alcehemyActivatedStored = 0;
+			this.alchemyActivatedStored = 0;
 		
 		
 		this.tickCycle = compound.getInt("tickCycle");
@@ -136,7 +136,7 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 		compound.putInt("lightningStruckStored", lightningStruckStored);
 		//compound.putInt("blockRightClickStored", blockRightClickStored);
 		//compound.putInt("entitySetTargetStored", entitySetTargetStored);
-		compound.putInt("alcehemyActivatedStored", alcehemyActivatedStored);
+		compound.putInt("alchemyActivatedStored", alchemyActivatedStored);
 		
 		compound.putInt("tickCycle", tickCycle);
 		compound.putInt("activeTypeOrdinal", activeType.ordinal());
@@ -163,7 +163,7 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 		else if(this.activeType == ActiveType.ENTITY_SET_TARGET)
 			return this.entitySetTargetStored;*/
 		else if(this.activeType == ActiveType.ALCHEMY_ACTIVATED)
-			return this.alcehemyActivatedStored;
+			return this.alchemyActivatedStored;
 		
 		return 0;
 	}
@@ -226,7 +226,7 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 			world.getBlockState(pos).getBlock().updateNeighbors(world.getBlockState(pos), world, pos, 3);*/
 		} else if(this.activeType == ActiveType.ALCHEMY_ACTIVATED)
 		{
-			this.alcehemyActivatedStored = (int) storedStatIn;
+			this.alchemyActivatedStored = (int) storedStatIn;
 			world.getBlockState(pos).getBlock().updateNeighbors(world.getBlockState(pos), world, pos, 3);
 		}
 	}

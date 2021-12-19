@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block.redstone;
 
+import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.tileentity.redstone.AreaEffectTileEntity;
 import com.mraof.minestuck.util.ParticlesAroundSolidBlock;
@@ -51,26 +52,33 @@ public class AreaEffectBlock extends Block
 	@SuppressWarnings("deprecation")
 	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
 	{
-		if(player.isCreative() && player.getHeldItem(hand).getItem() instanceof PotionItem && !CreativeShockEffect.doesCreativeShockLimit(player, 1, 4))
+		if(player.isCreative() && !CreativeShockEffect.doesCreativeShockLimit(player, 1, 4))
 		{
-			ItemStack heldItemStack = player.getHeldItem(hand);
-			
-			EffectInstance firstEffect = PotionUtils.getEffectsFromStack(heldItemStack).get(0);
-			if(firstEffect != null)
+			TileEntity tileEntity = worldIn.getTileEntity(pos);
+			if(tileEntity instanceof AreaEffectTileEntity)
 			{
-				TileEntity tileEntity = worldIn.getTileEntity(pos);
-				if(tileEntity instanceof AreaEffectTileEntity)
+				AreaEffectTileEntity te = (AreaEffectTileEntity) tileEntity;
+				
+				ItemStack heldItemStack = player.getHeldItem(hand);
+				
+				if(heldItemStack.getItem() instanceof PotionItem)
 				{
-					AreaEffectTileEntity te = (AreaEffectTileEntity) tileEntity;
-					te.setEffect(firstEffect.getPotion());
-					te.setEffectAmplifier(firstEffect.getAmplifier());
-					
-					player.sendStatusMessage(new TranslationTextComponent(getTranslationKey() + "." + EFFECT_CHANGE_MESSAGE, firstEffect.getPotion().getRegistryName(), firstEffect.getAmplifier()), true);
-					worldIn.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 1F);
+					EffectInstance firstEffect = PotionUtils.getEffectsFromStack(heldItemStack).get(0);
+					if(firstEffect != null)
+					{
+						te.setEffect(firstEffect.getPotion());
+						te.setEffectAmplifier(firstEffect.getAmplifier());
+						
+						player.sendStatusMessage(new TranslationTextComponent(getTranslationKey() + "." + EFFECT_CHANGE_MESSAGE, firstEffect.getPotion().getRegistryName(), firstEffect.getAmplifier()), true);
+						worldIn.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 1F);
+					}
+				} else
+				{
+					MSScreenFactories.displayAreaEffectScreen(te);
 				}
+				
+				return ActionResultType.SUCCESS;
 			}
-			
-			return ActionResultType.SUCCESS;
 		}
 		
 		return ActionResultType.PASS;
