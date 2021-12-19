@@ -28,7 +28,9 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 		IS_ENTITY_PRESENT,
 		IS_UNDERLING_PRESENT,
 		IS_ENTITY_BURNING,
-		IS_ENTITY_INVISIBLE;
+		IS_ENTITY_INVISIBLE,
+		IS_ELYTRA_FLYING,
+		IS_ENTITY_IN_WATER;
 		
 		public static ActiveType fromInt(int ordinal) //converts int back into enum
 		{
@@ -74,21 +76,25 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 		List<LivingEntity> livingEntityList = world.getEntitiesWithinAABB(LivingEntity.class, axisalignedbb);
 		if(!livingEntityList.isEmpty())
 		{
-			if(activeType == RemoteObserverTileEntity.ActiveType.IS_ENTITY_PRESENT)
+			if(activeType == ActiveType.IS_ENTITY_PRESENT)
 				world.setBlockState(pos, getBlockState().with(RemoteObserverBlock.POWERED, true));
 			else
 			{
 				for(LivingEntity livingEntity : livingEntityList)
 				{
-					if(activeType == RemoteObserverTileEntity.ActiveType.IS_PLAYER_PRESENT && livingEntity instanceof PlayerEntity)
+					if(activeType == ActiveType.IS_PLAYER_PRESENT && livingEntity instanceof PlayerEntity)
 						world.setBlockState(pos, getBlockState().with(RemoteObserverBlock.POWERED, true));
-					else if(activeType == RemoteObserverTileEntity.ActiveType.IS_UNDERLING_PRESENT && livingEntity instanceof UnderlingEntity)
+					else if(activeType == ActiveType.IS_UNDERLING_PRESENT && livingEntity instanceof UnderlingEntity)
 						world.setBlockState(pos, getBlockState().with(RemoteObserverBlock.POWERED, true));
-					else if(activeType == RemoteObserverTileEntity.ActiveType.IS_CROUCHING && livingEntity.isCrouching())
+					else if(activeType == ActiveType.IS_CROUCHING && livingEntity.isCrouching())
 						world.setBlockState(pos, getBlockState().with(RemoteObserverBlock.POWERED, true));
-					else if(activeType == RemoteObserverTileEntity.ActiveType.IS_ENTITY_BURNING && livingEntity.isBurning())
+					else if(activeType == ActiveType.IS_ENTITY_BURNING && livingEntity.isBurning())
 						world.setBlockState(pos, getBlockState().with(RemoteObserverBlock.POWERED, true));
-					else if(activeType == RemoteObserverTileEntity.ActiveType.IS_ENTITY_INVISIBLE && livingEntity.isInvisible())
+					else if(activeType == ActiveType.IS_ENTITY_INVISIBLE && livingEntity.isInvisible())
+						world.setBlockState(pos, getBlockState().with(RemoteObserverBlock.POWERED, true));
+					else if(activeType == ActiveType.IS_ELYTRA_FLYING && livingEntity.isElytraFlying())
+						world.setBlockState(pos, getBlockState().with(RemoteObserverBlock.POWERED, true));
+					else if(activeType == ActiveType.IS_ENTITY_IN_WATER && livingEntity.isInWater())
 						world.setBlockState(pos, getBlockState().with(RemoteObserverBlock.POWERED, true));
 				}
 			}

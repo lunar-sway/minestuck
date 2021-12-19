@@ -52,15 +52,13 @@ import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityStruckByLightningEvent;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.living.LivingHealEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.living.PotionEvent;
+import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.UseHoeEvent;
 import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
+import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.event.world.SaplingGrowTreeEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -193,28 +191,39 @@ public class ServerEventHandler
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public static void onEntityStruck(EntityStruckByLightningEvent event)
 	{
-		statStorer(1, StatStorerTileEntity.ActiveType.LIGHTNING_STRUCK, event.getEntity().getPosition(), event.getEntity().world);
-	}
-
-	/*@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
-	public static void onBlockRightClick(PlayerInteractEvent.RightClickBlock event)
-	{
-		//conditions check does not work
-		if(event.getUseBlock() == Event.Result.ALLOW)
-			statStorer(1, StatStorerTileEntity.ActiveType.BLOCK_RIGHT_CLICK, event.getEntity().getPosition(), event.getEntity().world);
+		if(event.getLightning().ticksExisted == 1)
+			statStorer(1, StatStorerTileEntity.ActiveType.LIGHTNING_STRUCK_ENTITY, event.getEntity().getPosition(), event.getEntity().world);
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
-	public static void onEntitySetTarget(LivingSetAttackTargetEvent event)
+	public static void onEntityBred(BabyEntitySpawnEvent event)
 	{
-		//adds value every tick
-		//statStorer(1, StatStorerTileEntity.ActiveType.ENTITY_SET_TARGET, event.getEntity().getPosition(), event.getEntity().world);
-	}*/
+		if(!event.isCanceled())
+			statStorer(1, StatStorerTileEntity.ActiveType.ENTITIES_BRED, event.getParentA().getPosition(), event.getParentA().world);
+	}
+	
+	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
+	public static void onExplosion(ExplosionEvent event)
+	{
+		PlayerEntity playerEntity = (PlayerEntity) event.getExplosion().getExplosivePlacedBy();
+		if(playerEntity != null && CreativeShockEffect.doesCreativeShockLimit(playerEntity, 0, 3))
+			event.setCanceled(true); //intended to prevent blocks from being destroyed by a player attempting to circumvent creative shock
+		else
+		{
+			statStorer(1, StatStorerTileEntity.ActiveType.EXPLOSIONS, event.getWorld().getSpawnPoint(), event.getWorld()); //TODO seems to be doubled
+		}
+	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public static void onAlchemy(AlchemyEvent event)
 	{
 		statStorer(1, StatStorerTileEntity.ActiveType.ALCHEMY_ACTIVATED, event.getAlchemiter().getPos(), event.getWorld());
+	}
+	
+	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
+	public static void onGristDrop(GristDropsEvent event)
+	{
+		statStorer(1, StatStorerTileEntity.ActiveType.GRIST_DROPS, event.getUnderling().getPosition(), event.getUnderling().world);
 	}
 	
 	@SubscribeEvent(priority = EventPriority.NORMAL)

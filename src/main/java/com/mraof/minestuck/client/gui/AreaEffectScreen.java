@@ -14,7 +14,7 @@ import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
 
 public class AreaEffectScreen extends Screen
 {
-	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/wireless_redstone.png");
+	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/generic_medium.png");
 	
 	private static final int guiWidth = 150; //126 previously
 	private static final int guiHeight = 98;
