@@ -5,11 +5,15 @@ import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.RemoteObserverPacket;
 import com.mraof.minestuck.tileentity.redstone.RemoteObserverTileEntity;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
+
+import java.util.Optional;
 
 public class RemoteObserverScreen extends Screen
 {
@@ -23,6 +27,8 @@ public class RemoteObserverScreen extends Screen
 	
 	public Button typeButton;
 	
+	private TextFieldWidget entityTypeTextField;
+	
 	
 	RemoteObserverScreen(RemoteObserverTileEntity te)
 	{
@@ -35,19 +41,40 @@ public class RemoteObserverScreen extends Screen
 	@Override
 	public void init()
 	{
-		addButton(typeButton = new ExtendedButton(this.width / 2 - 65, (height - guiHeight) / 2 + 15, 130, 20, activeType.getNameNoSpaces(), button -> changeActiveType()));
 		int yOffset = (this.height / 2) - (guiHeight / 2);
 		
-		addButton(new ExtendedButton(this.width / 2 - 18, yOffset + 60, 40, 20, I18n.format("gui.done"), button -> finish()));
+		addButton(typeButton = new ExtendedButton(this.width / 2 - 67, (height - guiHeight) / 2 + 15, 135, 20, activeType.getNameNoSpaces(), button -> changeActiveType()));
+		
+		this.entityTypeTextField = new TextFieldWidget(this.font, this.width / 2 - 53, yOffset + 40, 100, 18, "Current Entity Type");	//TODO Use translation instead, and maybe look at other text fields for what the text should be
+		this.entityTypeTextField.setText(EntityType.getKey(te.getCurrentEntityType()).toString()); //TODO somewhere along the line, if the active type is not current entity present and the gui is exited, returning to current entity present active type has pig as the entity type
+		addButton(entityTypeTextField);
+		entityTypeTextField.setVisible(activeType == RemoteObserverTileEntity.ActiveType.CURRENT_ENTITY_PRESENT);
+		
+		addButton(new ExtendedButton(this.width / 2 - 18, yOffset + 70, 40, 20, I18n.format("gui.done"), button -> finish()));
 	}
 	
 	/**
-	 * Gets the ordinal of the current active type, and either cycles it back to the beginning at one if it is the last ordinal in the set or just sets it to the next ordinal in line
+	 * Gets the ordinal of the current active type, and either cycles it back to the beginning at one if it is the last ordinal in the set or just sets it to the next ordinal in line, also refreshes the display for Current Entity Present
 	 */
 	private void changeActiveType()
 	{
 		activeType = RemoteObserverTileEntity.ActiveType.fromInt(activeType.ordinal() < RemoteObserverTileEntity.ActiveType.values().length - 1 ? activeType.ordinal() + 1 : 0);
 		typeButton.setMessage(activeType.getNameNoSpaces());
+		
+		entityTypeTextField.setVisible(activeType == RemoteObserverTileEntity.ActiveType.CURRENT_ENTITY_PRESENT);
+	}
+	
+	/**
+	 * Returns the current entity type if the text field string matches it and the active type is correct, returns players as a generic entity type if not valid but active type is correct, or returns null if the correct active type isnt selected
+	 */
+	private EntityType<?> getEntityType(String stringInput)
+	{
+		if(activeType == RemoteObserverTileEntity.ActiveType.CURRENT_ENTITY_PRESENT)
+		{
+			Optional<EntityType<?>> attemptedEntityType = EntityType.byKey(stringInput);
+			return attemptedEntityType.orElse(EntityType.PLAYER);
+		} else
+			return null;
 	}
 	
 	@Override
@@ -64,7 +91,7 @@ public class RemoteObserverScreen extends Screen
 	
 	private void finish()
 	{
-		RemoteObserverPacket packet = new RemoteObserverPacket(activeType, te.getPos());
+		RemoteObserverPacket packet = new RemoteObserverPacket(activeType, te.getPos(), getEntityType(entityTypeTextField.getText()));
 		MSPacketHandler.sendToServer(packet);
 		onClose();
 	}

@@ -41,7 +41,7 @@ public class StatStorerScreen extends Screen
 	@Override
 	public void init()
 	{
-		addButton(typeButton = new ExtendedButton(this.width / 2 - 70, (height - guiHeight) / 2 + 15, 135, 20, activeType.getNameNoSpaces(), button -> changeActiveType()));
+		addButton(typeButton = new ExtendedButton(this.width / 2 - 67, (height - guiHeight) / 2 + 15, 135, 20, activeType.getNameNoSpaces(), button -> changeActiveType()));
 		int yOffset = (this.height / 2) - (guiHeight / 2);
 		this.divideTextField = new TextFieldWidget(this.font, this.width / 2 - 18, yOffset + 50, 40, 18, "Divide comparator output strength");	//TODO Use translation instead, and maybe look at other text fields for what the text should be
 		this.divideTextField.setText(String.valueOf(te.getDivideValueBy()));
