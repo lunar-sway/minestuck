@@ -105,7 +105,11 @@ public class ServerEventHandler
 		if(event.getEntity() instanceof IMob && event.getSource().getEntity() instanceof ServerPlayerEntity)
 		{
 			ServerPlayerEntity player = (ServerPlayerEntity) event.getSource().getEntity();
-			int exp = ((ILivingEntity)event.getEntity()).getMinestuckXpValue();
+			int exp;
+			if (event.getEntity() instanceof ILivingEntity)
+				exp = ((ILivingEntity) event.getEntity()).getMinestuckXpValue();
+			else
+				throw new IllegalArgumentException("Expected mixin to inject interface ILivingEntity into LivingEntity, but the entity was not an instance of ILivingEntity");
 
 			if(exp > 0)
 				Echeladder.increaseProgress(player, exp);
