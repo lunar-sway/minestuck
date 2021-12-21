@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.mraof.minestuck.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "EntityMixinGlobal",
+    "EntityMixinSlime",
+    "EntityMixinTierOne",
+    "EntityMixinTierTwo",
+    "EntityMixinTierThree"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

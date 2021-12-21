@@ -8,6 +8,7 @@ import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.mixinIntefaces.ILivingEntity;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.IdentifierHandler;
@@ -16,7 +17,6 @@ import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.skaianet.TitleSelectionHook;
 import com.mraof.minestuck.world.MSDimensions;
-import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
@@ -105,16 +105,8 @@ public class ServerEventHandler
 		if(event.getEntity() instanceof IMob && event.getSource().getEntity() instanceof ServerPlayerEntity)
 		{
 			ServerPlayerEntity player = (ServerPlayerEntity) event.getSource().getEntity();
-			int exp = 0;
-			if(event.getEntity() instanceof ZombieEntity || event.getEntity() instanceof SkeletonEntity)
-				exp = 1;
-			else if(event.getEntity() instanceof CreeperEntity || event.getEntity() instanceof SpiderEntity || event.getEntity() instanceof SilverfishEntity)
-				exp = 2;
-			else if(event.getEntity() instanceof EndermanEntity || event.getEntity() instanceof BlazeEntity || event.getEntity() instanceof WitchEntity || event.getEntity() instanceof GuardianEntity)
-				exp = 3;
-			else if(event.getEntity() instanceof SlimeEntity)
-				exp = Math.min(((SlimeEntity) event.getEntity()).getSize() - 1, 9);
-			
+			int exp = ((ILivingEntity)event.getEntity()).getMinestuckXpValue();
+
 			if(exp > 0)
 				Echeladder.increaseProgress(player, exp);
 		}
