@@ -6,7 +6,8 @@ import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.ITag;
+import net.minecraft.tags.TagCollectionManager;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 
@@ -20,14 +21,15 @@ public class UnavailableGristCostBuilder
 	private final Ingredient ingredient;
 	private Integer priority = null;
 	
-	public static UnavailableGristCostBuilder of(Tag<Item> tag)
+	public static UnavailableGristCostBuilder of(ITag<Item> tag)
 	{
-		return new UnavailableGristCostBuilder(new ResourceLocation(tag.getId().getNamespace(), tag.getId().getPath()+"_tag"), Ingredient.fromTag(tag));
+		ResourceLocation tagId = TagCollectionManager.getInstance().getItems().getIdOrThrow(tag);
+		return new UnavailableGristCostBuilder(new ResourceLocation(tagId.getNamespace(), tagId.getPath()+"_tag"), Ingredient.of(tag));
 	}
 	
 	public static UnavailableGristCostBuilder of(IItemProvider item)
 	{
-		return new UnavailableGristCostBuilder(item.asItem().getRegistryName(), Ingredient.fromItems(item));
+		return new UnavailableGristCostBuilder(item.asItem().getRegistryName(), Ingredient.of(item));
 	}
 	
 	public static UnavailableGristCostBuilder of(Ingredient ingredient)
@@ -54,13 +56,13 @@ public class UnavailableGristCostBuilder
 	
 	public void build(Consumer<IFinishedRecipe> recipeSaver)
 	{
-		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ingredient.getMatchingStacks()[0].getItem().getRegistryName());
+		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ingredient.getItems()[0].getItem().getRegistryName());
 		build(recipeSaver, name);
 	}
 	
 	public void buildFor(Consumer<IFinishedRecipe> recipeSaver, String modId)
 	{
-		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ingredient.getMatchingStacks()[0].getItem().getRegistryName());
+		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ingredient.getItems()[0].getItem().getRegistryName());
 		build(recipeSaver, new ResourceLocation(modId, name.getPath()));
 	}
 	
@@ -83,35 +85,35 @@ public class UnavailableGristCostBuilder
 		}
 		
 		@Override
-		public void serialize(JsonObject jsonObject)
+		public void serializeRecipeData(JsonObject jsonObject)
 		{
-			jsonObject.add("ingredient", ingredient.serialize());
+			jsonObject.add("ingredient", ingredient.toJson());
 			if(priority != null)
 				jsonObject.addProperty("priority", priority);
 		}
 		
 		@Override
-		public ResourceLocation getID()
+		public ResourceLocation getId()
 		{
 			return id;
 		}
 		
 		@Override
-		public IRecipeSerializer<?> getSerializer()
+		public IRecipeSerializer<?> getType()
 		{
 			return MSRecipeTypes.UNAVAILABLE_GRIST_COST;
 		}
 		
 		@Nullable
 		@Override
-		public JsonObject getAdvancementJson()
+		public JsonObject serializeAdvancement()
 		{
 			return null;
 		}
 		
 		@Nullable
 		@Override
-		public ResourceLocation getAdvancementID()
+		public ResourceLocation getAdvancementId()
 		{
 			return new ResourceLocation("");
 		}

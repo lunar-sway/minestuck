@@ -1,6 +1,8 @@
 package com.mraof.minestuck.world.lands.terrain;
 
+import com.mojang.serialization.Codec;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
+import com.mraof.minestuck.util.CodecUtil;
 import com.mraof.minestuck.world.biome.LandBiomeSet;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.feature.structure.village.IguanaVillagePieces;
@@ -8,16 +10,18 @@ import com.mraof.minestuck.world.gen.feature.structure.village.NakagatorVillageP
 import com.mraof.minestuck.world.gen.feature.structure.village.SalamanderVillagePieces;
 import com.mraof.minestuck.world.gen.feature.structure.village.TurtleVillagePieces;
 import com.mraof.minestuck.world.lands.ILandType;
+import com.mraof.minestuck.world.lands.LandTypes;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import java.util.Random;
 
 public abstract class TerrainLandType extends ForgeRegistryEntry<TerrainLandType> implements ILandType<TerrainLandType>
 {
+	public static final Codec<TerrainLandType> CODEC = CodecUtil.registryCodec(() -> LandTypes.TERRAIN_REGISTRY);
 	private final ResourceLocation groupName;
 	private final boolean pickedAtRandom;
 	
@@ -47,11 +51,11 @@ public abstract class TerrainLandType extends ForgeRegistryEntry<TerrainLandType
 		return 1F;
 	}
 	
-	public abstract Vec3d getFogColor();
+	public abstract Vector3d getFogColor();
 	
-	public Vec3d getSkyColor()
+	public Vector3d getSkyColor()
 	{
-		return new Vec3d(0, 0, 0);
+		return new Vector3d(0, 0, 0);
 	}
 	
 	@Override

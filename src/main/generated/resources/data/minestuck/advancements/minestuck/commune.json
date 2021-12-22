@@ -23,7 +23,9 @@
     "visit_village": {
       "trigger": "minecraft:location",
       "conditions": {
-        "feature": "minestuck:consort_village"
+        "location": {
+          "feature": "minestuck:consort_village"
+        }
       }
     }
   },

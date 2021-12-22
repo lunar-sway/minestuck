@@ -38,7 +38,7 @@ public class CaptchaDeckHandler
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public static void onPlayerDrops(LivingDropsEvent event)
 	{
-		if(!event.getEntity().world.isRemote && !event.getEntity().world.getGameRules().getBoolean(GameRules.KEEP_INVENTORY) && event.getEntity() instanceof ServerPlayerEntity)
+		if(!event.getEntity().level.isClientSide && !event.getEntity().level.getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY) && event.getEntity() instanceof ServerPlayerEntity)
 		{
 			dropSylladex((ServerPlayerEntity) event.getEntity());
 		}
@@ -71,20 +71,20 @@ public class CaptchaDeckHandler
 	
 	public static void launchAnyItem(PlayerEntity player, ItemStack item)
 	{
-		ItemEntity entity = new ItemEntity(player.world, player.getPosX(), player.getPosY()+1, player.getPosZ(), item);
-		entity.setMotion(player.world.rand.nextDouble() - 0.5, entity.getMotion().y, player.world.rand.nextDouble() - 0.5);
-		entity.setDefaultPickupDelay();
-		player.world.addEntity(entity);
+		ItemEntity entity = new ItemEntity(player.level, player.getX(), player.getY()+1, player.getZ(), item);
+		entity.setDeltaMovement(player.level.random.nextDouble() - 0.5, entity.getDeltaMovement().y, player.level.random.nextDouble() - 0.5);
+		entity.setDefaultPickUpDelay();
+		player.level.addFreshEntity(entity);
 	}
 	
 	public static void useItem(ServerPlayerEntity player)
 	{
-		if(!(player.openContainer instanceof CaptchaDeckContainer) || !canPlayerUseModus(player))
+		if(!(player.containerMenu instanceof CaptchaDeckContainer) || !canPlayerUseModus(player))
 			 return;
-		CaptchaDeckContainer container = (CaptchaDeckContainer) player.openContainer;
-		if(container.inventory.getStackInSlot(0).isEmpty())
+		CaptchaDeckContainer container = (CaptchaDeckContainer) player.containerMenu;
+		if(container.inventory.getItem(0).isEmpty())
 			return;
-		ItemStack stack = container.inventory.getStackInSlot(0);
+		ItemStack stack = container.inventory.getItem(0);
 		Modus modus = getModus(player);
 		
 		ModusType<?> type = ModusTypes.getTypeFromItem(stack.getItem());
@@ -96,7 +96,7 @@ public class CaptchaDeckHandler
 				modus = type.createServerSide(PlayerSavedData.get(player.server));
 				modus.initModus(stack, player, null, data.hasGivenModus() ? 0 : MinestuckConfig.SERVER.initialModusSize.get());
 				setModus(player, modus);
-				container.inventory.setInventorySlotContents(0, ItemStack.EMPTY);
+				container.inventory.setItem(0, ItemStack.EMPTY);
 			}
 			else
 			{
@@ -116,7 +116,7 @@ public class CaptchaDeckHandler
 				}
 				
 				setModus(player, modus);
-				container.inventory.setInventorySlotContents(0, oldModus.getModusItem());
+				container.inventory.setItem(0, oldModus.getModusItem());
 			}
 			
 			MSCriteriaTriggers.CHANGE_MODUS.trigger(player, modus);
@@ -140,7 +140,7 @@ public class CaptchaDeckHandler
 				}
 			
 			if(failed == 0)
-				container.inventory.setInventorySlotContents(0, ItemStack.EMPTY);
+				container.inventory.setItem(0, ItemStack.EMPTY);
 			else stack.setCount(failed);
 		}
 		
@@ -154,25 +154,25 @@ public class CaptchaDeckHandler
 	{
 		if(canPlayerUseModus(player) && hasModus(player))
 		{
-			captchalogueItem(player, player.getHeldItemMainhand());
+			captchalogueItem(player, player.getMainHandItem());
 		}
 	}
 	
 	public static void captchalogueItemInSlot(ServerPlayerEntity player, int slotIndex, int windowId)
 	{
-		if(canPlayerUseModus(player) && hasModus(player) && player.openContainer.windowId == windowId && player.openContainer.getCanCraft(player))
+		if(canPlayerUseModus(player) && hasModus(player) && player.containerMenu.containerId == windowId && player.containerMenu.isSynched(player))
 		{
-			Slot slot = slotIndex >= 0 && slotIndex < player.openContainer.inventorySlots.size() ? player.openContainer.getSlot(slotIndex) : null;
+			Slot slot = slotIndex >= 0 && slotIndex < player.containerMenu.slots.size() ? player.containerMenu.getSlot(slotIndex) : null;
 			
-			if(slot != null && !slot.getStack().isEmpty() && slot.canTakeStack(player))
+			if(slot != null && !slot.getItem().isEmpty() && slot.mayPickup(player))
 			{
-				ItemStack stack = slot.decrStackSize(slot.getStack().getMaxStackSize());
+				ItemStack stack = slot.remove(slot.getItem().getMaxStackSize());
 				captchalogueItem(player, stack);
 				//It is not guaranteed that we can put the item back, so if it wasn't captchalogued, launch it
 				if(!stack.isEmpty())
 					launchItem(player, stack);
 				
-				player.openContainer.detectAndSendChanges();
+				player.containerMenu.broadcastChanges();
 			}
 		}
 	}
@@ -244,9 +244,9 @@ public class CaptchaDeckHandler
 		ItemStack stack = modus.getItem(player, index, asCard);
 		if(!stack.isEmpty())
 		{
-			ItemStack otherStack = player.getHeldItemMainhand();
+			ItemStack otherStack = player.getMainHandItem();
 			if(otherStack.isEmpty())
-				player.setHeldItem(Hand.MAIN_HAND, stack);
+				player.setItemInHand(Hand.MAIN_HAND, stack);
 			else if(canMergeItemStacks(stack, otherStack))
 			{
 				otherStack.grow(stack.getCount());
@@ -255,19 +255,19 @@ public class CaptchaDeckHandler
 			else
 			{
 				boolean placed = false;
-				for(int i = 0; i < player.inventory.mainInventory.size(); i++)
+				for(int i = 0; i < player.inventory.items.size(); i++)
 				{
-					otherStack = player.inventory.mainInventory.get(i);
+					otherStack = player.inventory.items.get(i);
 					if(otherStack.isEmpty())
-						player.inventory.mainInventory.set(i, stack.copy());
+						player.inventory.items.set(i, stack.copy());
 					else if(canMergeItemStacks(stack, otherStack))
 						otherStack.grow(stack.getCount());
 					else continue;
 					
 					stack.setCount(0);
 					placed = true;
-					player.inventory.markDirty();
-					player.container.detectAndSendChanges();
+					player.inventory.setChanged();
+					player.inventoryMenu.broadcastChanges();
 					break;
 				}
 				if(!placed)
@@ -304,17 +304,17 @@ public class CaptchaDeckHandler
 				if(size > cardsToKeep && MinestuckConfig.SERVER.dropItemsInCards.get())
 				{
 					ItemStack card = AlchemyHelper.createCard(stack, false);
-					player.dropItem(card, true, false);
+					player.drop(card, true, false);
 					size--;
-				} else player.dropItem(stack, true, false);
+				} else player.drop(stack, true, false);
 		
 		int stackLimit = new ItemStack(MSItems.CAPTCHA_CARD).getMaxStackSize();
 		for(; size > cardsToKeep; size = Math.max(size - stackLimit, cardsToKeep))
-			player.dropItem(new ItemStack(MSItems.CAPTCHA_CARD, Math.min(stackLimit, size - cardsToKeep)), true, false);
+			player.drop(new ItemStack(MSItems.CAPTCHA_CARD, Math.min(stackLimit, size - cardsToKeep)), true, false);
 		
 		if(MinestuckConfig.SERVER.sylladexDropMode.get() == MinestuckConfig.DropMode.ALL)
 		{
-			player.dropItem(modus.getModusItem(), true, false);
+			player.drop(modus.getModusItem(), true, false);
 			setModus(player, null);
 		} else modus.initModus(null, player, null, size);
 		
@@ -376,7 +376,7 @@ public class CaptchaDeckHandler
 	
 	private static boolean canMergeItemStacks(ItemStack stack1, ItemStack stack2)
 	{
-		return stack1.getItem() == stack2.getItem() && ItemStack.areItemStackTagsEqual(stack1, stack2)
+		return stack1.getItem() == stack2.getItem() && ItemStack.tagMatches(stack1, stack2)
 				&& stack1.isStackable() && stack1.getCount() + stack2.getCount() < stack1.getMaxStackSize();
 	}
 	

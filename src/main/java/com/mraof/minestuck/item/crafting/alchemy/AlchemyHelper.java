@@ -178,10 +178,10 @@ public class AlchemyHelper
 	
 	public static void removeItemFromCard(ItemStack card)
 	{
-		card.removeChildTag("contentID");
-		card.removeChildTag("punched");
-		card.removeChildTag("contentTags");
-		card.removeChildTag("contentSize");
+		card.removeTagKey("contentID");
+		card.removeTagKey("punched");
+		card.removeTagKey("contentTags");
+		card.removeTagKey("contentSize");
 	}
 	
 	public static ItemStack changeEncodeSize(ItemStack stack, int size)

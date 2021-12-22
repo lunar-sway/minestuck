@@ -1,10 +1,7 @@
 package com.mraof.minestuck.world.gen.feature.structure.village;
 
 import com.google.common.collect.Lists;
-import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.consort.EnumConsort;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
 import com.mraof.minestuck.world.gen.feature.structure.ImprovedStructurePiece;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
@@ -13,15 +10,19 @@ import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.LadderBlock;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.util.math.vector.Vector3i;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
+import net.minecraft.world.gen.feature.structure.StructureManager;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 import net.minecraftforge.common.util.Constants;
@@ -36,8 +37,8 @@ public class ConsortVillagePieces
 		List<PieceWeight> list = Lists.newArrayList();
 		
 		ILandType.PieceRegister register = (factory, weight, limit) -> list.add(new PieceWeight(factory, weight, limit));
-		landTypes.terrain.addVillagePieces(register, random);
-		landTypes.title.addVillagePieces(register, random);
+		landTypes.getTerrain().addVillagePieces(register, random);
+		landTypes.getTitle().addVillagePieces(register, random);
 		
 		list.removeIf(pieceWeight -> pieceWeight.villagePiecesLimit == 0);
 		
@@ -47,7 +48,7 @@ public class ConsortVillagePieces
 	//TODO make sure that components don't generate near the ocean
 	private static StructurePiece generateAndAddComponent(ConsortVillageCenter.VillageCenter start, List<StructurePiece> structurePieces, Random rand, int structureMinX, int structureMinY, int structureMinZ, Direction facing)
 	{
-		if (Math.abs(structureMinX - start.getBoundingBox().minX) <= 112 && Math.abs(structureMinZ - start.getBoundingBox().minZ) <= 112)
+		if (Math.abs(structureMinX - start.getBoundingBox().x0) <= 112 && Math.abs(structureMinZ - start.getBoundingBox().z0) <= 112)
 		{
 			StructurePiece villagePiece = generateComponent(start, structurePieces, rand, structureMinX, structureMinY, structureMinZ, facing);
 			
@@ -171,7 +172,7 @@ public class ConsortVillagePieces
 		}
 		
 		@Override
-		protected void readAdditional(CompoundNBT tagCompound)
+		protected void addAdditionalSaveData(CompoundNBT tagCompound)
 		{
 			tagCompound.putInt("HPos", this.averageGroundLvl);
 			
@@ -181,7 +182,7 @@ public class ConsortVillagePieces
 		
 		protected StructurePiece getNextComponentNN(ConsortVillageCenter.VillageCenter start, List<StructurePiece> structurePieces, Random rand, int offsetY, int offsetXZ)
 		{
-			Direction direction = this.getCoordBaseMode();
+			Direction direction = this.getOrientation();
 			
 			if (direction != null)
 			{
@@ -189,13 +190,13 @@ public class ConsortVillagePieces
 				{
 					case NORTH:
 					default:
-						return ConsortVillagePieces.generateAndAddComponent(start, structurePieces, rand, this.boundingBox.minX - 1, this.boundingBox.minY + offsetY, this.boundingBox.minZ + offsetXZ, Direction.WEST);
+						return ConsortVillagePieces.generateAndAddComponent(start, structurePieces, rand, this.boundingBox.x0 - 1, this.boundingBox.y0 + offsetY, this.boundingBox.z0 + offsetXZ, Direction.WEST);
 					case SOUTH:
-						return ConsortVillagePieces.generateAndAddComponent(start, structurePieces, rand, this.boundingBox.minX - 1, this.boundingBox.minY + offsetY, this.boundingBox.minZ + offsetXZ, Direction.WEST);
+						return ConsortVillagePieces.generateAndAddComponent(start, structurePieces, rand, this.boundingBox.x0 - 1, this.boundingBox.y0 + offsetY, this.boundingBox.z0 + offsetXZ, Direction.WEST);
 					case WEST:
-						return ConsortVillagePieces.generateAndAddComponent(start, structurePieces, rand, this.boundingBox.minX + offsetXZ, this.boundingBox.minY + offsetY, this.boundingBox.minZ - 1, Direction.NORTH);
+						return ConsortVillagePieces.generateAndAddComponent(start, structurePieces, rand, this.boundingBox.x0 + offsetXZ, this.boundingBox.y0 + offsetY, this.boundingBox.z0 - 1, Direction.NORTH);
 					case EAST:
-						return ConsortVillagePieces.generateAndAddComponent(start, structurePieces, rand, this.boundingBox.minX + offsetXZ, this.boundingBox.minY + offsetY, this.boundingBox.minZ - 1, Direction.NORTH);
+						return ConsortVillagePieces.generateAndAddComponent(start, structurePieces, rand, this.boundingBox.x0 + offsetXZ, this.boundingBox.y0 + offsetY, this.boundingBox.z0 - 1, Direction.NORTH);
 				}
 			}
 			else
@@ -206,7 +207,7 @@ public class ConsortVillagePieces
 		
 		protected StructurePiece getNextComponentPP(ConsortVillageCenter.VillageCenter start, List<StructurePiece> structurePieces, Random rand, int offsetY, int offsetXZ)
 		{
-			Direction direction = this.getCoordBaseMode();
+			Direction direction = this.getOrientation();
 			
 			if (direction != null)
 			{
@@ -214,13 +215,13 @@ public class ConsortVillagePieces
 				{
 					case NORTH:
 					default:
-						return ConsortVillagePieces.generateAndAddComponent(start, structurePieces, rand, this.boundingBox.maxX + 1, this.boundingBox.minY + offsetY, this.boundingBox.minZ + offsetXZ, Direction.EAST);
+						return ConsortVillagePieces.generateAndAddComponent(start, structurePieces, rand, this.boundingBox.x1 + 1, this.boundingBox.y0 + offsetY, this.boundingBox.z0 + offsetXZ, Direction.EAST);
 					case SOUTH:
-						return ConsortVillagePieces.generateAndAddComponent(start, structurePieces, rand, this.boundingBox.maxX + 1, this.boundingBox.minY + offsetY, this.boundingBox.minZ + offsetXZ, Direction.EAST);
+						return ConsortVillagePieces.generateAndAddComponent(start, structurePieces, rand, this.boundingBox.x1 + 1, this.boundingBox.y0 + offsetY, this.boundingBox.z0 + offsetXZ, Direction.EAST);
 					case WEST:
-						return ConsortVillagePieces.generateAndAddComponent(start, structurePieces, rand, this.boundingBox.minX + offsetXZ, this.boundingBox.minY + offsetY, this.boundingBox.maxZ + 1, Direction.SOUTH);
+						return ConsortVillagePieces.generateAndAddComponent(start, structurePieces, rand, this.boundingBox.x0 + offsetXZ, this.boundingBox.y0 + offsetY, this.boundingBox.z1 + 1, Direction.SOUTH);
 					case EAST:
-						return ConsortVillagePieces.generateAndAddComponent(start, structurePieces, rand, this.boundingBox.minX + offsetXZ, this.boundingBox.minY + offsetY, this.boundingBox.maxZ + 1, Direction.SOUTH);
+						return ConsortVillagePieces.generateAndAddComponent(start, structurePieces, rand, this.boundingBox.x0 + offsetXZ, this.boundingBox.y0 + offsetY, this.boundingBox.z1 + 1, Direction.SOUTH);
 				}
 			}
 			else
@@ -229,23 +230,23 @@ public class ConsortVillagePieces
 			}
 		}
 		
-		protected void clearFront(IWorld world, MutableBoundingBox structureBB, int minX, int maxX, int y, int z)
+		protected void clearFront(ISeedReader world, MutableBoundingBox structureBB, int minX, int maxX, int y, int z)
 		{
 			for (int x = minX; x <= maxX; x++)
-				if (structureBB.isVecInside(new Vec3i(this.getXWithOffset(x, z), this.getYWithOffset(y), this.getZWithOffset(x, z))))
+				if (structureBB.isInside(new Vector3i(this.getWorldX(x, z), this.getWorldY(y), this.getWorldZ(x, z))))
 				{
-					this.fillWithAir(world, structureBB, x, y, z, x, y + 4, z);
-					BlockPos pos = new BlockPos(this.getXWithOffset(x, z - 1), this.getYWithOffset(y), this.getZWithOffset(x, z - 1));
+					this.generateAirBox(world, structureBB, x, y, z, x, y + 4, z);
+					BlockPos pos = new BlockPos(this.getWorldX(x, z - 1), this.getWorldY(y), this.getWorldZ(x, z - 1));
 					int i = 0;
 					for (int yOffset = 0; yOffset <= 4; yOffset++)
 					{
-						if (world.getBlockState(pos.up(yOffset)).isSolid())
+						if (world.getBlockState(pos.above(yOffset)).canOcclude())
 							i++;
 						else break;
 					}
-					BlockState ladder = Blocks.LADDER.getDefaultState().with(LadderBlock.FACING, Direction.SOUTH);
+					BlockState ladder = Blocks.LADDER.defaultBlockState().setValue(LadderBlock.FACING, Direction.SOUTH);
 					if (i >= 2)
-						this.fillWithBlocks(world, structureBB, x, y, z, x, y + i - 1, z, ladder, ladder, false);
+						this.generateBox(world, structureBB, x, y, z, x, y + i - 1, z, ladder, ladder, false);
 				}
 		}
 		
@@ -253,9 +254,9 @@ public class ConsortVillagePieces
 		{
 			BlockPos blockpos = new BlockPos(x, 64, z);
 			
-			if (boundingBox.isVecInside(blockpos))
+			if (boundingBox.isInside(blockpos))
 			{
-				blockpos = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, blockpos).down();
+				blockpos = worldIn.getHeightmapPos(Heightmap.Type.WORLD_SURFACE_WG, blockpos).below();
 				
 				if (blockpos.getY() < worldIn.getSeaLevel())
 				{
@@ -266,52 +267,52 @@ public class ConsortVillagePieces
 				{
 					BlockState state = worldIn.getBlockState(blockpos);
 					
-					if (state.getMaterial().isLiquid() || state.isSolid())
+					if (state.getMaterial().isLiquid() || state.canOcclude())
 					{
-						worldIn.setBlockState(blockpos, pathBlock, Constants.BlockFlags.BLOCK_UPDATE);
+						worldIn.setBlock(blockpos, pathBlock, Constants.BlockFlags.BLOCK_UPDATE);
 						break;
 					}
 					
-					blockpos = blockpos.down();
+					blockpos = blockpos.below();
 				}
 			}
 		}
 		
 		protected void blockPillar(int x, int y, int z, MutableBoundingBox boundingBox, IWorld world, BlockState block)
 		{
-			BlockPos pos = new BlockPos(this.getXWithOffset(x, z), this.getYWithOffset(y), this.getZWithOffset(x, z));
+			BlockPos pos = new BlockPos(this.getWorldX(x, z), this.getWorldY(y), this.getWorldZ(x, z));
 			
-			if(!boundingBox.isVecInside(pos))
+			if(!boundingBox.isInside(pos))
 				return;
 			
 			while(pos.getY() >= world.getSeaLevel())
 			{
-				world.setBlockState(pos, block, Constants.BlockFlags.BLOCK_UPDATE);
+				world.setBlock(pos, block, Constants.BlockFlags.BLOCK_UPDATE);
 				
-				pos = pos.down();
+				pos = pos.below();
 				
-				if(world.getBlockState(pos).isSolid())
+				if(world.getBlockState(pos).canOcclude())
 					break;
 			}
 		}
 		
-		protected boolean spawnConsort(int x, int y, int z, MutableBoundingBox boundingBox, IWorld world, ChunkGenerator<?> chunkGenerator)
+		protected boolean spawnConsort(int x, int y, int z, MutableBoundingBox boundingBox, IWorld world, ChunkGenerator chunkGenerator)
 		{
 			return spawnConsort(x, y, z, boundingBox, world, chunkGenerator, EnumConsort.MerchantType.NONE, 48);
 		}
 		
-		protected boolean spawnConsort(int x, int y, int z, MutableBoundingBox boundingBox, IWorld world, ChunkGenerator<?> chunkGenerator, int maxHomeDistance)
+		protected boolean spawnConsort(int x, int y, int z, MutableBoundingBox boundingBox, IWorld world, ChunkGenerator chunkGenerator, int maxHomeDistance)
 		{
 			return spawnConsort(x, y, z, boundingBox, world, chunkGenerator, EnumConsort.MerchantType.NONE, maxHomeDistance);
 		}
 		
-		protected boolean spawnConsort(int x, int y, int z, MutableBoundingBox boundingBox, IWorld world, ChunkGenerator<?> chunkGenerator, EnumConsort.MerchantType type, int maxHomeDistance)
+		protected boolean spawnConsort(int x, int y, int z, MutableBoundingBox boundingBox, IWorld world, ChunkGenerator chunkGenerator, EnumConsort.MerchantType type, int maxHomeDistance)
 		{
-			BlockPos pos = new BlockPos(this.getXWithOffset(x, z), this.getYWithOffset(y), this.getZWithOffset(x, z));
+			BlockPos pos = new BlockPos(this.getWorldX(x, z), this.getWorldY(y), this.getWorldZ(x, z));
 			
-			if(boundingBox.isVecInside(pos))
+			if(boundingBox.isInside(pos))
 			{
-				
+				/*
 				if(!(chunkGenerator.getSettings() instanceof LandGenSettings))
 				{
 					Debug.warn("Tried to spawn a consort in a building that is being generated outside of a land dimension.");
@@ -343,7 +344,7 @@ public class ConsortVillagePieces
 				} catch(Exception e)
 				{
 					e.printStackTrace();
-				}
+				}*/
 			}
 			return false;
 		}
@@ -358,9 +359,9 @@ public class ConsortVillagePieces
 		VillagePath(ConsortVillageCenter.VillageCenter start, Random rand, MutableBoundingBox boundingBox, Direction facing)
 		{
 			super(MSStructurePieces.VILLAGE_PATH, 0, 0);
-			this.setCoordBaseMode(facing);
+			this.setOrientation(facing);
 			this.boundingBox = boundingBox;
-			this.length = Math.max(boundingBox.getXSize(), boundingBox.getZSize());
+			this.length = Math.max(boundingBox.getXSpan(), boundingBox.getZSpan());
 		}
 		
 		public VillagePath(TemplateManager templates, CompoundNBT nbt)
@@ -370,14 +371,14 @@ public class ConsortVillagePieces
 		}
 		
 		@Override
-		protected void readAdditional(CompoundNBT tagCompound)
+		protected void addAdditionalSaveData(CompoundNBT tagCompound)
 		{
-			super.readAdditional(tagCompound);
+			super.addAdditionalSaveData(tagCompound);
 			tagCompound.putInt("Length", this.length);
 		}
 		
 		@Override
-		public void buildComponent(StructurePiece componentIn, List<StructurePiece> listIn, Random rand)
+		public void addChildren(StructurePiece componentIn, List<StructurePiece> listIn, Random rand)
 		{
 			boolean flag = false;
 			
@@ -387,7 +388,7 @@ public class ConsortVillagePieces
 				
 				if (newPiece != null)
 				{
-					i += Math.max(newPiece.getBoundingBox().getXSize(), newPiece.getBoundingBox().getZSize());
+					i += Math.max(newPiece.getBoundingBox().getXSpan(), newPiece.getBoundingBox().getZSpan());
 					flag = true;
 				}
 			}
@@ -398,12 +399,12 @@ public class ConsortVillagePieces
 				
 				if (newPiece != null)
 				{
-					j += Math.max(newPiece.getBoundingBox().getXSize(), newPiece.getBoundingBox().getZSize());
+					j += Math.max(newPiece.getBoundingBox().getXSpan(), newPiece.getBoundingBox().getZSpan());
 					flag = true;
 				}
 			}
 			
-			Direction direction = this.getCoordBaseMode();
+			Direction direction = this.getOrientation();
 			
 			if (flag && rand.nextInt(3) > 0 && direction != null)
 			{
@@ -411,16 +412,16 @@ public class ConsortVillagePieces
 				{
 					case NORTH:
 					default:
-						ConsortVillagePieces.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, this.boundingBox.minX - 1, this.boundingBox.minY, this.boundingBox.minZ, Direction.WEST);
+						ConsortVillagePieces.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, this.boundingBox.x0 - 1, this.boundingBox.y0, this.boundingBox.z0, Direction.WEST);
 						break;
 					case SOUTH:
-						ConsortVillagePieces.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, this.boundingBox.minX - 1, this.boundingBox.minY, this.boundingBox.maxZ - 2, Direction.WEST);
+						ConsortVillagePieces.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, this.boundingBox.x0 - 1, this.boundingBox.y0, this.boundingBox.z1 - 2, Direction.WEST);
 						break;
 					case WEST:
-						ConsortVillagePieces.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, this.boundingBox.minX, this.boundingBox.minY, this.boundingBox.minZ - 1, Direction.NORTH);
+						ConsortVillagePieces.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, this.boundingBox.x0, this.boundingBox.y0, this.boundingBox.z0 - 1, Direction.NORTH);
 						break;
 					case EAST:
-						ConsortVillagePieces.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, this.boundingBox.maxX - 2, this.boundingBox.minY, this.boundingBox.minZ - 1, Direction.NORTH);
+						ConsortVillagePieces.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, this.boundingBox.x1 - 2, this.boundingBox.y0, this.boundingBox.z0 - 1, Direction.NORTH);
 				}
 			}
 			
@@ -430,29 +431,29 @@ public class ConsortVillagePieces
 				{
 					case NORTH:
 					default:
-						ConsortVillagePieces.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, this.boundingBox.maxX + 1, this.boundingBox.minY, this.boundingBox.minZ, Direction.EAST);
+						ConsortVillagePieces.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, this.boundingBox.x1 + 1, this.boundingBox.y0, this.boundingBox.z0, Direction.EAST);
 						break;
 					case SOUTH:
-						ConsortVillagePieces.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, this.boundingBox.maxX + 1, this.boundingBox.minY, this.boundingBox.maxZ - 2, Direction.EAST);
+						ConsortVillagePieces.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, this.boundingBox.x1 + 1, this.boundingBox.y0, this.boundingBox.z1 - 2, Direction.EAST);
 						break;
 					case WEST:
-						ConsortVillagePieces.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, this.boundingBox.minX, this.boundingBox.minY, this.boundingBox.maxZ + 1, Direction.SOUTH);
+						ConsortVillagePieces.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, this.boundingBox.x0, this.boundingBox.y0, this.boundingBox.z1 + 1, Direction.SOUTH);
 						break;
 					case EAST:
-						ConsortVillagePieces.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, this.boundingBox.maxX - 2, this.boundingBox.minY, this.boundingBox.maxZ + 1, Direction.SOUTH);
+						ConsortVillagePieces.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, this.boundingBox.x1 - 2, this.boundingBox.y0, this.boundingBox.z1 + 1, Direction.SOUTH);
 				}
 			}
 		}
 
 		@Override
-		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn)
+		public boolean postProcess(ISeedReader worldIn, StructureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
 		{
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
 			BlockState pathBlock = blocks.getBlockState("village_path");
 
-			for (int i = this.boundingBox.minX; i <= this.boundingBox.maxX; ++i)
+			for (int i = this.boundingBox.x0; i <= this.boundingBox.x1; ++i)
 			{
-				for (int j = this.boundingBox.minZ; j <= this.boundingBox.maxZ; ++j)
+				for (int j = this.boundingBox.z0; j <= this.boundingBox.z1; ++j)
 				{
 					placeRoadtile(i, j, structureBoundingBoxIn, worldIn, pathBlock);
 				}
@@ -465,9 +466,9 @@ public class ConsortVillagePieces
 		{
 			for(int i = 7 * MathHelper.nextInt(rand, 3, 5); i >= 7; i -= 7)
 			{
-				MutableBoundingBox mutableBoundingBox = MutableBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, 0, 0, 2, 3, i, facing);
+				MutableBoundingBox mutableBoundingBox = MutableBoundingBox.orientBox(x, y, z, 0, 0, 0, 2, 3, i, facing);
 				
-				if(StructurePiece.findIntersecting(components, mutableBoundingBox) == null)
+				if(StructurePiece.findCollisionPiece(components, mutableBoundingBox) == null)
 					return mutableBoundingBox;
 			}
 			
@@ -478,11 +479,11 @@ public class ConsortVillagePieces
 	
 	protected static StructurePiece generateAndAddRoadPiece(ConsortVillageCenter.VillageCenter start, List<StructurePiece> componentList, Random rand, int x, int y, int z, Direction direction)
 	{
-		if (Math.abs(x - start.getBoundingBox().minX) <= 112 && Math.abs(z - start.getBoundingBox().minZ) <= 112)
+		if (Math.abs(x - start.getBoundingBox().x0) <= 112 && Math.abs(z - start.getBoundingBox().z0) <= 112)
 		{
 			MutableBoundingBox mutableBoundingBox = VillagePath.findPieceBox(start, componentList, rand, x, y, z, direction);
 			
-			if (mutableBoundingBox != null && mutableBoundingBox.minY > 10)
+			if (mutableBoundingBox != null && mutableBoundingBox.y0 > 10)
 			{
 				StructurePiece structurePiece = new VillagePath(start, rand, mutableBoundingBox, direction);
 				componentList.add(structurePiece);

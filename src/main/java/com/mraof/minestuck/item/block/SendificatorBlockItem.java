@@ -23,16 +23,16 @@ public class SendificatorBlockItem extends BlockItem
 	}
 	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn)
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn)
 	{
-		ItemStack itemStackIn = playerIn.getHeldItem(handIn);
-		if(playerIn.isSneaking() && playerIn.getItemStackFromSlot(EquipmentSlotType.HEAD).isEmpty())
+		ItemStack itemStackIn = playerIn.getItemInHand(handIn);
+		if(playerIn.isShiftKeyDown() && playerIn.getItemBySlot(EquipmentSlotType.HEAD).isEmpty())
 		{
-			playerIn.replaceItemInInventory(103, new ItemStack(MSBlocks.SENDIFICATOR));
+			playerIn.setSlot(103, new ItemStack(MSBlocks.SENDIFICATOR));
 			
-			return ActionResult.resultSuccess(new ItemStack(Blocks.AIR));
+			return ActionResult.success(new ItemStack(Blocks.AIR));
 		}
-		return ActionResult.resultPass(itemStackIn);
+		return ActionResult.pass(itemStackIn);
 	}
 	
 	@Override
@@ -41,19 +41,19 @@ public class SendificatorBlockItem extends BlockItem
 		if(entityIn instanceof PlayerEntity)
 		{
 			PlayerEntity playerIn = (PlayerEntity) entityIn;
-			ItemStack recoverItem = playerIn.getItemStackFromSlot(EquipmentSlotType.HEAD);
-			if(recoverItem.isItemEqual(new ItemStack(MSBlocks.SENDIFICATOR)) && !playerIn.isCreative())
+			ItemStack recoverItem = playerIn.getItemBySlot(EquipmentSlotType.HEAD);
+			if(recoverItem.sameItem(new ItemStack(MSBlocks.SENDIFICATOR)) && !playerIn.isCreative())
 			{
 				ItemStack headItem = new ItemStack(Items.PLAYER_HEAD, 1);
-				NBTUtil.writeGameProfile(headItem.getOrCreateChildTag("SkullOwner"), playerIn.getGameProfile());
-				ItemEntity headItemEntity = new ItemEntity(playerIn.world, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), headItem);
-				playerIn.world.addEntity(headItemEntity);
+				NBTUtil.writeGameProfile(headItem.getOrCreateTagElement("SkullOwner"), playerIn.getGameProfile());
+				ItemEntity headItemEntity = new ItemEntity(playerIn.level, playerIn.getX(), playerIn.getY(), playerIn.getZ(), headItem);
+				playerIn.level.addFreshEntity(headItemEntity);
 				
-				ItemEntity recoverItemEntity = new ItemEntity(playerIn.world, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), recoverItem);
-				playerIn.world.addEntity(recoverItemEntity);
-				playerIn.replaceItemInInventory(103, new ItemStack(Items.AIR));
+				ItemEntity recoverItemEntity = new ItemEntity(playerIn.level, playerIn.getX(), playerIn.getY(), playerIn.getZ(), recoverItem);
+				playerIn.level.addFreshEntity(recoverItemEntity);
+				playerIn.setSlot(103, new ItemStack(Items.AIR));
 				//playerIn.setHealth(0);
-				playerIn.onKillCommand();
+				playerIn.kill();
 			}
 		}
 		super.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);

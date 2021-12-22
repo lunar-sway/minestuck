@@ -9,10 +9,9 @@ import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.AttributeMap;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -24,7 +23,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -106,7 +104,7 @@ public class Echeladder
 				boondollarsGained += BOONDOLLARS[Math.min(rung, BOONDOLLARS.length - 1)];
 				exp -= (expReq - progress);
 				progress = 0;
-				savedData.markDirty();
+				savedData.setDirty();
 				expReq = getRungProgressReq();
 				if(rung >= topRung)
 					break increment;
@@ -117,7 +115,7 @@ public class Echeladder
 			if(exp >= 1)
 			{
 				progress += exp;
-				savedData.markDirty();
+				savedData.setDirty();
 				Debug.debugf("Added remainder exp to progress, which is now at %s", progress);
 			} else
 				Debug.debugf("Remaining exp %s is below 1, and will therefore be ignored", exp);
@@ -133,7 +131,7 @@ public class Echeladder
 			if(rung != prevRung)
 			{
 				updateEcheladderBonuses(player);
-				player.world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), MSSoundEvents.EVENT_ECHELADDER_INCREASE, SoundCategory.AMBIENT, 1F, 1F);
+				player.level.playSound(null, player.getX(), player.getY(), player.getZ(), MSSoundEvents.EVENT_ECHELADDER_INCREASE, SoundCategory.AMBIENT, 1F, 1F);
 			}
 		}
 	}
@@ -143,12 +141,12 @@ public class Echeladder
 		if(type >= UNDERLING_BONUS_OFFSET && type < UNDERLING_BONUS_OFFSET + underlingBonuses.length && !underlingBonuses[type - UNDERLING_BONUS_OFFSET])
 		{
 			underlingBonuses[type - UNDERLING_BONUS_OFFSET] = true;
-			savedData.markDirty();
+			savedData.setDirty();
 			increaseProgress(UNDERLING_BONUSES[type - UNDERLING_BONUS_OFFSET]);
 		} else if(type >= ALCHEMY_BONUS_OFFSET && type < ALCHEMY_BONUS_OFFSET + alchemyBonuses.length && !alchemyBonuses[type - ALCHEMY_BONUS_OFFSET])
 		{
 			alchemyBonuses[type - ALCHEMY_BONUS_OFFSET] = true;
-			savedData.markDirty();
+			savedData.setDirty();
 			increaseProgress(ALCHEMY_BONUSES[type - ALCHEMY_BONUS_OFFSET]);
 		}
 	}
@@ -178,22 +176,15 @@ public class Echeladder
 		int healthBonus = healthBoost(rung);
 		double damageBonus = attackBonus(rung);
 		
-		updateAttribute(player.getAttribute(SharedMonsterAttributes.MAX_HEALTH), new AttributeModifier(echeladderHealthBoostModifierUUID, "Echeladder Health Boost", healthBonus, AttributeModifier.Operation.ADDITION));    //If this isn't saved, your health goes to 10 hearts (if it was higher before) when loading the save file.
-		updateAttribute(player.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE), new AttributeModifier(echeladderDamageBoostModifierUUID, "Echeladder Damage Boost", damageBonus, AttributeModifier.Operation.MULTIPLY_BASE).setSaved(false));
+		updateAttribute(player.getAttribute(Attributes.MAX_HEALTH), new AttributeModifier(echeladderHealthBoostModifierUUID, "Echeladder Health Boost", healthBonus, AttributeModifier.Operation.ADDITION));	//If this isn't saved, your health goes to 10 hearts (if it was higher before) when loading the save file.
+		updateAttribute(player.getAttribute(Attributes.ATTACK_DAMAGE), new AttributeModifier(echeladderDamageBoostModifierUUID, "Echeladder Damage Boost", damageBonus, AttributeModifier.Operation.MULTIPLY_BASE).setSaved(false));
 	}
 	
-	public void updateAttribute(IAttributeInstance attribute, AttributeModifier modifier)
+	public void updateAttribute(ModifiableAttributeInstance attribute, AttributeModifier modifier)
 	{
 		if(attribute.hasModifier(modifier))
-			attribute.removeModifier(attribute.getModifier(modifier.getID()));
-		attribute.applyModifier(modifier);
-	}
-	
-	public void resendAttributes(PlayerEntity player)
-	{
-		Set<IAttributeInstance> attributesToSend = ((AttributeMap) player.getAttributes()).getDirtyInstances();
-		
-		attributesToSend.add(player.getAttribute(SharedMonsterAttributes.MAX_HEALTH));
+			attribute.removeModifier(attribute.getModifier(modifier.getId()));
+		attribute.addPermanentModifier(modifier);
 	}
 	
 	public void saveEcheladder(CompoundNBT nbt)
@@ -257,7 +248,7 @@ public class Echeladder
 		
 		if(prevProgress != this.progress || prevRung != this.rung)
 		{
-			savedData.markDirty();
+			savedData.setDirty();
 			ServerPlayerEntity player = identifier.getPlayer(savedData.mcServer);
 			if(player != null && (MinestuckConfig.SERVER.echeladderProgress.get() || prevRung != this.rung))
 			{

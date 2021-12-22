@@ -1,14 +1,16 @@
 package com.mraof.minestuck.client.gui.captchalouge;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
 
 public class HashMapSylladexScreen extends SylladexScreen
@@ -30,19 +32,19 @@ public class HashMapSylladexScreen extends SylladexScreen
 	public void init()
 	{
 		super.init();
-		guiButton = new ExtendedButton((width - GUI_WIDTH)/2 + 15, (height - GUI_HEIGHT)/2 + 175, 120, 20, "", button -> changeSetting());
+		guiButton = new ExtendedButton((width - GUI_WIDTH)/2 + 15, (height - GUI_HEIGHT)/2 + 175, 120, 20, StringTextComponent.EMPTY, button -> changeSetting());
 		addButton(guiButton);
 	}
 	
 	@Override
-	public void render(int mouseX, int mouseY, float f)
+	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float f)
 	{
 		guiButton.x = (width - GUI_WIDTH)/2 + 15;
 		guiButton.y = (height - GUI_HEIGHT)/2 + 175;
 		boolean active = MinestuckConfig.SERVER.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.BOTH ? modus.ejectByChat : MinestuckConfig.SERVER.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.ON;
-		guiButton.setMessage(I18n.format(active ? EJECT_BY_CHAT_ON : EJECT_BY_CHAT_OFF));
+		guiButton.setMessage(new TranslationTextComponent(active ? EJECT_BY_CHAT_ON : EJECT_BY_CHAT_OFF));
 		guiButton.active = MinestuckConfig.SERVER.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.BOTH;
-		super.render(mouseX, mouseY, f);
+		super.render(matrixStack, mouseX, mouseY, f);
 	}
 	
 	@Override
@@ -85,19 +87,19 @@ public class HashMapSylladexScreen extends SylladexScreen
 	}
 	
 	@Override
-	public void drawGuiMap(int xcor, int ycor)
+	public void drawGuiMap(MatrixStack matrixStack, int mouseX, int mouseY)
 	{
-		super.drawGuiMap(xcor, ycor);
-		int y = mapHeight/2 - CARD_HEIGHT/2 - 3 - font.FONT_HEIGHT;
+		super.drawGuiMap(matrixStack, mouseX, mouseY);
+		int y = mapHeight/2 - CARD_HEIGHT/2 - 3 - font.lineHeight;
 		int start = Math.max(5, (mapWidth - (cards.size()*CARD_WIDTH + (cards.size() - 1)*5))/2);
 		
 		for(int i = 0; i < cards.size(); i++)
 		{
 			String s = String.valueOf(i);
-			int width = font.getStringWidth(s);
+			int width = font.width(s);
 			int x = start + i*(CARD_WIDTH + 5) + CARD_WIDTH/2 - mapX - width/2;
 			if(x + width > 0 && x < mapWidth)
-				font.drawString(s, x, y, 0x000000);
+				font.draw(matrixStack, s, x, y, 0x000000);
 		}
 	}
 	

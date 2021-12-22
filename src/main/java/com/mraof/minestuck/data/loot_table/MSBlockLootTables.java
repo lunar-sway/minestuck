@@ -11,12 +11,14 @@ import net.minecraft.block.Blocks;
 import net.minecraft.data.loot.BlockLootTables;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.Items;
-import net.minecraft.world.storage.loot.*;
-import net.minecraft.world.storage.loot.conditions.*;
-import net.minecraft.world.storage.loot.functions.ApplyBonus;
-import net.minecraft.world.storage.loot.functions.CopyName;
-import net.minecraft.world.storage.loot.functions.CopyNbt;
-import net.minecraft.world.storage.loot.functions.SetCount;
+import net.minecraft.loot.*;
+import net.minecraft.loot.conditions.ILootCondition;
+import net.minecraft.loot.conditions.MatchTool;
+import net.minecraft.loot.conditions.TableBonus;
+import net.minecraft.loot.functions.ApplyBonus;
+import net.minecraft.loot.functions.CopyName;
+import net.minecraft.loot.functions.CopyNbt;
+import net.minecraft.loot.functions.SetCount;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.stream.Collectors;
@@ -25,110 +27,110 @@ import static com.mraof.minestuck.block.MSBlocks.*;
 
 public class MSBlockLootTables extends BlockLootTables
 {
-	private static final ILootCondition.IBuilder SILK_TOUCH_CONDITION = MatchTool.builder(ItemPredicate.Builder.create().enchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.IntBound.atLeast(1))));
-	private static final ILootCondition.IBuilder SHEAR_CONDITION = MatchTool.builder(ItemPredicate.Builder.create().item(Items.SHEARS));
-	private static final ILootCondition.IBuilder SILK_AND_SHEAR_CONDITION = SHEAR_CONDITION.alternative(SILK_TOUCH_CONDITION);
-	private static final ILootCondition.IBuilder NO_SILK_OR_SHEAR_CONDITION = SILK_AND_SHEAR_CONDITION.inverted();
+	private static final ILootCondition.IBuilder SILK_TOUCH_CONDITION = MatchTool.toolMatches(ItemPredicate.Builder.item().hasEnchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.IntBound.atLeast(1))));
+	private static final ILootCondition.IBuilder SHEAR_CONDITION = MatchTool.toolMatches(ItemPredicate.Builder.item().of(Items.SHEARS));
+	private static final ILootCondition.IBuilder SILK_AND_SHEAR_CONDITION = SHEAR_CONDITION.or(SILK_TOUCH_CONDITION);
+	private static final ILootCondition.IBuilder NO_SILK_OR_SHEAR_CONDITION = SILK_AND_SHEAR_CONDITION.invert();
 	private static final float[] SAPLING_CHANCES = new float[]{0.05F, 0.0625F, 0.083333336F, 0.1F};
 	
 	@Override
 	protected void addTables()
 	{
-		registerDropSelfLootTable(BLACK_CHESS_DIRT);
-		registerDropSelfLootTable(WHITE_CHESS_DIRT);
-		registerDropSelfLootTable(DARK_GRAY_CHESS_DIRT);
-		registerDropSelfLootTable(LIGHT_GRAY_CHESS_DIRT);
+		dropSelf(BLACK_CHESS_DIRT);
+		dropSelf(WHITE_CHESS_DIRT);
+		dropSelf(DARK_GRAY_CHESS_DIRT);
+		dropSelf(LIGHT_GRAY_CHESS_DIRT);
 		
-		registerDropSelfLootTable(BLACK_CASTLE_BRICKS);
-		registerDropSelfLootTable(WHITE_CASTLE_BRICKS);
-		registerDropSelfLootTable(LIGHT_GRAY_CASTLE_BRICKS);
-		registerDropSelfLootTable(DARK_GRAY_CASTLE_BRICKS);
-		registerDropSelfLootTable(BLACK_CASTLE_BRICK_SMOOTH);
-		registerDropSelfLootTable(WHITE_CASTLE_BRICK_SMOOTH);
-		registerDropSelfLootTable(LIGHT_GRAY_CASTLE_BRICK_SMOOTH);
-		registerDropSelfLootTable(DARK_GRAY_CASTLE_BRICK_SMOOTH);
-		registerDropSelfLootTable(BLACK_CASTLE_BRICK_TRIM);
-		registerDropSelfLootTable(WHITE_CASTLE_BRICK_TRIM);
-		registerDropSelfLootTable(LIGHT_GRAY_CASTLE_BRICK_TRIM);
-		registerDropSelfLootTable(DARK_GRAY_CASTLE_BRICK_TRIM);
-		registerDropSelfLootTable(CHECKERED_STAINED_GLASS);
-		registerDropSelfLootTable(BLACK_CROWN_STAINED_GLASS);
-		registerDropSelfLootTable(BLACK_PAWN_STAINED_GLASS);
-		registerDropSelfLootTable(WHITE_CROWN_STAINED_GLASS);
-		registerDropSelfLootTable(WHITE_PAWN_STAINED_GLASS);
+		dropSelf(BLACK_CASTLE_BRICKS);
+		dropSelf(WHITE_CASTLE_BRICKS);
+		dropSelf(LIGHT_GRAY_CASTLE_BRICKS);
+		dropSelf(DARK_GRAY_CASTLE_BRICKS);
+		dropSelf(BLACK_CASTLE_BRICK_SMOOTH);
+		dropSelf(WHITE_CASTLE_BRICK_SMOOTH);
+		dropSelf(LIGHT_GRAY_CASTLE_BRICK_SMOOTH);
+		dropSelf(DARK_GRAY_CASTLE_BRICK_SMOOTH);
+		dropSelf(BLACK_CASTLE_BRICK_TRIM);
+		dropSelf(WHITE_CASTLE_BRICK_TRIM);
+		dropSelf(LIGHT_GRAY_CASTLE_BRICK_TRIM);
+		dropSelf(DARK_GRAY_CASTLE_BRICK_TRIM);
+		dropSelf(CHECKERED_STAINED_GLASS);
+		dropSelf(BLACK_CROWN_STAINED_GLASS);
+		dropSelf(BLACK_PAWN_STAINED_GLASS);
+		dropSelf(WHITE_CROWN_STAINED_GLASS);
+		dropSelf(WHITE_PAWN_STAINED_GLASS);
 		
-		registerLootTable(STONE_CRUXITE_ORE, MSBlockLootTables::cruxiteOreDrop);
-		registerLootTable(COBBLESTONE_CRUXITE_ORE, MSBlockLootTables::cruxiteOreDrop);
-		registerLootTable(SANDSTONE_CRUXITE_ORE, MSBlockLootTables::cruxiteOreDrop);
-		registerLootTable(RED_SANDSTONE_CRUXITE_ORE, MSBlockLootTables::cruxiteOreDrop);
-		registerLootTable(NETHERRACK_CRUXITE_ORE, MSBlockLootTables::cruxiteOreDrop);
-		registerLootTable(END_STONE_CRUXITE_ORE, MSBlockLootTables::cruxiteOreDrop);
-		registerLootTable(SHADE_STONE_CRUXITE_ORE, MSBlockLootTables::cruxiteOreDrop);
-		registerLootTable(PINK_STONE_CRUXITE_ORE, MSBlockLootTables::cruxiteOreDrop);
-		registerLootTable(STONE_URANIUM_ORE, MSBlockLootTables::uraniumOreDrop);
-		registerLootTable(COBBLESTONE_URANIUM_ORE, MSBlockLootTables::uraniumOreDrop);
-		registerLootTable(SANDSTONE_URANIUM_ORE, MSBlockLootTables::uraniumOreDrop);
-		registerLootTable(RED_SANDSTONE_URANIUM_ORE, MSBlockLootTables::uraniumOreDrop);
-		registerLootTable(NETHERRACK_URANIUM_ORE, MSBlockLootTables::uraniumOreDrop);
-		registerLootTable(END_STONE_URANIUM_ORE, MSBlockLootTables::uraniumOreDrop);
-		registerLootTable(SHADE_STONE_URANIUM_ORE, MSBlockLootTables::uraniumOreDrop);
-		registerLootTable(PINK_STONE_URANIUM_ORE, MSBlockLootTables::uraniumOreDrop);
+		add(STONE_CRUXITE_ORE, MSBlockLootTables::cruxiteOreDrop);
+		add(COBBLESTONE_CRUXITE_ORE, MSBlockLootTables::cruxiteOreDrop);
+		add(SANDSTONE_CRUXITE_ORE, MSBlockLootTables::cruxiteOreDrop);
+		add(RED_SANDSTONE_CRUXITE_ORE, MSBlockLootTables::cruxiteOreDrop);
+		add(NETHERRACK_CRUXITE_ORE, MSBlockLootTables::cruxiteOreDrop);
+		add(END_STONE_CRUXITE_ORE, MSBlockLootTables::cruxiteOreDrop);
+		add(SHADE_STONE_CRUXITE_ORE, MSBlockLootTables::cruxiteOreDrop);
+		add(PINK_STONE_CRUXITE_ORE, MSBlockLootTables::cruxiteOreDrop);
+		add(STONE_URANIUM_ORE, MSBlockLootTables::uraniumOreDrop);
+		add(COBBLESTONE_URANIUM_ORE, MSBlockLootTables::uraniumOreDrop);
+		add(SANDSTONE_URANIUM_ORE, MSBlockLootTables::uraniumOreDrop);
+		add(RED_SANDSTONE_URANIUM_ORE, MSBlockLootTables::uraniumOreDrop);
+		add(NETHERRACK_URANIUM_ORE, MSBlockLootTables::uraniumOreDrop);
+		add(END_STONE_URANIUM_ORE, MSBlockLootTables::uraniumOreDrop);
+		add(SHADE_STONE_URANIUM_ORE, MSBlockLootTables::uraniumOreDrop);
+		add(PINK_STONE_URANIUM_ORE, MSBlockLootTables::uraniumOreDrop);
 		
-		registerLootTable(NETHERRACK_COAL_ORE, MSBlockLootTables::coalOreDrop);
-		registerLootTable(SHADE_STONE_COAL_ORE, MSBlockLootTables::coalOreDrop);
-		registerLootTable(PINK_STONE_COAL_ORE, MSBlockLootTables::coalOreDrop);
-		registerDropSelfLootTable(SANDSTONE_IRON_ORE);
-		registerDropSelfLootTable(RED_SANDSTONE_IRON_ORE);
-		registerDropSelfLootTable(END_STONE_IRON_ORE);
-		registerDropSelfLootTable(SANDSTONE_GOLD_ORE);
-		registerDropSelfLootTable(RED_SANDSTONE_GOLD_ORE);
-		registerDropSelfLootTable(SHADE_STONE_GOLD_ORE);
-		registerDropSelfLootTable(PINK_STONE_GOLD_ORE);
-		registerLootTable(END_STONE_REDSTONE_ORE, MSBlockLootTables::redstoneOreDrop);
-		registerLootTable(STONE_QUARTZ_ORE, MSBlockLootTables::quartzOreDrop);
-		registerLootTable(PINK_STONE_LAPIS_ORE, MSBlockLootTables::lapisOreDrop);
-		registerLootTable(PINK_STONE_DIAMOND_ORE, MSBlockLootTables::diamondOreDrop);
+		add(NETHERRACK_COAL_ORE, MSBlockLootTables::coalOreDrop);
+		add(SHADE_STONE_COAL_ORE, MSBlockLootTables::coalOreDrop);
+		add(PINK_STONE_COAL_ORE, MSBlockLootTables::coalOreDrop);
+		dropSelf(SANDSTONE_IRON_ORE);
+		dropSelf(RED_SANDSTONE_IRON_ORE);
+		dropSelf(END_STONE_IRON_ORE);
+		dropSelf(SANDSTONE_GOLD_ORE);
+		dropSelf(RED_SANDSTONE_GOLD_ORE);
+		dropSelf(SHADE_STONE_GOLD_ORE);
+		dropSelf(PINK_STONE_GOLD_ORE);
+		add(END_STONE_REDSTONE_ORE, MSBlockLootTables::redstoneOreDrop);
+		add(STONE_QUARTZ_ORE, MSBlockLootTables::quartzOreDrop);
+		add(PINK_STONE_LAPIS_ORE, MSBlockLootTables::lapisOreDrop);
+		add(PINK_STONE_DIAMOND_ORE, MSBlockLootTables::diamondOreDrop);
 		
-		registerDropSelfLootTable(CRUXITE_BLOCK);
-		registerDropSelfLootTable(URANIUM_BLOCK);
-		registerDropSelfLootTable(GENERIC_OBJECT);
+		dropSelf(CRUXITE_BLOCK);
+		dropSelf(URANIUM_BLOCK);
+		dropSelf(GENERIC_OBJECT);
 		
-		registerDropSelfLootTable(BLUE_DIRT);
-		registerDropSelfLootTable(THOUGHT_DIRT);
-		registerDropSelfLootTable(COARSE_STONE);
-		registerDropSelfLootTable(CHISELED_COARSE_STONE);
-		registerDropSelfLootTable(SHADE_STONE);
-		registerDropSelfLootTable(SHADE_BRICKS);
-		registerDropSelfLootTable(SMOOTH_SHADE_STONE);
-		registerDropSelfLootTable(FROST_BRICKS);
-		registerDropSelfLootTable(FROST_TILE);
-		registerDropSelfLootTable(CHISELED_FROST_BRICKS);
-		registerDropSelfLootTable(CAST_IRON);
-		registerDropSelfLootTable(CHISELED_CAST_IRON);
-		registerDropSelfLootTable(STEEL_BEAM);
-		registerDropSelfLootTable(MYCELIUM_BRICKS);
-		registerDropSelfLootTable(BLACK_STONE);
-		registerDropSelfLootTable(BLACK_SAND);
-		registerDropSelfLootTable(FLOWERY_MOSSY_COBBLESTONE);
-		registerDropSelfLootTable(FLOWERY_MOSSY_STONE_BRICKS);
-		registerDropSelfLootTable(COARSE_END_STONE);
-		registerLootTable(END_GRASS, MSBlockLootTables::endGrassDrop);
-		registerDropSelfLootTable(CHALK);
-		registerDropSelfLootTable(POLISHED_CHALK);
-		registerDropSelfLootTable(CHALK_BRICKS);
-		registerDropSelfLootTable(CHISELED_CHALK_BRICKS);
-		registerDropSelfLootTable(PINK_STONE);
-		registerDropSelfLootTable(POLISHED_PINK_STONE);
-		registerDropSelfLootTable(PINK_STONE_BRICKS);
-		registerDropSelfLootTable(CHISELED_PINK_STONE_BRICKS);
-		registerDropSelfLootTable(CRACKED_PINK_STONE_BRICKS);
-		registerDropSelfLootTable(MOSSY_PINK_STONE_BRICKS);
-		registerDropSelfLootTable(BROWN_STONE);
-		registerDropSelfLootTable(POLISHED_BROWN_STONE);
-		registerDropSelfLootTable(BROWN_STONE_BRICKS);
-		registerDropSelfLootTable(BROWN_STONE_COLUMN);
-		registerDropSelfLootTable(CRACKED_BROWN_STONE_BRICKS);
-		registerDropSelfLootTable(GREEN_STONE);
+		dropSelf(BLUE_DIRT);
+		dropSelf(THOUGHT_DIRT);
+		dropSelf(COARSE_STONE);
+		dropSelf(CHISELED_COARSE_STONE);
+		dropSelf(SHADE_STONE);
+		dropSelf(SHADE_BRICKS);
+		dropSelf(SMOOTH_SHADE_STONE);
+		dropSelf(FROST_BRICKS);
+		dropSelf(FROST_TILE);
+		dropSelf(CHISELED_FROST_BRICKS);
+		dropSelf(CAST_IRON);
+		dropSelf(CHISELED_CAST_IRON);
+		dropSelf(STEEL_BEAM);
+		dropSelf(MYCELIUM_BRICKS);
+		dropSelf(BLACK_STONE);
+		dropSelf(BLACK_SAND);
+		dropSelf(FLOWERY_MOSSY_COBBLESTONE);
+		dropSelf(FLOWERY_MOSSY_STONE_BRICKS);
+		dropSelf(COARSE_END_STONE);
+		add(END_GRASS, MSBlockLootTables::endGrassDrop);
+		dropSelf(CHALK);
+		dropSelf(POLISHED_CHALK);
+		dropSelf(CHALK_BRICKS);
+		dropSelf(CHISELED_CHALK_BRICKS);
+		dropSelf(PINK_STONE);
+		dropSelf(POLISHED_PINK_STONE);
+		dropSelf(PINK_STONE_BRICKS);
+		dropSelf(CHISELED_PINK_STONE_BRICKS);
+		dropSelf(CRACKED_PINK_STONE_BRICKS);
+		dropSelf(MOSSY_PINK_STONE_BRICKS);
+		dropSelf(BROWN_STONE);
+		dropSelf(POLISHED_BROWN_STONE);
+		dropSelf(BROWN_STONE_BRICKS);
+		dropSelf(BROWN_STONE_COLUMN);
+		dropSelf(CRACKED_BROWN_STONE_BRICKS);
+		dropSelf(GREEN_STONE);
 		registerDropSelfLootTable(POLISHED_GREEN_STONE);
 		registerDropSelfLootTable(GREEN_STONE_BRICKS);
 		registerDropSelfLootTable(GREEN_STONE_COLUMN);
@@ -146,325 +148,325 @@ public class MSBlockLootTables extends BlockLootTables
 		registerDropSelfLootTable(GREEN_STONE_BRICK_SALAMANDER_RIGHT);
 		registerDropSelfLootTable(GREEN_STONE_BRICK_SKAIA);
 		registerDropSelfLootTable(GREEN_STONE_BRICK_TURTLE);
-		registerDropSelfLootTable(DENSE_CLOUD);
-		registerDropSelfLootTable(BRIGHT_DENSE_CLOUD);
-		registerDropSelfLootTable(SUGAR_CUBE);
+		dropSelf(DENSE_CLOUD);
+		dropSelf(BRIGHT_DENSE_CLOUD);
+		dropSelf(SUGAR_CUBE);
 		registerDropSelfLootTable(SPIKES);
 		
-		registerDropSelfLootTable(GLOWING_LOG);
-		registerDropSelfLootTable(FROST_LOG);
-		registerDropSelfLootTable(RAINBOW_LOG);
-		registerDropSelfLootTable(END_LOG);
-		registerDropSelfLootTable(VINE_LOG);
-		registerDropSelfLootTable(FLOWERY_VINE_LOG);
-		registerDropSelfLootTable(DEAD_LOG);
-		registerDropSelfLootTable(PETRIFIED_LOG);
-		registerDropSelfLootTable(GLOWING_WOOD);
-		registerDropSelfLootTable(FROST_WOOD);
-		registerDropSelfLootTable(RAINBOW_WOOD);
-		registerDropSelfLootTable(END_WOOD);
-		registerDropSelfLootTable(VINE_WOOD);
-		registerDropSelfLootTable(FLOWERY_VINE_WOOD);
-		registerDropSelfLootTable(DEAD_WOOD);
-		registerDropSelfLootTable(PETRIFIED_WOOD);
-		registerDropSelfLootTable(GLOWING_PLANKS);
-		registerDropSelfLootTable(FROST_PLANKS);
-		registerDropSelfLootTable(RAINBOW_PLANKS);
-		registerDropSelfLootTable(END_PLANKS);
-		registerDropSelfLootTable(DEAD_PLANKS);
-		registerDropSelfLootTable(TREATED_PLANKS);
-		registerLootTable(FROST_LEAVES, MSBlockLootTables::frostLeavesDrop);
-		registerLootTable(RAINBOW_LEAVES, MSBlockLootTables::rainbowLeavesDrop);
-		registerLootTable(END_LEAVES, MSBlockLootTables::endLeavesDrop);
-		registerDropSelfLootTable(RAINBOW_SAPLING);
-		registerDropSelfLootTable(END_SAPLING);
+		dropSelf(GLOWING_LOG);
+		dropSelf(FROST_LOG);
+		dropSelf(RAINBOW_LOG);
+		dropSelf(END_LOG);
+		dropSelf(VINE_LOG);
+		dropSelf(FLOWERY_VINE_LOG);
+		dropSelf(DEAD_LOG);
+		dropSelf(PETRIFIED_LOG);
+		dropSelf(GLOWING_WOOD);
+		dropSelf(FROST_WOOD);
+		dropSelf(RAINBOW_WOOD);
+		dropSelf(END_WOOD);
+		dropSelf(VINE_WOOD);
+		dropSelf(FLOWERY_VINE_WOOD);
+		dropSelf(DEAD_WOOD);
+		dropSelf(PETRIFIED_WOOD);
+		dropSelf(GLOWING_PLANKS);
+		dropSelf(FROST_PLANKS);
+		dropSelf(RAINBOW_PLANKS);
+		dropSelf(END_PLANKS);
+		dropSelf(DEAD_PLANKS);
+		dropSelf(TREATED_PLANKS);
+		add(FROST_LEAVES, MSBlockLootTables::frostLeavesDrop);
+		add(RAINBOW_LEAVES, MSBlockLootTables::rainbowLeavesDrop);
+		add(END_LEAVES, MSBlockLootTables::endLeavesDrop);
+		dropSelf(RAINBOW_SAPLING);
+		dropSelf(END_SAPLING);
 		
-		registerDropSelfLootTable(BLOOD_ASPECT_LOG);
-		registerDropSelfLootTable(BREATH_ASPECT_LOG);
-		registerDropSelfLootTable(DOOM_ASPECT_LOG);
-		registerDropSelfLootTable(HEART_ASPECT_LOG);
-		registerDropSelfLootTable(HOPE_ASPECT_LOG);
-		registerDropSelfLootTable(LIFE_ASPECT_LOG);
-		registerDropSelfLootTable(LIGHT_ASPECT_LOG);
-		registerDropSelfLootTable(MIND_ASPECT_LOG);
-		registerDropSelfLootTable(RAGE_ASPECT_LOG);
-		registerDropSelfLootTable(SPACE_ASPECT_LOG);
-		registerDropSelfLootTable(TIME_ASPECT_LOG);
-		registerDropSelfLootTable(VOID_ASPECT_LOG);
-		registerDropSelfLootTable(BLOOD_ASPECT_PLANKS);
-		registerDropSelfLootTable(BREATH_ASPECT_PLANKS);
-		registerDropSelfLootTable(DOOM_ASPECT_PLANKS);
-		registerDropSelfLootTable(HEART_ASPECT_PLANKS);
-		registerDropSelfLootTable(HOPE_ASPECT_PLANKS);
-		registerDropSelfLootTable(LIFE_ASPECT_PLANKS);
-		registerDropSelfLootTable(LIGHT_ASPECT_PLANKS);
-		registerDropSelfLootTable(MIND_ASPECT_PLANKS);
-		registerDropSelfLootTable(RAGE_ASPECT_PLANKS);
-		registerDropSelfLootTable(SPACE_ASPECT_PLANKS);
-		registerDropSelfLootTable(TIME_ASPECT_PLANKS);
-		registerDropSelfLootTable(VOID_ASPECT_PLANKS);
-		registerLootTable(BLOOD_ASPECT_LEAVES, MSBlockLootTables::bloodAspectLeavesDrop);
-		registerLootTable(BREATH_ASPECT_LEAVES, MSBlockLootTables::breathAspectLeavesDrop);
-		registerLootTable(DOOM_ASPECT_LEAVES, MSBlockLootTables::doomAspectLeavesDrop);
-		registerLootTable(HEART_ASPECT_LEAVES, MSBlockLootTables::heartAspectLeavesDrop);
-		registerLootTable(HOPE_ASPECT_LEAVES, MSBlockLootTables::hopeAspectLeavesDrop);
-		registerLootTable(LIFE_ASPECT_LEAVES, MSBlockLootTables::lifeAspectLeavesDrop);
-		registerLootTable(LIGHT_ASPECT_LEAVES, MSBlockLootTables::lightAspectLeavesDrop);
-		registerLootTable(MIND_ASPECT_LEAVES, MSBlockLootTables::mindAspectLeavesDrop);
-		registerLootTable(RAGE_ASPECT_LEAVES, MSBlockLootTables::rageAspectLeavesDrop);
-		registerLootTable(SPACE_ASPECT_LEAVES, MSBlockLootTables::spaceAspectLeavesDrop);
-		registerLootTable(TIME_ASPECT_LEAVES, MSBlockLootTables::timeAspectLeavesDrop);
-		registerLootTable(VOID_ASPECT_LEAVES, MSBlockLootTables::voidAspectLeavesDrop);
-		registerDropSelfLootTable(BLOOD_ASPECT_SAPLING);
-		registerDropSelfLootTable(BREATH_ASPECT_SAPLING);
-		registerDropSelfLootTable(DOOM_ASPECT_SAPLING);
-		registerDropSelfLootTable(HEART_ASPECT_SAPLING);
-		registerDropSelfLootTable(HOPE_ASPECT_SAPLING);
-		registerDropSelfLootTable(LIFE_ASPECT_SAPLING);
-		registerDropSelfLootTable(LIGHT_ASPECT_SAPLING);
-		registerDropSelfLootTable(MIND_ASPECT_SAPLING);
-		registerDropSelfLootTable(RAGE_ASPECT_SAPLING);
-		registerDropSelfLootTable(SPACE_ASPECT_SAPLING);
-		registerDropSelfLootTable(TIME_ASPECT_SAPLING);
-		registerDropSelfLootTable(VOID_ASPECT_SAPLING);
+		dropSelf(BLOOD_ASPECT_LOG);
+		dropSelf(BREATH_ASPECT_LOG);
+		dropSelf(DOOM_ASPECT_LOG);
+		dropSelf(HEART_ASPECT_LOG);
+		dropSelf(HOPE_ASPECT_LOG);
+		dropSelf(LIFE_ASPECT_LOG);
+		dropSelf(LIGHT_ASPECT_LOG);
+		dropSelf(MIND_ASPECT_LOG);
+		dropSelf(RAGE_ASPECT_LOG);
+		dropSelf(SPACE_ASPECT_LOG);
+		dropSelf(TIME_ASPECT_LOG);
+		dropSelf(VOID_ASPECT_LOG);
+		dropSelf(BLOOD_ASPECT_PLANKS);
+		dropSelf(BREATH_ASPECT_PLANKS);
+		dropSelf(DOOM_ASPECT_PLANKS);
+		dropSelf(HEART_ASPECT_PLANKS);
+		dropSelf(HOPE_ASPECT_PLANKS);
+		dropSelf(LIFE_ASPECT_PLANKS);
+		dropSelf(LIGHT_ASPECT_PLANKS);
+		dropSelf(MIND_ASPECT_PLANKS);
+		dropSelf(RAGE_ASPECT_PLANKS);
+		dropSelf(SPACE_ASPECT_PLANKS);
+		dropSelf(TIME_ASPECT_PLANKS);
+		dropSelf(VOID_ASPECT_PLANKS);
+		add(BLOOD_ASPECT_LEAVES, MSBlockLootTables::bloodAspectLeavesDrop);
+		add(BREATH_ASPECT_LEAVES, MSBlockLootTables::breathAspectLeavesDrop);
+		add(DOOM_ASPECT_LEAVES, MSBlockLootTables::doomAspectLeavesDrop);
+		add(HEART_ASPECT_LEAVES, MSBlockLootTables::heartAspectLeavesDrop);
+		add(HOPE_ASPECT_LEAVES, MSBlockLootTables::hopeAspectLeavesDrop);
+		add(LIFE_ASPECT_LEAVES, MSBlockLootTables::lifeAspectLeavesDrop);
+		add(LIGHT_ASPECT_LEAVES, MSBlockLootTables::lightAspectLeavesDrop);
+		add(MIND_ASPECT_LEAVES, MSBlockLootTables::mindAspectLeavesDrop);
+		add(RAGE_ASPECT_LEAVES, MSBlockLootTables::rageAspectLeavesDrop);
+		add(SPACE_ASPECT_LEAVES, MSBlockLootTables::spaceAspectLeavesDrop);
+		add(TIME_ASPECT_LEAVES, MSBlockLootTables::timeAspectLeavesDrop);
+		add(VOID_ASPECT_LEAVES, MSBlockLootTables::voidAspectLeavesDrop);
+		dropSelf(BLOOD_ASPECT_SAPLING);
+		dropSelf(BREATH_ASPECT_SAPLING);
+		dropSelf(DOOM_ASPECT_SAPLING);
+		dropSelf(HEART_ASPECT_SAPLING);
+		dropSelf(HOPE_ASPECT_SAPLING);
+		dropSelf(LIFE_ASPECT_SAPLING);
+		dropSelf(LIGHT_ASPECT_SAPLING);
+		dropSelf(MIND_ASPECT_SAPLING);
+		dropSelf(RAGE_ASPECT_SAPLING);
+		dropSelf(SPACE_ASPECT_SAPLING);
+		dropSelf(TIME_ASPECT_SAPLING);
+		dropSelf(VOID_ASPECT_SAPLING);
 		
-		registerDropSelfLootTable(GLOWING_MUSHROOM);
-		registerLootTable(DESERT_BUSH, MSBlockLootTables::desertBushDrop);
-		registerDropSelfLootTable(BLOOMING_CACTUS);
-		registerDropSelfLootTable(PETRIFIED_GRASS);
-		registerDropSelfLootTable(PETRIFIED_POPPY);
-		registerDropSelfLootTable(STRAWBERRY);
-		registerLootTable(ATTACHED_STRAWBERRY_STEM, func_218482_a());
-		registerLootTable(STRAWBERRY_STEM, MSBlockLootTables::strawberryStemDrop);
-		registerLootTable(TALL_END_GRASS, func_218482_a());
-		registerDropSelfLootTable(GLOWFLOWER);
+		dropSelf(GLOWING_MUSHROOM);
+		add(DESERT_BUSH, MSBlockLootTables::desertBushDrop);
+		dropSelf(BLOOMING_CACTUS);
+		dropSelf(PETRIFIED_GRASS);
+		dropSelf(PETRIFIED_POPPY);
+		dropSelf(STRAWBERRY);
+		add(ATTACHED_STRAWBERRY_STEM, noDrop());	//TODO vanilla has a different loot table for their attached stems, should we replicate?
+		add(STRAWBERRY_STEM, MSBlockLootTables::strawberryStemDrop);
+		add(TALL_END_GRASS, noDrop());
+		dropSelf(GLOWFLOWER);
 		
-		registerDropSelfLootTable(GLOWY_GOOP);
-		registerDropSelfLootTable(COAGULATED_BLOOD);
-		registerLootTable(VEIN, func_218482_a());
-		registerLootTable(VEIN_CORNER, func_218482_a());
-		registerLootTable(INVERTED_VEIN_CORNER, func_218482_a());
-		registerDropSelfLootTable(PIPE);
-		registerDropSelfLootTable(PIPE_INTERSECTION);
-		registerDropSelfLootTable(PARCEL_PYXIS);
-		registerDropSelfLootTable(PYXIS_LID);
-		registerLootTable(STONE_SLAB, MSBlockLootTables::droppingWithTEItem);
+		dropSelf(GLOWY_GOOP);
+		dropSelf(COAGULATED_BLOOD);
+		add(VEIN, noDrop());
+		add(VEIN_CORNER, noDrop());
+		add(INVERTED_VEIN_CORNER, noDrop());
+		dropSelf(PIPE);
+		dropSelf(PIPE_INTERSECTION);
+		dropSelf(PARCEL_PYXIS);
+		dropSelf(PYXIS_LID);
+		add(STONE_SLAB, MSBlockLootTables::droppingWithTEItem);
 		registerDropSelfLootTable(NAKAGATOR_STATUE);
 		
-		registerDropSelfLootTable(BLACK_CASTLE_BRICK_STAIRS);
-		registerDropSelfLootTable(DARK_GRAY_CASTLE_BRICK_STAIRS);
-		registerDropSelfLootTable(LIGHT_GRAY_CASTLE_BRICK_STAIRS);
-		registerDropSelfLootTable(WHITE_CASTLE_BRICK_STAIRS);
-		registerDropSelfLootTable(COARSE_STONE_STAIRS);
-		registerDropSelfLootTable(SHADE_BRICK_STAIRS);
-		registerDropSelfLootTable(FROST_BRICK_STAIRS);
-		registerDropSelfLootTable(CAST_IRON_STAIRS);
-		registerDropSelfLootTable(MYCELIUM_BRICK_STAIRS);
-		registerDropSelfLootTable(CHALK_STAIRS);
-		registerDropSelfLootTable(CHALK_BRICK_STAIRS);
-		registerDropSelfLootTable(PINK_STONE_BRICK_STAIRS);
-		registerDropSelfLootTable(BROWN_STONE_BRICK_STAIRS);
-		registerDropSelfLootTable(GREEN_STONE_BRICK_STAIRS);
-		registerDropSelfLootTable(RAINBOW_PLANKS_STAIRS);
-		registerDropSelfLootTable(END_PLANKS_STAIRS);
-		registerDropSelfLootTable(DEAD_PLANKS_STAIRS);
-		registerDropSelfLootTable(TREATED_PLANKS_STAIRS);
-		registerDropSelfLootTable(STEEP_GREEN_STONE_BRICK_STAIRS_BASE);
-		registerDropSelfLootTable(STEEP_GREEN_STONE_BRICK_STAIRS_TOP);
-		registerDropSelfLootTable(BLACK_CASTLE_BRICK_SLAB);
-		registerDropSelfLootTable(DARK_GRAY_CASTLE_BRICK_SLAB);
-		registerDropSelfLootTable(LIGHT_GRAY_CASTLE_BRICK_SLAB);
-		registerDropSelfLootTable(WHITE_CASTLE_BRICK_SLAB);
-		registerDropSelfLootTable(CHALK_SLAB);
-		registerDropSelfLootTable(CHALK_BRICK_SLAB);
-		registerDropSelfLootTable(PINK_STONE_BRICK_SLAB);
-		registerDropSelfLootTable(BROWN_STONE_BRICK_SLAB);
-		registerDropSelfLootTable(GREEN_STONE_BRICK_SLAB);
-		registerDropSelfLootTable(RAINBOW_PLANKS_SLAB);
-		registerDropSelfLootTable(END_PLANKS_SLAB);
-		registerDropSelfLootTable(DEAD_PLANKS_SLAB);
-		registerDropSelfLootTable(TREATED_PLANKS_SLAB);
+		dropSelf(BLACK_CASTLE_BRICK_STAIRS);
+		dropSelf(DARK_GRAY_CASTLE_BRICK_STAIRS);
+		dropSelf(LIGHT_GRAY_CASTLE_BRICK_STAIRS);
+		dropSelf(WHITE_CASTLE_BRICK_STAIRS);
+		dropSelf(COARSE_STONE_STAIRS);
+		dropSelf(SHADE_BRICK_STAIRS);
+		dropSelf(FROST_BRICK_STAIRS);
+		dropSelf(CAST_IRON_STAIRS);
+		dropSelf(MYCELIUM_BRICK_STAIRS);
+		dropSelf(CHALK_STAIRS);
+		dropSelf(CHALK_BRICK_STAIRS);
+		dropSelf(PINK_STONE_BRICK_STAIRS);
+		dropSelf(BROWN_STONE_BRICK_STAIRS);
+		dropSelf(GREEN_STONE_BRICK_STAIRS);
+		dropSelf(RAINBOW_PLANKS_STAIRS);
+		dropSelf(END_PLANKS_STAIRS);
+		dropSelf(DEAD_PLANKS_STAIRS);
+		dropSelf(TREATED_PLANKS_STAIRS);
+		dropSelf(STEEP_GREEN_STONE_BRICK_STAIRS_BASE);
+		dropSelf(STEEP_GREEN_STONE_BRICK_STAIRS_TOP);
+		dropSelf(BLACK_CASTLE_BRICK_SLAB);
+		dropSelf(DARK_GRAY_CASTLE_BRICK_SLAB);
+		dropSelf(LIGHT_GRAY_CASTLE_BRICK_SLAB);
+		dropSelf(WHITE_CASTLE_BRICK_SLAB);
+		dropSelf(CHALK_SLAB);
+		dropSelf(CHALK_BRICK_SLAB);
+		dropSelf(PINK_STONE_BRICK_SLAB);
+		dropSelf(BROWN_STONE_BRICK_SLAB);
+		dropSelf(GREEN_STONE_BRICK_SLAB);
+		dropSelf(RAINBOW_PLANKS_SLAB);
+		dropSelf(END_PLANKS_SLAB);
+		dropSelf(DEAD_PLANKS_SLAB);
+		dropSelf(TREATED_PLANKS_SLAB);
 		
-		registerDropSelfLootTable(TRAJECTORY_BLOCK);
-		registerDropSelfLootTable(STAT_STORER);
-		registerDropSelfLootTable(REMOTE_OBSERVER);
-		registerDropSelfLootTable(WIRELESS_REDSTONE_TRANSMITTER);
-		registerDropSelfLootTable(WIRELESS_REDSTONE_RECEIVER);
-		registerDropSelfLootTable(SOLID_SWITCH);
-		registerDropSelfLootTable(VARIABLE_SOLID_SWITCH);
-		registerDropSelfLootTable(ONE_SECOND_INTERVAL_TIMED_SOLID_SWITCH);
-		registerDropSelfLootTable(TWO_SECOND_INTERVAL_TIMED_SOLID_SWITCH);
+		dropSelf(TRAJECTORY_BLOCK);
+		dropSelf(STAT_STORER);
+		dropSelf(REMOTE_OBSERVER);
+		dropSelf(WIRELESS_REDSTONE_TRANSMITTER);
+		dropSelf(WIRELESS_REDSTONE_RECEIVER);
+		dropSelf(SOLID_SWITCH);
+		dropSelf(VARIABLE_SOLID_SWITCH);
+		dropSelf(ONE_SECOND_INTERVAL_TIMED_SOLID_SWITCH);
+		dropSelf(TWO_SECOND_INTERVAL_TIMED_SOLID_SWITCH);
 		registerLootTable(SUMMONER, func_218482_a());
 		registerLootTable(AREA_EFFECT_BLOCK, func_218482_a());
-		registerDropSelfLootTable(PLATFORM_GENERATOR);
+		dropSelf(PLATFORM_GENERATOR);
 		registerLootTable(PLATFORM_BLOCK, func_218482_a());
-		registerDropSelfLootTable(ITEM_MAGNET);
-		registerDropSelfLootTable(REDSTONE_CLOCK);
-		registerDropSelfLootTable(AND_GATE_BLOCK);
-		registerDropSelfLootTable(OR_GATE_BLOCK);
-		registerDropSelfLootTable(XOR_GATE_BLOCK);
-		registerDropSelfLootTable(NAND_GATE_BLOCK);
-		registerDropSelfLootTable(NOR_GATE_BLOCK);
-		registerDropSelfLootTable(XNOR_GATE_BLOCK);
+		dropSelf(ITEM_MAGNET);
+		dropSelf(REDSTONE_CLOCK);
+		dropSelf(AND_GATE_BLOCK);
+		dropSelf(OR_GATE_BLOCK);
+		dropSelf(XOR_GATE_BLOCK);
+		dropSelf(NAND_GATE_BLOCK);
+		dropSelf(NOR_GATE_BLOCK);
+		dropSelf(XNOR_GATE_BLOCK);
 		
-		registerDropSelfLootTable(HOLOPAD);
-		registerDropSelfLootTable(CRUXTRUDER_LID);
-		registerLootTable(MINI_CRUXTRUDER, MSBlockLootTables::droppingWithColor);
-		registerDropSelfLootTable(MINI_TOTEM_LATHE);
-		registerDropSelfLootTable(MINI_ALCHEMITER);
-		registerDropSelfLootTable(MINI_PUNCH_DESIGNIX);
+		dropSelf(HOLOPAD);
+		dropSelf(CRUXTRUDER_LID);
+		add(MINI_CRUXTRUDER, MSBlockLootTables::droppingWithColor);
+		dropSelf(MINI_TOTEM_LATHE);
+		dropSelf(MINI_ALCHEMITER);
+		dropSelf(MINI_PUNCH_DESIGNIX);
 		
-		registerDropSelfLootTable(COMPUTER);
-		registerDropSelfLootTable(LAPTOP);
-		registerDropSelfLootTable(CROCKERTOP);
-		registerDropSelfLootTable(HUBTOP);
-		registerDropSelfLootTable(LUNCHTOP);
-		registerDropSelfLootTable(OLD_COMPUTER);
-		registerLootTable(TRANSPORTALIZER, MSBlockLootTables::droppingWithNameOnSilkTouch);
-		registerLootTable(TRANS_PORTALIZER, MSBlockLootTables::droppingWithNameOnSilkTouch);
-		registerDropSelfLootTable(SENDIFICATOR);
-		registerDropSelfLootTable(GRIST_WIDGET);
-		registerDropSelfLootTable(URANIUM_COOKER);
+		dropSelf(COMPUTER);
+		dropSelf(LAPTOP);
+		dropSelf(CROCKERTOP);
+		dropSelf(HUBTOP);
+		dropSelf(LUNCHTOP);
+		dropSelf(OLD_COMPUTER);
+		add(TRANSPORTALIZER, MSBlockLootTables::droppingWithNameOnSilkTouch);
+		add(TRANS_PORTALIZER, MSBlockLootTables::droppingWithNameOnSilkTouch);
+		dropSelf(SENDIFICATOR);
+		dropSelf(GRIST_WIDGET);
+		dropSelf(URANIUM_COOKER);
 		
-		registerLootTable(CRUXITE_DOWEL, MSBlockLootTables::droppingWithTEItem);
+		add(CRUXITE_DOWEL, MSBlockLootTables::droppingWithTEItem);
 		
-		registerDropSelfLootTable(GOLD_SEEDS);
-		registerDropSelfLootTable(WOODEN_CACTUS);
+		dropSelf(GOLD_SEEDS);
+		dropSelf(WOODEN_CACTUS);
 		
-		registerLootTable(APPLE_CAKE, func_218482_a());
-		registerLootTable(BLUE_CAKE, func_218482_a());
-		registerLootTable(COLD_CAKE, func_218482_a());
-		registerLootTable(RED_CAKE, func_218482_a());
-		registerLootTable(HOT_CAKE, func_218482_a());
-		registerLootTable(REVERSE_CAKE, func_218482_a());
-		registerLootTable(FUCHSIA_CAKE, func_218482_a());
-		registerLootTable(NEGATIVE_CAKE, func_218482_a());
+		add(APPLE_CAKE, noDrop());
+		add(BLUE_CAKE, noDrop());
+		add(COLD_CAKE, noDrop());
+		add(RED_CAKE, noDrop());
+		add(HOT_CAKE, noDrop());
+		add(REVERSE_CAKE, noDrop());
+		add(FUCHSIA_CAKE, noDrop());
+		add(NEGATIVE_CAKE, noDrop());
 		
-		registerDropSelfLootTable(PRIMED_TNT);
-		registerDropSelfLootTable(UNSTABLE_TNT);
-		registerDropSelfLootTable(INSTANT_TNT);
-		registerDropSelfLootTable(WOODEN_EXPLOSIVE_BUTTON);
-		registerDropSelfLootTable(STONE_EXPLOSIVE_BUTTON);
+		dropSelf(PRIMED_TNT);
+		dropSelf(UNSTABLE_TNT);
+		dropSelf(INSTANT_TNT);
+		dropSelf(WOODEN_EXPLOSIVE_BUTTON);
+		dropSelf(STONE_EXPLOSIVE_BUTTON);
 		
-		registerDropSelfLootTable(BLENDER);
-		registerDropSelfLootTable(CHESSBOARD);
-		registerDropSelfLootTable(MINI_FROG_STATUE);
-		registerDropSelfLootTable(MINI_WIZARD_STATUE);
-		registerDropSelfLootTable(CASSETTE_PLAYER);
-		registerDropSelfLootTable(GLOWYSTONE_DUST);
+		dropSelf(BLENDER);
+		dropSelf(CHESSBOARD);
+		dropSelf(MINI_FROG_STATUE);
+		dropSelf(MINI_WIZARD_STATUE);
+		dropSelf(CASSETTE_PLAYER);
+		dropSelf(GLOWYSTONE_DUST);
 	}
 	
 	private static LootTable.Builder cruxiteOreDrop(Block block)
 	{
-		return droppingWithSilkTouch(block, withExplosionDecay(block, ItemLootEntry.builder(MSItems.RAW_CRUXITE).acceptFunction(SetCount.builder(RandomValueRange.of(2.0F, 5.0F))).acceptFunction(ApplyBonus.oreDrops(Enchantments.FORTUNE))));
+		return createSilkTouchDispatchTable(block, applyExplosionDecay(block, ItemLootEntry.lootTableItem(MSItems.RAW_CRUXITE).apply(SetCount.setCount(RandomValueRange.between(2.0F, 5.0F))).apply(ApplyBonus.addOreBonusCount(Enchantments.BLOCK_FORTUNE))));
 	}
 	private static LootTable.Builder uraniumOreDrop(Block block)
 	{
-		return droppingItemWithFortune(block, MSItems.RAW_URANIUM);
+		return createOreDrop(block, MSItems.RAW_URANIUM);
 	}
 	private static LootTable.Builder coalOreDrop(Block block)
 	{
-		return droppingItemWithFortune(block, Items.COAL);
+		return createOreDrop(block, Items.COAL);
 	}
 	private static LootTable.Builder redstoneOreDrop(Block block)
 	{
-		return droppingWithSilkTouch(block, withExplosionDecay(block, ItemLootEntry.builder(Items.REDSTONE).acceptFunction(SetCount.builder(RandomValueRange.of(4.0F, 5.0F))).acceptFunction(ApplyBonus.uniformBonusCount(Enchantments.FORTUNE))));
+		return createSilkTouchDispatchTable(block, applyExplosionDecay(block, ItemLootEntry.lootTableItem(Items.REDSTONE).apply(SetCount.setCount(RandomValueRange.between(4.0F, 5.0F))).apply(ApplyBonus.addUniformBonusCount(Enchantments.BLOCK_FORTUNE))));
 	}
 	private static LootTable.Builder quartzOreDrop(Block block)
 	{
-		return droppingItemWithFortune(block, Items.QUARTZ);
+		return createOreDrop(block, Items.QUARTZ);
 	}
 	private static LootTable.Builder lapisOreDrop(Block block)
 	{
-		return droppingWithSilkTouch(block, withExplosionDecay(block, ItemLootEntry.builder(Items.LAPIS_LAZULI).acceptFunction(SetCount.builder(RandomValueRange.of(4.0F, 9.0F))).acceptFunction(ApplyBonus.oreDrops(Enchantments.FORTUNE))));
+		return createSilkTouchDispatchTable(block, applyExplosionDecay(block, ItemLootEntry.lootTableItem(Items.LAPIS_LAZULI).apply(SetCount.setCount(RandomValueRange.between(4.0F, 9.0F))).apply(ApplyBonus.addOreBonusCount(Enchantments.BLOCK_FORTUNE))));
 	}
 	private static LootTable.Builder diamondOreDrop(Block block)
 	{
-		return droppingItemWithFortune(block, Items.DIAMOND);
+		return createOreDrop(block, Items.DIAMOND);
 	}
 	private static LootTable.Builder endGrassDrop(Block block)
 	{
-		return droppingWithSilkTouch(block, Blocks.END_STONE);
+		return createSingleItemTableWithSilkTouch(block, Blocks.END_STONE);
 	}
 	private static LootTable.Builder frostLeavesDrop(Block block)
 	{
-		return droppingWithChancesAndSticks(block, Blocks.AIR, SAPLING_CHANCES);
+		return createLeavesDrops(block, Blocks.AIR, SAPLING_CHANCES);
 	}
 	private static LootTable.Builder rainbowLeavesDrop(Block block)
 	{
-		return droppingWithChancesAndSticks(block, RAINBOW_SAPLING, SAPLING_CHANCES);
+		return createLeavesDrops(block, RAINBOW_SAPLING, SAPLING_CHANCES);
 	}
 	private static LootTable.Builder endLeavesDrop(Block block)
 	{
-		return droppingWithChancesAndSticks(block, END_SAPLING, SAPLING_CHANCES).addLootPool(LootPool.builder().rolls(ConstantRange.of(1)).acceptCondition(NO_SILK_OR_SHEAR_CONDITION).addEntry(withSurvivesExplosion(block, ItemLootEntry.builder(Items.CHORUS_FRUIT)).acceptCondition(TableBonus.builder(Enchantments.FORTUNE, 0.005F, 0.0055555557F, 0.00625F, 0.008333334F, 0.025F))));
+		return createLeavesDrops(block, END_SAPLING, SAPLING_CHANCES).withPool(LootPool.lootPool().setRolls(ConstantRange.exactly(1)).when(NO_SILK_OR_SHEAR_CONDITION).add(applyExplosionCondition(block, ItemLootEntry.lootTableItem(Items.CHORUS_FRUIT)).when(TableBonus.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.005F, 0.0055555557F, 0.00625F, 0.008333334F, 0.025F))));
 	}
 	private static LootTable.Builder bloodAspectLeavesDrop(Block block)
 	{
-		return droppingWithChancesAndSticks(block, BLOOD_ASPECT_SAPLING, SAPLING_CHANCES);
+		return createLeavesDrops(block, BLOOD_ASPECT_SAPLING, SAPLING_CHANCES);
 	}
 	private static LootTable.Builder breathAspectLeavesDrop(Block block)
 	{
-		return droppingWithChancesAndSticks(block, BREATH_ASPECT_SAPLING, SAPLING_CHANCES);
+		return createLeavesDrops(block, BREATH_ASPECT_SAPLING, SAPLING_CHANCES);
 	}
 	private static LootTable.Builder doomAspectLeavesDrop(Block block)
 	{
-		return droppingWithChancesAndSticks(block, DOOM_ASPECT_SAPLING, SAPLING_CHANCES);
+		return createLeavesDrops(block, DOOM_ASPECT_SAPLING, SAPLING_CHANCES);
 	}
 	private static LootTable.Builder heartAspectLeavesDrop(Block block)
 	{
-		return droppingWithChancesAndSticks(block, HEART_ASPECT_SAPLING, SAPLING_CHANCES);
+		return createLeavesDrops(block, HEART_ASPECT_SAPLING, SAPLING_CHANCES);
 	}
 	private static LootTable.Builder hopeAspectLeavesDrop(Block block)
 	{
-		return droppingWithChancesAndSticks(block, HOPE_ASPECT_SAPLING, SAPLING_CHANCES);
+		return createLeavesDrops(block, HOPE_ASPECT_SAPLING, SAPLING_CHANCES);
 	}
 	private static LootTable.Builder lifeAspectLeavesDrop(Block block)
 	{
-		return droppingWithChancesAndSticks(block, LIFE_ASPECT_SAPLING, SAPLING_CHANCES);
+		return createLeavesDrops(block, LIFE_ASPECT_SAPLING, SAPLING_CHANCES);
 	}
 	private static LootTable.Builder lightAspectLeavesDrop(Block block)
 	{
-		return droppingWithChancesAndSticks(block, LIGHT_ASPECT_SAPLING, SAPLING_CHANCES);
+		return createLeavesDrops(block, LIGHT_ASPECT_SAPLING, SAPLING_CHANCES);
 	}
 	private static LootTable.Builder mindAspectLeavesDrop(Block block)
 	{
-		return droppingWithChancesAndSticks(block, MIND_ASPECT_SAPLING, SAPLING_CHANCES);
+		return createLeavesDrops(block, MIND_ASPECT_SAPLING, SAPLING_CHANCES);
 	}
 	private static LootTable.Builder rageAspectLeavesDrop(Block block)
 	{
-		return droppingWithChancesAndSticks(block, RAGE_ASPECT_SAPLING, SAPLING_CHANCES);
+		return createLeavesDrops(block, RAGE_ASPECT_SAPLING, SAPLING_CHANCES);
 	}
 	private static LootTable.Builder spaceAspectLeavesDrop(Block block)
 	{
-		return droppingWithChancesAndSticks(block, SPACE_ASPECT_SAPLING, SAPLING_CHANCES);
+		return createLeavesDrops(block, SPACE_ASPECT_SAPLING, SAPLING_CHANCES);
 	}
 	private static LootTable.Builder timeAspectLeavesDrop(Block block)
 	{
-		return droppingWithChancesAndSticks(block, TIME_ASPECT_SAPLING, SAPLING_CHANCES);
+		return createLeavesDrops(block, TIME_ASPECT_SAPLING, SAPLING_CHANCES);
 	}
 	private static LootTable.Builder voidAspectLeavesDrop(Block block)
 	{
-		return droppingWithChancesAndSticks(block, VOID_ASPECT_SAPLING, SAPLING_CHANCES);
+		return createLeavesDrops(block, VOID_ASPECT_SAPLING, SAPLING_CHANCES);
 	}
 	private static LootTable.Builder desertBushDrop(Block block)
 	{
-		return droppingWithSilkTouch(block, withExplosionDecay(block, ItemLootEntry.builder(MSItems.DESERT_FRUIT).acceptFunction(SetCount.builder(RandomValueRange.of(3.0F, 6.0F))).acceptFunction(ApplyBonus.uniformBonusCount(Enchantments.FORTUNE))));
+		return createSilkTouchDispatchTable(block, applyExplosionDecay(block, ItemLootEntry.lootTableItem(MSItems.DESERT_FRUIT).apply(SetCount.setCount(RandomValueRange.between(3.0F, 6.0F))).apply(ApplyBonus.addUniformBonusCount(Enchantments.BLOCK_FORTUNE))));
 	}
 	private static LootTable.Builder strawberryStemDrop(Block block)
 	{
-		return droppingByAge(block, MSItems.STRAWBERRY_CHUNK);
+		return createStemDrops(block, MSItems.STRAWBERRY_CHUNK);
 	}
 	protected static LootTable.Builder droppingWithColor(Block block)
 	{
-		return LootTable.builder().addLootPool(withSurvivesExplosion(block, LootPool.builder().rolls(ConstantRange.of(1)).addEntry(ItemLootEntry.builder(block).acceptFunction(CopyNbt.builder(CopyNbt.Source.BLOCK_ENTITY).replaceOperation("color", "color")))));
+		return LootTable.lootTable().withPool(applyExplosionCondition(block, LootPool.lootPool().setRolls(ConstantRange.exactly(1)).add(ItemLootEntry.lootTableItem(block).apply(CopyNbt.copyData(CopyNbt.Source.BLOCK_ENTITY).copy("color", "color")))));
 	}
 	protected static LootTable.Builder droppingWithTEItem(Block block)
 	{
-		return LootTable.builder().addLootPool(withSurvivesExplosion(block, LootPool.builder().rolls(ConstantRange.of(1)).addEntry(DynamicLootEntry.func_216162_a(ItemStackTileEntity.ITEM_DYNAMIC))));
+		return LootTable.lootTable().withPool(applyExplosionCondition(block, LootPool.lootPool().setRolls(ConstantRange.exactly(1)).add(DynamicLootEntry.dynamicEntry(ItemStackTileEntity.ITEM_DYNAMIC))));
 	}
 	protected static LootTable.Builder droppingWithNameOnSilkTouch(Block block)
 	{
-		return dropping(block, SILK_TOUCH_CONDITION.inverted(), ItemLootEntry.builder(block).acceptFunction(CopyName.builder(CopyName.Source.BLOCK_ENTITY)));
+		return createSelfDropDispatchTable(block, SILK_TOUCH_CONDITION.invert(), ItemLootEntry.lootTableItem(block).apply(CopyName.copyName(CopyName.Source.BLOCK_ENTITY)));
 	}
 	
 	@Override

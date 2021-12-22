@@ -45,7 +45,7 @@ public class RecipeGeneratedGristCost extends GristCostRecipe
 	@Override
 	public boolean matches(IInventory inv, World worldIn)
 	{
-		return getCost(inv.getStackInSlot(0).getItem()) != null;
+		return getCost(inv.getItem(0).getItem()) != null;
 	}
 	
 	private GristSet getCost(Item item)
@@ -83,7 +83,7 @@ public class RecipeGeneratedGristCost extends GristCostRecipe
 	}
 	
 	@Override
-	public boolean isDynamic()
+	public boolean isSpecial()
 	{
 		return true;
 	}
@@ -91,19 +91,19 @@ public class RecipeGeneratedGristCost extends GristCostRecipe
 	public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<RecipeGeneratedGristCost>
 	{
 		@Override
-		public RecipeGeneratedGristCost read(ResourceLocation recipeId, JsonObject json)
+		public RecipeGeneratedGristCost fromJson(ResourceLocation recipeId, JsonObject json)
 		{
 			return new RecipeGeneratedGristCost(recipeId, null);
 		}
 		
 		@Override
-		public RecipeGeneratedGristCost read(ResourceLocation recipeId, PacketBuffer buffer)
+		public RecipeGeneratedGristCost fromNetwork(ResourceLocation recipeId, PacketBuffer buffer)
 		{
 			return new RecipeGeneratedGristCost(recipeId, RecipeGeneratedCostHandler.read(buffer));
 		}
 		
 		@Override
-		public void write(PacketBuffer buffer, RecipeGeneratedGristCost recipe)
+		public void toNetwork(PacketBuffer buffer, RecipeGeneratedGristCost recipe)
 		{
 			if(recipe.handler != null)
 				recipe.handler.write(buffer);

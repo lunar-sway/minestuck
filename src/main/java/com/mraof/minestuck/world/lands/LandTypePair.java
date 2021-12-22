@@ -1,5 +1,7 @@
 package com.mraof.minestuck.world.lands;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.nbt.CompoundNBT;
@@ -11,6 +13,10 @@ import java.util.Objects;
 
 public class LandTypePair
 {
+	public static final Codec<LandTypePair> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+			TerrainLandType.CODEC.fieldOf("terrain").forGetter(LandTypePair::getTerrain),
+			TitleLandType.CODEC.fieldOf("title").forGetter(LandTypePair::getTitle)).apply(instance, LandTypePair::new));
+	
 	public static final String FORMAT = "land.format";
 	
 	public LandTypePair(TerrainLandType terrainType, TitleLandType titleType)
@@ -20,9 +26,21 @@ public class LandTypePair
 	}
 	
 	@Nonnull
-	public final TerrainLandType terrain;
+	private final TerrainLandType terrain;
 	@Nonnull
-	public final TitleLandType title;
+	private final TitleLandType title;
+	
+	@Nonnull
+	public TerrainLandType getTerrain()
+	{
+		return terrain;
+	}
+	
+	@Nonnull
+	public TitleLandType getTitle()
+	{
+		return title;
+	}
 	
 	public CompoundNBT write(CompoundNBT nbt)
 	{

@@ -3,14 +3,13 @@ package com.mraof.minestuck.world.storage.loot;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.*;
+import net.minecraft.loot.conditions.ILootCondition;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.*;
-import net.minecraft.world.storage.loot.conditions.ILootCondition;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,13 +34,19 @@ public class LandTableLootEntry extends LootEntry
 	}
 	
 	@Override
+		public LootPoolEntryType getType()	//getType
+	{
+		return MSLootTables.landTableEntryType();
+	}
+	
+	@Override
 	public boolean expand(LootContext context, Consumer<ILootGenerator> lootGenCollector)
 	{
-		LandTypePair aspects = MSDimensions.getAspects(context.getWorld().getServer(), context.getWorld().dimension.getType());
-		if(test(context) && aspects != null)
+		LandTypePair aspects = MSDimensions.getAspects(context.getLevel().getServer(), context.getLevel().dimension());
+		if(canRun(context) && aspects != null)
 		{
-			ResourceLocation terrainTableName = new ResourceLocation(table.getNamespace(), table.getPath() + "/terrain/" + Objects.requireNonNull(aspects.terrain.getRegistryName()).toString().replace(':', '/'));
-			ResourceLocation titleTableName = new ResourceLocation(table.getNamespace(), table.getPath() + "/title/" + Objects.requireNonNull(aspects.title.getRegistryName()).toString().replace(':', '/'));
+			ResourceLocation terrainTableName = new ResourceLocation(table.getNamespace(), table.getPath() + "/terrain/" + Objects.requireNonNull(aspects.getTerrain().getRegistryName()).toString().replace(':', '/'));
+			ResourceLocation titleTableName = new ResourceLocation(table.getNamespace(), table.getPath() + "/title/" + Objects.requireNonNull(aspects.getTitle().getRegistryName()).toString().replace(':', '/'));
 			
 			expandFrom(terrainTableName, context, lootGenCollector);
 			expandFrom(titleTableName, context, lootGenCollector);
@@ -61,7 +66,7 @@ public class LandTableLootEntry extends LootEntry
 			LOGGER.warn("Could not find loot table {}", tableName);
 			return;
 		}
-		if(context.addLootTable(lootTable))
+		if(context.addVisitedTable(lootTable))
 		{
 			LootPool pool = lootTable.getPool(poolName);
 			//noinspection ConstantConditions
@@ -77,15 +82,15 @@ public class LandTableLootEntry extends LootEntry
 					lootGenCollector.accept(new ILootGenerator()
 					{
 						@Override
-						public int getEffectiveWeight(float v)
+						public int getWeight(float v)
 						{
 							return 30;
 						}
 						
 						@Override
-						public void func_216188_a(Consumer<ItemStack> consumer, LootContext lootContext)
+						public void createItemStack(Consumer<ItemStack> consumer, LootContext lootContext)
 						{
-							pool.generate(consumer, lootContext);
+							pool.addRandomItems(consumer, lootContext);
 						}
 					});
 				}
@@ -93,7 +98,7 @@ public class LandTableLootEntry extends LootEntry
 			{
 				LOGGER.warn("Could not find pool by name {} in loot table {}", poolName, tableName);
 			}
-			context.removeLootTable(lootTable);
+			context.removeVisitedTable(lootTable);
 		} else
 		{
 			LOGGER.warn("Detected infinite loop in loot tables");
@@ -106,7 +111,7 @@ public class LandTableLootEntry extends LootEntry
 	{
 		try
 		{
-			return ObfuscationReflectionHelper.findField(LootPool.class, "field_186453_a");
+			return ObfuscationReflectionHelper.findField(LootPool.class, "entries");
 		} catch(ObfuscationReflectionHelper.UnableToFindFieldException e)
 		{
 			LOGGER.error("Unable to get field for lootPool.lootEntries. Will be unable to fully insert loot from land type loot tables.", e);
@@ -134,21 +139,17 @@ public class LandTableLootEntry extends LootEntry
 	
 	public static class SerializerImpl extends Serializer<LandTableLootEntry>
 	{
-		public SerializerImpl()
-		{
-			super(new ResourceLocation(Minestuck.MOD_ID, "land_table"), LandTableLootEntry.class);
-		}
-		
-		public void serialize(JsonObject json, LandTableLootEntry entryIn, JsonSerializationContext context)
+		@Override
+		public void serializeCustom(JsonObject json, LandTableLootEntry entryIn, JsonSerializationContext context)
 		{
 			json.addProperty("name", entryIn.table.toString());
 			json.addProperty("pool", entryIn.poolName);
 		}
 		
-		public final LandTableLootEntry deserialize(JsonObject json, JsonDeserializationContext context, ILootCondition[] conditions)
+		public final LandTableLootEntry deserializeCustom(JsonObject json, JsonDeserializationContext context, ILootCondition[] conditions)
 		{
-			ResourceLocation table = new ResourceLocation(JSONUtils.getString(json, "name"));
-			String pool = JSONUtils.getString(json, "pool");
+			ResourceLocation table = new ResourceLocation(JSONUtils.getAsString(json, "name"));
+			String pool = JSONUtils.getAsString(json, "pool");
 			return new LandTableLootEntry(table, pool, conditions);
 		}
 	}
@@ -169,7 +170,7 @@ public class LandTableLootEntry extends LootEntry
 		}
 		
 		@Override
-		protected BuilderImpl func_212845_d_()
+		protected BuilderImpl getThis()
 		{
 			return this;
 		}
@@ -185,7 +186,7 @@ public class LandTableLootEntry extends LootEntry
 		{
 			if(pool == null)
 				throw new IllegalArgumentException("Pool not set");
-			return new LandTableLootEntry(table, pool, this.func_216079_f());
+			return new LandTableLootEntry(table, pool, this.getConditions());
 		}
 	}
 }

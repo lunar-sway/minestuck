@@ -43,7 +43,6 @@ import com.mraof.minestuck.tileentity.machine.*;
 import com.mraof.minestuck.tileentity.redstone.RedstoneClockTileEntity;
 import com.mraof.minestuck.tileentity.redstone.SummonerTileEntity;
 import com.mraof.minestuck.world.GateHandler;
-import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.LandChunkGenerator;
 import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.lands.LandTypePair;
@@ -1106,7 +1105,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addStoreTooltip(Items.WHEAT_SEEDS, "You know what tastes even better than those plant grains? Their seeds, of course!");
 		addStoreTooltip(Items.MUSHROOM_STEW, "Do you enjoy mushrooms? Then this'll be a delicacy!");
 		addStoreTooltip(Items.BEEF, "You want something RAW? We've got BEEF.");
-		addStoreTooltip(PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.WATER), "Stay hydrated with our oasis water.");
+		addStoreTooltip(PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER), "Stay hydrated with our oasis water.");
 		addStoreTooltip(Items.CARROT, "Want to try something orange? We've got carrots straight from the ground.");
 		addStoreTooltip(Items.MILK_BUCKET, "You won't find this in a regular bucket!");
 		addStore(Items.POISONOUS_POTATO, "Green Potato");
@@ -1146,13 +1145,13 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItemGroup.MAIN, "Minestuck Main");
 		add(MSItemGroup.LANDS, "Minestuck Lands");
 		add(MSItemGroup.WEAPONS, "Minestuck Weapons");
-		
+		/*TODO
 		addBiome(MSBiomes.SKAIA, "Skaia");
 		defaultLandBiomes(MSBiomes.DEFAULT_LAND);
 		defaultLandBiomes(MSBiomes.HIGH_HUMID_LAND);
 		defaultLandBiomes(MSBiomes.NO_RAIN_LAND);
 		defaultLandBiomes(MSBiomes.SNOW_LAND);
-		
+		*/
 		add(MSEntityTypes.FROG, "Frog");
 		add(MSEntityTypes.SALAMANDER, "Salamander");
 		addExtra(MSEntityTypes.SALAMANDER, "plural", "Salamanders");

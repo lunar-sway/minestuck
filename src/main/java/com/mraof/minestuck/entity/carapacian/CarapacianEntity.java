@@ -7,13 +7,15 @@ import com.mraof.minestuck.util.MSTags;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.LookAtGoal;
 import net.minecraft.entity.ai.goal.LookRandomlyGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.ITag;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -25,7 +27,7 @@ public abstract class CarapacianEntity extends SimpleTexturedEntity
 	private final EnumEntityKingdom kingdom;
 	
 	protected List<EntityType<?>> enemyTypes = new ArrayList<>();	//TODO Save this!
-	protected final Tag<EntityType<?>> allyTag;
+	protected final ITag<EntityType<?>> allyTag;
 	protected EntityListFilter attackEntitySelector = new EntityListFilter(enemyTypes);
 
 	public CarapacianEntity(EntityType<? extends CarapacianEntity> type, EnumEntityKingdom kingdom, World world)
@@ -47,11 +49,9 @@ public abstract class CarapacianEntity extends SimpleTexturedEntity
 		this.goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 8.0F));
 	}
 	
-	@Override
-	protected void registerAttributes()
+	public static AttributeModifierMap.MutableAttribute carapacianAttributes()
 	{
-		super.registerAttributes();
-		getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(32.0D);
+		return MobEntity.createMobAttributes().add(Attributes.FOLLOW_RANGE, 32);
 	}
 	
 	private void setEnemies()
@@ -59,25 +59,25 @@ public abstract class CarapacianEntity extends SimpleTexturedEntity
 		switch(this.getKingdom())
 		{
 			case PROSPITIAN:
-				enemyTypes.addAll(MSTags.EntityTypes.DERSITE_CARAPACIANS.getAllElements());	//TODO Should refer to tags directly. Entities will otherwise need to be reconstructed for resource reload changes to take place
+				enemyTypes.addAll(MSTags.EntityTypes.DERSITE_CARAPACIANS.getValues());	//TODO Should refer to tags directly. Entities will otherwise need to be reconstructed for resource reload changes to take place
 				break;
 			case DERSITE:
-				enemyTypes.addAll(MSTags.EntityTypes.PROSPITIAN_CARAPACIANS.getAllElements());
+				enemyTypes.addAll(MSTags.EntityTypes.PROSPITIAN_CARAPACIANS.getValues());
 		}
 	}
 	
 	public void addEnemy(EntityType<?> enemyType)
 	{
-		if(canAttack(enemyType) && !enemyTypes.contains(enemyType))
+		if(canAttackType(enemyType) && !enemyTypes.contains(enemyType))
 		{
 			enemyTypes.add(enemyType);
 		}
 	}
 	
 	@Override
-	public void setAttackTarget(LivingEntity entity)
+	public void setTarget(LivingEntity entity)
 	{
-		super.setAttackTarget(entity);
+		super.setTarget(entity);
 		if(entity != null)
 		{
 			this.addEnemy(entity.getType());
@@ -85,7 +85,7 @@ public abstract class CarapacianEntity extends SimpleTexturedEntity
 	}
 	
 	@Override
-	public boolean canAttack(EntityType<?> typeIn)
+	public boolean canAttackType(EntityType<?> typeIn)
 	{
 		return !allyTag.contains(typeIn);
 	}

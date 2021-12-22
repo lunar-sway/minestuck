@@ -34,6 +34,7 @@ public class MSPacketHandler
 		registerMessage(ConsortReputationDataPacket.class, ConsortReputationDataPacket::decode);
 		registerMessage(GristCachePacket.class, GristCachePacket::decode);
 		registerMessage(TitleDataPacket.class, TitleDataPacket::decode);
+		registerMessage(LandTypesDataPacket.class, LandTypesDataPacket::decode);
 		
 		registerMessage(CaptchaDeckPacket.class, CaptchaDeckPacket::decode);
 		registerMessage(ColorSelectPacket.class, ColorSelectPacket::decode);

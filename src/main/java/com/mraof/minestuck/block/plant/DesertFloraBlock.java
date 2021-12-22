@@ -15,7 +15,7 @@ public class DesertFloraBlock extends BushBlock
 	}
 	
 	@Override
-	protected boolean isValidGround(BlockState state, IBlockReader worldIn, BlockPos pos)
+	protected boolean mayPlaceOn(BlockState state, IBlockReader worldIn, BlockPos pos)
 	{
 		return BlockTags.SAND.contains(state.getBlock());
 	}

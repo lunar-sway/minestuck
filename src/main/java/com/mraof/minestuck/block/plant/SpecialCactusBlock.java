@@ -17,20 +17,20 @@ public class SpecialCactusBlock extends CactusBlock
 	}
 	
 	@Override
-	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos)
+	public boolean canSurvive(BlockState state, IWorldReader worldIn, BlockPos pos)
 	{
 		for(Direction direction : Direction.Plane.HORIZONTAL)
 		{
-			BlockState blockstate = worldIn.getBlockState(pos.offset(direction));
+			BlockState blockstate = worldIn.getBlockState(pos.relative(direction));
 			Material material = blockstate.getMaterial();
-			if(material.isSolid() || worldIn.getFluidState(pos.offset(direction)).isTagged(FluidTags.LAVA))
+			if(material.isSolid() || worldIn.getFluidState(pos.relative(direction)).is(FluidTags.LAVA))
 			{
 				return false;
 			}
 		}
 		
-		BlockState soil = worldIn.getBlockState(pos.down());
-		return isSustainableSoil(soil) && !worldIn.getBlockState(pos.up()).getMaterial().isLiquid();
+		BlockState soil = worldIn.getBlockState(pos.below());
+		return isSustainableSoil(soil) && !worldIn.getBlockState(pos.above()).getMaterial().isLiquid();
 	}
 	
 	protected boolean isSustainableSoil(BlockState soil)

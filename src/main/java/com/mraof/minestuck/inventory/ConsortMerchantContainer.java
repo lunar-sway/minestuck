@@ -30,11 +30,11 @@ public class ConsortMerchantContainer extends Container
 		this.consortType = consortType;
 		this.merchantType = merchantType;
 		
-		assertIntArraySize(prices, 9);
+		checkContainerDataCount(prices, 9);
 		this.prices = prices;
-		trackIntArray(prices);
+		addDataSlots(prices);
 		
-		assertInventorySize(storeInv, 9);
+		checkContainerSize(storeInv, 9);
 		
 		for(int i = 0; i < 9; i++)
 			this.addSlot(new ConsortMerchantSlot(player, storeInv, i, 17 + 35*(i%3), 35 + 33*(i/3)));
@@ -42,39 +42,39 @@ public class ConsortMerchantContainer extends Container
 	
 	public static ConsortMerchantContainer load(int windowId, PlayerInventory playerInventory, PacketBuffer buffer)
 	{
-		EnumConsort consortType = EnumConsort.getFromName(buffer.readString());
-		EnumConsort.MerchantType merchantType = EnumConsort.MerchantType.getFromName(buffer.readString());
+		EnumConsort consortType = EnumConsort.getFromName(buffer.readUtf());
+		EnumConsort.MerchantType merchantType = EnumConsort.MerchantType.getFromName(buffer.readUtf());
 		
 		return new ConsortMerchantContainer(windowId, playerInventory, new Inventory(9), consortType, merchantType, new IntArray(9));
 	}
 	
 	public static void write(PacketBuffer buffer, ConsortEntity consort)
 	{
-		buffer.writeString(consort.getConsortType().getName());
-		buffer.writeString(consort.merchantType.getName());
+		buffer.writeUtf(consort.getConsortType().getName());
+		buffer.writeUtf(consort.merchantType.getName());
 	}
 	
 	@Override
-	public ItemStack transferStackInSlot(PlayerEntity playerIn, int index)
+	public ItemStack quickMoveStack(PlayerEntity playerIn, int index)
 	{
 		Slot slot = getSlot(index);
 		if(slot != null)
-			slot.decrStackSize(0);
+			slot.remove(0);
 		return ItemStack.EMPTY;
 	}
 	
 	@Override
-	public boolean canInteractWith(PlayerEntity playerIn)
+	public boolean stillValid(PlayerEntity playerIn)
 	{
 		return this.player == playerIn;
 	}
 	
 	@Override
-	public void onContainerClosed(PlayerEntity playerIn)
+	public void removed(PlayerEntity playerIn)
 	{
-		super.onContainerClosed(playerIn);
+		super.removed(playerIn);
 		if(playerIn instanceof ServerPlayerEntity)
-			((ServerPlayerEntity) playerIn).sendContainerToPlayer(playerIn.container);
+			((ServerPlayerEntity) playerIn).refreshContainer(playerIn.inventoryMenu);
 	}
 	
 	public int getPrice(int index)

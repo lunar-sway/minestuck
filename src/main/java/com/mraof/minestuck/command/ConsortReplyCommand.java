@@ -9,7 +9,6 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.math.Vec3d;
 
 public class ConsortReplyCommand
 {
@@ -21,10 +20,10 @@ public class ConsortReplyCommand
 	
 	public static int execute(CommandSource source, int id, String path) throws CommandSyntaxException
 	{
-		ServerPlayerEntity player = source.asPlayer();
-		Entity entity = player.world.getEntityByID(id);
-		if(entity instanceof ConsortEntity && new Vec3d(player.getPosX(), player.getPosY(), player.getPosZ())
-				.squareDistanceTo(entity.getPosX(), entity.getPosY(), entity.getPosZ()) < 100)
+		ServerPlayerEntity player = source.getPlayerOrException();
+		Entity entity = player.level.getEntity(id);
+		if(entity instanceof ConsortEntity && player.position()
+				.distanceToSqr(entity.position()) < 100)
 		{
 			ConsortEntity consort = (ConsortEntity) entity;
 			consort.commandReply(player, path);

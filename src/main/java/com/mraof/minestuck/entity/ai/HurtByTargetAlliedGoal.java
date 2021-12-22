@@ -19,39 +19,39 @@ public class HurtByTargetAlliedGoal extends TargetGoal
 	{
 		super(par1EntityCreature, false);
 		this.alliedPredicate = alliedPredicate;
-		this.setMutexFlags(EnumSet.of(Flag.TARGET));
+		this.setFlags(EnumSet.of(Flag.TARGET));
 	}
 
 	/**
 	 * Returns whether the EntityAIBase should begin execution.
 	 */
 	@Override
-	public boolean shouldExecute()
+	public boolean canUse()
 	{
-		int i = this.goalOwner.getRevengeTimer();
-		return i != this.revengeTimer && this.isSuitableTarget(this.goalOwner.getRevengeTarget(), EntityPredicate.DEFAULT);
+		int i = this.mob.getLastHurtByMobTimestamp();
+		return i != this.revengeTimer && this.canAttack(this.mob.getLastHurtByMob(), EntityPredicate.DEFAULT);
 	}
 
 	/**
 	 * Execute a one shot task or start executing a continuous task
 	 */
 	@Override
-	public void startExecuting()
+	public void start()
 	{
-		this.goalOwner.setAttackTarget(this.goalOwner.getRevengeTarget());
-		this.revengeTimer = this.goalOwner.getRevengeTimer();
+		this.mob.setTarget(this.mob.getLastHurtByMob());
+		this.revengeTimer = this.mob.getLastHurtByMobTimestamp();
 		
-		double d0 = this.getTargetDistance();
-		List<CreatureEntity> list = this.goalOwner.world.getEntitiesWithinAABB(CreatureEntity.class, new AxisAlignedBB(this.goalOwner.getPosX(), this.goalOwner.getPosY(), this.goalOwner.getPosZ(), this.goalOwner.getPosX() + 1.0D, this.goalOwner.getPosY() + 1.0D, this.goalOwner.getPosZ() + 1.0D).grow(d0, 10.0D, d0), alliedPredicate);
+		double d0 = this.getFollowDistance();
+		List<CreatureEntity> list = this.mob.level.getEntitiesOfClass(CreatureEntity.class, new AxisAlignedBB(this.mob.getX(), this.mob.getY(), this.mob.getZ(), this.mob.getX() + 1.0D, this.mob.getY() + 1.0D, this.mob.getZ() + 1.0D).inflate(d0, 10.0D, d0), alliedPredicate);
 		
 		for(CreatureEntity creature : list)
 		{
-			if(this.goalOwner != creature && creature.getRevengeTarget() == null && !creature.isOnSameTeam(this.goalOwner.getRevengeTarget()))
+			if(this.mob != creature && creature.getLastHurtByMob() == null && !creature.isAlliedTo(this.mob.getLastHurtByMob()))
 			{
-				creature.setAttackTarget(this.goalOwner.getRevengeTarget());
+				creature.setTarget(this.mob.getLastHurtByMob());
 			}
 		}
 
-		super.startExecuting();
+		super.start();
 	}
 }

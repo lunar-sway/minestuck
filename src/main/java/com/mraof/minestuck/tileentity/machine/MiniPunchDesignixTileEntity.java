@@ -59,7 +59,7 @@ public class MiniPunchDesignixTileEntity extends MachineProcessTileEntity implem
 				return false;
 			
 			ItemStack currentOutput = itemHandler.getStackInSlot(2);
-			return (currentOutput.isEmpty() || currentOutput.getCount() < 16 && ItemStack.areItemStackTagsEqual(currentOutput, output));
+			return (currentOutput.isEmpty() || currentOutput.getCount() < 16 && ItemStack.tagMatches(currentOutput, output));
 		}
 		else
 		{
@@ -92,7 +92,7 @@ public class MiniPunchDesignixTileEntity extends MachineProcessTileEntity implem
 		ItemStack output = AlchemyHelper.getDecodedItemDesignix(itemHandler.getStackInSlot(0));
 		if(!output.isEmpty() && AlchemyHelper.isPunchedCard(itemHandler.getStackInSlot(1)))
 		{
-			output = CombinationRecipe.findResult(combinerInventory, world);
+			output = CombinationRecipe.findResult(combinerInventory, level);
 		} else return output;
 		
 		if(!output.isEmpty())
@@ -101,11 +101,11 @@ public class MiniPunchDesignixTileEntity extends MachineProcessTileEntity implem
 	}
 	
 	@Override
-	public void markDirty()
+	public void setChanged()
 	{
 		this.progress = 0;
 		this.ready = false;
-		super.markDirty();
+		super.setChanged();
 	}
 	
 	@Override
@@ -149,6 +149,6 @@ public class MiniPunchDesignixTileEntity extends MachineProcessTileEntity implem
 	@Override
 	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity player)
 	{
-		return new MiniPunchDesignixContainer(windowId, playerInventory, itemHandler, parameters, IWorldPosCallable.of(world, pos), pos);
+		return new MiniPunchDesignixContainer(windowId, playerInventory, itemHandler, parameters, IWorldPosCallable.create(level, worldPosition), worldPosition);
 	}
 }

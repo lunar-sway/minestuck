@@ -44,7 +44,7 @@ public class CustomSpriteRenderer<T extends Entity & RendersAsItem> extends Enti
 	
 	@Nullable
 	@Override
-	public ResourceLocation getEntityTexture(T entity)
+	public ResourceLocation getTextureLocation(T entity)
 	{
 		fakeEntity.setEntity(entity);
 		return renderer.getTexture(fakeEntity);
@@ -63,23 +63,23 @@ public class CustomSpriteRenderer<T extends Entity & RendersAsItem> extends Enti
 		void setEntity(T entity)
 		{
 			this.entity = entity;
-			this.setPosition(entity.getPosX(), entity.getPosY(), entity.getPosZ());
+			this.setPos(entity.getX(), entity.getY(), entity.getZ());
 		}
 		
 		@Override
-		protected void registerData()
+		protected void defineSynchedData()
 		{}
 		
 		@Override
-		protected void readAdditional(CompoundNBT compound)
+		protected void readAdditionalSaveData(CompoundNBT compound)
 		{}
 		
 		@Override
-		protected void writeAdditional(CompoundNBT compound)
+		protected void addAdditionalSaveData(CompoundNBT compound)
 		{}
 		
 		@Override
-		public IPacket<?> createSpawnPacket()
+		public IPacket<?> getAddEntityPacket()
 		{
 			return null;
 		}
@@ -98,9 +98,9 @@ public class CustomSpriteRenderer<T extends Entity & RendersAsItem> extends Enti
 		}
 		
 		@Override
-		public boolean getAlwaysRenderNameTagForRender()
+		public boolean shouldShowName()
 		{
-			return entity.getAlwaysRenderNameTagForRender();
+			return entity.shouldShowName();
 		}
 		
 		@Override
@@ -132,7 +132,7 @@ public class CustomSpriteRenderer<T extends Entity & RendersAsItem> extends Enti
 		
 		ResourceLocation getTexture(FakeEntity entity)
 		{
-			return getEntityTexture(entity);
+			return getTextureLocation(entity);
 		}
 	}
 }

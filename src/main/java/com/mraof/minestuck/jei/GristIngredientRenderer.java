@@ -1,5 +1,6 @@
 package com.mraof.minestuck.jei;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.item.crafting.alchemy.GristAmount;
 import mezz.jei.api.ingredients.IIngredientRenderer;
@@ -9,6 +10,8 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 
 import javax.annotation.Nullable;
@@ -18,7 +21,7 @@ import java.util.List;
 public class GristIngredientRenderer implements IIngredientRenderer<GristAmount>
 {
 	@Override
-	public void render(int xPosition, int yPosition, @Nullable GristAmount ingredient)
+	public void render(MatrixStack matrixStack, int xPosition, int yPosition, @Nullable GristAmount ingredient)
 	{
 		if(ingredient == null)
 			return;
@@ -27,7 +30,7 @@ public class GristIngredientRenderer implements IIngredientRenderer<GristAmount>
 		RenderSystem.color4f(1, 1, 1, 1);
 
 		ResourceLocation icon = ingredient.getType().getIcon();
-		Minecraft.getInstance().getTextureManager().bindTexture(icon);
+		Minecraft.getInstance().getTextureManager().bind(icon);
 
 		float scale = (float) 1 / 16;
 
@@ -36,24 +39,24 @@ public class GristIngredientRenderer implements IIngredientRenderer<GristAmount>
 		int iconU = 0;
 		int iconV = 0;
 
-		BufferBuilder render = Tessellator.getInstance().getBuffer();
+		BufferBuilder render = Tessellator.getInstance().getBuilder();
 		render.begin(7, DefaultVertexFormats.POSITION_TEX);
-		render.pos(xPosition, yPosition + iconY, 0D).tex((iconU) * scale, (iconV + iconY) * scale).endVertex();
-		render.pos(xPosition + iconX, yPosition + iconY, 0D).tex((iconU + iconX) * scale, (iconV + iconY) * scale).endVertex();
-		render.pos(xPosition + iconX, yPosition, 0D).tex((iconU + iconX) * scale, (iconV) * scale).endVertex();
-		render.pos(xPosition, yPosition, 0D).tex((iconU) * scale, (iconV) * scale).endVertex();
-		Tessellator.getInstance().draw();
+		render.vertex(xPosition, yPosition + iconY, 0D).uv((iconU) * scale, (iconV + iconY) * scale).endVertex();
+		render.vertex(xPosition + iconX, yPosition + iconY, 0D).uv((iconU + iconX) * scale, (iconV + iconY) * scale).endVertex();
+		render.vertex(xPosition + iconX, yPosition, 0D).uv((iconU + iconX) * scale, (iconV) * scale).endVertex();
+		render.vertex(xPosition, yPosition, 0D).uv((iconU) * scale, (iconV) * scale).endVertex();
+		Tessellator.getInstance().end();
 		
 		RenderSystem.disableAlphaTest();
 		RenderSystem.disableBlend();
 	}
 
 	@Override
-	public List<String> getTooltip(GristAmount ingredient, ITooltipFlag tooltipFlag)
+	public List<ITextComponent> getTooltip(GristAmount ingredient, ITooltipFlag tooltipFlag)
 	{
-		List<String> list = new ArrayList<>();
-		list.add(ingredient.getType().getDisplayName().getFormattedText());
-		list.add(TextFormatting.DARK_GRAY+""+ingredient.getType().getRegistryName());
+		List<ITextComponent> list = new ArrayList<>();
+		list.add(ingredient.getType().getDisplayName());
+		list.add(new StringTextComponent(String.valueOf(ingredient.getType().getRegistryName())).withStyle(TextFormatting.DARK_GRAY));
 		return list;
 	}
 }

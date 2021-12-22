@@ -47,7 +47,7 @@ public class TerrainLandTypeArgument implements ArgumentType<TerrainLandType>
 	@Override
 	public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder)
 	{
-		return ISuggestionProvider.func_212476_a(LandTypes.TERRAIN_REGISTRY.getValues().stream().map(TerrainLandType::getRegistryName), builder);
+		return ISuggestionProvider.suggestResource(LandTypes.TERRAIN_REGISTRY.getValues().stream().map(TerrainLandType::getRegistryName), builder);
 	}
 	
 	@Override

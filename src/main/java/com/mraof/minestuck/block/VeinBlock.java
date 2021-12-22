@@ -20,62 +20,63 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class VeinBlock extends DirectionalBlock
+public class VeinBlock extends DirectionalBlock	//TODO duplicate code between this and VeinCornerBlock. Do something about that
 {
 
 	protected VeinBlock(Properties properties)
 	{
 		super(properties);
-		setDefaultState(stateContainer.getBaseState().with(FACING, Direction.NORTH));
+		registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH));
 	}
 	
 	@Override
-	public void harvestBlock(World world, PlayerEntity player, BlockPos pos, BlockState state, @Nullable TileEntity tileEntity, ItemStack stack) {
-		super.harvestBlock(world, player, pos, state, tileEntity, stack);
-		if (EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, stack) == 0) {
-			if (world.dimension.doesWaterVaporize()) {
+	public void playerDestroy(World world, PlayerEntity player, BlockPos pos, BlockState state, @Nullable TileEntity tileEntity, ItemStack stack) {
+		super.playerDestroy(world, player, pos, state, tileEntity, stack);
+		if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, stack) == 0) {
+			if (world.dimensionType().ultraWarm())
+			{
 				world.removeBlock(pos, false);
 				return;
 			}
 			
-			Material mater = world.getBlockState(pos.down()).getMaterial();
-			if (mater.blocksMovement() || mater.isLiquid())
-				world.setBlockState(pos, MSBlocks.BLOOD.getDefaultState());
+			Material mater = world.getBlockState(pos.below()).getMaterial();
+			if (mater.blocksMotion() || mater.isLiquid())
+				world.setBlockAndUpdate(pos, MSBlocks.BLOOD.defaultBlockState());
 		}
 	}
 	
 	@Override
 	public BlockState rotate(BlockState state, IWorld world, BlockPos pos, Rotation direction)
 	{
-		return state.with(FACING, direction.rotate(state.get(FACING)));
+		return state.setValue(FACING, direction.rotate(state.getValue(FACING)));
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
 	public BlockState mirror(BlockState state, Mirror mirrorIn)
 	{
-		return state.with(FACING, mirrorIn.mirror(state.get(FACING)));
+		return state.setValue(FACING, mirrorIn.mirror(state.getValue(FACING)));
 	}
 	
 	@Nullable
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context)
 	{
-		BlockState state = context.getWorld().getBlockState(context.getPos().offset(context.getFace().getOpposite()));
+		BlockState state = context.getLevel().getBlockState(context.getClickedPos().relative(context.getClickedFace().getOpposite()));
 
 	   if(state.getBlock() == MSBlocks.VEIN || state.getBlock() == MSBlocks.VEIN_CORNER)
 		{
-			Direction direction = state.get(FACING);
+			Direction direction = state.getValue(FACING);
 
-			if (direction == context.getFace())
-				return this.getDefaultState().with(FACING, direction.getOpposite());
+			if (direction == context.getClickedFace())
+				return this.defaultBlockState().setValue(FACING, direction.getOpposite());
 		}
 
-		return this.getDefaultState().with(FACING, context.getFace());
+		return this.defaultBlockState().setValue(FACING, context.getClickedFace());
 	}
 	
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
 	{
 		builder.add(FACING);
 	}

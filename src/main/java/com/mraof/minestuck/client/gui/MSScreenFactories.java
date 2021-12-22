@@ -33,15 +33,15 @@ public class MSScreenFactories
 	
 	public static void registerScreenFactories()
 	{
-		ScreenManager.registerFactory(MSContainerTypes.MINI_CRUXTRUDER, MiniCruxtruderScreen::new);
-		ScreenManager.registerFactory(MSContainerTypes.MINI_TOTEM_LATHE, MiniTotemLatheScreen::new);
-		ScreenManager.registerFactory(MSContainerTypes.MINI_ALCHEMITER, MiniAlchemiterScreen::new);
-		ScreenManager.registerFactory(MSContainerTypes.MINI_PUNCH_DESIGNIX, MiniPunchDesignixScreen::new);
-		ScreenManager.registerFactory(MSContainerTypes.GRIST_WIDGET, GristWidgetScreen::new);
-		ScreenManager.registerFactory(MSContainerTypes.URANIUM_COOKER, UraniumCookerScreen::new);
+		ScreenManager.register(MSContainerTypes.MINI_CRUXTRUDER, MiniCruxtruderScreen::new);
+		ScreenManager.register(MSContainerTypes.MINI_TOTEM_LATHE, MiniTotemLatheScreen::new);
+		ScreenManager.register(MSContainerTypes.MINI_ALCHEMITER, MiniAlchemiterScreen::new);
+		ScreenManager.register(MSContainerTypes.MINI_PUNCH_DESIGNIX, MiniPunchDesignixScreen::new);
+		ScreenManager.register(MSContainerTypes.GRIST_WIDGET, GristWidgetScreen::new);
+		ScreenManager.register(MSContainerTypes.URANIUM_COOKER, UraniumCookerScreen::new);
 		//ScreenManager.registerFactory(ModContainerTypes.CAPTCHA_DECK, );
 		//ScreenManager.registerFactory(ModContainerTypes.EDITMODE, );
-		ScreenManager.registerFactory(MSContainerTypes.CONSORT_MERCHANT, ConsortShopScreen::new);
+		ScreenManager.register(MSContainerTypes.CONSORT_MERCHANT, ConsortShopScreen::new);
 		
 		registerSylladexFactory(ModusTypes.STACK, StackSylladexScreen::new);
 		registerSylladexFactory(ModusTypes.QUEUE, QueueSylladexScreen::new);
@@ -58,12 +58,12 @@ public class MSScreenFactories
 	
 	public static void displayComputerScreen(ComputerTileEntity tileEntity)
 	{
-		Minecraft.getInstance().displayGuiScreen(new ComputerScreen(Minecraft.getInstance(), tileEntity));
+		Minecraft.getInstance().setScreen(new ComputerScreen(Minecraft.getInstance(), tileEntity));
 	}
 	
 	public static void displayTransportalizerScreen(TransportalizerTileEntity tileEntity)
 	{
-		Minecraft.getInstance().displayGuiScreen(new TransportalizerScreen(tileEntity));
+		Minecraft.getInstance().setScreen(new TransportalizerScreen(tileEntity));
 	}
 	
 	public static void displayAreaEffectScreen(AreaEffectTileEntity tileEntity)
@@ -88,17 +88,17 @@ public class MSScreenFactories
 	
 	public static void displayAlchemiterScreen(AlchemiterTileEntity tileEntity)
 	{
-		Minecraft.getInstance().displayGuiScreen(new AlchemiterScreen(tileEntity));
+		Minecraft.getInstance().setScreen(new AlchemiterScreen(tileEntity));
 	}
 	
 	public static void displayStoneTabletScreen(PlayerEntity playerIn, Hand handIn, String text, boolean canEdit)
 	{
-		Minecraft.getInstance().displayGuiScreen(new StoneTabletScreen(playerIn, handIn, text, canEdit));
+		Minecraft.getInstance().setScreen(new StoneTabletScreen(playerIn, handIn, text, canEdit));
 	}
 	
 	public static void displayTitleSelectScreen(Title title)
 	{
-		Minecraft.getInstance().displayGuiScreen(new TitleSelectorScreen(title));
+		Minecraft.getInstance().setScreen(new TitleSelectorScreen(title));
 	}
 	
 	public static void displaySylladexScreen(Modus modus)
@@ -106,13 +106,13 @@ public class MSScreenFactories
 		if(SYLLADEX_FACTORIES.containsKey(modus.getType()))
 		{
 			SylladexScreen screen = SYLLADEX_FACTORIES.get(modus.getType()).apply(modus);
-			Minecraft.getInstance().displayGuiScreen(screen);
+			Minecraft.getInstance().setScreen(screen);
 		}
 	}
 	
 	public static void updateSylladexScreen()
 	{
-		Screen currentScreen = Minecraft.getInstance().currentScreen;
+		Screen currentScreen = Minecraft.getInstance().screen;
 		if(currentScreen instanceof SylladexScreen)
 			((SylladexScreen) currentScreen).updateContent();
 	}

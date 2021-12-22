@@ -39,8 +39,8 @@ public class DecorBlock extends Block implements IWaterLoggable
 	public BlockState getStateForPlacement(BlockItemUseContext context)
 	{
 		IFluidState iFluidState = context.getWorld().getFluidState(context.getPos());
-		return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite()).with(WATERLOGGED, iFluidState.getFluid() == Fluids.WATER);
-	}
+        return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite()).with(WATERLOGGED, iFluidState.getFluid() == Fluids.WATER);
+    }
 	
 	@Override
 	public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos)
@@ -54,7 +54,7 @@ public class DecorBlock extends Block implements IWaterLoggable
 	}
 	
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
 	{
 		builder.add(FACING, WATERLOGGED);
 	}
@@ -63,7 +63,7 @@ public class DecorBlock extends Block implements IWaterLoggable
 	@SuppressWarnings("deprecation")
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
 	{
-		return shape.get(state.get(FACING));
+		return shape.get(state.getValue(FACING));
 	}
 	
 	@Override

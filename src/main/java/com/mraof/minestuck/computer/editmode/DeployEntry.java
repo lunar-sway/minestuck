@@ -70,7 +70,7 @@ public class DeployEntry
 			ItemStack stack = getItemStack(c, world);
 			GristSet cost = getCurrentCost(c);
 			CompoundNBT tag = new CompoundNBT();
-			stack.write(tag);
+			stack.save(tag);
 			tag.putInt("i", i);
 			tag.put("cost", cost.write(new ListNBT()));
 			list.add(tag);

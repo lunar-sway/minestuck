@@ -79,7 +79,7 @@ public class FarmineEffect implements DestroyBlockEffect
 	@Override
 	public void onDestroyBlock(ItemStack stack, World worldIn, BlockState blockState, BlockPos pos, LivingEntity playerIn)
 	{
-		if(worldIn.isRemote)
+		if(worldIn.isClientSide)
 		{
 			return;
 		}
@@ -87,14 +87,14 @@ public class FarmineEffect implements DestroyBlockEffect
 		Comparator<Pair<BlockPos, Integer>> comparator = new PairedIntComparator();
 		PriorityQueue<Pair<BlockPos, Integer>> candidates = new PriorityQueue<>(comparator);
 		Block block = blockState.getBlock();
-		int fortuneLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, stack);
+		int fortuneLevel = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, stack);
 		HashSet<Block> equals = farMineEquivalencies.get(block);
 		if(equals==null) equals = new HashSet<>();
 		
 		//If the harvestTool can't harvest the block, or the player isn't actually a player, or the player is sneaking,
 		//or the harvestTool doesn't farmine, or it's one of those blocks that breaks instantly, don't farmine.
-		if (!stack.canHarvestBlock(blockState) || !(playerIn instanceof PlayerEntity) || playerIn.isSneaking()
-				|| terminus == 1 || radius==0 || Math.abs(blockState.getBlockHardness(worldIn, pos)) < 0.000000001)
+		if (!stack.isCorrectToolForDrops(blockState) || !(playerIn instanceof PlayerEntity) || playerIn.isShiftKeyDown()
+				|| terminus == 1 || radius==0 || Math.abs(blockState.getDestroySpeed(worldIn, pos)) < 0.000000001)
 		{
 			return;
 		}
@@ -151,7 +151,7 @@ public class FarmineEffect implements DestroyBlockEffect
 			}	
 			
 			//If you passed the maximum blocks you can break, stop trying to add more blocks to the list.
-			if (blocksToBreak.size() + 1 > stack.getMaxDamage() - stack.getDamage() || blocksToBreak.size() + 1 > terminus)
+			if (blocksToBreak.size() + 1 > stack.getMaxDamage() - stack.getDamageValue() || blocksToBreak.size() + 1 > terminus)
 			{
 				passedBreakLimit = true;
 				break;
@@ -173,7 +173,7 @@ public class FarmineEffect implements DestroyBlockEffect
 						BlockState newState = worldIn.getBlockState(newBlockPos);
 						Block newBlock = newState.getBlock();
 						if (equals.contains(newBlock) || newBlock.equals(block)
-								&& blocksToBreak.size()+1 < stack.getMaxDamage() - stack.getDamage())
+								&& blocksToBreak.size()+1 < stack.getMaxDamage() - stack.getDamageValue())
 						{
 							blocksToBreak.add(newBlockPos);
 						}
@@ -192,7 +192,7 @@ public class FarmineEffect implements DestroyBlockEffect
 		//We add 1 because that means the harvestTool will always take at least 2 damage.
 		//This is important because all ItemWeapons take at least 2 damage whenever it breaks a block.
 		//This is because WeaponItem extends ItemSword.
-		stack.damageItem(blocksToBreak.size() + 1, playerIn, player -> player.sendBreakAnimation(Hand.MAIN_HAND));
+		stack.hurtAndBreak(blocksToBreak.size() + 1, playerIn, player -> player.broadcastBreakEvent(Hand.MAIN_HAND));
 	}
 	
 	/*
@@ -229,11 +229,11 @@ public class FarmineEffect implements DestroyBlockEffect
 	{
 		PlayerEntity player = (PlayerEntity) playerIn;
 		
-		TileEntity te = world.getTileEntity(pos);
+		TileEntity te = world.getBlockEntity(pos);
 		if(block.removedByPlayer(state, world, pos, player, true, world.getFluidState(pos)))
 		{
-			block.onPlayerDestroy(world, pos, state);
-			block.harvestBlock(world, player, pos, state, te, stack);
+			block.destroy(world, pos, state);
+			block.playerDestroy(world, player, pos, state, te, stack);
 			return true;
 		}
 		return false;

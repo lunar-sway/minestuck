@@ -1,6 +1,6 @@
 package com.mraof.minestuck.world.gen;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.world.biome.Biome;
@@ -9,21 +9,20 @@ import net.minecraft.world.gen.surfacebuilders.SurfaceBuilder;
 import net.minecraft.world.gen.surfacebuilders.SurfaceBuilderConfig;
 
 import java.util.Random;
-import java.util.function.Function;
 
 public class RainbowSurfaceBuilder extends SurfaceBuilder<SurfaceBuilderConfig>
 {
 	
-	public RainbowSurfaceBuilder(Function<Dynamic<?>, ? extends SurfaceBuilderConfig> deserializer)
+	public RainbowSurfaceBuilder(Codec<SurfaceBuilderConfig> codec)
 	{
-		super(deserializer);
+		super(codec);
 	}
 	
 	@Override
-	public void buildSurface(Random random, IChunk chunkIn, Biome biomeIn, int x, int z, int startHeight, double noise, BlockState defaultBlock, BlockState defaultFluid, int seaLevel, long seed, SurfaceBuilderConfig config)
+	public void apply(Random random, IChunk chunkIn, Biome biomeIn, int x, int z, int startHeight, double noise, BlockState defaultBlock, BlockState defaultFluid, int seaLevel, long seed, SurfaceBuilderConfig config)
 	{
 		config = makeConfig(x - z, config);
-		SurfaceBuilder.DEFAULT.buildSurface(random, chunkIn, biomeIn, x, z, startHeight, noise, defaultBlock, defaultFluid, seaLevel, seed, config);
+		SurfaceBuilder.DEFAULT.apply(random, chunkIn, biomeIn, x, z, startHeight, noise, defaultBlock, defaultFluid, seaLevel, seed, config);
 	}
 	
 	private SurfaceBuilderConfig makeConfig(int index, SurfaceBuilderConfig original)
@@ -32,12 +31,12 @@ public class RainbowSurfaceBuilder extends SurfaceBuilder<SurfaceBuilderConfig>
 		if(index < 0)
 			index += 8;
 		
-		BlockState newTop = coloredState(original.getTop(), index);
-		BlockState newUnder = coloredState(original.getUnder(), index);
-		BlockState newUnderwater = coloredState(original.getUnderWaterMaterial(), index);
+		BlockState newTop = coloredState(original.getTopMaterial(), index);
+		BlockState newUnder = coloredState(original.getUnderMaterial(), index);
+		BlockState newUnderwater = coloredState(original.getUnderwaterMaterial(), index);
 		
 		if(newTop != null || newUnder != null || newUnderwater != null)
-			return new SurfaceBuilderConfig(newTop != null ? newTop : original.getTop(), newUnder != null ? newUnder : original.getUnder(), newUnderwater != null ? newUnderwater : original.getUnderWaterMaterial());
+			return new SurfaceBuilderConfig(newTop != null ? newTop : original.getTopMaterial(), newUnder != null ? newUnder : original.getUnderMaterial(), newUnderwater != null ? newUnderwater : original.getUnderwaterMaterial());
 		
 		return original;
 	}
@@ -58,14 +57,14 @@ public class RainbowSurfaceBuilder extends SurfaceBuilder<SurfaceBuilderConfig>
 		
 		switch(index)
 		{
-			case 0: return Blocks.RED_WOOL.getDefaultState();
-			case 1: return Blocks.ORANGE_WOOL.getDefaultState();
-			case 2: return Blocks.YELLOW_WOOL.getDefaultState();
-			case 3: return Blocks.LIME_WOOL.getDefaultState();
-			case 4: return Blocks.LIGHT_BLUE_WOOL.getDefaultState();
-			case 5: return Blocks.BLUE_WOOL.getDefaultState();
-			case 6: return Blocks.PURPLE_WOOL.getDefaultState();
-			case 7: return Blocks.MAGENTA_WOOL.getDefaultState();
+			case 0: return Blocks.RED_WOOL.defaultBlockState();
+			case 1: return Blocks.ORANGE_WOOL.defaultBlockState();
+			case 2: return Blocks.YELLOW_WOOL.defaultBlockState();
+			case 3: return Blocks.LIME_WOOL.defaultBlockState();
+			case 4: return Blocks.LIGHT_BLUE_WOOL.defaultBlockState();
+			case 5: return Blocks.BLUE_WOOL.defaultBlockState();
+			case 6: return Blocks.PURPLE_WOOL.defaultBlockState();
+			case 7: return Blocks.MAGENTA_WOOL.defaultBlockState();
 			default: throw new IllegalStateException("Should not happen");
 		}
 	}
@@ -74,14 +73,14 @@ public class RainbowSurfaceBuilder extends SurfaceBuilder<SurfaceBuilderConfig>
 	{
 		switch(index)
 		{
-			case 0: return Blocks.RED_TERRACOTTA.getDefaultState();
-			case 1: return Blocks.ORANGE_TERRACOTTA.getDefaultState();
-			case 2: return Blocks.YELLOW_TERRACOTTA.getDefaultState();
-			case 3: return Blocks.LIME_TERRACOTTA.getDefaultState();
-			case 4: return Blocks.LIGHT_BLUE_TERRACOTTA.getDefaultState();
-			case 5: return Blocks.BLUE_TERRACOTTA.getDefaultState();
-			case 6: return Blocks.PURPLE_TERRACOTTA.getDefaultState();
-			case 7: return Blocks.MAGENTA_TERRACOTTA.getDefaultState();
+			case 0: return Blocks.RED_TERRACOTTA.defaultBlockState();
+			case 1: return Blocks.ORANGE_TERRACOTTA.defaultBlockState();
+			case 2: return Blocks.YELLOW_TERRACOTTA.defaultBlockState();
+			case 3: return Blocks.LIME_TERRACOTTA.defaultBlockState();
+			case 4: return Blocks.LIGHT_BLUE_TERRACOTTA.defaultBlockState();
+			case 5: return Blocks.BLUE_TERRACOTTA.defaultBlockState();
+			case 6: return Blocks.PURPLE_TERRACOTTA.defaultBlockState();
+			case 7: return Blocks.MAGENTA_TERRACOTTA.defaultBlockState();
 			default: throw new IllegalStateException("Should not happen");
 		}
 	}

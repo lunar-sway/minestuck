@@ -20,12 +20,12 @@ public class ResumeSburbConnectionPacket implements PlayToServerPacket
 	
 	public static ResumeSburbConnectionPacket asClient(ComputerTileEntity te)
 	{
-		return new ResumeSburbConnectionPacket(te.getPos(), true);
+		return new ResumeSburbConnectionPacket(te.getBlockPos(), true);
 	}
 	
 	public static ResumeSburbConnectionPacket asServer(ComputerTileEntity te)
 	{
-		return new ResumeSburbConnectionPacket(te.getPos(), false);
+		return new ResumeSburbConnectionPacket(te.getBlockPos(), false);
 	}
 	
 	@Override

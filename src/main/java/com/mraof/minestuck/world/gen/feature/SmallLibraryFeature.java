@@ -1,8 +1,9 @@
 package com.mraof.minestuck.world.gen.feature;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.ResourceLocation;
@@ -10,42 +11,41 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.template.*;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.util.Constants;
 
 import java.util.Random;
-import java.util.function.Function;
 
 public class SmallLibraryFeature extends Feature<NoFeatureConfig>
 {
 	private static final ResourceLocation STRUCTURE_SMALL_LIBRARY = new ResourceLocation(Minestuck.MOD_ID, "small_library");
 	
-	public SmallLibraryFeature(Function<Dynamic<?>, ? extends NoFeatureConfig> deserialize)
+	public SmallLibraryFeature(Codec<NoFeatureConfig> codec)
 	{
-		super(deserialize);
+		super(codec);
 	}
 	
 	@Override
-	public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, NoFeatureConfig config)
+	public boolean place(ISeedReader worldIn, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
 	{
-		Rotation rotation = Rotation.randomRotation(rand);
-		TemplateManager templates = ((ServerWorld) worldIn.getWorld()).getSaveHandler().getStructureTemplateManager();
-		Template template = templates.getTemplateDefaulted(STRUCTURE_SMALL_LIBRARY);
+		Rotation rotation = Rotation.getRandom(rand);
+		TemplateManager templates = worldIn.getLevel().getStructureManager();
+		Template template = templates.getOrCreate(STRUCTURE_SMALL_LIBRARY);
 		
-		PlacementSettings settings = new PlacementSettings().setRotation(rotation).setChunk(new ChunkPos(pos)).setRandom(rand).addProcessor(StructureBlockRegistryProcessor.INSTANCE);
+		PlacementSettings settings = new PlacementSettings().setRotation(rotation).setChunkPos(new ChunkPos(pos)).setRandom(rand)
+				.addProcessor(new StructureBlockRegistryProcessor(StructureBlockRegistry.getOrDefault(generator)));
 		
 		if(rand.nextBoolean())
 		{	//Replace 20% of bookcases with air
-			settings.addProcessor(new RuleStructureProcessor(ImmutableList.of(new RuleEntry(new RandomBlockMatchRuleTest(Blocks.BOOKSHELF, 0.2F), AlwaysTrueRuleTest.INSTANCE, Blocks.AIR.getDefaultState()))));
+			settings.addProcessor(new RuleStructureProcessor(ImmutableList.of(new RuleEntry(new RandomBlockMatchRuleTest(Blocks.BOOKSHELF, 0.2F), AlwaysTrueRuleTest.INSTANCE, Blocks.AIR.defaultBlockState()))));
 		}
 		
-		BlockPos size = template.transformedSize(rotation);
+		BlockPos size = template.getSize(rotation);
 		int xOffset = rand.nextInt(16 - size.getX()), zOffset = rand.nextInt(16 - size.getZ());
 		int minX = template.getSize().getX()/2 - 1, maxX = template.getSize().getX()/2 + 1, z1 = 0, z2 = template.getSize().getZ();
 		MutableBoundingBox door1, door2;
@@ -60,19 +60,19 @@ public class SmallLibraryFeature extends Feature<NoFeatureConfig>
 		}
 		
 		int y1 = 0;
-		for(BlockPos doorPos : BlockPos.getAllInBoxMutable(door1.minX, 0, door1.minZ, door1.maxX, 0, door1.maxZ))
+		for(BlockPos doorPos : BlockPos.betweenClosed(door1.x0, 0, door1.z0, door1.x1, 0, door1.z1))
 		{
 			y1 = Math.max(y1, worldIn.getHeight(Heightmap.Type.OCEAN_FLOOR_WG, pos.getX() + doorPos.getX() + xOffset, pos.getZ() + doorPos.getZ() + zOffset));
 		}
 		int y2 = 0;
-		for(BlockPos doorPos : BlockPos.getAllInBoxMutable(door2.minX, 0, door2.minZ, door2.maxX, 0, door2.maxZ))
+		for(BlockPos doorPos : BlockPos.betweenClosed(door2.x0, 0, door2.z0, door2.x1, 0, door2.z1))
 		{
 			y2 = Math.max(y2, worldIn.getHeight(Heightmap.Type.OCEAN_FLOOR_WG, pos.getX() + doorPos.getX() + xOffset, pos.getZ() + doorPos.getZ() + zOffset));
 		}
 		int y = Math.min(y1, y2) - 1;
 		
 		BlockPos structurePos = template.getZeroPositionWithTransform(new BlockPos(pos.getX() + xOffset, y, pos.getZ() + zOffset), Mirror.NONE, rotation);
-		template.addBlocksToWorld(worldIn, structurePos, settings);
+		template.placeInWorld(worldIn, structurePos, structurePos, settings, rand, Constants.BlockFlags.NO_RERENDER);
 		
 		return true;
 	}

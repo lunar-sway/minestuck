@@ -12,12 +12,12 @@ public class ShadowRenderer<T extends Entity> extends EntityRenderer<T>
 	public ShadowRenderer(EntityRendererManager manager, float shadowSize)
 	{
 		super(manager);
-		this.shadowSize = shadowSize;
+		this.shadowRadius = shadowSize;
 	}
 	
 	public void doRenderShadow(T entity)
 	{
-		this.shadowSize = entity.getWidth();
+		this.shadowRadius = entity.getBbWidth();
 	}
 
 	@Override
@@ -26,7 +26,7 @@ public class ShadowRenderer<T extends Entity> extends EntityRenderer<T>
 	}
 	
 	@Override
-	public ResourceLocation getEntityTexture(T entity)
+	public ResourceLocation getTextureLocation(T entity)
 	{
 		return null;
 	}

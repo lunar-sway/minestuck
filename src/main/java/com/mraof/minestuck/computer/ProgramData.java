@@ -59,7 +59,7 @@ public class ProgramData
 			return -1;
 		item.setCount(1);
 		for(int id : disks.keySet())
-			if(disks.get(id).isItemEqual(item))
+			if(disks.get(id).sameItem(item))
 				return id;
 		return -2;
 	}
@@ -74,13 +74,13 @@ public class ProgramData
 	
 	public static void onClientClosed(ComputerTileEntity te)
 	{
-		Objects.requireNonNull(te.getWorld());
-		SkaianetHandler.get(te.getWorld()).closeClientConnection(te);	//Can safely be done even if this computer isn't in a connection
+		Objects.requireNonNull(te.getLevel());
+		SkaianetHandler.get(te.getLevel()).closeClientConnection(te);	//Can safely be done even if this computer isn't in a connection
 	}
 	
 	public static void onServerClosed(ComputerTileEntity te)
 	{
-		Objects.requireNonNull(te.getWorld());
-		SkaianetHandler.get(te.getWorld()).closeServerConnection(te);
+		Objects.requireNonNull(te.getLevel());
+		SkaianetHandler.get(te.getLevel()).closeServerConnection(te);
 	}
 }

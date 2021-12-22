@@ -36,7 +36,7 @@ public class MiniAlchemiterContainer extends MachineContainer
 	
 	public MiniAlchemiterContainer(int windowId, PlayerInventory playerInventory, PacketBuffer buffer)
 	{
-		this(MSContainerTypes.MINI_ALCHEMITER, windowId, playerInventory, new ItemStackHandler(2), new IntArray(3), IntReferenceHolder.single(), IWorldPosCallable.DUMMY, buffer.readBlockPos());
+		this(MSContainerTypes.MINI_ALCHEMITER, windowId, playerInventory, new ItemStackHandler(2), new IntArray(3), IntReferenceHolder.standalone(), IWorldPosCallable.NULL, buffer.readBlockPos());
 	}
 	
 	public MiniAlchemiterContainer(int windowId, PlayerInventory playerInventory, IItemHandler inventory, IIntArray parameters, IntReferenceHolder wildcardHolder, IWorldPosCallable position, BlockPos machinePos)
@@ -53,7 +53,7 @@ public class MiniAlchemiterContainer extends MachineContainer
 		
 		addSlot(new InputSlot(inventory, MiniAlchemiterTileEntity.INPUT, INPUT_X, INPUT_Y, MSBlocks.CRUXITE_DOWEL.asItem()));
 		addSlot(new OutputSlot(inventory, MiniAlchemiterTileEntity.OUTPUT, OUTPUT_X, OUTPUT_Y));
-		trackInt(wildcardHolder);
+		addDataSlot(wildcardHolder);
 		
 		bindPlayerInventory(playerInventory);
 	}
@@ -77,34 +77,34 @@ public class MiniAlchemiterContainer extends MachineContainer
 	
 	@Nonnull
 	@Override
-	public ItemStack transferStackInSlot(PlayerEntity player, int slotNumber)
+	public ItemStack quickMoveStack(PlayerEntity player, int slotNumber)
 	{
 		ItemStack itemstack = ItemStack.EMPTY;
-		Slot slot = this.inventorySlots.get(slotNumber);
-		int allSlots = this.inventorySlots.size();
+		Slot slot = this.slots.get(slotNumber);
+		int allSlots = this.slots.size();
 		
-		if(slot != null && slot.getHasStack())
+		if(slot != null && slot.hasItem())
 		{
-			ItemStack itemstackOrig = slot.getStack();
+			ItemStack itemstackOrig = slot.getItem();
 			itemstack = itemstackOrig.copy();
 			boolean result = false;
 			
 			if(slotNumber <= 1)
 			{
 				//if it's a machine slot
-				result = mergeItemStack(itemstackOrig, 2, allSlots, false);
+				result = moveItemStackTo(itemstackOrig, 2, allSlots, false);
 			} else if(slotNumber > 1)
 			{
 				//if it's an inventory slot with valid contents
 				if(itemstackOrig.getItem() == MSBlocks.CRUXITE_DOWEL.asItem())
-					result = mergeItemStack(itemstackOrig, 0, 1, false);
+					result = moveItemStackTo(itemstackOrig, 0, 1, false);
 			}
 			
 			if(!result)
 				return ItemStack.EMPTY;
 			
 			if(!itemstackOrig.isEmpty())
-				slot.onSlotChanged();
+				slot.setChanged();
 		}
 		
 		return itemstack;

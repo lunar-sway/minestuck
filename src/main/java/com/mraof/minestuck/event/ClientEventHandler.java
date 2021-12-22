@@ -18,8 +18,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.Style;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IWorldReader;
@@ -43,11 +42,11 @@ public class ClientEventHandler
 	{
 		if(event.phase == TickEvent.Phase.END)
 		{
-			if(ClientPlayerData.shouDisplayColorSelection() && Minecraft.getInstance().currentScreen == null)
+			if(ClientPlayerData.shouDisplayColorSelection() && Minecraft.getInstance().screen == null)
 			{
 				ClientPlayerData.clearDisplayColorSelection();
 				if(MinestuckConfig.CLIENT.loginColorSelector.get())
-					Minecraft.getInstance().displayGuiScreen(new ColorSelectorScreen(true));
+					Minecraft.getInstance().setScreen(new ColorSelectorScreen(true));
 			}
 			
 		}
@@ -59,27 +58,27 @@ public class ClientEventHandler
 		//Add config check
 		{
 			ItemStack stack = event.getItemStack();
-			if(event.getPlayer() != null && event.getPlayer().openContainer instanceof ConsortMerchantContainer
-					&& event.getPlayer().openContainer.getInventory().contains(stack))
+			if(event.getPlayer() != null && event.getPlayer().containerMenu instanceof ConsortMerchantContainer
+					&& event.getPlayer().containerMenu.getItems().contains(stack))
 			{
-				String unlocalized = stack.getTranslationKey();
+				String unlocalized = stack.getDescriptionId();
 				
-				EnumConsort type = ((ConsortMerchantContainer)event.getPlayer().openContainer).getConsortType();
-				String arg1 = I18n.format(type.getConsortType().getTranslationKey());
+				EnumConsort type = ((ConsortMerchantContainer)event.getPlayer().containerMenu).getConsortType();
+				String arg1 = I18n.get(type.getConsortType().getDescriptionId());
 				
 				String name = "store."+unlocalized;
 				String tooltip = "store."+unlocalized+".tooltip";
 				event.getToolTip().clear();
-				if(I18n.hasKey(name))
+				if(I18n.exists(name))
 					event.getToolTip().add(new TranslationTextComponent(name, arg1));
-				else event.getToolTip().add(stack.getDisplayName());
-				if(I18n.hasKey(tooltip))
-					event.getToolTip().add(new TranslationTextComponent(tooltip, arg1).setStyle(new Style().setColor(TextFormatting.GRAY)));
+				else event.getToolTip().add(stack.getHoverName());
+				if(I18n.exists(tooltip))
+					event.getToolTip().add(new TranslationTextComponent(tooltip, arg1).withStyle(TextFormatting.GRAY));
 			} else if(stack.getItem().getRegistryName().getNamespace().equals(Minestuck.MOD_ID))
 			{
-				String name = stack.getTranslationKey() + ".tooltip";
-				if(I18n.hasKey(name))
-					event.getToolTip().add(1, new TranslationTextComponent(name).setStyle(new Style().setColor(TextFormatting.GRAY)));
+				String name = stack.getDescriptionId() + ".tooltip";
+				if(I18n.exists(name))
+					event.getToolTip().add(1, new TranslationTextComponent(name).withStyle(TextFormatting.GRAY));
 			}
 		}
 	}
@@ -90,9 +89,9 @@ public class ClientEventHandler
 	@SubscribeEvent
 	public static void onFogRender(EntityViewRenderEvent.FogDensity event)
 	{
-		if (event.getInfo().getFluidState().getBlockState().getBlock() instanceof IMSFog)
+		if (event.getInfo().getFluidInCamera().createLegacyBlock().getBlock() instanceof IMSFog)
 		{
-			IMSFog fog = (IMSFog)event.getInfo().getFluidState().getBlockState().getBlock();
+			IMSFog fog = (IMSFog)event.getInfo().getFluidInCamera().createLegacyBlock().getBlock();
 			float fogDensity = fog.getMSFogDensity();
 			
 			event.setCanceled(true);
@@ -107,21 +106,21 @@ public class ClientEventHandler
 	@SubscribeEvent
 	public static void addFogColor(EntityViewRenderEvent.FogColors event)
 	{
-		BlockState state = event.getInfo().getFluidState().getBlockState();
-		IWorldReader world = event.getInfo().getRenderViewEntity().world;
-		BlockPos pos = event.getInfo().getBlockPos();
-		Entity entity = event.getInfo().getRenderViewEntity();
-		Vec3d originalColor = new Vec3d(event.getRed(), event.getGreen(), event.getBlue());
+		BlockState state = event.getInfo().getFluidInCamera().createLegacyBlock();
+		IWorldReader world = event.getInfo().getEntity().level;
+		BlockPos pos = event.getInfo().getBlockPosition();
+		Entity entity = event.getInfo().getEntity();
+		Vector3d originalColor = new Vector3d(event.getRed(), event.getGreen(), event.getBlue());
 		float partialTick = (float) (event.getRenderPartialTicks());
 		
 		if(state.getBlock() instanceof IMSFog)
 		{
 			IMSFog fog = (IMSFog) (state.getBlock());
-			Vec3d fogColor = fog.getMSFogColor(state, world, pos, entity, originalColor, partialTick);
+			Vector3d fogColor = fog.getMSFogColor(state, world, pos, entity, originalColor, partialTick);
 			
-			event.setRed((float) fogColor.getX());
-			event.setGreen((float) fogColor.getY());
-			event.setBlue((float) fogColor.getZ());
+			event.setRed((float) fogColor.x());
+			event.setGreen((float) fogColor.y());
+			event.setBlue((float) fogColor.z());
 		}
 	}
 	

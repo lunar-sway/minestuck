@@ -19,7 +19,7 @@ import java.util.Set;
 public class ShopPosterEntity extends HangingArtEntity<ShopPosterEntity.ShopArt>
 {
 	protected int dmg = 0;
-	private static final DataParameter<Integer> TYPE = EntityDataManager.createKey(FrogEntity.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> TYPE = EntityDataManager.defineId(FrogEntity.class, DataSerializers.INT);
 	
 	public ShopPosterEntity(EntityType<? extends ShopPosterEntity> type, World worldIn)
 	{
@@ -33,10 +33,10 @@ public class ShopPosterEntity extends HangingArtEntity<ShopPosterEntity.ShopArt>
 	}
 	
 	@Override
-	protected void registerData()
+	protected void defineSynchedData()
 	{
-		super.registerData();
-		this.dataManager.register(TYPE, 0);
+		super.defineSynchedData();
+		this.entityData.define(TYPE, 0);
 		
 	}
 	
@@ -60,27 +60,27 @@ public class ShopPosterEntity extends HangingArtEntity<ShopPosterEntity.ShopArt>
 	
 	private void setPosterType(int i)
     {
-    	this.dataManager.set(TYPE, i);
+    	this.entityData.set(TYPE, i);
 	}
 
 	public int getPosterType()
 	{
-		return this.dataManager.get(TYPE);
+		return this.entityData.get(TYPE);
 	}
 	
 	//NBT
 	
 	@Override
-	public void writeAdditional(CompoundNBT compound)
+	public void addAdditionalSaveData(CompoundNBT compound)
 	{
-		super.writeAdditional(compound);
+		super.addAdditionalSaveData(compound);
 		compound.putInt("Type", this.getPosterType());
 	}
 	
 	@Override
-	public void readAdditional(CompoundNBT compound)
+	public void readAdditionalSaveData(CompoundNBT compound)
 	{
-		super.readAdditional(compound);
+		super.readAdditionalSaveData(compound);
 		if(compound.contains("Type")) setPosterType(compound.getInt("Type"));
 		else setPosterType(0);
 	}

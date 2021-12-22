@@ -26,7 +26,7 @@ public class GristCommand
 	
 	public static void register(CommandDispatcher<CommandSource> dispatcher)
 	{
-		dispatcher.register(Commands.literal("grist").requires(source -> source.hasPermissionLevel(2)).then(createGet()).then(createAdd()).then(createSet()));
+		dispatcher.register(Commands.literal("grist").requires(source -> source.hasPermission(2)).then(createGet()).then(createAdd()).then(createSet()));
 	}
 	
 	private static ArgumentBuilder<CommandSource, ?> createGet()
@@ -47,7 +47,7 @@ public class GristCommand
 		for(ServerPlayerEntity player : players)
 		{
 			GristSet grist = PlayerSavedData.getData(player).getGristCache();
-			source.sendFeedback(new TranslationTextComponent(GET, player.getDisplayName(), grist.asTextComponent()), false);
+			source.sendSuccess(new TranslationTextComponent(GET, player.getDisplayName(), grist.asTextComponent()), false);
 		}
 		return players.size();
 	}
@@ -59,16 +59,16 @@ public class GristCommand
 		{
 			try
 			{
-				GristHelper.increase(player.world, IdentifierHandler.encode(player), grist);
+				GristHelper.increase(player.level, IdentifierHandler.encode(player), grist);
 				i++;
-				source.sendFeedback(new TranslationTextComponent(SUCCESS, player.getDisplayName()), true);
+				source.sendSuccess(new TranslationTextComponent(SUCCESS, player.getDisplayName()), true);
 			} catch(IllegalArgumentException e)
 			{
 				e.printStackTrace();
-				source.sendErrorMessage(new TranslationTextComponent(FAILURE, player.getDisplayName()));
+				source.sendFailure(new TranslationTextComponent(FAILURE, player.getDisplayName()));
 			}
 		}
-		source.sendFeedback(new TranslationTextComponent(ADD, i), true);
+		source.sendSuccess(new TranslationTextComponent(ADD, i), true);
 		return i;
 	}
 	
@@ -78,7 +78,7 @@ public class GristCommand
 		{
 			PlayerSavedData.getData(player).setGristCache(grist);
 		}
-		source.sendFeedback(new TranslationTextComponent(SET, players.size(), grist.asTextComponent()), true);
+		source.sendSuccess(new TranslationTextComponent(SET, players.size(), grist.asTextComponent()), true);
 		return players.size();
 	}
 }

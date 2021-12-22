@@ -19,24 +19,24 @@ public interface FinishUseItemEffect
 	
 	
 	FinishUseItemEffect SPAWN_BREADCRUMBS = (stack, worldIn, entityIn) -> {
-		if(!entityIn.world.isRemote && entityIn instanceof PlayerEntity)
+		if(!entityIn.level.isClientSide && entityIn instanceof PlayerEntity)
 		{
 			Random rand = new Random();
 			int num = rand.nextInt(10);
 			ItemStack crumbs = new ItemStack(MSItems.BREADCRUMBS, num);
 			
 			PlayerEntity player = (PlayerEntity) entityIn;
-			player.addItemStackToInventory(crumbs);
+			player.addItem(crumbs);
 		}
 		return stack;
 	};
 	
 	FinishUseItemEffect SHARPEN_CANDY_CANE = (stack, worldIn, entityIn) -> {
-		if(entityIn instanceof PlayerEntity && !entityIn.world.isRemote)
+		if(entityIn instanceof PlayerEntity && !entityIn.level.isClientSide)
 		{
-			((PlayerEntity) entityIn).addItemStackToInventory(new ItemStack(MSItems.SHARP_CANDY_CANE, 1));
+			((PlayerEntity) entityIn).addItem(new ItemStack(MSItems.SHARP_CANDY_CANE, 1));
 		}
-		stack.damageItem(999, entityIn, entity -> entity.sendBreakAnimation(Hand.MAIN_HAND));
+		stack.hurtAndBreak(999, entityIn, entity -> entity.broadcastBreakEvent(Hand.MAIN_HAND));
 		return stack;
 	};
 	
@@ -48,12 +48,12 @@ public interface FinishUseItemEffect
 	static FinishUseItemEffect foodEffect(int healAmount, float saturationModifier, int damageTaken)
 	{
 		return (stack, worldIn, entityIn) -> {
-			stack.damageItem(damageTaken, entityIn, entity -> entity.sendBreakAnimation(Hand.MAIN_HAND));
+			stack.hurtAndBreak(damageTaken, entityIn, entity -> entity.broadcastBreakEvent(Hand.MAIN_HAND));
 			if(entityIn instanceof PlayerEntity)
 			{
 				PlayerEntity player = (PlayerEntity) entityIn;
-				player.getFoodStats().addStats(healAmount, saturationModifier);
-				worldIn.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
+				player.getFoodData().eat(healAmount, saturationModifier);
+				worldIn.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, worldIn.random.nextFloat() * 0.1F + 0.9F);
 			}
 			return stack;
 		};
@@ -62,8 +62,8 @@ public interface FinishUseItemEffect
 	static FinishUseItemEffect potionEffect(Supplier<EffectInstance> effect, float probability)
 	{
 		return (stack, worldIn, entityLiving) -> {
-			if (!worldIn.isRemote && worldIn.rand.nextFloat() < probability)
-				entityLiving.addPotionEffect(effect.get());
+			if (!worldIn.isClientSide && worldIn.random.nextFloat() < probability)
+				entityLiving.addEffect(effect.get());
 			return stack;
 		};
 	}

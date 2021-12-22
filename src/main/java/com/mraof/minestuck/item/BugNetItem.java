@@ -21,7 +21,7 @@ public class BugNetItem extends Item
 	}
 	
 	@Override
-	public boolean onBlockDestroyed(ItemStack stack, World worldIn, BlockState state, BlockPos pos,
+	public boolean mineBlock(ItemStack stack, World worldIn, BlockState state, BlockPos pos,
 			LivingEntity entityLiving) {
 		
 		if(entityLiving instanceof PlayerEntity)
@@ -29,23 +29,23 @@ public class BugNetItem extends Item
 			PlayerEntity playerIn = (PlayerEntity) entityLiving;
 			if(!playerIn.isCreative() && worldIn.getBlockState(pos).getBlock() == Blocks.TALL_GRASS)
 			{
-				Random rand = playerIn.getRNG();
+				Random rand = playerIn.getRandom();
 				
-				if(!worldIn.isRemote)
+				if(!worldIn.isClientSide)
 				{
 					if(rand.nextInt(555) == 0)
 					{
 						ItemEntity item = new ItemEntity(worldIn, pos.getX(), pos.getY() + 0.5, pos.getZ(), new ItemStack(MSItems.GOLDEN_GRASSHOPPER, 1));
-						worldIn.addEntity(item);
-						playerIn.getHeldItemMainhand().damageItem(1, playerIn, PlayerIn -> playerIn.sendBreakAnimation(Hand.MAIN_HAND));
+						worldIn.addFreshEntity(item);
+						playerIn.getMainHandItem().hurtAndBreak(1, playerIn, PlayerIn -> playerIn.broadcastBreakEvent(Hand.MAIN_HAND));
 						
 						return true;
 					}
 					else if(rand.nextInt(5) == 0)
 					{
 						ItemEntity item = new ItemEntity(worldIn, pos.getX(), pos.getY() + 0.5, pos.getZ(), new ItemStack(MSItems.GRASSHOPPER, 1));
-						worldIn.addEntity(item);
-						playerIn.getHeldItemMainhand().damageItem(1, playerIn, PlayerIn -> playerIn.sendBreakAnimation(Hand.MAIN_HAND));
+						worldIn.addFreshEntity(item);
+						playerIn.getMainHandItem().hurtAndBreak(1, playerIn, PlayerIn -> playerIn.broadcastBreakEvent(Hand.MAIN_HAND));
 						
 						return true;
 					}

@@ -36,7 +36,7 @@ public class UraniumCookerContainer extends MachineContainer
 	
 	public UraniumCookerContainer(int windowId, PlayerInventory playerInventory, PacketBuffer buffer)
 	{
-		this(MSContainerTypes.URANIUM_COOKER, windowId, playerInventory, new ItemStackHandler(3), new IntArray(3), IntReferenceHolder.single(), IWorldPosCallable.DUMMY, buffer.readBlockPos());
+		this(MSContainerTypes.URANIUM_COOKER, windowId, playerInventory, new ItemStackHandler(3), new IntArray(3), IntReferenceHolder.standalone(), IWorldPosCallable.NULL, buffer.readBlockPos());
 	}
 	
 	public UraniumCookerContainer(int windowId, PlayerInventory playerInventory, IItemHandler inventory, IIntArray parameters, IntReferenceHolder fuelHolder, IWorldPosCallable position, BlockPos machinePos)
@@ -54,7 +54,7 @@ public class UraniumCookerContainer extends MachineContainer
 		addSlot(new SlotItemHandler(inventory, 0, itemInputX, itemInputY));
 		addSlot(new InputSlot(inventory, 1, uraniumInputX, uraniumInputY, MSItems.RAW_URANIUM));
 		addSlot(new OutputSlot(inventory, 2, itemOutputX, itemOutputY));
-		trackInt(fuelHolder);
+		addDataSlot(fuelHolder);
 		
 		bindPlayerInventory(playerInventory);
 	}
@@ -78,40 +78,40 @@ public class UraniumCookerContainer extends MachineContainer
 	
 	@Nonnull
 	@Override
-	public ItemStack transferStackInSlot(PlayerEntity player, int slotNumber)
+	public ItemStack quickMoveStack(PlayerEntity player, int slotNumber)
 	{
 		ItemStack itemstack = ItemStack.EMPTY;
-		Slot slot = this.inventorySlots.get(slotNumber);
-		int allSlots = this.inventorySlots.size();
+		Slot slot = this.slots.get(slotNumber);
+		int allSlots = this.slots.size();
 		
-		if (slot != null && slot.getHasStack())
+		if (slot != null && slot.hasItem())
 		{
-			ItemStack itemstackOrig = slot.getStack();
+			ItemStack itemstackOrig = slot.getItem();
 			itemstack = itemstackOrig.copy();
 			boolean result = false;
 			
 			if(slotNumber == 0)    //Shift-clicking from the item input
 			{
-				result = mergeItemStack(itemstackOrig, 3, allSlots, false);    //Send into the inventory
+				result = moveItemStackTo(itemstackOrig, 3, allSlots, false);    //Send into the inventory
 				
 			} else if(slotNumber == 1)    //Shift-clicking from the Uranium input
 			{
-				result = mergeItemStack(itemstackOrig, 3, allSlots, false);    //Send into the inventory
+				result = moveItemStackTo(itemstackOrig, 3, allSlots, false);    //Send into the inventory
 			} else if(slotNumber == 2)    //Shift-clicking from the output slot
 			{
 				if(itemstackOrig.getItem() == MSItems.RAW_URANIUM)
-					result = mergeItemStack(itemstackOrig, 0, 1, false);    //Send the uranium back to the uranium input
+					result = moveItemStackTo(itemstackOrig, 0, 1, false);    //Send the uranium back to the uranium input
 				else
-					result = mergeItemStack(itemstackOrig, 3, allSlots, false);    //Send the non-uranium to the inventory
+					result = moveItemStackTo(itemstackOrig, 3, allSlots, false);    //Send the non-uranium to the inventory
 				
 			} else    //Shift-clicking from the inventory
 			{
 				if(itemstackOrig.getItem() == MSItems.RAW_URANIUM)
 				{
-					result = mergeItemStack(itemstackOrig, 1, 2, false);    //Send the uranium to the uranium input
+					result = moveItemStackTo(itemstackOrig, 1, 2, false);    //Send the uranium to the uranium input
 				} else
 				{
-					result = mergeItemStack(itemstackOrig, 0, 1, false);    //Send the non-uranium to the other input
+					result = moveItemStackTo(itemstackOrig, 0, 1, false);    //Send the non-uranium to the other input
 				}
 			}
 			
@@ -119,7 +119,7 @@ public class UraniumCookerContainer extends MachineContainer
 				return ItemStack.EMPTY;
 			
 			if(!itemstackOrig.isEmpty())
-				slot.onSlotChanged();
+				slot.setChanged();
 		}
 		
 		return itemstack;

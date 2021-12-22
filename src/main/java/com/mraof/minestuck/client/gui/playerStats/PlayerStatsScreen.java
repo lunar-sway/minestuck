@@ -1,5 +1,6 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
@@ -15,7 +16,6 @@ import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.InputMappings;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
@@ -23,12 +23,12 @@ import net.minecraft.network.play.client.CCloseWindowPacket;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import java.util.Arrays;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
@@ -162,19 +162,19 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 		return false;
 	}
 	
-	protected void drawTabs()
+	protected void drawTabs(MatrixStack matrixStack)
 	{
 		RenderSystem.color3f(1,1,1);
 		
-		mc.getTextureManager().bindTexture(icons);
+		mc.getTextureManager().bind(icons);
 		
 		if(mode)
 		{
 			for(NormalGuiType type : NormalGuiType.values())
-				if(type != normalTab && (!type.reqMedium() || SkaiaClient.enteredMedium(SkaiaClient.playerId) || mc.playerController.isInCreativeMode()))
+				if(type != normalTab && (!type.reqMedium() || SkaiaClient.enteredMedium(SkaiaClient.playerId) || mc.gameMode.hasInfiniteItems()))
 				{
 					int i = type.ordinal();
-					blit(xOffset + i*(tabWidth + 2), yOffset - tabHeight + tabOverlap, i==0? 0:tabWidth, 0, tabWidth, tabHeight);
+					blit(matrixStack, xOffset + i*(tabWidth + 2), yOffset - tabHeight + tabOverlap, i==0? 0:tabWidth, 0, tabWidth, tabHeight);
 				}
 		} else
 		{
@@ -182,33 +182,33 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 				if(type != editmodeTab)
 				{
 					int i = type.ordinal();
-					blit(xOffset + i*(tabWidth + 2), yOffset - tabHeight + tabOverlap, i==0? 0:tabWidth, 0, tabWidth, tabHeight);
+					blit(matrixStack, xOffset + i*(tabWidth + 2), yOffset - tabHeight + tabOverlap, i==0? 0:tabWidth, 0, tabWidth, tabHeight);
 				}
 		}
 		
 		if(ClientPlayerData.hasDataCheckerAccess())
-			blit(xOffset + guiWidth - tabWidth, yOffset -tabHeight + tabOverlap, 2*tabWidth, 0, tabWidth, tabHeight);
+			blit(matrixStack, xOffset + guiWidth - tabWidth, yOffset -tabHeight + tabOverlap, 2*tabWidth, 0, tabWidth, tabHeight);
 	}
 	
-	protected void drawActiveTabAndOther(int xcor, int ycor)
+	protected void drawActiveTabAndOther(MatrixStack matrixStack, int xcor, int ycor)
 	{
 		RenderSystem.color3f(1,1,1);
 		
-		mc.getTextureManager().bindTexture(icons);
+		mc.getTextureManager().bind(icons);
 		
 		int index = (mode? normalTab:editmodeTab).ordinal();
-		blit(xOffset + index*(tabWidth+2), yOffset - tabHeight + tabOverlap,
+		blit(matrixStack, xOffset + index*(tabWidth+2), yOffset - tabHeight + tabOverlap,
 				index == 0? 0:tabWidth, tabHeight, tabWidth, tabHeight);
 		
 		for(int i = 0; i < (mode? NormalGuiType.values():EditmodeGuiType.values()).length; i++)
-			if(!mode || !NormalGuiType.values()[i].reqMedium() || SkaiaClient.enteredMedium(SkaiaClient.playerId) || mc.playerController.isInCreativeMode())
-				blit(xOffset + (tabWidth - 16)/2 + (tabWidth+2)*i, yOffset - tabHeight + tabOverlap + 8, i*16, tabHeight*2 + (mode? 0:16), 16, 16);
+			if(!mode || !NormalGuiType.values()[i].reqMedium() || SkaiaClient.enteredMedium(SkaiaClient.playerId) || mc.gameMode.hasInfiniteItems())
+				blit(matrixStack, xOffset + (tabWidth - 16)/2 + (tabWidth+2)*i, yOffset - tabHeight + tabOverlap + 8, i*16, tabHeight*2 + (mode? 0:16), 16, 16);
 		
 		if(ClientPlayerData.hasDataCheckerAccess())
-			blit(xOffset + guiWidth + (tabWidth - 16)/2 - tabWidth, yOffset - tabHeight + tabOverlap + 8, 5*16, tabHeight*2, 16, 16);
+			blit(matrixStack, xOffset + guiWidth + (tabWidth - 16)/2 - tabWidth, yOffset - tabHeight + tabOverlap + 8, 5*16, tabHeight*2, 16, 16);
 		
 		RenderSystem.disableRescaleNormal();
-		RenderHelper.disableStandardItemLighting();
+		RenderHelper.turnOff();
 		RenderSystem.disableLighting();
 		RenderSystem.disableDepthTest();
 		
@@ -217,9 +217,9 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 				if(xcor < xOffset + i*(tabWidth + 2))
 					break;
 				else if(xcor < xOffset + i*(tabWidth + 2) + tabWidth
-						&& (!mode || !NormalGuiType.values()[i].reqMedium() || SkaiaClient.enteredMedium(SkaiaClient.playerId) || mc.playerController.isInCreativeMode()))
-					renderTooltip(Arrays.asList(I18n.format(mode? NormalGuiType.values()[i].name:EditmodeGuiType.values()[i].name)),
-							xcor, ycor, font);
+						&& (!mode || !NormalGuiType.values()[i].reqMedium() || SkaiaClient.enteredMedium(SkaiaClient.playerId) || mc.gameMode.hasInfiniteItems()))
+					renderTooltip(matrixStack, new TranslationTextComponent(mode? NormalGuiType.values()[i].name:EditmodeGuiType.values()[i].name),
+							xcor, ycor);
 	}
 	
 	
@@ -233,9 +233,9 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 					break;
 				else if(xcor < xOffset + i*(tabWidth + 2) + tabWidth)
 				{
-					if(mode && NormalGuiType.values()[i].reqMedium() && !SkaiaClient.enteredMedium(SkaiaClient.playerId) && mc.playerController.isNotCreative())
+					if(mode && NormalGuiType.values()[i].reqMedium() && !SkaiaClient.enteredMedium(SkaiaClient.playerId) && mc.gameMode.hasMissTime())
 						return true;
-					mc.getSoundHandler().play(SimpleSound.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+					mc.getSoundManager().play(SimpleSound.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 					if(i != (mode? normalTab:editmodeTab).ordinal())
 					{
 						if(mode)
@@ -247,7 +247,7 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 				}
 			if(ClientPlayerData.hasDataCheckerAccess() && xcor < xOffset + guiWidth && xcor >= xOffset + guiWidth - tabWidth)
 			{
-				mc.displayGuiScreen(new DataCheckerScreen());
+				mc.setScreen(new DataCheckerScreen());
 				return true;
 			}
 		}
@@ -262,20 +262,20 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 		{
 			if(ClientPlayerData.hasDataCheckerAccess())
 			{
-				if(mc.currentScreen instanceof DataCheckerScreen)
-					mc.displayGuiScreen(null);
-				else mc.displayGuiScreen(new DataCheckerScreen());
+				if(mc.screen instanceof DataCheckerScreen)
+					mc.setScreen(null);
+				else mc.setScreen(new DataCheckerScreen());
 			}
 			
 			return;
 		}
 		
-		if(reload || mc.currentScreen == null)
+		if(reload || mc.screen == null)
 		{
-			if(mc.currentScreen instanceof ContainerScreen<?>)
+			if(mc.screen instanceof ContainerScreen<?>)
 			{
-				mc.player.connection.sendPacket(new CCloseWindowPacket(mc.player.openContainer.windowId));
-				mc.player.inventory.setItemStack(ItemStack.EMPTY);
+				mc.player.connection.send(new CCloseWindowPacket(mc.player.containerMenu.containerId));
+				mc.player.inventory.setCarried(ItemStack.EMPTY);
 			}
 			if(ClientEditHandler.isActive() ? editmodeTab.isContainer : normalTab.isContainer)
 			{
@@ -283,22 +283,22 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 				int windowId = WINDOW_ID_START + ordinal;
 				PlayerStatsContainerScreen<?> containerScreen = (PlayerStatsContainerScreen<?>) (ClientEditHandler.isActive() ? editmodeTab.createGuiInstance(windowId) : normalTab.createGuiInstance(windowId));
 				
-				mc.displayGuiScreen(containerScreen);
-				if(mc.currentScreen == containerScreen)
+				mc.setScreen(containerScreen);
+				if(mc.screen == containerScreen)
 					MSPacketHandler.sendToServer(new MiscContainerPacket(ordinal, ClientEditHandler.isActive()));
 			}
-			else mc.displayGuiScreen(ClientEditHandler.isActive()? editmodeTab.createGuiInstance():normalTab.createGuiInstance());
+			else mc.setScreen(ClientEditHandler.isActive()? editmodeTab.createGuiInstance():normalTab.createGuiInstance());
 		}
-		else if(mc.currentScreen instanceof PlayerStatsScreen || mc.currentScreen instanceof PlayerStatsContainerScreen)
-			mc.displayGuiScreen(null);
+		else if(mc.screen instanceof PlayerStatsScreen || mc.screen instanceof PlayerStatsContainerScreen)
+			mc.setScreen(null);
 	}
 	
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int i)
 	{
-		if(MSKeyHandler.statKey.isActiveAndMatches(InputMappings.getInputByCode(keyCode, scanCode)))
+		if(MSKeyHandler.statKey.isActiveAndMatches(InputMappings.getKey(keyCode, scanCode)))
 		{
-			mc.displayGuiScreen(null);
+			mc.setScreen(null);
 			return true;
 		}
 		else return super.keyPressed(keyCode, scanCode, i);

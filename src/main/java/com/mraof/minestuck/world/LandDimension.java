@@ -1,5 +1,5 @@
 package com.mraof.minestuck.world;
-
+/*
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
@@ -41,71 +41,12 @@ import java.util.function.BiFunction;
 
 public class LandDimension extends Dimension
 {
-	private LandBiomeHolder biomeHolder;
-	private LandProperties properties;
-	private StructureBlockRegistry blocks;
-	public final LandTypePair landTypes;
-	
-	private LandDimension(World worldIn, DimensionType typeIn, LandTypePair aspects)
-	{
-		super(worldIn, typeIn, 0.0F);
-		
-		if(aspects != null)
-			landTypes = aspects;
-		else
-		{
-			Debug.warnf("Creating land dimension %s without land aspects", typeIn);
-			landTypes = new LandTypePair(LandTypes.TERRAIN_NULL, LandTypes.TITLE_NULL);
-		}
-		
-		doesWaterVaporize = false;
-		
-		this.nether = false;
-		
-		initLandAspects();
-	}
-	
-	private void initLandAspects()
-	{
-		properties = new LandProperties(landTypes.terrain);
-		properties.load(landTypes);
-		
-		blocks = new StructureBlockRegistry();
-		landTypes.terrain.registerBlocks(blocks);
-		landTypes.title.registerBlocks(blocks);
-		
-		biomeHolder = new LandBiomeHolder(properties, landTypes);
-		biomeHolder.initBiomesWith(blocks);
-	}
-	
 	private static final long GENERIC_BIG_PRIME = 661231563202688713L;
 	
 	@Override
 	public long getSeed()
 	{
 		return super.getSeed() + getType().getId()*GENERIC_BIG_PRIME;
-	}
-	
-	@Override
-	public ChunkGenerator<?> createChunkGenerator()
-	{
-		LandGenSettings settings = MSWorldGenTypes.LANDS.createSettings();
-		settings.setLandTypes(landTypes);
-		settings.setBiomeHolder(biomeHolder);
-		settings.setStructureBlocks(blocks);
-		return MSWorldGenTypes.LANDS.create(this.world, MSWorldGenTypes.LAND_BIOMES.create(MSWorldGenTypes.LAND_BIOMES.createSettings(this.world.getWorldInfo()).setGenSettings(settings).setSeed(this.getSeed())), settings);
-	}
-	
-	public LandWrapperBiome getWrapperBiome(Biome biome)
-	{
-		return biomeHolder.localBiomeFrom(biome);
-	}
-
-	@Nullable
-	@Override
-	public BlockPos findSpawn(ChunkPos chunkPos, boolean checkValid)
-	{
-		return findSpawn(chunkPos.getXStart(), chunkPos.getZStart(), checkValid);
 	}
 	
 	@Nullable
@@ -138,19 +79,6 @@ public class LandDimension extends Dimension
 	{
 		//Reverses the algorithm used to calculate the skylight float. Needed as the skylight is currently hardcoded to use celestial angle
 		return (float) (Math.acos((properties.skylightBase - 0.5F) / 2) / (Math.PI * 2F));
-	}
-	
-	public float calculateVeilAngle()
-	{
-		double d0 = MathHelper.frac((double)world.getDayTime() / 24000.0D - 0.25D);
-		double d1 = 0.5D - Math.cos(d0 * Math.PI) / 2.0D;
-		return (float)(d0 * 2.0D + d1) / 3.0F;
-	}
-	
-	@Override
-	public boolean doesXZShowFog(int x, int z)
-	{
-		return false;
 	}
 	
 	@Override
@@ -186,65 +114,9 @@ public class LandDimension extends Dimension
 	}
 	
 	@Override
-	public SleepResult canSleepAt(PlayerEntity player, BlockPos pos)
-	{
-		return SleepResult.ALLOW;
-	}
-	
-	@Override
 	public boolean canRespawnHere()
 	{
 		return false;
-	}
-	
-	@Override
-	public boolean isSurfaceWorld()
-	{
-		return true;
-	}
-	
-	@Override
-	public void updateWeather(Runnable defaultLogic)
-	{
-		super.updateWeather(defaultLogic);
-		forceWeatherCheck();
-	}
-	
-	@Override
-	public void calculateInitialWeather()
-	{
-		super.calculateInitialWeather();
-		forceWeatherCheck();
-	}
-	
-	private void forceWeatherCheck()
-	{
-		if(properties.forceRain == LandProperties.ForceType.OFF)
-			world.rainingStrength = 0.0F;
-		else if(properties.forceRain == LandProperties.ForceType.ON)
-			world.rainingStrength = 1.0F;
-		
-		if(properties.forceThunder == LandProperties.ForceType.OFF)
-			world.thunderingStrength = 0.0F;
-		else if(properties.forceThunder == LandProperties.ForceType.ON)
-			world.thunderingStrength = 1.0F;
-	}
-	
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public Vec3d getFogColor(float celestialAngle, float partialTicks)
-	{
-		return properties.getFogColor();
-	}
-	
-	public Vec3d getSkyColor()
-	{
-		return properties.getSkyColor();
-	}
-	
-	public StructureBlockRegistry getBlocks()
-	{
-		return blocks;
 	}
 	
 	@Nullable
@@ -255,54 +127,4 @@ public class LandDimension extends Dimension
 		// (matters for some timing-related behavior, even if we stop any vanilla music from playing in lands)
 		return MusicTicker.MusicType.MENU;
 	}
-	
-	public static class Type extends ModDimension
-	{
-		public boolean useServerData;
-		public Map<ResourceLocation, LandTypePair.LazyInstance> dimToLandTypes = new HashMap<>();
-		//TODO Dimension might actually not be unloaded when switching to/creating a new world
-		@Override
-		public void write(PacketBuffer buffer, boolean network)
-		{
-			if(network)
-			{
-				buffer.writeInt(dimToLandTypes.size());
-				for(Map.Entry<ResourceLocation, LandTypePair.LazyInstance> entry : dimToLandTypes.entrySet())
-				{
-					buffer.writeResourceLocation(entry.getKey());
-					entry.getValue().write(buffer);
-				}
-			}
-		}
-		
-		@Override
-		public void read(PacketBuffer buffer, boolean network)
-		{
-			if(network)
-			{
-				dimToLandTypes.clear();
-				int size = buffer.readInt();
-				for(int i = 0; i < size; i++)
-				{
-					ResourceLocation dimId = buffer.readResourceLocation();
-					LandTypePair.LazyInstance landAspects = LandTypePair.LazyInstance.read(buffer);
-					dimToLandTypes.put(dimId, landAspects);
-				}
-			}
-		}
-		
-		@Override
-		public BiFunction<World, DimensionType, ? extends Dimension> getFactory()
-		{
-			return this::createDimension;
-		}
-		
-		private LandDimension createDimension(World world, DimensionType type)
-		{
-			LandTypePair.LazyInstance aspects = dimToLandTypes.get(DimensionType.getKey(type));
-			if(aspects == null)
-				Debug.warn("Trying to create a land world but haven't gotten its land aspects!");
-			return new LandDimension(world, type, aspects == null ? null : aspects.create());
-		}
-	}
-}
+}*/

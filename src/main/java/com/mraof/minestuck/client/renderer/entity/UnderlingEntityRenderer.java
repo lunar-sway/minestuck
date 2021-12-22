@@ -25,7 +25,7 @@ public class UnderlingEntityRenderer<T extends UnderlingEntity, M extends Entity
 	}
 	
 	@Override
-	public ResourceLocation getEntityTexture(T entity)
+	public ResourceLocation getTextureLocation(T entity)
 	{
 		return textureMap.computeIfAbsent(entity.getGristType(), grist -> createTexture(entity, grist));
 	}

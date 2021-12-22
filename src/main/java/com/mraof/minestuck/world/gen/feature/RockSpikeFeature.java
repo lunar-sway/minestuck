@@ -1,49 +1,49 @@
 package com.mraof.minestuck.world.gen.feature;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import com.mraof.minestuck.util.CoordPair;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraftforge.common.util.Constants;
 
 import java.util.*;
-import java.util.function.Function;
 
 public class RockSpikeFeature extends Feature<NoFeatureConfig>
 {
 	private final boolean stomps = false;
 	
-	public RockSpikeFeature(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactoryIn)
+	public RockSpikeFeature(Codec<NoFeatureConfig> codec)
 	{
-		super(configFactoryIn);
+		super(codec);
 	}
 	
 	@Override
-	public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, NoFeatureConfig config)
+	public boolean place(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
 	{
 		int height = rand.nextInt(7) + 10;
 		
-		if(worldIn.getBlockState(pos.up(height*2/3)).getMaterial().isLiquid())	//At least 1/3rd of the height should be above the liquid surface
+		if(world.getBlockState(pos.above(height*2/3)).getMaterial().isLiquid())	//At least 1/3rd of the height should be above the liquid surface
 			return false;
 		float plateauSize = 0.2F + rand.nextFloat()*(height/25F);
-		BlockState ground = generator.getSettings().getDefaultBlock();
+		BlockState ground = Blocks.STONE.defaultBlockState();//generator.getSettings().getDefaultBlock(); TODO
 		
-		BlockPos nodePos = generateRock(pos.up(height), height, plateauSize, worldIn, rand, ground);
+		BlockPos nodePos = generateRock(pos.above(height), height, plateauSize, world, rand, ground);
 		
 		float rockRarity = plateauSize + height/15F + rand.nextFloat()*0.5F - 0.5F;
 		
 		if(rockRarity > 1F)
 		{
-			generateSubRock(pos, height, plateauSize, worldIn, rand, ground);
+			generateSubRock(pos, height, plateauSize, world, rand, ground);
 			rockRarity -= 1F;
 		}
 		if(rand.nextFloat() < rockRarity)
-			generateSubRock(pos, height, plateauSize, worldIn, rand, ground);
+			generateSubRock(pos, height, plateauSize, world, rand, ground);
 		
 		//TODO return node
 		
@@ -53,7 +53,7 @@ public class RockSpikeFeature extends Feature<NoFeatureConfig>
 	private void generateSubRock(BlockPos pos, int heightOld, float plateauOld, IWorld world, Random rand, BlockState ground)
 	{
 		int height = 5 + rand.nextInt((int) ((heightOld - 6)*0.75));
-		BlockPos newPos = pos.add(rand.nextInt(10) - 5, 0, rand.nextInt(10) - 5);
+		BlockPos newPos = pos.offset(rand.nextInt(10) - 5, 0, rand.nextInt(10) - 5);
 		//newPos = world.getTopSolidOrLiquidBlock(newPos).up(height);
 		float plateauSize = rand.nextFloat()*plateauOld*0.75F;
 		
@@ -161,8 +161,8 @@ public class RockSpikeFeature extends Feature<NoFeatureConfig>
 					break;
 				}*/
 				was.put(pos, world.getBlockState(pos));
-				world.setBlockState(pos, ground, Constants.BlockFlags.BLOCK_UPDATE);
-				pos = pos.down();
+				world.setBlock(pos, ground, Constants.BlockFlags.BLOCK_UPDATE);
+				pos = pos.below();
 			} while(!world.getBlockState(pos).equals(ground));
 		}
 		
@@ -189,7 +189,7 @@ public class RockSpikeFeature extends Feature<NoFeatureConfig>
 		
 		if(stomps)
 		{
-			was.forEach((t, u) -> world.setBlockState(t, u, Constants.BlockFlags.BLOCK_UPDATE));
+			was.forEach((t, u) -> world.setBlock(t, u, Constants.BlockFlags.BLOCK_UPDATE));
 		}
 		
 		return corePosition;

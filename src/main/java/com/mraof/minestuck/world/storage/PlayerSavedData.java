@@ -8,7 +8,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.DimensionSavedDataManager;
 import net.minecraft.world.storage.WorldSavedData;
@@ -48,9 +47,9 @@ public class PlayerSavedData extends WorldSavedData
 	
 	public static PlayerSavedData get(MinecraftServer mcServer)
 	{
-		ServerWorld world = mcServer.getWorld(DimensionType.OVERWORLD);
+		ServerWorld world = mcServer.overworld();
 		
-		DimensionSavedDataManager storage = world.getSavedData();
+		DimensionSavedDataManager storage = world.getDataStorage();
 		PlayerSavedData instance = storage.get(() -> new PlayerSavedData(mcServer), DATA_NAME);
 		
 		if(instance == null)	//There is no save data
@@ -63,7 +62,7 @@ public class PlayerSavedData extends WorldSavedData
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound)
+	public CompoundNBT save(CompoundNBT compound)
 	{
 		ListNBT list = new ListNBT();
 		for (PlayerData data : dataMap.values())
@@ -74,7 +73,7 @@ public class PlayerSavedData extends WorldSavedData
 	}
 	
 	@Override
-	public void read(CompoundNBT nbt)
+	public void load(CompoundNBT nbt)
 	{
 		ListNBT list = nbt.getList("playerData", Constants.NBT.TAG_COMPOUND);
 		for (int i = 0; i < list.size(); i++)
@@ -112,7 +111,7 @@ public class PlayerSavedData extends WorldSavedData
 		{
 			PlayerData data = new PlayerData(this, player);
 			dataMap.put(player, data);
-			markDirty();
+			setDirty();
 		}
 		return dataMap.get(player);
 	}

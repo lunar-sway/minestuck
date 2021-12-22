@@ -5,7 +5,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
@@ -24,7 +24,7 @@ public class EntityBigPart extends Entity implements IEntityAdditionalSpawnData
 	{
 		super(type, worldIn);
 		this.group = group;
-		this.size = EntitySize.flexible(width, height);
+		this.size = EntitySize.scalable(width, height);
 	}
 
 	void setPartId(int id)
@@ -33,19 +33,19 @@ public class EntityBigPart extends Entity implements IEntityAdditionalSpawnData
 	}
 	
 	@Override
-	protected void registerData()
+	protected void defineSynchedData()
 	{
 	
 	}
 	
 	@Override
-	protected void readAdditional(CompoundNBT compound)
+	protected void readAdditionalSaveData(CompoundNBT compound)
 	{
 	
 	}
 	
 	@Override
-	protected void writeAdditional(CompoundNBT compound)
+	protected void addAdditionalSaveData(CompoundNBT compound)
 	{
 	
 	}
@@ -62,29 +62,29 @@ public class EntityBigPart extends Entity implements IEntityAdditionalSpawnData
 	}
 
 	@Override
-	public boolean attackEntityFrom(DamageSource damageSource, float amount)
+	public boolean hurt(DamageSource damageSource, float amount)
 	{
 		return this.group != null && this.group.attackFrom(damageSource, amount);
 	}
 	
 	@Override
-	public EntitySize getSize(Pose poseIn)
+	public EntitySize getDimensions(Pose poseIn)
 	{
-		return super.getSize(poseIn);
+		return super.getDimensions(poseIn);
 	}
 	
 	@Override
 	public void writeSpawnData(PacketBuffer buffer)
 	{
-		buffer.writeInt(this.group.parent.getEntityId());
-		buffer.writeFloat(this.getWidth());
-		buffer.writeFloat(this.getHeight());
+		buffer.writeInt(this.group.parent.getId());
+		buffer.writeFloat(this.getBbWidth());
+		buffer.writeFloat(this.getBbHeight());
 	}
 
 	@Override
 	public void readSpawnData(PacketBuffer additionalData)
 	{
-		Entity entity = world.getEntityByID(additionalData.readInt());
+		Entity entity = level.getEntity(additionalData.readInt());
 		if(entity instanceof IBigEntity)
 		{
 			ArrayList<EntityBigPart> parts = ((IBigEntity) entity).getGroup().parts;
@@ -98,32 +98,32 @@ public class EntityBigPart extends Entity implements IEntityAdditionalSpawnData
 	}
 
 	@Override
-	public boolean isEntityEqual(Entity entityIn)
+	public boolean is(Entity entityIn)
 	{
 		return entityIn == this || this.group != null && (entityIn == this.group.parent || entityIn instanceof EntityBigPart && ((EntityBigPart) entityIn).group == this.group);
 	}
 
 	@Override
-	public boolean canBeCollidedWith()
+	public boolean isPickable()
 	{
 		return true;
 	}
 
 	@Override
-	public boolean isEntityInsideOpaqueBlock()
+	public boolean isInWall()
 	{
 		return false;
 	}
 	
 	@Override
-	public void move(MoverType typeIn, Vec3d pos)
+	public void move(MoverType typeIn, Vector3d pos)
 	{
-		this.setBoundingBox(this.getBoundingBox().offset(pos));
-		this.resetPositionToBB();
+		this.setBoundingBox(this.getBoundingBox().move(pos));
+		this.setLocationFromBoundingbox();
 	}
 	
 	@Override
-	public IPacket<?> createSpawnPacket()
+	public IPacket<?> getAddEntityPacket()
 	{
 		throw new UnsupportedOperationException();
 	}

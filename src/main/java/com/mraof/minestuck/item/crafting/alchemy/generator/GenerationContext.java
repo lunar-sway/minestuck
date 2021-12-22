@@ -81,7 +81,7 @@ public class GenerationContext
 			return null;	//If the ingredient tests positive for an item already in generation, prevent recursion and return a null grist cost
 		
 		GristSet minCost = null;
-		for(ItemStack stack : ingredient.getMatchingStacks())
+		for(ItemStack stack : ingredient.getItems())
 		{
 			if(ingredient.test(new ItemStack(stack.getItem())))
 			{

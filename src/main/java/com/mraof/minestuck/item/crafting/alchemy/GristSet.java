@@ -288,11 +288,11 @@ public class GristSet
 			long countLeft = amount.getAmount();
 			for(int i = 0; i < 10 && countLeft > 0; i++)
 			{
-				long spawnedCount = countLeft <= amount.getAmount()/10 || i == 9 ? countLeft : Math.min(countLeft, (long) world.rand.nextDouble()*countLeft + 1);
+				long spawnedCount = countLeft <= amount.getAmount()/10 || i == 9 ? countLeft : Math.min(countLeft, (long) world.random.nextDouble()*countLeft + 1);
 				GristAmount spawnedAmount = new GristAmount(amount.getType(), spawnedCount);
 				GristEntity entity = new GristEntity(world, x, y, z, spawnedAmount);
 				postProcessor.accept(entity);
-				world.addEntity(entity);
+				world.addFreshEntity(entity);
 				countLeft -= spawnedCount;
 			}
 		}
@@ -323,7 +323,7 @@ public class GristSet
 			GristType type = GristTypes.getRegistry().getValue(gristId);
 			if(type == null)
 				throw new JsonParseException("'"+entry.getKey()+"' did not match an existing grist type!");
-			long amount = JSONUtils.getLong(entry.getValue(), entry.getKey());	//getLong
+			long amount = JSONUtils.convertToLong(entry.getValue(), entry.getKey());	//getLong
 			set.addGrist(type, amount);
 		}
 		
