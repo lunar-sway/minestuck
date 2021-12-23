@@ -91,7 +91,6 @@ public class ServerEventHandler
 		IdentifierHandler.clear();
 		SkaianetHandler.clear();
 		MSDimensions.clear();
-		MSFeatures.LAND_GATE.clearCache();
 	}
 	
 	@SubscribeEvent
@@ -130,7 +129,7 @@ public class ServerEventHandler
 			else if(event.getEntity() instanceof EndermanEntity || event.getEntity() instanceof BlazeEntity || event.getEntity() instanceof WitchEntity || event.getEntity() instanceof GuardianEntity)
 				exp = 3;
 			else if(event.getEntity() instanceof SlimeEntity)
-				exp = Math.min(((SlimeEntity) event.getEntity()).getSlimeSize() - 1, 9);
+				exp = Math.min(((SlimeEntity) event.getEntity()).getSize() - 1, 9);
 			
 			if(exp > 0)
 				Echeladder.increaseProgress(player, exp);
@@ -269,7 +268,7 @@ public class ServerEventHandler
 			PlayerEntity injuredPlayer = ((PlayerEntity) event.getEntity());
 			Title title = PlayerSavedData.getData((ServerPlayerEntity) injuredPlayer).getTitle();
 			boolean isDoom = title != null && title.getHeroAspect() == EnumAspect.DOOM;
-			ItemStack handItem = injuredPlayer.getHeldItemMainhand();
+			ItemStack handItem = injuredPlayer.getMainHandItem();
 			float activateThreshold = ((injuredPlayer.getMaxHealth() / (injuredPlayer.getHealth() + 1)) / injuredPlayer.getMaxHealth()); //fraction of players health that rises dramatically the more injured they are
 			
 			if(handItem.getItem() == MSItems.LUCERNE_HAMMER_OF_UNDYING)
@@ -277,43 +276,43 @@ public class ServerEventHandler
 				if(isDoom)
 					activateThreshold = activateThreshold * 1.5F;
 				
-				activateThreshold = activateThreshold + injuredPlayer.getRNG().nextFloat() * .9F;
+				activateThreshold = activateThreshold + injuredPlayer.getRandom().nextFloat() * .9F;
 				
-				if(activateThreshold >= 1.0F && injuredPlayer.getRNG().nextFloat() >= .75)
+				if(activateThreshold >= 1.0F && injuredPlayer.getRandom().nextFloat() >= .75)
 				{
 					injuredPlayer.level.playSound(null, injuredPlayer.getX(), injuredPlayer.getY(), injuredPlayer.getZ(), SoundEvents.TOTEM_USE, SoundCategory.PLAYERS, 1.0F, 1.4F);
 					injuredPlayer.setHealth(injuredPlayer.getHealth() + 3);
-					injuredPlayer.addPotionEffect(new EffectInstance(Effects.REGENERATION, 450, 0));
+					injuredPlayer.addEffect(new EffectInstance(Effects.REGENERATION, 450, 0));
 					if(isDoom)
 					{
-						injuredPlayer.addPotionEffect(new EffectInstance(Effects.ABSORPTION, 100, 0));
-						handItem.damageItem(100, injuredPlayer, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
+						injuredPlayer.addEffect(new EffectInstance(Effects.ABSORPTION, 100, 0));
+						handItem.hurtAndBreak(100, injuredPlayer, playerEntity -> playerEntity.broadcastBreakEvent(Hand.MAIN_HAND));
 					} else
 					{
-						handItem.damageItem(250, injuredPlayer, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
+						handItem.hurtAndBreak(250, injuredPlayer, playerEntity -> playerEntity.broadcastBreakEvent(Hand.MAIN_HAND));
 					}
 				}
 			}
 			
 			if(handItem.getItem() == MSItems.CRUEL_FATE_CRUCIBLE)
 			{
-				activateThreshold = activateThreshold * 8 + injuredPlayer.getRNG().nextFloat() * .9F;
+				activateThreshold = activateThreshold * 8 + injuredPlayer.getRandom().nextFloat() * .9F;
 				
-				if((isDoom && activateThreshold >= 1.0F && injuredPlayer.getRNG().nextFloat() <= .2) || (!isDoom && activateThreshold >= 1.0F && injuredPlayer.getRNG().nextFloat() <= .05))
+				if((isDoom && activateThreshold >= 1.0F && injuredPlayer.getRandom().nextFloat() <= .2) || (!isDoom && activateThreshold >= 1.0F && injuredPlayer.getRandom().nextFloat() <= .05))
 				{
 					AxisAlignedBB axisalignedbb = injuredPlayer.getBoundingBox().inflate(4.0D, 2.0D, 4.0D);
 					List<LivingEntity> list = injuredPlayer.level.getEntitiesOfClass(LivingEntity.class, axisalignedbb);
 					list.remove(injuredPlayer);
 					if(!list.isEmpty())
 					{
-						injuredPlayer.world.playSound(null, injuredPlayer.getPosX(), injuredPlayer.getPosY(), injuredPlayer.getPosZ(), SoundEvents.ENTITY_WITHER_HURT, SoundCategory.PLAYERS, 0.5F, 1.6F);
+						injuredPlayer.level.playSound(null, injuredPlayer.getX(), injuredPlayer.getY(), injuredPlayer.getZ(), SoundEvents.WITHER_HURT, SoundCategory.PLAYERS, 0.5F, 1.6F);
 						if(isDoom)
-							handItem.damageItem(2, injuredPlayer, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
+							handItem.hurtAndBreak(2, injuredPlayer, playerEntity -> playerEntity.broadcastBreakEvent(Hand.MAIN_HAND));
 						else
-							handItem.damageItem(10, injuredPlayer, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
+							handItem.hurtAndBreak(10, injuredPlayer, playerEntity -> playerEntity.broadcastBreakEvent(Hand.MAIN_HAND));
 						for(LivingEntity livingentity : list)
 						{
-							livingentity.addPotionEffect(new EffectInstance(Effects.INSTANT_DAMAGE, 1, 1));
+							livingentity.addEffect(new EffectInstance(Effects.HARM, 1, 1));
 						}
 					}
 				}

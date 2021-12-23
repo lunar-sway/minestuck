@@ -8,10 +8,7 @@ import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.entity.item.*;
 import com.mraof.minestuck.entity.underling.*;
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.EntitySpawnPlacementRegistry;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.*;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
@@ -107,7 +104,7 @@ public final class MSEntityTypes
 		register(registry, EntityType.Builder.<SbahjPosterEntity>of(SbahjPosterEntity::new, EntityClassification.MISC).sized(0.5F, 0.5F).setShouldReceiveVelocityUpdates(false).setTrackingRange(10).setUpdateInterval(Integer.MAX_VALUE), "sbahj_poster");
 		register(registry, EntityType.Builder.<ShopPosterEntity>of(ShopPosterEntity::new, EntityClassification.MISC).sized(0.5F, 0.5F).setShouldReceiveVelocityUpdates(false).setTrackingRange(10).setUpdateInterval(Integer.MAX_VALUE), "shop_poster");
 		register(registry, EntityType.Builder.<HologramEntity>of(HologramEntity::new, EntityClassification.MISC).sized(0.25F, 0.25F).setShouldReceiveVelocityUpdates(false).setTrackingRange(10).setUpdateInterval(Integer.MAX_VALUE), "hologram");
-		register(registry, EntityType.Builder.<LotusFlowerEntity>create(LotusFlowerEntity::new, EntityClassification.MISC).size(2F, 2F).setShouldReceiveVelocityUpdates(false).setTrackingRange(10), "lotus_flower");
+		register(registry, EntityType.Builder.<LotusFlowerEntity>of(LotusFlowerEntity::new, EntityClassification.MISC).sized(2F, 2F).setShouldReceiveVelocityUpdates(false).setTrackingRange(10), "lotus_flower");
 		
 		register(registry, EntityType.Builder.<ConsumableProjectileEntity>of(ConsumableProjectileEntity::new, EntityClassification.MISC).sized(0.25F, 0.25F).setTrackingRange(4).setUpdateInterval(10), "consumable_projectile");
 		register(registry, EntityType.Builder.<ReturningProjectileEntity>of(ReturningProjectileEntity::new, EntityClassification.MISC).sized(0.25F, 0.25F).setTrackingRange(6).setUpdateInterval(2), "returning_projectile"); //TODO smaller update interval value is temporary solution to improve client rendering
@@ -163,6 +160,8 @@ public final class MSEntityTypes
 		event.put(PROSPITIAN_ROOK, RookEntity.rookAttributes().build());
 		
 		event.put(PLAYER_DECOY, MobEntity.createMobAttributes().build());
+		
+		event.put(LOTUS_FLOWER, LivingEntity.createLivingAttributes().build());
 	}
 	
 	private static void register(IForgeRegistry<EntityType<?>> registry, EntityType.Builder<?> builder, String name)

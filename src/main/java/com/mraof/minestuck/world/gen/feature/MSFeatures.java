@@ -72,7 +72,7 @@ public final class MSFeatures
 		IForgeRegistry<Structure<?>> registry = event.getRegistry();
 		
 		register(registry, new GateStructure(NoFeatureConfig.CODEC).setRegistryName("land_gate"));
-		registry.register(new FrogTempleStructure(NoFeatureConfig::deserialize).setRegistryName("frog_temple"));
+		register(registry, new FrogTempleStructure(NoFeatureConfig.CODEC).setRegistryName("frog_temple"));
 		register(registry, new SmallRuinStructure(NoFeatureConfig.CODEC).setRegistryName("small_ruin"));
 		register(registry, new ImpDungeonStructure(NoFeatureConfig.CODEC).setRegistryName("imp_dungeon"));
 		register(registry, new ConsortVillageStructure(NoFeatureConfig.CODEC).setRegistryName("consort_village"));

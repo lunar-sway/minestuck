@@ -17,8 +17,6 @@ import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.Features;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.OreFeatureConfig;
-import net.minecraft.world.gen.placement.Placement;
-import net.minecraft.world.gen.placement.TopSolidRangeConfig;
 import net.minecraft.world.gen.surfacebuilders.SurfaceBuilder;
 
 import java.util.List;
@@ -129,12 +127,12 @@ public class LandBiomeHolder implements ILandBiomeSet
 		if(MinestuckConfig.SERVER.generateCruxiteOre.get())
 		{
 			builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.configured(new OreFeatureConfig(blocks.getGroundType(), blocks.getBlockState("cruxite_ore"), baseCruxiteVeinSize))
-					.decorated(Placement.RANGE.configured(new TopSolidRangeConfig(cruxiteStratumMin, cruxiteStratumMin, cruxiteStratumMax))).squared().count(cruxiteVeinsPerChunk));
+					.range(cruxiteStratumMax).squared().count(cruxiteVeinsPerChunk));
 		}
 		if(MinestuckConfig.SERVER.generateUraniumOre.get())
 		{
 			builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.configured(new OreFeatureConfig(blocks.getGroundType(), blocks.getBlockState("uranium_ore"), baseUraniumVeinSize))
-					.decorated(Placement.RANGE.configured(new TopSolidRangeConfig(uraniumStratumMin, uraniumStratumMin, uraniumStratumMax))).squared().count(uraniumVeinsPerChunk));
+					.range(uraniumStratumMax).squared().count(uraniumVeinsPerChunk));
 		}
 	}
 	

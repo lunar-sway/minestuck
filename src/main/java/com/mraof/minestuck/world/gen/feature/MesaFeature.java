@@ -2,6 +2,7 @@ package com.mraof.minestuck.world.gen.feature;
 
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.util.CoordPair;
+import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -56,7 +57,9 @@ public class MesaFeature extends Feature<NoFeatureConfig>
 		float altFrequency = 0.01F;
 		boolean isAlt = rand.nextFloat() < altFrequency;
 		
-		BlockPos nodePos = generateMesa(pos.above(height), height, plateauSize, world, rand, isAlt, Blocks.STONE.defaultBlockState());//generator.getSettings().getDefaultBlock()); TODO
+		StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(generator);
+		
+		BlockPos nodePos = generateMesa(pos.above(height), height, plateauSize, world, rand, isAlt, blocks.getBlockState("ground"));
 		
 		if(!stomps)
 		{

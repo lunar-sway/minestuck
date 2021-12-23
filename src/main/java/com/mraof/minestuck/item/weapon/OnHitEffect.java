@@ -24,6 +24,8 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.*;
+import net.minecraft.util.math.*;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.IFormattableTextComponent;
@@ -247,21 +249,21 @@ public interface OnHitEffect
 	static OnHitEffect backstab(float backstabDamage)
 	{
 		return (stack, target, attacker) -> {
-			Vec3i reversedBackVec = target.getHorizontalFacing().getOpposite().getDirectionVec();
-			Vec3i targetBackVec3i = target.getPosition().add(reversedBackVec).add(reversedBackVec).add(reversedBackVec); //three blocks behind the targets back
-			if(targetBackVec3i.withinDistance(attacker.getPosition(), 3))
+			Direction direction = target.getDirection().getOpposite();
+			Vector3i targetBackVec3i = target.blockPosition().relative(direction, 3); //three blocks behind the targets back
+			if(targetBackVec3i.closerThan(attacker.blockPosition(), 3))
 			{
 				for(int i = 0; i < 4; i++)
 				{
-					target.world.addParticle(ParticleTypes.DAMAGE_INDICATOR, true, target.getPosition().add(reversedBackVec).getX(), target.getEyePosition(1F).y - 1, target.getPosition().add(reversedBackVec).getZ(), 0.1,0.1,0.1);
+					target.level.addParticle(ParticleTypes.DAMAGE_INDICATOR, true, target.blockPosition().relative(direction).getX(), target.getEyePosition(1F).y - 1, target.blockPosition().relative(direction).getZ(), 0.1,0.1,0.1);
 				}
 				
 				DamageSource source;
 				if(attacker instanceof PlayerEntity)
-					source = DamageSource.causePlayerDamage((PlayerEntity) attacker);
-				else source = DamageSource.causeMobDamage(attacker);
+					source = DamageSource.playerAttack((PlayerEntity) attacker);
+				else source = DamageSource.mobAttack(attacker);
 				
-				target.attackEntityFrom(source, backstabDamage);
+				target.hurt(source, backstabDamage);
 			}
 		};
 	}
@@ -277,7 +279,7 @@ public interface OnHitEffect
 				
 				if(target.getType() == targetEntity.get())
 				{
-					target.attackEntityFrom(DamageSource.causePlayerDamage(serverPlayer), damage);
+					target.hurt(DamageSource.playerAttack(serverPlayer), damage);
 				}
 			}
 		};

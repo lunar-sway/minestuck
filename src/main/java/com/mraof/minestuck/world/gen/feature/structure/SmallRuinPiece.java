@@ -55,7 +55,7 @@ public class SmallRuinPiece extends ScatteredStructurePiece
 	}
 	
 	@Override
-	protected void addAdditionalSaveData(CompoundNBT nbt)    //Note: incorrectly mapped. Should be writeAdditional
+	protected void addAdditionalSaveData(CompoundNBT nbt)
 	{
 		super.addAdditionalSaveData(nbt);
 		

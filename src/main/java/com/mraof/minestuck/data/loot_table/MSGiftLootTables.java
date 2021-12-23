@@ -70,7 +70,7 @@ public class MSGiftLootTables implements Consumer<BiConsumer<ResourceLocation, L
 						.add(ItemLootEntry.lootTableItem(MSItems.SPADES_SUITARANG).setWeight(2).apply(SetCount.setCount(RandomValueRange.between(1, 5))))
 						.add(ItemLootEntry.lootTableItem(MSItems.MUSIC_DISC_EMISSARY_OF_DANCE).setWeight(1))
 						.add(ItemLootEntry.lootTableItem(MSItems.MUSIC_DISC_DANCE_STAB_DANCE).setWeight(1))
-						.addEntry(ItemLootEntry.builder(MSItems.ELECTRIC_AUTOHARP).weight(1))
+						.add(ItemLootEntry.lootTableItem(MSItems.ELECTRIC_AUTOHARP).setWeight(1))
 						.add(ItemLootEntry.lootTableItem(MSItems.BATTERY).setWeight(2).apply(SetCount.setCount(RandomValueRange.between(1,4))))
 						.add(ItemLootEntry.lootTableItem(MSItems.GRIMOIRE).setWeight(1).when(ConsortLootCondition.builder(EnumConsort.TURTLE)))
 						.add(ItemLootEntry.lootTableItem(MSItems.CRUMPLY_HAT).setWeight(8).apply(SetCount.setCount(RandomValueRange.between(1, 5))).when(ConsortLootCondition.builder(EnumConsort.SALAMANDER))))

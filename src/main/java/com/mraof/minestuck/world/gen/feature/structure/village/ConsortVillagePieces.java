@@ -1,7 +1,9 @@
 package com.mraof.minestuck.world.gen.feature.structure.village;
 
 import com.google.common.collect.Lists;
+import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.consort.EnumConsort;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
 import com.mraof.minestuck.world.gen.feature.structure.ImprovedStructurePiece;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
@@ -10,6 +12,8 @@ import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.LadderBlock;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -296,55 +300,48 @@ public class ConsortVillagePieces
 			}
 		}
 		
-		protected boolean spawnConsort(int x, int y, int z, MutableBoundingBox boundingBox, IWorld world, ChunkGenerator chunkGenerator)
+		protected boolean spawnConsort(int x, int y, int z, MutableBoundingBox boundingBox, ISeedReader world, ChunkGenerator chunkGenerator)
 		{
 			return spawnConsort(x, y, z, boundingBox, world, chunkGenerator, EnumConsort.MerchantType.NONE, 48);
 		}
 		
-		protected boolean spawnConsort(int x, int y, int z, MutableBoundingBox boundingBox, IWorld world, ChunkGenerator chunkGenerator, int maxHomeDistance)
+		protected boolean spawnConsort(int x, int y, int z, MutableBoundingBox boundingBox, ISeedReader world, ChunkGenerator chunkGenerator, int maxHomeDistance)
 		{
 			return spawnConsort(x, y, z, boundingBox, world, chunkGenerator, EnumConsort.MerchantType.NONE, maxHomeDistance);
 		}
 		
-		protected boolean spawnConsort(int x, int y, int z, MutableBoundingBox boundingBox, IWorld world, ChunkGenerator chunkGenerator, EnumConsort.MerchantType type, int maxHomeDistance)
+		protected boolean spawnConsort(int x, int y, int z, MutableBoundingBox boundingBox, ISeedReader world, ChunkGenerator chunkGenerator, EnumConsort.MerchantType type, int maxHomeDistance)
 		{
 			BlockPos pos = new BlockPos(this.getWorldX(x, z), this.getWorldY(y), this.getWorldZ(x, z));
 			
 			if(boundingBox.isInside(pos))
 			{
-				/*
-				if(!(chunkGenerator.getSettings() instanceof LandGenSettings))
-				{
-					Debug.warn("Tried to spawn a consort in a building that is being generated outside of a land dimension.");
-					return false;
-				}
+				LandTypePair landTypes = LandTypePair.getTypes(chunkGenerator);
 				
-				LandTypePair landTypes = ((LandGenSettings) chunkGenerator.getSettings()).getLandTypes();
-				
-				EntityType<? extends ConsortEntity> consortType = landTypes.terrain.getConsortType();
+				EntityType<? extends ConsortEntity> consortType = landTypes.getTerrain().getConsortType();
 				
 				try
 				{
-					ConsortEntity consort = consortType.create(world.getWorld());
+					ConsortEntity consort = consortType.create(world.getLevel());
 					if(consort == null)
 					{
 						Debug.warnf("Unable to create consort entity %s from a world.", consortType);
 						return false;
 					}
 					
-					consort.setPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+					consort.setPos(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
 					
 					consort.merchantType = type;
-					consort.setHomePosAndDistance(pos, maxHomeDistance);
+					consort.restrictTo(pos, maxHomeDistance);
 					
-					consort.onInitialSpawn(world, world.getDifficultyForLocation(new BlockPos(consort)), SpawnReason.STRUCTURE, null, null);
+					consort.finalizeSpawn(world, world.getCurrentDifficultyAt(pos), SpawnReason.STRUCTURE, null, null);
 					
-					world.addEntity(consort);
+					world.addFreshEntity(consort);
 					return true;
 				} catch(Exception e)
 				{
 					e.printStackTrace();
-				}*/
+				}
 			}
 			return false;
 		}

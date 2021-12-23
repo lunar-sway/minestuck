@@ -107,14 +107,14 @@ public interface ItemRightClickEffect
 					}
 				}
 				
-				AxisAlignedBB axisalignedbb = player.getBoundingBox().grow(2 * mod, mod, 2 * mod);
-				List<LivingEntity> list = player.world.getEntitiesWithinAABB(LivingEntity.class, axisalignedbb);
+				AxisAlignedBB axisalignedbb = player.getBoundingBox().inflate(2 * mod, mod, 2 * mod);
+				List<LivingEntity> list = player.getCommandSenderWorld().getEntitiesOfClass(LivingEntity.class, axisalignedbb);
 				for(LivingEntity livingentity : list)
 				{
-					if(livingentity.getFireTimer() > 0)
+					if(livingentity.getRemainingFireTicks() > 0)
 					{
-						livingentity.extinguish();
-						world.playSound(null, livingentity.getPosX(), livingentity.getPosY(), livingentity.getPosZ(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.NEUTRAL, 0.5F, 1.0F);
+						livingentity.clearFire();
+						world.playSound(null, livingentity.getX(), livingentity.getY(), livingentity.getZ(), SoundEvents.FIRE_EXTINGUISH, SoundCategory.NEUTRAL, 0.5F, 1.0F);
 					}
 				}
 				
@@ -123,7 +123,7 @@ public interface ItemRightClickEffect
 				itemStackIn.hurtAndBreak(1, player, playerEntity -> playerEntity.broadcastBreakEvent(Hand.MAIN_HAND));
 			}
 			return ActionResult.pass(itemStackIn);
-		};
+		});
 	}
 	
 	static ItemRightClickEffect absorbFluid(Supplier<Block> fluidBlock, Supplier<Item> otherItem)
@@ -151,7 +151,7 @@ public interface ItemRightClickEffect
 				}
 			}
 			return ActionResult.fail(itemStack);
-		};
+		});
 	}
 	
 	/**
@@ -160,16 +160,16 @@ public interface ItemRightClickEffect
 	static ItemRightClickEffect withoutCreativeShock(ItemRightClickEffect effect) //TODO action result for client side may not work
 	{
 		return (world, player, hand) -> {
-			ItemStack itemStackIn = player.getHeldItem(hand);
+			ItemStack itemStackIn = player.getItemInHand(hand);
 			
 			if(!CreativeShockEffect.doesCreativeShockLimit(player, 0, 3))
 			{
 				effect.onRightClick(world, player, hand);
 				if(effect.onRightClick(world, player, hand).getType().isSuccess())
-					return ActionResult.resultSuccess(itemStackIn);
+					return ActionResult.success(itemStackIn);
 			}
 			
-			return ActionResult.resultPass(itemStackIn);
+			return ActionResult.pass(itemStackIn);
 		};
 	}
 	

@@ -12,7 +12,7 @@ public class LotusFlowerPacket implements PlayToClientPacket
 	
 	public static LotusFlowerPacket createPacket(LotusFlowerEntity entity, LotusFlowerEntity.Animation animation)
 	{
-		return new LotusFlowerPacket(entity.getEntityId(), animation);
+		return new LotusFlowerPacket(entity.getId(), animation);
 	}
 	
 	private LotusFlowerPacket(int entityID, LotusFlowerEntity.Animation animation)
@@ -39,7 +39,7 @@ public class LotusFlowerPacket implements PlayToClientPacket
 	@Override
 	public void execute()
 	{
-		Entity entity = Minecraft.getInstance().world.getEntityByID(entityID);
+		Entity entity = Minecraft.getInstance().level.getEntity(entityID);
 		if(entity instanceof LotusFlowerEntity)
 		{
 			((LotusFlowerEntity) entity).setAnimationFromPacket(animation);

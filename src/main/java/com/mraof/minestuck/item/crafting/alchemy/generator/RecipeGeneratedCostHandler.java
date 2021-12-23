@@ -3,6 +3,7 @@ package com.mraof.minestuck.item.crafting.alchemy.generator;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.jei.JeiGristCost;
@@ -21,7 +22,6 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,7 +29,9 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
@@ -117,11 +119,12 @@ public class RecipeGeneratedCostHandler extends ReloadListener<List<RecipeGenera
 				if(resourceManagerIn.hasResource(new ResourceLocation(namespace, PATH)))
 				{
 					IResource resource = resourceManagerIn.getResource(new ResourceLocation(namespace, PATH));
-					try
+					try(
+							InputStream stream = resource.getInputStream();
+							Reader reader = new InputStreamReader(stream, StandardCharsets.UTF_8)
+					)
 					{
-						List<SourceEntry> namespaceEntries = readEntries(resource.getInputStream());
-						
-						sources.addAll(namespaceEntries);
+						sources.addAll(readEntries(reader));
 						
 					} catch(RuntimeException runtimeexception)
 					{
@@ -135,18 +138,19 @@ public class RecipeGeneratedCostHandler extends ReloadListener<List<RecipeGenera
 		return sources;
 	}
 	
-	private static List<SourceEntry> readEntries(InputStream input)
+	private static List<SourceEntry> readEntries(Reader reader)
 	{
-		List<SourceEntry> sources;
+		TypeToken<List<SourceEntry>> type = new TypeToken<List<SourceEntry>>(){};
 		try
 		{
-			TypeToken<List<SourceEntry>> type = new TypeToken<List<SourceEntry>>(){};
-			sources = JSONUtils.fromJson(GSON, new InputStreamReader(input), type, false);
-		} finally
+			JsonReader jsonreader = new JsonReader(reader);
+			jsonreader.setLenient(false);
+			
+			return GSON.getAdapter(type).read(jsonreader);
+		} catch (IOException e)
 		{
-			IOUtils.closeQuietly(input);
+			throw new JsonParseException(e);
 		}
-		return sources;
 	}
 	
 	private static SourceEntry deserializeSourceEntry(JsonElement json, Type typeOfT, JsonDeserializationContext context)

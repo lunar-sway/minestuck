@@ -4,8 +4,8 @@ import com.mraof.minestuck.util.CustomVoxelShape;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.IWaterLoggable;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.fluid.IFluidState;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.DirectionProperty;
@@ -31,26 +31,26 @@ public class DecorBlock extends Block implements IWaterLoggable
 	{
 		super(properties);
 		this.shape = shape.createRotatedShapes();
-		setDefaultState(getDefaultState().with(WATERLOGGED, false));
+		registerDefaultState(defaultBlockState().setValue(WATERLOGGED, false));
 	}
 	
 	@Nullable
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context)
 	{
-		IFluidState iFluidState = context.getWorld().getFluidState(context.getPos());
-        return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite()).with(WATERLOGGED, iFluidState.getFluid() == Fluids.WATER);
-    }
+		FluidState iFluidState = context.getLevel().getFluidState(context.getClickedPos());
+		return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite()).setValue(WATERLOGGED, iFluidState.getType() == Fluids.WATER);
+	}
 	
 	@Override
-	public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos)
+	public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos)
 	{
-		if(stateIn.get(WATERLOGGED))
+		if(stateIn.getValue(WATERLOGGED))
 		{
-			worldIn.getPendingFluidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickRate(worldIn));
+			worldIn.getLiquidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(worldIn));
 		}
 		
-		return super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+		return super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
 	}
 	
 	@Override
@@ -67,8 +67,8 @@ public class DecorBlock extends Block implements IWaterLoggable
 	}
 	
 	@Override
-	public IFluidState getFluidState(BlockState state)
+	public FluidState getFluidState(BlockState state)
 	{
-		return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
+		return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
 	}
 }

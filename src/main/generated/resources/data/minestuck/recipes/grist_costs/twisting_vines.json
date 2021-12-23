@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:twisting_vines"
+  },
+  "grist_cost": {
+    "minestuck:chalk": 4,
+    "minestuck:mercury": 1
+  }
+}

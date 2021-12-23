@@ -51,7 +51,7 @@ public class PropelEffect implements ItemRightClickEffect
 		} else if(player instanceof ServerPlayerEntity)
 		{
 			title = PlayerSavedData.getData((ServerPlayerEntity) player).getTitle();
-			if(player.getCooldowns().getCooldownPercent(stack.getItem(), 1F) <= 0 && ((title != null && title.getHeroAspect() == aspect) || player.isCreative())
+			if(player.getCooldowns().getCooldownPercent(stack.getItem(), 1F) <= 0 && ((title != null && title.getHeroAspect() == aspect) || player.isCreative()))
 				propelActionSound(player.level, player);
 		}
 		

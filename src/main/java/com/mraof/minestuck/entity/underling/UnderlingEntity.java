@@ -341,10 +341,10 @@ public abstract class UnderlingEntity extends CreatureEntity implements IMob
 		
 		if(totalModifier > maxSharedProgress)
 			for(int i = 0; i < playerList.length; i++)
-				Echeladder.increaseProgress(playerList[i], level, (int) (maxProgress * modifiers[i] / totalModifier));
+				Echeladder.increaseProgress(playerList[i], level, (int) (maxProgress*modifiers[i]/totalModifier));
 		else
 			for(int i = 0; i < playerList.length; i++)
-				Echeladder.increaseProgress(playerList[i], level, (int) (progress * modifiers[i]));
+				Echeladder.increaseProgress(playerList[i], level, (int) (progress*modifiers[i]));
 	}
 	
 	protected static class UnderlingData implements ILivingEntityData
