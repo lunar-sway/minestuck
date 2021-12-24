@@ -11,6 +11,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -104,7 +105,7 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 			}
 		}
 		
-		level.setBlock(getBlockPos(), getBlockState().setValue(RemoteObserverBlock.POWERED, shouldBePowered), 2);
+		level.setBlock(getBlockPos(), getBlockState().setValue(RemoteObserverBlock.POWERED, shouldBePowered), Constants.BlockFlags.NOTIFY_NEIGHBORS);
 	}
 	
 	public EntityType<?> getCurrentEntityType()

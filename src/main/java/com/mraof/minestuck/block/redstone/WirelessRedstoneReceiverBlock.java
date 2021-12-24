@@ -18,6 +18,7 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -55,7 +56,7 @@ public class WirelessRedstoneReceiverBlock extends Block
 	{
 		if(!player.isCrouching())
 		{
-			worldIn.setBlock(pos, state.setValue(AUTO_RESET, !state.getValue(AUTO_RESET)), 2);
+			worldIn.setBlock(pos, state.setValue(AUTO_RESET, !state.getValue(AUTO_RESET)), Constants.BlockFlags.NOTIFY_NEIGHBORS);
 			if(state.getValue(AUTO_RESET))
 			{
 				if(!worldIn.isClientSide)

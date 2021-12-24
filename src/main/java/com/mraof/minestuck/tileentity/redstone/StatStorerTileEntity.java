@@ -9,6 +9,7 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.util.Constants;
 
 public class StatStorerTileEntity extends TileEntity implements ITickableTileEntity
 {
@@ -67,7 +68,7 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 		
 		if(tickCycle % MinestuckConfig.SERVER.wirelessBlocksTickRate.get() == 1)
 		{
-			level.setBlock(worldPosition, level.getBlockState(worldPosition).setValue(StatStorerBlock.POWER, Math.min(15, getActiveStoredStatValue() / getDivideValueBy())), 2);
+			level.setBlock(worldPosition, level.getBlockState(worldPosition).setValue(StatStorerBlock.POWER, Math.min(15, getActiveStoredStatValue() / getDivideValueBy())), Constants.BlockFlags.NOTIFY_NEIGHBORS);
 			if(tickCycle >= 5000) //setting arbitrarily high value that the tick cannot go past
 				tickCycle = 0;
 		}

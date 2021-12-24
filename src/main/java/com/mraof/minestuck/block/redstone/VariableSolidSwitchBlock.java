@@ -13,6 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -35,11 +36,11 @@ public class VariableSolidSwitchBlock extends Block
 		{
 			if(state.getValue(POWER) != 15)
 			{
-				worldIn.setBlock(pos, state.setValue(POWER, state.getValue(POWER) + 1), 2);
+				worldIn.setBlock(pos, state.setValue(POWER, state.getValue(POWER) + 1), Constants.BlockFlags.NOTIFY_NEIGHBORS);
 				worldIn.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 1.2F);
 			} else
 			{
-				worldIn.setBlock(pos, state.setValue(POWER, 0), 2);
+				worldIn.setBlock(pos, state.setValue(POWER, 0), Constants.BlockFlags.NOTIFY_NEIGHBORS);
 				worldIn.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, 1.2F);
 			}
 			
@@ -48,11 +49,11 @@ public class VariableSolidSwitchBlock extends Block
 		{
 			if(state.getValue(POWER) != 0)
 			{
-				worldIn.setBlock(pos, state.setValue(POWER, state.getValue(POWER) - 1), 2);
+				worldIn.setBlock(pos, state.setValue(POWER, state.getValue(POWER) - 1), Constants.BlockFlags.NOTIFY_NEIGHBORS);
 				worldIn.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, 1.2F);
 			} else
 			{
-				worldIn.setBlock(pos, state.setValue(POWER, 15), 2);
+				worldIn.setBlock(pos, state.setValue(POWER, 15), Constants.BlockFlags.NOTIFY_NEIGHBORS);
 				worldIn.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 1.2F);
 			}
 			

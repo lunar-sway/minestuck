@@ -17,6 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -36,7 +37,7 @@ public class PlatformGeneratorBlock extends MSDirectionalBlock
 	{
 		if(!player.isCrouching() && !CreativeShockEffect.doesCreativeShockLimit(player, 1, 4))
 		{
-			worldIn.setBlock(pos, state.setValue(INVISIBLE_MODE, !state.getValue(INVISIBLE_MODE)), 2);
+			worldIn.setBlock(pos, state.setValue(INVISIBLE_MODE, !state.getValue(INVISIBLE_MODE)), Constants.BlockFlags.NOTIFY_NEIGHBORS);
 			if(state.getValue(INVISIBLE_MODE))
 				worldIn.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 1.5F);
 			else

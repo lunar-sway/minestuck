@@ -20,6 +20,7 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 
@@ -57,7 +58,7 @@ public class SummonerBlock extends Block
 			} else
 			{
 				boolean newBooleanState = !worldIn.getBlockState(pos).getValue(UNTRIGGERABLE);
-				worldIn.setBlock(pos, worldIn.getBlockState(pos).setValue(SummonerBlock.UNTRIGGERABLE, newBooleanState), 4);
+				worldIn.setBlock(pos, worldIn.getBlockState(pos).setValue(SummonerBlock.UNTRIGGERABLE, newBooleanState), Constants.BlockFlags.NOTIFY_NEIGHBORS);
 				player.displayClientMessage(new TranslationTextComponent(getDescriptionId() + "." + UNTRIGGERABLE_CHANGE_MESSAGE, !newBooleanState), true);
 			}
 			

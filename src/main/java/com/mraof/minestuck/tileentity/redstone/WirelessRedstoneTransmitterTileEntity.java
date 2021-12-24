@@ -15,6 +15,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 
 public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements INameable, ITickableTileEntity
 {
@@ -75,7 +76,7 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 			BlockState blockStateIn = level.getBlockState(destBlockPos);
 			if(blockStateIn.getBlock() instanceof WirelessRedstoneReceiverBlock && blockStateIn.getValue(WirelessRedstoneReceiverBlock.POWER) < powerIn)
 			{
-				level.setBlock(destBlockPos, blockStateIn.setValue(WirelessRedstoneReceiverBlock.POWER, powerIn), 2);
+				level.setBlock(destBlockPos, blockStateIn.setValue(WirelessRedstoneReceiverBlock.POWER, powerIn), Constants.BlockFlags.NOTIFY_NEIGHBORS);
 				
 				TileEntity tileEntity = level.getBlockEntity(destBlockPos);
 				if(tileEntity instanceof WirelessRedstoneReceiverTileEntity)
@@ -98,7 +99,7 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 				BlockState blockStateIn = worldIn.getBlockState(destBlockPos);
 				if(blockStateIn.getBlock() instanceof WirelessRedstoneReceiverBlock)
 				{
-					worldIn.setBlock(destBlockPos, blockStateIn.setValue(WirelessRedstoneReceiverBlock.POWER, powerIn), 2);
+					worldIn.setBlock(destBlockPos, blockStateIn.setValue(WirelessRedstoneReceiverBlock.POWER, powerIn), Constants.BlockFlags.NOTIFY_NEIGHBORS);
 					
 					TileEntity tileEntity = worldIn.getBlockEntity(destBlockPos);
 					if(tileEntity instanceof WirelessRedstoneReceiverTileEntity)
@@ -112,7 +113,7 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 				BlockState blockStateIn = worldIn.getBlockState(destBlockPos);
 				if(blockStateIn.getBlock() instanceof WirelessRedstoneReceiverBlock)
 				{
-					worldIn.setBlock(destBlockPos, blockStateIn.setValue(WirelessRedstoneReceiverBlock.POWER, 0), 2);
+					worldIn.setBlock(destBlockPos, blockStateIn.setValue(WirelessRedstoneReceiverBlock.POWER, 0), Constants.BlockFlags.NOTIFY_NEIGHBORS);
 				}
 			}
 		}

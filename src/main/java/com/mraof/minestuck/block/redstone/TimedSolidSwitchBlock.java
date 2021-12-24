@@ -14,6 +14,7 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -37,7 +38,7 @@ public class TimedSolidSwitchBlock extends Block
 	{
 		if(!player.isCrouching())
 		{
-			worldIn.setBlock(pos, state.setValue(POWER, state.getValue(POWER) == 0 ? 15 : 0), 2);
+			worldIn.setBlock(pos, state.setValue(POWER, state.getValue(POWER) == 0 ? 15 : 0), Constants.BlockFlags.NOTIFY_NEIGHBORS);
 			if(state.getValue(POWER) > 0)
 			{
 				worldIn.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 1.2F);
@@ -61,7 +62,7 @@ public class TimedSolidSwitchBlock extends Block
 		
 		if(state.getValue(POWER) >= 1)
 		{
-			worldIn.setBlock(pos, state.setValue(POWER, state.getValue(POWER) - 1), 2);
+			worldIn.setBlock(pos, state.setValue(POWER, state.getValue(POWER) - 1), Constants.BlockFlags.NOTIFY_NEIGHBORS);
 			worldIn.getBlockTicks().scheduleTick(new BlockPos(pos), this, tickRate);
 			
 			if(worldIn.getBlockState(pos).getValue(POWER) == 0)

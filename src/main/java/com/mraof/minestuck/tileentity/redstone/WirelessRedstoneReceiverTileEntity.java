@@ -10,6 +10,7 @@ import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.util.Constants;
 
 public class WirelessRedstoneReceiverTileEntity extends TileEntity implements ITickableTileEntity
 {
@@ -76,11 +77,11 @@ public class WirelessRedstoneReceiverTileEntity extends TileEntity implements IT
 				te.sendUpdateToPosition(level, getBlockPos());
 			} else
 			{
-				level.setBlock(getBlockPos(), level.getBlockState(getBlockPos()).setValue(WirelessRedstoneReceiverBlock.POWER, 0), 2);
+				level.setBlock(getBlockPos(), level.getBlockState(getBlockPos()).setValue(WirelessRedstoneReceiverBlock.POWER, 0), Constants.BlockFlags.NOTIFY_NEIGHBORS);
 			}
 		}
 		else if(level != null && !level.isClientSide)
-			level.setBlock(getBlockPos(), level.getBlockState(getBlockPos()).setValue(WirelessRedstoneReceiverBlock.POWER, 0), 2);
+			level.setBlock(getBlockPos(), level.getBlockState(getBlockPos()).setValue(WirelessRedstoneReceiverBlock.POWER, 0), Constants.BlockFlags.NOTIFY_NEIGHBORS);
 	}
 	
 	@Override

@@ -54,23 +54,11 @@ public class LogicGateBlock extends RedstoneDiodeBlock
 			return (!leftInputSendingPower && !rightInputSendingPower) || (leftInputSendingPower && rightInputSendingPower);
 	}
 	
-	/*@Override
-	protected boolean shouldBePowered(World worldIn, BlockPos pos, BlockState state)
-	{
-	
-	}*/
-	
 	@Override
 	protected int getAlternateSignalAt(IWorldReader worldIn, BlockPos pos, Direction side)
 	{
 		return ((World) worldIn).getSignal(pos.relative(side), side);
 	}
-	
-	/*@Override
-	protected int getPowerOnSide(IWorldReader worldIn, BlockPos pos, Direction side)
-	{
-		return ((World) worldIn).getSignal(pos.relative(side), side);
-	}*/
 	
 	@Override
 	public boolean isLocked(IWorldReader worldIn, BlockPos pos, BlockState state)
@@ -92,16 +80,10 @@ public class LogicGateBlock extends RedstoneDiodeBlock
 		return true; //default for RedstoneDiode means it cannot rest on air, now it can
 	}
 	
-	/*@Override
-	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos)
-	{
-		return true; //default for RedstoneDiode means it cannot rest on air, now it can
-	}*/
-	
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
 	{
-		return Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D); //box was makeCuboidShape
+		return Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
 	}
 	
 	@Override

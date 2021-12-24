@@ -53,15 +53,6 @@ public class PlatformBlock extends Block
 			return BlockRenderType.MODEL;
 	}
 	
-	/*@Override
-	public BlockRenderType getRenderType(BlockState state)
-	{
-		if(state.get(INVISIBLE))
-			return BlockRenderType.INVISIBLE;
-		else
-			return BlockRenderType.MODEL;
-	}*/
-	
 	@Override
 	public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand)
 	{
@@ -75,13 +66,6 @@ public class PlatformBlock extends Block
 		super.onPlace(state, worldIn, pos, oldState, isMoving);
 		worldIn.getBlockTicks().scheduleTick(new BlockPos(pos), this, 10);
 	}
-	
-	/*@Override
-	public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving)
-	{
-		super.onBlockAdded(state, worldIn, pos, oldState, isMoving);
-		worldIn.getPendingBlockTicks().scheduleTick(new BlockPos(pos), this, 10);
-	}*/
 	
 	@Override
 	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)

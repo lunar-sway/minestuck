@@ -37,7 +37,7 @@ public class AreaEffectPacket implements PlayToServerPacket
 	}
 	
 	@Override
-	public void execute(ServerPlayerEntity player) //TODO in an unknown set of conditions, the position changes seem to only take effect(from the perspective of being applied to entities) upon reloading after the change is made
+	public void execute(ServerPlayerEntity player) //TODO changes only take place server-side until reloaded, this results in the effect icon being refreshed even without the effects actually taking place
 	{
 		TileEntity te = player.level.getBlockEntity(tileBlockPos);
 		if(te instanceof AreaEffectTileEntity)

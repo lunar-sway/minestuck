@@ -17,6 +17,7 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -63,7 +64,7 @@ public class RedstoneClockBlock extends MSDirectionalBlock
 		
 		if(state.getValue(POWERED))
 		{
-			worldIn.setBlock(pos, state.setValue(POWERED, false), 2);
+			worldIn.setBlock(pos, state.setValue(POWERED, false), Constants.BlockFlags.NOTIFY_NEIGHBORS);
 		}
 	}
 	
@@ -82,37 +83,17 @@ public class RedstoneClockBlock extends MSDirectionalBlock
 		}
 	}
 	
-	/*@Override
-	public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving)
-	{
-		super.onBlockAdded(state, worldIn, pos, oldState, isMoving);
-		
-		
-	}*/
-	
 	@Override
 	public boolean isSignalSource(BlockState state)
 	{
 		return state.getValue(POWERED);
 	}
 	
-	/*@Override
-	public boolean canProvidePower(BlockState state)
-	{
-		return state.get(POWERED);
-	}*/
-	
 	@Override
 	public int getSignal(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side)
 	{
 		return blockState.getValue(POWERED) ? 15 : 0;
 	}
-	
-	/*@Override
-	public int getWeakPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side)
-	{
-		return blockState.get(POWERED) ? 15 : 0;
-	}*/
 	
 	@Override
 	public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side)
@@ -146,11 +127,4 @@ public class RedstoneClockBlock extends MSDirectionalBlock
 		super.createBlockStateDefinition(builder);
 		builder.add(POWERED);
 	}
-	
-	/*@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
-	{
-		super.fillStateContainer(builder);
-		builder.add(POWERED);
-	}*/
 }

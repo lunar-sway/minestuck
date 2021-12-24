@@ -38,19 +38,6 @@ public class TrajectoryBlock extends MSDirectionalBlock
 		}
 	}
 	
-	/*@Override
-	public void onFallenUpon(World worldIn, BlockPos pos, Entity entityIn, float fallDistance)
-	{
-		BlockState trajectoryState = worldIn.getBlockState(pos);
-		if(entityIn.isSuppressingBounce())
-		{
-			super.onFallenUpon(worldIn, pos, entityIn, fallDistance);
-		} else if(trajectoryState.get(FACING) == Direction.UP && trajectoryState.get(POWER) > 6)
-		{
-			entityIn.onLivingFall(fallDistance, 0.0F); //reduces damage if the trajectory block faces up and is powered a reasonable amount
-		}
-	}*/
-	
 	@Override
 	public void updateEntityAfterFallOn(IBlockReader worldIn, Entity entityIn)
 	{
@@ -137,7 +124,7 @@ public class TrajectoryBlock extends MSDirectionalBlock
 		if(!worldIn.isClientSide)
 		{
 			int powerInt = worldIn.getBestNeighborSignal(pos);
-			worldIn.setBlock(pos, state.setValue(POWER, powerInt), Constants.BlockFlags.BLOCK_UPDATE);
+			worldIn.setBlock(pos, state.setValue(POWER, powerInt), Constants.BlockFlags.NOTIFY_NEIGHBORS);
 		}
 	}
 	

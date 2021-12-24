@@ -7,7 +7,6 @@ import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.tileentity.redstone.AreaEffectTileEntity;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
@@ -68,7 +67,7 @@ public class AreaEffectScreen extends Screen
 		this.maxPosDestinationTextFieldZ.setValue(String.valueOf(te.getMaxEffectPos().getZ()));
 		addButton(maxPosDestinationTextFieldZ);
 		
-		addButton(new ExtendedButton(this.width / 2 - 20, yOffset + 73, 40, 20, new StringTextComponent("DONE"), button -> finish())); //new StringTextComponent("DONE") was I18n.format("gui.done")
+		addButton(new ExtendedButton(this.width / 2 - 20, yOffset + 73, 40, 20, new StringTextComponent("DONE"), button -> finish()));
 	}
 	
 	@Override
@@ -95,7 +94,7 @@ public class AreaEffectScreen extends Screen
 	{
 		try
 		{
-			return Integer.parseInt(widget.getValue()); //getValue was getText
+			return Integer.parseInt(widget.getValue());
 		} catch(NumberFormatException ignored)
 		{
 			return 0;

@@ -13,6 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -34,7 +35,7 @@ public class SolidSwitchBlock extends Block
 		
 		if(!player.isCrouching())
 		{
-			worldIn.setBlock(pos, state.setValue(POWERED, !state.getValue(POWERED)), 2);
+			worldIn.setBlock(pos, state.setValue(POWERED, !state.getValue(POWERED)), Constants.BlockFlags.NOTIFY_NEIGHBORS);
 			if(state.getValue(POWERED))
 				worldIn.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 1.2F);
 			else

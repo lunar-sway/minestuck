@@ -13,6 +13,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.common.util.Constants;
 
 public class RedstoneClockTileEntity extends TileEntity implements ITickableTileEntity
 {
@@ -44,7 +45,7 @@ public class RedstoneClockTileEntity extends TileEntity implements ITickableTile
 	{
 		if(level != null && level.isAreaLoaded(getBlockPos(), 1))
 		{
-			level.setBlock(getBlockPos(), getBlockState().setValue(RedstoneClockBlock.POWERED, true), 2);
+			level.setBlock(getBlockPos(), getBlockState().setValue(RedstoneClockBlock.POWERED, true), Constants.BlockFlags.NOTIFY_NEIGHBORS);
 			level.getBlockTicks().scheduleTick(new BlockPos(getBlockPos()), level.getBlockState(getBlockPos()).getBlock(), 10); //set to half a second
 			level.playSound(null, getBlockPos(), SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.05F, 1.2F);
 		}

@@ -17,6 +17,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -84,7 +85,7 @@ public class SummonerTileEntity extends TileEntity implements ITickableTileEntit
 			else
 			{
 				if(triggerActivate)
-					worldIn.setBlock(summonerBlockPos, worldIn.getBlockState(summonerBlockPos).setValue(SummonerBlock.TRIGGERED, true), 4);
+					worldIn.setBlock(summonerBlockPos, worldIn.getBlockState(summonerBlockPos).setValue(SummonerBlock.TRIGGERED, true), Constants.BlockFlags.NOTIFY_NEIGHBORS);
 				
 				cooldownTimer = 1;
 			}

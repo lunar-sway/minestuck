@@ -11,6 +11,7 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 
 public class PlatformGeneratorTileEntity extends TileEntity implements ITickableTileEntity
 {
@@ -54,7 +55,7 @@ public class PlatformGeneratorTileEntity extends TileEntity implements ITickable
 					
 					if(level.getBlockState(iteratePos).getMaterial().isLiquid() || level.getBlockState(iteratePos).isAir()/* || (level.getBlockState(iteratePos).getBlock() == MSBlocks.PLATFORM_BLOCK && level.getPendingBlockTicks().isTickScheduled(iteratePos, MSBlocks.PLATFORM_BLOCK))*/)
 					{
-						level.setBlock(iteratePos, MSBlocks.PLATFORM_BLOCK.defaultBlockState().setValue(PlatformGeneratorBlock.INVISIBLE_MODE, getBlockState().getValue(PlatformGeneratorBlock.INVISIBLE_MODE)), 2);
+						level.setBlock(iteratePos, MSBlocks.PLATFORM_BLOCK.defaultBlockState().setValue(PlatformGeneratorBlock.INVISIBLE_MODE, getBlockState().getValue(PlatformGeneratorBlock.INVISIBLE_MODE)), Constants.BlockFlags.NOTIFY_NEIGHBORS);
 					}
 				}
 			}
