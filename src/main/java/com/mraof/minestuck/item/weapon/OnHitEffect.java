@@ -133,7 +133,7 @@ public interface OnHitEffect
 	String SORD_DROP_MESSAGE = "drop_message";
 	
 	OnHitEffect SORD_DROP = (stack, target, attacker) -> {
-		if(!attacker.getCommandSenderWorld().isClientSide && attacker.getRandom().nextFloat() < .25)
+		if(!attacker.level.isClientSide && attacker.getRandom().nextFloat() < .25)
 		{
 			ItemEntity sord = new ItemEntity(attacker.level, attacker.getX(), attacker.getY(), attacker.getZ(), stack.copy());
 			sord.getItem().setCount(1);
@@ -300,7 +300,7 @@ public interface OnHitEffect
 		return (stack, target, attacker) -> {
 			float randFloat = knockback + attacker.getRandom().nextFloat();
 			
-			if(!attacker.getCommandSenderWorld().isClientSide)
+			if(!attacker.level.isClientSide)
 			{
 				target.setDeltaMovement(target.getDeltaMovement().x * randFloat, target.getDeltaMovement().y, target.getDeltaMovement().z * randFloat);
 			}

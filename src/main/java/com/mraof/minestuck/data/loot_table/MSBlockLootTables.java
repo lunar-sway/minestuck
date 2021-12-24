@@ -296,10 +296,10 @@ public class MSBlockLootTables extends BlockLootTables
 		dropSelf(VARIABLE_SOLID_SWITCH);
 		dropSelf(ONE_SECOND_INTERVAL_TIMED_SOLID_SWITCH);
 		dropSelf(TWO_SECOND_INTERVAL_TIMED_SOLID_SWITCH);
-		registerLootTable(SUMMONER, func_218482_a());
-		registerLootTable(AREA_EFFECT_BLOCK, func_218482_a());
+		add(SUMMONER, noDrop());
+		add(AREA_EFFECT_BLOCK, noDrop());
 		dropSelf(PLATFORM_GENERATOR);
-		registerLootTable(PLATFORM_BLOCK, func_218482_a());
+		add(PLATFORM_BLOCK, noDrop());
 		dropSelf(ITEM_MAGNET);
 		dropSelf(REDSTONE_CLOCK);
 		dropSelf(AND_GATE_BLOCK);

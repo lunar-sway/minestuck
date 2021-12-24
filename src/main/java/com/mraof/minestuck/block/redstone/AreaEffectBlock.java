@@ -49,27 +49,26 @@ public class AreaEffectBlock extends Block
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
 	{
 		if(player.isCreative() && !CreativeShockEffect.doesCreativeShockLimit(player, 1, 4))
 		{
-			TileEntity tileEntity = worldIn.getTileEntity(pos);
+			TileEntity tileEntity = worldIn.getBlockEntity(pos);
 			if(tileEntity instanceof AreaEffectTileEntity)
 			{
 				AreaEffectTileEntity te = (AreaEffectTileEntity) tileEntity;
 				
-				ItemStack heldItemStack = player.getHeldItem(hand);
+				ItemStack heldItemStack = player.getItemInHand(hand);
 				
 				if(heldItemStack.getItem() instanceof PotionItem)
 				{
-					EffectInstance firstEffect = PotionUtils.getEffectsFromStack(heldItemStack).get(0);
+					EffectInstance firstEffect = PotionUtils.getPotion(heldItemStack).getEffects().get(0);
 					if(firstEffect != null)
 					{
-						te.setEffect(firstEffect.getPotion());
+						te.setEffect(firstEffect.getEffect());
 						te.setEffectAmplifier(firstEffect.getAmplifier());
 						
-						player.sendStatusMessage(new TranslationTextComponent(getTranslationKey() + "." + EFFECT_CHANGE_MESSAGE, firstEffect.getPotion().getRegistryName(), firstEffect.getAmplifier()), true);
+						player.displayClientMessage(new TranslationTextComponent(getDescriptionId() + "." + EFFECT_CHANGE_MESSAGE, firstEffect.getEffect().getRegistryName(), firstEffect.getAmplifier()), true); //getDescriptionId was getTranslationKey
 						worldIn.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 1F);
 					}
 				} else
@@ -87,7 +86,7 @@ public class AreaEffectBlock extends Block
 	@Override
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
 	{
-		if(worldIn.isBlockPowered(pos))
-			ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE_DUST);
+		if(worldIn.hasNeighborSignal(pos))
+			ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE);
 	}
 }

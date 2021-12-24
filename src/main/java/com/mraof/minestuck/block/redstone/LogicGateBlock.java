@@ -25,19 +25,20 @@ public class LogicGateBlock extends RedstoneDiodeBlock
 	public LogicGateBlock(Properties properties, LogicGateBlock.State gateState)
 	{
 		super(properties);
-		this.setDefaultState(this.stateContainer.getBaseState().with(STATE, gateState).with(HORIZONTAL_FACING, Direction.NORTH).with(POWERED, false));
+		this.registerDefaultState(stateDefinition.any().setValue(STATE, gateState).setValue(FACING, Direction.NORTH).setValue(POWERED, false));
 	}
 	
 	//TODO add Inverter block for NOT gate functions, use that block as a crafting ingredient for NAND/NOR/XNOR
 	
+	
 	@Override
-	protected boolean shouldBePowered(World worldIn, BlockPos pos, BlockState state)
+	protected boolean shouldTurnOn(World worldIn, BlockPos pos, BlockState state)
 	{
-		Direction leftInput = state.get(HORIZONTAL_FACING).rotateYCCW();
-		Direction rightInput = state.get(HORIZONTAL_FACING).rotateY();
-		boolean leftInputSendingPower = getPowerOnSide(worldIn, pos, leftInput) > 0;
-		boolean rightInputSendingPower = getPowerOnSide(worldIn, pos, rightInput) > 0;
-		State assignedLogicState = state.get(STATE);
+		Direction leftInput = state.getValue(FACING).getCounterClockWise();
+		Direction rightInput = state.getValue(FACING).getClockWise();
+		boolean leftInputSendingPower = getAlternateSignalAt(worldIn, pos, leftInput) > 0;
+		boolean rightInputSendingPower = getAlternateSignalAt(worldIn, pos, rightInput) > 0;
+		State assignedLogicState = state.getValue(STATE);
 		
 		if(assignedLogicState == State.AND)
 			return leftInputSendingPower && rightInputSendingPower;
@@ -53,17 +54,30 @@ public class LogicGateBlock extends RedstoneDiodeBlock
 			return (!leftInputSendingPower && !rightInputSendingPower) || (leftInputSendingPower && rightInputSendingPower);
 	}
 	
+	/*@Override
+	protected boolean shouldBePowered(World worldIn, BlockPos pos, BlockState state)
+	{
+	
+	}*/
+	
 	@Override
+	protected int getAlternateSignalAt(IWorldReader worldIn, BlockPos pos, Direction side)
+	{
+		return ((World) worldIn).getSignal(pos.relative(side), side);
+	}
+	
+	/*@Override
 	protected int getPowerOnSide(IWorldReader worldIn, BlockPos pos, Direction side)
 	{
-		return worldIn.getDimension().getWorld().getRedstonePower(pos.offset(side), side);
-	}
+		return ((World) worldIn).getSignal(pos.relative(side), side);
+	}*/
 	
 	@Override
 	public boolean isLocked(IWorldReader worldIn, BlockPos pos, BlockState state)
 	{
-		Direction behind = state.get(HORIZONTAL_FACING);
-		return getPowerOnSide(worldIn, pos, behind) > 0;
+		Direction behind = state.getValue(FACING);
+		//return getPowerOnSide(worldIn, pos, behind) > 0;
+		return getAlternateSignalAt(worldIn, pos, behind) > 0;
 	}
 	
 	@Override
@@ -73,31 +87,37 @@ public class LogicGateBlock extends RedstoneDiodeBlock
 	}
 	
 	@Override
-	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos)
+	public boolean canSurvive(BlockState state, IWorldReader worldIn, BlockPos pos)
 	{
 		return true; //default for RedstoneDiode means it cannot rest on air, now it can
 	}
 	
+	/*@Override
+	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos)
+	{
+		return true; //default for RedstoneDiode means it cannot rest on air, now it can
+	}*/
+	
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
 	{
-		return Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+		return Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D); //box was makeCuboidShape
 	}
 	
 	@Override
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
 	{
-		if(shouldBePowered(worldIn, pos, stateIn))
-			ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE_DUST);
+		if(shouldTurnOn(worldIn, pos, stateIn))
+			ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE);
 	}
 	
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
 	{
-		super.fillStateContainer(builder);
+		super.createBlockStateDefinition(builder);
 		builder.add(STATE);
 		builder.add(POWERED);
-		builder.add(HORIZONTAL_FACING);
+		builder.add(FACING);
 	}
 	
 	public enum State implements IStringSerializable
@@ -110,7 +130,7 @@ public class LogicGateBlock extends RedstoneDiodeBlock
 		XNOR;
 		
 		@Override
-		public String getName()
+		public String getSerializedName()
 		{
 			return name().toLowerCase();
 		}

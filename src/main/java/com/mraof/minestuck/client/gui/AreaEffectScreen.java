@@ -1,5 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.network.AreaEffectPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
@@ -43,49 +44,49 @@ public class AreaEffectScreen extends Screen
 	{
 		int yOffset = (this.height / 2) - (guiHeight / 2);
 		
-		this.minPosDestinationTextFieldX = new TextFieldWidget(this.font, this.width / 2 - 60, yOffset + 15, 40, 20, "");
-		this.minPosDestinationTextFieldX.setText(String.valueOf(te.getMinEffectPos().getX()));
+		this.minPosDestinationTextFieldX = new TextFieldWidget(this.font, this.width / 2 - 60, yOffset + 15, 40, 20, new StringTextComponent(""));
+		this.minPosDestinationTextFieldX.setValue(String.valueOf(te.getMinEffectPos().getX())); //setValue was setText
 		addButton(minPosDestinationTextFieldX);
 		
-		this.minPosDestinationTextFieldY = new TextFieldWidget(this.font, this.width / 2 - 20, yOffset + 15, 40, 20, "Min pos coords");    //TODO Use translation instead, and maybe look at other text fields for what the text should be
-		this.minPosDestinationTextFieldY.setText(String.valueOf(te.getMinEffectPos().getY()));
+		this.minPosDestinationTextFieldY = new TextFieldWidget(this.font, this.width / 2 - 20, yOffset + 15, 40, 20, new StringTextComponent("Min pos coords"));    //TODO Use translation instead, and maybe look at other text fields for what the text should be
+		this.minPosDestinationTextFieldY.setValue(String.valueOf(te.getMinEffectPos().getY()));
 		addButton(minPosDestinationTextFieldY);
 		
-		this.minPosDestinationTextFieldZ = new TextFieldWidget(this.font, this.width / 2 + 20, yOffset + 15, 40, 20, ""); //was yOffset + 25
-		this.minPosDestinationTextFieldZ.setText(String.valueOf(te.getMinEffectPos().getZ()));
+		this.minPosDestinationTextFieldZ = new TextFieldWidget(this.font, this.width / 2 + 20, yOffset + 15, 40, 20, new StringTextComponent("")); //was yOffset + 25
+		this.minPosDestinationTextFieldZ.setValue(String.valueOf(te.getMinEffectPos().getZ()));
 		addButton(minPosDestinationTextFieldZ);
 		
-		this.maxPosDestinationTextFieldX = new TextFieldWidget(this.font, this.width / 2 - 60, yOffset + 50, 40, 20, "");
-		this.maxPosDestinationTextFieldX.setText(String.valueOf(te.getMaxEffectPos().getX()));
+		this.maxPosDestinationTextFieldX = new TextFieldWidget(this.font, this.width / 2 - 60, yOffset + 50, 40, 20, new StringTextComponent(""));
+		this.maxPosDestinationTextFieldX.setValue(String.valueOf(te.getMaxEffectPos().getX()));
 		addButton(maxPosDestinationTextFieldX);
 		
-		this.maxPosDestinationTextFieldY = new TextFieldWidget(this.font, this.width / 2 - 20, yOffset + 50, 40, 20, "Max pos coords");    //TODO Use translation instead, and maybe look at other text fields for what the text should be
-		this.maxPosDestinationTextFieldY.setText(String.valueOf(te.getMaxEffectPos().getY()));
+		this.maxPosDestinationTextFieldY = new TextFieldWidget(this.font, this.width / 2 - 20, yOffset + 50, 40, 20, new StringTextComponent("Max pos coords"));    //TODO Use translation instead, and maybe look at other text fields for what the text should be
+		this.maxPosDestinationTextFieldY.setValue(String.valueOf(te.getMaxEffectPos().getY()));
 		addButton(maxPosDestinationTextFieldY);
 		
-		this.maxPosDestinationTextFieldZ = new TextFieldWidget(this.font, this.width / 2 + 20, yOffset + 50, 40, 20, "");
-		this.maxPosDestinationTextFieldZ.setText(String.valueOf(te.getMaxEffectPos().getZ()));
+		this.maxPosDestinationTextFieldZ = new TextFieldWidget(this.font, this.width / 2 + 20, yOffset + 50, 40, 20, new StringTextComponent(""));
+		this.maxPosDestinationTextFieldZ.setValue(String.valueOf(te.getMaxEffectPos().getZ()));
 		addButton(maxPosDestinationTextFieldZ);
 		
-		addButton(new ExtendedButton(this.width / 2 - 20, yOffset + 73, 40, 20, I18n.format("gui.done"), button -> finish()));
+		addButton(new ExtendedButton(this.width / 2 - 20, yOffset + 73, 40, 20, new StringTextComponent("DONE"), button -> finish())); //new StringTextComponent("DONE") was I18n.format("gui.done")
 	}
 	
 	@Override
-	public void render(int mouseX, int mouseY, float partialTicks)
+	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground();
+		this.renderBackground(matrixStack);
 		RenderSystem.color4f(1F, 1F, 1F, 1F);
-		this.minecraft.getTextureManager().bindTexture(guiBackground);
+		this.minecraft.getTextureManager().bind(guiBackground);
 		int yOffset = (this.height / 2) - (guiHeight / 2);
-		this.blit((this.width / 2) - (guiWidth / 2), yOffset, 0, 0, guiWidth, guiHeight);
-		font.drawString(minPosMessage, (width / 2) - font.getStringWidth(minPosMessage) / 2, yOffset + 5, 0x404040);
-		font.drawString(maxPosMessage, (width / 2) - font.getStringWidth(maxPosMessage) / 2, yOffset + 40, 0x404040);
-		super.render(mouseX, mouseY, partialTicks);
+		this.blit(matrixStack, (this.width / 2) - (guiWidth / 2), yOffset, 0, 0, guiWidth, guiHeight);
+		font.draw(matrixStack, minPosMessage, (width / 2) - font.width(minPosMessage) / 2, yOffset + 5, 0x404040);
+		font.draw(matrixStack, maxPosMessage, (width / 2) - font.width(maxPosMessage) / 2, yOffset + 40, 0x404040);
+		super.render(matrixStack, mouseX, mouseY, partialTicks);
 	}
 	
 	private void finish()
 	{
-		AreaEffectPacket packet = new AreaEffectPacket(parseMinBlockPos(), parseMaxBlockPos(), te.getPos());
+		AreaEffectPacket packet = new AreaEffectPacket(parseMinBlockPos(), parseMaxBlockPos(), te.getBlockPos());
 		MSPacketHandler.sendToServer(packet);
 		onClose();
 	}
@@ -94,7 +95,7 @@ public class AreaEffectScreen extends Screen
 	{
 		try
 		{
-			return Integer.parseInt(widget.getText());
+			return Integer.parseInt(widget.getValue()); //getValue was getText
 		} catch(NumberFormatException ignored)
 		{
 			return 0;

@@ -25,7 +25,7 @@ public class WirelessRedstoneTransmitterBlock extends Block
 	public WirelessRedstoneTransmitterBlock(Properties properties)
 	{
 		super(properties);
-		setDefaultState(getDefaultState());
+		registerDefaultState(stateDefinition.any());
 	}
 	
 	@Override
@@ -43,11 +43,11 @@ public class WirelessRedstoneTransmitterBlock extends Block
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
 	{
-		if(!player.isSneaking() && !CreativeShockEffect.doesCreativeShockLimit(player, 1, 4))
+		if(!player.isCrouching() && !CreativeShockEffect.doesCreativeShockLimit(player, 1, 4))
 		{
-			TileEntity tileEntity = worldIn.getTileEntity(pos);
+			TileEntity tileEntity = worldIn.getBlockEntity(pos);
 			if(tileEntity instanceof WirelessRedstoneTransmitterTileEntity)
 			{
 				WirelessRedstoneTransmitterTileEntity te = (WirelessRedstoneTransmitterTileEntity) tileEntity;
@@ -62,10 +62,10 @@ public class WirelessRedstoneTransmitterBlock extends Block
 	@Override
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
 	{
-		if(worldIn.getRedstonePowerFromNeighbors(pos) > 0)
+		if(worldIn.getBestNeighborSignal(pos) > 0)
 		{
-			if(rand.nextInt(16 - worldIn.getRedstonePowerFromNeighbors(pos)) == 0)
-				ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE_DUST);
+			if(rand.nextInt(16 - worldIn.getBestNeighborSignal(pos)) == 0)
+				ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE);
 		}
 	}
 }

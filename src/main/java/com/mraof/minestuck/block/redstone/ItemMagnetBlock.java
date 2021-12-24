@@ -22,7 +22,7 @@ public class ItemMagnetBlock extends MSDirectionalBlock
 	public ItemMagnetBlock(Properties properties)
 	{
 		super(properties);
-		setDefaultState(stateContainer.getBaseState().with(FACING, Direction.UP));
+		registerDefaultState(stateDefinition.any().setValue(FACING, Direction.UP));
 	}
 	
 	@Override
@@ -41,16 +41,16 @@ public class ItemMagnetBlock extends MSDirectionalBlock
 	@Override
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
 	{
-		if(worldIn.getRedstonePowerFromNeighbors(pos) > 0)
+		if(worldIn.getBestNeighborSignal(pos) > 0)
 		{
-			if(rand.nextInt(16 - worldIn.getRedstonePowerFromNeighbors(pos)) == 0)
-				ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE_DUST);
+			if(rand.nextInt(16 - worldIn.getBestNeighborSignal(pos)) == 0)
+				ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE);
 		}
 	}
 	
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
 	{
-		super.fillStateContainer(builder);
+		super.createBlockStateDefinition(builder);
 	}
 }

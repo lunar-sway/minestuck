@@ -24,21 +24,21 @@ public class SolidSwitchBlock extends Block
 	public SolidSwitchBlock(Properties properties)
 	{
 		super(properties);
-		this.setDefaultState(this.stateContainer.getBaseState().with(POWERED, false));
+		registerDefaultState(stateDefinition.any().setValue(POWERED, false));
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
 	{
 		
-		if(!player.isSneaking())
+		if(!player.isCrouching())
 		{
-			worldIn.setBlockState(pos, state.with(POWERED, !state.get(POWERED)));
-			if(state.get(POWERED))
-				worldIn.playSound(null, pos, SoundEvents.BLOCK_PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 1.2F);
+			worldIn.setBlock(pos, state.setValue(POWERED, !state.getValue(POWERED)), 2);
+			if(state.getValue(POWERED))
+				worldIn.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 1.2F);
 			else
-				worldIn.playSound(null, pos, SoundEvents.BLOCK_PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, 1.2F);
+				worldIn.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, 1.2F);
 			return ActionResultType.SUCCESS;
 		}
 		
@@ -46,16 +46,28 @@ public class SolidSwitchBlock extends Block
 	}
 	
 	@Override
+	public boolean isSignalSource(BlockState state)
+	{
+		return state.getValue(POWERED);
+	}
+	
+	/*@Override
 	public boolean canProvidePower(BlockState state)
 	{
 		return state.get(POWERED);
-	}
+	}*/
 	
 	@Override
+	public int getSignal(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side)
+	{
+		return blockState.getValue(POWERED) ? 15 : 0;
+	}
+	
+	/*@Override
 	public int getWeakPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side)
 	{
 		return blockState.get(POWERED) ? 15 : 0;
-	}
+	}*/
 	
 	@Override
 	public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side)
@@ -64,22 +76,35 @@ public class SolidSwitchBlock extends Block
 	}
 	
 	@Override
+	public int getLightValue(BlockState state, IBlockReader world, BlockPos pos)
+	{
+		return state.getValue(POWERED) ? super.getLightValue(state, world, pos) : 0;
+	}
+	
+	/*@Override
 	public int getLightValue(BlockState state)
 	{
 		return state.get(POWERED) ? super.getLightValue(state) : 0;
-	}
+	}*/
 	
 	@Override
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
 	{
-		if(stateIn.get(POWERED))
-			ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE_DUST);
+		if(stateIn.getValue(POWERED))
+			ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE);
 	}
 	
 	@Override
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+	{
+		super.createBlockStateDefinition(builder);
+		builder.add(POWERED);
+	}
+	
+	/*@Override
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
 	{
 		super.fillStateContainer(builder);
 		builder.add(POWERED);
-	}
+	}*/
 }

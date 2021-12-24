@@ -33,32 +33,32 @@ public class SummonerBlock extends Block
 	public SummonerBlock(Properties properties)
 	{
 		super(properties);
-		setDefaultState(getDefaultState().with(TRIGGERED, false).with(UNTRIGGERABLE, false));
+		registerDefaultState(stateDefinition.any().setValue(UNTRIGGERABLE, false));
 	}
 	
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
 	{
-		if(!player.isSneaking() && player.isCreative() && !CreativeShockEffect.doesCreativeShockLimit(player, 1, 4))
+		if(!player.isCrouching() && player.isCreative() && !CreativeShockEffect.doesCreativeShockLimit(player, 1, 4))
 		{
-			ItemStack stackIn = player.getHeldItem(handIn);
+			ItemStack stackIn = player.getItemInHand(handIn);
 			
 			if(stackIn.getItem() instanceof SpawnEggItem)
 			{
-				TileEntity tileEntity = worldIn.getTileEntity(pos);
+				TileEntity tileEntity = worldIn.getBlockEntity(pos);
 				if(tileEntity instanceof SummonerTileEntity)
 				{
 					SummonerTileEntity summonerTE = (SummonerTileEntity) tileEntity;
 					SpawnEggItem eggItem = (SpawnEggItem) stackIn.getItem();
 					
-					if(!worldIn.isRemote)
+					if(!worldIn.isClientSide)
 						summonerTE.setSummonedEntity(eggItem.getType(stackIn.getTag()), player);
 				}
 			} else
 			{
-				boolean newBooleanState = !worldIn.getBlockState(pos).get(UNTRIGGERABLE);
-				worldIn.setBlockState(pos, worldIn.getBlockState(pos).with(SummonerBlock.UNTRIGGERABLE, newBooleanState), 4);
-				player.sendStatusMessage(new TranslationTextComponent(getTranslationKey() + "." + UNTRIGGERABLE_CHANGE_MESSAGE, !newBooleanState), true);
+				boolean newBooleanState = !worldIn.getBlockState(pos).getValue(UNTRIGGERABLE);
+				worldIn.setBlock(pos, worldIn.getBlockState(pos).setValue(SummonerBlock.UNTRIGGERABLE, newBooleanState), 4);
+				player.displayClientMessage(new TranslationTextComponent(getDescriptionId() + "." + UNTRIGGERABLE_CHANGE_MESSAGE, !newBooleanState), true);
 			}
 			
 			worldIn.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 1F);
@@ -77,22 +77,28 @@ public class SummonerBlock extends Block
 	}
 	
 	@Override
-	public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving)
+	public void onPlace(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving)
 	{
 		checkSummon(state, worldIn, pos); //made to work with the iterateTracker check in SummonerTileEntity
 	}
 	
+	/*@Override
+	public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving)
+	{
+		checkSummon(state, worldIn, pos); //made to work with the iterateTracker check in SummonerTileEntity
+	}*/
+	
 	private void checkSummon(BlockState state, World worldIn, BlockPos pos)
 	{
-		boolean blockPowered = worldIn.isBlockPowered(pos) || worldIn.isBlockPowered(pos.up()); //conditions of: 1. block is powered 2. block above is powered 3. shouldnt care if powered
+		boolean blockPowered = worldIn.hasNeighborSignal(pos) || worldIn.hasNeighborSignal(pos.above()); //conditions of: 1. block is powered 2. block above is powered 3. shouldnt care if powered
 		
-		if(!worldIn.isRemote && blockPowered && (!state.get(TRIGGERED) || state.get(UNTRIGGERABLE)))
+		if(!worldIn.isClientSide && blockPowered && (!state.getValue(TRIGGERED) || state.getValue(UNTRIGGERABLE)))
 		{
-			TileEntity tileEntity = worldIn.getTileEntity(pos);
+			TileEntity tileEntity = worldIn.getBlockEntity(pos);
 			if(tileEntity instanceof SummonerTileEntity)
 			{
 				SummonerTileEntity summonerTE = (SummonerTileEntity) tileEntity;
-				summonerTE.summonEntity(worldIn, pos, summonerTE.getSummonedEntity(), !state.get(UNTRIGGERABLE), true);
+				summonerTE.summonEntity(worldIn, pos, summonerTE.getSummonedEntity(), !state.getValue(UNTRIGGERABLE), true);
 			}
 		}
 	}
@@ -111,10 +117,18 @@ public class SummonerBlock extends Block
 	}
 	
 	@Override
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+	{
+		super.createBlockStateDefinition(builder);
+		builder.add(TRIGGERED);
+		builder.add(UNTRIGGERABLE);
+	}
+	
+	/*@Override
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
 	{
 		super.fillStateContainer(builder);
 		builder.add(TRIGGERED);
 		builder.add(UNTRIGGERABLE);
-	}
+	}*/
 }

@@ -3,6 +3,7 @@ package com.mraof.minestuck.tileentity.redstone;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.redstone.PlatformGeneratorBlock;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
+import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
@@ -24,7 +25,7 @@ public class PlatformGeneratorTileEntity extends TileEntity implements ITickable
 	@Override
 	public void tick()
 	{
-		if(world == null || !world.isAreaLoaded(pos, 1))
+		if(level == null || !level.isAreaLoaded(getBlockPos(), 1))
 			return; // Forge: prevent loading unloaded chunks
 		
 		if(tickCycle >= 10)
@@ -38,22 +39,22 @@ public class PlatformGeneratorTileEntity extends TileEntity implements ITickable
 	
 	private void sendUpdate()
 	{
-		if(world != null && !world.isRemote)
+		if(level != null && !level.isClientSide)
 		{
-			int powerIn = world.getRedstonePowerFromNeighbors(pos);
+			int powerIn = level.getBestNeighborSignal(getBlockPos());
 			platformLength = powerIn;
 			
 			if(powerIn > 0)
 			{
 				for(int blockIterate = 1; blockIterate < platformLength + 1; blockIterate++)
 				{
-					BlockPos iteratePos = new BlockPos(pos.offset(getBlockState().get(PlatformGeneratorBlock.FACING), blockIterate));
-					if(!world.isAreaLoaded(pos, blockIterate) || World.isYOutOfBounds(iteratePos.getY())) //allows platform blocks to be placed up until it runs out of bounds
+					BlockPos iteratePos = new BlockPos(getBlockPos().relative(getBlockState().getValue(PlatformGeneratorBlock.FACING), blockIterate));
+					if(!level.isAreaLoaded(getBlockPos(), blockIterate) || World.isOutsideBuildHeight(iteratePos.getY())) //allows platform blocks to be placed up until it runs out of bounds
 						break;
 					
-					if(world.getBlockState(iteratePos).getMaterial().isLiquid() || world.getBlockState(iteratePos).isAir()/* || (world.getBlockState(iteratePos).getBlock() == MSBlocks.PLATFORM_BLOCK && world.getPendingBlockTicks().isTickScheduled(iteratePos, MSBlocks.PLATFORM_BLOCK))*/)
+					if(level.getBlockState(iteratePos).getMaterial().isLiquid() || level.getBlockState(iteratePos).isAir()/* || (level.getBlockState(iteratePos).getBlock() == MSBlocks.PLATFORM_BLOCK && level.getPendingBlockTicks().isTickScheduled(iteratePos, MSBlocks.PLATFORM_BLOCK))*/)
 					{
-						world.setBlockState(iteratePos, MSBlocks.PLATFORM_BLOCK.getDefaultState().with(PlatformGeneratorBlock.INVISIBLE_MODE, getBlockState().get(PlatformGeneratorBlock.INVISIBLE_MODE)));
+						level.setBlock(iteratePos, MSBlocks.PLATFORM_BLOCK.defaultBlockState().setValue(PlatformGeneratorBlock.INVISIBLE_MODE, getBlockState().getValue(PlatformGeneratorBlock.INVISIBLE_MODE)), 2);
 					}
 				}
 			}
@@ -61,17 +62,18 @@ public class PlatformGeneratorTileEntity extends TileEntity implements ITickable
 	}
 	
 	@Override
-	public void read(CompoundNBT compound)
+	public void load(BlockState state, CompoundNBT compound)
 	{
-		super.read(compound);
+		super.load(state, compound);
+		
 		tickCycle = compound.getInt("tickCycle");
 		platformLength = compound.getInt("platformLength");
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound)
+	public CompoundNBT save(CompoundNBT compound)
 	{
-		super.write(compound);
+		super.save(compound);
 		
 		compound.putInt("tickCycle", tickCycle);
 		compound.putInt("platformLength", platformLength);
@@ -82,19 +84,18 @@ public class PlatformGeneratorTileEntity extends TileEntity implements ITickable
 	@Override
 	public CompoundNBT getUpdateTag()
 	{
-		return this.write(new CompoundNBT());
+		return this.save(new CompoundNBT());
 	}
 	
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket()
 	{
-		return new SUpdateTileEntityPacket(this.pos, 2, this.write(new CompoundNBT()));
+		return new SUpdateTileEntityPacket(getBlockPos(), 2, getUpdateTag());
 	}
 	
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
 	{
-		this.read(pkt.getNbtCompound());
+		this.load(getBlockState(), pkt.getTag());
 	}
-	
 }

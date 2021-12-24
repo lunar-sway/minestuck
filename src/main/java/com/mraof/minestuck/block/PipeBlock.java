@@ -5,8 +5,8 @@ import com.mraof.minestuck.util.CustomVoxelShape;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.IWaterLoggable;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.fluid.IFluidState;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
@@ -30,7 +30,7 @@ public class PipeBlock extends MSDirectionalBlock implements IWaterLoggable
 	{
 		super(properties);
 		this.shape = shape.createRotatedShapesAllDirections();
-		this.registerDefaultState(stateDefinition.any().setValue(FACING, Direction.DOWN).with(WATERLOGGED, false));
+		this.registerDefaultState(stateDefinition.any().setValue(FACING, Direction.DOWN).setValue(WATERLOGGED, false));
 	}
 	
 	
@@ -38,26 +38,45 @@ public class PipeBlock extends MSDirectionalBlock implements IWaterLoggable
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context)
 	{
-		IFluidState iFluidState = context.getWorld().getFluidState(context.getPos());
-		return this.getDefaultState().with(FACING, context.getNearestLookingDirection().getOpposite()).with(WATERLOGGED, iFluidState.getFluid() == Fluids.WATER);
+		FluidState iFluidState = context.getLevel().getFluidState(context.getClickedPos());
+		return this.defaultBlockState().setValue(FACING, context.getNearestLookingDirection().getOpposite()).setValue(WATERLOGGED, iFluidState.getType().getFluid() == Fluids.WATER);
 	}
 	
 	@Override
+	public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos)
+	{
+		if(stateIn.getValue(WATERLOGGED))
+		{
+			worldIn.getLiquidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(worldIn)); //getTickDelay was getTickRate
+		}
+		
+		return super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+	}
+	
+	/*@Override
 	public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos)
 	{
-		if(stateIn.get(WATERLOGGED))
+		if(stateIn.getValue(WATERLOGGED))
 		{
-			worldIn.getPendingFluidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickRate(worldIn));
+			worldIn.getLiquidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(worldIn)); //getTickDelay was getTickRate
 		}
 		
 		return super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
-	}
+	}*/
 	
 	@Override
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+	{
+		super.createBlockStateDefinition(builder);
+		builder.add(WATERLOGGED);
+	}
+	
+	/*@Override
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
 	{
+		super.fillStateContainer(builder);
 		builder.add(FACING, WATERLOGGED);
-	}
+	}*/
 	
 	@Override
 	public BlockState rotate(BlockState state, IWorld world, BlockPos pos, Rotation direction)
@@ -73,8 +92,8 @@ public class PipeBlock extends MSDirectionalBlock implements IWaterLoggable
 	}
 	
 	@Override
-	public IFluidState getFluidState(BlockState state)
+	public FluidState getFluidState(BlockState state)
 	{
-		return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
+		return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
 	}
 }

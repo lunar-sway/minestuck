@@ -1,5 +1,6 @@
 package com.mraof.minestuck.effects;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.DisplayEffectsScreen;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -26,14 +27,14 @@ public class CreativeShockEffect extends Effect
 	 */
 	public static boolean doesCreativeShockLimit(PlayerEntity player, int survivalAmplifierThreshold, int creativeAmplifierThreshold)
 	{
-		if(player.isPotionActive(MSEffects.CREATIVE_SHOCK.get()))
+		if(player.hasEffect(MSEffects.CREATIVE_SHOCK.get()))
 		{
 			if(player.isCreative())
 			{
-				return player.getActivePotionEffect(MSEffects.CREATIVE_SHOCK.get()).getAmplifier() >= creativeAmplifierThreshold;
+				return player.getEffect(MSEffects.CREATIVE_SHOCK.get()).getAmplifier() >= creativeAmplifierThreshold;
 			} else
 			{
-				return player.getActivePotionEffect(MSEffects.CREATIVE_SHOCK.get()).getAmplifier() >= survivalAmplifierThreshold;
+				return player.getEffect(MSEffects.CREATIVE_SHOCK.get()).getAmplifier() >= survivalAmplifierThreshold;
 			}
 		}
 		
@@ -41,9 +42,9 @@ public class CreativeShockEffect extends Effect
 	}
 	
 	@Override
-	public void performEffect(LivingEntity entityLivingBaseIn, int amplifier)
+	public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier)
 	{
-		super.performEffect(entityLivingBaseIn, amplifier);
+		super.applyEffectTick(entityLivingBaseIn, amplifier);
 		
 		if(!(entityLivingBaseIn instanceof PlayerEntity))
 			return;
@@ -52,20 +53,41 @@ public class CreativeShockEffect extends Effect
 		
 		if(doesCreativeShockLimit(player, 0, 3))
 		{
-			player.abilities.allowEdit = false;
+			player.abilities.mayBuild = false;
 		}
 	}
 	
+	/*@Override
+	public void performEffect(LivingEntity entityLivingBaseIn, int amplifier)
+	{
+		super.performEffect(entityLivingBaseIn, amplifier);
+		
+		
+	}*/
+	
 	@Override
+	public boolean isDurationEffectTick(int duration, int amplifier)
+	{
+		super.isDurationEffectTick(duration, amplifier);
+		return (duration % 5) == 0;
+	}
+	
+	/*@Override
 	public boolean isReady(int duration, int amplifier)
 	{
 		super.isReady(duration, amplifier);
 		return (duration % 5) == 0;
-	}
+	}*/
 	
 	@Override
+	public void renderInventoryEffect(EffectInstance effect, DisplayEffectsScreen<?> gui, MatrixStack mStack, int x, int y, float z)
+	{
+		super.renderInventoryEffect(effect, gui, mStack, x, y, z);
+	}
+	
+	/*@Override
 	public void renderInventoryEffect(EffectInstance effect, DisplayEffectsScreen<?> gui, int x, int y, float z)
 	{
 		super.renderInventoryEffect(effect, gui, x, y, z);
-	}
+	}*/
 }

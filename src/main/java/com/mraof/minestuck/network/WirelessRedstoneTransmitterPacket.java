@@ -35,7 +35,7 @@ public class WirelessRedstoneTransmitterPacket implements PlayToServerPacket
 	@Override
 	public void execute(ServerPlayerEntity player)
 	{
-		TileEntity te = player.world.getTileEntity(tileBlockPos);
+		TileEntity te = player.level.getBlockEntity(tileBlockPos);
 		if(te instanceof WirelessRedstoneTransmitterTileEntity)
 		{
 			((WirelessRedstoneTransmitterTileEntity) te).setDestinationBlockPos(destinationBlockPos);

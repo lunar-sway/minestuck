@@ -1,5 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.StatStorerPacket;
@@ -41,14 +42,14 @@ public class StatStorerScreen extends Screen
 	@Override
 	public void init()
 	{
-		addButton(typeButton = new ExtendedButton(this.width / 2 - 67, (height - guiHeight) / 2 + 15, 135, 20, activeType.getNameNoSpaces(), button -> changeActiveType()));
+		addButton(typeButton = new ExtendedButton(this.width / 2 - 67, (height - guiHeight) / 2 + 15, 135, 20, new StringTextComponent(activeType.getNameNoSpaces()), button -> changeActiveType()));
 		int yOffset = (this.height / 2) - (guiHeight / 2);
-		this.divideTextField = new TextFieldWidget(this.font, this.width / 2 - 18, yOffset + 50, 40, 18, "Divide comparator output strength");	//TODO Use translation instead, and maybe look at other text fields for what the text should be
-		this.divideTextField.setText(String.valueOf(te.getDivideValueBy()));
+		this.divideTextField = new TextFieldWidget(this.font, this.width / 2 - 18, yOffset + 50, 40, 18, new StringTextComponent("Divide comparator output strength"));	//TODO Use translation instead, and maybe look at other text fields for what the text should be
+		this.divideTextField.setValue(String.valueOf(te.getDivideValueBy()));
 		addButton(divideTextField);
-		setFocusedDefault(divideTextField);
+		setInitialFocus(divideTextField);
 		
-		addButton(new ExtendedButton(this.width / 2 - 18, yOffset + 70, 40, 20, I18n.format("gui.done"), button -> finish()));
+		addButton(new ExtendedButton(this.width / 2 - 18, yOffset + 70, 40, 20, new StringTextComponent("DONE"), button -> finish()));
 	}
 	
 	/**
@@ -57,25 +58,25 @@ public class StatStorerScreen extends Screen
 	private void changeActiveType()
 	{
 		activeType = StatStorerTileEntity.ActiveType.fromInt(activeType.ordinal() < StatStorerTileEntity.ActiveType.values().length - 1 ? activeType.ordinal() + 1 : 0);
-		typeButton.setMessage(activeType.getNameNoSpaces());
+		typeButton.setMessage(new StringTextComponent(activeType.getNameNoSpaces()));
 	}
 	
 	@Override
-	public void render(int mouseX, int mouseY, float partialTicks)
+	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground();
+		this.renderBackground(matrixStack);
 		RenderSystem.color4f(1F, 1F, 1F, 1F);
-		this.minecraft.getTextureManager().bindTexture(guiBackground);
+		this.minecraft.getTextureManager().bind(guiBackground);
 		int yOffset = (this.height / 2) - (guiHeight / 2);
 		
-		this.blit((this.width / 2) - (guiWidth / 2), yOffset, 0, 0, guiWidth, guiHeight);
-		font.drawString(divideValueMessage, (width / 2) - font.getStringWidth(divideValueMessage) / 2, yOffset + 40, 0x404040);
-		super.render(mouseX, mouseY, partialTicks);
+		this.blit(matrixStack, (this.width / 2) - (guiWidth / 2), yOffset, 0, 0, guiWidth, guiHeight);
+		font.draw(matrixStack, divideValueMessage, (width / 2) - font.width(divideValueMessage) / 2, yOffset + 40, 0x404040);
+		super.render(matrixStack, mouseX, mouseY, partialTicks);
 	}
 	
 	private void finish()
 	{
-		StatStorerPacket packet = new StatStorerPacket(activeType, te.getPos(), textToInt());
+		StatStorerPacket packet = new StatStorerPacket(activeType, te.getBlockPos(), textToInt());
 		MSPacketHandler.sendToServer(packet);
 		onClose();
 	}
@@ -84,7 +85,7 @@ public class StatStorerScreen extends Screen
 	{
 		try
 		{
-			divideValueBy = Integer.parseInt(divideTextField.getText());
+			divideValueBy = Integer.parseInt(divideTextField.getValue());
 		} catch(NumberFormatException ignored)
 		{
 		}

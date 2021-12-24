@@ -17,12 +17,12 @@ public class StopCreativeShockEffectPacket implements PlayToClientPacket
 	@Override
 	public void encode(PacketBuffer buffer)
 	{
-		buffer.writeInt(playerGameType.getID());
+		buffer.writeInt(playerGameType.getId());
 	}
 	
 	public static StopCreativeShockEffectPacket decode(PacketBuffer buffer)
 	{
-		GameType gameType = GameType.getByID(buffer.readInt());
+		GameType gameType = GameType.byId(buffer.readInt()); //byId was getByID
 		
 		return new StopCreativeShockEffectPacket(gameType);
 	}
@@ -33,7 +33,7 @@ public class StopCreativeShockEffectPacket implements PlayToClientPacket
 		PlayerEntity playerEntity = Minecraft.getInstance().player;
 		if(playerEntity != null)
 		{
-			playerEntity.abilities.allowEdit = !playerGameType.hasLimitedInteractions();
+			playerEntity.abilities.mayBuild = !playerGameType.isBlockPlacingRestricted();
 		}
 	}
 }

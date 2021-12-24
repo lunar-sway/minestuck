@@ -24,7 +24,7 @@ import java.util.Random;
 
 public class WirelessRedstoneReceiverBlock extends Block
 {
-	public static final IntegerProperty POWER = BlockStateProperties.POWER_0_15;
+	public static final IntegerProperty POWER = BlockStateProperties.POWER;
 	public static final BooleanProperty AUTO_RESET = MSProperties.AUTO_RESET;
 	
 	public static final String NOW_AUTO = "minestuck.receiver_now_auto_reset";
@@ -33,7 +33,7 @@ public class WirelessRedstoneReceiverBlock extends Block
 	public WirelessRedstoneReceiverBlock(Properties properties)
 	{
 		super(properties);
-		setDefaultState(getDefaultState().with(POWER, 0).with(AUTO_RESET, true));
+		registerDefaultState(stateDefinition.any().setValue(POWER, 0).setValue(AUTO_RESET, true));
 	}
 	
 	@Override
@@ -51,21 +51,21 @@ public class WirelessRedstoneReceiverBlock extends Block
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
 	{
-		if(!player.isSneaking())
+		if(!player.isCrouching())
 		{
-			worldIn.setBlockState(pos, state.with(AUTO_RESET, !state.get(AUTO_RESET)));
-			if(state.get(AUTO_RESET))
+			worldIn.setBlock(pos, state.setValue(AUTO_RESET, !state.getValue(AUTO_RESET)), 2);
+			if(state.getValue(AUTO_RESET))
 			{
-				if(!worldIn.isRemote)
-					player.sendMessage(new TranslationTextComponent(NOW_NOT_AUTO));
-				worldIn.playSound(null, pos, SoundEvents.BLOCK_PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 1.2F);
+				if(!worldIn.isClientSide)
+					player.sendMessage(new TranslationTextComponent(NOW_NOT_AUTO), Util.NIL_UUID);
+				worldIn.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 1.2F);
 			} else
 			{
-				if(!worldIn.isRemote)
-					player.sendMessage(new TranslationTextComponent(NOW_AUTO));
-				worldIn.playSound(null, pos, SoundEvents.BLOCK_PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, 1.2F);
+				if(!worldIn.isClientSide)
+					player.sendMessage(new TranslationTextComponent(NOW_AUTO), Util.NIL_UUID);
+				worldIn.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, 1.2F);
 			}
 			
 			return ActionResultType.SUCCESS;
@@ -75,10 +75,16 @@ public class WirelessRedstoneReceiverBlock extends Block
 	}
 	
 	@Override
+	public int getSignal(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side)
+	{
+		return blockState.getValue(POWER);
+	}
+	
+	/*@Override
 	public int getWeakPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side)
 	{
 		return blockState.get(POWER);
-	}
+	}*/
 	
 	@Override
 	public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side)
@@ -87,26 +93,40 @@ public class WirelessRedstoneReceiverBlock extends Block
 	}
 	
 	@Override
-	public boolean canProvidePower(BlockState state)
+	public boolean isSignalSource(BlockState state)
 	{
 		return true;
 	}
 	
+	/*@Override
+	public boolean canProvidePower(BlockState state)
+	{
+		return true;
+	}*/
+	
 	@Override
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
 	{
-		if(stateIn.get(POWER) > 0)
+		if(stateIn.getValue(POWER) > 0)
 		{
-			if(rand.nextInt(16 - stateIn.get(POWER)) == 0)
-				ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE_DUST);
+			if(rand.nextInt(16 - stateIn.getValue(POWER)) == 0)
+				ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE);
 		}
 	}
 	
 	@Override
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+	{
+		super.createBlockStateDefinition(builder);
+		builder.add(POWER);
+		builder.add(AUTO_RESET);
+	}
+	
+	/*@Override
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
 	{
 		super.fillStateContainer(builder);
 		builder.add(POWER);
 		builder.add(AUTO_RESET);
-	}
+	}*/
 }

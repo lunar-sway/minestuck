@@ -28,24 +28,24 @@ public class RedstoneClockBlock extends MSDirectionalBlock
 	public RedstoneClockBlock(Properties properties)
 	{
 		super(properties);
-		setDefaultState(stateContainer.getBaseState().with(POWERED, false));
+		registerDefaultState(stateDefinition.any().setValue(POWERED, false));
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
 	{
-		TileEntity tileEntity = worldIn.getTileEntity(pos);
+		TileEntity tileEntity = worldIn.getBlockEntity(pos);
 		if(tileEntity instanceof RedstoneClockTileEntity)
 		{
 			RedstoneClockTileEntity te = (RedstoneClockTileEntity) tileEntity;
 			
-			if(!player.isSneaking())
+			if(!player.isCrouching())
 			{
 				te.incrementClockSpeed(player);
 				
 				return ActionResultType.SUCCESS;
-			} else if(player.isSneaking() && player.getHeldItem(hand).isEmpty())
+			} else if(player.isCrouching() && player.getItemInHand(hand).isEmpty())
 			{
 				te.decrementClockSpeed(player);
 				
@@ -61,18 +61,18 @@ public class RedstoneClockBlock extends MSDirectionalBlock
 	{
 		super.tick(state, worldIn, pos, rand);
 		
-		if(state.get(POWERED))
+		if(state.getValue(POWERED))
 		{
-			worldIn.setBlockState(pos, state.with(POWERED, false));
+			worldIn.setBlock(pos, state.setValue(POWERED, false), 2);
 		}
 	}
 	
 	@Override
-	public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving)
+	public void onPlace(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving)
 	{
-		super.onBlockAdded(state, worldIn, pos, oldState, isMoving);
+		super.onPlace(state, worldIn, pos, oldState, isMoving);
 		
-		TileEntity tileEntity = worldIn.getTileEntity(pos);
+		TileEntity tileEntity = worldIn.getBlockEntity(pos);
 		if(tileEntity instanceof RedstoneClockTileEntity)
 		{
 			RedstoneClockTileEntity te = (RedstoneClockTileEntity) tileEntity;
@@ -82,17 +82,37 @@ public class RedstoneClockBlock extends MSDirectionalBlock
 		}
 	}
 	
+	/*@Override
+	public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving)
+	{
+		super.onBlockAdded(state, worldIn, pos, oldState, isMoving);
+		
+		
+	}*/
+	
 	@Override
+	public boolean isSignalSource(BlockState state)
+	{
+		return state.getValue(POWERED);
+	}
+	
+	/*@Override
 	public boolean canProvidePower(BlockState state)
 	{
 		return state.get(POWERED);
-	}
+	}*/
 	
 	@Override
+	public int getSignal(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side)
+	{
+		return blockState.getValue(POWERED) ? 15 : 0;
+	}
+	
+	/*@Override
 	public int getWeakPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side)
 	{
 		return blockState.get(POWERED) ? 15 : 0;
-	}
+	}*/
 	
 	@Override
 	public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side)
@@ -116,14 +136,21 @@ public class RedstoneClockBlock extends MSDirectionalBlock
 	@Override
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
 	{
-		if(stateIn.get(POWERED))
-			ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE_DUST);
+		if(stateIn.getValue(POWERED))
+			ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE);
 	}
 	
 	@Override
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+	{
+		super.createBlockStateDefinition(builder);
+		builder.add(POWERED);
+	}
+	
+	/*@Override
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
 	{
 		super.fillStateContainer(builder);
 		builder.add(POWERED);
-	}
+	}*/
 }

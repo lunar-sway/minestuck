@@ -165,7 +165,7 @@ public interface ItemRightClickEffect
 			if(!CreativeShockEffect.doesCreativeShockLimit(player, 0, 3))
 			{
 				effect.onRightClick(world, player, hand);
-				if(effect.onRightClick(world, player, hand).getType().isSuccess())
+				if(effect.onRightClick(world, player, hand).getResult() == ActionResultType.SUCCESS)
 					return ActionResult.success(itemStackIn);
 			}
 			

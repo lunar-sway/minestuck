@@ -93,7 +93,7 @@ public interface RightClickBlockEffect
 				if(!CreativeShockEffect.doesCreativeShockLimit(player, 0, 3) || effect instanceof PogoEffect) //TODO pogo defaults to normal creative shock limit parameters
 				{
 					effect.onClick(context);
-					if(effect.onClick(context).isSuccess())
+					if(effect.onClick(context) == ActionResultType.SUCCESS)
 						return ActionResultType.SUCCESS;
 				}
 			}

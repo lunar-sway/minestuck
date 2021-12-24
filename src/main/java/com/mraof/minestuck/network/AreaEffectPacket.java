@@ -39,7 +39,7 @@ public class AreaEffectPacket implements PlayToServerPacket
 	@Override
 	public void execute(ServerPlayerEntity player) //TODO in an unknown set of conditions, the position changes seem to only take effect(from the perspective of being applied to entities) upon reloading after the change is made
 	{
-		TileEntity te = player.world.getTileEntity(tileBlockPos);
+		TileEntity te = player.level.getBlockEntity(tileBlockPos);
 		if(te instanceof AreaEffectTileEntity)
 		{
 			((AreaEffectTileEntity) te).setMinEffectPos(minEffectPos);

@@ -25,7 +25,7 @@ import java.util.Random;
 
 public class StatStorerBlock extends Block
 {
-	public static final IntegerProperty POWER = BlockStateProperties.POWER_0_15;
+	public static final IntegerProperty POWER = BlockStateProperties.POWER;
 	
 	public StatStorerBlock(Properties properties)
 	{
@@ -34,11 +34,11 @@ public class StatStorerBlock extends Block
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
 	{
-		if(!player.isSneaking() && !CreativeShockEffect.doesCreativeShockLimit(player, 1, 4))
+		if(!player.isCrouching() && !CreativeShockEffect.doesCreativeShockLimit(player, 1, 4))
 		{
-			TileEntity tileEntity = worldIn.getTileEntity(pos);
+			TileEntity tileEntity = worldIn.getBlockEntity(pos);
 			if(tileEntity instanceof StatStorerTileEntity)
 			{
 				StatStorerTileEntity te = (StatStorerTileEntity) tileEntity;
@@ -51,16 +51,28 @@ public class StatStorerBlock extends Block
 	}
 	
 	@Override
+	public int getSignal(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side)
+	{
+		return blockState.getValue(POWER);
+	}
+	
+	/*@Override
 	public int getWeakPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side)
 	{
 		return blockState.get(POWER);
-	}
+	}*/
 	
 	@Override
+	public boolean isSignalSource(BlockState state)
+	{
+		return state.getValue(POWER) > 0;
+	}
+	
+	/*@Override
 	public boolean canProvidePower(BlockState state)
 	{
 		return state.get(POWER) > 0;
-	}
+	}*/
 	
 	@Override
 	public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side)
@@ -84,17 +96,24 @@ public class StatStorerBlock extends Block
 	@Override
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
 	{
-		if(stateIn.get(POWER) > 0)
+		if(stateIn.getValue(POWER) > 0)
 		{
-			if(rand.nextInt(16 - stateIn.get(POWER)) == 0)
-				ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE_DUST);
+			if(rand.nextInt(16 - stateIn.getValue(POWER)) == 0)
+				ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE);
 		}
 	}
 	
 	@Override
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+	{
+		super.createBlockStateDefinition(builder);
+		builder.add(POWER);
+	}
+	
+	/*@Override
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
 	{
 		super.fillStateContainer(builder);
 		builder.add(POWER);
-	}
+	}*/
 }

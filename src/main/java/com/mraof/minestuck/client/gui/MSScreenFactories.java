@@ -68,22 +68,22 @@ public class MSScreenFactories
 	
 	public static void displayAreaEffectScreen(AreaEffectTileEntity tileEntity)
 	{
-		Minecraft.getInstance().displayGuiScreen(new AreaEffectScreen(tileEntity));
+		Minecraft.getInstance().setScreen(new AreaEffectScreen(tileEntity));
 	}
 	
 	public static void displayWirelessRedstoneTransmitterScreen(WirelessRedstoneTransmitterTileEntity tileEntity)
 	{
-		Minecraft.getInstance().displayGuiScreen(new WirelessRedstoneTransmitterScreen(tileEntity));
+		Minecraft.getInstance().setScreen(new WirelessRedstoneTransmitterScreen(tileEntity));
 	}
 	
 	public static void displayStatStorerScreen(StatStorerTileEntity tileEntity)
 	{
-		Minecraft.getInstance().displayGuiScreen(new StatStorerScreen(tileEntity));
+		Minecraft.getInstance().setScreen(new StatStorerScreen(tileEntity));
 	}
 	
 	public static void displayRemoteObserverScreen(RemoteObserverTileEntity tileEntity)
 	{
-		Minecraft.getInstance().displayGuiScreen(new RemoteObserverScreen(tileEntity));
+		Minecraft.getInstance().setScreen(new RemoteObserverScreen(tileEntity));
 	}
 	
 	public static void displayAlchemiterScreen(AlchemiterTileEntity tileEntity)

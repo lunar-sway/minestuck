@@ -26,16 +26,22 @@ public class RemoteObserverPacket implements PlayToServerPacket
 	@Override
 	public void encode(PacketBuffer buffer)
 	{
-		buffer.writeEnumValue(activeType);
+		buffer.writeEnum(activeType);
 		buffer.writeBlockPos(tileBlockPos);
-		buffer.writeString(EntityType.getKey(entityType).toString());
+		if(entityType != null)
+		{
+			buffer.writeUtf(EntityType.getKey(entityType).toString());
+		}
+		else
+			buffer.writeUtf(EntityType.getKey(EntityType.PLAYER).toString());
+			
 	}
 	
 	public static RemoteObserverPacket decode(PacketBuffer buffer)
 	{
-		RemoteObserverTileEntity.ActiveType activeType = buffer.readEnumValue(RemoteObserverTileEntity.ActiveType.class);
+		RemoteObserverTileEntity.ActiveType activeType = buffer.readEnum(RemoteObserverTileEntity.ActiveType.class);
 		BlockPos tileBlockPos = buffer.readBlockPos();
-		Optional<EntityType<?>> attemptedEntityType = EntityType.byKey(buffer.readString());
+		Optional<EntityType<?>> attemptedEntityType = EntityType.byString(buffer.readUtf());
 		
 		return new RemoteObserverPacket(activeType, tileBlockPos, attemptedEntityType.orElse(null));
 	}
@@ -43,7 +49,7 @@ public class RemoteObserverPacket implements PlayToServerPacket
 	@Override
 	public void execute(ServerPlayerEntity player)
 	{
-		TileEntity te = player.world.getTileEntity(tileBlockPos);
+		TileEntity te = player.level.getBlockEntity(tileBlockPos);
 		if(te instanceof RemoteObserverTileEntity)
 		{
 			((RemoteObserverTileEntity) te).setActiveType(activeType);

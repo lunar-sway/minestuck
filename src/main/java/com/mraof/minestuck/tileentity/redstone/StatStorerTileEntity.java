@@ -3,6 +3,7 @@ package com.mraof.minestuck.tileentity.redstone;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.redstone.StatStorerBlock;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
+import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tileentity.ITickableTileEntity;
@@ -61,12 +62,12 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 	@Override
 	public void tick()
 	{
-		if(world == null || !world.isAreaLoaded(pos, 1))
+		if(level == null || !level.isAreaLoaded(worldPosition, 1))
 			return; // Forge: prevent loading unloaded chunks
 		
 		if(tickCycle % MinestuckConfig.SERVER.wirelessBlocksTickRate.get() == 1)
 		{
-			world.setBlockState(pos, world.getBlockState(pos).with(StatStorerBlock.POWER, Math.min(15, getActiveStoredStatValue() / getDivideValueBy())));
+			level.setBlock(worldPosition, level.getBlockState(worldPosition).setValue(StatStorerBlock.POWER, Math.min(15, getActiveStoredStatValue() / getDivideValueBy())), 2);
 			if(tickCycle >= 5000) //setting arbitrarily high value that the tick cannot go past
 				tickCycle = 0;
 		}
@@ -74,9 +75,9 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 	}
 	
 	@Override
-	public void read(CompoundNBT compound)
+	public void load(BlockState state, CompoundNBT compound)
 	{
-		super.read(compound);
+		super.load(state, compound);
 		
 		if(compound.contains("damageStored"))
 			this.damageStored = compound.getFloat("damageStored");
@@ -133,9 +134,10 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound)
+	public CompoundNBT save(CompoundNBT compound)
 	{
-		super.write(compound);
+		super.save(compound);
+		
 		compound.putFloat("damageStored", damageStored);
 		compound.putInt("deathsStored", deathsStored);
 		compound.putInt("saplingsGrownStored", saplingsGrownStored);
@@ -206,43 +208,50 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 			playAnimation(blockPos);
 		activeType = getActiveType();
 		
+		boolean changeBlockState = false;
+		
 		if(this.activeType == ActiveType.DAMAGE)
 		{
 			this.damageStored = storedStatIn;
-			world.getBlockState(pos).getBlock().updateNeighbors(world.getBlockState(pos), world, pos, 3);
+			changeBlockState = true;
+			
 		} else if(this.activeType == ActiveType.DEATHS)
 		{
 			this.deathsStored = (int) storedStatIn;
-			world.getBlockState(pos).getBlock().updateNeighbors(world.getBlockState(pos), world, pos, 3);
+			changeBlockState = true;
 		} else if(this.activeType == ActiveType.SAPLING_GROWN)
 		{
 			this.saplingsGrownStored = (int) storedStatIn;
-			world.getBlockState(pos).getBlock().updateNeighbors(world.getBlockState(pos), world, pos, 3);
+			changeBlockState = true;
 		} else if(this.activeType == ActiveType.HEALTH_RECOVERED)
 		{
 			this.healthRecoveredStored = storedStatIn;
-			world.getBlockState(pos).getBlock().updateNeighbors(world.getBlockState(pos), world, pos, 3);
+			changeBlockState = true;
 		} else if(this.activeType == ActiveType.LIGHTNING_STRUCK_ENTITY)
 		{
 			this.lightningStruckStored = (int) storedStatIn;
-			world.getBlockState(pos).getBlock().updateNeighbors(world.getBlockState(pos), world, pos, 3);
+			changeBlockState = true;
 		} else if(this.activeType == ActiveType.ENTITIES_BRED)
 		{
 			this.entitiesBredStored = (int) storedStatIn;
-			world.getBlockState(pos).getBlock().updateNeighbors(world.getBlockState(pos), world, pos, 3);
+			changeBlockState = true;
 		} else if(this.activeType == ActiveType.EXPLOSIONS)
 		{
 			this.explosionsStored = (int) storedStatIn;
-			world.getBlockState(pos).getBlock().updateNeighbors(world.getBlockState(pos), world, pos, 3);
+			changeBlockState = true;
 		} else if(this.activeType == ActiveType.ALCHEMY_ACTIVATED)
 		{
 			this.alchemyActivatedStored = (int) storedStatIn;
-			world.getBlockState(pos).getBlock().updateNeighbors(world.getBlockState(pos), world, pos, 3);
+			changeBlockState = true;
 		} else if(this.activeType == ActiveType.GRIST_DROPS)
 		{
 			this.gristDropsStored = (int) storedStatIn;
-			world.getBlockState(pos).getBlock().updateNeighbors(world.getBlockState(pos), world, pos, 3);
+			changeBlockState = true;
 		}
+		
+		if(changeBlockState)
+			level.updateNeighborsAt(worldPosition, level.getBlockState(worldPosition).getBlock());
+		//level.getBlockState(worldPosition).getBlock().updateNeighbors(level.getBlockState(worldPosition), level, worldPosition, 3);
 	}
 	
 	public void setDivideValue(int divideValueBy)
@@ -256,7 +265,7 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 	{
 		for(int i = 0; i < 10; i++)
 		{
-			this.world.addParticle(ParticleTypes.HEART, true, blockPosIn.getX(), blockPosIn.getY(), blockPosIn.getZ(), 0.01, 0.01, 0.01);
+			this.level.addParticle(ParticleTypes.HEART, true, blockPosIn.getX(), blockPosIn.getY(), blockPosIn.getZ(), 0.01, 0.01, 0.01);
 		}
 	}
 }

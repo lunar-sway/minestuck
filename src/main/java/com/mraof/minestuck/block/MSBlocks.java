@@ -368,7 +368,7 @@ public class MSBlocks
 		registry.register(new Block(AbstractBlock.Properties.of(Material.GLASS, MaterialColor.COLOR_YELLOW).strength(0.5F).sound(SoundType.SNOW)).setRegistryName("dense_cloud"));
 		registry.register(new Block(AbstractBlock.Properties.of(Material.GLASS, MaterialColor.COLOR_LIGHT_GRAY).strength(0.5F).sound(SoundType.SNOW)).setRegistryName("bright_dense_cloud"));
 		registry.register(new Block(AbstractBlock.Properties.of(Material.SAND, MaterialColor.SNOW).strength(0.4F).sound(SoundType.SAND)).setRegistryName("sugar_cube"));
-		registry.register(new SpikeBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(2).sound(SoundType.METAL), MSBlockShapes.SPIKES).setRegistryName("spikes"));
+		registry.register(new SpikeBlock(AbstractBlock.Properties.of(Material.METAL, MaterialColor.METAL).strength(2).sound(SoundType.METAL), MSBlockShapes.SPIKES).setRegistryName("spikes"));
 		
 		registry.register(new FlammableLogBlock(AbstractBlock.Properties.of(Material.WOOD, MaterialColor.COLOR_LIGHT_BLUE).strength(2.0F).harvestTool(ToolType.AXE).lightLevel(state -> 11).sound(SoundType.WOOD)).setRegistryName("glowing_log"));
 		registry.register(new FlammableLogBlock(AbstractBlock.Properties.of(Material.WOOD, MaterialColor.ICE).strength(2.0F).harvestTool(ToolType.AXE).sound(SoundType.WOOD)).setRegistryName("frost_log"));
@@ -466,7 +466,7 @@ public class MSBlocks
 		registry.register(new PipeBlock(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(4.0F).sound(SoundType.METAL).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.PIPE).setRegistryName("pipe"));
 		registry.register(new Block(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(4.0F).sound(SoundType.METAL).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("pipe_intersection"));
 		registry.register(new StoneTabletBlock(AbstractBlock.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(0.3F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("stone_slab")); //same thing as stone tablet
-		registry.register(new DecorBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.5F), MSBlockShapes.NAKAGATOR_STATUE).setRegistryName("nakagator_statue"));
+		registry.register(new DecorBlock(AbstractBlock.Properties.of(Material.STONE).strength(0.5F), MSBlockShapes.NAKAGATOR_STATUE).setRegistryName("nakagator_statue"));
 		
 		registry.register(new StairsBlock(() -> MSBlocks.BLACK_CASTLE_BRICKS.defaultBlockState(), AbstractBlock.Properties.copy(blackCastleBricks)).setRegistryName("black_castle_brick_stairs"));
 		registry.register(new StairsBlock(() -> MSBlocks.DARK_GRAY_CASTLE_BRICKS.defaultBlockState(), AbstractBlock.Properties.copy(darkGrayCastleBricks)).setRegistryName("dark_gray_castle_brick_stairs"));
@@ -502,27 +502,27 @@ public class MSBlocks
 		registry.register(new SlabBlock(AbstractBlock.Properties.copy(deadPlanks)).setRegistryName("dead_planks_slab"));
 		registry.register(new SlabBlock(AbstractBlock.Properties.copy(treatedPlanks)).setRegistryName("treated_planks_slab"));
 		
-		registry.register(new TrajectoryBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3).sound(SoundType.METAL)).setRegistryName("trajectory_block"));
-		registry.register(new StatStorerBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3).sound(SoundType.METAL)).setRegistryName("stat_storer"));
-		registry.register(new RemoteObserverBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3).sound(SoundType.METAL)).setRegistryName("remote_observer"));
-		registry.register(new WirelessRedstoneTransmitterBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3).sound(SoundType.METAL)).setRegistryName("wireless_redstone_transmitter"));
-		registry.register(new WirelessRedstoneReceiverBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3).tickRandomly().sound(SoundType.METAL)).setRegistryName("wireless_redstone_receiver"));
-		registry.register(new SolidSwitchBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3).sound(SoundType.METAL).lightValue(15)).setRegistryName("solid_switch"));
-		registry.register(new VariableSolidSwitchBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3).sound(SoundType.METAL).lightValue(15)).setRegistryName("variable_solid_switch"));
-		registry.register(new TimedSolidSwitchBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3).sound(SoundType.METAL).lightValue(12), 20).setRegistryName("one_second_interval_timed_solid_switch"));
-		registry.register(new TimedSolidSwitchBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3).sound(SoundType.METAL).lightValue(15), 40).setRegistryName("two_second_interval_timed_solid_switch"));
-		registry.register(new SummonerBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3).sound(SoundType.METAL)).setRegistryName("summoner"));
-		registry.register(new AreaEffectBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(6).sound(SoundType.METAL)).setRegistryName("area_effect_block"));
-		registry.register(new PlatformGeneratorBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(6).sound(SoundType.METAL)).setRegistryName("platform_generator"));
-		registry.register(new PlatformBlock(Block.Properties.create(Material.MISCELLANEOUS).hardnessAndResistance(0.2F).sound(SoundType.SCAFFOLDING).lightValue(6).notSolid()).setRegistryName("platform_block"));
-		registry.register(new ItemMagnetBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3).sound(SoundType.METAL)).setRegistryName("item_magnet"));
-		registry.register(new RedstoneClockBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(3).sound(SoundType.METAL)).setRegistryName("redstone_clock"));
-		registry.register(new LogicGateBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(1).sound(SoundType.STONE), LogicGateBlock.State.AND).setRegistryName("and_gate_block"));
-		registry.register(new LogicGateBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(1).sound(SoundType.STONE), LogicGateBlock.State.OR).setRegistryName("or_gate_block"));
-		registry.register(new LogicGateBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(1).sound(SoundType.STONE), LogicGateBlock.State.XOR).setRegistryName("xor_gate_block"));
-		registry.register(new LogicGateBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(1).sound(SoundType.STONE), LogicGateBlock.State.NAND).setRegistryName("nand_gate_block"));
-		registry.register(new LogicGateBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(1).sound(SoundType.STONE), LogicGateBlock.State.NOR).setRegistryName("nor_gate_block"));
-		registry.register(new LogicGateBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(1).sound(SoundType.STONE), LogicGateBlock.State.XNOR).setRegistryName("xnor_gate_block"));
+		registry.register(new TrajectoryBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL)).setRegistryName("trajectory_block"));
+		registry.register(new StatStorerBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL)).setRegistryName("stat_storer"));
+		registry.register(new RemoteObserverBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL)).setRegistryName("remote_observer"));
+		registry.register(new WirelessRedstoneTransmitterBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL)).setRegistryName("wireless_redstone_transmitter"));
+		registry.register(new WirelessRedstoneReceiverBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).randomTicks().sound(SoundType.METAL)).setRegistryName("wireless_redstone_receiver"));
+		registry.register(new SolidSwitchBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL).lightLevel(state -> 15)).setRegistryName("solid_switch"));
+		registry.register(new VariableSolidSwitchBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL).lightLevel(state -> 15)).setRegistryName("variable_solid_switch"));
+		registry.register(new TimedSolidSwitchBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL).lightLevel(state -> 12), 20).setRegistryName("one_second_interval_timed_solid_switch"));
+		registry.register(new TimedSolidSwitchBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL).lightLevel(state -> 15), 40).setRegistryName("two_second_interval_timed_solid_switch"));
+		registry.register(new SummonerBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL)).setRegistryName("summoner"));
+		registry.register(new AreaEffectBlock(AbstractBlock.Properties.of(Material.METAL).strength(6).sound(SoundType.METAL)).setRegistryName("area_effect_block"));
+		registry.register(new PlatformGeneratorBlock(AbstractBlock.Properties.of(Material.METAL).strength(6).sound(SoundType.METAL)).setRegistryName("platform_generator"));
+		registry.register(new PlatformBlock(AbstractBlock.Properties.of(Material.BARRIER).strength(0.2F).sound(SoundType.SCAFFOLDING).lightLevel(state -> 6).noOcclusion()).setRegistryName("platform_block"));
+		registry.register(new ItemMagnetBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL)).setRegistryName("item_magnet"));
+		registry.register(new RedstoneClockBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL)).setRegistryName("redstone_clock"));
+		registry.register(new LogicGateBlock(AbstractBlock.Properties.of(Material.STONE).strength(1).sound(SoundType.STONE), LogicGateBlock.State.AND).setRegistryName("and_gate_block"));
+		registry.register(new LogicGateBlock(AbstractBlock.Properties.of(Material.STONE).strength(1).sound(SoundType.STONE), LogicGateBlock.State.OR).setRegistryName("or_gate_block"));
+		registry.register(new LogicGateBlock(AbstractBlock.Properties.of(Material.STONE).strength(1).sound(SoundType.STONE), LogicGateBlock.State.XOR).setRegistryName("xor_gate_block"));
+		registry.register(new LogicGateBlock(AbstractBlock.Properties.of(Material.STONE).strength(1).sound(SoundType.STONE), LogicGateBlock.State.NAND).setRegistryName("nand_gate_block"));
+		registry.register(new LogicGateBlock(AbstractBlock.Properties.of(Material.STONE).strength(1).sound(SoundType.STONE), LogicGateBlock.State.NOR).setRegistryName("nor_gate_block"));
+		registry.register(new LogicGateBlock(AbstractBlock.Properties.of(Material.STONE).strength(1).sound(SoundType.STONE), LogicGateBlock.State.XNOR).setRegistryName("xnor_gate_block"));
 		
 		registry.register(new GateBlock(AbstractBlock.Properties.of(Material.PORTAL).noCollission().strength(-1.0F, 25.0F).sound(SoundType.GLASS).lightLevel(state -> 11).noDrops()).setRegistryName("gate"));
 		registry.register(new ReturnNodeBlock(AbstractBlock.Properties.of(Material.PORTAL).noCollission().strength(-1.0F, 10.0F).sound(SoundType.GLASS).lightLevel(state -> 11).noDrops()).setRegistryName("return_node"));

@@ -138,7 +138,7 @@ public class ClientEventHandler
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public static void onPlayerTickEvent(TickEvent.PlayerTickEvent event)
 	{
-		if(event.player.isPotionActive(MSEffects.CREATIVE_SHOCK.get()))
+		if(event.player.hasEffect(MSEffects.CREATIVE_SHOCK.get()))
 		{
 			if(CreativeShockEffect.doesCreativeShockLimit(event.player, 2, 5))
 				event.player.stopFallFlying(); //Stopping elytra moment on client side prevent visual disruptions
