@@ -6,7 +6,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tags.ITag;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
@@ -24,16 +23,9 @@ public class PlatformBlock extends Block
 		registerDefaultState(stateDefinition.any().setValue(INVISIBLE, false));
 	}
 	
-	//TODO needs suffocation and ambientOcclusion replacements
-	
 	/*@Override
-	public boolean causesSuffocation(BlockState state, IBlockReader worldIn, BlockPos pos)
-	{
-		return false;
-	}
-	
 	@Override
-	public float getAmbientOcclusionLightValue(BlockState state, IBlockReader worldIn, BlockPos pos)
+	public float getAmbientOcclusionLightValue(BlockState state, IBlockReader worldIn, BlockPos pos) //TODO unsure if occlusion has really changed anything
 	{
 		return 1.0F;
 	}*/

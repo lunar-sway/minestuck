@@ -55,23 +55,6 @@ public class TrajectoryBlock extends MSDirectionalBlock
 		}
 	}
 	
-	/*@Override
-	public void onLanded(IBlockReader worldIn, Entity entityIn)
-	{
-		if(entityIn.isSuppressingBounce())
-		{
-			super.onLanded(worldIn, entityIn);
-		} else
-		{
-			Vec3d entityMotion = entityIn.getMotion();
-			
-			if(entityMotion.y < 0.0D)
-			{
-				entityIn.setMotion(entityMotion.x, -entityMotion.y * 0.1D, entityMotion.z); //intended to reset player's falling momentum
-			}
-		}
-	}*/
-	
 	@Override
 	public void stepOn(World worldIn, BlockPos pos, Entity entityIn)
 	{
@@ -91,26 +74,6 @@ public class TrajectoryBlock extends MSDirectionalBlock
 			}
 		}
 	}
-	
-	/*@Override
-	public void onEntityWalk(World worldIn, BlockPos pos, Entity entityIn)
-	{
-		super.onEntityWalk(worldIn, pos, entityIn);
-		BlockState blockState = worldIn.getBlockState(pos);
-		updatePower(worldIn, pos, blockState);
-		
-		if(blockState.get(POWER) != 0)
-		{
-			int power = blockState.get(POWER);
-			double powerMod = power / 16D;
-			if(!(blockState.get(FACING) == Direction.UP && blockState.get(POWER) < 7))
-			{
-				if(entityIn.onGround)
-					entityIn.onGround = false;
-				entityIn.setMotion(entityIn.getMotion().x * 0.8 + blockState.get(FACING).getXOffset() * powerMod, entityIn.getMotion().y * 0.8 + blockState.get(FACING).getYOffset() * powerMod, entityIn.getMotion().z * 0.8 + blockState.get(FACING).getZOffset() * powerMod);
-			}
-		}
-	}*/
 	
 	@Override
 	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
@@ -144,11 +107,4 @@ public class TrajectoryBlock extends MSDirectionalBlock
 		super.createBlockStateDefinition(builder);
 		builder.add(POWER);
 	}
-	
-	/*@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
-	{
-		super.fillStateContainer(builder);
-		builder.add(POWER);
-	}*/
 }

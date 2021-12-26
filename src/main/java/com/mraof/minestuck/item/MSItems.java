@@ -746,8 +746,8 @@ public class MSItems
 		registerItemBlock(registry, TREATED_PLANKS_SLAB, MSItemGroup.LANDS);
 		
 		registerItemBlock(registry, TRAJECTORY_BLOCK, MSItemGroup.LANDS);
-		registerItemBlock(registry, STAT_STORER, MSItemGroup.MAIN);
-		registerItemBlock(registry, REMOTE_OBSERVER, MSItemGroup.MAIN);
+		registerItemBlock(registry, STAT_STORER, MSItemGroup.LANDS);
+		registerItemBlock(registry, REMOTE_OBSERVER, MSItemGroup.LANDS);
 		registerItemBlock(registry, WIRELESS_REDSTONE_TRANSMITTER, MSItemGroup.MAIN);
 		registerItemBlock(registry, WIRELESS_REDSTONE_RECEIVER, MSItemGroup.MAIN);
 		registerItemBlock(registry, SOLID_SWITCH, MSItemGroup.MAIN);
@@ -759,6 +759,7 @@ public class MSItems
 		registerItemBlock(registry, PLATFORM_GENERATOR, MSItemGroup.LANDS);
 		registerItemBlock(registry, ITEM_MAGNET, MSItemGroup.MAIN);
 		registerItemBlock(registry, REDSTONE_CLOCK, MSItemGroup.MAIN);
+		registerItemBlock(registry, FALL_PAD, MSItemGroup.MAIN);
 		registerItemBlock(registry, AND_GATE_BLOCK); //Logic gates have no item group as they are discordant with the aesthetics and intended mechanics of Minestuck(but are kept for some utility)
 		registerItemBlock(registry, OR_GATE_BLOCK);
 		registerItemBlock(registry, XOR_GATE_BLOCK);
