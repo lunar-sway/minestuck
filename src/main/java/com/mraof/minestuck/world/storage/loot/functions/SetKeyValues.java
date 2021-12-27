@@ -6,6 +6,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.mraof.minestuck.item.KeyItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.*;
+import net.minecraft.loot.conditions.ILootCondition;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.dimension.Dimension;
 import net.minecraft.world.storage.loot.IRandomRange;
@@ -26,16 +28,30 @@ public class SetKeyValues extends LootFunction
 		//this.dimension = dimensionIn;
 	}
 	
+	
+	
 	@Override
 	protected ItemStack doApply(ItemStack stack, LootContext context)
 	{
 		//KeyItem.setDimension(stack, dimension);
-		return KeyItem.setKeyType(stack, countRange.generateInt(context.getRandom()));
+		return KeyItem.setKeyType(stack, countRange.getInt(context.getRandom()));
 	}
 	
 	public static Builder<?> builder(IRandomRange range/*, Dimension dimension*/)
 	{
 		return builder((conditions) -> new SetKeyValues(conditions, range/*, dimension*/));
+	}
+	
+	@Override
+	protected ItemStack run(ItemStack p_215859_1_, LootContext p_215859_2_)
+	{
+		return null;
+	}
+	
+	@Override
+	public LootFunctionType getType()
+	{
+		return null;
 	}
 	
 	public static class Serializer extends LootFunction.Serializer<SetKeyValues>

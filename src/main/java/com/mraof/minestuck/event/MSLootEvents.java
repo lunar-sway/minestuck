@@ -4,14 +4,11 @@ import com.google.common.collect.Sets;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.storage.loot.MSLootTables;
+import net.minecraft.loot.LootEntry;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTables;
 import net.minecraft.loot.TableLootEntry;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.LootEntry;
-import net.minecraft.world.storage.loot.LootPool;
-import net.minecraft.world.storage.loot.LootTables;
-import net.minecraft.world.storage.loot.TableLootEntry;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -40,7 +37,7 @@ public class MSLootEvents
 		if(MSLootTables.TIER_ONE_MEDIUM_CHEST == event.getName())
 		{
 			LootPool pool = event.getTable().getPool("boondollars");
-			Debug.debugf("name = %s, lootTableKeys = %s", event.getName(), event.getLootTableManager().getLootTableKeys());
+			Debug.debugf("name = %s, lootTableKeys = %s", event.getName(), event.getLootTableManager().getIds()); //getIds was getLootTableKeys
 			
 			//addEntry(pool, ItemLootEntry.lootTableItem(UAItems.PIKE.get()).setWeight(11).when(IN_SWAMP.or(IN_SWAMP_HILLS).or(IN_RIVER)).build());
 			//addEntry(pool, TableLootEntry.builder(MSLootTables.TIER_ONE_DUNGEON_LOOT_INJECT).build());

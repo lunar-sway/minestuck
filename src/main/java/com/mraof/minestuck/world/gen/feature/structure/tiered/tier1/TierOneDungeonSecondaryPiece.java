@@ -55,7 +55,7 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 	private static final int pieceMaxY = -20;
 	private static final int pieceMaxZ = 58;
 	
-	private static final BlockState air = Blocks.AIR.getDefaultState();
+	private static final BlockState air = Blocks.AIR.defaultBlockState();
 	private BlockState primaryBlock;
 	private BlockState primaryDecorativeBlock;
 	private BlockState primaryPillarBlock;
@@ -108,15 +108,15 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 	
 	private void initTemplates(TemplateManager templates)
 	{
-		breathSymbolTemplate = templates.getTemplateDefaulted(new ResourceLocation(Minestuck.MOD_ID, "aspect/breath_symbol_no_background"));
-		breathPuzzleDoorTemplate = templates.getTemplateDefaulted(new ResourceLocation(Minestuck.MOD_ID, "dungeons/breath_puzzle_door"));
-		breathFirstSideRoomTemplate = templates.getTemplateDefaulted(new ResourceLocation(Minestuck.MOD_ID, "dungeons/breath_first_side_room"));
-		breathSecondSideRoomBarrierTemplate = templates.getTemplateDefaulted(new ResourceLocation(Minestuck.MOD_ID, "dungeons/breath_second_side_room_barrier"));
-		breathAreaEffectChamberTemplate = templates.getTemplateDefaulted(new ResourceLocation(Minestuck.MOD_ID, "dungeons/breath_area_effect_chamber"));
-		bloodSymbolTemplate = templates.getTemplateDefaulted(new ResourceLocation(Minestuck.MOD_ID, "aspect/blood_symbol_no_background"));
-		bloodFirstSideRoomTemplate = templates.getTemplateDefaulted(new ResourceLocation(Minestuck.MOD_ID, "dungeons/blood_first_side_room"));
-		bloodSecondSideRoomTemplate = templates.getTemplateDefaulted(new ResourceLocation(Minestuck.MOD_ID, "dungeons/blood_second_side_room"));
-		bloodWallFountainTemplate = templates.getTemplateDefaulted(new ResourceLocation(Minestuck.MOD_ID, "dungeons/blood_wall_fountain"));
+		breathSymbolTemplate = templates.getOrCreate(new ResourceLocation(Minestuck.MOD_ID, "aspect/breath_symbol_no_background"));
+		breathPuzzleDoorTemplate = templates.getOrCreate(new ResourceLocation(Minestuck.MOD_ID, "dungeons/breath_puzzle_door"));
+		breathFirstSideRoomTemplate = templates.getOrCreate(new ResourceLocation(Minestuck.MOD_ID, "dungeons/breath_first_side_room"));
+		breathSecondSideRoomBarrierTemplate = templates.getOrCreate(new ResourceLocation(Minestuck.MOD_ID, "dungeons/breath_second_side_room_barrier"));
+		breathAreaEffectChamberTemplate = templates.getOrCreate(new ResourceLocation(Minestuck.MOD_ID, "dungeons/breath_area_effect_chamber"));
+		bloodSymbolTemplate = templates.getOrCreate(new ResourceLocation(Minestuck.MOD_ID, "aspect/blood_symbol_no_background"));
+		bloodFirstSideRoomTemplate = templates.getOrCreate(new ResourceLocation(Minestuck.MOD_ID, "dungeons/blood_first_side_room"));
+		bloodSecondSideRoomTemplate = templates.getOrCreate(new ResourceLocation(Minestuck.MOD_ID, "dungeons/blood_second_side_room"));
+		bloodWallFountainTemplate = templates.getOrCreate(new ResourceLocation(Minestuck.MOD_ID, "dungeons/blood_wall_fountain")); //getOrCreate was getTemplateDefaulted
 	}
 	
 	@Override

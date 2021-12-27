@@ -36,10 +36,10 @@ public abstract class ImprovedStructurePiece extends StructurePiece
 	
 	public void setRandomDirection(Random random)
 	{
-		setCoordBaseMode(Direction.Plane.HORIZONTAL.random(random));
+		setOrientation(Direction.Plane.HORIZONTAL.getRandomDirection(random));
 	}
 	
-	public void setBoundsWithWorldHeight(ChunkGenerator<?> generator, int x, int z, int width, int height, int depth, int yOffset, Heightmap.Type type)
+	public void setBoundsWithWorldHeight(ChunkGenerator generator, int x, int z, int width, int height, int depth, int yOffset, Heightmap.Type type)
 	{
 		int y = generator.getHeight(x, z, type) + yOffset;
 		setBounds(x, y, z, width, height, depth);

@@ -56,9 +56,6 @@ public class RemoteObserverBlock extends Block
 	}
 	
 	@Override
-	}
-	
-	@Override
 	public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side)
 	{
 		return true;
