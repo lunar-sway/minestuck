@@ -1,8 +1,6 @@
 package com.mraof.minestuck.client;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.world.LandDimension;
-import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
@@ -17,6 +15,8 @@ import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Random;
+
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, value = Dist.CLIENT)
 public class MSMusicTicker	//TODO Introduce types (something similar to vanilla) such that this class could be reused for prospit, derse etc
 {
@@ -25,7 +25,7 @@ public class MSMusicTicker	//TODO Introduce types (something similar to vanilla)
 	@SubscribeEvent
 	public static void clientTick(TickEvent.ClientTickEvent event)
 	{
-		if(event.phase == TickEvent.Phase.END && !Minecraft.getInstance().isGamePaused())
+		if(event.phase == TickEvent.Phase.END && !Minecraft.getInstance().isPaused())
 		{
 			tick(Minecraft.getInstance());
 		}
@@ -35,8 +35,8 @@ public class MSMusicTicker	//TODO Introduce types (something similar to vanilla)
 	public static void playSound(PlaySoundEvent event)
 	{
 		Minecraft mc = Minecraft.getInstance();
-		if(mc.world != null && MSDimensions.isLandDimension(mc.world.getDimension().getType())
-				&& event.getSound().getSoundLocation().equals(mc.getAmbientMusicType().getSound().getName()))
+		if(mc.level != null && ClientDimensionData.isLand(mc.level.dimension())
+				&& event.getSound().getLocation().equals(mc.getSituationalMusic().getEvent().getLocation()))
 			event.setResultSound(null);
 	}
 	
@@ -46,11 +46,12 @@ public class MSMusicTicker	//TODO Introduce types (something similar to vanilla)
 	
 	private static void tick(Minecraft mc)
 	{
-		if(mc.world != null && MSDimensions.isLandDimension(mc.world.getDimension().getType()))
+		LandTypePair types = mc.level != null ? ClientDimensionData.getLandTypes(mc.level.dimension()) : null;
+		if(types != null)
 		{
 			if(!wasInLand)
 			{
-				ticksUntilMusic = MathHelper.nextInt(mc.world.rand, 0, 6000);
+				ticksUntilMusic = MathHelper.nextInt(mc.level.random, 0, 6000);
 				LOGGER.debug("Entered a land. Land music scheduled to play in {} ticks", ticksUntilMusic);
 			}
 			
@@ -59,14 +60,14 @@ public class MSMusicTicker	//TODO Introduce types (something similar to vanilla)
 				ticksUntilMusic--;
 				if(ticksUntilMusic < 0)
 				{
-					currentMusic = SimpleSound.music(getLandSoundEvent(mc));
-					mc.getSoundHandler().play(currentMusic);
+					currentMusic = SimpleSound.forMusic(getLandSoundEvent(mc.level.random, types));
+					mc.getSoundManager().play(currentMusic);
 					LOGGER.debug("Land music started.");
 				}
-			} else if(!mc.getSoundHandler().isPlaying(currentMusic))
+			} else if(!mc.getSoundManager().isActive(currentMusic))
 			{
 				currentMusic = null;
-				ticksUntilMusic = MathHelper.nextInt(mc.world.rand, 12000, 24000);
+				ticksUntilMusic = MathHelper.nextInt(mc.level.random, 12000, 24000);
 				LOGGER.debug("Land music finished playing. Scheduling music to be played again in {} ticks.", ticksUntilMusic);
 			}
 			
@@ -76,21 +77,17 @@ public class MSMusicTicker	//TODO Introduce types (something similar to vanilla)
 			wasInLand = false;
 			if(currentMusic != null)
 			{
-				mc.getSoundHandler().stop(currentMusic);
+				mc.getSoundManager().stop(currentMusic);
 				currentMusic = null;
 				LOGGER.debug("Left land, stopped music.");
 			}
 		}
 	}
 	
-	private static SoundEvent getLandSoundEvent(Minecraft mc)
+	private static SoundEvent getLandSoundEvent(Random rand, LandTypePair pair)
 	{
-		LandDimension dim = (LandDimension) mc.world.getDimension();
-		
-		LandTypePair pair = dim.landTypes;
-		
-		if(mc.world.rand.nextBoolean())
-			return pair.terrain.getBackgroundMusic();
-		else return pair.title.getBackgroundMusic();
+		if(rand.nextBoolean())
+			return pair.getTerrain().getBackgroundMusic();
+		else return pair.getTitle().getBackgroundMusic();
 	}
 }

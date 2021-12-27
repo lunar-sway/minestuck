@@ -35,10 +35,10 @@ public class AlchemiterPacket implements PlayToServerPacket
 	@Override
 	public void execute(ServerPlayerEntity player)
 	{
-		if(player.getEntityWorld().isAreaLoaded(pos, 0))
+		if(player.getCommandSenderWorld().isAreaLoaded(pos, 0))
 		{
 			TileEntity te;
-			te = player.getEntityWorld().getTileEntity(pos);
+			te = player.getCommandSenderWorld().getBlockEntity(pos);
 			if(te instanceof AlchemiterTileEntity)
 			{
 				((AlchemiterTileEntity) te).processContents(quantity, player);

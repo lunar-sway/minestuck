@@ -22,7 +22,7 @@ public class CustomOreBlock extends OreBlock
 	}
 	
 	@Override
-	protected int getExperience(Random random)
+	protected int xpOnDrop(Random random)
 	{
 		return MathHelper.nextInt(random, minExp, maxExp);
 	}

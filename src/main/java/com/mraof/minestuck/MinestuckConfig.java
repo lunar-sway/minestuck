@@ -3,6 +3,7 @@ package com.mraof.minestuck;
 import com.mraof.minestuck.computer.editmode.DeployList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.common.ForgeConfigSpec.*;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -12,8 +13,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import static net.minecraftforge.common.ForgeConfigSpec.*;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class MinestuckConfig
@@ -59,8 +58,8 @@ public class MinestuckConfig
 	{
 		//Machines
 		public final BooleanValue cruxtruderIntake;
+		public final ConfigValue<List<String>> forbiddenWorldsTpz;
 		public final ConfigValue<List<String>> forbiddenDimensionTypesTpz;
-		public final ConfigValue<List<String>> forbiddenModDimensionsTpz;
 		public final BooleanValue disableGristWidget;
 		public final IntValue alchemiterMaxStacks;
 		
@@ -202,10 +201,10 @@ public class MinestuckConfig
 					.defineInRange("alchemiterMaxStacks",16,0,999);
 			cruxtruderIntake = builder.comment("If enabled, the regular cruxtruder will require raw cruxite to function, which is inserted through the pipe.")
 					.define("cruxtruderIntake",true);
+			forbiddenWorldsTpz = builder.comment("A list of worlds that you cannot travel to or from using transportalizers.")
+					.define("forbiddenWorldsTpz", new ArrayList<>());
 			forbiddenDimensionTypesTpz = builder.comment("A list of dimension types that you cannot travel to or from using transportalizers.")
 					.define("forbiddenDimensionTypesTpz", new ArrayList<>());
-			forbiddenModDimensionsTpz = builder.comment("A list of mod dimensions that you cannot travel to or from using transportalizers.")
-					.define("forbiddenModDimensionsTpz", new ArrayList<>());
 			builder.pop();
 			
 			builder.push("entry");
@@ -272,7 +271,7 @@ public class MinestuckConfig
 	public static void onReload(final ModConfig.Reloading event)
 	{
 		MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
-		if(server != null && server.isOnExecutionThread())	//TODO Check if this will be true after server start. If not, use a static boolean together with a tick event instead
+		if(server != null && server.isSameThread())	//TODO Check if this will be true after server start. If not, use a static boolean together with a tick event instead
 			DeployList.onConditionsUpdated(server);
 	}
 	

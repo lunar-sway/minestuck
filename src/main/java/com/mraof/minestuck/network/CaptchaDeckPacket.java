@@ -128,9 +128,9 @@ public class CaptchaDeckPacket implements PlayToServerPacket
 		if(ServerEditHandler.getData(player) != null)
 			return;
 		
-		if(this.type == MODUS && player.openContainer instanceof CaptchaDeckContainer)
+		if(this.type == MODUS && player.containerMenu instanceof CaptchaDeckContainer)
 			CaptchaDeckHandler.useItem(player);
-		else if(this.type == CAPTCHALOGUE && !player.getItemStackFromSlot(EquipmentSlotType.MAINHAND).isEmpty())
+		else if(this.type == CAPTCHALOGUE && !player.getItemBySlot(EquipmentSlotType.MAINHAND).isEmpty())
 			CaptchaDeckHandler.captchalogueItem(player);
 		else if(this.type == CAPTCHALOGUE_INV)
 		{

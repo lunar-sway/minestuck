@@ -1,5 +1,5 @@
 {
-  "variants": {
-    "": { "model": "minestuck:block/area_effect_block" }
-  }
+    "variants": {
+        "": { "model": "minestuck:block/area_effect_block" }
+    }
 }

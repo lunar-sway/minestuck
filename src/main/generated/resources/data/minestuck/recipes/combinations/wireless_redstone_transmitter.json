@@ -4,7 +4,7 @@
     "item": "minecraft:repeater"
   },
   "input2": {
-    "item": "minecraft:ender_eye"
+    "item": "minestuck:plutonium_core"
   },
   "mode": "or",
   "output": {

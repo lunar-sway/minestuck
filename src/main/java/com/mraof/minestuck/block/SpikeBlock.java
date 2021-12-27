@@ -5,10 +5,15 @@ import com.mraof.minestuck.util.CustomVoxelShape;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
 
 public class SpikeBlock extends DecorBlock
 {
@@ -18,45 +23,58 @@ public class SpikeBlock extends DecorBlock
 	}
 	
 	@Override
-	public void onFallenUpon(World worldIn, BlockPos pos, Entity entityIn, float fallDistance)
+	public void fallOn(World worldIn, BlockPos pos, Entity entityIn, float fallDistance)
 	{
 		if(entityIn instanceof UnderlingEntity)
 		{
-			entityIn.onLivingFall(fallDistance, 1.5F);
+			entityIn.causeFallDamage(fallDistance, 1.5F); //damage reduced for underlings
 		} else if(entityIn instanceof LivingEntity)
 		{
-			entityIn.onLivingFall(fallDistance, 3);
+			entityIn.causeFallDamage(fallDistance, 3);
 		}
 		
-		super.onFallenUpon(worldIn, pos, entityIn, fallDistance);
+		super.fallOn(worldIn, pos, entityIn, fallDistance);
 	}
 	
+	/**
+	 * Damages relevant entities as they move through the block
+	 */
 	@Override
-	public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn)
+	public void entityInside(BlockState state, World worldIn, BlockPos pos, Entity entityIn)
 	{
 		if(entityIn instanceof LivingEntity && entityIn.fallDistance < 1)
 		{
-			if(!worldIn.isRemote && (entityIn.lastTickPosX != entityIn.getPosX() || entityIn.lastTickPosZ != entityIn.getPosZ()))
+			if(!worldIn.isClientSide && (entityIn.xOld != entityIn.getX() || entityIn.zOld != entityIn.getZ()))
 			{
-				double distanceX = Math.abs(entityIn.getPosX() - entityIn.lastTickPosX);
-				double distanceZ = Math.abs(entityIn.getPosZ() - entityIn.lastTickPosZ);
+				double distanceX = Math.abs(entityIn.getX() - entityIn.xOld);
+				double distanceZ = Math.abs(entityIn.getZ() - entityIn.zOld);
 				
 				if(entityIn instanceof UnderlingEntity)
 				{
-					entityIn.setMotionMultiplier(state, new Vec3d(0.1F, 0.9, 0.1F));
+					entityIn.makeStuckInBlock(state, new Vector3d(0.1F, 0.9, 0.1F));
 					if(distanceX >= (double) 0.003F || distanceZ >= (double) 0.003F)
 					{
-						entityIn.attackEntityFrom(DamageSource.GENERIC, 0.25F);
+						entityIn.hurt(DamageSource.GENERIC, 0.25F);
 					}
 				} else
 				{
-					entityIn.setMotionMultiplier(state, new Vec3d(0.3F, 0.9, 0.3F));
+					entityIn.makeStuckInBlock(state, new Vector3d(0.3F, 0.9, 0.3F));
 					if(distanceX >= (double) 0.003F || distanceZ >= (double) 0.003F)
 					{
-						entityIn.attackEntityFrom(DamageSource.GENERIC, 1.0F);
+						entityIn.hurt(DamageSource.GENERIC, 1.0F);
 					}
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Helps entities avoid these blocks if possible
+	 */
+	@Nullable
+	@Override
+	public PathNodeType getAiPathNodeType(BlockState state, IBlockReader world, BlockPos pos, @Nullable MobEntity entity)
+	{
+		return PathNodeType.DAMAGE_OTHER;
 	}
 }

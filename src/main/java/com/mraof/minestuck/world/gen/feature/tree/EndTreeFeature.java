@@ -1,36 +1,39 @@
 package com.mraof.minestuck.world.gen.feature.tree;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.plant.DoubleLogBlock;
 import com.mraof.minestuck.block.plant.EndLeavesBlock;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.world.ISeedReader;
+import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.IWorldGenerationReader;
-import net.minecraft.world.gen.feature.AbstractTreeFeature;
-import net.minecraft.world.gen.feature.BaseTreeFeatureConfig;
-import net.minecraft.world.gen.feature.TreeFeatureConfig;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.world.gen.feature.TreeFeature;
 
 import java.util.Random;
-import java.util.Set;
-import java.util.function.Function;
 
-public class EndTreeFeature extends AbstractTreeFeature<TreeFeatureConfig>
+
+public class EndTreeFeature extends Feature<NoFeatureConfig>
 {
-	public EndTreeFeature(Function<Dynamic<?>, ? extends TreeFeatureConfig> configFactory)
+	
+	public EndTreeFeature(Codec<NoFeatureConfig> codec)
 	{
-		super(configFactory);
+		super(codec);
 	}
 	
 	@Override
-	protected boolean place(IWorldGenerationReader world, Random rand, BlockPos position, Set<BlockPos> logBlocks, Set<BlockPos> foliageBlocks, MutableBoundingBox boundingBox, TreeFeatureConfig config)
+	public boolean place(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos position, NoFeatureConfig config)
 	{
-		if(isSoil(world, position.down(), config.getSapling()))
+		BlockPos soilPos = position.below();
+		if(world.getBlockState(soilPos).canSustainPlant(world, soilPos, Direction.UP, MSBlocks.END_SAPLING))
 		{
-			if(subGenerate(world, rand, position, position, logBlocks, foliageBlocks, boundingBox, EndLeavesBlock.LEAF_SUSTAIN_DISTANCE, 0, 4, config))
+			if(subGenerate(world, rand, position, position, EndLeavesBlock.LEAF_SUSTAIN_DISTANCE, 0, 4))
 			{
-				setDirtAt(world, position.down(), position);
-				setLog(world, rand, position, logBlocks, boundingBox, config);
+				setLog(world, position);
 				return true;
 			}
 		}
@@ -40,7 +43,7 @@ public class EndTreeFeature extends AbstractTreeFeature<TreeFeatureConfig>
 	//The point of using this algorithm, pretty much copy-pasted from the code on chorus plants, was to make these trees more reminiscent of chorus plants.
 	//As it stands, however, they don't branch horizontally, the way a chorus plant would.
 	//It's not necessary to fix this for end trees to exist and be enjoyed, but fixing it would be a good idea.
-	private boolean subGenerate(IWorldGenerationReader world, Random rand, BlockPos curr, BlockPos origin, Set<BlockPos> logBlocks, Set<BlockPos> foliageBlocks, MutableBoundingBox bounds, int range, int step, int maxSteps, BaseTreeFeatureConfig config)
+	private boolean subGenerate(ISeedReader world, Random rand, BlockPos curr, BlockPos origin, int range, int step, int maxSteps)
 	{
 		int height = rand.nextInt(Math.max(1, 4 - step)) + 1;
 		
@@ -48,11 +51,11 @@ public class EndTreeFeature extends AbstractTreeFeature<TreeFeatureConfig>
 			height++;
 		
 		for(int y = 1; y < height; y++)
-			if(!areAllNeighborsEmpty(world, curr.up(y), null))
+			if(!areAllNeighborsEmpty(world, curr.above(y), null))
 				return false;
 		
 		for(int y = 1; y < height; y++)
-			setLog(world, rand, curr.up(y), logBlocks, bounds, config);
+			setLog(world, curr.above(y));
 		
 		boolean flag = false;
 		
@@ -67,51 +70,39 @@ public class EndTreeFeature extends AbstractTreeFeature<TreeFeatureConfig>
 			
 			for (int k = 0; k < buds; ++k)		//TODO: Change this to prioritize north/south growth over east/west growth, and to lock growth into one axis
 			{
-				Direction direction = Direction.Plane.HORIZONTAL.random(rand);
-				BlockPos nextPos = curr.up(height).offset(direction);
+				Direction direction = Direction.Plane.HORIZONTAL.getRandomDirection(rand);
+				BlockPos nextPos = curr.above(height).relative(direction);
 				
 				if (Math.abs(nextPos.getX() - origin.getX()) < range
 						&& Math.abs(nextPos.getZ() - origin.getZ()) < range
-						&& isAirOrLeaves(world, nextPos)
-						&& isAirOrLeaves(world, nextPos.down())
+						&& TreeFeature.isAirOrLeaves(world, nextPos)
+						&& TreeFeature.isAirOrLeaves(world, nextPos.below())
 						&& areAllNeighborsEmpty(world, nextPos, direction.getOpposite()))
 				{
 					flag = true;
 					Direction.Axis axis = direction.getAxis();
-					setLogWithAxis2(axis, world, rand, nextPos, logBlocks, bounds, config);
-					subGenerate(world, rand, nextPos, origin, logBlocks, foliageBlocks, bounds, range, step + 1, maxSteps, config);
-					generateLeaves(world, rand, nextPos, foliageBlocks, bounds, config, Direction.Axis.Y, axis);
-					nextPos = curr.up(height);
-					setLogWithAxis2(axis, world, rand, nextPos, logBlocks, bounds, config);
+					setLog(world, nextPos, axis);
+					subGenerate(world, rand, nextPos, origin, range, step + 1, maxSteps);
+					generateLeaves(world, nextPos, Direction.Axis.Y, axis);
+					nextPos = curr.above(height);
+					setLog(world, nextPos, axis);
 				}
 			}
 		}
 		
 		if (!flag)
 		{
-			generateLeaves(world, rand, curr.up(height), foliageBlocks, bounds, config, Direction.Axis.Y, Direction.Axis.Y);
-			setLog(world, rand, curr.up(height), logBlocks, bounds, config);
+			generateLeaves(world, curr.above(height), Direction.Axis.Y, Direction.Axis.Y);
+			setLog(world, curr.above(height));
 		}
 		return true;
-	}
-	
-	protected boolean setLogWithAxis2(Direction.Axis axis, IWorldGenerationReader world, Random rand, BlockPos pos, Set<BlockPos> logBlocks, MutableBoundingBox bounds, BaseTreeFeatureConfig config)
-	{
-		if(!isAirOrLeaves(world, pos) && !isTallPlants(world, pos) && !isWater(world, pos))
-			return false;
-		else
-		{
-			setBlockState(world, pos, config.trunkProvider.getBlockState(rand, pos).with(DoubleLogBlock.AXIS_2, axis), bounds);
-			logBlocks.add(pos.toImmutable());
-			return true;
-		}
 	}
 	
 	private static boolean areAllNeighborsEmpty(IWorldGenerationReader worldIn, BlockPos pos, Direction excludingSide)
 	{
 		for (Direction direction : Direction.Plane.HORIZONTAL)
 		{
-			if (direction != excludingSide && !isAirOrLeaves(worldIn, pos.offset(direction)))
+			if (direction != excludingSide && !TreeFeature.isAirOrLeaves(worldIn, pos.relative(direction)))
 			{
 				return false;
 			}
@@ -120,39 +111,59 @@ public class EndTreeFeature extends AbstractTreeFeature<TreeFeatureConfig>
 		return true;
 	}
 	
-	public void generateLeaves(IWorldGenerationReader world, Random rand, BlockPos pos, Set<BlockPos> changedBlocks, MutableBoundingBox boundsIn, BaseTreeFeatureConfig config, Direction.Axis primary, Direction.Axis secondary)
+	public void generateLeaves(ISeedReader world, BlockPos pos, Direction.Axis primary, Direction.Axis secondary)
 	{
 		if(primary == Direction.Axis.X || secondary == Direction.Axis.X)
 		{
-			leaves(world, rand, pos.east(), changedBlocks, boundsIn, config, 2);
-			leaves(world, rand, pos.west(), changedBlocks, boundsIn, config, 2);
+			leaves(world, pos.east(), 2);
+			leaves(world, pos.west(), 2);
 		}
 		if(primary == Direction.Axis.Y || secondary == Direction.Axis.Y)
 		{
-			leaves(world, rand, pos.up(), changedBlocks, boundsIn, config, 1);
-			leaves(world, rand, pos.down(), changedBlocks, boundsIn, config, 1);
+			leaves(world, pos.above(), 1);
+			leaves(world, pos.below(), 1);
 		}
 		if(primary == Direction.Axis.Z || secondary == Direction.Axis.Z)
 		{
-			leaves(world, rand, pos.south(), changedBlocks, boundsIn, config, 1);
-			leaves(world, rand, pos.north(), changedBlocks, boundsIn, config, 1);
+			leaves(world, pos.south(), 1);
+			leaves(world, pos.north(), 1);
 		}
 	}
 	
-	private void leaves(IWorldGenerationReader world, Random rand, BlockPos curr, Set<BlockPos> changedBlocks, MutableBoundingBox boundsIn, BaseTreeFeatureConfig config, int distance)
+	private void leaves(ISeedReader world, BlockPos curr, int distance)
 	{
-		if(isAirOrLeaves(world, curr))
+		if(TreeFeature.isAirOrLeaves(world, curr))
 		{
 			if(distance <= EndLeavesBlock.LEAF_SUSTAIN_DISTANCE)
 			{
-				setLeaf(world, rand, curr, changedBlocks, boundsIn, config);
-				leaves(world, rand, curr.south(), changedBlocks, boundsIn, config, distance + 1);
-				leaves(world, rand, curr.north(), changedBlocks, boundsIn, config, distance + 1);
-				leaves(world, rand, curr.up(), changedBlocks, boundsIn, config, distance + 1);
-				leaves(world, rand, curr.down(), changedBlocks, boundsIn, config, distance + 1);
-				leaves(world, rand, curr.east(), changedBlocks, boundsIn, config, distance + 2);
-				leaves(world, rand, curr.west(), changedBlocks, boundsIn, config, distance + 2);
+				setLeaf(world, curr);
+				leaves(world, curr.south(), distance + 1);
+				leaves(world, curr.north(), distance + 1);
+				leaves(world, curr.above(), distance + 1);
+				leaves(world, curr.below(), distance + 1);
+				leaves(world, curr.east(), distance + 2);
+				leaves(world, curr.west(), distance + 2);
 			}
 		}
+	}
+	
+	private void setLog(ISeedReader world, BlockPos pos)
+	{
+		setLog(world, pos, Direction.Axis.Y);
+	}
+	
+	private void setLog(ISeedReader world, BlockPos pos, Direction.Axis axis)
+	{
+		if(TreeFeature.validTreePos(world, pos))
+		{
+			BlockState log = MSBlocks.END_LOG.defaultBlockState().setValue(DoubleLogBlock.AXIS_2, axis);
+			TreeFeature.setBlockKnownShape(world, pos, log);
+		}
+	}
+	
+	private void setLeaf(ISeedReader world, BlockPos pos)
+	{
+		if(TreeFeature.validTreePos(world, pos))
+			TreeFeature.setBlockKnownShape(world, pos, MSBlocks.END_LEAVES.defaultBlockState());
 	}
 }

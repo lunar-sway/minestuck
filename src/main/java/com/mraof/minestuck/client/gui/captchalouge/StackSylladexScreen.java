@@ -1,5 +1,6 @@
 package com.mraof.minestuck.client.gui.captchalouge;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -45,16 +46,16 @@ public class StackSylladexScreen extends SylladexScreen
 	}
 	
 	@Override
-	public void drawGuiMap(int xcor, int ycor)
+	public void drawGuiMap(MatrixStack matrixStack, int xcor, int ycor)
 	{
-		super.drawGuiMap(xcor, ycor);
+		super.drawGuiMap(matrixStack, xcor, ycor);
 		
 		if(!cards.isEmpty())
 		{
 			int startX = Math.max(0, cards.get(0).xPos + CARD_WIDTH - mapX);
 			int endX = Math.min(mapWidth, cards.get(cards.size() - 1).xPos - mapX);
 			int y = mapHeight/2 + 1;
-			fill(startX, y, endX, y + 2, 0xFF000000);
+			fill(matrixStack, startX, y, endX, y + 2, 0xFF000000);
 		}
 	}
 	

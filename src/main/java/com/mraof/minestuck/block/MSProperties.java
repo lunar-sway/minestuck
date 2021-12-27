@@ -1,6 +1,7 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.block.machine.ComputerBlock;
+import com.mraof.minestuck.block.redstone.LogicGateBlock;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.IntegerProperty;
@@ -32,4 +33,5 @@ public class MSProperties
 	public static final EnumProperty<CruxiteDowelBlock.Type> DOWEL_BLOCK = EnumProperty.create("dowel", CruxiteDowelBlock.Type.class);
 	public static final EnumProperty<Direction.Axis> AXIS_2 = EnumProperty.create("axis_2", Direction.Axis.class);
 	public static final EnumProperty<ComputerBlock.State> COMPUTER_STATE = EnumProperty.create("state", ComputerBlock.State.class);
+	public static final EnumProperty<LogicGateBlock.State> LOGIC_STATE = EnumProperty.create("state", LogicGateBlock.State.class);
 }

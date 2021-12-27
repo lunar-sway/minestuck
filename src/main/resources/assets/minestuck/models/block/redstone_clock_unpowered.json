@@ -1,0 +1,7 @@
+{
+    "parent": "block/cube_column",
+    "textures": {
+        "end": "minestuck:block/redstone_clock_unpowered",
+        "side": "minestuck:block/redstone_clock_side"
+    }
+}

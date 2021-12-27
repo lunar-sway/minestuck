@@ -47,7 +47,7 @@ public class TitleLandTypeArgument implements ArgumentType<TitleLandType>
 	@Override
 	public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder)
 	{
-		return ISuggestionProvider.func_212476_a(LandTypes.TITLE_REGISTRY.getValues().stream().map(TitleLandType::getRegistryName), builder);
+		return ISuggestionProvider.suggestResource(LandTypes.TITLE_REGISTRY.getValues().stream().map(TitleLandType::getRegistryName), builder);
 	}
 	
 	@Override

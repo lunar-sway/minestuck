@@ -1,8 +1,8 @@
 {
-  "parent": "block/cube_bottom_top",
-  "textures": {
-    "bottom": "minestuck:block/platform_generator_bottom",
-    "top": "minestuck:block/platform_generator_top",
-    "side": "minestuck:block/platform_generator_side"
-  }
+    "parent": "block/cube_bottom_top",
+    "textures": {
+        "bottom": "minestuck:block/item_magnet_bottom",
+        "top": "minestuck:block/item_magnet_top",
+        "side": "minestuck:block/item_magnet_side"
+    }
 }

@@ -17,9 +17,10 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
+import net.minecraft.world.gen.feature.structure.StructureManager;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 
@@ -33,15 +34,15 @@ public class ImpDungeonPieces
 		public EntryCorridor(Direction coordBaseMode, int posX, int posZ, Random rand, List<StructurePiece> componentList)
 		{
 			super(MSStructurePieces.IMP_ENTRY_CORRIDOR, 0, 2);
-			setCoordBaseMode(coordBaseMode);
+			setOrientation(coordBaseMode);
 			
-			int xWidth = getCoordBaseMode().getAxis().equals(Direction.Axis.X) ? 10 : 6;
-			int zWidth = getCoordBaseMode().getAxis().equals(Direction.Axis.Z) ? 10 : 6;
+			int xWidth = getOrientation().getAxis().equals(Direction.Axis.X) ? 10 : 6;
+			int zWidth = getOrientation().getAxis().equals(Direction.Axis.Z) ? 10 : 6;
 			
 			int height = 45 - rand.nextInt(8);
-			int offset = getCoordBaseMode().getAxisDirection().equals(Direction.AxisDirection.POSITIVE) ? 4 : -3;
-			int x = posX + (getCoordBaseMode().getAxis().equals(Direction.Axis.Z) ? 0 : offset);
-			int z = posZ + (getCoordBaseMode().getAxis().equals(Direction.Axis.X) ? 0 : offset);
+			int offset = getOrientation().getAxisDirection().equals(Direction.AxisDirection.POSITIVE) ? 4 : -3;
+			int x = posX + (getOrientation().getAxis().equals(Direction.Axis.Z) ? 0 : offset);
+			int z = posZ + (getOrientation().getAxis().equals(Direction.Axis.X) ? 0 : offset);
 			
 			this.boundingBox = new MutableBoundingBox(x, height, z, x + xWidth - 1, height + 6, z + zWidth - 1);
 			
@@ -50,16 +51,16 @@ public class ImpDungeonPieces
 			StructureContext ctxt = new StructureContext(componentList, rand);
 			ctxt.compoGen[6][6] = this;
 			
-			int xOffset = coordBaseMode.getXOffset();
-			int zOffset = coordBaseMode.getZOffset();
+			int xOffset = coordBaseMode.getStepX();
+			int zOffset = coordBaseMode.getStepZ();
 			if(rand.nextBoolean())
 			{
-				corridors[0] = !generatePart(ctxt, 6 + xOffset, 6 + zOffset, compoPos.add(xOffset*10, 0, zOffset*10), coordBaseMode, 0);
-				corridors[1] = !generatePart(ctxt, 6 - xOffset, 6 - zOffset, compoPos.add(-xOffset*10, 0, -zOffset*10), coordBaseMode.getOpposite(), 0);
+				corridors[0] = !generatePart(ctxt, 6 + xOffset, 6 + zOffset, compoPos.offset(xOffset*10, 0, zOffset*10), coordBaseMode, 0);
+				corridors[1] = !generatePart(ctxt, 6 - xOffset, 6 - zOffset, compoPos.offset(-xOffset*10, 0, -zOffset*10), coordBaseMode.getOpposite(), 0);
 			} else
 			{
-				corridors[1] = !generatePart(ctxt, 6 - xOffset, 6 - zOffset, compoPos.add(-xOffset*10, 0, -zOffset*10), coordBaseMode.getOpposite(), 0);
-				corridors[0] = !generatePart(ctxt, 6 + xOffset, 6 + zOffset, compoPos.add(xOffset*10, 0, zOffset*10), coordBaseMode, 0);
+				corridors[1] = !generatePart(ctxt, 6 - xOffset, 6 - zOffset, compoPos.offset(-xOffset*10, 0, -zOffset*10), coordBaseMode.getOpposite(), 0);
+				corridors[0] = !generatePart(ctxt, 6 + xOffset, 6 + zOffset, compoPos.offset(xOffset*10, 0, zOffset*10), coordBaseMode, 0);
 			}
 		}
 		
@@ -71,16 +72,17 @@ public class ImpDungeonPieces
 		@Override
 		protected boolean connectFrom(Direction facing)
 		{
-			if(getCoordBaseMode().equals(facing))
+			if(getOrientation().equals(facing))
 				corridors[0] = false;
-			else if(getCoordBaseMode().getOpposite().equals(facing))
+			else if(getOrientation().getOpposite().equals(facing))
 				corridors[1] = false;
-			return getCoordBaseMode().getAxis().equals(facing.getAxis());
+			return getOrientation().getAxis().equals(facing.getAxis());
 		}
 
 		@Override
-		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
+		public boolean postProcess(ISeedReader worldIn, StructureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
+		{
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
 
 			BlockState wallBlock = blocks.getBlockState("structure_primary");
 			BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");
@@ -88,35 +90,35 @@ public class ImpDungeonPieces
 			BlockState floorDecor = blocks.getBlockState("structure_secondary_decorative");
 			BlockState fluid = blocks.getBlockState("fall_fluid");
 
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 4, 4, 0, 6, floorBlock, floorBlock, false);
-			fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 4, 4, 4, 6);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 5, 3, 0, 5, fluid, fluid, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, -1, 5, 3, -1, 5, floorDecor, floorDecor, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 0, 4, 4, 0, 6, floorBlock, floorBlock, false);
+			generateAirBox(worldIn, structureBoundingBoxIn, 1, 1, 4, 4, 4, 6);
+			generateBox(worldIn, structureBoundingBoxIn, 2, 0, 5, 3, 0, 5, fluid, fluid, false);
+			generateBox(worldIn, structureBoundingBoxIn, 2, -1, 5, 3, -1, 5, floorDecor, floorDecor, false);
 
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 3, 0, 5, 7, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 0, 3, 5, 5, 7, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 4, 3, 4, 5, 3, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 4, 7, 4, 5, 7, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 3, 1, 3, 3, wallDecor, wallDecor, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 7, 1, 3, 7, wallDecor, wallDecor, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 0, 3, 4, 3, 3, wallDecor, wallDecor, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 0, 7, 4, 3, 7, wallDecor, wallDecor, false);
+			generateBox(worldIn, structureBoundingBoxIn, 0, 0, 3, 0, 5, 7, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 5, 0, 3, 5, 5, 7, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 4, 3, 4, 5, 3, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 4, 7, 4, 5, 7, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 0, 3, 1, 3, 3, wallDecor, wallDecor, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 0, 7, 1, 3, 7, wallDecor, wallDecor, false);
+			generateBox(worldIn, structureBoundingBoxIn, 4, 0, 3, 4, 3, 3, wallDecor, wallDecor, false);
+			generateBox(worldIn, structureBoundingBoxIn, 4, 0, 7, 4, 3, 7, wallDecor, wallDecor, false);
 
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 0, 3, 0, 3, floorBlock, floorBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 7, 3, 0, 9, floorBlock, floorBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 4, 0, 3, 4, 2, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 4, 8, 3, 4, 9, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 1, 0, 1, 4, 2, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 1, 0, 4, 4, 2, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 1, 8, 1, 4, 9, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 1, 8, 4, 4, 9, wallBlock, wallBlock, false);
-			fillWithAir(worldIn, structureBoundingBoxIn, 2, 1, 0, 3, 3, 3);
-			fillWithAir(worldIn, structureBoundingBoxIn, 2, 1, 7, 3, 3, 9);
+			generateBox(worldIn, structureBoundingBoxIn, 2, 0, 0, 3, 0, 3, floorBlock, floorBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 2, 0, 7, 3, 0, 9, floorBlock, floorBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 2, 4, 0, 3, 4, 2, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 2, 4, 8, 3, 4, 9, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 1, 0, 1, 4, 2, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 4, 1, 0, 4, 4, 2, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 1, 8, 1, 4, 9, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 4, 1, 8, 4, 4, 9, wallBlock, wallBlock, false);
+			generateAirBox(worldIn, structureBoundingBoxIn, 2, 1, 0, 3, 3, 3);
+			generateAirBox(worldIn, structureBoundingBoxIn, 2, 1, 7, 3, 3, 9);
 
 			if(corridors[0])
-				fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 1, 9, 3, 3, 9, wallBlock, wallBlock, false);
+				generateBox(worldIn, structureBoundingBoxIn, 2, 1, 9, 3, 3, 9, wallBlock, wallBlock, false);
 			if(corridors[1])
-				fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 1, 0, 3, 3, 0, wallBlock, wallBlock, false);
+				generateBox(worldIn, structureBoundingBoxIn, 2, 1, 0, 3, 3, 0, wallBlock, wallBlock, false);
 
 			return true;
 		}
@@ -228,7 +230,7 @@ public class ImpDungeonPieces
 		protected abstract boolean connectFrom(Direction facing);
 		
 		@Override
-		protected void readAdditional(CompoundNBT tagCompound)
+		protected void addAdditionalSaveData(CompoundNBT tagCompound)
 		{
 			for(int i = 0; i < corridors.length; i++)
 				tagCompound.putBoolean("bl"+i, corridors[i]);
@@ -244,10 +246,10 @@ public class ImpDungeonPieces
 		public StraightCorridor(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
 			super(MSStructurePieces.IMP_STRAIGHT_CORRIDOR, 0, 1);
-			setCoordBaseMode(coordBaseMode);
+			setOrientation(coordBaseMode);
 			
-			int xWidth = getCoordBaseMode().getAxis().equals(Direction.Axis.X) ? 10 : 4;
-			int zWidth = getCoordBaseMode().getAxis().equals(Direction.Axis.Z) ? 10 : 4;
+			int xWidth = getOrientation().getAxis().equals(Direction.Axis.X) ? 10 : 4;
+			int zWidth = getOrientation().getAxis().equals(Direction.Axis.Z) ? 10 : 4;
 			
 			int x = pos.getX() - (xWidth/2 - 1);
 			int z = pos.getZ() - (zWidth/2 - 1);
@@ -259,9 +261,9 @@ public class ImpDungeonPieces
 				lightPos = (byte) ctxt.rand.nextInt(4);
 			
 			ctxt.compoGen[xIndex][zIndex] = this;
-			int xOffset = coordBaseMode.getXOffset();
-			int zOffset = coordBaseMode.getZOffset();
-			corridors[0] = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.add(xOffset*10, 0, zOffset*10), coordBaseMode, index + 1);
+			int xOffset = coordBaseMode.getStepX();
+			int zOffset = coordBaseMode.getStepZ();
+			corridors[0] = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.offset(xOffset*10, 0, zOffset*10), coordBaseMode, index + 1);
 		}
 		
 		public StraightCorridor(TemplateManager templates, CompoundNBT nbt)
@@ -273,36 +275,37 @@ public class ImpDungeonPieces
 		}
 		
 		@Override
-		protected void readAdditional(CompoundNBT tagCompound)
+		protected void addAdditionalSaveData(CompoundNBT tagCompound)
 		{
-			super.readAdditional(tagCompound);
+			super.addAdditionalSaveData(tagCompound);
 			tagCompound.putBoolean("l", light);
 			if(light)
 				tagCompound.putByte("lpos", lightPos);
 		}
-
+		
 		@Override
-		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
+		public boolean postProcess(ISeedReader worldIn, StructureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
+		{
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
 
 			BlockState wallBlock = blocks.getBlockState("structure_primary");
 			BlockState floorBlock = blocks.getBlockState("structure_secondary");
 
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 0, 2, 0, 9, floorBlock, floorBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 4, 0, 2, 4, 9, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 0, 0, 4, 9, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 0, 0, 3, 4, 9, wallBlock, wallBlock, false);
-			fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 0, 2, 3, 9);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 0, 0, 2, 0, 9, floorBlock, floorBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 4, 0, 2, 4, 9, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 0, 0, 0, 0, 4, 9, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 3, 0, 0, 3, 4, 9, wallBlock, wallBlock, false);
+			generateAirBox(worldIn, structureBoundingBoxIn, 1, 1, 0, 2, 3, 9);
 
 			if(corridors[0])
-				fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 1, 9, 2, 3, 9, wallBlock, wallBlock, false);
+				generateBox(worldIn, structureBoundingBoxIn, 1, 1, 9, 2, 3, 9, wallBlock, wallBlock, false);
 
 			if(light)
 			{
 				BlockState torch = blocks.getBlockState("wall_torch");
 				if(lightPos/2 == 0)
-					setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.WEST), 2, 2, 4 + lightPos%2, structureBoundingBoxIn);
-				else setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.EAST), 1, 2, 4 + lightPos%2, structureBoundingBoxIn);
+					placeBlock(worldIn, torch.setValue(WallTorchBlock.FACING, Direction.WEST), 2, 2, 4 + lightPos%2, structureBoundingBoxIn);
+				else placeBlock(worldIn, torch.setValue(WallTorchBlock.FACING, Direction.EAST), 1, 2, 4 + lightPos%2, structureBoundingBoxIn);
 			}
 
 			return true;
@@ -311,9 +314,9 @@ public class ImpDungeonPieces
 		@Override
 		protected boolean connectFrom(Direction facing)
 		{
-			if(getCoordBaseMode().equals(facing))
+			if(getOrientation().equals(facing))
 				corridors[0] = false;
-			return getCoordBaseMode().getAxis().equals(facing.getAxis());
+			return getOrientation().getAxis().equals(facing.getAxis());
 		}
 	}
 	
@@ -324,7 +327,7 @@ public class ImpDungeonPieces
 		public CrossCorridor(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
 			super(MSStructurePieces.IMP_CROSS_CORRIDOR, 0, 3);
-			setCoordBaseMode(coordBaseMode);
+			setOrientation(coordBaseMode);
 			
 			int xWidth = 10;
 			int zWidth = 10;
@@ -337,19 +340,19 @@ public class ImpDungeonPieces
 			light = ctxt.rand.nextFloat() < 0.3F;
 			
 			ctxt.compoGen[xIndex][zIndex] = this;
-			int xOffset = coordBaseMode.getXOffset();
-			int zOffset = coordBaseMode.getZOffset();
+			int xOffset = coordBaseMode.getStepX();
+			int zOffset = coordBaseMode.getStepZ();
 			
 			if(ctxt.rand.nextBoolean())
 			{
-				corridors[0] = !generatePart(ctxt, xIndex - zOffset, zIndex + xOffset, pos.add(-zOffset*10, 0, xOffset*10), coordBaseMode.rotateY(), index + 1);
-				corridors[2] = !generatePart(ctxt, xIndex + zOffset, zIndex - xOffset, pos.add(zOffset*10, 0, -xOffset*10), coordBaseMode.rotateYCCW(), index + 1);
+				corridors[0] = !generatePart(ctxt, xIndex - zOffset, zIndex + xOffset, pos.offset(-zOffset*10, 0, xOffset*10), coordBaseMode.getClockWise(), index + 1);
+				corridors[2] = !generatePart(ctxt, xIndex + zOffset, zIndex - xOffset, pos.offset(zOffset*10, 0, -xOffset*10), coordBaseMode.getCounterClockWise(), index + 1);
 			} else
 			{
-				corridors[2] = !generatePart(ctxt, xIndex + zOffset, zIndex - xOffset, pos.add(zOffset*10, 0, -xOffset*10), coordBaseMode.rotateYCCW(), index + 1);
-				corridors[0] = !generatePart(ctxt, xIndex - zOffset, zIndex + xOffset, pos.add(-zOffset*10, 0, xOffset*10), coordBaseMode.rotateY(), index + 1);
+				corridors[2] = !generatePart(ctxt, xIndex + zOffset, zIndex - xOffset, pos.offset(zOffset*10, 0, -xOffset*10), coordBaseMode.getCounterClockWise(), index + 1);
+				corridors[0] = !generatePart(ctxt, xIndex - zOffset, zIndex + xOffset, pos.offset(-zOffset*10, 0, xOffset*10), coordBaseMode.getClockWise(), index + 1);
 			}
-			corridors[1] = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.add(xOffset*10, 0, zOffset*10), coordBaseMode, index + 2);
+			corridors[1] = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.offset(xOffset*10, 0, zOffset*10), coordBaseMode, index + 2);
 		}
 		
 		public CrossCorridor(TemplateManager templates, CompoundNBT nbt)
@@ -359,62 +362,62 @@ public class ImpDungeonPieces
 		}
 		
 		@Override
-		protected void readAdditional(CompoundNBT tagCompound)
+		protected void addAdditionalSaveData(CompoundNBT tagCompound)
 		{
-			super.readAdditional(tagCompound);
+			super.addAdditionalSaveData(tagCompound);
 			tagCompound.putBoolean("l", light);
 		}
 
 		@Override
-		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
+		public boolean postProcess(ISeedReader worldIn, StructureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
+		{
 
-
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
 
 			BlockState wallBlock = blocks.getBlockState("structure_primary");
 			BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");
 			BlockState floorBlock = blocks.getBlockState("structure_secondary");
 
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 0, 0, 5, 0, 9, floorBlock, floorBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 4, 3, 0, 5, floorBlock, floorBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 0, 4, 9, 0, 5, floorBlock, floorBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 4, 0, 0, 5, 0, 9, floorBlock, floorBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 0, 0, 4, 3, 0, 5, floorBlock, floorBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 6, 0, 4, 9, 0, 5, floorBlock, floorBlock, false);
 
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 0, 0, 3, 4, 3, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 0, 0, 6, 4, 3, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 0, 6, 3, 4, 9, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 0, 6, 6, 4, 9, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 3, 2, 4, 3, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 6, 2, 4, 6, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 7, 0, 3, 9, 4, 3, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 7, 0, 6, 9, 4, 6, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 3, 0, 0, 3, 4, 3, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 6, 0, 0, 6, 4, 3, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 3, 0, 6, 3, 4, 9, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 6, 0, 6, 6, 4, 9, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 0, 0, 3, 2, 4, 3, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 0, 0, 6, 2, 4, 6, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 7, 0, 3, 9, 4, 3, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 7, 0, 6, 9, 4, 6, wallBlock, wallBlock, false);
 
-			fillWithAir(worldIn, structureBoundingBoxIn, 4, 1, 0, 5, 3, 9);
-			fillWithAir(worldIn, structureBoundingBoxIn, 0, 1, 4, 3, 3, 5);
-			fillWithAir(worldIn, structureBoundingBoxIn, 6, 1, 4, 9, 3, 5);
-			fillWithAir(worldIn, structureBoundingBoxIn, 4, 4, 4, 5, 4, 5);
+			generateAirBox(worldIn, structureBoundingBoxIn, 4, 1, 0, 5, 3, 9);
+			generateAirBox(worldIn, structureBoundingBoxIn, 0, 1, 4, 3, 3, 5);
+			generateAirBox(worldIn, structureBoundingBoxIn, 6, 1, 4, 9, 3, 5);
+			generateAirBox(worldIn, structureBoundingBoxIn, 4, 4, 4, 5, 4, 5);
 
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 4, 0, 5, 4, 2, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 4, 3, 5, 4, 3, wallDecor, wallDecor, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 4, 7, 5, 4, 9, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 4, 6, 5, 4, 6, wallDecor, wallDecor, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 4, 4, 2, 4, 5, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 4, 4, 3, 4, 5, wallDecor, wallDecor, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 7, 4, 4, 9, 4, 5, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 4, 4, 6, 4, 5, wallDecor, wallDecor, false);
+			generateBox(worldIn, structureBoundingBoxIn, 4, 4, 0, 5, 4, 2, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 4, 4, 3, 5, 4, 3, wallDecor, wallDecor, false);
+			generateBox(worldIn, structureBoundingBoxIn, 4, 4, 7, 5, 4, 9, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 4, 4, 6, 5, 4, 6, wallDecor, wallDecor, false);
+			generateBox(worldIn, structureBoundingBoxIn, 0, 4, 4, 2, 4, 5, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 3, 4, 4, 3, 4, 5, wallDecor, wallDecor, false);
+			generateBox(worldIn, structureBoundingBoxIn, 7, 4, 4, 9, 4, 5, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 6, 4, 4, 6, 4, 5, wallDecor, wallDecor, false);
 
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 5, 3, 6, 5, 6, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 3, 5, 3, 6, 5, 6, wallBlock, wallBlock, false);
 
 			if(corridors[0])
-				fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 1, 4, 0, 3, 5, wallBlock, wallBlock, false);
+				generateBox(worldIn, structureBoundingBoxIn, 0, 1, 4, 0, 3, 5, wallBlock, wallBlock, false);
 			if(corridors[1])
-				fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 1, 9, 5, 3, 9, wallBlock, wallBlock, false);
+				generateBox(worldIn, structureBoundingBoxIn, 4, 1, 9, 5, 3, 9, wallBlock, wallBlock, false);
 			if(corridors[2])
-				fillWithBlocks(worldIn, structureBoundingBoxIn, 9, 1, 4, 9, 3, 5, wallBlock, wallBlock, false);
+				generateBox(worldIn, structureBoundingBoxIn, 9, 1, 4, 9, 3, 5, wallBlock, wallBlock, false);
 
 			if(light)
 			{
 				BlockState lightBlock = blocks.getBlockState("light_block");
-				fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 5, 4, 5, 5, 5, lightBlock, lightBlock, false);
+				generateBox(worldIn, structureBoundingBoxIn, 4, 5, 4, 5, 5, 5, lightBlock, lightBlock, false);
 			}
 
 			return true;
@@ -423,11 +426,11 @@ public class ImpDungeonPieces
 		@Override
 		protected boolean connectFrom(Direction facing)
 		{
-			if(getCoordBaseMode().rotateY().equals(facing))
+			if(getOrientation().getClockWise().equals(facing))
 				corridors[0] = false;
-			else if(getCoordBaseMode().equals(facing))
+			else if(getOrientation().equals(facing))
 				corridors[1] = false;
-			else if(getCoordBaseMode().rotateYCCW().equals(facing))
+			else if(getOrientation().getCounterClockWise().equals(facing))
 				corridors[2] = false;
 			return true;
 		}
@@ -442,26 +445,26 @@ public class ImpDungeonPieces
 			super(MSStructurePieces.IMP_TURN_CORRIDOR, 0, 2);
 			boolean direction = ctxt.rand.nextBoolean();
 			if(direction)
-				setCoordBaseMode(coordBaseMode.rotateY());
-			else setCoordBaseMode(coordBaseMode);
+				setOrientation(coordBaseMode.getClockWise());
+			else setOrientation(coordBaseMode);
 			
 			int xWidth = 7;
 			int zWidth = 7;
 			
-			int i = coordBaseMode.getAxisDirection().getOffset() + 1;
+			int i = coordBaseMode.getAxisDirection().getStep() + 1;
 			int j = direction^(coordBaseMode.getAxis() == Direction.Axis.Z)^(coordBaseMode.getAxisDirection() == Direction.AxisDirection.POSITIVE)?2:0;
-			int x = pos.getX() - 4 + (getCoordBaseMode() == Direction.NORTH || getCoordBaseMode() == Direction.WEST ? 3 : 0);
-			int z = pos.getZ() - 4 + (getCoordBaseMode() == Direction.NORTH || getCoordBaseMode() == Direction.EAST ? 3 : 0);
+			int x = pos.getX() - 4 + (getOrientation() == Direction.NORTH || getOrientation() == Direction.WEST ? 3 : 0);
+			int z = pos.getZ() - 4 + (getOrientation() == Direction.NORTH || getOrientation() == Direction.EAST ? 3 : 0);
 			
 			this.boundingBox = new MutableBoundingBox(x, pos.getY(), z, x + xWidth - 1, pos.getY() + 4, z + zWidth - 1);
 			
 			light = ctxt.rand.nextFloat() < 0.2F;
 			
 			ctxt.compoGen[xIndex][zIndex] = this;
-			Direction newFacing = direction ? coordBaseMode.rotateYCCW() : coordBaseMode.rotateY();
-			int xOffset = newFacing.getXOffset();
-			int zOffset = newFacing.getZOffset();
-			corridors[direction ? 0 : 1] = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.add(xOffset*10, 0, zOffset*10), newFacing, index + 1);
+			Direction newFacing = direction ? coordBaseMode.getCounterClockWise() : coordBaseMode.getClockWise();
+			int xOffset = newFacing.getStepX();
+			int zOffset = newFacing.getStepZ();
+			corridors[direction ? 0 : 1] = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.offset(xOffset*10, 0, zOffset*10), newFacing, index + 1);
 		}
 		
 		public TurnCorridor(TemplateManager templates, CompoundNBT nbt)
@@ -471,42 +474,42 @@ public class ImpDungeonPieces
 		}
 		
 		@Override
-		protected void readAdditional(CompoundNBT tagCompound)
+		protected void addAdditionalSaveData(CompoundNBT tagCompound)
 		{
-			super.readAdditional(tagCompound);
+			super.addAdditionalSaveData(tagCompound);
 			tagCompound.putBoolean("l", light);
 		}
 
 		@Override
-		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
+		public boolean postProcess(ISeedReader worldIn, StructureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
+		{
 
-
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
 
 			BlockState wallBlock = blocks.getBlockState("structure_primary");
 			BlockState floorBlock = blocks.getBlockState("structure_secondary");
 
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 0, 0, 5, 0, 5, floorBlock, floorBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 4, 3, 0, 5, floorBlock, floorBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 0, 0, 6, 4, 6, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 0, 0, 3, 4, 3, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 3, 2, 4, 3, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 6, 5, 4, 6, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 4, 0, 5, 4, 5, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 4, 4, 3, 4, 5, wallBlock, wallBlock, false);
-			fillWithAir(worldIn, structureBoundingBoxIn, 4, 1, 0, 5, 3, 5);
-			fillWithAir(worldIn, structureBoundingBoxIn, 0, 1, 4, 3, 3, 5);
+			generateBox(worldIn, structureBoundingBoxIn, 4, 0, 0, 5, 0, 5, floorBlock, floorBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 0, 0, 4, 3, 0, 5, floorBlock, floorBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 6, 0, 0, 6, 4, 6, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 3, 0, 0, 3, 4, 3, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 0, 0, 3, 2, 4, 3, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 0, 0, 6, 5, 4, 6, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 4, 4, 0, 5, 4, 5, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 0, 4, 4, 3, 4, 5, wallBlock, wallBlock, false);
+			generateAirBox(worldIn, structureBoundingBoxIn, 4, 1, 0, 5, 3, 5);
+			generateAirBox(worldIn, structureBoundingBoxIn, 0, 1, 4, 3, 3, 5);
 
 			if(corridors[0])
-				fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 1, 0, 5, 3, 0, wallBlock, wallBlock, false);
+				generateBox(worldIn, structureBoundingBoxIn, 4, 1, 0, 5, 3, 0, wallBlock, wallBlock, false);
 			if(corridors[1])
-				fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 1, 4, 0, 3, 5, wallBlock, wallBlock, false);
+				generateBox(worldIn, structureBoundingBoxIn, 0, 1, 4, 0, 3, 5, wallBlock, wallBlock, false);
 
 			if(light)
 			{
 				BlockState torch = blocks.getBlockState("wall_torch");
-				setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.WEST), 5, 2, 3, structureBoundingBoxIn);
-				setBlockState(worldIn, torch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.NORTH), 3, 2, 5, structureBoundingBoxIn);
+				placeBlock(worldIn, torch.setValue(WallTorchBlock.FACING, Direction.WEST), 5, 2, 3, structureBoundingBoxIn);
+				placeBlock(worldIn, torch.setValue(WallTorchBlock.FACING, Direction.NORTH), 3, 2, 5, structureBoundingBoxIn);
 			}
 
 			return true;
@@ -515,9 +518,9 @@ public class ImpDungeonPieces
 		@Override
 		protected boolean connectFrom(Direction facing)
 		{
-			if(getCoordBaseMode().rotateY().equals(facing))
+			if(getOrientation().getClockWise().equals(facing))
 				corridors[1] = false;
-			else if(getCoordBaseMode().getOpposite().equals(facing))
+			else if(getOrientation().getOpposite().equals(facing))
 				corridors[0] = false;
 			else return false;
 			return true;
@@ -529,13 +532,13 @@ public class ImpDungeonPieces
 		public ReturnRoom(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
 			super(MSStructurePieces.IMP_RETURN_ROOM, 0, 0);
-			setCoordBaseMode(coordBaseMode);
+			setOrientation(coordBaseMode);
 			
-			int xWidth = getCoordBaseMode().getAxis().equals(Direction.Axis.X) ? 8 : 6;
-			int zWidth = getCoordBaseMode().getAxis().equals(Direction.Axis.Z) ? 8 : 6;
+			int xWidth = getOrientation().getAxis().equals(Direction.Axis.X) ? 8 : 6;
+			int zWidth = getOrientation().getAxis().equals(Direction.Axis.Z) ? 8 : 6;
 			
-			int x = pos.getX() - (xWidth/2 - 1) - coordBaseMode.getXOffset();
-			int z = pos.getZ() - (zWidth/2 - 1) - coordBaseMode.getZOffset();
+			int x = pos.getX() - (xWidth/2 - 1) - coordBaseMode.getStepX();
+			int z = pos.getZ() - (zWidth/2 - 1) - coordBaseMode.getStepZ();
 			
 			this.boundingBox = new MutableBoundingBox(x, pos.getY(), z, x + xWidth - 1, pos.getY() + 10, z + zWidth - 1);
 			
@@ -551,12 +554,13 @@ public class ImpDungeonPieces
 		@Override
 		protected boolean connectFrom(Direction facing)
 		{
-			return getCoordBaseMode().getOpposite().equals(facing);
+			return getOrientation().getOpposite().equals(facing);
 		}
 
 		@Override
-		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
+		public boolean postProcess(ISeedReader worldIn, StructureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
+		{
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
 
 			BlockState wallBlock = blocks.getBlockState("structure_primary");
 			BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");
@@ -564,29 +568,29 @@ public class ImpDungeonPieces
 			BlockState floorDecor = blocks.getBlockState("structure_secondary_decorative");
 			BlockState light = blocks.getBlockState("light_block");
 
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 0, 3, 0, 2, floorBlock, floorBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 3, 4, 0, 6, floorBlock, floorBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 4, 3, 0, 5, floorDecor, floorDecor, false);
-			fillWithAir(worldIn, structureBoundingBoxIn, 2, 1, 0, 3, 3, 2);
-			fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 3, 4, 4, 6);
-			fillWithAir(worldIn, structureBoundingBoxIn, 2, 5, 4, 3, 9, 5);
+			generateBox(worldIn, structureBoundingBoxIn, 2, 0, 0, 3, 0, 2, floorBlock, floorBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 0, 3, 4, 0, 6, floorBlock, floorBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 2, 0, 4, 3, 0, 5, floorDecor, floorDecor, false);
+			generateAirBox(worldIn, structureBoundingBoxIn, 2, 1, 0, 3, 3, 2);
+			generateAirBox(worldIn, structureBoundingBoxIn, 1, 1, 3, 4, 4, 6);
+			generateAirBox(worldIn, structureBoundingBoxIn, 2, 5, 4, 3, 9, 5);
 
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 0, 1, 4, 2, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 0, 0, 4, 4, 2, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 2, 0, 5, 7, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 0, 2, 5, 5, 7, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 7, 4, 5, 7, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 4, 0, 3, 4, 2, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 5, 2, 4, 5, 2, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 3, 4, 0, 3, 5, wallDecor, wallDecor, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 3, 4, 5, 3, 5, wallDecor, wallDecor, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 3, 7, 3, 3, 7, wallDecor, wallDecor, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 0, 0, 1, 4, 2, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 4, 0, 0, 4, 4, 2, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 0, 0, 2, 0, 5, 7, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 5, 0, 2, 5, 5, 7, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 0, 7, 4, 5, 7, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 2, 4, 0, 3, 4, 2, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 5, 2, 4, 5, 2, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 0, 3, 4, 0, 3, 5, wallDecor, wallDecor, false);
+			generateBox(worldIn, structureBoundingBoxIn, 5, 3, 4, 5, 3, 5, wallDecor, wallDecor, false);
+			generateBox(worldIn, structureBoundingBoxIn, 2, 3, 7, 3, 3, 7, wallDecor, wallDecor, false);
 
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 5, 3, 4, 10, 3, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 5, 6, 4, 10, 6, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 5, 4, 1, 10, 5, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 5, 4, 4, 10, 5, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 10, 4, 3, 10, 5, light, light, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 5, 3, 4, 10, 3, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 5, 6, 4, 10, 6, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 5, 4, 1, 10, 5, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 4, 5, 4, 4, 10, 5, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 2, 10, 4, 3, 10, 5, light, light, false);
 
 			placeReturnNode(worldIn, structureBoundingBoxIn, 2, 1, 4);
 
@@ -599,7 +603,7 @@ public class ImpDungeonPieces
 		public ReturnRoomAlt(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
 			super(MSStructurePieces.IMP_ALT_RETURN_ROOM, 0, 0);
-			setCoordBaseMode(coordBaseMode);
+			setOrientation(coordBaseMode);
 			
 			int xWidth = coordBaseMode.getAxis().equals(Direction.Axis.X) ? 10 : 8;
 			int zWidth = coordBaseMode.getAxis().equals(Direction.Axis.Z) ? 10 : 8;
@@ -621,13 +625,14 @@ public class ImpDungeonPieces
 		@Override
 		protected boolean connectFrom(Direction facing)
 		{
-			return getCoordBaseMode().getOpposite().equals(facing);
+			return getOrientation().getOpposite().equals(facing);
 		}
 		
 		
 		@Override
-		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
+		public boolean postProcess(ISeedReader worldIn, StructureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
+		{
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
 			
 			BlockState wallBlock = blocks.getBlockState("structure_primary");
 			BlockState floorStairsFront = blocks.getStairs("structure_secondary_stairs", Direction.SOUTH, false);
@@ -636,33 +641,33 @@ public class ImpDungeonPieces
 			BlockState floorDecor = blocks.getBlockState("structure_secondary_decorative");
 			BlockState light = blocks.getBlockState("light_block");
 			
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 0, 0, 4, 0, 1, floorBlock, floorBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 2, 7, 0, 2, floorBlock, floorBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, -1, 4, 1, -1, 5, floorDecor, floorDecor, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, -1, 4, 5, -1, 5, floorBlock, floorBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 6, -1, 4, 6, -1, 5, floorDecor, floorDecor, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 7, 6, 0, 8, floorBlock, floorBlock, false);
-			fillWithAir(worldIn, structureBoundingBoxIn, 3, 1, 0, 4, 3, 1);
-			fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 2, 6, 4, 3);
-			fillWithAir(worldIn, structureBoundingBoxIn, 1, 0, 3, 6, 5, 5);
-			fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 6, 6, 5, 8);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 3, 6, 0, 3, floorStairsBack, floorStairsBack, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 6, 6, 0, 6, floorStairsFront, floorStairsFront, false);
+			generateBox(worldIn, structureBoundingBoxIn, 3, 0, 0, 4, 0, 1, floorBlock, floorBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 0, 2, 7, 0, 2, floorBlock, floorBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, -1, 4, 1, -1, 5, floorDecor, floorDecor, false);
+			generateBox(worldIn, structureBoundingBoxIn, 2, -1, 4, 5, -1, 5, floorBlock, floorBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 6, -1, 4, 6, -1, 5, floorDecor, floorDecor, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 0, 7, 6, 0, 8, floorBlock, floorBlock, false);
+			generateAirBox(worldIn, structureBoundingBoxIn, 3, 1, 0, 4, 3, 1);
+			generateAirBox(worldIn, structureBoundingBoxIn, 1, 1, 2, 6, 4, 3);
+			generateAirBox(worldIn, structureBoundingBoxIn, 1, 0, 3, 6, 5, 5);
+			generateAirBox(worldIn, structureBoundingBoxIn, 1, 1, 6, 6, 5, 8);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 0, 3, 6, 0, 3, floorStairsBack, floorStairsBack, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 0, 6, 6, 0, 6, floorStairsFront, floorStairsFront, false);
 			
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 1, 0, 2, 3, 1, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 1, 0, 5, 3, 1, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 1, 1, 1, 3, 1, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 1, 1, 7, 3, 1, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 4, 1, 7, 5, 1, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 2, 0, 5, 8, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 7, 0, 2, 7, 5, 8, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 1, 9, 7, 5, 9, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 4, 0, 4, 4, 0, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 5, 2, 6, 5, 3, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 6, 4, 6, 6, 8, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 2, 1, 0, 2, 3, 1, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 5, 1, 0, 5, 3, 1, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 0, 1, 1, 1, 3, 1, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 6, 1, 1, 7, 3, 1, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 0, 4, 1, 7, 5, 1, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 0, 0, 2, 0, 5, 8, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 7, 0, 2, 7, 5, 8, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 0, 1, 9, 7, 5, 9, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 3, 4, 0, 4, 4, 0, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 5, 2, 6, 5, 3, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 6, 4, 6, 6, 8, wallBlock, wallBlock, false);
 			
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 6, 5, 1, 6, 6, light, light, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 6, 5, 6, 6, 6, light, light, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 6, 5, 1, 6, 6, light, light, false);
+			generateBox(worldIn, structureBoundingBoxIn, 6, 6, 5, 6, 6, 6, light, light, false);
 			
 			placeReturnNode(worldIn, structureBoundingBoxIn, 3, 1, 7);
 			
@@ -676,13 +681,13 @@ public class ImpDungeonPieces
 		public SpawnerRoom(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
 			super(MSStructurePieces.IMP_SPAWNER_ROOM, 0, 0);
-			setCoordBaseMode(coordBaseMode);
+			setOrientation(coordBaseMode);
 			
-			int xWidth = getCoordBaseMode().getAxis().equals(Direction.Axis.X) ? 7 : 8;
-			int zWidth = getCoordBaseMode().getAxis().equals(Direction.Axis.Z) ? 7 : 8;
+			int xWidth = getOrientation().getAxis().equals(Direction.Axis.X) ? 7 : 8;
+			int zWidth = getOrientation().getAxis().equals(Direction.Axis.Z) ? 7 : 8;
 			
-			int x = pos.getX() - (getCoordBaseMode().equals(Direction.WEST)?2:3) - coordBaseMode.getXOffset();
-			int z = pos.getZ() - (getCoordBaseMode().equals(Direction.NORTH)?2:3) - coordBaseMode.getZOffset();
+			int x = pos.getX() - (getOrientation().equals(Direction.WEST)?2:3) - coordBaseMode.getStepX();
+			int z = pos.getZ() - (getOrientation().equals(Direction.NORTH)?2:3) - coordBaseMode.getStepZ();
 			
 			this.boundingBox = new MutableBoundingBox(x, pos.getY(), z, x + xWidth - 1, pos.getY() + 4, z + zWidth - 1);
 			
@@ -707,9 +712,9 @@ public class ImpDungeonPieces
 		}
 		
 		@Override
-		protected void readAdditional(CompoundNBT tagCompound)
+		protected void addAdditionalSaveData(CompoundNBT tagCompound)
 		{
-			super.readAdditional(tagCompound);
+			super.addAdditionalSaveData(tagCompound);
 			tagCompound.putBoolean("sp1", spawner1);
 			tagCompound.putBoolean("sp2", spawner2);
 		}
@@ -717,57 +722,58 @@ public class ImpDungeonPieces
 		@Override
 		protected boolean connectFrom(Direction facing)
 		{
-			return getCoordBaseMode().getOpposite().equals(facing);
+			return getOrientation().getOpposite().equals(facing);
 		}
 		
 		
 		@Override
-		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
+		public boolean postProcess(ISeedReader worldIn, StructureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
+		{
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
 			
 			BlockState wallBlock = blocks.getBlockState("structure_primary");
 			BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");
 			BlockState floorBlock = blocks.getBlockState("structure_secondary");
 			BlockState floorDecor = blocks.getBlockState("structure_secondary_decorative");
 			
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 0, 0, 4, 0, 2, floorBlock, floorBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 3, 6, 0, 5, floorBlock, floorBlock, false);
-			setBlockState(worldIn, floorBlock, 1, 0, 2, structureBoundingBoxIn);
-			setBlockState(worldIn, floorBlock, 6, 0, 2, structureBoundingBoxIn);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 0, 5, 4, 0, 5, floorDecor, floorDecor, false);
-			fillWithAir(worldIn, structureBoundingBoxIn, 3, 1, 0, 4, 3, 2);
-			fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 3, 6, 3, 5);
-			fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 2, 1, 3, 2);
-			fillWithAir(worldIn, structureBoundingBoxIn, 6, 1, 2, 6, 3, 2);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 0, 2, 4, 1, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 0, 0, 5, 4, 1, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 2, 2, 4, 2, wallDecor, wallDecor, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 0, 2, 5, 4, 2, wallDecor, wallDecor, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 1, 1, 4, 1, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 0, 1, 6, 4, 1, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 1, 0, 4, 5, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 7, 0, 1, 7, 4, 5, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 6, 7, 4, 6, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 4, 0, 4, 4, 2, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 4, 3, 6, 4, 5, wallBlock, wallBlock, false);
-			setBlockState(worldIn, wallBlock, 1, 4, 2, structureBoundingBoxIn);
-			setBlockState(worldIn, wallBlock, 6, 4, 2, structureBoundingBoxIn);
+			generateBox(worldIn, structureBoundingBoxIn, 3, 0, 0, 4, 0, 2, floorBlock, floorBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 0, 3, 6, 0, 5, floorBlock, floorBlock, false);
+			placeBlock(worldIn, floorBlock, 1, 0, 2, structureBoundingBoxIn);
+			placeBlock(worldIn, floorBlock, 6, 0, 2, structureBoundingBoxIn);
+			generateBox(worldIn, structureBoundingBoxIn, 3, 0, 5, 4, 0, 5, floorDecor, floorDecor, false);
+			generateAirBox(worldIn, structureBoundingBoxIn, 3, 1, 0, 4, 3, 2);
+			generateAirBox(worldIn, structureBoundingBoxIn, 1, 1, 3, 6, 3, 5);
+			generateAirBox(worldIn, structureBoundingBoxIn, 1, 1, 2, 1, 3, 2);
+			generateAirBox(worldIn, structureBoundingBoxIn, 6, 1, 2, 6, 3, 2);
+			generateBox(worldIn, structureBoundingBoxIn, 2, 0, 0, 2, 4, 1, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 5, 0, 0, 5, 4, 1, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 2, 0, 2, 2, 4, 2, wallDecor, wallDecor, false);
+			generateBox(worldIn, structureBoundingBoxIn, 5, 0, 2, 5, 4, 2, wallDecor, wallDecor, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 0, 1, 1, 4, 1, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 6, 0, 1, 6, 4, 1, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 0, 0, 1, 0, 4, 5, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 7, 0, 1, 7, 4, 5, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 0, 0, 6, 7, 4, 6, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 3, 4, 0, 4, 4, 2, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 4, 3, 6, 4, 5, wallBlock, wallBlock, false);
+			placeBlock(worldIn, wallBlock, 1, 4, 2, structureBoundingBoxIn);
+			placeBlock(worldIn, wallBlock, 6, 4, 2, structureBoundingBoxIn);
 			
 			if(spawner1)
 			{
-				BlockPos spawnerPos = getActualPos(1, 1, 2);
-				spawner1 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MSEntityTypes.IMP);
+				BlockPos spawnerPos = new BlockPos(this.getWorldX(1, 2), this.getWorldY(1), this.getWorldZ(1, 2));
+				spawner1 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
 			}
 			if(spawner2)
 			{
-				BlockPos spawnerPos = getActualPos(6, 1, 2);
-				spawner2 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MSEntityTypes.IMP);
+				BlockPos spawnerPos = new BlockPos(this.getWorldX(6, 2), this.getWorldY(1), this.getWorldZ(6, 2));
+				spawner2 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
 			}
 			
-			BlockPos chestPos = getActualPos(3, 1, 5);
-			StructureBlockUtil.placeChest(chestPos, worldIn, structureBoundingBoxIn, getCoordBaseMode().getOpposite(), ChestType.LEFT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
-			chestPos = getActualPos(4, 1, 5);
-			StructureBlockUtil.placeChest(chestPos, worldIn, structureBoundingBoxIn, getCoordBaseMode().getOpposite(), ChestType.RIGHT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
+			BlockPos chestPos = new BlockPos(this.getWorldX(3, 5), this.getWorldY(1), this.getWorldZ(3, 5));
+			StructureBlockUtil.placeLootChest(chestPos, worldIn, structureBoundingBoxIn, getOrientation().getOpposite(), ChestType.LEFT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
+			chestPos = new BlockPos(this.getWorldX(4, 5), this.getWorldY(1), this.getWorldZ(4, 5));
+			StructureBlockUtil.placeLootChest(chestPos, worldIn, structureBoundingBoxIn, getOrientation().getOpposite(), ChestType.RIGHT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
 			
 			return true;
 		}
@@ -781,13 +787,13 @@ public class ImpDungeonPieces
 		public BookcaseRoom(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
 			super(MSStructurePieces.IMP_BOOKCASE_ROOM, 0, 0);
-			setCoordBaseMode(coordBaseMode);
+			setOrientation(coordBaseMode);
 			
 			int xWidth = 8;
 			int zWidth = 8;
 			
-			int x = pos.getX() - (xWidth/2 - 1) - coordBaseMode.getXOffset();
-			int z = pos.getZ() - (zWidth/2 - 1) - coordBaseMode.getZOffset();
+			int x = pos.getX() - (xWidth/2 - 1) - coordBaseMode.getStepX();
+			int z = pos.getZ() - (zWidth/2 - 1) - coordBaseMode.getStepZ();
 			
 			this.boundingBox = new MutableBoundingBox(x, pos.getY(), z, x + xWidth - 1, pos.getY() + 4, z + zWidth - 1);
 			
@@ -805,9 +811,9 @@ public class ImpDungeonPieces
 		}
 		
 		@Override
-		protected void readAdditional(CompoundNBT tagCompound)
+		protected void addAdditionalSaveData(CompoundNBT tagCompound)
 		{
-			super.readAdditional(tagCompound);
+			super.addAdditionalSaveData(tagCompound);
 			tagCompound.putFloat("b", bookChance);
 			tagCompound.putBoolean("l", light);
 		}
@@ -815,46 +821,47 @@ public class ImpDungeonPieces
 		@Override
 		protected boolean connectFrom(Direction facing)
 		{
-			return getCoordBaseMode().getOpposite().equals(facing);
+			return getOrientation().getOpposite().equals(facing);
 		}
 		
 		
 		@Override
-		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
+		public boolean postProcess(ISeedReader worldIn, StructureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
+		{
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
 			
 			BlockState wallBlock = blocks.getBlockState("structure_primary");
 			BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");
 			BlockState floorBlock = blocks.getBlockState("structure_secondary");
 			BlockState floorDecor = blocks.getBlockState("structure_secondary_decorative");
 			
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 0, 0, 4, 0, 0, floorBlock, floorBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 1, 6, 0, 1, floorBlock, floorBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 6, 6, 0, 6, floorBlock, floorBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 2, 1, 0, 5, floorBlock, floorBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 0, 2, 6, 0, 5, floorBlock, floorBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 0, 3, 4, 0, 4, floorBlock, floorBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 2, 5, 0, 2, floorDecor, floorDecor, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 5, 5, 0, 5, floorDecor, floorDecor, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 3, 2, 0, 4, floorDecor, floorDecor, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 0, 3, 5, 0, 4, floorDecor, floorDecor, false);
-			fillWithAir(worldIn, structureBoundingBoxIn, 3, 1, 0, 4, 3, 0);
-			fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 1, 6, 4, 6);
-			fillWithAir(worldIn, structureBoundingBoxIn, 2, 5, 2, 5, 5, 5);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 0, 2, 5, 0, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 0, 0, 7, 5, 0, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 1, 0, 5, 7, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 7, 0, 1, 7, 5, 7, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 7, 6, 5, 7, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 4, 0, 4, 5, 0, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 5, 1, 1, 5, 6, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 5, 1, 6, 5, 6, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 5, 1, 5, 5, 1, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 5, 6, 5, 5, 6, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 6, 1, 6, 6, 6, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 6, 3, 4, 6, 4, wallDecor, wallDecor, false);
+			generateBox(worldIn, structureBoundingBoxIn, 3, 0, 0, 4, 0, 0, floorBlock, floorBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 0, 1, 6, 0, 1, floorBlock, floorBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 0, 6, 6, 0, 6, floorBlock, floorBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 0, 2, 1, 0, 5, floorBlock, floorBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 6, 0, 2, 6, 0, 5, floorBlock, floorBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 3, 0, 3, 4, 0, 4, floorBlock, floorBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 2, 0, 2, 5, 0, 2, floorDecor, floorDecor, false);
+			generateBox(worldIn, structureBoundingBoxIn, 2, 0, 5, 5, 0, 5, floorDecor, floorDecor, false);
+			generateBox(worldIn, structureBoundingBoxIn, 2, 0, 3, 2, 0, 4, floorDecor, floorDecor, false);
+			generateBox(worldIn, structureBoundingBoxIn, 5, 0, 3, 5, 0, 4, floorDecor, floorDecor, false);
+			generateAirBox(worldIn, structureBoundingBoxIn, 3, 1, 0, 4, 3, 0);
+			generateAirBox(worldIn, structureBoundingBoxIn, 1, 1, 1, 6, 4, 6);
+			generateAirBox(worldIn, structureBoundingBoxIn, 2, 5, 2, 5, 5, 5);
+			generateBox(worldIn, structureBoundingBoxIn, 0, 0, 0, 2, 5, 0, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 5, 0, 0, 7, 5, 0, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 0, 0, 1, 0, 5, 7, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 7, 0, 1, 7, 5, 7, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 0, 7, 6, 5, 7, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 3, 4, 0, 4, 5, 0, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 5, 1, 1, 5, 6, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 6, 5, 1, 6, 5, 6, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 2, 5, 1, 5, 5, 1, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 2, 5, 6, 5, 5, 6, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 6, 1, 6, 6, 6, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 3, 6, 3, 4, 6, 4, wallDecor, wallDecor, false);
 			
-			BlockState bookshelf = Blocks.BOOKSHELF.getDefaultState();
+			BlockState bookshelf = Blocks.BOOKSHELF.defaultBlockState();
 			
 			generateMaybeBox(worldIn, structureBoundingBoxIn, randomIn, bookChance, 1, 1, 1, 1, 4, 2, bookshelf, bookshelf, false, false);
 			generateMaybeBox(worldIn, structureBoundingBoxIn, randomIn, bookChance, 1, 1, 5, 1, 4, 6, bookshelf, bookshelf, false, false);
@@ -866,13 +873,13 @@ public class ImpDungeonPieces
 			{
 				BlockState torch = blocks.getBlockState("torch");
 				if(randomIn.nextBoolean())
-					setBlockState(worldIn, torch, 2, 1, 2, structureBoundingBoxIn);
+					placeBlock(worldIn, torch, 2, 1, 2, structureBoundingBoxIn);
 				if(randomIn.nextBoolean())
-					setBlockState(worldIn, torch, 5, 1, 2, structureBoundingBoxIn);
+					placeBlock(worldIn, torch, 5, 1, 2, structureBoundingBoxIn);
 				if(randomIn.nextBoolean())
-					setBlockState(worldIn, torch, 2, 1, 5, structureBoundingBoxIn);
+					placeBlock(worldIn, torch, 2, 1, 5, structureBoundingBoxIn);
 				if(randomIn.nextBoolean())
-					setBlockState(worldIn, torch, 5, 1, 5, structureBoundingBoxIn);
+					placeBlock(worldIn, torch, 5, 1, 5, structureBoundingBoxIn);
 			}
 			
 			return true;
@@ -888,11 +895,11 @@ public class ImpDungeonPieces
 			super(MSStructurePieces.IMP_SPAWNER_CORRIDOR, 0, 2);
 			boolean mirror = ctxt.rand.nextBoolean();
 			if(mirror)
-				setCoordBaseMode(coordBaseMode.getOpposite());
-			else setCoordBaseMode(coordBaseMode);
+				setOrientation(coordBaseMode.getOpposite());
+			else setOrientation(coordBaseMode);
 			
-			int xWidth = getCoordBaseMode().getAxis().equals(Direction.Axis.X) ? 10 : 6;
-			int zWidth = getCoordBaseMode().getAxis().equals(Direction.Axis.Z) ? 10 : 6;
+			int xWidth = getOrientation().getAxis().equals(Direction.Axis.X) ? 10 : 6;
+			int zWidth = getOrientation().getAxis().equals(Direction.Axis.Z) ? 10 : 6;
 			
 			int x = pos.getX() - (xWidth/2 - 1);
 			int z = pos.getZ() - (zWidth/2 - 1);
@@ -912,9 +919,9 @@ public class ImpDungeonPieces
 			}
 			chestPos = ctxt.rand.nextBoolean();
 			
-			int xOffset = coordBaseMode.getXOffset();
-			int zOffset = coordBaseMode.getZOffset();
-			corridors[mirror ? 0 : 1] = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.add(xOffset*10, 0, zOffset*10), coordBaseMode, index + 1);
+			int xOffset = coordBaseMode.getStepX();
+			int zOffset = coordBaseMode.getStepZ();
+			corridors[mirror ? 0 : 1] = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.offset(xOffset*10, 0, zOffset*10), coordBaseMode, index + 1);
 			
 		}
 		
@@ -927,9 +934,9 @@ public class ImpDungeonPieces
 		}
 		
 		@Override
-		protected void readAdditional(CompoundNBT tagCompound)
+		protected void addAdditionalSaveData(CompoundNBT tagCompound)
 		{
-			super.readAdditional(tagCompound);
+			super.addAdditionalSaveData(tagCompound);
 			tagCompound.putBoolean("sp1", spawner1);
 			tagCompound.putBoolean("sp2", spawner2);
 			tagCompound.putBoolean("ch", chestPos);
@@ -938,9 +945,9 @@ public class ImpDungeonPieces
 		@Override
 		protected boolean connectFrom(Direction facing)
 		{
-			if(getCoordBaseMode().getAxis().equals(facing.getAxis()))
+			if(getOrientation().getAxis().equals(facing.getAxis()))
 			{
-				corridors[getCoordBaseMode().equals(facing)?1:0] = false;
+				corridors[getOrientation().equals(facing)?1:0] = false;
 				return true;
 			}
 			return false;
@@ -948,50 +955,51 @@ public class ImpDungeonPieces
 		
 		
 		@Override
-		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
+		public boolean postProcess(ISeedReader worldIn, StructureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
+		{
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
 			
 			BlockState wallBlock = blocks.getBlockState("structure_primary");
 			BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");
 			BlockState floorBlock = blocks.getBlockState("structure_secondary");
 			
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 0, 3, 0, 9, floorBlock, floorBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 3, 1, 0, 6, floorBlock, floorBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 0, 3, 4, 0, 6, floorBlock, floorBlock, false);
-			fillWithAir(worldIn, structureBoundingBoxIn, 2, 1, 0, 3, 3, 9);
-			fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 3, 1, 3, 6);
-			fillWithAir(worldIn, structureBoundingBoxIn, 4, 1, 3, 4, 3, 6);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 0, 1, 4, 2, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 0, 0, 4, 4, 2, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 2, 0, 4, 7, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 0, 2, 5, 4, 7, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 7, 1, 4, 9, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 0, 7, 4, 4, 9, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 4, 0, 3, 4, 9, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 4, 3, 1, 4, 6, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 4, 3, 4, 4, 6, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 2, 4, 0, 2, 5, wallDecor, wallDecor, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 2, 4, 5, 2, 5, wallDecor, wallDecor, false);
+			generateBox(worldIn, structureBoundingBoxIn, 2, 0, 0, 3, 0, 9, floorBlock, floorBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 0, 3, 1, 0, 6, floorBlock, floorBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 4, 0, 3, 4, 0, 6, floorBlock, floorBlock, false);
+			generateAirBox(worldIn, structureBoundingBoxIn, 2, 1, 0, 3, 3, 9);
+			generateAirBox(worldIn, structureBoundingBoxIn, 1, 1, 3, 1, 3, 6);
+			generateAirBox(worldIn, structureBoundingBoxIn, 4, 1, 3, 4, 3, 6);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 0, 0, 1, 4, 2, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 4, 0, 0, 4, 4, 2, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 0, 0, 2, 0, 4, 7, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 5, 0, 2, 5, 4, 7, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 0, 7, 1, 4, 9, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 4, 0, 7, 4, 4, 9, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 2, 4, 0, 3, 4, 9, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 4, 3, 1, 4, 6, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 4, 4, 3, 4, 4, 6, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 0, 2, 4, 0, 2, 5, wallDecor, wallDecor, false);
+			generateBox(worldIn, structureBoundingBoxIn, 5, 2, 4, 5, 2, 5, wallDecor, wallDecor, false);
 			
 			if(spawner1)
 			{
-				BlockPos spawnerPos = getActualPos(1, 1, 4);
-				spawner1 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MSEntityTypes.IMP);
+				BlockPos spawnerPos = new BlockPos(this.getWorldX(1, 4), this.getWorldY(1), this.getWorldZ(1, 4));
+				spawner1 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
 			}
 			if(spawner2)
 			{
-				BlockPos spawnerPos = getActualPos(1, 1, 5);
-				spawner2 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MSEntityTypes.IMP);
+				BlockPos spawnerPos = new BlockPos(this.getWorldX(1, 5), this.getWorldY(1), this.getWorldZ(1, 5));
+				spawner2 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
 			}
 			
 			int z = chestPos ? 4 : 5;
-			BlockPos chestPos = getActualPos(4, 1, z);
-			StructureBlockUtil.placeChest(chestPos, worldIn, structureBoundingBoxIn, getCoordBaseMode().rotateY(), MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
+			BlockPos chestPos = new BlockPos(this.getWorldX(4, z), this.getWorldY(1), this.getWorldZ(4, z));
+			StructureBlockUtil.placeLootChest(chestPos, worldIn, structureBoundingBoxIn, getOrientation().getClockWise(), MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
 			
 			if(corridors[0])
-				fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 0, 3, 3, 0, wallBlock, wallBlock, false);
+				generateBox(worldIn, structureBoundingBoxIn, 2, 0, 0, 3, 3, 0, wallBlock, wallBlock, false);
 			if(corridors[1])
-				fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 9, 3, 3, 9, wallBlock, wallBlock, false);
+				generateBox(worldIn, structureBoundingBoxIn, 2, 0, 9, 3, 3, 9, wallBlock, wallBlock, false);
 			
 			return true;
 		}
@@ -1005,10 +1013,10 @@ public class ImpDungeonPieces
 		public OgreCorridor(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
 			super(MSStructurePieces.IMP_OGRE_CORRIDOR, 0, 1);
-			setCoordBaseMode(coordBaseMode);
+			setOrientation(coordBaseMode);
 			
-			int xWidth = getCoordBaseMode().getAxis().equals(Direction.Axis.X) ? 10 : 8;
-			int zWidth = getCoordBaseMode().getAxis().equals(Direction.Axis.Z) ? 10 : 8;
+			int xWidth = getOrientation().getAxis().equals(Direction.Axis.X) ? 10 : 8;
+			int zWidth = getOrientation().getAxis().equals(Direction.Axis.Z) ? 10 : 8;
 			
 			int x = pos.getX() - (xWidth/2 - 1);
 			int z = pos.getZ() - (zWidth/2 - 1);
@@ -1020,10 +1028,10 @@ public class ImpDungeonPieces
 			
 			chestPos = ctxt.rand.nextBoolean();
 			
-			int xOffset = coordBaseMode.getXOffset();
-			int zOffset = coordBaseMode.getZOffset();
+			int xOffset = coordBaseMode.getStepX();
+			int zOffset = coordBaseMode.getStepZ();
 			
-			corridors[0] = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.add(xOffset*10, 0, zOffset*10), coordBaseMode, index + 1);
+			corridors[0] = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.offset(xOffset*10, 0, zOffset*10), coordBaseMode, index + 1);
 		}
 		
 		public OgreCorridor(TemplateManager templates, CompoundNBT nbt)
@@ -1034,9 +1042,9 @@ public class ImpDungeonPieces
 		}
 		
 		@Override
-		protected void readAdditional(CompoundNBT tagCompound)
+		protected void addAdditionalSaveData(CompoundNBT tagCompound)
 		{
-			super.readAdditional(tagCompound);
+			super.addAdditionalSaveData(tagCompound);
 			tagCompound.putBoolean("ch", chestPos);
 			tagCompound.putBoolean("spwn", ogreSpawned);
 		}
@@ -1044,7 +1052,7 @@ public class ImpDungeonPieces
 		@Override
 		protected boolean connectFrom(Direction facing)
 		{
-			if(getCoordBaseMode().equals(facing.getOpposite()))
+			if(getOrientation().equals(facing.getOpposite()))
 			{
 				corridors[0] = false;
 				return true;
@@ -1054,8 +1062,9 @@ public class ImpDungeonPieces
 		
 		
 		@Override
-		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
+		public boolean postProcess(ISeedReader worldIn, StructureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
+		{
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
 			
 			BlockState wallBlock = blocks.getBlockState("structure_primary");
 			BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");
@@ -1063,59 +1072,59 @@ public class ImpDungeonPieces
 			BlockState floorDecor = blocks.getBlockState("structure_secondary_decorative");
 			BlockState light = blocks.getBlockState("light_block");
 			
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 0, 0, 4, 0, 9, floorBlock, floorBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 2, 2, 0, 7, floorDecor, floorDecor, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 0, 2, 5, 0, 7, floorDecor, floorDecor, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 2, 1, 0, 7, light, light, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 0, 2, 6, 0, 7, light, light, false);
-			fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 2, 6, 5, 7);
-			fillWithAir(worldIn, structureBoundingBoxIn, 2, 6, 3, 5, 6, 6);
-			fillWithAir(worldIn, structureBoundingBoxIn, 3, 1, 0, 4, 3, 2);
-			fillWithAir(worldIn, structureBoundingBoxIn, 3, 1, 7, 4, 3, 9);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 1, 2, 3, 1, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 0, 2, 3, 0, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 0, 1, 6, 3, 1, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 0, 0, 5, 3, 0, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 1, 0, 5, 8, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 7, 0, 1, 7, 5, 8, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 8, 2, 3, 8, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 9, 2, 3, 9, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 0, 8, 6, 3, 8, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 0, 9, 5, 3, 9, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 4, 1, 6, 6, 1, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 4, 0, 5, 4, 0, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 4, 8, 6, 6, 8, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 4, 9, 5, 4, 9, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 6, 2, 6, 6, 2, wallDecor, wallDecor, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 6, 3, 1, 6, 6, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 6, 7, 6, 6, 7, wallDecor, wallDecor, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 6, 3, 6, 6, 6, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 7, 3, 5, 7, 6, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 3, 0, 0, 4, 0, 9, floorBlock, floorBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 2, 0, 2, 2, 0, 7, floorDecor, floorDecor, false);
+			generateBox(worldIn, structureBoundingBoxIn, 5, 0, 2, 5, 0, 7, floorDecor, floorDecor, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 0, 2, 1, 0, 7, light, light, false);
+			generateBox(worldIn, structureBoundingBoxIn, 6, 0, 2, 6, 0, 7, light, light, false);
+			generateAirBox(worldIn, structureBoundingBoxIn, 1, 1, 2, 6, 5, 7);
+			generateAirBox(worldIn, structureBoundingBoxIn, 2, 6, 3, 5, 6, 6);
+			generateAirBox(worldIn, structureBoundingBoxIn, 3, 1, 0, 4, 3, 2);
+			generateAirBox(worldIn, structureBoundingBoxIn, 3, 1, 7, 4, 3, 9);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 0, 1, 2, 3, 1, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 2, 0, 0, 2, 3, 0, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 5, 0, 1, 6, 3, 1, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 5, 0, 0, 5, 3, 0, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 0, 0, 1, 0, 5, 8, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 7, 0, 1, 7, 5, 8, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 0, 8, 2, 3, 8, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 2, 0, 9, 2, 3, 9, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 5, 0, 8, 6, 3, 8, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 5, 0, 9, 5, 3, 9, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 4, 1, 6, 6, 1, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 2, 4, 0, 5, 4, 0, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 4, 8, 6, 6, 8, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 2, 4, 9, 5, 4, 9, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 6, 2, 6, 6, 2, wallDecor, wallDecor, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 6, 3, 1, 6, 6, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 6, 7, 6, 6, 7, wallDecor, wallDecor, false);
+			generateBox(worldIn, structureBoundingBoxIn, 6, 6, 3, 6, 6, 6, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 2, 7, 3, 5, 7, 6, wallBlock, wallBlock, false);
 			
 			
 			int x = chestPos ? 1 : 6;
-			Direction chestDirection = chestPos ? getCoordBaseMode().rotateYCCW() : getCoordBaseMode().rotateY();
-			BlockPos chestPos = getActualPos(x, 1, 4);
-			StructureBlockUtil.placeChest(chestPos, worldIn, structureBoundingBoxIn, chestDirection, this.chestPos ? ChestType.LEFT : ChestType.RIGHT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
-			chestPos = getActualPos(x, 1, 5);
-			StructureBlockUtil.placeChest(chestPos, worldIn, structureBoundingBoxIn, chestDirection, this.chestPos ? ChestType.RIGHT : ChestType.LEFT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
-			if(!ogreSpawned && structureBoundingBoxIn.isVecInside(getActualPos(3, 1, 4)))
-				spawnOgre(3, 1, 4, worldIn, randomIn);
+			Direction chestDirection = chestPos ? getOrientation().getCounterClockWise() : getOrientation().getClockWise();
+			BlockPos chestPos = new BlockPos(this.getWorldX(x, 4), this.getWorldY(1), this.getWorldZ(x, 4));
+			StructureBlockUtil.placeLootChest(chestPos, worldIn, structureBoundingBoxIn, chestDirection, this.chestPos ? ChestType.LEFT : ChestType.RIGHT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
+			chestPos = new BlockPos(this.getWorldX(x, 5), this.getWorldY(1), this.getWorldZ(x, 5));
+			StructureBlockUtil.placeLootChest(chestPos, worldIn, structureBoundingBoxIn, chestDirection, this.chestPos ? ChestType.RIGHT : ChestType.LEFT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
+			if(!ogreSpawned && structureBoundingBoxIn.isInside(new BlockPos(getWorldX(3, 4), getWorldY(1), getWorldZ(3, 4))))
+			spawnOgre(3, 1, 4, worldIn, randomIn);
 			
 			if(corridors[0])
-				fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 0, 9, 4, 3, 9, wallBlock, wallBlock, false);
+				generateBox(worldIn, structureBoundingBoxIn, 3, 0, 9, 4, 3, 9, wallBlock, wallBlock, false);
 			
 			return true;
 		}
 		
-		private void spawnOgre(int xPos, int yPos, int zPos, IWorld worldIn, Random rand)
+		private void spawnOgre(int xPos, int yPos, int zPos, ISeedReader worldIn, Random rand)
 		{
-			BlockPos pos = getActualPos(xPos, yPos, zPos);
-			OgreEntity ogre = MSEntityTypes.OGRE.create(worldIn.getWorld());
-			ogre.setLocationAndAngles(pos.getX(), pos.getY(), pos.getZ(), rand.nextFloat()*360F, 0);
-			ogre.onInitialSpawn(worldIn, null, SpawnReason.STRUCTURE, null, null);
-			ogre.setHomePosAndDistance(pos, 2);
-			worldIn.addEntity(ogre);
+			BlockPos pos = new BlockPos(getWorldX(xPos, zPos), getWorldY(yPos), getWorldZ(xPos, zPos));
+			OgreEntity ogre = MSEntityTypes.OGRE.create(worldIn.getLevel());
+			ogre.moveTo(pos.getX(), pos.getY(), pos.getZ(), rand.nextFloat()*360F, 0);
+			ogre.finalizeSpawn(worldIn, null, SpawnReason.STRUCTURE, null, null);
+			ogre.restrictTo(pos, 2);
+			worldIn.addFreshEntity(ogre);
 		}
 	}
 	
@@ -1128,11 +1137,11 @@ public class ImpDungeonPieces
 			super(MSStructurePieces.IMP_LARGE_SPAWNER_CORRIDOR, 0, 2);
 			boolean mirror = ctxt.rand.nextBoolean();
 			if(mirror)
-				setCoordBaseMode(coordBaseMode.getOpposite());
-			else setCoordBaseMode(coordBaseMode);
+				setOrientation(coordBaseMode.getOpposite());
+			else setOrientation(coordBaseMode);
 			
-			int xWidth = getCoordBaseMode().getAxis().equals(Direction.Axis.X) ? 10 : 10;
-			int zWidth = getCoordBaseMode().getAxis().equals(Direction.Axis.Z) ? 10 : 10;
+			int xWidth = getOrientation().getAxis().equals(Direction.Axis.X) ? 10 : 10;
+			int zWidth = getOrientation().getAxis().equals(Direction.Axis.Z) ? 10 : 10;
 			
 			int x = pos.getX() - (xWidth/2 - 1);
 			int z = pos.getZ() - (zWidth/2 - 1);
@@ -1152,9 +1161,9 @@ public class ImpDungeonPieces
 			}
 			chestPos = ctxt.rand.nextBoolean();
 			
-			int xOffset = coordBaseMode.getXOffset();
-			int zOffset = coordBaseMode.getZOffset();
-			corridors[mirror ? 0 : 1] = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.add(xOffset*10, 0, zOffset*10), coordBaseMode, index + 1);
+			int xOffset = coordBaseMode.getStepX();
+			int zOffset = coordBaseMode.getStepZ();
+			corridors[mirror ? 0 : 1] = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.offset(xOffset*10, 0, zOffset*10), coordBaseMode, index + 1);
 			
 		}
 		
@@ -1167,9 +1176,9 @@ public class ImpDungeonPieces
 		}
 		
 		@Override
-		protected void readAdditional(CompoundNBT tagCompound)
+		protected void addAdditionalSaveData(CompoundNBT tagCompound)
 		{
-			super.readAdditional(tagCompound);
+			super.addAdditionalSaveData(tagCompound);
 			tagCompound.putBoolean("sp1", spawner1);
 			tagCompound.putBoolean("sp2", spawner2);
 			tagCompound.putBoolean("ch", chestPos);
@@ -1178,9 +1187,9 @@ public class ImpDungeonPieces
 		@Override
 		protected boolean connectFrom(Direction facing)
 		{
-			if(getCoordBaseMode().getAxis().equals(facing.getAxis()))
+			if(getOrientation().getAxis().equals(facing.getAxis()))
 			{
-				corridors[getCoordBaseMode().equals(facing)?1:0] = false;
+				corridors[getOrientation().equals(facing)?1:0] = false;
 				return true;
 			}
 			return false;
@@ -1188,53 +1197,54 @@ public class ImpDungeonPieces
 		
 		
 		@Override
-		public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn) {
-			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
+		public boolean postProcess(ISeedReader worldIn, StructureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
+		{
+			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
 			
 			BlockState wallBlock = blocks.getBlockState("structure_primary");
 			BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");
 			BlockState floorBlock = blocks.getBlockState("structure_secondary");
 			
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 0, 0, 5, 0, 9, floorBlock, floorBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 2, 3, 0, 7, floorBlock, floorBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 0, 2, 8, 0, 7, floorBlock, floorBlock, false);
-			fillWithAir(worldIn, structureBoundingBoxIn, 4, 1, 0, 5, 3, 9);
-			fillWithAir(worldIn, structureBoundingBoxIn, 0, 1, 2, 3, 3, 7);
-			fillWithAir(worldIn, structureBoundingBoxIn, 6, 1, 2, 9, 3, 7);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 0, 0, 3, 4, 1, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 1, 2, 4, 1, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 7, 2, 4, 7, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 0, 0, 6, 4, 1, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 7, 0, 1, 8, 4, 1, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 7, 0, 7, 8, 4, 7, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 1, 0, 4, 8, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 9, 0, 1, 9, 4, 8, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 0, 7, 3, 4, 9, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 0, 7, 6, 4, 9, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 4, 0, 5, 4, 9, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 4, 2, 3, 4, 7, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 4, 2, 8, 4, 7, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 4, 0, 0, 5, 0, 9, floorBlock, floorBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 0, 2, 3, 0, 7, floorBlock, floorBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 6, 0, 2, 8, 0, 7, floorBlock, floorBlock, false);
+			generateAirBox(worldIn, structureBoundingBoxIn, 4, 1, 0, 5, 3, 9);
+			generateAirBox(worldIn, structureBoundingBoxIn, 0, 1, 2, 3, 3, 7);
+			generateAirBox(worldIn, structureBoundingBoxIn, 6, 1, 2, 9, 3, 7);
+			generateBox(worldIn, structureBoundingBoxIn, 3, 0, 0, 3, 4, 1, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 0, 1, 2, 4, 1, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 0, 7, 2, 4, 7, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 6, 0, 0, 6, 4, 1, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 7, 0, 1, 8, 4, 1, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 7, 0, 7, 8, 4, 7, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 0, 0, 1, 0, 4, 8, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 9, 0, 1, 9, 4, 8, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 3, 0, 7, 3, 4, 9, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 6, 0, 7, 6, 4, 9, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 4, 4, 0, 5, 4, 9, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 1, 4, 2, 3, 4, 7, wallBlock, wallBlock, false);
+			generateBox(worldIn, structureBoundingBoxIn, 6, 4, 2, 8, 4, 7, wallBlock, wallBlock, false);
 			
 			if(spawner1)
 			{
-				BlockPos spawnerPos = getActualPos(1, 1, 3);
-				spawner1 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MSEntityTypes.IMP);
+				BlockPos spawnerPos = new BlockPos(this.getWorldX(1, 3), this.getWorldY(1), this.getWorldZ(1, 3));
+				spawner1 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
 			}
 			if(spawner2)
 			{
-				BlockPos spawnerPos = getActualPos(8, 1, 5);
-				spawner2 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MSEntityTypes.IMP);
+				BlockPos spawnerPos = new BlockPos(this.getWorldX(8, 5), this.getWorldY(1), this.getWorldZ(8, 5));
+				spawner2 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
 			}
 			
-			BlockPos chestPos = getActualPos(4, 1, 4);
-			StructureBlockUtil.placeChest(chestPos, worldIn, structureBoundingBoxIn, getCoordBaseMode().getOpposite(), ChestType.LEFT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
-			chestPos = getActualPos(5, 1, 4);
-			StructureBlockUtil.placeChest(chestPos, worldIn, structureBoundingBoxIn, getCoordBaseMode().getOpposite(), ChestType.RIGHT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
+			BlockPos chestPos = new BlockPos(this.getWorldX(4, 4), this.getWorldY(1), this.getWorldZ(4, 4));
+			StructureBlockUtil.placeLootChest(chestPos, worldIn, structureBoundingBoxIn, getOrientation().getOpposite(), ChestType.LEFT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
+			chestPos = new BlockPos(this.getWorldX(5, 4), this.getWorldY(1), this.getWorldZ(5, 4));
+			StructureBlockUtil.placeLootChest(chestPos, worldIn, structureBoundingBoxIn, getOrientation().getOpposite(), ChestType.RIGHT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
 			
 			if(corridors[0])
-				fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 0, 0, 5, 3, 0, wallBlock, wallBlock, false);
+				generateBox(worldIn, structureBoundingBoxIn, 4, 0, 0, 5, 3, 0, wallBlock, wallBlock, false);
 			if(corridors[1])
-				fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 0, 9, 5, 3, 9, wallBlock, wallBlock, false);
+				generateBox(worldIn, structureBoundingBoxIn, 4, 0, 9, 5, 3, 9, wallBlock, wallBlock, false);
 			
 			return true;
 		}	

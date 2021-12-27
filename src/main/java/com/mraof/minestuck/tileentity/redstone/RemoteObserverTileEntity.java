@@ -4,16 +4,19 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.redstone.RemoteObserverBlock;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class RemoteObserverTileEntity extends TileEntity implements ITickableTileEntity
 {
@@ -21,14 +24,18 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 	@Nonnull
 	private ActiveType activeType;
 	
+	private EntityType<?> currentEntityType;
+	
 	public enum ActiveType
 	{
 		IS_CROUCHING,
-		IS_PLAYER_PRESENT,
+		CURRENT_ENTITY_PRESENT,
 		IS_ENTITY_PRESENT,
 		IS_UNDERLING_PRESENT,
 		IS_ENTITY_BURNING,
-		IS_ENTITY_INVISIBLE;
+		IS_ENTITY_INVISIBLE,
+		IS_ELYTRA_FLYING,
+		IS_ENTITY_IN_WATER;
 		
 		public static ActiveType fromInt(int ordinal) //converts int back into enum
 		{
@@ -55,10 +62,10 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 	@Override
 	public void tick()
 	{
-		if(this.getWorld() == null || !this.getWorld().isAreaLoaded(pos, 1))
+		if(level == null || !level.isAreaLoaded(getBlockPos(), 1))
 			return; // Forge: prevent loading unloaded chunks
 		
-		if(tickCycle >= MinestuckConfig.SERVER.wirelessBlocksTickRate.get())
+		if(tickCycle >= MinestuckConfig.SERVER.wirelessBlocksTickRate.get() * 1.667) //with the config value of 6 ticks, 6 * 1.667 ~= 10 ticks or 0.5 sec
 		{
 			checkRelaventType();
 			tickCycle = 0;
@@ -68,49 +75,71 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 	
 	public void checkRelaventType()
 	{
-		world.setBlockState(pos, getBlockState().with(RemoteObserverBlock.POWERED, false));
+		boolean shouldBePowered = false;
 		
-		AxisAlignedBB axisalignedbb = getRenderBoundingBox().grow(15D, 15D, 15D);
-		List<LivingEntity> livingEntityList = world.getEntitiesWithinAABB(LivingEntity.class, axisalignedbb);
+		AxisAlignedBB axisalignedbb = getRenderBoundingBox().inflate(15D, 15D, 15D);
+		List<LivingEntity> livingEntityList = level.getLoadedEntitiesOfClass(LivingEntity.class, axisalignedbb);
 		if(!livingEntityList.isEmpty())
 		{
-			if(activeType == RemoteObserverTileEntity.ActiveType.IS_ENTITY_PRESENT)
-				world.setBlockState(pos, getBlockState().with(RemoteObserverBlock.POWERED, true));
+			if(activeType == ActiveType.IS_ENTITY_PRESENT)
+				shouldBePowered = true;
 			else
 			{
 				for(LivingEntity livingEntity : livingEntityList)
 				{
-					if(activeType == RemoteObserverTileEntity.ActiveType.IS_PLAYER_PRESENT && livingEntity instanceof PlayerEntity)
-						world.setBlockState(pos, getBlockState().with(RemoteObserverBlock.POWERED, true));
-					else if(activeType == RemoteObserverTileEntity.ActiveType.IS_UNDERLING_PRESENT && livingEntity instanceof UnderlingEntity)
-						world.setBlockState(pos, getBlockState().with(RemoteObserverBlock.POWERED, true));
-					else if(activeType == RemoteObserverTileEntity.ActiveType.IS_CROUCHING && livingEntity.isCrouching())
-						world.setBlockState(pos, getBlockState().with(RemoteObserverBlock.POWERED, true));
-					else if(activeType == RemoteObserverTileEntity.ActiveType.IS_ENTITY_BURNING && livingEntity.isBurning())
-						world.setBlockState(pos, getBlockState().with(RemoteObserverBlock.POWERED, true));
-					else if(activeType == RemoteObserverTileEntity.ActiveType.IS_ENTITY_INVISIBLE && livingEntity.isInvisible())
-						world.setBlockState(pos, getBlockState().with(RemoteObserverBlock.POWERED, true));
+					if(activeType == ActiveType.CURRENT_ENTITY_PRESENT && livingEntity.getType() == getCurrentEntityType())
+						shouldBePowered = true;
+					else if(activeType == ActiveType.IS_UNDERLING_PRESENT && livingEntity instanceof UnderlingEntity)
+						shouldBePowered = true;
+					else if(activeType == ActiveType.IS_CROUCHING && livingEntity.isCrouching())
+						shouldBePowered = true;
+					else if(activeType == ActiveType.IS_ENTITY_BURNING && livingEntity.isOnFire())
+						shouldBePowered = true;
+					else if(activeType == ActiveType.IS_ENTITY_INVISIBLE && livingEntity.isInvisible())
+						shouldBePowered = true;
+					else if(activeType == ActiveType.IS_ELYTRA_FLYING && livingEntity.isFallFlying())
+						shouldBePowered = true;
+					else if(activeType == ActiveType.IS_ENTITY_IN_WATER && livingEntity.isInWater())
+						shouldBePowered = true;
 				}
 			}
 		}
+		
+		level.setBlock(getBlockPos(), getBlockState().setValue(RemoteObserverBlock.POWERED, shouldBePowered), Constants.BlockFlags.NOTIFY_NEIGHBORS);
+	}
+	
+	public EntityType<?> getCurrentEntityType()
+	{
+		if(currentEntityType != null)
+			return currentEntityType;
+		else
+			return EntityType.PLAYER;
+	}
+	
+	public void setCurrentEntityType(EntityType<?> currentEntityType)
+	{
+		this.currentEntityType = currentEntityType;
 	}
 	
 	@Override
-	public void read(CompoundNBT compound)
+	public void load(BlockState state, CompoundNBT compound)
 	{
-		super.read(compound);
+		super.load(state, compound);
 		
 		this.tickCycle = compound.getInt("tickCycle");
 		this.activeType = ActiveType.fromInt(compound.getInt("activeTypeOrdinal"));
+		Optional<EntityType<?>> attemptedEntityType = EntityType.byString(compound.getString("currentEntityType"));
+		attemptedEntityType.ifPresent(entityType -> this.currentEntityType = entityType);
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound)
+	public CompoundNBT save(CompoundNBT compound)
 	{
-		super.write(compound);
+		super.save(compound);
 		
 		compound.putInt("tickCycle", tickCycle);
 		compound.putInt("activeTypeOrdinal", getActiveType().ordinal());
+		compound.putString("currentEntityType", EntityType.getKey(getCurrentEntityType()).toString());
 		
 		return compound;
 	}

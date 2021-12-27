@@ -1,0 +1,20 @@
+{
+    "variants": {
+        "power=15": { "model": "minestuck:block/variable_solid_switch_powered" },
+        "power=14": { "model": "minestuck:block/variable_solid_switch_powered" },
+        "power=13": { "model": "minestuck:block/variable_solid_switch_powered" },
+        "power=12": { "model": "minestuck:block/variable_solid_switch_powered" },
+        "power=11": { "model": "minestuck:block/variable_solid_switch_powered" },
+        "power=10": { "model": "minestuck:block/variable_solid_switch_powered" },
+        "power=9": { "model": "minestuck:block/variable_solid_switch_powered" },
+        "power=8": { "model": "minestuck:block/variable_solid_switch_slightly_powered" },
+        "power=7": { "model": "minestuck:block/variable_solid_switch_slightly_powered" },
+        "power=6": { "model": "minestuck:block/variable_solid_switch_slightly_powered" },
+        "power=5": { "model": "minestuck:block/variable_solid_switch_slightly_powered" },
+        "power=4": { "model": "minestuck:block/variable_solid_switch_slightly_powered" },
+        "power=3": { "model": "minestuck:block/variable_solid_switch_slightly_powered" },
+        "power=2": { "model": "minestuck:block/variable_solid_switch_slightly_powered" },
+        "power=1": { "model": "minestuck:block/variable_solid_switch_slightly_powered" },
+        "power=0": { "model": "minestuck:block/variable_solid_switch_unpowered" }
+    }
+}

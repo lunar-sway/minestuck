@@ -4,10 +4,12 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.feature.structure.StructureManager;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 
@@ -33,19 +35,19 @@ public class CastleStaircasePiece extends CastleRoomPiece
 	}
 	
 	@Override
-	public void buildComponent(StructurePiece componentIn, List<StructurePiece> pieces, Random rand)
+	public void addChildren(StructurePiece componentIn, List<StructurePiece> pieces, Random rand)
 	{
 		this.direction = rand.nextInt(4);
 	}
 	
 	@Override
-	public boolean create(IWorld world, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBox, ChunkPos chunkPosIn)
+	public boolean postProcess(ISeedReader world, StructureManager manager, ChunkGenerator generator, Random random, MutableBoundingBox structureBoundingBox, ChunkPos chunkPosIn, BlockPos pos)
 	{
 //		super.create(world, chunkGeneratorIn, randomIn, structureBoundingBox, chunkPosIn);
 //		do what that would have done but set the offset correctly
-		BlockState chessTile = (isBlack ? MSBlocks.BLACK_CHESS_DIRT : MSBlocks.WHITE_CHESS_DIRT).getDefaultState();
-		BlockState chessTile1 = (isBlack ? MSBlocks.DARK_GRAY_CHESS_DIRT : MSBlocks.LIGHT_GRAY_CHESS_DIRT).getDefaultState();
-		this.fillWithAir(world, structureBoundingBox, 0, 1, 0, 7, 14, 7);
+		BlockState chessTile = (isBlack ? MSBlocks.BLACK_CHESS_DIRT : MSBlocks.WHITE_CHESS_DIRT).defaultBlockState();
+		BlockState chessTile1 = (isBlack ? MSBlocks.DARK_GRAY_CHESS_DIRT : MSBlocks.LIGHT_GRAY_CHESS_DIRT).defaultBlockState();
+		this.generateAirBox(world, structureBoundingBox, 0, 1, 0, 7, 14, 7);
 		this.fillWithAlternatingBlocks(world, structureBoundingBox, 0, 15, 0, 7, 15, 7, chessTile, chessTile1, false);
 		for(int step = 0; step < 8; step++) //Come on, step it up!
 			switch(this.direction)

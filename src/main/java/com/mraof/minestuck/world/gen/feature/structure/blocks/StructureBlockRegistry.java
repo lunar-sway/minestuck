@@ -1,15 +1,16 @@
 package com.mraof.minestuck.world.gen.feature.structure.blocks;
 
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.world.biome.BiomeType;
-import com.mraof.minestuck.world.gen.LandGenSettings;
+import com.mraof.minestuck.world.biome.LandBiomeType;
+import com.mraof.minestuck.world.gen.LandChunkGenerator;
 import net.minecraft.block.*;
-import net.minecraft.state.IProperty;
+import net.minecraft.state.Property;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.state.properties.Half;
 import net.minecraft.util.Direction;
-import net.minecraft.world.gen.GenerationSettings;
+import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.OreFeatureConfig;
+import net.minecraft.world.gen.feature.template.RuleTest;
 import net.minecraft.world.gen.surfacebuilders.SurfaceBuilderConfig;
 
 import java.util.HashMap;
@@ -70,18 +71,18 @@ public final class StructureBlockRegistry
 	
 	static	//TODO Use public static final Strings as a standard for names to reduce risk of typos
 	{
-		registerBlock("cruxite_ore", MSBlocks.STONE_CRUXITE_ORE.getDefaultState());
-		registerBlock("uranium_ore", MSBlocks.STONE_URANIUM_ORE.getDefaultState());
-		registerBlock("ground", Blocks.STONE.getDefaultState());
+		registerBlock("cruxite_ore", MSBlocks.STONE_CRUXITE_ORE.defaultBlockState());
+		registerBlock("uranium_ore", MSBlocks.STONE_URANIUM_ORE.defaultBlockState());
+		registerBlock("ground", Blocks.STONE.defaultBlockState());
 		registerBlock("upper", "ground", Blocks.DIRT);
 		registerBlock("surface", "upper", Blocks.GRASS_BLOCK);
 		registerBlock("surface_rough", "surface", Blocks.PODZOL);
-		registerBlock("ocean", Blocks.WATER.getDefaultState());
+		registerBlock("ocean", Blocks.WATER.defaultBlockState());
 		registerBlock("ocean_surface", "upper", Blocks.GRAVEL);
 		registerBlock("river", "ocean", Blocks.BLUE_WOOL);
-		registerBlock("sand", Blocks.SAND.getDefaultState());
-		registerBlock("structure_primary", Blocks.STONE_BRICKS.getDefaultState());
-		registerBlock("structure_primary_cracked", Blocks.CRACKED_STONE_BRICKS.getDefaultState());
+		registerBlock("sand", Blocks.SAND.defaultBlockState());
+		registerBlock("structure_primary", Blocks.STONE_BRICKS.defaultBlockState());
+		registerBlock("structure_primary_cracked", Blocks.CRACKED_STONE_BRICKS.defaultBlockState());
 		registerBlock("structure_primary_decorative", "structure_primary", Blocks.CHISELED_STONE_BRICKS);
 		registerBlock("structure_primary_pillar", Blocks.QUARTZ_PILLAR.getDefaultState());
 		registerBlock("structure_primary_stairs", "structure_primary", Blocks.STONE_BRICK_STAIRS);
@@ -89,40 +90,40 @@ public final class StructureBlockRegistry
 		registerBlock("structure_secondary", "structure_primary", Blocks.NETHER_BRICKS);
 		registerBlock("structure_secondary_decorative", "structure_secondary", Blocks.RED_NETHER_BRICKS);
 		registerBlock("structure_secondary_stairs", "structure_secondary", Blocks.NETHER_BRICK_STAIRS);
-		registerBlock("structure_planks", Blocks.OAK_PLANKS.getDefaultState());
-		registerBlock("structure_planks_slab", Blocks.OAK_SLAB.getDefaultState(), SlabBlock.class);
-		registerBlock("structure_wool_1", Blocks.WHITE_WOOL.getDefaultState());
-		registerBlock("structure_wool_2", Blocks.LIGHT_GRAY_WOOL.getDefaultState());
-		registerBlock("structure_wool_3", Blocks.GRAY_WOOL.getDefaultState());
-		registerBlock("carpet", Blocks.WHITE_CARPET.getDefaultState());
-		registerBlock("village_door", Blocks.OAK_DOOR.getDefaultState(), DoorBlock.class);
+		registerBlock("structure_planks", Blocks.OAK_PLANKS.defaultBlockState());
+		registerBlock("structure_planks_slab", Blocks.OAK_SLAB.defaultBlockState(), SlabBlock.class);
+		registerBlock("structure_wool_1", Blocks.WHITE_WOOL.defaultBlockState());
+		registerBlock("structure_wool_2", Blocks.LIGHT_GRAY_WOOL.defaultBlockState());
+		registerBlock("structure_wool_3", Blocks.GRAY_WOOL.defaultBlockState());
+		registerBlock("carpet", Blocks.WHITE_CARPET.defaultBlockState());
+		registerBlock("village_door", Blocks.OAK_DOOR.defaultBlockState(), DoorBlock.class);
 		registerBlock("salamander_floor", "upper", Blocks.COARSE_DIRT);
 		registerBlock("village_path", "structure_secondary", Blocks.COBBLESTONE);
-		registerBlock("village_fence", Blocks.OAK_FENCE.getDefaultState());
+		registerBlock("village_fence", Blocks.OAK_FENCE.defaultBlockState());
 		registerBlock("fall_fluid", "ocean", Blocks.LIGHT_BLUE_WOOL);
-		registerBlock("light_block", Blocks.GLOWSTONE.getDefaultState());
-		registerBlock("mushroom_1", Blocks.RED_MUSHROOM.getDefaultState());
-		registerBlock("mushroom_2", Blocks.BROWN_MUSHROOM.getDefaultState());
-		registerBlock("bush", Blocks.DEAD_BUSH.getDefaultState());
-		registerBlock("torch", Blocks.TORCH.getDefaultState());
-		registerBlock("wall_torch", Blocks.WALL_TORCH.getDefaultState());
-		registerBlock("bucket_1", Blocks.QUARTZ_BLOCK.getDefaultState());
-		registerBlock("bucket_2", Blocks.IRON_BLOCK.getDefaultState());
-		registerBlock("glass", Blocks.GLASS.getDefaultState());
-		registerBlock("stained_glass_1", Blocks.GRAY_STAINED_GLASS.getDefaultState());
-		registerBlock("stained_glass_2", Blocks.LIGHT_GRAY_STAINED_GLASS.getDefaultState());
-		registerBlock("slime", Blocks.SLIME_BLOCK.getDefaultState());
-		registerBlock("aspect_sapling", MSBlocks.BREATH_ASPECT_SAPLING.getDefaultState());
+		registerBlock("light_block", Blocks.GLOWSTONE.defaultBlockState());
+		registerBlock("mushroom_1", Blocks.RED_MUSHROOM.defaultBlockState());
+		registerBlock("mushroom_2", Blocks.BROWN_MUSHROOM.defaultBlockState());
+		registerBlock("bush", Blocks.DEAD_BUSH.defaultBlockState());
+		registerBlock("torch", Blocks.TORCH.defaultBlockState());
+		registerBlock("wall_torch", Blocks.WALL_TORCH.defaultBlockState());
+		registerBlock("bucket_1", Blocks.QUARTZ_BLOCK.defaultBlockState());
+		registerBlock("bucket_2", Blocks.IRON_BLOCK.defaultBlockState());
+		registerBlock("glass", Blocks.GLASS.defaultBlockState());
+		registerBlock("stained_glass_1", Blocks.GRAY_STAINED_GLASS.defaultBlockState());
+		registerBlock("stained_glass_2", Blocks.LIGHT_GRAY_STAINED_GLASS.defaultBlockState());
+		registerBlock("slime", Blocks.SLIME_BLOCK.defaultBlockState());
+		registerBlock("aspect_sapling", MSBlocks.BREATH_ASPECT_SAPLING.defaultBlockState());
 		
-		defaultRegistry.setBlockState("surface", Blocks.GRASS_BLOCK.getDefaultState());
-		defaultRegistry.setBlockState("upper", Blocks.DIRT.getDefaultState());
-		defaultRegistry.setBlockState("ocean_surface", Blocks.GRAVEL.getDefaultState());
+		defaultRegistry.setBlockState("surface", Blocks.GRASS_BLOCK.defaultBlockState());
+		defaultRegistry.setBlockState("upper", Blocks.DIRT.defaultBlockState());
+		defaultRegistry.setBlockState("ocean_surface", Blocks.GRAVEL.defaultBlockState());
 	}
 	
-	public static StructureBlockRegistry getOrDefault(GenerationSettings settings)
+	public static StructureBlockRegistry getOrDefault(ChunkGenerator generator)
 	{
-		if(settings instanceof LandGenSettings)
-			return ((LandGenSettings) settings).getBlockRegistry();
+		if(generator instanceof LandChunkGenerator)
+			return ((LandChunkGenerator) generator).blockRegistry;
 		else return defaultRegistry;
 	}
 	
@@ -151,8 +152,8 @@ public final class StructureBlockRegistry
 	}
 	
 	//Nonstatic stuff
-	private Map<String, BlockState> blockRegistry = new HashMap<>();
-	private OreFeatureConfig.FillerBlockType groundType = OreFeatureConfig.FillerBlockType.NATURAL_STONE;
+	private final Map<String, BlockState> blockRegistry = new HashMap<>();
+	private RuleTest groundType = OreFeatureConfig.FillerBlockType.NATURAL_STONE;
 	
 	public void setBlockState(String name, BlockState state)
 	{
@@ -168,7 +169,7 @@ public final class StructureBlockRegistry
 		blockRegistry.put(name, state);
 	}
 	
-	public void setGroundState(BlockState state, OreFeatureConfig.FillerBlockType groundType)
+	public void setGroundState(BlockState state, RuleTest groundType)
 	{
 		Objects.requireNonNull(state,  "Null parameters not allowed.");
 		Objects.requireNonNull(groundType,  "Null parameters not allowed.");
@@ -206,7 +207,7 @@ public final class StructureBlockRegistry
 		return state;
 	}
 	
-	public OreFeatureConfig.FillerBlockType getGroundType()
+	public RuleTest getGroundType()
 	{
 		return groundType;
 	}
@@ -216,29 +217,29 @@ public final class StructureBlockRegistry
 		if(templateBlockMap.containsKey(state.getBlock()))
 		{
 			BlockState newState = getBlockState(templateBlockMap.get(state.getBlock()));
-			for(IProperty<?> property : state.getProperties())
+			for(Property<?> property : state.getProperties())
 				newState = with(state, newState, property);
 			return newState;
 		} else return state;
 	}
 	
-	public SurfaceBuilderConfig getSurfaceBuilderConfig(BiomeType biomeType)
+	public SurfaceBuilderConfig getSurfaceBuilderConfig(LandBiomeType biomeType)
 	{
-		return new SurfaceBuilderConfig(getBlockState(biomeType == BiomeType.ROUGH ? "surface_rough" : "surface"), getBlockState("upper"), getBlockState("ocean_surface"));
+		return new SurfaceBuilderConfig(getBlockState(biomeType == LandBiomeType.ROUGH ? "surface_rough" : "surface"), getBlockState("upper"), getBlockState("ocean_surface"));
 	}
 	
-	private static <T extends Comparable<T>> BlockState with(BlockState fromState, BlockState toState, IProperty<T> property)
+	private static <T extends Comparable<T>> BlockState with(BlockState fromState, BlockState toState, Property<T> property)
 	{
-		if(toState.has(property))
-			return toState.with(property, fromState.get(property));
+		if(toState.hasProperty(property))
+			return toState.setValue(property, fromState.getValue(property));
 		else return toState;
 	}
 	
-	public static <T extends Comparable<T>> BlockState withOptionally(BlockState state, IProperty<T> property, T value)
+	public static <T extends Comparable<T>> BlockState withOptionally(BlockState state, Property<T> property, T value)
 	{
-		if(state.has(property))
+		if(state.hasProperty(property))
 		{
-			state = state.with(property, value);
+			state = state.setValue(property, value);
 		}
 		return state;
 	}

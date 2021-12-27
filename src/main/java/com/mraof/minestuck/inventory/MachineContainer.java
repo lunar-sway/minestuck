@@ -24,18 +24,18 @@ public abstract class MachineContainer extends Container
 		this.machinePos = Objects.requireNonNull(machinePos);
 		this.position = Objects.requireNonNull(position);
 		
-		assertIntArraySize(parameters, 3);
+		checkContainerDataCount(parameters, 3);
 		this.parameters = parameters;
 		
-		trackIntArray(parameters);
+		addDataSlots(parameters);
 	}
 	
 	protected abstract Block getValidBlock();
 	
 	@Override
-	public boolean canInteractWith(PlayerEntity playerIn)
+	public boolean stillValid(PlayerEntity playerIn)
 	{
-		return isWithinUsableDistance(position, playerIn, getValidBlock());
+		return stillValid(position, playerIn, getValidBlock());
 	}
 	
 	public void setOverrideStop(boolean value)

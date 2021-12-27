@@ -17,7 +17,7 @@ public class InputSlot extends SlotItemHandler
 	}
 	
 	@Override
-	public boolean isItemValid(ItemStack itemStack)
+	public boolean mayPlace(ItemStack itemStack)
 	{
 		return (itemStack.getItem() == item);
 	}

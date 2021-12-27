@@ -3,18 +3,18 @@ package com.mraof.minestuck.world.lands.title;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
-import com.mraof.minestuck.world.biome.BiomeType;
-import com.mraof.minestuck.world.biome.LandWrapperBiome;
+import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeGenerationSettings;
 import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.feature.Features;
 import net.minecraft.world.gen.feature.IFeatureConfig;
-import net.minecraft.world.gen.placement.ChanceConfig;
-import net.minecraft.world.gen.placement.Placement;
 
 public class WindLandType extends TitleLandType
 {
@@ -34,15 +34,15 @@ public class WindLandType extends TitleLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("structure_wool_2", Blocks.LIGHT_BLUE_WOOL.getDefaultState());
-		registry.setBlockState("carpet", Blocks.CYAN_CARPET.getDefaultState());
-		registry.setBlockState("aspect_sapling", MSBlocks.BREATH_ASPECT_SAPLING.getDefaultState());
+		registry.setBlockState("structure_wool_2", Blocks.LIGHT_BLUE_WOOL.defaultBlockState());
+		registry.setBlockState("carpet", Blocks.CYAN_CARPET.defaultBlockState());
+		registry.setBlockState("aspect_sapling", MSBlocks.BREATH_ASPECT_SAPLING.defaultBlockState());
 	}
 	
 	@Override
 	public void setProperties(LandProperties properties)
 	{
-		properties.mergeFogColor(new Vec3d(0.1, 0.2, 0.8), 0.3F);
+		properties.mergeFogColor(new Vector3d(0.1, 0.2, 0.8), 0.3F);
 		if(properties.forceRain == LandProperties.ForceType.OFF)
 			properties.forceRain = LandProperties.ForceType.DEFAULT;
 		
@@ -52,10 +52,11 @@ public class WindLandType extends TitleLandType
 	}
 	
 	@Override
-	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
+	public void setBiomeGeneration(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks, LandBiomeType type, Biome baseBiome)
 	{
-		if(biome.type != BiomeType.OCEAN)
-			biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.PARCEL_PYXIS.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.CHANCE_HEIGHTMAP.configure(new ChanceConfig(60))));
+		if(type != LandBiomeType.OCEAN)
+			builder.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.PARCEL_PYXIS.configured(IFeatureConfig.NONE)
+					.decorated(Features.Placements.HEIGHTMAP_SQUARE).chance(60));
 	}
 	
 	@Override

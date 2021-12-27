@@ -3,9 +3,11 @@ package com.mraof.minestuck.block.redstone;
 import com.mraof.minestuck.block.MSDirectionalBlock;
 import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.tileentity.redstone.PlatformGeneratorTileEntity;
+import com.mraof.minestuck.util.ParticlesAroundSolidBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.particles.RedstoneParticleData;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -15,8 +17,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
+import java.util.Random;
 
 public class PlatformGeneratorBlock extends MSDirectionalBlock
 {
@@ -25,20 +29,19 @@ public class PlatformGeneratorBlock extends MSDirectionalBlock
 	public PlatformGeneratorBlock(Properties properties)
 	{
 		super(properties);
-		setDefaultState(stateContainer.getBaseState().with(FACING, Direction.UP).with(INVISIBLE_MODE, false));
+		registerDefaultState(stateDefinition.any().setValue(FACING, Direction.UP).setValue(INVISIBLE_MODE, false));
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
 	{
-		if(!player.isSneaking() && !CreativeShockEffect.doesCreativeShockLimit(player, 1, 4))
+		if(!player.isCrouching() && !CreativeShockEffect.doesCreativeShockLimit(player, 1, 4))
 		{
-			worldIn.setBlockState(pos, state.with(INVISIBLE_MODE, !state.get(INVISIBLE_MODE)));
-			if(state.get(INVISIBLE_MODE))
-				worldIn.playSound(null, pos, SoundEvents.BLOCK_CONDUIT_ACTIVATE, SoundCategory.BLOCKS, 0.75F, 1.6F);
+			worldIn.setBlock(pos, state.setValue(INVISIBLE_MODE, !state.getValue(INVISIBLE_MODE)), Constants.BlockFlags.NOTIFY_NEIGHBORS);
+			if(state.getValue(INVISIBLE_MODE))
+				worldIn.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 1.5F);
 			else
-				worldIn.playSound(null, pos, SoundEvents.BLOCK_CONDUIT_DEACTIVATE, SoundCategory.BLOCKS, 0.75F, 1.6F);
+				worldIn.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 0.5F);
 			return ActionResultType.SUCCESS;
 		}
 		
@@ -59,9 +62,19 @@ public class PlatformGeneratorBlock extends MSDirectionalBlock
 	}
 	
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
 	{
-		super.fillStateContainer(builder);
+		if(worldIn.getBestNeighborSignal(pos) > 0)
+		{
+			if(rand.nextInt(16 - worldIn.getBestNeighborSignal(pos)) == 0)
+				ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE);
+		}
+	}
+	
+	@Override
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+	{
+		super.createBlockStateDefinition(builder);
 		builder.add(INVISIBLE_MODE);
 	}
 }

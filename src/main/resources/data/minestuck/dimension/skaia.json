@@ -1,0 +1,12 @@
+{
+    "type": "minestuck:skaia",
+    "generator": {
+        "type": "minestuck:skaia",
+        "seed": 0,
+        "settings": "minestuck:skaia",
+        "biome_source": {
+            "type":  "minecraft:fixed",
+            "biome": "minestuck:skaia"
+        }
+    }
+}

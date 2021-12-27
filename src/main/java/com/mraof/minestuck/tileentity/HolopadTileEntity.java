@@ -35,18 +35,18 @@ public class HolopadTileEntity extends TileEntity implements ITickableTileEntity
 	{
 		if(!card.isEmpty())
 		{
-			if (player.getHeldItemMainhand().isEmpty())
-				player.setHeldItem(Hand.MAIN_HAND, card);
-			else if (!player.inventory.addItemStackToInventory(card))
-				dropItem(false, world, pos, card);
-			else player.container.detectAndSendChanges();
+			if (player.getMainHandItem().isEmpty())
+				player.setItemInHand(Hand.MAIN_HAND, card);
+			else if (!player.inventory.add(card))
+				dropItem(false, level, worldPosition, card);
+			else player.inventoryMenu.broadcastChanges();
 			
 			setCard(ItemStack.EMPTY);
 			return;
 		}
 		else
 		{
-			ItemStack heldStack = player.getHeldItemMainhand();
+			ItemStack heldStack = player.getMainHandItem();
 			if (card.isEmpty())
 			{
 				if (!heldStack.isEmpty() && heldStack.getItem() == MSItems.CAPTCHA_CARD)
@@ -69,11 +69,11 @@ public class HolopadTileEntity extends TileEntity implements ITickableTileEntity
 		BlockPos dropPos;
 		if(inBlock)
 			dropPos = pos;
-		else if(!Block.hasSolidSide(worldIn.getBlockState(pos.up()), worldIn, pos.up(), Direction.DOWN))
-			dropPos = pos.up();
+		else if(!Block.canSupportCenter(worldIn, pos.above(), Direction.DOWN))
+			dropPos = pos.above();
 		else dropPos = pos;
 		
-		InventoryHelper.spawnItemStack(worldIn, dropPos.getX(), dropPos.getY(), dropPos.getZ(), item);
+		InventoryHelper.dropItemStack(worldIn, dropPos.getX(), dropPos.getY(), dropPos.getZ(), item);
 		
 	}
 	
@@ -87,7 +87,7 @@ public class HolopadTileEntity extends TileEntity implements ITickableTileEntity
 		if (card.getItem() == MSItems.CAPTCHA_CARD || card.isEmpty())
 		{
 			this.card = card;
-			if(world != null)
+			if(level != null)
 			{
 				updateState();
 			}
@@ -111,19 +111,19 @@ public class HolopadTileEntity extends TileEntity implements ITickableTileEntity
 	}
 	
 	@Override
-	public void read(CompoundNBT compound)
+	public void load(BlockState state, CompoundNBT nbt)
 	{
-		super.read(compound);
+		super.load(state, nbt);
 		//broken = tagCompound.getBoolean("broken");
-		setCard(ItemStack.read(compound.getCompound("card")));
+		setCard(ItemStack.of(nbt.getCompound("card")));
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound)
+	public CompoundNBT save(CompoundNBT compound)
 	{
-		super.write(compound);
+		super.save(compound);
 		//tagCompound.setBoolean("broken", this.broken);
-		compound.put("card", card.write(new CompoundNBT()));
+		compound.put("card", card.save(new CompoundNBT()));
 		return compound;
 	}
 	
@@ -131,7 +131,7 @@ public class HolopadTileEntity extends TileEntity implements ITickableTileEntity
 	public CompoundNBT getUpdateTag()
 	{
 		CompoundNBT nbt = super.getUpdateTag();
-		nbt.put("card", card.write(new CompoundNBT()));
+		nbt.put("card", card.save(new CompoundNBT()));
 		return nbt;
 	}
 	
@@ -139,14 +139,14 @@ public class HolopadTileEntity extends TileEntity implements ITickableTileEntity
 	public SUpdateTileEntityPacket getUpdatePacket()
 	{
 		SUpdateTileEntityPacket packet;
-		packet = new SUpdateTileEntityPacket(this.pos, 0, getUpdateTag());
+		packet = new SUpdateTileEntityPacket(this.worldPosition, 0, getUpdateTag());
 		return packet;
 	}
 	
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
 	{
-		handleUpdateTag(pkt.getNbtCompound());
+		handleUpdateTag(getBlockState(), pkt.getTag());
 	}
 	
 	
@@ -158,12 +158,12 @@ public class HolopadTileEntity extends TileEntity implements ITickableTileEntity
 	
 	private void updateState()
 	{
-		if(world != null && !world.isRemote)
+		if(level != null && !level.isClientSide)
 		{
-			BlockState state = world.getBlockState(pos);
+			BlockState state = level.getBlockState(worldPosition);
 			boolean hasCard = !card.isEmpty();
-			if(state.has(HolopadBlock.HAS_CARD) && hasCard != state.get(HolopadBlock.HAS_CARD))
-				world.setBlockState(pos, state.with(HolopadBlock.HAS_CARD, hasCard), Constants.BlockFlags.BLOCK_UPDATE);
+			if(state.hasProperty(HolopadBlock.HAS_CARD) && hasCard != state.getValue(HolopadBlock.HAS_CARD))
+				level.setBlock(worldPosition, state.setValue(HolopadBlock.HAS_CARD, hasCard), Constants.BlockFlags.BLOCK_UPDATE);
 		}
 	}
 }

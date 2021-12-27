@@ -22,14 +22,14 @@ public class StatStorerPacket implements PlayToServerPacket
 	@Override
 	public void encode(PacketBuffer buffer)
 	{
-		buffer.writeEnumValue(activeType);
+		buffer.writeEnum(activeType);
 		buffer.writeBlockPos(tileBlockPos);
 		buffer.writeInt(divideValueBy);
 	}
 	
 	public static StatStorerPacket decode(PacketBuffer buffer)
 	{
-		StatStorerTileEntity.ActiveType activeType = buffer.readEnumValue(StatStorerTileEntity.ActiveType.class);
+		StatStorerTileEntity.ActiveType activeType = buffer.readEnum(StatStorerTileEntity.ActiveType.class);
 		BlockPos tileBlockPos = buffer.readBlockPos();
 		int divideValueBy = buffer.readInt();
 		
@@ -39,7 +39,7 @@ public class StatStorerPacket implements PlayToServerPacket
 	@Override
 	public void execute(ServerPlayerEntity player)
 	{
-		TileEntity te = player.world.getTileEntity(tileBlockPos);
+		TileEntity te = player.level.getBlockEntity(tileBlockPos);
 		if(te instanceof StatStorerTileEntity)
 		{
 			((StatStorerTileEntity) te).setActiveType(activeType);

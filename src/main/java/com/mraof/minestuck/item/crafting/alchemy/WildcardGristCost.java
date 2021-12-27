@@ -53,7 +53,7 @@ public class WildcardGristCost extends GristCostRecipe
 		@Override
 		protected WildcardGristCost read(ResourceLocation recipeId, JsonObject json, Ingredient ingredient, Integer priority)
 		{
-			long wildcardCost = JSONUtils.getLong(json, "grist_cost");
+			long wildcardCost = JSONUtils.getAsLong(json, "grist_cost");
 			return new WildcardGristCost(recipeId, ingredient, wildcardCost, priority);
 		}
 		
@@ -65,9 +65,9 @@ public class WildcardGristCost extends GristCostRecipe
 		}
 		
 		@Override
-		public void write(PacketBuffer buffer, WildcardGristCost recipe)
+		public void toNetwork(PacketBuffer buffer, WildcardGristCost recipe)
 		{
-			super.write(buffer, recipe);
+			super.toNetwork(buffer, recipe);
 			buffer.writeLong(recipe.wildcardCost);
 		}
 	}

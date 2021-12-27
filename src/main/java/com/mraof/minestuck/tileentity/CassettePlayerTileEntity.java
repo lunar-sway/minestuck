@@ -1,5 +1,6 @@
 package com.mraof.minestuck.tileentity;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.inventory.IClearable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -14,22 +15,24 @@ public class CassettePlayerTileEntity extends TileEntity implements IClearable
 		super(MSTileEntityTypes.CASSETTE_PLAYER.get());
 	}
 	
-	public void read(CompoundNBT compound)
+	@Override
+	public void load(BlockState state, CompoundNBT nbt)
 	{
-		super.read(compound);
-		if(compound.contains("CassetteItem", 10))
+		super.load(state, nbt);
+		if(nbt.contains("CassetteItem", 10))
 		{
-			this.setCassette(ItemStack.read(compound.getCompound("CassetteItem")));
+			this.setCassette(ItemStack.of(nbt.getCompound("CassetteItem")));
 		}
 		
 	}
 	
-	public CompoundNBT write(CompoundNBT compound)
+	@Override
+	public CompoundNBT save(CompoundNBT compound)
 	{
-		super.write(compound);
+		super.save(compound);
 		if(!this.getCassette().isEmpty())
 		{
-			compound.put("CassetteItem", this.getCassette().write(new CompoundNBT()));
+			compound.put("CassetteItem", this.getCassette().save(new CompoundNBT()));
 		}
 		
 		return compound;
@@ -43,10 +46,11 @@ public class CassettePlayerTileEntity extends TileEntity implements IClearable
 	public void setCassette(ItemStack stack)
 	{
 		this.cassette = stack;
-		this.markDirty();
+		this.setChanged();
 	}
 	
-	public void clear()
+	@Override
+	public void clearContent()
 	{
 		this.setCassette(ItemStack.EMPTY);
 	}

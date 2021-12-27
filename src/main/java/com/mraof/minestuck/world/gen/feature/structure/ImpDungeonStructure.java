@@ -1,53 +1,26 @@
 package com.mraof.minestuck.world.gen.feature.structure;
 
-import com.mojang.datafixers.Dynamic;
-import com.mraof.minestuck.Minestuck;
-import net.minecraft.world.gen.ChunkGenerator;
+import com.mojang.serialization.Codec;
+import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.structure.ScatteredStructure;
+import net.minecraft.world.gen.feature.structure.Structure;
 
-import java.util.function.Function;
-
-public class ImpDungeonStructure extends ScatteredStructure<NoFeatureConfig>
+public class ImpDungeonStructure extends Structure<NoFeatureConfig>
 {
-	public ImpDungeonStructure(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactory)
+	public ImpDungeonStructure(Codec<NoFeatureConfig> codec)
 	{
-		super(configFactory);
+		super(codec);
 	}
 	
 	@Override
-	protected int getSeedModifier()
+	public GenerationStage.Decoration step()
 	{
-		return 34527185;
+		return GenerationStage.Decoration.SURFACE_STRUCTURES;	//Could probably also count as an underground structure, but I'm guessing the surface component takes importance
 	}
 	
 	@Override
-	public IStartFactory getStartFactory()
+	public IStartFactory<NoFeatureConfig> getStartFactory()
 	{
 		return ImpDungeonStart::new;
-	}
-	
-	@Override
-	public String getStructureName()
-	{
-		return Minestuck.MOD_ID + ":imp_dungeon";
-	}
-	
-	@Override
-	public int getSize()
-	{
-		return 5;
-	}
-	
-	@Override
-	protected int getBiomeFeatureDistance(ChunkGenerator<?> chunkGenerator)
-	{
-		return 24;
-	}
-	
-	@Override
-	protected int getBiomeFeatureSeparation(ChunkGenerator<?> chunkGenerator)
-	{
-		return 6;
 	}
 }

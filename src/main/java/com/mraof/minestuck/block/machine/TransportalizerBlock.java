@@ -51,32 +51,32 @@ public class TransportalizerBlock extends MachineBlock
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn)
+	public void entityInside(BlockState state, World worldIn, BlockPos pos, Entity entityIn)
 	{
-		TileEntity tileEntity = worldIn.getTileEntity(pos);
+		TileEntity tileEntity = worldIn.getBlockEntity(pos);
 		if(tileEntity instanceof TransportalizerTileEntity)
 			((TransportalizerTileEntity) tileEntity).onCollision(entityIn);
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public BlockRenderType getRenderType(BlockState state)
+	public BlockRenderType getRenderShape(BlockState state)
 	{
 		return BlockRenderType.MODEL;
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
 	{
-		TransportalizerTileEntity tileEntity = (TransportalizerTileEntity) worldIn.getTileEntity(pos);
+		TransportalizerTileEntity tileEntity = (TransportalizerTileEntity) worldIn.getBlockEntity(pos);
 
-		if (tileEntity == null || player.isSneaking())
+		if (tileEntity == null || player.isShiftKeyDown())
 		{
 			return ActionResultType.PASS;
 		}
 
-		if(worldIn.isRemote)
+		if(worldIn.isClientSide)
 			MSScreenFactories.displayTransportalizerScreen(tileEntity);
 
 		return ActionResultType.SUCCESS;

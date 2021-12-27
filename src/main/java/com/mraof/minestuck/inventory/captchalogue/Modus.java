@@ -72,7 +72,7 @@ public abstract class Modus
 	
 	public ITextComponent getName()
 	{
-		return new ItemStack(type.getItem()).getDisplayName();
+		return new ItemStack(type.getItem()).getHoverName();
 	}
 	
 	/**
@@ -82,7 +82,7 @@ public abstract class Modus
 	public void markDirty()
 	{
 		if(savedData != null)
-			savedData.markDirty();
+			savedData.setDirty();
 		needResend = true;
 	}
 	

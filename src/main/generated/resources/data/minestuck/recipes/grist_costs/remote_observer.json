@@ -4,7 +4,8 @@
     "item": "minestuck:remote_observer"
   },
   "grist_cost": {
-    "minestuck:garnet": 8,
-    "minestuck:marble": 4
+    "minestuck:garnet": 60,
+    "minestuck:marble": 16,
+    "minestuck:amber": 10
   }
 }

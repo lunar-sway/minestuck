@@ -13,7 +13,7 @@ import net.minecraft.world.IWorldReader;
 
 public class GoldSeedsBlock extends Block
 {
-	private static final VoxelShape SHAPE = Block.makeCuboidShape(0, 0, 0, 16, 4, 16);
+	private static final VoxelShape SHAPE = Block.box(0, 0, 0, 16, 4, 16);
 	
 	public GoldSeedsBlock(Properties properties)
 	{
@@ -29,15 +29,15 @@ public class GoldSeedsBlock extends Block
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos)
+	public boolean canSurvive(BlockState state, IWorldReader worldIn, BlockPos pos)
 	{
-		return worldIn.getBlockState(pos.down()).getBlock() == Blocks.FARMLAND;
+		return worldIn.getBlockState(pos.below()).getBlock() == Blocks.FARMLAND;
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos)
+	public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos)
 	{
-		return !stateIn.isValidPosition(worldIn, currentPos) ? Blocks.AIR.getDefaultState() : super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+		return !stateIn.canSurvive(worldIn, currentPos) ? Blocks.AIR.defaultBlockState() : super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
 	}
 }

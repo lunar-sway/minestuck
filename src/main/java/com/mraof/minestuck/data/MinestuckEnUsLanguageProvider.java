@@ -3,6 +3,8 @@ package com.mraof.minestuck.data;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.machine.SendificatorBlock;
+import com.mraof.minestuck.block.redstone.AreaEffectBlock;
+import com.mraof.minestuck.block.redstone.SummonerBlock;
 import com.mraof.minestuck.block.redstone.WirelessRedstoneReceiverBlock;
 import com.mraof.minestuck.client.gui.*;
 import com.mraof.minestuck.client.gui.captchalouge.HashMapSylladexScreen;
@@ -38,8 +40,9 @@ import com.mraof.minestuck.skaianet.PredefineData;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
 import com.mraof.minestuck.tileentity.machine.*;
+import com.mraof.minestuck.tileentity.redstone.RedstoneClockTileEntity;
+import com.mraof.minestuck.tileentity.redstone.SummonerTileEntity;
 import com.mraof.minestuck.world.GateHandler;
-import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.LandChunkGenerator;
 import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.lands.LandTypePair;
@@ -334,15 +337,27 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSBlocks.WIRELESS_REDSTONE_RECEIVER, "Receives signals from Wireless Redstone Transmitters.");
 		add(MSBlocks.SOLID_SWITCH, "Solid Switch");
 		addTooltip(MSBlocks.SOLID_SWITCH, "KACHUNK");
+		add(MSBlocks.VARIABLE_SOLID_SWITCH, "Variable Solid Switch");
+		addTooltip(MSBlocks.VARIABLE_SOLID_SWITCH, "The functionality of a solid switch but throw in the ability to change what redstone power it gives off.");
 		add(MSBlocks.ONE_SECOND_INTERVAL_TIMED_SOLID_SWITCH, "Timed Solid Switch(One Second)");
 		addTooltip(MSBlocks.ONE_SECOND_INTERVAL_TIMED_SOLID_SWITCH, "Loses one value of power every second until it turns off.");
 		add(MSBlocks.TWO_SECOND_INTERVAL_TIMED_SOLID_SWITCH, "Timed Solid Switch(Two Second)");
 		addTooltip(MSBlocks.TWO_SECOND_INTERVAL_TIMED_SOLID_SWITCH, "Loses one value of power every two seconds until it turns off.");
 		add(MSBlocks.SUMMONER, "Summoner");
+		addExtra(MSBlocks.SUMMONER, SummonerBlock.UNTRIGGERABLE_CHANGE_MESSAGE, "Block inactivation after successful summoning now %s.");
 		add(MSBlocks.AREA_EFFECT_BLOCK, "Area Effect Block");
+		addExtra(MSBlocks.AREA_EFFECT_BLOCK, AreaEffectBlock.EFFECT_CHANGE_MESSAGE, "Effect type changed to %s with the amplification strength %s.");
 		add(MSBlocks.PLATFORM_GENERATOR, "Platform Generator");
 		add(MSBlocks.PLATFORM_BLOCK, "Platform Block");
 		add(MSBlocks.ITEM_MAGNET, "Item Magnet");
+		add(MSBlocks.REDSTONE_CLOCK, "Redstone Clock");
+		add(MSBlocks.FALL_PAD, "Fall Pad");
+		add(MSBlocks.AND_GATE_BLOCK, "AND Gate");
+		add(MSBlocks.OR_GATE_BLOCK, "OR Gate");
+		add(MSBlocks.XOR_GATE_BLOCK, "XOR Gate");
+		add(MSBlocks.NAND_GATE_BLOCK, "NAND Gate");
+		add(MSBlocks.NOR_GATE_BLOCK, "NOR Gate");
+		add(MSBlocks.XNOR_GATE_BLOCK, "XNOR Gate");
 		add(MSBlocks.LOOT_CHEST, "Loot Chest");
 		add(MSBlocks.GATE, "Gate");
 		add(MSBlocks.RETURN_NODE, "Return Node");
@@ -370,6 +385,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.GRIST_WIDGET, "GristWidget 12000");
 		add(MSBlocks.URANIUM_COOKER, "Cookalyzer");
 		add(MSBlocks.CRUXITE_DOWEL, "Cruxite Dowel");
+		addExtra(MSBlocks.CRUXITE_DOWEL, "invalid", "Invalid Data");
 		MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.forEachBlock(block -> add(block, "Lotus Time Capsule"));
 		add(MSBlocks.GOLD_SEEDS, "Golden Seeds");
 		addTooltip(MSBlocks.GOLD_SEEDS, "These seeds are made out of 24-karat gold!");
@@ -779,7 +795,11 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addExtra(MSItems.BOONDOLLARS, "amount", "Amount: %s");
 		add(MSItems.RAW_CRUXITE, "Raw Cruxite");
 		add(MSItems.RAW_URANIUM, "Uranium Lump");
+		addTooltip(MSItems.RAW_URANIUM, "Is this even safe to be around?");
 		add(MSItems.ENERGY_CORE, "Energy Core");
+		addTooltip(MSItems.ENERGY_CORE, "The power of radiation in a neat little packet.");
+		add(MSItems.PLUTONIUM_CORE, "Plutonium Spatial Core");
+		addTooltip(MSItems.PLUTONIUM_CORE, "It seems to pulse gently, moving its immediate surroundings slightly each time.");
 		add(MSItems.TEMPLE_SCANNER, "Temple Scanner");
 		addExtra(MSItems.TEMPLE_SCANNER, "successMessage", "Closest detected temple around %s blocks away");
 		addExtra(MSItems.TEMPLE_SCANNER, "failMessage", "No temple detected nearby");
@@ -1093,7 +1113,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addStoreTooltip(Items.WHEAT_SEEDS, "You know what tastes even better than those plant grains? Their seeds, of course!");
 		addStoreTooltip(Items.MUSHROOM_STEW, "Do you enjoy mushrooms? Then this'll be a delicacy!");
 		addStoreTooltip(Items.BEEF, "You want something RAW? We've got BEEF.");
-		addStoreTooltip(PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.WATER), "Stay hydrated with our oasis water.");
+		addStoreTooltip(PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER), "Stay hydrated with our oasis water.");
 		addStoreTooltip(Items.CARROT, "Want to try something orange? We've got carrots straight from the ground.");
 		addStoreTooltip(Items.MILK_BUCKET, "You won't find this in a regular bucket!");
 		addStore(Items.POISONOUS_POTATO, "Green Potato");
@@ -1133,13 +1153,13 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItemGroup.MAIN, "Minestuck Main");
 		add(MSItemGroup.LANDS, "Minestuck Lands");
 		add(MSItemGroup.WEAPONS, "Minestuck Weapons");
-		
+		/*TODO
 		addBiome(MSBiomes.SKAIA, "Skaia");
 		defaultLandBiomes(MSBiomes.DEFAULT_LAND);
 		defaultLandBiomes(MSBiomes.HIGH_HUMID_LAND);
 		defaultLandBiomes(MSBiomes.NO_RAIN_LAND);
 		defaultLandBiomes(MSBiomes.SNOW_LAND);
-		
+		*/
 		add(MSEntityTypes.FROG, "Frog");
 		add(MSEntityTypes.SALAMANDER, "Salamander");
 		addExtra(MSEntityTypes.SALAMANDER, "plural", "Salamanders");
@@ -1429,6 +1449,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MiniPunchDesignixTileEntity.TITLE, "Miniature Punch Designix");
 		add(UraniumCookerTileEntity.TITLE, "Cookalyzer");
 		add(GristWidgetTileEntity.TITLE, "GristWidget 12000");
+		add(SummonerTileEntity.SUMMON_TYPE_CHANGE, "Summoned entity type changed to %s.");
+		add(RedstoneClockTileEntity.TIME_CHANGE, "The clock now pulses every %s seconds");
 		add(GuiUtil.NOT_ALCHEMIZABLE, "Not Alchemizable");
 		add(GuiUtil.FREE, "Free!");
 		add(MachineScreen.GO, "GO");

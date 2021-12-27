@@ -18,7 +18,8 @@
   },
   "criteria": {
     "melon_overload": {
-      "trigger": "minestuck:melon_overload"
+      "trigger": "minestuck:melon_overload",
+      "conditions": {}
     }
   },
   "requirements": [

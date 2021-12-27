@@ -2,6 +2,8 @@ package com.mraof.minestuck.entity.carapacian;
 
 import com.mraof.minestuck.entity.ai.AttackByDistanceGoal;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.projectile.FireballEntity;
@@ -9,7 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -22,7 +24,7 @@ public class BishopEntity extends CarapacianEntity implements IRangedAttackMob, 
 	protected BishopEntity(EntityType<? extends BishopEntity> type, EnumEntityKingdom kingdom, World world)
 	{
 		super(type, kingdom, world);
-		this.experienceValue = 3;
+		this.xpReward = 3;
 	}
 	
 	public static BishopEntity createProspitian(EntityType<? extends BishopEntity> type, World world)
@@ -35,12 +37,10 @@ public class BishopEntity extends CarapacianEntity implements IRangedAttackMob, 
 		return new BishopEntity(type, EnumEntityKingdom.DERSITE, world);
 	}
 	
-	@Override
-	protected void registerAttributes()
+	public static AttributeModifierMap.MutableAttribute bishopAttributes()
 	{
-		super.registerAttributes();
-		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(40D);
-		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.2D);
+		return CarapacianEntity.carapacianAttributes().add(Attributes.MAX_HEALTH, 40)
+				.add(Attributes.MOVEMENT_SPEED, 0.2);
 	}
 	
 	@Override
@@ -52,26 +52,26 @@ public class BishopEntity extends CarapacianEntity implements IRangedAttackMob, 
 	}
 	
 	@Override
-	public void attackEntityWithRangedAttack(LivingEntity target, float distanceFactor)
+	public void performRangedAttack(LivingEntity target, float distanceFactor)
 	{
 		
-		double distanceX = target.getPosX() - this.getPosX();
-		double distanceY = target.getBoundingBox().minY + (double)(target.getHeight() / 2.0F) - (this.getPosY() + (double)(this.getHeight() / 2.0F));
-		double distanceZ = target.getPosZ() - this.getPosZ();
+		double distanceX = target.getX() - this.getX();
+		double distanceY = target.getBoundingBox().minY + (double)(target.getBbHeight() / 2.0F) - (this.getY() + (double)(this.getBbHeight() / 2.0F));
+		double distanceZ = target.getZ() - this.getZ();
 		
-		FireballEntity fireball = new FireballEntity(this.world, this, distanceX, distanceY, distanceZ);
+		FireballEntity fireball = new FireballEntity(this.level, this, distanceX, distanceY, distanceZ);
 		fireball.explosionPower = 1;
-		double d8 = this.getHeight();
-		Vec3d vec3 = this.getLook(1.0F);
+		double d8 = this.getBbHeight();
+		Vector3d vec3 = this.getViewVector(1.0F);
 		double x = (this.getBoundingBox().minX + this.getBoundingBox().maxX) / 2.0F  + vec3.x * d8;
-		double y = this.getPosY() + (double)(this.getHeight() / 2.0F);
+		double y = this.getY() + (double)(this.getBbHeight() / 2.0F);
 		double z = (this.getBoundingBox().minZ + this.getBoundingBox().maxZ) / 2.0F + vec3.z * d8;
-		fireball.setPosition(x, y, z);
-		this.world.addEntity(fireball);
+		fireball.setPos(x, y, z);
+		this.level.addFreshEntity(fireball);
 	}
 	public int getAttackStrength(Entity par1Entity)
 	{
-		ItemStack var2 = this.getHeldItemMainhand();
+		ItemStack var2 = this.getMainHandItem();
 		int var3 = 0;
 		
 		/*if(!var2.isEmpty())
@@ -94,24 +94,24 @@ public class BishopEntity extends CarapacianEntity implements IRangedAttackMob, 
 //	}
 	
 	@Override
-	public boolean attackEntityAsMob(Entity par1Entity)
+	public boolean doHurtTarget(Entity par1Entity)
 	{
 		int damage = this.getAttackStrength(par1Entity);
 		int knockback = 6;
-		par1Entity.addVelocity(-MathHelper.sin(this.rotationYaw * (float)Math.PI / 180.0F) * (float)knockback * 0.5F, 0.1D, (double)(MathHelper.cos(this.rotationYaw * (float)Math.PI / 180.0F) * (float)knockback * 0.5F));
-		return par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this), damage);
+		par1Entity.push(-MathHelper.sin(this.yRot * (float)Math.PI / 180.0F) * (float)knockback * 0.5F, 0.1D, (double)(MathHelper.cos(this.yRot * (float)Math.PI / 180.0F) * (float)knockback * 0.5F));
+		return par1Entity.hurt(DamageSource.mobAttack(this), damage);
 	}
 	
 	@Override
-	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2)
+	public boolean hurt(DamageSource par1DamageSource, float par2)
 	{
-		if(par1DamageSource.isFireDamage())
+		if(par1DamageSource.isFire())
 		{
 			burnTime += par2;
 			if(burnTime <= 3)
 				return false;
 		}
-		return super.attackEntityFrom(par1DamageSource, par2);
+		return super.hurt(par1DamageSource, par2);
 	}
 	
 	private static class NearestAttackableExtendedGoal extends NearestAttackableTargetGoal<LivingEntity>
@@ -122,10 +122,10 @@ public class BishopEntity extends CarapacianEntity implements IRangedAttackMob, 
 		}
 		
 		@Override
-		protected AxisAlignedBB getTargetableArea(double targetDistance)
+		protected AxisAlignedBB getTargetSearchArea(double targetDistance)
 		{
 			//Bishops use a much higher bounding box for some reason. Probably for their fire ball targeting
-			return this.goalOwner.getBoundingBox().grow(targetDistance, 64.0D, targetDistance);
+			return this.mob.getBoundingBox().inflate(targetDistance, 64.0D, targetDistance);
 		}
 	}
 }

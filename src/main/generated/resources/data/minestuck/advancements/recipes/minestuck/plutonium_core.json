@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minestuck:plutonium_core"
+    ]
+  },
+  "criteria": {
+    "has_energy_core": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minestuck:energy_core"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minestuck:plutonium_core"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_energy_core",
+      "has_the_recipe"
+    ]
+  ]
+}

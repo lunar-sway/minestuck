@@ -17,12 +17,12 @@ import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.KindAbstratusList;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
-import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.MSSurfaceBuilders;
+import com.mraof.minestuck.world.gen.MSWorldGenTypes;
+import com.mraof.minestuck.world.gen.feature.MSCFeatures;
 import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.WorldPersistenceHooks;
@@ -34,8 +34,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import software.bernie.geckolib3.GeckoLib;
 
 import static com.mraof.minestuck.Minestuck.MOD_ID;
-import static com.mraof.minestuck.world.gen.OreGeneration.setupOverworldOreGeneration;
-import static com.mraof.minestuck.world.gen.OverworldStructureGeneration.setupOverworldStructureGeneration;
 
 @Mod(MOD_ID)
 public class Minestuck
@@ -60,7 +58,6 @@ public class Minestuck
 		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		MSFluids.FLUIDS.register(eventBus);
 		MSSurfaceBuilders.REGISTER.register(eventBus);
-		MSBiomes.REGISTER.register(eventBus);
 		MSTileEntityTypes.REGISTER.register(eventBus);
 		GristTypes.GRIST_TYPES.register(eventBus);
 		MSEffects.REGISTER.register(eventBus);
@@ -72,12 +69,10 @@ public class Minestuck
 	 */
 	private void setup(final FMLCommonSetupEvent event)
 	{
-		DeferredWorkQueue.runLater(this::mainThreadSetup);
+		event.enqueueWork(this::mainThreadSetup);
 		
 		//register channel handler
 		MSPacketHandler.setupChannel();
-		
-		MSBiomes.init();
 	}
 	
 	/**
@@ -89,12 +84,8 @@ public class Minestuck
 		MSCriteriaTriggers.register();
 		MSEntityTypes.registerPlacements();
 		MSFillerBlockTypes.init();	//Not sure if this is thread safe, but better safe than sorry
-		
-		//register ore generation
-		setupOverworldOreGeneration();
-		
-		//register structure generation
-		setupOverworldStructureGeneration();
+		MSCFeatures.init();
+		MSWorldGenTypes.register();
 		
 		ConsortDialogue.init();
 		

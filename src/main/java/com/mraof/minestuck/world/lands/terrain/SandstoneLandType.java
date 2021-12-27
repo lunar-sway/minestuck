@@ -5,8 +5,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.MSSoundEvents;
-import com.mraof.minestuck.world.biome.BiomeType;
-import com.mraof.minestuck.world.biome.LandWrapperBiome;
+import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
@@ -16,17 +15,12 @@ import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeGenerationSettings;
 import net.minecraft.world.biome.DefaultBiomeFeatures;
 import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.BlockBlobConfig;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.OreFeatureConfig;
-import net.minecraft.world.gen.feature.SphereReplaceConfig;
-import net.minecraft.world.gen.placement.CountRangeConfig;
-import net.minecraft.world.gen.placement.FrequencyConfig;
-import net.minecraft.world.gen.placement.Placement;
+import net.minecraft.world.gen.feature.*;
 
 import java.util.Random;
 
@@ -36,7 +30,7 @@ public class SandstoneLandType extends TerrainLandType
 	public static final String STONY_DESERTS = "minestuck.stony_deserts";
 	
 	public static final ResourceLocation GROUP_NAME = new ResourceLocation(Minestuck.MOD_ID, "sandstone");
-	private final Vec3d fogColor, skyColor;
+	private final Vector3d fogColor, skyColor;
 	private final Variant type;
 	
 	public SandstoneLandType(Variant type)
@@ -45,12 +39,12 @@ public class SandstoneLandType extends TerrainLandType
 		this.type = type;
 		if(type == Variant.SANDSTONE)
 		{
-			fogColor = new Vec3d(0.9D, 0.7D, 0.05D);
-			skyColor = new Vec3d(0.8D, 0.6D, 0.2D);
+			fogColor = new Vector3d(0.9D, 0.7D, 0.05D);
+			skyColor = new Vector3d(0.8D, 0.6D, 0.2D);
 		} else
 		{
-			fogColor = new Vec3d(0.7D, 0.4D, 0.05D);
-			skyColor = new Vec3d(0.8D, 0.5D, 0.1D);
+			fogColor = new Vector3d(0.7D, 0.4D, 0.05D);
+			skyColor = new Vector3d(0.8D, 0.5D, 0.1D);
 			
 		}
 	}
@@ -60,32 +54,32 @@ public class SandstoneLandType extends TerrainLandType
 	{
 		if(type == Variant.SANDSTONE)
 		{
-			registry.setBlockState("sand", Blocks.SAND.getDefaultState());
-			registry.setBlockState("ocean_surface", Blocks.SAND.getDefaultState());
-			registry.setBlockState("upper", Blocks.SANDSTONE.getDefaultState());
-			registry.setBlockState("structure_primary", Blocks.SMOOTH_SANDSTONE.getDefaultState());
-			registry.setBlockState("structure_primary_decorative", Blocks.CHISELED_SANDSTONE.getDefaultState());
-			registry.setBlockState("structure_primary_stairs", Blocks.SANDSTONE_STAIRS.getDefaultState());
-			registry.setBlockState("village_path", Blocks.RED_SAND.getDefaultState());
+			registry.setBlockState("sand", Blocks.SAND.defaultBlockState());
+			registry.setBlockState("ocean_surface", Blocks.SAND.defaultBlockState());
+			registry.setBlockState("upper", Blocks.SANDSTONE.defaultBlockState());
+			registry.setBlockState("structure_primary", Blocks.SMOOTH_SANDSTONE.defaultBlockState());
+			registry.setBlockState("structure_primary_decorative", Blocks.CHISELED_SANDSTONE.defaultBlockState());
+			registry.setBlockState("structure_primary_stairs", Blocks.SANDSTONE_STAIRS.defaultBlockState());
+			registry.setBlockState("village_path", Blocks.RED_SAND.defaultBlockState());
 		} else
 		{
-			registry.setBlockState("sand", Blocks.RED_SAND.getDefaultState());
-			registry.setBlockState("ocean_surface", Blocks.RED_SAND.getDefaultState());
-			registry.setBlockState("upper", Blocks.RED_SANDSTONE.getDefaultState());
-			registry.setBlockState("structure_primary", Blocks.SMOOTH_RED_SANDSTONE.getDefaultState());
-			registry.setBlockState("structure_primary_decorative", Blocks.CHISELED_RED_SANDSTONE.getDefaultState());
-			registry.setBlockState("structure_primary_stairs", Blocks.RED_SANDSTONE_STAIRS.getDefaultState());
-			registry.setBlockState("village_path", Blocks.SAND.getDefaultState());
+			registry.setBlockState("sand", Blocks.RED_SAND.defaultBlockState());
+			registry.setBlockState("ocean_surface", Blocks.RED_SAND.defaultBlockState());
+			registry.setBlockState("upper", Blocks.RED_SANDSTONE.defaultBlockState());
+			registry.setBlockState("structure_primary", Blocks.SMOOTH_RED_SANDSTONE.defaultBlockState());
+			registry.setBlockState("structure_primary_decorative", Blocks.CHISELED_RED_SANDSTONE.defaultBlockState());
+			registry.setBlockState("structure_primary_stairs", Blocks.RED_SANDSTONE_STAIRS.defaultBlockState());
+			registry.setBlockState("village_path", Blocks.SAND.defaultBlockState());
 		}
-		registry.setBlockState("structure_secondary", Blocks.STONE_BRICKS.getDefaultState());
-		registry.setBlockState("structure_secondary_decorative", Blocks.CHISELED_STONE_BRICKS.getDefaultState());
-		registry.setBlockState("structure_secondary_stairs", Blocks.STONE_BRICK_STAIRS.getDefaultState());
-		registry.setBlockState("structure_planks", Blocks.ACACIA_PLANKS.getDefaultState());
-		registry.setBlockState("structure_planks_slab", Blocks.ACACIA_SLAB.getDefaultState());
-		registry.setBlockState("torch", Blocks.REDSTONE_TORCH.getDefaultState());
-		registry.setBlockState("wall_torch", Blocks.REDSTONE_WALL_TORCH.getDefaultState());
-		registry.setBlockState("structure_wool_1", Blocks.WHITE_WOOL.getDefaultState());
-		registry.setBlockState("structure_wool_3", Blocks.MAGENTA_WOOL.getDefaultState());
+		registry.setBlockState("structure_secondary", Blocks.STONE_BRICKS.defaultBlockState());
+		registry.setBlockState("structure_secondary_decorative", Blocks.CHISELED_STONE_BRICKS.defaultBlockState());
+		registry.setBlockState("structure_secondary_stairs", Blocks.STONE_BRICK_STAIRS.defaultBlockState());
+		registry.setBlockState("structure_planks", Blocks.ACACIA_PLANKS.defaultBlockState());
+		registry.setBlockState("structure_planks_slab", Blocks.ACACIA_SLAB.defaultBlockState());
+		registry.setBlockState("torch", Blocks.REDSTONE_TORCH.defaultBlockState());
+		registry.setBlockState("wall_torch", Blocks.REDSTONE_WALL_TORCH.defaultBlockState());
+		registry.setBlockState("structure_wool_1", Blocks.WHITE_WOOL.defaultBlockState());
+		registry.setBlockState("structure_wool_3", Blocks.MAGENTA_WOOL.defaultBlockState());
 	}
 	
 	@Override
@@ -107,29 +101,39 @@ public class SandstoneLandType extends TerrainLandType
 	}
 	
 	@Override
-	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
+	public void setBiomeGeneration(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks, LandBiomeType type, Biome baseBiome)
 	{
 		BlockState sand = blocks.getBlockState("sand");
 		BlockState sandstone = blocks.getBlockState("upper");
 		
-		if(biome.type != BiomeType.OCEAN)
+		if(type != LandBiomeType.OCEAN)
 		{
-			DefaultBiomeFeatures.addDeadBushes(biome);
-			biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.DISK.withConfiguration(new SphereReplaceConfig(sand, 7, 2, Lists.newArrayList(blocks.getBlockState("surface"), blocks.getBlockState("upper")))).withPlacement(Placement.COUNT_TOP_SOLID.configure(new FrequencyConfig(4))));
+			DefaultBiomeFeatures.addDesertVegetation(builder);
+			builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.DISK
+					.configured(new SphereReplaceConfig(sand, FeatureSpread.of(2, 4), 2, Lists.newArrayList(blocks.getBlockState("surface"), blocks.getBlockState("upper"))))
+					.decorated(Features.Placements.TOP_SOLID_HEIGHTMAP_SQUARE).count(4));
 		}
 		
 		
-		if(biome.type == BiomeType.NORMAL)
+		if(type == LandBiomeType.NORMAL)
 		{
-			biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.BLOCK_BLOB.withConfiguration(new BlockBlobConfig(sandstone, 0)).withPlacement(Placement.FOREST_ROCK.configure(new FrequencyConfig(3))));
-		} else if(biome.type == BiomeType.ROUGH)
+			builder.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.BLOCK_BLOB
+					.configured(new BlockStateFeatureConfig(sandstone)).decorated(Features.Placements.HEIGHTMAP_SQUARE).countRandom(3));
+		} else if(type == LandBiomeType.ROUGH)
 		{
-			biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.BLOCK_BLOB.withConfiguration(new BlockBlobConfig(sandstone, 0)).withPlacement(Placement.FOREST_ROCK.configure(new FrequencyConfig(5))));
+			builder.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.BLOCK_BLOB
+					.configured(new BlockStateFeatureConfig(sandstone)).decorated(Features.Placements.HEIGHTMAP_SQUARE).countRandom(5));
 		}
-
-		biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, sandstone, 28)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(8, 0, 0, 256))));
-		biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, Blocks.IRON_ORE.getDefaultState(), 9)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(24, 0, 0, 64))));
-		biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, Blocks.REDSTONE_ORE.getDefaultState(), 8)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(12, 0, 0, 32))));
+		
+		builder.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Feature.ORE
+				.configured(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, sandstone, 28))
+				.range(256).squared().count(8));
+		builder.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Feature.ORE
+				.configured(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, Blocks.IRON_ORE.defaultBlockState(), 9))
+				.range(64).squared().count(24));
+		builder.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Feature.ORE
+				.configured(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, Blocks.REDSTONE_ORE.defaultBlockState(), 8))
+				.range(32).squared().count(12));
 	}
 	
 	@Override
@@ -139,13 +143,13 @@ public class SandstoneLandType extends TerrainLandType
 	}
 	
 	@Override
-	public Vec3d getFogColor()
+	public Vector3d getFogColor()
 	{
 		return fogColor;
 	}
 	
 	@Override
-	public Vec3d getSkyColor()
+	public Vector3d getSkyColor()
 	{
 		return skyColor;
 	}

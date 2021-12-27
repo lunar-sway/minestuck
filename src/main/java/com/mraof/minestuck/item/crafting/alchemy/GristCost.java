@@ -58,9 +58,9 @@ public class GristCost extends GristCostRecipe
 		}
 		
 		@Override
-		public void write(PacketBuffer buffer, GristCost recipe)
+		public void toNetwork(PacketBuffer buffer, GristCost recipe)
 		{
-			super.write(buffer, recipe);
+			super.toNetwork(buffer, recipe);
 			recipe.cost.write(buffer);
 		}
 	}

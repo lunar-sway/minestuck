@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:fall_pad"
+  },
+  "grist_cost": {
+    "minestuck:caulk": 5,
+    "minestuck:shale": 2
+  }
+}

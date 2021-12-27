@@ -86,22 +86,22 @@ public class DataCheckerPermission
 	
 	private static boolean hasGamemodePermission(ServerPlayerEntity player)
 	{
-		GameType gameType = player.interactionManager.getGameType();
+		GameType gameType = player.gameMode.getGameModeForPlayer();
 		
 		EditData data = ServerEditHandler.getData(player);
 		if(data != null)
 			gameType = data.getDecoy().gameType;
 		
-		return !gameType.isSurvivalOrAdventure();
+		return !gameType.isSurvival();
 	}
 	
 	private static boolean hasOp(ServerPlayerEntity player)
 	{
 		MinecraftServer server = player.getServer();
-		if(server != null && server.getPlayerList().canSendCommands(player.getGameProfile()))
+		if(server != null && server.getPlayerList().isOp(player.getGameProfile()))
 		{
-			OpEntry entry = server.getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
-			return (entry != null ? entry.getPermissionLevel() : server.getOpPermissionLevel()) >= 2;
+			OpEntry entry = server.getPlayerList().getOps().get(player.getGameProfile());
+			return (entry != null ? entry.getLevel() : server.getOperatorUserPermissionLevel()) >= 2;
 		}
 		return false;
 	}

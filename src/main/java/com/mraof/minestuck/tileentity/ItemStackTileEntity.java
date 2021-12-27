@@ -33,7 +33,7 @@ public class ItemStackTileEntity extends TileEntity implements IColored
 		if(stack != null)
 		{
 			this.stack = stack;
-			markDirty();
+			setChanged();
 		}
 	}
 	
@@ -44,17 +44,17 @@ public class ItemStackTileEntity extends TileEntity implements IColored
 	}
 	
 	@Override
-	public void read(CompoundNBT compound)
+	public void load(BlockState state, CompoundNBT nbt)
 	{
-		super.read(compound);
-		stack = ItemStack.read(compound.getCompound("stack"));
+		super.load(state, nbt);
+		stack = ItemStack.of(nbt.getCompound("stack"));
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound)
+	public CompoundNBT save(CompoundNBT compound)
 	{
-		compound = super.write(compound);
-		compound.put("stack", stack.write(new CompoundNBT()));
+		compound = super.save(compound);
+		compound.put("stack", stack.save(new CompoundNBT()));
 		return compound;
 	}
 	
@@ -62,31 +62,32 @@ public class ItemStackTileEntity extends TileEntity implements IColored
 	public CompoundNBT getUpdateTag()
 	{
 		CompoundNBT nbt = super.getUpdateTag();
-		nbt.put("stack", stack.write(new CompoundNBT()));
+		nbt.put("stack", stack.save(new CompoundNBT()));
 		return nbt;
 	}
 	
+	
 	@Override
-	public void handleUpdateTag(CompoundNBT tag)
+	public void handleUpdateTag(BlockState state, CompoundNBT tag)
 	{
-		stack = ItemStack.read(tag.getCompound("stack"));
+		stack = ItemStack.of(tag.getCompound("stack"));
 	}
 	
 	@Nullable
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket()
 	{
-		return new SUpdateTileEntityPacket(getPos(), 2, getUpdateTag());
+		return new SUpdateTileEntityPacket(getBlockPos(), 2, getUpdateTag());
 	}
 	
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
 	{
-		handleUpdateTag(pkt.getNbtCompound());
-		if(world != null)
+		handleUpdateTag(getBlockState(), pkt.getTag());
+		if(level != null)
 		{
-			BlockState state = world.getBlockState(pos);
-			world.notifyBlockUpdate(pos, state, state, 2);
+			BlockState state = level.getBlockState(worldPosition);
+			level.sendBlockUpdated(worldPosition, state, state, 2);
 		}
 	}
 }

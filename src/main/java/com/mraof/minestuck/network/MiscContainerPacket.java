@@ -45,21 +45,21 @@ public class MiscContainerPacket implements PlayToServerPacket
 		if(editmode != isInEditmode)
 		{
 			if(isInEditmode)
-				LOGGER.error("Sanity check failed: {} tried to open a minestuck gui while in editmode", player.getName().getFormattedText());
-			else LOGGER.error("Sanity check failed: {} tried to open an editmode gui while outside editmode", player.getName().getFormattedText());
+				LOGGER.error("Sanity check failed: {} tried to open a minestuck gui while in editmode", player.getName().getString());
+			else LOGGER.error("Sanity check failed: {} tried to open an editmode gui while outside editmode", player.getName().getString());
 			
 			ServerEditHandler.resendEditmodeStatus(player);
 		} else
 		{
 			if(!isInEditmode)
 			{
-				player.openContainer = new CaptchaDeckContainer(PlayerStatsScreen.WINDOW_ID_START + index, player.inventory);//ContainerHandler.windowIdStart + i;
+				player.containerMenu = new CaptchaDeckContainer(PlayerStatsScreen.WINDOW_ID_START + index, player.inventory);//ContainerHandler.windowIdStart + i;
 			} else
 			{
-				player.openContainer = new EditmodeContainer(PlayerStatsScreen.WINDOW_ID_START + index, player.inventory);
+				player.containerMenu = new EditmodeContainer(PlayerStatsScreen.WINDOW_ID_START + index, player.inventory);
 			}
 			
-			player.addSelfToInternalCraftingInventory();
+			player.initMenu();
 		}
 	}
 }

@@ -4,7 +4,8 @@
     "item": "minestuck:stat_storer"
   },
   "grist_cost": {
-    "minestuck:garnet": 12,
-    "minestuck:marble": 6
+    "minestuck:garnet": 40,
+    "minestuck:marble": 14,
+    "minestuck:diamond": 20
   }
 }

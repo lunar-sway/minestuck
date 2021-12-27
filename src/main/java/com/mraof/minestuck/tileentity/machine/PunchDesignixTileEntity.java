@@ -49,17 +49,17 @@ public class PunchDesignixTileEntity extends TileEntity
 	public void breakMachine()
 	{
 		broken = true;
-		markDirty();
+		setChanged();
 	}
 	
 	private void updateState()
 	{
-		if(world != null && !world.isRemote)
+		if(level != null && !level.isClientSide)
 		{
-			BlockState state = world.getBlockState(pos);
+			BlockState state = level.getBlockState(worldPosition);
 			boolean hasCard = !card.isEmpty();
-			if(state.has(PunchDesignixBlock.Slot.HAS_CARD) && hasCard != state.get(PunchDesignixBlock.Slot.HAS_CARD))
-				world.setBlockState(pos, state.with(PunchDesignixBlock.Slot.HAS_CARD, hasCard), Constants.BlockFlags.BLOCK_UPDATE);
+			if(state.hasProperty(PunchDesignixBlock.Slot.HAS_CARD) && hasCard != state.getValue(PunchDesignixBlock.Slot.HAS_CARD))
+				level.setBlock(worldPosition, state.setValue(PunchDesignixBlock.Slot.HAS_CARD, hasCard), Constants.BlockFlags.BLOCK_UPDATE);
 		}
 	}
 	
@@ -87,16 +87,16 @@ public class PunchDesignixTileEntity extends TileEntity
 	{
 		if(!getCard().isEmpty())
 		{
-			if (player.getHeldItemMainhand().isEmpty())
-				player.setHeldItem(Hand.MAIN_HAND, getCard());
-			else if (!player.inventory.addItemStackToInventory(getCard()))
+			if (player.getMainHandItem().isEmpty())
+				player.setItemInHand(Hand.MAIN_HAND, getCard());
+			else if (!player.inventory.add(getCard()))
 				dropItem(false);
-			else player.container.detectAndSendChanges();
+			else player.inventoryMenu.broadcastChanges();
 			
 			setCard(ItemStack.EMPTY);
 		} else if(!broken)
 		{
-			ItemStack heldStack = player.getHeldItemMainhand();
+			ItemStack heldStack = player.getMainHandItem();
 			if(!heldStack.isEmpty() && heldStack.getItem() == MSItems.CAPTCHA_CARD)
 				setCard(heldStack.split(1));    //Insert card into the punch slot
 		}
@@ -104,7 +104,7 @@ public class PunchDesignixTileEntity extends TileEntity
 	
 	private void handleKeyboardClick(ServerPlayerEntity player)
 	{
-		ItemStack heldStack = player.getHeldItemMainhand();
+		ItemStack heldStack = player.getMainHandItem();
 		if(heldStack.getItem() != MSItems.CAPTCHA_CARD)
 			return;    //Not a valid item in hand
 		
@@ -115,7 +115,7 @@ public class PunchDesignixTileEntity extends TileEntity
 				ItemStack output;
 				if(AlchemyHelper.isPunchedCard(getCard()))	//|| combination
 				{
-					output = CombinationRecipe.findResult(new CombinerWrapper(heldStack, getCard(), CombinationMode.OR), world);
+					output = CombinationRecipe.findResult(new CombinerWrapper(heldStack, getCard(), CombinationMode.OR), level);
 				} else output = AlchemyHelper.getDecodedItem(heldStack);
 				
 				if(!output.isEmpty())
@@ -132,58 +132,58 @@ public class PunchDesignixTileEntity extends TileEntity
 	
 	private void effects(boolean success)
 	{
-		WorldEventUtil.dispenserEffect(getWorld(), getPos(), getBlockState().get(FACING), success);
+		WorldEventUtil.dispenserEffect(getLevel(), getBlockPos(), getBlockState().getValue(FACING), success);
 	}
 	
 	private boolean isUsable(BlockState state)
 	{
-		return !broken && state.get(FACING).equals(getBlockState().get(FACING));
+		return !broken && state.getValue(FACING).equals(getBlockState().getValue(FACING));
 	}
 	
 	private void validateMachine()
 	{
-		if (broken || world == null)
+		if (broken || level == null)
 			return;
 		
-		if(MSBlocks.PUNCH_DESIGNIX.isInvalidFromSlot(world, getPos()))
+		if(MSBlocks.PUNCH_DESIGNIX.isInvalidFromSlot(level, getBlockPos()))
 			broken = true;
 	}
 	
 	public void dropItem(boolean inBlock)
 	{
-		if(world == null) {
+		if(level == null) {
 			Debug.warn("Tried to drop punch designix card before the world had been set!");
 			return;
 		}
 		
-		Direction direction = inBlock ? null : world.getBlockState(this.pos).get(FACING);
+		Direction direction = inBlock ? null : level.getBlockState(this.worldPosition).getValue(FACING);
 		BlockPos dropPos;
 		if (inBlock)
-			dropPos = this.pos;
-		else if (!Block.hasSolidSide(world.getBlockState(this.pos.offset(direction)), world, this.pos.offset(direction), direction.getOpposite()))
-			dropPos = this.pos.offset(direction);
-		else if (!Block.hasSolidSide(world.getBlockState(this.pos.up()), world, this.pos.up(), Direction.DOWN))
-			dropPos = this.pos.up();
-		else dropPos = this.pos;
+			dropPos = this.worldPosition;
+		else if (!Block.canSupportCenter(level, this.worldPosition.relative(direction), direction.getOpposite()))
+			dropPos = this.worldPosition.relative(direction);
+		else if (!Block.canSupportCenter(level, this.worldPosition.above(), Direction.DOWN))
+			dropPos = this.worldPosition.above();
+		else dropPos = this.worldPosition;
 		
-		InventoryHelper.spawnItemStack(world, dropPos.getX(), dropPos.getY(), dropPos.getZ(), getCard());
+		InventoryHelper.dropItemStack(level, dropPos.getX(), dropPos.getY(), dropPos.getZ(), getCard());
 		setCard(ItemStack.EMPTY);
 	}
 	
 	@Override
-	public void read(CompoundNBT compound)
+	public void load(BlockState state, CompoundNBT nbt)
 	{
-		super.read(compound);
-		broken = compound.getBoolean("broken");
-		setCard(ItemStack.read(compound.getCompound("card")));
+		super.load(state, nbt);
+		broken = nbt.getBoolean("broken");
+		setCard(ItemStack.of(nbt.getCompound("card")));
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound)
+	public CompoundNBT save(CompoundNBT compound)
 	{
-		super.write(compound);
+		super.save(compound);
 		compound.putBoolean("broken", this.broken);
-		compound.put("card", getCard().write(new CompoundNBT()));
+		compound.put("card", getCard().save(new CompoundNBT()));
 		return compound;
 	}
 }

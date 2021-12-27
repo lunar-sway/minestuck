@@ -1,0 +1,51 @@
+{
+    "bedrock_roof_position": -1,
+    "bedrock_floor_position": 0,
+    "sea_level": 0,
+    "disable_mob_generation": false,
+    "default_block": {
+        "Name": "minecraft:stone"
+    },
+    "default_fluid": {
+        "Properties": {
+            "level": "0"
+        },
+        "Name": "minecraft:water"
+    },
+    "structures": {
+        "structures": {
+            "minestuck:skaia_castle": {
+                "spacing": 1,
+                "separation": 0,
+                "salt": 0
+            }
+        }
+    },
+    "noise": {
+        "top_slide": {
+            "target": -10,
+            "size": 3,
+            "offset": 0
+        },
+        "bottom_slide": {
+            "target": -30,
+            "size": 0,
+            "offset": 0
+        },
+        "sampling": {
+            "xz_scale": 1,
+            "xz_factor": 80,
+            "y_scale": 1,
+            "y_factor": 160
+        },
+        "size_vertical": 2,
+        "size_horizontal": 1,
+        "height": 256,
+        "density_factor": 1,
+        "density_offset": -0.46875,
+        "random_density_offset": true,
+        "simplex_surface_noise": true,
+        "island_noise_override": false,
+        "amplified": false
+    }
+}

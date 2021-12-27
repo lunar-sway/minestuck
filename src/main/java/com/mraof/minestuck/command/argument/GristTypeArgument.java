@@ -47,7 +47,7 @@ public class GristTypeArgument implements ArgumentType<GristType>
 	@Override
 	public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder)
 	{
-		return ISuggestionProvider.func_212476_a(GristTypes.values().stream().map(GristType::getRegistryName), builder);
+		return ISuggestionProvider.suggestResource(GristTypes.values().stream().map(GristType::getRegistryName), builder);
 	}
 	
 	@Override

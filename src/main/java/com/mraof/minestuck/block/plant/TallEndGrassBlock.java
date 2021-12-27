@@ -27,7 +27,7 @@ public class TallEndGrassBlock extends DoublePlantBlock
 	}
 	
 	@Override
-	protected boolean isValidGround(BlockState state, IBlockReader worldIn, BlockPos pos)
+	protected boolean mayPlaceOn(BlockState state, IBlockReader worldIn, BlockPos pos)
 	{
 		return state.getBlock() == MSBlocks.END_GRASS;
 	}
@@ -36,12 +36,12 @@ public class TallEndGrassBlock extends DoublePlantBlock
 	@SuppressWarnings("deprecation")
 	public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random)
 	{
-		if(!worldIn.isRemote && random.nextFloat() >= .75F)
+		if(!worldIn.isClientSide && random.nextFloat() >= .75F)
 		{
-			List<LivingEntity> list = worldIn.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY(), pos.getZ() + 1));
+			List<LivingEntity> list = worldIn.getEntitiesOfClass(LivingEntity.class, new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY(), pos.getZ() + 1));
 			for(LivingEntity livingentity : list)
 			{
-				if(!livingentity.isSneaking() && !livingentity.isSpectator() && !(livingentity instanceof FrogEntity))
+				if(!livingentity.isShiftKeyDown() && !livingentity.isSpectator() && !(livingentity instanceof FrogEntity))
 				{
 					randomTeleport(worldIn, livingentity);
 				}
@@ -50,10 +50,10 @@ public class TallEndGrassBlock extends DoublePlantBlock
 	}
 	
 	@Override
-	public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, PlayerEntity player)
+	public void playerWillDestroy(World worldIn, BlockPos pos, BlockState state, PlayerEntity player)
 	{
-		super.onBlockHarvested(worldIn, pos, state, player);
-		if(!worldIn.isRemote && !player.isCreative())
+		super.playerWillDestroy(worldIn, pos, state, player);
+		if(!worldIn.isClientSide && !player.isCreative())
 		{
 			randomTeleport(worldIn, player);
 		}
@@ -70,24 +70,24 @@ public class TallEndGrassBlock extends DoublePlantBlock
 	
 	public void randomTeleport(World worldIn, LivingEntity livingEntity)
 	{
-		double oldPosX = livingEntity.getPosX();
-		double oldPosY = livingEntity.getPosY();
-		double oldPosZ = livingEntity.getPosZ();
+		double oldPosX = livingEntity.getX();
+		double oldPosY = livingEntity.getY();
+		double oldPosZ = livingEntity.getZ();
 		
 		for(int i = 0; i < 16; ++i)
 		{
-			double newPosX = livingEntity.getPosX() + (livingEntity.getRNG().nextDouble() - 0.5D) * 16.0D;
-			double newPosY = MathHelper.clamp(livingEntity.getPosY() + (double) (livingEntity.getRNG().nextInt(16) - 8), 0.0D, worldIn.getActualHeight() - 1);
-			double newPosZ = livingEntity.getPosZ() + (livingEntity.getRNG().nextDouble() - 0.5D) * 16.0D;
+			double newPosX = livingEntity.getX() + (livingEntity.getRandom().nextDouble() - 0.5D) * 16.0D;
+			double newPosY = MathHelper.clamp(livingEntity.getY() + (double) (livingEntity.getRandom().nextInt(16) - 8), 0.0D, worldIn.getHeight() - 1);//getAcutalHeight/getLogicalHeight
+			double newPosZ = livingEntity.getZ() + (livingEntity.getRandom().nextDouble() - 0.5D) * 16.0D;
 			if(livingEntity.isPassenger())
 			{
 				livingEntity.stopRiding();
 			}
 			
-			if(livingEntity.attemptTeleport(newPosX, newPosY, newPosZ, true))
+			if(livingEntity.randomTeleport(newPosX, newPosY, newPosZ, true))
 			{
-				worldIn.playSound(null, oldPosX, oldPosY, oldPosZ, SoundEvents.ITEM_CHORUS_FRUIT_TELEPORT, SoundCategory.PLAYERS, 1.0F, 1.0F);
-				livingEntity.playSound(SoundEvents.ITEM_CHORUS_FRUIT_TELEPORT, 1.0F, 1.0F);
+				worldIn.playSound(null, oldPosX, oldPosY, oldPosZ, SoundEvents.CHORUS_FRUIT_TELEPORT, SoundCategory.PLAYERS, 1.0F, 1.0F);
+				livingEntity.playSound(SoundEvents.CHORUS_FRUIT_TELEPORT, 1.0F, 1.0F);
 				break;
 			}
 		}

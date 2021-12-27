@@ -1,7 +1,7 @@
 {
   "type": "minestuck:combination",
   "input1": {
-    "item": "minecraft:piston"
+    "item": "minestuck:plutonium_core"
   },
   "input2": {
     "item": "minecraft:fishing_rod"

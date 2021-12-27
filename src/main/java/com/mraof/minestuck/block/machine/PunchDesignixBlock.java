@@ -41,17 +41,17 @@ public class PunchDesignixBlock extends MultiMachineBlock
 	@SuppressWarnings("deprecation")
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
 	{
-		return shape.get(state.get(FACING));
+		return shape.get(state.getValue(FACING));
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
 	{
-		if (worldIn.isRemote)
+		if (worldIn.isClientSide)
 			return ActionResultType.SUCCESS;
 		BlockPos mainPos = getMainPos(state, pos);
-		TileEntity te = worldIn.getTileEntity(mainPos);
+		TileEntity te = worldIn.getBlockEntity(mainPos);
 		if (te instanceof PunchDesignixTileEntity)
 			((PunchDesignixTileEntity) te).onRightClick((ServerPlayerEntity) player, state);
 		return ActionResultType.SUCCESS;
@@ -59,12 +59,12 @@ public class PunchDesignixBlock extends MultiMachineBlock
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving)
+	public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving)
 	{
 		if(state.getBlock() != newState.getBlock())
 		{
 			BlockPos mainPos = getMainPos(state, pos);
-			TileEntity te = worldIn.getTileEntity(mainPos);
+			TileEntity te = worldIn.getBlockEntity(mainPos);
 			if(te instanceof PunchDesignixTileEntity)
 			{
 				PunchDesignixTileEntity designix = (PunchDesignixTileEntity) te;
@@ -73,7 +73,7 @@ public class PunchDesignixBlock extends MultiMachineBlock
 					designix.dropItem(true);
 			}
 			
-			super.onReplaced(state, worldIn, pos, newState, isMoving);
+			super.onRemove(state, worldIn, pos, newState, isMoving);
 		}
 	}
 	
@@ -85,10 +85,10 @@ public class PunchDesignixBlock extends MultiMachineBlock
      */
 	public BlockPos getMainPos(BlockState state, BlockPos pos)
 	{
-		Direction direction = state.get(FACING);
+		Direction direction = state.getValue(FACING);
 		Rotation rotation = MSRotationUtil.fromDirection(direction);
 		
-		return pos.add(this.mainPos.rotate(rotation));
+		return pos.offset(this.mainPos.rotate(rotation));
 	}
 	
 	public static class Slot extends PunchDesignixBlock
@@ -98,13 +98,13 @@ public class PunchDesignixBlock extends MultiMachineBlock
 		public Slot(MachineMultiblock machine, CustomVoxelShape shape, Properties properties)
 		{
 			super(machine, shape, new BlockPos(0, 0, 0), properties);
-			setDefaultState(this.stateContainer.getBaseState().with(HAS_CARD, false));
+			registerDefaultState(this.stateDefinition.any().setValue(HAS_CARD, false));
 		}
 		
 		@Override
-		protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+		protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
 		{
-			super.fillStateContainer(builder);
+			super.createBlockStateDefinition(builder);
 			builder.add(HAS_CARD);
 		}
 		

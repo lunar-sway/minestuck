@@ -4,6 +4,7 @@ import com.mraof.minestuck.block.redstone.AreaEffectBlock;
 import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -30,11 +31,11 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 	
 	public void giveEntitiesEffect()
 	{
-		for(LivingEntity livingEntity : world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(minEffectPos, maxEffectPos)))
+		for(LivingEntity livingEntity : level.getLoadedEntitiesOfClass(LivingEntity.class, new AxisAlignedBB(minEffectPos, maxEffectPos)))
 		{
 			if(effect instanceof CreativeShockEffect) //skips later creative/harmful specific checks as the effect should always be given
 			{
-				livingEntity.addPotionEffect(new EffectInstance(effect, 120, effectAmplifier, false, false));
+				livingEntity.addEffect(new EffectInstance(effect, 120, effectAmplifier, false, false));
 			} else
 			{
 				if(livingEntity instanceof PlayerEntity)
@@ -43,10 +44,10 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 						break;
 				}
 				
-				if(effect.isInstant())
-					livingEntity.addPotionEffect(new EffectInstance(effect, 1, effectAmplifier, false, false));
+				if(effect.isInstantenous())
+					livingEntity.addEffect(new EffectInstance(effect, 1, effectAmplifier, false, false));
 				else
-					livingEntity.addPotionEffect(new EffectInstance(effect, 120, effectAmplifier, false, false));
+					livingEntity.addEffect(new EffectInstance(effect, 120, effectAmplifier, false, false));
 			}
 		}
 	}
@@ -54,10 +55,10 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 	@Override
 	public void tick()
 	{
-		if(world == null || !world.isAreaLoaded(pos, 0))
+		if(level == null || !level.isAreaLoaded(getBlockPos(), 0))
 			return; // Forge: prevent loading unloaded chunks
 		
-		if(world.getGameTime() % 60 == 0 && world.getBlockState(pos).getBlock() instanceof AreaEffectBlock && world.isBlockPowered(pos))
+		if(level.getGameTime() % 60 == 0 && level.getBlockState(getBlockPos()).getBlock() instanceof AreaEffectBlock && level.hasNeighborSignal(getBlockPos()))
 		{
 			giveEntitiesEffect();
 		}
@@ -94,7 +95,7 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 	{
 		if(minEffectPos == null)
 		{
-			minEffectPos = new BlockPos(this.pos.add(-16, -16, -16));
+			minEffectPos = new BlockPos(this.getBlockPos().offset(-16, -16, -16));
 		}
 		return this.minEffectPos;
 	}
@@ -108,17 +109,17 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 	{
 		if(maxEffectPos == null)
 		{
-			maxEffectPos = new BlockPos(this.pos.add(16, 16, 16));
+			maxEffectPos = new BlockPos(this.getBlockPos().offset(16, 16, 16));
 		}
 		return this.maxEffectPos;
 	}
 	
 	@Override
-	public void read(CompoundNBT compound)
+	public void load(BlockState state, CompoundNBT compound)
 	{
-		super.read(compound);
+		super.load(state, compound);
 		
-		Effect effectRead = Effect.get(compound.getInt("effect"));
+		Effect effectRead = Effect.byId(compound.getInt("effect"));
 		if(effectRead != null)
 		{
 			effect = effectRead;
@@ -138,9 +139,9 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound)
+	public CompoundNBT save(CompoundNBT compound)
 	{
-		super.write(compound);
+		super.save(compound);
 		
 		compound.putInt("effect", Effect.getId(getEffect()));
 		compound.putInt("effectAmplifier", effectAmplifier);
@@ -162,19 +163,18 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 	@Override
 	public CompoundNBT getUpdateTag()
 	{
-		return this.write(new CompoundNBT());
+		return this.save(new CompoundNBT());
 	}
 	
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket()
 	{
-		return new SUpdateTileEntityPacket(this.pos, 2, this.write(new CompoundNBT()));
+		return new SUpdateTileEntityPacket(getBlockPos(), 2, getUpdateTag());
 	}
 	
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
 	{
-		this.read(pkt.getNbtCompound());
+		this.load(getBlockState(), pkt.getTag());
 	}
-	
 }

@@ -20,7 +20,8 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.StringNBT;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.util.RegistryKey;
+import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
 
@@ -103,7 +104,7 @@ public final class SburbConnection
 		if(nbt.contains("ClientLand", Constants.NBT.TAG_COMPOUND))
 		{
 			clientLandInfo = LandInfo.read(nbt.getCompound("ClientLand"), skaianet, getClientIdentifier());
-			MSDimensions.updateLandMaps(this);
+			MSDimensions.updateLandMaps(this, false);
 			hasEntered = nbt.contains("has_entered") ? nbt.getBoolean("has_entered") : true;
 		}
 		artifactType = nbt.getInt("artifact");
@@ -293,7 +294,7 @@ public final class SburbConnection
 	/**
 	 * @return The land dimension assigned to the client player.
 	 */
-	public DimensionType getClientDimension()
+	public RegistryKey<World> getClientDimension()
 	{
 		return getLandInfo() == null ? null : getLandInfo().getDimensionType();
 	}
@@ -301,14 +302,14 @@ public final class SburbConnection
 	{
 		return clientLandInfo;
 	}
-	void setLand(LandTypePair landTypes, DimensionType dimension)
+	void setLand(LandTypePair landTypes, RegistryKey<World> dimension)
 	{
 		if(clientLandInfo != null)
 			throw new IllegalStateException("Can't set land twice");
 		else
 		{
 			clientLandInfo = new LandInfo(clientIdentifier, landTypes, dimension, new Random());	//TODO handle random better
-			MSDimensions.updateLandMaps(this);
+			MSDimensions.updateLandMaps(this, true);
 		}
 	}
 	void setHasEntered()
@@ -384,8 +385,8 @@ public final class SburbConnection
 			buffer.writeBoolean(hasEntered());
 		}
 		buffer.writeInt(getClientIdentifier().getId());
-		buffer.writeString(getClientIdentifier().getUsername(), 16);
+		buffer.writeUtf(getClientIdentifier().getUsername(), 16);
 		buffer.writeInt(getServerIdentifier().getId());
-		buffer.writeString(getServerIdentifier().getUsername(), 16);
+		buffer.writeUtf(getServerIdentifier().getUsername(), 16);
 	}
 }

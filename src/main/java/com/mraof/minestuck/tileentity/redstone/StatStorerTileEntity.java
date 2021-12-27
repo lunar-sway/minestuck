@@ -3,11 +3,13 @@ package com.mraof.minestuck.tileentity.redstone;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.redstone.StatStorerBlock;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
+import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.util.Constants;
 
 public class StatStorerTileEntity extends TileEntity implements ITickableTileEntity
 {
@@ -16,9 +18,10 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 	private int saplingsGrownStored;
 	private float healthRecoveredStored;
 	private int lightningStruckStored;
-	//private int blockRightClickStored;
-	//private int entitySetTargetStored;
-	private int alcehemyActivatedStored;
+	private int entitiesBredStored;
+	private int explosionsStored;
+	private int alchemyActivatedStored;
+	private int gristDropsStored;
 	
 	private ActiveType activeType;
 	private int divideValueBy;
@@ -30,10 +33,11 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 		DEATHS,
 		SAPLING_GROWN,
 		HEALTH_RECOVERED,
-		LIGHTNING_STRUCK,
-		//BLOCK_RIGHT_CLICK,
-		//ENTITY_SET_TARGET,
-		ALCHEMY_ACTIVATED;
+		LIGHTNING_STRUCK_ENTITY,
+		ENTITIES_BRED,
+		EXPLOSIONS,
+		ALCHEMY_ACTIVATED,
+		GRIST_DROPS;
 		
 		public static ActiveType fromInt(int ordinal) //converts int back into enum
 		{
@@ -59,12 +63,12 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 	@Override
 	public void tick()
 	{
-		if(world == null || !world.isAreaLoaded(pos, 1))
+		if(level == null || !level.isAreaLoaded(worldPosition, 1))
 			return; // Forge: prevent loading unloaded chunks
 		
 		if(tickCycle % MinestuckConfig.SERVER.wirelessBlocksTickRate.get() == 1)
 		{
-			world.setBlockState(pos, world.getBlockState(pos).with(StatStorerBlock.POWER, Math.min(15, getActiveStoredStatValue() / getDivideValueBy())));
+			level.setBlock(worldPosition, level.getBlockState(worldPosition).setValue(StatStorerBlock.POWER, Math.min(15, getActiveStoredStatValue() / getDivideValueBy())), Constants.BlockFlags.NOTIFY_NEIGHBORS);
 			if(tickCycle >= 5000) //setting arbitrarily high value that the tick cannot go past
 				tickCycle = 0;
 		}
@@ -72,9 +76,9 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 	}
 	
 	@Override
-	public void read(CompoundNBT compound)
+	public void load(BlockState state, CompoundNBT compound)
 	{
-		super.read(compound);
+		super.load(state, compound);
 		
 		if(compound.contains("damageStored"))
 			this.damageStored = compound.getFloat("damageStored");
@@ -101,20 +105,25 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 		else
 			this.lightningStruckStored = 0;
 		
-		/*if(compound.contains("blockRightClickStored"))
-			this.blockRightClickStored = compound.getInt("blockRightClickStored");
+		if(compound.contains("entitiesBredStored"))
+			this.entitiesBredStored = compound.getInt("entitiesBredStored");
 		else
-			this.blockRightClickStored = 0;
+			this.entitiesBredStored = 0;
 		
-		if(compound.contains("entitySetTargetStored"))
-			this.entitySetTargetStored = compound.getInt("entitySetTargetStored");
+		if(compound.contains("explosionsStored"))
+			this.explosionsStored = compound.getInt("explosionsStored");
 		else
-			this.entitySetTargetStored = 0;*/
+			this.explosionsStored = 0;
 		
-		if(compound.contains("alcehemyActivatedStored"))
-			this.alcehemyActivatedStored = compound.getInt("alcehemyActivatedStored");
+		if(compound.contains("alchemyActivatedStored"))
+			this.alchemyActivatedStored = compound.getInt("alchemyActivatedStored");
 		else
-			this.alcehemyActivatedStored = 0;
+			this.alchemyActivatedStored = 0;
+		
+		if(compound.contains("gristDropsStored"))
+			this.gristDropsStored = compound.getInt("gristDropsStored");
+		else
+			this.gristDropsStored = 0;
 		
 		
 		this.tickCycle = compound.getInt("tickCycle");
@@ -126,17 +135,19 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound)
+	public CompoundNBT save(CompoundNBT compound)
 	{
-		super.write(compound);
+		super.save(compound);
+		
 		compound.putFloat("damageStored", damageStored);
 		compound.putInt("deathsStored", deathsStored);
 		compound.putInt("saplingsGrownStored", saplingsGrownStored);
 		compound.putFloat("healthRecoveredStored", healthRecoveredStored);
 		compound.putInt("lightningStruckStored", lightningStruckStored);
-		//compound.putInt("blockRightClickStored", blockRightClickStored);
-		//compound.putInt("entitySetTargetStored", entitySetTargetStored);
-		compound.putInt("alcehemyActivatedStored", alcehemyActivatedStored);
+		compound.putInt("entitiesBredStored", entitiesBredStored);
+		compound.putInt("explosionsStored", explosionsStored);
+		compound.putInt("alchemyActivatedStored", alchemyActivatedStored);
+		compound.putInt("gristDropsStored", gristDropsStored);
 		
 		compound.putInt("tickCycle", tickCycle);
 		compound.putInt("activeTypeOrdinal", activeType.ordinal());
@@ -156,14 +167,16 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 			return this.saplingsGrownStored;
 		else if(this.activeType == ActiveType.HEALTH_RECOVERED)
 			return (int) this.healthRecoveredStored;
-		else if(this.activeType == ActiveType.LIGHTNING_STRUCK)
+		else if(this.activeType == ActiveType.LIGHTNING_STRUCK_ENTITY)
 			return this.lightningStruckStored;
-	/*	else if(this.activeType == ActiveType.BLOCK_RIGHT_CLICK)
-			return this.blockRightClickStored;
-		else if(this.activeType == ActiveType.ENTITY_SET_TARGET)
-			return this.entitySetTargetStored;*/
+		else if(this.activeType == ActiveType.ENTITIES_BRED)
+			return this.entitiesBredStored;
+		else if(this.activeType == ActiveType.EXPLOSIONS)
+			return this.explosionsStored;
 		else if(this.activeType == ActiveType.ALCHEMY_ACTIVATED)
-			return this.alcehemyActivatedStored;
+			return this.alchemyActivatedStored;
+		else if(this.activeType == ActiveType.GRIST_DROPS)
+			return this.gristDropsStored;
 		
 		return 0;
 	}
@@ -196,39 +209,50 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 			playAnimation(blockPos);
 		activeType = getActiveType();
 		
+		boolean changeBlockState = false;
+		
 		if(this.activeType == ActiveType.DAMAGE)
 		{
 			this.damageStored = storedStatIn;
-			world.getBlockState(pos).getBlock().updateNeighbors(world.getBlockState(pos), world, pos, 3);
+			changeBlockState = true;
+			
 		} else if(this.activeType == ActiveType.DEATHS)
 		{
 			this.deathsStored = (int) storedStatIn;
-			world.getBlockState(pos).getBlock().updateNeighbors(world.getBlockState(pos), world, pos, 3);
+			changeBlockState = true;
 		} else if(this.activeType == ActiveType.SAPLING_GROWN)
 		{
 			this.saplingsGrownStored = (int) storedStatIn;
-			world.getBlockState(pos).getBlock().updateNeighbors(world.getBlockState(pos), world, pos, 3);
+			changeBlockState = true;
 		} else if(this.activeType == ActiveType.HEALTH_RECOVERED)
 		{
 			this.healthRecoveredStored = storedStatIn;
-			world.getBlockState(pos).getBlock().updateNeighbors(world.getBlockState(pos), world, pos, 3);
-		} else if(this.activeType == ActiveType.LIGHTNING_STRUCK)
+			changeBlockState = true;
+		} else if(this.activeType == ActiveType.LIGHTNING_STRUCK_ENTITY)
 		{
 			this.lightningStruckStored = (int) storedStatIn;
-			world.getBlockState(pos).getBlock().updateNeighbors(world.getBlockState(pos), world, pos, 3);
-		/*} else if(this.activeType == ActiveType.BLOCK_RIGHT_CLICK)
+			changeBlockState = true;
+		} else if(this.activeType == ActiveType.ENTITIES_BRED)
 		{
-			this.blockRightClickStored = (int) storedStatIn;
-			world.getBlockState(pos).getBlock().updateNeighbors(world.getBlockState(pos), world, pos, 3);
-		} else if(this.activeType == ActiveType.ENTITY_SET_TARGET)
+			this.entitiesBredStored = (int) storedStatIn;
+			changeBlockState = true;
+		} else if(this.activeType == ActiveType.EXPLOSIONS)
 		{
-			this.entitySetTargetStored = (int) storedStatIn;
-			world.getBlockState(pos).getBlock().updateNeighbors(world.getBlockState(pos), world, pos, 3);*/
+			this.explosionsStored = (int) storedStatIn;
+			changeBlockState = true;
 		} else if(this.activeType == ActiveType.ALCHEMY_ACTIVATED)
 		{
-			this.alcehemyActivatedStored = (int) storedStatIn;
-			world.getBlockState(pos).getBlock().updateNeighbors(world.getBlockState(pos), world, pos, 3);
+			this.alchemyActivatedStored = (int) storedStatIn;
+			changeBlockState = true;
+		} else if(this.activeType == ActiveType.GRIST_DROPS)
+		{
+			this.gristDropsStored = (int) storedStatIn;
+			changeBlockState = true;
 		}
+		
+		if(changeBlockState)
+			level.updateNeighborsAt(worldPosition, level.getBlockState(worldPosition).getBlock());
+		//level.getBlockState(worldPosition).getBlock().updateNeighbors(level.getBlockState(worldPosition), level, worldPosition, 3);
 	}
 	
 	public void setDivideValue(int divideValueBy)
@@ -242,7 +266,7 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 	{
 		for(int i = 0; i < 10; i++)
 		{
-			this.world.addParticle(ParticleTypes.HEART, true, blockPosIn.getX(), blockPosIn.getY(), blockPosIn.getZ(), 0.01, 0.01, 0.01);
+			this.level.addParticle(ParticleTypes.HEART, true, blockPosIn.getX(), blockPosIn.getY(), blockPosIn.getZ(), 0.01, 0.01, 0.01);
 		}
 	}
 }

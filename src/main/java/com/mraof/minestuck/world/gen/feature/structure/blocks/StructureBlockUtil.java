@@ -37,21 +37,21 @@ public class StructureBlockUtil
 	public static boolean placeSpawner(BlockPos pos, IWorld world, MutableBoundingBox bb, EntityType<?> entityType)
 	{
 		WeightedSpawnerEntity entity = new WeightedSpawnerEntity();
-		entity.getNbt().putString("id", Objects.requireNonNull(entityType.getRegistryName()).toString());
+		entity.getTag().putString("id", Objects.requireNonNull(entityType.getRegistryName()).toString());
 		return placeSpawner(pos, world, bb, entity);
 	}
 	
 	public static boolean placeSpawner(BlockPos pos, IWorld world, MutableBoundingBox bb, WeightedSpawnerEntity entity)
 	{
-		if(bb.isVecInside(pos))
+		if(bb.isInside(pos))
 		{
-			world.setBlockState(pos, Blocks.SPAWNER.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
+			world.setBlock(pos, Blocks.SPAWNER.defaultBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
 			
-			TileEntity te = world.getTileEntity(pos);
+			TileEntity te = world.getBlockEntity(pos);
 			if(te instanceof MobSpawnerTileEntity)
 			{
 				MobSpawnerTileEntity spawner = (MobSpawnerTileEntity) te;
-				spawner.getSpawnerBaseLogic().setNextSpawnData(entity);
+				spawner.getSpawner().setNextSpawnData(entity);
 				
 				return true;
 			}
@@ -66,11 +66,11 @@ public class StructureBlockUtil
 	
 	public static void placeChest(BlockPos pos, IWorld world, MutableBoundingBox bb, Direction direction, ChestType type, ResourceLocation lootTable, Random rand)
 	{
-		if(bb == null || bb.isVecInside(pos))
+		if(bb == null || bb.isInside(pos))
 		{
-			world.setBlockState(pos, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, direction).with(ChestBlock.TYPE, type), Constants.BlockFlags.BLOCK_UPDATE);
+			world.setBlock(pos, Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, direction).setValue(ChestBlock.TYPE, type), Constants.BlockFlags.BLOCK_UPDATE);
 			
-			TileEntity te = world.getTileEntity(pos);
+			TileEntity te = world.getBlockEntity(pos);
 			if(te instanceof ChestTileEntity)
 			{
 				ChestTileEntity chest = (ChestTileEntity) te;
@@ -78,7 +78,7 @@ public class StructureBlockUtil
 			}
 			
 			if(bb != null)
-				world.getChunk(pos).markBlockForPostprocessing(pos);
+				world.getChunk(pos).markPosForPostprocessing(pos);
 		}
 	}
 	

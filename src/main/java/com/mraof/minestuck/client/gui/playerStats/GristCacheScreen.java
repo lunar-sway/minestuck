@@ -1,5 +1,6 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.computer.editmode.ClientEditHandler;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
@@ -7,6 +8,7 @@ import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
 
@@ -31,8 +33,8 @@ public class GristCacheScreen extends PlayerStatsScreen
 	public void init()
 	{
 		super.init();
-		this.previousButton = new ExtendedButton(this.xOffset + 8, this.yOffset + 8, 16, 16, "<", button -> prevPage());
-		this.nextButton = new ExtendedButton(this.xOffset + guiWidth - 24, this.yOffset + 8, 16, 16, ">", button -> nextPage());
+		this.previousButton = new ExtendedButton(this.xOffset + 8, this.yOffset + 8, 16, 16, new StringTextComponent("<"), button -> prevPage());
+		this.nextButton = new ExtendedButton(this.xOffset + guiWidth - 24, this.yOffset + 8, 16, 16, new TranslationTextComponent(">"), button -> nextPage());
 		if(GristTypes.getRegistry().getValues().size() > rows * columns)
 		{
 			addButton(this.nextButton);
@@ -40,33 +42,33 @@ public class GristCacheScreen extends PlayerStatsScreen
 	}
 	
 	@Override
-	public void render(int mouseX, int mouseY, float partialTicks)
+	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground();
+		this.renderBackground(matrixStack);
 		
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-		drawTabs();
+		drawTabs(matrixStack);
 
-		this.mc.getTextureManager().bindTexture(guiGristcache);
-		this.blit(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
+		this.mc.getTextureManager().bind(guiGristcache);
+		this.blit(matrixStack, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 
 		String cacheMessage;
 		if(ClientEditHandler.isActive() || ClientPlayerData.getTitle() == null)
-			cacheMessage = getTitle().getFormattedText();
-		else cacheMessage = ClientPlayerData.getTitle().asTextComponent().getFormattedText();
-		mc.fontRenderer.drawString(cacheMessage, (this.width / 2F) - mc.fontRenderer.getStringWidth(cacheMessage) / 2F, yOffset + 12, 0x404040);
-		super.render(mouseX, mouseY, partialTicks);
+			cacheMessage = getTitle().getString();
+		else cacheMessage = ClientPlayerData.getTitle().asTextComponent().getString();
+		mc.font.draw(matrixStack, cacheMessage, (this.width / 2F) - mc.font.width(cacheMessage) / 2F, yOffset + 12, 0x404040);
+		super.render(matrixStack, mouseX, mouseY, partialTicks);
 
-		drawActiveTabAndOther(mouseX, mouseY);
+		drawActiveTabAndOther(matrixStack, mouseX, mouseY);
 
 		RenderSystem.color3f(1, 1, 1);
 		RenderSystem.disableRescaleNormal();
-		RenderHelper.disableStandardItemLighting();
+		RenderHelper.turnOff();
 		RenderSystem.disableLighting();
 		RenderSystem.disableDepthTest();
 
-		this.drawGrist(xOffset, yOffset, mouseX, mouseY, page);
+		this.drawGrist(matrixStack, xOffset, yOffset, mouseX, mouseY, page);
 	}
 	
 	private void prevPage()

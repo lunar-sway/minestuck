@@ -27,14 +27,14 @@ public class FrogRenderer extends MobRenderer<FrogEntity, FrogModel<FrogEntity>>
 	}
 
 	@Override
-	public ResourceLocation getEntityTexture(FrogEntity entity)
+	public ResourceLocation getTextureLocation(FrogEntity entity)
 	{
 		return new ResourceLocation(Minestuck.MOD_ID, "textures/entity/frog/base.png");
 	}
 	
-	protected boolean canRenderName(FrogEntity entity)
+	protected boolean shouldShowName(FrogEntity entity)
     {
-        return super.canRenderName(entity) && (entity.getAlwaysRenderNameTagForRender() || entity.hasCustomName() && entity == this.renderManager.pointedEntity);
+        return super.shouldShowName(entity) && (entity.shouldShowName() || entity.hasCustomName() && entity == this.entityRenderDispatcher.crosshairPickEntity);
     }
 	
 

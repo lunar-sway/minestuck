@@ -21,22 +21,22 @@ public class HieroglyphBlock extends Block
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
 	{
-		ItemStack itemstack = player.getHeldItem(handIn);
+		ItemStack itemstack = player.getItemInHand(handIn);
 		ItemStack bookStack = new ItemStack(Items.WRITABLE_BOOK);
 		
-		if(ItemStack.areItemsEqual(itemstack, bookStack))
+		if(ItemStack.isSame(itemstack, bookStack))
 		{
-			if(!worldIn.isRemote)
+			if(!worldIn.isClientSide)
 			{
-				int amountInHandStack = player.getHeldItem(handIn).getCount();
-				Direction direction = hit.getFace();
-				Direction direction1 = direction.getAxis() == Direction.Axis.Y ? player.getHorizontalFacing().getOpposite() : direction;
-				worldIn.playSound((PlayerEntity) null, pos, SoundEvents.ENTITY_VILLAGER_WORK_CARTOGRAPHER, SoundCategory.BLOCKS, 1.0F, 1.0F);
-				ItemEntity itementity = new ItemEntity(worldIn, (double) pos.getX() + 0.5D + (double) direction1.getXOffset() * 0.65D, (double) pos.getY() + 0.1D, (double) pos.getZ() + 0.5D + (double) direction1.getZOffset() * 0.65D, new ItemStack(MSItems.SBURB_CODE, amountInHandStack));
-				itementity.setMotion(0.05D * (double) direction1.getXOffset() + worldIn.rand.nextDouble() * 0.02D, 0.05D, 0.05D * (double) direction1.getZOffset() + worldIn.rand.nextDouble() * 0.02D);
-				worldIn.addEntity(itementity);
+				int amountInHandStack = itemstack.getCount();
+				Direction direction = hit.getDirection();
+				Direction direction1 = direction.getAxis() == Direction.Axis.Y ? player.getDirection().getOpposite() : direction;
+				worldIn.playSound(null, pos, SoundEvents.VILLAGER_WORK_CARTOGRAPHER, SoundCategory.BLOCKS, 1.0F, 1.0F);
+				ItemEntity itementity = new ItemEntity(worldIn, (double) pos.getX() + 0.5D + (double) direction1.getStepX() * 0.65D, (double) pos.getY() + 0.1D, (double) pos.getZ() + 0.5D + (double) direction1.getStepZ() * 0.65D, new ItemStack(MSItems.SBURB_CODE, amountInHandStack));
+				itementity.setDeltaMovement(0.05D * (double) direction1.getStepX() + worldIn.random.nextDouble() * 0.02D, 0.05D, 0.05D * (double) direction1.getStepZ() + worldIn.random.nextDouble() * 0.02D);
+				worldIn.addFreshEntity(itementity);
 				itemstack.shrink(amountInHandStack);
 			}
 			return ActionResultType.SUCCESS;

@@ -50,7 +50,7 @@ public abstract class GeneratedGristCost extends GristCostRecipe implements Gene
 	@Override
 	public void addCostProvider(BiConsumer<Item, GeneratedCostProvider> consumer)
 	{
-		for(ItemStack stack : ingredient.getMatchingStacks())
+		for(ItemStack stack : ingredient.getItems())
 			consumer.accept(stack.getItem(), this);
 	}
 	
@@ -101,9 +101,9 @@ public abstract class GeneratedGristCost extends GristCostRecipe implements Gene
 		}
 		
 		@Override
-		public void write(PacketBuffer buffer, T recipe)
+		public void toNetwork(PacketBuffer buffer, T recipe)
 		{
-			super.write(buffer, recipe);
+			super.toNetwork(buffer, recipe);
 			if(recipe.getCachedCost() != null)
 			{
 				buffer.writeBoolean(true);

@@ -21,10 +21,10 @@ public class BarbasolBombItem extends Item
     }
     
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn)
+    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn)
     {
-        ItemStack item = playerIn.getHeldItem(handIn);
-        
+        ItemStack item = playerIn.getItemInHand(handIn);
+    
         if(!CreativeShockEffect.doesCreativeShockLimit(playerIn, 0, 3))
         {
             if(!playerIn.isCreative())
@@ -32,20 +32,21 @@ public class BarbasolBombItem extends Item
                 item.shrink(1);
             }
     
-            worldIn.playSound(null, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.ENTITY_TNT_PRIMED, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+            worldIn.playSound(null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.TNT_PRIMED, SoundCategory.NEUTRAL, 1.0F, 1.0F);
     
-            if(!worldIn.isRemote)
+            if(!worldIn.isClientSide)
             {
         
-                BarbasolBombEntity bomb = new BarbasolBombEntity(MSEntityTypes.BARBASOL_BOMB, playerIn, worldIn, playerIn.abilities.allowEdit);
+                BarbasolBombEntity bomb = new BarbasolBombEntity(MSEntityTypes.BARBASOL_BOMB, playerIn, worldIn, playerIn.abilities.mayBuild);
                 bomb.setItem(item);
-                bomb.shoot(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, -20.0F, 0.7F, 1.0F);
-                worldIn.addEntity(bomb);
+                bomb.shootFromRotation(playerIn, playerIn.xRot, playerIn.yRot, -20.0F, 0.7F, 1.0F);
+                worldIn.addFreshEntity(bomb);
             }
     
-            playerIn.addStat(Stats.ITEM_USED.get(this));
-            return ActionResult.resultSuccess(item);
+            playerIn.awardStat(Stats.ITEM_USED.get(this));
+            return ActionResult.success(item);
         }
-        return ActionResult.resultPass(item);
+    
+        return ActionResult.pass(item);
     }
 }

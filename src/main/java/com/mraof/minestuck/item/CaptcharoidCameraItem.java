@@ -27,36 +27,36 @@ public class CaptcharoidCameraItem extends Item
 	}
 	
 	@Override
-	public ActionResultType onItemUse(ItemUseContext context)
+	public ActionResultType useOn(ItemUseContext context)
 	{
-		World worldIn = context.getWorld();
-		BlockPos pos = context.getPos();
+		World worldIn = context.getLevel();
+		BlockPos pos = context.getClickedPos();
 		PlayerEntity player = context.getPlayer();
-		Direction facing = context.getFace();
+		Direction facing = context.getClickedFace();
 		Boolean inside = context.isInside();
 
 		//pos.offset(facing).offset(facing.rotateY()).up(), pos.offset(facing.getOpposite()).offset(facing.rotateYCCW()).down()
-		if(!worldIn.isRemote) 
+		if(!worldIn.isClientSide) 
 		{
 			
-			AxisAlignedBB bb = new AxisAlignedBB(pos.offset(facing));
-			List<ItemFrameEntity> list = worldIn.getEntitiesWithinAABB(ItemFrameEntity.class, bb);
+			AxisAlignedBB bb = new AxisAlignedBB(pos.relative(facing));
+			List<ItemFrameEntity> list = worldIn.getEntitiesOfClass(ItemFrameEntity.class, bb);
 			
 			if(!list.isEmpty())
 			{
-				ItemStack item = list.get(0).getDisplayedItem();
+				ItemStack item = list.get(0).getItem();
 				if(item.isEmpty()) item = new ItemStack(Items.ITEM_FRAME);
 				
-				player.inventory.addItemStackToInventory(AlchemyHelper.createGhostCard(item));
-				context.getItem().damageItem(1, player, (playerEntity) -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
+				player.inventory.add(AlchemyHelper.createGhostCard(item));
+				context.getItemInHand().hurtAndBreak(1, player, (playerEntity) -> playerEntity.broadcastBreakEvent(Hand.MAIN_HAND));
 			}
 			else
 			{
 				BlockState state = worldIn.getBlockState(pos);
-				ItemStack block = state.getPickBlock(new BlockRayTraceResult(context.getHitVec(), facing, pos, inside), worldIn, pos, player);
+				ItemStack block = state.getPickBlock(new BlockRayTraceResult(context.getClickLocation(), facing, pos, inside), worldIn, pos, player);
 				
-				player.inventory.addItemStackToInventory(AlchemyHelper.createGhostCard(block));
-				context.getItem().damageItem(1, player,  (playerEntity) -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
+				player.inventory.add(AlchemyHelper.createGhostCard(block));
+				context.getItemInHand().hurtAndBreak(1, player,  (playerEntity) -> playerEntity.broadcastBreakEvent(Hand.MAIN_HAND));
 			}
 			return ActionResultType.PASS;
 		}

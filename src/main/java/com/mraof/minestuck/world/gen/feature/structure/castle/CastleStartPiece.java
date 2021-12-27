@@ -4,10 +4,12 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.feature.structure.StructureManager;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 
@@ -41,25 +43,25 @@ public class CastleStartPiece extends CastlePiece
     }
     
     @Override
-    public void buildComponent(StructurePiece componentIn, List<StructurePiece> pieces, Random rand)
+    public void addChildren(StructurePiece componentIn, List<StructurePiece> pieces, Random rand)
     {
 		this.castleWidth = (rand.nextInt(12) + 4) * 16;
 		this.castleLength = (rand.nextInt(24) + 8) * 16;
-		this.componentType = 1;
+		this.genDepth = 1;
 		this.getNextComponentNormal(this, pieces, rand, 8, 0, true);
-		this.componentType = 2;
+		this.genDepth = 2;
 		for(int depth = 8; depth < this.castleLength; depth += 8)
 			this.getNextComponentNormal(this, pieces, rand,  0, depth, true);
-		this.componentType = 0;
+		this.genDepth = 0;
 		this.getNextComponentNormal(this, pieces, rand, 0, -8, 0);
 		
 	}
     
     @Override
-    public boolean create(IWorld world, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBox, ChunkPos chunkPosIn)
+    public boolean postProcess(ISeedReader world, StructureManager manager, ChunkGenerator generator, Random random, MutableBoundingBox structureBoundingBox, ChunkPos chunkPosIn, BlockPos pos)
     {
-        BlockState chessTile = (isBlack ? MSBlocks.BLACK_CHESS_DIRT : MSBlocks.WHITE_CHESS_DIRT).getDefaultState();
-        BlockState chessTile1 = (isBlack ? MSBlocks.DARK_GRAY_CHESS_DIRT : MSBlocks.LIGHT_GRAY_CHESS_DIRT).getDefaultState();
+        BlockState chessTile = (isBlack ? MSBlocks.BLACK_CHESS_DIRT : MSBlocks.WHITE_CHESS_DIRT).defaultBlockState();
+        BlockState chessTile1 = (isBlack ? MSBlocks.DARK_GRAY_CHESS_DIRT : MSBlocks.LIGHT_GRAY_CHESS_DIRT).defaultBlockState();
         if (this.averageGroundLevel < 0)
         {
             this.averageGroundLevel = this.getAverageGroundLevel(world, structureBoundingBox);
@@ -70,8 +72,8 @@ public class CastleStartPiece extends CastlePiece
             }
 
         }
-        this.boundingBox.offset(0, this.averageGroundLevel - 1, 0);
-        if (this.isLiquidInStructureBoundingBox(world, structureBoundingBox))
+        this.boundingBox.move(0, this.averageGroundLevel - 1, 0);
+        if (this.edgesLiquid(world, structureBoundingBox))
         {
             return false;
         }
@@ -80,7 +82,7 @@ public class CastleStartPiece extends CastlePiece
             this.fillWithAlternatingBlocks(world, structureBoundingBox, 0, 0, 0, 7 ,6, 7, chessTile,  chessTile1, false);
             this.fillWithAlternatingBlocks(world, structureBoundingBox, 0, 0, 0, 7 ,7, 0, chessTile, chessTile1, false);
             this.fillWithAlternatingBlocks(world, structureBoundingBox, 0, 0, 7, 7 ,7, 7, chessTile, chessTile1, false);
-            this.fillWithAir(world, structureBoundingBox, 2, 1, 0, 5, 5, 7);
+            this.generateAirBox(world, structureBoundingBox, 2, 1, 0, 5, 5, 7);
 
             return true;
         }

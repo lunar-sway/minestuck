@@ -29,7 +29,7 @@ public class CookingCostInterpreter extends DefaultInterpreter
 		
 		if(cost != null && recipe instanceof AbstractCookingRecipe)
 		{
-			float cookTime = ((AbstractCookingRecipe) recipe).getCookTime();
+			float cookTime = ((AbstractCookingRecipe) recipe).getCookingTime();
 			cost.addGrist(fuelCost.copy().scale(cookTime / STANDARD_COOKING_TIME, false));
 		}
 		
@@ -47,7 +47,7 @@ public class CookingCostInterpreter extends DefaultInterpreter
 		@Override
 		public CookingCostInterpreter read(JsonElement json)
 		{
-			GristSet cost = GristSet.deserialize(JSONUtils.getJsonObject(json, "grist cost"));
+			GristSet cost = GristSet.deserialize(JSONUtils.convertToJsonObject(json, "grist cost"));
 			return new CookingCostInterpreter(cost);
 		}
 		

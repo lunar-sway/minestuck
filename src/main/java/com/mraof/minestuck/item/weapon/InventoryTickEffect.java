@@ -27,14 +27,14 @@ public interface InventoryTickEffect
 	InventoryTickEffect DROP_WHEN_IN_WATER = (stack, worldIn, entityIn, itemSlot, isSelected) -> {
 		if(isSelected && entityIn.isInWater() && entityIn instanceof LivingEntity)
 		{
-			stack.damageItem(70, ((LivingEntity) entityIn), entity -> entity.sendBreakAnimation(Hand.MAIN_HAND));
-			ItemEntity weapon = new ItemEntity(entityIn.world, entityIn.getPosX(), entityIn.getPosY(), entityIn.getPosZ(), stack.copy());
+			stack.hurtAndBreak(70, ((LivingEntity) entityIn), entity -> entity.broadcastBreakEvent(Hand.MAIN_HAND));
+			ItemEntity weapon = new ItemEntity(entityIn.level, entityIn.getX(), entityIn.getY(), entityIn.getZ(), stack.copy());
 			weapon.getItem().setCount(1);
-			weapon.setPickupDelay(40);
-			entityIn.world.addEntity(weapon);
+			weapon.setPickUpDelay(40);
+			entityIn.level.addFreshEntity(weapon);
 			stack.shrink(1);
 			
-			entityIn.attackEntityFrom(DamageSource.LIGHTNING_BOLT, 5);
+			entityIn.hurt(DamageSource.LIGHTNING_BOLT, 5);
 		}
 	};
 	
@@ -46,7 +46,7 @@ public interface InventoryTickEffect
 			{
 				Title title = PlayerSavedData.getData((ServerPlayerEntity) entityIn).getTitle();
 				if(title != null && title.getHeroAspect() == aspect)
-					((ServerPlayerEntity) entityIn).addPotionEffect(effect.get());
+					((ServerPlayerEntity) entityIn).addEffect(effect.get());
 			}
 		};
 	}

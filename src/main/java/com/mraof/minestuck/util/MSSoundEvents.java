@@ -111,6 +111,7 @@ public class MSSoundEvents
 	{
 		List<String> paths = Lists.newArrayList(
 				"music_disc.emissary_of_dance", "music_disc.dance_stab_dance", "music_disc.retro_battle_theme",
+				"music.default",
 				"music.forest", "music.taiga", "music.frost", "music.fungi",
 				"music.heat", "music.rock", "music.petrification", "music.sand",
 				"music.lush_deserts", "music.sandstone", "music.shade", "music.wood",

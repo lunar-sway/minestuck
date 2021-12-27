@@ -33,7 +33,7 @@ public class GristIngredientHelper implements IIngredientHelper<GristAmount>
 	@Override
 	public String getDisplayName(GristAmount ingredient)
 	{
-		return ingredient.getType().getDisplayName().getFormattedText();
+		return ingredient.getType().getDisplayName().getString();
 	}
 
 	@Override

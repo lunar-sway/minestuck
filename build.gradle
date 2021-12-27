@@ -5,7 +5,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.+', changing: true
     }
 }
 
@@ -35,9 +35,6 @@ repositories {
     }
     maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
 }
-dependencies{
-    compile fg.deobf('software.bernie.geckolib:geckolib-forge-1.15.2:3.0.32')
-}
 
 version = project.getProperty('mc_ms_version') +'.' + System.env.BUILD_NUMBER
 group = 'com.mraof.minestuck'
@@ -49,7 +46,7 @@ compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = "UTF-8"
 
 minecraft {
-    mappings channel: 'snapshot', version: project.getProperty('mc_mappings_version')
+    mappings channel: "official", version: "1.16.5"
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -64,9 +61,6 @@ minecraft {
 
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
-
-            // It seems to default to Minestuck_main, but is not set because it's actually called Minestuck.main?
-            ideaModule project.getName() +  '.main'
 
             // Add an uuid arg if you have specified it in a relevant gradle.properties file. NOTE: Do not use the gradle.properties file in the project! (because that one is supposed to be shared among all devs) Create one in your "gradle user home" instead.
             if (project.hasProperty('mc_uuid')) {
@@ -93,9 +87,6 @@ minecraft {
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
-            // It seems to default to Minestuck_main, but is not set because it's actually called Minestuck.main?
-            ideaModule project.getName() +  '.main'
-
             mods {
                 minestuck {
                     source sourceSets.main
@@ -110,9 +101,6 @@ minecraft {
 
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
-
-            // It seems to default to Minestuck_main, but is not set because it's actually called Minestuck.main?
-            ideaModule project.getName() +  '.main'
 
             args '--mod', 'minestuck', '--all', '--output', file('src/main/generated/resources/'), '--existing', sourceSets.main.resources.srcDirs[0]
 
@@ -132,6 +120,8 @@ dependencies {
     compileOnly fg.deobf("mezz.jei:jei-${project.getProperty('mc_jei_version')}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-${project.getProperty('mc_jei_version')}")
     compileOnly fg.deobf("com.refinedmods:refinedstorage:${project.getProperty('mc_refined_storage_version')}")
+
+    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.16.5:3.0.46')
 }
 
 sourceSets.main.resources {

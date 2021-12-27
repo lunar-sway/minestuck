@@ -4,25 +4,21 @@ import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import net.minecraft.client.resources.JsonReloadListener;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.BinomialRange;
+import net.minecraft.loot.ConstantRange;
+import net.minecraft.loot.RandomValueRange;
 import net.minecraft.profiler.IProfiler;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.BinomialRange;
-import net.minecraft.world.storage.loot.ConstantRange;
-import net.minecraft.world.storage.loot.RandomValueRange;
+import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -45,14 +41,14 @@ public class BoondollarPriceManager extends JsonReloadListener
 	
 	public static BoondollarPriceManager getInstance()
 	{
-		return INSTANCE;
+		return Objects.requireNonNull(INSTANCE);
 	}
 	
 	@Override
-	protected void apply(Map<ResourceLocation, JsonObject> jsonEntries, IResourceManager resourceManager, IProfiler profiler)
+	protected void apply(Map<ResourceLocation, JsonElement> jsonEntries, IResourceManager resourceManager, IProfiler profiler)
 	{
 		ImmutableList.Builder<BoondollarPricing> pricings = ImmutableList.builder();
-		for(Map.Entry<ResourceLocation, JsonObject> entry : jsonEntries.entrySet())
+		for(Map.Entry<ResourceLocation, JsonElement> entry : jsonEntries.entrySet())
 		{
 			try
 			{
@@ -79,8 +75,8 @@ public class BoondollarPriceManager extends JsonReloadListener
 	}
 	
 	@SubscribeEvent
-	public static void serverAboutToStart(FMLServerAboutToStartEvent event)
+	public static void onResourceReload(AddReloadListenerEvent event)
 	{
-		event.getServer().getResourceManager().addReloadListener(INSTANCE = new BoondollarPriceManager());
+		event.addListener(INSTANCE = new BoondollarPriceManager());
 	}
 }

@@ -1,24 +1,23 @@
 package com.mraof.minestuck.block.plant;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.block.LogBlock;
-import net.minecraft.block.material.MaterialColor;
+import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 
-public class FlammableLogBlock extends LogBlock
+public class FlammableLogBlock extends RotatedPillarBlock
 {
 	private final int flammability, encouragement;
 	
-	public FlammableLogBlock(MaterialColor axisColor, Properties properties)
+	public FlammableLogBlock(Properties properties)
 	{
-		this(axisColor, 5, 5, properties);
+		this(5, 5, properties);
 	}
 	
-	public FlammableLogBlock(MaterialColor axisColor, int flammability, int encouragement, Properties properties)
+	public FlammableLogBlock(int flammability, int encouragement, Properties properties)
 	{
-		super(axisColor, properties);
+		super(properties);
 		this.flammability = flammability;
 		this.encouragement = encouragement;
 	}

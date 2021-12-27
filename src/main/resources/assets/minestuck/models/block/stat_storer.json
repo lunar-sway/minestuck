@@ -1,6 +1,8 @@
 {
-    "parent": "block/cube_all",
+    "parent": "block/cube_bottom_top",
     "textures": {
-        "all": "minestuck:block/stat_storer"
+        "bottom": "minestuck:block/stat_storer",
+        "top": "minestuck:block/stat_storer",
+        "side": "minecraft:block/observer_side"
     }
 }

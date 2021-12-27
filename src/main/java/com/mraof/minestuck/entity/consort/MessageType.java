@@ -14,15 +14,16 @@ import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.SimpleNamedContainerProvider;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootParameterSets;
+import net.minecraft.loot.LootParameters;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Util;
 import net.minecraft.util.text.*;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootParameterSets;
-import net.minecraft.world.storage.loot.LootParameters;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.network.NetworkHooks;
 import org.apache.logging.log4j.LogManager;
@@ -46,17 +47,17 @@ public abstract class MessageType
 	
 	public abstract String getString();
 	
-	public abstract ITextComponent getMessage(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier);
+	public abstract IFormattableTextComponent getMessage(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier);
 	
-	public abstract ITextComponent getFromChain(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier,
+	public abstract IFormattableTextComponent getFromChain(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier,
 												String fromChain);
 	
 	protected abstract void debugAddAllMessages(List<ITextComponent> list);
 	
-	private static ITextComponent createMessage(ConsortEntity consort, ServerPlayerEntity player, String unlocalizedMessage,
+	private static IFormattableTextComponent createMessage(ConsortEntity consort, ServerPlayerEntity player, String unlocalizedMessage,
 												String[] args, boolean consortPrefix)
 	{
-		String s = consort.getType().getTranslationKey();
+		String s = consort.getType().getDescriptionId();
 		
 		Object[] obj = new Object[args.length];
 		SburbConnection c = SburbHandler.getConnectionForDimension(player.getServer(), consort.homeDimension);
@@ -127,9 +128,9 @@ public abstract class MessageType
 			} else if(args[i].startsWith("nbt_item:"))
 			{
 				CompoundNBT nbt = consort.getMessageTagForPlayer(player);
-				ItemStack stack = ItemStack.read(nbt.getCompound(args[i].substring(9)));
+				ItemStack stack = ItemStack.of(nbt.getCompound(args[i].substring(9)));
 				if(!stack.isEmpty())
-					obj[i] = new TranslationTextComponent(stack.getTranslationKey());
+					obj[i] = new TranslationTextComponent(stack.getDescriptionId());
 				else obj[i] = "Item";
 			}
 		}
@@ -137,7 +138,7 @@ public abstract class MessageType
 		TranslationTextComponent message = new TranslationTextComponent("consort." + unlocalizedMessage, obj);
 		if(consortPrefix)
 		{
-			message.getStyle().setColor(consort.getConsortType().getColor());
+			message.withStyle(consort.getConsortType().getColor());
 			TranslationTextComponent entity = new TranslationTextComponent(s);
 			
 			return new TranslationTextComponent("chat.type.text", entity, message);
@@ -181,14 +182,14 @@ public abstract class MessageType
 		}
 		
 		@Override
-		public ITextComponent getMessage(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier)
+		public IFormattableTextComponent getMessage(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier)
 		{
 			consort.getMessageTagForPlayer(player).putString("currentMessage", this.getString());
 			return createMessage(consort, player, unlocalizedMessage, args, true);
 		}
 		
 		@Override
-		public ITextComponent getFromChain(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier,
+		public IFormattableTextComponent getFromChain(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier,
 										   String fromChain)
 		{
 			return null;
@@ -241,7 +242,7 @@ public abstract class MessageType
 		}
 
 		@Override
-		public ITextComponent getMessage(ConsortEntity consort, ServerPlayerEntity player,
+		public IFormattableTextComponent getMessage(ConsortEntity consort, ServerPlayerEntity player,
 										 String chainIdentifier)
 		{
 			if(firstOnce)
@@ -252,17 +253,17 @@ public abstract class MessageType
 				else return messageTwo.getMessage(consort, player, chainIdentifier);
 			}
 			
-			ITextComponent message = messageOne.getMessage(consort, player, chainIdentifier);
-			message.appendText("\n");
-			message.appendSibling(messageTwo.getMessage(consort, player, chainIdentifier));
+			IFormattableTextComponent message = messageOne.getMessage(consort, player, chainIdentifier);
+			message.append("\n");
+			message.append(messageTwo.getMessage(consort, player, chainIdentifier));
 			return message;
 		}
 		
 		@Override
-		public ITextComponent getFromChain(ConsortEntity consort, ServerPlayerEntity player,
+		public IFormattableTextComponent getFromChain(ConsortEntity consort, ServerPlayerEntity player,
 										   String chainIdentifier, String fromChain)
 		{
-			ITextComponent message = messageTwo.getFromChain(consort, player, chainIdentifier, fromChain);
+			IFormattableTextComponent message = messageTwo.getFromChain(consort, player, chainIdentifier, fromChain);
 			return message;
 		}
 		
@@ -302,21 +303,21 @@ public abstract class MessageType
 		}
 		
 		@Override
-		public ITextComponent getMessage(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier)
+		public IFormattableTextComponent getMessage(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier)
 		{
-			ITextComponent message = this.message.getMessage(consort, player, chainIdentifier);
+			IFormattableTextComponent message = this.message.getMessage(consort, player, chainIdentifier);
 			if(message == null)
 				return null;
 			
-			message.appendText("\n");
-			ITextComponent desc = createMessage(consort, player, unlocalizedMessage, args, false);
-			desc.getStyle().setItalic(true).setColor(TextFormatting.GRAY);
-			message.appendSibling(desc);
+			message.append("\n");
+			IFormattableTextComponent desc = createMessage(consort, player, unlocalizedMessage, args, false);
+			desc.setStyle(desc.getStyle().withItalic(true).applyFormat(TextFormatting.GRAY));
+			message.append(desc);
 			return message;
 		}
 		
 		@Override
-		public ITextComponent getFromChain(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier, String fromChain)
+		public IFormattableTextComponent getFromChain(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier, String fromChain)
 		{
 			return message.getFromChain(consort, player, chainIdentifier, fromChain);
 		}
@@ -342,13 +343,13 @@ public abstract class MessageType
 		}
 		
 		@Override
-		public ITextComponent getMessage(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier)
+		public IFormattableTextComponent getMessage(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier)
 		{
-			ITextComponent desc = createMessage(consort, player, unlocalizedMessage, args, false);
-			desc.getStyle().setItalic(true).setColor(TextFormatting.GRAY);
+			IFormattableTextComponent desc = createMessage(consort, player, unlocalizedMessage, args, false);
+			desc.setStyle(desc.getStyle().withItalic(true).applyFormat(TextFormatting.GRAY));
 			
-			ITextComponent message = new StringTextComponent("");
-			message.appendSibling(desc);
+			IFormattableTextComponent message = new StringTextComponent("");
+			message.append(desc);
 			return message;
 		}
 		
@@ -396,7 +397,7 @@ public abstract class MessageType
 		}
 		
 		@Override
-		public ITextComponent getMessage(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier)
+		public IFormattableTextComponent getMessage(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier)
 		{
 			CompoundNBT nbt = consort.getMessageTagForPlayer(player);
 			int index = nbt.getInt(this.getString());
@@ -405,7 +406,7 @@ public abstract class MessageType
 			if(index >= messages.length)
 				index = repeatIndex;
 			
-			ITextComponent text = message.getMessage(consort, player, addTo(chainIdentifier, message.getString()));
+			IFormattableTextComponent text = message.getMessage(consort, player, addTo(chainIdentifier, message.getString()));
 			
 			if(text != null)
 				nbt.putInt(this.getString(), index);
@@ -414,7 +415,7 @@ public abstract class MessageType
 		}
 		
 		@Override
-		public ITextComponent getFromChain(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier,
+		public IFormattableTextComponent getFromChain(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier,
 										   String fromChain)
 		{
 			if(fromChain.isEmpty())
@@ -440,7 +441,7 @@ public abstract class MessageType
 			if(message == null && !(prevIndex + 1 == index || index == messages.length - 1 && prevIndex == repeatIndex))
 				return null;
 			
-			ITextComponent text = message.getFromChain(consort, player, addTo(chainIdentifier, message.getString()), fromChain);
+			IFormattableTextComponent text = message.getFromChain(consort, player, addTo(chainIdentifier, message.getString()), fromChain);
 			if(text != null) //Only update if everything is correctly performed
 				nbt.putInt(this.getString(), index);
 			return text;
@@ -480,7 +481,7 @@ public abstract class MessageType
 		}
 		
 		@Override
-		public ITextComponent getMessage(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier)
+		public IFormattableTextComponent getMessage(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier)
 		{
 			if (condition.testFor(consort, player))
 				return message1.getMessage(consort, player, chainIdentifier);
@@ -488,7 +489,7 @@ public abstract class MessageType
 		}
 		
 		@Override
-		public ITextComponent getFromChain(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier, String fromChain)
+		public IFormattableTextComponent getFromChain(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier, String fromChain)
 		{
 			if (condition.testFor(consort, player))
 				return message1.getFromChain(consort, player, chainIdentifier, fromChain);
@@ -529,7 +530,7 @@ public abstract class MessageType
 		}
 		
 		@Override
-		public ITextComponent getMessage(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier)
+		public IFormattableTextComponent getMessage(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier)
 		{
 			CompoundNBT nbt;
 			if(keepMethod.equals(RandomKeepResult.KEEP_CONSORT))
@@ -543,7 +544,7 @@ public abstract class MessageType
 					return messages[i].getMessage(consort, player, MessageType.addTo(chainIdentifier, messages[i].getString()));
 				}
 			
-			int i = consort.getRNG().nextInt(messages.length);
+			int i = consort.getRandom().nextInt(messages.length);
 			
 			if(!keepMethod.equals(RandomKeepResult.SKIP))
 				nbt.putInt(this.getString(), i);
@@ -552,7 +553,7 @@ public abstract class MessageType
 		}
 
 		@Override
-		public ITextComponent getFromChain(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier,
+		public IFormattableTextComponent getFromChain(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier,
 										   String fromChain)
 		{
 			if(fromChain.isEmpty())
@@ -625,7 +626,7 @@ public abstract class MessageType
 		}
 		
 		@Override
-		public ITextComponent getMessage(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier)
+		public IFormattableTextComponent getMessage(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier)
 		{
 			CompoundNBT nbt = consort.getMessageTagForPlayer(player);
 			if(!repeat && nbt.contains(this.getString(), Constants.NBT.TAG_ANY_NUMERIC))
@@ -642,23 +643,23 @@ public abstract class MessageType
 				}
 			} else
 			{
-				ITextComponent question = message.getMessage(consort, player, chainIdentifier);
+				IFormattableTextComponent question = message.getMessage(consort, player, chainIdentifier);
 				if(question == null)
 					return null;
 				
-				String commandStart = "/consortreply " + consort.getEntityId() + " "
+				String commandStart = "/consortreply " + consort.getId() + " "
 						+ (chainIdentifier.isEmpty() ? "" : chainIdentifier + ":");
-				question.appendText("\n");
+				question.append("\n");
 				for(int i = 0; i < options.length; i++)
 				{
-					question.appendText("\n");
-					ITextComponent option = new StringTextComponent(">");
-					option.appendSibling(
+					question.append("\n");
+					IFormattableTextComponent option = new StringTextComponent(">");
+					option.append(
 							createMessage(consort, player, options[i].unlocalizedMessage, options[i].args, false));
-					option.getStyle().setClickEvent(
+					option.getStyle().withClickEvent(
 							new ClickEvent(ClickEvent.Action.RUN_COMMAND, commandStart + options[i].getString()));
-					option.getStyle().setColor(TextFormatting.GRAY);
-					question.appendSibling(option);
+					option.withStyle(TextFormatting.GRAY);
+					question.append(option);
 				}
 				
 				nbt.putString("currentMessage", this.getString());
@@ -668,7 +669,7 @@ public abstract class MessageType
 		}
 		
 		@Override
-		public ITextComponent getFromChain(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier,
+		public IFormattableTextComponent getFromChain(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier,
 										   String fromChain)
 		{
 			if(fromChain.isEmpty())
@@ -700,9 +701,9 @@ public abstract class MessageType
 							
 							ITextComponent out = new TranslationTextComponent("chat.type.text", player.getDisplayName(), innerMessage);
 							
-							player.sendMessage(out);
+							player.sendMessage(out, Util.NIL_UUID);
 						}
-						ITextComponent text = message.getMessage(consort, player, addTo(chainIdentifier, message.getString()));
+						IFormattableTextComponent text = message.getMessage(consort, player, addTo(chainIdentifier, message.getString()));
 						
 						if(text != null && !acceptNull)
 						{
@@ -713,7 +714,7 @@ public abstract class MessageType
 							
 							ITextComponent out = new TranslationTextComponent("chat.type.text", player.getDisplayName(), innerMessage);
 							
-							player.sendMessage(out);
+							player.sendMessage(out, Util.NIL_UUID);
 						}
 						
 						return text;
@@ -790,7 +791,7 @@ public abstract class MessageType
 		}
 		
 		@Override
-		public ITextComponent getMessage(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier)
+		public IFormattableTextComponent getMessage(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier)
 		{
 			consort.getMessageTag().putString(this.getString(), chainIdentifier);
 			
@@ -803,7 +804,7 @@ public abstract class MessageType
 				consort.updatingMessage = this;
 				ITextComponent text = messages[0].getMessage(consort, player, MessageType.addTo(chainIdentifier, messages[0].getString()));
 				if(text != null)
-					player.sendMessage(text);
+					player.sendMessage(text, Util.NIL_UUID);
 				
 			} else if(nbt.getInt(this.getString()+".i") == messages.length - 1)
 			{
@@ -814,7 +815,7 @@ public abstract class MessageType
 		}
 		
 		@Override
-		public ITextComponent getFromChain(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier, String fromChain)
+		public IFormattableTextComponent getFromChain(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier, String fromChain)
 		{
 			if(fromChain.isEmpty())
 				return null;
@@ -836,13 +837,13 @@ public abstract class MessageType
 			CompoundNBT messageTags = consort.getMessageTag();
 			String chainIdentifier = messageTags.getString(this.getString());
 			boolean update = false;
-			for(String key : messageTags.keySet())
+			for(String key : messageTags.getAllKeys())
 			{
 				CompoundNBT nbt = messageTags.getCompound(key);
 				if(!nbt.contains(this.getString()))
 					continue;
 				
-				ServerPlayerEntity player = consort.getServer().getPlayerList().getPlayerByUUID(UUID.fromString(key));
+				ServerPlayerEntity player = consort.getServer().getPlayerList().getPlayer(UUID.fromString(key));
 				if(player == null)
 					nbt.remove(this.getString());
 				else
@@ -860,7 +861,7 @@ public abstract class MessageType
 						{
 							ITextComponent text = consort.message.getMessage(consort, player);
 							if(text != null)
-								player.sendMessage(text);
+								player.sendMessage(text, Util.NIL_UUID);
 							
 							nbt.remove(this.getString());
 							nbt.remove(this.getString() + ".i");
@@ -870,7 +871,7 @@ public abstract class MessageType
 							update = true;
 							ITextComponent text = messages[i].getMessage(consort, player, MessageType.addTo(chainIdentifier, messages[i].getString()));
 							if(text != null)
-								player.sendMessage(text);
+								player.sendMessage(text, Util.NIL_UUID);
 						}
 					} else update = true;
 				}
@@ -915,14 +916,14 @@ public abstract class MessageType
 		}
 		
 		@Override
-		public ITextComponent getFromChain(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier,
+		public IFormattableTextComponent getFromChain(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier,
 										   String fromChain)
 		{
 			return message.getFromChain(consort, player, chainIdentifier, fromChain);
 		}
 		
 		@Override
-		public ITextComponent getMessage(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier)
+		public IFormattableTextComponent getMessage(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier)
 		{
 			CompoundNBT nbt = consort.getMessageTagForPlayer(player);
 			PlayerData data = PlayerSavedData.getData(player);
@@ -934,17 +935,17 @@ public abstract class MessageType
 				if(!repeat)
 					nbt.putBoolean(nbtName, true);
 				
-				LootContext.Builder contextBuilder = new LootContext.Builder((ServerWorld) consort.world).withRandom(consort.world.rand)
-						.withParameter(LootParameters.THIS_ENTITY, consort).withParameter(LootParameters.POSITION, consort.getPosition());
-				List<ItemStack> loot = consort.getServer().getLootTableManager().getLootTableFromLocation(lootTableId)
-						.generate(contextBuilder.build(LootParameterSets.GIFT));
+				LootContext.Builder contextBuilder = new LootContext.Builder((ServerWorld) consort.level).withRandom(consort.level.random)
+						.withParameter(LootParameters.THIS_ENTITY, consort).withParameter(LootParameters.ORIGIN, consort.position());
+				List<ItemStack> loot = consort.getServer().getLootTables().get(lootTableId)
+						.getRandomItems(contextBuilder.create(LootParameterSets.GIFT));
 				
 				if(loot.isEmpty())
 					LOGGER.warn("Tried to generate loot from {}, but no items were generated!", lootTableId);
 				
 				for(ItemStack itemstack : loot)
 				{
-					player.entityDropItem(itemstack, 0.0F);
+					player.spawnAtLocation(itemstack, 0.0F);
 					MSCriteriaTriggers.CONSORT_ITEM.trigger(player, lootTableId.toString(), itemstack, consort);
 				}
 				if(rep != 0)
@@ -953,7 +954,7 @@ public abstract class MessageType
 				return message.getMessage(consort, player, chainIdentifier);
 			} else
 			{
-				player.sendMessage(createMessage(consort, player, "cant_afford", new String[0], false));
+				player.sendMessage(createMessage(consort, player, "cant_afford", new String[0], false), Util.NIL_UUID);
 				
 				return null;
 			}
@@ -1030,7 +1031,7 @@ public abstract class MessageType
 		}
 		
 		@Override
-		public ITextComponent getMessage(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier)
+		public IFormattableTextComponent getMessage(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier)
 		{
 			CompoundNBT nbt = consort.getMessageTagForPlayer(player);
 			if(!repeat && nbt.contains(this.getString()))
@@ -1045,12 +1046,12 @@ public abstract class MessageType
 					index = nbt.getInt(this.getString());
 				else
 				{
-					index = consort.world.rand.nextInt(possibleItems.size());
+					index = consort.level.random.nextInt(possibleItems.size());
 					nbt.putInt(this.getString(), index);
 				}
 				
 				ItemStack stack = possibleItems.get(index);
-				nbt.put(this.getString() + ".item", stack.write(new CompoundNBT()));
+				nbt.put(this.getString() + ".item", stack.save(new CompoundNBT()));
 				
 				hasItem = lookFor(stack, player);
 			} else
@@ -1058,11 +1059,11 @@ public abstract class MessageType
 				List<ItemStack> list = new ArrayList<>(possibleItems);
 				while (!list.isEmpty())
 				{
-					ItemStack stack = list.remove(consort.world.rand.nextInt(list.size()));
+					ItemStack stack = list.remove(consort.level.random.nextInt(list.size()));
 					if(lookFor(stack, player))
 					{
 						nbt.putInt(this.getString(), possibleItems.indexOf(stack));
-						nbt.put(this.getString() + ".item", stack.write(new CompoundNBT()));
+						nbt.put(this.getString() + ".item", stack.save(new CompoundNBT()));
 						hasItem = true;
 						break;
 					}
@@ -1074,12 +1075,12 @@ public abstract class MessageType
 				return conditionedMessage.getMessage(consort, player, addTo(chainIdentifier, conditionedMessage.getString()));
 			}
 			
-			player.sendMessage(defaultMessage.getMessage(consort, player, addTo(chainIdentifier, defaultMessage.getString())));
+			player.sendMessage(defaultMessage.getMessage(consort, player, addTo(chainIdentifier, defaultMessage.getString())), Util.NIL_UUID);
 			return null;
 		}
 		
 		@Override
-		public ITextComponent getFromChain(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier,
+		public IFormattableTextComponent getFromChain(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier,
 										   String fromChain)
 		{
 			if(fromChain.isEmpty())
@@ -1101,13 +1102,13 @@ public abstract class MessageType
 		
 		private boolean lookFor(ItemStack stack, ServerPlayerEntity player)
 		{
-			for(ItemStack held : player.getHeldEquipment())
-				if(ItemStack.areItemsEqual(held, stack))
+			for(ItemStack held : player.getHandSlots())
+				if(ItemStack.isSame(held, stack))
 					return true;
 				
 			if(!held)
-				for(ItemStack held : player.inventory.mainInventory)
-					if(ItemStack.areItemsEqual(held, stack))
+				for(ItemStack held : player.inventory.items)
+					if(ItemStack.isSame(held, stack))
 						return true;
 					
 			return false;
@@ -1150,19 +1151,19 @@ public abstract class MessageType
 		}
 		
 		@Override
-		public ITextComponent getMessage(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier)
+		public IFormattableTextComponent getMessage(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier)
 		{
 			CompoundNBT nbt = consort.getMessageTagForPlayer(player);
 			if(nbt.getBoolean(this.getString()))
 				return next.getMessage(consort, player, chainIdentifier);
 			
-			ItemStack stack = ItemStack.read(nbt.getCompound(itemData));
+			ItemStack stack = ItemStack.of(nbt.getCompound(itemData));
 			
 			boolean foundItem = false;
 			for(Hand hand : Hand.values())
 			{
-				ItemStack heldItem = player.getHeldItem(hand);
-				if(ItemStack.areItemsEqual(heldItem, stack))
+				ItemStack heldItem = player.getItemInHand(hand);
+				if(ItemStack.isSame(heldItem, stack))
 				{
 					foundItem = true;
 					heldItem.shrink(1);
@@ -1170,9 +1171,9 @@ public abstract class MessageType
 				}
 			}
 			
-			for(ItemStack invItem : player.inventory.mainInventory)
+			for(ItemStack invItem : player.inventory.items)
 			{
-				if(ItemStack.areItemsEqual(invItem, stack))
+				if(ItemStack.isSame(invItem, stack))
 				{
 					foundItem = true;
 					invItem.shrink(1);
@@ -1194,13 +1195,13 @@ public abstract class MessageType
 			} else
 			{
 				player.sendMessage(
-						createMessage(consort, player, MISSING_ITEM, new String[] { "nbtItem:" + itemData }, false).setStyle(new Style().setColor(TextFormatting.RED)));
+						createMessage(consort, player, MISSING_ITEM, new String[] { "nbtItem:" + itemData }, false).withStyle(TextFormatting.RED), Util.NIL_UUID);
 				return null;
 			}
 		}
 		
 		@Override
-		public ITextComponent getFromChain(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier,
+		public IFormattableTextComponent getFromChain(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier,
 										   String fromChain)
 		{
 			return next.getFromChain(consort, player, chainIdentifier, fromChain);
@@ -1238,11 +1239,11 @@ public abstract class MessageType
 		}
 		
 		@Override
-		public ITextComponent getMessage(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier)
+		public IFormattableTextComponent getMessage(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier)
 		{
 			if(consort.stocks == null)
 			{
-				consort.stocks = new ConsortMerchantInventory(consort, ConsortRewardHandler.generateStock(lootTable, consort, consort.world.rand));
+				consort.stocks = new ConsortMerchantInventory(consort, ConsortRewardHandler.generateStock(lootTable, consort, consort.level.random));
 			}
 			
 			NetworkHooks.openGui(player, new SimpleNamedContainerProvider(consort, new StringTextComponent("Consort shop")), consort::writeShopContainerBuffer);
@@ -1251,7 +1252,7 @@ public abstract class MessageType
 		}
 		
 		@Override
-		public ITextComponent getFromChain(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier, String fromChain)
+		public IFormattableTextComponent getFromChain(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier, String fromChain)
 		{
 			return null;
 		}
@@ -1271,7 +1272,7 @@ public abstract class MessageType
 		}
 		
 		@Override
-		public ITextComponent getMessage(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier)
+		public IFormattableTextComponent getMessage(ConsortEntity consort, ServerPlayerEntity player, String chainIdentifier)
 		{
 			consort.setExplosionTimer();
 			return super.getMessage(consort, player, chainIdentifier);

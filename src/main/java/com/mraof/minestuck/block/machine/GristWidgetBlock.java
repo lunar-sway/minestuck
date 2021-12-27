@@ -20,13 +20,13 @@ public class GristWidgetBlock extends SmallMachineBlock<GristWidgetTileEntity>
 	public GristWidgetBlock(Properties properties)
 	{
 		super(MSBlockShapes.GRIST_WIDGET.createRotatedShapes(), MSTileEntityTypes.GRIST_WIDGET, properties);
-		setDefaultState(getStateContainer().getBaseState().with(FACING, Direction.NORTH).with(HAS_CARD, false));
+		registerDefaultState(getStateDefinition().any().setValue(FACING, Direction.NORTH).setValue(HAS_CARD, false));
 	}
 	
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
 	{
-		super.fillStateContainer(builder);
+		super.createBlockStateDefinition(builder);
 		builder.add(HAS_CARD);
 	}
 	
@@ -34,6 +34,6 @@ public class GristWidgetBlock extends SmallMachineBlock<GristWidgetTileEntity>
 	{
 		BlockState oldState = world.getBlockState(pos);
 		if(oldState.getBlock() instanceof GristWidgetBlock)
-			world.setBlockState(pos, oldState.with(HAS_CARD, b), Constants.BlockFlags.BLOCK_UPDATE);
+			world.setBlock(pos, oldState.setValue(HAS_CARD, b), Constants.BlockFlags.BLOCK_UPDATE);
 	}
 }

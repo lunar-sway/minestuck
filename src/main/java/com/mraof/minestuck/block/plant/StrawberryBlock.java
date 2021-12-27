@@ -20,12 +20,12 @@ public class StrawberryBlock extends StemGrownBlock
 	{
 		super(properties);
 		
-		setDefaultState(getDefaultState().with(FACING, Direction.UP));
+		registerDefaultState(defaultBlockState().setValue(FACING, Direction.UP));
 	}
 	
 	
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
 	{
 		builder.add(FACING);
 	}
@@ -35,7 +35,7 @@ public class StrawberryBlock extends StemGrownBlock
 	public BlockState getStateForPlacement(BlockItemUseContext context)
 	{
 		Direction direction = context.getNearestLookingDirection();
-		return this.getDefaultState().with(FACING, direction);
+		return this.defaultBlockState().setValue(FACING, direction);
 	}
 	
 	@Override
@@ -58,7 +58,7 @@ public class StrawberryBlock extends StemGrownBlock
 		}
 		
 		@Override
-		protected Item getSeeds()
+		protected Item getSeedItem()
 		{
 			return MSItems.STRAWBERRY_CHUNK;
 		}

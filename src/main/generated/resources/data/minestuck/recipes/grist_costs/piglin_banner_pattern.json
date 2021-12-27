@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:piglin_banner_pattern"
+  },
+  "grist_cost": {
+    "minestuck:build": 120,
+    "minestuck:tar": 17,
+    "minestuck:gold": 12
+  }
+}

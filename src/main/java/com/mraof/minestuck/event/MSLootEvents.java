@@ -4,6 +4,9 @@ import com.google.common.collect.Sets;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.storage.loot.MSLootTables;
+import net.minecraft.loot.LootPool;
+import net.minecraft.loot.LootTables;
+import net.minecraft.loot.TableLootEntry;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootEntry;
 import net.minecraft.world.storage.loot.LootPool;
@@ -20,7 +23,7 @@ import java.util.Set;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class MSLootEvents
 {
-	private static final Set<ResourceLocation> OVERWORLD_LOOT_INJECT = Sets.newHashSet(LootTables.CHESTS_SIMPLE_DUNGEON, LootTables.CHESTS_ABANDONED_MINESHAFT, LootTables.CHESTS_DESERT_PYRAMID, LootTables.CHESTS_JUNGLE_TEMPLE, LootTables.CHESTS_WOODLAND_MANSION, LootTables.CHESTS_UNDERWATER_RUIN_BIG, LootTables.CHESTS_SPAWN_BONUS_CHEST);
+	private static final Set<ResourceLocation> OVERWORLD_LOOT_INJECT = Sets.newHashSet(LootTables.SIMPLE_DUNGEON, LootTables.ABANDONED_MINESHAFT, LootTables.DESERT_PYRAMID, LootTables.JUNGLE_TEMPLE, LootTables.WOODLAND_MANSION, LootTables.UNDERWATER_RUIN_BIG, LootTables.SPAWN_BONUS_CHEST);
 	private static final Set<ResourceLocation> TIER_ONE_LOOT_INJECT = Sets.newHashSet(MSLootTables.TIER_ONE_MEDIUM_CHEST);
 	
 	@SubscribeEvent
@@ -30,7 +33,7 @@ public class MSLootEvents
 		
 		if(OVERWORLD_LOOT_INJECT.contains(event.getName()))
 		{
-			LootPool pool = LootPool.builder().addEntry(TableLootEntry.builder(MSLootTables.OVERWORLD_DUNGEON_LOOT_INJECT)).name("overworld_dungeon_loot_inject").build();
+			LootPool pool = LootPool.lootPool().add(TableLootEntry.lootTableReference(MSLootTables.OVERWORLD_DUNGEON_LOOT_INJECT)).name("overworld_dungeon_loot_inject").build();
 			event.getTable().addPool(pool);
 		}
 		

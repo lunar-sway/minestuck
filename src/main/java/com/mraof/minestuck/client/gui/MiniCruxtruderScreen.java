@@ -1,5 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.inventory.MiniCruxtruderContainer;
 import com.mraof.minestuck.tileentity.machine.MiniCruxtruderTileEntity;
@@ -32,36 +33,36 @@ public class MiniCruxtruderScreen extends MachineScreen<MiniCruxtruderContainer>
 	}
 	
 	@Override
-	public void render(int mouseX, int mouseY, float partialTicks)
+	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground();
-		super.render(mouseX, mouseY, partialTicks);
-		this.renderHoveredToolTip(mouseX, mouseY);
+		this.renderBackground(matrixStack);
+		super.render(matrixStack, mouseX, mouseY, partialTicks);
+		this.renderTooltip(matrixStack, mouseX, mouseY);
 	}
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
+	protected void renderLabels(MatrixStack matrixStack, int mouseX, int mouseY)
 	{
-		font.drawString(this.title.getFormattedText(), 8, 6, 4210752);
+		font.draw(matrixStack, this.title.getString(), 8, 6, 4210752);
 		//draws "Inventory" or your regional equivalent
-		font.drawString(playerInventory.getDisplayName().getFormattedText(), 8, ySize - 96 + 2, 4210752);
+		font.draw(matrixStack, inventory.getDisplayName().getString(), 8, imageHeight - 96 + 2, 4210752);
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
+	protected void renderBg(MatrixStack matrixStack, float par1, int par2, int par3)
 	{
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		//draw background
-		this.minecraft.getTextureManager().bindTexture(BACKGROUND);
-		int x = (width - xSize) / 2;
-		int y = (height - ySize) / 2;
-		this.blit(x, y, 0, 0, xSize, ySize);
+		this.minecraft.getTextureManager().bind(BACKGROUND);
+		int x = (width - imageWidth) / 2;
+		int y = (height - imageHeight) / 2;
+		this.blit(matrixStack, x, y, 0, 0, imageWidth, imageHeight);
 
 		//draw progress bar
-		this.minecraft.getTextureManager().bindTexture(PROGRESS);
+		this.minecraft.getTextureManager().bind(PROGRESS);
 		int width = progressWidth;
-		int height = getScaledValue(container.getProgress(), MiniCruxtruderTileEntity.DEFAULT_MAX_PROGRESS, progressHeight);
-		blit(x + progressX, y + progressY + progressHeight - height, 0, progressHeight - height, width, height, progressWidth, progressHeight);
+		int height = getScaledValue(menu.getProgress(), MiniCruxtruderTileEntity.DEFAULT_MAX_PROGRESS, progressHeight);
+		blit(matrixStack, x + progressX, y + progressY + progressHeight - height, 0, progressHeight - height, width, height, progressWidth, progressHeight);
 	}
 }

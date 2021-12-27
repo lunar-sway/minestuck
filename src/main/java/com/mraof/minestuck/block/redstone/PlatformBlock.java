@@ -20,20 +20,15 @@ public class PlatformBlock extends Block
 	public PlatformBlock(Properties properties)
 	{
 		super(properties);
-		this.setDefaultState(this.stateContainer.getBaseState().with(INVISIBLE, false));
+		registerDefaultState(stateDefinition.any().setValue(INVISIBLE, false));
 	}
 	
+	/*@Override
 	@Override
-	public boolean causesSuffocation(BlockState state, IBlockReader worldIn, BlockPos pos)
-	{
-		return false;
-	}
-	
-	@Override
-	public float getAmbientOcclusionLightValue(BlockState state, IBlockReader worldIn, BlockPos pos)
+	public float getAmbientOcclusionLightValue(BlockState state, IBlockReader worldIn, BlockPos pos) //TODO unsure if occlusion has really changed anything
 	{
 		return 1.0F;
-	}
+	}*/
 	
 	@Override
 	public boolean propagatesSkylightDown(BlockState state, IBlockReader reader, BlockPos pos)
@@ -42,9 +37,9 @@ public class PlatformBlock extends Block
 	}
 	
 	@Override
-	public BlockRenderType getRenderType(BlockState state)
+	public BlockRenderType getRenderShape(BlockState state)
 	{
-		if(state.get(INVISIBLE))
+		if(state.getValue(INVISIBLE))
 			return BlockRenderType.INVISIBLE;
 		else
 			return BlockRenderType.MODEL;
@@ -58,16 +53,16 @@ public class PlatformBlock extends Block
 	}
 	
 	@Override
-	public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving)
+	public void onPlace(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving)
 	{
-		super.onBlockAdded(state, worldIn, pos, oldState, isMoving);
-		worldIn.getPendingBlockTicks().scheduleTick(new BlockPos(pos), this, 10);
+		super.onPlace(state, worldIn, pos, oldState, isMoving);
+		worldIn.getBlockTicks().scheduleTick(new BlockPos(pos), this, 10);
 	}
 	
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
 	{
-		super.fillStateContainer(builder);
+		super.createBlockStateDefinition(builder);
 		builder.add(INVISIBLE);
 	}
 }
