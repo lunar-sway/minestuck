@@ -33,7 +33,7 @@ public class BucketsLandType extends TitleLandType    //Yes, buckets
 	{
 		registry.setBlockState("structure_wool_2", Blocks.BLUE_WOOL.defaultBlockState());
 		registry.setBlockState("carpet", Blocks.BLACK_CARPET.defaultBlockState());
-		registry.setBlockState("aspect_sapling", MSBlocks.SPACE_ASPECT_SAPLING.getDefaultState());
+		registry.setBlockState("aspect_sapling", MSBlocks.SPACE_ASPECT_SAPLING.defaultBlockState());
 	}
 	
 	@Override

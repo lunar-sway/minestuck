@@ -30,7 +30,7 @@ public class MSTileEntityTypes
 	public static final RegistryObject<TileEntityType<SkaiaPortalTileEntity>> SKAIA_PORTAL = REGISTER.register("skaia_portal", () -> TileEntityType.Builder.of(SkaiaPortalTileEntity::new, MSBlocks.SKAIA_PORTAL).build(null));
 	public static final RegistryObject<TileEntityType<GateTileEntity>> GATE = REGISTER.register("gate", () -> TileEntityType.Builder.of(GateTileEntity::new, MSBlocks.GATE, MSBlocks.RETURN_NODE).build(null));
 	public static final RegistryObject<TileEntityType<CassettePlayerTileEntity>> CASSETTE_PLAYER = REGISTER.register("cassette_player", () -> TileEntityType.Builder.of(CassettePlayerTileEntity::new, MSBlocks.CASSETTE_PLAYER).build(null));
-	public static final RegistryObject<TileEntityType<DungeonDoorInterfaceTileEntity>> DUNGEON_DOOR_INTERFACE = REGISTER.register("dungeon_door_interface", () -> TileEntityType.Builder.create(DungeonDoorInterfaceTileEntity::new, MSBlocks.DUNGEON_DOOR_INTERFACE).build(null));
+	public static final RegistryObject<TileEntityType<DungeonDoorInterfaceTileEntity>> DUNGEON_DOOR_INTERFACE = REGISTER.register("dungeon_door_interface", () -> TileEntityType.Builder.of(DungeonDoorInterfaceTileEntity::new, MSBlocks.DUNGEON_DOOR_INTERFACE).build(null));
 	public static final RegistryObject<TileEntityType<StatStorerTileEntity>> STAT_STORER = REGISTER.register("stat_storer", () -> TileEntityType.Builder.of(StatStorerTileEntity::new, MSBlocks.STAT_STORER).build(null));
 	public static final RegistryObject<TileEntityType<RemoteObserverTileEntity>> REMOTE_OBSERVER = REGISTER.register("remote_observer", () -> TileEntityType.Builder.of(RemoteObserverTileEntity::new, MSBlocks.REMOTE_OBSERVER).build(null));
 	public static final RegistryObject<TileEntityType<WirelessRedstoneTransmitterTileEntity>> WIRELESS_REDSTONE_TRANSMITTER = REGISTER.register("wireless_redstone_transmitter", () -> TileEntityType.Builder.of(WirelessRedstoneTransmitterTileEntity::new, MSBlocks.WIRELESS_REDSTONE_TRANSMITTER).build(null));
@@ -40,5 +40,5 @@ public class MSTileEntityTypes
 	public static final RegistryObject<TileEntityType<PlatformGeneratorTileEntity>> PLATFORM_GENERATOR = REGISTER.register("platform_generator", () -> TileEntityType.Builder.of(PlatformGeneratorTileEntity::new, MSBlocks.PLATFORM_GENERATOR).build(null));
 	public static final RegistryObject<TileEntityType<ItemMagnetTileEntity>> ITEM_MAGNET = REGISTER.register("item_magnet", () -> TileEntityType.Builder.of(ItemMagnetTileEntity::new, MSBlocks.ITEM_MAGNET).build(null));
 	public static final RegistryObject<TileEntityType<RedstoneClockTileEntity>> REDSTONE_CLOCK = REGISTER.register("redstone_clock", () -> TileEntityType.Builder.of(RedstoneClockTileEntity::new, MSBlocks.REDSTONE_CLOCK).build(null));
-	public static final RegistryObject<TileEntityType<LootBlockTileEntity>> LOOT_BLOCK = REGISTER.register("loot_block", () -> TileEntityType.Builder.create(LootBlockTileEntity::new, MSBlocks.LOOT_CHEST).build(null));
+	public static final RegistryObject<TileEntityType<LootBlockTileEntity>> LOOT_BLOCK = REGISTER.register("loot_block", () -> TileEntityType.Builder.of(LootBlockTileEntity::new, MSBlocks.LOOT_CHEST).build(null));
 }

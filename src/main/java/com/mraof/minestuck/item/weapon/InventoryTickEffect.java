@@ -55,8 +55,8 @@ public interface InventoryTickEffect
 		if(isSelected && entityIn instanceof ServerPlayerEntity)
 		{
 			ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) entityIn;
-			ItemStack otherStack = !serverPlayerEntity.getHeldItemMainhand().isItemEqual(stack) ? serverPlayerEntity.getHeldItemMainhand() : serverPlayerEntity.getHeldItemOffhand(); //it gives the stack in the hand that doesnt hold the tick weapon
-			if((serverPlayerEntity.getHeldItemMainhand() == stack || serverPlayerEntity.getHeldItemOffhand() == stack) && MSItems.PRISMARINE_BASHER == otherStack.getItem())
+			ItemStack otherStack = !serverPlayerEntity.getMainHandItem().sameItem(stack) ? serverPlayerEntity.getMainHandItem() : serverPlayerEntity.getOffhandItem(); //it gives the stack in the hand that doesnt hold the tick weapon
+			if((serverPlayerEntity.getMainHandItem() == stack || serverPlayerEntity.getOffhandItem() == stack) && MSItems.PRISMARINE_BASHER == otherStack.getItem())
 			{
 				MSCriteriaTriggers.SURF_N_TURF.trigger(serverPlayerEntity);
 			}

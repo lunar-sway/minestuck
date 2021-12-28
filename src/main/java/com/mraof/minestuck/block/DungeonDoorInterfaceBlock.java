@@ -15,10 +15,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootParameterSets;
-import net.minecraft.world.storage.loot.LootTable;
 
 import javax.annotation.Nullable;
 
@@ -31,12 +27,12 @@ public class DungeonDoorInterfaceBlock extends Block
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
 	{
-		ItemStack itemstack = player.getHeldItem(handIn);
+		ItemStack itemstack = player.getItemInHand(handIn);
 		
-		TileEntity tileentity = worldIn.getTileEntity(pos);
-		if(tileentity instanceof DungeonDoorInterfaceTileEntity && itemstack.getItem() instanceof KeyItem && !worldIn.isRemote)
+		TileEntity tileentity = worldIn.getBlockEntity(pos);
+		if(tileentity instanceof DungeonDoorInterfaceTileEntity && itemstack.getItem() instanceof KeyItem && !worldIn.isClientSide)
 		{
 			DungeonDoorInterfaceTileEntity interfaceTileEntity = (DungeonDoorInterfaceTileEntity) tileentity;
 			EnumKeyType itemKeyType = EnumKeyType.fromInt(KeyItem.getKeyType(itemstack));
@@ -73,14 +69,14 @@ public class DungeonDoorInterfaceBlock extends Block
 	
 	public void removeDoorBlocks(World world, BlockPos actionOrigin)
 	{
-		world.playSound(null, actionOrigin.getX(), actionOrigin.getY(), actionOrigin.getZ(), SoundEvents.BLOCK_GRINDSTONE_USE, SoundCategory.BLOCKS, 1.3F, 0F);
+		world.playSound(null, actionOrigin.getX(), actionOrigin.getY(), actionOrigin.getZ(), SoundEvents.GRINDSTONE_USE, SoundCategory.BLOCKS, 1.3F, 0F);
 		
-		for(BlockPos blockPos : BlockPos.getAllInBoxMutable(actionOrigin.add(10, 10, 10), actionOrigin.add(-10, -10, -10)))
+		for(BlockPos blockPos : BlockPos.betweenClosed(actionOrigin.offset(10, 10, 10), actionOrigin.offset(-10, -10, -10)))
 		{
 			BlockState blockState = world.getBlockState(blockPos);
 			if(blockState.getBlock() == MSBlocks.DUNGEON_DOOR)
 			{
-				world.setBlockState(blockPos, Blocks.AIR.getDefaultState());
+				world.setBlock(blockPos, Blocks.AIR.defaultBlockState(), 2);
 			}
 		}
 	}

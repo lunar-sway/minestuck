@@ -13,7 +13,7 @@ import java.util.List;
 
 public class LootBlockTables
 {
-	public static ItemStack[] TIER_ONE_GENERIC = new ItemStack[]{new ItemStack(Items.MELON_SLICE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), new ItemStack(Items.STICK), new ItemStack(Items.STICK)
+	/*public static ItemStack[] TIER_ONE_GENERIC = new ItemStack[]{new ItemStack(Items.MELON_SLICE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), new ItemStack(Items.STICK), new ItemStack(Items.STICK)
 			, new ItemStack(Items.STICK), new ItemStack(Items.STICK), new ItemStack(Items.STICK), new ItemStack(Items.STICK), new ItemStack(Items.STICK), new ItemStack(Items.STICK), new ItemStack(Items.STICK)
 			, new ItemStack(Items.STICK), new ItemStack(Items.STICK), new ItemStack(Items.STICK), new ItemStack(Items.STICK), new ItemStack(Items.STICK), new ItemStack(Items.STICK), new ItemStack(Items.STICK)};
 	
@@ -57,4 +57,5 @@ public class LootBlockTables
 	}
 	
 	//public ItemStack[] TEST = Stream.concat(Arrays.stream(TIER_ONE_GENERIC), Arrays.stream(TIER_ONE_TEST));
+	*/
 }

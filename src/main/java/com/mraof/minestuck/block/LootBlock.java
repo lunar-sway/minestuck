@@ -9,6 +9,9 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootParameterSets;
+import net.minecraft.loot.LootTable;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -22,9 +25,6 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootParameterSets;
-import net.minecraft.world.storage.loot.LootTable;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -43,54 +43,54 @@ public class LootBlock extends DecorBlock
 		//this.lootTable = lootTable;
 		this.closedShape = closedShape.createRotatedShapes();
 		this.openShape = openShape.createRotatedShapes();
-		this.setDefaultState(getDefaultState().with(OPEN, false)); //defaultState set in decor block has waterlogged
+		registerDefaultState(defaultBlockState().setValue(OPEN, false)); //defaultState set in decor block has waterlogged
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
 	{
-		if(state.get(OPEN))
+		if(state.getValue(OPEN))
 		{
-			return openShape.get(state.get(FACING));
+			return openShape.get(state.getValue(FACING));
 		}
-		return closedShape.get(state.get(FACING));
+		return closedShape.get(state.getValue(FACING));
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
 	{
-		if(!player.isSneaking() && !state.get(OPEN))
+		if(!player.isCrouching() && !state.getValue(OPEN))
 		{
 			if(worldIn instanceof ServerWorld)
 			{
-				TileEntity tileentity = worldIn.getTileEntity(pos);
+				TileEntity tileentity = worldIn.getBlockEntity(pos);
 				if(tileentity instanceof LootBlockTileEntity)
 				{
-					player.sendMessage(new TranslationTextComponent("Wahoo!"));
+					player.sendMessage(new TranslationTextComponent("Wahoo!"), player.getUUID());
 					
 					//LootBlockTables.givePlayerItemFromLandTableArrays(worldIn, player, LootBlockTables.TIER_ONE_GENERIC, LootBlockTables.TIER_ONE_TEST, LootBlockTables.TIER_ONE_GENERIC, LootBlockTables.TIER_ONE_GENERIC);
 					
-					LootTable lootTable = ((ServerWorld) worldIn).getServer().getLootTableManager().getLootTableFromLocation(((LootBlockTileEntity) tileentity).getLootTable());
+					LootTable lootTable = ((ServerWorld) worldIn).getServer().getLootTables().get(((LootBlockTileEntity) tileentity).getLootTable());
 					//lootTable.fillInventory(player.inventory, new LootContext.Builder((ServerWorld) interfaceTileEntity.getWorld()).build(LootParameterSets.CHEST));
 					//lootTable.generate(new LootContext.Builder((ServerWorld) worldIn).build(LootParameterSets.EMPTY), player::entityDropItem);
-					List<ItemStack> loot = lootTable.generate(new LootContext.Builder((ServerWorld) worldIn).build(LootParameterSets.EMPTY));
+					List<ItemStack> loot = lootTable.getRandomItems(new LootContext.Builder((ServerWorld) worldIn).create(LootParameterSets.EMPTY));
 					if(loot.isEmpty())
 						LOGGER.warn("Tried to generate loot from {}, but no items were generated!", ((LootBlockTileEntity) tileentity).getLootTable());
 					
-					if(!player.inventory.addItemStackToInventory(loot.get(worldIn.rand.nextInt(loot.size()))))
+					if(!player.inventory.add(loot.get(worldIn.random.nextInt(loot.size()))))
 					{
-						ItemEntity itemEntity = player.entityDropItem(loot.get(worldIn.rand.nextInt(loot.size())), 0.0F);
+						ItemEntity itemEntity = player.spawnAtLocation(loot.get(worldIn.random.nextInt(loot.size())), 0.0F);
 						if(itemEntity != null)
 						{
-							itemEntity.setNoPickupDelay();
+							itemEntity.setNoPickUpDelay();
 							//MSCriteriaTriggers.CONSORT_ITEM.trigger(player, this.lootTable.toString(), itemstack, consort);
 						}
 					}
 					
-					if(player.getHeldItem(handIn).getItem() != MSItems.DUNGEON_KEY)
-						worldIn.setBlockState(pos, state.with(OPEN, true));
+					if(player.getItemInHand(handIn).getItem() != MSItems.DUNGEON_KEY)
+						worldIn.setBlock(pos, state.setValue(OPEN, true), 2);
 				}
 			}
 			worldIn.playSound(null, pos, MSSoundEvents.LOOT_BLOCK_OPEN, SoundCategory.BLOCKS, 1.0F, 1.0F);
@@ -114,9 +114,8 @@ public class LootBlock extends DecorBlock
 	}
 	
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
 	{
-		super.fillStateContainer(builder);
 		builder.add(OPEN);
 	}
 }

@@ -41,13 +41,13 @@ public abstract class ImprovedStructurePiece extends StructurePiece
 	
 	public void setBoundsWithWorldHeight(ChunkGenerator generator, int x, int z, int width, int height, int depth, int yOffset, Heightmap.Type type)
 	{
-		int y = generator.getHeight(x, z, type) + yOffset;
+		int y = generator.getBaseHeight(x, z, type) + yOffset;
 		setBounds(x, y, z, width, height, depth);
 	}
 	
 	public void setBounds(int x, int y, int z, int width, int height, int depth)
 	{
-		if (Objects.requireNonNull(getCoordBaseMode()).getAxis() == Direction.Axis.Z)
+		if (Objects.requireNonNull(getOrientation()).getAxis() == Direction.Axis.Z)
 			this.boundingBox = new MutableBoundingBox(x, y, z, x + width - 1, y + height - 1, z + depth - 1);
 		else
 			this.boundingBox = new MutableBoundingBox(x, y, z, x + depth - 1, y + height - 1, z + width - 1);
@@ -111,7 +111,7 @@ public abstract class ImprovedStructurePiece extends StructurePiece
 	
 	protected BlockPos getActualPos(int x, int y, int z)
 	{
-		return new BlockPos(getXWithOffset(x, z), getYWithOffset(y), getZWithOffset(x, z));
+		return new BlockPos(getWorldX(x, z), getWorldY(y), getWorldZ(x, z));
 	}
 	
 	@Override

@@ -30,9 +30,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.ISeedReader;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
+import net.minecraft.world.gen.feature.structure.StructureManager;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
 import net.minecraft.world.gen.feature.template.Template;
@@ -64,7 +66,7 @@ public class TierOneDungeonEntryPiece extends ImprovedStructurePiece
 	private static final int lowerRoomMaxY = entryRoomMinY - 20;
 	private static final int lowerRoomMaxZ = entryRoomMaxZ + 5;
 	
-	private static final BlockState air = Blocks.AIR.getDefaultState();
+	private static final BlockState air = Blocks.AIR.defaultBlockState();
 	//private BlockState ground; //dont use because ores get embedded in it
 	private BlockState primaryBlock;
 	private BlockState primaryCrackedBlock;
@@ -84,7 +86,7 @@ public class TierOneDungeonEntryPiece extends ImprovedStructurePiece
 	private Template pipesTemplate1;
 	
 	
-	public TierOneDungeonEntryPiece(TemplateManager templates, ChunkGenerator<?> generator, Random random, int x, int z)
+	public TierOneDungeonEntryPiece(TemplateManager templates, ChunkGenerator generator, Random random, int x, int z)
 	{
 		super(MSStructurePieces.TIER_ONE_DUNGEON_ENTRY, 0);
 		
@@ -126,14 +128,14 @@ public class TierOneDungeonEntryPiece extends ImprovedStructurePiece
 	
 	private void initTemplates(TemplateManager templates)
 	{
-		rabbitTemplate = templates.getTemplateDefaulted(new ResourceLocation(Minestuck.MOD_ID, "stone_rabbit_statue"));
-		pipesTemplate1 = templates.getTemplateDefaulted(new ResourceLocation(Minestuck.MOD_ID, "tier_one_pipes_0"));
+		rabbitTemplate = templates.getOrCreate(new ResourceLocation(Minestuck.MOD_ID, "stone_rabbit_statue"));
+		pipesTemplate1 = templates.getOrCreate(new ResourceLocation(Minestuck.MOD_ID, "tier_one_pipes_0"));
 	}
 	
 	@Override
-	public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox boundingBoxIn, ChunkPos chunkPosIn)
+	public boolean postProcess(ISeedReader worldIn, StructureManager structureManagerIn, ChunkGenerator chunkGeneratorIn, Random randomIn, MutableBoundingBox boundingBoxIn, ChunkPos chunkPosIn, BlockPos blockPosIn)
 	{
-		StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings()); //creates set of blocks relevant to the terrain and aspect of a player's land(primarily terrain)
+		StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn); //creates set of blocks relevant to the terrain and aspect of a player's land(primarily terrain)
 		
 		primaryBlock = blocks.getBlockState("structure_primary");
 		primaryCrackedBlock = blocks.getBlockState("structure_primary_cracked");
@@ -144,12 +146,12 @@ public class TierOneDungeonEntryPiece extends ImprovedStructurePiece
 		fluid = blocks.getBlockState("fall_fluid");
 		lightBlock = blocks.getBlockState("light_block");
 		
-		SburbConnection sburbConnection = SburbHandler.getConnectionForDimension(worldIn.getWorld().getServer(), worldIn.getDimension().getType());
-		Title worldTitle = sburbConnection == null ? null : PlayerSavedData.getData(sburbConnection.getClientIdentifier(), worldIn.getWorld().getServer()).getTitle();
+		SburbConnection sburbConnection = SburbHandler.getConnectionForDimension(worldIn.getLevel().getServer(), worldIn.getLevel().dimension());
+		Title worldTitle = sburbConnection == null ? null : PlayerSavedData.getData(sburbConnection.getClientIdentifier(), worldIn.getLevel().getServer()).getTitle();
 		worldAspect = worldTitle == null ? null : worldTitle.getHeroAspect(); //aspect of this land's player
 		worldClass = worldTitle == null ? null : worldTitle.getHeroClass(); //class of this land's player
-		LandInfo landInfo = MSDimensions.getLandInfo(worldIn.getWorld().getServer(), worldIn.getDimension().getType());
-		worldTerrain = landInfo.getLandAspects().terrain;
+		LandInfo landInfo = MSDimensions.getLandInfo(worldIn.getLevel().getServer(), worldIn.getLevel().dimension());
+		worldTerrain = landInfo.getLandAspects().getTerrain();
 		
 		if(!createRan)
 		{
@@ -173,29 +175,29 @@ public class TierOneDungeonEntryPiece extends ImprovedStructurePiece
 		return true;
 	}
 	
-	private void buildStructureFoundation(IWorld world, MutableBoundingBox boundingBox, Random rand, int randomRoomType, ChunkGenerator<?> chunkGeneratorIn)
+	private void buildStructureFoundation(ISeedReader world, MutableBoundingBox boundingBox, Random rand, int randomRoomType, ChunkGenerator chunkGeneratorIn)
 	{
 		StructureBlockUtil.createSphere(world, boundingBox, air, getActualPos((entryRoomMaxX + entryRoomMinX) / 2, entryRoomMaxY + 2, entryRoomMinZ),
 				10, fluid); //clears area around structure in a more organic fashion
 		
 		BlockPos segsg = getActualPos((entryRoomMaxX + entryRoomMinX) / 2, entryRoomMaxY + 8, entryRoomMinZ);
-		StructureBlockUtil.fillAsGrid(world, boundingBox, primaryBlock, segsg, segsg.up(15).west(15).south(15), 3);
+		StructureBlockUtil.fillAsGrid(world, boundingBox, primaryBlock, segsg, segsg.above(15).west(15).south(15), 3);
 		
-		fillWithBlocks(world, boundingBox,
+		generateBox(world, boundingBox,
 				entryRoomMinX, entryRoomMinY, entryRoomMinZ,
 				entryRoomMaxX, entryRoomMaxY, entryRoomMaxZ,
 				secondaryBlock, secondaryBlock, false); //plain entrance before aspect modification
-		fillWithBlocks(world, boundingBox,
+		generateBox(world, boundingBox,
 				entryRoomMinX - 3, lowerRoomMaxY, entryRoomMinZ - 3,
 				entryRoomMaxX + 3, entryRoomMinY, entryRoomMaxZ + 3,
 				primaryBlock, primaryBlock, false); //fills out section between rooms
 		
-		/*fillWithBlocks(world, boundingBox,
+		/*generateBox(world, boundingBox,
 				entryRoomMinX, entryRoomMinY, entryRoomMinZ,
 				entryRoomMaxX, entryRoomMaxY, entryRoomMaxZ,
 				primaryBlock, air, false);*/ //exposed entry structure
 		
-		//fillWithAir(world, boundingBox, entryRoomMinX - 10, entryRoomMinY - 12, entryRoomMinZ - 5, entryRoomMaxX + 5, entryRoomMinY, entryRoomMaxZ + 5);
+		//generateAirBox(world, boundingBox, entryRoomMinX - 10, entryRoomMinY - 12, entryRoomMinZ - 5, entryRoomMaxX + 5, entryRoomMinY, entryRoomMaxZ + 5);
 		
 		//lighting for stairway down
 		if(roomVariable1 == 1) //spiral lighting
@@ -205,25 +207,25 @@ public class TierOneDungeonEntryPiece extends ImprovedStructurePiece
 		{
 			for(int ringIterate = 0; ringIterate < 5; ringIterate++)
 			{
-				fillWithBlocks(world, boundingBox, entryRoomMinX + 5, entryRoomMinY - 5 * ringIterate, entryRoomMinZ + 5, entryRoomMaxX - 5, entryRoomMinY - 5 * ringIterate, entryRoomMaxZ - 5, lightBlock, lightBlock, false);
+				generateBox(world, boundingBox, entryRoomMinX + 5, entryRoomMinY - 5 * ringIterate, entryRoomMinZ + 5, entryRoomMaxX - 5, entryRoomMinY - 5 * ringIterate, entryRoomMaxZ - 5, lightBlock, lightBlock, false);
 			}
 		} else //vertical line lighting
 		{
-			fillWithBlocks(world, boundingBox, (entryRoomMaxX + entryRoomMinX) / 2, lowerRoomMaxY + 1, entryRoomMinZ + 5, (entryRoomMaxX + entryRoomMinX) / 2 + 1, entryRoomMinY - 1, entryRoomMinZ + 5, lightBlock, lightBlock, false);
-			fillWithBlocks(world, boundingBox, entryRoomMinX + 5, lowerRoomMaxY + 1, (entryRoomMaxZ + entryRoomMinZ) / 2, entryRoomMinX + 5, entryRoomMinY - 1, (entryRoomMaxZ + entryRoomMinZ) / 2 + 1, lightBlock, lightBlock, false);
-			fillWithBlocks(world, boundingBox, (entryRoomMaxX + entryRoomMinX) / 2, lowerRoomMaxY + 1, entryRoomMaxZ - 5, (entryRoomMaxX + entryRoomMinX) / 2 + 1, entryRoomMinY - 1, entryRoomMaxZ - 5, lightBlock, lightBlock, false);
-			fillWithBlocks(world, boundingBox, entryRoomMaxX - 5, lowerRoomMaxY + 1, (entryRoomMaxZ + entryRoomMinZ) / 2, entryRoomMaxX - 5, entryRoomMinY - 1, (entryRoomMaxZ + entryRoomMinZ) / 2 + 1, lightBlock, lightBlock, false);
+			generateBox(world, boundingBox, (entryRoomMaxX + entryRoomMinX) / 2, lowerRoomMaxY + 1, entryRoomMinZ + 5, (entryRoomMaxX + entryRoomMinX) / 2 + 1, entryRoomMinY - 1, entryRoomMinZ + 5, lightBlock, lightBlock, false);
+			generateBox(world, boundingBox, entryRoomMinX + 5, lowerRoomMaxY + 1, (entryRoomMaxZ + entryRoomMinZ) / 2, entryRoomMinX + 5, entryRoomMinY - 1, (entryRoomMaxZ + entryRoomMinZ) / 2 + 1, lightBlock, lightBlock, false);
+			generateBox(world, boundingBox, (entryRoomMaxX + entryRoomMinX) / 2, lowerRoomMaxY + 1, entryRoomMaxZ - 5, (entryRoomMaxX + entryRoomMinX) / 2 + 1, entryRoomMinY - 1, entryRoomMaxZ - 5, lightBlock, lightBlock, false);
+			generateBox(world, boundingBox, entryRoomMaxX - 5, lowerRoomMaxY + 1, (entryRoomMaxZ + entryRoomMinZ) / 2, entryRoomMaxX - 5, entryRoomMinY - 1, (entryRoomMaxZ + entryRoomMinZ) / 2 + 1, lightBlock, lightBlock, false);
 		}
 		
 		if(randomRoomType != 4) //chamber below-connected to entry, not filled with air because of thick floor
 		{
-			fillWithBlocks(world, boundingBox,
+			generateBox(world, boundingBox,
 					lowerRoomMinX, lowerRoomMinY, lowerRoomMinZ,
 					lowerRoomMaxX, lowerRoomMaxY, lowerRoomMaxZ,
 					primaryBlock, primaryBlock, false);
 		} else
 		{
-			fillWithRandomizedBlocks(world, boundingBox,
+			generateBox(world, boundingBox,
 					lowerRoomMinX, lowerRoomMinY, lowerRoomMinZ,
 					lowerRoomMaxX, lowerRoomMaxY, lowerRoomMaxZ,
 					true, rand, DECAYED_BLOCKS);
@@ -232,7 +234,7 @@ public class TierOneDungeonEntryPiece extends ImprovedStructurePiece
 		buildTreasureAndEscapeChamber(world, boundingBox, rand);
 	}
 	
-	private void buildWallsAndFloors(IWorld world, MutableBoundingBox boundingBox, Random rand)
+	private void buildWallsAndFloors(ISeedReader world, MutableBoundingBox boundingBox, Random rand)
 	{
 		BlockPos doorInterfacePos = getActualPos(entryRoomMinX + 5, entryRoomMinY + 3, entryRoomMinZ);
 		
@@ -241,33 +243,33 @@ public class TierOneDungeonEntryPiece extends ImprovedStructurePiece
 		
 		StructureBlockUtil.placeDungeonDoor(world, boundingBox, doorInterfacePos, minDoorPos, maxDoorPos, EnumKeyType.tier_1_key);
 		
-		fillWithBlocks(world, boundingBox,
+		generateBox(world, boundingBox,
 				entryRoomMinX + 1, entryRoomMinY, entryRoomMinZ + 1,
 				entryRoomMaxX - 1, entryRoomMinY, entryRoomMaxZ - 1,
 				secondaryBlock, air, false); //floor
 		
 	}
 	
-	private void carveRooms(IWorld world, MutableBoundingBox boundingBox)
+	private void carveRooms(ISeedReader world, MutableBoundingBox boundingBox)
 	{
-		fillWithAir(world, boundingBox, entryRoomMinX + 1, entryRoomMinY + 1, entryRoomMinZ + 1, entryRoomMaxX - 1, entryRoomMaxY - 1, entryRoomMaxZ - 1); //entry room
-		fillWithAir(world, boundingBox, entryRoomMinX + 6, lowerRoomMaxY, entryRoomMinZ + 6, entryRoomMaxX - 6, entryRoomMinY, entryRoomMaxZ - 6); //stairway hole
-		fillWithAir(world, boundingBox, lowerRoomMinX + 1, lowerRoomMinY + 3, lowerRoomMinZ + 1, lowerRoomMaxX - 1, lowerRoomMaxY - 1, lowerRoomMaxZ - 1); //lower secondary chamber
+		generateAirBox(world, boundingBox, entryRoomMinX + 1, entryRoomMinY + 1, entryRoomMinZ + 1, entryRoomMaxX - 1, entryRoomMaxY - 1, entryRoomMaxZ - 1); //entry room
+		generateAirBox(world, boundingBox, entryRoomMinX + 6, lowerRoomMaxY, entryRoomMinZ + 6, entryRoomMaxX - 6, entryRoomMinY, entryRoomMaxZ - 6); //stairway hole
+		generateAirBox(world, boundingBox, lowerRoomMinX + 1, lowerRoomMinY + 3, lowerRoomMinZ + 1, lowerRoomMaxX - 1, lowerRoomMaxY - 1, lowerRoomMaxZ - 1); //lower secondary chamber
 	}
 	
-	private void buildTreasureAndEscapeChamber(IWorld world, MutableBoundingBox boundingBox, Random rand/*, int randomRoomType*/)
+	private void buildTreasureAndEscapeChamber(ISeedReader world, MutableBoundingBox boundingBox, Random rand/*, int randomRoomType*/)
 	{
-		fillWithBlocks(world, boundingBox,
+		generateBox(world, boundingBox,
 				lowerRoomMinX - 10, lowerRoomMinY + 2, lowerRoomMinZ + 8,
 				lowerRoomMinX, lowerRoomMinY + 9, lowerRoomMaxZ - 8,
 				primaryBlock, air, false); //room itself
 		
-		BlockState ironBar = Blocks.IRON_BARS.getDefaultState().with(PaneBlock.EAST, true).with(PaneBlock.WEST, true);
-		if(this.getCoordBaseMode() == Direction.EAST || this.getCoordBaseMode() == Direction.WEST) //flips which side is left or right to prevent them from being two single chests
+		BlockState ironBar = Blocks.IRON_BARS.defaultBlockState().setValue(PaneBlock.EAST, true).setValue(PaneBlock.WEST, true);
+		if(this.getOrientation() == Direction.EAST || this.getOrientation() == Direction.WEST) //flips which side is left or right to prevent them from being two single chests //getOrientation was getCoordBaseMode
 		{
-			ironBar = Blocks.IRON_BARS.getDefaultState().with(PaneBlock.NORTH, true).with(PaneBlock.SOUTH, true);
+			ironBar = Blocks.IRON_BARS.defaultBlockState().setValue(PaneBlock.NORTH, true).setValue(PaneBlock.SOUTH, true);
 		}
-		fillWithBlocks(world, boundingBox,
+		generateBox(world, boundingBox,
 				lowerRoomMinX, lowerRoomMinY + 3, lowerRoomMinZ + 12,
 				lowerRoomMinX, lowerRoomMinY + 6, lowerRoomMaxZ - 12,
 				ironBar, ironBar, false); //iron bars
@@ -281,14 +283,14 @@ public class TierOneDungeonEntryPiece extends ImprovedStructurePiece
 		}/**/
 		
 		BlockPos chestPosLeft = getActualPos(lowerRoomMinX - 4, lowerRoomMinY + 3, lowerRoomMinZ + 9);
-		StructureBlockUtil.placeLootBlock(chestPosLeft, world, boundingBox, MSBlocks.LOOT_CHEST.getDefaultState().with(BlockStateProperties.HORIZONTAL_FACING, getCoordBaseMode()), MSLootTables.TIER_ONE_MEDIUM_CHEST);
+		StructureBlockUtil.placeLootBlock(chestPosLeft, world, boundingBox, MSBlocks.LOOT_CHEST.defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, getOrientation()), MSLootTables.TIER_ONE_MEDIUM_CHEST);
 		chestPosLeft = getActualPos(lowerRoomMinX - 2, lowerRoomMinY + 3, lowerRoomMinZ + 9);
-		StructureBlockUtil.placeLootBlock(chestPosLeft, world, boundingBox, MSBlocks.LOOT_CHEST.getDefaultState().with(BlockStateProperties.HORIZONTAL_FACING, getCoordBaseMode()), MSLootTables.TIER_ONE_MEDIUM_CHEST);
+		StructureBlockUtil.placeLootBlock(chestPosLeft, world, boundingBox, MSBlocks.LOOT_CHEST.defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, getOrientation()), MSLootTables.TIER_ONE_MEDIUM_CHEST);
 		
 		BlockPos chestPosRight = getActualPos(lowerRoomMinX - 4, lowerRoomMinY + 3, lowerRoomMaxZ - 9);
-		StructureBlockUtil.placeLootBlock(chestPosRight, world, boundingBox, MSBlocks.LOOT_CHEST.getDefaultState().with(BlockStateProperties.HORIZONTAL_FACING, getCoordBaseMode().getOpposite()), MSLootTables.TIER_ONE_MEDIUM_CHEST);
+		StructureBlockUtil.placeLootBlock(chestPosRight, world, boundingBox, MSBlocks.LOOT_CHEST.defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, getOrientation().getOpposite()), MSLootTables.TIER_ONE_MEDIUM_CHEST);
 		chestPosRight = getActualPos(lowerRoomMinX - 2, lowerRoomMinY + 3, lowerRoomMaxZ - 9);
-		StructureBlockUtil.placeLootBlock(chestPosRight, world, boundingBox, MSBlocks.LOOT_CHEST.getDefaultState().with(BlockStateProperties.HORIZONTAL_FACING, getCoordBaseMode().getOpposite()), MSLootTables.TIER_ONE_MEDIUM_CHEST);
+		StructureBlockUtil.placeLootBlock(chestPosRight, world, boundingBox, MSBlocks.LOOT_CHEST.defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, getOrientation().getOpposite()), MSLootTables.TIER_ONE_MEDIUM_CHEST);
 		
 		/*
 		BlockPos chestPosLeftb = getActualPos(lowerRoomMinX - 2, lowerRoomMinY + 5, lowerRoomMinZ + 9);
@@ -302,13 +304,13 @@ public class TierOneDungeonEntryPiece extends ImprovedStructurePiece
 		StructureBlockUtil.placeChest(chestPosRightb, world, boundingBox, getCoordBaseMode().getOpposite(), leftChestType, MSLootTables.TIER_ONE_MEDIUM_CHEST, rand);
 		/**/
 		
-		StructureBlockUtil.placeReturnNode(world, boundingBox, getActualPos(lowerRoomMinX - 7, lowerRoomMinY + 3, (lowerRoomMaxZ + lowerRoomMinZ) / 2), getCoordBaseMode());
+		StructureBlockUtil.placeReturnNode(world, boundingBox, getActualPos(lowerRoomMinX - 7, lowerRoomMinY + 3, (lowerRoomMaxZ + lowerRoomMinZ) / 2), getOrientation());
 		
-		setBlockState(world, lightBlock, lowerRoomMinX, lowerRoomMinY + 5, lowerRoomMinZ + 10, boundingBox); //left side light
-		setBlockState(world, lightBlock, lowerRoomMinX, lowerRoomMinY + 5, lowerRoomMaxZ - 10, boundingBox); //right side light
+		placeBlock(world, lightBlock, lowerRoomMinX, lowerRoomMinY + 5, lowerRoomMinZ + 10, boundingBox); //left side light
+		placeBlock(world, lightBlock, lowerRoomMinX, lowerRoomMinY + 5, lowerRoomMaxZ - 10, boundingBox); //right side light
 	}
 	
-	private void buildIndoorBlocks(IWorld world, MutableBoundingBox boundingBox, Random rand, int randomRoomType)
+	private void buildIndoorBlocks(ISeedReader world, MutableBoundingBox boundingBox, Random rand, int randomRoomType)
 	{
 		BlockPos staircaseMinPos = getActualPos(entryRoomMinX + 6, lowerRoomMinY + 2, entryRoomMinZ + 6);
 		BlockPos staircaseMaxPos = getActualPos(entryRoomMaxX - 6, entryRoomMinY, entryRoomMaxZ - 6);
@@ -341,26 +343,26 @@ public class TierOneDungeonEntryPiece extends ImprovedStructurePiece
 		}
 	}
 	
-	private void bottomRoomPlainType(IWorld world, MutableBoundingBox boundingBox, Random rand)
+	private void bottomRoomPlainType(ISeedReader world, MutableBoundingBox boundingBox, Random rand)
 	{
 		//Debug.debugf("bottomRoomPlainType");
 		
-		fillWithBlocks(world, boundingBox, lowerRoomMinX + 12, lowerRoomMinY + 2, lowerRoomMinZ + 12, lowerRoomMaxX - 12, lowerRoomMinY + 2, lowerRoomMaxZ - 12, lightBlock, lightBlock, false); //central lighting
+		generateBox(world, boundingBox, lowerRoomMinX + 12, lowerRoomMinY + 2, lowerRoomMinZ + 12, lowerRoomMaxX - 12, lowerRoomMinY + 2, lowerRoomMaxZ - 12, lightBlock, lightBlock, false); //central lighting
 		
 		placePillars(world, boundingBox, rand, false);
 		
 	}
 	
-	private void bottomRoomDecrepitType(IWorld world, MutableBoundingBox boundingBox, Random rand)
+	private void bottomRoomDecrepitType(ISeedReader world, MutableBoundingBox boundingBox, Random rand)
 	{
 		//Debug.debugf("bottomRoomDecrepitType");
 		
 		placePillars(world, boundingBox, rand, true);
 		
-		if(fluid == Blocks.LAVA.getDefaultState())
-			fillWithBlocks(world, boundingBox, entryRoomMinX + 6, lowerRoomMinY + 1, entryRoomMinZ + 6, entryRoomMaxX - 6, lowerRoomMinY + 2, entryRoomMaxZ - 6, Blocks.WATER.getDefaultState(), Blocks.WATER.getDefaultState(), false);
+		if(fluid == Blocks.LAVA.defaultBlockState())
+			generateBox(world, boundingBox, entryRoomMinX + 6, lowerRoomMinY + 1, entryRoomMinZ + 6, entryRoomMaxX - 6, lowerRoomMinY + 2, entryRoomMaxZ - 6, Blocks.WATER.defaultBlockState(), Blocks.WATER.defaultBlockState(), false);
 		else
-			fillWithBlocks(world, boundingBox, entryRoomMinX + 6, lowerRoomMinY + 1, entryRoomMinZ + 6, entryRoomMaxX - 6, lowerRoomMinY + 2, entryRoomMaxZ - 6, fluid, fluid, false);
+			generateBox(world, boundingBox, entryRoomMinX + 6, lowerRoomMinY + 1, entryRoomMinZ + 6, entryRoomMaxX - 6, lowerRoomMinY + 2, entryRoomMaxZ - 6, fluid, fluid, false);
 		
 		
 		/*for(int i = 0; i <= 6; i++)
@@ -378,15 +380,15 @@ public class TierOneDungeonEntryPiece extends ImprovedStructurePiece
 		}*/
 	}
 	
-	private void bottomRoomOrnateType(IWorld world, MutableBoundingBox boundingBox, Random rand)
+	private void bottomRoomOrnateType(ISeedReader world, MutableBoundingBox boundingBox, Random rand)
 	{
 		//Debug.debugf("bottomRoomOrnateType");
 		
-		fillWithBlocks(world, boundingBox, lowerRoomMinX + 12, lowerRoomMinY + 3, lowerRoomMinZ + 12, lowerRoomMaxX - 12, lowerRoomMinY + 3, lowerRoomMaxZ - 12, lightBlock, lightBlock, false); //central lighting
+		generateBox(world, boundingBox, lowerRoomMinX + 12, lowerRoomMinY + 3, lowerRoomMinZ + 12, lowerRoomMaxX - 12, lowerRoomMinY + 3, lowerRoomMaxZ - 12, lightBlock, lightBlock, false); //central lighting
 		
 		placePillars(world, boundingBox, rand, false);
 		
-		StructureBlockUtil.createCylinder(world, boundingBox, primarySlabBlock.with(SlabBlock.TYPE, SlabType.BOTTOM),
+		StructureBlockUtil.createCylinder(world, boundingBox, primarySlabBlock.setValue(SlabBlock.TYPE, SlabType.BOTTOM),
 				getActualPos(lowerRoomMinX + 14, lowerRoomMinY + 3, lowerRoomMinZ + 13),
 				6, 1);
 		StructureBlockUtil.createCylinder(world, boundingBox, secondaryBlock,
@@ -394,110 +396,110 @@ public class TierOneDungeonEntryPiece extends ImprovedStructurePiece
 				5, 1);
 	}
 	
-	private void bottomRoomSpawnersType(IWorld world, MutableBoundingBox boundingBox, Random rand)
+	private void bottomRoomSpawnersType(ISeedReader world, MutableBoundingBox boundingBox, Random rand)
 	{
 		//Debug.debugf("bottomRoomSpawnersType");
 		
-		fillWithBlocks(world, boundingBox, lowerRoomMinX + 12, lowerRoomMinY + 2, lowerRoomMinZ + 12, lowerRoomMaxX - 12, lowerRoomMinY + 2, lowerRoomMaxZ - 12, lightBlock, lightBlock, false); //central lighting
+		generateBox(world, boundingBox, lowerRoomMinX + 12, lowerRoomMinY + 2, lowerRoomMinZ + 12, lowerRoomMaxX - 12, lowerRoomMinY + 2, lowerRoomMaxZ - 12, lightBlock, lightBlock, false); //central lighting
 		
 		placePillars(world, boundingBox, rand, false);
 		
 		if(bottomRoomSpawner1)
 		{
-			//fillWithBlocks(world, boundingBox, entryRoomMinX - 2, entryRoomMinY - 11, entryRoomMinZ - 2, entryRoomMinX - 2, entryRoomMinY - 8, entryRoomMinZ - 2, primaryDecorativeBlock, primaryDecorativeBlock, false);
+			//generateBox(world, boundingBox, entryRoomMinX - 2, entryRoomMinY - 11, entryRoomMinZ - 2, entryRoomMinX - 2, entryRoomMinY - 8, entryRoomMinZ - 2, primaryDecorativeBlock, primaryDecorativeBlock, false);
 			BlockPos spawnerPos = getActualPos(lowerRoomMinX + 4, lowerRoomMinY + 6, lowerRoomMinZ + 4);
 			bottomRoomSpawner1 = !StructureBlockUtil.placeSpawner(spawnerPos, world, boundingBox, MSEntityTypes.IMP);
 		}
 		if(bottomRoomSpawner2)
 		{
-			//fillWithBlocks(world, boundingBox, entryRoomMaxX - 2, entryRoomMinY - 11, entryRoomMaxZ - 2, entryRoomMaxX - 2, entryRoomMinY - 8, entryRoomMaxZ - 2, primaryDecorativeBlock, primaryDecorativeBlock, false);
+			//generateBox(world, boundingBox, entryRoomMaxX - 2, entryRoomMinY - 11, entryRoomMaxZ - 2, entryRoomMaxX - 2, entryRoomMinY - 8, entryRoomMaxZ - 2, primaryDecorativeBlock, primaryDecorativeBlock, false);
 			BlockPos spawnerPos = getActualPos(lowerRoomMaxX - 4, lowerRoomMinY + 6, lowerRoomMaxZ - 4);
 			bottomRoomSpawner2 = !StructureBlockUtil.placeSpawner(spawnerPos, world, boundingBox, MSEntityTypes.IMP);
 		}
 	}
 	
-	private void bottomRoomSkippingStonesType(IWorld world, MutableBoundingBox boundingBox, Random rand)
+	private void bottomRoomSkippingStonesType(ISeedReader world, MutableBoundingBox boundingBox, Random rand)
 	{
 		//Debug.debugf("bottomRoomSkippingStonesType");
 		
-		fillWithBlocks(world, boundingBox, lowerRoomMinX + 2, lowerRoomMinY + 1, lowerRoomMinZ + 2, lowerRoomMaxX - 2, lowerRoomMinY + 2, lowerRoomMaxZ - 2, fluid, fluid, false);
-		fillWithBlocks(world, boundingBox, lowerRoomMinX + 11, lowerRoomMinY + 1, lowerRoomMinZ + 11, lowerRoomMaxX - 11, lowerRoomMinY + 2, lowerRoomMaxZ - 11, primaryBlock, primaryBlock, false); //floor connected to stairs
-		fillWithBlocks(world, boundingBox, lowerRoomMinX + 2, lowerRoomMinY, lowerRoomMinZ + 2, lowerRoomMaxX - 2, lowerRoomMinY, lowerRoomMaxZ - 2, lightBlock, lightBlock, false); //lighting under water
-		fillWithBlocks(world, boundingBox, lowerRoomMinX + 12, lowerRoomMinY + 2, lowerRoomMinZ + 12, lowerRoomMaxX - 12, lowerRoomMinY + 2, lowerRoomMaxZ - 12, lightBlock, lightBlock, false); //central lighting
+		generateBox(world, boundingBox, lowerRoomMinX + 2, lowerRoomMinY + 1, lowerRoomMinZ + 2, lowerRoomMaxX - 2, lowerRoomMinY + 2, lowerRoomMaxZ - 2, fluid, fluid, false);
+		generateBox(world, boundingBox, lowerRoomMinX + 11, lowerRoomMinY + 1, lowerRoomMinZ + 11, lowerRoomMaxX - 11, lowerRoomMinY + 2, lowerRoomMaxZ - 11, primaryBlock, primaryBlock, false); //floor connected to stairs
+		generateBox(world, boundingBox, lowerRoomMinX + 2, lowerRoomMinY, lowerRoomMinZ + 2, lowerRoomMaxX - 2, lowerRoomMinY, lowerRoomMaxZ - 2, lightBlock, lightBlock, false); //lighting under water
+		generateBox(world, boundingBox, lowerRoomMinX + 12, lowerRoomMinY + 2, lowerRoomMinZ + 12, lowerRoomMaxX - 12, lowerRoomMinY + 2, lowerRoomMaxZ - 12, lightBlock, lightBlock, false); //central lighting
 		
 		placePillars(world, boundingBox, rand, false);
 	}
 	
-	private void bottomRoomTrappedType(IWorld world, MutableBoundingBox boundingBox, Random rand) //looks same as plain
+	private void bottomRoomTrappedType(ISeedReader world, MutableBoundingBox boundingBox, Random rand) //looks same as plain
 	{
 		//Debug.debugf("bottomRoomTrappedType");
 		
-		fillWithBlocks(world, boundingBox, lowerRoomMinX + 12, lowerRoomMinY + 2, lowerRoomMinZ + 12, lowerRoomMaxX - 12, lowerRoomMinY + 2, lowerRoomMaxZ - 12, lightBlock, lightBlock, false); //central lighting
+		generateBox(world, boundingBox, lowerRoomMinX + 12, lowerRoomMinY + 2, lowerRoomMinZ + 12, lowerRoomMaxX - 12, lowerRoomMinY + 2, lowerRoomMaxZ - 12, lightBlock, lightBlock, false); //central lighting
 		
 		placePillars(world, boundingBox, rand, false);
 	}
 	
-	private void placePillars(IWorld world, MutableBoundingBox boundingBox, Random rand, boolean breakDown)
+	private void placePillars(ISeedReader world, MutableBoundingBox boundingBox, Random rand, boolean breakDown)
 	{
 		if(breakDown)
 		{
 			if(decayedPillar1)
 			{
-				fillWithBlocks(world, boundingBox,
+				generateBox(world, boundingBox,
 						lowerRoomMaxX - 6, lowerRoomMinY + 1, lowerRoomMaxZ - 6,
 						lowerRoomMaxX - 4, lowerRoomMaxY - 1, lowerRoomMaxZ - 4,
 						primaryPillarBlock, primaryPillarBlock, false);
 			}
 			if(decayedPillar2)
 			{
-				fillWithBlocks(world, boundingBox,
+				generateBox(world, boundingBox,
 						lowerRoomMinX + 4, lowerRoomMinY + 1, lowerRoomMinZ + 4,
 						lowerRoomMinX + 6, lowerRoomMaxY - 1, lowerRoomMinZ + 6,
 						primaryPillarBlock, primaryPillarBlock, false);
 			}
 			if(decayedPillar3)
 			{
-				fillWithBlocks(world, boundingBox,
+				generateBox(world, boundingBox,
 						lowerRoomMinX + 4, lowerRoomMinY + 1, lowerRoomMaxZ - 6,
 						lowerRoomMinX + 6, lowerRoomMaxY - 1, lowerRoomMaxZ - 4,
 						primaryPillarBlock, primaryPillarBlock, false);
 			}
 			if(decayedPillar4)
 			{
-				fillWithBlocks(world, boundingBox,
+				generateBox(world, boundingBox,
 						lowerRoomMaxX - 6, lowerRoomMinY + 1, lowerRoomMinZ + 4,
 						lowerRoomMaxX - 4, lowerRoomMaxY - 1, lowerRoomMinZ + 6,
 						primaryPillarBlock, primaryPillarBlock, false);
 			}
 		} else
 		{
-			fillWithBlocks(world, boundingBox,
+			generateBox(world, boundingBox,
 					lowerRoomMaxX - 6, lowerRoomMinY + 1, lowerRoomMaxZ - 6,
 					lowerRoomMaxX - 4, lowerRoomMaxY - 1, lowerRoomMaxZ - 4,
 					primaryPillarBlock, primaryPillarBlock, false);
-			fillWithBlocks(world, boundingBox,
+			generateBox(world, boundingBox,
 					lowerRoomMinX + 4, lowerRoomMinY + 1, lowerRoomMinZ + 4,
 					lowerRoomMinX + 6, lowerRoomMaxY - 1, lowerRoomMinZ + 6,
 					primaryPillarBlock, primaryPillarBlock, false);
-			fillWithBlocks(world, boundingBox,
+			generateBox(world, boundingBox,
 					lowerRoomMinX + 4, lowerRoomMinY + 1, lowerRoomMaxZ - 6,
 					lowerRoomMinX + 6, lowerRoomMaxY - 1, lowerRoomMaxZ - 4,
 					primaryPillarBlock, primaryPillarBlock, false);
-			fillWithBlocks(world, boundingBox,
+			generateBox(world, boundingBox,
 					lowerRoomMaxX - 6, lowerRoomMinY + 1, lowerRoomMinZ + 4,
 					lowerRoomMaxX - 4, lowerRoomMaxY - 1, lowerRoomMinZ + 6,
 					primaryPillarBlock, primaryPillarBlock, false);
 		}
 	}
 	
-	private void buildAspectThemedEntrance(IWorld world, MutableBoundingBox boundingBox, Random rand)
+	private void buildAspectThemedEntrance(ISeedReader world, MutableBoundingBox boundingBox, Random rand)
 	{
 		if(worldAspect == EnumAspect.BREATH) //pipes moving around
 		{
-			StructureBlockUtil.placeCenteredTemplate(world, new BlockPos(getActualPos((entryRoomMaxX + entryRoomMinX) / 2, entryRoomMinY - 1, (entryRoomMaxZ + entryRoomMinZ) / 2)), pipesTemplate1, new PlacementSettings().setBoundingBox(boundingBox).setRotation(MSRotationUtil.fromDirection(getCoordBaseMode().rotateYCCW())));
+			StructureBlockUtil.placeCenteredTemplate(world, new BlockPos(getActualPos((entryRoomMaxX + entryRoomMinX) / 2, entryRoomMinY - 1, (entryRoomMaxZ + entryRoomMinZ) / 2)), pipesTemplate1, new PlacementSettings().setBoundingBox(boundingBox).setRotation(MSRotationUtil.fromDirection(getOrientation().getCounterClockWise())));
 		} else if(worldAspect == EnumAspect.LIFE) //rabbit statue
 		{
-			StructureBlockUtil.placeCenteredTemplate(world, new BlockPos(getActualPos((entryRoomMaxX + entryRoomMinX) / 2, entryRoomMaxY + 1, (entryRoomMaxZ + entryRoomMinZ) / 2)), rabbitTemplate, new PlacementSettings().setBoundingBox(boundingBox).setRotation(MSRotationUtil.fromDirection(getCoordBaseMode().getOpposite())));
+			StructureBlockUtil.placeCenteredTemplate(world, new BlockPos(getActualPos((entryRoomMaxX + entryRoomMinX) / 2, entryRoomMaxY + 1, (entryRoomMaxZ + entryRoomMinZ) / 2)), rabbitTemplate, new PlacementSettings().setBoundingBox(boundingBox).setRotation(MSRotationUtil.fromDirection(getOrientation().getOpposite())));
 			
 			//TODO Will be for
 			
@@ -526,7 +528,7 @@ public class TierOneDungeonEntryPiece extends ImprovedStructurePiece
 	}
 	
 	@Override
-	protected void readAdditional(CompoundNBT tagCompound)
+	protected void addAdditionalSaveData(CompoundNBT tagCompound)
 	{
 		tagCompound.putBoolean("bottomRoomSpawner1", bottomRoomSpawner1); //spawner type room only
 		tagCompound.putBoolean("bottomRoomSpawner2", bottomRoomSpawner2); //spawner type room only
@@ -544,15 +546,16 @@ public class TierOneDungeonEntryPiece extends ImprovedStructurePiece
 		{
 		}
 		
-		public void selectBlocks(Random rand, int x, int y, int z, boolean wall)
+		@Override
+		public void next(Random rand, int x, int y, int z, boolean wall)
 		{
 			int randomBlock = rand.nextInt(6);
 			if(randomBlock >= 1)
 			{
-				this.blockstate = primaryBlock;
+				this.next = primaryBlock; //next was blockstate
 			} else
 			{
-				this.blockstate = primaryCrackedBlock;
+				this.next = primaryCrackedBlock;
 			}
 		}
 	}

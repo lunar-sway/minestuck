@@ -36,7 +36,7 @@ public class CakeLandType extends TitleLandType
 	{
 		registry.setBlockState("structure_wool_2", Blocks.ORANGE_WOOL.defaultBlockState());
 		registry.setBlockState("carpet", Blocks.MAGENTA_CARPET.defaultBlockState());
-		registry.setBlockState("aspect_sapling", MSBlocks.HEART_ASPECT_SAPLING.getDefaultState());
+		registry.setBlockState("aspect_sapling", MSBlocks.HEART_ASPECT_SAPLING.defaultBlockState());
 	}
 	
 	@Override

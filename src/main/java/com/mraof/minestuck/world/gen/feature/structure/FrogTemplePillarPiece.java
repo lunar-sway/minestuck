@@ -51,7 +51,6 @@ public class FrogTemplePillarPiece extends ImprovedStructurePiece
 		tagCompound.putBoolean("eroded", eroded);
 		tagCompound.putBoolean("uraniumFilled", uraniumFilled);
 		tagCompound.putInt("randReduction", randReduction);
-		super.addAdditionalSaveData(tagCompound);
 	}
 	
 	@Override

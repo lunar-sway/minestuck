@@ -8,12 +8,6 @@ public enum EnumKeyType implements IStringSerializable
 	tier_1_key,
 	tier_2_key;
 	
-	@Override
-	public String getName()
-	{
-		return name().toLowerCase();
-	}
-	
 	public String getNameNoSpaces()
 	{
 		return name().replace('_', ' ');
@@ -37,5 +31,11 @@ public enum EnumKeyType implements IStringSerializable
 				return type;
 		}
 		return null;
+	}
+	
+	@Override
+	public String getSerializedName()
+	{
+		return name().toLowerCase();
 	}
 }

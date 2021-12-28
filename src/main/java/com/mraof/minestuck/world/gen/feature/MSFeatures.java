@@ -2,11 +2,9 @@ package com.mraof.minestuck.world.gen.feature;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.gen.feature.structure.*;
-import com.mraof.minestuck.world.gen.feature.structure.castle.CastleStructure;
 import com.mraof.minestuck.world.gen.feature.structure.tiered.tier1.TierOneDungeonStructure;
+import com.mraof.minestuck.world.gen.feature.structure.castle.CastleStructure;
 import com.mraof.minestuck.world.gen.feature.structure.village.ConsortVillageStructure;
-import com.mraof.minestuck.world.gen.feature.tree.EndTreeFeature;
-import com.mraof.minestuck.world.gen.feature.tree.LeaflessTreeFeature;
 import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraftforge.event.RegistryEvent;
@@ -74,7 +72,7 @@ public final class MSFeatures
 		register(registry, new FrogTempleStructure(NoFeatureConfig.CODEC).setRegistryName("frog_temple"));
 		register(registry, new SmallRuinStructure(NoFeatureConfig.CODEC).setRegistryName("small_ruin"));
 		register(registry, new ImpDungeonStructure(NoFeatureConfig.CODEC).setRegistryName("imp_dungeon"));
-		registry(registry, new TierOneDungeonStructure(NoFeatureConfig::CODEC).setRegistryName("tier_one_dungeon"));
+		register(registry, new TierOneDungeonStructure(NoFeatureConfig.CODEC).setRegistryName("tier_one_dungeon"));
 		register(registry, new ConsortVillageStructure(NoFeatureConfig.CODEC).setRegistryName("consort_village"));
 		register(registry, new CastleStructure(NoFeatureConfig.CODEC).setRegistryName("skaia_castle"));
 	}

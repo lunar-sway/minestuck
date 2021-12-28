@@ -25,6 +25,7 @@ public class MSLootTables
 	private static LootConditionType LAND_TYPE_CONDITION;
 	private static LootConditionType CONSORT_CONDITION;
 	private static LootFunctionType SET_BOONDOLLAR_FUNCTION;
+	private static LootFunctionType SET_KEY_VALUES_FUNCTION;
 	private static LootPoolEntryType LAND_TABLE_ENTRY;
 	
 	public static void registerLootSerializers()
@@ -32,7 +33,7 @@ public class MSLootTables
 		LAND_TYPE_CONDITION = registerCondition("land_aspect", new LandTypeLootCondition.Serializer());
 		CONSORT_CONDITION = registerCondition("consort", new ConsortLootCondition.Serializer());
 		SET_BOONDOLLAR_FUNCTION = registerFunction("set_boondollar_count", new SetBoondollarCount.Serializer());
-		LootFunctionManager.registerFunction(new SetKeyValues.Serializer());
+		SET_KEY_VALUES_FUNCTION = registerFunction("set_key_value", new SetKeyValues.Serializer());
 		LAND_TABLE_ENTRY = registerEntry("land_table", new LandTableLootEntry.SerializerImpl());
 	}
 	
@@ -49,6 +50,11 @@ public class MSLootTables
 	public static LootFunctionType setBoondollarFunctionType()
 	{
 		return SET_BOONDOLLAR_FUNCTION;
+	}
+	
+	public static LootFunctionType setKeyValuesFunctionType()
+	{
+		return SET_KEY_VALUES_FUNCTION;
 	}
 	
 	public static LootPoolEntryType landTableEntryType()

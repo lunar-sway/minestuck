@@ -5,16 +5,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.mraof.minestuck.item.KeyItem;
+import com.mraof.minestuck.world.storage.loot.MSLootTables;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.*;
 import net.minecraft.loot.conditions.ILootCondition;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.dimension.Dimension;
-import net.minecraft.world.storage.loot.IRandomRange;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootFunction;
-import net.minecraft.world.storage.loot.RandomRanges;
-import net.minecraft.world.storage.loot.conditions.ILootCondition;
 
 public class SetKeyValues extends LootFunction
 {
@@ -28,38 +23,30 @@ public class SetKeyValues extends LootFunction
 		//this.dimension = dimensionIn;
 	}
 	
-	
-	
 	@Override
-	protected ItemStack doApply(ItemStack stack, LootContext context)
+	protected ItemStack run(ItemStack stack, LootContext context)
 	{
 		//KeyItem.setDimension(stack, dimension);
 		return KeyItem.setKeyType(stack, countRange.getInt(context.getRandom()));
 	}
 	
-	public static Builder<?> builder(IRandomRange range/*, Dimension dimension*/)
+	public static LootFunction.Builder<?> builder(IRandomRange range/*, Dimension dimension*/)
 	{
-		return builder((conditions) -> new SetKeyValues(conditions, range/*, dimension*/));
-	}
-	
-	@Override
-	protected ItemStack run(ItemStack p_215859_1_, LootContext p_215859_2_)
-	{
-		return null;
+		return simpleBuilder((conditions) -> new SetKeyValues(conditions, range/*, dimension*/));
 	}
 	
 	@Override
 	public LootFunctionType getType()
 	{
-		return null;
+		return MSLootTables.setKeyValuesFunctionType();
 	}
 	
 	public static class Serializer extends LootFunction.Serializer<SetKeyValues>
 	{
-		public Serializer()
+		/*public Serializer()
 		{
-			super(new ResourceLocation("minestuck:set_key_values"), SetKeyValues.class);
-		}
+			//super(new ResourceLocation("minestuck:set_key_values"), SetKeyValues.class);
+		}*/
 		
 		public void serialize(JsonObject object, SetKeyValues functionClazz, JsonSerializationContext serializationContext)
 		{

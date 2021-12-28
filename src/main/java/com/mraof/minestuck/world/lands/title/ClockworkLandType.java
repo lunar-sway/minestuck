@@ -36,7 +36,7 @@ public class ClockworkLandType extends TitleLandType
 	{
 		registry.setBlockState("structure_wool_2", Blocks.LIGHT_GRAY_WOOL.defaultBlockState());
 		registry.setBlockState("carpet", Blocks.RED_CARPET.defaultBlockState());
-		registry.setBlockState("aspect_sapling", MSBlocks.TIME_ASPECT_SAPLING.getDefaultState());
+		registry.setBlockState("aspect_sapling", MSBlocks.TIME_ASPECT_SAPLING.defaultBlockState());
 	}
 	
 	@Override

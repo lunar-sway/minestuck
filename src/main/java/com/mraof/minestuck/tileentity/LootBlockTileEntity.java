@@ -1,6 +1,7 @@
 package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.world.storage.loot.MSLootTables;
+import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -15,9 +16,9 @@ public class LootBlockTileEntity extends TileEntity
 	}
 	
 	@Override
-	public void read(CompoundNBT compound)
+	public void load(BlockState state, CompoundNBT compound)
 	{
-		super.read(compound);
+		super.load(state, compound);
 		
 		if(compound.contains("lootTable"))
 			this.lootTable = new ResourceLocation(compound.getString("lootTable"));
@@ -26,9 +27,9 @@ public class LootBlockTileEntity extends TileEntity
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound)
+	public CompoundNBT save(CompoundNBT compound)
 	{
-		super.write(compound);
+		super.save(compound);
 		if(this.lootTable != null)
 			compound.putString("lootTable", lootTable.toString());
 		

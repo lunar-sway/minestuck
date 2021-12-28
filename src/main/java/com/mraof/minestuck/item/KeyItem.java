@@ -1,9 +1,7 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.*;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.world.LandDimension;
 import com.mraof.minestuck.world.storage.loot.MSLootTables;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
@@ -14,11 +12,10 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.Dimension;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.Dimension;
 import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
@@ -33,19 +30,30 @@ public class KeyItem extends Item
 	{
 		super(builder);
 		//this.keyID = keyName;
-		this.addPropertyOverride(new ResourceLocation(Minestuck.MOD_ID, "key"), (stack, world, holder) -> getKeyType(stack));
-		this.addPropertyOverride(new ResourceLocation(Minestuck.MOD_ID, "dimension"), (stack, world, holder) -> getKeyType(stack));
+		//this.addPropertyOverride(new ResourceLocation(Minestuck.MOD_ID, "key"), (stack, world, holder) -> getKeyType(stack));
+		//this.addPropertyOverride(new ResourceLocation(Minestuck.MOD_ID, "dimension"), (stack, world, holder) -> getKeyType(stack));
 	}
 	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn)
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn)
 	{
-		if(!worldIn.isRemote)
-			Debug.debugf("%s, %s", worldIn.getDimension().toString(), MSLootTables.TIER_ONE_MEDIUM_CHEST);
-		return super.onItemRightClick(worldIn, playerIn, handIn);
+		if(!worldIn.isClientSide)
+			Debug.debugf("%s, %s", worldIn.dimensionType().toString(), MSLootTables.TIER_ONE_MEDIUM_CHEST);
+		return super.use(worldIn, playerIn, handIn);
 	}
 	
 	@Override
+	public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items)
+	{
+		if(allowdedIn(group))
+		{
+			items.add(new ItemStack(this));
+			items.add(setKeyType(new ItemStack(this), 1));
+			items.add(setKeyType(new ItemStack(this), 2));
+		}
+	}
+	
+	/*@Override
 	public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items)
 	{
 		if(isInGroup(group))
@@ -54,7 +62,7 @@ public class KeyItem extends Item
 			items.add(setKeyType(new ItemStack(this), 1));
 			items.add(setKeyType(new ItemStack(this), 2));
 		}
-	}
+	}*/
 	
 	public static int getKeyType(ItemStack stack) //converted to int for use in constructor
 	{
@@ -104,9 +112,9 @@ public class KeyItem extends Item
 	}
 	
 	@Override
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
+	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
 	{
-		super.addInformation(stack, worldIn, tooltip, flagIn);
+		super.appendHoverText(stack, worldIn, tooltip, flagIn);
 		EnumKeyType keyTypeFromInt = EnumKeyType.fromInt(getKeyType(stack));
 		tooltip.add(new TranslationTextComponent("item.minestuck." + this + ".key", keyTypeFromInt.getNameNoSpaces()));
 	}

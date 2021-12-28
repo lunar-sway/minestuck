@@ -507,8 +507,8 @@ public class MSBlocks
 		registry.register(new SlabBlock(AbstractBlock.Properties.copy(deadPlanks)).setRegistryName("dead_planks_slab"));
 		registry.register(new SlabBlock(AbstractBlock.Properties.copy(treatedPlanks)).setRegistryName("treated_planks_slab"));
 		
-		registry.register(new DungeonDoorInterfaceBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(3).sound(SoundType.STONE)).setRegistryName("dungeon_door_interface"));
-		registry.register(new Block(Block.Properties.create(Material.ROCK).hardnessAndResistance(3).sound(SoundType.STONE)).setRegistryName("dungeon_door"));
+		registry.register(new DungeonDoorInterfaceBlock(AbstractBlock.Properties.of(Material.STONE).strength(3).sound(SoundType.STONE)).setRegistryName("dungeon_door_interface"));
+		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE).strength(3).sound(SoundType.STONE)).setRegistryName("dungeon_door"));
 		registry.register(new TrajectoryBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL)).setRegistryName("trajectory_block"));
 		registry.register(new StatStorerBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL)).setRegistryName("stat_storer"));
 		registry.register(new RemoteObserverBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL)).setRegistryName("remote_observer"));
@@ -532,7 +532,7 @@ public class MSBlocks
 		registry.register(new LogicGateBlock(AbstractBlock.Properties.of(Material.STONE).strength(1).sound(SoundType.STONE), LogicGateBlock.State.NOR).setRegistryName("nor_gate_block"));
 		registry.register(new LogicGateBlock(AbstractBlock.Properties.of(Material.STONE).strength(1).sound(SoundType.STONE), LogicGateBlock.State.XNOR).setRegistryName("xnor_gate_block"));
 		
-		registry.register(new LootBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(3).sound(SoundType.METAL), MSBlockShapes.LOOT_CHEST, MSBlockShapes.LOOT_CHEST_EMPTY/*, MSLootTables.BASIC_MEDIUM_CHEST*/).setRegistryName("loot_chest"));
+		registry.register(new LootBlock(AbstractBlock.Properties.of(Material.STONE).strength(3).sound(SoundType.METAL), MSBlockShapes.LOOT_CHEST, MSBlockShapes.LOOT_CHEST_EMPTY/*, MSLootTables.BASIC_MEDIUM_CHEST*/).setRegistryName("loot_chest"));
 		
 		registry.register(new GateBlock(AbstractBlock.Properties.of(Material.PORTAL).noCollission().strength(-1.0F, 25.0F).sound(SoundType.GLASS).lightLevel(state -> 11).noDrops()).setRegistryName("gate"));
 		registry.register(new ReturnNodeBlock(AbstractBlock.Properties.of(Material.PORTAL).noCollission().strength(-1.0F, 10.0F).sound(SoundType.GLASS).lightLevel(state -> 11).noDrops()).setRegistryName("return_node"));

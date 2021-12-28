@@ -61,7 +61,6 @@ public class FrogTemplePiece extends ImprovedStructurePiece
 	protected void addAdditionalSaveData(CompoundNBT tagCompound) //actually writeAdditional
 	{
 		tagCompound.putBoolean("createRan", createRan);
-		super.addAdditionalSaveData(tagCompound);
 	}
 	
 	@Override
@@ -104,15 +103,15 @@ public class FrogTemplePiece extends ImprovedStructurePiece
 		
 		BlockPos chestFarPos = new BlockPos(this.getWorldX(21, 12 + 14), this.getWorldY(21), this.getWorldZ(21, 12 + 14));
 		generateBox(worldIn, boundingBoxIn, 20, 20, 12 + 14, 21, 20, 12 + 14, MSBlocks.GREEN_STONE_BRICK_STAIRS.defaultBlockState().setValue(StairsBlock.HALF, Half.TOP).setValue(StairsBlock.FACING, Direction.SOUTH), MSBlocks.GREEN_STONE_BRICK_STAIRS.defaultBlockState(), false);
-		StructureBlockUtil.placeLootChest(chestFarPos, worldIn, boundingBoxIn, getOrientation(), rightChestType, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
+		StructureBlockUtil.placeChest(chestFarPos, worldIn, boundingBoxIn, getOrientation(), rightChestType, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
 		chestFarPos = new BlockPos(this.getWorldX(20, 12 + 14), this.getWorldY(21), this.getWorldZ(20, 12 + 14));
-		StructureBlockUtil.placeLootChest(chestFarPos, worldIn, boundingBoxIn, getOrientation(), leftChestType, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
+		StructureBlockUtil.placeChest(chestFarPos, worldIn, boundingBoxIn, getOrientation(), leftChestType, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
 		
 		BlockPos chestNearDoorPos = new BlockPos(this.getWorldX(11, 29 + 14), this.getWorldY(21), this.getWorldZ(11, 29 + 14));
 		generateBox(worldIn, boundingBoxIn, 10, 20, 29 + 14, 11, 20, 29 + 14, MSBlocks.GREEN_STONE_BRICK_STAIRS.defaultBlockState().setValue(StairsBlock.HALF, Half.TOP), MSBlocks.GREEN_STONE_BRICK_STAIRS.defaultBlockState(), false);
-		StructureBlockUtil.placeLootChest(chestNearDoorPos, worldIn, boundingBoxIn, getOrientation().getOpposite(), leftChestType, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
+		StructureBlockUtil.placeChest(chestNearDoorPos, worldIn, boundingBoxIn, getOrientation().getOpposite(), leftChestType, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
 		chestNearDoorPos = new BlockPos(this.getWorldX(10, 29 + 14), this.getWorldY(21), this.getWorldZ(10, 29 + 14));
-		StructureBlockUtil.placeLootChest(chestNearDoorPos, worldIn, boundingBoxIn, getOrientation().getOpposite(), rightChestType, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
+		StructureBlockUtil.placeChest(chestNearDoorPos, worldIn, boundingBoxIn, getOrientation().getOpposite(), rightChestType, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
 		
 		Vector3i entityVec = new Vector3i(getEntityXWithOffset(21, 21 + 14), this.getWorldY(50), getEntityZWithOffset(21, 21 + 14)); //BlockPos also suitable instead of Vec3i
 		if(!createRan && boundingBoxIn.isInside(entityVec))
@@ -137,23 +136,23 @@ public class FrogTemplePiece extends ImprovedStructurePiece
 		for(int i = 0; i < 24; i++)
 		{
 			StructureBlockUtil.fillWithBlocksCheckWater(world, boundingBox,
-					getXWithOffset(17, i), getYWithOffset(pushUp), getZWithOffset(17, i),
-					getXWithOffset(24, i), getYWithOffset(pushUp), getZWithOffset(24, i),
-					MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE.getDefaultState().with(DecorBlock.FACING, this.getCoordBaseMode().getOpposite())); //stairs base
+					getWorldX(17, i), getWorldY(pushUp), getWorldZ(17, i),
+					getWorldX(24, i), getWorldY(pushUp), getWorldZ(24, i),
+					MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE.defaultBlockState().setValue(DecorBlock.FACING, this.getOrientation().getOpposite())); //stairs base
 			StructureBlockUtil.fillWithBlocksCheckWater(world, boundingBox,
-					getXWithOffset(17, i), getYWithOffset(pushUp + 1), getZWithOffset(17, i),
-					getXWithOffset(24, i), getYWithOffset(pushUp + 1), getZWithOffset(24, i),
-					MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_TOP.getDefaultState().with(DecorBlock.FACING, this.getCoordBaseMode().getOpposite())); //stairs top
-			generateBox(world, boundingBox, 17, pushUp, i + 1, 24, pushUp, 26, MSBlocks.GREEN_STONE_BRICKS.getDefaultState(), MSBlocks.GREEN_STONE_BRICKS.getDefaultState(), false); //stairs base fill in
-			generateBox(world, boundingBox, 17, pushUp + 1, i + 1, 24, pushUp + 1, 26, MSBlocks.GREEN_STONE_BRICKS.getDefaultState(), MSBlocks.GREEN_STONE_BRICKS.getDefaultState(), false); //stairs top fill in
+					getWorldX(17, i), getWorldY(pushUp + 1), getWorldZ(17, i),
+					getWorldX(24, i), getWorldY(pushUp + 1), getWorldZ(24, i),
+					MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_TOP.defaultBlockState().setValue(DecorBlock.FACING, this.getOrientation().getOpposite())); //stairs top
+			generateBox(world, boundingBox, 17, pushUp, i + 1, 24, pushUp, 26, MSBlocks.GREEN_STONE_BRICKS.defaultBlockState(), MSBlocks.GREEN_STONE_BRICKS.defaultBlockState(), false); //stairs base fill in
+			generateBox(world, boundingBox, 17, pushUp + 1, i + 1, 24, pushUp + 1, 26, MSBlocks.GREEN_STONE_BRICKS.defaultBlockState(), MSBlocks.GREEN_STONE_BRICKS.defaultBlockState(), false); //stairs top fill in
 			pushUp = pushUp + 2; //allows the stairs height to increment twice as fast as sideways placement
 		}
 		
 		//TODO was not using the correct coordinate type
-		//StructureBlockUtil.fillWithBlocksCheckWater(world, boundingBox, 17, 48, 24, 24, 48, 24, MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE.getDefaultState().with(DecorBlock.FACING, this.getCoordBaseMode().getOpposite())); //stairs base at top
-		fillWithBlocks(world, boundingBox, 17, -10, 20 + 24, 24, -1, 24, MSBlocks.GREEN_STONE_BRICKS.getDefaultState(), MSBlocks.GREEN_STONE_BRICKS.getDefaultState(), false); //underneath stairs
+		//StructureBlockUtil.fillWithBlocksCheckWater(world, boundingBox, 17, 48, 24, 24, 48, 24, MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE.defaultBlockState().with(DecorBlock.FACING, this.getOrientation().getOpposite())); //stairs base at top
+		generateBox(world, boundingBox, 17, -10, 20 + 24, 24, -1, 24, MSBlocks.GREEN_STONE_BRICKS.defaultBlockState(), MSBlocks.GREEN_STONE_BRICKS.defaultBlockState(), false); //underneath stairs
 		
-		fillWithBlocks(world, boundingBox, 20, -10, 14, 41, 0, 55, block, block, false); //underneath main platform
+		generateBox(world, boundingBox, 20, -10, 14, 41, 0, 55, block, block, false); //underneath main platform
 		for(int i = 0; i < 28; i++)
 		{
 			generateBox(world, boundingBox, i, -i - 10, i + 14, 41 - i, -i - 10, 55 - i, block, block, false); //underneath main platform

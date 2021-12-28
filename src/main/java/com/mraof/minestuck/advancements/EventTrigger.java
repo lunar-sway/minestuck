@@ -58,7 +58,7 @@ public class EventTrigger extends AbstractCriterionTrigger<EventTrigger.Instance
 		
 		public static Instance surfNTurf()
 		{
-			return new Instance(SURF_N_TURF_ID);
+			return new Instance(EntityPredicate.AndPredicate.ANY, SURF_N_TURF_ID);
 		}
 		
 		public Instance(EntityPredicate.AndPredicate predicate, ResourceLocation id)

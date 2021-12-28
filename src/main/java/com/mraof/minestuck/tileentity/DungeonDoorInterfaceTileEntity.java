@@ -1,6 +1,7 @@
 package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.block.EnumKeyType;
+import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 
@@ -15,9 +16,9 @@ public class DungeonDoorInterfaceTileEntity extends TileEntity
 	}
 	
 	@Override
-	public void read(CompoundNBT compound)
+	public void load(BlockState state, CompoundNBT compound)
 	{
-		super.read(compound);
+		super.load(state, compound);
 		
 		if(compound.contains("key"))
 			this.keyType = EnumKeyType.fromString(compound.getString("key"));
@@ -28,9 +29,9 @@ public class DungeonDoorInterfaceTileEntity extends TileEntity
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound)
+	public CompoundNBT save(CompoundNBT compound)
 	{
-		super.write(compound);
+		super.save(compound);
 		if(this.keyType != null)
 			compound.putString("key", keyType.toString()); //enum turned into string in order to store
 		
