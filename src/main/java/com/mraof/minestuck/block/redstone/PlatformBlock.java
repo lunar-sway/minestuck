@@ -25,7 +25,7 @@ public class PlatformBlock extends Block
 	
 	/*@Override
 	@Override
-	public float getAmbientOcclusionLightValue(BlockState state, IBlockReader worldIn, BlockPos pos) //TODO unsure if occlusion has really changed anything
+	public float getAmbientOcclusionLightValue(BlockState state, IBlockReader worldIn, BlockPos pos) //TODO should have occlusion so players can see while inside block
 	{
 		return 1.0F;
 	}*/
