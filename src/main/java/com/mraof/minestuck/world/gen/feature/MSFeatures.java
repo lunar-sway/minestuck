@@ -5,6 +5,8 @@ import com.mraof.minestuck.world.gen.feature.structure.*;
 import com.mraof.minestuck.world.gen.feature.structure.tiered.tier1.TierOneDungeonStructure;
 import com.mraof.minestuck.world.gen.feature.structure.castle.CastleStructure;
 import com.mraof.minestuck.world.gen.feature.structure.village.ConsortVillageStructure;
+import com.mraof.minestuck.world.gen.feature.tree.EndTreeFeature;
+import com.mraof.minestuck.world.gen.feature.tree.LeaflessTreeFeature;
 import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraftforge.event.RegistryEvent;
