@@ -57,6 +57,16 @@
         },
         {
           "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": 1
+            }
+          ],
+          "name": "minestuck:mini_typheus_statue"
+        },
+        {
+          "type": "minecraft:item",
           "weight": 10,
           "functions": [
             {
