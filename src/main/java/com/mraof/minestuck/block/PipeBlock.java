@@ -30,7 +30,7 @@ public class PipeBlock extends MSDirectionalBlock implements IWaterLoggable
 	{
 		super(properties);
 		this.shape = shape.createRotatedShapesAllDirections();
-		this.registerDefaultState(stateDefinition.any().setValue(FACING, Direction.DOWN).setValue(WATERLOGGED, false));
+		this.registerDefaultState(defaultBlockState().setValue(WATERLOGGED, false));
 	}
 	
 	
@@ -39,7 +39,7 @@ public class PipeBlock extends MSDirectionalBlock implements IWaterLoggable
 	public BlockState getStateForPlacement(BlockItemUseContext context)
 	{
 		FluidState iFluidState = context.getLevel().getFluidState(context.getClickedPos());
-		return this.defaultBlockState().setValue(FACING, context.getNearestLookingDirection().getOpposite()).setValue(WATERLOGGED, iFluidState.getType().getFluid() == Fluids.WATER);
+		return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite()).setValue(WATERLOGGED, iFluidState.getType() == Fluids.WATER);
 	}
 	
 	@Override
@@ -52,31 +52,6 @@ public class PipeBlock extends MSDirectionalBlock implements IWaterLoggable
 		
 		return super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
 	}
-	
-	/*@Override
-	public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos)
-	{
-		if(stateIn.getValue(WATERLOGGED))
-		{
-			worldIn.getLiquidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(worldIn)); //getTickDelay was getTickRate
-		}
-		
-		return super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
-	}*/
-	
-	@Override
-	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
-	{
-		super.createBlockStateDefinition(builder);
-		builder.add(WATERLOGGED);
-	}
-	
-	/*@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
-	{
-		super.fillStateContainer(builder);
-		builder.add(FACING, WATERLOGGED);
-	}*/
 	
 	@Override
 	public BlockState rotate(BlockState state, IWorld world, BlockPos pos, Rotation direction)
@@ -95,5 +70,12 @@ public class PipeBlock extends MSDirectionalBlock implements IWaterLoggable
 	public FluidState getFluidState(BlockState state)
 	{
 		return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+	}
+	
+	@Override
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+	{
+		super.createBlockStateDefinition(builder);
+		builder.add(WATERLOGGED);
 	}
 }

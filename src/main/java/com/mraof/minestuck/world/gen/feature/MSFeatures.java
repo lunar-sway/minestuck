@@ -1,7 +1,10 @@
 package com.mraof.minestuck.world.gen.feature;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.world.gen.feature.structure.*;
+import com.mraof.minestuck.world.gen.feature.structure.FrogTempleStructure;
+import com.mraof.minestuck.world.gen.feature.structure.GateStructure;
+import com.mraof.minestuck.world.gen.feature.structure.ImpDungeonStructure;
+import com.mraof.minestuck.world.gen.feature.structure.SmallRuinStructure;
 import com.mraof.minestuck.world.gen.feature.structure.tiered.tier1.TierOneDungeonStructure;
 import com.mraof.minestuck.world.gen.feature.structure.castle.CastleStructure;
 import com.mraof.minestuck.world.gen.feature.structure.village.ConsortVillageStructure;
