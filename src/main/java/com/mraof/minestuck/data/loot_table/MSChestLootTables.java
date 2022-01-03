@@ -26,9 +26,58 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 	//Pools in basic medium chest
 	public static final String WEAPONS_POOL = "weapons", SUPPLIES_POOL = "supplies", MISC_POOL = "misc", RARE_POOL = "rare";
 	
+	
 	@Override
 	public void accept(BiConsumer<ResourceLocation, LootTable.Builder> lootProcessor)
 	{
+		lootProcessor.accept(MSLootTables.DUNGEON_LOOT_INJECT, LootTable.lootTable()
+				.withPool(LootPool.lootPool().name("minestuck").setRolls(RandomValueRange.between(0, 1))
+						.add(ItemLootEntry.lootTableItem(MSItems.BLANK_DISK).setWeight(1).setQuality(1).apply(SetCount.setCount(RandomValueRange.between(0, 2))))));
+		
+		lootProcessor.accept(MSLootTables.FROG_TEMPLE_CHEST, LootTable.lootTable()
+				.withPool(LootPool.lootPool().name(WEAPONS_POOL).setRolls(RandomValueRange.between(0, 2))
+						.add(ItemLootEntry.lootTableItem(Items.BOW).setWeight(5).setQuality(1).apply(SetDamage.setDamage(RandomValueRange.between(0.75F, 1.0F))))
+						.add(ItemLootEntry.lootTableItem(Items.STONE_SWORD).setWeight(5).setQuality(-1).apply(SetDamage.setDamage(RandomValueRange.between(0.75F, 1.0F))))
+						.add(ItemLootEntry.lootTableItem(Items.IRON_SWORD).setWeight(3).setQuality(1).apply(SetDamage.setDamage(RandomValueRange.between(0.75F, 1.0F))))
+						.add(ItemLootEntry.lootTableItem(MSItems.CLAW_HAMMER).setWeight(5).setQuality(-1).apply(SetDamage.setDamage(RandomValueRange.between(0.75F, 1.0F))))
+						.add(ItemLootEntry.lootTableItem(MSItems.SICKLE).setWeight(5).setQuality(-1).apply(SetDamage.setDamage(RandomValueRange.between(0.75F, 1.0F))))
+						.add(ItemLootEntry.lootTableItem(MSItems.KATANA).setWeight(3).setQuality(1).apply(SetDamage.setDamage(RandomValueRange.between(0.75F, 1.0F))))
+						.add(ItemLootEntry.lootTableItem(MSItems.SLEDGE_HAMMER).setWeight(3).setQuality(1).apply(SetDamage.setDamage(RandomValueRange.between(0.75F, 1.0F))))
+						.add(ItemLootEntry.lootTableItem(MSItems.WOODEN_SPOON).setWeight(5).setQuality(-2).apply(SetDamage.setDamage(RandomValueRange.between(0.75F, 1.0F))))
+						.add(ItemLootEntry.lootTableItem(MSItems.SCYTHE).setWeight(1).setQuality(2).apply(SetDamage.setDamage(RandomValueRange.between(0.75F, 1.0F))))
+						.add(ItemLootEntry.lootTableItem(MSItems.KNITTING_NEEDLE).setWeight(4).setQuality(-1).apply(SetDamage.setDamage(RandomValueRange.between(0.75F, 1.0F))))
+						.add(ItemLootEntry.lootTableItem(MSItems.SHURIKEN).setWeight(8).setQuality(-2).apply(SetDamage.setDamage(RandomValueRange.between(0.75F, 1.0F))))
+						.add(ItemLootEntry.lootTableItem(MSItems.METAL_BAT).setWeight(4).setQuality(1).apply(SetDamage.setDamage(RandomValueRange.between(0.75F, 1.0F))))
+						.add(ItemLootEntry.lootTableItem(MSItems.MACE).setWeight(1).setQuality(1).apply(SetDamage.setDamage(RandomValueRange.between(0.75F, 1.0F))))
+						.add(ItemLootEntry.lootTableItem(MSItems.JOUSTING_LANCE).setWeight(2).setQuality(1).apply(SetDamage.setDamage(RandomValueRange.between(0.75F, 1.0F))))
+						.add(ItemLootEntry.lootTableItem(MSItems.FAN).setWeight(4).setQuality(1).apply(SetDamage.setDamage(RandomValueRange.between(0.75F, 1.0F))))
+						.add(ItemLootEntry.lootTableItem(MSItems.LUCERNE_HAMMER).setWeight(1).setQuality(2).apply(SetDamage.setDamage(RandomValueRange.between(0.75F, 1.0F))))
+						.add(ItemLootEntry.lootTableItem(MSItems.FORK).setWeight(4).setQuality(-1).apply(SetDamage.setDamage(RandomValueRange.between(0.75F, 1.0F)))))
+				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(RandomValueRange.between(2, 6))
+						.add(ItemLootEntry.lootTableItem(Items.GOLD_INGOT).setWeight(2).setQuality(2).apply(SetCount.setCount(RandomValueRange.between(2, 5))))
+						.add(ItemLootEntry.lootTableItem(Items.DIAMOND).setWeight(1).setQuality(3).apply(SetCount.setCount(RandomValueRange.between(1, 3))))
+						.add(ItemLootEntry.lootTableItem(Items.PUMPKIN).setWeight(3).setQuality(-1).apply(SetCount.setCount(RandomValueRange.between(1, 5))))
+						.add(ItemLootEntry.lootTableItem(Items.WRITABLE_BOOK).setWeight(2).setQuality(1).apply(SetCount.setCount(RandomValueRange.between(0, 1))))
+						.add(ItemLootEntry.lootTableItem(MSItems.BLANK_DISK).setWeight(5).setQuality(3).apply(SetCount.setCount(RandomValueRange.between(1, 2))))
+						.add(ItemLootEntry.lootTableItem(MSItems.RAW_CRUXITE).setWeight(4).setQuality(0).apply(SetCount.setCount(RandomValueRange.between(1, 7))))
+						.add(ItemLootEntry.lootTableItem(MSItems.RAW_URANIUM).setWeight(2).setQuality(1).apply(SetCount.setCount(RandomValueRange.between(1, 5))))
+						.add(ItemLootEntry.lootTableItem(MSItems.BUG_ON_A_STICK).setWeight(4).setQuality(-1).apply(SetCount.setCount(RandomValueRange.between(1, 5))))
+						.add(ItemLootEntry.lootTableItem(MSItems.CHOCOLATE_BEETLE).setWeight(4).setQuality(-1).apply(SetCount.setCount(RandomValueRange.between(1, 5))))
+						.add(ItemLootEntry.lootTableItem(MSItems.FOOD_CAN).setWeight(4).setQuality(-1).apply(SetCount.setCount(RandomValueRange.between(1, 5))))
+						.add(ItemLootEntry.lootTableItem(MSItems.GRASSHOPPER).setWeight(4).setQuality(-1).apply(SetCount.setCount(RandomValueRange.between(1, 5))))
+						.add(ItemLootEntry.lootTableItem(MSItems.CONE_OF_FLIES).setWeight(4).setQuality(-1).apply(SetCount.setCount(RandomValueRange.between(1, 5))))
+						.add(ItemLootEntry.lootTableItem(MSItems.GOLDEN_GRASSHOPPER).setWeight(1).setQuality(1).apply(SetCount.setCount(RandomValueRange.between(1, 2))))
+						.add(ItemLootEntry.lootTableItem(MSBlocks.MINI_FROG_STATUE).setWeight(1).setQuality(1).apply(SetCount.setCount(RandomValueRange.between(0, 1))))
+						.add(ItemLootEntry.lootTableItem(MSItems.CARVING_TOOL).setWeight(5).setQuality(0).apply(SetCount.setCount(RandomValueRange.between(1, 2))))
+						.add(ItemLootEntry.lootTableItem(MSItems.STONE_SLAB).setWeight(2).setQuality(0).apply(SetCount.setCount(RandomValueRange.between(1, 2))))
+						.add(ItemLootEntry.lootTableItem(MSItems.HASHMAP_MODUS_CARD).setWeight(1).setQuality(1).apply(SetCount.setCount(RandomValueRange.between(0, 1))))
+						.add(ItemLootEntry.lootTableItem(MSItems.QUEUE_MODUS_CARD).setWeight(1).setQuality(1).apply(SetCount.setCount(RandomValueRange.between(0, 1))))
+						.add(ItemLootEntry.lootTableItem(MSItems.QUEUESTACK_MODUS_CARD).setWeight(1).setQuality(1).apply(SetCount.setCount(RandomValueRange.between(0, 1))))
+						.add(ItemLootEntry.lootTableItem(MSItems.SET_MODUS_CARD).setWeight(1).setQuality(1).apply(SetCount.setCount(RandomValueRange.between(0, 1))))
+						.add(ItemLootEntry.lootTableItem(MSItems.STACK_MODUS_CARD).setWeight(1).setQuality(1).apply(SetCount.setCount(RandomValueRange.between(0, 1))))
+						.add(ItemLootEntry.lootTableItem(MSItems.TREE_MODUS_CARD).setWeight(1).setQuality(1).apply(SetCount.setCount(RandomValueRange.between(0, 1))))));
+		
+		
 		lootProcessor.accept(MSLootTables.BASIC_MEDIUM_CHEST, LootTable.lootTable()
 				.withPool(LootPool.lootPool().name(WEAPONS_POOL).setRolls(ConstantRange.exactly(1))
 						.add(LandTableLootEntry.builder(MSLootTables.BASIC_MEDIUM_CHEST).setPool(WEAPONS_POOL))

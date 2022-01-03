@@ -6,7 +6,9 @@ import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Teleport;
-import com.mraof.minestuck.world.biome.LandBiomeType;
+import com.mraof.minestuck.world.biome.LandBiomeSet;
+import com.mraof.minestuck.world.biome.LandBiomeSetWrapper;
+import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.lands.LandInfo;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -19,6 +21,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
 
+import java.util.Optional;
 import java.util.Random;
 import java.util.function.Function;
 
@@ -64,7 +67,7 @@ public class GateHandler
 				return info.getGatePos();
 		}
 		
-		BlockPos gatePos = null;//TODO MSFeatures.LAND_GATE.findLandGatePos(world);
+		BlockPos gatePos = MSFeatures.LAND_GATE.findLandGatePos(world);
 		
 		if(info != null)
 			info.setGatePos(gatePos);
@@ -75,28 +78,31 @@ public class GateHandler
 	private static GlobalPos findPosNearLandGate(ServerWorld world)
 	{
 		BlockPos pos = Type.LAND_GATE.getPosition(world);
-		Random rand = world.random;
-		if(pos != null)
-			while(true)	//TODO replace with a more friendly version without a chance of freezing the game
+		Optional<LandBiomeSetWrapper> optional = LandBiomeSet.getSet(world.getChunkSource().getGenerator());
+		if(pos != null && optional.isPresent())
+		{
+			Random rand = world.random;
+			LandBiomeSetWrapper biomes = optional.get();
+			while(true)    //TODO replace with a more friendly version without a chance of freezing the game
 			{
 				int radius = 160 + rand.nextInt(60);
 				double d = rand.nextDouble();
-				int i = radius*radius;
-				int x = (int) Math.sqrt(i*d);
-				int z = (int) Math.sqrt(i*(1-d));
+				int i = radius * radius;
+				int x = (int) Math.sqrt(i * d);
+				int z = (int) Math.sqrt(i * (1 - d));
 				if(rand.nextBoolean()) x = -x;
 				if(rand.nextBoolean()) z = -z;
 				
 				BlockPos placement = pos.offset(x, 0, z);
 				
-				if(LandBiomeType.NORMAL.isBiomeOfType(world.getBiome(placement)))
+				if(biomes.NORMAL == world.getBiome(placement))
 				{
 					//TODO Can and has placed the player into a lava ocean. Fix this (Also for other hazards)
 					int y = world.getChunk(placement).getHeight(Heightmap.Type.MOTION_BLOCKING, placement.getX(), placement.getZ());
 					return GlobalPos.of(world.dimension(), new BlockPos(placement.getX(), y + 1, placement.getZ()));
 				}
 			}
-		else
+		} else
 			Debug.errorf("Unexpected error: Couldn't find position for land gate for dimension %s.", world.dimension());
 		return null;
 	}

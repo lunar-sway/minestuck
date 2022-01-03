@@ -1,0 +1,18 @@
+{
+    "parent": "item/handheld",
+    "textures": {
+        "layer0": "minestuck:item/skeletonizer_sheathed"
+    },
+    "display": {
+        "thirdperson_righthand": {
+            "rotation": [-90, 0, -45],
+            "translation": [-0.15, 0.75, -2.5],
+            "scale": [0.7, 0.7, 0.7]
+        },
+        "thirdperson_lefthand": {
+            "rotation": [-90, -180, 45],
+            "translation": [-0.15, 0.25, -2.5],
+            "scale": [0.7, 0.7, 0.7]
+        }
+    }
+}

@@ -80,7 +80,7 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 	}
 	
 	@Override
-	public World getWorld() 
+	public World getWorld()
 	{
 		return this.level;
 	}
@@ -91,47 +91,49 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 		super.baseTick();
 		this.updatePartPositions();
 	}
-
+	
 	@Override
-	public boolean attackEntityFromPart(Entity entityPart, DamageSource source, float damage) 
+	public boolean attackEntityFromPart(Entity entityPart, DamageSource source, float damage)
 	{
 		return this.hurt(source, damage);
 	}
 	
 	@Override
-	protected void doPush(Entity par1Entity) 
+	protected void doPush(Entity par1Entity)
 	{
 		if(par1Entity != this.tail)
 			super.doPush(par1Entity);
 	}
+	
 	@Override
-	public void absMoveTo(double par1, double par3, double par5, float par7, float par8) {
+	public void absMoveTo(double par1, double par3, double par5, float par7, float par8)
+	{
 		super.absMoveTo(par1, par3, par5, par7, par8);
 		this.updatePartPositions();
 	}
 	
 	@Override
-	public void updatePartPositions() 
+	public void updatePartPositions()
 	{
 		if(tail == null)
 			return;
 		float f1 = this.yRotO + (this.yRot - this.yRotO);
-		double tailPosX = (this.getX() +  Math.sin(f1 / 180.0 * Math.PI) * tail.getBbWidth());
+		double tailPosX = (this.getX() + Math.sin(f1 / 180.0 * Math.PI) * tail.getBbWidth());
 		double tailPosZ = (this.getZ() + -Math.cos(f1 / 180.0 * Math.PI) * tail.getBbWidth());
-
+		
 		tail.absMoveTo(tailPosX, this.getY(), tailPosZ, this.yRot, this.xRot);
 	}
-
+	
 	@Override
-	public void addPart(Entity entityPart, int id) 
+	public void addPart(Entity entityPart, int id)
 	{
 		this.tail = (UnderlingPartEntity) entityPart;
 	}
-
+	
 	@Override
-	public void onPartDeath(Entity entityPart, int id) 
+	public void onPartDeath(Entity entityPart, int id)
 	{
-
+	
 	}
 	
 	@Override
@@ -141,7 +143,7 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 		Entity entity = cause.getEntity();
 		if(this.dead && !this.level.isClientSide)
 		{
-			computePlayerProgress((int) (100* getGristType().getPower() + 160));
+			computePlayerProgress((int) (30 + 2.4 * getGristType().getPower())); //most basilisks stop giving xp at rung 32
 			if(entity instanceof ServerPlayerEntity)
 			{
 				Echeladder ladder = PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder();

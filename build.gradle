@@ -33,6 +33,7 @@ repositories {
         name = "RS maven"
         url = "https://repo.refinedmods.com"
     }
+    maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
 }
 
 version = project.getProperty('mc_ms_version') +'.' + System.env.BUILD_NUMBER
@@ -119,6 +120,8 @@ dependencies {
     compileOnly fg.deobf("mezz.jei:jei-${project.getProperty('mc_jei_version')}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-${project.getProperty('mc_jei_version')}")
     compileOnly fg.deobf("com.refinedmods:refinedstorage:${project.getProperty('mc_refined_storage_version')}")
+
+    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.16.5:3.0.46')
 }
 
 sourceSets.main.resources {

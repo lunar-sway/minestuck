@@ -74,6 +74,7 @@ public class MSTags
 		public static final Tags.IOptionalNamedTag<Item> FAYGO = tag("faygo");
 		public static final Tags.IOptionalNamedTag<Item> MODUS_CARD = tag("modus_card");
 		public static final Tags.IOptionalNamedTag<Item> CASSETTES = tag("cassettes");
+		public static final Tags.IOptionalNamedTag<Item> BUGS = tag("bugs");
 
 		private static Tags.IOptionalNamedTag<Item> tag(String name)
 		{

@@ -2,8 +2,8 @@ package com.mraof.minestuck.world.gen.feature;
 
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.util.CoordPair;
+import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ISeedReader;
 import net.minecraft.world.IWorld;
@@ -31,7 +31,7 @@ public class RockSpikeFeature extends Feature<NoFeatureConfig>
 		if(world.getBlockState(pos.above(height*2/3)).getMaterial().isLiquid())	//At least 1/3rd of the height should be above the liquid surface
 			return false;
 		float plateauSize = 0.2F + rand.nextFloat()*(height/25F);
-		BlockState ground = Blocks.STONE.defaultBlockState();//generator.getSettings().getDefaultBlock(); TODO
+		BlockState ground = StructureBlockRegistry.getOrDefault(generator).getBlockState("ground");
 		
 		BlockPos nodePos = generateRock(pos.above(height), height, plateauSize, world, rand, ground);
 		

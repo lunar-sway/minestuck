@@ -20,10 +20,8 @@ public class WeatherManager
 			{
 				LandChunkGenerator generator = (LandChunkGenerator) world.getChunkSource().getGenerator();
 				LandProperties properties = LandProperties.create(generator.landTypes);
-				if (properties.forceRain != LandProperties.ForceType.DEFAULT || properties.forceThunder != LandProperties.ForceType.DEFAULT)
-				{
-					world.levelData = new ForcedWeatherWorldInfo(world.levelData, properties.forceRain, properties.forceThunder);
-				}
+				
+				world.levelData = new LandWorldInfo(world.levelData, properties.forceRain, properties.forceThunder);
 			}
 		}
 	}

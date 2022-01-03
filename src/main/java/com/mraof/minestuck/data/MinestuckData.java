@@ -34,7 +34,7 @@ public class MinestuckData
 			
 			gen.addProvider(new BoondollarPricingProvider(gen, Minestuck.MOD_ID));
 			gen.addProvider(new MinestuckLootTableProvider(gen));
-			gen.addProvider(new MSAvancementProvider(gen));
+			gen.addProvider(new MSAdvancementProvider(gen));
 			gen.addProvider(new MinestuckEnUsLanguageProvider(gen));
 			
 			gen.addProvider(new MinestuckBiomeProvider(gen));

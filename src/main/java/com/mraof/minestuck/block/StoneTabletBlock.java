@@ -34,7 +34,7 @@ public class StoneTabletBlock extends DecorBlock //stone slab is the same as sto
 	public StoneTabletBlock(Properties properties)
 	{
 		super(properties, MSBlockShapes.STONE_TABLET);
-		registerDefaultState(this.stateDefinition.any().setValue(CARVED, false));
+		registerDefaultState(defaultBlockState().setValue(CARVED, false)); //defaultState set in decor block has waterlogged
 	}
 	
 	@Override
@@ -128,7 +128,7 @@ public class StoneTabletBlock extends DecorBlock //stone slab is the same as sto
 	@Override
 	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
 	{
-		builder.add(FACING);
+		super.createBlockStateDefinition(builder);
 		builder.add(CARVED);
 	}
 }

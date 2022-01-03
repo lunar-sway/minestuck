@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:lipstick_chainsaw"
+  },
+  "input2": {
+    "item": "minecraft:rose_bush"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:thistleblower"
+  }
+}

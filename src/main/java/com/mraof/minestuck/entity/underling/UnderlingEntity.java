@@ -52,9 +52,9 @@ public abstract class UnderlingEntity extends CreatureEntity implements IMob
 	public boolean dropCandy;
 	private int consortRep;
 	
-	private static final float maxSharedProgress = 2;	//The multiplier for the maximum amount progress that can be gathered from each enemy with the group fight bonus
+	private static final float maxSharedProgress = 2;    //The multiplier for the maximum amount progress that can be gathered from each enemy with the group fight bonus
 	
-	protected Map<PlayerIdentifier, Double> damageMap = new HashMap<>();	//Map that stores how much damage each player did to this to this underling. Null is used for environmental or other non-player damage
+	protected Map<PlayerIdentifier, Double> damageMap = new HashMap<>();    //Map that stores how much damage each player did to this to this underling. Null is used for environmental or other non-player damage
 	
 	public UnderlingEntity(EntityType<? extends UnderlingEntity> type, World world, int consortRep)
 	{
@@ -176,8 +176,8 @@ public abstract class UnderlingEntity extends CreatureEntity implements IMob
 			{
 				for(GristAmount gristType : grist.getAmounts())
 				{
-					int candy = (int) Math.min(64, (gristType.getAmount() + 2)/4);
-					long gristAmount = gristType.getAmount() - candy*2;
+					int candy = (int) Math.min(64, (gristType.getAmount() + 2) / 4);
+					long gristAmount = gristType.getAmount() - candy * 2;
 					ItemStack candyItem = gristType.getType().getCandyItem();
 					candyItem.setCount(candy);
 					if(candy > 0)
@@ -229,7 +229,7 @@ public abstract class UnderlingEntity extends CreatureEntity implements IMob
 			this.addEnemy(entity.getType());
 		}
 	}
-
+	
 	public void addEnemy(EntityType<?> enemyType)
 	{
 		if(!attackEntitySelector.entityList.contains(enemyType) && !MSTags.EntityTypes.UNDERLINGS.contains(enemyType))
@@ -291,7 +291,7 @@ public abstract class UnderlingEntity extends CreatureEntity implements IMob
 			spawnDataIn = new UnderlingData(getGristType());
 		} else
 		{
-			applyGristType(((UnderlingData)spawnDataIn).type);
+			applyGristType(((UnderlingData) spawnDataIn).type);
 		}
 		
 		return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
@@ -323,7 +323,7 @@ public abstract class UnderlingEntity extends CreatureEntity implements IMob
 		if(totalDamage < this.getMaxHealth())
 			totalDamage = this.getMaxHealth();
 		
-		int maxProgress = (int) (progress*maxSharedProgress);
+		int maxProgress = (int) (progress * maxSharedProgress);
 		damageMap.remove(null);
 		PlayerIdentifier[] playerList = damageMap.keySet().toArray(new PlayerIdentifier[0]);
 		double[] modifiers = new double[playerList.length];
@@ -331,8 +331,8 @@ public abstract class UnderlingEntity extends CreatureEntity implements IMob
 		
 		for(int i = 0; i < playerList.length; i++)
 		{
-			double f = damageMap.get(playerList[i])/totalDamage;
-			modifiers[i] = 2*f - f*f;
+			double f = damageMap.get(playerList[i]) / totalDamage;
+			modifiers[i] = 2 * f - f * f;
 			totalModifier += modifiers[i];
 		}
 		
@@ -350,6 +350,7 @@ public abstract class UnderlingEntity extends CreatureEntity implements IMob
 	protected static class UnderlingData implements ILivingEntityData
 	{
 		public final GristType type;
+		
 		public UnderlingData(GristType type)
 		{
 			this.type = type;
