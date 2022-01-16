@@ -3,7 +3,6 @@ package com.mraof.minestuck.block;
 import com.mraof.minestuck.tileentity.ItemStackTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.material.PushReaction;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
@@ -90,7 +89,7 @@ public class CruxiteDowelBlock extends Block
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context)
 	{
-		return context.getClickedFace() == Direction.UP ? defaultBlockState() : Blocks.AIR.defaultBlockState();
+		return context.getClickedFace() == Direction.UP ? defaultBlockState() : null;
 	}
 	
 	@Override
