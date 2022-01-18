@@ -9,6 +9,7 @@ import net.minecraft.command.Commands;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.server.ServerWorld;
 
 import java.util.Optional;
 
@@ -26,7 +27,7 @@ public class GristLayerCommand
 	{
 		ServerPlayerEntity player = source.getPlayerOrException();
 		
-		Optional<GristLayerInfo> optionalInfo = GristLayerInfo.get(player.level.dimension());
+		Optional<GristLayerInfo> optionalInfo = GristLayerInfo.get((ServerWorld) player.level);
 		if(optionalInfo.isPresent())
 		{
 			ITextComponent layerInfo = optionalInfo.get().getGristLayerInfo(player.blockPosition().getX(), player.blockPosition().getZ());

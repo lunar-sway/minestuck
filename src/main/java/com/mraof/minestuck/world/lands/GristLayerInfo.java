@@ -13,7 +13,6 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
@@ -48,35 +47,36 @@ public class GristLayerInfo
 		infoByWorldMap.clear();
 	}
 	
-	@SubscribeEvent
-	public static void worldLoad(WorldEvent.Load event)
+	private static Optional<GristLayerInfo> initAndGetGristLayer(ServerWorld world)
 	{
-		if (event.getWorld() instanceof ServerWorld)
-		{
-			ServerWorld world = (ServerWorld) event.getWorld();
-			ChunkGenerator generator = world.getChunkSource().getGenerator();
-			if (generator instanceof LandChunkGenerator) {
-				
-				long seed = ((LandChunkGenerator) generator).getSeed();
-				
-				GristType baseType;
-				SburbConnection connection = SburbHandler.getConnectionForDimension(world.getServer(), world.dimension());
-				if (connection != null)
-					baseType = connection.getBaseGrist();
-				else
-				{
-					LOGGER.error("Unable to find sburb connection for land dimension \"%s\" when creating grist layers. Defaulting to amber base type.");
-					baseType = GristTypes.AMBER.get();
-				}
-				
-				infoByWorldMap.put(world.dimension(), new GristLayerInfo(seed, baseType));
+		ChunkGenerator generator = world.getChunkSource().getGenerator();
+		if (generator instanceof LandChunkGenerator) {
+			
+			long seed = ((LandChunkGenerator) generator).getSeed();
+			
+			GristType baseType;
+			SburbConnection connection = SburbHandler.getConnectionForDimension(world.getServer(), world.dimension());
+			if (connection != null)
+				baseType = connection.getBaseGrist();
+			else
+			{
+				LOGGER.error("Unable to find sburb connection for land dimension \"{}\" when creating grist layers. Defaulting to amber base type.", world.dimension().location());
+				baseType = GristTypes.AMBER.get();
 			}
-		}
+			
+			GristLayerInfo info = new GristLayerInfo(seed, baseType);
+			infoByWorldMap.put(world.dimension(), info);
+			return Optional.of(info);
+		} else
+			return Optional.empty();
 	}
 	
-	public static Optional<GristLayerInfo> get(RegistryKey<World> worldKey)
+	public static Optional<GristLayerInfo> get(ServerWorld world)
 	{
-		return Optional.ofNullable(infoByWorldMap.get(worldKey));
+		if (infoByWorldMap.containsKey(world.dimension()))
+			return Optional.ofNullable(infoByWorldMap.get(world.dimension()));
+		else
+			return initAndGetGristLayer(world);
 	}
 	
 	private final GristTypeLayer anyGristLayer, commonGristLayer, uncommonGristLayer;
