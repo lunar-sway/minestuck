@@ -14,13 +14,21 @@ public class LandWorldInfo implements IServerWorldInfo
 {
 	private final IServerWorldInfo wrapped;
 	private final LandProperties.ForceType forceRain, forceThunder;
+	private final long dayTime;
 	
 	public LandWorldInfo(IServerWorldInfo wrapped,
-						 LandProperties.ForceType forceRain, LandProperties.ForceType forceThunder)
+						 LandProperties.ForceType forceRain, LandProperties.ForceType forceThunder, float skylight)
 	{
 		this.wrapped = wrapped;
 		this.forceRain = forceRain;
 		this.forceThunder = forceThunder;
+		this.dayTime = dayTimeFromSkylight(skylight);
+	}
+	
+	private static long dayTimeFromSkylight(float skylight) {
+		double timeOfDay = Math.acos((skylight - 0.5F) / 2) / (Math.PI * 2F);
+		// Not a perfect inversion of DimensionType.timeOfDay(), but might be good enough
+		return (long) ((timeOfDay + 0.25) * 24000);
 	}
 	
 	@Override
@@ -53,6 +61,12 @@ public class LandWorldInfo implements IServerWorldInfo
 	public int getZSpawn()
 	{
 		return 0;
+	}
+	
+	@Override
+	public long getDayTime()
+	{
+		return dayTime;
 	}
 	
 	// Calls to wrapped info
@@ -97,12 +111,6 @@ public class LandWorldInfo implements IServerWorldInfo
 	public long getGameTime()
 	{
 		return wrapped.getGameTime();
-	}
-	
-	@Override
-	public long getDayTime()
-	{
-		return wrapped.getDayTime();
 	}
 	
 	@Override

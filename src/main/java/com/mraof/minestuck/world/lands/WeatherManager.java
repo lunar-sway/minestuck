@@ -27,7 +27,7 @@ public class WeatherManager
 				LandProperties properties = LandProperties.create(generator.landTypes);
 				
 				if (world.levelData instanceof IServerWorldInfo)
-					world.levelData = new LandWorldInfo((IServerWorldInfo) world.levelData, properties.forceRain, properties.forceThunder);
+					world.levelData = new LandWorldInfo((IServerWorldInfo) world.levelData, properties.forceRain, properties.forceThunder, properties.skylightBase);
 				else
 					LOGGER.error("Expected level data on server side to be an instance of IServerWorldInfo. Was {}", world.levelData.getClass());
 			}
