@@ -23,6 +23,9 @@ import net.minecraftforge.common.util.Constants;
 import javax.annotation.Nullable;
 import java.util.Random;
 
+/**
+ * Receives redstone inputs from wireless redstone transmitters. Has a blockstate that allows the receiver to retain the strongest redstone signal it has received
+ */
 public class WirelessRedstoneReceiverBlock extends Block
 {
 	public static final IntegerProperty POWER = BlockStateProperties.POWER;
@@ -56,7 +59,7 @@ public class WirelessRedstoneReceiverBlock extends Block
 	{
 		if(!player.isCrouching())
 		{
-			worldIn.setBlock(pos, state.setValue(AUTO_RESET, !state.getValue(AUTO_RESET)), Constants.BlockFlags.NOTIFY_NEIGHBORS);
+			worldIn.setBlock(pos, state.cycle(AUTO_RESET), Constants.BlockFlags.NOTIFY_NEIGHBORS);
 			if(state.getValue(AUTO_RESET))
 			{
 				if(!worldIn.isClientSide)
@@ -81,12 +84,6 @@ public class WirelessRedstoneReceiverBlock extends Block
 		return blockState.getValue(POWER);
 	}
 	
-	/*@Override
-	public int getWeakPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side)
-	{
-		return blockState.get(POWER);
-	}*/
-	
 	@Override
 	public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side)
 	{
@@ -98,12 +95,6 @@ public class WirelessRedstoneReceiverBlock extends Block
 	{
 		return true;
 	}
-	
-	/*@Override
-	public boolean canProvidePower(BlockState state)
-	{
-		return true;
-	}*/
 	
 	@Override
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
@@ -122,12 +113,4 @@ public class WirelessRedstoneReceiverBlock extends Block
 		builder.add(POWER);
 		builder.add(AUTO_RESET);
 	}
-	
-	/*@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
-	{
-		super.fillStateContainer(builder);
-		builder.add(POWER);
-		builder.add(AUTO_RESET);
-	}*/
 }

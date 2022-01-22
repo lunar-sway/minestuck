@@ -1,11 +1,8 @@
 package com.mraof.minestuck.effects;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.DisplayEffectsScreen;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.EffectType;
 
 /**
@@ -41,6 +38,12 @@ public class CreativeShockEffect extends Effect
 		return false;
 	}
 	
+	public static void stopElytraFlying(PlayerEntity player, int survivalAmplifierThreshold, int creativeAmplifierThreshold)
+	{
+		if(CreativeShockEffect.doesCreativeShockLimit(player, survivalAmplifierThreshold, creativeAmplifierThreshold))
+			player.stopFallFlying();
+	}
+	
 	@Override
 	public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier)
 	{
@@ -53,41 +56,13 @@ public class CreativeShockEffect extends Effect
 		
 		if(doesCreativeShockLimit(player, 0, 3))
 		{
-			player.abilities.mayBuild = false;
+			player.abilities.mayBuild = false; //this property is restored when the effect ends, in StopCreativeShockEffectPacket
 		}
 	}
-	
-	/*@Override
-	public void performEffect(LivingEntity entityLivingBaseIn, int amplifier)
-	{
-		super.performEffect(entityLivingBaseIn, amplifier);
-		
-		
-	}*/
 	
 	@Override
 	public boolean isDurationEffectTick(int duration, int amplifier)
 	{
-		super.isDurationEffectTick(duration, amplifier);
 		return (duration % 5) == 0;
 	}
-	
-	/*@Override
-	public boolean isReady(int duration, int amplifier)
-	{
-		super.isReady(duration, amplifier);
-		return (duration % 5) == 0;
-	}*/
-	
-	@Override
-	public void renderInventoryEffect(EffectInstance effect, DisplayEffectsScreen<?> gui, MatrixStack mStack, int x, int y, float z)
-	{
-		super.renderInventoryEffect(effect, gui, mStack, x, y, z);
-	}
-	
-	/*@Override
-	public void renderInventoryEffect(EffectInstance effect, DisplayEffectsScreen<?> gui, int x, int y, float z)
-	{
-		super.renderInventoryEffect(effect, gui, x, y, z);
-	}*/
 }

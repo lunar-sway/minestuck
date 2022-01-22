@@ -15,6 +15,9 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
+/**
+ * Increases damage from falls for living entities landing on it. Also injures living entities that move through it, in a manner similar to sweet berry bushes
+ */
 public class SpikeBlock extends DecorBlock
 {
 	public SpikeBlock(Properties properties, CustomVoxelShape shape)
@@ -27,7 +30,7 @@ public class SpikeBlock extends DecorBlock
 	{
 		if(entityIn instanceof UnderlingEntity)
 		{
-			entityIn.causeFallDamage(fallDistance, 1.5F); //damage reduced for underlings
+			entityIn.causeFallDamage(fallDistance, 1.5F); //damage reduced for underlings to limit their death by factors other than players
 		} else if(entityIn instanceof LivingEntity)
 		{
 			entityIn.causeFallDamage(fallDistance, 3);

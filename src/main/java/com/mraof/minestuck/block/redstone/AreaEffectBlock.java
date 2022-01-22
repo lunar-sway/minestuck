@@ -26,6 +26,10 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.Random;
 
+/**
+ * When powered, the tile entity applies an effect to entities in a designated area between two block pos, similar to beacons but with more versatility.
+ * Only creative mode players(who are not under the effects of Creative Shock) can change the effect
+ */
 public class AreaEffectBlock extends Block
 {
 	public static final String EFFECT_CHANGE_MESSAGE = "effect_change_message";

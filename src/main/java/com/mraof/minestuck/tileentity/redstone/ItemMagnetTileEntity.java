@@ -44,7 +44,7 @@ public class ItemMagnetTileEntity extends TileEntity implements ITickableTileEnt
 			if(powerIn > 0)
 			{
 				Direction blockFacing = level.getBlockState(getBlockPos()).getValue(ItemMagnetBlock.FACING);
-				BlockPos offsetPosClose = getBlockPos().relative(blockFacing); //relative was offset
+				BlockPos offsetPosClose = getBlockPos().relative(blockFacing);
 				BlockPos offsetPosFar = offsetPosClose.relative(blockFacing, gatherLength);
 				
 				AxisAlignedBB axisalignedbb = new AxisAlignedBB(
@@ -55,9 +55,9 @@ public class ItemMagnetTileEntity extends TileEntity implements ITickableTileEnt
 				{
 					for(ItemEntity itemEntity : list)
 					{
-						Vector3d motionVec3d = new Vector3d(blockFacing.getOpposite().step()); //step was .getDirectionVec()
+						Vector3d motionVec3d = new Vector3d(blockFacing.getOpposite().step());
 						motionVec3d.add(itemEntity.getDeltaMovement());
-						itemEntity.setDeltaMovement(motionVec3d.scale(0.3));
+						itemEntity.setDeltaMovement(motionVec3d.scale(0.2));
 					}
 				}
 			}

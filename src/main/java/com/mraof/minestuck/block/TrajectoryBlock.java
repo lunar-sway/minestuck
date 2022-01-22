@@ -15,6 +15,10 @@ import net.minecraftforge.common.util.Constants;
 
 import java.util.Random;
 
+/**
+ * When not crouching, players are subjected to movement by the block when walking on top of them. In addition, fall damage is cancelled when entities land on a upward facing trajectory block of more than power 6.
+ * While players can avoid the effects by crouching, while they are subject to them, they have limited movement of their own and cannot jump
+ */
 public class TrajectoryBlock extends MSDirectionalBlock
 {
 	public static final IntegerProperty POWER = BlockStateProperties.POWER;

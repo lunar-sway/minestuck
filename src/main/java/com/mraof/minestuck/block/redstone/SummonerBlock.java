@@ -24,6 +24,10 @@ import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 
+/**
+ * Summons an entity stored in tile entity when powered by redstone. If the blockstate untriggerable is set to true, it can summon an entity multiple times
+ * Only creative mode players(who are not under the effects of Creative Shock) can change the set mob
+ */
 public class SummonerBlock extends Block
 {
 	public static final BooleanProperty TRIGGERED = BlockStateProperties.TRIGGERED;
@@ -83,12 +87,6 @@ public class SummonerBlock extends Block
 		checkSummon(state, worldIn, pos); //made to work with the iterateTracker check in SummonerTileEntity
 	}
 	
-	/*@Override
-	public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving)
-	{
-		checkSummon(state, worldIn, pos); //made to work with the iterateTracker check in SummonerTileEntity
-	}*/
-	
 	private void checkSummon(BlockState state, World worldIn, BlockPos pos)
 	{
 		boolean blockPowered = worldIn.hasNeighborSignal(pos) || worldIn.hasNeighborSignal(pos.above()); //conditions of: 1. block is powered 2. block above is powered 3. shouldnt care if powered
@@ -124,12 +122,4 @@ public class SummonerBlock extends Block
 		builder.add(TRIGGERED);
 		builder.add(UNTRIGGERABLE);
 	}
-	
-	/*@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
-	{
-		super.fillStateContainer(builder);
-		builder.add(TRIGGERED);
-		builder.add(UNTRIGGERABLE);
-	}*/
 }

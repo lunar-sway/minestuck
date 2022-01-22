@@ -140,8 +140,7 @@ public class ClientEventHandler
 	{
 		if(event.player.hasEffect(MSEffects.CREATIVE_SHOCK.get()))
 		{
-			if(CreativeShockEffect.doesCreativeShockLimit(event.player, 2, 5))
-				event.player.stopFallFlying(); //Stopping elytra moment on client side prevent visual disruptions
+			CreativeShockEffect.stopElytraFlying(event.player, 2, 5); //Stopping elytra movement on client side to prevent visual disruptions
 		}
 	}
 }

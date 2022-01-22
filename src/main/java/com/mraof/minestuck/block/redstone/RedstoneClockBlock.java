@@ -22,6 +22,9 @@ import net.minecraftforge.common.util.Constants;
 import javax.annotation.Nullable;
 import java.util.Random;
 
+/**
+ * Generates a redstone pulse through its tile entity at a modifiable increment. Used as a compact means of creating redstone clocks
+ */
 public class RedstoneClockBlock extends MSDirectionalBlock
 {
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
@@ -65,21 +68,6 @@ public class RedstoneClockBlock extends MSDirectionalBlock
 		if(state.getValue(POWERED))
 		{
 			worldIn.setBlock(pos, state.setValue(POWERED, false), Constants.BlockFlags.NOTIFY_NEIGHBORS);
-		}
-	}
-	
-	@Override
-	public void onPlace(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving)
-	{
-		super.onPlace(state, worldIn, pos, oldState, isMoving);
-		
-		TileEntity tileEntity = worldIn.getBlockEntity(pos);
-		if(tileEntity instanceof RedstoneClockTileEntity)
-		{
-			RedstoneClockTileEntity te = (RedstoneClockTileEntity) tileEntity;
-			
-			if(te.getClockSpeed() == 0)
-				te.setClockSpeed(60);
 		}
 	}
 	

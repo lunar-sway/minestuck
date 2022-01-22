@@ -19,6 +19,9 @@ import net.minecraftforge.common.util.Constants;
 import javax.annotation.Nullable;
 import java.util.Random;
 
+/**
+ * When right clicked without crouching(and is unpowered), the block turns to full power and brightness and then loses one value of power and light at a set rate of ticks determined by the "tickrate" of the block
+ */
 public class TimedSolidSwitchBlock extends Block
 {
 	public static final IntegerProperty POWER = BlockStateProperties.POWER;
@@ -79,36 +82,17 @@ public class TimedSolidSwitchBlock extends Block
 		worldIn.getBlockTicks().scheduleTick(new BlockPos(pos), this, tickRate);
 	}
 	
-	/*@Override
-	public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving)
-	{
-		super.onBlockAdded(state, worldIn, pos, oldState, isMoving);
-		worldIn.getPendingBlockTicks().scheduleTick(new BlockPos(pos), this, tickRate);
-	}*/
-	
 	@Override
 	public boolean isSignalSource(BlockState state)
 	{
 		return state.getValue(POWER) > 0;
 	}
 	
-	/*@Override
-	public boolean canProvidePower(BlockState state)
-	{
-		return state.get(POWERED);
-	}*/
-	
 	@Override
 	public int getSignal(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side)
 	{
 		return blockState.getValue(POWER);
 	}
-	
-	/*@Override
-	public int getWeakPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side)
-	{
-		return blockState.get(POWER);
-	}*/
 	
 	@Override
 	public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side)
@@ -121,12 +105,6 @@ public class TimedSolidSwitchBlock extends Block
 	{
 		return state.getValue(POWER);
 	}
-	
-	/*@Override
-	public int getLightValue(BlockState state)
-	{
-		return state.get(POWER);
-	}*/
 	
 	@Override
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
@@ -144,11 +122,4 @@ public class TimedSolidSwitchBlock extends Block
 		super.createBlockStateDefinition(builder);
 		builder.add(POWER);
 	}
-	
-	/*@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
-	{
-		super.fillStateContainer(builder);
-		builder.add(POWER);
-	}*/
 }

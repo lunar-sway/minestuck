@@ -336,9 +336,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSBlocks.SOLID_SWITCH, "KACHUNK");
 		add(MSBlocks.VARIABLE_SOLID_SWITCH, "Variable Solid Switch");
 		addTooltip(MSBlocks.VARIABLE_SOLID_SWITCH, "The functionality of a solid switch but throw in the ability to change what redstone power it gives off.");
-		add(MSBlocks.ONE_SECOND_INTERVAL_TIMED_SOLID_SWITCH, "Timed Solid Switch(One Second)");
+		add(MSBlocks.ONE_SECOND_INTERVAL_TIMED_SOLID_SWITCH, "Timed Solid Switch (One Second)");
 		addTooltip(MSBlocks.ONE_SECOND_INTERVAL_TIMED_SOLID_SWITCH, "Loses one value of power every second until it turns off.");
-		add(MSBlocks.TWO_SECOND_INTERVAL_TIMED_SOLID_SWITCH, "Timed Solid Switch(Two Second)");
+		add(MSBlocks.TWO_SECOND_INTERVAL_TIMED_SOLID_SWITCH, "Timed Solid Switch (Two Second)");
 		addTooltip(MSBlocks.TWO_SECOND_INTERVAL_TIMED_SOLID_SWITCH, "Loses one value of power every two seconds until it turns off.");
 		add(MSBlocks.SUMMONER, "Summoner");
 		addExtra(MSBlocks.SUMMONER, SummonerBlock.UNTRIGGERABLE_CHANGE_MESSAGE, "Block inactivation after successful summoning now %s.");

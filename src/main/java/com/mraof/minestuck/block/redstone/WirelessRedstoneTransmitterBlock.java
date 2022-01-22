@@ -19,6 +19,10 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.Random;
 
+/**
+ * Checks for redstone power inputs and transmits that signal to any wireless redstone receiver present at the location stored in the tile entity
+ * GUI is limited by creative shock
+ */
 public class WirelessRedstoneTransmitterBlock extends Block
 {
 	

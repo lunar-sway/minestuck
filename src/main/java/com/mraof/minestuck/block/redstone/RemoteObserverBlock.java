@@ -21,6 +21,10 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.Random;
 
+/**
+ * Gives off power if the boolean condition currently set in the tile entity is met. Checks for an entity meeting its condition in a 16 block radius.
+ * GUI is limited by creative shock
+ */
 public class RemoteObserverBlock extends Block
 {
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
@@ -55,23 +59,11 @@ public class RemoteObserverBlock extends Block
 		return state.getValue(POWERED);
 	}
 	
-	/*@Override
-	public boolean canProvidePower(BlockState state)
-	{
-		return state.get(POWERED);
-	}*/
-	
 	@Override
 	public int getSignal(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side)
 	{
 		return blockState.getValue(POWERED) ? 15 : 0;
 	}
-	
-	/*@Override
-	public int getWeakPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side)
-	{
-		return blockState.get(POWERED) ? 15 : 0;
-	}*/
 	
 	@Override
 	public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side)
@@ -105,11 +97,4 @@ public class RemoteObserverBlock extends Block
 		super.createBlockStateDefinition(builder);
 		builder.add(POWERED);
 	}
-	
-	/*@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
-	{
-		super.fillStateContainer(builder);
-		builder.add(POWERED);
-	}*/
 }

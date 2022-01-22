@@ -18,6 +18,10 @@ import net.minecraftforge.common.util.Constants;
 import javax.annotation.Nullable;
 import java.util.Random;
 
+/**
+ * Can be right clicked while not crouching to cycle on or off. The block gives off full power and light when on and gives off no power or light when off.
+ * Does the same job as a lever but gives off light and as a full block can be submerged in liquids without breaking
+ */
 public class SolidSwitchBlock extends Block
 {
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
@@ -52,23 +56,11 @@ public class SolidSwitchBlock extends Block
 		return state.getValue(POWERED);
 	}
 	
-	/*@Override
-	public boolean canProvidePower(BlockState state)
-	{
-		return state.get(POWERED);
-	}*/
-	
 	@Override
 	public int getSignal(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side)
 	{
 		return blockState.getValue(POWERED) ? 15 : 0;
 	}
-	
-	/*@Override
-	public int getWeakPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side)
-	{
-		return blockState.get(POWERED) ? 15 : 0;
-	}*/
 	
 	@Override
 	public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side)
@@ -81,12 +73,6 @@ public class SolidSwitchBlock extends Block
 	{
 		return state.getValue(POWERED) ? super.getLightValue(state, world, pos) : 0;
 	}
-	
-	/*@Override
-	public int getLightValue(BlockState state)
-	{
-		return state.get(POWERED) ? super.getLightValue(state) : 0;
-	}*/
 	
 	@Override
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
@@ -101,11 +87,4 @@ public class SolidSwitchBlock extends Block
 		super.createBlockStateDefinition(builder);
 		builder.add(POWERED);
 	}
-	
-	/*@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
-	{
-		super.fillStateContainer(builder);
-		builder.add(POWERED);
-	}*/
 }

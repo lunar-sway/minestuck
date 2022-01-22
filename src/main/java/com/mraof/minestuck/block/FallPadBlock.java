@@ -5,9 +5,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+/**
+ * Prevents fall damage for entities who land on the block as long as they do not crouch when they land
+ */
 public class FallPadBlock extends Block
 {
-
 	protected FallPadBlock(Properties properties)
 	{
 		super(properties);

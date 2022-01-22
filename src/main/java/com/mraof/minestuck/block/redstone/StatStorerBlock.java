@@ -23,6 +23,10 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.Random;
 
+/**
+ * Outputs a redstone signal proportional to the recorded value its tile entity is currently set to, divided by the divide by value stored also stored in the tile entity.
+ * Stats are increased when the relevant event(in ServerEventHandler) occurs within 16 blocks of a stat storer. GUI is limited by creative shock
+ */
 public class StatStorerBlock extends Block
 {
 	public static final IntegerProperty POWER = BlockStateProperties.POWER;
@@ -56,23 +60,11 @@ public class StatStorerBlock extends Block
 		return blockState.getValue(POWER);
 	}
 	
-	/*@Override
-	public int getWeakPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side)
-	{
-		return blockState.get(POWER);
-	}*/
-	
 	@Override
 	public boolean isSignalSource(BlockState state)
 	{
 		return state.getValue(POWER) > 0;
 	}
-	
-	/*@Override
-	public boolean canProvidePower(BlockState state)
-	{
-		return state.get(POWER) > 0;
-	}*/
 	
 	@Override
 	public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side)
@@ -109,11 +101,4 @@ public class StatStorerBlock extends Block
 		super.createBlockStateDefinition(builder);
 		builder.add(POWER);
 	}
-	
-	/*@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
-	{
-		super.fillStateContainer(builder);
-		builder.add(POWER);
-	}*/
 }

@@ -378,8 +378,7 @@ public class ServerEventHandler
 			{
 				if(CreativeShockEffect.doesCreativeShockLimit(event.player, 0, 3))
 					event.player.abilities.mayBuild = false;
-				if(CreativeShockEffect.doesCreativeShockLimit(event.player, 2, 5))
-					event.player.stopFallFlying();
+				CreativeShockEffect.stopElytraFlying(event.player, 2, 5);
 			}
 			else
 			{
@@ -414,7 +413,7 @@ public class ServerEventHandler
 				ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player;
 				player.abilities.mayBuild = !serverPlayerEntity.gameMode.getGameModeForPlayer().isBlockPlacingRestricted(); //block placing restricted was hasLimitedInteractions(), mayBuild was allowEdit
 				
-				StopCreativeShockEffectPacket packet = new StopCreativeShockEffectPacket(serverPlayerEntity.gameMode.getGameModeForPlayer());
+				StopCreativeShockEffectPacket packet = new StopCreativeShockEffectPacket(serverPlayerEntity.gameMode.getGameModeForPlayer().isBlockPlacingRestricted());
 				MSPacketHandler.sendToPlayer(packet, serverPlayerEntity);
 			}
 		}
