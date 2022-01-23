@@ -65,7 +65,9 @@ public class TierOneDungeonEndPiece extends ImprovedStructurePiece
 	private Template bloodSecondSideRoomTemplate;
 	private Template bloodWallFountainTemplate;
 	
-	public TierOneDungeonEndPiece(TemplateManager templates, Direction direction, int x, int y, int z) //this constructor is used when the structure is first initialized
+	TierOneDungeonStructure.Start.Layout layout;
+	
+	public TierOneDungeonEndPiece(TemplateManager templates, TierOneDungeonStructure.Start.Layout layout, Direction direction, int x, int y, int z) //this constructor is used when the structure is first initialized
 	{
 		super(MSStructurePieces.TIER_ONE_DUNGEON_END, 0);
 		
@@ -73,6 +75,7 @@ public class TierOneDungeonEndPiece extends ImprovedStructurePiece
 		setBounds(x, y, z, 82, 50, 82);
 		
 		initTemplates(templates);
+		this.layout = layout;
 	}
 	
 	public TierOneDungeonEndPiece(TemplateManager templates, CompoundNBT nbt) //this constructor is used for reading from data
@@ -138,6 +141,10 @@ public class TierOneDungeonEndPiece extends ImprovedStructurePiece
 		
 		//generateBox(worldIn, boundingBoxIn,firstRoomMinX, firstRoomMinY, firstRoomMinZ,firstRoomMaxX, firstRoomMaxY, firstRoomMaxZ,primaryBlock, air, false);
 		
+		//TODO use the saved layout variable to determine where the puzzle and end rooms should go within the 3x3 grid of 32x32 modular components built above this structure. This should not jut out beyond the grid
+		//linear: end piece entry in bottom right/puzzle in bottom middle/end in bottom left
+		//branched: end piece entry in bottom middle/puzzle in true middle/end in top middle
+		//optional: end piece entry in true middle/puzzle(BENT NORTH) in middle right/end in top right
 		buildAspectThemedPuzzle(worldIn, boundingBoxIn, randomIn, chunkGeneratorIn);
 		
 		return true;

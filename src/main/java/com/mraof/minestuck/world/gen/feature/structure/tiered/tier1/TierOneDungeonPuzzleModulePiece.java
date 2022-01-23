@@ -55,15 +55,17 @@ public class TierOneDungeonPuzzleModulePiece extends ImprovedStructurePiece
 	private TerrainLandType worldTerrain;
 	
 	private final TemplateManager templates;
+	TierOneDungeonStructure.Start.Layout layout;
 	
-	public TierOneDungeonPuzzleModulePiece(TemplateManager templates, Direction direction, int x, int y, int z) //this constructor is used when the structure is first initialized
+	public TierOneDungeonPuzzleModulePiece(TemplateManager templates, TierOneDungeonStructure.Start.Layout layout, Direction exitDirection, int x, int y, int z) //this constructor is used when the structure is first initialized
 	{
 		super(MSStructurePieces.TIER_ONE_DUNGEON_PUZZLE_MODULE, 0);
 		
-		setOrientation(direction);
+		setOrientation(exitDirection);
 		setBounds(x, y, z, 32, 16, 32);
 		
 		this.templates = templates;
+		this.layout = layout;
 	}
 	
 	public TierOneDungeonPuzzleModulePiece(TemplateManager templates, CompoundNBT nbt) //this constructor is used for reading from data
