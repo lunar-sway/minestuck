@@ -22,7 +22,7 @@ public class AreaEffectScreen extends Screen
 	private static final String minPosMessage = "Min Effect Pos";
 	private static final String maxPosMessage = "Max Effect Pos";
 	
-	AreaEffectTileEntity te;
+	private final AreaEffectTileEntity te;
 	private TextFieldWidget minPosDestinationTextFieldX;
 	private TextFieldWidget minPosDestinationTextFieldY;
 	private TextFieldWidget minPosDestinationTextFieldZ;
@@ -43,27 +43,27 @@ public class AreaEffectScreen extends Screen
 	{
 		int yOffset = (this.height / 2) - (guiHeight / 2);
 		
-		this.minPosDestinationTextFieldX = new TextFieldWidget(this.font, this.width / 2 - 60, yOffset + 15, 40, 20, new StringTextComponent(""));
+		this.minPosDestinationTextFieldX = new TextFieldWidget(this.font, this.width / 2 - 60, yOffset + 15, 40, 20, new StringTextComponent("X value of min effect pos"));
 		this.minPosDestinationTextFieldX.setValue(String.valueOf(te.getMinEffectPos().getX())); //setValue was setText
 		addButton(minPosDestinationTextFieldX);
 		
-		this.minPosDestinationTextFieldY = new TextFieldWidget(this.font, this.width / 2 - 20, yOffset + 15, 40, 20, new StringTextComponent("Min pos coords"));    //TODO Use translation instead, and maybe look at other text fields for what the text should be
+		this.minPosDestinationTextFieldY = new TextFieldWidget(this.font, this.width / 2 - 20, yOffset + 15, 40, 20, new StringTextComponent("Y value of min effect pos"));
 		this.minPosDestinationTextFieldY.setValue(String.valueOf(te.getMinEffectPos().getY()));
 		addButton(minPosDestinationTextFieldY);
 		
-		this.minPosDestinationTextFieldZ = new TextFieldWidget(this.font, this.width / 2 + 20, yOffset + 15, 40, 20, new StringTextComponent("")); //was yOffset + 25
+		this.minPosDestinationTextFieldZ = new TextFieldWidget(this.font, this.width / 2 + 20, yOffset + 15, 40, 20, new StringTextComponent("Z value of min effect pos")); //was yOffset + 25
 		this.minPosDestinationTextFieldZ.setValue(String.valueOf(te.getMinEffectPos().getZ()));
 		addButton(minPosDestinationTextFieldZ);
 		
-		this.maxPosDestinationTextFieldX = new TextFieldWidget(this.font, this.width / 2 - 60, yOffset + 50, 40, 20, new StringTextComponent(""));
+		this.maxPosDestinationTextFieldX = new TextFieldWidget(this.font, this.width / 2 - 60, yOffset + 50, 40, 20, new StringTextComponent("X value of max effect pos"));
 		this.maxPosDestinationTextFieldX.setValue(String.valueOf(te.getMaxEffectPos().getX()));
 		addButton(maxPosDestinationTextFieldX);
 		
-		this.maxPosDestinationTextFieldY = new TextFieldWidget(this.font, this.width / 2 - 20, yOffset + 50, 40, 20, new StringTextComponent("Max pos coords"));    //TODO Use translation instead, and maybe look at other text fields for what the text should be
+		this.maxPosDestinationTextFieldY = new TextFieldWidget(this.font, this.width / 2 - 20, yOffset + 50, 40, 20, new StringTextComponent("Y value of max effect pos"));
 		this.maxPosDestinationTextFieldY.setValue(String.valueOf(te.getMaxEffectPos().getY()));
 		addButton(maxPosDestinationTextFieldY);
 		
-		this.maxPosDestinationTextFieldZ = new TextFieldWidget(this.font, this.width / 2 + 20, yOffset + 50, 40, 20, new StringTextComponent(""));
+		this.maxPosDestinationTextFieldZ = new TextFieldWidget(this.font, this.width / 2 + 20, yOffset + 50, 40, 20, new StringTextComponent("Z value of max effect pos"));
 		this.maxPosDestinationTextFieldZ.setValue(String.valueOf(te.getMaxEffectPos().getZ()));
 		addButton(maxPosDestinationTextFieldZ);
 		
@@ -85,8 +85,7 @@ public class AreaEffectScreen extends Screen
 	
 	private void finish()
 	{
-		AreaEffectPacket packet = new AreaEffectPacket(parseMinBlockPos(), parseMaxBlockPos(), te.getBlockPos());
-		MSPacketHandler.sendToServer(packet);
+		MSPacketHandler.sendToServer(new AreaEffectPacket(parseMinBlockPos(), parseMaxBlockPos(), te.getBlockPos()));
 		onClose();
 	}
 	

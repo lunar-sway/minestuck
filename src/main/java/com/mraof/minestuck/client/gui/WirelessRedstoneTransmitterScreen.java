@@ -38,18 +38,15 @@ public class WirelessRedstoneTransmitterScreen extends Screen
 	{
 		int yOffset = (this.height / 2) - (guiHeight / 2);
 		
-		this.destinationTextFieldX = new TextFieldWidget(this.font, this.width / 2 - 60, yOffset + 10, 40, 20, new StringTextComponent(""));
-		this.destinationTextFieldX.setMaxLength(12);
+		this.destinationTextFieldX = new TextFieldWidget(this.font, this.width / 2 - 60, yOffset + 10, 40, 20, new StringTextComponent("X value of destination block pos"));
 		this.destinationTextFieldX.setValue(String.valueOf(te.getDestinationBlockPos().getX()));
 		addButton(destinationTextFieldX);
 		
-		this.destinationTextFieldY = new TextFieldWidget(this.font, this.width / 2 - 20, yOffset + 10, 40, 20, new StringTextComponent("Wireless signal destination code"));    //TODO Use translation instead, and maybe look at other text fields for what the text should be
-		this.destinationTextFieldY.setMaxLength(12);
+		this.destinationTextFieldY = new TextFieldWidget(this.font, this.width / 2 - 20, yOffset + 10, 40, 20, new StringTextComponent("Y value of destination block pos"));
 		this.destinationTextFieldY.setValue(String.valueOf(te.getDestinationBlockPos().getY()));
 		addButton(destinationTextFieldY);
 		
-		this.destinationTextFieldZ = new TextFieldWidget(this.font, this.width / 2 + 20, yOffset + 10, 40, 20, new StringTextComponent("")); //was yOffset + 25
-		this.destinationTextFieldZ.setMaxLength(12);
+		this.destinationTextFieldZ = new TextFieldWidget(this.font, this.width / 2 + 20, yOffset + 10, 40, 20, new StringTextComponent("Z value of destination block pos")); //was yOffset + 25
 		this.destinationTextFieldZ.setValue(String.valueOf(te.getDestinationBlockPos().getZ()));
 		addButton(destinationTextFieldZ);
 		
@@ -82,8 +79,7 @@ public class WirelessRedstoneTransmitterScreen extends Screen
 	
 	private void finish()
 	{
-		WirelessRedstoneTransmitterPacket packet = new WirelessRedstoneTransmitterPacket(parseBlockPos(), te.getBlockPos());
-		MSPacketHandler.sendToServer(packet);
+		MSPacketHandler.sendToServer(new WirelessRedstoneTransmitterPacket(parseBlockPos(), te.getBlockPos()));
 		onClose();
 	}
 	

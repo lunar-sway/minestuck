@@ -160,7 +160,7 @@ public class ServerEventHandler
 		for(BlockPos blockPos : BlockPos.betweenClosed(eventPos.offset(16, 16, 16), eventPos.offset(-16, -16, -16)))
 		{
 			if(world == null || !world.isAreaLoaded(blockPos, 0))
-				return; // Forge: prevent loading unloaded chunks
+				return;
 			
 			TileEntity tileEntity = world.getBlockEntity(blockPos);
 			if(tileEntity instanceof StatStorerTileEntity)

@@ -64,9 +64,10 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 		}
 	}
 	
-	public void setEffect(Effect effectIn)
+	public void setEffect(Effect effectIn, int effectAmplifierIn)
 	{
 		this.effect = effectIn;
+		this.effectAmplifier = effectAmplifierIn;
 	}
 	
 	public Effect getEffect()
@@ -76,19 +77,15 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 		return this.effect;
 	}
 	
-	public void setEffectAmplifier(int effectAmplifierIn)
-	{
-		this.effectAmplifier = effectAmplifierIn;
-	}
-	
 	public int getEffectAmplifier()
 	{
 		return this.effectAmplifier;
 	}
 	
-	public void setMinEffectPos(BlockPos minEffectPosIn)
+	public void setMinAndMaxEffectPos(BlockPos minEffectPosIn, BlockPos maxEffectPosIn)
 	{
 		this.minEffectPos = minEffectPosIn;
+		this.maxEffectPos = maxEffectPosIn;
 	}
 	
 	public BlockPos getMinEffectPos()
@@ -98,11 +95,6 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 			minEffectPos = new BlockPos(this.getBlockPos().offset(-16, -16, -16));
 		}
 		return this.minEffectPos;
-	}
-	
-	public void setMaxEffectPos(BlockPos maxEffectPosIn)
-	{
-		this.maxEffectPos = maxEffectPosIn;
 	}
 	
 	public BlockPos getMaxEffectPos()

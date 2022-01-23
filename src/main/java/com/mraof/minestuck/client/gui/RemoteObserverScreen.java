@@ -23,7 +23,7 @@ public class RemoteObserverScreen extends Screen
 	private static final int guiWidth = 150;
 	private static final int guiHeight = 98;
 	
-	RemoteObserverTileEntity te;
+	private final RemoteObserverTileEntity te;
 	private RemoteObserverTileEntity.ActiveType activeType;
 	
 	public Button typeButton;
@@ -92,8 +92,7 @@ public class RemoteObserverScreen extends Screen
 	
 	private void finish()
 	{
-		RemoteObserverPacket packet = new RemoteObserverPacket(activeType, te.getBlockPos(), getEntityType(entityTypeTextField.getValue()));
-		MSPacketHandler.sendToServer(packet);
+		MSPacketHandler.sendToServer(new RemoteObserverPacket(activeType, te.getBlockPos(), getEntityType(entityTypeTextField.getValue())));
 		onClose();
 	}
 }

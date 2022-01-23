@@ -69,8 +69,7 @@ public class AreaEffectBlock extends Block
 					EffectInstance firstEffect = PotionUtils.getPotion(heldItemStack).getEffects().get(0);
 					if(firstEffect != null)
 					{
-						te.setEffect(firstEffect.getEffect());
-						te.setEffectAmplifier(firstEffect.getAmplifier());
+						te.setEffect(firstEffect.getEffect(), firstEffect.getAmplifier());
 						
 						player.displayClientMessage(new TranslationTextComponent(getDescriptionId() + "." + EFFECT_CHANGE_MESSAGE, firstEffect.getEffect().getRegistryName(), firstEffect.getAmplifier()), true); //getDescriptionId was getTranslationKey
 						worldIn.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 1F);
