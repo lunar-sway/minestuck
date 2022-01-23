@@ -3,8 +3,6 @@ package com.mraof.minestuck.world.gen;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
-import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.skaianet.UnderlingController;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.LandBiomeSetWrapper;
@@ -12,7 +10,6 @@ import com.mraof.minestuck.world.biome.gen.LandBiomeProvider;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.structure.GateStructure;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
-import com.mraof.minestuck.world.lands.GristTypeLayer;
 import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.entity.EntityClassification;
@@ -20,8 +17,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryLookupCodec;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.gen.ChunkGenerator;
@@ -46,14 +41,11 @@ public class LandChunkGenerator extends AbstractChunkGenerator
 					RegistryLookupCodec.create(Registry.BIOME_REGISTRY).forGetter(generator -> generator.registry))
 			.apply(instance, instance.stable(LandChunkGenerator::new)));
 	
-	public static final String GRIST_LAYER_INFO = "grist_layer.info";
-	
 	public final LandTypePair landTypes;
 	public final StructureBlockRegistry blockRegistry;
 	public final LandBiomeHolder biomes;
 	public final GateStructure.PieceFactory gatePiece;
 	private final Registry<Biome> registry;
-	private final GristTypeLayer anyGristLayer, commonGristLayer, uncommonGristLayer;
 	
 	private ChunkPos landGatePosition;
 	
@@ -77,14 +69,6 @@ public class LandChunkGenerator extends AbstractChunkGenerator
 		landTypes = genSettings.getLandTypes();
 		blockRegistry = genSettings.getBlockRegistry();
 		gatePiece = genSettings.getGatePiece();
-		
-		//TODO Server not available from the world as it is still being constructed. Is a different solution reliable here?
-		// Suggestion: attach it to the world using a capability
-		GristType baseType = GristTypes.AMBER.get(); //SburbHandler.getConnectionForDimension(ServerLifecycleHooks.getCurrentServer(), worldIn.getDimension().getType()).getBaseGrist();
-		
-		commonGristLayer = GristTypeLayer.createLayer(GristType.SpawnCategory.COMMON, 0, seed, 10, null);
-		anyGristLayer = GristTypeLayer.createLayer(GristType.SpawnCategory.ANY, 1, seed, 8, baseType);
-		uncommonGristLayer = GristTypeLayer.createLayer(GristType.SpawnCategory.UNCOMMON, 2, seed, 7, baseType);
 	}
 	
 	@Override
@@ -113,28 +97,6 @@ public class LandChunkGenerator extends AbstractChunkGenerator
 		else return biomes.getBiomeFromBase(biome).getMobSettings().getMobs(classification);
 	}
 	
-	public GristTypeLayer randomLayer(Random rand)
-	{
-		switch(rand.nextInt(3))
-		{
-			case 0:
-				return commonGristLayer;
-			case 1:
-				return uncommonGristLayer;
-			default:
-				return anyGristLayer;
-		}
-	}
-	
-	public ITextComponent getGristLayerInfo(int x, int z)
-	{
-		GristType commonType = commonGristLayer.getTypeAt(x, z);
-		GristType uncommonType = uncommonGristLayer.getTypeAt(x, z);
-		GristType anyType = anyGristLayer.getTypeAt(x, z);
-		
-		return new TranslationTextComponent(GRIST_LAYER_INFO, commonType.getDisplayName(), uncommonType.getDisplayName(), anyType.getDisplayName());
-	}
-	
 	@Nullable
 	@Override
 	public BlockPos findNearestMapFeature(ServerWorld world, Structure<?> structure, BlockPos pos, int searchSize, boolean checkReference)
@@ -145,6 +107,11 @@ public class LandChunkGenerator extends AbstractChunkGenerator
 			return new BlockPos((gatePos.x << 4) + 8, 32, (gatePos.z << 4) + 8);
 		} else
 			return super.findNearestMapFeature(world, structure, pos, searchSize, checkReference);
+	}
+	
+	public long getSeed()
+	{
+		return seed;
 	}
 	
 	public ChunkPos getOrFindLandGatePosition()

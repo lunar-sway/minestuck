@@ -46,7 +46,7 @@ public class LandInfo
 		this.identifier = Objects.requireNonNull(identifier);
 		cachedAspects = Objects.requireNonNull(landTypes);
 		this.landAspects = landTypes.createLazy();
-		dimension = dimensionType;
+		dimension = Objects.requireNonNull(dimensionType);
 		useReverseOrder = random.nextBoolean();
 		terrainNameIndex = random.nextInt(landTypes.getTerrain().getNames().length);
 		titleNameIndex = random.nextInt(landTypes.getTitle().getNames().length);
