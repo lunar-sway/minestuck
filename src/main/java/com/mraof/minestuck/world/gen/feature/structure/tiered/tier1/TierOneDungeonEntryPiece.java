@@ -85,8 +85,9 @@ public class TierOneDungeonEntryPiece extends ImprovedStructurePiece
 	private Template rabbitTemplate;
 	private Template pipesTemplate1;
 	
+	boolean organicDesign;
 	
-	public TierOneDungeonEntryPiece(TemplateManager templates, ChunkGenerator generator, Random random, int x, int z)
+	public TierOneDungeonEntryPiece(TemplateManager templates, boolean organicDesign, ChunkGenerator generator, Random random, int x, int z)
 	{
 		super(MSStructurePieces.TIER_ONE_DUNGEON_ENTRY, 0);
 		
@@ -94,6 +95,7 @@ public class TierOneDungeonEntryPiece extends ImprovedStructurePiece
 		setBoundsWithWorldHeight(generator, x, z, 82, 60, 82, -1, Heightmap.Type.OCEAN_FLOOR_WG); //x = 42, z = 32
 		
 		initTemplates(templates);
+		this.organicDesign = organicDesign;
 	}
 	
 	public TierOneDungeonEntryPiece(TemplateManager templates, CompoundNBT nbt)

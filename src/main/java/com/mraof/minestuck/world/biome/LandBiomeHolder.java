@@ -146,6 +146,9 @@ public class LandBiomeHolder implements ILandBiomeSet
 			builder.addStructureStart(MSFeatures.CONSORT_VILLAGE.configured(IFeatureConfig.NONE));
 		}
 		if(type == LandBiomeType.NORMAL || type == LandBiomeType.ROUGH)
+		{
 			builder.addStructureStart(MSFeatures.IMP_DUNGEON.configured(IFeatureConfig.NONE));
+			builder.addStructureStart(MSFeatures.TIER_ONE_DUNGEON.configured(IFeatureConfig.NONE));
+		}
 	}
 }

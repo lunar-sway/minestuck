@@ -59,6 +59,7 @@ public class LandGenSettings
 		structures.put(MSFeatures.LAND_GATE, new StructureSeparationSettings(1, 0, 0));
 		structures.put(MSFeatures.SMALL_RUIN, new StructureSeparationSettings(16, 4, 59273643));
 		structures.put(MSFeatures.IMP_DUNGEON, new StructureSeparationSettings(16, 4, 34527185));
+		structures.put(MSFeatures.TIER_ONE_DUNGEON, new StructureSeparationSettings(16, 4, 41361209));
 		structures.put(MSFeatures.CONSORT_VILLAGE, new StructureSeparationSettings(24, 5, 10387312));
 		
 		DimensionStructuresSettings structureSettings = new DimensionStructuresSettings(Optional.empty(), structures);

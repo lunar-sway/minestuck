@@ -56,8 +56,9 @@ public class TierOneDungeonPuzzleModulePiece extends ImprovedStructurePiece
 	
 	private final TemplateManager templates;
 	TierOneDungeonStructure.Start.Layout layout;
+	boolean organicDesign;
 	
-	public TierOneDungeonPuzzleModulePiece(TemplateManager templates, TierOneDungeonStructure.Start.Layout layout, Direction exitDirection, int x, int y, int z) //this constructor is used when the structure is first initialized
+	public TierOneDungeonPuzzleModulePiece(TemplateManager templates, boolean organicDesign, TierOneDungeonStructure.Start.Layout layout, Direction exitDirection, int x, int y, int z) //this constructor is used when the structure is first initialized
 	{
 		super(MSStructurePieces.TIER_ONE_DUNGEON_PUZZLE_MODULE, 0);
 		
@@ -66,6 +67,7 @@ public class TierOneDungeonPuzzleModulePiece extends ImprovedStructurePiece
 		
 		this.templates = templates;
 		this.layout = layout;
+		this.organicDesign = organicDesign;
 	}
 	
 	public TierOneDungeonPuzzleModulePiece(TemplateManager templates, CompoundNBT nbt) //this constructor is used for reading from data
