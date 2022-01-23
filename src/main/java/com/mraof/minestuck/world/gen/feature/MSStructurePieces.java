@@ -3,8 +3,9 @@ package com.mraof.minestuck.world.gen.feature;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.gen.feature.structure.*;
 import com.mraof.minestuck.world.gen.feature.structure.castle.*;
-import com.mraof.minestuck.world.gen.feature.structure.tiered.tier1.TierOneDungeonSecondaryPiece;
+import com.mraof.minestuck.world.gen.feature.structure.tiered.tier1.TierOneDungeonEndPiece;
 import com.mraof.minestuck.world.gen.feature.structure.tiered.tier1.TierOneDungeonEntryPiece;
+import com.mraof.minestuck.world.gen.feature.structure.tiered.tier1.TierOneDungeonPuzzleModulePiece;
 import com.mraof.minestuck.world.gen.feature.structure.village.*;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
@@ -23,7 +24,7 @@ public final class MSStructurePieces
 	public static IStructurePieceType IMP_SPAWNER_ROOM, IMP_SPAWNER_CORRIDOR, IMP_LARGE_SPAWNER_CORRIDOR;
 	public static IStructurePieceType IMP_BOOKCASE_ROOM, IMP_OGRE_CORRIDOR;
 	
-	public static IStructurePieceType TIER_ONE_DUNGEON_ENTRY, TIER_ONE_DUNGEON_SECONDARY;
+	public static IStructurePieceType TIER_ONE_DUNGEON_ENTRY, TIER_ONE_DUNGEON_END, TIER_ONE_DUNGEON_PUZZLE_MODULE;
 	
 	public static IStructurePieceType VILLAGE_PATH;
 	public static IStructurePieceType MARKET_CENTER;
@@ -66,7 +67,8 @@ public final class MSStructurePieces
 		IMP_OGRE_CORRIDOR = register(ImpDungeonPieces.OgreCorridor::new, Minestuck.MOD_ID+":imp_ogre_corridor");
 		
 		TIER_ONE_DUNGEON_ENTRY = register(TierOneDungeonEntryPiece::new, Minestuck.MOD_ID+":tier_one_dungeon_entry");
-		TIER_ONE_DUNGEON_SECONDARY = register(TierOneDungeonSecondaryPiece::new, Minestuck.MOD_ID+":tier_one_dungeon_secondary");
+		TIER_ONE_DUNGEON_END = register(TierOneDungeonEndPiece::new, Minestuck.MOD_ID+":tier_one_dungeon_end");
+		TIER_ONE_DUNGEON_PUZZLE_MODULE = register(TierOneDungeonPuzzleModulePiece::new, Minestuck.MOD_ID+":tier_one_dungeon_puzzle_module");
 		
 		VILLAGE_PATH = register(ConsortVillagePieces.VillagePath::new, Minestuck.MOD_ID+":village_path");
 		MARKET_CENTER = register(ConsortVillageCenter.VillageMarketCenter::new, Minestuck.MOD_ID+":market_center");

@@ -1,26 +1,15 @@
 package com.mraof.minestuck.world.gen.feature.structure.tiered.tier1;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.block.redstone.WirelessRedstoneReceiverBlock;
-import com.mraof.minestuck.effects.MSEffects;
-import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
-import com.mraof.minestuck.tileentity.redstone.RemoteObserverTileEntity;
-import com.mraof.minestuck.tileentity.redstone.StatStorerTileEntity;
-import com.mraof.minestuck.tileentity.redstone.SummonerTileEntity;
-import com.mraof.minestuck.util.MSRotationUtil;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
-import com.mraof.minestuck.world.gen.feature.StructureBlockRegistryProcessor;
 import com.mraof.minestuck.world.gen.feature.structure.ImprovedStructurePiece;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
-import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockUtil;
 import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
@@ -32,17 +21,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.ISeedReader;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.structure.StructureManager;
-import net.minecraft.world.gen.feature.template.PlacementSettings;
 import net.minecraft.world.gen.feature.template.Template;
 import net.minecraft.world.gen.feature.template.TemplateManager;
-import net.minecraftforge.common.util.Constants;
 
 import java.util.Random;
 
-public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
+public class TierOneDungeonEndPiece extends ImprovedStructurePiece
 {
 	private boolean createRan = false; //boolean check to prevent certain aspects from generating several times over or changing
 	private boolean spawner1, spawner2;
@@ -79,9 +65,9 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 	private Template bloodSecondSideRoomTemplate;
 	private Template bloodWallFountainTemplate;
 	
-	public TierOneDungeonSecondaryPiece(TemplateManager templates, Direction direction, int x, int y, int z) //this constructor is used when the structure is first initialized
+	public TierOneDungeonEndPiece(TemplateManager templates, Direction direction, int x, int y, int z) //this constructor is used when the structure is first initialized
 	{
-		super(MSStructurePieces.TIER_ONE_DUNGEON_SECONDARY, 0);
+		super(MSStructurePieces.TIER_ONE_DUNGEON_END, 0);
 		
 		setOrientation(direction);
 		setBounds(x, y, z, 82, 50, 82);
@@ -89,9 +75,9 @@ public class TierOneDungeonSecondaryPiece extends ImprovedStructurePiece
 		initTemplates(templates);
 	}
 	
-	public TierOneDungeonSecondaryPiece(TemplateManager templates, CompoundNBT nbt) //this constructor is used for reading from data
+	public TierOneDungeonEndPiece(TemplateManager templates, CompoundNBT nbt) //this constructor is used for reading from data
 	{
-		super(MSStructurePieces.TIER_ONE_DUNGEON_SECONDARY, nbt);
+		super(MSStructurePieces.TIER_ONE_DUNGEON_END, nbt);
 		spawner1 = nbt.getBoolean("sp1");
 		spawner2 = nbt.getBoolean("sp2");
 		randomRoomType = nbt.getInt("randomRoomType");
