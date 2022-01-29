@@ -1,16 +1,33 @@
 package com.mraof.minestuck.tileentity.redstone;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.redstone.StatStorerBlock;
+import com.mraof.minestuck.effects.CreativeShockEffect;
+import com.mraof.minestuck.event.AlchemyEvent;
+import com.mraof.minestuck.event.GristDropsEvent;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.event.entity.EntityStruckByLightningEvent;
+import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingHealEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.world.ExplosionEvent;
+import net.minecraftforge.event.world.SaplingGrowTreeEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class StatStorerTileEntity extends TileEntity implements ITickableTileEntity
 {
 	private float damageStored;
@@ -268,5 +285,85 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 		{
 			this.level.addParticle(ParticleTypes.HEART, true, blockPosIn.getX(), blockPosIn.getY(), blockPosIn.getZ(), 0.01, 0.01, 0.01);
 		}
+	}
+	
+	public static void attemptStatUpdate(float eventAmount, StatStorerTileEntity.ActiveType activeType, BlockPos eventPos, World world)
+	{
+		for(BlockPos blockPos : BlockPos.betweenClosed(eventPos.offset(16, 16, 16), eventPos.offset(-16, -16, -16)))
+		{
+			if(world == null || !world.isAreaLoaded(blockPos, 0))
+				return;
+			
+			TileEntity tileEntity = world.getBlockEntity(blockPos);
+			if(tileEntity instanceof StatStorerTileEntity)
+			{
+				StatStorerTileEntity storerTileEntity = (StatStorerTileEntity) tileEntity;
+				
+				if(activeType == storerTileEntity.getActiveType())
+					storerTileEntity.setActiveStoredStatValue(storerTileEntity.getActiveStoredStatValue() + eventAmount, blockPos.above(), true);
+			}
+		}
+	}
+	
+	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
+	public static void onEntityHeal(LivingHealEvent event)
+	{
+		attemptStatUpdate(event.getAmount(), StatStorerTileEntity.ActiveType.HEALTH_RECOVERED, event.getEntity().blockPosition(), event.getEntity().level);
+	}
+	
+	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
+	public static void onSaplingGrow(SaplingGrowTreeEvent event)
+	{
+		attemptStatUpdate(1, StatStorerTileEntity.ActiveType.SAPLING_GROWN, event.getPos(), (World) event.getWorld());
+	}
+	
+	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
+	public static void onEntityStruck(EntityStruckByLightningEvent event)
+	{
+		if(event.getLightning().tickCount == 1)
+			attemptStatUpdate(1, StatStorerTileEntity.ActiveType.LIGHTNING_STRUCK_ENTITY, event.getEntity().blockPosition(), event.getEntity().level);
+	}
+	
+	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
+	public static void onEntityBred(BabyEntitySpawnEvent event)
+	{
+		if(!event.isCanceled())
+			attemptStatUpdate(1, StatStorerTileEntity.ActiveType.ENTITIES_BRED, event.getParentA().blockPosition(), event.getParentA().level);
+	}
+	
+	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
+	public static void onExplosion(ExplosionEvent event)
+	{
+		PlayerEntity playerEntity = (PlayerEntity) event.getExplosion().getSourceMob();
+		if(playerEntity != null && CreativeShockEffect.doesCreativeShockLimit(playerEntity, 0))
+			event.setCanceled(true); //intended to prevent blocks from being destroyed by a player attempting to circumvent creative shock
+		else
+		{
+			attemptStatUpdate(1, StatStorerTileEntity.ActiveType.EXPLOSIONS, new BlockPos(event.getExplosion().getPosition()), event.getWorld()); //TODO seems to be doubled
+		}
+	}
+	
+	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
+	public static void onAlchemy(AlchemyEvent event)
+	{
+		attemptStatUpdate(1, StatStorerTileEntity.ActiveType.ALCHEMY_ACTIVATED, event.getAlchemiter().getBlockPos(), event.getWorld());
+	}
+	
+	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
+	public static void onGristDrop(GristDropsEvent event)
+	{
+		attemptStatUpdate(1, StatStorerTileEntity.ActiveType.GRIST_DROPS, event.getUnderling().getEntity().blockPosition(), event.getUnderling().level);
+	}
+	
+	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
+	public static void onEntityDamage(LivingHurtEvent event)
+	{
+		attemptStatUpdate(event.getAmount(), StatStorerTileEntity.ActiveType.DAMAGE, event.getEntity().blockPosition(), event.getEntity().level);
+	}
+	
+	@SubscribeEvent(priority=EventPriority.LOWEST, receiveCanceled=false)
+	public static void onEntityDeath(LivingDeathEvent event)
+	{
+		attemptStatUpdate(1, StatStorerTileEntity.ActiveType.DEATHS, event.getEntity().blockPosition(), event.getEntity().level);
 	}
 }

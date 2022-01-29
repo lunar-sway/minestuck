@@ -44,7 +44,7 @@ public class SummonerBlock extends Block
 	@Override
 	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
 	{
-		if(!player.isCrouching() && player.isCreative() && !CreativeShockEffect.doesCreativeShockLimit(player, 1, 4))
+		if(!player.isCrouching() && player.isCreative() && !CreativeShockEffect.doesCreativeShockLimit(player, 1))
 		{
 			ItemStack stackIn = player.getItemInHand(handIn);
 			

@@ -55,7 +55,7 @@ public class AreaEffectBlock extends Block
 	@Override
 	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
 	{
-		if(player.isCreative() && !CreativeShockEffect.doesCreativeShockLimit(player, 1, 4))
+		if(player.isCreative() && !CreativeShockEffect.doesCreativeShockLimit(player, 1))
 		{
 			TileEntity tileEntity = worldIn.getBlockEntity(pos);
 			if(tileEntity instanceof AreaEffectTileEntity)

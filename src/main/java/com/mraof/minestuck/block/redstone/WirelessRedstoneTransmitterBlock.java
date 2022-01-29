@@ -49,7 +49,7 @@ public class WirelessRedstoneTransmitterBlock extends Block
 	@SuppressWarnings("deprecation")
 	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
 	{
-		if(!player.isCrouching() && !CreativeShockEffect.doesCreativeShockLimit(player, 1, 4))
+		if(!player.isCrouching() && !CreativeShockEffect.doesCreativeShockLimit(player, 1))
 		{
 			TileEntity tileEntity = worldIn.getBlockEntity(pos);
 			if(tileEntity instanceof WirelessRedstoneTransmitterTileEntity)

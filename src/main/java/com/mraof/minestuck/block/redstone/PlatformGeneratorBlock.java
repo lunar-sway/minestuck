@@ -40,7 +40,7 @@ public class PlatformGeneratorBlock extends MSDirectionalBlock
 	@Override
 	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
 	{
-		if(!player.isCrouching() && !CreativeShockEffect.doesCreativeShockLimit(player, 1, 4))
+		if(!player.isCrouching() && !CreativeShockEffect.doesCreativeShockLimit(player, 1))
 		{
 			worldIn.setBlock(pos, state.setValue(INVISIBLE_MODE, !state.getValue(INVISIBLE_MODE)), Constants.BlockFlags.NOTIFY_NEIGHBORS);
 			if(state.getValue(INVISIBLE_MODE))

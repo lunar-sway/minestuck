@@ -130,7 +130,7 @@ public class ClientEventHandler
 		if(event.getEntity() instanceof PlayerEntity)
 		{
 			PlayerEntity playerEntity = (PlayerEntity) event.getEntity();
-			if(CreativeShockEffect.doesCreativeShockLimit(playerEntity, 0, 3))
+			if(CreativeShockEffect.doesCreativeShockLimit(playerEntity, 0))
 				event.setCanceled(true); //It is necessary to do this here in order to prevent creative mode players from breaking blocks
 		}
 	}
@@ -138,9 +138,9 @@ public class ClientEventHandler
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public static void onPlayerTickEvent(TickEvent.PlayerTickEvent event)
 	{
-		if(event.player.hasEffect(MSEffects.CREATIVE_SHOCK.get()))
+		if(event.side.isClient() && event.player.hasEffect(MSEffects.CREATIVE_SHOCK.get()))
 		{
-			CreativeShockEffect.stopElytraFlying(event.player, 2, 5); //Stopping elytra movement on client side to prevent visual disruptions
+			CreativeShockEffect.stopElytraFlying(event.player, 2); //Stopping elytra movement on client side to prevent visual disruptions
 		}
 	}
 }

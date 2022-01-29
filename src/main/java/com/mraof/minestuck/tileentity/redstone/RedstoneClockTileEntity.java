@@ -31,7 +31,7 @@ public class RedstoneClockTileEntity extends TileEntity implements ITickableTile
 	public void tick()
 	{
 		if(level == null)
-			return; // Forge: prevent loading unloaded chunks
+			return;
 		
 		if(tickCycle >= clockSpeed)
 		{
