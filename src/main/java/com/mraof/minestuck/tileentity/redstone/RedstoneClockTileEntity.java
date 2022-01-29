@@ -46,7 +46,7 @@ public class RedstoneClockTileEntity extends TileEntity implements ITickableTile
 		if(level != null && level.isAreaLoaded(getBlockPos(), 1))
 		{
 			level.setBlock(getBlockPos(), getBlockState().setValue(RedstoneClockBlock.POWERED, true), Constants.BlockFlags.NOTIFY_NEIGHBORS);
-			level.getBlockTicks().scheduleTick(new BlockPos(getBlockPos()), level.getBlockState(getBlockPos()).getBlock(), 10); //set to half a second //TODO block stays powered client side
+			level.getBlockTicks().scheduleTick(new BlockPos(getBlockPos()), level.getBlockState(getBlockPos()).getBlock(), 10); //set to half a second
 			level.playSound(null, getBlockPos(), SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.05F, 1.2F);
 		}
 	}

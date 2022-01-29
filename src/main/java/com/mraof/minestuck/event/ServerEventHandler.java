@@ -295,9 +295,10 @@ public class ServerEventHandler
 		{
 			PlayerEntity player = (PlayerEntity) entityLiving;
 			
-			if(player instanceof ServerPlayerEntity && effect == MSEffects.CREATIVE_SHOCK.get())
+			if(player instanceof ServerPlayerEntity)
 			{
-				CreativeShockEffect.onEffectEnd((ServerPlayerEntity) player);
+				if(effect == MSEffects.CREATIVE_SHOCK.get())
+					CreativeShockEffect.onEffectEnd((ServerPlayerEntity) player);
 			}
 		}
 	}

@@ -91,7 +91,7 @@ public class TrajectoryBlock extends MSDirectionalBlock
 		if(!worldIn.isClientSide)
 		{
 			int powerInt = worldIn.getBestNeighborSignal(pos);
-			worldIn.setBlock(pos, state.setValue(POWER, powerInt), Constants.BlockFlags.NOTIFY_NEIGHBORS);
+			worldIn.setBlock(pos, state.setValue(POWER, powerInt), Constants.BlockFlags.BLOCK_UPDATE);
 		}
 	}
 	

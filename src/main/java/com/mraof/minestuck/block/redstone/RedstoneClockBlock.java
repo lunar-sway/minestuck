@@ -67,7 +67,7 @@ public class RedstoneClockBlock extends MSDirectionalBlock
 		
 		if(state.getValue(POWERED))
 		{
-			worldIn.setBlock(pos, state.setValue(POWERED, false), Constants.BlockFlags.NOTIFY_NEIGHBORS);
+			worldIn.setBlock(pos, state.setValue(POWERED, false), Constants.BlockFlags.DEFAULT_AND_RERENDER);
 		}
 	}
 	

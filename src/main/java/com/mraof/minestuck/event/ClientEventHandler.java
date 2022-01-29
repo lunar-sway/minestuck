@@ -124,17 +124,7 @@ public class ClientEventHandler
 		}
 	}
 	
-	@SubscribeEvent(priority=EventPriority.NORMAL)
-	public static void onLeftClickBlockEvent(PlayerInteractEvent.LeftClickBlock event)
-	{
-		if(event.getEntity() instanceof PlayerEntity)
-		{
-			PlayerEntity playerEntity = (PlayerEntity) event.getEntity();
-			if(CreativeShockEffect.doesCreativeShockLimit(playerEntity, 0))
-				event.setCanceled(true); //It is necessary to do this here in order to prevent creative mode players from breaking blocks
-		}
-	}
-	
+	//TODO may remove, does nothing that can be seen
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public static void onPlayerTickEvent(TickEvent.PlayerTickEvent event)
 	{
