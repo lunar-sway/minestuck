@@ -1,32 +1,26 @@
 package com.mraof.minestuck.world.gen.feature.structure.tiered.tier1;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
-import com.mraof.minestuck.util.MSRotationUtil;
 import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
-import com.mraof.minestuck.world.gen.feature.StructureBlockRegistryProcessor;
 import com.mraof.minestuck.world.gen.feature.structure.ImprovedStructurePiece;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
-import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockUtil;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.structure.StructureManager;
-import net.minecraft.world.gen.feature.template.PlacementSettings;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 
 import java.util.Random;
 
-public class TierOneDungeonPuzzleModulePiece extends ImprovedStructurePiece
+public class TierOneDungeonCombatModulePiece extends ImprovedStructurePiece
 {
 	private boolean createRan = false; //boolean check to prevent certain aspects from generating several times over or changing
 	private boolean spawner1, spawner2;
@@ -58,9 +52,9 @@ public class TierOneDungeonPuzzleModulePiece extends ImprovedStructurePiece
 	TierOneDungeonStructure.Start.Layout layout;
 	boolean organicDesign;
 	
-	public TierOneDungeonPuzzleModulePiece(TemplateManager templates, boolean organicDesign, TierOneDungeonStructure.Start.Layout layout, Direction orientation, Direction exitDirection, int x, int y, int z) //this constructor is used when the structure is first initialized
+	public TierOneDungeonCombatModulePiece(TemplateManager templates, boolean organicDesign, TierOneDungeonStructure.Start.Layout layout, Direction orientation, Direction exitDirection, int x, int y, int z) //this constructor is used when the structure is first initialized
 	{
-		super(MSStructurePieces.TIER_ONE_DUNGEON_PUZZLE_MODULE, 0);
+		super(MSStructurePieces.TIER_ONE_DUNGEON_COMBAT_MODULE, 0);
 		
 		setOrientation(orientation);
 		setBounds(x, y, z, 32, 16, 32);
@@ -70,9 +64,9 @@ public class TierOneDungeonPuzzleModulePiece extends ImprovedStructurePiece
 		this.organicDesign = organicDesign;
 	}
 	
-	public TierOneDungeonPuzzleModulePiece(TemplateManager templates, CompoundNBT nbt) //this constructor is used for reading from data
+	public TierOneDungeonCombatModulePiece(TemplateManager templates, CompoundNBT nbt) //this constructor is used for reading from data
 	{
-		super(MSStructurePieces.TIER_ONE_DUNGEON_PUZZLE_MODULE, nbt);
+		super(MSStructurePieces.TIER_ONE_DUNGEON_COMBAT_MODULE, nbt);
 		spawner1 = nbt.getBoolean("sp1");
 		spawner2 = nbt.getBoolean("sp2");
 		randomType = nbt.getInt("randomType");
@@ -109,44 +103,16 @@ public class TierOneDungeonPuzzleModulePiece extends ImprovedStructurePiece
 			createRan = true;
 		}
 		
-		generateAirBox(worldIn, boundingBoxIn, pieceMinX, pieceMinY, pieceMinZ, pieceMaxX, pieceMaxY, pieceMaxZ);
-		placeBlock(worldIn, lightBlock, pieceMinX, pieceMinY, pieceMinZ, boundingBoxIn);
-		placeBlock(worldIn, lightBlock, pieceMaxX, pieceMaxY, pieceMaxZ, boundingBoxIn);
-		placeBlock(worldIn, primaryBlock, pieceMaxX - 5, pieceMaxY - 5, pieceMaxZ - 5, boundingBoxIn);
-		
-		if(randomType == 9) //1 in 10 chance of opposite aspect style puzzle
-			buildCounterpartAspectThemedPuzzle(worldIn, boundingBoxIn, randomIn, chunkGeneratorIn);
-		else if(randomType > 4) //4 in 10 chance of aspect style puzzle
-			buildAspectThemedPuzzle(worldIn, boundingBoxIn, randomIn, chunkGeneratorIn);
-		/*
-		else if(randomType > 2)
-			buildClassThemedPuzzle(worldIn, boundingBoxIn, randomIn, chunkGeneratorIn);
-		 */
-		else // 5 in 10 chance of generic puzzle(assuming class themed puzzle is not included)
-			buildGenericPuzzle(worldIn, boundingBoxIn, randomIn, chunkGeneratorIn);
+		buildGenericCombatRoom(worldIn, boundingBoxIn, randomIn, chunkGeneratorIn);
 		
 		return true;
 	}
 	
-	private void buildAspectThemedPuzzle(ISeedReader world, MutableBoundingBox boundingBox, Random rand, ChunkGenerator chunkGeneratorIn)
+	private void buildGenericCombatRoom(ISeedReader world, MutableBoundingBox boundingBox, Random rand, ChunkGenerator chunkGeneratorIn)
 	{
-		//TODO for each nbt template, have Structure Blocks in the component that makes the floors/walls/ceilings(the blocks may be spread between the puzzle template and the module terrain template). From there, apply the relevant aesthetic feature to the area.
-		// That is to say, if a structure block is created on the ceiling of a module between the puzzle and room templates for a rock and bunnies land, if the ceilings are designated to be shaped by the aesthetics of the terrain then the structure block would be replaced with a stalactite
-		//StructureBlockUtil.placeCenteredTemplate(world, getActualPos(pieceMinX + 16, pieceMinY + 8, pieceMinZ + 16), templates.getOrCreate(new ResourceLocation(Minestuck.MOD_ID, "aspect/breath_symbol_no_background")), new PlacementSettings().setBoundingBox(boundingBox).setRotation(MSRotationUtil.fromDirection(getOrientation())).addProcessor(new StructureBlockRegistryProcessor(StructureBlockRegistry.getOrDefault(chunkGeneratorIn))));
-	}
-	
-	private void buildCounterpartAspectThemedPuzzle(ISeedReader world, MutableBoundingBox boundingBox, Random rand, ChunkGenerator chunkGeneratorIn)
-	{
-	
-	}
-	
-	private void buildClassThemedPuzzle(ISeedReader world, MutableBoundingBox boundingBox, Random rand, ChunkGenerator chunkGeneratorIn) //TODO add class puzzles, as well as lunar sway puzzles if that can be checked in the future
-	{
-	
-	}
-	
-	private void buildGenericPuzzle(ISeedReader world, MutableBoundingBox boundingBox, Random rand, ChunkGenerator chunkGeneratorIn)
-	{
-	
+		generateAirBox(world, boundingBox, pieceMinX, pieceMinY, pieceMinZ, pieceMaxX, pieceMaxY, pieceMaxZ);
+		placeBlock(world, lightBlock, pieceMinX, pieceMinY, pieceMinZ, boundingBox);
+		placeBlock(world, lightBlock, pieceMaxX, pieceMaxY, pieceMaxZ, boundingBox);
+		placeBlock(world, secondaryBlock, pieceMaxX - 5, pieceMaxY - 5, pieceMaxZ - 5, boundingBox);
 	}
 }

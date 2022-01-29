@@ -116,6 +116,7 @@ public class LootBlock extends DecorBlock
 	@Override
 	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
 	{
+		super.createBlockStateDefinition(builder);
 		builder.add(OPEN);
 	}
 }

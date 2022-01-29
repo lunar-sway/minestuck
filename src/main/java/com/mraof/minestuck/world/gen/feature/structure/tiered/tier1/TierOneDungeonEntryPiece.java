@@ -52,12 +52,12 @@ public class TierOneDungeonEntryPiece extends ImprovedStructurePiece
 	private int randomRoomType;
 	private int roomVariable1;
 	
-	private static final int entryRoomMinX = 20;
-	private static final int entryRoomMinY = 0;
-	private static final int entryRoomMinZ = 30;
-	private static final int entryRoomMaxX = 37;
-	private static final int entryRoomMaxY = 8;
-	private static final int entryRoomMaxZ = 47;
+	private static final int entryRoomMinX = 5;
+	private static final int entryRoomMinY = 32;
+	private static final int entryRoomMinZ = 5;
+	private static final int entryRoomMaxX = 27 - 1;
+	private static final int entryRoomMaxY = 40;
+	private static final int entryRoomMaxZ = 27 - 1;
 	
 	private static final int lowerRoomMinX = entryRoomMinX - 5;
 	private static final int lowerRoomMinY = entryRoomMinY - 32;
@@ -65,6 +65,20 @@ public class TierOneDungeonEntryPiece extends ImprovedStructurePiece
 	private static final int lowerRoomMaxX = entryRoomMaxX + 5;
 	private static final int lowerRoomMaxY = entryRoomMinY - 20;
 	private static final int lowerRoomMaxZ = entryRoomMaxZ + 5;
+	
+	//private static final int entryRoomMinX = 20;
+	//	private static final int entryRoomMinY = 32;
+	//	private static final int entryRoomMinZ = 30;
+	//	private static final int entryRoomMaxX = 37;
+	//	private static final int entryRoomMaxY = 40;
+	//	private static final int entryRoomMaxZ = 47;
+	//
+	//	private static final int lowerRoomMinX = entryRoomMinX - 5;
+	//	private static final int lowerRoomMinY = entryRoomMinY - 32;
+	//	private static final int lowerRoomMinZ = entryRoomMinZ - 5;
+	//	private static final int lowerRoomMaxX = entryRoomMaxX + 5;
+	//	private static final int lowerRoomMaxY = entryRoomMinY - 20;
+	//	private static final int lowerRoomMaxZ = entryRoomMaxZ + 5;
 	
 	private static final BlockState air = Blocks.AIR.defaultBlockState();
 	//private BlockState ground; //dont use because ores get embedded in it
@@ -92,7 +106,7 @@ public class TierOneDungeonEntryPiece extends ImprovedStructurePiece
 		super(MSStructurePieces.TIER_ONE_DUNGEON_ENTRY, 0);
 		
 		setRandomDirection(random);
-		setBoundsWithWorldHeight(generator, x, z, 82, 60, 82, -1, Heightmap.Type.OCEAN_FLOOR_WG); //x = 42, z = 32
+		setBoundsWithWorldHeight(generator, x, z, 32, 60, 32, -entryRoomMinY, Heightmap.Type.OCEAN_FLOOR_WG); //x = 42, z = 32
 		
 		initTemplates(templates);
 		this.organicDesign = organicDesign;
@@ -171,7 +185,7 @@ public class TierOneDungeonEntryPiece extends ImprovedStructurePiece
 		buildStructureFoundation(worldIn, boundingBoxIn, randomIn, randomRoomType, chunkGeneratorIn);
 		buildWallsAndFloors(worldIn, boundingBoxIn, randomIn);
 		carveRooms(worldIn, boundingBoxIn);
-		buildAspectThemedEntrance(worldIn, boundingBox, randomIn);
+		buildAspectThemedEntrance(worldIn, boundingBoxIn, randomIn);
 		buildIndoorBlocks(worldIn, boundingBoxIn, randomIn, randomRoomType);
 		
 		return true;
@@ -233,7 +247,7 @@ public class TierOneDungeonEntryPiece extends ImprovedStructurePiece
 					true, rand, DECAYED_BLOCKS);
 		}
 		
-		buildTreasureAndEscapeChamber(world, boundingBox, rand);
+		//buildTreasureAndEscapeChamber(world, boundingBox, rand);
 	}
 	
 	private void buildWallsAndFloors(ISeedReader world, MutableBoundingBox boundingBox, Random rand)

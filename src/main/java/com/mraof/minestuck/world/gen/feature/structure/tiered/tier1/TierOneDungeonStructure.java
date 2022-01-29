@@ -79,15 +79,15 @@ public class TierOneDungeonStructure extends Structure<NoFeatureConfig>
 			
 			int roomOffset = 32; //each modular room is 32x32 wide and 16 deep
 			
-			for(int i = 0; i < 3; i++) //x iterate
+			for(int roomX = 0; roomX < 3; roomX++) //x iterate
 			{
-				for(int j = 0; j < 3; j++) //z iterate
+				for(int roomZ = 0; roomZ < 3; roomZ++) //z iterate
 				{
-					int ordinalCombo = i + j; //combines the x and z components and lists each of the components in a 3x3 grid as values 1-9(1 at top left, 9 at bottom right, left to right then top to bottom)
+					int ordinalCombo = roomX + ( roomZ * 3 ); //combines the x and z components and lists each of the components in a 3x3 grid as values 1-9(1 at top left, 9 at bottom right, left to right then top to bottom)
 					
-					//finds the center of the structure, then subtracts or adds to the location. i/j:0 = -32, 1 = 0, 2 = 32
-					int newX = (entryPiece.getBoundingBox().x0 + entryPiece.getBoundingBox().getXSpan() / 2) + (roomOffset * i - 32);
-					int newZ = (entryPiece.getBoundingBox().z0 + entryPiece.getBoundingBox().getZSpan() / 2) + (roomOffset * j - 32);
+					//finds the center of the structure, then subtracts or adds to the location. roomX/roomZ:0 = -32, 1 = 0, 2 = 32
+					int newX = /*(entryPiece.getBoundingBox().x0 + entryPiece.getBoundingBox().getXSpan() / 2)*/x + roomOffset * (roomX - 1);
+					int newZ = /*(entryPiece.getBoundingBox().z0 + entryPiece.getBoundingBox().getZSpan() / 2)*/z + roomOffset * (roomZ - 1);
 					
 					if(layout.roomPlacementOrder[ordinalCombo] == modularRoomCount + 1) //the end piece, it gets placed down at the point after all possible modules are situated
 					{
@@ -97,13 +97,13 @@ public class TierOneDungeonStructure extends Structure<NoFeatureConfig>
 					
 					if(layout.roomPlacementOrder[ordinalCombo] == 1 || layout.roomPlacementOrder[ordinalCombo] == 5)
 					{
-						//TierOneDungeonCombatModulePiece combatModulePiece = new TierOneDungeonCombatModulePiece(templates, layout.roomsExitDirection[ordinalCombo], entryPiece.getOrientation(), newX, entryPiece.getBoundingBox().y0, newZ);
-						//pieces.add(combatModulePiece);
+						TierOneDungeonCombatModulePiece combatModulePiece = new TierOneDungeonCombatModulePiece(templates, organicDesign, layout, entryPiece.getOrientation(), calculateDirection(layout.roomsExitDirection[ordinalCombo], entryPiece.getOrientation()), newX, entryPiece.getBoundingBox().y0, newZ);
+						pieces.add(combatModulePiece);
 					}
 					
 					if(layout.roomPlacementOrder[ordinalCombo] == 2)
 					{
-						TierOneDungeonPuzzleModulePiece puzzleModulePiece = new TierOneDungeonPuzzleModulePiece(templates, organicDesign, layout, calculateDirection(layout.roomsExitDirection[ordinalCombo], entryPiece.getOrientation()), newX, entryPiece.getBoundingBox().y0, newZ);
+						TierOneDungeonPuzzleModulePiece puzzleModulePiece = new TierOneDungeonPuzzleModulePiece(templates, organicDesign, layout, entryPiece.getOrientation(), calculateDirection(layout.roomsExitDirection[ordinalCombo], entryPiece.getOrientation()), newX, entryPiece.getBoundingBox().y0, newZ);
 						pieces.add(puzzleModulePiece);
 					}
 					
@@ -131,6 +131,9 @@ public class TierOneDungeonStructure extends Structure<NoFeatureConfig>
 		 */
 		public Direction calculateDirection(Direction roomsExitDirection, Direction entryPieceDirection)
 		{
+			if(roomsExitDirection == null)
+				return null;
+			
 			if(entryPieceDirection == Direction.NORTH)
 				return roomsExitDirection;
 			else if(entryPieceDirection == Direction.EAST)
