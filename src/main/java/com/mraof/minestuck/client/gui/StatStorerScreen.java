@@ -22,9 +22,9 @@ public class StatStorerScreen extends Screen
 	
 	private static final String divideValueMessage = "Divide power output by:";
 	
-	StatStorerTileEntity te;
+	private final StatStorerTileEntity te;
 	private StatStorerTileEntity.ActiveType activeType;
-	private static int divideValueBy;
+	private int divideValueBy;
 	
 	public Button typeButton;
 	
@@ -44,7 +44,7 @@ public class StatStorerScreen extends Screen
 	{
 		addButton(typeButton = new ExtendedButton(this.width / 2 - 67, (height - guiHeight) / 2 + 15, 135, 20, new StringTextComponent(activeType.getNameNoSpaces()), button -> changeActiveType()));
 		int yOffset = (this.height / 2) - (guiHeight / 2);
-		this.divideTextField = new TextFieldWidget(this.font, this.width / 2 - 18, yOffset + 50, 40, 18, new StringTextComponent("Divide comparator output strength"));	//TODO Use translation instead, and maybe look at other text fields for what the text should be
+		this.divideTextField = new TextFieldWidget(this.font, this.width / 2 - 18, yOffset + 50, 40, 18, new StringTextComponent("Divide comparator output strength"));
 		this.divideTextField.setValue(String.valueOf(te.getDivideValueBy()));
 		addButton(divideTextField);
 		setInitialFocus(divideTextField);
@@ -76,8 +76,7 @@ public class StatStorerScreen extends Screen
 	
 	private void finish()
 	{
-		StatStorerPacket packet = new StatStorerPacket(activeType, te.getBlockPos(), textToInt());
-		MSPacketHandler.sendToServer(packet);
+		MSPacketHandler.sendToServer(new StatStorerPacket(activeType, te.getBlockPos(), textToInt()));
 		onClose();
 	}
 	

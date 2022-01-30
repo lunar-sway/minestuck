@@ -92,6 +92,7 @@ public class ClientProxy
 		RenderTypeLookup.setRenderLayer(MSBlocks.SPIKES, RenderType.cutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.MINI_FROG_STATUE, RenderType.cutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.MINI_WIZARD_STATUE, RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.MINI_TYPHEUS_STATUE, RenderType.cutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.NAKAGATOR_STATUE, RenderType.cutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.CASSETTE_PLAYER, RenderType.cutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.PIPE, RenderType.cutout());

@@ -18,6 +18,10 @@ import net.minecraftforge.common.util.Constants;
 import javax.annotation.Nullable;
 import java.util.Random;
 
+/**
+ * Can be right clicked while not crouching to cycle on or off. The block gives off full power and light when on and gives off no power or light when off.
+ * Does the same job as a lever but gives off light and as a full block can be submerged in liquids without breaking
+ */
 public class SolidSwitchBlock extends Block
 {
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;

@@ -162,11 +162,9 @@ public interface ItemRightClickEffect
 		return (world, player, hand) -> {
 			ItemStack itemStackIn = player.getItemInHand(hand);
 			
-			if(!CreativeShockEffect.doesCreativeShockLimit(player, 0, 3))
+			if(!CreativeShockEffect.doesCreativeShockLimit(player, 0))
 			{
-				effect.onRightClick(world, player, hand);
-				if(effect.onRightClick(world, player, hand).getResult() == ActionResultType.SUCCESS)
-					return ActionResult.success(itemStackIn);
+				return effect.onRightClick(world, player, hand);
 			}
 			
 			return ActionResult.pass(itemStackIn);

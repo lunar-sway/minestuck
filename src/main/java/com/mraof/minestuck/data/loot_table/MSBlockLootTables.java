@@ -357,6 +357,7 @@ public class MSBlockLootTables extends BlockLootTables
 		dropSelf(CHESSBOARD);
 		dropSelf(MINI_FROG_STATUE);
 		dropSelf(MINI_WIZARD_STATUE);
+		dropSelf(MINI_TYPHEUS_STATUE);
 		dropSelf(CASSETTE_PLAYER);
 		dropSelf(GLOWYSTONE_DUST);
 	}

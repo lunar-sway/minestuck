@@ -54,6 +54,7 @@ public class MSGiftLootTables implements Consumer<BiConsumer<ResourceLocation, L
 						.add(ItemLootEntry.lootTableItem(MSItems.CARVING_TOOL).setWeight(10).apply(SetCount.setCount(RandomValueRange.between(1, 5))))
 						.add(ItemLootEntry.lootTableItem(MSBlocks.MINI_FROG_STATUE).setWeight(8).apply(SetCount.setCount(RandomValueRange.between(1, 5))))
 						.add(ItemLootEntry.lootTableItem(MSBlocks.MINI_WIZARD_STATUE).setWeight(8).apply(SetCount.setCount(RandomValueRange.between(1, 5))))
+						.add(ItemLootEntry.lootTableItem(MSBlocks.MINI_TYPHEUS_STATUE).setWeight(1).apply(SetCount.setCount(ConstantRange.exactly(1))))
 						.add(ItemLootEntry.lootTableItem(MSItems.STONE_SLAB).setWeight(10).apply(SetCount.setCount(RandomValueRange.between(1, 5))))
 						.add(ItemLootEntry.lootTableItem(MSItems.THRESH_DVD).setWeight(5).apply(SetCount.setCount(RandomValueRange.between(1, 3))))
 						.add(ItemLootEntry.lootTableItem(MSItems.CREW_POSTER).setWeight(5).apply(SetCount.setCount(RandomValueRange.between(1, 3))))

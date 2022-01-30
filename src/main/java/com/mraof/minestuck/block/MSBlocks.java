@@ -241,6 +241,7 @@ public class MSBlocks
 	public static final Block CHESSBOARD = getNull();
 	public static final Block MINI_FROG_STATUE = getNull();
 	public static final Block MINI_WIZARD_STATUE = getNull();
+	public static final Block MINI_TYPHEUS_STATUE = getNull();
 	public static final Block GLOWYSTONE_DUST = getNull();
 	public static final CassettePlayerBlock CASSETTE_PLAYER = getNull();
 	
@@ -584,6 +585,7 @@ public class MSBlocks
 		registry.register(new DecorBlock(AbstractBlock.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(0.5F).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.CHESSBOARD).setRegistryName("chessboard"));
 		registry.register(new DecorBlock(AbstractBlock.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(0.5F).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.FROG_STATUE).setRegistryName("mini_frog_statue"));
 		registry.register(new DecorBlock(AbstractBlock.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(0.5F).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.WIZARD_STATUE).setRegistryName("mini_wizard_statue"));
+		registry.register(new DecorBlock(AbstractBlock.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(0.5F).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.DENIZEN_STATUE).setRegistryName("mini_typheus_statue"));
 		registry.register(new CassettePlayerBlock(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(0.5F).sound(SoundType.METAL).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.CASSETTE_PLAYER).setRegistryName("cassette_player"));
 		registry.register(new GlowystoneWireBlock(AbstractBlock.Properties.of(Material.DECORATION).strength(0.0F).lightLevel(state -> 16).noCollission()).setRegistryName("glowystone_dust"));
 		registry.register(new DecorBlock(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(4.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.PARCEL_PYXIS).setRegistryName("parcel_pyxis"));

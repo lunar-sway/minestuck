@@ -1,7 +1,6 @@
 package com.mraof.minestuck.item.weapon;
 
 import com.mraof.minestuck.effects.CreativeShockEffect;
-import com.mraof.minestuck.util.Debug;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -89,12 +88,9 @@ public interface RightClickBlockEffect
 			PlayerEntity player = context.getPlayer();
 			if(player != null)
 			{
-				Debug.debugf("effect = %s", effect);
-				if(!CreativeShockEffect.doesCreativeShockLimit(player, 0, 3) || effect instanceof PogoEffect) //TODO pogo defaults to normal creative shock limit parameters
+				if(!CreativeShockEffect.doesCreativeShockLimit(player, 0)) //TODO pogo may default to normal creative shock limit parameters
 				{
-					effect.onClick(context);
-					if(effect.onClick(context) == ActionResultType.SUCCESS)
-						return ActionResultType.SUCCESS;
+					return effect.onClick(context);
 				}
 			}
 			

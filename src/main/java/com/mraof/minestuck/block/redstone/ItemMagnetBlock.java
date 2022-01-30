@@ -16,6 +16,9 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.Random;
 
+/**
+ * When powered, the tile entity for this block pulls item entities towards it
+ */
 public class ItemMagnetBlock extends MSDirectionalBlock
 {
 	
@@ -46,11 +49,5 @@ public class ItemMagnetBlock extends MSDirectionalBlock
 			if(rand.nextInt(16 - worldIn.getBestNeighborSignal(pos)) == 0)
 				ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE);
 		}
-	}
-	
-	@Override
-	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
-	{
-		super.createBlockStateDefinition(builder);
 	}
 }

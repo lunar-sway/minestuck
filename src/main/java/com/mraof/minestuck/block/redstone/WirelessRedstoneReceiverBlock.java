@@ -23,6 +23,9 @@ import net.minecraftforge.common.util.Constants;
 import javax.annotation.Nullable;
 import java.util.Random;
 
+/**
+ * Receives redstone inputs from wireless redstone transmitters. Has a blockstate that allows the receiver to retain the strongest redstone signal it has received
+ */
 public class WirelessRedstoneReceiverBlock extends Block
 {
 	public static final IntegerProperty POWER = BlockStateProperties.POWER;
@@ -56,7 +59,7 @@ public class WirelessRedstoneReceiverBlock extends Block
 	{
 		if(!player.isCrouching())
 		{
-			worldIn.setBlock(pos, state.setValue(AUTO_RESET, !state.getValue(AUTO_RESET)), Constants.BlockFlags.NOTIFY_NEIGHBORS);
+			worldIn.setBlock(pos, state.cycle(AUTO_RESET), Constants.BlockFlags.NOTIFY_NEIGHBORS);
 			if(state.getValue(AUTO_RESET))
 			{
 				if(!worldIn.isClientSide)

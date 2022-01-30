@@ -23,6 +23,10 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.Random;
 
+/**
+ * Outputs a redstone signal proportional to the recorded value its tile entity is currently set to, divided by the divide by value stored also stored in the tile entity.
+ * Stats are increased when the relevant event(in ServerEventHandler) occurs within 16 blocks of a stat storer. GUI is limited by creative shock
+ */
 public class StatStorerBlock extends Block
 {
 	public static final IntegerProperty POWER = BlockStateProperties.POWER;
@@ -36,7 +40,7 @@ public class StatStorerBlock extends Block
 	@SuppressWarnings("deprecation")
 	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
 	{
-		if(!player.isCrouching() && !CreativeShockEffect.doesCreativeShockLimit(player, 1, 4))
+		if(!player.isCrouching() && !CreativeShockEffect.doesCreativeShockLimit(player, 1))
 		{
 			TileEntity tileEntity = worldIn.getBlockEntity(pos);
 			if(tileEntity instanceof StatStorerTileEntity)

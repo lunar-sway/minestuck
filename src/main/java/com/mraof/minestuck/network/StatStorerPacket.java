@@ -39,13 +39,16 @@ public class StatStorerPacket implements PlayToServerPacket
 	@Override
 	public void execute(ServerPlayerEntity player)
 	{
-		TileEntity te = player.level.getBlockEntity(tileBlockPos);
-		if(te instanceof StatStorerTileEntity)
+		if(player.level.isAreaLoaded(tileBlockPos, 0))
 		{
-			((StatStorerTileEntity) te).setActiveType(activeType);
-			if(divideValueBy <= 0)
-				divideValueBy = 1;
-			((StatStorerTileEntity) te).setDivideValue(divideValueBy);
+			TileEntity te = player.level.getBlockEntity(tileBlockPos);
+			
+			if(te instanceof StatStorerTileEntity)
+			{
+				((StatStorerTileEntity) te).setActiveType(activeType);
+				divideValueBy = Math.max(1, divideValueBy); //should not be able to enter 0 or negative number range
+				((StatStorerTileEntity) te).setDivideValue(divideValueBy);
+			}
 		}
 	}
 }

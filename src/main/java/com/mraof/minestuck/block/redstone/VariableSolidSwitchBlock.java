@@ -18,6 +18,10 @@ import net.minecraftforge.common.util.Constants;
 import javax.annotation.Nullable;
 import java.util.Random;
 
+/**
+ * Can be right clicked without crouching to increase the power/light values the block gives off by one or right clicked with an empty hand to reduce the power/light values by one.
+ * Reaching the highest or lowest value will cause it to cycle back to the opposite extreme
+ */
 public class VariableSolidSwitchBlock extends Block
 {
 	public static final IntegerProperty POWER = BlockStateProperties.POWER;
@@ -69,23 +73,11 @@ public class VariableSolidSwitchBlock extends Block
 		return state.getValue(POWER) > 0;
 	}
 	
-	/*@Override
-	public boolean canProvidePower(BlockState state)
-	{
-		return state.get(POWERED);
-	}*/
-	
 	@Override
 	public int getSignal(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side)
 	{
 		return blockState.getValue(POWER);
 	}
-	
-	/*@Override
-	public int getWeakPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side)
-	{
-		return blockState.get(POWER);
-	}*/
 	
 	@Override
 	public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side)
@@ -98,12 +90,6 @@ public class VariableSolidSwitchBlock extends Block
 	{
 		return state.getValue(POWER);
 	}
-	
-	/*@Override
-	public int getLightValue(BlockState state)
-	{
-		return state.get(POWER);
-	}*/
 	
 	@Override
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
@@ -121,11 +107,4 @@ public class VariableSolidSwitchBlock extends Block
 		super.createBlockStateDefinition(builder);
 		builder.add(POWER);
 	}
-	
-	/*@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
-	{
-		super.fillStateContainer(builder);
-		builder.add(POWER);
-	}*/
 }

@@ -21,6 +21,10 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.Random;
 
+/**
+ * Gives off power if the boolean condition currently set in the tile entity is met. Checks for an entity meeting its condition in a 16 block radius.
+ * GUI is limited by creative shock
+ */
 public class RemoteObserverBlock extends Block
 {
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
@@ -35,7 +39,7 @@ public class RemoteObserverBlock extends Block
 	@SuppressWarnings("deprecation")
 	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
 	{
-		if(!player.isCrouching() && !CreativeShockEffect.doesCreativeShockLimit(player, 1, 4))
+		if(!player.isCrouching() && !CreativeShockEffect.doesCreativeShockLimit(player, 1))
 		{
 			TileEntity tileEntity = worldIn.getBlockEntity(pos);
 			if(tileEntity instanceof RemoteObserverTileEntity)
@@ -53,6 +57,12 @@ public class RemoteObserverBlock extends Block
 	public boolean isSignalSource(BlockState state)
 	{
 		return state.getValue(POWERED);
+	}
+	
+	@Override
+	public int getSignal(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side)
+	{
+		return blockState.getValue(POWERED) ? 15 : 0;
 	}
 	
 	@Override

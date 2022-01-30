@@ -340,7 +340,7 @@ public interface OnHitEffect
 			{
 				PlayerEntity playerAttacker = (PlayerEntity) attacker;
 				
-				if(!CreativeShockEffect.doesCreativeShockLimit(playerAttacker, 2, 5))
+				if(!CreativeShockEffect.doesCreativeShockLimit(playerAttacker, 2))
 				{
 					effect.onHit(stack, target, attacker);
 				}

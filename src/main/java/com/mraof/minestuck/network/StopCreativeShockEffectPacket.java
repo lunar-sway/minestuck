@@ -3,28 +3,27 @@ package com.mraof.minestuck.network;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.world.GameType;
 
 public class StopCreativeShockEffectPacket implements PlayToClientPacket
 {
-	public GameType playerGameType;
+	private final boolean mayBuild;
 	
-	public StopCreativeShockEffectPacket(GameType playerGameTypeIn)
+	public StopCreativeShockEffectPacket(boolean mayBuildIn)
 	{
-		this.playerGameType = playerGameTypeIn;
+		this.mayBuild = mayBuildIn;
 	}
 	
 	@Override
 	public void encode(PacketBuffer buffer)
 	{
-		buffer.writeInt(playerGameType.getId());
+		buffer.writeBoolean(mayBuild);
 	}
 	
 	public static StopCreativeShockEffectPacket decode(PacketBuffer buffer)
 	{
-		GameType gameType = GameType.byId(buffer.readInt()); //byId was getByID
+		boolean mayBuild = buffer.readBoolean();
 		
-		return new StopCreativeShockEffectPacket(gameType);
+		return new StopCreativeShockEffectPacket(mayBuild);
 	}
 	
 	@Override
@@ -33,7 +32,7 @@ public class StopCreativeShockEffectPacket implements PlayToClientPacket
 		PlayerEntity playerEntity = Minecraft.getInstance().player;
 		if(playerEntity != null)
 		{
-			playerEntity.abilities.mayBuild = !playerGameType.isBlockPlacingRestricted();
+			playerEntity.abilities.mayBuild = !mayBuild;
 		}
 	}
 }

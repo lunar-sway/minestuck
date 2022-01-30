@@ -822,6 +822,7 @@ public class MSItems
 		registerItemBlock(registry, CHESSBOARD, MSItemGroup.MAIN);
 		registerItemBlock(registry, MINI_FROG_STATUE, MSItemGroup.MAIN);
 		registerItemBlock(registry, MINI_WIZARD_STATUE, MSItemGroup.MAIN);
+		registerItemBlock(registry, MINI_TYPHEUS_STATUE, MSItemGroup.MAIN);
 		registerItemBlock(registry, CASSETTE_PLAYER, MSItemGroup.MAIN);
 		
 		registry.register(new MultiblockItem(MSBlocks.LOTUS_TIME_CAPSULE_BLOCK, new Item.Properties().tab(MSItemGroup.MAIN)).setRegistryName("lotus_time_capsule"));

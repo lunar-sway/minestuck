@@ -67,7 +67,7 @@ public class PogoEffect implements RightClickBlockEffect, OnHitEffect
 	private static ActionResultType onItemUse(PlayerEntity player, World worldIn, BlockPos pos, ItemStack stack, Direction facing, double pogoMotion)
 	{
 		pogoMotion = addEfficiencyModifier(pogoMotion, stack);
-		if (worldIn.getBlockState(pos).getBlock() != Blocks.AIR && !CreativeShockEffect.doesCreativeShockLimit(player, 2, 5))
+		if (worldIn.getBlockState(pos).getBlock() != Blocks.AIR && !CreativeShockEffect.doesCreativeShockLimit(player, 2))
 		{
 			double playerMotionX;
 			double playerMotionY;

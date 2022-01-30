@@ -49,12 +49,15 @@ public class RemoteObserverPacket implements PlayToServerPacket
 	@Override
 	public void execute(ServerPlayerEntity player)
 	{
-		TileEntity te = player.level.getBlockEntity(tileBlockPos);
-		if(te instanceof RemoteObserverTileEntity)
+		if(player.level.isAreaLoaded(tileBlockPos, 0))
 		{
-			((RemoteObserverTileEntity) te).setActiveType(activeType);
-			if(entityType != null)
-				((RemoteObserverTileEntity) te).setCurrentEntityType(entityType);
+			TileEntity te = player.level.getBlockEntity(tileBlockPos);
+			if(te instanceof RemoteObserverTileEntity)
+			{
+				((RemoteObserverTileEntity) te).setActiveType(activeType);
+				if(entityType != null)
+					((RemoteObserverTileEntity) te).setCurrentEntityType(entityType);
+			}
 		}
 	}
 }

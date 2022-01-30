@@ -124,24 +124,13 @@ public class ClientEventHandler
 		}
 	}
 	
-	@SubscribeEvent(priority=EventPriority.NORMAL)
-	public static void onLeftClickBlockEvent(PlayerInteractEvent.LeftClickBlock event)
-	{
-		if(event.getEntity() instanceof PlayerEntity)
-		{
-			PlayerEntity playerEntity = (PlayerEntity) event.getEntity();
-			if(CreativeShockEffect.doesCreativeShockLimit(playerEntity, 0, 3))
-				event.setCanceled(true); //It is necessary to do this here in order to prevent creative mode players from breaking blocks
-		}
-	}
-	
+	//TODO may remove, does nothing that can be seen
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public static void onPlayerTickEvent(TickEvent.PlayerTickEvent event)
 	{
-		if(event.player.hasEffect(MSEffects.CREATIVE_SHOCK.get()))
+		if(event.side.isClient() && event.player.hasEffect(MSEffects.CREATIVE_SHOCK.get()))
 		{
-			if(CreativeShockEffect.doesCreativeShockLimit(event.player, 2, 5))
-				event.player.stopFallFlying(); //Stopping elytra moment on client side prevent visual disruptions
+			CreativeShockEffect.stopElytraFlying(event.player, 2); //Stopping elytra movement on client side to prevent visual disruptions
 		}
 	}
 }

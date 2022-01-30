@@ -25,7 +25,7 @@ public class BarbasolBombItem extends Item
     {
         ItemStack item = playerIn.getItemInHand(handIn);
     
-        if(!CreativeShockEffect.doesCreativeShockLimit(playerIn, 0, 3))
+        if(!CreativeShockEffect.doesCreativeShockLimit(playerIn, 0))
         {
             if(!playerIn.isCreative())
             {

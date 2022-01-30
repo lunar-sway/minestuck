@@ -33,5 +33,4 @@ public class MSProperties
 	public static final EnumProperty<CruxiteDowelBlock.Type> DOWEL_BLOCK = EnumProperty.create("dowel", CruxiteDowelBlock.Type.class);
 	public static final EnumProperty<Direction.Axis> AXIS_2 = EnumProperty.create("axis_2", Direction.Axis.class);
 	public static final EnumProperty<ComputerBlock.State> COMPUTER_STATE = EnumProperty.create("state", ComputerBlock.State.class);
-	public static final EnumProperty<LogicGateBlock.State> LOGIC_STATE = EnumProperty.create("state", LogicGateBlock.State.class);
 }

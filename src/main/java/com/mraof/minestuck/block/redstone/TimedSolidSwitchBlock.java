@@ -19,6 +19,9 @@ import net.minecraftforge.common.util.Constants;
 import javax.annotation.Nullable;
 import java.util.Random;
 
+/**
+ * When right clicked without crouching(and is unpowered), the block turns to full power and brightness and then loses one value of power and light at a set rate of ticks determined by the "tickrate" of the block
+ */
 public class TimedSolidSwitchBlock extends Block
 {
 	public static final IntegerProperty POWER = BlockStateProperties.POWER;

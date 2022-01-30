@@ -22,6 +22,11 @@ import net.minecraftforge.common.util.Constants;
 import javax.annotation.Nullable;
 import java.util.Random;
 
+/**
+ * When powered, the tile entity creates a line of platform blocks in the direction it is facing.
+ * These blocks will generate even if there is a physical barrier between the generator and the end of the line, but only replace air or fluid blocks.
+ * Right clicking the block toggles whether the generated platform blocks are visible
+ */
 public class PlatformGeneratorBlock extends MSDirectionalBlock
 {
 	public static final BooleanProperty INVISIBLE_MODE = BlockStateProperties.ENABLED;
@@ -35,7 +40,7 @@ public class PlatformGeneratorBlock extends MSDirectionalBlock
 	@Override
 	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
 	{
-		if(!player.isCrouching() && !CreativeShockEffect.doesCreativeShockLimit(player, 1, 4))
+		if(!player.isCrouching() && !CreativeShockEffect.doesCreativeShockLimit(player, 1))
 		{
 			worldIn.setBlock(pos, state.setValue(INVISIBLE_MODE, !state.getValue(INVISIBLE_MODE)), Constants.BlockFlags.NOTIFY_NEIGHBORS);
 			if(state.getValue(INVISIBLE_MODE))

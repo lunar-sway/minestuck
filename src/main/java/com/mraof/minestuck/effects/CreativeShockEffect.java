@@ -1,12 +1,22 @@
 package com.mraof.minestuck.effects;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.DisplayEffectsScreen;
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.item.artifact.CruxiteArtifactItem;
+import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.network.StopCreativeShockEffectPacket;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.ChorusFruitItem;
+import net.minecraft.item.EnderPearlItem;
 import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.EffectType;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 /**
  * This is an adapted version of Cibernet's code in Minestuck Universe, credit goes to him!
@@ -14,6 +24,7 @@ import net.minecraft.potion.EffectType;
  * 0 = cant directly cause block breakage/placement outside of creative, 1 = cant access redstone machinery gui outside of creative, 2 = cant use mobility items outside of creative,
  * 3 = cant directly cause block breakage/placement even in creative, 4 = cant access redstone machinery gui even in creative, 5 = cant use mobility items even in creative
  */
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class CreativeShockEffect extends Effect
 {
 	protected CreativeShockEffect()
@@ -25,6 +36,11 @@ public class CreativeShockEffect extends Effect
 	 * Checks whether player has creative shock effect and whether the amplifier is strong enough to limit.
 	 * Will return true if amplifier is equal to or greater than relevant threshold.
 	 */
+	public static boolean doesCreativeShockLimit(PlayerEntity player, int survivalAmplifierThreshold)
+	{
+		return doesCreativeShockLimit(player, survivalAmplifierThreshold, survivalAmplifierThreshold + 3);
+	}
+	
 	public static boolean doesCreativeShockLimit(PlayerEntity player, int survivalAmplifierThreshold, int creativeAmplifierThreshold)
 	{
 		if(player.hasEffect(MSEffects.CREATIVE_SHOCK.get()))
@@ -41,6 +57,12 @@ public class CreativeShockEffect extends Effect
 		return false;
 	}
 	
+	public static void stopElytraFlying(PlayerEntity player, int survivalAmplifierThreshold)
+	{
+		if(CreativeShockEffect.doesCreativeShockLimit(player, survivalAmplifierThreshold))
+			player.stopFallFlying();
+	}
+	
 	@Override
 	public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier)
 	{
@@ -51,43 +73,82 @@ public class CreativeShockEffect extends Effect
 		
 		PlayerEntity player = (PlayerEntity) entityLivingBaseIn;
 		
-		if(doesCreativeShockLimit(player, 0, 3))
+		if(doesCreativeShockLimit(player, 0))
 		{
-			player.abilities.mayBuild = false;
+			player.abilities.mayBuild = false; //this property is restored when the effect ends, in StopCreativeShockEffectPacket
 		}
 	}
-	
-	/*@Override
-	public void performEffect(LivingEntity entityLivingBaseIn, int amplifier)
-	{
-		super.performEffect(entityLivingBaseIn, amplifier);
-		
-		
-	}*/
 	
 	@Override
 	public boolean isDurationEffectTick(int duration, int amplifier)
 	{
-		super.isDurationEffectTick(duration, amplifier);
 		return (duration % 5) == 0;
 	}
 	
-	/*@Override
-	public boolean isReady(int duration, int amplifier)
+	@SubscribeEvent
+	public static void onPlayerTickEvent(TickEvent.PlayerTickEvent event)
 	{
-		super.isReady(duration, amplifier);
-		return (duration % 5) == 0;
-	}*/
-	
-	@Override
-	public void renderInventoryEffect(EffectInstance effect, DisplayEffectsScreen<?> gui, MatrixStack mStack, int x, int y, float z)
-	{
-		super.renderInventoryEffect(effect, gui, mStack, x, y, z);
+		if(event.player.hasEffect(MSEffects.CREATIVE_SHOCK.get()))
+		{
+			int duration = event.player.getEffect(MSEffects.CREATIVE_SHOCK.get()).getDuration();
+			if(duration >= 5)
+			{
+				if(CreativeShockEffect.doesCreativeShockLimit(event.player, 0))
+					event.player.abilities.mayBuild = false;
+				CreativeShockEffect.stopElytraFlying(event.player, 2);
+			}
+			else
+			{
+				if(!event.player.level.isClientSide)
+				{
+					event.player.abilities.mayBuild = ((ServerPlayerEntity) event.player).gameMode.getGameModeForPlayer().isBlockPlacingRestricted();
+				}
+			}
+		}
 	}
 	
-	/*@Override
-	public void renderInventoryEffect(EffectInstance effect, DisplayEffectsScreen<?> gui, int x, int y, float z)
+	@SubscribeEvent(priority= EventPriority.NORMAL)
+	public static void onLeftClickBlockEvent(PlayerInteractEvent.LeftClickBlock event)
 	{
-		super.renderInventoryEffect(effect, gui, x, y, z);
-	}*/
+		if(event.getEntity() instanceof PlayerEntity)
+		{
+			PlayerEntity playerEntity = (PlayerEntity) event.getEntity();
+			if(doesCreativeShockLimit(playerEntity, 0))
+				event.setCanceled(true);
+		}
+	}
+	
+	@SubscribeEvent
+	public static void onBreakSpeed(PlayerEvent.BreakSpeed event)
+	{
+		if(doesCreativeShockLimit(event.getPlayer(), 0))
+			event.setNewSpeed(0);
+	}
+	
+	@SubscribeEvent
+	public static void onHarvestCheck(PlayerEvent.HarvestCheck event)
+	{
+		if(doesCreativeShockLimit(event.getPlayer(), 0))
+			event.setCanHarvest(false);
+	}
+	
+	@SubscribeEvent
+	public static void onRightClickItem(PlayerInteractEvent.RightClickItem event)
+	{
+		if(doesCreativeShockLimit(event.getPlayer(), 0))
+		{
+			if(event.getItemStack().getItem() instanceof CruxiteArtifactItem //Cruxite check prevents players from using an artifact to enter while under effects of Creative Shock
+					|| event.getItemStack().getItem() instanceof EnderPearlItem
+					|| event.getItemStack().getItem() instanceof ChorusFruitItem)
+				event.setCanceled(true);
+		}
+	}
+	
+	public static void onEffectEnd(ServerPlayerEntity serverPlayerEntity)
+	{
+		serverPlayerEntity.abilities.mayBuild = !serverPlayerEntity.gameMode.getGameModeForPlayer().isBlockPlacingRestricted(); //block placing restricted was hasLimitedInteractions(), mayBuild was allowEdit
+		
+		StopCreativeShockEffectPacket packet = new StopCreativeShockEffectPacket(serverPlayerEntity.gameMode.getGameModeForPlayer().isBlockPlacingRestricted());
+		MSPacketHandler.sendToPlayer(packet, serverPlayerEntity);
+	}
 }

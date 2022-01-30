@@ -1,12 +1,10 @@
 package com.mraof.minestuck.block.redstone;
 
-import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.util.ParticlesAroundSolidBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.RedstoneDiodeBlock;
 import net.minecraft.particles.RedstoneParticleData;
-import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
@@ -17,19 +15,24 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
 import java.util.Random;
+import java.util.function.BiPredicate;
 
+/**
+ * Allows redstone signals to be filtered through a specified logic gate operation, including the ability for the power state to be locked in place as is possible with repeater blocks.
+ * All of these functions are achievable with one or more blocks but these blocks are intended to present a more uniform look and compact solution to larger circuits
+ */
 public class LogicGateBlock extends RedstoneDiodeBlock
 {
-	public static final EnumProperty<LogicGateBlock.State> STATE = MSProperties.LOGIC_STATE;
+	private final State assignedLogicState;
 	
 	public LogicGateBlock(Properties properties, LogicGateBlock.State gateState)
 	{
 		super(properties);
-		this.registerDefaultState(stateDefinition.any().setValue(STATE, gateState).setValue(FACING, Direction.NORTH).setValue(POWERED, false));
+		this.assignedLogicState = gateState;
+		this.registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(POWERED, false));
 	}
 	
 	//TODO add Inverter block for NOT gate functions, use that block as a crafting ingredient for NAND/NOR/XNOR
-	
 	
 	@Override
 	protected boolean shouldTurnOn(World worldIn, BlockPos pos, BlockState state)
@@ -38,20 +41,8 @@ public class LogicGateBlock extends RedstoneDiodeBlock
 		Direction rightInput = state.getValue(FACING).getClockWise();
 		boolean leftInputSendingPower = getAlternateSignalAt(worldIn, pos, leftInput) > 0;
 		boolean rightInputSendingPower = getAlternateSignalAt(worldIn, pos, rightInput) > 0;
-		State assignedLogicState = state.getValue(STATE);
-		
-		if(assignedLogicState == State.AND)
-			return leftInputSendingPower && rightInputSendingPower;
-		else if(assignedLogicState == State.OR)
-			return leftInputSendingPower || rightInputSendingPower;
-		else if(assignedLogicState == State.XOR)
-			return (leftInputSendingPower && !rightInputSendingPower) || (!leftInputSendingPower && rightInputSendingPower);
-		else if(assignedLogicState == State.NAND)
-			return !leftInputSendingPower || !rightInputSendingPower;
-		else if(assignedLogicState == State.NOR)
-			return !leftInputSendingPower && !rightInputSendingPower;
-		else //XNOR
-			return (!leftInputSendingPower && !rightInputSendingPower) || (leftInputSendingPower && rightInputSendingPower);
+	
+		return assignedLogicState.operation.test(leftInputSendingPower, rightInputSendingPower);
 	}
 	
 	@Override
@@ -64,7 +55,6 @@ public class LogicGateBlock extends RedstoneDiodeBlock
 	public boolean isLocked(IWorldReader worldIn, BlockPos pos, BlockState state)
 	{
 		Direction behind = state.getValue(FACING);
-		//return getPowerOnSide(worldIn, pos, behind) > 0;
 		return getAlternateSignalAt(worldIn, pos, behind) > 0;
 	}
 	
@@ -97,19 +87,25 @@ public class LogicGateBlock extends RedstoneDiodeBlock
 	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
 	{
 		super.createBlockStateDefinition(builder);
-		builder.add(STATE);
 		builder.add(POWERED);
 		builder.add(FACING);
 	}
 	
 	public enum State implements IStringSerializable
 	{
-		AND,
-		OR,
-		XOR,
-		NAND,
-		NOR,
-		XNOR;
+		AND((left, right) -> left && right),
+		OR((left, right) -> left || right),
+		XOR((left, right) -> (left && !right) || (!left && right)),
+		NAND((left, right) -> !left || !right),
+		NOR((left, right) -> !left && !right),
+		XNOR((left, right) -> (left && right) || (!left && !right));
+		
+		private final BiPredicate<Boolean, Boolean> operation;
+		
+		State(BiPredicate<Boolean, Boolean> operation)
+		{
+			this.operation = operation;
+		}
 		
 		@Override
 		public String getSerializedName()
