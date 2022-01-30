@@ -13,6 +13,7 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MSRotationUtil;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
+import com.mraof.minestuck.world.gen.feature.StructureBlockRegistryProcessor;
 import com.mraof.minestuck.world.gen.feature.structure.ImprovedStructurePiece;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockUtil;
@@ -185,7 +186,7 @@ public class TierOneDungeonEntryPiece extends ImprovedStructurePiece
 		buildStructureFoundation(worldIn, boundingBoxIn, randomIn, randomRoomType, chunkGeneratorIn);
 		buildWallsAndFloors(worldIn, boundingBoxIn, randomIn);
 		carveRooms(worldIn, boundingBoxIn);
-		buildAspectThemedEntrance(worldIn, boundingBoxIn, randomIn);
+		buildAspectThemedEntrance(worldIn, boundingBoxIn, randomIn, chunkGeneratorIn);
 		buildIndoorBlocks(worldIn, boundingBoxIn, randomIn, randomRoomType);
 		
 		return true;
@@ -508,14 +509,16 @@ public class TierOneDungeonEntryPiece extends ImprovedStructurePiece
 		}
 	}
 	
-	private void buildAspectThemedEntrance(ISeedReader world, MutableBoundingBox boundingBox, Random rand)
+	private void buildAspectThemedEntrance(ISeedReader world, MutableBoundingBox boundingBox, Random rand, ChunkGenerator chunkGenerator)
 	{
 		if(worldAspect == EnumAspect.BREATH) //pipes moving around
 		{
-			StructureBlockUtil.placeCenteredTemplate(world, new BlockPos(getActualPos((entryRoomMaxX + entryRoomMinX) / 2, entryRoomMinY - 1, (entryRoomMaxZ + entryRoomMinZ) / 2)), pipesTemplate1, new PlacementSettings().setBoundingBox(boundingBox).setRotation(MSRotationUtil.fromDirection(getOrientation().getCounterClockWise())));
-		} else if(worldAspect == EnumAspect.LIFE) //rabbit statue
+			//TODO make sure these use fixed centeredTemplate
+			//StructureBlockUtil.placeCenteredTemplate(world, new BlockPos(getActualPos((entryRoomMaxX + entryRoomMinX) / 2, entryRoomMinY - 1, (entryRoomMaxZ + entryRoomMinZ) / 2)), pipesTemplate1, new PlacementSettings().setBoundingBox(boundingBox).setRotation(MSRotationUtil.fromDirection(getOrientation().getCounterClockWise())));
+		} else if(worldAspect == EnumAspect.RAGE) //rabbit statue
 		{
-			StructureBlockUtil.placeCenteredTemplate(world, new BlockPos(getActualPos((entryRoomMaxX + entryRoomMinX) / 2, entryRoomMaxY + 1, (entryRoomMaxZ + entryRoomMinZ) / 2)), rabbitTemplate, new PlacementSettings().setBoundingBox(boundingBox).setRotation(MSRotationUtil.fromDirection(getOrientation().getOpposite())));
+			BlockPos pos = new BlockPos(getActualPos((entryRoomMaxX + entryRoomMinX) / 2, entryRoomMaxY + 1, (entryRoomMaxZ + entryRoomMinZ) / 2));
+			//StructureBlockUtil.placeCenteredTemplate(world, pos, rabbitTemplate, new PlacementSettings().setBoundingBox(boundingBox).setRotation(MSRotationUtil.fromDirection(getOrientation().getOpposite())).setChunkPos(new ChunkPos(pos)).setRandom(rand).addProcessor(new StructureBlockRegistryProcessor(StructureBlockRegistry.getOrDefault(chunkGenerator))));
 			
 			//TODO Will be for
 			

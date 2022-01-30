@@ -1,21 +1,35 @@
 package com.mraof.minestuck.world.gen.feature.structure.tiered.tier1;
 
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
+import com.mraof.minestuck.util.MSRotationUtil;
 import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
+import com.mraof.minestuck.world.gen.feature.StructureBlockRegistryProcessor;
 import com.mraof.minestuck.world.gen.feature.structure.ImprovedStructurePiece;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockUtil;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
+import com.mraof.minestuck.world.storage.loot.MSLootTables;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.state.properties.StructureMode;
+import net.minecraft.tileentity.ChestTileEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.structure.StructureManager;
+import net.minecraft.world.gen.feature.template.PlacementSettings;
+import net.minecraft.world.gen.feature.template.Template;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 import net.minecraftforge.common.util.Constants;
 
@@ -49,6 +63,8 @@ public class TierOneDungeonCombatModulePiece extends ImprovedStructurePiece
 	private EnumClass worldClass;
 	private TerrainLandType worldTerrain;
 	
+	private Template organicDesignTemplate;
+	
 	//private final TemplateManager templates;
 	TierOneDungeonStructure.Start.Layout layout;
 	boolean organicDesign;
@@ -61,7 +77,7 @@ public class TierOneDungeonCombatModulePiece extends ImprovedStructurePiece
 		setOrientation(orientation);
 		setBounds(x, y, z, 32, 16, 32);
 		
-		//this.templates = templates;
+		initTemplates(templates);
 		this.layout = layout;
 		this.organicDesign = organicDesign;
 		this.entryDirection = entryDirection;
@@ -75,7 +91,7 @@ public class TierOneDungeonCombatModulePiece extends ImprovedStructurePiece
 		randomType = nbt.getInt("randomType");
 		roomVariable1 = nbt.getInt("roomVariable1");
 		
-		//this.templates = templates;
+		initTemplates(templates);
 	}
 	
 	@Override
@@ -84,6 +100,11 @@ public class TierOneDungeonCombatModulePiece extends ImprovedStructurePiece
 		tagCompound.putBoolean("sp1", spawner1); //spawner type room only
 		tagCompound.putBoolean("sp2", spawner2); //spawner type room only
 		tagCompound.putInt("randomType", randomType);
+	}
+	
+	private void initTemplates(TemplateManager templates)
+	{
+		organicDesignTemplate = templates.getOrCreate(new ResourceLocation(Minestuck.MOD_ID, "tier_1_combat_module_organic"));
 	}
 	
 	@Override
@@ -113,9 +134,19 @@ public class TierOneDungeonCombatModulePiece extends ImprovedStructurePiece
 	
 	private void buildGenericCombatRoom(ISeedReader world, MutableBoundingBox boundingBox, Random rand, ChunkGenerator chunkGeneratorIn)
 	{
-		generateBox(world, boundingBox, pieceMinX, pieceMinY, pieceMinZ, pieceMaxX, pieceMaxY, pieceMaxZ, Blocks.RED_STAINED_GLASS.defaultBlockState(), air, false);
-		generateBox(world, boundingBox, pieceMinX, pieceMinY, pieceMinZ, pieceMaxX, pieceMinY, pieceMaxZ, lightBlock, lightBlock, false);
-		//generateAirBox(world, boundingBox, pieceMinX, pieceMinY, pieceMinZ, pieceMaxX, pieceMaxY, pieceMaxZ);
+		BlockPos templatePos = new BlockPos(getActualPos(pieceMaxX, pieceMinY, pieceMaxZ));
+		//BlockPos templatePos = new BlockPos(getActualPos(pieceMaxX / 2, pieceMinY, pieceMaxZ / 2));
+		PlacementSettings settings = new PlacementSettings().setChunkPos(new ChunkPos(templatePos)).setRandom(rand).setBoundingBox(boundingBox).addProcessor(new StructureBlockRegistryProcessor(StructureBlockRegistry.getOrDefault(chunkGeneratorIn)));
+		//Rotation rotation = Rotation.getRandom(rand);
+		settings.setRotation(MSRotationUtil.fromDirection(getOrientation()));
+		//BlockPos structurePos = organicDesignTemplate.getZeroPositionWithTransform(templatePos, Mirror.NONE, rotation);
+		//BlockPos center = new BlockPos((organicDesignTemplate.getSize().getX() - 1) / 2, 0, (organicDesignTemplate.getSize().getZ() - 1) / 2);
+		organicDesignTemplate.placeInWorld(world, templatePos, templatePos, settings, rand, Constants.BlockFlags.NO_RERENDER);
+		//StructureBlockUtil.placeCenteredTemplate(world, templatePos, organicDesignTemplate, boundingBox, chunkGeneratorIn, MSRotationUtil.fromDirection(getOrientation()), true);
+		templateProcessor(world, boundingBox, rand, chunkGeneratorIn, templatePos, settings);
+		
+		//generateBox(world, boundingBox, pieceMinX, pieceMinY, pieceMinZ, pieceMaxX, pieceMaxY, pieceMaxZ, Blocks.RED_STAINED_GLASS.defaultBlockState(), air, false);
+		//generateBox(world, boundingBox, pieceMinX, pieceMinY, pieceMinZ, pieceMaxX, pieceMinY, pieceMaxZ, lightBlock, lightBlock, false);
 		placeBlock(world, lightBlock, pieceMinX, pieceMinY, pieceMinZ, boundingBox);
 		placeBlock(world, lightBlock, pieceMaxX, pieceMaxY, pieceMaxZ, boundingBox);
 		placeBlock(world, secondaryBlock, pieceMaxX - 5, pieceMaxY - 5, pieceMaxZ - 5, boundingBox);
@@ -132,6 +163,66 @@ public class TierOneDungeonCombatModulePiece extends ImprovedStructurePiece
 				generateAirBox(world, boundingBox, pieceMaxX, pieceMaxY - 10, pieceMinZ + 15, pieceMaxX, pieceMaxY - 6, pieceMaxZ - 15);
 			
 			world.setBlock(getActualPos(pieceMaxX / 2, pieceMinY + 1, pieceMaxZ / 2).relative(entryDirection, 5), secondaryDecorativeBlock, Constants.BlockFlags.BLOCK_UPDATE);
+		}
+	}
+	
+	private void templateProcessor(ISeedReader world, MutableBoundingBox boundingBox, Random rand, ChunkGenerator chunkGeneratorIn, BlockPos templatePos, PlacementSettings settings)
+	{
+		for(Template.BlockInfo blockInfo : organicDesignTemplate.filterBlocks(templatePos, settings, Blocks.STRUCTURE_BLOCK))
+		{
+			if(blockInfo.nbt != null)
+			{
+				StructureMode structuremode = StructureMode.valueOf(blockInfo.nbt.getString("mode"));
+				if (structuremode == StructureMode.DATA)
+				{
+					String data = blockInfo.nbt.getString("metadata");
+					/*if(data.equals("minestuck:summoner_imp"))
+					{
+						StructureBlockUtil.placeSummoner(world, boundingBox, blockInfo.pos, MSEntityTypes.IMP);
+					}
+					if(data.equals("minestuck:summoner_ogre"))
+					{
+						StructureBlockUtil.placeSummoner(world, boundingBox, blockInfo.pos, MSEntityTypes.OGRE);
+					}
+					if(data.equals("minestuck:summoner_lich"))
+					{
+						StructureBlockUtil.placeSummoner(world, boundingBox, blockInfo.pos, MSEntityTypes.IMP);
+					}*/
+					if(data.equals("minestuck:small_ground_creator"))
+					{
+						//TODO make this use the ground type
+						if(rand.nextBoolean())
+							StructureBlockUtil.createSphere(world, boundingBox, Blocks.STONE.defaultBlockState(), blockInfo.pos.relative(Direction.getRandom(rand), rand.nextInt(2)), rand.nextInt(3), null);
+					}
+					if(data.equals("minestuck:small_air_carve"))
+					{
+						if(rand.nextBoolean())
+							StructureBlockUtil.createSphere(world, boundingBox, Blocks.AIR.defaultBlockState(), blockInfo.pos.relative(Direction.getRandom(rand), rand.nextInt(2)), rand.nextInt(3), null);
+					}
+					/*if(data.equals("minestuck:organic_terrain_component_floor"))
+					{
+						if(rand.nextBoolean())
+							world.setBlock(blockInfo.pos.below(), Blocks.MAGMA_BLOCK.defaultBlockState(), Constants.BlockFlags.DEFAULT);
+					}
+					if(data.equals("minestuck:organic_aspect_component_floor"))
+					{
+						if(rand.nextBoolean())
+							world.setBlock(blockInfo.pos, Blocks.BAMBOO.defaultBlockState(), Constants.BlockFlags.DEFAULT);
+					}
+					if(data.equals("minestuck:organic_terrain_component_ceiling"))
+					{
+						if(rand.nextBoolean())
+							world.setBlock(blockInfo.pos, Blocks.WARPED_ROOTS.defaultBlockState(), Constants.BlockFlags.DEFAULT);
+					}
+					if(data.equals("minestuck:organic_aspect_component_ceiling"))
+					{
+						if(rand.nextBoolean())
+							world.setBlock(blockInfo.pos, Blocks.ANCIENT_DEBRIS.defaultBlockState(), Constants.BlockFlags.DEFAULT);
+					}*/
+					if(world.getBlockState(blockInfo.pos).getBlock() == Blocks.STRUCTURE_BLOCK)
+						world.setBlock(blockInfo.pos, Blocks.AIR.defaultBlockState(), Constants.BlockFlags.DEFAULT);
+				}
+			}
 		}
 	}
 }

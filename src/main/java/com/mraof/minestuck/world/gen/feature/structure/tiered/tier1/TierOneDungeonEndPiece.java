@@ -156,12 +156,12 @@ public class TierOneDungeonEndPiece extends ImprovedStructurePiece
 		
 		if(layout != TierOneDungeonStructure.Start.Layout.OPTIONAL)
 		{
-			generateBox(worldIn, boundingBoxIn, pieceMinX, pieceMaxY - 16, pieceMinZ, pieceMaxX, pieceMaxY, pieceMaxZ, primaryBlock, air, false);
+			generateBox(worldIn, boundingBoxIn, pieceMinX, pieceMaxY - 15, pieceMinZ, pieceMaxX, pieceMaxY, pieceMaxZ, Blocks.GLASS.defaultBlockState(), air, false);
 		}
 		
-		generateAirBox(worldIn, boundingBoxIn, pieceMinX + 15, pieceMinY + 2, pieceMinZ + 15, pieceMaxX - 15, pieceMaxY + 2, pieceMaxZ - 15);
-		BlockPos staircaseMinPos = getActualPos(pieceMinX + 15, pieceMinY + 2, pieceMinZ + 15);
-		BlockPos staircaseMaxPos = getActualPos(pieceMaxX - 15, pieceMaxY - 16 + 2, pieceMaxZ - 15);
+		generateAirBox(worldIn, boundingBoxIn, pieceMinX + 12, pieceMinY + 2, pieceMinZ + 12, pieceMaxX - 12, pieceMaxY - 16 + 2, pieceMaxZ - 12);
+		BlockPos staircaseMinPos = getActualPos(pieceMinX + 12, pieceMinY + 2, pieceMinZ + 12);
+		BlockPos staircaseMaxPos = getActualPos(pieceMaxX - 12, pieceMaxY - 16 + 2, pieceMaxZ - 12);
 		StructureBlockUtil.placeSpiralStaircase(worldIn, boundingBoxIn, staircaseMinPos, staircaseMaxPos, secondaryBlock);
 		
 		//TODO use the saved layout variable to determine where the puzzle and end rooms should go within the 3x3 grid of 32x32 modular components built above this structure. This should not jut out beyond the grid
