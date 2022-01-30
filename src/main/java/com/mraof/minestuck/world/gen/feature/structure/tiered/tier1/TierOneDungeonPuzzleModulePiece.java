@@ -1,28 +1,23 @@
 package com.mraof.minestuck.world.gen.feature.structure.tiered.tier1;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
-import com.mraof.minestuck.util.MSRotationUtil;
 import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
-import com.mraof.minestuck.world.gen.feature.StructureBlockRegistryProcessor;
 import com.mraof.minestuck.world.gen.feature.structure.ImprovedStructurePiece;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
-import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockUtil;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.structure.StructureManager;
-import net.minecraft.world.gen.feature.template.PlacementSettings;
 import net.minecraft.world.gen.feature.template.TemplateManager;
+import net.minecraftforge.common.util.Constants;
 
 import java.util.Random;
 
@@ -57,8 +52,9 @@ public class TierOneDungeonPuzzleModulePiece extends ImprovedStructurePiece
 	//private final TemplateManager templates;
 	TierOneDungeonStructure.Start.Layout layout;
 	boolean organicDesign;
+	Direction entryDirection;
 	
-	public TierOneDungeonPuzzleModulePiece(TemplateManager templates, boolean organicDesign, TierOneDungeonStructure.Start.Layout layout, Direction orientation, Direction exitDirection, int x, int y, int z) //this constructor is used when the structure is first initialized
+	public TierOneDungeonPuzzleModulePiece(TemplateManager templates, boolean organicDesign, TierOneDungeonStructure.Start.Layout layout, Direction orientation, Direction entryDirection, int x, int y, int z) //this constructor is used when the structure is first initialized
 	{
 		super(MSStructurePieces.TIER_ONE_DUNGEON_PUZZLE_MODULE, 0);
 		
@@ -68,6 +64,7 @@ public class TierOneDungeonPuzzleModulePiece extends ImprovedStructurePiece
 		//this.templates = templates;
 		this.layout = layout;
 		this.organicDesign = organicDesign;
+		this.entryDirection = entryDirection;
 	}
 	
 	public TierOneDungeonPuzzleModulePiece(TemplateManager templates, CompoundNBT nbt) //this constructor is used for reading from data
@@ -109,10 +106,26 @@ public class TierOneDungeonPuzzleModulePiece extends ImprovedStructurePiece
 			createRan = true;
 		}
 		
-		generateAirBox(worldIn, boundingBoxIn, pieceMinX, pieceMinY, pieceMinZ, pieceMaxX, pieceMaxY, pieceMaxZ);
+		generateBox(worldIn, boundingBoxIn, pieceMinX, pieceMinY, pieceMinZ, pieceMaxX, pieceMaxY, pieceMaxZ, Blocks.YELLOW_STAINED_GLASS.defaultBlockState(), air, false);
+		generateBox(worldIn, boundingBoxIn, pieceMinX, pieceMinY, pieceMinZ, pieceMaxX, pieceMinY, pieceMaxZ, lightBlock, lightBlock, false);
+		//generateAirBox(worldIn, boundingBoxIn, pieceMinX, pieceMinY, pieceMinZ, pieceMaxX, pieceMaxY, pieceMaxZ);
 		placeBlock(worldIn, lightBlock, pieceMinX, pieceMinY, pieceMinZ, boundingBoxIn);
 		placeBlock(worldIn, lightBlock, pieceMaxX, pieceMaxY, pieceMaxZ, boundingBoxIn);
 		placeBlock(worldIn, primaryBlock, pieceMaxX - 5, pieceMaxY - 5, pieceMaxZ - 5, boundingBoxIn);
+		
+		if(entryDirection != null && entryDirection != Direction.UP && entryDirection != Direction.DOWN)
+		{
+			if(entryDirection == Direction.NORTH)
+				generateAirBox(worldIn, boundingBoxIn, pieceMinX + 15, pieceMaxY - 10, pieceMaxZ, pieceMaxX - 15, pieceMaxY - 6, pieceMaxZ);
+			else if(entryDirection == Direction.SOUTH)
+				generateAirBox(worldIn, boundingBoxIn, pieceMinX + 15, pieceMaxY - 10, pieceMinZ, pieceMaxX - 15, pieceMaxY - 6, pieceMinZ);
+			else if(entryDirection == Direction.EAST)
+				generateAirBox(worldIn, boundingBoxIn, pieceMinX, pieceMaxY - 10, pieceMinZ + 15, pieceMinX, pieceMaxY - 6, pieceMaxZ - 15);
+			else if(entryDirection == Direction.WEST)
+				generateAirBox(worldIn, boundingBoxIn, pieceMaxX, pieceMaxY - 10, pieceMinZ + 15, pieceMaxX, pieceMaxY - 6, pieceMaxZ - 15);
+			
+			worldIn.setBlock(getActualPos(pieceMaxX / 2, pieceMinY + 1, pieceMaxZ / 2).relative(entryDirection, 5), secondaryDecorativeBlock, Constants.BlockFlags.BLOCK_UPDATE);
+		}
 		
 		if(randomType == 9) //1 in 10 chance of opposite aspect style puzzle
 			buildCounterpartAspectThemedPuzzle(worldIn, boundingBoxIn, randomIn, chunkGeneratorIn);

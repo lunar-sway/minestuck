@@ -1,13 +1,6 @@
 package com.mraof.minestuck.world.gen.feature.structure.tiered.tier1;
 
 import com.mojang.serialization.Codec;
-import com.mraof.minestuck.player.Title;
-import com.mraof.minestuck.skaianet.SburbConnection;
-import com.mraof.minestuck.skaianet.SburbHandler;
-import com.mraof.minestuck.world.MSDimensions;
-import com.mraof.minestuck.world.gen.feature.structure.FrogTemplePillarPiece;
-import com.mraof.minestuck.world.lands.LandInfo;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.util.registry.DynamicRegistries;
@@ -20,7 +13,6 @@ import net.minecraft.world.gen.feature.structure.StructureStart;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 
 import java.util.Random;
-import java.util.function.BiPredicate;
 
 public class TierOneDungeonStructure extends Structure<NoFeatureConfig>
 {
@@ -50,7 +42,8 @@ public class TierOneDungeonStructure extends Structure<NoFeatureConfig>
 	
 	public static class Start extends StructureStart<NoFeatureConfig>
 	{
-		private Start(Structure<NoFeatureConfig> structure, int chunkX, int chunkZ, MutableBoundingBox boundingBox, int reference, long seed) {
+		private Start(Structure<NoFeatureConfig> structure, int chunkX, int chunkZ, MutableBoundingBox boundingBox, int reference, long seed)
+		{
 			super(structure, chunkX, chunkZ, boundingBox, reference, seed);
 		}
 		
@@ -73,50 +66,53 @@ public class TierOneDungeonStructure extends Structure<NoFeatureConfig>
 			}*/
 			
 			//TODO include each of these components into the structure as a whole or as a parameter into each structure piece following Entry so that they dont have to be rechecked each time. On top of that, add check whether the room style will be organic(meaning its shaped to match the terrain aesthetics) or structured(meaning it primarily follows the aspect aesthetic)
+			//add each back into each piece separately, this information will not be recorded until after the rest have been initialized
 			entryPiece.getWorldAspect();
 			entryPiece.getWorldClass();
 			entryPiece.getWorldTerrain();
 			
 			int roomOffset = 32; //each modular room is 32x32 wide and 16 deep
+			boolean endPieceStarted = false;
 			
 			for(int roomX = 0; roomX < 3; roomX++) //x iterate
 			{
 				for(int roomZ = 0; roomZ < 3; roomZ++) //z iterate
 				{
-					int ordinalCombo = roomX + ( roomZ * 3 ); //combines the x and z components and lists each of the components in a 3x3 grid as values 1-9(1 at top left, 9 at bottom right, left to right then top to bottom)
+					int ordinalCombo = roomX + (roomZ * 3); //combines the x and z components and lists each of the components in a 3x3 grid as values 1-9(1 at top left, 9 at bottom right, left to right then top to bottom)
 					
 					//finds the center of the structure, then subtracts or adds to the location. roomX/roomZ:0 = -32, 1 = 0, 2 = 32
-					int newX = /*(entryPiece.getBoundingBox().x0 + entryPiece.getBoundingBox().getXSpan() / 2)*/x + roomOffset * (roomX - 1);
-					int newZ = /*(entryPiece.getBoundingBox().z0 + entryPiece.getBoundingBox().getZSpan() / 2)*/z + roomOffset * (roomZ - 1);
+					int newX = x + roomOffset * (roomX - 1);
+					int newZ = z + roomOffset * (roomZ - 1);
 					
 					if(layout.roomPlacementOrder[ordinalCombo] == modularRoomCount + 1) //the end piece, it gets placed down at the point after all possible modules are situated
 					{
-						TierOneDungeonEndPiece endPiece = new TierOneDungeonEndPiece(templates, layout, entryPiece.getOrientation(), newX, entryPiece.getBoundingBox().y0, newZ); //leaving out organic design value for now
+						TierOneDungeonEndPiece endPiece = new TierOneDungeonEndPiece(templates, layout, entryPiece.getOrientation(), newX, entryPiece.getBoundingBox().y0 - 16, newZ); //leaving out organic design value for now
 						pieces.add(endPiece);
+						endPieceStarted = true;
 					}
 					
-					if(layout.roomPlacementOrder[ordinalCombo] == 1 || layout.roomPlacementOrder[ordinalCombo] == 5)
+					if(layout.roomPlacementOrder[ordinalCombo] == 1 || layout.roomPlacementOrder[ordinalCombo] == 5 || (!endPieceStarted && (layout.roomPlacementOrder[ordinalCombo] == 6 || layout.roomPlacementOrder[ordinalCombo] == 7)))
 					{
-						TierOneDungeonCombatModulePiece combatModulePiece = new TierOneDungeonCombatModulePiece(templates, organicDesign, layout, entryPiece.getOrientation(), calculateDirection(layout.roomsExitDirection[ordinalCombo], entryPiece.getOrientation()), newX, entryPiece.getBoundingBox().y0, newZ);
+						TierOneDungeonCombatModulePiece combatModulePiece = new TierOneDungeonCombatModulePiece(templates, organicDesign, layout, entryPiece.getOrientation(), calculateDirection(layout.roomsEntryDirection[ordinalCombo], entryPiece.getOrientation()), newX, entryPiece.getBoundingBox().y0, newZ);
 						pieces.add(combatModulePiece);
 					}
 					
 					if(layout.roomPlacementOrder[ordinalCombo] == 2)
 					{
-						TierOneDungeonPuzzleModulePiece puzzleModulePiece = new TierOneDungeonPuzzleModulePiece(templates, organicDesign, layout, entryPiece.getOrientation(), calculateDirection(layout.roomsExitDirection[ordinalCombo], entryPiece.getOrientation()), newX, entryPiece.getBoundingBox().y0, newZ);
+						TierOneDungeonPuzzleModulePiece puzzleModulePiece = new TierOneDungeonPuzzleModulePiece(templates, organicDesign, layout, entryPiece.getOrientation(), calculateDirection(layout.roomsEntryDirection[ordinalCombo], entryPiece.getOrientation()), newX, entryPiece.getBoundingBox().y0, newZ);
 						pieces.add(puzzleModulePiece);
 					}
 					
 					if(layout.roomPlacementOrder[ordinalCombo] == 3) //return node
 					{
-						//TierOneDungeonReturnModulePiece returnModulePiece = new TierOneDungeonReturnModulePiece(templates, layout.roomsExitDirection[ordinalCombo], entryPiece.getOrientation(), newX, entryPiece.getBoundingBox().y0, newZ);
-						//pieces.add(returnModulePiece);
+						TierOneDungeonReturnModulePiece returnModulePiece = new TierOneDungeonReturnModulePiece(templates, organicDesign, layout, entryPiece.getOrientation(), calculateDirection(layout.roomsEntryDirection[ordinalCombo], entryPiece.getOrientation()), newX, entryPiece.getBoundingBox().y0, newZ);
+						pieces.add(returnModulePiece);
 					}
 					
 					if(layout.roomPlacementOrder[ordinalCombo] == 4)
 					{
-						//TierOneDungeonTreasureModulePiece treasureModulePiece = new TierOneDungeonTreasureModulePiece(templates, layout.roomsExitDirection[ordinalCombo], entryPiece.getOrientation(), newX, entryPiece.getBoundingBox().y0, newZ);
-						//pieces.add(treasureModulePiece);
+						TierOneDungeonTreasureModulePiece treasureModulePiece = new TierOneDungeonTreasureModulePiece(templates, organicDesign, layout, entryPiece.getOrientation(), calculateDirection(layout.roomsEntryDirection[ordinalCombo], entryPiece.getOrientation()), newX, entryPiece.getBoundingBox().y0, newZ);
+						pieces.add(treasureModulePiece);
 					}
 					
 					//TODO create additional room types of: trap, lore, external puzzle(multi-structure puzzles like seen with the reflected mirrors on Jane's land), npc quest(fetch quest), land quest(fixing local instance of land's issue)
@@ -127,21 +123,22 @@ public class TierOneDungeonStructure extends Structure<NoFeatureConfig>
 		}
 		
 		/**
-		 * orients the roomsExitDirection value to match the direction of the rest of the structure which is decided through entryPieceDirection)
+		 * orients the roomsEntryDirection value to match the direction of the rest of the structure which is decided through entryPieceDirection)
 		 */
-		public Direction calculateDirection(Direction roomsExitDirection, Direction entryPieceDirection)
+		public Direction calculateDirection(Direction roomsEntryDirection, Direction entryPieceDirection)
 		{
-			if(roomsExitDirection == null)
+			if(roomsEntryDirection == null)
 				return null;
 			
+			//TODO these are mirrored in about half of circumstances
 			if(entryPieceDirection == Direction.NORTH)
-				return roomsExitDirection;
+				return roomsEntryDirection;
 			else if(entryPieceDirection == Direction.EAST)
-				return roomsExitDirection.getClockWise();
+				return roomsEntryDirection.getClockWise();
 			else if(entryPieceDirection == Direction.SOUTH)
-				return roomsExitDirection.getOpposite();
+				return roomsEntryDirection.getOpposite();
 			else //if west
-			return roomsExitDirection.getCounterClockWise();
+				return roomsEntryDirection.getCounterClockWise();
 		}
 		
 		/*public enum Module
@@ -166,9 +163,9 @@ public class TierOneDungeonStructure extends Structure<NoFeatureConfig>
 		public enum Layout
 		{
 			LINEAR(new Direction[]{
-					Direction.SOUTH, Direction.WEST, null,
-					Direction.SOUTH, Direction.NORTH, Direction.NORTH,
-					Direction.EAST, Direction.EAST, Direction.NORTH},
+					Direction.EAST, Direction.SOUTH, Direction.SOUTH,
+					Direction.NORTH, null, Direction.SOUTH,
+					Direction.NORTH, Direction.WEST, Direction.WEST},
 					new Integer[]{
 							2, 1, 8,
 							3, 0, 7,
@@ -176,9 +173,9 @@ public class TierOneDungeonStructure extends Structure<NoFeatureConfig>
 					}),
 			
 			BRANCHED(new Direction[]{
-					null, Direction.WEST, Direction.WEST,
-					Direction.SOUTH, Direction.WEST, Direction.NORTH,
-					Direction.EAST, Direction.EAST, null},
+					Direction.EAST, Direction.EAST, Direction.SOUTH,
+					Direction.EAST, null, Direction.WEST,
+					Direction.NORTH, Direction.WEST, Direction.WEST},
 					new Integer[]{
 							8, 6, 3,
 							1, 0, 2,
@@ -186,21 +183,21 @@ public class TierOneDungeonStructure extends Structure<NoFeatureConfig>
 					}),
 			
 			OPTIONAL(new Direction[]{
-					null, Direction.WEST, null,
-					Direction.SOUTH, Direction.DOWN, Direction.NORTH,
-					null, Direction.EAST, null},
+					Direction.EAST, Direction.SOUTH, Direction.SOUTH,
+					Direction.EAST, null, Direction.WEST,
+					Direction.NORTH, Direction.NORTH, Direction.WEST},
 					new Integer[]{
 							7, 1, 5,
-							4, 9, 2, //9 equivalent to 0+8
+							4, 8, 2,
 							6, 3, 7
 					}); //rooms between
 			
-			private final Direction[] roomsExitDirection;
+			private final Direction[] roomsEntryDirection;
 			private final Integer[] roomPlacementOrder;
 			
 			Layout(Direction[] directions, Integer[] order)
 			{
-				this.roomsExitDirection = directions;
+				this.roomsEntryDirection = directions;
 				this.roomPlacementOrder = order;
 			}
 			

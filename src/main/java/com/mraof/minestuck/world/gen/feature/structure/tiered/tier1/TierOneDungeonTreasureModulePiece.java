@@ -1,14 +1,18 @@
 package com.mraof.minestuck.world.gen.feature.structure.tiered.tier1;
 
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
 import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
 import com.mraof.minestuck.world.gen.feature.structure.ImprovedStructurePiece;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockUtil;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
+import com.mraof.minestuck.world.storage.loot.MSLootTables;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -21,7 +25,7 @@ import net.minecraftforge.common.util.Constants;
 
 import java.util.Random;
 
-public class TierOneDungeonCombatModulePiece extends ImprovedStructurePiece
+public class TierOneDungeonTreasureModulePiece extends ImprovedStructurePiece
 {
 	private boolean createRan = false; //boolean check to prevent certain aspects from generating several times over or changing
 	private boolean spawner1, spawner2;
@@ -54,9 +58,9 @@ public class TierOneDungeonCombatModulePiece extends ImprovedStructurePiece
 	boolean organicDesign;
 	Direction entryDirection;
 	
-	public TierOneDungeonCombatModulePiece(TemplateManager templates, boolean organicDesign, TierOneDungeonStructure.Start.Layout layout, Direction orientation, Direction entryDirection, int x, int y, int z) //this constructor is used when the structure is first initialized
+	public TierOneDungeonTreasureModulePiece(TemplateManager templates, boolean organicDesign, TierOneDungeonStructure.Start.Layout layout, Direction orientation, Direction entryDirection, int x, int y, int z) //this constructor is used when the structure is first initialized
 	{
-		super(MSStructurePieces.TIER_ONE_DUNGEON_COMBAT_MODULE, 0);
+		super(MSStructurePieces.TIER_ONE_DUNGEON_TREASURE_MODULE, 0);
 		
 		setOrientation(orientation);
 		setBounds(x, y, z, 32, 16, 32);
@@ -67,9 +71,9 @@ public class TierOneDungeonCombatModulePiece extends ImprovedStructurePiece
 		this.entryDirection = entryDirection;
 	}
 	
-	public TierOneDungeonCombatModulePiece(TemplateManager templates, CompoundNBT nbt) //this constructor is used for reading from data
+	public TierOneDungeonTreasureModulePiece(TemplateManager templates, CompoundNBT nbt) //this constructor is used for reading from data
 	{
-		super(MSStructurePieces.TIER_ONE_DUNGEON_COMBAT_MODULE, nbt);
+		super(MSStructurePieces.TIER_ONE_DUNGEON_TREASURE_MODULE, nbt);
 		spawner1 = nbt.getBoolean("sp1");
 		spawner2 = nbt.getBoolean("sp2");
 		randomType = nbt.getInt("randomType");
@@ -106,19 +110,22 @@ public class TierOneDungeonCombatModulePiece extends ImprovedStructurePiece
 			createRan = true;
 		}
 		
-		buildGenericCombatRoom(worldIn, boundingBoxIn, randomIn, chunkGeneratorIn);
+		//generateAirBox(worldIn, boundingBoxIn, pieceMinX, pieceMinY, pieceMinZ, pieceMaxX, pieceMaxY, pieceMaxZ);
+		placeBlock(worldIn, lightBlock, pieceMinX, pieceMinY, pieceMinZ, boundingBoxIn);
+		placeBlock(worldIn, lightBlock, pieceMaxX, pieceMaxY, pieceMaxZ, boundingBoxIn);
+		placeBlock(worldIn, primaryBlock, pieceMaxX - 5, pieceMaxY - 5, pieceMaxZ - 5, boundingBoxIn);
+		
+		buildGeneric(worldIn, boundingBoxIn, randomIn, chunkGeneratorIn);
 		
 		return true;
 	}
 	
-	private void buildGenericCombatRoom(ISeedReader world, MutableBoundingBox boundingBox, Random rand, ChunkGenerator chunkGeneratorIn)
+	private void buildGeneric(ISeedReader world, MutableBoundingBox boundingBox, Random rand, ChunkGenerator chunkGeneratorIn)
 	{
-		generateBox(world, boundingBox, pieceMinX, pieceMinY, pieceMinZ, pieceMaxX, pieceMaxY, pieceMaxZ, Blocks.RED_STAINED_GLASS.defaultBlockState(), air, false);
+		generateBox(world, boundingBox, pieceMinX, pieceMinY, pieceMinZ, pieceMaxX, pieceMaxY, pieceMaxZ, Blocks.BLUE_STAINED_GLASS.defaultBlockState(), air, false);
 		generateBox(world, boundingBox, pieceMinX, pieceMinY, pieceMinZ, pieceMaxX, pieceMinY, pieceMaxZ, lightBlock, lightBlock, false);
-		//generateAirBox(world, boundingBox, pieceMinX, pieceMinY, pieceMinZ, pieceMaxX, pieceMaxY, pieceMaxZ);
-		placeBlock(world, lightBlock, pieceMinX, pieceMinY, pieceMinZ, boundingBox);
-		placeBlock(world, lightBlock, pieceMaxX, pieceMaxY, pieceMaxZ, boundingBox);
-		placeBlock(world, secondaryBlock, pieceMaxX - 5, pieceMaxY - 5, pieceMaxZ - 5, boundingBox);
+		
+		StructureBlockUtil.placeLootBlock(getActualPos(pieceMaxX / 2, pieceMinY + 1, pieceMaxZ / 2), world, boundingBox, MSBlocks.LOOT_CHEST.defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, getOrientation()), MSLootTables.TIER_ONE_MEDIUM_CHEST);
 		
 		if(entryDirection != null && entryDirection != Direction.UP && entryDirection != Direction.DOWN)
 		{

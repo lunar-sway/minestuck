@@ -82,9 +82,9 @@ public final class StructureBlockRegistry
 		registerBlock("river", "ocean", Blocks.BLUE_WOOL);
 		registerBlock("sand", Blocks.SAND.defaultBlockState());
 		registerBlock("structure_primary", Blocks.STONE_BRICKS.defaultBlockState()); //structure blocks are predominantly determined by the terrain type
-		registerBlock("structure_primary_cracked", Blocks.CRACKED_STONE_BRICKS.defaultBlockState());
+		registerBlock("structure_primary_cracked", Blocks.CRACKED_STONE_BRICKS.defaultBlockState()); //TODO all terrain types need this or it needs to be removed
 		registerBlock("structure_primary_decorative", "structure_primary", Blocks.CHISELED_STONE_BRICKS);
-		registerBlock("structure_primary_pillar", Blocks.QUARTZ_PILLAR.defaultBlockState());
+		registerBlock("structure_primary_pillar", Blocks.QUARTZ_PILLAR.defaultBlockState()); //TODO all terrain types need this or it needs to be removed
 		registerBlock("structure_primary_stairs", "structure_primary", Blocks.STONE_BRICK_STAIRS);
 		registerBlock("structure_primary_slab", Blocks.STONE_BRICK_SLAB.defaultBlockState(), SlabBlock.class);
 		registerBlock("structure_secondary", "structure_primary", Blocks.NETHER_BRICKS);

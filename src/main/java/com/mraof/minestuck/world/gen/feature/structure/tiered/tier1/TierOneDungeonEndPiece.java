@@ -52,9 +52,9 @@ public class TierOneDungeonEndPiece extends ImprovedStructurePiece
 	private static final int pieceMinX = 0; //was 42
 	private static final int pieceMinY = 0;
 	private static final int pieceMinZ = 0; //was 20
-	private static final int pieceMaxX = 40; //was 82
-	private static final int pieceMaxY = 30;
-	private static final int pieceMaxZ = 38; //was 58
+	private static final int pieceMaxX = 32 - 1; //was 82, then 40
+	private static final int pieceMaxY = 32 - 1;
+	private static final int pieceMaxZ = 32 - 1; //was 58, then 38
 	
 	private static final BlockState air = Blocks.AIR.defaultBlockState();
 	private BlockState primaryBlock;
@@ -85,7 +85,7 @@ public class TierOneDungeonEndPiece extends ImprovedStructurePiece
 		super(MSStructurePieces.TIER_ONE_DUNGEON_END, 0);
 		
 		setOrientation(direction);
-		setBounds(x, y, z, 82, 50, 82);
+		setBounds(x, y, z, 32, 32, 32); //was 82, 48, 82
 		
 		initTemplates(templates);
 		this.layout = layout;
@@ -154,11 +154,21 @@ public class TierOneDungeonEndPiece extends ImprovedStructurePiece
 		
 		//generateBox(worldIn, boundingBoxIn,firstRoomMinX, firstRoomMinY, firstRoomMinZ,firstRoomMaxX, firstRoomMaxY, firstRoomMaxZ,primaryBlock, air, false);
 		
+		if(layout != TierOneDungeonStructure.Start.Layout.OPTIONAL)
+		{
+			generateBox(worldIn, boundingBoxIn, pieceMinX, pieceMaxY - 16, pieceMinZ, pieceMaxX, pieceMaxY, pieceMaxZ, primaryBlock, air, false);
+		}
+		
+		generateAirBox(worldIn, boundingBoxIn, pieceMinX + 15, pieceMinY + 2, pieceMinZ + 15, pieceMaxX - 15, pieceMaxY + 2, pieceMaxZ - 15);
+		BlockPos staircaseMinPos = getActualPos(pieceMinX + 15, pieceMinY + 2, pieceMinZ + 15);
+		BlockPos staircaseMaxPos = getActualPos(pieceMaxX - 15, pieceMaxY - 16 + 2, pieceMaxZ - 15);
+		StructureBlockUtil.placeSpiralStaircase(worldIn, boundingBoxIn, staircaseMinPos, staircaseMaxPos, secondaryBlock);
+		
 		//TODO use the saved layout variable to determine where the puzzle and end rooms should go within the 3x3 grid of 32x32 modular components built above this structure. This should not jut out beyond the grid
 		//linear: end piece entry in bottom right/puzzle in bottom middle/end in bottom left
 		//branched: end piece entry in bottom middle/puzzle in true middle/end in top middle
 		//optional: end piece entry in true middle/puzzle(BENT NORTH) in middle right/end in top right
-		buildAspectThemedPuzzle(worldIn, boundingBoxIn, randomIn, chunkGeneratorIn);
+		//buildAspectThemedPuzzle(worldIn, boundingBoxIn, randomIn, chunkGeneratorIn);
 		
 		return true;
 	}
