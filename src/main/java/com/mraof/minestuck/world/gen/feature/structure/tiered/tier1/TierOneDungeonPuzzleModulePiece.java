@@ -2,10 +2,16 @@ package com.mraof.minestuck.world.gen.feature.structure.tiered.tier1;
 
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
+import com.mraof.minestuck.player.Title;
+import com.mraof.minestuck.skaianet.SburbConnection;
+import com.mraof.minestuck.skaianet.SburbHandler;
+import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
 import com.mraof.minestuck.world.gen.feature.structure.ImprovedStructurePiece;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.nbt.CompoundNBT;
@@ -51,10 +57,10 @@ public class TierOneDungeonPuzzleModulePiece extends ImprovedStructurePiece
 	
 	//private final TemplateManager templates;
 	TierOneDungeonStructure.Start.Layout layout;
-	boolean organicDesign;
+	boolean naturalDesign;
 	Direction entryDirection;
 	
-	public TierOneDungeonPuzzleModulePiece(TemplateManager templates, boolean organicDesign, TierOneDungeonStructure.Start.Layout layout, Direction orientation, Direction entryDirection, int x, int y, int z) //this constructor is used when the structure is first initialized
+	public TierOneDungeonPuzzleModulePiece(TemplateManager templates, boolean naturalDesign, TierOneDungeonStructure.Start.Layout layout, Direction orientation, Direction entryDirection, int x, int y, int z) //this constructor is used when the structure is first initialized
 	{
 		super(MSStructurePieces.TIER_ONE_DUNGEON_PUZZLE_MODULE, 0);
 		
@@ -63,7 +69,7 @@ public class TierOneDungeonPuzzleModulePiece extends ImprovedStructurePiece
 		
 		//this.templates = templates;
 		this.layout = layout;
-		this.organicDesign = organicDesign;
+		this.naturalDesign = naturalDesign;
 		this.entryDirection = entryDirection;
 	}
 	
@@ -98,6 +104,13 @@ public class TierOneDungeonPuzzleModulePiece extends ImprovedStructurePiece
 		secondaryBlock = blocks.getBlockState("structure_secondary");
 		secondaryDecorativeBlock = blocks.getBlockState("structure_secondary_decorative");
 		lightBlock = blocks.getBlockState("light_block");
+		
+		SburbConnection sburbConnection = SburbHandler.getConnectionForDimension(worldIn.getLevel().getServer(), worldIn.getLevel().dimension());
+		Title worldTitle = sburbConnection == null ? null : PlayerSavedData.getData(sburbConnection.getClientIdentifier(), worldIn.getLevel().getServer()).getTitle();
+		worldAspect = worldTitle == null ? null : worldTitle.getHeroAspect(); //aspect of this land's player
+		worldClass = worldTitle == null ? null : worldTitle.getHeroClass(); //class of this land's player
+		LandInfo landInfo = MSDimensions.getLandInfo(worldIn.getLevel().getServer(), worldIn.getLevel().dimension());
+		worldTerrain = landInfo.getLandAspects().getTerrain();
 		
 		if(!createRan)
 		{

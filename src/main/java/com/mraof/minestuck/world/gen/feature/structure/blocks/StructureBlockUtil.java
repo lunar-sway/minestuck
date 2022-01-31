@@ -124,7 +124,7 @@ public class StructureBlockUtil
 		if(boundingBox.isInside(transmitterBlockPos))
 		{
 			world.setBlock(transmitterBlockPos, MSBlocks.WIRELESS_REDSTONE_TRANSMITTER.defaultBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
-			MSBlocks.WIRELESS_REDSTONE_TRANSMITTER.defaultBlockState().createTileEntity(world);
+			//MSBlocks.WIRELESS_REDSTONE_TRANSMITTER.defaultBlockState().createTileEntity(world);
 			TileEntity TE = world.getBlockEntity(transmitterBlockPos);
 			if(!(TE instanceof WirelessRedstoneTransmitterTileEntity))
 			{
@@ -152,7 +152,7 @@ public class StructureBlockUtil
 		if(boundingBox.isInside(blockPos))
 		{
 			world.setBlock(blockPos, MSBlocks.REMOTE_OBSERVER.defaultBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
-			MSBlocks.REMOTE_OBSERVER.defaultBlockState().createTileEntity(world);
+			//MSBlocks.REMOTE_OBSERVER.defaultBlockState().createTileEntity(world);
 			TileEntity TE = world.getBlockEntity(blockPos);
 			if(!(TE instanceof RemoteObserverTileEntity))
 			{
@@ -174,7 +174,7 @@ public class StructureBlockUtil
 		if(boundingBox.isInside(blockPos))
 		{
 			world.setBlock(blockPos, MSBlocks.STAT_STORER.defaultBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
-			MSBlocks.STAT_STORER.defaultBlockState().createTileEntity(world);
+			//MSBlocks.STAT_STORER.defaultBlockState().createTileEntity(world);
 			TileEntity TE = world.getBlockEntity(blockPos);
 			if(!(TE instanceof StatStorerTileEntity))
 			{
@@ -190,14 +190,14 @@ public class StructureBlockUtil
 	}
 	
 	/**
-	 * Creates a summoner with the designated active type(null will be converted to measuring deaths)
+	 * Creates a summoner with the designated active type
 	 */
 	public static void placeSummoner(ISeedReader world, MutableBoundingBox boundingBox, BlockPos blockPos, EntityType<?> entityType)
 	{
 		if(boundingBox.isInside(blockPos))
 		{
 			world.setBlock(blockPos, MSBlocks.SUMMONER.defaultBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
-			MSBlocks.SUMMONER.defaultBlockState().createTileEntity(world);
+			//MSBlocks.SUMMONER.defaultBlockState().createTileEntity(world);
 			TileEntity TE = world.getBlockEntity(blockPos);
 			if(!(TE instanceof SummonerTileEntity))
 			{
@@ -219,7 +219,7 @@ public class StructureBlockUtil
 		if(boundingBox.isInside(blockPos))
 		{
 			world.setBlock(blockPos, MSBlocks.AREA_EFFECT_BLOCK.defaultBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
-			MSBlocks.AREA_EFFECT_BLOCK.defaultBlockState().createTileEntity(world);
+			//MSBlocks.AREA_EFFECT_BLOCK.defaultBlockState().createTileEntity(world);
 			TileEntity TE = world.getBlockEntity(blockPos);
 			if(!(TE instanceof AreaEffectTileEntity))
 			{
@@ -228,10 +228,8 @@ public class StructureBlockUtil
 			}
 			AreaEffectTileEntity areaEffectTE = (AreaEffectTileEntity) TE;
 			
-			areaEffectTE.setEffect(effect);
-			areaEffectTE.setEffectAmplifier(effectAmplifier);
-			areaEffectTE.setMinEffectPos(minEffectPos);
-			areaEffectTE.setMaxEffectPos(maxEffectPos);
+			areaEffectTE.setEffect(effect, effectAmplifier);
+			areaEffectTE.setMinAndMaxEffectPos(minEffectPos, maxEffectPos);
 		}
 	}
 	
@@ -246,7 +244,7 @@ public class StructureBlockUtil
 			BlockPos maxEffectPos = new BlockPos(maxAreaX, maxAreaY, maxAreaZ);
 			
 			world.setBlock(blockPos, MSBlocks.AREA_EFFECT_BLOCK.defaultBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
-			MSBlocks.AREA_EFFECT_BLOCK.defaultBlockState().createTileEntity(world);
+			//MSBlocks.AREA_EFFECT_BLOCK.defaultBlockState().createTileEntity(world);
 			TileEntity TE = world.getBlockEntity(blockPos);
 			if(!(TE instanceof AreaEffectTileEntity))
 			{
@@ -255,10 +253,8 @@ public class StructureBlockUtil
 			}
 			AreaEffectTileEntity areaEffectTE = (AreaEffectTileEntity) TE;
 			
-			areaEffectTE.setEffect(effect);
-			areaEffectTE.setEffectAmplifier(effectAmplifier);
-			areaEffectTE.setMinEffectPos(minEffectPos);
-			areaEffectTE.setMaxEffectPos(maxEffectPos);
+			areaEffectTE.setEffect(effect, effectAmplifier);
+			areaEffectTE.setMinAndMaxEffectPos(minEffectPos, maxEffectPos);
 		}
 	}
 	
@@ -270,7 +266,7 @@ public class StructureBlockUtil
 		if(boundingBox.isInside(interfaceBlockPos))
 		{
 			world.setBlock(interfaceBlockPos, MSBlocks.DUNGEON_DOOR_INTERFACE.defaultBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
-			MSBlocks.DUNGEON_DOOR_INTERFACE.defaultBlockState().createTileEntity(world);
+			//MSBlocks.DUNGEON_DOOR_INTERFACE.defaultBlockState().createTileEntity(world);
 			TileEntity TE = world.getBlockEntity(interfaceBlockPos);
 			if(!(TE instanceof DungeonDoorInterfaceTileEntity))
 			{

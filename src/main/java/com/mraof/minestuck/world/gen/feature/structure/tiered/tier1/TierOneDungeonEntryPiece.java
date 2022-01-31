@@ -1,7 +1,6 @@
 package com.mraof.minestuck.world.gen.feature.structure.tiered.tier1;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.*;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.player.EnumAspect;
@@ -9,11 +8,8 @@ import com.mraof.minestuck.player.EnumClass;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.MSRotationUtil;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
-import com.mraof.minestuck.world.gen.feature.StructureBlockRegistryProcessor;
 import com.mraof.minestuck.world.gen.feature.structure.ImprovedStructurePiece;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockUtil;
@@ -24,7 +20,6 @@ import com.mraof.minestuck.world.storage.loot.MSLootTables;
 import net.minecraft.block.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.state.properties.ChestType;
 import net.minecraft.state.properties.SlabType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
@@ -32,12 +27,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.ISeedReader;
-import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.structure.StructureManager;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
-import net.minecraft.world.gen.feature.template.PlacementSettings;
 import net.minecraft.world.gen.feature.template.Template;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 
@@ -100,9 +93,9 @@ public class TierOneDungeonEntryPiece extends ImprovedStructurePiece
 	private Template rabbitTemplate;
 	private Template pipesTemplate1;
 	
-	boolean organicDesign;
+	boolean naturalDesign;
 	
-	public TierOneDungeonEntryPiece(TemplateManager templates, boolean organicDesign, ChunkGenerator generator, Random random, int x, int z)
+	public TierOneDungeonEntryPiece(TemplateManager templates, boolean naturalDesign, ChunkGenerator generator, Random random, int x, int z)
 	{
 		super(MSStructurePieces.TIER_ONE_DUNGEON_ENTRY, 0);
 		
@@ -110,7 +103,7 @@ public class TierOneDungeonEntryPiece extends ImprovedStructurePiece
 		setBoundsWithWorldHeight(generator, x, z, 32, 60, 32, -entryRoomMinY, Heightmap.Type.OCEAN_FLOOR_WG); //x = 42, z = 32
 		
 		initTemplates(templates);
-		this.organicDesign = organicDesign;
+		this.naturalDesign = naturalDesign;
 	}
 	
 	public TierOneDungeonEntryPiece(TemplateManager templates, CompoundNBT nbt)
