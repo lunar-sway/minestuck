@@ -47,7 +47,7 @@ public abstract class UnderlingEntity extends CreatureEntity implements IMob
 {
 	public static final UUID GRIST_MODIFIER_ID = UUID.fromString("08B6DEFC-E3F4-11EA-87D0-0242AC130003");
 	private static final DataParameter<String> GRIST_TYPE = EntityDataManager.defineId(UnderlingEntity.class, DataSerializers.STRING);
-	protected EntityListFilter attackEntitySelector;	//TODO this filter isn't being saved. F1X PLZ
+	protected final EntityListFilter attackEntitySelector = new EntityListFilter(new ArrayList<>());	//TODO this filter isn't being saved. F1X PLZ
 	protected boolean fromSpawner;
 	public boolean dropCandy;
 	private int consortRep;
@@ -60,13 +60,13 @@ public abstract class UnderlingEntity extends CreatureEntity implements IMob
 	{
 		super(type, world);
 		this.consortRep = consortRep;
+		
+		attackEntitySelector.entityList.add(EntityType.PLAYER);
 	}
 	
 	@Override
 	protected void registerGoals()
 	{
-		attackEntitySelector = new EntityListFilter(new ArrayList<>());
-		attackEntitySelector.entityList.add(EntityType.PLAYER);
 		
 		goalSelector.addGoal(1, new SwimGoal(this));
 		goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 0.8D));
