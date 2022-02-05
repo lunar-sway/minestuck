@@ -27,15 +27,12 @@ public class RightClickMusicItem extends Item
 	@Override
 	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn)
 	{
-		SoundEvent[] soundArray = new SoundEvent[]{
-				MSSoundEvents.EVENT_ELECTRIC_AUTOHARP_STROKE_AMAJOR, MSSoundEvents.EVENT_ELECTRIC_AUTOHARP_STROKE_BMAJOR, MSSoundEvents.EVENT_ELECTRIC_AUTOHARP_STROKE_BBMAJOR,
-				MSSoundEvents.EVENT_ELECTRIC_AUTOHARP_STROKE_CMAJOR, MSSoundEvents.EVENT_ELECTRIC_AUTOHARP_STROKE_DMAJOR, MSSoundEvents.EVENT_ELECTRIC_AUTOHARP_STROKE_EBMAJOR,
-				MSSoundEvents.EVENT_ELECTRIC_AUTOHARP_STROKE_EMAJOR, MSSoundEvents.EVENT_ELECTRIC_AUTOHARP_STROKE_FMAJOR, MSSoundEvents.EVENT_ELECTRIC_AUTOHARP_STROKE_GMAJOR}; //default set to autoharp
+		SoundEvent sound = new SoundEvent(MSSoundEvents.ITEM_ELECTRIC_AUTOHARP_STROKE.getLocation()); //autoharp by default
 		/*if(type == Type.ACOUSTIC_GUITAR)
 		{
 		}*/
 		
-		playerIn.level.playSound(null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), soundArray[playerIn.getRandom().nextInt(soundArray.length)], playerIn.getSoundSource(), 0.75F, 1F);
+		playerIn.level.playSound(null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), sound, playerIn.getSoundSource(), 0.75F, 1F);
 		return ActionResult.success(playerIn.getItemInHand(handIn));
 	}
 }

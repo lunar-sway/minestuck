@@ -1926,15 +1926,14 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addSubtitles("screech", "Estrogen-empowered screech");
 		addSubtitles("upcheladder", "Echeladder levels up");
 		addSubtitles("electric_shock", "Electric Shock");
-		addSubtitles("amajor_electric_autoharp_stroke", "A Major plays on electric autoharp");
-		addSubtitles("bmajor_electric_autoharp_stroke", "B Major plays on electric autoharp");
-		addSubtitles("bbmajor_electric_autoharp_stroke", "Bb Major plays on electric autoharp");
-		addSubtitles("cmajor_electric_autoharp_stroke", "C Major plays on electric autoharp");
-		addSubtitles("dmajor_electric_autoharp_stroke", "D Major plays on electric autoharp");
-		addSubtitles("ebmajor_electric_autoharp_stroke", "Eb Major plays on electric autoharp");
-		addSubtitles("emajor_electric_autoharp_stroke", "E Major plays on electric autoharp");
-		addSubtitles("fmajor_electric_autoharp_stroke", "F Major plays on electric autoharp");
-		addSubtitles("gmajor_electric_autoharp_stroke", "G Major plays on electric autoharp");
+		addSubtitles("electric_autoharp_stroke", "Chord plays on electric autoharp");
+		addSubtitles("magic_cast", "Spell cast");
+		addSubtitles("magic_hit", "Spell hits something");
+		addSubtitles("lotus_flower_loot_spawn", "Items pop into existence");
+		addSubtitles("lotus_flower_open", "Flower unfurls");
+		addSubtitles("lotus_flower_restore", "Flower regrows");
+		addSubtitles("projectile_throw", "Projectile is thrown");
+		addSubtitles("projectile_bounce", "Projectile bounces");
 		
 		addEntitySubtitles(MSEntityTypes.NAKAGATOR, "ambient", "Nakagator naks");
 		addEntitySubtitles(MSEntityTypes.NAKAGATOR, "hurt", "Nakagator hurts");

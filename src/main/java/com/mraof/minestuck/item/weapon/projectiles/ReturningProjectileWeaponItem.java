@@ -5,6 +5,7 @@ import com.mraof.minestuck.entity.item.ReturningProjectileEntity;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.Title;
+import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -28,7 +29,7 @@ public class ReturningProjectileWeaponItem extends ConsumableProjectileWeaponIte
 	{
 		ItemStack item = playerIn.getItemInHand(handIn);
 		
-		worldIn.playSound(null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.TRIDENT_THROW, SoundCategory.PLAYERS, 1.0F, 1.2F);
+		worldIn.playSound(null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), MSSoundEvents.ITEM_PROJECTILE_THROW, SoundCategory.PLAYERS, 1.0F, 1.2F);
 		
 		if(!worldIn.isClientSide)
 		{

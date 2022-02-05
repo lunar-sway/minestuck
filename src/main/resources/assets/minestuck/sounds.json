@@ -227,6 +227,10 @@
       {
         "name": "minestuck:music/lands/unrelenting_underlings",
         "stream": true
+      },
+      {
+        "name": "minestuck:music/lands/lillypad_rain",
+        "stream": true
       }
     ]
   },
@@ -262,6 +266,10 @@
       },
       {
         "name": "minestuck:music/lands/unrelenting_underlings",
+        "stream": true
+      },
+      {
+        "name": "minestuck:music/lands/lillypad_rain",
         "stream": true
       }
     ]
@@ -382,6 +390,30 @@
       },
       {
         "name": "minestuck:music/lands/rung_climber",
+        "stream": true
+      }
+    ]
+  },
+  "music.sickest_fires": {
+    "sounds": [
+      {
+        "name": "minestuck:music/miscellaneous/sickest_fires",
+        "stream": true
+      }
+    ]
+  },
+  "music.ranchorous_gambligant": {
+    "sounds": [
+      {
+        "name": "minestuck:music/miscellaneous/ranchorous_gambligant",
+        "stream": true
+      }
+    ]
+  },
+  "music.what_goes_up": {
+    "sounds": [
+      {
+        "name": "minestuck:music/miscellaneous/what_goes_up",
         "stream": true
       }
     ]
@@ -601,7 +633,7 @@
     "subtitle": "subtitles.minestuck.warhorn",
     "sounds": [
       {
-        "name": "minestuck:random/warhorn",
+        "name": "minestuck:item/warhorn",
         "stream": false
       }
     ]
@@ -621,7 +653,7 @@
     "subtitle": "subtitles.minestuck.horn",
     "sounds": [
       {
-        "name": "minestuck:random/horn_honk",
+        "name": "minestuck:item/horn_honk",
         "stream": false
       }
     ]
@@ -631,9 +663,61 @@
     "subtitle": "subtitles.minestuck.screech",
     "sounds": [
       {
-        "name": "minestuck:random/screech",
+        "name": "minestuck:item/screech",
         "stream": false
       }
+    ]
+  },
+  "item.electric_autoharp.stroke": {
+    "category": "ambient",
+    "subtitle": "subtitles.minestuck.electric_autoharp_stroke",
+    "sounds": [
+      "minestuck:item/amajor_electric_autoharp_stroke",
+      "minestuck:item/bmajor_electric_autoharp_stroke",
+      "minestuck:item/bbmajor_electric_autoharp_stroke",
+      "minestuck:item/cmajor_electric_autoharp_stroke",
+      "minestuck:item/dmajor_electric_autoharp_stroke",
+      "minestuck:item/ebmajor_electric_autoharp_stroke",
+      "minestuck:item/emajor_electric_autoharp_stroke",
+      "minestuck:item/fmajor_electric_autoharp_stroke",
+      "minestuck:item/gmajor_electric_autoharp_stroke"
+    ]
+  },
+  "item.magic.cast": {
+    "category": "player",
+    "subtitle": "subtitles.minestuck.magic_cast",
+    "sounds": [
+      "minestuck:item/magic_cast1",
+      "minestuck:item/magic_cast2"
+    ]
+  },
+  "item.magic.hit": {
+    "category": "ambient",
+    "subtitle": "subtitles.minestuck.magic_hit",
+    "sounds": [
+      "minecraft:entity/shulker_bullet/hit1",
+      "minecraft:entity/shulker_bullet/hit2",
+      "minecraft:entity/shulker_bullet/hit3",
+      "minecraft:entity/shulker_bullet/hit4"
+    ]
+  },
+  "item.projectile.throw": {
+    "category": "ambient",
+    "subtitle": "subtitles.minestuck.projectile_throw",
+    "sounds": [
+      "minecraft:item/trident/throw1",
+      "minecraft:item/trident/throw2"
+    ]
+  },
+  "item.projectile.bounce": {
+    "category": "ambient",
+    "subtitle": "subtitles.minestuck.projectile_bounce",
+    "sounds": [
+      "minecraft:item/shield/block1",
+      "minecraft:item/shield/block2",
+      "minecraft:item/shield/block3",
+      "minecraft:item/shield/block4",
+      "minecraft:item/shield/block5"
     ]
   },
   "event.echeladder.increase": {
@@ -656,94 +740,31 @@
       }
     ]
   },
-  "event.electric_autoharp.stroke.amajor": {
+  "event.lotus_flower.loot_spawn": {
     "category": "ambient",
-    "subtitle": "subtitles.minestuck.amajor_electric_autoharp_stroke",
+    "subtitle": "subtitles.minestuck.lotus_flower_loot_spawn",
     "sounds": [
       {
-        "name": "minestuck:random/amajor_electric_autoharp_stroke",
+        "name": "minestuck:random/lotus_flower_loot_spawn",
         "stream": false
       }
     ]
   },
-  "event.electric_autoharp.stroke.bmajor": {
+  "event.lotus_flower.open": {
     "category": "ambient",
-    "subtitle": "subtitles.minestuck.bmajor_electric_autoharp_stroke",
+    "subtitle": "subtitles.minestuck.lotus_flower_open",
     "sounds": [
-      {
-        "name": "minestuck:random/bmajor_electric_autoharp_stroke",
-        "stream": false
-      }
-    ]
+      "minecraft:block/composter/ready1",
+      "minecraft:block/composter/ready2",
+      "minecraft:block/composter/ready3",
+      "minecraft:block/composter/ready4"
+      ]
   },
-  "event.electric_autoharp.stroke.bbmajor": {
+  "event.lotus_flower.restore": {
     "category": "ambient",
-    "subtitle": "subtitles.minestuck.bbmajor_electric_autoharp_stroke",
+    "subtitle": "subtitles.minestuck.lotus_flower_restore",
     "sounds": [
-      {
-        "name": "minestuck:random/bbmajor_electric_autoharp_stroke",
-        "stream": false
-      }
-    ]
-  },
-  "event.electric_autoharp.stroke.cmajor": {
-    "category": "ambient",
-    "subtitle": "subtitles.minestuck.cmajor_electric_autoharp_stroke",
-    "sounds": [
-      {
-        "name": "minestuck:random/cmajor_electric_autoharp_stroke",
-        "stream": false
-      }
-    ]
-  },
-  "event.electric_autoharp.stroke.dmajor": {
-    "category": "ambient",
-    "subtitle": "subtitles.minestuck.dmajor_electric_autoharp_stroke",
-    "sounds": [
-      {
-        "name": "minestuck:random/dmajor_electric_autoharp_stroke",
-        "stream": false
-      }
-    ]
-  },
-  "event.electric_autoharp.stroke.ebmajor": {
-    "category": "ambient",
-    "subtitle": "subtitles.minestuck.ebmajor_electric_autoharp_stroke",
-    "sounds": [
-      {
-        "name": "minestuck:random/ebmajor_electric_autoharp_stroke",
-        "stream": false
-      }
-    ]
-  },
-  "event.electric_autoharp.stroke.emajor": {
-    "category": "ambient",
-    "subtitle": "subtitles.minestuck.emajor_electric_autoharp_stroke",
-    "sounds": [
-      {
-        "name": "minestuck:random/emajor_electric_autoharp_stroke",
-        "stream": false
-      }
-    ]
-  },
-  "event.electric_autoharp.stroke.fmajor": {
-    "category": "ambient",
-    "subtitle": "subtitles.minestuck.fmajor_electric_autoharp_stroke",
-    "sounds": [
-      {
-        "name": "minestuck:random/fmajor_electric_autoharp_stroke",
-        "stream": false
-      }
-    ]
-  },
-  "event.electric_autoharp.stroke.gmajor": {
-    "category": "ambient",
-    "subtitle": "subtitles.minestuck.gmajor_electric_autoharp_stroke",
-    "sounds": [
-      {
-        "name": "minestuck:random/gmajor_electric_autoharp_stroke",
-        "stream": false
-      }
+      "minecraft:block/beehive/exit"
     ]
   }
 }

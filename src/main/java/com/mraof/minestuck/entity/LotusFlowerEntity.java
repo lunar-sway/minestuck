@@ -4,6 +4,7 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.network.LotusFlowerPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MoverType;
@@ -134,7 +135,7 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 			setEventTimer(OPEN_START);
 			
 			Vector3d posVec = position();
-			level.playSound(null, posVec.x(), posVec.y(), posVec.z(), SoundEvents.COMPOSTER_READY, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+			level.playSound(null, posVec.x(), posVec.y(), posVec.z(), MSSoundEvents.EVENT_LOTUS_FLOWER_OPEN, SoundCategory.NEUTRAL, 1.0F, 1.0F);
 		}
 	}
 	
@@ -247,16 +248,14 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 	{
 		Vector3d posVec = this.position();
 		this.level.addParticle(ParticleTypes.FLASH, posVec.x, posVec.y + 0.5D, posVec.z, 0.0D, 0.0D, 0.0D);
-		this.level.playLocalSound(posVec.x(), posVec.y(), posVec.z(), SoundEvents.BEEHIVE_EXIT, SoundCategory.NEUTRAL, 1.0F, 1.0F, false);
+		this.level.playLocalSound(posVec.x(), posVec.y(), posVec.z(), MSSoundEvents.EVENT_LOTUS_FLOWER_RESTORE, SoundCategory.NEUTRAL, 1.0F, 1.0F, false);
 	}
 	
 	protected void addLootSpawnEffects()
 	{
 		Vector3d posVec = this.position();
 		this.level.addParticle(ParticleTypes.FLASH, posVec.x, posVec.y + 0.5D, posVec.z, 0.0D, 0.0D, 0.0D);
-		this.level.playLocalSound(posVec.x(), posVec.y(), posVec.z(), SoundEvents.ITEM_PICKUP, SoundCategory.NEUTRAL, 1.0F, 1.3F, false);
-		this.level.playLocalSound(posVec.x(), posVec.y(), posVec.z(), SoundEvents.ITEM_PICKUP, SoundCategory.NEUTRAL, 1.0F, 0.7F, false);
-		this.level.playLocalSound(posVec.x(), posVec.y(), posVec.z(), SoundEvents.BOAT_PADDLE_LAND, SoundCategory.NEUTRAL, 2.0F, 2.0F, false);
+		this.level.playLocalSound(posVec.x(), posVec.y(), posVec.z(), MSSoundEvents.EVENT_LOTUS_FLOWER_LOOT_SPAWN, SoundCategory.NEUTRAL, 1.0F, 1.0F, false);
 	}
 	
 	@Override

@@ -3,6 +3,7 @@ package com.mraof.minestuck.entity.item;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.weapon.projectiles.ProjectileDamaging;
+import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -16,7 +17,6 @@ import net.minecraft.network.IPacket;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.EntityRayTraceResult;
@@ -82,7 +82,7 @@ public class ReturningProjectileEntity extends ProjectileItemEntity
 				if(!level.isClientSide)
 				{
 					++bounce;
-					this.level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.SHIELD_BLOCK, SoundCategory.NEUTRAL, 0.6F, 4.0F);
+					this.level.playSound(null, this.getX(), this.getY(), this.getZ(), MSSoundEvents.ITEM_PROJECTILE_BOUNCE, SoundCategory.NEUTRAL, 0.6F, 2.0F);
 				}
 			}
 			

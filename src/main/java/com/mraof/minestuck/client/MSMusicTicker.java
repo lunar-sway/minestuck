@@ -1,6 +1,7 @@
 package com.mraof.minestuck.client;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
@@ -18,7 +19,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.Random;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, value = Dist.CLIENT)
-public class MSMusicTicker	//TODO Introduce types (something similar to vanilla) such that this class could be reused for prospit, derse etc
+public class MSMusicTicker    //TODO Introduce types (something similar to vanilla) such that this class could be reused for prospit, derse etc
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
@@ -60,7 +61,11 @@ public class MSMusicTicker	//TODO Introduce types (something similar to vanilla)
 				ticksUntilMusic--;
 				if(ticksUntilMusic < 0)
 				{
-					currentMusic = SimpleSound.forMusic(getLandSoundEvent(mc.level.random, types));
+					if(mc.level.random.nextInt(5) == 0)
+					{
+						currentMusic = SimpleSound.forMusic(getGenericSoundEvent(mc.level.random));
+					} else
+						currentMusic = SimpleSound.forMusic(getLandSoundEvent(mc.level.random, types));
 					mc.getSoundManager().play(currentMusic);
 					LOGGER.debug("Land music started.");
 				}
@@ -89,5 +94,16 @@ public class MSMusicTicker	//TODO Introduce types (something similar to vanilla)
 		if(rand.nextBoolean())
 			return pair.getTerrain().getBackgroundMusic();
 		else return pair.getTitle().getBackgroundMusic();
+	}
+	
+	private static SoundEvent getGenericSoundEvent(Random rand)
+	{
+		int randomPick = rand.nextInt(3);
+		if(randomPick == 2)
+			return MSSoundEvents.MUSIC_SICKEST_FIRES;
+		else if(randomPick == 1)
+			return MSSoundEvents.MUSIC_RANCHOROUS_GAMBLIGANT;
+		else
+			return MSSoundEvents.MUSIC_WHAT_GOES_UP;
 	}
 }

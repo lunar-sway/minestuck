@@ -2,6 +2,7 @@ package com.mraof.minestuck.item.weapon.projectiles;
 
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.item.BouncingProjectileEntity;
+import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Stats;
@@ -20,7 +21,7 @@ public class BouncingProjectileWeaponItem extends ReturningProjectileWeaponItem
 	{
 		ItemStack item = playerIn.getItemInHand(handIn);
 		
-		worldIn.playSound(null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.TRIDENT_THROW, SoundCategory.PLAYERS, 1.0F, 1.2F);
+		worldIn.playSound(null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), MSSoundEvents.ITEM_PROJECTILE_THROW, SoundCategory.PLAYERS, 1.0F, 1.2F);
 		
 		if(!worldIn.isClientSide)
 		{
