@@ -53,6 +53,10 @@ public class MSSoundEvents
 	public static final SoundEvent MUSIC_UNDEAD = getNull();
 	public static final SoundEvent MUSIC_TOWERS = getNull();
 	
+	public static final SoundEvent MUSIC_SICKEST_FIRES = getNull();
+	public static final SoundEvent MUSIC_RANCHOROUS_GAMBLIGANT = getNull();
+	public static final SoundEvent MUSIC_WHAT_GOES_UP = getNull();
+	
 	public static final SoundEvent ENTITY_NAKAGATOR_AMBIENT = getNull();
 	public static final SoundEvent ENTITY_NAKAGATOR_HURT = getNull();
 	public static final SoundEvent ENTITY_NAKAGATOR_DEATH = getNull();
@@ -86,17 +90,16 @@ public class MSSoundEvents
 	public static final SoundEvent ITEM_GRIMOIRE_USE = getNull();
 	public static final SoundEvent ITEM_HORN_USE = getNull();
 	public static final SoundEvent ITEM_EEEEEEEEEEEE_HIT = getNull();
+	public static final SoundEvent ITEM_ELECTRIC_AUTOHARP_STROKE = getNull();
+	public static final SoundEvent ITEM_MAGIC_CAST = getNull(); //based on evoker cast
+	public static final SoundEvent ITEM_MAGIC_HIT = getNull(); //identical to shulker bullet hit
+	public static final SoundEvent ITEM_PROJECTILE_THROW = getNull(); //identical to trident throw
+	public static final SoundEvent ITEM_PROJECTILE_BOUNCE = getNull(); //identical to shield block
 	public static final SoundEvent EVENT_ECHELADDER_INCREASE = getNull();
 	public static final SoundEvent EVENT_ELECTRIC_SHOCK = getNull();
-	public static final SoundEvent EVENT_ELECTRIC_AUTOHARP_STROKE_AMAJOR = getNull();
-	public static final SoundEvent EVENT_ELECTRIC_AUTOHARP_STROKE_BMAJOR = getNull();
-	public static final SoundEvent EVENT_ELECTRIC_AUTOHARP_STROKE_BBMAJOR = getNull();
-	public static final SoundEvent EVENT_ELECTRIC_AUTOHARP_STROKE_CMAJOR = getNull();
-	public static final SoundEvent EVENT_ELECTRIC_AUTOHARP_STROKE_DMAJOR = getNull();
-	public static final SoundEvent EVENT_ELECTRIC_AUTOHARP_STROKE_EBMAJOR = getNull();
-	public static final SoundEvent EVENT_ELECTRIC_AUTOHARP_STROKE_EMAJOR = getNull();
-	public static final SoundEvent EVENT_ELECTRIC_AUTOHARP_STROKE_FMAJOR = getNull();
-	public static final SoundEvent EVENT_ELECTRIC_AUTOHARP_STROKE_GMAJOR = getNull();
+	public static final SoundEvent EVENT_LOTUS_FLOWER_LOOT_SPAWN = getNull(); //based on boat paddle land and item pop
+	public static final SoundEvent EVENT_LOTUS_FLOWER_OPEN = getNull(); //identical to composter ready
+	public static final SoundEvent EVENT_LOTUS_FLOWER_RESTORE = getNull(); //identical to beehive exit
     
     @Nonnull
 	@SuppressWarnings("ConstantConditions")
@@ -117,6 +120,7 @@ public class MSSoundEvents
 				"music.rainbow", "music.flora", "music.end", "music.rain",
 				"music.frogs", "music.wind", "music.light", "music.clockwork", "music.silence", "music.thunder", "music.pulse",
 				"music.thought", "music.buckets", "music.cake", "music.rabbits", "music.monsters", "music.undead", "music.towers",
+				"music.sickest_fires", "music.ranchorous_gambligant", "music.what_goes_up",
 				"entity.nakagator.ambient", "entity.nakagator.hurt", "entity.nakagator.death",
 				"entity.iguana.ambient", "entity.iguana.hurt", "entity.iguana.death",
 				"entity.salamander.ambient", "entity.salamander.hurt", "entity.salamander.death",
@@ -128,12 +132,10 @@ public class MSSoundEvents
 				"entity.lich.ambient", "entity.lich.hurt", "entity.lich.death",
 				"entity.giclops.ambient", "entity.giclops.hurt", "entity.giclops.death",
 				"item.long_forgotten_warhorn.use", "item.grimoire.use",  "item.horn.use",
-				"item.eeeeeeeeeeee.hit", "event.echeladder.increase", "event.electric_shock",
-				"event.electric_autoharp.stroke.amajor","event.electric_autoharp.stroke.bmajor",
-				"event.electric_autoharp.stroke.bbmajor", "event.electric_autoharp.stroke.cmajor",
-				"event.electric_autoharp.stroke.dmajor", "event.electric_autoharp.stroke.ebmajor",
-				"event.electric_autoharp.stroke.emajor","event.electric_autoharp.stroke.fmajor",
-				"event.electric_autoharp.stroke.gmajor");
+				"item.electric_autoharp.stroke", "item.magic.cast", "item.magic.hit",
+				"item.eeeeeeeeeeee.hit", "item.projectile.throw","item.projectile.bounce",
+				"event.echeladder.increase", "event.electric_shock",
+				"event.lotus_flower.loot_spawn", "event.lotus_flower.open", "event.lotus_flower.restore");
 		
 		for(String path : paths)
 		{

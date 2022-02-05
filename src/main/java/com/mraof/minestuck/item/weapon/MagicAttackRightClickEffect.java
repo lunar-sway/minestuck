@@ -85,7 +85,7 @@ public class MagicAttackRightClickEffect implements ItemRightClickEffect
 	{
 		if(sound != null && player.getRandom().nextFloat() < .1F) //optional sound effect adding
 			level.playSound(null, player.getX(), player.getY(), player.getZ(), sound.get(), SoundSource.PLAYERS, 0.7F, pitch);
-		level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundSource.PLAYERS, 1.0F, 1.6F);
+		level.playSound(null, player.getX(), player.getY(), player.getZ(), MSSoundEvents.ITEM_MAGIC_CAST, SoundSource.PLAYERS, 1.0F, 1.2F);
 		
 		targetEffect(player);
 		
