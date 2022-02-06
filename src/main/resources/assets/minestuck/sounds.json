@@ -402,10 +402,10 @@
       }
     ]
   },
-  "music.ranchorous_gambligant": {
+  "music.rancorous_gambligant": {
     "sounds": [
       {
-        "name": "minestuck:music/miscellaneous/ranchorous_gambligant",
+        "name": "minestuck:music/miscellaneous/rancorous_gambligant",
         "stream": true
       }
     ]
@@ -414,6 +414,14 @@
     "sounds": [
       {
         "name": "minestuck:music/miscellaneous/what_goes_up",
+        "stream": true
+      }
+    ]
+  },
+  "music.rise_up": {
+    "sounds": [
+      {
+        "name": "minestuck:music/miscellaneous/rise_up",
         "stream": true
       }
     ]

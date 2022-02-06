@@ -54,8 +54,9 @@ public class MSSoundEvents
 	public static final SoundEvent MUSIC_TOWERS = getNull();
 	
 	public static final SoundEvent MUSIC_SICKEST_FIRES = getNull();
-	public static final SoundEvent MUSIC_RANCHOROUS_GAMBLIGANT = getNull();
+	public static final SoundEvent MUSIC_RANCOROUS_GAMBLIGANT = getNull();
 	public static final SoundEvent MUSIC_WHAT_GOES_UP = getNull();
+	public static final SoundEvent MUSIC_RISE_UP = getNull();
 	
 	public static final SoundEvent ENTITY_NAKAGATOR_AMBIENT = getNull();
 	public static final SoundEvent ENTITY_NAKAGATOR_HURT = getNull();
@@ -120,7 +121,7 @@ public class MSSoundEvents
 				"music.rainbow", "music.flora", "music.end", "music.rain",
 				"music.frogs", "music.wind", "music.light", "music.clockwork", "music.silence", "music.thunder", "music.pulse",
 				"music.thought", "music.buckets", "music.cake", "music.rabbits", "music.monsters", "music.undead", "music.towers",
-				"music.sickest_fires", "music.ranchorous_gambligant", "music.what_goes_up",
+				"music.sickest_fires", "music.rancorous_gambligant", "music.what_goes_up", "music.rise_up",
 				"entity.nakagator.ambient", "entity.nakagator.hurt", "entity.nakagator.death",
 				"entity.iguana.ambient", "entity.iguana.hurt", "entity.iguana.death",
 				"entity.salamander.ambient", "entity.salamander.hurt", "entity.salamander.death",

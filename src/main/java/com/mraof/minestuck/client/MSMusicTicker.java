@@ -102,7 +102,7 @@ public class MSMusicTicker    //TODO Introduce types (something similar to vanil
 		if(randomPick == 2)
 			return MSSoundEvents.MUSIC_SICKEST_FIRES;
 		else if(randomPick == 1)
-			return MSSoundEvents.MUSIC_RANCHOROUS_GAMBLIGANT;
+			return MSSoundEvents.MUSIC_RANCOROUS_GAMBLIGANT;
 		else
 			return MSSoundEvents.MUSIC_WHAT_GOES_UP;
 	}
