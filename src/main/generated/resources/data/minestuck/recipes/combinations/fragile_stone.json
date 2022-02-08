@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "tag": "forge:stone"
+  },
+  "input2": {
+    "item": "minecraft:gravel"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:fragile_stone"
+  }
+}
