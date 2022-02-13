@@ -37,7 +37,7 @@ import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
 import com.mraof.minestuck.tileentity.machine.*;
 import com.mraof.minestuck.world.GateHandler;
-import com.mraof.minestuck.world.gen.LandChunkGenerator;
+import com.mraof.minestuck.world.lands.GristLayerInfo;
 import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.terrain.*;
@@ -1474,7 +1474,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MergeResult.GENERIC_FAIL, "Merge failed");
 		add(Generator.NO_AVAILABLE_TITLES, "No title was available to generate under current circumstances.");
 		
-		add(LandChunkGenerator.GRIST_LAYER_INFO, "Grist types at this position; common: %s, uncommon: %s, any: %s");
+		add(GristLayerInfo.INFO, "Grist types at this position; common: %s, uncommon: %s, any: %s");
 		add(CheckLandCommand.CHECK, "You are currently in %s.");
 		add(CheckLandCommand.FAIL, "You are currently not in a land dimension.");
 		add(SendGristCommand.SUCCESS, "Successfully gave grist to %s: %s");
