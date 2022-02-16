@@ -16,6 +16,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.FakePlayer;
 
 public class LichEntity extends UnderlingEntity
 {
@@ -83,7 +84,7 @@ public class LichEntity extends UnderlingEntity
 		if(this.dead && !this.level.isClientSide)
 		{
 			computePlayerProgress((int) (50 + 2.6 * getGristType().getPower())); //still give xp up to top rung
-			if(entity instanceof ServerPlayerEntity)
+			if(entity instanceof ServerPlayerEntity && (!(entity instanceof FakePlayer)))
 			{
 				Echeladder ladder = PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder();
 				ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET + 3));
