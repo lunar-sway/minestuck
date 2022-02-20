@@ -4,10 +4,7 @@ import com.mraof.minestuck.entity.EntityListFilter;
 import com.mraof.minestuck.entity.ai.HurtByTargetAlliedGoal;
 import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.entity.item.VitalityGelEntity;
-import com.mraof.minestuck.item.crafting.alchemy.GristAmount;
-import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
-import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
+import com.mraof.minestuck.item.crafting.alchemy.*;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
@@ -263,7 +260,7 @@ public abstract class UnderlingEntity extends CreatureEntity implements IMob
 		//Note: grist type should be read and applied before reading health due to the modifiers to max health
 		if(compound.contains("Type", Constants.NBT.TAG_STRING))
 			applyGristType(GristType.read(compound, "Type", GristTypes.ARTIFACT));
-		else applyGristType(UnderlingController.getUnderlingType(this));
+		else applyGristType(GristHelper.getPrimaryGrist(this.getRandom()));
 		
 		super.readAdditionalSaveData(compound);
 		
