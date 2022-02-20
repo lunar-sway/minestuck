@@ -119,6 +119,7 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 			if(lotusFlowerEntity == null)
 				throw new IllegalStateException("Unable to create a new lotus flower. Entity factory returned null!");
 			lotusFlowerEntity.moveTo(entityVec.getX(), entityVec.getY(), entityVec.getZ(), 0F, 0);
+			lotusFlowerEntity.setInvulnerable(true);
 			worldIn.addFreshEntity(lotusFlowerEntity);
 			createRan = true;
 		}
