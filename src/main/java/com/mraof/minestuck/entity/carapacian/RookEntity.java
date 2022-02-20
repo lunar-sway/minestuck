@@ -39,7 +39,7 @@ public class RookEntity extends CarapacianEntity implements IMob
 	protected void registerGoals()
 	{
 		super.registerGoals();
-		this.goalSelector.addGoal(4, new MeleeAttackGoal(this, .4F, false));
+		this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 4/3F, false));
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 0, true, false, entity -> attackEntitySelector.isEntityApplicable(entity)));
 	}
 

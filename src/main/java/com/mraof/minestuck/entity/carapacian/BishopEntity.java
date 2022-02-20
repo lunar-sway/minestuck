@@ -47,7 +47,7 @@ public class BishopEntity extends CarapacianEntity implements IRangedAttackMob, 
 	protected void registerGoals()
 	{
 		super.registerGoals();
-		this.goalSelector.addGoal(4, new AttackByDistanceGoal(this, 0.25F, 30, 64.0F));
+		this.goalSelector.addGoal(4, new AttackByDistanceGoal(this, 5/4F, 30, 64.0F));
 		this.targetSelector.addGoal(2, new NearestAttackableExtendedGoal(this, LivingEntity.class, 0, true, false, entity -> attackEntitySelector.isEntityApplicable(entity)));
 	}
 	
