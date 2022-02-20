@@ -17,6 +17,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.FakePlayer;
 
 public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 {
@@ -144,7 +145,7 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 		if(this.dead && !this.level.isClientSide)
 		{
 			computePlayerProgress((int) (30 + 2.4 * getGristType().getPower())); //most basilisks stop giving xp at rung 32
-			if(entity instanceof ServerPlayerEntity)
+			if(entity instanceof ServerPlayerEntity && (!(entity instanceof FakePlayer)))
 			{
 				Echeladder ladder = PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder();
 				ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET + 2));

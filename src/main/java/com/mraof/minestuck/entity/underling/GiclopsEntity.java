@@ -25,6 +25,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.FakePlayer;
 
 public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 {
@@ -132,7 +133,7 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 		if(this.dead && !this.level.isClientSide)
 		{
 			computePlayerProgress((int) (200 + 3 * getGristType().getPower())); //still give xp up to top rung
-			if(entity instanceof ServerPlayerEntity)
+			if(entity instanceof ServerPlayerEntity && (!(entity instanceof FakePlayer)))
 			{
 				Echeladder ladder = PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder();
 				ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET + 4));

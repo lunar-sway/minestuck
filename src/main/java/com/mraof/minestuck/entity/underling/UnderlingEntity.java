@@ -38,6 +38,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.*;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.FakePlayer;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -196,7 +197,7 @@ public abstract class UnderlingEntity extends CreatureEntity implements IMob
 	public void die(DamageSource cause)
 	{
 		LivingEntity entity = this.getKillCredit();
-		if(entity instanceof ServerPlayerEntity)
+		if(entity instanceof ServerPlayerEntity && (!(entity instanceof FakePlayer)))
 			PlayerSavedData.getData((ServerPlayerEntity) entity).addConsortReputation(consortRep, level.dimension());
 		
 		super.die(cause);
