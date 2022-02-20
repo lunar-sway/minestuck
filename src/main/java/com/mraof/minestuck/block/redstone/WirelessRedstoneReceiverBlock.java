@@ -40,7 +40,7 @@ public class WirelessRedstoneReceiverBlock extends HorizontalBlock
 	public WirelessRedstoneReceiverBlock(Properties properties)
 	{
 		super(properties);
-		registerDefaultState(stateDefinition.any().setValue(POWER, 0).setValue(POWERED,false).setValue(AUTO_RESET, true).setValue(FACING, Direction.NORTH));
+		registerDefaultState(stateDefinition.any().setValue(POWER, 0).setValue(POWERED, false).setValue(AUTO_RESET, true).setValue(FACING, Direction.NORTH));
 	}
 	
 	@Override
