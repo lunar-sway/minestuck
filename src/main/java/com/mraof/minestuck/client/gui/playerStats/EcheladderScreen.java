@@ -18,10 +18,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * @author Kirderf1
@@ -231,7 +228,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 					new StringTextComponent(Math.round(attack*Echeladder.getUnderlingDamageModifier(currentRung)) + "%"));
 		if(mouseY >= yOffset + 93 && mouseY < yOffset + 93 + mc.font.lineHeight && mouseX >= xOffset + 26 && mouseX < xOffset + 26 + mc.font.width(String.valueOf(health)))
 			return ImmutableList.of(new TranslationTextComponent(PROTECTION_UNDERLING),
-					new StringTextComponent(String.format("%.1f", 100*Echeladder.getUnderlingProtectionModifier(currentRung))+"%"));
+					new StringTextComponent(String.format(Locale.ROOT, "%.1f", 100*Echeladder.getUnderlingProtectionModifier(currentRung))+"%"));
 		return null;
 	}
 	
