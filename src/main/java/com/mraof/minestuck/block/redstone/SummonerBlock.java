@@ -38,7 +38,7 @@ public class SummonerBlock extends Block
 	public SummonerBlock(Properties properties)
 	{
 		super(properties);
-		registerDefaultState(stateDefinition.any().setValue(UNTRIGGERABLE, false));
+		registerDefaultState(stateDefinition.any().setValue(UNTRIGGERABLE, false).setValue(TRIGGERED, false));
 	}
 	
 	@Override

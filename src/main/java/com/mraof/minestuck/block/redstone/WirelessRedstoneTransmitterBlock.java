@@ -6,10 +6,17 @@ import com.mraof.minestuck.tileentity.redstone.WirelessRedstoneTransmitterTileEn
 import com.mraof.minestuck.util.ParticlesAroundSolidBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.HorizontalBlock;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.particles.RedstoneParticleData;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.IntegerProperty;
+import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -23,13 +30,15 @@ import java.util.Random;
  * Checks for redstone power inputs and transmits that signal to any wireless redstone receiver present at the location stored in the tile entity
  * GUI is limited by creative shock
  */
-public class WirelessRedstoneTransmitterBlock extends Block
+public class WirelessRedstoneTransmitterBlock extends HorizontalBlock
 {
+	public static final IntegerProperty POWER = BlockStateProperties.POWER;
+	public static final BooleanProperty POWERED = BlockStateProperties.POWERED; //used for texture purposes
 	
 	public WirelessRedstoneTransmitterBlock(Properties properties)
 	{
 		super(properties);
-		registerDefaultState(stateDefinition.any());
+		registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(POWER, 0).setValue(POWERED, false));
 	}
 	
 	@Override
@@ -63,13 +72,50 @@ public class WirelessRedstoneTransmitterBlock extends Block
 		return ActionResultType.SUCCESS;
 	}
 	
+	@Nullable
+	@Override
+	public BlockState getStateForPlacement(BlockItemUseContext context)
+	{
+		return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
+	}
+	
+	@Override
+	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+	{
+		super.neighborChanged(state, worldIn, pos, blockIn, fromPos, isMoving);
+		updatePower(worldIn, pos);
+	}
+	
+	public void updatePower(World worldIn, BlockPos pos)
+	{
+		if(!worldIn.isClientSide)
+		{
+			BlockState state = worldIn.getBlockState(pos);
+			int powerInt = worldIn.getBestNeighborSignal(pos);
+			worldIn.setBlockAndUpdate(pos, state.setValue(POWER, powerInt));
+			
+			if(state.getValue(POWERED) != powerInt > 0)
+				worldIn.setBlockAndUpdate(pos, state.setValue(POWERED, powerInt > 0));
+			else worldIn.sendBlockUpdated(pos, state, state, 2);
+		}
+	}
+	
 	@Override
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
 	{
-		if(worldIn.getBestNeighborSignal(pos) > 0)
+		if(stateIn.getValue(POWER) > 0)
 		{
-			if(rand.nextInt(16 - worldIn.getBestNeighborSignal(pos)) == 0)
+			if(rand.nextInt(16 - stateIn.getValue(POWER)) == 0)
 				ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE);
 		}
+	}
+	
+	@Override
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+	{
+		super.createBlockStateDefinition(builder);
+		builder.add(FACING);
+		builder.add(POWER);
+		builder.add(POWERED);
 	}
 }

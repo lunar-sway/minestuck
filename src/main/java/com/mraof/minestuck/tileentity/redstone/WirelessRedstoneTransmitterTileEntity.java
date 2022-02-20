@@ -2,6 +2,7 @@ package com.mraof.minestuck.tileentity.redstone;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.redstone.WirelessRedstoneReceiverBlock;
+import com.mraof.minestuck.block.redstone.WirelessRedstoneTransmitterBlock;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -70,20 +71,13 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 	{
 		if(destBlockPos != null && level != null && !level.isClientSide && level.isAreaLoaded(destBlockPos, 1))
 		{
-			int powerIn = level.getBestNeighborSignal(getBlockPos());
+			((WirelessRedstoneTransmitterBlock) getBlockState().getBlock()).updatePower(level, getBlockPos());
 			
-			//Debug.debugf("not null destination of %s and area loaded, powerIn = %s", destBlockPos, powerIn);
-			BlockState blockStateIn = level.getBlockState(destBlockPos);
-			if(blockStateIn.getBlock() instanceof WirelessRedstoneReceiverBlock && blockStateIn.getValue(WirelessRedstoneReceiverBlock.POWER) < powerIn)
+			BlockState destBlockState = level.getBlockState(destBlockPos);
+			if(destBlockState.getBlock() instanceof WirelessRedstoneReceiverBlock && destBlockState.getValue(WirelessRedstoneReceiverBlock.POWER) < getBlockState().getValue(WirelessRedstoneTransmitterBlock.POWER))
 			{
-				level.setBlock(destBlockPos, blockStateIn.setValue(WirelessRedstoneReceiverBlock.POWER, powerIn), Constants.BlockFlags.NOTIFY_NEIGHBORS);
-				
-				TileEntity tileEntity = level.getBlockEntity(destBlockPos);
-				if(tileEntity instanceof WirelessRedstoneReceiverTileEntity)
-				{
-					WirelessRedstoneReceiverTileEntity te = (WirelessRedstoneReceiverTileEntity) tileEntity;
-					te.setLastTransmitterBlockPos(getBlockPos());
-				}
+				WirelessRedstoneReceiverBlock receiverBlock = (WirelessRedstoneReceiverBlock) destBlockState.getBlock();
+				receiverBlock.updatePower(level, destBlockPos, getBlockPos());
 			}
 		}
 	}
@@ -94,19 +88,11 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 		{
 			if(destBlockPos.equals(this.destBlockPos))
 			{
-				int powerIn = worldIn.getBestNeighborSignal(getBlockPos());
-				
 				BlockState blockStateIn = worldIn.getBlockState(destBlockPos);
 				if(blockStateIn.getBlock() instanceof WirelessRedstoneReceiverBlock)
 				{
-					worldIn.setBlock(destBlockPos, blockStateIn.setValue(WirelessRedstoneReceiverBlock.POWER, powerIn), Constants.BlockFlags.NOTIFY_NEIGHBORS);
-					
-					TileEntity tileEntity = worldIn.getBlockEntity(destBlockPos);
-					if(tileEntity instanceof WirelessRedstoneReceiverTileEntity)
-					{
-						WirelessRedstoneReceiverTileEntity te = (WirelessRedstoneReceiverTileEntity) tileEntity;
-						te.setLastTransmitterBlockPos(getBlockPos());
-					}
+					WirelessRedstoneReceiverBlock receiverBlock = (WirelessRedstoneReceiverBlock) blockStateIn.getBlock();
+					receiverBlock.updatePower(worldIn, destBlockPos, getBlockPos());
 				}
 			} else
 			{

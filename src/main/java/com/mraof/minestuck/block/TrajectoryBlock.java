@@ -2,7 +2,9 @@ package com.mraof.minestuck.block;
 
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -11,8 +13,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
 
+import javax.annotation.Nullable;
 import java.util.Random;
 
 /**
@@ -91,7 +93,9 @@ public class TrajectoryBlock extends MSDirectionalBlock
 		if(!worldIn.isClientSide)
 		{
 			int powerInt = worldIn.getBestNeighborSignal(pos);
-			worldIn.setBlock(pos, state.setValue(POWER, powerInt), Constants.BlockFlags.BLOCK_UPDATE);
+			if(state.getValue(POWER) != powerInt)
+				worldIn.setBlockAndUpdate(pos, state.setValue(POWER, powerInt));
+			else worldIn.sendBlockUpdated(pos, state, state, 2);
 		}
 	}
 	
@@ -103,6 +107,19 @@ public class TrajectoryBlock extends MSDirectionalBlock
 			double powerMod = stateIn.getValue(POWER) / 120D + 0.075;
 			worldIn.addParticle(ParticleTypes.CLOUD, pos.getX() + 0.5, pos.above().getY() + 0.25, pos.getZ() + 0.5, stateIn.getValue(FACING).getStepX() * powerMod, stateIn.getValue(FACING).getStepY() * powerMod, stateIn.getValue(FACING).getStepZ() * powerMod);
 		}
+	}
+	
+	/**
+	 * Helps entities avoid these blocks if possible should the blocks be directly responsible for hurting them
+	 */
+	@Nullable
+	@Override
+	public PathNodeType getAiPathNodeType(BlockState state, IBlockReader world, BlockPos pos, @Nullable MobEntity entity)
+	{
+		if(state.getValue(POWER) > 12 && state.getValue(FACING) == Direction.UP)
+			return PathNodeType.DAMAGE_OTHER;
+		else
+			return PathNodeType.WALKABLE;
 	}
 	
 	@Override

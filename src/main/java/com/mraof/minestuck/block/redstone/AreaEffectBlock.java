@@ -6,17 +6,17 @@ import com.mraof.minestuck.tileentity.redstone.AreaEffectTileEntity;
 import com.mraof.minestuck.util.ParticlesAroundSolidBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.HorizontalBlock;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.PotionItem;
 import net.minecraft.particles.RedstoneParticleData;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.PotionUtils;
+import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -30,13 +30,14 @@ import java.util.Random;
  * When powered, the tile entity applies an effect to entities in a designated area between two block pos, similar to beacons but with more versatility.
  * Only creative mode players(who are not under the effects of Creative Shock) can change the effect
  */
-public class AreaEffectBlock extends Block
+public class AreaEffectBlock extends HorizontalBlock
 {
 	public static final String EFFECT_CHANGE_MESSAGE = "effect_change_message";
 	
 	public AreaEffectBlock(Properties properties)
 	{
 		super(properties);
+		this.registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH));
 	}
 	
 	@Override
@@ -86,10 +87,24 @@ public class AreaEffectBlock extends Block
 		return ActionResultType.PASS;
 	}
 	
+	@Nullable
+	@Override
+	public BlockState getStateForPlacement(BlockItemUseContext context)
+	{
+		return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
+	}
+	
 	@Override
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
 	{
 		if(worldIn.hasNeighborSignal(pos))
 			ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE);
+	}
+	
+	@Override
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+	{
+		super.createBlockStateDefinition(builder);
+		builder.add(FACING);
 	}
 }

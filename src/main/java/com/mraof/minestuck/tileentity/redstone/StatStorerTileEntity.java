@@ -167,7 +167,7 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 		compound.putInt("gristDropsStored", gristDropsStored);
 		
 		compound.putInt("tickCycle", tickCycle);
-		compound.putInt("activeTypeOrdinal", activeType.ordinal());
+		compound.putInt("activeTypeOrdinal", getActiveType().ordinal());
 		compound.putInt("divideValueBy", divideValueBy);
 		
 		return compound;

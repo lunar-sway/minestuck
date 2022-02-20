@@ -105,7 +105,12 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 			}
 		}
 		
-		level.setBlock(getBlockPos(), getBlockState().setValue(RemoteObserverBlock.POWERED, shouldBePowered), Constants.BlockFlags.NOTIFY_NEIGHBORS);
+		if(!level.isClientSide)
+		{
+			if(getBlockState().getValue(RemoteObserverBlock.POWERED) != shouldBePowered)
+				level.setBlockAndUpdate(getBlockPos(), getBlockState().setValue(RemoteObserverBlock.POWERED, shouldBePowered));
+			else level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 2);
+		}
 	}
 	
 	public EntityType<?> getCurrentEntityType()

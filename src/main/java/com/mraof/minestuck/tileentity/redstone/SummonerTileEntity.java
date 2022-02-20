@@ -85,7 +85,7 @@ public class SummonerTileEntity extends TileEntity implements ITickableTileEntit
 			else
 			{
 				if(triggerActivate)
-					worldIn.setBlock(summonerBlockPos, worldIn.getBlockState(summonerBlockPos).setValue(SummonerBlock.TRIGGERED, true), Constants.BlockFlags.NOTIFY_NEIGHBORS);
+					worldIn.setBlockAndUpdate(getBlockPos(), getBlockState().setValue(SummonerBlock.TRIGGERED, true));
 				
 				cooldownTimer = 1;
 			}
