@@ -5,6 +5,7 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.consort.ConsortDialogue;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
+import com.mraof.minestuck.entry.EntryEvent;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.MSItems;
@@ -94,6 +95,9 @@ public class ServerEventHandler
 			}
 			
 			MSExtraData.get(server).executeEntryTasks(server);
+			
+			if (MinestuckConfig.SERVER.hardMode)
+				EntryEvent.tick(server);
 		}
 	}
 	

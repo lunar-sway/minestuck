@@ -405,6 +405,11 @@ public final class SkaianetHandler
 		return sessionHandler.getConnectionStream().filter(c -> c.isServer(computer)).findAny().orElse(null);
 	}
 	
+	public Stream<SburbConnection> getConnectionsInEntry()
+	{
+		return sessionHandler.getConnectionStream().filter(connection -> connection.isActive() && connection.isMain() && !connection.hasEntered());
+	}
+	
 	/**
 	 * Prepares the sburb connection and data needed for after entry.
 	 * Should only be called by the cruxite artifact on trigger before teleportation
