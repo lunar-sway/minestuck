@@ -168,6 +168,7 @@ public class MSBlocks
 	public static final Block PLATFORM_BLOCK = getNull();
 	public static final Block ITEM_MAGNET = getNull();
 	public static final Block REDSTONE_CLOCK = getNull();
+	public static final Block ROTATOR = getNull();
 	public static final Block FALL_PAD = getNull();
 	public static final Block FRAGILE_STONE = getNull();
 	public static final Block RETRACTABLE_SPIKES = getNull();
@@ -521,6 +522,7 @@ public class MSBlocks
 		registry.register(new PlatformBlock(AbstractBlock.Properties.of(Material.BARRIER).strength(0.2F).sound(SoundType.SCAFFOLDING).lightLevel(state -> 6).noOcclusion().isSuffocating(MSBlocks::never)).setRegistryName("platform_block"));
 		registry.register(new ItemMagnetBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL)).setRegistryName("item_magnet"));
 		registry.register(new RedstoneClockBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL)).setRegistryName("redstone_clock"));
+		registry.register(new RotatorBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL)).setRegistryName("rotator"));
 		registry.register(new FallPadBlock(AbstractBlock.Properties.of(Material.CLOTH_DECORATION).strength(1).sound(SoundType.WOOL)).setRegistryName("fall_pad"));
 		registry.register(new FragileBlock(AbstractBlock.Properties.of(Material.STONE).strength(1).sound(SoundType.STONE)).setRegistryName("fragile_stone"));
 		registry.register(new RetractableSpikesBlock(AbstractBlock.Properties.of(Material.METAL).strength(1).sound(SoundType.METAL)).setRegistryName("retractable_spikes"));

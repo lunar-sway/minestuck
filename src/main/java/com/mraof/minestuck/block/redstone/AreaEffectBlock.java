@@ -14,7 +14,9 @@ import net.minecraft.item.PotionItem;
 import net.minecraft.particles.RedstoneParticleData;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.PotionUtils;
+import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
@@ -32,12 +34,13 @@ import java.util.Random;
  */
 public class AreaEffectBlock extends HorizontalBlock
 {
+	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 	public static final String EFFECT_CHANGE_MESSAGE = "effect_change_message";
 	
 	public AreaEffectBlock(Properties properties)
 	{
 		super(properties);
-		this.registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH));
+		this.registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(POWERED, false));
 	}
 	
 	@Override
@@ -87,6 +90,26 @@ public class AreaEffectBlock extends HorizontalBlock
 		return ActionResultType.PASS;
 	}
 	
+	@Override
+	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+	{
+		super.neighborChanged(state, worldIn, pos, blockIn, fromPos, isMoving);
+		updatePower(worldIn, pos);
+	}
+	
+	public void updatePower(World worldIn, BlockPos pos)
+	{
+		if(!worldIn.isClientSide)
+		{
+			BlockState state = worldIn.getBlockState(pos);
+			int powerInt = worldIn.getBestNeighborSignal(pos);
+			
+			if(state.getValue(POWERED) != powerInt > 0)
+				worldIn.setBlockAndUpdate(pos, state.setValue(POWERED, powerInt > 0));
+			else worldIn.sendBlockUpdated(pos, state, state, 2);
+		}
+	}
+	
 	@Nullable
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context)
@@ -97,7 +120,7 @@ public class AreaEffectBlock extends HorizontalBlock
 	@Override
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
 	{
-		if(worldIn.hasNeighborSignal(pos))
+		if(stateIn.getValue(POWERED))
 			ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE);
 	}
 	
@@ -106,5 +129,6 @@ public class AreaEffectBlock extends HorizontalBlock
 	{
 		super.createBlockStateDefinition(builder);
 		builder.add(FACING);
+		builder.add(POWERED);
 	}
 }

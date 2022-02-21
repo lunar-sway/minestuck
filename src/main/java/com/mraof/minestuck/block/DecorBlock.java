@@ -12,6 +12,8 @@ import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -51,6 +53,18 @@ public class DecorBlock extends Block implements IWaterLoggable
 		}
 		
 		return super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+	}
+	
+	@Override
+	public BlockState rotate(BlockState state, IWorld world, BlockPos pos, Rotation direction)
+	{
+		return state.setValue(FACING, direction.rotate(state.getValue(FACING)));
+	}
+	
+	@Override
+	public BlockState mirror(BlockState state, Mirror mirrorIn)
+	{
+		return state.setValue(FACING, mirrorIn.mirror(state.getValue(FACING)));
 	}
 	
 	@Override
