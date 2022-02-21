@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.lands;
 
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.skaianet.SburbConnection;
@@ -90,8 +91,12 @@ public class GristLayerInfo
 	
 	public GristType randomTypeFor(LivingEntity entity)
 	{
-		BlockPos pos = entity.blockPosition();
-		return randomLayer(entity.getRandom()).getTypeAt(pos.getX(), pos.getZ());
+		if (MinestuckConfig.SERVER.hardMode && entity.getRandom().nextBoolean()) {
+			return GristTypes.ARTIFACT.get();
+		} else {
+			BlockPos pos = entity.blockPosition();
+			return randomLayer(entity.getRandom()).getTypeAt(pos.getX(), pos.getZ());
+		}
 	}
 	
 	private GristTypeLayer randomLayer(Random rand)
