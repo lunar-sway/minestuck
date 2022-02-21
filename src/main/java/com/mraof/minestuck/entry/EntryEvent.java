@@ -14,7 +14,7 @@ import java.util.Random;
 public class EntryEvent
 {
 	private static final int FREQUENCY = 8;
-	private static final int RADIUS = 40;
+	private static final int RADIUS = 30;
 	
 	public static void tick(MinecraftServer server)
 	{
@@ -30,9 +30,9 @@ public class EntryEvent
 		{
 			Random rand = level.getRandom();
 			
-			double x = pos.pos().getX() + 0.5 + RADIUS * (2*rand.nextDouble() - 1) * (2*rand.nextDouble() - 1);
+			double x = pos.pos().getX() + 0.5 + RADIUS * invertedPyramidDist(rand);
 			double y = 256;
-			double z = pos.pos().getZ() + 0.5 + RADIUS * (2*rand.nextDouble() - 1) * (2*rand.nextDouble() - 1);
+			double z = pos.pos().getZ() + 0.5 + RADIUS * invertedPyramidDist(rand);
 			
 			Entity entity;
 			if (rand.nextFloat() < 0.95)
@@ -41,5 +41,14 @@ public class EntryEvent
 				entity = new DragonFireballEntity(level, x, y, z, 0, -1, 0);
 			level.addFreshEntity(entity);
 		}
+	}
+	
+	private static double invertedPyramidDist(Random rand)
+	{
+		double value = rand.nextDouble() - rand.nextDouble();
+		if (value > 0)
+			return 1 - value;
+		else
+			return -1 - value;
 	}
 }
