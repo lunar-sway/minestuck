@@ -38,6 +38,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
@@ -106,18 +107,21 @@ public class ServerEventHandler
 		if(event.getEntity() instanceof IMob && event.getSource().getEntity() instanceof ServerPlayerEntity)
 		{
 			ServerPlayerEntity player = (ServerPlayerEntity) event.getSource().getEntity();
-			int exp = 0;
-			if(event.getEntity() instanceof ZombieEntity || event.getEntity() instanceof SkeletonEntity)
-				exp = 1;
-			else if(event.getEntity() instanceof CreeperEntity || event.getEntity() instanceof SpiderEntity || event.getEntity() instanceof SilverfishEntity)
-				exp = 2;
-			else if(event.getEntity() instanceof EndermanEntity || event.getEntity() instanceof BlazeEntity || event.getEntity() instanceof WitchEntity || event.getEntity() instanceof GuardianEntity)
-				exp = 3;
-			else if(event.getEntity() instanceof SlimeEntity)
-				exp = Math.min(((SlimeEntity) event.getEntity()).getSize() - 1, 9);
-			
-			if(exp > 0)
-				Echeladder.increaseProgress(player, exp);
+			if(!(player instanceof FakePlayer))
+			{
+				int exp = 0;
+				if(event.getEntity() instanceof ZombieEntity || event.getEntity() instanceof SkeletonEntity)
+					exp = 1;
+				else if(event.getEntity() instanceof CreeperEntity || event.getEntity() instanceof SpiderEntity || event.getEntity() instanceof SilverfishEntity)
+					exp = 2;
+				else if(event.getEntity() instanceof EndermanEntity || event.getEntity() instanceof BlazeEntity || event.getEntity() instanceof WitchEntity || event.getEntity() instanceof GuardianEntity)
+					exp = 3;
+				else if(event.getEntity() instanceof SlimeEntity)
+					exp = Math.min(((SlimeEntity) event.getEntity()).getSize() - 1, 9);
+				
+				if(exp > 0)
+					Echeladder.increaseProgress(player, exp);
+			}
 		}
 		if(event.getEntity() instanceof ServerPlayerEntity)
 		{

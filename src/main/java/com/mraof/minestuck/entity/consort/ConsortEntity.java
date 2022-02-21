@@ -28,6 +28,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.*;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.FakePlayer;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;
@@ -319,7 +320,7 @@ public class ConsortEntity extends SimpleTexturedEntity implements IContainerPro
 	public void die(DamageSource cause)
 	{
 		LivingEntity livingEntity = this.getKillCredit();
-		if(livingEntity instanceof ServerPlayerEntity)
+		if(livingEntity instanceof ServerPlayerEntity && (!(livingEntity instanceof FakePlayer)))
 			PlayerSavedData.getData((ServerPlayerEntity) livingEntity).addConsortReputation(-100, homeDimension);
 		super.die(cause);
 	}

@@ -72,14 +72,14 @@ public class VeinCornerBlock extends Block
 		BlockState state = context.getLevel().getBlockState(context.getClickedPos().relative(context.getClickedFace().getOpposite()));
 		Half half = context.getClickedFace() == Direction.UP ? Half.TOP : Half.BOTTOM;
 		Direction facing = context.getHorizontalDirection();
-		
+		/*Does not work as it is written because the vein and vein corner isn't using the same facing type. Fix this if you want to use the vein block in the future.
 		if(state.getBlock() == MSBlocks.VEIN || state.getBlock() == MSBlocks.VEIN_CORNER)
 		{
 			Direction direction = state.getValue(FACING);
 			
 			if (direction == context.getClickedFace())
 				return this.defaultBlockState().setValue(FACING, direction.getOpposite());
-		}
+		}*/
 		
 		return this.defaultBlockState().setValue(FACING, facing).setValue(HALF, half);
 	}

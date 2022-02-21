@@ -55,6 +55,12 @@ public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<Editmode
 	}
 	
 	@Override
+	protected void renderLabels(MatrixStack matrixStack, int mouseX, int mouseY) {
+		
+		this.font.draw(matrixStack, this.title, this.titleLabelX, this.titleLabelY, 0x404040);
+	}
+	
+	@Override
 	public boolean mouseClicked(double xcor, double ycor, int mouseButton)
 	{
 		if(ycor >= yOffset + arrowY && ycor < yOffset + arrowY + 18)
