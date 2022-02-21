@@ -91,7 +91,7 @@ public class GristLayerInfo
 	
 	public GristType randomTypeFor(LivingEntity entity)
 	{
-		if (MinestuckConfig.SERVER.hardMode && entity.getRandom().nextBoolean()) {
+		if(MinestuckConfig.SERVER.hardMode.get() && entity.getRandom().nextBoolean()) {
 			return GristTypes.ARTIFACT.get();
 		} else {
 			BlockPos pos = entity.blockPosition();

@@ -1251,7 +1251,8 @@ public class ImpDungeonPieces
 		}	
 	}
 	
-	private static EntityType<?> getTypeForSpawners() {
-		return MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP;
+	private static EntityType<?> getTypeForSpawners()
+	{
+		return MinestuckConfig.SERVER.hardMode.get() ? MSEntityTypes.LICH : MSEntityTypes.IMP;
 	}
 }

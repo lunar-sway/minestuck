@@ -84,7 +84,7 @@ public class ServerEventHandler
 		if(event.phase == TickEvent.Phase.END)
 		{
 			MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
-			if(!MinestuckConfig.SERVER.hardMode)
+			if(!MinestuckConfig.SERVER.hardMode.get())
 			{
 				long time = server.overworld().getGameTime() / 24000L;
 				if(time != lastDay)
@@ -96,7 +96,7 @@ public class ServerEventHandler
 			
 			MSExtraData.get(server).executeEntryTasks(server);
 			
-			if (MinestuckConfig.SERVER.hardMode)
+			if(MinestuckConfig.SERVER.hardMode.get())
 				EntryEvent.tick(server);
 		}
 	}
