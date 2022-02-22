@@ -91,9 +91,11 @@ public class GristLayerInfo
 	
 	public GristType randomTypeFor(LivingEntity entity)
 	{
+		// In hardmode, any underling anywhere can get the artifact grist type at a 50% chance.
 		if(MinestuckConfig.SERVER.hardMode.get() && entity.getRandom().nextBoolean()) {
 			return GristTypes.ARTIFACT.get();
 		} else {
+			// Otherwise, the grist type is picked from a random grist layer.
 			BlockPos pos = entity.blockPosition();
 			return randomLayer(entity.getRandom()).getTypeAt(pos.getX(), pos.getZ());
 		}

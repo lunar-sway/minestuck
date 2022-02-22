@@ -11,6 +11,9 @@ import net.minecraft.world.server.ServerWorld;
 
 import java.util.Random;
 
+/**
+ * Handles special events leading up to the player entering, that may motivate the player to hurry up with entry.
+ */
 public class EntryEvent
 {
 	private static final int FREQUENCY = 8;
@@ -28,6 +31,7 @@ public class EntryEvent
 		ServerWorld level = server.getLevel(pos.dimension());
 		if (level != null && level.isLoaded(pos.pos()))
 		{
+			// Spawn some kind of fireball in the sky near the computer
 			Random rand = level.getRandom();
 			
 			double x = pos.pos().getX() + 0.5 + RADIUS * invertedPyramidDist(rand);
@@ -43,6 +47,9 @@ public class EntryEvent
 		}
 	}
 	
+	/**
+	 * A random distribution in the range -1 to 1 that is less likely to be near 0 and more likely to be near -1 or 1.
+	 */
 	private static double invertedPyramidDist(Random rand)
 	{
 		double value = rand.nextDouble() - rand.nextDouble();
