@@ -4,10 +4,10 @@
     "item": "minecraft:yellow_wool"
   },
   "input2": {
-    "item": "minestuck:black_castle_bricks"
+    "item": "minestuck:black_chess_bricks"
   },
   "mode": "and",
   "output": {
-    "item": "minestuck:black_castle_brick_trim"
+    "item": "minestuck:black_chess_brick_trim"
   }
 }

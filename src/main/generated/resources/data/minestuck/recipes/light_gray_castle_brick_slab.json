@@ -5,11 +5,11 @@
   ],
   "key": {
     "#": {
-      "item": "minestuck:light_gray_castle_bricks"
+      "item": "minestuck:light_gray_chess_bricks"
     }
   },
   "result": {
-    "item": "minestuck:light_gray_castle_brick_slab",
+    "item": "minestuck:light_gray_chess_brick_slab",
     "count": 6
   }
 }

@@ -2,16 +2,16 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "minestuck:dark_gray_castle_brick_stairs_from_dark_gray_castle_bricks_stonecutting"
+      "minestuck:dark_gray_chess_brick_stairs_from_dark_gray_chess_bricks_stonecutting"
     ]
   },
   "criteria": {
-    "has_dark_gray_castle_bricks": {
+    "has_dark_gray_chess_bricks": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "minestuck:dark_gray_castle_bricks"
+            "item": "minestuck:dark_gray_chess_bricks"
           }
         ]
       }
@@ -19,13 +19,13 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "minestuck:dark_gray_castle_brick_stairs_from_dark_gray_castle_bricks_stonecutting"
+        "recipe": "minestuck:dark_gray_chess_brick_stairs_from_dark_gray_chess_bricks_stonecutting"
       }
     }
   },
   "requirements": [
     [
-      "has_dark_gray_castle_bricks",
+      "has_dark_gray_chess_bricks",
       "has_the_recipe"
     ]
   ]

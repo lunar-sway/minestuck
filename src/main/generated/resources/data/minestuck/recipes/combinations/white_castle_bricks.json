@@ -8,6 +8,6 @@
   },
   "mode": "or",
   "output": {
-    "item": "minestuck:white_castle_bricks"
+    "item": "minestuck:white_chess_bricks"
   }
 }

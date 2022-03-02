@@ -4,10 +4,10 @@
     "item": "minecraft:stone"
   },
   "input2": {
-    "item": "minestuck:white_castle_bricks"
+    "item": "minestuck:white_chess_bricks"
   },
   "mode": "or",
   "output": {
-    "item": "minestuck:white_castle_brick_smooth"
+    "item": "minestuck:white_chess_brick_smooth"
   }
 }

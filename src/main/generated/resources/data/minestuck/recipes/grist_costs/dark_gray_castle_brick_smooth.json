@@ -1,7 +1,7 @@
 {
   "type": "minestuck:grist_cost",
   "ingredient": {
-    "item": "minestuck:dark_gray_castle_brick_smooth"
+    "item": "minestuck:dark_gray_chess_brick_smooth"
   },
   "grist_cost": {
     "minestuck:build": 2

@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minestuck:dark_gray_castle_bricks"
+          "name": "minestuck:dark_gray_chess_bricks"
         }
       ],
       "conditions": [
