@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "minestuck:white_chess_bricks"
-  },
-  "result": "minestuck:white_chess_brick_stairs",
-  "count": 1
-}
