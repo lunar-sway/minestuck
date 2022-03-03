@@ -5,6 +5,7 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.consort.ConsortDialogue;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
+import com.mraof.minestuck.entry.EntryEvent;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.MSItems;
@@ -16,7 +17,6 @@ import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.skaianet.TitleSelectionHook;
 import com.mraof.minestuck.world.MSDimensions;
-import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
@@ -35,7 +35,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.TickEvent;
@@ -52,6 +51,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 import java.util.List;
 
@@ -79,24 +79,25 @@ public class ServerEventHandler
 	}
 	
 	@SubscribeEvent
-	public static void onWorldTick(TickEvent.WorldTickEvent event)
+	public static void onServerTick(TickEvent.ServerTickEvent event)
 	{
 		if(event.phase == TickEvent.Phase.END)
 		{
-			
-			if(!MinestuckConfig.SERVER.hardMode && event.world.dimension() == World.OVERWORLD)
+			MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+			if(!MinestuckConfig.SERVER.hardMode.get())
 			{
-				long time = event.world.getGameTime() / 24000L;
+				long time = server.overworld().getGameTime() / 24000L;
 				if(time != lastDay)
 				{
 					lastDay = time;
-					SburbHandler.resetGivenItems(event.world.getServer());
+					SburbHandler.resetGivenItems(server);
 				}
 			}
 			
-			MinecraftServer server = event.world.getServer();
-			if(server != null)
-				MSExtraData.get(server).executeEntryTasks(server);
+			MSExtraData.get(server).executeEntryTasks(server);
+			
+			if(MinestuckConfig.SERVER.hardMode.get())
+				EntryEvent.tick(server);
 		}
 	}
 	
