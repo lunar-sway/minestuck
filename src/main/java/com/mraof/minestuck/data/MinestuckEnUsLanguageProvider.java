@@ -314,6 +314,11 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.END_PLANKS_SLAB, "End Planks Slab");
 		add(MSBlocks.DEAD_PLANKS_SLAB, "Dead Planks Slab");
 		add(MSBlocks.TREATED_PLANKS_SLAB, "Treated Planks Slab");
+		add(MSBlocks.MYCELIUM_BRICK_SLAB, "Mycelium Brick Slab");
+		add(MSBlocks.FLOWERY_MOSSY_STONE_BRICK_SLAB, "Flowery Mossy Stone Brick Slab");
+		add(MSBlocks.FROST_BRICK_SLAB, "Frost Brick Slab");
+		add(MSBlocks.SHADE_BRICK_SLAB, "Shade Brick Slab");
+		add(MSBlocks.COARSE_STONE_SLAB, "Coarse Stone Slab");
 		add(MSBlocks.GATE, "Gate");
 		add(MSBlocks.RETURN_NODE, "Return Node");
 		MSBlocks.CRUXTRUDER.forEachBlock(block -> add(block, "Cruxtruder"));

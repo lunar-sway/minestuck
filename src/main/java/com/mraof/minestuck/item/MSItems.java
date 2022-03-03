@@ -726,6 +726,7 @@ public class MSItems
 		registerItemBlock(registry, END_PLANKS_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, DEAD_PLANKS_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, TREATED_PLANKS_STAIRS, MSItemGroup.LANDS);
+		registerItemBlock(registry, FLOWERY_MOSSY_STONE_BRICK_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, STEEP_GREEN_STONE_BRICK_STAIRS_BASE, MSItemGroup.MAIN);
 		registerItemBlock(registry, STEEP_GREEN_STONE_BRICK_STAIRS_TOP, MSItemGroup.MAIN);
 		registerItemBlock(registry, BLACK_CHESS_BRICK_SLAB, MSItemGroup.MAIN);
@@ -741,6 +742,11 @@ public class MSItems
 		registerItemBlock(registry, END_PLANKS_SLAB, MSItemGroup.LANDS);
 		registerItemBlock(registry, DEAD_PLANKS_SLAB, MSItemGroup.LANDS);
 		registerItemBlock(registry, TREATED_PLANKS_SLAB, MSItemGroup.LANDS);
+		registerItemBlock(registry, MYCELIUM_BRICK_SLAB, MSItemGroup.LANDS);
+		registerItemBlock(registry, FLOWERY_MOSSY_STONE_BRICK_SLAB, MSItemGroup.LANDS);
+		registerItemBlock(registry, FROST_BRICK_SLAB, MSItemGroup.LANDS);
+		registerItemBlock(registry, COARSE_STONE_SLAB, MSItemGroup.LANDS);
+		registerItemBlock(registry, SHADE_BRICK_SLAB, MSItemGroup.LANDS);
 		
 		registry.register(new CruxtruderItem(MSBlocks.CRUXTRUDER, new Item.Properties().tab(MSItemGroup.MAIN)).setRegistryName("cruxtruder"));
 		registerItemBlock(registry, CRUXTRUDER_LID, MSItemGroup.MAIN);

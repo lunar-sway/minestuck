@@ -25,6 +25,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.ObjectHolder;
+import software.bernie.shadowed.eliotlash.mclib.math.functions.classic.Abs;
 
 import javax.annotation.Nonnull;
 import java.util.function.Function;
@@ -142,11 +143,11 @@ public class MSBlocks
 	//Structure Land Blocks
 	public static final Block BLACK_CHESS_BRICK_STAIRS = getNull(), DARK_GRAY_CHESS_BRICK_STAIRS = getNull(), LIGHT_GRAY_CHESS_BRICK_STAIRS = getNull(), WHITE_CHESS_BRICK_STAIRS = getNull();
 	public static final Block COARSE_STONE_STAIRS = getNull(), SHADE_BRICK_STAIRS = getNull(), FROST_BRICK_STAIRS = getNull(), CAST_IRON_STAIRS = getNull();
-	public static final Block MYCELIUM_BRICK_STAIRS = getNull(), CHALK_STAIRS = getNull(), CHALK_BRICK_STAIRS = getNull(), PINK_STONE_BRICK_STAIRS = getNull(), BROWN_STONE_BRICK_STAIRS = getNull(), GREEN_STONE_BRICK_STAIRS = getNull();
+	public static final Block FLOWERY_MOSSY_STONE_BRICK_STAIRS = getNull(), MYCELIUM_BRICK_STAIRS = getNull(), CHALK_STAIRS = getNull(), CHALK_BRICK_STAIRS = getNull(), PINK_STONE_BRICK_STAIRS = getNull(), BROWN_STONE_BRICK_STAIRS = getNull(), GREEN_STONE_BRICK_STAIRS = getNull();
 	public static final Block RAINBOW_PLANKS_STAIRS = getNull(), END_PLANKS_STAIRS = getNull(), DEAD_PLANKS_STAIRS = getNull(), TREATED_PLANKS_STAIRS = getNull();
 	public static final Block STEEP_GREEN_STONE_BRICK_STAIRS_BASE = getNull(), STEEP_GREEN_STONE_BRICK_STAIRS_TOP = getNull();
 	public static final Block BLACK_CHESS_BRICK_SLAB = getNull(), DARK_GRAY_CHESS_BRICK_SLAB = getNull(), LIGHT_GRAY_CHESS_BRICK_SLAB = getNull(), WHITE_CHESS_BRICK_SLAB = getNull();
-	public static final Block CHALK_SLAB = getNull(), CHALK_BRICK_SLAB = getNull(), PINK_STONE_BRICK_SLAB = getNull(), BROWN_STONE_BRICK_SLAB = getNull(), GREEN_STONE_BRICK_SLAB = getNull();
+	public static final Block FLOWERY_MOSSY_STONE_BRICK_SLAB = getNull(), COARSE_STONE_SLAB = getNull(), SHADE_BRICK_SLAB = getNull(), FROST_BRICK_SLAB = getNull(), MYCELIUM_BRICK_SLAB = getNull(), CHALK_SLAB = getNull(), CHALK_BRICK_SLAB = getNull(), PINK_STONE_BRICK_SLAB = getNull(), BROWN_STONE_BRICK_SLAB = getNull(), GREEN_STONE_BRICK_SLAB = getNull();
 	public static final Block RAINBOW_PLANKS_SLAB = getNull(), END_PLANKS_SLAB = getNull(), DEAD_PLANKS_SLAB = getNull(), TREATED_PLANKS_SLAB = getNull();
 
 	//Core Functional Land Blocks
@@ -303,7 +304,7 @@ public class MSBlocks
 		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_BLACK).requiresCorrectToolForDrops().strength(2.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("black_stone"));
 		registry.register(new SandBlock(0x181915, AbstractBlock.Properties.of(Material.SAND, MaterialColor.COLOR_BLACK).strength(0.5F).sound(SoundType.SAND)).setRegistryName("black_sand"));
 		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("flowery_mossy_cobblestone"));
-		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("flowery_mossy_stone_bricks"));
+		Block floweryMossyStoneBricks = register(registry, new Block(AbstractBlock.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("flowery_mossy_stone_bricks"));
 		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.SAND).requiresCorrectToolForDrops().strength(3.0F, 9.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("coarse_end_stone"));
 		registry.register(new EndGrassBlock(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_PURPLE).requiresCorrectToolForDrops().strength(3.0F, 9.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("end_grass"));
 		Block chalk = register(registry, new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.SNOW).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("chalk"));
@@ -342,6 +343,7 @@ public class MSBlocks
 		registry.register(new Block(AbstractBlock.Properties.of(Material.GLASS, MaterialColor.COLOR_YELLOW).strength(0.5F).sound(SoundType.SNOW)).setRegistryName("dense_cloud"));
 		registry.register(new Block(AbstractBlock.Properties.of(Material.GLASS, MaterialColor.COLOR_LIGHT_GRAY).strength(0.5F).sound(SoundType.SNOW)).setRegistryName("bright_dense_cloud"));
 		registry.register(new Block(AbstractBlock.Properties.of(Material.SAND, MaterialColor.SNOW).strength(0.4F).sound(SoundType.SAND)).setRegistryName("sugar_cube"));
+
 		
 		registry.register(new FlammableLogBlock(AbstractBlock.Properties.of(Material.WOOD, MaterialColor.COLOR_LIGHT_BLUE).strength(2.0F).harvestTool(ToolType.AXE).lightLevel(state -> 11).sound(SoundType.WOOD)).setRegistryName("glowing_log"));
 		registry.register(new FlammableLogBlock(AbstractBlock.Properties.of(Material.WOOD, MaterialColor.ICE).strength(2.0F).harvestTool(ToolType.AXE).sound(SoundType.WOOD)).setRegistryName("frost_log"));
@@ -449,6 +451,7 @@ public class MSBlocks
 		registry.register(new StairsBlock(() -> MSBlocks.FROST_BRICKS.defaultBlockState(), AbstractBlock.Properties.copy(frostBricks)).setRegistryName("frost_brick_stairs"));
 		registry.register(new StairsBlock(() -> MSBlocks.CAST_IRON.defaultBlockState(), AbstractBlock.Properties.copy(castIron)).setRegistryName("cast_iron_stairs"));
 		registry.register(new StairsBlock(() -> MSBlocks.MYCELIUM_BRICKS.defaultBlockState(), AbstractBlock.Properties.copy(myceliumBricks)).setRegistryName("mycelium_brick_stairs"));
+		registry.register(new StairsBlock(() -> MSBlocks.FLOWERY_MOSSY_STONE_BRICK_STAIRS.defaultBlockState(), AbstractBlock.Properties.copy(floweryMossyStoneBricks)).setRegistryName("flowery_mossy_stone_brick_stairs"));
 		registry.register(new StairsBlock(() -> MSBlocks.CHALK.defaultBlockState(), AbstractBlock.Properties.copy(chalk)).setRegistryName("chalk_stairs"));
 		registry.register(new StairsBlock(() -> MSBlocks.CHALK_BRICKS.defaultBlockState(), AbstractBlock.Properties.copy(chalkBricks)).setRegistryName("chalk_brick_stairs"));
 		registry.register(new StairsBlock(() -> MSBlocks.PINK_STONE_BRICKS.defaultBlockState(), AbstractBlock.Properties.copy(pinkStoneBricks)).setRegistryName("pink_stone_brick_stairs"));
@@ -467,6 +470,12 @@ public class MSBlocks
 		registry.register(new SlabBlock(AbstractBlock.Properties.copy(chalk)).setRegistryName("chalk_slab"));
 		registry.register(new SlabBlock(AbstractBlock.Properties.copy(chalkBricks)).setRegistryName("chalk_brick_slab"));
 		registry.register(new SlabBlock(AbstractBlock.Properties.copy(pinkStoneBricks)).setRegistryName("pink_stone_brick_slab"));
+		registry.register(new SlabBlock(AbstractBlock.Properties.copy(myceliumBricks)).setRegistryName("mycelium_brick_slab"));
+		registry.register(new SlabBlock(AbstractBlock.Properties.copy(floweryMossyStoneBricks)).setRegistryName("flowery_mossy_stone_brick_slab"));
+
+		registry.register(new SlabBlock(AbstractBlock.Properties.copy(frostBricks)).setRegistryName("frost_brick_slab"));
+		registry.register(new SlabBlock(AbstractBlock.Properties.copy(shadeBricks)).setRegistryName("shade_brick_slab"));
+		registry.register(new SlabBlock(AbstractBlock.Properties.copy(coarseStone)).setRegistryName("coarse_stone_slab"));
 		registry.register(new SlabBlock(AbstractBlock.Properties.copy(brownStoneBricks)).setRegistryName("brown_stone_brick_slab"));
 		registry.register(new SlabBlock(Block.Properties.copy(greenStoneBricks)).setRegistryName("green_stone_brick_slab"));
 		registry.register(new SlabBlock(AbstractBlock.Properties.copy(rainbowPlanks)).setRegistryName("rainbow_planks_slab"));

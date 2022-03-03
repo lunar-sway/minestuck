@@ -81,6 +81,7 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		ShapedRecipeBuilder.shaped(MSBlocks.DARK_GRAY_CHESS_BRICK_SLAB, 6).define('#', MSBlocks.DARK_GRAY_CHESS_BRICKS).pattern("###").unlockedBy("has_dark_gray_chess_bricks", has(MSBlocks.DARK_GRAY_CHESS_BRICKS)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(MSBlocks.LIGHT_GRAY_CHESS_BRICK_SLAB, 6).define('#', MSBlocks.LIGHT_GRAY_CHESS_BRICKS).pattern("###").unlockedBy("has_light_gray_chess_bricks", has(MSBlocks.LIGHT_GRAY_CHESS_BRICKS)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(MSBlocks.WHITE_CHESS_BRICK_SLAB, 6).define('#', MSBlocks.WHITE_CHESS_BRICKS).pattern("###").unlockedBy("has_white_chess_bricks", has(MSBlocks.WHITE_CHESS_BRICKS)).save(recipeBuilder);
+		ShapedRecipeBuilder.shaped(MSBlocks.COARSE_STONE_SLAB, 6).define( '#', MSBlocks.COARSE_STONE).pattern("###").unlockedBy("has_coarse_stone", has(MSBlocks.COARSE_STONE)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(MSBlocks.CHALK_SLAB, 6).define('#', MSBlocks.CHALK).pattern("###").unlockedBy("has_chalk", has(MSBlocks.CHALK)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(MSBlocks.CHALK_BRICK_SLAB, 6).define('#', MSBlocks.CHALK_BRICKS).pattern("###").unlockedBy("has_chalk_bricks", has(MSBlocks.CHALK_BRICKS)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(MSBlocks.PINK_STONE_BRICK_SLAB, 6).define('#', MSBlocks.PINK_STONE_BRICKS).pattern("###").unlockedBy("has_pink_stone_bricks", has(MSBlocks.PINK_STONE_BRICKS)).save(recipeBuilder);
