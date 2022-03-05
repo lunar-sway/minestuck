@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minestuck:white_castle_brick_slab"
+    ]
+  },
+  "criteria": {
+    "has_white_chess_bricks": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minestuck:white_castle_bricks"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minestuck:white_castle_brick_slab"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_white_chess_bricks",
+      "has_the_recipe"
+    ]
+  ]
+}

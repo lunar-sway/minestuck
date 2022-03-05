@@ -501,18 +501,18 @@ public class MSItems
 		registerItemBlock(registry, LIGHT_GRAY_CHESS_DIRT, MSItemGroup.MAIN);
 		registerItemBlock(registry, SKAIA_PORTAL, new Item.Properties().tab(MSItemGroup.MAIN).rarity(Rarity.EPIC));
 		
-		registerItemBlock(registry, BLACK_CHESS_BRICKS, MSItemGroup.MAIN);
-		registerItemBlock(registry, DARK_GRAY_CHESS_BRICKS, MSItemGroup.MAIN);
-		registerItemBlock(registry, LIGHT_GRAY_CHESS_BRICKS, MSItemGroup.MAIN);
-		registerItemBlock(registry, WHITE_CHESS_BRICKS, MSItemGroup.MAIN);
-		registerItemBlock(registry, BLACK_CHESS_BRICK_SMOOTH, MSItemGroup.MAIN);
-		registerItemBlock(registry, DARK_GRAY_CHESS_BRICK_SMOOTH, MSItemGroup.MAIN);
-		registerItemBlock(registry, LIGHT_GRAY_CHESS_BRICK_SMOOTH, MSItemGroup.MAIN);
-		registerItemBlock(registry, WHITE_CHESS_BRICK_SMOOTH, MSItemGroup.MAIN);
-		registerItemBlock(registry, BLACK_CHESS_BRICK_TRIM, MSItemGroup.MAIN);
-		registerItemBlock(registry, DARK_GRAY_CHESS_BRICK_TRIM, MSItemGroup.MAIN);
-		registerItemBlock(registry, LIGHT_GRAY_CHESS_BRICK_TRIM, MSItemGroup.MAIN);
-		registerItemBlock(registry, WHITE_CHESS_BRICK_TRIM, MSItemGroup.MAIN);
+		registerItemBlock(registry, BLACK_CASTLE_BRICKS, MSItemGroup.MAIN);
+		registerItemBlock(registry, DARK_GRAY_CASTLE_BRICKS, MSItemGroup.MAIN);
+		registerItemBlock(registry, LIGHT_GRAY_CASTLE_BRICKS, MSItemGroup.MAIN);
+		registerItemBlock(registry, WHITE_CASTLE_BRICKS, MSItemGroup.MAIN);
+		registerItemBlock(registry, BLACK_CASTLE_BRICK_SMOOTH, MSItemGroup.MAIN);
+		registerItemBlock(registry, DARK_GRAY_CASTLE_BRICK_SMOOTH, MSItemGroup.MAIN);
+		registerItemBlock(registry, LIGHT_GRAY_CASTLE_BRICK_SMOOTH, MSItemGroup.MAIN);
+		registerItemBlock(registry, WHITE_CASTLE_BRICK_SMOOTH, MSItemGroup.MAIN);
+		registerItemBlock(registry, BLACK_CASTLE_BRICK_TRIM, MSItemGroup.MAIN);
+		registerItemBlock(registry, DARK_GRAY_CASTLE_BRICK_TRIM, MSItemGroup.MAIN);
+		registerItemBlock(registry, LIGHT_GRAY_CASTLE_BRICK_TRIM, MSItemGroup.MAIN);
+		registerItemBlock(registry, WHITE_CASTLE_BRICK_TRIM, MSItemGroup.MAIN);
 		registerItemBlock(registry, CHECKERED_STAINED_GLASS, MSItemGroup.MAIN);
 		registerItemBlock(registry, BLACK_CROWN_STAINED_GLASS, MSItemGroup.MAIN);
 		registerItemBlock(registry, BLACK_PAWN_STAINED_GLASS, MSItemGroup.MAIN);
@@ -708,10 +708,10 @@ public class MSItems
 		registerItemBlock(registry, PYXIS_LID, MSItemGroup.LANDS);
 		registerItemBlock(registry, new StoneTabletItem(MSBlocks.STONE_SLAB, new Item.Properties().tab(MSItemGroup.LANDS)));
 		
-		registerItemBlock(registry, BLACK_CHESS_BRICK_STAIRS, MSItemGroup.MAIN);
-		registerItemBlock(registry, DARK_GRAY_CHESS_BRICK_STAIRS, MSItemGroup.MAIN);
-		registerItemBlock(registry, LIGHT_GRAY_CHESS_BRICK_STAIRS, MSItemGroup.MAIN);
-		registerItemBlock(registry, WHITE_CHESS_BRICK_STAIRS, MSItemGroup.MAIN);
+		registerItemBlock(registry, BLACK_CASTLE_BRICK_STAIRS, MSItemGroup.MAIN);
+		registerItemBlock(registry, DARK_GRAY_CASTLE_BRICK_STAIRS, MSItemGroup.MAIN);
+		registerItemBlock(registry, LIGHT_GRAY_CASTLE_BRICK_STAIRS, MSItemGroup.MAIN);
+		registerItemBlock(registry, WHITE_CASTLE_BRICK_STAIRS, MSItemGroup.MAIN);
 		registerItemBlock(registry, COARSE_STONE_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, SHADE_BRICK_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, FROST_BRICK_STAIRS, MSItemGroup.LANDS);
@@ -719,6 +719,7 @@ public class MSItems
 		registerItemBlock(registry, MYCELIUM_BRICK_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, CHALK_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, CHALK_BRICK_STAIRS, MSItemGroup.LANDS);
+		registerItemBlock(registry, FLOWERY_MOSSY_STONE_BRICK_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, PINK_STONE_BRICK_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, BROWN_STONE_BRICK_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, GREEN_STONE_BRICK_STAIRS, MSItemGroup.MAIN);
@@ -726,13 +727,13 @@ public class MSItems
 		registerItemBlock(registry, END_PLANKS_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, DEAD_PLANKS_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, TREATED_PLANKS_STAIRS, MSItemGroup.LANDS);
-		registerItemBlock(registry, FLOWERY_MOSSY_STONE_BRICK_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, STEEP_GREEN_STONE_BRICK_STAIRS_BASE, MSItemGroup.MAIN);
 		registerItemBlock(registry, STEEP_GREEN_STONE_BRICK_STAIRS_TOP, MSItemGroup.MAIN);
-		registerItemBlock(registry, BLACK_CHESS_BRICK_SLAB, MSItemGroup.MAIN);
-		registerItemBlock(registry, DARK_GRAY_CHESS_BRICK_SLAB, MSItemGroup.MAIN);
-		registerItemBlock(registry, LIGHT_GRAY_CHESS_BRICK_SLAB, MSItemGroup.MAIN);
-		registerItemBlock(registry, WHITE_CHESS_BRICK_SLAB, MSItemGroup.MAIN);
+		registerItemBlock(registry, BLACK_CASTLE_BRICK_SLAB, MSItemGroup.MAIN);
+		registerItemBlock(registry, DARK_GRAY_CASTLE_BRICK_SLAB, MSItemGroup.MAIN);
+		registerItemBlock(registry, LIGHT_GRAY_CASTLE_BRICK_SLAB, MSItemGroup.MAIN);
+		registerItemBlock(registry, WHITE_CASTLE_BRICK_SLAB, MSItemGroup.MAIN);
+		registerItemBlock(registry, COARSE_STONE_SLAB, MSItemGroup.LANDS);
 		registerItemBlock(registry, CHALK_SLAB, MSItemGroup.LANDS);
 		registerItemBlock(registry, CHALK_BRICK_SLAB, MSItemGroup.LANDS);
 		registerItemBlock(registry, PINK_STONE_BRICK_SLAB, MSItemGroup.LANDS);
@@ -745,7 +746,6 @@ public class MSItems
 		registerItemBlock(registry, MYCELIUM_BRICK_SLAB, MSItemGroup.LANDS);
 		registerItemBlock(registry, FLOWERY_MOSSY_STONE_BRICK_SLAB, MSItemGroup.LANDS);
 		registerItemBlock(registry, FROST_BRICK_SLAB, MSItemGroup.LANDS);
-		registerItemBlock(registry, COARSE_STONE_SLAB, MSItemGroup.LANDS);
 		registerItemBlock(registry, SHADE_BRICK_SLAB, MSItemGroup.LANDS);
 		
 		registry.register(new CruxtruderItem(MSBlocks.CRUXTRUDER, new Item.Properties().tab(MSItemGroup.MAIN)).setRegistryName("cruxtruder"));

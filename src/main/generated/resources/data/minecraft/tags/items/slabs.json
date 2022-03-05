@@ -1,10 +1,11 @@
 {
   "replace": false,
   "values": [
-    "minestuck:black_chess_brick_slab",
-    "minestuck:dark_gray_chess_brick_slab",
-    "minestuck:light_gray_chess_brick_slab",
-    "minestuck:white_chess_brick_slab",
+    "minestuck:coarse_stone_slab",
+    "minestuck:black_castle_brick_slab",
+    "minestuck:dark_gray_castle_brick_slab",
+    "minestuck:light_gray_castle_brick_slab",
+    "minestuck:white_castle_brick_slab",
     "minestuck:chalk_slab",
     "minestuck:chalk_brick_slab",
     "minestuck:pink_stone_brick_slab",
@@ -13,7 +14,6 @@
     "minestuck:mycelium_brick_slab",
     "minestuck:flowery_mossy_stone_brick_slab",
     "minestuck:frost_brick_slab",
-    "minestuck:shade_brick_slab",
-    "minestuck:coarse_stone_slab"
+    "minestuck:shade_brick_slab"
   ]
 }
