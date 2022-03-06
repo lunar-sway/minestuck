@@ -519,7 +519,7 @@ public class MSBlocks
 		registry.register(new SummonerBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL)).setRegistryName("summoner"));
 		registry.register(new AreaEffectBlock(AbstractBlock.Properties.of(Material.METAL).strength(6).sound(SoundType.METAL)).setRegistryName("area_effect_block"));
 		registry.register(new PlatformGeneratorBlock(AbstractBlock.Properties.of(Material.METAL).strength(6).sound(SoundType.METAL)).setRegistryName("platform_generator"));
-		registry.register(new PlatformBlock(AbstractBlock.Properties.of(Material.BARRIER).strength(0.2F).sound(SoundType.SCAFFOLDING).lightLevel(state -> 6).noOcclusion().isSuffocating(MSBlocks::never)).setRegistryName("platform_block"));
+		registry.register(new PlatformBlock(AbstractBlock.Properties.of(Material.BARRIER).strength(0.2F).sound(SoundType.SCAFFOLDING).lightLevel(state -> 6).noOcclusion().isSuffocating(MSBlocks::never).isViewBlocking(MSBlocks::never)).setRegistryName("platform_block"));
 		registry.register(new ItemMagnetBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL)).setRegistryName("item_magnet"));
 		registry.register(new RedstoneClockBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL)).setRegistryName("redstone_clock"));
 		registry.register(new RotatorBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL)).setRegistryName("rotator"));

@@ -1,7 +1,6 @@
 package com.mraof.minestuck.block.redstone;
 
 import com.mraof.minestuck.effects.CreativeShockEffect;
-import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -44,10 +43,7 @@ public class RetractableSpikesBlock extends Block
 	{
 		if(worldIn.getBlockState(pos).getValue(POWERED) && fallDistance > 3)
 		{
-			if(entityIn instanceof UnderlingEntity)
-			{
-				entityIn.causeFallDamage(fallDistance, 1.5F); //damage reduced for underlings to limit their death by factors other than players
-			} else if(entityIn instanceof LivingEntity)
+			if(entityIn instanceof LivingEntity)
 			{
 				entityIn.causeFallDamage(fallDistance, 3);
 			}
@@ -71,15 +67,8 @@ public class RetractableSpikesBlock extends Block
 				double distanceZ = Math.abs(entityIn.getZ() - entityIn.zOld);
 				if(distanceX >= (double) 0.003F || distanceZ >= (double) 0.003F)
 				{
-					if(entityIn instanceof UnderlingEntity)
-					{
-						//entityIn.makeStuckInBlock(state, new Vector3d(0.1F, 0.9, 0.1F));
-						entityIn.hurt(DamageSource.GENERIC, 0.25F);
-					} else
-					{
-						//entityIn.makeStuckInBlock(state, new Vector3d(0.3F, 0.9, 0.3F));
-						entityIn.hurt(DamageSource.GENERIC, 1.0F); //TODO only activates for players when they take a running jump onto the block, works fine for other mobs
-					}
+					//entityIn.makeStuckInBlock(state, new Vector3d(0.3F, 0.9, 0.3F));
+					entityIn.hurt(DamageSource.GENERIC, 1.0F); //TODO only activates for players when they take a running jump onto the block, works fine for other mobs
 				}
 			}
 		}

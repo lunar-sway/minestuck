@@ -7,6 +7,9 @@ import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
@@ -26,12 +29,15 @@ public class PlatformBlock extends Block
 		registerDefaultState(stateDefinition.any().setValue(INVISIBLE, false));
 	}
 	
-	/*@Override
 	@Override
-	public float getAmbientOcclusionLightValue(BlockState state, IBlockReader worldIn, BlockPos pos) //TODO should have occlusion so players can see while inside block
+	public float getShadeBrightness(BlockState p_220080_1_, IBlockReader p_220080_2_, BlockPos p_220080_3_)
 	{
 		return 1.0F;
-	}*/
+	}
+	
+	public VoxelShape getVisualShape(BlockState p_230322_1_, IBlockReader p_230322_2_, BlockPos p_230322_3_, ISelectionContext p_230322_4_) {
+		return VoxelShapes.empty();
+	}
 	
 	@Override
 	public boolean propagatesSkylightDown(BlockState state, IBlockReader reader, BlockPos pos)
