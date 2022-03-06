@@ -1,12 +1,11 @@
 package com.mraof.minestuck.block.redstone;
 
-import com.mraof.minestuck.block.MSDirectionalBlock;
+import com.mraof.minestuck.block.DirectionalCustomModelBlock;
 import com.mraof.minestuck.tileentity.redstone.ItemMagnetTileEntity;
+import com.mraof.minestuck.util.CustomVoxelShape;
 import com.mraof.minestuck.util.ParticlesAroundSolidBlock;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.particles.RedstoneParticleData;
-import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
@@ -19,12 +18,12 @@ import java.util.Random;
 /**
  * When powered, the tile entity for this block pulls item entities towards it
  */
-public class ItemMagnetBlock extends MSDirectionalBlock
+public class ItemMagnetBlock extends DirectionalCustomModelBlock
 {
 	
-	public ItemMagnetBlock(Properties properties)
+	public ItemMagnetBlock(Properties properties, CustomVoxelShape shape)
 	{
-		super(properties);
+		super(properties, shape);
 		registerDefaultState(stateDefinition.any().setValue(FACING, Direction.UP));
 	}
 	

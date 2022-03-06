@@ -468,10 +468,10 @@ public class MSBlocks
 		registry.register(new VeinBlock(AbstractBlock.Properties.of(Material.WOOD).strength(0.45F).sound(SoundType.SLIME_BLOCK)).setRegistryName("vein"));
 		registry.register(new VeinCornerBlock(AbstractBlock.Properties.of(Material.WOOD).strength(0.45F).sound(SoundType.SLIME_BLOCK)).setRegistryName("vein_corner"));
 		registry.register(new VeinCornerBlock(AbstractBlock.Properties.of(Material.WOOD).strength(0.45F).sound(SoundType.SLIME_BLOCK)).setRegistryName("inverted_vein_corner"));
-		registry.register(new PipeBlock(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(4.0F).sound(SoundType.METAL).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.PIPE).setRegistryName("pipe"));
+		registry.register(new DirectionalCustomModelBlock(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(4.0F).sound(SoundType.METAL).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.PIPE).setRegistryName("pipe"));
 		registry.register(new Block(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(4.0F).sound(SoundType.METAL).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("pipe_intersection"));
 		registry.register(new StoneTabletBlock(AbstractBlock.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(0.3F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("stone_slab")); //same thing as stone tablet
-		registry.register(new DecorBlock(AbstractBlock.Properties.of(Material.STONE).strength(0.5F), MSBlockShapes.NAKAGATOR_STATUE).setRegistryName("nakagator_statue"));
+		registry.register(new CustomModelBlock(AbstractBlock.Properties.of(Material.STONE).strength(0.5F), MSBlockShapes.NAKAGATOR_STATUE).setRegistryName("nakagator_statue"));
 		
 		registry.register(new StairsBlock(() -> MSBlocks.BLACK_CASTLE_BRICKS.defaultBlockState(), AbstractBlock.Properties.copy(blackCastleBricks)).setRegistryName("black_castle_brick_stairs"));
 		registry.register(new StairsBlock(() -> MSBlocks.DARK_GRAY_CASTLE_BRICKS.defaultBlockState(), AbstractBlock.Properties.copy(darkGrayCastleBricks)).setRegistryName("dark_gray_castle_brick_stairs"));
@@ -491,8 +491,8 @@ public class MSBlocks
 		registry.register(new StairsBlock(() -> MSBlocks.END_PLANKS.defaultBlockState(), AbstractBlock.Properties.copy(endPlanks)).setRegistryName("end_planks_stairs"));
 		registry.register(new StairsBlock(() -> MSBlocks.DEAD_PLANKS.defaultBlockState(), AbstractBlock.Properties.copy(deadPlanks)).setRegistryName("dead_planks_stairs"));
 		registry.register(new StairsBlock(() -> MSBlocks.TREATED_PLANKS.defaultBlockState(), AbstractBlock.Properties.copy(treatedPlanks)).setRegistryName("treated_planks_stairs"));
-		registry.register(new DecorBlock(Block.Properties.copy(greenStoneBricks), MSBlockShapes.STEEP_STAIRS_BASE).setRegistryName("steep_green_stone_brick_stairs_base"));
-		registry.register(new DecorBlock(Block.Properties.copy(greenStoneBricks), MSBlockShapes.STEEP_STAIRS_TOP).setRegistryName("steep_green_stone_brick_stairs_top"));
+		registry.register(new CustomModelBlock(Block.Properties.copy(greenStoneBricks), MSBlockShapes.STEEP_STAIRS_BASE).setRegistryName("steep_green_stone_brick_stairs_base"));
+		registry.register(new CustomModelBlock(Block.Properties.copy(greenStoneBricks), MSBlockShapes.STEEP_STAIRS_TOP).setRegistryName("steep_green_stone_brick_stairs_top"));
 		registry.register(new SlabBlock(AbstractBlock.Properties.copy(blackCastleBricks)).setRegistryName("black_castle_brick_slab"));
 		registry.register(new SlabBlock(AbstractBlock.Properties.copy(darkGrayCastleBricks)).setRegistryName("dark_gray_castle_brick_slab"));
 		registry.register(new SlabBlock(AbstractBlock.Properties.copy(lightGrayCastleBricks)).setRegistryName("light_gray_castle_brick_slab"));
@@ -520,7 +520,7 @@ public class MSBlocks
 		registry.register(new AreaEffectBlock(AbstractBlock.Properties.of(Material.METAL).strength(6).sound(SoundType.METAL)).setRegistryName("area_effect_block"));
 		registry.register(new PlatformGeneratorBlock(AbstractBlock.Properties.of(Material.METAL).strength(6).sound(SoundType.METAL)).setRegistryName("platform_generator"));
 		registry.register(new PlatformBlock(AbstractBlock.Properties.of(Material.BARRIER).strength(0.2F).sound(SoundType.SCAFFOLDING).lightLevel(state -> 6).noOcclusion().isSuffocating(MSBlocks::never).isViewBlocking(MSBlocks::never)).setRegistryName("platform_block"));
-		registry.register(new ItemMagnetBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL)).setRegistryName("item_magnet"));
+		registry.register(new ItemMagnetBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL), new CustomVoxelShape(new double[]{0, 0, 0, 16, 1, 16}, new double[]{1, 1, 1, 15, 15, 15}, new double[]{0, 15, 0, 16, 16, 16})).setRegistryName("item_magnet"));
 		registry.register(new RedstoneClockBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL)).setRegistryName("redstone_clock"));
 		registry.register(new RotatorBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL)).setRegistryName("rotator"));
 		registry.register(new FallPadBlock(AbstractBlock.Properties.of(Material.CLOTH_DECORATION).strength(1).sound(SoundType.WOOL)).setRegistryName("fall_pad"));
@@ -579,15 +579,15 @@ public class MSBlocks
 		registry.register(new SpecialButtonBlock(AbstractBlock.Properties.of(Material.DECORATION).noCollission().strength(0.5F).sound(SoundType.WOOD), true, true).setRegistryName("wooden_explosive_button"));
 		registry.register(new SpecialButtonBlock(AbstractBlock.Properties.of(Material.DECORATION).noCollission().strength(0.5F).sound(SoundType.STONE), true, false).setRegistryName("stone_explosive_button"));
 		
-		registry.register(new DecorBlock(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(0.5F).harvestTool(ToolType.PICKAXE).harvestLevel(0).sound(SoundType.METAL), MSBlockShapes.BLENDER).setRegistryName("blender"));
-		registry.register(new DecorBlock(AbstractBlock.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(0.5F).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.CHESSBOARD).setRegistryName("chessboard"));
-		registry.register(new DecorBlock(AbstractBlock.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(0.5F).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.FROG_STATUE).setRegistryName("mini_frog_statue"));
-		registry.register(new DecorBlock(AbstractBlock.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(0.5F).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.WIZARD_STATUE).setRegistryName("mini_wizard_statue"));
-		registry.register(new DecorBlock(AbstractBlock.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(0.5F).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.DENIZEN_STATUE).setRegistryName("mini_typheus_statue"));
+		registry.register(new CustomModelBlock(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(0.5F).harvestTool(ToolType.PICKAXE).harvestLevel(0).sound(SoundType.METAL), MSBlockShapes.BLENDER).setRegistryName("blender"));
+		registry.register(new CustomModelBlock(AbstractBlock.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(0.5F).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.CHESSBOARD).setRegistryName("chessboard"));
+		registry.register(new CustomModelBlock(AbstractBlock.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(0.5F).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.FROG_STATUE).setRegistryName("mini_frog_statue"));
+		registry.register(new CustomModelBlock(AbstractBlock.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(0.5F).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.WIZARD_STATUE).setRegistryName("mini_wizard_statue"));
+		registry.register(new CustomModelBlock(AbstractBlock.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(0.5F).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.DENIZEN_STATUE).setRegistryName("mini_typheus_statue"));
 		registry.register(new CassettePlayerBlock(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(0.5F).sound(SoundType.METAL).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.CASSETTE_PLAYER).setRegistryName("cassette_player"));
 		registry.register(new GlowystoneWireBlock(AbstractBlock.Properties.of(Material.DECORATION).strength(0.0F).lightLevel(state -> 16).noCollission()).setRegistryName("glowystone_dust"));
-		registry.register(new DecorBlock(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(4.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.PARCEL_PYXIS).setRegistryName("parcel_pyxis"));
-		registry.register(new DecorBlock(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(1.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.PYXIS_LID).setRegistryName("pyxis_lid"));
+		registry.register(new CustomModelBlock(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(4.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.PARCEL_PYXIS).setRegistryName("parcel_pyxis"));
+		registry.register(new CustomModelBlock(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(1.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.PYXIS_LID).setRegistryName("pyxis_lid"));
 		
 		LOTUS_TIME_CAPSULE_BLOCK.registerBlocks(registry);
 		

@@ -27,7 +27,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class StoneTabletBlock extends DecorBlock //stone slab is the same as stone tablet, both are used in different circumstances
+public class StoneTabletBlock extends CustomModelBlock //stone slab is the same as stone tablet, both are used in different circumstances
 {
 	public static final BooleanProperty CARVED = MSProperties.CARVED;
 	

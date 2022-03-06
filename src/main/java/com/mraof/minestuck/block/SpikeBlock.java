@@ -1,6 +1,5 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -18,7 +17,7 @@ import javax.annotation.Nullable;
 /**
  * Increases damage from falls for living entities landing on it. Also injures living entities that move through it, in a manner similar to sweet berry bushes
  */
-public class SpikeBlock extends DecorBlock
+public class SpikeBlock extends CustomModelBlock
 {
 	public SpikeBlock(Properties properties, CustomVoxelShape shape)
 	{

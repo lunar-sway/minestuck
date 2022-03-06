@@ -26,7 +26,7 @@ import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 
-public class CassettePlayerBlock extends DecorBlock
+public class CassettePlayerBlock extends CustomModelBlock
 {
 	public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
 	public static final EnumProperty<EnumCassetteType> CASSETTE = MSProperties.CASSETTE;
