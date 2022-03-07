@@ -6,7 +6,7 @@
     ]
   },
   "criteria": {
-    "has_black_castle_bricks": {
+    "has_black_chess_bricks": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
@@ -25,7 +25,7 @@
   },
   "requirements": [
     [
-      "has_black_castle_bricks",
+      "has_black_chess_bricks",
       "has_the_recipe"
     ]
   ]

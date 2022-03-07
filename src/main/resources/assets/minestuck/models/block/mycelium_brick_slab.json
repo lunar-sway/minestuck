@@ -1,0 +1,8 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "bottom": "minestuck:block/mycelium_bricks",
+    "top": "minestuck:block/mycelium_bricks",
+    "side": "minestuck:block/mycelium_bricks"
+  }
+}

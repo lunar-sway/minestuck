@@ -1,10 +1,10 @@
 {
   "variants": {
-    "facing=up":    { "model": "minestuck:block/dark_gray_castle_brick_trim" },
-    "facing=down":  { "model": "minestuck:block/dark_gray_castle_brick_trim_flipped"},
-    "facing=east":  { "model": "minestuck:block/dark_gray_castle_brick_trim", "y": 90, "x": 90 },
-    "facing=south": { "model": "minestuck:block/dark_gray_castle_brick_trim_flipped", "y": 180, "x": 90 },
-    "facing=west":  { "model": "minestuck:block/dark_gray_castle_brick_trim_flipped", "y": 270, "x": 90 },
-    "facing=north": { "model": "minestuck:block/dark_gray_castle_brick_trim", "y": 0, "x": 90 }
+    "facing=up":    { "model": "minestuck:block/dark_gray_chess_brick_trim" },
+    "facing=down":  { "model": "minestuck:block/dark_gray_chess_brick_trim_flipped"},
+    "facing=east":  { "model": "minestuck:block/dark_gray_chess_brick_trim", "y": 90, "x": 90 },
+    "facing=south": { "model": "minestuck:block/dark_gray_chess_brick_trim_flipped", "y": 180, "x": 90 },
+    "facing=west":  { "model": "minestuck:block/dark_gray_chess_brick_trim_flipped", "y": 270, "x": 90 },
+    "facing=north": { "model": "minestuck:block/dark_gray_chess_brick_trim", "y": 0, "x": 90 }
   }
 }
