@@ -353,6 +353,15 @@ public abstract class UnderlingEntity extends CreatureEntity implements IMob
 				Echeladder.increaseProgress(playerList[i], level, (int) (progress*modifiers[i]));
 	}
 	
+	protected static void firstKillBonus(Entity killer, byte type)
+	{
+		if(killer instanceof ServerPlayerEntity && (!(killer instanceof FakePlayer)))
+		{
+			Echeladder ladder = PlayerSavedData.getData((ServerPlayerEntity) killer).getEcheladder();
+			ladder.checkBonus(type);
+		}
+	}
+	
 	protected static class UnderlingData implements ILivingEntityData
 	{
 		public final GristType type;

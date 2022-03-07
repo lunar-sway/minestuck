@@ -133,11 +133,7 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 		if(this.dead && !this.level.isClientSide)
 		{
 			computePlayerProgress((int) (200 + 3 * getGristType().getPower())); //still give xp up to top rung
-			if(entity instanceof ServerPlayerEntity && (!(entity instanceof FakePlayer)))
-			{
-				Echeladder ladder = PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder();
-				ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET + 4));
-			}
+			firstKillBonus(entity, (byte) (Echeladder.UNDERLING_BONUS_OFFSET + 4));
 		}
 	}
 	
