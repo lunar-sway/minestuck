@@ -15,7 +15,6 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.EntityStruckByLightningEvent;
 import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -85,7 +84,12 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 		
 		if(tickCycle % MinestuckConfig.SERVER.wirelessBlocksTickRate.get() == 1)
 		{
-			level.setBlock(worldPosition, level.getBlockState(worldPosition).setValue(StatStorerBlock.POWER, Math.min(15, getActiveStoredStatValue() / getDivideValueBy())), Constants.BlockFlags.NOTIFY_NEIGHBORS);
+			if(!level.isClientSide)
+			{
+				if(getBlockState().getValue(StatStorerBlock.POWER) != Math.min(15, getActiveStoredStatValue() / getDivideValueBy()))
+					level.setBlockAndUpdate(getBlockPos(), getBlockState().setValue(StatStorerBlock.POWER, Math.min(15, getActiveStoredStatValue() / getDivideValueBy())));
+				else level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 2);
+			}
 			if(tickCycle >= 5000) //setting arbitrarily high value that the tick cannot go past
 				tickCycle = 0;
 		}
@@ -269,7 +273,7 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 		
 		if(changeBlockState)
 			level.updateNeighborsAt(worldPosition, level.getBlockState(worldPosition).getBlock());
-		//level.getBlockState(worldPosition).getBlock().updateNeighbors(level.getBlockState(worldPosition), level, worldPosition, 3);
+		
 	}
 	
 	public void setDivideValue(int divideValueBy)
