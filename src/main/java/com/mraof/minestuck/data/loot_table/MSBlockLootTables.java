@@ -285,9 +285,6 @@ public class MSBlockLootTables extends BlockLootTables
 		
 		dropSelf(GLOWY_GOOP);
 		dropSelf(COAGULATED_BLOOD);
-		add(VEIN, noDrop());
-		add(VEIN_CORNER, noDrop());
-		add(INVERTED_VEIN_CORNER, noDrop());
 		dropSelf(PIPE);
 		dropSelf(PIPE_INTERSECTION);
 		dropSelf(PARCEL_PYXIS);

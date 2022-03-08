@@ -136,9 +136,6 @@ public class MSBlocks
 	//Special Land Blocks
 	public static final Block GLOWY_GOOP = getNull();
 	public static final Block COAGULATED_BLOOD = getNull();
-	public static final Block VEIN = getNull();
-	public static final Block VEIN_CORNER = getNull();
-	public static final Block INVERTED_VEIN_CORNER = getNull();
 	public static final Block PIPE = getNull();
 	public static final Block PIPE_INTERSECTION = getNull();
 	public static final Block PARCEL_PYXIS = getNull();
@@ -520,9 +517,6 @@ public class MSBlocks
 		
 		registry.register(new GoopBlock(AbstractBlock.Properties.of(Material.CLAY).strength(0.1F).sound(SoundType.SLIME_BLOCK).lightLevel(state -> 14)).setRegistryName("glowy_goop"));
 		registry.register(new GoopBlock(AbstractBlock.Properties.of(Material.CLAY).strength(0.1F).sound(SoundType.SLIME_BLOCK)).setRegistryName("coagulated_blood"));
-		registry.register(new VeinBlock(AbstractBlock.Properties.of(Material.WOOD).strength(0.45F).sound(SoundType.SLIME_BLOCK)).setRegistryName("vein"));
-		registry.register(new VeinCornerBlock(AbstractBlock.Properties.of(Material.WOOD).strength(0.45F).sound(SoundType.SLIME_BLOCK)).setRegistryName("vein_corner"));
-		registry.register(new VeinCornerBlock(AbstractBlock.Properties.of(Material.WOOD).strength(0.45F).sound(SoundType.SLIME_BLOCK)).setRegistryName("inverted_vein_corner"));
 		registry.register(new DirectionalCustomShapeBlock(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(4.0F).sound(SoundType.METAL).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.PIPE).setRegistryName("pipe"));
 		registry.register(new Block(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(4.0F).sound(SoundType.METAL).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("pipe_intersection"));
 		registry.register(new StoneTabletBlock(AbstractBlock.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(0.3F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("stone_slab")); //same thing as stone tablet

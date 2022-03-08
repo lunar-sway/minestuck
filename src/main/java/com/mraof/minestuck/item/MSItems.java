@@ -749,9 +749,6 @@ public class MSItems
 		
 		registerItemBlock(registry, GLOWY_GOOP, MSItemGroup.LANDS);
 		registerItemBlock(registry, COAGULATED_BLOOD, MSItemGroup.LANDS);
-		registerItemBlock(registry, VEIN);
-		registerItemBlock(registry, VEIN_CORNER);
-		registerItemBlock(registry, INVERTED_VEIN_CORNER);
 		registerItemBlock(registry, PIPE, MSItemGroup.LANDS);
 		registerItemBlock(registry, PIPE_INTERSECTION, MSItemGroup.LANDS);
 		registerItemBlock(registry, PARCEL_PYXIS, MSItemGroup.LANDS);

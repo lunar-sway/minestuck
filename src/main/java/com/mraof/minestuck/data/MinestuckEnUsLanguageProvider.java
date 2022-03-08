@@ -319,11 +319,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.GLOWFLOWER, "Glowflower");
 		add(MSBlocks.GLOWY_GOOP, "Glowy Goop");
 		add(MSBlocks.COAGULATED_BLOOD, "Coagulated Blood");
-		add(MSBlocks.VEIN, "Vein");
-		add(MSBlocks.VEIN_CORNER, "Vein");
-		addTooltip(MSBlocks.VEIN_CORNER, "Corner");
-		add(MSBlocks.INVERTED_VEIN_CORNER, "Vein");
-		addTooltip(MSBlocks.INVERTED_VEIN_CORNER, "Corner (Inverted Flow)");
 		add(MSBlocks.PIPE, "Pipe");
 		add(MSBlocks.PIPE_INTERSECTION, "Pipe Intersection");
 		addTooltip(MSBlocks.PIPE_INTERSECTION, "Astute engineers may note the lack of any openings and inability for anything to cross this intersection. In the business this is called 'useless'");
