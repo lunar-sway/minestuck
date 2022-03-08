@@ -63,7 +63,6 @@ public class ClientProxy
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.BASILISK, manager -> new UnderlingEntityRenderer<>(manager, new BasiliskModel<>(), 2.8F));
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.LICH, manager -> new UnderlingEntityRenderer<>(manager, new LichModel<>(), 0.5F));
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.GICLOPS, manager -> new UnderlingEntityRenderer<>(manager, new GiclopsModel<>(), 7.6F));
-		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.WYRM, manager -> new ShadowRenderer<>(manager, 1.0F));
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.PROSPITIAN_BISHOP, manager -> new SimpleTexturedEntityRenderer<>(manager, new BishopModel<>(), 1.8F));
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.DERSITE_BISHOP, manager -> new SimpleTexturedEntityRenderer<>(manager, new BishopModel<>(), 1.8F));
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.PROSPITIAN_ROOK, manager -> new SimpleTexturedEntityRenderer<>(manager, new RookModel<>(), 2.5F));
