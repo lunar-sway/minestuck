@@ -1,0 +1,7 @@
+{
+  "parent": "block/cube_all",
+  "textures":
+  {
+    "all": "minestuck:block/polished_mycelium_stone"
+  }
+}

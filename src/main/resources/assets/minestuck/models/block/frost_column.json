@@ -1,0 +1,8 @@
+{
+  "parent": "block/cube_column",
+  "textures":
+  {
+    "end": "minestuck:block/minestuck_missingtex",
+    "side": "minestuck:block/minestuck_missingtex"
+  }
+}

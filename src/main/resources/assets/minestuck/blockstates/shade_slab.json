@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "type=bottom": { "model": "minestuck:block/shade_slab" },
+    "type=top":    { "model": "minestuck:block/shade_slab_top" },
+    "type=double": { "model": "minestuck:block/shade_stone" }
+  }
+}

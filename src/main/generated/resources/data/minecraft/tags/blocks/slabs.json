@@ -11,9 +11,15 @@
     "minestuck:pink_stone_brick_slab",
     "minestuck:brown_stone_brick_slab",
     "minestuck:green_stone_brick_slab",
+    "minestuck:black_stone_slab",
+    "minestuck:black_stone_brick_slab",
+    "minestuck:mycelium_slab",
     "minestuck:mycelium_brick_slab",
+    "minestuck:flowery_mossy_stone_slab",
     "minestuck:flowery_mossy_stone_brick_slab",
+    "minestuck:frost_slab",
     "minestuck:frost_brick_slab",
+    "minestuck:shade_slab",
     "minestuck:shade_brick_slab"
   ]
 }
