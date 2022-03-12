@@ -352,6 +352,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addExtra(MSBlocks.AREA_EFFECT_BLOCK, AreaEffectBlock.EFFECT_CHANGE_MESSAGE, "Effect type changed to %s with the amplification strength %s.");
 		add(MSBlocks.PLATFORM_GENERATOR, "Platform Generator");
 		add(MSBlocks.PLATFORM_BLOCK, "Platform Block");
+		add(MSBlocks.PLATFORM_RECEPTACLE, "Platform Receptacle");
 		add(MSBlocks.ITEM_MAGNET, "Item Magnet");
 		add(MSBlocks.REDSTONE_CLOCK, "Redstone Clock");
 		add(MSBlocks.ROTATOR, "Rotator");

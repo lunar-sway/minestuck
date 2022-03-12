@@ -39,7 +39,7 @@ public class SolidSwitchBlock extends Block
 		
 		if(!player.isCrouching())
 		{
-			worldIn.setBlock(pos, state.setValue(POWERED, !state.getValue(POWERED)), Constants.BlockFlags.NOTIFY_NEIGHBORS);
+			worldIn.setBlock(pos, state.cycle(POWERED), Constants.BlockFlags.NOTIFY_NEIGHBORS);
 			if(state.getValue(POWERED))
 				worldIn.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 1.2F);
 			else

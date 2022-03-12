@@ -763,6 +763,7 @@ public class MSItems
 		registerItemBlock(registry, SUMMONER, MSItemGroup.LANDS);
 		registerItemBlock(registry, AREA_EFFECT_BLOCK, MSItemGroup.LANDS);
 		registerItemBlock(registry, PLATFORM_GENERATOR, MSItemGroup.LANDS);
+		registerItemBlock(registry, PLATFORM_RECEPTACLE, MSItemGroup.LANDS);
 		registerItemBlock(registry, ITEM_MAGNET, MSItemGroup.MAIN);
 		registerItemBlock(registry, REDSTONE_CLOCK, MSItemGroup.MAIN);
 		registerItemBlock(registry, ROTATOR, MSItemGroup.MAIN);

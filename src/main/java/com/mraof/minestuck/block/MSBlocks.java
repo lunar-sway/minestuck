@@ -166,6 +166,7 @@ public class MSBlocks
 	public static final Block AREA_EFFECT_BLOCK = getNull();
 	public static final Block PLATFORM_GENERATOR = getNull();
 	public static final Block PLATFORM_BLOCK = getNull();
+	public static final Block PLATFORM_RECEPTACLE = getNull();
 	public static final Block ITEM_MAGNET = getNull();
 	public static final Block REDSTONE_CLOCK = getNull();
 	public static final Block ROTATOR = getNull();
@@ -527,6 +528,7 @@ public class MSBlocks
 		registry.register(new AreaEffectBlock(AbstractBlock.Properties.of(Material.METAL).strength(6).sound(SoundType.METAL)).setRegistryName("area_effect_block"));
 		registry.register(new PlatformGeneratorBlock(AbstractBlock.Properties.of(Material.METAL).strength(6).sound(SoundType.METAL)).setRegistryName("platform_generator"));
 		registry.register(new PlatformBlock(AbstractBlock.Properties.of(Material.BARRIER).strength(0.2F).sound(SoundType.SCAFFOLDING).lightLevel(state -> 6).noOcclusion().isSuffocating(MSBlocks::never).isViewBlocking(MSBlocks::never)).setRegistryName("platform_block"));
+		registry.register(new PlatformReceptacleBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL)).setRegistryName("platform_receptacle"));
 		registry.register(new ItemMagnetBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL), new CustomVoxelShape(new double[]{0, 0, 0, 16, 1, 16}, new double[]{1, 1, 1, 15, 15, 15}, new double[]{0, 15, 0, 16, 16, 16})).setRegistryName("item_magnet"));
 		registry.register(new RedstoneClockBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL)).setRegistryName("redstone_clock"));
 		registry.register(new RotatorBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL)).setRegistryName("rotator"));
