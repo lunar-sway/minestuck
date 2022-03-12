@@ -35,6 +35,7 @@ import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,6 +66,7 @@ public final class PlayerData
 		PlayerSavedData.getData(player).sendConsortReputation(player);
 	}
 	
+	@Nonnull
 	final PlayerIdentifier identifier;
 	
 	private final PlayerSavedData savedData;
@@ -83,7 +85,7 @@ public final class PlayerData
 	
 	private boolean hasLoggedIn;
 	
-	PlayerData(PlayerSavedData savedData, PlayerIdentifier player)
+	PlayerData(PlayerSavedData savedData, @Nonnull PlayerIdentifier player)
 	{
 		this.savedData = savedData;
 		this.identifier = player;

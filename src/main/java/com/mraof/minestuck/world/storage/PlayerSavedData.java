@@ -17,6 +17,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Stores all instances of {@link PlayerData}.
@@ -107,6 +108,7 @@ public class PlayerSavedData extends WorldSavedData
 
 	public PlayerData getData(PlayerIdentifier player)
 	{
+		Objects.requireNonNull(player);
 		if (!dataMap.containsKey(player))
 		{
 			PlayerData data = new PlayerData(this, player);

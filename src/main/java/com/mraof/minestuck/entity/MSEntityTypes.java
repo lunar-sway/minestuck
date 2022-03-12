@@ -87,8 +87,8 @@ public final class MSEntityTypes
 		register(registry, EntityType.Builder.of(GiclopsEntity::new, UNDERLING).sized(8.0F, 12.0F), "giclops");
 		register(registry, EntityType.Builder.of(WyrmEntity::new, UNDERLING), "wyrm");
 		
-		register(registry, EntityType.Builder.of(PawnEntity::createDersite, EntityClassification.MONSTER).sized(0.6F, 1.5F), "dersite_pawn");
-		register(registry, EntityType.Builder.of(PawnEntity::createProspitian, EntityClassification.MONSTER).sized(0.6F, 1.5F), "prospitian_pawn");
+		register(registry, EntityType.Builder.of(PawnEntity::createDersite, EntityClassification.MONSTER).sized(0.6F, 2.1F), "dersite_pawn");
+		register(registry, EntityType.Builder.of(PawnEntity::createProspitian, EntityClassification.MONSTER).sized(0.6F, 2.1F), "prospitian_pawn");
 		register(registry, EntityType.Builder.of(BishopEntity::createDersite, EntityClassification.MONSTER).sized(1.9F, 4.1F), "dersite_bishop");
 		register(registry, EntityType.Builder.of(BishopEntity::createProspitian, EntityClassification.MONSTER).sized(1.9F, 4.1F), "prospitian_bishop");
 		register(registry, EntityType.Builder.of(RookEntity::createDersite, EntityClassification.MONSTER).sized(3.5F, 3.5F), "dersite_rook");

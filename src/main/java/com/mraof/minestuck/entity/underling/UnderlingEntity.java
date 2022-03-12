@@ -4,10 +4,7 @@ import com.mraof.minestuck.entity.EntityListFilter;
 import com.mraof.minestuck.entity.ai.HurtByTargetAlliedGoal;
 import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.entity.item.VitalityGelEntity;
-import com.mraof.minestuck.item.crafting.alchemy.GristAmount;
-import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
-import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
+import com.mraof.minestuck.item.crafting.alchemy.*;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
@@ -38,6 +35,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.*;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.FakePlayer;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -92,6 +90,14 @@ public abstract class UnderlingEntity extends CreatureEntity implements IMob
 	public SoundCategory getSoundSource()
 	{
 		return SoundCategory.HOSTILE;
+	}
+	
+	@Override
+	protected float getVoicePitch()
+	{
+		return getGristType() == GristTypes.ARTIFACT.get()
+				? (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 0.7F
+				: (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F;
 	}
 	
 	@Override
@@ -196,7 +202,7 @@ public abstract class UnderlingEntity extends CreatureEntity implements IMob
 	public void die(DamageSource cause)
 	{
 		LivingEntity entity = this.getKillCredit();
-		if(entity instanceof ServerPlayerEntity)
+		if(entity instanceof ServerPlayerEntity && (!(entity instanceof FakePlayer)))
 			PlayerSavedData.getData((ServerPlayerEntity) entity).addConsortReputation(consortRep, level.dimension());
 		
 		super.die(cause);
@@ -262,7 +268,7 @@ public abstract class UnderlingEntity extends CreatureEntity implements IMob
 		//Note: grist type should be read and applied before reading health due to the modifiers to max health
 		if(compound.contains("Type", Constants.NBT.TAG_STRING))
 			applyGristType(GristType.read(compound, "Type", GristTypes.ARTIFACT));
-		else applyGristType(UnderlingController.getUnderlingType(this));
+		else applyGristType(GristHelper.getPrimaryGrist(this.getRandom()));
 		
 		super.readAdditionalSaveData(compound);
 		
@@ -345,6 +351,15 @@ public abstract class UnderlingEntity extends CreatureEntity implements IMob
 		else
 			for(int i = 0; i < playerList.length; i++)
 				Echeladder.increaseProgress(playerList[i], level, (int) (progress*modifiers[i]));
+	}
+	
+	protected static void firstKillBonus(Entity killer, byte type)
+	{
+		if(killer instanceof ServerPlayerEntity && (!(killer instanceof FakePlayer)))
+		{
+			Echeladder ladder = PlayerSavedData.getData((ServerPlayerEntity) killer).getEcheladder();
+			ladder.checkBonus(type);
+		}
 	}
 	
 	protected static class UnderlingData implements ILivingEntityData

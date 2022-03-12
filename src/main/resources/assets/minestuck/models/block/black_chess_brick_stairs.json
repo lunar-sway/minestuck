@@ -1,0 +1,8 @@
+{
+    "parent": "block/stairs",
+    "textures": {
+        "bottom": "minestuck:block/black_chess_bricks",
+        "top": "minestuck:block/black_chess_bricks",
+        "side": "minestuck:block/black_chess_bricks"
+    }
+}

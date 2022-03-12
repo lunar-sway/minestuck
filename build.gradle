@@ -36,7 +36,7 @@ repositories {
     maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
 }
 
-version = project.getProperty('mc_ms_version') +'.' + System.env.BUILD_NUMBER
+version = project.getProperty('mc_ms_version')
 group = 'com.mraof.minestuck'
 archivesBaseName = 'Minestuck'
 

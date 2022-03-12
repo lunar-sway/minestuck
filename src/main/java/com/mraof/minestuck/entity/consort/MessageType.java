@@ -650,14 +650,14 @@ public abstract class MessageType
 				String commandStart = "/consortreply " + consort.getId() + " "
 						+ (chainIdentifier.isEmpty() ? "" : chainIdentifier + ":");
 				question.append("\n");
-				for(int i = 0; i < options.length; i++)
+				for (SingleMessage optionText : options)
 				{
 					question.append("\n");
-					IFormattableTextComponent option = new StringTextComponent(">");
+					IFormattableTextComponent option = new StringTextComponent("> ");
 					option.append(
-							createMessage(consort, player, options[i].unlocalizedMessage, options[i].args, false));
-					option.getStyle().withClickEvent(
-							new ClickEvent(ClickEvent.Action.RUN_COMMAND, commandStart + options[i].getString()));
+							createMessage(consort, player, optionText.unlocalizedMessage, optionText.args, false));
+					option.withStyle(style -> style.withClickEvent(
+							new ClickEvent(ClickEvent.Action.RUN_COMMAND, commandStart + optionText.getString())));
 					option.withStyle(TextFormatting.GRAY);
 					question.append(option);
 				}

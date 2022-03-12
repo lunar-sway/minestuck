@@ -10,6 +10,7 @@ import com.mraof.minestuck.world.storage.loot.MSLootTables;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.WallTorchBlock;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.properties.ChestType;
@@ -762,12 +763,12 @@ public class ImpDungeonPieces
 			if(spawner1)
 			{
 				BlockPos spawnerPos = new BlockPos(this.getWorldX(1, 2), this.getWorldY(1), this.getWorldZ(1, 2));
-				spawner1 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
+				spawner1 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, getTypeForSpawners());
 			}
 			if(spawner2)
 			{
 				BlockPos spawnerPos = new BlockPos(this.getWorldX(6, 2), this.getWorldY(1), this.getWorldZ(6, 2));
-				spawner2 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
+				spawner2 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, getTypeForSpawners());
 			}
 			
 			BlockPos chestPos = new BlockPos(this.getWorldX(3, 5), this.getWorldY(1), this.getWorldZ(3, 5));
@@ -984,12 +985,12 @@ public class ImpDungeonPieces
 			if(spawner1)
 			{
 				BlockPos spawnerPos = new BlockPos(this.getWorldX(1, 4), this.getWorldY(1), this.getWorldZ(1, 4));
-				spawner1 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
+				spawner1 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, getTypeForSpawners());
 			}
 			if(spawner2)
 			{
 				BlockPos spawnerPos = new BlockPos(this.getWorldX(1, 5), this.getWorldY(1), this.getWorldZ(1, 5));
-				spawner2 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
+				spawner2 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, getTypeForSpawners());
 			}
 			
 			int z = chestPos ? 4 : 5;
@@ -1228,12 +1229,12 @@ public class ImpDungeonPieces
 			if(spawner1)
 			{
 				BlockPos spawnerPos = new BlockPos(this.getWorldX(1, 3), this.getWorldY(1), this.getWorldZ(1, 3));
-				spawner1 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
+				spawner1 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, getTypeForSpawners());
 			}
 			if(spawner2)
 			{
 				BlockPos spawnerPos = new BlockPos(this.getWorldX(8, 5), this.getWorldY(1), this.getWorldZ(8, 5));
-				spawner2 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, MinestuckConfig.SERVER.hardMode ? MSEntityTypes.LICH : MSEntityTypes.IMP);
+				spawner2 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, getTypeForSpawners());
 			}
 			
 			BlockPos chestPos = new BlockPos(this.getWorldX(4, 4), this.getWorldY(1), this.getWorldZ(4, 4));
@@ -1248,5 +1249,10 @@ public class ImpDungeonPieces
 			
 			return true;
 		}	
+	}
+	
+	private static EntityType<?> getTypeForSpawners()
+	{
+		return MinestuckConfig.SERVER.hardMode.get() ? MSEntityTypes.LICH : MSEntityTypes.IMP;
 	}
 }

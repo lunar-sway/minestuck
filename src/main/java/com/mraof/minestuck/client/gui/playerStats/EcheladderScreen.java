@@ -1,5 +1,6 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
+import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.MinestuckConfig;
@@ -12,11 +13,12 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nullable;
-import java.util.Random;
+import java.util.*;
 
 /**
  * @author Kirderf1
@@ -125,7 +127,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 
 		this.blit(matrixStack, xOffset + 80, yOffset + 42 + (int) (130*(1 - scrollIndex/(float) MAX_SCROLL)), 0, 243, 7, 13);
 		
-		ITextComponent tooltip = drawEffectIconsAndText(matrixStack, currentRung, mouseX, mouseY);
+		List<ITextComponent> tooltip = drawEffectIconsAndText(matrixStack, currentRung, mouseX, mouseY);
 		
 		if(fromRung < currentRung)
 		{
@@ -136,7 +138,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 			for(; rung <= currentRung; rung++)
 			{
 				int index = rung - 1 - Math.max(fromRung, currentRung - 4);
-				ITextComponent newTooltip = drawGainedRungBonuses(matrixStack, rung, index, rand, mouseX, mouseY);
+				List<ITextComponent> newTooltip = drawGainedRungBonuses(matrixStack, rung, index, rand, mouseX, mouseY);
 				if(newTooltip != null)
 					tooltip = newTooltip;
 			}
@@ -145,7 +147,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 		drawActiveTabAndOther(matrixStack, mouseX, mouseY);
 		
 		if(tooltip != null)
-			renderTooltip(matrixStack, tooltip, mouseX, mouseY);
+			renderComponentTooltip(matrixStack, tooltip, mouseX, mouseY);
 	}
 	
 	private void drawLadder(MatrixStack matrixStack, int currentRung, boolean showLastRung)
@@ -188,7 +190,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 	}
 	
 	@Nullable
-	private ITextComponent drawEffectIconsAndText(MatrixStack matrixStack, int currentRung, int mouseX, int mouseY)
+	private List<ITextComponent> drawEffectIconsAndText(MatrixStack matrixStack, int currentRung, int mouseX, int mouseY)
 	{
 		boolean gristLimit = true;
 		PotionSpriteUploader sprites = this.minecraft.getMobEffectTextures();
@@ -222,14 +224,16 @@ public class EcheladderScreen extends PlayerStatsScreen
 		mc.font.draw(matrixStack, "Unlimited", xOffset + 26, yOffset + 147, 0x0094FF);
 		
 		if(mouseY >= yOffset + 39 && mouseY < yOffset + 39 + mc.font.lineHeight && mouseX >= xOffset + 26 && mouseX < xOffset + 26 + mc.font.width(attack+"%"))
-			return new TranslationTextComponent(DAMAGE_UNDERLING).append("\n" + Math.round(attack*Echeladder.getUnderlingDamageModifier(currentRung)) + "%");
+			return ImmutableList.of(new TranslationTextComponent(DAMAGE_UNDERLING),
+					new StringTextComponent(Math.round(attack*Echeladder.getUnderlingDamageModifier(currentRung)) + "%"));
 		if(mouseY >= yOffset + 93 && mouseY < yOffset + 93 + mc.font.lineHeight && mouseX >= xOffset + 26 && mouseX < xOffset + 26 + mc.font.width(String.valueOf(health)))
-			return new TranslationTextComponent(PROTECTION_UNDERLING).append("\n" + String.format("%.1f", 100*Echeladder.getUnderlingProtectionModifier(currentRung))+"%");
+			return ImmutableList.of(new TranslationTextComponent(PROTECTION_UNDERLING),
+					new StringTextComponent(String.format(Locale.ROOT, "%.1f", 100*Echeladder.getUnderlingProtectionModifier(currentRung))+"%"));
 		return null;
 	}
 	
 	@Nullable
-	private ITextComponent drawGainedRungBonuses(MatrixStack matrixStack, int rung, int index, Random rand, int mouseX, int mouseY)
+	private List<ITextComponent> drawGainedRungBonuses(MatrixStack matrixStack, int rung, int index, Random rand, int mouseX, int mouseY)
 	{
 		int textColor = rand.nextInt(0xFFFFFF);
 		if(textColors.length > rung)
@@ -252,14 +256,14 @@ public class EcheladderScreen extends PlayerStatsScreen
 		{
 			int diff = (int) Math.round(100*Echeladder.attackBonus(rung)*Echeladder.getUnderlingDamageModifier(rung));
 			diff -= Math.round(100*Echeladder.attackBonus(rung - 1)*Echeladder.getUnderlingDamageModifier(rung - 1));
-			return new TranslationTextComponent(DAMAGE_UNDERLING_INCREASE, diff);
+			return Collections.singletonList(new TranslationTextComponent(DAMAGE_UNDERLING_INCREASE, diff));
 		}
 		
 		if(mouseY >= strY && mouseY < strY + mc.font.lineHeight && mouseX >= strX && mouseX < strX + mc.font.width(str))
 		{
 			int diff = (int) Math.round(1000*Echeladder.getUnderlingProtectionModifier(rung - 1));
 			diff -= Math.round(1000*Echeladder.getUnderlingProtectionModifier(rung));
-			return new TranslationTextComponent(PROTECTION_UNDERLING_INCREASE, diff/10D);
+			return Collections.singletonList(new TranslationTextComponent(PROTECTION_UNDERLING_INCREASE, diff/10D));
 		}
 		
 		return null;
