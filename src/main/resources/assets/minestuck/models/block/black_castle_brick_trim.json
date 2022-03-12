@@ -1,7 +1,0 @@
-{
-  "parent": "block/cube_column",
-  "textures": {
-    "end": "minestuck:block/black_castle_bricks",
-    "side": "minestuck:block/black_castle_brick_trim"
-  }
-}

@@ -93,6 +93,14 @@ public abstract class UnderlingEntity extends CreatureEntity implements IMob
 	}
 	
 	@Override
+	protected float getVoicePitch()
+	{
+		return getGristType() == GristTypes.ARTIFACT.get()
+				? (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 0.7F
+				: (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F;
+	}
+	
+	@Override
 	protected void defineSynchedData()
 	{
 		super.defineSynchedData();
@@ -343,6 +351,15 @@ public abstract class UnderlingEntity extends CreatureEntity implements IMob
 		else
 			for(int i = 0; i < playerList.length; i++)
 				Echeladder.increaseProgress(playerList[i], level, (int) (progress*modifiers[i]));
+	}
+	
+	protected static void firstKillBonus(Entity killer, byte type)
+	{
+		if(killer instanceof ServerPlayerEntity && (!(killer instanceof FakePlayer)))
+		{
+			Echeladder ladder = PlayerSavedData.getData((ServerPlayerEntity) killer).getEcheladder();
+			ladder.checkBonus(type);
+		}
 	}
 	
 	protected static class UnderlingData implements ILivingEntityData

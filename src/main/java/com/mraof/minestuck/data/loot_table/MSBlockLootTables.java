@@ -271,6 +271,7 @@ public class MSBlockLootTables extends BlockLootTables
 		dropSelf(END_PLANKS_STAIRS);
 		dropSelf(DEAD_PLANKS_STAIRS);
 		dropSelf(TREATED_PLANKS_STAIRS);
+		dropSelf(FLOWERY_MOSSY_STONE_BRICK_STAIRS);
 		dropSelf(STEEP_GREEN_STONE_BRICK_STAIRS_BASE);
 		dropSelf(STEEP_GREEN_STONE_BRICK_STAIRS_TOP);
 		dropSelf(BLACK_CASTLE_BRICK_SLAB);
@@ -286,6 +287,11 @@ public class MSBlockLootTables extends BlockLootTables
 		dropSelf(END_PLANKS_SLAB);
 		dropSelf(DEAD_PLANKS_SLAB);
 		dropSelf(TREATED_PLANKS_SLAB);
+		dropSelf(MYCELIUM_BRICK_SLAB);
+		dropSelf(FLOWERY_MOSSY_STONE_BRICK_SLAB);
+		dropSelf(FROST_BRICK_SLAB);
+		dropSelf(SHADE_BRICK_SLAB);
+		dropSelf(COARSE_STONE_SLAB);
 		
 		dropSelf(TRAJECTORY_BLOCK);
 		dropSelf(STAT_STORER);

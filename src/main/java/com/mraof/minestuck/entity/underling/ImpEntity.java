@@ -83,11 +83,7 @@ public class ImpEntity extends UnderlingEntity
 		if(this.dead && !this.level.isClientSide)
 		{
 			computePlayerProgress((int) (5 + 2 * getGristType().getPower())); //most imps stop giving xp at rung 8
-			if(entity instanceof ServerPlayerEntity && (!(entity instanceof FakePlayer)))
-			{
-				Echeladder ladder = PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder();
-				ladder.checkBonus(Echeladder.UNDERLING_BONUS_OFFSET);
-			}
+			firstKillBonus(entity, Echeladder.UNDERLING_BONUS_OFFSET);
 		}
 	}
 	
