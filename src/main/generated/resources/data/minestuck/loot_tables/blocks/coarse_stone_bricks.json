@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minestuck:frost_stairs"
+          "name": "minestuck:coarse_stone_bricks"
         }
       ],
       "conditions": [

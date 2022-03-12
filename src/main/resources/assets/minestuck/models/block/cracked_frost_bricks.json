@@ -1,6 +1,7 @@
 {
-  "variants":
+  "parent": "block/cube_all",
+  "textures":
   {
-    "": "minestuck:block/minestuck_missingtex"
+    "all": "minestuck:block/cracked_frost_bricks"
   }
 }

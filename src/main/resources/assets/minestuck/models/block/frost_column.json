@@ -2,7 +2,7 @@
   "parent": "block/cube_column",
   "textures":
   {
-    "end": "minestuck:block/minestuck_missingtex",
-    "side": "minestuck:block/minestuck_missingtex"
+    "end": "minestuck:block/frost_column_top",
+    "side": "minestuck:block/frost_column"
   }
 }

@@ -36,6 +36,7 @@ public class MinestuckData
 			gen.addProvider(new MinestuckLootTableProvider(gen));
 			gen.addProvider(new MSAdvancementProvider(gen));
 			gen.addProvider(new MinestuckEnUsLanguageProvider(gen));
+			gen.addProvider(new MinestuckEsCuLanguageProvider(gen));
 			
 			gen.addProvider(new MinestuckBiomeProvider(gen));
 		}

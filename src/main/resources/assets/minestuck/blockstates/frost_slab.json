@@ -1,7 +1,0 @@
-{
-  "variants": {
-    "type=bottom": { "model": "minestuck:block/frost_slab" },
-    "type=top":    { "model": "minestuck:block/frost_slab_top" },
-    "type=double": { "model": "minestuck:block/frost" }
-  }
-}

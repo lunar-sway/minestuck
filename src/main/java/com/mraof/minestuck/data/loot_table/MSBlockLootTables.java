@@ -100,6 +100,13 @@ public class MSBlockLootTables extends BlockLootTables
 		dropSelf(THOUGHT_DIRT);
 		dropSelf(COARSE_STONE);
 		dropSelf(CHISELED_COARSE_STONE);
+		dropSelf(POLISHED_COARSE_STONE);
+		dropSelf(COARSE_STONE_BRICKS);
+		dropSelf(COARSE_STONE_COLUMN);
+		dropSelf(CHISELED_COARSE_STONE_BRICKS);
+		dropSelf(CRACKED_COARSE_STONE_BRICKS);
+		dropSelf(MOSSY_COARSE_STONE_BRICKS);
+		dropSelf(FLOWERY_COARSE_STONE_BRICKS);
 		dropSelf(SHADE_STONE);
 		dropSelf(SMOOTH_SHADE_STONE);
 		dropSelf(SHADE_BRICKS);
@@ -109,12 +116,13 @@ public class MSBlockLootTables extends BlockLootTables
 		dropSelf(MOSSY_SHADE_BRICKS);
 		dropSelf(BLOOD_SHADE_BRICKS);
 		dropSelf(TAR_SHADE_BRICKS);
-		dropSelf(FROST);
 		dropSelf(FROST_TILE);
+		dropSelf(CHISELED_FROST_TILE);
 		dropSelf(FROST_BRICKS);
 		dropSelf(FROST_COLUMN);
 		dropSelf(CHISELED_FROST_BRICKS);
 		dropSelf(CRACKED_FROST_BRICKS);
+		dropSelf(MOSSY_FROST_BRICKS);
 		dropSelf(CAST_IRON);
 		dropSelf(CHISELED_CAST_IRON);
 		dropSelf(STEEL_BEAM);
@@ -287,9 +295,10 @@ public class MSBlockLootTables extends BlockLootTables
 		dropSelf(LIGHT_GRAY_CASTLE_BRICK_STAIRS);
 		dropSelf(WHITE_CASTLE_BRICK_STAIRS);
 		dropSelf(COARSE_STONE_STAIRS);
+		dropSelf(COARSE_STONE_BRICK_STAIRS);
 		dropSelf(SHADE_STAIRS);
 		dropSelf(SHADE_BRICK_STAIRS);
-		dropSelf(FROST_STAIRS);
+		dropSelf(FROST_TILE_STAIRS);
 		dropSelf(FROST_BRICK_STAIRS);
 		dropSelf(CAST_IRON_STAIRS);
 		dropSelf(BLACK_STONE_STAIRS);
@@ -328,11 +337,12 @@ public class MSBlockLootTables extends BlockLootTables
 		dropSelf(MYCELIUM_BRICK_SLAB);
 		dropSelf(FLOWERY_MOSSY_STONE_SLAB);
 		dropSelf(FLOWERY_MOSSY_STONE_BRICK_SLAB);
-		dropSelf(FROST_SLAB);
+		dropSelf(FROST_TILE_SLAB);
 		dropSelf(FROST_BRICK_SLAB);
 		dropSelf(SHADE_SLAB);
 		dropSelf(SHADE_BRICK_SLAB);
 		dropSelf(COARSE_STONE_SLAB);
+		dropSelf(COARSE_STONE_BRICK_SLAB);
 		
 		dropSelf(HOLOPAD);
 		dropSelf(CRUXTRUDER_LID);

@@ -22,6 +22,7 @@ import com.mraof.minestuck.item.weapon.projectiles.ReturningProjectileWeaponItem
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
+import com.sun.jna.platform.win32.Msi;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
@@ -558,6 +559,13 @@ public class MSItems
 		registerItemBlock(registry, THOUGHT_DIRT, MSItemGroup.LANDS);
 		registerItemBlock(registry, COARSE_STONE, MSItemGroup.LANDS);
 		registerItemBlock(registry, CHISELED_COARSE_STONE, MSItemGroup.LANDS);
+		registerItemBlock(registry, POLISHED_COARSE_STONE, MSItemGroup.LANDS);
+		registerItemBlock(registry, COARSE_STONE_BRICKS, MSItemGroup.LANDS);
+		registerItemBlock(registry, COARSE_STONE_COLUMN, MSItemGroup.LANDS);
+		registerItemBlock(registry, CHISELED_COARSE_STONE_BRICKS, MSItemGroup.LANDS);
+		registerItemBlock(registry, CRACKED_COARSE_STONE_BRICKS, MSItemGroup.LANDS);
+		registerItemBlock(registry, MOSSY_COARSE_STONE_BRICKS, MSItemGroup.LANDS);
+		registerItemBlock(registry, FLOWERY_COARSE_STONE_BRICKS, MSItemGroup.LANDS);
 		registerItemBlock(registry, SHADE_STONE, MSItemGroup.LANDS);
 		registerItemBlock(registry, SMOOTH_SHADE_STONE, MSItemGroup.LANDS);
 		registerItemBlock(registry, SHADE_BRICKS, MSItemGroup.LANDS);
@@ -566,12 +574,13 @@ public class MSItems
 		registerItemBlock(registry, CRACKED_SHADE_BRICKS, MSItemGroup.LANDS);
 		registerItemBlock(registry, BLOOD_SHADE_BRICKS, MSItemGroup.LANDS);
 		registerItemBlock(registry, TAR_SHADE_BRICKS, MSItemGroup.LANDS);
-		registerItemBlock(registry, FROST, MSItemGroup.LANDS);
 		registerItemBlock(registry, FROST_TILE, MSItemGroup.LANDS);
+		registerItemBlock(registry, CHISELED_FROST_TILE, MSItemGroup.LANDS);
 		registerItemBlock(registry, FROST_BRICKS, MSItemGroup.LANDS);
 		registerItemBlock(registry, FROST_COLUMN, MSItemGroup.LANDS);
 		registerItemBlock(registry, CHISELED_FROST_BRICKS, MSItemGroup.LANDS);
 		registerItemBlock(registry, CRACKED_FROST_BRICKS, MSItemGroup.LANDS);
+		registerItemBlock(registry, MOSSY_FROST_BRICKS, MSItemGroup.LANDS);
 		registerItemBlock(registry, CAST_IRON, MSItemGroup.LANDS);
 		registerItemBlock(registry, CHISELED_CAST_IRON, MSItemGroup.LANDS);
 		registerItemBlock(registry, STEEL_BEAM, MSItemGroup.LANDS);
@@ -742,9 +751,10 @@ public class MSItems
 		registerItemBlock(registry, LIGHT_GRAY_CASTLE_BRICK_STAIRS, MSItemGroup.MAIN);
 		registerItemBlock(registry, WHITE_CASTLE_BRICK_STAIRS, MSItemGroup.MAIN);
 		registerItemBlock(registry, COARSE_STONE_STAIRS, MSItemGroup.LANDS);
+		registerItemBlock(registry, COARSE_STONE_BRICK_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, SHADE_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, SHADE_BRICK_STAIRS, MSItemGroup.LANDS);
-		registerItemBlock(registry, FROST_STAIRS, MSItemGroup.LANDS);
+		registerItemBlock(registry, FROST_TILE_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, FROST_BRICK_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, CAST_IRON_STAIRS, MSItemGroup.LANDS);
 		registerItemBlock(registry, BLACK_STONE_STAIRS, MSItemGroup.LANDS);
@@ -769,6 +779,7 @@ public class MSItems
 		registerItemBlock(registry, LIGHT_GRAY_CASTLE_BRICK_SLAB, MSItemGroup.MAIN);
 		registerItemBlock(registry, WHITE_CASTLE_BRICK_SLAB, MSItemGroup.MAIN);
 		registerItemBlock(registry, COARSE_STONE_SLAB, MSItemGroup.LANDS);
+		registerItemBlock(registry, COARSE_STONE_BRICK_SLAB, MSItemGroup.LANDS);
 		registerItemBlock(registry, CHALK_SLAB, MSItemGroup.LANDS);
 		registerItemBlock(registry, CHALK_BRICK_SLAB, MSItemGroup.LANDS);
 		registerItemBlock(registry, PINK_STONE_BRICK_SLAB, MSItemGroup.LANDS);
@@ -784,7 +795,7 @@ public class MSItems
 		registerItemBlock(registry, MYCELIUM_BRICK_SLAB, MSItemGroup.LANDS);
 		registerItemBlock(registry, FLOWERY_MOSSY_STONE_SLAB, MSItemGroup.LANDS);
 		registerItemBlock(registry, FLOWERY_MOSSY_STONE_BRICK_SLAB, MSItemGroup.LANDS);
-		registerItemBlock(registry, FROST_SLAB, MSItemGroup.LANDS);
+		registerItemBlock(registry, FROST_TILE_SLAB, MSItemGroup.LANDS);
 		registerItemBlock(registry, FROST_BRICK_SLAB, MSItemGroup.LANDS);
 		registerItemBlock(registry, SHADE_SLAB, MSItemGroup.LANDS);
 		registerItemBlock(registry, SHADE_BRICK_SLAB, MSItemGroup.LANDS);

@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minestuck:flowery_black_stone_bricks"
+          "name": "minestuck:polished_coarse_stone"
         }
       ],
       "conditions": [
