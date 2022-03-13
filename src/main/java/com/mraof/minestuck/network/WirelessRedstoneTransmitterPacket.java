@@ -40,7 +40,11 @@ public class WirelessRedstoneTransmitterPacket implements PlayToServerPacket
 			TileEntity te = player.level.getBlockEntity(tileBlockPos);
 			if(te instanceof WirelessRedstoneTransmitterTileEntity)
 			{
-				((WirelessRedstoneTransmitterTileEntity) te).setDestinationBlockPos(destinationBlockPos);
+				BlockPos tePos = te.getBlockPos();
+				if(Math.sqrt(player.distanceToSqr(tePos.getX() + 0.5, tePos.getY() + 0.5, tePos.getZ() + 0.5)) <= 8)
+				{
+					((WirelessRedstoneTransmitterTileEntity) te).setDestinationBlockPos(destinationBlockPos);
+				}
 			}
 		}
 	}

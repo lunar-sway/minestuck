@@ -63,11 +63,6 @@ public class PlatformGeneratorTileEntity extends TileEntity implements ITickable
 					{
 						if(iterateBlockState.getValue(PlatformReceptacleBlock.ABSORBING))
 						{
-							/*if(!iterateBlockState.getValue(PlatformReceptacleBlock.POWERED)) //powers receptacle and stops platform generation, this check is only for receptacles that absorb and are not touching a platform block
-							{
-								level.setBlock(iteratePos, iterateBlockState.setValue(PlatformReceptacleBlock.POWERED, true), Constants.BlockFlags.NOTIFY_NEIGHBORS);
-								level.getBlockTicks().scheduleTick(new BlockPos(iteratePos), iterateBlockState.getBlock(), 10);
-							}*/
 							break;
 						}
 					} else if(iterateBlockState.getMaterial().isLiquid() || iterateBlockState.isAir()/* || iterateBlockState.getBlock() == MSBlocks.PLATFORM_BLOCK && level.getPendingBlockTicks().isTickScheduled(iteratePos, MSBlocks.PLATFORM_BLOCK))*/)

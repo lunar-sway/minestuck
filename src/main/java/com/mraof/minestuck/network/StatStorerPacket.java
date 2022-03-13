@@ -45,9 +45,13 @@ public class StatStorerPacket implements PlayToServerPacket
 			
 			if(te instanceof StatStorerTileEntity)
 			{
-				((StatStorerTileEntity) te).setActiveType(activeType);
-				divideValueBy = Math.max(1, divideValueBy); //should not be able to enter 0 or negative number range
-				((StatStorerTileEntity) te).setDivideValue(divideValueBy);
+				BlockPos tePos = te.getBlockPos();
+				if(Math.sqrt(player.distanceToSqr(tePos.getX() + 0.5, tePos.getY() + 0.5, tePos.getZ() + 0.5)) <= 8)
+				{
+					((StatStorerTileEntity) te).setActiveType(activeType);
+					divideValueBy = Math.max(1, divideValueBy); //should not be able to enter 0 or negative number range
+					((StatStorerTileEntity) te).setDivideValue(divideValueBy);
+				}
 			}
 		}
 	}

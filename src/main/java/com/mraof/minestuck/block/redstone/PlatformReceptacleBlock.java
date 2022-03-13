@@ -68,13 +68,6 @@ public class PlatformReceptacleBlock extends Block
 		return true;
 	}
 	
-	/*@Override
-	public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand) //used in PlatformGeneratorTileEntity to check if an ABSORBING state receptacle should still be powered with no direct neighbor source
-	{
-		super.tick(state, worldIn, pos, rand);
-		updatePower(worldIn, pos);
-	}*/
-	
 	@Override
 	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
 	{

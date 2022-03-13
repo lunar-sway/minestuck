@@ -31,10 +31,9 @@ public class RemoteObserverPacket implements PlayToServerPacket
 		if(entityType != null)
 		{
 			buffer.writeUtf(EntityType.getKey(entityType).toString());
-		}
-		else
+		} else
 			buffer.writeUtf(EntityType.getKey(EntityType.PLAYER).toString());
-			
+		
 	}
 	
 	public static RemoteObserverPacket decode(PacketBuffer buffer)
@@ -54,9 +53,13 @@ public class RemoteObserverPacket implements PlayToServerPacket
 			TileEntity te = player.level.getBlockEntity(tileBlockPos);
 			if(te instanceof RemoteObserverTileEntity)
 			{
-				((RemoteObserverTileEntity) te).setActiveType(activeType);
-				if(entityType != null)
-					((RemoteObserverTileEntity) te).setCurrentEntityType(entityType);
+				BlockPos tePos = te.getBlockPos();
+				if(Math.sqrt(player.distanceToSqr(tePos.getX() + 0.5, tePos.getY() + 0.5, tePos.getZ() + 0.5)) <= 8)
+				{
+					((RemoteObserverTileEntity) te).setActiveType(activeType);
+					if(entityType != null)
+						((RemoteObserverTileEntity) te).setCurrentEntityType(entityType);
+				}
 			}
 		}
 	}
