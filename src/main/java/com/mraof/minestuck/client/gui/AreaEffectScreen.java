@@ -16,7 +16,7 @@ public class AreaEffectScreen extends Screen
 {
 	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/generic_medium.png");
 	
-	private static final int guiWidth = 150; //126 previously
+	private static final int guiWidth = 150;
 	private static final int guiHeight = 98;
 	
 	private static final String minPosMessage = "Min Effect Pos";
@@ -44,14 +44,14 @@ public class AreaEffectScreen extends Screen
 		int yOffset = (this.height / 2) - (guiHeight / 2);
 		
 		this.minPosDestinationTextFieldX = new TextFieldWidget(this.font, this.width / 2 - 60, yOffset + 15, 40, 20, new StringTextComponent("X value of min effect pos"));
-		this.minPosDestinationTextFieldX.setValue(String.valueOf(te.getMinEffectPos().getX())); //setValue was setText
+		this.minPosDestinationTextFieldX.setValue(String.valueOf(te.getMinEffectPos().getX()));
 		addButton(minPosDestinationTextFieldX);
 		
 		this.minPosDestinationTextFieldY = new TextFieldWidget(this.font, this.width / 2 - 20, yOffset + 15, 40, 20, new StringTextComponent("Y value of min effect pos"));
 		this.minPosDestinationTextFieldY.setValue(String.valueOf(te.getMinEffectPos().getY()));
 		addButton(minPosDestinationTextFieldY);
 		
-		this.minPosDestinationTextFieldZ = new TextFieldWidget(this.font, this.width / 2 + 20, yOffset + 15, 40, 20, new StringTextComponent("Z value of min effect pos")); //was yOffset + 25
+		this.minPosDestinationTextFieldZ = new TextFieldWidget(this.font, this.width / 2 + 20, yOffset + 15, 40, 20, new StringTextComponent("Z value of min effect pos"));
 		this.minPosDestinationTextFieldZ.setValue(String.valueOf(te.getMinEffectPos().getZ()));
 		addButton(minPosDestinationTextFieldZ);
 		
@@ -85,6 +85,7 @@ public class AreaEffectScreen extends Screen
 	
 	private void finish()
 	{
+		//TODO limit the range to numbers closer in line with 64x64x64
 		MSPacketHandler.sendToServer(new AreaEffectPacket(parseMinBlockPos(), parseMaxBlockPos(), te.getBlockPos()));
 		onClose();
 	}

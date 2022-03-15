@@ -32,7 +32,7 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 	public void tick()
 	{
 		if(level == null || !level.isAreaLoaded(getBlockPos(), 1))
-			return; // Forge: prevent loading unloaded chunks
+			return;
 		
 		if(tickCycle >= MinestuckConfig.SERVER.wirelessBlocksTickRate.get())
 		{
@@ -42,18 +42,6 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 		
 		tickCycle++;
 	}
-	
-	/*@Override
-	public void validate()
-	{
-		super.validate();
-	}
-	
-	@Override
-	public void remove()
-	{
-		super.remove();
-	}*/
 	
 	public BlockPos getDestinationBlockPos()
 	{

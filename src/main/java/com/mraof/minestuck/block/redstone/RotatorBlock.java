@@ -36,6 +36,13 @@ public class RotatorBlock extends MSDirectionalBlock
 	}
 	
 	@Override
+	public void onPlace(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving)
+	{
+		super.onPlace(state, worldIn, pos, oldState, isMoving);
+		updatePower(worldIn, pos);
+	}
+	
+	@Override
 	@SuppressWarnings("deprecation")
 	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
 	{

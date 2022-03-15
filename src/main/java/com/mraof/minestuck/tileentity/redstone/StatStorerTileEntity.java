@@ -80,7 +80,7 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 	public void tick()
 	{
 		if(level == null || !level.isAreaLoaded(worldPosition, 1))
-			return; // Forge: prevent loading unloaded chunks
+			return;
 		
 		if(tickCycle % MinestuckConfig.SERVER.wirelessBlocksTickRate.get() == 1)
 		{
@@ -335,15 +335,16 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 			attemptStatUpdate(1, StatStorerTileEntity.ActiveType.ENTITIES_BRED, event.getParentA().blockPosition(), event.getParentA().level);
 	}
 	
+	//TODO seems to be doubled, potentially due to phase
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public static void onExplosion(ExplosionEvent event)
 	{
 		PlayerEntity playerEntity = (PlayerEntity) event.getExplosion().getSourceMob();
 		if(playerEntity != null && CreativeShockEffect.doesCreativeShockLimit(playerEntity, 0))
 			event.setCanceled(true); //intended to prevent blocks from being destroyed by a player attempting to circumvent creative shock
-		else
+		else if(!event.getWorld().isClientSide)
 		{
-			attemptStatUpdate(1, StatStorerTileEntity.ActiveType.EXPLOSIONS, new BlockPos(event.getExplosion().getPosition()), event.getWorld()); //TODO seems to be doubled
+			attemptStatUpdate(1, StatStorerTileEntity.ActiveType.EXPLOSIONS, new BlockPos(event.getExplosion().getPosition()), event.getWorld());
 		}
 	}
 	

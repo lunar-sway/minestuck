@@ -86,6 +86,13 @@ public class WirelessRedstoneTransmitterBlock extends HorizontalBlock
 		updatePower(worldIn, pos);
 	}
 	
+	@Override
+	public void onPlace(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving)
+	{
+		super.onPlace(state, worldIn, pos, oldState, isMoving);
+		updatePower(worldIn, pos);
+	}
+	
 	public void updatePower(World worldIn, BlockPos pos)
 	{
 		if(!worldIn.isClientSide)

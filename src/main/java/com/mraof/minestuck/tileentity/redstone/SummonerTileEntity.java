@@ -38,7 +38,7 @@ public class SummonerTileEntity extends TileEntity implements ITickableTileEntit
 	public void tick()
 	{
 		if(level == null)
-			return; // Forge: prevent loading unloaded chunks
+			return;
 		
 		if(cooldownTimer >= 200) //summoner has a cooldown of 10 seconds(10 sec * 20 tick) to prevent entity spamming
 		{

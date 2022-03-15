@@ -124,6 +124,13 @@ public class RetractableSpikesBlock extends Block
 		tryExtendSpikes(worldIn, pos, state, false);
 	}
 	
+	@Override
+	public void onPlace(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving)
+	{
+		super.onPlace(state, worldIn, pos, oldState, isMoving);
+		tryExtendSpikes(worldIn, pos, state, false);
+	}
+	
 	/**
 	 * Will extend the spikes(plays a sound and does a flat damage amount) assuming the block is powered or is being stepped on while in pressure sensitive mode
 	 */

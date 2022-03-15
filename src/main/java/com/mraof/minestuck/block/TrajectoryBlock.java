@@ -70,16 +70,14 @@ public class TrajectoryBlock extends MSDirectionalBlock
 		BlockState blockState = worldIn.getBlockState(pos);
 		updatePower(worldIn, pos);
 		
-		if(blockState.getValue(POWER) != 0)
+		int power = blockState.getValue(POWER);
+		double powerMod = power / 16D;
+		
+		if(power != 0 && !(blockState.getValue(FACING) == Direction.UP && power < 7))
 		{
-			int power = blockState.getValue(POWER);
-			double powerMod = power / 16D;
-			if(!(blockState.getValue(FACING) == Direction.UP && blockState.getValue(POWER) < 7))
-			{
-				if(entityIn.isOnGround())
-					entityIn.setOnGround(false);
-				entityIn.setDeltaMovement(entityIn.getDeltaMovement().x * 0.8 + blockState.getValue(FACING).getStepX() * powerMod, entityIn.getDeltaMovement().y * 0.8 + blockState.getValue(FACING).getStepY() * powerMod, entityIn.getDeltaMovement().z * 0.8 + blockState.getValue(FACING).getStepZ() * powerMod);
-			}
+			if(entityIn.isOnGround())
+				entityIn.setOnGround(false);
+			entityIn.setDeltaMovement(entityIn.getDeltaMovement().x * 0.8 + blockState.getValue(FACING).getStepX() * powerMod, entityIn.getDeltaMovement().y * 0.8 + blockState.getValue(FACING).getStepY() * powerMod, entityIn.getDeltaMovement().z * 0.8 + blockState.getValue(FACING).getStepZ() * powerMod);
 		}
 	}
 	
@@ -87,6 +85,13 @@ public class TrajectoryBlock extends MSDirectionalBlock
 	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
 	{
 		super.neighborChanged(state, worldIn, pos, blockIn, fromPos, isMoving);
+		updatePower(worldIn, pos);
+	}
+	
+	@Override
+	public void onPlace(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving)
+	{
+		super.onPlace(state, worldIn, pos, oldState, isMoving);
 		updatePower(worldIn, pos);
 	}
 	
@@ -109,7 +114,7 @@ public class TrajectoryBlock extends MSDirectionalBlock
 	@Override
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
 	{
-		if(stateIn.getValue(POWER) != 0 && rand.nextInt(12 - ( stateIn.getValue(POWER) + 1 ) / 4) == 0) //at max power nextInt(8) == 0, at 1 to 4 power nextInt(11) == 0. More frequent at higher power
+		if(stateIn.getValue(POWER) != 0 && rand.nextInt(10 - (stateIn.getValue(POWER) + 1) / 4) == 0) //at max power nextInt(6) == 0, at 1 to 4 power nextInt(9) == 0. More frequent at higher power
 		{
 			double powerMod = stateIn.getValue(POWER) / 120D + 0.075;
 			worldIn.addParticle(ParticleTypes.CLOUD, pos.getX() + 0.5, pos.above().getY() + 0.25, pos.getZ() + 0.5, stateIn.getValue(FACING).getStepX() * powerMod, stateIn.getValue(FACING).getStepY() * powerMod, stateIn.getValue(FACING).getStepZ() * powerMod);

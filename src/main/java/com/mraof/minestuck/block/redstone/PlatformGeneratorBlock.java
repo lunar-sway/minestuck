@@ -9,6 +9,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particles.RedstoneParticleData;
 import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
@@ -29,12 +30,13 @@ import java.util.Random;
  */
 public class PlatformGeneratorBlock extends MSDirectionalBlock
 {
+	public static final IntegerProperty POWER = BlockStateProperties.POWER;
 	public static final BooleanProperty INVISIBLE_MODE = BlockStateProperties.ENABLED;
 	
 	public PlatformGeneratorBlock(Properties properties)
 	{
 		super(properties);
-		registerDefaultState(stateDefinition.any().setValue(FACING, Direction.UP).setValue(INVISIBLE_MODE, false));
+		registerDefaultState(stateDefinition.any().setValue(FACING, Direction.UP).setValue(POWER, 0).setValue(INVISIBLE_MODE, false));
 	}
 	
 	@Override
@@ -67,11 +69,38 @@ public class PlatformGeneratorBlock extends MSDirectionalBlock
 	}
 	
 	@Override
+	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+	{
+		super.neighborChanged(state, worldIn, pos, blockIn, fromPos, isMoving);
+		updatePower(worldIn, pos);
+	}
+	
+	@Override
+	public void onPlace(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving)
+	{
+		super.onPlace(state, worldIn, pos, oldState, isMoving);
+		updatePower(worldIn, pos);
+	}
+	
+	public void updatePower(World worldIn, BlockPos pos)
+	{
+		if(!worldIn.isClientSide)
+		{
+			BlockState state = worldIn.getBlockState(pos);
+			int powerInt = worldIn.getBestNeighborSignal(pos);
+			
+			if(state.getValue(POWER) != powerInt)
+				worldIn.setBlockAndUpdate(pos, state.setValue(POWER, powerInt));
+			else worldIn.sendBlockUpdated(pos, state, state, 2);
+		}
+	}
+	
+	@Override
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
 	{
-		if(worldIn.getBestNeighborSignal(pos) > 0)
+		if(stateIn.getValue(POWER) > 0)
 		{
-			if(rand.nextInt(16 - worldIn.getBestNeighborSignal(pos)) == 0)
+			if(rand.nextInt(16 - stateIn.getValue(POWER)) == 0)
 				ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE);
 		}
 	}
@@ -80,6 +109,7 @@ public class PlatformGeneratorBlock extends MSDirectionalBlock
 	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
 	{
 		super.createBlockStateDefinition(builder);
+		builder.add(POWER);
 		builder.add(INVISIBLE_MODE);
 	}
 }

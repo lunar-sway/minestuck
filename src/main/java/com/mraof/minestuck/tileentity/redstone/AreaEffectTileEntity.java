@@ -19,6 +19,8 @@ import net.minecraft.util.math.BlockPos;
 
 public class AreaEffectTileEntity extends TileEntity implements ITickableTileEntity
 {
+	//TODO deserialize/reserialize function + triggering of all summoners
+	
 	private Effect effect;
 	private int effectAmplifier;
 	private BlockPos minEffectPos;
@@ -56,7 +58,7 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 	public void tick()
 	{
 		if(level == null || !level.isAreaLoaded(getBlockPos(), 0))
-			return; // Forge: prevent loading unloaded chunks
+			return;
 		
 		if(level.getGameTime() % 60 == 0 && level.getBlockState(getBlockPos()).getBlock() instanceof AreaEffectBlock && level.hasNeighborSignal(getBlockPos()))
 		{

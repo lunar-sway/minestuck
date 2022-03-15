@@ -17,7 +17,7 @@ import javax.annotation.Nullable;
 /**
  * Increases damage from falls for living entities landing on it. Also injures living entities that move through it, in a manner similar to sweet berry bushes
  */
-public class SpikeBlock extends CustomModelBlock
+public class SpikeBlock extends CustomShapeBlock
 {
 	public SpikeBlock(Properties properties, CustomVoxelShape shape)
 	{
@@ -48,12 +48,10 @@ public class SpikeBlock extends CustomModelBlock
 				double distanceX = Math.abs(entityIn.getX() - entityIn.xOld);
 				double distanceZ = Math.abs(entityIn.getZ() - entityIn.zOld);
 				
+				entityIn.makeStuckInBlock(state, new Vector3d(0.3F, 0.9, 0.3F));
+				if(distanceX >= 0.003 || distanceZ >= 0.003)
 				{
-					entityIn.makeStuckInBlock(state, new Vector3d(0.3F, 0.9, 0.3F));
-					if(distanceX >= (double) 0.003F || distanceZ >= (double) 0.003F)
-					{
-						entityIn.hurt(DamageSource.GENERIC, 1.0F);
-					}
+					entityIn.hurt(DamageSource.GENERIC, 1.0F);
 				}
 			}
 		}

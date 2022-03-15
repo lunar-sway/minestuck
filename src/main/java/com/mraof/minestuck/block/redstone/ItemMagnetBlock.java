@@ -1,6 +1,6 @@
 package com.mraof.minestuck.block.redstone;
 
-import com.mraof.minestuck.block.DirectionalCustomModelBlock;
+import com.mraof.minestuck.block.DirectionalCustomShapeBlock;
 import com.mraof.minestuck.tileentity.redstone.ItemMagnetTileEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
 import com.mraof.minestuck.util.ParticlesAroundSolidBlock;
@@ -22,7 +22,7 @@ import java.util.Random;
 /**
  * When powered, the tile entity for this block pulls item entities towards it
  */
-public class ItemMagnetBlock extends DirectionalCustomModelBlock
+public class ItemMagnetBlock extends DirectionalCustomShapeBlock
 {
 	public static final IntegerProperty POWER = BlockStateProperties.POWER;
 	
@@ -49,6 +49,13 @@ public class ItemMagnetBlock extends DirectionalCustomModelBlock
 	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
 	{
 		super.neighborChanged(state, worldIn, pos, blockIn, fromPos, isMoving);
+		updatePower(worldIn, pos);
+	}
+	
+	@Override
+	public void onPlace(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving)
+	{
+		super.onPlace(state, worldIn, pos, oldState, isMoving);
 		updatePower(worldIn, pos);
 	}
 	

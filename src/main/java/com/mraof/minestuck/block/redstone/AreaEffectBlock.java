@@ -68,7 +68,7 @@ public class AreaEffectBlock extends HorizontalBlock
 				
 				ItemStack heldItemStack = player.getItemInHand(hand);
 				
-				if(heldItemStack.getItem() instanceof PotionItem)
+				if(heldItemStack.getItem() instanceof PotionItem && !worldIn.isClientSide)
 				{
 					EffectInstance firstEffect = PotionUtils.getPotion(heldItemStack).getEffects().get(0);
 					if(firstEffect != null)
@@ -78,9 +78,9 @@ public class AreaEffectBlock extends HorizontalBlock
 						player.displayClientMessage(new TranslationTextComponent(getDescriptionId() + "." + EFFECT_CHANGE_MESSAGE, firstEffect.getEffect().getRegistryName(), firstEffect.getAmplifier()), true); //getDescriptionId was getTranslationKey
 						worldIn.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 1F);
 					}
-				} else
+				} else if(worldIn.isClientSide)
 				{
-					MSScreenFactories.displayAreaEffectScreen(te);
+					MSScreenFactories.displayAreaEffectScreen(te); //TODO the gui opens up now but no changes to the fields seem to work, may be a result of the introduction of client only?
 				}
 				
 				return ActionResultType.SUCCESS;
@@ -94,6 +94,13 @@ public class AreaEffectBlock extends HorizontalBlock
 	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
 	{
 		super.neighborChanged(state, worldIn, pos, blockIn, fromPos, isMoving);
+		updatePower(worldIn, pos);
+	}
+	
+	@Override
+	public void onPlace(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving)
+	{
+		super.onPlace(state, worldIn, pos, oldState, isMoving);
 		updatePower(worldIn, pos);
 	}
 	

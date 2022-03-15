@@ -44,7 +44,7 @@ public class PlatformGeneratorTileEntity extends TileEntity implements ITickable
 	{
 		if(level != null && !level.isClientSide)
 		{
-			int powerIn = level.getBestNeighborSignal(getBlockPos());
+			int powerIn = getBlockState().getValue(PlatformGeneratorBlock.POWER);
 			platformLength = powerIn;
 			
 			if(powerIn > 0)

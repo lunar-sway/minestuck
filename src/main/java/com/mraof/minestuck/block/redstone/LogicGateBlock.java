@@ -10,6 +10,7 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
@@ -19,16 +20,16 @@ import java.util.function.BiPredicate;
 
 /**
  * Allows redstone signals to be filtered through a specified logic gate operation, including the ability for the power state to be locked in place as is possible with repeater blocks.
- * All of these functions are achievable with one or more blocks but these blocks are intended to present a more uniform look and compact solution to larger circuits
+ * All of these functions are achievable with one or more vanilla blocks but this new set is intended to present a more uniform look and compact solution to larger circuits
  */
 public class LogicGateBlock extends RedstoneDiodeBlock
 {
-	private final State assignedLogicState;
+	private final State assignedLogicOperator;
 	
 	public LogicGateBlock(Properties properties, LogicGateBlock.State gateState)
 	{
 		super(properties);
-		this.assignedLogicState = gateState;
+		this.assignedLogicOperator = gateState;
 		this.registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(POWERED, false));
 	}
 	
@@ -41,8 +42,8 @@ public class LogicGateBlock extends RedstoneDiodeBlock
 		Direction rightInput = state.getValue(FACING).getClockWise();
 		boolean leftInputSendingPower = getAlternateSignalAt(worldIn, pos, leftInput) > 0;
 		boolean rightInputSendingPower = getAlternateSignalAt(worldIn, pos, rightInput) > 0;
-	
-		return assignedLogicState.operation.test(leftInputSendingPower, rightInputSendingPower);
+		
+		return assignedLogicOperator.operation.test(leftInputSendingPower, rightInputSendingPower);
 	}
 	
 	@Override
@@ -73,7 +74,7 @@ public class LogicGateBlock extends RedstoneDiodeBlock
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
 	{
-		return Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+		return VoxelShapes.block(); //collision shape for other redstone diodes is not a full block, now it is
 	}
 	
 	@Override
@@ -96,9 +97,9 @@ public class LogicGateBlock extends RedstoneDiodeBlock
 		AND((left, right) -> left && right),
 		OR((left, right) -> left || right),
 		XOR((left, right) -> (left && !right) || (!left && right)),
-		NAND((left, right) -> !left || !right),
-		NOR((left, right) -> !left && !right),
-		XNOR((left, right) -> (left && right) || (!left && !right));
+		NAND(AND.operation.negate()),
+		NOR(OR.operation.negate()),
+		XNOR(XOR.operation.negate());
 		
 		private final BiPredicate<Boolean, Boolean> operation;
 		

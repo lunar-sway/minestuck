@@ -64,7 +64,7 @@ public class RedstoneClockTileEntity extends TileEntity implements ITickableTile
 			clockSpeed = 20;
 			level.playSound(null, getBlockPos(), SoundEvents.PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, 1.6F);
 		}
-		playerEntity.displayClientMessage(new TranslationTextComponent(TIME_CHANGE, (double) clockSpeed / 20), true); //displayClientMessage was sendStatusMessage
+		playerEntity.displayClientMessage(new TranslationTextComponent(TIME_CHANGE, (double) clockSpeed / 20), true);
 	}
 	
 	public void decrementClockSpeed(PlayerEntity playerEntity)

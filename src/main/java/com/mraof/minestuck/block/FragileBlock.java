@@ -5,6 +5,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.BlockVoxelShape;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
@@ -17,16 +19,19 @@ import net.minecraft.world.World;
  */
 public class FragileBlock extends Block
 {
-	protected FragileBlock(Properties properties)
+	//collision shape is not a full block in order for the entityInside function to work. entityInside is used instead of stepOn as stepOn can be bypassed via sneaking
+	private static final VoxelShape COLLISION_SHAPE = Block.box(0, 0, 0, 16, 15, 16);
+	
+	public FragileBlock(Properties properties)
 	{
 		super(properties);
 	}
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	public VoxelShape getCollisionShape(BlockState p_220071_1_, IBlockReader p_220071_2_, BlockPos p_220071_3_, ISelectionContext p_220071_4_)
+	public VoxelShape getCollisionShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context)
 	{
-		return Block.box(0, 0, 0, 16, 15, 16);
+		return COLLISION_SHAPE;
 	}
 	
 	@Override
@@ -60,6 +65,10 @@ public class FragileBlock extends Block
 	 */
 	public boolean directionNeedsObfuscation(World worldIn, BlockPos pos)
 	{
-		return (!(worldIn.getBlockState(pos).getBlock() instanceof FragileBlock) && !worldIn.getBlockState(pos).isAir() && !(worldIn.getBlockState(pos).getBlock() instanceof FlowingFluidBlock)) || (worldIn.getBlockState(pos).getBlock() instanceof FragileBlock && !worldIn.getBlockState(pos.below()).isAir());
+		BlockState state = worldIn.getBlockState(pos);
+		//return (!(state.getBlock() == this) && !state.isAir() && !(state.getBlock() instanceof FlowingFluidBlock)) || (state.getBlock() instanceof FragileBlock && !worldIn.getBlockState(pos.below()).isAir());
+		//returns true if the block in question is also a fragile block and the block below it does not have a full face or if the block in question is air and a fluid
+		return state.getBlock() == this ? worldIn.getBlockState(pos.below()).isFaceSturdy(worldIn, pos.below(), Direction.UP, BlockVoxelShape.RIGID) : (!state.isAir() && !(state.getBlock() instanceof FlowingFluidBlock));
+		/*.getBlockSupportShape(worldIn.getBlockState(pos.below()), worldIn, pos.below())*/
 	}
 }
