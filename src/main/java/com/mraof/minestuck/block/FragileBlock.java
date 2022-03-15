@@ -66,9 +66,9 @@ public class FragileBlock extends Block
 	public boolean directionNeedsObfuscation(World worldIn, BlockPos pos)
 	{
 		BlockState state = worldIn.getBlockState(pos);
-		//return (!(state.getBlock() == this) && !state.isAir() && !(state.getBlock() instanceof FlowingFluidBlock)) || (state.getBlock() instanceof FragileBlock && !worldIn.getBlockState(pos.below()).isAir());
+		return (!(state.getBlock() == this) && !state.isAir() && !(state.getBlock() instanceof FlowingFluidBlock)) || (state.getBlock() instanceof FragileBlock && !worldIn.getBlockState(pos.below()).isAir());
 		//returns true if the block in question is also a fragile block and the block below it does not have a full face or if the block in question is air and a fluid
-		return state.getBlock() == this ? worldIn.getBlockState(pos.below()).isFaceSturdy(worldIn, pos.below(), Direction.UP, BlockVoxelShape.RIGID) : (!state.isAir() && !(state.getBlock() instanceof FlowingFluidBlock));
+		//return state.getBlock() == this ? worldIn.getBlockState(pos.below()).isFaceSturdy(worldIn, pos.below(), Direction.UP, BlockVoxelShape.RIGID) : (!state.isAir() && !(state.getBlock() instanceof FlowingFluidBlock));
 		/*.getBlockSupportShape(worldIn.getBlockState(pos.below()), worldIn, pos.below())*/
 	}
 }
