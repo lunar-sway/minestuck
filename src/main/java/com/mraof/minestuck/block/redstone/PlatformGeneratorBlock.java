@@ -31,12 +31,13 @@ import java.util.Random;
 public class PlatformGeneratorBlock extends MSDirectionalBlock
 {
 	public static final IntegerProperty POWER = BlockStateProperties.POWER;
+	public static final BooleanProperty POWERED = BlockStateProperties.POWERED; //used for texture purposes
 	public static final BooleanProperty INVISIBLE_MODE = BlockStateProperties.ENABLED;
 	
 	public PlatformGeneratorBlock(Properties properties)
 	{
 		super(properties);
-		registerDefaultState(stateDefinition.any().setValue(FACING, Direction.UP).setValue(POWER, 0).setValue(INVISIBLE_MODE, false));
+		registerDefaultState(stateDefinition.any().setValue(FACING, Direction.UP).setValue(POWER, 0).setValue(POWERED, false).setValue(INVISIBLE_MODE, false));
 	}
 	
 	@Override
@@ -92,6 +93,10 @@ public class PlatformGeneratorBlock extends MSDirectionalBlock
 			if(state.getValue(POWER) != powerInt)
 				worldIn.setBlockAndUpdate(pos, state.setValue(POWER, powerInt));
 			else worldIn.sendBlockUpdated(pos, state, state, 2);
+			
+			if(state.getValue(POWERED) != powerInt > 0)
+				worldIn.setBlockAndUpdate(pos, state.setValue(POWERED, powerInt > 0));
+			else worldIn.sendBlockUpdated(pos, state, state, 2);
 		}
 	}
 	
@@ -110,6 +115,7 @@ public class PlatformGeneratorBlock extends MSDirectionalBlock
 	{
 		super.createBlockStateDefinition(builder);
 		builder.add(POWER);
+		builder.add(POWERED);
 		builder.add(INVISIBLE_MODE);
 	}
 }

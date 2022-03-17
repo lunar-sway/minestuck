@@ -2,8 +2,8 @@
     "parent": "block/block",
     "textures": {
         "top": "minestuck:block/trajectory_block_horizontal_top_unpowered",
-        "side": "minestuck:block/trajectory_block_side",
-        "particle": "minestuck:block/trajectory_block_side"
+        "side": "minestuck:block/redstone_machine_block",
+        "particle": "minestuck:block/redstone_machine_block"
     },
     "elements": [
         {   "from": [ 0, 0, 0 ],
