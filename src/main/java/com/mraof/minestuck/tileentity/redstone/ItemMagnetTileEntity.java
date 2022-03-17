@@ -53,8 +53,9 @@ public class ItemMagnetTileEntity extends TileEntity implements ITickableTileEnt
 			if(powerIn > 0)
 			{
 				Direction magnetFacing = getBlockState().getValue(ItemMagnetBlock.FACING);
+				boolean reversePolarity = getBlockState().getValue(ItemMagnetBlock.REVERSE_POLARITY);
 				
-				if(!level.isClientSide && magnetFacing == Direction.DOWN && level.getGameTime() % 5 == 0) //will only try turning a portable block into a falling entity if its getting dragged upwards and only does so every quarter second
+				if(!level.isClientSide && level.getGameTime() % 5 == 0 && ((magnetFacing == Direction.DOWN && !reversePolarity) || (magnetFacing == Direction.UP && reversePolarity))) //will only try turning a portable block into a falling entity if its getting moved upwards and only does so every quarter second
 				{
 					for(int blockIterate = 1; blockIterate < powerIn + 1; blockIterate++)
 					{
@@ -70,7 +71,7 @@ public class ItemMagnetTileEntity extends TileEntity implements ITickableTileEnt
 						{
 							FallingBlockEntity fallingblockentity = new FallingBlockEntity(level, iteratePos.getX() + 0.5D, iteratePos.getY(), iteratePos.getZ() + 0.5D, iterateBlockState);
 							level.addFreshEntity(fallingblockentity);
-							fallingblockentity.time = Integer.MIN_VALUE; //puzzles should not be holding the block indefintely but this prevents them from breaking in the mean time
+							fallingblockentity.time = Integer.MIN_VALUE; //puzzles ideally should not be holding the block indefinitely but this prevents the falling block entity from converting to an item for as long as that is the case
 							level.removeBlock(iteratePos, false);
 						}
 					}
@@ -91,7 +92,10 @@ public class ItemMagnetTileEntity extends TileEntity implements ITickableTileEnt
 						{
 							Vector3d motionVec3d = new Vector3d(magnetFacing.getOpposite().step());
 							motionVec3d.add(itemEntity.getDeltaMovement());
-							itemEntity.setDeltaMovement(motionVec3d.scale(0.2));
+							if(reversePolarity)
+								itemEntity.setDeltaMovement(motionVec3d.scale(0.2).reverse());
+							else
+								itemEntity.setDeltaMovement(motionVec3d.scale(0.2));
 						}
 					}
 				}
@@ -100,12 +104,18 @@ public class ItemMagnetTileEntity extends TileEntity implements ITickableTileEnt
 				if(level.random.nextInt(6) == 0)
 				{
 					BlockPos randomPosInAABB = offsetPosFar.relative(magnetFacing.getOpposite(), level.random.nextInt(Math.abs(offsetPosFar.compareTo(offsetPosClose))));
-					level.addParticle(new BlockParticleData(ParticleTypes.BLOCK, level.getBlockState(randomPosInAABB.relative(Direction.getRandom(level.random)))), randomPosInAABB.getX() + 0.5, randomPosInAABB.getY() + 0.9, randomPosInAABB.getZ() + 0.5, magnetFacing.getOpposite().getStepX(), magnetFacing.getOpposite().getStepY(), magnetFacing.getOpposite().getStepZ());
+					if(reversePolarity)
+						level.addParticle(new BlockParticleData(ParticleTypes.BLOCK, level.getBlockState(randomPosInAABB.relative(Direction.getRandom(level.random)))), randomPosInAABB.getX() + 0.5, randomPosInAABB.getY() + 0.9, randomPosInAABB.getZ() + 0.5, magnetFacing.getStepX(), magnetFacing.getStepY(), magnetFacing.getStepZ());
+					else
+						level.addParticle(new BlockParticleData(ParticleTypes.BLOCK, level.getBlockState(randomPosInAABB.relative(Direction.getRandom(level.random)))), randomPosInAABB.getX() + 0.5, randomPosInAABB.getY() + 0.9, randomPosInAABB.getZ() + 0.5, magnetFacing.getOpposite().getStepX(), magnetFacing.getOpposite().getStepY(), magnetFacing.getOpposite().getStepZ());
 				}
 				if(level.random.nextInt(3) == 0)
 				{
 					BlockPos randomPosInAABB = offsetPosFar.relative(magnetFacing.getOpposite(), level.random.nextInt(Math.abs(offsetPosFar.compareTo(offsetPosClose))));
-					level.addParticle(new BlockParticleData(ParticleTypes.BLOCK, level.getBlockState(randomPosInAABB.relative(Direction.getRandom(level.random)))), randomPosInAABB.getX() + 0.5, randomPosInAABB.getY() + 0.9, randomPosInAABB.getZ() + 0.5, magnetFacing.getOpposite().getStepX(), magnetFacing.getOpposite().getStepY(), magnetFacing.getOpposite().getStepZ());
+					if(reversePolarity)
+						level.addParticle(new BlockParticleData(ParticleTypes.BLOCK, level.getBlockState(randomPosInAABB.relative(Direction.getRandom(level.random)))), randomPosInAABB.getX() + 0.5, randomPosInAABB.getY() + 0.9, randomPosInAABB.getZ() + 0.5, magnetFacing.getStepX(), magnetFacing.getStepY(), magnetFacing.getStepZ());
+					else
+						level.addParticle(new BlockParticleData(ParticleTypes.BLOCK, level.getBlockState(randomPosInAABB.relative(Direction.getRandom(level.random)))), randomPosInAABB.getX() + 0.5, randomPosInAABB.getY() + 0.9, randomPosInAABB.getZ() + 0.5, magnetFacing.getOpposite().getStepX(), magnetFacing.getOpposite().getStepY(), magnetFacing.getOpposite().getStepZ());
 				}
 			}
 		}
