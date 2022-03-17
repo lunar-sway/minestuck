@@ -770,6 +770,7 @@ public class MSItems
 		registerItemBlock(registry, FALL_PAD, MSItemGroup.MAIN);
 		registerItemBlock(registry, FRAGILE_STONE, MSItemGroup.MAIN);
 		registerItemBlock(registry, RETRACTABLE_SPIKES, MSItemGroup.MAIN);
+		registerItemBlock(registry, PORTABLE_BLOCK, MSItemGroup.LANDS);
 		registerItemBlock(registry, AND_GATE_BLOCK); //Logic gates have no item group as they are discordant with the aesthetics and intended mechanics of Minestuck(but are kept for some utility)
 		registerItemBlock(registry, OR_GATE_BLOCK);
 		registerItemBlock(registry, XOR_GATE_BLOCK);

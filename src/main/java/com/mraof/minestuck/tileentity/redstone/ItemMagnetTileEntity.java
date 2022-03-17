@@ -1,5 +1,6 @@
 package com.mraof.minestuck.tileentity.redstone;
 
+import com.mraof.minestuck.block.PortableBlock;
 import com.mraof.minestuck.block.redstone.ItemMagnetBlock;
 import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.entity.item.VitalityGelEntity;
@@ -7,6 +8,7 @@ import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ExperienceOrbEntity;
+import net.minecraft.entity.item.FallingBlockEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
@@ -19,6 +21,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.World;
 
 import java.util.List;
 
@@ -49,9 +52,32 @@ public class ItemMagnetTileEntity extends TileEntity implements ITickableTileEnt
 			
 			if(powerIn > 0)
 			{
-				Direction blockFacing = level.getBlockState(getBlockPos()).getValue(ItemMagnetBlock.FACING);
-				BlockPos offsetPosClose = getBlockPos().relative(blockFacing);
-				BlockPos offsetPosFar = offsetPosClose.relative(blockFacing, gatherLength);
+				Direction magnetFacing = getBlockState().getValue(ItemMagnetBlock.FACING);
+				
+				if(!level.isClientSide && magnetFacing == Direction.DOWN && level.getGameTime() % 5 == 0) //will only try turning a portable block into a falling entity if its getting dragged upwards and only does so every quarter second
+				{
+					for(int blockIterate = 1; blockIterate < powerIn + 1; blockIterate++)
+					{
+						BlockPos iteratePos = new BlockPos(getBlockPos().relative(magnetFacing, blockIterate));
+						if(!level.isAreaLoaded(getBlockPos(), blockIterate) || World.isOutsideBuildHeight(iteratePos.getY())) //checks for portable blocks to grab up until the world bounds
+						{
+							break;
+						}
+						
+						BlockState iterateBlockState = level.getBlockState(iteratePos);
+						
+						if(iterateBlockState.getBlock() instanceof PortableBlock)
+						{
+							FallingBlockEntity fallingblockentity = new FallingBlockEntity(level, iteratePos.getX() + 0.5D, iteratePos.getY(), iteratePos.getZ() + 0.5D, iterateBlockState);
+							level.addFreshEntity(fallingblockentity);
+							fallingblockentity.time = Integer.MIN_VALUE; //puzzles should not be holding the block indefintely but this prevents them from breaking in the mean time
+							level.removeBlock(iteratePos, false);
+						}
+					}
+				}
+				
+				BlockPos offsetPosClose = getBlockPos().relative(magnetFacing);
+				BlockPos offsetPosFar = offsetPosClose.relative(magnetFacing, gatherLength);
 				
 				AxisAlignedBB axisalignedbb = new AxisAlignedBB(
 						offsetPosClose.getX() + 0.5, offsetPosClose.getY() + 0.5, offsetPosClose.getZ() + 0.5,
@@ -61,9 +87,9 @@ public class ItemMagnetTileEntity extends TileEntity implements ITickableTileEnt
 				{
 					for(Entity itemEntity : list)
 					{
-						if(itemEntity instanceof GristEntity || itemEntity instanceof VitalityGelEntity || itemEntity instanceof ItemEntity || itemEntity instanceof ExperienceOrbEntity)
+						if(itemEntity instanceof GristEntity || itemEntity instanceof VitalityGelEntity || itemEntity instanceof ItemEntity || itemEntity instanceof ExperienceOrbEntity || (itemEntity instanceof FallingBlockEntity && ((FallingBlockEntity) itemEntity).getBlockState().getBlock() instanceof PortableBlock))
 						{
-							Vector3d motionVec3d = new Vector3d(blockFacing.getOpposite().step());
+							Vector3d motionVec3d = new Vector3d(magnetFacing.getOpposite().step());
 							motionVec3d.add(itemEntity.getDeltaMovement());
 							itemEntity.setDeltaMovement(motionVec3d.scale(0.2));
 						}
@@ -73,13 +99,13 @@ public class ItemMagnetTileEntity extends TileEntity implements ITickableTileEnt
 				//particles to give the illusion that small bits of material are being pulled towards the magnet
 				if(level.random.nextInt(6) == 0)
 				{
-					BlockPos randomPosInAABB = offsetPosFar.relative(blockFacing.getOpposite(), level.random.nextInt(Math.abs(offsetPosFar.compareTo(offsetPosClose))));
-					level.addParticle(new BlockParticleData(ParticleTypes.BLOCK, level.getBlockState(randomPosInAABB.relative(Direction.getRandom(level.random)))), randomPosInAABB.getX() + 0.5, randomPosInAABB.getY() + 0.9, randomPosInAABB.getZ() + 0.5, blockFacing.getOpposite().getStepX(), blockFacing.getOpposite().getStepY(), blockFacing.getOpposite().getStepZ());
+					BlockPos randomPosInAABB = offsetPosFar.relative(magnetFacing.getOpposite(), level.random.nextInt(Math.abs(offsetPosFar.compareTo(offsetPosClose))));
+					level.addParticle(new BlockParticleData(ParticleTypes.BLOCK, level.getBlockState(randomPosInAABB.relative(Direction.getRandom(level.random)))), randomPosInAABB.getX() + 0.5, randomPosInAABB.getY() + 0.9, randomPosInAABB.getZ() + 0.5, magnetFacing.getOpposite().getStepX(), magnetFacing.getOpposite().getStepY(), magnetFacing.getOpposite().getStepZ());
 				}
 				if(level.random.nextInt(3) == 0)
 				{
-					BlockPos randomPosInAABB = offsetPosFar.relative(blockFacing.getOpposite(), level.random.nextInt(Math.abs(offsetPosFar.compareTo(offsetPosClose))));
-					level.addParticle(new BlockParticleData(ParticleTypes.BLOCK, level.getBlockState(randomPosInAABB.relative(Direction.getRandom(level.random)))), randomPosInAABB.getX() + 0.5, randomPosInAABB.getY() + 0.9, randomPosInAABB.getZ() + 0.5, blockFacing.getOpposite().getStepX(), blockFacing.getOpposite().getStepY(), blockFacing.getOpposite().getStepZ());
+					BlockPos randomPosInAABB = offsetPosFar.relative(magnetFacing.getOpposite(), level.random.nextInt(Math.abs(offsetPosFar.compareTo(offsetPosClose))));
+					level.addParticle(new BlockParticleData(ParticleTypes.BLOCK, level.getBlockState(randomPosInAABB.relative(Direction.getRandom(level.random)))), randomPosInAABB.getX() + 0.5, randomPosInAABB.getY() + 0.9, randomPosInAABB.getZ() + 0.5, magnetFacing.getOpposite().getStepX(), magnetFacing.getOpposite().getStepY(), magnetFacing.getOpposite().getStepZ());
 				}
 			}
 		}

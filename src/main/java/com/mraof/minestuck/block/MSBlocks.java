@@ -173,6 +173,7 @@ public class MSBlocks
 	public static final Block FALL_PAD = getNull();
 	public static final Block FRAGILE_STONE = getNull();
 	public static final Block RETRACTABLE_SPIKES = getNull();
+	public static final Block PORTABLE_BLOCK = getNull();
 	public static final Block AND_GATE_BLOCK = getNull();
 	public static final Block OR_GATE_BLOCK = getNull();
 	public static final Block XOR_GATE_BLOCK = getNull();
@@ -535,6 +536,7 @@ public class MSBlocks
 		registry.register(new FallPadBlock(AbstractBlock.Properties.of(Material.CLOTH_DECORATION).strength(1).sound(SoundType.WOOL)).setRegistryName("fall_pad"));
 		registry.register(new FragileBlock(AbstractBlock.Properties.of(Material.STONE).strength(1).sound(SoundType.STONE)).setRegistryName("fragile_stone"));
 		registry.register(new RetractableSpikesBlock(AbstractBlock.Properties.of(Material.METAL).strength(1).sound(SoundType.METAL)).setRegistryName("retractable_spikes"));
+		registry.register(new PortableBlock(AbstractBlock.Properties.of(Material.STONE).strength(1).sound(SoundType.GILDED_BLACKSTONE)).setRegistryName("portable_block"));
 		registry.register(new LogicGateBlock(AbstractBlock.Properties.of(Material.STONE).strength(1).sound(SoundType.STONE), LogicGateBlock.State.AND).setRegistryName("and_gate_block"));
 		registry.register(new LogicGateBlock(AbstractBlock.Properties.of(Material.STONE).strength(1).sound(SoundType.STONE), LogicGateBlock.State.OR).setRegistryName("or_gate_block"));
 		registry.register(new LogicGateBlock(AbstractBlock.Properties.of(Material.STONE).strength(1).sound(SoundType.STONE), LogicGateBlock.State.XOR).setRegistryName("xor_gate_block"));
