@@ -95,7 +95,6 @@ public class MinestuckConfig
 		public final BooleanValue rungHealthOnRespawn;
 		public final IntValue dialogueRenewalSpeed;
 		public final IntValue lotusRestorationTime;
-		public final IntValue wirelessBlocksTickRate;
 		
 		//Entry
 		public final BooleanValue entryCrater;
@@ -146,8 +145,6 @@ public class MinestuckConfig
 			lotusRestorationTime = builder.comment("Determines how many seconds it takes for the lotus blossom to regrow after the opening process has started.")
 					.defineInRange("lotusRestorationTime", 600, 30, Integer.MAX_VALUE);
 			hardMode = builder.define("hardMode", false);
-			wirelessBlocksTickRate = builder.comment("Determines the speed at which remote/wireless redstone blocks send/receive updates.")
-					.defineInRange("wirelessBlocksTickRate", 6, 1, 200);
 			builder.pop();
 			
 			builder.push("sylladex");

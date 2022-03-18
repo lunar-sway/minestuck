@@ -2,6 +2,6 @@
     "parent": "block/cube_column",
     "textures": {
         "end": "minestuck:block/trajectory_block_vertical_top_unpowered",
-        "side": "minestuck:block/trajectory_block_side"
+        "side": "minestuck:block/redstone_machine_block"
     }
 }
