@@ -24,6 +24,7 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -35,12 +36,13 @@ import java.util.Random;
 public class AreaEffectBlock extends HorizontalBlock
 {
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
+	public static final BooleanProperty ALL_MOBS = BlockStateProperties.ENABLED; //checks whether just players should be given the effect or if all living entities should be given the effect
 	public static final String EFFECT_CHANGE_MESSAGE = "effect_change_message";
 	
 	public AreaEffectBlock(Properties properties)
 	{
 		super(properties);
-		this.registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(POWERED, false));
+		this.registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(POWERED, false).setValue(ALL_MOBS, false));
 	}
 	
 	@Override
@@ -68,7 +70,7 @@ public class AreaEffectBlock extends HorizontalBlock
 				
 				ItemStack heldItemStack = player.getItemInHand(hand);
 				
-				if(heldItemStack.getItem() instanceof PotionItem && !worldIn.isClientSide)
+				if(heldItemStack.getItem() instanceof PotionItem/* && !worldIn.isClientSide*/)
 				{
 					EffectInstance firstEffect = PotionUtils.getPotion(heldItemStack).getEffects().get(0);
 					if(firstEffect != null)
@@ -78,9 +80,16 @@ public class AreaEffectBlock extends HorizontalBlock
 						player.displayClientMessage(new TranslationTextComponent(getDescriptionId() + "." + EFFECT_CHANGE_MESSAGE, firstEffect.getEffect().getRegistryName(), firstEffect.getAmplifier()), true); //getDescriptionId was getTranslationKey
 						worldIn.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 1F);
 					}
-				} else if(worldIn.isClientSide)
+				} else if(heldItemStack.isEmpty() && player.isCrouching())
 				{
-					MSScreenFactories.displayAreaEffectScreen(te); //TODO the gui opens up now but no changes to the fields seem to work, may be a result of the introduction of client only?
+					worldIn.setBlock(pos, state.cycle(ALL_MOBS), Constants.BlockFlags.NOTIFY_NEIGHBORS);
+					if(state.getValue(ALL_MOBS))
+						worldIn.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 1.2F);
+					else
+						worldIn.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, 1.2F);
+				} else if(!player.isCrouching()/*&& if(worldIn.isClientSide)*/)
+				{
+					MSScreenFactories.displayAreaEffectScreen(te); //TODO if its only client side the gui opens up but no changes to the fields seem to work, may be a result of the introduction of client only?
 				}
 				
 				return ActionResultType.SUCCESS;
@@ -109,10 +118,10 @@ public class AreaEffectBlock extends HorizontalBlock
 		if(!worldIn.isClientSide)
 		{
 			BlockState state = worldIn.getBlockState(pos);
-			int powerInt = worldIn.getBestNeighborSignal(pos);
+			boolean hasPower = worldIn.hasNeighborSignal(pos);
 			
-			if(state.getValue(POWERED) != powerInt > 0)
-				worldIn.setBlockAndUpdate(pos, state.setValue(POWERED, powerInt > 0));
+			if(state.getValue(POWERED) != hasPower)
+				worldIn.setBlockAndUpdate(pos, state.setValue(POWERED, hasPower));
 			else worldIn.sendBlockUpdated(pos, state, state, 2);
 		}
 	}
@@ -137,5 +146,6 @@ public class AreaEffectBlock extends HorizontalBlock
 		super.createBlockStateDefinition(builder);
 		builder.add(FACING);
 		builder.add(POWERED);
+		builder.add(ALL_MOBS);
 	}
 }

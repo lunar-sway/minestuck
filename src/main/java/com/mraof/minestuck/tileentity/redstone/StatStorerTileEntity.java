@@ -1,7 +1,6 @@
 package com.mraof.minestuck.tileentity.redstone;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.redstone.StatStorerBlock;
 import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.event.AlchemyEvent;
@@ -82,7 +81,7 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 		if(level == null || !level.isAreaLoaded(worldPosition, 1))
 			return;
 		
-		if(tickCycle % MinestuckConfig.SERVER.wirelessBlocksTickRate.get() == 1)
+		if(tickCycle % 6 == 1) //6 is wireless constant
 		{
 			if(!level.isClientSide)
 			{

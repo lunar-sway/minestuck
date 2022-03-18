@@ -64,15 +64,15 @@ public class RotatorBlock extends MSDirectionalBlock
 		if(!worldIn.isClientSide)
 		{
 			BlockState state = worldIn.getBlockState(pos);
-			int powerInt = worldIn.getBestNeighborSignal(pos);
+			boolean hasPower = worldIn.hasNeighborSignal(pos);
 			
 			boolean isPoweredBeforeUpdate = state.getValue(POWERED);
 			
-			if(state.getValue(POWERED) != powerInt > 0)
-				worldIn.setBlockAndUpdate(pos, state.setValue(POWERED, powerInt > 0));
+			if(state.getValue(POWERED) != hasPower)
+				worldIn.setBlockAndUpdate(pos, state.setValue(POWERED, hasPower));
 			else worldIn.sendBlockUpdated(pos, state, state, 2);
 			
-			if(!isPoweredBeforeUpdate && powerInt > 0)
+			if(!isPoweredBeforeUpdate && hasPower)
 			{
 				BlockPos facingPos = pos.relative(state.getValue(FACING));
 				BlockState facingState = worldIn.getBlockState(facingPos);

@@ -1,6 +1,5 @@
 package com.mraof.minestuck.tileentity.redstone;
 
-import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.redstone.WirelessRedstoneReceiverBlock;
 import com.mraof.minestuck.block.redstone.WirelessRedstoneTransmitterBlock;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
@@ -34,7 +33,7 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 		if(level == null || !level.isAreaLoaded(getBlockPos(), 1))
 			return;
 		
-		if(tickCycle >= MinestuckConfig.SERVER.wirelessBlocksTickRate.get())
+		if(tickCycle >= 6) //6 is wireless constant
 		{
 			sendUpdateToPosition();
 			tickCycle = 0;

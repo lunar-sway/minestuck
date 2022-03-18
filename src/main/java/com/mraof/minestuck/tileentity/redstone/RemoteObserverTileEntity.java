@@ -1,6 +1,5 @@
 package com.mraof.minestuck.tileentity.redstone;
 
-import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.redstone.RemoteObserverBlock;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
@@ -11,7 +10,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -65,7 +63,7 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 		if(level == null || !level.isAreaLoaded(getBlockPos(), 1))
 			return;
 		
-		if(tickCycle >= MinestuckConfig.SERVER.wirelessBlocksTickRate.get() * 1.667) //with the config value of 6 ticks, 6 * 1.667 ~= 10 ticks or 0.5 sec
+		if(tickCycle >= 6 * 1.667) //6 * 1.667 ~= 10 ticks or 0.5 sec, 6 is wireless constant
 		{
 			checkRelaventType();
 			tickCycle = 0;
