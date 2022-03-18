@@ -1,6 +1,7 @@
 package com.mraof.minestuck.block.redstone;
 
 import com.mraof.minestuck.block.DirectionalCustomShapeBlock;
+import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.tileentity.redstone.ItemMagnetTileEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
@@ -30,7 +31,7 @@ import java.util.Random;
 public class ItemMagnetBlock extends DirectionalCustomShapeBlock
 {
 	public static final IntegerProperty POWER = BlockStateProperties.POWER;
-	public static final BooleanProperty REVERSE_POLARITY = BlockStateProperties.INVERTED;
+	public static final BooleanProperty REVERSE_POLARITY = MSProperties.MACHINE_TOGGLE;
 	
 	public ItemMagnetBlock(Properties properties, CustomVoxelShape shape)
 	{

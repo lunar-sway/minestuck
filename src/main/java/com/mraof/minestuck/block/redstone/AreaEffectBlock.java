@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block.redstone;
 
+import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.tileentity.redstone.AreaEffectTileEntity;
@@ -36,7 +37,7 @@ import java.util.Random;
 public class AreaEffectBlock extends HorizontalBlock
 {
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
-	public static final BooleanProperty ALL_MOBS = BlockStateProperties.ENABLED; //checks whether just players should be given the effect or if all living entities should be given the effect
+	public static final BooleanProperty ALL_MOBS = MSProperties.MACHINE_TOGGLE; //checks whether just players should be given the effect or if all living entities should be given the effect
 	public static final String EFFECT_CHANGE_MESSAGE = "effect_change_message";
 	
 	public AreaEffectBlock(Properties properties)

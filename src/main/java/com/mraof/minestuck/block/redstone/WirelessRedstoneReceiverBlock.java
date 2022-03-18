@@ -32,7 +32,7 @@ public class WirelessRedstoneReceiverBlock extends HorizontalBlock
 {
 	public static final IntegerProperty POWER = BlockStateProperties.POWER;
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED; //used for texture purposes
-	public static final BooleanProperty AUTO_RESET = MSProperties.AUTO_RESET;
+	public static final BooleanProperty AUTO_RESET = MSProperties.MACHINE_TOGGLE;
 	
 	public static final String NOW_AUTO = "minestuck.receiver_now_auto_reset";
 	public static final String NOW_NOT_AUTO = "minestuck.receiver_now_not_auto_reset";

@@ -1,6 +1,7 @@
 package com.mraof.minestuck.block.redstone;
 
 import com.mraof.minestuck.block.MSDirectionalBlock;
+import com.mraof.minestuck.block.MSProperties;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -22,7 +23,7 @@ import java.util.Random;
  */
 public class PlatformBlock extends MSDirectionalBlock
 {
-	public static final BooleanProperty INVISIBLE = BlockStateProperties.ENABLED;
+	public static final BooleanProperty INVISIBLE = MSProperties.MACHINE_TOGGLE;
 	
 	public PlatformBlock(Properties properties)
 	{

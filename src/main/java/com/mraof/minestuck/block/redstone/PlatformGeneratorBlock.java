@@ -1,6 +1,7 @@
 package com.mraof.minestuck.block.redstone;
 
 import com.mraof.minestuck.block.MSDirectionalBlock;
+import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.tileentity.redstone.PlatformGeneratorTileEntity;
 import com.mraof.minestuck.util.ParticlesAroundSolidBlock;
@@ -32,7 +33,7 @@ public class PlatformGeneratorBlock extends MSDirectionalBlock
 {
 	public static final IntegerProperty POWER = BlockStateProperties.POWER;
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED; //used for texture purposes
-	public static final BooleanProperty INVISIBLE_MODE = BlockStateProperties.ENABLED;
+	public static final BooleanProperty INVISIBLE_MODE = MSProperties.MACHINE_TOGGLE;
 	
 	public PlatformGeneratorBlock(Properties properties)
 	{

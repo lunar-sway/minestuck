@@ -1,6 +1,7 @@
 package com.mraof.minestuck.block.redstone;
 
 import com.mraof.minestuck.block.MSDirectionalBlock;
+import com.mraof.minestuck.block.MSProperties;
 import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.state.BooleanProperty;
@@ -19,7 +20,7 @@ import net.minecraftforge.common.util.Constants;
 public class RotatorBlock extends MSDirectionalBlock
 {
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
-	public static final BooleanProperty ROTATION_FLIPPED = BlockStateProperties.INVERTED;
+	public static final BooleanProperty ROTATION_FLIPPED = MSProperties.MACHINE_TOGGLE;
 	
 	public RotatorBlock(Properties properties)
 	{

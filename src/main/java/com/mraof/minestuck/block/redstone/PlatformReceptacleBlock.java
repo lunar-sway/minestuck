@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block.redstone;
 
+import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.util.ParticlesAroundSolidBlock;
 import net.minecraft.block.Block;
@@ -26,7 +27,7 @@ import java.util.Random;
 public class PlatformReceptacleBlock extends Block
 {
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
-	public static final BooleanProperty ABSORBING = BlockStateProperties.ENABLED;
+	public static final BooleanProperty ABSORBING = MSProperties.MACHINE_TOGGLE;
 	
 	public PlatformReceptacleBlock(Properties properties)
 	{

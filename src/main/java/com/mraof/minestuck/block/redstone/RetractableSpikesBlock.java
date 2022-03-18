@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block.redstone;
 
+import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.effects.CreativeShockEffect;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -30,7 +31,7 @@ import java.util.Random;
 public class RetractableSpikesBlock extends Block
 {
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
-	public static final BooleanProperty PRESSURE_SENSITIVE = BlockStateProperties.ENABLED;
+	public static final BooleanProperty PRESSURE_SENSITIVE = MSProperties.MACHINE_TOGGLE;
 	
 	public RetractableSpikesBlock(Properties properties)
 	{
