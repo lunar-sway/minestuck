@@ -39,35 +39,7 @@ public class DefaultInterpreter implements RecipeInterpreter
 			return null;
 
 		GristSet totalCost = new GristSet();
-
-		// Frick reflection frick reflection frick reflection frick reflection i hate java
-		// this was a whole minecraft oversight anyway
-		// so if they eventually fix this, remove this bit ok?
-		NonNullList<Ingredient> ingredients;
-		if (recipe instanceof SmithingRecipe)
-		{
-			try
-			{
-				Field baseField = SmithingRecipe.class.getDeclaredField("base");
-				baseField.setAccessible(true);
-				Ingredient base = (Ingredient)baseField.get(recipe);
-
-				Field additionField = SmithingRecipe.class.getDeclaredField("addition");
-				additionField.setAccessible(true);
-				Ingredient addition = (Ingredient)additionField.get(recipe);
-
-				// The first argument of NonNullList.of is the default value and doesn't actually go in the list :|
-				ingredients = NonNullList.of(null, base, addition);
-			}
-			catch (Exception e)
-			{
-				throw new RuntimeException(e);
-			}
-		}
-		else
-			ingredients = recipe.getIngredients();
-
-		for(Ingredient ingredient : ingredients)
+		for(Ingredient ingredient : recipe.getIngredients())
 		{
 			GristSet ingredientCost = context.costForIngredient(ingredient, true);
 			if(ingredientCost == null)

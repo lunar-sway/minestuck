@@ -22,7 +22,7 @@
   {
     "source_type": "recipe_type",
     "source": "smithing",
-    "interpreter_type": "minestuck:default"
+    "interpreter_type": "minestuck:smithing"
   },
   {
     "source_type": "recipe_type",
