@@ -2,8 +2,10 @@ package com.mraof.minestuck.block;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FallingBlock;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.FallingBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -25,13 +27,14 @@ public class PortableBlock extends FallingBlock
 	@SuppressWarnings("deprecation")
 	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
 	{
-		if(!player.isCrouching())
+		if(!player.isCrouching() && !worldIn.isClientSide)
 		{
 			Direction direction = hit.getDirection().getOpposite();
-			if((direction.getAxis() == Direction.Axis.X || direction.getAxis() == Direction.Axis.Z) && worldIn.getBlockState(pos.relative(direction)).isAir()/*.canBeReplaced(context)*/)
+			if((direction.getAxis() == Direction.Axis.X || direction.getAxis() == Direction.Axis.Z) && isReplaceable(worldIn.getBlockState(pos.relative(direction))))
 			{
-				worldIn.playSound(null, pos, SoundEvents.GRINDSTONE_USE, SoundCategory.BLOCKS, 0.5F, 1.4F);
+				worldIn.playSound(null, pos, SoundEvents.GRINDSTONE_USE, SoundCategory.BLOCKS, 0.6F, 1.3F);
 				worldIn.removeBlock(pos, false);
+				worldIn.destroyBlock(pos.relative(direction), true);
 				worldIn.setBlock(pos.relative(direction), state, 2);
 				return ActionResultType.SUCCESS;
 			}
@@ -43,9 +46,13 @@ public class PortableBlock extends FallingBlock
 	@Override
 	public void onLand(World worldIn, BlockPos pos, BlockState fallingBlockState, BlockState replacedState, FallingBlockEntity fallingBlockEntity)
 	{
-		super.onLand(worldIn, pos, fallingBlockState, replacedState, fallingBlockEntity);
-		if(!worldIn.isClientSide)
+		if(worldIn.isClientSide)
 			replacedState.addLandingEffects((ServerWorld) worldIn, pos, fallingBlockState, null, 20); //TODO does not work
 		worldIn.playSound(null, pos, SoundEvents.GILDED_BLACKSTONE_STEP, SoundCategory.BLOCKS, 0.5F, 0.3F);
+	}
+	
+	public static boolean isReplaceable(BlockState state) {
+		Material material = state.getMaterial();
+		return state.isAir() || state.is(BlockTags.FIRE) || material.isLiquid() || material.isReplaceable();
 	}
 }

@@ -2,6 +2,7 @@ package com.mraof.minestuck.block.redstone;
 
 import com.mraof.minestuck.block.MSDirectionalBlock;
 import com.mraof.minestuck.block.MSProperties;
+import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.tileentity.redstone.RemoteComparatorTileEntity;
 import com.mraof.minestuck.util.ParticlesAroundSolidBlock;
 import net.minecraft.block.Block;
@@ -43,28 +44,31 @@ public class RemoteComparatorBlock extends MSDirectionalBlock
 	@SuppressWarnings("deprecation")
 	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
 	{
-		if(!player.isCrouching())
+		if(!CreativeShockEffect.doesCreativeShockLimit(player, 1))
 		{
-			if(state.getValue(DISTANCE_1_16) != 16) //increases property until it gets to the highest value at which it resets
+			if(!player.isCrouching())
 			{
-				worldIn.setBlock(pos, state.setValue(DISTANCE_1_16, state.getValue(DISTANCE_1_16) + 1), Constants.BlockFlags.NOTIFY_NEIGHBORS);
-				worldIn.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 1.2F);
-			} else
+				if(state.getValue(DISTANCE_1_16) != 16) //increases property until it gets to the highest value at which it resets
+				{
+					worldIn.setBlock(pos, state.setValue(DISTANCE_1_16, state.getValue(DISTANCE_1_16) + 1), Constants.BlockFlags.NOTIFY_NEIGHBORS);
+					worldIn.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 1.2F);
+				} else
+				{
+					worldIn.setBlock(pos, state.setValue(DISTANCE_1_16, 1), Constants.BlockFlags.NOTIFY_NEIGHBORS);
+					worldIn.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, 1.2F);
+				}
+				
+				return ActionResultType.SUCCESS;
+			} else if(player.isCrouching() && player.getItemInHand(hand).isEmpty())
 			{
-				worldIn.setBlock(pos, state.setValue(DISTANCE_1_16, 0), Constants.BlockFlags.NOTIFY_NEIGHBORS);
-				worldIn.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, 1.2F);
+				worldIn.setBlock(pos, state.cycle(CHECK_STATE), Constants.BlockFlags.NOTIFY_NEIGHBORS);
+				if(state.getValue(CHECK_STATE))
+					worldIn.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 1.5F);
+				else
+					worldIn.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 0.5F);
+				
+				return ActionResultType.SUCCESS;
 			}
-			
-			return ActionResultType.SUCCESS;
-		} else if(player.isCrouching() && player.getItemInHand(hand).isEmpty())
-		{
-			worldIn.setBlock(pos, state.cycle(CHECK_STATE), Constants.BlockFlags.NOTIFY_NEIGHBORS);
-			if(state.getValue(CHECK_STATE))
-				worldIn.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 1.5F);
-			else
-				worldIn.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 0.5F);
-			
-			return ActionResultType.SUCCESS;
 		}
 		
 		return ActionResultType.PASS;
