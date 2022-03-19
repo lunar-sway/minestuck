@@ -65,7 +65,17 @@ public class RotatorBlock extends MSDirectionalBlock
 		if(!worldIn.isClientSide)
 		{
 			BlockState state = worldIn.getBlockState(pos);
-			boolean hasPower = worldIn.hasNeighborSignal(pos);
+			boolean hasPower = false;
+			Direction stateFacing = state.getValue(FACING);
+			
+			for (Direction direction : Direction.values()) //checks for a signal in any direction except the one it is facing
+			{
+				if(direction != stateFacing && worldIn.getSignal(pos.relative(direction), direction) > 0)
+				{
+					hasPower = true;
+					break;
+				}
+			}
 			
 			boolean isPoweredBeforeUpdate = state.getValue(POWERED);
 			

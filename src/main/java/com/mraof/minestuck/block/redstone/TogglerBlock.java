@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
 /**
- * Toggles the state of the block it is facing upon recieving a new redstone signal if that block has the MACHINE_TOGGLE property from MSProperties
+ * Toggles the state of the block it is facing upon receiving a new redstone signal if that block has the MACHINE_TOGGLE property from MSProperties
  */
 public class TogglerBlock extends MSDirectionalBlock
 {
@@ -47,7 +47,17 @@ public class TogglerBlock extends MSDirectionalBlock
 		if(!worldIn.isClientSide)
 		{
 			BlockState state = worldIn.getBlockState(pos);
-			boolean hasPower = worldIn.hasNeighborSignal(pos);
+			boolean hasPower = false;
+			Direction stateFacing = state.getValue(FACING);
+			
+			for (Direction direction : Direction.values()) //checks for a signal in any direction except the one it is facing
+			{
+				if(direction != stateFacing && worldIn.getSignal(pos.relative(direction), direction) > 0)
+				{
+					hasPower = true;
+					break;
+				}
+			}
 			
 			boolean isPoweredBeforeUpdate = state.getValue(POWERED);
 			
@@ -62,7 +72,7 @@ public class TogglerBlock extends MSDirectionalBlock
 				
 				for(Property<?> property : facingState.getProperties())
 				{
-					if(property.equals(MSProperties.MACHINE_TOGGLE))
+					if(property.equals(MSProperties.MACHINE_TOGGLE) && !(facingState.getBlock() instanceof PlatformBlock)) //if it has the property and is not a platform block(platform block property should be toggled by the generator)
 					{
 						worldIn.setBlock(facingPos, facingState.cycle(MSProperties.MACHINE_TOGGLE), Constants.BlockFlags.NOTIFY_NEIGHBORS);
 						

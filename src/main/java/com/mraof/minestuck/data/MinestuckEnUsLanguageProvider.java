@@ -357,6 +357,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.REDSTONE_CLOCK, "Redstone Clock");
 		add(MSBlocks.ROTATOR, "Rotator");
 		add(MSBlocks.TOGGLER, "Toggler");
+		add(MSBlocks.REMOTE_COMPARATOR, "Remote Comparator");
 		add(MSBlocks.FALL_PAD, "Fall Pad");
 		add(MSBlocks.FRAGILE_STONE, "Fragile Stone");
 		add(MSBlocks.RETRACTABLE_SPIKES, "Retractable Spikes");

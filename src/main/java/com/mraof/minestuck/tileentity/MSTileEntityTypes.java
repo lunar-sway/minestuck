@@ -39,4 +39,5 @@ public class MSTileEntityTypes
 	public static final RegistryObject<TileEntityType<PlatformGeneratorTileEntity>> PLATFORM_GENERATOR = REGISTER.register("platform_generator", () -> TileEntityType.Builder.of(PlatformGeneratorTileEntity::new, MSBlocks.PLATFORM_GENERATOR).build(null));
 	public static final RegistryObject<TileEntityType<ItemMagnetTileEntity>> ITEM_MAGNET = REGISTER.register("item_magnet", () -> TileEntityType.Builder.of(ItemMagnetTileEntity::new, MSBlocks.ITEM_MAGNET).build(null));
 	public static final RegistryObject<TileEntityType<RedstoneClockTileEntity>> REDSTONE_CLOCK = REGISTER.register("redstone_clock", () -> TileEntityType.Builder.of(RedstoneClockTileEntity::new, MSBlocks.REDSTONE_CLOCK).build(null));
+	public static final RegistryObject<TileEntityType<RemoteComparatorTileEntity>> REMOTE_COMPARATOR = REGISTER.register("remote_comparator", () -> TileEntityType.Builder.of(RemoteComparatorTileEntity::new, MSBlocks.REMOTE_COMPARATOR).build(null));
 }

@@ -311,6 +311,7 @@ public class MSBlockLootTables extends BlockLootTables
 		dropSelf(REDSTONE_CLOCK);
 		dropSelf(ROTATOR);
 		dropSelf(TOGGLER);
+		dropSelf(REMOTE_COMPARATOR);
 		dropSelf(FALL_PAD);
 		dropSelf(FRAGILE_STONE);
 		dropSelf(RETRACTABLE_SPIKES);

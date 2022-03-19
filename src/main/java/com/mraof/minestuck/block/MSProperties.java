@@ -24,6 +24,7 @@ public class MSProperties
 	public static final BooleanProperty MACHINE_TOGGLE = BooleanProperty.create("machine_toggle");
 	
 	public static final IntegerProperty COUNT_0_2 = IntegerProperty.create("count", 0, 2);
+	public static final IntegerProperty DISTANCE_1_16 = IntegerProperty.create("distance", 1, 16);
 	
 	public static final EnumProperty<EnumCassetteType> CASSETTE = EnumProperty.create("cassette", EnumCassetteType.class);
 	public static final EnumProperty<EnumDowelType> DOWEL = EnumProperty.create("dowel", EnumDowelType.class, EnumDowelType.DOWEL, EnumDowelType.CARVED_DOWEL);

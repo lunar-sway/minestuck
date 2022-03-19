@@ -54,8 +54,12 @@ public class ItemMagnetTileEntity extends TileEntity implements ITickableTileEnt
 			{
 				Direction magnetFacing = getBlockState().getValue(ItemMagnetBlock.FACING);
 				boolean reversePolarity = getBlockState().getValue(ItemMagnetBlock.REVERSE_POLARITY);
+				//boolean alreadyMovingPortableBlock = false;
 				
-				if(!level.isClientSide && level.getGameTime() % 5 == 0 && ((magnetFacing == Direction.DOWN && !reversePolarity) || (magnetFacing == Direction.UP && reversePolarity))) //will only try turning a portable block into a falling entity if its getting moved upwards and only does so every quarter second
+				//TODO figure out if alreadyMovingPortableBlock is worth trying, if trying that then put this section below the entity one
+				if(!level.isClientSide && level.getGameTime() % 5 == 0 &&
+						((magnetFacing == Direction.DOWN && !reversePolarity) || (magnetFacing == Direction.UP && reversePolarity))/* &&
+						!alreadyMovingPortableBlock*/) //will only try turning a portable block into a falling entity if its getting moved upwards and if there is not already a portable block being moved, only does so every quarter second
 				{
 					for(int blockIterate = 1; blockIterate < powerIn + 1; blockIterate++)
 					{
@@ -92,10 +96,16 @@ public class ItemMagnetTileEntity extends TileEntity implements ITickableTileEnt
 						{
 							Vector3d motionVec3d = new Vector3d(magnetFacing.getOpposite().step());
 							motionVec3d.add(itemEntity.getDeltaMovement());
-							if(reversePolarity)
-								itemEntity.setDeltaMovement(motionVec3d.scale(0.2).reverse());
-							else
-								itemEntity.setDeltaMovement(motionVec3d.scale(0.2));
+							
+							//if(!(itemEntity instanceof FallingBlockEntity/* && alreadyMovingPortableBlock*/))
+							//{
+								if(reversePolarity)
+									itemEntity.setDeltaMovement(motionVec3d.scale(0.2).reverse());
+								else
+									itemEntity.setDeltaMovement(motionVec3d.scale(0.2));
+								
+								//alreadyMovingPortableBlock = true;
+							//}
 						}
 					}
 				}
