@@ -7,8 +7,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.SmithingRecipe;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.registries.ObjectHolder;
+import org.apache.logging.log4j.LogManager;
 
+import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.List;
 
@@ -33,9 +37,37 @@ public class DefaultInterpreter implements RecipeInterpreter
 	{
 		if(recipe.isSpecial())
 			return null;
-		
+
 		GristSet totalCost = new GristSet();
-		for(Ingredient ingredient : recipe.getIngredients())
+
+		// Frick reflection frick reflection frick reflection frick reflection i hate java
+		// this was a whole minecraft oversight anyway
+		// so if they eventually fix this, remove this bit ok?
+		NonNullList<Ingredient> ingredients;
+		if (recipe instanceof SmithingRecipe)
+		{
+			try
+			{
+				Field baseField = SmithingRecipe.class.getDeclaredField("base");
+				baseField.setAccessible(true);
+				Ingredient base = (Ingredient)baseField.get(recipe);
+
+				Field additionField = SmithingRecipe.class.getDeclaredField("addition");
+				additionField.setAccessible(true);
+				Ingredient addition = (Ingredient)additionField.get(recipe);
+
+				// The first argument of NonNullList.of is the default value and doesn't actually go in the list :|
+				ingredients = NonNullList.of(null, base, addition);
+			}
+			catch (Exception e)
+			{
+				throw new RuntimeException(e);
+			}
+		}
+		else
+			ingredients = recipe.getIngredients();
+
+		for(Ingredient ingredient : ingredients)
 		{
 			GristSet ingredientCost = context.costForIngredient(ingredient, true);
 			if(ingredientCost == null)

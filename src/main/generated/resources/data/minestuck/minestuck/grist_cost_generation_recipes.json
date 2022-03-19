@@ -21,6 +21,11 @@
   },
   {
     "source_type": "recipe_type",
+    "source": "smithing",
+    "interpreter_type": "minestuck:default"
+  },
+  {
+    "source_type": "recipe_type",
     "source": "smelting",
     "interpreter_type": "minestuck:cooking",
     "interpreter": {
