@@ -27,6 +27,7 @@ import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.entity.SpriteRenderer;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.world.DimensionRenderInfo;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemModelsProperties;
 import net.minecraft.util.ResourceLocation;
@@ -155,5 +156,14 @@ public class ClientProxy
 	private static void registerArmorModels()
 	{
 		MSItems.CRUMPLY_HAT.setArmorModel(new CrumplyHatModel());
+	}
+	
+	/**
+	 * Used to prevent a crash in PlayToClientPackets when loading ClientPlayerEntity on a dedicated server
+	 */
+	public static PlayerEntity getClientPlayer()
+	{
+		Minecraft mc = Minecraft.getInstance();
+		return mc.player;
 	}
 }
