@@ -10,9 +10,14 @@ import net.minecraft.item.crafting.SmithingRecipe;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.ObjectHolder;
 
+import java.lang.reflect.Field;
+
 public class SmithingInterpreter extends DefaultInterpreter
 {
 	public static final SmithingInterpreter INSTANCE = new SmithingInterpreter();
+
+	private static final Field baseField = ObfuscationReflectionHelper.findField(SmithingRecipe.class, "field_234837_a_");
+	private static final Field additionField = ObfuscationReflectionHelper.findField(SmithingRecipe.class, "field_234838_b_");
 
 	@ObjectHolder("minestuck:smithing")
 	public static final InterpreterSerializer<SmithingInterpreter> SERIALIZER = null;
@@ -25,13 +30,13 @@ public class SmithingInterpreter extends DefaultInterpreter
 		{
 			GristSet totalCost = new GristSet();
 
-			Ingredient base = (Ingredient)ObfuscationReflectionHelper.findField(SmithingRecipe.class, "field_234837_a_").get(recipe);
+			Ingredient base = (Ingredient)baseField.get(recipe);
 			GristSet baseCost = context.costForIngredient(base, true);
 			if(baseCost == null)
 				return null;
 			else totalCost.addGrist(baseCost);
 
-			Ingredient addition = (Ingredient)ObfuscationReflectionHelper.findField(SmithingRecipe.class, "field_234838_b_").get(recipe);
+			Ingredient addition = (Ingredient)additionField.get(recipe);
 			GristSet additionCost = context.costForIngredient(addition, true);
 			if(additionCost == null)
 				return null;
