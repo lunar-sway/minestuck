@@ -4,16 +4,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import net.minecraft.item.Item;
-import net.minecraft.item.crafting.AbstractCookingRecipe;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.SmithingRecipe;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.ObjectHolder;
-
-import java.lang.reflect.Field;
 
 public class SmithingInterpreter extends DefaultInterpreter
 {

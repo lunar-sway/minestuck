@@ -7,12 +7,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.SmithingRecipe;
-import net.minecraft.util.NonNullList;
 import net.minecraftforge.registries.ObjectHolder;
-import org.apache.logging.log4j.LogManager;
 
-import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.List;
 

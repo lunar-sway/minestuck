@@ -14,7 +14,6 @@ import net.minecraft.data.DirectoryCache;
 import net.minecraft.data.IDataProvider;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.SmithingRecipe;
 import net.minecraft.util.ResourceLocation;
 
 import java.io.IOException;
