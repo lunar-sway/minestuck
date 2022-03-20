@@ -1,6 +1,7 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.util.CustomVoxelShape;
+import com.mraof.minestuck.util.MSDamageSources;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -51,7 +52,7 @@ public class SpikeBlock extends CustomShapeBlock
 				entityIn.makeStuckInBlock(state, new Vector3d(0.3F, 0.9, 0.3F));
 				if(distanceX >= 0.003 || distanceZ >= 0.003)
 				{
-					entityIn.hurt(DamageSource.GENERIC, 1.0F);
+					entityIn.hurt(MSDamageSources.SPIKE, 1.0F);
 				}
 			}
 		}

@@ -65,8 +65,8 @@ public class FragileBlock extends Block
 	public boolean directionNeedsObfuscation(World worldIn, BlockPos pos)
 	{
 		BlockState state = worldIn.getBlockState(pos);
-		return (!(state.getBlock() == this) && !isUnsecure(state)) || (state.getBlock() == this && !isUnsecure(worldIn.getBlockState(pos.below())));
-		//returns true if the block in question is also a fragile block and the block below it cannot be replaceable or if the block itself cannot be replaceable
+		//returns true if the block in question is also a fragile block and the block below it cannot be replaced or if the block itself cannot be replaced
+		return state.getBlock() == this ? !isUnsecure(worldIn.getBlockState(pos.below())) : !isUnsecure(state);
 	}
 	
 	public static boolean isUnsecure(BlockState state) {

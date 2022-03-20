@@ -42,6 +42,7 @@ import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
 import com.mraof.minestuck.tileentity.machine.*;
 import com.mraof.minestuck.tileentity.redstone.RedstoneClockTileEntity;
 import com.mraof.minestuck.tileentity.redstone.SummonerTileEntity;
+import com.mraof.minestuck.util.MSDamageSources;
 import com.mraof.minestuck.world.GateHandler;
 import com.mraof.minestuck.world.lands.GristLayerInfo;
 import com.mraof.minestuck.world.lands.LandInfo;
@@ -1593,6 +1594,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSKeyHandler.SYLLADEX, "Open Sylladex");
 		
 		add(LotusFlowerEntity.REGROW, "There are no petals on this plant, maybe it will regrow?");
+		
+		addDamageMessage(MSDamageSources.SPIKE, "%s was filled with too many holes from spikes");
 		
 		add(ConsortMerchantInventory.CANT_AFFORD, "You don't have enough boondollars for that!");
 		add(MessageType.MISSING_ITEM, "You need a %s for that!");
