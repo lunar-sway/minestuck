@@ -10,8 +10,7 @@ import net.minecraft.entity.projectile.FireballEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.*;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -129,12 +128,27 @@ public interface ItemRightClickEffect
 	static ItemRightClickEffect absorbFluid(Supplier<Block> fluidBlock, Supplier<Item> otherItem)
 	{
 		return withoutCreativeShock((world, player, hand) -> {
-			Vector3d eyePos = player.getEyePosition(1.0F);
-			Vector3d lookVec = player.getLookAngle();
-			BlockState state;
+			//Vector3d eyePos = player.getEyePosition(1.0F);
+			//Vector3d lookVec = player.getLookAngle();
+			//BlockState state;
 			ItemStack itemStack = player.getItemInHand(hand);
 			
-			for(int step = 0; step < player.getAttribute(ForgeMod.REACH_DISTANCE.get()).getValue() * 10; step++) //raytraces from the players current eye position to the maximum their reach distance allows
+			BlockRayTraceResult blockraytraceresult = getPlayerPOVHitResult(world, player);
+			BlockPos rayTracedPos = blockraytraceresult.getBlockPos();
+			
+			if(blockraytraceresult.getType() == RayTraceResult.Type.BLOCK && world.getBlockState(rayTracedPos).getBlock() == fluidBlock.get())
+			{
+				world.setBlockAndUpdate(rayTracedPos, Blocks.AIR.defaultBlockState());
+				ItemStack newItem = new ItemStack(otherItem.get(), itemStack.getCount());
+				newItem.setTag(itemStack.getTag()); //It is important that the item it is switching to has the same durability
+				world.playSound(null, rayTracedPos, SoundEvents.BUCKET_FILL, SoundCategory.BLOCKS, 1F, 2F);
+				player.getCooldowns().addCooldown(otherItem.get(), 5);
+				return ActionResult.success(newItem);
+			}
+			
+			
+			
+			/*for(int step = 0; step < player.getAttribute(ForgeMod.REACH_DISTANCE.get()).getValue() * 10; step++) //raytraces from the players current eye position to the maximum their reach distance allows
 			{
 				Vector3d vecPos = eyePos.add(lookVec.scale(step / 10D));
 				BlockPos blockPos = new BlockPos(vecPos);
@@ -149,9 +163,26 @@ public interface ItemRightClickEffect
 					player.getCooldowns().addCooldown(otherItem.get(), 5);
 					return ActionResult.success(newItem);
 				}
-			}
+			}*/
 			return ActionResult.fail(itemStack);
 		});
+	}
+	
+	//based on the Item class function of the same name
+	static BlockRayTraceResult getPlayerPOVHitResult(World world, PlayerEntity playerEntity)
+	{
+		float xRot = playerEntity.xRot;
+		float yRot = playerEntity.yRot;
+		Vector3d eyeVec = playerEntity.getEyePosition(1.0F);
+		float f2 = MathHelper.cos(-yRot * ((float) Math.PI / 180F) - (float) Math.PI);
+		float f3 = MathHelper.sin(-yRot * ((float) Math.PI / 180F) - (float) Math.PI);
+		float f4 = -MathHelper.cos(-xRot * ((float) Math.PI / 180F));
+		float yComponent = MathHelper.sin(-xRot * ((float) Math.PI / 180F));
+		float xComponent = f3 * f4;
+		float zComponent = f2 * f4;
+		double reachDistance = playerEntity.getAttribute(ForgeMod.REACH_DISTANCE.get()).getValue();
+		Vector3d endVec = eyeVec.add((double) xComponent * reachDistance, (double) yComponent * reachDistance, (double) zComponent * reachDistance);
+		return world.clip(new RayTraceContext(eyeVec, endVec, RayTraceContext.BlockMode.OUTLINE, RayTraceContext.FluidMode.SOURCE_ONLY, playerEntity));
 	}
 	
 	/**

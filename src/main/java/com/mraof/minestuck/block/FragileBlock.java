@@ -2,11 +2,10 @@ package com.mraof.minestuck.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.FlowingFluidBlock;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.BlockVoxelShape;
-import net.minecraft.util.Direction;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
@@ -54,7 +53,7 @@ public class FragileBlock extends Block
 				if(directionNeedsObfuscation(worldIn, pos.north()))
 					obfuscateBB = obfuscateBB.contract(0, 0, -0.6);
 				
-				if(steppingPlayer.getBoundingBox().intersects(obfuscateBB) && worldIn.getBlockState(pos.below()).isAir())
+				if(steppingPlayer.getBoundingBox().intersects(obfuscateBB) && isUnsecure(worldIn.getBlockState(pos.below())))
 					worldIn.destroyBlock(pos, false);
 			}
 		}
@@ -66,9 +65,12 @@ public class FragileBlock extends Block
 	public boolean directionNeedsObfuscation(World worldIn, BlockPos pos)
 	{
 		BlockState state = worldIn.getBlockState(pos);
-		return (!(state.getBlock() == this) && !state.isAir() && !(state.getBlock() instanceof FlowingFluidBlock)) || (state.getBlock() instanceof FragileBlock && !worldIn.getBlockState(pos.below()).isAir());
-		//returns true if the block in question is also a fragile block and the block below it does not have a full face or if the block in question is air and a fluid
-		//return state.getBlock() == this ? worldIn.getBlockState(pos.below()).isFaceSturdy(worldIn, pos.below(), Direction.UP, BlockVoxelShape.RIGID) : (!state.isAir() && !(state.getBlock() instanceof FlowingFluidBlock));
-		/*.getBlockSupportShape(worldIn.getBlockState(pos.below()), worldIn, pos.below())*/
+		return (!(state.getBlock() == this) && !isUnsecure(state)) || (state.getBlock() == this && !isUnsecure(worldIn.getBlockState(pos.below())));
+		//returns true if the block in question is also a fragile block and the block below it cannot be replaceable or if the block itself cannot be replaceable
+	}
+	
+	public static boolean isUnsecure(BlockState state) {
+		Material material = state.getMaterial();
+		return state.isAir() || state.is(BlockTags.FIRE) || material.isLiquid() || material.isReplaceable();
 	}
 }
