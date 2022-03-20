@@ -819,6 +819,7 @@
   "container.minestuck.mini_punch_designix": "Miniature Punch Designix",
   "container.minestuck.mini_totem_lathe": "Miniature Totem Lathe",
   "container.minestuck.uranium_cooker": "Cookalyzer",
+  "death.attack.minestuck:spike": "%s was filled with too many holes from spikes",
   "denizen.title.aspect.blood": "Jormungandr",
   "denizen.title.aspect.breath": "Typheus",
   "denizen.title.aspect.doom": "Nemesis",

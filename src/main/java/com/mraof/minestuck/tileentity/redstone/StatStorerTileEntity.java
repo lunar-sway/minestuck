@@ -2,14 +2,13 @@ package com.mraof.minestuck.tileentity.redstone;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.redstone.StatStorerBlock;
-import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.event.AlchemyEvent;
 import com.mraof.minestuck.event.GristDropsEvent;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.particles.ParticleTypes;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -24,6 +23,8 @@ import net.minecraftforge.event.world.SaplingGrowTreeEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
+import javax.annotation.Nullable;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class StatStorerTileEntity extends TileEntity implements ITickableTileEntity
@@ -218,15 +219,18 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 		return this.divideValueBy;
 	}
 	
-	public void setActiveType(ActiveType activeTypeIn)
+	public void setActiveTypeAndDivideValue(ActiveType activeTypeIn, int divideValueBy)
 	{
 		activeType = activeTypeIn;
+		if(divideValueBy <= 0)
+			divideValueBy = 1;
+		this.divideValueBy = divideValueBy;
+		this.setChanged();
+		level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 0);
 	}
 	
-	public void setActiveStoredStatValue(float storedStatIn, BlockPos blockPos, boolean playAnimation)
+	public void setActiveStoredStatValue(float storedStatIn)
 	{
-		if(playAnimation)
-			playAnimation(blockPos);
 		activeType = getActiveType();
 		
 		boolean changeBlockState = false;
@@ -275,35 +279,23 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 		
 	}
 	
-	public void setDivideValue(int divideValueBy)
-	{
-		if(divideValueBy <= 0)
-			divideValueBy = 1;
-		this.divideValueBy = divideValueBy;
-	}
-	
-	public void playAnimation(BlockPos blockPosIn)
-	{
-		for(int i = 0; i < 10; i++)
-		{
-			this.level.addParticle(ParticleTypes.HEART, true, blockPosIn.getX(), blockPosIn.getY(), blockPosIn.getZ(), 0.01, 0.01, 0.01);
-		}
-	}
-	
 	public static void attemptStatUpdate(float eventAmount, StatStorerTileEntity.ActiveType activeType, BlockPos eventPos, World world)
 	{
-		for(BlockPos blockPos : BlockPos.betweenClosed(eventPos.offset(16, 16, 16), eventPos.offset(-16, -16, -16)))
+		if(world != null && !world.isClientSide())
 		{
-			if(world == null || !world.isAreaLoaded(blockPos, 0))
-				return;
-			
-			TileEntity tileEntity = world.getBlockEntity(blockPos);
-			if(tileEntity instanceof StatStorerTileEntity)
+			for(BlockPos blockPos : BlockPos.betweenClosed(eventPos.offset(16, 16, 16), eventPos.offset(-16, -16, -16)))
 			{
-				StatStorerTileEntity storerTileEntity = (StatStorerTileEntity) tileEntity;
+				if(!world.isAreaLoaded(blockPos, 0))
+					return;
 				
-				if(activeType == storerTileEntity.getActiveType())
-					storerTileEntity.setActiveStoredStatValue(storerTileEntity.getActiveStoredStatValue() + eventAmount, blockPos.above(), true);
+				TileEntity tileEntity = world.getBlockEntity(blockPos);
+				if(tileEntity instanceof StatStorerTileEntity)
+				{
+					StatStorerTileEntity storerTileEntity = (StatStorerTileEntity) tileEntity;
+					
+					if(activeType == storerTileEntity.getActiveType())
+						storerTileEntity.setActiveStoredStatValue(storerTileEntity.getActiveStoredStatValue() + eventAmount);
+				}
 			}
 		}
 	}
@@ -334,17 +326,10 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 			attemptStatUpdate(1, StatStorerTileEntity.ActiveType.ENTITIES_BRED, event.getParentA().blockPosition(), event.getParentA().level);
 	}
 	
-	//TODO seems to be doubled, potentially due to phase
-	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
-	public static void onExplosion(ExplosionEvent event)
+	@SubscribeEvent
+	public static void onExplosion(ExplosionEvent.Detonate event)
 	{
-		PlayerEntity playerEntity = (PlayerEntity) event.getExplosion().getSourceMob();
-		if(playerEntity != null && CreativeShockEffect.doesCreativeShockLimit(playerEntity, 0))
-			event.setCanceled(true); //intended to prevent blocks from being destroyed by a player attempting to circumvent creative shock
-		else if(!event.getWorld().isClientSide)
-		{
-			attemptStatUpdate(1, StatStorerTileEntity.ActiveType.EXPLOSIONS, new BlockPos(event.getExplosion().getPosition()), event.getWorld());
-		}
+		attemptStatUpdate(1, StatStorerTileEntity.ActiveType.EXPLOSIONS, new BlockPos(event.getExplosion().getPosition()), event.getWorld());
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
@@ -369,5 +354,28 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 	public static void onEntityDeath(LivingDeathEvent event)
 	{
 		attemptStatUpdate(1, StatStorerTileEntity.ActiveType.DEATHS, event.getEntity().blockPosition(), event.getEntity().level);
+	}
+	
+	@Override
+	public CompoundNBT getUpdateTag()
+	{
+		CompoundNBT tagCompound = super.getUpdateTag();
+		tagCompound.putInt("activeTypeOrdinal", getActiveType().ordinal());
+		tagCompound.putInt("divideValueBy", getDivideValueBy());
+		
+		return tagCompound;
+	}
+	
+	@Nullable
+	@Override
+	public SUpdateTileEntityPacket getUpdatePacket()
+	{
+		return new SUpdateTileEntityPacket(this.worldPosition, 2, getUpdateTag());
+	}
+	
+	@Override
+	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
+	{
+		this.load(getBlockState(), pkt.getTag());
 	}
 }

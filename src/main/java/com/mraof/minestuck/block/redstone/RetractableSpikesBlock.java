@@ -2,6 +2,7 @@ package com.mraof.minestuck.block.redstone;
 
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.effects.CreativeShockEffect;
+import com.mraof.minestuck.util.MSDamageSources;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -69,7 +70,7 @@ public class RetractableSpikesBlock extends Block
 				if(distanceX >= (double) 0.003F || distanceZ >= (double) 0.003F)
 				{
 					//entityIn.makeStuckInBlock(state, new Vector3d(0.3F, 0.9, 0.3F));
-					entityIn.hurt(DamageSource.GENERIC, 1.0F); //TODO only activates for players when they take a running jump onto the block, works fine for other mobs
+					entityIn.hurt(MSDamageSources.SPIKE, 1.0F); //TODO only activates for players when they take a running jump onto the block, works fine for other mobs
 				}
 			}
 		}
@@ -146,7 +147,7 @@ public class RetractableSpikesBlock extends Block
 			{
 				for(LivingEntity livingEntity : list)
 				{
-					livingEntity.hurt(DamageSource.GENERIC, 4.0F);
+					livingEntity.hurt(MSDamageSources.SPIKE, 4.0F);
 				}
 			}
 			

@@ -41,7 +41,7 @@ public class StatStorerBlock extends Block
 	@SuppressWarnings("deprecation")
 	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
 	{
-		if(!player.isCrouching() && !CreativeShockEffect.doesCreativeShockLimit(player, 1))
+		if(worldIn.isClientSide && !player.isCrouching() && !CreativeShockEffect.doesCreativeShockLimit(player, 1))
 		{
 			TileEntity tileEntity = worldIn.getBlockEntity(pos);
 			if(tileEntity instanceof StatStorerTileEntity)

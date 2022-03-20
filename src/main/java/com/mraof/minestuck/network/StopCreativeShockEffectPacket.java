@@ -1,6 +1,6 @@
 package com.mraof.minestuck.network;
 
-import net.minecraft.client.Minecraft;
+import com.mraof.minestuck.client.ClientProxy;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
 
@@ -29,7 +29,7 @@ public class StopCreativeShockEffectPacket implements PlayToClientPacket
 	@Override
 	public void execute()
 	{
-		PlayerEntity playerEntity = Minecraft.getInstance().player;
+		PlayerEntity playerEntity = ClientProxy.getClientPlayer();
 		if(playerEntity != null)
 		{
 			playerEntity.abilities.mayBuild = !mayBuild;

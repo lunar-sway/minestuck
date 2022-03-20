@@ -71,26 +71,15 @@ public class AreaEffectBlock extends HorizontalBlock
 				
 				ItemStack heldItemStack = player.getItemInHand(hand);
 				
-				if(heldItemStack.getItem() instanceof PotionItem/* && !worldIn.isClientSide*/)
+				if(heldItemStack.getItem() instanceof PotionItem)
 				{
-					EffectInstance firstEffect = PotionUtils.getPotion(heldItemStack).getEffects().get(0);
-					if(firstEffect != null)
-					{
-						te.setEffect(firstEffect.getEffect(), firstEffect.getAmplifier());
-						
-						player.displayClientMessage(new TranslationTextComponent(getDescriptionId() + "." + EFFECT_CHANGE_MESSAGE, firstEffect.getEffect().getRegistryName(), firstEffect.getAmplifier()), true); //getDescriptionId was getTranslationKey
-						worldIn.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 1F);
-					}
+					clickWithPotion(worldIn, pos, player, te, heldItemStack);
 				} else if(heldItemStack.isEmpty() && player.isCrouching())
 				{
-					worldIn.setBlock(pos, state.cycle(ALL_MOBS), Constants.BlockFlags.NOTIFY_NEIGHBORS);
-					if(state.getValue(ALL_MOBS))
-						worldIn.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 1.2F);
-					else
-						worldIn.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, 1.2F);
-				} else if(!player.isCrouching()/*&& if(worldIn.isClientSide)*/)
+					cycleAllMobsProperty(state, worldIn, pos);
+				} else if(!player.isCrouching() && worldIn.isClientSide)
 				{
-					MSScreenFactories.displayAreaEffectScreen(te); //TODO if its only client side the gui opens up but no changes to the fields seem to work, may be a result of the introduction of client only?
+					MSScreenFactories.displayAreaEffectScreen(te);
 				}
 				
 				return ActionResultType.SUCCESS;
@@ -98,6 +87,30 @@ public class AreaEffectBlock extends HorizontalBlock
 		}
 		
 		return ActionResultType.PASS;
+	}
+	
+	private void clickWithPotion(World worldIn, BlockPos pos, PlayerEntity player, AreaEffectTileEntity te, ItemStack potionStack)
+	{
+		EffectInstance firstEffect = PotionUtils.getPotion(potionStack).getEffects().get(0);
+		if(firstEffect != null && !worldIn.isClientSide)
+		{
+			te.setEffect(firstEffect.getEffect(), firstEffect.getAmplifier());
+			
+			player.displayClientMessage(new TranslationTextComponent(getDescriptionId() + "." + EFFECT_CHANGE_MESSAGE, firstEffect.getEffect().getRegistryName(), firstEffect.getAmplifier()), true); //getDescriptionId was getTranslationKey
+			worldIn.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 1F);
+		}
+	}
+	
+	private void cycleAllMobsProperty(BlockState state, World worldIn, BlockPos pos)
+	{
+		if(!worldIn.isClientSide)
+		{
+			worldIn.setBlock(pos, state.cycle(ALL_MOBS), Constants.BlockFlags.NOTIFY_NEIGHBORS);
+			if(state.getValue(ALL_MOBS))
+				worldIn.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 1.2F);
+			else
+				worldIn.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, 1.2F);
+		}
 	}
 	
 	@Override
