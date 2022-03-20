@@ -63,7 +63,7 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 					if(effect.isInstantenous())
 						livingEntity.addEffect(new EffectInstance(effect, 1, effectAmplifier, false, false));
 					else
-						livingEntity.addEffect(new EffectInstance(effect, 60, effectAmplifier, false, false));
+						livingEntity.addEffect(new EffectInstance(effect, 120, effectAmplifier, false, false));
 				}
 			}
 		} else
@@ -81,7 +81,7 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 					if(effect.isInstantenous())
 						playerEntity.addEffect(new EffectInstance(effect, 1, effectAmplifier, false, false));
 					else
-						playerEntity.addEffect(new EffectInstance(effect, 60, effectAmplifier, false, false));
+						playerEntity.addEffect(new EffectInstance(effect, 120, effectAmplifier, false, false));
 				}
 			}
 		}
