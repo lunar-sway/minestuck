@@ -58,21 +58,14 @@ public class TierOneDungeonStructure extends Structure<NoFeatureConfig>
 			
 			Layout layout = Layout.pickLayout(random); //picks one of the room generation patterns
 			int modularRoomCount = 5 + random.nextInt(2); //how many rooms there are between beginning and end, 5-7 range
-			boolean naturalDesign = random.nextBoolean(); //true means it will have a cavernous appearance with a natural block like stone/ice/sandstone coating the walls. false means it will have a structured shaped and use bricks
 			
-			TierOneDungeonEntryPiece entryPiece = new TierOneDungeonEntryPiece(templates, naturalDesign, generator, random, x, z); //TODO input layout to determine if the entry piece should build a structure to connect straight into the end piece(should have a room connecting the two, with doors to go into optional area)
+			TierOneDungeonEntryPiece entryPiece = new TierOneDungeonEntryPiece(templates, generator, random, x, z); //TODO input layout to determine if the entry piece should build a structure to connect straight into the end piece(should have a room connecting the two, with doors to go into optional area)
 			pieces.add(entryPiece);
 			
 			/*if(modularRoomCount > 5) //TODO increase variability by creating alternative orders in which rooms can appear by modifying the enum integer array
 			{
 				random.nextInt(modularRoomCount - 5);
 			}*/
-			
-			//TODO include each of these components into the structure as a whole or as a parameter into each structure piece following Entry so that they dont have to be rechecked each time. On top of that, add check whether the room style will be organic(meaning its shaped to match the terrain aesthetics) or structured(meaning it primarily follows the aspect aesthetic)
-			//add each back into each piece separately, this information will not be recorded until after the rest have been initialized
-			entryPiece.getWorldAspect();
-			entryPiece.getWorldClass();
-			entryPiece.getWorldTerrain();
 			
 			int roomOffset = 32; //each modular room is 32x32 wide and 16 deep
 			boolean endPieceStarted = false;
@@ -89,32 +82,32 @@ public class TierOneDungeonStructure extends Structure<NoFeatureConfig>
 					
 					if(!endPieceStarted && (layout.roomPlacementOrder[ordinalCombo] == 9 || (layout.roomPlacementOrder[ordinalCombo] == modularRoomCount + 1 && layout != Layout.OPTIONAL))) //the end piece, it gets placed down at the point after all possible modules are situated
 					{
-						TierOneDungeonEndPiece endPiece = new TierOneDungeonEndPiece(templates, layout, entryPiece.getOrientation(), newX, entryPiece.getBoundingBox().y0 - 16, newZ); //leaving out organic design value for now
+						TierOneDungeonEndPiece endPiece = new TierOneDungeonEndPiece(templates, layout, entryPiece.getOrientation(), newX, entryPiece.getBoundingBox().y0 - 16, newZ);
 						pieces.add(endPiece);
 						endPieceStarted = true;
 					}
 					
 					if(layout.roomPlacementOrder[ordinalCombo] == 1 || layout.roomPlacementOrder[ordinalCombo] == 5 || (!endPieceStarted && (layout.roomPlacementOrder[ordinalCombo] == 6 || layout.roomPlacementOrder[ordinalCombo] == 7)))
 					{
-						TierOneDungeonCombatModulePiece combatModulePiece = new TierOneDungeonCombatModulePiece(templates, naturalDesign, layout, entryPiece.getOrientation(), calculateDirection(layout.roomsEntryDirection[ordinalCombo], entryPiece.getOrientation()), newX, entryPiece.getBoundingBox().y0, newZ);
+						TierOneDungeonCombatModulePiece combatModulePiece = new TierOneDungeonCombatModulePiece(templates, layout, entryPiece.getOrientation(), calculateDirection(layout.roomsEntryDirection[ordinalCombo], entryPiece.getOrientation()), newX, entryPiece.getBoundingBox().y0, newZ);
 						pieces.add(combatModulePiece);
 					}
 					
 					if(layout.roomPlacementOrder[ordinalCombo] == 2)
 					{
-						TierOneDungeonPuzzleModulePiece puzzleModulePiece = new TierOneDungeonPuzzleModulePiece(templates, naturalDesign, layout, entryPiece.getOrientation(), calculateDirection(layout.roomsEntryDirection[ordinalCombo], entryPiece.getOrientation()), newX, entryPiece.getBoundingBox().y0, newZ);
+						TierOneDungeonPuzzleModulePiece puzzleModulePiece = new TierOneDungeonPuzzleModulePiece(templates, layout, entryPiece.getOrientation(), calculateDirection(layout.roomsEntryDirection[ordinalCombo], entryPiece.getOrientation()), newX, entryPiece.getBoundingBox().y0, newZ);
 						pieces.add(puzzleModulePiece);
 					}
 					
 					if(layout.roomPlacementOrder[ordinalCombo] == 3) //return node
 					{
-						TierOneDungeonReturnModulePiece returnModulePiece = new TierOneDungeonReturnModulePiece(templates, naturalDesign, layout, entryPiece.getOrientation(), calculateDirection(layout.roomsEntryDirection[ordinalCombo], entryPiece.getOrientation()), newX, entryPiece.getBoundingBox().y0, newZ);
+						TierOneDungeonReturnModulePiece returnModulePiece = new TierOneDungeonReturnModulePiece(templates, layout, entryPiece.getOrientation(), calculateDirection(layout.roomsEntryDirection[ordinalCombo], entryPiece.getOrientation()), newX, entryPiece.getBoundingBox().y0, newZ);
 						pieces.add(returnModulePiece);
 					}
 					
 					if(layout.roomPlacementOrder[ordinalCombo] == 4)
 					{
-						TierOneDungeonTreasureModulePiece treasureModulePiece = new TierOneDungeonTreasureModulePiece(templates, naturalDesign, layout, entryPiece.getOrientation(), calculateDirection(layout.roomsEntryDirection[ordinalCombo], entryPiece.getOrientation()), newX, entryPiece.getBoundingBox().y0, newZ);
+						TierOneDungeonTreasureModulePiece treasureModulePiece = new TierOneDungeonTreasureModulePiece(templates, layout, entryPiece.getOrientation(), calculateDirection(layout.roomsEntryDirection[ordinalCombo], entryPiece.getOrientation()), newX, entryPiece.getBoundingBox().y0, newZ);
 						pieces.add(treasureModulePiece);
 					}
 					

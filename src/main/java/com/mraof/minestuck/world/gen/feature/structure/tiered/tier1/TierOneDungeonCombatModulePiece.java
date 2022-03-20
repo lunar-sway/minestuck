@@ -12,14 +12,13 @@ import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
 import com.mraof.minestuck.world.gen.feature.StructureBlockRegistryProcessor;
 import com.mraof.minestuck.world.gen.feature.structure.ImprovedStructurePiece;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
-import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockUtil;
+import com.mraof.minestuck.world.gen.feature.structure.tiered.CommonTemplateProcessors;
 import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.state.properties.StructureMode;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -68,10 +67,9 @@ public class TierOneDungeonCombatModulePiece extends ImprovedStructurePiece
 	
 	//private final TemplateManager templates;
 	TierOneDungeonStructure.Start.Layout layout;
-	boolean naturalDesign;
 	Direction entryDirection;
 	
-	public TierOneDungeonCombatModulePiece(TemplateManager templates, boolean naturalDesign, TierOneDungeonStructure.Start.Layout layout, Direction orientation, Direction entryDirection, int x, int y, int z) //this constructor is used when the structure is first initialized
+	public TierOneDungeonCombatModulePiece(TemplateManager templates, TierOneDungeonStructure.Start.Layout layout, Direction orientation, Direction entryDirection, int x, int y, int z) //this constructor is used when the structure is first initialized
 	{
 		super(MSStructurePieces.TIER_ONE_DUNGEON_COMBAT_MODULE, 0);
 		
@@ -80,7 +78,6 @@ public class TierOneDungeonCombatModulePiece extends ImprovedStructurePiece
 		
 		initTemplates(templates);
 		this.layout = layout;
-		this.naturalDesign = naturalDesign;
 		this.entryDirection = entryDirection;
 	}
 	
@@ -150,9 +147,9 @@ public class TierOneDungeonCombatModulePiece extends ImprovedStructurePiece
 		
 		//BlockPos structurePos = organicDesignTemplate.getZeroPositionWithTransform(templatePos, Mirror.NONE, rotation);
 		//BlockPos center = new BlockPos((organicDesignTemplate.getSize().getX() - 1) / 2, 0, (organicDesignTemplate.getSize().getZ() - 1) / 2);
-		naturalDesignTemplate.placeInWorld(world, templatePos, templatePos, settings, rand, Constants.BlockFlags.NO_RERENDER);
+		
 		//StructureBlockUtil.placeCenteredTemplate(world, templatePos, organicDesignTemplate, boundingBox, chunkGeneratorIn, MSRotationUtil.fromDirection(getOrientation()), true);
-		templateProcessor(world, boundingBox, rand, chunkGeneratorIn, templatePos, settings);
+		CommonTemplateProcessors.placeAndProcessTemplate(world, boundingBox, naturalDesignTemplate, rand, chunkGeneratorIn, templatePos, settings);
 		
 		//generateBox(world, boundingBox, pieceMinX, pieceMinY, pieceMinZ, pieceMaxX, pieceMaxY, pieceMaxZ, Blocks.RED_STAINED_GLASS.defaultBlockState(), air, false);
 		//generateBox(world, boundingBox, pieceMinX, pieceMinY, pieceMinZ, pieceMaxX, pieceMinY, pieceMaxZ, lightBlock, lightBlock, false);
@@ -175,70 +172,5 @@ public class TierOneDungeonCombatModulePiece extends ImprovedStructurePiece
 		}
 	}
 	
-	/**
-	 * Searches through a placed template for data mode structure blocks and adds details/variability to the template if conditions are matched, then removes the structure blocks still left
-	 */
-	private void templateProcessor(ISeedReader world, MutableBoundingBox boundingBox, Random rand, ChunkGenerator chunkGeneratorIn, BlockPos templatePos, PlacementSettings settings)
-	{
-		boolean[] componentChoiceArray = new boolean[]{rand.nextBoolean(), rand.nextBoolean(), rand.nextBoolean(), rand.nextBoolean(), rand.nextBoolean(), rand.nextBoolean()}; //a boolean array for compactness to determine whether a given component type generates at all
-		for(Template.BlockInfo blockInfo : naturalDesignTemplate.filterBlocks(templatePos, settings, Blocks.STRUCTURE_BLOCK))
-		{
-			if(blockInfo.nbt != null)
-			{
-				StructureMode structuremode = StructureMode.valueOf(blockInfo.nbt.getString("mode"));
-				if(structuremode == StructureMode.DATA)
-				{
-					String data = blockInfo.nbt.getString("metadata");
-					/*if(data.equals("minestuck:summoner_imp"))
-					{
-						StructureBlockUtil.placeSummoner(world, boundingBox, blockInfo.pos, MSEntityTypes.IMP);
-					}
-					if(data.equals("minestuck:summoner_ogre"))
-					{
-						StructureBlockUtil.placeSummoner(world, boundingBox, blockInfo.pos, MSEntityTypes.OGRE);
-					}
-					if(data.equals("minestuck:summoner_lich"))
-					{
-						StructureBlockUtil.placeSummoner(world, boundingBox, blockInfo.pos, MSEntityTypes.IMP);
-					}/**/
-					if(componentChoiceArray[0] && data.equals("minestuck:small_ground_creator"))
-					{
-						if(rand.nextBoolean())
-							StructureBlockUtil.createSphere(world, boundingBox, ground, blockInfo.pos, rand.nextInt(3), null);
-					}
-					if(componentChoiceArray[1] && data.equals("minestuck:small_air_carve"))
-					{
-						if(rand.nextBoolean())
-							StructureBlockUtil.createSphere(world, boundingBox, Blocks.AIR.defaultBlockState(), blockInfo.pos.relative(Direction.getRandom(rand), rand.nextInt(2)), rand.nextInt(5), Blocks.STRUCTURE_BLOCK.defaultBlockState());
-					}
-					/**/
-					if(componentChoiceArray[2] && data.equals("minestuck:organic_terrain_component_floor"))
-					{
-						if(rand.nextBoolean())
-							world.setBlock(blockInfo.pos.below(), Blocks.MAGMA_BLOCK.defaultBlockState(), Constants.BlockFlags.DEFAULT);
-					}
-					if(componentChoiceArray[3] && data.equals("minestuck:organic_aspect_component_floor"))
-					{
-						if(rand.nextBoolean())
-							world.setBlock(blockInfo.pos, Blocks.BAMBOO.defaultBlockState(), Constants.BlockFlags.DEFAULT);
-					}
-					if(componentChoiceArray[4] && data.equals("minestuck:organic_terrain_component_ceiling"))
-					{
-						if(rand.nextBoolean())
-							world.setBlock(blockInfo.pos, Blocks.WEEPING_VINES.defaultBlockState(), Constants.BlockFlags.DEFAULT);
-					}
-					if(componentChoiceArray[5] && data.equals("minestuck:organic_aspect_component_ceiling"))
-					{
-						if(rand.nextBoolean())
-							world.setBlock(blockInfo.pos, Blocks.ANCIENT_DEBRIS.defaultBlockState(), Constants.BlockFlags.DEFAULT);
-					}/**/
-					
-					if(world.getBlockState(blockInfo.pos).getBlock() == Blocks.STRUCTURE_BLOCK)
-						world.setBlock(blockInfo.pos, Blocks.AIR.defaultBlockState(), Constants.BlockFlags.DEFAULT);
-				}
-			}
-		}
-		//TODO this removes no structure blocks but should be preferred over the other structure block removing function
-		//StructureBlockUtil.fillWithBlocksReplaceState(world, boundingBox, new BlockPos(getActualPos(pieceMinX, pieceMinY, pieceMinZ)), new BlockPos(getActualPos(pieceMaxX, pieceMaxY, pieceMaxZ)), Blocks.AIR.defaultBlockState(), Blocks.STRUCTURE_BLOCK.defaultBlockState());
-	}
+	
 }

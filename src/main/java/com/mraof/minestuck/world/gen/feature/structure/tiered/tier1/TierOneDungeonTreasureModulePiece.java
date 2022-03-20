@@ -55,10 +55,9 @@ public class TierOneDungeonTreasureModulePiece extends ImprovedStructurePiece
 	
 	//private final TemplateManager templates;
 	TierOneDungeonStructure.Start.Layout layout;
-	boolean organicDesign;
 	Direction entryDirection;
 	
-	public TierOneDungeonTreasureModulePiece(TemplateManager templates, boolean organicDesign, TierOneDungeonStructure.Start.Layout layout, Direction orientation, Direction entryDirection, int x, int y, int z) //this constructor is used when the structure is first initialized
+	public TierOneDungeonTreasureModulePiece(TemplateManager templates, TierOneDungeonStructure.Start.Layout layout, Direction orientation, Direction entryDirection, int x, int y, int z) //this constructor is used when the structure is first initialized
 	{
 		super(MSStructurePieces.TIER_ONE_DUNGEON_TREASURE_MODULE, 0);
 		
@@ -67,7 +66,6 @@ public class TierOneDungeonTreasureModulePiece extends ImprovedStructurePiece
 		
 		//this.templates = templates;
 		this.layout = layout;
-		this.organicDesign = organicDesign;
 		this.entryDirection = entryDirection;
 	}
 	
