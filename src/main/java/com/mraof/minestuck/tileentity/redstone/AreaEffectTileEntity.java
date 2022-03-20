@@ -19,6 +19,8 @@ import net.minecraft.util.math.BlockPos;
 
 public class AreaEffectTileEntity extends TileEntity implements ITickableTileEntity
 {
+	//TODO deserialize/reserialize function + triggering of all summoners
+	
 	private Effect effect;
 	private int effectAmplifier;
 	private BlockPos minEffectPos;
@@ -29,38 +31,59 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 		super(MSTileEntityTypes.AREA_EFFECT.get());
 	}
 	
-	public void giveEntitiesEffect()
-	{
-		for(LivingEntity livingEntity : level.getLoadedEntitiesOfClass(LivingEntity.class, new AxisAlignedBB(minEffectPos, maxEffectPos)))
-		{
-			if(effect instanceof CreativeShockEffect) //skips later creative/harmful specific checks as the effect should always be given
-			{
-				livingEntity.addEffect(new EffectInstance(effect, 120, effectAmplifier, false, false));
-			} else
-			{
-				if(livingEntity instanceof PlayerEntity)
-				{
-					if(((PlayerEntity) livingEntity).isCreative() && !effect.isBeneficial())
-						break;
-				}
-				
-				if(effect.isInstantenous())
-					livingEntity.addEffect(new EffectInstance(effect, 1, effectAmplifier, false, false));
-				else
-					livingEntity.addEffect(new EffectInstance(effect, 120, effectAmplifier, false, false));
-			}
-		}
-	}
-	
 	@Override
 	public void tick()
 	{
 		if(level == null || !level.isAreaLoaded(getBlockPos(), 0))
-			return; // Forge: prevent loading unloaded chunks
+			return;
 		
-		if(level.getGameTime() % 60 == 0 && level.getBlockState(getBlockPos()).getBlock() instanceof AreaEffectBlock && level.hasNeighborSignal(getBlockPos()))
+		if(level.getGameTime() % 80 == 0 && !level.isClientSide && level.getBlockState(getBlockPos()).getBlock() instanceof AreaEffectBlock && getBlockState().getValue(AreaEffectBlock.POWERED))
 		{
 			giveEntitiesEffect();
+		}
+	}
+	
+	public void giveEntitiesEffect()
+	{
+		if(getBlockState().getValue(AreaEffectBlock.ALL_MOBS))
+		{
+			for(LivingEntity livingEntity : level.getLoadedEntitiesOfClass(LivingEntity.class, new AxisAlignedBB(minEffectPos, maxEffectPos)))
+			{
+				if(effect instanceof CreativeShockEffect) //skips later creative/harmful specific checks as the effect should always be given
+				{
+					livingEntity.addEffect(new EffectInstance(effect, 120, effectAmplifier, false, false));
+				} else
+				{
+					if(livingEntity instanceof PlayerEntity)
+					{
+						if(((PlayerEntity) livingEntity).isCreative() && !effect.isBeneficial())
+							break;
+					}
+					
+					if(effect.isInstantenous())
+						livingEntity.addEffect(new EffectInstance(effect, 1, effectAmplifier, false, false));
+					else
+						livingEntity.addEffect(new EffectInstance(effect, 60, effectAmplifier, false, false));
+				}
+			}
+		} else
+		{
+			for(PlayerEntity playerEntity : level.getLoadedEntitiesOfClass(PlayerEntity.class, new AxisAlignedBB(minEffectPos, maxEffectPos)))
+			{
+				if(effect instanceof CreativeShockEffect) //skips later creative/harmful specific checks as the effect should always be given
+				{
+					playerEntity.addEffect(new EffectInstance(effect, 120, effectAmplifier, false, false));
+				} else
+				{
+					if(playerEntity.isCreative() && !effect.isBeneficial())
+						break;
+					
+					if(effect.isInstantenous())
+						playerEntity.addEffect(new EffectInstance(effect, 1, effectAmplifier, false, false));
+					else
+						playerEntity.addEffect(new EffectInstance(effect, 60, effectAmplifier, false, false));
+				}
+			}
 		}
 	}
 	

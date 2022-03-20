@@ -1,6 +1,6 @@
 package com.mraof.minestuck.block.machine;
 
-import com.mraof.minestuck.block.DecorBlock;
+import com.mraof.minestuck.block.CustomShapeBlock;
 import com.mraof.minestuck.util.CustomVoxelShape;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -12,7 +12,7 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
-public class SendificatorBlock extends DecorBlock
+public class SendificatorBlock extends CustomShapeBlock
 {
 	public static final String ACTIVATION_MESSAGE = "activation_message";
 	

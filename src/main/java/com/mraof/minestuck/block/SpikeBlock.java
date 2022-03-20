@@ -1,6 +1,5 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -20,7 +19,7 @@ import javax.annotation.Nullable;
 /**
  * Increases damage from falls for living entities landing on it. Also injures living entities that move through it, in a manner similar to sweet berry bushes
  */
-public class SpikeBlock extends DecorBlock
+public class SpikeBlock extends CustomShapeBlock
 {
 	public SpikeBlock(Properties properties, CustomVoxelShape shape)
 	{
@@ -30,10 +29,7 @@ public class SpikeBlock extends DecorBlock
 	@Override
 	public void fallOn(World worldIn, BlockPos pos, Entity entityIn, float fallDistance)
 	{
-		if(entityIn instanceof UnderlingEntity)
-		{
-			entityIn.causeFallDamage(fallDistance, 1.5F); //damage reduced for underlings to limit their death by factors other than players
-		} else if(entityIn instanceof LivingEntity)
+		if(entityIn instanceof LivingEntity)
 		{
 			entityIn.causeFallDamage(fallDistance, 3);
 		}
@@ -54,20 +50,10 @@ public class SpikeBlock extends DecorBlock
 				double distanceX = Math.abs(entityIn.getX() - entityIn.xOld);
 				double distanceZ = Math.abs(entityIn.getZ() - entityIn.zOld);
 				
-				if(entityIn instanceof UnderlingEntity)
+				entityIn.makeStuckInBlock(state, new Vector3d(0.3F, 0.9, 0.3F));
+				if(distanceX >= 0.003 || distanceZ >= 0.003)
 				{
-					entityIn.makeStuckInBlock(state, new Vector3d(0.1F, 0.9, 0.1F));
-					if(distanceX >= (double) 0.003F || distanceZ >= (double) 0.003F)
-					{
-						entityIn.hurt(DamageSource.GENERIC, 0.25F);
-					}
-				} else
-				{
-					entityIn.makeStuckInBlock(state, new Vector3d(0.3F, 0.9, 0.3F));
-					if(distanceX >= (double) 0.003F || distanceZ >= (double) 0.003F)
-					{
-						entityIn.hurt(DamageSource.GENERIC, 1.0F);
-					}
+					entityIn.hurt(DamageSource.GENERIC, 1.0F);
 				}
 			}
 		}

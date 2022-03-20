@@ -34,6 +34,7 @@ public class StatStorerBlock extends Block
 	public StatStorerBlock(Properties properties)
 	{
 		super(properties);
+		this.registerDefaultState(stateDefinition.any().setValue(POWER, 0));
 	}
 	
 	@Override

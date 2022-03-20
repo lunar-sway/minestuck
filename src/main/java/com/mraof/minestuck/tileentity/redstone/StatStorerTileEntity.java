@@ -1,7 +1,6 @@
 package com.mraof.minestuck.tileentity.redstone;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.redstone.StatStorerBlock;
 import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.event.AlchemyEvent;
@@ -15,7 +14,6 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.EntityStruckByLightningEvent;
 import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -27,7 +25,7 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class StatStorerTileEntity extends TileEntity implements ITickableTileEntity
 {
 	private float damageStored;
@@ -81,11 +79,16 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 	public void tick()
 	{
 		if(level == null || !level.isAreaLoaded(worldPosition, 1))
-			return; // Forge: prevent loading unloaded chunks
+			return;
 		
-		if(tickCycle % MinestuckConfig.SERVER.wirelessBlocksTickRate.get() == 1)
+		if(tickCycle % 6 == 1) //6 is wireless constant
 		{
-			level.setBlock(worldPosition, level.getBlockState(worldPosition).setValue(StatStorerBlock.POWER, Math.min(15, getActiveStoredStatValue() / getDivideValueBy())), Constants.BlockFlags.NOTIFY_NEIGHBORS);
+			if(!level.isClientSide)
+			{
+				if(getBlockState().getValue(StatStorerBlock.POWER) != Math.min(15, getActiveStoredStatValue() / getDivideValueBy()))
+					level.setBlockAndUpdate(getBlockPos(), getBlockState().setValue(StatStorerBlock.POWER, Math.min(15, getActiveStoredStatValue() / getDivideValueBy())));
+				else level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 2);
+			}
 			if(tickCycle >= 5000) //setting arbitrarily high value that the tick cannot go past
 				tickCycle = 0;
 		}
@@ -167,7 +170,7 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 		compound.putInt("gristDropsStored", gristDropsStored);
 		
 		compound.putInt("tickCycle", tickCycle);
-		compound.putInt("activeTypeOrdinal", activeType.ordinal());
+		compound.putInt("activeTypeOrdinal", getActiveType().ordinal());
 		compound.putInt("divideValueBy", divideValueBy);
 		
 		return compound;
@@ -269,7 +272,7 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 		
 		if(changeBlockState)
 			level.updateNeighborsAt(worldPosition, level.getBlockState(worldPosition).getBlock());
-		//level.getBlockState(worldPosition).getBlock().updateNeighbors(level.getBlockState(worldPosition), level, worldPosition, 3);
+		
 	}
 	
 	public void setDivideValue(int divideValueBy)
@@ -331,15 +334,16 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 			attemptStatUpdate(1, StatStorerTileEntity.ActiveType.ENTITIES_BRED, event.getParentA().blockPosition(), event.getParentA().level);
 	}
 	
+	//TODO seems to be doubled, potentially due to phase
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public static void onExplosion(ExplosionEvent event)
 	{
 		PlayerEntity playerEntity = (PlayerEntity) event.getExplosion().getSourceMob();
 		if(playerEntity != null && CreativeShockEffect.doesCreativeShockLimit(playerEntity, 0))
 			event.setCanceled(true); //intended to prevent blocks from being destroyed by a player attempting to circumvent creative shock
-		else
+		else if(!event.getWorld().isClientSide)
 		{
-			attemptStatUpdate(1, StatStorerTileEntity.ActiveType.EXPLOSIONS, new BlockPos(event.getExplosion().getPosition()), event.getWorld()); //TODO seems to be doubled
+			attemptStatUpdate(1, StatStorerTileEntity.ActiveType.EXPLOSIONS, new BlockPos(event.getExplosion().getPosition()), event.getWorld());
 		}
 	}
 	
@@ -361,7 +365,7 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 		attemptStatUpdate(event.getAmount(), StatStorerTileEntity.ActiveType.DAMAGE, event.getEntity().blockPosition(), event.getEntity().level);
 	}
 	
-	@SubscribeEvent(priority=EventPriority.LOWEST, receiveCanceled=false)
+	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public static void onEntityDeath(LivingDeathEvent event)
 	{
 		attemptStatUpdate(1, StatStorerTileEntity.ActiveType.DEATHS, event.getEntity().blockPosition(), event.getEntity().level);

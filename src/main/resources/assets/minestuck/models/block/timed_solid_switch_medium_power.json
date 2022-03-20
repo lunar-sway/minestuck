@@ -1,0 +1,6 @@
+{
+    "parent": "block/cube_all",
+    "textures": {
+        "all": "minestuck:block/timed_solid_switch_medium_power"
+    }
+}

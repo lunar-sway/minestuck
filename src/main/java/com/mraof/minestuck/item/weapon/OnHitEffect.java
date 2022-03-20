@@ -245,7 +245,7 @@ public interface OnHitEffect
 	
 	/**
 	 * Checks for attacks within three blocks of a point three blocks behind the targets back(covering the whole standard attack range of a player)
-	*/
+	 */
 	static OnHitEffect backstab(float backstabDamage)
 	{
 		return (stack, target, attacker) -> {
@@ -255,7 +255,7 @@ public interface OnHitEffect
 			{
 				for(int i = 0; i < 4; i++)
 				{
-					target.level.addParticle(ParticleTypes.DAMAGE_INDICATOR, true, target.blockPosition().relative(direction).getX(), target.getEyePosition(1F).y - 1, target.blockPosition().relative(direction).getZ(), 0.1,0.1,0.1);
+					target.level.addParticle(ParticleTypes.DAMAGE_INDICATOR, true, target.blockPosition().relative(direction).getX(), target.getEyePosition(1F).y - 1, target.blockPosition().relative(direction).getZ(), 0.1, 0.1, 0.1);
 				}
 				
 				DamageSource source;
@@ -331,21 +331,15 @@ public interface OnHitEffect
 	}
 	
 	/**
-	 * Prevents effect from working if the entity is subject to the effects of creative shock
+	 * Prevents effect from working if the entity is a player subject to the effects of creative shock
 	 */
 	static OnHitEffect withoutCreativeShock(OnHitEffect effect) //TODO action result for client side may not work
 	{
 		return (stack, target, attacker) -> {
-			if(attacker instanceof PlayerEntity)
+			if(!(attacker instanceof PlayerEntity) || !CreativeShockEffect.doesCreativeShockLimit((PlayerEntity) attacker, 2))
 			{
-				PlayerEntity playerAttacker = (PlayerEntity) attacker;
-				
-				if(!CreativeShockEffect.doesCreativeShockLimit(playerAttacker, 2))
-				{
-					effect.onHit(stack, target, attacker);
-				}
-			} else
 				effect.onHit(stack, target, attacker);
+			}
 		};
 	}
 	

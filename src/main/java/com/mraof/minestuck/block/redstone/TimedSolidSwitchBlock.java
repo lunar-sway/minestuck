@@ -65,7 +65,7 @@ public class TimedSolidSwitchBlock extends Block
 		
 		if(state.getValue(POWER) >= 1)
 		{
-			worldIn.setBlock(pos, state.setValue(POWER, state.getValue(POWER) - 1), Constants.BlockFlags.NOTIFY_NEIGHBORS);
+			worldIn.setBlockAndUpdate(pos, state.setValue(POWER, state.getValue(POWER) - 1));
 			worldIn.getBlockTicks().scheduleTick(new BlockPos(pos), this, tickRate);
 			
 			if(worldIn.getBlockState(pos).getValue(POWER) == 0)

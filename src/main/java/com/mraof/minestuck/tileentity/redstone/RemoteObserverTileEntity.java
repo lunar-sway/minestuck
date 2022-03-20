@@ -1,6 +1,5 @@
 package com.mraof.minestuck.tileentity.redstone;
 
-import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.redstone.RemoteObserverBlock;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
@@ -11,7 +10,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -35,7 +33,7 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 		IS_ENTITY_BURNING,
 		IS_ENTITY_INVISIBLE,
 		IS_ELYTRA_FLYING,
-		IS_ENTITY_IN_WATER;
+		IS_ENTITY_IN_WATER; //TODO IS_BOSS_PRESENT
 		
 		public static ActiveType fromInt(int ordinal) //converts int back into enum
 		{
@@ -63,9 +61,9 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 	public void tick()
 	{
 		if(level == null || !level.isAreaLoaded(getBlockPos(), 1))
-			return; // Forge: prevent loading unloaded chunks
+			return;
 		
-		if(tickCycle >= MinestuckConfig.SERVER.wirelessBlocksTickRate.get() * 1.667) //with the config value of 6 ticks, 6 * 1.667 ~= 10 ticks or 0.5 sec
+		if(tickCycle >= 6 * 1.667) //6 * 1.667 ~= 10 ticks or 0.5 sec, 6 is wireless constant
 		{
 			checkRelaventType();
 			tickCycle = 0;
@@ -77,6 +75,8 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 	{
 		boolean shouldBePowered = false;
 		
+		//TODO configurable radius
+		//TODO allow for the center of the radius to be moved to other coordinates as is seen with command blocks
 		AxisAlignedBB axisalignedbb = getRenderBoundingBox().inflate(15D, 15D, 15D);
 		List<LivingEntity> livingEntityList = level.getLoadedEntitiesOfClass(LivingEntity.class, axisalignedbb);
 		if(!livingEntityList.isEmpty())
@@ -105,7 +105,12 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 			}
 		}
 		
-		level.setBlock(getBlockPos(), getBlockState().setValue(RemoteObserverBlock.POWERED, shouldBePowered), Constants.BlockFlags.NOTIFY_NEIGHBORS);
+		if(!level.isClientSide)
+		{
+			if(getBlockState().getValue(RemoteObserverBlock.POWERED) != shouldBePowered)
+				level.setBlockAndUpdate(getBlockPos(), getBlockState().setValue(RemoteObserverBlock.POWERED, shouldBePowered));
+			else level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 2);
+		}
 	}
 	
 	public EntityType<?> getCurrentEntityType()

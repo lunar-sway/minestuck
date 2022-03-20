@@ -5,8 +5,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.ColorSelectorScreen;
-import com.mraof.minestuck.effects.CreativeShockEffect;
-import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.fluid.IMSFog;
 import com.mraof.minestuck.inventory.ConsortMerchantContainer;
@@ -15,7 +13,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
@@ -26,7 +23,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -121,16 +117,6 @@ public class ClientEventHandler
 			event.setRed((float) fogColor.x());
 			event.setGreen((float) fogColor.y());
 			event.setBlue((float) fogColor.z());
-		}
-	}
-	
-	//TODO may remove, does nothing that can be seen
-	@SubscribeEvent(priority = EventPriority.LOW)
-	public static void onPlayerTickEvent(TickEvent.PlayerTickEvent event)
-	{
-		if(event.side.isClient() && event.player.hasEffect(MSEffects.CREATIVE_SHOCK.get()))
-		{
-			CreativeShockEffect.stopElytraFlying(event.player, 2); //Stopping elytra movement on client side to prevent visual disruptions
 		}
 	}
 }

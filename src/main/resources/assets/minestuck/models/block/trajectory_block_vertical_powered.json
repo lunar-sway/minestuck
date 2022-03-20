@@ -1,0 +1,7 @@
+{
+    "parent": "block/cube_column",
+    "textures": {
+        "end": "minestuck:block/trajectory_block_vertical_top_powered",
+        "side": "minestuck:block/redstone_machine_block"
+    }
+}

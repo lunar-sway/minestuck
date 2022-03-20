@@ -127,6 +127,7 @@ public class ClientProxy
 		RenderTypeLookup.setRenderLayer(MSBlocks.WHITE_PAWN_STAINED_GLASS, RenderType.translucent());
 		RenderTypeLookup.setRenderLayer(MSBlocks.LUNCHTOP, RenderType.translucent());
 		RenderTypeLookup.setRenderLayer(MSBlocks.PLATFORM_BLOCK, RenderType.translucent());
+		RenderTypeLookup.setRenderLayer(MSBlocks.ITEM_MAGNET, RenderType.translucent());
 		
 		MSKeyHandler.registerKeys();
 		

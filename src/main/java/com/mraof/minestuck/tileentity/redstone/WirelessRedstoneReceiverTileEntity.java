@@ -1,6 +1,5 @@
 package com.mraof.minestuck.tileentity.redstone;
 
-import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.redstone.WirelessRedstoneReceiverBlock;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import net.minecraft.block.BlockState;
@@ -26,29 +25,17 @@ public class WirelessRedstoneReceiverTileEntity extends TileEntity implements IT
 	public void tick()
 	{
 		if(level == null || !level.isAreaLoaded(getBlockPos(), 1))
-			return; // Forge: prevent loading unloaded chunks
+			return;
 		
-		if(MinestuckConfig.SERVER.wirelessBlocksTickRate.get() != Integer.MAX_VALUE && lastTransmission >= MinestuckConfig.SERVER.wirelessBlocksTickRate.get() && level.getBlockState(getBlockPos()).getValue(WirelessRedstoneReceiverBlock.AUTO_RESET))
+		if(lastTransmission >= 6 && level.getBlockState(getBlockPos()).getValue(WirelessRedstoneReceiverBlock.AUTO_RESET)) //6 is wireless constant
 		{
 			renewFromLastTransmitter();
 			lastTransmission = 0;
 		}
 		
-		if(lastTransmission < MinestuckConfig.SERVER.wirelessBlocksTickRate.get()) //how many ticks since last transmission
+		if(lastTransmission < 6) //how many ticks since last transmission, 6 is wireless constant
 			lastTransmission++;
 	}
-	
-	/*@Override
-	public void validate()
-	{
-		super.validate();
-	}
-	
-	@Override
-	public void remove()
-	{
-		super.remove();
-	}*/
 	
 	public BlockPos getLastTransmitterBlockPos()
 	{

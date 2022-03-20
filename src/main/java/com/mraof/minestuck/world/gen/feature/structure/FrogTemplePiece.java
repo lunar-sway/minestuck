@@ -1,6 +1,6 @@
 package com.mraof.minestuck.world.gen.feature.structure;
 
-import com.mraof.minestuck.block.DecorBlock;
+import com.mraof.minestuck.block.CustomShapeBlock;
 import com.mraof.minestuck.block.LotusTimeCapsuleBlock;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.MSDirectionalBlock;
@@ -135,6 +135,8 @@ public class FrogTemplePiece extends ImprovedStructurePiece
 		int pushUp = 0;
 		for(int i = 0; i < 24; i++)
 		{
+			fillWithBlocksCheckWater(world, boundingBox, 17, pushUp, i, 24, pushUp, i, MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE.defaultBlockState().setValue(CustomShapeBlock.FACING, this.getOrientation().getOpposite())); //stairs base
+			fillWithBlocksCheckWater(world, boundingBox, 17, pushUp + 1, i, 24, pushUp + 1, i, MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_TOP.defaultBlockState().setValue(CustomShapeBlock.FACING, this.getOrientation().getOpposite())); //stairs top
 			StructureBlockUtil.fillWithBlocksCheckWater(world, boundingBox,
 					getWorldX(17, i), getWorldY(pushUp), getWorldZ(17, i),
 					getWorldX(24, i), getWorldY(pushUp), getWorldZ(24, i),
@@ -148,6 +150,8 @@ public class FrogTemplePiece extends ImprovedStructurePiece
 			pushUp = pushUp + 2; //allows the stairs height to increment twice as fast as sideways placement
 		}
 		
+		fillWithBlocksCheckWater(world, boundingBox, 17, 48, 24, 24, 48, 24, MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE.defaultBlockState().setValue(CustomShapeBlock.FACING, this.getOrientation().getOpposite())); //stairs base at top
+		generateBox(world, boundingBox, 17, -10, 0, 24, -1, 24, MSBlocks.GREEN_STONE_BRICKS.defaultBlockState(), MSBlocks.GREEN_STONE_BRICKS.defaultBlockState(), false); //underneath stairs
 		//TODO was not using the correct coordinate type
 		//StructureBlockUtil.fillWithBlocksCheckWater(world, boundingBox, 17, 48, 24, 24, 48, 24, MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE.defaultBlockState().with(DecorBlock.FACING, this.getOrientation().getOpposite())); //stairs base at top
 		generateBox(world, boundingBox, 17, -10, 20 + 24, 24, -1, 24, MSBlocks.GREEN_STONE_BRICKS.defaultBlockState(), MSBlocks.GREEN_STONE_BRICKS.defaultBlockState(), false); //underneath stairs

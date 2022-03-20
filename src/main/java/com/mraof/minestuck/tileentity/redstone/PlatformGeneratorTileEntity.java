@@ -1,7 +1,9 @@
 package com.mraof.minestuck.tileentity.redstone;
 
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.block.redstone.PlatformBlock;
 import com.mraof.minestuck.block.redstone.PlatformGeneratorBlock;
+import com.mraof.minestuck.block.redstone.PlatformReceptacleBlock;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
@@ -27,7 +29,7 @@ public class PlatformGeneratorTileEntity extends TileEntity implements ITickable
 	public void tick()
 	{
 		if(level == null || !level.isAreaLoaded(getBlockPos(), 1))
-			return; // Forge: prevent loading unloaded chunks
+			return;
 		
 		if(tickCycle >= 10)
 		{
@@ -42,7 +44,7 @@ public class PlatformGeneratorTileEntity extends TileEntity implements ITickable
 	{
 		if(level != null && !level.isClientSide)
 		{
-			int powerIn = level.getBestNeighborSignal(getBlockPos());
+			int powerIn = getBlockState().getValue(PlatformGeneratorBlock.POWER);
 			platformLength = powerIn;
 			
 			if(powerIn > 0)
@@ -50,12 +52,22 @@ public class PlatformGeneratorTileEntity extends TileEntity implements ITickable
 				for(int blockIterate = 1; blockIterate < platformLength + 1; blockIterate++)
 				{
 					BlockPos iteratePos = new BlockPos(getBlockPos().relative(getBlockState().getValue(PlatformGeneratorBlock.FACING), blockIterate));
-					if(!level.isAreaLoaded(getBlockPos(), blockIterate) || World.isOutsideBuildHeight(iteratePos.getY())) //allows platform blocks to be placed up until it runs out of bounds
-						break;
-					
-					if(level.getBlockState(iteratePos).getMaterial().isLiquid() || level.getBlockState(iteratePos).isAir()/* || (level.getBlockState(iteratePos).getBlock() == MSBlocks.PLATFORM_BLOCK && level.getPendingBlockTicks().isTickScheduled(iteratePos, MSBlocks.PLATFORM_BLOCK))*/)
+					if(!level.isAreaLoaded(getBlockPos(), blockIterate) || World.isOutsideBuildHeight(iteratePos.getY())) //allows platform blocks to be placed up until it runs out of bounds)
 					{
-						level.setBlock(iteratePos, MSBlocks.PLATFORM_BLOCK.defaultBlockState().setValue(PlatformGeneratorBlock.INVISIBLE_MODE, getBlockState().getValue(PlatformGeneratorBlock.INVISIBLE_MODE)), Constants.BlockFlags.NOTIFY_NEIGHBORS);
+						break;
+					}
+					
+					BlockState iterateBlockState = level.getBlockState(iteratePos);
+					
+					if(iterateBlockState.getBlock() instanceof PlatformReceptacleBlock)
+					{
+						if(iterateBlockState.getValue(PlatformReceptacleBlock.ABSORBING))
+						{
+							break;
+						}
+					} else if(iterateBlockState.getMaterial().isLiquid() || iterateBlockState.isAir()/* || iterateBlockState.getBlock() == MSBlocks.PLATFORM_BLOCK && level.getPendingBlockTicks().isTickScheduled(iteratePos, MSBlocks.PLATFORM_BLOCK))*/)
+					{
+						level.setBlock(iteratePos, MSBlocks.PLATFORM_BLOCK.defaultBlockState().setValue(PlatformGeneratorBlock.INVISIBLE_MODE, getBlockState().getValue(PlatformGeneratorBlock.INVISIBLE_MODE)).setValue(PlatformBlock.FACING, getBlockState().getValue(PlatformGeneratorBlock.FACING)), Constants.BlockFlags.NOTIFY_NEIGHBORS);
 					}
 				}
 			}

@@ -7,6 +7,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundCategory;
@@ -47,7 +48,8 @@ public class RedstoneClockTileEntity extends TileEntity implements ITickableTile
 		{
 			level.setBlock(getBlockPos(), getBlockState().setValue(RedstoneClockBlock.POWERED, true), Constants.BlockFlags.NOTIFY_NEIGHBORS);
 			level.getBlockTicks().scheduleTick(new BlockPos(getBlockPos()), level.getBlockState(getBlockPos()).getBlock(), 10); //set to half a second
-			level.playSound(null, getBlockPos(), SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.05F, 1.2F);
+			if(!level.getBlockState(getBlockPos().above()).getBlock().asItem().is(ItemTags.WOOL) && !level.getBlockState(getBlockPos().below()).getBlock().asItem().is(ItemTags.WOOL)) //will not make a sound if wool is above or below the block
+				level.playSound(null, getBlockPos(), SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.05F, 1.2F);
 		}
 	}
 	
@@ -62,7 +64,7 @@ public class RedstoneClockTileEntity extends TileEntity implements ITickableTile
 			clockSpeed = 20;
 			level.playSound(null, getBlockPos(), SoundEvents.PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, 1.6F);
 		}
-		playerEntity.displayClientMessage(new TranslationTextComponent(TIME_CHANGE, (double) clockSpeed / 20), true); //displayClientMessage was sendStatusMessage
+		playerEntity.displayClientMessage(new TranslationTextComponent(TIME_CHANGE, (double) clockSpeed / 20), true);
 	}
 	
 	public void decrementClockSpeed(PlayerEntity playerEntity)

@@ -16,7 +16,7 @@ public class AreaEffectScreen extends Screen
 {
 	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/generic_medium.png");
 	
-	private static final int guiWidth = 150; //126 previously
+	private static final int guiWidth = 150;
 	private static final int guiHeight = 98;
 	
 	private static final String minPosMessage = "Min Effect Pos";
@@ -44,14 +44,14 @@ public class AreaEffectScreen extends Screen
 		int yOffset = (this.height / 2) - (guiHeight / 2);
 		
 		this.minPosDestinationTextFieldX = new TextFieldWidget(this.font, this.width / 2 - 60, yOffset + 15, 40, 20, new StringTextComponent("X value of min effect pos"));
-		this.minPosDestinationTextFieldX.setValue(String.valueOf(te.getMinEffectPos().getX())); //setValue was setText
+		this.minPosDestinationTextFieldX.setValue(String.valueOf(te.getMinEffectPos().getX()));
 		addButton(minPosDestinationTextFieldX);
 		
 		this.minPosDestinationTextFieldY = new TextFieldWidget(this.font, this.width / 2 - 20, yOffset + 15, 40, 20, new StringTextComponent("Y value of min effect pos"));
 		this.minPosDestinationTextFieldY.setValue(String.valueOf(te.getMinEffectPos().getY()));
 		addButton(minPosDestinationTextFieldY);
 		
-		this.minPosDestinationTextFieldZ = new TextFieldWidget(this.font, this.width / 2 + 20, yOffset + 15, 40, 20, new StringTextComponent("Z value of min effect pos")); //was yOffset + 25
+		this.minPosDestinationTextFieldZ = new TextFieldWidget(this.font, this.width / 2 + 20, yOffset + 15, 40, 20, new StringTextComponent("Z value of min effect pos"));
 		this.minPosDestinationTextFieldZ.setValue(String.valueOf(te.getMinEffectPos().getZ()));
 		addButton(minPosDestinationTextFieldZ);
 		
@@ -102,18 +102,42 @@ public class AreaEffectScreen extends Screen
 	
 	private BlockPos parseMinBlockPos()
 	{
+		BlockPos tePos = te.getBlockPos();
+		int furthestMinX = tePos.getX() - 64;
+		int furthestMinY = tePos.getY() - 64;
+		int furthestMinZ = tePos.getZ() - 64;
+		int furthestMaxX = tePos.getX() + 64;
+		int furthestMaxY = tePos.getY() + 64;
+		int furthestMaxZ = tePos.getZ() + 64;
+		
 		int x = parseInt(minPosDestinationTextFieldX);
 		int y = parseInt(minPosDestinationTextFieldY);
 		int z = parseInt(minPosDestinationTextFieldZ);
+		
+		x = Math.max(furthestMinX, Math.min(x, furthestMaxX));
+		y = Math.max(furthestMinY, Math.min(y, Math.min(furthestMaxY, te.getLevel().getMaxBuildHeight())));
+		z = Math.max(furthestMinZ, Math.min(z, furthestMaxZ));
 		
 		return new BlockPos(x, y, z);
 	}
 	
 	private BlockPos parseMaxBlockPos()
 	{
+		BlockPos tePos = te.getBlockPos();
+		int furthestMinX = tePos.getX() - 64;
+		int furthestMinY = tePos.getY() - 64;
+		int furthestMinZ = tePos.getZ() - 64;
+		int furthestMaxX = tePos.getX() + 64;
+		int furthestMaxY = tePos.getY() + 64;
+		int furthestMaxZ = tePos.getZ() + 64;
+		
 		int x = parseInt(maxPosDestinationTextFieldX);
 		int y = parseInt(maxPosDestinationTextFieldY);
 		int z = parseInt(maxPosDestinationTextFieldZ);
+		
+		x = Math.min(furthestMaxX, Math.max(x, furthestMinX));
+		y = Math.min(furthestMaxY, Math.max(y, furthestMinY));
+		z = Math.min(furthestMaxZ, Math.max(z, furthestMinZ));
 		
 		return new BlockPos(x, y, z);
 	}

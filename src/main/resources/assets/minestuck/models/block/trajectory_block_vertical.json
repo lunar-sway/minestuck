@@ -1,7 +1,0 @@
-{
-    "parent": "block/cube_column",
-    "textures": {
-        "end": "minestuck:block/trajectory_block_vertical_top",
-        "side": "minestuck:block/trajectory_block_side"
-    }
-}

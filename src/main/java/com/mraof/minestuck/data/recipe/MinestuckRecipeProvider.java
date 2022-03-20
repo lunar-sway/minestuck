@@ -89,6 +89,7 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		ShapedRecipeBuilder.shaped(MSBlocks.GREEN_STONE_BRICK_SLAB, 6).define('#', MSBlocks.GREEN_STONE_BRICKS).pattern("###").unlockedBy("has_green_stone_bricks", has(MSBlocks.GREEN_STONE_BRICKS)).save(recipeBuilder);
 		
 		ShapedRecipeBuilder.shaped(MSBlocks.SPIKES).define('#', Items.IRON_INGOT).define('n', Items.IRON_NUGGET).pattern("n n").pattern("# #").pattern("###").unlockedBy("has_iron_ingot", has(Items.IRON_INGOT)).save(recipeBuilder);
+		ShapedRecipeBuilder.shaped(MSBlocks.RETRACTABLE_SPIKES).define('#', Items.IRON_INGOT).define('p', Items.PISTON).define('s', MSBlocks.SPIKES).define('w', ItemTags.WOODEN_PRESSURE_PLATES).pattern(" s ").pattern("#w#").pattern("#p#").unlockedBy("has_spikes", has(MSBlocks.SPIKES)).save(recipeBuilder);
 		
 		ShapedRecipeBuilder.shaped(MSBlocks.GLOWING_WOOD, 3).define('#', MSBlocks.GLOWING_LOG).pattern("##").pattern("##").group("bark").unlockedBy("has_log", has(MSTags.Items.GLOWING_LOGS)).save(recipeBuilder);
 		ShapelessRecipeBuilder.shapeless(MSBlocks.GLOWING_PLANKS, 4).requires(MSTags.Items.GLOWING_LOGS).group("planks").unlockedBy("has_log", has(MSTags.Items.GLOWING_LOGS)).save(recipeBuilder);
@@ -167,7 +168,7 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		ShapelessRecipeBuilder.shapeless(MSBlocks.VARIABLE_SOLID_SWITCH).requires(MSBlocks.SOLID_SWITCH).requires(Items.COMPARATOR).unlockedBy("has_solid_switch", has(MSBlocks.SOLID_SWITCH)).save(recipeBuilder);
 		ShapelessRecipeBuilder.shapeless(MSBlocks.ONE_SECOND_INTERVAL_TIMED_SOLID_SWITCH).requires(MSBlocks.SOLID_SWITCH).requires(Items.CLOCK).requires(Items.REPEATER).unlockedBy("has_solid_switch", has(MSBlocks.SOLID_SWITCH)).save(recipeBuilder);
 		ShapelessRecipeBuilder.shapeless(MSBlocks.TWO_SECOND_INTERVAL_TIMED_SOLID_SWITCH).requires(MSBlocks.SOLID_SWITCH).requires(Items.CLOCK).requires(Items.REPEATER).requires(Items.REPEATER).unlockedBy("has_solid_switch", has(MSBlocks.SOLID_SWITCH)).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(MSBlocks.ITEM_MAGNET).define('e', MSItems.PLUTONIUM_CORE).define('i', Items.IRON_INGOT).define('r', Items.REDSTONE).pattern("iri").pattern("iei").pattern("iri").unlockedBy("has_plutonium_core", has(MSItems.PLUTONIUM_CORE)).save(recipeBuilder);
+		ShapedRecipeBuilder.shaped(MSBlocks.ITEM_MAGNET).define('e', MSItems.PLUTONIUM_CORE).define('i', Items.IRON_INGOT).define('r', Items.REDSTONE).define('g', Items.GLASS_PANE).pattern("iri").pattern("geg").pattern("iri").unlockedBy("has_plutonium_core", has(MSItems.PLUTONIUM_CORE)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(MSBlocks.REDSTONE_CLOCK).define('c', Items.CLOCK).define('i', Items.IRON_INGOT).define('r', Items.REPEATER).define('q', Items.QUARTZ).define('P', ItemTags.PLANKS).pattern("PiP").pattern("rcr").pattern("PqP").unlockedBy("has_clock", has(Items.CLOCK)).save(recipeBuilder);
 		
 		CookingRecipeBuilder.smelting(Ingredient.of(MSBlocks.PINK_STONE_BRICKS), MSBlocks.CRACKED_PINK_STONE_BRICKS, 0.1F, 200).unlockedBy("has_pink_stone_bricks", has(MSBlocks.PINK_STONE_BRICKS)).save(recipeBuilder);
