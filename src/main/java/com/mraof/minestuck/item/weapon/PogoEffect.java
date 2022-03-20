@@ -52,22 +52,7 @@ public class PogoEffect implements ItemRightClickEffect, OnHitEffect
 	public ActionResult<ItemStack> onRightClick(World world, PlayerEntity player, Hand hand)
 	{
 		ItemStack stack = player.getItemInHand(hand);
-		//player.interactAt();
-		//player.pick();
-		//player.getPickedResult();
-		//RayTraceContext;
-		//world.clipWithInteractionOverride();
-		//BlockRayTraceResult blockraytraceresult = world.clip(new RayTraceContext(player.getEyePosition(1), player.getEyePosition(1).scale(player.getAttribute(net.minecraftforge.common.ForgeMod.REACH_DISTANCE.get()).getValue()), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, player));
 		BlockRayTraceResult blockraytraceresult = getPlayerPOVHitResult(world, player);
-		;
-		//blockraytraceresult.;
-		//LivingEntity livingEntityPlayer = player;
-		//ItemUseContext context = new ItemUseContext(player, hand, blockraytraceresult); //itemUseContext
-		//livingEntityPlayer;
-		//RayTraceResult rayTrace = getPlayerPOVHitResult(world, player, RayTraceContext.BlockMode.COLLIDER);
-		//rayTrace.hitInfo;
-		
-		//onItemUse(player, world, blockraytraceresult.getBlockPos(), stack, blockraytraceresult.getDirection(), getPogoMotion(stack)) == ActionResultType.SUCCESS;
 		
 		if(blockraytraceresult.getType() == RayTraceResult.Type.BLOCK)
 		{
@@ -93,12 +78,6 @@ public class PogoEffect implements ItemRightClickEffect, OnHitEffect
 		Vector3d endVec = eyeVec.add((double) xComponent * reachDistance, (double) yComponent * reachDistance, (double) zComponent * reachDistance);
 		return world.clip(new RayTraceContext(eyeVec, endVec, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, playerEntity));
 	}
-	
-	/*@Override
-	public ActionResultType onClick(ItemUseContext context)
-	{
-		return onItemUse(context.getPlayer(), context.getLevel(), context.getClickedPos(), context.getItemInHand(), context.getClickedFace(), getPogoMotion(context.getItemInHand()));
-	}*/
 	
 	private static void hitEntity(ItemStack stack, LivingEntity target, LivingEntity player, double pogoMotion)
 	{

@@ -128,9 +128,6 @@ public interface ItemRightClickEffect
 	static ItemRightClickEffect absorbFluid(Supplier<Block> fluidBlock, Supplier<Item> otherItem)
 	{
 		return withoutCreativeShock((world, player, hand) -> {
-			//Vector3d eyePos = player.getEyePosition(1.0F);
-			//Vector3d lookVec = player.getLookAngle();
-			//BlockState state;
 			ItemStack itemStack = player.getItemInHand(hand);
 			
 			BlockRayTraceResult blockraytraceresult = getPlayerPOVHitResult(world, player);
@@ -146,24 +143,6 @@ public interface ItemRightClickEffect
 				return ActionResult.success(newItem);
 			}
 			
-			
-			
-			/*for(int step = 0; step < player.getAttribute(ForgeMod.REACH_DISTANCE.get()).getValue() * 10; step++) //raytraces from the players current eye position to the maximum their reach distance allows
-			{
-				Vector3d vecPos = eyePos.add(lookVec.scale(step / 10D));
-				BlockPos blockPos = new BlockPos(vecPos);
-				state = world.getBlockState(blockPos);
-				
-				if(state.getBlock() == fluidBlock.get() && state.getFluidState().isSource()) //may cause error if fed non-fluid "fluidBlock" parameter
-				{
-					world.setBlockAndUpdate(blockPos, Blocks.AIR.defaultBlockState());
-					ItemStack newItem = new ItemStack(otherItem.get(), itemStack.getCount());
-					newItem.setTag(itemStack.getTag()); //It is important that the item it is switching to has the same durability
-					world.playSound(null, blockPos, SoundEvents.BUCKET_FILL, SoundCategory.BLOCKS, 1F, 2F);
-					player.getCooldowns().addCooldown(otherItem.get(), 5);
-					return ActionResult.success(newItem);
-				}
-			}*/
 			return ActionResult.fail(itemStack);
 		});
 	}
