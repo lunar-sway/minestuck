@@ -33,7 +33,7 @@ public class DefaultInterpreter implements RecipeInterpreter
 	{
 		if(recipe.isSpecial())
 			return null;
-		
+
 		GristSet totalCost = new GristSet();
 		for(Ingredient ingredient : recipe.getIngredients())
 		{
