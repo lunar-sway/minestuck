@@ -109,6 +109,8 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 	{
 		this.minEffectPos = minEffectPosIn;
 		this.maxEffectPos = maxEffectPosIn;
+		this.setChanged();
+		level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 0);
 	}
 	
 	public BlockPos getMinEffectPos()
@@ -117,6 +119,9 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 		{
 			minEffectPos = new BlockPos(this.getBlockPos().offset(-16, -16, -16));
 		}
+		
+		minEffectPos = parseMinBlockPos(this, minEffectPos.getX(), minEffectPos.getY(), minEffectPos.getZ());
+		
 		return this.minEffectPos;
 	}
 	
@@ -126,7 +131,58 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 		{
 			maxEffectPos = new BlockPos(this.getBlockPos().offset(16, 16, 16));
 		}
+		
+		maxEffectPos = parseMaxBlockPos(this, maxEffectPos.getX(), maxEffectPos.getY(), maxEffectPos.getZ());
+		
 		return this.maxEffectPos;
+	}
+	
+	/**
+	 * Checks to make sure that the minimum effect pos is within legal bounds, defaults to the intended boundary if it is too far away from the block
+	 */
+	public static BlockPos parseMinBlockPos(AreaEffectTileEntity te, int x, int y, int z)
+	{
+		BlockPos tePos = te.getBlockPos();
+		int furthestMinX = tePos.getX() - 64;
+		int furthestMinY = tePos.getY() - 64;
+		int furthestMinZ = tePos.getZ() - 64;
+		int furthestMaxX = tePos.getX() + 64;
+		int furthestMaxY = tePos.getY() + 64;
+		int furthestMaxZ = tePos.getZ() + 64;
+		
+		x = Math.max(furthestMinX, Math.min(x, furthestMaxX));
+		y = Math.max(furthestMinY, Math.min(y, Math.min(furthestMaxY, te.getLevel().getMaxBuildHeight())));
+		z = Math.max(furthestMinZ, Math.min(z, furthestMaxZ));
+		
+		return new BlockPos(x, y, z);
+	}
+	
+	/**
+	 * Checks to make sure that the maximum effect pos is within legal bounds, defaults to the intended boundary if it is too far away from the block
+	 */
+	public static BlockPos parseMaxBlockPos(AreaEffectTileEntity te, int x, int y, int z)
+	{
+		BlockPos tePos = te.getBlockPos();
+		int furthestMinX = tePos.getX() - 64;
+		int furthestMinY = tePos.getY() - 64;
+		int furthestMinZ = tePos.getZ() - 64;
+		int furthestMaxX = tePos.getX() + 64;
+		int furthestMaxY = tePos.getY() + 64;
+		int furthestMaxZ = tePos.getZ() + 64;
+		
+		x = Math.min(furthestMaxX, Math.max(x, furthestMinX));
+		y = Math.min(furthestMaxY, Math.max(y, Math.max(furthestMinY, 0))); //TODO change 0 to new bottom height when switching to 1.18
+		z = Math.min(furthestMaxZ, Math.max(z, furthestMinZ));
+		
+		return new BlockPos(x, y, z);
+	}
+	
+	@Override
+	public void onLoad()
+	{
+		super.onLoad();
+		getMinEffectPos(); //used only to update the boundaries in case they go too far
+		getMaxEffectPos();
 	}
 	
 	@Override

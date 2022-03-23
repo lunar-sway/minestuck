@@ -5,9 +5,10 @@ import com.mraof.minestuck.block.MSProperties;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -24,25 +25,27 @@ import java.util.Random;
 public class PlatformBlock extends MSDirectionalBlock
 {
 	public static final BooleanProperty INVISIBLE = MSProperties.MACHINE_TOGGLE;
+	public static final IntegerProperty GENERATOR_DISTANCE = MSProperties.DISTANCE_1_16;
 	
 	public PlatformBlock(Properties properties)
 	{
 		super(properties);
-		registerDefaultState(stateDefinition.any().setValue(INVISIBLE, false));
+		registerDefaultState(stateDefinition.any().setValue(INVISIBLE, false).setValue(GENERATOR_DISTANCE, 1));
 	}
 	
 	@Override
-	public float getShadeBrightness(BlockState p_220080_1_, IBlockReader p_220080_2_, BlockPos p_220080_3_)
+	public float getShadeBrightness(BlockState state, IBlockReader world, BlockPos pos)
 	{
 		return 1.0F;
 	}
 	
-	public VoxelShape getVisualShape(BlockState p_230322_1_, IBlockReader p_230322_2_, BlockPos p_230322_3_, ISelectionContext p_230322_4_) {
+	public VoxelShape getVisualShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context)
+	{
 		return VoxelShapes.empty();
 	}
 	
 	@Override
-	public boolean propagatesSkylightDown(BlockState state, IBlockReader reader, BlockPos pos)
+	public boolean propagatesSkylightDown(BlockState state, IBlockReader world, BlockPos pos)
 	{
 		return true;
 	}
@@ -56,18 +59,46 @@ public class PlatformBlock extends MSDirectionalBlock
 			return BlockRenderType.MODEL;
 	}
 	
+	public static void updateSurvival(BlockState state, World world, BlockPos pos)
+	{
+		if(!world.isClientSide() && state.getBlock() instanceof PlatformBlock)
+		{
+			BlockPos supportingPos = pos.relative(state.getValue(FACING).getOpposite(), state.getValue(GENERATOR_DISTANCE));
+			if(world.isAreaLoaded(supportingPos, 0))
+			{
+				BlockState supportingState = world.getBlockState(supportingPos);
+				if((supportingState.getBlock() instanceof PlatformGeneratorBlock && (!supportingState.getValue(PlatformGeneratorBlock.POWERED) || supportingState.getValue(PlatformGeneratorBlock.FACING) != state.getValue(FACING)) || !(supportingState.getBlock() instanceof PlatformGeneratorBlock)))
+					world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+				else if(supportingState.getBlock() instanceof PlatformGeneratorBlock && supportingState.getValue(PlatformGeneratorBlock.POWERED))
+				{
+					if(supportingState.getValue(PlatformGeneratorBlock.INVISIBLE_MODE) != state.getValue(INVISIBLE) && supportingState.getValue(PlatformGeneratorBlock.FACING) == state.getValue(FACING))
+						world.setBlockAndUpdate(pos, state.setValue(INVISIBLE, supportingState.getValue(PlatformGeneratorBlock.INVISIBLE_MODE))); //TODO Visible platforms should override invisible ones
+					if(!supportingState.getValue(PlatformGeneratorBlock.INVISIBLE_MODE) && state.getValue(INVISIBLE) && supportingState.getValue(PlatformGeneratorBlock.FACING) != state.getValue(FACING))
+						world.setBlockAndUpdate(pos, state.setValue(INVISIBLE, false));
+				}
+			}
+		}
+	}
+	
+	@Override
+	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+	{
+		super.neighborChanged(state, worldIn, pos, blockIn, fromPos, isMoving);
+		updateSurvival(state, worldIn, pos);
+	}
+	
 	@Override
 	public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand)
 	{
 		super.tick(state, worldIn, pos, rand);
-		worldIn.removeBlock(pos, false);
+		updateSurvival(state, worldIn, pos);
 	}
 	
 	@Override
 	public void onPlace(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving)
 	{
 		super.onPlace(state, worldIn, pos, oldState, isMoving);
-		worldIn.getBlockTicks().scheduleTick(new BlockPos(pos), this, 10);
+		worldIn.getBlockTicks().scheduleTick(new BlockPos(pos), this, 20);
 	}
 	
 	@Override
@@ -75,5 +106,6 @@ public class PlatformBlock extends MSDirectionalBlock
 	{
 		super.createBlockStateDefinition(builder);
 		builder.add(INVISIBLE);
+		builder.add(GENERATOR_DISTANCE);
 	}
 }

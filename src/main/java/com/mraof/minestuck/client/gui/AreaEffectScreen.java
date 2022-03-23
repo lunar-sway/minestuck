@@ -85,7 +85,14 @@ public class AreaEffectScreen extends Screen
 	
 	private void finish()
 	{
-		MSPacketHandler.sendToServer(new AreaEffectPacket(parseMinBlockPos(), parseMaxBlockPos(), te.getBlockPos()));
+		int minX = parseInt(minPosDestinationTextFieldX);
+		int minY = parseInt(minPosDestinationTextFieldY);
+		int minZ = parseInt(minPosDestinationTextFieldZ);
+		int maxX = parseInt(maxPosDestinationTextFieldX);
+		int maxY = parseInt(maxPosDestinationTextFieldY);
+		int maxZ = parseInt(maxPosDestinationTextFieldZ);
+		
+		MSPacketHandler.sendToServer(new AreaEffectPacket(AreaEffectTileEntity.parseMinBlockPos(te, minX, minY, minZ), AreaEffectTileEntity.parseMaxBlockPos(te, maxX, maxY, maxZ), te.getBlockPos()));
 		onClose();
 	}
 	
@@ -98,47 +105,5 @@ public class AreaEffectScreen extends Screen
 		{
 			return 0;
 		}
-	}
-	
-	private BlockPos parseMinBlockPos()
-	{
-		BlockPos tePos = te.getBlockPos();
-		int furthestMinX = tePos.getX() - 64;
-		int furthestMinY = tePos.getY() - 64;
-		int furthestMinZ = tePos.getZ() - 64;
-		int furthestMaxX = tePos.getX() + 64;
-		int furthestMaxY = tePos.getY() + 64;
-		int furthestMaxZ = tePos.getZ() + 64;
-		
-		int x = parseInt(minPosDestinationTextFieldX);
-		int y = parseInt(minPosDestinationTextFieldY);
-		int z = parseInt(minPosDestinationTextFieldZ);
-		
-		x = Math.max(furthestMinX, Math.min(x, furthestMaxX));
-		y = Math.max(furthestMinY, Math.min(y, Math.min(furthestMaxY, te.getLevel().getMaxBuildHeight())));
-		z = Math.max(furthestMinZ, Math.min(z, furthestMaxZ));
-		
-		return new BlockPos(x, y, z);
-	}
-	
-	private BlockPos parseMaxBlockPos()
-	{
-		BlockPos tePos = te.getBlockPos();
-		int furthestMinX = tePos.getX() - 64;
-		int furthestMinY = tePos.getY() - 64;
-		int furthestMinZ = tePos.getZ() - 64;
-		int furthestMaxX = tePos.getX() + 64;
-		int furthestMaxY = tePos.getY() + 64;
-		int furthestMaxZ = tePos.getZ() + 64;
-		
-		int x = parseInt(maxPosDestinationTextFieldX);
-		int y = parseInt(maxPosDestinationTextFieldY);
-		int z = parseInt(maxPosDestinationTextFieldZ);
-		
-		x = Math.min(furthestMaxX, Math.max(x, furthestMinX));
-		y = Math.min(furthestMaxY, Math.max(y, furthestMinY));
-		z = Math.min(furthestMaxZ, Math.max(z, furthestMinZ));
-		
-		return new BlockPos(x, y, z);
 	}
 }

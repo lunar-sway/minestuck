@@ -27,7 +27,7 @@ public class PortableBlock extends FallingBlock
 	@SuppressWarnings("deprecation")
 	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
 	{
-		if(!player.isCrouching() && !worldIn.isClientSide)
+		if(!worldIn.isClientSide && !player.isCrouching() && player.getItemInHand(hand).isEmpty())
 		{
 			Direction direction = hit.getDirection().getOpposite();
 			if((direction.getAxis() == Direction.Axis.X || direction.getAxis() == Direction.Axis.Z) && isReplaceable(worldIn.getBlockState(pos.relative(direction))))
@@ -51,7 +51,8 @@ public class PortableBlock extends FallingBlock
 		worldIn.playSound(null, pos, SoundEvents.GILDED_BLACKSTONE_STEP, SoundCategory.BLOCKS, 0.5F, 0.3F);
 	}
 	
-	public static boolean isReplaceable(BlockState state) {
+	public static boolean isReplaceable(BlockState state)
+	{
 		Material material = state.getMaterial();
 		return state.isAir() || state.is(BlockTags.FIRE) || material.isLiquid() || material.isReplaceable();
 	}

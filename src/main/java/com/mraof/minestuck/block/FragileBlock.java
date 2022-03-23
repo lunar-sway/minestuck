@@ -10,6 +10,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
@@ -18,7 +19,7 @@ import net.minecraft.world.World;
  */
 public class FragileBlock extends Block
 {
-	//collision shape is not a full block in order for the entityInside function to work. entityInside is used instead of stepOn as stepOn can be bypassed via sneaking
+	//collision shape is not a full block in order for the entityInside function to work. entityInside is used instead of stepOn as stepOn can be bypassed via sneaking. fallOn is used in addition for additional checking opportunities
 	private static final VoxelShape COLLISION_SHAPE = Block.box(0, 0, 0, 16, 15, 16);
 	
 	public FragileBlock(Properties properties)
@@ -35,6 +36,20 @@ public class FragileBlock extends Block
 	
 	@Override
 	public void entityInside(BlockState stateIn, World worldIn, BlockPos pos, Entity entityIn)
+	{
+		attemptBreak(worldIn, entityIn, pos);
+	}
+	
+	@Override
+	public void fallOn(World worldIn, BlockPos pos, Entity entityIn, float fallDistance)
+	{
+		super.fallOn(worldIn, pos, entityIn, fallDistance);
+		//TODO does not help
+		//entityInside function covers most conditions but if a player sprint jumps there is a ~50% chance they will skip the check, this covers jumps
+		attemptBreak(worldIn, entityIn, pos);
+	}
+	
+	public void attemptBreak(World worldIn, Entity entityIn, BlockPos pos)
 	{
 		if(entityIn instanceof PlayerEntity)
 		{
@@ -54,7 +69,10 @@ public class FragileBlock extends Block
 					obfuscateBB = obfuscateBB.contract(0, 0, -0.6);
 				
 				if(steppingPlayer.getBoundingBox().intersects(obfuscateBB) && !isSecure(worldIn.getBlockState(pos.below())))
+				{
+					entityIn.makeStuckInBlock(worldIn.getBlockState(pos), new Vector3d(0.9F, 0.2, 0.9F));
 					worldIn.destroyBlock(pos, false);
+				}
 			}
 		}
 	}

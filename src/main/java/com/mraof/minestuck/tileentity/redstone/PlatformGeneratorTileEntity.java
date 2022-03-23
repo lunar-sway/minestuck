@@ -6,14 +6,15 @@ import com.mraof.minestuck.block.redstone.PlatformGeneratorBlock;
 import com.mraof.minestuck.block.redstone.PlatformReceptacleBlock;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.material.Material;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
 
 public class PlatformGeneratorTileEntity extends TileEntity implements ITickableTileEntity
 {
@@ -53,25 +54,74 @@ public class PlatformGeneratorTileEntity extends TileEntity implements ITickable
 				{
 					BlockPos iteratePos = new BlockPos(getBlockPos().relative(getBlockState().getValue(PlatformGeneratorBlock.FACING), blockIterate));
 					if(!level.isAreaLoaded(getBlockPos(), blockIterate) || World.isOutsideBuildHeight(iteratePos.getY())) //allows platform blocks to be placed up until it runs out of bounds)
-					{
 						break;
-					}
 					
 					BlockState iterateBlockState = level.getBlockState(iteratePos);
 					
 					if(iterateBlockState.getBlock() instanceof PlatformReceptacleBlock)
 					{
 						if(iterateBlockState.getValue(PlatformReceptacleBlock.ABSORBING))
-						{
 							break;
-						}
-					} else if(iterateBlockState.getMaterial().isLiquid() || iterateBlockState.isAir()/* || iterateBlockState.getBlock() == MSBlocks.PLATFORM_BLOCK && level.getPendingBlockTicks().isTickScheduled(iteratePos, MSBlocks.PLATFORM_BLOCK))*/)
+					} else if(isReplaceable(iterateBlockState))
 					{
-						level.setBlock(iteratePos, MSBlocks.PLATFORM_BLOCK.defaultBlockState().setValue(PlatformGeneratorBlock.INVISIBLE_MODE, getBlockState().getValue(PlatformGeneratorBlock.INVISIBLE_MODE)).setValue(PlatformBlock.FACING, getBlockState().getValue(PlatformGeneratorBlock.FACING)), Constants.BlockFlags.NOTIFY_NEIGHBORS);
+						if(!iterateBlockState.isAir())
+							level.destroyBlock(iteratePos, true);
+						generatePlatform(level, iteratePos, blockIterate);
+					} else if(shouldReplaceExistingPlatformBlock(iteratePos, blockIterate))
+					{
+						generatePlatform(level, iteratePos, blockIterate);
 					}
+				}
+			} else
+			{
+				for(int blockIterate = 1; blockIterate < 16; blockIterate++)
+				{
+					BlockPos iteratePos = new BlockPos(getBlockPos().relative(getBlockState().getValue(PlatformGeneratorBlock.FACING), blockIterate));
+					
+					if(!level.isAreaLoaded(getBlockPos(), blockIterate) || World.isOutsideBuildHeight(iteratePos.getY()))
+						break;
+					
+					BlockState iterateBlockState = level.getBlockState(iteratePos);
+					
+					if(iterateBlockState.getBlock() instanceof PlatformBlock)
+						PlatformBlock.updateSurvival(iterateBlockState, level, iteratePos);
 				}
 			}
 		}
+	}
+	
+	private static boolean isReplaceable(BlockState state)
+	{
+		Material material = state.getMaterial();
+		return state.isAir() || state.is(BlockTags.FIRE) || material.isLiquid() || material.isReplaceable();
+	}
+	
+	private boolean shouldReplaceExistingPlatformBlock(BlockPos pos, int loopIteration)
+	{
+		if(level != null)
+		{
+			BlockState state = level.getBlockState(pos);
+			if(state.getBlock() instanceof PlatformBlock)
+			{
+				PlatformBlock.updateSurvival(state, level, pos);
+				state = level.getBlockState(pos);
+				return !(state.getBlock() instanceof PlatformBlock);
+				
+				//if the platform generator is now generating invisible platform blocks, it will replace if it also has the same facing and generation distance values. If not generation invisible platform blocks it will replace only invisible platform blocks
+				//return getBlockState().getValue(PlatformGeneratorBlock.INVISIBLE_MODE) ? (state.getValue(PlatformBlock.GENERATOR_DISTANCE) == loopIteration && state.getValue(PlatformBlock.FACING) == getBlockState().getValue(PlatformGeneratorBlock.FACING)) : state.getValue(PlatformBlock.INVISIBLE);
+				//return state.getValue(PlatformBlock.GENERATOR_DISTANCE) != loopIteration || state.getValue(PlatformBlock.FACING) != getBlockState().getValue(PlatformGeneratorBlock.FACING) || state.getValue(PlatformBlock.INVISIBLE) != getBlockState().getValue(PlatformGeneratorBlock.INVISIBLE_MODE);
+			}
+		}
+		
+		return false;
+	}
+	
+	private void generatePlatform(World world, BlockPos pos, int loopIteration)
+	{
+		world.setBlockAndUpdate(pos, MSBlocks.PLATFORM_BLOCK.defaultBlockState()
+				.setValue(PlatformGeneratorBlock.INVISIBLE_MODE, getBlockState().getValue(PlatformGeneratorBlock.INVISIBLE_MODE))
+				.setValue(PlatformBlock.FACING, getBlockState().getValue(PlatformGeneratorBlock.FACING))
+				.setValue(PlatformBlock.GENERATOR_DISTANCE, loopIteration));
 	}
 	
 	@Override

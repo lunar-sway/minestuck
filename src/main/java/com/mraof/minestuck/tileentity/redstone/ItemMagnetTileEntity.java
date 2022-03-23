@@ -94,18 +94,12 @@ public class ItemMagnetTileEntity extends TileEntity implements ITickableTileEnt
 					{
 						if(itemEntity instanceof GristEntity || itemEntity instanceof VitalityGelEntity || itemEntity instanceof ItemEntity || itemEntity instanceof ExperienceOrbEntity || (itemEntity instanceof FallingBlockEntity && ((FallingBlockEntity) itemEntity).getBlockState().getBlock() instanceof PortableBlock))
 						{
-							Vector3d motionVec3d = new Vector3d(magnetFacing.getOpposite().step());
-							motionVec3d.add(itemEntity.getDeltaMovement());
-							
-							//if(!(itemEntity instanceof FallingBlockEntity/* && alreadyMovingPortableBlock*/))
-							//{
-								if(reversePolarity)
-									itemEntity.setDeltaMovement(motionVec3d.scale(0.2).reverse());
-								else
-									itemEntity.setDeltaMovement(motionVec3d.scale(0.2));
-								
-								//alreadyMovingPortableBlock = true;
-							//}
+							Direction momentumFromFacing = magnetFacing.getOpposite();
+							Vector3d facingVec = new Vector3d(momentumFromFacing.getStepX(), momentumFromFacing.getStepY(), momentumFromFacing.getStepZ());
+							if(reversePolarity)
+								itemEntity.setDeltaMovement(itemEntity.getDeltaMovement().add(facingVec).scale(0.2).reverse());
+							else
+								itemEntity.setDeltaMovement(itemEntity.getDeltaMovement().add(facingVec).scale(0.2));
 						}
 					}
 				}
