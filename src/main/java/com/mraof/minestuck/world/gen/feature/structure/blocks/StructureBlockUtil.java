@@ -184,8 +184,7 @@ public class StructureBlockUtil
 			StatStorerTileEntity storerTE = (StatStorerTileEntity) TE;
 			if(activeType == null)
 				activeType = StatStorerTileEntity.ActiveType.DEATHS;
-			storerTE.setActiveType(activeType);
-			storerTE.setDivideValue(statDivideBy);
+			storerTE.setActiveTypeAndDivideValue(activeType, statDivideBy);
 		}
 	}
 	

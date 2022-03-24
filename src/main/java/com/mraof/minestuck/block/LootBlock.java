@@ -30,7 +30,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 
-public class LootBlock extends DecorBlock
+public class LootBlock extends CustomShapeBlock
 {
 	public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
 	//public final ResourceLocation lootTable;
