@@ -27,6 +27,8 @@ public class TrajectoryBlock extends MSDirectionalBlock
 	public static final IntegerProperty POWER = BlockStateProperties.POWER;
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED; //used for texture purposes
 	
+	private static final int UPWARDS_POWER_MIN = 6;
+	
 	protected TrajectoryBlock(Properties properties)
 	{
 		super(properties);
@@ -40,7 +42,7 @@ public class TrajectoryBlock extends MSDirectionalBlock
 		if(entityIn.isSuppressingBounce())
 		{
 			super.fallOn(worldIn, pos, entityIn, fallDistance);
-		} else if(trajectoryState.getValue(FACING) == Direction.UP && trajectoryState.getValue(POWER) > 6)
+		} else if(trajectoryState.getValue(FACING) == Direction.UP && trajectoryState.getValue(POWER) > UPWARDS_POWER_MIN)
 		{
 			entityIn.causeFallDamage(fallDistance, 0.0F); //reduces damage if the trajectory block faces up and is powered a reasonable amount
 		}
@@ -73,7 +75,7 @@ public class TrajectoryBlock extends MSDirectionalBlock
 		int power = blockState.getValue(POWER);
 		double powerMod = power / 16D;
 		
-		if(power != 0 && !(blockState.getValue(FACING) == Direction.UP && power < 7))
+		if(power != 0 && !(blockState.getValue(FACING) == Direction.UP && power < UPWARDS_POWER_MIN + 1))
 		{
 			if(entityIn.isOnGround())
 				entityIn.setOnGround(false);
@@ -128,7 +130,7 @@ public class TrajectoryBlock extends MSDirectionalBlock
 	@Override
 	public PathNodeType getAiPathNodeType(BlockState state, IBlockReader world, BlockPos pos, @Nullable MobEntity entity)
 	{
-		if((state.getValue(POWER) > 7 && state.getValue(FACING) == Direction.UP) || (state.getValue(POWER) > 0 && state.getValue(FACING) != Direction.UP))
+		if((state.getValue(POWER) > UPWARDS_POWER_MIN + 1 && state.getValue(FACING) == Direction.UP) || (state.getValue(POWER) > 0 && state.getValue(FACING) != Direction.UP))
 			return PathNodeType.DANGER_OTHER;
 		else
 			return PathNodeType.WALKABLE;

@@ -53,7 +53,7 @@ public class FragileBlock extends Block
 				if(directionNeedsObfuscation(worldIn, pos.north()))
 					obfuscateBB = obfuscateBB.contract(0, 0, -0.6);
 				
-				if(steppingPlayer.getBoundingBox().intersects(obfuscateBB) && isUnsecure(worldIn.getBlockState(pos.below())))
+				if(steppingPlayer.getBoundingBox().intersects(obfuscateBB) && !isSecure(worldIn.getBlockState(pos.below())))
 					worldIn.destroyBlock(pos, false);
 			}
 		}
@@ -65,12 +65,12 @@ public class FragileBlock extends Block
 	public boolean directionNeedsObfuscation(World worldIn, BlockPos pos)
 	{
 		BlockState state = worldIn.getBlockState(pos);
-		return (!(state.getBlock() == this) && !isUnsecure(state)) || (state.getBlock() == this && !isUnsecure(worldIn.getBlockState(pos.below())));
-		//returns true if the block in question is also a fragile block and the block below it cannot be replaceable or if the block itself cannot be replaceable
+		//returns true if the block in question is also a fragile block and the block below it cannot be replaced or if the block itself cannot be replaced
+		return state.getBlock() == this ? isSecure(worldIn.getBlockState(pos.below())) : isSecure(state);
 	}
 	
-	public static boolean isUnsecure(BlockState state) {
+	public static boolean isSecure(BlockState state) {
 		Material material = state.getMaterial();
-		return state.isAir() || state.is(BlockTags.FIRE) || material.isLiquid() || material.isReplaceable();
+		return !state.isAir() && !state.is(BlockTags.FIRE) && !material.isLiquid() && !material.isReplaceable();
 	}
 }

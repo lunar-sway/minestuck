@@ -14,6 +14,7 @@ import net.minecraft.potion.EffectType;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -130,6 +131,17 @@ public class CreativeShockEffect extends Effect
 	{
 		if(doesCreativeShockLimit(event.getPlayer(), 0))
 			event.setCanHarvest(false);
+	}
+	
+	@SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = false)
+	public static void onExplosionCreativeShock(ExplosionEvent.Start event)
+	{
+		LivingEntity sourceEntity = event.getExplosion().getSourceMob();
+		if(sourceEntity instanceof PlayerEntity)
+		{
+			if(CreativeShockEffect.doesCreativeShockLimit((PlayerEntity) sourceEntity, 0))
+				event.setCanceled(true); //intended to prevent blocks from being destroyed by a player attempting to circumvent creative shock
+		}
 	}
 	
 	@SubscribeEvent

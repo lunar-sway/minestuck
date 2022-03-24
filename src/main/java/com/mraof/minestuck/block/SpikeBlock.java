@@ -1,13 +1,12 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.util.CustomVoxelShape;
-import net.minecraft.block.Block;
+import com.mraof.minestuck.util.MSDamageSources;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.state.StateContainer;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
@@ -53,7 +52,7 @@ public class SpikeBlock extends CustomShapeBlock
 				entityIn.makeStuckInBlock(state, new Vector3d(0.3F, 0.9, 0.3F));
 				if(distanceX >= 0.003 || distanceZ >= 0.003)
 				{
-					entityIn.hurt(DamageSource.GENERIC, 1.0F);
+					entityIn.hurt(MSDamageSources.SPIKE, 1.0F);
 				}
 			}
 		}
@@ -67,11 +66,5 @@ public class SpikeBlock extends CustomShapeBlock
 	public PathNodeType getAiPathNodeType(BlockState state, IBlockReader world, BlockPos pos, @Nullable MobEntity entity)
 	{
 		return PathNodeType.DAMAGE_OTHER;
-	}
-	
-	@Override
-	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
-	{
-		super.createBlockStateDefinition(builder);
 	}
 }
