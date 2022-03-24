@@ -111,10 +111,10 @@ public class LandTableLootEntry extends LootEntry
 	{
 		try
 		{
-			return ObfuscationReflectionHelper.findField(LootPool.class, "entries");
+			return ObfuscationReflectionHelper.findField(LootPool.class, "field_186453_a");	//LootPool.entries
 		} catch(ObfuscationReflectionHelper.UnableToFindFieldException e)
 		{
-			LOGGER.error("Unable to get field for lootPool.lootEntries. Will be unable to fully insert loot from land type loot tables.", e);
+			LOGGER.error("Unable to get field for lootPool.entries. Will be unable to fully insert loot from land type loot tables.", e);
 			return null;
 		}
 	}
