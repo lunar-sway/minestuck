@@ -39,13 +39,12 @@ public class TrajectoryBlock extends MSDirectionalBlock
 	public void fallOn(World worldIn, BlockPos pos, Entity entityIn, float fallDistance)
 	{
 		BlockState trajectoryState = worldIn.getBlockState(pos);
-		if(entityIn.isSuppressingBounce())
-		{
-			super.fallOn(worldIn, pos, entityIn, fallDistance);
-		} else if(trajectoryState.getValue(FACING) == Direction.UP && trajectoryState.getValue(POWER) > UPWARDS_POWER_MIN)
+		if(trajectoryState.getValue(FACING) == Direction.UP && trajectoryState.getValue(POWER) > UPWARDS_POWER_MIN)
 		{
 			entityIn.causeFallDamage(fallDistance, 0.0F); //reduces damage if the trajectory block faces up and is powered a reasonable amount
 		}
+		else
+			super.fallOn(worldIn, pos, entityIn, fallDistance);
 	}
 	
 	@Override

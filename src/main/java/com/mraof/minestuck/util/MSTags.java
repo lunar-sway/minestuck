@@ -39,6 +39,7 @@ public class MSTags
 		public static final Tags.IOptionalNamedTag<Block> DIAMOND_ORES = tag("ores/diamond");
 		public static final Tags.IOptionalNamedTag<Block> CRUXITE_STORAGE_BLOCKS = tag("storage_blocks/cruxite");
 		public static final Tags.IOptionalNamedTag<Block> END_SAPLING_DIRT = tag("end_sapling_dirt");
+		public static final Tags.IOptionalNamedTag<Block> RULE_EXEMPT_ROTATABLE = tag("rule_exempt_rotatable");
 		
 		private static Tags.IOptionalNamedTag<Block> tag(String name)
 		{

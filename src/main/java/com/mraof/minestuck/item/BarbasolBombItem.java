@@ -25,28 +25,25 @@ public class BarbasolBombItem extends Item
     {
         ItemStack item = playerIn.getItemInHand(handIn);
     
-        if(!CreativeShockEffect.doesCreativeShockLimit(playerIn, 0))
+        if(!playerIn.isCreative())
         {
-            if(!playerIn.isCreative())
-            {
-                item.shrink(1);
-            }
+            item.shrink(1);
+        }
     
-            worldIn.playSound(null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.TNT_PRIMED, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+        worldIn.playSound(null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.TNT_PRIMED, SoundCategory.NEUTRAL, 1.0F, 1.0F);
     
-            if(!worldIn.isClientSide)
-            {
+        if(!worldIn.isClientSide)
+        {
         
-                BarbasolBombEntity bomb = new BarbasolBombEntity(MSEntityTypes.BARBASOL_BOMB, playerIn, worldIn, playerIn.abilities.mayBuild);
-                bomb.setItem(item);
-                bomb.shootFromRotation(playerIn, playerIn.xRot, playerIn.yRot, -20.0F, 0.7F, 1.0F);
-                worldIn.addFreshEntity(bomb);
-            }
-    
-            playerIn.awardStat(Stats.ITEM_USED.get(this));
+            BarbasolBombEntity bomb = new BarbasolBombEntity(MSEntityTypes.BARBASOL_BOMB, playerIn, worldIn, playerIn.abilities.mayBuild);
+            bomb.setItem(item);
+            bomb.shootFromRotation(playerIn, playerIn.xRot, playerIn.yRot, -20.0F, 0.7F, 1.0F);
+            worldIn.addFreshEntity(bomb);
             return ActionResult.success(item);
         }
     
+        playerIn.awardStat(Stats.ITEM_USED.get(this));
+        
         return ActionResult.pass(item);
     }
 }

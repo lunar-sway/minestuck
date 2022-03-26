@@ -1,6 +1,7 @@
 package com.mraof.minestuck.block.redstone;
 
 import com.mraof.minestuck.block.MSDirectionalBlock;
+import com.mraof.minestuck.util.MSTags;
 import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.state.BooleanProperty;
@@ -83,7 +84,7 @@ public class RotatorBlock extends MSDirectionalBlock
 					rotatedFacingState = facingState.rotate(worldIn, facingPos, Rotation.CLOCKWISE_90);
 				
 				if((rotatedFacingState.canSurvive(worldIn, pos) && !rotatedFacingState.hasLargeCollisionShape() && (PistonBlock.isPushable(rotatedFacingState, worldIn, facingPos, null, false, null)) ||
-						(rotatedFacingState.getBlock() instanceof MSDirectionalBlock || rotatedFacingState.getBlock() instanceof LogicGateBlock)))
+						(rotatedFacingState.getBlock() instanceof MSDirectionalBlock || MSTags.Blocks.RULE_EXEMPT_ROTATABLE.contains(rotatedFacingState.getBlock()))))
 					worldIn.setBlockAndUpdate(facingPos, rotatedFacingState);
 			}
 		}

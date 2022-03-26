@@ -44,7 +44,7 @@ public class SummonerBlock extends Block
 	@Override
 	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
 	{
-		if(!player.isCrouching() && player.isCreative() && !CreativeShockEffect.doesCreativeShockLimit(player, 1))
+		if(!player.isCrouching() && player.isCreative() && !CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS))
 		{
 			ItemStack stackIn = player.getItemInHand(handIn);
 			
@@ -59,14 +59,14 @@ public class SummonerBlock extends Block
 					if(!worldIn.isClientSide)
 						summonerTE.setSummonedEntity(eggItem.getType(stackIn.getTag()), player);
 				}
-			} else
+			} else if(!worldIn.isClientSide)
 			{
 				boolean newBooleanState = !worldIn.getBlockState(pos).getValue(UNTRIGGERABLE);
-				worldIn.setBlock(pos, worldIn.getBlockState(pos).setValue(SummonerBlock.UNTRIGGERABLE, newBooleanState), Constants.BlockFlags.NOTIFY_NEIGHBORS);
+				worldIn.setBlock(pos, worldIn.getBlockState(pos).cycle(SummonerBlock.UNTRIGGERABLE), Constants.BlockFlags.NOTIFY_NEIGHBORS);
 				player.displayClientMessage(new TranslationTextComponent(getDescriptionId() + "." + UNTRIGGERABLE_CHANGE_MESSAGE, !newBooleanState), true);
 			}
 			
-			worldIn.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 1F);
+			worldIn.playSound(player, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 1F);
 			
 			return ActionResultType.SUCCESS;
 		}

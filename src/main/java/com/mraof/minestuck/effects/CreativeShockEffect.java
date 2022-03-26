@@ -28,6 +28,10 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class CreativeShockEffect extends Effect
 {
+	public static final int LIMIT_BLOCK_PLACEMENT_AND_BREAKING = 0;
+	public static final int LIMIT_MACHINE_INTERACTIONS = 1;
+	public static final int LIMIT_MOBILITY_ITEMS = 2;
+	
 	protected CreativeShockEffect()
 	{
 		super(EffectType.NEUTRAL, 0x47453d);

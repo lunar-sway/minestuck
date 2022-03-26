@@ -333,10 +333,10 @@ public interface OnHitEffect
 	/**
 	 * Prevents effect from working if the entity is a player subject to the effects of creative shock
 	 */
-	static OnHitEffect withoutCreativeShock(OnHitEffect effect) //TODO action result for client side may not work
+	static OnHitEffect withoutCreativeShock(OnHitEffect effect)
 	{
 		return (stack, target, attacker) -> {
-			if(!(attacker instanceof PlayerEntity) || !CreativeShockEffect.doesCreativeShockLimit((PlayerEntity) attacker, 2))
+			if(!(attacker instanceof PlayerEntity) || !CreativeShockEffect.doesCreativeShockLimit((PlayerEntity) attacker, CreativeShockEffect.LIMIT_MOBILITY_ITEMS))
 			{
 				effect.onHit(stack, target, attacker);
 			}

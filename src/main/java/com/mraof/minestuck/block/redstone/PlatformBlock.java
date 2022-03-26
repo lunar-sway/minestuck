@@ -31,12 +31,12 @@ public class PlatformBlock extends MSDirectionalBlock
 	}
 	
 	@Override
-	public float getShadeBrightness(BlockState p_220080_1_, IBlockReader p_220080_2_, BlockPos p_220080_3_)
+	public float getShadeBrightness(BlockState state, IBlockReader reader, BlockPos pos)
 	{
 		return 1.0F;
 	}
 	
-	public VoxelShape getVisualShape(BlockState p_230322_1_, IBlockReader p_230322_2_, BlockPos p_230322_3_, ISelectionContext p_230322_4_) {
+	public VoxelShape getVisualShape(BlockState state, IBlockReader reader, BlockPos pos, ISelectionContext context) {
 		return VoxelShapes.empty();
 	}
 	

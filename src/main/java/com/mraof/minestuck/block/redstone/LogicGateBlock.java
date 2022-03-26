@@ -24,12 +24,12 @@ import java.util.function.BiPredicate;
  */
 public class LogicGateBlock extends RedstoneDiodeBlock
 {
-	private final State assignedLogicOperator;
+	private final State logicOperator;
 	
 	public LogicGateBlock(Properties properties, LogicGateBlock.State gateState)
 	{
 		super(properties);
-		this.assignedLogicOperator = gateState;
+		this.logicOperator = gateState;
 		this.registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(POWERED, false));
 	}
 	
@@ -43,7 +43,7 @@ public class LogicGateBlock extends RedstoneDiodeBlock
 		boolean leftInputSendingPower = getAlternateSignalAt(worldIn, pos, leftInput) > 0;
 		boolean rightInputSendingPower = getAlternateSignalAt(worldIn, pos, rightInput) > 0;
 		
-		return assignedLogicOperator.operation.test(leftInputSendingPower, rightInputSendingPower);
+		return logicOperator.operation.test(leftInputSendingPower, rightInputSendingPower);
 	}
 	
 	@Override
@@ -96,7 +96,7 @@ public class LogicGateBlock extends RedstoneDiodeBlock
 	{
 		AND((left, right) -> left && right),
 		OR((left, right) -> left || right),
-		XOR((left, right) -> (left && !right) || (!left && right)),
+		XOR((left, right) -> left != right),
 		NAND(AND.operation.negate()),
 		NOR(OR.operation.negate()),
 		XNOR(XOR.operation.negate());
