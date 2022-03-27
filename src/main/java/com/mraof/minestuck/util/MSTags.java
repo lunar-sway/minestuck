@@ -76,6 +76,7 @@ public class MSTags
 		public static final Tags.IOptionalNamedTag<Item> MODUS_CARD = tag("modus_card");
 		public static final Tags.IOptionalNamedTag<Item> CASSETTES = tag("cassettes");
 		public static final Tags.IOptionalNamedTag<Item> BUGS = tag("bugs");
+		public static final Tags.IOptionalNamedTag<Item> CREATIVE_SHOCK_RIGHT_CLICK_LIMIT = tag("creative_shock_right_click_limit");
 
 		private static Tags.IOptionalNamedTag<Item> tag(String name)
 		{

@@ -38,7 +38,7 @@ public class VariableSolidSwitchBlock extends Block
 	{
 		if(!player.isCrouching())
 		{
-			if(state.getValue(POWER) != 15)
+			if(state.getValue(POWER) < 15)
 			{
 				worldIn.setBlock(pos, state.setValue(POWER, state.getValue(POWER) + 1), Constants.BlockFlags.NOTIFY_NEIGHBORS);
 				worldIn.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 1.2F);
@@ -94,10 +94,9 @@ public class VariableSolidSwitchBlock extends Block
 	@Override
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
 	{
-		if(stateIn.getValue(POWER) > 0)
+		if(rand.nextInt(15) < stateIn.getValue(POWER))
 		{
-			if(rand.nextInt(16 - stateIn.getValue(POWER)) == 0)
-				ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE);
+			ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE);
 		}
 	}
 	

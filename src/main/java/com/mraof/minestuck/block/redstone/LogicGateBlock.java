@@ -33,8 +33,6 @@ public class LogicGateBlock extends RedstoneDiodeBlock
 		this.registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(POWERED, false));
 	}
 	
-	//TODO add Inverter block for NOT gate functions, use that block as a crafting ingredient for NAND/NOR/XNOR
-	
 	@Override
 	protected boolean shouldTurnOn(World worldIn, BlockPos pos, BlockState state)
 	{

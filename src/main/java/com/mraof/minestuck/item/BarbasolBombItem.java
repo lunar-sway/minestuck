@@ -1,6 +1,5 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.item.BarbasolBombEntity;
 import net.minecraft.entity.player.PlayerEntity;

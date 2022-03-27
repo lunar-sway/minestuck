@@ -71,7 +71,6 @@ public class RotatorBlock extends MSDirectionalBlock
 			
 			if(state.getValue(POWERED) != hasPower)
 				worldIn.setBlockAndUpdate(pos, state.setValue(POWERED, hasPower));
-			else worldIn.sendBlockUpdated(pos, state, state, 2);
 			
 			if(!isPoweredBeforeUpdate && hasPower)
 			{
