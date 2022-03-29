@@ -28,12 +28,7 @@ public class SpikeBlock extends CustomShapeBlock
 	@Override
 	public void fallOn(World worldIn, BlockPos pos, Entity entityIn, float fallDistance)
 	{
-		if(entityIn instanceof LivingEntity)
-		{
-			entityIn.causeFallDamage(fallDistance, 3);
-		}
-		
-		super.fallOn(worldIn, pos, entityIn, fallDistance);
+		entityIn.causeFallDamage(fallDistance, 3);
 	}
 	
 	/**

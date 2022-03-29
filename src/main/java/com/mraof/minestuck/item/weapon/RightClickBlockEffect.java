@@ -82,13 +82,13 @@ public interface RightClickBlockEffect
 	/**
 	 * Prevents effect from working if the entity is subject to the effects of creative shock
 	 */
-	static RightClickBlockEffect withoutCreativeShock(RightClickBlockEffect effect) //TODO action result for client side may not work
+	static RightClickBlockEffect withoutCreativeShock(RightClickBlockEffect effect)
 	{
 		return (context) -> {
 			PlayerEntity player = context.getPlayer();
 			if(player != null)
 			{
-				if(!CreativeShockEffect.doesCreativeShockLimit(player, 0)) //TODO pogo may default to normal creative shock limit parameters
+				if(!CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_BLOCK_PLACEMENT_AND_BREAKING))
 				{
 					return effect.onClick(context);
 				}

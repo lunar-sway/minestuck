@@ -39,8 +39,7 @@ public class PlatformBlock extends MSDirectionalBlock
 		return 1.0F;
 	}
 	
-	public VoxelShape getVisualShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context)
-	{
+	public VoxelShape getVisualShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
 		return VoxelShapes.empty();
 	}
 	

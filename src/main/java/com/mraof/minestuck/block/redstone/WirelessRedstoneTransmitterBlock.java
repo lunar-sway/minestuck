@@ -58,7 +58,7 @@ public class WirelessRedstoneTransmitterBlock extends HorizontalBlock
 	@SuppressWarnings("deprecation")
 	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
 	{
-		if(!player.isCrouching() && !CreativeShockEffect.doesCreativeShockLimit(player, 1))
+		if(!player.isCrouching() && !CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS))
 		{
 			TileEntity tileEntity = worldIn.getBlockEntity(pos);
 			if(tileEntity instanceof WirelessRedstoneTransmitterTileEntity)
@@ -110,10 +110,9 @@ public class WirelessRedstoneTransmitterBlock extends HorizontalBlock
 	@Override
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
 	{
-		if(stateIn.getValue(POWER) > 0)
+		if(rand.nextInt(15) < stateIn.getValue(POWER))
 		{
-			if(rand.nextInt(16 - stateIn.getValue(POWER)) == 0)
-				ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE);
+			ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE);
 		}
 	}
 	

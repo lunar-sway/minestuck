@@ -44,12 +44,11 @@ public class TimedSolidSwitchBlock extends Block
 			worldIn.setBlock(pos, state.setValue(POWER, state.getValue(POWER) == 0 ? 15 : 0), Constants.BlockFlags.NOTIFY_NEIGHBORS);
 			if(state.getValue(POWER) > 0)
 			{
-				worldIn.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 1.2F);
+				worldIn.playSound(player, pos, SoundEvents.PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 1.2F);
 				worldIn.getBlockTicks().scheduleTick(new BlockPos(pos), this, tickRate);
 			} else
 			{
-				worldIn.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, 1.2F);
-				worldIn.getBlockTicks().scheduleTick(new BlockPos(pos), this, tickRate);
+				worldIn.playSound(player, pos, SoundEvents.PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, 1.2F);
 			}
 			
 			return ActionResultType.SUCCESS;
@@ -63,12 +62,14 @@ public class TimedSolidSwitchBlock extends Block
 	{
 		super.tick(state, worldIn, pos, rand);
 		
-		if(state.getValue(POWER) >= 1)
+		int power = state.getValue(POWER);
+		
+		if(power >= 1)
 		{
-			worldIn.setBlockAndUpdate(pos, state.setValue(POWER, state.getValue(POWER) - 1));
+			worldIn.setBlockAndUpdate(pos, state.setValue(POWER, power - 1));
 			worldIn.getBlockTicks().scheduleTick(new BlockPos(pos), this, tickRate);
 			
-			if(worldIn.getBlockState(pos).getValue(POWER) == 0)
+			if(power - 1 == 0)
 				worldIn.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, 1.2F);
 			else
 				worldIn.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 1.2F);
@@ -109,10 +110,9 @@ public class TimedSolidSwitchBlock extends Block
 	@Override
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
 	{
-		if(stateIn.getValue(POWER) > 0)
+		if(rand.nextInt(15) < stateIn.getValue(POWER))
 		{
-			if(rand.nextInt(16 - stateIn.getValue(POWER)) == 0)
-				ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE);
+			ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE);
 		}
 	}
 	

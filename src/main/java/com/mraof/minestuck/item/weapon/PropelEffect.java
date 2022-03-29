@@ -32,7 +32,7 @@ public class PropelEffect implements ItemRightClickEffect
 	public ActionResult<ItemStack> onRightClick(World world, PlayerEntity player, Hand hand)
 	{
 		ItemStack itemStack = player.getItemInHand(hand);
-		if(!CreativeShockEffect.doesCreativeShockLimit(player, 2))
+		if(!CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MOBILITY_ITEMS))
 			propelAction(player, itemStack, getVelocityMod(), hand);
 		return ActionResult.pass(itemStack);
 	}

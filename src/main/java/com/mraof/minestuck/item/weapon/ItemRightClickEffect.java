@@ -172,7 +172,7 @@ public interface ItemRightClickEffect
 		return (world, player, hand) -> {
 			ItemStack itemStackIn = player.getItemInHand(hand);
 			
-			if(!CreativeShockEffect.doesCreativeShockLimit(player, 0))
+			if(!CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_BLOCK_PLACEMENT_AND_BREAKING))
 			{
 				return effect.onRightClick(world, player, hand);
 			}

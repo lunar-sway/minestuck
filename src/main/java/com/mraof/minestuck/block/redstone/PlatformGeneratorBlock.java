@@ -44,13 +44,11 @@ public class PlatformGeneratorBlock extends MSDirectionalBlock
 	@Override
 	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
 	{
-		if(!player.isCrouching() && !CreativeShockEffect.doesCreativeShockLimit(player, 1))
+		if(!player.isCrouching() && !CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS))
 		{
 			worldIn.setBlock(pos, state.cycle(INVISIBLE_MODE), Constants.BlockFlags.NOTIFY_NEIGHBORS);
-			if(state.getValue(INVISIBLE_MODE))
-				worldIn.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 1.5F);
-			else
-				worldIn.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 0.5F);
+			worldIn.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, state.getValue(INVISIBLE_MODE) ? 1.5F : 0.5F);
+		
 			return ActionResultType.SUCCESS;
 		}
 		
@@ -104,10 +102,9 @@ public class PlatformGeneratorBlock extends MSDirectionalBlock
 	@Override
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
 	{
-		if(stateIn.getValue(POWER) > 0)
+		if(rand.nextInt(15) < stateIn.getValue(POWER))
 		{
-			if(rand.nextInt(16 - stateIn.getValue(POWER)) == 0)
-				ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE);
+			ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE);
 		}
 	}
 	

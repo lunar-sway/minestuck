@@ -4,7 +4,7 @@ import net.minecraft.util.DamageSource;
 
 public class MSDamageSources
 {
-	public static final DamageSource SPIKE = new DamageSource("minestuck:spike").setScalesWithDifficulty();
+	public static final DamageSource SPIKE = new DamageSource("minestuck.spike").setScalesWithDifficulty();
 	
 	
 }
