@@ -838,6 +838,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.MOREL_MUSHROOM, "A delicacy amongst both humans and consorts.");
 		addStore(MSItems.MOREL_MUSHROOM, "THE Mushroom");
 		addStoreTooltip(MSItems.MOREL_MUSHROOM, "This is a very rare mushroom-- not many get to see it, much less taste it!");
+		add(MSItems.SUSHROOM, "Sushroom");
+		addTooltip(MSItems.SUSHROOM, "Afungus.");
 		add(MSItems.FRENCH_FRY, "French Fry");
 		add(MSItems.STRAWBERRY_CHUNK, "Strawberry Chunk");
 		addTooltip(MSItems.STRAWBERRY_CHUNK, "It tastes a lot better than it looks.");

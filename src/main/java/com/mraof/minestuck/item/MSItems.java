@@ -351,6 +351,7 @@ public class MSItems
 	public static final Item FUNGAL_SPORE = getNull();
 	public static final Item SPOREO = getNull();
 	public static final Item MOREL_MUSHROOM = getNull();
+	public static final Item SUSHROOM = getNull();
 	public static final Item FRENCH_FRY = getNull();
 	public static final Item STRAWBERRY_CHUNK = getNull();
 	public static final Item FOOD_CAN = getNull();
@@ -1103,6 +1104,7 @@ public class MSItems
 		registry.register(new Item(new Item.Properties().tab(MSItemGroup.LANDS).food(MSFoods.FUNGAL_SPORE)).setRegistryName("fungal_spore"));
 		registry.register(new Item(new Item.Properties().tab(MSItemGroup.LANDS).food(MSFoods.SPOREO)).setRegistryName("sporeo"));
 		registry.register(new Item(new Item.Properties().tab(MSItemGroup.LANDS).food(MSFoods.MOREL_MUSHROOM)).setRegistryName("morel_mushroom"));
+		registry.register(new Item(new Item.Properties().tab(MSItemGroup.LANDS)).setRegistryName("sushroom"));
 		registry.register(new Item(new Item.Properties().tab(MSItemGroup.LANDS).food(MSFoods.FRENCH_FRY)).setRegistryName("french_fry"));
 		registry.register(new BlockNamedItem(STRAWBERRY_STEM, new Item.Properties().tab(MSItemGroup.LANDS).food(MSFoods.STRAWBERRY_CHUNK)).setRegistryName("strawberry_chunk"));
 		registry.register(new Item(new Item.Properties().stacksTo(16).tab(MSItemGroup.MAIN).food(MSFoods.FOOD_CAN)).setRegistryName("food_can"));
