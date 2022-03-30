@@ -706,6 +706,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.GOLDEN_SPORK, "A spoon and fork with all the awfulness of gold tools? Sign me up!");
 		add(MSItems.BIDENT, "Bident");
 		addTooltip(MSItems.BIDENT, "Double trouble for all your bubble scuffle needs");
+		add(MSItems.EDISONS_FURY, "Edison's Fury");
+		add(MSItems.EDISONS_SERENITY, "Edison's Serenity");
 		add(MSItems.POINTY_STICK, "Pointy Stick");
 		add(MSItems.KNITTING_NEEDLE, "Knitting Needle");
 		add(MSItems.ARTIFUCKER, "Artifucker");
