@@ -46,7 +46,7 @@ public class PortableBlock extends FallingBlock
 	@Override
 	public void onLand(World worldIn, BlockPos pos, BlockState fallingBlockState, BlockState replacedState, FallingBlockEntity fallingBlockEntity)
 	{
-		if(worldIn.isClientSide)
+		if(!worldIn.isClientSide)
 			replacedState.addLandingEffects((ServerWorld) worldIn, pos, fallingBlockState, null, 20); //TODO does not work
 		worldIn.playSound(null, pos, SoundEvents.GILDED_BLACKSTONE_STEP, SoundCategory.BLOCKS, 0.5F, 0.3F);
 	}

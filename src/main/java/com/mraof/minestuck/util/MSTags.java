@@ -40,6 +40,7 @@ public class MSTags
 		public static final Tags.IOptionalNamedTag<Block> CRUXITE_STORAGE_BLOCKS = tag("storage_blocks/cruxite");
 		public static final Tags.IOptionalNamedTag<Block> END_SAPLING_DIRT = tag("end_sapling_dirt");
 		public static final Tags.IOptionalNamedTag<Block> RULE_EXEMPT_ROTATABLE = tag("rule_exempt_rotatable");
+		public static final Tags.IOptionalNamedTag<Block> PLATFORM_ABSORBING = tag("platform_absorbing");
 		
 		private static Tags.IOptionalNamedTag<Block> tag(String name)
 		{

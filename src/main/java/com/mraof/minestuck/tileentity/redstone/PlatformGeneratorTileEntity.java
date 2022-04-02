@@ -5,6 +5,7 @@ import com.mraof.minestuck.block.redstone.PlatformBlock;
 import com.mraof.minestuck.block.redstone.PlatformGeneratorBlock;
 import com.mraof.minestuck.block.redstone.PlatformReceptacleBlock;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
+import com.mraof.minestuck.util.MSTags;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.nbt.CompoundNBT;
@@ -62,6 +63,9 @@ public class PlatformGeneratorTileEntity extends TileEntity implements ITickable
 					{
 						if(iterateBlockState.getValue(PlatformReceptacleBlock.ABSORBING))
 							break;
+					} else if(MSTags.Blocks.PLATFORM_ABSORBING.contains(iterateBlockState.getBlock()))
+					{
+						break;
 					} else if(isReplaceable(iterateBlockState))
 					{
 						if(!iterateBlockState.isAir())
@@ -108,8 +112,6 @@ public class PlatformGeneratorTileEntity extends TileEntity implements ITickable
 				return !(state.getBlock() instanceof PlatformBlock);
 				
 				//if the platform generator is now generating invisible platform blocks, it will replace if it also has the same facing and generation distance values. If not generation invisible platform blocks it will replace only invisible platform blocks
-				//return getBlockState().getValue(PlatformGeneratorBlock.INVISIBLE_MODE) ? (state.getValue(PlatformBlock.GENERATOR_DISTANCE) == loopIteration && state.getValue(PlatformBlock.FACING) == getBlockState().getValue(PlatformGeneratorBlock.FACING)) : state.getValue(PlatformBlock.INVISIBLE);
-				//return state.getValue(PlatformBlock.GENERATOR_DISTANCE) != loopIteration || state.getValue(PlatformBlock.FACING) != getBlockState().getValue(PlatformGeneratorBlock.FACING) || state.getValue(PlatformBlock.INVISIBLE) != getBlockState().getValue(PlatformGeneratorBlock.INVISIBLE_MODE);
 			}
 		}
 		

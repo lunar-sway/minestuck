@@ -79,6 +79,7 @@ public class MinestuckBlockTagsProvider extends BlockTagsProvider
 		tag(CRUXITE_STORAGE_BLOCKS).add(CRUXITE_BLOCK);
 		tag(END_SAPLING_DIRT).addTag(Tags.Blocks.END_STONES).add(END_GRASS);
 		tag(RULE_EXEMPT_ROTATABLE).add(AND_GATE_BLOCK, OR_GATE_BLOCK, XOR_GATE_BLOCK, NAND_GATE_BLOCK, NOR_GATE_BLOCK, XNOR_GATE_BLOCK);
+		tag(PLATFORM_ABSORBING).addTag(Tags.Blocks.OBSIDIAN).add(Blocks.BEDROCK, Blocks.NETHER_PORTAL, Blocks.END_PORTAL, Blocks.END_PORTAL_FRAME, PORTABLE_BLOCK); //excludes Platform Receptacle blocks as they only absorb conditionally
 	}
 	
 	@Override

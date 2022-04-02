@@ -100,6 +100,27 @@ public class PlatformGeneratorBlock extends MSDirectionalBlock
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
+	public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving)
+	{
+		super.onRemove(state, worldIn, pos, newState, isMoving);
+		
+		Direction facing = state.getValue(FACING);
+		for(int blockIterate = 1; blockIterate < 16; blockIterate++)
+		{
+			BlockPos iteratePos = new BlockPos(pos.relative(facing, blockIterate));
+			
+			if(!worldIn.isAreaLoaded(pos, blockIterate) || World.isOutsideBuildHeight(iteratePos.getY()))
+				break;
+			
+			BlockState iterateBlockState = worldIn.getBlockState(iteratePos);
+			
+			if(iterateBlockState.getBlock() instanceof PlatformBlock)
+				PlatformBlock.updateSurvival(iterateBlockState, worldIn, iteratePos);
+		}
+	}
+	
+	@Override
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
 	{
 		if(rand.nextInt(15) < stateIn.getValue(POWER))

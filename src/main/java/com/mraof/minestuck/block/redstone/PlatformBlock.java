@@ -2,6 +2,7 @@ package com.mraof.minestuck.block.redstone;
 
 import com.mraof.minestuck.block.MSDirectionalBlock;
 import com.mraof.minestuck.block.MSProperties;
+import com.mraof.minestuck.util.MSTags;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -9,6 +10,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -39,7 +41,8 @@ public class PlatformBlock extends MSDirectionalBlock
 		return 1.0F;
 	}
 	
-	public VoxelShape getVisualShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
+	public VoxelShape getVisualShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context)
+	{
 		return VoxelShapes.empty();
 	}
 	
@@ -62,17 +65,29 @@ public class PlatformBlock extends MSDirectionalBlock
 	{
 		if(!world.isClientSide() && state.getBlock() instanceof PlatformBlock)
 		{
-			BlockPos supportingPos = pos.relative(state.getValue(FACING).getOpposite(), state.getValue(GENERATOR_DISTANCE));
+			Direction stateFacing = state.getValue(FACING);
+			BlockPos supportingPos = pos.relative(stateFacing.getOpposite(), state.getValue(GENERATOR_DISTANCE));
 			if(world.isAreaLoaded(supportingPos, 0))
 			{
 				BlockState supportingState = world.getBlockState(supportingPos);
-				if((supportingState.getBlock() instanceof PlatformGeneratorBlock && (!supportingState.getValue(PlatformGeneratorBlock.POWERED) || supportingState.getValue(PlatformGeneratorBlock.FACING) != state.getValue(FACING)) || !(supportingState.getBlock() instanceof PlatformGeneratorBlock)))
+				
+				for(int blockIterate = 1; blockIterate < state.getValue(GENERATOR_DISTANCE); blockIterate++)
+				{
+					BlockPos iteratePos = pos.relative(stateFacing.getOpposite(), blockIterate);
+					BlockState iterateState = world.getBlockState(iteratePos);
+					if(MSTags.Blocks.PLATFORM_ABSORBING.contains(iterateState.getBlock()))
+					{
+						world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+					}
+				}
+				
+				if(supportingState.getBlock() instanceof PlatformGeneratorBlock && (!supportingState.getValue(PlatformGeneratorBlock.POWERED) || supportingState.getValue(PlatformGeneratorBlock.FACING) != stateFacing) || !(supportingState.getBlock() instanceof PlatformGeneratorBlock))
 					world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
 				else if(supportingState.getBlock() instanceof PlatformGeneratorBlock && supportingState.getValue(PlatformGeneratorBlock.POWERED))
 				{
-					if(supportingState.getValue(PlatformGeneratorBlock.INVISIBLE_MODE) != state.getValue(INVISIBLE) && supportingState.getValue(PlatformGeneratorBlock.FACING) == state.getValue(FACING))
+					if(supportingState.getValue(PlatformGeneratorBlock.INVISIBLE_MODE) != state.getValue(INVISIBLE) && supportingState.getValue(PlatformGeneratorBlock.FACING) == stateFacing)
 						world.setBlockAndUpdate(pos, state.setValue(INVISIBLE, supportingState.getValue(PlatformGeneratorBlock.INVISIBLE_MODE))); //TODO Visible platforms should override invisible ones
-					if(!supportingState.getValue(PlatformGeneratorBlock.INVISIBLE_MODE) && state.getValue(INVISIBLE) && supportingState.getValue(PlatformGeneratorBlock.FACING) != state.getValue(FACING))
+					if(!supportingState.getValue(PlatformGeneratorBlock.INVISIBLE_MODE) && state.getValue(INVISIBLE) && supportingState.getValue(PlatformGeneratorBlock.FACING) != stateFacing)
 						world.setBlockAndUpdate(pos, state.setValue(INVISIBLE, false));
 				}
 			}
