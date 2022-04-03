@@ -610,6 +610,9 @@ public class MSItems
 		registerItemBlock(registry, GREEN_STONE_BRICK_SALAMANDER_RIGHT, MSItemGroup.MAIN);
 		registerItemBlock(registry, GREEN_STONE_BRICK_SKAIA, MSItemGroup.MAIN);
 		registerItemBlock(registry, GREEN_STONE_BRICK_TURTLE, MSItemGroup.MAIN);
+		registerItemBlock(registry, UNCARVED_WOOD, MSItemGroup.LANDS);
+		registerItemBlock(registry, CHIPBOARD, MSItemGroup.LANDS);
+		registerItemBlock(registry, WOOD_SHAVINGS, MSItemGroup.LANDS);
 		registerItemBlock(registry, DENSE_CLOUD, MSItemGroup.LANDS);
 		registerItemBlock(registry, BRIGHT_DENSE_CLOUD, MSItemGroup.LANDS);
 		registerItemBlock(registry, SUGAR_CUBE, MSItemGroup.LANDS);

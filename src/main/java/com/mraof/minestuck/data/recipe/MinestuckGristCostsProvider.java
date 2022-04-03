@@ -664,6 +664,7 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSBlocks.BROWN_STONE_COLUMN).grist(BUILD, 2).grist(IODINE, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.CRACKED_BROWN_STONE_BRICKS).grist(BUILD, 2).grist(IODINE, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.GREEN_STONE).grist(BUILD, 2).grist(CAULK, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.UNCARVED_WOOD).grist(BUILD, 4).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.POLISHED_GREEN_STONE).grist(BUILD, 2).grist(CAULK, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.GREEN_STONE_BRICKS).grist(BUILD, 2).grist(CAULK, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.GREEN_STONE_COLUMN).grist(BUILD, 2).grist(CAULK, 1).build(recipeSaver);

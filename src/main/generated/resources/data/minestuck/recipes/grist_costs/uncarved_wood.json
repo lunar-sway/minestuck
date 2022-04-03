@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:uncarved_wood"
+  },
+  "grist_cost": {
+    "minestuck:build": 4
+  }
+}

@@ -655,6 +655,10 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSBlocks.PINK_STONE).input(Tags.Items.STONE).and().namedInput(Items.PINK_DYE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.BROWN_STONE).input(Tags.Items.STONE).and().namedInput(Items.BROWN_DYE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.GREEN_STONE).input(Tags.Items.STONE).and().namedInput(Items.GREEN_DYE).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.UNCARVED_WOOD).input(ItemTags.LOGS).and().input(Items.STONE).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.CHIPBOARD).input(ItemTags.LOGS).and().input(Items.COBBLESTONE).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.WOOD_SHAVINGS).input(ItemTags.LOGS).or().namedInput(Items.STONECUTTER).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.WOOD_SHAVINGS).input(ItemTags.LOGS).or().namedInput(MSItems.CARVING_TOOL).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.TREATED_PLANKS).input(ItemTags.PLANKS).or().input(Items.NETHERRACK).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.FROST_PLANKS).input(ItemTags.PLANKS).or().namedInput(Items.SNOW_BLOCK).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.FROST_PLANKS).input(ItemTags.PLANKS).or().namedInput(Items.SNOW).build(consumer);

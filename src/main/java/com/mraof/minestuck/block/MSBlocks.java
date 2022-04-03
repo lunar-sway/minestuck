@@ -90,6 +90,7 @@ public class MSBlocks
 	public static final Block GREEN_STONE = getNull(), POLISHED_GREEN_STONE = getNull(), GREEN_STONE_BRICKS = getNull(), GREEN_STONE_COLUMN = getNull(), CHISELED_GREEN_STONE_BRICKS = getNull(), HORIZONTAL_GREEN_STONE_BRICKS = getNull(), VERTICAL_GREEN_STONE_BRICKS = getNull()
 			, GREEN_STONE_BRICK_TRIM = getNull(), GREEN_STONE_BRICK_FROG = getNull(), GREEN_STONE_BRICK_IGUANA_LEFT = getNull(), GREEN_STONE_BRICK_IGUANA_RIGHT = getNull(), GREEN_STONE_BRICK_LOTUS = getNull(), GREEN_STONE_BRICK_NAK_LEFT = getNull(), GREEN_STONE_BRICK_NAK_RIGHT = getNull()
 			, GREEN_STONE_BRICK_SALAMANDER_LEFT = getNull(), GREEN_STONE_BRICK_SALAMANDER_RIGHT = getNull(), GREEN_STONE_BRICK_SKAIA = getNull(), GREEN_STONE_BRICK_TURTLE = getNull();
+	public static final Block UNCARVED_WOOD = getNull(), CHIPBOARD = getNull(), WOOD_SHAVINGS = getNull();
 	public static final Block DENSE_CLOUD = getNull(), BRIGHT_DENSE_CLOUD = getNull();
 	public static final Block SUGAR_CUBE = getNull();
 	
@@ -339,6 +340,9 @@ public class MSBlocks
 		registry.register(new HieroglyphBlock(Block.Properties.of(Material.STONE, MaterialColor.COLOR_GREEN).strength(2.5F, 7.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1)).setRegistryName("green_stone_brick_salamander_right"));
 		registry.register(new HieroglyphBlock(Block.Properties.of(Material.STONE, MaterialColor.COLOR_GREEN).strength(2.5F, 7.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1)).setRegistryName("green_stone_brick_skaia"));
 		registry.register(new HieroglyphBlock(Block.Properties.of(Material.STONE, MaterialColor.COLOR_GREEN).strength(2.5F, 7.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1)).setRegistryName("green_stone_brick_turtle"));
+		registry.register(new Block(AbstractBlock.Properties.of(Material.WOOD, MaterialColor.WOOD).strength(2.0F).harvestTool(ToolType.AXE).sound(SoundType.WOOD)).setRegistryName("uncarved_wood"));
+		registry.register(new Block(AbstractBlock.Properties.of(Material.WOOD, MaterialColor.WOOD).strength(1.0F).harvestTool(ToolType.AXE).sound(SoundType.SCAFFOLDING)).setRegistryName("chipboard"));
+		registry.register(new Block(AbstractBlock.Properties.of(Material.WOOD, MaterialColor.WOOD).strength(0.4F).harvestTool(ToolType.SHOVEL).sound(SoundType.SAND)).setRegistryName("wood_shavings"));
 		registry.register(new Block(AbstractBlock.Properties.of(Material.GLASS, MaterialColor.COLOR_YELLOW).strength(0.5F).sound(SoundType.SNOW)).setRegistryName("dense_cloud"));
 		registry.register(new Block(AbstractBlock.Properties.of(Material.GLASS, MaterialColor.COLOR_LIGHT_GRAY).strength(0.5F).sound(SoundType.SNOW)).setRegistryName("bright_dense_cloud"));
 		registry.register(new Block(AbstractBlock.Properties.of(Material.SAND, MaterialColor.SNOW).strength(0.4F).sound(SoundType.SAND)).setRegistryName("sugar_cube"));

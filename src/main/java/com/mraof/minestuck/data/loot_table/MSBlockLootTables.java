@@ -148,6 +148,9 @@ public class MSBlockLootTables extends BlockLootTables
 		dropSelf(GREEN_STONE_BRICK_SALAMANDER_RIGHT);
 		dropSelf(GREEN_STONE_BRICK_SKAIA);
 		dropSelf(GREEN_STONE_BRICK_TURTLE);
+		add(UNCARVED_WOOD, createSingleItemTableWithSilkTouch(UNCARVED_WOOD, CHIPBOARD));
+		dropSelf(CHIPBOARD);
+		dropSelf(WOOD_SHAVINGS);
 		dropSelf(DENSE_CLOUD);
 		dropSelf(BRIGHT_DENSE_CLOUD);
 		dropSelf(SUGAR_CUBE);
