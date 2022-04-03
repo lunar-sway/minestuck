@@ -480,6 +480,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.SHATTER_BACON, "ShatterBacon");
 		addTooltip(MSItems.SHATTER_BACON, "This thing is so unspeakably greasy you are having a hard time even holding it.");
 		addExtra(MSItems.SHATTER_BACON, OnHitEffect.SORD_DROP_MESSAGE, "The grease caused the ShatterBacon to slip from your grasp!");
+		add(MSItems.SUBTRACTSHUMIDIRE_ZOMORRODNEGATIVE, "SUBTRACTSHUMIDIR-E ZOMORRODNEGATIVE");
 		add(MSItems.DAGGER, "Dagger");
 		add(MSItems.NIFE, "nife.");
 		addExtra(MSItems.NIFE, OnHitEffect.SORD_DROP_MESSAGE, "Whoopsies doopsies you dwopped the nife!!");

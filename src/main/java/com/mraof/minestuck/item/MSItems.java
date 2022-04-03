@@ -107,6 +107,7 @@ public class MSItems
 	public static final Item QUANTUM_SABRE = getNull();
 	public static final Item SHATTER_BEACON = getNull();
 	public static final Item SHATTER_BACON = getNull();
+	public static final Item SUBTRACTSHUMIDIRE_ZOMORRODNEGATIVE = getNull();
 	
 	public static final Item DAGGER = getNull();
 	public static final Item NIFE = getNull();
@@ -856,7 +857,9 @@ public class MSItems
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.GOLD, 7, -2.4F).efficiency(15.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP).add(OnHitEffect.setOnFire(30)), new Item.Properties().defaultDurability(300).tab(MSItemGroup.WEAPONS)).setRegistryName("cobalt_sabre"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.URANIUM_TIER, 4, -2.4F).efficiency(15.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP).add(OnHitEffect.onCrit(OnHitEffect.enemyPotionEffect(() -> new EffectInstance(Effects.WITHER, 100, 1)))), new Item.Properties().tab(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)).setRegistryName("quantum_sabre"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.DIAMOND, 7, -2.4F).efficiency(15.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP), new Item.Properties().tab(MSItemGroup.WEAPONS).rarity(Rarity.RARE)).setRegistryName("shatter_beacon"));
-		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.MEAT_TIER, 7, -2.4F).efficiency(5.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP).add(OnHitEffect.SORD_DROP), new Item.Properties().tab(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)).setRegistryName("shatter_bacon"));registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 0, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.backstab(3)), new Item.Properties().tab(MSItemGroup.WEAPONS)).setRegistryName("dagger"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.MEAT_TIER, 7, -2.4F).efficiency(5.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP).add(OnHitEffect.SORD_DROP), new Item.Properties().tab(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)).setRegistryName("shatter_bacon"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.URANIUM_TIER, 6, -2.6F).efficiency(5.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP).add(OnHitEffect.setOnFire(30)), new Item.Properties().tab(MSItemGroup.WEAPONS)).setRegistryName("subtractshumidire_zomorrodnegative"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 0, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.backstab(3)), new Item.Properties().tab(MSItemGroup.WEAPONS)).setRegistryName("dagger"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.SBAHJ_TIER, 1, -2.0F).add(OnHitEffect.SORD_DROP), new Item.Properties().tab(MSItemGroup.WEAPONS)).setRegistryName("nife"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.EMERALD_TIER, 1, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.backstab(4)), new Item.Properties().tab(MSItemGroup.WEAPONS)).setRegistryName("light_of_my_knife"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.CORUNDUM_TIER, 1, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.backstab(9)), new Item.Properties().tab(MSItemGroup.WEAPONS)).setRegistryName("starshard_tri_blade"));
