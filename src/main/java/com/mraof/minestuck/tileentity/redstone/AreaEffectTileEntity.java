@@ -14,6 +14,7 @@ import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 
@@ -23,8 +24,8 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 	
 	private Effect effect;
 	private int effectAmplifier;
-	private BlockPos minEffectPos;
-	private BlockPos maxEffectPos;
+	private BlockPos minAreaOffset;
+	private BlockPos maxAreaOffset;
 	
 	public AreaEffectTileEntity()
 	{
@@ -45,9 +46,19 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 	
 	public void giveEntitiesEffect()
 	{
+		BlockPos tePos = getBlockPos();
+		Direction teFacing = getBlockState().getValue(AreaEffectBlock.FACING);
+		
+		BlockPos minAreaPos = tePos.relative(teFacing, minAreaOffset.getX()).relative(Direction.UP, minAreaOffset.getY()).relative(teFacing.getClockWise(), minAreaOffset.getZ());
+		BlockPos maxAreaPos = tePos.relative(teFacing, maxAreaOffset.getX()).relative(Direction.UP, maxAreaOffset.getY()).relative(teFacing.getClockWise(), maxAreaOffset.getZ());
+		
+		//TODO with the current area effect block being tested, only north and east work right now and with the axis align functions only the east directional effect works
+		//minAreaPos = axisAlignBlockPosGetMin(minAreaPos, maxAreaPos);
+		//maxAreaPos = axisAlignBlockPosGetMax(minAreaPos, maxAreaPos);
+		
 		if(getBlockState().getValue(AreaEffectBlock.ALL_MOBS))
 		{
-			for(LivingEntity livingEntity : level.getLoadedEntitiesOfClass(LivingEntity.class, new AxisAlignedBB(minEffectPos, maxEffectPos)))
+			for(LivingEntity livingEntity : level.getLoadedEntitiesOfClass(LivingEntity.class, new AxisAlignedBB(minAreaPos, maxAreaPos)))
 			{
 				if(effect instanceof CreativeShockEffect) //skips later creative/harmful specific checks as the effect should always be given
 				{
@@ -68,7 +79,7 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 			}
 		} else
 		{
-			for(PlayerEntity playerEntity : level.getLoadedEntitiesOfClass(PlayerEntity.class, new AxisAlignedBB(minEffectPos, maxEffectPos)))
+			for(PlayerEntity playerEntity : level.getLoadedEntitiesOfClass(PlayerEntity.class, new AxisAlignedBB(minAreaPos, maxAreaPos)))
 			{
 				if(effect instanceof CreativeShockEffect) //skips later creative/harmful specific checks as the effect should always be given
 				{
@@ -85,6 +96,30 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Reorders the blockpos pair to get the overall min coords
+	 */
+	public static BlockPos axisAlignBlockPosGetMin(BlockPos minBlockPosIn, BlockPos maxBlockPosIn)
+	{
+		int blockPosMinX = Math.min(minBlockPosIn.getX(), maxBlockPosIn.getX());
+		int blockPosMinY = Math.min(minBlockPosIn.getY(), maxBlockPosIn.getY());
+		int blockPosMinZ = Math.min(minBlockPosIn.getZ(), maxBlockPosIn.getZ());
+		
+		return new BlockPos(blockPosMinX, blockPosMinY, blockPosMinZ);
+	}
+	
+	/**
+	 * Reorders the blockpos pair to get the overall max coords
+	 */
+	public static BlockPos axisAlignBlockPosGetMax(BlockPos minBlockPosIn, BlockPos maxBlockPosIn)
+	{
+		int blockPosMaxX = Math.max(minBlockPosIn.getX(), maxBlockPosIn.getX());
+		int blockPosMaxY = Math.max(minBlockPosIn.getY(), maxBlockPosIn.getY());
+		int blockPosMaxZ = Math.max(minBlockPosIn.getZ(), maxBlockPosIn.getZ());
+		
+		return new BlockPos(blockPosMaxX, blockPosMaxY, blockPosMaxZ);
 	}
 	
 	public void setEffect(Effect effectIn, int effectAmplifierIn)
@@ -105,36 +140,36 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 		return this.effectAmplifier;
 	}
 	
-	public void setMinAndMaxEffectPos(BlockPos minEffectPosIn, BlockPos maxEffectPosIn)
+	public void setMinAndMaxEffectPosOffset(BlockPos minAreaOffsetIn, BlockPos maxAreaOffsetIn)
 	{
-		this.minEffectPos = minEffectPosIn;
-		this.maxEffectPos = maxEffectPosIn;
+		this.minAreaOffset = minAreaOffsetIn;
+		this.maxAreaOffset = maxAreaOffsetIn;
 		this.setChanged();
 		level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 0);
 	}
 	
-	public BlockPos getMinEffectPos()
+	public BlockPos getMinAreaOffset()
 	{
-		if(minEffectPos == null)
+		if(minAreaOffset == null)
 		{
-			minEffectPos = new BlockPos(this.getBlockPos().offset(-16, -16, -16));
+			minAreaOffset = new BlockPos(-16, -16, -16);
 		}
 		
-		minEffectPos = parseMinBlockPos(this, minEffectPos.getX(), minEffectPos.getY(), minEffectPos.getZ());
+		minAreaOffset = parseMinBlockPos(this, minAreaOffset.getX(), minAreaOffset.getY(), minAreaOffset.getZ());
 		
-		return this.minEffectPos;
+		return this.minAreaOffset;
 	}
 	
-	public BlockPos getMaxEffectPos()
+	public BlockPos getMaxAreaOffset()
 	{
-		if(maxEffectPos == null)
+		if(maxAreaOffset == null)
 		{
-			maxEffectPos = new BlockPos(this.getBlockPos().offset(16, 16, 16));
+			maxAreaOffset = new BlockPos(16, 16, 16);
 		}
 		
-		maxEffectPos = parseMaxBlockPos(this, maxEffectPos.getX(), maxEffectPos.getY(), maxEffectPos.getZ());
+		maxAreaOffset = parseMaxBlockPos(this, maxAreaOffset.getX(), maxAreaOffset.getY(), maxAreaOffset.getZ());
 		
-		return this.maxEffectPos;
+		return this.maxAreaOffset;
 	}
 	
 	/**
@@ -143,16 +178,13 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 	public static BlockPos parseMinBlockPos(AreaEffectTileEntity te, int x, int y, int z)
 	{
 		BlockPos tePos = te.getBlockPos();
-		int furthestMinX = tePos.getX() - 64;
-		int furthestMinY = tePos.getY() - 64;
-		int furthestMinZ = tePos.getZ() - 64;
-		int furthestMaxX = tePos.getX() + 64;
-		int furthestMaxY = tePos.getY() + 64;
-		int furthestMaxZ = tePos.getZ() + 64;
 		
-		x = Math.max(furthestMinX, Math.min(x, furthestMaxX));
-		y = Math.max(furthestMinY, Math.min(y, Math.min(furthestMaxY, te.getLevel().getMaxBuildHeight())));
-		z = Math.max(furthestMinZ, Math.min(z, furthestMaxZ));
+		x = Math.max(x, -64);
+		y = Math.max(y, -64);
+		z = Math.max(z, -64);
+		
+		y = Math.max(y, -tePos.getY()); //cannot be offset to lower than y = min build height
+		y = Math.min(y, te.getLevel().getMaxBuildHeight() - tePos.getY()); //cannot be offset to higher than y = max build height
 		
 		return new BlockPos(x, y, z);
 	}
@@ -163,16 +195,13 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 	public static BlockPos parseMaxBlockPos(AreaEffectTileEntity te, int x, int y, int z)
 	{
 		BlockPos tePos = te.getBlockPos();
-		int furthestMinX = tePos.getX() - 64;
-		int furthestMinY = tePos.getY() - 64;
-		int furthestMinZ = tePos.getZ() - 64;
-		int furthestMaxX = tePos.getX() + 64;
-		int furthestMaxY = tePos.getY() + 64;
-		int furthestMaxZ = tePos.getZ() + 64;
 		
-		x = Math.min(furthestMaxX, Math.max(x, furthestMinX));
-		y = Math.min(furthestMaxY, Math.max(y, Math.max(furthestMinY, 0))); //TODO change 0 to new bottom height when switching to 1.18
-		z = Math.min(furthestMaxZ, Math.max(z, furthestMinZ));
+		x = Math.min(x, 64);
+		y = Math.min(y, 64);
+		z = Math.min(z, 64);
+		
+		y = Math.max(y, -tePos.getY()); //TODO change -tePos.getY() to new bottom height when switching to 1.18
+		y = Math.min(y, te.getLevel().getMaxBuildHeight() - tePos.getY());
 		
 		return new BlockPos(x, y, z);
 	}
@@ -181,8 +210,8 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 	public void onLoad()
 	{
 		super.onLoad();
-		getMinEffectPos(); //used only to update the boundaries in case they go too far
-		getMaxEffectPos();
+		getMinAreaOffset(); //used only to update the boundaries in case they go too far
+		getMaxAreaOffset();
 	}
 	
 	@Override
@@ -198,15 +227,15 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 		
 		effectAmplifier = compound.getInt("effectAmplifier");
 		
-		int minEffectPosX = compound.getInt("minEffectPosX");
-		int minEffectPosY = compound.getInt("minEffectPosY");
-		int minEffectPosZ = compound.getInt("minEffectPosZ");
-		this.minEffectPos = new BlockPos(minEffectPosX, minEffectPosY, minEffectPosZ);
+		int minAreaOffsetX = compound.getInt("minAreaOffsetX");
+		int minAreaOffsetY = compound.getInt("minAreaOffsetY");
+		int minAreaOffsetZ = compound.getInt("minAreaOffsetZ");
+		this.minAreaOffset = new BlockPos(minAreaOffsetX, minAreaOffsetY, minAreaOffsetZ);
 		
-		int maxEffectPosX = compound.getInt("maxEffectPosX");
-		int maxEffectPosY = compound.getInt("maxEffectPosY");
-		int maxEffectPosZ = compound.getInt("maxEffectPosZ");
-		this.maxEffectPos = new BlockPos(maxEffectPosX, maxEffectPosY, maxEffectPosZ);
+		int maxAreaOffsetX = compound.getInt("maxAreaOffsetX");
+		int maxAreaOffsetY = compound.getInt("maxAreaOffsetY");
+		int maxAreaOffsetZ = compound.getInt("maxAreaOffsetZ");
+		this.maxAreaOffset = new BlockPos(maxAreaOffsetX, maxAreaOffsetY, maxAreaOffsetZ);
 	}
 	
 	@Override
@@ -217,16 +246,16 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 		compound.putInt("effect", Effect.getId(getEffect()));
 		compound.putInt("effectAmplifier", effectAmplifier);
 		
-		getMinEffectPos();
-		getMaxEffectPos();
+		getMinAreaOffset();
+		getMaxAreaOffset();
 		
-		compound.putInt("minEffectPosX", minEffectPos.getX());
-		compound.putInt("minEffectPosY", minEffectPos.getY());
-		compound.putInt("minEffectPosZ", minEffectPos.getZ());
+		compound.putInt("minAreaOffsetX", minAreaOffset.getX());
+		compound.putInt("minAreaOffsetY", minAreaOffset.getY());
+		compound.putInt("minAreaOffsetZ", minAreaOffset.getZ());
 		
-		compound.putInt("maxEffectPosX", maxEffectPos.getX());
-		compound.putInt("maxEffectPosY", maxEffectPos.getY());
-		compound.putInt("maxEffectPosZ", maxEffectPos.getZ());
+		compound.putInt("maxAreaOffsetX", maxAreaOffset.getX());
+		compound.putInt("maxAreaOffsetY", maxAreaOffset.getY());
+		compound.putInt("maxAreaOffsetZ", maxAreaOffset.getZ());
 		
 		return compound;
 	}

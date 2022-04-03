@@ -19,8 +19,8 @@ public class AreaEffectScreen extends Screen
 	private static final int guiWidth = 150;
 	private static final int guiHeight = 98;
 	
-	private static final String minPosMessage = "Min Effect Pos";
-	private static final String maxPosMessage = "Max Effect Pos";
+	private static final String minPosMessage = "Min Pos Facing Offset";
+	private static final String maxPosMessage = "Max Pos Facing Offset";
 	
 	private final AreaEffectTileEntity te;
 	private TextFieldWidget minPosDestinationTextFieldX;
@@ -44,27 +44,27 @@ public class AreaEffectScreen extends Screen
 		int yOffset = (this.height / 2) - (guiHeight / 2);
 		
 		this.minPosDestinationTextFieldX = new TextFieldWidget(this.font, this.width / 2 - 60, yOffset + 15, 40, 20, new StringTextComponent("X value of min effect pos"));
-		this.minPosDestinationTextFieldX.setValue(String.valueOf(te.getMinEffectPos().getX()));
+		this.minPosDestinationTextFieldX.setValue(String.valueOf(te.getMinAreaOffset().getX()));
 		addButton(minPosDestinationTextFieldX);
 		
 		this.minPosDestinationTextFieldY = new TextFieldWidget(this.font, this.width / 2 - 20, yOffset + 15, 40, 20, new StringTextComponent("Y value of min effect pos"));
-		this.minPosDestinationTextFieldY.setValue(String.valueOf(te.getMinEffectPos().getY()));
+		this.minPosDestinationTextFieldY.setValue(String.valueOf(te.getMinAreaOffset().getY()));
 		addButton(minPosDestinationTextFieldY);
 		
 		this.minPosDestinationTextFieldZ = new TextFieldWidget(this.font, this.width / 2 + 20, yOffset + 15, 40, 20, new StringTextComponent("Z value of min effect pos"));
-		this.minPosDestinationTextFieldZ.setValue(String.valueOf(te.getMinEffectPos().getZ()));
+		this.minPosDestinationTextFieldZ.setValue(String.valueOf(te.getMinAreaOffset().getZ()));
 		addButton(minPosDestinationTextFieldZ);
 		
 		this.maxPosDestinationTextFieldX = new TextFieldWidget(this.font, this.width / 2 - 60, yOffset + 50, 40, 20, new StringTextComponent("X value of max effect pos"));
-		this.maxPosDestinationTextFieldX.setValue(String.valueOf(te.getMaxEffectPos().getX()));
+		this.maxPosDestinationTextFieldX.setValue(String.valueOf(te.getMaxAreaOffset().getX()));
 		addButton(maxPosDestinationTextFieldX);
 		
 		this.maxPosDestinationTextFieldY = new TextFieldWidget(this.font, this.width / 2 - 20, yOffset + 50, 40, 20, new StringTextComponent("Y value of max effect pos"));
-		this.maxPosDestinationTextFieldY.setValue(String.valueOf(te.getMaxEffectPos().getY()));
+		this.maxPosDestinationTextFieldY.setValue(String.valueOf(te.getMaxAreaOffset().getY()));
 		addButton(maxPosDestinationTextFieldY);
 		
 		this.maxPosDestinationTextFieldZ = new TextFieldWidget(this.font, this.width / 2 + 20, yOffset + 50, 40, 20, new StringTextComponent("Z value of max effect pos"));
-		this.maxPosDestinationTextFieldZ.setValue(String.valueOf(te.getMaxEffectPos().getZ()));
+		this.maxPosDestinationTextFieldZ.setValue(String.valueOf(te.getMaxAreaOffset().getZ()));
 		addButton(maxPosDestinationTextFieldZ);
 		
 		addButton(new ExtendedButton(this.width / 2 - 20, yOffset + 73, 40, 20, new StringTextComponent("DONE"), button -> finish()));
@@ -92,7 +92,10 @@ public class AreaEffectScreen extends Screen
 		int maxY = parseInt(maxPosDestinationTextFieldY);
 		int maxZ = parseInt(maxPosDestinationTextFieldZ);
 		
-		MSPacketHandler.sendToServer(new AreaEffectPacket(AreaEffectTileEntity.parseMinBlockPos(te, minX, minY, minZ), AreaEffectTileEntity.parseMaxBlockPos(te, maxX, maxY, maxZ), te.getBlockPos()));
+		BlockPos minOffsetPos = new BlockPos(minX, minY, minZ);
+		BlockPos maxOffsetPos = new BlockPos(maxX, maxY, maxZ);
+		
+		MSPacketHandler.sendToServer(new AreaEffectPacket(minOffsetPos, maxOffsetPos, te.getBlockPos()));
 		onClose();
 	}
 	

@@ -297,12 +297,10 @@ public class ServerEventHandler
 	
 	private static void onEffectEnd(LivingEntity entityLiving, Effect effect)
 	{
-		PlayerEntity player = (PlayerEntity) entityLiving;
-		
-		if(player instanceof ServerPlayerEntity)
+		if(entityLiving instanceof ServerPlayerEntity)
 		{
 			if(effect == MSEffects.CREATIVE_SHOCK.get())
-				CreativeShockEffect.onEffectEnd((ServerPlayerEntity) player);
+				CreativeShockEffect.onEffectEnd((ServerPlayerEntity) entityLiving);
 		}
 	}
 	

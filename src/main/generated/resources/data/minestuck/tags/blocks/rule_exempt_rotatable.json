@@ -6,6 +6,7 @@
     "minestuck:xor_gate_block",
     "minestuck:nand_gate_block",
     "minestuck:nor_gate_block",
-    "minestuck:xnor_gate_block"
+    "minestuck:xnor_gate_block",
+    "minestuck:area_effect_block"
   ]
 }

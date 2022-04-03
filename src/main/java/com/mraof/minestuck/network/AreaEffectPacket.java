@@ -37,7 +37,7 @@ public class AreaEffectPacket implements PlayToServerPacket
 	}
 	
 	@Override
-	public void execute(ServerPlayerEntity player) //TODO changes only take place server-side until reloaded, this results in the effect icon being refreshed even without the effects actually taking place
+	public void execute(ServerPlayerEntity player)
 	{
 		if(player.level.isAreaLoaded(tileBlockPos, 0))
 		{
@@ -46,7 +46,7 @@ public class AreaEffectPacket implements PlayToServerPacket
 			{
 				if(Math.sqrt(player.distanceToSqr(tileBlockPos.getX() + 0.5, tileBlockPos.getY() + 0.5, tileBlockPos.getZ() + 0.5)) <= 8)
 				{
-					((AreaEffectTileEntity) te).setMinAndMaxEffectPos(minEffectPos, maxEffectPos);
+					((AreaEffectTileEntity) te).setMinAndMaxEffectPosOffset(minEffectPos, maxEffectPos);
 				}
 			}
 		}
