@@ -88,10 +88,10 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		ShapedRecipeBuilder.shaped(MSBlocks.PINK_STONE_BRICK_SLAB, 6).define('#', MSBlocks.PINK_STONE_BRICKS).pattern("###").unlockedBy("has_pink_stone_bricks", has(MSBlocks.PINK_STONE_BRICKS)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(MSBlocks.BROWN_STONE_BRICK_SLAB, 6).define('#', MSBlocks.BROWN_STONE_BRICKS).pattern("###").unlockedBy("has_brown_stone_bricks", has(MSBlocks.BROWN_STONE_BRICKS)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(MSBlocks.GREEN_STONE_BRICK_SLAB, 6).define('#', MSBlocks.GREEN_STONE_BRICKS).pattern("###").unlockedBy("has_green_stone_bricks", has(MSBlocks.GREEN_STONE_BRICKS)).save(recipeBuilder);
-		ShapedRecipeBuilder.shaped(MSBlocks.SANDSTONE_COLUMN, 3).define('#', Blocks.SANDSTONE).pattern("#").pattern("#").pattern("#").unlockedBy("has_sandstone", has(Items.SANDSTONE)).save(skipAdvancement(recipeBuilder));
-		ShapedRecipeBuilder.shaped(MSBlocks.CHISELED_SANDSTONE_COLUMN, 3).define('#', Blocks.CHISELED_SANDSTONE).pattern("#").pattern("#").pattern("#").unlockedBy("has_chiseled_sandstone", has(Items.CHISELED_SANDSTONE)).save(skipAdvancement(recipeBuilder));
-		ShapedRecipeBuilder.shaped(MSBlocks.RED_SANDSTONE_COLUMN, 3).define('#', Blocks.RED_SANDSTONE).pattern("#").pattern("#").pattern("#").unlockedBy("has_red_sandstone", has(Items.RED_SANDSTONE)).save(skipAdvancement(recipeBuilder));
-		ShapedRecipeBuilder.shaped(MSBlocks.CHISELED_RED_SANDSTONE_COLUMN, 3).define('#', Blocks.CHISELED_RED_SANDSTONE).pattern("#").pattern("#").pattern("#").unlockedBy("has_chiseled_red_sandstone", has(Items.CHISELED_RED_SANDSTONE)).save(skipAdvancement(recipeBuilder));
+		ShapedRecipeBuilder.shaped(MSBlocks.SANDSTONE_COLUMN, 3).define('#', Blocks.SANDSTONE).pattern("#").pattern("#").pattern("#").unlockedBy("has_sandstone", has(Items.SANDSTONE)).save(recipeBuilder);
+		ShapedRecipeBuilder.shaped(MSBlocks.CHISELED_SANDSTONE_COLUMN, 3).define('#', Blocks.CHISELED_SANDSTONE).pattern("#").pattern("#").pattern("#").unlockedBy("has_chiseled_sandstone", has(Items.CHISELED_SANDSTONE)).save(recipeBuilder);
+		ShapedRecipeBuilder.shaped(MSBlocks.RED_SANDSTONE_COLUMN, 3).define('#', Blocks.RED_SANDSTONE).pattern("#").pattern("#").pattern("#").unlockedBy("has_red_sandstone", has(Items.RED_SANDSTONE)).save(recipeBuilder);
+		ShapedRecipeBuilder.shaped(MSBlocks.CHISELED_RED_SANDSTONE_COLUMN, 3).define('#', Blocks.CHISELED_RED_SANDSTONE).pattern("#").pattern("#").pattern("#").unlockedBy("has_chiseled_red_sandstone", has(Items.CHISELED_RED_SANDSTONE)).save(recipeBuilder);
 
 		ShapedRecipeBuilder.shaped(MSBlocks.GLOWING_WOOD, 3).define('#', MSBlocks.GLOWING_LOG).pattern("##").pattern("##").group("bark").unlockedBy("has_log", has(MSTags.Items.GLOWING_LOGS)).save(recipeBuilder);
 		ShapelessRecipeBuilder.shapeless(MSBlocks.GLOWING_PLANKS, 4).requires(MSTags.Items.GLOWING_LOGS).group("planks").unlockedBy("has_log", has(MSTags.Items.GLOWING_LOGS)).save(recipeBuilder);
