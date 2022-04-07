@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#",
+    "#",
+    "#"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:chiseled_red_sandstone"
+    }
+  },
+  "result": {
+    "item": "minestuck:chiseled_red_sandstone_column",
+    "count": 3
+  }
+}

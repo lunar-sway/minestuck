@@ -144,6 +144,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.CHISELED_PINK_STONE_BRICKS, "Chiseled Pink Stone Bricks");
 		add(MSBlocks.CRACKED_PINK_STONE_BRICKS, "Cracked Pink Stone Bricks");
 		add(MSBlocks.MOSSY_PINK_STONE_BRICKS, "Mossy Pink Stone Bricks");
+		add(MSBlocks.PINK_STONE_COLUMN, "Pink Stone Column");
 		add(MSBlocks.BROWN_STONE, "Brown Stone");
 		add(MSBlocks.POLISHED_BROWN_STONE, "Polished Brown Stone");
 		add(MSBlocks.BROWN_STONE_BRICKS, "Brown Stone Bricks");
@@ -167,6 +168,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.GREEN_STONE_BRICK_SALAMANDER_RIGHT, "Green Stone Brick Salamander Right Hieroglyph");
 		add(MSBlocks.GREEN_STONE_BRICK_SKAIA, "Green Stone Brick Skaia Hieroglyph");
 		add(MSBlocks.GREEN_STONE_BRICK_TURTLE, "Green Stone Brick Turtle Hieroglyph");
+		add(MSBlocks.SANDSTONE_COLUMN, "Sandstone Column");
+		add(MSBlocks.CHISELED_SANDSTONE_COLUMN, "Chiseled Sandstone Column");
+		add(MSBlocks.RED_SANDSTONE_COLUMN, "Red Sandstone Column");
+		add(MSBlocks.CHISELED_RED_SANDSTONE_COLUMN, "Chiseled Red Sandstone Column");
 		add(MSBlocks.DENSE_CLOUD, "Dense Cloud");
 		add(MSBlocks.BRIGHT_DENSE_CLOUD, "Bright Dense Cloud");
 		add(MSBlocks.SUGAR_CUBE, "Sugar Cube");

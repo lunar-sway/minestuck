@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:chiseled_sandstone_column"
+  },
+  "grist_cost": {
+    "minestuck:build": 4
+  }
+}

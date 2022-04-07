@@ -659,6 +659,7 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSBlocks.COARSE_END_STONE).grist(BUILD, 4).grist(CAULK, 3).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.CHALK).grist(BUILD, 2).grist(CHALK, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.PINK_STONE).grist(BUILD, 2).grist(MARBLE, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.PINK_STONE_COLUMN).grist(BUILD, 2).grist(MARBLE, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.BROWN_STONE).grist(BUILD, 2).grist(IODINE, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.POLISHED_BROWN_STONE).grist(BUILD, 2).grist(IODINE, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.BROWN_STONE_BRICKS).grist(BUILD, 2).grist(IODINE, 1).build(recipeSaver);
@@ -671,6 +672,11 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSBlocks.CHISELED_GREEN_STONE_BRICKS).grist(BUILD, 2).grist(CAULK, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.HORIZONTAL_GREEN_STONE_BRICKS).grist(BUILD, 2).grist(CAULK, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.VERTICAL_GREEN_STONE_BRICKS).grist(BUILD, 2).grist(CAULK, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.SANDSTONE_COLUMN).grist(BUILD, 4).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.CHISELED_SANDSTONE_COLUMN).grist(BUILD, 4).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.RED_SANDSTONE_COLUMN).grist(BUILD, 4).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.CHISELED_RED_SANDSTONE_COLUMN).grist(BUILD, 4).build(recipeSaver);
+
 		GristCostRecipeBuilder.of(MSBlocks.END_GRASS).grist(BUILD, 4).grist(CAULK, 3).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.FLOWERY_VINE_LOG).grist(BUILD, 7).grist(IODINE, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.FROST_LOG).grist(BUILD, 7).grist(COBALT, 1).build(recipeSaver);

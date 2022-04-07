@@ -1,0 +1,7 @@
+{
+  "parent": "block/cube_column",
+  "textures": {
+    "end": "minestuck:block/sandstone_column_end",
+    "side": "minestuck:block/sandstone_column"
+  }
+}
