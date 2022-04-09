@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:carrot_cake"
+  },
+  "grist_cost": {
+    "minestuck:chalk": 20,
+    "minestuck:amethyst": 10,
+    "minestuck:marble": 5
+  }
+}

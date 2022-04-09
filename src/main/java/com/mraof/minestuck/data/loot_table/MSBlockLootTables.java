@@ -326,6 +326,7 @@ public class MSBlockLootTables extends BlockLootTables
 		add(REVERSE_CAKE, noDrop());
 		add(FUCHSIA_CAKE, noDrop());
 		add(NEGATIVE_CAKE, noDrop());
+		add(CARROT_CAKE, noDrop());
 		
 		dropSelf(PRIMED_TNT);
 		dropSelf(UNSTABLE_TNT);

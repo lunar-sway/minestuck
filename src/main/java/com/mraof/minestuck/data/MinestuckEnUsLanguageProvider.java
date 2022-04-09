@@ -374,6 +374,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.FUCHSIA_CAKE, "Fuchsia Cake");
 		add(MSBlocks.NEGATIVE_CAKE, "Negative Cake");
 		addStore(MSBlocks.FUCHSIA_CAKE, "Fuschia Cake");
+		add(MSBlocks.CARROT_CAKE, "Carrot Cake");
 		add(MSBlocks.PRIMED_TNT, "Primed TNT");
 		add(MSBlocks.UNSTABLE_TNT, "Unstable TNT");
 		add(MSBlocks.INSTANT_TNT, "Instant TNT");

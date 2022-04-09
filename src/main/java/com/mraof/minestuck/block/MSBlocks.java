@@ -198,6 +198,7 @@ public class MSBlocks
 	public static final Block REVERSE_CAKE = getNull();
 	public static final Block FUCHSIA_CAKE = getNull();
 	public static final Block NEGATIVE_CAKE = getNull();
+	public static final Block CARROT_CAKE = getNull();
 	
 	//Explosion and Redstone
 	public static final Block PRIMED_TNT = getNull();
@@ -525,6 +526,7 @@ public class MSBlocks
 		registry.register(new SimpleCakeBlock(AbstractBlock.Properties.of(Material.CAKE).strength(0.5F).sound(SoundType.WOOL), 2, 0.1F, null).setRegistryName("reverse_cake"));
 		registry.register(new SimpleCakeBlock(AbstractBlock.Properties.of(Material.CAKE).strength(0.5F).sound(SoundType.WOOL), 3, 0.5F, player -> {player.addEffect(new EffectInstance(Effects.ABSORPTION, 350, 1));player.addEffect(new EffectInstance(Effects.REGENERATION, 200, 0));}).setRegistryName("fuchsia_cake"));
 		registry.register(new SimpleCakeBlock(AbstractBlock.Properties.of(Material.CAKE).strength(0.5F).sound(SoundType.WOOL), 2, 0.3F, player -> {player.addEffect(new EffectInstance(Effects.BLINDNESS, 300, 0));player.addEffect(new EffectInstance(Effects.INVISIBILITY, 250, 0));}).setRegistryName("negative_cake"));
+		registry.register(new SimpleCakeBlock(AbstractBlock.Properties.of(Material.CAKE).strength(0.5F).sound(SoundType.WOOL), 2, 0.3F, player -> player.addEffect(new EffectInstance(Effects.NIGHT_VISION, 200, 0))).setRegistryName("carrot_cake"));
 		
 		registry.register(new SpecialTNTBlock(AbstractBlock.Properties.of(Material.EXPLOSIVE).strength(0.0F).sound(SoundType.GRASS), true, false, false).setRegistryName("primed_tnt"));
 		registry.register(new SpecialTNTBlock(AbstractBlock.Properties.of(Material.EXPLOSIVE).strength(0.0F).sound(SoundType.GRASS).randomTicks(), false, true, false).setRegistryName("unstable_tnt"));

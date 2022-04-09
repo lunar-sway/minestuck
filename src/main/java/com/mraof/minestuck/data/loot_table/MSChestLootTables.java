@@ -537,6 +537,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(ItemLootEntry.lootTableItem(MSBlocks.BLUE_CAKE).setWeight(3).setQuality(1))
 						.add(ItemLootEntry.lootTableItem(MSBlocks.RED_CAKE).setWeight(3).setQuality(1))
 						.add(ItemLootEntry.lootTableItem(MSBlocks.NEGATIVE_CAKE).setWeight(2).setQuality(1))
+						.add(ItemLootEntry.lootTableItem(MSBlocks.CARROT_CAKE).setWeight(3).setQuality(1))
 						.add(ItemLootEntry.lootTableItem(Items.COOKIE).setWeight(5).setQuality(0).apply(SetCount.setCount(RandomValueRange.between(2, 5))))
 						.add(ItemLootEntry.lootTableItem(MSItems.CANDY_CORN).setWeight(3).setQuality(0)))
 				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantRange.exactly(1))
