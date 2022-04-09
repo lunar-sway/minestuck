@@ -566,6 +566,14 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSItems.IRON_LASS_CHESTPLATE).grist(BUILD, 3500).grist(RUBY, 700).grist(AMBER, 350).grist(URANIUM, 125).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.IRON_LASS_SKIRT).grist(BUILD, 3500).grist(RUBY, 700).grist(AMBER, 350).grist(URANIUM, 125).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.IRON_LASS_SHOES).grist(BUILD, 3500).grist(RUBY, 700).grist(AMBER, 350).grist(URANIUM, 125).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.PROSPIT_CIRCLET).grist(CHALK, 30).grist(AMBER, 5).grist(QUARTZ, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.PROSPIT_SHIRT).grist(CHALK, 45).grist(AMBER, 5).grist(QUARTZ, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.PROSPIT_PANTS).grist(CHALK, 40).grist(AMBER, 5).grist(QUARTZ, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.PROSPIT_SHOES).grist(CHALK, 25).grist(AMBER, 5).grist(QUARTZ, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.DERSE_CIRCLET).grist(CHALK, 30).grist(SHALE, 5).grist(MERCURY, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.DERSE_SHIRT).grist(CHALK, 45).grist(SHALE, 5).grist(MERCURY, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.DERSE_PANTS).grist(CHALK, 40).grist(SHALE, 5).grist(MERCURY, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.DERSE_SHOES).grist(CHALK, 25).grist(SHALE, 5).grist(MERCURY, 1).build(recipeSaver);
 		
 		GristCostRecipeBuilder.of(MSItems.CARDBOARD_TUBE).grist(BUILD, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.GLOWYSTONE_DUST).grist(BUILD, 1).grist(AMBER, 1).build(recipeSaver);

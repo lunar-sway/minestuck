@@ -723,10 +723,10 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.EMERALD_HOE).input(Items.DIAMOND_HOE).or().input(Items.EMERALD).build(consumer);
 		//CombinationRecipeBuilder.of(MSItems.MINE_AND_GRIST).input(Items.DIAMOND_PICKAXE).and().input(MSBlocks.GRIST_WIDGET).build(consumer);
 		
-		Item[] metalHelmets = new Item[] {Items.IRON_HELMET, Items.GOLDEN_HELMET, Items.DIAMOND_HELMET};
-		Item[] metalChestplates = new Item[] {Items.IRON_CHESTPLATE, Items.GOLDEN_CHESTPLATE, Items.DIAMOND_CHESTPLATE};
-		Item[] metalLeggings = new Item[] {Items.IRON_LEGGINGS, Items.GOLDEN_LEGGINGS, Items.DIAMOND_LEGGINGS};
-		Item[] metalBoots = new Item[] {Items.IRON_BOOTS, Items.GOLDEN_BOOTS, Items.DIAMOND_BOOTS};
+		Item[] metalHelmets = new Item[] {Items.IRON_HELMET, Items.GOLDEN_HELMET, Items.NETHERITE_HELMET};
+		Item[] metalChestplates = new Item[] {Items.IRON_CHESTPLATE, Items.GOLDEN_CHESTPLATE, Items.NETHERITE_CHESTPLATE};
+		Item[] metalLeggings = new Item[] {Items.IRON_LEGGINGS, Items.GOLDEN_LEGGINGS, Items.NETHERITE_LEGGINGS};
+		Item[] metalBoots = new Item[] {Items.IRON_BOOTS, Items.GOLDEN_BOOTS, Items.NETHERITE_BOOTS};
 		for(int i = 0; i < metalHelmets.length; i++)	//Two out of three possible for-loops is enough for me
 			for(IItemProvider prismarine : new IItemProvider[]{Items.PRISMARINE_SHARD, Blocks.PRISMARINE})
 			{
@@ -740,6 +740,14 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.IRON_LASS_CHESTPLATE).namedInput(Items.IRON_CHESTPLATE).and().input(MSItems.ENERGY_CORE).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.IRON_LASS_SKIRT).namedInput(Items.IRON_LEGGINGS).and().input(MSItems.ENERGY_CORE).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.IRON_LASS_SHOES).namedInput(Items.IRON_BOOTS).and().input(MSItems.ENERGY_CORE).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.PROSPIT_CIRCLET).namedInput(Items.GOLDEN_HELMET).and().input(MSBlocks.WHITE_CROWN_STAINED_GLASS).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.PROSPIT_SHIRT).namedInput(Items.LEATHER_CHESTPLATE).and().input(MSBlocks.WHITE_CROWN_STAINED_GLASS).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.PROSPIT_PANTS).namedInput(Items.LEATHER_LEGGINGS).and().input(MSBlocks.WHITE_CROWN_STAINED_GLASS).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.PROSPIT_SHOES).namedInput(Items.LEATHER_BOOTS).and().input(MSBlocks.WHITE_CROWN_STAINED_GLASS).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.DERSE_CIRCLET).namedInput(Items.GOLDEN_HELMET).or().input(MSBlocks.BLACK_CROWN_STAINED_GLASS).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.DERSE_SHIRT).namedInput(Items.LEATHER_CHESTPLATE).or().input(MSBlocks.BLACK_CROWN_STAINED_GLASS).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.DERSE_PANTS).namedInput(Items.LEATHER_LEGGINGS).or().input(MSBlocks.BLACK_CROWN_STAINED_GLASS).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.DERSE_SHOES).namedInput(Items.LEATHER_BOOTS).or().input(MSBlocks.BLACK_CROWN_STAINED_GLASS).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSBlocks.PRIMED_TNT).input(Items.TNT).or().input(ItemTags.BUTTONS).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.UNSTABLE_TNT).input(Items.TNT).or().input(Items.REDSTONE_TORCH).build(consumer);
