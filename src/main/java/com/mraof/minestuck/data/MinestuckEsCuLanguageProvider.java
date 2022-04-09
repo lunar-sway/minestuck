@@ -70,7 +70,6 @@ public class MinestuckEsCuLanguageProvider extends MinestuckLanguageProvider
         add(MSBlocks.THOUGHT_DIRT, "Tierra Pensamiento");
         add(MSBlocks.COARSE_STONE, "Piedra Gruesa");
         add(MSBlocks.CHISELED_COARSE_STONE, "Cincelada Piedra Gruesa");
-        add(MSBlocks.POLISHED_COARSE_STONE, "Piedra Gruesa Lisa");
 
 
 

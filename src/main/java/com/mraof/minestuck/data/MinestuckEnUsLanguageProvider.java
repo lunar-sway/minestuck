@@ -118,13 +118,11 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.THOUGHT_DIRT, "Thought Dirt");
 		add(MSBlocks.COARSE_STONE, "Coarse Stone");
 		add(MSBlocks.CHISELED_COARSE_STONE, "Chiseled Coarse Stone");
-		add(MSBlocks.POLISHED_COARSE_STONE, "Smooth Coarse Stone");
 		add(MSBlocks.COARSE_STONE_BRICKS, "Coarse Stone Bricks");
 		add(MSBlocks.COARSE_STONE_COLUMN, "Coarse Stone Column");
 		add(MSBlocks.CHISELED_COARSE_STONE_BRICKS, "Chiseled Coarse Stone Bricks");
 		add(MSBlocks.CRACKED_COARSE_STONE_BRICKS, "Cracked Coarse Stone Bricks");
-		add(MSBlocks.MOSSY_COARSE_STONE_BRICKS, "Mossy Coarse Stone Bricks");
-		add(MSBlocks.FLOWERY_COARSE_STONE_BRICKS, "Flowery Coarse Stone Bricks");
+		add(MSBlocks.MOSSY_COARSE_STONE, "Mossy Coarse Stone");
 		add(MSBlocks.SHADE_STONE, "Shade Stone");
 		add(MSBlocks.SMOOTH_SHADE_STONE, "Smooth Shade Stone");
 		add(MSBlocks.SHADE_BRICKS, "Shade Bricks");
@@ -151,6 +149,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.MYCELIUM_COLUMN, "Mycelium Column");
 		add(MSBlocks.CHISELED_MYCELIUM_BRICKS, "Chiseled Mycelium Bricks");
 		add(MSBlocks.CRACKED_MYCELIUM_BRICKS, "Cracked Mycelium Bricks");
+		add(MSBlocks.MOSSY_MYCELIUM_BRICKS, "Mossy Mycelium Bricks");
+		add(MSBlocks.FLOWERY_MYCELIUM_BRICKS, "Flowery Mycelium Bricks");
 		add(MSBlocks.BLACK_STONE, "Black Stone");
 		add(MSBlocks.POLISHED_BLACK_STONE, "Polished Black Stone");
 		add(MSBlocks.BLACK_COBBLESTONE, "Black Cobblestone");
@@ -338,8 +338,11 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.FLOWERY_MOSSY_STONE_BRICK_STAIRS, "Flowery Mossy Stone Brick Stairs");
 		add(MSBlocks.CHALK_STAIRS, "Chalk Stairs");
 		add(MSBlocks.CHALK_BRICK_STAIRS, "Chalk Brick Stairs");
+		add(MSBlocks.PINK_STONE_STAIRS, "Pink Stone Stairs");
 		add(MSBlocks.PINK_STONE_BRICK_STAIRS, "Pink Stone Brick Stairs");
+		add(MSBlocks.BROWN_STONE_STAIRS, "Brown Stone Stairs");
 		add(MSBlocks.BROWN_STONE_BRICK_STAIRS, "Brown Stone Brick Stairs");
+		add(MSBlocks.GREEN_STONE_STAIRS, "Green Stone Stairs");
 		add(MSBlocks.GREEN_STONE_BRICK_STAIRS, "Green Stone Brick Stairs");
 		add(MSBlocks.RAINBOW_PLANKS_STAIRS, "Rainbow Planks Stairs");
 		add(MSBlocks.END_PLANKS_STAIRS, "End Planks Stairs");
@@ -353,8 +356,11 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.WHITE_CASTLE_BRICK_SLAB, "White Chess Brick Slab");
 		add(MSBlocks.CHALK_SLAB, "Chalk Slab");
 		add(MSBlocks.CHALK_BRICK_SLAB, "Chalk Brick Slab");
+		add(MSBlocks.PINK_STONE_SLAB, "Pink Stone Slab");
 		add(MSBlocks.PINK_STONE_BRICK_SLAB, "Pink Stone Brick Slab");
+		add(MSBlocks.BROWN_STONE_SLAB, "Brown Stone Slab");
 		add(MSBlocks.BROWN_STONE_BRICK_SLAB, "Brown Stone Brick Slab");
+		add(MSBlocks.GREEN_STONE_SLAB, "Green Stone Slab");
 		add(MSBlocks.GREEN_STONE_BRICK_SLAB, "Green Stone Brick Slab");
 		add(MSBlocks.RAINBOW_PLANKS_SLAB, "Rainbow Planks Slab");
 		add(MSBlocks.END_PLANKS_SLAB, "End Planks Slab");

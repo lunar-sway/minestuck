@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minecraft:air"
+          "name": "minestuck:mossy_shade_bricks"
         }
       ],
       "conditions": [

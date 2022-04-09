@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minestuck:mossy_coarse_stone_bricks"
+          "name": "minestuck:green_stone_stairs"
         }
       ],
       "conditions": [

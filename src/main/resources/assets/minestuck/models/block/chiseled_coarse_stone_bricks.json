@@ -2,6 +2,6 @@
   "parent": "block/cube_all",
   "textures":
   {
-    "all": "minestuck:block/minestuck_missingtex"
+    "all": "minestuck:block/chiseled_coarse_stone_bricks"
   }
 }

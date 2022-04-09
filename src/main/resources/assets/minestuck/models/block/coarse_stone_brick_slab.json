@@ -2,8 +2,8 @@
   "parent": "block/slab",
   "textures":
   {
-    "bottom": "minestuck:block/minestuck_missingtex",
-    "top": "minestuck:block/minestuck_missingtex",
-    "side": "minestuck:block/minestuck_missingtex"
+    "bottom": "minestuck:block/coarse_stone_bricks",
+    "top": "minestuck:block/coarse_stone_bricks",
+    "side": "minestuck:block/coarse_stone_bricks"
   }
 }
