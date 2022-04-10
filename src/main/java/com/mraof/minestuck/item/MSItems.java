@@ -586,6 +586,7 @@ public class MSItems
 		registerItemBlock(registry, CRACKED_PINK_STONE_BRICKS, MSItemGroup.LANDS);
 		registerItemBlock(registry, MOSSY_PINK_STONE_BRICKS, MSItemGroup.LANDS);
 		registerItemBlock(registry, POLISHED_PINK_STONE, MSItemGroup.LANDS);
+		registerItemBlock(registry, PINK_STONE_COLUMN, MSItemGroup.LANDS);
 		registerItemBlock(registry, BROWN_STONE, MSItemGroup.LANDS);
 		registerItemBlock(registry, BROWN_STONE_BRICKS, MSItemGroup.LANDS);
 		registerItemBlock(registry, BROWN_STONE_COLUMN, MSItemGroup.LANDS);
@@ -609,6 +610,10 @@ public class MSItems
 		registerItemBlock(registry, GREEN_STONE_BRICK_SALAMANDER_RIGHT, MSItemGroup.MAIN);
 		registerItemBlock(registry, GREEN_STONE_BRICK_SKAIA, MSItemGroup.MAIN);
 		registerItemBlock(registry, GREEN_STONE_BRICK_TURTLE, MSItemGroup.MAIN);
+		registerItemBlock(registry, SANDSTONE_COLUMN, MSItemGroup.LANDS);
+		registerItemBlock(registry, CHISELED_SANDSTONE_COLUMN, MSItemGroup.LANDS);
+		registerItemBlock(registry, RED_SANDSTONE_COLUMN, MSItemGroup.LANDS);
+		registerItemBlock(registry, CHISELED_RED_SANDSTONE_COLUMN, MSItemGroup.LANDS);
 		registerItemBlock(registry, DENSE_CLOUD, MSItemGroup.LANDS);
 		registerItemBlock(registry, BRIGHT_DENSE_CLOUD, MSItemGroup.LANDS);
 		registerItemBlock(registry, SUGAR_CUBE, MSItemGroup.LANDS);
