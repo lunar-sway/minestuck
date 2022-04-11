@@ -80,25 +80,28 @@ public class RetractableSpikesBlock extends Block
 	{
 		super.tick(state, worldIn, pos, random);
 		
-		boolean entityStandingOnBlock = false;
-		AxisAlignedBB checkBB = new AxisAlignedBB(pos);
-		List<LivingEntity> list = worldIn.getEntitiesOfClass(LivingEntity.class, checkBB.move(0, 0.5, 0));
-		if(!list.isEmpty() && !worldIn.isClientSide)
+		if(!worldIn.isClientSide)
 		{
-			for(LivingEntity livingEntity : list)
+			boolean entityStandingOnBlock = false;
+			AxisAlignedBB checkBB = new AxisAlignedBB(pos);
+			List<LivingEntity> list = worldIn.getEntitiesOfClass(LivingEntity.class, checkBB.move(0, 0.5, 0));
+			if(!list.isEmpty())
 			{
-				entityStandingOnBlock = (livingEntity.isOnGround() && !livingEntity.isCrouching());
+				for(LivingEntity livingEntity : list)
+				{
+					entityStandingOnBlock = (livingEntity.isOnGround() && !livingEntity.isCrouching());
+				}
 			}
-		}
-		
-		if((state.getValue(POWERED) && !worldIn.hasNeighborSignal(pos) && !state.getValue(PRESSURE_SENSITIVE)) ||
-				(state.getValue(POWERED) && !entityStandingOnBlock && state.getValue(PRESSURE_SENSITIVE)))
-		{
-			worldIn.setBlock(pos, state.setValue(POWERED, false), Constants.BlockFlags.BLOCK_UPDATE);
-			worldIn.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, 1.2F);
-		} else
-		{
-			worldIn.getBlockTicks().scheduleTick(new BlockPos(pos), this, 20);
+			
+			if((state.getValue(POWERED) && !worldIn.hasNeighborSignal(pos) && !state.getValue(PRESSURE_SENSITIVE)) ||
+					(state.getValue(POWERED) && !worldIn.hasNeighborSignal(pos) && !entityStandingOnBlock && state.getValue(PRESSURE_SENSITIVE)))
+			{
+				worldIn.setBlock(pos, state.setValue(POWERED, false), Constants.BlockFlags.BLOCK_UPDATE);
+				worldIn.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, 1.2F);
+			} else
+			{
+				worldIn.getBlockTicks().scheduleTick(new BlockPos(pos), this, 20);
+			}
 		}
 	}
 	
@@ -108,10 +111,9 @@ public class RetractableSpikesBlock extends Block
 		if(!player.isCrouching() && !CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS))
 		{
 			worldIn.setBlock(pos, state.cycle(PRESSURE_SENSITIVE), Constants.BlockFlags.NOTIFY_NEIGHBORS);
-			if(state.getValue(PRESSURE_SENSITIVE))
-				worldIn.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 1.5F);
-			else
-				worldIn.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 0.5F);
+			float pitch = state.getValue(PRESSURE_SENSITIVE) ? 1.5F : 0.5F;
+			worldIn.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, pitch);
+			
 			return ActionResultType.SUCCESS;
 		}
 		
@@ -153,7 +155,7 @@ public class RetractableSpikesBlock extends Block
 			worldIn.setBlock(pos, state.setValue(POWERED, true), Constants.BlockFlags.BLOCK_UPDATE);
 		}
 		
-		if(steppedOn || state.getValue(POWERED))
+		if(steppedOn || (worldIn.hasNeighborSignal(pos) && !state.getValue(POWERED)))
 		{
 			worldIn.setBlock(pos, state.setValue(POWERED, true), Constants.BlockFlags.BLOCK_UPDATE);
 			worldIn.getBlockTicks().scheduleTick(new BlockPos(pos), this, 20);

@@ -44,7 +44,7 @@ public class StatStorerScreen extends Screen
 	{
 		addButton(typeButton = new ExtendedButton(this.width / 2 - 67, (height - guiHeight) / 2 + 15, 135, 20, new StringTextComponent(activeType.getNameNoSpaces()), button -> changeActiveType()));
 		int yOffset = (this.height / 2) - (guiHeight / 2);
-		this.divideTextField = new TextFieldWidget(this.font, this.width / 2 - 18, yOffset + 50, 40, 18, new StringTextComponent("Divide comparator output strength"));
+		this.divideTextField = new TextFieldWidget(this.font, this.width / 2 - 18, yOffset + 50, 40, 18, new StringTextComponent("Divide comparator output strength")); //TODO make these translatable
 		this.divideTextField.setValue(String.valueOf(te.getDivideValueBy()));
 		addButton(divideTextField);
 		setInitialFocus(divideTextField);
@@ -84,11 +84,10 @@ public class StatStorerScreen extends Screen
 	{
 		try
 		{
-			divideValueBy = Integer.parseInt(divideTextField.getValue());
+			return Integer.parseInt(divideTextField.getValue());
 		} catch(NumberFormatException ignored)
 		{
+			return 0;
 		}
-		
-		return divideValueBy;
 	}
 }

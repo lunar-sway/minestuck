@@ -43,7 +43,7 @@ public class AreaEffectScreen extends Screen
 	{
 		int yOffset = (this.height / 2) - (guiHeight / 2);
 		
-		this.minPosDestinationTextFieldX = new TextFieldWidget(this.font, this.width / 2 - 60, yOffset + 15, 40, 20, new StringTextComponent("X value of min effect pos"));
+		this.minPosDestinationTextFieldX = new TextFieldWidget(this.font, this.width / 2 - 60, yOffset + 15, 40, 20, new StringTextComponent("X value of min effect pos")); //TODO make these translatable
 		this.minPosDestinationTextFieldX.setValue(String.valueOf(te.getMinEffectPos().getX()));
 		addButton(minPosDestinationTextFieldX);
 		

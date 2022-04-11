@@ -29,7 +29,7 @@ import net.minecraftforge.fml.common.Mod;
 public class CreativeShockEffect extends Effect
 {
 	public static final int LIMIT_BLOCK_PLACEMENT_AND_BREAKING = 0;
-	public static final int LIMIT_MACHINE_INTERACTIONS = 1;
+	public static final int LIMIT_MACHINE_INTERACTIONS = 1; //TODO consider moving this to an amplifier of 0 so that it is uniform with player accessibility to vanilla redstone component right click functionality requiring "mayBuild"
 	public static final int LIMIT_MOBILITY_ITEMS = 2;
 	
 	protected CreativeShockEffect()
@@ -41,7 +41,7 @@ public class CreativeShockEffect extends Effect
 	 * Checks whether player has creative shock effect and whether the amplifier is strong enough to limit.
 	 * Will return true if amplifier is equal to or greater than relevant threshold.
 	 */
-	public static boolean doesCreativeShockLimit(PlayerEntity player, int survivalAmplifierThreshold)
+	public static boolean doesCreativeShockLimit(PlayerEntity player, int survivalAmplifierThreshold) //TODO consider an inverted version of this function for the many "!doesCreativeShockLimit" use cases
 	{
 		return doesCreativeShockLimit(player, survivalAmplifierThreshold, survivalAmplifierThreshold + 3);
 	}

@@ -127,7 +127,7 @@ public class TrajectoryBlock extends MSDirectionalBlock
 	@Override
 	public PathNodeType getAiPathNodeType(BlockState state, IBlockReader world, BlockPos pos, @Nullable MobEntity entity)
 	{
-		if((state.getValue(POWER) > UPWARDS_POWER_MIN && state.getValue(FACING) == Direction.UP) || (state.getValue(POWER) > 0 && state.getValue(FACING) != Direction.UP))
+		if((state.getValue(POWER) >= UPWARDS_POWER_MIN && state.getValue(FACING) == Direction.UP) || (state.getValue(POWER) > 0 && state.getValue(FACING) != Direction.UP))
 			return PathNodeType.DANGER_OTHER;
 		else
 			return PathNodeType.WALKABLE;

@@ -770,12 +770,12 @@ public class MSItems
 		registerItemBlock(registry, FALL_PAD, MSItemGroup.MAIN);
 		registerItemBlock(registry, FRAGILE_STONE, MSItemGroup.MAIN);
 		registerItemBlock(registry, RETRACTABLE_SPIKES, MSItemGroup.MAIN);
-		registerItemBlock(registry, AND_GATE_BLOCK); //Logic gates have no item group as they are discordant with the aesthetics and intended mechanics of Minestuck(but are kept for some utility)
-		registerItemBlock(registry, OR_GATE_BLOCK);
-		registerItemBlock(registry, XOR_GATE_BLOCK);
-		registerItemBlock(registry, NAND_GATE_BLOCK);
-		registerItemBlock(registry, NOR_GATE_BLOCK);
-		registerItemBlock(registry, XNOR_GATE_BLOCK);
+		registerItemBlock(registry, AND_GATE_BLOCK, MSItemGroup.LANDS);
+		registerItemBlock(registry, OR_GATE_BLOCK, MSItemGroup.LANDS);
+		registerItemBlock(registry, XOR_GATE_BLOCK, MSItemGroup.LANDS);
+		registerItemBlock(registry, NAND_GATE_BLOCK, MSItemGroup.LANDS);
+		registerItemBlock(registry, NOR_GATE_BLOCK, MSItemGroup.LANDS);
+		registerItemBlock(registry, XNOR_GATE_BLOCK, MSItemGroup.LANDS);
 		
 		registry.register(new CruxtruderItem(MSBlocks.CRUXTRUDER, new Item.Properties().tab(MSItemGroup.MAIN)).setRegistryName("cruxtruder"));
 		registerItemBlock(registry, CRUXTRUDER_LID, MSItemGroup.MAIN);

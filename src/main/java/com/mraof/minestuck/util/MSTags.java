@@ -109,6 +109,7 @@ public class MSTags
 		public static final Tags.IOptionalNamedTag<EntityType<?>> PAWNS = tag("carapacians/pawn");
 		public static final Tags.IOptionalNamedTag<EntityType<?>> BISHOPS = tag("carapacians/bishop");
 		public static final Tags.IOptionalNamedTag<EntityType<?>> ROOKS = tag("carapacians/rook");
+		public static final Tags.IOptionalNamedTag<EntityType<?>> MAGNET_RECEPTIVE = tag("magnet_receptive");
 		
 		private static Tags.IOptionalNamedTag<EntityType<?>> tag(String name)
 		{

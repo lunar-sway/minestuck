@@ -1,13 +1,10 @@
 package com.mraof.minestuck.tileentity.redstone;
 
 import com.mraof.minestuck.block.redstone.ItemMagnetBlock;
-import com.mraof.minestuck.entity.item.GristEntity;
-import com.mraof.minestuck.entity.item.VitalityGelEntity;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
+import com.mraof.minestuck.util.MSTags;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.ExperienceOrbEntity;
-import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
@@ -49,9 +46,9 @@ public class ItemMagnetTileEntity extends TileEntity implements ITickableTileEnt
 			
 			if(powerIn > 0)
 			{
-				Direction blockFacing = level.getBlockState(getBlockPos()).getValue(ItemMagnetBlock.FACING);
-				BlockPos offsetPosClose = getBlockPos().relative(blockFacing);
-				BlockPos offsetPosFar = offsetPosClose.relative(blockFacing, gatherLength);
+				Direction magnetFacing = getBlockState().getValue(ItemMagnetBlock.FACING);
+				BlockPos offsetPosClose = getBlockPos().relative(magnetFacing);
+				BlockPos offsetPosFar = offsetPosClose.relative(magnetFacing, gatherLength);
 				
 				AxisAlignedBB axisalignedbb = new AxisAlignedBB(
 						offsetPosClose.getX() + 0.5, offsetPosClose.getY() + 0.5, offsetPosClose.getZ() + 0.5,
@@ -61,11 +58,11 @@ public class ItemMagnetTileEntity extends TileEntity implements ITickableTileEnt
 				{
 					for(Entity itemEntity : list)
 					{
-						if(itemEntity instanceof GristEntity || itemEntity instanceof VitalityGelEntity || itemEntity instanceof ItemEntity || itemEntity instanceof ExperienceOrbEntity)
+						if(MSTags.EntityTypes.MAGNET_RECEPTIVE.contains(itemEntity.getType()))
 						{
-							Vector3d motionVec3d = new Vector3d(blockFacing.getOpposite().step());
-							motionVec3d.add(itemEntity.getDeltaMovement());
-							itemEntity.setDeltaMovement(motionVec3d.scale(0.2));
+							Direction momentumFromFacing = magnetFacing.getOpposite();
+							Vector3d facingVec = new Vector3d(momentumFromFacing.getStepX(), momentumFromFacing.getStepY(), momentumFromFacing.getStepZ());
+							itemEntity.setDeltaMovement(itemEntity.getDeltaMovement().add(facingVec).scale(0.2));
 						}
 					}
 				}
@@ -73,13 +70,13 @@ public class ItemMagnetTileEntity extends TileEntity implements ITickableTileEnt
 				//particles to give the illusion that small bits of material are being pulled towards the magnet
 				if(level.random.nextInt(6) == 0)
 				{
-					BlockPos randomPosInAABB = offsetPosFar.relative(blockFacing.getOpposite(), level.random.nextInt(Math.abs(offsetPosFar.compareTo(offsetPosClose))));
-					level.addParticle(new BlockParticleData(ParticleTypes.BLOCK, level.getBlockState(randomPosInAABB.relative(Direction.getRandom(level.random)))), randomPosInAABB.getX() + 0.5, randomPosInAABB.getY() + 0.9, randomPosInAABB.getZ() + 0.5, blockFacing.getOpposite().getStepX(), blockFacing.getOpposite().getStepY(), blockFacing.getOpposite().getStepZ());
+					BlockPos randomPosInAABB = offsetPosFar.relative(magnetFacing.getOpposite(), level.random.nextInt(Math.abs(offsetPosFar.compareTo(offsetPosClose))));
+					level.addParticle(new BlockParticleData(ParticleTypes.BLOCK, level.getBlockState(randomPosInAABB.relative(Direction.getRandom(level.random)))), randomPosInAABB.getX() + 0.5, randomPosInAABB.getY() + 0.9, randomPosInAABB.getZ() + 0.5, magnetFacing.getOpposite().getStepX(), magnetFacing.getOpposite().getStepY(), magnetFacing.getOpposite().getStepZ());
 				}
 				if(level.random.nextInt(3) == 0)
 				{
-					BlockPos randomPosInAABB = offsetPosFar.relative(blockFacing.getOpposite(), level.random.nextInt(Math.abs(offsetPosFar.compareTo(offsetPosClose))));
-					level.addParticle(new BlockParticleData(ParticleTypes.BLOCK, level.getBlockState(randomPosInAABB.relative(Direction.getRandom(level.random)))), randomPosInAABB.getX() + 0.5, randomPosInAABB.getY() + 0.9, randomPosInAABB.getZ() + 0.5, blockFacing.getOpposite().getStepX(), blockFacing.getOpposite().getStepY(), blockFacing.getOpposite().getStepZ());
+					BlockPos randomPosInAABB = offsetPosFar.relative(magnetFacing.getOpposite(), level.random.nextInt(Math.abs(offsetPosFar.compareTo(offsetPosClose))));
+					level.addParticle(new BlockParticleData(ParticleTypes.BLOCK, level.getBlockState(randomPosInAABB.relative(Direction.getRandom(level.random)))), randomPosInAABB.getX() + 0.5, randomPosInAABB.getY() + 0.9, randomPosInAABB.getZ() + 0.5, magnetFacing.getOpposite().getStepX(), magnetFacing.getOpposite().getStepY(), magnetFacing.getOpposite().getStepZ());
 				}
 			}
 		}

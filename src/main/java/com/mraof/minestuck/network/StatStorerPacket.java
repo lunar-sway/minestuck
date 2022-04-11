@@ -10,7 +10,7 @@ public class StatStorerPacket implements PlayToServerPacket
 {
 	private final StatStorerTileEntity.ActiveType activeType;
 	private final BlockPos tileBlockPos;
-	private int divideValueBy;
+	private final int divideValueBy;
 	
 	public StatStorerPacket(StatStorerTileEntity.ActiveType activeType, BlockPos tileBlockPos, int divideValueBy)
 	{
@@ -48,8 +48,8 @@ public class StatStorerPacket implements PlayToServerPacket
 				BlockPos tePos = te.getBlockPos();
 				if(Math.sqrt(player.distanceToSqr(tePos.getX() + 0.5, tePos.getY() + 0.5, tePos.getZ() + 0.5)) <= 8)
 				{
-					divideValueBy = Math.max(1, divideValueBy); //should not be able to enter 0 or negative number range
-					((StatStorerTileEntity) te).setActiveTypeAndDivideValue(activeType, divideValueBy);
+					int largestDivideValueBy = Math.max(1, divideValueBy); //should not be able to enter 0 or negative number range
+					((StatStorerTileEntity) te).setActiveTypeAndDivideValue(activeType, largestDivideValueBy);
 				}
 			}
 		}

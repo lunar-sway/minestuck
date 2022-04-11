@@ -45,6 +45,7 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 	
 	public void giveEntitiesEffect()
 	{
+		//TODO improve flow/reduce repetition of code by extracting repetitive components into another function
 		if(getBlockState().getValue(AreaEffectBlock.ALL_MOBS))
 		{
 			for(LivingEntity livingEntity : level.getLoadedEntitiesOfClass(LivingEntity.class, new AxisAlignedBB(minEffectPos, maxEffectPos)))
