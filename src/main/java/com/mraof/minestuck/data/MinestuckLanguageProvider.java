@@ -165,7 +165,7 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
 	{
 		add(result.translationKey(), value);
 	}
-	protected void addDamageMessage(DamageSource key, String value)
+	protected void addDamageMessage(DamageSource key, String value) //TODO consider "death.attack." + key.msgId + ".player"
 	{
 		add("death.attack." + key.getMsgId(), value);
 	}

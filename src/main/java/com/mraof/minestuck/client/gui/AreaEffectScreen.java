@@ -19,7 +19,7 @@ public class AreaEffectScreen extends Screen
 	private static final int guiWidth = 150;
 	private static final int guiHeight = 98;
 	
-	private static final String minPosMessage = "Min Effect Pos";
+	private static final String minPosMessage = "Min Effect Pos"; //TODO make translatable (lang file + translation key)
 	private static final String maxPosMessage = "Max Effect Pos";
 	
 	private final AreaEffectTileEntity te;
