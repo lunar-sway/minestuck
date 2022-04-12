@@ -7,6 +7,7 @@ import net.minecraft.entity.LivingEntity;
 public class DreamerPajamasModel extends BipedModel<LivingEntity>
 {
 	//if making a model from Blockbench, do not include the variables that start with biped(as per Doro and Riotmode's blockbench exports so far). Instead replace those use cases with the public BipedModel variables(such as "rightLeg") and delete the now unused biped variables
+	//TODO figure out if these variables can be rebased on to the model variables
 	private final ModelRenderer RightLeg;
 	private final ModelRenderer LeftLeg;
 	private final ModelRenderer Torso;

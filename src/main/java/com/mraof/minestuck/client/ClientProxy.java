@@ -151,13 +151,14 @@ public class ClientProxy
 	private static void registerArmorModels()
 	{
 		MSItems.CRUMPLY_HAT.setArmorModel(new CrumplyHatModel());
-		MSItems.PROSPIT_CIRCLET.setArmorModel(new DreamerPajamasModel());
-		MSItems.PROSPIT_SHIRT.setArmorModel(new DreamerPajamasModel());
-		MSItems.PROSPIT_PANTS.setArmorModel(new DreamerPajamasModel());
-		MSItems.PROSPIT_SHOES.setArmorModel(new DreamerPajamasModel());
-		MSItems.DERSE_CIRCLET.setArmorModel(new DreamerPajamasModel());
-		MSItems.DERSE_SHIRT.setArmorModel(new DreamerPajamasModel());
-		MSItems.DERSE_PANTS.setArmorModel(new DreamerPajamasModel());
-		MSItems.DERSE_SHOES.setArmorModel(new DreamerPajamasModel());
+		DreamerPajamasModel pajamasModel = new DreamerPajamasModel();
+		MSItems.PROSPIT_CIRCLET.setArmorModel(pajamasModel);
+		MSItems.PROSPIT_SHIRT.setArmorModel(pajamasModel);
+		MSItems.PROSPIT_PANTS.setArmorModel(pajamasModel);
+		MSItems.PROSPIT_SHOES.setArmorModel(pajamasModel);
+		MSItems.DERSE_CIRCLET.setArmorModel(pajamasModel);
+		MSItems.DERSE_SHIRT.setArmorModel(pajamasModel);
+		MSItems.DERSE_PANTS.setArmorModel(pajamasModel);
+		MSItems.DERSE_SHOES.setArmorModel(pajamasModel);
 	}
 }
