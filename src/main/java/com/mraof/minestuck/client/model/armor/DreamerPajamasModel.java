@@ -6,38 +6,41 @@ import net.minecraft.entity.LivingEntity;
 
 public class DreamerPajamasModel extends BipedModel<LivingEntity>
 {
-	//if making a model from Blockbench, do not include the variables that start with biped. Instead replace those instances with the public BipedModel variables
+	//if making a model from Blockbench, do not include the variables that start with biped(as per Doro and Riotmode's blockbench exports so far). Instead replace those use cases with the public BipedModel variables(such as "rightLeg") and delete the now unused biped variables
 	private final ModelRenderer RightLeg;
 	private final ModelRenderer LeftLeg;
 	private final ModelRenderer Torso;
 	private final ModelRenderer RightArm;
 	private final ModelRenderer LeftArm;
-	private final ModelRenderer Head;
+	private final ModelRenderer Headwear;
 	
 	public DreamerPajamasModel()
 	{
-		super(1);
+		super(1); //Does not generate with BlockBench, done manually
 		texWidth = 64;
 		texHeight = 64;
 		
 		rightLeg = new ModelRenderer(this);
 		rightLeg.setPos(0.0F, 12.0F, 0.0F);
 		
+		
 		RightLeg = new ModelRenderer(this);
-		RightLeg.setPos(0.0F, 0.0F, 0.0F);
+		RightLeg.setPos(0.05F, 0.0F, 0.0F); //switch to 0.0F for all if BlockBench changes it, ideally the model should be fixed so it doesnt have to be tweaked to 0.05 in other cases
 		rightLeg.addChild(RightLeg);
-		RightLeg.texOffs(32, 0).addBox(-2.05F, -0.01F, -2.0F, 4.0F, 10F, 4.0F, 0.075F, false); //pant leg
-		RightLeg.texOffs(48, 10).addBox(-2.2F, 10.2F, -2.0F, 4.0F, 2.0F, 4.0F, 0.2F, false); //shoe
+		RightLeg.texOffs(16, 32).addBox(-2.225F, 0.75F, -2.0F, 4.0F, 11.0F, 4.0F, 0.27F, true);
+		RightLeg.texOffs(32, 0).addBox(-2.125F, 0.175F, -2.025F, 4.0F, 11.0F, 4.0F, 0.075F, true);
+		RightLeg.texOffs(48, 10).addBox(-2.2F, 10.2F, -2.0F, 4.0F, 2.0F, 4.0F, 0.2F, false);
 		
 		leftLeg = new ModelRenderer(this);
 		leftLeg.setPos(0.0F, 12.0F, 0.0F);
 		
 		
 		LeftLeg = new ModelRenderer(this);
-		LeftLeg.setPos(0.0F, 0.0F, 0.0F);
+		LeftLeg.setPos(-0.05F, 0.0F, 0.0F); //switch to 0.0F for all if BlockBench changes it
 		leftLeg.addChild(LeftLeg);
-		LeftLeg.texOffs(32, 0).addBox(-1.95F, -0.01F, -2.0F, 4.0F, 10F, 4.0F, 0.075F, false); //pant leg
-		LeftLeg.texOffs(48, 10).addBox(-1.8F, 10.2F, -2.0F, 4.0F, 2.0F, 4.0F, 0.2F, false); //shoe
+		LeftLeg.texOffs(32, 0).addBox(-1.875F, 0.175F, -2.025F, 4.0F, 11.0F, 4.0F, 0.075F, false);
+		LeftLeg.texOffs(16, 32).addBox(-1.775F, 0.75F, -2.0F, 4.0F, 11.0F, 4.0F, 0.27F, false);
+		LeftLeg.texOffs(48, 10).addBox(-1.8F, 10.2F, -2.0F, 4.0F, 2.0F, 4.0F, 0.2F, false);
 		
 		body = new ModelRenderer(this);
 		body.setPos(0.0F, 0.0F, 0.0F);
@@ -49,6 +52,7 @@ public class DreamerPajamasModel extends BipedModel<LivingEntity>
 		Torso.texOffs(0, 16).addBox(-4.0F, 0.0F, -2.0F, 8.0F, 12.0F, 4.0F, 0.1F, false);
 		Torso.texOffs(40, 16).addBox(-4.0F, 0.0F, -2.0F, 8.0F, 12.0F, 4.0F, 0.2F, false);
 		Torso.texOffs(40, 49).addBox(-4.0F, 11.85F, -2.0F, 8.0F, 2.0F, 4.0F, 0.21F, false);
+		Torso.texOffs(40, 58).addBox(-4.0F, 12.1F, -2.0F, 8.0F, 2.0F, 4.0F, 0.19F, false);
 		
 		rightArm = new ModelRenderer(this);
 		rightArm.setPos(-5.0F, 2.0F, 0.0F);
@@ -73,18 +77,12 @@ public class DreamerPajamasModel extends BipedModel<LivingEntity>
 		LeftArm.texOffs(16, 0).addBox(-0.7F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, 0.2F, false);
 		
 		head = new ModelRenderer(this);
-		head.setPos(0.0F, 0.0F, 0.0F);
+		head.setPos(0.0F, 24.0F, 0.0F);
 		
 		
-		Head = new ModelRenderer(this);
-		Head.setPos(0.0F, 0.0F, 0.0F);
-		head.addChild(Head);
-		Head.texOffs(0, 51).addBox(-4.0F, -10.0F, -4.0F, 8.0F, 5.0F, 8.0F, 0.17F, false);
-	}
-	
-	public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
-		modelRenderer.xRot = x;
-		modelRenderer.yRot = y;
-		modelRenderer.zRot = z;
+		Headwear = new ModelRenderer(this);
+		Headwear.setPos(0.0F, 0.0F, 0.0F);
+		head.addChild(Headwear);
+		Headwear.texOffs(0, 51).addBox(-4.0F, -9.0F, -4.0F, 8.0F, 5.0F, 8.0F, 0.17F, false); //by default BlockBench may try to make the second value of .addBox much higher than -9.0F, make sure to tweak this value to get it to the right height
 	}
 }
