@@ -222,7 +222,8 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(ItemLootEntry.lootTableItem(Items.BROWN_MUSHROOM).setWeight(8).setQuality(0).apply(SetCount.setCount(RandomValueRange.between(2, 8))))
 						.add(ItemLootEntry.lootTableItem(Items.RED_MUSHROOM).setWeight(8).setQuality(0).apply(SetCount.setCount(RandomValueRange.between(2, 7))))
 						.add(ItemLootEntry.lootTableItem(Items.SLIME_BALL).setWeight(5).setQuality(0).apply(SetCount.setCount(RandomValueRange.between(1, 5))))
-						.add(ItemLootEntry.lootTableItem(MSItems.FUNGAL_SPORE).setWeight(10).setQuality(0).apply(SetCount.setCount(RandomValueRange.between(6, 11))))));
+						.add(ItemLootEntry.lootTableItem(MSItems.FUNGAL_SPORE).setWeight(10).setQuality(0).apply(SetCount.setCount(RandomValueRange.between(6, 11))))
+						.add(ItemLootEntry.lootTableItem(MSItems.SUSHROOM).setWeight(1).setQuality(0))));
 		
 		lootProcessor.accept(locationFor(LandTypes.HEAT, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
 				.withPool(LootPool.lootPool().name(WEAPONS_POOL).setRolls(ConstantRange.exactly(1))
