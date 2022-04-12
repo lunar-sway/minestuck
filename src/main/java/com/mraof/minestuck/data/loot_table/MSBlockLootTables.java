@@ -132,7 +132,7 @@ public class MSBlockLootTables extends BlockLootTables
 		dropSelf(CRACKED_MYCELIUM_BRICKS);
 		dropSelf(MOSSY_MYCELIUM_BRICKS);
 		dropSelf(FLOWERY_MYCELIUM_BRICKS);
-		dropSelf(BLACK_STONE);
+		add(BLACK_STONE, createSingleItemTableWithSilkTouch(BLACK_STONE, BLACK_COBBLESTONE));
 		dropSelf(BLACK_COBBLESTONE);
 		dropSelf(POLISHED_BLACK_STONE);
 		dropSelf(BLACK_STONE_BRICKS);
