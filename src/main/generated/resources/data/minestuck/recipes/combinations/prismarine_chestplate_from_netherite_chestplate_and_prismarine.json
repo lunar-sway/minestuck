@@ -1,10 +1,10 @@
 {
   "type": "minestuck:combination",
   "input1": {
-    "item": "minecraft:diamond_chestplate"
+    "item": "minecraft:netherite_chestplate"
   },
   "input2": {
-    "item": "minecraft:prismarine_shard"
+    "item": "minecraft:prismarine"
   },
   "mode": "or",
   "output": {

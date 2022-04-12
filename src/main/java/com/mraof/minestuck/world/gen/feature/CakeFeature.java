@@ -37,6 +37,8 @@ public class CakeFeature extends Feature<ProbabilityConfig>
 			cake = MSBlocks.APPLE_CAKE;
 		else if (f < 0.45F)
 			cake = MSBlocks.NEGATIVE_CAKE;
+		else if (f < 0.5F)
+			cake = MSBlocks.CARROT_CAKE;
 		else if(rand.nextFloat() < 0.01)
 			cake = MSBlocks.REVERSE_CAKE;
 		else

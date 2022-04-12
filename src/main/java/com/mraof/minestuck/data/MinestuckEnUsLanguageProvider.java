@@ -206,6 +206,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.CHISELED_SANDSTONE_COLUMN, "Chiseled Sandstone Column");
 		add(MSBlocks.RED_SANDSTONE_COLUMN, "Red Sandstone Column");
 		add(MSBlocks.CHISELED_RED_SANDSTONE_COLUMN, "Chiseled Red Sandstone Column");
+		add(MSBlocks.UNCARVED_WOOD, "Uncarved Wood");
+		addTooltip(MSBlocks.UNCARVED_WOOD, "Woodgrain terrain");
+		add(MSBlocks.CHIPBOARD, "Chipboard");
+		add(MSBlocks.WOOD_SHAVINGS, "Wood Shavings");
 		add(MSBlocks.DENSE_CLOUD, "Dense Cloud");
 		add(MSBlocks.BRIGHT_DENSE_CLOUD, "Bright Dense Cloud");
 		add(MSBlocks.SUGAR_CUBE, "Sugar Cube");
@@ -427,6 +431,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.FUCHSIA_CAKE, "Fuchsia Cake");
 		add(MSBlocks.NEGATIVE_CAKE, "Negative Cake");
 		addStore(MSBlocks.FUCHSIA_CAKE, "Fuschia Cake");
+		add(MSBlocks.CARROT_CAKE, "Carrot Cake");
 		add(MSBlocks.PRIMED_TNT, "Primed TNT");
 		add(MSBlocks.UNSTABLE_TNT, "Unstable TNT");
 		add(MSBlocks.INSTANT_TNT, "Instant TNT");
@@ -533,6 +538,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.SHATTER_BACON, "ShatterBacon");
 		addTooltip(MSItems.SHATTER_BACON, "This thing is so unspeakably greasy you are having a hard time even holding it.");
 		addExtra(MSItems.SHATTER_BACON, OnHitEffect.SORD_DROP_MESSAGE, "The grease caused the ShatterBacon to slip from your grasp!");
+		add(MSItems.SUBTRACTSHUMIDIRE_ZOMORRODNEGATIVE, "SUBTRACTSHUMIDIR-E ZOMORRODNEGATIVE");
 		add(MSItems.DAGGER, "Dagger");
 		add(MSItems.NIFE, "nife.");
 		addExtra(MSItems.NIFE, OnHitEffect.SORD_DROP_MESSAGE, "Whoopsies doopsies you dwopped the nife!!");
@@ -805,9 +811,11 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.IRON_LASS_CHESTPLATE, "Iron Lass Chestplate");
 		add(MSItems.IRON_LASS_SKIRT, "Iron Lass Skirt");
 		add(MSItems.IRON_LASS_SHOES, "Iron Lass Boots");
+		add(MSItems.PROSPIT_CIRCLET, "Prospit Circlet");
 		add(MSItems.PROSPIT_SHIRT, "Prospit Shirt");
 		add(MSItems.PROSPIT_PANTS, "Prospit Pants");
 		add(MSItems.PROSPIT_SHOES, "Prospit Shoes");
+		add(MSItems.DERSE_CIRCLET, "Derse Circlet");
 		add(MSItems.DERSE_SHIRT, "Derse Shirt");
 		add(MSItems.DERSE_PANTS, "Derse Pants");
 		add(MSItems.DERSE_SHOES, "Derse Shoes");
@@ -895,6 +903,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.MOREL_MUSHROOM, "A delicacy amongst both humans and consorts.");
 		addStore(MSItems.MOREL_MUSHROOM, "THE Mushroom");
 		addStoreTooltip(MSItems.MOREL_MUSHROOM, "This is a very rare mushroom-- not many get to see it, much less taste it!");
+		add(MSItems.SUSHROOM, "Sushroom");
+		addTooltip(MSItems.SUSHROOM, "Afungus.");
 		add(MSItems.FRENCH_FRY, "French Fry");
 		add(MSItems.STRAWBERRY_CHUNK, "Strawberry Chunk");
 		addTooltip(MSItems.STRAWBERRY_CHUNK, "It tastes a lot better than it looks.");
