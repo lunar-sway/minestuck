@@ -144,6 +144,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.CHISELED_PINK_STONE_BRICKS, "Chiseled Pink Stone Bricks");
 		add(MSBlocks.CRACKED_PINK_STONE_BRICKS, "Cracked Pink Stone Bricks");
 		add(MSBlocks.MOSSY_PINK_STONE_BRICKS, "Mossy Pink Stone Bricks");
+		add(MSBlocks.PINK_STONE_COLUMN, "Pink Stone Column");
 		add(MSBlocks.BROWN_STONE, "Brown Stone");
 		add(MSBlocks.POLISHED_BROWN_STONE, "Polished Brown Stone");
 		add(MSBlocks.BROWN_STONE_BRICKS, "Brown Stone Bricks");
@@ -167,6 +168,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.GREEN_STONE_BRICK_SALAMANDER_RIGHT, "Green Stone Brick Salamander Right Hieroglyph");
 		add(MSBlocks.GREEN_STONE_BRICK_SKAIA, "Green Stone Brick Skaia Hieroglyph");
 		add(MSBlocks.GREEN_STONE_BRICK_TURTLE, "Green Stone Brick Turtle Hieroglyph");
+		add(MSBlocks.SANDSTONE_COLUMN, "Sandstone Column");
+		add(MSBlocks.CHISELED_SANDSTONE_COLUMN, "Chiseled Sandstone Column");
+		add(MSBlocks.RED_SANDSTONE_COLUMN, "Red Sandstone Column");
+		add(MSBlocks.CHISELED_RED_SANDSTONE_COLUMN, "Chiseled Red Sandstone Column");
 		add(MSBlocks.UNCARVED_WOOD, "Uncarved Wood");
 		addTooltip(MSBlocks.UNCARVED_WOOD, "Woodgrain terrain");
 		add(MSBlocks.CHIPBOARD, "Chipboard");
@@ -712,6 +717,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addTooltip(MSItems.GOLDEN_SPORK, "A spoon and fork with all the awfulness of gold tools? Sign me up!");
 		add(MSItems.BIDENT, "Bident");
 		addTooltip(MSItems.BIDENT, "Double trouble for all your bubble scuffle needs");
+		add(MSItems.EDISONS_FURY, "Edison's Fury");
+		add(MSItems.EDISONS_SERENITY, "Edison's Serenity");
 		add(MSItems.POINTY_STICK, "Pointy Stick");
 		add(MSItems.KNITTING_NEEDLE, "Knitting Needle");
 		add(MSItems.ARTIFUCKER, "Artifucker");

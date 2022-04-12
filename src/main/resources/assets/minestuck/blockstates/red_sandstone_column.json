@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "facing=up":    { "model": "minestuck:block/red_sandstone_column" },
+    "facing=down":  { "model": "minestuck:block/red_sandstone_column"},
+    "facing=east":  { "model": "minestuck:block/red_sandstone_column", "y": 90, "x": 90 },
+    "facing=south": { "model": "minestuck:block/red_sandstone_column", "y": 180, "x": 90 },
+    "facing=west":  { "model": "minestuck:block/red_sandstone_column", "y": 270, "x": 90 },
+    "facing=north": { "model": "minestuck:block/red_sandstone_column", "y": 0, "x": 90 }
+  }
+}
