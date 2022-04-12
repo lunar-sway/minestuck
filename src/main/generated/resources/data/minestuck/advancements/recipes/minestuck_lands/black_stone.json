@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minestuck:black_stone"
+    ]
+  },
+  "criteria": {
+    "has_black_cobblestone": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minestuck:black_cobblestone"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minestuck:black_stone"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_black_cobblestone",
+      "has_the_recipe"
+    ]
+  ]
+}
