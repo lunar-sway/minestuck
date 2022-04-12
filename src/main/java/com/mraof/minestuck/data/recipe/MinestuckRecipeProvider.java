@@ -45,6 +45,9 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		
 		ShapedRecipeBuilder.shaped(MSBlocks.SMOOTH_SHADE_STONE, 4).define('#', MSBlocks.SHADE_STONE).pattern("##").pattern("##").unlockedBy("has_shade_stone", has(MSBlocks.SHADE_STONE)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(MSBlocks.SHADE_BRICKS, 4).define('#', MSBlocks.SMOOTH_SHADE_STONE).pattern("##").pattern("##").unlockedBy("has_smooth_shade_stone", has(MSBlocks.SMOOTH_SHADE_STONE)).save(recipeBuilder);
+		ShapedRecipeBuilder.shaped(MSBlocks.MYCELIUM_BRICKS, 4).define('#', MSBlocks.MYCELIUM_STONE).pattern("##").pattern("##").unlockedBy("has_mycelium_stone", has(MSBlocks.MYCELIUM_STONE)).save(recipeBuilder);
+		ShapedRecipeBuilder.shaped(MSBlocks.CHISELED_MYCELIUM_BRICKS, 4).define('#', MSBlocks.MYCELIUM_BRICKS).pattern("##").pattern("##").unlockedBy("has_mycelium_bricks", has(MSBlocks.MYCELIUM_BRICKS)).save(recipeBuilder);
+		ShapedRecipeBuilder.shaped(MSBlocks.MYCELIUM_COLUMN, 3).define('#', MSBlocks.POLISHED_MYCELIUM_STONE).pattern("#").pattern("#").pattern("#").unlockedBy("has_polished_mycelium", has(MSBlocks.POLISHED_MYCELIUM_STONE)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(MSBlocks.FROST_BRICKS, 4).define('#', MSBlocks.FROST_TILE).pattern("##").pattern("##").unlockedBy("has_frost_tile", has(MSBlocks.FROST_TILE)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(MSBlocks.POLISHED_CHALK, 4).define('#', MSBlocks.CHALK).pattern("##").pattern("##").unlockedBy("has_chalk", has(MSBlocks.CHALK)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(MSBlocks.CHALK_BRICKS, 4).define('#', MSBlocks.POLISHED_CHALK).pattern("##").pattern("##").unlockedBy("has_polished_chalk", has(MSBlocks.POLISHED_CHALK)).save(recipeBuilder);
@@ -70,6 +73,9 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		ShapedRecipeBuilder.shaped(MSBlocks.SHADE_BRICK_STAIRS, 4).define('#', MSBlocks.SHADE_BRICKS).pattern("#  ").pattern("## ").pattern("###").unlockedBy("has_shade_bricks", has(MSBlocks.SHADE_BRICKS)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(MSBlocks.FROST_BRICK_STAIRS, 4).define('#', MSBlocks.FROST_BRICKS).pattern("#  ").pattern("## ").pattern("###").unlockedBy("has_frost_bricks", has(MSBlocks.FROST_BRICKS)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(MSBlocks.CAST_IRON_STAIRS, 4).define('#', MSBlocks.CAST_IRON).pattern("#  ").pattern("## ").pattern("###").unlockedBy("has_cast_iron", has(MSBlocks.CAST_IRON)).save(recipeBuilder);
+		ShapedRecipeBuilder.shaped(MSBlocks.BLACK_STONE_STAIRS, 4).define('#', MSBlocks.BLACK_STONE).pattern("#  ").pattern("## ").pattern("###").unlockedBy("has_black_stone", has(MSBlocks.BLACK_STONE)).save(recipeBuilder);
+		ShapedRecipeBuilder.shaped(MSBlocks.BLACK_STONE_BRICK_STAIRS, 4).define('#', MSBlocks.BLACK_STONE_BRICKS).pattern("#  ").pattern("## ").pattern("###").unlockedBy("has_black_stone_bricks", has(MSBlocks.BLACK_STONE_BRICKS)).save(recipeBuilder);
+		ShapedRecipeBuilder.shaped(MSBlocks.MYCELIUM_STAIRS, 4).define('#', MSBlocks.MYCELIUM_STONE).pattern("#  ").pattern("## ").pattern("###").unlockedBy("has_mycelium_stone", has(MSBlocks.MYCELIUM_STONE)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(MSBlocks.MYCELIUM_BRICK_STAIRS, 4).define('#', MSBlocks.MYCELIUM_BRICKS).pattern("#  ").pattern("## ").pattern("###").unlockedBy("has_mycelium_bricks", has(MSBlocks.MYCELIUM_BRICKS)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(MSBlocks.CHALK_STAIRS, 4).define('#', MSBlocks.CHALK).pattern("#  ").pattern("## ").pattern("###").unlockedBy("has_chalk", has(MSBlocks.CHALK)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(MSBlocks.CHALK_BRICK_STAIRS, 4).define('#', MSBlocks.CHALK_BRICKS).pattern("#  ").pattern("## ").pattern("###").unlockedBy("has_chalk_bricks", has(MSBlocks.CHALK_BRICKS)).save(recipeBuilder);
@@ -85,6 +91,8 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		ShapedRecipeBuilder.shaped(MSBlocks.COARSE_STONE_SLAB, 6).define( '#', MSBlocks.COARSE_STONE).pattern("###").unlockedBy("has_coarse_stone", has(MSBlocks.COARSE_STONE)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(MSBlocks.CHALK_SLAB, 6).define('#', MSBlocks.CHALK).pattern("###").unlockedBy("has_chalk", has(MSBlocks.CHALK)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(MSBlocks.CHALK_BRICK_SLAB, 6).define('#', MSBlocks.CHALK_BRICKS).pattern("###").unlockedBy("has_chalk_bricks", has(MSBlocks.CHALK_BRICKS)).save(recipeBuilder);
+		ShapedRecipeBuilder.shaped(MSBlocks.BLACK_STONE_SLAB, 6).define('#', MSBlocks.BLACK_STONE).pattern("###").unlockedBy("has_black_stone", has(MSBlocks.BLACK_STONE)).save(recipeBuilder);
+		ShapedRecipeBuilder.shaped(MSBlocks.BLACK_STONE_BRICK_SLAB, 6).define('#', MSBlocks.BLACK_STONE_BRICK_SLAB).pattern("###").unlockedBy("has_black_stone_bricks", has(MSBlocks.BLACK_STONE_BRICKS)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(MSBlocks.PINK_STONE_BRICK_SLAB, 6).define('#', MSBlocks.PINK_STONE_BRICKS).pattern("###").unlockedBy("has_pink_stone_bricks", has(MSBlocks.PINK_STONE_BRICKS)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(MSBlocks.BROWN_STONE_BRICK_SLAB, 6).define('#', MSBlocks.BROWN_STONE_BRICKS).pattern("###").unlockedBy("has_brown_stone_bricks", has(MSBlocks.BROWN_STONE_BRICKS)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(MSBlocks.GREEN_STONE_BRICK_SLAB, 6).define('#', MSBlocks.GREEN_STONE_BRICKS).pattern("###").unlockedBy("has_green_stone_bricks", has(MSBlocks.GREEN_STONE_BRICKS)).save(recipeBuilder);
@@ -163,7 +171,9 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		ShapelessRecipeBuilder.shapeless(MSItems.SALAD).requires(Items.BOWL).requires(ItemTags.LEAVES).unlockedBy("has_bowl", has(Items.BOWL)).save(recipeBuilder);
 		
 		ShapelessRecipeBuilder.shapeless(MSBlocks.TRANS_PORTALIZER).requires(MSBlocks.TRANSPORTALIZER).requires(Items.PINK_DYE).requires(Items.LIGHT_BLUE_DYE).unlockedBy("has_transportalizer", has(MSBlocks.TRANSPORTALIZER)).save(recipeBuilder);
-		
+
+		CookingRecipeBuilder.smelting(Ingredient.of(MSBlocks.MYCELIUM_STONE), MSBlocks.POLISHED_MYCELIUM_STONE, 0.1f, 200).unlockedBy("has_mycelium_stone", has(MSBlocks.MYCELIUM_STONE)).save(recipeBuilder);
+		CookingRecipeBuilder.smelting(Ingredient.of(MSBlocks.MYCELIUM_BRICKS), MSBlocks.CRACKED_MYCELIUM_BRICKS, 0.1f, 200).unlockedBy("has_mycelium_bricks", has(MSBlocks.MYCELIUM_BRICKS)).save(recipeBuilder);
 		CookingRecipeBuilder.smelting(Ingredient.of(MSBlocks.PINK_STONE_BRICKS), MSBlocks.CRACKED_PINK_STONE_BRICKS, 0.1F, 200).unlockedBy("has_pink_stone_bricks", has(MSBlocks.PINK_STONE_BRICKS)).save(recipeBuilder);
 		CookingRecipeBuilder.smelting(Ingredient.of(MSBlocks.BROWN_STONE_BRICKS), MSBlocks.CRACKED_BROWN_STONE_BRICKS, 0.1F, 200).unlockedBy("has_brown_stone_bricks", has(MSBlocks.BROWN_STONE_BRICKS)).save(recipeBuilder);
 		CookingRecipeBuilder.smelting(Ingredient.of(MSItems.CAKE_MIX), Blocks.CAKE, 0.0F, 200).unlockedBy("has_cake_mix", has(MSItems.CAKE_MIX)).save(recipeBuilder, new ResourceLocation (Minestuck.MOD_ID, "cake_from_mix"));
