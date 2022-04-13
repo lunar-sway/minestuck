@@ -37,7 +37,7 @@ public class AreaEffectPacket implements PlayToServerPacket
 	}
 	
 	@Override
-	public void execute(ServerPlayerEntity player) //TODO changes only take place server-side until reloaded, this results in the effect icon being refreshed even without the effects actually taking place
+	public void execute(ServerPlayerEntity player)
 	{
 		if(player.level.isAreaLoaded(tileBlockPos, 0))
 		{
