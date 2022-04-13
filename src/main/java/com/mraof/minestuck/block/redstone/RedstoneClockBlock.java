@@ -40,7 +40,7 @@ public class RedstoneClockBlock extends MSDirectionalBlock
 	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
 	{
 		TileEntity tileEntity = worldIn.getBlockEntity(pos);
-		if(tileEntity instanceof RedstoneClockTileEntity)
+		if(tileEntity instanceof RedstoneClockTileEntity) //does not check for creative shock to anticipate use cases in timing puzzle designs
 		{
 			RedstoneClockTileEntity te = (RedstoneClockTileEntity) tileEntity;
 			

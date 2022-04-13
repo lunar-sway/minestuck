@@ -63,13 +63,17 @@ public class WirelessRedstoneTransmitterBlock extends HorizontalBlock
 			TileEntity tileEntity = worldIn.getBlockEntity(pos);
 			if(tileEntity instanceof WirelessRedstoneTransmitterTileEntity)
 			{
-				WirelessRedstoneTransmitterTileEntity te = (WirelessRedstoneTransmitterTileEntity) tileEntity;
+				if(worldIn.isClientSide)
+				{
+					WirelessRedstoneTransmitterTileEntity te = (WirelessRedstoneTransmitterTileEntity) tileEntity;
+					MSScreenFactories.displayWirelessRedstoneTransmitterScreen(te);
+				}
 				
-				MSScreenFactories.displayWirelessRedstoneTransmitterScreen(te);
+				return ActionResultType.SUCCESS;
 			}
 		}
 		
-		return ActionResultType.SUCCESS;
+		return ActionResultType.PASS;
 	}
 	
 	@Nullable

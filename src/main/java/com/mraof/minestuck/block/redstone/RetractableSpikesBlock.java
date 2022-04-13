@@ -44,13 +44,9 @@ public class RetractableSpikesBlock extends Block
 	{
 		if(worldIn.getBlockState(pos).getValue(POWERED) && fallDistance > 3)
 		{
-			if(entityIn instanceof LivingEntity)
-			{
-				entityIn.causeFallDamage(fallDistance, 3);
-			}
-		}
-		
-		super.fallOn(worldIn, pos, entityIn, fallDistance);
+			entityIn.causeFallDamage(fallDistance, 3);
+		} else
+			super.fallOn(worldIn, pos, entityIn, fallDistance);
 	}
 	
 	@Override
@@ -68,7 +64,6 @@ public class RetractableSpikesBlock extends Block
 				double distanceZ = Math.abs(entityIn.getZ() - entityIn.zOld);
 				if(distanceX >= (double) 0.003F || distanceZ >= (double) 0.003F)
 				{
-					//entityIn.makeStuckInBlock(state, new Vector3d(0.3F, 0.9, 0.3F));
 					entityIn.hurt(MSDamageSources.SPIKE, 1.0F); //TODO only activates for players when they take a running jump onto the block, works fine for other mobs
 				}
 			}

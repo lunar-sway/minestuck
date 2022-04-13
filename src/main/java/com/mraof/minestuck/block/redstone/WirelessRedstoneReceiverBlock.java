@@ -1,6 +1,7 @@
 package com.mraof.minestuck.block.redstone;
 
 import com.mraof.minestuck.block.MSProperties;
+import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.tileentity.redstone.WirelessRedstoneReceiverTileEntity;
 import com.mraof.minestuck.util.ParticlesAroundSolidBlock;
 import net.minecraft.block.Block;
@@ -60,7 +61,7 @@ public class WirelessRedstoneReceiverBlock extends HorizontalBlock
 	@SuppressWarnings("deprecation")
 	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
 	{
-		if(!player.isCrouching())
+		if(!player.isCrouching() && !CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS))
 		{
 			worldIn.setBlock(pos, state.cycle(AUTO_RESET), Constants.BlockFlags.NOTIFY_NEIGHBORS);
 			if(state.getValue(AUTO_RESET))

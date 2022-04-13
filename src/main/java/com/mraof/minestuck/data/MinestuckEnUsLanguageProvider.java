@@ -1596,6 +1596,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(LotusFlowerEntity.REGROW, "There are no petals on this plant, maybe it will regrow?");
 		
 		addDamageMessage(MSDamageSources.SPIKE, "%s was filled with too many holes from spikes");
+		addDamageMessageWithKiller(MSDamageSources.SPIKE, "%1$s was caught in a spike trap whilst trying to escape %2$s");
 		
 		add(ConsortMerchantInventory.CANT_AFFORD, "You don't have enough boondollars for that!");
 		add(MessageType.MISSING_ITEM, "You need a %s for that!");
