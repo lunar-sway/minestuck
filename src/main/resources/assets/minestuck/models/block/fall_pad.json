@@ -1,0 +1,8 @@
+{
+    "parent": "block/cube_bottom_top",
+    "textures": {
+        "bottom": "minestuck:block/fall_pad_bottom",
+        "top": "minestuck:block/fall_pad_top",
+        "side": "minestuck:block/fall_pad_side"
+    }
+}

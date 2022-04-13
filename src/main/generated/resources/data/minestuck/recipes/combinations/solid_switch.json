@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:lever"
+  },
+  "input2": {
+    "item": "minecraft:redstone_lamp"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:solid_switch"
+  }
+}

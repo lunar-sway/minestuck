@@ -78,6 +78,7 @@ public class MinestuckBlockTagsProvider extends BlockTagsProvider
 		tag(DIAMOND_ORES).add(PINK_STONE_DIAMOND_ORE);
 		tag(CRUXITE_STORAGE_BLOCKS).add(CRUXITE_BLOCK);
 		tag(END_SAPLING_DIRT).addTag(Tags.Blocks.END_STONES).add(END_GRASS);
+		tag(RULE_EXEMPT_ROTATABLE).add(AND_GATE_BLOCK, OR_GATE_BLOCK, XOR_GATE_BLOCK, NAND_GATE_BLOCK, NOR_GATE_BLOCK, XNOR_GATE_BLOCK);
 	}
 	
 	@Override

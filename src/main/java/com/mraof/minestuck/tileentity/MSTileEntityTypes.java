@@ -3,6 +3,7 @@ package com.mraof.minestuck.tileentity;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.tileentity.machine.*;
+import com.mraof.minestuck.tileentity.redstone.*;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -29,4 +30,13 @@ public class MSTileEntityTypes
 	public static final RegistryObject<TileEntityType<SkaiaPortalTileEntity>> SKAIA_PORTAL = REGISTER.register("skaia_portal", () -> TileEntityType.Builder.of(SkaiaPortalTileEntity::new, MSBlocks.SKAIA_PORTAL).build(null));
 	public static final RegistryObject<TileEntityType<GateTileEntity>> GATE = REGISTER.register("gate", () -> TileEntityType.Builder.of(GateTileEntity::new, MSBlocks.GATE, MSBlocks.RETURN_NODE).build(null));
 	public static final RegistryObject<TileEntityType<CassettePlayerTileEntity>> CASSETTE_PLAYER = REGISTER.register("cassette_player", () -> TileEntityType.Builder.of(CassettePlayerTileEntity::new, MSBlocks.CASSETTE_PLAYER).build(null));
+	public static final RegistryObject<TileEntityType<StatStorerTileEntity>> STAT_STORER = REGISTER.register("stat_storer", () -> TileEntityType.Builder.of(StatStorerTileEntity::new, MSBlocks.STAT_STORER).build(null));
+	public static final RegistryObject<TileEntityType<RemoteObserverTileEntity>> REMOTE_OBSERVER = REGISTER.register("remote_observer", () -> TileEntityType.Builder.of(RemoteObserverTileEntity::new, MSBlocks.REMOTE_OBSERVER).build(null));
+	public static final RegistryObject<TileEntityType<WirelessRedstoneTransmitterTileEntity>> WIRELESS_REDSTONE_TRANSMITTER = REGISTER.register("wireless_redstone_transmitter", () -> TileEntityType.Builder.of(WirelessRedstoneTransmitterTileEntity::new, MSBlocks.WIRELESS_REDSTONE_TRANSMITTER).build(null));
+	public static final RegistryObject<TileEntityType<WirelessRedstoneReceiverTileEntity>> WIRELESS_REDSTONE_RECEIVER = REGISTER.register("wireless_redstone_receiver", () -> TileEntityType.Builder.of(WirelessRedstoneReceiverTileEntity::new, MSBlocks.WIRELESS_REDSTONE_RECEIVER).build(null));
+	public static final RegistryObject<TileEntityType<SummonerTileEntity>> SUMMONER = REGISTER.register("summoner", () -> TileEntityType.Builder.of(SummonerTileEntity::new, MSBlocks.SUMMONER).build(null));
+	public static final RegistryObject<TileEntityType<AreaEffectTileEntity>> AREA_EFFECT = REGISTER.register("area_effect", () -> TileEntityType.Builder.of(AreaEffectTileEntity::new, MSBlocks.AREA_EFFECT_BLOCK).build(null));
+	public static final RegistryObject<TileEntityType<PlatformGeneratorTileEntity>> PLATFORM_GENERATOR = REGISTER.register("platform_generator", () -> TileEntityType.Builder.of(PlatformGeneratorTileEntity::new, MSBlocks.PLATFORM_GENERATOR).build(null));
+	public static final RegistryObject<TileEntityType<ItemMagnetTileEntity>> ITEM_MAGNET = REGISTER.register("item_magnet", () -> TileEntityType.Builder.of(ItemMagnetTileEntity::new, MSBlocks.ITEM_MAGNET).build(null));
+	public static final RegistryObject<TileEntityType<RedstoneClockTileEntity>> REDSTONE_CLOCK = REGISTER.register("redstone_clock", () -> TileEntityType.Builder.of(RedstoneClockTileEntity::new, MSBlocks.REDSTONE_CLOCK).build(null));
 }

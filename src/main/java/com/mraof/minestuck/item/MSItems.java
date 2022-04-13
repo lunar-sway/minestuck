@@ -419,6 +419,7 @@ public class MSItems
 	public static final Item OBSIDIAN_BUCKET = getNull();
 	
 	//Alchemy Items
+	public static final Item PLUTONIUM_CORE = getNull();
 	public static final Item GRIMOIRE = getNull();
 	public static final Item BATTERY = getNull();
 	public static final Item BARBASOL = getNull();
@@ -658,6 +659,7 @@ public class MSItems
 		registerItemBlock(registry, DENSE_CLOUD, MSItemGroup.LANDS);
 		registerItemBlock(registry, BRIGHT_DENSE_CLOUD, MSItemGroup.LANDS);
 		registerItemBlock(registry, SUGAR_CUBE, MSItemGroup.LANDS);
+		registerItemBlock(registry, SPIKES, MSItemGroup.MAIN);
 		
 		registerItemBlock(registry, GLOWING_LOG, MSItemGroup.LANDS);
 		registerItemBlock(registry, FROST_LOG, MSItemGroup.LANDS);
@@ -755,6 +757,7 @@ public class MSItems
 		registerItemBlock(registry, PARCEL_PYXIS, MSItemGroup.LANDS);
 		registerItemBlock(registry, PYXIS_LID, MSItemGroup.LANDS);
 		registerItemBlock(registry, new StoneTabletItem(MSBlocks.STONE_SLAB, new Item.Properties().tab(MSItemGroup.LANDS)));
+		registerItemBlock(registry, NAKAGATOR_STATUE, MSItemGroup.LANDS);
 		
 		registerItemBlock(registry, BLACK_CASTLE_BRICK_STAIRS, MSItemGroup.MAIN);
 		registerItemBlock(registry, DARK_GRAY_CASTLE_BRICK_STAIRS, MSItemGroup.MAIN);
@@ -814,6 +817,32 @@ public class MSItems
 		registerItemBlock(registry, SHADE_SLAB, MSItemGroup.LANDS);
 		registerItemBlock(registry, SHADE_BRICK_SLAB, MSItemGroup.LANDS);
 		
+		registerItemBlock(registry, TRAJECTORY_BLOCK, MSItemGroup.LANDS);
+		registerItemBlock(registry, STAT_STORER, MSItemGroup.LANDS);
+		registerItemBlock(registry, REMOTE_OBSERVER, MSItemGroup.LANDS);
+		registerItemBlock(registry, WIRELESS_REDSTONE_TRANSMITTER, MSItemGroup.MAIN);
+		registerItemBlock(registry, WIRELESS_REDSTONE_RECEIVER, MSItemGroup.MAIN);
+		registerItemBlock(registry, SOLID_SWITCH, MSItemGroup.MAIN);
+		registerItemBlock(registry, VARIABLE_SOLID_SWITCH, MSItemGroup.MAIN);
+		registerItemBlock(registry, ONE_SECOND_INTERVAL_TIMED_SOLID_SWITCH, MSItemGroup.MAIN);
+		registerItemBlock(registry, TWO_SECOND_INTERVAL_TIMED_SOLID_SWITCH, MSItemGroup.MAIN);
+		registerItemBlock(registry, SUMMONER, MSItemGroup.LANDS);
+		registerItemBlock(registry, AREA_EFFECT_BLOCK, MSItemGroup.LANDS);
+		registerItemBlock(registry, PLATFORM_GENERATOR, MSItemGroup.LANDS);
+		registerItemBlock(registry, PLATFORM_RECEPTACLE, MSItemGroup.LANDS);
+		registerItemBlock(registry, ITEM_MAGNET, MSItemGroup.MAIN);
+		registerItemBlock(registry, REDSTONE_CLOCK, MSItemGroup.MAIN);
+		registerItemBlock(registry, ROTATOR, MSItemGroup.MAIN);
+		registerItemBlock(registry, FALL_PAD, MSItemGroup.MAIN);
+		registerItemBlock(registry, FRAGILE_STONE, MSItemGroup.MAIN);
+		registerItemBlock(registry, RETRACTABLE_SPIKES, MSItemGroup.MAIN);
+		registerItemBlock(registry, AND_GATE_BLOCK, MSItemGroup.LANDS);
+		registerItemBlock(registry, OR_GATE_BLOCK, MSItemGroup.LANDS);
+		registerItemBlock(registry, XOR_GATE_BLOCK, MSItemGroup.LANDS);
+		registerItemBlock(registry, NAND_GATE_BLOCK, MSItemGroup.LANDS);
+		registerItemBlock(registry, NOR_GATE_BLOCK, MSItemGroup.LANDS);
+		registerItemBlock(registry, XNOR_GATE_BLOCK, MSItemGroup.LANDS);
+		
 		registry.register(new CruxtruderItem(MSBlocks.CRUXTRUDER, new Item.Properties().tab(MSItemGroup.MAIN)).setRegistryName("cruxtruder"));
 		registerItemBlock(registry, CRUXTRUDER_LID, MSItemGroup.MAIN);
 		registry.register(new MultiblockItem(MSBlocks.TOTEM_LATHE, new Item.Properties().tab(MSItemGroup.MAIN)).setRegistryName("totem_lathe"));
@@ -862,6 +891,7 @@ public class MSItems
 		registerItemBlock(registry, CHESSBOARD, MSItemGroup.MAIN);
 		registerItemBlock(registry, MINI_FROG_STATUE, MSItemGroup.MAIN);
 		registerItemBlock(registry, MINI_WIZARD_STATUE, MSItemGroup.MAIN);
+		registerItemBlock(registry, MINI_TYPHEUS_STATUE, MSItemGroup.MAIN);
 		registerItemBlock(registry, CASSETTE_PLAYER, MSItemGroup.MAIN);
 		
 		registry.register(new MultiblockItem(MSBlocks.LOTUS_TIME_CAPSULE_BLOCK, new Item.Properties().tab(MSItemGroup.MAIN)).setRegistryName("lotus_time_capsule"));
@@ -1134,6 +1164,7 @@ public class MSItems
 		registry.register(new Item(new Item.Properties().tab(MSItemGroup.MAIN)).setRegistryName("raw_cruxite"));
 		registry.register(new Item(new Item.Properties().tab(MSItemGroup.MAIN)).setRegistryName("raw_uranium"));
 		registry.register(new Item(new Item.Properties().tab(MSItemGroup.MAIN)).setRegistryName("energy_core"));
+		registry.register(new Item(new Item.Properties().tab(MSItemGroup.MAIN)).setRegistryName("plutonium_core"));
 		registry.register(new Item(new Item.Properties().tab(MSItemGroup.MAIN)).setRegistryName("sburb_code"));
 		registry.register(new Item(new Item.Properties().tab(MSItemGroup.MAIN)).setRegistryName("computer_parts"));
 		//have to fix Cruxite artifact classes

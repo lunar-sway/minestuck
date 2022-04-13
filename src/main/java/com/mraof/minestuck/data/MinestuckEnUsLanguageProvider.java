@@ -3,6 +3,9 @@ package com.mraof.minestuck.data;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.machine.SendificatorBlock;
+import com.mraof.minestuck.block.redstone.AreaEffectBlock;
+import com.mraof.minestuck.block.redstone.SummonerBlock;
+import com.mraof.minestuck.block.redstone.WirelessRedstoneReceiverBlock;
 import com.mraof.minestuck.client.gui.*;
 import com.mraof.minestuck.client.gui.captchalouge.HashMapSylladexScreen;
 import com.mraof.minestuck.client.gui.captchalouge.SylladexScreen;
@@ -15,6 +18,7 @@ import com.mraof.minestuck.command.argument.*;
 import com.mraof.minestuck.computer.ButtonListProgram;
 import com.mraof.minestuck.computer.SburbClient;
 import com.mraof.minestuck.computer.SburbServer;
+import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.LotusFlowerEntity;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.MessageType;
@@ -36,6 +40,9 @@ import com.mraof.minestuck.skaianet.PredefineData;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
 import com.mraof.minestuck.tileentity.machine.*;
+import com.mraof.minestuck.tileentity.redstone.RedstoneClockTileEntity;
+import com.mraof.minestuck.tileentity.redstone.SummonerTileEntity;
+import com.mraof.minestuck.util.MSDamageSources;
 import com.mraof.minestuck.world.GateHandler;
 import com.mraof.minestuck.world.lands.GristLayerInfo;
 import com.mraof.minestuck.world.lands.LandInfo;
@@ -213,6 +220,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.DENSE_CLOUD, "Dense Cloud");
 		add(MSBlocks.BRIGHT_DENSE_CLOUD, "Bright Dense Cloud");
 		add(MSBlocks.SUGAR_CUBE, "Sugar Cube");
+		add(MSBlocks.SPIKES, "Spikes");
 		add(MSBlocks.GLOWING_LOG, "Glowing Log");
 		add(MSBlocks.FROST_LOG, "Frost Log");
 		add(MSBlocks.RAINBOW_LOG, "Rainbow Log");
@@ -324,6 +332,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.PARCEL_PYXIS, "Parcel Pyxis");
 		addTooltip(MSBlocks.PARCEL_PYXIS, "This doesn't actually seem to do anything");
 		add(MSBlocks.PYXIS_LID, "Parcel Pyxis Lid");
+		add(MSBlocks.NAKAGATOR_STATUE, "Nakagator Statue");
 		add(MSBlocks.BLACK_CASTLE_BRICK_STAIRS, "Black Chess Brick Stairs");
 		add(MSBlocks.DARK_GRAY_CASTLE_BRICK_STAIRS, "Dark Gray Chess Brick Stairs");
 		add(MSBlocks.LIGHT_GRAY_CASTLE_BRICK_STAIRS, "Light Gray Chess Brick Stairs");
@@ -381,6 +390,43 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.SHADE_BRICK_SLAB, "Shade Brick Slab");
 		add(MSBlocks.COARSE_STONE_SLAB, "Coarse Stone Slab");
 		add(MSBlocks.COARSE_STONE_BRICK_SLAB, "Coarse Stone Brick Slab");
+		add(MSBlocks.TRAJECTORY_BLOCK, "Trajectory Block");
+		addTooltip(MSBlocks.TRAJECTORY_BLOCK, "Propels entities in the direction it faces, with an incoming redstone strength modifier.");
+		add(MSBlocks.STAT_STORER, "Stat Storer");
+		addTooltip(MSBlocks.STAT_STORER, "Lets off a redstone signal with the strength of the signal based on the active value type stored.");
+		add(MSBlocks.REMOTE_OBSERVER, "Remote Observer");
+		addTooltip(MSBlocks.REMOTE_OBSERVER, "Lets off a full strength redstone signal if the active condition is met.");
+		add(MSBlocks.WIRELESS_REDSTONE_TRANSMITTER, "Wireless Redstone Transmitter");
+		addTooltip(MSBlocks.WIRELESS_REDSTONE_TRANSMITTER, "Sends a signal to Wireless Redstone Receiver at the input coordinates if the coordinates are loaded.");
+		add(MSBlocks.WIRELESS_REDSTONE_RECEIVER, "Wireless Redstone Receiver");
+		addTooltip(MSBlocks.WIRELESS_REDSTONE_RECEIVER, "Receives signals from Wireless Redstone Transmitters.");
+		add(MSBlocks.SOLID_SWITCH, "Solid Switch");
+		addTooltip(MSBlocks.SOLID_SWITCH, "KACHUNK");
+		add(MSBlocks.VARIABLE_SOLID_SWITCH, "Variable Solid Switch");
+		addTooltip(MSBlocks.VARIABLE_SOLID_SWITCH, "The functionality of a solid switch but throw in the ability to change what redstone power it gives off.");
+		add(MSBlocks.ONE_SECOND_INTERVAL_TIMED_SOLID_SWITCH, "Timed Solid Switch (One Second)");
+		addTooltip(MSBlocks.ONE_SECOND_INTERVAL_TIMED_SOLID_SWITCH, "Loses one value of power every second until it turns off.");
+		add(MSBlocks.TWO_SECOND_INTERVAL_TIMED_SOLID_SWITCH, "Timed Solid Switch (Two Second)");
+		addTooltip(MSBlocks.TWO_SECOND_INTERVAL_TIMED_SOLID_SWITCH, "Loses one value of power every two seconds until it turns off.");
+		add(MSBlocks.SUMMONER, "Summoner");
+		addExtra(MSBlocks.SUMMONER, SummonerBlock.UNTRIGGERABLE_CHANGE_MESSAGE, "Block inactivation after successful summoning now %s.");
+		add(MSBlocks.AREA_EFFECT_BLOCK, "Area Effect Block");
+		addExtra(MSBlocks.AREA_EFFECT_BLOCK, AreaEffectBlock.EFFECT_CHANGE_MESSAGE, "Effect type changed to %s with the amplification strength %s.");
+		add(MSBlocks.PLATFORM_GENERATOR, "Platform Generator");
+		add(MSBlocks.PLATFORM_BLOCK, "Platform Block");
+		add(MSBlocks.PLATFORM_RECEPTACLE, "Platform Receptacle");
+		add(MSBlocks.ITEM_MAGNET, "Item Magnet");
+		add(MSBlocks.REDSTONE_CLOCK, "Redstone Clock");
+		add(MSBlocks.ROTATOR, "Rotator");
+		add(MSBlocks.FALL_PAD, "Fall Pad");
+		add(MSBlocks.FRAGILE_STONE, "Fragile Stone");
+		add(MSBlocks.RETRACTABLE_SPIKES, "Retractable Spikes");
+		add(MSBlocks.AND_GATE_BLOCK, "AND Gate");
+		add(MSBlocks.OR_GATE_BLOCK, "OR Gate");
+		add(MSBlocks.XOR_GATE_BLOCK, "XOR Gate");
+		add(MSBlocks.NAND_GATE_BLOCK, "NAND Gate");
+		add(MSBlocks.NOR_GATE_BLOCK, "NOR Gate");
+		add(MSBlocks.XNOR_GATE_BLOCK, "XNOR Gate");
 		add(MSBlocks.GATE, "Gate");
 		add(MSBlocks.RETURN_NODE, "Return Node");
 		MSBlocks.CRUXTRUDER.forEachBlock(block -> add(block, "Cruxtruder"));
@@ -443,6 +489,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.MINI_FROG_STATUE, "Frog Statue Replica");
 		addStoreTooltip(MSBlocks.MINI_FROG_STATUE, "Some say it's creepy, some say it's cute, others would say it's contraband, so keep it out of sight!");
 		add(MSBlocks.MINI_WIZARD_STATUE, "Small Wizard Statue");
+		add(MSBlocks.MINI_TYPHEUS_STATUE, "Small Denizen Statue"); //Referred to as typheus in all code except name here. Its generic now but more denizen statues may get added
 		add(MSBlocks.GLOWYSTONE_DUST, "Glowystone Dust");
 		add(MSBlocks.OIL, "Oil");
 		add(MSBlocks.BLOOD, "Blood");
@@ -823,7 +870,11 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addExtra(MSItems.BOONDOLLARS, "amount", "Amount: %s");
 		add(MSItems.RAW_CRUXITE, "Raw Cruxite");
 		add(MSItems.RAW_URANIUM, "Uranium Lump");
+		addTooltip(MSItems.RAW_URANIUM, "Is this even safe to be around?");
 		add(MSItems.ENERGY_CORE, "Energy Core");
+		addTooltip(MSItems.ENERGY_CORE, "The power of radiation in a neat little packet.");
+		add(MSItems.PLUTONIUM_CORE, "Plutonium Spatial Core");
+		addTooltip(MSItems.PLUTONIUM_CORE, "It seems to pulse gently, moving its immediate surroundings slightly each time.");
 		add(MSItems.TEMPLE_SCANNER, "Temple Scanner");
 		addExtra(MSItems.TEMPLE_SCANNER, "successMessage", "Closest detected temple around %s blocks away");
 		addExtra(MSItems.TEMPLE_SCANNER, "failMessage", "No temple detected nearby");
@@ -1432,6 +1483,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(LandTypePair.FORMAT, "Land of %s and %s");
 		add(LandInfo.LAND_ENTRY, "Welcome to %s.");
 		
+		addEffect(MSEffects.CREATIVE_SHOCK, "Creative Shock");
+		
 		addStrife(KindAbstratusList.SWORD, "Bladekind");
 		addStrife(KindAbstratusList.BOW, "Bowkind");
 		addStrife(KindAbstratusList.PICKAXE, "Pickaxekind");
@@ -1470,6 +1523,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MiniPunchDesignixTileEntity.TITLE, "Miniature Punch Designix");
 		add(UraniumCookerTileEntity.TITLE, "Cookalyzer");
 		add(GristWidgetTileEntity.TITLE, "GristWidget 12000");
+		add(SummonerTileEntity.SUMMON_TYPE_CHANGE, "Summoned entity type changed to %s.");
+		add(RedstoneClockTileEntity.TIME_CHANGE, "The clock now pulses every %s seconds");
 		add(GuiUtil.NOT_ALCHEMIZABLE, "Not Alchemizable");
 		add(GuiUtil.FREE, "Free!");
 		add(MachineScreen.GO, "GO");
@@ -1519,6 +1574,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(TransportalizerTileEntity.FORBIDDEN_DESTINATION, "Transportalizers have been disabled for the destination dimension.");
 		add(GateHandler.DESTROYED, "The destination gate seems to have been destroyed.");
 		add(GateHandler.MISSING_LAND, "The land this gate leads to does not exist yet!");
+		add(WirelessRedstoneReceiverBlock.NOW_AUTO, "Receiver will now unpower itself automatically.");
+		add(WirelessRedstoneReceiverBlock.NOW_NOT_AUTO, "Receiver will now store the highest input power indefinitely.");
 		add(HashMapModus.MESSAGE, "[HASHMAP] %s %% %s -> %s");
 		add(ButtonListProgram.CLEAR_BUTTON, "Clear message");
 		add(SburbClient.CLOSE_BUTTON, "Disconnect");
@@ -1606,6 +1663,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSKeyHandler.SYLLADEX, "Open Sylladex");
 		
 		add(LotusFlowerEntity.REGROW, "There are no petals on this plant, maybe it will regrow?");
+		
+		addDamageMessage(MSDamageSources.SPIKE, "%s was filled with too many holes from spikes");
+		addDamageMessageWithKiller(MSDamageSources.SPIKE, "%1$s was caught in a spike trap whilst trying to escape %2$s");
 		
 		add(ConsortMerchantInventory.CANT_AFFORD, "You don't have enough boondollars for that!");
 		add(MessageType.MISSING_ITEM, "You need a %s for that!");

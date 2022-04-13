@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "facing=up":    { "model": "minestuck:block/rotator" },
+    "facing=down":  { "model": "minestuck:block/rotator", "y": 0, "x": 180},
+    "facing=east":  { "model": "minestuck:block/rotator", "y": 90, "x": 90 },
+    "facing=south": { "model": "minestuck:block/rotator", "y": 180, "x": 90 },
+    "facing=west":  { "model": "minestuck:block/rotator", "y": 270, "x": 90 },
+    "facing=north": { "model": "minestuck:block/rotator", "y": 0, "x": 90 }
+  }
+}

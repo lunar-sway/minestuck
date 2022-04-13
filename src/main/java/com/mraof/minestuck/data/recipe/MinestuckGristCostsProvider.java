@@ -544,6 +544,13 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSBlocks.PARCEL_PYXIS).grist(BUILD, 25).grist(RUST, 10).grist(MERCURY, 5).grist(CHALK,2).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.PYXIS_LID).grist(BUILD, 2).grist(RUST, 1).build(recipeSaver);
 		
+		GristCostRecipeBuilder.of(MSBlocks.TRAJECTORY_BLOCK).grist(URANIUM, 2).grist(AMBER, 40).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.STAT_STORER).grist(GARNET, 40).grist(MARBLE, 14).grist(DIAMOND, 20).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.REMOTE_OBSERVER).grist(GARNET, 60).grist(MARBLE, 16).grist(AMBER, 10).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.PLATFORM_GENERATOR).grist(TAR, 200).grist(COBALT, 75).grist(AMETHYST, 5).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.FALL_PAD).grist(CAULK, 5).grist(SHALE, 2).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.FRAGILE_STONE).grist(SHALE, 1).build(recipeSaver);
+		
 		GristCostRecipeBuilder.of(MSBlocks.PETRIFIED_LOG).grist(BUILD, 4).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.FROST_PLANKS).grist(BUILD, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.PETRIFIED_GRASS).grist(BUILD, 1).build(recipeSaver);

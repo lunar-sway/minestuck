@@ -1,5 +1,6 @@
 package com.mraof.minestuck.item.weapon;
 
+import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
@@ -31,7 +32,8 @@ public class PropelEffect implements ItemRightClickEffect
 	public ActionResult<ItemStack> onRightClick(World world, PlayerEntity player, Hand hand)
 	{
 		ItemStack itemStack = player.getItemInHand(hand);
-		propelAction(player, itemStack, getVelocityMod(), hand);
+		if(!CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MOBILITY_ITEMS))
+			propelAction(player, itemStack, getVelocityMod(), hand);
 		return ActionResult.pass(itemStack);
 	}
 	

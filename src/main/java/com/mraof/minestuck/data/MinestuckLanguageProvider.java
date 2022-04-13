@@ -11,6 +11,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.data.LanguageProvider;
@@ -163,6 +164,14 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
 	protected void add(MergeResult result, String value)
 	{
 		add(result.translationKey(), value);
+	}
+	protected void addDamageMessage(DamageSource key, String value)
+	{
+		add("death.attack." + key.getMsgId(), value);
+	}
+	protected void addDamageMessageWithKiller(DamageSource key, String value)
+	{
+		add("death.attack." + key.getMsgId() + ".player", value);
 	}
 	/*protected void defaultLandBiomes(LandBiomeSet biomes)
 	{

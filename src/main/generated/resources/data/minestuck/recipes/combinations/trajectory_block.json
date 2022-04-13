@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:powered_rail"
+  },
+  "input2": {
+    "item": "minecraft:slime_block"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:trajectory_block"
+  }
+}

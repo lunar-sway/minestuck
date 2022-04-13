@@ -55,10 +55,15 @@ public class MSPacketHandler
 		registerMessage(AlchemiterPacket.class, AlchemiterPacket::decode);
 		registerMessage(GristWildcardPacket.class, GristWildcardPacket::decode);
 		registerMessage(TransportalizerPacket.class, TransportalizerPacket::decode);
+		registerMessage(AreaEffectPacket.class, AreaEffectPacket::decode);
+		registerMessage(WirelessRedstoneTransmitterPacket.class, WirelessRedstoneTransmitterPacket::decode);
+		registerMessage(StatStorerPacket.class, StatStorerPacket::decode);
+		registerMessage(RemoteObserverPacket.class, RemoteObserverPacket::decode);
 		registerMessage(EffectTogglePacket.class, EffectTogglePacket::decode);
 		registerMessage(StoneTabletPacket.class, StoneTabletPacket::decode);
 		registerMessage(MagicEffectPacket.class, MagicEffectPacket::decode);
 		registerMessage(LotusFlowerPacket.class, LotusFlowerPacket::decode);
+		registerMessage(StopCreativeShockEffectPacket.class, StopCreativeShockEffectPacket::decode);
 	}
 	
 	private static int nextIndex;

@@ -39,6 +39,7 @@ public class MSTags
 		public static final Tags.IOptionalNamedTag<Block> DIAMOND_ORES = tag("ores/diamond");
 		public static final Tags.IOptionalNamedTag<Block> CRUXITE_STORAGE_BLOCKS = tag("storage_blocks/cruxite");
 		public static final Tags.IOptionalNamedTag<Block> END_SAPLING_DIRT = tag("end_sapling_dirt");
+		public static final Tags.IOptionalNamedTag<Block> RULE_EXEMPT_ROTATABLE = tag("rule_exempt_rotatable");
 		
 		private static Tags.IOptionalNamedTag<Block> tag(String name)
 		{
@@ -75,6 +76,7 @@ public class MSTags
 		public static final Tags.IOptionalNamedTag<Item> MODUS_CARD = tag("modus_card");
 		public static final Tags.IOptionalNamedTag<Item> CASSETTES = tag("cassettes");
 		public static final Tags.IOptionalNamedTag<Item> BUGS = tag("bugs");
+		public static final Tags.IOptionalNamedTag<Item> CREATIVE_SHOCK_RIGHT_CLICK_LIMIT = tag("creative_shock_right_click_limit");
 
 		private static Tags.IOptionalNamedTag<Item> tag(String name)
 		{
@@ -107,6 +109,7 @@ public class MSTags
 		public static final Tags.IOptionalNamedTag<EntityType<?>> PAWNS = tag("carapacians/pawn");
 		public static final Tags.IOptionalNamedTag<EntityType<?>> BISHOPS = tag("carapacians/bishop");
 		public static final Tags.IOptionalNamedTag<EntityType<?>> ROOKS = tag("carapacians/rook");
+		public static final Tags.IOptionalNamedTag<EntityType<?>> MAGNET_RECEPTIVE = tag("magnet_receptive");
 		
 		private static Tags.IOptionalNamedTag<EntityType<?>> tag(String name)
 		{

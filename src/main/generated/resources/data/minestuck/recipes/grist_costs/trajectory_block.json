@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:trajectory_block"
+  },
+  "grist_cost": {
+    "minestuck:uranium": 2,
+    "minestuck:amber": 40
+  }
+}

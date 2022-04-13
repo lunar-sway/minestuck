@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "nin",
+    "pep",
+    "nin"
+  ],
+  "key": {
+    "e": {
+      "item": "minestuck:energy_core"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "n": {
+      "item": "minecraft:iron_nugget"
+    },
+    "p": {
+      "item": "minecraft:ender_pearl"
+    }
+  },
+  "result": {
+    "item": "minestuck:plutonium_core"
+  }
+}

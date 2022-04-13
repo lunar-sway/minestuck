@@ -98,6 +98,7 @@ public class BoondollarPricingProvider implements IDataProvider
 		add(CARVING_TOOL, 60, 90);
 		add(MINI_FROG_STATUE, 200, 250);
 		add(MINI_WIZARD_STATUE, 200, 250);
+		add(MINI_TYPHEUS_STATUE, 10000, 12000);
 		add(MSItems.STONE_SLAB, 20, 30);
 		add(THRESH_DVD, 350, 400);
 		add(CREW_POSTER, 350, 400);

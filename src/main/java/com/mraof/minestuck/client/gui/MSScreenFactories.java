@@ -10,6 +10,10 @@ import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
 import com.mraof.minestuck.tileentity.machine.AlchemiterTileEntity;
+import com.mraof.minestuck.tileentity.redstone.AreaEffectTileEntity;
+import com.mraof.minestuck.tileentity.redstone.RemoteObserverTileEntity;
+import com.mraof.minestuck.tileentity.redstone.StatStorerTileEntity;
+import com.mraof.minestuck.tileentity.redstone.WirelessRedstoneTransmitterTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.gui.screen.Screen;
@@ -60,6 +64,26 @@ public class MSScreenFactories
 	public static void displayTransportalizerScreen(TransportalizerTileEntity tileEntity)
 	{
 		Minecraft.getInstance().setScreen(new TransportalizerScreen(tileEntity));
+	}
+	
+	public static void displayAreaEffectScreen(AreaEffectTileEntity tileEntity)
+	{
+		Minecraft.getInstance().setScreen(new AreaEffectScreen(tileEntity));
+	}
+	
+	public static void displayWirelessRedstoneTransmitterScreen(WirelessRedstoneTransmitterTileEntity tileEntity)
+	{
+		Minecraft.getInstance().setScreen(new WirelessRedstoneTransmitterScreen(tileEntity));
+	}
+	
+	public static void displayStatStorerScreen(StatStorerTileEntity tileEntity)
+	{
+		Minecraft.getInstance().setScreen(new StatStorerScreen(tileEntity));
+	}
+	
+	public static void displayRemoteObserverScreen(RemoteObserverTileEntity tileEntity)
+	{
+		Minecraft.getInstance().setScreen(new RemoteObserverScreen(tileEntity));
 	}
 	
 	public static void displayAlchemiterScreen(AlchemiterTileEntity tileEntity)
