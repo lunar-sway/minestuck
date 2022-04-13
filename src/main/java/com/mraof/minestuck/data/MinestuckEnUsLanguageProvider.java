@@ -138,7 +138,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.FROST_COLUMN, "Frost Column");
 		add(MSBlocks.CHISELED_FROST_BRICKS, "Chiseled Frost Bricks");
 		add(MSBlocks.CRACKED_FROST_BRICKS, "Cracked Frost Bricks");
-		add(MSBlocks.MOSSY_FROST_BRICKS, "Mossy Frost Bricks");
+		add(MSBlocks.FLOWERY_FROST_BRICKS, "Flowery Frost Bricks");
 		add(MSBlocks.CAST_IRON, "Cast-Iron");
 		add(MSBlocks.CHISELED_CAST_IRON, "Chiseled Cast-Iron");
 		add(MSBlocks.STEEL_BEAM, "Steel Beam");
@@ -170,7 +170,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.CHALK_BRICKS, "Chalk Bricks");
 		add(MSBlocks.CHALK_COLUMN, "Chalk Column");
 		add(MSBlocks.CHISELED_CHALK_BRICKS, "Chiseled Chalk Bricks");
-		add(MSBlocks.CRACKED_CHALK_BRICKS, "Cracked Chalk Bricks");
+		add(MSBlocks.MOSSY_CHALK_BRICKS, "Mossy Chalk Bricks");
 		add(MSBlocks.FLOWERY_CHALK_BRICKS, "Flowery Chalk Bricks");
 		add(MSBlocks.PINK_STONE, "Pink Stone");
 		add(MSBlocks.POLISHED_PINK_STONE, "Polished Pink Stone");

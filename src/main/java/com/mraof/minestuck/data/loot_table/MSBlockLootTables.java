@@ -119,7 +119,7 @@ public class MSBlockLootTables extends BlockLootTables
 		dropSelf(FROST_COLUMN);
 		dropSelf(CHISELED_FROST_BRICKS);
 		dropSelf(CRACKED_FROST_BRICKS);
-		dropSelf(MOSSY_FROST_BRICKS);
+		dropSelf(FLOWERY_FROST_BRICKS);
 		dropSelf(CAST_IRON);
 		dropSelf(CHISELED_CAST_IRON);
 		dropSelf(STEEL_BEAM);
@@ -151,7 +151,7 @@ public class MSBlockLootTables extends BlockLootTables
 		dropSelf(CHALK_BRICKS);
 		dropSelf(CHALK_COLUMN);
 		dropSelf(CHISELED_CHALK_BRICKS);
-		dropSelf(CRACKED_CHALK_BRICKS);
+		dropSelf(MOSSY_CHALK_BRICKS);
 		dropSelf(FLOWERY_CHALK_BRICKS);
 		dropSelf(PINK_STONE);
 		dropSelf(POLISHED_PINK_STONE);

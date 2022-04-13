@@ -584,7 +584,7 @@ public class MSItems
 		registerItemBlock(registry, FROST_COLUMN, MSItemGroup.LANDS);
 		registerItemBlock(registry, CHISELED_FROST_BRICKS, MSItemGroup.LANDS);
 		registerItemBlock(registry, CRACKED_FROST_BRICKS, MSItemGroup.LANDS);
-		registerItemBlock(registry, MOSSY_FROST_BRICKS, MSItemGroup.LANDS);
+		registerItemBlock(registry, FLOWERY_FROST_BRICKS, MSItemGroup.LANDS);
 		registerItemBlock(registry, CAST_IRON, MSItemGroup.LANDS);
 		registerItemBlock(registry, CHISELED_CAST_IRON, MSItemGroup.LANDS);
 		registerItemBlock(registry, STEEL_BEAM, MSItemGroup.LANDS);
@@ -616,7 +616,7 @@ public class MSItems
 		registerItemBlock(registry, CHALK_BRICKS, MSItemGroup.LANDS);
 		registerItemBlock(registry, CHALK_COLUMN, MSItemGroup.LANDS);
 		registerItemBlock(registry, CHISELED_CHALK_BRICKS, MSItemGroup.LANDS);
-		registerItemBlock(registry, CRACKED_CHALK_BRICKS, MSItemGroup.LANDS);
+		registerItemBlock(registry, MOSSY_CHALK_BRICKS, MSItemGroup.LANDS);
 		registerItemBlock(registry, FLOWERY_CHALK_BRICKS, MSItemGroup.LANDS);
 		registerItemBlock(registry, PINK_STONE, MSItemGroup.LANDS);
 		registerItemBlock(registry, PINK_STONE_BRICKS, MSItemGroup.LANDS);
