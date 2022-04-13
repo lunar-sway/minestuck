@@ -48,23 +48,6 @@ public class TrajectoryBlock extends MSDirectionalBlock
 	}
 	
 	@Override
-	public void updateEntityAfterFallOn(IBlockReader worldIn, Entity entityIn)
-	{
-		if(entityIn.isSuppressingBounce())
-		{
-			super.updateEntityAfterFallOn(worldIn, entityIn);
-		} else
-		{
-			Vector3d entityMotion = entityIn.getDeltaMovement();
-			
-			if(entityMotion.y < 0.0D)
-			{
-				entityIn.setDeltaMovement(entityMotion.x, -entityMotion.y * 0.1D, entityMotion.z); //intended to reset player's falling momentum
-			}
-		}
-	}
-	
-	@Override
 	public void stepOn(World worldIn, BlockPos pos, Entity entityIn)
 	{
 		super.stepOn(worldIn, pos, entityIn);
