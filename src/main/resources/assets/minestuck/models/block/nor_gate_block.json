@@ -4,10 +4,10 @@
         "back": "minestuck:block/logic_gate_back",
         "right_side": "minestuck:block/logic_gate_right_side",
         "left_side": "minestuck:block/logic_gate_left_side",
-        "top": "minestuck:block/nor_gate_top",
+        "top": "minestuck:block/redstone_machine_block",
         "bottom": "minestuck:block/redstone_machine_block",
-        "front": "minestuck:block/logic_gate_front",
-        "particle": "minestuck:block/nor_gate_top"
+        "front": "minestuck:block/nor_gate",
+        "particle": "minestuck:block/nor_gate"
     },
     "elements": [
         {   "from": [ 0, 0, 0 ],
