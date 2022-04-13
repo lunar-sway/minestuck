@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minestuck:chiseled_sandstone_column"
+    ]
+  },
+  "criteria": {
+    "has_chiseled_sandstone": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:chiseled_sandstone"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minestuck:chiseled_sandstone_column"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_chiseled_sandstone",
+      "has_the_recipe"
+    ]
+  ]
+}

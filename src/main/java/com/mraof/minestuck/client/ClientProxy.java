@@ -5,6 +5,7 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.client.model.*;
 import com.mraof.minestuck.client.model.armor.CrumplyHatModel;
+import com.mraof.minestuck.client.model.armor.DreamerPajamasModel;
 import com.mraof.minestuck.client.renderer.entity.*;
 import com.mraof.minestuck.client.renderer.entity.frog.FrogRenderer;
 import com.mraof.minestuck.client.renderer.tileentity.GateRenderer;
@@ -156,6 +157,15 @@ public class ClientProxy
 	private static void registerArmorModels()
 	{
 		MSItems.CRUMPLY_HAT.setArmorModel(new CrumplyHatModel());
+		DreamerPajamasModel pajamasModel = new DreamerPajamasModel();
+		MSItems.PROSPIT_CIRCLET.setArmorModel(pajamasModel);
+		MSItems.PROSPIT_SHIRT.setArmorModel(pajamasModel);
+		MSItems.PROSPIT_PANTS.setArmorModel(pajamasModel);
+		MSItems.PROSPIT_SHOES.setArmorModel(pajamasModel);
+		MSItems.DERSE_CIRCLET.setArmorModel(pajamasModel);
+		MSItems.DERSE_SHIRT.setArmorModel(pajamasModel);
+		MSItems.DERSE_PANTS.setArmorModel(pajamasModel);
+		MSItems.DERSE_SHOES.setArmorModel(pajamasModel);
 	}
 	
 	/**
