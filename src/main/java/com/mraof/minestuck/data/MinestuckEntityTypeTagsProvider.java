@@ -3,6 +3,7 @@ package com.mraof.minestuck.data;
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.EntityTypeTagsProvider;
+import net.minecraft.entity.EntityType;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 import javax.annotation.Nullable;
@@ -29,6 +30,7 @@ public class MinestuckEntityTypeTagsProvider extends EntityTypeTagsProvider
 		tag(PAWNS).add(DERSITE_PAWN, PROSPITIAN_PAWN);
 		tag(BISHOPS).add(DERSITE_BISHOP, PROSPITIAN_BISHOP);
 		tag(ROOKS).add(DERSITE_ROOK, PROSPITIAN_ROOK);
+		tag(MAGNET_RECEPTIVE).add(GRIST, VITALITY_GEL, EntityType.ITEM, EntityType.EXPERIENCE_ORB);
 	}
 	
 	@Override

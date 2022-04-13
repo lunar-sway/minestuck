@@ -15,7 +15,7 @@ import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
 
 public class TransportalizerScreen extends Screen
 {
-	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/transportalizer.png");
+	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/generic_small.png");
 
 	private static final int guiWidth = 126;
 	private static final int guiHeight = 98;

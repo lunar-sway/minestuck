@@ -1,5 +1,6 @@
 package com.mraof.minestuck.item.weapon;
 
+import com.mraof.minestuck.effects.CreativeShockEffect;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -9,8 +10,7 @@ import net.minecraft.entity.projectile.FireballEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.*;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -89,7 +89,7 @@ public interface ItemRightClickEffect
 	
 	static ItemRightClickEffect extinguishFire(int mod)
 	{
-		return (world, player, hand) -> {
+		return withoutCreativeShock((world, player, hand) -> {
 			ItemStack itemStackIn = player.getItemInHand(hand);
 			
 			if(!world.isClientSide)
@@ -107,7 +107,7 @@ public interface ItemRightClickEffect
 				}
 				
 				AxisAlignedBB axisalignedbb = player.getBoundingBox().inflate(2 * mod, mod, 2 * mod);
-				List<LivingEntity> list = player.level.getEntitiesOfClass(LivingEntity.class, axisalignedbb);
+				List<LivingEntity> list = player.getCommandSenderWorld().getEntitiesOfClass(LivingEntity.class, axisalignedbb);
 				for(LivingEntity livingentity : list)
 				{
 					if(livingentity.getRemainingFireTicks() > 0)
@@ -122,34 +122,62 @@ public interface ItemRightClickEffect
 				itemStackIn.hurtAndBreak(1, player, playerEntity -> playerEntity.broadcastBreakEvent(Hand.MAIN_HAND));
 			}
 			return ActionResult.pass(itemStackIn);
-		};
+		});
 	}
 	
 	static ItemRightClickEffect absorbFluid(Supplier<Block> fluidBlock, Supplier<Item> otherItem)
 	{
-		return (world, player, hand) -> {
-			Vector3d eyePos = player.getEyePosition(1.0F);
-			Vector3d lookVec = player.getLookAngle();
-			BlockState state;
+		return withoutCreativeShock((world, player, hand) -> {
 			ItemStack itemStack = player.getItemInHand(hand);
 			
-			for(int step = 0; step < player.getAttribute(ForgeMod.REACH_DISTANCE.get()).getValue() * 10; step++) //raytraces from the players current eye position to the maximum their reach distance allows
+			BlockRayTraceResult blockraytraceresult = getPlayerPOVHitResult(world, player);
+			BlockPos rayTracedPos = blockraytraceresult.getBlockPos();
+			
+			if(blockraytraceresult.getType() == RayTraceResult.Type.BLOCK && world.getBlockState(rayTracedPos).getBlock() == fluidBlock.get())
 			{
-				Vector3d vecPos = eyePos.add(lookVec.scale(step / 10D));
-				BlockPos blockPos = new BlockPos(vecPos);
-				state = world.getBlockState(blockPos);
-				
-				if(state.getBlock() == fluidBlock.get() && state.getFluidState().isSource()) //may cause error if fed non-fluid "fluidBlock" parameter
-				{
-					world.setBlockAndUpdate(blockPos, Blocks.AIR.defaultBlockState());
-					ItemStack newItem = new ItemStack(otherItem.get(), itemStack.getCount());
-					newItem.setTag(itemStack.getTag()); //It is important that the item it is switching to has the same durability
-					world.playSound(null, blockPos, SoundEvents.BUCKET_FILL, SoundCategory.BLOCKS, 1F, 2F);
-					player.getCooldowns().addCooldown(otherItem.get(), 5);
-					return ActionResult.success(newItem);
-				}
+				world.setBlockAndUpdate(rayTracedPos, Blocks.AIR.defaultBlockState());
+				ItemStack newItem = new ItemStack(otherItem.get(), itemStack.getCount());
+				newItem.setTag(itemStack.getTag()); //It is important that the item it is switching to has the same durability
+				world.playSound(null, rayTracedPos, SoundEvents.BUCKET_FILL, SoundCategory.BLOCKS, 1F, 2F);
+				player.getCooldowns().addCooldown(otherItem.get(), 5);
+				return ActionResult.success(newItem);
 			}
+			
 			return ActionResult.fail(itemStack);
+		});
+	}
+	
+	//based on the Item class function of the same name
+	static BlockRayTraceResult getPlayerPOVHitResult(World world, PlayerEntity playerEntity)
+	{
+		float xRot = playerEntity.xRot;
+		float yRot = playerEntity.yRot;
+		Vector3d eyeVec = playerEntity.getEyePosition(1.0F);
+		float f2 = MathHelper.cos(-yRot * ((float) Math.PI / 180F) - (float) Math.PI);
+		float f3 = MathHelper.sin(-yRot * ((float) Math.PI / 180F) - (float) Math.PI);
+		float f4 = -MathHelper.cos(-xRot * ((float) Math.PI / 180F));
+		float yComponent = MathHelper.sin(-xRot * ((float) Math.PI / 180F));
+		float xComponent = f3 * f4;
+		float zComponent = f2 * f4;
+		double reachDistance = playerEntity.getAttribute(ForgeMod.REACH_DISTANCE.get()).getValue();
+		Vector3d endVec = eyeVec.add((double) xComponent * reachDistance, (double) yComponent * reachDistance, (double) zComponent * reachDistance);
+		return world.clip(new RayTraceContext(eyeVec, endVec, RayTraceContext.BlockMode.OUTLINE, RayTraceContext.FluidMode.SOURCE_ONLY, playerEntity));
+	}
+	
+	/**
+	 * Prevents effect from working if the entity is subject to the effects of creative shock
+	 */
+	static ItemRightClickEffect withoutCreativeShock(ItemRightClickEffect effect) //TODO action result for client side may not work
+	{
+		return (world, player, hand) -> {
+			ItemStack itemStackIn = player.getItemInHand(hand);
+			
+			if(!CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_BLOCK_PLACEMENT_AND_BREAKING))
+			{
+				return effect.onRightClick(world, player, hand);
+			}
+			
+			return ActionResult.pass(itemStackIn);
 		};
 	}
 	

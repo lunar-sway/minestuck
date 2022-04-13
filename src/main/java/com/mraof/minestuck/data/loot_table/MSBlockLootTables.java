@@ -159,6 +159,7 @@ public class MSBlockLootTables extends BlockLootTables
 		dropSelf(DENSE_CLOUD);
 		dropSelf(BRIGHT_DENSE_CLOUD);
 		dropSelf(SUGAR_CUBE);
+		dropSelf(SPIKES);
 		
 		dropSelf(GLOWING_LOG);
 		dropSelf(FROST_LOG);
@@ -258,6 +259,7 @@ public class MSBlockLootTables extends BlockLootTables
 		dropSelf(PARCEL_PYXIS);
 		dropSelf(PYXIS_LID);
 		add(STONE_SLAB, MSBlockLootTables::droppingWithTEItem);
+		dropSelf(NAKAGATOR_STATUE);
 		
 		dropSelf(BLACK_CASTLE_BRICK_STAIRS);
 		dropSelf(DARK_GRAY_CASTLE_BRICK_STAIRS);
@@ -298,6 +300,33 @@ public class MSBlockLootTables extends BlockLootTables
 		dropSelf(FROST_BRICK_SLAB);
 		dropSelf(SHADE_BRICK_SLAB);
 		dropSelf(COARSE_STONE_SLAB);
+		
+		dropSelf(TRAJECTORY_BLOCK);
+		dropSelf(STAT_STORER);
+		dropSelf(REMOTE_OBSERVER);
+		dropSelf(WIRELESS_REDSTONE_TRANSMITTER);
+		dropSelf(WIRELESS_REDSTONE_RECEIVER);
+		dropSelf(SOLID_SWITCH);
+		dropSelf(VARIABLE_SOLID_SWITCH);
+		dropSelf(ONE_SECOND_INTERVAL_TIMED_SOLID_SWITCH);
+		dropSelf(TWO_SECOND_INTERVAL_TIMED_SOLID_SWITCH);
+		add(SUMMONER, noDrop());
+		add(AREA_EFFECT_BLOCK, noDrop());
+		dropSelf(PLATFORM_GENERATOR);
+		add(PLATFORM_BLOCK, noDrop());
+		dropSelf(PLATFORM_RECEPTACLE);
+		dropSelf(ITEM_MAGNET);
+		dropSelf(REDSTONE_CLOCK);
+		dropSelf(ROTATOR);
+		dropSelf(FALL_PAD);
+		dropSelf(FRAGILE_STONE);
+		dropSelf(RETRACTABLE_SPIKES);
+		dropSelf(AND_GATE_BLOCK);
+		dropSelf(OR_GATE_BLOCK);
+		dropSelf(XOR_GATE_BLOCK);
+		dropSelf(NAND_GATE_BLOCK);
+		dropSelf(NOR_GATE_BLOCK);
+		dropSelf(XNOR_GATE_BLOCK);
 		
 		dropSelf(HOLOPAD);
 		dropSelf(CRUXTRUDER_LID);
@@ -343,6 +372,7 @@ public class MSBlockLootTables extends BlockLootTables
 		dropSelf(CHESSBOARD);
 		dropSelf(MINI_FROG_STATUE);
 		dropSelf(MINI_WIZARD_STATUE);
+		dropSelf(MINI_TYPHEUS_STATUE);
 		dropSelf(CASSETTE_PLAYER);
 		dropSelf(GLOWYSTONE_DUST);
 	}

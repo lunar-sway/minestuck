@@ -1,5 +1,6 @@
 package com.mraof.minestuck.item.weapon;
 
+import com.mraof.minestuck.effects.CreativeShockEffect;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -20,7 +21,7 @@ public interface RightClickBlockEffect
 	
 	static RightClickBlockEffect placeFluid(Supplier<Block> fluidBlock, Supplier<Item> otherItem)
 	{
-		return (context) -> {
+		return withoutCreativeShock((context) -> {
 			World worldIn = context.getLevel();
 			PlayerEntity player = context.getPlayer();
 			ItemStack itemStack = context.getItemInHand();
@@ -42,12 +43,12 @@ public interface RightClickBlockEffect
 				return ActionResultType.SUCCESS;
 			}
 			return ActionResultType.PASS;
-		};
+		});
 	}
 	
 	static RightClickBlockEffect scoopBlock(Supplier<Block> validBlock)
 	{
-		return (context) -> {
+		return withoutCreativeShock((context) -> {
 			World worldIn = context.getLevel();
 			BlockPos pos = context.getClickedPos();
 			PlayerEntity player = context.getPlayer();
@@ -72,6 +73,25 @@ public interface RightClickBlockEffect
 				worldIn.playSound(null, pos, SoundEvents.ITEM_PICKUP, SoundCategory.NEUTRAL, 1F, 1F);
 				
 				return ActionResultType.SUCCESS;
+			}
+			
+			return ActionResultType.PASS;
+		});
+	}
+	
+	/**
+	 * Prevents effect from working if the entity is subject to the effects of creative shock
+	 */
+	static RightClickBlockEffect withoutCreativeShock(RightClickBlockEffect effect)
+	{
+		return (context) -> {
+			PlayerEntity player = context.getPlayer();
+			if(player != null)
+			{
+				if(!CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_BLOCK_PLACEMENT_AND_BREAKING))
+				{
+					return effect.onClick(context);
+				}
 			}
 			
 			return ActionResultType.PASS;

@@ -1,0 +1,16 @@
+{
+    "variants": {
+        "facing=up,powered=true":    { "model": "minestuck:block/trajectory_block_vertical_powered" },
+        "facing=down,powered=true":  { "model": "minestuck:block/trajectory_block_vertical_powered", "y": 0, "x": 180},
+        "facing=east,powered=true":  { "model": "minestuck:block/trajectory_block_horizontal_powered", "y": 90, "x": 90 },
+        "facing=south,powered=true": { "model": "minestuck:block/trajectory_block_horizontal_powered", "y": 180, "x": 90 },
+        "facing=west,powered=true":  { "model": "minestuck:block/trajectory_block_horizontal_powered", "y": 270, "x": 90 },
+        "facing=north,powered=true": { "model": "minestuck:block/trajectory_block_horizontal_powered", "y": 0, "x": 90 },
+        "facing=up,powered=false":    { "model": "minestuck:block/trajectory_block_vertical_unpowered" },
+        "facing=down,powered=false":  { "model": "minestuck:block/trajectory_block_vertical_unpowered", "y": 0, "x": 180},
+        "facing=east,powered=false":  { "model": "minestuck:block/trajectory_block_horizontal_unpowered", "y": 90, "x": 90 },
+        "facing=south,powered=false": { "model": "minestuck:block/trajectory_block_horizontal_unpowered", "y": 180, "x": 90 },
+        "facing=west,powered=false":  { "model": "minestuck:block/trajectory_block_horizontal_unpowered", "y": 270, "x": 90 },
+        "facing=north,powered=false": { "model": "minestuck:block/trajectory_block_horizontal_unpowered", "y": 0, "x": 90 }
+    }
+}

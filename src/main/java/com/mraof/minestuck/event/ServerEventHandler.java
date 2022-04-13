@@ -3,6 +3,8 @@ package com.mraof.minestuck.event;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.effects.CreativeShockEffect;
+import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.consort.ConsortDialogue;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.entry.EntryEvent;
@@ -28,6 +30,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.server.MinecraftServer;
@@ -39,8 +42,7 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.UseHoeEvent;
@@ -145,7 +147,7 @@ public class ServerEventHandler
 		return entity instanceof ServerPlayerEntity && cachedCrit;
 	}
 	
-	@SubscribeEvent(priority=EventPriority.NORMAL)
+	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public static void onEntityAttack(LivingHurtEvent event)
 	{
 		if(event.getSource().getEntity() != null)
@@ -278,6 +280,27 @@ public class ServerEventHandler
 			PlayerData data = PlayerSavedData.getData((ServerPlayerEntity) event.player);
 			if(data.getTitle() != null)
 				data.getTitle().handleAspectEffects((ServerPlayerEntity) event.player);
+		}
+	}
+	
+	@SubscribeEvent
+	public static void onEffectRemove(PotionEvent.PotionRemoveEvent event)
+	{
+		onEffectEnd(event.getEntityLiving(), event.getPotion());
+	}
+	
+	@SubscribeEvent
+	public static void onEffectExpire(PotionEvent.PotionExpiryEvent expiryEvent)
+	{
+		onEffectEnd(expiryEvent.getEntityLiving(), expiryEvent.getPotionEffect().getEffect());
+	}
+	
+	private static void onEffectEnd(LivingEntity entityLiving, Effect effect)
+	{
+		if(entityLiving instanceof ServerPlayerEntity)
+		{
+			if(effect == MSEffects.CREATIVE_SHOCK.get())
+				CreativeShockEffect.onEffectEnd((ServerPlayerEntity) entityLiving);
 		}
 	}
 	
