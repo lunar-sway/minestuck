@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "type=bottom": { "model": "minestuck:block/green_stone_slab" },
+    "type=top":    { "model": "minestuck:block/green_stone_slab_top" },
+    "type=double": { "model": "minestuck:block/green_stone" }
+  }
+}

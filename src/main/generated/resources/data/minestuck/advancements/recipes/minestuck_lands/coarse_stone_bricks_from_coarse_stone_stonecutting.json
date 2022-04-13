@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minestuck:coarse_stone_bricks_from_coarse_stone_stonecutting"
+    ]
+  },
+  "criteria": {
+    "has_coarse_stone": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minestuck:coarse_stone"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minestuck:coarse_stone_bricks_from_coarse_stone_stonecutting"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_coarse_stone",
+      "has_the_recipe"
+    ]
+  ]
+}

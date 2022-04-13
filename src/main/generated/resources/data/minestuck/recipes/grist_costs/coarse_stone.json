@@ -1,9 +1,0 @@
-{
-  "type": "minestuck:grist_cost",
-  "ingredient": {
-    "item": "minestuck:coarse_stone"
-  },
-  "grist_cost": {
-    "minestuck:build": 4
-  }
-}

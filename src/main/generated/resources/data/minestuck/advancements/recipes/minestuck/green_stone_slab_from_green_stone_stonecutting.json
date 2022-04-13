@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minestuck:green_stone_slab_from_green_stone_stonecutting"
+    ]
+  },
+  "criteria": {
+    "has_green_stone": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minestuck:green_stone"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minestuck:green_stone_slab_from_green_stone_stonecutting"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_green_stone",
+      "has_the_recipe"
+    ]
+  ]
+}

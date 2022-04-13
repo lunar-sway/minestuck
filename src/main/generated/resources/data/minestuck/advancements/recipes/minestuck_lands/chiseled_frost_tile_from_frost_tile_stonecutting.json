@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minestuck:chiseled_frost_tile_from_frost_tile_stonecutting"
+    ]
+  },
+  "criteria": {
+    "has_frost_tile": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minestuck:frost_tile"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minestuck:chiseled_frost_tile_from_frost_tile_stonecutting"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_frost_tile",
+      "has_the_recipe"
+    ]
+  ]
+}

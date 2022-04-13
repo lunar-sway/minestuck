@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minestuck:chiseled_frost_bricks"
+    ]
+  },
+  "criteria": {
+    "has_frost_brick_slab": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minestuck:frost_brick_slab"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minestuck:chiseled_frost_bricks"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_frost_brick_slab",
+      "has_the_recipe"
+    ]
+  ]
+}

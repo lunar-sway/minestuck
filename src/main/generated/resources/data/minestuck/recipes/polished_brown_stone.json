@@ -1,16 +1,9 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "##",
-    "##"
-  ],
-  "key": {
-    "#": {
-      "item": "minestuck:brown_stone"
-    }
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "minestuck:brown_stone"
   },
-  "result": {
-    "item": "minestuck:polished_brown_stone",
-    "count": 4
-  }
+  "result": "minestuck:polished_brown_stone",
+  "experience": 0.1,
+  "cookingtime": 200
 }

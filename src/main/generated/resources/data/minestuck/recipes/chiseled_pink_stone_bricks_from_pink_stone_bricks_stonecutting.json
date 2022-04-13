@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "minestuck:pink_stone_bricks"
+  },
+  "result": "minestuck:chiseled_pink_stone_bricks",
+  "count": 1
+}
