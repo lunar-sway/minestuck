@@ -129,7 +129,6 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(ItemLootEntry.lootTableItem(MSItems.RAW_CRUXITE).setWeight(15).setQuality(1).apply(SetCount.setCount(RandomValueRange.between(1, 5))))
 						.add(ItemLootEntry.lootTableItem(MSItems.RAW_URANIUM).setWeight(12).setQuality(1).apply(SetCount.setCount(RandomValueRange.between(1, 4)))))
 				.withPool(LootPool.lootPool().name(RARE_POOL).setRolls(RandomValueRange.between(0, 1))
-						.add(LandTableLootEntry.builder(MSLootTables.BASIC_MEDIUM_CHEST).setPool(RARE_POOL))
 						.add(ItemLootEntry.lootTableItem(Items.IRON_INGOT).setWeight(20).setQuality(1).apply(SetCount.setCount(RandomValueRange.between(0, 5))))
 						.add(ItemLootEntry.lootTableItem(Items.GOLD_INGOT).setWeight(15).setQuality(1).apply(SetCount.setCount(RandomValueRange.between(0, 4))))
 						.add(ItemLootEntry.lootTableItem(Items.DIAMOND).setWeight(15).setQuality(2).apply(SetCount.setCount(RandomValueRange.between(0, 2))))
