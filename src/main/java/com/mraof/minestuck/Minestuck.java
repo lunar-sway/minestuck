@@ -2,6 +2,7 @@ package com.mraof.minestuck;
 
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.client.ClientProxy;
+import com.mraof.minestuck.command.argument.*;
 import com.mraof.minestuck.computer.ProgramData;
 import com.mraof.minestuck.computer.editmode.DeployList;
 import com.mraof.minestuck.effects.MSEffects;
@@ -21,6 +22,8 @@ import com.mraof.minestuck.world.gen.MSSurfaceBuilders;
 import com.mraof.minestuck.world.gen.MSWorldGenTypes;
 import com.mraof.minestuck.world.gen.feature.MSCFeatures;
 import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
+import net.minecraft.command.arguments.ArgumentTypes;
+import net.minecraft.command.arguments.IArgumentSerializer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModList;
@@ -99,6 +102,16 @@ public class Minestuck
 		EntryProcess.addBlockProcessing(new TransportalizerBlockProcess());
 		if(ModList.get().isLoaded("refinedstorage"))
 			EntryProcess.addBlockProcessing(new RSEntryBlockProcess());
+		
+		ArgumentTypes.register("minestuck:grist_type", GristTypeArgument.class, GristTypeArgument.SERIALIZER);
+		ArgumentTypes.register("minestuck:grist_set", GristSetArgument.class, GristSetArgument.SERIALIZER);
+		ArgumentTypes.register("minestuck:terrain_land", TerrainLandTypeArgument.class, TerrainLandTypeArgument.SERIALIZER);
+		ArgumentTypes.register("minestuck:title_land", TitleLandTypeArgument.class, TitleLandTypeArgument.SERIALIZER);
+		ArgumentTypes.register("minestuck:land_type_pair", LandTypePairArgument.class, LandTypePairArgument.SERIALIZER);
+		ArgumentTypes.register("minestuck:title", TitleArgument.class, TitleArgument.SERIALIZER);
+		//noinspection unchecked,rawtypes
+		ArgumentTypes.register("minestuck:list", ListArgument.class, (IArgumentSerializer) ListArgument.SERIALIZER);
+		
 	}
 	
 	private void clientSetup(final FMLClientSetupEvent event)

@@ -13,6 +13,8 @@ import com.mraof.minestuck.player.EnumClass;
 import com.mraof.minestuck.player.Title;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.ISuggestionProvider;
+import net.minecraft.command.arguments.ArgumentSerializer;
+import net.minecraft.command.arguments.IArgumentSerializer;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.Arrays;
@@ -24,6 +26,8 @@ import java.util.stream.Stream;
 
 public class TitleArgument implements ArgumentType<Title>
 {
+	public static final IArgumentSerializer<TitleArgument> SERIALIZER = new ArgumentSerializer<>(TitleArgument::title);
+	
 	private static final List<String> EXAMPLES = Arrays.asList("heir light", "bard void", "lord doom");
 	public static final String INCOMPLETE = "argument.title.incomplete";
 	public static final String INVALID_CLASS = "argument.title.invalid_class";
