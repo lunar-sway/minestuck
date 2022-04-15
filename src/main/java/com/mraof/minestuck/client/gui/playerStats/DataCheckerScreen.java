@@ -132,7 +132,7 @@ public class DataCheckerScreen extends Screen
 		RenderSystem.color3f(1, 1, 1);
 		int textureIndex = canScroll ? 232 : 244;
 		this.minecraft.getTextureManager().bind(guiBackground);
-		blit(matrixStack, (width - GUI_WIDTH)/2 + 190, (height - GUI_HEIGHT)/2 + LIST_Y + 1 + (int) displayIndex*91, textureIndex, 0, 12, 15);
+		blit(matrixStack, (width - GUI_WIDTH)/2 + 190, (height - GUI_HEIGHT)/2 + LIST_Y + 1 + (int) (displayIndex*91), textureIndex, 0, 12, 15);
 	}
 	
 	@Override
