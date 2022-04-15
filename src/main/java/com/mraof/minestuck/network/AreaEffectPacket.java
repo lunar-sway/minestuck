@@ -1,6 +1,7 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.tileentity.redstone.AreaEffectTileEntity;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
@@ -44,10 +45,13 @@ public class AreaEffectPacket implements PlayToServerPacket
 			TileEntity te = player.level.getBlockEntity(tileBlockPos);
 			if(te instanceof AreaEffectTileEntity)
 			{
-				BlockPos tePos = te.getBlockPos();
-				if(Math.sqrt(player.distanceToSqr(tePos.getX() + 0.5, tePos.getY() + 0.5, tePos.getZ() + 0.5)) <= 8)
+				if(Math.sqrt(player.distanceToSqr(tileBlockPos.getX() + 0.5, tileBlockPos.getY() + 0.5, tileBlockPos.getZ() + 0.5)) <= 8)
 				{
 					((AreaEffectTileEntity) te).setMinAndMaxEffectPos(minEffectPos, maxEffectPos);
+					//Imitates the structure block to ensure that changes are sent client-side
+					te.setChanged();
+					BlockState state = player.level.getBlockState(tileBlockPos);
+					player.level.sendBlockUpdated(tileBlockPos, state, state, 3);
 				}
 			}
 		}

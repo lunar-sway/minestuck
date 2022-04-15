@@ -77,7 +77,7 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 		
 		//TODO configurable radius
 		//TODO allow for the center of the radius to be moved to other coordinates as is seen with command blocks
-		AxisAlignedBB axisalignedbb = getRenderBoundingBox().inflate(15D, 15D, 15D);
+		AxisAlignedBB axisalignedbb = new AxisAlignedBB(getBlockPos()).inflate(15D, 15D, 15D);
 		List<LivingEntity> livingEntityList = level.getLoadedEntitiesOfClass(LivingEntity.class, axisalignedbb);
 		if(!livingEntityList.isEmpty())
 		{

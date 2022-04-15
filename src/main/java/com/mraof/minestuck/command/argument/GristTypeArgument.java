@@ -11,6 +11,8 @@ import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.ISuggestionProvider;
+import net.minecraft.command.arguments.ArgumentSerializer;
+import net.minecraft.command.arguments.IArgumentSerializer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -21,6 +23,8 @@ import java.util.concurrent.CompletableFuture;
 
 public class GristTypeArgument implements ArgumentType<GristType>
 {
+	public static final IArgumentSerializer<GristTypeArgument> SERIALIZER = new ArgumentSerializer<>(GristTypeArgument::gristType);
+	
 	private static final List<String> EXAMPLES = Arrays.asList("minestuck:build", "minestuck:marble", "minestuckarsenal:iron");
 	
 	public static final String INVALID = "argument.grist_type.invalid";
@@ -56,6 +60,7 @@ public class GristTypeArgument implements ArgumentType<GristType>
 		return EXAMPLES;
 	}
 	
+	@SuppressWarnings("unused")
 	public static GristType getGristArgument(CommandContext<CommandSource> context, String id)
 	{
 		return context.getArgument(id, GristType.class);
