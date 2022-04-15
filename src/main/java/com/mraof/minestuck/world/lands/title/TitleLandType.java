@@ -11,6 +11,10 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
 
+/**
+ * Base class for land types that are associated with some aspect.
+ * These land types make up the second half of a land together with a {@link TerrainLandType}.
+ */
 public abstract class TitleLandType extends ForgeRegistryEntry<TitleLandType> implements ILandType<TitleLandType>
 {
 	public static final Codec<TitleLandType> CODEC = CodecUtil.registryCodec(() -> LandTypes.TITLE_REGISTRY);
@@ -40,13 +44,16 @@ public abstract class TitleLandType extends ForgeRegistryEntry<TitleLandType> im
 		this.pickedAtRandom = pickedAtRandom;
 	}
 	
+	/**
+	 * Returns true if the given land type may be randomly chosen together with this land type.
+	 */
 	public boolean isAspectCompatible(TerrainLandType otherType)
 	{
 		return true;
 	}
 	
 	@Override
-	public boolean canBePickedAtRandom()
+	public final boolean canBePickedAtRandom()
 	{
 		return pickedAtRandom;
 	}
