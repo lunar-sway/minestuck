@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minestuck:pink_stone"
+    }
+  },
+  "result": {
+    "item": "minestuck:pink_stone_stairs",
+    "count": 4
+  }
+}

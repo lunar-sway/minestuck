@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minestuck:shade_stairs"
+    ]
+  },
+  "criteria": {
+    "has_shade_stone": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minestuck:shade_stone"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minestuck:shade_stairs"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_shade_stone",
+      "has_the_recipe"
+    ]
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minestuck:pink_stone_stairs"
+    ]
+  },
+  "criteria": {
+    "has_pink_stone": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minestuck:pink_stone"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minestuck:pink_stone_stairs"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_pink_stone",
+      "has_the_recipe"
+    ]
+  ]
+}
