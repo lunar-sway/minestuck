@@ -1,6 +1,7 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.tileentity.redstone.RemoteObserverTileEntity;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
@@ -53,12 +54,15 @@ public class RemoteObserverPacket implements PlayToServerPacket
 			TileEntity te = player.level.getBlockEntity(tileBlockPos);
 			if(te instanceof RemoteObserverTileEntity)
 			{
-				BlockPos tePos = te.getBlockPos();
-				if(Math.sqrt(player.distanceToSqr(tePos.getX() + 0.5, tePos.getY() + 0.5, tePos.getZ() + 0.5)) <= 8)
+				if(Math.sqrt(player.distanceToSqr(tileBlockPos.getX() + 0.5, tileBlockPos.getY() + 0.5, tileBlockPos.getZ() + 0.5)) <= 8)
 				{
 					((RemoteObserverTileEntity) te).setActiveType(activeType);
 					if(entityType != null)
 						((RemoteObserverTileEntity) te).setCurrentEntityType(entityType);
+					//Imitates the structure block to ensure that changes are sent client-side
+					te.setChanged();
+					BlockState state = player.level.getBlockState(tileBlockPos);
+					player.level.sendBlockUpdated(tileBlockPos, state, state, 3);
 				}
 			}
 		}

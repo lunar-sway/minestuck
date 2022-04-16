@@ -7,6 +7,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -157,5 +159,23 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 	public void setActiveType(ActiveType activeTypeIn)
 	{
 		activeType = Objects.requireNonNull(activeTypeIn);
+	}
+	
+	@Override
+	public CompoundNBT getUpdateTag()
+	{
+		return this.save(new CompoundNBT());
+	}
+	
+	@Override
+	public SUpdateTileEntityPacket getUpdatePacket()
+	{
+		return new SUpdateTileEntityPacket(getBlockPos(), 2, getUpdateTag());
+	}
+	
+	@Override
+	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
+	{
+		this.load(getBlockState(), pkt.getTag());
 	}
 }
