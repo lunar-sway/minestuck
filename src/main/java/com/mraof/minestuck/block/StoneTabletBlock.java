@@ -91,7 +91,7 @@ public class StoneTabletBlock extends CustomShapeBlock //stone slab is the same 
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context)
 	{
-		return context.getClickedFace() == Direction.UP ? super.getStateForPlacement(context) : Blocks.AIR.defaultBlockState();
+		return context.getClickedFace() == Direction.UP ? super.getStateForPlacement(context) : null;
 	}
 	
 	@Override
