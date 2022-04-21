@@ -62,7 +62,7 @@ public class SummonerBlock extends Block
 			} else if(!worldIn.isClientSide)
 			{
 				boolean newBooleanState = !worldIn.getBlockState(pos).getValue(UNTRIGGERABLE);
-				worldIn.setBlock(pos, worldIn.getBlockState(pos).cycle(SummonerBlock.UNTRIGGERABLE), Constants.BlockFlags.NOTIFY_NEIGHBORS);
+				worldIn.setBlock(pos, worldIn.getBlockState(pos).cycle(SummonerBlock.UNTRIGGERABLE), Constants.BlockFlags.DEFAULT);
 				player.displayClientMessage(new TranslationTextComponent(getDescriptionId() + "." + UNTRIGGERABLE_CHANGE_MESSAGE, !newBooleanState), true);
 			}
 			

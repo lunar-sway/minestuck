@@ -49,7 +49,7 @@ public class RotatorBlock extends MSDirectionalBlock
 	{
 		if(!player.isCrouching())
 		{
-			worldIn.setBlock(pos, state.cycle(ROTATION_FLIPPED), Constants.BlockFlags.NOTIFY_NEIGHBORS);
+			worldIn.setBlock(pos, state.cycle(ROTATION_FLIPPED), Constants.BlockFlags.DEFAULT);
 			if(state.getValue(ROTATION_FLIPPED))
 				worldIn.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 1.2F);
 			else

@@ -63,7 +63,7 @@ public class WirelessRedstoneReceiverBlock extends HorizontalBlock
 	{
 		if(!player.isCrouching() && !CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS))
 		{
-			worldIn.setBlock(pos, state.cycle(AUTO_RESET), Constants.BlockFlags.NOTIFY_NEIGHBORS);
+			worldIn.setBlock(pos, state.cycle(AUTO_RESET), Constants.BlockFlags.DEFAULT);
 			if(state.getValue(AUTO_RESET))
 			{
 				if(!worldIn.isClientSide)

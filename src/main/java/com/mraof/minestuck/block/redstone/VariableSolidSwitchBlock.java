@@ -40,11 +40,11 @@ public class VariableSolidSwitchBlock extends Block
 		{
 			if(state.getValue(POWER) < 15)
 			{
-				worldIn.setBlock(pos, state.setValue(POWER, state.getValue(POWER) + 1), Constants.BlockFlags.NOTIFY_NEIGHBORS);
+				worldIn.setBlock(pos, state.setValue(POWER, state.getValue(POWER) + 1), Constants.BlockFlags.DEFAULT);
 				worldIn.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 1.2F);
 			} else
 			{
-				worldIn.setBlock(pos, state.setValue(POWER, 0), Constants.BlockFlags.NOTIFY_NEIGHBORS);
+				worldIn.setBlock(pos, state.setValue(POWER, 0), Constants.BlockFlags.DEFAULT);
 				worldIn.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, 1.2F);
 			}
 			
@@ -53,11 +53,11 @@ public class VariableSolidSwitchBlock extends Block
 		{
 			if(state.getValue(POWER) != 0)
 			{
-				worldIn.setBlock(pos, state.setValue(POWER, state.getValue(POWER) - 1), Constants.BlockFlags.NOTIFY_NEIGHBORS);
+				worldIn.setBlock(pos, state.setValue(POWER, state.getValue(POWER) - 1), Constants.BlockFlags.DEFAULT);
 				worldIn.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, 1.2F);
 			} else
 			{
-				worldIn.setBlock(pos, state.setValue(POWER, 15), Constants.BlockFlags.NOTIFY_NEIGHBORS);
+				worldIn.setBlock(pos, state.setValue(POWER, 15), Constants.BlockFlags.DEFAULT);
 				worldIn.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 1.2F);
 			}
 			

@@ -41,7 +41,7 @@ public class TimedSolidSwitchBlock extends Block
 	{
 		if(!player.isCrouching())
 		{
-			worldIn.setBlock(pos, state.setValue(POWER, state.getValue(POWER) == 0 ? 15 : 0), Constants.BlockFlags.NOTIFY_NEIGHBORS);
+			worldIn.setBlock(pos, state.setValue(POWER, state.getValue(POWER) == 0 ? 15 : 0), Constants.BlockFlags.DEFAULT);
 			if(state.getValue(POWER) > 0)
 			{
 				worldIn.playSound(player, pos, SoundEvents.PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 1.2F);

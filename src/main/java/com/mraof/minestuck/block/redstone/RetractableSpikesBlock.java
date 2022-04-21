@@ -105,7 +105,7 @@ public class RetractableSpikesBlock extends Block
 	{
 		if(!player.isCrouching() && !CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS))
 		{
-			worldIn.setBlock(pos, state.cycle(PRESSURE_SENSITIVE), Constants.BlockFlags.NOTIFY_NEIGHBORS);
+			worldIn.setBlock(pos, state.cycle(PRESSURE_SENSITIVE), Constants.BlockFlags.DEFAULT);
 			float pitch = state.getValue(PRESSURE_SENSITIVE) ? 1.5F : 0.5F;
 			worldIn.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, pitch);
 			

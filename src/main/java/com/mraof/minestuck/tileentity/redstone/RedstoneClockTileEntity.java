@@ -46,7 +46,7 @@ public class RedstoneClockTileEntity extends TileEntity implements ITickableTile
 	{
 		if(level != null && level.isAreaLoaded(getBlockPos(), 1))
 		{
-			level.setBlock(getBlockPos(), getBlockState().setValue(RedstoneClockBlock.POWERED, true), Constants.BlockFlags.NOTIFY_NEIGHBORS);
+			level.setBlock(getBlockPos(), getBlockState().setValue(RedstoneClockBlock.POWERED, true), Constants.BlockFlags.DEFAULT);
 			level.getBlockTicks().scheduleTick(new BlockPos(getBlockPos()), level.getBlockState(getBlockPos()).getBlock(), 10); //set to half a second
 			if(!level.getBlockState(getBlockPos().above()).getBlock().asItem().is(ItemTags.WOOL) && !level.getBlockState(getBlockPos().below()).getBlock().asItem().is(ItemTags.WOOL)) //will not make a sound if wool is above or below the block
 				level.playSound(null, getBlockPos(), SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.05F, 1.2F);
