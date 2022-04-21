@@ -86,12 +86,6 @@ public class VariableSolidSwitchBlock extends Block
 	}
 	
 	@Override
-	public int getLightValue(BlockState state, IBlockReader world, BlockPos pos)
-	{
-		return state.getValue(POWER);
-	}
-	
-	@Override
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
 	{
 		if(rand.nextInt(15) < stateIn.getValue(POWER))

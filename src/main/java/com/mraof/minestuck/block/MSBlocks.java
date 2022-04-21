@@ -586,10 +586,10 @@ public class MSBlocks
 		registry.register(new RemoteObserverBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL)).setRegistryName("remote_observer"));
 		registry.register(new WirelessRedstoneTransmitterBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL)).setRegistryName("wireless_redstone_transmitter"));
 		registry.register(new WirelessRedstoneReceiverBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).randomTicks().sound(SoundType.METAL)).setRegistryName("wireless_redstone_receiver"));
-		registry.register(new SolidSwitchBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL).lightLevel(state -> 15)).setRegistryName("solid_switch"));
-		registry.register(new VariableSolidSwitchBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL).lightLevel(state -> 15)).setRegistryName("variable_solid_switch"));
-		registry.register(new TimedSolidSwitchBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL).lightLevel(state -> 12), 20).setRegistryName("one_second_interval_timed_solid_switch"));
-		registry.register(new TimedSolidSwitchBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL).lightLevel(state -> 15), 40).setRegistryName("two_second_interval_timed_solid_switch"));
+		registry.register(new SolidSwitchBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL).lightLevel(state -> state.getValue(SolidSwitchBlock.POWERED) ? 15 : 0)).setRegistryName("solid_switch"));
+		registry.register(new VariableSolidSwitchBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL).lightLevel(state -> state.getValue(VariableSolidSwitchBlock.POWER))).setRegistryName("variable_solid_switch"));
+		registry.register(new TimedSolidSwitchBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL).lightLevel(state -> state.getValue(TimedSolidSwitchBlock.POWER)), 20).setRegistryName("one_second_interval_timed_solid_switch"));
+		registry.register(new TimedSolidSwitchBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL).lightLevel(state -> state.getValue(TimedSolidSwitchBlock.POWER)), 40).setRegistryName("two_second_interval_timed_solid_switch"));
 		registry.register(new SummonerBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL)).setRegistryName("summoner"));
 		registry.register(new AreaEffectBlock(AbstractBlock.Properties.of(Material.METAL).strength(6).sound(SoundType.METAL)).setRegistryName("area_effect_block"));
 		registry.register(new PlatformGeneratorBlock(AbstractBlock.Properties.of(Material.METAL).strength(6).sound(SoundType.METAL)).setRegistryName("platform_generator"));

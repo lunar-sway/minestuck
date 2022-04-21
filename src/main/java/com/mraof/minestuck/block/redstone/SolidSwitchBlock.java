@@ -68,12 +68,6 @@ public class SolidSwitchBlock extends Block
 	}
 	
 	@Override
-	public int getLightValue(BlockState state, IBlockReader world, BlockPos pos)
-	{
-		return state.getValue(POWERED) ? super.getLightValue(state, world, pos) : 0;
-	}
-	
-	@Override
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
 	{
 		if(stateIn.getValue(POWERED))
