@@ -39,22 +39,17 @@ public class TimedSolidSwitchBlock extends Block
 	@SuppressWarnings("deprecation")
 	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
 	{
-		if(!player.isCrouching())
+		worldIn.setBlock(pos, state.setValue(POWER, state.getValue(POWER) == 0 ? 15 : 0), Constants.BlockFlags.DEFAULT);
+		if(state.getValue(POWER) > 0)
 		{
-			worldIn.setBlock(pos, state.setValue(POWER, state.getValue(POWER) == 0 ? 15 : 0), Constants.BlockFlags.DEFAULT);
-			if(state.getValue(POWER) > 0)
-			{
-				worldIn.playSound(player, pos, SoundEvents.PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 1.2F);
-				worldIn.getBlockTicks().scheduleTick(new BlockPos(pos), this, tickRate);
-			} else
-			{
-				worldIn.playSound(player, pos, SoundEvents.PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, 1.2F);
-			}
-			
-			return ActionResultType.SUCCESS;
+			worldIn.playSound(player, pos, SoundEvents.PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 1.2F);
+			worldIn.getBlockTicks().scheduleTick(new BlockPos(pos), this, tickRate);
+		} else
+		{
+			worldIn.playSound(player, pos, SoundEvents.PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, 1.2F);
 		}
 		
-		return ActionResultType.PASS;
+		return ActionResultType.SUCCESS;
 	}
 	
 	@Override

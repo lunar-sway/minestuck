@@ -36,17 +36,12 @@ public class SolidSwitchBlock extends Block
 	@SuppressWarnings("deprecation")
 	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
 	{
-		if(!player.isCrouching())
-		{
-			worldIn.setBlock(pos, state.cycle(POWERED), Constants.BlockFlags.DEFAULT);
-			if(state.getValue(POWERED))
-				worldIn.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 1.2F);
-			else
-				worldIn.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, 1.2F);
-			return ActionResultType.SUCCESS;
-		}
-		
-		return ActionResultType.PASS;
+		worldIn.setBlock(pos, state.cycle(POWERED), Constants.BlockFlags.DEFAULT);
+		if(state.getValue(POWERED))
+			worldIn.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 1.2F);
+		else
+			worldIn.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, 1.2F);
+		return ActionResultType.SUCCESS;
 	}
 	
 	@Override

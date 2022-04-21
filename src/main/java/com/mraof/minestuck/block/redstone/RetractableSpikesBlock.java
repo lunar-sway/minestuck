@@ -103,7 +103,7 @@ public class RetractableSpikesBlock extends Block
 	@Override
 	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
 	{
-		if(!player.isCrouching() && !CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS))
+		if(!CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS))
 		{
 			worldIn.setBlock(pos, state.cycle(PRESSURE_SENSITIVE), Constants.BlockFlags.DEFAULT);
 			float pitch = state.getValue(PRESSURE_SENSITIVE) ? 1.5F : 0.5F;
