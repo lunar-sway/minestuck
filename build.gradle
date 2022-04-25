@@ -119,7 +119,7 @@ dependencies {
 	// http://dvs1.progwml6.com/files/maven
     compileOnly fg.deobf("mezz.jei:jei-${project.getProperty('mc_jei_version')}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-${project.getProperty('mc_jei_version')}")
-    compileOnly fg.deobf("curse.maven:refinedmods-${project.getProperty('mc_refined_storage_curseid')}:${project.getProperty('mc_refined_storage_version')}")
+    compileOnly fg.deobf("curse.maven:refinedstorage-${project.getProperty('mc_refined_storage_curseid')}:${project.getProperty('mc_refined_storage_version')}")
     implementation fg.deobf("software.bernie.geckolib:geckolib-forge-${project.getProperty('mc_gecko_version')}")
 }
 
