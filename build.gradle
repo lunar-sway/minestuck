@@ -27,10 +27,6 @@ repositories {
         name = 'ModMaven'
         url = 'https://modmaven.dev'
     }
-    maven {
-        name = "RS maven"
-        url = "https://repo.refinedmods.com"
-    }
     maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
     maven {
         url "https://cursemaven.com"
@@ -123,9 +119,8 @@ dependencies {
 	// http://dvs1.progwml6.com/files/maven
     compileOnly fg.deobf("mezz.jei:jei-${project.getProperty('mc_jei_version')}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-${project.getProperty('mc_jei_version')}")
-    compileOnly fg.deobf("com.refinedmods:refinedstorage:${project.getProperty('mc_refined_storage_version')}")
-
-    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.16.5:3.0.46')
+    compileOnly fg.deobf("curse.maven:refinedmods-${project.getProperty('mc_refined_storage_curseid')}:${project.getProperty('mc_refined_storage_version')}")
+    implementation fg.deobf("software.bernie.geckolib:geckolib-forge-${project.getProperty('mc_gecko_version')}")
 }
 
 sourceSets.main.resources {
