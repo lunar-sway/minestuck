@@ -46,6 +46,7 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 	
 	public void giveEntitiesEffect()
 	{
+		//TODO improve flow/reduce repetition of code by extracting repetitive components into another function
 		BlockPos tePos = getBlockPos();
 		Direction teFacing = getBlockState().getValue(AreaEffectBlock.FACING);
 		

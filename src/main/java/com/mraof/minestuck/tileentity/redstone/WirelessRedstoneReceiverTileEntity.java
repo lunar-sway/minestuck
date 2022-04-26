@@ -15,6 +15,7 @@ public class WirelessRedstoneReceiverTileEntity extends TileEntity implements IT
 {
 	private BlockPos lastTransmitterBlockPos;
 	private int lastTransmission;
+	private static final int WIRELESS_CONSTANT = 6;
 	
 	public WirelessRedstoneReceiverTileEntity()
 	{
@@ -27,13 +28,13 @@ public class WirelessRedstoneReceiverTileEntity extends TileEntity implements IT
 		if(level == null || !level.isAreaLoaded(getBlockPos(), 1))
 			return;
 		
-		if(lastTransmission >= 6 && level.getBlockState(getBlockPos()).getValue(WirelessRedstoneReceiverBlock.AUTO_RESET)) //6 is wireless constant
+		if(lastTransmission >= WIRELESS_CONSTANT && level.getBlockState(getBlockPos()).getValue(WirelessRedstoneReceiverBlock.AUTO_RESET))
 		{
 			renewFromLastTransmitter();
 			lastTransmission = 0;
 		}
 		
-		if(lastTransmission < 6) //how many ticks since last transmission, 6 is wireless constant
+		if(lastTransmission < WIRELESS_CONSTANT) //how many ticks since last transmission
 			lastTransmission++;
 	}
 	

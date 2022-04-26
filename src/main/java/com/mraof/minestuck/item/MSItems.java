@@ -107,6 +107,7 @@ public class MSItems
 	public static final Item QUANTUM_SABRE = getNull();
 	public static final Item SHATTER_BEACON = getNull();
 	public static final Item SHATTER_BACON = getNull();
+	public static final Item SUBTRACTSHUMIDIRE_ZOMORRODNEGATIVE = getNull();
 	
 	public static final Item DAGGER = getNull();
 	public static final Item NIFE = getNull();
@@ -262,6 +263,8 @@ public class MSItems
 	public static final Item SPORK = getNull();
 	public static final Item GOLDEN_SPORK = getNull();
 	public static final Item BIDENT = getNull();
+	public static final Item EDISONS_FURY = getNull();
+	public static final Item EDISONS_SERENITY = getNull();
 	
 	//needles/wands
 	public static final Item POINTY_STICK = getNull();
@@ -303,12 +306,14 @@ public class MSItems
 	public static final Item IRON_LASS_SKIRT = getNull();
 	public static final Item IRON_LASS_SHOES = getNull();
 	
-	public static final Item PROSPIT_SHIRT = getNull();
-	public static final Item PROSPIT_PANTS = getNull();
-	public static final Item PROSPIT_SHOES = getNull();
-	public static final Item DERSE_SHIRT = getNull();
-	public static final Item DERSE_PANTS = getNull();
-	public static final Item DERSE_SHOES = getNull();
+	public static final MSArmorItem PROSPIT_CIRCLET = getNull();
+	public static final MSArmorItem PROSPIT_SHIRT = getNull();
+	public static final MSArmorItem PROSPIT_PANTS = getNull();
+	public static final MSArmorItem PROSPIT_SHOES = getNull();
+	public static final MSArmorItem DERSE_CIRCLET = getNull();
+	public static final MSArmorItem DERSE_SHIRT = getNull();
+	public static final MSArmorItem DERSE_PANTS = getNull();
+	public static final MSArmorItem DERSE_SHOES = getNull();
 	
 	//Core Items
 	public static final Item BOONDOLLARS = getNull();
@@ -349,6 +354,7 @@ public class MSItems
 	public static final Item FUNGAL_SPORE = getNull();
 	public static final Item SPOREO = getNull();
 	public static final Item MOREL_MUSHROOM = getNull();
+	public static final Item SUSHROOM = getNull();
 	public static final Item FRENCH_FRY = getNull();
 	public static final Item STRAWBERRY_CHUNK = getNull();
 	public static final Item FOOD_CAN = getNull();
@@ -585,6 +591,7 @@ public class MSItems
 		registerItemBlock(registry, CRACKED_PINK_STONE_BRICKS, MSItemGroup.LANDS);
 		registerItemBlock(registry, MOSSY_PINK_STONE_BRICKS, MSItemGroup.LANDS);
 		registerItemBlock(registry, POLISHED_PINK_STONE, MSItemGroup.LANDS);
+		registerItemBlock(registry, PINK_STONE_COLUMN, MSItemGroup.LANDS);
 		registerItemBlock(registry, BROWN_STONE, MSItemGroup.LANDS);
 		registerItemBlock(registry, BROWN_STONE_BRICKS, MSItemGroup.LANDS);
 		registerItemBlock(registry, BROWN_STONE_COLUMN, MSItemGroup.LANDS);
@@ -608,6 +615,13 @@ public class MSItems
 		registerItemBlock(registry, GREEN_STONE_BRICK_SALAMANDER_RIGHT, MSItemGroup.MAIN);
 		registerItemBlock(registry, GREEN_STONE_BRICK_SKAIA, MSItemGroup.MAIN);
 		registerItemBlock(registry, GREEN_STONE_BRICK_TURTLE, MSItemGroup.MAIN);
+		registerItemBlock(registry, SANDSTONE_COLUMN, MSItemGroup.LANDS);
+		registerItemBlock(registry, CHISELED_SANDSTONE_COLUMN, MSItemGroup.LANDS);
+		registerItemBlock(registry, RED_SANDSTONE_COLUMN, MSItemGroup.LANDS);
+		registerItemBlock(registry, CHISELED_RED_SANDSTONE_COLUMN, MSItemGroup.LANDS);
+		registerItemBlock(registry, UNCARVED_WOOD, MSItemGroup.LANDS);
+		registerItemBlock(registry, CHIPBOARD, MSItemGroup.LANDS);
+		registerItemBlock(registry, WOOD_SHAVINGS, MSItemGroup.LANDS);
 		registerItemBlock(registry, DENSE_CLOUD, MSItemGroup.LANDS);
 		registerItemBlock(registry, BRIGHT_DENSE_CLOUD, MSItemGroup.LANDS);
 		registerItemBlock(registry, SUGAR_CUBE, MSItemGroup.LANDS);
@@ -773,7 +787,7 @@ public class MSItems
 		registerItemBlock(registry, FRAGILE_STONE, MSItemGroup.MAIN);
 		registerItemBlock(registry, RETRACTABLE_SPIKES, MSItemGroup.MAIN);
 		registerItemBlock(registry, PORTABLE_BLOCK, MSItemGroup.LANDS);
-		registerItemBlock(registry, AND_GATE_BLOCK); //Logic gates have no item group as they are discordant with the aesthetics and intended mechanics of Minestuck(but are kept for some utility)
+		registerItemBlock(registry, AND_GATE_BLOCK);
 		registerItemBlock(registry, OR_GATE_BLOCK);
 		registerItemBlock(registry, XOR_GATE_BLOCK);
 		registerItemBlock(registry, NAND_GATE_BLOCK);
@@ -816,6 +830,7 @@ public class MSItems
 		registerItemBlock(registry, new BlockItem(REVERSE_CAKE, new Item.Properties().tab(MSItemGroup.MAIN).stacksTo(1)));
 		registerItemBlock(registry, new BlockItem(FUCHSIA_CAKE, new Item.Properties().tab(MSItemGroup.MAIN).stacksTo(1)));
 		registerItemBlock(registry, new BlockItem(NEGATIVE_CAKE, new Item.Properties().tab(MSItemGroup.MAIN).stacksTo(1)));
+		registerItemBlock(registry, new BlockItem(CARROT_CAKE, new Item.Properties().tab(MSItemGroup.MAIN).stacksTo(1)));
 		
 		registerItemBlock(registry, PRIMED_TNT, MSItemGroup.MAIN);
 		registerItemBlock(registry, UNSTABLE_TNT, MSItemGroup.MAIN);
@@ -883,7 +898,9 @@ public class MSItems
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.GOLD, 7, -2.4F).efficiency(15.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP).add(OnHitEffect.setOnFire(30)), new Item.Properties().defaultDurability(300).tab(MSItemGroup.WEAPONS)).setRegistryName("cobalt_sabre"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.URANIUM_TIER, 4, -2.4F).efficiency(15.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP).add(OnHitEffect.onCrit(OnHitEffect.enemyPotionEffect(() -> new EffectInstance(Effects.WITHER, 100, 1)))), new Item.Properties().tab(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)).setRegistryName("quantum_sabre"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.DIAMOND, 7, -2.4F).efficiency(15.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP), new Item.Properties().tab(MSItemGroup.WEAPONS).rarity(Rarity.RARE)).setRegistryName("shatter_beacon"));
-		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.MEAT_TIER, 7, -2.4F).efficiency(5.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP).add(OnHitEffect.SORD_DROP), new Item.Properties().tab(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)).setRegistryName("shatter_bacon"));registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 0, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.backstab(3)), new Item.Properties().tab(MSItemGroup.WEAPONS)).setRegistryName("dagger"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.MEAT_TIER, 7, -2.4F).efficiency(5.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP).add(OnHitEffect.SORD_DROP), new Item.Properties().tab(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)).setRegistryName("shatter_bacon"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.URANIUM_TIER, 6, -2.6F).efficiency(5.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP).add(OnHitEffect.setOnFire(30)), new Item.Properties().tab(MSItemGroup.WEAPONS)).setRegistryName("subtractshumidire_zomorrodnegative"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 0, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.backstab(3)), new Item.Properties().tab(MSItemGroup.WEAPONS)).setRegistryName("dagger"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.SBAHJ_TIER, 1, -2.0F).add(OnHitEffect.SORD_DROP), new Item.Properties().tab(MSItemGroup.WEAPONS)).setRegistryName("nife"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.EMERALD_TIER, 1, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.backstab(4)), new Item.Properties().tab(MSItemGroup.WEAPONS)).setRegistryName("light_of_my_knife"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(MSItemTypes.CORUNDUM_TIER, 1, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.backstab(9)), new Item.Properties().tab(MSItemGroup.WEAPONS)).setRegistryName("starshard_tri_blade"));
@@ -1042,6 +1059,8 @@ public class MSItems
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.STONE, 4, -2.5F).efficiency(1.0F).set(MSItemTypes.SHOVEL_TOOL), new Item.Properties().tab(MSItemGroup.WEAPONS)).setRegistryName("spork"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.GOLD, 5, -2.5F).efficiency(1.0F).set(MSItemTypes.SHOVEL_TOOL), new Item.Properties().tab(MSItemGroup.WEAPONS)).setRegistryName("golden_spork"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 7, -2.9F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().tab(MSItemGroup.WEAPONS)).setRegistryName("bident"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 7, -2.6F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).set(ItemRightClickEffect.switchTo(() -> EDISONS_SERENITY)).add(OnHitEffect.DROP_FOE_ITEM).add(InventoryTickEffect.DROP_WHEN_IN_WATER).add(OnHitEffect.playSound(() -> MSSoundEvents.EVENT_ELECTRIC_SHOCK, 0.6F, 1.0F)), new Item.Properties().tab(MSItemGroup.WEAPONS)).setRegistryName("edisons_fury"));
+		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.IRON, 7, -2.6F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).set(ItemRightClickEffect.switchTo(() -> EDISONS_FURY)), new Item.Properties()).setRegistryName("edisons_serenity"));
 		
 		//needles/wands
 		registry.register(new WeaponItem(new WeaponItem.Builder(ItemTier.WOOD, 0, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().tab(MSItemGroup.WEAPONS)).setRegistryName("pointy_stick"));
@@ -1082,12 +1101,14 @@ public class MSItems
 		registry.register(new ArmorItem(MSItemTypes.IRON_LASS_ARMOR, EquipmentSlotType.LEGS, new Item.Properties().tab(MSItemGroup.WEAPONS)).setRegistryName("iron_lass_skirt"));
 		registry.register(new ArmorItem(MSItemTypes.IRON_LASS_ARMOR, EquipmentSlotType.FEET, new Item.Properties().tab(MSItemGroup.WEAPONS)).setRegistryName("iron_lass_shoes"));
 		
-		registry.register(new ArmorItem(MSItemTypes.PROSPIT_PAJAMAS, EquipmentSlotType.CHEST, new Item.Properties().tab(MSItemGroup.WEAPONS)).setRegistryName("prospit_shirt"));
-		registry.register(new ArmorItem(MSItemTypes.PROSPIT_PAJAMAS, EquipmentSlotType.LEGS, new Item.Properties().tab(MSItemGroup.WEAPONS)).setRegistryName("prospit_pants"));
-		registry.register(new ArmorItem(MSItemTypes.PROSPIT_PAJAMAS, EquipmentSlotType.FEET, new Item.Properties().tab(MSItemGroup.WEAPONS)).setRegistryName("prospit_shoes"));
-		registry.register(new ArmorItem(MSItemTypes.DERSE_PAJAMAS, EquipmentSlotType.CHEST, new Item.Properties().tab(MSItemGroup.WEAPONS)).setRegistryName("derse_shirt"));
-		registry.register(new ArmorItem(MSItemTypes.DERSE_PAJAMAS, EquipmentSlotType.LEGS, new Item.Properties().tab(MSItemGroup.WEAPONS)).setRegistryName("derse_pants"));
-		registry.register(new ArmorItem(MSItemTypes.DERSE_PAJAMAS, EquipmentSlotType.FEET, new Item.Properties().tab(MSItemGroup.WEAPONS)).setRegistryName("derse_shoes"));
+		registry.register(new MSArmorItem(MSItemTypes.DREAM_PAJAMAS, EquipmentSlotType.HEAD, new Item.Properties().tab(MSItemGroup.WEAPONS)).setRegistryName("prospit_circlet"));
+		registry.register(new MSArmorItem(MSItemTypes.DREAM_PAJAMAS, EquipmentSlotType.CHEST, new Item.Properties().tab(MSItemGroup.WEAPONS)).setRegistryName("prospit_shirt"));
+		registry.register(new MSArmorItem(MSItemTypes.DREAM_PAJAMAS, EquipmentSlotType.LEGS, new Item.Properties().tab(MSItemGroup.WEAPONS)).setRegistryName("prospit_pants"));
+		registry.register(new MSArmorItem(MSItemTypes.DREAM_PAJAMAS, EquipmentSlotType.FEET, new Item.Properties().tab(MSItemGroup.WEAPONS)).setRegistryName("prospit_shoes"));
+		registry.register(new MSArmorItem(MSItemTypes.DREAM_PAJAMAS, EquipmentSlotType.HEAD, new Item.Properties().tab(MSItemGroup.WEAPONS)).setRegistryName("derse_circlet"));
+		registry.register(new MSArmorItem(MSItemTypes.DREAM_PAJAMAS, EquipmentSlotType.CHEST, new Item.Properties().tab(MSItemGroup.WEAPONS)).setRegistryName("derse_shirt"));
+		registry.register(new MSArmorItem(MSItemTypes.DREAM_PAJAMAS, EquipmentSlotType.LEGS, new Item.Properties().tab(MSItemGroup.WEAPONS)).setRegistryName("derse_pants"));
+		registry.register(new MSArmorItem(MSItemTypes.DREAM_PAJAMAS, EquipmentSlotType.FEET, new Item.Properties().tab(MSItemGroup.WEAPONS)).setRegistryName("derse_shoes"));
 		
 		//core items
 		registry.register(new BoondollarsItem(new Item.Properties().stacksTo(1).tab(MSItemGroup.MAIN)).setRegistryName("boondollars"));
@@ -1133,6 +1154,7 @@ public class MSItems
 		registry.register(new Item(new Item.Properties().tab(MSItemGroup.LANDS).food(MSFoods.FUNGAL_SPORE)).setRegistryName("fungal_spore"));
 		registry.register(new Item(new Item.Properties().tab(MSItemGroup.LANDS).food(MSFoods.SPOREO)).setRegistryName("sporeo"));
 		registry.register(new Item(new Item.Properties().tab(MSItemGroup.LANDS).food(MSFoods.MOREL_MUSHROOM)).setRegistryName("morel_mushroom"));
+		registry.register(new Item(new Item.Properties().tab(MSItemGroup.LANDS)).setRegistryName("sushroom"));
 		registry.register(new Item(new Item.Properties().tab(MSItemGroup.LANDS).food(MSFoods.FRENCH_FRY)).setRegistryName("french_fry"));
 		registry.register(new BlockNamedItem(STRAWBERRY_STEM, new Item.Properties().tab(MSItemGroup.LANDS).food(MSFoods.STRAWBERRY_CHUNK)).setRegistryName("strawberry_chunk"));
 		registry.register(new Item(new Item.Properties().stacksTo(16).tab(MSItemGroup.MAIN).food(MSFoods.FOOD_CAN)).setRegistryName("food_can"));

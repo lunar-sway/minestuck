@@ -44,13 +44,17 @@ public class RemoteObserverBlock extends Block
 			TileEntity tileEntity = worldIn.getBlockEntity(pos);
 			if(tileEntity instanceof RemoteObserverTileEntity)
 			{
-				RemoteObserverTileEntity te = (RemoteObserverTileEntity) tileEntity;
+				if(worldIn.isClientSide)
+				{
+					RemoteObserverTileEntity te = (RemoteObserverTileEntity) tileEntity;
+					MSScreenFactories.displayRemoteObserverScreen(te);
+				}
 				
-				MSScreenFactories.displayRemoteObserverScreen(te);
+				return ActionResultType.SUCCESS;
 			}
 		}
 		
-		return ActionResultType.SUCCESS;
+		return ActionResultType.PASS;
 	}
 	
 	@Override

@@ -1,11 +1,11 @@
 {
     "parent": "block/block",
     "textures": {
-        "back": "minestuck:block/and_gate_back",
+        "back": "minestuck:block/logic_gate_back",
         "right_side": "minestuck:block/logic_gate_right_side",
         "left_side": "minestuck:block/logic_gate_left_side",
         "top": "minestuck:block/and_gate_top",
-        "bottom": "minestuck:block/logic_gate_bottom",
+        "bottom": "minestuck:block/redstone_machine_block",
         "front": "minestuck:block/logic_gate_front",
         "particle": "minestuck:block/and_gate_top"
     },

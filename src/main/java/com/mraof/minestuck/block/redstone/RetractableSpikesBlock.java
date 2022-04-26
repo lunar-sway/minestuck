@@ -45,13 +45,9 @@ public class RetractableSpikesBlock extends Block
 	{
 		if(worldIn.getBlockState(pos).getValue(POWERED) && fallDistance > 3)
 		{
-			if(entityIn instanceof LivingEntity)
-			{
-				entityIn.causeFallDamage(fallDistance, 3);
-			}
-		}
-		
-		super.fallOn(worldIn, pos, entityIn, fallDistance);
+			entityIn.causeFallDamage(fallDistance, 3);
+		} else
+			super.fallOn(worldIn, pos, entityIn, fallDistance);
 	}
 	
 	@Override
@@ -69,7 +65,6 @@ public class RetractableSpikesBlock extends Block
 				double distanceZ = Math.abs(entityIn.getZ() - entityIn.zOld);
 				if(distanceX >= (double) 0.003F || distanceZ >= (double) 0.003F)
 				{
-					//entityIn.makeStuckInBlock(state, new Vector3d(0.3F, 0.9, 0.3F));
 					entityIn.hurt(MSDamageSources.SPIKE, 1.0F); //TODO only activates for players when they take a running jump onto the block, works fine for other mobs
 				}
 			}
@@ -81,25 +76,28 @@ public class RetractableSpikesBlock extends Block
 	{
 		super.tick(state, worldIn, pos, random);
 		
-		boolean entityStandingOnBlock = false;
-		AxisAlignedBB checkBB = new AxisAlignedBB(pos);
-		List<LivingEntity> list = worldIn.getEntitiesOfClass(LivingEntity.class, checkBB.move(0, 0.5, 0));
-		if(!list.isEmpty() && !worldIn.isClientSide)
+		if(!worldIn.isClientSide)
 		{
-			for(LivingEntity livingEntity : list)
+			boolean entityStandingOnBlock = false;
+			AxisAlignedBB checkBB = new AxisAlignedBB(pos);
+			List<LivingEntity> list = worldIn.getEntitiesOfClass(LivingEntity.class, checkBB.move(0, 0.5, 0));
+			if(!list.isEmpty())
 			{
-				entityStandingOnBlock = (livingEntity.isOnGround() && !livingEntity.isCrouching());
+				for(LivingEntity livingEntity : list)
+				{
+					entityStandingOnBlock = (livingEntity.isOnGround() && !livingEntity.isCrouching());
+				}
 			}
-		}
-		
-		if((state.getValue(POWERED) && !worldIn.hasNeighborSignal(pos) && !state.getValue(PRESSURE_SENSITIVE)) ||
-				(state.getValue(POWERED) && !entityStandingOnBlock && state.getValue(PRESSURE_SENSITIVE)))
-		{
-			worldIn.setBlock(pos, state.setValue(POWERED, false), Constants.BlockFlags.BLOCK_UPDATE);
-			worldIn.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, 1.2F);
-		} else
-		{
-			worldIn.getBlockTicks().scheduleTick(new BlockPos(pos), this, 20);
+			
+			if((state.getValue(POWERED) && !worldIn.hasNeighborSignal(pos) && !state.getValue(PRESSURE_SENSITIVE)) ||
+					(state.getValue(POWERED) && !worldIn.hasNeighborSignal(pos) && !entityStandingOnBlock && state.getValue(PRESSURE_SENSITIVE)))
+			{
+				worldIn.setBlock(pos, state.setValue(POWERED, false), Constants.BlockFlags.BLOCK_UPDATE);
+				worldIn.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, 1.2F);
+			} else
+			{
+				worldIn.getBlockTicks().scheduleTick(new BlockPos(pos), this, 20);
+			}
 		}
 	}
 	
@@ -109,10 +107,9 @@ public class RetractableSpikesBlock extends Block
 		if(!player.isCrouching() && !CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS))
 		{
 			worldIn.setBlock(pos, state.cycle(PRESSURE_SENSITIVE), Constants.BlockFlags.NOTIFY_NEIGHBORS);
-			if(state.getValue(PRESSURE_SENSITIVE))
-				worldIn.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 1.5F);
-			else
-				worldIn.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 0.5F);
+			float pitch = state.getValue(PRESSURE_SENSITIVE) ? 1.5F : 0.5F;
+			worldIn.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, pitch);
+			
 			return ActionResultType.SUCCESS;
 		}
 		
@@ -154,7 +151,7 @@ public class RetractableSpikesBlock extends Block
 			worldIn.setBlock(pos, state.setValue(POWERED, true), Constants.BlockFlags.BLOCK_UPDATE);
 		}
 		
-		if(steppedOn || state.getValue(POWERED))
+		if(steppedOn || (worldIn.hasNeighborSignal(pos) && !state.getValue(POWERED)))
 		{
 			worldIn.setBlock(pos, state.setValue(POWERED, true), Constants.BlockFlags.BLOCK_UPDATE);
 			worldIn.getBlockTicks().scheduleTick(new BlockPos(pos), this, 20);

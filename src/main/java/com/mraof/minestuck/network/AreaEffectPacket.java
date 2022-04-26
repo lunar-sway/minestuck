@@ -44,7 +44,8 @@ public class AreaEffectPacket implements PlayToServerPacket
 			TileEntity te = player.level.getBlockEntity(tileBlockPos);
 			if(te instanceof AreaEffectTileEntity)
 			{
-				if(Math.sqrt(player.distanceToSqr(tileBlockPos.getX() + 0.5, tileBlockPos.getY() + 0.5, tileBlockPos.getZ() + 0.5)) <= 8)
+				BlockPos tePos = te.getBlockPos();
+				if(Math.sqrt(player.distanceToSqr(tePos.getX() + 0.5, tePos.getY() + 0.5, tePos.getZ() + 0.5)) <= 8)
 				{
 					((AreaEffectTileEntity) te).setMinAndMaxEffectPosOffset(minEffectPos, maxEffectPos);
 				}

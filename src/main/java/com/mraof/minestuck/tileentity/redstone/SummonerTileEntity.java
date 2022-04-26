@@ -71,10 +71,11 @@ public class SummonerTileEntity extends TileEntity implements ITickableTileEntit
 					
 					if(playParticles)
 					{
-						for(int particleIterate = 0; particleIterate < 5; particleIterate++)
+						//TODO caused a crash, bring back in later
+						/*for(int particleIterate = 0; particleIterate < 5; particleIterate++)
 						{
 							worldIn.addParticle(ParticleTypes.POOF, true, newPosX, newPosY, newPosZ, 0.1, 0.1, 0.1);
-						}
+						}*/
 					}
 					break;
 				}

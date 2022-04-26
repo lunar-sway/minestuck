@@ -19,7 +19,7 @@ public class AreaEffectScreen extends Screen
 	private static final int guiWidth = 150;
 	private static final int guiHeight = 98;
 	
-	private static final String minPosMessage = "Min Pos Facing Offset";
+	private static final String minPosMessage = "Min Pos Facing Offset"; //TODO make translatable (lang file + translation key)
 	private static final String maxPosMessage = "Max Pos Facing Offset";
 	
 	private final AreaEffectTileEntity te;
@@ -43,7 +43,7 @@ public class AreaEffectScreen extends Screen
 	{
 		int yOffset = (this.height / 2) - (guiHeight / 2);
 		
-		this.minPosDestinationTextFieldX = new TextFieldWidget(this.font, this.width / 2 - 60, yOffset + 15, 40, 20, new StringTextComponent("X value of min effect pos"));
+		this.minPosDestinationTextFieldX = new TextFieldWidget(this.font, this.width / 2 - 60, yOffset + 15, 40, 20, new StringTextComponent("X value of min effect pos")); //TODO make these translatable
 		this.minPosDestinationTextFieldX.setValue(String.valueOf(te.getMinAreaOffset().getX()));
 		addButton(minPosDestinationTextFieldX);
 		

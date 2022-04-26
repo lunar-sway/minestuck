@@ -41,18 +41,22 @@ public class StatStorerBlock extends Block
 	@SuppressWarnings("deprecation")
 	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
 	{
-		if(worldIn.isClientSide && !player.isCrouching() && !CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS))
+		if(!player.isCrouching() && !CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS))
 		{
 			TileEntity tileEntity = worldIn.getBlockEntity(pos);
 			if(tileEntity instanceof StatStorerTileEntity)
 			{
-				StatStorerTileEntity te = (StatStorerTileEntity) tileEntity;
+				if(worldIn.isClientSide)
+				{
+					StatStorerTileEntity te = (StatStorerTileEntity) tileEntity;
+					MSScreenFactories.displayStatStorerScreen(te);
+				}
 				
-				MSScreenFactories.displayStatStorerScreen(te);
+				return ActionResultType.SUCCESS;
 			}
 		}
 		
-		return ActionResultType.SUCCESS;
+		return ActionResultType.PASS;
 	}
 	
 	@Override

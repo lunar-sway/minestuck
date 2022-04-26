@@ -16,6 +16,7 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 
 public class PlatformGeneratorTileEntity extends TileEntity implements ITickableTileEntity
 {
@@ -55,7 +56,9 @@ public class PlatformGeneratorTileEntity extends TileEntity implements ITickable
 				{
 					BlockPos iteratePos = new BlockPos(getBlockPos().relative(getBlockState().getValue(PlatformGeneratorBlock.FACING), blockIterate));
 					if(!level.isAreaLoaded(getBlockPos(), blockIterate) || World.isOutsideBuildHeight(iteratePos.getY())) //allows platform blocks to be placed up until it runs out of bounds)
+					{
 						break;
+					}
 					
 					BlockState iterateBlockState = level.getBlockState(iteratePos);
 					

@@ -125,6 +125,7 @@ public class MSBlockLootTables extends BlockLootTables
 		dropSelf(CHISELED_PINK_STONE_BRICKS);
 		dropSelf(CRACKED_PINK_STONE_BRICKS);
 		dropSelf(MOSSY_PINK_STONE_BRICKS);
+		dropSelf(PINK_STONE_COLUMN);
 		dropSelf(BROWN_STONE);
 		dropSelf(POLISHED_BROWN_STONE);
 		dropSelf(BROWN_STONE_BRICKS);
@@ -148,6 +149,13 @@ public class MSBlockLootTables extends BlockLootTables
 		dropSelf(GREEN_STONE_BRICK_SALAMANDER_RIGHT);
 		dropSelf(GREEN_STONE_BRICK_SKAIA);
 		dropSelf(GREEN_STONE_BRICK_TURTLE);
+		dropSelf(SANDSTONE_COLUMN);
+		dropSelf(CHISELED_SANDSTONE_COLUMN);
+		dropSelf(RED_SANDSTONE_COLUMN);
+		dropSelf(CHISELED_RED_SANDSTONE_COLUMN);
+		add(UNCARVED_WOOD, createSingleItemTableWithSilkTouch(UNCARVED_WOOD, CHIPBOARD));
+		dropSelf(CHIPBOARD);
+		dropSelf(WOOD_SHAVINGS);
 		dropSelf(DENSE_CLOUD);
 		dropSelf(BRIGHT_DENSE_CLOUD);
 		dropSelf(SUGAR_CUBE);
@@ -355,6 +363,7 @@ public class MSBlockLootTables extends BlockLootTables
 		add(REVERSE_CAKE, noDrop());
 		add(FUCHSIA_CAKE, noDrop());
 		add(NEGATIVE_CAKE, noDrop());
+		add(CARROT_CAKE, noDrop());
 		
 		dropSelf(PRIMED_TNT);
 		dropSelf(UNSTABLE_TNT);

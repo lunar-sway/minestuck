@@ -36,7 +36,6 @@ public class SolidSwitchBlock extends Block
 	@SuppressWarnings("deprecation")
 	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
 	{
-		
 		if(!player.isCrouching())
 		{
 			worldIn.setBlock(pos, state.cycle(POWERED), Constants.BlockFlags.NOTIFY_NEIGHBORS);

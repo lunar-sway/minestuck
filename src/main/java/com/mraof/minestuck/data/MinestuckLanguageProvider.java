@@ -169,6 +169,10 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
 	{
 		add("death.attack." + key.getMsgId(), value);
 	}
+	protected void addDamageMessageWithKiller(DamageSource key, String value)
+	{
+		add("death.attack." + key.getMsgId() + ".player", value);
+	}
 	/*protected void defaultLandBiomes(LandBiomeSet biomes)
 	{
 		addBiome(biomes.NORMAL, "Land");

@@ -17,7 +17,7 @@ public class WirelessRedstoneTransmitterScreen extends Screen
 {
 	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/generic_medium.png");
 	
-	private static final int guiWidth = 150; //126 previously
+	private static final int guiWidth = 150;
 	private static final int guiHeight = 98;
 	
 	WirelessRedstoneTransmitterTileEntity te;
@@ -38,7 +38,7 @@ public class WirelessRedstoneTransmitterScreen extends Screen
 	{
 		int yOffset = (this.height / 2) - (guiHeight / 2);
 		
-		this.destinationTextFieldX = new TextFieldWidget(this.font, this.width / 2 - 60, yOffset + 10, 40, 20, new StringTextComponent("X value of destination block pos"));
+		this.destinationTextFieldX = new TextFieldWidget(this.font, this.width / 2 - 60, yOffset + 10, 40, 20, new StringTextComponent("X value of destination block pos")); //TODO make these translatable
 		this.destinationTextFieldX.setValue(String.valueOf(te.getDestinationBlockPos().getX()));
 		addButton(destinationTextFieldX);
 		

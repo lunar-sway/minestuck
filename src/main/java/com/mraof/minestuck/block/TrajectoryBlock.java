@@ -48,23 +48,6 @@ public class TrajectoryBlock extends MSDirectionalBlock
 	}
 	
 	@Override
-	public void updateEntityAfterFallOn(IBlockReader worldIn, Entity entityIn)
-	{
-		if(entityIn.isSuppressingBounce())
-		{
-			super.updateEntityAfterFallOn(worldIn, entityIn);
-		} else
-		{
-			Vector3d entityMotion = entityIn.getDeltaMovement();
-			
-			if(entityMotion.y < 0.0D)
-			{
-				entityIn.setDeltaMovement(entityMotion.x, -entityMotion.y * 0.1D, entityMotion.z); //intended to reset player's falling momentum
-			}
-		}
-	}
-	
-	@Override
 	public void stepOn(World worldIn, BlockPos pos, Entity entityIn)
 	{
 		super.stepOn(worldIn, pos, entityIn);
@@ -127,7 +110,7 @@ public class TrajectoryBlock extends MSDirectionalBlock
 	@Override
 	public PathNodeType getAiPathNodeType(BlockState state, IBlockReader world, BlockPos pos, @Nullable MobEntity entity)
 	{
-		if((state.getValue(POWER) > UPWARDS_POWER_MIN && state.getValue(FACING) == Direction.UP) || (state.getValue(POWER) > 0 && state.getValue(FACING) != Direction.UP))
+		if((state.getValue(POWER) >= UPWARDS_POWER_MIN && state.getValue(FACING) == Direction.UP) || (state.getValue(POWER) > 0 && state.getValue(FACING) != Direction.UP))
 			return PathNodeType.DANGER_OTHER;
 		else
 			return PathNodeType.WALKABLE;
