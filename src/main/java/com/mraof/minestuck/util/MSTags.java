@@ -41,6 +41,7 @@ public class MSTags
 		public static final Tags.IOptionalNamedTag<Block> END_SAPLING_DIRT = tag("end_sapling_dirt");
 		public static final Tags.IOptionalNamedTag<Block> RULE_EXEMPT_ROTATABLE = tag("rule_exempt_rotatable");
 		public static final Tags.IOptionalNamedTag<Block> PLATFORM_ABSORBING = tag("platform_absorbing");
+		public static final Tags.IOptionalNamedTag<Block> PORTABLE_BLOCK_REPLACABLE = tag("portable_block_replacable");
 		
 		private static Tags.IOptionalNamedTag<Block> tag(String name)
 		{

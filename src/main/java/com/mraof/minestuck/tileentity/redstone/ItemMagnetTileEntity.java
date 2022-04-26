@@ -93,7 +93,7 @@ public class ItemMagnetTileEntity extends TileEntity implements ITickableTileEnt
 				{
 					for(Entity itemEntity : list)
 					{
-						if(MSTags.EntityTypes.MAGNET_RECEPTIVE.contains(itemEntity.getType()))
+						if(MSTags.EntityTypes.MAGNET_RECEPTIVE.contains(itemEntity.getType()) || (itemEntity instanceof FallingBlockEntity && ((FallingBlockEntity) itemEntity).getBlockState().getBlock() instanceof PortableBlock))
 						{
 							Direction momentumFromFacing = magnetFacing.getOpposite();
 							Vector3d facingVec = new Vector3d(momentumFromFacing.getStepX(), momentumFromFacing.getStepY(), momentumFromFacing.getStepZ());

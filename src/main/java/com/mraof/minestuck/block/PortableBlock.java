@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block;
 
+import com.mraof.minestuck.util.MSTags;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FallingBlock;
 import net.minecraft.block.material.Material;
@@ -51,6 +52,6 @@ public class PortableBlock extends FallingBlock
 	public static boolean isReplaceable(BlockState state)
 	{
 		Material material = state.getMaterial();
-		return state.isAir() || state.is(BlockTags.FIRE) || material.isLiquid() || material.isReplaceable();
+		return state.isAir() || state.is(BlockTags.FIRE) || material.isLiquid() || material.isReplaceable() || MSTags.Blocks.PORTABLE_BLOCK_REPLACABLE.contains(state.getBlock());
 	}
 }

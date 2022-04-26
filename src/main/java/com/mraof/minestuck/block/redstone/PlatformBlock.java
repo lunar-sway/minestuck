@@ -75,7 +75,7 @@ public class PlatformBlock extends MSDirectionalBlock
 				{
 					BlockPos iteratePos = pos.relative(stateFacing.getOpposite(), blockIterate);
 					BlockState iterateState = world.getBlockState(iteratePos);
-					if(MSTags.Blocks.PLATFORM_ABSORBING.contains(iterateState.getBlock()))
+					if(MSTags.Blocks.PLATFORM_ABSORBING.contains(iterateState.getBlock()) || (iterateState.getBlock() instanceof PlatformReceptacleBlock && iterateState.getValue(PlatformReceptacleBlock.ABSORBING)))
 					{
 						world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
 					}
