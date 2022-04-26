@@ -1,0 +1,9 @@
+{
+  "parent": "block/stairs",
+  "textures":
+  {
+    "bottom": "minestuck:block/black_stone",
+    "top": "minestuck:block/black_stone",
+    "side": "minestuck:block/black_stone"
+  }
+}

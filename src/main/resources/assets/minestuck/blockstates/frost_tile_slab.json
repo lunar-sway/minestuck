@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "type=bottom": { "model": "minestuck:block/frost_tile_slab" },
+    "type=top":    { "model": "minestuck:block/frost_tile_slab_top" },
+    "type=double": { "model": "minestuck:block/frost_tile" }
+  }
+}

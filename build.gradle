@@ -1,19 +1,17 @@
 buildscript {
     repositories {
         maven { url = 'https://files.minecraftforge.net/maven' }
-        jcenter()
+        maven { url = 'https://maven.parchmentmc.org' }
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath 'org.parchmentmc:librarian:1.+'
     }
 }
 
-plugins {
-    id "com.wynprice.cursemaven" version "2.1.5"
-}
-
 apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'org.parchmentmc.librarian.forgegradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
@@ -22,18 +20,20 @@ repositories {
     maven {
         // location of the maven that hosts JEI files
         name = 'Progwml6 maven'
-        url = 'http://dvs1.progwml6.com/files/maven/'
+        url = 'https://dvs1.progwml6.com/files/maven/'
     }
     maven {
         // location of a maven mirror for JEI files, as a fallback
         name = 'ModMaven'
-        url = 'modmaven.k-4u.nl'
-    }
-    maven {
-        name = "RS maven"
-        url = "https://repo.refinedmods.com"
+        url = 'https://modmaven.dev'
     }
     maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
+    maven {
+        url "https://cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
 }
 
 version = project.getProperty('mc_ms_version')
@@ -46,7 +46,7 @@ compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = "UTF-8"
 
 minecraft {
-    mappings channel: "official", version: "1.16.5"
+    mappings channel: "parchment", version: "2022.03.06-1.16.5"
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -119,9 +119,8 @@ dependencies {
 	// http://dvs1.progwml6.com/files/maven
     compileOnly fg.deobf("mezz.jei:jei-${project.getProperty('mc_jei_version')}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-${project.getProperty('mc_jei_version')}")
-    compileOnly fg.deobf("com.refinedmods:refinedstorage:${project.getProperty('mc_refined_storage_version')}")
-
-    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.16.5:3.0.46')
+    compileOnly fg.deobf("curse.maven:refinedstorage-${project.getProperty('mc_refined_storage_curseid')}:${project.getProperty('mc_refined_storage_version')}")
+    implementation fg.deobf("software.bernie.geckolib:geckolib-forge-${project.getProperty('mc_gecko_version')}")
 }
 
 sourceSets.main.resources {

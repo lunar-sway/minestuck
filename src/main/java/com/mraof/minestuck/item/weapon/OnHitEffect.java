@@ -32,6 +32,7 @@ import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 import java.util.List;
 import java.util.Random;
@@ -253,10 +254,13 @@ public interface OnHitEffect
 			Vector3i targetBackVec3i = target.blockPosition().relative(direction, 3); //three blocks behind the targets back
 			if(targetBackVec3i.closerThan(attacker.blockPosition(), 3))
 			{
-				for(int i = 0; i < 4; i++)
+				if (target.level instanceof ServerWorld)
 				{
-					target.level.addParticle(ParticleTypes.DAMAGE_INDICATOR, true, target.blockPosition().relative(direction).getX(), target.getEyePosition(1F).y - 1, target.blockPosition().relative(direction).getZ(), 0.1, 0.1, 0.1);
+					((ServerWorld) target.level).sendParticles(ParticleTypes.DAMAGE_INDICATOR,
+							target.blockPosition().relative(direction).getX(), target.getEyePosition(1F).y - 1, target.blockPosition().relative(direction).getZ(),
+							4, 0, 0, 0, 0.1);
 				}
+				
 				
 				DamageSource source;
 				if(attacker instanceof PlayerEntity)

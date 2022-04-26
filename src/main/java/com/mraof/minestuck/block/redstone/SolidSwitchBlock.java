@@ -36,17 +36,12 @@ public class SolidSwitchBlock extends Block
 	@SuppressWarnings("deprecation")
 	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
 	{
-		if(!player.isCrouching())
-		{
-			worldIn.setBlock(pos, state.cycle(POWERED), Constants.BlockFlags.NOTIFY_NEIGHBORS);
-			if(state.getValue(POWERED))
-				worldIn.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 1.2F);
-			else
-				worldIn.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, 1.2F);
-			return ActionResultType.SUCCESS;
-		}
-		
-		return ActionResultType.PASS;
+		worldIn.setBlock(pos, state.cycle(POWERED), Constants.BlockFlags.DEFAULT);
+		if(state.getValue(POWERED))
+			worldIn.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 1.2F);
+		else
+			worldIn.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, 1.2F);
+		return ActionResultType.SUCCESS;
 	}
 	
 	@Override
@@ -65,12 +60,6 @@ public class SolidSwitchBlock extends Block
 	public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side)
 	{
 		return true;
-	}
-	
-	@Override
-	public int getLightValue(BlockState state, IBlockReader world, BlockPos pos)
-	{
-		return state.getValue(POWERED) ? super.getLightValue(state, world, pos) : 0;
 	}
 	
 	@Override

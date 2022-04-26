@@ -588,11 +588,6 @@
       },
       "entries": [
         {
-          "type": "minestuck:land_table",
-          "name": "minestuck:chests/medium_basic",
-          "pool": "rare"
-        },
-        {
           "type": "minecraft:item",
           "weight": 20,
           "quality": 1,

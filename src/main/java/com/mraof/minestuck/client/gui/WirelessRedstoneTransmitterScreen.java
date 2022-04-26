@@ -46,7 +46,7 @@ public class WirelessRedstoneTransmitterScreen extends Screen
 		this.destinationTextFieldY.setValue(String.valueOf(te.getDestinationBlockPos().getY()));
 		addButton(destinationTextFieldY);
 		
-		this.destinationTextFieldZ = new TextFieldWidget(this.font, this.width / 2 + 20, yOffset + 10, 40, 20, new StringTextComponent("Z value of destination block pos")); //was yOffset + 25
+		this.destinationTextFieldZ = new TextFieldWidget(this.font, this.width / 2 + 20, yOffset + 10, 40, 20, new StringTextComponent("Z value of destination block pos"));
 		this.destinationTextFieldZ.setValue(String.valueOf(te.getDestinationBlockPos().getZ()));
 		addButton(destinationTextFieldZ);
 		

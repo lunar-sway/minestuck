@@ -1,6 +1,8 @@
 {
   "replace": false,
   "values": [
+    "minestuck:decrepit_stone_bricks",
+    "minestuck:mossy_decrepit_stone_bricks",
     "minestuck:flowery_mossy_stone_bricks"
   ]
 }

@@ -105,7 +105,7 @@ public class AreaEffectBlock extends HorizontalBlock
 	{
 		if(!worldIn.isClientSide)
 		{
-			worldIn.setBlock(pos, state.cycle(ALL_MOBS), Constants.BlockFlags.NOTIFY_NEIGHBORS);
+			worldIn.setBlock(pos, state.cycle(ALL_MOBS), Constants.BlockFlags.DEFAULT);
 			if(state.getValue(ALL_MOBS))
 				worldIn.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 1.2F);
 			else

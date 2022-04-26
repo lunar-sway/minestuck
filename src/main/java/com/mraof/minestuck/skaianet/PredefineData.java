@@ -100,6 +100,9 @@ public final class PredefineData
 	private void forceVerifyTitle(Set<TitleLandType> availableTypes, CommandSource source) throws SkaianetException
 	{
 		Set<EnumAspect> availableAspects = availableTypes.stream().map(TitleLandType::getAspect).filter(Objects::nonNull).collect(Collectors.toSet());
+		if (availableAspects.isEmpty())
+			availableAspects = EnumAspect.valuesSet();
+		
 		if(title == null || !availableAspects.contains(title.getHeroAspect()))
 		{
 			Title previous = title;

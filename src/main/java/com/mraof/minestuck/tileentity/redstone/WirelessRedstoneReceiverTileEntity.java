@@ -65,11 +65,11 @@ public class WirelessRedstoneReceiverTileEntity extends TileEntity implements IT
 				te.sendUpdateToPosition(level, getBlockPos());
 			} else
 			{
-				level.setBlock(getBlockPos(), level.getBlockState(getBlockPos()).setValue(WirelessRedstoneReceiverBlock.POWER, 0), Constants.BlockFlags.NOTIFY_NEIGHBORS);
+				level.setBlock(getBlockPos(), level.getBlockState(getBlockPos()).setValue(WirelessRedstoneReceiverBlock.POWER, 0), Constants.BlockFlags.DEFAULT);
 			}
 		}
 		else if(level != null && !level.isClientSide)
-			level.setBlock(getBlockPos(), level.getBlockState(getBlockPos()).setValue(WirelessRedstoneReceiverBlock.POWER, 0), Constants.BlockFlags.NOTIFY_NEIGHBORS);
+			level.setBlock(getBlockPos(), level.getBlockState(getBlockPos()).setValue(WirelessRedstoneReceiverBlock.POWER, 0), Constants.BlockFlags.DEFAULT);
 	}
 	
 	@Override
