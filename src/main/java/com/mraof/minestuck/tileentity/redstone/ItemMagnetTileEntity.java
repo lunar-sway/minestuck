@@ -8,6 +8,7 @@ import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.FallingBlockEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
