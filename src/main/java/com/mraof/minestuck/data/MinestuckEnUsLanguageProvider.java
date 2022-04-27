@@ -409,7 +409,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.TWO_SECOND_INTERVAL_TIMED_SOLID_SWITCH, "Timed Solid Switch (Two Second)");
 		addTooltip(MSBlocks.TWO_SECOND_INTERVAL_TIMED_SOLID_SWITCH, "Loses one value of power every two seconds until it turns off.");
 		add(MSBlocks.SUMMONER, "Summoner");
-		addExtra(MSBlocks.SUMMONER, SummonerBlock.UNTRIGGERABLE_CHANGE_MESSAGE, "Block inactivation after successful summoning now %s.");
 		add(MSBlocks.AREA_EFFECT_BLOCK, "Area Effect Block");
 		addExtra(MSBlocks.AREA_EFFECT_BLOCK, AreaEffectBlock.EFFECT_CHANGE_MESSAGE, "Effect type changed to %s with the amplification strength %s.");
 		add(MSBlocks.PLATFORM_GENERATOR, "Platform Generator");

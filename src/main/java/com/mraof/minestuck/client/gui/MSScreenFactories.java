@@ -10,10 +10,7 @@ import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
 import com.mraof.minestuck.tileentity.machine.AlchemiterTileEntity;
-import com.mraof.minestuck.tileentity.redstone.AreaEffectTileEntity;
-import com.mraof.minestuck.tileentity.redstone.RemoteObserverTileEntity;
-import com.mraof.minestuck.tileentity.redstone.StatStorerTileEntity;
-import com.mraof.minestuck.tileentity.redstone.WirelessRedstoneTransmitterTileEntity;
+import com.mraof.minestuck.tileentity.redstone.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.gui.screen.Screen;
@@ -84,6 +81,11 @@ public class MSScreenFactories
 	public static void displayRemoteObserverScreen(RemoteObserverTileEntity tileEntity)
 	{
 		Minecraft.getInstance().setScreen(new RemoteObserverScreen(tileEntity));
+	}
+	
+	public static void displaySummonerScreen(SummonerTileEntity tileEntity)
+	{
+		Minecraft.getInstance().setScreen(new SummonerScreen(tileEntity));
 	}
 	
 	public static void displayAlchemiterScreen(AlchemiterTileEntity tileEntity)

@@ -26,7 +26,7 @@ import javax.annotation.Nullable;
 import java.util.Random;
 
 /**
- * When powered, the tile entity for this block pulls item entities towards it(or pushes item entities if REVERSE_POLARITY is true
+ * When powered, the tile entity for this block pulls item entities towards it(or pushes item entities if REVERSE_POLARITY is true)
  */
 public class ItemMagnetBlock extends DirectionalCustomShapeBlock
 {

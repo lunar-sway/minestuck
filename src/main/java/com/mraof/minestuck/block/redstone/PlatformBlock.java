@@ -61,6 +61,10 @@ public class PlatformBlock extends MSDirectionalBlock
 			return BlockRenderType.MODEL;
 	}
 	
+	/**
+	 * Using the generator distance block state and its facing,this function determines if a platform generator is still capable of refreshing this block and deletes the block if it is not supported.
+	 * There must be a powered platform generator at the coordinates established by the generator distance and facing, and there must not be any blocks in the tag PLATFORM_ABSORBING or absorbing mode platform receptacles in between the platform block and its generator
+	 */
 	public static void updateSurvival(BlockState state, World world, BlockPos pos)
 	{
 		if(!world.isClientSide() && state.getBlock() instanceof PlatformBlock)
@@ -71,19 +75,22 @@ public class PlatformBlock extends MSDirectionalBlock
 			{
 				BlockState supportingState = world.getBlockState(supportingPos);
 				
-				for(int blockIterate = 1; blockIterate < state.getValue(GENERATOR_DISTANCE); blockIterate++)
+				for(int blockIterate = 1; blockIterate < state.getValue(GENERATOR_DISTANCE); blockIterate++) //looping through blocks between the platform block and its generator for absorbing kinds
 				{
 					BlockPos iteratePos = pos.relative(stateFacing.getOpposite(), blockIterate);
 					BlockState iterateState = world.getBlockState(iteratePos);
-					if(MSTags.Blocks.PLATFORM_ABSORBING.contains(iterateState.getBlock()) || (iterateState.getBlock() instanceof PlatformReceptacleBlock && iterateState.getValue(PlatformReceptacleBlock.ABSORBING)))
+					if(MSTags.Blocks.PLATFORM_ABSORBING.contains(iterateState.getBlock()) ||
+							(iterateState.getBlock() instanceof PlatformReceptacleBlock && iterateState.getValue(PlatformReceptacleBlock.ABSORBING)))
 					{
 						world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
 					}
 				}
 				
-				if(supportingState.getBlock() instanceof PlatformGeneratorBlock && (!supportingState.getValue(PlatformGeneratorBlock.POWERED) || supportingState.getValue(PlatformGeneratorBlock.FACING) != stateFacing) || !(supportingState.getBlock() instanceof PlatformGeneratorBlock))
-					world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
-				else if(supportingState.getBlock() instanceof PlatformGeneratorBlock && supportingState.getValue(PlatformGeneratorBlock.POWERED))
+				if(supportingState.getBlock() instanceof PlatformGeneratorBlock &&
+						(!supportingState.getValue(PlatformGeneratorBlock.POWERED) || supportingState.getValue(PlatformGeneratorBlock.FACING) != stateFacing) ||
+						!(supportingState.getBlock() instanceof PlatformGeneratorBlock))
+					world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState()); //removes platform block if there is no platform generator, or if a platform generator is there but it is either not powered or not facing the platform block
+				else if(supportingState.getBlock() instanceof PlatformGeneratorBlock && supportingState.getValue(PlatformGeneratorBlock.POWERED)) //switches which kind of platform block is present if the Invisibility mode does not match
 				{
 					if(supportingState.getValue(PlatformGeneratorBlock.INVISIBLE_MODE) != state.getValue(INVISIBLE) && supportingState.getValue(PlatformGeneratorBlock.FACING) == stateFacing)
 						world.setBlockAndUpdate(pos, state.setValue(INVISIBLE, supportingState.getValue(PlatformGeneratorBlock.INVISIBLE_MODE))); //TODO Visible platforms should override invisible ones

@@ -45,12 +45,6 @@ public class RemoteComparatorTileEntity extends TileEntity implements ITickableT
 	}
 	
 	@Override
-	public void onLoad()
-	{
-		super.onLoad();
-	}
-	
-	@Override
 	public void load(BlockState state, CompoundNBT compound)
 	{
 		super.load(state, compound);

@@ -19,7 +19,7 @@ import net.minecraft.world.World;
  */
 public class FragileBlock extends Block
 {
-	//collision shape is not a full block in order for the entityInside function to work. entityInside is used instead of stepOn as stepOn can be bypassed via sneaking. fallOn is used in addition for additional checking opportunities
+	//collision shape is not a full block in order for the entityInside function to work. entityInside is used instead of stepOn as stepOn can be bypassed via sneaking. fallOn is used as well for additional checking opportunities
 	private static final VoxelShape COLLISION_SHAPE = Block.box(0, 0, 0, 16, 15, 16);
 	
 	public FragileBlock(Properties properties)
