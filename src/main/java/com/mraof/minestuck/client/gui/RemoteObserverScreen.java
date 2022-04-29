@@ -44,9 +44,9 @@ public class RemoteObserverScreen extends Screen
 	{
 		int yOffset = (this.height / 2) - (guiHeight / 2);
 		
-		addButton(typeButton = new ExtendedButton(this.width / 2 - 67, (height - guiHeight) / 2 + 15, 135, 20, new StringTextComponent(activeType.getNameNoSpaces()), button -> changeActiveType()));
+		addButton(typeButton = new ExtendedButton(this.width / 2 - 67, (height - guiHeight) / 2 + 5, 135, 20, new StringTextComponent(activeType.getNameNoSpaces()), button -> changeActiveType()));
 		
-		this.entityTypeTextField = new TextFieldWidget(this.font, this.width / 2 - 53, yOffset + 40, 100, 18, new StringTextComponent("Current Entity Type"));	//TODO Use translation instead, and maybe look at other text fields for what the text should be
+		this.entityTypeTextField = new TextFieldWidget(this.font, this.width / 2 - 53, yOffset + 30, 105, 18, new StringTextComponent("Current Entity Type"));	//TODO Use translation instead, and maybe look at other text fields for what the text should be
 		this.entityTypeTextField.setValue(EntityType.getKey(te.getCurrentEntityType()).toString()); //TODO somewhere along the line, if the active type is not current entity present and the gui is exited, returning to current entity present active type has pig as the entity type
 		addButton(entityTypeTextField);
 		entityTypeTextField.setVisible(activeType == RemoteObserverTileEntity.ActiveType.CURRENT_ENTITY_PRESENT);

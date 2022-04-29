@@ -36,11 +36,18 @@ public class PortableBlock extends FallingBlock
 				worldIn.removeBlock(pos, false);
 				worldIn.destroyBlock(pos.relative(direction), true);
 				worldIn.setBlock(pos.relative(direction), state, 2);
+				
 				return ActionResultType.SUCCESS;
 			}
 		}
 		
 		return ActionResultType.PASS;
+	}
+	
+	@Override
+	protected int getDelayAfterPlace()
+	{
+		return 0;
 	}
 	
 	@Override
@@ -51,7 +58,6 @@ public class PortableBlock extends FallingBlock
 	
 	public static boolean isReplaceable(BlockState state)
 	{
-		Material material = state.getMaterial();
-		return state.isAir() || state.is(BlockTags.FIRE) || material.isLiquid() || material.isReplaceable() || MSTags.Blocks.PORTABLE_BLOCK_REPLACABLE.contains(state.getBlock());
+		return isFree(state) || MSTags.Blocks.PORTABLE_BLOCK_REPLACABLE.contains(state.getBlock());
 	}
 }

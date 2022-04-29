@@ -61,7 +61,7 @@ public class SummonerScreen extends Screen
 			addButton(unTriggerableButton = new ExtendedButton(this.width / 2 - 65, yOffset + 70, 85, 20, new StringTextComponent("UNTRIGGERABLE"), button -> cycleUntriggerable()));
 		else
 			addButton(unTriggerableButton = new ExtendedButton(this.width / 2 - 65, yOffset + 70, 85, 20, new StringTextComponent("TRIGGERABLE"), button -> cycleUntriggerable()));
-		addButton(new ExtendedButton(this.width / 2 + 25, yOffset + 70, 40, 20, new StringTextComponent("DONE"), button -> finish())); //was 18
+		addButton(new ExtendedButton(this.width / 2 + 25, yOffset + 70, 40, 20, new StringTextComponent("DONE"), button -> finish()));
 	}
 	
 	/**
@@ -102,7 +102,7 @@ public class SummonerScreen extends Screen
 		int yOffset = (this.height / 2) - (guiHeight / 2);
 		
 		this.blit(matrixStack, (this.width / 2) - (guiWidth / 2), yOffset, 0, 0, guiWidth, guiHeight);
-		font.draw(matrixStack, Integer.toString(summonRange), (width / 2) - 5, (height - guiHeight) / 2 + 15, 0x404040);
+		font.draw(matrixStack, Integer.toString(summonRange), (width / 2) - 5, (height - guiHeight) / 2 + 16, 16777215); //0x404040
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
 	}
 	

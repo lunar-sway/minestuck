@@ -2,22 +2,27 @@ package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mraof.minestuck.block.redstone.AreaEffectBlock;
 import com.mraof.minestuck.network.AreaEffectPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.tileentity.redstone.AreaEffectTileEntity;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.potion.Effect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class AreaEffectScreen extends Screen
 {
-	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/generic_medium.png");
+	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/generic_large.png");
 	
 	private static final int guiWidth = 150;
-	private static final int guiHeight = 98;
+	private static final int guiHeight = 132;
 	
 	private static final String minPosMessage = "Min Pos Facing Offset"; //TODO make translatable (lang file + translation key)
 	private static final String maxPosMessage = "Max Pos Facing Offset";
@@ -29,6 +34,11 @@ public class AreaEffectScreen extends Screen
 	private TextFieldWidget maxPosDestinationTextFieldX;
 	private TextFieldWidget maxPosDestinationTextFieldY;
 	private TextFieldWidget maxPosDestinationTextFieldZ;
+	private TextFieldWidget effectTextField;
+	private TextFieldWidget effectAmplifierTextField;
+	private boolean isAllMobs;
+	
+	private Button allMobsButton;
 	
 	
 	AreaEffectScreen(AreaEffectTileEntity te)
@@ -36,6 +46,7 @@ public class AreaEffectScreen extends Screen
 		super(new StringTextComponent("Area Effect Block"));
 		
 		this.te = te;
+		this.isAllMobs = te.getBlockState().getValue(AreaEffectBlock.ALL_MOBS);
 	}
 	
 	@Override
@@ -67,7 +78,40 @@ public class AreaEffectScreen extends Screen
 		this.maxPosDestinationTextFieldZ.setValue(String.valueOf(te.getMaxAreaOffset().getZ()));
 		addButton(maxPosDestinationTextFieldZ);
 		
-		addButton(new ExtendedButton(this.width / 2 - 20, yOffset + 73, 40, 20, new StringTextComponent("DONE"), button -> finish()));
+		
+		this.effectTextField = new TextFieldWidget(this.font, this.width / 2 - 65, yOffset + 79, 105, 18, new StringTextComponent("Current Effect"));
+		this.effectTextField.setValue(te.getEffect().getRegistryName().toString());
+		addButton(effectTextField);
+		
+		this.effectAmplifierTextField = new TextFieldWidget(this.font, this.width / 2 + 45, yOffset + 79, 20, 18, new StringTextComponent("Current Effect Amplifier"));
+		this.effectAmplifierTextField.setValue(String.valueOf(te.getEffectAmplifier()));
+		addButton(effectAmplifierTextField);
+		
+		if(isAllMobs)
+			addButton(allMobsButton = new ExtendedButton(this.width / 2 - 65, yOffset + 105, 85, 20, new StringTextComponent("ALL MOBS"), button -> cycleIsAllMobs()));
+		else
+			addButton(allMobsButton = new ExtendedButton(this.width / 2 - 65, yOffset + 105, 85, 20, new StringTextComponent("JUST PLAYERS"), button -> cycleIsAllMobs()));
+		addButton(new ExtendedButton(this.width / 2 + 25, yOffset + 105, 40, 20, new StringTextComponent("DONE"), button -> finish()));
+	}
+	
+	/**
+	 * Cycles between the block affecting all mobs or just players
+	 */
+	private void cycleIsAllMobs()
+	{
+		isAllMobs = !isAllMobs;
+		if(isAllMobs)
+			allMobsButton.setMessage(new StringTextComponent("ALL MOBS"));
+		else
+			allMobsButton.setMessage(new StringTextComponent("JUST PLAYERS"));
+	}
+	
+	/**
+	 * Returns the current effect type
+	 */
+	private Effect getEffect(String stringInput)
+	{
+		return ForgeRegistries.POTIONS.getValue(ResourceLocation.tryParse(stringInput));
 	}
 	
 	@Override
@@ -95,7 +139,7 @@ public class AreaEffectScreen extends Screen
 		BlockPos minOffsetPos = new BlockPos(minX, minY, minZ);
 		BlockPos maxOffsetPos = new BlockPos(maxX, maxY, maxZ);
 		
-		MSPacketHandler.sendToServer(new AreaEffectPacket(minOffsetPos, maxOffsetPos, te.getBlockPos()));
+		MSPacketHandler.sendToServer(new AreaEffectPacket(getEffect(effectTextField.getValue()), MathHelper.clamp(parseInt(effectAmplifierTextField), 0, 255), isAllMobs, minOffsetPos, maxOffsetPos, te.getBlockPos()));
 		onClose();
 	}
 	

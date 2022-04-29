@@ -74,9 +74,6 @@ public class AreaEffectBlock extends HorizontalBlock
 				if(heldItemStack.getItem() instanceof PotionItem)
 				{
 					clickWithPotion(worldIn, pos, player, te, heldItemStack);
-				} else if(heldItemStack.isEmpty() && player.isCrouching())
-				{
-					cycleAllMobsProperty(state, worldIn, pos);
 				} else if(!player.isCrouching() && worldIn.isClientSide)
 				{
 					MSScreenFactories.displayAreaEffectScreen(te);
