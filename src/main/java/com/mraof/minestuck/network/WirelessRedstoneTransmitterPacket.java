@@ -43,7 +43,7 @@ public class WirelessRedstoneTransmitterPacket implements PlayToServerPacket
 				BlockPos tePos = te.getBlockPos();
 				if(Math.sqrt(player.distanceToSqr(tePos.getX() + 0.5, tePos.getY() + 0.5, tePos.getZ() + 0.5)) <= 8)
 				{
-					((WirelessRedstoneTransmitterTileEntity) te).setDestinationBlockPos(destinationBlockPos);
+					((WirelessRedstoneTransmitterTileEntity) te).setOffsetFromDestinationBlockPos(destinationBlockPos);
 				}
 			}
 		}

@@ -10,7 +10,9 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.INameable;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -19,8 +21,10 @@ import net.minecraftforge.common.util.Constants;
 
 public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements INameable, ITickableTileEntity
 {
-	private BlockPos destBlockPos;
+	private BlockPos offsetPos;
+	private Direction facing;
 	private int tickCycle;
+	private static final int WIRELESS_CONSTANT = 6;
 	
 	public WirelessRedstoneTransmitterTileEntity()
 	{
@@ -33,7 +37,7 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 		if(level == null || !level.isAreaLoaded(getBlockPos(), 1))
 			return;
 		
-		if(tickCycle >= 6) //6 is wireless constant
+		if(tickCycle >= WIRELESS_CONSTANT)
 		{
 			sendUpdateToPosition();
 			tickCycle = 0;
@@ -42,20 +46,49 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 		tickCycle++;
 	}
 	
-	public BlockPos getDestinationBlockPos()
+	public BlockPos getDestinationBlockPosFromOffset()
 	{
-		if(destBlockPos == null)
-			destBlockPos = new BlockPos(0, 0, 0);
-		return destBlockPos;
+		if(offsetPos == null)
+			offsetPos = new BlockPos(0, 0, 0);
+		if(facing == null)
+			facing = getBlockState().getValue(WirelessRedstoneTransmitterBlock.FACING);
+		
+		Direction stateFacing = getBlockState().getValue(WirelessRedstoneTransmitterBlock.FACING);
+		
+		//in cases where the block has been rotated after the coordinates were set(rotator blocks or placement in structure templates), this will transform the relative coordinates by rotating them around the block
+		if(facing.getClockWise() == stateFacing)
+		{
+			this.offsetPos = offsetPos.rotate(Rotation.CLOCKWISE_90);
+		}
+		else if(facing.getOpposite() == stateFacing)
+		{
+			this.offsetPos = offsetPos.rotate(Rotation.CLOCKWISE_180);
+		}
+		else if(facing.getCounterClockWise() == stateFacing)
+		{
+			this.offsetPos = offsetPos.rotate(Rotation.COUNTERCLOCKWISE_90);
+		}
+		
+		//refreshing the facing value now that offsetPos has been corrected to fix the change
+		this.facing = getBlockState().getValue(WirelessRedstoneTransmitterBlock.FACING);
+		
+		return getBlockPos().offset(offsetPos);
 	}
 	
-	public void setDestinationBlockPos(BlockPos destinationPosIn)
+	public void setOffsetFromDestinationBlockPos(BlockPos destinationPosIn)
 	{
-		this.destBlockPos = destinationPosIn;
+		this.facing = getBlockState().getValue(WirelessRedstoneTransmitterBlock.FACING);
+		
+		int offsetX = destinationPosIn.getX() - getBlockPos().getX();
+		int offsetY = destinationPosIn.getY() - getBlockPos().getY();
+		int offsetZ = destinationPosIn.getZ() - getBlockPos().getZ();
+		
+		this.offsetPos = new BlockPos(offsetX, offsetY, offsetZ);
 	}
 	
 	private void sendUpdateToPosition() //for internal use
 	{
+		BlockPos destBlockPos = getDestinationBlockPosFromOffset();
 		if(destBlockPos != null && level != null && !level.isClientSide && level.isAreaLoaded(destBlockPos, 1))
 		{
 			((WirelessRedstoneTransmitterBlock) getBlockState().getBlock()).updatePower(level, getBlockPos());
@@ -73,7 +106,7 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 	{
 		if(destBlockPos != null && worldIn != null && !worldIn.isClientSide && worldIn.isAreaLoaded(destBlockPos, 1))
 		{
-			if(destBlockPos.equals(this.destBlockPos))
+			if(destBlockPos.equals(getDestinationBlockPosFromOffset()))
 			{
 				BlockState blockStateIn = worldIn.getBlockState(destBlockPos);
 				if(blockStateIn.getBlock() instanceof WirelessRedstoneReceiverBlock)
@@ -127,10 +160,10 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 		super.load(state, compound);
 		
 		tickCycle = compound.getInt("tickCycle");
-		int destX = compound.getInt("destX");
-		int destY = compound.getInt("destY");
-		int destZ = compound.getInt("destZ");
-		this.destBlockPos = new BlockPos(destX, destY, destZ);
+		int offsetX = compound.getInt("offsetX");
+		int offsetY = compound.getInt("offsetY");
+		int offsetZ = compound.getInt("offsetZ");
+		this.offsetPos = new BlockPos(offsetX, offsetY, offsetZ);
 	}
 	
 	@Override
@@ -140,11 +173,11 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 		
 		compound.putInt("tickCycle", tickCycle);
 		
-		getDestinationBlockPos();
+		getDestinationBlockPosFromOffset();
 		
-		compound.putInt("destX", destBlockPos.getX());
-		compound.putInt("destY", destBlockPos.getY());
-		compound.putInt("destZ", destBlockPos.getZ());
+		compound.putInt("offsetX", offsetPos.getX());
+		compound.putInt("offsetY", offsetPos.getY());
+		compound.putInt("offsetZ", offsetPos.getZ());
 		
 		return compound;
 	}

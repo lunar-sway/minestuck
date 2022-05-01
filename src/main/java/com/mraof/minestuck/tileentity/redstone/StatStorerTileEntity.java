@@ -42,6 +42,7 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 	private ActiveType activeType;
 	private int divideValueBy;
 	private int tickCycle;
+	private static final int WIRELESS_CONSTANT = 6;
 	
 	public enum ActiveType
 	{
@@ -82,7 +83,7 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 		if(level == null || !level.isAreaLoaded(worldPosition, 1))
 			return;
 		
-		if(tickCycle % 6 == 1) //6 is wireless constant
+		if(tickCycle % WIRELESS_CONSTANT == 1)
 		{
 			if(!level.isClientSide)
 			{

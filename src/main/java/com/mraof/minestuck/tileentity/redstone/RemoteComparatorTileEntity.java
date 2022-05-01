@@ -12,6 +12,7 @@ import net.minecraft.tileentity.TileEntity;
 public class RemoteComparatorTileEntity extends TileEntity implements ITickableTileEntity
 {
 	private int tickCycle;
+	private static final int WIRELESS_CONSTANT = 6;
 	
 	public RemoteComparatorTileEntity()
 	{
@@ -24,7 +25,7 @@ public class RemoteComparatorTileEntity extends TileEntity implements ITickableT
 		if(level == null)
 			return;
 		
-		if(tickCycle >= 6)
+		if(tickCycle >= WIRELESS_CONSTANT)
 		{
 			sendUpdate();
 			tickCycle = 0;
