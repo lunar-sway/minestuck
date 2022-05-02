@@ -53,10 +53,6 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 		BlockPos minAreaPos = tePos.relative(teFacing, minAreaOffset.getX()).relative(Direction.UP, minAreaOffset.getY()).relative(teFacing.getClockWise(), minAreaOffset.getZ());
 		BlockPos maxAreaPos = tePos.relative(teFacing, maxAreaOffset.getX()).relative(Direction.UP, maxAreaOffset.getY()).relative(teFacing.getClockWise(), maxAreaOffset.getZ());
 		
-		//TODO with the current area effect block being tested, only north and east work right now and with the axis align functions only the east directional effect works
-		//minAreaPos = axisAlignBlockPosGetMin(minAreaPos, maxAreaPos);
-		//maxAreaPos = axisAlignBlockPosGetMax(minAreaPos, maxAreaPos);
-		
 		if(getBlockState().getValue(AreaEffectBlock.ALL_MOBS))
 		{
 			for(LivingEntity livingEntity : level.getLoadedEntitiesOfClass(LivingEntity.class, new AxisAlignedBB(minAreaPos, maxAreaPos)))
@@ -72,10 +68,7 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 							break;
 					}
 					
-					if(effect.isInstantenous())
-						livingEntity.addEffect(new EffectInstance(effect, 1, effectAmplifier, false, false));
-					else
-						livingEntity.addEffect(new EffectInstance(effect, 120, effectAmplifier, false, false));
+					addEffect(livingEntity);
 				}
 			}
 		} else
@@ -90,13 +83,18 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 					if(playerEntity.isCreative() && !effect.isBeneficial())
 						break;
 					
-					if(effect.isInstantenous())
-						playerEntity.addEffect(new EffectInstance(effect, 1, effectAmplifier, false, false));
-					else
-						playerEntity.addEffect(new EffectInstance(effect, 120, effectAmplifier, false, false));
+					addEffect(playerEntity);
 				}
 			}
 		}
+	}
+	
+	private void addEffect(LivingEntity livingEntity)
+	{
+		if(effect.isInstantenous())
+			livingEntity.addEffect(new EffectInstance(effect, 1, effectAmplifier, false, false));
+		else
+			livingEntity.addEffect(new EffectInstance(effect, 120, effectAmplifier, false, false));
 	}
 	
 	/**

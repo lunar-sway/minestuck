@@ -23,6 +23,8 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 	private int tickCycle;
 	@Nonnull
 	private ActiveType activeType;
+	private int observingRange; //default is 16, but can be set(via gui) between 1 and 64
+	private static final int WIRELESS_CONSTANT = 6;
 	
 	private EntityType<?> currentEntityType;
 	
@@ -65,7 +67,7 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 		if(level == null || !level.isAreaLoaded(getBlockPos(), 1))
 			return;
 		
-		if(tickCycle >= 6 * 1.667) //6 * 1.667 ~= 10 ticks or 0.5 sec, 6 is wireless constant
+		if(tickCycle >= WIRELESS_CONSTANT * 1.667) //6 * 1.667 ~= 10 ticks or 0.5 sec
 		{
 			checkRelaventType();
 			tickCycle = 0;
@@ -77,9 +79,9 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 	{
 		boolean shouldBePowered = false;
 		
-		//TODO configurable radius
-		//TODO allow for the center of the radius to be moved to other coordinates as is seen with command blocks
-		AxisAlignedBB axisalignedbb = new AxisAlignedBB(getBlockPos()).inflate(15D, 15D, 15D);
+		if(observingRange == 0)
+			this.observingRange = 16; //on creation it defaults to 0, when it should default to 16
+		AxisAlignedBB axisalignedbb = new AxisAlignedBB(getBlockPos()).inflate(observingRange);
 		List<LivingEntity> livingEntityList = level.getLoadedEntitiesOfClass(LivingEntity.class, axisalignedbb);
 		if(!livingEntityList.isEmpty())
 		{
@@ -115,6 +117,11 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 		}
 	}
 	
+	public void setCurrentEntityType(EntityType<?> currentEntityType)
+	{
+		this.currentEntityType = currentEntityType;
+	}
+	
 	public EntityType<?> getCurrentEntityType()
 	{
 		if(currentEntityType != null)
@@ -123,9 +130,14 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 			return EntityType.PLAYER;
 	}
 	
-	public void setCurrentEntityType(EntityType<?> currentEntityType)
+	public void setObservingRange(int rangeIn)
 	{
-		this.currentEntityType = currentEntityType;
+		this.observingRange = rangeIn;
+	}
+	
+	public int getObservingRange()
+	{
+		return this.observingRange;
 	}
 	
 	@Override
@@ -135,6 +147,7 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 		
 		this.tickCycle = compound.getInt("tickCycle");
 		this.activeType = ActiveType.fromInt(compound.getInt("activeTypeOrdinal"));
+		observingRange = compound.getInt("observingRange");
 		Optional<EntityType<?>> attemptedEntityType = EntityType.byString(compound.getString("currentEntityType"));
 		attemptedEntityType.ifPresent(entityType -> this.currentEntityType = entityType);
 	}
@@ -146,6 +159,7 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 		
 		compound.putInt("tickCycle", tickCycle);
 		compound.putInt("activeTypeOrdinal", getActiveType().ordinal());
+		compound.putInt("observingRange", observingRange);
 		compound.putString("currentEntityType", EntityType.getKey(getCurrentEntityType()).toString());
 		
 		return compound;

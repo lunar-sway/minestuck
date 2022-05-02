@@ -16,10 +16,12 @@ public class RemoteObserverPacket implements PlayToServerPacket
 	private final RemoteObserverTileEntity.ActiveType activeType;
 	private final BlockPos tileBlockPos;
 	private final EntityType<?> entityType;
+	private final int observingRange;
 	
-	public RemoteObserverPacket(RemoteObserverTileEntity.ActiveType activeType, BlockPos tileBlockPos, @Nullable EntityType<?> entityType)
+	public RemoteObserverPacket(RemoteObserverTileEntity.ActiveType activeType, int observingRange, BlockPos tileBlockPos, @Nullable EntityType<?> entityType)
 	{
 		this.activeType = activeType;
+		this.observingRange = observingRange;
 		this.tileBlockPos = tileBlockPos;
 		this.entityType = entityType;
 	}
@@ -28,6 +30,7 @@ public class RemoteObserverPacket implements PlayToServerPacket
 	public void encode(PacketBuffer buffer)
 	{
 		buffer.writeEnum(activeType);
+		buffer.writeInt(observingRange);
 		buffer.writeBlockPos(tileBlockPos);
 		if(entityType != null)
 		{
@@ -40,10 +43,11 @@ public class RemoteObserverPacket implements PlayToServerPacket
 	public static RemoteObserverPacket decode(PacketBuffer buffer)
 	{
 		RemoteObserverTileEntity.ActiveType activeType = buffer.readEnum(RemoteObserverTileEntity.ActiveType.class);
+		int observingRange = buffer.readInt();
 		BlockPos tileBlockPos = buffer.readBlockPos();
 		Optional<EntityType<?>> attemptedEntityType = EntityType.byString(buffer.readUtf());
 		
-		return new RemoteObserverPacket(activeType, tileBlockPos, attemptedEntityType.orElse(null));
+		return new RemoteObserverPacket(activeType, observingRange, tileBlockPos, attemptedEntityType.orElse(null));
 	}
 	
 	@Override
@@ -59,6 +63,7 @@ public class RemoteObserverPacket implements PlayToServerPacket
 					((RemoteObserverTileEntity) te).setActiveType(activeType);
 					if(entityType != null)
 						((RemoteObserverTileEntity) te).setCurrentEntityType(entityType);
+					((RemoteObserverTileEntity) te).setObservingRange(observingRange);
 					//Imitates the structure block to ensure that changes are sent client-side
 					te.setChanged();
 					BlockState state = player.level.getBlockState(tileBlockPos);

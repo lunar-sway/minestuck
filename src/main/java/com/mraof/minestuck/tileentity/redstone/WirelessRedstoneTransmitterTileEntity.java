@@ -3,6 +3,7 @@ package com.mraof.minestuck.tileentity.redstone;
 import com.mraof.minestuck.block.redstone.WirelessRedstoneReceiverBlock;
 import com.mraof.minestuck.block.redstone.WirelessRedstoneTransmitterBlock;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
+import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
@@ -12,7 +13,6 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.INameable;
-import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -56,18 +56,8 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 		Direction stateFacing = getBlockState().getValue(WirelessRedstoneTransmitterBlock.FACING);
 		
 		//in cases where the block has been rotated after the coordinates were set(rotator blocks or placement in structure templates), this will transform the relative coordinates by rotating them around the block
-		if(facing.getClockWise() == stateFacing)
-		{
-			this.offsetPos = offsetPos.rotate(Rotation.CLOCKWISE_90);
-		}
-		else if(facing.getOpposite() == stateFacing)
-		{
-			this.offsetPos = offsetPos.rotate(Rotation.CLOCKWISE_180);
-		}
-		else if(facing.getCounterClockWise() == stateFacing)
-		{
-			this.offsetPos = offsetPos.rotate(Rotation.COUNTERCLOCKWISE_90);
-		}
+		if(facing != stateFacing)
+			this.offsetPos = offsetPos.rotate(MSRotationUtil.rotationBetween(this.facing, stateFacing));
 		
 		//refreshing the facing value now that offsetPos has been corrected to fix the change
 		this.facing = getBlockState().getValue(WirelessRedstoneTransmitterBlock.FACING);

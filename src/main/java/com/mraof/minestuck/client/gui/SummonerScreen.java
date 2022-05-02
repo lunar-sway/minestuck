@@ -41,7 +41,7 @@ public class SummonerScreen extends Screen
 		super(new StringTextComponent("Summoner"));
 		
 		this.te = te;
-		this.summonRange = te.getSummonRange() > 1 ? te.getSummonRange() : 8; //if its defaulted on creation to 0, set it to the intended default of 8
+		this.summonRange = te.getSummonRange() > 0 ? te.getSummonRange() : 8; //if its defaulted on creation to 0, set it to the intended default of 8
 		this.isUntriggerable = te.getBlockState().getValue(SummonerBlock.UNTRIGGERABLE);
 	}
 	
@@ -102,7 +102,7 @@ public class SummonerScreen extends Screen
 		int yOffset = (this.height / 2) - (guiHeight / 2);
 		
 		this.blit(matrixStack, (this.width / 2) - (guiWidth / 2), yOffset, 0, 0, guiWidth, guiHeight);
-		font.draw(matrixStack, Integer.toString(summonRange), (width / 2) - 5, (height - guiHeight) / 2 + 16, 16777215); //0x404040
+		font.draw(matrixStack, Integer.toString(summonRange), (width / 2) - 5, (height - guiHeight) / 2 + 16, 0x404040);
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
 	}
 	
