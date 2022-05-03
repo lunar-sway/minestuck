@@ -38,12 +38,13 @@ public class AreaEffectBlock extends HorizontalBlock
 {
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 	public static final BooleanProperty ALL_MOBS = MSProperties.MACHINE_TOGGLE; //checks whether just players should be given the effect or if all living entities should be given the effect
+	public static final BooleanProperty DISABLED = MSProperties.DISCHARGED;
 	public static final String EFFECT_CHANGE_MESSAGE = "effect_change_message";
 	
 	public AreaEffectBlock(Properties properties)
 	{
 		super(properties);
-		this.registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(POWERED, false).setValue(ALL_MOBS, false));
+		this.registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(POWERED, false).setValue(ALL_MOBS, false).setValue(DISABLED, false));
 	}
 	
 	@Override
@@ -98,18 +99,6 @@ public class AreaEffectBlock extends HorizontalBlock
 		}
 	}
 	
-	private void cycleAllMobsProperty(BlockState state, World worldIn, BlockPos pos)
-	{
-		if(!worldIn.isClientSide)
-		{
-			worldIn.setBlock(pos, state.cycle(ALL_MOBS), Constants.BlockFlags.DEFAULT);
-			if(state.getValue(ALL_MOBS))
-				worldIn.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 1.2F);
-			else
-				worldIn.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, 1.2F);
-		}
-	}
-	
 	@Override
 	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
 	{
@@ -131,9 +120,15 @@ public class AreaEffectBlock extends HorizontalBlock
 			BlockState state = worldIn.getBlockState(pos);
 			boolean hasPower = worldIn.hasNeighborSignal(pos);
 			
-			if(state.getValue(POWERED) != hasPower)
-				worldIn.setBlockAndUpdate(pos, state.setValue(POWERED, hasPower));
-			else worldIn.sendBlockUpdated(pos, state, state, 2);
+			if(state.getValue(DISABLED))
+			{
+				worldIn.setBlockAndUpdate(pos, state.setValue(POWERED, false));
+			} else
+			{
+				if(state.getValue(POWERED) != hasPower)
+					worldIn.setBlockAndUpdate(pos, state.setValue(POWERED, hasPower));
+				else worldIn.sendBlockUpdated(pos, state, state, 2);
+			}
 		}
 	}
 	
@@ -157,6 +152,7 @@ public class AreaEffectBlock extends HorizontalBlock
 		super.createBlockStateDefinition(builder);
 		builder.add(FACING);
 		builder.add(POWERED);
+		builder.add(DISABLED);
 		builder.add(ALL_MOBS);
 	}
 }

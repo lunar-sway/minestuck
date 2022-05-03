@@ -50,18 +50,18 @@ public class RemoteComparatorBlock extends MSDirectionalBlock
 			{
 				if(state.getValue(DISTANCE_1_16) != 16) //increases property until it gets to the highest value at which it resets
 				{
-					worldIn.setBlock(pos, state.setValue(DISTANCE_1_16, state.getValue(DISTANCE_1_16) + 1), Constants.BlockFlags.NOTIFY_NEIGHBORS);
+					worldIn.setBlock(pos, state.setValue(DISTANCE_1_16, state.getValue(DISTANCE_1_16) + 1), Constants.BlockFlags.DEFAULT);
 					worldIn.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 1.2F);
 				} else
 				{
-					worldIn.setBlock(pos, state.setValue(DISTANCE_1_16, 1), Constants.BlockFlags.NOTIFY_NEIGHBORS);
+					worldIn.setBlock(pos, state.setValue(DISTANCE_1_16, 1), Constants.BlockFlags.DEFAULT);
 					worldIn.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, 1.2F);
 				}
 				
 				return ActionResultType.SUCCESS;
 			} else if(player.isCrouching() && player.getItemInHand(hand).isEmpty())
 			{
-				worldIn.setBlock(pos, state.cycle(CHECK_STATE), Constants.BlockFlags.NOTIFY_NEIGHBORS);
+				worldIn.setBlock(pos, state.cycle(CHECK_STATE), Constants.BlockFlags.DEFAULT);
 				if(state.getValue(CHECK_STATE))
 					worldIn.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 1.5F);
 				else

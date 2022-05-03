@@ -44,7 +44,7 @@ public class ItemMagnetBlock extends DirectionalCustomShapeBlock
 	{
 		if(!player.isCrouching() && !CreativeShockEffect.doesCreativeShockLimit(player, 1))
 		{
-			worldIn.setBlock(pos, state.cycle(REVERSE_POLARITY), Constants.BlockFlags.NOTIFY_NEIGHBORS);
+			worldIn.setBlock(pos, state.cycle(REVERSE_POLARITY), Constants.BlockFlags.DEFAULT);
 			if(state.getValue(REVERSE_POLARITY))
 				worldIn.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 1.5F);
 			else

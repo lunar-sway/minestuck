@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block.redstone;
 
+import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.tileentity.redstone.SummonerTileEntity;
@@ -32,7 +33,7 @@ import javax.annotation.Nullable;
 public class SummonerBlock extends Block
 {
 	public static final BooleanProperty TRIGGERED = BlockStateProperties.TRIGGERED;
-	public static final BooleanProperty UNTRIGGERABLE = BlockStateProperties.ENABLED;
+	public static final BooleanProperty UNTRIGGERABLE = MSProperties.DISCHARGED;
 	
 	public SummonerBlock(Properties properties)
 	{
@@ -57,6 +58,8 @@ public class SummonerBlock extends Block
 					
 					if(!worldIn.isClientSide)
 						summonerTE.setSummonedEntity(eggItem.getType(stackIn.getTag()), player);
+					
+					worldIn.playSound(player, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 1F);
 				}
 			} else if(worldIn.isClientSide)
 			{
@@ -67,8 +70,6 @@ public class SummonerBlock extends Block
 					MSScreenFactories.displaySummonerScreen(te);
 				}
 			}
-			
-			worldIn.playSound(player, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 1F);
 			
 			return ActionResultType.SUCCESS;
 		}
