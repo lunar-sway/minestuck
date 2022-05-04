@@ -4,6 +4,8 @@ import com.mraof.minestuck.item.MSItems;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.ai.goal.RangedAttackGoal;
@@ -17,20 +19,20 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
 public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IMob
 {
-	private final RangedAttackGoal aiArrowAttack = new RangedAttackGoal(this, 0.25F, 20, 10.0F);
-	private final MeleeAttackGoal aiMeleeAttack = new MeleeAttackGoal(this, .4F, false);
+	private final RangedAttackGoal aiArrowAttack = new RangedAttackGoal(this, 5/4F, 20, 10.0F);
+	private final MeleeAttackGoal aiMeleeAttack = new MeleeAttackGoal(this, 2F, false);
 	
 	protected PawnEntity(EntityType<? extends PawnEntity> type, EnumEntityKingdom kingdom, World world)
 	{
 		super(type, kingdom, world);
-		this.experienceValue = 1;
+		this.xpReward = 1;
 		setCombatTask();
 	}
 	
@@ -43,14 +45,10 @@ public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IM
 	{
 		return new PawnEntity(type, EnumEntityKingdom.DERSITE, world);
 	}
-	
-	@Override
-	protected void registerAttributes()
+	public static AttributeModifierMap.MutableAttribute pawnAttributes()
 	{
-		super.registerAttributes();
-		getAttributes().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
-		
-		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.2D);
+		return CarapacianEntity.carapacianAttributes().add(Attributes.ATTACK_DAMAGE)
+				.add(Attributes.MOVEMENT_SPEED, 0.2);
 	}
 	
 	@Override
@@ -61,46 +59,46 @@ public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IM
 	}
 	
 	@Override
-	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty)
+	protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty)
 	{
-		super.setEquipmentBasedOnDifficulty(difficulty);
-		this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(rand.nextDouble() < .25 ? Items.BOW : rand.nextDouble() < .2 ? MSItems.REGISWORD : rand.nextDouble() < .02 ? MSItems.SORD : Items.STONE_SWORD));
+		super.populateDefaultEquipmentSlots(difficulty);
+		this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(random.nextDouble() < .25 ? Items.BOW : random.nextDouble() < .2 ? MSItems.REGISWORD : random.nextDouble() < .02 ? MSItems.SORD : Items.STONE_SWORD));
 	}
 	
 	@Override
-	public void attackEntityWithRangedAttack(LivingEntity target, float distanceFactor)
+	public void performRangedAttack(LivingEntity target, float distanceFactor)
 	{
-		ArrowEntity arrow = new ArrowEntity(this.world, this);
-		double d0 = target.getPosX() - this.getPosX();
-		double d1 = target.getBoundingBox().minY + (double)(target.getHeight() / 3.0F) - arrow.getPosY();
-		double d2 = target.getPosZ() - this.getPosZ();
+		ArrowEntity arrow = new ArrowEntity(this.level, this);
+		double d0 = target.getX() - this.getX();
+		double d1 = target.getBoundingBox().minY + (double)(target.getBbHeight() / 3.0F) - arrow.getY();
+		double d2 = target.getZ() - this.getZ();
 		double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
 		arrow.shoot(d0, d1 + d3 * 0.2D, d2, 1.6F, 12.0F);
-		int power = EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.POWER, this);
-		int punch = EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.PUNCH, this);
+		int power = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER_ARROWS, this);
+		int punch = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH_ARROWS, this);
 
 		if(power > 0)
 		{
-			arrow.setDamage(arrow.getDamage() + (double)power * 0.5D + 0.5D);
+			arrow.setBaseDamage(arrow.getBaseDamage() + (double)power * 0.5D + 0.5D);
 		}
 
 		if(punch > 0)
 		{
-			arrow.setKnockbackStrength(punch);
+			arrow.setKnockback(punch);
 		}
 
-		if(EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.FLAME, this) > 0)
+		if(EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAMING_ARROWS, this) > 0)
 		{
-			arrow.setFire(100);
+			arrow.setSecondsOnFire(100);
 		}
 		
-		playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+		playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
 		//		EntityPawn pawn = this.getClass() == EntityWhitePawn.class ? new EntityWhitePawn(this.worldObj, 0) : new EntityBlackPawn(this.worldObj, 0);
 		//		pawn.setLocationAndAngles(this.posX, this.posY, this.posZ, 0, 0);
 		//		pawn.initCreature();
 		//		this.worldObj.spawnEntityInWorld(pawn);	
 		//I was just messing around to see if I could make an EntityLiving spawn more EntityLiving, it can
-		this.world.addEntity(arrow);
+		this.level.addFreshEntity(arrow);
 	}
 
 	/**
@@ -108,31 +106,31 @@ public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IM
 	 */
 	public float getAttackStrength(Entity par1Entity)
 	{
-		ItemStack weapon = this.getHeldItemMainhand();
+		ItemStack weapon = this.getMainHandItem();
 		float damage = 2;
 
 		if (!weapon.isEmpty())
-			damage += (float)this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue();
+			damage += (float)this.getAttribute(Attributes.ATTACK_DAMAGE).getValue();
 		
-		damage += EnchantmentHelper.getModifierForCreature(this.getHeldItemMainhand(), ((LivingEntity) par1Entity).getCreatureAttribute());
+		damage += EnchantmentHelper.getDamageBonus(this.getMainHandItem(), ((LivingEntity) par1Entity).getMobType());
 		
 		return damage;
 	}
 
 	@Override
-	public boolean attackEntityAsMob(Entity par1Entity)
+	public boolean doHurtTarget(Entity par1Entity)
 	{
 		float damage = this.getAttackStrength(par1Entity);
-		int fireAspectLevel = EnchantmentHelper.getFireAspectModifier(this);
-		int knockback = EnchantmentHelper.getKnockbackModifier(this);
+		int fireAspectLevel = EnchantmentHelper.getFireAspect(this);
+		int knockback = EnchantmentHelper.getKnockbackBonus(this);
 
-		if (fireAspectLevel > 0 && !par1Entity.isBurning())
-			par1Entity.setFire(1);
+		if (fireAspectLevel > 0 && !par1Entity.isOnFire())
+			par1Entity.setSecondsOnFire(1);
 
 		if (knockback > 0)
-			par1Entity.addVelocity(-MathHelper.sin(this.rotationYaw * (float)Math.PI / 180.0F) * (float)knockback * 0.5F, 0.1D, (double)(MathHelper.cos(this.rotationYaw * (float)Math.PI / 180.0F) * (float)knockback * 0.5F));
+			par1Entity.push(-MathHelper.sin(this.yRot * (float)Math.PI / 180.0F) * (float)knockback * 0.5F, 0.1D, (double)(MathHelper.cos(this.yRot * (float)Math.PI / 180.0F) * (float)knockback * 0.5F));
 
-		return par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this), damage);
+		return par1Entity.hurt(DamageSource.mobAttack(this), damage);
 	}
 	
 //	/**
@@ -150,11 +148,11 @@ public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IM
 	
 	private void setCombatTask()
 	{
-		if(this.world != null && !this.world.isRemote)
+		if(this.level != null && !this.level.isClientSide)
 		{
 			this.goalSelector.removeGoal(this.aiArrowAttack);
 			this.goalSelector.removeGoal(this.aiMeleeAttack);
-			ItemStack weapon = this.getHeldItemMainhand();
+			ItemStack weapon = this.getMainHandItem();
 			
 			if(!weapon.isEmpty() && weapon.getItem() == Items.BOW)
 			{
@@ -165,18 +163,18 @@ public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IM
 	}
 	
 	@Override
-	public void readAdditional(CompoundNBT compound)
+	public void readAdditionalSaveData(CompoundNBT compound)
 	{
-		super.readAdditional(compound);
+		super.readAdditionalSaveData(compound);
 		setCombatTask();
 	}
 	
 	@Override
-	public void setItemStackToSlot(EquipmentSlotType slotIn, ItemStack stack)
+	public void setItemSlot(EquipmentSlotType slotIn, ItemStack stack)
 	{
-		super.setItemStackToSlot(slotIn, stack);
+		super.setItemSlot(slotIn, stack);
 		
-		if (!this.world.isRemote)
+		if (!this.level.isClientSide)
 		{
 			this.setCombatTask();
 		}
@@ -184,12 +182,12 @@ public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IM
 	
 	@Nullable
 	@Override
-	public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag)
+	public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag)
 	{
-		spawnDataIn = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+		spawnDataIn = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
 		
-		setEquipmentBasedOnDifficulty(difficultyIn);
-		this.setEnchantmentBasedOnDifficulty(difficultyIn);
+		populateDefaultEquipmentSlots(difficultyIn);
+		this.populateDefaultEquipmentEnchantments(difficultyIn);
 		
 		setCombatTask();
 		return spawnDataIn;

@@ -38,11 +38,11 @@ public class FrogSkinLayer extends LayerRenderer<FrogEntity, FrogModel<FrogEntit
 				if (b < this.colorMin)
 					b = this.colorMin;
 
-				renderCopyCutoutModel(this.getEntityModel(), this.frogModel, this.getTexture(type), matrixStackIn, bufferIn, packedLightIn, frog, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, partialTicks, r, g, b);
+				coloredCutoutModelCopyLayerRender(this.getParentModel(), this.frogModel, this.getTexture(type), matrixStackIn, bufferIn, packedLightIn, frog, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, partialTicks, r, g, b);
 			}
 			else
 			{
-				renderCopyCutoutModel(this.getEntityModel(), this.frogModel, this.getTexture(type), matrixStackIn, bufferIn, packedLightIn, frog, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, partialTicks, 1.0F, 1.0F, 1.0F);
+				coloredCutoutModelCopyLayerRender(this.getParentModel(), this.frogModel, this.getTexture(type), matrixStackIn, bufferIn, packedLightIn, frog, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, partialTicks, 1.0F, 1.0F, 1.0F);
 			}
 		}
 	}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#",
+    "#",
+    "#"
+  ],
+  "key": {
+    "#": {
+      "item": "minestuck:mycelium_bricks"
+    }
+  },
+  "result": {
+    "item": "minestuck:mycelium_column",
+    "count": 3
+  }
+}

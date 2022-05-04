@@ -8,8 +8,9 @@ import com.mraof.minestuck.network.computer.SkaianetInfoPacket;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -32,7 +33,7 @@ public class SkaiaClient
 	/**
 	 * A map used to track chains of lands, to be used by the skybox render
 	 */
-	private static final Map<ResourceLocation, List<ResourceLocation>> landChainMap = new HashMap<>();
+	private static final Map<RegistryKey<World>, List<RegistryKey<World>>> landChainMap = new HashMap<>();
 	private static ComputerTileEntity te = null;
 	public static int playerId;	//The id that this player is expected to have.
 	
@@ -90,9 +91,9 @@ public class SkaiaClient
 		return false;
 	}
 	
-	public static List<ResourceLocation> getLandChain(DimensionType id)
+	public static List<RegistryKey<World>> getLandChain(RegistryKey<World> id)
 	{
-		return landChainMap.get(id.getRegistryName());
+		return landChainMap.get(id);
 	}
 	
 	public static boolean isActive(int playerId, boolean isClient)
@@ -130,9 +131,9 @@ public class SkaiaClient
 		if(data.landChains != null)
 		{
 			landChainMap.clear();
-			for(List<ResourceLocation> list : data.landChains)
+			for(List<RegistryKey<World>> list : data.landChains)
 			{
-				for(ResourceLocation land : list)
+				for(RegistryKey<World> land : list)
 				{
 					landChainMap.put(land, list);
 				}
@@ -150,12 +151,12 @@ public class SkaiaClient
 		connections.removeIf(c -> c.getClientId() == data.playerId || c.getServerId() == data.playerId);
 		connections.addAll(data.connectionsTo);
 		
-		Screen gui = Minecraft.getInstance().currentScreen;
+		Screen gui = Minecraft.getInstance().screen;
 		if(gui instanceof ComputerScreen)
 			((ComputerScreen)gui).updateGui();
 		else if(te != null && te.ownerId == data.playerId)
 		{
-			if(!Minecraft.getInstance().player.isSneaking())
+			if(!Minecraft.getInstance().player.isShiftKeyDown())
 				MSScreenFactories.displayComputerScreen(te);
 			te = null;
 		}

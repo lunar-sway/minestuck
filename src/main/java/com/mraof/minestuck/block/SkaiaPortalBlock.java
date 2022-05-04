@@ -19,7 +19,7 @@ import javax.annotation.Nullable;
 
 public class SkaiaPortalBlock extends ContainerBlock
 {
-	protected static final VoxelShape SHAPE = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D);
+	protected static final VoxelShape SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D);
 	
 	public SkaiaPortalBlock(Properties properties)
 	{
@@ -28,7 +28,7 @@ public class SkaiaPortalBlock extends ContainerBlock
 	
 	@Nullable
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn)
+	public TileEntity newBlockEntity(IBlockReader worldIn)
 	{
 		return new SkaiaPortalTileEntity();
 	}
@@ -41,11 +41,11 @@ public class SkaiaPortalBlock extends ContainerBlock
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn)
+	public void entityInside(BlockState state, World worldIn, BlockPos pos, Entity entityIn)
 	{
-		if (!entityIn.isPassenger() && !entityIn.isBeingRidden() && !worldIn.isRemote && entityIn.timeUntilPortal == 0)
+		if (!entityIn.isPassenger() && !entityIn.isVehicle() && !worldIn.isClientSide && !entityIn.isOnPortalCooldown())
 		{
-			TileEntity tile = worldIn.getTileEntity(pos);
+			TileEntity tile = worldIn.getBlockEntity(pos);
 			if(tile instanceof  SkaiaPortalTileEntity)
 				((SkaiaPortalTileEntity) tile).teleportEntity(entityIn);
 		}

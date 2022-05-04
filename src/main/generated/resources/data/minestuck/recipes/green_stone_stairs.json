@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minestuck:green_stone"
+    }
+  },
+  "result": {
+    "item": "minestuck:green_stone_stairs",
+    "count": 4
+  }
+}

@@ -61,7 +61,7 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 	public String getTranslationKey()
 	{
 		if(translationKey == null)
-			translationKey = Util.makeTranslationKey("grist", GristTypes.getRegistry().getKey(this));
+			translationKey = Util.makeDescriptionId("grist", GristTypes.getRegistry().getKey(this));
 		
 		return translationKey;
 	}

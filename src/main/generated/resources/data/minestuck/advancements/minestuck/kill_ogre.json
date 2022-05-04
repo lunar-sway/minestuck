@@ -20,9 +20,15 @@
     "kill_ogre": {
       "trigger": "minecraft:player_killed_entity",
       "conditions": {
-        "entity": {
-          "type": "minestuck:ogre"
-        }
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "type": "minestuck:ogre"
+            },
+            "entity": "this"
+          }
+        ]
       }
     }
   },

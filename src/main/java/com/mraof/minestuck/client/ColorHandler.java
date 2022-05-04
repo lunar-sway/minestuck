@@ -35,7 +35,7 @@ public class ColorHandler
         colors.register(new BlockColorCruxite(), MSBlocks.ALCHEMITER.TOTEM_PAD.get(), MSBlocks.TOTEM_LATHE.DOWEL_ROD.get(), MSBlocks.CRUXITE_DOWEL);
         colors.register((state, worldIn, pos, tintIndex) ->
         {
-            int age = state.get(StemBlock.AGE);
+            int age = state.getValue(StemBlock.AGE);
             int red = age * 32;
             int green = 255 - age * 8;
             int blue = age * 4;

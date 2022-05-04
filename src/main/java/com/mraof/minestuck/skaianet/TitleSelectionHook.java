@@ -10,7 +10,7 @@ import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -25,7 +25,7 @@ public class TitleSelectionHook
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	static Map<PlayerEntity, Vec3d> playersInTitleSelection = new HashMap<>();
+	static Map<PlayerEntity, Vector3d> playersInTitleSelection = new HashMap<>();
 	
 	/**
 	 * Checks if the player has the go-ahead to enter.
@@ -37,13 +37,13 @@ public class TitleSelectionHook
 			return true;
 		
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
-		Session s = SessionHandler.get(player.world).getPlayerSession(identifier);
+		Session s = SessionHandler.get(player.level).getPlayerSession(identifier);
 		
 		if(s != null && s.predefinedPlayers.containsKey(identifier) && s.predefinedPlayers.get(identifier).getTitle() != null
 				|| PlayerSavedData.getData(identifier, player.server).getTitle() != null)
 			return true;
 		
-		playersInTitleSelection.put(player, new Vec3d(player.getPosX(), player.getPosY(), player.getPosZ()));
+		playersInTitleSelection.put(player, new Vector3d(player.getX(), player.getY(), player.getZ()));
 		TitleSelectPacket packet = new TitleSelectPacket();
 		MSPacketHandler.sendToPlayer(packet, player);
 		return false;
@@ -61,7 +61,7 @@ public class TitleSelectionHook
 			PlayerIdentifier identifier = IdentifierHandler.encode(player);
 			
 			if(title == null)
-				SburbHandler.generateAndSetTitle(player.world, identifier);
+				SburbHandler.generateAndSetTitle(player.level, identifier);
 			else
 			{
 				Session s = SessionHandler.get(player.server).getPlayerSession(identifier);
@@ -76,13 +76,13 @@ public class TitleSelectionHook
 			}
 			
 			//Once the title selection has finished successfully, restore player position and trigger entry
-			Vec3d pos = playersInTitleSelection.remove(player);
+			Vector3d pos = playersInTitleSelection.remove(player);
 			
-			player.setPosition(pos.x, pos.y, pos.z);
+			player.setPos(pos.x, pos.y, pos.z);
 			
 			EntryProcess process = new EntryProcess();
 			process.onArtifactActivated(player);
 			
-		} else LOGGER.warn("{} tried to select a title without entering.", player.getName().getFormattedText());
+		} else LOGGER.warn("{} tried to select a title without entering.", player.getName().getString());
 	}
 }

@@ -1,6 +1,5 @@
 package com.mraof.minestuck.item.block;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.StoneTabletBlock;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.item.MSItems;
@@ -17,7 +16,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -32,16 +30,15 @@ public class StoneTabletItem extends BlockItem //stone slab is the same as stone
 	public StoneTabletItem(Block blockIn, Properties properties)
 	{
 		super(blockIn, properties);
-		addPropertyOverride(new ResourceLocation(Minestuck.MOD_ID, "carved"), (stack, world, holder) -> hasText(stack) ? 1 : 0);
 	}
 	
 	@Override
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
+	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
 	{
-		super.addInformation(stack, worldIn, tooltip, flagIn);
+		super.appendHoverText(stack, worldIn, tooltip, flagIn);
 		
 		if(hasText(stack))
-			tooltip.add(new TranslationTextComponent(getTranslationKey() + ".carved").applyTextStyle(TextFormatting.GRAY));
+			tooltip.add(new TranslationTextComponent(getDescriptionId() + ".carved").withStyle(TextFormatting.GRAY));
 	}
 	
 	public static boolean hasText(ItemStack stack)
@@ -52,22 +49,22 @@ public class StoneTabletItem extends BlockItem //stone slab is the same as stone
 	
 	@Nullable
 	@Override
-	protected BlockState getStateForPlacement(BlockItemUseContext context)
+	protected BlockState getPlacementState(BlockItemUseContext context)
 	{
-		BlockState state = super.getStateForPlacement(context);
+		BlockState state = super.getPlacementState(context);
 		if(state == null)
 			return null;
 		
-		ItemStack stack = context.getItem();
+		ItemStack stack = context.getItemInHand();
 		
-		state = state.with(StoneTabletBlock.FACING, context.getPlacementHorizontalFacing()).with(StoneTabletBlock.CARVED, hasText(stack));
+		state = state.setValue(StoneTabletBlock.FACING, context.getHorizontalDirection()).setValue(StoneTabletBlock.CARVED, hasText(stack));
 		return state;
 	}
 	
 	@Override
-	protected boolean onBlockPlaced(BlockPos pos, World world, @Nullable PlayerEntity player, ItemStack stack, BlockState state)
+	protected boolean updateCustomBlockEntityTag(BlockPos pos, World world, @Nullable PlayerEntity player, ItemStack stack, BlockState state)
 	{
-		TileEntity te = world.getTileEntity(pos);
+		TileEntity te = world.getBlockEntity(pos);
 		if(te instanceof ItemStackTileEntity)
 		{
 			ItemStack newStack = stack.copy();
@@ -78,32 +75,32 @@ public class StoneTabletItem extends BlockItem //stone slab is the same as stone
 	}
 	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn)
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn)
 	{
-		ItemStack itemStackIn = playerIn.getHeldItem(handIn);
+		ItemStack itemStackIn = playerIn.getItemInHand(handIn);
 		
-		if(!playerIn.isSneaking())
+		if(!playerIn.isShiftKeyDown())
 		{
 			//Display the stone tablet screen
-			if(worldIn.isRemote)
+			if(worldIn.isClientSide)
 			{
-				boolean canEdit = playerIn.getHeldItem(handIn == Hand.MAIN_HAND ? Hand.OFF_HAND : Hand.MAIN_HAND).getItem() == MSItems.CARVING_TOOL;
+				boolean canEdit = playerIn.getItemInHand(handIn == Hand.MAIN_HAND ? Hand.OFF_HAND : Hand.MAIN_HAND).getItem() == MSItems.CARVING_TOOL;
 				String text = hasText(itemStackIn) ? itemStackIn.getTag().getString("text") : "";
 				MSScreenFactories.displayStoneTabletScreen(playerIn, handIn, text, canEdit);
 			}
-			return ActionResult.resultSuccess(itemStackIn);
+			return ActionResult.success(itemStackIn);
 		} else
 		{
-			return super.onItemRightClick(worldIn, playerIn, handIn);
+			return super.use(worldIn, playerIn, handIn);
 		}
 	}
 	
 	@Override
-	public ActionResultType tryPlace(BlockItemUseContext context)
+	public ActionResultType place(BlockItemUseContext context)
 	{
 		PlayerEntity playerIn = context.getPlayer();
-		if(playerIn == null || playerIn.isSneaking())
-			return super.tryPlace(context);
+		if(playerIn == null || playerIn.isShiftKeyDown())
+			return super.place(context);
 		return ActionResultType.PASS;
 	}
 }

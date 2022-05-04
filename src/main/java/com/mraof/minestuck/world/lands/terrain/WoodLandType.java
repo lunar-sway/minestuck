@@ -5,23 +5,17 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.MSSoundEvents;
-import com.mraof.minestuck.world.biome.BiomeType;
-import com.mraof.minestuck.world.biome.LandWrapperBiome;
+import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.biome.DefaultBiomeFeatures;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeGenerationSettings;
 import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.OreFeatureConfig;
-import net.minecraft.world.gen.feature.SphereReplaceConfig;
-import net.minecraft.world.gen.placement.ChanceConfig;
-import net.minecraft.world.gen.placement.CountRangeConfig;
-import net.minecraft.world.gen.placement.FrequencyConfig;
-import net.minecraft.world.gen.placement.Placement;
+import net.minecraft.world.gen.feature.*;
 
 import java.util.Random;
 
@@ -31,7 +25,7 @@ public class WoodLandType extends TerrainLandType
 	public static final String OAK = "minestuck.oak";
 	public static final String LUMBER = "minestuck.lumber";
 	
-	private static final Vec3d fogColor = new Vec3d(0.0D, 0.16D, 0.38D);
+	private static final Vector3d fogColor = new Vector3d(0.0D, 0.16D, 0.38D);
 	
 	public WoodLandType()
 	{
@@ -41,23 +35,24 @@ public class WoodLandType extends TerrainLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("upper", Blocks.OAK_LOG.getDefaultState());
-		registry.setBlockState("surface", MSBlocks.TREATED_PLANKS.getDefaultState());
-		registry.setBlockState("structure_primary", Blocks.JUNGLE_WOOD.getDefaultState());
-		registry.setBlockState("structure_primary_decorative", Blocks.DARK_OAK_LOG.getDefaultState());
-		registry.setBlockState("structure_primary_stairs", Blocks.DARK_OAK_STAIRS.getDefaultState());
-		registry.setBlockState("structure_secondary", Blocks.JUNGLE_PLANKS.getDefaultState());
-		registry.setBlockState("structure_secondary_decorative", Blocks.DARK_OAK_PLANKS.getDefaultState());
-		registry.setBlockState("structure_secondary_stairs", Blocks.JUNGLE_STAIRS.getDefaultState());
-		registry.setBlockState("light_block", MSBlocks.GLOWING_WOOD.getDefaultState());
-		registry.setBlockState("bush", Blocks.RED_MUSHROOM.getDefaultState());
-		registry.setBlockState("structure_wool_1", Blocks.PURPLE_WOOL.getDefaultState());
-		registry.setBlockState("structure_wool_3", Blocks.GREEN_WOOL.getDefaultState());
+		registry.setBlockState("upper", Blocks.OAK_LOG.defaultBlockState());
+		registry.setBlockState("surface", MSBlocks.TREATED_PLANKS.defaultBlockState());
+		registry.setBlockState("structure_primary", Blocks.JUNGLE_WOOD.defaultBlockState());
+		registry.setBlockState("structure_primary_decorative", Blocks.DARK_OAK_LOG.defaultBlockState());
+		registry.setBlockState("structure_primary_stairs", Blocks.DARK_OAK_STAIRS.defaultBlockState());
+		registry.setBlockState("structure_secondary", Blocks.JUNGLE_PLANKS.defaultBlockState());
+		registry.setBlockState("structure_secondary_decorative", Blocks.DARK_OAK_PLANKS.defaultBlockState());
+		registry.setBlockState("structure_secondary_stairs", Blocks.JUNGLE_STAIRS.defaultBlockState());
+		registry.setBlockState("light_block", MSBlocks.GLOWING_WOOD.defaultBlockState());
+		registry.setBlockState("bush", Blocks.RED_MUSHROOM.defaultBlockState());
+		registry.setBlockState("structure_wool_1", Blocks.PURPLE_WOOL.defaultBlockState());
+		registry.setBlockState("structure_wool_3", Blocks.GREEN_WOOL.defaultBlockState());
 	}
 	
 	@Override
-	public String[] getNames() {
-		return new String[] {WOOD, OAK, LUMBER};
+	public String[] getNames()
+	{
+		return new String[]{WOOD, OAK, LUMBER};
 	}
 	
 	@Override
@@ -66,29 +61,49 @@ public class WoodLandType extends TerrainLandType
 	}
 	
 	@Override
-	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
+	public void setBiomeGeneration(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks, LandBiomeType type, Biome baseBiome)
 	{
-		if(biome.type == BiomeType.NORMAL)
+		if(type == LandBiomeType.NORMAL)
 		{
-			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_PATCH.withConfiguration(DefaultBiomeFeatures.RED_MUSHROOM_CONFIG).withPlacement(Placement.CHANCE_HEIGHTMAP_DOUBLE.configure(new ChanceConfig(2))));
-			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_PATCH.withConfiguration(DefaultBiomeFeatures.BROWN_MUSHROOM_CONFIG).withPlacement(Placement.CHANCE_HEIGHTMAP_DOUBLE.configure(new ChanceConfig(2))));
-
-			biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.DISK.withConfiguration(new SphereReplaceConfig(MSBlocks.VINE_WOOD.getDefaultState(), 7, 2, Lists.newArrayList(blocks.getBlockState("surface"), blocks.getBlockState("upper")))).withPlacement(Placement.COUNT_TOP_SOLID.configure(new FrequencyConfig(8))));
-			biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.DISK.withConfiguration(new SphereReplaceConfig(Blocks.NETHERRACK.getDefaultState(), 4, 1, Lists.newArrayList(blocks.getBlockState("surface"), blocks.getBlockState("upper")))).withPlacement(Placement.COUNT_TOP_SOLID.configure(new FrequencyConfig(6))));
-
-		} else if(biome.type == BiomeType.ROUGH)
+			builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Features.PATCH_RED_MUSHROOM
+					.decorated(Features.Placements.HEIGHTMAP_DOUBLE_SQUARE).chance(2));
+			builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Features.PATCH_BROWN_MUSHROOM
+					.decorated(Features.Placements.HEIGHTMAP_DOUBLE_SQUARE).chance(2));
+			
+			builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.DISK
+					.configured(new SphereReplaceConfig(MSBlocks.VINE_WOOD.defaultBlockState(), FeatureSpread.of(2, 4), 2, Lists.newArrayList(blocks.getBlockState("surface"), blocks.getBlockState("upper"))))
+					.decorated(Features.Placements.TOP_SOLID_HEIGHTMAP_SQUARE).count(8));
+			builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.DISK
+					.configured(new SphereReplaceConfig(Blocks.NETHERRACK.defaultBlockState(), FeatureSpread.of(2, 1), 1, Lists.newArrayList(blocks.getBlockState("surface"), blocks.getBlockState("upper"))))
+					.decorated(Features.Placements.TOP_SOLID_HEIGHTMAP_SQUARE).count(6));
+			
+		} else if(type == LandBiomeType.ROUGH)
 		{
-			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_PATCH.withConfiguration(DefaultBiomeFeatures.RED_MUSHROOM_CONFIG).withPlacement(Placement.CHANCE_HEIGHTMAP_DOUBLE.configure(new ChanceConfig(4))));
-			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_PATCH.withConfiguration(DefaultBiomeFeatures.BROWN_MUSHROOM_CONFIG).withPlacement(Placement.CHANCE_HEIGHTMAP_DOUBLE.configure(new ChanceConfig(4))));
-
-			biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.DISK.withConfiguration(new SphereReplaceConfig(Blocks.OAK_LEAVES.getDefaultState(), 7, 2, Lists.newArrayList(blocks.getBlockState("surface"), blocks.getBlockState("upper")))).withPlacement(Placement.COUNT_TOP_SOLID.configure(new FrequencyConfig(15))));
+			builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Features.PATCH_RED_MUSHROOM
+					.decorated(Features.Placements.HEIGHTMAP_DOUBLE_SQUARE).chance(4));
+			builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Features.PATCH_BROWN_MUSHROOM
+					.decorated(Features.Placements.HEIGHTMAP_DOUBLE_SQUARE).chance(4));
+			
+			builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.DISK
+					.configured(new SphereReplaceConfig(Blocks.OAK_LEAVES.defaultBlockState(), FeatureSpread.of(2, 4), 2, Lists.newArrayList(blocks.getBlockState("surface"), blocks.getBlockState("upper"))))
+					.decorated(Features.Placements.TOP_SOLID_HEIGHTMAP_SQUARE).count(15));
 		}
-
-		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), Blocks.GRAVEL.getDefaultState(), 33)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(8, 0, 0, 256))));
-		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), Blocks.DIRT.getDefaultState(), 17)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(18, 0, 0, 128))));
-		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), Blocks.REDSTONE_ORE.getDefaultState(), 7)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(8, 0, 0, 32))));
-		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), Blocks.IRON_ORE.getDefaultState(), 9)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(24, 0, 0, 64))));
-		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), Blocks.EMERALD_ORE.getDefaultState(), 3)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(8, 0, 0, 24))));
+		
+		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE
+				.configured(new OreFeatureConfig(blocks.getGroundType(), Blocks.GRAVEL.defaultBlockState(), 33))
+				.range(256).squared().count(8));
+		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE
+				.configured(new OreFeatureConfig(blocks.getGroundType(), Blocks.DIRT.defaultBlockState(), 17))
+				.range(128).squared().count(18));
+		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE
+				.configured(new OreFeatureConfig(blocks.getGroundType(), Blocks.REDSTONE_ORE.defaultBlockState(), 7))
+				.range(32).squared().count(8));
+		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE
+				.configured(new OreFeatureConfig(blocks.getGroundType(), Blocks.IRON_ORE.defaultBlockState(), 9))
+				.range(64).squared().count(24));
+		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE
+				.configured(new OreFeatureConfig(blocks.getGroundType(), Blocks.EMERALD_ORE.defaultBlockState(), 3))
+				.range(24).squared().count(8));
 	}
 	
 	@Override
@@ -98,15 +113,15 @@ public class WoodLandType extends TerrainLandType
 	}
 	
 	@Override
-	public Vec3d getFogColor() 
+	public Vector3d getFogColor()
 	{
 		return fogColor;
 	}
 	
 	@Override
-	public Vec3d getSkyColor()
+	public Vector3d getSkyColor()
 	{
-		return new Vec3d(0.0D, 0.3D, 0.4D);
+		return new Vector3d(0.0D, 0.3D, 0.4D);
 	}
 	
 	@Override

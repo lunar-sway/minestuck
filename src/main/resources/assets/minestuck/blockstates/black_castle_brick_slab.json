@@ -1,7 +1,7 @@
 {
     "variants": {
-        "type=bottom": { "model": "minestuck:block/black_castle_brick_slab" },
-        "type=top":    { "model": "minestuck:block/black_castle_brick_slab_top" },
-        "type=double": { "model": "minestuck:block/black_castle_bricks" }
+        "type=bottom": { "model": "minestuck:block/black_chess_brick_slab" },
+        "type=top":    { "model": "minestuck:block/black_chess_brick_slab_top" },
+        "type=double": { "model": "minestuck:block/black_chess_bricks" }
     }
 }

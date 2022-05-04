@@ -30,15 +30,15 @@ public class GristTypeLayer
 	{
 		LongFunction<LazyAreaLayerContext> layerContextCreator = modifier -> new LazyAreaLayerContext(25, seed, modifier + index);
 		
-		IAreaFactory<LazyArea> layer = new BaseLayer(category, baseType).apply(layerContextCreator.apply(250L));
-		layer = LayerUtil.repeat(2000L, ZoomLayer.NORMAL, layer, zoomLevel, layerContextCreator);
+		IAreaFactory<LazyArea> layer = new BaseLayer(category, baseType).run(layerContextCreator.apply(250L));
+		layer = LayerUtil.zoom(2000L, ZoomLayer.NORMAL, layer, zoomLevel, layerContextCreator);
 		
 		return new GristTypeLayer(layer.make());
 	}
 	
 	public GristType getTypeAt(int posX, int posZ)
 	{
-		int gristId = area.getValue(posX, posZ);
+		int gristId = area.get(posX, posZ);
 		return ((ForgeRegistry<GristType>) GristTypes.getRegistry()).getValue(gristId);
 	}
 	
@@ -58,12 +58,12 @@ public class GristTypeLayer
 		}
 		
 		@Override
-		public int apply(INoiseRandom context, int x, int z)
+		public int applyPixel(INoiseRandom context, int x, int z)
 		{
 			if(baseGristType != -1 && x * x + z * z <= 1)
 				return baseGristType;
 			
-			return WeightedRandom.getRandomItem(gristTypes, context.random(weightSum)).gristId;
+			return WeightedRandom.getWeightedItem(gristTypes, context.nextRandom(weightSum)).gristId;
 		}
 		
 		private static class GristEntry extends WeightedRandom.Item

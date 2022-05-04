@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "minestuck:and_gate_block",
+    "minestuck:or_gate_block",
+    "minestuck:xor_gate_block",
+    "minestuck:nand_gate_block",
+    "minestuck:nor_gate_block",
+    "minestuck:xnor_gate_block"
+  ]
+}

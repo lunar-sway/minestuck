@@ -38,7 +38,7 @@ public class IrradiatingFallbackRecipe extends IrradiatingRecipe
 	@Override
 	public Optional<? extends AbstractCookingRecipe> getCookingRecipe(IInventory inventory, World world)
 	{
-		return world.getRecipeManager().getRecipes(fallbackType, inventory, world).stream().filter(o -> !o.isDynamic()).findFirst();
+		return world.getRecipeManager().getRecipesFor(fallbackType, inventory, world).stream().filter(o -> !o.isSpecial()).findFirst();
 	}
 	
 	@Override
@@ -48,7 +48,7 @@ public class IrradiatingFallbackRecipe extends IrradiatingRecipe
 	}
 	
 	@Override
-	public boolean isDynamic()
+	public boolean isSpecial()
 	{
 		return true;
 	}
@@ -64,7 +64,7 @@ public class IrradiatingFallbackRecipe extends IrradiatingRecipe
 		private static final ResourceLocation NAME = new ResourceLocation("minestuck", "irradiating_fallback");
 		
 		@Override
-		public IrradiatingFallbackRecipe read(ResourceLocation recipeId, JsonObject json)
+		public IrradiatingFallbackRecipe fromJson(ResourceLocation recipeId, JsonObject json)
 		{
 			IRecipeType<? extends AbstractCookingRecipe> fallbackType = deserializeRecipeType(json);
 			return new IrradiatingFallbackRecipe(recipeId, fallbackType);
@@ -72,15 +72,15 @@ public class IrradiatingFallbackRecipe extends IrradiatingRecipe
 		
 		@Nullable
 		@Override
-		public IrradiatingFallbackRecipe read(ResourceLocation recipeId, PacketBuffer buffer)
+		public IrradiatingFallbackRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer)
 		{
 			ResourceLocation typeName = buffer.readResourceLocation();
-			IRecipeType<?> fallbackType = Registry.RECIPE_TYPE.getValue(typeName).orElseThrow(() -> new IllegalArgumentException("Can not deserialize unknown Recipe type: " + typeName));
+			IRecipeType<?> fallbackType = Registry.RECIPE_TYPE.getOptional(typeName).orElseThrow(() -> new IllegalArgumentException("Can not deserialize unknown Recipe type: " + typeName));
 			return new IrradiatingFallbackRecipe(recipeId, (IRecipeType<? extends AbstractCookingRecipe>) fallbackType);
 		}
 		
 		@Override
-		public void write(PacketBuffer buffer, IrradiatingFallbackRecipe recipe)
+		public void toNetwork(PacketBuffer buffer, IrradiatingFallbackRecipe recipe)
 		{
 			buffer.writeResourceLocation(Objects.requireNonNull(Registry.RECIPE_TYPE.getKey(recipe.fallbackType)));
 		}
@@ -88,8 +88,8 @@ public class IrradiatingFallbackRecipe extends IrradiatingRecipe
 	
 	private static IRecipeType<? extends AbstractCookingRecipe> deserializeRecipeType(JsonObject json)
 	{
-		String typeName = JSONUtils.getString(json, "fallback_type");
-		IRecipeType<?> fallbackType = Registry.RECIPE_TYPE.getValue(new ResourceLocation(typeName)).orElseThrow(() -> new JsonSyntaxException("Unknown recipe type '" + typeName + "'"));
+		String typeName = JSONUtils.getAsString(json, "fallback_type");
+		IRecipeType<?> fallbackType = Registry.RECIPE_TYPE.getOptional(new ResourceLocation(typeName)).orElseThrow(() -> new JsonSyntaxException("Unknown recipe type '" + typeName + "'"));
 		return (IRecipeType<? extends AbstractCookingRecipe>) fallbackType;
 	}
 }

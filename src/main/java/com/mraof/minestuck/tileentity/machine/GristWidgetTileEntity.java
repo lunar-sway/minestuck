@@ -12,6 +12,7 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -59,7 +60,7 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements I
 	
 	public GristSet getGristWidgetResult()
 	{
-		return getGristWidgetResult(itemHandler.getStackInSlot(0), world);
+		return getGristWidgetResult(itemHandler.getStackInSlot(0), level);
 	}
 	
 	public static GristSet getGristWidgetResult(ItemStack stack, World world)
@@ -109,10 +110,10 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements I
 	{
 		if(MinestuckConfig.SERVER.disableGristWidget.get())
 			return false;
-		if(world.isBlockPowered(this.getPos()))
+		if(level.hasNeighborSignal(this.getBlockPos()))
 			return false;
 		int i = getGristWidgetBoondollarValue();
-		return owner != null && i != 0 && i <= PlayerSavedData.getData(owner, world).getBoondollars();
+		return owner != null && i != 0 && i <= PlayerSavedData.getData(owner, level).getBoondollars();
 	}
 
 	@Override
@@ -120,30 +121,30 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements I
 	{
 		GristSet gristSet = getGristWidgetResult();
 		
-		if(!PlayerSavedData.getData(owner, world).tryTakeBoondollars(getGristWidgetBoondollarValue()))
+		if(!PlayerSavedData.getData(owner, level).tryTakeBoondollars(getGristWidgetBoondollarValue()))
 		{
 			Debug.warnf("Failed to remove boondollars for a grist widget from %s's porkhollow", owner.getUsername());
 			return;
 		}
 		
-		gristSet.spawnGristEntities(world, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, world.rand, entity -> entity.setMotion(entity.getMotion().mul(0.5, 0.5, 0.5)));
+		gristSet.spawnGristEntities(level, worldPosition.getX() + 0.5, worldPosition.getY() + 1, worldPosition.getZ() + 0.5, level.random, entity -> entity.setDeltaMovement(entity.getDeltaMovement().multiply(0.5, 0.5, 0.5)));
 		
 		itemHandler.extractItem(0, 1, false);
 	}
 	
 	@Override
-	public void read(CompoundNBT compound)
+	public void load(BlockState state, CompoundNBT nbt)
 	{
-		super.read(compound);
+		super.load(state, nbt);
 		
-		if(IdentifierHandler.hasIdentifier(compound, "owner"))
-			owner = IdentifierHandler.load(compound, "owner");
+		if(IdentifierHandler.hasIdentifier(nbt, "owner"))
+			owner = IdentifierHandler.load(nbt, "owner");
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound)
+	public CompoundNBT save(CompoundNBT compound)
 	{
-		super.write(compound);
+		super.save(compound);
 		
 		if(owner != null)
 			owner.saveToNBT(compound, "owner");
@@ -161,7 +162,7 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements I
 	@Override
 	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity player)
 	{
-		return new GristWidgetContainer(windowId, playerInventory, itemHandler, parameters, IWorldPosCallable.of(world, pos), pos);
+		return new GristWidgetContainer(windowId, playerInventory, itemHandler, parameters, IWorldPosCallable.create(level, worldPosition), worldPosition);
 	}
 	
 	@Override
@@ -178,6 +179,6 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements I
 	
 	public void resendState()
 	{
-		GristWidgetBlock.updateItem(hasItem, world, this.getPos());
+		GristWidgetBlock.updateItem(hasItem, level, this.getBlockPos());
 	}
 }

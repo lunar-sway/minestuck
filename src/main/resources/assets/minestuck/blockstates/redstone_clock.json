@@ -1,0 +1,16 @@
+{
+    "variants": {
+        "facing=up,powered=true":    { "model": "minestuck:block/redstone_clock_powered", "y": 0, "x": 270},
+        "facing=down,powered=true":  { "model": "minestuck:block/redstone_clock_powered","y": 180, "x": 90},
+        "facing=east,powered=true":  { "model": "minestuck:block/redstone_clock_powered", "y": 90},
+        "facing=south,powered=true": { "model": "minestuck:block/redstone_clock_powered", "y": 180},
+        "facing=west,powered=true":  { "model": "minestuck:block/redstone_clock_powered", "y": 270},
+        "facing=north,powered=true": { "model": "minestuck:block/redstone_clock_powered"},
+        "facing=up,powered=false":    { "model": "minestuck:block/redstone_clock_unpowered", "y": 0, "x": 270},
+        "facing=down,powered=false":  { "model": "minestuck:block/redstone_clock_unpowered","y": 180, "x": 90},
+        "facing=east,powered=false":  { "model": "minestuck:block/redstone_clock_unpowered", "y": 90},
+        "facing=south,powered=false": { "model": "minestuck:block/redstone_clock_unpowered", "y": 180},
+        "facing=west,powered=false":  { "model": "minestuck:block/redstone_clock_unpowered", "y": 270},
+        "facing=north,powered=false": { "model": "minestuck:block/redstone_clock_unpowered"}
+    }
+}

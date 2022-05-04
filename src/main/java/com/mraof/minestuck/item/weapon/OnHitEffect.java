@@ -1,6 +1,7 @@
 package com.mraof.minestuck.item.weapon;
 
 import com.google.common.collect.ImmutableList;
+import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.item.MSItems;
@@ -11,7 +12,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.item.ArmorStandEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -24,10 +25,14 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.*;
 import net.minecraft.util.math.*;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.math.vector.Vector3i;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 import java.util.List;
 import java.util.Random;
@@ -40,36 +45,36 @@ public interface OnHitEffect
 	void onHit(ItemStack stack, LivingEntity target, LivingEntity attacker);
 	
 	OnHitEffect RAGE_STRENGTH = requireAspect(RAGE, chanceWithCritMod(
-			userPotionEffect(() -> new EffectInstance(Effects.STRENGTH, 80, 1))));
+			userPotionEffect(() -> new EffectInstance(Effects.DAMAGE_BOOST, 80, 1))));
 	OnHitEffect HOPE_RESISTANCE = requireAspect(HOPE, chanceWithCritMod(
-			userPotionEffect(() -> new EffectInstance(Effects.RESISTANCE, 120, 2))));
+			userPotionEffect(() -> new EffectInstance(Effects.DAMAGE_RESISTANCE, 120, 2))));
 	OnHitEffect LIFE_SATURATION = requireAspect(LIFE, chanceWithCritMod(
 			userPotionEffect(() -> new EffectInstance(Effects.SATURATION, 1, 1))
 					.and(enemyPotionEffect(() -> new EffectInstance(Effects.HUNGER, 60, 100)))));
 	
 	OnHitEffect BREATH_LEVITATION_AOE = requireAspect(BREATH, chanceWithCritMod(
-			potionAOE(() -> new EffectInstance(Effects.LEVITATION, 30, 2), () -> SoundEvents.ENTITY_ENDER_DRAGON_FLAP, 1.4F)));
+			potionAOE(() -> new EffectInstance(Effects.LEVITATION, 30, 2), () -> SoundEvents.ENDER_DRAGON_FLAP, 1.4F)));
 	OnHitEffect TIME_SLOWNESS_AOE = requireAspect(TIME, chanceWithCritMod(
-			potionAOE(() -> new EffectInstance(Effects.SLOWNESS, 100, 4), () -> SoundEvents.BLOCK_BELL_RESONATE, 2F)));
+			potionAOE(() -> new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 100, 4), () -> SoundEvents.BELL_RESONATE, 2F)));
 	
 	OnHitEffect SET_CANDY_DROP_FLAG = (stack, target, attacker) -> {
 		if(target instanceof UnderlingEntity)
 			((UnderlingEntity) target).dropCandy = true;
 	};
 	OnHitEffect ICE_SHARD = (stack, target, attacker) -> {
-		target.playSound(SoundEvents.BLOCK_GLASS_BREAK, 0.25F, 1.5F);
-		if(!target.world.isRemote && attacker instanceof PlayerEntity && attacker.getRNG().nextFloat() < .1)
+		target.playSound(SoundEvents.GLASS_BREAK, 0.25F, 1.5F);
+		if(!target.level.isClientSide && attacker instanceof PlayerEntity && attacker.getRandom().nextFloat() < .1)
 		{
-			target.playSound(SoundEvents.BLOCK_GLASS_BREAK, 1.5F, 1F);
-			target.attackEntityFrom(DamageSource.causePlayerDamage((PlayerEntity) attacker), 2);
-			stack.damageItem(2, attacker, entity -> entity.sendBreakAnimation(Hand.MAIN_HAND));
+			target.playSound(SoundEvents.GLASS_BREAK, 1.5F, 1F);
+			target.hurt(DamageSource.playerAttack((PlayerEntity) attacker), 2);
+			stack.hurtAndBreak(2, attacker, entity -> entity.broadcastBreakEvent(Hand.MAIN_HAND));
 			
-			ItemEntity shardEntity = new ItemEntity(target.world, target.getPosX(), target.getPosY(), target.getPosZ(), new ItemStack(MSItems.ICE_SHARD, 1));
-			target.world.addEntity(shardEntity);
+			ItemEntity shardEntity = new ItemEntity(target.level, target.getX(), target.getY(), target.getZ(), new ItemStack(MSItems.ICE_SHARD, 1));
+			target.level.addFreshEntity(shardEntity);
 		}
 	};
 	OnHitEffect KUNDLER_SURPRISE = (stack, target, attacker) -> {
-		if(!attacker.world.isRemote && target.getHealth() <= 0 && attacker.getRNG().nextFloat() <= 0.20)
+		if(!attacker.level.isClientSide && target.getHealth() <= 0 && attacker.getRandom().nextFloat() <= 0.20)
 		{
 			Random ran = new Random();
 			//TODO Make this a loot table
@@ -78,50 +83,50 @@ public interface OnHitEffect
 					new ItemStack(MSItems.SURPRISE_EMBRYO), new ItemStack(MSItems.GAMEGRL_MAGAZINE), new ItemStack(MSItems.GAMEBRO_MAGAZINE),
 					new ItemStack(Blocks.DEAD_HORN_CORAL)};
 			int num = ran.nextInt(items.length);
-			ItemEntity item = new ItemEntity(target.world, target.getPosX(), target.getPosY(), target.getPosZ(), items[num].copy());
-			target.world.addEntity(item);
+			ItemEntity item = new ItemEntity(target.level, target.getX(), target.getY(), target.getZ(), items[num].copy());
+			target.level.addFreshEntity(item);
 			
-			ITextComponent message = new TranslationTextComponent(stack.getTranslationKey() + ".message", items[num].getDisplayName());
-			attacker.sendMessage(message.applyTextStyle(TextFormatting.GOLD));
+			IFormattableTextComponent message = new TranslationTextComponent(stack.getDescriptionId() + ".message", items[num].getHoverName());
+			attacker.sendMessage(message.withStyle(TextFormatting.GOLD), Util.NIL_UUID);
 		}
 	};
 	
 	OnHitEffect HORRORTERROR = (stack, target, attacker) -> {
 		
-		target.addPotionEffect(new EffectInstance(Effects.WITHER, 100, 2));
+		target.addEffect(new EffectInstance(Effects.WITHER, 100, 2));
 		
-		if(!attacker.world.isRemote && attacker instanceof PlayerEntity && attacker.getRNG().nextFloat() < .1)
+		if(!attacker.level.isClientSide && attacker instanceof PlayerEntity && attacker.getRandom().nextFloat() < .1)
 		{
 			List<String> messages = ImmutableList.of("machinations", "stir", "suffering", "will", "done", "conspiracies", "waiting", "strife", "search", "blessings", "seek", "shadow");
 			
-			String key = messages.get(attacker.getRNG().nextInt(messages.size()));
-			ITextComponent message = new TranslationTextComponent("message.horrorterror." + key);
-			attacker.sendMessage(message.applyTextStyle(TextFormatting.DARK_PURPLE));
-			boolean potionBool = attacker.getRNG().nextBoolean();
+			String key = messages.get(attacker.getRandom().nextInt(messages.size()));
+			IFormattableTextComponent message = new TranslationTextComponent("message.horrorterror." + key);
+			attacker.sendMessage(message.withStyle(TextFormatting.DARK_PURPLE), Util.NIL_UUID);
+			boolean potionBool = attacker.getRandom().nextBoolean();
 			if(potionBool)
-				attacker.addPotionEffect(new EffectInstance(Effects.WITHER, 100, 2));
+				attacker.addEffect(new EffectInstance(Effects.WITHER, 100, 2));
 			else
-				attacker.addPotionEffect(new EffectInstance(Effects.BLINDNESS, 100, 0));
+				attacker.addEffect(new EffectInstance(Effects.BLINDNESS, 100, 0));
 		}
 	};
 	
 	OnHitEffect SPAWN_BREADCRUMBS = (stack, target, attacker) -> {
-		if(!target.world.isRemote)
+		if(!target.level.isClientSide)
 		{
 			ItemStack crumbs = new ItemStack(MSItems.BREADCRUMBS, 1);
-			ItemEntity item = new ItemEntity(target.world, target.getPosX(), target.getPosY(), target.getPosZ(), crumbs);
-			target.world.addEntity(item);
+			ItemEntity item = new ItemEntity(target.level, target.getX(), target.getY(), target.getZ(), crumbs);
+			target.level.addFreshEntity(item);
 		}
 	};
 	
 	OnHitEffect DROP_FOE_ITEM = (stack, target, attacker) -> {
-		ItemStack heldByTarget = target.getHeldItemMainhand();
-		if(!target.world.isRemote && !heldByTarget.isEmpty() && attacker.getRNG().nextFloat() < .05)
+		ItemStack heldByTarget = target.getMainHandItem();
+		if(!target.level.isClientSide && !heldByTarget.isEmpty() && attacker.getRandom().nextFloat() < .05)
 		{
-			ItemEntity item = new ItemEntity(target.world, target.getPosX(), target.getPosY(), target.getPosZ(), heldByTarget.copy());
+			ItemEntity item = new ItemEntity(target.level, target.getX(), target.getY(), target.getZ(), heldByTarget.copy());
 			item.getItem().setCount(1);
-			item.setPickupDelay(40);
-			target.world.addEntity(item);
+			item.setPickUpDelay(40);
+			target.level.addFreshEntity(item);
 			heldByTarget.shrink(1);
 		}
 	};
@@ -129,80 +134,80 @@ public interface OnHitEffect
 	String SORD_DROP_MESSAGE = "drop_message";
 	
 	OnHitEffect SORD_DROP = (stack, target, attacker) -> {
-		if(!attacker.getEntityWorld().isRemote && attacker.getRNG().nextFloat() < .25)
+		if(!attacker.level.isClientSide && attacker.getRandom().nextFloat() < .25)
 		{
-			ItemEntity sord = new ItemEntity(attacker.world, attacker.getPosX(), attacker.getPosY(), attacker.getPosZ(), stack.copy());
+			ItemEntity sord = new ItemEntity(attacker.level, attacker.getX(), attacker.getY(), attacker.getZ(), stack.copy());
 			sord.getItem().setCount(1);
-			sord.setPickupDelay(40);
-			attacker.world.addEntity(sord);
+			sord.setPickUpDelay(40);
+			attacker.level.addFreshEntity(sord);
 			stack.shrink(1);
-			attacker.sendMessage(new TranslationTextComponent(sord.getItem().getTranslationKey() + "." + SORD_DROP_MESSAGE));
+			attacker.sendMessage(new TranslationTextComponent(sord.getItem().getDescriptionId() + "." + SORD_DROP_MESSAGE), Util.NIL_UUID);
 		}
 	};
 	
 	OnHitEffect RANDOM_DAMAGE = (stack, target, attacker) -> {
 		DamageSource source;
 		if(attacker instanceof PlayerEntity)
-			source = DamageSource.causePlayerDamage((PlayerEntity) attacker);
-		else source = DamageSource.causeMobDamage(attacker);
+			source = DamageSource.playerAttack((PlayerEntity) attacker);
+		else source = DamageSource.mobAttack(attacker);
 		
-		float rng = (float) (attacker.getRNG().nextInt(7) + 1) * (attacker.getRNG().nextInt(7) + 1);
-		target.attackEntityFrom(source, rng);
+		float rng = (float) (attacker.getRandom().nextInt(7) + 1) * (attacker.getRandom().nextInt(7) + 1);
+		target.hurt(source, rng);
 	};
 	
 	OnHitEffect SWEEP = (stack, target, attacker) -> {
 		if(attacker instanceof PlayerEntity)
 		{
 			PlayerEntity playerAttacker = (PlayerEntity) attacker;
-			boolean slowMoving = (double) (playerAttacker.distanceWalkedModified - playerAttacker.prevDistanceWalkedModified) < (double) playerAttacker.getAIMoveSpeed();
+			boolean slowMoving = (double) (playerAttacker.walkDist - playerAttacker.walkDistO) < (double) playerAttacker.getSpeed();
 			boolean lastHitWasCrit = ServerEventHandler.wasLastHitCrit(playerAttacker);
-			if(slowMoving && !lastHitWasCrit && playerAttacker.onGround)
+			if(slowMoving && !lastHitWasCrit && playerAttacker.isOnGround())
 			{
-				float attackDamage = (float) playerAttacker.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue();
+				float attackDamage = (float) playerAttacker.getAttribute(Attributes.ATTACK_DAMAGE).getValue();
 				float sweepEnchantMod = 1.0F + EnchantmentHelper.getSweepingDamageRatio(playerAttacker) * attackDamage;
 				
-				for(LivingEntity livingEntity : playerAttacker.world.getEntitiesWithinAABB(LivingEntity.class, target.getBoundingBox().grow(1.0D, 0.25D, 1.0D)))
+				for(LivingEntity livingEntity : playerAttacker.level.getEntitiesOfClass(LivingEntity.class, target.getBoundingBox().inflate(1.0D, 0.25D, 1.0D)))
 				{
-					if(livingEntity != playerAttacker && livingEntity != target && !playerAttacker.isOnSameTeam(livingEntity) && (!(livingEntity instanceof ArmorStandEntity) || !((ArmorStandEntity) livingEntity).hasMarker()) && playerAttacker.getDistanceSq(livingEntity) < 9.0D)
+					if(livingEntity != playerAttacker && livingEntity != target && !playerAttacker.isAlliedTo(livingEntity) && (!(livingEntity instanceof ArmorStandEntity) || !((ArmorStandEntity) livingEntity).isMarker()) && playerAttacker.distanceToSqr(livingEntity) < 9.0D)
 					{
-						livingEntity.knockBack(playerAttacker, 0.4F, (double) MathHelper.sin(playerAttacker.rotationYaw * ((float) Math.PI / 180F)), (double) (-MathHelper.cos(playerAttacker.rotationYaw * ((float) Math.PI / 180F))));
-						livingEntity.attackEntityFrom(DamageSource.causePlayerDamage(playerAttacker), sweepEnchantMod);
+						livingEntity.knockback(0.4F, MathHelper.sin(playerAttacker.yRot * ((float) Math.PI / 180F)), -MathHelper.cos(playerAttacker.yRot * ((float) Math.PI / 180F)));
+						livingEntity.hurt(DamageSource.playerAttack(playerAttacker), sweepEnchantMod);
 					}
 				}
 				
-				playerAttacker.world.playSound(null, playerAttacker.getPosX(), playerAttacker.getPosY(), playerAttacker.getPosZ(), SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, playerAttacker.getSoundCategory(), 1.0F, 1.0F);
-				playerAttacker.spawnSweepParticles();
+				playerAttacker.level.playSound(null, playerAttacker.getX(), playerAttacker.getY(), playerAttacker.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, playerAttacker.getSoundSource(), 1.0F, 1.0F);
+				playerAttacker.sweepAttack();
 			}
 		}
 	};
 	
-	OnHitEffect SPACE_TELEPORT = requireAspect(SPACE, onCrit((stack, target, attacker) -> {
-		double oldPosX = attacker.getPosX();
-		double oldPosY = attacker.getPosY();
-		double oldPosZ = attacker.getPosZ();
-		World worldIn = attacker.world;
+	OnHitEffect SPACE_TELEPORT = withoutCreativeShock(requireAspect(SPACE, onCrit((stack, target, attacker) -> {
+		double oldPosX = attacker.getX();
+		double oldPosY = attacker.getY();
+		double oldPosZ = attacker.getZ();
+		World worldIn = attacker.level;
 		
 		for(int i = 0; i < 16; ++i)
 		{
-			double newPosX = attacker.getPosX() + (attacker.getRNG().nextDouble() - 0.5D) * 16.0D;
-			double newPosY = MathHelper.clamp(attacker.getPosY() + (double) (attacker.getRNG().nextInt(16) - 8), 0.0D, worldIn.getActualHeight() - 1);
-			double newPosZ = attacker.getPosZ() + (attacker.getRNG().nextDouble() - 0.5D) * 16.0D;
+			double newPosX = attacker.getX() + (attacker.getRandom().nextDouble() - 0.5D) * 16.0D;
+			double newPosY = MathHelper.clamp(attacker.getY() + (double) (attacker.getRandom().nextInt(16) - 8), 0.0D, worldIn.getHeight() - 1);//getAcutalHeight/getLogicalHeight
+			double newPosZ = attacker.getZ() + (attacker.getRandom().nextDouble() - 0.5D) * 16.0D;
 			if(attacker.isPassenger())
 				attacker.stopRiding();
 			
-			if(attacker.attemptTeleport(newPosX, newPosY, newPosZ, true))
+			if(attacker.randomTeleport(newPosX, newPosY, newPosZ, true))
 			{
-				worldIn.playSound(null, oldPosX, oldPosY, oldPosZ, SoundEvents.ITEM_CHORUS_FRUIT_TELEPORT, SoundCategory.PLAYERS, 1.0F, 1.0F);
-				attacker.playSound(SoundEvents.ITEM_CHORUS_FRUIT_TELEPORT, 1.0F, 1.0F);
-				attacker.lookAt(attacker.getCommandSource().getEntityAnchorType(), target.getPositionVec());
+				worldIn.playSound(null, oldPosX, oldPosY, oldPosZ, SoundEvents.CHORUS_FRUIT_TELEPORT, SoundCategory.PLAYERS, 1.0F, 1.0F);
+				attacker.playSound(SoundEvents.CHORUS_FRUIT_TELEPORT, 1.0F, 1.0F);
+				attacker.lookAt(attacker.createCommandSourceStack().getAnchor(), target.position());
 				break;
 			}
 		}
-	}));
+	})));
 	
 	static OnHitEffect setOnFire(int duration)
 	{
-		return (itemStack, target, attacker) -> target.setFire(duration);
+		return (itemStack, target, attacker) -> target.setSecondsOnFire(duration);
 	}
 	
 	static OnHitEffect armorBypassingDamageMod(float additionalDamage, EnumAspect aspect)
@@ -214,7 +219,7 @@ public interface OnHitEffect
 			if(attacker instanceof ServerPlayerEntity)
 			{
 				ServerPlayerEntity serverPlayer = (ServerPlayerEntity) attacker;
-				source = DamageSource.causePlayerDamage(serverPlayer);
+				source = DamageSource.playerAttack(serverPlayer);
 				Title title = PlayerSavedData.getData(serverPlayer).getTitle();
 				
 				if(target instanceof UnderlingEntity)
@@ -232,34 +237,37 @@ public interface OnHitEffect
 				}
 			} else
 			{
-				source = DamageSource.causeMobDamage(attacker);
+				source = DamageSource.mobAttack(attacker);
 			}
 			
-			target.attackEntityFrom(source.setDamageBypassesArmor(), damage);
+			target.hurt(source.bypassArmor(), damage);
 		};
 	}
 	
 	/**
 	 * Checks for attacks within three blocks of a point three blocks behind the targets back(covering the whole standard attack range of a player)
-	*/
+	 */
 	static OnHitEffect backstab(float backstabDamage)
 	{
 		return (stack, target, attacker) -> {
-			Vec3i reversedBackVec = target.getHorizontalFacing().getOpposite().getDirectionVec();
-			Vec3i targetBackVec3i = target.getPosition().add(reversedBackVec).add(reversedBackVec).add(reversedBackVec); //three blocks behind the targets back
-			if(targetBackVec3i.withinDistance(attacker.getPosition(), 3))
+			Direction direction = target.getDirection().getOpposite();
+			Vector3i targetBackVec3i = target.blockPosition().relative(direction, 3); //three blocks behind the targets back
+			if(targetBackVec3i.closerThan(attacker.blockPosition(), 3))
 			{
-				for(int i = 0; i < 4; i++)
+				if (target.level instanceof ServerWorld)
 				{
-					target.world.addParticle(ParticleTypes.DAMAGE_INDICATOR, true, target.getPosition().add(reversedBackVec).getX(), target.getEyePosition(1F).y - 1, target.getPosition().add(reversedBackVec).getZ(), 0.1,0.1,0.1);
+					((ServerWorld) target.level).sendParticles(ParticleTypes.DAMAGE_INDICATOR,
+							target.blockPosition().relative(direction).getX(), target.getEyePosition(1F).y - 1, target.blockPosition().relative(direction).getZ(),
+							4, 0, 0, 0, 0.1);
 				}
+				
 				
 				DamageSource source;
 				if(attacker instanceof PlayerEntity)
-					source = DamageSource.causePlayerDamage((PlayerEntity) attacker);
-				else source = DamageSource.causeMobDamage(attacker);
+					source = DamageSource.playerAttack((PlayerEntity) attacker);
+				else source = DamageSource.mobAttack(attacker);
 				
-				target.attackEntityFrom(source, backstabDamage);
+				target.hurt(source, backstabDamage);
 			}
 		};
 	}
@@ -275,7 +283,7 @@ public interface OnHitEffect
 				
 				if(target.getType() == targetEntity.get())
 				{
-					target.attackEntityFrom(DamageSource.causePlayerDamage(serverPlayer), damage);
+					target.hurt(DamageSource.playerAttack(serverPlayer), damage);
 				}
 			}
 		};
@@ -288,29 +296,29 @@ public interface OnHitEffect
 	
 	static OnHitEffect playSound(Supplier<SoundEvent> sound, float volume, float pitch)
 	{
-		return (itemStack, target, attacker) -> attacker.world.playSound(null, attacker.getPosX(), attacker.getPosY(), attacker.getPosZ(), sound.get(), attacker.getSoundCategory(), volume, pitch);
+		return (itemStack, target, attacker) -> attacker.level.playSound(null, attacker.getX(), attacker.getY(), attacker.getZ(), sound.get(), attacker.getSoundSource(), volume, pitch);
 	}
 	
 	static OnHitEffect enemyKnockback(float knockback)
 	{
 		return (stack, target, attacker) -> {
-			float randFloat = knockback + attacker.getRNG().nextFloat();
+			float randFloat = knockback + attacker.getRandom().nextFloat();
 			
-			if(!attacker.getEntityWorld().isRemote)
+			if(!attacker.level.isClientSide)
 			{
-				target.setMotion(target.getMotion().x * randFloat, target.getMotion().y, target.getMotion().z * randFloat);
+				target.setDeltaMovement(target.getDeltaMovement().x * randFloat, target.getDeltaMovement().y, target.getDeltaMovement().z * randFloat);
 			}
 		};
 	}
 	
 	static OnHitEffect userPotionEffect(Supplier<EffectInstance> effect)
 	{
-		return (stack, target, attacker) -> attacker.addPotionEffect(effect.get());
+		return (stack, target, attacker) -> attacker.addEffect(effect.get());
 	}
 	
 	static OnHitEffect enemyPotionEffect(Supplier<EffectInstance> effect)
 	{
-		return (stack, target, attacker) -> target.addPotionEffect(effect.get());
+		return (stack, target, attacker) -> target.addEffect(effect.get());
 	}
 	
 	static OnHitEffect requireAspect(EnumAspect aspect, OnHitEffect effect)
@@ -326,6 +334,20 @@ public interface OnHitEffect
 		};
 	}
 	
+	/**
+	 * Prevents effect from working if the entity is a player subject to the effects of creative shock
+	 */
+	static OnHitEffect withoutCreativeShock(OnHitEffect effect)
+	{
+		return (stack, target, attacker) -> {
+			if(!(attacker instanceof PlayerEntity) || !CreativeShockEffect.doesCreativeShockLimit((PlayerEntity) attacker, CreativeShockEffect.LIMIT_MOBILITY_ITEMS))
+			{
+				effect.onHit(stack, target, attacker);
+			}
+		};
+	}
+	
+	
 	static OnHitEffect onCrit(OnHitEffect effect)
 	{
 		return (stack, target, attacker) -> {
@@ -337,7 +359,7 @@ public interface OnHitEffect
 	static OnHitEffect chanceWithCritMod(OnHitEffect effect)
 	{
 		return (stack, target, attacker) -> {
-			if(!attacker.world.isRemote && attacker.getRNG().nextFloat() < (ServerEventHandler.wasLastHitCrit(attacker) ? 0.2 : 0.1))
+			if(!attacker.level.isClientSide && attacker.getRandom().nextFloat() < (ServerEventHandler.wasLastHitCrit(attacker) ? 0.2 : 0.1))
 				effect.onHit(stack, target, attacker);
 		};
 	}
@@ -353,14 +375,14 @@ public interface OnHitEffect
 	static OnHitEffect potionAOE(Supplier<EffectInstance> effect, Supplier<SoundEvent> sound, float pitch)
 	{
 		return (stack, target, attacker) -> {
-			AxisAlignedBB axisalignedbb = attacker.getBoundingBox().grow(4.0D, 2.0D, 4.0D);
-			List<LivingEntity> list = attacker.world.getEntitiesWithinAABB(LivingEntity.class, axisalignedbb);
+			AxisAlignedBB axisalignedbb = attacker.getBoundingBox().inflate(4.0D, 2.0D, 4.0D);
+			List<LivingEntity> list = attacker.level.getEntitiesOfClass(LivingEntity.class, axisalignedbb);
 			list.remove(attacker);
 			if(!list.isEmpty())
 			{
-				attacker.world.playSound(null, attacker.getPosition(), sound.get(), SoundCategory.PLAYERS, 1.5F, pitch);
+				attacker.level.playSound(null, attacker.blockPosition(), sound.get(), SoundCategory.PLAYERS, 1.5F, pitch);
 				for(LivingEntity livingentity : list)
-					livingentity.addPotionEffect(effect.get());
+					livingentity.addEffect(effect.get());
 			}
 		};
 	}

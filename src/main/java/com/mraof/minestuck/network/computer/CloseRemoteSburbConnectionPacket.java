@@ -18,7 +18,7 @@ public class CloseRemoteSburbConnectionPacket implements PlayToServerPacket
 	
 	public static CloseRemoteSburbConnectionPacket asClient(ComputerTileEntity te)
 	{
-		return new CloseRemoteSburbConnectionPacket(te.getPos());
+		return new CloseRemoteSburbConnectionPacket(te.getBlockPos());
 	}
 	
 	@Override

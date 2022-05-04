@@ -9,8 +9,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.ITag;
+import net.minecraft.tags.TagCollectionManager;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -68,12 +68,12 @@ public class SourceGristCost extends GeneratedGristCost
 		@Override
 		protected SourceGristCost read(ResourceLocation recipeId, JsonObject json, Ingredient ingredient, Integer priority)
 		{
-			GristSet cost = GristSet.deserialize(JSONUtils.getJsonObject(json, "grist_cost"));
-			float multiplier = json.has("multiplier") ? JSONUtils.getFloat(json, "multiplier") : 1;
+			GristSet cost = GristSet.deserialize(JSONUtils.getAsJsonObject(json, "grist_cost"));
+			float multiplier = json.has("multiplier") ? JSONUtils.getAsFloat(json, "multiplier") : 1;
 			
-			JsonArray jsonList = JSONUtils.getJsonArray(json, "sources");
+			JsonArray jsonList = JSONUtils.getAsJsonArray(json, "sources");
 			List<Source> sources = new ArrayList<>();
-			jsonList.forEach(element -> sources.add(parseSource(JSONUtils.getString(element, "source"))));
+			jsonList.forEach(element -> sources.add(parseSource(JSONUtils.convertToString(element, "source"))));
 			
 			return new SourceGristCost(recipeId, ingredient, sources, multiplier, cost, priority);
 		}
@@ -120,18 +120,18 @@ public class SourceGristCost extends GeneratedGristCost
 	
 	private static class TagSource implements Source
 	{
-		final Tag<Item> tag;
+		final ITag<Item> tag;
 		
 		private TagSource(ResourceLocation name)
 		{
-			this.tag = ItemTags.getCollection().get(name);
+			this.tag = TagCollectionManager.getInstance().getItems().getTag(name);
 		}
 		
 		@Override
 		public GristSet getCostFor(GenerationContext context)
 		{
 			GristSet maxCost = null;
-			for(Item item : tag.getAllElements())
+			for(Item item : tag.getValues())
 			{
 				GristSet cost = context.lookupCostFor(item);
 				
@@ -142,8 +142,8 @@ public class SourceGristCost extends GeneratedGristCost
 		}
 	}
 	
-	public static String tagString(Tag<Item> tag)
+	public static String tagString(ITag<Item> tag)
 	{
-		return "#" + tag.getId().toString();
+		return "#" + TagCollectionManager.getInstance().getItems().getIdOrThrow(tag).toString();
 	}
 }

@@ -22,7 +22,7 @@ public class SimpleCakeBlock extends CustomCakeBlock
 	@Override
 	protected void applyEffects(World worldIn, BlockPos pos, BlockState state, PlayerEntity player)
 	{
-		player.getFoodStats().addStats(foodLevel, saturation);
+		player.getFoodData().eat(foodLevel, saturation);
 		if(effect != null)
 			effect.applyEffects(player);
 	}

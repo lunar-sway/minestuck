@@ -38,16 +38,17 @@ public class GeneratedGristCostConfigProvider implements IDataProvider
 	
 	protected void addEntries()
 	{
-		serializer(IRecipeSerializer.CRAFTING_SHAPED);
-		serializer(IRecipeSerializer.CRAFTING_SHAPELESS);
+		serializer(IRecipeSerializer.SHAPED_RECIPE);
+		serializer(IRecipeSerializer.SHAPELESS_RECIPE);
 		serializer(MSRecipeTypes.NON_MIRRORED);
 		type(IRecipeType.STONECUTTING);
+		type(IRecipeType.SMITHING, SmithingInterpreter.INSTANCE);
 		type(IRecipeType.SMELTING, new CookingCostInterpreter(new GristSet(GristTypes.TAR, 1)));
 		type(MSRecipeTypes.IRRADIATING_TYPE, new CookingCostInterpreter(new GristSet(GristTypes.URANIUM, 1)));
 	}
 	
 	@Override
-	public final void act(DirectoryCache cache) throws IOException
+	public final void run(DirectoryCache cache) throws IOException
 	{
 		addEntries();
 		

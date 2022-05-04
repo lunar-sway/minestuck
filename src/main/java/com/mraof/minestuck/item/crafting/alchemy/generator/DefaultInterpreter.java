@@ -24,16 +24,16 @@ public class DefaultInterpreter implements RecipeInterpreter
 	@Override
 	public List<Item> getOutputItems(IRecipe<?> recipe)
 	{
-		ItemStack stack = recipe.getRecipeOutput();
+		ItemStack stack = recipe.getResultItem();
 		return stack.isEmpty() ? Collections.emptyList() : Collections.singletonList(stack.getItem());
 	}
 	
 	@Override
 	public GristSet generateCost(IRecipe<?> recipe, Item output, GenerationContext context)
 	{
-		if(recipe.isDynamic())
+		if(recipe.isSpecial())
 			return null;
-		
+
 		GristSet totalCost = new GristSet();
 		for(Ingredient ingredient : recipe.getIngredients())
 		{
@@ -43,7 +43,7 @@ public class DefaultInterpreter implements RecipeInterpreter
 			else totalCost.addGrist(ingredientCost);
 		}
 		
-		totalCost.scale(1F/recipe.getRecipeOutput().getCount(), false);	//Do not round down because it's better to have something cost a little to much than it possibly costing nothing
+		totalCost.scale(1F/recipe.getResultItem().getCount(), false);	//Do not round down because it's better to have something cost a little to much than it possibly costing nothing
 		
 		return totalCost;
 	}

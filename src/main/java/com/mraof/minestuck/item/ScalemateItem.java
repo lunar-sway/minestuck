@@ -18,52 +18,52 @@ public class ScalemateItem extends Item
     }
     
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn)
+    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn)
     {
         Item newItem;
-        Item offhandItem = playerIn.getHeldItemOffhand().getItem();
-        ItemStack mainhandItemStack = playerIn.getHeldItem(handIn);
+        Item offhandItem = playerIn.getOffhandItem().getItem();
+        ItemStack mainhandItemStack = playerIn.getItemInHand(handIn);
         
-        if(offhandItem.isIn(Tags.Items.DYES_RED))
+        if(offhandItem.is(Tags.Items.DYES_RED))
         {
             newItem = MSItems.SCALEMATE_APPLESCAB;
-        } else if(offhandItem.isIn(Tags.Items.DYES_BLUE))
+        } else if(offhandItem.is(Tags.Items.DYES_BLUE))
         {
             newItem = MSItems.SCALEMATE_BERRYBREATH;
-        } else if(offhandItem.isIn(Tags.Items.DYES_BROWN))
+        } else if(offhandItem.is(Tags.Items.DYES_BROWN))
         {
             newItem = MSItems.SCALEMATE_CINNAMONWHIFF;
-        } else if(offhandItem.isIn(Tags.Items.DYES_ORANGE))
+        } else if(offhandItem.is(Tags.Items.DYES_ORANGE))
         {
             newItem = MSItems.SCALEMATE_HONEYTONGUE;
-        } else if(offhandItem.isIn(Tags.Items.DYES_YELLOW))
+        } else if(offhandItem.is(Tags.Items.DYES_YELLOW))
         {
             newItem = MSItems.SCALEMATE_LEMONSNOUT;
-        } else if(offhandItem.isIn(Tags.Items.DYES_LIGHT_BLUE))
+        } else if(offhandItem.is(Tags.Items.DYES_LIGHT_BLUE))
         {
             newItem = MSItems.SCALEMATE_PINESNOUT;
-        } else if(offhandItem.isIn(Tags.Items.DYES_PINK))
+        } else if(offhandItem.is(Tags.Items.DYES_PINK))
         {
             newItem = MSItems.SCALEMATE_PUCEFOOT;
         } else if(offhandItem == Items.PUMPKIN)
         {
             newItem = MSItems.SCALEMATE_PUMPKINSNUFFLE;
-        } else if(offhandItem.isIn(Tags.Items.DYES_WHITE))
+        } else if(offhandItem.is(Tags.Items.DYES_WHITE))
         {
             newItem = MSItems.SCALEMATE_PYRALSPITE;
-        } else if(offhandItem.isIn(Tags.Items.DYES_GREEN))
+        } else if(offhandItem.is(Tags.Items.DYES_GREEN))
         {
             newItem = MSItems.SCALEMATE_WITNESS;
         } else
         {
-            return ActionResult.resultPass(mainhandItemStack);
+            return ActionResult.pass(mainhandItemStack);
         }
         
-        playerIn.getHeldItemOffhand().shrink(1);
+        playerIn.getOffhandItem().shrink(1);
         ItemStack item = new ItemStack(newItem, mainhandItemStack.getCount());
         item.setTag(mainhandItemStack.getTag());
         
         playerIn.playSound(SoundEvents.AMBIENT_UNDERWATER_EXIT, 0.5F, 1.0F);
-        return ActionResult.resultSuccess(item);
+        return ActionResult.success(item);
     }
 }

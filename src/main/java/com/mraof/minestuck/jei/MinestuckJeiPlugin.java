@@ -80,7 +80,7 @@ public class MinestuckJeiPlugin implements IModPlugin
 	@Override
 	public void registerRecipes(IRecipeRegistration registration)
 	{
-		World world = Minecraft.getInstance().world;
+		World world = Minecraft.getInstance().level;
 		Collection<IRecipe<?>> recipes = world.getRecipeManager().getRecipes();
 		registration.addRecipes(recipes.stream().filter(recipe -> recipe.getType() == MSRecipeTypes.GRIST_COST_TYPE).flatMap(recipe -> ((GristCostRecipe) recipe).getJeiCosts(world).stream()).collect(Collectors.toList()), GRIST_COST_ID);
 		registration.addRecipes(recipes.stream().filter(recipe -> recipe.getType() == MSRecipeTypes.COMBINATION_TYPE).flatMap(recipe -> ((CombinationRecipe) recipe).getJeiCombinations().stream()).filter(combination -> combination.getMode() == CombinationMode.AND).collect(Collectors.toList()), LATHE_ID);

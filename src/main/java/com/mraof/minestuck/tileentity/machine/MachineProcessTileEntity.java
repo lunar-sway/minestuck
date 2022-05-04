@@ -46,22 +46,22 @@ public abstract class MachineProcessTileEntity extends TileEntity implements ITi
 	}
 	
 	@Override
-	public void read(CompoundNBT compound)
+	public void load(BlockState state, CompoundNBT nbt)
 	{
-		super.read(compound);
+		super.load(state, nbt);
 
-		this.progress = compound.getInt("progress");
+		this.progress = nbt.getInt("progress");
 		if(getRunType() == RunType.BUTTON_OVERRIDE)
-			this.overrideStop = compound.getBoolean("overrideStop");
-		if(compound.contains("inventory", Constants.NBT.TAG_COMPOUND))
-			itemHandler.deserializeNBT(compound.getCompound("inventory"));
-		else itemHandler.deserializeNBT(compound);	//TODO reads save format from before the item handler. Remove when we don't care about backwards-compability to early mc1.15 versions
+			this.overrideStop = nbt.getBoolean("overrideStop");
+		if(nbt.contains("inventory", Constants.NBT.TAG_COMPOUND))
+			itemHandler.deserializeNBT(nbt.getCompound("inventory"));
+		else itemHandler.deserializeNBT(nbt);	//TODO reads save format from before the item handler. Remove when we don't care about backwards-compability to early mc1.15 versions
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound)
+	public CompoundNBT save(CompoundNBT compound)
 	{
-		super.write(compound);
+		super.save(compound);
 
 		compound.putInt("progress", this.progress);
 		if(getRunType() == RunType.BUTTON_OVERRIDE)
@@ -83,8 +83,8 @@ public abstract class MachineProcessTileEntity extends TileEntity implements ITi
 	@Override
 	public void tick()
 	{
-		BlockState state = world.getBlockState(pos);
-		if (world.isRemote)    //Processing is easier done on the server side only
+		BlockState state = level.getBlockState(worldPosition);
+		if (level.isClientSide)    //Processing is easier done on the server side only
 			return;
 
 		if ((!ready && getRunType() != RunType.AUTOMATIC) || !contentsValid())
@@ -93,7 +93,7 @@ public abstract class MachineProcessTileEntity extends TileEntity implements ITi
 			this.progress = 0;
 			this.ready = getOverrideStop();
 			if (!b)
-				world.notifyBlockUpdate(pos, state, state, 3);
+				level.sendBlockUpdated(worldPosition, state, state, 3);
 			return;
 		}
 
@@ -142,7 +142,7 @@ public abstract class MachineProcessTileEntity extends TileEntity implements ITi
 		@Override
 		protected void onContentsChanged(int slot)
 		{
-			MachineProcessTileEntity.this.markDirty();
+			MachineProcessTileEntity.this.setChanged();
 		}
 	}
 	
@@ -179,7 +179,7 @@ public abstract class MachineProcessTileEntity extends TileEntity implements ITi
 		}
 		
 		@Override
-		public int size()
+		public int getCount()
 		{
 			return 3;
 		}

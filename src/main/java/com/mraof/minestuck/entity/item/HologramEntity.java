@@ -14,13 +14,12 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 public class HologramEntity extends Entity
 {
 
-	private static final DataParameter<ItemStack> ITEM = EntityDataManager.createKey(HologramEntity.class, DataSerializers.ITEMSTACK);
+	private static final DataParameter<ItemStack> ITEM = EntityDataManager.defineId(HologramEntity.class, DataSerializers.ITEM_STACK);
 	public int innerRotation;
 	
 	public HologramEntity(World worldIn, ItemStack item)
@@ -31,8 +30,8 @@ public class HologramEntity extends Entity
 	public HologramEntity(EntityType<? extends HologramEntity> type, World worldIn, ItemStack item)
 	{
 		super(type, worldIn);
-		this.innerRotation = this.rand.nextInt(100000);
-		dataManager.set(ITEM, item);
+		this.innerRotation = this.random.nextInt(100000);
+		entityData.set(ITEM, item);
 	}
 
 	public HologramEntity(EntityType<? extends HologramEntity> type, World worldIn)
@@ -42,54 +41,54 @@ public class HologramEntity extends Entity
 	
 	public void onUpdate()
     {
-        this.prevPosX = this.getPosX();
-        this.prevPosY = this.getPosY();
-        this.prevPosZ = this.getPosZ();
+        this.xo = this.getX();
+        this.yo = this.getY();
+        this.zo = this.getZ();
         ++this.innerRotation;
 
-        if (!this.world.isRemote)
+        if (!this.level.isClientSide)
         {
-            BlockPos blockpos = new BlockPos(this);
+            BlockPos blockpos = blockPosition();
 
-            if (this.world.getDimension().getType() == DimensionType.THE_END && this.world.getBlockState(blockpos).getBlock() != Blocks.FIRE)
+            if (this.level.dimension() == World.END && this.level.getBlockState(blockpos).getBlock() != Blocks.FIRE)
             {
-                this.world.setBlockState(blockpos, Blocks.FIRE.getDefaultState());
+                this.level.setBlockAndUpdate(blockpos, Blocks.FIRE.defaultBlockState());
             }
         }
     }
 	
 	@Override
-	protected void registerData()
+	protected void defineSynchedData()
 	{
-		this.dataManager.register(ITEM, new ItemStack(MSBlocks.GENERIC_OBJECT));
+		this.entityData.define(ITEM, new ItemStack(MSBlocks.GENERIC_OBJECT));
 	}
 	
 	@Override
-	protected void readAdditional(CompoundNBT compound)
+	protected void readAdditionalSaveData(CompoundNBT compound)
 	{
 		if(compound.contains("Item"))
-			setItem(ItemStack.read(compound.getCompound("Item")));
+			setItem(ItemStack.of(compound.getCompound("Item")));
 	}
 	
 	@Override
-	protected void writeAdditional(CompoundNBT compound)
+	protected void addAdditionalSaveData(CompoundNBT compound)
 	{
-		compound.put("Item", this.getItem().write(new CompoundNBT()));
+		compound.put("Item", this.getItem().save(new CompoundNBT()));
 	}
 
 	public ItemStack getItem()
 	{
-		return dataManager.get(ITEM);
+		return entityData.get(ITEM);
 	}
 	
 	public int getItemId()
 	{
-		return Item.getIdFromItem(dataManager.get(ITEM).getItem());
+		return Item.getId(entityData.get(ITEM).getItem());
 	}
 	
 	public void setItem(ItemStack item)
 	{
-		dataManager.set(ITEM,item);
+		entityData.set(ITEM,item);
 	}
 	
 	public void setItem(int id)
@@ -97,7 +96,7 @@ public class HologramEntity extends Entity
 	}
 	
 	@Override
-	public IPacket<?> createSpawnPacket()
+	public IPacket<?> getAddEntityPacket()
 	{
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}

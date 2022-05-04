@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:solid_switch"
+  },
+  "input2": {
+    "tag": "minecraft:wooden_buttons"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:two_second_interval_timed_solid_switch"
+  }
+}

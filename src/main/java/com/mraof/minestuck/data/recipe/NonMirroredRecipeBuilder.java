@@ -29,9 +29,9 @@ public class NonMirroredRecipeBuilder extends ShapedRecipeBuilder
 	}
 	
 	@Override
-	public void build(Consumer<IFinishedRecipe> recipeBuilder, ResourceLocation recipeName)
+	public void save(Consumer<IFinishedRecipe> recipeBuilder, ResourceLocation recipeName)
 	{
-		super.build(recipe -> recipeBuilder.accept(new ResultWrapper(recipe)), recipeName);
+		super.save(recipe -> recipeBuilder.accept(new ResultWrapper(recipe)), recipeName);
 		
 	}
 	
@@ -45,35 +45,35 @@ public class NonMirroredRecipeBuilder extends ShapedRecipeBuilder
 		}
 		
 		@Override
-		public void serialize(JsonObject jsonObject)
+		public void serializeRecipeData(JsonObject jsonObject)
 		{
-			shapedRecipe.serialize(jsonObject);
+			shapedRecipe.serializeRecipeData(jsonObject);
 		}
 		
 		@Override
-		public ResourceLocation getID()
+		public ResourceLocation getId()
 		{
-			return shapedRecipe.getID();
+			return shapedRecipe.getId();
 		}
 		
 		@Override
-		public IRecipeSerializer<?> getSerializer()
+		public IRecipeSerializer<?> getType()
 		{
 			return MSRecipeTypes.NON_MIRRORED;
 		}
 		
 		@Nullable
 		@Override
-		public JsonObject getAdvancementJson()
+		public JsonObject serializeAdvancement()
 		{
-			return shapedRecipe.getAdvancementJson();
+			return shapedRecipe.serializeAdvancement();
 		}
 		
 		@Nullable
 		@Override
-		public ResourceLocation getAdvancementID()
+		public ResourceLocation getAdvancementId()
 		{
-			return shapedRecipe.getAdvancementID();
+			return shapedRecipe.getAdvancementId();
 		}
 	}
 }

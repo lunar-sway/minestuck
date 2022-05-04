@@ -28,30 +28,20 @@ public class LotusTimeCapsuleBlock extends MultiMachineBlock
 	@SuppressWarnings("deprecation")
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
 	{
-		return shape.get(state.get(FACING));
-	}
-	
-	@Override
-	@SuppressWarnings("deprecation")
-	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving)
-	{
-		if(state.getBlock() != newState.getBlock())
-		{
-			super.onReplaced(state, worldIn, pos, newState, isMoving);
-		}
+		return shape.get(state.getValue(FACING));
 	}
 	
 	@Override
 	public BlockState mirror(BlockState state, Mirror mirror)
 	{
-		Direction direction = state.get(FACING);
+		Direction direction = state.getValue(FACING);
 		if(mirror != Mirror.NONE)
 		{
 			boolean clockwise = (mirror == Mirror.LEFT_RIGHT) ^ (direction.getAxis() == Direction.Axis.X); //fixes generation issue
 			if(clockwise)
-				return state.with(FACING, direction.rotateY());
+				return state.setValue(FACING, direction.getClockWise());
 			else
-				return state.with(FACING, direction.rotateYCCW());
+				return state.setValue(FACING, direction.getCounterClockWise());
 		}
 		return state;
 	}

@@ -43,33 +43,33 @@ public class IrradiatingFallbackRecipeBuilder
 		}
 		
 		@Override
-		public void serialize(JsonObject jsonObject)
+		public void serializeRecipeData(JsonObject jsonObject)
 		{
 			jsonObject.addProperty("fallback_type", Registry.RECIPE_TYPE.getKey(fallbackType).toString());
 		}
 		
 		@Override
-		public ResourceLocation getID()
+		public ResourceLocation getId()
 		{
 			return id;
 		}
 		
 		@Override
-		public IRecipeSerializer<?> getSerializer()
+		public IRecipeSerializer<?> getType()
 		{
 			return MSRecipeTypes.IRRADIATING_FALLBACK;
 		}
 		
 		@Nullable
 		@Override
-		public JsonObject getAdvancementJson()
+		public JsonObject serializeAdvancement()
 		{
 			return null;
 		}
 		
 		@Nullable
 		@Override
-		public ResourceLocation getAdvancementID()
+		public ResourceLocation getAdvancementId()
 		{
 			return new ResourceLocation("");
 		}

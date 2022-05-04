@@ -16,11 +16,8 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.Hand;
-import net.minecraft.util.HandSide;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.*;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
@@ -89,37 +86,36 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 	}
 	
 	@Override
-	public boolean processInitialInteract(PlayerEntity player, Hand hand)
+	public ActionResultType interact(PlayerEntity player, Hand hand)
 	{
-		if(isAlive() && !player.isSneaking() && animation == Animation.IDLE)
+		if(isAlive() && !player.isShiftKeyDown() && animation == Animation.IDLE)
 		{
 			startLotusAnimation();
-			return true;
+			return ActionResultType.SUCCESS;
 		}
 		if(isAlive() && animation == Animation.EMPTY)
 		{
-			ItemStack itemstack = player.getHeldItem(hand);
+			ItemStack itemstack = player.getItemInHand(hand);
 			
-			if(player.getDistanceSq(this) < 36 && itemstack.getItem() == Items.BONE_MEAL && player.isCreative())
+			if(player.distanceToSqr(this) < 36 && itemstack.getItem() == Items.BONE_MEAL && player.isCreative())
 			{
 				restoreFromBonemeal();
-			} else if(world.isRemote && player.getDistanceSq(this) < 36)
+			} else if(level.isClientSide && player.distanceToSqr(this) < 36)
 			{
-				player.sendMessage(new TranslationTextComponent(REGROW));
+				player.sendMessage(new TranslationTextComponent(REGROW), Util.NIL_UUID);
 			}
 			
-			return true;
+			return ActionResultType.SUCCESS;
 		} else
-			return super.processInitialInteract(player, hand);
+			return super.interact(player, hand);
 	}
 	
-	
 	@Override
-	public void livingTick()
+	public void aiStep()
 	{
-		super.livingTick();
+		super.aiStep();
 		
-		if(!world.isRemote)
+		if(!level.isClientSide)
 		{
 			if(animation != Animation.IDLE)
 				setEventTimer(eventTimer + 1);
@@ -133,28 +129,28 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 	
 	private void startLotusAnimation()
 	{
-		if(!world.isRemote)
+		if(!level.isClientSide)
 		{
 			setEventTimer(OPEN_START);
 			
-			Vec3d posVec = getPositionVec();
-			world.playSound(null, posVec.getX(), posVec.getY(), posVec.getZ(), SoundEvents.BLOCK_COMPOSTER_READY, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+			Vector3d posVec = position();
+			level.playSound(null, posVec.x(), posVec.y(), posVec.z(), SoundEvents.COMPOSTER_READY, SoundCategory.NEUTRAL, 1.0F, 1.0F);
 		}
 	}
 	
 	private void restoreFromBonemeal()
 	{
-		if(!world.isRemote)
+		if(!level.isClientSide)
 			setEventTimer(IDLE_TIME);
 		
-		Vec3d posVec = getPositionVec();
+		Vector3d posVec = position();
 		for(int i = 0; i < 10; i++)
-			this.world.addParticle(ParticleTypes.COMPOSTER, posVec.x, posVec.y + 0.5, posVec.z, 0.5 - rand.nextDouble(), 0.5 - rand.nextDouble(), 0.5 - rand.nextDouble());
+			this.level.addParticle(ParticleTypes.COMPOSTER, posVec.x, posVec.y + 0.5, posVec.z, 0.5 - random.nextDouble(), 0.5 - random.nextDouble(), 0.5 - random.nextDouble());
 	}
 	
 	private void setEventTimer(int time)
 	{
-		if(world.isRemote)
+		if(level.isClientSide)
 			throw new IllegalStateException("Shouldn't call setEventTimer client-side!");
 		
 		eventTimer = time;
@@ -187,28 +183,28 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 	
 	protected void spawnLoot()
 	{
-		World worldIn = this.world;
-		Vec3d posVec = this.getPositionVec();
+		World worldIn = this.level;
+		Vector3d posVec = this.position();
 		
-		ItemEntity unpoweredComputerItemEntity = new ItemEntity(worldIn, posVec.getX(), posVec.getY() + 1D, posVec.getZ(), new ItemStack(MSItems.COMPUTER_PARTS, 1));
-		worldIn.addEntity(unpoweredComputerItemEntity);
+		ItemEntity unpoweredComputerItemEntity = new ItemEntity(worldIn, posVec.x(), posVec.y() + 1D, posVec.z(), new ItemStack(MSItems.COMPUTER_PARTS, 1));
+		worldIn.addFreshEntity(unpoweredComputerItemEntity);
 		
-		ItemEntity sburbCodeItemEntity = new ItemEntity(worldIn, posVec.getX(), posVec.getY() + 1D, posVec.getZ(), new ItemStack(MSItems.SBURB_CODE, 1));
-		worldIn.addEntity(sburbCodeItemEntity);
+		ItemEntity sburbCodeItemEntity = new ItemEntity(worldIn, posVec.x(), posVec.y() + 1D, posVec.z(), new ItemStack(MSItems.SBURB_CODE, 1));
+		worldIn.addFreshEntity(sburbCodeItemEntity);
 	}
 	
 	@Override
-	public void writeAdditional(CompoundNBT compound)
+	public void addAdditionalSaveData(CompoundNBT compound)
 	{
-		super.writeAdditional(compound);
+		super.addAdditionalSaveData(compound);
 		
 		compound.putInt("EventTimer", eventTimer);
 	}
 	
 	@Override
-	public void readAdditional(CompoundNBT compound)
+	public void readAdditionalSaveData(CompoundNBT compound)
 	{
-		super.readAdditional(compound);
+		super.readAdditionalSaveData(compound);
 		
 		if(compound.contains("EventTimer", Constants.NBT.TAG_ANY_NUMERIC))
 		{
@@ -230,14 +226,14 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 	}
 	
 	@Override
-	public IPacket<?> createSpawnPacket()
+	public IPacket<?> getAddEntityPacket()
 	{
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 	
 	public void setAnimationFromPacket(Animation newAnimation)
 	{
-		if(world.isRemote) //allows client-side effects tied to server-side events
+		if(level.isClientSide) //allows client-side effects tied to server-side events
 		{
 			animation = newAnimation;
 			if(animation == Animation.IDLE)
@@ -249,50 +245,50 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 	
 	protected void addRestoreEffects()
 	{
-		Vec3d posVec = this.getPositionVec();
-		this.world.addParticle(ParticleTypes.FLASH, posVec.x, posVec.y + 0.5D, posVec.z, 0.0D, 0.0D, 0.0D);
-		this.world.playSound(posVec.getX(), posVec.getY(), posVec.getZ(), SoundEvents.BLOCK_BEEHIVE_EXIT, SoundCategory.NEUTRAL, 1.0F, 1.0F, false);
+		Vector3d posVec = this.position();
+		this.level.addParticle(ParticleTypes.FLASH, posVec.x, posVec.y + 0.5D, posVec.z, 0.0D, 0.0D, 0.0D);
+		this.level.playLocalSound(posVec.x(), posVec.y(), posVec.z(), SoundEvents.BEEHIVE_EXIT, SoundCategory.NEUTRAL, 1.0F, 1.0F, false);
 	}
 	
 	protected void addLootSpawnEffects()
 	{
-		Vec3d posVec = this.getPositionVec();
-		this.world.addParticle(ParticleTypes.FLASH, posVec.x, posVec.y + 0.5D, posVec.z, 0.0D, 0.0D, 0.0D);
-		this.world.playSound(posVec.getX(), posVec.getY(), posVec.getZ(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.NEUTRAL, 1.0F, 1.3F, false);
-		this.world.playSound(posVec.getX(), posVec.getY(), posVec.getZ(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.NEUTRAL, 1.0F, 0.7F, false);
-		this.world.playSound(posVec.getX(), posVec.getY(), posVec.getZ(), SoundEvents.ENTITY_BOAT_PADDLE_LAND, SoundCategory.NEUTRAL, 2.0F, 2.0F, false);
+		Vector3d posVec = this.position();
+		this.level.addParticle(ParticleTypes.FLASH, posVec.x, posVec.y + 0.5D, posVec.z, 0.0D, 0.0D, 0.0D);
+		this.level.playLocalSound(posVec.x(), posVec.y(), posVec.z(), SoundEvents.ITEM_PICKUP, SoundCategory.NEUTRAL, 1.0F, 1.3F, false);
+		this.level.playLocalSound(posVec.x(), posVec.y(), posVec.z(), SoundEvents.ITEM_PICKUP, SoundCategory.NEUTRAL, 1.0F, 0.7F, false);
+		this.level.playLocalSound(posVec.x(), posVec.y(), posVec.z(), SoundEvents.BOAT_PADDLE_LAND, SoundCategory.NEUTRAL, 2.0F, 2.0F, false);
 	}
 	
 	@Override
-	protected boolean canTriggerWalking()
+	protected boolean isMovementNoisy()
 	{
 		return false;
 	}
 	
 	@Override
-	public void move(MoverType typeIn, Vec3d pos)
+	public void move(MoverType typeIn, Vector3d pos)
 	{
 	}
 	
 	@Override
-	public Iterable<ItemStack> getArmorInventoryList()
+	public Iterable<ItemStack> getArmorSlots()
 	{
 		return Collections.emptyList();
 	}
 	
 	@Override
-	public ItemStack getItemStackFromSlot(EquipmentSlotType slotIn)
+	public ItemStack getItemBySlot(EquipmentSlotType slotIn)
 	{
 		return ItemStack.EMPTY;
 	}
 	
 	@Override
-	public void setItemStackToSlot(EquipmentSlotType slotIn, ItemStack stack)
+	public void setItemSlot(EquipmentSlotType slotIn, ItemStack stack)
 	{
 	}
 	
 	@Override
-	public HandSide getPrimaryHand()
+	public HandSide getMainArm()
 	{
 		return HandSide.RIGHT;
 	}

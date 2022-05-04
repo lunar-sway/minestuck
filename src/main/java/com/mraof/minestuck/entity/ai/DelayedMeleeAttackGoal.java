@@ -16,29 +16,29 @@ public class DelayedMeleeAttackGoal extends CustomMeleeAttackGoal
 		this.delay = delay;
 	}
 
-	@Override
-	public void tick() {
-		super.tick();
-		if (attackStarted) {
-			remainingTicks--;
-			if (remainingTicks <= 0) {
-				attackStarted = false;
-				this.attacker.attackEntityAsMob(this.attacker.getAttackTarget());
-			}
-		}
-	}
-
-	@Override
-	protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
-		double reach = this.getAttackReachSqr(enemy);
-		if (distToEnemySqr <= reach && this.attackTick <= 0) {
-			this.attackTick = this.attackRate;
-			this.attacker.swingArm(Hand.MAIN_HAND);
-
-			if (!attackStarted) {
-				attackStarted = true;
-				remainingTicks = delay;
-			}
-		}
-	}
+//	@Override
+//	public void tick() {
+//		super.tick();
+//		if (attackStarted) {
+//			remainingTicks--;
+//			if (remainingTicks <= 0) {
+//				attackStarted = false;
+//				this.attacker.attackEntityAsMob(this.attacker.getAttackTarget());
+//			}
+//		}
+//	}
+//
+//	@Override
+//	protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
+//		double reach = this.getAttackReachSqr(enemy);
+//		if (distToEnemySqr <= reach && this.attackTick <= 0) {
+//			this.attackTick = this.attackRate;
+//			this.attacker.swingArm(Hand.MAIN_HAND);
+//
+//			if (!attackStarted) {
+//				attackStarted = true;
+//				remainingTicks = delay;
+//			}
+//		}
+//	}
 }

@@ -19,7 +19,7 @@ public abstract class AbstractCombinationRecipe implements IRecipe<ItemCombiner>
 	}
 	
 	@Override
-	public boolean canFit(int width, int height)
+	public boolean canCraftInDimensions(int width, int height)
 	{
 		return width * height >= 2;
 	}

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minestuck:chiseled_coarse_stone"
+    ]
+  },
+  "criteria": {
+    "has_coarse_stone_slab": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minestuck:coarse_stone_slab"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minestuck:chiseled_coarse_stone"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_coarse_stone_slab",
+      "has_the_recipe"
+    ]
+  ]
+}

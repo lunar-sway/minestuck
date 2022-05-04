@@ -41,7 +41,7 @@ public class AlchemyEvent extends Event
 	
 	public World getWorld()
 	{
-		return alchemiter.getWorld();
+		return alchemiter.getLevel();
 	}
 	
 	public ItemStack getDowel()

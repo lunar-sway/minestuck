@@ -15,7 +15,7 @@ public class PawnRenderer extends BipedRenderer<PawnEntity, BipedModel<PawnEntit
 	}
 	
 	@Override
-	public ResourceLocation getEntityTexture(PawnEntity pawn)
+	public ResourceLocation getTextureLocation(PawnEntity pawn)
 	{
 		return pawn.getTextureResource();
 	}

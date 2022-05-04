@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:platform_generator"
+  },
+  "grist_cost": {
+    "minestuck:tar": 200,
+    "minestuck:cobalt": 75,
+    "minestuck:amethyst": 5
+  }
+}

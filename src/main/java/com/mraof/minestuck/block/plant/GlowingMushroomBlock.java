@@ -20,9 +20,9 @@ public class GlowingMushroomBlock extends BushBlock
 	}
 	
 	@Override
-	protected boolean isValidGround(BlockState state, IBlockReader worldIn, BlockPos pos)
+	protected boolean mayPlaceOn(BlockState state, IBlockReader worldIn, BlockPos pos)
 	{
-		return state.isOpaqueCube(worldIn, pos);
+		return state.isSolidRender(worldIn, pos);
 	}
 	
 	@Override
@@ -32,7 +32,7 @@ public class GlowingMushroomBlock extends BushBlock
 		if(canSpread(worldIn, pos, state) && random.nextInt(25) == 0)
 		{
 			int count = 0;
-			Iterable<BlockPos> blocks = BlockPos.getAllInBoxMutable(pos.add(-4, -1, -4), pos.add(4, 1, 4));
+			Iterable<BlockPos> blocks = BlockPos.betweenClosed(pos.offset(-4, -1, -4), pos.offset(4, 1, 4));
 			
 			for(BlockPos checkPos : blocks)
 				if(worldIn.getBlockState(checkPos).getBlock() == this)
@@ -44,10 +44,10 @@ public class GlowingMushroomBlock extends BushBlock
 			
 			for (int i = 0; i < 5; ++i)
 			{
-				BlockPos spreadPos = pos.add(random.nextInt(3) - 1, random.nextInt(2) - random.nextInt(2), random.nextInt(3) - 1);
-				if (worldIn.isAirBlock(spreadPos) && this.canSpread(worldIn, spreadPos, this.getDefaultState()))
+				BlockPos spreadPos = pos.offset(random.nextInt(3) - 1, random.nextInt(2) - random.nextInt(2), random.nextInt(3) - 1);
+				if (worldIn.isEmptyBlock(spreadPos) && this.canSpread(worldIn, spreadPos, this.defaultBlockState()))
 				{
-					worldIn.setBlockState(spreadPos, this.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
+					worldIn.setBlock(spreadPos, this.defaultBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
 					return;
 				}
 			}
@@ -57,12 +57,12 @@ public class GlowingMushroomBlock extends BushBlock
 	@Override
 	public PlantType getPlantType(IBlockReader world, BlockPos pos)
 	{
-		return PlantType.Cave;
+		return PlantType.CAVE;
 	}
 	
 	public boolean canSpread(World world, BlockPos pos, BlockState state)
 	{
-		BlockState soil = world.getBlockState(pos.down());
+		BlockState soil = world.getBlockState(pos.below());
 		return soil.getBlock().equals(MSBlocks.BLUE_DIRT);
 	}
 }

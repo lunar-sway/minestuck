@@ -51,8 +51,8 @@ public class ReducedConnection
 			hasEntered = false;
 		}
 		clientId = buffer.readInt();
-		clientName = buffer.readString(16);
+		clientName = buffer.readUtf(16);
 		serverId = buffer.readInt();
-		serverName = buffer.readString(16);
+		serverName = buffer.readUtf(16);
 	}
 }

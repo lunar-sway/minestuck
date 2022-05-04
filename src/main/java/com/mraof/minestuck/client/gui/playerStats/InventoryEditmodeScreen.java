@@ -1,5 +1,6 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.inventory.EditmodeContainer;
 import com.mraof.minestuck.network.EditmodeInventoryPacket;
@@ -32,25 +33,31 @@ public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<Editmode
 	}
 	
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float par1, int xcor, int ycor)
+	protected void renderBg(MatrixStack matrixStack, float par1, int xcor, int ycor)
 	{
-		drawTabs();
+		drawTabs(matrixStack);
 		
-		minecraft.getTextureManager().bindTexture(guiBackground);
-		this.blit(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
+		minecraft.getTextureManager().bind(guiBackground);
+		this.blit(matrixStack, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
 		LocalDate localdate = LocalDate.now();
 		int d = localdate.getDayOfMonth();
 		Month m = localdate.getMonth();
-		boolean b1 = MinestuckConfig.SERVER.hardMode;
+		boolean b1 = MinestuckConfig.SERVER.hardMode.get();
 		boolean b2 = !b1 && (m == Month.APRIL && d == 13 || m == Month.JUNE && d == 12
 				|| m == Month.OCTOBER && d == 25 || m == Month.NOVEMBER && d == 11
 				|| m == Month.NOVEMBER && d == 27);
-		this.blit(xOffset+leftArrowX, yOffset+arrowY, guiWidth + (b2?36:0), (less?0:18) + (b1?36:0), 18, 18);
-		this.blit(xOffset+rightArrowX, yOffset+arrowY, guiWidth+18 + (b2?36:0), (more?0:18) + (b1?36:0), 18, 18);
+		this.blit(matrixStack, xOffset+leftArrowX, yOffset+arrowY, guiWidth + (b2?36:0), (less?0:18) + (b1?36:0), 18, 18);
+		this.blit(matrixStack, xOffset+rightArrowX, yOffset+arrowY, guiWidth+18 + (b2?36:0), (more?0:18) + (b1?36:0), 18, 18);
 		
-		drawActiveTabAndIcons();
+		drawActiveTabAndIcons(matrixStack);
 		
+	}
+	
+	@Override
+	protected void renderLabels(MatrixStack matrixStack, int mouseX, int mouseY) {
+		
+		this.font.draw(matrixStack, this.title, this.titleLabelX, this.titleLabelY, 0x404040);
 	}
 	
 	@Override
@@ -61,11 +68,11 @@ public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<Editmode
 			EditmodeInventoryPacket packet = null;
 			if(less && xcor >= xOffset + leftArrowX && xcor < xOffset + leftArrowX + 18)
 			{
-				minecraft.getSoundHandler().play(SimpleSound.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+				minecraft.getSoundManager().play(SimpleSound.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 				packet = EditmodeInventoryPacket.scroll(false);
 			} else if(more && xcor >= xOffset + rightArrowX && xcor < xOffset + rightArrowX + 18)
 			{
-				minecraft.getSoundHandler().play(SimpleSound.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+				minecraft.getSoundManager().play(SimpleSound.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 				packet = EditmodeInventoryPacket.scroll(true);
 			}
 			if(packet != null)

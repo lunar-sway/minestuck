@@ -23,7 +23,7 @@ public class WyrmEntity extends UnderlingEntity implements IEntityMultiPart
 	@Override
 	public World getWorld()
 	{
-		return this.world;
+		return this.level;
 	}
 	
 	@Override

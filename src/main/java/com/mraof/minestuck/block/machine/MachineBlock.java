@@ -30,14 +30,14 @@ public abstract class MachineBlock extends Block
 	}
 	
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
 	{
 		builder.add(FACING);
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public PushReaction getPushReaction(BlockState state)
+	public PushReaction getPistonPushReaction(BlockState state)
 	{
 		return PushReaction.BLOCK;
 	}
@@ -46,21 +46,21 @@ public abstract class MachineBlock extends Block
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context)
 	{
-		return getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());	//Should face the player
+		return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());	//Should face the player
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
 	public BlockState rotate(BlockState state, Rotation rotation)
 	{
-		return state.with(FACING, rotation.rotate(state.get(FACING)));
+		return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
 	public BlockState mirror(BlockState state, Mirror mirrorIn)
 	{
-		return state.rotate(mirrorIn.toRotation(state.get(FACING)));
+		return state.rotate(mirrorIn.getRotation(state.getValue(FACING)));
 	}
 	
 	public static Map<Direction, VoxelShape> createRotatedShapes(CustomVoxelShape shape)
@@ -70,8 +70,8 @@ public abstract class MachineBlock extends Block
 	
 	public static Map<Direction, VoxelShape> createRotatedShapes(double x1, double y1, double z1, double x2, double y2, double z2)
 	{
-		return Maps.newEnumMap(ImmutableMap.of(Direction.NORTH, Block.makeCuboidShape(x1, y1, z1, x2, y2, z2), Direction.SOUTH, Block.makeCuboidShape(16 - x2, y1, 16 - z2, 16 - x1, y2, 16 - z1),
-				Direction.WEST, Block.makeCuboidShape(z1, y1, 16 - x2, z2, y2, 16 - x1), Direction.EAST, Block.makeCuboidShape(16 - z2, y1, x1, 16 - z1, y2, x2)));
+		return Maps.newEnumMap(ImmutableMap.of(Direction.NORTH, Block.box(x1, y1, z1, x2, y2, z2), Direction.SOUTH, Block.box(16 - x2, y1, 16 - z2, 16 - x1, y2, 16 - z1),
+				Direction.WEST, Block.box(z1, y1, 16 - x2, z2, y2, 16 - x1), Direction.EAST, Block.box(16 - z2, y1, x1, 16 - z1, y2, x2)));
 	}
 	
 	public static <K extends Enum<K>, V> Map<K, V> createEnumMapping(Class<K> c, K[] keys, Function<K, V> function)

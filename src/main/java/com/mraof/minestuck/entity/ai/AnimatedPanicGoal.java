@@ -15,11 +15,10 @@ public class AnimatedPanicGoal extends PanicGoal
 	}
 	
 	@Override
-	public void startExecuting()
+	public boolean canUse()
 	{
-		super.startExecuting();
-		
 		eventTimer = 0;
+		return super.canUse();
 	}
 	
 	@Override
@@ -28,11 +27,11 @@ public class AnimatedPanicGoal extends PanicGoal
 		super.tick();
 		
 		if(eventTimer == 0)
-			((ConsortEntity) this.creature).updateAndSendAnimation(ConsortEntity.Animation.PANIC, true, true);
+			((ConsortEntity) this.mob).updateAndSendAnimation(ConsortEntity.Animation.PANIC, true, true);
 		
 		if(eventTimer == 10)
 		{
-			((ConsortEntity) this.creature).updateAndSendAnimation(ConsortEntity.Animation.PANIC_RUN, true, true);
+			((ConsortEntity) this.mob).updateAndSendAnimation(ConsortEntity.Animation.PANIC_RUN, true, true);
 			Debug.debugf("panic run");
 			if((eventTimer - 10) % 6 == 0) //.32 sec panic run animation * 20 ticks/sec = 6.4(cuts slightly into itself?)
 			{
@@ -40,7 +39,7 @@ public class AnimatedPanicGoal extends PanicGoal
 			}
 		}
 		
-		if(shouldContinueExecuting())
+		if(canContinueToUse())
 		{
 		
 		}
@@ -59,11 +58,11 @@ public class AnimatedPanicGoal extends PanicGoal
 	}
 	
 	@Override
-	public boolean shouldContinueExecuting()
+	public boolean canContinueToUse()
 	{
-		if(!super.shouldContinueExecuting() && eventTimer >= 10)
+		if(!super.canContinueToUse() && eventTimer >= 10)
 		{
-			if(this.creature instanceof ConsortEntity)
+			if(this.mob instanceof ConsortEntity)
 			{
 				Debug.debugf("startExecuting in AnimatedPanicGoal");
 				//((ConsortEntity) this.creature).updateAndSendAnimation(ConsortEntity.Animation.IDLE, true);
@@ -72,7 +71,7 @@ public class AnimatedPanicGoal extends PanicGoal
 		
 		if(eventTimer < 100)
 			return true;
-		return super.shouldContinueExecuting();
+		return super.canContinueToUse();
 	}
 	
 	@Override

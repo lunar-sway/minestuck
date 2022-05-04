@@ -1,0 +1,8 @@
+{
+  "variants":
+  {
+    "type=bottom": { "model":  "minestuck:block/mycelium_slab"},
+    "type=top": { "model":  "minestuck:block/mycelium_slab_top"},
+    "type=double": { "model":  "minestuck:block/mycelium_stone"}
+  }
+}

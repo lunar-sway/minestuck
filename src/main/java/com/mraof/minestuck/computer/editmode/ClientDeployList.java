@@ -21,7 +21,7 @@ public final class ClientDeployList
 		{
 			CompoundNBT tag = list.getCompound(i);
 			Entry entry = new Entry();
-			entry.item = ItemStack.read(tag);
+			entry.item = ItemStack.of(tag);
 			entry.index = tag.getInt("i");
 			
 			entry.cost = GristSet.read(tag.getList("cost", Constants.NBT.TAG_COMPOUND));
@@ -36,7 +36,7 @@ public final class ClientDeployList
 	{
 		stack = DeployList.cleanStack(stack);
 		for(Entry entry : entryList)
-			if(ItemStack.areItemStacksEqual(entry.item, stack))
+			if(ItemStack.matches(entry.item, stack))
 				return entry;
 		return null;
 	}

@@ -2,12 +2,12 @@ package com.mraof.minestuck.computer.editmode;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.client.ClientDimensionData;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.item.crafting.alchemy.*;
 import com.mraof.minestuck.network.ClientEditPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -19,6 +19,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -36,6 +37,7 @@ import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.List;
@@ -91,7 +93,7 @@ public final class ClientEditHandler
 		
 		GristSet have = ClientPlayerData.getClientGrist();
 		
-		addToolTip(event.getItemStack(), event.getToolTip(), have, event.getEntity().world);
+		addToolTip(event.getItemStack(), event.getToolTip(), have, event.getEntity().level);
 		
 	}
 	
@@ -116,29 +118,29 @@ public final class ClientEditHandler
 		{
 			GristType grist = amount.getType();
 			TextFormatting color = amount.getAmount() <= have.getGrist(grist) ? TextFormatting.GREEN : TextFormatting.RED;
-			toolTip.add(new StringTextComponent(amount.getAmount()+" ").appendSibling(grist.getDisplayName()).appendText(" ("+have.getGrist(grist) + ")").applyTextStyle(color));
+			toolTip.add(new StringTextComponent(amount.getAmount()+" ").append(grist.getDisplayName()).append(" ("+have.getGrist(grist) + ")").withStyle(color));
 		}
 		if(cost.isEmpty())
-			toolTip.add(new TranslationTextComponent(GuiUtil.FREE).applyTextStyle(TextFormatting.GREEN));
+			toolTip.add(new TranslationTextComponent(GuiUtil.FREE).withStyle(TextFormatting.GREEN));
 	}
 	
 	@SubscribeEvent
 	public static void tickEnd(TickEvent.PlayerTickEvent event)
 	{
-		if(event.phase != TickEvent.Phase.END || event.player != Minecraft.getInstance().player || !isActive())
-			return;
-		PlayerEntity player = event.player;
-		
-		double range = MSDimensions.isLandDimension(player.dimension) ? MinestuckConfig.SERVER.landEditRange.get() : MinestuckConfig.SERVER.overworldEditRange.get();
-		
-		ServerEditHandler.updatePosition(player, range, centerX, centerZ);
-		
+		if(event.side == LogicalSide.CLIENT && event.phase == TickEvent.Phase.END && event.player == Minecraft.getInstance().player && isActive())
+		{
+			PlayerEntity player = event.player;
+			
+			double range = ClientDimensionData.isLand(player.level.dimension()) ? MinestuckConfig.SERVER.landEditRange.get() : MinestuckConfig.SERVER.overworldEditRange.get();
+			
+			ServerEditHandler.updatePosition(player, range, centerX, centerZ);
+		}
 	}
 	
 	@SubscribeEvent
 	public static void onTossEvent(ItemTossEvent event)
 	{
-		if(event.getEntity().world.isRemote && event.getPlayer().isUser() && isActive())
+		if(event.getEntity().level.isClientSide && event.getPlayer().isLocalPlayer() && isActive())
 		{
 			PlayerInventory inventory = event.getPlayer().inventory;
 			ItemStack stack = event.getEntityItem().getItem();
@@ -150,9 +152,9 @@ public final class ClientEditHandler
 			}
 			if(event.isCanceled())
 			{
-				if(!inventory.getItemStack().isEmpty())
-					inventory.setItemStack(ItemStack.EMPTY);
-				else inventory.setInventorySlotContents(inventory.currentItem, ItemStack.EMPTY);
+				if(!inventory.getCarried().isEmpty())
+					inventory.setCarried(ItemStack.EMPTY);
+				else inventory.setItem(inventory.selected, ItemStack.EMPTY);
 				event.getEntityItem().remove();
 			}
 		}
@@ -160,17 +162,17 @@ public final class ClientEditHandler
 	
 	@SubscribeEvent
 	public static void onItemPickupEvent(EntityItemPickupEvent event) {
-		if(event.getEntity().world.isRemote && isActive() && event.getPlayer().equals(Minecraft.getInstance().player))
+		if(event.getEntity().level.isClientSide && isActive() && event.getPlayer().equals(Minecraft.getInstance().player))
 			event.setCanceled(true);
 	}
 	
 	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public static void onRightClickEvent(PlayerInteractEvent.RightClickBlock event)
 	{
-		if(event.getWorld().isRemote && event.getPlayer().isUser() && isActive())
+		if(event.getWorld().isClientSide && event.getPlayer().isLocalPlayer() && isActive())
 		{
 			Block block = event.getWorld().getBlockState(event.getPos()).getBlock();
-			ItemStack stack = event.getPlayer().getHeldItemMainhand();
+			ItemStack stack = event.getPlayer().getMainHandItem();
 			event.setUseBlock((block instanceof DoorBlock || block instanceof TrapDoorBlock || block instanceof FenceGateBlock) ? Event.Result.ALLOW : Event.Result.DENY);
 			if(event.getUseBlock() == Event.Result.ALLOW)
 				return;
@@ -185,7 +187,7 @@ public final class ClientEditHandler
 			{
 				if(cost != null)
 				{
-					event.getPlayer().sendMessage(cost.createMissingMessage());
+					event.getPlayer().sendMessage(cost.createMissingMessage(), Util.NIL_UUID);
 				}
 				event.setCanceled(true);
 			}
@@ -197,10 +199,10 @@ public final class ClientEditHandler
 	@SubscribeEvent(priority=EventPriority.NORMAL)
 	public static void onLeftClickEvent(PlayerInteractEvent.LeftClickBlock event)
 	{
-		if(event.getWorld().isRemote && event.getPlayer().isUser() && isActive())
+		if(event.getWorld().isClientSide && event.getPlayer().isLocalPlayer() && isActive())
 		{
 			BlockState block = event.getWorld().getBlockState(event.getPos());
-			if(block.getBlockHardness(event.getWorld(), event.getPos()) < 0 || block.getMaterial() == Material.PORTAL
+			if(block.getDestroySpeed(event.getWorld(), event.getPos()) < 0 || block.getMaterial() == Material.PORTAL
 					|| ClientPlayerData.getClientGrist().getGrist(GristTypes.BUILD) <= 0)
 				event.setCanceled(true);
 		}
@@ -209,7 +211,7 @@ public final class ClientEditHandler
 	@SubscribeEvent(priority=EventPriority.NORMAL)
 	public static void onRightClickAir(PlayerInteractEvent.RightClickItem event)
 	{
-		if(event.getWorld().isRemote && event.getPlayer().isUser() && isActive())
+		if(event.getWorld().isClientSide && event.getPlayer().isLocalPlayer() && isActive())
 		{
 			event.setCanceled(true);
 		}
@@ -218,28 +220,28 @@ public final class ClientEditHandler
 	@SubscribeEvent
 	public static void onAttackEvent(AttackEntityEvent event)
 	{
-		if(event.getEntity().world.isRemote && event.getPlayer().isUser() && isActive())
+		if(event.getEntity().level.isClientSide && event.getPlayer().isLocalPlayer() && isActive())
 			event.setCanceled(true);
 	}
 	
 	@SubscribeEvent
 	public static void onInteractEvent(PlayerInteractEvent.EntityInteract event)
 	{
-		if(event.getEntity().world.isRemote && event.getPlayer().isUser() && isActive())
+		if(event.getEntity().level.isClientSide && event.getPlayer().isLocalPlayer() && isActive())
 			event.setCanceled(true);
 	}
 	
 	@SubscribeEvent
 	public static void onInteractEvent(PlayerInteractEvent.EntityInteractSpecific event)
 	{
-		if(event.getEntity().world.isRemote && event.getPlayer().isUser() && isActive())
+		if(event.getEntity().level.isClientSide && event.getPlayer().isLocalPlayer() && isActive())
 			event.setCanceled(true);
 	}
 	
 	@SubscribeEvent
 	public static void onWorldUnload(WorldEvent.Unload event)
 	{
-		if(event.getWorld().isRemote())
+		if(event.getWorld().isClientSide())
 			activated = false;
 	}
 	

@@ -35,7 +35,7 @@ public class MultiblockItem extends BlockItem
 	}
 	
 	@Override
-	public void addToBlockToItemMap(Map<Block, Item> blockToItemMap, Item itemIn)
+	public void registerBlocks(Map<Block, Item> blockToItemMap, Item itemIn)
 	{
 		multiblock.forEachBlock(block -> blockToItemMap.put(block, itemIn));
 	}
@@ -47,11 +47,11 @@ public class MultiblockItem extends BlockItem
 	}
 	
 	@Override
-	public ActionResultType tryPlace(BlockItemUseContext context)
+	public ActionResultType place(BlockItemUseContext context)
 	{
-		World world = context.getWorld();
-		Direction sideFace = context.getFace();
-		if (world.isRemote)
+		World world = context.getLevel();
+		Direction sideFace = context.getClickedFace();
+		if (world.isClientSide)
 		{
 			return ActionResultType.SUCCESS;
 		} else if (sideFace != Direction.UP)
@@ -59,15 +59,15 @@ public class MultiblockItem extends BlockItem
 			return ActionResultType.FAIL;
 		} else
 		{
-			Direction facing = context.getPlacementHorizontalFacing().getOpposite();
+			Direction facing = context.getHorizontalDirection().getOpposite();
 			BlockPos pos = getPlacementPos(context);
 			
 			if(!canPlaceAt(context, pos, facing))
 				return ActionResultType.FAIL;
 			
-			BlockState state = getBlock().getDefaultState().with(AlchemiterBlock.FACING, facing);
+			BlockState state = getBlock().defaultBlockState().setValue(AlchemiterBlock.FACING, facing);
 			this.placeBlock(context, state);
-			onBlockPlaced(pos, world, context.getPlayer(), context.getItem(), state);
+			updateCustomBlockEntityTag(pos, world, context.getPlayer(), context.getItemInHand(), state);
 			return ActionResultType.SUCCESS;
 		}
 	}
@@ -75,17 +75,17 @@ public class MultiblockItem extends BlockItem
 	public boolean canPlaceAt(BlockItemUseContext context, BlockPos pos, Direction facing)
 	{
 		PlayerEntity player = context.getPlayer();
-		if(player != null && !player.canPlayerEdit(pos, Direction.UP, context.getItem()))
+		if(player != null && !player.mayUseItemAt(pos, Direction.UP, context.getItemInHand()))
 			return false;
 		MutableBoundingBox boundingBox = multiblock.getBoundingBox(MSRotationUtil.fromDirection(facing));
-		for(int x = boundingBox.minX; x <= boundingBox.maxX; x++)
+		for(int x = boundingBox.x0; x <= boundingBox.x1; x++)
 		{
-			for(int z = boundingBox.minZ; z <= boundingBox.maxZ; z++)
+			for(int z = boundingBox.z0; z <= boundingBox.z1; z++)
 			{
-				for(int y = boundingBox.minY; y <= boundingBox.maxY; y++)
+				for(int y = boundingBox.y0; y <= boundingBox.y1; y++)
 				{
-					if(World.isOutsideBuildHeight(pos.add(x, y, z)) || player != null && !context.getWorld().isBlockModifiable(player, pos)
-							|| !context.getWorld().getBlockState(pos.add(x, y, z)).isReplaceable(context))
+					if(World.isOutsideBuildHeight(pos.offset(x, y, z)) || player != null && !context.getLevel().mayInteract(player, pos)
+							|| !context.getLevel().getBlockState(pos.offset(x, y, z)).canBeReplaced(context))
 						return false;
 				}
 			}
@@ -96,30 +96,30 @@ public class MultiblockItem extends BlockItem
 	@Override
 	protected boolean placeBlock(BlockItemUseContext context, BlockState newState)
 	{
-		World world = context.getWorld();
-		if(!world.isRemote)
+		World world = context.getLevel();
+		if(!world.isClientSide)
 		{
 			BlockPos pos = getPlacementPos(context);
 			
-			multiblock.placeWithRotation(world, pos, MSRotationUtil.fromDirection(context.getPlacementHorizontalFacing().getOpposite()));
+			multiblock.placeWithRotation(world, pos, MSRotationUtil.fromDirection(context.getHorizontalDirection().getOpposite()));
 			
 			PlayerEntity player = context.getPlayer();
 			if(player instanceof ServerPlayerEntity)
-				CriteriaTriggers.PLACED_BLOCK.trigger((ServerPlayerEntity) player, pos, context.getItem());
+				CriteriaTriggers.PLACED_BLOCK.trigger((ServerPlayerEntity) player, pos, context.getItemInHand());
 		}
 		return true;
 	}
 	
 	private BlockPos getPlacementPos(BlockItemUseContext context)
 	{
-		BlockPos pos = context.getPos();
-		if(!context.getWorld().getBlockState(pos).isReplaceable(context))
+		BlockPos pos = context.getClickedPos();
+		if(!context.getLevel().getBlockState(pos).canBeReplaced(context))
 		{
-			pos = pos.up();
+			pos = pos.above();
 		}
-		Direction facing = context.getPlacementHorizontalFacing().getOpposite();
+		Direction facing = context.getHorizontalDirection().getOpposite();
 		
-		return getPlacementPos(pos, facing, context.getHitVec().x - pos.getX(), context.getHitVec().z - pos.getZ());
+		return getPlacementPos(pos, facing, context.getClickLocation().x - pos.getX(), context.getClickLocation().z - pos.getZ());
 	}
 	
 	public BlockPos getPlacementPos(BlockPos pos, Direction direction, double hitX, double hitZ)
@@ -127,9 +127,9 @@ public class MultiblockItem extends BlockItem
 		MutableBoundingBox bb = multiblock.getBoundingBox(MSRotationUtil.fromDirection(direction));
 		
 		if(direction.getAxis() == Direction.Axis.X)
-			return pos.south((int) Math.floor(hitZ - (bb.maxZ - bb.minZ)*direction.rotateY().getZOffset()/2D));
+			return pos.south((int) Math.floor(hitZ - (bb.z1 - bb.z0)*direction.getClockWise().getStepZ()/2D));
 		else if(direction.getAxis() == Direction.Axis.Z)
-			return pos.east((int) Math.floor(hitX - (bb.maxX - bb.minX)*direction.rotateY().getXOffset()/2D));
+			return pos.east((int) Math.floor(hitX - (bb.x1 - bb.x0)*direction.getClockWise().getStepX()/2D));
 		else throw new IllegalArgumentException("Direction should be horizontal");
 	}
 }

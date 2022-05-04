@@ -14,7 +14,7 @@ public class PetrifiedFloraBlock extends BushBlock
 	}
 	
 	@Override
-	protected boolean isValidGround(BlockState state, IBlockReader worldIn, BlockPos pos)
+	protected boolean mayPlaceOn(BlockState state, IBlockReader worldIn, BlockPos pos)
 	{
         return state.getBlock() == Blocks.STONE || state.getBlock() == Blocks.GRAVEL || state.getBlock() == Blocks.COBBLESTONE;
     }

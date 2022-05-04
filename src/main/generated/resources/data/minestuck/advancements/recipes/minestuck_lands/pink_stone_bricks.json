@@ -6,12 +6,12 @@
     ]
   },
   "criteria": {
-    "has_polished_pink_stone": {
+    "has_pink_stone": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "minestuck:polished_pink_stone"
+            "item": "minestuck:pink_stone"
           }
         ]
       }
@@ -25,7 +25,7 @@
   },
   "requirements": [
     [
-      "has_polished_pink_stone",
+      "has_pink_stone",
       "has_the_recipe"
     ]
   ]

@@ -13,7 +13,7 @@ public class ConsortPacket implements PlayToClientPacket
 	
 	public static ConsortPacket createPacket(ConsortEntity entity, ConsortEntity.Animation animation, int animationTimer)
 	{
-		return new ConsortPacket(entity.getEntityId(), animation, animationTimer);
+		return new ConsortPacket(entity.getEntity().getId(), animation, animationTimer);
 	}
 	
 	private ConsortPacket(int entityID, ConsortEntity.Animation animation, int animationTimer)
@@ -43,7 +43,7 @@ public class ConsortPacket implements PlayToClientPacket
 	@Override
 	public void execute()
 	{
-		Entity entity = Minecraft.getInstance().world.getEntityByID(entityID);
+		Entity entity = Minecraft.getInstance().level.getEntity(entityID);
 		if(entity instanceof ConsortEntity)
 		{
 			((ConsortEntity) entity).setAnimationFromPacket(animation, animationTimer);

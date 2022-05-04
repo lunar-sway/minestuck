@@ -2,8 +2,10 @@ package com.mraof.minestuck;
 
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.client.ClientProxy;
+import com.mraof.minestuck.command.argument.*;
 import com.mraof.minestuck.computer.ProgramData;
 import com.mraof.minestuck.computer.editmode.DeployList;
+import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortDialogue;
 import com.mraof.minestuck.entry.ComputerBlockProcess;
@@ -16,12 +18,14 @@ import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.KindAbstratusList;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
-import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.MSSurfaceBuilders;
+import com.mraof.minestuck.world.gen.MSWorldGenTypes;
+import com.mraof.minestuck.world.gen.feature.MSCFeatures;
 import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
+import net.minecraft.command.arguments.ArgumentTypes;
+import net.minecraft.command.arguments.IArgumentSerializer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.WorldPersistenceHooks;
@@ -33,8 +37,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import software.bernie.geckolib3.GeckoLib;
 
 import static com.mraof.minestuck.Minestuck.MOD_ID;
-import static com.mraof.minestuck.world.gen.OreGeneration.setupOverworldOreGeneration;
-import static com.mraof.minestuck.world.gen.OverworldStructureGeneration.setupOverworldStructureGeneration;
 
 @Mod(MOD_ID)
 public class Minestuck
@@ -59,9 +61,9 @@ public class Minestuck
 		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		MSFluids.FLUIDS.register(eventBus);
 		MSSurfaceBuilders.REGISTER.register(eventBus);
-		MSBiomes.REGISTER.register(eventBus);
 		MSTileEntityTypes.REGISTER.register(eventBus);
 		GristTypes.GRIST_TYPES.register(eventBus);
+		MSEffects.REGISTER.register(eventBus);
 	}
 	
 	/**
@@ -70,12 +72,10 @@ public class Minestuck
 	 */
 	private void setup(final FMLCommonSetupEvent event)
 	{
-		DeferredWorkQueue.runLater(this::mainThreadSetup);
+		event.enqueueWork(this::mainThreadSetup);
 		
 		//register channel handler
 		MSPacketHandler.setupChannel();
-		
-		MSBiomes.init();
 	}
 	
 	/**
@@ -87,12 +87,8 @@ public class Minestuck
 		MSCriteriaTriggers.register();
 		MSEntityTypes.registerPlacements();
 		MSFillerBlockTypes.init();	//Not sure if this is thread safe, but better safe than sorry
-		
-		//register ore generation
-		setupOverworldOreGeneration();
-		
-		//register structure generation
-		setupOverworldStructureGeneration();
+		MSCFeatures.init();
+		MSWorldGenTypes.register();
 		
 		ConsortDialogue.init();
 		
@@ -106,6 +102,16 @@ public class Minestuck
 		EntryProcess.addBlockProcessing(new TransportalizerBlockProcess());
 		if(ModList.get().isLoaded("refinedstorage"))
 			EntryProcess.addBlockProcessing(new RSEntryBlockProcess());
+		
+		ArgumentTypes.register("minestuck:grist_type", GristTypeArgument.class, GristTypeArgument.SERIALIZER);
+		ArgumentTypes.register("minestuck:grist_set", GristSetArgument.class, GristSetArgument.SERIALIZER);
+		ArgumentTypes.register("minestuck:terrain_land", TerrainLandTypeArgument.class, TerrainLandTypeArgument.SERIALIZER);
+		ArgumentTypes.register("minestuck:title_land", TitleLandTypeArgument.class, TitleLandTypeArgument.SERIALIZER);
+		ArgumentTypes.register("minestuck:land_type_pair", LandTypePairArgument.class, LandTypePairArgument.SERIALIZER);
+		ArgumentTypes.register("minestuck:title", TitleArgument.class, TitleArgument.SERIALIZER);
+		//noinspection unchecked,rawtypes
+		ArgumentTypes.register("minestuck:list", ListArgument.class, (IArgumentSerializer) ListArgument.SERIALIZER);
+		
 	}
 	
 	private void clientSetup(final FMLClientSetupEvent event)

@@ -1,44 +1,43 @@
 package com.mraof.minestuck.world.gen.feature;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import com.mraof.minestuck.block.MSBlocks;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 
 import java.util.Random;
-import java.util.function.Function;
 
 public class ParcelPyxisFeature extends Feature<NoFeatureConfig>
 {
-	public ParcelPyxisFeature(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactoryIn)
+	public ParcelPyxisFeature(Codec<NoFeatureConfig> codec)
 	{
-		super(configFactoryIn);
+		super(codec);
 	}
 	
 	@Override
-	public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, NoFeatureConfig config)
+	public boolean place(ISeedReader worldIn, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
 	{
-		BlockState state = MSBlocks.PARCEL_PYXIS.getDefaultState().rotate(Rotation.randomRotation(rand));
+		Rotation rotation = Rotation.getRandom(rand);
+		BlockState state = MSBlocks.PARCEL_PYXIS.defaultBlockState().rotate(worldIn, pos, rotation);
 		
-		if(state.isValidPosition(worldIn, pos) && !worldIn.getBlockState(pos).getMaterial().isLiquid())
+		if(state.canSurvive(worldIn, pos) && !worldIn.getBlockState(pos).getMaterial().isLiquid())
 		{
 			int randInt = 10 + rand.nextInt(5);
-			setBlockState(worldIn, pos.up(1), state);
-			setBlockState(worldIn, pos, MSBlocks.PIPE_INTERSECTION.getDefaultState());
+			setBlock(worldIn, pos.above(1), state);
+			setBlock(worldIn, pos, MSBlocks.PIPE_INTERSECTION.defaultBlockState());
 			for(int i = 1; i < randInt; i++)
 			{
-				setBlockState(worldIn, pos.down(i), MSBlocks.PIPE.getDefaultState());
+				setBlock(worldIn, pos.below(i), MSBlocks.PIPE.defaultBlockState());
 			}
-			setBlockState(worldIn, pos.down(randInt), MSBlocks.PIPE_INTERSECTION.getDefaultState());
+			setBlock(worldIn, pos.below(randInt), MSBlocks.PIPE_INTERSECTION.defaultBlockState());
 			if(rand.nextBoolean())
 			{
-				setBlockState(worldIn, pos.up(2), MSBlocks.PYXIS_LID.getDefaultState().rotate(Rotation.randomRotation(rand)));
+				setBlock(worldIn, pos.above(2), MSBlocks.PYXIS_LID.defaultBlockState().rotate(worldIn, pos, rotation));
 			}
 			return true;
 		}

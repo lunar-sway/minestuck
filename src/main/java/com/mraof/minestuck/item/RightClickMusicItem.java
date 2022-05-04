@@ -25,7 +25,7 @@ public class RightClickMusicItem extends Item
 	}
 	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn)
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn)
 	{
 		SoundEvent[] soundArray = new SoundEvent[]{
 				MSSoundEvents.EVENT_ELECTRIC_AUTOHARP_STROKE_AMAJOR, MSSoundEvents.EVENT_ELECTRIC_AUTOHARP_STROKE_BMAJOR, MSSoundEvents.EVENT_ELECTRIC_AUTOHARP_STROKE_BBMAJOR,
@@ -35,7 +35,7 @@ public class RightClickMusicItem extends Item
 		{
 		}*/
 		
-		playerIn.world.playSound(null, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), soundArray[playerIn.getRNG().nextInt(soundArray.length)], playerIn.getSoundCategory(), 0.75F, 1F);
-		return ActionResult.resultSuccess(playerIn.getHeldItem(handIn));
+		playerIn.level.playSound(null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), soundArray[playerIn.getRandom().nextInt(soundArray.length)], playerIn.getSoundSource(), 0.75F, 1F);
+		return ActionResult.success(playerIn.getItemInHand(handIn));
 	}
 }

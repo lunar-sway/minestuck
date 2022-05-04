@@ -1,8 +1,8 @@
 package com.mraof.minestuck.world.gen.feature;
 
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
-import com.mraof.minestuck.world.LandDimension;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.Decoder;
+import com.mojang.serialization.Encoder;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
@@ -16,31 +16,26 @@ import javax.annotation.Nullable;
 
 public class StructureBlockRegistryProcessor extends StructureProcessor
 {
-	public static final StructureBlockRegistryProcessor INSTANCE = new StructureBlockRegistryProcessor();
+	public static final Codec<StructureBlockRegistryProcessor> CODEC = Codec.of(Encoder.error("StructureBlockRegistryProcessor is not serializable."), Decoder.error("StructureBlockRegistryProcessor is not serializable."));
+	private final StructureBlockRegistry blocks;
+	
+	public StructureBlockRegistryProcessor(StructureBlockRegistry blocks)
+	{
+		this.blocks = blocks;
+	}
 	
 	@Nullable
-	@Override
-	public Template.BlockInfo process(IWorldReader world, BlockPos blockPos, Template.BlockInfo original, Template.BlockInfo current, PlacementSettings placementSettings, @Nullable Template template)
+	@Override	//TODO figure out blockpos difference
+	public Template.BlockInfo process(IWorldReader world, BlockPos blockPos, BlockPos blockPos2, Template.BlockInfo original, Template.BlockInfo current, PlacementSettings placementSettings, @Nullable Template template)
 	{
-		if(world.getDimension() instanceof LandDimension)
-		{
-			LandDimension dimension = (LandDimension) world.getDimension();
-			StructureBlockRegistry registry = dimension.getBlocks();
-			BlockState newState = registry.getTemplateState(original.state);
-			return new Template.BlockInfo(current.pos, newState, current.nbt);
-		}
-		return current;
+		BlockState newState = blocks.getTemplateState(original.state);
+		return new Template.BlockInfo(current.pos, newState, current.nbt);
 	}
 	
 	@Override
-	protected IStructureProcessorType getType()
+	protected IStructureProcessorType<StructureBlockRegistryProcessor> getType()
 	{
 		return MSStructureProcessorTypes.BLOCK_REGISTRY;
 	}
 	
-	@Override
-	protected <T> Dynamic<T> serialize0(DynamicOps<T> dynamicOps)
-	{
-		return new Dynamic<>(dynamicOps, dynamicOps.emptyMap());
-	}
 }

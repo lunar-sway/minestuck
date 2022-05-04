@@ -39,7 +39,7 @@ public class Generator
 		List<EnumAspect> unusedAspects = unusedAspects(availableAspects, usedTitles);
 		List<EnumClass> unusedClasses = unusedClasses(usedTitles);
 		
-		if(!unusedAspects.isEmpty() && unusedClasses.isEmpty())
+		if(!unusedAspects.isEmpty() && !unusedClasses.isEmpty())
 		{
 			EnumAspect a = getRandomFromList(unusedAspects, random);
 			EnumClass c = getRandomFromList(unusedClasses, random);

@@ -24,26 +24,26 @@ public class ConsumableProjectileWeaponItem extends Item implements ProjectileDa
 	}
 	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn)
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn)
 	{
-		ItemStack item = playerIn.getHeldItem(handIn);
+		ItemStack item = playerIn.getItemInHand(handIn);
 		
-		worldIn.playSound(null, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.ITEM_TRIDENT_THROW, SoundCategory.PLAYERS, 0.8F, 1.5F);
+		worldIn.playSound(null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.TRIDENT_THROW, SoundCategory.PLAYERS, 0.8F, 1.5F);
 		
-		if(!worldIn.isRemote)
+		if(!worldIn.isClientSide)
 		{
 			ConsumableProjectileEntity projectileEntity = new ConsumableProjectileEntity(MSEntityTypes.CONSUMABLE_PROJECTILE, playerIn, worldIn);
 			projectileEntity.setItem(item);
-			projectileEntity.shoot(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, velocity, accuracy);
-			worldIn.addEntity(projectileEntity);
+			projectileEntity.shootFromRotation(playerIn, playerIn.xRot, playerIn.yRot, 0.0F, velocity, accuracy);
+			worldIn.addFreshEntity(projectileEntity);
 		}
 		if(!playerIn.isCreative())
 		{
 			item.shrink(1);
 		}
 		
-		playerIn.getCooldownTracker().setCooldown(this, 7);
-		playerIn.addStat(Stats.ITEM_USED.get(this));
+		playerIn.getCooldowns().addCooldown(this, 7);
+		playerIn.awardStat(Stats.ITEM_USED.get(this));
 		return new ActionResult<>(ActionResultType.SUCCESS, item);
 	}
 	

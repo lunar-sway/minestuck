@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:comparator"
+  },
+  "input2": {
+    "item": "minestuck:remote_observer"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:stat_storer"
+  }
+}

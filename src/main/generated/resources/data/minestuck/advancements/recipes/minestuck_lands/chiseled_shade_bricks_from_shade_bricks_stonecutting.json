@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minestuck:chiseled_shade_bricks_from_shade_bricks_stonecutting"
+    ]
+  },
+  "criteria": {
+    "has_shade_bricks": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minestuck:shade_bricks"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minestuck:chiseled_shade_bricks_from_shade_bricks_stonecutting"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_shade_bricks",
+      "has_the_recipe"
+    ]
+  ]
+}

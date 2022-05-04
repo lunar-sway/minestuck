@@ -1,12 +1,14 @@
 package com.mraof.minestuck.world.storage.loot;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.storage.loot.conditions.ConsortLootCondition;
 import com.mraof.minestuck.world.storage.loot.conditions.LandTypeLootCondition;
 import com.mraof.minestuck.world.storage.loot.functions.SetBoondollarCount;
+import net.minecraft.loot.*;
+import net.minecraft.loot.conditions.ILootCondition;
+import net.minecraft.loot.functions.ILootFunction;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.LootEntryManager;
-import net.minecraft.world.storage.loot.conditions.LootConditionManager;
-import net.minecraft.world.storage.loot.functions.LootFunctionManager;
+import net.minecraft.util.registry.Registry;
 
 public class MSLootTables
 {
@@ -17,11 +19,53 @@ public class MSLootTables
 	public static final ResourceLocation CONSORT_FOOD_STOCK = new ResourceLocation("minestuck", "gameplay/consort_food");
 	public static final ResourceLocation CONSORT_GENERAL_STOCK = new ResourceLocation("minestuck", "gameplay/consort_general");
 	
+	private static LootConditionType LAND_TYPE_CONDITION;
+	private static LootConditionType CONSORT_CONDITION;
+	private static LootFunctionType SET_BOONDOLLAR_FUNCTION;
+	private static LootPoolEntryType LAND_TABLE_ENTRY;
+	
 	public static void registerLootSerializers()
 	{
-		LootConditionManager.registerCondition(new LandTypeLootCondition.Serializer());
-		LootConditionManager.registerCondition(new ConsortLootCondition.Serializer());
-		LootFunctionManager.registerFunction(new SetBoondollarCount.Serializer());
-		LootEntryManager.func_216194_a(new LandTableLootEntry.SerializerImpl());
+		LAND_TYPE_CONDITION = registerCondition("land_aspect", new LandTypeLootCondition.Serializer());
+		CONSORT_CONDITION = registerCondition("consort", new ConsortLootCondition.Serializer());
+		SET_BOONDOLLAR_FUNCTION = registerFunction("set_boondollar_count", new SetBoondollarCount.Serializer());
+		LAND_TABLE_ENTRY = registerEntry("land_table", new LandTableLootEntry.SerializerImpl());
+	}
+	
+	public static LootConditionType landTypeConditionType()
+	{
+		return LAND_TYPE_CONDITION;
+	}
+	
+	public static LootConditionType consortConditionType()
+	{
+		return CONSORT_CONDITION;
+	}
+	
+	public static LootFunctionType setBoondollarFunctionType()
+	{
+		return SET_BOONDOLLAR_FUNCTION;
+	}
+	
+	public static LootPoolEntryType landTableEntryType()
+	{
+		return LAND_TABLE_ENTRY;
+	}
+	
+	//Currently does not have a forge registry, so we'll have to register it this way
+	
+	private static LootConditionType registerCondition(String name, ILootSerializer<? extends ILootCondition> serializer)
+	{
+		return Registry.register(Registry.LOOT_CONDITION_TYPE, new ResourceLocation(Minestuck.MOD_ID, name), new LootConditionType(serializer));
+	}
+	
+	private static LootFunctionType registerFunction(String name, ILootSerializer<? extends ILootFunction> serializer)
+	{
+		return Registry.register(Registry.LOOT_FUNCTION_TYPE, new ResourceLocation(Minestuck.MOD_ID, name), new LootFunctionType(serializer));
+	}
+	
+	private static LootPoolEntryType registerEntry(String name, ILootSerializer<? extends LootEntry> serializer)
+	{
+		return Registry.register(Registry.LOOT_POOL_ENTRY_TYPE, new ResourceLocation(Minestuck.MOD_ID, name), new LootPoolEntryType(serializer));
 	}
 }

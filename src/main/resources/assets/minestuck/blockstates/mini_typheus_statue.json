@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "minestuck:block/mini_typheus_statue" },
+        "facing=east": { "model": "minestuck:block/mini_typheus_statue", "y": 90 },
+        "facing=south": { "model": "minestuck:block/mini_typheus_statue", "y": 180 },
+        "facing=west": { "model": "minestuck:block/mini_typheus_statue", "y": 270 }
+    }
+}

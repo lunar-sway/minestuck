@@ -21,7 +21,7 @@ public class ConnectToSburbServerPacket implements PlayToServerPacket
 	
 	public static ConnectToSburbServerPacket create(ComputerTileEntity te, int server)
 	{
-		return new ConnectToSburbServerPacket(te.getPos(), server);
+		return new ConnectToSburbServerPacket(te.getBlockPos(), server);
 	}
 	
 	@Override

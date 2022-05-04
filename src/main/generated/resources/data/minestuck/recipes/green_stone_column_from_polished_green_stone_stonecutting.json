@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "minestuck:polished_green_stone"
-  },
-  "result": "minestuck:green_stone_column",
-  "count": 1
-}

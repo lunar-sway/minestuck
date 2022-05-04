@@ -44,7 +44,7 @@ public class ServerEditPacket implements PlayToClientPacket
 		if(target != null)
 		{
 			buffer.writeBoolean(true);
-			buffer.writeString(target, 16);
+			buffer.writeUtf(target, 16);
 			buffer.writeInt(centerX);
 			buffer.writeInt(centerZ);
 		} else if(deployTags != null)
@@ -72,7 +72,7 @@ public class ServerEditPacket implements PlayToClientPacket
 		{
 			if(buffer.readBoolean())
 			{
-				packet.target = buffer.readString(16);
+				packet.target = buffer.readUtf(16);
 				packet.centerX = buffer.readInt();
 				packet.centerZ = buffer.readInt();
 			}

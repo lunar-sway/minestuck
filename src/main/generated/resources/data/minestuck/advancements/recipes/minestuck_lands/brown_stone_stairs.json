@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minestuck:brown_stone_stairs"
+    ]
+  },
+  "criteria": {
+    "has_brown_stone": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minestuck:brown_stone"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minestuck:brown_stone_stairs"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_brown_stone",
+      "has_the_recipe"
+    ]
+  ]
+}

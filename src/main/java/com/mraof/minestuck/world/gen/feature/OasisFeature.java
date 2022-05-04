@@ -1,31 +1,29 @@
 package com.mraof.minestuck.world.gen.feature;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockUtil;
 import com.mraof.minestuck.world.storage.loot.MSLootTables;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 
 import java.util.Random;
-import java.util.function.Function;
 
 public class OasisFeature extends Feature<NoFeatureConfig>
 {
-	public OasisFeature(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactory)
+	public OasisFeature(Codec<NoFeatureConfig> codec)
 	{
-		super(configFactory);
+		super(codec);
 	}
 	
 	@Override
-	public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, NoFeatureConfig config)
+	public boolean place(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
 	{
 		boolean[] blocks = new boolean[16*16*4];
 		
@@ -66,7 +64,7 @@ public class OasisFeature extends Feature<NoFeatureConfig>
 			{
 				if (!blocks[((x * 16) + z) * 4 + 3] && hasBlock1(blocks, x, 3, z, true))
 				{
-					BlockPos topPos = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, pos.add(x - 8, 0, z - 8)).down();
+					BlockPos topPos = world.getHeightmapPos(Heightmap.Type.WORLD_SURFACE_WG, pos.offset(x - 8, 0, z - 8)).below();
 					yMin = Math.min(yMin, topPos.getY());
 					yMax = Math.max(yMax, topPos.getY());
 				}
@@ -76,7 +74,7 @@ public class OasisFeature extends Feature<NoFeatureConfig>
 		if (yMax - yMin > 1)
 			return false;
 		
-		pos = pos.up(yMin - pos.getY());
+		pos = pos.above(yMin - pos.getY());
 		
 		BlockPos treePos = null;
 		int blockCount = 0;	//Cool way of 100% picking a position while iterating through and checking alternatives; same as used by dispensers
@@ -89,17 +87,17 @@ public class OasisFeature extends Feature<NoFeatureConfig>
 				{
 					int index = ((x * 16) + z) * 4 + y;
 					if (blocks[index])
-						setBlockState(worldIn, pos.add(x - 8, y - 3, z - 8), Blocks.WATER.getDefaultState());
+						setBlock(world, pos.offset(x - 8, y - 3, z - 8), Blocks.WATER.defaultBlockState());
 					else if (!blocks[index] && hasBlock1(blocks, x, y, z, false))
-						setBlockState(worldIn, pos.add(x - 8, y - 3, z - 8), Blocks.DIRT.getDefaultState());
+						setBlock(world, pos.offset(x - 8, y - 3, z - 8), Blocks.DIRT.defaultBlockState());
 				}
 				
 				if (!blocks[((x * 16) + z) * 4 + 3] && hasBlock2(blocks, x, 3, z))
 				{
-					BlockPos surfacePos = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE, pos.add(x - 8, 0, z - 8));
-					setBlockState(worldIn, surfacePos.down(), Blocks.GRASS_BLOCK.getDefaultState());
+					BlockPos surfacePos = world.getHeightmapPos(Heightmap.Type.WORLD_SURFACE, pos.offset(x - 8, 0, z - 8));
+					setBlock(world, surfacePos.below(), Blocks.GRASS_BLOCK.defaultBlockState());
 					if (rand.nextInt(5) == 0)
-						setBlockState(worldIn, surfacePos, Blocks.GRASS.getDefaultState());
+						setBlock(world, surfacePos, Blocks.GRASS.defaultBlockState());
 					if (hasBlock1(blocks, x, 3, z, true))
 					{
 						blockCount++;
@@ -108,7 +106,7 @@ public class OasisFeature extends Feature<NoFeatureConfig>
 					}
 				} else if (blocks[((x * 16) + z) * 4 + 3])
 					for (int y = 0; y < 4; y++)
-						setBlockState(worldIn, pos.add(x - 8, y + 1, z - 8), Blocks.AIR.getDefaultState());
+						setBlock(world, pos.offset(x - 8, y + 1, z - 8), Blocks.AIR.defaultBlockState());
 			}
 		}
 		
@@ -118,16 +116,16 @@ public class OasisFeature extends Feature<NoFeatureConfig>
 			int posZ = treePos.getZ() + 8 - pos.getZ();
 			int topX = Math.max(4, Math.min(11, posX - 2 + rand.nextInt(3)));
 			int topZ = Math.max(4, Math.min(11, posZ - 2 + rand.nextInt(3)));
-			BlockPos topPos = pos.add(topX - 8, treePos.getY() - pos.getY() + 5 + rand.nextInt(2), topZ - 8);
-			BlockState log = Blocks.JUNGLE_LOG.getDefaultState();
-			BlockState leaves = Blocks.JUNGLE_LEAVES.getDefaultState();
+			BlockPos topPos = pos.offset(topX - 8, treePos.getY() - pos.getY() + 5 + rand.nextInt(2), topZ - 8);
+			BlockState log = Blocks.JUNGLE_LOG.defaultBlockState();
+			BlockState leaves = Blocks.JUNGLE_LEAVES.defaultBlockState();
 			
 			BlockPos diff = topPos.subtract(treePos);
 			int logChecks = 12;
 			for (int i = 0; i <= logChecks; i++)
 			{
-				BlockPos currentPos = treePos.add(diff.getX() * i / logChecks, diff.getY() * i / logChecks, diff.getZ() * i / logChecks);
-				setBlockState(worldIn, currentPos, log);
+				BlockPos currentPos = treePos.offset(diff.getX() * i / logChecks, diff.getY() * i / logChecks, diff.getZ() * i / logChecks);
+				setBlock(world, currentPos, log);
 			}
 			
 			for (int x = -4; x <= 4; x++)
@@ -135,16 +133,16 @@ public class OasisFeature extends Feature<NoFeatureConfig>
 				for (int z = -4; z <= 4; z++)
 				{
 					int lowerY = 1;
-					if (rand.nextDouble() < Math.sqrt(BlockPos.ZERO.distanceSq(x, 0, z, false)) / 4)
+					if (rand.nextDouble() < Math.sqrt(BlockPos.ZERO.distSqr(x, 0, z, false)) / 4)
 						lowerY = 0;
 					int upperY = Math.min(4, 4 - Math.max(Math.abs(x), Math.abs(z)) + rand.nextInt(2));
 					if (Math.abs(x) == 4 || Math.abs(z) == 4)
 						lowerY -= Math.abs(rand.nextInt(4) - rand.nextInt(4));
 					for (int y = lowerY; y <= upperY; y++)
-						setBlockState(worldIn, topPos.add(x, y, z), leaves);
+						setBlock(world, topPos.offset(x, y, z), leaves);
 				}
 			}
-			setBlockState(worldIn, topPos.up(), log);
+			setBlock(world, topPos.above(), log);
 		}
 		
 		if(rand.nextInt(25) == 0)
@@ -160,14 +158,14 @@ public class OasisFeature extends Feature<NoFeatureConfig>
 						{
 							count++;
 							if(rand.nextInt(count) == 0)
-								chestPos = pos.add(x - 8, y - 3, z - 8);
+								chestPos = pos.offset(x - 8, y - 3, z - 8);
 						}
 				}
 			}
 			
 			if(chestPos != null)
 			{
-				StructureBlockUtil.placeLootChest(chestPos, worldIn, null, Direction.Plane.HORIZONTAL.random(rand), MSLootTables.BASIC_MEDIUM_CHEST, rand);
+				StructureBlockUtil.placeLootChest(chestPos, world, null, Direction.Plane.HORIZONTAL.getRandomDirection(rand), MSLootTables.BASIC_MEDIUM_CHEST, rand);
 			}
 		}
 		

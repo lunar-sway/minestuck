@@ -20,13 +20,13 @@ public class TransportalizerItem extends BlockItem
 	}
 	
 	@Override
-	protected boolean onBlockPlaced(BlockPos pos, World world, @Nullable PlayerEntity player, ItemStack stack, BlockState state)
+	protected boolean updateCustomBlockEntityTag(BlockPos pos, World world, @Nullable PlayerEntity player, ItemStack stack, BlockState state)
 	{
-		if(stack.hasDisplayName() && stack.getDisplayName().getString().length() == 4)
+		if(stack.hasCustomHoverName() && stack.getHoverName().getString().length() == 4)
 		{
-			TileEntity te = world.getTileEntity(pos);
+			TileEntity te = world.getBlockEntity(pos);
 			if(te instanceof TransportalizerTileEntity)
-				((TransportalizerTileEntity) te).setId(stack.getDisplayName().getString().toUpperCase());
+				((TransportalizerTileEntity) te).setId(stack.getHoverName().getString().toUpperCase());
 		}
 		return true;
 	}

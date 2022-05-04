@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "minestuck:green_stone"
-  },
-  "result": "minestuck:green_stone_brick_slab",
-  "count": 2
-}

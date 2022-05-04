@@ -8,7 +8,10 @@ import com.mraof.minestuck.skaianet.client.ReducedConnection;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,9 +25,9 @@ public class SkaianetInfoPacket implements PlayToBothPacket
 	public Map<Integer, String> openServers;
 	public List<SburbConnection> connectionsFrom;
 	public List<ReducedConnection> connectionsTo;
-	public List<List<ResourceLocation>> landChains;
+	public List<List<RegistryKey<World>>> landChains;
 	
-	public static SkaianetInfoPacket landChains(List<List<ResourceLocation>> landChains)
+	public static SkaianetInfoPacket landChains(List<List<RegistryKey<World>>> landChains)
 	{
 		SkaianetInfoPacket packet = new SkaianetInfoPacket();
 		packet.landChains = landChains;
@@ -58,14 +61,14 @@ public class SkaianetInfoPacket implements PlayToBothPacket
 		if(landChains != null) //Land chain data
 		{
 			buffer.writeBoolean(true);
-			for(List<ResourceLocation> list : landChains)
+			for(List<RegistryKey<World>> list : landChains)
 			{
 				buffer.writeInt(list.size());
-				for(ResourceLocation land : list)
+				for(RegistryKey<World> land : list)
 				{
 					if(land == null)
-						buffer.writeString("");
-					else buffer.writeString(land.toString());
+						buffer.writeUtf("");
+					else buffer.writeUtf(land.location().toString());
 				}
 			}
 		} else
@@ -83,7 +86,7 @@ public class SkaianetInfoPacket implements PlayToBothPacket
 				for(Map.Entry<Integer, String> entry : openServers.entrySet())
 				{
 					buffer.writeInt(entry.getKey());
-					buffer.writeString(entry.getValue(), 16);
+					buffer.writeUtf(entry.getValue(), 16);
 				}
 				
 				for(SburbConnection connection : connectionsFrom)
@@ -101,13 +104,13 @@ public class SkaianetInfoPacket implements PlayToBothPacket
 			while(buffer.readableBytes() > 0)
 			{
 				int size = buffer.readInt();
-				List<ResourceLocation> list = new ArrayList<>();
+				List<RegistryKey<World>> list = new ArrayList<>();
 				for(int k = 0; k < size; k++)
 				{
-					String landName = buffer.readString(32767);
+					String landName = buffer.readUtf(32767);
 					if(landName.isEmpty())
 						list.add(null);
-					else list.add(ResourceLocation.tryCreate(landName));
+					else list.add(RegistryKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(landName)));
 				}
 				packet.landChains.add(list);
 			}
@@ -122,7 +125,7 @@ public class SkaianetInfoPacket implements PlayToBothPacket
 				int size = buffer.readInt();
 				packet.openServers = new HashMap<>();
 				for(int i = 0; i < size; i++)
-					packet.openServers.put(buffer.readInt(), buffer.readString(16));
+					packet.openServers.put(buffer.readInt(), buffer.readUtf(16));
 				packet.connectionsTo = new ArrayList<>();
 				while(buffer.readableBytes() > 0)
 					packet.connectionsTo.add(ReducedConnection.read(buffer));

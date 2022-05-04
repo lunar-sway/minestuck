@@ -24,18 +24,16 @@ public class CustomMeleeAttackGoal extends MeleeAttackGoal
 		this.distanceMultiplier = distanceMultiplier;
 	}
 	
+	
 	@Override
-	protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr)
+	protected void resetAttackCooldown()
 	{
-		boolean tickCondition = attackTick <= 0;
-		super.checkAndPerformAttack(enemy, distToEnemySqr);
-		if(tickCondition && attackTick > 0)
-			attackTick = attackRate;
+		ticksUntilNextAttack = attackRate;
 	}
 	
 	@Override
 	protected double getAttackReachSqr(LivingEntity attackTarget)
 	{
-		return attacker.getWidth() * distanceMultiplier * attacker.getWidth() * distanceMultiplier + attackTarget.getWidth();
+		return mob.getBbWidth() * distanceMultiplier * mob.getBbWidth() * distanceMultiplier + attackTarget.getBbWidth();
 	}
 }

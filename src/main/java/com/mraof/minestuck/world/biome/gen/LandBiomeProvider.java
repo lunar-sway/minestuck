@@ -1,52 +1,44 @@
 package com.mraof.minestuck.world.biome.gen;
 
-import com.mraof.minestuck.world.biome.LandBiomeHolder;
-import net.minecraft.block.BlockState;
+
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.Decoder;
+import com.mojang.serialization.Encoder;
+import com.mraof.minestuck.world.biome.ILandBiomeSet;
+import com.mraof.minestuck.world.gen.LandGenSettings;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.provider.BiomeProvider;
-import net.minecraft.world.gen.feature.structure.Structure;
-import net.minecraft.world.gen.layer.Layer;
-
-import java.util.Set;
 
 public class LandBiomeProvider extends BiomeProvider
 {
-	private final Layer genLevelLayer;
-	private final LandBiomeHolder biomeHolder;
+	public static final Codec<LandBiomeProvider> CODEC = Codec.of(Encoder.error("LandBiomeProvider is not serializable."), Decoder.error("LandBiomeProvider is not serializable."));
+	private final LandBiomeLayer genLevelLayer;
+	private final ILandBiomeSet biomes;
+	private final LandGenSettings settings;
 	
-	public LandBiomeProvider(LandBiomeProviderSettings settings)
+	public LandBiomeProvider(long seed, ILandBiomeSet biomes, LandGenSettings settings)
 	{
-		super(settings.getBiomes().getAll());
-		topBlocksCache.add(settings.getGenSettings().getBlockRegistry().getBlockState("surface"));
+		super(biomes.getAll());
+		this.biomes = biomes;
+		this.settings = settings;
 
-		this.genLevelLayer = LandBiomeLayers.buildLandProcedure(settings.getSeed(), settings.getGenSettings());
-		biomeHolder = settings.getGenSettings().getBiomeHolder();
+		this.genLevelLayer = LandBiomeLayer.buildLandProcedure(seed, biomes, settings.oceanChance, settings.roughChance);
 	}
 	
 	@Override
 	public Biome getNoiseBiome(int x, int y, int z) {
-		return this.genLevelLayer.func_215738_a(x, z);
+		return this.genLevelLayer.get(x, z);
 	}
 	
 	@Override
-	public boolean hasStructure(Structure<?> structureIn)
+	protected Codec<? extends BiomeProvider> codec()
 	{
-		return hasStructureCache.computeIfAbsent(structureIn, this::isStructureInBiomes);
-	}
-	
-	private boolean isStructureInBiomes(Structure<?> structure)
-	{
-		for(Biome biome : biomeHolder.getBiomes())
-		{
-			if(biome.hasStructure(structure))
-				return true;
-		}
-		return false;
+		return CODEC;
 	}
 	
 	@Override
-	public Set<BlockState> getSurfaceBlocks()
+	public BiomeProvider withSeed(long seed)
 	{
-		return topBlocksCache;
+		return new LandBiomeProvider(seed, biomes, settings);
 	}
 }

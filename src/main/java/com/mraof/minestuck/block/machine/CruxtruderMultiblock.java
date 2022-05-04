@@ -1,6 +1,7 @@
 package com.mraof.minestuck.block.machine;
 
 import com.mraof.minestuck.block.MSBlocks;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.Direction;
@@ -12,10 +13,10 @@ import static com.mraof.minestuck.block.MSBlockShapes.*;
 
 public class CruxtruderMultiblock extends MachineMultiblock
 {
-	public final RegistryObject<Block> CORNER = register("cruxtruder_corner", () -> new CruxtruderBlock(this, CRUXTRUDER_BASE_CORNER, false, new BlockPos(1, 1, 1), Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F).noDrops()));
-	public final RegistryObject<Block> SIDE = register("cruxtruder_side", () -> new CruxtruderBlock(this, CRUXTRUDER_BASE_SIDE, false, new BlockPos(0, 1, 1), Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F).noDrops()));
-	public final RegistryObject<Block> CENTER = register("cruxtruder_center", () -> new CruxtruderBlock(this, CRUXTRUDER_CENTER, false, new BlockPos(0, 1, 0), Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F).noDrops()));
-	public final RegistryObject<Block> TUBE = register("cruxtruder_tube", () -> new CruxtruderBlock(this, CRUXTRUDER_TUBE, true, new BlockPos(0, 0, 0), Block.Properties.create(Material.IRON).hardnessAndResistance(3.0F).noDrops()));
+	public final RegistryObject<Block> CORNER = register("cruxtruder_corner", () -> new CruxtruderBlock(this, CRUXTRUDER_BASE_CORNER, false, new BlockPos(1, 1, 1), AbstractBlock.Properties.of(Material.METAL).strength(3.0F, 4.5F).noDrops()));
+	public final RegistryObject<Block> SIDE = register("cruxtruder_side", () -> new CruxtruderBlock(this, CRUXTRUDER_BASE_SIDE, false, new BlockPos(0, 1, 1), AbstractBlock.Properties.of(Material.METAL).strength(3.0F, 4.5F).noDrops()));
+	public final RegistryObject<Block> CENTER = register("cruxtruder_center", () -> new CruxtruderBlock(this, CRUXTRUDER_CENTER, false, new BlockPos(0, 1, 0), AbstractBlock.Properties.of(Material.METAL).strength(3.0F, 4.5F).noDrops()));
+	public final RegistryObject<Block> TUBE = register("cruxtruder_tube", () -> new CruxtruderBlock(this, CRUXTRUDER_TUBE, true, new BlockPos(0, 0, 0), AbstractBlock.Properties.of(Material.METAL).strength(3.0F, 4.5F).noDrops()));
 	
 	private final PlacementEntry tubePlacement;
 	
@@ -33,7 +34,7 @@ public class CruxtruderMultiblock extends MachineMultiblock
 		registerPlacement(new BlockPos(1, 0, 1), applyDirection(CENTER, Direction.NORTH));
 		tubePlacement = registerPlacement(new BlockPos(1, 1, 1), applyDirection(TUBE, Direction.NORTH));
 		//noinspection Convert2MethodRef
-		registerPlacement(new BlockPos(1, 2, 1), () -> MSBlocks.CRUXTRUDER_LID.getDefaultState(), (state1, state2) -> true);
+		registerPlacement(new BlockPos(1, 2, 1), () -> MSBlocks.CRUXTRUDER_LID.defaultBlockState(), (state1, state2) -> true);
 	}
 	
 	public BlockPos getTilePos(BlockPos placementPos, Rotation rotation)

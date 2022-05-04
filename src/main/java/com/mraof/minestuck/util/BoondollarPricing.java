@@ -3,9 +3,9 @@ package com.mraof.minestuck.util;
 import com.google.gson.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.loot.IRandomRange;
+import net.minecraft.loot.RandomRanges;
 import net.minecraft.util.JSONUtils;
-import net.minecraft.world.storage.loot.IRandomRange;
-import net.minecraft.world.storage.loot.RandomRanges;
 
 import java.lang.reflect.Type;
 import java.util.Random;
@@ -23,7 +23,7 @@ public class BoondollarPricing
 	
 	public int generatePrice(Random random)
 	{
-		return priceRange.generateInt(random);
+		return priceRange.getInt(random);
 	}
 	
 	public boolean appliesTo(ItemStack stack)
@@ -36,15 +36,15 @@ public class BoondollarPricing
 		@Override
 		public BoondollarPricing deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext context) throws JsonParseException
 		{
-			JsonObject json = JSONUtils.getJsonObject(jsonElement, "boolean pricing");
-			return new BoondollarPricing(Ingredient.deserialize(json.get("ingredient")), RandomRanges.deserialize(json.get("range"), context));
+			JsonObject json = JSONUtils.convertToJsonObject(jsonElement, "boolean pricing");
+			return new BoondollarPricing(Ingredient.fromJson(json.get("ingredient")), RandomRanges.deserialize(json.get("range"), context));
 		}
 		
 		@Override
 		public JsonElement serialize(BoondollarPricing pricing, Type type, JsonSerializationContext context)
 		{
 			JsonObject json = new JsonObject();
-			json.add("ingredient", pricing.ingredient.serialize());
+			json.add("ingredient", pricing.ingredient.toJson());
 			json.add("range", RandomRanges.serialize(pricing.priceRange, context));
 			return json;
 		}

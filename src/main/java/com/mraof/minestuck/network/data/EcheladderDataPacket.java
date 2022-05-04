@@ -6,6 +6,7 @@ import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.Util;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public class EcheladderDataPacket implements PlayToClientPacket
@@ -57,7 +58,7 @@ public class EcheladderDataPacket implements PlayToClientPacket
 			for(prev++; prev <= rung; prev++)
 			{
 				TranslationTextComponent rung = new TranslationTextComponent(Echeladder.translationKey(prev));
-				Minecraft.getInstance().player.sendMessage(new TranslationTextComponent(Echeladder.NEW_RUNG, rung));
+				Minecraft.getInstance().player.sendMessage(new TranslationTextComponent(Echeladder.NEW_RUNG, rung), Util.NIL_UUID);
 			}
 		else EcheladderScreen.animatedRung = EcheladderScreen.lastRung = rung;
 	}

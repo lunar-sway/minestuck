@@ -40,9 +40,9 @@ public class VitalityGelEntity extends Entity implements IEntityAdditionalSpawnD
 	protected VitalityGelEntity(EntityType<? extends VitalityGelEntity> type, World world, double x, double y, double z, int healAmount)
 	{
 		super(type, world);
-		this.setPosition(x, y, z);
-		this.rotationYaw = (float)(Math.random() * 360.0D);
-		this.setMotion(world.rand.nextGaussian() * 0.2D - 0.1D, world.rand.nextGaussian() * 0.2D, world.rand.nextGaussian() * 0.2D - 0.1D);
+		this.setPos(x, y, z);
+		this.yRot = (float)(Math.random() * 360.0D);
+		this.setDeltaMovement(world.random.nextGaussian() * 0.2D - 0.1D, world.random.nextGaussian() * 0.2D, world.random.nextGaussian() * 0.2D - 0.1D);
 		
 		this.healAmount = healAmount;
 	}
@@ -58,20 +58,20 @@ public class VitalityGelEntity extends Entity implements IEntityAdditionalSpawnD
 	 * prevent them from trampling crops
 	 */
 	@Override
-	protected boolean canTriggerWalking()
+	protected boolean isMovementNoisy()
 	{
 		return false;
 	}
 	
 	@Override
-	public boolean attackEntityFrom(DamageSource source, float amount)
+	public boolean hurt(DamageSource source, float amount)
 	{
 		if (this.isInvulnerableTo(source))
 		{
 			return false;
 		} else
 		{
-			this.markVelocityChanged();
+			this.markHurt();
 			this.health = (int)((float)this.health - amount);
 			
 			if (this.health <= 0)
@@ -84,7 +84,7 @@ public class VitalityGelEntity extends Entity implements IEntityAdditionalSpawnD
 	}
 	
 	@Override
-	protected void registerData()
+	protected void defineSynchedData()
 	{
 	}
 	
@@ -114,24 +114,24 @@ public class VitalityGelEntity extends Entity implements IEntityAdditionalSpawnD
 	{
 		super.tick();
 		
-		this.prevPosX = this.getPosX();
-		this.prevPosY = this.getPosY();
-		this.prevPosZ = this.getPosZ();
-		this.setMotion(this.getMotion().add(0, -0.03D, 0));
+		this.xo = this.getX();
+		this.yo = this.getY();
+		this.zo = this.getZ();
+		this.setDeltaMovement(this.getDeltaMovement().add(0, -0.03D, 0));
 		
-		if (this.world.getBlockState(new BlockPos(MathHelper.floor(this.getPosX()), MathHelper.floor(this.getPosY()), MathHelper.floor(this.getPosZ()))).getMaterial() == Material.LAVA)
+		if (this.level.getBlockState(new BlockPos(MathHelper.floor(this.getX()), MathHelper.floor(this.getY()), MathHelper.floor(this.getZ()))).getMaterial() == Material.LAVA)
 		{
-			this.setMotion(0.2D, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F);
-			this.playSound(SoundEvents.ENTITY_GENERIC_BURN, 0.4F, 2.0F + this.rand.nextFloat() * 0.4F);
+			this.setDeltaMovement(0.2D, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
+			this.playSound(SoundEvents.GENERIC_BURN, 0.4F, 2.0F + this.random.nextFloat() * 0.4F);
 		}
 		
-		double d0 = this.getSize(Pose.STANDING).width * 2.0D;
+		double d0 = this.getDimensions(Pose.STANDING).width * 2.0D;
 		
-		if (this.targetCycle < this.cycle - 20 + this.getEntityId() % 100)
+		if (this.targetCycle < this.cycle - 20 + this.getId() % 100)
 		{
-			if (this.closestPlayer == null || this.closestPlayer.getDistanceSq(this) > d0 * d0)
+			if (this.closestPlayer == null || this.closestPlayer.distanceToSqr(this) > d0 * d0)
 			{
-				this.closestPlayer = this.world.getClosestPlayer(this, d0);
+				this.closestPlayer = this.level.getNearestPlayer(this, d0);
 			}
 			
 			this.targetCycle = this.cycle;
@@ -139,32 +139,32 @@ public class VitalityGelEntity extends Entity implements IEntityAdditionalSpawnD
 
 		if (this.closestPlayer != null)
 		{
-			double d1 = (this.closestPlayer.getPosX() - this.getPosX()) / d0;
-			double d2 = (this.closestPlayer.getPosY() + (double)this.closestPlayer.getEyeHeight() - this.getPosY()) / d0;
-			double d3 = (this.closestPlayer.getPosZ() - this.getPosZ()) / d0;
+			double d1 = (this.closestPlayer.getX() - this.getX()) / d0;
+			double d2 = (this.closestPlayer.getY() + (double)this.closestPlayer.getEyeHeight() - this.getY()) / d0;
+			double d3 = (this.closestPlayer.getZ() - this.getZ()) / d0;
 			double d4 = Math.sqrt(d1 * d1 + d2 * d2 + d3 * d3);
-			double d5 = this.getSize(Pose.STANDING).width * 2.0D - d4;
+			double d5 = this.getDimensions(Pose.STANDING).width * 2.0D - d4;
 
 			if (d5 > 0.0D)
 			{
-				this.setMotion(this.getMotion().add(d1 / d4 * d5 * 0.1D, d2 / d4 * d5 * 0.1D, d3 / d4 * d5 * 0.1D));
+				this.setDeltaMovement(this.getDeltaMovement().add(d1 / d4 * d5 * 0.1D, d2 / d4 * d5 * 0.1D, d3 / d4 * d5 * 0.1D));
 			}
 		}
 
-		this.move(MoverType.SELF, this.getMotion());
+		this.move(MoverType.SELF, this.getDeltaMovement());
 		float f = 0.98F;
 		
 		if(this.onGround)
 		{
-			BlockPos pos = new BlockPos(MathHelper.floor(this.getPosX()), MathHelper.floor(this.getBoundingBox().minY) - 1, MathHelper.floor(this.getPosZ()));
-			f = this.world.getBlockState(pos).getSlipperiness(world, pos, this) * 0.98F;
+			BlockPos pos = new BlockPos(MathHelper.floor(this.getX()), MathHelper.floor(this.getBoundingBox().minY) - 1, MathHelper.floor(this.getZ()));
+			f = this.level.getBlockState(pos).getSlipperiness(level, pos, this) * 0.98F;
 		}
 		
-		this.setMotion(this.getMotion().mul(f, 0.98D, f));
+		this.setDeltaMovement(this.getDeltaMovement().multiply(f, 0.98D, f));
 		
 		if (this.onGround)
 		{
-			this.setMotion(this.getMotion().mul(1, -0.9D, 1));
+			this.setDeltaMovement(this.getDeltaMovement().multiply(1, -0.9D, 1));
 		}
 
 		++this.cycle;
@@ -187,7 +187,7 @@ public class VitalityGelEntity extends Entity implements IEntityAdditionalSpawnD
 	}*/
 	
 	@Override
-	protected void writeAdditional(CompoundNBT compound)
+	protected void addAdditionalSaveData(CompoundNBT compound)
 	{
 		compound.putShort("health", (short)((byte)this.health));
 		compound.putShort("age", (short)this.age);
@@ -195,7 +195,7 @@ public class VitalityGelEntity extends Entity implements IEntityAdditionalSpawnD
 	}
 	
 	@Override
-	protected void readAdditional(CompoundNBT compound)
+	protected void readAdditionalSaveData(CompoundNBT compound)
 	{
 		this.health = compound.getShort("health") & 255;
 		this.age = compound.getShort("age");
@@ -207,14 +207,14 @@ public class VitalityGelEntity extends Entity implements IEntityAdditionalSpawnD
 	 * Called by a player entity when they collide with an entity
 	 */
 	@Override
-	public void onCollideWithPlayer(PlayerEntity player)
+	public void playerTouch(PlayerEntity player)
 	{
-		if(this.world.isRemote?ClientEditHandler.isActive():ServerEditHandler.getData(player) != null)
+		if(this.level.isClientSide?ClientEditHandler.isActive():ServerEditHandler.getData(player) != null)
 			return;
 		
-		if (!this.world.isRemote)
+		if (!this.level.isClientSide)
 		{
-			this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.1F, 0.5F * ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.8F));
+			this.playSound(SoundEvents.ITEM_PICKUP, 0.1F, 0.5F * ((this.random.nextFloat() - this.random.nextFloat()) * 0.7F + 1.8F));
 			player.heal(healAmount);
 			this.remove();
 		}
@@ -223,15 +223,15 @@ public class VitalityGelEntity extends Entity implements IEntityAdditionalSpawnD
 	}
 	
 	@Override
-	public boolean canBeAttackedWithItem()
+	public boolean isAttackable()
 	{
 		return false;
 	}
 	
 	@Override
-	public EntitySize getSize(Pose poseIn)
+	public EntitySize getDimensions(Pose poseIn)
 	{
-		return super.getSize(poseIn).scale(healAmount);
+		return super.getDimensions(poseIn).scale(healAmount);
 	}
 
 	public float getSizeByValue() {	return (float)this.healAmount / 4.0F; }
@@ -249,7 +249,7 @@ public class VitalityGelEntity extends Entity implements IEntityAdditionalSpawnD
 	}
 	
 	@Override
-	public IPacket<?> createSpawnPacket()
+	public IPacket<?> getAddEntityPacket()
 	{
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
