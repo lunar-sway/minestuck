@@ -2,6 +2,7 @@ package com.mraof.minestuck.block.redstone;
 
 import com.mraof.minestuck.block.MSDirectionalBlock;
 import com.mraof.minestuck.block.MSProperties;
+import com.mraof.minestuck.tileentity.redstone.TogglerTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -10,11 +11,15 @@ import net.minecraft.state.Property;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
+
+import javax.annotation.Nullable;
 
 /**
  * Toggles the state of the block it is facing upon receiving a new redstone signal if that block has the MACHINE_TOGGLE property from MSProperties
@@ -28,6 +33,19 @@ public class TogglerBlock extends MSDirectionalBlock
 	{
 		super(properties);
 		this.registerDefaultState(stateDefinition.any().setValue(FACING, Direction.UP).setValue(POWERED, false).setValue(DISCHARGE, false));
+	}
+	
+	@Override
+	public boolean hasTileEntity(BlockState state)
+	{
+		return true;
+	}
+	
+	@Nullable
+	@Override
+	public TileEntity createTileEntity(BlockState state, IBlockReader world)
+	{
+		return new TogglerTileEntity();
 	}
 	
 	@Override
@@ -88,27 +106,6 @@ public class TogglerBlock extends MSDirectionalBlock
 				if(state.getValue(DISCHARGE))
 				{
 					boolean makeSound = false;
-					
-					//removing functionality from blocks that should have limited survival access
-					for(Property<?> property : facingState.getProperties())
-					{
-						if(property.equals(MSProperties.DISCHARGED))
-						{
-							if(facingState.getBlock() instanceof SummonerBlock)
-							{
-								worldIn.setBlock(facingPos, facingState.setValue(MSProperties.DISCHARGED, false).setValue(SummonerBlock.TRIGGERED, true), Constants.BlockFlags.DEFAULT); //the boolean is inverted specifically with the summoner
-							}
-							else
-								worldIn.setBlock(facingPos, facingState.setValue(MSProperties.DISCHARGED, true), Constants.BlockFlags.DEFAULT);
-							
-							if(!worldIn.getBlockState(pos.relative(state.getValue(FACING).getOpposite())).getBlock().asItem().is(ItemTags.WOOL)) //wont make a toggle sound if the toggler is "muted" by a wool block
-							{
-								makeSound = true;
-							}
-							
-							break;
-						}
-					}
 					
 					//removing redstone power from powered blocks
 					for(Property<?> property : facingState.getProperties())
