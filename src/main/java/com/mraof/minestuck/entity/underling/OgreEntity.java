@@ -1,6 +1,7 @@
 package com.mraof.minestuck.entity.underling;
 
 import com.mraof.minestuck.entity.ai.CustomMeleeAttackGoal;
+import com.mraof.minestuck.entity.ai.DelayedMeleeAttackGoal;
 import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
@@ -39,7 +40,7 @@ public class OgreEntity extends UnderlingEntity
 	protected void registerGoals()
 	{
 		super.registerGoals();
-		this.goalSelector.addGoal(3, new CustomMeleeAttackGoal(this, 1.0F, false, 40, 1.2F));
+		this.goalSelector.addGoal(3, new DelayedMeleeAttackGoal(this, 1.0F, false, 40, 1.2F, 50));
 	}
 	
 	protected SoundEvent getAmbientSound()
