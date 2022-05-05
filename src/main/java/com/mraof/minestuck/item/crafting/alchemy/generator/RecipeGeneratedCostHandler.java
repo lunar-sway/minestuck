@@ -7,16 +7,16 @@ import com.google.gson.stream.JsonReader;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.jei.JeiGristCost;
-import net.minecraft.client.resources.ReloadListener;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.*;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.profiler.IProfiler;
-import net.minecraft.resources.IResource;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.core.Registry;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.*;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -37,7 +37,7 @@ import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class RecipeGeneratedCostHandler extends ReloadListener<List<RecipeGeneratedCostHandler.SourceEntry>> implements GeneratedCostProvider
+public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<List<RecipeGeneratedCostHandler.SourceEntry>> implements GeneratedCostProvider
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
@@ -63,7 +63,7 @@ public class RecipeGeneratedCostHandler extends ReloadListener<List<RecipeGenera
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public static void addListener(AddReloadListenerEvent event)
 	{
-		event.addListener(new RecipeGeneratedCostHandler(event.getDataPackRegistries().getRecipeManager()));
+		event.addListener(new RecipeGeneratedCostHandler(event.getServerResources().getRecipeManager()));
 	}
 	
 	GristSet getGristCost(Item item)
@@ -71,7 +71,7 @@ public class RecipeGeneratedCostHandler extends ReloadListener<List<RecipeGenera
 		return generatedCosts.get(item);
 	}
 	
-	void write(PacketBuffer buffer)
+	void write(FriendlyByteBuf buffer)
 	{
 		buffer.writeInt(generatedCosts.size());
 		for(Map.Entry<Item, GristSet> entry : generatedCosts.entrySet())
@@ -81,7 +81,7 @@ public class RecipeGeneratedCostHandler extends ReloadListener<List<RecipeGenera
 		}
 	}
 	
-	static RecipeGeneratedCostHandler read(PacketBuffer buffer)
+	static RecipeGeneratedCostHandler read(FriendlyByteBuf buffer)
 	{
 		if(buffer.readableBytes() == 0)
 			return null;
@@ -109,7 +109,7 @@ public class RecipeGeneratedCostHandler extends ReloadListener<List<RecipeGenera
 	}
 	
 	@Override
-	protected List<SourceEntry> prepare(IResourceManager resourceManagerIn, IProfiler profilerIn)
+	protected List<SourceEntry> prepare(ResourceManager resourceManagerIn, ProfilerFiller profilerIn)
 	{
 		List<SourceEntry> sources = new ArrayList<>();
 		for(String namespace : resourceManagerIn.getNamespaces())
@@ -118,7 +118,7 @@ public class RecipeGeneratedCostHandler extends ReloadListener<List<RecipeGenera
 			{
 				if(resourceManagerIn.hasResource(new ResourceLocation(namespace, PATH)))
 				{
-					IResource resource = resourceManagerIn.getResource(new ResourceLocation(namespace, PATH));
+					Resource resource = resourceManagerIn.getResource(new ResourceLocation(namespace, PATH));
 					try(
 							InputStream stream = resource.getInputStream();
 							Reader reader = new InputStreamReader(stream, StandardCharsets.UTF_8)
@@ -155,11 +155,11 @@ public class RecipeGeneratedCostHandler extends ReloadListener<List<RecipeGenera
 	
 	private static SourceEntry deserializeSourceEntry(JsonElement json, Type typeOfT, JsonDeserializationContext context)
 	{
-		JsonObject obj = JSONUtils.convertToJsonObject(json, "source entry");
+		JsonObject obj = GsonHelper.convertToJsonObject(json, "source entry");
 		
 		Source source = deserializeSource(obj);
 		
-		ResourceLocation name = new ResourceLocation(JSONUtils.getAsString(obj, "interpreter_type"));
+		ResourceLocation name = new ResourceLocation(GsonHelper.getAsString(obj, "interpreter_type"));
 		InterpreterSerializer<?> serializer = InterpreterSerializer.REGISTRY.getValue(name);
 		
 		if(serializer == null)
@@ -171,28 +171,28 @@ public class RecipeGeneratedCostHandler extends ReloadListener<List<RecipeGenera
 	
 	private static Source deserializeSource(JsonObject json)
 	{
-		String type = JSONUtils.getAsString(json, "source_type");
+		String type = GsonHelper.getAsString(json, "source_type");
 		switch(type)
 		{
 			case "recipe":
-				ResourceLocation recipe = new ResourceLocation(JSONUtils.getAsString(json, "source"));
+				ResourceLocation recipe = new ResourceLocation(GsonHelper.getAsString(json, "source"));
 				return new RecipeSource(recipe);
 			case "recipe_serializer":
-				ResourceLocation serializerName = new ResourceLocation(JSONUtils.getAsString(json, "source"));
-				IRecipeSerializer<?> recipeSerializer = ForgeRegistries.RECIPE_SERIALIZERS.getValue(serializerName);
+				ResourceLocation serializerName = new ResourceLocation(GsonHelper.getAsString(json, "source"));
+				RecipeSerializer<?> recipeSerializer = ForgeRegistries.RECIPE_SERIALIZERS.getValue(serializerName);
 				if(recipeSerializer == null)
 					throw new JsonParseException("No recipe type by name " + serializerName);
 				return new RecipeSerializerSource(recipeSerializer);
 			case "recipe_type":
-				ResourceLocation typeName = new ResourceLocation(JSONUtils.getAsString(json, "source"));
-				IRecipeType<?> recipeType = Registry.RECIPE_TYPE.getOptional(typeName).orElseThrow(() -> new JsonParseException("No recipe type by name " + typeName));
+				ResourceLocation typeName = new ResourceLocation(GsonHelper.getAsString(json, "source"));
+				RecipeType<?> recipeType = Registry.RECIPE_TYPE.getOptional(typeName).orElseThrow(() -> new JsonParseException("No recipe type by name " + typeName));
 				return new RecipeTypeSource(recipeType);
 		}
 		throw new JsonParseException("Invalid source type " + type);
 	}
 	
 	@Override
-	protected void apply(List<SourceEntry> sources, IResourceManager resourceManagerIn, IProfiler profilerIn)
+	protected void apply(List<SourceEntry> sources, ResourceManager resourceManagerIn, ProfilerFiller profilerIn)
 	{
 		Objects.requireNonNull(recipeManager, "Recipe manager was null while generating grist costs");
 		
@@ -203,7 +203,7 @@ public class RecipeGeneratedCostHandler extends ReloadListener<List<RecipeGenera
 		
 		this.process = new RecipeGeneratedCostProcess(prepareRecipeMap(sources, recipeManager));
 		
-		for(IRecipe<?> recipe : recipeManager.getRecipes())
+		for(Recipe<?> recipe : recipeManager.getRecipes())
 		{
 			if(recipe instanceof RecipeGeneratedGristCost)
 			{
@@ -248,28 +248,28 @@ public class RecipeGeneratedCostHandler extends ReloadListener<List<RecipeGenera
 	 * The dominant source should be the most specific source (fewest recipes provided by that source).
 	 * If there are equally dominant sources, we won't bother to make a distinction and will instead pick whichever is more convenient implementation-wise.
 	 */
-	private Map<Item, List<Pair<IRecipe<?>, RecipeInterpreter>>> prepareRecipeMap(List<SourceEntry> sources, RecipeManager recipeManager)
+	private Map<Item, List<Pair<Recipe<?>, RecipeInterpreter>>> prepareRecipeMap(List<SourceEntry> sources, RecipeManager recipeManager)
 	{
 		//Step 1: sort recipe interpreters paired with their recipes in the order depending on the number of recipes in the list
-		List<Pair<List<IRecipe<?>>, RecipeInterpreter>> recipeLists = new ArrayList<>(sources.size());
+		List<Pair<List<Recipe<?>>, RecipeInterpreter>> recipeLists = new ArrayList<>(sources.size());
 		for(SourceEntry entry : sources)
 		{
-			List<IRecipe<?>> recipes = entry.source.findRecipes(recipeManager);
+			List<Recipe<?>> recipes = entry.source.findRecipes(recipeManager);
 			recipeLists.add(Pair.of(recipes, entry.interpreter));
 		}
 		recipeLists.sort(Comparator.comparingInt(pair -> -pair.getLeft().size()));
 		
 		//Step 2: Map recipes to interpreters such that each recipe only has one interpreter
-		Map<IRecipe<?>, RecipeInterpreter> recipeMap = new HashMap<>();
-		for(Pair<List<IRecipe<?>>, RecipeInterpreter> pair : recipeLists)
+		Map<Recipe<?>, RecipeInterpreter> recipeMap = new HashMap<>();
+		for(Pair<List<Recipe<?>>, RecipeInterpreter> pair : recipeLists)
 		{
-			for(IRecipe<?> recipe : pair.getLeft())
+			for(Recipe<?> recipe : pair.getLeft())
 				recipeMap.put(recipe, pair.getRight());
 		}
 		
 		//Step 3: Take items from interpreter.getOutputItems() and map item -> recipe interpreter pair
-		Map<Item, List<Pair<IRecipe<?>, RecipeInterpreter>>> itemLookupMap = new HashMap<>();
-		for(Map.Entry<IRecipe<?>, RecipeInterpreter> entry : recipeMap.entrySet())
+		Map<Item, List<Pair<Recipe<?>, RecipeInterpreter>>> itemLookupMap = new HashMap<>();
+		for(Map.Entry<Recipe<?>, RecipeInterpreter> entry : recipeMap.entrySet())
 		{
 			for(Item item : entry.getValue().getOutputItems(entry.getKey()))
 			{
@@ -294,7 +294,7 @@ public class RecipeGeneratedCostHandler extends ReloadListener<List<RecipeGenera
 	
 	public interface Source
 	{
-		List<IRecipe<?>> findRecipes(RecipeManager recipeManager);
+		List<Recipe<?>> findRecipes(RecipeManager recipeManager);
 	}
 	
 	private static class RecipeSource implements Source
@@ -307,10 +307,10 @@ public class RecipeGeneratedCostHandler extends ReloadListener<List<RecipeGenera
 		}
 		
 		@Override
-		public List<IRecipe<?>> findRecipes(RecipeManager recipeManager)
+		public List<Recipe<?>> findRecipes(RecipeManager recipeManager)
 		{
-			Optional<? extends IRecipe<?>> recipe = recipeManager.byKey(this.recipe);
-			return recipe.<List<IRecipe<?>>>map(Collections::singletonList).orElse(Collections.emptyList());
+			Optional<? extends Recipe<?>> recipe = recipeManager.byKey(this.recipe);
+			return recipe.<List<Recipe<?>>>map(Collections::singletonList).orElse(Collections.emptyList());
 		}
 		
 		@Override
@@ -322,15 +322,15 @@ public class RecipeGeneratedCostHandler extends ReloadListener<List<RecipeGenera
 	
 	private static class RecipeSerializerSource implements Source
 	{
-		private final IRecipeSerializer<?> serializer;
+		private final RecipeSerializer<?> serializer;
 		
-		private RecipeSerializerSource(IRecipeSerializer<?> serializer)
+		private RecipeSerializerSource(RecipeSerializer<?> serializer)
 		{
 			this.serializer = Objects.requireNonNull(serializer);
 		}
 		
 		@Override
-		public List<IRecipe<?>> findRecipes(RecipeManager recipeManager)
+		public List<Recipe<?>> findRecipes(RecipeManager recipeManager)
 		{
 			return recipeManager.getRecipes().stream().filter(iRecipe -> iRecipe.getSerializer() == serializer).collect(Collectors.toList());
 		}
@@ -344,15 +344,15 @@ public class RecipeGeneratedCostHandler extends ReloadListener<List<RecipeGenera
 	
 	private static class RecipeTypeSource implements Source
 	{
-		private final IRecipeType<?> recipeType;
+		private final RecipeType<?> recipeType;
 		
-		private RecipeTypeSource(IRecipeType<?> recipeType)
+		private RecipeTypeSource(RecipeType<?> recipeType)
 		{
 			this.recipeType = Objects.requireNonNull(recipeType);
 		}
 		
 		@Override
-		public List<IRecipe<?>> findRecipes(RecipeManager recipeManager)
+		public List<Recipe<?>> findRecipes(RecipeManager recipeManager)
 		{
 			return recipeManager.getRecipes().stream().filter(iRecipe -> iRecipe.getType() == recipeType).collect(Collectors.toList());
 		}

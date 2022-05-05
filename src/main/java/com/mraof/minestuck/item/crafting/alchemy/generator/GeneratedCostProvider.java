@@ -1,6 +1,6 @@
 package com.mraof.minestuck.item.crafting.alchemy.generator;
 
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 
 public interface GeneratedCostProvider
 {

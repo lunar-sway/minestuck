@@ -2,10 +2,10 @@ package com.mraof.minestuck.item.crafting.alchemy.generator;
 
 import com.google.gson.JsonElement;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.AbstractCookingRecipe;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.util.JSONUtils;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.AbstractCookingRecipe;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraftforge.registries.ObjectHolder;
 
 public class CookingCostInterpreter extends DefaultInterpreter
@@ -23,7 +23,7 @@ public class CookingCostInterpreter extends DefaultInterpreter
 	}
 	
 	@Override
-	public GristSet generateCost(IRecipe<?> recipe, Item output, GenerationContext context)
+	public GristSet generateCost(Recipe<?> recipe, Item output, GenerationContext context)
 	{
 		GristSet cost = super.generateCost(recipe, output, context);
 		
@@ -47,7 +47,7 @@ public class CookingCostInterpreter extends DefaultInterpreter
 		@Override
 		public CookingCostInterpreter read(JsonElement json)
 		{
-			GristSet cost = GristSet.deserialize(JSONUtils.convertToJsonObject(json, "grist cost"));
+			GristSet cost = GristSet.deserialize(GsonHelper.convertToJsonObject(json, "grist cost"));
 			return new CookingCostInterpreter(cost);
 		}
 		

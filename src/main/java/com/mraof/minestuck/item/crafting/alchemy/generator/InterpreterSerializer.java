@@ -2,14 +2,11 @@ package com.mraof.minestuck.item.crafting.alchemy.generator;
 
 import com.google.gson.JsonElement;
 import com.mraof.minestuck.Minestuck;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistryEntry;
-import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.ObjectHolder;
-import net.minecraftforge.registries.RegistryBuilder;
+import net.minecraftforge.registries.*;
 
 @ObjectHolder(Minestuck.MOD_ID)
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -19,14 +16,14 @@ public abstract class InterpreterSerializer<T extends RecipeInterpreter> extends
 	
 	@SubscribeEvent
 	@SuppressWarnings("unchecked")
-	public static void onRegistryNewRegistry(final RegistryEvent.NewRegistry event)
+	public static void onRegistryNewRegistry(final NewRegistryEvent event)
 	{
-		REGISTRY = new RegistryBuilder<InterpreterSerializer<?>>()
-				.setName(new ResourceLocation(Minestuck.MOD_ID, "recipe_interpreter"))
-				.setType((Class<InterpreterSerializer<?>>) (Class<?>) InterpreterSerializer.class)
-				.disableSaving()
-				.disableSync()
-				.create();
+		event.create(new RegistryBuilder<InterpreterSerializer<?>>()
+						.setName(new ResourceLocation(Minestuck.MOD_ID, "recipe_interpreter"))
+						.setType((Class<InterpreterSerializer<?>>) (Class<?>) InterpreterSerializer.class)
+						.disableSaving()
+						.disableSync(),
+				registry -> REGISTRY = registry);
 	}
 	
 	@SubscribeEvent

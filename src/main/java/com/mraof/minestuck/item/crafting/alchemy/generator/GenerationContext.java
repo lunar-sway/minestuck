@@ -1,9 +1,9 @@
 package com.mraof.minestuck.item.crafting.alchemy.generator;
 
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 
 import java.util.HashMap;
 import java.util.Map;

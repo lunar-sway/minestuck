@@ -3,8 +3,8 @@ package com.mraof.minestuck.item.crafting.alchemy.generator;
 import com.google.common.collect.ImmutableMap;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Recipe;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,10 +15,10 @@ class RecipeGeneratedCostProcess
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private final Map<Item, List<Pair<IRecipe<?>, RecipeInterpreter>>> lookupMap;
+	private final Map<Item, List<Pair<Recipe<?>, RecipeInterpreter>>> lookupMap;
 	private final Map<Item, GristSet> generatedCosts = new HashMap<>();
 	
-	RecipeGeneratedCostProcess(Map<Item, List<Pair<IRecipe<?>, RecipeInterpreter>>> lookupMap)
+	RecipeGeneratedCostProcess(Map<Item, List<Pair<Recipe<?>, RecipeInterpreter>>> lookupMap)
 	{
 		this.lookupMap = lookupMap;
 	}
@@ -59,12 +59,12 @@ class RecipeGeneratedCostProcess
 	
 	private GristSet costFromRecipes(Item item, boolean isCostNull, GenerationContext context)
 	{
-		List<Pair<IRecipe<?>, RecipeInterpreter>> recipes = lookupMap.getOrDefault(item, Collections.emptyList());
+		List<Pair<Recipe<?>, RecipeInterpreter>> recipes = lookupMap.getOrDefault(item, Collections.emptyList());
 		
 		if(!recipes.isEmpty())
 		{
 			GristSet minCost = null;
-			for(Pair<IRecipe<?>, RecipeInterpreter> recipePair : recipes)
+			for(Pair<Recipe<?>, RecipeInterpreter> recipePair : recipes)
 			{
 				GristSet cost = costForRecipe(recipePair.getLeft(), recipePair.getRight(), item, context);
 				if(cost != null && (minCost == null || cost.getValue() < minCost.getValue()))
@@ -79,7 +79,7 @@ class RecipeGeneratedCostProcess
 		}
 	}
 	
-	private GristSet costForRecipe(IRecipe<?> recipe, RecipeInterpreter interpreter, Item item, GenerationContext context)
+	private GristSet costForRecipe(Recipe<?> recipe, RecipeInterpreter interpreter, Item item, GenerationContext context)
 	{
 		try
 		{

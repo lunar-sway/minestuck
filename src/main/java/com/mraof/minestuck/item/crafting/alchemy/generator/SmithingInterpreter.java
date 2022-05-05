@@ -3,11 +3,11 @@ package com.mraof.minestuck.item.crafting.alchemy.generator;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.SmithingRecipe;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.UpgradeRecipe;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.ObjectHolder;
 
 import java.lang.reflect.Field;
@@ -16,16 +16,16 @@ public class SmithingInterpreter extends DefaultInterpreter
 {
 	public static final SmithingInterpreter INSTANCE = new SmithingInterpreter();
 
-	private static final Field baseField = ObfuscationReflectionHelper.findField(SmithingRecipe.class, "field_234837_a_");
-	private static final Field additionField = ObfuscationReflectionHelper.findField(SmithingRecipe.class, "field_234838_b_");
+	private static final Field baseField = ObfuscationReflectionHelper.findField(UpgradeRecipe.class, "f_44518_");
+	private static final Field additionField = ObfuscationReflectionHelper.findField(UpgradeRecipe.class, "f_44519_");
 
 	@ObjectHolder("minestuck:smithing")
 	public static final InterpreterSerializer<SmithingInterpreter> SERIALIZER = null;
 
 	@Override
-	public GristSet generateCost(IRecipe<?> recipe, Item output, GenerationContext context)
+	public GristSet generateCost(Recipe<?> recipe, Item output, GenerationContext context)
 	{
-		// SmithingRecipes don't list their ingredients as ingredients so use this as workaround
+		// UpgradeRecipes don't list their ingredients as ingredients so use this as workaround
 		try
 		{
 			GristSet totalCost = new GristSet();

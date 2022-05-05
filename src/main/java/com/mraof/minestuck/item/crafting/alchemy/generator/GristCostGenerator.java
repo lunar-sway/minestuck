@@ -3,11 +3,11 @@ package com.mraof.minestuck.item.crafting.alchemy.generator;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.crafting.alchemy.GristCostRecipe;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import net.minecraft.client.resources.ReloadListener;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.RecipeManager;
-import net.minecraft.profiler.IProfiler;
-import net.minecraft.resources.IResourceManager;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
+import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public final class GristCostGenerator extends ReloadListener<Void>
+public final class GristCostGenerator extends SimplePreparableReloadListener<Void>
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
@@ -34,17 +34,17 @@ public final class GristCostGenerator extends ReloadListener<Void>
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public static void addListener(AddReloadListenerEvent event)
 	{
-		event.addListener(new GristCostGenerator(event.getDataPackRegistries().getRecipeManager()));
+		event.addListener(new GristCostGenerator(event.getServerResources().getRecipeManager()));
 	}
 	
 	@Override
-	protected Void prepare(IResourceManager resourceManagerIn, IProfiler profilerIn)
+	protected Void prepare(ResourceManager resourceManagerIn, ProfilerFiller profilerIn)
 	{
 		return null;
 	}
 	
 	@Override
-	protected void apply(Void splashList, IResourceManager resourceManagerIn, IProfiler profilerIn)
+	protected void apply(Void splashList, ResourceManager resourceManagerIn, ProfilerFiller profilerIn)
 	{
 		GeneratorProcess process = new GeneratorProcess();
 		

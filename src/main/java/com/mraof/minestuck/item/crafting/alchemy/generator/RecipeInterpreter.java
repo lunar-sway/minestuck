@@ -1,16 +1,16 @@
 package com.mraof.minestuck.item.crafting.alchemy.generator;
 
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Recipe;
 
 import java.util.List;
 
 public interface RecipeInterpreter
 {
-	List<Item> getOutputItems(IRecipe<?> recipe);
+	List<Item> getOutputItems(Recipe<?> recipe);
 	
-	GristSet generateCost(IRecipe<?> recipe, Item output, GenerationContext context);
+	GristSet generateCost(Recipe<?> recipe, Item output, GenerationContext context);
 	
 	InterpreterSerializer<?> getSerializer();
 }

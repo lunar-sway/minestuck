@@ -3,10 +3,10 @@ package com.mraof.minestuck.item.crafting.alchemy.generator;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraftforge.registries.ObjectHolder;
 
 import java.util.Collections;
@@ -22,14 +22,14 @@ public class DefaultInterpreter implements RecipeInterpreter
 	//TODO interpreter (perhaps setting) that makes the interpreter not remove container cost for ingredient
 	
 	@Override
-	public List<Item> getOutputItems(IRecipe<?> recipe)
+	public List<Item> getOutputItems(Recipe<?> recipe)
 	{
 		ItemStack stack = recipe.getResultItem();
 		return stack.isEmpty() ? Collections.emptyList() : Collections.singletonList(stack.getItem());
 	}
 	
 	@Override
-	public GristSet generateCost(IRecipe<?> recipe, Item output, GenerationContext context)
+	public GristSet generateCost(Recipe<?> recipe, Item output, GenerationContext context)
 	{
 		if(recipe.isSpecial())
 			return null;
