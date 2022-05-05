@@ -1,6 +1,6 @@
 package com.mraof.minestuck.item.crafting.alchemy;
 
-import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.ListTag;
 
 public class NonNegativeGristSet extends GristSet
 {
@@ -41,7 +41,7 @@ public class NonNegativeGristSet extends GristSet
 		return super.scale(scale, roundDown);
 	}
 	
-	public static NonNegativeGristSet read(ListNBT list)
+	public static NonNegativeGristSet read(ListTag list)
 	{
 		NonNegativeGristSet set = new NonNegativeGristSet();
 		for(int i = 0; i < list.size(); i++)

@@ -4,13 +4,13 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.MSNBTUtil;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.Util;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -45,14 +45,14 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 		spawnCategories = ImmutableSet.copyOf(properties.categories);
 	}
 	
-	public ITextComponent getNameWithSuffix()
+	public Component getNameWithSuffix()
 	{
-		return new TranslationTextComponent(FORMAT, getDisplayName());
+		return new TranslatableComponent(FORMAT, getDisplayName());
 	}
 	
-	public ITextComponent getDisplayName()
+	public Component getDisplayName()
 	{
-		return new TranslationTextComponent(getTranslationKey());
+		return new TranslatableComponent(getTranslationKey());
 	}
 	
 	/**
@@ -161,7 +161,7 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 					.compareTo(Objects.requireNonNull(gristType.getRegistryName()).getPath());
 	}
 	
-	public final void write(CompoundNBT nbt, String key)
+	public final void write(CompoundTag nbt, String key)
 	{
 		ResourceLocation name = this.getRegistryName();
 		if(name == null)
@@ -169,12 +169,12 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 		else MSNBTUtil.writeResourceLocation(nbt, key, name);
 	}
 	
-	public static GristType read(CompoundNBT nbt, String key)
+	public static GristType read(CompoundTag nbt, String key)
 	{
 		return read(nbt, key, GristTypes.BUILD);
 	}
 	
-	public static GristType read(CompoundNBT nbt, String key, Supplier<GristType> fallback)
+	public static GristType read(CompoundTag nbt, String key, Supplier<GristType> fallback)
 	{
 		ResourceLocation name = MSNBTUtil.tryReadResourceLocation(nbt, key);
 		if(name != null)

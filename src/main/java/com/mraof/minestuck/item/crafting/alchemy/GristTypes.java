@@ -2,11 +2,11 @@ package com.mraof.minestuck.item.crafting.alchemy;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.MSItems;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryBuilder;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Collection;
 import java.util.function.Supplier;
@@ -15,9 +15,9 @@ import static com.mraof.minestuck.item.crafting.alchemy.GristType.SpawnCategory.
 
 public class GristTypes
 {
-	public static final DeferredRegister<GristType> GRIST_TYPES = DeferredRegister.create(GristType.class, Minestuck.MOD_ID);
+	public static final DeferredRegister<GristType> GRIST_TYPES = DeferredRegister.create(new ResourceLocation(Minestuck.MOD_ID, "grist"), Minestuck.MOD_ID);
 	
-	private static final Supplier<IForgeRegistry<GristType>> REGISTRY = GRIST_TYPES.makeRegistry("grist", () -> new RegistryBuilder<GristType>().set(DummyFactory.INSTANCE));
+	private static final Supplier<IForgeRegistry<GristType>> REGISTRY = GRIST_TYPES.makeRegistry(GristType.class, () -> new RegistryBuilder<GristType>().set(DummyFactory.INSTANCE));
 	
 	public static final RegistryObject<GristType> BUILD = GRIST_TYPES.register("build", () -> new GristType(new GristType.Properties(1.0F, 1).candy(() -> MSItems.BUILD_GUSHERS).notUnderlingType()));
 	public static final RegistryObject<GristType> AMBER = GRIST_TYPES.register("amber", () -> new GristType(new GristType.Properties(0.5F, 1.5F).spawnsFor(COMMON, ANY).candy(() -> MSItems.AMBER_GUMMY_WORM).secondary(GristTypes.RUST).secondary(GristTypes.SULFUR)));

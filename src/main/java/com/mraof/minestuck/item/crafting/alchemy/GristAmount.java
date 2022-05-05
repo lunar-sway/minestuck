@@ -1,9 +1,9 @@
 package com.mraof.minestuck.item.crafting.alchemy;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -69,22 +69,22 @@ public class GristAmount
 		return Objects.hash(type, amount);
 	}
 	
-	public void write(PacketBuffer buffer)
+	public void write(FriendlyByteBuf buffer)
 	{
 		buffer.writeRegistryId(getType());
 		buffer.writeLong(getAmount());
 	}
 	
-	public static GristAmount read(PacketBuffer buffer)
+	public static GristAmount read(FriendlyByteBuf buffer)
 	{
 		GristType type = buffer.readRegistryIdSafe(GristType.class);
 		long amount = buffer.readLong();
 		return new GristAmount(type, amount);
 	}
 	
-	public ITextComponent asTextComponent()
+	public Component asTextComponent()
 	{
-		return new TranslationTextComponent(GRIST_AMOUNT, getAmount(), getType().getDisplayName());
+		return new TranslatableComponent(GRIST_AMOUNT, getAmount(), getType().getDisplayName());
 	}
 	
 	private static String makeNBTPrefix(String prefix)
@@ -92,7 +92,7 @@ public class GristAmount
 		return prefix != null && !prefix.isEmpty() ? prefix + "_" : "";
 	}
 	
-	public CompoundNBT write(CompoundNBT nbt, String keyPrefix)
+	public CompoundTag write(CompoundTag nbt, String keyPrefix)
 	{
 		keyPrefix = makeNBTPrefix(keyPrefix);
 		getType().write(nbt, keyPrefix + "type");
@@ -100,7 +100,7 @@ public class GristAmount
 		return nbt;
 	}
 	
-	public static GristAmount read(CompoundNBT nbt, String keyPrefix)
+	public static GristAmount read(CompoundTag nbt, String keyPrefix)
 	{
 		keyPrefix = makeNBTPrefix(keyPrefix);
 		GristType type = GristType.read(nbt, keyPrefix + "type");

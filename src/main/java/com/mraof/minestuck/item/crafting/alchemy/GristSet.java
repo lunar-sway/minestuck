@@ -5,15 +5,15 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.util.Debug;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.level.Level;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -256,23 +256,23 @@ public class GristSet
 		return build.toString();
 	}
 	
-	public ITextComponent asTextComponent()
+	public Component asTextComponent()
 	{
-		ITextComponent component = null;
+		Component component = null;
 		for(GristAmount grist : getAmounts())
 		{
 			if(component == null)
 				component = grist.asTextComponent();
-			else component = new TranslationTextComponent(GRIST_COMMA, component, grist.asTextComponent());
+			else component = new TranslatableComponent(GRIST_COMMA, component, grist.asTextComponent());
 		}
 		if(component != null)
 			return component;
-		else return new StringTextComponent("");
+		else return new TextComponent("");
 	}
 	
-	public ITextComponent createMissingMessage()
+	public Component createMissingMessage()
 	{
-		return new TranslationTextComponent(MISSING_MESSAGE, asTextComponent());
+		return new TranslatableComponent(MISSING_MESSAGE, asTextComponent());
 	}
 	
 	
@@ -281,18 +281,18 @@ public class GristSet
 		return new GristSet(new TreeMap<>(gristTypes));
 	}
 	
-	public void spawnGristEntities(World world, double x, double y, double z, Random rand, Consumer<GristEntity> postProcessor)
+	public void spawnGristEntities(Level level, double x, double y, double z, Random rand, Consumer<GristEntity> postProcessor)
 	{
 		for(GristAmount amount : getAmounts())
 		{
 			long countLeft = amount.getAmount();
 			for(int i = 0; i < 10 && countLeft > 0; i++)
 			{
-				long spawnedCount = countLeft <= amount.getAmount()/10 || i == 9 ? countLeft : Math.min(countLeft, (long) world.random.nextDouble()*countLeft + 1);
+				long spawnedCount = countLeft <= amount.getAmount()/10 || i == 9 ? countLeft : Math.min(countLeft, (long) (level.random.nextDouble()*countLeft) + 1);
 				GristAmount spawnedAmount = new GristAmount(amount.getType(), spawnedCount);
-				GristEntity entity = new GristEntity(world, x, y, z, spawnedAmount);
+				GristEntity entity = new GristEntity(level, x, y, z, spawnedAmount);
 				postProcessor.accept(entity);
-				world.addFreshEntity(entity);
+				level.addFreshEntity(entity);
 				countLeft -= spawnedCount;
 			}
 		}
@@ -323,21 +323,21 @@ public class GristSet
 			GristType type = GristTypes.getRegistry().getValue(gristId);
 			if(type == null)
 				throw new JsonParseException("'"+entry.getKey()+"' did not match an existing grist type!");
-			long amount = JSONUtils.convertToLong(entry.getValue(), entry.getKey());	//getLong
+			long amount = GsonHelper.convertToLong(entry.getValue(), entry.getKey());	//getLong
 			set.addGrist(type, amount);
 		}
 		
 		return set;
 	}
 	
-	public void write(PacketBuffer buffer)
+	public void write(FriendlyByteBuf buffer)
 	{
 		List<GristAmount> amounts = getAmounts();
 		buffer.writeInt(amounts.size());
 		amounts.forEach(gristAmount -> gristAmount.write(buffer));
 	}
 	
-	public static GristSet read(PacketBuffer buffer)
+	public static GristSet read(FriendlyByteBuf buffer)
 	{
 		int size = buffer.readInt();
 		GristAmount[] amounts = new GristAmount[size];
@@ -347,13 +347,13 @@ public class GristSet
 		return new GristSet(amounts);
 	}
 	
-	public ListNBT write(ListNBT list)
+	public ListTag write(ListTag list)
 	{
-		getAmounts().forEach(gristAmount -> list.add(gristAmount.write(new CompoundNBT(), null)));
+		getAmounts().forEach(gristAmount -> list.add(gristAmount.write(new CompoundTag(), null)));
 		return list;
 	}
 	
-	public static GristSet read(ListNBT list)
+	public static GristSet read(ListTag list)
 	{
 		GristSet set = new GristSet();
 		for(int i = 0; i < list.size(); i++)
