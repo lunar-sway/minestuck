@@ -1,6 +1,6 @@
 buildscript {
     repositories {
-        maven { url = 'https://files.minecraftforge.net/maven' }
+        maven { url = 'https://maven.minecraftforge.net/' }
         maven { url = 'https://maven.parchmentmc.org' }
         mavenCentral()
     }
@@ -34,19 +34,32 @@ repositories {
             includeGroup "curse.maven"
         }
     }
+    maven {
+        url = uri("https://maven.pkg.github.com/refinedmods/refinedstorage")
+        /* As of december 2021, GitHub packages requires authentication.
+           The password below is a personal access token that has read access to the Refined Mods repos.
+           It can be reused in other projects.
+           See: https://github.community/t/download-from-github-package-registry-without-authentication/14407/38 and
+                https://github.community/t/download-from-github-package-registry-without-authentication/14407/44
+         */
+        credentials {
+            username = "anything"
+            password = "\u0067hp_oGjcDFCn8jeTzIj4Ke9pLoEVtpnZMP4VQgaX"
+        }
+    }
 }
 
 version = project.getProperty('mc_ms_version')
 group = 'com.mraof.minestuck'
 archivesBaseName = 'Minestuck'
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = "UTF-8"
 
 minecraft {
-    mappings channel: "parchment", version: "2022.03.06-1.16.5"
+    mappings channel: 'parchment', version: '2022.05.02-1.18.2'
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -119,8 +132,11 @@ dependencies {
 	// http://dvs1.progwml6.com/files/maven
     compileOnly fg.deobf("mezz.jei:jei-${project.getProperty('mc_jei_version')}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-${project.getProperty('mc_jei_version')}")
-    compileOnly fg.deobf("curse.maven:refinedstorage-${project.getProperty('mc_refined_storage_curseid')}:${project.getProperty('mc_refined_storage_version')}")
-    implementation fg.deobf("software.bernie.geckolib:geckolib-forge-${project.getProperty('mc_gecko_version')}")
+    compileOnly fg.deobf("com.refinedmods:refinedstorage:${project.getProperty('mc_refined_storage_version')}") {
+        transitive false
+    }
+
+    implementation fg.deobf("software.bernie.geckolib:geckolib-${project.getProperty('mc_gecko_version')}")
 }
 
 sourceSets.main.resources {
