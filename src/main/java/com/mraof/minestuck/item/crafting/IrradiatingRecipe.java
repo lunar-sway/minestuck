@@ -1,13 +1,13 @@
 package com.mraof.minestuck.item.crafting;
 
 import com.mraof.minestuck.block.MSBlocks;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.AbstractCookingRecipe;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.AbstractCookingRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.Level;
 
 import java.util.Optional;
 
@@ -37,12 +37,12 @@ public class IrradiatingRecipe extends AbstractCookingRecipe
 	}
 	
 	@Override
-	public IRecipeSerializer<?> getSerializer()
+	public RecipeSerializer<?> getSerializer()
 	{
 		return MSRecipeTypes.IRRADIATING;
 	}
 	
-	public Optional<? extends AbstractCookingRecipe> getCookingRecipe(IInventory inventory, World world)
+	public Optional<? extends AbstractCookingRecipe> getCookingRecipe(Container container, Level level)
 	{
 		return Optional.of(this);
 	}

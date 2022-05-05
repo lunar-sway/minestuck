@@ -5,13 +5,13 @@ import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.jei.JeiGristCost;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -36,15 +36,15 @@ public abstract class GeneratedGristCost extends GristCostRecipe implements Gene
 	}
 	
 	@Override
-	public GristSet getGristCost(ItemStack input, GristType wildcardType, boolean shouldRoundDown, World world)
+	public GristSet getGristCost(ItemStack input, GristType wildcardType, boolean shouldRoundDown, Level level)
 	{
 		return scaleToCountAndDurability(cachedCost, input, shouldRoundDown);
 	}
 	
 	@Override
-	public boolean matches(IInventory inv, World worldIn)
+	public boolean matches(Container inv, Level level)
 	{
-		return cachedCost != null && super.matches(inv, worldIn);
+		return cachedCost != null && super.matches(inv, level);
 	}
 	
 	@Override
@@ -55,7 +55,7 @@ public abstract class GeneratedGristCost extends GristCostRecipe implements Gene
 	}
 	
 	@Override
-	public List<JeiGristCost> getJeiCosts(World world)
+	public List<JeiGristCost> getJeiCosts(Level level)
 	{
 		if(cachedCost != null)
 			return Collections.singletonList(new JeiGristCost.Set(ingredient, cachedCost));
@@ -92,7 +92,7 @@ public abstract class GeneratedGristCost extends GristCostRecipe implements Gene
 	public static abstract class GeneratedCostSerializer<T extends GeneratedGristCost> extends AbstractSerializer<T>
 	{
 		@Override
-		protected T read(ResourceLocation recipeId, PacketBuffer buffer, Ingredient ingredient, int priority)
+		protected T read(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority)
 		{
 			boolean hasCost = buffer.readBoolean();
 			GristSet cost = hasCost ? GristSet.read(buffer) : null;
@@ -101,7 +101,7 @@ public abstract class GeneratedGristCost extends GristCostRecipe implements Gene
 		}
 		
 		@Override
-		public void toNetwork(PacketBuffer buffer, T recipe)
+		public void toNetwork(FriendlyByteBuf buffer, T recipe)
 		{
 			super.toNetwork(buffer, recipe);
 			if(recipe.getCachedCost() != null)
@@ -111,6 +111,6 @@ public abstract class GeneratedGristCost extends GristCostRecipe implements Gene
 			} else buffer.writeBoolean(false);
 		}
 		
-		protected abstract T create(ResourceLocation recipeId, PacketBuffer buffer, Ingredient ingredient, int priority, GristSet cost);
+		protected abstract T create(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority, GristSet cost);
 	}
 }

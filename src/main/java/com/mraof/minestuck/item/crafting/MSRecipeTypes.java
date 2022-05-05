@@ -6,9 +6,9 @@ import com.mraof.minestuck.item.crafting.alchemy.generator.ContainerGristCost;
 import com.mraof.minestuck.item.crafting.alchemy.generator.RecipeGeneratedGristCost;
 import com.mraof.minestuck.item.crafting.alchemy.generator.SourceGristCost;
 import com.mraof.minestuck.world.storage.loot.MSLootTables;
-import net.minecraft.item.crafting.CookingRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.SimpleCookingSerializer;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -21,20 +21,20 @@ import javax.annotation.Nonnull;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public class MSRecipeTypes
 {
-	public static IRecipeType<IrradiatingRecipe> IRRADIATING_TYPE;
-	public static IRecipeType<GristCostRecipe> GRIST_COST_TYPE;
-	public static IRecipeType<AbstractCombinationRecipe> COMBINATION_TYPE;
+	public static RecipeType<IrradiatingRecipe> IRRADIATING_TYPE;
+	public static RecipeType<GristCostRecipe> GRIST_COST_TYPE;
+	public static RecipeType<AbstractCombinationRecipe> COMBINATION_TYPE;
 	
-	public static final IRecipeSerializer<NonMirroredRecipe> NON_MIRRORED = getNull();
-	public static final CookingRecipeSerializer<IrradiatingRecipe> IRRADIATING = getNull();
-	public static final IRecipeSerializer<IrradiatingFallbackRecipe> IRRADIATING_FALLBACK = getNull();
-	public static final IRecipeSerializer<GristCost> GRIST_COST = getNull();
-	public static final IRecipeSerializer<GristCost> CONTAINER_GRIST_COST = getNull();
-	public static final IRecipeSerializer<GristCostRecipe> WILDCARD_GRIST_COST = getNull();
-	public static final IRecipeSerializer<UnavailableGristCost> UNAVAILABLE_GRIST_COST = getNull();
-	public static final IRecipeSerializer<RecipeGeneratedGristCost> RECIPE_GRIST_COST = getNull();
-	public static final IRecipeSerializer<SourceGristCost> SOURCE_GRIST_COST = getNull();
-	public static final IRecipeSerializer<CombinationRecipe> COMBINATION = getNull();
+	public static final RecipeSerializer<NonMirroredRecipe> NON_MIRRORED = getNull();
+	public static final SimpleCookingSerializer<IrradiatingRecipe> IRRADIATING = getNull();
+	public static final RecipeSerializer<IrradiatingFallbackRecipe> IRRADIATING_FALLBACK = getNull();
+	public static final RecipeSerializer<GristCost> GRIST_COST = getNull();
+	public static final RecipeSerializer<GristCost> CONTAINER_GRIST_COST = getNull();
+	public static final RecipeSerializer<GristCostRecipe> WILDCARD_GRIST_COST = getNull();
+	public static final RecipeSerializer<UnavailableGristCost> UNAVAILABLE_GRIST_COST = getNull();
+	public static final RecipeSerializer<RecipeGeneratedGristCost> RECIPE_GRIST_COST = getNull();
+	public static final RecipeSerializer<SourceGristCost> SOURCE_GRIST_COST = getNull();
+	public static final RecipeSerializer<CombinationRecipe> COMBINATION = getNull();
 	
 	@Nonnull
 	@SuppressWarnings("ConstantConditions")
@@ -44,15 +44,15 @@ public class MSRecipeTypes
 	}
 	
 	@SubscribeEvent
-	public static void registerSerializers(final RegistryEvent.Register<IRecipeSerializer<?>> event)
+	public static void registerSerializers(final RegistryEvent.Register<RecipeSerializer<?>> event)
 	{
-		IRRADIATING_TYPE = IRecipeType.register(Minestuck.MOD_ID+":irradiating");
-		GRIST_COST_TYPE = IRecipeType.register(Minestuck.MOD_ID+":grist_cost");
-		COMBINATION_TYPE = IRecipeType.register(Minestuck.MOD_ID+":combination");
+		IRRADIATING_TYPE = RecipeType.register(Minestuck.MOD_ID+":irradiating");
+		GRIST_COST_TYPE = RecipeType.register(Minestuck.MOD_ID+":grist_cost");
+		COMBINATION_TYPE = RecipeType.register(Minestuck.MOD_ID+":combination");
 		
-		IForgeRegistry<IRecipeSerializer<?>> registry = event.getRegistry();
+		IForgeRegistry<RecipeSerializer<?>> registry = event.getRegistry();
 		registry.register(new NonMirroredRecipe.Serializer().setRegistryName("non_mirrored"));
-		registry.register(new CookingRecipeSerializer<>(IrradiatingRecipe::new, 20).setRegistryName("irradiating"));
+		registry.register(new SimpleCookingSerializer<>(IrradiatingRecipe::new, 20).setRegistryName("irradiating"));
 		registry.register(new IrradiatingFallbackRecipe.Serializer().setRegistryName("irradiating_fallback"));
 		
 		registry.register(new GristCost.Serializer().setRegistryName("grist_cost"));

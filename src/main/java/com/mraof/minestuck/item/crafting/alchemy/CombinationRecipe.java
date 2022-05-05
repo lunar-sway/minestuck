@@ -3,14 +3,14 @@ package com.mraof.minestuck.item.crafting.alchemy;
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.jei.JeiCombination;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.ShapedRecipe;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
@@ -19,8 +19,8 @@ import java.util.List;
 
 public class CombinationRecipe extends AbstractCombinationRecipe
 {
-	public static ItemStack findResult(ItemCombiner combiner, World world) {
-		return world.getRecipeManager().getRecipeFor(MSRecipeTypes.COMBINATION_TYPE, combiner, world)
+	public static ItemStack findResult(ItemCombiner combiner, Level level) {
+		return level.getRecipeManager().getRecipeFor(MSRecipeTypes.COMBINATION_TYPE, combiner, level)
 				.map(recipe -> recipe.assemble(combiner)).orElse(ItemStack.EMPTY);
 	}
 	
@@ -38,7 +38,7 @@ public class CombinationRecipe extends AbstractCombinationRecipe
 	}
 	
 	@Override
-	public boolean matches(ItemCombiner inv, World worldIn)
+	public boolean matches(ItemCombiner inv, Level level)
 	{
 		ItemStack item1 = AlchemyHelper.getDecodedItem(inv.getItem(0)), item2 = AlchemyHelper.getDecodedItem(inv.getItem(1));
 		return inv.getMode() == this.mode && (input1.test(item1) && input2.test(item2) || input2.test(item1) && input1.test(item2));
@@ -69,27 +69,27 @@ public class CombinationRecipe extends AbstractCombinationRecipe
 	}
 	
 	@Override
-	public IRecipeSerializer<?> getSerializer()
+	public RecipeSerializer<?> getSerializer()
 	{
 		return MSRecipeTypes.COMBINATION;
 	}
 	
-	public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<CombinationRecipe>
+	public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<CombinationRecipe>
 	{
 		@Override
 		public CombinationRecipe fromJson(ResourceLocation recipeId, JsonObject json)
 		{
 			Ingredient input1 = Ingredient.fromJson(json.get("input1"));
 			Ingredient input2 = Ingredient.fromJson(json.get("input2"));
-			CombinationMode mode = CombinationMode.fromString(JSONUtils.getAsString(json, "mode"));
-			ItemStack output = ShapedRecipe.itemFromJson(JSONUtils.getAsJsonObject(json, "output"));
+			CombinationMode mode = CombinationMode.fromString(GsonHelper.getAsString(json, "mode"));
+			ItemStack output = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "output"));
 			
 			return new CombinationRecipe(recipeId, input1, input2, mode, output);
 		}
 		
 		@Nullable
 		@Override
-		public CombinationRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer)
+		public CombinationRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer)
 		{
 			Ingredient input1 = Ingredient.fromNetwork(buffer);
 			Ingredient input2 = Ingredient.fromNetwork(buffer);
@@ -100,7 +100,7 @@ public class CombinationRecipe extends AbstractCombinationRecipe
 		}
 		
 		@Override
-		public void toNetwork(PacketBuffer buffer, CombinationRecipe recipe)
+		public void toNetwork(FriendlyByteBuf buffer, CombinationRecipe recipe)
 		{
 			recipe.input1.toNetwork(buffer);
 			recipe.input2.toNetwork(buffer);

@@ -2,12 +2,12 @@ package com.mraof.minestuck.item.crafting.alchemy;
 
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.Level;
 
 public class UnavailableGristCost extends GristCostRecipe
 {
@@ -17,13 +17,13 @@ public class UnavailableGristCost extends GristCostRecipe
 	}
 	
 	@Override
-	public GristSet getGristCost(ItemStack input, GristType wildcardType, boolean shouldRoundDown, World world)
+	public GristSet getGristCost(ItemStack input, GristType wildcardType, boolean shouldRoundDown, Level level)
 	{
 		return null;
 	}
 	
 	@Override
-	public IRecipeSerializer<?> getSerializer()
+	public RecipeSerializer<?> getSerializer()
 	{
 		return MSRecipeTypes.UNAVAILABLE_GRIST_COST;
 	}
@@ -37,13 +37,13 @@ public class UnavailableGristCost extends GristCostRecipe
 		}
 		
 		@Override
-		protected UnavailableGristCost read(ResourceLocation recipeId, PacketBuffer buffer, Ingredient ingredient, int priority)
+		protected UnavailableGristCost read(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority)
 		{
 			return new UnavailableGristCost(recipeId, ingredient, priority);
 		}
 		
 		@Override
-		public void toNetwork(PacketBuffer buffer, UnavailableGristCost recipe)
+		public void toNetwork(FriendlyByteBuf buffer, UnavailableGristCost recipe)
 		{
 			super.toNetwork(buffer, recipe);
 			//Do nothing more

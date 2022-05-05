@@ -4,12 +4,12 @@ import com.google.gson.JsonObject;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.ImmutableGristSet;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -59,7 +59,7 @@ public class ContainerGristCost extends GeneratedGristCost
 	}
 	
 	@Override
-	public IRecipeSerializer<?> getSerializer()
+	public RecipeSerializer<?> getSerializer()
 	{
 		return MSRecipeTypes.CONTAINER_GRIST_COST;
 	}
@@ -69,12 +69,12 @@ public class ContainerGristCost extends GeneratedGristCost
 		@Override
 		protected ContainerGristCost read(ResourceLocation recipeId, JsonObject json, Ingredient ingredient, Integer priority)
 		{
-			GristSet cost = GristSet.deserialize(JSONUtils.getAsJsonObject(json, "grist_cost"));
+			GristSet cost = GristSet.deserialize(GsonHelper.getAsJsonObject(json, "grist_cost"));
 			return new ContainerGristCost(recipeId, ingredient, cost, priority);
 		}
 		
 		@Override
-		protected ContainerGristCost create(ResourceLocation recipeId, PacketBuffer buffer, Ingredient ingredient, int priority, GristSet cost)
+		protected ContainerGristCost create(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority, GristSet cost)
 		{
 			return new ContainerGristCost(recipeId, ingredient, priority, cost);
 		}

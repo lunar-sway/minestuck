@@ -1,7 +1,7 @@
 package com.mraof.minestuck.item.crafting.alchemy;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 public class CombinerWrapper implements ItemCombiner
 {
@@ -68,7 +68,7 @@ public class CombinerWrapper implements ItemCombiner
 	}
 	
 	@Override
-	public boolean stillValid(PlayerEntity player)
+	public boolean stillValid(Player player)
 	{
 		return true;
 	}

@@ -5,14 +5,14 @@ import com.google.gson.JsonObject;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.ImmutableGristSet;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tags.ITag;
-import net.minecraft.tags.TagCollectionManager;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.core.Registry;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
@@ -58,7 +58,7 @@ public class SourceGristCost extends GeneratedGristCost
 	}
 	
 	@Override
-	public IRecipeSerializer<?> getSerializer()
+	public RecipeSerializer<?> getSerializer()
 	{
 		return MSRecipeTypes.SOURCE_GRIST_COST;
 	}
@@ -68,18 +68,18 @@ public class SourceGristCost extends GeneratedGristCost
 		@Override
 		protected SourceGristCost read(ResourceLocation recipeId, JsonObject json, Ingredient ingredient, Integer priority)
 		{
-			GristSet cost = GristSet.deserialize(JSONUtils.getAsJsonObject(json, "grist_cost"));
-			float multiplier = json.has("multiplier") ? JSONUtils.getAsFloat(json, "multiplier") : 1;
+			GristSet cost = GristSet.deserialize(GsonHelper.getAsJsonObject(json, "grist_cost"));
+			float multiplier = json.has("multiplier") ? GsonHelper.getAsFloat(json, "multiplier") : 1;
 			
-			JsonArray jsonList = JSONUtils.getAsJsonArray(json, "sources");
+			JsonArray jsonList = GsonHelper.getAsJsonArray(json, "sources");
 			List<Source> sources = new ArrayList<>();
-			jsonList.forEach(element -> sources.add(parseSource(JSONUtils.convertToString(element, "source"))));
+			jsonList.forEach(element -> sources.add(parseSource(GsonHelper.convertToString(element, "source"))));
 			
 			return new SourceGristCost(recipeId, ingredient, sources, multiplier, cost, priority);
 		}
 		
 		@Override
-		protected SourceGristCost create(ResourceLocation recipeId, PacketBuffer buffer, Ingredient ingredient, int priority, GristSet cost)
+		protected SourceGristCost create(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority, GristSet cost)
 		{
 			return new SourceGristCost(recipeId, ingredient, priority, cost);
 		}
@@ -120,18 +120,18 @@ public class SourceGristCost extends GeneratedGristCost
 	
 	private static class TagSource implements Source
 	{
-		final ITag<Item> tag;
+		final TagKey<Item> tag;
 		
 		private TagSource(ResourceLocation name)
 		{
-			this.tag = TagCollectionManager.getInstance().getItems().getTag(name);
+			this.tag = TagKey.create(Registry.ITEM_REGISTRY, name);
 		}
 		
 		@Override
 		public GristSet getCostFor(GenerationContext context)
 		{
 			GristSet maxCost = null;
-			for(Item item : tag.getValues())
+			for(Item item : Objects.requireNonNull(ForgeRegistries.ITEMS.tags()).getTag(this.tag))
 			{
 				GristSet cost = context.lookupCostFor(item);
 				
@@ -142,8 +142,8 @@ public class SourceGristCost extends GeneratedGristCost
 		}
 	}
 	
-	public static String tagString(ITag<Item> tag)
+	public static String tagString(TagKey<Item> tag)
 	{
-		return "#" + TagCollectionManager.getInstance().getItems().getIdOrThrow(tag).toString();
+		return "#" + tag.location();
 	}
 }

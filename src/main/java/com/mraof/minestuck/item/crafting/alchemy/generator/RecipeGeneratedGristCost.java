@@ -6,15 +6,15 @@ import com.mraof.minestuck.item.crafting.alchemy.GristCostRecipe;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.jei.JeiGristCost;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import java.util.Collections;
@@ -37,13 +37,13 @@ public class RecipeGeneratedGristCost extends GristCostRecipe
 	}
 	
 	@Override
-	public GristSet getGristCost(ItemStack input, GristType wildcardType, boolean shouldRoundDown, World world)
+	public GristSet getGristCost(ItemStack input, GristType wildcardType, boolean shouldRoundDown, Level level)
 	{
 		return scaleToCountAndDurability(getCost(input.getItem()), input, shouldRoundDown);
 	}
 	
 	@Override
-	public boolean matches(IInventory inv, World worldIn)
+	public boolean matches(Container inv, Level level)
 	{
 		return getCost(inv.getItem(0).getItem()) != null;
 	}
@@ -69,7 +69,7 @@ public class RecipeGeneratedGristCost extends GristCostRecipe
 	}
 	
 	@Override
-	public List<JeiGristCost> getJeiCosts(World world)
+	public List<JeiGristCost> getJeiCosts(Level level)
 	{
 		if(handler != null)
 			return handler.createJeiCosts();
@@ -77,7 +77,7 @@ public class RecipeGeneratedGristCost extends GristCostRecipe
 	}
 	
 	@Override
-	public IRecipeSerializer<?> getSerializer()
+	public RecipeSerializer<?> getSerializer()
 	{
 		return MSRecipeTypes.RECIPE_GRIST_COST;
 	}
@@ -88,7 +88,7 @@ public class RecipeGeneratedGristCost extends GristCostRecipe
 		return true;
 	}
 	
-	public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<RecipeGeneratedGristCost>
+	public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<RecipeGeneratedGristCost>
 	{
 		@Override
 		public RecipeGeneratedGristCost fromJson(ResourceLocation recipeId, JsonObject json)
@@ -97,13 +97,13 @@ public class RecipeGeneratedGristCost extends GristCostRecipe
 		}
 		
 		@Override
-		public RecipeGeneratedGristCost fromNetwork(ResourceLocation recipeId, PacketBuffer buffer)
+		public RecipeGeneratedGristCost fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer)
 		{
 			return new RecipeGeneratedGristCost(recipeId, RecipeGeneratedCostHandler.read(buffer));
 		}
 		
 		@Override
-		public void toNetwork(PacketBuffer buffer, RecipeGeneratedGristCost recipe)
+		public void toNetwork(FriendlyByteBuf buffer, RecipeGeneratedGristCost recipe)
 		{
 			if(recipe.handler != null)
 				recipe.handler.write(buffer);

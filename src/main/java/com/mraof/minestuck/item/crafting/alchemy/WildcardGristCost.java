@@ -3,13 +3,13 @@ package com.mraof.minestuck.item.crafting.alchemy;
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.jei.JeiGristCost;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.Level;
 
 import java.util.Collections;
 import java.util.List;
@@ -25,7 +25,7 @@ public class WildcardGristCost extends GristCostRecipe
 	}
 	
 	@Override
-	public GristSet getGristCost(ItemStack input, GristType wildcardType, boolean shouldRoundDown, World world)
+	public GristSet getGristCost(ItemStack input, GristType wildcardType, boolean shouldRoundDown, Level level)
 	{
 		return wildcardType != null ? scaleToCountAndDurability(new GristSet(wildcardType, wildcardCost), input, shouldRoundDown) : null;
 	}
@@ -37,13 +37,13 @@ public class WildcardGristCost extends GristCostRecipe
 	}
 	
 	@Override
-	public List<JeiGristCost> getJeiCosts(World world)
+	public List<JeiGristCost> getJeiCosts(Level level)
 	{
 		return Collections.singletonList(new JeiGristCost.Wildcard(ingredient, wildcardCost));
 	}
 	
 	@Override
-	public IRecipeSerializer<?> getSerializer()
+	public RecipeSerializer<?> getSerializer()
 	{
 		return MSRecipeTypes.WILDCARD_GRIST_COST;
 	}
@@ -53,19 +53,19 @@ public class WildcardGristCost extends GristCostRecipe
 		@Override
 		protected WildcardGristCost read(ResourceLocation recipeId, JsonObject json, Ingredient ingredient, Integer priority)
 		{
-			long wildcardCost = JSONUtils.getAsLong(json, "grist_cost");
+			long wildcardCost = GsonHelper.getAsLong(json, "grist_cost");
 			return new WildcardGristCost(recipeId, ingredient, wildcardCost, priority);
 		}
 		
 		@Override
-		protected WildcardGristCost read(ResourceLocation recipeId, PacketBuffer buffer, Ingredient ingredient, int priority)
+		protected WildcardGristCost read(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority)
 		{
 			long wildcardCost = buffer.readLong();
 			return new WildcardGristCost(recipeId, ingredient, wildcardCost, priority);
 		}
 		
 		@Override
-		public void toNetwork(PacketBuffer buffer, WildcardGristCost recipe)
+		public void toNetwork(FriendlyByteBuf buffer, WildcardGristCost recipe)
 		{
 			super.toNetwork(buffer, recipe);
 			buffer.writeLong(recipe.wildcardCost);

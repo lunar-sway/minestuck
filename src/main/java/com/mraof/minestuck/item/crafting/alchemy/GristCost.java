@@ -3,12 +3,12 @@ package com.mraof.minestuck.item.crafting.alchemy;
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.jei.JeiGristCost;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.Level;
 
 import java.util.Collections;
 import java.util.List;
@@ -24,19 +24,19 @@ public class GristCost extends GristCostRecipe
 	}
 	
 	@Override
-	public GristSet getGristCost(ItemStack input, GristType wildcardType, boolean shouldRoundDown, World world)
+	public GristSet getGristCost(ItemStack input, GristType wildcardType, boolean shouldRoundDown, Level level)
 	{
 		return scaleToCountAndDurability(cost, input, shouldRoundDown);
 	}
 	
 	@Override
-	public List<JeiGristCost> getJeiCosts(World world)
+	public List<JeiGristCost> getJeiCosts(Level level)
 	{
 		return Collections.singletonList(new JeiGristCost.Set(ingredient, cost));
 	}
 	
 	@Override
-	public IRecipeSerializer<?> getSerializer()
+	public RecipeSerializer<?> getSerializer()
 	{
 		return MSRecipeTypes.GRIST_COST;
 	}
@@ -51,14 +51,14 @@ public class GristCost extends GristCostRecipe
 		}
 		
 		@Override
-		protected GristCost read(ResourceLocation recipeId, PacketBuffer buffer, Ingredient ingredient, int priority)
+		protected GristCost read(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority)
 		{
 			GristSet cost = GristSet.read(buffer);
 			return new GristCost(recipeId, ingredient, cost, priority);
 		}
 		
 		@Override
-		public void toNetwork(PacketBuffer buffer, GristCost recipe)
+		public void toNetwork(FriendlyByteBuf buffer, GristCost recipe)
 		{
 			super.toNetwork(buffer, recipe);
 			recipe.cost.write(buffer);
