@@ -25,29 +25,29 @@ public class CruxiteAppleItem extends CruxiteArtifactItem
 	}
 	
 	@Override
-	public UseAction getUseAction(ItemStack stack)
+	public UseAction getUseAnimation(ItemStack stack)
 	{
 		return UseAction.EAT;
 	}
 	
 	@Override
-	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityLiving)
+	public ItemStack finishUsingItem(ItemStack stack, World worldIn, LivingEntity entityLiving)
 	{
 		stack.shrink(1);
 		
 		if(entityLiving instanceof ServerPlayerEntity)
 		{
 			ServerPlayerEntity player = (ServerPlayerEntity) entityLiving;
-			worldIn.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
+			worldIn.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, worldIn.random.nextFloat() * 0.1F + 0.9F);
 			onArtifactActivated(player);
 		}
 		return stack;
 	}
 	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn)
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn)
 	{
-		playerIn.setActiveHand(handIn);
-		return ActionResult.resultSuccess(playerIn.getHeldItem(handIn));
+		playerIn.startUsingItem(handIn);
+		return ActionResult.success(playerIn.getItemInHand(handIn));
 	}
 }

@@ -7,10 +7,10 @@ import com.mraof.minestuck.tileentity.machine.MachineProcessTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
 import org.lwjgl.glfw.GLFW;
 
@@ -39,13 +39,13 @@ public abstract class MachineScreen<T extends MachineContainer> extends Containe
 	{
 		if(keyCode == GLFW.GLFW_KEY_ENTER && goButton != null)
 		{
-			this.minecraft.getSoundHandler().play(SimpleSound.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+			this.minecraft.getSoundManager().play(SimpleSound.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 
 			boolean mode = runType == MachineProcessTileEntity.RunType.BUTTON_OVERRIDE && hasShiftDown();
-			GoButtonPacket packet = new GoButtonPacket(true, mode && !container.overrideStop());
+			GoButtonPacket packet = new GoButtonPacket(true, mode && !menu.overrideStop());
 			MSPacketHandler.sendToServer(packet);
 			
-			goButton.setMessage(I18n.format(mode && !container.overrideStop() ? STOP : GO));
+			goButton.setMessage(new TranslationTextComponent(mode && !menu.overrideStop() ? STOP : GO));
 			return true;
 		}
 		return super.keyPressed(keyCode, scanCode, i);
@@ -53,7 +53,7 @@ public abstract class MachineScreen<T extends MachineContainer> extends Containe
 	
 	protected class GoButton extends ExtendedButton
 	{
-		public GoButton(int x, int y, int widthIn, int heightIn, String buttonText)
+		public GoButton(int x, int y, int widthIn, int heightIn, ITextComponent buttonText)
 		{
 			super(x, y, widthIn, heightIn, buttonText, null);
 		}
@@ -76,7 +76,7 @@ public abstract class MachineScreen<T extends MachineContainer> extends Containe
 				if (this.isValidClickButton(mouseKey)) {
 					boolean flag = this.clicked(mouseX, mouseY);
 					if (flag) {
-						this.playDownSound(Minecraft.getInstance().getSoundHandler());
+						this.playDownSound(Minecraft.getInstance().getSoundManager());
 						this.onClick(mouseKey);
 						return true;
 					}
@@ -92,21 +92,21 @@ public abstract class MachineScreen<T extends MachineContainer> extends Containe
 		{
 			if(mouseKey == GLFW.GLFW_MOUSE_BUTTON_1)
 			{
-				if(!container.overrideStop())
+				if(!menu.overrideStop())
 				{
 					//Tell the machine to go once
 					GoButtonPacket packet = new GoButtonPacket(true, false);
 					MSPacketHandler.sendToServer(packet);
 					
-					setMessage(I18n.format(GO));
+					setMessage(new TranslationTextComponent(GO));
 				}
 			} else if(mouseKey == GLFW.GLFW_MOUSE_BUTTON_2 && runType == MachineProcessTileEntity.RunType.BUTTON_OVERRIDE)
 			{
 				//Tell the machine to go until stopped
-				GoButtonPacket packet = new GoButtonPacket(true, !container.overrideStop());
+				GoButtonPacket packet = new GoButtonPacket(true, !menu.overrideStop());
 				MSPacketHandler.sendToServer(packet);
 				
-				setMessage(I18n.format(container.overrideStop() ? STOP : GO));
+				setMessage(new TranslationTextComponent(menu.overrideStop() ? STOP : GO));
 			}
 		}
 	}

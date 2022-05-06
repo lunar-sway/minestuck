@@ -64,11 +64,11 @@ public class MSKeyHandler
 	@SubscribeEvent
 	public static void guiKeyInput(GuiScreenEvent.KeyboardKeyPressedEvent.Post event)
 	{
-		InputMappings.Input input = InputMappings.getInputByCode(event.getKeyCode(), event.getScanCode());
+		InputMappings.Input input = InputMappings.getKey(event.getKeyCode(), event.getScanCode());
 		
-		if(captchaKey.isActiveAndMatches(input) && Minecraft.getInstance().currentScreen instanceof ContainerScreen<?>)
+		if(captchaKey.isActiveAndMatches(input) && Minecraft.getInstance().screen instanceof ContainerScreen<?>)
 		{
-			captchalogueInGui((ContainerScreen<?>) Minecraft.getInstance().currentScreen);
+			captchalogueInGui((ContainerScreen<?>) Minecraft.getInstance().screen);
 			event.setCanceled(true);
 		}
 	}
@@ -81,9 +81,9 @@ public class MSKeyHandler
 	@SubscribeEvent
 	public static void onKeyInput(InputEvent.KeyInputEvent event)    //This is only called during the game, when no gui is active
 	{
-		if(isNotRelease(event) && Minecraft.getInstance().currentScreen == null)
+		if(isNotRelease(event) && Minecraft.getInstance().screen == null)
 		{
-			InputMappings.Input input = InputMappings.getInputByCode(event.getKey(), event.getScanCode());
+			InputMappings.Input input = InputMappings.getKey(event.getKey(), event.getScanCode());
 			
 			if(statKey.isActiveAndMatches(input))
 				PlayerStatsScreen.openGui(false);
@@ -105,7 +105,7 @@ public class MSKeyHandler
 	
 	private static void captchalogueInGame()
 	{
-		if(!Minecraft.getInstance().player.getHeldItemMainhand().isEmpty())
+		if(!Minecraft.getInstance().player.getMainHandItem().isEmpty())
 			MSPacketHandler.sendToServer(CaptchaDeckPacket.captchalogue());
 	}
 	
@@ -114,8 +114,8 @@ public class MSKeyHandler
 		if(!(screen instanceof CreativeScreen))
 		{
 			Slot slot = screen.getSlotUnderMouse();
-			if(slot != null && slot.getHasStack())
-				MSPacketHandler.sendToServer(CaptchaDeckPacket.captchalogueInv(slot.slotNumber, screen.getContainer().windowId));
+			if(slot != null && slot.hasItem())
+				MSPacketHandler.sendToServer(CaptchaDeckPacket.captchalogueInv(slot.index, screen.getMenu().containerId));
 		}
 	}
 }

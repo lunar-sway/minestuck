@@ -77,7 +77,7 @@ public class MSToolType
 		for(EnchantmentType type : enchantmentTypes)
 		{
 			ForgeRegistries.ENCHANTMENTS.forEach(enchantment ->
-			{if(enchantment.type == type) addEnchantments(enchantment);});
+			{if(enchantment.category == type) addEnchantments(enchantment);});
 		}
 		
 		return this;

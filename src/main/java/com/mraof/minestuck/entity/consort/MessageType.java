@@ -16,6 +16,9 @@ import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.SimpleNamedContainerProvider;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootParameterSets;
+import net.minecraft.loot.LootParameters;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
@@ -23,9 +26,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootParameterSets;
-import net.minecraft.world.storage.loot.LootParameters;
 import net.minecraftforge.fml.network.NetworkHooks;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -53,7 +53,7 @@ public abstract class MessageType
 	
 	protected static ITextComponent createMessage(ConsortEntity consort, ServerPlayerEntity player, String unlocalizedMessage, String[] args)
 	{
-		String translationKey = consort.getType().getTranslationKey();
+		String translationKey = consort.getType().getDescriptionId();
 		
 		Object[] arguments = new Object[args.length];
 		SburbConnection connection = SburbHandler.getConnectionForDimension(player.getServer(), consort.homeDimension);
@@ -124,9 +124,9 @@ public abstract class MessageType
 			} else if(args[i].startsWith("nbt_item:"))
 			{
 				CompoundNBT nbt = consort.getMessageTagForPlayer(player);
-				ItemStack stack = ItemStack.read(nbt.getCompound(args[i].substring(9)));
+				ItemStack stack = ItemStack.of(nbt.getCompound(args[i].substring(9)));
 				if(!stack.isEmpty())
-					arguments[i] = new TranslationTextComponent(stack.getTranslationKey());
+					arguments[i] = new TranslationTextComponent(stack.getDescriptionId());
 				else arguments[i] = "Item";
 			}
 		}
@@ -163,7 +163,7 @@ public abstract class MessageType
 		{
 			ITextComponent message = createMessage(consort, player, unlocalizedMessage, args);
 			String resourcePath = consort.getConsortType().getDialogueSpriteResourcePath();
-			return Collections.singletonList(new DialogueCard(message.getFormattedText(), resourcePath, consort.getConsortType().getColor()));
+			return Collections.singletonList(new DialogueCard(message, resourcePath, consort.getConsortType().getColor()));
 		}
 	}
 	
@@ -186,8 +186,8 @@ public abstract class MessageType
 		public List<DialogueCard> getDialogueCards(ConsortEntity consort, ServerPlayerEntity player)
 		{
 			ITextComponent message = createMessage(consort, player, unlocalizedMessage, args);
-			message.getStyle().setItalic(true);
-			return Collections.singletonList(new DialogueCard(message.getFormattedText(), null, 0));
+			message.getStyle().withItalic(true);
+			return Collections.singletonList(new DialogueCard(message, null, 0));
 		}
 	}
 	
@@ -319,14 +319,14 @@ public abstract class MessageType
 		@Override
 		public void showMessage(ConsortEntity consort, ServerPlayerEntity player)
 		{
-			int i = consort.getRNG().nextInt(messages.length);
+			int i = consort.getRandom().nextInt(messages.length);
 			messages[i].showMessage(consort, player);
 		}
 		
 		@Override
 		public List<DialogueCard> getDialogueCards(ConsortEntity consort, ServerPlayerEntity player)
 		{
-			int i = consort.getRNG().nextInt(messages.length);
+			int i = consort.getRandom().nextInt(messages.length);
 			return messages[i].getDialogueCards(consort, player);
 		}
 	}
@@ -378,7 +378,7 @@ public abstract class MessageType
 		@Override
 		public void showMessage(ConsortEntity consort, ServerPlayerEntity player)
 		{
-			List<String> localizedOptions = Arrays.stream(options).map(option -> createMessage(consort, player, option.unlocalizedMessage, option.args).getFormattedText()).collect(Collectors.toList());
+			List<ITextComponent> localizedOptions = Arrays.stream(options).map(option -> createMessage(consort, player, option.unlocalizedMessage, option.args)).collect(Collectors.toList());
 			PlayerSavedData.getData(player).setDialogue(consort, this);
 			MSPacketHandler.sendToPlayer(new DialogueUpdatePacket(message.getDialogueCards(consort, player), localizedOptions), player);
 		}
@@ -433,17 +433,17 @@ public abstract class MessageType
 			
 			if(data.tryTakeBoondollars(cost))
 			{
-				LootContext.Builder contextBuilder = new LootContext.Builder((ServerWorld) consort.world).withRandom(consort.world.rand)
-						.withParameter(LootParameters.THIS_ENTITY, consort).withParameter(LootParameters.POSITION, consort.getPosition());
-				List<ItemStack> loot = consort.getServer().getLootTableManager().getLootTableFromLocation(lootTableId)
-						.generate(contextBuilder.build(LootParameterSets.GIFT));
+				LootContext.Builder contextBuilder = new LootContext.Builder((ServerWorld) consort.level).withRandom(consort.level.random)
+						.withParameter(LootParameters.THIS_ENTITY, consort).withParameter(LootParameters.ORIGIN, consort.position());
+				List<ItemStack> loot = consort.getServer().getLootTables().get(lootTableId)
+						.getRandomItems(contextBuilder.create(LootParameterSets.GIFT));
 				
 				if(loot.isEmpty())
 					LOGGER.warn("Tried to generate loot from {}, but no items were generated!", lootTableId);
 				
 				for(ItemStack itemstack : loot)
 				{
-					player.entityDropItem(itemstack, 0.0F);
+					player.spawnAtLocation(itemstack, 0.0F);
 					MSCriteriaTriggers.CONSORT_ITEM.trigger(player, lootTableId.toString(), itemstack, consort);
 				}
 				if(rep != 0)
@@ -531,12 +531,12 @@ public abstract class MessageType
 					index = nbt.getInt(this.getString());
 				else
 				{
-					index = consort.world.rand.nextInt(possibleItems.size());
+					index = consort.level.random.nextInt(possibleItems.size());
 					nbt.putInt(this.getString(), index);
 				}
 				
 				ItemStack stack = possibleItems.get(index);
-				nbt.put(this.getString() + ".item", stack.write(new CompoundNBT()));
+				nbt.put(this.getString() + ".item", stack.save(new CompoundNBT()));
 				
 				hasItem = lookFor(stack, player);
 			} else
@@ -544,11 +544,11 @@ public abstract class MessageType
 				List<ItemStack> list = new ArrayList<>(possibleItems);
 				while(!list.isEmpty())
 				{
-					ItemStack stack = list.remove(consort.world.rand.nextInt(list.size()));
+					ItemStack stack = list.remove(consort.level.random.nextInt(list.size()));
 					if(lookFor(stack, player))
 					{
 						nbt.putInt(this.getString(), possibleItems.indexOf(stack));
-						nbt.put(this.getString() + ".item", stack.write(new CompoundNBT()));
+						nbt.put(this.getString() + ".item", stack.save(new CompoundNBT()));
 						hasItem = true;
 						break;
 					}
@@ -572,13 +572,13 @@ public abstract class MessageType
 		
 		private boolean lookFor(ItemStack stack, ServerPlayerEntity player)
 		{
-			for(ItemStack held : player.getHeldEquipment())
-				if(ItemStack.areItemsEqual(held, stack))
+			for(ItemStack held : player.getHandSlots())
+				if(ItemStack.isSame(held, stack))
 					return true;
 			
 			if(!held)
-				for(ItemStack held : player.inventory.mainInventory)
-					if(ItemStack.areItemsEqual(held, stack))
+				for(ItemStack held : player.inventory.items)
+					if(ItemStack.isSame(held, stack))
 						return true;
 			
 			return false;
@@ -618,13 +618,13 @@ public abstract class MessageType
 				return;
 			}
 			
-			ItemStack stack = ItemStack.read(nbt.getCompound(itemData));
+			ItemStack stack = ItemStack.of(nbt.getCompound(itemData));
 			
 			boolean foundItem = false;
 			for(Hand hand : Hand.values())
 			{
-				ItemStack heldItem = player.getHeldItem(hand);
-				if(ItemStack.areItemsEqual(heldItem, stack))
+				ItemStack heldItem = player.getItemInHand(hand);
+				if(ItemStack.isSame(heldItem, stack))
 				{
 					foundItem = true;
 					heldItem.shrink(1);
@@ -634,9 +634,9 @@ public abstract class MessageType
 			
 			if(!foundItem)
 			{
-				for(ItemStack invItem : player.inventory.mainInventory)
+				for(ItemStack invItem : player.inventory.items)
 				{
-					if(ItemStack.areItemsEqual(invItem, stack))
+					if(ItemStack.isSame(invItem, stack))
 					{
 						foundItem = true;
 						invItem.shrink(1);
@@ -678,7 +678,7 @@ public abstract class MessageType
 			IOptionAction action = (player, consort) -> {
 				if(consort.stocks == null)
 				{
-					consort.stocks = new ConsortMerchantInventory(consort, ConsortRewardHandler.generateStock(lootTable, consort, consort.world.rand));
+					consort.stocks = new ConsortMerchantInventory(consort, ConsortRewardHandler.generateStock(lootTable, consort, consort.level.random));
 				}
 				
 				NetworkHooks.openGui(player, new SimpleNamedContainerProvider(consort, new StringTextComponent("Consort shop")), consort::writeShopContainerBuffer);

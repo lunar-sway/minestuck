@@ -19,14 +19,14 @@ public class ObsidianBucketItem extends Item
 	}
 	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn)
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn)
 	{
-		worldIn.playSound(null, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((worldIn.rand.nextFloat() - worldIn.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
-		if(!playerIn.inventory.addItemStackToInventory(new ItemStack(Blocks.OBSIDIAN)))
-			if(!worldIn.isRemote)
-				playerIn.dropItem(new ItemStack(Blocks.OBSIDIAN), false);
+		worldIn.playSound(null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((worldIn.random.nextFloat() - worldIn.random.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+		if(!playerIn.inventory.add(new ItemStack(Blocks.OBSIDIAN)))
+			if(!worldIn.isClientSide)
+				playerIn.drop(new ItemStack(Blocks.OBSIDIAN), false);
 		
-		return ActionResult.resultSuccess(new ItemStack(Items.BUCKET));
+		return ActionResult.success(new ItemStack(Items.BUCKET));
 	}
 	
 }

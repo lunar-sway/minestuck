@@ -22,47 +22,48 @@ public class EndLeavesBlock extends FlammableLeavesBlock
 	}
 	
 	@Override
-	public boolean ticksRandomly(BlockState state)
+	public boolean isRandomlyTicking(BlockState state)
 	{
-		return state.get(DISTANCE) > LEAF_SUSTAIN_DISTANCE && !state.get(PERSISTENT);
+		return state.getValue(DISTANCE) > LEAF_SUSTAIN_DISTANCE && !state.getValue(PERSISTENT);
 	}
 	
 	@Override
 	public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random)
 	{
-		if(!state.get(PERSISTENT) && state.get(DISTANCE) > LEAF_SUSTAIN_DISTANCE)
+		if(!state.getValue(PERSISTENT) && state.getValue(DISTANCE) > LEAF_SUSTAIN_DISTANCE)
 		{
-			spawnDrops(state, worldIn, pos);
+			dropResources(state, worldIn, pos);
 			worldIn.removeBlock(pos, false);
 		}
 	}
 	
 	@Override
-	public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos)
+	public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos)
 	{
 		int i = getDistance(facingState) + 1;
-		if(i != 1 || stateIn.get(DISTANCE) != i)
-			worldIn.getPendingBlockTicks().scheduleTick(currentPos, this, 1);
+		if(i != 1 || stateIn.getValue(DISTANCE) != i)
+			worldIn.getBlockTicks().scheduleTick(currentPos, this, 1);
 		
 		return stateIn;
 	}
 	
-	protected BlockState updateDistance(BlockState state, IWorld world, BlockPos pos) {
+	protected BlockState updateDistance(BlockState state, IWorld world, BlockPos pos)
+	{
 		int i = 7;
 		
-		try (BlockPos.PooledMutable mutablePos = BlockPos.PooledMutable.retain())
+		BlockPos.Mutable mutablePos = new BlockPos.Mutable();
+		
+		for(Direction facing : Direction.values())
 		{
-			for(Direction facing : Direction.values())
-			{
-				mutablePos.setPos(pos).move(facing);
-				int axisDecrease = facing.getAxis() == Direction.Axis.X ? 2 : 1;
-				i = Math.min(i, getDistance(world.getBlockState(mutablePos)) + axisDecrease);
-				if(i == 1)
-					break;
-			}
+			mutablePos.set(pos).move(facing);
+			int axisDecrease = facing.getAxis() == Direction.Axis.X ? 2 : 1;
+			i = Math.min(i, getDistance(world.getBlockState(mutablePos)) + axisDecrease);
+			if(i == 1)
+				break;
 		}
 		
-		return state.with(DISTANCE, i);
+		
+		return state.setValue(DISTANCE, i);
 	}
 	
 	protected int getDistance(BlockState neighbor)
@@ -72,14 +73,14 @@ public class EndLeavesBlock extends FlammableLeavesBlock
 			return 0;
 		} else
 		{
-			return neighbor.getBlock() == this ? neighbor.get(DISTANCE) : 7;
+			return neighbor.getBlock() == this ? neighbor.getValue(DISTANCE) : 7;
 		}
 	}
 	
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context)
 	{
-		return updateDistance(this.getDefaultState().with(PERSISTENT, true), context.getWorld(), context.getPos());
+		return updateDistance(this.defaultBlockState().setValue(PERSISTENT, true), context.getLevel(), context.getClickedPos());
 	}
 	
 	@Override

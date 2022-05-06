@@ -1,0 +1,10 @@
+{
+    "variants": {
+        "": [
+            { "model": "minestuck:block/decrepit_stone_bricks1" },
+            { "model": "minestuck:block/decrepit_stone_bricks2" },
+            { "model": "minestuck:block/decrepit_stone_bricks3" },
+            { "model": "minestuck:block/decrepit_stone_bricks4" }
+        ]
+    }
+}

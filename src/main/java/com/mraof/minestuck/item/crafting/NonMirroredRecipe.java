@@ -45,7 +45,7 @@ public class NonMirroredRecipe extends ShapedRecipe
                     ingredient = this.getIngredients().get(posX + posY * this.getRecipeWidth());
                 }
 
-                if (!ingredient.test(inv.getStackInSlot(invX + invY * inv.getWidth()))) {
+                if (!ingredient.test(inv.getItem(invX + invY * inv.getWidth()))) {
                     return false;
                 }
             }
@@ -56,19 +56,19 @@ public class NonMirroredRecipe extends ShapedRecipe
     public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>>  implements IRecipeSerializer<NonMirroredRecipe>
     {
         @Override
-        public NonMirroredRecipe read(ResourceLocation recipeId, JsonObject json) {
-            ShapedRecipe recipe = IRecipeSerializer.CRAFTING_SHAPED.read(recipeId, json);
+        public NonMirroredRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
+            ShapedRecipe recipe = IRecipeSerializer.SHAPED_RECIPE.fromJson(recipeId, json);
             
-            return new NonMirroredRecipe(recipe.getId(), recipe.getGroup(), recipe.getRecipeWidth(), recipe.getRecipeHeight(), recipe.getIngredients(), recipe.getRecipeOutput());
+            return new NonMirroredRecipe(recipe.getId(), recipe.getGroup(), recipe.getRecipeWidth(), recipe.getRecipeHeight(), recipe.getIngredients(), recipe.getResultItem());
         }
         @Override
-        public NonMirroredRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
-            ShapedRecipe recipe = IRecipeSerializer.CRAFTING_SHAPED.read(recipeId, buffer);
-            return new NonMirroredRecipe(recipe.getId() , recipe.getGroup(), recipe.getRecipeWidth(), recipe.getRecipeHeight(), recipe.getIngredients(), recipe.getRecipeOutput());
+        public NonMirroredRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+            ShapedRecipe recipe = IRecipeSerializer.SHAPED_RECIPE.fromNetwork(recipeId, buffer);
+            return new NonMirroredRecipe(recipe.getId() , recipe.getGroup(), recipe.getRecipeWidth(), recipe.getRecipeHeight(), recipe.getIngredients(), recipe.getResultItem());
         }
         @Override
-        public void write(PacketBuffer buffer, NonMirroredRecipe recipe) {
-            IRecipeSerializer.CRAFTING_SHAPED.write(buffer, recipe);
+        public void toNetwork(PacketBuffer buffer, NonMirroredRecipe recipe) {
+            IRecipeSerializer.SHAPED_RECIPE.toNetwork(buffer, recipe);
         }
     }
 }

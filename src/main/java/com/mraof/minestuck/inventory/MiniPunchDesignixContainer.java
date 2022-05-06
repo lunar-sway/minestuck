@@ -34,7 +34,7 @@ public class MiniPunchDesignixContainer extends MachineContainer
 	
 	public MiniPunchDesignixContainer(int windowId, PlayerInventory playerInventory, PacketBuffer buffer)
 	{
-		this(MSContainerTypes.MINI_PUNCH_DESIGNIX, windowId, playerInventory, new ItemStackHandler(3), new IntArray(3), IWorldPosCallable.DUMMY, buffer.readBlockPos());
+		this(MSContainerTypes.MINI_PUNCH_DESIGNIX, windowId, playerInventory, new ItemStackHandler(3), new IntArray(3), IWorldPosCallable.NULL, buffer.readBlockPos());
 	}
 	
 	public MiniPunchDesignixContainer(int windowId, PlayerInventory playerInventory, IItemHandler inventory, IIntArray parameters, IWorldPosCallable position, BlockPos machinePos)
@@ -74,15 +74,15 @@ public class MiniPunchDesignixContainer extends MachineContainer
 	
 	@Nonnull
 	@Override
-	public ItemStack transferStackInSlot(PlayerEntity player, int slotNumber)
+	public ItemStack quickMoveStack(PlayerEntity player, int slotNumber)
 	{
 		ItemStack itemstack = ItemStack.EMPTY;
-		Slot slot = this.inventorySlots.get(slotNumber);
-		int allSlots = this.inventorySlots.size();
+		Slot slot = this.slots.get(slotNumber);
+		int allSlots = this.slots.size();
 		
-		if (slot != null && slot.getHasStack())
+		if (slot != null && slot.hasItem())
 		{
-			ItemStack itemstackOrig = slot.getStack();
+			ItemStack itemstackOrig = slot.getItem();
 			itemstack = itemstackOrig.copy();
 			boolean result = false;
 			
@@ -90,20 +90,20 @@ public class MiniPunchDesignixContainer extends MachineContainer
 			if(slotNumber <= 2)
 			{
 				//if it's a machine slot
-				result = mergeItemStack(itemstackOrig, 3, allSlots, false);
+				result = moveItemStackTo(itemstackOrig, 3, allSlots, false);
 			} else if(slotNumber > 2)
 			{
 				//if it's an inventory slot with valid contents
 				if(itemstackOrig.getItem() == MSItems.CAPTCHA_CARD && (!AlchemyHelper.hasDecodedItem(itemstackOrig) || AlchemyHelper.isPunchedCard(itemstackOrig)))
-					result = mergeItemStack(itemstackOrig, 1, 2, false);
-				else result = mergeItemStack(itemstackOrig, 0, 1, false);
+					result = moveItemStackTo(itemstackOrig, 1, 2, false);
+				else result = moveItemStackTo(itemstackOrig, 0, 1, false);
 			}
 			
 			if(!result)
 				return ItemStack.EMPTY;
 			
 			if(!itemstackOrig.isEmpty())
-				slot.onSlotChanged();
+				slot.setChanged();
 		}
 		
 		return itemstack;

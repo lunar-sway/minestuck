@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minestuck:frost_tile"
+    }
+  },
+  "result": {
+    "item": "minestuck:frost_tile_stairs",
+    "count": 4
+  }
+}

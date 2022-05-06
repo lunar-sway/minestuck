@@ -1,28 +1,27 @@
 package com.mraof.minestuck.world.gen.feature.tree;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.LogBlock;
+import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.feature.BlockStateFeatureConfig;
 import net.minecraft.world.gen.feature.Feature;
 
 import java.util.Random;
-import java.util.function.Function;
 
 public class LeaflessTreeFeature extends Feature<BlockStateFeatureConfig>
 {
-	public LeaflessTreeFeature(Function<Dynamic<?>, ? extends BlockStateFeatureConfig> configFactoryIn)
+	public LeaflessTreeFeature(Codec<BlockStateFeatureConfig> codec)
 	{
-		super(configFactoryIn);
+		super(codec);
 	}
 	
 	@Override
-	public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, BlockStateFeatureConfig config)
+	public boolean place(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, BlockStateFeatureConfig config)
 	{
 		//TODO Define which blocks that it is allowed to place on
 		int size = rand.nextInt(3);
@@ -40,10 +39,10 @@ public class LeaflessTreeFeature extends Feature<BlockStateFeatureConfig>
 			int yOffset = h + Math.round(rand.nextFloat()*2*modifier);
 			int zOffset = Math.round((rand.nextFloat() - rand.nextFloat())*4*modifier);
 			
-			genBranch(pos.up(h), pos.add(xOffset, yOffset, zOffset), worldIn, config.state);
+			genBranch(pos.above(h), pos.offset(xOffset, yOffset, zOffset), world, config.state);
 		}
 		
-		genBranch(pos, pos.up(height), worldIn, config.state);
+		genBranch(pos, pos.above(height), world, config.state);
 		
 		return true;
 	}
@@ -73,14 +72,14 @@ public class LeaflessTreeFeature extends Feature<BlockStateFeatureConfig>
 			axis = Direction.Axis.Z;
 		}
 		
-		BlockState state = logState.with(LogBlock.AXIS, axis);
+		BlockState state = logState.setValue(RotatedPillarBlock.AXIS, axis);
 		
 		for(int i = 0; i < length; i++)
 		{
 			float f = i/(float) (length);
-			BlockPos pos = pos0.add(xDiff*f, yDiff*f, zDiff*f);
-			if(world.hasBlockState(pos, (blockState) -> blockState.canBeReplacedByLogs(world, pos)))
-				setBlockState(world, pos, state);
+			BlockPos pos = pos0.offset(xDiff*f, yDiff*f, zDiff*f);
+			if(world.isStateAtPosition(pos, (blockState) -> blockState.canBeReplacedByLogs(world, pos)))
+				setBlock(world, pos, state);
 			else return;
 		}
 	}

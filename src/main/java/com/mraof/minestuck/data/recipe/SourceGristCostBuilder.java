@@ -12,7 +12,8 @@ import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.ITag;
+import net.minecraft.tags.TagCollectionManager;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 
@@ -31,14 +32,15 @@ public class SourceGristCostBuilder
 	private float multiplier = 1;
 	private Integer priority = null;
 	
-	public static SourceGristCostBuilder of(Tag<Item> tag)
+	public static SourceGristCostBuilder of(ITag<Item> tag)
 	{
-		return new SourceGristCostBuilder(new ResourceLocation(tag.getId().getNamespace(), tag.getId().getPath()+"_tag"), Ingredient.fromTag(tag));
+		ResourceLocation tagId = TagCollectionManager.getInstance().getItems().getIdOrThrow(tag);
+		return new SourceGristCostBuilder(new ResourceLocation(tagId.getNamespace(), tagId.getPath()+"_tag"), Ingredient.of(tag));
 	}
 	
 	public static SourceGristCostBuilder of(IItemProvider item)
 	{
-		return new SourceGristCostBuilder(item.asItem().getRegistryName(), Ingredient.fromItems(item));
+		return new SourceGristCostBuilder(item.asItem().getRegistryName(), Ingredient.of(item));
 	}
 	
 	public static SourceGristCostBuilder of(Ingredient ingredient)
@@ -74,7 +76,7 @@ public class SourceGristCostBuilder
 		return this;
 	}
 	
-	public SourceGristCostBuilder source(Tag<Item> source)
+	public SourceGristCostBuilder source(ITag<Item> source)
 	{
 		sources.add(SourceGristCost.tagString(source));
 		return this;
@@ -95,13 +97,13 @@ public class SourceGristCostBuilder
 	
 	public void build(Consumer<IFinishedRecipe> recipeSaver)
 	{
-		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ingredient.getMatchingStacks()[0].getItem().getRegistryName());
+		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ingredient.getItems()[0].getItem().getRegistryName());
 		build(recipeSaver, name);
 	}
 	
 	public void buildFor(Consumer<IFinishedRecipe> recipeSaver, String modId)
 	{
-		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ingredient.getMatchingStacks()[0].getItem().getRegistryName());
+		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ingredient.getItems()[0].getItem().getRegistryName());
 		build(recipeSaver, new ResourceLocation(modId, name.getPath()));
 	}
 	
@@ -123,9 +125,9 @@ public class SourceGristCostBuilder
 		}
 		
 		@Override
-		public void serialize(JsonObject jsonObject)
+		public void serializeRecipeData(JsonObject jsonObject)
 		{
-			super.serialize(jsonObject);
+			super.serializeRecipeData(jsonObject);
 			JsonArray sourceArray = new JsonArray();
 			sources.forEach(sourceArray::add);
 			jsonObject.add("sources", sourceArray);
@@ -134,7 +136,7 @@ public class SourceGristCostBuilder
 		}
 		
 		@Override
-		public IRecipeSerializer<?> getSerializer()
+		public IRecipeSerializer<?> getType()
 		{
 			return MSRecipeTypes.SOURCE_GRIST_COST;
 		}

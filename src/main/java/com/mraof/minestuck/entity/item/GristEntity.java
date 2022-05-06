@@ -47,9 +47,9 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		super(MSEntityTypes.GRIST, world);
 		this.gristValue = gristData.getAmount();
 //		this.yOffset = this.height / 2.0F;
-		this.setPosition(x, y, z);
-		this.rotationYaw = (float)(Math.random() * 360.0D);
-		this.setMotion(world.rand.nextGaussian() * 0.2D - 0.1D, world.rand.nextGaussian() * 0.2D, world.rand.nextGaussian() * 0.2D - 0.1D);
+		this.setPos(x, y, z);
+		this.yRot = (float)(Math.random() * 360.0D);
+		this.setDeltaMovement(world.random.nextGaussian() * 0.2D - 0.1D, world.random.nextGaussian() * 0.2D, world.random.nextGaussian() * 0.2D - 0.1D);
 		
 		this.gristType = gristData.getType();
 	}
@@ -60,7 +60,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	}
 	
 	@Override
-	protected void registerData()
+	protected void defineSynchedData()
 	{}
 	
 	/**
@@ -68,13 +68,13 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	 * prevent them from trampling crops
 	 */
 	@Override
-	protected boolean canTriggerWalking()
+	protected boolean isMovementNoisy()
 	{
 		return false;
 	}
 	
 	@Override
-	public boolean attackEntityFrom(DamageSource source, float amount)
+	public boolean hurt(DamageSource source, float amount)
 	{
 		if(this.isInvulnerableTo(source))
 		{
@@ -82,7 +82,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		}
 		else
 		{
-			this.markVelocityChanged();
+			this.markHurt();
 			this.gristHealth = (int)((float)this.gristHealth - amount);
 			
 			if (this.gristHealth <= 0)
@@ -99,25 +99,25 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	{
 		super.tick();
 
-		this.prevPosX = this.getPosX();
-		this.prevPosY = this.getPosY();
-		this.prevPosZ = this.getPosZ();
-		this.setMotion(this.getMotion().add(0, -0.03D, 0));
+		this.xo = this.getX();
+		this.yo = this.getY();
+		this.zo = this.getZ();
+		this.setDeltaMovement(this.getDeltaMovement().add(0, -0.03D, 0));
 
-		if (this.world.getBlockState(new BlockPos(MathHelper.floor(this.getPosX()), MathHelper.floor(this.getPosY()), MathHelper.floor(this.getPosZ()))).getMaterial() == Material.LAVA)
+		if (this.level.getBlockState(new BlockPos(MathHelper.floor(this.getX()), MathHelper.floor(this.getY()), MathHelper.floor(this.getZ()))).getMaterial() == Material.LAVA)
 		{
-			this.setMotion(0.2D, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F);
-			this.playSound(SoundEvents.ENTITY_GENERIC_BURN, 0.4F, 2.0F + this.rand.nextFloat() * 0.4F);
+			this.setDeltaMovement(0.2D, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
+			this.playSound(SoundEvents.GENERIC_BURN, 0.4F, 2.0F + this.random.nextFloat() * 0.4F);
 		}
 
 		//this.setPosition(this.getPosX(), (this.getEntityBoundingBox().minY + this.getEntityBoundingBox().maxY) / 2.0D, this.getPosZ());
-		double d0 = this.getSize(Pose.STANDING).width * 2.0D;
+		double d0 = this.getDimensions(Pose.STANDING).width * 2.0D;
 
-		if (this.targetCycle < this.cycle - 20 + this.getEntityId() % 100) //Why should I care about the entityId
+		if (this.targetCycle < this.cycle - 20 + this.getId() % 100) //Why should I care about the entityId
 		{
-			if (this.closestPlayer == null || this.closestPlayer.getDistanceSq(this) > d0 * d0)
+			if (this.closestPlayer == null || this.closestPlayer.distanceToSqr(this) > d0 * d0)
 			{
-				this.closestPlayer = this.world.getClosestPlayer(this, d0);
+				this.closestPlayer = this.level.getNearestPlayer(this, d0);
 			}
 
 			this.targetCycle = this.cycle;
@@ -125,32 +125,32 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 
 		if (this.closestPlayer != null)
 		{
-			double d1 = (this.closestPlayer.getPosX() - this.getPosX()) / d0;
-			double d2 = (this.closestPlayer.getPosY() + (double)this.closestPlayer.getEyeHeight() - this.getPosY()) / d0;
-			double d3 = (this.closestPlayer.getPosZ() - this.getPosZ()) / d0;
+			double d1 = (this.closestPlayer.getX() - this.getX()) / d0;
+			double d2 = (this.closestPlayer.getY() + (double)this.closestPlayer.getEyeHeight() - this.getY()) / d0;
+			double d3 = (this.closestPlayer.getZ() - this.getZ()) / d0;
 			double d4 = Math.sqrt(d1 * d1 + d2 * d2 + d3 * d3);
-			double d5 = this.getSize(Pose.STANDING).width * 2.0D - d4;
+			double d5 = this.getDimensions(Pose.STANDING).width * 2.0D - d4;
 
 			if (d5 > 0.0D)
 			{
-				this.setMotion(this.getMotion().add(d1 / d4 * d5 * 0.1D, d2 / d4 * d5 * 0.1D, d3 / d4 * d5 * 0.1D));
+				this.setDeltaMovement(this.getDeltaMovement().add(d1 / d4 * d5 * 0.1D, d2 / d4 * d5 * 0.1D, d3 / d4 * d5 * 0.1D));
 			}
 		}
 		
-		this.move(MoverType.SELF, this.getMotion());
+		this.move(MoverType.SELF, this.getDeltaMovement());
 		float f = 0.98F;
 		
 		if(this.onGround)
 		{
-			BlockPos pos = new BlockPos(MathHelper.floor(this.getPosX()), MathHelper.floor(this.getBoundingBox().minY) - 1, MathHelper.floor(this.getPosZ()));
-			f = this.world.getBlockState(pos).getSlipperiness(world, pos, this) * 0.98F;
+			BlockPos pos = new BlockPos(MathHelper.floor(this.getX()), MathHelper.floor(this.getBoundingBox().minY) - 1, MathHelper.floor(this.getZ()));
+			f = this.level.getBlockState(pos).getSlipperiness(level, pos, this) * 0.98F;
 		}
 		
-		this.setMotion(this.getMotion().mul(f, 0.98D, f));
+		this.setDeltaMovement(this.getDeltaMovement().multiply(f, 0.98D, f));
 
 		if (this.onGround)
 		{
-			this.setMotion(this.getMotion().mul(1, -0.9D, 1));
+			this.setDeltaMovement(this.getDeltaMovement().multiply(1, -0.9D, 1));
 		}
 
 		++this.cycle;
@@ -180,7 +180,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	}*/
 	
 	@Override
-	protected void writeAdditional(CompoundNBT compound)
+	protected void addAdditionalSaveData(CompoundNBT compound)
 	{
 		compound.putShort("Health", (short)this.gristHealth);
 		compound.putShort("Age", (short)this.gristAge);
@@ -189,7 +189,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	}
 	
 	@Override
-	protected void readAdditional(CompoundNBT compound)
+	protected void readAdditionalSaveData(CompoundNBT compound)
 	{
 		this.gristHealth = compound.getShort("Health") & 255;
 		this.gristAge = compound.getShort("Age");
@@ -203,12 +203,12 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	 * Called by a player entity when they collide with an entity
 	 */
 	@Override
-	public void onCollideWithPlayer(PlayerEntity entityIn)
+	public void playerTouch(PlayerEntity entityIn)
 	{
-		if(this.world.isRemote?ClientEditHandler.isActive():ServerEditHandler.getData(entityIn) != null)
+		if(this.level.isClientSide?ClientEditHandler.isActive():ServerEditHandler.getData(entityIn) != null)
 			return;
 		
-		if (!this.world.isRemote && !(entityIn instanceof FakePlayer))
+		if (!this.level.isClientSide && !(entityIn instanceof FakePlayer))
 		{
 			consumeGrist(IdentifierHandler.encode(entityIn), true);
 		}
@@ -216,17 +216,17 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	
 	public void consumeGrist(PlayerIdentifier identifier, boolean sound)
 	{
-		if(this.world.isRemote)
+		if(this.level.isClientSide)
 			throw new IllegalStateException("Grist entities shouldn't be consumed client-side.");
 		if(sound)
-			this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.1F, 0.5F * ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.8F));
-		GristHelper.increase(world, identifier, new GristSet(gristType, gristValue));
-		GristHelper.notify(world.getServer(), identifier, new GristSet(gristType, gristValue));
+			this.playSound(SoundEvents.ITEM_PICKUP, 0.1F, 0.5F * ((this.random.nextFloat() - this.random.nextFloat()) * 0.7F + 1.8F));
+		GristHelper.increase(level, identifier, new GristSet(gristType, gristValue));
+		GristHelper.notify(level.getServer(), identifier, new GristSet(gristType, gristValue));
 		this.remove();
 	}
 	
 	@Override
-	public boolean canBeAttackedWithItem()
+	public boolean isAttackable()
 	{
 		return false;
 	}
@@ -242,9 +242,9 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	}
 	
 	@Override
-	public EntitySize getSize(Pose poseIn)
+	public EntitySize getDimensions(Pose poseIn)
 	{
-		return super.getSize(poseIn).scale((float) Math.pow(gristValue, .25));
+		return super.getDimensions(poseIn).scale((float) Math.pow(gristValue, .25));
 	}
 
 	public float getSizeByValue() {
@@ -266,7 +266,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	}
 	
 	@Override
-	public IPacket<?> createSpawnPacket()
+	public IPacket<?> getAddEntityPacket()
 	{
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}

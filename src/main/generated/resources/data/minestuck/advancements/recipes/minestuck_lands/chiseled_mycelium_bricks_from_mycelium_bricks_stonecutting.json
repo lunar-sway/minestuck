@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minestuck:chiseled_mycelium_bricks_from_mycelium_bricks_stonecutting"
+    ]
+  },
+  "criteria": {
+    "has_mycelium_bricks": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minestuck:mycelium_bricks"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minestuck:chiseled_mycelium_bricks_from_mycelium_bricks_stonecutting"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_mycelium_bricks",
+      "has_the_recipe"
+    ]
+  ]
+}

@@ -6,12 +6,12 @@
     ]
   },
   "criteria": {
-    "has_polished_green_stone": {
+    "has_green_stone_bricks": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "minestuck:polished_green_stone"
+            "item": "minestuck:green_stone_bricks"
           }
         ]
       }
@@ -25,7 +25,7 @@
   },
   "requirements": [
     [
-      "has_polished_green_stone",
+      "has_green_stone_bricks",
       "has_the_recipe"
     ]
   ]

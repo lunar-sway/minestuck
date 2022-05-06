@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "minestuck:green_stone_bricks"
+  },
+  "result": "minestuck:green_stone_column",
+  "count": 1
+}

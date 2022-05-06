@@ -1,5 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entity.consort.DialogueCard;
@@ -9,6 +10,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
 import org.lwjgl.glfw.GLFW;
@@ -24,14 +27,14 @@ public class DialogueScreen extends Screen
 	private static final int PORTRAIT_SIZE = 32;
 	
 	private final List<DialogueCard> dialogueCards;
-	private final List<String> responseOptions;
+	private final List<ITextComponent> responseOptions;
 	
-	private String renderedText;
+	private ITextComponent displayText;
 	private int currentCardIndex;
 	private boolean doneWriting;
 	private int frame;
 	
-	public DialogueScreen(List<DialogueCard> dialogueCards, List<String> responseOptions)
+	public DialogueScreen(List<DialogueCard> dialogueCards, List<ITextComponent> responseOptions)
 	{
 		super(new TranslationTextComponent("minestuck.dialogue"));
 		this.dialogueCards = dialogueCards;
@@ -41,29 +44,29 @@ public class DialogueScreen extends Screen
 	}
 	
 	@Override
-	public void render(int mouseX, int mouseY, float partialTicks)
+	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground();
+		this.renderBackground(matrixStack);
 		
 		int xOffset = (width - GUI_WIDTH) / 2;
 		int yOffset = (height - GUI_HEIGHT) / 2;
 		int leftStart = xOffset + PORTRAIT_SIZE + 16;
 		
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.minecraft.getTextureManager().bindTexture(BACKGROUND);
-		this.blit(xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
+		this.minecraft.getTextureManager().bind(BACKGROUND);
+		this.blit(matrixStack, xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 		
 		DialogueCard currentDialogue = dialogueCards.get(currentCardIndex);
-		font.drawSplitString(renderedText, leftStart, yOffset + 12, GUI_WIDTH - PORTRAIT_SIZE - 28, currentDialogue.getTextColor());
+		font.drawWordWrap(displayText, leftStart, yOffset + 12, GUI_WIDTH - PORTRAIT_SIZE - 28, currentDialogue.getTextColor());
 		ResourceLocation portrait = currentDialogue.getPortraitResource();
 		
 		if(portrait != null)
 		{
-			this.minecraft.getTextureManager().bindTexture(portrait);
-			this.blit(xOffset + 8, yOffset + GUI_HEIGHT - PORTRAIT_SIZE - 8, getAnimationOffset() * PORTRAIT_SIZE, 0, PORTRAIT_SIZE, PORTRAIT_SIZE);
+			this.minecraft.getTextureManager().bind(portrait);
+			this.blit(matrixStack, xOffset + 8, yOffset + GUI_HEIGHT - PORTRAIT_SIZE - 8, getAnimationOffset() * PORTRAIT_SIZE, 0, PORTRAIT_SIZE, PORTRAIT_SIZE);
 		}
 		
-		super.render(mouseX, mouseY, partialTicks);
+		super.render(matrixStack, mouseX, mouseY, partialTicks);
 	}
 	
 	@Override
@@ -71,10 +74,10 @@ public class DialogueScreen extends Screen
 	{
 		if(!doneWriting)
 		{
-			String text = dialogueCards.get(currentCardIndex).getText();
-			int amount = Math.min(frame * MinestuckConfig.CLIENT.dialogueSpeed.get(), text.length());
+			ITextComponent text = dialogueCards.get(currentCardIndex).getText();
+			int amount = Math.min(frame * MinestuckConfig.CLIENT.dialogueSpeed.get(), text.getString().length());
 			
-			if(amount == text.length())
+			if(amount == text.getString().length())
 			{
 				doneWriting = true;
 				if(currentCardIndex >= dialogueCards.size() - 1)
@@ -82,8 +85,8 @@ public class DialogueScreen extends Screen
 					addOptions();
 				}
 			}
-			
-			renderedText = text.substring(0, amount);
+
+			displayText = new StringTextComponent(text.getString().substring(0, amount));
 			frame++;
 		}
 	}
@@ -95,7 +98,7 @@ public class DialogueScreen extends Screen
 		{
 			if(!this.doneWriting)
 			{
-				renderedText = dialogueCards.get(currentCardIndex).getText();
+				displayText = dialogueCards.get(currentCardIndex).getText();
 				doneWriting = true;
 				if(currentCardIndex >= dialogueCards.size() - 1)
 				{
@@ -161,28 +164,27 @@ public class DialogueScreen extends Screen
 	private void resetWriter()
 	{
 		doneWriting = false;
-		renderedText = "";
+		displayText = new StringTextComponent("");
 		frame = 1;
 	}
 	
 	public void close()
 	{
-		this.minecraft.displayGuiScreen(null);
+		this.minecraft.setScreen(null);
 	}
 	
 	static class DialogueButton extends ExtendedButton
 	{
-		
-		DialogueButton(int xPos, int yPos, int width, int height, String displayString, IPressable handler)
+		DialogueButton(int xPos, int yPos, int width, int height, ITextComponent text, IPressable handler)
 		{
-			super(xPos, yPos, width, height, displayString, handler);
+			super(xPos, yPos, width, height, text, handler);
 		}
 		
 		@Override
-		public void renderButton(int mouseX, int mouseY, float partial)
+		public void renderButton(MatrixStack matrixStack, int mouseX, int mouseY, float partial)
 		{
 			Minecraft mc = Minecraft.getInstance();
-			String buttonText = this.getMessage();
+			ITextComponent buttonText = this.getMessage();
 			int color = 0xAFAFAF;
 			int offset = 0;
 			
@@ -193,12 +195,12 @@ public class DialogueScreen extends Screen
 			
 			if(isFocused())
 			{
-				buttonText = "> " + buttonText;
+				buttonText = new StringTextComponent(buttonText.getString()).setStyle(buttonText.getStyle());
 				color = 0xFFFFFF;
 				offset = 9;
 			}
 			
-			this.drawString(mc.fontRenderer, buttonText, this.x - offset, this.y, color);
+			drawString(matrixStack, mc.font, buttonText, this.x - offset, this.y, color);
 		}
 	}
 }

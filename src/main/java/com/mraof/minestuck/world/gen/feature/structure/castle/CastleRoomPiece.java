@@ -5,11 +5,13 @@ import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
+import net.minecraft.world.gen.feature.structure.StructureManager;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 
@@ -41,11 +43,11 @@ public class CastleRoomPiece extends CastlePiece
 	}
 	
 	@Override
-	public void buildComponent(StructurePiece componentIn, List<StructurePiece> pieces, Random rand)
+	public void addChildren(StructurePiece componentIn, List<StructurePiece> pieces, Random rand)
 	{
 		if(((CastleStartPiece)componentIn).bottom)
 		{
-			this.componentType = 0;
+			this.genDepth = 0;
 			this.getNextComponentNormal((CastleStartPiece)componentIn, pieces, rand, 0, -8, 0);
 		}
 	}
@@ -77,15 +79,15 @@ public class CastleRoomPiece extends CastlePiece
 	}
 	
 	@Override
-	public boolean create(IWorld world, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBox, ChunkPos chunkPosIn)
+	public boolean postProcess(ISeedReader world, StructureManager manager, ChunkGenerator generator, Random random, MutableBoundingBox structureBoundingBox, ChunkPos chunkPosIn, BlockPos pos)
 	{
-		BlockState chessTile = (isBlack ? MSBlocks.BLACK_CHESS_DIRT : MSBlocks.WHITE_CHESS_DIRT).getDefaultState();
-		BlockState chessTile1 = (isBlack ? MSBlocks.DARK_GRAY_CHESS_DIRT : MSBlocks.LIGHT_GRAY_CHESS_DIRT).getDefaultState();
+		BlockState chessTile = (isBlack ? MSBlocks.BLACK_CHESS_DIRT : MSBlocks.WHITE_CHESS_DIRT).defaultBlockState();
+		BlockState chessTile1 = (isBlack ? MSBlocks.DARK_GRAY_CHESS_DIRT : MSBlocks.LIGHT_GRAY_CHESS_DIRT).defaultBlockState();
 		
 		this.fillWithAlternatingBlocks(world, structureBoundingBox, 0, 0, 0, 7 ,0, 7, chessTile,  chessTile1, false);
 		this.fillWithAlternatingBlocks(world, structureBoundingBox, 0, 7, 0, 7 ,7, 7, chessTile,  chessTile1, false);
-		this.fillWithBlocks(world, structureBoundingBox, 0, 1, 0, 7, 6, 7, Blocks.AIR.getDefaultState(), Blocks.AIR.getDefaultState(), false);
-		this.setBlockState(world, Blocks.TORCH.getDefaultState(), 3, 1, 3, structureBoundingBox);	//placeBlockAtCurrentPosition
+		this.generateBox(world, structureBoundingBox, 0, 1, 0, 7, 6, 7, Blocks.AIR.defaultBlockState(), Blocks.AIR.defaultBlockState(), false);
+		this.placeBlock(world, Blocks.TORCH.defaultBlockState(), 3, 1, 3, structureBoundingBox);	//placeBlockAtCurrentPosition
 		return true;
 	}
 }

@@ -1,6 +1,5 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.Minestuck;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -56,20 +55,20 @@ public class MSArmorItem extends ArmorItem
             {
                 BipedModel model = this.model;
 
-                model.bipedRightLeg.showModel = slot == EquipmentSlotType.LEGS || slot == EquipmentSlotType.FEET;
-                model.bipedLeftLeg.showModel = slot == EquipmentSlotType.LEGS || slot == EquipmentSlotType.FEET;
+                model.rightLeg.visible = slot == EquipmentSlotType.LEGS || slot == EquipmentSlotType.FEET;
+                model.leftLeg.visible = slot == EquipmentSlotType.LEGS || slot == EquipmentSlotType.FEET;
 
-                model.bipedBody.showModel = slot == EquipmentSlotType.CHEST;
-                model.bipedLeftArm.showModel = slot == EquipmentSlotType.CHEST;
-                model.bipedRightArm.showModel = slot == EquipmentSlotType.CHEST;
+                model.body.visible = slot == EquipmentSlotType.CHEST;
+                model.leftArm.visible = slot == EquipmentSlotType.CHEST;
+                model.rightArm.visible = slot == EquipmentSlotType.CHEST;
 
-                model.bipedHead.showModel = slot == EquipmentSlotType.HEAD;
-                model.bipedHeadwear.showModel = slot == EquipmentSlotType.HEAD;
+                model.head.visible = slot == EquipmentSlotType.HEAD;
+                model.hat.visible = slot == EquipmentSlotType.HEAD;
 
 
-                model.isSneak = _default.isSneak;
-                model.isSitting = _default.isSitting;
-                model.isChild = _default.isChild;
+                model.crouching = _default.crouching;
+                model.riding = _default.riding;
+                model.young = _default.young;
 
                 model.rightArmPose = _default.rightArmPose;
                 model.leftArmPose = _default.leftArmPose;

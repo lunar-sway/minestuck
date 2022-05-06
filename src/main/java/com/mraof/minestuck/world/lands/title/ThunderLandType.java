@@ -8,7 +8,7 @@ import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.biome.Biome;
 
 public class ThunderLandType extends TitleLandType
@@ -31,15 +31,15 @@ public class ThunderLandType extends TitleLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("structure_wool_2", Blocks.BLUE_WOOL.getDefaultState());
-		registry.setBlockState("carpet", Blocks.GREEN_CARPET.getDefaultState());
+		registry.setBlockState("structure_wool_2", Blocks.BLUE_WOOL.defaultBlockState());
+		registry.setBlockState("carpet", Blocks.GREEN_CARPET.defaultBlockState());
 		
 	}
 	
 	@Override
 	public void setProperties(LandProperties properties)
 	{
-		properties.mergeFogColor(new Vec3d(0.1, 0.1, 0.2), 0.5F);
+		properties.mergeFogColor(new Vector3d(0.1, 0.1, 0.2), 0.5F);
 		properties.forceRain = LandProperties.ForceType.ON;
 		properties.forceThunder = LandProperties.ForceType.ON;
 	}
@@ -51,11 +51,11 @@ public class ThunderLandType extends TitleLandType
 	}
 	
 	@Override
-	public boolean isAspectCompatible(TerrainLandType aspect)
+	public boolean isAspectCompatible(TerrainLandType otherType)
 	{
-		LandProperties properties = new LandProperties(aspect);
-		aspect.setProperties(properties);
-		return properties.biomes.NORMAL.get().getPrecipitation() == Biome.RainType.RAIN;
+		LandProperties properties = LandProperties.createPartial(otherType);
+		
+		return properties.biomes.getPrecipitation() == Biome.RainType.RAIN;
 	}
 	
 	@Override

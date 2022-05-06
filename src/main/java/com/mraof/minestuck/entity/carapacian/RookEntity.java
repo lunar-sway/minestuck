@@ -3,7 +3,8 @@ package com.mraof.minestuck.entity.carapacian;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.monster.IMob;
@@ -15,7 +16,7 @@ public class RookEntity extends CarapacianEntity implements IMob
 	protected RookEntity(EntityType<? extends RookEntity> type, EnumEntityKingdom kingdom, World world)
 	{
 		super(type, kingdom, world);
-		this.experienceValue = 10;
+		this.xpReward = 10;
 	}
 	
 	public static RookEntity createProspitian(EntityType<? extends RookEntity> type, World world)
@@ -28,19 +29,17 @@ public class RookEntity extends CarapacianEntity implements IMob
 		return new RookEntity(type, EnumEntityKingdom.DERSITE, world);
 	}
 	
-	@Override
-	protected void registerAttributes()
+	public static AttributeModifierMap.MutableAttribute rookAttributes()
 	{
-		super.registerAttributes();
-		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(50D);
-		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
+		return CarapacianEntity.carapacianAttributes().add(Attributes.MAX_HEALTH, 50)
+				.add(Attributes.MOVEMENT_SPEED, 0.3);
 	}
 	
 	@Override
 	protected void registerGoals()
 	{
 		super.registerGoals();
-		this.goalSelector.addGoal(4, new MeleeAttackGoal(this, .4F, false));
+		this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 4/3F, false));
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 0, true, false, entity -> attackEntitySelector.isEntityApplicable(entity)));
 	}
 
@@ -50,10 +49,10 @@ public class RookEntity extends CarapacianEntity implements IMob
 	}
 
 	@Override
-	public boolean attackEntityAsMob(Entity entity)
+	public boolean doHurtTarget(Entity entity)
 	{
 		float damage = this.getAttackStrength(entity);
-		return entity.attackEntityFrom(DamageSource.causeMobDamage(this), damage);
+		return entity.hurt(DamageSource.mobAttack(this), damage);
 	}
 
 //	@Override

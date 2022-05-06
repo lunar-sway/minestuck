@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minestuck:blood_shade_bricks"
+    ]
+  },
+  "criteria": {
+    "has_shade_bricks": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minestuck:shade_bricks"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minestuck:blood_shade_bricks"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_shade_bricks",
+      "has_the_recipe"
+    ]
+  ]
+}

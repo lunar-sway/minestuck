@@ -4,17 +4,20 @@ import com.mraof.minestuck.client.gui.DialogueScreen;
 import com.mraof.minestuck.entity.consort.DialogueCard;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DialogueUpdatePacket implements PlayToClientPacket
 {
 	private final List<DialogueCard> dialogueCards;
-	private final List<String> localizedOptions;
+	private final List<ITextComponent> localizedOptions;
 	
-	public DialogueUpdatePacket(List<DialogueCard> dialogueCards, List<String> localizedOptions)
+	public DialogueUpdatePacket(List<DialogueCard> dialogueCards, List<ITextComponent> localizedOptions)
 	{
 		this.dialogueCards = dialogueCards != null ? dialogueCards : new ArrayList<>();
 		this.localizedOptions = localizedOptions != null ? localizedOptions : new ArrayList<>();
@@ -26,15 +29,15 @@ public class DialogueUpdatePacket implements PlayToClientPacket
 		buffer.writeInt(dialogueCards.size());
 		for(DialogueCard item : dialogueCards)
 		{
-			buffer.writeString(item.getText());
-			buffer.writeString(item.getPortraitResourcePath());
+			buffer.writeUtf(item.getText().getString());
+			buffer.writeUtf(item.getPortraitResourcePath());
 			buffer.writeInt(item.getTextColor());
 		}
 		
 		buffer.writeInt(localizedOptions.size());
-		for(String item : localizedOptions)
+		for(ITextComponent item : localizedOptions)
 		{
-			buffer.writeString(item);
+			buffer.writeUtf(item.getString());
 		}
 	}
 	
@@ -44,10 +47,10 @@ public class DialogueUpdatePacket implements PlayToClientPacket
 		LinkedList<DialogueCard> cards = new LinkedList<>();
 		for(int i = 0; i < length; i++)
 		{
-			cards.add(new DialogueCard(buffer.readString(), buffer.readString(), buffer.readInt()));
+			cards.add(new DialogueCard(buffer.readUtf(), buffer.readUtf(), buffer.readInt()));
 		}
 		
-		List<String> localizedOptions = readStringList(buffer);
+		List<ITextComponent> localizedOptions = readStringList(buffer).stream().map(StringTextComponent::new).collect(Collectors.toList());
 		
 		return new DialogueUpdatePacket(cards, localizedOptions);
 	}
@@ -59,7 +62,7 @@ public class DialogueUpdatePacket implements PlayToClientPacket
 		
 		for(int i = 0; i < length; i++)
 		{
-			strings.add(buffer.readString());
+			strings.add(buffer.readUtf());
 		}
 		
 		return strings;
@@ -68,6 +71,6 @@ public class DialogueUpdatePacket implements PlayToClientPacket
 	@Override
 	public void execute()
 	{
-		Minecraft.getInstance().displayGuiScreen(new DialogueScreen(dialogueCards, localizedOptions));
+		Minecraft.getInstance().setScreen(new DialogueScreen(dialogueCards, localizedOptions));
 	}
 }

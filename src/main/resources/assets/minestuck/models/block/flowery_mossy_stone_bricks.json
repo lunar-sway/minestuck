@@ -1,6 +1,0 @@
-{
-    "parent": "block/cube_all",
-    "textures": {
-        "all": "minestuck:block/flowery_mossy_stone_bricks"
-    }
-}

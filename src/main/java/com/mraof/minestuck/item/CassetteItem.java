@@ -25,15 +25,15 @@ public class CassetteItem extends MusicDiscItem
 	}
 	
 	@Override
-	public ActionResultType onItemUse(ItemUseContext context)
+	public ActionResultType useOn(ItemUseContext context)
 	{
-		World world = context.getWorld();
-		BlockPos blockpos = context.getPos();
+		World world = context.getLevel();
+		BlockPos blockpos = context.getClickedPos();
 		BlockState blockstate = world.getBlockState(blockpos);
-		if(blockstate.getBlock() == MSBlocks.CASSETTE_PLAYER && blockstate.get(CassettePlayerBlock.CASSETTE) == EnumCassetteType.NONE && blockstate.get(CassettePlayerBlock.OPEN))
+		if(blockstate.getBlock() == MSBlocks.CASSETTE_PLAYER && blockstate.getValue(CassettePlayerBlock.CASSETTE) == EnumCassetteType.NONE && blockstate.getValue(CassettePlayerBlock.OPEN))
 		{
-			ItemStack itemstack = context.getItem();
-			if(!world.isRemote)
+			ItemStack itemstack = context.getItemInHand();
+			if(!world.isClientSide)
 			{
 				(MSBlocks.CASSETTE_PLAYER).insertCassette(world, blockpos, blockstate, itemstack);
 				itemstack.shrink(1);

@@ -1,0 +1,25 @@
+{
+    "parent": "block/block",
+    "textures": {
+        "back": "minestuck:block/logic_gate_back",
+        "right_side": "minestuck:block/logic_gate_right_side",
+        "left_side": "minestuck:block/logic_gate_left_side",
+        "top": "minestuck:block/redstone_machine_block",
+        "bottom": "minestuck:block/redstone_machine_block",
+        "front": "minestuck:block/nand_gate",
+        "particle": "minestuck:block/nand_gate"
+    },
+    "elements": [
+        {   "from": [ 0, 0, 0 ],
+            "to": [ 16, 16, 16 ],
+            "faces": {
+                "down":  { "uv": [ 0, 0, 16, 16 ], "texture": "#bottom", "cullface": "down" },
+                "up":    { "uv": [ 0, 16, 16, 0 ], "texture": "#top", "cullface": "up" },
+                "north": { "uv": [ 0, 0, 16, 16 ], "texture": "#back", "cullface": "north" },
+                "south": { "uv": [ 0, 0, 16, 16 ], "texture": "#front", "cullface": "south" },
+                "west":  { "uv": [ 0, 0, 16, 16 ], "texture": "#left_side", "cullface": "west" },
+                "east":  { "uv": [ 0, 0, 16, 16 ], "texture": "#right_side", "cullface": "east" }
+            }
+        }
+    ]
+}

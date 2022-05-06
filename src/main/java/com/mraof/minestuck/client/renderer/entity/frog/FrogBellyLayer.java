@@ -44,12 +44,12 @@ public class FrogBellyLayer extends LayerRenderer<FrogEntity, FrogModel<FrogEnti
 			if (g < this.colorMin) g = this.colorMin;
 			if (b < this.colorMin) b = this.colorMin;
 
-			renderCopyCutoutModel(this.getEntityModel(), this.frogModel, this.getEntityTexture(frog), matrixStackIn, bufferIn, packedLightIn, frog, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, partialTicks, r, g, b);
+			coloredCutoutModelCopyLayerRender(this.getParentModel(), this.frogModel, this.getTextureLocation(frog), matrixStackIn, bufferIn, packedLightIn, frog, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, partialTicks, r, g, b);
 		}
 	}
 
 	@Override
-	public ResourceLocation getEntityTexture(FrogEntity frog)
+	public ResourceLocation getTextureLocation(FrogEntity frog)
 	{
 		int id = frog.getBellyType();
 

@@ -50,8 +50,9 @@ public enum EnumShopPoster implements IStringSerializable
     {
         return this.unlocalizedName;
     }
-
-    public String getName()
+    
+    @Override
+    public String getSerializedName()
     {
         return this.name;
     }

@@ -40,9 +40,9 @@ public class GristWildcardPacket implements PlayToServerPacket
 	@Override
 	public void execute(ServerPlayerEntity player)
 	{
-		if(player != null && player.getEntityWorld().isAreaLoaded(pos, 0))
+		if(player != null && player.getCommandSenderWorld().isAreaLoaded(pos, 0))
 		{
-			TileEntity te = player.getEntityWorld().getTileEntity(pos);
+			TileEntity te = player.getCommandSenderWorld().getBlockEntity(pos);
 			if(te instanceof GristWildcardHolder)
 			{
 				((GristWildcardHolder) te).setWildcardGrist(gristType);

@@ -14,13 +14,13 @@ public class PositionTeleporter
 		{
 			if (((ServerPlayerEntity)entity).isSleeping())
 			{
-				((ServerPlayerEntity)entity).wakeUp();
+				((ServerPlayerEntity)entity).stopSleeping();
 			}
 			
-			((ServerPlayerEntity)entity).connection.setPlayerLocation(posX, posY, posZ, entity.rotationYaw, entity.rotationPitch);
+			((ServerPlayerEntity)entity).connection.teleport(posX, posY, posZ, entity.yRot, entity.xRot);
 		} else
 		{
-			entity.setPosition(posX, posY, posZ);
+			entity.setPos(posX, posY, posZ);
 		}
 	}
 }

@@ -30,7 +30,7 @@ public class CaptchaDeckContainer extends Container
 		addSlot(new Slot(this.inventory, 0, 81, 32)
 		{
 			@Override
-			public boolean isItemValid(ItemStack stack)
+			public boolean mayPlace(ItemStack stack)
 			{
 				return ModusTypes.getTypeFromItem(stack.getItem()) != null || stack.getItem().equals(MSItems.CAPTCHA_CARD) && !AlchemyHelper.isPunchedCard(stack);
 			}
@@ -38,41 +38,41 @@ public class CaptchaDeckContainer extends Container
 	}
 	
 	@Override
-	public void onContainerClosed(PlayerEntity playerIn)
+	public void removed(PlayerEntity playerIn)
 	{
-		ItemStack stack = this.inventory.removeStackFromSlot(0);
+		ItemStack stack = this.inventory.removeItemNoUpdate(0);
 		if(!stack.isEmpty())
-			playerIn.dropItem(stack, false);
+			playerIn.drop(stack, false);
 	}
 	
 	@Override
-	public boolean canInteractWith(PlayerEntity playerIn)
+	public boolean stillValid(PlayerEntity playerIn)
 	{
-		return ((PlayerInventory)this.getSlot(0).inventory).player == playerIn;
+		return ((PlayerInventory)this.getSlot(0).container).player == playerIn;
 	}
 	
 	@Override
-	public ItemStack transferStackInSlot(PlayerEntity playerIn, int index)
+	public ItemStack quickMoveStack(PlayerEntity playerIn, int index)
 	{
 		Slot slot = getSlot(index);
-		int slotCount = inventorySlots.size();
-		if(slot.getHasStack())
+		int slotCount = slots.size();
+		if(slot.hasItem())
 		{
-			ItemStack stack1 = slot.getStack();
+			ItemStack stack1 = slot.getItem();
 			ItemStack stack2 = stack1.copy();
 			if(index == slotCount - 1)
 			{
-				if(!mergeItemStack(stack1, 0, slotCount - 1, false))
+				if(!moveItemStackTo(stack1, 0, slotCount - 1, false))
 					return ItemStack.EMPTY;
 			} else
 			{
-				if(!getSlot(slotCount - 1).isItemValid(stack1) || !mergeItemStack(stack1, slotCount - 1, slotCount, false))
+				if(!getSlot(slotCount - 1).mayPlace(stack1) || !moveItemStackTo(stack1, slotCount - 1, slotCount, false))
 					return ItemStack.EMPTY;
 			}
 			
 			if (stack1.isEmpty())
-				slot.putStack(ItemStack.EMPTY);
-			else slot.onSlotChanged();
+				slot.set(ItemStack.EMPTY);
+			else slot.setChanged();
 			return stack2;
 		}
 		return ItemStack.EMPTY;

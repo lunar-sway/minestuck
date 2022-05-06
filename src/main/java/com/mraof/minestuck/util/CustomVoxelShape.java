@@ -75,10 +75,10 @@ public class CustomVoxelShape
 	public VoxelShape create(Direction dir)
 	{
 		CustomVoxelShape shape = this.rotate(dir);
-		VoxelShape out = Block.makeCuboidShape(0,0,0,0,0,0);
+		VoxelShape out = Block.box(0,0,0,0,0,0);
 		
 		for(double[] part : shape.parts)
-			out = VoxelShapes.or(out, Block.makeCuboidShape(part[0], part[1], part[2], part[3], part[4], part[5]));
+			out = VoxelShapes.or(out, Block.box(part[0], part[1], part[2], part[3], part[4], part[5]));
 		return out;
 	}
 	

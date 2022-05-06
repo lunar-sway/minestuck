@@ -1,0 +1,20 @@
+{
+    "variants": {
+        "power=15": { "model": "minestuck:block/stat_storer_high_power" },
+        "power=14": { "model": "minestuck:block/stat_storer_high_power" },
+        "power=13": { "model": "minestuck:block/stat_storer_high_power" },
+        "power=12": { "model": "minestuck:block/stat_storer_high_power" },
+        "power=11": { "model": "minestuck:block/stat_storer_high_power" },
+        "power=10": { "model": "minestuck:block/stat_storer_medium_power" },
+        "power=9": { "model": "minestuck:block/stat_storer_medium_power" },
+        "power=8": { "model": "minestuck:block/stat_storer_medium_power" },
+        "power=7": { "model": "minestuck:block/stat_storer_medium_power" },
+        "power=6": { "model": "minestuck:block/stat_storer_medium_power" },
+        "power=5": { "model": "minestuck:block/stat_storer_low_power" },
+        "power=4": { "model": "minestuck:block/stat_storer_low_power" },
+        "power=3": { "model": "minestuck:block/stat_storer_low_power" },
+        "power=2": { "model": "minestuck:block/stat_storer_low_power" },
+        "power=1": { "model": "minestuck:block/stat_storer_low_power" },
+        "power=0": { "model": "minestuck:block/stat_storer_unpowered" }
+    }
+}

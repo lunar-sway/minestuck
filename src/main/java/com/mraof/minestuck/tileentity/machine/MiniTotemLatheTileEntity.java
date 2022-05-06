@@ -58,7 +58,7 @@ public class MiniTotemLatheTileEntity extends MachineProcessTileEntity implement
 		
 		ItemStack currentOutput = itemHandler.getStackInSlot(3);
 		if(!output.isEmpty())
-			return currentOutput.isEmpty() || ItemStack.areItemsEqual(output, currentOutput) && ItemStack.areItemStackTagsEqual(output, currentOutput);
+			return currentOutput.isEmpty() || ItemStack.isSame(output, currentOutput) && ItemStack.tagMatches(output, currentOutput);
 		else return false;
 	}
 	
@@ -89,7 +89,7 @@ public class MiniTotemLatheTileEntity extends MachineProcessTileEntity implement
 			if (!AlchemyHelper.isPunchedCard(input1) || !AlchemyHelper.isPunchedCard(input2))
 				output = new ItemStack(MSBlocks.GENERIC_OBJECT);
 			else
-				output = CombinationRecipe.findResult(combinerInventory, world);
+				output = CombinationRecipe.findResult(combinerInventory, level);
 		else
 		{
 			ItemStack input = input1.isEmpty() ? input2 : input1;
@@ -108,11 +108,11 @@ public class MiniTotemLatheTileEntity extends MachineProcessTileEntity implement
 	}
 	
 	@Override
-	public void markDirty()
+	public void setChanged()
 	{
 		this.progress = 0;
 		this.ready = false;
-		super.markDirty();
+		super.setChanged();
 	}
 	
 	@Override
@@ -156,6 +156,6 @@ public class MiniTotemLatheTileEntity extends MachineProcessTileEntity implement
 	@Override
 	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity playerIn)
 	{
-		return new MiniTotemLatheContainer(windowId, playerInventory, itemHandler, parameters, IWorldPosCallable.of(world, pos), pos);
+		return new MiniTotemLatheContainer(windowId, playerInventory, itemHandler, parameters, IWorldPosCallable.create(level, worldPosition), worldPosition);
 	}
 }

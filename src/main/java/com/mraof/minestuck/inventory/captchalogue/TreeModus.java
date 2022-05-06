@@ -48,7 +48,7 @@ public class TreeModus extends Modus
 	{
 		if(nbt.contains("node"+currentIndex))
 		{
-			ItemStack stack = ItemStack.read(nbt.getCompound("node"+currentIndex));
+			ItemStack stack = ItemStack.of(nbt.getCompound("node"+currentIndex));
 			if(stack.isEmpty()) return null;	//Should not happen
 			TreeNode node = new TreeNode(stack);
 			node.node1 = readNode(nbt, currentIndex + (int) Math.pow(2, level), level + 1);
@@ -60,7 +60,7 @@ public class TreeModus extends Modus
 	
 	private void saveNode(CompoundNBT nbt, TreeNode node, int currentIndex, int level)
 	{
-		nbt.put("node"+currentIndex, node.stack.write(new CompoundNBT()));
+		nbt.put("node"+currentIndex, node.stack.save(new CompoundNBT()));
 		if(node.node1 != null)
 			saveNode(nbt, node.node1, currentIndex + (int) Math.pow(2, level), level + 1);
 		if(node.node2 != null)
@@ -249,7 +249,7 @@ public class TreeModus extends Modus
 		
 		public void addNode(TreeNode node)
 		{
-			if(this.stack.getItem() == node.stack.getItem() && ItemStack.areItemStackTagsEqual(this.stack, node.stack)
+			if(this.stack.getItem() == node.stack.getItem() && ItemStack.tagMatches(this.stack, node.stack)
 				&& this.stack.getCount() + node.stack.getCount() <= this.stack.getMaxStackSize())
 			{
 				this.stack.grow(node.stack.getCount());

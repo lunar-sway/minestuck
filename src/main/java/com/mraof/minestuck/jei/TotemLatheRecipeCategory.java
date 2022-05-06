@@ -48,7 +48,7 @@ public class TotemLatheRecipeCategory implements IRecipeCategory<JeiCombination>
 	@Override
 	public String getTitle()
 	{
-		return I18n.format(MSBlocks.TOTEM_LATHE.MIDDLE.get().getTranslationKey());
+		return I18n.get(MSBlocks.TOTEM_LATHE.MIDDLE.get().getDescriptionId());
 	}
 
 	@Override
@@ -66,7 +66,7 @@ public class TotemLatheRecipeCategory implements IRecipeCategory<JeiCombination>
 	@Override
 	public void setIngredients(JeiCombination jeiCombination, IIngredients ingredients)
 	{
-		ingredients.setInputLists(VanillaTypes.ITEM, Arrays.asList(Arrays.asList(jeiCombination.getInput1().getMatchingStacks()), Arrays.asList(jeiCombination.getInput2().getMatchingStacks())));
+		ingredients.setInputLists(VanillaTypes.ITEM, Arrays.asList(Arrays.asList(jeiCombination.getInput1().getItems()), Arrays.asList(jeiCombination.getInput2().getItems())));
 		ingredients.setOutput(VanillaTypes.ITEM, jeiCombination.getOutput());
 	}
 

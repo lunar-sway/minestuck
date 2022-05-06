@@ -88,6 +88,12 @@
         },
         {
           "type": "minecraft:item",
+          "weight": 3,
+          "quality": 1,
+          "name": "minestuck:carrot_cake"
+        },
+        {
+          "type": "minecraft:item",
           "weight": 5,
           "functions": [
             {

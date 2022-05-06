@@ -7,10 +7,11 @@ import com.mraof.minestuck.inventory.ConsortMerchantContainer;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.util.MSNBTUtil;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -19,19 +20,18 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.IContainerProvider;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.NBTDynamicOps;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityPredicates;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.*;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.FakePlayer;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;
@@ -49,7 +49,7 @@ public class ConsortEntity extends SimpleTexturedEntity implements IContainerPro
 	private CompoundNBT messageData;
 	private final Set<PlayerIdentifier> talkRepPlayerList = new HashSet<>();
 	public EnumConsort.MerchantType merchantType = EnumConsort.MerchantType.NONE;
-	DimensionType homeDimension;
+	RegistryKey<World> homeDimension;
 	boolean visitedSkaia;
 	public ConsortMerchantInventory stocks;
 	private int eventTimer = -1;    //TODO use the interface mentioned in the todo above to implement consort explosion instead
@@ -58,15 +58,13 @@ public class ConsortEntity extends SimpleTexturedEntity implements IContainerPro
 	{
 		super(type, world);
 		this.consortType = consortType;
-		this.experienceValue = 1;
+		this.xpReward = 1;
 	}
 	
-	@Override
-	protected void registerAttributes()
+	
+	public static AttributeModifierMap.MutableAttribute consortAttributes()
 	{
-		super.registerAttributes();
-		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10D);
-		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25);
+		return MobEntity.createMobAttributes().add(Attributes.MAX_HEALTH, 10).add(Attributes.MOVEMENT_SPEED, 0.25);
 	}
 	
 	@Override
@@ -82,27 +80,27 @@ public class ConsortEntity extends SimpleTexturedEntity implements IContainerPro
 	
 	private boolean shouldFleeFrom(LivingEntity entity)
 	{
-		return entity instanceof ServerPlayerEntity && EntityPredicates.CAN_AI_TARGET.test(entity) && PlayerSavedData.getData((ServerPlayerEntity) entity).getConsortReputation(homeDimension) <= -1000;
+		return entity instanceof ServerPlayerEntity && EntityPredicates.NO_CREATIVE_OR_SPECTATOR.test(entity) && PlayerSavedData.getData((ServerPlayerEntity) entity).getConsortReputation(homeDimension) <= -1000;
 	}
 	
 	protected void applyAdditionalAITasks()
 	{
-		if(!this.detachHome() || getMaximumHomeDistance() > 1)
+		if(!this.hasRestriction() || getRestrictRadius() > 1)
 			goalSelector.addGoal(5, new WaterAvoidingRandomWalkingGoal(this, 0.5F));
 	}
 	
 	@Override
-	public boolean isWithinHomeDistanceCurrentPosition()
+	public boolean isWithinRestriction()
 	{
-		return homeDimension != this.dimension || super.isWithinHomeDistanceCurrentPosition();
+		return homeDimension != this.level.dimension() || super.isWithinRestriction();
 	}
 	
 	@Override
-	protected boolean processInteract(PlayerEntity player, Hand hand)
+	protected ActionResultType mobInteract(PlayerEntity player, Hand hand)
 	{
-		if(this.isAlive() && !player.isSneaking() && eventTimer < 0)
+		if(this.isAlive() && !player.isShiftKeyDown() && eventTimer < 0)
 		{
-			if(!world.isRemote && player instanceof ServerPlayerEntity && PlayerSavedData.getData((ServerPlayerEntity) player).getConsortReputation(homeDimension) > -1000)
+			if(!level.isClientSide && player instanceof ServerPlayerEntity && PlayerSavedData.getData((ServerPlayerEntity) player).getConsortReputation(homeDimension) > -1000)
 			{
 				ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
 				if(message == null)
@@ -124,9 +122,9 @@ public class ConsortEntity extends SimpleTexturedEntity implements IContainerPro
 				}
 			}
 			
-			return true;
+			return ActionResultType.SUCCESS;
 		} else
-			return super.processInteract(player, hand);
+			return super.mobInteract(player, hand);
 	}
 	
 	private void checkMessageData()
@@ -134,7 +132,7 @@ public class ConsortEntity extends SimpleTexturedEntity implements IContainerPro
 		if(messageData == null)
 		{
 			messageData = new CompoundNBT();
-			messageTicksLeft = 24000 + world.rand.nextInt(24000);
+			messageTicksLeft = 24000 + level.random.nextInt(24000);
 		}
 	}
 	
@@ -164,10 +162,10 @@ public class ConsortEntity extends SimpleTexturedEntity implements IContainerPro
 	}
 	
 	@Override
-	public void livingTick()
+	public void aiStep()
 	{
-		super.livingTick();
-		if(world.isRemote)
+		super.aiStep();
+		if(level.isClientSide)
 			return;
 		
 		if(messageTicksLeft > 0)
@@ -179,7 +177,7 @@ public class ConsortEntity extends SimpleTexturedEntity implements IContainerPro
 				message = null;
 		}
 		
-		if(MSDimensions.isSkaia(dimension))
+		if(MSDimensions.isSkaia(level.dimension()))
 			visitedSkaia = true;
 		
 		if(eventTimer > 0)
@@ -190,20 +188,20 @@ public class ConsortEntity extends SimpleTexturedEntity implements IContainerPro
 	
 	private void explode()
 	{
-		if(!this.world.isRemote)
+		if (!this.level.isClientSide)
 		{
-			boolean flag = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this);
+			boolean flag = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this);
 			this.dead = true;
 			float explosionRadius = 2.0f;
-			this.world.createExplosion(this, this.getPosX(), this.getPosY(), this.getPosZ(), explosionRadius, flag ? Explosion.Mode.DESTROY : Explosion.Mode.NONE);
+			this.level.explode(this, this.getX(), this.getY(), this.getZ(), explosionRadius, flag ? Explosion.Mode.DESTROY : Explosion.Mode.NONE);
 			this.remove();
 		}
 	}
 	
 	@Override
-	public void writeAdditional(CompoundNBT compound)
+	public void addAdditionalSaveData(CompoundNBT compound)
 	{
-		super.writeAdditional(compound);
+		super.addAdditionalSaveData(compound);
 		
 		if(message != null)
 		{
@@ -221,19 +219,20 @@ public class ConsortEntity extends SimpleTexturedEntity implements IContainerPro
 		compound.putBoolean("HasHadMessage", hasHadMessage);
 		
 		compound.putInt("Type", merchantType.ordinal());
-		MSNBTUtil.tryWriteDimensionType(compound, "HomeDim", homeDimension);
+		ResourceLocation.CODEC.encodeStart(NBTDynamicOps.INSTANCE, homeDimension.location()).resultOrPartial(LOGGER::error)
+				.ifPresent(tag -> compound.put("HomeDim", tag));
 		
 		if(merchantType != EnumConsort.MerchantType.NONE && stocks != null)
 			compound.put("Stock", stocks.writeToNBT());
 		
-		if(detachHome())
+		if(hasRestriction())
 		{
 			CompoundNBT nbt = new CompoundNBT();
-			BlockPos home = getHomePosition();
+			BlockPos home = getRestrictCenter();
 			nbt.putInt("HomeX", home.getX());
 			nbt.putInt("HomeY", home.getY());
 			nbt.putInt("HomeZ", home.getZ());
-			nbt.putInt("MaxHomeDistance", (int) getMaximumHomeDistance());
+			nbt.putInt("MaxHomeDistance", (int) getRestrictRadius());
 			compound.put("HomePos", nbt);
 		}
 		
@@ -241,9 +240,9 @@ public class ConsortEntity extends SimpleTexturedEntity implements IContainerPro
 	}
 	
 	@Override
-	public void readAdditional(CompoundNBT compound)
+	public void readAdditionalSaveData(CompoundNBT compound)
 	{
-		super.readAdditional(compound);
+		super.readAdditionalSaveData(compound);
 		
 		if(compound.contains("Dialogue", Constants.NBT.TAG_STRING))
 		{
@@ -265,9 +264,9 @@ public class ConsortEntity extends SimpleTexturedEntity implements IContainerPro
 		merchantType = EnumConsort.MerchantType.values()[MathHelper.clamp(compound.getInt("Type"), 0, EnumConsort.MerchantType.values().length - 1)];
 		
 		if(compound.contains("HomeDim", Constants.NBT.TAG_STRING))
-			homeDimension = MSNBTUtil.tryReadDimensionType(compound, "HomeDim");
+			homeDimension = World.RESOURCE_KEY_CODEC.parse(NBTDynamicOps.INSTANCE, compound.get("HomeDim")).resultOrPartial(LOGGER::error).orElse(null);
 		if(homeDimension == null)
-			homeDimension = this.world.getDimension().getType();
+			homeDimension = this.level.dimension();
 		
 		if(merchantType != EnumConsort.MerchantType.NONE && compound.contains("Stock", Constants.NBT.TAG_LIST))
 		{
@@ -278,7 +277,7 @@ public class ConsortEntity extends SimpleTexturedEntity implements IContainerPro
 		{
 			CompoundNBT nbt = compound.getCompound("HomePos");
 			BlockPos pos = new BlockPos(nbt.getInt("HomeX"), nbt.getInt("HomeY"), nbt.getInt("HomeZ"));
-			setHomePosAndDistance(pos, nbt.getInt("MaxHomeDistance"));
+			restrictTo(pos, nbt.getInt("MaxHomeDistance"));
 		}
 		
 		visitedSkaia = compound.getBoolean("Skaia");
@@ -288,42 +287,42 @@ public class ConsortEntity extends SimpleTexturedEntity implements IContainerPro
 	
 	@Nullable
 	@Override
-	public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag)
+	public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag)
 	{
-		if(merchantType == EnumConsort.MerchantType.NONE && this.rand.nextInt(30) == 0)
+		if(merchantType == EnumConsort.MerchantType.NONE && this.random.nextInt(30) == 0)
 		{
 			merchantType = EnumConsort.MerchantType.SHADY;
-			if(detachHome())
-				setHomePosAndDistance(getHomePosition(), (int) (getMaximumHomeDistance() * 0.4F));
+			if(hasRestriction())
+				restrictTo(getRestrictCenter(), (int) (getRestrictRadius()*0.4F));
 		}
 		
-		homeDimension = world.getDimension().getType();
-		visitedSkaia = rand.nextFloat() < 0.1F;
+		homeDimension = level.dimension();
+		visitedSkaia = random.nextFloat() < 0.1F;
 		
 		applyAdditionalAITasks();
 		
-		return super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+		return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
 	}
 	
 	@Override
-	public boolean hitByEntity(Entity entityIn)
+	public boolean skipAttackInteraction(Entity entityIn)
 	{
 		if(entityIn instanceof ServerPlayerEntity)
 			PlayerSavedData.getData((ServerPlayerEntity) entityIn).addConsortReputation(-5, homeDimension);
-		return super.hitByEntity(entityIn);
+		return super.skipAttackInteraction(entityIn);
 	}
 	
 	@Override
-	public void onDeath(DamageSource cause)
+	public void die(DamageSource cause)
 	{
-		LivingEntity livingEntity = this.getAttackingEntity();
-		if(livingEntity instanceof ServerPlayerEntity)
+		LivingEntity livingEntity = this.getKillCredit();
+		if(livingEntity instanceof ServerPlayerEntity && (!(livingEntity instanceof FakePlayer)))
 			PlayerSavedData.getData((ServerPlayerEntity) livingEntity).addConsortReputation(-100, homeDimension);
-		super.onDeath(cause);
+		super.die(cause);
 	}
 	
 	@Override
-	public boolean canDespawn(double distanceToClosestPlayer)
+	public boolean removeWhenFarAway(double distanceToClosestPlayer)
 	{
 		return false;
 	}
@@ -335,7 +334,11 @@ public class ConsortEntity extends SimpleTexturedEntity implements IContainerPro
 	
 	public MessageType getMessage()
 	{
-		return message.getMessage();
+		if(this.isAlive() && !level.isClientSide && message != null)
+		{
+			return message.getMessage();
+		}
+		return null;
 	}
 	
 	public CompoundNBT getMessageTag()
@@ -345,9 +348,9 @@ public class ConsortEntity extends SimpleTexturedEntity implements IContainerPro
 	
 	public CompoundNBT getMessageTagForPlayer(PlayerEntity player)
 	{
-		if(!messageData.contains(player.getCachedUniqueIdString(), Constants.NBT.TAG_COMPOUND))
-			messageData.put(player.getCachedUniqueIdString(), new CompoundNBT());
-		return messageData.getCompound(player.getCachedUniqueIdString());
+		if(!messageData.contains(player.getStringUUID(), Constants.NBT.TAG_COMPOUND))
+			messageData.put(player.getStringUUID(), new CompoundNBT());
+		return messageData.getCompound(player.getStringUUID());
 	}
 	
 	@Nullable
@@ -385,7 +388,7 @@ public class ConsortEntity extends SimpleTexturedEntity implements IContainerPro
 		return consortType.getDeathSound();
 	}
 	
-	public DimensionType getHomeDimension()
+	public RegistryKey<World> getHomeDimension()
 	{
 		return homeDimension;
 	}

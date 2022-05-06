@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minestuck:mycelium_bricks"
+    ]
+  },
+  "criteria": {
+    "has_mycelium_stone": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minestuck:mycelium_stone"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minestuck:mycelium_bricks"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_mycelium_stone",
+      "has_the_recipe"
+    ]
+  ]
+}

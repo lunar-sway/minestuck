@@ -23,13 +23,13 @@ public class CruxitePotionItem extends CruxiteArtifactItem
 	}
 	
 	@Override
-	public UseAction getUseAction(ItemStack stack)
+	public UseAction getUseAnimation(ItemStack stack)
 	{
 		return UseAction.DRINK;
 	}
 	
 	@Override
-	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityLiving)
+	public ItemStack finishUsingItem(ItemStack stack, World worldIn, LivingEntity entityLiving)
 	{
 		stack.shrink(1);
 		if(entityLiving instanceof ServerPlayerEntity)
@@ -39,9 +39,9 @@ public class CruxitePotionItem extends CruxiteArtifactItem
 	}
 	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn)
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn)
 	{
-		playerIn.setActiveHand(handIn);
-		return ActionResult.resultSuccess(playerIn.getHeldItem(handIn));
+		playerIn.startUsingItem(handIn);
+		return ActionResult.success(playerIn.getItemInHand(handIn));
 	}
 }

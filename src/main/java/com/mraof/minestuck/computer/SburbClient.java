@@ -74,7 +74,7 @@ public class SburbClient extends ButtonListProgram
 				MSPacketHandler.sendToServer(CloseRemoteSburbConnectionPacket.asClient(te));
 			else MSPacketHandler.sendToServer(CloseSburbConnectionPacket.asClient(te));
 		} else if(buttonName.equals(SELECT_COLOR))
-			Minecraft.getInstance().displayGuiScreen(new ColorSelectorScreen(false));
+			Minecraft.getInstance().setScreen(new ColorSelectorScreen(false));
 	}
 	
 	@Override

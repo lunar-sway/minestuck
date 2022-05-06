@@ -16,10 +16,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.structure.ScatteredStructurePiece;
+import net.minecraft.world.gen.feature.structure.StructureManager;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 
 import java.util.Random;
@@ -54,9 +55,9 @@ public class SmallRuinPiece extends ScatteredStructurePiece
 	}
 	
 	@Override
-	protected void readAdditional(CompoundNBT nbt)    //Note: incorrectly mapped. Should be writeAdditional
+	protected void addAdditionalSaveData(CompoundNBT nbt)
 	{
-		super.readAdditional(nbt);
+		super.addAdditionalSaveData(nbt);
 		
 		for(int i = 0; i < 4; i++)
 			nbt.putBoolean("torch" + i, torches[i]);
@@ -66,12 +67,12 @@ public class SmallRuinPiece extends ScatteredStructurePiece
 	}
 
 	@Override
-	public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGeneratorIn, Random randomIn, MutableBoundingBox boundingBoxIn, ChunkPos chunkPosIn)
+	public boolean postProcess(ISeedReader worldIn, StructureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, MutableBoundingBox boundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
 	{
-		if(!isInsideBounds(worldIn, boundingBoxIn, 0)) //where the height is determined, uses ScatteredStructurePiece "Heightmap.Type.MOTION_BLOCKING_NO_LEAVES"
+		if(!updateAverageGroundHeight(worldIn, boundingBoxIn, 0)) //where the height is determined, uses ScatteredStructurePiece "Heightmap.Type.MOTION_BLOCKING_NO_LEAVES"
 			return false;
 
-		StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn.getSettings());
+		StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
 		BlockState wallBlock = blocks.getBlockState("structure_primary");
 		BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");
 		BlockState floorBlock = blocks.getBlockState("structure_secondary");
@@ -93,8 +94,8 @@ public class SmallRuinPiece extends ScatteredStructurePiece
 			{
 				buildFloorTile(wallBlock, x, 8, worldIn, randomIn, boundingBoxIn);
 				buildWall(wallBlock, x, 8, worldIn, randomIn, boundingBoxIn, 0);
-				if(this.getBlockStateFromPos(worldIn, x, 2, 8, boundingBoxIn) == wallBlock)
-					this.setBlockState(worldIn, wallDecor, x, 2, 8, boundingBoxIn);
+				if(this.getBlock(worldIn, x, 2, 8, boundingBoxIn) == wallBlock)
+					this.placeBlock(worldIn, wallDecor, x, 2, 8, boundingBoxIn);
 			} else buildFloorTile(floorBlock, x, 8, worldIn, randomIn, boundingBoxIn);
 
 		for(int x = 2; x < 5; x++)
@@ -103,40 +104,40 @@ public class SmallRuinPiece extends ScatteredStructurePiece
 			buildWall(wallBlock, x, 9, worldIn, randomIn, boundingBoxIn, 0);
 		}
 
-		this.fillWithAir(worldIn, boundingBoxIn, 1, 1, 0, 5, 3, 7);
-		this.fillWithAir(worldIn, boundingBoxIn, 2, 1, 8, 4, 3, 8);
+		this.generateAirBox(worldIn, boundingBoxIn, 1, 1, 0, 5, 3, 7);
+		this.generateAirBox(worldIn, boundingBoxIn, 2, 1, 8, 4, 3, 8);
 
 		if(!placedChest)
-			placedChest = generateChest(worldIn, boundingBoxIn, randomIn, 3, 1, 6, this.getCoordBaseMode().getOpposite(), MSLootTables.BASIC_MEDIUM_CHEST);
+			placedChest = generateChest(worldIn, boundingBoxIn, randomIn, 3, 1, 6, this.getOrientation().getOpposite(), MSLootTables.BASIC_MEDIUM_CHEST);
 
 		if(torches[0])
-			this.setBlockState(worldIn, wallTorch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.EAST), 1, 2, 3, boundingBoxIn);
+			this.placeBlock(worldIn, wallTorch.setValue(WallTorchBlock.FACING, Direction.EAST), 1, 2, 3, boundingBoxIn);
 		if(torches[1])
-			this.setBlockState(worldIn, wallTorch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.WEST), 5, 2, 3, boundingBoxIn);
+			this.placeBlock(worldIn, wallTorch.setValue(WallTorchBlock.FACING, Direction.WEST), 5, 2, 3, boundingBoxIn);
 		if(torches[2])
-			this.setBlockState(worldIn, wallTorch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.EAST), 1, 2, 6, boundingBoxIn);
+			this.placeBlock(worldIn, wallTorch.setValue(WallTorchBlock.FACING, Direction.EAST), 1, 2, 6, boundingBoxIn);
 		if(torches[3])
-			this.setBlockState(worldIn, wallTorch.with(WallTorchBlock.HORIZONTAL_FACING, Direction.WEST), 5, 2, 6, boundingBoxIn);
+			this.placeBlock(worldIn, wallTorch.setValue(WallTorchBlock.FACING, Direction.WEST), 5, 2, 6, boundingBoxIn);
 
 		if(!placedOgres[0])
-			placedOgres[0] = placeUnderling(this.boundingBox.minX - 3, this.boundingBox.minZ - 3, boundingBoxIn, worldIn, randomIn);
+			placedOgres[0] = placeUnderling(this.boundingBox.x0 - 3, this.boundingBox.z0 - 3, boundingBoxIn, worldIn, randomIn);
 		if(!placedOgres[1])
-			placedOgres[1] = placeUnderling(this.boundingBox.maxX  + 3, this.boundingBox.minZ - 3, boundingBoxIn, worldIn, randomIn);
+			placedOgres[1] = placeUnderling(this.boundingBox.x1  + 3, this.boundingBox.z0 - 3, boundingBoxIn, worldIn, randomIn);
 		if(!placedOgres[2])
-			placedOgres[2] = placeUnderling(this.boundingBox.minX - 3, this.boundingBox.maxZ + 3, boundingBoxIn, worldIn, randomIn);
+			placedOgres[2] = placeUnderling(this.boundingBox.x0 - 3, this.boundingBox.z1 + 3, boundingBoxIn, worldIn, randomIn);
 		if(!placedOgres[3])
-			placedOgres[3] = placeUnderling(this.boundingBox.maxX + 3, this.boundingBox.maxZ + 3, boundingBoxIn, worldIn, randomIn);
+			placedOgres[3] = placeUnderling(this.boundingBox.x1 + 3, this.boundingBox.z1 + 3, boundingBoxIn, worldIn, randomIn);
 
 		return true;
 	}
 	
-	private boolean generateChest(IWorld worldIn, MutableBoundingBox boundingBoxIn, Random randomIn, int x, int y, int z, Direction direction, ResourceLocation lootTable)
+	private boolean generateChest(ISeedReader worldIn, MutableBoundingBox boundingBoxIn, Random randomIn, int x, int y, int z, Direction direction, ResourceLocation lootTable)
 	{
-		BlockPos blockpos = new BlockPos(this.getXWithOffset(x, z), this.getYWithOffset(y), this.getZWithOffset(x, z));
-		return generateChest(worldIn, boundingBoxIn, randomIn, blockpos, lootTable, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, direction));
+		BlockPos blockpos = new BlockPos(this.getWorldX(x, z), this.getWorldY(y), this.getWorldZ(x, z));
+		return createChest(worldIn, boundingBoxIn, randomIn, blockpos, lootTable, Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, direction));
 	}
 	
-	private void buildWall(BlockState block, int x, int z, IWorld world, Random rand, MutableBoundingBox boundingBox, int minY)
+	private void buildWall(BlockState block, int x, int z, ISeedReader world, Random rand, MutableBoundingBox boundingBox, int minY)
 	{
 		
 		float f = z * 0.2F;
@@ -145,25 +146,25 @@ public class SmallRuinPiece extends ScatteredStructurePiece
 			if(y > minY && rand.nextFloat() >= f)
 				return;
 			
-			this.setBlockState(world, block, x, y, z, boundingBox);
+			this.placeBlock(world, block, x, y, z, boundingBox);
 			
 			f -= 0.5F;
 		}
 	}
 	
-	private boolean buildFloorTile(BlockState block, int x, int z, IWorld world, Random rand, MutableBoundingBox boundingBox)
+	private boolean buildFloorTile(BlockState block, int x, int z, ISeedReader world, Random rand, MutableBoundingBox boundingBox)
 	{
 		int y = 0;
 		
 		float f = (3 - z) * 0.25F;
-		if(this.getBlockStateFromPos(world, x, y, z, boundingBox).getMaterial().isSolid())
+		if(this.getBlock(world, x, y, z, boundingBox).getMaterial().isSolid())
 			f -= 0.25F;
 		boolean b = true;
 		do
 		{
 			if(rand.nextFloat() >= f)
 			{
-				this.setBlockState(world, block, x, y, z, boundingBox);
+				this.placeBlock(world, block, x, y, z, boundingBox);
 				f = 0F;
 			} else
 			{
@@ -172,21 +173,21 @@ public class SmallRuinPiece extends ScatteredStructurePiece
 			}
 			
 			y--;
-		} while(this.boundingBox.minY + y >= 0 && !this.getBlockStateFromPos(world, x, y, z, boundingBox).getMaterial().isSolid());
+		} while(this.boundingBox.y0 + y >= 0 && !this.getBlock(world, x, y, z, boundingBox).getMaterial().isSolid());
 		
 		return b;
 	}
 	
-	private boolean placeUnderling(int xPos, int zPos, MutableBoundingBox boundingBox, IWorld world, Random rand)
+	private boolean placeUnderling(int xPos, int zPos, MutableBoundingBox boundingBox, ISeedReader world, Random rand)
 	{
-		if(!boundingBox.isVecInside(new BlockPos(xPos, 64, zPos)))
+		if(!boundingBox.isInside(new BlockPos(xPos, 64, zPos)))
 			return false;
 		
 		int minY = 256, maxY = 0;
 		for(int x = xPos - 1; x <= xPos + 1; x++)
 			for(int z = zPos - 1; z <= zPos + 1; z++)
 			{
-				int y = world.getHeight(Heightmap.Type.MOTION_BLOCKING, new BlockPos(x, 0, z)).getY();
+				int y = world.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING, new BlockPos(x, 0, z)).getY();
 				if(y < minY)
 					minY = y;
 				if(y > maxY)
@@ -195,14 +196,14 @@ public class SmallRuinPiece extends ScatteredStructurePiece
 		
 		if(maxY - minY < 3)
 		{
-			OgreEntity ogre = MSEntityTypes.OGRE.create(world.getWorld());
+			OgreEntity ogre = MSEntityTypes.OGRE.create(world.getLevel());
 			if(ogre == null)
 				throw new IllegalStateException("Unable to create a new ogre. Entity factory returned null!");
-			ogre.enablePersistence();
-			ogre.setLocationAndAngles(xPos + 0.5, maxY, zPos + 0.5, rand.nextFloat() * 360F, 0);
-			ogre.onInitialSpawn(world, world.getDifficultyForLocation(new BlockPos(xPos, maxY, zPos)), SpawnReason.STRUCTURE, null, null);
-			ogre.setHomePosAndDistance(new BlockPos(xPos, this.boundingBox.minY, zPos), 10);
-			world.addEntity(ogre);
+			ogre.setPersistenceRequired();
+			ogre.moveTo(xPos + 0.5, maxY, zPos + 0.5, rand.nextFloat() * 360F, 0);
+			ogre.finalizeSpawn(world, world.getCurrentDifficultyAt(new BlockPos(xPos, maxY, zPos)), SpawnReason.STRUCTURE, null, null);
+			ogre.restrictTo(new BlockPos(xPos, this.boundingBox.y0, zPos), 10);
+			world.addFreshEntity(ogre);
 		}
 		return true;
 	}

@@ -62,12 +62,12 @@ public class ClientEditPacket implements PlayToServerPacket
 	{
 		if(player == null || player.getServer() == null)
 			return;
-		OpEntry opsEntry = player.getServer().getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
+		OpEntry opsEntry = player.getServer().getPlayerList().getOps().get(player.getGameProfile());
 		if(!MinestuckConfig.SERVER.giveItems.get())
 		{
 			if(user == -1)
 				ServerEditHandler.onPlayerExit(player);
-			else if(!MinestuckConfig.SERVER.privateComputers.get() || IdentifierHandler.encode(player).getId() == this.user || opsEntry != null && opsEntry.getPermissionLevel() >= 2)
+			else if(!MinestuckConfig.SERVER.privateComputers.get() || IdentifierHandler.encode(player).getId() == this.user || opsEntry != null && opsEntry.getLevel() >= 2)
 			{
 				PlayerIdentifier user = IdentifierHandler.getById(this.user);
 				PlayerIdentifier target = IdentifierHandler.getById(this.target);
@@ -83,9 +83,9 @@ public class ClientEditPacket implements PlayToServerPacket
 		{
 			ServerPlayerEntity targetPlayer = target.getPlayer(player.getServer());
 			
-			if(targetPlayer != null && (!MinestuckConfig.SERVER.privateComputers.get() || user.appliesTo(player) || opsEntry != null && opsEntry.getPermissionLevel() >= 2))
+			if(targetPlayer != null && (!MinestuckConfig.SERVER.privateComputers.get() || user.appliesTo(player) || opsEntry != null && opsEntry.getLevel() >= 2))
 			{
-				SburbConnection c = SkaianetHandler.get(player.world).getActiveConnection(target);
+				SburbConnection c = SkaianetHandler.get(player.level).getActiveConnection(target);
 				if(c == null || c.getServerIdentifier() != user || !(c.isMain() || SburbHandler.giveItems(player.server, target)))
 					return;
 				
@@ -93,12 +93,12 @@ public class ClientEditPacket implements PlayToServerPacket
 				{
 					if(!c.hasGivenItem(entry))
 					{
-						ItemStack item = entry.getItemStack(c, player.world);
-						if(!targetPlayer.inventory.hasItemStack(item) && targetPlayer.inventory.addItemStackToInventory(item))
+						ItemStack item = entry.getItemStack(c, player.level);
+						if(!targetPlayer.inventory.contains(item) && targetPlayer.inventory.add(item))
 							c.setHasGivenItem(entry);
 					}
 				}
-				player.getServer().getPlayerList().sendInventory(targetPlayer);
+				player.getServer().getPlayerList().sendAllPlayerInfo(targetPlayer);
 			}
 		}
 	}

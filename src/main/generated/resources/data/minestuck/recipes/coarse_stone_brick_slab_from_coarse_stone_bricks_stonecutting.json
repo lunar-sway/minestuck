@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "minestuck:coarse_stone_bricks"
+  },
+  "result": "minestuck:coarse_stone_brick_slab",
+  "count": 2
+}

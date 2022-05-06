@@ -203,7 +203,7 @@ public final class Session
 			{
 				LandInfo landInfo = c.getLandInfo();
 				if(landInfo != null)
-					types.add(landInfo.getLandAspects().title);
+					types.add(landInfo.getLandAspects().getTitle());
 			}
 		}
 		
@@ -228,7 +228,7 @@ public final class Session
 			{
 				LandInfo landInfo = c.getLandInfo();
 				if(landInfo != null)
-					types.add(landInfo.getLandAspects().terrain);
+					types.add(landInfo.getLandAspects().getTerrain());
 			}
 		}
 		

@@ -9,6 +9,7 @@ import net.minecraftforge.common.UsernameCache;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.FakePlayer;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -45,6 +46,7 @@ public class IdentifierHandler
 		return nbt.contains(key, Constants.NBT.TAG_STRING) || nbt.contains(key + "Most", Constants.NBT.TAG_LONG) && nbt.contains(key + "Least", Constants.NBT.TAG_LONG);
 	}
 	
+	@Nonnull
 	public static PlayerIdentifier load(CompoundNBT nbt, String key)
 	{
 		PlayerIdentifier identifier;
@@ -54,7 +56,7 @@ public class IdentifierHandler
 			case "null":
 				return NULL_IDENTIFIER;
 			case "uuid":
-				identifier = new UUIDIdentifier(nextIdentifierId, nbt.getUniqueId(key));
+				identifier = new UUIDIdentifier(nextIdentifierId, nbt.getUUID(key + "_uuid"));
 				break;
 			case "fake":
 				identifier = new FakeIdentifier(nextIdentifierId, nbt.getInt(key+"_count"));
@@ -170,7 +172,7 @@ public class IdentifierHandler
 			PlayerList list = server == null ? null : server.getPlayerList();
 			if(list == null)
 				return null;
-			return list.getPlayerByUUID(uuid);
+			return list.getPlayer(uuid);
 		}
 		
 		@Override
@@ -183,7 +185,7 @@ public class IdentifierHandler
 		public CompoundNBT saveToNBT(CompoundNBT nbt, String key)
 		{
 			nbt.putString(key, "uuid");
-			nbt.putUniqueId(key, uuid);
+			nbt.putUUID(key + "_uuid", uuid);
 			return nbt;
 		}
 		

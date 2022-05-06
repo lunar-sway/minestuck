@@ -12,8 +12,9 @@ import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.RegistryKey;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
 import org.apache.logging.log4j.LogManager;
@@ -404,13 +405,18 @@ public final class SkaianetHandler
 		return sessionHandler.getConnectionStream().filter(c -> c.isServer(computer)).findAny().orElse(null);
 	}
 	
+	public Stream<SburbConnection> getConnectionsInEntry()
+	{
+		return sessionHandler.getConnectionStream().filter(connection -> connection.isActive() && connection.isMain() && !connection.hasEntered());
+	}
+	
 	/**
 	 * Prepares the sburb connection and data needed for after entry.
 	 * Should only be called by the cruxite artifact on trigger before teleportation
 	 * @param target the identifier of the player that is entering
 	 * @return The dimension type of the new land created, or null if the player can't enter at this time.
 	 */
-	public DimensionType prepareEntry(PlayerIdentifier target)
+	public RegistryKey<World> prepareEntry(PlayerIdentifier target)
 	{
 		SburbConnection c = getPrimaryConnection(target, true).orElse(null);
 		if(c == null)

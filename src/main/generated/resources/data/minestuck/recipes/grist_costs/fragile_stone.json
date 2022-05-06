@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:fragile_stone"
+  },
+  "grist_cost": {
+    "minestuck:shale": 1
+  }
+}

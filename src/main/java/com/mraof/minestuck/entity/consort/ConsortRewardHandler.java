@@ -2,12 +2,11 @@ package com.mraof.minestuck.entity.consort;
 
 import com.mraof.minestuck.util.BoondollarPriceManager;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootParameterSets;
+import net.minecraft.loot.LootParameters;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootParameterSets;
-import net.minecraft.world.storage.loot.LootParameters;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,17 +19,17 @@ public class ConsortRewardHandler
 	
 	public static List<Pair<ItemStack, Integer>> generateStock(ResourceLocation lootTable, ConsortEntity consort, Random rand)
 	{
-		LootContext.Builder contextBuilder = new LootContext.Builder((ServerWorld) consort.world)
-				.withParameter(LootParameters.THIS_ENTITY, consort).withParameter(LootParameters.POSITION, new BlockPos(consort));
-		List<ItemStack> itemStacks = Objects.requireNonNull(consort.getServer()).getLootTableManager()
-				.getLootTableFromLocation(lootTable).generate(contextBuilder.build(LootParameterSets.GIFT));
+		LootContext.Builder contextBuilder = new LootContext.Builder((ServerWorld) consort.level)
+				.withParameter(LootParameters.THIS_ENTITY, consort).withParameter(LootParameters.ORIGIN, consort.position());
+		List<ItemStack> itemStacks = Objects.requireNonNull(consort.getServer()).getLootTables()
+				.get(lootTable).getRandomItems(contextBuilder.create(LootParameterSets.GIFT));
 		List<Pair<ItemStack, Integer>> itemPriceList = new ArrayList<>();
 		stackLoop:
 		for (ItemStack stack : itemStacks)
 		{
 			for (Pair<ItemStack, Integer> pair : itemPriceList)
 			{
-				if (ItemStack.areItemsEqual(pair.getKey(), stack) && ItemStack.areItemStackTagsEqual(pair.getKey(), stack))
+				if (ItemStack.isSame(pair.getKey(), stack) && ItemStack.tagMatches(pair.getKey(), stack))
 				{
 					pair.getKey().grow(stack.getCount());
 					continue stackLoop;

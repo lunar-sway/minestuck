@@ -36,7 +36,7 @@ public class ContainerGristCost extends GeneratedGristCost
 	@Override
 	protected GristSet generateCost(GenerationContext context)
 	{
-		ItemStack container = ingredient.getMatchingStacks().length > 0 ? ingredient.getMatchingStacks()[0].getContainerItem() : ItemStack.EMPTY;
+		ItemStack container = ingredient.getItems().length > 0 ? ingredient.getItems()[0].getContainerItem() : ItemStack.EMPTY;
 		if(!container.isEmpty())
 		{
 			GristSet cost = context.lookupCostFor(container);
@@ -69,7 +69,7 @@ public class ContainerGristCost extends GeneratedGristCost
 		@Override
 		protected ContainerGristCost read(ResourceLocation recipeId, JsonObject json, Ingredient ingredient, Integer priority)
 		{
-			GristSet cost = GristSet.deserialize(JSONUtils.getJsonObject(json, "grist_cost"));
+			GristSet cost = GristSet.deserialize(JSONUtils.getAsJsonObject(json, "grist_cost"));
 			return new ContainerGristCost(recipeId, ingredient, cost, priority);
 		}
 		

@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:stat_storer"
+  },
+  "grist_cost": {
+    "minestuck:garnet": 40,
+    "minestuck:marble": 14,
+    "minestuck:diamond": 20
+  }
+}

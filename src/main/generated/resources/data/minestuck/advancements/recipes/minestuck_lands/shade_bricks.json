@@ -6,12 +6,12 @@
     ]
   },
   "criteria": {
-    "has_smooth_shade_stone": {
+    "has_shade_stone": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "minestuck:smooth_shade_stone"
+            "item": "minestuck:shade_stone"
           }
         ]
       }
@@ -25,7 +25,7 @@
   },
   "requirements": [
     [
-      "has_smooth_shade_stone",
+      "has_shade_stone",
       "has_the_recipe"
     ]
   ]

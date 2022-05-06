@@ -1,5 +1,6 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.player.KindAbstratusList;
 import com.mraof.minestuck.player.KindAbstratusType;
@@ -23,38 +24,38 @@ public class StrifeSpecibusScreen extends PlayerStatsScreen
 	}
 	
 	@Override
-	public void render(int xcor, int ycor, float par3)
+	public void render(MatrixStack matrixStack, int xcor, int ycor, float par3)
 	{
-		super.render(xcor, ycor, par3);
-		this.renderBackground();
+		super.render(matrixStack, xcor, ycor, par3);
+		this.renderBackground(matrixStack);
 		
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		
-		drawTabs();
+		drawTabs(matrixStack);
 		
-		this.mc.getTextureManager().bindTexture(guiStrifeSelector);
+		this.mc.getTextureManager().bind(guiStrifeSelector);
 		
-		this.blit(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
+		this.blit(matrixStack, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
 		String message = "This feature isn't implemented yet.";//new TranslationTextComponent(KIND_ABSTRATUS).getFormattedText();
-		mc.fontRenderer.drawString(message, (this.width / 2F) - mc.fontRenderer.getStringWidth(message) / 2F, yOffset + 12, 0x404040);
+		mc.font.draw(matrixStack, message, (this.width / 2F) - mc.font.width(message) / 2F, yOffset + 12, 0x404040);
 		
 		int i = 0;
 		for(KindAbstratusType type : KindAbstratusList.getTypeList()) {
-			String typeName = type.getDisplayName().getFormattedText();
-			int xPos = xOffset+9+(columnWidth)*((i%columns)+1)-mc.fontRenderer.getStringWidth(typeName);
-			int yPos = yOffset+35+(mc.fontRenderer.FONT_HEIGHT+1)*(int)(i/columns);
+			String typeName = type.getDisplayName().getString();
+			int xPos = xOffset+9+(columnWidth)*((i%columns)+1)-mc.font.width(typeName);
+			int yPos = yOffset+35+(mc.font.lineHeight+1)*(int)(i/columns);
 			
-			if(!isPointInRegion(xOffset+9+(columnWidth)*(i%columns)+1, yPos-1, columnWidth-1, mc.fontRenderer.FONT_HEIGHT+1, xcor, ycor))
-				mc.fontRenderer.drawString(typeName, xPos, yPos, 0xFFFFFF);
+			if(!isPointInRegion(xOffset+9+(columnWidth)*(i%columns)+1, yPos-1, columnWidth-1, mc.font.lineHeight+1, xcor, ycor))
+				mc.font.draw(matrixStack, typeName, xPos, yPos, 0xFFFFFF);
 			else {
-				fill(xOffset+9+(columnWidth)*(i%columns)+1, yPos-1, xOffset+9+(columnWidth)*((i%columns)+1), yPos+mc.fontRenderer.FONT_HEIGHT, 0xFFAFAFAF);
-				mc.fontRenderer.drawString(typeName, xPos, yPos, 0x000000);
+				fill(matrixStack, xOffset+9+(columnWidth)*(i%columns)+1, yPos-1, xOffset+9+(columnWidth)*((i%columns)+1), yPos+mc.font.lineHeight, 0xFFAFAFAF);
+				mc.font.draw(matrixStack, typeName, xPos, yPos, 0x000000);
 			}
 			i++;
 		}
 		
-		drawActiveTabAndOther(xcor, ycor);
+		drawActiveTabAndOther(matrixStack, xcor, ycor);
 		
 	}
 	

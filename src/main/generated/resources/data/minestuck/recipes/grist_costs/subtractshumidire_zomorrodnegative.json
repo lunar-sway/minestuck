@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:subtractshumidire_zomorrodnegative"
+  },
+  "grist_cost": {
+    "minestuck:build": 666,
+    "minestuck:amber": 1167,
+    "minestuck:garnet": 600,
+    "minestuck:diamond": 333
+  }
+}

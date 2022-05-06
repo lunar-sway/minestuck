@@ -15,12 +15,12 @@ public class Teleport	//TODO there might still be things that vanilla does that 
 	
 	public static Entity teleportEntity(Entity entity, ServerWorld world)
 	{
-		return teleportEntity(entity, world, entity.getPosX(), entity.getPosY(), entity.getPosZ());
+		return teleportEntity(entity, world, entity.getX(), entity.getY(), entity.getZ());
 	}
 	
 	public static Entity teleportEntity(Entity entity, ServerWorld world, double x, double y, double z)
 	{
-		return teleportEntity(entity, world, x, y, z, entity.rotationYaw, entity.rotationPitch);
+		return teleportEntity(entity, world, x, y, z, entity.yRot, entity.xRot);
 	}
 	
 	/**
@@ -33,54 +33,53 @@ public class Teleport	//TODO there might still be things that vanilla does that 
 			ServerPlayerEntity player = (ServerPlayerEntity) entity;
 			
 			ChunkPos chunkpos = new ChunkPos(new BlockPos(x, y, z));
-			world.getChunkProvider().registerTicket(TicketType.POST_TELEPORT, chunkpos, 1, player.getEntityId());
+			world.getChunkSource().addRegionTicket(TicketType.POST_TELEPORT, chunkpos, 1, player.getId());
 			player.stopRiding();
 			if(player.isSleeping())
 			{
-				player.wakeUp();
+				player.stopSleeping();
 			}
 			
-			boolean toNewDim = player.world != world;
-			player.teleport(world, x, y, z, yaw, pitch);
-			if(toNewDim && player.world != world)	//Was teleporting to a new dimension, but the teleportation did not go through
+			boolean toNewDim = player.level != world;
+			player.teleportTo(world, x, y, z, yaw, pitch);
+			if(toNewDim && player.level != world)	//Was teleporting to a new dimension, but the teleportation did not go through
 				return null;
 			
-			player.invulnerableDimensionChange = true;
-			player.setRotationYawHead(yaw);
+			player.isChangingDimension = true;
+			player.setYHeadRot(yaw);
 			
-			player.setExperienceLevel(player.experienceLevel);
-			player.setPlayerHealthUpdated();
+			player.setExperienceLevels(player.experienceLevel);
+			player.resetSentInfo();
 			
 		} else
 		{
 			yaw = MathHelper.wrapDegrees(yaw);	//I think we can trust the function input enough to not need this, but better safe then sorry?
 			pitch = MathHelper.wrapDegrees(pitch);
 			pitch = MathHelper.clamp(pitch, -90.0F, 90.0F);
-			if(world == entity.world)
+			if(world == entity.level)
 			{
-				entity.setLocationAndAngles(x, y, z, yaw, pitch);
-				entity.setRotationYawHead(yaw);
+				entity.moveTo(x, y, z, yaw, pitch);
+				entity.setYHeadRot(yaw);
 			} else
 			{
-				entity.detach();
-				entity.dimension = world.dimension.getType();
+				entity.unRide();
 				Entity oldEntity = entity;
 				entity = entity.getType().create(world);
 				if (entity == null)
 					return null;
 				
-				entity.copyDataFromOld(oldEntity);
-				entity.setLocationAndAngles(x, y, z, yaw, pitch);
-				entity.setRotationYawHead(yaw);
+				entity.restoreFrom(oldEntity);
+				entity.moveTo(x, y, z, yaw, pitch);
+				entity.setYHeadRot(yaw);
 				world.addFromAnotherDimension(entity);
 				oldEntity.remove(false);
 			}
 		}
 		
-		if(!(entity instanceof LivingEntity) || !((LivingEntity)entity).isElytraFlying())
+		if(!(entity instanceof LivingEntity) || !((LivingEntity)entity).isFallFlying())
 		{
-			entity.setMotion(entity.getMotion().mul(1.0D, 0.0D, 1.0D));
-			entity.onGround = true;
+			entity.setDeltaMovement(entity.getDeltaMovement().multiply(1.0D, 0.0D, 1.0D));
+			entity.setOnGround(true);
 		}
 		
 		return entity;

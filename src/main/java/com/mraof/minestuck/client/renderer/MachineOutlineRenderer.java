@@ -13,7 +13,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.Matrix4f;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
@@ -26,6 +25,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.DrawHighlightEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -40,13 +40,13 @@ public class MachineOutlineRenderer
 		Minecraft mc = Minecraft.getInstance();
 		BlockRayTraceResult rayTrace = event.getTarget();
 		
-		if (mc.player != null && mc.getRenderViewEntity() == mc.player)
+		if (mc.player != null && mc.getCameraEntity() == mc.player)
 		{
-			if (rayTrace.getFace() != Direction.UP)
+			if (rayTrace.getDirection() != Direction.UP)
 				return;
 			
-			if (!renderCheckItem(event.getMatrix(), event.getBuffers(), mc.player, Hand.MAIN_HAND, mc.player.getHeldItemMainhand(), rayTrace, event.getInfo()))
-				 renderCheckItem(event.getMatrix(), event.getBuffers(), mc.player, Hand.OFF_HAND, mc.player.getHeldItemOffhand(), rayTrace, event.getInfo());
+			if (!renderCheckItem(event.getMatrix(), event.getBuffers(), mc.player, Hand.MAIN_HAND, mc.player.getMainHandItem(), rayTrace, event.getInfo()))
+				 renderCheckItem(event.getMatrix(), event.getBuffers(), mc.player, Hand.OFF_HAND, mc.player.getOffhandItem(), rayTrace, event.getInfo());
 		}
 	}
 	
@@ -56,27 +56,27 @@ public class MachineOutlineRenderer
 			return false;
 		if(stack.getItem() instanceof MultiblockItem)
 		{
-			IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.getLines());
+			IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.lines());
 
 			MultiblockItem item = (MultiblockItem) stack.getItem();
-			BlockPos pos = rayTraceResult.getPos();
+			BlockPos pos = rayTraceResult.getBlockPos();
 			BlockItemUseContext context = new BlockItemUseContext(new ItemUseContext(player, hand, rayTraceResult));
 
-			BlockState block = player.world.getBlockState(pos);
-			boolean flag = block.isReplaceable(context);
+			BlockState block = player.level.getBlockState(pos);
+			boolean flag = block.canBeReplaced(context);
 					//(player.world, player, stack, pos, rayTraceResult.getFace(), (float) rayTraceResult.getPos().getZ() - pos.getX(), (float) rayTraceResult.getPos().getY() - pos.getY(), (float) rayTraceResult.getPos().getZ() - pos.getZ()));
 			
 			if (!flag)
-				pos = pos.up();
+				pos = pos.above();
 
-			Direction placedFacing = player.getHorizontalFacing().getOpposite();
+			Direction placedFacing = player.getDirection().getOpposite();
 			Rotation rotation = MSRotationUtil.fromDirection(placedFacing);
 			
-			double hitX = rayTraceResult.getHitVec().getX() - pos.getX(), hitZ = rayTraceResult.getHitVec().getZ() - pos.getZ();
+			double hitX = rayTraceResult.getLocation().x() - pos.getX(), hitZ = rayTraceResult.getLocation().z() - pos.getZ();
 			
-			double d1 = info.getProjectedView().x;
-			double d2 = info.getProjectedView().y;
-			double d3 = info.getProjectedView().z;
+			double d1 = info.getPosition().x;
+			double d2 = info.getPosition().y;
+			double d3 = info.getPosition().z;
 			
 			boolean placeable;
 			AxisAlignedBB boundingBox;
@@ -92,14 +92,14 @@ public class MachineOutlineRenderer
 
 			if(item == MSItems.ALCHEMITER)//Alchemiter
 			{
-				AxisAlignedBB rod = GuiUtil.rotateAround(new AxisAlignedBB(3.25, 1, 3.25, 3.75, 4, 3.75), 0.5, 0.5, rotation).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
-				AxisAlignedBB pad = GuiUtil.rotateAround(new AxisAlignedBB(0, 0, 0, 4, 1, 4), 0.5, 0.5, rotation).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
+				AxisAlignedBB rod = GuiUtil.rotateAround(new AxisAlignedBB(3.25, 1, 3.25, 3.75, 4, 3.75), 0.5, 0.5, rotation).move(pos).move(-d1, -d2, -d3).deflate(0.002);
+				AxisAlignedBB pad = GuiUtil.rotateAround(new AxisAlignedBB(0, 0, 0, 4, 1, 4), 0.5, 0.5, rotation).move(pos).move(-d1, -d2, -d3).deflate(0.002);
 				//If you don't want the extra details to the alchemiter outline, comment out the following two lines
 				drawPhernaliaPlacementOutline(matrixStack, ivertexbuilder, VoxelShapes.create(rod), 0, 0, 0, placeable ? 0 : 1, placeable ? 1 : 0, 0, 0.5F);
 				drawPhernaliaPlacementOutline(matrixStack, ivertexbuilder, VoxelShapes.create(pad), 0, 0, 0, placeable ? 0 : 1, placeable ? 1 : 0, 0, 0.5F);
 			}
 			
-			boundingBox = GuiUtil.fromBoundingBox(item.getMultiblock().getBoundingBox(rotation)).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
+			boundingBox = GuiUtil.fromBoundingBox(item.getMultiblock().getBoundingBox(rotation)).move(pos).move(-d1, -d2, -d3).deflate(0.002);
 
 			drawPhernaliaPlacementOutline(matrixStack, ivertexbuilder, VoxelShapes.create(boundingBox), 0, 0, 0, placeable ? 0 : 1, placeable ? 1 : 0, 0, 0.5F);
 			
@@ -112,10 +112,10 @@ public class MachineOutlineRenderer
 	}
 
 	private static void drawPhernaliaPlacementOutline(MatrixStack matrixStackIn, IVertexBuilder bufferIn, VoxelShape shapeIn, double xIn, double yIn, double zIn, float red, float green, float blue, float alpha) {
-		Matrix4f matrix4f = matrixStackIn.getLast().getMatrix();
-		shapeIn.forEachEdge((p_230013_12_, p_230013_14_, p_230013_16_, p_230013_18_, p_230013_20_, p_230013_22_) -> {
-			bufferIn.pos(matrix4f, (float)(p_230013_12_ + xIn), (float)(p_230013_14_ + yIn), (float)(p_230013_16_ + zIn)).color(red, green, blue, alpha).endVertex();
-			bufferIn.pos(matrix4f, (float)(p_230013_18_ + xIn), (float)(p_230013_20_ + yIn), (float)(p_230013_22_ + zIn)).color(red, green, blue, alpha).endVertex();
+		Matrix4f matrix4f = matrixStackIn.last().pose();
+		shapeIn.forAllEdges((p_230013_12_, p_230013_14_, p_230013_16_, p_230013_18_, p_230013_20_, p_230013_22_) -> {
+			bufferIn.vertex(matrix4f, (float)(p_230013_12_ + xIn), (float)(p_230013_14_ + yIn), (float)(p_230013_16_ + zIn)).color(red, green, blue, alpha).endVertex();
+			bufferIn.vertex(matrix4f, (float)(p_230013_18_ + xIn), (float)(p_230013_20_ + yIn), (float)(p_230013_22_ + zIn)).color(red, green, blue, alpha).endVertex();
 		});
 	}
 }

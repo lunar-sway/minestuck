@@ -15,6 +15,7 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.arguments.EntityArgument;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.Util;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.Optional;
@@ -36,15 +37,15 @@ public class SendGristCommand
 	
 	private static int execute(CommandSource source, ServerPlayerEntity target, NonNegativeGristSet grist) throws CommandSyntaxException
 	{
-		ServerPlayerEntity player = source.asPlayer();
+		ServerPlayerEntity player = source.getPlayerOrException();
 		if(isPermittedFor(player, target))
 		{
 			if(GristHelper.canAfford(player, grist))
 			{
-				GristHelper.decrease(player.world, IdentifierHandler.encode(player), grist);
-				GristHelper.increase(player.world, IdentifierHandler.encode(target), grist);
-				source.sendFeedback(new TranslationTextComponent(SUCCESS, target.getDisplayName(), grist.asTextComponent()), true);
-				target.sendMessage(new TranslationTextComponent(RECEIVE, player.getDisplayName(), grist.asTextComponent()));
+				GristHelper.decrease(player.level, IdentifierHandler.encode(player), grist);
+				GristHelper.increase(player.level, IdentifierHandler.encode(target), grist);
+				source.sendSuccess(new TranslationTextComponent(SUCCESS, target.getDisplayName(), grist.asTextComponent()), true);
+				target.sendMessage(new TranslationTextComponent(RECEIVE, player.getDisplayName(), grist.asTextComponent()), Util.NIL_UUID);
 				return 1;
 			} else throw CANT_AFFORD_EXCEPTION.create(grist);
 		} else throw PERMISSION_EXCEPTION.create(target.getDisplayName());

@@ -10,7 +10,7 @@ import net.minecraft.world.IBlockReader;
 
 public class CruxtruderLidBlock extends Block
 {
-	public static final VoxelShape SHAPE = Block.makeCuboidShape(2, 0, 2, 14, 5, 14);
+	public static final VoxelShape SHAPE = Block.box(2, 0, 2, 14, 5, 14);
 	
 	public CruxtruderLidBlock(Properties properties)
 	{
@@ -18,7 +18,7 @@ public class CruxtruderLidBlock extends Block
 	}
 	
 	@Override
-	public PushReaction getPushReaction(BlockState state)
+	public PushReaction getPistonPushReaction(BlockState state)
 	{
 		return PushReaction.DESTROY;
 	}

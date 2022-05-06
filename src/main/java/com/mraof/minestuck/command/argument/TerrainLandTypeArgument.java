@@ -11,6 +11,8 @@ import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.ISuggestionProvider;
+import net.minecraft.command.arguments.ArgumentSerializer;
+import net.minecraft.command.arguments.IArgumentSerializer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -21,6 +23,8 @@ import java.util.concurrent.CompletableFuture;
 
 public class TerrainLandTypeArgument implements ArgumentType<TerrainLandType>
 {
+	public static final IArgumentSerializer<TerrainLandTypeArgument> SERIALIZER = new ArgumentSerializer<>(TerrainLandTypeArgument::terrainLandType);
+	
 	private static final List<String> EXAMPLES = Arrays.asList("minestuck:frost", "minestuck:shade");
 	
 	public static final String INVALID = "argument.terrain_land_type.invalid";
@@ -47,7 +51,7 @@ public class TerrainLandTypeArgument implements ArgumentType<TerrainLandType>
 	@Override
 	public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder)
 	{
-		return ISuggestionProvider.func_212476_a(LandTypes.TERRAIN_REGISTRY.getValues().stream().map(TerrainLandType::getRegistryName), builder);
+		return ISuggestionProvider.suggestResource(LandTypes.TERRAIN_REGISTRY.getValues().stream().map(TerrainLandType::getRegistryName), builder);
 	}
 	
 	@Override

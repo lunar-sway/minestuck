@@ -16,7 +16,6 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -24,13 +23,13 @@ import javax.annotation.Nullable;
 public class GateBlock extends Block
 {
 	
-	protected static final VoxelShape SHAPE = Block.makeCuboidShape(0.0D, 7.0D, 0.0D, 16.0D, 9.0D, 16.0D);
+	protected static final VoxelShape SHAPE = Block.box(0.0D, 7.0D, 0.0D, 16.0D, 9.0D, 16.0D);
 	public static BooleanProperty MAIN = MSProperties.MAIN;
 	
 	public GateBlock(Properties properties)
 	{
 		super(properties);
-		setDefaultState(getDefaultState().with(MAIN, false));
+		registerDefaultState(defaultBlockState().setValue(MAIN, false));
 	}
 	
 	@Override
@@ -48,13 +47,13 @@ public class GateBlock extends Block
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public BlockRenderType getRenderType(BlockState state)
+	public BlockRenderType getRenderShape(BlockState state)
 	{
 		return BlockRenderType.INVISIBLE;
 	}
 	
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
 	{
 		builder.add(MAIN);
 	}
@@ -69,17 +68,17 @@ public class GateBlock extends Block
 	@Override
 	public boolean hasTileEntity(BlockState state)
 	{
-		return state.get(MAIN);
+		return state.getValue(MAIN);
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn)
+	public void entityInside(BlockState state, World worldIn, BlockPos pos, Entity entityIn)
 	{
 		if(entityIn instanceof ServerPlayerEntity)
 		{
 			BlockPos mainPos = pos;
-			if(!state.get(MAIN))
+			if(!state.getValue(MAIN))
 			{
 				if(this != MSBlocks.GATE)
 					mainPos = this.findMainComponent(pos, worldIn);
@@ -88,7 +87,7 @@ public class GateBlock extends Block
 			
 			if(mainPos != null)
 			{
-				TileEntity te = worldIn.getTileEntity(mainPos);
+				TileEntity te = worldIn.getBlockEntity(mainPos);
 				if(te instanceof GateTileEntity)
 					((GateTileEntity) te).onCollision((ServerPlayerEntity) entityIn);
 			} else worldIn.removeBlock(pos, false);
@@ -97,7 +96,7 @@ public class GateBlock extends Block
 	
 	protected boolean isValid(BlockPos pos, World world, BlockState state)
 	{
-		if(state.get(MAIN))
+		if(state.getValue(MAIN))
 			return isValid(pos, world);
 		else
 		{
@@ -114,8 +113,8 @@ public class GateBlock extends Block
 			for(int z = -1; z <= 1; z++)
 				if(x != 0 || z != 0)
 				{
-					BlockState block = world.getBlockState(pos.add(x, 0, z));
-					if(block.getBlock() != this || block.get(MAIN))
+					BlockState block = world.getBlockState(pos.offset(x, 0, z));
+					if(block.getBlock() != this || block.getValue(MAIN))
 						return false;
 				}
 		
@@ -126,8 +125,8 @@ public class GateBlock extends Block
 	{
 		for(int x = -1; x <= 1; x++)
 			for(int z = -1; z <= 1; z++)
-				if(world.getBlockState(pos.add(x, 0, z)).getBlock() == this)
-					world.removeBlock(pos.add(x, 0, z), false);
+				if(world.getBlockState(pos.offset(x, 0, z)).getBlock() == this)
+					world.removeBlock(pos.offset(x, 0, z), false);
 	}
 	
 	protected BlockPos findMainComponent(BlockPos pos, World world)
@@ -136,9 +135,9 @@ public class GateBlock extends Block
 			for(int z = -1; z <= 1; z++)
 				if(x != 0 || z != 0)
 				{
-					BlockState block = world.getBlockState(pos.add(x, 0, z));
-					if(block.getBlock() == this && block.get(MAIN))
-						return pos.add(x, 0, z);
+					BlockState block = world.getBlockState(pos.offset(x, 0, z));
+					if(block.getBlock() == this && block.getValue(MAIN))
+						return pos.offset(x, 0, z);
 				}
 		
 		return null;
@@ -146,10 +145,10 @@ public class GateBlock extends Block
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving)
+	public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving)
 	{
-		super.onReplaced(state, worldIn, pos, newState, isMoving);
-		if(state.get(MAIN))
+		super.onRemove(state, worldIn, pos, newState, isMoving);
+		if(state.getValue(MAIN))
 			removePortal(pos, worldIn);
 		else
 		{
@@ -166,7 +165,7 @@ public class GateBlock extends Block
 		if(!this.isValid(pos, worldIn, state))
 		{
 			BlockPos mainPos = pos;
-			if(!state.get(MAIN))
+			if(!state.getValue(MAIN))
 				mainPos = findMainComponent(pos, worldIn);
 			
 			if(mainPos == null)
@@ -176,10 +175,10 @@ public class GateBlock extends Block
 	}
 	
 	@Override
-	public float getExplosionResistance(BlockState state, IWorldReader world, BlockPos pos, @Nullable Entity exploder, Explosion explosion)
+	public float getExplosionResistance(BlockState state, IBlockReader world, BlockPos pos, Explosion explosion)
 	{
 		if(this instanceof ReturnNodeBlock || MinestuckConfig.SERVER.canBreakGates.get())
-			return super.getExplosionResistance(state, world, pos, exploder, explosion);
+			return super.getExplosionResistance(state, world, pos, explosion);
 		else return 3600000.0F;
 	}
 }

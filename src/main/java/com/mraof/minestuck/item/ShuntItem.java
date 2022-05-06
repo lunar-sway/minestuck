@@ -14,25 +14,23 @@ import java.util.List;
 
 public class ShuntItem extends Item
 {
-	
 	public ShuntItem(Properties properties)
 	{
 		super(properties);
-		this.addPropertyOverride(CaptchaCardItem.CONTENT_NAME, CaptchaCardItem.CONTENT);
 	}
 	
 	@Override
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
+	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
 	{
 		if(AlchemyHelper.hasDecodedItem(stack))
 		{
 			ItemStack content = AlchemyHelper.getDecodedItem(stack);
 			
 			if (!content.isEmpty())
-				tooltip.add(new StringTextComponent("(").appendSibling(content.getDisplayName()).appendText(")"));
+				tooltip.add(new StringTextComponent("(").append(content.getHoverName()).append(")"));
 			else
-				tooltip.add(new StringTextComponent("(").appendSibling(new TranslationTextComponent(getTranslationKey()+".invalid")).appendText(")"));
+				tooltip.add(new StringTextComponent("(").append(new TranslationTextComponent(getDescriptionId()+".invalid")).append(")"));
 		} else
-			tooltip.add(new StringTextComponent("(").appendSibling(new TranslationTextComponent(getTranslationKey()+".empty")).appendText(")"));
+			tooltip.add(new StringTextComponent("(").append(new TranslationTextComponent(getDescriptionId()+".empty")).append(")"));
 	}
 }
