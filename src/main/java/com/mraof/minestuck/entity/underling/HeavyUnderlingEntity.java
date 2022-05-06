@@ -95,5 +95,4 @@ public abstract class HeavyUnderlingEntity extends UnderlingEntity
 			}
 		}
 	}
-
 }

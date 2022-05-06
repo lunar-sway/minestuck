@@ -9,4 +9,9 @@ public class OgreRenderer extends GeoEntityRenderer<OgreEntity> {
 	public OgreRenderer(EntityRendererManager renderManager) {
 		super(renderManager, new OgreModel());
 	}
+
+	@Override
+	protected float getDeathMaxRotation(OgreEntity entityLivingBaseIn) {
+		return 0;
+	}
 }

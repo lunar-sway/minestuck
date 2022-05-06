@@ -89,17 +89,16 @@ public class OgreEntity extends HeavyUnderlingEntity implements IAnimatable
 
 	@Override
 	public void registerControllers(AnimationData data) {
-		AnimationController<OgreEntity> armsController = new AnimationController<>(this, "walkArmsAnimation", 0, this::walkArmsAnimation);
-		armsController.setAnimationSpeed(0.3);
-		data.addAnimationController(armsController);
+		data.addAnimationController(addAnimation("walkArmsAnimation", 0.3, this::walkArmsAnimation));
+		data.addAnimationController(addAnimation("walkAnimation", 0.3, this::walkAnimation));
+		data.addAnimationController(addAnimation("swingAnimation", 0.5, this::swingAnimation));
+		data.addAnimationController(addAnimation("deathAnimation", 0.85, this::deathAnimation));
+	}
 
-		AnimationController<OgreEntity> walkController = new AnimationController<>(this, "walkAnimation", 0, this::walkAnimation);
-		walkController.setAnimationSpeed(0.3);
-		data.addAnimationController(walkController);
-
-		AnimationController<OgreEntity> swingController = new AnimationController<>(this, "swingAnimation", 0, this::swingAnimation);
-		swingController.setAnimationSpeed(0.5);
-		data.addAnimationController(swingController);
+	private AnimationController<OgreEntity> addAnimation(String name, double speed, AnimationController.IAnimationPredicate<OgreEntity> predicate) {
+		AnimationController<OgreEntity> controller = new AnimationController<>(this, name, 0, predicate);
+		controller.setAnimationSpeed(speed);
+		return controller;
 	}
 
 	private <E extends IAnimatable> PlayState walkAnimation(AnimationEvent<E> event) {
@@ -124,6 +123,14 @@ public class OgreEntity extends HeavyUnderlingEntity implements IAnimatable
 			return PlayState.CONTINUE;
 		}
 		event.getController().markNeedsReload();
+		return PlayState.STOP;
+	}
+
+	private <E extends IAnimatable> PlayState deathAnimation(AnimationEvent<E> event) {
+		if (dead) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ogre.die", false));
+			return PlayState.CONTINUE;
+		}
 		return PlayState.STOP;
 	}
 
