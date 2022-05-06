@@ -18,6 +18,13 @@ public abstract class HeavyUnderlingEntity extends UnderlingEntity
 	private final int heavyAttackDelay;
 	private final int heavyAttackRecovery;
 
+	/**
+	 * Used to apply a delay before and after each attacks.
+	 * Mainly used to sync attack animations.
+	 * @param consortRep the consort reputation bonus if killed
+	 * @param attackDelay the delay in game ticks before the damage is applied
+	 * @param attackRecovery the recovery time in game ticks (used to finish the animation before another can start)
+	 */
 	public HeavyUnderlingEntity(EntityType<? extends HeavyUnderlingEntity> type, World world, int consortRep, int attackDelay, int attackRecovery)
 	{
 		super(type, world, consortRep);
@@ -31,6 +38,11 @@ public abstract class HeavyUnderlingEntity extends UnderlingEntity
 		this.entityData.define(DATA_IS_ATTACKING, false);
 	}
 
+	/**
+	 * Checks if performing a delayed attack.
+	 * Can be used client side to trigger animations.
+	 * @return true if there is a delayed attack in progress
+	 */
 	public boolean isPerformingHeavyAttack() {
 		return this.entityData.get(DATA_IS_ATTACKING);
 	}
@@ -67,7 +79,7 @@ public abstract class HeavyUnderlingEntity extends UnderlingEntity
 		return this.distanceToSqr(target) <= reach;
 	}
 
-	public void startHeavyAttack() {
+	private void startHeavyAttack() {
 		if (heavyAttackTicks <= 0 && recoveryTicks <= 0) {
 			heavyAttackTicks = heavyAttackDelay;
 			entityData.set(DATA_IS_ATTACKING, true);
