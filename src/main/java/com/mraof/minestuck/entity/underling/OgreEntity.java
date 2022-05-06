@@ -1,30 +1,34 @@
 package com.mraof.minestuck.entity.underling;
 
-import com.mraof.minestuck.entity.ai.CustomMeleeAttackGoal;
-import com.mraof.minestuck.entity.ai.DelayedMeleeAttackGoal;
 import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.util.MSSoundEvents;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.FakePlayer;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 //Makes non-stop ogre puns
-public class OgreEntity extends UnderlingEntity
+public class OgreEntity extends HeavyUnderlingEntity implements IAnimatable
 {
+	private AnimationFactory factory = new AnimationFactory(this);
+
 	public OgreEntity(EntityType<? extends OgreEntity> type, World world)
 	{
-		super(type, world, 3);
+		super(type, world, 3, 18, 24);
 		this.maxUpStep = 1.0F;
 	}
 	
@@ -34,14 +38,7 @@ public class OgreEntity extends UnderlingEntity
 				.add(Attributes.KNOCKBACK_RESISTANCE, 0.4).add(Attributes.MOVEMENT_SPEED, 0.22)
 				.add(Attributes.ATTACK_DAMAGE, 6);
 	}
-	
-	@Override
-	protected void registerGoals()
-	{
-		super.registerGoals();
-		this.goalSelector.addGoal(3, new DelayedMeleeAttackGoal(this, 1.0F, false, 40, 1.2F, 50));
-	}
-	
+
 	protected SoundEvent getAmbientSound()
 	{
 		return MSSoundEvents.ENTITY_OGRE_AMBIENT;
@@ -88,5 +85,49 @@ public class OgreEntity extends UnderlingEntity
 			computePlayerProgress((int) (15 + 2.2 * getGristType().getPower())); //most ogres stop giving xp at rung 18
 			firstKillBonus(entity, (byte) (Echeladder.UNDERLING_BONUS_OFFSET + 1));
 		}
+	}
+
+	@Override
+	public void registerControllers(AnimationData data) {
+		AnimationController<OgreEntity> armsController = new AnimationController<>(this, "walkArmsAnimation", 0, this::walkArmsAnimation);
+		armsController.setAnimationSpeed(0.3);
+		data.addAnimationController(armsController);
+
+		AnimationController<OgreEntity> walkController = new AnimationController<>(this, "walkAnimation", 0, this::walkAnimation);
+		walkController.setAnimationSpeed(0.3);
+		data.addAnimationController(walkController);
+
+		AnimationController<OgreEntity> swingController = new AnimationController<>(this, "swingAnimation", 0, this::swingAnimation);
+		swingController.setAnimationSpeed(0.5);
+		data.addAnimationController(swingController);
+	}
+
+	private <E extends IAnimatable> PlayState walkAnimation(AnimationEvent<E> event) {
+		if (event.isMoving()) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ogre.walk", true));
+			return PlayState.CONTINUE;
+		}
+		return PlayState.STOP;
+	}
+
+	private <E extends IAnimatable> PlayState walkArmsAnimation(AnimationEvent<E> event) {
+		if (event.isMoving() && !isPerformingHeavyAttack()) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ogre.walkarms", true));
+			return PlayState.CONTINUE;
+		}
+		return PlayState.STOP;
+	}
+
+	private <E extends IAnimatable> PlayState swingAnimation(AnimationEvent<E> event) {
+		if (isPerformingHeavyAttack()) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ogre.punch", true));
+			return PlayState.CONTINUE;
+		}
+		return PlayState.STOP;
+	}
+
+	@Override
+	public AnimationFactory getFactory() {
+		return this.factory;
 	}
 }

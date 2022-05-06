@@ -59,7 +59,7 @@ public class ClientProxy
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.IGUANA, IguanaRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.TURTLE, TurtleRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.IMP, manager -> new UnderlingEntityRenderer<>(manager, new ImpModel<>(), 0.5F));
-		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.OGRE, manager -> new UnderlingEntityRenderer<>(manager, new OgreModel<>(), 2.8F));
+		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.OGRE, OgreRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.BASILISK, manager -> new UnderlingEntityRenderer<>(manager, new BasiliskModel<>(), 2.8F));
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.LICH, manager -> new UnderlingEntityRenderer<>(manager, new LichModel<>(), 0.5F));
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.GICLOPS, manager -> new UnderlingEntityRenderer<>(manager, new GiclopsModel<>(), 7.6F));
