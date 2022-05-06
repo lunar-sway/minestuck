@@ -13,7 +13,6 @@ import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SimpleSound;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.util.InputMappings;
@@ -29,9 +28,6 @@ import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import java.util.function.BiFunction;
-import java.util.function.Supplier;
-
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public abstract class PlayerStatsScreen extends MinestuckScreen
 {
@@ -43,43 +39,20 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 	public enum NormalGuiType
 	{
 		
-		CAPTCHA_DECK(CaptchaDeckScreen::new, CaptchaDeckScreen.TITLE, false),
-		STRIFE_SPECIBUS(StrifeSpecibusScreen::new, StrifeSpecibusScreen.TITLE, false),
-		ECHELADDER(EcheladderScreen::new, EcheladderScreen.TITLE, true),
-		GRIST_CACHE(GristCacheScreen::new, GristCacheScreen.TITLE, true);
+		CAPTCHA_DECK((MenuScreenFactory) CaptchaDeckScreen::new, CaptchaDeckScreen.TITLE, false),
+		STRIFE_SPECIBUS((ScreenFactory) StrifeSpecibusScreen::new, StrifeSpecibusScreen.TITLE, false),
+		ECHELADDER((ScreenFactory) EcheladderScreen::new, EcheladderScreen.TITLE, true),
+		GRIST_CACHE((ScreenFactory) GristCacheScreen::new, GristCacheScreen.TITLE, true);
 		
-		final Supplier<? extends Screen> factory;
-		final BiFunction<Integer, PlayerInventory, ? extends ContainerScreen<?>> factory2;
+		private final TabAction action;
 		final String name;
-		final boolean isContainer;
 		final boolean reqMedium;
 		
-		NormalGuiType(Supplier<? extends Screen> factory, String name, boolean reqMedium)
+		NormalGuiType(TabAction factory, String name, boolean reqMedium)
 		{
-			this.factory = factory;
-			this.factory2 = null;
+			this.action = factory;
 			this.name = name;
-			this.isContainer = false;
 			this.reqMedium = reqMedium;
-		}
-		
-		NormalGuiType(BiFunction<Integer, PlayerInventory, ? extends ContainerScreen<?>> factory, String name, boolean reqMedium)
-		{
-			this.factory = null;
-			this.factory2 = factory;
-			this.name = name;
-			this.isContainer = true;
-			this.reqMedium = reqMedium;
-		}
-		
-		public Screen createGuiInstance()
-		{
-			return factory.get();
-		}
-		
-		public Screen createGuiInstance(int windowId)
-		{
-			return factory2.apply(windowId, Minecraft.getInstance().player.inventory);
 		}
 		
 		public boolean reqMedium()
@@ -88,45 +61,56 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 				return MinestuckConfig.SERVER.preEntryRungLimit.get() == 0;
 			else return this.reqMedium;
 		}
-		
 	}
 	
 	public enum EditmodeGuiType
 	{
-		DEPLOY_LIST(InventoryEditmodeScreen::new, InventoryEditmodeScreen.TITLE),
-//		BLOCK_LIST(GuiInventoryEditmode.class, "gui.blockList.name", true, false),
-		GRIST_CACHE(GristCacheScreen::new, GristCacheScreen.TITLE);
+		DEPLOY_LIST((MenuScreenFactory) InventoryEditmodeScreen::new, InventoryEditmodeScreen.TITLE),
+		//BLOCK_LIST(GuiInventoryEditmode.class, "gui.blockList.name", true, false),
+		GRIST_CACHE((ScreenFactory) GristCacheScreen::new, GristCacheScreen.TITLE);
 		
-		final Supplier<? extends Screen> factory;
-		final BiFunction<Integer, PlayerInventory, ? extends ContainerScreen<?>> factory2;
+		private final TabAction action;
 		final String name;
-		final boolean isContainer;
 		
-		EditmodeGuiType(Supplier<? extends Screen> factory, String name)
+		EditmodeGuiType(TabAction factory, String name)
 		{
-			this.factory = factory;
-			this.factory2 = null;
+			this.action = factory;
 			this.name = name;
-			this.isContainer = false;
 		}
-		
-		EditmodeGuiType(BiFunction<Integer, PlayerInventory, ? extends ContainerScreen<?>> factory, String name)
+	}
+	
+	public interface TabAction
+	{
+		void trigger(Minecraft mc);
+	}
+	
+	public interface ScreenFactory extends TabAction
+	{
+		@Override
+		default void trigger(Minecraft mc)
 		{
-			this.factory = null;
-			this.factory2 = factory;
-			this.name = name;
-			this.isContainer = true;
+			mc.setScreen(this.createScreen());
 		}
-		
-		public Screen createGuiInstance()
+		PlayerStatsScreen createScreen();
+	}
+	
+	public interface MenuScreenFactory extends TabAction
+	{
+		@Override
+		default void trigger(Minecraft mc)
 		{
-			return factory.get();
+			if (mc.player != null)
+			{
+				int ordinal = (ClientEditHandler.isActive() ? editmodeTab : normalTab).ordinal();
+				int windowId = WINDOW_ID_START + ordinal;
+				PlayerStatsContainerScreen<?> containerScreen = createScreen(windowId, mc.player.inventory);
+				
+				mc.setScreen(containerScreen);
+				if(mc.screen == containerScreen)
+					MSPacketHandler.sendToServer(new MiscContainerPacket(ordinal, ClientEditHandler.isActive()));
+			}
 		}
-		
-		public Screen createGuiInstance(int windowId)
-		{
-			return factory2.apply(windowId, Minecraft.getInstance().player.inventory);
-		}
+		PlayerStatsContainerScreen<?> createScreen(int windowId, PlayerInventory inventory);
 	}
 	
 	static final int tabWidth = 28, tabHeight = 32, tabOverlap = 4;
@@ -277,19 +261,9 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 				mc.player.connection.send(new CCloseWindowPacket(mc.player.containerMenu.containerId));
 				mc.player.inventory.setCarried(ItemStack.EMPTY);
 			}
-			if(ClientEditHandler.isActive() ? editmodeTab.isContainer : normalTab.isContainer)
-			{
-				int ordinal = (ClientEditHandler.isActive() ? editmodeTab : normalTab).ordinal();
-				int windowId = WINDOW_ID_START + ordinal;
-				PlayerStatsContainerScreen<?> containerScreen = (PlayerStatsContainerScreen<?>) (ClientEditHandler.isActive() ? editmodeTab.createGuiInstance(windowId) : normalTab.createGuiInstance(windowId));
-				
-				mc.setScreen(containerScreen);
-				if(mc.screen == containerScreen)
-					MSPacketHandler.sendToServer(new MiscContainerPacket(ordinal, ClientEditHandler.isActive()));
-			}
-			else mc.setScreen(ClientEditHandler.isActive()? editmodeTab.createGuiInstance():normalTab.createGuiInstance());
-		}
-		else if(mc.screen instanceof PlayerStatsScreen || mc.screen instanceof PlayerStatsContainerScreen)
+			
+			(ClientEditHandler.isActive() ? editmodeTab.action : normalTab.action).trigger(mc);
+		} else if(mc.screen instanceof PlayerStatsScreen || mc.screen instanceof PlayerStatsContainerScreen)
 			mc.setScreen(null);
 	}
 	
