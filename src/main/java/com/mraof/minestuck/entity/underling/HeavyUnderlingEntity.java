@@ -49,8 +49,7 @@ public abstract class HeavyUnderlingEntity extends UnderlingEntity
 			heavyAttackTicks--;
 			if (heavyAttackTicks == 0) {
 				recoveryTicks = heavyAttackRecovery;
-				if (getTarget() != null) {
-					//todo aoe stuff
+				if (getTarget() != null && isInRange(getTarget())) {
 					doHurtTarget(getTarget());
 				}
 			}
@@ -61,6 +60,11 @@ public abstract class HeavyUnderlingEntity extends UnderlingEntity
 				entityData.set(DATA_IS_ATTACKING, false);
 			}
 		}
+	}
+
+	private boolean isInRange(LivingEntity target) {
+		double reach = this.getBbWidth() * 2.0F * this.getBbWidth() * 2.0F + target.getBbWidth();
+		return this.distanceToSqr(target) <= reach;
 	}
 
 	public void startHeavyAttack() {

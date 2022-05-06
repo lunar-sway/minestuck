@@ -28,7 +28,7 @@ public class OgreEntity extends HeavyUnderlingEntity implements IAnimatable
 
 	public OgreEntity(EntityType<? extends OgreEntity> type, World world)
 	{
-		super(type, world, 3, 18, 24);
+		super(type, world, 3, 18, 20);
 		this.maxUpStep = 1.0F;
 	}
 	
@@ -120,9 +120,10 @@ public class OgreEntity extends HeavyUnderlingEntity implements IAnimatable
 
 	private <E extends IAnimatable> PlayState swingAnimation(AnimationEvent<E> event) {
 		if (isPerformingHeavyAttack()) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ogre.punch", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ogre.punch", false));
 			return PlayState.CONTINUE;
 		}
+		event.getController().markNeedsReload();
 		return PlayState.STOP;
 	}
 
