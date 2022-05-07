@@ -24,7 +24,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 //Makes non-stop ogre puns
 public class OgreEntity extends HeavyUnderlingEntity implements IAnimatable
 {
-	private AnimationFactory factory = new AnimationFactory(this);
+	private final AnimationFactory factory = new AnimationFactory(this);
 
 	public OgreEntity(EntityType<? extends OgreEntity> type, World world)
 	{
@@ -89,13 +89,13 @@ public class OgreEntity extends HeavyUnderlingEntity implements IAnimatable
 
 	@Override
 	public void registerControllers(AnimationData data) {
-		data.addAnimationController(addAnimation("walkArmsAnimation", 0.3, this::walkArmsAnimation));
-		data.addAnimationController(addAnimation("walkAnimation", 0.3, this::walkAnimation));
-		data.addAnimationController(addAnimation("swingAnimation", 0.5, this::swingAnimation));
-		data.addAnimationController(addAnimation("deathAnimation", 0.85, this::deathAnimation));
+		data.addAnimationController(createAnimation("walkArmsAnimation", 0.3, this::walkArmsAnimation));
+		data.addAnimationController(createAnimation("walkAnimation", 0.3, this::walkAnimation));
+		data.addAnimationController(createAnimation("swingAnimation", 0.5, this::swingAnimation));
+		data.addAnimationController(createAnimation("deathAnimation", 0.85, this::deathAnimation));
 	}
 
-	private AnimationController<OgreEntity> addAnimation(String name, double speed, AnimationController.IAnimationPredicate<OgreEntity> predicate) {
+	private AnimationController<OgreEntity> createAnimation(String name, double speed, AnimationController.IAnimationPredicate<OgreEntity> predicate) {
 		AnimationController<OgreEntity> controller = new AnimationController<>(this, name, 0, predicate);
 		controller.setAnimationSpeed(speed);
 		return controller;

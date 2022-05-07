@@ -21,11 +21,19 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nullable;
 
-public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IMob
+public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IMob, IAnimatable
 {
+	private final AnimationFactory factory = new AnimationFactory(this);
 	private final RangedAttackGoal aiArrowAttack = new RangedAttackGoal(this, 5/4F, 20, 10.0F);
 	private final MeleeAttackGoal aiMeleeAttack = new MeleeAttackGoal(this, 2F, false);
 	
@@ -191,5 +199,58 @@ public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IM
 		
 		setCombatTask();
 		return spawnDataIn;
+	}
+
+	@Override
+	public void registerControllers(AnimationData data) {
+		data.addAnimationController(createAnimation("walkArmsAnimation", 1, this::walkArmsAnimation));
+		data.addAnimationController(createAnimation("walkAnimation", 1, this::walkAnimation));
+		data.addAnimationController(createAnimation("deathAnimation", 1, this::deathAnimation));
+		data.addAnimationController(createAnimation("swingAnimation", 1, this::swingAnimation));
+	}
+
+	private AnimationController<PawnEntity> createAnimation(String name, double speed, AnimationController.IAnimationPredicate<PawnEntity> predicate) {
+		AnimationController<PawnEntity> controller = new AnimationController<>(this, name, 0, predicate);
+		controller.setAnimationSpeed(speed);
+		return controller;
+	}
+
+
+	private <E extends IAnimatable> PlayState walkAnimation(AnimationEvent<E> event) {
+		if (event.isMoving()) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", true));
+			return PlayState.CONTINUE;
+		}
+		return PlayState.STOP;
+	}
+
+	private <E extends IAnimatable> PlayState walkArmsAnimation(AnimationEvent<E> event) {
+		if (event.isMoving() && !swinging) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("walkarms", true));
+			return PlayState.CONTINUE;
+		}
+		return PlayState.STOP;
+	}
+
+	private <E extends IAnimatable> PlayState deathAnimation(AnimationEvent<E> event) {
+		if (dead) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("die", false));
+			return PlayState.CONTINUE;
+		}
+		return PlayState.STOP;
+	}
+
+	private <E extends IAnimatable> PlayState swingAnimation(AnimationEvent<E> event) {
+		if (swinging) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("punch1", false));
+			return PlayState.CONTINUE;
+		}
+		event.getController().markNeedsReload();
+		return PlayState.STOP;
+	}
+
+	@Override
+	public AnimationFactory getFactory() {
+		return this.factory;
 	}
 }
