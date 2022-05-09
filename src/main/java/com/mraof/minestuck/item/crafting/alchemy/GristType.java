@@ -28,6 +28,7 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 	
 	private final float rarity;
 	private final float value;
+	private final int color;
 	private final boolean underlingType;
 	private final Supplier<ItemStack> candyItem;
 	private final List<Supplier<GristType>> secondaryTypes;
@@ -39,6 +40,7 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 	{
 		rarity = properties.rarity;
 		value = properties.value;
+		color = properties.color;
 		underlingType = properties.isUnderlingType;
 		candyItem = properties.candyItem;
 		secondaryTypes = ImmutableList.copyOf(properties.secondaryGristTypes);
@@ -187,7 +189,11 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 		}
 		return fallback.get();
 	}
-	
+
+	public int getColor() {
+		return color;
+	}
+
 	static class DummyType extends GristType
 	{
 		DummyType()
@@ -211,6 +217,7 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 	public static class Properties
 	{
 		private final float rarity, value;
+		private int color;
 		private boolean isUnderlingType = true;
 		private Supplier<ItemStack> candyItem = () -> ItemStack.EMPTY;
 		private final List<Supplier<GristType>> secondaryGristTypes = new ArrayList<>();
@@ -254,6 +261,11 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 		public Properties spawnsFor(SpawnCategory... categories)
 		{
 			this.categories.addAll(Arrays.asList(categories));
+			return this;
+		}
+
+		public Properties color(int color) {
+			this.color = color;
 			return this;
 		}
 	}

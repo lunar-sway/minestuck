@@ -32,7 +32,7 @@ public class OgreRenderer extends GeoEntityRenderer<OgreEntity> {
 
 	@Override
 	public Color getRenderColor(OgreEntity animatable, float partialTicks, MatrixStack stack, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn) {
-		return Color.ofRGBA(0, 255, 0, 255); //TODO that
+		return Color.ofOpaque(animatable.getGristType().getColor());
 	}
 
 	public class OgreDetailsLayer extends GeoLayerRenderer {
