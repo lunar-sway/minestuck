@@ -14,7 +14,7 @@ public class OgreModel extends AnimatedGeoModel<OgreEntity>
 
 	@Override
 	public ResourceLocation getTextureLocation(OgreEntity object) {
-		return new ResourceLocation(Minestuck.MOD_ID, "textures/entity/underlings/ogre.png");
+		return new ResourceLocation(Minestuck.MOD_ID, "textures/entity/underlings/ogre_base.png");
 	}
 
 	@Override
