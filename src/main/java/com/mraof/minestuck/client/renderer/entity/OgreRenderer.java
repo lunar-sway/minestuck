@@ -44,8 +44,6 @@ public class OgreRenderer extends GeoEntityRenderer<OgreEntity> {
 		public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, Entity entityLivingBaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
 			RenderType renderType =  RenderType.armorCutoutNoCull(new ResourceLocation(Minestuck.MOD_ID, "textures/entity/underlings/ogre_details.png"));
 			matrixStackIn.pushPose();
-			matrixStackIn.scale(1.0f, 1.0f, 1.0f);
-			matrixStackIn.translate(0.0d, 0.0d, 0.0d);
 
 			GeoModel model = modelProvider.getModel(modelProvider.getModelLocation((OgreEntity)entityLivingBaseIn));
 			this.getRenderer().render(model, entityLivingBaseIn, partialTicks, renderType, matrixStackIn, bufferIn, bufferIn.getBuffer(renderType), packedLightIn, OverlayTexture.NO_OVERLAY, 1f, 1f, 1f, 1f);

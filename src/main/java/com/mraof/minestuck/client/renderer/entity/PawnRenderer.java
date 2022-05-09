@@ -18,7 +18,6 @@ public class PawnRenderer extends GeoEntityRenderer<PawnEntity>
 {
 	private PawnEntity entity;
 
-
 	public PawnRenderer(EntityRendererManager renderManager) {
 		super(renderManager, new PawnModel());
 	}
@@ -30,32 +29,20 @@ public class PawnRenderer extends GeoEntityRenderer<PawnEntity>
 
 	@Override
 	public void renderEarly(PawnEntity animatable, MatrixStack stackIn, float ticks, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
-		this.rtb = renderTypeBuffer;
-		this.whTexture = this.getTextureLocation(animatable);
 		this.entity = animatable;
 		super.renderEarly(animatable, stackIn, ticks, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, partialTicks);
 	}
 
 	@Override
 	public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-		super.renderRecursively(bone, stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
 		if (bone.getName().equals("right_hand")) {
 			stack.pushPose();
 			stack.translate(0.36D, 0.58, -0.22D);
 			stack.mulPose(Vector3f.XP.rotationDegrees(-80));
-			stack.mulPose(Vector3f.YP.rotationDegrees(0));
-			stack.mulPose(Vector3f.ZP.rotationDegrees(0));
-			stack.scale(1.0f, 1.0f, 1.0f);
 			Minecraft.getInstance().getItemRenderer().renderStatic(entity.getItemBySlot(EquipmentSlotType.MAINHAND), ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, packedLightIn, packedOverlayIn, stack, rtb);
 			stack.popPose();
 			bufferIn = rtb.getBuffer(RenderType.entitySolid(whTexture));
 		}
 		super.renderRecursively(bone, stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
 	}
-
-//	@Override
-//	public ResourceLocation getTextureLocation(PawnEntity pawn)
-//	{
-//		return pawn.getTextureResource();
-//	}
 }

@@ -19,7 +19,6 @@ public class PawnModel extends AnimatedGeoModel<PawnEntity> {
         } else {
             return new ResourceLocation(Minestuck.MOD_ID, "textures/entity/carapacian/prospit_pawn.png");
         }
-
     }
 
     @Override
