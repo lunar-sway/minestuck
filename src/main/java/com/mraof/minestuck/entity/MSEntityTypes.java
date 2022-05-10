@@ -37,7 +37,6 @@ public final class MSEntityTypes
 	public static final EntityType<BasiliskEntity> BASILISK = getNull();
 	public static final EntityType<LichEntity> LICH = getNull();
 	public static final EntityType<GiclopsEntity> GICLOPS = getNull();
-	public static final EntityType<WyrmEntity> WYRM = getNull();
 	
 	public static final EntityType<PawnEntity> DERSITE_PAWN = getNull();
 	public static final EntityType<PawnEntity> PROSPITIAN_PAWN = getNull();
@@ -82,10 +81,9 @@ public final class MSEntityTypes
 		
 		register(registry, EntityType.Builder.of(ImpEntity::new, UNDERLING).sized(0.7F, 1.2F), "imp");
 		register(registry, EntityType.Builder.of(OgreEntity::new, UNDERLING).sized(2.8F, 4.3F), "ogre");
-		register(registry, EntityType.Builder.of(BasiliskEntity::new, UNDERLING).sized(3F, 2F), "basilisk");
+		register(registry, EntityType.Builder.of(BasiliskEntity::new, UNDERLING).sized(2F, 1F), "basilisk");
 		register(registry, EntityType.Builder.of(LichEntity::new, UNDERLING).sized(0.8F, 2.0F), "lich");
 		register(registry, EntityType.Builder.of(GiclopsEntity::new, UNDERLING).sized(8.0F, 12.0F), "giclops");
-		register(registry, EntityType.Builder.of(WyrmEntity::new, UNDERLING), "wyrm");
 		
 		register(registry, EntityType.Builder.of(PawnEntity::createDersite, EntityClassification.MONSTER).sized(0.6F, 2.1F), "dersite_pawn");
 		register(registry, EntityType.Builder.of(PawnEntity::createProspitian, EntityClassification.MONSTER).sized(0.6F, 2.1F), "prospitian_pawn");
@@ -150,8 +148,7 @@ public final class MSEntityTypes
 		event.put(BASILISK, BasiliskEntity.basiliskAttributes().build());
 		event.put(LICH, LichEntity.lichAttributes().build());
 		event.put(GICLOPS, GiclopsEntity.giclopsAttributes().build());
-		event.put(WYRM, UnderlingEntity.underlingAttributes().build());
-		
+
 		event.put(DERSITE_PAWN, PawnEntity.pawnAttributes().build());
 		event.put(PROSPITIAN_PAWN, PawnEntity.pawnAttributes().build());
 		event.put(DERSITE_BISHOP, BishopEntity.bishopAttributes().build());

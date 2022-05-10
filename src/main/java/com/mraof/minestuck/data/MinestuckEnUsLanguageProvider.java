@@ -1262,8 +1262,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addExtra(MSEntityTypes.LICH, "type", "%s Lich");
 		add(MSEntityTypes.GICLOPS, "Giclops");
 		addExtra(MSEntityTypes.GICLOPS, "type", "%s Giclops");
-		add(MSEntityTypes.WYRM, "Wyrm");
-		addExtra(MSEntityTypes.WYRM, "type", "%s Wyrm");
 		add(MSEntityTypes.DERSITE_PAWN, "Dersite Pawn");
 		add(MSEntityTypes.PROSPITIAN_PAWN, "Prospitian Pawn");
 		add(MSEntityTypes.DERSITE_BISHOP, "Dersite Bishop");

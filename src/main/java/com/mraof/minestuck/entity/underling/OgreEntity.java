@@ -16,19 +16,17 @@ import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 //Makes non-stop ogre puns
-public class OgreEntity extends HeavyUnderlingEntity implements IAnimatable
+public class OgreEntity extends UnderlingEntity
 {
-	private final AnimationFactory factory = new AnimationFactory(this);
-
 	public OgreEntity(EntityType<? extends OgreEntity> type, World world)
 	{
-		super(type, world, 3, 18, 20);
+		super(type, world, 3);
+		this.setAttackDelay(18);
+		this.setAttackRecovery(20);
 		this.maxUpStep = 1.0F;
 	}
 	
@@ -95,12 +93,6 @@ public class OgreEntity extends HeavyUnderlingEntity implements IAnimatable
 		data.addAnimationController(createAnimation("deathAnimation", 0.85, this::deathAnimation));
 	}
 
-	private AnimationController<OgreEntity> createAnimation(String name, double speed, AnimationController.IAnimationPredicate<OgreEntity> predicate) {
-		AnimationController<OgreEntity> controller = new AnimationController<>(this, name, 0, predicate);
-		controller.setAnimationSpeed(speed);
-		return controller;
-	}
-
 	private <E extends IAnimatable> PlayState walkAnimation(AnimationEvent<E> event) {
 		if (event.isMoving()) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ogre.walk", true));
@@ -110,7 +102,7 @@ public class OgreEntity extends HeavyUnderlingEntity implements IAnimatable
 	}
 
 	private <E extends IAnimatable> PlayState walkArmsAnimation(AnimationEvent<E> event) {
-		if (event.isMoving() && !isPerformingHeavyAttack()) {
+		if (event.isMoving() && !isAttacking()) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ogre.walkarms", true));
 			return PlayState.CONTINUE;
 		}
@@ -118,7 +110,7 @@ public class OgreEntity extends HeavyUnderlingEntity implements IAnimatable
 	}
 
 	private <E extends IAnimatable> PlayState swingAnimation(AnimationEvent<E> event) {
-		if (isPerformingHeavyAttack()) {
+		if (isAttacking()) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ogre.punch", false));
 			return PlayState.CONTINUE;
 		}
@@ -132,10 +124,5 @@ public class OgreEntity extends HeavyUnderlingEntity implements IAnimatable
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
-	}
-
-	@Override
-	public AnimationFactory getFactory() {
-		return this.factory;
 	}
 }

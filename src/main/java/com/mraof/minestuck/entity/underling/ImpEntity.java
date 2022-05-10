@@ -12,60 +12,59 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.FakePlayer;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.manager.AnimationData;
 
-public class ImpEntity extends UnderlingEntity
+public class ImpEntity extends UnderlingEntity implements IAnimatable
 {
+
 	public ImpEntity(EntityType<? extends ImpEntity> type, World world)
 	{
 		super(type, world, 1);
+		this.setAttackDelay(4);
+		this.setAttackRecovery(10);
 	}
-	
+
 	public static AttributeModifierMap.MutableAttribute impAttributes()
 	{
 		return UnderlingEntity.underlingAttributes().add(Attributes.MAX_HEALTH, 6)
 				.add(Attributes.MOVEMENT_SPEED, 0.28).add(Attributes.ATTACK_DAMAGE, 1);
 	}
-	
+
 	@Override
 	public GristSet getGristSpoils()
 	{
 		return GristHelper.generateUnderlingGristDrops(this, damageMap, 1);
 	}
-	
-	@Override
-	protected void registerGoals()
-	{
-		super.registerGoals();
-		this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.0F, false));
-	}
-	
+
 	protected SoundEvent getAmbientSound()
 	{
 		return MSSoundEvents.ENTITY_IMP_AMBIENT;
 	}
-	
+
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
 	{
 		return MSSoundEvents.ENTITY_IMP_HURT;
 	}
-	
+
 	protected SoundEvent getDeathSound()
 	{
 		return MSSoundEvents.ENTITY_IMP_DEATH;
 	}
-	
+
 	@Override
 	protected int getVitalityGel()
 	{
 		return random.nextInt(3) + 1;
 	}
-	
+
 	@Override
 	protected void onGristTypeUpdated(GristType type)
 	{
@@ -74,7 +73,7 @@ public class ImpEntity extends UnderlingEntity
 		applyGristModifier(Attributes.ATTACK_DAMAGE, Math.ceil(type.getPower()), AttributeModifier.Operation.ADDITION);
 		this.xpReward = (int) (3 * type.getPower() + 1);
 	}
-	
+
 	@Override
 	public void die(DamageSource cause)
 	{
@@ -86,7 +85,7 @@ public class ImpEntity extends UnderlingEntity
 			firstKillBonus(entity, Echeladder.UNDERLING_BONUS_OFFSET);
 		}
 	}
-	
+
 	@Override
 	protected boolean isAppropriateTarget(LivingEntity entity)
 	{
@@ -96,5 +95,67 @@ public class ImpEntity extends UnderlingEntity
 			return PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder().getRung() < 19;
 		}
 		return super.isAppropriateTarget(entity);
+	}
+
+	@Override
+	public void registerControllers(AnimationData data) {
+		data.addAnimationController(createAnimation("idleAnimation", 1, this::idleAnimation));
+		data.addAnimationController(createAnimation("walkArmsAnimation", 0.5, this::walkArmsAnimation));
+		data.addAnimationController(createAnimation("walkAnimation", 0.5, this::walkAnimation));
+		data.addAnimationController(createAnimation("deathAnimation", 0.7, this::deathAnimation));
+		data.addAnimationController(createAnimation("swingAnimation", 2, this::swingAnimation));
+	}
+
+	private <E extends IAnimatable> PlayState idleAnimation(AnimationEvent<E> event) {
+		if (!event.isMoving() && !this.isAggressive()) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.idle", true));
+			return PlayState.CONTINUE;
+		}
+		return PlayState.STOP;
+	}
+
+	private <E extends IAnimatable> PlayState walkAnimation(AnimationEvent<E> event) {
+		if (!event.isMoving()) {
+			return PlayState.STOP;
+		}
+
+		if (this.isAggressive()) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.run", true));
+			return PlayState.CONTINUE;
+		} else {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.walk", true));
+			return PlayState.CONTINUE;
+		}
+	}
+
+	private <E extends IAnimatable> PlayState walkArmsAnimation(AnimationEvent<E> event) {
+		if (!event.isMoving() || isAttacking()) {
+			return PlayState.STOP;
+		}
+
+		if (this.isAggressive()) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.runarms", true));
+			return PlayState.CONTINUE;
+		} else {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.walkarms", true));
+			return PlayState.CONTINUE;
+		}
+	}
+
+	private <E extends IAnimatable> PlayState deathAnimation(AnimationEvent<E> event) {
+		if (dead) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.die", false));
+			return PlayState.CONTINUE;
+		}
+		return PlayState.STOP;
+	}
+
+	private <E extends IAnimatable> PlayState swingAnimation(AnimationEvent<E> event) {
+		if (isAttacking()) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.scratch", false));
+			return PlayState.CONTINUE;
+		}
+		event.getController().markNeedsReload();
+		return PlayState.STOP;
 	}
 }

@@ -33,7 +33,6 @@ import javax.annotation.Nullable;
 
 public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IMob, IAnimatable
 {
-	private final AnimationFactory factory = new AnimationFactory(this);
 	private final RangedAttackGoal aiArrowAttack = new RangedAttackGoal(this, 5/4F, 20, 10.0F);
 	private final MeleeAttackGoal aiMeleeAttack = new MeleeAttackGoal(this, 2F, false);
 	
@@ -209,13 +208,6 @@ public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IM
 		data.addAnimationController(createAnimation("swingAnimation", 1, this::swingAnimation));
 	}
 
-	private AnimationController<PawnEntity> createAnimation(String name, double speed, AnimationController.IAnimationPredicate<PawnEntity> predicate) {
-		AnimationController<PawnEntity> controller = new AnimationController<>(this, name, 0, predicate);
-		controller.setAnimationSpeed(speed);
-		return controller;
-	}
-
-
 	private <E extends IAnimatable> PlayState walkAnimation(AnimationEvent<E> event) {
 		if (event.isMoving()) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", true));
@@ -225,7 +217,7 @@ public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IM
 	}
 
 	private <E extends IAnimatable> PlayState walkArmsAnimation(AnimationEvent<E> event) {
-		if (event.isMoving() && !swinging) {
+		if (event.isMoving() && !isAttacking()) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("walkarms", true));
 			return PlayState.CONTINUE;
 		}
@@ -241,16 +233,11 @@ public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IM
 	}
 
 	private <E extends IAnimatable> PlayState swingAnimation(AnimationEvent<E> event) {
-		if (swinging) {
+		if (isAttacking()) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("punch1", false));
 			return PlayState.CONTINUE;
 		}
 		event.getController().markNeedsReload();
 		return PlayState.STOP;
-	}
-
-	@Override
-	public AnimationFactory getFactory() {
-		return this.factory;
 	}
 }

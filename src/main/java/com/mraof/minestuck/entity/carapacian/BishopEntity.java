@@ -13,6 +13,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import software.bernie.geckolib3.core.manager.AnimationData;
 
 import javax.annotation.Nullable;
 import java.util.function.Predicate;
@@ -113,7 +114,12 @@ public class BishopEntity extends CarapacianEntity implements IRangedAttackMob, 
 		}
 		return super.hurt(par1DamageSource, par2);
 	}
-	
+
+	@Override
+	public void registerControllers(AnimationData data) {
+		//TODO blockbench model + anims
+	}
+
 	private static class NearestAttackableExtendedGoal extends NearestAttackableTargetGoal<LivingEntity>
 	{
 		NearestAttackableExtendedGoal(MobEntity goalOwnerIn, Class<LivingEntity> targetClassIn, int targetChanceIn, boolean checkSight, boolean nearbyOnlyIn, @Nullable Predicate<LivingEntity> targetPredicate)

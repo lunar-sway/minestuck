@@ -1,13 +1,12 @@
 package com.mraof.minestuck.entity;
 
-import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import java.util.Objects;
 
-public abstract class SimpleTexturedEntity extends CreatureEntity
+public abstract class SimpleTexturedEntity extends AnimatedCreatureEntity
 {
 	private ResourceLocation textureResource;
 	

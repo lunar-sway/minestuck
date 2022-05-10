@@ -1,33 +1,32 @@
 package com.mraof.minestuck.entity.underling;
 
-import com.mraof.minestuck.entity.IEntityMultiPart;
 import com.mraof.minestuck.entity.ai.CustomMeleeAttackGoal;
 import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.util.MSSoundEvents;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.FakePlayer;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.manager.AnimationData;
 
-public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
+public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 {
-	private UnderlingPartEntity tail;
-	
 	public BasiliskEntity(EntityType<? extends BasiliskEntity> type, World world)
 	{
 		super(type, world, 5);
-		tail = new UnderlingPartEntity(this, 0, 3F, 2F);
-		//world.addEntity(tail); TODO Not safe to add entities to world on creation. A different solution is needed
+		this.setAttackDelay(4);
+		this.setAttackRecovery(10);
 	}
 	
 	public static AttributeModifierMap.MutableAttribute basiliskAttributes()
@@ -35,13 +34,6 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 		return UnderlingEntity.underlingAttributes().add(Attributes.MAX_HEALTH, 85)
 				.add(Attributes.KNOCKBACK_RESISTANCE, 0.6).add(Attributes.MOVEMENT_SPEED, 0.25)
 				.add(Attributes.ATTACK_DAMAGE, 6);
-	}
-	
-	@Override
-	protected void registerGoals()
-	{
-		super.registerGoals();
-		this.goalSelector.addGoal(3, new CustomMeleeAttackGoal(this, 1.0F, false, 40, 1.2F));
 	}
 	
 	protected SoundEvent getAmbientSound()
@@ -81,63 +73,6 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 	}
 	
 	@Override
-	public World getWorld()
-	{
-		return this.level;
-	}
-	
-	@Override
-	public void baseTick()
-	{
-		super.baseTick();
-		this.updatePartPositions();
-	}
-	
-	@Override
-	public boolean attackEntityFromPart(Entity entityPart, DamageSource source, float damage)
-	{
-		return this.hurt(source, damage);
-	}
-	
-	@Override
-	protected void doPush(Entity par1Entity)
-	{
-		if(par1Entity != this.tail)
-			super.doPush(par1Entity);
-	}
-	
-	@Override
-	public void absMoveTo(double par1, double par3, double par5, float par7, float par8)
-	{
-		super.absMoveTo(par1, par3, par5, par7, par8);
-		this.updatePartPositions();
-	}
-	
-	@Override
-	public void updatePartPositions()
-	{
-		if(tail == null)
-			return;
-		float f1 = this.yRotO + (this.yRot - this.yRotO);
-		double tailPosX = (this.getX() + Math.sin(f1 / 180.0 * Math.PI) * tail.getBbWidth());
-		double tailPosZ = (this.getZ() + -Math.cos(f1 / 180.0 * Math.PI) * tail.getBbWidth());
-		
-		tail.absMoveTo(tailPosX, this.getY(), tailPosZ, this.yRot, this.xRot);
-	}
-	
-	@Override
-	public void addPart(Entity entityPart, int id)
-	{
-		this.tail = (UnderlingPartEntity) entityPart;
-	}
-	
-	@Override
-	public void onPartDeath(Entity entityPart, int id)
-	{
-	
-	}
-	
-	@Override
 	public void die(DamageSource cause)
 	{
 		super.die(cause);
@@ -147,5 +82,43 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 			computePlayerProgress((int) (30 + 2.4 * getGristType().getPower())); //most basilisks stop giving xp at rung 32
 			firstKillBonus(entity, (byte) (Echeladder.UNDERLING_BONUS_OFFSET + 2));
 		}
+	}
+
+	@Override
+	public void registerControllers(AnimationData data) {
+		data.addAnimationController(createAnimation("walkAnimation", 1, this::walkAnimation));
+		data.addAnimationController(createAnimation("deathAnimation", 1, this::deathAnimation));
+		data.addAnimationController(createAnimation("swingAnimation", 1, this::swingAnimation));
+	}
+
+	private <E extends IAnimatable> PlayState walkAnimation(AnimationEvent<E> event) {
+		if (!event.isMoving()) {
+			return PlayState.STOP;
+		}
+
+		if (this.isAggressive()) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("run", true));
+			return PlayState.CONTINUE;
+		} else {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", true));
+			return PlayState.CONTINUE;
+		}
+	}
+
+	private <E extends IAnimatable> PlayState deathAnimation(AnimationEvent<E> event) {
+		if (dead) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("die", false));
+			return PlayState.CONTINUE;
+		}
+		return PlayState.STOP;
+	}
+
+	private <E extends IAnimatable> PlayState swingAnimation(AnimationEvent<E> event) {
+		if (isAttacking()) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("bite", false));
+			return PlayState.CONTINUE;
+		}
+		event.getController().markNeedsReload();
+		return PlayState.STOP;
 	}
 }

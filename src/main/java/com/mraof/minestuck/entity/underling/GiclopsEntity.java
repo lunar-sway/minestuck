@@ -1,46 +1,28 @@
 package com.mraof.minestuck.entity.underling;
 
-import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.entity.EntityBigPart;
-import com.mraof.minestuck.entity.IBigEntity;
-import com.mraof.minestuck.entity.PartGroup;
 import com.mraof.minestuck.entity.ai.CustomMeleeAttackGoal;
 import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.util.MSSoundEvents;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MoverType;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.tags.ITag;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.FakePlayer;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.manager.AnimationData;
 
-public class GiclopsEntity extends UnderlingEntity implements IBigEntity
+public class GiclopsEntity extends UnderlingEntity implements IAnimatable
 {
-	private PartGroup partGroup;
-	
 	public GiclopsEntity(EntityType<? extends GiclopsEntity> type, World world)
 	{
 		super(type, world, 7);
-		
 		this.maxUpStep = 2;
-		partGroup = new PartGroup(this);
-		partGroup.addBox(-4, 2, -1.5, 8, 8, 5);
-		partGroup.addBox(-5, 0, -0.5, 3, 2, 3);
-		partGroup.addBox(1, 0, -0.5, 3, 2, 3);
-		partGroup.createEntities(world);
 	}
 	
 	public static AttributeModifierMap.MutableAttribute giclopsAttributes()
@@ -94,38 +76,6 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	}
 	
 	@Override
-	public void baseTick()
-	{
-		super.baseTick();
-		partGroup.updatePositions();
-		if(!level.isClientSide && MinestuckConfig.SERVER.disableGiclops.get())
-			this.remove();
-	}
-	
-	@Override
-	public void absMoveTo(double par1, double par3, double par5, float par7, float par8)
-	{
-		super.absMoveTo(par1, par3, par5, par7, par8);
-		partGroup.updatePositions();
-	}
-	
-	@Override
-	protected void doPush(Entity par1Entity)
-	{
-		if(!(par1Entity instanceof EntityBigPart))
-			super.doPush(par1Entity);
-	}
-	
-	@Override
-	public void push(Entity entityIn)
-	{
-		if(!entityIn.noPhysics)
-		{
-			partGroup.applyCollision(entityIn);
-		}
-	}
-	
-	@Override
 	public void die(DamageSource cause)
 	{
 		super.die(cause);
@@ -137,63 +87,52 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 		}
 	}
 	
-	//Reduced lag is worth not taking damage for being inside a wall
-	@Override
-	public boolean isInWall()
-	{
-		return false;
-	}
+//	//Reduced lag is worth not taking damage for being inside a wall
+//	@Override
+//	public boolean isInWall()
+//	{
+//		return false;
+//	}
+//
+//	//Only pay attention to the top for water
+//
+//	@Override
+//	public boolean updateFluidHeightAndDoFluidPushing(ITag<Fluid> fluidTag, double fluidFactor)
+//	{
+//		AxisAlignedBB realBox = this.getBoundingBox();
+//		this.setBoundingBox(new AxisAlignedBB(realBox.minX, realBox.maxY - 1, realBox.minZ, realBox.maxX, realBox.maxY, realBox.maxZ));
+//		boolean result = super.updateFluidHeightAndDoFluidPushing(fluidTag, fluidFactor);
+//		this.setBoundingBox(realBox);
+//		return result;
+//	}
 	
-	//Only pay attention to the top for water
 	
-	@Override
-	public boolean updateFluidHeightAndDoFluidPushing(ITag<Fluid> fluidTag, double fluidFactor)
-	{
-		AxisAlignedBB realBox = this.getBoundingBox();
-		this.setBoundingBox(new AxisAlignedBB(realBox.minX, realBox.maxY - 1, realBox.minZ, realBox.maxX, realBox.maxY, realBox.maxZ));
-		boolean result = super.updateFluidHeightAndDoFluidPushing(fluidTag, fluidFactor);
-		this.setBoundingBox(realBox);
-		return result;
-	}
-	
-	
-	@Override
-	public void move(MoverType typeIn, Vector3d pos)
-	{
-		AxisAlignedBB realBox = this.getBoundingBox();
-		double minX = pos.x > 0 ? realBox.maxX - pos.x : realBox.minX;
-		/*				y > 0 ? realBox.maxY - y : realBox.minY,*/
-		double minY = realBox.minY;
-		double minZ = pos.z > 0 ? realBox.maxZ - pos.z : realBox.minZ;
-		double maxX = pos.x < 0 ? realBox.minX - pos.x : realBox.maxX;
-		double maxY = pos.y < 0 ? realBox.minY - pos.y : realBox.maxY;
-		double maxZ = pos.z < 0 ? realBox.minZ - pos.z : realBox.maxZ;
-		this.setBoundingBox(new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ));
-		super.move(typeIn, pos);
-		AxisAlignedBB changedBox = this.getBoundingBox();
-		this.setBoundingBox(realBox.move(changedBox.minX - minX, changedBox.minY - minY, changedBox.minZ - minZ));
-		this.setLocationFromBoundingbox();
-	}
-	
-	@Override
-	public PartGroup getGroup()
-	{
-		return partGroup;
-	}
-	
-	/**
-	 * Will get destroyed next tick.
-	 */
-	@Override
-	public void remove()
-	{
-		super.remove();
-		partGroup.updatePositions();
-	}
+//	@Override
+//	public void move(MoverType typeIn, Vector3d pos)
+//	{
+//		AxisAlignedBB realBox = this.getBoundingBox();
+//		double minX = pos.x > 0 ? realBox.maxX - pos.x : realBox.minX;
+//		/*				y > 0 ? realBox.maxY - y : realBox.minY,*/
+//		double minY = realBox.minY;
+//		double minZ = pos.z > 0 ? realBox.maxZ - pos.z : realBox.minZ;
+//		double maxX = pos.x < 0 ? realBox.minX - pos.x : realBox.maxX;
+//		double maxY = pos.y < 0 ? realBox.minY - pos.y : realBox.maxY;
+//		double maxZ = pos.z < 0 ? realBox.minZ - pos.z : realBox.maxZ;
+//		this.setBoundingBox(new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ));
+//		super.move(typeIn, pos);
+//		AxisAlignedBB changedBox = this.getBoundingBox();
+//		this.setBoundingBox(realBox.move(changedBox.minX - minX, changedBox.minY - minY, changedBox.minZ - minZ));
+//		this.setLocationFromBoundingbox();
+//	}
 	
 	@Override
 	public boolean isPickable()
 	{
 		return true;
+	}
+
+	@Override
+	public void registerControllers(AnimationData data) {
+
 	}
 }
