@@ -43,9 +43,9 @@ public class UnavailableGristCost extends GristCostRecipe
 		}
 		
 		@Override
-		public void write(PacketBuffer buffer, UnavailableGristCost recipe)
+		public void toNetwork(PacketBuffer buffer, UnavailableGristCost recipe)
 		{
-			super.write(buffer, recipe);
+			super.toNetwork(buffer, recipe);
 			//Do nothing more
 		}
 	}

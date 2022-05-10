@@ -5,6 +5,7 @@ import com.mraof.minestuck.data.loot_table.MinestuckLootTableProvider;
 import com.mraof.minestuck.data.recipe.MinestuckCombinationsProvider;
 import com.mraof.minestuck.data.recipe.MinestuckGristCostsProvider;
 import com.mraof.minestuck.data.recipe.MinestuckRecipeProvider;
+import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -20,10 +21,11 @@ public class MinestuckData
 		
 		if(event.includeServer())
 		{
-			gen.addProvider(new MinestuckBlockTagsProvider(gen));
-			gen.addProvider(new MinestuckItemTagsProvider(gen));
-			gen.addProvider(new MinestuckFluidTagsProvider(gen));
-			gen.addProvider(new MinestuckEntityTypeTagsProvider(gen));
+			BlockTagsProvider blockTags = new MinestuckBlockTagsProvider(gen, event.getExistingFileHelper());
+			gen.addProvider(blockTags);
+			gen.addProvider(new MinestuckItemTagsProvider(gen, blockTags, event.getExistingFileHelper()));
+			gen.addProvider(new MinestuckFluidTagsProvider(gen, event.getExistingFileHelper()));
+			gen.addProvider(new MinestuckEntityTypeTagsProvider(gen, event.getExistingFileHelper()));
 			
 			gen.addProvider(new MinestuckRecipeProvider(gen));
 			gen.addProvider(new MinestuckGristCostsProvider(gen));
@@ -32,8 +34,10 @@ public class MinestuckData
 			
 			gen.addProvider(new BoondollarPricingProvider(gen, Minestuck.MOD_ID));
 			gen.addProvider(new MinestuckLootTableProvider(gen));
-			gen.addProvider(new MSAvancementProvider(gen));
+			gen.addProvider(new MSAdvancementProvider(gen));
 			gen.addProvider(new MinestuckEnUsLanguageProvider(gen));
+			
+			gen.addProvider(new MinestuckBiomeProvider(gen));
 		}
 	}
 }

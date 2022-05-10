@@ -43,19 +43,19 @@ public class AlchemiterBlock extends MultiMachineBlock
 	@SuppressWarnings("deprecation")
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
 	{
-		return shape.get(state.get(FACING));
+		return shape.get(state.getValue(FACING));
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
 	{
 		BlockPos mainPos = getMainPos(state, pos, worldIn);
-		TileEntity te = worldIn.getTileEntity(mainPos);
+		TileEntity te = worldIn.getBlockEntity(mainPos);
 		
 		if (te instanceof AlchemiterTileEntity)
 		{
-			((AlchemiterTileEntity) te).onRightClick(worldIn, player, state, hit.getFace());
+			((AlchemiterTileEntity) te).onRightClick(worldIn, player, state, hit.getDirection());
 		}
 		
 		return ActionResultType.SUCCESS;
@@ -63,12 +63,12 @@ public class AlchemiterBlock extends MultiMachineBlock
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving)
+	public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving)
 	{
 		if(state.getBlock() != newState.getBlock())
 		{
 			BlockPos mainPos = getMainPos(state, pos, worldIn);
-			TileEntity te = worldIn.getTileEntity(mainPos);
+			TileEntity te = worldIn.getBlockEntity(mainPos);
 			if(te instanceof AlchemiterTileEntity)
 			{
 				AlchemiterTileEntity alchemiter = (AlchemiterTileEntity) te;
@@ -77,7 +77,7 @@ public class AlchemiterBlock extends MultiMachineBlock
 					alchemiter.dropItem(null);
 			}
 			
-			super.onReplaced(state, worldIn, pos, newState, isMoving);
+			super.onRemove(state, worldIn, pos, newState, isMoving);
 		}
 	}
 	
@@ -92,9 +92,9 @@ public class AlchemiterBlock extends MultiMachineBlock
 	
 	protected BlockPos getMainPos(BlockState state, BlockPos pos, IBlockReader world, int count)
 	{
-		Direction direction = state.get(FACING);
+		Direction direction = state.getValue(FACING);
 		
-		BlockPos newPos = pos.add(mainPos.rotate(MSRotationUtil.fromDirection(direction)));
+		BlockPos newPos = pos.offset(mainPos.rotate(MSRotationUtil.fromDirection(direction)));
 		
 		if(!recursive)
 			return newPos;
@@ -102,7 +102,7 @@ public class AlchemiterBlock extends MultiMachineBlock
 		{
 			BlockState newState = world.getBlockState(newPos);
 			if(count > 0 && newState.getBlock() instanceof AlchemiterBlock && ((AlchemiterBlock) newState.getBlock()).corner
-					&& newState.get(FACING).equals(this.corner ? state.get(FACING).rotateY() : state.get(FACING)))
+					&& newState.getValue(FACING).equals(this.corner ? state.getValue(FACING).getClockWise() : state.getValue(FACING)))
 			{
 				return ((AlchemiterBlock) newState.getBlock()).getMainPos(newState, newPos, world, count - 1);
 			} else return new BlockPos(0, -1 , 0);
@@ -132,9 +132,9 @@ public class AlchemiterBlock extends MultiMachineBlock
 		}
 		
 		@Override
-		protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+		protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
 		{
-			super.fillStateContainer(builder);
+			super.createBlockStateDefinition(builder);
 			builder.add(DOWEL);
 		}
 	}

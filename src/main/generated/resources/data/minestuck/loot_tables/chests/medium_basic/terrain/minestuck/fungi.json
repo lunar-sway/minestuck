@@ -111,6 +111,10 @@
             }
           ],
           "name": "minestuck:fungal_spore"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:sushroom"
         }
       ]
     }

@@ -1,0 +1,12 @@
+{
+    "variants": {
+        "facing=north,powered=true":  { "model": "minestuck:block/wireless_redstone_transmitter_powered" },
+        "facing=east,powered=true":   { "model": "minestuck:block/wireless_redstone_transmitter_powered", "y": 90 },
+        "facing=south,powered=true":  { "model": "minestuck:block/wireless_redstone_transmitter_powered", "y": 180 },
+        "facing=west,powered=true":   { "model": "minestuck:block/wireless_redstone_transmitter_powered", "y": 270 },
+        "facing=north,powered=false": { "model": "minestuck:block/wireless_redstone_transmitter_unpowered" },
+        "facing=east,powered=false":  { "model": "minestuck:block/wireless_redstone_transmitter_unpowered", "y": 90 },
+        "facing=south,powered=false": { "model": "minestuck:block/wireless_redstone_transmitter_unpowered", "y": 180 },
+        "facing=west,powered=false":  { "model": "minestuck:block/wireless_redstone_transmitter_unpowered", "y": 270 }
+    }
+}

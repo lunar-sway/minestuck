@@ -1,15 +1,23 @@
 package com.mraof.minestuck.world.lands.title;
 
+import com.mojang.serialization.Codec;
 import com.mraof.minestuck.player.EnumAspect;
+import com.mraof.minestuck.util.CodecUtil;
 import com.mraof.minestuck.world.lands.ILandType;
+import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
 
+/**
+ * Base class for land types that are associated with some aspect.
+ * These land types make up the second half of a land together with a {@link TerrainLandType}.
+ */
 public abstract class TitleLandType extends ForgeRegistryEntry<TitleLandType> implements ILandType<TitleLandType>
 {
+	public static final Codec<TitleLandType> CODEC = CodecUtil.registryCodec(() -> LandTypes.TITLE_REGISTRY);
 	private final ResourceLocation groupName;
 	private final EnumAspect aspectType;
 	private final boolean pickedAtRandom;
@@ -36,13 +44,16 @@ public abstract class TitleLandType extends ForgeRegistryEntry<TitleLandType> im
 		this.pickedAtRandom = pickedAtRandom;
 	}
 	
-	public boolean isAspectCompatible(TerrainLandType aspect)
+	/**
+	 * Returns true if the given land type may be randomly chosen together with this land type.
+	 */
+	public boolean isAspectCompatible(TerrainLandType otherType)
 	{
 		return true;
 	}
 	
 	@Override
-	public boolean canBePickedAtRandom()
+	public final boolean canBePickedAtRandom()
 	{
 		return pickedAtRandom;
 	}

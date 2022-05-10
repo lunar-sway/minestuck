@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minestuck:polished_green_stone"
+    ]
+  },
+  "criteria": {
+    "has_green_stone": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minestuck:green_stone"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minestuck:polished_green_stone"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_green_stone",
+      "has_the_recipe"
+    ]
+  ]
+}

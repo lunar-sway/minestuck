@@ -29,9 +29,18 @@ public class MSBlockShapes
 					new double[]{5.5,12,2.5,10.5,13,14.5}
 			);
 	
+	public static final CustomVoxelShape SPIKES = new CustomVoxelShape(new double[]{0, 0, 0, 16, 4, 16}/*, new double[]{1, 1, 1, 15, 15, 15}*/);
+	
 	public static final CustomVoxelShape FROG_STATUE = FROG_STATUE_BASE.merge(FROG_STATUE_BODY, FROG_STATUE_HEAD).rotate(Direction.SOUTH);
 	
 	public static final CustomVoxelShape WIZARD_STATUE = new CustomVoxelShape(new double[]{3, 0, 3, 13, 16, 12});
+	public static final CustomVoxelShape DENIZEN_STATUE = new CustomVoxelShape(new double[]{2, 0, 2, 14, 14, 14});
+	public static final CustomVoxelShape NAKAGATOR_STATUE = new CustomVoxelShape(new double[]{1, 0, 1, 15, 1, 15}, new double[]{5, 1, 6, 11, 16, 13}, new double[]{5, 11, 0, 11, 15, 6}, new double[]{6, 1, 11, 10, 4, 16});
+	
+	public static final CustomVoxelShape STEEP_STAIRS_BASE = new CustomVoxelShape(new double[]{0, 0, 0, 16, 4, 16}, new double[]{0, 4, 2, 16, 8, 16}, new double[]{0, 8, 4, 16, 12, 16}, new double[]{0, 12, 6, 16, 16, 16});
+	public static final CustomVoxelShape STEEP_STAIRS_TOP = new CustomVoxelShape(new double[]{0, 0, 8, 16, 4, 16}, new double[]{0, 4, 10, 16, 8, 16}, new double[]{0, 8, 12, 16, 12, 16}, new double[]{0, 12, 14, 16, 16, 16});
+	
+	public static final CustomVoxelShape LOTUS_TIME_CAPSULE = new CustomVoxelShape(new double[]{0, 0, 0, 16, 7, 16}, new double[]{0, 7, 1, 15, 9, 16}, new double[]{0, 9, 0, 16, 11, 16}, new double[]{0, 11, 2, 14, 14, 16}, new double[]{0, 11, 7, 9, 15, 16}, new double[]{0, 15, 9, 7, 16, 16});
 	
 	public static final CustomVoxelShape STONE_TABLET = new CustomVoxelShape(new double[]{3, 0, 3, 13, 1, 15}, new double[]{3, 0, 2, 12, 1, 3}, new double[]{3, 0, 1, 11, 1, 2});
 	
@@ -116,4 +125,5 @@ public static CustomVoxelShape PUNCH_DESIGNIX_TOP_RIGHT = PUNCH_DESIGNIX_TOP_RIG
 	public static CustomVoxelShape LAPTOP_CLOSED = new CustomVoxelShape(new double[]{1,0,3,15,2,14}, new double[]{1,0.5,14,15,1.5,14.5});
 	public static CustomVoxelShape LAPTOP_OPEN = new CustomVoxelShape(new double[]{1,0,3,15,1,14}, new double[]{1,0.5,14,15,1,14.5}, new double[]{1,1,14,15,12,15});
 	public static CustomVoxelShape OLD_COMPUTER = new CustomVoxelShape(/*mouse*/new double[]{0,0,0,3,1,4}, /*keyboard*/new double[]{4,0,0,16,1,5}, /*body*/new double[]{1,0,6,15,13,16});
+	public static CustomVoxelShape LUNCHTOP_OPEN = new CustomVoxelShape(/*base*/new double[]{4,0,1.5,12,3,15.5}, /*core*/new double[]{5,3,2.5,11,5,7.5});
 }

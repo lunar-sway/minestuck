@@ -9,12 +9,14 @@ import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.FakePlayer;
 
 //Makes non-stop ogre puns
 public class OgreEntity extends UnderlingEntity
@@ -22,17 +24,14 @@ public class OgreEntity extends UnderlingEntity
 	public OgreEntity(EntityType<? extends OgreEntity> type, World world)
 	{
 		super(type, world, 3);
-		this.stepHeight = 1.0F;
+		this.maxUpStep = 1.0F;
 	}
 	
-	@Override
-	protected void registerAttributes()
+	public static AttributeModifierMap.MutableAttribute ogreAttributes()
 	{
-		super.registerAttributes();
-		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(50.0D);
-		getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.4F);
-		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.22D);
-		getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(6.0D);
+		return UnderlingEntity.underlingAttributes().add(Attributes.MAX_HEALTH, 50)
+				.add(Attributes.KNOCKBACK_RESISTANCE, 0.4).add(Attributes.MOVEMENT_SPEED, 0.22)
+				.add(Attributes.ATTACK_DAMAGE, 6);
 	}
 	
 	@Override
@@ -50,7 +49,7 @@ public class OgreEntity extends UnderlingEntity
 	protected SoundEvent getDeathSound()
 	{
 		return MSSoundEvents.ENTITY_OGRE_DEATH;
-	}	
+	}
 	
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
 	{
@@ -66,31 +65,27 @@ public class OgreEntity extends UnderlingEntity
 	@Override
 	protected int getVitalityGel()
 	{
-		return rand.nextInt(3) + 3;
+		return random.nextInt(3) + 3;
 	}
 	
 	@Override
 	protected void onGristTypeUpdated(GristType type)
 	{
 		super.onGristTypeUpdated(type);
-		applyGristModifier(SharedMonsterAttributes.MAX_HEALTH, 13 * type.getPower(), AttributeModifier.Operation.ADDITION);
-		applyGristModifier(SharedMonsterAttributes.ATTACK_DAMAGE, 2.1 * type.getPower(), AttributeModifier.Operation.ADDITION);
-		this.experienceValue = (int) (5 * type.getPower() + 4);
+		applyGristModifier(Attributes.MAX_HEALTH, 13 * type.getPower(), AttributeModifier.Operation.ADDITION);
+		applyGristModifier(Attributes.ATTACK_DAMAGE, 2.1 * type.getPower(), AttributeModifier.Operation.ADDITION);
+		this.xpReward = (int) (5 * type.getPower() + 4);
 	}
 	
 	@Override
-	public void onDeath(DamageSource cause)
+	public void die(DamageSource cause)
 	{
-		super.onDeath(cause);
-		Entity entity = cause.getTrueSource();
-		if(this.dead && !this.world.isRemote)
+		super.die(cause);
+		Entity entity = cause.getEntity();
+		if(this.dead && !this.level.isClientSide)
 		{
-			computePlayerProgress((int) (40* getGristType().getPower() + 50));
-			if(entity instanceof ServerPlayerEntity)
-			{
-				Echeladder ladder = PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder();
-				ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET + 1));
-			}
+			computePlayerProgress((int) (15 + 2.2 * getGristType().getPower())); //most ogres stop giving xp at rung 18
+			firstKillBonus(entity, (byte) (Echeladder.UNDERLING_BONUS_OFFSET + 1));
 		}
 	}
 }

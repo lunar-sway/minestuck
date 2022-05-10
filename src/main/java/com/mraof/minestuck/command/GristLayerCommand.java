@@ -3,13 +3,15 @@ package com.mraof.minestuck.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import com.mraof.minestuck.world.gen.LandChunkGenerator;
+import com.mraof.minestuck.world.lands.GristLayerInfo;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.server.ServerWorld;
+
+import java.util.Optional;
 
 public class GristLayerCommand
 {
@@ -18,18 +20,18 @@ public class GristLayerCommand
 	
 	public static void register(CommandDispatcher<CommandSource> dispatcher)
 	{
-		dispatcher.register(Commands.literal("gristlayers").requires(source -> source.hasPermissionLevel(2)).executes(context -> execute(context.getSource())));
+		dispatcher.register(Commands.literal("gristlayers").requires(source -> source.hasPermission(2)).executes(context -> execute(context.getSource())));
 	}
 	
 	private static int execute(CommandSource source) throws CommandSyntaxException
 	{
-		ServerPlayerEntity player = source.asPlayer();
+		ServerPlayerEntity player = source.getPlayerOrException();
 		
-		ChunkGenerator<?> chunkGenerator = player.getServerWorld().getChunkProvider().getChunkGenerator();
-		if(chunkGenerator instanceof LandChunkGenerator)
+		Optional<GristLayerInfo> optionalInfo = GristLayerInfo.get((ServerWorld) player.level);
+		if(optionalInfo.isPresent())
 		{
-			ITextComponent layerInfo = ((LandChunkGenerator) chunkGenerator).getGristLayerInfo(player.getPosition().getX(), player.getPosition().getZ());
-			source.sendFeedback(layerInfo, false);
+			ITextComponent layerInfo = optionalInfo.get().getGristLayerInfo(player.blockPosition().getX(), player.blockPosition().getZ());
+			source.sendSuccess(layerInfo, false);
 			return 1;
 		} else
 		{

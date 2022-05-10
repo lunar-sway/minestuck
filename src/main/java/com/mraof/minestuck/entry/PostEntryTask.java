@@ -6,9 +6,10 @@ import com.mraof.minestuck.util.MSNBTUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunk;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
 
@@ -25,13 +26,13 @@ public class PostEntryTask
 	 */
 	private static final long MIN_TIME = 20;
 	
-	private final DimensionType dimension;
+	private final RegistryKey<World> dimension;
 	private final int x, y, z;
 	private final int entrySize;
 	private final byte entryType;	//Used if we add more ways for entry to happen
 	private int index;
 	
-	public PostEntryTask(DimensionType dimension, int xCoord, int yCoord, int zCoord, int entrySize, byte entryType)
+	public PostEntryTask(RegistryKey<World> dimension, int xCoord, int yCoord, int zCoord, int entrySize, byte entryType)
 	{
 		this.dimension = dimension;
 		this.x = xCoord;
@@ -69,7 +70,7 @@ public class PostEntryTask
 		if(isDone())
 			return false;
 		
-		ServerWorld world = dimension != null ? server.getWorld(dimension) : null;
+		ServerWorld world = dimension != null ? server.getLevel(dimension) : null;
 		
 		if(world == null)
 		{
@@ -107,7 +108,7 @@ public class PostEntryTask
 				}
 			}
 			
-			Debug.infof("Completed entry block updates for dimension %s.", dimension.getRegistryName());
+			Debug.infof("Completed entry block updates for dimension %s.", dimension.location());
 			setDone();
 			return true;
 		}
@@ -131,15 +132,15 @@ public class PostEntryTask
 		if(i >= index)
 		{
 			if(blockUpdate)
-				world.notifyNeighborsOfStateChange(pos, world.getBlockState(pos).getBlock());
-			world.getChunkProvider().getLightManager().checkBlock(pos);
+				world.updateNeighborsAt(pos, world.getBlockState(pos).getBlock());
+			world.getChunkSource().getLightEngine().checkBlock(pos);
 			IChunk chunk = world.getChunk(pos);
 			BlockState state = chunk.getBlockState(pos);
 			int x = pos.getX() & 15, y = pos.getY(), z = pos.getZ() & 15;
-			chunk.getHeightmap(Heightmap.Type.MOTION_BLOCKING).update(x, y, z, state);
-			chunk.getHeightmap(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES).update(x, y, z, state);
-			chunk.getHeightmap(Heightmap.Type.OCEAN_FLOOR).update(x, y, z, state);
-			chunk.getHeightmap(Heightmap.Type.WORLD_SURFACE).update(x, y, z, state);
+			chunk.getOrCreateHeightmapUnprimed(Heightmap.Type.MOTION_BLOCKING).update(x, y, z, state);
+			chunk.getOrCreateHeightmapUnprimed(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES).update(x, y, z, state);
+			chunk.getOrCreateHeightmapUnprimed(Heightmap.Type.OCEAN_FLOOR).update(x, y, z, state);
+			chunk.getOrCreateHeightmapUnprimed(Heightmap.Type.WORLD_SURFACE).update(x, y, z, state);
 			index++;
 		}
 		return i + 1;

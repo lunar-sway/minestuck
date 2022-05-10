@@ -1,16 +1,12 @@
 package com.mraof.minestuck.world.gen.feature.structure.village;
 
-import com.mojang.datafixers.Dynamic;
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.world.biome.LandBiomeSet;
-import com.mraof.minestuck.world.gen.LandGenSettings;
+import com.mojang.serialization.Codec;
 import com.mraof.minestuck.world.lands.LandTypePair;
-import net.minecraft.util.SharedSeedRandom;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.util.registry.DynamicRegistries;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeManager;
 import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
@@ -18,111 +14,58 @@ import net.minecraft.world.gen.feature.structure.StructureStart;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 
 import java.util.List;
-import java.util.Random;
-import java.util.function.Function;
 
-public class ConsortVillageStructure extends Structure<NoFeatureConfig>	//TODO Implement this
+public class ConsortVillageStructure extends Structure<NoFeatureConfig>
 {
-	private static final int VILLAGE_DISTANCE = 24;
-	private static final int MIN_VILLAGE_DISTANCE = 5;
-	
-	public ConsortVillageStructure(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactory)
+	public ConsortVillageStructure(Codec<NoFeatureConfig> codec)
 	{
-		super(configFactory);
+		super(codec);
 	}
 	
 	@Override
-	protected ChunkPos getStartPositionForPosition(ChunkGenerator<?> chunkGenerator, Random random, int x, int z, int spacingOffsetsX, int spacingOffsetsZ)
+	public GenerationStage.Decoration step()
 	{
-		if(x < 0)
-		{
-			x -= VILLAGE_DISTANCE - 1;
-		}
-		
-		if(z < 0)
-		{
-			z -= VILLAGE_DISTANCE - 1;
-		}
-		
-		x = x / VILLAGE_DISTANCE;
-		z = z / VILLAGE_DISTANCE;
-		x += spacingOffsetsX;
-		z += spacingOffsetsZ;
-		((SharedSeedRandom)random).setLargeFeatureSeedWithSalt(chunkGenerator.getSeed(), x, z, 10387312);
-		x = x * VILLAGE_DISTANCE;
-		z = z * VILLAGE_DISTANCE;
-		x = x + random.nextInt(VILLAGE_DISTANCE - MIN_VILLAGE_DISTANCE);
-		z = z + random.nextInt(VILLAGE_DISTANCE - MIN_VILLAGE_DISTANCE);
-		
-		return new ChunkPos(x, z);
-	}
-
-	@Override
-	public boolean canBeGenerated(BiomeManager biomeManagerIn, ChunkGenerator<?> generatorIn, Random randIn, int chunkX, int chunkZ, Biome biomeIn) {
-		ChunkPos pos = this.getStartPositionForPosition(generatorIn, randIn, chunkX, chunkZ, 0, 0);
-
-		if(chunkX == pos.x && chunkZ == pos.z)
-		{
-			Biome normalBiome = LandBiomeSet.getSet(generatorIn.getSettings()).NORMAL.get();
-			return generatorIn.getBiomeProvider().getBiomes(chunkX * 16 + 8, 0, chunkZ * 16 + 8, 16).stream().allMatch(biome -> biome == normalBiome);
-		}
-		return false;
+		return GenerationStage.Decoration.SURFACE_STRUCTURES;
 	}
 	
 	@Override
-	public IStartFactory getStartFactory()
+	public IStartFactory<NoFeatureConfig> getStartFactory()
 	{
 		return Start::new;
 	}
 	
-	@Override
-	public String getStructureName()
-	{
-		return Minestuck.MOD_ID + ":consort_village";
-	}
-	
-	@Override
-	public int getSize()
-	{
-		return 8;
-	}
-	
-	private static class Start extends StructureStart
+	private static class Start extends StructureStart<NoFeatureConfig>
 	{
 		
-		Start(Structure<?> structure, int chunkX, int chunkZ, MutableBoundingBox boundingBox, int reference, long seed)
+		Start(Structure<NoFeatureConfig> structure, int chunkX, int chunkZ, MutableBoundingBox boundingBox, int reference, long seed)
 		{
 			super(structure, chunkX, chunkZ, boundingBox, reference, seed);
 		}
 		
 		@Override
-		public void init(ChunkGenerator<?> generator, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn)
+		public void generatePieces(DynamicRegistries registries, ChunkGenerator generator, TemplateManager templates, int chunkX, int chunkZ, Biome biome, NoFeatureConfig config)
 		{
-			if(generator.getSettings() instanceof LandGenSettings)
+			LandTypePair landTypes = LandTypePair.getTypes(generator);
+			List<ConsortVillagePieces.PieceWeight> pieceWeightList = ConsortVillagePieces.getStructureVillageWeightedPieceList(random, landTypes);
+			ConsortVillageCenter.VillageCenter start = ConsortVillageCenter.getVillageStart((chunkX << 4) + random.nextInt(16), (chunkZ << 4) + random.nextInt(16), random, pieceWeightList, landTypes);
+			pieces.add(start);
+			start.addChildren(start, pieces, random);
+			
+			while(!start.pendingHouses.isEmpty() || !start.pendingRoads.isEmpty())
 			{
-				LandGenSettings settings = (LandGenSettings) generator.getSettings();
-				LandTypePair landTypes = settings.getLandTypes();
-				List<ConsortVillagePieces.PieceWeight> pieceWeightList = ConsortVillagePieces.getStructureVillageWeightedPieceList(rand, landTypes);
-				ConsortVillageCenter.VillageCenter start = ConsortVillageCenter.getVillageStart((chunkX << 4) + rand.nextInt(16), (chunkZ << 4) + rand.nextInt(16), rand, pieceWeightList, landTypes);
-				components.add(start);
-				start.buildComponent(start, components, rand);
-				
-				while(!start.pendingHouses.isEmpty() || !start.pendingRoads.isEmpty())
+				if(!start.pendingRoads.isEmpty())
 				{
-					if(!start.pendingRoads.isEmpty())
-					{
-						int index = rand.nextInt(start.pendingRoads.size());
-						StructurePiece component = start.pendingRoads.remove(index);
-						component.buildComponent(start, components, rand);
-					} else
-					{
-						int index = rand.nextInt(start.pendingHouses.size());
-						StructurePiece component = start.pendingHouses.remove(index);
-						component.buildComponent(start, components, rand);
-					}
+					int index = random.nextInt(start.pendingRoads.size());
+					StructurePiece component = start.pendingRoads.remove(index);
+					component.addChildren(start, pieces, random);
+				} else
+				{
+					int index = random.nextInt(start.pendingHouses.size());
+					StructurePiece component = start.pendingHouses.remove(index);
+					component.addChildren(start, pieces, random);
 				}
-				recalculateStructureSize();
 			}
+			calculateBoundingBox();
 		}
 	}
 }

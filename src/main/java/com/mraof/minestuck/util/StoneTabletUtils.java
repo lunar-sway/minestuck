@@ -1,8 +1,10 @@
 package com.mraof.minestuck.util;
 
+import com.mraof.minestuck.client.gui.StoneTabletScreen;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.Style;
+import org.apache.commons.lang3.mutable.MutableInt;
 
 public class StoneTabletUtils
 {
@@ -11,61 +13,43 @@ public class StoneTabletUtils
 	 */
 	public static int getTextWidth(FontRenderer font, String text)
 	{
-		return font.getStringWidth(font.getBidiFlag() ? font.bidiReorder(text) : text);
+		return font.width(font.isBidirectional() ? font.bidirectionalShaping(text) : text);
 	}
 	
-	//I'm not exactly sure about what these do, so some function names might be inaccurate
-	
-	public static Point createPointer(FontRenderer font, String pageText, int sectionEnd)
+	/**
+	 * Calculates the position of the given character index in the text
+	 * Might be appropriate to clean up usage of this function similarly to what vanilla did
+	 */
+	public static Point createPointer(FontRenderer font, String pageText, int index)
 	{
 		Point point = new Point();
-		int i = 0;
-		int j = 0;
 		
-		for(String s = pageText; !s.isEmpty(); j = i)
-		{
-			int k = sizeStringToWidth(font, s, 114);
-			if (s.length() <= k)
-			{
-				String s3 = s.substring(0, Math.min(Math.max(sectionEnd - j, 0), s.length()));
-				point.x = point.x + getTextWidth(font, s3);
-				break;
-			}
-			
-			String s1 = s.substring(0, k);
-			char c0 = s.charAt(k);
-			boolean flag = c0 == ' ' || c0 == '\n';
-			s = TextFormatting.getFormatString(s1) + s.substring(k + (flag ? 1 : 0));
-			i += s1.length() + (flag ? 1 : 0);
-			if (i - 1 >= sectionEnd)
-			{
-				String s2 = s1.substring(0, Math.min(Math.max(sectionEnd - j, 0), s1.length()));
-				point.x = point.x + getTextWidth(font, s2);
-				break;
-			}
-			
-			point.y = point.y + 9;
-		}
+		font.getSplitter().splitLines(pageText, StoneTabletScreen.TEXT_WIDTH, Style.EMPTY, true, (style, start, end) -> {
+			if(index >= end)
+				point.y += font.lineHeight;
+			if(index >= start)
+				point.x = getTextWidth(font, pageText.substring(start, Math.min(index, end)));
+		});
 		
 		return point;
 	}
 	
 	public static void adjustPointerAForBidi(FontRenderer font, Point pointer)
 	{
-		if (font.getBidiFlag())
-			pointer.x = 114 - pointer.x;
+		if (font.isBidirectional())
+			pointer.x = StoneTabletScreen.TEXT_WIDTH - pointer.x;
 	}
 	
-	public static void adjustPointerA(Point pointer, int width)
+	public static void pointerToRelative(Point pointer, int width)
 	{
-		pointer.x = pointer.x - (width - 192) / 2 - 36;
-		pointer.y = pointer.y - 32;
+		pointer.x = pointer.x - (width - StoneTabletScreen.GUI_WIDTH) / 2 - StoneTabletScreen.TEXT_OFFSET_X;
+		pointer.y = pointer.y - StoneTabletScreen.TEXT_OFFSET_Y;
 	}
 	
-	public static void adjustPointerB(Point pointer, int width)
+	public static void pointerToPrecise(Point pointer, int width)
 	{
-		pointer.x = pointer.x + (width - 192) / 2 + 36;
-		pointer.y = pointer.y + 32;
+		pointer.x = pointer.x + (width - StoneTabletScreen.GUI_WIDTH) / 2 + StoneTabletScreen.TEXT_OFFSET_X;
+		pointer.y = pointer.y + StoneTabletScreen.TEXT_OFFSET_Y;
 	}
 	
 	
@@ -81,7 +65,7 @@ public class StoneTabletUtils
 			for(int i = 0; i < s.length(); ++i)
 			{
 				char c0 = s.charAt(i);
-				float f2 = font.getCharWidth(c0);
+				float f2 = font.width(String.valueOf(c0));
 				if (c0 == 167 && i < s.length() - 1)
 				{
 					++i;
@@ -111,55 +95,35 @@ public class StoneTabletUtils
 		}
 	}
 	
+	/**
+	 * Get a char index from the given pointer.
+	 * Reverse of createPointer
+	 */
 	public static int getSelectionIndex(FontRenderer font, String text, Point pointer)
 	{
-		int i = 16 * 9;
-		if (pointer.y > i)
-			return -1;
-		else
+		int maxY = 16 * font.lineHeight;
+		if(pointer.y >= 0 && pointer.y < maxY)
 		{
-			int j = Integer.MIN_VALUE;
-			int k = 9;
-			int l = 0;
+			MutableInt lineY = new MutableInt();
+			MutableInt index = new MutableInt(text.length());
 			
-			for(String s = text; !s.isEmpty() && j < i; k += 9)
-			{
-				int i1 = sizeStringToWidth(font, s, 114);
-				if (i1 < s.length())
+			font.getSplitter().splitLines(text, StoneTabletScreen.TEXT_WIDTH, Style.EMPTY, true, (style, start, end) -> {
+				int nextLineY = lineY.intValue() + font.lineHeight;
+				if(pointer.y >= lineY.intValue() && pointer.y < nextLineY)
 				{
-					String s1 = s.substring(0, i1);
-					if (pointer.y >= j && pointer.y < k)
-					{
-						int k1 = getSelectionX(font, s1, pointer.x);
-						return k1 < 0 ? -1 : l + k1;
-					}
-					
-					char c0 = s.charAt(i1);
-					boolean flag = c0 == ' ' || c0 == '\n';
-					s = TextFormatting.getFormatString(s1) + s.substring(i1 + (flag ? 1 : 0));
-					l += s1.length() + (flag ? 1 : 0);
-				} else if (pointer.y >= j && pointer.y < k)
-				{
-					int j1 = getSelectionX(font, s, pointer.x);
-					return j1 < 0 ? -1 : l + j1;
+					int lineIdx = getSelectionX(font, text.substring(start, end), pointer.x);
+					index.setValue(lineIdx < 0 ? -1 : start + lineIdx);
 				}
-				
-				j = k;
-			}
+				lineY.setValue(nextLineY);
+			});
 			
-			return text.length();
-		}
+			return index.intValue();
+		} else return -1;
 	}
 	
 	public static int getSelectionWidth(FontRenderer font, String pageText, int selectionEnd)
 	{
-		return (int)font.getCharWidth(pageText.charAt(MathHelper.clamp(selectionEnd, 0, pageText.length() - 1)));
-	}
-	
-	
-	public static int sizeStringToWidth(FontRenderer font, String text, int wrapWidth)
-	{
-		return font.sizeStringToWidth(text, wrapWidth);
+		return font.width(String.valueOf(pageText.charAt(MathHelper.clamp(selectionEnd, 0, pageText.length() - 1))));
 	}
 	
 	public static class Point

@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:sburb_code"
+  },
+  "grist_cost": {
+    "minestuck:chalk": 16,
+    "minestuck:iodine": 2
+  }
+}

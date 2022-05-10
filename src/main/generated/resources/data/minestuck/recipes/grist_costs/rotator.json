@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:rotator"
+  },
+  "grist_cost": {
+    "minestuck:sulfur": 20,
+    "minestuck:gold": 2
+  }
+}

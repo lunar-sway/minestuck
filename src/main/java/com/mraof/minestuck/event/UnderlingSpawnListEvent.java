@@ -1,6 +1,6 @@
 package com.mraof.minestuck.event;
 
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraftforge.eventbus.api.Event;
 
 import java.util.List;
@@ -8,9 +8,9 @@ import java.util.List;
 public class UnderlingSpawnListEvent extends Event
 {
 	private final int difficultyRating;
-	private final List<Biome.SpawnListEntry> spawnList;
+	private final List<MobSpawnInfo.Spawners> spawnList;
 	
-	public UnderlingSpawnListEvent(int difficultyRating, List<Biome.SpawnListEntry> spawnList)
+	public UnderlingSpawnListEvent(int difficultyRating, List<MobSpawnInfo.Spawners> spawnList)
 	{
 		this.difficultyRating = difficultyRating;
 		this.spawnList = spawnList;
@@ -21,7 +21,7 @@ public class UnderlingSpawnListEvent extends Event
 		return difficultyRating;
 	}
 	
-	public void addEntry(Biome.SpawnListEntry entry)
+	public void addEntry(MobSpawnInfo.Spawners entry)
 	{
 		spawnList.add(entry);
 	}

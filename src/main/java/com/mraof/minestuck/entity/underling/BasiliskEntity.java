@@ -10,12 +10,14 @@ import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.FakePlayer;
 
 public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 {
@@ -28,14 +30,11 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 		//world.addEntity(tail); TODO Not safe to add entities to world on creation. A different solution is needed
 	}
 	
-	@Override
-	protected void registerAttributes()
+	public static AttributeModifierMap.MutableAttribute basiliskAttributes()
 	{
-		super.registerAttributes();
-		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(85.0D);
-		getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.6D);
-		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
-		getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(6.0D);
+		return UnderlingEntity.underlingAttributes().add(Attributes.MAX_HEALTH, 85)
+				.add(Attributes.KNOCKBACK_RESISTANCE, 0.6).add(Attributes.MOVEMENT_SPEED, 0.25)
+				.add(Attributes.ATTACK_DAMAGE, 6);
 	}
 	
 	@Override
@@ -69,22 +68,22 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 	@Override
 	protected int getVitalityGel()
 	{
-		return rand.nextInt(3) + 4;
+		return random.nextInt(3) + 4;
 	}
 	
 	@Override
 	protected void onGristTypeUpdated(GristType type)
 	{
 		super.onGristTypeUpdated(type);
-		applyGristModifier(SharedMonsterAttributes.MAX_HEALTH, 20 * type.getPower(), AttributeModifier.Operation.ADDITION);
-		applyGristModifier(SharedMonsterAttributes.ATTACK_DAMAGE, 2.7 * type.getPower(), AttributeModifier.Operation.ADDITION);
-		this.experienceValue = (int) (6 * type.getPower() + 4);
+		applyGristModifier(Attributes.MAX_HEALTH, 20 * type.getPower(), AttributeModifier.Operation.ADDITION);
+		applyGristModifier(Attributes.ATTACK_DAMAGE, 2.7 * type.getPower(), AttributeModifier.Operation.ADDITION);
+		this.xpReward = (int) (6 * type.getPower() + 4);
 	}
 	
 	@Override
-	public World getWorld() 
+	public World getWorld()
 	{
-		return this.world;
+		return this.level;
 	}
 	
 	@Override
@@ -93,62 +92,60 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 		super.baseTick();
 		this.updatePartPositions();
 	}
-
+	
 	@Override
-	public boolean attackEntityFromPart(Entity entityPart, DamageSource source, float damage) 
+	public boolean attackEntityFromPart(Entity entityPart, DamageSource source, float damage)
 	{
-		return this.attackEntityFrom(source, damage);
+		return this.hurt(source, damage);
 	}
 	
 	@Override
-	protected void collideWithEntity(Entity par1Entity) 
+	protected void doPush(Entity par1Entity)
 	{
 		if(par1Entity != this.tail)
-			super.collideWithEntity(par1Entity);
+			super.doPush(par1Entity);
 	}
+	
 	@Override
-	public void setPositionAndRotation(double par1, double par3, double par5, float par7, float par8) {
-		super.setPositionAndRotation(par1, par3, par5, par7, par8);
+	public void absMoveTo(double par1, double par3, double par5, float par7, float par8)
+	{
+		super.absMoveTo(par1, par3, par5, par7, par8);
 		this.updatePartPositions();
 	}
 	
 	@Override
-	public void updatePartPositions() 
+	public void updatePartPositions()
 	{
 		if(tail == null)
 			return;
-		float f1 = this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw);
-		double tailPosX = (this.getPosX() +  Math.sin(f1 / 180.0 * Math.PI) * tail.getWidth());
-		double tailPosZ = (this.getPosZ() + -Math.cos(f1 / 180.0 * Math.PI) * tail.getWidth());
-
-		tail.setPositionAndRotation(tailPosX, this.getPosY(), tailPosZ, this.rotationYaw, this.rotationPitch);
-	}
-
-	@Override
-	public void addPart(Entity entityPart, int id) 
-	{
-		this.tail = (UnderlingPartEntity) entityPart;
-	}
-
-	@Override
-	public void onPartDeath(Entity entityPart, int id) 
-	{
-
+		float f1 = this.yRotO + (this.yRot - this.yRotO);
+		double tailPosX = (this.getX() + Math.sin(f1 / 180.0 * Math.PI) * tail.getBbWidth());
+		double tailPosZ = (this.getZ() + -Math.cos(f1 / 180.0 * Math.PI) * tail.getBbWidth());
+		
+		tail.absMoveTo(tailPosX, this.getY(), tailPosZ, this.yRot, this.xRot);
 	}
 	
 	@Override
-	public void onDeath(DamageSource cause)
+	public void addPart(Entity entityPart, int id)
 	{
-		super.onDeath(cause);
-		Entity entity = cause.getTrueSource();
-		if(this.dead && !this.world.isRemote)
+		this.tail = (UnderlingPartEntity) entityPart;
+	}
+	
+	@Override
+	public void onPartDeath(Entity entityPart, int id)
+	{
+	
+	}
+	
+	@Override
+	public void die(DamageSource cause)
+	{
+		super.die(cause);
+		Entity entity = cause.getEntity();
+		if(this.dead && !this.level.isClientSide)
 		{
-			computePlayerProgress((int) (100* getGristType().getPower() + 160));
-			if(entity instanceof ServerPlayerEntity)
-			{
-				Echeladder ladder = PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder();
-				ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET + 2));
-			}
+			computePlayerProgress((int) (30 + 2.4 * getGristType().getPower())); //most basilisks stop giving xp at rung 32
+			firstKillBonus(entity, (byte) (Echeladder.UNDERLING_BONUS_OFFSET + 2));
 		}
 	}
 }

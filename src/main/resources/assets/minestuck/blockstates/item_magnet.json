@@ -1,0 +1,10 @@
+{
+    "variants": {
+        "facing=up":    { "model": "minestuck:block/item_magnet", "y": 0, "x": 270 },
+        "facing=down":  { "model": "minestuck:block/item_magnet", "y": 180, "x": 90 },
+        "facing=north": { "model": "minestuck:block/item_magnet" },
+        "facing=east":  { "model": "minestuck:block/item_magnet", "y": 90 },
+        "facing=south": { "model": "minestuck:block/item_magnet", "y": 180 },
+        "facing=west":  { "model": "minestuck:block/item_magnet", "y": 270 }
+    }
+}

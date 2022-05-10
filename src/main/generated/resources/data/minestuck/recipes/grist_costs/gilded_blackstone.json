@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:gilded_blackstone"
+  },
+  "grist_cost": {
+    "minestuck:build": 2,
+    "minestuck:gold": 2
+  }
+}

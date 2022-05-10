@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:globe_banner_pattern"
+  },
+  "grist_cost": {
+    "minestuck:build": 100,
+    "minestuck:marble": 15,
+    "minestuck:shale": 15
+  }
+}

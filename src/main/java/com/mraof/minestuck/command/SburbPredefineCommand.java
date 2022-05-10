@@ -29,7 +29,7 @@ public class SburbPredefineCommand
 	
 	public static void register(CommandDispatcher<CommandSource> dispatcher)
 	{
-		dispatcher.register(Commands.literal("sburbpredefine").requires(source -> source.hasPermissionLevel(2)).then(subCommandTitle()).then(subCommandTerrainLand()).then(subCommandTitleLand()).then(subCommandDefine()));
+		dispatcher.register(Commands.literal("sburbpredefine").requires(source -> source.hasPermission(2)).then(subCommandTitle()).then(subCommandTerrainLand()).then(subCommandTitleLand()).then(subCommandDefine()));
 	}
 	
 	/**
@@ -87,7 +87,7 @@ public class SburbPredefineCommand
 		try
 		{
 			SburbHandler.handlePredefineData(player, data -> data.predefineTitle(title, source));
-			source.sendFeedback(new TranslationTextComponent(SET_TITLE, player.getDisplayName(), title.asTextComponent()), true);
+			source.sendSuccess(new TranslationTextComponent(SET_TITLE, player.getDisplayName(), title.asTextComponent()), true);
 			return 1;
 		} catch(SkaianetException e)
 		{
@@ -100,7 +100,7 @@ public class SburbPredefineCommand
 		try
 		{
 			SburbHandler.handlePredefineData(player, data -> data.predefineTerrainLand(landType, source));
-			source.sendFeedback(new TranslationTextComponent(SET_TERRAIN_LAND, player.getDisplayName()), true);
+			source.sendSuccess(new TranslationTextComponent(SET_TERRAIN_LAND, player.getDisplayName()), true);
 			return 1;
 		} catch(SkaianetException e)
 		{
@@ -113,7 +113,7 @@ public class SburbPredefineCommand
 		try
 		{
 			SburbHandler.handlePredefineData(player, data -> data.predefineTitleLand(landType, source));
-			source.sendFeedback(new TranslationTextComponent(SET_TITLE_LAND, player.getDisplayName()), true);
+			source.sendSuccess(new TranslationTextComponent(SET_TITLE_LAND, player.getDisplayName()), true);
 			return 1;
 		} catch(SkaianetException e)
 		{
@@ -123,11 +123,11 @@ public class SburbPredefineCommand
 	
 	private static int define(CommandSource source, ServerPlayerEntity player, Title title, TerrainLandType terrainLand, TitleLandType titleLand) throws CommandSyntaxException
 	{
-		CommandSource silentSource = source.withFeedbackDisabled();
+		CommandSource silentSource = source.withSuppressedOutput();
 		setTitle(silentSource, player, title);
 		setTitleLand(silentSource, player, titleLand);
 		setTerrainLand(silentSource, player, terrainLand);
-		source.sendFeedback(new TranslationTextComponent(DEFINE, player.getDisplayName()), true);
+		source.sendSuccess(new TranslationTextComponent(DEFINE, player.getDisplayName()), true);
 		return 1;
 	}
 }

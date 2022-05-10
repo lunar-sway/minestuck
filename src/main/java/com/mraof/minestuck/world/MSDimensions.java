@@ -1,73 +1,42 @@
 package com.mraof.minestuck.world;
 
+import com.google.common.collect.ImmutableMap;
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.network.data.LandTypesDataPacket;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
-import net.minecraftforge.common.DimensionManager;
-import net.minecraftforge.event.world.RegisterDimensionsEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
-import net.minecraftforge.registries.ClearableRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class MSDimensions
 {
 	private static final Logger LOGGER = LogManager.getLogger();
-	private static final ResourceLocation SKAIA_ID = new ResourceLocation(Minestuck.MOD_ID, "skaia");
-	/**
-	 * Changes to this map must also be done to {@link MSDimensionTypes#LANDS#dimToLandAspects}
-	 */
-	private static final Map<ResourceLocation, LandInfo> typeToInfoContainer = new HashMap<>();
+	private static final Map<RegistryKey<World>, LandInfo> typeToInfoContainer = new HashMap<>();
 	
-	public static DimensionType skaiaDimension;
+	public static RegistryKey<World> SKAIA = RegistryKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(Minestuck.MOD_ID, "skaia"));
+	public static final ResourceLocation LAND_EFFECTS = new ResourceLocation(Minestuck.MOD_ID, "land");
 	
-	/**
-	 * On server init, this function is called to register dimensions.
-	 * The dimensions registered will then be sent and registered by forge client-side.
-	 */
-	@SubscribeEvent
-	public static void registerDimensionTypes(final RegisterDimensionsEvent event)
-	{
-		//register dimensions
-		skaiaDimension = DimensionManager.registerOrGetDimension(SKAIA_ID, MSDimensionTypes.SKAIA, null, true);
-	}
-	
-	@SubscribeEvent
-	public static void serverStopped(final FMLServerStoppedEvent event)
-	{
-		if(!event.getServer().isDedicatedServer())
-		{
-			LOGGER.warn("Unregistering land dimensions unsafely. If the dimension type registry is messed up after this, blame minestuck.");
-			ClearableRegistry<DimensionType> registry = (ClearableRegistry<DimensionType>) DimensionManager.getRegistry();
-			Map<ResourceLocation, DimensionType> dimensionsToKeep = registry.stream().filter(dimensionType -> !isLandDimension(dimensionType)).collect(Collectors.toMap(registry::getKey, v -> v));
-			registry.clear();
-			for(Map.Entry<ResourceLocation, DimensionType> entry : dimensionsToKeep.entrySet())
-			{
-				LOGGER.debug("Re-Registering non-land dimension ID: {} Name: {} Value: {}", entry.getValue().getId() + 1, entry.getKey().toString(), entry.getValue().toString());
-				registry.register(entry.getValue().getId() + 1, entry.getKey(), entry.getValue());
-			}
-		}
-	}
-	
-	public static LandTypePair getAspects(MinecraftServer server, DimensionType dimension)
+	public static LandTypePair getAspects(MinecraftServer server, RegistryKey<World> dimension)
 	{
 		LandInfo info = getLandInfo(server, dimension);
 		if(info != null)
 			return info.getLandAspects();
-		else if(isLandDimension(dimension))
+		else if(isLandDimension(server, dimension))
 		{
 			LOGGER.warn("Tried to get land aspects for {}, but did not find a container reference! Using defaults instead.", dimension.getRegistryName());
 			return new LandTypePair(LandTypes.TERRAIN_NULL, LandTypes.TITLE_NULL);
@@ -76,33 +45,53 @@ public class MSDimensions
 	
 	public static LandInfo getLandInfo(World world)
 	{
-		return getLandInfo(world.getServer(), world.getDimension().getType());
+		return getLandInfo(world.getServer(), world.dimension());
 	}
 	
-	public static LandInfo getLandInfo(MinecraftServer server, DimensionType dimension)
+	public static LandInfo getLandInfo(MinecraftServer server, RegistryKey<World> dimension)
 	{
-		return typeToInfoContainer.get(DimensionType.getKey(dimension));
+		Objects.requireNonNull(server);
+		return typeToInfoContainer.get(dimension);
 	}
 	
-	public static boolean isLandDimension(DimensionType dimension)
+	public static boolean isLandDimension(MinecraftServer server, RegistryKey<World> world)
 	{
-		return dimension != null && dimension.getModType() == MSDimensionTypes.LANDS;
+		Objects.requireNonNull(server);
+		return typeToInfoContainer.containsKey(world);
 	}
 	
-	public static boolean isSkaia(DimensionType dimension)
+	public static boolean isSkaia(RegistryKey<World> dimension)
 	{
-		return dimension != null && dimension.getModType() == MSDimensionTypes.SKAIA;
+		return dimension == SKAIA;
 	}
 	
-	public static void updateLandMaps(SburbConnection connection)
+	public static void updateLandMaps(SburbConnection connection, boolean shouldSendUpdate)
 	{
-		typeToInfoContainer.put(connection.getLandInfo().getDimensionName(), connection.getLandInfo());
-		MSDimensionTypes.LANDS.dimToLandTypes.put(connection.getLandInfo().getDimensionName(), connection.getLandInfo().getLazyLandAspects());
+		typeToInfoContainer.put(connection.getLandInfo().getDimensionType(), connection.getLandInfo());
+		
+		if (shouldSendUpdate)
+		{
+			MSPacketHandler.sendToAll(createLandTypesPacket());
+		}
 	}
 	
 	public static void clear()
 	{
 		typeToInfoContainer.clear();
-		MSDimensionTypes.LANDS.dimToLandTypes.clear();
+	}
+	
+	public static void sendDimensionData(ServerPlayerEntity player)
+	{
+		MSPacketHandler.sendToPlayer(createLandTypesPacket(), player);
+	}
+	
+	private static LandTypesDataPacket createLandTypesPacket()
+	{
+		ImmutableMap.Builder<RegistryKey<World>, LandTypePair> builder = new ImmutableMap.Builder<>();
+		
+		for (Map.Entry<RegistryKey<World>, LandInfo> entry : typeToInfoContainer.entrySet())
+			builder.put(entry.getKey(), entry.getValue().getLandAspects());
+		
+		return new LandTypesDataPacket(builder.build());
 	}
 }

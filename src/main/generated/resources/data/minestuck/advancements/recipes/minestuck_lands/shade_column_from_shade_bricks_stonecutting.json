@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minestuck:shade_column_from_shade_bricks_stonecutting"
+    ]
+  },
+  "criteria": {
+    "has_shade_bricks": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minestuck:shade_bricks"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minestuck:shade_column_from_shade_bricks_stonecutting"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_shade_bricks",
+      "has_the_recipe"
+    ]
+  ]
+}

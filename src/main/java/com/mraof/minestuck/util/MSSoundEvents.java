@@ -87,6 +87,16 @@ public class MSSoundEvents
 	public static final SoundEvent ITEM_HORN_USE = getNull();
 	public static final SoundEvent ITEM_EEEEEEEEEEEE_HIT = getNull();
 	public static final SoundEvent EVENT_ECHELADDER_INCREASE = getNull();
+	public static final SoundEvent EVENT_ELECTRIC_SHOCK = getNull();
+	public static final SoundEvent EVENT_ELECTRIC_AUTOHARP_STROKE_AMAJOR = getNull();
+	public static final SoundEvent EVENT_ELECTRIC_AUTOHARP_STROKE_BMAJOR = getNull();
+	public static final SoundEvent EVENT_ELECTRIC_AUTOHARP_STROKE_BBMAJOR = getNull();
+	public static final SoundEvent EVENT_ELECTRIC_AUTOHARP_STROKE_CMAJOR = getNull();
+	public static final SoundEvent EVENT_ELECTRIC_AUTOHARP_STROKE_DMAJOR = getNull();
+	public static final SoundEvent EVENT_ELECTRIC_AUTOHARP_STROKE_EBMAJOR = getNull();
+	public static final SoundEvent EVENT_ELECTRIC_AUTOHARP_STROKE_EMAJOR = getNull();
+	public static final SoundEvent EVENT_ELECTRIC_AUTOHARP_STROKE_FMAJOR = getNull();
+	public static final SoundEvent EVENT_ELECTRIC_AUTOHARP_STROKE_GMAJOR = getNull();
     
     @Nonnull
 	@SuppressWarnings("ConstantConditions")
@@ -100,6 +110,7 @@ public class MSSoundEvents
 	{
 		List<String> paths = Lists.newArrayList(
 				"music_disc.emissary_of_dance", "music_disc.dance_stab_dance", "music_disc.retro_battle_theme",
+				"music.default",
 				"music.forest", "music.taiga", "music.frost", "music.fungi",
 				"music.heat", "music.rock", "music.petrification", "music.sand",
 				"music.lush_deserts", "music.sandstone", "music.shade", "music.wood",
@@ -117,7 +128,12 @@ public class MSSoundEvents
 				"entity.lich.ambient", "entity.lich.hurt", "entity.lich.death",
 				"entity.giclops.ambient", "entity.giclops.hurt", "entity.giclops.death",
 				"item.long_forgotten_warhorn.use", "item.grimoire.use",  "item.horn.use",
-				"item.eeeeeeeeeeee.hit", "event.echeladder.increase");
+				"item.eeeeeeeeeeee.hit", "event.echeladder.increase", "event.electric_shock",
+				"event.electric_autoharp.stroke.amajor","event.electric_autoharp.stroke.bmajor",
+				"event.electric_autoharp.stroke.bbmajor", "event.electric_autoharp.stroke.cmajor",
+				"event.electric_autoharp.stroke.dmajor", "event.electric_autoharp.stroke.ebmajor",
+				"event.electric_autoharp.stroke.emajor","event.electric_autoharp.stroke.fmajor",
+				"event.electric_autoharp.stroke.gmajor");
 		
 		for(String path : paths)
 		{

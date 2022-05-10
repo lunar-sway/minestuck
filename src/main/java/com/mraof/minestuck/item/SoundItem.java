@@ -22,10 +22,10 @@ public class SoundItem extends Item
     }
     
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity player, Hand handIn)
+    public ActionResult<ItemStack> use(World worldIn, PlayerEntity player, Hand handIn)
     {
-        worldIn.playSound(player, player.getPosX(), player.getPosY(), player.getPosZ(), sound.get(), SoundCategory.PLAYERS, 1.0F, 1.0F);
+        worldIn.playSound(player, player.getX(), player.getY(), player.getZ(), sound.get(), SoundCategory.PLAYERS, 1.0F, 1.0F);
     
-        return ActionResult.resultSuccess(player.getHeldItem(handIn));
+        return ActionResult.success(player.getItemInHand(handIn));
     }
 }

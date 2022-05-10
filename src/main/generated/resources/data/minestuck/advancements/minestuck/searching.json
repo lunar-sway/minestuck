@@ -1,0 +1,35 @@
+{
+  "parent": "minestuck:minestuck/root",
+  "display": {
+    "icon": {
+      "item": "minecraft:compass"
+    },
+    "title": {
+      "translate": "advancements.minestuck.searching.title"
+    },
+    "description": {
+      "translate": "advancements.minestuck.searching.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "possess_scanner": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minestuck:temple_scanner"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "possess_scanner"
+    ]
+  ]
+}

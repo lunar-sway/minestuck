@@ -54,7 +54,7 @@ public class SetModus extends Modus
 		
 		for(int i = 0; i < size; i++)
 			if(nbt.contains("item"+i))
-				list.add(ItemStack.read(nbt.getCompound("item"+i)));
+				list.add(ItemStack.of(nbt.getCompound("item"+i)));
 			else break;
 		if(side == LogicalSide.CLIENT)
 		{
@@ -72,7 +72,7 @@ public class SetModus extends Modus
 		for(int i = 0; i < list.size(); i++)
 		{
 			ItemStack stack = iter.next();
-			nbt.put("item"+i, stack.write(new CompoundNBT()));
+			nbt.put("item"+i, stack.save(new CompoundNBT()));
 		}
 		return nbt;
 	}

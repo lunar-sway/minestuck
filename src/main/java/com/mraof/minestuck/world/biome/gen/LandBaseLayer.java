@@ -1,6 +1,6 @@
 package com.mraof.minestuck.world.biome.gen;
 
-import com.mraof.minestuck.world.biome.BiomeType;
+import com.mraof.minestuck.world.biome.LandBiomeType;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.gen.INoiseRandom;
 import net.minecraft.world.gen.layer.traits.IAreaTransformer0;
@@ -8,8 +8,8 @@ import net.minecraft.world.gen.layer.traits.IAreaTransformer0;
 public class LandBaseLayer implements IAreaTransformer0
 {
 	private final int oceanChance;
-	private final int NORMAL_BIOME = BiomeType.NORMAL.ordinal();
-	private final int OCEAN_BIOME = BiomeType.OCEAN.ordinal();
+	private final int NORMAL_BIOME = LandBiomeType.NORMAL.ordinal();
+	private final int OCEAN_BIOME = LandBiomeType.OCEAN.ordinal();
 	
 	public LandBaseLayer(float oceanChance)
 	{
@@ -17,9 +17,9 @@ public class LandBaseLayer implements IAreaTransformer0
 	}
 	
 	@Override
-	public int apply(INoiseRandom random, int x, int z)
+	public int applyPixel(INoiseRandom random, int x, int z)
 	{
-		if(random.random(Integer.MAX_VALUE) >= oceanChance)
+		if(random.nextRandom(Integer.MAX_VALUE) >= oceanChance)
 			return NORMAL_BIOME;
 		return OCEAN_BIOME;
 	}

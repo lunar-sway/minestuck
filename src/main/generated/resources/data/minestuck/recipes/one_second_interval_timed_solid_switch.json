@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minestuck:solid_switch"
+    },
+    {
+      "item": "minecraft:clock"
+    },
+    {
+      "item": "minecraft:repeater"
+    }
+  ],
+  "result": {
+    "item": "minestuck:one_second_interval_timed_solid_switch"
+  }
+}

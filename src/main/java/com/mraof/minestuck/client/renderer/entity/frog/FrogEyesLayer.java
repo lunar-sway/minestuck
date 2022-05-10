@@ -27,7 +27,7 @@ public class FrogEyesLayer extends LayerRenderer<FrogEntity, FrogModel<FrogEntit
 			if (frog.getFrogType() == 6)
 	        {
 				float r, g, b;
-				switch(frog.ticksExisted % 4)
+				switch(frog.tickCount % 4)
 				{
 					default:
 					{
@@ -58,7 +58,7 @@ public class FrogEyesLayer extends LayerRenderer<FrogEntity, FrogModel<FrogEntit
 					} break;
 				}
 
-				renderCopyCutoutModel(this.getEntityModel(), this.frogModel, this.getEntityTexture(frog), matrixStackIn, bufferIn, packedLightIn, frog, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, partialTicks, r, g, b);
+				coloredCutoutModelCopyLayerRender(this.getParentModel(), this.frogModel, this.getTextureLocation(frog), matrixStackIn, bufferIn, packedLightIn, frog, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, partialTicks, r, g, b);
 	        }
 			else if (frog.getFrogType() > FrogEntity.maxTypes() || frog.getFrogType() < 1)
 	        {
@@ -72,13 +72,13 @@ public class FrogEyesLayer extends LayerRenderer<FrogEntity, FrogModel<FrogEntit
 				if(g < this.colorMin) g = this.colorMin;
 				if(b < this.colorMin) b = this.colorMin;
 
-				renderCopyCutoutModel(this.getEntityModel(), this.frogModel, this.getEntityTexture(frog), matrixStackIn, bufferIn, packedLightIn, frog, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, partialTicks, r, g, b);
+				coloredCutoutModelCopyLayerRender(this.getParentModel(), this.frogModel, this.getTextureLocation(frog), matrixStackIn, bufferIn, packedLightIn, frog, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, partialTicks, r, g, b);
 	        }
 		}
 	}
 
 	@Override
-	public ResourceLocation getEntityTexture(FrogEntity frog)
+	public ResourceLocation getTextureLocation(FrogEntity frog)
 	{
 		int id = frog.getEyeType();
 

@@ -5,9 +5,8 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.MSSoundEvents;
-import com.mraof.minestuck.world.biome.BiomeType;
 import com.mraof.minestuck.world.biome.LandBiomeSet;
-import com.mraof.minestuck.world.biome.LandWrapperBiome;
+import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
@@ -17,17 +16,11 @@ import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeGenerationSettings;
 import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.BlockStateFeatureConfig;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.OreFeatureConfig;
-import net.minecraft.world.gen.feature.SphereReplaceConfig;
-import net.minecraft.world.gen.placement.ChanceConfig;
-import net.minecraft.world.gen.placement.CountRangeConfig;
-import net.minecraft.world.gen.placement.FrequencyConfig;
-import net.minecraft.world.gen.placement.Placement;
+import net.minecraft.world.gen.feature.*;
 
 import java.util.Random;
 
@@ -37,8 +30,8 @@ public class RainLandType extends TerrainLandType
 	public static final String ISLANDS = "minestuck.islands";
 	public static final String SKY = "minestuck.sky";
 	
-	private static final Vec3d skyColor = new Vec3d(0.3D, 0.5D, 0.98D);
-	private static final Vec3d fogColor = new Vec3d(0.9D, 0.8D, 0.6D);
+	private static final Vector3d skyColor = new Vector3d(0.3D, 0.5D, 0.98D);
+	private static final Vector3d fogColor = new Vector3d(0.9D, 0.8D, 0.6D);
 	
 	//TODO:
 	//Pink stone brick temples		Monsters in these temples tend to guard living trees, Magic Beans, and Fertile Soil.
@@ -56,23 +49,23 @@ public class RainLandType extends TerrainLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setGroundState(MSBlocks.PINK_STONE.getDefaultState(), MSFillerBlockTypes.PINK_STONE);
-		registry.setBlockState("surface", MSBlocks.CHALK.getDefaultState());
-		registry.setBlockState("upper", MSBlocks.CHALK.getDefaultState());
-		registry.setBlockState("ocean", Blocks.WATER.getDefaultState());
-		registry.setBlockState("structure_primary", MSBlocks.PINK_STONE_BRICKS.getDefaultState());
-		registry.setBlockState("structure_primary_stairs", MSBlocks.PINK_STONE_BRICK_STAIRS.getDefaultState());
-		registry.setBlockState("structure_primary_decorative", MSBlocks.CHISELED_PINK_STONE_BRICKS.getDefaultState());
-		registry.setBlockState("structure_secondary", MSBlocks.POLISHED_PINK_STONE.getDefaultState());
-		registry.setBlockState("structure_secondary_stairs", MSBlocks.CHALK_BRICK_STAIRS.getDefaultState());
-		registry.setBlockState("structure_secondary_decorative", MSBlocks.CHISELED_PINK_STONE_BRICKS.getDefaultState());
-		registry.setBlockState("structure_planks", MSBlocks.DEAD_PLANKS.getDefaultState());
-		registry.setBlockState("structure_planks_slab", MSBlocks.DEAD_PLANKS_SLAB.getDefaultState());
-		registry.setBlockState("bush", Blocks.DEAD_BUSH.getDefaultState());
-		registry.setBlockState("structure_wool_1", Blocks.YELLOW_WOOL.getDefaultState());
-		registry.setBlockState("structure_wool_3", Blocks.MAGENTA_WOOL.getDefaultState());
-		registry.setBlockState("cruxite_ore", MSBlocks.PINK_STONE_CRUXITE_ORE.getDefaultState());
-		registry.setBlockState("uranium_ore", MSBlocks.PINK_STONE_URANIUM_ORE.getDefaultState());
+		registry.setGroundState(MSBlocks.PINK_STONE.defaultBlockState(), MSFillerBlockTypes.PINK_STONE);
+		registry.setBlockState("surface", MSBlocks.CHALK.defaultBlockState());
+		registry.setBlockState("upper", MSBlocks.CHALK.defaultBlockState());
+		registry.setBlockState("ocean", Blocks.WATER.defaultBlockState());
+		registry.setBlockState("structure_primary", MSBlocks.PINK_STONE_BRICKS.defaultBlockState());
+		registry.setBlockState("structure_primary_stairs", MSBlocks.PINK_STONE_BRICK_STAIRS.defaultBlockState());
+		registry.setBlockState("structure_primary_decorative", MSBlocks.CHISELED_PINK_STONE_BRICKS.defaultBlockState());
+		registry.setBlockState("structure_secondary", MSBlocks.POLISHED_PINK_STONE.defaultBlockState());
+		registry.setBlockState("structure_secondary_stairs", MSBlocks.CHALK_BRICK_STAIRS.defaultBlockState());
+		registry.setBlockState("structure_secondary_decorative", MSBlocks.CHISELED_PINK_STONE_BRICKS.defaultBlockState());
+		registry.setBlockState("structure_planks", MSBlocks.DEAD_PLANKS.defaultBlockState());
+		registry.setBlockState("structure_planks_slab", MSBlocks.DEAD_PLANKS_SLAB.defaultBlockState());
+		registry.setBlockState("bush", Blocks.DEAD_BUSH.defaultBlockState());
+		registry.setBlockState("structure_wool_1", Blocks.YELLOW_WOOL.defaultBlockState());
+		registry.setBlockState("structure_wool_3", Blocks.MAGENTA_WOOL.defaultBlockState());
+		registry.setBlockState("cruxite_ore", MSBlocks.PINK_STONE_CRUXITE_ORE.defaultBlockState());
+		registry.setBlockState("uranium_ore", MSBlocks.PINK_STONE_URANIUM_ORE.defaultBlockState());
 
 	}
 	
@@ -104,32 +97,46 @@ public class RainLandType extends TerrainLandType
 	}
 	
 	@Override
-	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
+	public void setBiomeGeneration(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks, LandBiomeType type, Biome baseBiome)
 	{
-		if(biome.type == BiomeType.NORMAL)
+		if(type == LandBiomeType.NORMAL)
 		{
-			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, MSFeatures.LEAFLESS_TREE.withConfiguration(new BlockStateFeatureConfig(MSBlocks.DEAD_LOG.getDefaultState())).withPlacement(Placement.CHANCE_TOP_SOLID_HEIGHTMAP.configure(new ChanceConfig(2))));
+			builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, MSFeatures.LEAFLESS_TREE
+					.configured(new BlockStateFeatureConfig(MSBlocks.DEAD_LOG.defaultBlockState()))
+					.decorated(Features.Placements.TOP_SOLID_HEIGHTMAP_SQUARE).chance(2));
 		}
 		
-		if(biome.type == BiomeType.ROUGH)
+		if(type == LandBiomeType.ROUGH)
 		{
-			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, MSFeatures.LEAFLESS_TREE.withConfiguration(new BlockStateFeatureConfig(MSBlocks.DEAD_LOG.getDefaultState())).withPlacement(Placement.CHANCE_TOP_SOLID_HEIGHTMAP.configure(new ChanceConfig(4))));
+			builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, MSFeatures.LEAFLESS_TREE
+					.configured(new BlockStateFeatureConfig(MSBlocks.DEAD_LOG.defaultBlockState()))
+					.decorated(Features.Placements.TOP_SOLID_HEIGHTMAP_SQUARE).chance(4));
 		}
-		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.DISK.withConfiguration(new SphereReplaceConfig(MSBlocks.POLISHED_PINK_STONE.getDefaultState(), 4, 1, Lists.newArrayList(blocks.getBlockState("ground")))).withPlacement(Placement.COUNT_TOP_SOLID.configure(new FrequencyConfig(2))));
-		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), MSBlocks.PINK_STONE_COAL_ORE.getDefaultState(), 17)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(13, 0, 0, 64))));
-		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), MSBlocks.PINK_STONE_LAPIS_ORE.getDefaultState(), 7)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(4, 0, 0, 24))));
-		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), MSBlocks.PINK_STONE_GOLD_ORE.getDefaultState(), 9)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(4, 0, 0, 32))));
-		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), MSBlocks.PINK_STONE_DIAMOND_ORE.getDefaultState(), 6)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(3, 0, 0, 24))));
+		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.DISK
+				.configured(new SphereReplaceConfig(MSBlocks.POLISHED_PINK_STONE.defaultBlockState(), FeatureSpread.of(2, 1), 1, Lists.newArrayList(blocks.getBlockState("ground"))))
+				.decorated(Features.Placements.TOP_SOLID_HEIGHTMAP_SQUARE).count(2));
+		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE
+				.configured(new OreFeatureConfig(blocks.getGroundType(), MSBlocks.PINK_STONE_COAL_ORE.defaultBlockState(), 17))
+				.range(64).squared().count(13));
+		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE
+				.configured(new OreFeatureConfig(blocks.getGroundType(), MSBlocks.PINK_STONE_LAPIS_ORE.defaultBlockState(), 7))
+				.range(24).squared().count(4));
+		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE
+				.configured(new OreFeatureConfig(blocks.getGroundType(), MSBlocks.PINK_STONE_GOLD_ORE.defaultBlockState(), 9))
+				.range(32).squared().count(4));
+		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE
+				.configured(new OreFeatureConfig(blocks.getGroundType(), MSBlocks.PINK_STONE_DIAMOND_ORE.defaultBlockState(), 6))
+				.range(24).squared().count(3));
 	}
 	
 	@Override
-	public Vec3d getFogColor() 
+	public Vector3d getFogColor()
 	{
 		return fogColor;
 	}
 	
 	@Override
-	public Vec3d getSkyColor()
+	public Vector3d getSkyColor()
 	{
 		return skyColor;
 	}

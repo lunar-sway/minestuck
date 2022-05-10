@@ -24,13 +24,13 @@ public class CheckLandCommand
 	
 	private static int execute(CommandSource source) throws CommandSyntaxException
 	{
-		ServerPlayerEntity player = source.asPlayer();
+		ServerPlayerEntity player = source.getPlayerOrException();
 		
-		if(MSDimensions.isLandDimension(player.dimension))
+		if(MSDimensions.isLandDimension(player.server, player.level.dimension()))
 		{
-			LandInfo info = MSDimensions.getLandInfo(player.world);
+			LandInfo info = MSDimensions.getLandInfo(player.level);
 			ITextComponent toSend = new TranslationTextComponent(CHECK, info.landAsTextComponent());
-			source.sendFeedback(toSend, false);
+			source.sendSuccess(toSend, false);
 			return 1;
 		}
 		else

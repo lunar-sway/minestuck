@@ -1,9 +1,11 @@
 package com.mraof.minestuck.client;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.client.model.*;
 import com.mraof.minestuck.client.model.armor.CrumplyHatModel;
+import com.mraof.minestuck.client.model.armor.DreamerPajamasModel;
 import com.mraof.minestuck.client.renderer.entity.*;
 import com.mraof.minestuck.client.renderer.entity.frog.FrogRenderer;
 import com.mraof.minestuck.client.renderer.tileentity.GateRenderer;
@@ -14,13 +16,21 @@ import com.mraof.minestuck.computer.ComputerProgram;
 import com.mraof.minestuck.computer.SburbClient;
 import com.mraof.minestuck.computer.SburbServer;
 import com.mraof.minestuck.entity.MSEntityTypes;
+import com.mraof.minestuck.item.BoondollarsItem;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.block.StoneTabletItem;
+import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
+import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.entity.SpriteRenderer;
 import net.minecraft.client.renderer.entity.model.BipedModel;
+import net.minecraft.client.world.DimensionRenderInfo;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.IItemPropertyGetter;
+import net.minecraft.item.ItemModelsProperties;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -43,6 +53,7 @@ public class ClientProxy
 
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.FROG, FrogRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.HOLOGRAM, HologramRenderer::new);
+		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.LOTUS_FLOWER, LotusFlowerRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.NAKAGATOR, manager -> new SimpleTexturedEntityRenderer<>(manager, new NakagatorModel<>(), 0.5F));
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.SALAMANDER, manager -> new SimpleTexturedEntityRenderer<>(manager, new SalamanderModel<>(), 0.5F));
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.IGUANA, manager -> new SimpleTexturedEntityRenderer<>(manager, new IguanaModel<>(), 0.5F));
@@ -72,60 +83,97 @@ public class ClientProxy
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.MIDNIGHT_CREW_POSTER, manager -> new RenderHangingArt<>(manager, new ResourceLocation("minestuck:midnight_poster")));
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.SBAHJ_POSTER, manager -> new RenderHangingArt<>(manager, new ResourceLocation("minestuck:sbahj_poster")));
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.SHOP_POSTER, manager -> new RenderHangingArt<>(manager, new ResourceLocation("minestuck:shop_poster")));
-
-		RenderTypeLookup.setRenderLayer(MSBlocks.ALCHEMITER.TOTEM_PAD.get(), RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(MSBlocks.TOTEM_LATHE.DOWEL_ROD.get(), RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(MSBlocks.TOTEM_LATHE.CARD_SLOT.get(), RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(MSBlocks.HOLOPAD, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(MSBlocks.CRUXITE_DOWEL, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(MSBlocks.BLENDER, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(MSBlocks.CHESSBOARD, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(MSBlocks.MINI_FROG_STATUE, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(MSBlocks.MINI_WIZARD_STATUE, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(MSBlocks.CASSETTE_PLAYER, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(MSBlocks.PIPE, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(MSBlocks.PARCEL_PYXIS, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(MSBlocks.GLOWYSTONE_DUST, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(MSBlocks.GOLD_SEEDS, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(MSBlocks.RAINBOW_SAPLING, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(MSBlocks.END_SAPLING, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(MSBlocks.BREATH_ASPECT_SAPLING, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(MSBlocks.LIFE_ASPECT_SAPLING, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(MSBlocks.LIGHT_ASPECT_SAPLING, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(MSBlocks.TIME_ASPECT_SAPLING, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(MSBlocks.HEART_ASPECT_SAPLING, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(MSBlocks.RAGE_ASPECT_SAPLING, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(MSBlocks.BLOOD_ASPECT_SAPLING, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(MSBlocks.DOOM_ASPECT_SAPLING, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(MSBlocks.VOID_ASPECT_SAPLING, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(MSBlocks.SPACE_ASPECT_SAPLING, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(MSBlocks.MIND_ASPECT_SAPLING, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(MSBlocks.HOPE_ASPECT_SAPLING, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(MSBlocks.GLOWING_MUSHROOM, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(MSBlocks.DESERT_BUSH, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(MSBlocks.BLOOMING_CACTUS, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(MSBlocks.PETRIFIED_GRASS, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(MSBlocks.PETRIFIED_POPPY, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(MSBlocks.TALL_END_GRASS, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(MSBlocks.GLOWFLOWER, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(MSBlocks.CHECKERED_STAINED_GLASS, RenderType.getTranslucent());
-		RenderTypeLookup.setRenderLayer(MSBlocks.BLACK_CROWN_STAINED_GLASS, RenderType.getTranslucent());
-		RenderTypeLookup.setRenderLayer(MSBlocks.BLACK_PAWN_STAINED_GLASS, RenderType.getTranslucent());
-		RenderTypeLookup.setRenderLayer(MSBlocks.WHITE_CROWN_STAINED_GLASS, RenderType.getTranslucent());
-		RenderTypeLookup.setRenderLayer(MSBlocks.WHITE_PAWN_STAINED_GLASS, RenderType.getTranslucent());
-
+		
+		RenderTypeLookup.setRenderLayer(MSBlocks.ALCHEMITER.TOTEM_PAD.get(), RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.TOTEM_LATHE.DOWEL_ROD.get(), RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.TOTEM_LATHE.CARD_SLOT.get(), RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.HOLOPAD, RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.CRUXITE_DOWEL, RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.BLENDER, RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.CHESSBOARD, RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.SPIKES, RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.MINI_FROG_STATUE, RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.MINI_WIZARD_STATUE, RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.MINI_TYPHEUS_STATUE, RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.NAKAGATOR_STATUE, RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.CASSETTE_PLAYER, RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.PIPE, RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.PARCEL_PYXIS, RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.GLOWYSTONE_DUST, RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.GOLD_SEEDS, RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.RAINBOW_SAPLING, RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.END_SAPLING, RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.BREATH_ASPECT_SAPLING, RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.LIFE_ASPECT_SAPLING, RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.LIGHT_ASPECT_SAPLING, RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.TIME_ASPECT_SAPLING, RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.HEART_ASPECT_SAPLING, RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.RAGE_ASPECT_SAPLING, RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.BLOOD_ASPECT_SAPLING, RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.DOOM_ASPECT_SAPLING, RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.VOID_ASPECT_SAPLING, RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.SPACE_ASPECT_SAPLING, RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.MIND_ASPECT_SAPLING, RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.HOPE_ASPECT_SAPLING, RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.GLOWING_MUSHROOM, RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.DESERT_BUSH, RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.BLOOMING_CACTUS, RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.PETRIFIED_GRASS, RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.PETRIFIED_POPPY, RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.TALL_END_GRASS, RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.GLOWFLOWER, RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.CHECKERED_STAINED_GLASS, RenderType.translucent());
+		RenderTypeLookup.setRenderLayer(MSBlocks.BLACK_CROWN_STAINED_GLASS, RenderType.translucent());
+		RenderTypeLookup.setRenderLayer(MSBlocks.BLACK_PAWN_STAINED_GLASS, RenderType.translucent());
+		RenderTypeLookup.setRenderLayer(MSBlocks.WHITE_CROWN_STAINED_GLASS, RenderType.translucent());
+		RenderTypeLookup.setRenderLayer(MSBlocks.WHITE_PAWN_STAINED_GLASS, RenderType.translucent());
+		RenderTypeLookup.setRenderLayer(MSBlocks.LUNCHTOP, RenderType.translucent());
+		RenderTypeLookup.setRenderLayer(MSBlocks.PLATFORM_BLOCK, RenderType.translucent());
+		RenderTypeLookup.setRenderLayer(MSBlocks.ITEM_MAGNET, RenderType.translucent());
+		
 		MSKeyHandler.registerKeys();
 		
 		ComputerProgram.registerProgramClass(0, SburbClient.class);
 		ComputerProgram.registerProgramClass(1, SburbServer.class);
-
+		
 		registerArmorModels();
 
-		//MinecraftForge.EVENT_BUS.register(new MinestuckConfig()); Does not currently use any events to reload config
+		IItemPropertyGetter content = (stack, world, holder) -> AlchemyHelper.hasDecodedItem(stack) ? 1 : 0;
+		ResourceLocation contentName = new ResourceLocation(Minestuck.MOD_ID, "content");
+		
+		ItemModelsProperties.register(MSItems.CAPTCHA_CARD, contentName, content);
+		ItemModelsProperties.register(MSItems.CRUXITE_DOWEL, contentName, content);
+		ItemModelsProperties.register(MSItems.SHUNT, contentName, content);
+		ItemModelsProperties.register(MSItems.CAPTCHA_CARD, new ResourceLocation(Minestuck.MOD_ID, "punched"), (stack, world, holder) -> AlchemyHelper.isPunchedCard(stack) ? 1 : 0);
+		ItemModelsProperties.register(MSItems.CAPTCHA_CARD, new ResourceLocation(Minestuck.MOD_ID, "ghost"), (stack, world, holder) -> AlchemyHelper.isGhostCard(stack) ? 1 : 0);
+		
+		ItemModelsProperties.register(MSItems.BOONDOLLARS, new ResourceLocation(Minestuck.MOD_ID, "count"), (stack, world, holder) -> BoondollarsItem.getCount(stack));
+		ItemModelsProperties.register(MSItems.FROG, new ResourceLocation(Minestuck.MOD_ID, "type"), (stack, world, holder) -> !stack.hasTag() ? 0 : stack.getTag().getInt("Type"));
+		ItemModelsProperties.register(MSItems.STONE_SLAB, new ResourceLocation(Minestuck.MOD_ID, "carved"), (stack, world, holder) -> StoneTabletItem.hasText(stack) ? 1 : 0);
+		
+		DimensionRenderInfo.EFFECTS.put(MSDimensions.LAND_EFFECTS, new LandRenderInfo());
 	}
 	
 	private static void registerArmorModels()
 	{
 		MSItems.CRUMPLY_HAT.setArmorModel(new CrumplyHatModel());
+		DreamerPajamasModel pajamasModel = new DreamerPajamasModel();
+		MSItems.PROSPIT_CIRCLET.setArmorModel(pajamasModel);
+		MSItems.PROSPIT_SHIRT.setArmorModel(pajamasModel);
+		MSItems.PROSPIT_PANTS.setArmorModel(pajamasModel);
+		MSItems.PROSPIT_SHOES.setArmorModel(pajamasModel);
+		MSItems.DERSE_CIRCLET.setArmorModel(pajamasModel);
+		MSItems.DERSE_SHIRT.setArmorModel(pajamasModel);
+		MSItems.DERSE_PANTS.setArmorModel(pajamasModel);
+		MSItems.DERSE_SHOES.setArmorModel(pajamasModel);
+	}
+	
+	/**
+	 * Used to prevent a crash in PlayToClientPackets when loading ClientPlayerEntity on a dedicated server
+	 */
+	public static PlayerEntity getClientPlayer()
+	{
+		Minecraft mc = Minecraft.getInstance();
+		return mc.player;
 	}
 }

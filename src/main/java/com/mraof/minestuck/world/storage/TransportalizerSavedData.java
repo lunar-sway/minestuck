@@ -1,6 +1,5 @@
 package com.mraof.minestuck.world.storage;
 
-import com.mojang.datafixers.Dynamic;
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
@@ -8,7 +7,6 @@ import net.minecraft.nbt.NBTDynamicOps;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.GlobalPos;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.DimensionSavedDataManager;
 import net.minecraft.world.storage.WorldSavedData;
@@ -36,33 +34,24 @@ public class TransportalizerSavedData extends WorldSavedData
 	}
 	
 	@Override
-	public void read(CompoundNBT nbt)
+	public void load(CompoundNBT nbt)
 	{
 		locations.clear();
-		for(String id : nbt.keySet())
+		for(String id : nbt.getAllKeys())
 		{
-			try
-			{
-				INBT locationTag = nbt.get(id);
-				GlobalPos location = GlobalPos.deserialize(new Dynamic<>(NBTDynamicOps.INSTANCE, locationTag));
-				locations.put(id, location);
-			} catch(IllegalArgumentException e)
-			{
-				LOGGER.error("Could not load transportalizer {} due to unreadable location. This transportalizer will be ignored.", id);
-			}
+			INBT locationTag = nbt.get(id);
+			GlobalPos.CODEC.parse(NBTDynamicOps.INSTANCE, locationTag).resultOrPartial(LOGGER::error).ifPresent(location -> locations.put(id, location));
 		}
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound)
+	public CompoundNBT save(CompoundNBT compound)
 	{
 		for(Map.Entry<String, GlobalPos> entry : locations.entrySet())
 		{
 			GlobalPos location = entry.getValue();
 			
-			INBT locationTag = location.serialize(NBTDynamicOps.INSTANCE);
-			
-			compound.put(entry.getKey(), locationTag);
+			GlobalPos.CODEC.encodeStart(NBTDynamicOps.INSTANCE, location).resultOrPartial(LOGGER::error).ifPresent(locationTag -> compound.put(entry.getKey(), locationTag));
 		}
 		
 		return compound;
@@ -78,7 +67,7 @@ public class TransportalizerSavedData extends WorldSavedData
 		if(!locations.containsKey(id))
 		{
 			locations.put(id, location);
-			this.markDirty();
+			this.setDirty();
 			return true;
 		} else return locations.get(id).equals(location);
 	}
@@ -87,7 +76,7 @@ public class TransportalizerSavedData extends WorldSavedData
 	{
 		boolean removed = locations.remove(id, location);
 		if(removed)
-			this.markDirty();
+			this.setDirty();
 		return removed;
 	}
 	
@@ -105,14 +94,14 @@ public class TransportalizerSavedData extends WorldSavedData
 		while(locations.containsKey(unusedId));
 		
 		locations.put(unusedId, location);
-		this.markDirty();
+		this.setDirty();
 		return unusedId;
 	}
 	
 	public void replace(String id, GlobalPos oldPos, GlobalPos newPos)
 	{
 		if(locations.replace(id, oldPos, newPos))
-			markDirty();
+			setDirty();
 	}
 	
 	public static TransportalizerSavedData get(World world)
@@ -125,9 +114,9 @@ public class TransportalizerSavedData extends WorldSavedData
 	
 	public static TransportalizerSavedData get(MinecraftServer mcServer)
 	{
-		ServerWorld world = mcServer.getWorld(DimensionType.OVERWORLD);
+		ServerWorld world = mcServer.getLevel(World.OVERWORLD);
 		
-		DimensionSavedDataManager storage = world.getSavedData();
+		DimensionSavedDataManager storage = world.getDataStorage();
 		TransportalizerSavedData instance = storage.get(TransportalizerSavedData::new, DATA_NAME);
 		
 		if(instance == null)	//There is no save data

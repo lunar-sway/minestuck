@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.Util;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
@@ -19,11 +20,11 @@ public class GrimoireItem extends Item
 	}
 	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn)
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn)
 	{
-		playerIn.world.playSound(playerIn, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), MSSoundEvents.ITEM_GRIMOIRE_USE, SoundCategory.AMBIENT, 0.5F, 0.8F);
-		if(worldIn.isRemote)
-			playerIn.sendMessage(new TranslationTextComponent(getTranslationKey() + ".message"));
-		return super.onItemRightClick(worldIn, playerIn, handIn);
+		playerIn.level.playSound(playerIn, playerIn.getX(), playerIn.getY(), playerIn.getZ(), MSSoundEvents.ITEM_GRIMOIRE_USE, SoundCategory.AMBIENT, 0.5F, 0.8F);
+		if(worldIn.isClientSide)
+			playerIn.sendMessage(new TranslationTextComponent(getDescriptionId() + ".message"), Util.NIL_UUID);
+		return super.use(worldIn, playerIn, handIn);
 	}
 }

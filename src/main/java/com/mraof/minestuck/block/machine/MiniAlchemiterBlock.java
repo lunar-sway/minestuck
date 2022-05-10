@@ -21,7 +21,7 @@ public class MiniAlchemiterBlock extends SmallMachineBlock<MiniAlchemiterTileEnt
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public boolean hasComparatorInputOverride(BlockState state)
+	public boolean hasAnalogOutputSignal(BlockState state)
 	{
 		return true;
 	}
@@ -30,9 +30,9 @@ public class MiniAlchemiterBlock extends SmallMachineBlock<MiniAlchemiterTileEnt
 	// If no item can be alchemized, it will provide no signal to the comparator.
 	@Override
 	@SuppressWarnings("deprecation")
-	public int getComparatorInputOverride(BlockState blockState, World worldIn, BlockPos pos)
+	public int getAnalogOutputSignal(BlockState blockState, World worldIn, BlockPos pos)
 	{
-		TileEntity tileEntity = worldIn.getTileEntity(pos);
+		TileEntity tileEntity = worldIn.getBlockEntity(pos);
 		if(tileEntity instanceof MiniAlchemiterTileEntity)
 			return ((MiniAlchemiterTileEntity) tileEntity).comparatorValue();
 		return 0;

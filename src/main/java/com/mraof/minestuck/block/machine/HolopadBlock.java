@@ -34,7 +34,7 @@ public class HolopadBlock extends MachineBlock
 	
 	static
 	{
-		VoxelShape topShape = Block.makeCuboidShape(3, 6, 3, 13, 7, 13);
+		VoxelShape topShape = Block.box(3, 6, 3, 13, 7, 13);
 		COLLISION_SHAPE = createRotatedShapes(4, 0, 14, 12, 10, 16);
 		COLLISION_SHAPE.replaceAll((enumFacing, shape) -> VoxelShapes.or(shape, topShape));
 	}
@@ -42,7 +42,7 @@ public class HolopadBlock extends MachineBlock
 	public HolopadBlock(Properties builder)
 	{
 		super(builder);
-		setDefaultState(getDefaultState().with(HAS_CARD, false));
+		registerDefaultState(defaultBlockState().setValue(HAS_CARD, false));
 	}
 	
 	@Override
@@ -59,12 +59,12 @@ public class HolopadBlock extends MachineBlock
 	}
 	
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
 	{
-		if(player.isSneaking()) return ActionResultType.PASS;
-		if(worldIn.isRemote)
+		if(player.isShiftKeyDown()) return ActionResultType.PASS;
+		if(worldIn.isClientSide)
 			return ActionResultType.SUCCESS;
-		TileEntity te = worldIn.getTileEntity(pos);
+		TileEntity te = worldIn.getBlockEntity(pos);
 		
 		if(te instanceof HolopadTileEntity)
 			((HolopadTileEntity) te).onRightClick(player);
@@ -72,35 +72,35 @@ public class HolopadBlock extends MachineBlock
 	}
 	
 	@Override
-	public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, PlayerEntity player)
+	public void playerWillDestroy(World worldIn, BlockPos pos, BlockState state, PlayerEntity player)
 	{
-		HolopadTileEntity te = (HolopadTileEntity) worldIn.getTileEntity(pos);
+		HolopadTileEntity te = (HolopadTileEntity) worldIn.getBlockEntity(pos);
 		
-		if(te != null && !worldIn.isRemote)
+		if(te != null && !worldIn.isClientSide)
 		{
 			te.dropItem(true, worldIn, pos, te.getCard());
 		}
 		
-		super.onBlockHarvested(worldIn, pos, state, player);
+		super.playerWillDestroy(worldIn, pos, state, player);
 	}
 	
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
 	{
-		super.fillStateContainer(builder);
+		super.createBlockStateDefinition(builder);
 		builder.add(HAS_CARD);
 	}
 	
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
 	{
-		return SHAPE.get(state.get(FACING));
+		return SHAPE.get(state.getValue(FACING));
 	}
 	
 	@Override
 	public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
 	{
-		return COLLISION_SHAPE.get(state.get(FACING));
+		return COLLISION_SHAPE.get(state.getValue(FACING));
 	}
 	
 	

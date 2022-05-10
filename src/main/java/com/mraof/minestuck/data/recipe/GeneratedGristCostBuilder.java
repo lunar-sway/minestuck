@@ -34,32 +34,32 @@ public class GeneratedGristCostBuilder
 		}
 		
 		@Override
-		public void serialize(JsonObject jsonObject)
+		public void serializeRecipeData(JsonObject jsonObject)
 		{
 		}
 		
 		@Override
-		public ResourceLocation getID()
+		public ResourceLocation getId()
 		{
 			return id;
 		}
 		
 		@Override
-		public IRecipeSerializer<?> getSerializer()
+		public IRecipeSerializer<?> getType()
 		{
 			return MSRecipeTypes.RECIPE_GRIST_COST;
 		}
 		
 		@Nullable
 		@Override
-		public JsonObject getAdvancementJson()
+		public JsonObject serializeAdvancement()
 		{
 			return null;
 		}
 		
 		@Nullable
 		@Override
-		public ResourceLocation getAdvancementID()
+		public ResourceLocation getAdvancementId()
 		{
 			return new ResourceLocation("");
 		}

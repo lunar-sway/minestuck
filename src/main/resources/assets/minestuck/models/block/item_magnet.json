@@ -1,0 +1,177 @@
+{
+    "credit": "Crafted with love by the grease artisan mysterymeat in Blockbench",
+    "parent": "minecraft:block/block",
+    "texture_size": [64, 64],
+    "textures": {
+        "magnet": "minestuck:block/item_magnet",
+        "particle": "minestuck:block/item_magnet"
+    },
+    "elements": [
+        {
+            "from": [0, 0, 0],
+            "to": [16, 1, 16],
+            "faces": {
+                "north": {"uv": [0, 7.75, 4, 8], "texture": "#magnet"},
+                "east": {"uv": [0, 7.75, 4, 8], "texture": "#magnet"},
+                "south": {"uv": [0, 7.75, 4, 8], "texture": "#magnet"},
+                "west": {"uv": [0, 7.75, 4, 8], "texture": "#magnet"},
+                "up": {"uv": [0, 8, 4, 12], "texture": "#magnet"},
+                "down": {"uv": [4, 8, 8, 12], "texture": "#magnet"}
+            }
+        },
+        {
+            "from": [0, 15, 0],
+            "to": [16, 16, 16],
+            "faces": {
+                "north": {"uv": [0, 4, 4, 4.25], "texture": "#magnet"},
+                "east": {"uv": [0, 4, 4, 4.25], "texture": "#magnet"},
+                "south": {"uv": [0, 4, 4, 4.25], "texture": "#magnet"},
+                "west": {"uv": [0, 4, 4, 4.25], "texture": "#magnet"},
+                "up": {"uv": [0, 0, 4, 4], "texture": "#magnet"},
+                "down": {"uv": [4, 0, 8, 4], "texture": "#magnet"}
+            }
+        },
+        {
+            "from": [15, 15, 15],
+            "to": [1, 1, 1],
+            "faces": {
+                "north": {"uv": [0.25, 4.25, 3.75, 7.75], "texture": "#magnet"},
+                "east": {"uv": [0.25, 4.25, 3.75, 7.75], "texture": "#magnet"},
+                "south": {"uv": [0.25, 4.25, 3.75, 7.75], "texture": "#magnet"},
+                "west": {"uv": [0.25, 4.25, 3.75, 7.75], "texture": "#magnet"},
+                "up": {"uv": [13.75, 3.5, 10.25, 0], "texture": "#magnet"},
+                "down": {"uv": [13.75, 0, 10.25, 3.5], "texture": "#magnet"}
+            }
+        },
+        {
+            "from": [7, 2, 7],
+            "to": [9, 14, 9],
+            "rotation": {"angle": 0, "axis": "y", "origin": [7, 7.5, 9]},
+            "faces": {
+                "north": {"uv": [5.75, 4.5, 6.25, 7.5], "texture": "#magnet"},
+                "east": {"uv": [5.75, 4.5, 6.25, 7.5], "texture": "#magnet"},
+                "south": {"uv": [5.75, 4.5, 6.25, 7.5], "texture": "#magnet"},
+                "west": {"uv": [5.75, 4.5, 6.25, 7.5], "texture": "#magnet"},
+                "up": {"uv": [13.75, 0.5, 13.25, 0], "rotation": 270, "texture": "#magnet"},
+                "down": {"uv": [13.75, 0, 13.25, 0.5], "rotation": 90, "texture": "#magnet"}
+            }
+        },
+        {
+            "from": [8, 6, 6.5],
+            "to": [10, 8, 11.5],
+            "rotation": {"angle": 0, "axis": "y", "origin": [8, 6.5, 8.5]},
+            "faces": {
+                "north": {"uv": [8, 0.5, 8.5, 1], "texture": "#magnet"},
+                "east": {"uv": [8.5, 1.5, 9.75, 2], "texture": "#magnet"},
+                "south": {"uv": [9.75, 0.5, 10.25, 1], "texture": "#magnet"},
+                "west": {"uv": [8.5, 0.5, 9.75, 1], "texture": "#magnet"},
+                "up": {"uv": [8.5, 0, 9.75, 0.5], "rotation": 270, "texture": "#magnet"},
+                "down": {"uv": [8.5, 1, 9.75, 1.5], "rotation": 90, "texture": "#magnet"}
+            }
+        },
+        {
+            "from": [6, 10, 6.5],
+            "to": [8, 12, 11.5],
+            "rotation": {"angle": 0, "axis": "y", "origin": [6, 10.5, 8.5]},
+            "faces": {
+                "north": {"uv": [8, 2.5, 8.5, 3], "texture": "#magnet"},
+                "east": {"uv": [8.5, 3.5, 9.75, 4], "texture": "#magnet"},
+                "south": {"uv": [9.75, 2.5, 10.25, 3], "texture": "#magnet"},
+                "west": {"uv": [8.5, 2.5, 9.75, 3], "texture": "#magnet"},
+                "up": {"uv": [8.5, 2, 9.75, 2.5], "rotation": 270, "texture": "#magnet"},
+                "down": {"uv": [8.5, 3, 9.75, 3.5], "rotation": 90, "texture": "#magnet"}
+            }
+        },
+        {
+            "from": [6, 1, 6],
+            "to": [10, 2, 10],
+            "rotation": {"angle": 0, "axis": "y", "origin": [7, 7.5, 9]},
+            "faces": {
+                "north": {"uv": [5.5, 7.5, 6.5, 7.75], "texture": "#magnet"},
+                "east": {"uv": [5.5, 7.5, 6.5, 7.75], "texture": "#magnet"},
+                "south": {"uv": [5.5, 7.5, 6.5, 7.75], "texture": "#magnet"},
+                "west": {"uv": [5.5, 7.5, 6.5, 7.75], "texture": "#magnet"},
+                "up": {"uv": [4.5, 5.75, 5.5, 6.75], "rotation": 270, "texture": "#magnet"},
+                "down": {"uv": [5.5, 6.75, 4.5, 7.75], "rotation": 90, "texture": "#magnet"}
+            }
+        },
+        {
+            "from": [6, 14, 6],
+            "to": [10, 15, 10],
+            "rotation": {"angle": 0, "axis": "y", "origin": [7, 21.5, 9]},
+            "faces": {
+                "north": {"uv": [5.5, 4.25, 6.5, 4.5], "texture": "#magnet"},
+                "east": {"uv": [5.5, 4.25, 6.5, 4.5], "texture": "#magnet"},
+                "south": {"uv": [5.5, 4.25, 6.5, 4.5], "texture": "#magnet"},
+                "west": {"uv": [5.5, 4.25, 6.5, 4.5], "texture": "#magnet"},
+                "up": {"uv": [7.5, 5.25, 6.5, 4.25], "rotation": 270, "texture": "#magnet"},
+                "down": {"uv": [6.5, 5.25, 7.5, 6.25], "rotation": 90, "texture": "#magnet"}
+            }
+        },
+        {
+            "from": [5.88268, 4.92388, 9],
+            "to": [8.88268, 13.92388, 11],
+            "rotation": {"angle": -45, "axis": "z", "origin": [7.38268, 8.42388, 10.5]},
+            "faces": {
+                "north": {"uv": [10.5, 8.75, 11.25, 11], "texture": "#magnet"},
+                "east": {"uv": [12.5, 8.75, 13, 11], "texture": "#magnet"},
+                "south": {"uv": [11.75, 8.75, 12.5, 11], "texture": "#magnet"},
+                "west": {"uv": [11.25, 8.75, 11.75, 11], "texture": "#magnet"},
+                "up": {"uv": [11.25, 8, 11.75, 8.75], "rotation": 270, "texture": "#magnet"},
+                "down": {"uv": [11.25, 11, 11.75, 11.75], "rotation": 90, "texture": "#magnet"}
+            }
+        },
+        {
+            "from": [5.88268, 3.92388, 2],
+            "to": [8.88268, 6.92388, 9],
+            "rotation": {"angle": -45, "axis": "z", "origin": [7.38268, 8.42388, 7.5]},
+            "faces": {
+                "north": {"uv": [8, 11, 8.75, 11.75], "texture": "#magnet"},
+                "east": {"uv": [8.75, 12.5, 10.5, 13.25], "rotation": 180, "texture": "#magnet"},
+                "south": {"uv": [10.5, 11, 11.25, 11.75], "texture": "#magnet"},
+                "west": {"uv": [8.75, 11, 10.5, 11.75], "texture": "#magnet"},
+                "up": {"uv": [8.75, 10.25, 10.5, 11], "rotation": 90, "texture": "#magnet"},
+                "down": {"uv": [8.75, 11.75, 10.5, 12.5], "rotation": 270, "texture": "#magnet"}
+            }
+        },
+        {
+            "from": [5.88268, 11.92388, 2],
+            "to": [8.88268, 14.92388, 9],
+            "rotation": {"angle": -45, "axis": "z", "origin": [7.38268, 8.42388, 7.5]},
+            "faces": {
+                "north": {"uv": [8, 8, 8.75, 8.75], "texture": "#magnet"},
+                "east": {"uv": [8.75, 9.5, 10.5, 10.25], "rotation": 180, "texture": "#magnet"},
+                "south": {"uv": [10.5, 8, 11.25, 8.75], "texture": "#magnet"},
+                "west": {"uv": [8.75, 8, 10.5, 8.75], "texture": "#magnet"},
+                "up": {"uv": [8.75, 7.25, 10.5, 8], "rotation": 90, "texture": "#magnet"},
+                "down": {"uv": [8.75, 8.75, 10.5, 9.5], "rotation": 270, "texture": "#magnet"}
+            }
+        }
+    ],
+    "groups": [
+        {
+            "name": "casing",
+            "origin": [8, 8, 8],
+            "color": 0,
+            "children": [0, 1, 2]
+        },
+        {
+            "name": "root",
+            "origin": [8, 8, 8],
+            "color": 0,
+            "children": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                {
+                    "name": "magnet",
+                    "origin": [7, 7.5, 7],
+                    "color": 0,
+                    "children": [8, 9, 10]
+                }
+            ]
+        }
+    ]
+}

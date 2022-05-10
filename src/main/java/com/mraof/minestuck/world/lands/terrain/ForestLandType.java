@@ -6,24 +6,23 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.MSSoundEvents;
-import com.mraof.minestuck.world.biome.BiomeType;
-import com.mraof.minestuck.world.biome.LandWrapperBiome;
+import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeGenerationSettings;
 import net.minecraft.world.biome.DefaultBiomeFeatures;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.Features;
 import net.minecraft.world.gen.feature.MultipleRandomFeatureConfig;
 import net.minecraft.world.gen.feature.OreFeatureConfig;
 import net.minecraft.world.gen.placement.AtSurfaceWithExtraConfig;
-import net.minecraft.world.gen.placement.CountRangeConfig;
-import net.minecraft.world.gen.placement.FrequencyConfig;
 import net.minecraft.world.gen.placement.Placement;
 
 import java.util.Random;
@@ -48,25 +47,25 @@ public class ForestLandType extends TerrainLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("surface", type == Variant.TAIGA ? Blocks.PODZOL.getDefaultState() : Blocks.GRASS_BLOCK.getDefaultState());
-		registry.setBlockState("upper", Blocks.DIRT.getDefaultState());
+		registry.setBlockState("surface", type == Variant.TAIGA ? Blocks.PODZOL.defaultBlockState() : Blocks.GRASS_BLOCK.defaultBlockState());
+		registry.setBlockState("upper", Blocks.DIRT.defaultBlockState());
 		if(type == Variant.TAIGA) {
-			registry.setBlockState("structure_primary", Blocks.SPRUCE_WOOD.getDefaultState());
-			registry.setBlockState("structure_primary_decorative", MSBlocks.FROST_WOOD.getDefaultState());
+			registry.setBlockState("structure_primary", Blocks.SPRUCE_WOOD.defaultBlockState());
+			registry.setBlockState("structure_primary_decorative", MSBlocks.FROST_WOOD.defaultBlockState());
 		} else {
-			registry.setBlockState("structure_primary", MSBlocks.VINE_WOOD.getDefaultState());
-			registry.setBlockState("structure_primary_decorative", MSBlocks.FLOWERY_VINE_WOOD.getDefaultState());
+			registry.setBlockState("structure_primary", MSBlocks.VINE_WOOD.defaultBlockState());
+			registry.setBlockState("structure_primary_decorative", MSBlocks.FLOWERY_VINE_WOOD.defaultBlockState());
 		}
-		registry.setBlockState("structure_secondary", Blocks.STONE_BRICKS.getDefaultState());
-		registry.setBlockState("structure_secondary_decorative", Blocks.CHISELED_STONE_BRICKS.getDefaultState());
-		registry.setBlockState("structure_secondary_stairs", Blocks.STONE_BRICK_STAIRS.getDefaultState());
-		registry.setBlockState("village_path", Blocks.GRASS_PATH.getDefaultState());
-		registry.setBlockState("bush", Blocks.FERN.getDefaultState());
-		registry.setBlockState("structure_wool_1", Blocks.GREEN_WOOL.getDefaultState());
+		registry.setBlockState("structure_secondary", Blocks.STONE_BRICKS.defaultBlockState());
+		registry.setBlockState("structure_secondary_decorative", Blocks.CHISELED_STONE_BRICKS.defaultBlockState());
+		registry.setBlockState("structure_secondary_stairs", Blocks.STONE_BRICK_STAIRS.defaultBlockState());
+		registry.setBlockState("village_path", Blocks.GRASS_PATH.defaultBlockState());
+		registry.setBlockState("bush", Blocks.FERN.defaultBlockState());
+		registry.setBlockState("structure_wool_1", Blocks.GREEN_WOOL.defaultBlockState());
 		if(type == Variant.TAIGA) {
-			registry.setBlockState("structure_wool_3", Blocks.LIGHT_BLUE_WOOL.getDefaultState());
+			registry.setBlockState("structure_wool_3", Blocks.LIGHT_BLUE_WOOL.defaultBlockState());
 		} else {
-			registry.setBlockState("structure_wool_3", Blocks.BROWN_WOOL.getDefaultState());
+			registry.setBlockState("structure_wool_3", Blocks.BROWN_WOOL.defaultBlockState());
 		}
 	}
 	
@@ -88,56 +87,67 @@ public class ForestLandType extends TerrainLandType
 	}
 	
 	@Override
-	public void setBiomeSettings(LandWrapperBiome biome, StructureBlockRegistry blocks)
+	public void setBiomeGeneration(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks, LandBiomeType type, Biome baseBiome)
 	{
-		if(biome.type == BiomeType.NORMAL)
+		if(type == LandBiomeType.NORMAL)
 		{
-			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_PATCH.withConfiguration(DefaultBiomeFeatures.GRASS_CONFIG).withPlacement(Placement.COUNT_HEIGHTMAP_DOUBLE.configure(new FrequencyConfig(2))));
-
+			builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Features.PATCH_GRASS_FOREST);
+			
 			switch(this.type)
 			{
 				case FOREST:
-					biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_SELECTOR.withConfiguration(new MultipleRandomFeatureConfig(ImmutableList.of(Feature.NORMAL_TREE.withConfiguration(DefaultBiomeFeatures.field_230129_h_).withChance(0.2F), Feature.FANCY_TREE.withConfiguration(DefaultBiomeFeatures.FANCY_TREE_CONFIG).withChance(1.0F)), Feature.NORMAL_TREE.withConfiguration(DefaultBiomeFeatures.OAK_TREE_CONFIG))).withPlacement(Placement.COUNT_EXTRA_HEIGHTMAP.configure(new AtSurfaceWithExtraConfig(5, 0.1F, 1))));
+					builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_SELECTOR
+							.configured(new MultipleRandomFeatureConfig(ImmutableList.of(Features.BIRCH.weighted(0.2F), Features.FANCY_OAK.weighted(0.1F)), Features.OAK))
+							.decorated(Features.Placements.HEIGHTMAP_SQUARE).decorated(Placement.COUNT_EXTRA.configured(new AtSurfaceWithExtraConfig(5, 0.1F, 1))));
 					break;
 				case TAIGA:
-					biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_SELECTOR.withConfiguration(new MultipleRandomFeatureConfig(ImmutableList.of(Feature.NORMAL_TREE.withConfiguration(DefaultBiomeFeatures.SPRUCE_TREE_CONFIG).withChance(1/3F)),Feature.NORMAL_TREE.withConfiguration(DefaultBiomeFeatures.SPRUCE_TREE_CONFIG))).withPlacement(Placement.COUNT_EXTRA_HEIGHTMAP.configure(new AtSurfaceWithExtraConfig(5, 0.1F, 1))));
+					builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_SELECTOR
+							.configured(new MultipleRandomFeatureConfig(ImmutableList.of(Features.PINE.weighted(1/3F)), Features.SPRUCE))
+							.decorated(Features.Placements.HEIGHTMAP_SQUARE).decorated(Placement.COUNT_EXTRA.configured(new AtSurfaceWithExtraConfig(5, 0.1F, 1))));
 					break;
 			}
-		} else if(biome.type == BiomeType.ROUGH)
+		} else if(type == LandBiomeType.ROUGH)
 		{
-			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_PATCH.withConfiguration(DefaultBiomeFeatures.LUSH_GRASS_CONFIG).withPlacement(Placement.COUNT_HEIGHTMAP_DOUBLE.configure(new FrequencyConfig(4))));
-
+			builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_PATCH
+					.configured(Features.Configs.JUNGLE_GRASS_CONFIG).decorated(Features.Placements.HEIGHTMAP_DOUBLE_SQUARE).count(4));
+			
 			switch(this.type)
 			{
 				case FOREST:
-					biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_SELECTOR.withConfiguration(new MultipleRandomFeatureConfig(ImmutableList.of(Feature.NORMAL_TREE.withConfiguration(DefaultBiomeFeatures.field_230129_h_).withChance(0.2F), Feature.FANCY_TREE.withConfiguration(DefaultBiomeFeatures.FANCY_TREE_CONFIG).withChance(1.0F)), Feature.NORMAL_TREE.withConfiguration(DefaultBiomeFeatures.OAK_TREE_CONFIG))).withPlacement(Placement.COUNT_EXTRA_HEIGHTMAP.configure(new AtSurfaceWithExtraConfig(10, 0.1F, 1))));
+					builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_SELECTOR
+							.configured(new MultipleRandomFeatureConfig(ImmutableList.of(Features.BIRCH.weighted(0.2F), Features.FANCY_OAK.weighted(0.1F)), Features.OAK))
+							.decorated(Features.Placements.HEIGHTMAP_SQUARE).decorated(Placement.COUNT_EXTRA.configured(new AtSurfaceWithExtraConfig(10, 0.1F, 1))));
 					break;
 				case TAIGA:
-					biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_SELECTOR.withConfiguration(new MultipleRandomFeatureConfig(ImmutableList.of(Feature.NORMAL_TREE.withConfiguration(DefaultBiomeFeatures.SPRUCE_TREE_CONFIG).withChance(0.33333334F)),Feature.NORMAL_TREE.withConfiguration(DefaultBiomeFeatures.SPRUCE_TREE_CONFIG))).withPlacement(Placement.COUNT_EXTRA_HEIGHTMAP.configure(new AtSurfaceWithExtraConfig(10, 0.1F, 1))));
+					builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION,Feature.RANDOM_SELECTOR
+							.configured(new MultipleRandomFeatureConfig(ImmutableList.of(Features.PINE.weighted(1/3F)), Features.SPRUCE))
+							.decorated(Features.Placements.HEIGHTMAP_SQUARE).decorated(Placement.COUNT_EXTRA.configured(new AtSurfaceWithExtraConfig(10, 0.1F, 1))));
 					break;
 			}
-		} else if(biome.type == BiomeType.OCEAN)
+		} else if(type == LandBiomeType.OCEAN)
 		{
-			DefaultBiomeFeatures.addSwampClayDisks(biome);
+			DefaultBiomeFeatures.addSwampClayDisk(builder);
 		}
-
-		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), Blocks.DIRT.getDefaultState(), 33)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(10, 0, 0, 256))));
-		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), Blocks.GRAVEL.getDefaultState(), 33)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(8, 0, 0, 256))));
-		biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(blocks.getGroundType(), Blocks.COAL_ORE.getDefaultState(), 17)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(20, 0, 0, 128))));
-		DefaultBiomeFeatures.addExtraEmeraldOre(biome);
+		
+		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.configured(new OreFeatureConfig(blocks.getGroundType(), Blocks.DIRT.defaultBlockState(), 33))
+				.range(256).squared().count(10));
+		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.configured(new OreFeatureConfig(blocks.getGroundType(), Blocks.GRAVEL.defaultBlockState(), 33))
+				.range(256).squared().count(8));
+		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.configured(new OreFeatureConfig(blocks.getGroundType(), Blocks.COAL_ORE.defaultBlockState(), 17))
+				.range(128).squared().count(20));
+		DefaultBiomeFeatures.addExtraEmeralds(builder);
 		
 	}
-	
 	@Override
-	public Vec3d getFogColor()
+	public Vector3d getFogColor()
 	{
-		return new Vec3d(0.0D, 1.0D, 0.6D);
+		return new Vector3d(0.0D, 1.0D, 0.6D);
 	}
 	
 	@Override
-	public Vec3d getSkyColor()
+	public Vector3d getSkyColor()
 	{
-		return new Vec3d(0.4D, 0.7D, 1.0D);
+		return new Vector3d(0.4D, 0.7D, 1.0D);
 	}
 	
 	@Override

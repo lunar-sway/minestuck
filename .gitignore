@@ -14,5 +14,4 @@
 /.settings
 /src/main/generated/resources/.cache/
 /.metadata
-/logs/debug.log
-/logs/latest.log
+/logs/

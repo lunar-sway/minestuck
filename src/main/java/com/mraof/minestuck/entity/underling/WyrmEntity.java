@@ -23,30 +23,30 @@ public class WyrmEntity extends UnderlingEntity implements IEntityMultiPart
 	@Override
 	public World getWorld()
 	{
-		return this.world;
+		return this.level;
 	}
-
+	
 	@Override
 	public boolean attackEntityFromPart(Entity entityPart, DamageSource source, float damage)
 	{
 		return false;
 	}
-
+	
 	@Override
 	public void updatePartPositions()
 	{
 	}
-
+	
 	@Override
 	public void addPart(Entity entityPart, int id)
 	{
 	}
-
+	
 	@Override
 	public void onPartDeath(Entity entityPart, int id)
 	{
 	}
-
+	
 	@Override
 	public GristSet getGristSpoils()
 	{

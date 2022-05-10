@@ -17,7 +17,6 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import javax.annotation.Nonnull;
@@ -151,7 +150,7 @@ public final class DeployList
 	{
 		stack = cleanStack(stack);
 		for(DeployEntry entry : list)
-			if(ItemStack.areItemStacksEqual(stack, entry.getItemStack(c, world)))
+			if(ItemStack.matches(stack, entry.getItemStack(c, world)))
 				return entry;
 		return null;
 	}
@@ -182,7 +181,7 @@ public final class DeployList
 		for(int i = 0; i < list.size(); i++)
 		{
 			DeployEntry entry = list.get(i);
-			entry.tryAddDeployTag(c, server.getWorld(DimensionType.OVERWORLD), tier, tagList, i);
+			entry.tryAddDeployTag(c, server.getLevel(World.OVERWORLD), tier, tagList, i);
 		}
 		return nbt;
 	}

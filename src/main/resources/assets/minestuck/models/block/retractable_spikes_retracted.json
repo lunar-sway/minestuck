@@ -1,0 +1,8 @@
+{
+    "parent": "block/cube_bottom_top",
+    "textures": {
+        "bottom": "minestuck:block/spikes",
+        "top": "minestuck:block/retractable_spikes_top_retracted",
+        "side": "minestuck:block/spikes"
+    }
+}

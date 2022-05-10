@@ -19,7 +19,7 @@ import net.minecraft.stats.Stats;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.PacketDistributor;
 
@@ -36,7 +36,7 @@ public class MagicAttackRightClickEffect implements ItemRightClickEffect
 	@Nullable
 	private final MagicEffect.Type type;
 	
-	EntityPredicate visiblePredicate = (new EntityPredicate()).setLineOfSiteRequired();
+	private static final EntityPredicate visiblePredicate = (new EntityPredicate());//.setLineOfSiteRequired(); TODO should something else be done with the predicate?
 	
 	public static final MagicAttackRightClickEffect SBAHJ_AIMBOT_MAGIC = new SbahjMagicEffect(10, 1, null, null, 1.0F, MagicEffect.Type.GREEN);
 	public static final MagicAttackRightClickEffect AIMBOT_MAGIC = new AimbotMagicEffect(14, 2, null, null, 1.0F, MagicEffect.Type.CRIT);
@@ -59,37 +59,37 @@ public class MagicAttackRightClickEffect implements ItemRightClickEffect
 	@Override
 	public ActionResult<ItemStack> onRightClick(World world, PlayerEntity player, Hand hand)
 	{
-		ItemStack itemStackIn = player.getHeldItem(hand);
+		ItemStack itemStackIn = player.getItemInHand(hand);
 		
 		if(player instanceof ServerPlayerEntity)
 			magicAttack(world, (ServerPlayerEntity) player);
 		
 		if(player.isCreative())
-			player.getCooldownTracker().setCooldown(itemStackIn.getItem(), 10);
+			player.getCooldowns().addCooldown(itemStackIn.getItem(), 10);
 		else
-			player.getCooldownTracker().setCooldown(itemStackIn.getItem(), 50);
+			player.getCooldowns().addCooldown(itemStackIn.getItem(), 50);
 		
 		player.swing(hand, true);
-		itemStackIn.damageItem(6, player, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
-		player.addStat(Stats.ITEM_USED.get(itemStackIn.getItem()));
+		itemStackIn.hurtAndBreak(6, player, playerEntity -> playerEntity.broadcastBreakEvent(Hand.MAIN_HAND));
+		player.awardStat(Stats.ITEM_USED.get(itemStackIn.getItem()));
 		
-		return ActionResult.resultSuccess(itemStackIn);
+		return ActionResult.success(itemStackIn);
 	}
 	
 	private void magicAttack(World world, ServerPlayerEntity player)
 	{
-		if(sound != null && player.getRNG().nextFloat() < .1F) //optional sound effect adding
-			world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), sound.get(), SoundCategory.PLAYERS, 0.7F, pitch);
-		world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ENTITY_EVOKER_CAST_SPELL, SoundCategory.PLAYERS, 1.0F, 1.6F);
+		if(sound != null && player.getRandom().nextFloat() < .1F) //optional sound effect adding
+			world.playSound(null, player.getX(), player.getY(), player.getZ(), sound.get(), SoundCategory.PLAYERS, 0.7F, pitch);
+		world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.PLAYERS, 1.0F, 1.6F);
 		
 		targetEffect(player);
 		
-		Vec3d eyePos = player.getEyePosition(1.0F);
-		Vec3d lookVec = player.getLookVec();
+		Vector3d eyePos = player.getEyePosition(1.0F);
+		Vector3d lookVec = player.getLookAngle();
 		
 		for(int step = 0; step < distance * 2; step++) //uses the float i value to increase the distance away from where the player is looking and creating a sort of raytrace
 		{
-			Vec3d vecPos = eyePos.add(lookVec.scale(step / 2D));
+			Vector3d vecPos = eyePos.add(lookVec.scale(step / 2D));
 			
 			boolean hitObstacle = checkCollisionInPath(world, player, vecPos);
 			
@@ -103,39 +103,39 @@ public class MagicAttackRightClickEffect implements ItemRightClickEffect
 	}
 	
 	// If you're an addon that want to use this class with your own effect, override this to use your own network packet
-	protected void sendEffectPacket(World world, Vec3d pos, Vec3d lookVec, int length, boolean collides)
+	protected void sendEffectPacket(World world, Vector3d pos, Vector3d lookVec, int length, boolean collides)
 	{
 		if(type != null)
 			MSPacketHandler.sendToNear(new MagicEffectPacket(type, pos, lookVec, length, collides),
-					new PacketDistributor.TargetPoint(pos.x, pos.y, pos.z, 64, world.getDimension().getType()));
+					new PacketDistributor.TargetPoint(pos.x, pos.y, pos.z, 64, world.dimension()));
 	}
 	
 	protected void targetEffect(ServerPlayerEntity player)
 	{
 	}
 	
-	private boolean checkCollisionInPath(World world, ServerPlayerEntity player, Vec3d vecPos)
+	private boolean checkCollisionInPath(World world, ServerPlayerEntity player, Vector3d vecPos)
 	{
 		BlockPos blockPos = new BlockPos(vecPos);
 		
-		if(!world.getBlockState(blockPos).allowsMovement(world, blockPos, PathType.LAND))
+		if(!world.getBlockState(blockPos).isPathfindable(world, blockPos, PathType.LAND))
 		{
 			return true;
 		}
 		
 		AxisAlignedBB axisAlignedBB = new AxisAlignedBB(blockPos);
 		// gets entities in a bounding box around each vector position in the for loop
-		LivingEntity closestTarget = player.world.getClosestEntityWithinAABB(LivingEntity.class, visiblePredicate, player, vecPos.x, vecPos.y, vecPos.z, axisAlignedBB);
+		LivingEntity closestTarget = player.level.getNearestEntity(LivingEntity.class, visiblePredicate, player, vecPos.x, vecPos.y, vecPos.z, axisAlignedBB);
 		if(closestTarget != null)
 		{
 			int playerRung = PlayerSavedData.getData(player).getEcheladder().getRung();
 			
 			if(closestTarget instanceof UnderlingEntity)
-				closestTarget.attackEntityFrom(DamageSource.causePlayerDamage(player).setMagicDamage(), damage + playerRung / 5F); //damage increase from rung is higher against underlings
+				closestTarget.hurt(DamageSource.playerAttack(player).setMagic(), damage + playerRung / 5F); //damage increase from rung is higher against underlings
 			else
-				closestTarget.attackEntityFrom(DamageSource.causePlayerDamage(player).setMagicDamage(), damage + playerRung / 10F);
-			if(effect != null && player.getRNG().nextFloat() < .25F)
-				closestTarget.addPotionEffect(effect.get());
+				closestTarget.hurt(DamageSource.playerAttack(player).setMagic(), damage + playerRung / 10F);
+			if(effect != null && player.getRandom().nextFloat() < .25F)
+				closestTarget.addEffect(effect.get());
 			
 			return true;
 		} else return false;
@@ -151,8 +151,8 @@ public class MagicAttackRightClickEffect implements ItemRightClickEffect
 		@Override
 		protected void targetEffect(ServerPlayerEntity player)
 		{
-			Vec3d randomFacingVecPos = new Vec3d(player.getPosX() + player.getRNG().nextInt(10) - 5, player.getPosY() + player.getRNG().nextInt(10) - 5, player.getPosZ() + player.getRNG().nextInt(10) - 5);
-			player.lookAt(player.getCommandSource().getEntityAnchorType(), randomFacingVecPos);
+			Vector3d randomFacingVecPos = new Vector3d(player.getX() + player.getRandom().nextInt(10) - 5, player.getY() + player.getRandom().nextInt(10) - 5, player.getZ() + player.getRandom().nextInt(10) - 5);
+			player.lookAt(player.createCommandSourceStack().getAnchor(), randomFacingVecPos);
 		}
 	}
 	
@@ -166,8 +166,8 @@ public class MagicAttackRightClickEffect implements ItemRightClickEffect
 		@Override
 		protected void targetEffect(ServerPlayerEntity player)
 		{
-			BlockPos playerEyePos = new BlockPos(player.getPosX(), player.getPosYEye(), player.getPosZ());
-			LivingEntity closestVisibleTarget = player.world.getClosestEntityWithinAABB(LivingEntity.class, visiblePredicate, player, player.getPosX(), player.getPosYEye(), player.getPosZ(), new AxisAlignedBB(playerEyePos).grow(11));
+			BlockPos playerEyePos = new BlockPos(player.getX(), player.getEyeY(), player.getZ());
+			LivingEntity closestVisibleTarget = player.level.getNearestEntity(LivingEntity.class, visiblePredicate, player, player.getX(), player.getEyeY(), player.getZ(), new AxisAlignedBB(playerEyePos).inflate(11));
 			if(closestVisibleTarget != null)
 				player.lookAt(EntityAnchorArgument.Type.EYES, closestVisibleTarget, EntityAnchorArgument.Type.EYES);
 		}

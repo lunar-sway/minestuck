@@ -2,7 +2,6 @@ package com.mraof.minestuck.item.block;
 
 import com.mraof.minestuck.block.CruxiteDowelBlock;
 import com.mraof.minestuck.item.AlchemizedColored;
-import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.tileentity.ItemStackTileEntity;
 import net.minecraft.block.Block;
@@ -16,8 +15,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -29,7 +28,6 @@ public class DowelItem extends BlockItem implements AlchemizedColored
 	public DowelItem(Block blockIn, Properties builder)
 	{
 		super(blockIn, builder);
-		this.addPropertyOverride(CaptchaCardItem.CONTENT_NAME, CaptchaCardItem.CONTENT);
 	}
 	
 	@Override
@@ -41,7 +39,7 @@ public class DowelItem extends BlockItem implements AlchemizedColored
 	}
 	
 	@Override
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
+	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
 	{
 		if(AlchemyHelper.hasDecodedItem(stack))
 		{
@@ -49,35 +47,35 @@ public class DowelItem extends BlockItem implements AlchemizedColored
 			
 			if(!containedStack.isEmpty())
 			{
-				tooltip.add(new StringTextComponent("(").appendSibling(containedStack.getDisplayName()).appendText(")").setStyle(new Style().setColor(TextFormatting.GRAY)));
+				tooltip.add(new StringTextComponent("(").append(containedStack.getHoverName()).append(")").withStyle(TextFormatting.GRAY));
 			}
 			else
 			{
-				tooltip.add(new StringTextComponent("(").appendSibling(new StringTextComponent("item.captchaCard.invalid")).appendText(")").setStyle(new Style().setColor(TextFormatting.GRAY)));//TODO translation key
+				tooltip.add(new StringTextComponent("(").append(new TranslationTextComponent(getDescriptionId() + ".invalid")).append(")").withStyle(TextFormatting.GRAY));
 			}
 		}
 	}
 	
 	@Nullable
 	@Override
-	protected BlockState getStateForPlacement(BlockItemUseContext context)
+	protected BlockState getPlacementState(BlockItemUseContext context)
 	{
-		BlockState state = super.getStateForPlacement(context);
+		BlockState state = super.getPlacementState(context);
 		if(state == null)
 			return null;
 		
-		ItemStack stack = context.getItem();
+		ItemStack stack = context.getItemInHand();
 		if(AlchemyHelper.hasDecodedItem(stack))
-			state = state.with(CruxiteDowelBlock.DOWEL_TYPE, CruxiteDowelBlock.Type.TOTEM);
+			state = state.setValue(CruxiteDowelBlock.DOWEL_TYPE, CruxiteDowelBlock.Type.TOTEM);
 		else
-			state = state.with(CruxiteDowelBlock.DOWEL_TYPE, CruxiteDowelBlock.Type.DOWEL);
+			state = state.setValue(CruxiteDowelBlock.DOWEL_TYPE, CruxiteDowelBlock.Type.DOWEL);
 		return state;
 	}
 	
 	@Override
-	protected boolean onBlockPlaced(BlockPos pos, World world, @Nullable PlayerEntity player, ItemStack stack, BlockState state)
+	protected boolean updateCustomBlockEntityTag(BlockPos pos, World world, @Nullable PlayerEntity player, ItemStack stack, BlockState state)
 	{
-		TileEntity te = world.getTileEntity(pos);
+		TileEntity te = world.getBlockEntity(pos);
 		if(te instanceof ItemStackTileEntity)
 		{
 			ItemStack newStack = stack.copy();

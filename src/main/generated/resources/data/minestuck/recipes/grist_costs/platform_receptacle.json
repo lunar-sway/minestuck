@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:platform_receptacle"
+  },
+  "grist_cost": {
+    "minestuck:quartz": 5,
+    "minestuck:mercury": 5
+  }
+}

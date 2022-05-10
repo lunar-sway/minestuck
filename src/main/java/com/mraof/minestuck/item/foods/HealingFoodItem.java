@@ -16,9 +16,9 @@ public class HealingFoodItem extends Item
     }
     
     @Override
-    public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityLiving)
+    public ItemStack finishUsingItem(ItemStack stack, World worldIn, LivingEntity entityLiving)
     {
         entityLiving.heal(healAmount);
-        return super.onItemUseFinish(stack, worldIn, entityLiving);
+        return super.finishUsingItem(stack, worldIn, entityLiving);
     }
 }

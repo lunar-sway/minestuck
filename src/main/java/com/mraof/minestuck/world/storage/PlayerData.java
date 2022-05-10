@@ -20,12 +20,14 @@ import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.ColorHandler;
+import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -33,6 +35,7 @@ import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +56,7 @@ public final class PlayerData
 	{
 		ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
 		PlayerSavedData.getData(player).onPlayerLoggedIn(player);
+		MSDimensions.sendDimensionData(player);
 	}
 	
 	@SubscribeEvent
@@ -62,6 +66,7 @@ public final class PlayerData
 		PlayerSavedData.getData(player).sendConsortReputation(player);
 	}
 	
+	@Nonnull
 	final PlayerIdentifier identifier;
 	
 	private final PlayerSavedData savedData;
@@ -80,7 +85,7 @@ public final class PlayerData
 	
 	private boolean hasLoggedIn;
 	
-	PlayerData(PlayerSavedData savedData, PlayerIdentifier player)
+	PlayerData(PlayerSavedData savedData, @Nonnull PlayerIdentifier player)
 	{
 		this.savedData = savedData;
 		this.identifier = player;
@@ -112,7 +117,7 @@ public final class PlayerData
 		for(int i = 0; i < list.size(); i++)
 		{
 			CompoundNBT dimensionRep = list.getCompound(i);
-			ResourceLocation dimension = ResourceLocation.tryCreate(dimensionRep.getString("dim"));
+			ResourceLocation dimension = ResourceLocation.tryParse(dimensionRep.getString("dim"));
 			if(dimension != null)
 				consortReputation.put(dimension, dimensionRep.getInt("rep"));
 		}
@@ -155,7 +160,7 @@ public final class PlayerData
 	
 	private void markDirty()
 	{
-		savedData.markDirty();
+		savedData.setDirty();
 	}
 	
 	public Echeladder getEcheladder()
@@ -264,19 +269,19 @@ public final class PlayerData
 		}
 	}
 	
-	public int getConsortReputation(DimensionType dim)
+	public int getConsortReputation(RegistryKey<World> dim)
 	{
-		return consortReputation.getOrDefault(dim.getRegistryName(), 0);
+		return consortReputation.getOrDefault(dim.location(), 0);
 	}
 	
-	public void addConsortReputation(int amount, DimensionType dim)
+	public void addConsortReputation(int amount, RegistryKey<World> dim)
 	{
 		int oldRep = getConsortReputation(dim);
 		int newRep = MathHelper.clamp(oldRep + amount, -10000, 10000);
 		
 		if(newRep != oldRep)
 		{
-			consortReputation.put(dim.getRegistryName(), newRep);
+			consortReputation.put(dim.location(), newRep);
 			markDirty();
 			sendConsortReputation(getPlayer());
 		}
@@ -328,13 +333,13 @@ public final class PlayerData
 		List<String> startingTypes = MinestuckConfig.SERVER.startingModusTypes.get();
 		if(!startingTypes.isEmpty())
 		{
-			String type = startingTypes.get(player.world.rand.nextInt(startingTypes.size()));
+			String type = startingTypes.get(player.level.random.nextInt(startingTypes.size()));
 			if(type.isEmpty())
 			{
 				setGivenModus();
 				return;
 			}
-			ResourceLocation name = ResourceLocation.tryCreate(type);
+			ResourceLocation name = ResourceLocation.tryParse(type);
 			if(name == null)
 				LOGGER.error("Unable to parse starting modus type {} as a resource location!", type);
 			else
@@ -396,7 +401,7 @@ public final class PlayerData
 	{
 		if(player == null)
 			return;
-		ConsortReputationDataPacket packet = ConsortReputationDataPacket.create(getConsortReputation(player.dimension));
+		ConsortReputationDataPacket packet = ConsortReputationDataPacket.create(getConsortReputation(player.level.dimension()));
 		//MSPacketHandler.sendToPlayer(packet, player);
 	}
 	

@@ -1,5 +1,6 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.client.gui.captchalouge.SylladexScreen;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckContainer;
@@ -12,7 +13,6 @@ import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.client.gui.screen.ConfirmScreen;
 import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.CCloseWindowPacket;
@@ -41,41 +41,41 @@ public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckCon
 	public void init()
 	{
 		super.init();
-		modusButton = new ExtendedButton(xOffset + 102, yOffset + 31, 50, 18, I18n.format(USE_ITEM), button -> use());
-		sylladexMap = new ExtendedButton(xOffset + 6, yOffset + 31, 60, 18, I18n.format(SYLLADEX), button -> sylladex());
+		modusButton = new ExtendedButton(xOffset + 102, yOffset + 31, 50, 18, new TranslationTextComponent(USE_ITEM), button -> use());
+		sylladexMap = new ExtendedButton(xOffset + 6, yOffset + 31, 60, 18, new TranslationTextComponent(SYLLADEX), button -> sylladex());
 		addButton(modusButton);
 		addButton(sylladexMap);
 		sylladexMap.active = ClientPlayerData.getModus() != null;
-		modusButton.active = !container.inventory.getStackInSlot(0).isEmpty();
+		modusButton.active = !menu.inventory.getItem(0).isEmpty();
 	}
 	
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY)
+	protected void renderBg(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY)
 	{
 		sylladexMap.active = ClientPlayerData.getModus() != null;
-		modusButton.active = !container.inventory.getStackInSlot(0).isEmpty();
+		modusButton.active = !menu.inventory.getItem(0).isEmpty();
 		
-		drawTabs();
+		drawTabs(matrixStack);
 		
-		minecraft.getTextureManager().bindTexture(guiCaptchaDeck);
-		this.blit(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
+		minecraft.getTextureManager().bind(guiCaptchaDeck);
+		this.blit(matrixStack, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
-		drawActiveTabAndIcons();
+		drawActiveTabAndIcons(matrixStack);
 		
 	}
 	
 	@Override
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
+	protected void renderLabels(MatrixStack matrixStack, int mouseX, int mouseY)
 	{
-		String message = getTitle().getFormattedText();
-		font.drawString(message, (this.width / 2F) - font.getStringWidth(message) / 2F - guiLeft, yOffset + 12 - guiTop, 0x404040);
+		String message = getTitle().getString();
+		font.draw(matrixStack, message, (this.width / 2F) - font.width(message) / 2F - leftPos, yOffset + 12 - topPos, 0x404040);
 		
 	}
 	
 	private void use() {
-		if(!container.inventory.getStackInSlot(0).isEmpty())
+		if(!menu.inventory.getItem(0).isEmpty())
 		{
-			ItemStack stack = container.inventory.getStackInSlot(0);
+			ItemStack stack = menu.inventory.getItem(0);
 			if(!(stack.getItem() instanceof CaptchaCardItem))
 			{
 				ModusType<?> type = ModusTypes.getTypeFromItem(stack.getItem());
@@ -83,16 +83,16 @@ public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckCon
 				Modus modus = ClientPlayerData.getModus();
 				if(newModus != null && modus != null && newModus.getClass() != modus.getClass() && !newModus.canSwitchFrom(modus))
 				{
-					minecraft.currentScreen = new ConfirmScreen(this::onConfirm, new TranslationTextComponent(SylladexScreen.EMPTY_SYLLADEX_1), new TranslationTextComponent(SylladexScreen.EMPTY_SYLLADEX_2))
+					minecraft.screen = new ConfirmScreen(this::onConfirm, new TranslationTextComponent(SylladexScreen.EMPTY_SYLLADEX_1), new TranslationTextComponent(SylladexScreen.EMPTY_SYLLADEX_2))
 					{
 						@Override
-						public void onClose()
+						public void removed()
 						{
-							minecraft.currentScreen = CaptchaDeckScreen.this;
-							minecraft.player.closeScreen();
+							minecraft.screen = CaptchaDeckScreen.this;
+							minecraft.player.closeContainer();
 						}
 					};
-					minecraft.currentScreen.init(minecraft, width, height);
+					minecraft.screen.init(minecraft, width, height);
 					return;
 				}
 			}
@@ -104,18 +104,18 @@ public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckCon
 	{
 		if( ClientPlayerData.getModus() != null)
 		{
-			minecraft.player.connection.sendPacket(new CCloseWindowPacket(minecraft.player.openContainer.windowId));
-			minecraft.player.inventory.setItemStack(ItemStack.EMPTY);
+			minecraft.player.connection.send(new CCloseWindowPacket(minecraft.player.containerMenu.containerId));
+			minecraft.player.inventory.setCarried(ItemStack.EMPTY);
 			MSScreenFactories.displaySylladexScreen(ClientPlayerData.getModus());
-			minecraft.player.openContainer = minecraft.player.container;
+			minecraft.player.containerMenu = minecraft.player.inventoryMenu;
 		}
 	}
 	
 	private void onConfirm(boolean result)
 	{
-		if(result && !container.inventory.getStackInSlot(0).isEmpty())
+		if(result && !menu.inventory.getItem(0).isEmpty())
 			MSPacketHandler.sendToServer(CaptchaDeckPacket.modus());
-		minecraft.currentScreen = this;
+		minecraft.screen = this;
 	}
 	
 }

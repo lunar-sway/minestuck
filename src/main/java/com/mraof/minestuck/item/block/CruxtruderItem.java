@@ -28,11 +28,11 @@ public class CruxtruderItem extends MultiblockItem
 	}
 	
 	@Override
-	protected boolean onBlockPlaced(BlockPos pos, World world, @Nullable PlayerEntity player, ItemStack stack, BlockState state)
+	protected boolean updateCustomBlockEntityTag(BlockPos pos, World world, @Nullable PlayerEntity player, ItemStack stack, BlockState state)
 	{
 		if(player == null)
 			return false;
-		TileEntity te = world.getTileEntity(multiblock.getTilePos(pos, MSRotationUtil.fromDirection(player.getHorizontalFacing().getOpposite())));
+		TileEntity te = world.getBlockEntity(multiblock.getTilePos(pos, MSRotationUtil.fromDirection(player.getDirection().getOpposite())));
 		if(te instanceof CruxtruderTileEntity)
 		{
 			int color;

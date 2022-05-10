@@ -1,0 +1,6 @@
+{
+    "parent": "block/cube_all",
+    "textures": {
+        "all": "minestuck:block/horizontal_green_stone_bricks"
+    }
+}

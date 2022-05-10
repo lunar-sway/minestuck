@@ -1,0 +1,6 @@
+{
+    "parent": "block/cube_all",
+    "textures": {
+        "all": "minestuck:block/variable_solid_switch_low_power"
+    }
+}

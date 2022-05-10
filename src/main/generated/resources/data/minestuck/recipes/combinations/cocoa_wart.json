@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:cocoa_beans"
+  },
+  "input2": {
+    "item": "minecraft:nether_wart"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:cocoa_wart"
+  }
+}

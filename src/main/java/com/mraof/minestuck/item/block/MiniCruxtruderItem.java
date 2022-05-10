@@ -24,11 +24,11 @@ public class MiniCruxtruderItem extends BlockItem implements AlchemizedColored
 	}
 	
 	@Override
-	protected boolean onBlockPlaced(BlockPos pos, World world, @Nullable PlayerEntity player, ItemStack stack, BlockState state)
+	protected boolean updateCustomBlockEntityTag(BlockPos pos, World world, @Nullable PlayerEntity player, ItemStack stack, BlockState state)
 	{
 		if(stack.hasTag() && stack.getTag().contains("color"))
 		{
-			TileEntity te = world.getTileEntity(pos);
+			TileEntity te = world.getBlockEntity(pos);
 			if(te instanceof MiniCruxtruderTileEntity)
 				((MiniCruxtruderTileEntity) te).color = stack.getTag().getInt("color");
 			else LogManager.getLogger().warn("Placed miniature cruxtruder, but no appropriate tile entity was created. Instead found {}.", te);

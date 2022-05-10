@@ -2,7 +2,11 @@ package com.mraof.minestuck.entity;
 
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.util.Debug;
-import net.minecraft.entity.*;
+import net.minecraft.entity.EntitySize;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.Pose;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -13,6 +17,7 @@ import net.minecraft.network.IPacket;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.FoodStats;
+import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.GameType;
@@ -45,7 +50,7 @@ public class DecoyEntity extends MobEntity implements IEntityAdditionalSpawnData
 	{
 		super(MSEntityTypes.PLAYER_DECOY, world);
 		inventory = new PlayerInventory(null);
-		if(!world.isRemote)	//If not spawned the way it should
+		if(!world.isClientSide)	//If not spawned the way it should
 			markedForDespawn = true;
 	}
 	
@@ -54,46 +59,44 @@ public class DecoyEntity extends MobEntity implements IEntityAdditionalSpawnData
 		super(MSEntityTypes.PLAYER_DECOY, world);
 		this.setBoundingBox(player.getBoundingBox());
 		this.player = new DecoyPlayer(world, this, player);
-		for(String key : player.getPersistentData().keySet())
+		for(String key : player.getPersistentData().getAllKeys())
 			this.player.getPersistentData().put(key, player.getPersistentData().get(key).copy());
-		this.setPosition(player.getPosX(), player.getPosY(), player.getPosZ());
-		originX = this.getPosX();
-		this.chunkCoordX = player.chunkCoordX;
-		originY = this.getPosY();
-		this.chunkCoordY = player.chunkCoordY;
-		originZ = this.getPosZ();
-		this.chunkCoordZ = player.chunkCoordZ;
-		this.rotationPitch = player.rotationPitch;
-		this.rotationYaw = player.rotationYaw;
-		this.rotationYawHead = player.rotationYawHead;
-		this.renderYawOffset = player.renderYawOffset;
-		this.gameType = player.interactionManager.getGameType();
+		this.setPos(player.getX(), player.getY(), player.getZ());
+		originX = this.getX();
+		this.xChunk = player.xChunk;
+		originY = this.getY();
+		this.yChunk = player.yChunk;
+		originZ = this.getZ();
+		this.zChunk = player.zChunk;
+		this.xRot = player.xRot;
+		this.yRot = player.yRot;
+		this.yHeadRot = player.yHeadRot;
+		this.yBodyRot = player.yBodyRot;
+		this.gameType = player.gameMode.getGameModeForPlayer();
 		initInventory(player);
-		player.getAttribute(SharedMonsterAttributes.MAX_HEALTH).func_225505_c_().forEach(attributeModifier ->
-				this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).applyModifier(attributeModifier));
-		player.getAttribute(SharedMonsterAttributes.MAX_HEALTH).func_225505_c_().forEach(attributeModifier ->
-				this.player.getAttribute(SharedMonsterAttributes.MAX_HEALTH).applyModifier(attributeModifier));
+		this.getAttribute(Attributes.MAX_HEALTH).replaceFrom(player.getAttribute(Attributes.MAX_HEALTH));
+		this.player.getAttribute(Attributes.MAX_HEALTH).replaceFrom(player.getAttribute(Attributes.MAX_HEALTH));
 		this.setHealth(player.getHealth());
 		username = player.getGameProfile().getName();
-		playerId = player.getUniqueID();
-		isFlying = player.abilities.isFlying;
-		player.abilities.write(this.capabilities);
+		playerId = player.getUUID();
+		isFlying = player.abilities.flying;
+		player.abilities.addSaveData(this.capabilities);
 		foodStatsNBT = new CompoundNBT();
-		player.getFoodStats().write(foodStatsNBT);
+		player.getFoodData().addAdditionalSaveData(foodStatsNBT);
 		initFoodStats(player);
 	}
 	
 	@Override
-	public EntitySize getSize(Pose poseIn)
+	public EntitySize getDimensions(Pose poseIn)
 	{
-		return EntityType.PLAYER.getSize();
+		return EntityType.PLAYER.getDimensions();
 	}
 	
 	private void initInventory(ServerPlayerEntity player)
 	{
 		inventory = this.player.inventory;
 		
-		inventory.copyInventory(player.inventory);
+		inventory.replaceWith(player.inventory);
 	}
 	
 	private void initFoodStats(ServerPlayerEntity sourcePlayer)
@@ -115,12 +118,12 @@ public class DecoyEntity extends MobEntity implements IEntityAdditionalSpawnData
 					throw new NoSuchMethodException("Found no known constructor for net.minecraft.util.FoodStats.");
 				}
 			}
-			foodStats.read(foodStatsNBT);	//Exact copy of food stack
+			foodStats.readAdditionalSaveData(foodStatsNBT);	//Exact copy of food stack
 		} catch(Exception e)
 		{
 			foodStats = null;
 			Debug.logger.error("Couldn't initiate food stats for player decoy. Proceeding to not simulate food stats.", e);
-			sourcePlayer.sendMessage(new StringTextComponent("An issue came up while creating the decoy. More info in the server logs."));
+			sourcePlayer.sendMessage(new StringTextComponent("An issue came up while creating the decoy. More info in the server logs."), Util.NIL_UUID);
 		}
 	}
 	
@@ -129,7 +132,7 @@ public class DecoyEntity extends MobEntity implements IEntityAdditionalSpawnData
 		if(foodStats != null)
 		{
 			CompoundNBT nbt = new CompoundNBT();
-			foodStats.write(nbt);
+			foodStats.addAdditionalSaveData(nbt);
 			return nbt;
 		} else return foodStatsNBT;
 	}
@@ -137,27 +140,27 @@ public class DecoyEntity extends MobEntity implements IEntityAdditionalSpawnData
 	@Override
 	public void writeSpawnData(PacketBuffer buffer)
 	{
-		buffer.writeString(username, 16);
-		buffer.writeUniqueId(playerId);
-		buffer.writeFloat(rotationYawHead);
+		buffer.writeUtf(username, 16);
+		buffer.writeUUID(playerId);
+		buffer.writeFloat(yHeadRot);
 		buffer.writeBoolean(isFlying);
 	}
 	
 	@Override
 	public void readSpawnData(PacketBuffer additionalData)
 	{
-		username = additionalData.readString(16);
-		playerId = additionalData.readUniqueId();
-		rotationYawHead = additionalData.readFloat();
+		username = additionalData.readUtf(16);
+		playerId = additionalData.readUUID();
+		yHeadRot = additionalData.readFloat();
 		isFlying = additionalData.readBoolean();
-		prevRotationYawHead = rotationYawHead;
-		this.rotationYaw = rotationYawHead;	//I don't know how much of this that is necessary
-		prevRotationYaw = rotationYaw;
-		renderYawOffset = rotationYaw;
+		yHeadRotO = yHeadRot;
+		this.yRot = yHeadRot;	//I don't know how much of this that is necessary
+		yRotO = yRot;
+		yBodyRot = yRot;
 	}
 	
 	@Override
-	public IPacket<?> createSpawnPacket()
+	public IPacket<?> getAddEntityPacket()
 	{
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
@@ -177,14 +180,14 @@ public class DecoyEntity extends MobEntity implements IEntityAdditionalSpawnData
 		}
 		super.tick();
 		
-		rotationYawHead = prevRotationYawHead;	//Neutralize the effect of the LookHelper
-		rotationYaw = prevRotationYaw;
-		rotationPitch = prevRotationPitch;
+		yHeadRot = yHeadRotO;	//Neutralize the effect of the LookHelper
+		yRot = yRotO;
+		xRot = xRotO;
 		
 		if(isFlying)
-			this.setPosition(this.getPosX(), prevPosY, this.getPosZ());
+			this.setPos(this.getX(), yo, this.getZ());
 		
-		if(!world.isRemote)
+		if(!level.isClientSide)
 		{
 			if(foodStats != null)
 				foodStats.tick(player);
@@ -194,20 +197,20 @@ public class DecoyEntity extends MobEntity implements IEntityAdditionalSpawnData
 	}
 	
 	public boolean locationChanged() {
-		return originX >= this.getPosX()+1 || originX <= this.getPosX()-1 ||
-				originY >= this.getPosY()+1 || originY <= this.getPosY()-1 ||
-				originZ >= this.getPosZ()+1 || originZ <= this.getPosZ()-1;
+		return originX >= this.getX()+1 || originX <= this.getX()-1 ||
+				originY >= this.getY()+1 || originY <= this.getY()-1 ||
+				originZ >= this.getZ()+1 || originZ <= this.getZ()-1;
 	}
 	
 	@Override
-	public boolean attackEntityFrom(DamageSource damageSource, float par2) {
-		if (!world.isRemote && (!gameType.equals(GameType.CREATIVE) || damageSource.canHarmInCreative()))
+	public boolean hurt(DamageSource damageSource, float par2) {
+		if (!level.isClientSide && (!gameType.equals(GameType.CREATIVE) || damageSource.isBypassInvul()))
 			ServerEditHandler.reset(damageSource, par2, ServerEditHandler.getData(this));
 		return true;
 	}
 	
 	@Override
-	public boolean getAlwaysRenderNameTagForRender() {
+	public boolean shouldShowName() {
 		return username != null;
 	}
 	
@@ -218,23 +221,23 @@ public class DecoyEntity extends MobEntity implements IEntityAdditionalSpawnData
 	}
 	
 	@Override
-	public ItemStack getItemStackFromSlot(EquipmentSlotType slotIn)
+	public ItemStack getItemBySlot(EquipmentSlotType slotIn)
 	{
 		if(slotIn == EquipmentSlotType.MAINHAND)
-			return inventory.getCurrentItem();
+			return inventory.getSelected();
 		else if(slotIn == EquipmentSlotType.OFFHAND)
-			return inventory.offHandInventory.get(0);
-		else return inventory.armorInventory.get(slotIn.getIndex());
+			return inventory.offhand.get(0);
+		else return inventory.armor.get(slotIn.getIndex());
 	}
 	
 	@Override
-	public void setItemStackToSlot(EquipmentSlotType slotIn, ItemStack stack)
+	public void setItemSlot(EquipmentSlotType slotIn, ItemStack stack)
 	{
 		if(slotIn == EquipmentSlotType.MAINHAND)
-			inventory.setInventorySlotContents(inventory.currentItem, stack);
+			inventory.setItem(inventory.selected, stack);
 		else if(slotIn == EquipmentSlotType.OFFHAND)
-			inventory.offHandInventory.set(0, stack);
-		else inventory.armorInventory.set(slotIn.getIndex(), stack);
+			inventory.offhand.set(0, stack);
+		else inventory.armor.set(slotIn.getIndex(), stack);
 	}
 	
 	@Override
@@ -246,13 +249,13 @@ public class DecoyEntity extends MobEntity implements IEntityAdditionalSpawnData
 	}
 	
 	@Override
-	public Iterable<ItemStack> getArmorInventoryList()
+	public Iterable<ItemStack> getArmorSlots()
 	{
-		return inventory.armorInventory;
+		return inventory.armor;
 	}
 	
 	@Override
-	public boolean canDespawn(double distanceToClosestPlayer)
+	public boolean removeWhenFarAway(double distanceToClosestPlayer)
 	{
 		return false;
 	}

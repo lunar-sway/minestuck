@@ -7,11 +7,14 @@ import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
+import com.mraof.minestuck.world.storage.loot.MSLootTables;
+import net.minecraft.loot.ILootSerializer;
+import net.minecraft.loot.LootConditionType;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.conditions.ILootCondition;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.conditions.ILootCondition;
 
 import java.util.Collections;
 import java.util.Objects;
@@ -38,29 +41,30 @@ public class LandTypeLootCondition implements ILootCondition
 	}
 	
 	@Override
+	public LootConditionType getType()
+	{
+		return MSLootTables.landTypeConditionType();
+	}
+	
+	@Override
 	public boolean test(LootContext context)
 	{
-		ServerWorld world = context.getWorld();
+		ServerWorld world = context.getLevel();
 		
-		if(world != null && MSDimensions.isLandDimension(world.getDimension().getType()))
+		if(world != null && MSDimensions.isLandDimension(world.getServer(), world.dimension()))
 		{
-			LandTypePair aspects = MSDimensions.getAspects(world.getServer(), world.getDimension().getType());
+			LandTypePair aspects = MSDimensions.getAspects(world.getServer(), world.dimension());
 			
-			if(aspects != null && (terrainTypes.contains(aspects.terrain) || titleTypes.contains(aspects.title)
-					|| terrainGroups.contains(aspects.terrain.getGroup()) || titleGroups.contains(aspects.title.getGroup())))
+			if(aspects != null && (terrainTypes.contains(aspects.getTerrain()) || titleTypes.contains(aspects.getTitle())
+					|| terrainGroups.contains(aspects.getTerrain().getGroup()) || titleGroups.contains(aspects.getTitle().getGroup())))
 					return !inverted;
 		}
 		
 		return inverted;
 	}
 	
-	public static class Serializer extends ILootCondition.AbstractSerializer<LandTypeLootCondition>
+	public static class Serializer implements ILootSerializer<LandTypeLootCondition>
 	{
-		public Serializer()
-		{
-			super(new ResourceLocation("minestuck", "land_aspect"), LandTypeLootCondition.class);
-		}
-		
 		@Override
 		public void serialize(JsonObject json, LandTypeLootCondition value, JsonSerializationContext context)
 		{
@@ -78,7 +82,7 @@ public class LandTypeLootCondition implements ILootCondition
 			Set<ResourceLocation> titleGroups = deserializeSet(json, "title_group", ResourceLocation::new);
 			Set<TerrainLandType> terrainTypes = deserializeSet(json, "terrain_type", s -> LandTypes.TERRAIN_REGISTRY.getValue(new ResourceLocation(s)));
 			Set<TitleLandType> titleTypes = deserializeSet(json, "title_type", s -> LandTypes.TITLE_REGISTRY.getValue(new ResourceLocation(s)));
-			boolean inverted = JSONUtils.getBoolean(json, "inverse", false);
+			boolean inverted = JSONUtils.getAsBoolean(json, "inverse", false);
 			return new LandTypeLootCondition(terrainGroups, titleGroups, terrainTypes, titleTypes, inverted);
 		}
 	}
@@ -110,13 +114,13 @@ public class LandTypeLootCondition implements ILootCondition
 				ImmutableSet.Builder<T> builder = ImmutableSet.builder();
 				for(int i = 0; i < list.size(); i++)
 				{
-					String str = JSONUtils.getString(list.get(i), name);
+					String str = JSONUtils.convertToString(list.get(i), name);
 					builder.add(Objects.requireNonNull(fromString.apply(str), "Unable to parse "+str+" for type "+name));
 				}
 				return builder.build();
 			} else
 			{
-				String str = JSONUtils.getString(json, name);
+				String str = JSONUtils.getAsString(json, name);
 				return ImmutableSet.of(Objects.requireNonNull(fromString.apply(str), "Unable to parse "+str+" for type "+name));
 			}
 		} else return Collections.emptySet();

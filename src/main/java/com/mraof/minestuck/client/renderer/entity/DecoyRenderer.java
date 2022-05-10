@@ -35,16 +35,16 @@ public class DecoyRenderer extends MobRenderer<DecoyEntity, PlayerModel<DecoyEnt
 	public void render(DecoyEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn)
 	{
 		NetworkPlayerInfo info = getPlayerInfo(entityIn.getPlayerID());
-		entityModel = getModelForType(info != null ? info.getSkinType() : DefaultPlayerSkin.getSkinType(entityIn.getPlayerID()));
+		model = getModelForType(info != null ? info.getModelName() : DefaultPlayerSkin.getSkinModelName(entityIn.getPlayerID()));
 		
 		super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
 	}
 	
 	@Override
-	public ResourceLocation getEntityTexture(DecoyEntity entity)
+	public ResourceLocation getTextureLocation(DecoyEntity entity)
 	{
 		NetworkPlayerInfo info = getPlayerInfo(entity.getPlayerID());
-		return info != null ? info.getLocationSkin() : DefaultPlayerSkin.getDefaultSkin(entity.getPlayerID());
+		return info != null ? info.getSkinLocation() : DefaultPlayerSkin.getDefaultSkin(entity.getPlayerID());
 	}
 	
 	private PlayerModel<DecoyEntity> getModelForType(String type)

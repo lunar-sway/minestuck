@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:bread"
+    },
+    {
+      "tag": "minestuck:bugs"
+    },
+    {
+      "tag": "minestuck:bugs"
+    },
+    {
+      "item": "minestuck:french_fry"
+    },
+    {
+      "item": "minestuck:french_fry"
+    },
+    {
+      "item": "minestuck:french_fry"
+    },
+    {
+      "item": "minestuck:french_fry"
+    },
+    {
+      "item": "minestuck:grub_sauce"
+    }
+  ],
+  "result": {
+    "item": "minestuck:bug_mac",
+    "count": 2
+  }
+}

@@ -38,21 +38,21 @@ public class CruxtruderBlock extends MultiMachineBlock
 	@SuppressWarnings("deprecation")
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
 	{
-		return shape.get(state.get(FACING));
+		return shape.get(state.getValue(FACING));
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
 	{
-		if(hasTileEntity && (state.get(FACING) == hit.getFace() || hit.getFace() == Direction.UP))
+		if(hasTileEntity && (state.getValue(FACING) == hit.getDirection() || hit.getDirection() == Direction.UP))
 		{
-			if(worldIn.isRemote)
+			if(worldIn.isClientSide)
 				return ActionResultType.SUCCESS;
 			
-			TileEntity te = worldIn.getTileEntity(pos);
+			TileEntity te = worldIn.getBlockEntity(pos);
 			if(te instanceof CruxtruderTileEntity)
-				((CruxtruderTileEntity) te).onRightClick(player, hit.getFace() == Direction.UP);
+				((CruxtruderTileEntity) te).onRightClick(player, hit.getDirection() == Direction.UP);
 			return ActionResultType.SUCCESS;
 		}
 		return ActionResultType.PASS;
@@ -75,22 +75,22 @@ public class CruxtruderBlock extends MultiMachineBlock
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving)
+	public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving)
 	{
 		BlockPos MainPos = getMainPos(state, pos);
-		TileEntity te = worldIn.getTileEntity(MainPos);
+		TileEntity te = worldIn.getBlockEntity(MainPos);
 		if(te instanceof CruxtruderTileEntity)
 		{
 			((CruxtruderTileEntity) te).destroy();
 		}
 		
-		super.onReplaced(state, worldIn, pos, newState, isMoving);
+		super.onRemove(state, worldIn, pos, newState, isMoving);
 	}
 	
 	public BlockPos getMainPos(BlockState state, BlockPos pos)
 	{
-		Rotation rotation = MSRotationUtil.fromDirection(state.get(FACING));
+		Rotation rotation = MSRotationUtil.fromDirection(state.getValue(FACING));
 		
-		return pos.add(mainPos.rotate(rotation));
+		return pos.offset(mainPos.rotate(rotation));
 	}
 }

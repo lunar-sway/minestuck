@@ -20,27 +20,27 @@ public class LongForgottenWarhornItem extends Item
 			new EffectInstance(Effects.WITHER, 300, 1),
 			new EffectInstance(Effects.POISON, 300, 2),
 			new EffectInstance(Effects.HUNGER, 400, 1),
-			new EffectInstance(Effects.SLOWNESS, 400, 2),
+			new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 400, 2),
 			new EffectInstance(Effects.UNLUCK, 600, 3),
 			new EffectInstance(Effects.LUCK, 600, 3),
 			new EffectInstance(Effects.NIGHT_VISION, 400, 0),
-			new EffectInstance(Effects.STRENGTH, 200, 1),
-			new EffectInstance(Effects.RESISTANCE, 300, 1),
+			new EffectInstance(Effects.DAMAGE_BOOST, 200, 1),
+			new EffectInstance(Effects.DAMAGE_RESISTANCE, 300, 1),
 			new EffectInstance(Effects.REGENERATION, 300, 2),
-			new EffectInstance(Effects.JUMP_BOOST, 400, 2),
-			new EffectInstance(Effects.SPEED, 400, 2),
-			new EffectInstance(Effects.HASTE, 400, 2),
+			new EffectInstance(Effects.JUMP, 400, 2),
+			new EffectInstance(Effects.MOVEMENT_SPEED, 400, 2),
+			new EffectInstance(Effects.DIG_SPEED, 400, 2),
 			new EffectInstance(Effects.ABSORPTION, 500, 1),
 			new EffectInstance(Effects.FIRE_RESISTANCE, 600, 0),
 			new EffectInstance(Effects.GLOWING, 500, 0),
-			new EffectInstance(Effects.INSTANT_HEALTH, 20, 0),
-			new EffectInstance(Effects.INSTANT_DAMAGE, 20, 0),
+			new EffectInstance(Effects.HEAL, 20, 0),
+			new EffectInstance(Effects.HARM, 20, 0),
 			new EffectInstance(Effects.INVISIBILITY, 500, 3),
 			new EffectInstance(Effects.WATER_BREATHING, 400, 0),
-			new EffectInstance(Effects.NAUSEA, 300, 0),
+			new EffectInstance(Effects.CONFUSION, 300, 0),
 			new EffectInstance(Effects.WEAKNESS, 200, 1),
 			new EffectInstance(Effects.LEVITATION, 200, 2),
-			new EffectInstance(Effects.MINING_FATIGUE, 300, 2),
+			new EffectInstance(Effects.DIG_SLOWDOWN, 300, 2),
 			new EffectInstance(Effects.SATURATION, 400, 1)};
 	
 	public LongForgottenWarhornItem(Properties properties)
@@ -49,24 +49,24 @@ public class LongForgottenWarhornItem extends Item
 	}
 	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn)
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn)
 	{
-		worldIn.playSound(playerIn, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), MSSoundEvents.ITEM_LONG_FORGOTTEN_WARHORN_USE, SoundCategory.AMBIENT, 1.5F, 1.0F);
+		worldIn.playSound(playerIn, playerIn.getX(), playerIn.getY(), playerIn.getZ(), MSSoundEvents.ITEM_LONG_FORGOTTEN_WARHORN_USE, SoundCategory.AMBIENT, 1.5F, 1.0F);
 		
-		ItemStack item = playerIn.getHeldItem(handIn);
-		if(!worldIn.isRemote)
+		ItemStack item = playerIn.getItemInHand(handIn);
+		if(!worldIn.isClientSide)
 		{
 			Random rand = new Random();
 			int durability = rand.nextInt(14) + 1;
 			int raneffect = rand.nextInt(effect.length);
-			playerIn.addPotionEffect(new EffectInstance(effect[raneffect]));
+			playerIn.addEffect(new EffectInstance(effect[raneffect]));
 			if(raneffect != 0)
 			{
-				playerIn.addPotionEffect(new EffectInstance(Effects.BLINDNESS, 15, 1));
+				playerIn.addEffect(new EffectInstance(Effects.BLINDNESS, 15, 1));
 			}
-			item.damageItem(durability, playerIn, playerEntity -> playerEntity.sendBreakAnimation(Hand.MAIN_HAND));
+			item.hurtAndBreak(durability, playerIn, playerEntity -> playerEntity.broadcastBreakEvent(Hand.MAIN_HAND));
 		}
 		
-		return ActionResult.resultSuccess(item);
+		return ActionResult.success(item);
 	}
 }

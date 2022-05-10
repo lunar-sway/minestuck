@@ -9,10 +9,10 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DirectoryCache;
 import net.minecraft.data.IDataProvider;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.loot.IRandomRange;
+import net.minecraft.loot.RandomValueRange;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.IRandomRange;
-import net.minecraft.world.storage.loot.RandomValueRange;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -98,6 +98,7 @@ public class BoondollarPricingProvider implements IDataProvider
 		add(CARVING_TOOL, 60, 90);
 		add(MINI_FROG_STATUE, 200, 250);
 		add(MINI_WIZARD_STATUE, 200, 250);
+		add(MINI_TYPHEUS_STATUE, 10000, 12000);
 		add(MSItems.STONE_SLAB, 20, 30);
 		add(THRESH_DVD, 350, 400);
 		add(CREW_POSTER, 350, 400);
@@ -238,7 +239,7 @@ public class BoondollarPricingProvider implements IDataProvider
 	protected void add(IItemProvider item, int min, int max)
 	{
 		//Just set the name manually if this throws an exception
-		add(Ingredient.fromItems(item), new RandomValueRange(min, max), Objects.requireNonNull(item.asItem().getRegistryName()).getPath());
+		add(Ingredient.of(item), new RandomValueRange(min, max), Objects.requireNonNull(item.asItem().getRegistryName()).getPath());
 	}
 	
 	protected void add(Ingredient ingredient, IRandomRange range, String name)
@@ -252,7 +253,7 @@ public class BoondollarPricingProvider implements IDataProvider
 	}
 	
 	@Override
-	public void act(DirectoryCache cache)
+	public void run(DirectoryCache cache)
 	{
 		registerPricings();
 		

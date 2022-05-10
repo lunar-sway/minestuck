@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minestuck:shade_brick_slab"
+    ]
+  },
+  "criteria": {
+    "has_shade_bricks": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minestuck:shade_bricks"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minestuck:shade_brick_slab"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_shade_bricks",
+      "has_the_recipe"
+    ]
+  ]
+}

@@ -18,7 +18,8 @@
   },
   "criteria": {
     "use_artifact": {
-      "trigger": "minestuck:cruxite_artifact"
+      "trigger": "minestuck:cruxite_artifact",
+      "conditions": {}
     }
   },
   "requirements": [
