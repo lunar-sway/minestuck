@@ -159,9 +159,5 @@ public abstract class AnimatedCreatureEntity extends CreatureEntity implements I
                 entity.startAttack();
             }
         }
-
-
-
-
     }
 }

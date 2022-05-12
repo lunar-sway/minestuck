@@ -7,7 +7,7 @@ import com.mraof.minestuck.client.model.*;
 import com.mraof.minestuck.client.model.armor.CrumplyHatModel;
 import com.mraof.minestuck.client.model.armor.DreamerPajamasModel;
 import com.mraof.minestuck.client.renderer.entity.*;
-import com.mraof.minestuck.client.renderer.entity.carapacian.PawnRenderer;
+import com.mraof.minestuck.client.renderer.entity.PawnRenderer;
 import com.mraof.minestuck.client.renderer.entity.frog.FrogRenderer;
 import com.mraof.minestuck.client.renderer.tileentity.GateRenderer;
 import com.mraof.minestuck.client.renderer.tileentity.HolopadRenderer;

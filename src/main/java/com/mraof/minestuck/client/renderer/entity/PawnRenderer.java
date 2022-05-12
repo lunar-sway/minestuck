@@ -1,4 +1,4 @@
-package com.mraof.minestuck.client.renderer.entity.carapacian;
+package com.mraof.minestuck.client.renderer.entity;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;

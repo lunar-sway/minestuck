@@ -18,6 +18,9 @@ import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 
 import javax.annotation.Nullable;
 
+import static com.mraof.minestuck.item.crafting.alchemy.GristTypes.DIAMOND;
+import static com.mraof.minestuck.item.crafting.alchemy.GristTypes.MARBLE;
+
 public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRenderer<T> {
     public UnderlingRenderer(EntityRendererManager renderManager) {
         super(renderManager, new UnderlingModel<>());
@@ -34,6 +37,17 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
         return Color.ofOpaque(animatable.getGristType().getColor());
     }
 
+    @Override
+    public ResourceLocation getTextureLocation(T instance) {
+        if (instance.getGristType() == MARBLE.get()) {
+            return new ResourceLocation(Minestuck.MOD_ID, "textures/entity/underlings/marble.png");
+        }
+        if (instance.getGristType() == DIAMOND.get()) {
+            return new ResourceLocation(Minestuck.MOD_ID, "textures/entity/underlings/diamond.png");
+        }
+        return super.getTextureLocation(instance);
+    }
+
     public class UnderlingDetailsLayer extends GeoLayerRenderer<T> {
         public UnderlingDetailsLayer(IGeoRenderer<T> entityRendererIn) {
             super(entityRendererIn);
@@ -45,7 +59,7 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
             matrixStackIn.pushPose();
 
             GeoModel model = modelProvider.getModel(modelProvider.getModelLocation(entityLivingBaseIn));
-            this.getRenderer().render(model, entityLivingBaseIn, partialTicks, renderType, matrixStackIn, bufferIn, bufferIn.getBuffer(renderType), packedLightIn, OverlayTexture.NO_OVERLAY, 1f, 1f, 1f, 1f);
+            this.getRenderer().render(model, entityLivingBaseIn, partialTicks, renderType, matrixStackIn, bufferIn, bufferIn.getBuffer(renderType), packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
 
             matrixStackIn.popPose();
         }
