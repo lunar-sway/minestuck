@@ -13,100 +13,155 @@ import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public abstract class AnimatedCreatureEntity extends CreatureEntity implements IAnimatable
-{
-	private final AnimationFactory factory = new AnimationFactory(this);
-	protected static final DataParameter<Boolean> IS_ATTACKING = EntityDataManager.defineId(AnimatedCreatureEntity.class, DataSerializers.BOOLEAN);
+public abstract class AnimatedCreatureEntity extends CreatureEntity implements IAnimatable {
+    private final AnimationFactory factory = new AnimationFactory(this);
+    protected static final DataParameter<Integer> CURRENT_ACTION = EntityDataManager.defineId(AnimatedCreatureEntity.class, DataSerializers.INT);
 
-	private int heavyAttackTicks = 0;
-	private int recoveryTicks = 0;
-	private int attackDelay;
-	private int attackRecovery;
+    private int heavyAttackTicks = 0;
+    private int recoveryTicks = 0;
+    private int attackDelay;
+    private int attackRecovery;
+    private int actionResetTicks;
 
-	protected AnimatedCreatureEntity(EntityType<? extends CreatureEntity> type, World world) {
-		super(type, world);
-	}
+    protected AnimatedCreatureEntity(EntityType<? extends CreatureEntity> type, World world) {
+        super(type, world);
+    }
 
-	@Override
-	protected void registerGoals()
-	{
-		super.registerGoals();
-		goalSelector.addGoal(3, new DelayedAttackGoal(this, 1F, false));
-	}
+    @Override
+    protected void registerGoals() {
+        super.registerGoals();
+        goalSelector.addGoal(3, new DelayedAttackGoal(this, 1F, false));
+    }
 
-	@Override
-	public void tick() {
-		super.tick();
-		if (heavyAttackTicks > 0) {
-			heavyAttackTicks--;
-			if (heavyAttackTicks == 0) {
-				recoveryTicks = attackRecovery;
-				if (getTarget() != null && isInRange(getTarget())) {
-					doHurtTarget(getTarget());
-				}
-			}
-		}
-		if (recoveryTicks > 0) {
-			recoveryTicks--;
-			if (recoveryTicks == 0) {
-				entityData.set(IS_ATTACKING, false);
-			}
-		}
-	}
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        entityData.define(CURRENT_ACTION, Actions.NONE.ordinal());
+    }
 
-	private boolean isInRange(LivingEntity target) {
-		double reach = this.getBbWidth() * 2.0F * this.getBbWidth() * 2.0F + target.getBbWidth();
-		return this.distanceToSqr(target) <= reach;
-	}
+    @Override
+    public void tick() {
+        super.tick();
+        if (heavyAttackTicks > 0) {
+            heavyAttackTicks--;
+            if (heavyAttackTicks == 0) {
+                recoveryTicks = attackRecovery;
+                if (getTarget() != null && isInRange(getTarget())) {
+                    doHurtTarget(getTarget());
+                }
+            }
+        }
+        if (recoveryTicks > 0) {
+            recoveryTicks--;
+            if (recoveryTicks == 0) {
+                setAttacking(false);
+            }
+        }
+        if (getCurrentAction() != Actions.NONE && actionResetTicks > 0) {
+            actionResetTicks--;
+            if (actionResetTicks <= 0) {
+                setCurrentAction(Actions.NONE, 0);
+            }
+        }
+    }
 
-	private void startAttack() {
-		if (heavyAttackTicks <= 0 && recoveryTicks <= 0) {
-			heavyAttackTicks = attackDelay;
-			entityData.set(IS_ATTACKING, true);
-		}
-	}
+    private boolean isInRange(LivingEntity target) {
+        double reach = this.getBbWidth() * 2.0F * this.getBbWidth() * 2.0F + target.getBbWidth();
+        return this.distanceToSqr(target) <= reach;
+    }
 
-	protected AnimationController<AnimatedCreatureEntity> createAnimation(String name, double speed, AnimationController.IAnimationPredicate<AnimatedCreatureEntity> predicate) {
-		AnimationController<AnimatedCreatureEntity> controller = new AnimationController<>(this, name, 0, predicate);
-		controller.setAnimationSpeed(speed);
-		return controller;
-	}
+    private void startAttack() {
+        if (heavyAttackTicks <= 0 && recoveryTicks <= 0) {
+            heavyAttackTicks = attackDelay;
+            setAttacking(true);
+        }
+    }
 
-	public AnimationFactory getFactory() {
-		return this.factory;
-	}
+    protected AnimationController<AnimatedCreatureEntity> createAnimation(String name, double speed, AnimationController.IAnimationPredicate<AnimatedCreatureEntity> predicate) {
+        AnimationController<AnimatedCreatureEntity> controller = new AnimationController<>(this, name, 0, predicate);
+        controller.setAnimationSpeed(speed);
+        return controller;
+    }
 
-	public void setAttackRecovery(int attackRecovery) {
-		this.attackRecovery = attackRecovery;
-	}
+    public AnimationFactory getFactory() {
+        return this.factory;
+    }
 
-	public void setAttackDelay(int attackDelay) {
-		this.attackDelay = attackDelay;
-	}
+    public void setAttackRecovery(int attackRecovery) {
+        this.attackRecovery = attackRecovery;
+    }
 
-	public boolean isAttacking() {
-		return this.entityData.get(IS_ATTACKING);
-	}
+    public void setAttackDelay(int attackDelay) {
+        this.attackDelay = attackDelay;
+    }
 
-	private static class DelayedAttackGoal extends MeleeAttackGoal
-	{
-		private final AnimatedCreatureEntity entity;
+    public void setAttacking(boolean attacking) {
+        if (attacking) {
+            this.entityData.set(CURRENT_ACTION, Actions.ATTACK.ordinal());
+        } else {
+            this.entityData.set(CURRENT_ACTION, Actions.NONE.ordinal());
+        }
+    }
 
-		public DelayedAttackGoal(AnimatedCreatureEntity entity, float speed, boolean useMemory)
-		{
-			super(entity, speed, useMemory);
-			this.entity = entity;
-		}
+    public boolean isAttacking() {
+        return Actions.ATTACK.isEqual(this.entityData.get(CURRENT_ACTION));
+    }
 
-		@Override
-		protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
-			double reach = this.getAttackReachSqr(enemy);
-			if (distToEnemySqr <= reach && this.ticksUntilNextAttack <= 0) {
-				this.resetAttackCooldown();
-				this.mob.swing(Hand.MAIN_HAND);
-				this.mob.getNavigation().stop();
-				entity.startAttack();
-			}
-		}
-	}
+    public Actions getCurrentAction() {
+        return Actions.values()[this.entityData.get(CURRENT_ACTION)];
+    }
+
+    /**
+     * Used to set the entity's action
+     * @param action The action to be performed
+     * @param tickLength -1 to for infinite action or any positive value to set the tick length
+     */
+    public void setCurrentAction(Actions action, int tickLength) {
+        this.entityData.set(CURRENT_ACTION, action.ordinal());
+        this.actionResetTicks = tickLength;
+    }
+
+    /**
+     * Used to set the entity's action - will repeat indefinitely
+     * @param action The action to be performed
+     */
+    public void setCurrentAction(Actions action) {
+        setCurrentAction(action, -1);
+    }
+
+    public enum Actions {
+        NONE,
+        ATTACK,
+        TALK,
+        PANIC,
+        PANIC_RUN;
+
+        public boolean isEqual(int ordinal) {
+            return this.ordinal() == ordinal;
+        }
+    }
+
+    private static class DelayedAttackGoal extends MeleeAttackGoal {
+        private final AnimatedCreatureEntity entity;
+
+        public DelayedAttackGoal(AnimatedCreatureEntity entity, float speed, boolean useMemory) {
+            super(entity, speed, useMemory);
+            this.entity = entity;
+        }
+
+        @Override
+        protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
+            double reach = this.getAttackReachSqr(enemy);
+            if (distToEnemySqr <= reach && this.ticksUntilNextAttack <= 0) {
+                this.resetAttackCooldown();
+                this.mob.swing(Hand.MAIN_HAND);
+                this.mob.getNavigation().stop();
+                entity.startAttack();
+            }
+        }
+
+
+
+
+    }
 }

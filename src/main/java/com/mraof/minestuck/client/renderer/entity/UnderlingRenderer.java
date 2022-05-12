@@ -12,14 +12,13 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.util.Color;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 
 import javax.annotation.Nullable;
 
-public class UnderlingRenderer<T extends UnderlingEntity, M extends AnimatedGeoModel<T>> extends GeoEntityRenderer<T> {
+public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRenderer<T> {
     public UnderlingRenderer(EntityRendererManager renderManager) {
         super(renderManager, new UnderlingModel<>());
         this.addLayer(new UnderlingDetailsLayer(this));

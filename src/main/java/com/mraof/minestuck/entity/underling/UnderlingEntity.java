@@ -99,7 +99,6 @@ public abstract class UnderlingEntity extends AnimatedCreatureEntity implements 
     protected void defineSynchedData() {
         super.defineSynchedData();
         entityData.define(GRIST_TYPE, String.valueOf(GristTypes.ARTIFACT.get().getRegistryName()));
-        entityData.define(IS_ATTACKING, false);
     }
 
     protected void applyGristType(GristType type) {

@@ -2,15 +2,11 @@ package com.mraof.minestuck.entity.consort;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
-import com.mraof.minestuck.entity.ai.AnimatedPanicGoal;
+import com.mraof.minestuck.entity.AnimatedCreatureEntity;
 import com.mraof.minestuck.inventory.ConsortMerchantContainer;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
-import com.mraof.minestuck.network.ConsortPacket;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.MSNBTUtil;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.*;
@@ -32,26 +28,21 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.*;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.FakePlayer;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import net.minecraftforge.common.util.FakePlayer;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-public class ConsortEntity extends CreatureEntity implements IContainerProvider, IAnimatable
+public class ConsortEntity extends AnimatedCreatureEntity implements IContainerProvider
 {
-	private boolean shouldLoop;
 	private final EnumConsort consortType;
-	
 	private boolean hasHadMessage = false;
 	ConsortDialogue.DialogueWrapper message;
 	int messageTicksLeft;
@@ -63,7 +54,6 @@ public class ConsortEntity extends CreatureEntity implements IContainerProvider,
 	MessageType.DelayMessage updatingMessage; //TODO Change to an interface/array if more message components need tick updates
 	public ConsortMerchantInventory stocks;
 	private int eventTimer = -1;    //TODO use the interface mentioned in the todo above to implement consort explosion instead
-	private int animationTimer = 0;
 	
 	public ConsortEntity(EnumConsort consortType, EntityType<? extends ConsortEntity> type, World world)
 	{
@@ -75,16 +65,16 @@ public class ConsortEntity extends CreatureEntity implements IContainerProvider,
 	
 	public static AttributeModifierMap.MutableAttribute consortAttributes()
 	{
-		return MobEntity.createMobAttributes().add(Attributes.MAX_HEALTH, 10).add(Attributes.MOVEMENT_SPEED, 0.25);
+		return MobEntity.createMobAttributes().add(Attributes.MAX_HEALTH, 10).add(Attributes.MOVEMENT_SPEED, 0.35);
 	}
 	
 	@Override
 	protected void registerGoals()
 	{
 		goalSelector.addGoal(0, new SwimGoal(this));
-		goalSelector.addGoal(1, new AnimatedPanicGoal(this, 1.4D));
+		//goalSelector.addGoal(1, new AnimatedPanicGoal(this, 1.4D));
 		//goalSelector.addGoal(1, new PanicGoal(this, 1.0D));
-		goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 0.6F));
+		goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 1F));
 		goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 8.0F));
 		goalSelector.addGoal(7, new LookRandomlyGoal(this));
 		goalSelector.addGoal(4, new AvoidEntityGoal<>(this, PlayerEntity.class, 16F, 1.0D, 1.4D, this::shouldFleeFrom));
@@ -129,7 +119,7 @@ public class ConsortEntity extends CreatureEntity implements IContainerProvider,
 					if(text != null)
 						player.sendMessage(text, Util.NIL_UUID);
 					handleConsortRepFromTalking(serverPlayer);
-					updateAndSendAnimation(Animation.TALK, true, true);
+					setCurrentAction(Actions.TALK, 80);
 					MSCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, message.getString(), this);
 				} catch(Exception e)
 				{
@@ -203,9 +193,6 @@ public class ConsortEntity extends CreatureEntity implements IContainerProvider,
 			eventTimer--;
 		else if(eventTimer == 0)
 			explode();
-		
-		if(animationTimer > 0 && !level.isClientSide)
-			animationTimer--;
 	}
 	
 	private void explode()
@@ -259,8 +246,6 @@ public class ConsortEntity extends CreatureEntity implements IContainerProvider,
 		}
 		
 		compound.putBoolean("Skaia", visitedSkaia);
-		
-		compound.putInt("animationTimer", animationTimer);
 	}
 	
 	@Override
@@ -305,11 +290,6 @@ public class ConsortEntity extends CreatureEntity implements IContainerProvider,
 		}
 		
 		visitedSkaia = compound.getBoolean("Skaia");
-		
-		if(compound.contains("animationTimer", Constants.NBT.TAG_ANY_NUMERIC))
-		{
-			animationTimer = compound.getInt("animationTimer");
-		}
 		
 		applyAdditionalAITasks();
 	}
@@ -427,184 +407,55 @@ public class ConsortEntity extends CreatureEntity implements IContainerProvider,
 	{
 		return true;
 	}
-	
-	private ConsortEntity.Animation animation;
-	
-	private final AnimationFactory factory = new AnimationFactory(this);
-	
-	private <E extends IAnimatable> PlayState additionalAnimationPredicate(AnimationEvent<E> event)
-	{
-		if(animationTimer > 0)
-		{
-			if(animation == null && !(event.getLimbSwingAmount() > -0.05F && event.getLimbSwingAmount() < 0.05F))
-			{
-				animation = Animation.WALK_ARMS; //TODO should get handled in AnimatedMoveTowardsRestrictionGoal, or that class should be removed with this as replacement
-			}
-			
-			if(animation != null)
-			{
-				event.getController().setAnimation(new AnimationBuilder().addAnimation(this.consortType.getName() + animation.animationName, true)); //TODO return control of boolean value to "shouldLoop" if a way to make the animation go null after stop is found
-			}
-			
-			if(level.isClientSide)
-				animationTimer--;
-		}
-		
-		if(event.getController().getCurrentAnimation() != null)
-			Debug.debugf("animation current animation = %s, animationTimer = %s", event.getController().getCurrentAnimation().animationName, animationTimer);
-		else
-			Debug.debugf("animation current animation = null, animationTimer = %s", animationTimer);
-		
-		if(animation != null)
-			Debug.debugf("animation = %s", animation);
-		else
-			Debug.debugf("animation is null");
-		
-		if(animationTimer == 0)
-		{
-			if(!(event.getLimbSwingAmount() > -0.05F && event.getLimbSwingAmount() < 0.05F) && !level.isClientSide)
-			{
-				updateAndSendAnimation(Animation.WALK_ARMS, true, false);
-				Debug.debugf("client world animationTimer = 0");
-			} else if(!level.isClientSide)
-			{
-				updateAndSendAnimation(Animation.POSE, true, false);
-				Debug.debugf("client world animationTimer = 0");
-			}
-			
+
+	@Override
+	public void registerControllers(AnimationData data) {
+		data.addAnimationController(createAnimation("walkAnimation", 1, this::walkAnimation));
+		data.addAnimationController(createAnimation("armsAnimation", 1, this::armsAnimation));
+		data.addAnimationController(createAnimation("deathAnimation", 1, this::deathAnimation));
+		data.addAnimationController(createAnimation("actionAnimation", 1, this::actionAnimation));
+	}
+
+	private <E extends IAnimatable> PlayState walkAnimation(AnimationEvent<E> event) {
+		if (!event.isMoving()) {
 			return PlayState.STOP;
-		} else
+		}
+
+		event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", true));
+		return PlayState.CONTINUE;
+	}
+
+	private <E extends IAnimatable> PlayState armsAnimation(AnimationEvent<E> event) {
+		if (!event.isMoving()) {
+			if (this.getConsortType() == EnumConsort.TURTLE) { // eeeeeeeeeeehhh maybe just fix the turtle anims instead
+				event.getController().setAnimation(new AnimationBuilder().addAnimation("armfix", true));
+				return PlayState.CONTINUE;
+			}
+			return PlayState.STOP;
+		}
+
+		event.getController().setAnimation(new AnimationBuilder().addAnimation("walkarms", true));
+		return PlayState.CONTINUE;
+	}
+
+	private <E extends IAnimatable> PlayState deathAnimation(AnimationEvent<E> event) {
+		if (dead) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("die", false));
 			return PlayState.CONTINUE;
-	}
-	
-	private <E extends IAnimatable> PlayState walkPredicate(AnimationEvent<E> event)
-	{
-		if(!(event.getLimbSwingAmount() > -0.05F && event.getLimbSwingAmount() < 0.05F))
-		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(this.consortType.getName() + Animation.WALK.animationName, true));
-		} else
-		{
-			return PlayState.STOP;
 		}
-		
-		//Debug.debugf("is moving = %s, limb swing amount = %s", event.isMoving(), event.getLimbSwingAmount());
-		//Debug.debugf("current animation = %s, animation state = %s", event.getController().getCurrentAnimation(), event.getController().getAnimationState());
-		//Debug.debugf("current animation = %s, animation name = %s, event just starting = %s, animation modulo = %s", Math.round(event.animationTick), animation.animationName, event.getController().isJustStarting, Math.round(event.animationTick) % 40 == 0);
-		
-		return PlayState.CONTINUE;
+		return PlayState.STOP;
 	}
-	
-	private <E extends IAnimatable> PlayState posePredicate(AnimationEvent<E> event)
-	{
-		event.getController().setAnimation(new AnimationBuilder().addAnimation(this.consortType.getName() + Animation.POSE.animationName, true));
-		//if(event.getController().getCurrentAnimation() != null)
-		//	Debug.debugf("pose current animation = %s", event.getController().getCurrentAnimation().animationName);
-		//else
-		//	Debug.debugf("pose current animation = null");
-		
-		return PlayState.CONTINUE;
-	}
-	
-	@Override
-	public void registerControllers(AnimationData data)
-	{
-		data.addAnimationController(new AnimationController<>(this, "additional_animation_controller", 0, this::additionalAnimationPredicate));
-		data.addAnimationController(new AnimationController<>(this, "walk_controller", 0, this::walkPredicate));
-		data.addAnimationController(new AnimationController<>(this, "pose_controller", 0, this::posePredicate));
-	}
-	
-	@Override
-	public AnimationFactory getFactory()
-	{
-		return this.factory;
-	}
-	
-	public enum Animation //animationName set in assets/minestuck/animations/[consort].animation.json. Animated blocks/entities also need a section in assets/minestuck/geo
-	{
-		//ordered by priority
-		POSE(".pose"),
-		WALK(".walk"),
-		WALK_ARMS(".walkarms"),
-		ARMFIX(".armfix"),
-		TALK(".talk"),
-		PANIC(".panic"),
-		PANIC_RUN(".panic.run"),
-		DIE(".die");
-		
-		private final String animationName;
-		
-		Animation(String animationName)
-		{
-			this.animationName = animationName;
+
+	private <E extends IAnimatable> PlayState actionAnimation(AnimationEvent<E> event) {
+		Actions action = getCurrentAction();
+		if (action == Actions.TALK) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("talk", true));
+			return PlayState.CONTINUE;
 		}
-		
-		public static double animationLength(Animation animation)
-		{
-			//TODO this is not well synced between sides(should only be used on one side if possible). Some animations are cut short and the refresh times shown by additionalAnimationPredicate does not reflect it
-			//VALUES RETURNED FOR WHATEVER IS THE LONGEST CONSORT ANIMATION
-			if(animation == POSE)
-				return 3.12 * 20; //1.96 for iguana and non existent for turtle
-			else if(animation == WALK)
-				return 1.12 * 20; //.96 for iguana
-			else if(animation == WALK_ARMS)
-				return 1.12 * 20; //.96 for iguana
-			else if(animation == ARMFIX)
-				return 1.12 * 20; //Has no length, just keeping it as long as walk
-			else if(animation == TALK)
-				return 3.12 * 20; //2.88
-			else if(animation == PANIC)
-				return .52 * 20; //.48 for iguana
-			else if(animation == PANIC_RUN)
-				return .32 * 20;
-			else //DIE
-				return .92 * 20;
+		if (action == Actions.PANIC) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("panic", true));
+			return PlayState.CONTINUE;
 		}
-		
-		public static boolean isNewAnimationPrioritized(Animation newAnimation, Animation currentAnimation)
-		{
-			if(newAnimation != null && currentAnimation != null)
-			{
-				Debug.debugf("newAnimation = %s with ordinal of %s, currentAnimation = %s with ordinal of %s", newAnimation.animationName, newAnimation.ordinal(), currentAnimation.animationName, currentAnimation.ordinal());
-				return newAnimation.ordinal() > currentAnimation.ordinal();
-			} else return newAnimation != null;
-		}
-	}
-	
-	public void setAnimation(@Nonnull ConsortEntity.Animation animation)
-	{
-		this.animation = animation;
-	}
-	
-	public @Nonnull
-	ConsortEntity.Animation getAnimation()
-	{
-		return animation;
-	}
-	
-	public void setAnimationFromPacket(ConsortEntity.Animation newAnimation, int newAnimationTimer)
-	{
-		if(level.isClientSide) //allows client-side effects tied to server-side events
-		{
-			animation = newAnimation;
-			animationTimer = newAnimationTimer;
-		}
-	}
-	
-	public void updateAndSendAnimation(ConsortEntity.Animation animation, boolean shouldLoop, boolean onlyIfPriority)
-	{
-		if(this.animation == null)
-		{
-			this.animation = Animation.POSE;
-		}
-		Debug.debugf("updateAndSendAnimation. animation = %s, animationTimer = %s", animation, animationTimer);
-		if((!onlyIfPriority || Animation.isNewAnimationPrioritized(animation, this.animation)) || animationTimer == 0)
-		{
-			Debug.debugf("matched conditions for updateAndSendAnimation");
-			this.animationTimer = (int) Animation.animationLength(animation);
-			this.animation = animation;
-			this.shouldLoop = shouldLoop;
-			ConsortPacket packet = ConsortPacket.createPacket(this, animation, (int) Animation.animationLength(animation)); //this packet allows information to be exchanged between server and client where one side cant access the other easily or reliably
-			MSPacketHandler.sendToTracking(packet, this);
-		}
+		return PlayState.STOP;
 	}
 }
