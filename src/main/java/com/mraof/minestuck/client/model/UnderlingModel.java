@@ -24,6 +24,6 @@ public class UnderlingModel<T extends UnderlingEntity> extends AnimatedGeoModel<
     }
 
     public static String getName(UnderlingEntity entity) {
-        return Objects.requireNonNull(entity.getType().getRegistryName(), () -> "Getting texture for entity without a registry name! " + entity).getPath();
+        return Objects.requireNonNull(entity.getType().getRegistryName(), () -> "Getting resource for entity without a registry name! " + entity).getPath();
     }
 }
