@@ -95,7 +95,6 @@ public class CaptchaDeckHandler
 				PlayerData data = PlayerSavedData.getData(player);
 				modus = type.createServerSide(PlayerSavedData.get(player.server));
 				modus.initModus(stack, player, null, data.hasGivenModus() ? 0 : MinestuckConfig.SERVER.initialModusSize.get());
-				setModus(player, modus);
 				container.inventory.setItem(0, ItemStack.EMPTY);
 			}
 			else
@@ -114,10 +113,11 @@ public class CaptchaDeckHandler
 							launchAnyItem(player, content);
 					modus.initModus(stack, player, null, oldModus.getSize());
 				}
-				
-				setModus(player, modus);
 				container.inventory.setItem(0, oldModus.getModusItem());
 			}
+			
+			setModus(player, modus);
+			MSPacketHandler.sendToPlayer(ModusDataPacket.create(CaptchaDeckHandler.writeToNBT(modus)), player);
 			
 			MSCriteriaTriggers.CHANGE_MODUS.trigger(player, modus);
 		}
@@ -142,10 +142,7 @@ public class CaptchaDeckHandler
 			if(failed == 0)
 				container.inventory.setItem(0, ItemStack.EMPTY);
 			else stack.setCount(failed);
-		}
-		
-		if(modus != null)
-		{
+			
 			modus.checkAndResend(player);
 		}
 	}
