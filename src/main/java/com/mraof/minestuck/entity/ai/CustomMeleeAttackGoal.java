@@ -9,7 +9,7 @@ import net.minecraft.entity.ai.goal.MeleeAttackGoal;
  */
 public class CustomMeleeAttackGoal extends MeleeAttackGoal
 {
-	final int attackRate;
+	private final int attackRate;
 	private final float distanceMultiplier;
 	
 	public CustomMeleeAttackGoal(CreatureEntity entity, float speed, boolean useMemory, int attackRate)
