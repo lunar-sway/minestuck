@@ -25,7 +25,8 @@ import javax.annotation.Nullable;
 import java.util.Random;
 
 /**
- *
+ * When ACTIVE is true, the tile entity will perform one of several tasks outlined in its ActionType enum to either send nbt to a CoreCompatibleScatteredStructurePiece or act on nbt it receives from said Piece type.
+ * It is made to work with various structures in which recording whether it has been completed or not will be important, such as for updating quest completion(quest system pending) or preventing area effect blocks/summoners from remaining in use after completion of a dungeon
  */
 public class StructureCoreBlock extends HorizontalBlock
 {

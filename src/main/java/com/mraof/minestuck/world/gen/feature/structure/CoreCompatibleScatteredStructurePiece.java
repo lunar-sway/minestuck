@@ -6,16 +6,16 @@ import net.minecraft.world.gen.feature.structure.ScatteredStructurePiece;
 
 import java.util.Random;
 
-public abstract class CoreCompatabileScatteredStructurePiece extends ScatteredStructurePiece
+public abstract class CoreCompatibleScatteredStructurePiece extends ScatteredStructurePiece
 {
 	private boolean hasBeenCompleted = false;
 	
-	public CoreCompatabileScatteredStructurePiece(IStructurePieceType structurePieceType, Random random, int minX, int minY, int minZ, int sizeX, int sizeY, int sizeZ)
+	public CoreCompatibleScatteredStructurePiece(IStructurePieceType structurePieceType, Random random, int minX, int minY, int minZ, int sizeX, int sizeY, int sizeZ)
 	{
 		super(structurePieceType, random, minX, minY, minZ, sizeX, sizeY, sizeZ);
 	}
 	
-	public CoreCompatabileScatteredStructurePiece(IStructurePieceType structurePieceType, CompoundNBT nbt)
+	public CoreCompatibleScatteredStructurePiece(IStructurePieceType structurePieceType, CompoundNBT nbt)
 	{
 		super(structurePieceType, nbt);
 		hasBeenCompleted = nbt.getBoolean("hasBeenCompleted");

@@ -6,7 +6,7 @@ import com.mraof.minestuck.block.redstone.SummonerBlock;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
-import com.mraof.minestuck.world.gen.feature.structure.CoreCompatabileScatteredStructurePiece;
+import com.mraof.minestuck.world.gen.feature.structure.CoreCompatibleScatteredStructurePiece;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
@@ -97,7 +97,7 @@ public class StructureCoreTileEntity extends TileEntity implements ITickableTile
 					wipeSlate();
 				} else if(actionType == ActionType.READ_AND_REDSTONE)
 				{
-					CoreCompatabileScatteredStructurePiece piece = getStructurePiece(structureStart);
+					CoreCompatibleScatteredStructurePiece piece = getStructurePiece(structureStart);
 					
 					if(piece != null && piece.hasBeenCompleted())
 					{
@@ -126,7 +126,7 @@ public class StructureCoreTileEntity extends TileEntity implements ITickableTile
 	{
 		//compoundnbt.putString("id", Registry.STRUCTURE_FEATURE.getKey(this.getFeature()).toString());
 		
-		CoreCompatabileScatteredStructurePiece piece = getStructurePiece(structureStart);
+		CoreCompatibleScatteredStructurePiece piece = getStructurePiece(structureStart);
 		if(piece != null)
 		{
 			if(!piece.hasBeenCompleted())
@@ -136,14 +136,14 @@ public class StructureCoreTileEntity extends TileEntity implements ITickableTile
 		}
 	}
 	
-	private CoreCompatabileScatteredStructurePiece getStructurePiece(StructureStart<?> structureStart)
+	private CoreCompatibleScatteredStructurePiece getStructurePiece(StructureStart<?> structureStart)
 	{
 		List<StructurePiece> structurePieceList = structureStart.getPieces();
 		for(StructurePiece pieceIterate : structurePieceList)
 		{
-			if(pieceIterate instanceof CoreCompatabileScatteredStructurePiece)
+			if(pieceIterate instanceof CoreCompatibleScatteredStructurePiece)
 			{
-				return (CoreCompatabileScatteredStructurePiece) pieceIterate;
+				return (CoreCompatibleScatteredStructurePiece) pieceIterate;
 			}
 		}
 		
