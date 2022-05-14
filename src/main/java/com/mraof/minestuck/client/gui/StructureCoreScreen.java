@@ -14,17 +14,17 @@ import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
 
 public class StructureCoreScreen extends Screen
 {
-	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/generic_medium.png");
+	private static final ResourceLocation GUI_BACKGROUND = new ResourceLocation("minestuck", "textures/gui/generic_medium.png");
 	
-	private static final int guiWidth = 150;
-	private static final int guiHeight = 98;
+	private static final int GUI_WIDTH = 150;
+	private static final int GUI_HEIGHT = 98;
 	
 	private final StructureCoreTileEntity te;
 	private StructureCoreTileEntity.ActionType actionType;
 	private int shutdownRange;
 	
-	public Button incrementButton;
-	public Button decrementButton;
+	private Button incrementButton;
+	private Button decrementButton;
 	private Button typeButton;
 	
 	
@@ -40,10 +40,10 @@ public class StructureCoreScreen extends Screen
 	@Override
 	public void init()
 	{
-		int yOffset = (this.height / 2) - (guiHeight / 2);
+		int yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
 		
-		addButton(incrementButton = new ExtendedButton(this.width / 2 + 20, (height - guiHeight) / 2 + 12, 20, 20, new StringTextComponent("+"), button -> changeRange(1)));
-		addButton(decrementButton = new ExtendedButton(this.width / 2 - 40, (height - guiHeight) / 2 + 12, 20, 20, new StringTextComponent("-"), button -> changeRange(-1)));
+		addButton(incrementButton = new ExtendedButton(this.width / 2 + 20, (height - GUI_HEIGHT) / 2 + 12, 20, 20, new StringTextComponent("+"), button -> changeRange(1)));
+		addButton(decrementButton = new ExtendedButton(this.width / 2 - 40, (height - GUI_HEIGHT) / 2 + 12, 20, 20, new StringTextComponent("-"), button -> changeRange(-1)));
 		
 		addButton(typeButton = new ExtendedButton(this.width / 2 - 67, yOffset + 40, 135, 20, new StringTextComponent(actionType.getNameNoSpaces()), button -> changeActionType()));
 		
@@ -72,11 +72,11 @@ public class StructureCoreScreen extends Screen
 	{
 		this.renderBackground(matrixStack);
 		RenderSystem.color4f(1F, 1F, 1F, 1F);
-		this.minecraft.getTextureManager().bind(guiBackground);
-		int yOffset = (this.height / 2) - (guiHeight / 2);
+		this.minecraft.getTextureManager().bind(GUI_BACKGROUND);
+		int yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
 		
-		this.blit(matrixStack, (this.width / 2) - (guiWidth / 2), yOffset, 0, 0, guiWidth, guiHeight);
-		font.draw(matrixStack, Integer.toString(shutdownRange), (width / 2) - 5, (height - guiHeight) / 2 + 16, 0x404040);
+		this.blit(matrixStack, (this.width / 2) - (GUI_WIDTH / 2), yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
+		font.draw(matrixStack, Integer.toString(shutdownRange), (width / 2) - 5, (height - GUI_HEIGHT) / 2 + 16, 0x404040);
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
 	}
 	

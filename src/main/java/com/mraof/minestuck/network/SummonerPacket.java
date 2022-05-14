@@ -64,7 +64,7 @@ public class SummonerPacket implements PlayToServerPacket
 				if(Math.sqrt(player.distanceToSqr(tileBlockPos.getX() + 0.5, tileBlockPos.getY() + 0.5, tileBlockPos.getZ() + 0.5)) <= 8)
 				{
 					if(entityType != null)
-						((SummonerTileEntity) te).setSummonedEntity(entityType, null);
+						((SummonerTileEntity) te).setSummonedEntity(entityType);
 					((SummonerTileEntity) te).setSummonRange(summonRange);
 					//Imitates the structure block to ensure that changes are sent client-side
 					te.setChanged();

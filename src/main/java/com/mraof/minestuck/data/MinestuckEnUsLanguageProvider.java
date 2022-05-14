@@ -41,7 +41,6 @@ import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
 import com.mraof.minestuck.tileentity.machine.*;
 import com.mraof.minestuck.tileentity.redstone.RedstoneClockTileEntity;
-import com.mraof.minestuck.tileentity.redstone.SummonerTileEntity;
 import com.mraof.minestuck.util.MSDamageSources;
 import com.mraof.minestuck.world.GateHandler;
 import com.mraof.minestuck.world.lands.GristLayerInfo;
@@ -1526,7 +1525,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MiniPunchDesignixTileEntity.TITLE, "Miniature Punch Designix");
 		add(UraniumCookerTileEntity.TITLE, "Cookalyzer");
 		add(GristWidgetTileEntity.TITLE, "GristWidget 12000");
-		add(SummonerTileEntity.SUMMON_TYPE_CHANGE, "Summoned entity type changed to %s.");
 		add(RedstoneClockTileEntity.TIME_CHANGE, "The clock now pulses every %s seconds");
 		add(GuiUtil.NOT_ALCHEMIZABLE, "Not Alchemizable");
 		add(GuiUtil.FREE, "Free!");
@@ -1579,6 +1577,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(GateHandler.MISSING_LAND, "The land this gate leads to does not exist yet!");
 		add(WirelessRedstoneReceiverBlock.NOW_AUTO, "Receiver will now unpower itself automatically.");
 		add(WirelessRedstoneReceiverBlock.NOW_NOT_AUTO, "Receiver will now store the highest input power indefinitely.");
+		add(SummonerBlock.SUMMON_TYPE_CHANGE, "Summoned entity type changed to %s.");
 		add(HashMapModus.MESSAGE, "[HASHMAP] %s %% %s -> %s");
 		add(ButtonListProgram.CLEAR_BUTTON, "Clear message");
 		add(SburbClient.CLOSE_BUTTON, "Disconnect");

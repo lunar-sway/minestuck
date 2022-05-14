@@ -14,10 +14,10 @@ import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
 
 public class WirelessRedstoneTransmitterScreen extends Screen
 {
-	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/generic_medium.png");
+	private static final ResourceLocation GUI_BACKGROUND = new ResourceLocation("minestuck", "textures/gui/generic_medium.png");
 	
-	private static final int guiWidth = 150;
-	private static final int guiHeight = 98;
+	private static final int GUI_WIDTH = 150;
+	private static final int GUI_HEIGHT = 98;
 	
 	WirelessRedstoneTransmitterTileEntity te;
 	private TextFieldWidget destinationTextFieldX;
@@ -35,7 +35,7 @@ public class WirelessRedstoneTransmitterScreen extends Screen
 	@Override
 	public void init()
 	{
-		int yOffset = (this.height / 2) - (guiHeight / 2);
+		int yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
 		
 		this.destinationTextFieldX = new TextFieldWidget(this.font, this.width / 2 - 60, yOffset + 10, 40, 20, new StringTextComponent("X value of destination block pos")); //TODO make these translatable
 		this.destinationTextFieldX.setValue(String.valueOf(te.getDestinationBlockPosFromOffset().getX()));
@@ -59,9 +59,9 @@ public class WirelessRedstoneTransmitterScreen extends Screen
 	{
 		this.renderBackground(matrixStack);
 		RenderSystem.color4f(1F, 1F, 1F, 1F);
-		this.minecraft.getTextureManager().bind(guiBackground);
-		int yOffset = (this.height / 2) - (guiHeight / 2);
-		this.blit(matrixStack, (this.width / 2) - (guiWidth / 2), yOffset, 0, 0, guiWidth, guiHeight);
+		this.minecraft.getTextureManager().bind(GUI_BACKGROUND);
+		int yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
+		this.blit(matrixStack, (this.width / 2) - (GUI_WIDTH / 2), yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
 	}
 	

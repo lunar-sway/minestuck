@@ -18,18 +18,18 @@ import java.util.Optional;
 
 public class RemoteObserverScreen extends Screen
 {
-	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/generic_medium.png");
+	private static final ResourceLocation GUI_BACKGROUND = new ResourceLocation("minestuck", "textures/gui/generic_medium.png");
 	
-	private static final int guiWidth = 150;
-	private static final int guiHeight = 98;
+	private static final int GUI_WIDTH = 150;
+	private static final int GUI_HEIGHT = 98;
 	
 	private final RemoteObserverTileEntity te;
 	private RemoteObserverTileEntity.ActiveType activeType;
 	private int observingRange;
 	
-	public Button typeButton;
-	public Button incrementButton;
-	public Button decrementButton;
+	private Button typeButton;
+	private Button incrementButton;
+	private Button decrementButton;
 	
 	private TextFieldWidget entityTypeTextField;
 	
@@ -46,17 +46,17 @@ public class RemoteObserverScreen extends Screen
 	@Override
 	public void init()
 	{
-		int yOffset = (this.height / 2) - (guiHeight / 2);
+		int yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
 		
-		addButton(typeButton = new ExtendedButton(this.width / 2 - 67, (height - guiHeight) / 2 + 5, 135, 20, new StringTextComponent(activeType.getNameNoSpaces()), button -> changeActiveType()));
+		addButton(typeButton = new ExtendedButton(this.width / 2 - 67, (height - GUI_HEIGHT) / 2 + 5, 135, 20, new StringTextComponent(activeType.getNameNoSpaces()), button -> changeActiveType()));
 		
 		this.entityTypeTextField = new TextFieldWidget(this.font, this.width / 2 - 53, yOffset + 29, 105, 18, new StringTextComponent("Current Entity Type"));	//TODO Use translation instead, and maybe look at other text fields for what the text should be
 		this.entityTypeTextField.setValue(EntityType.getKey(te.getCurrentEntityType()).toString()); //TODO somewhere along the line, if the active type is not current entity present and the gui is exited, returning to current entity present active type has pig as the entity type
 		addButton(entityTypeTextField);
 		entityTypeTextField.setVisible(activeType == RemoteObserverTileEntity.ActiveType.CURRENT_ENTITY_PRESENT);
 		
-		addButton(incrementButton = new ExtendedButton(this.width / 2 + 20, (height - guiHeight) / 2 + 51, 20, 20, new StringTextComponent("+"), button -> changeRange(1)));
-		addButton(decrementButton = new ExtendedButton(this.width / 2 - 40, (height - guiHeight) / 2 + 51, 20, 20, new StringTextComponent("-"), button -> changeRange(-1)));
+		addButton(incrementButton = new ExtendedButton(this.width / 2 + 20, (height - GUI_HEIGHT) / 2 + 51, 20, 20, new StringTextComponent("+"), button -> changeRange(1)));
+		addButton(decrementButton = new ExtendedButton(this.width / 2 - 40, (height - GUI_HEIGHT) / 2 + 51, 20, 20, new StringTextComponent("-"), button -> changeRange(-1)));
 		
 		addButton(new ExtendedButton(this.width / 2 - 20, yOffset + 73, 40, 20, new StringTextComponent("DONE"), button -> finish()));
 	}
@@ -98,11 +98,11 @@ public class RemoteObserverScreen extends Screen
 	{
 		this.renderBackground(matrixStack);
 		RenderSystem.color4f(1F, 1F, 1F, 1F);
-		this.minecraft.getTextureManager().bind(guiBackground);
-		int yOffset = (this.height / 2) - (guiHeight / 2);
+		this.minecraft.getTextureManager().bind(GUI_BACKGROUND);
+		int yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
 		
-		this.blit(matrixStack, (this.width / 2) - (guiWidth / 2), yOffset, 0, 0, guiWidth, guiHeight);
-		font.draw(matrixStack, Integer.toString(observingRange), (width / 2) - 5, (height - guiHeight) / 2 + 55, 0x404040);
+		this.blit(matrixStack, (this.width / 2) - (GUI_WIDTH / 2), yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
+		font.draw(matrixStack, Integer.toString(observingRange), (width / 2) - 5, (height - GUI_HEIGHT) / 2 + 55, 0x404040);
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
 	}
 	

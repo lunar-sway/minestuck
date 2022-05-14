@@ -13,6 +13,7 @@ import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
 
@@ -20,17 +21,17 @@ import java.util.Optional;
 
 public class SummonerScreen extends Screen
 {
-	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/generic_medium.png");
+	private static final ResourceLocation GUI_BACKGROUND = new ResourceLocation("minestuck", "textures/gui/generic_medium.png");
 	
-	private static final int guiWidth = 150;
-	private static final int guiHeight = 98;
+	private static final int GUI_WIDTH = 150;
+	private static final int GUI_HEIGHT = 98;
 	
 	private final SummonerTileEntity te;
 	private boolean isUntriggerable;
 	private int summonRange;
 	
-	public Button incrementButton;
-	public Button decrementButton;
+	private Button incrementButton;
+	private Button decrementButton;
 	private Button unTriggerableButton;
 	
 	private TextFieldWidget entityTypeTextField;
@@ -38,29 +39,26 @@ public class SummonerScreen extends Screen
 	
 	SummonerScreen(SummonerTileEntity te)
 	{
-		super(new StringTextComponent("Summoner"));
+		super(new StringTextComponent("Summoner")); //TODO convert to translatable text string
 		
 		this.te = te;
-		this.summonRange = te.getSummonRange() > 0 ? te.getSummonRange() : 8; //if its defaulted on creation to 0, set it to the intended default of 8
+		this.summonRange = te.getSummonRange();
 		this.isUntriggerable = te.getBlockState().getValue(SummonerBlock.UNTRIGGERABLE);
 	}
 	
 	@Override
 	public void init()
 	{
-		int yOffset = (this.height / 2) - (guiHeight / 2);
+		int yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
 		
-		addButton(incrementButton = new ExtendedButton(this.width / 2 + 20, (height - guiHeight) / 2 + 12, 20, 20, new StringTextComponent("+"), button -> changeRange(1)));
-		addButton(decrementButton = new ExtendedButton(this.width / 2 - 40, (height - guiHeight) / 2 + 12, 20, 20, new StringTextComponent("-"), button -> changeRange(-1)));
+		addButton(incrementButton = new ExtendedButton(this.width / 2 + 20, (height - GUI_HEIGHT) / 2 + 12, 20, 20, new StringTextComponent("+"), button -> changeRange(1)));
+		addButton(decrementButton = new ExtendedButton(this.width / 2 - 40, (height - GUI_HEIGHT) / 2 + 12, 20, 20, new StringTextComponent("-"), button -> changeRange(-1)));
 		
 		this.entityTypeTextField = new TextFieldWidget(this.font, this.width / 2 - 60, yOffset + 40, 120, 18, new StringTextComponent("Current Entity Type"));	//TODO Use translation instead, and maybe look at other text fields for what the text should be
 		this.entityTypeTextField.setValue(EntityType.getKey(te.getSummonedEntity()).toString());
 		addButton(entityTypeTextField);
 		
-		if(isUntriggerable)
-			addButton(unTriggerableButton = new ExtendedButton(this.width / 2 - 65, yOffset + 70, 85, 20, new StringTextComponent("UNTRIGGERABLE"), button -> cycleUntriggerable()));
-		else
-			addButton(unTriggerableButton = new ExtendedButton(this.width / 2 - 65, yOffset + 70, 85, 20, new StringTextComponent("TRIGGERABLE"), button -> cycleUntriggerable()));
+		addButton(unTriggerableButton = new ExtendedButton(this.width / 2 - 65, yOffset + 70, 85, 20, getTriggerableButtonMessage(), button -> cycleUntriggerable()));
 		addButton(new ExtendedButton(this.width / 2 + 25, yOffset + 70, 40, 20, new StringTextComponent("DONE"), button -> finish()));
 	}
 	
@@ -69,6 +67,8 @@ public class SummonerScreen extends Screen
 	 */
 	private void changeRange(int change)
 	{
+		//if(keyPressed(GLFW.GLFW_MOD_SHIFT, scanCode, i))
+		
 		summonRange = MathHelper.clamp(summonRange + change, 1, 64);
 	}
 	
@@ -78,10 +78,12 @@ public class SummonerScreen extends Screen
 	private void cycleUntriggerable()
 	{
 		isUntriggerable = !isUntriggerable;
-		if(isUntriggerable)
-			unTriggerableButton.setMessage(new StringTextComponent("UNTRIGGERABLE"));
-		else
-			unTriggerableButton.setMessage(new StringTextComponent("TRIGGERABLE"));
+		unTriggerableButton.setMessage(getTriggerableButtonMessage());
+	}
+	
+	private ITextComponent getTriggerableButtonMessage()
+	{
+		return this.isUntriggerable ? new StringTextComponent("UNTRIGGERABLE") : new StringTextComponent("TRIGGERABLE");
 	}
 	
 	/**
@@ -98,11 +100,12 @@ public class SummonerScreen extends Screen
 	{
 		this.renderBackground(matrixStack);
 		RenderSystem.color4f(1F, 1F, 1F, 1F);
-		this.minecraft.getTextureManager().bind(guiBackground);
-		int yOffset = (this.height / 2) - (guiHeight / 2);
+		this.minecraft.getTextureManager().bind(GUI_BACKGROUND);
+		//int yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
+		int yOffset = (height - GUI_HEIGHT) / 2;
 		
-		this.blit(matrixStack, (this.width / 2) - (guiWidth / 2), yOffset, 0, 0, guiWidth, guiHeight);
-		font.draw(matrixStack, Integer.toString(summonRange), (width / 2) - 5, (height - guiHeight) / 2 + 16, 0x404040);
+		this.blit(matrixStack, (this.width / 2) - (GUI_WIDTH / 2), yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
+		font.draw(matrixStack, Integer.toString(summonRange), (width / 2) - 5, yOffset + 16, 0x404040);
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
 	}
 	

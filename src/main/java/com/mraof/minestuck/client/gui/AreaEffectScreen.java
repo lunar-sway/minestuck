@@ -19,13 +19,13 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class AreaEffectScreen extends Screen
 {
-	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/generic_large.png");
+	private static final ResourceLocation GUI_BACKGROUND = new ResourceLocation("minestuck", "textures/gui/generic_large.png");
 	
-	private static final int guiWidth = 150;
-	private static final int guiHeight = 132;
+	private static final int GUI_WIDTH = 150;
+	private static final int GUI_HEIGHT = 132;
 	
-	private static final String minPosMessage = "Min Pos Facing Offset"; //TODO make translatable (lang file + translation key)
-	private static final String maxPosMessage = "Max Pos Facing Offset";
+	private static final String MIN_POS_MESSAGE = "Min Pos Facing Offset"; //TODO make translatable (lang file + translation key)
+	private static final String MAX_POS_MESSAGE = "Max Pos Facing Offset";
 	
 	private final AreaEffectTileEntity te;
 	private TextFieldWidget minPosDestinationTextFieldX;
@@ -52,7 +52,7 @@ public class AreaEffectScreen extends Screen
 	@Override
 	public void init()
 	{
-		int yOffset = (this.height / 2) - (guiHeight / 2);
+		int yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
 		
 		this.minPosDestinationTextFieldX = new TextFieldWidget(this.font, this.width / 2 - 60, yOffset + 15, 40, 20, new StringTextComponent("X value of min effect pos")); //TODO make these translatable
 		this.minPosDestinationTextFieldX.setValue(String.valueOf(te.getMinAreaOffset().getX()));
@@ -119,11 +119,11 @@ public class AreaEffectScreen extends Screen
 	{
 		this.renderBackground(matrixStack);
 		RenderSystem.color4f(1F, 1F, 1F, 1F);
-		this.minecraft.getTextureManager().bind(guiBackground);
-		int yOffset = (this.height / 2) - (guiHeight / 2);
-		this.blit(matrixStack, (this.width / 2) - (guiWidth / 2), yOffset, 0, 0, guiWidth, guiHeight);
-		font.draw(matrixStack, minPosMessage, (width / 2) - font.width(minPosMessage) / 2, yOffset + 5, 0x404040);
-		font.draw(matrixStack, maxPosMessage, (width / 2) - font.width(maxPosMessage) / 2, yOffset + 40, 0x404040);
+		this.minecraft.getTextureManager().bind(GUI_BACKGROUND);
+		int yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
+		this.blit(matrixStack, (this.width / 2) - (GUI_WIDTH / 2), yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
+		font.draw(matrixStack, MIN_POS_MESSAGE, (width / 2) - font.width(MIN_POS_MESSAGE) / 2, yOffset + 5, 0x404040);
+		font.draw(matrixStack, MAX_POS_MESSAGE, (width / 2) - font.width(MAX_POS_MESSAGE) / 2, yOffset + 40, 0x404040);
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
 	}
 	

@@ -19,6 +19,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
@@ -32,6 +33,7 @@ public class SummonerBlock extends Block
 {
 	public static final BooleanProperty TRIGGERED = BlockStateProperties.TRIGGERED;
 	public static final BooleanProperty UNTRIGGERABLE = MSProperties.SHUT_DOWN; //subverts the intended conditions of the property but is ultimately still linked to the intended use and is still impacted by the structure core
+	public static final String SUMMON_TYPE_CHANGE = "block.minestuck.summoner_block.summon_type_change";
 	
 	public SummonerBlock(Properties properties)
 	{
@@ -55,7 +57,10 @@ public class SummonerBlock extends Block
 					SpawnEggItem eggItem = (SpawnEggItem) stackIn.getItem();
 					
 					if(!worldIn.isClientSide)
-						summonerTE.setSummonedEntity(eggItem.getType(stackIn.getTag()), player);
+					{
+						summonerTE.setSummonedEntity(eggItem.getType(stackIn.getTag()));
+						player.displayClientMessage(new TranslationTextComponent(SUMMON_TYPE_CHANGE, eggItem.getType(stackIn.getTag()).getRegistryName()), true);
+					}
 					
 					worldIn.playSound(player, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 1F);
 				}

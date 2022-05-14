@@ -5,30 +5,24 @@ import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.util.Constants;
 
-import javax.annotation.Nullable;
 import java.util.Optional;
 
 public class SummonerTileEntity extends TileEntity implements ITickableTileEntity
 {
 	private EntityType<?> summonType;
 	private int cooldownTimer;
-	private int summonRange; //default is 8, but can be set(via gui) between 1 and 64
-	
-	public static final String SUMMON_TYPE_CHANGE = "block.minestuck.summoner_block.summon_type_change";
+	private int summonRange = 8; //default is 8, but can be set(via gui) between 1 and 64
 	
 	public SummonerTileEntity()
 	{
@@ -94,12 +88,9 @@ public class SummonerTileEntity extends TileEntity implements ITickableTileEntit
 		}
 	}
 	
-	public void setSummonedEntity(EntityType<?> entityTypeIn, @Nullable PlayerEntity playerEntityIn)
+	public void setSummonedEntity(EntityType<?> entityTypeIn)
 	{
 		this.summonType = entityTypeIn;
-		
-		if(playerEntityIn != null) //used when setting via spawn egg, does not play message when set through gui
-			playerEntityIn.displayClientMessage(new TranslationTextComponent(SUMMON_TYPE_CHANGE, summonType.getRegistryName()), true);
 	}
 	
 	public EntityType<?> getSummonedEntity()
@@ -116,7 +107,7 @@ public class SummonerTileEntity extends TileEntity implements ITickableTileEntit
 	
 	public int getSummonRange()
 	{
-		return this.summonRange;
+		return MathHelper.clamp(this.summonRange, 1, 64);
 	}
 	
 	@Override

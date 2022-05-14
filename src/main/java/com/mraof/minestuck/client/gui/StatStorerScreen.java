@@ -8,25 +8,23 @@ import com.mraof.minestuck.tileentity.redstone.StatStorerTileEntity;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
 
 public class StatStorerScreen extends Screen
 {
-	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/generic_medium.png");
+	private static final ResourceLocation GUI_BACKGROUND = new ResourceLocation("minestuck", "textures/gui/generic_medium.png");
 	
-	private static final int guiWidth = 150;
-	private static final int guiHeight = 98;
+	private static final int GUI_WIDTH = 150;
+	private static final int GUI_HEIGHT = 98;
 	
-	private static final String divideValueMessage = "Divide power output by:";
+	private static final String DIVIDE_VALUE_MESSAGE = "Divide power output by:";
 	
 	private final StatStorerTileEntity te;
 	private StatStorerTileEntity.ActiveType activeType;
-	private int divideValueBy;
 	
-	public Button typeButton;
+	private Button typeButton;
 	
 	private TextFieldWidget divideTextField;
 	
@@ -42,8 +40,8 @@ public class StatStorerScreen extends Screen
 	@Override
 	public void init()
 	{
-		addButton(typeButton = new ExtendedButton(this.width / 2 - 67, (height - guiHeight) / 2 + 15, 135, 20, new StringTextComponent(activeType.getNameNoSpaces()), button -> changeActiveType()));
-		int yOffset = (this.height / 2) - (guiHeight / 2);
+		addButton(typeButton = new ExtendedButton(this.width / 2 - 67, (height - GUI_HEIGHT) / 2 + 15, 135, 20, new StringTextComponent(activeType.getNameNoSpaces()), button -> changeActiveType()));
+		int yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
 		this.divideTextField = new TextFieldWidget(this.font, this.width / 2 - 18, yOffset + 50, 40, 18, new StringTextComponent("Divide comparator output strength")); //TODO make these translatable
 		this.divideTextField.setValue(String.valueOf(te.getDivideValueBy()));
 		addButton(divideTextField);
@@ -66,11 +64,11 @@ public class StatStorerScreen extends Screen
 	{
 		this.renderBackground(matrixStack);
 		RenderSystem.color4f(1F, 1F, 1F, 1F);
-		this.minecraft.getTextureManager().bind(guiBackground);
-		int yOffset = (this.height / 2) - (guiHeight / 2);
+		this.minecraft.getTextureManager().bind(GUI_BACKGROUND);
+		int yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
 		
-		this.blit(matrixStack, (this.width / 2) - (guiWidth / 2), yOffset, 0, 0, guiWidth, guiHeight);
-		font.draw(matrixStack, divideValueMessage, (width / 2) - font.width(divideValueMessage) / 2, yOffset + 40, 0x404040);
+		this.blit(matrixStack, (this.width / 2) - (GUI_WIDTH / 2), yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
+		font.draw(matrixStack, DIVIDE_VALUE_MESSAGE, (width / 2) - font.width(DIVIDE_VALUE_MESSAGE) / 2, yOffset + 40, 0x404040);
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
 	}
 	
