@@ -835,6 +835,7 @@ public class MSItems
 		registerItemBlock(registry, ROTATOR, MSItemGroup.MAIN);
 		registerItemBlock(registry, TOGGLER, MSItemGroup.MAIN);
 		registerItemBlock(registry, REMOTE_COMPARATOR, MSItemGroup.LANDS);
+		registerItemBlock(registry, STRUCTURE_CORE, MSItemGroup.LANDS);
 		registerItemBlock(registry, FALL_PAD, MSItemGroup.MAIN);
 		registerItemBlock(registry, FRAGILE_STONE, MSItemGroup.MAIN);
 		registerItemBlock(registry, RETRACTABLE_SPIKES, MSItemGroup.MAIN);

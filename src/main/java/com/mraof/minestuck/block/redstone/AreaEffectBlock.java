@@ -25,7 +25,6 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -38,13 +37,13 @@ public class AreaEffectBlock extends HorizontalBlock
 {
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 	public static final BooleanProperty ALL_MOBS = MSProperties.MACHINE_TOGGLE; //checks whether just players should be given the effect or if all living entities should be given the effect
-	public static final BooleanProperty DISABLED = MSProperties.DISCHARGED;
+	public static final BooleanProperty SHUT_DOWN = MSProperties.SHUT_DOWN;
 	public static final String EFFECT_CHANGE_MESSAGE = "effect_change_message";
 	
 	public AreaEffectBlock(Properties properties)
 	{
 		super(properties);
-		this.registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(POWERED, false).setValue(ALL_MOBS, false).setValue(DISABLED, false));
+		this.registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(POWERED, false).setValue(ALL_MOBS, false).setValue(SHUT_DOWN, false));
 	}
 	
 	@Override
@@ -120,7 +119,7 @@ public class AreaEffectBlock extends HorizontalBlock
 			BlockState state = worldIn.getBlockState(pos);
 			boolean hasPower = worldIn.hasNeighborSignal(pos);
 			
-			if(state.getValue(DISABLED))
+			if(state.getValue(SHUT_DOWN))
 			{
 				worldIn.setBlockAndUpdate(pos, state.setValue(POWERED, false));
 			} else
@@ -152,7 +151,7 @@ public class AreaEffectBlock extends HorizontalBlock
 		super.createBlockStateDefinition(builder);
 		builder.add(FACING);
 		builder.add(POWERED);
-		builder.add(DISABLED);
+		builder.add(SHUT_DOWN);
 		builder.add(ALL_MOBS);
 	}
 }

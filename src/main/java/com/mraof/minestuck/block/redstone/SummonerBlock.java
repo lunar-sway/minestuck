@@ -19,10 +19,8 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 
@@ -33,7 +31,7 @@ import javax.annotation.Nullable;
 public class SummonerBlock extends Block
 {
 	public static final BooleanProperty TRIGGERED = BlockStateProperties.TRIGGERED;
-	public static final BooleanProperty UNTRIGGERABLE = MSProperties.DISCHARGED;
+	public static final BooleanProperty UNTRIGGERABLE = MSProperties.SHUT_DOWN; //subverts the intended conditions of the property but is ultimately still linked to the intended use and is still impacted by the structure core
 	
 	public SummonerBlock(Properties properties)
 	{

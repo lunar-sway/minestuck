@@ -29,10 +29,9 @@ import net.minecraft.world.gen.feature.template.TemplateManager;
 
 import java.util.Random;
 
-public class FrogTemplePiece extends ScatteredStructurePiece
+public class FrogTemplePiece extends CoreCompatabileScatteredStructurePiece
 {
 	private boolean createRan = false; //boolean check to prevent certain objects(the lotus flower entity) from spawning several times over
-	private boolean hasBeenUsed = false;
 	private static final FrogTemplePiece.Selector HIEROGLYPHS = new FrogTemplePiece.Selector();
 	
 	public FrogTemplePiece(ChunkGenerator generator, Random random, int x, int z)
@@ -54,23 +53,13 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 	{
 		super(MSStructurePieces.FROG_TEMPLE, nbt);
 		createRan = nbt.getBoolean("createRan");
-		hasBeenUsed = nbt.getBoolean("hasBeenUsed");
 	}
 	
 	@Override
 	protected void addAdditionalSaveData(CompoundNBT tagCompound) //actually writeAdditional
 	{
 		tagCompound.putBoolean("createRan", createRan);
-		tagCompound.putBoolean("hasBeenUsed", hasBeenUsed);
 		super.addAdditionalSaveData(tagCompound);
-	}
-	
-	public boolean hasBeenUsed() {
-		return hasBeenUsed;
-	}
-	
-	public void nowUsed() {
-		hasBeenUsed = true;
 	}
 	
 	@Override

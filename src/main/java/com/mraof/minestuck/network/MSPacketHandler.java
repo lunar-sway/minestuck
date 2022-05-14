@@ -60,6 +60,7 @@ public class MSPacketHandler
 		registerMessage(StatStorerPacket.class, StatStorerPacket::decode);
 		registerMessage(RemoteObserverPacket.class, RemoteObserverPacket::decode);
 		registerMessage(SummonerPacket.class, SummonerPacket::decode);
+		registerMessage(StructureCorePacket.class, StructureCorePacket::decode);
 		registerMessage(EffectTogglePacket.class, EffectTogglePacket::decode);
 		registerMessage(StoneTabletPacket.class, StoneTabletPacket::decode);
 		registerMessage(MagicEffectPacket.class, MagicEffectPacket::decode);

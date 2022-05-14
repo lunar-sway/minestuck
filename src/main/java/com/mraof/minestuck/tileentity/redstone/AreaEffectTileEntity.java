@@ -38,7 +38,7 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 		if(level == null || !level.isAreaLoaded(getBlockPos(), 0))
 			return;
 		
-		if(level.getGameTime() % 80 == 0 && !level.isClientSide && level.getBlockState(getBlockPos()).getBlock() instanceof AreaEffectBlock && getBlockState().getValue(AreaEffectBlock.POWERED) && !getBlockState().getValue(AreaEffectBlock.DISABLED))
+		if(level.getGameTime() % 80 == 0 && !level.isClientSide && level.getBlockState(getBlockPos()).getBlock() instanceof AreaEffectBlock && getBlockState().getValue(AreaEffectBlock.POWERED) && !getBlockState().getValue(AreaEffectBlock.SHUT_DOWN))
 		{
 			giveEntitiesEffect();
 		}

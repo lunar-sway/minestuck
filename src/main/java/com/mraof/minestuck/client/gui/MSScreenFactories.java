@@ -88,6 +88,11 @@ public class MSScreenFactories
 		Minecraft.getInstance().setScreen(new SummonerScreen(tileEntity));
 	}
 	
+	public static void displayStructureCoreScreen(StructureCoreTileEntity tileEntity)
+	{
+		Minecraft.getInstance().setScreen(new StructureCoreScreen(tileEntity));
+	}
+	
 	public static void displayAlchemiterScreen(AlchemiterTileEntity tileEntity)
 	{
 		Minecraft.getInstance().setScreen(new AlchemiterScreen(tileEntity));
