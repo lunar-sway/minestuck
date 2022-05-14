@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.model.UnderlingModel;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
+import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
@@ -23,6 +24,9 @@ import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.util.HashMap;
+
+import static com.mraof.minestuck.item.crafting.alchemy.GristTypes.*;
 
 public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRenderer<T> {
     public UnderlingRenderer(EntityRendererManager renderManager) {
@@ -76,6 +80,29 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
     }
 
     public class UnderlingDetailsLayer extends GeoLayerRenderer<T> {
+        //TODO replace with a light/dark texture to make it look better
+        HashMap<GristType, Float> contrastModifier = new HashMap<GristType, Float>() {{
+            put(AMBER.get(), 1f);
+            put(CAULK.get(), 0.3f);
+            put(CHALK.get(), 0.3f);
+            put(IODINE.get(), 1f);
+            put(SHALE.get(), 1f);
+            put(TAR.get(), 1f);
+            put(COBALT.get(), 1f);
+            put(MARBLE.get(), 0.3f);
+            put(MERCURY.get(), 1f);
+            put(QUARTZ.get(), 0.3f);
+            put(SULFUR.get(), 1f);
+            put(AMETHYST.get(), 1f);
+            put(GARNET.get(), 1f);
+            put(RUBY.get(), 1f);
+            put(RUST.get(), 1f);
+            put(DIAMOND.get(), 0.3f);
+            put(GOLD.get(), 1f);
+            put(URANIUM.get(), 1f);
+        }};
+
+
         public UnderlingDetailsLayer(IGeoRenderer<T> entityRendererIn) {
             super(entityRendererIn);
         }
@@ -83,10 +110,11 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
         @Override
         public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, T entityLivingBaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
             RenderType renderType = RenderType.armorCutoutNoCull(new ResourceLocation(Minestuck.MOD_ID, "textures/entity/underlings/" + UnderlingModel.getName(entityLivingBaseIn) + "_details.png"));
+            float color = contrastModifier.get(entityLivingBaseIn.getGristType());
             matrixStackIn.pushPose();
 
             GeoModel model = modelProvider.getModel(modelProvider.getModelLocation(entityLivingBaseIn));
-            this.getRenderer().render(model, entityLivingBaseIn, partialTicks, renderType, matrixStackIn, bufferIn, bufferIn.getBuffer(renderType), packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+            this.getRenderer().render(model, entityLivingBaseIn, partialTicks, renderType, matrixStackIn, bufferIn, bufferIn.getBuffer(renderType), packedLightIn, OverlayTexture.NO_OVERLAY, color, color, color, 1);
 
             matrixStackIn.popPose();
         }
