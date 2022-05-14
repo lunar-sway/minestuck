@@ -62,7 +62,7 @@ public class ClientProxy
 
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.IMP, UnderlingRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.OGRE, UnderlingRenderer::new);
-		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.BASILISK, UnderlingRenderer::new);
+		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.BASILISK, BasiliskRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.LICH, UnderlingRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.GICLOPS, UnderlingRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.PROSPITIAN_BISHOP, manager -> new SimpleTexturedEntityRenderer<>(manager, new BishopModel<>(), 1.8F));

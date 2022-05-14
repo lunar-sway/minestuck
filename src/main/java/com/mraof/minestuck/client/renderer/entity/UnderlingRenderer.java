@@ -9,7 +9,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.texture.*;
+import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.client.renderer.texture.NativeImage;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.renderer.texture.SimpleTexture;
+import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.util.Color;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
@@ -18,13 +22,12 @@ import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 
 import javax.annotation.Nullable;
-
 import java.io.IOException;
 
 public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRenderer<T> {
     public UnderlingRenderer(EntityRendererManager renderManager) {
         super(renderManager, new UnderlingModel<>());
-        this.addLayer(new UnderlingDetailsLayer(this));
+        this.addLayer(new UnderlingDetailsLayer(this)); // possibility to bake the layer directly in the texture if the renderer dont color the vertex
     }
 
     @Override
@@ -39,21 +42,14 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 
     @Override
     public ResourceLocation getTextureLocation(T entity) {
-//        if (instance.getGristType() == MARBLE.get()) {
-//            return new ResourceLocation(Minestuck.MOD_ID, "textures/entity/underlings/marble.png");
-//        }
-//        if (instance.getGristType() == DIAMOND.get()) {
-//            return new ResourceLocation(Minestuck.MOD_ID, "textures/entity/underlings/diamond.png");
-//        }
-//        return super.getTextureLocation(instance);
-
-        String textureName = "marble";
+        String textureName = entity.getGristType().getRegistryName().getPath();
         ResourceLocation resource = new ResourceLocation(Minestuck.MOD_ID, "textures/entity/underlings/" + UnderlingModel.getName(entity) + "_" + textureName + ".png");
+
         if (Minecraft.getInstance().textureManager.getTexture(resource) == null) {
-            ResourceLocation textureResource = new ResourceLocation(Minestuck.MOD_ID, "textures/entity/underlings/" + textureName + ".png");
             try {
-                NativeImage base = SimpleTexture.TextureData.load(Minecraft.getInstance().getResourceManager(), super.getTextureLocation(entity)).getImage();
-                NativeImage texture = SimpleTexture.TextureData.load(Minecraft.getInstance().getResourceManager(), textureResource).getImage();
+                IResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
+                NativeImage base = SimpleTexture.TextureData.load(resourceManager, super.getTextureLocation(entity)).getImage();
+                NativeImage texture = SimpleTexture.TextureData.load(resourceManager, getGristTexture(entity)).getImage();
                 NativeImage computed = new NativeImage(base.getWidth(), base.getHeight(), false);
 
                 for (int i = 0; i < base.getWidth(); i++) {
@@ -71,8 +67,12 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
                 throw new RuntimeException(e);
             }
         }
-
         return resource;
+    }
+
+    protected ResourceLocation getGristTexture(T entity) {
+        String textureName = "marble"; //TODO entity.getGristType().getRegistryName().getPath()
+        return new ResourceLocation(Minestuck.MOD_ID, "textures/entity/underlings/" + textureName + ".png");
     }
 
     public class UnderlingDetailsLayer extends GeoLayerRenderer<T> {
