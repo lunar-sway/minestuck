@@ -57,6 +57,7 @@ public class StructureCoreBlock extends HorizontalBlock
 						worldIn.setBlock(pos, state.setValue(POWERED, false), Constants.BlockFlags.DEFAULT);
 						worldIn.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, 1.2F);
 					}
+					((StructureCoreTileEntity) tileEntity).prepForUpdate(); //sets tickCycle to 600 so next tick an update will occur
 				} else if(worldIn.isClientSide && !player.isCrouching())
 				{
 					StructureCoreTileEntity te = (StructureCoreTileEntity) tileEntity;
@@ -68,6 +69,37 @@ public class StructureCoreBlock extends HorizontalBlock
 		}
 		
 		return ActionResultType.FAIL;
+	}
+	
+	@Override
+	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+	{
+		super.neighborChanged(state, worldIn, pos, blockIn, fromPos, isMoving);
+		updateTileEntityWithBlock(worldIn, pos);
+	}
+	
+	@Override
+	public void onPlace(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving)
+	{
+		super.onPlace(state, worldIn, pos, oldState, isMoving);
+		updateTileEntityWithBlock(worldIn, pos);
+	}
+	
+	/**
+	 * Used for cases in which the action type of the TE would benefit from instant change
+	 */
+	public void updateTileEntityWithBlock(World worldIn, BlockPos pos)
+	{
+		TileEntity tileEntity = worldIn.getBlockEntity(pos);
+		if(tileEntity instanceof StructureCoreTileEntity)
+		{
+			StructureCoreTileEntity structureCoreTileEntity = (StructureCoreTileEntity) tileEntity;
+			if(structureCoreTileEntity.getBlockState().getValue(ACTIVE) &&
+					structureCoreTileEntity.getActionType() == StructureCoreTileEntity.ActionType.WRITE) //having the variable hasBeenCompleted changed to true as soon as possible will improve the response speed of READ_AND_WIPE functionality
+			{
+				((StructureCoreTileEntity) tileEntity).prepForUpdate();
+			}
+		}
 	}
 	
 	@Override

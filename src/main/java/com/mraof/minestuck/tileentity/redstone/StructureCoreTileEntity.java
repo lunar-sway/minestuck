@@ -32,6 +32,11 @@ public class StructureCoreTileEntity extends TileEntity implements ITickableTile
 	private boolean hasWiped = false;
 	public final Structure<?>[] SOLVABLE_STRUCTURES = new Structure<?>[]{MSFeatures.FROG_TEMPLE};
 	
+	/**
+	 * READ AND WIPE checks to see if the structure piece hasBeenCompleted variable is true, and then prevents puzzle blocks not meant to be utilized for survival players from working
+	 * READ AND REDSTONE checks to see if the structure piece hasBeenCompleted variable is true, and then gives off a redstone signal if so
+	 * WRITE turns the structure piece hasBeenCompleted variable to true if it is not yet
+	 */
 	public enum ActionType
 	{
 		READ_AND_WIPE,
@@ -94,7 +99,7 @@ public class StructureCoreTileEntity extends TileEntity implements ITickableTile
 				{
 					CoreCompatabileScatteredStructurePiece piece = getStructurePiece(structureStart);
 					
-					if(piece != null && piece.hasBeenUsed())
+					if(piece != null && piece.hasBeenCompleted())
 					{
 						if(!getBlockState().getValue(StructureCoreBlock.POWERED))
 							level.setBlockAndUpdate(getBlockPos(), getBlockState().setValue(StructureCoreBlock.POWERED, true));
@@ -111,7 +116,6 @@ public class StructureCoreTileEntity extends TileEntity implements ITickableTile
 	{
 		for(Structure<?> structureListIterate : SOLVABLE_STRUCTURES)
 		{
-			Debug.debugf("%s", structureListIterate.getRegistryName());
 			return structureManager.getStructureAt(getBlockPos(), true, structureListIterate);
 		}
 		
@@ -123,10 +127,13 @@ public class StructureCoreTileEntity extends TileEntity implements ITickableTile
 		//compoundnbt.putString("id", Registry.STRUCTURE_FEATURE.getKey(this.getFeature()).toString());
 		
 		CoreCompatabileScatteredStructurePiece piece = getStructurePiece(structureStart);
-		if(piece != null && !piece.hasBeenUsed())
-			piece.nowUsed();
-		if(piece != null && piece.hasBeenUsed())
-			Debug.debugf("has already been used");
+		if(piece != null)
+		{
+			if(!piece.hasBeenCompleted())
+				piece.nowCompleted();
+			else
+				Debug.debugf("has already been completed");
+		}
 	}
 	
 	private CoreCompatabileScatteredStructurePiece getStructurePiece(StructureStart<?> structureStart)
@@ -154,11 +161,11 @@ public class StructureCoreTileEntity extends TileEntity implements ITickableTile
 				//removing functionality from blocks that should have limited survival access
 				for(Property<?> property : iterateState.getProperties())
 				{
-					if(property.equals(MSProperties.SHUT_DOWN) && !iterateState.getValue(MSProperties.SHUT_DOWN))
+					if((property.equals(MSProperties.SHUT_DOWN) && !iterateState.getValue(MSProperties.SHUT_DOWN)) || (property.equals(MSProperties.UNTRIGGERABLE) && iterateState.getValue(MSProperties.UNTRIGGERABLE)))
 					{
 						if(iterateState.getBlock() instanceof SummonerBlock)
 						{
-							level.setBlock(iteratePos, iterateState.setValue(MSProperties.SHUT_DOWN, false).setValue(SummonerBlock.TRIGGERED, true), Constants.BlockFlags.DEFAULT); //the boolean is inverted specifically with the summoner
+							level.setBlock(iteratePos, iterateState.setValue(SummonerBlock.UNTRIGGERABLE, false).setValue(SummonerBlock.TRIGGERED, true), Constants.BlockFlags.DEFAULT);
 						} else
 							level.setBlock(iteratePos, iterateState.setValue(MSProperties.SHUT_DOWN, true), Constants.BlockFlags.DEFAULT);
 						
@@ -199,6 +206,11 @@ public class StructureCoreTileEntity extends TileEntity implements ITickableTile
 	public void setActionType(ActionType actionTypeIn)
 	{
 		actionType = Objects.requireNonNull(actionTypeIn);
+	}
+	
+	public void prepForUpdate()
+	{
+		this.tickCycle = 600;
 	}
 	
 	@Override

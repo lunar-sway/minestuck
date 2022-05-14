@@ -32,7 +32,7 @@ import javax.annotation.Nullable;
 public class SummonerBlock extends Block
 {
 	public static final BooleanProperty TRIGGERED = BlockStateProperties.TRIGGERED;
-	public static final BooleanProperty UNTRIGGERABLE = MSProperties.SHUT_DOWN; //subverts the intended conditions of the property but is ultimately still linked to the intended use and is still impacted by the structure core
+	public static final BooleanProperty UNTRIGGERABLE = MSProperties.UNTRIGGERABLE;
 	public static final String SUMMON_TYPE_CHANGE = "block.minestuck.summoner_block.summon_type_change";
 	
 	public SummonerBlock(Properties properties)

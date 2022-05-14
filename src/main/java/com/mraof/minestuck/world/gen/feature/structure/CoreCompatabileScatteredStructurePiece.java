@@ -8,7 +8,7 @@ import java.util.Random;
 
 public abstract class CoreCompatabileScatteredStructurePiece extends ScatteredStructurePiece
 {
-	private boolean hasBeenUsed = false;
+	private boolean hasBeenCompleted = false;
 	
 	public CoreCompatabileScatteredStructurePiece(IStructurePieceType structurePieceType, Random random, int minX, int minY, int minZ, int sizeX, int sizeY, int sizeZ)
 	{
@@ -18,21 +18,24 @@ public abstract class CoreCompatabileScatteredStructurePiece extends ScatteredSt
 	public CoreCompatabileScatteredStructurePiece(IStructurePieceType structurePieceType, CompoundNBT nbt)
 	{
 		super(structurePieceType, nbt);
-		hasBeenUsed = nbt.getBoolean("hasBeenUsed");
+		hasBeenCompleted = nbt.getBoolean("hasBeenCompleted");
 	}
 	
 	@Override
 	protected void addAdditionalSaveData(CompoundNBT tagCompound) //actually writeAdditional
 	{
-		tagCompound.putBoolean("hasBeenUsed", hasBeenUsed);
+		tagCompound.putBoolean("hasBeenCompleted", hasBeenCompleted);
 		super.addAdditionalSaveData(tagCompound);
 	}
 	
-	public boolean hasBeenUsed() {
-		return hasBeenUsed;
+	/**
+	 * Refers to whether the end of the structure has been reached, via the activation of a WRITE type StructureCoreTileEntity
+	 */
+	public boolean hasBeenCompleted() {
+		return hasBeenCompleted;
 	}
 	
-	public void nowUsed() {
-		hasBeenUsed = true;
+	public void nowCompleted() {
+		hasBeenCompleted = true;
 	}
 }

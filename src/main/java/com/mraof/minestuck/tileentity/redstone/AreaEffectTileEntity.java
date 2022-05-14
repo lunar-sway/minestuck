@@ -97,30 +97,6 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 			livingEntity.addEffect(new EffectInstance(effect, 120, effectAmplifier, false, false));
 	}
 	
-	/**
-	 * Reorders the blockpos pair to get the overall min coords
-	 */
-	public static BlockPos axisAlignBlockPosGetMin(BlockPos minBlockPosIn, BlockPos maxBlockPosIn)
-	{
-		int blockPosMinX = Math.min(minBlockPosIn.getX(), maxBlockPosIn.getX());
-		int blockPosMinY = Math.min(minBlockPosIn.getY(), maxBlockPosIn.getY());
-		int blockPosMinZ = Math.min(minBlockPosIn.getZ(), maxBlockPosIn.getZ());
-		
-		return new BlockPos(blockPosMinX, blockPosMinY, blockPosMinZ);
-	}
-	
-	/**
-	 * Reorders the blockpos pair to get the overall max coords
-	 */
-	public static BlockPos axisAlignBlockPosGetMax(BlockPos minBlockPosIn, BlockPos maxBlockPosIn)
-	{
-		int blockPosMaxX = Math.max(minBlockPosIn.getX(), maxBlockPosIn.getX());
-		int blockPosMaxY = Math.max(minBlockPosIn.getY(), maxBlockPosIn.getY());
-		int blockPosMaxZ = Math.max(minBlockPosIn.getZ(), maxBlockPosIn.getZ());
-		
-		return new BlockPos(blockPosMaxX, blockPosMaxY, blockPosMaxZ);
-	}
-	
 	public void setEffect(Effect effectIn, int effectAmplifierIn)
 	{
 		this.effect = effectIn;
