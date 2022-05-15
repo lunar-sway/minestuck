@@ -7,7 +7,6 @@ import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.controller.AnimationController;
@@ -135,8 +134,7 @@ public abstract class AnimatedCreatureEntity extends CreatureEntity implements I
         NONE,
         ATTACK,
         TALK,
-        PANIC,
-        PANIC_RUN;
+        PANIC;
 
         public boolean isEqual(int ordinal) {
             return this.ordinal() == ordinal;

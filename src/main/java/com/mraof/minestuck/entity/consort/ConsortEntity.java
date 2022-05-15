@@ -3,6 +3,7 @@ package com.mraof.minestuck.entity.consort;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.entity.AnimatedCreatureEntity;
+import com.mraof.minestuck.entity.ai.AnimatedPanicGoal;
 import com.mraof.minestuck.inventory.ConsortMerchantContainer;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.player.IdentifierHandler;
@@ -72,8 +73,7 @@ public class ConsortEntity extends AnimatedCreatureEntity implements IContainerP
 	protected void registerGoals()
 	{
 		goalSelector.addGoal(0, new SwimGoal(this));
-		//goalSelector.addGoal(1, new AnimatedPanicGoal(this, 1.4D));
-		//goalSelector.addGoal(1, new PanicGoal(this, 1.0D));
+		goalSelector.addGoal(1, new AnimatedPanicGoal(this, 1.4D));
 		goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 1F));
 		goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 8.0F));
 		goalSelector.addGoal(7, new LookRandomlyGoal(this));
@@ -417,7 +417,7 @@ public class ConsortEntity extends AnimatedCreatureEntity implements IContainerP
 	}
 
 	private <E extends IAnimatable> PlayState walkAnimation(AnimationEvent<E> event) {
-		if (!event.isMoving()) {
+		if (!event.isMoving() || getCurrentAction() != Actions.NONE) {
 			return PlayState.STOP;
 		}
 
@@ -426,7 +426,7 @@ public class ConsortEntity extends AnimatedCreatureEntity implements IContainerP
 	}
 
 	private <E extends IAnimatable> PlayState armsAnimation(AnimationEvent<E> event) {
-		if (!event.isMoving()) {
+		if (!event.isMoving() || getCurrentAction() != Actions.NONE) {
 			if (this.getConsortType() == EnumConsort.TURTLE) { // eeeeeeeeeeehhh maybe just fix the turtle anims instead
 				event.getController().setAnimation(new AnimationBuilder().addAnimation("armfix", true));
 				return PlayState.CONTINUE;
@@ -453,7 +453,7 @@ public class ConsortEntity extends AnimatedCreatureEntity implements IContainerP
 			return PlayState.CONTINUE;
 		}
 		if (action == Actions.PANIC) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("panic", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("panic", false).addAnimation("panicrun", true));
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
