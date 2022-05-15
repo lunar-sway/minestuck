@@ -23,6 +23,8 @@ public abstract class AnimatedCreatureEntity extends CreatureEntity implements I
     private int attackRecovery;
     private int actionResetTicks;
 
+    protected boolean canMoveWhileAttacking = false;
+
     protected AnimatedCreatureEntity(EntityType<? extends CreatureEntity> type, World world) {
         super(type, world);
     }
@@ -154,9 +156,11 @@ public abstract class AnimatedCreatureEntity extends CreatureEntity implements I
             double reach = this.getAttackReachSqr(enemy);
             if (distToEnemySqr <= reach && this.ticksUntilNextAttack <= 0) {
                 this.resetAttackCooldown();
-                this.mob.swing(Hand.MAIN_HAND);
-                this.mob.getNavigation().stop();
+                if (!this.entity.canMoveWhileAttacking) {
+                    this.mob.getNavigation().stop();
+                }
                 entity.startAttack();
+                // TODO temporary knockback resistance while attacking
             }
         }
     }

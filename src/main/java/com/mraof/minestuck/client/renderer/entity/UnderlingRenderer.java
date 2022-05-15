@@ -75,7 +75,10 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
     }
 
     protected ResourceLocation getGristTexture(T entity) {
-        String textureName = "marble"; //TODO entity.getGristType().getRegistryName().getPath()
+        String textureName = entity.getGristType().getRegistryName().getPath();
+        if (!textureName.equals("marble") && !textureName.equals("diamond")) { //Ideally when all the textures are done we wont need that
+            textureName = "marble"; //default
+        }
         return new ResourceLocation(Minestuck.MOD_ID, "textures/entity/underlings/" + textureName + ".png");
     }
 

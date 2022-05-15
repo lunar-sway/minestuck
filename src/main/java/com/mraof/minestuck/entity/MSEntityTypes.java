@@ -79,7 +79,7 @@ public final class MSEntityTypes
 		register(registry, EntityType.Builder.of(EnumConsort.NAKAGATOR::create, CONSORT).sized(0.52F, 1.2F), "nakagator");
 		register(registry, EntityType.Builder.of(EnumConsort.IGUANA::create, CONSORT).sized(0.52F, 1.2F), "iguana");
 		
-		register(registry, EntityType.Builder.of(ImpEntity::new, UNDERLING).sized(0.7F, 1.2F), "imp");
+		register(registry, EntityType.Builder.of(ImpEntity::new, UNDERLING).sized(0.7F, 1.2F), "imp"); //TODO adjust hitboxes for all underlings
 		register(registry, EntityType.Builder.of(OgreEntity::new, UNDERLING).sized(2F, 3.3F), "ogre");
 		register(registry, EntityType.Builder.of(BasiliskEntity::new, UNDERLING).sized(2F,2F), "basilisk");
 		register(registry, EntityType.Builder.of(LichEntity::new, UNDERLING).sized(0.8F, 1.9F), "lich");

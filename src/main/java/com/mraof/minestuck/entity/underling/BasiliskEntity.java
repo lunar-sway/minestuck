@@ -34,7 +34,7 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable {
         this.setAttackRecovery(10);
 
         this.head = new BasiliskPartEntity(this, "head", 2.3F, 2.3F);
-        this.body = new BasiliskPartEntity(this, "body", 2.2F, 2.2F);
+        this.body = new BasiliskPartEntity(this, "body", 2.8F, 2.2F);
         this.tail = new BasiliskPartEntity(this, "tail", 2.0F, 2.0F);
         this.tailEnd = new BasiliskPartEntity(this, "tailEnd", 1.7F, 1.7F);
         parts = new BasiliskPartEntity[]{this.head, this.body, this.tail, this.tailEnd};
@@ -103,8 +103,8 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable {
     @Override
     public void aiStep() {
         super.aiStep();
+        // save the current part positions
         Vector3d[] positions = new Vector3d[this.parts.length];
-
         for(int j = 0; j < this.parts.length; ++j) {
             positions[j] = new Vector3d(this.parts[j].getX(), this.parts[j].getY(), this.parts[j].getZ());
         }
@@ -113,11 +113,13 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable {
         float xOffset = MathHelper.sin(bodyAngle);
         float zOffset = -MathHelper.cos(bodyAngle);
 
-        this.updatePart(this.body, xOffset * 0.5, 0, zOffset * 0.5);
+        // update the body parts based on the body rotation + apply natural offsets
+        this.updatePart(this.body, 0, 0, 0);
         this.updatePart(this.head, xOffset * -2.5, 0.3, zOffset * -2.5);
         this.updatePart(this.tail, xOffset * 2.5, 0, zOffset * 2.5);
         this.updatePart(this.tailEnd, xOffset * 4.5, 1, zOffset * 4.5);
 
+        // sets various mysterious params - used to sync client server stuff
         for(int l = 0; l < this.parts.length; ++l) {
             this.parts[l].xo = positions[l].x;
             this.parts[l].yo = positions[l].y;

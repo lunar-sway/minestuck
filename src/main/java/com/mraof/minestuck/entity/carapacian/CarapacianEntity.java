@@ -41,6 +41,7 @@ public abstract class CarapacianEntity extends SimpleTexturedEntity
 	@Override
 	protected void registerGoals()
 	{
+		super.registerGoals();
 		this.goalSelector.addGoal(1, new SwimGoal(this));
 		//this.goalSelector.addGoal(4, new EntityAIMoveToBattle(this));
 		this.targetSelector.addGoal(1, new HurtByTargetAlliedGoal(this, this::isAlly));

@@ -119,7 +119,7 @@ public class ConsortEntity extends AnimatedCreatureEntity implements IContainerP
 					if(text != null)
 						player.sendMessage(text, Util.NIL_UUID);
 					handleConsortRepFromTalking(serverPlayer);
-					setCurrentAction(Actions.TALK, 80);
+					setCurrentAction(Actions.TALK, 40); // TODO adjust as needed - 2 secs for now
 					MSCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, message.getString(), this);
 				} catch(Exception e)
 				{

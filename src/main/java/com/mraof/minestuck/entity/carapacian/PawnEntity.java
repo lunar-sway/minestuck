@@ -41,6 +41,8 @@ public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IM
 		super(type, kingdom, world);
 		this.xpReward = 1;
 		setCombatTask();
+		setAttackDelay(6);
+		setAttackRecovery(12);
 	}
 	
 	public static PawnEntity createProspitian(EntityType<? extends PawnEntity> type, World world)
@@ -205,7 +207,7 @@ public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IM
 		data.addAnimationController(createAnimation("walkArmsAnimation", 1, this::walkArmsAnimation));
 		data.addAnimationController(createAnimation("walkAnimation", 1, this::walkAnimation));
 		data.addAnimationController(createAnimation("deathAnimation", 1, this::deathAnimation));
-		data.addAnimationController(createAnimation("swingAnimation", 1, this::swingAnimation));
+		data.addAnimationController(createAnimation("swingAnimation", 2, this::swingAnimation));
 	}
 
 	private <E extends IAnimatable> PlayState walkAnimation(AnimationEvent<E> event) {
