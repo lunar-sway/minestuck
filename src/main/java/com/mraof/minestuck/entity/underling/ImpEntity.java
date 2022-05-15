@@ -100,7 +100,7 @@ public class ImpEntity extends UnderlingEntity implements IAnimatable
 	@Override
 	public void registerControllers(AnimationData data) {
 		data.addAnimationController(createAnimation("idleAnimation", 1, this::idleAnimation));
-		data.addAnimationController(createAnimation("walkArmsAnimation", 0.5, this::walkArmsAnimation));
+		data.addAnimationController(createAnimation("walkArmsAnimation", 1, this::walkArmsAnimation));
 		data.addAnimationController(createAnimation("walkAnimation", 0.5, this::walkAnimation));
 		data.addAnimationController(createAnimation("deathAnimation", 0.7, this::deathAnimation));
 		data.addAnimationController(createAnimation("swingAnimation", 2, this::swingAnimation));

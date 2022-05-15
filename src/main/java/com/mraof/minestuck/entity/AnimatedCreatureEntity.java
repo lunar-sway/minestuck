@@ -47,7 +47,7 @@ public abstract class AnimatedCreatureEntity extends CreatureEntity implements I
             heavyAttackTicks--;
             if (heavyAttackTicks == 0) {
                 recoveryTicks = attackRecovery;
-                if (getTarget() != null && isInRange(getTarget())) {
+                if (getTarget() != null && isInRange(getTarget())) { // TODO: AOE bounding box collision checks + aoe flag
                     doHurtTarget(getTarget());
                 }
             }

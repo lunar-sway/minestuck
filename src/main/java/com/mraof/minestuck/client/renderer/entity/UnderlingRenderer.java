@@ -31,7 +31,7 @@ import static com.mraof.minestuck.item.crafting.alchemy.GristTypes.*;
 public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRenderer<T> {
     public UnderlingRenderer(EntityRendererManager renderManager) {
         super(renderManager, new UnderlingModel<>());
-        this.addLayer(new UnderlingDetailsLayer(this)); // possibility to bake the layer directly in the texture if the renderer dont color the vertex
+        this.addLayer(new UnderlingDetailsLayer(this));
     }
 
     @Override
@@ -49,6 +49,7 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
         String textureName = entity.getGristType().getRegistryName().getPath();
         ResourceLocation resource = new ResourceLocation(Minestuck.MOD_ID, "textures/entity/underlings/" + UnderlingModel.getName(entity) + "_" + textureName + ".png");
 
+        // the texture manager will cache the computed textures so theyre effectively computed once (at least in theory)
         if (Minecraft.getInstance().textureManager.getTexture(resource) == null) {
             try {
                 IResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
@@ -56,6 +57,8 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
                 NativeImage texture = SimpleTexture.TextureData.load(resourceManager, getGristTexture(entity)).getImage();
                 NativeImage computed = new NativeImage(base.getWidth(), base.getHeight(), false);
 
+                // loop through pixels on the base, apply textures & keep transparency
+                // possibility to bake the details layer directly in the texture when/if the renderer stops coloring the vertex
                 for (int i = 0; i < base.getWidth(); i++) {
                     for (int j = 0; j < base.getHeight(); j++) {
                         if (NativeImage.getA(base.getPixelRGBA(i, j)) == 0) {
@@ -66,6 +69,7 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
                     }
                 }
 
+                // save the computed texture to the texture manager's cache
                 Minecraft.getInstance().textureManager.register(resource, new DynamicTexture(computed));
             } catch (IOException e) {
                 throw new RuntimeException(e);
