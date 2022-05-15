@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minestuck:retractable_spikes"
+    ]
+  },
+  "criteria": {
+    "has_spikes": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minestuck:spikes"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minestuck:retractable_spikes"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_spikes",
+      "has_the_recipe"
+    ]
+  ]
+}

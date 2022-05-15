@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures":
+  {
+    "bottom": "minestuck:block/coarse_stone_bricks",
+    "top": "minestuck:block/coarse_stone_bricks",
+    "side": "minestuck:block/coarse_stone_bricks"
+  }
+}

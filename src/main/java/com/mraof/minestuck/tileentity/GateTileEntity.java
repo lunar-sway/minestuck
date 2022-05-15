@@ -12,13 +12,13 @@ import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
 
 public class GateTileEntity extends OnCollisionTeleporterTileEntity<ServerPlayerEntity>
 {
 	//Only used client-side
 	public int color;
-	private boolean hasCollisions = false;
 	
 	public GateHandler.Type gateType;
 	
@@ -41,13 +41,19 @@ public class GateTileEntity extends OnCollisionTeleporterTileEntity<ServerPlayer
 	{
 		if(getBlockState().getBlock() == MSBlocks.RETURN_NODE)
 		{
-			BlockPos pos = ((ServerWorld)level).getSharedSpawnPos();
-			if(pos == null)
-				return;
-			Teleport.teleportEntity(player, (ServerWorld) level, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
-			player.setPortalCooldown();
-			player.setDeltaMovement(Vector3d.ZERO);
-			player.fallDistance = 0;
+			if (level instanceof ServerWorld)
+			{
+				BlockPos spawnPos = ((ServerWorld) level).getSharedSpawnPos();
+				// "level.getHeightmapPos()" will default to y = 0 if the chunk isn't loaded,
+				// so we get the height from the chunk directly to get an accurate height.
+				int spawnHeight = level.getChunk(spawnPos).getHeight(Heightmap.Type.MOTION_BLOCKING, spawnPos.getX(), spawnPos.getZ());
+				BlockPos pos = new BlockPos(spawnPos.getX(), spawnHeight, spawnPos.getZ());
+				
+				Teleport.teleportEntity(player, (ServerWorld) level, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
+				player.setPortalCooldown();
+				player.setDeltaMovement(Vector3d.ZERO);
+				player.fallDistance = 0;
+			}
 		} else
 		{
 			GateHandler.teleport(gateType, (ServerWorld) level, player);

@@ -55,7 +55,7 @@ public class SmallRuinPiece extends ScatteredStructurePiece
 	}
 	
 	@Override
-	protected void addAdditionalSaveData(CompoundNBT nbt)    //Note: incorrectly mapped. Should be writeAdditional
+	protected void addAdditionalSaveData(CompoundNBT nbt)
 	{
 		super.addAdditionalSaveData(nbt);
 		
@@ -69,7 +69,7 @@ public class SmallRuinPiece extends ScatteredStructurePiece
 	@Override
 	public boolean postProcess(ISeedReader worldIn, StructureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, MutableBoundingBox boundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
 	{
-		if(!updateAverageGroundHeight(worldIn, boundingBoxIn, 0))
+		if(!updateAverageGroundHeight(worldIn, boundingBoxIn, 0)) //where the height is determined, uses ScatteredStructurePiece "Heightmap.Type.MOTION_BLOCKING_NO_LEAVES"
 			return false;
 
 		StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);

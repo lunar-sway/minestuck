@@ -21,6 +21,7 @@ public class MSProperties
 	public static final BooleanProperty GREEN = BooleanProperty.create("green");
 	public static final BooleanProperty BLUE = BooleanProperty.create("blue");
 	public static final BooleanProperty CARVED = BooleanProperty.create("carved");
+	public static final BooleanProperty AUTO_RESET = BooleanProperty.create("auto_reset");
 	
 	public static final IntegerProperty COUNT_0_2 = IntegerProperty.create("count", 0, 2);
 	

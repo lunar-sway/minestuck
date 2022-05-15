@@ -43,7 +43,7 @@ public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<Editmode
 		LocalDate localdate = LocalDate.now();
 		int d = localdate.getDayOfMonth();
 		Month m = localdate.getMonth();
-		boolean b1 = MinestuckConfig.SERVER.hardMode;
+		boolean b1 = MinestuckConfig.SERVER.hardMode.get();
 		boolean b2 = !b1 && (m == Month.APRIL && d == 13 || m == Month.JUNE && d == 12
 				|| m == Month.OCTOBER && d == 25 || m == Month.NOVEMBER && d == 11
 				|| m == Month.NOVEMBER && d == 27);
@@ -52,6 +52,12 @@ public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<Editmode
 		
 		drawActiveTabAndIcons(matrixStack);
 		
+	}
+	
+	@Override
+	protected void renderLabels(MatrixStack matrixStack, int mouseX, int mouseY) {
+		
+		this.font.draw(matrixStack, this.title, this.titleLabelX, this.titleLabelY, 0x404040);
 	}
 	
 	@Override

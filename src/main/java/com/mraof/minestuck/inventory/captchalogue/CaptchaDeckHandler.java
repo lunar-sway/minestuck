@@ -29,6 +29,8 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import javax.annotation.Nullable;
+
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class CaptchaDeckHandler
 {
@@ -90,64 +92,69 @@ public class CaptchaDeckHandler
 		ModusType<?> type = ModusTypes.getTypeFromItem(stack.getItem());
 		if(type != null)
 		{
-			if(modus == null)
-			{
-				PlayerData data = PlayerSavedData.getData(player);
-				modus = type.createServerSide(PlayerSavedData.get(player.server));
-				modus.initModus(stack, player, null, data.hasGivenModus() ? 0 : MinestuckConfig.SERVER.initialModusSize.get());
-				setModus(player, modus);
-				container.inventory.setItem(0, ItemStack.EMPTY);
-			}
-			else
-			{
-				Modus oldModus = modus;
-				ModusType<?> oldType = oldModus.getType();
-				if(type.equals(oldType))
-					return;
-				modus = type.createServerSide(PlayerSavedData.get(player.server));
-				if(modus.canSwitchFrom(oldModus))
-					modus.initModus(stack, player, oldModus.getItems(), oldModus.getSize());
-				else
-				{
-					for(ItemStack content : oldModus.getItems())
-						if(!content.isEmpty())
-							launchAnyItem(player, content);
-					modus.initModus(stack, player, null, oldModus.getSize());
-				}
-				
-				setModus(player, modus);
-				container.inventory.setItem(0, oldModus.getModusItem());
-			}
-			
-			MSCriteriaTriggers.CHANGE_MODUS.trigger(player, modus);
+			ItemStack newItem = changeModus(player, stack, modus, type);
+			container.inventory.setItem(0, newItem);
 		}
 		else if(stack.getItem().equals(MSItems.CAPTCHA_CARD) && !AlchemyHelper.isPunchedCard(stack)
 				&& modus != null)
 		{
-			ItemStack content = AlchemyHelper.getDecodedItem(stack, true);
-			
-			int failed = 0;
-			for(int i = 0; i < stack.getCount(); i++)
-				if(!modus.increaseSize(player))
-					failed++;
-			
-			if(!content.isEmpty())
-				for(int i = 0; i < stack.getCount() - failed; i++)
-				{
-					ItemStack toPut = content.copy();
-					if(!putInModus(player, modus, toPut))
-						launchItem(player, toPut);
-				}
-			
-			if(failed == 0)
-				container.inventory.setItem(0, ItemStack.EMPTY);
-			else stack.setCount(failed);
+			consumeCards(player, stack, modus);
+		}
+	}
+	
+	private static ItemStack changeModus(ServerPlayerEntity player, ItemStack modusItem, @Nullable Modus oldModus, ModusType<?> newType)
+	{
+		final Modus newModus = newType.createServerSide(PlayerSavedData.get(player.server));
+		
+		if(oldModus == null)
+		{
+			PlayerData data = PlayerSavedData.getData(player);
+			newModus.initModus(modusItem, player, null, data.hasGivenModus() ? 0 : MinestuckConfig.SERVER.initialModusSize.get());
+		}
+		else
+		{
+			ModusType<?> oldType = oldModus.getType();
+			if(newType.equals(oldType))
+				return modusItem;
+			if(newModus.canSwitchFrom(oldModus))
+				newModus.initModus(modusItem, player, oldModus.getItems(), oldModus.getSize());
+			else
+			{
+				for(ItemStack content : oldModus.getItems())
+					if(!content.isEmpty())
+						launchAnyItem(player, content);
+				newModus.initModus(modusItem, player, null, oldModus.getSize());
+			}
 		}
 		
-		if(modus != null)
-		{
-			modus.checkAndResend(player);
-		}
+		setModus(player, newModus);
+		MSPacketHandler.sendToPlayer(ModusDataPacket.create(CaptchaDeckHandler.writeToNBT(newModus)), player);
+		
+		MSCriteriaTriggers.CHANGE_MODUS.trigger(player, newModus);
+		
+		return oldModus == null ? ItemStack.EMPTY : oldModus.getModusItem();
+	}
+	
+	private static void consumeCards(ServerPlayerEntity player, ItemStack cards, Modus modus)
+	{
+		ItemStack content = AlchemyHelper.getDecodedItem(cards, true);
+		
+		int failed = 0;
+		for(int i = 0; i < cards.getCount(); i++)
+			if(!modus.increaseSize(player))
+				failed++;
+		
+		if(!content.isEmpty())
+			for(int i = 0; i < cards.getCount() - failed; i++)
+			{
+				ItemStack toPut = content.copy();
+				if(!putInModus(player, modus, toPut))
+					launchItem(player, toPut);
+			}
+		
+		cards.setCount(failed);
+		
+		modus.checkAndResend(player);
 	}
 	
 	public static void captchalogueItem(ServerPlayerEntity player)

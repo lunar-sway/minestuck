@@ -6,12 +6,12 @@
     ]
   },
   "criteria": {
-    "has_pink_stone_bricks": {
+    "has_pink_stone_brick_slab": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "minestuck:pink_stone_bricks"
+            "item": "minestuck:pink_stone_brick_slab"
           }
         ]
       }
@@ -25,7 +25,7 @@
   },
   "requirements": [
     [
-      "has_pink_stone_bricks",
+      "has_pink_stone_brick_slab",
       "has_the_recipe"
     ]
   ]

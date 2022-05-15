@@ -8,6 +8,7 @@ import com.mraof.minestuck.util.MSTags;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.ItemTagsProvider;
+import net.minecraft.item.Items;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraftforge.common.Tags;
@@ -104,6 +105,8 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		tag(MSTags.Items.FAYGO).add(MSItems.ORANGE_FAYGO, CANDY_APPLE_FAYGO, FAYGO_COLA, COTTON_CANDY_FAYGO, CREME_SODA_FAYGO, GRAPE_FAYGO, MOON_MIST_FAYGO, PEACH_FAYGO, REDPOP_FAYGO);
 		tag(MODUS_CARD).add(STACK_MODUS_CARD, QUEUE_MODUS_CARD, QUEUESTACK_MODUS_CARD, TREE_MODUS_CARD, HASHMAP_MODUS_CARD, SET_MODUS_CARD);
 		tag(CASSETTES).add(MSItems.CASSETTE_MELLOHI, CASSETTE_13, CASSETTE_BLOCKS, CASSETTE_CAT, CASSETTE_CHIRP, CASSETTE_FAR, CASSETTE_MALL, CASSETTE_DANCE_STAB, CASSETTE_RETRO_BATTLE, CASSETTE_EMISSARY);
+		tag(BUGS).add(BUG_ON_A_STICK, CHOCOLATE_BEETLE, CONE_OF_FLIES, GRASSHOPPER, CICADA, JAR_OF_BUGS);
+		tag(CREATIVE_SHOCK_RIGHT_CLICK_LIMIT).add(Items.CHORUS_FRUIT);
 	}
 
 	@Override

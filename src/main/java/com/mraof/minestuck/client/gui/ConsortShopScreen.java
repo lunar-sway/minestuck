@@ -58,6 +58,11 @@ public class ConsortShopScreen extends ContainerScreen<ConsortMerchantContainer>
 	}
 	
 	@Override
+	protected void renderLabels(MatrixStack matrixStack, int mouseX, int mouseY)
+	{
+	}
+	
+	@Override
 	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
 	{
 		this.renderBackground(matrixStack);

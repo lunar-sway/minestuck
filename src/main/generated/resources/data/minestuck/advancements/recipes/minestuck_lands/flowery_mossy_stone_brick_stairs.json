@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minestuck:flowery_mossy_stone_brick_stairs"
+    ]
+  },
+  "criteria": {
+    "has_flowery_mossy_bricks": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minestuck:flowery_mossy_stone_bricks"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minestuck:flowery_mossy_stone_brick_stairs"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_flowery_mossy_bricks",
+      "has_the_recipe"
+    ]
+  ]
+}

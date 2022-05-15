@@ -5,6 +5,7 @@ import com.mraof.minestuck.block.fluid.FlowingModFluidBlock;
 import com.mraof.minestuck.block.fluid.FlowingWaterColorsBlock;
 import com.mraof.minestuck.block.machine.*;
 import com.mraof.minestuck.block.plant.*;
+import com.mraof.minestuck.block.redstone.*;
 import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.util.CustomVoxelShape;
@@ -33,6 +34,7 @@ import java.util.function.Function;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public class MSBlocks
 {
+	//TODO: rename all instances of "CASTLE_BRICKS" to "CHESS_BRICKS" (Black, DGrey, LGrey, White)
 	//Skaia
 	public static final Block BLACK_CHESS_DIRT = getNull(), WHITE_CHESS_DIRT = getNull(), DARK_GRAY_CHESS_DIRT = getNull(), LIGHT_GRAY_CHESS_DIRT = getNull();
 	public static final Block SKAIA_PORTAL = getNull();
@@ -74,22 +76,28 @@ public class MSBlocks
 	
 	//Land Environment Blocks
 	public static final Block BLUE_DIRT = getNull(), THOUGHT_DIRT = getNull();
-	public static final Block COARSE_STONE = getNull(), CHISELED_COARSE_STONE = getNull();
-	public static final Block SHADE_STONE = getNull(), SHADE_BRICKS = getNull(), SMOOTH_SHADE_STONE = getNull();
-	public static final Block FROST_BRICKS = getNull(), FROST_TILE = getNull(), CHISELED_FROST_BRICKS = getNull();
+	public static final Block COARSE_STONE = getNull(), CHISELED_COARSE_STONE = getNull(), COARSE_STONE_BRICKS = getNull(), COARSE_STONE_COLUMN = getNull(), CHISELED_COARSE_STONE_BRICKS = getNull(), CRACKED_COARSE_STONE_BRICKS = getNull(), MOSSY_COARSE_STONE = getNull();
+	public static final Block SHADE_STONE = getNull(), SMOOTH_SHADE_STONE = getNull(), SHADE_BRICKS = getNull(), SHADE_COLUMN = getNull(), CHISELED_SHADE_BRICKS = getNull(), CRACKED_SHADE_BRICKS = getNull(), MOSSY_SHADE_BRICKS = getNull(), BLOOD_SHADE_BRICKS = getNull(), TAR_SHADE_BRICKS = getNull();
+	public static final Block FROST_BRICKS = getNull(), FROST_TILE = getNull(), CHISELED_FROST_TILE = getNull(), FROST_COLUMN = getNull(),  CHISELED_FROST_BRICKS = getNull(), CRACKED_FROST_BRICKS = getNull(), FLOWERY_FROST_BRICKS = getNull();
 	public static final Block CAST_IRON = getNull(), CHISELED_CAST_IRON = getNull();
-	public static final Block MYCELIUM_BRICKS = getNull();
+	public static final Block MYCELIUM_COBBLESTONE = getNull(), MYCELIUM_STONE = getNull(), POLISHED_MYCELIUM_STONE = getNull(), MYCELIUM_BRICKS  = getNull(), MYCELIUM_COLUMN = getNull();
+	public static final Block CHISELED_MYCELIUM_BRICKS = getNull(), CRACKED_MYCELIUM_BRICKS = getNull(), MOSSY_MYCELIUM_BRICKS = getNull(), FLOWERY_MYCELIUM_BRICKS = getNull();
 	public static final Block STEEL_BEAM = getNull();
-	public static final Block BLACK_STONE = getNull(), BLACK_SAND = getNull();
-	public static final Block FLOWERY_MOSSY_COBBLESTONE = getNull(), FLOWERY_MOSSY_STONE_BRICKS = getNull();
+	public static final Block BLACK_STONE = getNull(), BLACK_COBBLESTONE = getNull(), POLISHED_BLACK_STONE = getNull(), BLACK_STONE_BRICKS = getNull(), BLACK_STONE_COLUMN = getNull(), CHISELED_BLACK_STONE_BRICKS = getNull(), CRACKED_BLACK_STONE_BRICKS = getNull(), BLACK_SAND = getNull();
+	public static final Block DECREPIT_STONE_BRICKS = getNull(), FLOWERY_MOSSY_COBBLESTONE = getNull(), MOSSY_DECREPIT_STONE_BRICKS = getNull(), FLOWERY_MOSSY_STONE_BRICKS = getNull();
 	public static final Block COARSE_END_STONE = getNull(), END_GRASS = getNull();
-	public static final Block CHALK = getNull(), POLISHED_CHALK = getNull(), CHALK_BRICKS = getNull(), CHISELED_CHALK_BRICKS = getNull();
-	public static final Block PINK_STONE = getNull(), POLISHED_PINK_STONE = getNull(), PINK_STONE_BRICKS = getNull(), CHISELED_PINK_STONE_BRICKS = getNull();
+	public static final Block CHALK = getNull(), POLISHED_CHALK = getNull(), CHALK_BRICKS = getNull(), CHALK_COLUMN = getNull(), CHISELED_CHALK_BRICKS = getNull(), MOSSY_CHALK_BRICKS = getNull(), FLOWERY_CHALK_BRICKS = getNull();
+	public static final Block PINK_STONE = getNull(), POLISHED_PINK_STONE = getNull(), PINK_STONE_BRICKS = getNull(), CHISELED_PINK_STONE_BRICKS = getNull(), PINK_STONE_COLUMN = getNull();
 	public static final Block CRACKED_PINK_STONE_BRICKS = getNull(), MOSSY_PINK_STONE_BRICKS = getNull();
 	public static final Block BROWN_STONE = getNull(), POLISHED_BROWN_STONE = getNull(), BROWN_STONE_BRICKS = getNull(), CRACKED_BROWN_STONE_BRICKS = getNull(), BROWN_STONE_COLUMN = getNull();
-	public static final Block GREEN_STONE = getNull();
+	public static final Block GREEN_STONE = getNull(), POLISHED_GREEN_STONE = getNull(), GREEN_STONE_BRICKS = getNull(), GREEN_STONE_COLUMN = getNull(), CHISELED_GREEN_STONE_BRICKS = getNull(), HORIZONTAL_GREEN_STONE_BRICKS = getNull(), VERTICAL_GREEN_STONE_BRICKS = getNull()
+			, GREEN_STONE_BRICK_TRIM = getNull(), GREEN_STONE_BRICK_FROG = getNull(), GREEN_STONE_BRICK_IGUANA_LEFT = getNull(), GREEN_STONE_BRICK_IGUANA_RIGHT = getNull(), GREEN_STONE_BRICK_LOTUS = getNull(), GREEN_STONE_BRICK_NAK_LEFT = getNull(), GREEN_STONE_BRICK_NAK_RIGHT = getNull()
+			, GREEN_STONE_BRICK_SALAMANDER_LEFT = getNull(), GREEN_STONE_BRICK_SALAMANDER_RIGHT = getNull(), GREEN_STONE_BRICK_SKAIA = getNull(), GREEN_STONE_BRICK_TURTLE = getNull();
+	public static final Block SANDSTONE_COLUMN = getNull(), CHISELED_SANDSTONE_COLUMN = getNull(), RED_SANDSTONE_COLUMN = getNull(), CHISELED_RED_SANDSTONE_COLUMN = getNull();
+	public static final Block UNCARVED_WOOD = getNull(), CHIPBOARD = getNull(), WOOD_SHAVINGS = getNull();
 	public static final Block DENSE_CLOUD = getNull(), BRIGHT_DENSE_CLOUD = getNull();
 	public static final Block SUGAR_CUBE = getNull();
+	public static final Block SPIKES = getNull();
 	
 	//Land Tree Blocks
 	public static final Block GLOWING_LOG = getNull(), FROST_LOG = getNull(), RAINBOW_LOG = getNull(), END_LOG = getNull();
@@ -136,15 +144,45 @@ public class MSBlocks
 	public static final Block PARCEL_PYXIS = getNull();
 	public static final Block PYXIS_LID = getNull();
 	public static final Block STONE_SLAB = getNull();
+	public static final Block NAKAGATOR_STATUE = getNull();
 	
 	//Structure Land Blocks
 	public static final Block BLACK_CASTLE_BRICK_STAIRS = getNull(), DARK_GRAY_CASTLE_BRICK_STAIRS = getNull(), LIGHT_GRAY_CASTLE_BRICK_STAIRS = getNull(), WHITE_CASTLE_BRICK_STAIRS = getNull();
-	public static final Block COARSE_STONE_STAIRS = getNull(), SHADE_BRICK_STAIRS = getNull(), FROST_BRICK_STAIRS = getNull(), CAST_IRON_STAIRS = getNull();
-	public static final Block MYCELIUM_BRICK_STAIRS = getNull(), CHALK_STAIRS = getNull(), CHALK_BRICK_STAIRS = getNull(), PINK_STONE_BRICK_STAIRS = getNull(), BROWN_STONE_BRICK_STAIRS = getNull();
+	public static final Block COARSE_STONE_STAIRS = getNull(), COARSE_STONE_BRICK_STAIRS = getNull(), SHADE_STAIRS = getNull(), SHADE_BRICK_STAIRS = getNull(), FROST_TILE_STAIRS = getNull(), FROST_BRICK_STAIRS = getNull(), CAST_IRON_STAIRS = getNull(), BLACK_STONE_STAIRS = getNull(), BLACK_STONE_BRICK_STAIRS = getNull();
+	public static final Block FLOWERY_MOSSY_STONE_BRICK_STAIRS = getNull(), MYCELIUM_STAIRS = getNull(), MYCELIUM_BRICK_STAIRS = getNull(), CHALK_STAIRS = getNull(), CHALK_BRICK_STAIRS = getNull(), PINK_STONE_STAIRS = getNull(), PINK_STONE_BRICK_STAIRS = getNull(), BROWN_STONE_STAIRS = getNull(), BROWN_STONE_BRICK_STAIRS = getNull(), GREEN_STONE_STAIRS = getNull(), GREEN_STONE_BRICK_STAIRS = getNull();
 	public static final Block RAINBOW_PLANKS_STAIRS = getNull(), END_PLANKS_STAIRS = getNull(), DEAD_PLANKS_STAIRS = getNull(), TREATED_PLANKS_STAIRS = getNull();
+	public static final Block STEEP_GREEN_STONE_BRICK_STAIRS_BASE = getNull(), STEEP_GREEN_STONE_BRICK_STAIRS_TOP = getNull();
 	public static final Block BLACK_CASTLE_BRICK_SLAB = getNull(), DARK_GRAY_CASTLE_BRICK_SLAB = getNull(), LIGHT_GRAY_CASTLE_BRICK_SLAB = getNull(), WHITE_CASTLE_BRICK_SLAB = getNull();
-	public static final Block CHALK_SLAB = getNull(), CHALK_BRICK_SLAB = getNull(), PINK_STONE_BRICK_SLAB = getNull(), BROWN_STONE_BRICK_SLAB = getNull();
+	public static final Block FLOWERY_MOSSY_STONE_BRICK_SLAB = getNull(), COARSE_STONE_SLAB = getNull(), COARSE_STONE_BRICK_SLAB = getNull(), SHADE_SLAB = getNull(), SHADE_BRICK_SLAB = getNull(), FROST_TILE_SLAB = getNull(), FROST_BRICK_SLAB = getNull(), BLACK_STONE_SLAB = getNull(), BLACK_STONE_BRICK_SLAB = getNull(), MYCELIUM_SLAB = getNull(), MYCELIUM_BRICK_SLAB = getNull(), CHALK_SLAB = getNull(), CHALK_BRICK_SLAB = getNull(), PINK_STONE_SLAB = getNull(), PINK_STONE_BRICK_SLAB = getNull(), BROWN_STONE_SLAB = getNull(), BROWN_STONE_BRICK_SLAB = getNull(), GREEN_STONE_SLAB = getNull(), GREEN_STONE_BRICK_SLAB = getNull();
 	public static final Block RAINBOW_PLANKS_SLAB = getNull(), END_PLANKS_SLAB = getNull(), DEAD_PLANKS_SLAB = getNull(), TREATED_PLANKS_SLAB = getNull();
+	
+	//Dungeon Functional Blocks
+	public static final Block TRAJECTORY_BLOCK = getNull();
+	public static final Block STAT_STORER = getNull();
+	public static final Block REMOTE_OBSERVER = getNull();
+	public static final Block WIRELESS_REDSTONE_TRANSMITTER = getNull();
+	public static final Block WIRELESS_REDSTONE_RECEIVER = getNull();
+	public static final Block SOLID_SWITCH = getNull();
+	public static final Block VARIABLE_SOLID_SWITCH = getNull();
+	public static final Block ONE_SECOND_INTERVAL_TIMED_SOLID_SWITCH = getNull();
+	public static final Block TWO_SECOND_INTERVAL_TIMED_SOLID_SWITCH = getNull();
+	public static final Block SUMMONER = getNull();
+	public static final Block AREA_EFFECT_BLOCK = getNull();
+	public static final Block PLATFORM_GENERATOR = getNull();
+	public static final Block PLATFORM_BLOCK = getNull();
+	public static final Block PLATFORM_RECEPTACLE = getNull();
+	public static final Block ITEM_MAGNET = getNull();
+	public static final Block REDSTONE_CLOCK = getNull();
+	public static final Block ROTATOR = getNull();
+	public static final Block FALL_PAD = getNull();
+	public static final Block FRAGILE_STONE = getNull();
+	public static final Block RETRACTABLE_SPIKES = getNull();
+	public static final Block AND_GATE_BLOCK = getNull();
+	public static final Block OR_GATE_BLOCK = getNull();
+	public static final Block XOR_GATE_BLOCK = getNull();
+	public static final Block NAND_GATE_BLOCK = getNull();
+	public static final Block NOR_GATE_BLOCK = getNull();
+	public static final Block XNOR_GATE_BLOCK = getNull();
 	
 	//Core Functional Land Blocks
 	public static final Block GATE = getNull();
@@ -179,6 +217,7 @@ public class MSBlocks
 	
 	//Misc Core Objects
 	public static final Block CRUXITE_DOWEL = getNull();
+	public static LotusTimeCapsuleMultiblock LOTUS_TIME_CAPSULE_BLOCK = new LotusTimeCapsuleMultiblock(Minestuck.MOD_ID);
 	
 	//Misc Alchemy Semi-Plants
 	public static final Block GOLD_SEEDS = getNull();
@@ -193,6 +232,7 @@ public class MSBlocks
 	public static final Block REVERSE_CAKE = getNull();
 	public static final Block FUCHSIA_CAKE = getNull();
 	public static final Block NEGATIVE_CAKE = getNull();
+	public static final Block CARROT_CAKE = getNull();
 	
 	//Explosion and Redstone
 	public static final Block PRIMED_TNT = getNull();
@@ -206,6 +246,7 @@ public class MSBlocks
 	public static final Block CHESSBOARD = getNull();
 	public static final Block MINI_FROG_STATUE = getNull();
 	public static final Block MINI_WIZARD_STATUE = getNull();
+	public static final Block MINI_TYPHEUS_STATUE = getNull();
 	public static final Block GLOWYSTONE_DUST = getNull();
 	public static final CassettePlayerBlock CASSETTE_PLAYER = getNull();
 	
@@ -224,15 +265,16 @@ public class MSBlocks
 	{
 		IForgeRegistry<Block> registry = event.getRegistry();
 		
+		//Skaia Blocks
 		registry.register(new Block(AbstractBlock.Properties.of(Material.DIRT, MaterialColor.COLOR_BLACK).strength(0.5F).harvestTool(ToolType.SHOVEL).sound(SoundType.GRAVEL)).setRegistryName("black_chess_dirt"));
 		registry.register(new Block(AbstractBlock.Properties.of(Material.DIRT, MaterialColor.SNOW).strength(0.5F).harvestTool(ToolType.SHOVEL).sound(SoundType.GRAVEL)).setRegistryName("white_chess_dirt"));
 		registry.register(new Block(AbstractBlock.Properties.of(Material.DIRT, MaterialColor.COLOR_GRAY).strength(0.5F).harvestTool(ToolType.SHOVEL).sound(SoundType.GRAVEL)).setRegistryName("dark_gray_chess_dirt"));
 		registry.register(new Block(AbstractBlock.Properties.of(Material.DIRT, MaterialColor.COLOR_LIGHT_GRAY).strength(0.5F).harvestTool(ToolType.SHOVEL).sound(SoundType.GRAVEL)).setRegistryName("light_gray_chess_dirt"));
 		registry.register(new SkaiaPortalBlock(AbstractBlock.Properties.of(Material.PORTAL, MaterialColor.COLOR_CYAN).noCollission().lightLevel(state -> 11).strength(-1.0F, 3600000.0F).noDrops()).setRegistryName("skaia_portal"));
-		Block blackCastleBricks = register(registry, new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.TERRACOTTA_BLACK).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("black_castle_bricks"));
-		Block darkGrayCastleBricks = register(registry, new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.TERRACOTTA_GRAY).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("dark_gray_castle_bricks"));
-		Block lightGrayCastleBricks = register(registry, new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.TERRACOTTA_LIGHT_GRAY).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("light_gray_castle_bricks"));
-		Block whiteCastleBricks = register(registry, new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.TERRACOTTA_WHITE).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("white_castle_bricks"));
+		Block blackChessBricks = register(registry, new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.TERRACOTTA_BLACK).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("black_castle_bricks"));
+		Block darkGrayChessBricks = register(registry, new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.TERRACOTTA_GRAY).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("dark_gray_castle_bricks"));
+		Block lightGrayChessBricks = register(registry, new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.TERRACOTTA_LIGHT_GRAY).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("light_gray_castle_bricks"));
+		Block whiteChessBricks = register(registry, new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.TERRACOTTA_WHITE).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("white_castle_bricks"));
 		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.TERRACOTTA_BLACK).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("black_castle_brick_smooth"));
 		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.TERRACOTTA_GRAY).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("dark_gray_castle_brick_smooth"));
 		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.TERRACOTTA_LIGHT_GRAY).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("light_gray_castle_brick_smooth"));
@@ -247,6 +289,7 @@ public class MSBlocks
 		registry.register(new StainedGlassBlock(DyeColor.BLUE, AbstractBlock.Properties.of(Material.GLASS, DyeColor.BLUE).strength(0.3F).sound(SoundType.GLASS).noOcclusion().isValidSpawn(MSBlocks::never).isRedstoneConductor(MSBlocks::never).isSuffocating(MSBlocks::never).isViewBlocking(MSBlocks::never)).setRegistryName("white_crown_stained_glass"));
 		registry.register(new StainedGlassBlock(DyeColor.BLUE, AbstractBlock.Properties.of(Material.GLASS, DyeColor.BLUE).strength(0.3F).sound(SoundType.GLASS).noOcclusion().isValidSpawn(MSBlocks::never).isRedstoneConductor(MSBlocks::never).isSuffocating(MSBlocks::never).isViewBlocking(MSBlocks::never)).setRegistryName("white_pawn_stained_glass"));
 		
+		//Ores
 		registry.register(new CustomOreBlock(2, 5, AbstractBlock.Properties.of(Material.STONE).strength(3.0F, 3.0F).requiresCorrectToolForDrops().harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("stone_cruxite_ore"));
 		registry.register(new CustomOreBlock(2, 5, AbstractBlock.Properties.of(Material.STONE).strength(3.0F, 3.0F).requiresCorrectToolForDrops().harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("netherrack_cruxite_ore"));
 		registry.register(new CustomOreBlock(2, 5, AbstractBlock.Properties.of(Material.STONE).strength(3.0F, 3.0F).requiresCorrectToolForDrops().harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("cobblestone_cruxite_ore"));
@@ -286,41 +329,101 @@ public class MSBlocks
 		registry.register(new Block(AbstractBlock.Properties.of(Material.DIRT, MaterialColor.COLOR_LIGHT_GREEN).strength(0.5F).sound(SoundType.GRAVEL)).setRegistryName("thought_dirt"));
 		Block coarseStone = register(registry, new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.STONE).requiresCorrectToolForDrops().strength(2.0F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("coarse_stone"));
 		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.STONE).requiresCorrectToolForDrops().strength(2.0F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("chiseled_coarse_stone"));
-		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_BLUE).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("shade_stone"));
-		Block shadeBricks = register(registry, new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_BLUE).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("shade_bricks"));
+		Block coarseStoneBricks = register(registry, new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.STONE).requiresCorrectToolForDrops().strength(2.0F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("coarse_stone_bricks"));
+		registry.register(new MSDirectionalBlock(AbstractBlock.Properties.of(Material.STONE, MaterialColor.STONE).requiresCorrectToolForDrops().strength(2.0F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("coarse_stone_column"));
+		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.STONE).requiresCorrectToolForDrops().strength(2.0F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("chiseled_coarse_stone_bricks"));
+		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.STONE).requiresCorrectToolForDrops().strength(2.0F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("cracked_coarse_stone_bricks"));
+		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.STONE).requiresCorrectToolForDrops().strength(2.0F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("mossy_coarse_stone"));
+		Block shadeStone = register(registry, new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_BLUE).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("shade_stone"));
 		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_BLUE).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("smooth_shade_stone"));
+		Block shadeBricks = register(registry, new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_BLUE).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("shade_bricks"));
+		registry.register(new MSDirectionalBlock(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_BLUE).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("shade_column"));
+		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_BLUE).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("chiseled_shade_bricks"));
+		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_BLUE).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("cracked_shade_bricks"));
+		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_BLUE).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("mossy_shade_bricks"));
+		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_BLUE).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("blood_shade_bricks"));
+		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_BLUE).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("tar_shade_bricks"));
+		Block frostTile = register(registry, new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.ICE).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("frost_tile"));
+		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.ICE).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("chiseled_frost_tile"));
 		Block frostBricks = register(registry, new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.ICE).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("frost_bricks"));
-		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.ICE).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("frost_tile"));
+		registry.register(new MSDirectionalBlock(AbstractBlock.Properties.of(Material.STONE, MaterialColor.ICE).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("frost_column"));
 		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.ICE).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("chiseled_frost_bricks"));
+		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.ICE).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("cracked_frost_bricks"));
+		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.ICE).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("flowery_frost_bricks"));
 		Block castIron = register(registry, new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.METAL).requiresCorrectToolForDrops().strength(3.0F, 9.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("cast_iron"));
 		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.METAL).requiresCorrectToolForDrops().strength(3.0F, 9.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("chiseled_cast_iron"));
 		registry.register(new MSDirectionalBlock(AbstractBlock.Properties.of(Material.METAL, MaterialColor.METAL).requiresCorrectToolForDrops().strength(3.0F, 9.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("steel_beam"));
+		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_MAGENTA).requiresCorrectToolForDrops().strength(1.5f, 6.0f).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("mycelium_cobblestone"));
+		Block myceliumStone = register(registry, new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_MAGENTA).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("mycelium_stone"));
+		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_MAGENTA).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("polished_mycelium_stone"));
 		Block myceliumBricks = register(registry, new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_MAGENTA).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("mycelium_bricks"));
-		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_BLACK).requiresCorrectToolForDrops().strength(2.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("black_stone"));
+		registry.register(new MSDirectionalBlock(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_MAGENTA).requiresCorrectToolForDrops().strength(2.5F, 7.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1)).setRegistryName("mycelium_column"));
+		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_MAGENTA).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("chiseled_mycelium_bricks"));
+		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_MAGENTA).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("cracked_mycelium_bricks"));
+		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_MAGENTA).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("mossy_mycelium_bricks"));
+		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_MAGENTA).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("flowery_mycelium_bricks"));
+		Block blackStone = register(registry, new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_BLACK).requiresCorrectToolForDrops().strength(2.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("black_stone"));
+		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_BLACK).requiresCorrectToolForDrops().strength(2.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("polished_black_stone"));
+		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_BLACK).requiresCorrectToolForDrops().strength(2.5f,6.0f).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("black_cobblestone"));
+		Block blackStoneBricks = register(registry, new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_BLACK).requiresCorrectToolForDrops().strength(2.5f,6.0f).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("black_stone_bricks"));
+		registry.register(new MSDirectionalBlock(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_BLACK).requiresCorrectToolForDrops().strength(2.5f,6.0f).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("black_stone_column"));
+		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_BLACK).requiresCorrectToolForDrops().strength(2.5f,6.0f).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("cracked_black_stone_bricks"));
+		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_BLACK).requiresCorrectToolForDrops().strength(2.5f,6.0f).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("chiseled_black_stone_bricks"));
 		registry.register(new SandBlock(0x181915, AbstractBlock.Properties.of(Material.SAND, MaterialColor.COLOR_BLACK).strength(0.5F).sound(SoundType.SAND)).setRegistryName("black_sand"));
+		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("decrepit_stone_bricks"));
 		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("flowery_mossy_cobblestone"));
-		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("flowery_mossy_stone_bricks"));
+		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("mossy_decrepit_stone_bricks"));
+		Block floweryMossyStoneBricks = register(registry, new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_GRAY).requiresCorrectToolForDrops().strength(1.5f, 6.0f).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("flowery_mossy_stone_bricks"));
 		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.SAND).requiresCorrectToolForDrops().strength(3.0F, 9.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("coarse_end_stone"));
 		registry.register(new EndGrassBlock(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_PURPLE).requiresCorrectToolForDrops().strength(3.0F, 9.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("end_grass"));
 		Block chalk = register(registry, new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.SNOW).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("chalk"));
 		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.SNOW).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("polished_chalk"));
 		Block chalkBricks = register(registry, new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.SNOW).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("chalk_bricks"));
+		registry.register(new MSDirectionalBlock(AbstractBlock.Properties.of(Material.STONE, MaterialColor.SNOW).requiresCorrectToolForDrops().strength(1.5f, 6.0f).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("chalk_column"));
 		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.SNOW).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("chiseled_chalk_bricks"));
-		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_PINK).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("pink_stone"));
+		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.SNOW).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("mossy_chalk_bricks"));
+		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.SNOW).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("flowery_chalk_bricks"));
+		Block pinkStone = register(registry, new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_PINK).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("pink_stone"));
 		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_PINK).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("polished_pink_stone"));
 		Block pinkStoneBricks = register(registry, new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_PINK).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("pink_stone_bricks"));
+		registry.register(new MSDirectionalBlock(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_PINK).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("pink_stone_column"));
 		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_PINK).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("chiseled_pink_stone_bricks"));
 		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_PINK).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("cracked_pink_stone_bricks"));
 		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_PINK).requiresCorrectToolForDrops().strength(1.5F, 6.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("mossy_pink_stone_bricks"));
-		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_BROWN).requiresCorrectToolForDrops().strength(2.5F, 7.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1)).setRegistryName("brown_stone"));
+		Block brownStone = register(registry, new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_BROWN).requiresCorrectToolForDrops().strength(2.5F, 7.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1)).setRegistryName("brown_stone"));
 		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_BROWN).requiresCorrectToolForDrops().strength(2.5F, 7.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1)).setRegistryName("polished_brown_stone"));
 		Block brownStoneBricks = register(registry, new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_BROWN).requiresCorrectToolForDrops().strength(2.5F, 7.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1)).setRegistryName("brown_stone_bricks"));
 		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_BROWN).requiresCorrectToolForDrops().strength(1.0F, 5.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("cracked_brown_stone_bricks"));
 		registry.register(new MSDirectionalBlock(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_BROWN).requiresCorrectToolForDrops().strength(2.5F, 7.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1)).setRegistryName("brown_stone_column"));
-		registry.register(new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_GREEN).strength(2.5F, 7.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1)).setRegistryName("green_stone"));
+		Block greenStone = register(registry, new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_GREEN).strength(2.5F, 7.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1)).setRegistryName("green_stone"));
+		registry.register(new Block(Block.Properties.of(Material.STONE, MaterialColor.COLOR_GREEN).strength(2.5F, 7.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1)).setRegistryName("polished_green_stone"));
+		Block greenStoneBricks = register(registry, new Block(Block.Properties.of(Material.STONE, MaterialColor.COLOR_GREEN).strength(2.5F, 7.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1)).setRegistryName("green_stone_bricks"));
+		registry.register(new MSDirectionalBlock(Block.Properties.of(Material.STONE, MaterialColor.COLOR_GREEN).strength(2.5F, 7.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1)).setRegistryName("green_stone_column"));
+		registry.register(new Block(Block.Properties.of(Material.STONE, MaterialColor.COLOR_GREEN).strength(2.5F, 7.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1)).setRegistryName("chiseled_green_stone_bricks"));
+		registry.register(new Block(Block.Properties.of(Material.STONE, MaterialColor.COLOR_GREEN).strength(2.5F, 7.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1)).setRegistryName("horizontal_green_stone_bricks"));
+		registry.register(new Block(Block.Properties.of(Material.STONE, MaterialColor.COLOR_GREEN).strength(2.5F, 7.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1)).setRegistryName("vertical_green_stone_bricks"));
+		registry.register(new MSDirectionalBlock(Block.Properties.of(Material.STONE, MaterialColor.COLOR_GREEN).strength(2.5F, 7.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1)).setRegistryName("green_stone_brick_trim"));
+		registry.register(new HieroglyphBlock(Block.Properties.of(Material.STONE, MaterialColor.COLOR_GREEN).strength(2.5F, 7.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1)).setRegistryName("green_stone_brick_frog"));
+		registry.register(new HieroglyphBlock(Block.Properties.of(Material.STONE, MaterialColor.COLOR_GREEN).strength(2.5F, 7.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1)).setRegistryName("green_stone_brick_iguana_left"));
+		registry.register(new HieroglyphBlock(Block.Properties.of(Material.STONE, MaterialColor.COLOR_GREEN).strength(2.5F, 7.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1)).setRegistryName("green_stone_brick_iguana_right"));
+		registry.register(new HieroglyphBlock(Block.Properties.of(Material.STONE, MaterialColor.COLOR_GREEN).strength(2.5F, 7.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1)).setRegistryName("green_stone_brick_lotus"));
+		registry.register(new HieroglyphBlock(Block.Properties.of(Material.STONE, MaterialColor.COLOR_GREEN).strength(2.5F, 7.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1)).setRegistryName("green_stone_brick_nak_left"));
+		registry.register(new HieroglyphBlock(Block.Properties.of(Material.STONE, MaterialColor.COLOR_GREEN).strength(2.5F, 7.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1)).setRegistryName("green_stone_brick_nak_right"));
+		registry.register(new HieroglyphBlock(Block.Properties.of(Material.STONE, MaterialColor.COLOR_GREEN).strength(2.5F, 7.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1)).setRegistryName("green_stone_brick_salamander_left"));
+		registry.register(new HieroglyphBlock(Block.Properties.of(Material.STONE, MaterialColor.COLOR_GREEN).strength(2.5F, 7.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1)).setRegistryName("green_stone_brick_salamander_right"));
+		registry.register(new HieroglyphBlock(Block.Properties.of(Material.STONE, MaterialColor.COLOR_GREEN).strength(2.5F, 7.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1)).setRegistryName("green_stone_brick_skaia"));
+		registry.register(new HieroglyphBlock(Block.Properties.of(Material.STONE, MaterialColor.COLOR_GREEN).strength(2.5F, 7.0F).harvestTool(ToolType.PICKAXE).harvestLevel(1)).setRegistryName("green_stone_brick_turtle"));
+		registry.register(new MSDirectionalBlock(AbstractBlock.Properties.of(Material.STONE, MaterialColor.SAND).requiresCorrectToolForDrops().strength(0.8F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("sandstone_column"));
+		registry.register(new MSDirectionalBlock(AbstractBlock.Properties.of(Material.STONE, MaterialColor.SAND).requiresCorrectToolForDrops().strength(0.8F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("chiseled_sandstone_column"));
+		registry.register(new MSDirectionalBlock(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_ORANGE).requiresCorrectToolForDrops().strength(0.8F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("red_sandstone_column"));
+		registry.register(new MSDirectionalBlock(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_ORANGE).requiresCorrectToolForDrops().strength(0.8F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("chiseled_red_sandstone_column"));
+		registry.register(new Block(AbstractBlock.Properties.of(Material.WOOD, MaterialColor.WOOD).strength(2.0F).harvestTool(ToolType.AXE).sound(SoundType.WOOD)).setRegistryName("uncarved_wood"));
+		registry.register(new Block(AbstractBlock.Properties.of(Material.WOOD, MaterialColor.WOOD).strength(1.0F).harvestTool(ToolType.AXE).sound(SoundType.SCAFFOLDING)).setRegistryName("chipboard"));
+		registry.register(new Block(AbstractBlock.Properties.of(Material.WOOD, MaterialColor.WOOD).strength(0.4F).harvestTool(ToolType.SHOVEL).sound(SoundType.SAND)).setRegistryName("wood_shavings"));
 		registry.register(new Block(AbstractBlock.Properties.of(Material.GLASS, MaterialColor.COLOR_YELLOW).strength(0.5F).sound(SoundType.SNOW)).setRegistryName("dense_cloud"));
 		registry.register(new Block(AbstractBlock.Properties.of(Material.GLASS, MaterialColor.COLOR_LIGHT_GRAY).strength(0.5F).sound(SoundType.SNOW)).setRegistryName("bright_dense_cloud"));
 		registry.register(new Block(AbstractBlock.Properties.of(Material.SAND, MaterialColor.SNOW).strength(0.4F).sound(SoundType.SAND)).setRegistryName("sugar_cube"));
+		registry.register(new SpikeBlock(AbstractBlock.Properties.of(Material.METAL, MaterialColor.METAL).strength(2).sound(SoundType.METAL), MSBlockShapes.SPIKES).setRegistryName("spikes"));
 		
 		registry.register(new FlammableLogBlock(AbstractBlock.Properties.of(Material.WOOD, MaterialColor.COLOR_LIGHT_BLUE).strength(2.0F).harvestTool(ToolType.AXE).lightLevel(state -> 11).sound(SoundType.WOOD)).setRegistryName("glowing_log"));
 		registry.register(new FlammableLogBlock(AbstractBlock.Properties.of(Material.WOOD, MaterialColor.ICE).strength(2.0F).harvestTool(ToolType.AXE).sound(SoundType.WOOD)).setRegistryName("frost_log"));
@@ -415,39 +518,95 @@ public class MSBlocks
 		registry.register(new VeinBlock(AbstractBlock.Properties.of(Material.WOOD).strength(0.45F).sound(SoundType.SLIME_BLOCK)).setRegistryName("vein"));
 		registry.register(new VeinCornerBlock(AbstractBlock.Properties.of(Material.WOOD).strength(0.45F).sound(SoundType.SLIME_BLOCK)).setRegistryName("vein_corner"));
 		registry.register(new VeinCornerBlock(AbstractBlock.Properties.of(Material.WOOD).strength(0.45F).sound(SoundType.SLIME_BLOCK)).setRegistryName("inverted_vein_corner"));
-		registry.register(new PipeBlock(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(4.0F).sound(SoundType.METAL).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.PIPE).setRegistryName("pipe"));
+		registry.register(new DirectionalCustomShapeBlock(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(4.0F).sound(SoundType.METAL).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.PIPE).setRegistryName("pipe"));
 		registry.register(new Block(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(4.0F).sound(SoundType.METAL).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("pipe_intersection"));
 		registry.register(new StoneTabletBlock(AbstractBlock.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(0.3F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("stone_slab")); //same thing as stone tablet
+		registry.register(new CustomShapeBlock(AbstractBlock.Properties.of(Material.STONE).strength(0.5F), MSBlockShapes.NAKAGATOR_STATUE).setRegistryName("nakagator_statue"));
 		
-		registry.register(new StairsBlock(() -> MSBlocks.BLACK_CASTLE_BRICKS.defaultBlockState(), AbstractBlock.Properties.copy(blackCastleBricks)).setRegistryName("black_castle_brick_stairs"));
-		registry.register(new StairsBlock(() -> MSBlocks.DARK_GRAY_CASTLE_BRICKS.defaultBlockState(), AbstractBlock.Properties.copy(darkGrayCastleBricks)).setRegistryName("dark_gray_castle_brick_stairs"));
-		registry.register(new StairsBlock(() -> MSBlocks.LIGHT_GRAY_CASTLE_BRICKS.defaultBlockState(), AbstractBlock.Properties.copy(lightGrayCastleBricks)).setRegistryName("light_gray_castle_brick_stairs"));
-		registry.register(new StairsBlock(() -> MSBlocks.WHITE_CASTLE_BRICKS.defaultBlockState(), AbstractBlock.Properties.copy(whiteCastleBricks)).setRegistryName("white_castle_brick_stairs"));
+		registry.register(new StairsBlock(() -> MSBlocks.BLACK_CASTLE_BRICKS.defaultBlockState(), AbstractBlock.Properties.copy(blackChessBricks)).setRegistryName("black_castle_brick_stairs"));
+		registry.register(new StairsBlock(() -> MSBlocks.DARK_GRAY_CASTLE_BRICKS.defaultBlockState(), AbstractBlock.Properties.copy(darkGrayChessBricks)).setRegistryName("dark_gray_castle_brick_stairs"));
+		registry.register(new StairsBlock(() -> MSBlocks.LIGHT_GRAY_CASTLE_BRICKS.defaultBlockState(), AbstractBlock.Properties.copy(lightGrayChessBricks)).setRegistryName("light_gray_castle_brick_stairs"));
+		registry.register(new StairsBlock(() -> MSBlocks.WHITE_CASTLE_BRICKS.defaultBlockState(), AbstractBlock.Properties.copy(whiteChessBricks)).setRegistryName("white_castle_brick_stairs"));
 		registry.register(new StairsBlock(() -> MSBlocks.COARSE_STONE.defaultBlockState(), AbstractBlock.Properties.copy(coarseStone)).setRegistryName("coarse_stone_stairs"));
+		registry.register(new StairsBlock(() -> MSBlocks.COARSE_STONE_BRICKS.defaultBlockState(), AbstractBlock.Properties.copy(coarseStoneBricks)).setRegistryName("coarse_stone_brick_stairs"));
+		registry.register(new StairsBlock(() -> MSBlocks.SHADE_STONE.defaultBlockState(), AbstractBlock.Properties.copy(shadeStone)).setRegistryName("shade_stairs"));;
 		registry.register(new StairsBlock(() -> MSBlocks.SHADE_BRICKS.defaultBlockState(), AbstractBlock.Properties.copy(shadeBricks)).setRegistryName("shade_brick_stairs"));
+		registry.register(new StairsBlock(() -> MSBlocks.FROST_TILE.defaultBlockState(), AbstractBlock.Properties.copy(frostTile)).setRegistryName("frost_tile_stairs"));
 		registry.register(new StairsBlock(() -> MSBlocks.FROST_BRICKS.defaultBlockState(), AbstractBlock.Properties.copy(frostBricks)).setRegistryName("frost_brick_stairs"));
 		registry.register(new StairsBlock(() -> MSBlocks.CAST_IRON.defaultBlockState(), AbstractBlock.Properties.copy(castIron)).setRegistryName("cast_iron_stairs"));
+		registry.register(new StairsBlock(() -> MSBlocks.BLACK_STONE.defaultBlockState(), AbstractBlock.Properties.copy(blackStone)).setRegistryName("black_stone_stairs"));
+		registry.register(new StairsBlock(() -> MSBlocks.BLACK_STONE_BRICKS.defaultBlockState(), AbstractBlock.Properties.copy(blackStoneBricks)).setRegistryName("black_stone_brick_stairs"));
+		registry.register(new StairsBlock(() -> MSBlocks.MYCELIUM_STONE.defaultBlockState(), AbstractBlock.Properties.copy(myceliumStone)).setRegistryName("mycelium_stairs"));
 		registry.register(new StairsBlock(() -> MSBlocks.MYCELIUM_BRICKS.defaultBlockState(), AbstractBlock.Properties.copy(myceliumBricks)).setRegistryName("mycelium_brick_stairs"));
+		registry.register(new StairsBlock(() -> MSBlocks.FLOWERY_MOSSY_STONE_BRICKS.defaultBlockState(), AbstractBlock.Properties.copy(floweryMossyStoneBricks)).setRegistryName("flowery_mossy_stone_brick_stairs"));
 		registry.register(new StairsBlock(() -> MSBlocks.CHALK.defaultBlockState(), AbstractBlock.Properties.copy(chalk)).setRegistryName("chalk_stairs"));
 		registry.register(new StairsBlock(() -> MSBlocks.CHALK_BRICKS.defaultBlockState(), AbstractBlock.Properties.copy(chalkBricks)).setRegistryName("chalk_brick_stairs"));
+		registry.register(new StairsBlock(() -> MSBlocks.PINK_STONE.defaultBlockState(), AbstractBlock.Properties.copy(pinkStone)).setRegistryName("pink_stone_stairs"));
 		registry.register(new StairsBlock(() -> MSBlocks.PINK_STONE_BRICKS.defaultBlockState(), AbstractBlock.Properties.copy(pinkStoneBricks)).setRegistryName("pink_stone_brick_stairs"));
-		registry.register(new StairsBlock(() -> MSBlocks.BROWN_STONE_BRICKS.defaultBlockState(), AbstractBlock.Properties.copy(pinkStoneBricks)).setRegistryName("brown_stone_brick_stairs"));
+		registry.register(new StairsBlock(() -> MSBlocks.BROWN_STONE.defaultBlockState(), AbstractBlock.Properties.copy(brownStone)).setRegistryName("brown_stone_stairs"));
+		registry.register(new StairsBlock(() -> MSBlocks.BROWN_STONE_BRICKS.defaultBlockState(), AbstractBlock.Properties.copy(brownStoneBricks)).setRegistryName("brown_stone_brick_stairs"));
+		registry.register(new StairsBlock(() -> MSBlocks.GREEN_STONE.defaultBlockState(), Block.Properties.copy(greenStone)).setRegistryName("green_stone_stairs"));
+		registry.register(new StairsBlock(() -> MSBlocks.GREEN_STONE_BRICKS.defaultBlockState(), Block.Properties.copy(greenStoneBricks)).setRegistryName("green_stone_brick_stairs"));
 		registry.register(new StairsBlock(() -> MSBlocks.RAINBOW_PLANKS.defaultBlockState(), AbstractBlock.Properties.copy(rainbowPlanks)).setRegistryName("rainbow_planks_stairs"));
 		registry.register(new StairsBlock(() -> MSBlocks.END_PLANKS.defaultBlockState(), AbstractBlock.Properties.copy(endPlanks)).setRegistryName("end_planks_stairs"));
 		registry.register(new StairsBlock(() -> MSBlocks.DEAD_PLANKS.defaultBlockState(), AbstractBlock.Properties.copy(deadPlanks)).setRegistryName("dead_planks_stairs"));
 		registry.register(new StairsBlock(() -> MSBlocks.TREATED_PLANKS.defaultBlockState(), AbstractBlock.Properties.copy(treatedPlanks)).setRegistryName("treated_planks_stairs"));
-		registry.register(new SlabBlock(AbstractBlock.Properties.copy(blackCastleBricks)).setRegistryName("black_castle_brick_slab"));
-		registry.register(new SlabBlock(AbstractBlock.Properties.copy(darkGrayCastleBricks)).setRegistryName("dark_gray_castle_brick_slab"));
-		registry.register(new SlabBlock(AbstractBlock.Properties.copy(lightGrayCastleBricks)).setRegistryName("light_gray_castle_brick_slab"));
-		registry.register(new SlabBlock(AbstractBlock.Properties.copy(whiteCastleBricks)).setRegistryName("white_castle_brick_slab"));
+		registry.register(new CustomShapeBlock(Block.Properties.copy(greenStoneBricks), MSBlockShapes.STEEP_STAIRS_BASE).setRegistryName("steep_green_stone_brick_stairs_base"));
+		registry.register(new CustomShapeBlock(Block.Properties.copy(greenStoneBricks), MSBlockShapes.STEEP_STAIRS_TOP).setRegistryName("steep_green_stone_brick_stairs_top"));
+		registry.register(new SlabBlock(AbstractBlock.Properties.copy(blackChessBricks)).setRegistryName("black_castle_brick_slab"));
+		registry.register(new SlabBlock(AbstractBlock.Properties.copy(darkGrayChessBricks)).setRegistryName("dark_gray_castle_brick_slab"));
+		registry.register(new SlabBlock(AbstractBlock.Properties.copy(lightGrayChessBricks)).setRegistryName("light_gray_castle_brick_slab"));
+		registry.register(new SlabBlock(AbstractBlock.Properties.copy(whiteChessBricks)).setRegistryName("white_castle_brick_slab"));
 		registry.register(new SlabBlock(AbstractBlock.Properties.copy(chalk)).setRegistryName("chalk_slab"));
 		registry.register(new SlabBlock(AbstractBlock.Properties.copy(chalkBricks)).setRegistryName("chalk_brick_slab"));
+		registry.register(new SlabBlock(AbstractBlock.Properties.copy(pinkStone)).setRegistryName("pink_stone_slab"));
 		registry.register(new SlabBlock(AbstractBlock.Properties.copy(pinkStoneBricks)).setRegistryName("pink_stone_brick_slab"));
+		registry.register(new SlabBlock(AbstractBlock.Properties.copy(blackStone)).setRegistryName("black_stone_slab"));
+		registry.register(new SlabBlock(AbstractBlock.Properties.copy(blackStoneBricks)).setRegistryName("black_stone_brick_slab"));
+		registry.register(new SlabBlock(AbstractBlock.Properties.copy(myceliumStone)).setRegistryName("mycelium_slab"));
+		registry.register(new SlabBlock(AbstractBlock.Properties.copy(myceliumBricks)).setRegistryName("mycelium_brick_slab"));
+		registry.register(new SlabBlock(AbstractBlock.Properties.copy(floweryMossyStoneBricks)).setRegistryName("flowery_mossy_stone_brick_slab"));
+		registry.register(new SlabBlock(AbstractBlock.Properties.copy(frostTile)).setRegistryName("frost_tile_slab"));
+		registry.register(new SlabBlock(AbstractBlock.Properties.copy(frostBricks)).setRegistryName("frost_brick_slab"));
+		registry.register(new SlabBlock(AbstractBlock.Properties.copy(shadeStone)).setRegistryName("shade_slab"));
+		registry.register(new SlabBlock(AbstractBlock.Properties.copy(shadeBricks)).setRegistryName("shade_brick_slab"));
+		registry.register(new SlabBlock(AbstractBlock.Properties.copy(coarseStone)).setRegistryName("coarse_stone_slab"));
+		registry.register(new SlabBlock(AbstractBlock.Properties.copy(coarseStoneBricks)).setRegistryName("coarse_stone_brick_slab"));
+		registry.register(new SlabBlock(AbstractBlock.Properties.copy(brownStone)).setRegistryName("brown_stone_slab"));
 		registry.register(new SlabBlock(AbstractBlock.Properties.copy(brownStoneBricks)).setRegistryName("brown_stone_brick_slab"));
+		registry.register(new SlabBlock(Block.Properties.copy(greenStone)).setRegistryName("green_stone_slab"));
+		registry.register(new SlabBlock(Block.Properties.copy(greenStoneBricks)).setRegistryName("green_stone_brick_slab"));
 		registry.register(new SlabBlock(AbstractBlock.Properties.copy(rainbowPlanks)).setRegistryName("rainbow_planks_slab"));
 		registry.register(new SlabBlock(AbstractBlock.Properties.copy(endPlanks)).setRegistryName("end_planks_slab"));
 		registry.register(new SlabBlock(AbstractBlock.Properties.copy(deadPlanks)).setRegistryName("dead_planks_slab"));
 		registry.register(new SlabBlock(AbstractBlock.Properties.copy(treatedPlanks)).setRegistryName("treated_planks_slab"));
+		
+		registry.register(new TrajectoryBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL)).setRegistryName("trajectory_block"));
+		registry.register(new StatStorerBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL)).setRegistryName("stat_storer"));
+		registry.register(new RemoteObserverBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL)).setRegistryName("remote_observer"));
+		registry.register(new WirelessRedstoneTransmitterBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL)).setRegistryName("wireless_redstone_transmitter"));
+		registry.register(new WirelessRedstoneReceiverBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).randomTicks().sound(SoundType.METAL)).setRegistryName("wireless_redstone_receiver"));
+		registry.register(new SolidSwitchBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL).lightLevel(state -> state.getValue(SolidSwitchBlock.POWERED) ? 15 : 0)).setRegistryName("solid_switch"));
+		registry.register(new VariableSolidSwitchBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL).lightLevel(state -> state.getValue(VariableSolidSwitchBlock.POWER))).setRegistryName("variable_solid_switch"));
+		registry.register(new TimedSolidSwitchBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL).lightLevel(state -> state.getValue(TimedSolidSwitchBlock.POWER)), 20).setRegistryName("one_second_interval_timed_solid_switch"));
+		registry.register(new TimedSolidSwitchBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL).lightLevel(state -> state.getValue(TimedSolidSwitchBlock.POWER)), 40).setRegistryName("two_second_interval_timed_solid_switch"));
+		registry.register(new SummonerBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL)).setRegistryName("summoner"));
+		registry.register(new AreaEffectBlock(AbstractBlock.Properties.of(Material.METAL).strength(6).sound(SoundType.METAL)).setRegistryName("area_effect_block"));
+		registry.register(new PlatformGeneratorBlock(AbstractBlock.Properties.of(Material.METAL).strength(6).sound(SoundType.METAL)).setRegistryName("platform_generator"));
+		registry.register(new PlatformBlock(AbstractBlock.Properties.of(Material.BARRIER).strength(0.2F).sound(SoundType.SCAFFOLDING).lightLevel(state -> 6).noOcclusion().isSuffocating(MSBlocks::never).isViewBlocking(MSBlocks::never)).setRegistryName("platform_block"));
+		registry.register(new PlatformReceptacleBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL)).setRegistryName("platform_receptacle"));
+		registry.register(new ItemMagnetBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL), new CustomVoxelShape(new double[]{0, 0, 0, 16, 1, 16}, new double[]{1, 1, 1, 15, 15, 15}, new double[]{0, 15, 0, 16, 16, 16})).setRegistryName("item_magnet"));
+		registry.register(new RedstoneClockBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL)).setRegistryName("redstone_clock"));
+		registry.register(new RotatorBlock(AbstractBlock.Properties.of(Material.METAL).strength(3).sound(SoundType.METAL)).setRegistryName("rotator"));
+		registry.register(new FallPadBlock(AbstractBlock.Properties.of(Material.CLOTH_DECORATION).strength(1).sound(SoundType.WOOL)).setRegistryName("fall_pad"));
+		registry.register(new FragileBlock(AbstractBlock.Properties.of(Material.STONE).strength(1).sound(SoundType.STONE)).setRegistryName("fragile_stone"));
+		registry.register(new RetractableSpikesBlock(AbstractBlock.Properties.of(Material.METAL).strength(1).sound(SoundType.METAL)).setRegistryName("retractable_spikes"));
+		registry.register(new LogicGateBlock(AbstractBlock.Properties.of(Material.STONE).strength(1).sound(SoundType.STONE), LogicGateBlock.State.AND).setRegistryName("and_gate_block"));
+		registry.register(new LogicGateBlock(AbstractBlock.Properties.of(Material.STONE).strength(1).sound(SoundType.STONE), LogicGateBlock.State.OR).setRegistryName("or_gate_block"));
+		registry.register(new LogicGateBlock(AbstractBlock.Properties.of(Material.STONE).strength(1).sound(SoundType.STONE), LogicGateBlock.State.XOR).setRegistryName("xor_gate_block"));
+		registry.register(new LogicGateBlock(AbstractBlock.Properties.of(Material.STONE).strength(1).sound(SoundType.STONE), LogicGateBlock.State.NAND).setRegistryName("nand_gate_block"));
+		registry.register(new LogicGateBlock(AbstractBlock.Properties.of(Material.STONE).strength(1).sound(SoundType.STONE), LogicGateBlock.State.NOR).setRegistryName("nor_gate_block"));
+		registry.register(new LogicGateBlock(AbstractBlock.Properties.of(Material.STONE).strength(1).sound(SoundType.STONE), LogicGateBlock.State.XNOR).setRegistryName("xnor_gate_block"));
 		
 		registry.register(new GateBlock(AbstractBlock.Properties.of(Material.PORTAL).noCollission().strength(-1.0F, 25.0F).sound(SoundType.GLASS).lightLevel(state -> 11).noDrops()).setRegistryName("gate"));
 		registry.register(new ReturnNodeBlock(AbstractBlock.Properties.of(Material.PORTAL).noCollission().strength(-1.0F, 10.0F).sound(SoundType.GLASS).lightLevel(state -> 11).noDrops()).setRegistryName("return_node"));
@@ -467,7 +626,7 @@ public class MSBlocks
 		registry.register(new ComputerBlock(ComputerBlock.LAPTOP_OPEN_SHAPE, ComputerBlock.LAPTOP_CLOSED_SHAPE, AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(4.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("laptop"));
 		registry.register(new ComputerBlock(ComputerBlock.LAPTOP_OPEN_SHAPE, ComputerBlock.LAPTOP_CLOSED_SHAPE, AbstractBlock.Properties.of(Material.METAL, MaterialColor.COLOR_RED).requiresCorrectToolForDrops().strength(4.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("crockertop"));
 		registry.register(new ComputerBlock(ComputerBlock.LAPTOP_OPEN_SHAPE, ComputerBlock.LAPTOP_CLOSED_SHAPE, AbstractBlock.Properties.of(Material.METAL, MaterialColor.COLOR_GREEN).requiresCorrectToolForDrops().strength(4.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("hubtop"));
-		registry.register(new ComputerBlock(ComputerBlock.LUNCHTOP_SHAPE, ComputerBlock.LUNCHTOP_SHAPE, AbstractBlock.Properties.of(Material.METAL, MaterialColor.COLOR_RED).requiresCorrectToolForDrops().strength(4.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("lunchtop"));
+		registry.register(new ComputerBlock(ComputerBlock.LUNCHTOP_OPEN_SHAPE, ComputerBlock.LUNCHTOP_CLOSED_SHAPE, AbstractBlock.Properties.of(Material.METAL, MaterialColor.COLOR_RED).requiresCorrectToolForDrops().strength(4.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("lunchtop"));
 		registry.register(new ComputerBlock(ComputerBlock.OLD_COMPUTER_SHAPE, ComputerBlock.OLD_COMPUTER_SHAPE, AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(4.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("old_computer"));
 		registry.register(new TransportalizerBlock(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("transportalizer"));
 		registry.register(new TransportalizerBlock(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("trans_portalizer"));
@@ -488,6 +647,7 @@ public class MSBlocks
 		registry.register(new SimpleCakeBlock(AbstractBlock.Properties.of(Material.CAKE).strength(0.5F).sound(SoundType.WOOL), 2, 0.1F, null).setRegistryName("reverse_cake"));
 		registry.register(new SimpleCakeBlock(AbstractBlock.Properties.of(Material.CAKE).strength(0.5F).sound(SoundType.WOOL), 3, 0.5F, player -> {player.addEffect(new EffectInstance(Effects.ABSORPTION, 350, 1));player.addEffect(new EffectInstance(Effects.REGENERATION, 200, 0));}).setRegistryName("fuchsia_cake"));
 		registry.register(new SimpleCakeBlock(AbstractBlock.Properties.of(Material.CAKE).strength(0.5F).sound(SoundType.WOOL), 2, 0.3F, player -> {player.addEffect(new EffectInstance(Effects.BLINDNESS, 300, 0));player.addEffect(new EffectInstance(Effects.INVISIBILITY, 250, 0));}).setRegistryName("negative_cake"));
+		registry.register(new SimpleCakeBlock(AbstractBlock.Properties.of(Material.CAKE).strength(0.5F).sound(SoundType.WOOL), 2, 0.3F, player -> player.addEffect(new EffectInstance(Effects.NIGHT_VISION, 200, 0))).setRegistryName("carrot_cake"));
 		
 		registry.register(new SpecialTNTBlock(AbstractBlock.Properties.of(Material.EXPLOSIVE).strength(0.0F).sound(SoundType.GRASS), true, false, false).setRegistryName("primed_tnt"));
 		registry.register(new SpecialTNTBlock(AbstractBlock.Properties.of(Material.EXPLOSIVE).strength(0.0F).sound(SoundType.GRASS).randomTicks(), false, true, false).setRegistryName("unstable_tnt"));
@@ -495,14 +655,17 @@ public class MSBlocks
 		registry.register(new SpecialButtonBlock(AbstractBlock.Properties.of(Material.DECORATION).noCollission().strength(0.5F).sound(SoundType.WOOD), true, true).setRegistryName("wooden_explosive_button"));
 		registry.register(new SpecialButtonBlock(AbstractBlock.Properties.of(Material.DECORATION).noCollission().strength(0.5F).sound(SoundType.STONE), true, false).setRegistryName("stone_explosive_button"));
 		
-		registry.register(new DecorBlock(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(0.5F).harvestTool(ToolType.PICKAXE).harvestLevel(0).sound(SoundType.METAL), MSBlockShapes.BLENDER).setRegistryName("blender"));
-		registry.register(new DecorBlock(AbstractBlock.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(0.5F).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.CHESSBOARD).setRegistryName("chessboard"));
-		registry.register(new DecorBlock(AbstractBlock.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(0.5F).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.FROG_STATUE).setRegistryName("mini_frog_statue"));
-		registry.register(new DecorBlock(AbstractBlock.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(0.5F).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.WIZARD_STATUE).setRegistryName("mini_wizard_statue"));
+		registry.register(new CustomShapeBlock(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(0.5F).harvestTool(ToolType.PICKAXE).harvestLevel(0).sound(SoundType.METAL), MSBlockShapes.BLENDER).setRegistryName("blender"));
+		registry.register(new CustomShapeBlock(AbstractBlock.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(0.5F).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.CHESSBOARD).setRegistryName("chessboard"));
+		registry.register(new CustomShapeBlock(AbstractBlock.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(0.5F).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.FROG_STATUE).setRegistryName("mini_frog_statue"));
+		registry.register(new CustomShapeBlock(AbstractBlock.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(0.5F).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.WIZARD_STATUE).setRegistryName("mini_wizard_statue"));
+		registry.register(new CustomShapeBlock(AbstractBlock.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(0.5F).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.DENIZEN_STATUE).setRegistryName("mini_typheus_statue"));
 		registry.register(new CassettePlayerBlock(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(0.5F).sound(SoundType.METAL).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.CASSETTE_PLAYER).setRegistryName("cassette_player"));
 		registry.register(new GlowystoneWireBlock(AbstractBlock.Properties.of(Material.DECORATION).strength(0.0F).lightLevel(state -> 16).noCollission()).setRegistryName("glowystone_dust"));
-		registry.register(new DecorBlock(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(4.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.PARCEL_PYXIS).setRegistryName("parcel_pyxis"));
-		registry.register(new DecorBlock(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(1.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.PYXIS_LID).setRegistryName("pyxis_lid"));
+		registry.register(new CustomShapeBlock(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(4.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.PARCEL_PYXIS).setRegistryName("parcel_pyxis"));
+		registry.register(new CustomShapeBlock(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(1.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.PYXIS_LID).setRegistryName("pyxis_lid"));
+		
+		LOTUS_TIME_CAPSULE_BLOCK.registerBlocks(registry);
 		
 		registry.register(new FlowingModFluidBlock(MSFluids.OIL, new Vector3d(0.0, 0.0, 0.0), 0.75f, AbstractBlock.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()).setRegistryName("oil"));
 		registry.register(new FlowingModFluidBlock(MSFluids.BLOOD, new Vector3d(0.8, 0.0, 0.0), 0.25f, AbstractBlock.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()).setRegistryName("blood"));

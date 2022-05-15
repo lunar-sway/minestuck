@@ -5,6 +5,7 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.client.model.*;
 import com.mraof.minestuck.client.model.armor.CrumplyHatModel;
+import com.mraof.minestuck.client.model.armor.DreamerPajamasModel;
 import com.mraof.minestuck.client.renderer.entity.*;
 import com.mraof.minestuck.client.renderer.entity.frog.FrogRenderer;
 import com.mraof.minestuck.client.renderer.tileentity.GateRenderer;
@@ -27,6 +28,7 @@ import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.entity.SpriteRenderer;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.world.DimensionRenderInfo;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemModelsProperties;
 import net.minecraft.util.ResourceLocation;
@@ -51,6 +53,7 @@ public class ClientProxy
 
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.FROG, FrogRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.HOLOGRAM, HologramRenderer::new);
+		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.LOTUS_FLOWER, LotusFlowerRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.NAKAGATOR, manager -> new SimpleTexturedEntityRenderer<>(manager, new NakagatorModel<>(), 0.5F));
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.SALAMANDER, manager -> new SimpleTexturedEntityRenderer<>(manager, new SalamanderModel<>(), 0.5F));
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.IGUANA, manager -> new SimpleTexturedEntityRenderer<>(manager, new IguanaModel<>(), 0.5F));
@@ -80,7 +83,7 @@ public class ClientProxy
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.MIDNIGHT_CREW_POSTER, manager -> new RenderHangingArt<>(manager, new ResourceLocation("minestuck:midnight_poster")));
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.SBAHJ_POSTER, manager -> new RenderHangingArt<>(manager, new ResourceLocation("minestuck:sbahj_poster")));
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.SHOP_POSTER, manager -> new RenderHangingArt<>(manager, new ResourceLocation("minestuck:shop_poster")));
-
+		
 		RenderTypeLookup.setRenderLayer(MSBlocks.ALCHEMITER.TOTEM_PAD.get(), RenderType.cutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.TOTEM_LATHE.DOWEL_ROD.get(), RenderType.cutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.TOTEM_LATHE.CARD_SLOT.get(), RenderType.cutout());
@@ -88,8 +91,11 @@ public class ClientProxy
 		RenderTypeLookup.setRenderLayer(MSBlocks.CRUXITE_DOWEL, RenderType.cutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.BLENDER, RenderType.cutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.CHESSBOARD, RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.SPIKES, RenderType.cutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.MINI_FROG_STATUE, RenderType.cutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.MINI_WIZARD_STATUE, RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.MINI_TYPHEUS_STATUE, RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.NAKAGATOR_STATUE, RenderType.cutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.CASSETTE_PLAYER, RenderType.cutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.PIPE, RenderType.cutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.PARCEL_PYXIS, RenderType.cutout());
@@ -121,7 +127,10 @@ public class ClientProxy
 		RenderTypeLookup.setRenderLayer(MSBlocks.BLACK_PAWN_STAINED_GLASS, RenderType.translucent());
 		RenderTypeLookup.setRenderLayer(MSBlocks.WHITE_CROWN_STAINED_GLASS, RenderType.translucent());
 		RenderTypeLookup.setRenderLayer(MSBlocks.WHITE_PAWN_STAINED_GLASS, RenderType.translucent());
-
+		RenderTypeLookup.setRenderLayer(MSBlocks.LUNCHTOP, RenderType.translucent());
+		RenderTypeLookup.setRenderLayer(MSBlocks.PLATFORM_BLOCK, RenderType.translucent());
+		RenderTypeLookup.setRenderLayer(MSBlocks.ITEM_MAGNET, RenderType.translucent());
+		
 		MSKeyHandler.registerKeys();
 		
 		ComputerProgram.registerProgramClass(0, SburbClient.class);
@@ -148,5 +157,23 @@ public class ClientProxy
 	private static void registerArmorModels()
 	{
 		MSItems.CRUMPLY_HAT.setArmorModel(new CrumplyHatModel());
+		DreamerPajamasModel pajamasModel = new DreamerPajamasModel();
+		MSItems.PROSPIT_CIRCLET.setArmorModel(pajamasModel);
+		MSItems.PROSPIT_SHIRT.setArmorModel(pajamasModel);
+		MSItems.PROSPIT_PANTS.setArmorModel(pajamasModel);
+		MSItems.PROSPIT_SHOES.setArmorModel(pajamasModel);
+		MSItems.DERSE_CIRCLET.setArmorModel(pajamasModel);
+		MSItems.DERSE_SHIRT.setArmorModel(pajamasModel);
+		MSItems.DERSE_PANTS.setArmorModel(pajamasModel);
+		MSItems.DERSE_SHOES.setArmorModel(pajamasModel);
+	}
+	
+	/**
+	 * Used to prevent a crash in PlayToClientPackets when loading ClientPlayerEntity on a dedicated server
+	 */
+	public static PlayerEntity getClientPlayer()
+	{
+		Minecraft mc = Minecraft.getInstance();
+		return mc.player;
 	}
 }

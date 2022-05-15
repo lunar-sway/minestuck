@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "tag": "minecraft:wool"
+  },
+  "input2": {
+    "item": "minecraft:hay_block"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:fall_pad"
+  }
+}

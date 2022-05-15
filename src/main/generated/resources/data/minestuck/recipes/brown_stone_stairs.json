@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minestuck:brown_stone"
+    }
+  },
+  "result": {
+    "item": "minestuck:brown_stone_stairs",
+    "count": 4
+  }
+}

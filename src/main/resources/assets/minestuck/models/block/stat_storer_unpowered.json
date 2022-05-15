@@ -1,0 +1,8 @@
+{
+    "parent": "block/cube_bottom_top",
+    "textures": {
+        "bottom": "minestuck:block/stat_storer_unpowered",
+        "top": "minestuck:block/stat_storer_unpowered",
+        "side": "minestuck:block/redstone_machine_block"
+    }
+}

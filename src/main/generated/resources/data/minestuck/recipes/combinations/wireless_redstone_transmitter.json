@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:repeater"
+  },
+  "input2": {
+    "item": "minestuck:plutonium_core"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:wireless_redstone_transmitter"
+  }
+}

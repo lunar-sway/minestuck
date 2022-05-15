@@ -61,7 +61,7 @@ public class VeinBlock extends DirectionalBlock	//TODO duplicate code between th
 	@Nullable
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context)
-	{
+	{/*Does not work as it is written because the vein and vein corner isn't using the same facing type. Fix this if you want to use the vein block in the future.
 		BlockState state = context.getLevel().getBlockState(context.getClickedPos().relative(context.getClickedFace().getOpposite()));
 
 	   if(state.getBlock() == MSBlocks.VEIN || state.getBlock() == MSBlocks.VEIN_CORNER)
@@ -70,7 +70,7 @@ public class VeinBlock extends DirectionalBlock	//TODO duplicate code between th
 
 			if (direction == context.getClickedFace())
 				return this.defaultBlockState().setValue(FACING, direction.getOpposite());
-		}
+		}*/
 
 		return this.defaultBlockState().setValue(FACING, context.getClickedFace());
 	}

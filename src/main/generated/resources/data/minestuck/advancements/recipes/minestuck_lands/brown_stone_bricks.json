@@ -6,12 +6,12 @@
     ]
   },
   "criteria": {
-    "has_polished_brown_stone": {
+    "has_brown_stone": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "minestuck:polished_brown_stone"
+            "item": "minestuck:brown_stone"
           }
         ]
       }
@@ -25,7 +25,7 @@
   },
   "requirements": [
     [
-      "has_polished_brown_stone",
+      "has_brown_stone",
       "has_the_recipe"
     ]
   ]

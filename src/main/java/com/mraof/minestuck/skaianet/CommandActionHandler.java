@@ -6,9 +6,11 @@ import com.mraof.minestuck.command.SburbConnectionCommand;
 import com.mraof.minestuck.entry.EntryProcess;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.world.DynamicDimensions;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
@@ -142,7 +144,7 @@ public final class CommandActionHandler
 				PlayerIdentifier fakePlayer = IdentifierHandler.createNewFakeIdentifier();
 				c.setNewServerPlayer(fakePlayer);
 				
-				c = makeConnectionWithLand(skaianet, land, createDebugLand(land), fakePlayer, IdentifierHandler.NULL_IDENTIFIER);
+				c = makeConnectionWithLand(skaianet, land, createDebugLand(player.server, land), fakePlayer, IdentifierHandler.NULL_IDENTIFIER);
 			}
 			
 			if(i == landTypes.size())
@@ -157,7 +159,7 @@ public final class CommandActionHandler
 						break;
 					PlayerIdentifier fakePlayer = IdentifierHandler.createNewFakeIdentifier();
 					
-					c = makeConnectionWithLand(skaianet, land, createDebugLand(land), fakePlayer, lastIdentifier);
+					c = makeConnectionWithLand(skaianet, land, createDebugLand(player.server, land), fakePlayer, lastIdentifier);
 					
 					lastIdentifier = fakePlayer;
 				}
@@ -189,18 +191,8 @@ public final class CommandActionHandler
 	}
 	
 	
-	private static RegistryKey<World> createDebugLand(LandTypePair landTypes) throws CommandSyntaxException
+	private static RegistryKey<World> createDebugLand(MinecraftServer server, LandTypePair landTypes)
 	{
-		String base = "minestuck:debug_land";
-		
-		ResourceLocation landName = new ResourceLocation(base);
-		/*
-		for(int i = 0; DimensionType.byName(landName) != null; i++)
-		{
-			landName = new ResourceLocation(base+"_"+i);
-		}
-		
-		return DimensionManager.registerDimension(landName, MSDimensionTypes.LANDS, null, true);
-		 */return null;
+		return DynamicDimensions.createLand(server, new ResourceLocation("minestuck:debug_land"), landTypes);
 	}
 }

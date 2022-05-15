@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:shade_bricks"
+  },
+  "input2": {
+    "item": "minestuck:oil_bucket"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:tar_shade_bricks"
+  }
+}

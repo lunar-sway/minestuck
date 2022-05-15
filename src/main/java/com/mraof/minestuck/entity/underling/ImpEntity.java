@@ -17,6 +17,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.FakePlayer;
 
 public class ImpEntity extends UnderlingEntity
 {
@@ -62,7 +63,7 @@ public class ImpEntity extends UnderlingEntity
 	@Override
 	protected int getVitalityGel()
 	{
-		return random.nextInt(3)+1;
+		return random.nextInt(3) + 1;
 	}
 	
 	@Override
@@ -81,12 +82,8 @@ public class ImpEntity extends UnderlingEntity
 		Entity entity = cause.getEntity();
 		if(this.dead && !this.level.isClientSide)
 		{
-			computePlayerProgress((int) (2 + 3* getGristType().getPower()));
-			if(entity instanceof ServerPlayerEntity)
-			{
-				Echeladder ladder = PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder();
-				ladder.checkBonus(Echeladder.UNDERLING_BONUS_OFFSET);
-			}
+			computePlayerProgress((int) (5 + 2 * getGristType().getPower())); //most imps stop giving xp at rung 8
+			firstKillBonus(entity, Echeladder.UNDERLING_BONUS_OFFSET);
 		}
 	}
 	

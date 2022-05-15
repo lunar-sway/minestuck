@@ -111,13 +111,13 @@ public class TitleSelectorScreen extends Screen
 	private void select()
 	{
 		MSPacketHandler.sendToServer(new TitleSelectPacket(new Title(currentClass, currentAspect)));
-		removed();
+		onClose();
 	}
 	
 	private void random()
 	{
 		MSPacketHandler.sendToServer(new TitleSelectPacket());
-		removed();
+		onClose();
 	}
 	
 	@Override

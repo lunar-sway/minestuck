@@ -26,7 +26,7 @@ import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 
-public class CassettePlayerBlock extends DecorBlock
+public class CassettePlayerBlock extends CustomShapeBlock
 {
 	public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
 	public static final EnumProperty<EnumCassetteType> CASSETTE = MSProperties.CASSETTE;
@@ -34,7 +34,7 @@ public class CassettePlayerBlock extends DecorBlock
 	public CassettePlayerBlock(Properties properties, CustomVoxelShape shape)
 	{
 		super(properties, shape);
-		this.registerDefaultState(this.stateDefinition.any().setValue(CASSETTE, EnumCassetteType.NONE));
+		this.registerDefaultState(defaultBlockState().setValue(CASSETTE, EnumCassetteType.NONE)); //defaultState set in decor block has waterlogged
 	}
 	
 	@Override
@@ -155,7 +155,7 @@ public class CassettePlayerBlock extends DecorBlock
 	@Override
 	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
 	{
-		builder.add(FACING);
+		super.createBlockStateDefinition(builder);
 		builder.add(CASSETTE);
 		builder.add(OPEN);
 	}

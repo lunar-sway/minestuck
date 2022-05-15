@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minestuck:shade_bricks"
+    },
+    {
+      "item": "minestuck:glowing_mushroom"
+    }
+  ],
+  "result": {
+    "item": "minestuck:mossy_shade_bricks"
+  }
+}

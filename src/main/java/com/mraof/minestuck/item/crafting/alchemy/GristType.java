@@ -54,6 +54,7 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 	{
 		return new TranslationTextComponent(getTranslationKey());
 	}
+	
 	/**
 	 * Returns the grist's translation key
 	 */
@@ -64,7 +65,7 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 		
 		return translationKey;
 	}
-
+	
 	/**
 	 * Returns the grist's rarity. Is a number from 0.0 to 1.0.
 	 *
@@ -74,7 +75,7 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 	{
 		return rarity;
 	}
-
+	
 	/**
 	 * Returns the power level of a underling of a grist's type. Don't call this with grists like Zillium or Build.
 	 */
@@ -140,7 +141,7 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 	{
 		if(entry == null)
 			return DUMMY_ICON_LOCATION;
-		else return new ResourceLocation(entry.getNamespace(), "textures/grist/"+entry.getPath()+".png");
+		else return new ResourceLocation(entry.getNamespace(), "textures/grist/" + entry.getPath() + ".png");
 	}
 	
 	@Override
@@ -181,7 +182,8 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 			GristType type = GristTypes.getRegistry().getValue(name);
 			if(type != null)
 				return type;
-			else LOGGER.warn("Couldn't find grist type by name {}  while reading from nbt. Will fall back to {} instead.", name, fallback);
+			else
+				LOGGER.warn("Couldn't find grist type by name {}  while reading from nbt. Will fall back to {} instead.", name, fallback);
 		}
 		return fallback.get();
 	}
@@ -256,7 +258,7 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 		}
 	}
 	
-	public enum SpawnCategory	//Which categories can a certain grist type appear under (for spawning underlings)
+	public enum SpawnCategory    //Which categories can a certain grist type appear under (for spawning underlings)
 	{
 		COMMON,
 		UNCOMMON,

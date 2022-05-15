@@ -5,14 +5,12 @@ import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.util.MSSoundEvents;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
@@ -63,7 +61,7 @@ public class LichEntity extends UnderlingEntity
 	@Override
 	protected int getVitalityGel()
 	{
-		return random.nextInt(3)+6;
+		return random.nextInt(3) + 6;
 	}
 	
 	@Override
@@ -79,15 +77,12 @@ public class LichEntity extends UnderlingEntity
 	public void die(DamageSource cause)
 	{
 		super.die(cause);
-		Entity entity = cause.getEntity();
+		Entity killer = cause.getEntity();
 		if(this.dead && !this.level.isClientSide)
 		{
-			computePlayerProgress((int) (300* getGristType().getPower() + 650));
-			if(entity instanceof ServerPlayerEntity)
-			{
-				Echeladder ladder = PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder();
-				ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET + 3));
-			}
+			computePlayerProgress((int) (50 + 2.6 * getGristType().getPower())); //still give xp up to top rung
+			firstKillBonus(killer, (byte) (Echeladder.UNDERLING_BONUS_OFFSET + 3));
 		}
 	}
+	
 }

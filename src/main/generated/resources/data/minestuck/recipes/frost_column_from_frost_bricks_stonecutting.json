@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "minestuck:frost_bricks"
+  },
+  "result": "minestuck:frost_column",
+  "count": 1
+}

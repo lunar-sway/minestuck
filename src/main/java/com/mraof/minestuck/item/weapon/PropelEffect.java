@@ -1,5 +1,6 @@
 package com.mraof.minestuck.item.weapon;
 
+import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
@@ -31,7 +32,8 @@ public class PropelEffect implements ItemRightClickEffect
 	public ActionResult<ItemStack> onRightClick(World world, PlayerEntity player, Hand hand)
 	{
 		ItemStack itemStack = player.getItemInHand(hand);
-		propelAction(player, itemStack, getVelocityMod(), hand);
+		if(!CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MOBILITY_ITEMS))
+			propelAction(player, itemStack, getVelocityMod(), hand);
 		return ActionResult.pass(itemStack);
 	}
 	
@@ -49,11 +51,11 @@ public class PropelEffect implements ItemRightClickEffect
 		} else if(player instanceof ServerPlayerEntity)
 		{
 			title = PlayerSavedData.getData((ServerPlayerEntity) player).getTitle();
-			if(player.getCooldowns().getCooldownPercent(stack.getItem(), 1F) <= 0 && title != null && title.getHeroAspect() == aspect)
+			if(player.getCooldowns().getCooldownPercent(stack.getItem(), 1F) <= 0 && ((title != null && title.getHeroAspect() == aspect) || player.isCreative()))
 				propelActionSound(player.level, player);
 		}
 		
-		if(title != null && title.getHeroAspect() == aspect)
+		if((title != null && title.getHeroAspect() == aspect) || player.isCreative())
 		{
 			Vector3d lookVec = player.getLookAngle().scale(velocity);
 			if(player.isFallFlying())

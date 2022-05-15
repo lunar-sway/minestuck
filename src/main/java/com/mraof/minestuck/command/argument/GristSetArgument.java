@@ -1,5 +1,6 @@
 package com.mraof.minestuck.command.argument;
 
+import com.google.gson.JsonObject;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
@@ -11,10 +12,16 @@ import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.alchemy.NonNegativeGristSet;
 import net.minecraft.command.CommandSource;
+import net.minecraft.command.arguments.IArgumentSerializer;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.text.TranslationTextComponent;
+
+import javax.annotation.Nonnull;
 
 public class GristSetArgument implements ArgumentType<GristSet>
 {
+	public static final IArgumentSerializer<GristSetArgument> SERIALIZER = new Serializer();
+	
 	//TODO List suggestions
 	//TODO Provide examples
 	public static final String INCOMPLETE = "argument.grist_set.incomplete";
@@ -91,5 +98,36 @@ public class GristSetArgument implements ArgumentType<GristSet>
 	{
 		STANDARD,
 		NON_NEGATIVE
+	}
+	
+	private static final class Serializer implements IArgumentSerializer<GristSetArgument>
+	{
+		@Override
+		public void serializeToNetwork(GristSetArgument argument, PacketBuffer buffer)
+		{
+			buffer.writeEnum(argument.mode);
+		}
+		
+		@Nonnull
+		@Override
+		public GristSetArgument deserializeFromNetwork(PacketBuffer buffer)
+		{
+			Mode mode = buffer.readEnum(Mode.class);
+			return new GristSetArgument(mode);
+		}
+		
+		@Override
+		public void serializeToJson(GristSetArgument argument, @Nonnull JsonObject json)
+		{
+			switch (argument.mode) {
+				case NON_NEGATIVE:
+					json.addProperty("type", "non_negative");
+					break;
+				case STANDARD:
+				default:
+					json.addProperty("type", "standard");
+					break;
+			}
+		}
 	}
 }

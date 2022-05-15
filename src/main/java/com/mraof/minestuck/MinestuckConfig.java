@@ -87,13 +87,14 @@ public class MinestuckConfig
 		
 		//Mechanics
 		public final boolean forceMaxSize = true;
-		public final boolean hardMode = false; //Not fully fleshed out yet
+		public final BooleanValue hardMode;
 		public final BooleanValue echeladderProgress;
 		public final BooleanValue aspectEffects;
 		public final BooleanValue playerSelectedTitle;
 		public final IntValue preEntryRungLimit;
 		public final BooleanValue rungHealthOnRespawn;
 		public final IntValue dialogueRenewalSpeed;
+		public final IntValue lotusRestorationTime;
 		
 		//Entry
 		public final BooleanValue entryCrater;
@@ -141,6 +142,9 @@ public class MinestuckConfig
 					.define("playerSelectedTitle", true);
 			dialogueRenewalSpeed = builder.comment("Determines how quickly consort dialogue and store stocks are renewed.")
 					.defineInRange("dialogueRenewalSpeed", 2, 0, 1000);
+			lotusRestorationTime = builder.comment("Determines how many seconds it takes for the lotus blossom to regrow after the opening process has started.")
+					.defineInRange("lotusRestorationTime", 600, 30, Integer.MAX_VALUE);
+			hardMode = builder.define("hardMode", false);
 			builder.pop();
 			
 			builder.push("sylladex");

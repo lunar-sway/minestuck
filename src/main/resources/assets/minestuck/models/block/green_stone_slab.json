@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures":
+  {
+    "bottom": "minestuck:block/green_stone",
+    "top": "minestuck:block/green_stone",
+    "side": "minestuck:block/green_stone"
+  }
+}
