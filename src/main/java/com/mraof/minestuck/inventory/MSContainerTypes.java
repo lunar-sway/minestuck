@@ -20,6 +20,7 @@ public class MSContainerTypes
 	public static final ContainerType<MiniTotemLatheContainer> MINI_TOTEM_LATHE = getNull();
 	public static final ContainerType<MiniAlchemiterContainer> MINI_ALCHEMITER = getNull();
 	public static final ContainerType<MiniPunchDesignixContainer> MINI_PUNCH_DESIGNIX = getNull();
+	public static final ContainerType<SendificatorContainer> SENDIFICATOR = getNull();
 	public static final ContainerType<GristWidgetContainer> GRIST_WIDGET = getNull();
 	public static final ContainerType<UraniumCookerContainer> URANIUM_COOKER = getNull();
 	public static final ContainerType<CaptchaDeckContainer> CAPTCHA_DECK = getNull();
@@ -41,6 +42,7 @@ public class MSContainerTypes
 		registry.register(new ContainerType<>((IContainerFactory<MiniTotemLatheContainer>) MiniTotemLatheContainer::new).setRegistryName("mini_totem_lathe"));
 		registry.register(new ContainerType<>((IContainerFactory<MiniAlchemiterContainer>) MiniAlchemiterContainer::new).setRegistryName("mini_alchemiter"));
 		registry.register(new ContainerType<>((IContainerFactory<MiniPunchDesignixContainer>) MiniPunchDesignixContainer::new).setRegistryName("mini_punch_designix"));
+		registry.register(new ContainerType<>((IContainerFactory<SendificatorContainer>) SendificatorContainer::new).setRegistryName("sendificator"));
 		registry.register(new ContainerType<>((IContainerFactory<GristWidgetContainer>) GristWidgetContainer::new).setRegistryName("grist_widget"));
 		registry.register(new ContainerType<>((IContainerFactory<UraniumCookerContainer>) UraniumCookerContainer::new).setRegistryName("uranium_cooker"));
 		registry.register(new ContainerType<>(CaptchaDeckContainer::new).setRegistryName("captcha_deck"));
