@@ -1,7 +1,7 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.tileentity.machine.SendificatorTileEntity;
-import com.mraof.minestuck.tileentity.redstone.WirelessRedstoneTransmitterTileEntity;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
@@ -45,6 +45,10 @@ public class SendificatorPacket implements PlayToServerPacket
 				if(Math.sqrt(player.distanceToSqr(tePos.getX() + 0.5, tePos.getY() + 0.5, tePos.getZ() + 0.5)) <= 8)
 				{
 					((SendificatorTileEntity) te).setDestinationBlockPos(destinationBlockPos);
+					//Imitates the structure block to ensure that changes are sent client-side
+					te.setChanged();
+					BlockState state = player.level.getBlockState(tileBlockPos);
+					player.level.sendBlockUpdated(tileBlockPos, state, state, 3);
 				}
 			}
 		}

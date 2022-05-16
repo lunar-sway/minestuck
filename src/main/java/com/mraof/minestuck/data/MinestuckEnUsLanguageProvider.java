@@ -2,7 +2,6 @@ package com.mraof.minestuck.data;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.block.machine.SendificatorBlock;
 import com.mraof.minestuck.block.redstone.AreaEffectBlock;
 import com.mraof.minestuck.block.redstone.SummonerBlock;
 import com.mraof.minestuck.block.redstone.WirelessRedstoneReceiverBlock;
@@ -449,7 +448,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.TRANS_PORTALIZER, "TRANSportalizer");
 		add(MSBlocks.SENDIFICATOR, "Sendificator");
 		addTooltip(MSBlocks.SENDIFICATOR, "Approximately head sized");
-		addExtra(MSBlocks.SENDIFICATOR, SendificatorBlock.ACTIVATION_MESSAGE, "The machine indicates that it is irreversibly set to the current time and place, following that up by saying SUBMIT. OBEY.");
 		add(MSBlocks.GRIST_WIDGET, "GristWidget 12000");
 		add(MSBlocks.URANIUM_COOKER, "Cookalyzer");
 		add(MSBlocks.CRUXITE_DOWEL, "Cruxite Dowel");
@@ -1522,6 +1520,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MiniAlchemiterTileEntity.TITLE, "Miniature Alchemiter");
 		add(MiniPunchDesignixTileEntity.TITLE, "Miniature Punch Designix");
 		add(UraniumCookerTileEntity.TITLE, "Cookalyzer");
+		add(SendificatorTileEntity.TITLE, "Sendificator");
 		add(GristWidgetTileEntity.TITLE, "GristWidget 12000");
 		add(SummonerTileEntity.SUMMON_TYPE_CHANGE, "Summoned entity type changed to %s.");
 		add(RedstoneClockTileEntity.TIME_CHANGE, "The clock now pulses every %s seconds");
@@ -1666,6 +1665,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		
 		addDamageMessage(MSDamageSources.SPIKE, "%s was filled with too many holes from spikes");
 		addDamageMessageWithKiller(MSDamageSources.SPIKE, "%1$s was caught in a spike trap whilst trying to escape %2$s");
+		addDamageMessage(MSDamageSources.DECAPITATION, "%s had their head chopped off");
+		addDamageMessageWithKiller(MSDamageSources.DECAPITATION, "%1$s lost their head whilst engaged with %2$s");
 		
 		add(ConsortMerchantInventory.CANT_AFFORD, "You don't have enough boondollars for that!");
 		add(MessageType.MISSING_ITEM, "You need a %s for that!");

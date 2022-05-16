@@ -12,7 +12,7 @@ import net.minecraft.util.text.StringTextComponent;
 public class UraniumCookerScreen extends MachineScreen<UraniumCookerContainer>
 {
 	private static final ResourceLocation BACKGROUND = new ResourceLocation("minestuck:textures/gui/uranium_cooker.png");
-	private static final ResourceLocation PROGRESS = new ResourceLocation("minestuck:textures/gui/progress/uranium_cooker.png");
+	private static final ResourceLocation PROGRESS = new ResourceLocation("minestuck:textures/gui/progress/uranium_level.png");
 	
 	private int progressX;
 	private int progressY;

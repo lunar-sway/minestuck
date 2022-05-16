@@ -54,6 +54,7 @@ public class MSPacketHandler
 		registerMessage(GoButtonPacket.class, GoButtonPacket::decode);
 		registerMessage(AlchemiterPacket.class, AlchemiterPacket::decode);
 		registerMessage(GristWildcardPacket.class, GristWildcardPacket::decode);
+		registerMessage(SendificatorPacket.class, SendificatorPacket::decode);
 		registerMessage(TransportalizerPacket.class, TransportalizerPacket::decode);
 		registerMessage(AreaEffectPacket.class, AreaEffectPacket::decode);
 		registerMessage(WirelessRedstoneTransmitterPacket.class, WirelessRedstoneTransmitterPacket::decode);

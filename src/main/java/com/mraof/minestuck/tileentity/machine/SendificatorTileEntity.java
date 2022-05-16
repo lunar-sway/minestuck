@@ -7,7 +7,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
@@ -17,25 +16,24 @@ import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.RangedWrapper;
-import net.minecraftforge.items.wrapper.RecipeWrapper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class SendificatorTileEntity extends MachineProcessTileEntity implements INamedContainerProvider, INameable
+public class SendificatorTileEntity extends MachineProcessTileEntity implements INamedContainerProvider
 {
-	private BlockPos destBlockPos;
-	
 	public static final RunType TYPE = RunType.BUTTON_OVERRIDE;
+	public static final String TITLE = "container.minestuck.sendificator";
 	public static final int DEFAULT_MAX_PROGRESS = 0;
-	private final IInventory recipeInventory = new RecipeWrapper(itemHandler);
+	
+	private BlockPos destBlockPos;
 	
 	private final IntReferenceHolder fuelHolder = new IntReferenceHolder()
 	{
@@ -54,8 +52,6 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 	
 	private short fuel = 0;
 	private static final short maxFuel = 128;
-	
-	String id = "";
 	
 	public SendificatorTileEntity()
 	{
@@ -76,23 +72,9 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 	}
 	
 	@Override
-	public ITextComponent getName()
-	{
-		return new StringTextComponent("Sendificator");
-	}
-	
-	@Override
 	public ITextComponent getDisplayName()
 	{
-		//TODO seems to always default to getName even when named, check custom name functionality in Transport
-		return hasCustomName() ? getCustomName() : getName(); //using INameable so that people can use the name to describe what the destination is
-	}
-	
-	@Nullable
-	@Override
-	public ITextComponent getCustomName()
-	{
-		return id.isEmpty() ? null : new StringTextComponent(id);
+		return new TranslationTextComponent(TITLE);
 	}
 	
 	@Override
@@ -106,8 +88,6 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 		this.destBlockPos = new BlockPos(destX, destY, destZ);
 		
 		fuel = compound.getShort("fuel");
-		
-		this.id = compound.getString("id");
 	}
 	
 	@Override
@@ -122,8 +102,6 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 		
 		compound.putShort("fuel", fuel);
 		
-		compound.putString("id", id);
-		
 		return compound;
 	}
 	
@@ -132,21 +110,6 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 	{
 		return new MachineProcessTileEntity.CustomHandler(3, (index, stack) -> index == 1 ? ExtraForgeTags.Items.URANIUM_CHUNKS.contains(stack.getItem()) : index != 2);
 	}
-	
-	/*@Override
-	public CompoundNBT save(CompoundNBT compound)
-	{
-		super.save(compound);
-		compound.putShort("fuel", fuel);
-		return compound;
-	}
-	
-	@Override
-	public void load(BlockState state, CompoundNBT nbt)
-	{
-		super.load(state, nbt);
-		fuel = nbt.getShort("fuel");
-	}*/
 	
 	@Override
 	public MachineProcessTileEntity.RunType getRunType()
@@ -164,24 +127,8 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 		
 		ItemStack fuel = itemHandler.getStackInSlot(1);
 		ItemStack input = itemHandler.getStackInSlot(0);
-		//ItemStack output = irradiate();
-		return getFuel() <= getMaxFuel() - 32 && ExtraForgeTags.Items.URANIUM_CHUNKS.contains(fuel.getItem()) || !input.isEmpty()/* && !output.isEmpty()*/;
+		return getFuel() <= getMaxFuel() - 32 && ExtraForgeTags.Items.URANIUM_CHUNKS.contains(fuel.getItem()) || !input.isEmpty();
 	}
-	
-	/*private ItemStack irradiate()	//TODO Handle the recipe and make sure to use its exp/cooking time
-	{
-		if(level == null)
-			return ItemStack.EMPTY;
-		
-		//List of all recipes that match to the current input
-		Stream<IrradiatingRecipe> stream = level.getRecipeManager().getRecipesFor(MSRecipeTypes.IRRADIATING_TYPE, recipeInventory, level).stream();
-		//Sort the stream to get non-fallback recipes first, and fallback recipes second
-		stream = stream.sorted(Comparator.comparingInt(o -> (o.isFallback() ? 1 : 0)));
-		//Let the recipe return the recipe actually used (for fallbacks), to clear out all that are not present, and then get the first
-		Optional<? extends AbstractCookingRecipe> cookingRecipe = stream.flatMap(recipe -> Util.toStream(recipe.getCookingRecipe(recipeInventory, level))).findFirst();
-		
-		return cookingRecipe.map(abstractCookingRecipe -> abstractCookingRecipe.assemble(recipeInventory)).orElse(ItemStack.EMPTY);
-	}*/
 	
 	@Override
 	public void processContents()
@@ -208,7 +155,7 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 					BlockPos destinationPos = getDestinationBlockPos();
 					ItemStack mimicStack = itemHandler.getStackInSlot(0).copy();
 					mimicStack.setCount(1);
-					ItemEntity itemEntity = new ItemEntity(level, destinationPos.getX(), destinationPos.getY() + 0.5, destinationPos.getZ(), mimicStack); //use if needed: Teleport.teleportEntity
+					ItemEntity itemEntity = new ItemEntity(level, destinationPos.getX(), destinationPos.getY(), destinationPos.getZ(), mimicStack); //use if needed: Teleport.teleportEntity
 					level.addFreshEntity(itemEntity);
 					itemHandler.extractItem(0, 1, false);
 					
@@ -216,25 +163,6 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 				}
 			}
 		}
-		/*if(canIrradiate())
-		{
-			ItemStack output = irradiate();
-			if(itemHandler.getStackInSlot(2).isEmpty() && fuel > 0)
-			{
-				itemHandler.setStackInSlot(2, output);
-			} else
-			{
-				itemHandler.extractItem(2, -output.getCount(), false);
-			}
-			if(itemHandler.getStackInSlot(0).hasContainerItem())
-			{
-				itemHandler.setStackInSlot(0, itemHandler.getStackInSlot(0).getContainerItem());
-			} else
-			{
-				itemHandler.extractItem(0, 1, false);
-			}
-			fuel--;
-		}*/
 	}
 	
 	private boolean canSend()
@@ -242,27 +170,8 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 		return fuel > 0 && !itemHandler.getStackInSlot(0).isEmpty();
 	}
 	
-	/*private boolean canIrradiate()
-	{
-		ItemStack output = irradiate();
-		if(fuel > 0 && !itemHandler.getStackInSlot(0).isEmpty() && !output.isEmpty())
-		{
-			ItemStack out = itemHandler.getStackInSlot(2);
-			if(out.isEmpty())
-			{
-				return true;
-			}
-			else if(out.getMaxStackSize() >= output.getCount() + out.getCount() && out.sameItem(output))
-			{
-				return true;
-			}
-		}
-		return false;
-	}*/
-	
 	private final LazyOptional<IItemHandler> upHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 0, 1));
 	private final LazyOptional<IItemHandler> downHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 2, 3));
-	//private final LazyOptional<IItemHandler> sideHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 1, 2));
 	
 	@Nonnull
 	@Override
@@ -271,7 +180,6 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 		if(cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && side != null)
 		{
 			return side == Direction.DOWN ? downHandler.cast() : upHandler.cast();
-			//return side == Direction.DOWN ? downHandler.cast() : side == Direction.UP ? upHandler.cast() : sideHandler.cast();
 		}
 		return super.getCapability(cap, side);
 	}
@@ -280,20 +188,8 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 	@Override
 	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity player)
 	{
-		return new SendificatorContainer(windowId, playerInventory, itemHandler, parameters, fuelHolder, IWorldPosCallable.create(level, worldPosition), worldPosition, getLevel());
+		return new SendificatorContainer(windowId, playerInventory, itemHandler, parameters, fuelHolder, IWorldPosCallable.create(level, worldPosition), worldPosition);
 	}
-	
-	/*@Override
-	public ITextComponent getName()
-	{
-		return null;
-	}
-	
-	@Override
-	public ITextComponent getDisplayName()
-	{
-		return new TranslationTextComponent(TITLE);
-	}*/
 	
 	public short getFuel()
 	{
