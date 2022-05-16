@@ -1,8 +1,13 @@
 package com.mraof.minestuck.entity;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.Attribute;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -14,15 +19,17 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 public abstract class AnimatedCreatureEntity extends CreatureEntity implements IAnimatable {
     private final AnimationFactory factory = new AnimationFactory(this);
+    private static final Multimap<Attribute, AttributeModifier> attributes = HashMultimap.create();
     protected static final DataParameter<Integer> CURRENT_ACTION = EntityDataManager.defineId(AnimatedCreatureEntity.class, DataSerializers.INT);
 
     private int heavyAttackTicks = 0;
     private int recoveryTicks = 0;
-    private int attackDelay;
-    private int attackRecovery;
     private int actionResetTicks;
 
+    protected int attackDelay;
+    protected int attackRecovery;
     protected boolean canMoveWhileAttacking = false;
+    protected double knockbackResistWhileAttacking = 0;
 
     protected AnimatedCreatureEntity(EntityType<? extends CreatureEntity> type, World world) {
         super(type, world);
@@ -47,6 +54,7 @@ public abstract class AnimatedCreatureEntity extends CreatureEntity implements I
             heavyAttackTicks--;
             if (heavyAttackTicks == 0) {
                 recoveryTicks = attackRecovery;
+                getAttributes().removeAttributeModifiers(attributes);
                 if (getTarget() != null && isInRange(getTarget())) { // TODO: AOE bounding box collision checks + aoe flag
                     doHurtTarget(getTarget());
                 }
@@ -114,7 +122,8 @@ public abstract class AnimatedCreatureEntity extends CreatureEntity implements I
 
     /**
      * Used to set the entity's action
-     * @param action The action to be performed
+     *
+     * @param action     The action to be performed
      * @param tickLength -1 to for infinite action or any positive value to set the tick length
      */
     public void setCurrentAction(Actions action, int tickLength) {
@@ -124,6 +133,7 @@ public abstract class AnimatedCreatureEntity extends CreatureEntity implements I
 
     /**
      * Used to set the entity's action - will repeat indefinitely
+     *
      * @param action The action to be performed
      */
     public void setCurrentAction(Actions action) {
@@ -157,8 +167,11 @@ public abstract class AnimatedCreatureEntity extends CreatureEntity implements I
                 if (!this.entity.canMoveWhileAttacking) {
                     this.mob.getNavigation().stop();
                 }
+                if (this.entity.knockbackResistWhileAttacking >= 0.01) {
+                    attributes.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier("attack.knockback", 1.0, AttributeModifier.Operation.ADDITION));
+                    this.entity.getAttributes().addTransientAttributeModifiers(attributes);
+                }
                 entity.startAttack();
-                // TODO temporary knockback resistance while attacking
             }
         }
     }
