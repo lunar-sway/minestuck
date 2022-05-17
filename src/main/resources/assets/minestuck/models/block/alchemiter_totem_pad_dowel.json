@@ -1,118 +1,152 @@
 {
-    "textures": {
-        "particle": "minestuck:block/machine/alchemiter/corner_top",
-        "pad": "minestuck:block/machine/alchemiter/totem_pad",
-        "rod": "minestuck:block/machine/alchemiter/rods",
-        "inside": "minestuck:block/machine/alchemiter/corner_inside",
-        "totem": "minestuck:block/machine/totem",
-        "totem2": "minestuck:block/machine/totem_2"
-    },
-    "elements": [
-        {
-            "name": "rod",
-            "from": [ 10, 0, 12 ],
-            "to": [ 14, 14, 16 ],
-            "faces": {
-                "north": { "uv": [0, 4, 2, 11], "texture": "#rod" },
-                "east":  { "uv": [0, 4, 2, 11], "texture": "#rod" },
-                "south": { "uv": [0, 4, 2, 11], "texture": "#rod" },
-                "west":  { "uv": [0, 4, 2, 11], "texture": "#rod" },
-                "up":    { "uv": [0, 2, 2,  4], "texture": "#rod" },
-                "down":  { "uv": [0, 2, 2,  4], "texture": "#rod" }
-            }
-        },
-        {
-            "name": "rod_top",
-            "from": [ 11, 14, 13 ],
-            "to": [ 13, 16, 15 ],
-            "faces": {
-                "north": { "uv": [0, 0, 1, 1], "texture": "#rod" },
-                "east":  { "uv": [0, 0, 1, 1], "texture": "#rod" },
-                "south": { "uv": [0, 0, 1, 1], "texture": "#rod" },
-                "west":  { "uv": [0, 0, 1, 1], "texture": "#rod" },
-                "up":    { "uv": [0, 0, 1, 1], "texture": "#rod" }
-            }
-        },
-        {
-            "name": "pad",
-            "from": [ 8, 0, 2 ],
-            "to": [ 14, 4, 8 ],
-            "faces": {
-                "north": { "uv": [0,  0,  6,  4], "texture": "#pad" },
-                "east":  { "uv": [0,  8,  6, 12], "texture": "#pad" },
-                "south": { "uv": [0,  4,  6,  8], "texture": "#pad" },
-                "west":  { "uv": [0, 12,  6, 16], "texture": "#pad" },
-                "up":    { "uv": [10, 0, 16,  6], "texture": "#pad" },
-                "down":  { "uv": [0,  0,  6,  6], "texture": "#inside", "cullface": "down" }
-            }
-        },
-        {
-            "from": [ 8, 4, 3 ],
-            "to": [ 14, 12, 7 ],
-            "faces": {
-                "north": { "uv": [  4,  8,  6, 16 ], "texture": "#totem", "tintindex": 0 },
-                "east":  { "uv": [  6,  8, 10, 16 ], "texture": "#totem", "tintindex": 0 },
-                "south": { "uv": [  4,  8,  6, 16 ], "texture": "#totem", "tintindex": 0 },
-                "west":  { "uv": [  6,  8, 10, 16 ], "texture": "#totem", "tintindex": 0 },
-                "up":    { "uv": [ 10,  1, 16,  5 ], "texture": "#totem", "tintindex": 0 },
-                "down":  { "uv": [ 10, 11, 16, 15 ], "texture": "#totem", "tintindex": 0 }
-            }
-        },
-        {
-            "from": [ 9, 4, 2 ],
-            "to": [ 13, 12, 3 ],
-            "faces": {
-                "north": { "uv": [  1,  8,  5, 16 ], "texture": "#totem", "tintindex": 0 },
-                "east":  { "uv": [  5,  8,  6, 16 ], "texture": "#totem", "tintindex": 0 },
-                "west":  { "uv": [  4,  8,  5, 16 ], "texture": "#totem", "tintindex": 0 },
-                "up":    { "uv": [ 11,  0, 15,  1 ], "texture": "#totem", "tintindex": 0 },
-                "down":  { "uv": [ 11, 15, 15, 16 ], "texture": "#totem", "tintindex": 0 }
-            }
-        },
-        {
-            "from": [ 9, 4, 7 ],
-            "to": [ 13, 12, 8 ],
-            "faces": {
-                "east":  { "uv": [  4,  8,  5, 16 ], "texture": "#totem", "tintindex": 0 },
-                "south": { "uv": [  1,  8,  5, 16 ], "texture": "#totem", "tintindex": 0 },
-                "west":  { "uv": [  5,  8,  6, 16 ], "texture": "#totem", "tintindex": 0 },
-                "up":    { "uv": [ 11,  5, 15,  6 ], "texture": "#totem", "tintindex": 0 },
-                "down":  { "uv": [ 11, 10, 15, 11 ], "texture": "#totem", "tintindex": 0 }
-            }
-        },
-        {
-            "from": [ 8, 4, 3 ],
-            "to": [ 14, 12, 7 ],
-            "faces": {
-                "north": { "uv": [  4,  8,  6, 16 ], "texture": "#totem2", "tintindex": 1 },
-                "east":  { "uv": [  6,  8, 10, 16 ], "texture": "#totem2", "tintindex": 1 },
-                "south": { "uv": [  4,  8,  6, 16 ], "texture": "#totem2", "tintindex": 1 },
-                "west":  { "uv": [  6,  8, 10, 16 ], "texture": "#totem2", "tintindex": 1 },
-                "up":    { "uv": [ 10,  1, 16,  5 ], "texture": "#totem2", "tintindex": 1 },
-                "down":  { "uv": [ 10, 11, 16, 15 ], "texture": "#totem2", "tintindex": 1 }
-            }
-        },
-        {
-            "from": [ 9, 4, 2 ],
-            "to": [ 13, 12, 3 ],
-            "faces": {
-                "north": { "uv": [  1,  8,  5, 16 ], "texture": "#totem2", "tintindex": 1 },
-                "east":  { "uv": [  5,  8,  6, 16 ], "texture": "#totem2", "tintindex": 1 },
-                "west":  { "uv": [  4,  8,  5, 16 ], "texture": "#totem2", "tintindex": 1 },
-                "up":    { "uv": [ 11,  0, 15,  1 ], "texture": "#totem2", "tintindex": 1 },
-                "down":  { "uv": [ 11, 15, 15, 16 ], "texture": "#totem2", "tintindex": 1 }
-            }
-        },
-        {
-            "from": [ 9, 4, 7 ],
-            "to": [ 13, 12, 8 ],
-            "faces": {
-                "east":  { "uv": [  4,  8,  5, 16 ], "texture": "#totem2", "tintindex": 1 },
-                "south": { "uv": [  1,  8,  5, 16 ], "texture": "#totem2", "tintindex": 1 },
-                "west":  { "uv": [  5,  8,  6, 16 ], "texture": "#totem2", "tintindex": 1 },
-                "up":    { "uv": [ 11,  5, 15,  6 ], "texture": "#totem2", "tintindex": 1 },
-                "down":  { "uv": [ 11, 10, 15, 11 ], "texture": "#totem2", "tintindex": 1 }
-            }
-        }
-    ]
+	"credit": "crafted with love by the grease artisan mysterymeat",
+	"texture_size": [256, 256],
+	"textures": {
+		"0": "minestuck:block/machine/alchemiter",
+		"particle": "minestuck:block/machine/particle",
+		"totem": "minestuck:block/machine/totem",
+		"totem2": "minestuck:block/machine/totem_2"
+	},
+	"elements": [
+		{
+			"name": "rod_top",
+			"from": [10, 16, 12.5],
+			"to": [12, 18, 15.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [-1, 2, -0.5]},
+			"faces": {
+				"north": {"uv": [13.125, 13.5, 13.25, 13.625], "texture": "#0"},
+				"east": {"uv": [12.9375, 13.5, 13.125, 13.625], "texture": "#0"},
+				"south": {"uv": [13.4375, 13.5, 13.5625, 13.625], "texture": "#0"},
+				"west": {"uv": [13.25, 13.5, 13.4375, 13.625], "texture": "#0"},
+				"up": {"uv": [13.25, 13.5, 13.125, 13.3125], "texture": "#0"},
+				"down": {"uv": [13.375, 13.3125, 13.25, 13.5], "texture": "#0"}
+			}
+		},
+		{
+			"name": "baserod",
+			"from": [9, 0, 12],
+			"to": [13, 16, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [-1, 2, 0]},
+			"faces": {
+				"north": {"uv": [13.0625, 13.875, 13.3125, 14.875], "texture": "#0"},
+				"east": {"uv": [12.8125, 13.875, 13.0625, 14.875], "texture": "#0"},
+				"south": {"uv": [13.5625, 13.875, 13.8125, 14.875], "texture": "#0"},
+				"west": {"uv": [13.3125, 13.875, 13.5625, 14.875], "texture": "#0"},
+				"up": {"uv": [13.3125, 13.875, 13.0625, 13.625], "texture": "#0"},
+				"down": {"uv": [13.5625, 13.625, 13.3125, 13.875], "texture": "#0"}
+			}
+		},
+		{
+			"name": "pad",
+			"from": [7, 0, 2],
+			"to": [13, 4, 8],
+			"rotation": {"angle": 0, "axis": "y", "origin": [-1, 0, 0]},
+			"faces": {
+				"north": {"uv": [13.9375, 13.375, 14.3125, 13.625], "texture": "#0"},
+				"east": {"uv": [13.5625, 13.375, 13.9375, 13.625], "texture": "#0"},
+				"south": {"uv": [14.6875, 13.375, 15.0625, 13.625], "texture": "#0"},
+				"west": {"uv": [14.3125, 13.375, 14.6875, 13.625], "texture": "#0"},
+				"up": {"uv": [14.3125, 13.375, 13.9375, 13], "texture": "#0"},
+				"down": {"uv": [14.6875, 13, 14.3125, 13.375], "texture": "#0", "cullface": "down"}
+			}
+		},
+		{
+			"name": "totem2",
+			"from": [8, 4, 7],
+			"to": [12, 12, 8],
+			"rotation": {"angle": 0, "axis": "y", "origin": [-1, 0, 0]},
+			"faces": {
+				"east":  { "uv": [  4,  8,  5, 16 ], "texture": "#totem2", "tintindex": 1 },
+				"south": { "uv": [  1,  8,  5, 16 ], "texture": "#totem2", "tintindex": 1 },
+				"west":  { "uv": [  5,  8,  6, 16 ], "texture": "#totem2", "tintindex": 1 },
+				"up":    { "uv": [ 11,  5, 15,  6 ], "texture": "#totem2", "tintindex": 1 },
+				"down":  { "uv": [ 11, 10, 15, 11 ], "texture": "#totem2", "tintindex": 1 }
+			}
+		},
+		{
+			"name": "totem2",
+			"from": [8, 4, 2],
+			"to": [12, 12, 3],
+			"rotation": {"angle": 0, "axis": "y", "origin": [-1, 0, 0]},
+			"faces": {
+				"north": { "uv": [  1,  8,  5, 16 ], "texture": "#totem2", "tintindex": 1 },
+				"east":  { "uv": [  5,  8,  6, 16 ], "texture": "#totem2", "tintindex": 1 },
+				"west":  { "uv": [  4,  8,  5, 16 ], "texture": "#totem2", "tintindex": 1 },
+				"up":    { "uv": [ 11,  0, 15,  1 ], "texture": "#totem2", "tintindex": 1 },
+				"down":  { "uv": [ 11, 15, 15, 16 ], "texture": "#totem2", "tintindex": 1 }
+			}
+		},
+		{
+			"name": "totem2",
+			"from": [7, 4, 3],
+			"to": [13, 12, 7],
+			"rotation": {"angle": 0, "axis": "y", "origin": [-1, 0, 0]},
+			"faces": {
+				"north": { "uv": [  4,  8,  6, 16 ], "texture": "#totem2", "tintindex": 1 },
+				"east":  { "uv": [  6,  8, 10, 16 ], "texture": "#totem2", "tintindex": 1 },
+				"south": { "uv": [  4,  8,  6, 16 ], "texture": "#totem2", "tintindex": 1 },
+				"west":  { "uv": [  6,  8, 10, 16 ], "texture": "#totem2", "tintindex": 1 },
+				"up":    { "uv": [ 10,  1, 16,  5 ], "texture": "#totem2", "tintindex": 1 },
+				"down":  { "uv": [ 10, 11, 16, 15 ], "texture": "#totem2", "tintindex": 1 }
+			}
+		},
+		{
+			"name": "totem",
+			"from": [8, 4, 7],
+			"to": [12, 12, 8],
+			"rotation": {"angle": 0, "axis": "y", "origin": [-1, 0, 0]},
+			"faces": {
+				"east":  { "uv": [  4,  8,  5, 16 ], "texture": "#totem", "tintindex": 0 },
+				"south": { "uv": [  1,  8,  5, 16 ], "texture": "#totem", "tintindex": 0 },
+				"west":  { "uv": [  5,  8,  6, 16 ], "texture": "#totem", "tintindex": 0 },
+				"up":    { "uv": [ 11,  5, 15,  6 ], "texture": "#totem", "tintindex": 0 },
+				"down":  { "uv": [ 11, 10, 15, 11 ], "texture": "#totem", "tintindex": 0 }
+			}
+		},
+		{
+			"name": "totem",
+			"from": [8, 4, 2],
+			"to": [12, 12, 3],
+			"rotation": {"angle": 0, "axis": "y", "origin": [-1, 0, 0]},
+			"faces": {
+				"north": { "uv": [  1,  8,  5, 16 ], "texture": "#totem", "tintindex": 0 },
+				"east":  { "uv": [  5,  8,  6, 16 ], "texture": "#totem", "tintindex": 0 },
+				"west":  { "uv": [  4,  8,  5, 16 ], "texture": "#totem", "tintindex": 0 },
+				"up":    { "uv": [ 11,  0, 15,  1 ], "texture": "#totem", "tintindex": 0 },
+				"down":  { "uv": [ 11, 15, 15, 16 ], "texture": "#totem", "tintindex": 0 }
+			}
+		},
+		{
+			"name": "totem",
+			"from": [7, 4, 3],
+			"to": [13, 12, 7],
+			"rotation": {"angle": 0, "axis": "y", "origin": [-1, 0, 0]},
+			"faces": {
+				"north": { "uv": [  4,  8,  6, 16 ], "texture": "#totem", "tintindex": 0 },
+				"east":  { "uv": [  6,  8, 10, 16 ], "texture": "#totem", "tintindex": 0 },
+				"south": { "uv": [  4,  8,  6, 16 ], "texture": "#totem", "tintindex": 0 },
+				"west":  { "uv": [  6,  8, 10, 16 ], "texture": "#totem", "tintindex": 0 },
+				"up":    { "uv": [ 10,  1, 16,  5 ], "texture": "#totem", "tintindex": 0 },
+				"down":  { "uv": [ 10, 11, 16, 15 ], "texture": "#totem", "tintindex": 0 }
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "base2",
+			"origin": [7, -10, -24],
+			"color": 0,
+			"children": [
+				0,
+				1,
+				2,
+				{
+					"name": "totem2",
+					"origin": [7, -10, -24],
+					"color": 0,
+					"children": [3, 4, 5, 6, 7, 8]
+				}
+			]
+		}
+	]
 }

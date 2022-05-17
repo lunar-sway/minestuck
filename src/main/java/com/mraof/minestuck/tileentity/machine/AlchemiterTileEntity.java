@@ -28,12 +28,25 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.model.data.ModelDataMap;
+import net.minecraftforge.client.model.data.ModelProperty;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public class AlchemiterTileEntity extends TileEntity implements IColored, GristWildcardHolder
+import javax.annotation.Nonnull;
+
+public class AlchemiterTileEntity extends TileEntity implements IColored, GristWildcardHolder, IAnimatable
 {
-	
+	private static final ModelProperty<Boolean> HAS_DOWEL = new ModelProperty<>();
+	private final AnimationFactory factory = new AnimationFactory(this);
 	private GristType wildcardGrist = GristTypes.BUILD.get();
 	protected boolean broken = false;
 	protected ItemStack dowel = ItemStack.EMPTY;
@@ -59,6 +72,7 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 				}
 			}
 		}
+		this.requestModelDataUpdate();
 	}
 	
 	public ItemStack getDowel()
@@ -332,5 +346,30 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 			if(level != null && !level.isClientSide)
 				level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 0);
 		}
+	}
+
+	@Nonnull
+	@Override
+	public IModelData getModelData() {
+		return new ModelDataMap.Builder().withInitial(HAS_DOWEL, !this.dowel.isEmpty()).build();
+	}
+
+	@Override
+	public AnimationFactory getFactory() {
+		return factory;
+	}
+
+	@Override
+	public void registerControllers(AnimationData data) {
+		data.addAnimationController(new AnimationController<>(this, "scanAnimation", 0, this::scanAnimation));
+	}
+
+	private <E extends TileEntity & IAnimatable> PlayState scanAnimation(AnimationEvent<E> event) {
+		if (getModelData().getData(HAS_DOWEL)) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("scan", false));
+			return PlayState.CONTINUE;
+		}
+		event.getController().markNeedsReload();
+		return PlayState.STOP;
 	}
 }
