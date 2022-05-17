@@ -47,13 +47,14 @@ public class SendificatorScreen extends MachineScreen<SendificatorContainer>
 		goX = 115;
 		goY = 60;
 		
+		//TODO find out if there is a more elegant method of getting the te
 		SendificatorTileEntity tempTE = null;
 		World world = inv.player.level;
 		if(world != null && screenContainer.machinePos != null)
 		{
 			TileEntity tileEntity = world.getBlockEntity(screenContainer.machinePos);
 			if(tileEntity instanceof SendificatorTileEntity)
-				tempTE = ((SendificatorTileEntity) tileEntity);
+				tempTE = ((SendificatorTileEntity) tileEntity); //will cause crashes if a check for a null te is not done
 		}
 		te = tempTE;
 	}
@@ -80,6 +81,7 @@ public class SendificatorScreen extends MachineScreen<SendificatorContainer>
 			addButton(new ExtendedButton((width - imageWidth) / 2 + 105, 80, 50, 12, new StringTextComponent("Update"), button -> updateDestinationPos()));
 		}
 		
+		//activates processContents() in SendificatorTileEntity
 		goButton = new GoButton((width - imageWidth) / 2 + goX, (height - imageHeight) / 2 + goY, 30, 12, new StringTextComponent(menu.overrideStop() ? "STOP" : "GO"));
 		addButton(goButton);
 	}
@@ -95,7 +97,7 @@ public class SendificatorScreen extends MachineScreen<SendificatorContainer>
 	@Override
 	protected void renderLabels(MatrixStack matrixStack, int mouseX, int mouseY)
 	{
-		//draws the name of the TE, which may be customized via anvil
+		//draws the name of the TE
 		font.draw(matrixStack, this.title.getString(), 8, 6, 4210752);
 		
 		//draws "Inventory" or your regional equivalent

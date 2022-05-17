@@ -130,11 +130,15 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 		return getFuel() <= getMaxFuel() - 32 && ExtraForgeTags.Items.URANIUM_CHUNKS.contains(fuel.getItem()) || !input.isEmpty();
 	}
 	
+	/**
+	 * With the given container possessing tile entity system our mod uses, this is the function that connects to the GoButton found in it's screen(SendificatorScreen in this example)
+	 */
 	@Override
 	public void processContents()
 	{
 		if(getFuel() <= getMaxFuel() - 32)
 		{
+			//checks for a uranium itemstack in the lower(fuel) item slot, increases the fuel value if some is found and then removes one count from the fuel stack
 			if(ExtraForgeTags.Items.URANIUM_CHUNKS.contains(itemHandler.getStackInSlot(1).getItem()))
 			{
 				//Refill fuel
@@ -154,10 +158,9 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 				{
 					BlockPos destinationPos = getDestinationBlockPos();
 					ItemStack mimicStack = itemHandler.getStackInSlot(0).copy();
-					mimicStack.setCount(1);
-					ItemEntity itemEntity = new ItemEntity(level, destinationPos.getX(), destinationPos.getY(), destinationPos.getZ(), mimicStack); //use if needed: Teleport.teleportEntity
+					ItemEntity itemEntity = new ItemEntity(level, destinationPos.getX(), destinationPos.getY(), destinationPos.getZ(), mimicStack);
 					level.addFreshEntity(itemEntity);
-					itemHandler.extractItem(0, 1, false);
+					itemHandler.extractItem(0, itemHandler.getStackInSlot(0).getCount(), false); //sends the whole stack at once
 					
 					fuel = (short) (fuel - 8);
 				}
@@ -165,13 +168,16 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 		}
 	}
 	
+	/**
+	 * Checks that there is enough fuel energy for the machine to work and that there is something to sendificate
+	 */
 	private boolean canSend()
 	{
 		return fuel > 0 && !itemHandler.getStackInSlot(0).isEmpty();
 	}
 	
-	private final LazyOptional<IItemHandler> upHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 0, 1));
-	private final LazyOptional<IItemHandler> downHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 2, 3));
+	private final LazyOptional<IItemHandler> upHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 0, 1)); //sendificated item slot
+	private final LazyOptional<IItemHandler> downHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 2, 3)); //uranium fuel slot
 	
 	@Nonnull
 	@Override
