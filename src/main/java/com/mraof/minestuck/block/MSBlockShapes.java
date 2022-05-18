@@ -69,13 +69,11 @@ public class MSBlockShapes
 	public static final CustomVoxelShape ALCHEMITER_UPPER_ROD = new CustomVoxelShape(new double[]{10, 0, 2, 14, 8, 6}, new double[]{10, 0, 7, 14, 8, 11}, new double[]{10, 0, 12, 14, 8, 16}, new double[]{11, 8, 8, 13, 10, 15},
 			new double[]{9,8,3,13,10,5}, new double[]{7,4,2,9,10,6}, new double[]{3,5,3,7,6,5});
 	
-	public static final CustomVoxelShape CRUXTRUDER_BASE_CORNER = new CustomVoxelShape(new double[]{1,0,1,16,9,16}, new double[]{9,9,9,16,16,16});
-	public static final CustomVoxelShape CRUXTRUDER_BASE_SIDE = new CustomVoxelShape(new double[]{0,0,1,16,9,16}, new double[]{0,9,9,16,16,16},
-			new double[]{3,9,6,4,13,9}, new double[]{3,13,6,13,14,9}, new double[]{12,9,6,13,13,9}, new double[]{4,9,7,12,13,9});
-	public static final CustomVoxelShape CRUXTRUDER_CENTER = new CustomVoxelShape(new double[]{0,0,0,16,16,16});
-	public static final CustomVoxelShape CRUXTRUDER_KNOB = new CustomVoxelShape(new double[]{7.5,11,1,8.5,12,2}, new double[]{6.5,13,0,9.5,14,1}, new double[]{9.5,10,0,10.5,13,1}, new double[]{6.5,9,0,9.5,10,1}, new double[]{5.5,10,0,6.5,13,1},
-			new double[]{7.5,12,0,8.5,13,1}, new double[]{6.5,11,0,9.5,12,1}, new double[]{7.5,10,0,8.5,11,1});
-	public static final CustomVoxelShape CRUXTRUDER_TUBE = new CustomVoxelShape(new double[]{3,0,3,13,1,13}, new double[]{2,1,2,14,15,14}, new double[]{3,15,3,13,16,13}).merge(CRUXTRUDER_KNOB);
+	public static final CustomVoxelShape CRUXTRUDER_BASE = new CustomVoxelShape(new double[]{0,0,0,16,16,16});
+	public static final CustomVoxelShape CRUXTRUDER_TOP_CORNER = new CustomVoxelShape(new double[]{10, 0, 10, 16, 10, 16}, new double[]{12, 10, 12, 16, 12, 16});
+	public static final CustomVoxelShape CRUXTRUDER_TOP_SIDE = new CustomVoxelShape(new double[]{0, 0, 10, 16, 10, 16}, new double[]{0, 10, 12, 16, 12, 16}, new double[]{2, -0.45672, 4.2961, 14, 5.54328, 10.2961});
+	public static final CustomVoxelShape CRUXTRUDER_TOP_CENTER = new CustomVoxelShape(new double[]{0, -3, 0, 16, 9, 16}, new double[]{3, 9, 3, 13, 10, 13}, new double[]{2, 10, 2, 14, 13, 14});
+	public static final CustomVoxelShape CRUXTRUDER_TUBE = new CustomVoxelShape(new double[]{2, 0, 2, 14, 16, 14}, new double[]{7.5, 8.5, 0, 8.5, 9.5, 2}, new double[]{6, 7, -0.005, 10, 11, -0.005}, new double[]{6, 11, -1, 10, 12, 0}, new double[]{6, 6, -1, 10, 7, 0}, new double[]{5, 7, -1, 6, 11, 0}, new double[]{10, 7, -1, 11, 11, 0});
 	
 	
 	public static final CustomVoxelShape TOTEM_LATHE_BOTTOM_CORNER = new CustomVoxelShape(new double[]{4,0,5,16,2,15}, new double[]{4,2,8,16,7,12}, new double[]{5,5,7,12,12,13}, new double[]{6,12,7,12,16,13},
