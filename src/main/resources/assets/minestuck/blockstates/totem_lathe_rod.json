@@ -1,12 +1,16 @@
 {
     "variants": {
-        "facing=north,active=false": { "model": "minestuck:block/totem_lathe_rod" },
-        "facing=east,active=false":  { "model": "minestuck:block/totem_lathe_rod", "y": 90 },
-        "facing=south,active=false": { "model": "minestuck:block/totem_lathe_rod", "y": 180 },
-        "facing=west,active=false":  { "model": "minestuck:block/totem_lathe_rod", "y": 270 },
-        "facing=north,active=true":  { "model": "minestuck:block/totem_lathe_rod_active" },
-        "facing=east,active=true":   { "model": "minestuck:block/totem_lathe_rod_active", "y": 90 },
-        "facing=south,active=true":  { "model": "minestuck:block/totem_lathe_rod_active", "y": 180 },
-        "facing=west,active=true":   { "model": "minestuck:block/totem_lathe_rod_active", "y": 270 }
+        "facing=north,dowel=dowel":        { "model": "minestuck:block/totem_lathe_rod" },
+        "facing=east,dowel=dowel":         { "model": "minestuck:block/totem_lathe_rod", "y": 90 },
+        "facing=south,dowel=dowel":        { "model": "minestuck:block/totem_lathe_rod", "y": 180 },
+        "facing=west,dowel=dowel":         { "model": "minestuck:block/totem_lathe_rod", "y": 270 },
+        "facing=north,dowel=carved_dowel": { "model": "minestuck:block/totem_lathe_rod" },
+        "facing=east,dowel=carved_dowel":  { "model": "minestuck:block/totem_lathe_rod", "y": 90 },
+        "facing=south,dowel=carved_dowel": { "model": "minestuck:block/totem_lathe_rod", "y": 180 },
+        "facing=west,dowel=carved_dowel":  { "model": "minestuck:block/totem_lathe_rod", "y": 270 },
+        "facing=north,dowel=none":         { "model": "minestuck:block/totem_lathe_rod" },
+        "facing=east,dowel=none":          { "model": "minestuck:block/totem_lathe_rod", "y": 90 },
+        "facing=south,dowel=none":         { "model": "minestuck:block/totem_lathe_rod", "y": 180 },
+        "facing=west,dowel=none":          { "model": "minestuck:block/totem_lathe_rod", "y": 270 }
     }
 }

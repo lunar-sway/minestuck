@@ -23,12 +23,25 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.model.data.ModelDataMap;
+import net.minecraftforge.client.model.data.ModelProperty;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nonnull;
 
-public class TotemLatheTileEntity extends TileEntity
-{
+public class TotemLatheTileEntity extends TileEntity implements IAnimatable {
+	private static final ModelProperty<Boolean> IS_PROCESSING = new ModelProperty<>();
+	private final AnimationFactory factory = new AnimationFactory(this);
+	private boolean isProcessing;
 	private boolean broken = false;
 	//two cards so that we can preform the && alchemy operation
 	private ItemStack card1 = ItemStack.EMPTY;
@@ -91,17 +104,6 @@ public class TotemLatheTileEntity extends TileEntity
 		else return 0;
 	}
 	
-	@Nonnull
-	public ItemStack getCard1()
-	{
-		return card1;
-	}
-	
-	public ItemStack getCard2()
-	{
-		return card2;
-	}
-	
 	public boolean isBroken()
 	{
 		return broken;
@@ -119,49 +121,26 @@ public class TotemLatheTileEntity extends TileEntity
 		Direction facing = getFacing();
 		BlockPos pos = MSBlocks.TOTEM_LATHE.getDowelPos(getBlockPos(), getBlockState());
 		BlockState state = level.getBlockState(pos);
-		if(stack.isEmpty())
-		{
-			if(isValidDowelRod(state, facing))
-				level.removeBlock(pos, false);
-			return true;
-		} else if(stack.getItem() == MSBlocks.CRUXITE_DOWEL.asItem())
-		{
-			BlockState newState = MSBlocks.TOTEM_LATHE.DOWEL_ROD.get().defaultBlockState().setValue(TotemLatheBlock.FACING, facing).setValue(TotemLatheBlock.DowelRod.DOWEL, EnumDowelType.getForDowel(stack));
-			if(isValidDowelRod(state, facing))
-			{
-				TileEntity te = level.getBlockEntity(pos);
-				if(!(te instanceof ItemStackTileEntity))
-				{
-					te = new ItemStackTileEntity();
-					level.setBlockEntity(pos, te);
-				}
-				ItemStackTileEntity teItem = (ItemStackTileEntity) te;
-				teItem.setStack(stack);
-				if(!state.equals(newState))
-					level.setBlockAndUpdate(pos, newState);
-				else level.sendBlockUpdated(pos, state, state, 2);
-				return true;
-			} else if(state.isAir(level, pos))
-			{
-				level.setBlockAndUpdate(pos, newState);
-				TileEntity te = level.getBlockEntity(pos);
-				if(!(te instanceof ItemStackTileEntity))
-				{
-					te = new ItemStackTileEntity();
-					level.setBlockEntity(pos, te);
-				}
-				ItemStackTileEntity teItem = (ItemStackTileEntity) te;
-				teItem.setStack(stack);
-				
-				return true;
+		BlockState newState = MSBlocks.TOTEM_LATHE.DOWEL_ROD.get().defaultBlockState().setValue(TotemLatheBlock.FACING, facing).setValue(TotemLatheBlock.DowelRod.DOWEL, EnumDowelType.getForDowel(stack));
+		if(isValidDowelRod(state, facing)) {
+			TileEntity te = level.getBlockEntity(pos);
+			if (!(te instanceof ItemStackTileEntity)) {
+				te = new ItemStackTileEntity();
+				level.setBlockEntity(pos, te);
 			}
+			ItemStackTileEntity teItem = (ItemStackTileEntity) te;
+			teItem.setStack(stack);
+			if (!state.equals(newState))
+				level.setBlockAndUpdate(pos, newState);
+			else level.sendBlockUpdated(pos, state, state, 2);
+			return true;
 		}
 		return false;
 	}
 	
 	public ItemStack getDowel()
 	{
-		BlockPos pos = getBlockPos().above().relative(getFacing().getCounterClockWise(), 2);
+		BlockPos pos = getBlockPos().above().relative(getFacing().getCounterClockWise(), 1);
 		if(isValidDowelRod(level.getBlockState(pos), getFacing()))
 		{
 			TileEntity te = level.getBlockEntity(pos);
@@ -193,11 +172,11 @@ public class TotemLatheTileEntity extends TileEntity
 			handleSlotClick(player, working);
 		
 		//if they have clicked the dowel block
-		if(clickedState.getBlock() == MSBlocks.TOTEM_LATHE.ROD.get() || clickedState.getBlock() == MSBlocks.TOTEM_LATHE.DOWEL_ROD.get())
+		if(clickedState.getBlock() == MSBlocks.TOTEM_LATHE.DOWEL_ROD.get() || clickedState.getBlock() == MSBlocks.TOTEM_LATHE.DOWEL_ROD.get())
 			handleDowelClick(player, working);
 		
 		//if they have clicked on the lever
-		if(working && clickedState.getBlock() == MSBlocks.TOTEM_LATHE.CARVER.get())
+		if(working && clickedState.getBlock() == MSBlocks.TOTEM_LATHE.TOP.get())
 		{
 			//carve the dowel.
 			processContents();
@@ -335,7 +314,10 @@ public class TotemLatheTileEntity extends TileEntity
 			{
 				ItemStack outputDowel = output.getItem().equals(MSBlocks.GENERIC_OBJECT.asItem()) ? new ItemStack(MSBlocks.CRUXITE_DOWEL) : AlchemyHelper.createEncodedItem(output, false);
 				ColorHandler.setColor(outputDowel, ColorHandler.getColorFromStack(dowel));
-				
+
+				isProcessing = true;
+				this.requestModelDataUpdate();
+
 				setDowel(outputDowel);
 				success = true;
 			}
@@ -349,4 +331,36 @@ public class TotemLatheTileEntity extends TileEntity
 		BlockPos pos = getBlockPos().above().relative(getFacing().getCounterClockWise(), 2);
 		WorldEventUtil.dispenserEffect(getLevel(), pos, getFacing(), success);
 	}
+
+	@Override
+	public AxisAlignedBB getRenderBoundingBox() {
+		return INFINITE_EXTENT_AABB;
+	}
+
+	@Nonnull
+	@Override
+	public IModelData getModelData() {
+		return new ModelDataMap.Builder().withInitial(IS_PROCESSING, this.isProcessing).build();
+	}
+
+	@Override
+	public AnimationFactory getFactory() {
+		return factory;
+	}
+
+	@Override
+	public void registerControllers(AnimationData data) {
+		data.addAnimationController(new AnimationController<>(this, "carveAnimation", 0, this::carveAnimation));
+	}
+
+	private <E extends TileEntity & IAnimatable> PlayState carveAnimation(AnimationEvent<E> event) {
+		if (getModelData().getData(IS_PROCESSING)) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("carvetotem", false));
+			return PlayState.CONTINUE;
+		}
+		event.getController().markNeedsReload();
+		return PlayState.STOP;
+	}
+
+
 }
