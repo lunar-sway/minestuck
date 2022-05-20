@@ -103,7 +103,7 @@ public class MSBlockLootTables extends BlockLootTables
 		dropSelf(COARSE_STONE_COLUMN);
 		dropSelf(CHISELED_COARSE_STONE_BRICKS);
 		dropSelf(CRACKED_COARSE_STONE_BRICKS);
-		dropSelf(MOSSY_COARSE_STONE_BRICKS);
+		dropSelf(MOSSY_COARSE_STONE);
 		dropSelf(SHADE_STONE);
 		dropSelf(SMOOTH_SHADE_STONE);
 		dropSelf(SHADE_BRICKS);

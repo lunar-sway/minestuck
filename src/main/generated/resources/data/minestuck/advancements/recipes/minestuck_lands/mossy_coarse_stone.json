@@ -2,7 +2,7 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "minestuck:mossy_coarse_stone_bricks"
+      "minestuck:mossy_coarse_stone"
     ]
   },
   "criteria": {
@@ -19,7 +19,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "minestuck:mossy_coarse_stone_bricks"
+        "recipe": "minestuck:mossy_coarse_stone"
       }
     }
   },
