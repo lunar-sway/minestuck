@@ -569,7 +569,7 @@ public class MSItems
 		registerItemBlock(registry, COARSE_STONE_COLUMN, MSItemGroup.LANDS);
 		registerItemBlock(registry, CHISELED_COARSE_STONE_BRICKS, MSItemGroup.LANDS);
 		registerItemBlock(registry, CRACKED_COARSE_STONE_BRICKS, MSItemGroup.LANDS);
-		registerItemBlock(registry, MOSSY_COARSE_STONE, MSItemGroup.LANDS);
+		registerItemBlock(registry, MOSSY_COARSE_STONE_BRICKS, MSItemGroup.LANDS);
 		registerItemBlock(registry, SHADE_STONE, MSItemGroup.LANDS);
 		registerItemBlock(registry, SMOOTH_SHADE_STONE, MSItemGroup.LANDS);
 		registerItemBlock(registry, SHADE_BRICKS, MSItemGroup.LANDS);

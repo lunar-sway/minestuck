@@ -83,6 +83,9 @@ public final class StructureBlockRegistry
 		registerBlock("sand", Blocks.SAND.defaultBlockState());
 		registerBlock("structure_primary", Blocks.STONE_BRICKS.defaultBlockState());
 		registerBlock("structure_primary_decorative", "structure_primary", Blocks.CHISELED_STONE_BRICKS);
+		registerBlock("structure_primary_cracked", "structure_primary", Blocks.CRACKED_STONE_BRICKS);
+		registerBlock("structure_primary_mossy", "structure_primary", Blocks.MOSSY_STONE_BRICKS);
+		registerBlock("structure_primary_column", "structure_primary", MSBlocks.COARSE_STONE_COLUMN);
 		registerBlock("structure_primary_stairs", "structure_primary", Blocks.STONE_BRICK_STAIRS);
 		registerBlock("structure_secondary", "structure_primary", Blocks.NETHER_BRICKS);
 		registerBlock("structure_secondary_decorative", "structure_secondary", Blocks.RED_NETHER_BRICKS);
