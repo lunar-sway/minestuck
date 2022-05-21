@@ -198,7 +198,7 @@ public class ConsortEntity extends AnimatedCreatureEntity implements IContainerP
 	
 	private void explode()
 	{
-		if (!this.level.isClientSide)
+		if(!this.level.isClientSide)
 		{
 			boolean flag = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this);
 			this.dead = true;
@@ -303,7 +303,7 @@ public class ConsortEntity extends AnimatedCreatureEntity implements IContainerP
 		{
 			merchantType = EnumConsort.MerchantType.SHADY;
 			if(hasRestriction())
-				restrictTo(getRestrictCenter(), (int) (getRestrictRadius()*0.4F));
+				restrictTo(getRestrictCenter(), (int) (getRestrictRadius() * 0.4F));
 		}
 		
 		homeDimension = level.dimension();
@@ -408,52 +408,63 @@ public class ConsortEntity extends AnimatedCreatureEntity implements IContainerP
 	{
 		return true;
 	}
-
+	
 	@Override
-	public void registerControllers(AnimationData data) {
+	public void registerControllers(AnimationData data)
+	{
 		data.addAnimationController(createAnimation("walkAnimation", 1, this::walkAnimation));
 		data.addAnimationController(createAnimation("armsAnimation", 1, this::armsAnimation));
 		data.addAnimationController(createAnimation("deathAnimation", 1, this::deathAnimation));
 		data.addAnimationController(createAnimation("actionAnimation", 1, this::actionAnimation));
 	}
-
-	private <E extends IAnimatable> PlayState walkAnimation(AnimationEvent<E> event) {
-		if (!event.isMoving() || getCurrentAction() != Actions.NONE) {
+	
+	private <E extends IAnimatable> PlayState walkAnimation(AnimationEvent<E> event)
+	{
+		if(!event.isMoving() || getCurrentAction() != Actions.NONE)
+		{
 			return PlayState.STOP;
 		}
-
+		
 		event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", true));
 		return PlayState.CONTINUE;
 	}
-
-	private <E extends IAnimatable> PlayState armsAnimation(AnimationEvent<E> event) {
-		if (!event.isMoving() || getCurrentAction() != Actions.NONE) {
-			if (this.getConsortType() == EnumConsort.TURTLE) { // eeeeeeeeeeehhh maybe just fix the turtle anims instead
+	
+	private <E extends IAnimatable> PlayState armsAnimation(AnimationEvent<E> event)
+	{
+		if(!event.isMoving() || getCurrentAction() != Actions.NONE)
+		{
+			if(this.getConsortType() == EnumConsort.TURTLE)
+			{ // eeeeeeeeeeehhh maybe just fix the turtle anims instead
 				event.getController().setAnimation(new AnimationBuilder().addAnimation("armfix", true));
 				return PlayState.CONTINUE;
 			}
 			return PlayState.STOP;
 		}
-
+		
 		event.getController().setAnimation(new AnimationBuilder().addAnimation("walkarms", true));
 		return PlayState.CONTINUE;
 	}
-
-	private <E extends IAnimatable> PlayState deathAnimation(AnimationEvent<E> event) {
-		if (dead) {
+	
+	private <E extends IAnimatable> PlayState deathAnimation(AnimationEvent<E> event)
+	{
+		if(dead)
+		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("die", false));
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
 	}
-
-	private <E extends IAnimatable> PlayState actionAnimation(AnimationEvent<E> event) {
+	
+	private <E extends IAnimatable> PlayState actionAnimation(AnimationEvent<E> event)
+	{
 		Actions action = getCurrentAction();
-		if (action == Actions.TALK) {
+		if(action == Actions.TALK)
+		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("talk", true));
 			return PlayState.CONTINUE;
 		}
-		if (action == Actions.PANIC) {
+		if(action == Actions.PANIC)
+		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("panic", false).addAnimation("panicrun", true));
 			return PlayState.CONTINUE;
 		}

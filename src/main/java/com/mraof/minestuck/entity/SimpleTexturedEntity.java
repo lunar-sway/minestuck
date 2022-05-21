@@ -17,11 +17,11 @@ public abstract class SimpleTexturedEntity extends AnimatedCreatureEntity
 	
 	protected ResourceLocation createTexture()
 	{
-		ResourceLocation entityName = Objects.requireNonNull(getType().getRegistryName(), () -> "Getting texture for entity without a registry name! "+this);
+		ResourceLocation entityName = Objects.requireNonNull(getType().getRegistryName(), () -> "Getting texture for entity without a registry name! " + this);
 		
 		return new ResourceLocation(entityName.getNamespace(), "textures/entity/" + entityName.getPath() + ".png");
 	}
-
+	
 	public final ResourceLocation getTextureResource()
 	{
 		if(textureResource == null)

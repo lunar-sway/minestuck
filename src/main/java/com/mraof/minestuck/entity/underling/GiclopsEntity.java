@@ -8,11 +8,16 @@ import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.tags.ITag;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.manager.AnimationData;
@@ -87,52 +92,52 @@ public class GiclopsEntity extends UnderlingEntity implements IAnimatable
 		}
 	}
 	
-//	//Reduced lag is worth not taking damage for being inside a wall
-//	@Override
-//	public boolean isInWall()
-//	{
-//		return false;
-//	}
-//
-//	//Only pay attention to the top for water
-//
-//	@Override
-//	public boolean updateFluidHeightAndDoFluidPushing(ITag<Fluid> fluidTag, double fluidFactor)
-//	{
-//		AxisAlignedBB realBox = this.getBoundingBox();
-//		this.setBoundingBox(new AxisAlignedBB(realBox.minX, realBox.maxY - 1, realBox.minZ, realBox.maxX, realBox.maxY, realBox.maxZ));
-//		boolean result = super.updateFluidHeightAndDoFluidPushing(fluidTag, fluidFactor);
-//		this.setBoundingBox(realBox);
-//		return result;
-//	}
+	//Reduced lag is worth not taking damage for being inside a wall
+	@Override
+	public boolean isInWall()
+	{
+		return false;
+	}
 	
+	//Only pay attention to the top for water
 	
-//	@Override
-//	public void move(MoverType typeIn, Vector3d pos)
-//	{
-//		AxisAlignedBB realBox = this.getBoundingBox();
-//		double minX = pos.x > 0 ? realBox.maxX - pos.x : realBox.minX;
-//		/*				y > 0 ? realBox.maxY - y : realBox.minY,*/
-//		double minY = realBox.minY;
-//		double minZ = pos.z > 0 ? realBox.maxZ - pos.z : realBox.minZ;
-//		double maxX = pos.x < 0 ? realBox.minX - pos.x : realBox.maxX;
-//		double maxY = pos.y < 0 ? realBox.minY - pos.y : realBox.maxY;
-//		double maxZ = pos.z < 0 ? realBox.minZ - pos.z : realBox.maxZ;
-//		this.setBoundingBox(new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ));
-//		super.move(typeIn, pos);
-//		AxisAlignedBB changedBox = this.getBoundingBox();
-//		this.setBoundingBox(realBox.move(changedBox.minX - minX, changedBox.minY - minY, changedBox.minZ - minZ));
-//		this.setLocationFromBoundingbox();
-//	}
+	@Override
+	public boolean updateFluidHeightAndDoFluidPushing(ITag<Fluid> fluidTag, double fluidFactor)
+	{
+		AxisAlignedBB realBox = this.getBoundingBox();
+		this.setBoundingBox(new AxisAlignedBB(realBox.minX, realBox.maxY - 1, realBox.minZ, realBox.maxX, realBox.maxY, realBox.maxZ));
+		boolean result = super.updateFluidHeightAndDoFluidPushing(fluidTag, fluidFactor);
+		this.setBoundingBox(realBox);
+		return result;
+	}
+	
+	@Override
+	public void move(MoverType typeIn, Vector3d pos)
+	{
+		AxisAlignedBB realBox = this.getBoundingBox();
+		double minX = pos.x > 0 ? realBox.maxX - pos.x : realBox.minX;
+		/*				y > 0 ? realBox.maxY - y : realBox.minY,*/
+		double minY = realBox.minY;
+		double minZ = pos.z > 0 ? realBox.maxZ - pos.z : realBox.minZ;
+		double maxX = pos.x < 0 ? realBox.minX - pos.x : realBox.maxX;
+		double maxY = pos.y < 0 ? realBox.minY - pos.y : realBox.maxY;
+		double maxZ = pos.z < 0 ? realBox.minZ - pos.z : realBox.maxZ;
+		this.setBoundingBox(new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ));
+		super.move(typeIn, pos);
+		AxisAlignedBB changedBox = this.getBoundingBox();
+		this.setBoundingBox(realBox.move(changedBox.minX - minX, changedBox.minY - minY, changedBox.minZ - minZ));
+		this.setLocationFromBoundingbox();
+	}
 	
 	@Override
 	public boolean isPickable()
 	{
 		return true;
 	}
-
+	
 	@Override
-	public void registerControllers(AnimationData data) {
-
+	public void registerControllers(AnimationData data)
+	{
+	
 	}
 }

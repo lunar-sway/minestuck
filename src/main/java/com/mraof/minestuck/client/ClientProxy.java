@@ -50,23 +50,23 @@ public class ClientProxy
 		registerRenderers();
 		
 		MSScreenFactories.registerScreenFactories();
-
+		
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.FROG, FrogRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.HOLOGRAM, HologramRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.LOTUS_FLOWER, LotusFlowerRenderer::new);
-
+		
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.NAKAGATOR, ConsortRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.SALAMANDER, ConsortRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.IGUANA, ConsortRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.TURTLE, ConsortRenderer::new);
-
+		
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.IMP, UnderlingRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.OGRE, UnderlingRenderer::new);
-		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.BASILISK, BasiliskRenderer::new);
+		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.BASILISK, UnderlingRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.LICH, UnderlingRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.GICLOPS, UnderlingRenderer::new);
-		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.WYRM, UnderlingRenderer::new);
-
+		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.WYRM, manager -> new ShadowRenderer<>(manager, 1.0F));
+		
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.PROSPITIAN_BISHOP, manager -> new SimpleTexturedEntityRenderer<>(manager, new BishopModel<>(), 1.8F));
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.DERSITE_BISHOP, manager -> new SimpleTexturedEntityRenderer<>(manager, new BishopModel<>(), 1.8F));
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.PROSPITIAN_ROOK, manager -> new SimpleTexturedEntityRenderer<>(manager, new RookModel<>(), 2.5F));
@@ -140,7 +140,7 @@ public class ClientProxy
 		ComputerProgram.registerProgramClass(1, SburbServer.class);
 		
 		registerArmorModels();
-
+		
 		IItemPropertyGetter content = (stack, world, holder) -> AlchemyHelper.hasDecodedItem(stack) ? 1 : 0;
 		ResourceLocation contentName = new ResourceLocation(Minestuck.MOD_ID, "content");
 		
