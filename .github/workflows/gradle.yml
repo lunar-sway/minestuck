@@ -1,10 +1,14 @@
-name: Java CI with Gradle
+name: Build
 
 on:
   push:
-    branches: [ 1.16 ]
+    branches: 
+      - '1.16'
+      - 'upcoming-content'
   pull_request:
-    branches: [ 1.16 ]
+    branches: 
+      - '1.16'
+      - 'upcoming-content'
 
 permissions:
   contents: read
@@ -16,13 +20,13 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Set up JDK 11
+    - name: Set up JDK
       uses: actions/setup-java@v3
       with:
         java-version: '11'
         distribution: 'temurin'
 
-    - name: Build with Gradle
+    - name: Gradle Build
       uses: gradle/gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee
       with:
         arguments: build
