@@ -1484,6 +1484,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(LandInfo.LAND_ENTRY, "Welcome to %s.");
 		
 		addEffect(MSEffects.CREATIVE_SHOCK, "Creative Shock");
+		addEffect(MSEffects.ARTIFACTED, "Artifacted");
 		
 		addStrife(KindAbstratusList.SWORD, "Bladekind");
 		addStrife(KindAbstratusList.BOW, "Bowkind");

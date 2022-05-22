@@ -6,6 +6,7 @@ import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.client.model.*;
 import com.mraof.minestuck.client.model.armor.CrumplyHatModel;
 import com.mraof.minestuck.client.model.armor.DreamerPajamasModel;
+import com.mraof.minestuck.client.renderer.effects.ArtifactEffectRenderer;
 import com.mraof.minestuck.client.renderer.entity.*;
 import com.mraof.minestuck.client.renderer.entity.frog.FrogRenderer;
 import com.mraof.minestuck.client.renderer.tileentity.GateRenderer;
@@ -28,10 +29,12 @@ import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.entity.SpriteRenderer;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.world.DimensionRenderInfo;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemModelsProperties;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
@@ -47,6 +50,8 @@ public class ClientProxy
 	
 	public static void init()
 	{
+		MinecraftForge.EVENT_BUS.register(new ArtifactEffectRenderer(Minecraft.getInstance().getEntityRenderDispatcher()));
+		
 		registerRenderers();
 		
 		MSScreenFactories.registerScreenFactories();
