@@ -3,7 +3,9 @@ package com.mraof.minestuck.tileentity.redstone;
 import com.mraof.minestuck.block.redstone.RemoteObserverBlock;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
+import com.mraof.minestuck.util.MSTags;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -23,7 +25,7 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 	private int tickCycle;
 	@Nonnull
 	private ActiveType activeType;
-	private int observingRange; //default is 16, but can be set(via gui) between 1 and 64
+	private int observingRange = 16; //default is 16, but can be set(via gui) between 1 and 64
 	private static final int WIRELESS_CONSTANT = 6;
 	
 	private EntityType<?> currentEntityType;
@@ -32,7 +34,7 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 	{
 		IS_CROUCHING,
 		CURRENT_ENTITY_PRESENT,
-		IS_ENTITY_PRESENT,
+		IS_LIVING_ENTITY_PRESENT,
 		IS_UNDERLING_PRESENT,
 		IS_ENTITY_BURNING,
 		IS_ENTITY_INVISIBLE,
@@ -58,7 +60,7 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 	public RemoteObserverTileEntity()
 	{
 		super(MSTileEntityTypes.REMOTE_OBSERVER.get());
-		activeType = ActiveType.IS_ENTITY_PRESENT;
+		activeType = ActiveType.IS_LIVING_ENTITY_PRESENT;
 	}
 	
 	@Override
@@ -79,33 +81,28 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 	{
 		boolean shouldBePowered = false;
 		
-		if(observingRange == 0)
-			this.observingRange = 16; //on creation it defaults to 0, when it should default to 16
 		AxisAlignedBB axisalignedbb = new AxisAlignedBB(getBlockPos()).inflate(observingRange);
-		List<LivingEntity> livingEntityList = level.getLoadedEntitiesOfClass(LivingEntity.class, axisalignedbb);
-		if(!livingEntityList.isEmpty())
+		List<Entity> entityList = level.getLoadedEntitiesOfClass(Entity.class, axisalignedbb);
+		if(!entityList.isEmpty())
 		{
-			if(activeType == ActiveType.IS_ENTITY_PRESENT)
-				shouldBePowered = true;
-			else
+			for(Entity entity : entityList)
 			{
-				for(LivingEntity livingEntity : livingEntityList)
-				{
-					if(activeType == ActiveType.CURRENT_ENTITY_PRESENT && livingEntity.getType() == getCurrentEntityType())
-						shouldBePowered = true;
-					else if(activeType == ActiveType.IS_UNDERLING_PRESENT && livingEntity instanceof UnderlingEntity)
-						shouldBePowered = true;
-					else if(activeType == ActiveType.IS_CROUCHING && livingEntity.isCrouching())
-						shouldBePowered = true;
-					else if(activeType == ActiveType.IS_ENTITY_BURNING && livingEntity.isOnFire())
-						shouldBePowered = true;
-					else if(activeType == ActiveType.IS_ENTITY_INVISIBLE && livingEntity.isInvisible())
-						shouldBePowered = true;
-					else if(activeType == ActiveType.IS_ELYTRA_FLYING && livingEntity.isFallFlying())
-						shouldBePowered = true;
-					else if(activeType == ActiveType.IS_ENTITY_IN_WATER && livingEntity.isInWater())
-						shouldBePowered = true;
-				}
+				if(activeType == ActiveType.IS_LIVING_ENTITY_PRESENT && entity instanceof LivingEntity)
+					shouldBePowered = true;
+				else if(activeType == ActiveType.CURRENT_ENTITY_PRESENT && entity.getType() == getCurrentEntityType())
+					shouldBePowered = true;
+				else if(activeType == ActiveType.IS_UNDERLING_PRESENT && entity instanceof UnderlingEntity)
+					shouldBePowered = true;
+				else if(activeType == ActiveType.IS_CROUCHING && entity.isCrouching())
+					shouldBePowered = true;
+				else if(activeType == ActiveType.IS_ENTITY_BURNING && entity.isOnFire())
+					shouldBePowered = true;
+				else if(activeType == ActiveType.IS_ENTITY_INVISIBLE && entity.isInvisible())
+					shouldBePowered = true;
+				else if(activeType == ActiveType.IS_ELYTRA_FLYING && (entity instanceof LivingEntity && ((LivingEntity) entity).isFallFlying()))
+					shouldBePowered = true;
+				else if(activeType == ActiveType.IS_ENTITY_IN_WATER && entity.isInWater())
+					shouldBePowered = true;
 			}
 		}
 		
@@ -128,6 +125,14 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 			return currentEntityType;
 		else
 			return EntityType.PLAYER;
+	}
+	
+	/**
+	 * Checks for entity types that are not intended to be known by survival players or are forbidden from typical use
+	 */
+	public static boolean entityCanBeObserved(EntityType<?> currentEntityType)
+	{
+		return !MSTags.EntityTypes.REMOTE_OBSERVER_WHITELIST.contains(currentEntityType);
 	}
 	
 	public void setObservingRange(int rangeIn)

@@ -112,6 +112,7 @@ public class MSTags
 		public static final Tags.IOptionalNamedTag<EntityType<?>> BISHOPS = tag("carapacians/bishop");
 		public static final Tags.IOptionalNamedTag<EntityType<?>> ROOKS = tag("carapacians/rook");
 		public static final Tags.IOptionalNamedTag<EntityType<?>> MAGNET_RECEPTIVE = tag("magnet_receptive");
+		public static final Tags.IOptionalNamedTag<EntityType<?>> REMOTE_OBSERVER_WHITELIST = tag("remote_observer_whitelist");
 		
 		private static Tags.IOptionalNamedTag<EntityType<?>> tag(String name)
 		{
