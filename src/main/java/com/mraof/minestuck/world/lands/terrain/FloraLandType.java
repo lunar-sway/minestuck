@@ -45,9 +45,10 @@ public class FloraLandType extends TerrainLandType
 		registry.setBlockState("surface_rough", Blocks.COARSE_DIRT.defaultBlockState());
 		registry.setBlockState("upper", Blocks.DIRT.defaultBlockState());
 		registry.setBlockState("ocean", MSBlocks.BLOOD.defaultBlockState());
-		registry.setBlockState("structure_primary", Blocks.MOSSY_STONE_BRICKS.defaultBlockState());
+		registry.setBlockState("structure_primary", MSBlocks.MOSSY_DECREPIT_STONE_BRICKS.defaultBlockState());
 		registry.setBlockState("structure_primary_decorative", MSBlocks.FLOWERY_MOSSY_STONE_BRICKS.defaultBlockState());
-		registry.setBlockState("structure_secondary_stairs", Blocks.STONE_BRICK_STAIRS.defaultBlockState());
+		registry.setBlockState("structure_primary_mossy", MSBlocks.MOSSY_DECREPIT_STONE_BRICKS.defaultBlockState());
+		registry.setBlockState("structure_primary_stairs", Blocks.STONE_BRICK_STAIRS.defaultBlockState());
 		registry.setBlockState("structure_secondary", Blocks.MOSSY_COBBLESTONE.defaultBlockState());
 		registry.setBlockState("structure_secondary_decorative", MSBlocks.FLOWERY_MOSSY_COBBLESTONE.defaultBlockState());
 		registry.setBlockState("structure_secondary_stairs", Blocks.DARK_OAK_STAIRS.defaultBlockState());

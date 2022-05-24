@@ -41,10 +41,14 @@ public class ShadeLandType extends TerrainLandType
 		registry.setGroundState(MSBlocks.SHADE_STONE.defaultBlockState(), MSFillerBlockTypes.SHADE_STONE);
 		registry.setBlockState("upper", MSBlocks.BLUE_DIRT.defaultBlockState());
 		registry.setBlockState("ocean", MSBlocks.OIL.defaultBlockState());
-		registry.setBlockState("structure_primary_decorative", Blocks.CHISELED_STONE_BRICKS.defaultBlockState());
-		registry.setBlockState("structure_primary_stairs", Blocks.STONE_BRICK_STAIRS.defaultBlockState());
-		registry.setBlockState("structure_secondary", MSBlocks.SHADE_BRICKS.defaultBlockState());
-		registry.setBlockState("structure_secondary_decorative", MSBlocks.SMOOTH_SHADE_STONE.defaultBlockState());
+		registry.setBlockState("structure_primary", MSBlocks.SHADE_BRICKS.defaultBlockState());
+		registry.setBlockState("structure_primary_decorative", MSBlocks.CHISELED_SHADE_BRICKS.defaultBlockState());
+		registry.setBlockState("structure_primary_cracked", MSBlocks.CRACKED_SHADE_BRICKS.defaultBlockState());
+		registry.setBlockState("structure_primary_mossy", MSBlocks.MOSSY_SHADE_BRICKS.defaultBlockState());
+		registry.setBlockState("structure_primary_column", MSBlocks.SHADE_COLUMN.defaultBlockState());
+		registry.setBlockState("structure_primary_stairs", MSBlocks.SHADE_STAIRS.defaultBlockState());
+		registry.setBlockState("structure_secondary", MSBlocks.SMOOTH_SHADE_STONE.defaultBlockState());
+		registry.setBlockState("structure_secondary_decorative", MSBlocks.TAR_SHADE_BRICKS.defaultBlockState());
 		registry.setBlockState("structure_secondary_stairs", MSBlocks.SHADE_BRICK_STAIRS.defaultBlockState());
 		registry.setBlockState("village_path", Blocks.GRAVEL.defaultBlockState());
 		registry.setBlockState("light_block", MSBlocks.GLOWING_WOOD.defaultBlockState());

@@ -54,8 +54,11 @@ public class RainLandType extends TerrainLandType
 		registry.setBlockState("upper", MSBlocks.CHALK.defaultBlockState());
 		registry.setBlockState("ocean", Blocks.WATER.defaultBlockState());
 		registry.setBlockState("structure_primary", MSBlocks.PINK_STONE_BRICKS.defaultBlockState());
-		registry.setBlockState("structure_primary_stairs", MSBlocks.PINK_STONE_BRICK_STAIRS.defaultBlockState());
+		registry.setBlockState("structure_primary_cracked", MSBlocks.CRACKED_PINK_STONE_BRICKS.defaultBlockState());
+		registry.setBlockState("structure_primary_mossy", MSBlocks.MOSSY_PINK_STONE_BRICKS.defaultBlockState());
+		registry.setBlockState("structure_primary_column", MSBlocks.PINK_STONE_COLUMN.defaultBlockState());
 		registry.setBlockState("structure_primary_decorative", MSBlocks.CHISELED_PINK_STONE_BRICKS.defaultBlockState());
+		registry.setBlockState("structure_primary_stairs",MSBlocks.PINK_STONE_BRICK_STAIRS.defaultBlockState());
 		registry.setBlockState("structure_secondary", MSBlocks.POLISHED_PINK_STONE.defaultBlockState());
 		registry.setBlockState("structure_secondary_stairs", MSBlocks.CHALK_BRICK_STAIRS.defaultBlockState());
 		registry.setBlockState("structure_secondary_decorative", MSBlocks.CHISELED_PINK_STONE_BRICKS.defaultBlockState());
