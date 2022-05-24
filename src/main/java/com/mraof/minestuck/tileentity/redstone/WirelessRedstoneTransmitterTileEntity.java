@@ -24,7 +24,7 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 	private BlockPos offsetPos;
 	private Direction facing;
 	private int tickCycle;
-	private static final int WIRELESS_CONSTANT = 6;
+	private static final int WIRELESS_CONSTANT = 6; //tick speed of components related to wireless redstone, does not occur every tick for performance
 	
 	public WirelessRedstoneTransmitterTileEntity()
 	{

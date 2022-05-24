@@ -55,6 +55,7 @@ public class SummonerTileEntity extends TileEntity implements ITickableTileEntit
 			for(int i = 0; i < 60; i++) //arbitrarily high
 			{
 				iterateTracker = i;
+				getSummonRange(); //used here in case the summonRange was set to a value larger than this block is intended to check through
 				double newPosX = summonerBlockPos.getX() + (worldIn.random.nextDouble() - 0.5D) * summonRange;
 				double newPosY = summonerBlockPos.getY() + (worldIn.random.nextDouble() - 0.5D) * summonRange;
 				double newPosZ = summonerBlockPos.getZ() + (worldIn.random.nextDouble() - 0.5D) * summonRange;

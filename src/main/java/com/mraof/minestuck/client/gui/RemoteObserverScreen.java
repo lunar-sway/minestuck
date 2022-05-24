@@ -42,7 +42,7 @@ public class RemoteObserverScreen extends Screen
 		
 		this.te = te;
 		this.activeType = te.getActiveType();
-		this.observingRange = te.getObservingRange() > 0 ? te.getObservingRange() : 16; //if its defaulted on creation to 0, set it to the intended default of 16
+		this.observingRange = te.getObservingRange();
 	}
 	
 	@Override
