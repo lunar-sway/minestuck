@@ -1,5 +1,6 @@
 package com.mraof.minestuck.entity.underling;
 
+import com.mraof.minestuck.entity.AnimatedCreatureEntity;
 import com.mraof.minestuck.entity.EntityListFilter;
 import com.mraof.minestuck.entity.ai.HurtByTargetAlliedGoal;
 import com.mraof.minestuck.entity.item.GristEntity;
@@ -36,16 +37,17 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.*;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.FakePlayer;
+import software.bernie.geckolib3.core.IAnimatable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public abstract class UnderlingEntity extends CreatureEntity implements IMob
+public abstract class UnderlingEntity extends AnimatedCreatureEntity implements IMob, IAnimatable
 {
 	public static final UUID GRIST_MODIFIER_ID = UUID.fromString("08B6DEFC-E3F4-11EA-87D0-0242AC130003");
 	private static final DataParameter<String> GRIST_TYPE = EntityDataManager.defineId(UnderlingEntity.class, DataSerializers.STRING);
-	protected final EntityListFilter attackEntitySelector = new EntityListFilter(new ArrayList<>());	//TODO this filter isn't being saved. F1X PLZ
+	protected final EntityListFilter attackEntitySelector = new EntityListFilter(new ArrayList<>());    //TODO this filter isn't being saved. F1X PLZ
 	protected boolean fromSpawner;
 	public boolean dropCandy;
 	private int consortRep;
@@ -65,7 +67,7 @@ public abstract class UnderlingEntity extends CreatureEntity implements IMob
 	@Override
 	protected void registerGoals()
 	{
-		
+		super.registerGoals();
 		goalSelector.addGoal(1, new SwimGoal(this));
 		goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 0.8D));
 		goalSelector.addGoal(5, new RandomWalkingGoal(this, 0.6D));
@@ -109,8 +111,8 @@ public abstract class UnderlingEntity extends CreatureEntity implements IMob
 	
 	protected void applyGristType(GristType type)
 	{
-		if(!type.isUnderlingType())	//Utility grist type
-			throw new IllegalArgumentException("Can't set underling grist type to "+type.getRegistryName());
+		if(!type.isUnderlingType())    //Utility grist type
+			throw new IllegalArgumentException("Can't set underling grist type to " + type.getRegistryName());
 		entityData.set(GRIST_TYPE, String.valueOf(type.getRegistryName()));
 		
 		onGristTypeUpdated(type);
@@ -189,7 +191,7 @@ public abstract class UnderlingEntity extends CreatureEntity implements IMob
 					if(candy > 0)
 						this.level.addFreshEntity(new ItemEntity(level, randX(), this.getY(), randZ(), candyItem));
 					if(gristAmount > 0)
-						this.level.addFreshEntity(new GristEntity(level, randX(), this.getY(), randZ(),new GristAmount(gristType.getType(), gristAmount)));
+						this.level.addFreshEntity(new GristEntity(level, randX(), this.getY(), randZ(), new GristAmount(gristType.getType(), gristAmount)));
 				}
 			}
 			
@@ -347,10 +349,10 @@ public abstract class UnderlingEntity extends CreatureEntity implements IMob
 		
 		if(totalModifier > maxSharedProgress)
 			for(int i = 0; i < playerList.length; i++)
-				Echeladder.increaseProgress(playerList[i], level, (int) (maxProgress*modifiers[i]/totalModifier));
+				Echeladder.increaseProgress(playerList[i], level, (int) (maxProgress * modifiers[i] / totalModifier));
 		else
 			for(int i = 0; i < playerList.length; i++)
-				Echeladder.increaseProgress(playerList[i], level, (int) (progress*modifiers[i]));
+				Echeladder.increaseProgress(playerList[i], level, (int) (progress * modifiers[i]));
 	}
 	
 	protected static void firstKillBonus(Entity killer, byte type)

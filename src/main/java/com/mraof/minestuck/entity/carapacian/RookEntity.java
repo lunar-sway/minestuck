@@ -10,6 +10,7 @@ import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import software.bernie.geckolib3.core.manager.AnimationData;
 
 public class RookEntity extends CarapacianEntity implements IMob
 {
@@ -53,6 +54,11 @@ public class RookEntity extends CarapacianEntity implements IMob
 	{
 		float damage = this.getAttackStrength(entity);
 		return entity.hurt(DamageSource.mobAttack(this), damage);
+	}
+
+	@Override
+	public void registerControllers(AnimationData data) {
+		// TODO blockbench model
 	}
 
 //	@Override
