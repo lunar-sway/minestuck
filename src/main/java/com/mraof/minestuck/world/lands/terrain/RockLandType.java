@@ -57,8 +57,9 @@ public class RockLandType extends TerrainLandType
 		}
 		
 		registry.setBlockState("upper", Blocks.COBBLESTONE.defaultBlockState());
-		registry.setBlockState("structure_primary_decorative", Blocks.CHISELED_STONE_BRICKS.defaultBlockState());
-		registry.setBlockState("structure_primary_stairs", Blocks.STONE_BRICK_STAIRS.defaultBlockState());
+		registry.setBlockState("structure_primary", MSBlocks.COARSE_STONE_BRICKS.defaultBlockState());
+		registry.setBlockState("structure_primary_decorative", MSBlocks.CHISELED_COARSE_STONE_BRICKS.defaultBlockState());
+		registry.setBlockState("structure_primary_stairs", MSBlocks.COARSE_STONE_BRICK_STAIRS.defaultBlockState());
 		registry.setBlockState("structure_secondary", MSBlocks.COARSE_STONE.defaultBlockState());
 		registry.setBlockState("structure_secondary_decorative", MSBlocks.CHISELED_COARSE_STONE.defaultBlockState());
 		registry.setBlockState("structure_secondary_stairs", MSBlocks.COARSE_STONE_STAIRS.defaultBlockState());
