@@ -88,10 +88,10 @@ public class TotemLatheBlock extends MultiMachineBlock
 			((TotemLatheTileEntity) te).checkStates();
 	}
 	
-    /**
-     *returns the block position of the "Main" block
-     *aka the block with the TileEntity for the machine
-     */
+	/**
+	 * returns the block position of the "Main" block
+	 * aka the block with the TileEntity for the machine
+	 */
 	public BlockPos getMainPos(BlockState state, BlockPos pos)
 	{
 		Rotation rotation = MSRotationUtil.fromDirection(state.getValue(FACING));
@@ -104,7 +104,7 @@ public class TotemLatheBlock extends MultiMachineBlock
 		public static final EnumProperty<EnumDowelType> DOWEL = MSProperties.DOWEL;
 		protected final Map<Direction, VoxelShape> carvedShape;
 		protected final Map<Direction, VoxelShape> dowelShape;
-
+		
 		public DowelRod(MachineMultiblock machine, CustomVoxelShape emptyShape, CustomVoxelShape dowelShape, CustomVoxelShape carvedShape, BlockPos mainPos, Properties properties)
 		{
 			super(machine, emptyShape, mainPos, properties);
@@ -115,11 +115,14 @@ public class TotemLatheBlock extends MultiMachineBlock
 		@Override
 		public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
 		{
-			if (state.getValue(DOWEL).equals(EnumDowelType.CARVED_DOWEL)) {
+			if(state.getValue(DOWEL).equals(EnumDowelType.CARVED_DOWEL))
+			{
 				return carvedShape.get(state.getValue(FACING));
-			} else if (state.getValue(DOWEL).equals(EnumDowelType.DOWEL)) {
+			} else if(state.getValue(DOWEL).equals(EnumDowelType.DOWEL))
+			{
 				return dowelShape.get(state.getValue(FACING));
-			} else {
+			} else
+			{
 				return super.getShape(state, worldIn, pos, context);
 			}
 		}
