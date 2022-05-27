@@ -189,11 +189,12 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 		}
 		return fallback.get();
 	}
-
-	public int getColor() {
+	
+	public int getColor()
+	{
 		return color;
 	}
-
+	
 	static class DummyType extends GristType
 	{
 		DummyType()
@@ -263,8 +264,9 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 			this.categories.addAll(Arrays.asList(categories));
 			return this;
 		}
-
-		public Properties color(int color) {
+		
+		public Properties color(int color)
+		{
 			this.color = color;
 			return this;
 		}

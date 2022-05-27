@@ -38,8 +38,8 @@ public class GristTypes
 	public static final RegistryObject<GristType> DIAMOND = GRIST_TYPES.register("diamond", () -> new GristType(new GristType.Properties(0.2F, 5).spawnsFor(UNCOMMON, ANY).candy(() -> MSItems.DIAMOND_MINT).secondary(GristTypes.GOLD).color(0xffffff)));
 	public static final RegistryObject<GristType> GOLD = GRIST_TYPES.register("gold", () -> new GristType(new GristType.Properties(0.2F, 5).spawnsFor(UNCOMMON, ANY).candy(() -> MSItems.GOLD_CANDY_RIBBON).secondary(GristTypes.URANIUM).color(0xffbf00)));
 	public static final RegistryObject<GristType> URANIUM = GRIST_TYPES.register("uranium", () -> new GristType(new GristType.Properties(0.2F, 5).spawnsFor(UNCOMMON, ANY).candy(() -> MSItems.URANIUM_GUMMY_BEAR).secondary(GristTypes.DIAMOND).color(0x14e130)));
-	public static final RegistryObject<GristType> ARTIFACT = GRIST_TYPES.register("artifact", () -> new GristType(new GristType.Properties(0.1F, 1).candy(() -> MSItems.ARTIFACT_WARHEAD)));
-	public static final RegistryObject<GristType> ZILLIUM = GRIST_TYPES.register("zillium", () -> new GristType(new GristType.Properties(0.0F, 10).candy(() -> MSItems.ZILLIUM_SKITTLES).notUnderlingType()));
+	public static final RegistryObject<GristType> ARTIFACT = GRIST_TYPES.register("artifact", () -> new GristType(new GristType.Properties(0.1F, 1).candy(() -> MSItems.ARTIFACT_WARHEAD).color(0xffffff)));
+	public static final RegistryObject<GristType> ZILLIUM = GRIST_TYPES.register("zillium", () -> new GristType(new GristType.Properties(0.0F, 10).candy(() -> MSItems.ZILLIUM_SKITTLES).notUnderlingType().color(0xffffff)));
 	
 	public static IForgeRegistry<GristType> getRegistry()
 	{

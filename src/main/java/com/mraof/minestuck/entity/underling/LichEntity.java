@@ -26,8 +26,8 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 	public LichEntity(EntityType<? extends LichEntity> type, World world)
 	{
 		super(type, world, 7);
-		this.setAttackDelay(14);
-		this.setAttackRecovery(16);
+		this.attackDelay = 14;
+		this.attackRecovery = 16;
 		this.canMoveWhileAttacking = true;
 		this.knockbackResistWhileAttacking = 1.0;
 	}
@@ -86,32 +86,39 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 			firstKillBonus(killer, (byte) (Echeladder.UNDERLING_BONUS_OFFSET + 3));
 		}
 	}
-
+	
 	@Override
-	public void registerControllers(AnimationData data) {
+	public void registerControllers(AnimationData data)
+	{
 		data.addAnimationController(createAnimation("walkAnimation", 1, this::walkAnimation));
 		data.addAnimationController(createAnimation("deathAnimation", 1, this::deathAnimation));
 		data.addAnimationController(createAnimation("swingAnimation", 0.8, this::swingAnimation));
 	}
-
-	private <E extends IAnimatable> PlayState walkAnimation(AnimationEvent<E> event) {
-		if (!event.isMoving()) {
+	
+	private <E extends IAnimatable> PlayState walkAnimation(AnimationEvent<E> event)
+	{
+		if(!event.isMoving())
+		{
 			return PlayState.STOP;
 		}
 		event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", true));
 		return PlayState.CONTINUE;
 	}
-
-	private <E extends IAnimatable> PlayState deathAnimation(AnimationEvent<E> event) {
-		if (dead) {
+	
+	private <E extends IAnimatable> PlayState deathAnimation(AnimationEvent<E> event)
+	{
+		if(dead)
+		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("die", false));
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
 	}
-
-	private <E extends IAnimatable> PlayState swingAnimation(AnimationEvent<E> event) {
-		if (isAttacking()) {
+	
+	private <E extends IAnimatable> PlayState swingAnimation(AnimationEvent<E> event)
+	{
+		if(isAttacking())
+		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("attack", false));
 			return PlayState.CONTINUE;
 		}

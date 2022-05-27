@@ -25,8 +25,8 @@ public class OgreEntity extends UnderlingEntity
 	public OgreEntity(EntityType<? extends OgreEntity> type, World world)
 	{
 		super(type, world, 3);
-		this.setAttackDelay(18);
-		this.setAttackRecovery(20);
+		this.attackDelay = 18;
+		this.attackRecovery = 20;
 		this.maxUpStep = 1.0F;
 	}
 	
@@ -36,7 +36,7 @@ public class OgreEntity extends UnderlingEntity
 				.add(Attributes.KNOCKBACK_RESISTANCE, 0.4).add(Attributes.MOVEMENT_SPEED, 0.22)
 				.add(Attributes.ATTACK_DAMAGE, 6);
 	}
-
+	
 	protected SoundEvent getAmbientSound()
 	{
 		return MSSoundEvents.ENTITY_OGRE_AMBIENT;
@@ -84,42 +84,51 @@ public class OgreEntity extends UnderlingEntity
 			firstKillBonus(entity, (byte) (Echeladder.UNDERLING_BONUS_OFFSET + 1));
 		}
 	}
-
+	
 	@Override
-	public void registerControllers(AnimationData data) {
+	public void registerControllers(AnimationData data)
+	{
 		data.addAnimationController(createAnimation("walkArmsAnimation", 0.3, this::walkArmsAnimation));
 		data.addAnimationController(createAnimation("walkAnimation", 0.3, this::walkAnimation));
 		data.addAnimationController(createAnimation("swingAnimation", 0.5, this::swingAnimation));
 		data.addAnimationController(createAnimation("deathAnimation", 0.85, this::deathAnimation));
 	}
-
-	private <E extends IAnimatable> PlayState walkAnimation(AnimationEvent<E> event) {
-		if (event.isMoving()) {
+	
+	private <E extends IAnimatable> PlayState walkAnimation(AnimationEvent<E> event)
+	{
+		if(event.isMoving())
+		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ogre.walk", true));
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
 	}
-
-	private <E extends IAnimatable> PlayState walkArmsAnimation(AnimationEvent<E> event) {
-		if (event.isMoving() && !isAttacking()) {
+	
+	private <E extends IAnimatable> PlayState walkArmsAnimation(AnimationEvent<E> event)
+	{
+		if(event.isMoving() && !isAttacking())
+		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ogre.walkarms", true));
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
 	}
-
-	private <E extends IAnimatable> PlayState swingAnimation(AnimationEvent<E> event) {
-		if (isAttacking()) {
+	
+	private <E extends IAnimatable> PlayState swingAnimation(AnimationEvent<E> event)
+	{
+		if(isAttacking())
+		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ogre.punch", false));
 			return PlayState.CONTINUE;
 		}
 		event.getController().markNeedsReload();
 		return PlayState.STOP;
 	}
-
-	private <E extends IAnimatable> PlayState deathAnimation(AnimationEvent<E> event) {
-		if (dead) {
+	
+	private <E extends IAnimatable> PlayState deathAnimation(AnimationEvent<E> event)
+	{
+		if(dead)
+		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ogre.die", false));
 			return PlayState.CONTINUE;
 		}

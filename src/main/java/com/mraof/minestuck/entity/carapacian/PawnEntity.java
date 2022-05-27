@@ -33,16 +33,16 @@ import javax.annotation.Nullable;
 
 public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IMob, IAnimatable
 {
-	private final RangedAttackGoal aiArrowAttack = new RangedAttackGoal(this, 5/4F, 20, 10.0F);
+	private final RangedAttackGoal aiArrowAttack = new RangedAttackGoal(this, 5 / 4F, 20, 10.0F);
 	private final MeleeAttackGoal aiMeleeAttack = new MeleeAttackGoal(this, 2F, false);
 	
 	protected PawnEntity(EntityType<? extends PawnEntity> type, EnumEntityKingdom kingdom, World world)
 	{
 		super(type, kingdom, world);
 		this.xpReward = 1;
+		this.attackDelay = 6;
+		this.attackRecovery = 12;
 		setCombatTask();
-		setAttackDelay(6);
-		setAttackRecovery(12);
 	}
 	
 	public static PawnEntity createProspitian(EntityType<? extends PawnEntity> type, World world)
@@ -54,6 +54,7 @@ public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IM
 	{
 		return new PawnEntity(type, EnumEntityKingdom.DERSITE, world);
 	}
+	
 	public static AttributeModifierMap.MutableAttribute pawnAttributes()
 	{
 		return CarapacianEntity.carapacianAttributes().add(Attributes.ATTACK_DAMAGE)
@@ -79,23 +80,23 @@ public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IM
 	{
 		ArrowEntity arrow = new ArrowEntity(this.level, this);
 		double d0 = target.getX() - this.getX();
-		double d1 = target.getBoundingBox().minY + (double)(target.getBbHeight() / 3.0F) - arrow.getY();
+		double d1 = target.getBoundingBox().minY + (double) (target.getBbHeight() / 3.0F) - arrow.getY();
 		double d2 = target.getZ() - this.getZ();
 		double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
 		arrow.shoot(d0, d1 + d3 * 0.2D, d2, 1.6F, 12.0F);
 		int power = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER_ARROWS, this);
 		int punch = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH_ARROWS, this);
-
+		
 		if(power > 0)
 		{
-			arrow.setBaseDamage(arrow.getBaseDamage() + (double)power * 0.5D + 0.5D);
+			arrow.setBaseDamage(arrow.getBaseDamage() + (double) power * 0.5D + 0.5D);
 		}
-
+		
 		if(punch > 0)
 		{
 			arrow.setKnockback(punch);
 		}
-
+		
 		if(EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAMING_ARROWS, this) > 0)
 		{
 			arrow.setSecondsOnFire(100);
@@ -109,7 +110,7 @@ public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IM
 		//I was just messing around to see if I could make an EntityLiving spawn more EntityLiving, it can
 		this.level.addFreshEntity(arrow);
 	}
-
+	
 	/**
 	 * Returns the amount of damage a mob should deal.
 	 */
@@ -117,31 +118,31 @@ public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IM
 	{
 		ItemStack weapon = this.getMainHandItem();
 		float damage = 2;
-
-		if (!weapon.isEmpty())
-			damage += (float)this.getAttribute(Attributes.ATTACK_DAMAGE).getValue();
+		
+		if(!weapon.isEmpty())
+			damage += (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue();
 		
 		damage += EnchantmentHelper.getDamageBonus(this.getMainHandItem(), ((LivingEntity) par1Entity).getMobType());
 		
 		return damage;
 	}
-
+	
 	@Override
 	public boolean doHurtTarget(Entity par1Entity)
 	{
 		float damage = this.getAttackStrength(par1Entity);
 		int fireAspectLevel = EnchantmentHelper.getFireAspect(this);
 		int knockback = EnchantmentHelper.getKnockbackBonus(this);
-
-		if (fireAspectLevel > 0 && !par1Entity.isOnFire())
+		
+		if(fireAspectLevel > 0 && !par1Entity.isOnFire())
 			par1Entity.setSecondsOnFire(1);
-
-		if (knockback > 0)
-			par1Entity.push(-MathHelper.sin(this.yRot * (float)Math.PI / 180.0F) * (float)knockback * 0.5F, 0.1D, (double)(MathHelper.cos(this.yRot * (float)Math.PI / 180.0F) * (float)knockback * 0.5F));
-
+		
+		if(knockback > 0)
+			par1Entity.push(-MathHelper.sin(this.yRot * (float) Math.PI / 180.0F) * (float) knockback * 0.5F, 0.1D, (double) (MathHelper.cos(this.yRot * (float) Math.PI / 180.0F) * (float) knockback * 0.5F));
+		
 		return par1Entity.hurt(DamageSource.mobAttack(this), damage);
 	}
-	
+
 //	/**
 //	 * Basic mob attack. Default to touch of death in EntityCreature. Overridden by each mob to define their attack.
 //	 */
@@ -183,7 +184,7 @@ public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IM
 	{
 		super.setItemSlot(slotIn, stack);
 		
-		if (!this.level.isClientSide)
+		if(!this.level.isClientSide)
 		{
 			this.setCombatTask();
 		}
@@ -201,41 +202,50 @@ public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IM
 		setCombatTask();
 		return spawnDataIn;
 	}
-
+	
 	@Override
-	public void registerControllers(AnimationData data) {
+	public void registerControllers(AnimationData data)
+	{
 		data.addAnimationController(createAnimation("walkArmsAnimation", 1, this::walkArmsAnimation));
 		data.addAnimationController(createAnimation("walkAnimation", 1, this::walkAnimation));
 		data.addAnimationController(createAnimation("deathAnimation", 1, this::deathAnimation));
 		data.addAnimationController(createAnimation("swingAnimation", 2, this::swingAnimation));
 	}
-
-	private <E extends IAnimatable> PlayState walkAnimation(AnimationEvent<E> event) {
-		if (event.isMoving()) {
+	
+	private <E extends IAnimatable> PlayState walkAnimation(AnimationEvent<E> event)
+	{
+		if(event.isMoving())
+		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", true));
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
 	}
-
-	private <E extends IAnimatable> PlayState walkArmsAnimation(AnimationEvent<E> event) {
-		if (event.isMoving() && !isAttacking()) {
+	
+	private <E extends IAnimatable> PlayState walkArmsAnimation(AnimationEvent<E> event)
+	{
+		if(event.isMoving() && !isAttacking())
+		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("walkarms", true));
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
 	}
-
-	private <E extends IAnimatable> PlayState deathAnimation(AnimationEvent<E> event) {
-		if (dead) {
+	
+	private <E extends IAnimatable> PlayState deathAnimation(AnimationEvent<E> event)
+	{
+		if(dead)
+		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("die", false));
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
 	}
-
-	private <E extends IAnimatable> PlayState swingAnimation(AnimationEvent<E> event) {
-		if (isAttacking()) {
+	
+	private <E extends IAnimatable> PlayState swingAnimation(AnimationEvent<E> event)
+	{
+		if(isAttacking())
+		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("punch1", false));
 			return PlayState.CONTINUE;
 		}

@@ -20,7 +20,7 @@ import net.minecraftforge.registries.ObjectHolder;
 import javax.annotation.Nonnull;
 
 @ObjectHolder(Minestuck.MOD_ID)
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class MSEntityTypes
 {
 	public static EntityClassification UNDERLING = EntityClassification.create("UNDERLING", "underling", 35, false, false, 128);
@@ -82,7 +82,7 @@ public final class MSEntityTypes
 		
 		register(registry, EntityType.Builder.of(ImpEntity::new, UNDERLING).sized(0.7F, 1.2F), "imp"); //TODO adjust hitboxes for all underlings
 		register(registry, EntityType.Builder.of(OgreEntity::new, UNDERLING).sized(2F, 3.3F), "ogre");
-		register(registry, EntityType.Builder.of(BasiliskEntity::new, UNDERLING).sized(2F,2F), "basilisk");
+		register(registry, EntityType.Builder.of(BasiliskEntity::new, UNDERLING).sized(2F, 2F), "basilisk");
 		register(registry, EntityType.Builder.of(LichEntity::new, UNDERLING).sized(0.8F, 1.9F), "lich");
 		register(registry, EntityType.Builder.of(GiclopsEntity::new, UNDERLING).sized(8.0F, 12.0F), "giclops");
 		register(registry, EntityType.Builder.of(WyrmEntity::new, UNDERLING).sized(1.0F, 1.0F), "wyrm");
@@ -151,7 +151,7 @@ public final class MSEntityTypes
 		event.put(LICH, LichEntity.lichAttributes().build());
 		event.put(GICLOPS, GiclopsEntity.giclopsAttributes().build());
 		event.put(WYRM, WyrmEntity.wyrmAttributes().build());
-
+		
 		event.put(DERSITE_PAWN, PawnEntity.pawnAttributes().build());
 		event.put(PROSPITIAN_PAWN, PawnEntity.pawnAttributes().build());
 		event.put(DERSITE_BISHOP, BishopEntity.bishopAttributes().build());

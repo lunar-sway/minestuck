@@ -26,10 +26,10 @@ public abstract class CarapacianEntity extends SimpleTexturedEntity
 {
 	private final EnumEntityKingdom kingdom;
 	
-	protected List<EntityType<?>> enemyTypes = new ArrayList<>();	//TODO Save this!
+	protected List<EntityType<?>> enemyTypes = new ArrayList<>();    //TODO Save this!
 	protected final ITag<EntityType<?>> allyTag;
 	protected EntityListFilter attackEntitySelector = new EntityListFilter(enemyTypes);
-
+	
 	public CarapacianEntity(EntityType<? extends CarapacianEntity> type, EnumEntityKingdom kingdom, World world)
 	{
 		super(type, world);
@@ -60,7 +60,7 @@ public abstract class CarapacianEntity extends SimpleTexturedEntity
 		switch(this.getKingdom())
 		{
 			case PROSPITIAN:
-				enemyTypes.addAll(MSTags.EntityTypes.DERSITE_CARAPACIANS.getValues());	//TODO Should refer to tags directly. Entities will otherwise need to be reconstructed for resource reload changes to take place
+				enemyTypes.addAll(MSTags.EntityTypes.DERSITE_CARAPACIANS.getValues());    //TODO Should refer to tags directly. Entities will otherwise need to be reconstructed for resource reload changes to take place
 				break;
 			case DERSITE:
 				enemyTypes.addAll(MSTags.EntityTypes.PROSPITIAN_CARAPACIANS.getValues());

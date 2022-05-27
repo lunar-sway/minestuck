@@ -17,25 +17,30 @@ import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 public class PawnRenderer extends GeoEntityRenderer<PawnEntity>
 {
 	private PawnEntity entity;
-
-	public PawnRenderer(EntityRendererManager renderManager) {
+	
+	public PawnRenderer(EntityRendererManager renderManager)
+	{
 		super(renderManager, new PawnModel());
 	}
-
+	
 	@Override
-	protected float getDeathMaxRotation(PawnEntity entityLivingBaseIn) {
+	protected float getDeathMaxRotation(PawnEntity entityLivingBaseIn)
+	{
 		return 0;
 	}
-
+	
 	@Override
-	public void renderEarly(PawnEntity animatable, MatrixStack stackIn, float ticks, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
+	public void renderEarly(PawnEntity animatable, MatrixStack stackIn, float ticks, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks)
+	{
 		this.entity = animatable;
 		super.renderEarly(animatable, stackIn, ticks, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, partialTicks);
 	}
-
+	
 	@Override
-	public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-		if (bone.getName().equals("right_hand")) {
+	public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha)
+	{
+		if(bone.getName().equals("right_hand"))
+		{
 			stack.pushPose();
 			stack.translate(0.36D, 0.58, -0.22D);
 			stack.mulPose(Vector3f.XP.rotationDegrees(-80));
