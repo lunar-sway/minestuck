@@ -4,9 +4,8 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.carapacian.EnumEntityKingdom;
 import com.mraof.minestuck.entity.carapacian.PawnEntity;
 import net.minecraft.util.ResourceLocation;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
 
-public class PawnModel extends AnimatedGeoModel<PawnEntity>
+public class PawnModel extends AnimatedModel<PawnEntity>
 {
 	@Override
 	public ResourceLocation getModelLocation(PawnEntity object)

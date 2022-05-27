@@ -3,11 +3,10 @@ package com.mraof.minestuck.client.model;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import net.minecraft.util.ResourceLocation;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 import java.util.Objects;
 
-public class UnderlingModel<T extends UnderlingEntity> extends AnimatedGeoModel<T>
+public class UnderlingModel<T extends UnderlingEntity> extends AnimatedModel<T>
 {
 	@Override
 	public ResourceLocation getModelLocation(T entity)

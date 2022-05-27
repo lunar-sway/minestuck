@@ -3,9 +3,8 @@ package com.mraof.minestuck.client.model;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import net.minecraft.util.ResourceLocation;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
 
-public class ConsortModel<T extends ConsortEntity> extends AnimatedGeoModel<T>
+public class ConsortModel<T extends ConsortEntity> extends AnimatedModel<T>
 {
 	@Override
 	public ResourceLocation getModelLocation(T entity)
