@@ -1,6 +1,6 @@
 /build
 /bin
-.idea
+.idea/*
 .gradle
 .classpath
 .project
