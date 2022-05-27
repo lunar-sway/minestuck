@@ -221,12 +221,15 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 	
 	public void setActiveTypeAndDivideValue(ActiveType activeTypeIn, int divideValueBy)
 	{
-		activeType = activeTypeIn;
-		if(divideValueBy <= 0)
-			divideValueBy = 1;
-		this.divideValueBy = divideValueBy;
-		this.setChanged();
-		level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 0);
+		if(worldPosition != null && level != null)
+		{
+			activeType = activeTypeIn;
+			if(divideValueBy <= 0)
+				divideValueBy = 1;
+			this.divideValueBy = divideValueBy;
+			this.setChanged();
+			level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 0);
+		}
 	}
 	
 	public void setActiveStoredStatValue(float storedStatIn)

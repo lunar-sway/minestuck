@@ -1,5 +1,7 @@
 package com.mraof.minestuck.item.weapon;
 
+import com.mraof.minestuck.advancements.MSCriteriaTriggers;
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
@@ -48,4 +50,16 @@ public interface InventoryTickEffect
 			}
 		};
 	}
+	
+	InventoryTickEffect SURF_N_TURF = (stack, worldIn, entityIn, itemSlot, isSelected) -> {
+		if(isSelected && entityIn instanceof ServerPlayerEntity)
+		{
+			ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) entityIn;
+			ItemStack otherStack = !serverPlayerEntity.getMainHandItem().sameItem(stack) ? serverPlayerEntity.getMainHandItem() : serverPlayerEntity.getOffhandItem(); //it gives the stack in the hand that doesnt hold the tick weapon
+			if((serverPlayerEntity.getMainHandItem() == stack || serverPlayerEntity.getOffhandItem() == stack) && MSItems.PRISMARINE_BASHER == otherStack.getItem())
+			{
+				MSCriteriaTriggers.SURF_N_TURF.trigger(serverPlayerEntity);
+			}
+		}
+	};
 }

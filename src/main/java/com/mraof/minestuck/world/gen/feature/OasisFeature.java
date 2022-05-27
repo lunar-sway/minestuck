@@ -165,7 +165,7 @@ public class OasisFeature extends Feature<NoFeatureConfig>
 			
 			if(chestPos != null)
 			{
-				StructureBlockUtil.placeLootChest(chestPos, world, null, Direction.Plane.HORIZONTAL.getRandomDirection(rand), MSLootTables.BASIC_MEDIUM_CHEST, rand);
+				StructureBlockUtil.placeChest(chestPos, world, null, Direction.Plane.HORIZONTAL.getRandomDirection(rand), MSLootTables.BASIC_MEDIUM_CHEST, rand);
 			}
 		}
 		

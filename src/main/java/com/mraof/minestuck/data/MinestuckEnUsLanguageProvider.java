@@ -1411,6 +1411,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addAdvancement(MSAdvancementProvider.GOLD_SEEDS, "Gold Farming", "It begins to dawn on you that everything you just did may have been a colossal waste of time");
 		addAdvancement(MSAdvancementProvider.FRENCH_FRY, "Can I Get A, Uh...", "Successfully place and consume an order");
 		addAdvancement(MSAdvancementProvider.MELON_OVERLOAD, "M- M- M- MELON OVERLOAAAAD!", "Become overloaded with melons");
+		addAdvancement(MSAdvancementProvider.SURFNTURF, "Surf n' Turf", "Dual wield steak and prismarine weapons");
 		addAdvancement(MSAdvancementProvider.TREE_MODUS, "Uprooting", "Remove the root card in a tree modus with a bunch of items");
 		addAdvancement(MSAdvancementProvider.KILL_OGRE, "The Big One", "Kill an ogre");
 		addAdvancement(MSAdvancementProvider.RETURN_NODE, "There's No Place Like Home", "Find a Return Node and jump in to return home");
@@ -2094,7 +2095,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addEntitySubtitles(MSEntityTypes.BASILISK, "ambient", "Basilisk hisses");
 		addEntitySubtitles(MSEntityTypes.BASILISK, "hurt", "Basilisk hurts");
 		addEntitySubtitles(MSEntityTypes.BASILISK, "death", "Basilisk dies");
-		addEntitySubtitles(MSEntityTypes.LICH, "ambient", "Lich wispers");
+		addEntitySubtitles(MSEntityTypes.LICH, "ambient", "Lich whispers");
 		addEntitySubtitles(MSEntityTypes.LICH, "hurt", "Lich hurts");
 		addEntitySubtitles(MSEntityTypes.LICH, "death", "Lich dies");
 		addEntitySubtitles(MSEntityTypes.GICLOPS, "ambient", "Giclops wants to eat'cha");

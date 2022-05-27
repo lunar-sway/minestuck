@@ -19,6 +19,7 @@ import net.minecraft.world.gen.feature.structure.IStructurePieceType;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraftforge.common.util.Constants;
 
+import java.util.Objects;
 import java.util.Random;
 
 public abstract class ImprovedStructurePiece extends StructurePiece
@@ -31,6 +32,25 @@ public abstract class ImprovedStructurePiece extends StructurePiece
 	public ImprovedStructurePiece(IStructurePieceType structurePierceTypeIn, CompoundNBT nbt)
 	{
 		super(structurePierceTypeIn, nbt);
+	}
+	
+	public void setRandomDirection(Random random)
+	{
+		setOrientation(Direction.Plane.HORIZONTAL.getRandomDirection(random));
+	}
+	
+	public void setBoundsWithWorldHeight(ChunkGenerator generator, int x, int z, int width, int height, int depth, int yOffset, Heightmap.Type type)
+	{
+		int y = generator.getBaseHeight(x, z, type) + yOffset;
+		setBounds(x, y, z, width, height, depth);
+	}
+	
+	public void setBounds(int x, int y, int z, int width, int height, int depth)
+	{
+		if (Objects.requireNonNull(getOrientation()).getAxis() == Direction.Axis.Z)
+			this.boundingBox = new MutableBoundingBox(x, y, z, x + width - 1, y + height - 1, z + depth - 1);
+		else
+			this.boundingBox = new MutableBoundingBox(x, y, z, x + depth - 1, y + height - 1, z + width - 1);
 	}
 	
 	protected void generateDoor(ISeedReader worldIn, MutableBoundingBox sbb, Random rand, int x, int y, int z, Direction direction, Block door, DoorHingeSide hinge)
@@ -87,6 +107,11 @@ public abstract class ImprovedStructurePiece extends StructurePiece
 		{
 			return i / j;
 		}
+	}
+	
+	protected BlockPos getActualPos(int x, int y, int z)
+	{
+		return new BlockPos(getWorldX(x, z), getWorldY(y), getWorldZ(x, z));
 	}
 	
 	@Override

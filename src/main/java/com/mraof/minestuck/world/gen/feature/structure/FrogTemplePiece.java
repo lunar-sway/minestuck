@@ -102,15 +102,15 @@ public class FrogTemplePiece extends ScatteredStructurePiece
 		
 		BlockPos chestFarPos = new BlockPos(this.getWorldX(21, 12 + 14), this.getWorldY(21), this.getWorldZ(21, 12 + 14));
 		generateBox(worldIn, boundingBoxIn, 20, 20, 12 + 14, 21, 20, 12 + 14, MSBlocks.GREEN_STONE_BRICK_STAIRS.defaultBlockState().setValue(StairsBlock.HALF, Half.TOP).setValue(StairsBlock.FACING, Direction.SOUTH), MSBlocks.GREEN_STONE_BRICK_STAIRS.defaultBlockState(), false);
-		StructureBlockUtil.placeLootChest(chestFarPos, worldIn, boundingBoxIn, getOrientation(), rightChestType, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
+		StructureBlockUtil.placeChest(chestFarPos, worldIn, boundingBoxIn, getOrientation(), rightChestType, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
 		chestFarPos = new BlockPos(this.getWorldX(20, 12 + 14), this.getWorldY(21), this.getWorldZ(20, 12 + 14));
-		StructureBlockUtil.placeLootChest(chestFarPos, worldIn, boundingBoxIn, getOrientation(), leftChestType, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
+		StructureBlockUtil.placeChest(chestFarPos, worldIn, boundingBoxIn, getOrientation(), leftChestType, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
 		
 		BlockPos chestNearDoorPos = new BlockPos(this.getWorldX(11, 29 + 14), this.getWorldY(21), this.getWorldZ(11, 29 + 14));
 		generateBox(worldIn, boundingBoxIn, 10, 20, 29 + 14, 11, 20, 29 + 14, MSBlocks.GREEN_STONE_BRICK_STAIRS.defaultBlockState().setValue(StairsBlock.HALF, Half.TOP), MSBlocks.GREEN_STONE_BRICK_STAIRS.defaultBlockState(), false);
-		StructureBlockUtil.placeLootChest(chestNearDoorPos, worldIn, boundingBoxIn, getOrientation().getOpposite(), leftChestType, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
+		StructureBlockUtil.placeChest(chestNearDoorPos, worldIn, boundingBoxIn, getOrientation().getOpposite(), leftChestType, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
 		chestNearDoorPos = new BlockPos(this.getWorldX(10, 29 + 14), this.getWorldY(21), this.getWorldZ(10, 29 + 14));
-		StructureBlockUtil.placeLootChest(chestNearDoorPos, worldIn, boundingBoxIn, getOrientation().getOpposite(), rightChestType, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
+		StructureBlockUtil.placeChest(chestNearDoorPos, worldIn, boundingBoxIn, getOrientation().getOpposite(), rightChestType, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
 		
 		Vector3i entityVec = new Vector3i(getEntityXWithOffset(21, 21 + 14), this.getWorldY(50), getEntityZWithOffset(21, 21 + 14)); //BlockPos also suitable instead of Vec3i
 		if(!createRan && boundingBoxIn.isInside(entityVec))

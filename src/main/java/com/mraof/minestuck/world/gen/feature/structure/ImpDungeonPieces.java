@@ -1,8 +1,11 @@
 package com.mraof.minestuck.world.gen.feature.structure;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.underling.OgreEntity;
+import com.mraof.minestuck.tileentity.redstone.RemoteObserverTileEntity;
+import com.mraof.minestuck.tileentity.redstone.StatStorerTileEntity;
 import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockUtil;
@@ -13,6 +16,7 @@ import net.minecraft.block.WallTorchBlock;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.potion.Effects;
 import net.minecraft.state.properties.ChestType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -115,7 +119,21 @@ public class ImpDungeonPieces
 			generateBox(worldIn, structureBoundingBoxIn, 4, 1, 8, 4, 4, 9, wallBlock, wallBlock, false);
 			generateAirBox(worldIn, structureBoundingBoxIn, 2, 1, 0, 3, 3, 3);
 			generateAirBox(worldIn, structureBoundingBoxIn, 2, 1, 7, 3, 3, 9);
-
+			
+			BlockPos testingPos = getActualPos(5, 20, 5);
+			Direction testingDirection = getOrientation();
+			StructureBlockUtil.placeReturnNode(worldIn, structureBoundingBoxIn, testingPos, testingDirection);
+			StructureBlockUtil.placeWirelessRelay(worldIn, structureBoundingBoxIn, testingPos.above(10), testingPos.above(12), false);
+			StructureBlockUtil.placeRemoteObserver(worldIn, structureBoundingBoxIn, testingPos.above(15), RemoteObserverTileEntity.ActiveType.CURRENT_ENTITY_PRESENT);
+			StructureBlockUtil.placeStatStorer(worldIn, structureBoundingBoxIn, testingPos.above(20), StatStorerTileEntity.ActiveType.DAMAGE, 1);
+			StructureBlockUtil.placeSummoner(worldIn, structureBoundingBoxIn, testingPos.above(25), MSEntityTypes.FROG);
+			StructureBlockUtil.placeAreaEffectBlock(worldIn, structureBoundingBoxIn, testingPos.above(30), Effects.GLOWING, 0, testingPos.offset(-25, -25, -25), testingPos.offset(25, 25, 25)); //TODO effect not working
+			//StructureBlockUtil.placeCenteredTemplate(worldIn, structureBoundingBoxIn, chunkGeneratorIn, Rotation.NONE, testingPos.above(), new ResourceLocation(Minestuck.MOD_ID, "stone_rabbit_statue")), new PlacementSettings().setBoundingBox(boundingBox).setRotation(MSRotationUtil.fromDirection(getOrientation().getOpposite())).setChunkPos(new ChunkPos(pos)).setRandom(randomIn).addProcessor(new StructureBlockRegistryProcessor(StructureBlockRegistry.getOrDefault(chunkGeneratorIn))));
+			StructureBlockUtil.placeSpiralStaircase(worldIn, structureBoundingBoxIn, testingPos.above(32).offset(-5, -5, -5), testingPos.above(40).offset(5, 5, 5), floorBlock);
+			StructureBlockUtil.createStairs(worldIn, structureBoundingBoxIn, floorBlock, floorDecor, testingPos.above(45), 5, 1, Direction.EAST, false);
+			StructureBlockUtil.createSphere(worldIn, structureBoundingBoxIn, wallBlock, testingPos.above(55), 3, null);
+			StructureBlockUtil.createCylinder(worldIn, structureBoundingBoxIn, floorBlock, testingPos.above(60), 6, 3);
+			
 			if(corridors[0])
 				generateBox(worldIn, structureBoundingBoxIn, 2, 1, 9, 3, 3, 9, wallBlock, wallBlock, false);
 			if(corridors[1])
@@ -772,9 +790,9 @@ public class ImpDungeonPieces
 			}
 			
 			BlockPos chestPos = new BlockPos(this.getWorldX(3, 5), this.getWorldY(1), this.getWorldZ(3, 5));
-			StructureBlockUtil.placeLootChest(chestPos, worldIn, structureBoundingBoxIn, getOrientation().getOpposite(), ChestType.LEFT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
+			StructureBlockUtil.placeChest(chestPos, worldIn, structureBoundingBoxIn, getOrientation().getOpposite(), ChestType.LEFT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
 			chestPos = new BlockPos(this.getWorldX(4, 5), this.getWorldY(1), this.getWorldZ(4, 5));
-			StructureBlockUtil.placeLootChest(chestPos, worldIn, structureBoundingBoxIn, getOrientation().getOpposite(), ChestType.RIGHT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
+			StructureBlockUtil.placeChest(chestPos, worldIn, structureBoundingBoxIn, getOrientation().getOpposite(), ChestType.RIGHT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
 			
 			return true;
 		}
@@ -995,7 +1013,7 @@ public class ImpDungeonPieces
 			
 			int z = chestPos ? 4 : 5;
 			BlockPos chestPos = new BlockPos(this.getWorldX(4, z), this.getWorldY(1), this.getWorldZ(4, z));
-			StructureBlockUtil.placeLootChest(chestPos, worldIn, structureBoundingBoxIn, getOrientation().getClockWise(), MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
+			StructureBlockUtil.placeChest(chestPos, worldIn, structureBoundingBoxIn, getOrientation().getClockWise(), MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
 			
 			if(corridors[0])
 				generateBox(worldIn, structureBoundingBoxIn, 2, 0, 0, 3, 3, 0, wallBlock, wallBlock, false);
@@ -1106,9 +1124,9 @@ public class ImpDungeonPieces
 			int x = chestPos ? 1 : 6;
 			Direction chestDirection = chestPos ? getOrientation().getCounterClockWise() : getOrientation().getClockWise();
 			BlockPos chestPos = new BlockPos(this.getWorldX(x, 4), this.getWorldY(1), this.getWorldZ(x, 4));
-			StructureBlockUtil.placeLootChest(chestPos, worldIn, structureBoundingBoxIn, chestDirection, this.chestPos ? ChestType.LEFT : ChestType.RIGHT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
+			StructureBlockUtil.placeChest(chestPos, worldIn, structureBoundingBoxIn, chestDirection, this.chestPos ? ChestType.LEFT : ChestType.RIGHT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
 			chestPos = new BlockPos(this.getWorldX(x, 5), this.getWorldY(1), this.getWorldZ(x, 5));
-			StructureBlockUtil.placeLootChest(chestPos, worldIn, structureBoundingBoxIn, chestDirection, this.chestPos ? ChestType.RIGHT : ChestType.LEFT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
+			StructureBlockUtil.placeChest(chestPos, worldIn, structureBoundingBoxIn, chestDirection, this.chestPos ? ChestType.RIGHT : ChestType.LEFT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
 			if(!ogreSpawned && structureBoundingBoxIn.isInside(new BlockPos(getWorldX(3, 4), getWorldY(1), getWorldZ(3, 4))))
 			spawnOgre(3, 1, 4, worldIn, randomIn);
 			
@@ -1238,9 +1256,9 @@ public class ImpDungeonPieces
 			}
 			
 			BlockPos chestPos = new BlockPos(this.getWorldX(4, 4), this.getWorldY(1), this.getWorldZ(4, 4));
-			StructureBlockUtil.placeLootChest(chestPos, worldIn, structureBoundingBoxIn, getOrientation().getOpposite(), ChestType.LEFT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
+			StructureBlockUtil.placeChest(chestPos, worldIn, structureBoundingBoxIn, getOrientation().getOpposite(), ChestType.LEFT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
 			chestPos = new BlockPos(this.getWorldX(5, 4), this.getWorldY(1), this.getWorldZ(5, 4));
-			StructureBlockUtil.placeLootChest(chestPos, worldIn, structureBoundingBoxIn, getOrientation().getOpposite(), ChestType.RIGHT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
+			StructureBlockUtil.placeChest(chestPos, worldIn, structureBoundingBoxIn, getOrientation().getOpposite(), ChestType.RIGHT, MSLootTables.BASIC_MEDIUM_CHEST, randomIn);
 			
 			if(corridors[0])
 				generateBox(worldIn, structureBoundingBoxIn, 4, 0, 0, 5, 3, 0, wallBlock, wallBlock, false);
