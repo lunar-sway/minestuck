@@ -1,0 +1,51 @@
+{
+	"credit": "crafted with love by the grease artisan mysterymeat",
+	"texture_size": [256, 256],
+	"textures": {
+		"0": "minestuck:block/machine/cruxtruder",
+		"particle": "minestuck:block/machine/particle"
+	},
+	"elements": [
+		{
+			"from": [10, 0, 10],
+			"to": [16, 10, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [-6, -27.5, -9]},
+			"faces": {
+				"north": {"uv": [5.875, 5.375, 6.25, 6], "texture": "#0"},
+				"east": {"uv": [5.5, 5.375, 5.875, 6], "texture": "#0"},
+				"south": {"uv": [6.625, 5.375, 7, 6], "texture": "#0"},
+				"west": {"uv": [6.25, 5.375, 6.625, 6], "texture": "#0"},
+				"up": {"uv": [6.25, 5.375, 5.875, 5], "texture": "#0"},
+				"down": {"uv": [6.625, 5, 6.25, 5.375], "texture": "#0"}
+			}
+		},
+		{
+			"from": [12, 10, 12],
+			"to": [16, 12, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [-6, -27.5, -9]},
+			"faces": {
+				"north": {"uv": [6.75, 7.5, 7, 7.625], "texture": "#0"},
+				"east": {"uv": [6.5, 7.5, 6.75, 7.625], "texture": "#0"},
+				"south": {"uv": [7.25, 7.5, 7.5, 7.625], "texture": "#0"},
+				"west": {"uv": [7, 7.5, 7.25, 7.625], "texture": "#0"},
+				"up": {"uv": [7, 7.5, 6.75, 7.25], "texture": "#0"},
+				"down": {"uv": [7.25, 7.25, 7, 7.5], "texture": "#0"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "top",
+			"origin": [1, 8, 0],
+			"color": 0,
+			"children": [
+				{
+					"name": "capnw",
+					"origin": [1, 8, 0],
+					"color": 0,
+					"children": [0, 1]
+				}
+			]
+		}
+	]
+}

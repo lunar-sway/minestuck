@@ -1,24 +1,47 @@
 {
-    "parent": "block/thin_block",
-    "textures": {
-		"particle": "minestuck:block/machine/cruxtruder/lid_top",
-		"down": "minestuck:block/machine/cruxtruder/lid",
-		"top": "minestuck:block/machine/cruxtruder/lid_top",
-        "side": "minestuck:block/machine/cruxtruder/lid_side"
-    },
-    
-    "elements": [
-        {
-            "from": [ 2, 0, 2 ],
-            "to": [ 14, 5, 14 ],
-            "faces": {
-                "north": { "uv": [ 0, 0, 12, 5 ], "texture": "#side" },
-                "east":  { "uv": [ 0, 6, 12, 11 ], "texture": "#side" },
-                "south": { "uv": [ 0, 0, 12, 5 ], "texture": "#side" },
-                "west":  { "uv": [ 0, 6, 12, 11 ], "texture": "#side" },
-                "up":    { "uv": [ 2, 2, 14, 14 ], "texture": "#top" },
-                "down":  { "uv": [ 2, 2, 14, 14 ], "texture": "#down", "cullface":"down" }
-            }
-        }
-    ]
+	"credit": "crafted with love by the grease artisan mysterymeat",
+	"texture_size": [256, 256],
+	"parent": "block/thin_block",
+	"textures": {
+		"0": "minestuck:block/machine/cruxtruder",
+		"particle": "minestuck:block/machine/particle"
+	},
+	"elements": [
+		{
+			"name": "cap",
+			"from": [2, 1, 2],
+			"to": [14, 5, 14],
+			"rotation": {"angle": 0, "axis": "y", "origin": [1, -9.9, -1]},
+			"faces": {
+				"north": {"uv": [10.375, 10.75, 11.125, 11], "texture": "#0"},
+				"east": {"uv": [9.625, 10.75, 10.375, 11], "texture": "#0"},
+				"south": {"uv": [11.875, 10.75, 12.625, 11], "texture": "#0"},
+				"west": {"uv": [11.125, 10.75, 11.875, 11], "texture": "#0"},
+				"up": {"uv": [11.125, 10.75, 10.375, 10], "texture": "#0"},
+				"down": {"uv": [11.875, 10, 11.125, 10.75], "texture": "#0"}
+			}
+		},
+		{
+			"name": "screw",
+			"from": [3, 0, 3],
+			"to": [13, 1, 13],
+			"rotation": {"angle": 0, "axis": "y", "origin": [1, -10.9, -1]},
+			"faces": {
+				"north": {"uv": [10.5, 11.625, 11.125, 11.6875], "texture": "#0"},
+				"east": {"uv": [9.875, 11.625, 10.5, 11.6875], "texture": "#0"},
+				"south": {"uv": [11.75, 11.625, 12.375, 11.6875], "texture": "#0"},
+				"west": {"uv": [11.125, 11.625, 11.75, 11.6875], "texture": "#0"},
+				"up": {"uv": [11.125, 11.625, 10.5, 11], "texture": "#0"},
+				"down": {"uv": [11.75, 11, 11.125, 11.625], "texture": "#0"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "lid",
+			"origin": [0, 8, 0],
+			"color": 0,
+			"children": [0, 1]
+		}
+	]
 }
