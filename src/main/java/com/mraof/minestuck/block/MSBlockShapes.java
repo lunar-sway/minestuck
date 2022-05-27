@@ -99,15 +99,12 @@ public static CustomVoxelShape TOTEM_LATHE_ROD_RIGHT = TOTEM_LATHE_ROD_RIGHT_BAS
 public static CustomVoxelShape TOTEM_LATHE_TOP_LEFT = new CustomVoxelShape(new double[]{8,0,7,16,7,15}, new double[]{0,0,6,8,12,14}, new double[]{8,7,7,16,12,14}, new double[]{0,12,5,16,16,15}, new double[]{9,3,5,15,9,7});
 public static CustomVoxelShape TOTEM_LATHE_TOP_MIDDLE = new CustomVoxelShape(new double[]{0,12,5,16,16,15}, new double[]{12,4,6,16,12,14}, new double[]{2,4,7,12,10,13}, new double[]{5,6,6,12,10,7}, new double[]{0,3,7,2,12,13});
 
-public static CustomVoxelShape PUNCH_DESIGNIX_BOTTOM_LEFT = new CustomVoxelShape(new double[]{12,0,7,15,11,16}, new double[]{0,11,7,15,15,16}, new double[]{0,15,3.5,16,16,16});
-public static CustomVoxelShape PUNCH_DESIGNIX_BOTTOM_RIGHT = new CustomVoxelShape(new double[]{1,0,7,4,11,16}, new double[]{0,15,3.5,16,16,16}, new double[]{1,11,7,16,15,16});
-public static CustomVoxelShape PUNCH_DESIGNIX_TOP_LEFT = new CustomVoxelShape(new double[]{13,7,13.55,15,7.5,16}, new double[]{0,0,9.075,15,3,16}, new double[]{0,2,13.55,15,7.25,16}, new double[]{0,3,10.075,15,4,13.55}, new double[]{0,4,11.075,15,5,13.55}, new double[]{0,5,12.075,15,6,13.55}, new double[]{0,6,13.075,15,7,13.55}, new double[]{11,7,13.55,12,7.5,16}, new double[]{0,7,13.55,10,7.5,16});
-
-public static CustomVoxelShape PUNCH_DESIGNIX_KEYBOARD = new CustomVoxelShape(new double[]{8,0.3,3.775,12,1.1,4.675}, new double[]{3,0.6,4.475,12,1.4,5.375}, new double[]{3,0.89,5.175,12,1.69,6.075}, new double[]{3,1.18,5.875,12,1.98,6.775}, new double[]{3,1.47,6.575,12,2.27,7.475}, new double[]{3,1.76,7.275,12,2.56,7.725});
-public static CustomVoxelShape PUNCH_DESIGNIX_RIGHT_SLOPE = new CustomVoxelShape(new double[]{12,3,10.075,16,4,14.075}, new double[]{12,4,11.075,16,5,14.075}, new double[]{12,5,12.075,16,6,14.075}, new double[]{2,6,13.075,16,7,14.075}, new double[]{2,3,10.075,3,4,14.075}, new double[]{2,4,11.075,3,5,14.075}, new double[]{2,5,12.075,3,6,14.075}, new double[]{2,6,13.075,3,7,14.075});
-public static CustomVoxelShape PUNCH_DESIGNIX_TOP_RIGHT_BASE = new CustomVoxelShape(new double[]{1,0,13.55,16,7.5,16}, new double[]{12,0,9.075,16,3,13.55}, new double[]{3,0,9.075,12,2.5,13.55}, new double[]{1,0,9.075,3,3,13.55}, new double[]{3,2,13,12,6.5,15}, new double[]{3,2,12,15,4.5,14});
-
-public static CustomVoxelShape PUNCH_DESIGNIX_TOP_RIGHT = PUNCH_DESIGNIX_TOP_RIGHT_BASE.merge(PUNCH_DESIGNIX_RIGHT_SLOPE, PUNCH_DESIGNIX_KEYBOARD);
+	public static CustomVoxelShape PUNCH_DESIGNIX_BOTTOM_LEFT = new CustomVoxelShape(new double[]{12, 0, 5, 14, 16, 13}, new double[]{0, 7, 5, 12, 16, 13});
+	public static CustomVoxelShape PUNCH_DESIGNIX_BOTTOM_RIGHT = new CustomVoxelShape(new double[]{2, 0, 5, 4, 16, 13}, new double[]{4, 7, 5, 16, 16, 13});
+	public static CustomVoxelShape PUNCH_DESIGNIX_TOP_LEFT = new CustomVoxelShape(new double[]{0, 5, 10, 6, 7, 13}, new double[]{6, 5.53143, 10.69698, 12, 6.52743, 12.69298}, new double[]{8, 6, 10, 10, 7, 13}, new double[]{6, 5, 12, 12, 6, 13}, new double[]{12, 5, 10, 14, 7, 13}, new double[]{7, 5.275, 8, 13, 6.275, 10}, new double[]{0, 0, 7, 14, 5, 13}, new double[]{0, 0, 0, 15, 2, 7});
+	public static CustomVoxelShape PUNCH_DESIGNIX_KEYBOARD = new CustomVoxelShape(new double[]{4, 0, 7, 12, 4, 9}, new double[]{1, 0, 0, 16, 2, 7}, new double[]{6, 2, 1.75, 14, 6, 4.75}, new double[]{6.5, 3.21094, 6.80766, 7.5, 4.21294, 10.80966}, new double[]{8.5, 3.21094, 6.80766, 11.5, 4.21294, 10.80966});
+	public static CustomVoxelShape PUNCH_DESIGNIX_TOP_RIGHT_BASE = new CustomVoxelShape(new double[]{12, 5, 10, 16, 7, 13}, new double[]{2, 5, 10, 4, 7, 13}, new double[]{12, 0, 7, 16, 5, 13}, new double[]{2, 0, 7, 4, 5, 13}, new double[]{4, 0, 11, 12, 7, 13});
+	public static CustomVoxelShape PUNCH_DESIGNIX_TOP_RIGHT = PUNCH_DESIGNIX_TOP_RIGHT_BASE.merge(PUNCH_DESIGNIX_KEYBOARD);
 
 	//Small Machines
 	public static CustomVoxelShape SMALL_PUNCH_DESIGNIX = new CustomVoxelShape(new double[]{0,0,8,2,6,16}, new double[]{14,0,8,16,6,16}, new double[]{0,6,8,16,10,16}, new double[]{0,10,6,16,11,16}, new double[]{0,11,11,16,16,16}, new double[]{1,11,6.5,9.5,13,10.5});
