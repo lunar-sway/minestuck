@@ -32,7 +32,7 @@ public class ColorHandler
     public static void initBlockColors(ColorHandlerEvent.Block event)
     {
         BlockColors colors = event.getBlockColors();
-        colors.register(new BlockColorCruxite(), MSBlocks.ALCHEMITER.TOTEM_PAD.get(), MSBlocks.TOTEM_LATHE.DOWEL_ROD.get(), MSBlocks.CRUXITE_DOWEL);
+        colors.register(new BlockColorCruxite(), MSBlocks.ALCHEMITER.TOTEM_PAD.get(), MSBlocks.CRUXITE_DOWEL);
         colors.register((state, worldIn, pos, tintIndex) ->
         {
             int age = state.getValue(StemBlock.AGE);

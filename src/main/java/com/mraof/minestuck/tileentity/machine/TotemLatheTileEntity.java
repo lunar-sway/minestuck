@@ -20,6 +20,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
@@ -28,10 +30,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
 import net.minecraftforge.client.model.data.ModelProperty;
+import net.minecraftforge.common.util.Constants;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.easing.EasingType;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
@@ -39,7 +43,6 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import javax.annotation.Nonnull;
 
 public class TotemLatheTileEntity extends TileEntity implements IAnimatable {
-	private static final ModelProperty<Boolean> IS_PROCESSING = new ModelProperty<>();
 	private final AnimationFactory factory = new AnimationFactory(this);
 	private boolean isProcessing;
 	private boolean broken = false;
@@ -133,6 +136,10 @@ public class TotemLatheTileEntity extends TileEntity implements IAnimatable {
 			if (!state.equals(newState))
 				level.setBlockAndUpdate(pos, newState);
 			else level.sendBlockUpdated(pos, state, state, 2);
+
+			this.isProcessing = false;
+			level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
+
 			return true;
 		}
 		return false;
@@ -274,6 +281,7 @@ public class TotemLatheTileEntity extends TileEntity implements IAnimatable {
 		broken = nbt.getBoolean("broken");
 		card1 = ItemStack.of(nbt.getCompound("card1"));
 		card2 = ItemStack.of(nbt.getCompound("card2"));
+		isProcessing = nbt.getBoolean("isProcessing");
 		if(card1.isEmpty() && !card2.isEmpty())
 		{
 			card1 = card2;
@@ -288,6 +296,7 @@ public class TotemLatheTileEntity extends TileEntity implements IAnimatable {
 		compound.putBoolean("broken",broken);
 		compound.put("card1", card1.save(new CompoundNBT()));
 		compound.put("card2", card2.save(new CompoundNBT()));
+		compound.putBoolean("isProcessing", isProcessing);
 		return compound;
 	}
 	
@@ -314,12 +323,13 @@ public class TotemLatheTileEntity extends TileEntity implements IAnimatable {
 			{
 				ItemStack outputDowel = output.getItem().equals(MSBlocks.GENERIC_OBJECT.asItem()) ? new ItemStack(MSBlocks.CRUXITE_DOWEL) : AlchemyHelper.createEncodedItem(output, false);
 				ColorHandler.setColor(outputDowel, ColorHandler.getColorFromStack(dowel));
-
-				isProcessing = true;
-				this.requestModelDataUpdate();
-
 				setDowel(outputDowel);
 				success = true;
+
+				this.isProcessing = true;
+				if (level != null) {
+					level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
+				}
 			}
 		}
 		
@@ -337,10 +347,21 @@ public class TotemLatheTileEntity extends TileEntity implements IAnimatable {
 		return INFINITE_EXTENT_AABB;
 	}
 
-	@Nonnull
 	@Override
-	public IModelData getModelData() {
-		return new ModelDataMap.Builder().withInitial(IS_PROCESSING, this.isProcessing).build();
+	public CompoundNBT getUpdateTag()
+	{
+		return save(new CompoundNBT());
+	}
+
+	@Override
+	public SUpdateTileEntityPacket getUpdatePacket()
+	{
+		return new SUpdateTileEntityPacket(this.worldPosition, 0, getUpdateTag());
+	}
+
+	@Override
+	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+		handleUpdateTag(getBlockState(), pkt.getTag());
 	}
 
 	@Override
@@ -354,13 +375,11 @@ public class TotemLatheTileEntity extends TileEntity implements IAnimatable {
 	}
 
 	private <E extends TileEntity & IAnimatable> PlayState carveAnimation(AnimationEvent<E> event) {
-		if (getModelData().getData(IS_PROCESSING)) {
+		if (this.isProcessing) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("carvetotem", false));
 			return PlayState.CONTINUE;
 		}
 		event.getController().markNeedsReload();
 		return PlayState.STOP;
 	}
-
-
 }
