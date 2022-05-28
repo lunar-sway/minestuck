@@ -13,7 +13,6 @@ import com.mraof.minestuck.tileentity.ItemStackTileEntity;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.WorldEventUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -22,6 +21,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.particles.RedstoneParticleData;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
@@ -32,13 +33,18 @@ import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.ParticleKeyFrameEvent;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public class TotemLatheTileEntity extends TileEntity implements IAnimatable {
+import java.awt.*;
+
+public class TotemLatheTileEntity extends TileEntity implements IAnimatable, ITickableTileEntity
+{
     private final AnimationFactory factory = new AnimationFactory(this);
     private boolean isProcessing;
+    private int animationticks;
     private boolean broken = false;
     //two cards so that we can preform the && alchemy operation
     private ItemStack card1 = ItemStack.EMPTY;
@@ -118,10 +124,8 @@ public class TotemLatheTileEntity extends TileEntity implements IAnimatable {
             if (!state.equals(newState))
                 level.setBlockAndUpdate(pos, newState);
             else level.sendBlockUpdated(pos, state, state, 2);
-
-            this.isProcessing = false;
+            isProcessing = false;
             level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
-
             return true;
         }
         return false;
@@ -161,7 +165,11 @@ public class TotemLatheTileEntity extends TileEntity implements IAnimatable {
         //if they have clicked on the lever
         if (working && clickedState.getBlock() == MSBlocks.TOTEM_LATHE.TOP.get()) {
             //carve the dowel.
-            processContents();
+            if (!getDowel().isEmpty() && !AlchemyHelper.hasDecodedItem(getDowel()) && (!card1.isEmpty() || !card2.isEmpty()) && level != null) {
+                isProcessing = true;
+                animationticks = 25;
+                level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
+            }
         }
     }
 
@@ -262,7 +270,6 @@ public class TotemLatheTileEntity extends TileEntity implements IAnimatable {
     public void processContents() {
         ItemStack dowel = getDowel();
         ItemStack output;
-        boolean success = false;
         if (!dowel.isEmpty() && !AlchemyHelper.hasDecodedItem(dowel) && (!card1.isEmpty() || !card2.isEmpty())) {
             if (!card1.isEmpty() && !card2.isEmpty())
                 if (!AlchemyHelper.isPunchedCard(card1) || !AlchemyHelper.isPunchedCard(card2))
@@ -280,23 +287,10 @@ public class TotemLatheTileEntity extends TileEntity implements IAnimatable {
                 ItemStack outputDowel = output.getItem().equals(MSBlocks.GENERIC_OBJECT.asItem()) ? new ItemStack(MSBlocks.CRUXITE_DOWEL) : AlchemyHelper.createEncodedItem(output, false);
                 ColorHandler.setColor(outputDowel, ColorHandler.getColorFromStack(dowel));
                 setDowel(outputDowel);
-                success = true;
-
-                this.isProcessing = true;
-                if (level != null) {
-                    level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
-                }
             }
         }
-
-        effects(success);
     }
-
-    private void effects(boolean success) {
-        BlockPos pos = getBlockPos().above().relative(getFacing().getCounterClockWise(), 2);
-        WorldEventUtil.dispenserEffect(getLevel(), pos, getFacing(), success);
-    }
-
+    
     @Override
     public AxisAlignedBB getRenderBoundingBox() {
         return INFINITE_EXTENT_AABB;
@@ -316,6 +310,17 @@ public class TotemLatheTileEntity extends TileEntity implements IAnimatable {
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
         handleUpdateTag(getBlockState(), pkt.getTag());
     }
+    
+    @Override
+    public void tick()
+    {
+        if(animationticks > 0) {
+            animationticks--;
+            if(animationticks <= 0) {
+                processContents();
+            }
+        }
+    }
 
     @Override
     public AnimationFactory getFactory() {
@@ -324,7 +329,17 @@ public class TotemLatheTileEntity extends TileEntity implements IAnimatable {
 
     @Override
     public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController<>(this, "carveAnimation", 0, this::carveAnimation));
+        AnimationController<TotemLatheTileEntity> controller = new AnimationController<>(this, "carveAnimation", 0, this::carveAnimation);
+        controller.registerParticleListener(this::particleEventListener);
+        data.addAnimationController(controller);
+    }
+    
+    private <T extends IAnimatable> void particleEventListener(ParticleKeyFrameEvent<T> event) {
+        BlockPos pos = MSBlocks.TOTEM_LATHE.getDowelPos(getBlockPos(), getBlockState());
+        Color stackColor = new Color(ColorHandler.getColorFromStack(getDowel()));
+        Direction teDirection = getFacing();
+        level.addParticle(new RedstoneParticleData(stackColor.getRed(), stackColor.getGreen(), stackColor.getBlue(), 1),
+                pos.getX() + 1, pos.getY(), pos.getZ() + 1, teDirection.getStepX(), teDirection.getStepY(), teDirection.getStepZ());
     }
 
     private <E extends TileEntity & IAnimatable> PlayState carveAnimation(AnimationEvent<E> event) {

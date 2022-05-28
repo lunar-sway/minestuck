@@ -444,6 +444,56 @@
 						}
 					}
 				}
+			},
+			"particle_effects": {
+				"0.68": {
+					"effect": "dust"
+				},
+				"0.72": {
+					"effect": "dust"
+				},
+				"0.76": {
+					"effect": "dust"
+				},
+				"0.8": {
+					"effect": "dust"
+				},
+				"0.84": {
+					"effect": "dust"
+				},
+				"0.88": {
+					"effect": "dust"
+				},
+				"0.92": {
+					"effect": "dust"
+				},
+				"0.96": {
+					"effect": "dust"
+				},
+				"1.0": {
+					"effect": "dust"
+				},
+				"1.04": {
+					"effect": "dust"
+				},
+				"1.08": {
+					"effect": "dust"
+				},
+				"1.12": {
+					"effect": "dust"
+				},
+				"1.16": {
+					"effect": "dust"
+				},
+				"1.2": {
+					"effect": "dust"
+				},
+				"1.24": {
+					"effect": "dust"
+				},
+				"1.28": {
+					"effect": "dust"
+				}
 			}
 		}
 	},
