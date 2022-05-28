@@ -51,6 +51,7 @@ public abstract class AnimatedCreatureEntity extends CreatureEntity implements I
 	protected AnimatedCreatureEntity(EntityType<? extends CreatureEntity> type, World world)
 	{
 		super(type, world);
+		attributes.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier("attack.knockback", 1.0, AttributeModifier.Operation.ADDITION));
 	}
 	
 	@Override
@@ -88,6 +89,7 @@ public abstract class AnimatedCreatureEntity extends CreatureEntity implements I
 	
 	private void performAttack()
 	{
+		getAttributes().removeAttributeModifiers(attributes);
 		if(getTarget() != null && isInRange(getTarget()))
 		{
 			doHurtTarget(getTarget());
@@ -219,7 +221,6 @@ public abstract class AnimatedCreatureEntity extends CreatureEntity implements I
 				
 				if (this.entity.knockbackResistWhileAttacking >= 0.01) 
 				{
-					attributes.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier("attack.knockback", 1.0, AttributeModifier.Operation.ADDITION));
 					this.entity.getAttributes().addTransientAttributeModifiers(attributes);
 				}
 			}
