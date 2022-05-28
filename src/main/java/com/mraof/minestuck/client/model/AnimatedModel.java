@@ -8,6 +8,9 @@ import software.bernie.geckolib3.model.provider.data.EntityModelData;
 
 import javax.annotation.Nullable;
 
+/**
+ * Base class for all entity models which implements head movement based on the look direction
+ */
 public abstract class AnimatedModel<T extends IAnimatable> extends AnimatedGeoModel<T> {
 	@Override
 	public void setLivingAnimations(T entity, Integer uniqueID, @Nullable AnimationEvent predicate) {
