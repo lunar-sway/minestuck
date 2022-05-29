@@ -1,6 +1,5 @@
 package com.mraof.minestuck.tileentity.machine;
 
-
 import com.mraof.minestuck.block.EnumDowelType;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.machine.TotemLatheBlock;
@@ -21,29 +20,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.particles.RedstoneParticleData;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.common.util.Constants;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.ParticleKeyFrameEvent;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-import java.awt.*;
-
-public class TotemLatheTileEntity extends TileEntity implements IAnimatable, ITickableTileEntity
+public class TotemLatheTileEntity extends TileEntity implements ITickableTileEntity
 {
-	private final AnimationFactory factory = new AnimationFactory(this);
 	private boolean isProcessing;
 	private int animationticks;
 	private boolean broken = false;
@@ -334,12 +319,16 @@ public class TotemLatheTileEntity extends TileEntity implements IAnimatable, ITi
 		}
 	}
 	
-	@Override
-	public AxisAlignedBB getRenderBoundingBox()
+	public ItemStack getCard1()
 	{
-		return INFINITE_EXTENT_AABB;
+		return card1;
 	}
 	
+	public ItemStack getCard2()
+	{
+		return card2;
+	}
+
 	@Override
 	public CompoundNBT getUpdateTag()
 	{
@@ -371,41 +360,8 @@ public class TotemLatheTileEntity extends TileEntity implements IAnimatable, ITi
 		}
 	}
 	
-	@Override
-	public AnimationFactory getFactory()
+	public boolean isProcessing()
 	{
-		return factory;
-	}
-	
-	@Override
-	public void registerControllers(AnimationData data)
-	{
-		AnimationController<TotemLatheTileEntity> controller = new AnimationController<>(this, "carveAnimation", 0, this::carveAnimation);
-		controller.registerParticleListener(this::particleEventListener);
-		data.addAnimationController(controller);
-	}
-	
-	private <T extends IAnimatable> void particleEventListener(ParticleKeyFrameEvent<T> event)
-	{
-		Direction dir = getFacing();
-		BlockPos blockPos = MSBlocks.TOTEM_LATHE.getDowelPos(getBlockPos(), getBlockState());
-		Vector3f pos = new Vector3f(blockPos.getX(), blockPos.getY(), blockPos.getZ());
-		pos.add(dir.getCounterClockWise().getStepX() * 0.375f, 0, dir.getCounterClockWise().getStepZ() * 0.375f);
-		pos.add(0.5f, 0.3f, 0.5f);
-		
-		Color stackColor = new Color(ColorHandler.getColorFromStack(getDowel()));
-		level.addParticle(new RedstoneParticleData(stackColor.getRed() / 255f, stackColor.getGreen() / 255f, stackColor.getBlue() / 255f, 1),
-				pos.x(), pos.y(), pos.z(), 1, 1, 1);
-	}
-	
-	private <E extends TileEntity & IAnimatable> PlayState carveAnimation(AnimationEvent<E> event)
-	{
-		if(this.isProcessing)
-		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("carvetotem", false));
-			return PlayState.CONTINUE;
-		}
-		event.getController().markNeedsReload();
-		return PlayState.STOP;
+		return isProcessing;
 	}
 }

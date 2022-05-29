@@ -7,7 +7,7 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.client.model.TotemLatheModel;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
-import com.mraof.minestuck.tileentity.machine.TotemLatheTileEntity;
+import com.mraof.minestuck.tileentity.machine.TotemLatheDowelTileEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
@@ -28,9 +28,9 @@ import software.bernie.geckolib3.util.RenderUtils;
 
 import javax.annotation.Nullable;
 
-public class TotemLatheRenderer extends GeoBlockRenderer<TotemLatheTileEntity>
+public class TotemLatheRenderer extends GeoBlockRenderer<TotemLatheDowelTileEntity>
 {
-	private TotemLatheTileEntity lathe;
+	private TotemLatheDowelTileEntity lathe;
 	private IRenderTypeBuffer renderTypeBuffer;
 	
 	public TotemLatheRenderer(TileEntityRendererDispatcher rendererDispatcherIn)
@@ -39,13 +39,13 @@ public class TotemLatheRenderer extends GeoBlockRenderer<TotemLatheTileEntity>
 	}
 	
 	@Override
-	public RenderType getRenderType(TotemLatheTileEntity animatable, float partialTicks, MatrixStack stack, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, ResourceLocation textureLocation)
+	public RenderType getRenderType(TotemLatheDowelTileEntity animatable, float partialTicks, MatrixStack stack, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, ResourceLocation textureLocation)
 	{
 		return RenderType.entityCutoutNoCull(textureLocation);
 	}
 	
 	@Override
-	public void renderEarly(TotemLatheTileEntity animatable, MatrixStack stackIn, float ticks, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks)
+	public void renderEarly(TotemLatheDowelTileEntity animatable, MatrixStack stackIn, float ticks, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks)
 	{
 		super.renderEarly(animatable, stackIn, ticks, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, partialTicks);
 		this.lathe = animatable;
@@ -57,7 +57,7 @@ public class TotemLatheRenderer extends GeoBlockRenderer<TotemLatheTileEntity>
 	{
 		if(bone.getName().equals("totem"))
 		{
-			ItemStack dowel = this.lathe.getDowel();
+			ItemStack dowel = this.lathe.getStack();
 			if(dowel.isEmpty())
 			{
 				return; // render nothing
@@ -79,7 +79,7 @@ public class TotemLatheRenderer extends GeoBlockRenderer<TotemLatheTileEntity>
 			// render the dowel with the blockRenderer
 			ClientWorld level = Minecraft.getInstance().level;
 			BlockRendererDispatcher blockRenderer = Minecraft.getInstance().getBlockRenderer();
-			BlockPos pos = MSBlocks.TOTEM_LATHE.getDowelPos(lathe.getBlockPos(), lathe.getBlockState());
+			BlockPos pos = lathe.getBlockPos();
 			IModelData modelData = new ModelDataMap.Builder().build();
 			blockRenderer.renderModel(cruxiteDowel, pos, level, stack, renderTypeBuffer.getBuffer(RenderTypeLookup.getRenderType(cruxiteDowel, false)), false, level.random, modelData);
 			

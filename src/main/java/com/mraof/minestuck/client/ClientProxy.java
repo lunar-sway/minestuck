@@ -43,7 +43,7 @@ public class ClientProxy
 		ClientRegistry.bindTileEntityRenderer(MSTileEntityTypes.SKAIA_PORTAL.get(), SkaiaPortalRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(MSTileEntityTypes.GATE.get(), GateRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(MSTileEntityTypes.HOLOPAD.get(), HolopadRenderer::new);
-		ClientRegistry.bindTileEntityRenderer(MSTileEntityTypes.TOTEM_LATHE.get(), TotemLatheRenderer::new);
+		ClientRegistry.bindTileEntityRenderer(MSTileEntityTypes.TOTEM_LATHE_DOWEL.get(), TotemLatheRenderer::new);
 //		MinecraftForgeClient.registerItemRenderer(Minestuck.captchaCard, new CardRenderer());
 	}
 	

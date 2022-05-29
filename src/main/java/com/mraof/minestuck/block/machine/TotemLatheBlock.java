@@ -3,12 +3,15 @@ package com.mraof.minestuck.block.machine;
 import com.mraof.minestuck.block.EnumDowelType;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.tileentity.ItemStackTileEntity;
+import com.mraof.minestuck.tileentity.MSTileEntityTypes;
+import com.mraof.minestuck.tileentity.machine.TotemLatheDowelTileEntity;
 import com.mraof.minestuck.tileentity.machine.TotemLatheTileEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
 import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
@@ -137,7 +140,7 @@ public class TotemLatheBlock extends MultiMachineBlock
 		@Override
 		public TileEntity createTileEntity(BlockState state, IBlockReader world)
 		{
-			return new ItemStackTileEntity();
+			return new TotemLatheDowelTileEntity();
 		}
 		
 		@Override
@@ -145,6 +148,20 @@ public class TotemLatheBlock extends MultiMachineBlock
 		{
 			super.createBlockStateDefinition(builder);
 			builder.add(DOWEL);
+		}
+		
+		@Override
+		public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving)
+		{
+			if(state.getBlock() != newState.getBlock())
+			{
+				TileEntity totemLathe = worldIn.getBlockEntity(pos);
+				if(totemLathe instanceof ItemStackTileEntity)
+				{
+					InventoryHelper.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), ((ItemStackTileEntity) totemLathe).getStack());
+				}
+			}
+			super.onRemove(state, worldIn, pos, newState, isMoving);
 		}
 	}
 	
@@ -175,6 +192,28 @@ public class TotemLatheBlock extends MultiMachineBlock
 		{
 			super.createBlockStateDefinition(builder);
 			builder.add(COUNT);
+		}
+		
+		@Override
+		public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving)
+		{
+			if(state.getBlock() != newState.getBlock())
+			{
+				TileEntity te = worldIn.getBlockEntity(pos);
+				if(te instanceof TotemLatheTileEntity)
+				{
+					TotemLatheTileEntity totemLathe = (TotemLatheTileEntity) te;
+					if(!totemLathe.getCard1().isEmpty())
+					{
+						InventoryHelper.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), totemLathe.getCard1());
+					}
+					if(!totemLathe.getCard2().isEmpty())
+					{
+						InventoryHelper.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), totemLathe.getCard2());
+					}
+				}
+			}
+			super.onRemove(state, worldIn, pos, newState, isMoving);
 		}
 	}
 }
