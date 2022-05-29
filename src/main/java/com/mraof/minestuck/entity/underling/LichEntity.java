@@ -10,7 +10,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
@@ -22,10 +21,9 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 
 public class LichEntity extends UnderlingEntity implements IAnimatable
 {
-	
 	public LichEntity(EntityType<? extends LichEntity> type, World world)
 	{
-		super(type, world, 7);
+		super(type, world, 7, 1);
 		this.attackDelay = 14;
 		this.attackRecovery = 16;
 		this.canMoveWhileAttacking = true;

@@ -56,12 +56,19 @@ public abstract class UnderlingEntity extends AnimatedCreatureEntity implements 
 	
 	protected Map<PlayerIdentifier, Double> damageMap = new HashMap<>();    //Map that stores how much damage each player did to this to this underling. Null is used for environmental or other non-player damage
 	
+	/**
+	 * @param knockbackResist Extra knockback resistance while attacking
+	 */
+	public UnderlingEntity(EntityType<? extends UnderlingEntity> type, World world, int consortRep, double knockbackResist)
+	{
+		super(type, world, knockbackResist);
+		this.consortRep = consortRep;
+		attackEntitySelector.entityList.add(EntityType.PLAYER);
+	}
+	
 	public UnderlingEntity(EntityType<? extends UnderlingEntity> type, World world, int consortRep)
 	{
-		super(type, world);
-		this.consortRep = consortRep;
-		
-		attackEntitySelector.entityList.add(EntityType.PLAYER);
+		this(type, world, consortRep, 0);
 	}
 	
 	@Override
