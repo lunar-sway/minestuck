@@ -19,7 +19,7 @@ public class StatStorerScreen extends Screen
 	private static final int GUI_WIDTH = 150;
 	private static final int GUI_HEIGHT = 98;
 	
-	private static final String DIVIDE_VALUE_MESSAGE = "Divide power output by:";
+	private static final String DIVIDE_VALUE_MESSAGE = "Divide power output by:"; //TODO make this translatable
 	
 	private final StatStorerTileEntity te;
 	private StatStorerTileEntity.ActiveType activeType;

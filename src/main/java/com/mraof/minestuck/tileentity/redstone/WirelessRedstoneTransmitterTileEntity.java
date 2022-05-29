@@ -24,7 +24,7 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 	private BlockPos offsetPos;
 	private Direction facing;
 	private int tickCycle;
-	private static final int WIRELESS_CONSTANT = 6; //tick speed of components related to wireless redstone, does not occur every tick for performance
+	private static final int WIRELESS_TICK_FREQUENCY = 6; //tick speed of components related to wireless redstone, does not occur every tick for performance
 	
 	public WirelessRedstoneTransmitterTileEntity()
 	{
@@ -37,7 +37,7 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 		if(level == null || !level.isAreaLoaded(getBlockPos(), 1))
 			return;
 		
-		if(tickCycle >= WIRELESS_CONSTANT)
+		if(tickCycle >= WIRELESS_TICK_FREQUENCY)
 		{
 			sendUpdateToPosition();
 			tickCycle = 0;
@@ -154,6 +154,14 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 		int offsetY = compound.getInt("offsetY");
 		int offsetZ = compound.getInt("offsetZ");
 		this.offsetPos = new BlockPos(offsetX, offsetY, offsetZ);
+		
+		if(compound.contains("destX") && compound.contains("destY") && compound.contains("destZ")) //backwards-portability to the destination based method first utilized
+		{
+			int destX = compound.getInt("destX");
+			int destY = compound.getInt("destY");
+			int destZ = compound.getInt("destZ");
+			setOffsetFromDestinationBlockPos(new BlockPos(destX, destY, destZ));
+		}
 	}
 	
 	@Override

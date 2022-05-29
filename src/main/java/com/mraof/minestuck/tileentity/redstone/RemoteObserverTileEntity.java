@@ -26,7 +26,7 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 	@Nonnull
 	private ActiveType activeType;
 	private int observingRange = 16; //default is 16, but can be set(via gui) between 1 and 64
-	private static final int WIRELESS_CONSTANT = 6;
+	private static final int WIRELESS_TICK_FREQUENCY = 6;
 	
 	private EntityType<?> currentEntityType;
 	
@@ -69,7 +69,7 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 		if(level == null || !level.isAreaLoaded(getBlockPos(), 1))
 			return;
 		
-		if(tickCycle >= WIRELESS_CONSTANT * 1.667) //6 * 1.667 ~= 10 ticks or 0.5 sec
+		if(tickCycle >= WIRELESS_TICK_FREQUENCY * 1.667) //6 * 1.667 ~= 10 ticks or 0.5 sec
 		{
 			checkRelaventType();
 			tickCycle = 0;

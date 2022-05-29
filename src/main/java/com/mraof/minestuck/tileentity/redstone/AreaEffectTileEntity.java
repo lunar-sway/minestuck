@@ -122,6 +122,20 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 		this.setChanged();
 		level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 0);
 	}
+
+	public void setOffsetFromDestinationBlockPos(BlockPos minDestinationPosIn, BlockPos maxDestinationPosIn)
+	{
+		int minOffsetX = minDestinationPosIn.getX() - getBlockPos().getX();
+		int minOffsetY = minDestinationPosIn.getY() - getBlockPos().getY();
+		int minOffsetZ = minDestinationPosIn.getZ() - getBlockPos().getZ();
+
+		int maxOffsetX = maxDestinationPosIn.getX() - getBlockPos().getX();
+		int maxOffsetY = maxDestinationPosIn.getY() - getBlockPos().getY();
+		int maxOffsetZ = maxDestinationPosIn.getZ() - getBlockPos().getZ();
+
+		this.minAreaOffset = new BlockPos(minOffsetX, minOffsetY, minOffsetZ);
+		this.maxAreaOffset = new BlockPos(maxOffsetX, maxOffsetY, maxOffsetZ);
+	}
 	
 	public BlockPos getMinAreaOffset()
 	{
@@ -211,6 +225,18 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 		int maxAreaOffsetY = compound.getInt("maxAreaOffsetY");
 		int maxAreaOffsetZ = compound.getInt("maxAreaOffsetZ");
 		this.maxAreaOffset = new BlockPos(maxAreaOffsetX, maxAreaOffsetY, maxAreaOffsetZ);
+
+		if(compound.contains("minEffectPosX") && compound.contains("minEffectPosY") && compound.contains("minEffectPosZ") &&
+				compound.contains("maxEffectPosX") && compound.contains("maxEffectPosY") && compound.contains("maxEffectPosZ")) //backwards-portability to the destination based method first utilized
+		{
+			int minDestX = compound.getInt("minEffectPosX");
+			int minDestY = compound.getInt("minEffectPosY");
+			int minDestZ = compound.getInt("minEffectPosZ");
+			int maxDestX = compound.getInt("maxEffectPosX");
+			int maxDestY = compound.getInt("maxEffectPosY");
+			int maxDestZ = compound.getInt("maxEffectPosZ");
+			setOffsetFromDestinationBlockPos(new BlockPos(minDestX, minDestY, minDestZ), new BlockPos(maxDestX, maxDestY, maxDestZ));
+		}
 	}
 	
 	@Override
