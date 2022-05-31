@@ -26,14 +26,22 @@ import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public class AlchemiterTileEntity extends TileEntity implements IColored, GristWildcardHolder
+public class AlchemiterTileEntity extends TileEntity implements IColored, GristWildcardHolder, IAnimatable
 {
-	
+	private final AnimationFactory factory = new AnimationFactory(this);
 	private GristType wildcardGrist = GristTypes.BUILD.get();
 	protected boolean broken = false;
 	protected ItemStack dowel = ItemStack.EMPTY;
@@ -52,13 +60,14 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 			if(level != null)
 			{
 				BlockState state = level.getBlockState(worldPosition);
-				if(state.hasProperty(AlchemiterBlock.Pad.DOWEL))	//If not, then the machine has likely been destroyed; don't bother doing anything about it
+				if(state.hasProperty(AlchemiterBlock.Pad.DOWEL))    //If not, then the machine has likely been destroyed; don't bother doing anything about it
 				{
 					state = state.setValue(AlchemiterBlock.Pad.DOWEL, EnumDowelType.getForDowel(newDowel));
 					level.setBlock(worldPosition, state, Constants.BlockFlags.BLOCK_UPDATE);
 				}
 			}
 		}
+		this.requestModelDataUpdate();
 	}
 	
 	public ItemStack getDowel()
@@ -80,7 +89,8 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 			return AlchemyRecipes.createCard(new ItemStack(MinestuckBlocks.GENERIC_OBJECT), false);
 		else return AlchemyRecipes.createCard(new ItemStack(AlchemyRecipes.getDecodedItem(dowel).getItem(), 1), false);
 		}
-		else */if (!AlchemyHelper.hasDecodedItem(dowel))
+		else */
+		if(!AlchemyHelper.hasDecodedItem(dowel))
 			return new ItemStack(MSBlocks.GENERIC_OBJECT);
 		else return AlchemyHelper.getDecodedItem(dowel);
 	}
@@ -103,17 +113,17 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 			level.sendBlockUpdated(worldPosition, state, state, 2);
 		}
 	}
-
+	
 	//tells the tile entity to not stop working
-		public void unbreakMachine()
+	public void unbreakMachine()
+	{
+		broken = false;
+		if(level != null)
 		{
-			broken = false;
-			if(level != null)
-			{
-				BlockState state = level.getBlockState(worldPosition);
-				level.sendBlockUpdated(worldPosition, state, state, 2);
-			}
+			BlockState state = level.getBlockState(worldPosition);
+			level.sendBlockUpdated(worldPosition, state, state, 2);
 		}
+	}
 	
 	public void dropItem(Direction direction)
 	{
@@ -189,11 +199,11 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 	public CompoundNBT save(CompoundNBT compound)
 	{
 		super.save(compound);
-
+		
 		compound.putString("gristType", wildcardGrist.getRegistryName().toString());
 		compound.putBoolean("broken", isBroken());
 		
-		if(dowel!= null)
+		if(dowel != null)
 			compound.put("dowel", dowel.save(new CompoundNBT()));
 		
 		return compound;
@@ -239,15 +249,15 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 	
 	public void onPadRightClick(PlayerEntity player, BlockState clickedState, Direction side)
 	{
-		if (isUseable(clickedState))
+		if(isUseable(clickedState))
 		{
 			if(clickedState.getBlock() == MSBlocks.ALCHEMITER.TOTEM_PAD.get())
 			{
-				if (!dowel.isEmpty())
+				if(!dowel.isEmpty())
 				{    //Remove dowel from pad
-					if (player.getMainHandItem().isEmpty())
+					if(player.getMainHandItem().isEmpty())
 						player.setItemInHand(Hand.MAIN_HAND, dowel);
-					else if (!player.inventory.add(dowel))
+					else if(!player.inventory.add(dowel))
 						dropItem(side);
 					else player.inventoryMenu.broadcastChanges();
 					
@@ -255,7 +265,7 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 				} else
 				{
 					ItemStack heldStack = player.getMainHandItem();
-					if (!heldStack.isEmpty() && heldStack.getItem() == MSBlocks.CRUXITE_DOWEL.asItem())
+					if(!heldStack.isEmpty() && heldStack.getItem() == MSBlocks.CRUXITE_DOWEL.asItem())
 						setDowel(heldStack.split(1));    //Put a dowel on the pad
 				}
 			}
@@ -316,7 +326,7 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 		
 		return set;
 	}
-
+	
 	public GristType getWildcardGrist()
 	{
 		return wildcardGrist;
@@ -332,5 +342,34 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 			if(level != null && !level.isClientSide)
 				level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 0);
 		}
+	}
+	
+	@Override
+	public AxisAlignedBB getRenderBoundingBox()
+	{
+		return INFINITE_EXTENT_AABB;
+	}
+	
+	@Override
+	public AnimationFactory getFactory()
+	{
+		return factory;
+	}
+	
+	@Override
+	public void registerControllers(AnimationData data)
+	{
+		data.addAnimationController(new AnimationController<>(this, "scanAnimation", 0, this::scanAnimation));
+	}
+	
+	private <E extends TileEntity & IAnimatable> PlayState scanAnimation(AnimationEvent<E> event)
+	{
+		if(!this.dowel.isEmpty())
+		{
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("scan", false));
+			return PlayState.CONTINUE;
+		}
+		event.getController().markNeedsReload();
+		return PlayState.STOP;
 	}
 }

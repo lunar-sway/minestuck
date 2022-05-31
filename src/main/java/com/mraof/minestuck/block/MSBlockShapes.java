@@ -60,21 +60,17 @@ public class MSBlockShapes
 	
 	//Machines
 	public static final CustomVoxelShape ALCHEMITER_CENTER = new CustomVoxelShape(new double[]{0, 0, 0, 16, 16, 16});
-	public static final CustomVoxelShape ALCHEMITER_CORNER = new CustomVoxelShape(new double[]{0, 0, 0, 16, 8, 16}, new double[]{0, 8, 6, 10, 12, 16}, new double[]{0, 12, 8, 8, 16, 16});
-	public static final CustomVoxelShape ALCHEMITER_LEFT_SIDE = new CustomVoxelShape(new double[]{0, 0, 0, 16, 8, 16}, new double[]{0, 8, 6, 16, 12, 16}, new double[]{0, 12, 8, 16, 16, 16}, new double[]{0, 8, 2, 4, 12, 6}, new double[]{10, 8, 1, 14, 11, 5});
-	public static final CustomVoxelShape ALCHEMITER_RIGHT_SIDE = new CustomVoxelShape(new double[]{0, 0, 0, 16, 8, 16}, new double[]{0, 8, 6, 16, 12, 16}, new double[]{0, 12, 8, 16, 16, 16}, new double[]{12, 8, 2, 16, 12, 6}, new double[]{2, 8, 1, 6, 11, 5});
-	public static final CustomVoxelShape ALCHEMITER_TOTEM_CORNER = new CustomVoxelShape(new double[]{0, 0, 0, 16, 8, 16}, new double[]{0, 8, 6, 10, 12, 16}, new double[]{0, 12, 8, 8, 16, 16}, new double[]{8, 8, 2, 14, 16, 8}, new double[]{10, 8, 12, 14, 16, 16});
-	public static final CustomVoxelShape ALCHEMITER_TOTEM_PAD = new CustomVoxelShape(new double[]{8, 0, 2, 14, 4, 8}, new double[]{10, 0, 12, 14, 14, 16}, new double[]{11, 14, 13, 13, 16, 15});
-	public static final CustomVoxelShape ALCHEMITER_LOWER_ROD = new CustomVoxelShape(new double[]{10, 0, 2, 14, 16, 6}, new double[]{10, 0, 7, 14, 16, 11}, new double[]{10, 0, 7, 14, 16, 16}, new double[]{11, -2, 3, 13, 0, 10});
-	public static final CustomVoxelShape ALCHEMITER_UPPER_ROD = new CustomVoxelShape(new double[]{10, 0, 2, 14, 8, 6}, new double[]{10, 0, 7, 14, 8, 11}, new double[]{10, 0, 12, 14, 8, 16}, new double[]{11, 8, 8, 13, 10, 15},
-			new double[]{9,8,3,13,10,5}, new double[]{7,4,2,9,10,6}, new double[]{3,5,3,7,6,5});
+	public static final CustomVoxelShape ALCHEMITER_CORNER = new CustomVoxelShape(new double[]{0, 0, 0, 16, 8, 16}, new double[]{0, 8, 5, 11, 11, 16}, new double[]{0, 11, 9, 7, 16, 16});
+	public static final CustomVoxelShape ALCHEMITER_LEFT_SIDE = new CustomVoxelShape(new double[]{0, 0, 0, 16, 8, 16}, new double[]{0, 8, 5, 16, 11, 16}, new double[]{0, 11, 9, 16, 16, 16}, new double[]{-5, 6.25, 3.25, 5, 12.25, 9.25}, new double[]{9, 8, 0.25, 13, 11, 4.25});
+	public static final CustomVoxelShape ALCHEMITER_RIGHT_SIDE = new CustomVoxelShape(new double[]{0, 0, 0, 16, 8, 16}, new double[]{0, 8, 5, 16, 11, 16}, new double[]{0, 11, 9, 16, 16, 16}, new double[]{3, 8, 0.25, 7, 11, 4.25});
+	public static final CustomVoxelShape ALCHEMITER_TOTEM_CORNER = new CustomVoxelShape(new double[]{0, 0, 0, 16, 8, 16}, new double[]{0, 8, 5, 11, 11, 16}, new double[]{0, 11, 9, 7, 16, 16}, new double[]{9, 8, 12, 13, 16, 16});
+	public static final CustomVoxelShape ALCHEMITER_TOTEM_PAD = new CustomVoxelShape(new double[]{7, 0, 2, 13, 4, 8}, new double[]{9, 0, 12, 13, 16, 16}, new double[]{10, 16, 12.5, 12, 18, 15.5});
 	
 	public static final CustomVoxelShape CRUXTRUDER_BASE = new CustomVoxelShape(new double[]{0,0,0,16,16,16});
 	public static final CustomVoxelShape CRUXTRUDER_TOP_CORNER = new CustomVoxelShape(new double[]{10, 0, 10, 16, 10, 16}, new double[]{12, 10, 12, 16, 12, 16});
 	public static final CustomVoxelShape CRUXTRUDER_TOP_SIDE = new CustomVoxelShape(new double[]{0, 0, 10, 16, 10, 16}, new double[]{0, 10, 12, 16, 12, 16}, new double[]{2, -0.45672, 4.2961, 14, 5.54328, 10.2961});
 	public static final CustomVoxelShape CRUXTRUDER_TOP_CENTER = new CustomVoxelShape(new double[]{0, -3, 0, 16, 9, 16}, new double[]{3, 9, 3, 13, 10, 13}, new double[]{2, 10, 2, 14, 13, 14});
 	public static final CustomVoxelShape CRUXTRUDER_TUBE = new CustomVoxelShape(new double[]{2, 0, 2, 14, 16, 14}, new double[]{7.5, 8.5, 0, 8.5, 9.5, 2}, new double[]{6, 7, -0.005, 10, 11, -0.005}, new double[]{6, 11, -1, 10, 12, 0}, new double[]{6, 6, -1, 10, 7, 0}, new double[]{5, 7, -1, 6, 11, 0}, new double[]{10, 7, -1, 11, 11, 0});
-	
 	
 	public static final CustomVoxelShape TOTEM_LATHE_BOTTOM_CORNER = new CustomVoxelShape(new double[]{4,0,5,16,2,15}, new double[]{4,2,8,16,7,12}, new double[]{5,5,7,12,12,13}, new double[]{6,12,7,12,16,13},
 			new double[]{8,6,5,9,7,7}, new double[]{7,7,5,8,9,6}, new double[]{6,9,5,7,10,6});

@@ -53,7 +53,7 @@ public class AlchemiterBlock extends MultiMachineBlock
 		BlockPos mainPos = getMainPos(state, pos, worldIn);
 		TileEntity te = worldIn.getBlockEntity(mainPos);
 		
-		if (te instanceof AlchemiterTileEntity)
+		if(te instanceof AlchemiterTileEntity)
 		{
 			((AlchemiterTileEntity) te).onRightClick(worldIn, player, state, hit.getDirection());
 		}
@@ -81,10 +81,10 @@ public class AlchemiterBlock extends MultiMachineBlock
 		}
 	}
 	
-    /**
-     * returns the block position of the "Main" block
-     * aka the block with the TileEntity for the machine
-     */
+	/**
+	 * returns the block position of the "Main" block
+	 * aka the block with the TileEntity for the machine
+	 */
 	public BlockPos getMainPos(BlockState state, BlockPos pos, IBlockReader world)
 	{
 		return getMainPos(state, pos, world, 4);
@@ -105,10 +105,10 @@ public class AlchemiterBlock extends MultiMachineBlock
 					&& newState.getValue(FACING).equals(this.corner ? state.getValue(FACING).getClockWise() : state.getValue(FACING)))
 			{
 				return ((AlchemiterBlock) newState.getBlock()).getMainPos(newState, newPos, world, count - 1);
-			} else return new BlockPos(0, -1 , 0);
+			} else return new BlockPos(0, -1, 0);
 		}
 	}
-
+	
 	public static class Pad extends AlchemiterBlock
 	{
 		public static final EnumProperty<EnumDowelType> DOWEL = MSProperties.DOWEL_OR_NONE;

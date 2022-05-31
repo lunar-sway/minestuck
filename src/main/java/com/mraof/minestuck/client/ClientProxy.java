@@ -9,6 +9,7 @@ import com.mraof.minestuck.client.model.armor.DreamerPajamasModel;
 import com.mraof.minestuck.client.renderer.entity.*;
 import com.mraof.minestuck.client.renderer.entity.PawnRenderer;
 import com.mraof.minestuck.client.renderer.entity.frog.FrogRenderer;
+import com.mraof.minestuck.client.renderer.tileentity.AlchemiterRenderer;
 import com.mraof.minestuck.client.renderer.tileentity.GateRenderer;
 import com.mraof.minestuck.client.renderer.tileentity.HolopadRenderer;
 import com.mraof.minestuck.client.renderer.tileentity.SkaiaPortalRenderer;
@@ -42,6 +43,7 @@ public class ClientProxy
 		ClientRegistry.bindTileEntityRenderer(MSTileEntityTypes.SKAIA_PORTAL.get(), SkaiaPortalRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(MSTileEntityTypes.GATE.get(), GateRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(MSTileEntityTypes.HOLOPAD.get(), HolopadRenderer::new);
+		ClientRegistry.bindTileEntityRenderer(MSTileEntityTypes.ALCHEMITER.get(), AlchemiterRenderer::new);
 //		MinecraftForgeClient.registerItemRenderer(Minestuck.captchaCard, new CardRenderer());
 	}
 	
@@ -89,6 +91,7 @@ public class ClientProxy
 
 		RenderTypeLookup.setRenderLayer(MSBlocks.PUNCH_DESIGNIX.SLOT.get(), RenderType.cutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.ALCHEMITER.TOTEM_PAD.get(), RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(MSBlocks.ALCHEMITER.TOTEM_CORNER.get(), RenderType.cutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.TOTEM_LATHE.DOWEL_ROD.get(), RenderType.cutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.TOTEM_LATHE.CARD_SLOT.get(), RenderType.cutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.HOLOPAD, RenderType.cutout());

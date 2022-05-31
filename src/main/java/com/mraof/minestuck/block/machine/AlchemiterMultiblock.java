@@ -13,12 +13,10 @@ public class AlchemiterMultiblock extends MachineMultiblock
 {
 	public final RegistryObject<Block> CENTER = register("alchemiter_center", () -> new AlchemiterBlock(this, MSBlockShapes.ALCHEMITER_CENTER, true, false, new BlockPos(1, 0, -1), AbstractBlock.Properties.of(Material.METAL).strength(3.0F, 4.5F).noDrops()));
 	public final RegistryObject<Block> CORNER = register("alchemiter_corner", () -> new AlchemiterBlock(this, MSBlockShapes.ALCHEMITER_CORNER, true, true, new BlockPos(0, 0, 3), AbstractBlock.Properties.of(Material.METAL).strength(3.0F, 4.5F).noDrops()));
-	public final RegistryObject<Block> LEFT_SIDE = register("alchemiter_left_side", () -> new AlchemiterBlock(this,MSBlockShapes.ALCHEMITER_LEFT_SIDE, true, false, new BlockPos(1, 0, 0), AbstractBlock.Properties.of(Material.METAL).strength(3.0F, 4.5F).noDrops()));
+	public final RegistryObject<Block> LEFT_SIDE = register("alchemiter_left_side", () -> new AlchemiterBlock(this, MSBlockShapes.ALCHEMITER_LEFT_SIDE, true, false, new BlockPos(1, 0, 0), AbstractBlock.Properties.of(Material.METAL).strength(3.0F, 4.5F).noDrops()));
 	public final RegistryObject<Block> RIGHT_SIDE = register("alchemiter_right_side", () -> new AlchemiterBlock(this, MSBlockShapes.ALCHEMITER_RIGHT_SIDE, true, false, new BlockPos(2, 0, 0), AbstractBlock.Properties.of(Material.METAL).strength(3.0F, 4.5F).noDrops()));
 	public final RegistryObject<Block> TOTEM_CORNER = register("alchemiter_totem_corner", () -> new AlchemiterBlock(this, MSBlockShapes.ALCHEMITER_TOTEM_CORNER, false, true, new BlockPos(0, 1, 0), AbstractBlock.Properties.of(Material.METAL).strength(3.0F, 4.5F).noDrops()));
 	public final RegistryObject<Block> TOTEM_PAD = register("alchemiter_totem_pad", () -> new AlchemiterBlock.Pad(this, MSBlockShapes.ALCHEMITER_TOTEM_PAD, AbstractBlock.Properties.of(Material.METAL).strength(3.0F, 4.5F).noDrops()));
-	public final RegistryObject<Block> LOWER_ROD = register("alchemiter_lower_rod", () -> new AlchemiterBlock(this, MSBlockShapes.ALCHEMITER_LOWER_ROD, false, false, new BlockPos(0, -1, 0), AbstractBlock.Properties.of(Material.METAL).strength(3.0F, 4.5F).noDrops()));
-	public final RegistryObject<Block> UPPER_ROD = register("alchemiter_upper_rod", () -> new AlchemiterBlock(this, MSBlockShapes.ALCHEMITER_UPPER_ROD, false, false, new BlockPos(0, -2, 0), AbstractBlock.Properties.of(Material.METAL).strength(3.0F, 4.5F).noDrops()));
 	
 	private final PlacementEntry totemPadPos;
 	
@@ -46,8 +44,6 @@ public class AlchemiterMultiblock extends MachineMultiblock
 		registerPlacement(new BlockPos(3, 0, 1), applyDirection(RIGHT_SIDE, Direction.EAST));
 		registerPlacement(new BlockPos(2, 0, 2), applyDirection(CENTER, Direction.EAST));
 		totemPadPos = registerPlacement(new BlockPos(3, 1, 3), applyDirection(TOTEM_PAD, Direction.EAST));
-		registerPlacement(new BlockPos(3, 2, 3), applyDirection(LOWER_ROD, Direction.EAST));
-		registerPlacement(new BlockPos(3, 3, 3), applyDirection(UPPER_ROD, Direction.EAST));
 	}
 	
 	public boolean isInvalidFromPad(IWorld world, BlockPos pos)
