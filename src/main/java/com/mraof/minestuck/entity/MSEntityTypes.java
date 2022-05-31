@@ -20,7 +20,7 @@ import net.minecraftforge.registries.ObjectHolder;
 import javax.annotation.Nonnull;
 
 @ObjectHolder(Minestuck.MOD_ID)
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class MSEntityTypes
 {
 	public static EntityClassification UNDERLING = EntityClassification.create("UNDERLING", "underling", 35, false, false, 128);
@@ -75,17 +75,17 @@ public final class MSEntityTypes
 	{
 		IForgeRegistry<EntityType<?>> registry = event.getRegistry();
 		register(registry, EntityType.Builder.<FrogEntity>of(FrogEntity::new, EntityClassification.CREATURE).sized(0.51F, 0.51F), "frog");
-		register(registry, EntityType.Builder.of(EnumConsort.SALAMANDER::create, CONSORT).sized(0.45F, 1.0F), "salamander");
-		register(registry, EntityType.Builder.of(EnumConsort.TURTLE::create, CONSORT).sized(0.45F, 1.0F), "turtle");
-		register(registry, EntityType.Builder.of(EnumConsort.NAKAGATOR::create, CONSORT).sized(0.45F, 1.1F), "nakagator");
-		register(registry, EntityType.Builder.of(EnumConsort.IGUANA::create, CONSORT).sized(0.45F, 1.0F), "iguana");
+		register(registry, EntityType.Builder.of(EnumConsort.SALAMANDER::create, CONSORT).sized(0.52F, 1.2F), "salamander");
+		register(registry, EntityType.Builder.of(EnumConsort.TURTLE::create, CONSORT).sized(0.52F, 1.3F), "turtle");
+		register(registry, EntityType.Builder.of(EnumConsort.NAKAGATOR::create, CONSORT).sized(0.52F, 1.2F), "nakagator");
+		register(registry, EntityType.Builder.of(EnumConsort.IGUANA::create, CONSORT).sized(0.52F, 1.2F), "iguana");
 		
-		register(registry, EntityType.Builder.of(ImpEntity::new, UNDERLING).sized(0.7F, 1.2F), "imp");
-		register(registry, EntityType.Builder.of(OgreEntity::new, UNDERLING).sized(2.8F, 4.3F), "ogre");
-		register(registry, EntityType.Builder.of(BasiliskEntity::new, UNDERLING).sized(3F, 2F), "basilisk");
-		register(registry, EntityType.Builder.of(LichEntity::new, UNDERLING).sized(0.8F, 2.0F), "lich");
+		register(registry, EntityType.Builder.of(ImpEntity::new, UNDERLING).sized(0.7F, 1.2F), "imp"); //TODO adjust hitboxes for all underlings
+		register(registry, EntityType.Builder.of(OgreEntity::new, UNDERLING).sized(2F, 3.3F), "ogre");
+		register(registry, EntityType.Builder.of(BasiliskEntity::new, UNDERLING).sized(2F, 2F), "basilisk");
+		register(registry, EntityType.Builder.of(LichEntity::new, UNDERLING).sized(0.8F, 1.9F), "lich");
 		register(registry, EntityType.Builder.of(GiclopsEntity::new, UNDERLING).sized(8.0F, 12.0F), "giclops");
-		register(registry, EntityType.Builder.of(WyrmEntity::new, UNDERLING), "wyrm");
+		register(registry, EntityType.Builder.of(WyrmEntity::new, UNDERLING).sized(1.0F, 1.0F), "wyrm");
 		
 		register(registry, EntityType.Builder.of(PawnEntity::createDersite, EntityClassification.MONSTER).sized(0.6F, 2.1F), "dersite_pawn");
 		register(registry, EntityType.Builder.of(PawnEntity::createProspitian, EntityClassification.MONSTER).sized(0.6F, 2.1F), "prospitian_pawn");
@@ -150,7 +150,7 @@ public final class MSEntityTypes
 		event.put(BASILISK, BasiliskEntity.basiliskAttributes().build());
 		event.put(LICH, LichEntity.lichAttributes().build());
 		event.put(GICLOPS, GiclopsEntity.giclopsAttributes().build());
-		event.put(WYRM, UnderlingEntity.underlingAttributes().build());
+		event.put(WYRM, WyrmEntity.wyrmAttributes().build());
 		
 		event.put(DERSITE_PAWN, PawnEntity.pawnAttributes().build());
 		event.put(PROSPITIAN_PAWN, PawnEntity.pawnAttributes().build());

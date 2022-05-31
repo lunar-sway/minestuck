@@ -7,6 +7,7 @@ import com.mraof.minestuck.client.model.*;
 import com.mraof.minestuck.client.model.armor.CrumplyHatModel;
 import com.mraof.minestuck.client.model.armor.DreamerPajamasModel;
 import com.mraof.minestuck.client.renderer.entity.*;
+import com.mraof.minestuck.client.renderer.entity.PawnRenderer;
 import com.mraof.minestuck.client.renderer.entity.frog.FrogRenderer;
 import com.mraof.minestuck.client.renderer.tileentity.AlchemiterRenderer;
 import com.mraof.minestuck.client.renderer.tileentity.GateRenderer;
@@ -27,7 +28,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.entity.SpriteRenderer;
-import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.world.DimensionRenderInfo;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.IItemPropertyGetter;
@@ -52,28 +52,31 @@ public class ClientProxy
 		registerRenderers();
 		
 		MSScreenFactories.registerScreenFactories();
-
+		
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.FROG, FrogRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.HOLOGRAM, HologramRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.LOTUS_FLOWER, LotusFlowerRenderer::new);
-		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.NAKAGATOR, manager -> new SimpleTexturedEntityRenderer<>(manager, new NakagatorModel<>(), 0.5F));
-		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.SALAMANDER, manager -> new SimpleTexturedEntityRenderer<>(manager, new SalamanderModel<>(), 0.5F));
-		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.IGUANA, manager -> new SimpleTexturedEntityRenderer<>(manager, new IguanaModel<>(), 0.5F));
-		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.TURTLE, manager -> new SimpleTexturedEntityRenderer<>(manager, new TurtleModel<>(), 0.5F));
-		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.IMP, manager -> new UnderlingEntityRenderer<>(manager, new ImpModel<>(), 0.5F));
-		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.OGRE, manager -> new UnderlingEntityRenderer<>(manager, new OgreModel<>(), 2.8F));
-		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.BASILISK, manager -> new UnderlingEntityRenderer<>(manager, new BasiliskModel<>(), 2.8F));
-		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.LICH, manager -> new UnderlingEntityRenderer<>(manager, new LichModel<>(), 0.5F));
-		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.GICLOPS, manager -> new UnderlingEntityRenderer<>(manager, new GiclopsModel<>(), 7.6F));
+		
+		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.NAKAGATOR, ConsortRenderer::new);
+		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.SALAMANDER, ConsortRenderer::new);
+		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.IGUANA, ConsortRenderer::new);
+		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.TURTLE, ConsortRenderer::new);
+		
+		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.IMP, UnderlingRenderer::new);
+		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.OGRE, UnderlingRenderer::new);
+		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.BASILISK, UnderlingRenderer::new);
+		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.LICH, UnderlingRenderer::new);
+		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.GICLOPS, UnderlingRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.WYRM, manager -> new ShadowRenderer<>(manager, 1.0F));
+		
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.PROSPITIAN_BISHOP, manager -> new SimpleTexturedEntityRenderer<>(manager, new BishopModel<>(), 1.8F));
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.DERSITE_BISHOP, manager -> new SimpleTexturedEntityRenderer<>(manager, new BishopModel<>(), 1.8F));
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.PROSPITIAN_ROOK, manager -> new SimpleTexturedEntityRenderer<>(manager, new RookModel<>(), 2.5F));
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.DERSITE_ROOK, manager -> new SimpleTexturedEntityRenderer<>(manager, new RookModel<>(), 2.5F));
 		//RenderingRegistry.registerEntityRenderingHandler(UnderlingPartEntity.class, manager -> new ShadowRenderer<>(manager, 2.8F));
 		//RenderingRegistry.registerEntityRenderingHandler(EntityBigPart.class, manager -> new ShadowRenderer<>(manager, 0F));
-		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.PROSPITIAN_PAWN, manager -> new PawnRenderer(manager, new BipedModel<>(1.0F), 0.5F));
-		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.DERSITE_PAWN, manager -> new PawnRenderer(manager, new BipedModel<>(1.0F), 0.5F));
+		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.PROSPITIAN_PAWN, PawnRenderer::new);
+		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.DERSITE_PAWN, PawnRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.GRIST, GristRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.VITALITY_GEL, VitalityGelRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.PLAYER_DECOY, DecoyRenderer::new);
@@ -85,7 +88,8 @@ public class ClientProxy
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.MIDNIGHT_CREW_POSTER, manager -> new RenderHangingArt<>(manager, new ResourceLocation("minestuck:midnight_poster")));
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.SBAHJ_POSTER, manager -> new RenderHangingArt<>(manager, new ResourceLocation("minestuck:sbahj_poster")));
 		RenderingRegistry.registerEntityRenderingHandler(MSEntityTypes.SHOP_POSTER, manager -> new RenderHangingArt<>(manager, new ResourceLocation("minestuck:shop_poster")));
-		
+
+		RenderTypeLookup.setRenderLayer(MSBlocks.PUNCH_DESIGNIX.SLOT.get(), RenderType.cutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.ALCHEMITER.TOTEM_PAD.get(), RenderType.cutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.TOTEM_LATHE.DOWEL_ROD.get(), RenderType.cutout());
 		RenderTypeLookup.setRenderLayer(MSBlocks.TOTEM_LATHE.CARD_SLOT.get(), RenderType.cutout());
@@ -139,7 +143,7 @@ public class ClientProxy
 		ComputerProgram.registerProgramClass(1, SburbServer.class);
 		
 		registerArmorModels();
-
+		
 		IItemPropertyGetter content = (stack, world, holder) -> AlchemyHelper.hasDecodedItem(stack) ? 1 : 0;
 		ResourceLocation contentName = new ResourceLocation(Minestuck.MOD_ID, "content");
 		

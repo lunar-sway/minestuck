@@ -12,6 +12,7 @@ public class MSFillerBlockTypes
 	public static final RuleTest COARSE_END_STONE = new BlockMatchRuleTest(MSBlocks.COARSE_END_STONE);
 	public static final RuleTest SHADE_STONE = new BlockMatchRuleTest(MSBlocks.SHADE_STONE);
 	public static final RuleTest PINK_STONE = new BlockMatchRuleTest(MSBlocks.PINK_STONE);
+	public static final RuleTest MYCELIUM_STONE = new BlockMatchRuleTest(MSBlocks.MYCELIUM_STONE);
 	
 	public static void init()
 	{
