@@ -67,11 +67,14 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 	
 	public void setOffsetFromDestinationBlockPos(BlockPos destinationPosIn)
 	{
-		this.facing = getBlockState().getValue(WirelessRedstoneTransmitterBlock.FACING);
+		if(level != null) //level is null when gotten from Load
+		{
+			this.facing = level.getBlockState(worldPosition).getValue(WirelessRedstoneTransmitterBlock.FACING);
+		}
 		
-		int offsetX = destinationPosIn.getX() - getBlockPos().getX();
-		int offsetY = destinationPosIn.getY() - getBlockPos().getY();
-		int offsetZ = destinationPosIn.getZ() - getBlockPos().getZ();
+		int offsetX = destinationPosIn.getX() - worldPosition.getX();
+		int offsetY = destinationPosIn.getY() - worldPosition.getY();
+		int offsetZ = destinationPosIn.getZ() - worldPosition.getZ();
 		
 		this.offsetPos = new BlockPos(offsetX, offsetY, offsetZ);
 	}
