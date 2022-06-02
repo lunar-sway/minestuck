@@ -58,15 +58,19 @@ public abstract class AnimatedCreatureEntity extends CreatureEntity implements I
 		if(animationTicks > 0)
 		{
 			animationTicks--;
-			if(animationTicks == 0 && getCurrentAction() == Actions.ATTACK)
-			{
-				this.setCurrentAction(Actions.ATTACK_RECOVERY, attackRecovery);
-				performAttack();
-			} else if(animationTicks == 0)
-			{
-				this.setCurrentAction(Actions.NONE);
-			}
+			if(animationTicks == 0)
+				this.endTimedAction(this.getCurrentAction());
 		}
+	}
+	
+	protected void endTimedAction(Actions action)
+	{
+		if(action == Actions.ATTACK)
+		{
+			this.setCurrentAction(Actions.ATTACK_RECOVERY, attackRecovery);
+			performAttack();
+		} else
+			this.setCurrentAction(Actions.NONE);
 	}
 	
 	private void performAttack()
@@ -112,7 +116,7 @@ public abstract class AnimatedCreatureEntity extends CreatureEntity implements I
 	 */
 	private void startAttack()
 	{
-		if(animationTicks <= 0)
+		if(!this.hasTimedAction())
 		{
 			this.setCurrentAction(Actions.ATTACK, attackDelay);
 			
@@ -153,6 +157,15 @@ public abstract class AnimatedCreatureEntity extends CreatureEntity implements I
 	protected Actions getCurrentAction()
 	{
 		return Actions.values()[this.entityData.get(CURRENT_ACTION)];
+	}
+	
+	/**
+	 * @return true if an action has been set with a finite time
+	 * with setCurrentAction(Action, int) and its duration has not yet run out.
+	 */
+	public boolean hasTimedAction()
+	{
+		return this.animationTicks > 0;
 	}
 	
 	/**
