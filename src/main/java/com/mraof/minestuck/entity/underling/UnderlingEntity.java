@@ -14,10 +14,7 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.attributes.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.monster.IMob;
@@ -56,19 +53,11 @@ public abstract class UnderlingEntity extends AnimatedCreatureEntity implements 
 	
 	protected Map<PlayerIdentifier, Double> damageMap = new HashMap<>();    //Map that stores how much damage each player did to this to this underling. Null is used for environmental or other non-player damage
 	
-	/**
-	 * @param knockbackResist Extra knockback resistance while attacking
-	 */
-	public UnderlingEntity(EntityType<? extends UnderlingEntity> type, World world, int consortRep, double knockbackResist)
-	{
-		super(type, world, knockbackResist);
-		this.consortRep = consortRep;
-		attackEntitySelector.entityList.add(EntityType.PLAYER);
-	}
-	
 	public UnderlingEntity(EntityType<? extends UnderlingEntity> type, World world, int consortRep)
 	{
-		this(type, world, consortRep, 0);
+		super(type, world);
+		this.consortRep = consortRep;
+		attackEntitySelector.entityList.add(EntityType.PLAYER);
 	}
 	
 	@Override

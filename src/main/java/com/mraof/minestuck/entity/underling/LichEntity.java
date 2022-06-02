@@ -10,6 +10,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
@@ -21,12 +22,15 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 
 public class LichEntity extends UnderlingEntity implements IAnimatable
 {
+	private final AttributeModifier knockback;
+	
 	public LichEntity(EntityType<? extends LichEntity> type, World world)
 	{
-		super(type, world, 7, 1);
+		super(type, world, 7);
 		this.attackDelay = 14;
 		this.attackRecovery = 16;
 		this.canMoveWhileAttacking = true;
+		knockback = new AttributeModifier("attack.knockback", 1, AttributeModifier.Operation.ADDITION);
 	}
 	
 	public static AttributeModifierMap.MutableAttribute lichAttributes()
@@ -82,6 +86,22 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 			computePlayerProgress((int) (50 + 2.6 * getGristType().getPower())); //still give xp up to top rung
 			firstKillBonus(killer, (byte) (Echeladder.UNDERLING_BONUS_OFFSET + 3));
 		}
+	}
+	
+	@Override
+	protected void onAttackStart()
+	{
+		ModifiableAttributeInstance instance = getAttributes().getInstance(Attributes.KNOCKBACK_RESISTANCE);
+		if(instance != null && !instance.hasModifier(knockback))
+			instance.addTransientModifier(knockback);
+	}
+	
+	@Override
+	protected void onAttackEnd()
+	{
+		ModifiableAttributeInstance instance = getAttributes().getInstance(Attributes.KNOCKBACK_RESISTANCE);
+		if(instance != null)
+			instance.removeModifier(knockback);
 	}
 	
 	@Override

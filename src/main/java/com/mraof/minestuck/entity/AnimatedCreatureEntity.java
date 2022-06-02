@@ -3,9 +3,6 @@ package com.mraof.minestuck.entity;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -21,7 +18,6 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 public abstract class AnimatedCreatureEntity extends CreatureEntity implements IAnimatable
 {
 	private final AnimationFactory factory = new AnimationFactory(this);
-	private final AttributeModifier knockback;
 	private static final DataParameter<Integer> CURRENT_ACTION = EntityDataManager.defineId(AnimatedCreatureEntity.class, DataSerializers.INT);
 	
 	private int animationTicks = 0;
@@ -43,16 +39,7 @@ public abstract class AnimatedCreatureEntity extends CreatureEntity implements I
 	
 	protected AnimatedCreatureEntity(EntityType<? extends CreatureEntity> type, World world)
 	{
-		this(type, world, 0);
-	}
-	
-	/**
-	 * @param knockbackResist Extra knockback resistance while attacking
-	 */
-	protected AnimatedCreatureEntity(EntityType<? extends CreatureEntity> type, World world, double knockbackResist)
-	{
 		super(type, world);
-		knockback = new AttributeModifier("attack.knockback", knockbackResist, AttributeModifier.Operation.ADDITION);
 	}
 	
 	@Override
@@ -89,10 +76,7 @@ public abstract class AnimatedCreatureEntity extends CreatureEntity implements I
 	
 	private void performAttack()
 	{
-		ModifiableAttributeInstance instance = getAttributes().getInstance(Attributes.KNOCKBACK_RESISTANCE);
-		if(instance != null) {
-			instance.removeModifier(knockback);
-		}
+		this.onAttackEnd();
 		
 		if(getTarget() != null && isInRange(getTarget()))
 		{
@@ -137,11 +121,22 @@ public abstract class AnimatedCreatureEntity extends CreatureEntity implements I
 		{
 			this.setCurrentAction(Actions.ATTACK, attackDelay);
 			
-			ModifiableAttributeInstance instance = getAttributes().getInstance(Attributes.KNOCKBACK_RESISTANCE);
-			if(instance != null && !instance.hasModifier(knockback)) {
-				instance.addTransientModifier(knockback);
-			}
+			this.onAttackStart();
 		}
+	}
+	
+	/**
+	 * Is called when an attack starts. Can be extended to apply effects during an attack.
+	 */
+	protected void onAttackStart()
+	{
+	}
+	
+	/**
+	 * Is called when an attack starts. Can be extended to remove effects once an attack has ended.
+	 */
+	protected void onAttackEnd()
+	{
 	}
 	
 	/**
