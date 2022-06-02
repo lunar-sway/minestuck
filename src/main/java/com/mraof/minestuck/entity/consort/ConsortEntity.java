@@ -35,14 +35,16 @@ import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-public class ConsortEntity extends AnimatedCreatureEntity implements IContainerProvider
+public class ConsortEntity extends AnimatedCreatureEntity implements IContainerProvider, IAnimatable
 {
+	private final AnimationFactory factory = new AnimationFactory(this);
 	private final EnumConsort consortType;
 	private boolean hasHadMessage = false;
 	ConsortDialogue.DialogueWrapper message;
@@ -78,6 +80,12 @@ public class ConsortEntity extends AnimatedCreatureEntity implements IContainerP
 		goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 8.0F));
 		goalSelector.addGoal(7, new LookRandomlyGoal(this));
 		goalSelector.addGoal(4, new AvoidEntityGoal<>(this, PlayerEntity.class, 16F, 1.0D, 1.4D, this::shouldFleeFrom));
+	}
+	
+	@Override
+	public AnimationFactory getFactory()
+	{
+		return this.factory;
 	}
 	
 	private boolean shouldFleeFrom(LivingEntity entity)

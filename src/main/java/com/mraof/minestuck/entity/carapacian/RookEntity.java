@@ -55,12 +55,7 @@ public class RookEntity extends CarapacianEntity implements IMob
 		float damage = this.getAttackStrength(entity);
 		return entity.hurt(DamageSource.mobAttack(this), damage);
 	}
-
-	@Override
-	public void registerControllers(AnimationData data) {
-		// TODO blockbench model
-	}
-
+	
 //	@Override
 //	protected void attackEntity(Entity entity, float par2)
 //	{

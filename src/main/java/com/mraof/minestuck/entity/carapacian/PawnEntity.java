@@ -26,11 +26,13 @@ import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nullable;
 
 public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IMob, IAnimatable
 {
+	private final AnimationFactory factory = new AnimationFactory(this);
 	private final RangedAttackGoal aiArrowAttack = new RangedAttackGoal(this, 5 / 4F, 20, 10.0F);
 	private final MeleeAttackGoal aiMeleeAttack = new MeleeAttackGoal(this, 2F, false);
 	
@@ -41,6 +43,12 @@ public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IM
 		this.attackDelay = 6;
 		this.attackRecovery = 12;
 		setCombatTask();
+	}
+	
+	@Override
+	public AnimationFactory getFactory()
+	{
+		return this.factory;
 	}
 	
 	public static PawnEntity createProspitian(EntityType<? extends PawnEntity> type, World world)

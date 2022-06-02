@@ -8,14 +8,12 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 /**
  * Abstract class that provide a way to track an action with optional durations for animated entities.
  */
-public abstract class AnimatedCreatureEntity extends CreatureEntity implements IAnimatable
+public abstract class AnimatedCreatureEntity extends CreatureEntity
 {
-	private final AnimationFactory factory = new AnimationFactory(this);
 	private static final DataParameter<Integer> CURRENT_ACTION = EntityDataManager.defineId(AnimatedCreatureEntity.class, DataSerializers.INT);
 	
 	private int animationTicks = 0;
@@ -48,12 +46,6 @@ public abstract class AnimatedCreatureEntity extends CreatureEntity implements I
 	protected void endTimedAction(Actions action)
 	{
 		this.setCurrentAction(Actions.NONE);
-	}
-	
-	@Override
-	public AnimationFactory getFactory()
-	{
-		return this.factory;
 	}
 	
 	/**
