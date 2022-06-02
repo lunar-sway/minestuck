@@ -78,12 +78,11 @@ public abstract class AnimatedCreatureEntity extends CreatureEntity implements I
 			animationTicks--;
 			if(animationTicks == 0 && getCurrentAction() == Actions.ATTACK)
 			{
-				animationTicks = attackRecovery;
-				this.entityData.set(CURRENT_ACTION, Actions.ATTACK_RECOVERY.ordinal());
+				this.setCurrentAction(Actions.ATTACK_RECOVERY, attackRecovery);
 				performAttack();
 			} else if(animationTicks == 0)
 			{
-				this.entityData.set(CURRENT_ACTION, Actions.NONE.ordinal());
+				this.setCurrentAction(Actions.NONE);
 			}
 		}
 	}
@@ -129,15 +128,14 @@ public abstract class AnimatedCreatureEntity extends CreatureEntity implements I
 	}
 	
 	/**
-	 * Starts a long attack against the current target
+	 * Starts a long attack against the current target if this entity isn't already performing some action with a duration.
 	 * Useful to sync animations and add extra delays
 	 */
-	public void startAttack()
+	private void startAttack()
 	{
 		if(animationTicks <= 0)
 		{
-			animationTicks = attackDelay;
-			this.entityData.set(CURRENT_ACTION, Actions.ATTACK.ordinal());
+			this.setCurrentAction(Actions.ATTACK, attackDelay);
 			
 			ModifiableAttributeInstance instance = getAttributes().getInstance(Attributes.KNOCKBACK_RESISTANCE);
 			if(instance != null && !instance.hasModifier(knockback)) {
@@ -153,7 +151,8 @@ public abstract class AnimatedCreatureEntity extends CreatureEntity implements I
 	 */
 	protected boolean isAttacking()
 	{
-		return Actions.ATTACK.isEqual(this.entityData.get(CURRENT_ACTION)) || Actions.ATTACK_RECOVERY.isEqual(this.entityData.get(CURRENT_ACTION));
+		Actions action = this.getCurrentAction();
+		return action == Actions.ATTACK || action == Actions.ATTACK_RECOVERY;
 	}
 	
 	/**
@@ -194,12 +193,7 @@ public abstract class AnimatedCreatureEntity extends CreatureEntity implements I
 		ATTACK,
 		ATTACK_RECOVERY,
 		TALK,
-		PANIC;
-		
-		public boolean isEqual(int ordinal)
-		{
-			return this.ordinal() == ordinal;
-		}
+		PANIC
 	}
 	
 	private static class DelayedAttackGoal extends MeleeAttackGoal
