@@ -1,6 +1,6 @@
 package com.mraof.minestuck.entity.underling;
 
-import com.mraof.minestuck.entity.AnimatedCreatureEntity;
+import com.mraof.minestuck.entity.AttackingAnimatedEntity;
 import com.mraof.minestuck.entity.EntityListFilter;
 import com.mraof.minestuck.entity.ai.HurtByTargetAlliedGoal;
 import com.mraof.minestuck.entity.item.GristEntity;
@@ -14,7 +14,10 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.*;
+import net.minecraft.entity.ai.attributes.Attribute;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.monster.IMob;
@@ -40,7 +43,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public abstract class UnderlingEntity extends AnimatedCreatureEntity implements IMob, IAnimatable
+public abstract class UnderlingEntity extends AttackingAnimatedEntity implements IMob, IAnimatable
 {
 	public static final UUID GRIST_MODIFIER_ID = UUID.fromString("08B6DEFC-E3F4-11EA-87D0-0242AC130003");
 	private static final DataParameter<String> GRIST_TYPE = EntityDataManager.defineId(UnderlingEntity.class, DataSerializers.STRING);

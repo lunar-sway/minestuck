@@ -2,8 +2,6 @@ package com.mraof.minestuck.entity;
 
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -13,7 +11,7 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 /**
- * Abstract class that provide different ways to manage timings and delays for animated entities.
+ * Abstract class that provide a way to track an action with optional durations for animated entities.
  */
 public abstract class AnimatedCreatureEntity extends CreatureEntity implements IAnimatable
 {
@@ -22,26 +20,10 @@ public abstract class AnimatedCreatureEntity extends CreatureEntity implements I
 	
 	private int animationTicks = 0;
 	
-	/**
-	 * The delay between the start of the animation and the moment the damage lands
-	 */
-	protected int attackDelay;
 	
-	/**
-	 * The delay after an attack and before another start
-	 */
-	protected int attackRecovery;
-	
-	protected AnimatedCreatureEntity(EntityType<? extends CreatureEntity> type, World world)
+	protected AnimatedCreatureEntity(EntityType<? extends AnimatedCreatureEntity> type, World world)
 	{
 		super(type, world);
-	}
-	
-	@Override
-	protected void registerGoals()
-	{
-		super.registerGoals();
-		goalSelector.addGoal(3, new DelayedAttackGoal(this, 1F, false));
 	}
 	
 	@Override
@@ -65,31 +47,10 @@ public abstract class AnimatedCreatureEntity extends CreatureEntity implements I
 	
 	protected void endTimedAction(Actions action)
 	{
-		if(action == Actions.ATTACK)
-		{
-			this.setCurrentAction(Actions.ATTACK_RECOVERY, attackRecovery);
-			performAttack();
-		} else
-			this.setCurrentAction(Actions.NONE);
+		this.setCurrentAction(Actions.NONE);
 	}
 	
-	private void performAttack()
-	{
-		this.onAttackEnd();
-		
-		if(getTarget() != null && isInRange(getTarget()))
-		{
-			doHurtTarget(getTarget());
-			// TODO: AOE bounding box collision checks + aoe flag
-		}
-	}
-	
-	private boolean isInRange(LivingEntity target)
-	{
-		double reach = this.getBbWidth() * 2.0F * this.getBbWidth() * 2.0F + target.getBbWidth();
-		return this.distanceToSqr(target) <= reach;
-	}
-	
+	@Override
 	public AnimationFactory getFactory()
 	{
 		return this.factory;
@@ -108,34 +69,6 @@ public abstract class AnimatedCreatureEntity extends CreatureEntity implements I
 		AnimationController<AnimatedCreatureEntity> controller = new AnimationController<>(this, name, 0, predicate);
 		controller.setAnimationSpeed(speed);
 		return controller;
-	}
-	
-	/**
-	 * Starts a long attack against the current target if this entity isn't already performing some action with a duration.
-	 * Useful to sync animations and add extra delays
-	 */
-	private void startAttack()
-	{
-		if(!this.hasTimedAction())
-		{
-			this.setCurrentAction(Actions.ATTACK, attackDelay);
-			
-			this.onAttackStart();
-		}
-	}
-	
-	/**
-	 * Is called when an attack starts. Can be extended to apply effects during an attack.
-	 */
-	protected void onAttackStart()
-	{
-	}
-	
-	/**
-	 * Is called when an attack starts. Can be extended to remove effects once an attack has ended.
-	 */
-	protected void onAttackEnd()
-	{
 	}
 	
 	/**
@@ -197,31 +130,5 @@ public abstract class AnimatedCreatureEntity extends CreatureEntity implements I
 		ATTACK_RECOVERY,
 		TALK,
 		PANIC
-	}
-	
-	private static class DelayedAttackGoal extends MeleeAttackGoal
-	{
-		private final AnimatedCreatureEntity entity;
-		
-		/**
-		 * The same as MeleeAttackGoal but it does not apply damage immediately when performing an attack
-		 * Should be used only internally by AnimatedCreatureEntity
-		 */
-		private DelayedAttackGoal(AnimatedCreatureEntity entity, float speed, boolean useMemory)
-		{
-			super(entity, speed, useMemory);
-			this.entity = entity;
-		}
-		
-		@Override
-		protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr)
-		{
-			double reach = this.getAttackReachSqr(enemy);
-			if(distToEnemySqr <= reach && this.isTimeToAttack())
-			{
-				this.resetAttackCooldown();
-				entity.startAttack();
-			}
-		}
 	}
 }

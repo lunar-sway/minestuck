@@ -1,6 +1,6 @@
 package com.mraof.minestuck.entity.carapacian;
 
-import com.mraof.minestuck.entity.AnimatedCreatureEntity;
+import com.mraof.minestuck.entity.AttackingAnimatedEntity;
 import com.mraof.minestuck.entity.EntityListFilter;
 import com.mraof.minestuck.entity.ai.HurtByTargetAlliedGoal;
 import com.mraof.minestuck.util.MSTags;
@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class CarapacianEntity extends AnimatedCreatureEntity
+public abstract class CarapacianEntity extends AttackingAnimatedEntity
 {
 	private final EnumEntityKingdom kingdom;
 	
