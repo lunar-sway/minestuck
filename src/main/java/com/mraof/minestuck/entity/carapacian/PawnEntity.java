@@ -24,10 +24,8 @@ import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nullable;
 
@@ -206,13 +204,13 @@ public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IM
 	@Override
 	public void registerControllers(AnimationData data)
 	{
-		data.addAnimationController(createAnimation("walkArmsAnimation", 1, this::walkArmsAnimation));
-		data.addAnimationController(createAnimation("walkAnimation", 1, this::walkAnimation));
-		data.addAnimationController(createAnimation("deathAnimation", 1, this::deathAnimation));
-		data.addAnimationController(createAnimation("swingAnimation", 2, this::swingAnimation));
+		data.addAnimationController(createAnimation(this, "walkArmsAnimation", 1, PawnEntity::walkArmsAnimation));
+		data.addAnimationController(createAnimation(this, "walkAnimation", 1, PawnEntity::walkAnimation));
+		data.addAnimationController(createAnimation(this, "deathAnimation", 1, PawnEntity::deathAnimation));
+		data.addAnimationController(createAnimation(this, "swingAnimation", 2, PawnEntity::swingAnimation));
 	}
 	
-	private <E extends IAnimatable> PlayState walkAnimation(AnimationEvent<E> event)
+	private static PlayState walkAnimation(AnimationEvent<PawnEntity> event)
 	{
 		if(event.isMoving())
 		{
@@ -222,9 +220,9 @@ public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IM
 		return PlayState.STOP;
 	}
 	
-	private <E extends IAnimatable> PlayState walkArmsAnimation(AnimationEvent<E> event)
+	private static PlayState walkArmsAnimation(AnimationEvent<PawnEntity> event)
 	{
-		if(event.isMoving() && !isAttacking())
+		if(event.isMoving() && !event.getAnimatable().isAttacking())
 		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("walkarms", true));
 			return PlayState.CONTINUE;
@@ -232,9 +230,9 @@ public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IM
 		return PlayState.STOP;
 	}
 	
-	private <E extends IAnimatable> PlayState deathAnimation(AnimationEvent<E> event)
+	private static PlayState deathAnimation(AnimationEvent<PawnEntity> event)
 	{
-		if(dead)
+		if(event.getAnimatable().dead)
 		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("die", false));
 			return PlayState.CONTINUE;
@@ -242,9 +240,9 @@ public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IM
 		return PlayState.STOP;
 	}
 	
-	private <E extends IAnimatable> PlayState swingAnimation(AnimationEvent<E> event)
+	private static PlayState swingAnimation(AnimationEvent<PawnEntity> event)
 	{
-		if(isAttacking())
+		if(event.getAnimatable().isAttacking())
 		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("punch1", false));
 			return PlayState.CONTINUE;

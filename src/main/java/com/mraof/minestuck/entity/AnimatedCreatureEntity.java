@@ -64,9 +64,9 @@ public abstract class AnimatedCreatureEntity extends CreatureEntity implements I
 	 * @param predicate the animation predicate
 	 * @return a configured animation controller with speed
 	 */
-	protected AnimationController<AnimatedCreatureEntity> createAnimation(String name, double speed, AnimationController.IAnimationPredicate<AnimatedCreatureEntity> predicate)
+	protected static <T extends IAnimatable> AnimationController<T> createAnimation(T entity, String name, double speed, AnimationController.IAnimationPredicate<T> predicate)
 	{
-		AnimationController<AnimatedCreatureEntity> controller = new AnimationController<>(this, name, 0, predicate);
+		AnimationController<T> controller = new AnimationController<>(entity, name, 0, predicate);
 		controller.setAnimationSpeed(speed);
 		return controller;
 	}

@@ -13,7 +13,6 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
-import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
@@ -95,13 +94,13 @@ public class OgreEntity extends UnderlingEntity
 	@Override
 	public void registerControllers(AnimationData data)
 	{
-		data.addAnimationController(createAnimation("walkArmsAnimation", 0.3, this::walkArmsAnimation));
-		data.addAnimationController(createAnimation("walkAnimation", 0.3, this::walkAnimation));
-		data.addAnimationController(createAnimation("swingAnimation", 0.5, this::swingAnimation));
-		data.addAnimationController(createAnimation("deathAnimation", 0.85, this::deathAnimation));
+		data.addAnimationController(createAnimation(this, "walkArmsAnimation", 0.3, OgreEntity::walkArmsAnimation));
+		data.addAnimationController(createAnimation(this, "walkAnimation", 0.3, OgreEntity::walkAnimation));
+		data.addAnimationController(createAnimation(this, "swingAnimation", 0.5, OgreEntity::swingAnimation));
+		data.addAnimationController(createAnimation(this, "deathAnimation", 0.85, OgreEntity::deathAnimation));
 	}
 	
-	private <E extends IAnimatable> PlayState walkAnimation(AnimationEvent<E> event)
+	private static PlayState walkAnimation(AnimationEvent<OgreEntity> event)
 	{
 		if(event.isMoving())
 		{
@@ -111,9 +110,9 @@ public class OgreEntity extends UnderlingEntity
 		return PlayState.STOP;
 	}
 	
-	private <E extends IAnimatable> PlayState walkArmsAnimation(AnimationEvent<E> event)
+	private static PlayState walkArmsAnimation(AnimationEvent<OgreEntity> event)
 	{
-		if(event.isMoving() && !isAttacking())
+		if(event.isMoving() && !event.getAnimatable().isAttacking())
 		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ogre.walkarms", true));
 			return PlayState.CONTINUE;
@@ -121,9 +120,9 @@ public class OgreEntity extends UnderlingEntity
 		return PlayState.STOP;
 	}
 	
-	private <E extends IAnimatable> PlayState swingAnimation(AnimationEvent<E> event)
+	private static PlayState swingAnimation(AnimationEvent<OgreEntity> event)
 	{
-		if(isAttacking())
+		if(event.getAnimatable().isAttacking())
 		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ogre.punch", false));
 			return PlayState.CONTINUE;
@@ -132,9 +131,9 @@ public class OgreEntity extends UnderlingEntity
 		return PlayState.STOP;
 	}
 	
-	private <E extends IAnimatable> PlayState deathAnimation(AnimationEvent<E> event)
+	private static PlayState deathAnimation(AnimationEvent<OgreEntity> event)
 	{
-		if(dead)
+		if(event.getAnimatable().dead)
 		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ogre.die", false));
 			return PlayState.CONTINUE;

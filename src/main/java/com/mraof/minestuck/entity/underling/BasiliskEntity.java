@@ -174,19 +174,19 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 	@Override
 	public void registerControllers(AnimationData data)
 	{
-		data.addAnimationController(createAnimation("walkAnimation", 0.5, this::walkAnimation));
-		data.addAnimationController(createAnimation("deathAnimation", 1, this::deathAnimation));
-		data.addAnimationController(createAnimation("swingAnimation", 1, this::swingAnimation));
+		data.addAnimationController(createAnimation(this, "walkAnimation", 0.5, BasiliskEntity::walkAnimation));
+		data.addAnimationController(createAnimation(this, "deathAnimation", 1, BasiliskEntity::deathAnimation));
+		data.addAnimationController(createAnimation(this, "swingAnimation", 1, BasiliskEntity::swingAnimation));
 	}
 	
-	private <E extends IAnimatable> PlayState walkAnimation(AnimationEvent<E> event)
+	private static PlayState walkAnimation(AnimationEvent<BasiliskEntity> event)
 	{
 		if(!event.isMoving())
 		{
 			return PlayState.STOP;
 		}
 		
-		if(this.isAggressive())
+		if(event.getAnimatable().isAggressive())
 		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("run", true));
 			return PlayState.CONTINUE;
@@ -197,9 +197,9 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 		}
 	}
 	
-	private <E extends IAnimatable> PlayState deathAnimation(AnimationEvent<E> event)
+	private static PlayState deathAnimation(AnimationEvent<BasiliskEntity> event)
 	{
-		if(dead)
+		if(event.getAnimatable().dead)
 		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("die", false));
 			return PlayState.CONTINUE;
@@ -207,9 +207,9 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 		return PlayState.STOP;
 	}
 	
-	private <E extends IAnimatable> PlayState swingAnimation(AnimationEvent<E> event)
+	private static PlayState swingAnimation(AnimationEvent<BasiliskEntity> event)
 	{
-		if(isAttacking())
+		if(event.getAnimatable().isAttacking())
 		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("bite", false));
 			return PlayState.CONTINUE;

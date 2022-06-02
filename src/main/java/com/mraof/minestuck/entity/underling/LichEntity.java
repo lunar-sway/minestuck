@@ -108,12 +108,12 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 	@Override
 	public void registerControllers(AnimationData data)
 	{
-		data.addAnimationController(createAnimation("walkAnimation", 1, this::walkAnimation));
-		data.addAnimationController(createAnimation("deathAnimation", 1, this::deathAnimation));
-		data.addAnimationController(createAnimation("swingAnimation", 0.8, this::swingAnimation));
+		data.addAnimationController(createAnimation(this, "walkAnimation", 1, LichEntity::walkAnimation));
+		data.addAnimationController(createAnimation(this, "deathAnimation", 1, LichEntity::deathAnimation));
+		data.addAnimationController(createAnimation(this, "swingAnimation", 0.8, LichEntity::swingAnimation));
 	}
 	
-	private <E extends IAnimatable> PlayState walkAnimation(AnimationEvent<E> event)
+	private static PlayState walkAnimation(AnimationEvent<LichEntity> event)
 	{
 		if(!event.isMoving())
 		{
@@ -123,9 +123,9 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 		return PlayState.CONTINUE;
 	}
 	
-	private <E extends IAnimatable> PlayState deathAnimation(AnimationEvent<E> event)
+	private static PlayState deathAnimation(AnimationEvent<LichEntity> event)
 	{
-		if(dead)
+		if(event.getAnimatable().dead)
 		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("die", false));
 			return PlayState.CONTINUE;
@@ -133,9 +133,9 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 		return PlayState.STOP;
 	}
 	
-	private <E extends IAnimatable> PlayState swingAnimation(AnimationEvent<E> event)
+	private static PlayState swingAnimation(AnimationEvent<LichEntity> event)
 	{
-		if(isAttacking())
+		if(event.getAnimatable().isAttacking())
 		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("attack", false));
 			return PlayState.CONTINUE;

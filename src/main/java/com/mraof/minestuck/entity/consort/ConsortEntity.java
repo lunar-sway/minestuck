@@ -412,15 +412,15 @@ public class ConsortEntity extends AnimatedCreatureEntity implements IContainerP
 	@Override
 	public void registerControllers(AnimationData data)
 	{
-		data.addAnimationController(createAnimation("walkAnimation", 1, this::walkAnimation));
-		data.addAnimationController(createAnimation("armsAnimation", 1, this::armsAnimation));
-		data.addAnimationController(createAnimation("deathAnimation", 1, this::deathAnimation));
-		data.addAnimationController(createAnimation("actionAnimation", 1, this::actionAnimation));
+		data.addAnimationController(createAnimation(this, "walkAnimation", 1, ConsortEntity::walkAnimation));
+		data.addAnimationController(createAnimation(this, "armsAnimation", 1, ConsortEntity::armsAnimation));
+		data.addAnimationController(createAnimation(this, "deathAnimation", 1, ConsortEntity::deathAnimation));
+		data.addAnimationController(createAnimation(this, "actionAnimation", 1, ConsortEntity::actionAnimation));
 	}
 	
-	private <E extends IAnimatable> PlayState walkAnimation(AnimationEvent<E> event)
+	private static PlayState walkAnimation(AnimationEvent<ConsortEntity> event)
 	{
-		if(!event.isMoving() || getCurrentAction() != Actions.NONE)
+		if(!event.isMoving() || event.getAnimatable().getCurrentAction() != Actions.NONE)
 		{
 			return PlayState.STOP;
 		}
@@ -429,11 +429,11 @@ public class ConsortEntity extends AnimatedCreatureEntity implements IContainerP
 		return PlayState.CONTINUE;
 	}
 	
-	private <E extends IAnimatable> PlayState armsAnimation(AnimationEvent<E> event)
+	private static PlayState armsAnimation(AnimationEvent<ConsortEntity> event)
 	{
-		if(!event.isMoving() || getCurrentAction() != Actions.NONE)
+		if(!event.isMoving() || event.getAnimatable().getCurrentAction() != Actions.NONE)
 		{
-			if(this.getConsortType() == EnumConsort.TURTLE)
+			if(event.getAnimatable().getConsortType() == EnumConsort.TURTLE)
 			{ // eeeeeeeeeeehhh maybe just fix the turtle anims instead
 				event.getController().setAnimation(new AnimationBuilder().addAnimation("armfix", true));
 				return PlayState.CONTINUE;
@@ -445,9 +445,9 @@ public class ConsortEntity extends AnimatedCreatureEntity implements IContainerP
 		return PlayState.CONTINUE;
 	}
 	
-	private <E extends IAnimatable> PlayState deathAnimation(AnimationEvent<E> event)
+	private static PlayState deathAnimation(AnimationEvent<ConsortEntity> event)
 	{
-		if(dead)
+		if(event.getAnimatable().dead)
 		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("die", false));
 			return PlayState.CONTINUE;
@@ -455,9 +455,9 @@ public class ConsortEntity extends AnimatedCreatureEntity implements IContainerP
 		return PlayState.STOP;
 	}
 	
-	private <E extends IAnimatable> PlayState actionAnimation(AnimationEvent<E> event)
+	private static PlayState actionAnimation(AnimationEvent<ConsortEntity> event)
 	{
-		Actions action = getCurrentAction();
+		Actions action = event.getAnimatable().getCurrentAction();
 		if(action == Actions.TALK)
 		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("talk", true));
