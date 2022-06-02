@@ -92,6 +92,13 @@ public class GiclopsEntity extends UnderlingEntity implements IAnimatable
 		}
 	}
 	
+	@Override
+	protected void onAttackStart()
+	{
+		// Will stop the entity while performing its attack animation
+		this.getNavigation().stop();
+	}
+	
 	//Reduced lag is worth not taking damage for being inside a wall
 	@Override
 	public boolean isInWall()

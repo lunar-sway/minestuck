@@ -86,6 +86,13 @@ public class OgreEntity extends UnderlingEntity
 	}
 	
 	@Override
+	protected void onAttackStart()
+	{
+		// Will stop the entity while performing its attack animation
+		this.getNavigation().stop();
+	}
+	
+	@Override
 	public void registerControllers(AnimationData data)
 	{
 		data.addAnimationController(createAnimation("walkArmsAnimation", 0.3, this::walkArmsAnimation));

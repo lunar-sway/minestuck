@@ -29,7 +29,6 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 		super(type, world, 7);
 		this.attackDelay = 14;
 		this.attackRecovery = 16;
-		this.canMoveWhileAttacking = true;
 	}
 	
 	public static AttributeModifierMap.MutableAttribute lichAttributes()

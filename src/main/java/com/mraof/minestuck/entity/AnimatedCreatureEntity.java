@@ -32,11 +32,6 @@ public abstract class AnimatedCreatureEntity extends CreatureEntity implements I
 	 */
 	protected int attackRecovery;
 	
-	/**
-	 * Will stop the entity while performing its attack animation
-	 */
-	protected boolean canMoveWhileAttacking = false;
-	
 	protected AnimatedCreatureEntity(EntityType<? extends CreatureEntity> type, World world)
 	{
 		super(type, world);
@@ -209,13 +204,9 @@ public abstract class AnimatedCreatureEntity extends CreatureEntity implements I
 		protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr)
 		{
 			double reach = this.getAttackReachSqr(enemy);
-			if(distToEnemySqr <= reach && this.ticksUntilNextAttack <= 0)
+			if(distToEnemySqr <= reach && this.isTimeToAttack())
 			{
 				this.resetAttackCooldown();
-				if(!this.entity.canMoveWhileAttacking)
-				{
-					this.mob.getNavigation().stop();
-				}
 				entity.startAttack();
 			}
 		}

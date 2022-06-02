@@ -99,6 +99,13 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 	}
 	
 	@Override
+	protected void onAttackStart()
+	{
+		// Will stop the entity while performing its attack animation
+		this.getNavigation().stop();
+	}
+	
+	@Override
 	public boolean canBeCollidedWith()
 	{
 		return false;

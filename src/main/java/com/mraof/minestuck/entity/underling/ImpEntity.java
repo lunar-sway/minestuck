@@ -87,6 +87,13 @@ public class ImpEntity extends UnderlingEntity implements IAnimatable
 	}
 	
 	@Override
+	protected void onAttackStart()
+	{
+		// Will stop the entity while performing its attack animation
+		this.getNavigation().stop();
+	}
+	
+	@Override
 	protected boolean isAppropriateTarget(LivingEntity entity)
 	{
 		if(entity instanceof ServerPlayerEntity)
