@@ -20,6 +20,8 @@ import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 
+import java.util.UUID;
+
 public class LichEntity extends UnderlingEntity implements IAnimatable
 {
 	public LichEntity(EntityType<? extends LichEntity> type, World world)
@@ -85,7 +87,8 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 		}
 	}
 	
-	private static final AttributeModifier RESISTANCE_MODIFIER_ATTACKING = new AttributeModifier("Attacking resistance boost", 1, AttributeModifier.Operation.ADDITION);
+	private static final UUID RESISTANCE_MODIFIER_ATTACKING_UUID = UUID.fromString("7f03c94c-e287-11ec-8fea-0242ac120002");
+	private static final AttributeModifier RESISTANCE_MODIFIER_ATTACKING = new AttributeModifier(RESISTANCE_MODIFIER_ATTACKING_UUID, "Attacking resistance boost", 1, AttributeModifier.Operation.ADDITION);
 	
 	@Override
 	protected void onAttackStart()
