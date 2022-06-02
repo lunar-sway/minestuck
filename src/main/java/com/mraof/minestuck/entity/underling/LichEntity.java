@@ -4,6 +4,7 @@ import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.player.Echeladder;
+import com.mraof.minestuck.util.AnimationUtil;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -108,9 +109,9 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 	@Override
 	public void registerControllers(AnimationData data)
 	{
-		data.addAnimationController(createAnimation(this, "walkAnimation", 1, LichEntity::walkAnimation));
-		data.addAnimationController(createAnimation(this, "deathAnimation", 1, LichEntity::deathAnimation));
-		data.addAnimationController(createAnimation(this, "swingAnimation", 0.8, LichEntity::swingAnimation));
+		data.addAnimationController(AnimationUtil.createAnimation(this, "walkAnimation", 1, LichEntity::walkAnimation));
+		data.addAnimationController(AnimationUtil.createAnimation(this, "deathAnimation", 1, LichEntity::deathAnimation));
+		data.addAnimationController(AnimationUtil.createAnimation(this, "swingAnimation", 0.8, LichEntity::swingAnimation));
 	}
 	
 	private static PlayState walkAnimation(AnimationEvent<LichEntity> event)

@@ -4,6 +4,7 @@ import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.player.Echeladder;
+import com.mraof.minestuck.util.AnimationUtil;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -94,10 +95,10 @@ public class OgreEntity extends UnderlingEntity
 	@Override
 	public void registerControllers(AnimationData data)
 	{
-		data.addAnimationController(createAnimation(this, "walkArmsAnimation", 0.3, OgreEntity::walkArmsAnimation));
-		data.addAnimationController(createAnimation(this, "walkAnimation", 0.3, OgreEntity::walkAnimation));
-		data.addAnimationController(createAnimation(this, "swingAnimation", 0.5, OgreEntity::swingAnimation));
-		data.addAnimationController(createAnimation(this, "deathAnimation", 0.85, OgreEntity::deathAnimation));
+		data.addAnimationController(AnimationUtil.createAnimation(this, "walkArmsAnimation", 0.3, OgreEntity::walkArmsAnimation));
+		data.addAnimationController(AnimationUtil.createAnimation(this, "walkAnimation", 0.3, OgreEntity::walkAnimation));
+		data.addAnimationController(AnimationUtil.createAnimation(this, "swingAnimation", 0.5, OgreEntity::swingAnimation));
+		data.addAnimationController(AnimationUtil.createAnimation(this, "deathAnimation", 0.85, OgreEntity::deathAnimation));
 	}
 	
 	private static PlayState walkAnimation(AnimationEvent<OgreEntity> event)

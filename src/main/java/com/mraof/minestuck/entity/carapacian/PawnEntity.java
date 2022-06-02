@@ -1,6 +1,7 @@
 package com.mraof.minestuck.entity.carapacian;
 
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.util.AnimationUtil;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
@@ -212,10 +213,10 @@ public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IM
 	@Override
 	public void registerControllers(AnimationData data)
 	{
-		data.addAnimationController(createAnimation(this, "walkArmsAnimation", 1, PawnEntity::walkArmsAnimation));
-		data.addAnimationController(createAnimation(this, "walkAnimation", 1, PawnEntity::walkAnimation));
-		data.addAnimationController(createAnimation(this, "deathAnimation", 1, PawnEntity::deathAnimation));
-		data.addAnimationController(createAnimation(this, "swingAnimation", 2, PawnEntity::swingAnimation));
+		data.addAnimationController(AnimationUtil.createAnimation(this, "walkArmsAnimation", 1, PawnEntity::walkArmsAnimation));
+		data.addAnimationController(AnimationUtil.createAnimation(this, "walkAnimation", 1, PawnEntity::walkAnimation));
+		data.addAnimationController(AnimationUtil.createAnimation(this, "deathAnimation", 1, PawnEntity::deathAnimation));
+		data.addAnimationController(AnimationUtil.createAnimation(this, "swingAnimation", 2, PawnEntity::swingAnimation));
 	}
 	
 	private static PlayState walkAnimation(AnimationEvent<PawnEntity> event)

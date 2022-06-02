@@ -6,8 +6,6 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.world.World;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.controller.AnimationController;
 
 /**
  * Abstract class that provide a way to track an action with optional durations for animated entities.
@@ -46,21 +44,6 @@ public abstract class AnimatedCreatureEntity extends CreatureEntity
 	protected void endTimedAction(Actions action)
 	{
 		this.setCurrentAction(Actions.NONE);
-	}
-	
-	/**
-	 * Helper to create a new animation controller with custom animation speed
-	 *
-	 * @param name      name of this controller
-	 * @param speed     animation speed - default speed is 1
-	 * @param predicate the animation predicate
-	 * @return a configured animation controller with speed
-	 */
-	protected static <T extends IAnimatable> AnimationController<T> createAnimation(T entity, String name, double speed, AnimationController.IAnimationPredicate<T> predicate)
-	{
-		AnimationController<T> controller = new AnimationController<>(entity, name, 0, predicate);
-		controller.setAnimationSpeed(speed);
-		return controller;
 	}
 	
 	/**

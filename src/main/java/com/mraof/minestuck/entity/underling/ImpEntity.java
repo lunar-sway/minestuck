@@ -4,6 +4,7 @@ import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.player.Echeladder;
+import com.mraof.minestuck.util.AnimationUtil;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.Entity;
@@ -107,11 +108,11 @@ public class ImpEntity extends UnderlingEntity implements IAnimatable
 	@Override
 	public void registerControllers(AnimationData data)
 	{
-		data.addAnimationController(createAnimation(this, "idleAnimation", 1, ImpEntity::idleAnimation));
-		data.addAnimationController(createAnimation(this, "walkArmsAnimation", 1, ImpEntity::walkArmsAnimation));
-		data.addAnimationController(createAnimation(this, "walkAnimation", 0.5, ImpEntity::walkAnimation));
-		data.addAnimationController(createAnimation(this, "deathAnimation", 0.7, ImpEntity::deathAnimation));
-		data.addAnimationController(createAnimation(this, "swingAnimation", 2, ImpEntity::swingAnimation));
+		data.addAnimationController(AnimationUtil.createAnimation(this, "idleAnimation", 1, ImpEntity::idleAnimation));
+		data.addAnimationController(AnimationUtil.createAnimation(this, "walkArmsAnimation", 1, ImpEntity::walkArmsAnimation));
+		data.addAnimationController(AnimationUtil.createAnimation(this, "walkAnimation", 0.5, ImpEntity::walkAnimation));
+		data.addAnimationController(AnimationUtil.createAnimation(this, "deathAnimation", 0.7, ImpEntity::deathAnimation));
+		data.addAnimationController(AnimationUtil.createAnimation(this, "swingAnimation", 2, ImpEntity::swingAnimation));
 	}
 	
 	private static PlayState idleAnimation(AnimationEvent<ImpEntity> event)

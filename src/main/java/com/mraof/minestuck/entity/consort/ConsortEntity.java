@@ -8,6 +8,7 @@ import com.mraof.minestuck.inventory.ConsortMerchantContainer;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.util.AnimationUtil;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.*;
@@ -420,10 +421,10 @@ public class ConsortEntity extends AnimatedCreatureEntity implements IContainerP
 	@Override
 	public void registerControllers(AnimationData data)
 	{
-		data.addAnimationController(createAnimation(this, "walkAnimation", 1, ConsortEntity::walkAnimation));
-		data.addAnimationController(createAnimation(this, "armsAnimation", 1, ConsortEntity::armsAnimation));
-		data.addAnimationController(createAnimation(this, "deathAnimation", 1, ConsortEntity::deathAnimation));
-		data.addAnimationController(createAnimation(this, "actionAnimation", 1, ConsortEntity::actionAnimation));
+		data.addAnimationController(AnimationUtil.createAnimation(this, "walkAnimation", 1, ConsortEntity::walkAnimation));
+		data.addAnimationController(AnimationUtil.createAnimation(this, "armsAnimation", 1, ConsortEntity::armsAnimation));
+		data.addAnimationController(AnimationUtil.createAnimation(this, "deathAnimation", 1, ConsortEntity::deathAnimation));
+		data.addAnimationController(AnimationUtil.createAnimation(this, "actionAnimation", 1, ConsortEntity::actionAnimation));
 	}
 	
 	private static PlayState walkAnimation(AnimationEvent<ConsortEntity> event)
