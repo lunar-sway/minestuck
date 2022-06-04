@@ -32,7 +32,7 @@ public class SendificatorContainer extends MachineContainer
 	
 	public SendificatorContainer(int windowId, PlayerInventory playerInventory, PacketBuffer buffer)
 	{
-		this(MSContainerTypes.SENDIFICATOR, windowId, playerInventory, new ItemStackHandler(3), new IntArray(3), IntReferenceHolder.standalone(), IWorldPosCallable.NULL, buffer.readBlockPos());
+		this(MSContainerTypes.SENDIFICATOR, windowId, playerInventory, new ItemStackHandler(2), new IntArray(3), IntReferenceHolder.standalone(), IWorldPosCallable.NULL, buffer.readBlockPos());
 	}
 	
 	public SendificatorContainer(int windowId, PlayerInventory playerInventory, IItemHandler inventory, IIntArray parameters, IntReferenceHolder fuelHolder, IWorldPosCallable position, BlockPos machinePos)

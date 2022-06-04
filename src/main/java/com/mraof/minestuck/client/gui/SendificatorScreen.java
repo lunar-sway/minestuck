@@ -66,16 +66,22 @@ public class SendificatorScreen extends MachineScreen<SendificatorContainer>
 		
 		if(te != null)
 		{
+			BlockPos tePos = te.getDestinationBlockPos();
+			if(tePos == null)
+			{
+				tePos = new BlockPos(0, 64, 0);
+			}
+
 			this.destinationTextFieldX = new TextFieldWidget(this.font, this.width / 2 - 10, 50, 35, 15, new StringTextComponent("X value of destination block pos")); //TODO make these translatable
-			this.destinationTextFieldX.setValue(String.valueOf(te.getDestinationBlockPos().getX()));
+			this.destinationTextFieldX.setValue(String.valueOf(tePos.getX()));
 			addButton(destinationTextFieldX);
 			
 			this.destinationTextFieldY = new TextFieldWidget(this.font, this.width / 2 + 25, 50, 20, 15, new StringTextComponent("Y value of destination block pos"));
-			this.destinationTextFieldY.setValue(String.valueOf(te.getDestinationBlockPos().getY()));
+			this.destinationTextFieldY.setValue(String.valueOf(tePos.getY()));
 			addButton(destinationTextFieldY);
 			
 			this.destinationTextFieldZ = new TextFieldWidget(this.font, this.width / 2 + 45, 50, 35, 15, new StringTextComponent("Z value of destination block pos"));
-			this.destinationTextFieldZ.setValue(String.valueOf(te.getDestinationBlockPos().getZ()));
+			this.destinationTextFieldZ.setValue(String.valueOf(tePos.getZ()));
 			addButton(destinationTextFieldZ);
 			
 			addButton(new ExtendedButton((width - imageWidth) / 2 + 105, 80, 50, 12, new StringTextComponent("Update"), button -> updateDestinationPos()));
@@ -98,10 +104,10 @@ public class SendificatorScreen extends MachineScreen<SendificatorContainer>
 	protected void renderLabels(MatrixStack matrixStack, int mouseX, int mouseY)
 	{
 		//draws the name of the TE
-		font.draw(matrixStack, this.title.getString(), 8, 6, 4210752);
+		font.draw(matrixStack, this.title, 8, 6, 0x404040);
 		
 		//draws "Inventory" or your regional equivalent
-		font.draw(matrixStack, this.inventory.getDisplayName().getString(), 8, imageHeight - 96 + 2, 4210752);
+		font.draw(matrixStack, this.inventory.getDisplayName(), 8, imageHeight - 96 + 2, 0x404040);
 	}
 	
 	@Override
