@@ -15,6 +15,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.util.Constants;
 
 import java.util.Optional;
 
@@ -23,32 +24,32 @@ public class SummonerTileEntity extends TileEntity implements ITickableTileEntit
 	private EntityType<?> summonType;
 	private int cooldownTimer;
 	private int summonRange = 8; //default is 8, but can be set(via gui) between 1 and 64
-	
+
 	public SummonerTileEntity()
 	{
 		super(MSTileEntityTypes.SUMMONER.get());
 	}
-	
+
 	@Override
 	public void tick()
 	{
 		if(level == null)
 			return;
-		
+
 		if(cooldownTimer >= 200) //summoner has a cooldown of 10 seconds(10 sec * 20 tick) to prevent entity spamming
 		{
 			cooldownTimer = 0;
 		}
-		
+
 		if(cooldownTimer != 0)
 			cooldownTimer++;
 	}
-	
+
 	public void summonEntity(World worldIn, BlockPos summonerBlockPos, EntityType<?> type, boolean triggerActivate, boolean playParticles)
 	{
 		if(type == null)
 			throw new IllegalStateException("SummonerTileEntity unable to create a new entity. Entity factory returned null!");
-		
+
 		if(cooldownTimer == 0 && worldIn instanceof IServerWorld)
 		{
 			int iterateTracker = 0;
@@ -64,7 +65,7 @@ public class SummonerTileEntity extends TileEntity implements ITickableTileEntit
 				{
 					BlockPos newBlockPos = new BlockPos(newPosX, newPosY, newPosZ);
 					type.spawn((ServerWorld) worldIn, null, null, null, newBlockPos, SpawnReason.SPAWN_EGG, true, true); //TODO mob spawning conforms to light level/spawning surface/other conditions of normal generation which limits undead mob use
-					
+
 					if(playParticles)
 					{
 						//TODO caused a crash, bring back in later
@@ -76,76 +77,78 @@ public class SummonerTileEntity extends TileEntity implements ITickableTileEntit
 					break;
 				}
 			}
-			
+
 			if(iterateTracker == 59)
 				worldIn.getBlockTicks().scheduleTick(new BlockPos(summonerBlockPos), worldIn.getBlockState(summonerBlockPos).getBlock(), 30); //if a valid resting spot was not found in the 59 checks of the for loop then the block will be reset and will try again in 1.5 seconds
 			else
 			{
 				if(triggerActivate)
 					worldIn.setBlockAndUpdate(getBlockPos(), getBlockState().setValue(SummonerBlock.TRIGGERED, true));
-				
+
 				cooldownTimer = 1;
 			}
 		}
 	}
-	
+
 	public void setSummonedEntity(EntityType<?> entityTypeIn)
 	{
 		this.summonType = entityTypeIn;
 	}
-	
+
 	public EntityType<?> getSummonedEntity()
 	{
 		if(summonType == null)
 			summonType = MSEntityTypes.IMP;
 		return this.summonType;
 	}
-	
+
 	public void setSummonRange(int rangeIn)
 	{
-		this.summonRange = rangeIn;
+		this.summonRange = MathHelper.clamp(rangeIn, 1, 64);
 	}
-	
+
 	public int getSummonRange()
 	{
 		return MathHelper.clamp(this.summonRange, 1, 64);
 	}
-	
+
 	@Override
 	public void load(BlockState state, CompoundNBT compound)
 	{
 		super.load(state, compound);
-		
+
 		cooldownTimer = compound.getInt("cooldownTimer");
-		summonRange = compound.getInt("summonRange");
+		if(compound.contains("summonRange", Constants.NBT.TAG_ANY_NUMERIC))
+			this.setSummonRange(compound.getInt("summonRange"));
+        else this.setSummonRange(16); //16 was previously the default
 		Optional<EntityType<?>> attemptedSummonType = EntityType.byString(compound.getString("summonType"));
 		attemptedSummonType.ifPresent(entityType -> summonType = entityType);
 	}
-	
+
 	@Override
 	public CompoundNBT save(CompoundNBT compound)
 	{
 		super.save(compound);
-		
+
 		compound.putInt("cooldownTimer", cooldownTimer);
 		compound.putInt("summonRange", summonRange);
 		compound.putString("summonType", EntityType.getKey(getSummonedEntity()).toString());
-		
+
 		return compound;
 	}
-	
+
 	@Override
 	public CompoundNBT getUpdateTag()
 	{
 		return this.save(new CompoundNBT());
 	}
-	
+
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket()
 	{
 		return new SUpdateTileEntityPacket(getBlockPos(), 2, getUpdateTag());
 	}
-	
+
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
 	{
