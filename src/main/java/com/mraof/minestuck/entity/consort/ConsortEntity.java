@@ -2,7 +2,8 @@ package com.mraof.minestuck.entity.consort;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
-import com.mraof.minestuck.entity.SimpleTexturedEntity;
+import com.mraof.minestuck.entity.AnimatedCreatureEntity;
+import com.mraof.minestuck.entity.ai.AnimatedPanicGoal;
 import com.mraof.minestuck.inventory.ConsortMerchantContainer;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.player.IdentifierHandler;
@@ -29,17 +30,20 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.*;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.FakePlayer;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.manager.AnimationData;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-public class ConsortEntity extends SimpleTexturedEntity implements IContainerProvider
+public class ConsortEntity extends AnimatedCreatureEntity implements IContainerProvider
 {
-	
 	private final EnumConsort consortType;
-	
 	private boolean hasHadMessage = false;
 	ConsortDialogue.DialogueWrapper message;
 	int messageTicksLeft;
@@ -50,7 +54,7 @@ public class ConsortEntity extends SimpleTexturedEntity implements IContainerPro
 	boolean visitedSkaia;
 	MessageType.DelayMessage updatingMessage; //TODO Change to an interface/array if more message components need tick updates
 	public ConsortMerchantInventory stocks;
-	private int eventTimer = -1;	//TODO use the interface mentioned in the todo above to implement consort explosion instead
+	private int eventTimer = -1;    //TODO use the interface mentioned in the todo above to implement consort explosion instead
 	
 	public ConsortEntity(EnumConsort consortType, EntityType<? extends ConsortEntity> type, World world)
 	{
@@ -62,15 +66,15 @@ public class ConsortEntity extends SimpleTexturedEntity implements IContainerPro
 	
 	public static AttributeModifierMap.MutableAttribute consortAttributes()
 	{
-		return MobEntity.createMobAttributes().add(Attributes.MAX_HEALTH, 10).add(Attributes.MOVEMENT_SPEED, 0.25);
+		return MobEntity.createMobAttributes().add(Attributes.MAX_HEALTH, 10).add(Attributes.MOVEMENT_SPEED, 0.35);
 	}
 	
 	@Override
 	protected void registerGoals()
 	{
 		goalSelector.addGoal(0, new SwimGoal(this));
-		goalSelector.addGoal(1, new PanicGoal(this, 1.0D));
-		goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 0.6F));
+		goalSelector.addGoal(1, new AnimatedPanicGoal(this, 1.4D));
+		goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 1F));
 		goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 8.0F));
 		goalSelector.addGoal(7, new LookRandomlyGoal(this));
 		goalSelector.addGoal(4, new AvoidEntityGoal<>(this, PlayerEntity.class, 16F, 1.0D, 1.4D, this::shouldFleeFrom));
@@ -115,6 +119,8 @@ public class ConsortEntity extends SimpleTexturedEntity implements IContainerPro
 					if(text != null)
 						player.sendMessage(text, Util.NIL_UUID);
 					handleConsortRepFromTalking(serverPlayer);
+					setCurrentAction(Actions.TALK, 40); // TODO adjust as needed - 2 secs for now
+					this.getNavigation().stop();
 					MSCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, message.getString(), this);
 				} catch(Exception e)
 				{
@@ -192,7 +198,7 @@ public class ConsortEntity extends SimpleTexturedEntity implements IContainerPro
 	
 	private void explode()
 	{
-		if (!this.level.isClientSide)
+		if(!this.level.isClientSide)
 		{
 			boolean flag = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this);
 			this.dead = true;
@@ -297,7 +303,7 @@ public class ConsortEntity extends SimpleTexturedEntity implements IContainerPro
 		{
 			merchantType = EnumConsort.MerchantType.SHADY;
 			if(hasRestriction())
-				restrictTo(getRestrictCenter(), (int) (getRestrictRadius()*0.4F));
+				restrictTo(getRestrictCenter(), (int) (getRestrictRadius() * 0.4F));
 		}
 		
 		homeDimension = level.dimension();
@@ -401,5 +407,67 @@ public class ConsortEntity extends SimpleTexturedEntity implements IContainerPro
 	public static boolean canConsortSpawnOn(EntityType<ConsortEntity> entityType, IWorld world, SpawnReason reason, BlockPos pos, Random random)
 	{
 		return true;
+	}
+	
+	@Override
+	public void registerControllers(AnimationData data)
+	{
+		data.addAnimationController(createAnimation("walkAnimation", 1, this::walkAnimation));
+		data.addAnimationController(createAnimation("armsAnimation", 1, this::armsAnimation));
+		data.addAnimationController(createAnimation("deathAnimation", 1, this::deathAnimation));
+		data.addAnimationController(createAnimation("actionAnimation", 1, this::actionAnimation));
+	}
+	
+	private <E extends IAnimatable> PlayState walkAnimation(AnimationEvent<E> event)
+	{
+		if(!event.isMoving() || getCurrentAction() != Actions.NONE)
+		{
+			return PlayState.STOP;
+		}
+		
+		event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", true));
+		return PlayState.CONTINUE;
+	}
+	
+	private <E extends IAnimatable> PlayState armsAnimation(AnimationEvent<E> event)
+	{
+		if(!event.isMoving() || getCurrentAction() != Actions.NONE)
+		{
+			if(this.getConsortType() == EnumConsort.TURTLE)
+			{ // eeeeeeeeeeehhh maybe just fix the turtle anims instead
+				event.getController().setAnimation(new AnimationBuilder().addAnimation("armfix", true));
+				return PlayState.CONTINUE;
+			}
+			return PlayState.STOP;
+		}
+		
+		event.getController().setAnimation(new AnimationBuilder().addAnimation("walkarms", true));
+		return PlayState.CONTINUE;
+	}
+	
+	private <E extends IAnimatable> PlayState deathAnimation(AnimationEvent<E> event)
+	{
+		if(dead)
+		{
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("die", false));
+			return PlayState.CONTINUE;
+		}
+		return PlayState.STOP;
+	}
+	
+	private <E extends IAnimatable> PlayState actionAnimation(AnimationEvent<E> event)
+	{
+		Actions action = getCurrentAction();
+		if(action == Actions.TALK)
+		{
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("talk", true));
+			return PlayState.CONTINUE;
+		}
+		if(action == Actions.PANIC)
+		{
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("panic", false).addAnimation("panicrun", true));
+			return PlayState.CONTINUE;
+		}
+		return PlayState.STOP;
 	}
 }

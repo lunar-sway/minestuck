@@ -39,10 +39,13 @@ public class HeatLandType extends TerrainLandType
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
 		registry.setGroundState(Blocks.NETHERRACK.defaultBlockState(), OreFeatureConfig.FillerBlockType.NETHER_ORE_REPLACEABLES);
-		registry.setBlockState("upper", MSBlocks.BLACK_STONE.defaultBlockState());
+		registry.setBlockState("upper", Blocks.NETHERRACK.defaultBlockState());
 		registry.setBlockState("ocean", Blocks.LAVA.defaultBlockState());
-		registry.setBlockState("structure_primary", Blocks.NETHER_BRICKS.defaultBlockState());
-		registry.setBlockState("structure_primary_stairs", Blocks.NETHER_BRICK_STAIRS.defaultBlockState());
+		registry.setBlockState("structure_primary", MSBlocks.BLACK_STONE_BRICKS.defaultBlockState());
+		registry.setBlockState("structure_primary_decorative", MSBlocks.CHISELED_BLACK_STONE_BRICKS.defaultBlockState());
+		registry.setBlockState("structure_primary_cracked", MSBlocks.CRACKED_BLACK_STONE_BRICKS.defaultBlockState());
+		registry.setBlockState("structure_primary_column", MSBlocks.BLACK_STONE_COLUMN.defaultBlockState());
+		registry.setBlockState("structure_primary_stairs", MSBlocks.BLACK_STONE_BRICK_STAIRS.defaultBlockState());
 		registry.setBlockState("structure_secondary", MSBlocks.CAST_IRON.defaultBlockState());
 		registry.setBlockState("structure_secondary_decorative", MSBlocks.CHISELED_CAST_IRON.defaultBlockState());
 		registry.setBlockState("structure_secondary_stairs", MSBlocks.CAST_IRON_STAIRS.defaultBlockState());

@@ -1,21 +1,14 @@
 package com.mraof.minestuck.client.renderer.tileentity;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mraof.minestuck.client.model.machine.AlchemiterModel;
 import com.mraof.minestuck.tileentity.machine.AlchemiterTileEntity;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import software.bernie.geckolib3.renderers.geo.GeoBlockRenderer;
 
-public class AlchemiterRenderer extends TileEntityRenderer<AlchemiterTileEntity>
+public class AlchemiterRenderer extends GeoBlockRenderer<AlchemiterTileEntity>
 {
-
-	public AlchemiterRenderer(TileEntityRendererDispatcher rendererDispatcherIn) {
-		super(rendererDispatcherIn);
-	}
-
-	@Override
-	public void render(AlchemiterTileEntity tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
-
-		//ModelLoaderRegistry.getModel()
+	public AlchemiterRenderer(TileEntityRendererDispatcher rendererDispatcherIn)
+	{
+		super(rendererDispatcherIn, new AlchemiterModel());
 	}
 }
