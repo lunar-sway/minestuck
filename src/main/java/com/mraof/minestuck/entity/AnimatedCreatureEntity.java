@@ -41,6 +41,11 @@ public abstract class AnimatedCreatureEntity extends CreatureEntity
 		}
 	}
 	
+	/**
+	 * Gets called when the duration of a timed action has run out.
+	 * Default behavior is to set the action to NONE, but this function can be overridden to add behavior for specific actions.
+	 * @param action the action whose duration ran out.
+	 */
 	protected void endTimedAction(Actions action)
 	{
 		this.setCurrentAction(Actions.NONE);

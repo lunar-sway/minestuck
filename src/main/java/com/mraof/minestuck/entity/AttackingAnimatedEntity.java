@@ -82,7 +82,8 @@ public abstract class AttackingAnimatedEntity extends AnimatedCreatureEntity
 	}
 	
 	/**
-	 * Is called when an attack starts. Can be extended to remove effects once an attack has ended.
+	 * Is called when an attack ends. Can be extended to remove effects once an attack has ended.
+	 * The end of an attack does not necessarily equate to an attack hit.
 	 */
 	protected void onAttackEnd()
 	{
