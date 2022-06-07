@@ -104,7 +104,7 @@ public class TotemLatheBlock extends MultiMachineBlock
 	
 	public static class DowelRod extends TotemLatheBlock
 	{
-		public static final EnumProperty<EnumDowelType> DOWEL = MSProperties.DOWEL;
+		public static final EnumProperty<EnumDowelType> DOWEL = MSProperties.DOWEL_OR_NONE;
 		protected final Map<Direction, VoxelShape> carvedShape;
 		protected final Map<Direction, VoxelShape> dowelShape;
 		

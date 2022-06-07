@@ -165,7 +165,7 @@ public class TotemLatheTileEntity extends TileEntity implements ITickableTileEnt
 			handleSlotClick(player, working);
 		
 		//if they have clicked the dowel block
-		if(clickedState.getBlock() == MSBlocks.TOTEM_LATHE.DOWEL_ROD.get() || clickedState.getBlock() == MSBlocks.TOTEM_LATHE.DOWEL_ROD.get())
+		if(clickedState.getBlock() == MSBlocks.TOTEM_LATHE.DOWEL_ROD.get())
 			handleDowelClick(player, working);
 		
 		//if they have clicked on the lever
