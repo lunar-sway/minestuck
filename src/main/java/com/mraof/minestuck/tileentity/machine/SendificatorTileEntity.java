@@ -183,8 +183,8 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 		return fuel > 0 && !itemHandler.getStackInSlot(0).isEmpty();
 	}
 	
-	private final LazyOptional<IItemHandler> upHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 0, 1)); //sendificated item slot
-	private final LazyOptional<IItemHandler> downHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 1, 2)); //uranium fuel slot
+	private final LazyOptional<IItemHandler> inputHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 0, 1)); //sendificated item slot
+	private final LazyOptional<IItemHandler> fuelHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 1, 2)); //uranium fuel slot
 	
 	@Nonnull
 	@Override
@@ -192,7 +192,12 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 	{
 		if(cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && side != null)
 		{
-			return side == Direction.DOWN ? downHandler.cast() : upHandler.cast();
+			if(side == Direction.UP)
+				return inputHandler.cast();
+			else if(side == Direction.DOWN)
+				return LazyOptional.empty();
+			else
+				return fuelHandler.cast(); //will fill the sendificator with fuel if fed from the sides
 		}
 		return super.getCapability(cap, side);
 	}

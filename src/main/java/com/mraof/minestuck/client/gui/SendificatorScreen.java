@@ -34,6 +34,9 @@ public class SendificatorScreen extends MachineScreen<SendificatorContainer>
 	private TextFieldWidget destinationTextFieldX;
 	private TextFieldWidget destinationTextFieldY;
 	private TextFieldWidget destinationTextFieldZ;
+	private ExtendedButton updateButton;
+	private ExtendedButton goButton;
+	private BlockPos startingDestPos;
 	
 	
 	SendificatorScreen(SendificatorContainer screenContainer, PlayerInventory inv, ITextComponent titleIn)
@@ -66,37 +69,46 @@ public class SendificatorScreen extends MachineScreen<SendificatorContainer>
 		super.init();
 		
 		int yOffset = (height - imageHeight) / 2;
-		if(te != null)
-		{
-			BlockPos tePos = te.getDestinationBlockPos();
-			
-			this.destinationTextFieldX = new TextFieldWidget(this.font, this.width / 2 - 10, yOffset + 10, 35, 15, new StringTextComponent("X value of destination block pos")); //TODO make these translatable
-			addButton(destinationTextFieldX);
-			
-			this.destinationTextFieldY = new TextFieldWidget(this.font, this.width / 2 + 25, yOffset + 10, 20, 15, new StringTextComponent("Y value of destination block pos"));
-			addButton(destinationTextFieldY);
-			
-			this.destinationTextFieldZ = new TextFieldWidget(this.font, this.width / 2 + 45, yOffset + 10, 35, 15, new StringTextComponent("Z value of destination block pos"));
-			addButton(destinationTextFieldZ);
-			
-			if(tePos != null)
-			{
-				this.destinationTextFieldX.setValue(String.valueOf(tePos.getX()));
-				this.destinationTextFieldY.setValue(String.valueOf(tePos.getY()));
-				this.destinationTextFieldZ.setValue(String.valueOf(tePos.getZ()));
-			}
-			
-			addButton(new ExtendedButton((width - imageWidth) / 2 + 105, yOffset + 40, 50, 12, new StringTextComponent("Update"), button -> updateDestinationPos()));
-		}
+		
+		updateButton = addButton(new ExtendedButton((width - imageWidth) / 2 + 105, yOffset + 40, 50, 12, new StringTextComponent("Update"), button -> updateDestinationPos()));
+		
+		this.destinationTextFieldX = new TextFieldWidget(this.font, this.width / 2 - 10, yOffset + 10, 35, 15, new StringTextComponent("X value of destination block pos")); //TODO make these translatable
+		addButton(destinationTextFieldX);
+		destinationTextFieldX.setResponder(s -> onTextFieldChange());
+		
+		this.destinationTextFieldY = new TextFieldWidget(this.font, this.width / 2 + 25, yOffset + 10, 20, 15, new StringTextComponent("Y value of destination block pos"));
+		addButton(destinationTextFieldY);
+		destinationTextFieldY.setResponder(s -> onTextFieldChange());
+		
+		this.destinationTextFieldZ = new TextFieldWidget(this.font, this.width / 2 + 45, yOffset + 10, 35, 15, new StringTextComponent("Z value of destination block pos"));
+		addButton(destinationTextFieldZ);
+		destinationTextFieldZ.setResponder(s -> onTextFieldChange());
 		
 		//activates processContents() in SendificatorTileEntity
 		goButton = new GoButton((width - imageWidth) / 2 + goX, yOffset + goY, 30, 12, new StringTextComponent(menu.overrideStop() ? "STOP" : "GO"));
 		addButton(goButton);
+		
+		BlockPos tePos = te != null ? te.getDestinationBlockPos() : null;
+		
+		if(tePos != null)
+		{
+			this.destinationTextFieldX.setValue(String.valueOf(tePos.getX()));
+			this.destinationTextFieldY.setValue(String.valueOf(tePos.getY()));
+			this.destinationTextFieldZ.setValue(String.valueOf(tePos.getZ()));
+			
+			startingDestPos = tePos;
+			
+			goButton.active = true;
+		} else
+			goButton.active = false;
+		
+		updateButton.active = false;
 	}
 	
 	@Override
 	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
 	{
+		goButton.active = te != null && te.getDestinationBlockPos() != null;
 		this.renderBackground(matrixStack);
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
 		this.renderTooltip(matrixStack, mouseX, mouseY);
@@ -144,22 +156,34 @@ public class SendificatorScreen extends MachineScreen<SendificatorContainer>
 	
 	private void updateDestinationPos()
 	{
-		if(te != null)
-			MSPacketHandler.sendToServer(new SendificatorPacket(parseBlockPos(), te.getBlockPos()));
+		MSPacketHandler.sendToServer(new SendificatorPacket(parseBlockPos()));
+		updateButton.active = false;
+		goButton.active = true;
 	}
 	
-	private static int parseInt(TextFieldWidget widget)
+	/**
+	 * Sets the Update button to active if a valid change has occurred
+	 */
+	private void onTextFieldChange()
 	{
 		try
 		{
-			return Integer.parseInt(widget.getValue());
+			if(!parseBlockPos().equals(startingDestPos)) //prevents it from becoming active during resizing or if non-changing modifications are made to the text fields
+				updateButton.active = true;
 		} catch(NumberFormatException ignored)
 		{
-			return 0;
+			updateButton.active = false;
 		}
 	}
 	
+	private static int parseInt(TextFieldWidget widget)
+			throws NumberFormatException
+	{
+		return Integer.parseInt(widget.getValue());
+	}
+	
 	private BlockPos parseBlockPos()
+			throws NumberFormatException
 	{
 		int x = parseInt(destinationTextFieldX);
 		int y = parseInt(destinationTextFieldY);
