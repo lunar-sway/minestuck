@@ -35,7 +35,7 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 	public static final int FUEL_INCREASE = 32;
 	public static final short MAX_FUEL = 128;
 	private short fuel = 0;
-
+	
 	@Nullable
 	private BlockPos destBlockPos;
 	
@@ -59,7 +59,7 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 		super(MSTileEntityTypes.SENDIFICATOR.get());
 		maxProgress = DEFAULT_MAX_PROGRESS;
 	}
-
+	
 	@Nullable
 	public BlockPos getDestinationBlockPos()
 	{
@@ -81,7 +81,7 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 	public void load(BlockState state, CompoundNBT compound)
 	{
 		super.load(state, compound);
-
+		
 		if(compound.contains("destX") && compound.contains("destY") && compound.contains("destZ"))
 		{
 			int destX = compound.getInt("destX");
@@ -167,7 +167,7 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 						ItemStack sentStack = itemHandler.extractItem(0, 64, false);
 						ItemEntity itemEntity = new ItemEntity(level, destinationPos.getX(), destinationPos.getY(), destinationPos.getZ(), sentStack);
 						level.addFreshEntity(itemEntity);
-
+						
 						fuel = (short) (fuel - 8);
 					}
 				}

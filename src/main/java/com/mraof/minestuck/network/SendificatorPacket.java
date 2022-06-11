@@ -12,28 +12,28 @@ public class SendificatorPacket implements PlayToServerPacket
 {
 	private final BlockPos destinationBlockPos;
 	private final BlockPos tileBlockPos;
-
+	
 	public SendificatorPacket(BlockPos pos, BlockPos tileBlockPos)
 	{
 		this.destinationBlockPos = pos;
 		this.tileBlockPos = tileBlockPos;
 	}
-
+	
 	@Override
 	public void encode(PacketBuffer buffer)
 	{
 		buffer.writeBlockPos(destinationBlockPos);
 		buffer.writeBlockPos(tileBlockPos);
 	}
-
+	
 	public static SendificatorPacket decode(PacketBuffer buffer)
 	{
 		BlockPos destinationBlockPos = buffer.readBlockPos();
 		BlockPos tileBlockPos = buffer.readBlockPos();
-
+		
 		return new SendificatorPacket(destinationBlockPos, tileBlockPos);
 	}
-
+	
 	@Override
 	public void execute(ServerPlayerEntity player)
 	{
@@ -46,9 +46,9 @@ public class SendificatorPacket implements PlayToServerPacket
 				BlockPos tePos = tileEntity.getBlockPos();
 				if(Math.sqrt(player.distanceToSqr(tePos.getX() + 0.5, tePos.getY() + 0.5, tePos.getZ() + 0.5)) <= 8)
 				{
-                    tileEntity.setDestinationBlockPos(destinationBlockPos);
+					tileEntity.setDestinationBlockPos(destinationBlockPos);
 					//Imitates the structure block to ensure that changes are sent client-side
-                    tileEntity.setChanged();
+					tileEntity.setChanged();
 					BlockState state = player.level.getBlockState(tileBlockPos);
 					player.level.sendBlockUpdated(tileBlockPos, state, state, 3);
 				}
