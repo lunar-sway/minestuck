@@ -32,8 +32,11 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 	public static final RunType TYPE = RunType.BUTTON_OVERRIDE;
 	public static final String TITLE = "container.minestuck.sendificator";
 	public static final int DEFAULT_MAX_PROGRESS = 0;
-	public static final int FUEL_COST = 32;
-	
+	public static final int FUEL_INCREASE = 32;
+	public static final short MAX_FUEL = 128;
+	private short fuel = 0;
+
+	@Nullable
 	private BlockPos destBlockPos;
 	
 	private final IntReferenceHolder fuelHolder = new IntReferenceHolder()
@@ -51,15 +54,13 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 		}
 	};
 	
-	private short fuel = 0;
-	private static final short maxFuel = 128;
-	
 	public SendificatorTileEntity()
 	{
 		super(MSTileEntityTypes.SENDIFICATOR.get());
 		maxProgress = DEFAULT_MAX_PROGRESS;
 	}
-	
+
+	@Nullable
 	public BlockPos getDestinationBlockPos()
 	{
 		return destBlockPos;
@@ -112,7 +113,7 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 	@Override
 	protected ItemStackHandler createItemHandler()
 	{
-		return new MachineProcessTileEntity.CustomHandler(2, (index, stack) -> index == 1 ? ExtraForgeTags.Items.URANIUM_CHUNKS.contains(stack.getItem()) : index != 2);
+		return new MachineProcessTileEntity.CustomHandler(2, (index, stack) -> index == 0 || ExtraForgeTags.Items.URANIUM_CHUNKS.contains(stack.getItem()));
 	}
 	
 	@Override
@@ -131,7 +132,7 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 		
 		ItemStack fuel = itemHandler.getStackInSlot(1);
 		ItemStack input = itemHandler.getStackInSlot(0);
-		return getFuel() <= getMaxFuel() - FUEL_COST && ExtraForgeTags.Items.URANIUM_CHUNKS.contains(fuel.getItem()) || !input.isEmpty();
+		return getFuel() <= MAX_FUEL - FUEL_INCREASE && ExtraForgeTags.Items.URANIUM_CHUNKS.contains(fuel.getItem()) || !input.isEmpty();
 	}
 	
 	/**
@@ -140,13 +141,13 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 	@Override
 	public void processContents()
 	{
-		if(getFuel() <= getMaxFuel() - FUEL_COST)
+		if(getFuel() <= MAX_FUEL - FUEL_INCREASE)
 		{
 			//checks for a uranium itemstack in the lower(fuel) item slot, increases the fuel value if some is found and then removes one count from the fuel stack
 			if(ExtraForgeTags.Items.URANIUM_CHUNKS.contains(itemHandler.getStackInSlot(1).getItem()))
 			{
 				//Refill fuel
-				fuel += FUEL_COST;
+				fuel += FUEL_INCREASE;
 				itemHandler.extractItem(1, 1, false);
 			}
 		}
@@ -163,10 +164,9 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 					BlockPos destinationPos = getDestinationBlockPos();
 					if(destinationPos != null)
 					{
-						ItemStack mimicStack = itemHandler.getStackInSlot(0).copy();
-						ItemEntity itemEntity = new ItemEntity(level, destinationPos.getX(), destinationPos.getY(), destinationPos.getZ(), mimicStack);
+						ItemStack sentStack = itemHandler.extractItem(0, 64, false);
+						ItemEntity itemEntity = new ItemEntity(level, destinationPos.getX(), destinationPos.getY(), destinationPos.getZ(), sentStack);
 						level.addFreshEntity(itemEntity);
-						itemHandler.extractItem(0, itemHandler.getStackInSlot(0).getCount(), false); //sends the whole stack at once
 
 						fuel = (short) (fuel - 8);
 					}
@@ -184,7 +184,7 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 	}
 	
 	private final LazyOptional<IItemHandler> upHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 0, 1)); //sendificated item slot
-	private final LazyOptional<IItemHandler> downHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 1, 3)); //uranium fuel slot
+	private final LazyOptional<IItemHandler> downHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 1, 2)); //uranium fuel slot
 	
 	@Nonnull
 	@Override
@@ -212,11 +212,6 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 	public void setFuel(short fuel)
 	{
 		this.fuel = fuel;
-	}
-	
-	public static short getMaxFuel()
-	{
-		return maxFuel;
 	}
 	
 	@Override
