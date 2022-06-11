@@ -1,5 +1,6 @@
 package com.mraof.minestuck.entity.underling;
 
+import com.mraof.minestuck.entity.AttackingAnimatedEntity;
 import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
@@ -35,6 +36,13 @@ public class OgreEntity extends UnderlingEntity
 		return UnderlingEntity.underlingAttributes().add(Attributes.MAX_HEALTH, 50)
 				.add(Attributes.KNOCKBACK_RESISTANCE, 0.4).add(Attributes.MOVEMENT_SPEED, 0.22)
 				.add(Attributes.ATTACK_DAMAGE, 6);
+	}
+	
+	@Override
+	protected void registerGoals()
+	{
+		super.registerGoals();
+		this.goalSelector.addGoal(3, new AttackingAnimatedEntity.DelayedAttackGoal(this, 1F, false));
 	}
 	
 	protected SoundEvent getAmbientSound()

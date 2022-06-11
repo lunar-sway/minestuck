@@ -1,5 +1,6 @@
 package com.mraof.minestuck.entity.underling;
 
+import com.mraof.minestuck.entity.AttackingAnimatedEntity;
 import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
@@ -37,6 +38,13 @@ public class ImpEntity extends UnderlingEntity implements IAnimatable
 	{
 		return UnderlingEntity.underlingAttributes().add(Attributes.MAX_HEALTH, 6)
 				.add(Attributes.MOVEMENT_SPEED, 0.28).add(Attributes.ATTACK_DAMAGE, 1);
+	}
+	
+	@Override
+	protected void registerGoals()
+	{
+		super.registerGoals();
+		this.goalSelector.addGoal(3, new AttackingAnimatedEntity.DelayedAttackGoal(this, 1F, false));
 	}
 	
 	@Override

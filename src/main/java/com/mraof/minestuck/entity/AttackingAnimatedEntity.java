@@ -26,13 +26,6 @@ public abstract class AttackingAnimatedEntity extends AnimatedCreatureEntity
 	}
 	
 	@Override
-	protected void registerGoals()
-	{
-		super.registerGoals();
-		goalSelector.addGoal(3, new AttackingAnimatedEntity.DelayedAttackGoal(this, 1F, false));
-	}
-	
-	@Override
 	protected void endTimedAction(Actions action)
 	{
 		if(action == Actions.ATTACK)
@@ -89,7 +82,7 @@ public abstract class AttackingAnimatedEntity extends AnimatedCreatureEntity
 	{
 	}
 	
-	static class DelayedAttackGoal extends MeleeAttackGoal
+	protected static class DelayedAttackGoal extends MeleeAttackGoal
 	{
 		private final AttackingAnimatedEntity entity;
 		
@@ -97,7 +90,7 @@ public abstract class AttackingAnimatedEntity extends AnimatedCreatureEntity
 		 * The same as MeleeAttackGoal but it does not apply damage immediately when performing an attack
 		 * Should be used only internally by AnimatedCreatureEntity
 		 */
-		private DelayedAttackGoal(AttackingAnimatedEntity entity, float speed, boolean useMemory)
+		public DelayedAttackGoal(AttackingAnimatedEntity entity, float speed, boolean useMemory)
 		{
 			super(entity, speed, useMemory);
 			this.entity = entity;
