@@ -51,18 +51,6 @@ public abstract class AttackingAnimatedEntity extends AnimatedCreatureEntity
 		return this.distanceToSqr(target) <= reach;
 	}
 	
-	/**
-	 * Starts a long attack against the current target if this entity isn't already performing some action with a duration.
-	 * Useful to sync animations and add extra delays
-	 */
-	private void startAttack()
-	{
-		if(!this.hasTimedAction())
-		{
-			this.setCurrentAction(Actions.ATTACK, attackDelay);
-		}
-	}
-	
 	protected static class DelayedAttackGoal extends MeleeAttackGoal
 	{
 		private final AttackingAnimatedEntity entity;
@@ -83,16 +71,21 @@ public abstract class AttackingAnimatedEntity extends AnimatedCreatureEntity
 		protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr)
 		{
 			double reach = this.getAttackReachSqr(enemy);
-			if(distToEnemySqr <= reach && this.isTimeToAttack())
+			if(distToEnemySqr <= reach && !entity.hasTimedAction())
 			{
-				this.resetAttackCooldown();
 				if(this.attackStopsMovement)
 				{
 					// Meant to stop the entity while performing its attack animation
 					entity.getNavigation().stop();
 				}
-				entity.startAttack();
+				entity.setCurrentAction(Actions.ATTACK, entity.attackDelay);
 			}
+		}
+		
+		@Override
+		public void stop()
+		{
+			entity.setCurrentAction(Actions.NONE);
 		}
 	}
 }
