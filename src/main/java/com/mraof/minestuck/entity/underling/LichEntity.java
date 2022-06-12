@@ -144,7 +144,7 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 		@Override
 		public boolean canUse()
 		{
-			return LichEntity.this.getCurrentAction() == Actions.ATTACK;
+			return LichEntity.this.isPreparingToAttack();
 		}
 		
 		@Override

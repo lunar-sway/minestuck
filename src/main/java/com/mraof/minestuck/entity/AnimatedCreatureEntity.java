@@ -52,17 +52,6 @@ public abstract class AnimatedCreatureEntity extends CreatureEntity
 	}
 	
 	/**
-	 * Used to start animations
-	 *
-	 * @return true if the entity performing an attack
-	 */
-	protected boolean isAttacking()
-	{
-		Actions action = this.getCurrentAction();
-		return action == Actions.ATTACK || action == Actions.ATTACK_RECOVERY;
-	}
-	
-	/**
 	 * Get the current action to coordinate animations
 	 *
 	 * @return The action this entity is currently executing
@@ -70,15 +59,6 @@ public abstract class AnimatedCreatureEntity extends CreatureEntity
 	protected Actions getCurrentAction()
 	{
 		return Actions.values()[this.entityData.get(CURRENT_ACTION)];
-	}
-	
-	/**
-	 * @return true if an action has been set with a finite time
-	 * with setCurrentAction(Action, int) and its duration has not yet run out.
-	 */
-	public boolean hasTimedAction()
-	{
-		return this.animationTicks > 0;
 	}
 	
 	/**
@@ -106,8 +86,6 @@ public abstract class AnimatedCreatureEntity extends CreatureEntity
 	public enum Actions
 	{
 		NONE,
-		ATTACK,
-		ATTACK_RECOVERY,
 		TALK,
 		PANIC
 	}
