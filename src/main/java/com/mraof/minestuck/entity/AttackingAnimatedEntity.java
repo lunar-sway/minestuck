@@ -30,7 +30,7 @@ public abstract class AttackingAnimatedEntity extends AnimatedCreatureEntity
 		private final AttackingAnimatedEntity entity;
 		private final boolean attackStopsMovement;
 		
-		private int attackDuration = -1;
+		private int attackDuration = -1, recoverDuration = -1;
 		
 		/**
 		 * The same as MeleeAttackGoal but it does not apply damage immediately when performing an attack
@@ -47,11 +47,12 @@ public abstract class AttackingAnimatedEntity extends AnimatedCreatureEntity
 		protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr)
 		{
 			this.attackDuration = Math.max(this.attackDuration - 1, -1);
+			this.recoverDuration = Math.max(this.recoverDuration - 1, -1);
 			
 			double reach = this.getAttackReachSqr(enemy);
 			
 			//Check attack start
-			if(distToEnemySqr <= reach && entity.getCurrentAction() == Actions.NONE)
+			if(distToEnemySqr <= reach && this.attackDuration < 0 && this.recoverDuration < 0)
 			{
 				if(this.attackStopsMovement)
 				{
@@ -71,7 +72,13 @@ public abstract class AttackingAnimatedEntity extends AnimatedCreatureEntity
 					entity.doHurtTarget(enemy);
 					// TODO: AOE bounding box collision checks + aoe flag
 				}
-				entity.setCurrentAction(Actions.ATTACK_RECOVERY, entity.attackRecovery);
+				this.recoverDuration = entity.attackRecovery;
+				entity.setCurrentAction(Actions.ATTACK_RECOVERY);
+			}
+			
+			if(this.recoverDuration == 0)
+			{
+				entity.setCurrentAction(Actions.NONE);
 			}
 		}
 		
@@ -79,6 +86,7 @@ public abstract class AttackingAnimatedEntity extends AnimatedCreatureEntity
 		public void stop()
 		{
 			this.attackDuration = -1;
+			this.recoverDuration = -1;
 			entity.setCurrentAction(Actions.NONE);
 		}
 	}
