@@ -132,7 +132,7 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 	 */
 	public static boolean entityCanBeObserved(EntityType<?> currentEntityType)
 	{
-		return !MSTags.EntityTypes.REMOTE_OBSERVER_WHITELIST.contains(currentEntityType);
+		return !MSTags.EntityTypes.REMOTE_OBSERVER_BLACKLIST.contains(currentEntityType);
 	}
 	
 	public void setObservingRange(int rangeIn)

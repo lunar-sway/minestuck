@@ -153,10 +153,6 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 		super.load(state, compound);
 		
 		tickCycle = compound.getInt("tickCycle");
-		int offsetX = compound.getInt("offsetX");
-		int offsetY = compound.getInt("offsetY");
-		int offsetZ = compound.getInt("offsetZ");
-		this.offsetPos = new BlockPos(offsetX, offsetY, offsetZ);
 		
 		if(compound.contains("destX") && compound.contains("destY") && compound.contains("destZ")) //backwards-portability to the destination based method first utilized
 		{
@@ -164,6 +160,12 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 			int destY = compound.getInt("destY");
 			int destZ = compound.getInt("destZ");
 			setOffsetFromDestinationBlockPos(new BlockPos(destX, destY, destZ));
+		} else
+		{
+			int offsetX = compound.getInt("offsetX");
+			int offsetY = compound.getInt("offsetY");
+			int offsetZ = compound.getInt("offsetZ");
+			this.offsetPos = new BlockPos(offsetX, offsetY, offsetZ);
 		}
 	}
 	
