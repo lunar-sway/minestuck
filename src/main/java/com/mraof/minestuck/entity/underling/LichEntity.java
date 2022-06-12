@@ -13,6 +13,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
@@ -44,6 +45,7 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 	protected void registerGoals()
 	{
 		super.registerGoals();
+		this.goalSelector.addGoal(1, new AttackResistanceGoal());
 		this.goalSelector.addGoal(3, new AttackingAnimatedEntity.DelayedAttackGoal(this, 1F, false));
 	}
 	
@@ -95,25 +97,6 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 		}
 	}
 	
-	private static final UUID RESISTANCE_MODIFIER_ATTACKING_UUID = UUID.fromString("7f03c94c-e287-11ec-8fea-0242ac120002");
-	private static final AttributeModifier RESISTANCE_MODIFIER_ATTACKING = new AttributeModifier(RESISTANCE_MODIFIER_ATTACKING_UUID, "Attacking resistance boost", 1, AttributeModifier.Operation.ADDITION);
-	
-	@Override
-	protected void onAttackStart()
-	{
-		ModifiableAttributeInstance instance = getAttributes().getInstance(Attributes.KNOCKBACK_RESISTANCE);
-		if(instance != null && !instance.hasModifier(RESISTANCE_MODIFIER_ATTACKING))
-			instance.addTransientModifier(RESISTANCE_MODIFIER_ATTACKING);
-	}
-	
-	@Override
-	protected void onAttackEnd()
-	{
-		ModifiableAttributeInstance instance = getAttributes().getInstance(Attributes.KNOCKBACK_RESISTANCE);
-		if(instance != null)
-			instance.removeModifier(RESISTANCE_MODIFIER_ATTACKING);
-	}
-	
 	@Override
 	public void registerControllers(AnimationData data)
 	{
@@ -151,5 +134,33 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 		}
 		event.getController().markNeedsReload();
 		return PlayState.STOP;
+	}
+	
+	private static final UUID RESISTANCE_MODIFIER_ATTACKING_UUID = UUID.fromString("7f03c94c-e287-11ec-8fea-0242ac120002");
+	private static final AttributeModifier RESISTANCE_MODIFIER_ATTACKING = new AttributeModifier(RESISTANCE_MODIFIER_ATTACKING_UUID, "Attacking resistance boost", 1, AttributeModifier.Operation.ADDITION);
+	
+	private class AttackResistanceGoal extends Goal
+	{
+		@Override
+		public boolean canUse()
+		{
+			return LichEntity.this.getCurrentAction() == Actions.ATTACK;
+		}
+		
+		@Override
+		public void start()
+		{
+			ModifiableAttributeInstance instance = getAttributes().getInstance(Attributes.KNOCKBACK_RESISTANCE);
+			if(instance != null && !instance.hasModifier(RESISTANCE_MODIFIER_ATTACKING))
+				instance.addTransientModifier(RESISTANCE_MODIFIER_ATTACKING);
+		}
+		
+		@Override
+		public void stop()
+		{
+			ModifiableAttributeInstance instance = getAttributes().getInstance(Attributes.KNOCKBACK_RESISTANCE);
+			if(instance != null)
+				instance.removeModifier(RESISTANCE_MODIFIER_ATTACKING);
+		}
 	}
 }

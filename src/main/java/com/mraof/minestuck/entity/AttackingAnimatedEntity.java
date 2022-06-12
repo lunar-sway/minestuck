@@ -38,8 +38,6 @@ public abstract class AttackingAnimatedEntity extends AnimatedCreatureEntity
 	
 	private void performAttack()
 	{
-		this.onAttackEnd();
-		
 		if(getTarget() != null && isInRange(getTarget()))
 		{
 			doHurtTarget(getTarget());
@@ -71,14 +69,6 @@ public abstract class AttackingAnimatedEntity extends AnimatedCreatureEntity
 	 * Is called when an attack starts. Can be extended to apply effects during an attack.
 	 */
 	protected void onAttackStart()
-	{
-	}
-	
-	/**
-	 * Is called when an attack ends. Can be extended to remove effects once an attack has ended.
-	 * The end of an attack does not necessarily equate to an attack hit.
-	 */
-	protected void onAttackEnd()
 	{
 	}
 	
