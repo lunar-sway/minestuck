@@ -25,44 +25,20 @@ public abstract class AttackingAnimatedEntity extends AnimatedCreatureEntity
 		super(type, world);
 	}
 	
-	@Override
-	protected void endTimedAction(Actions action)
-	{
-		if(action == Actions.ATTACK)
-		{
-			this.setCurrentAction(Actions.ATTACK_RECOVERY, attackRecovery);
-			performAttack();
-		} else
-			super.endTimedAction(action);
-	}
-	
-	private void performAttack()
-	{
-		if(getTarget() != null && isInRange(getTarget()))
-		{
-			doHurtTarget(getTarget());
-			// TODO: AOE bounding box collision checks + aoe flag
-		}
-	}
-	
-	private boolean isInRange(LivingEntity target)
-	{
-		double reach = this.getBbWidth() * 2.0F * this.getBbWidth() * 2.0F + target.getBbWidth();
-		return this.distanceToSqr(target) <= reach;
-	}
-	
 	protected static class DelayedAttackGoal extends MeleeAttackGoal
 	{
 		private final AttackingAnimatedEntity entity;
 		private final boolean attackStopsMovement;
 		
+		private int attackDuration = -1;
+		
 		/**
 		 * The same as MeleeAttackGoal but it does not apply damage immediately when performing an attack
 		 * Should be used only internally by AnimatedCreatureEntity
 		 */
-		public DelayedAttackGoal(AttackingAnimatedEntity entity, float speed, boolean useMemory, boolean attackStopsMovement)
+		public DelayedAttackGoal(AttackingAnimatedEntity entity, float speed, boolean attackStopsMovement)
 		{
-			super(entity, speed, useMemory);
+			super(entity, speed, true);	// If this boolean is false, the goal will stop when the navigation is stopped, which is not what we want to happen
 			this.entity = entity;
 			this.attackStopsMovement = attackStopsMovement;
 		}
@@ -70,21 +46,39 @@ public abstract class AttackingAnimatedEntity extends AnimatedCreatureEntity
 		@Override
 		protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr)
 		{
+			this.attackDuration = Math.max(this.attackDuration - 1, -1);
+			
 			double reach = this.getAttackReachSqr(enemy);
-			if(distToEnemySqr <= reach && !entity.hasTimedAction())
+			
+			//Check attack start
+			if(distToEnemySqr <= reach && entity.getCurrentAction() == Actions.NONE)
 			{
 				if(this.attackStopsMovement)
 				{
 					// Meant to stop the entity while performing its attack animation
 					entity.getNavigation().stop();
 				}
-				entity.setCurrentAction(Actions.ATTACK, entity.attackDelay);
+				
+				this.attackDuration = entity.attackDelay;
+				entity.setCurrentAction(Actions.ATTACK);
+			}
+			
+			//Check attack end
+			if(this.attackDuration == 0)
+			{
+				if(distToEnemySqr <= reach)
+				{
+					entity.doHurtTarget(enemy);
+					// TODO: AOE bounding box collision checks + aoe flag
+				}
+				entity.setCurrentAction(Actions.ATTACK_RECOVERY, entity.attackRecovery);
 			}
 		}
 		
 		@Override
 		public void stop()
 		{
+			this.attackDuration = -1;
 			entity.setCurrentAction(Actions.NONE);
 		}
 	}
