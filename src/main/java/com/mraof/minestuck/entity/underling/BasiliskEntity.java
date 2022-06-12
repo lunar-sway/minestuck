@@ -34,8 +34,6 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 	public BasiliskEntity(EntityType<? extends BasiliskEntity> type, World world)
 	{
 		super(type, world, 5);
-		this.attackDelay = 4;
-		this.attackRecovery = 10;
 		
 		this.head = new BasiliskPartEntity(this, "head", 2.3F, 2.3F);
 		this.body = new BasiliskPartEntity(this, "body", 2.8F, 2.2F);
@@ -56,7 +54,7 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 	protected void registerGoals()
 	{
 		super.registerGoals();
-		this.goalSelector.addGoal(3, new AttackingAnimatedEntity.DelayedAttackGoal(this, 1F, true));
+		this.goalSelector.addGoal(3, new AttackingAnimatedEntity.DelayedAttackGoal(this, 1F, true, 4, 10));
 	}
 	
 	protected SoundEvent getAmbientSound()

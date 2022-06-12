@@ -26,8 +26,6 @@ public class OgreEntity extends UnderlingEntity
 	public OgreEntity(EntityType<? extends OgreEntity> type, World world)
 	{
 		super(type, world, 3);
-		this.attackDelay = 18;
-		this.attackRecovery = 20;
 		this.maxUpStep = 1.0F;
 	}
 	
@@ -42,7 +40,7 @@ public class OgreEntity extends UnderlingEntity
 	protected void registerGoals()
 	{
 		super.registerGoals();
-		this.goalSelector.addGoal(3, new AttackingAnimatedEntity.DelayedAttackGoal(this, 1F, true));
+		this.goalSelector.addGoal(3, new AttackingAnimatedEntity.DelayedAttackGoal(this, 1F, true, 18, 20));
 	}
 	
 	protected SoundEvent getAmbientSound()

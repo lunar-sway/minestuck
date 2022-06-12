@@ -30,8 +30,6 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 	public LichEntity(EntityType<? extends LichEntity> type, World world)
 	{
 		super(type, world, 7);
-		this.attackDelay = 14;
-		this.attackRecovery = 16;
 	}
 	
 	public static AttributeModifierMap.MutableAttribute lichAttributes()
@@ -46,7 +44,7 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 	{
 		super.registerGoals();
 		this.goalSelector.addGoal(1, new AttackResistanceGoal());
-		this.goalSelector.addGoal(3, new AttackingAnimatedEntity.DelayedAttackGoal(this, 1F, false));
+		this.goalSelector.addGoal(3, new AttackingAnimatedEntity.DelayedAttackGoal(this, 1F, false, 14, 16));
 	}
 	
 	protected SoundEvent getAmbientSound()

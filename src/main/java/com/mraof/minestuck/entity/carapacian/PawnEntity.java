@@ -42,8 +42,6 @@ public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IM
 	{
 		super(type, kingdom, world);
 		this.xpReward = 1;
-		this.attackDelay = 6;
-		this.attackRecovery = 12;
 		setCombatTask();
 	}
 	
@@ -73,7 +71,7 @@ public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IM
 	protected void registerGoals()
 	{
 		super.registerGoals();
-		this.goalSelector.addGoal(3, new AttackingAnimatedEntity.DelayedAttackGoal(this, 1F, true));
+		this.goalSelector.addGoal(3, new AttackingAnimatedEntity.DelayedAttackGoal(this, 1F, true, 6, 12));
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 0, true, false, entity -> attackEntitySelector.isEntityApplicable(entity)));
 	}
 	

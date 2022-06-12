@@ -30,8 +30,6 @@ public class ImpEntity extends UnderlingEntity implements IAnimatable
 	public ImpEntity(EntityType<? extends ImpEntity> type, World world)
 	{
 		super(type, world, 1);
-		this.attackDelay = 4;
-		this.attackRecovery = 10;
 	}
 	
 	public static AttributeModifierMap.MutableAttribute impAttributes()
@@ -44,7 +42,7 @@ public class ImpEntity extends UnderlingEntity implements IAnimatable
 	protected void registerGoals()
 	{
 		super.registerGoals();
-		this.goalSelector.addGoal(3, new AttackingAnimatedEntity.DelayedAttackGoal(this, 1F, true));
+		this.goalSelector.addGoal(3, new AttackingAnimatedEntity.DelayedAttackGoal(this, 1F, true, 4, 10));
 	}
 	
 	@Override

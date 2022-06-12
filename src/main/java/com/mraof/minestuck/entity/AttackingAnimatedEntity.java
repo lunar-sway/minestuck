@@ -16,16 +16,6 @@ public abstract class AttackingAnimatedEntity extends CreatureEntity
 {
 	private static final DataParameter<Integer> CURRENT_ACTION = EntityDataManager.defineId(AttackingAnimatedEntity.class, DataSerializers.INT);
 	
-	/**
-	 * The delay between the start of the animation and the moment the damage lands
-	 */
-	protected int attackDelay;
-	
-	/**
-	 * The delay after an attack and before another start
-	 */
-	protected int attackRecovery;
-	
 	protected AttackingAnimatedEntity(EntityType<? extends AttackingAnimatedEntity> type, World world)
 	{
 		super(type, world);
@@ -83,22 +73,33 @@ public abstract class AttackingAnimatedEntity extends CreatureEntity
 		ATTACK_RECOVERY
 	}
 	
+	/**
+	 * The same as MeleeAttackGoal, except that the moment of attack is not instantaneous.
+	 * Instead, the attack has a preparation phase that delays the actual attack from the moment when the target is first in range.
+	 * The goal updates the attack state of the attacker accordingly, so that the state can be used for animations and other things.
+	 */
 	protected static class DelayedAttackGoal extends MeleeAttackGoal
 	{
 		private final AttackingAnimatedEntity entity;
 		private final boolean attackStopsMovement;
+		/**
+		 * The delay between the start of the animation and the moment the damage lands
+		 */
+		private final int attackDelay;
+		/**
+		 * The delay after an attack and before another start
+		 */
+		private final int attackRecovery;
 		
 		private int attackDuration = -1, recoverDuration = -1;
 		
-		/**
-		 * The same as MeleeAttackGoal but it does not apply damage immediately when performing an attack
-		 * Should be used only internally by AnimatedCreatureEntity
-		 */
-		public DelayedAttackGoal(AttackingAnimatedEntity entity, float speed, boolean attackStopsMovement)
+		public DelayedAttackGoal(AttackingAnimatedEntity entity, float speed, boolean attackStopsMovement, int attackDelay, int attackRecovery)
 		{
 			super(entity, speed, true);	// If this boolean is false, the goal will stop when the navigation is stopped, which is not what we want to happen
 			this.entity = entity;
 			this.attackStopsMovement = attackStopsMovement;
+			this.attackDelay = attackDelay;
+			this.attackRecovery = attackRecovery;
 		}
 		
 		@Override
@@ -115,10 +116,11 @@ public abstract class AttackingAnimatedEntity extends CreatureEntity
 				if(this.attackStopsMovement)
 				{
 					// Meant to stop the entity while performing its attack animation
+					//TODO not done yet
 					entity.getNavigation().stop();
 				}
 				
-				this.attackDuration = entity.attackDelay;
+				this.attackDuration = this.attackDelay;
 				entity.setAttackState(AttackState.ATTACK);
 			}
 			
@@ -130,7 +132,7 @@ public abstract class AttackingAnimatedEntity extends CreatureEntity
 					entity.doHurtTarget(enemy);
 					// TODO: AOE bounding box collision checks + aoe flag
 				}
-				this.recoverDuration = entity.attackRecovery;
+				this.recoverDuration = this.attackRecovery;
 				entity.setAttackState(AttackState.ATTACK_RECOVERY);
 			}
 			
