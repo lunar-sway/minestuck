@@ -91,13 +91,6 @@ public abstract class CarapacianEntity extends AttackingAnimatedEntity
 		return !allyTag.contains(typeIn);
 	}
 	
-	@Override
-	protected void onAttackStart()
-	{
-		// Will stop the entity while performing its attack animation
-		this.getNavigation().stop();
-	}
-	
 	public EnumEntityKingdom getKingdom()
 	{
 		return Objects.requireNonNull(kingdom);

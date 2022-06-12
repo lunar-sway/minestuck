@@ -42,7 +42,7 @@ public class OgreEntity extends UnderlingEntity
 	protected void registerGoals()
 	{
 		super.registerGoals();
-		this.goalSelector.addGoal(3, new AttackingAnimatedEntity.DelayedAttackGoal(this, 1F, false));
+		this.goalSelector.addGoal(3, new AttackingAnimatedEntity.DelayedAttackGoal(this, 1F, false, true));
 	}
 	
 	protected SoundEvent getAmbientSound()
@@ -91,13 +91,6 @@ public class OgreEntity extends UnderlingEntity
 			computePlayerProgress((int) (15 + 2.2 * getGristType().getPower())); //most ogres stop giving xp at rung 18
 			firstKillBonus(entity, (byte) (Echeladder.UNDERLING_BONUS_OFFSET + 1));
 		}
-	}
-	
-	@Override
-	protected void onAttackStart()
-	{
-		// Will stop the entity while performing its attack animation
-		this.getNavigation().stop();
 	}
 	
 	@Override

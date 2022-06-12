@@ -56,7 +56,7 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 	protected void registerGoals()
 	{
 		super.registerGoals();
-		this.goalSelector.addGoal(3, new AttackingAnimatedEntity.DelayedAttackGoal(this, 1F, false));
+		this.goalSelector.addGoal(3, new AttackingAnimatedEntity.DelayedAttackGoal(this, 1F, false, true));
 	}
 	
 	protected SoundEvent getAmbientSound()
@@ -105,13 +105,6 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 			computePlayerProgress((int) (30 + 2.4 * getGristType().getPower())); //most basilisks stop giving xp at rung 32
 			firstKillBonus(entity, (byte) (Echeladder.UNDERLING_BONUS_OFFSET + 2));
 		}
-	}
-	
-	@Override
-	protected void onAttackStart()
-	{
-		// Will stop the entity while performing its attack animation
-		this.getNavigation().stop();
 	}
 	
 	@Override

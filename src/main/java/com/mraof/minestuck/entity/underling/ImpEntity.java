@@ -44,7 +44,7 @@ public class ImpEntity extends UnderlingEntity implements IAnimatable
 	protected void registerGoals()
 	{
 		super.registerGoals();
-		this.goalSelector.addGoal(3, new AttackingAnimatedEntity.DelayedAttackGoal(this, 1F, false));
+		this.goalSelector.addGoal(3, new AttackingAnimatedEntity.DelayedAttackGoal(this, 1F, false, true));
 	}
 	
 	@Override
@@ -93,13 +93,6 @@ public class ImpEntity extends UnderlingEntity implements IAnimatable
 			computePlayerProgress((int) (5 + 2 * getGristType().getPower())); //most imps stop giving xp at rung 8
 			firstKillBonus(entity, Echeladder.UNDERLING_BONUS_OFFSET);
 		}
-	}
-	
-	@Override
-	protected void onAttackStart()
-	{
-		// Will stop the entity while performing its attack animation
-		this.getNavigation().stop();
 	}
 	
 	@Override

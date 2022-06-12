@@ -60,30 +60,23 @@ public abstract class AttackingAnimatedEntity extends AnimatedCreatureEntity
 		if(!this.hasTimedAction())
 		{
 			this.setCurrentAction(Actions.ATTACK, attackDelay);
-			
-			this.onAttackStart();
 		}
-	}
-	
-	/**
-	 * Is called when an attack starts. Can be extended to apply effects during an attack.
-	 */
-	protected void onAttackStart()
-	{
 	}
 	
 	protected static class DelayedAttackGoal extends MeleeAttackGoal
 	{
 		private final AttackingAnimatedEntity entity;
+		private final boolean attackStopsMovement;
 		
 		/**
 		 * The same as MeleeAttackGoal but it does not apply damage immediately when performing an attack
 		 * Should be used only internally by AnimatedCreatureEntity
 		 */
-		public DelayedAttackGoal(AttackingAnimatedEntity entity, float speed, boolean useMemory)
+		public DelayedAttackGoal(AttackingAnimatedEntity entity, float speed, boolean useMemory, boolean attackStopsMovement)
 		{
 			super(entity, speed, useMemory);
 			this.entity = entity;
+			this.attackStopsMovement = attackStopsMovement;
 		}
 		
 		@Override
@@ -93,6 +86,11 @@ public abstract class AttackingAnimatedEntity extends AnimatedCreatureEntity
 			if(distToEnemySqr <= reach && this.isTimeToAttack())
 			{
 				this.resetAttackCooldown();
+				if(this.attackStopsMovement)
+				{
+					// Meant to stop the entity while performing its attack animation
+					entity.getNavigation().stop();
+				}
 				entity.startAttack();
 			}
 		}
