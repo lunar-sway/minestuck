@@ -8,6 +8,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
@@ -19,6 +20,11 @@ public class ItemStackTileEntity extends TileEntity implements IColored
 	public ItemStackTileEntity()
 	{
 		super(MSTileEntityTypes.ITEM_STACK.get());
+	}
+	
+	public ItemStackTileEntity(TileEntityType<?> type)
+	{
+		super(type);
 	}
 	
 	private ItemStack stack = ItemStack.EMPTY;

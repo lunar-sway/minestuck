@@ -3,13 +3,15 @@ package com.mraof.minestuck.block.machine;
 import com.mraof.minestuck.block.EnumDowelType;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.tileentity.ItemStackTileEntity;
+import com.mraof.minestuck.tileentity.MSTileEntityTypes;
+import com.mraof.minestuck.tileentity.machine.TotemLatheDowelTileEntity;
 import com.mraof.minestuck.tileentity.machine.TotemLatheTileEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
 import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.state.BooleanProperty;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
@@ -88,10 +90,10 @@ public class TotemLatheBlock extends MultiMachineBlock
 			((TotemLatheTileEntity) te).checkStates();
 	}
 	
-    /**
-     *returns the block position of the "Main" block
-     *aka the block with the TileEntity for the machine
-     */
+	/**
+	 * returns the block position of the "Main" block
+	 * aka the block with the TileEntity for the machine
+	 */
 	public BlockPos getMainPos(BlockState state, BlockPos pos)
 	{
 		Rotation rotation = MSRotationUtil.fromDirection(state.getValue(FACING));
@@ -99,46 +101,32 @@ public class TotemLatheBlock extends MultiMachineBlock
 		return pos.offset(mainPos.rotate(rotation));
 	}
 	
-	public static class Rod extends TotemLatheBlock
-	{
-		public static final BooleanProperty ACTIVE = MSProperties.ACTIVE;
-		protected final Map<Direction, VoxelShape> activeShape;
-		
-		public Rod(MachineMultiblock machine, CustomVoxelShape shape, CustomVoxelShape activeShape, BlockPos mainPos, Properties properties)
-		{
-			super(machine, shape, mainPos, properties);
-			this.activeShape = activeShape.createRotatedShapes();
-		}
-		
-		@Override
-		protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
-		{
-			super.createBlockStateDefinition(builder);
-			builder.add(ACTIVE);
-		}
-		
-		@Override
-		public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
-		{
-			return state.getValue(ACTIVE) ? activeShape.get(state.getValue(FACING)) : super.getShape(state, worldIn, pos, context);
-		}
-	}
-	
 	public static class DowelRod extends TotemLatheBlock
 	{
-		public static final EnumProperty<EnumDowelType> DOWEL = MSProperties.DOWEL;
+		public static final EnumProperty<EnumDowelType> DOWEL = MSProperties.DOWEL_OR_NONE;
 		protected final Map<Direction, VoxelShape> carvedShape;
+		protected final Map<Direction, VoxelShape> dowelShape;
 		
-		public DowelRod(MachineMultiblock machine, CustomVoxelShape shape, CustomVoxelShape carvedShape, BlockPos mainPos, Properties properties)
+		public DowelRod(MachineMultiblock machine, CustomVoxelShape emptyShape, CustomVoxelShape dowelShape, CustomVoxelShape carvedShape, BlockPos mainPos, Properties properties)
 		{
-			super(machine, shape, mainPos, properties);
+			super(machine, emptyShape, mainPos, properties);
+			this.dowelShape = dowelShape.createRotatedShapes();
 			this.carvedShape = carvedShape.createRotatedShapes();
 		}
 		
 		@Override
 		public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
 		{
-			return state.getValue(DOWEL).equals(EnumDowelType.CARVED_DOWEL) ? carvedShape.get(state.getValue(FACING)) : super.getShape(state, worldIn, pos, context);
+			if(state.getValue(DOWEL).equals(EnumDowelType.CARVED_DOWEL))
+			{
+				return carvedShape.get(state.getValue(FACING));
+			} else if(state.getValue(DOWEL).equals(EnumDowelType.DOWEL))
+			{
+				return dowelShape.get(state.getValue(FACING));
+			} else
+			{
+				return super.getShape(state, worldIn, pos, context);
+			}
 		}
 		
 		@Override
@@ -151,7 +139,7 @@ public class TotemLatheBlock extends MultiMachineBlock
 		@Override
 		public TileEntity createTileEntity(BlockState state, IBlockReader world)
 		{
-			return new ItemStackTileEntity();
+			return new TotemLatheDowelTileEntity();
 		}
 		
 		@Override
@@ -160,12 +148,20 @@ public class TotemLatheBlock extends MultiMachineBlock
 			super.createBlockStateDefinition(builder);
 			builder.add(DOWEL);
 		}
-
-//		@Override
-//		public BlockRenderLayer getRenderLayer()
-//		{
-//			return BlockRenderLayer.CUTOUT;
-//		}
+		
+		@Override
+		public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving)
+		{
+			if(state.getBlock() != newState.getBlock())
+			{
+				TileEntity totemLathe = worldIn.getBlockEntity(pos);
+				if(totemLathe instanceof ItemStackTileEntity)
+				{
+					InventoryHelper.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), ((ItemStackTileEntity) totemLathe).getStack());
+				}
+			}
+			super.onRemove(state, worldIn, pos, newState, isMoving);
+		}
 	}
 	
 	public static class Slot extends TotemLatheBlock
@@ -195,6 +191,28 @@ public class TotemLatheBlock extends MultiMachineBlock
 		{
 			super.createBlockStateDefinition(builder);
 			builder.add(COUNT);
+		}
+		
+		@Override
+		public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving)
+		{
+			if(state.getBlock() != newState.getBlock())
+			{
+				TileEntity te = worldIn.getBlockEntity(pos);
+				if(te instanceof TotemLatheTileEntity)
+				{
+					TotemLatheTileEntity totemLathe = (TotemLatheTileEntity) te;
+					if(!totemLathe.getCard1().isEmpty())
+					{
+						InventoryHelper.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), totemLathe.getCard1());
+					}
+					if(!totemLathe.getCard2().isEmpty())
+					{
+						InventoryHelper.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), totemLathe.getCard2());
+					}
+				}
+			}
+			super.onRemove(state, worldIn, pos, newState, isMoving);
 		}
 	}
 }

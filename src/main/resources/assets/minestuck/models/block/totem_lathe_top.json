@@ -1,66 +1,67 @@
 {
-    "textures": {
-        "particle": "minestuck:block/machine/totem_lathe/top_middle_front",
-        "left":     "minestuck:block/machine/totem_lathe/top_left_inside",
-        "front":    "minestuck:block/machine/totem_lathe/top_middle_front",
-        "down":     "minestuck:block/machine/totem_lathe/top_middle_down",
-        "back":     "minestuck:block/machine/totem_lathe/top_middle_back",
-        "right":    "minestuck:block/machine/totem_lathe/top_right_inside",
-        "top":      "minestuck:block/machine/totem_lathe/top_middle_top"
-    },
-    "elements": [
-        {
-            "from": [ 0, 12, 5 ],
-            "to": [ 16, 16, 15 ],
-            "faces": {
-                "north": { "uv": [  0, 0, 16,  4 ], "texture": "#front" },
-                "east":  { "uv": [ 16, 0,  6,  4 ], "texture": "#left", "cullface": "east" },
-                "south": { "uv": [  0, 0, 16,  4 ], "texture": "#back" },
-                "west":  { "uv": [  6, 0, 16,  4 ], "texture": "#right", "cullface": "west" },
-                "up":    { "uv": [  0, 6, 16, 16 ], "texture": "#top", "cullface": "up" },
-                "down":  { "uv": [  0, 1, 16, 11 ], "texture": "#down" }
-            }
-        },
-        {
-            "from": [ 12, 4, 6 ],
-            "to": [ 16, 12, 14 ],
-            "faces": {
-                "north": { "uv": [  0, 4,  4, 12 ], "texture": "#front" },
-                "east":  { "uv": [ 15, 4,  7, 12 ], "texture": "#left", "cullface": "east" },
-                "south": { "uv": [ 12, 4, 16, 12 ], "texture": "#back" },
-                "west":  { "uv": [  7, 4, 15, 12 ], "texture": "#right" },
-                "down":  { "uv": [ 12, 2, 16, 10 ], "texture": "#down" }
-            }
-        },
-        {
-            "from": [ 2, 4, 7 ],
-            "to": [ 12, 12, 13 ],
-            "faces": {
-                "north": { "uv": [ 4, 4, 14, 12 ], "texture": "#front" },
-                "south": { "uv": [ 0, 4, 10, 12 ], "texture": "#back" },
-                "down":  { "uv": [ 2, 3, 12,  9 ], "texture": "#down" }
-            }
-        },
-        {
-            "from": [ 5, 6, 6 ],
-            "to": [ 12, 10, 7 ],
-            "faces": {
-                "north": { "uv": [ 4,  6, 11, 10 ], "texture": "#front" },
-                "west":  { "uv": [ 7,  6,  8, 10 ], "texture": "#right" },
-                "up":    { "uv": [ 5,  5, 12,  6 ], "texture": "#top" },
-                "down":  { "uv": [ 5, 11, 12, 12 ], "texture": "#down" }
-            }
-        },
-        {
-            "from": [ 0, 3, 7 ],
-            "to": [ 2, 12, 13 ],
-            "faces": {
-                "north": { "uv": [ 14, 4, 16, 13 ], "texture": "#front" },
-                "east":  { "uv": [  0, 7,  6, 16 ], "texture": "#right" },
-                "south": { "uv": [  0, 4,  2, 13 ], "texture": "#back" },
-                "west":  { "uv": [  8, 4, 14, 13 ], "texture": "#right", "cullface": "west" },
-                "down":  { "uv": [  0, 3,  2,  9 ], "texture": "#down" }
-            }
-        }
-    ]
+	"credit": "crafted with love by the grease artisan mysterymeat",
+	"texture_size": [128, 128],
+	"textures": {
+		"0": "minestuck:block/machine/totemlathe",
+		"particle": "minestuck:block/machine/particle"
+	},
+	"elements": [
+		{
+			"name": "top",
+			"from": [-5, 9, 2],
+			"to": [16, 16, 14],
+			"rotation": {"angle": 0, "axis": "y", "origin": [16, 0, 0]},
+			"faces": {
+				"north": {"uv": [3.5, 1.5, 6.125, 2.375], "texture": "#0"},
+				"east": {"uv": [2, 1.5, 3.5, 2.375], "texture": "#0"},
+				"south": {"uv": [7.625, 1.5, 10.25, 2.375], "texture": "#0"},
+				"west": {"uv": [6.125, 1.5, 7.625, 2.375], "texture": "#0"},
+				"up": {"uv": [6.125, 1.5, 3.5, 0], "texture": "#0"},
+				"down": {"uv": [8.75, 0, 6.125, 1.5], "texture": "#0"}
+			}
+		},
+		{
+			"name": "frame",
+			"from": [-2, 1, 6],
+			"to": [8, 9, 10],
+			"rotation": {"angle": 0, "axis": "y", "origin": [22.5, 22.5, 8]},
+			"faces": {
+				"north": {"uv": [12.125, 4, 13.375, 5], "texture": "#0"},
+				"east": {"uv": [11.625, 4, 12.125, 5], "texture": "#0"},
+				"south": {"uv": [13.875, 4, 15.125, 5], "texture": "#0"},
+				"west": {"uv": [13.375, 4, 13.875, 5], "texture": "#0"},
+				"up": {"uv": [13.375, 4, 12.125, 3.5], "texture": "#0"},
+				"down": {"uv": [14.625, 3.5, 13.375, 4], "texture": "#0"}
+			}
+		},
+		{
+			"name": "frame",
+			"from": [8, 2, 5],
+			"to": [15, 9, 11],
+			"rotation": {"angle": 0, "axis": "y", "origin": [22.5, 22.5, 8]},
+			"faces": {
+				"north": {"uv": [13.5, 1.625, 14.375, 2.5], "texture": "#0"},
+				"east": {"uv": [12.75, 1.625, 13.5, 2.5], "texture": "#0"},
+				"south": {"uv": [15.125, 1.625, 16, 2.5], "texture": "#0"},
+				"west": {"uv": [14.375, 1.625, 15.125, 2.5], "texture": "#0"},
+				"up": {"uv": [14.375, 1.625, 13.5, 0.875], "texture": "#0"},
+				"down": {"uv": [15.25, 0.875, 14.375, 1.625], "texture": "#0"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "root",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "tope",
+					"origin": [6.5, 22.5, 8],
+					"color": 0,
+					"children": [0, 1, 2]
+				}
+			]
+		}
+	]
 }

@@ -1,6 +1,5 @@
 package com.mraof.minestuck.tileentity.machine;
 
-
 import com.mraof.minestuck.block.EnumDowelType;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.machine.TotemLatheBlock;
@@ -9,26 +8,28 @@ import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.item.crafting.alchemy.CombinationMode;
 import com.mraof.minestuck.item.crafting.alchemy.CombinationRecipe;
 import com.mraof.minestuck.item.crafting.alchemy.CombinerWrapper;
-import com.mraof.minestuck.tileentity.ItemStackTileEntity;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.WorldEventUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.util.Constants;
 
-import javax.annotation.Nonnull;
-
-public class TotemLatheTileEntity extends TileEntity
+public class TotemLatheTileEntity extends TileEntity implements ITickableTileEntity
 {
+	private boolean isProcessing;
+	private int animationticks;
 	private boolean broken = false;
 	//two cards so that we can preform the && alchemy operation
 	private ItemStack card1 = ItemStack.EMPTY;
@@ -91,17 +92,6 @@ public class TotemLatheTileEntity extends TileEntity
 		else return 0;
 	}
 	
-	@Nonnull
-	public ItemStack getCard1()
-	{
-		return card1;
-	}
-	
-	public ItemStack getCard2()
-	{
-		return card2;
-	}
-	
 	public boolean isBroken()
 	{
 		return broken;
@@ -119,55 +109,39 @@ public class TotemLatheTileEntity extends TileEntity
 		Direction facing = getFacing();
 		BlockPos pos = MSBlocks.TOTEM_LATHE.getDowelPos(getBlockPos(), getBlockState());
 		BlockState state = level.getBlockState(pos);
-		if(stack.isEmpty())
+		BlockState newState = MSBlocks.TOTEM_LATHE.DOWEL_ROD.get().defaultBlockState().setValue(TotemLatheBlock.FACING, facing).setValue(TotemLatheBlock.DowelRod.DOWEL, EnumDowelType.getForDowel(stack));
+		if(isValidDowelRod(state, facing))
 		{
-			if(isValidDowelRod(state, facing))
-				level.removeBlock(pos, false);
-			return true;
-		} else if(stack.getItem() == MSBlocks.CRUXITE_DOWEL.asItem())
-		{
-			BlockState newState = MSBlocks.TOTEM_LATHE.DOWEL_ROD.get().defaultBlockState().setValue(TotemLatheBlock.FACING, facing).setValue(TotemLatheBlock.DowelRod.DOWEL, EnumDowelType.getForDowel(stack));
-			if(isValidDowelRod(state, facing))
+			TileEntity te = level.getBlockEntity(pos);
+			if(!(te instanceof TotemLatheDowelTileEntity))
 			{
-				TileEntity te = level.getBlockEntity(pos);
-				if(!(te instanceof ItemStackTileEntity))
-				{
-					te = new ItemStackTileEntity();
-					level.setBlockEntity(pos, te);
-				}
-				ItemStackTileEntity teItem = (ItemStackTileEntity) te;
-				teItem.setStack(stack);
-				if(!state.equals(newState))
-					level.setBlockAndUpdate(pos, newState);
-				else level.sendBlockUpdated(pos, state, state, 2);
-				return true;
-			} else if(state.isAir(level, pos))
-			{
-				level.setBlockAndUpdate(pos, newState);
-				TileEntity te = level.getBlockEntity(pos);
-				if(!(te instanceof ItemStackTileEntity))
-				{
-					te = new ItemStackTileEntity();
-					level.setBlockEntity(pos, te);
-				}
-				ItemStackTileEntity teItem = (ItemStackTileEntity) te;
-				teItem.setStack(stack);
-				
-				return true;
+				te = new TotemLatheDowelTileEntity();
+				level.setBlockEntity(pos, te);
 			}
+			TotemLatheDowelTileEntity teItem = (TotemLatheDowelTileEntity) te;
+			teItem.setStack(stack);
+			//updating the dowel tile entity
+			if(!state.equals(newState))
+				level.setBlockAndUpdate(pos, newState);
+			else level.sendBlockUpdated(pos, state, state, Constants.BlockFlags.BLOCK_UPDATE);
+			
+			//updating the machine's tile entity
+			isProcessing = false;
+			level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
+			return true;
 		}
 		return false;
 	}
 	
 	public ItemStack getDowel()
 	{
-		BlockPos pos = getBlockPos().above().relative(getFacing().getCounterClockWise(), 2);
+		BlockPos pos = MSBlocks.TOTEM_LATHE.getDowelPos(getBlockPos(), getBlockState());
 		if(isValidDowelRod(level.getBlockState(pos), getFacing()))
 		{
 			TileEntity te = level.getBlockEntity(pos);
-			if(te instanceof ItemStackTileEntity)
+			if(te instanceof TotemLatheDowelTileEntity)
 			{
-				return ((ItemStackTileEntity) te).getStack();
+				return ((TotemLatheDowelTileEntity) te).getStack();
 			}
 		}
 		return ItemStack.EMPTY;
@@ -193,14 +167,19 @@ public class TotemLatheTileEntity extends TileEntity
 			handleSlotClick(player, working);
 		
 		//if they have clicked the dowel block
-		if(clickedState.getBlock() == MSBlocks.TOTEM_LATHE.ROD.get() || clickedState.getBlock() == MSBlocks.TOTEM_LATHE.DOWEL_ROD.get())
+		if(clickedState.getBlock() == MSBlocks.TOTEM_LATHE.DOWEL_ROD.get())
 			handleDowelClick(player, working);
 		
 		//if they have clicked on the lever
-		if(working && clickedState.getBlock() == MSBlocks.TOTEM_LATHE.CARVER.get())
+		if(working && clickedState.getBlock() == MSBlocks.TOTEM_LATHE.TOP.get())
 		{
 			//carve the dowel.
-			processContents();
+			if(!getDowel().isEmpty() && !AlchemyHelper.hasDecodedItem(getDowel()) && (!card1.isEmpty() || !card2.isEmpty()) && level != null)
+			{
+				isProcessing = true;
+				animationticks = 25;
+				level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
+			}
 		}
 	}
 	
@@ -229,7 +208,7 @@ public class TotemLatheTileEntity extends TileEntity
 	{
 		ItemStack heldStack = player.getMainHandItem();
 		ItemStack dowel = getDowel();
-		if (dowel.isEmpty())
+		if(dowel.isEmpty())
 		{
 			if(isWorking && heldStack.getItem() == MSBlocks.CRUXITE_DOWEL.asItem())
 			{
@@ -295,6 +274,7 @@ public class TotemLatheTileEntity extends TileEntity
 		broken = nbt.getBoolean("broken");
 		card1 = ItemStack.of(nbt.getCompound("card1"));
 		card2 = ItemStack.of(nbt.getCompound("card2"));
+		isProcessing = nbt.getBoolean("isProcessing");
 		if(card1.isEmpty() && !card2.isEmpty())
 		{
 			card1 = card2;
@@ -306,9 +286,10 @@ public class TotemLatheTileEntity extends TileEntity
 	public CompoundNBT save(CompoundNBT compound)
 	{
 		super.save(compound);
-		compound.putBoolean("broken",broken);
+		compound.putBoolean("broken", broken);
 		compound.put("card1", card1.save(new CompoundNBT()));
 		compound.put("card2", card2.save(new CompoundNBT()));
+		compound.putBoolean("isProcessing", isProcessing);
 		return compound;
 	}
 	
@@ -316,13 +297,13 @@ public class TotemLatheTileEntity extends TileEntity
 	{
 		ItemStack dowel = getDowel();
 		ItemStack output;
-		boolean success = false;
 		if(!dowel.isEmpty() && !AlchemyHelper.hasDecodedItem(dowel) && (!card1.isEmpty() || !card2.isEmpty()))
 		{
 			if(!card1.isEmpty() && !card2.isEmpty())
 				if(!AlchemyHelper.isPunchedCard(card1) || !AlchemyHelper.isPunchedCard(card2))
 					output = new ItemStack(MSBlocks.GENERIC_OBJECT);
-				else output = CombinationRecipe.findResult(new CombinerWrapper(card1, card2, CombinationMode.AND), level);
+				else
+					output = CombinationRecipe.findResult(new CombinerWrapper(card1, card2, CombinationMode.AND), level);
 			else
 			{
 				ItemStack input = card1.isEmpty() ? card2 : card1;
@@ -335,18 +316,54 @@ public class TotemLatheTileEntity extends TileEntity
 			{
 				ItemStack outputDowel = output.getItem().equals(MSBlocks.GENERIC_OBJECT.asItem()) ? new ItemStack(MSBlocks.CRUXITE_DOWEL) : AlchemyHelper.createEncodedItem(output, false);
 				ColorHandler.setColor(outputDowel, ColorHandler.getColorFromStack(dowel));
-				
 				setDowel(outputDowel);
-				success = true;
 			}
 		}
-		
-		effects(success);
 	}
 	
-	private void effects(boolean success)
+	public ItemStack getCard1()
 	{
-		BlockPos pos = getBlockPos().above().relative(getFacing().getCounterClockWise(), 2);
-		WorldEventUtil.dispenserEffect(getLevel(), pos, getFacing(), success);
+		return card1;
+	}
+	
+	public ItemStack getCard2()
+	{
+		return card2;
+	}
+
+	@Override
+	public CompoundNBT getUpdateTag()
+	{
+		return save(new CompoundNBT());
+	}
+	
+	@Override
+	public SUpdateTileEntityPacket getUpdatePacket()
+	{
+		return new SUpdateTileEntityPacket(this.worldPosition, 0, getUpdateTag());
+	}
+	
+	@Override
+	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
+	{
+		handleUpdateTag(getBlockState(), pkt.getTag());
+	}
+	
+	@Override
+	public void tick()
+	{
+		if(animationticks > 0)
+		{
+			animationticks--;
+			if(animationticks <= 0)
+			{
+				processContents();
+			}
+		}
+	}
+	
+	public boolean isProcessing()
+	{
+		return isProcessing;
 	}
 }

@@ -1,49 +1,84 @@
 {
-    "textures": {
-        "particle": "minestuck:block/machine/totem_lathe/middle_left_front",
-        "front":    "minestuck:block/machine/totem_lathe/middle_left_front",
-        "side":     "minestuck:block/machine/totem_lathe/middle_left_side",
-        "back":     "minestuck:block/machine/totem_lathe/middle_left_back",
-        "inside":   "minestuck:block/machine/totem_lathe/middle_left_inside",
-        "top":      "minestuck:block/machine/totem_lathe/middle_left_top",
-        "bottom":   "minestuck:block/machine/totem_lathe/bottom_left_top"
-    },
-    "elements": [
-        {
-            "from": [ 0, 0, 6 ],
-            "to": [ 8, 16, 14 ],
-            "faces": {
-                "north": { "uv": [ 8,  0, 16, 16 ], "texture": "#front" },
-                "east":  { "uv": [ 2,  0, 10, 16 ], "texture": "#side" },
-                "south": { "uv": [ 0,  0,  8, 16 ], "texture": "#back" },
-                "west":  { "uv": [ 6,  0, 14, 16 ], "texture": "#inside", "cullface": "west" },
-                "up":    { "uv": [ 0,  6,  8, 14 ], "texture": "#top", "cullface": "up" },
-                "down":  { "uv": [ 0, 15,  8,  7 ], "texture": "#bottom", "cullface": "down" }
-            }
-        },
-        {
-            "from": [ 8, 0, 4 ],
-            "to": [ 16, 12, 14 ],
-            "faces": {
-                "north": { "uv": [ 0,  4,  8, 16 ], "texture": "#front" },
-                "east":  { "uv": [ 2,  4, 12, 16 ], "texture": "#side", "cullface": "east" },
-                "south": { "uv": [ 8,  4, 16, 16 ], "texture": "#back" },
-                "west":  { "uv": [ 4,  4, 14, 16 ], "texture": "#inside" },
-                "up":    { "uv": [ 8,  4, 16, 14 ], "texture": "#top" },
-                "down":  { "uv": [ 8, 15, 16,  5 ], "texture": "#bottom", "cullface": "down" }
-            }
-        },
-        {
-            "from": [ 8, 12, 7 ],
-            "to": [ 16, 16, 15 ],
-            "faces": {
-                "north": { "uv": [ 0,  0,  8,  4 ], "texture": "#front" },
-                "east":  { "uv": [ 1,  0,  9,  4 ], "texture": "#side", "cullface": "east" },
-                "south": { "uv": [ 8,  0, 16,  4 ], "texture": "#back" },
-                "west":  { "uv": [ 7,  0, 15,  4 ], "texture": "#inside" },
-                "up":    { "uv": [ 8,  7, 16, 15 ], "texture": "#top", "cullface": "up" },
-                "down":  { "uv": [ 8, 16, 16,  8 ], "texture": "#bottom" }
-            }
-        }
-    ]
+	"credit": "crafted with love by the grease artisan mysterymeat",
+	"texture_size": [128, 128],
+	"textures": {
+		"0": "minestuck:block/machine/totemlathe",
+		"particle": "minestuck:block/machine/particle"
+	},
+	"elements": [
+		{
+			"name": "blackbox",
+			"from": [9, 8, 4],
+			"to": [15, 23, 10],
+			"faces": {
+				"north": {"uv": [0.875, 6.875, 1.625, 8.75], "texture": "#0"},
+				"east": {"uv": [0.125, 6.875, 0.875, 8.75], "texture": "#0"},
+				"south": {"uv": [2.375, 6.875, 3.125, 8.75], "texture": "#0"},
+				"west": {"uv": [1.625, 6.875, 2.375, 8.75], "texture": "#0"},
+				"up": {"uv": [1.625, 6.875, 0.875, 6.125], "texture": "#0"},
+				"down": {"uv": [2.375, 6.125, 1.625, 6.875], "texture": "#0"}
+			}
+		},
+		{
+			"name": "blackbox",
+			"from": [9, 16.001, 1],
+			"to": [16, 23.001, 7],
+			"faces": {
+				"north": {"uv": [0.75, 5.25, 1.625, 6.125], "texture": "#0"},
+				"east": {"uv": [0, 5.25, 0.75, 6.125], "texture": "#0"},
+				"south": {"uv": [2.375, 5.25, 3.25, 6.125], "texture": "#0"},
+				"west": {"uv": [1.625, 5.25, 2.375, 6.125], "texture": "#0"},
+				"up": {"uv": [1.625, 5.25, 0.75, 4.5], "texture": "#0"},
+				"down": {"uv": [2.5, 4.5, 1.625, 5.25], "texture": "#0"}
+			}
+		},
+		{
+			"name": "endcap",
+			"from": [8, 8, 10],
+			"to": [16, 25, 14],
+			"faces": {
+				"north": {"uv": [0.5, 9.25, 1.5, 11.375], "texture": "#0"},
+				"east": {"uv": [0, 9.25, 0.5, 11.375], "texture": "#0"},
+				"south": {"uv": [2, 9.25, 3, 11.375], "texture": "#0"},
+				"west": {"uv": [1.5, 9.25, 2, 11.375], "texture": "#0"},
+				"up": {"uv": [1.5, 9.25, 0.5, 8.75], "texture": "#0"},
+				"down": {"uv": [2.5, 8.75, 1.5, 9.25], "texture": "#0"}
+			}
+		},
+		{
+			"name": "frame",
+			"from": [1, -4, 3],
+			"to": [8, 25, 13],
+			"faces": {
+				"north": {"uv": [7.625, 3.875, 8.5, 7.5], "texture": "#0"},
+				"east": {"uv": [6.375, 3.875, 7.625, 7.5], "texture": "#0"},
+				"south": {"uv": [9.75, 3.875, 10.625, 7.5], "texture": "#0"},
+				"west": {"uv": [8.5, 3.875, 9.75, 7.5], "texture": "#0"},
+				"up": {"uv": [8.5, 3.875, 7.625, 2.625], "texture": "#0"},
+				"down": {"uv": [9.375, 2.625, 8.5, 3.875], "texture": "#0"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "root",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "mid",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "mide",
+							"origin": [8, 8, 8],
+							"color": 0,
+							"children": [0, 1, 2, 3]
+						}
+					]
+				}
+			]
+		}
+	]
 }
