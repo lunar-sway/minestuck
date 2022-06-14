@@ -8,7 +8,6 @@ import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.item.crafting.alchemy.CombinationMode;
 import com.mraof.minestuck.item.crafting.alchemy.CombinationRecipe;
 import com.mraof.minestuck.item.crafting.alchemy.CombinerWrapper;
-import com.mraof.minestuck.tileentity.ItemStackTileEntity;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.util.Debug;
@@ -114,16 +113,19 @@ public class TotemLatheTileEntity extends TileEntity implements ITickableTileEnt
 		if(isValidDowelRod(state, facing))
 		{
 			TileEntity te = level.getBlockEntity(pos);
-			if(!(te instanceof ItemStackTileEntity))
+			if(!(te instanceof TotemLatheDowelTileEntity))
 			{
-				te = new ItemStackTileEntity();
+				te = new TotemLatheDowelTileEntity();
 				level.setBlockEntity(pos, te);
 			}
-			ItemStackTileEntity teItem = (ItemStackTileEntity) te;
+			TotemLatheDowelTileEntity teItem = (TotemLatheDowelTileEntity) te;
 			teItem.setStack(stack);
+			//updating the dowel tile entity
 			if(!state.equals(newState))
 				level.setBlockAndUpdate(pos, newState);
-			else level.sendBlockUpdated(pos, state, state, 2);
+			else level.sendBlockUpdated(pos, state, state, Constants.BlockFlags.BLOCK_UPDATE);
+			
+			//updating the machine's tile entity
 			isProcessing = false;
 			level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
 			return true;
@@ -133,13 +135,13 @@ public class TotemLatheTileEntity extends TileEntity implements ITickableTileEnt
 	
 	public ItemStack getDowel()
 	{
-		BlockPos pos = getBlockPos().above().relative(getFacing().getCounterClockWise(), 1);
+		BlockPos pos = MSBlocks.TOTEM_LATHE.getDowelPos(getBlockPos(), getBlockState());
 		if(isValidDowelRod(level.getBlockState(pos), getFacing()))
 		{
 			TileEntity te = level.getBlockEntity(pos);
-			if(te instanceof ItemStackTileEntity)
+			if(te instanceof TotemLatheDowelTileEntity)
 			{
-				return ((ItemStackTileEntity) te).getStack();
+				return ((TotemLatheDowelTileEntity) te).getStack();
 			}
 		}
 		return ItemStack.EMPTY;

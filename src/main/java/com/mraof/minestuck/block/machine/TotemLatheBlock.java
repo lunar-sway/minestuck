@@ -40,7 +40,6 @@ public class TotemLatheBlock extends MultiMachineBlock
 		super(machine, properties);
 		this.shape = shape.createRotatedShapes();
 		this.mainPos = mainPos;
-		this.defaultBlockState().getRenderShape();
 	}
 	
 	@Override

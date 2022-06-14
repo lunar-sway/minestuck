@@ -19,6 +19,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+import javax.annotation.Nullable;
 import java.awt.*;
 
 public class TotemLatheDowelTileEntity extends ItemStackTileEntity implements IAnimatable
@@ -30,6 +31,7 @@ public class TotemLatheDowelTileEntity extends ItemStackTileEntity implements IA
 		super(MSTileEntityTypes.TOTEM_LATHE_DOWEL.get());
 	}
 	
+	@Nullable
 	private TotemLatheTileEntity getTotemLatheEntity()
 	{
 		if(level == null)

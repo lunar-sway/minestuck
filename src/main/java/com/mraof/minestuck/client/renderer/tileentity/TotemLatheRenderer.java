@@ -20,6 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3f;
+import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
@@ -66,7 +67,7 @@ public class TotemLatheRenderer extends GeoBlockRenderer<TotemLatheDowelTileEnti
 			BlockState cruxiteDowel = MSBlocks.CRUXITE_DOWEL.defaultBlockState();
 			if(AlchemyHelper.hasDecodedItem(dowel))
 			{
-				cruxiteDowel = cruxiteDowel.setValue(MSProperties.DOWEL_BLOCK, CruxiteDowelBlock.Type.TOTEM).getBlockState();
+				cruxiteDowel = cruxiteDowel.setValue(MSProperties.DOWEL_BLOCK, CruxiteDowelBlock.Type.TOTEM);
 			}
 			
 			// position adjustments
@@ -80,10 +81,12 @@ public class TotemLatheRenderer extends GeoBlockRenderer<TotemLatheDowelTileEnti
 			ClientWorld level = Minecraft.getInstance().level;
 			BlockRendererDispatcher blockRenderer = Minecraft.getInstance().getBlockRenderer();
 			BlockPos pos = lathe.getBlockPos();
-			IModelData modelData = new ModelDataMap.Builder().build();
+			IModelData modelData = EmptyModelData.INSTANCE;
 			blockRenderer.renderModel(cruxiteDowel, pos, level, stack, renderTypeBuffer.getBuffer(RenderTypeLookup.getRenderType(cruxiteDowel, false)), false, level.random, modelData);
 			
 			stack.popPose();
+			
+			// reset the buffer to render the rest of the totemlathe
 			renderTypeBuffer.getBuffer(RenderType.entityCutoutNoCull(this.getTextureLocation(lathe)));
 			return;
 		}
