@@ -11,6 +11,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
+import java.util.EnumSet;
 
 /**
  * A base class for animated entities with a potentially delayed attack.
@@ -100,7 +101,6 @@ public abstract class AttackingAnimatedEntity extends CreatureEntity
 	protected static class SlowAttackWhenInRangeGoal extends Goal
 	{
 		private final AttackingAnimatedEntity entity;
-		private final boolean attackStopsMovement;
 		/**
 		 * The delay between the start of the animation and the moment the damage lands
 		 */
@@ -115,9 +115,13 @@ public abstract class AttackingAnimatedEntity extends CreatureEntity
 		public SlowAttackWhenInRangeGoal(AttackingAnimatedEntity entity, boolean attackStopsMovement, int attackDelay, int attackRecovery)
 		{
 			this.entity = entity;
-			this.attackStopsMovement = attackStopsMovement;
 			this.attackDelay = attackDelay;
 			this.attackRecovery = attackRecovery;
+			if(attackStopsMovement)
+			{
+				// Will stop any other goal with movement if this goal activates
+				this.setFlags(EnumSet.of(Flag.MOVE));
+			}
 		}
 		
 		@Override
@@ -136,13 +140,6 @@ public abstract class AttackingAnimatedEntity extends CreatureEntity
 		@Override
 		public void start()
 		{
-			if(this.attackStopsMovement)
-			{
-				// Meant to stop the entity while performing its attack animation
-				//TODO not done yet
-				entity.getNavigation().stop();
-			}
-			
 			this.attackDuration = this.attackDelay;
 			this.entity.setAttackState(AttackState.ATTACK);
 		}
