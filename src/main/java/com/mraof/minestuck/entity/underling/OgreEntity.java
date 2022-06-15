@@ -40,7 +40,7 @@ public class OgreEntity extends UnderlingEntity
 	{
 		super.registerGoals();
 		this.goalSelector.addGoal(2, new SlowAttackWhenInRangeGoal(this, true, 18, 20));
-		this.goalSelector.addGoal(3, new MoveToTargetGoal(this, 1F));
+		this.goalSelector.addGoal(3, new MoveToTargetGoal(this, 1F, false));
 	}
 	
 	protected SoundEvent getAmbientSound()

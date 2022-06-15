@@ -43,7 +43,7 @@ public class ImpEntity extends UnderlingEntity implements IAnimatable
 		super.registerGoals();
 		
 		this.goalSelector.addGoal(2, new SlowAttackWhenInRangeGoal(this, true, 4, 10));
-		this.goalSelector.addGoal(3, new MoveToTargetGoal(this, 1F));
+		this.goalSelector.addGoal(3, new MoveToTargetGoal(this, 1F, false));
 	}
 	
 	@Override

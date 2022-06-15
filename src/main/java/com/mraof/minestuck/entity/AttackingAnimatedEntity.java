@@ -81,9 +81,9 @@ public abstract class AttackingAnimatedEntity extends CreatureEntity
 	 */
 	protected static class MoveToTargetGoal extends MeleeAttackGoal
 	{
-		public MoveToTargetGoal(CreatureEntity entity, float speed)
+		public MoveToTargetGoal(CreatureEntity entity, float speed, boolean followsUnseenTarget)
 		{
-			super(entity, speed, true);	// If this boolean is false, the goal will stop when the navigation is stopped, which is not what we want to happen
+			super(entity, speed, followsUnseenTarget);
 		}
 		
 		@Override

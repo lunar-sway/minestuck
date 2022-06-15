@@ -71,7 +71,7 @@ public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IM
 	{
 		super.registerGoals();
 		this.goalSelector.addGoal(2, new SlowAttackWhenInRangeGoal(this, true, 6, 12));
-		this.goalSelector.addGoal(3, new MoveToTargetGoal(this, 1F));
+		this.goalSelector.addGoal(3, new MoveToTargetGoal(this, 1F, false));
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 0, true, false, entity -> attackEntitySelector.isEntityApplicable(entity)));
 	}
 	
