@@ -43,7 +43,7 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 	{
 		super.registerGoals();
 		this.goalSelector.addGoal(1, new AttackResistanceGoal());
-		this.goalSelector.addGoal(2, new SlowAttackWhenInRangeGoal(this, false, 14, 16));
+		this.goalSelector.addGoal(2, new SlowAttackWhenInRangeGoal(this, 14, 16));
 		this.goalSelector.addGoal(3, new MoveToTargetGoal(this, 1F, false));
 	}
 	

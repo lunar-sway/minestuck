@@ -100,7 +100,7 @@ public abstract class AttackingAnimatedEntity extends CreatureEntity
 	 */
 	protected static class SlowAttackWhenInRangeGoal extends Goal
 	{
-		private final AttackingAnimatedEntity entity;
+		protected final AttackingAnimatedEntity entity;
 		/**
 		 * The delay between the start of the animation and the moment the damage lands
 		 */
@@ -112,16 +112,11 @@ public abstract class AttackingAnimatedEntity extends CreatureEntity
 		
 		private int attackDuration = -1, recoverDuration = -1;
 		
-		public SlowAttackWhenInRangeGoal(AttackingAnimatedEntity entity, boolean attackStopsMovement, int attackDelay, int attackRecovery)
+		public SlowAttackWhenInRangeGoal(AttackingAnimatedEntity entity, int attackDelay, int attackRecovery)
 		{
 			this.entity = entity;
 			this.attackDelay = attackDelay;
 			this.attackRecovery = attackRecovery;
-			if(attackStopsMovement)
-			{
-				// Will stop any other goal with movement if this goal activates
-				this.setFlags(EnumSet.of(Flag.MOVE));
-			}
 		}
 		
 		@Override
@@ -183,6 +178,28 @@ public abstract class AttackingAnimatedEntity extends CreatureEntity
 		
 		protected double getAttackReachSqr(LivingEntity target) {
 			return this.entity.getBbWidth() * 2.0F * this.entity.getBbWidth() * 2.0F + target.getBbWidth();
+		}
+	}
+	
+	/**
+	 * Like {@link SlowAttackWhenInRangeGoal}, but interrupts any movement and look goals to stand still and look at the target.
+	 */
+	protected static class SlowAttackInPlaceGoal extends SlowAttackWhenInRangeGoal
+	{
+		public SlowAttackInPlaceGoal(AttackingAnimatedEntity entity, int attackDelay, int attackRecovery)
+		{
+			super(entity, attackDelay, attackRecovery);
+			// Will stop any other goal with movement or looking if this goal activates
+			this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
+		}
+		
+		@Override
+		public void tick()
+		{
+			LivingEntity target = this.entity.getTarget();
+			if(target != null)
+				this.entity.getLookControl().setLookAt(target, 30.0F, 30.0F);
+			super.tick();
 		}
 	}
 }
