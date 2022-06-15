@@ -1,6 +1,5 @@
 package com.mraof.minestuck.entity.underling;
 
-import com.mraof.minestuck.entity.AttackingAnimatedEntity;
 import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
@@ -54,7 +53,8 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 	protected void registerGoals()
 	{
 		super.registerGoals();
-		this.goalSelector.addGoal(3, new AttackingAnimatedEntity.DelayedAttackGoal(this, 1F, true, 4, 10));
+		this.goalSelector.addGoal(2, new SlowAttackWhenInRangeGoal(this, true, 4, 10));
+		this.goalSelector.addGoal(3, new MoveToTargetGoal(this, 1F));
 	}
 	
 	protected SoundEvent getAmbientSound()

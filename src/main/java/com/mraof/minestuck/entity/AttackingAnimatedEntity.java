@@ -3,11 +3,14 @@ package com.mraof.minestuck.entity;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.world.World;
+
+import javax.annotation.Nonnull;
 
 /**
  * A base class for animated entities with a potentially delayed attack.
@@ -57,7 +60,7 @@ public abstract class AttackingAnimatedEntity extends CreatureEntity
 	
 	/**
 	 * Used to set the entity's attack state.
-	 * The attack state is meant to be set exclusively by {@link DelayedAttackGoal}.
+	 * The attack state is meant to be set exclusively by {@link MoveToTargetGoal}.
 	 *
 	 * @param state The new state of the entity's melee attack
 	 */
@@ -74,11 +77,27 @@ public abstract class AttackingAnimatedEntity extends CreatureEntity
 	}
 	
 	/**
-	 * The same as MeleeAttackGoal, except that the moment of attack is not instantaneous.
-	 * Instead, the attack has a preparation phase that delays the actual attack from the moment when the target is first in range.
+	 * The same as MeleeAttackGoal, except that the goal does not handle the actual attack.
+	 */
+	protected static class MoveToTargetGoal extends MeleeAttackGoal
+	{
+		public MoveToTargetGoal(CreatureEntity entity, float speed)
+		{
+			super(entity, speed, true);	// If this boolean is false, the goal will stop when the navigation is stopped, which is not what we want to happen
+		}
+		
+		@Override
+		protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr)
+		{
+		}
+	}
+	
+	/**
+	 * A goal for performing a slow melee attack when within hitting range.
+	 * The attack has a preparation phase that delays the actual attack from the moment when the target is first in range.
 	 * The goal updates the attack state of the attacker accordingly, so that the state can be used for animations and other things.
 	 */
-	protected static class DelayedAttackGoal extends MeleeAttackGoal
+	protected static class SlowAttackWhenInRangeGoal extends Goal
 	{
 		private final AttackingAnimatedEntity entity;
 		private final boolean attackStopsMovement;
@@ -93,9 +112,8 @@ public abstract class AttackingAnimatedEntity extends CreatureEntity
 		
 		private int attackDuration = -1, recoverDuration = -1;
 		
-		public DelayedAttackGoal(AttackingAnimatedEntity entity, float speed, boolean attackStopsMovement, int attackDelay, int attackRecovery)
+		public SlowAttackWhenInRangeGoal(AttackingAnimatedEntity entity, boolean attackStopsMovement, int attackDelay, int attackRecovery)
 		{
-			super(entity, speed, true);	// If this boolean is false, the goal will stop when the navigation is stopped, which is not what we want to happen
 			this.entity = entity;
 			this.attackStopsMovement = attackStopsMovement;
 			this.attackDelay = attackDelay;
@@ -103,44 +121,30 @@ public abstract class AttackingAnimatedEntity extends CreatureEntity
 		}
 		
 		@Override
-		protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr)
+		public boolean canUse()
 		{
-			this.attackDuration = Math.max(this.attackDuration - 1, -1);
-			this.recoverDuration = Math.max(this.recoverDuration - 1, -1);
-			
-			double reach = this.getAttackReachSqr(enemy);
-			
-			//Check for attack start
-			if(distToEnemySqr <= reach && this.attackDuration < 0 && this.recoverDuration < 0)
+			LivingEntity target = this.entity.getTarget();
+			return target != null && this.isValidTarget(target) && this.entity.getSensing().canSee(target);
+		}
+		
+		@Override
+		public boolean canContinueToUse()
+		{
+			return attackDuration > 0 || recoverDuration > 0;
+		}
+		
+		@Override
+		public void start()
+		{
+			if(this.attackStopsMovement)
 			{
-				if(this.attackStopsMovement)
-				{
-					// Meant to stop the entity while performing its attack animation
-					//TODO not done yet
-					entity.getNavigation().stop();
-				}
-				
-				this.attackDuration = this.attackDelay;
-				entity.setAttackState(AttackState.ATTACK);
+				// Meant to stop the entity while performing its attack animation
+				//TODO not done yet
+				entity.getNavigation().stop();
 			}
 			
-			//Check for attack end
-			if(this.attackDuration == 0)
-			{
-				if(distToEnemySqr <= reach)
-				{
-					entity.doHurtTarget(enemy);
-					// TODO: AOE bounding box collision checks + aoe flag
-				}
-				this.recoverDuration = this.attackRecovery;
-				entity.setAttackState(AttackState.ATTACK_RECOVERY);
-			}
-			
-			//Check for attack recovery end
-			if(this.recoverDuration == 0)
-			{
-				entity.setAttackState(AttackState.NONE);
-			}
+			this.attackDuration = this.attackDelay;
+			this.entity.setAttackState(AttackState.ATTACK);
 		}
 		
 		@Override
@@ -148,7 +152,40 @@ public abstract class AttackingAnimatedEntity extends CreatureEntity
 		{
 			this.attackDuration = -1;
 			this.recoverDuration = -1;
-			entity.setAttackState(AttackState.NONE);
+			this.entity.setAttackState(AttackState.NONE);
+		}
+		
+		@Override
+		public void tick()
+		{
+			this.attackDuration = Math.max(this.attackDuration - 1, -1);
+			this.recoverDuration = Math.max(this.recoverDuration - 1, -1);
+			
+			if(this.attackDuration == 0)
+			{
+				LivingEntity target = this.entity.getTarget();
+				if(target != null && this.isValidTarget(target))
+				{
+					this.entity.doHurtTarget(target);
+					// TODO: AOE bounding box collision checks + aoe flag
+				}
+				this.recoverDuration = this.attackRecovery;
+				this.entity.setAttackState(AttackState.ATTACK_RECOVERY);
+			}
+			
+			if(this.recoverDuration == 0)
+			{
+				this.entity.setAttackState(AttackState.NONE);
+			}
+		}
+		
+		protected boolean isValidTarget(@Nonnull LivingEntity target)
+		{
+			return target.isAlive() && this.getAttackReachSqr(target) >= this.entity.distanceToSqr(target);
+		}
+		
+		protected double getAttackReachSqr(LivingEntity target) {
+			return this.entity.getBbWidth() * 2.0F * this.entity.getBbWidth() * 2.0F + target.getBbWidth();
 		}
 	}
 }
