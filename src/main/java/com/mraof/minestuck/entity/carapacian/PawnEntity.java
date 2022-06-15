@@ -1,5 +1,7 @@
 package com.mraof.minestuck.entity.carapacian;
 
+import com.mraof.minestuck.entity.ai.MoveToTargetGoal;
+import com.mraof.minestuck.entity.ai.SlowAttackWhenInRangeGoal;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.AnimationUtil;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -70,7 +72,7 @@ public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IM
 	protected void registerGoals()
 	{
 		super.registerGoals();
-		this.goalSelector.addGoal(2, new SlowAttackInPlaceGoal(this, 6, 12));
+		this.goalSelector.addGoal(2, new SlowAttackWhenInRangeGoal.InPlace(this, 6, 12));
 		this.goalSelector.addGoal(3, new MoveToTargetGoal(this, 1F, false));
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 0, true, false, entity -> attackEntitySelector.isEntityApplicable(entity)));
 	}

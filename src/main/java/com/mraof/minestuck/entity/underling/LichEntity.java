@@ -1,5 +1,7 @@
 package com.mraof.minestuck.entity.underling;
 
+import com.mraof.minestuck.entity.ai.MoveToTargetGoal;
+import com.mraof.minestuck.entity.ai.SlowAttackWhenInRangeGoal;
 import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;

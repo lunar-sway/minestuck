@@ -1,5 +1,7 @@
 package com.mraof.minestuck.entity.underling;
 
+import com.mraof.minestuck.entity.ai.MoveToTargetGoal;
+import com.mraof.minestuck.entity.ai.SlowAttackWhenInRangeGoal;
 import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
@@ -42,7 +44,7 @@ public class ImpEntity extends UnderlingEntity implements IAnimatable
 	{
 		super.registerGoals();
 		
-		this.goalSelector.addGoal(2, new SlowAttackInPlaceGoal(this, 4, 10));
+		this.goalSelector.addGoal(2, new SlowAttackWhenInRangeGoal.InPlace(this, 4, 10));
 		this.goalSelector.addGoal(3, new MoveToTargetGoal(this, 1F, false));
 	}
 	

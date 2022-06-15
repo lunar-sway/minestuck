@@ -1,17 +1,13 @@
 package com.mraof.minestuck.entity;
 
+import com.mraof.minestuck.entity.ai.MoveToTargetGoal;
+import com.mraof.minestuck.entity.ai.SlowAttackWhenInRangeGoal;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.world.World;
-
-import javax.annotation.Nonnull;
-import java.util.EnumSet;
 
 /**
  * A base class for animated entities with a potentially delayed attack.
@@ -39,8 +35,8 @@ public abstract class AttackingAnimatedEntity extends CreatureEntity
 	 */
 	protected boolean isAttacking()
 	{
-		AttackState state = this.getAttackState();
-		return state == AttackState.ATTACK || state == AttackState.ATTACK_RECOVERY;
+		SlowAttackWhenInRangeGoal.AttackState state = this.getAttackState();
+		return state == SlowAttackWhenInRangeGoal.AttackState.ATTACK || state == SlowAttackWhenInRangeGoal.AttackState.ATTACK_RECOVERY;
 	}
 	
 	/**
@@ -48,15 +44,15 @@ public abstract class AttackingAnimatedEntity extends CreatureEntity
 	 */
 	protected boolean isPreparingToAttack()
 	{
-		return this.getAttackState() == AttackState.ATTACK;
+		return this.getAttackState() == SlowAttackWhenInRangeGoal.AttackState.ATTACK;
 	}
 	
 	/**
 	 * @return the current state of the entity's melee attack
 	 */
-	protected AttackState getAttackState()
+	protected SlowAttackWhenInRangeGoal.AttackState getAttackState()
 	{
-		return AttackState.values()[this.entityData.get(CURRENT_ACTION)];
+		return SlowAttackWhenInRangeGoal.AttackState.values()[this.entityData.get(CURRENT_ACTION)];
 	}
 	
 	/**
@@ -65,141 +61,8 @@ public abstract class AttackingAnimatedEntity extends CreatureEntity
 	 *
 	 * @param state The new state of the entity's melee attack
 	 */
-	public void setAttackState(AttackState state)
+	public void setAttackState(SlowAttackWhenInRangeGoal.AttackState state)
 	{
 		this.entityData.set(CURRENT_ACTION, state.ordinal());
-	}
-	
-	public enum AttackState
-	{
-		NONE,
-		ATTACK,
-		ATTACK_RECOVERY
-	}
-	
-	/**
-	 * The same as MeleeAttackGoal, except that the goal does not handle the actual attack.
-	 */
-	protected static class MoveToTargetGoal extends MeleeAttackGoal
-	{
-		public MoveToTargetGoal(CreatureEntity entity, float speed, boolean followsUnseenTarget)
-		{
-			super(entity, speed, followsUnseenTarget);
-		}
-		
-		@Override
-		protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr)
-		{
-		}
-	}
-	
-	/**
-	 * A goal for performing a slow melee attack when within hitting range.
-	 * The attack has a preparation phase that delays the actual attack from the moment when the target is first in range.
-	 * The goal updates the attack state of the attacker accordingly, so that the state can be used for animations and other things.
-	 */
-	protected static class SlowAttackWhenInRangeGoal extends Goal
-	{
-		protected final AttackingAnimatedEntity entity;
-		/**
-		 * The delay between the start of the animation and the moment the damage lands
-		 */
-		private final int attackDelay;
-		/**
-		 * The delay after an attack and before another start
-		 */
-		private final int attackRecovery;
-		
-		private int attackDuration = -1, recoverDuration = -1;
-		
-		public SlowAttackWhenInRangeGoal(AttackingAnimatedEntity entity, int attackDelay, int attackRecovery)
-		{
-			this.entity = entity;
-			this.attackDelay = attackDelay;
-			this.attackRecovery = attackRecovery;
-		}
-		
-		@Override
-		public boolean canUse()
-		{
-			LivingEntity target = this.entity.getTarget();
-			return target != null && this.isValidTarget(target) && this.entity.getSensing().canSee(target);
-		}
-		
-		@Override
-		public boolean canContinueToUse()
-		{
-			return attackDuration > 0 || recoverDuration > 0;
-		}
-		
-		@Override
-		public void start()
-		{
-			this.attackDuration = this.attackDelay;
-			this.entity.setAttackState(AttackState.ATTACK);
-		}
-		
-		@Override
-		public void stop()
-		{
-			this.attackDuration = -1;
-			this.recoverDuration = -1;
-			this.entity.setAttackState(AttackState.NONE);
-		}
-		
-		@Override
-		public void tick()
-		{
-			this.attackDuration = Math.max(this.attackDuration - 1, -1);
-			this.recoverDuration = Math.max(this.recoverDuration - 1, -1);
-			
-			if(this.attackDuration == 0)
-			{
-				LivingEntity target = this.entity.getTarget();
-				if(target != null && this.isValidTarget(target))
-				{
-					this.entity.doHurtTarget(target);
-					// TODO: AOE bounding box collision checks + aoe flag
-				}
-				this.recoverDuration = this.attackRecovery;
-				this.entity.setAttackState(AttackState.ATTACK_RECOVERY);
-			}
-			
-			if(this.recoverDuration == 0)
-			{
-				this.entity.setAttackState(AttackState.NONE);
-			}
-		}
-		
-		protected boolean isValidTarget(@Nonnull LivingEntity target)
-		{
-			return target.isAlive() && this.getAttackReachSqr(target) >= this.entity.distanceToSqr(target);
-		}
-		
-		protected double getAttackReachSqr(LivingEntity target) {
-			return this.entity.getBbWidth() * 2.0F * this.entity.getBbWidth() * 2.0F + target.getBbWidth();
-		}
-	}
-	
-	/**
-	 * Like {@link SlowAttackWhenInRangeGoal}, but interrupts any movement and look goals to stand still and look at the target.
-	 */
-	protected static class SlowAttackInPlaceGoal extends SlowAttackWhenInRangeGoal
-	{
-		public SlowAttackInPlaceGoal(AttackingAnimatedEntity entity, int attackDelay, int attackRecovery)
-		{
-			super(entity, attackDelay, attackRecovery);
-			// Will stop any other goal with movement or looking if this goal activates
-			this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
-		}
-		
-		@Override
-		public void tick()
-		{
-			LivingEntity target = this.entity.getTarget();
-			if(target != null)
-				this.entity.getLookControl().setLookAt(target, 30.0F, 30.0F);
-			super.tick();
-		}
 	}
 }
