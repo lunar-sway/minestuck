@@ -33,7 +33,7 @@ public abstract class AttackingAnimatedEntity extends CreatureEntity
 	 *
 	 * @return true if the entity performing an attack
 	 */
-	protected boolean isAttacking()
+	public boolean isAttacking()
 	{
 		SlowAttackWhenInRangeGoal.AttackState state = this.getAttackState();
 		return state == SlowAttackWhenInRangeGoal.AttackState.ATTACK || state == SlowAttackWhenInRangeGoal.AttackState.ATTACK_RECOVERY;
