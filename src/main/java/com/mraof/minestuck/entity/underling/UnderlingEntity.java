@@ -1,6 +1,6 @@
 package com.mraof.minestuck.entity.underling;
 
-import com.mraof.minestuck.entity.AnimatedCreatureEntity;
+import com.mraof.minestuck.entity.AttackingAnimatedEntity;
 import com.mraof.minestuck.entity.EntityListFilter;
 import com.mraof.minestuck.entity.ai.HurtByTargetAlliedGoal;
 import com.mraof.minestuck.entity.item.GristEntity;
@@ -38,15 +38,18 @@ import net.minecraft.world.*;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.FakePlayer;
 import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public abstract class UnderlingEntity extends AnimatedCreatureEntity implements IMob, IAnimatable
+public abstract class UnderlingEntity extends AttackingAnimatedEntity implements IMob, IAnimatable
 {
 	public static final UUID GRIST_MODIFIER_ID = UUID.fromString("08B6DEFC-E3F4-11EA-87D0-0242AC130003");
 	private static final DataParameter<String> GRIST_TYPE = EntityDataManager.defineId(UnderlingEntity.class, DataSerializers.STRING);
+	
+	private final AnimationFactory factory = new AnimationFactory(this);
 	protected final EntityListFilter attackEntitySelector = new EntityListFilter(new ArrayList<>());    //TODO this filter isn't being saved. F1X PLZ
 	protected boolean fromSpawner;
 	public boolean dropCandy;
@@ -56,19 +59,11 @@ public abstract class UnderlingEntity extends AnimatedCreatureEntity implements 
 	
 	protected Map<PlayerIdentifier, Double> damageMap = new HashMap<>();    //Map that stores how much damage each player did to this to this underling. Null is used for environmental or other non-player damage
 	
-	/**
-	 * @param knockbackResist Extra knockback resistance while attacking
-	 */
-	public UnderlingEntity(EntityType<? extends UnderlingEntity> type, World world, int consortRep, double knockbackResist)
-	{
-		super(type, world, knockbackResist);
-		this.consortRep = consortRep;
-		attackEntitySelector.entityList.add(EntityType.PLAYER);
-	}
-	
 	public UnderlingEntity(EntityType<? extends UnderlingEntity> type, World world, int consortRep)
 	{
-		this(type, world, consortRep, 0);
+		super(type, world);
+		this.consortRep = consortRep;
+		attackEntitySelector.entityList.add(EntityType.PLAYER);
 	}
 	
 	@Override
@@ -83,6 +78,12 @@ public abstract class UnderlingEntity extends AnimatedCreatureEntity implements 
 		
 		targetSelector.addGoal(1, new HurtByTargetAlliedGoal(this, entity -> MSTags.EntityTypes.UNDERLINGS.contains(entity.getType())));
 		targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 2, true, false, this::isAppropriateTarget));
+	}
+	
+	@Override
+	public AnimationFactory getFactory()
+	{
+		return this.factory;
 	}
 	
 	protected boolean isAppropriateTarget(LivingEntity entity)
