@@ -1,7 +1,8 @@
 package com.mraof.minestuck.entity.underling;
 
-import com.mraof.minestuck.entity.ai.MoveToTargetGoal;
-import com.mraof.minestuck.entity.ai.SlowAttackWhenInRangeGoal;
+import com.mraof.minestuck.entity.ai.attack.MoveToTargetGoal;
+import com.mraof.minestuck.entity.ai.attack.SlowAttackWhenInRangeGoal;
+import com.mraof.minestuck.entity.ai.attack.ZeroMovementDuringAttack;
 import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
@@ -42,7 +43,7 @@ public class OgreEntity extends UnderlingEntity
 	{
 		super.registerGoals();
 		this.goalSelector.addGoal(2, new SlowAttackWhenInRangeGoal<>(this, 18, 20));
-		this.goalSelector.addGoal(2, new SlowAttackWhenInRangeGoal.ZeroMovementDuringAttack<>(this));
+		this.goalSelector.addGoal(2, new ZeroMovementDuringAttack<>(this));
 		this.goalSelector.addGoal(3, new MoveToTargetGoal(this, 1F, false));
 	}
 	

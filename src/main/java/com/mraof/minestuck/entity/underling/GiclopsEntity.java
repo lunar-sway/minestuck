@@ -1,6 +1,6 @@
 package com.mraof.minestuck.entity.underling;
 
-import com.mraof.minestuck.entity.ai.CustomMeleeAttackGoal;
+import com.mraof.minestuck.entity.ai.attack.CustomMeleeAttackGoal;
 import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;

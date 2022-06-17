@@ -1,11 +1,11 @@
-package com.mraof.minestuck.entity.ai;
+package com.mraof.minestuck.entity.ai.attack;
 
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 
 /**
- * The same as MeleeAttackGoal, except that the goal does not handle the actual attack.
+ * The same as {@link MeleeAttackGoal}, except that the goal does not handle the actual attack.
  */
 public class MoveToTargetGoal extends MeleeAttackGoal
 {

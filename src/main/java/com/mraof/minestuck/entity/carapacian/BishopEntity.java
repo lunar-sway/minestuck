@@ -1,6 +1,6 @@
 package com.mraof.minestuck.entity.carapacian;
 
-import com.mraof.minestuck.entity.ai.AttackByDistanceGoal;
+import com.mraof.minestuck.entity.ai.attack.AttackByDistanceGoal;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -13,7 +13,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
-import software.bernie.geckolib3.core.manager.AnimationData;
 
 import javax.annotation.Nullable;
 import java.util.function.Predicate;

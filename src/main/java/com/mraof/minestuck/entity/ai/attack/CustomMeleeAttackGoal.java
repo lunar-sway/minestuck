@@ -1,4 +1,4 @@
-package com.mraof.minestuck.entity.ai;
+package com.mraof.minestuck.entity.ai.attack;
 
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.LivingEntity;
