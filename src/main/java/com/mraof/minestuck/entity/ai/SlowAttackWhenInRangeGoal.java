@@ -1,6 +1,6 @@
 package com.mraof.minestuck.entity.ai;
 
-import com.mraof.minestuck.entity.AttackingAnimatedEntity;
+import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -16,9 +16,9 @@ import java.util.UUID;
  * The attack has a preparation phase that delays the actual attack from the moment when the target is first in range.
  * The goal updates the attack state of the attacker accordingly, so that the state can be used for animations and other things.
  */
-public class SlowAttackWhenInRangeGoal extends Goal
+public class SlowAttackWhenInRangeGoal<T extends CreatureEntity & SlowAttackWhenInRangeGoal.AttackStateHolder> extends Goal
 {
-	protected final AttackingAnimatedEntity entity;
+	protected final T entity;
 	/**
 	 * The delay between the start of the animation and the moment the damage lands
 	 */
@@ -30,7 +30,7 @@ public class SlowAttackWhenInRangeGoal extends Goal
 	
 	private int attackDuration = -1, recoverDuration = -1;
 	
-	public SlowAttackWhenInRangeGoal(AttackingAnimatedEntity entity, int attackDelay, int attackRecovery)
+	public SlowAttackWhenInRangeGoal(T entity, int attackDelay, int attackRecovery)
 	{
 		this.entity = entity;
 		this.attackDelay = attackDelay;
@@ -109,9 +109,9 @@ public class SlowAttackWhenInRangeGoal extends Goal
 	/**
 	 * Like {@link SlowAttackWhenInRangeGoal}, but interrupts any movement and look goals to stand still and look at the target.
 	 */
-	public static class InPlace extends SlowAttackWhenInRangeGoal
+	public static class InPlace<T extends CreatureEntity & AttackStateHolder> extends SlowAttackWhenInRangeGoal<T>
 	{
-		public InPlace(AttackingAnimatedEntity entity, int attackDelay, int attackRecovery)
+		public InPlace(T entity, int attackDelay, int attackRecovery)
 		{
 			super(entity, attackDelay, attackRecovery);
 			// Will stop any other goal with movement or looking if this goal activates
@@ -135,14 +135,14 @@ public class SlowAttackWhenInRangeGoal extends Goal
 	 * Also, while {@link InPlace} is used instead of {@link SlowAttackWhenInRangeGoal},
 	 * this goal is used on top of {@link SlowAttackWhenInRangeGoal}.
 	 */
-	public static class ZeroMovementDuringAttack extends Goal
+	public static class ZeroMovementDuringAttack<T extends CreatureEntity & AttackStateHolder> extends Goal
 	{
 		private static final UUID MOVEMENT_MODIFIER_ATTACKING_UUID = UUID.fromString("a2793876-ee17-11ec-8ea0-0242ac120002");
 		private static final AttributeModifier MOVEMENT_MODIFIER_ATTACKING = new AttributeModifier(MOVEMENT_MODIFIER_ATTACKING_UUID, "Attacking movement reduction", -1, AttributeModifier.Operation.MULTIPLY_TOTAL);
 		
-		private final AttackingAnimatedEntity entity;
+		private final T entity;
 		
-		public ZeroMovementDuringAttack(AttackingAnimatedEntity entity)
+		public ZeroMovementDuringAttack(T entity)
 		{
 			this.entity = entity;
 		}
@@ -167,6 +167,42 @@ public class SlowAttackWhenInRangeGoal extends Goal
 			ModifiableAttributeInstance instance = this.entity.getAttributes().getInstance(Attributes.MOVEMENT_SPEED);
 			if(instance != null)
 				instance.removeModifier(MOVEMENT_MODIFIER_ATTACKING);
+		}
+	}
+	
+	public interface AttackStateHolder
+	{
+		/**
+		 * @return the current state of the entity's melee attack
+		 */
+		AttackState getAttackState();
+		
+		/**
+		 * Used to set the entity's attack state.
+		 * The attack state is meant to be set exclusively by {@link MoveToTargetGoal}.
+		 *
+		 * @param state The new state of the entity's melee attack
+		 */
+		void setAttackState(AttackState state);
+		
+		
+		/**
+		 * @return true during the attack animation right before an attack lands.
+		 */
+		default boolean isPreparingToAttack()
+		{
+			return this.getAttackState() == AttackState.ATTACK;
+		}
+		
+		/**
+		 * Used to start animations and other things
+		 *
+		 * @return true if the entity performing an attack
+		 */
+		default boolean isAttacking()
+		{
+			AttackState state = this.getAttackState();
+			return state == AttackState.ATTACK || state == AttackState.ATTACK_RECOVERY;
 		}
 	}
 }
