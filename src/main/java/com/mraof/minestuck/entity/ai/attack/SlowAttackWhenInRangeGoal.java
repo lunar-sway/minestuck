@@ -49,7 +49,7 @@ public class SlowAttackWhenInRangeGoal<T extends CreatureEntity & AttackState.Ho
 	public void start()
 	{
 		this.attackDuration = this.attackDelay;
-		this.entity.setAttackState(AttackState.ATTACK);
+		this.entity.setAttackState(AttackState.PREPARATION);
 	}
 	
 	@Override
@@ -75,7 +75,7 @@ public class SlowAttackWhenInRangeGoal<T extends CreatureEntity & AttackState.Ho
 				// TODO: AOE bounding box collision checks + aoe flag
 			}
 			this.recoverDuration = this.attackRecovery;
-			this.entity.setAttackState(AttackState.ATTACK_RECOVERY);
+			this.entity.setAttackState(AttackState.RECOVERY);
 		}
 		
 		if(this.recoverDuration == 0)

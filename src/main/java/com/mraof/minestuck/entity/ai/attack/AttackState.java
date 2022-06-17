@@ -7,8 +7,8 @@ package com.mraof.minestuck.entity.ai.attack;
 public enum AttackState
 {
 	NONE,
-	ATTACK,
-	ATTACK_RECOVERY;
+	PREPARATION,
+	RECOVERY;
 	
 	/**
 	 * An interface for an entity which may hold an attack state.
@@ -33,7 +33,7 @@ public enum AttackState
 		 */
 		default boolean isPreparingToAttack()
 		{
-			return this.getAttackState() == ATTACK;
+			return this.getAttackState() == PREPARATION;
 		}
 		
 		/**
@@ -44,7 +44,7 @@ public enum AttackState
 		default boolean isAttacking()
 		{
 			AttackState state = this.getAttackState();
-			return state == ATTACK || state == ATTACK_RECOVERY;
+			return state == PREPARATION || state == RECOVERY;
 		}
 	}
 }
