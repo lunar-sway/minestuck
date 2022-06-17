@@ -1,5 +1,7 @@
 package com.mraof.minestuck.entity.carapacian;
 
+import com.mraof.minestuck.entity.AnimatedCreatureEntity;
+import com.mraof.minestuck.entity.ai.attack.AttackState;
 import com.mraof.minestuck.entity.ai.attack.MoveToTargetGoal;
 import com.mraof.minestuck.entity.ai.attack.SlowAttackWhenInRangeGoal;
 import com.mraof.minestuck.entity.ai.attack.ZeroMovementDuringAttack;
@@ -19,6 +21,9 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
@@ -34,8 +39,10 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nullable;
 
-public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IMob, IAnimatable
+public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IMob, IAnimatable, AttackState.Holder
 {
+	private static final DataParameter<Integer> CURRENT_ACTION = EntityDataManager.defineId(PawnEntity.class, DataSerializers.INT);
+	
 	private final AnimationFactory factory = new AnimationFactory(this);
 	private final RangedAttackGoal aiArrowAttack = new RangedAttackGoal(this, 5 / 4F, 20, 10.0F);
 	private final MeleeAttackGoal aiMeleeAttack = new MeleeAttackGoal(this, 2F, false);
@@ -45,12 +52,6 @@ public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IM
 		super(type, kingdom, world);
 		this.xpReward = 1;
 		setCombatTask();
-	}
-	
-	@Override
-	public AnimationFactory getFactory()
-	{
-		return this.factory;
 	}
 	
 	public static PawnEntity createProspitian(EntityType<? extends PawnEntity> type, World world)
@@ -70,6 +71,12 @@ public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IM
 	}
 	
 	@Override
+	public AnimationFactory getFactory()
+	{
+		return this.factory;
+	}
+	
+	@Override
 	protected void registerGoals()
 	{
 		super.registerGoals();
@@ -77,6 +84,25 @@ public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IM
 		this.goalSelector.addGoal(2, new ZeroMovementDuringAttack<>(this));
 		this.goalSelector.addGoal(3, new MoveToTargetGoal(this, 1F, false));
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 0, true, false, entity -> attackEntitySelector.isEntityApplicable(entity)));
+	}
+	
+	@Override
+	protected void defineSynchedData()
+	{
+		super.defineSynchedData();
+		entityData.define(CURRENT_ACTION, AnimatedCreatureEntity.Actions.NONE.ordinal());
+	}
+	
+	@Override
+	public AttackState getAttackState()
+	{
+		return AttackState.values()[this.entityData.get(CURRENT_ACTION)];
+	}
+	
+	@Override
+	public void setAttackState(AttackState state)
+	{
+		this.entityData.set(CURRENT_ACTION, state.ordinal());
 	}
 	
 	@Override
