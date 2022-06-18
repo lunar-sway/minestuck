@@ -32,5 +32,12 @@ public class MSMiscLootTables implements Consumer<BiConsumer<ResourceLocation, L
 						.add(LootItem.lootTableItem(Items.DEAD_HORN_CORAL).setWeight(10).setQuality(0))
 				)
 		);
+		
+		lootProcessor.accept(MSLootTables.LOTUS_FLOWER_DEFAULT, LootTable.lootTable()
+				.withPool(LootPool.lootPool().name("computer").setRolls(ConstantRange.exactly(1))
+						.add(ItemLootEntry.lootTableItem(MSItems.COMPUTER_PARTS).setWeight(10).setQuality(3)))
+				.withPool(LootPool.lootPool().name("code").setRolls(ConstantRange.exactly(1))
+						.add(ItemLootEntry.lootTableItem(MSItems.SBURB_CODE).setWeight(10).setQuality(3)))
+		);
 	}
 }

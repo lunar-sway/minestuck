@@ -4,6 +4,7 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.network.LotusFlowerPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.world.storage.loot.MSLootTables;
 import net.minecraft.Util;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -34,6 +35,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
+import java.util.List;
 
 public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEntityAdditionalSpawnData
 {
@@ -182,16 +184,34 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 		MSPacketHandler.sendToTracking(packet, this);
 	}
 	
+	/**
+	 * Spawns loot from the LOTUS_FLOWER_DEFAULT loot table
+	 */
 	protected void spawnLoot()
 	{
-		Level level = this.level;
+		if(!level.isClientSide)
+		{
+			ServerWorld serverWorld = (ServerWorld) level;
+			
+			LootTable lootTable = serverWorld.getServer().getLootTables().get(MSLootTables.LOTUS_FLOWER_DEFAULT);
+			List<ItemStack> loot = lootTable.getRandomItems(new LootContext.Builder(serverWorld).create(LootParameterSets.EMPTY));
+			if(loot.isEmpty())
+				LOGGER.warn("Tried to generate loot for Lotus Flower, but no items were generated!");
+			
+			for(ItemStack itemStack : loot)
+			{
+				this.spawnAtLocation(itemStack, 1F);
+			}
+		}
+		
+		/*Level level = this.level;
 		Vec3 posVec = this.position();
 		
 		ItemEntity unpoweredComputerItemEntity = new ItemEntity(level, posVec.x(), posVec.y() + 1D, posVec.z(), new ItemStack(MSItems.COMPUTER_PARTS.get(), 1));
 		level.addFreshEntity(unpoweredComputerItemEntity);
 		
 		ItemEntity sburbCodeItemEntity = new ItemEntity(level, posVec.x(), posVec.y() + 1D, posVec.z(), new ItemStack(MSItems.SBURB_CODE.get(), 1));
-		level.addFreshEntity(sburbCodeItemEntity);
+		level.addFreshEntity(sburbCodeItemEntity);*/
 	}
 	
 	@Override

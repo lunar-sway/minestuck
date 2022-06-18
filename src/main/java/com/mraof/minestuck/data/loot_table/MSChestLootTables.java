@@ -35,7 +35,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 	@Override
 	public void accept(BiConsumer<ResourceLocation, LootTable.Builder> lootProcessor)
 	{
-		lootProcessor.accept(MSLootTables.DUNGEON_LOOT_INJECT, LootTable.lootTable()
+		lootProcessor.accept(MSLootTables.BLANK_DISK_DUNGEON_LOOT_INJECT, LootTable.lootTable()
 				.withPool(LootPool.lootPool().name("minestuck").setRolls(UniformGenerator.between(0, 1))
 						.add(LootItem.lootTableItem(MSItems.BLANK_DISK.get()).setWeight(1).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 2))))));
 		
