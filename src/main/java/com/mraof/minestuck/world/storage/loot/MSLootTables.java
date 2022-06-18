@@ -12,12 +12,16 @@ import net.minecraft.util.registry.Registry;
 
 public class MSLootTables
 {
-	public static final ResourceLocation DUNGEON_LOOT_INJECT = new ResourceLocation("minestuck", "chests/injections/dungeon_inject");
+	public static final ResourceLocation BLANK_DISK_DUNGEON_LOOT_INJECT = new ResourceLocation("minestuck", "chests/injections/blank_disk_dungeon_inject");
+	;;;;
+	//TODO sburb code inject for overworld libraries
+	;;;;
 	public static final ResourceLocation FROG_TEMPLE_CHEST = new ResourceLocation("minestuck", "chests/frog_temple");
 	public static final ResourceLocation BASIC_MEDIUM_CHEST = new ResourceLocation("minestuck", "chests/medium_basic");
 	public static final ResourceLocation CONSORT_JUNK_REWARD = new ResourceLocation("minestuck", "gameplay/consort_junk");
 	public static final ResourceLocation CONSORT_FOOD_STOCK = new ResourceLocation("minestuck", "gameplay/consort_food");
 	public static final ResourceLocation CONSORT_GENERAL_STOCK = new ResourceLocation("minestuck", "gameplay/consort_general");
+	public static final ResourceLocation LOTUS_FLOWER_DEFAULT = new ResourceLocation("minestuck", "gameplay/lotus_flower_default");
 	
 	private static LootConditionType LAND_TYPE_CONDITION;
 	private static LootConditionType CONSORT_CONDITION;

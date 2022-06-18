@@ -30,9 +30,9 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 	@Override
 	public void accept(BiConsumer<ResourceLocation, LootTable.Builder> lootProcessor)
 	{
-		lootProcessor.accept(MSLootTables.DUNGEON_LOOT_INJECT, LootTable.lootTable()
+		lootProcessor.accept(MSLootTables.BLANK_DISK_DUNGEON_LOOT_INJECT, LootTable.lootTable()
 				.withPool(LootPool.lootPool().name("minestuck").setRolls(RandomValueRange.between(0, 1))
-						.add(ItemLootEntry.lootTableItem(MSItems.BLANK_DISK).setWeight(1).setQuality(1).apply(SetCount.setCount(RandomValueRange.between(0, 2))))));
+						.add(ItemLootEntry.lootTableItem(MSItems.BLANK_DISK).setWeight(1).setQuality(1).apply(SetCount.setCount(RandomValueRange.between(1, 2))))));
 		
 		lootProcessor.accept(MSLootTables.FROG_TEMPLE_CHEST, LootTable.lootTable()
 				.withPool(LootPool.lootPool().name(WEAPONS_POOL).setRolls(RandomValueRange.between(0, 2))
@@ -58,7 +58,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(ItemLootEntry.lootTableItem(Items.DIAMOND).setWeight(1).setQuality(3).apply(SetCount.setCount(RandomValueRange.between(1, 3))))
 						.add(ItemLootEntry.lootTableItem(Items.PUMPKIN).setWeight(3).setQuality(-1).apply(SetCount.setCount(RandomValueRange.between(1, 5))))
 						.add(ItemLootEntry.lootTableItem(Items.WRITABLE_BOOK).setWeight(2).setQuality(1).apply(SetCount.setCount(RandomValueRange.between(0, 1))))
-						.add(ItemLootEntry.lootTableItem(MSItems.BLANK_DISK).setWeight(5).setQuality(3).apply(SetCount.setCount(RandomValueRange.between(1, 2))))
+						.add(ItemLootEntry.lootTableItem(MSItems.BLANK_DISK).setWeight(5).setQuality(3).apply(SetCount.setCount(RandomValueRange.between(1, 5))))
 						.add(ItemLootEntry.lootTableItem(MSItems.RAW_CRUXITE).setWeight(4).setQuality(0).apply(SetCount.setCount(RandomValueRange.between(1, 7))))
 						.add(ItemLootEntry.lootTableItem(MSItems.RAW_URANIUM).setWeight(2).setQuality(1).apply(SetCount.setCount(RandomValueRange.between(1, 5))))
 						.add(ItemLootEntry.lootTableItem(MSItems.BUG_ON_A_STICK).setWeight(4).setQuality(-1).apply(SetCount.setCount(RandomValueRange.between(1, 5))))

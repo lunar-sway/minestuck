@@ -38,14 +38,15 @@ import java.util.Set;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class MSLootEvents
 {
-	private static final Set<ResourceLocation> LOOT_INJECT = Sets.newHashSet(LootTables.SIMPLE_DUNGEON, LootTables.ABANDONED_MINESHAFT, LootTables.DESERT_PYRAMID, LootTables.JUNGLE_TEMPLE, LootTables.WOODLAND_MANSION, LootTables.UNDERWATER_RUIN_BIG, LootTables.SPAWN_BONUS_CHEST);
+	private static final Set<ResourceLocation> BLANK_DISC_LOOT_INJECT = Sets.newHashSet(LootTables.SIMPLE_DUNGEON, LootTables.ABANDONED_MINESHAFT, LootTables.DESERT_PYRAMID, LootTables.JUNGLE_TEMPLE, LootTables.WOODLAND_MANSION, LootTables.UNDERWATER_RUIN_BIG, LootTables.SPAWN_BONUS_CHEST, LootTables.SHIPWRECK_TREASURE, LootTables.BURIED_TREASURE, LootTables.STRONGHOLD_CORRIDOR, LootTables.STRONGHOLD_CROSSING);
 	
 	@SubscribeEvent
 	public static void onLootLoad(LootTableLoadEvent event) //created using Upgrade Aquatic "LootEvents" and Mystical World "LootHandler" for reference
 	{
-		if(LOOT_INJECT.contains(event.getName()))
+		if(BLANK_DISC_LOOT_INJECT.contains(event.getName()))
 		{
-			LootPool pool = LootPool.lootPool().add(TableLootEntry.lootTableReference(MSLootTables.DUNGEON_LOOT_INJECT)).name("dungeon_loot_inject").build();
+			//TODO test in server setting for increased drops
+			LootPool pool = LootPool.lootPool().add(TableLootEntry.lootTableReference(MSLootTables.BLANK_DISK_DUNGEON_LOOT_INJECT)).name("dungeon_loot_inject").build();
 			event.getTable().addPool(pool);
 		}
 	}
@@ -53,6 +54,7 @@ public class MSLootEvents
 	@SubscribeEvent
 	public static void addCustomVillagerTrade(VillagerTradesEvent event)
 	{
+		//TODO test in server setting for bugs
 		Int2ObjectMap<List<VillagerTrades.ITrade>> trades = event.getTrades();
 		
 		if(event.getType() == VillagerProfession.CARTOGRAPHER)

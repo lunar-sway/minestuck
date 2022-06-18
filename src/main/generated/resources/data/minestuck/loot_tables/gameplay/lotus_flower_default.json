@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:empty",
+  "pools": [
+    {
+      "name": "computer",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "quality": 3,
+          "name": "minestuck:computer_parts"
+        }
+      ]
+    },
+    {
+      "name": "code",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "quality": 3,
+          "name": "minestuck:sburb_code"
+        }
+      ]
+    }
+  ]
+}

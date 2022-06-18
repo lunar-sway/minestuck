@@ -1,17 +1,19 @@
 package com.mraof.minestuck.entity;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.network.LotusFlowerPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.world.storage.loot.MSLootTables;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MoverType;
-import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootParameterSets;
+import net.minecraft.loot.LootTable;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.PacketBuffer;
@@ -20,6 +22,7 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -33,6 +36,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
+import java.util.List;
 
 public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEntityAdditionalSpawnData
 {
@@ -181,16 +185,25 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 		MSPacketHandler.sendToTracking(packet, this);
 	}
 	
+	/**
+	 * Spawns loot from the LOTUS_FLOWER_DEFAULT loot table
+	 */
 	protected void spawnLoot()
 	{
-		World worldIn = this.level;
-		Vector3d posVec = this.position();
-		
-		ItemEntity unpoweredComputerItemEntity = new ItemEntity(worldIn, posVec.x(), posVec.y() + 1D, posVec.z(), new ItemStack(MSItems.COMPUTER_PARTS, 1));
-		worldIn.addFreshEntity(unpoweredComputerItemEntity);
-		
-		ItemEntity sburbCodeItemEntity = new ItemEntity(worldIn, posVec.x(), posVec.y() + 1D, posVec.z(), new ItemStack(MSItems.SBURB_CODE, 1));
-		worldIn.addFreshEntity(sburbCodeItemEntity);
+		if(!level.isClientSide)
+		{
+			ServerWorld serverWorld = (ServerWorld) level;
+			
+			LootTable lootTable = serverWorld.getServer().getLootTables().get(MSLootTables.LOTUS_FLOWER_DEFAULT);
+			List<ItemStack> loot = lootTable.getRandomItems(new LootContext.Builder(serverWorld).create(LootParameterSets.EMPTY));
+			if(loot.isEmpty())
+				LOGGER.warn("Tried to generate loot for Lotus Flower, but no items were generated!");
+			
+			for(ItemStack itemStack : loot)
+			{
+				this.spawnAtLocation(itemStack, 1F);
+			}
+		}
 	}
 	
 	@Override
