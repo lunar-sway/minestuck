@@ -876,7 +876,12 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.CRUXITE_APPLE, "Cruxite Artifact");
 		addItem(MSItems.CRUXITE_POTION, "Cruxite Artifact");
 		addItem(MSItems.SBURB_CODE, "SBURB Code");
-		addItemTooltip(MSItems.SBURB_CODE, "It seems temple hieroglyphs can be translated into computer game code using a Book and Quill.");
+		addItemTooltip(MSItems.SBURB_CODE, "It seems temple hieroglyphs can be translated into genetic code using a Book and Quill. Perhaps genetic code could be turned into computer code?");
+		addItemExtra(MSItems.SBURB_CODE, "completion", "Percent completion: %s%%");
+		addItemExtra(MSItems.SBURB_CODE, "action_description", "Right click on different types of hieroglyph blocks to record them");
+		addItemExtra(MSItems.SBURB_CODE, "shift_for_more_info", "Press §eSHIFT§r for more info");
+		addItem(MSItems.COMPLETED_SBURB_CODE, "SBURB Code");
+		addItemTooltip(MSItems.COMPLETED_SBURB_CODE, "Everything needed to make... something... is transcribed to this book. If this is for a computer program, it's very big.");
 		addItem(MSItems.COMPUTER_PARTS, "Computer Parts");
 		addItemTooltip(MSItems.COMPUTER_PARTS, "Looks like it needs some additional components to get working.");
 		addItem(MSItems.BLANK_DISK, "Blank Disk");

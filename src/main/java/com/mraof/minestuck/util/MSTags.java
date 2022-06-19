@@ -18,6 +18,7 @@ public class MSTags
 {
 	public static class Blocks
 	{
+		public static final TagKey<Block> HIEROGLYPHS = tag("hieroglyphs");
 		public static final TagKey<Block> GLOWING_LOGS = tag("logs/glowing");
 		public static final TagKey<Block> FROST_LOGS = tag("logs/frost");
 		public static final TagKey<Block> RAINBOW_LOGS = tag("logs/rainbow");
