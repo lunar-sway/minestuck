@@ -44,6 +44,7 @@ import com.mraof.minestuck.tileentity.redstone.RedstoneClockTileEntity;
 import com.mraof.minestuck.tileentity.redstone.SummonerTileEntity;
 import com.mraof.minestuck.util.MSDamageSources;
 import com.mraof.minestuck.world.GateHandler;
+import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.lands.GristLayerInfo;
 import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.lands.LandTypePair;
@@ -55,6 +56,8 @@ import net.minecraft.item.Items;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.potion.Potions;
 import net.minecraft.util.text.TextFormatting;
+
+import java.util.Locale;
 
 public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 {
@@ -882,9 +885,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.CRUXITE_APPLE, "Cruxite Artifact");
 		add(MSItems.CRUXITE_POTION, "Cruxite Artifact");
 		add(MSItems.SBURB_CODE, "SBURB Code");
-		addTooltip(MSItems.SBURB_CODE, "It seems temple hieroglyphs can be translated into genetic code using a Book and Quill. Perhaps genetic code could be turned into computer code?");
-		addExtra(MSItems.SBURB_CODE, "completion", "Percent completion: %s%%");
-		addExtra(MSItems.SBURB_CODE, "action_description", "Right click on different types of hieroglyph blocks to record them");
+		addTooltip(MSItems.SBURB_CODE, "It seems hieroglyphs can be translated into genetic code. Perhaps this genetic code could in turn be made into computer code?");
+		addExtra(MSItems.SBURB_CODE, "completion", "§dPercent completion: %s%%§r"); //section signs result in the percent number being light purple, double percent symbol required to get it to show up in game
+		addExtra(MSItems.SBURB_CODE, "additional_info", "Right click on different types of hieroglyph blocks to record them. Create new code books using a Book and Quill.");
 		addExtra(MSItems.SBURB_CODE, "shift_for_more_info", "Press §eSHIFT§r for more info");
 		add(MSItems.COMPLETED_SBURB_CODE, "SBURB Code");
 		addTooltip(MSItems.COMPLETED_SBURB_CODE, "Everything needed to make... something... is transcribed to this book. If this is for a computer program, it's very big.");
@@ -1668,6 +1671,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSKeyHandler.SYLLADEX, "Open Sylladex");
 		
 		add(LotusFlowerEntity.REGROW, "There are no petals on this plant, maybe it will regrow?");
+		
+		add("filled_map."+MSFeatures.FROG_TEMPLE.getFeatureName().toLowerCase(Locale.ROOT), "Frog Temple");
 		
 		addDamageMessage(MSDamageSources.SPIKE, "%s was filled with too many holes from spikes");
 		addDamageMessageWithKiller(MSDamageSources.SPIKE, "%1$s was caught in a spike trap whilst trying to escape %2$s");

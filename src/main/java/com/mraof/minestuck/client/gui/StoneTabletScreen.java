@@ -41,7 +41,9 @@ public class StoneTabletScreen extends Screen
 	private boolean isModified;
 	private String text = "";
 	private int updateCount;
-	/** In milliseconds */
+	/**
+	 * In milliseconds
+	 */
 	private long lastClickTime;
 	//Player
 	private final PlayerEntity editingPlayer;
@@ -71,12 +73,16 @@ public class StoneTabletScreen extends Screen
 		super.tick();
 		++updateCount;
 	}
+	
 	@Override
-	public void removed() {
+	public void removed()
+	{
 		this.minecraft.keyboardHandler.setSendRepeatsToGui(false);
 	}
+	
 	@Override
-	protected void init() {
+	protected void init()
+	{
 		this.minecraft.keyboardHandler.setSendRepeatsToGui(true);
 		
 		
@@ -91,8 +97,7 @@ public class StoneTabletScreen extends Screen
 			{
 				minecraft.setScreen(null);
 			}));
-		}
-		else
+		} else
 		{
 			this.addButton(new Button(this.width / 2 - 100, GUI_HEIGHT + 4, 200, 20, new TranslationTextComponent("gui.done"), (p_214161_1_) -> {
 				this.minecraft.setScreen(null);
@@ -169,11 +174,11 @@ public class StoneTabletScreen extends Screen
 	/**
 	 * Draws the blue text selection box, defined by the two point parameters
 	 */
-	private void drawSelectionBox(Point topLeft, Point bottomRight) 
+	private void drawSelectionBox(Point topLeft, Point bottomRight)
 	{
 		Point point = new Point(topLeft.x, topLeft.y);
 		Point point1 = new Point(bottomRight.x, bottomRight.y);
-		if (this.font.isBidirectional()) 
+		if(this.font.isBidirectional())
 		{
 			StoneTabletUtils.adjustPointerAForBidi(font, point);
 			StoneTabletUtils.adjustPointerAForBidi(font, point1);
@@ -230,8 +235,8 @@ public class StoneTabletScreen extends Screen
 	
 	private void setText(String text)
 	{
-			this.text = text;
-			this.isModified = true;
+		this.text = text;
+		this.isModified = true;
 	}
 	
 	private void setClipboard(String str)
@@ -249,13 +254,14 @@ public class StoneTabletScreen extends Screen
 	/**
 	 * Returns the width of text
 	 */
-	private int getTextWidth(String text) 
+	private int getTextWidth(String text)
 	{
 		return this.font.width(this.font.isBidirectional() ? this.font.bidirectionalShaping(text) : text);
 	}
 	
 	@Override
-	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton)
+	{
 		if(mouseButton == 0)
 		{
 			long i = Util.getMillis();
@@ -266,7 +272,7 @@ public class StoneTabletScreen extends Screen
 				StoneTabletUtils.pointerToRelative(point, width);
 				StoneTabletUtils.adjustPointerAForBidi(font, point);
 				int clickedIndex = StoneTabletUtils.getSelectionIndex(font, s, point);
-				if (clickedIndex >= 0)
+				if(clickedIndex >= 0)
 				{
 					if(i - this.lastClickTime < 250L)
 					{
@@ -291,14 +297,14 @@ public class StoneTabletScreen extends Screen
 	@Override
 	public boolean mouseDragged(double mouseX, double mouseY, int button, double dx, double dy)
 	{
-		if (button == 0)
+		if(button == 0)
 		{
 			String s = this.text;
 			Point point = new Point((int) mouseX, (int) mouseY);
 			StoneTabletUtils.pointerToRelative(point, width);
 			StoneTabletUtils.adjustPointerAForBidi(font, point);
 			int index = StoneTabletUtils.getSelectionIndex(font, s, point);
-			if (index >= 0)
+			if(index >= 0)
 				pageEditor.setCursorPos(index, true);
 		}
 		

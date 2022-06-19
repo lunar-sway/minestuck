@@ -14,12 +14,14 @@ import com.mraof.minestuck.tileentity.redstone.AreaEffectTileEntity;
 import com.mraof.minestuck.tileentity.redstone.RemoteObserverTileEntity;
 import com.mraof.minestuck.tileentity.redstone.StatStorerTileEntity;
 import com.mraof.minestuck.tileentity.redstone.WirelessRedstoneTransmitterTileEntity;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Hand;
 
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -94,6 +96,11 @@ public class MSScreenFactories
 	public static void displayStoneTabletScreen(PlayerEntity playerIn, Hand handIn, String text, boolean canEdit)
 	{
 		Minecraft.getInstance().setScreen(new StoneTabletScreen(playerIn, handIn, text, canEdit));
+	}
+	
+	public static void displayReadableSburbCodeScreen(List<Block> blockList)
+	{
+		Minecraft.getInstance().setScreen(new ReadableSburbCodeScreen(blockList));
 	}
 	
 	public static void displayTitleSelectScreen(Title title)

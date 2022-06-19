@@ -1166,8 +1166,8 @@ public class MSItems
 		registry.register(new Item(new Item.Properties().tab(MSItemGroup.MAIN)).setRegistryName("raw_uranium"));
 		registry.register(new Item(new Item.Properties().tab(MSItemGroup.MAIN)).setRegistryName("energy_core"));
 		registry.register(new Item(new Item.Properties().tab(MSItemGroup.MAIN)).setRegistryName("plutonium_core"));
-		registry.register(new SburbCodeItem(new Item.Properties().stacksTo(1).defaultDurability(100).tab(MSItemGroup.MAIN)).setRegistryName("sburb_code"));
-		registry.register(new Item(new Item.Properties().tab(MSItemGroup.MAIN)).setRegistryName("completed_sburb_code"));
+		registry.register(new SburbCodeItem(new Item.Properties().stacksTo(1).tab(MSItemGroup.MAIN)).setRegistryName("sburb_code"));
+		registry.register(new ReadableSburbCodeItem(new Item.Properties().tab(MSItemGroup.MAIN).rarity(Rarity.UNCOMMON)).setRegistryName("completed_sburb_code"));
 		registry.register(new Item(new Item.Properties().tab(MSItemGroup.MAIN)).setRegistryName("computer_parts"));
 		//have to fix Cruxite artifact classes
 		
