@@ -1,9 +1,11 @@
 package com.mraof.minestuck.entity.underling;
 
+import com.mraof.minestuck.entity.AttackingAnimatedEntity;
 import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.player.Echeladder;
+import com.mraof.minestuck.util.AnimationUtil;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -32,8 +34,6 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 	public BasiliskEntity(EntityType<? extends BasiliskEntity> type, World world)
 	{
 		super(type, world, 5);
-		this.attackDelay = 4;
-		this.attackRecovery = 10;
 		
 		this.head = new BasiliskPartEntity(this, "head", 2.3F, 2.3F);
 		this.body = new BasiliskPartEntity(this, "body", 2.8F, 2.2F);
@@ -48,6 +48,13 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 		return UnderlingEntity.underlingAttributes().add(Attributes.MAX_HEALTH, 85)
 				.add(Attributes.KNOCKBACK_RESISTANCE, 0.6).add(Attributes.MOVEMENT_SPEED, 0.25)
 				.add(Attributes.ATTACK_DAMAGE, 6);
+	}
+	
+	@Override
+	protected void registerGoals()
+	{
+		super.registerGoals();
+		this.goalSelector.addGoal(3, new AttackingAnimatedEntity.DelayedAttackGoal(this, 1F, true, 4, 10));
 	}
 	
 	protected SoundEvent getAmbientSound()
@@ -167,19 +174,19 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 	@Override
 	public void registerControllers(AnimationData data)
 	{
-		data.addAnimationController(createAnimation("walkAnimation", 0.5, this::walkAnimation));
-		data.addAnimationController(createAnimation("deathAnimation", 1, this::deathAnimation));
-		data.addAnimationController(createAnimation("swingAnimation", 1, this::swingAnimation));
+		data.addAnimationController(AnimationUtil.createAnimation(this, "walkAnimation", 0.5, BasiliskEntity::walkAnimation));
+		data.addAnimationController(AnimationUtil.createAnimation(this, "deathAnimation", 1, BasiliskEntity::deathAnimation));
+		data.addAnimationController(AnimationUtil.createAnimation(this, "swingAnimation", 1, BasiliskEntity::swingAnimation));
 	}
 	
-	private <E extends IAnimatable> PlayState walkAnimation(AnimationEvent<E> event)
+	private static PlayState walkAnimation(AnimationEvent<BasiliskEntity> event)
 	{
 		if(!event.isMoving())
 		{
 			return PlayState.STOP;
 		}
 		
-		if(this.isAggressive())
+		if(event.getAnimatable().isAggressive())
 		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("run", true));
 			return PlayState.CONTINUE;
@@ -190,9 +197,9 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 		}
 	}
 	
-	private <E extends IAnimatable> PlayState deathAnimation(AnimationEvent<E> event)
+	private static PlayState deathAnimation(AnimationEvent<BasiliskEntity> event)
 	{
-		if(dead)
+		if(event.getAnimatable().dead)
 		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("die", false));
 			return PlayState.CONTINUE;
@@ -200,9 +207,9 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 		return PlayState.STOP;
 	}
 	
-	private <E extends IAnimatable> PlayState swingAnimation(AnimationEvent<E> event)
+	private static PlayState swingAnimation(AnimationEvent<BasiliskEntity> event)
 	{
-		if(isAttacking())
+		if(event.getAnimatable().isAttacking())
 		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("bite", false));
 			return PlayState.CONTINUE;

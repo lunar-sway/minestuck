@@ -8,6 +8,7 @@ import com.mraof.minestuck.inventory.ConsortMerchantContainer;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.util.AnimationUtil;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.entity.*;
@@ -35,14 +36,16 @@ import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-public class ConsortEntity extends AnimatedCreatureEntity implements IContainerProvider
+public class ConsortEntity extends AnimatedCreatureEntity implements IContainerProvider, IAnimatable
 {
+	private final AnimationFactory factory = new AnimationFactory(this);
 	private final EnumConsort consortType;
 	private boolean hasHadMessage = false;
 	ConsortDialogue.DialogueWrapper message;
@@ -78,6 +81,12 @@ public class ConsortEntity extends AnimatedCreatureEntity implements IContainerP
 		goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 8.0F));
 		goalSelector.addGoal(7, new LookRandomlyGoal(this));
 		goalSelector.addGoal(4, new AvoidEntityGoal<>(this, PlayerEntity.class, 16F, 1.0D, 1.4D, this::shouldFleeFrom));
+	}
+	
+	@Override
+	public AnimationFactory getFactory()
+	{
+		return this.factory;
 	}
 	
 	private boolean shouldFleeFrom(LivingEntity entity)
@@ -412,15 +421,15 @@ public class ConsortEntity extends AnimatedCreatureEntity implements IContainerP
 	@Override
 	public void registerControllers(AnimationData data)
 	{
-		data.addAnimationController(createAnimation("walkAnimation", 1, this::walkAnimation));
-		data.addAnimationController(createAnimation("armsAnimation", 1, this::armsAnimation));
-		data.addAnimationController(createAnimation("deathAnimation", 1, this::deathAnimation));
-		data.addAnimationController(createAnimation("actionAnimation", 1, this::actionAnimation));
+		data.addAnimationController(AnimationUtil.createAnimation(this, "walkAnimation", 1, ConsortEntity::walkAnimation));
+		data.addAnimationController(AnimationUtil.createAnimation(this, "armsAnimation", 1, ConsortEntity::armsAnimation));
+		data.addAnimationController(AnimationUtil.createAnimation(this, "deathAnimation", 1, ConsortEntity::deathAnimation));
+		data.addAnimationController(AnimationUtil.createAnimation(this, "actionAnimation", 1, ConsortEntity::actionAnimation));
 	}
 	
-	private <E extends IAnimatable> PlayState walkAnimation(AnimationEvent<E> event)
+	private static PlayState walkAnimation(AnimationEvent<ConsortEntity> event)
 	{
-		if(!event.isMoving() || getCurrentAction() != Actions.NONE)
+		if(!event.isMoving() || event.getAnimatable().getCurrentAction() != Actions.NONE)
 		{
 			return PlayState.STOP;
 		}
@@ -429,9 +438,9 @@ public class ConsortEntity extends AnimatedCreatureEntity implements IContainerP
 		return PlayState.CONTINUE;
 	}
 	
-	private <E extends IAnimatable> PlayState armsAnimation(AnimationEvent<E> event)
+	private static PlayState armsAnimation(AnimationEvent<ConsortEntity> event)
 	{
-		if(!event.isMoving() || getCurrentAction() != Actions.NONE)
+		if(!event.isMoving() || event.getAnimatable().getCurrentAction() != Actions.NONE)
 		{
 			return PlayState.STOP;
 		}
@@ -440,9 +449,9 @@ public class ConsortEntity extends AnimatedCreatureEntity implements IContainerP
 		return PlayState.CONTINUE;
 	}
 	
-	private <E extends IAnimatable> PlayState deathAnimation(AnimationEvent<E> event)
+	private static PlayState deathAnimation(AnimationEvent<ConsortEntity> event)
 	{
-		if(dead)
+		if(event.getAnimatable().dead)
 		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("die", false));
 			return PlayState.CONTINUE;
@@ -450,9 +459,9 @@ public class ConsortEntity extends AnimatedCreatureEntity implements IContainerP
 		return PlayState.STOP;
 	}
 	
-	private <E extends IAnimatable> PlayState actionAnimation(AnimationEvent<E> event)
+	private static PlayState actionAnimation(AnimationEvent<ConsortEntity> event)
 	{
-		Actions action = getCurrentAction();
+		Actions action = event.getAnimatable().getCurrentAction();
 		if(action == Actions.TALK)
 		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("talk", true));

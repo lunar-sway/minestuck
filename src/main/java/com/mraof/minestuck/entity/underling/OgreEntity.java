@@ -1,9 +1,11 @@
 package com.mraof.minestuck.entity.underling;
 
+import com.mraof.minestuck.entity.AttackingAnimatedEntity;
 import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.player.Echeladder;
+import com.mraof.minestuck.util.AnimationUtil;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -13,7 +15,6 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
-import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
@@ -25,8 +26,6 @@ public class OgreEntity extends UnderlingEntity
 	public OgreEntity(EntityType<? extends OgreEntity> type, World world)
 	{
 		super(type, world, 3);
-		this.attackDelay = 18;
-		this.attackRecovery = 20;
 		this.maxUpStep = 1.0F;
 	}
 	
@@ -35,6 +34,13 @@ public class OgreEntity extends UnderlingEntity
 		return UnderlingEntity.underlingAttributes().add(Attributes.MAX_HEALTH, 50)
 				.add(Attributes.KNOCKBACK_RESISTANCE, 0.4).add(Attributes.MOVEMENT_SPEED, 0.22)
 				.add(Attributes.ATTACK_DAMAGE, 6);
+	}
+	
+	@Override
+	protected void registerGoals()
+	{
+		super.registerGoals();
+		this.goalSelector.addGoal(3, new AttackingAnimatedEntity.DelayedAttackGoal(this, 1F, true, 18, 20));
 	}
 	
 	protected SoundEvent getAmbientSound()
@@ -88,13 +94,13 @@ public class OgreEntity extends UnderlingEntity
 	@Override
 	public void registerControllers(AnimationData data)
 	{
-		data.addAnimationController(createAnimation("walkArmsAnimation", 0.3, this::walkArmsAnimation));
-		data.addAnimationController(createAnimation("walkAnimation", 0.3, this::walkAnimation));
-		data.addAnimationController(createAnimation("swingAnimation", 0.5, this::swingAnimation));
-		data.addAnimationController(createAnimation("deathAnimation", 0.85, this::deathAnimation));
+		data.addAnimationController(AnimationUtil.createAnimation(this, "walkArmsAnimation", 0.3, OgreEntity::walkArmsAnimation));
+		data.addAnimationController(AnimationUtil.createAnimation(this, "walkAnimation", 0.3, OgreEntity::walkAnimation));
+		data.addAnimationController(AnimationUtil.createAnimation(this, "swingAnimation", 0.5, OgreEntity::swingAnimation));
+		data.addAnimationController(AnimationUtil.createAnimation(this, "deathAnimation", 0.85, OgreEntity::deathAnimation));
 	}
 	
-	private <E extends IAnimatable> PlayState walkAnimation(AnimationEvent<E> event)
+	private static PlayState walkAnimation(AnimationEvent<OgreEntity> event)
 	{
 		if(event.isMoving())
 		{
@@ -104,9 +110,9 @@ public class OgreEntity extends UnderlingEntity
 		return PlayState.STOP;
 	}
 	
-	private <E extends IAnimatable> PlayState walkArmsAnimation(AnimationEvent<E> event)
+	private static PlayState walkArmsAnimation(AnimationEvent<OgreEntity> event)
 	{
-		if(event.isMoving() && !isAttacking())
+		if(event.isMoving() && !event.getAnimatable().isAttacking())
 		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ogre.walkarms", true));
 			return PlayState.CONTINUE;
@@ -114,9 +120,9 @@ public class OgreEntity extends UnderlingEntity
 		return PlayState.STOP;
 	}
 	
-	private <E extends IAnimatable> PlayState swingAnimation(AnimationEvent<E> event)
+	private static PlayState swingAnimation(AnimationEvent<OgreEntity> event)
 	{
-		if(isAttacking())
+		if(event.getAnimatable().isAttacking())
 		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ogre.punch", false));
 			return PlayState.CONTINUE;
@@ -125,9 +131,9 @@ public class OgreEntity extends UnderlingEntity
 		return PlayState.STOP;
 	}
 	
-	private <E extends IAnimatable> PlayState deathAnimation(AnimationEvent<E> event)
+	private static PlayState deathAnimation(AnimationEvent<OgreEntity> event)
 	{
-		if(dead)
+		if(event.getAnimatable().dead)
 		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ogre.die", false));
 			return PlayState.CONTINUE;
