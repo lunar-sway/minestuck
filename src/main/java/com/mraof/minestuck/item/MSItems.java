@@ -323,6 +323,7 @@ public class MSItems
 	public static final Item CRUXITE_APPLE = getNull();
 	public static final Item CRUXITE_POTION = getNull();
 	public static final Item SBURB_CODE = getNull();
+	public static final Item COMPLETED_SBURB_CODE = getNull();
 	public static final Item COMPUTER_PARTS = getNull();
 	public static final Item BLANK_DISK = getNull();
 	public static final Item CLIENT_DISK = getNull();
@@ -1165,7 +1166,8 @@ public class MSItems
 		registry.register(new Item(new Item.Properties().tab(MSItemGroup.MAIN)).setRegistryName("raw_uranium"));
 		registry.register(new Item(new Item.Properties().tab(MSItemGroup.MAIN)).setRegistryName("energy_core"));
 		registry.register(new Item(new Item.Properties().tab(MSItemGroup.MAIN)).setRegistryName("plutonium_core"));
-		registry.register(new Item(new Item.Properties().tab(MSItemGroup.MAIN)).setRegistryName("sburb_code"));
+		registry.register(new SburbCodeItem(new Item.Properties().stacksTo(1).defaultDurability(100).tab(MSItemGroup.MAIN)).setRegistryName("sburb_code"));
+		registry.register(new Item(new Item.Properties().tab(MSItemGroup.MAIN)).setRegistryName("completed_sburb_code"));
 		registry.register(new Item(new Item.Properties().tab(MSItemGroup.MAIN)).setRegistryName("computer_parts"));
 		//have to fix Cruxite artifact classes
 		

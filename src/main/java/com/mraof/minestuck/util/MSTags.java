@@ -16,6 +16,7 @@ public class MSTags
 {
 	public static class Blocks
 	{
+		public static final Tags.IOptionalNamedTag<Block> HIEROGLYPHS = tag("hieroglyphs");
 		public static final Tags.IOptionalNamedTag<Block> GLOWING_LOGS = tag("logs/glowing");
 		public static final Tags.IOptionalNamedTag<Block> FROST_LOGS = tag("logs/frost");
 		public static final Tags.IOptionalNamedTag<Block> RAINBOW_LOGS = tag("logs/rainbow");

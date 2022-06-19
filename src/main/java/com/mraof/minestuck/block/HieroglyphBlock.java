@@ -1,9 +1,9 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.SburbCodeItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -23,21 +23,20 @@ public class HieroglyphBlock extends Block
 	@SuppressWarnings("deprecation")
 	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
 	{
-		ItemStack itemstack = player.getItemInHand(handIn);
+		ItemStack itemStack = player.getItemInHand(handIn);
 		ItemStack bookStack = new ItemStack(Items.WRITABLE_BOOK);
 		
-		if(ItemStack.isSame(itemstack, bookStack))
+		if(ItemStack.isSame(itemStack, bookStack))
 		{
 			if(!worldIn.isClientSide)
 			{
-				int amountInHandStack = itemstack.getCount();
-				Direction direction = hit.getDirection();
-				Direction direction1 = direction.getAxis() == Direction.Axis.Y ? player.getDirection().getOpposite() : direction;
+				int amountInHandStack = itemStack.getCount();
 				worldIn.playSound(null, pos, SoundEvents.VILLAGER_WORK_CARTOGRAPHER, SoundCategory.BLOCKS, 1.0F, 1.0F);
-				ItemEntity itementity = new ItemEntity(worldIn, (double) pos.getX() + 0.5D + (double) direction1.getStepX() * 0.65D, (double) pos.getY() + 0.1D, (double) pos.getZ() + 0.5D + (double) direction1.getStepZ() * 0.65D, new ItemStack(MSItems.SBURB_CODE, amountInHandStack));
-				itementity.setDeltaMovement(0.05D * (double) direction1.getStepX() + worldIn.random.nextDouble() * 0.02D, 0.05D, 0.05D * (double) direction1.getStepZ() + worldIn.random.nextDouble() * 0.02D);
-				worldIn.addFreshEntity(itementity);
-				itemstack.shrink(amountInHandStack);
+				
+				ItemStack newStack = MSItems.SBURB_CODE.getDefaultInstance();
+				SburbCodeItem.addRecordedInfo(newStack, state.getBlock());
+				newStack.setCount(amountInHandStack);
+				player.setItemInHand(handIn, newStack);
 			}
 			return ActionResultType.SUCCESS;
 		} else

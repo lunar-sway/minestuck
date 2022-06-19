@@ -1,6 +1,8 @@
 package com.mraof.minestuck.item.weapon;
 
 import com.mraof.minestuck.effects.CreativeShockEffect;
+import com.mraof.minestuck.util.BlockHitResultUtil;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -52,32 +54,16 @@ public class PogoEffect implements ItemRightClickEffect, OnHitEffect
 	public ActionResult<ItemStack> onRightClick(World world, PlayerEntity player, Hand hand)
 	{
 		ItemStack stack = player.getItemInHand(hand);
-		BlockRayTraceResult blockraytraceresult = getPlayerPOVHitResult(world, player);
+		BlockRayTraceResult blockraytraceresult = BlockHitResultUtil.getPlayerPOVHitResult(world, player);
 		
 		if(blockraytraceresult.getType() == RayTraceResult.Type.BLOCK)
 		{
-			return onItemUse(player, world, blockraytraceresult.getBlockPos(), stack, blockraytraceresult.getDirection(), getPogoMotion(stack)) == ActionResultType.SUCCESS ? ActionResult.success(stack) : ActionResult.pass(stack);
+			return onItemUse(player, BlockHitResultUtil.collidedBlockState(player, blockraytraceresult), stack, blockraytraceresult.getDirection(), getPogoMotion(stack)) == ActionResultType.SUCCESS ? ActionResult.success(stack) : ActionResult.pass(stack);
 		}
 		
 		return ActionResult.pass(stack);
 	}
 	
-	//based on the Item class function of the same name
-	private static BlockRayTraceResult getPlayerPOVHitResult(World world, PlayerEntity playerEntity)
-	{
-		float xRot = playerEntity.xRot;
-		float yRot = playerEntity.yRot;
-		Vector3d eyeVec = playerEntity.getEyePosition(1.0F);
-		float f2 = MathHelper.cos(-yRot * ((float) Math.PI / 180F) - (float) Math.PI);
-		float f3 = MathHelper.sin(-yRot * ((float) Math.PI / 180F) - (float) Math.PI);
-		float f4 = -MathHelper.cos(-xRot * ((float) Math.PI / 180F));
-		float yComponent = MathHelper.sin(-xRot * ((float) Math.PI / 180F));
-		float xComponent = f3 * f4;
-		float zComponent = f2 * f4;
-		double reachDistance = playerEntity.getAttribute(ForgeMod.REACH_DISTANCE.get()).getValue();
-		Vector3d endVec = eyeVec.add((double) xComponent * reachDistance, (double) yComponent * reachDistance, (double) zComponent * reachDistance);
-		return world.clip(new RayTraceContext(eyeVec, endVec, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, playerEntity));
-	}
 	
 	private static void hitEntity(ItemStack stack, LivingEntity target, LivingEntity player, double pogoMotion)
 	{
@@ -92,10 +78,10 @@ public class PogoEffect implements ItemRightClickEffect, OnHitEffect
 		}
 	}
 	
-	private static ActionResultType onItemUse(PlayerEntity player, World worldIn, BlockPos pos, ItemStack stack, Direction facing, double pogoMotion)
+	private static ActionResultType onItemUse(PlayerEntity player, BlockState rayTraceBlockState, ItemStack stack, Direction facing, double pogoMotion)
 	{
 		pogoMotion = addEfficiencyModifier(pogoMotion, stack);
-		if(worldIn.getBlockState(pos).getBlock() != Blocks.AIR && !CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MOBILITY_ITEMS))
+		if(rayTraceBlockState.getBlock() != Blocks.AIR && !CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MOBILITY_ITEMS))
 		{
 			double playerMotionX;
 			double playerMotionY;

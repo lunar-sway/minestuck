@@ -29,7 +29,7 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 public class ComputerTileEntity extends TileEntity implements ISburbComputer
-{	//TODO The implementation of this class need a serious rewrite
+{    //TODO The implementation of this class need a serious rewrite
 	public ComputerTileEntity()
 	{
 		super(MSTileEntityTypes.COMPUTER.get());
@@ -51,20 +51,20 @@ public class ComputerTileEntity extends TileEntity implements ISburbComputer
 	public void load(BlockState state, CompoundNBT nbt)
 	{
 		super.load(state, nbt);
-		if (nbt.contains("programs"))
+		if(nbt.contains("programs"))
 		{
 			CompoundNBT programs = nbt.getCompound("programs");
-			for (Object name : programs.getAllKeys())
+			for(Object name : programs.getAllKeys())
 			{
-				installedPrograms.put(programs.getInt((String)name), true);
+				installedPrograms.put(programs.getInt((String) name), true);
 			}
 		}
-
+		
 		latestmessage.clear();
-		for(Entry<Integer,Boolean> e : installedPrograms.entrySet())
+		for(Entry<Integer, Boolean> e : installedPrograms.entrySet())
 			if(e.getValue())
 				latestmessage.put(e.getKey(), nbt.getString("text" + e.getKey()));
-
+		
 		programData = nbt.getCompound("programData");
 		
 		if(nbt.contains("ownerId"))
@@ -81,18 +81,18 @@ public class ComputerTileEntity extends TileEntity implements ISburbComputer
 		CompoundNBT programs = new CompoundNBT();
 		Iterator<Entry<Integer, Boolean>> it = this.installedPrograms.entrySet().iterator();
 		//int place = 0;
-		while (it.hasNext()) 
+		while(it.hasNext())
 		{
 			Map.Entry<Integer, Boolean> pairs = it.next();
 			int program = pairs.getKey();
-			programs.putInt("program" + program,program);
+			programs.putInt("program" + program, program);
 			//place++;
 		}
 		for(Entry<Integer, String> e : latestmessage.entrySet())
 			compound.putString("text" + e.getKey(), e.getValue());
-		compound.put("programs",programs);
+		compound.put("programs", programs);
 		compound.put("programData", programData.copy());
-		if (owner != null) 
+		if(owner != null)
 			owner.saveToNBT(compound, "owner");
 		return compound;
 	}
@@ -127,26 +127,26 @@ public class ComputerTileEntity extends TileEntity implements ISburbComputer
 	{
 		this.load(getBlockState(), pkt.getTag());
 	}
-
-	public boolean hasProgram(int id) 
+	
+	public boolean hasProgram(int id)
 	{
-		return installedPrograms.get(id) == null ? false:installedPrograms.get(id);
+		return installedPrograms.get(id) == null ? false : installedPrograms.get(id);
 	}
-
+	
 	public CompoundNBT getData(int id)
 	{
-		if(!programData.contains("program_"+id))
+		if(!programData.contains("program_" + id))
 			programData.put("program_" + id, new CompoundNBT());
 		return programData.getCompound("program_" + id);
 	}
-
-	public void closeAll() 
+	
+	public void closeAll()
 	{
 		for(Entry<Integer, Boolean> entry : installedPrograms.entrySet())
 			if(entry.getValue() && entry.getKey() != -1)
 				ProgramData.closeProgram(entry.getKey(), this);
 	}
-
+	
 	@Override
 	public void connected(PlayerIdentifier player, boolean isClient)
 	{
@@ -154,8 +154,7 @@ public class ComputerTileEntity extends TileEntity implements ISburbComputer
 		{
 			getData(0).putBoolean("isResuming", false);
 			getData(0).putBoolean("connectedToServer", true);
-		}
-		else
+		} else
 		{
 			getData(1).putBoolean("isOpen", false);
 		}
@@ -235,7 +234,7 @@ public class ComputerTileEntity extends TileEntity implements ISburbComputer
 	
 	public static void forNetworkIfPresent(ServerPlayerEntity player, BlockPos pos, Consumer<ComputerTileEntity> consumer)
 	{
-		if(player.level.isAreaLoaded(pos, 0))	//TODO also check distance to the computer pos (together with a continual check clientside)
+		if(player.level.isAreaLoaded(pos, 0))    //TODO also check distance to the computer pos (together with a continual check clientside)
 		{
 			TileEntity te = player.level.getBlockEntity(pos);
 			if(te instanceof ComputerTileEntity)

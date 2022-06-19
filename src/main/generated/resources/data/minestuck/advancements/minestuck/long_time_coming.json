@@ -2,7 +2,8 @@
   "parent": "minestuck:minestuck/root",
   "display": {
     "icon": {
-      "item": "minestuck:sburb_code"
+      "item": "minestuck:sburb_code",
+      "nbt": "{Damage:0}"
     },
     "title": {
       "translate": "advancements.minestuck.long_time_coming.title"

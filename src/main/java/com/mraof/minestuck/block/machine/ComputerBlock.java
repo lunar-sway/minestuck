@@ -119,8 +119,7 @@ public class ComputerBlock extends MachineBlock
 			{
 				tileEntity.closeAll();
 				worldIn.setBlock(pos, state.setValue(STATE, State.BROKEN), Constants.BlockFlags.BLOCK_UPDATE);
-			}
-			else tileEntity.installedPrograms.put(id, true);
+			} else tileEntity.installedPrograms.put(id, true);
 			tileEntity.setChanged();
 			worldIn.sendBlockUpdated(pos, state, state, 3);
 			return true;
@@ -153,7 +152,7 @@ public class ComputerBlock extends MachineBlock
 	{
 		Random rand = new Random();
 		ComputerTileEntity te = (ComputerTileEntity) world.getBlockEntity(new BlockPos(x, y, z));
-		if (te == null)
+		if(te == null)
 		{
 			return;
 		}
