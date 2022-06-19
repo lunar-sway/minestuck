@@ -18,7 +18,8 @@ public class MSTags
 {
 	public static class Blocks
 	{
-		public static final TagKey<Block> HIEROGLYPHS = tag("hieroglyphs");
+		//make an alternative block tag for hieroglyph block sets that accomplish the same task, every block included in the green hieroglyph tag is required to get completed code
+		public static final TagKey<Block> GREEN_HIEROGLYPHS = tag("green_hieroglyphs");
 		public static final TagKey<Block> GLOWING_LOGS = tag("logs/glowing");
 		public static final TagKey<Block> FROST_LOGS = tag("logs/frost");
 		public static final TagKey<Block> RAINBOW_LOGS = tag("logs/rainbow");

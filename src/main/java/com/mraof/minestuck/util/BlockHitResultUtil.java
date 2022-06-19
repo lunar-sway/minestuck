@@ -11,7 +11,9 @@ import net.minecraftforge.common.ForgeMod;
 
 public class BlockHitResultUtil
 {
-	//based on the Item class function of the same name
+	/**
+	 * Based on the Item class function of the same name, without the FluidMode context
+	 */
 	public static BlockRayTraceResult getPlayerPOVHitResult(World world, PlayerEntity playerEntity)
 	{
 		float xRot = playerEntity.xRot;

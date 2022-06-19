@@ -16,6 +16,7 @@ import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -99,6 +100,11 @@ public class MSScreenFactories
 	public static void displayStoneTabletScreen(Player playerIn, InteractionHand handIn, String text, boolean canEdit)
 	{
 		Minecraft.getInstance().setScreen(new StoneTabletScreen(playerIn, handIn, text, canEdit));
+	}
+	
+	public static void displayReadableSburbCodeScreen(List<Block> blockList)
+	{
+		Minecraft.getInstance().setScreen(new ReadableSburbCodeScreen(blockList));
 	}
 	
 	public static void displayTitleSelectScreen(Title title)
