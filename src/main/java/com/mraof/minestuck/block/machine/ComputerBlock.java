@@ -6,6 +6,7 @@ import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.computer.ProgramData;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.ReadableSburbCodeItem;
+import com.mraof.minestuck.item.SburbCodeItem;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
@@ -157,12 +158,22 @@ public class ComputerBlock extends MachineBlock
 			if(!hieroglyphList.isEmpty())
 			{
 				boolean newInfo = false;
-				for(Block iterateBlock : hieroglyphList)
+				for(Block iterateBlock : hieroglyphList) //for each block in the item's list, adds it to the tile entities list should it not exist yet
 				{
 					if(tileEntity.hieroglyphsStored != null && MSTags.Blocks.GREEN_HIEROGLYPHS.contains(iterateBlock) && !tileEntity.hieroglyphsStored.contains(iterateBlock))
 					{
 						tileEntity.hieroglyphsStored.add(iterateBlock);
 						newInfo = true;
+					}
+				}
+				
+				//checks additionally if the item is also a SburbCodeItem, and does the reverse process of adding any new blocks from the tile entities list to the item's
+				if(tileEntity.hieroglyphsStored != null && heldStack.getItem() instanceof SburbCodeItem)
+				{
+					for(Block iterateBlock : tileEntity.hieroglyphsStored)
+					{
+						SburbCodeItem.addRecordedInfo(heldStack, iterateBlock);
+						SburbCodeItem.attemptConversionToCompleted(player, handIn);
 					}
 				}
 				

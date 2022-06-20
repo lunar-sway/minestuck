@@ -888,14 +888,16 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.SBURB_CODE, "SBURB Code");
 		addTooltip(MSItems.SBURB_CODE, "It seems hieroglyphs can be translated into genetic code. Perhaps this genetic code could in turn be made into computer code?");
 		addExtra(MSItems.SBURB_CODE, "completion", "§dPercent completion: %s%%§r"); //section signs result in the percent number being light purple, double percent symbol required to get it to show up in game
-		addExtra(MSItems.SBURB_CODE, "additional_info", "Right click on different types of hieroglyph blocks to record them. Create new code books using a Book and Quill.");
+		addExtra(MSItems.SBURB_CODE, "additional_info", "Right click on different types of hieroglyph blocks to record them. Create new code books using a Book and Quill on hieroglyphs. Right click on a computer to exchange code.");
 		addExtra(MSItems.SBURB_CODE, "shift_for_more_info", "Press §eSHIFT§r for more info");
 		add(MSItems.COMPLETED_SBURB_CODE, "SBURB Code");
 		addTooltip(MSItems.COMPLETED_SBURB_CODE, "Everything needed to make... something... is transcribed to this book. If this is for a computer program, it's very big.");
+		addExtra(MSItems.COMPLETED_SBURB_CODE, "additional_info", "Right click on an active computer to upload all necessary sburb code.");
+		addExtra(MSItems.COMPLETED_SBURB_CODE, "shift_for_more_info", "Press §eSHIFT§r for more info");
 		add(MSItems.COMPUTER_PARTS, "Computer Parts");
 		addTooltip(MSItems.COMPUTER_PARTS, "Looks like it needs some additional components to get working.");
 		add(MSItems.BLANK_DISK, "Blank Disk");
-		addTooltip(MSItems.BLANK_DISK, "Can be put into a computer once there is a program on it to run.");
+		addTooltip(MSItems.BLANK_DISK, "Can be put into a computer, has space to write a program on to it.");
 		add(MSItems.CLIENT_DISK, "SBURB Client Disk");
 		add(MSItems.SERVER_DISK, "SBURB Server Disk");
 		add(MSItems.CAPTCHA_CARD, "Captchalogue Card");
@@ -1411,7 +1413,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		
 		addAdvancement(MSAdvancementProvider.ROOT, "Minestuck", "The Beginning of Something Really Excellent");
 		addAdvancement(MSAdvancementProvider.SEARCHING, "Searching For Purpose", "Build a Temple Scanner to find special ruins scattered around the land");
-		addAdvancement(MSAdvancementProvider.LONG_TIME_COMING, "Long Time Coming", "Collect SBURB code from a Frog Temple! You get the sense that you need to find a disk to write it onto");
+		addAdvancement(MSAdvancementProvider.LONG_TIME_COMING, "Long Time Coming", "Collect SBURB code from a Frog Temple! You get the sense that you need to find a computer to record its information to");
 		addAdvancement(MSAdvancementProvider.CONNECT, "Connect", "Create a connection with someone");
 		addAdvancement(MSAdvancementProvider.ENTRY, "A New World", "Create, and use the Cruxite Artifact");
 		addAdvancement(MSAdvancementProvider.ALCHEMY, "Step Towards Alchemy", "Getting a punch designix is the first step to alchemizing something else!");
