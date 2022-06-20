@@ -48,7 +48,7 @@ public class SburbClient extends ButtonListProgram
 			list.add(new UnlocalizedString(SELECT));
 			if(SkaiaClient.getAssociatedPartner(te.ownerId, true) != -1) //If it has a resumable connection
 				list.add(new UnlocalizedString(RESUME_BUTTON));
-			for (Map.Entry<Integer, String> entry : SkaiaClient.getAvailableServers(te.ownerId).entrySet())
+			for(Map.Entry<Integer, String> entry : SkaiaClient.getAvailableServers(te.ownerId).entrySet())
 				list.add(new UnlocalizedString(CONNECT_BUTTON, entry.getValue(), entry.getKey()));
 		} else
 		{

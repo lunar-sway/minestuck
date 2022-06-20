@@ -28,19 +28,19 @@ public class SburbServer extends ButtonListProgram
 	@Override
 	public ArrayList<UnlocalizedString> getStringList(ComputerTileEntity te)
 	{
-		int clientId = te.getData(1).contains("connectedClient")?te.getData(1).getInt("connectedClient"):-1;
+		int clientId = te.getData(1).contains("connectedClient") ? te.getData(1).getInt("connectedClient") : -1;
 		ReducedConnection connection = clientId != -1 ? SkaiaClient.getClientConnection(clientId) : null;
 		if(connection != null && connection.getServerId() != te.ownerId)
 			connection = null;
 		
 		ArrayList<UnlocalizedString> list = new ArrayList<>();
-		String displayPlayer= connection==null?"UNDEFINED":connection.getClientDisplayName();
-		if (connection != null)
+		String displayPlayer = connection == null ? "UNDEFINED" : connection.getClientDisplayName();
+		if(connection != null)
 		{
 			list.add(new UnlocalizedString(CONNECT, displayPlayer));
 			list.add(new UnlocalizedString(CLOSE_BUTTON));
 			list.add(new UnlocalizedString(MinestuckConfig.SERVER.giveItems.get() ? GIVE_BUTTON : EDIT_BUTTON));
-		} else if (te.getData(getId()).getBoolean("isOpen"))
+		} else if(te.getData(getId()).getBoolean("isOpen"))
 		{
 			list.add(new UnlocalizedString(RESUME_SERVER));
 			list.add(new UnlocalizedString(CLOSE_BUTTON));
@@ -58,7 +58,8 @@ public class SburbServer extends ButtonListProgram
 	}
 	
 	@Override
-	public void onButtonPressed(ComputerTileEntity te, String buttonName, Object[] data) {
+	public void onButtonPressed(ComputerTileEntity te, String buttonName, Object[] data)
+	{
 		switch(buttonName)
 		{
 			case EDIT_BUTTON:

@@ -64,11 +64,12 @@ public class ProgramData
 		return -2;
 	}
 	
-	@Nonnull
 	public static ItemStack getItem(int id)
 	{
 		if(id == -1)
 			return new ItemStack(Items.MUSIC_DISC_11);
+		if(id == 2)
+			return null;
 		return disks.get(id).copy();
 	}
 	
