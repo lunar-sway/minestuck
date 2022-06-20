@@ -6,26 +6,27 @@ import com.mraof.minestuck.computer.ComputerReference;
 import com.mraof.minestuck.computer.ISburbComputer;
 import com.mraof.minestuck.computer.ProgramData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
+import com.mraof.minestuck.item.ReadableSburbCodeItem;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.OpEntry;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Objects;
 import java.util.function.Consumer;
 
 public class ComputerTileEntity extends TileEntity implements ISburbComputer
@@ -36,7 +37,7 @@ public class ComputerTileEntity extends TileEntity implements ISburbComputer
 	}
 	
 	/**
-	 * 0 = client, 1 = server
+	 * 0 = client, 1 = server, 2 = disk burner
 	 */
 	public Hashtable<Integer, Boolean> installedPrograms = new Hashtable<Integer, Boolean>();
 	public ComputerScreen gui;
@@ -46,6 +47,8 @@ public class ComputerTileEntity extends TileEntity implements ISburbComputer
 	public Hashtable<Integer, String> latestmessage = new Hashtable<Integer, String>();
 	public CompoundNBT programData = new CompoundNBT();
 	public int programSelected = -1;
+	public List<Block> hieroglyphsStored = new ArrayList<>();
+	public int blankDisksStored;
 	
 	@Override
 	public void load(BlockState state, CompoundNBT nbt)
@@ -72,6 +75,11 @@ public class ComputerTileEntity extends TileEntity implements ISburbComputer
 		else this.owner = IdentifierHandler.load(nbt, "owner");
 		if(gui != null)
 			gui.updateGui();
+		
+		if(nbt.contains("hieroglyphsStored"))
+			hieroglyphsStored = ReadableSburbCodeItem.getRecordedBlocks(nbt.getList("hieroglyphsStored", Constants.NBT.TAG_STRING));
+		if(nbt.contains("blankDisksStored"))
+			blankDisksStored = nbt.getInt("blankDisksStored");
 	}
 	
 	@Override
@@ -94,6 +102,15 @@ public class ComputerTileEntity extends TileEntity implements ISburbComputer
 		compound.put("programData", programData.copy());
 		if(owner != null)
 			owner.saveToNBT(compound, "owner");
+		
+		ListNBT hieroglyphListNBT = ReadableSburbCodeItem.getListNBTFromBlockList(hieroglyphsStored);
+		if(!hieroglyphListNBT.isEmpty())
+		{
+			compound.put("hieroglyphsStored", hieroglyphListNBT);
+		}
+		
+		compound.putInt("blankDisksStored", blankDisksStored);
+		
 		return compound;
 	}
 	

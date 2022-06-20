@@ -10,7 +10,7 @@ import java.util.Map.Entry;
 /**
  * The static interface will probably later be merged with DeployList,
  * GristStorage and other similar classes that store static data.
- * 
+ *
  * @author Kirderf1
  */
 public abstract class ComputerProgram
@@ -37,7 +37,7 @@ public abstract class ComputerProgram
 		try
 		{
 			return programs.get(id).newInstance();
-		} catch (Exception e)
+		} catch(Exception e)
 		{
 			e.printStackTrace();
 		}
@@ -56,8 +56,7 @@ public abstract class ComputerProgram
 	 * Called when the gui is created or if the player pressed the switch
 	 * program button.
 	 *
-	 * @param prevProgram
-	 *            The previous program, or null if the gui was just created.
+	 * @param prevProgram The previous program, or null if the gui was just created.
 	 */
 	public void onInitGui(ComputerScreen gui, ComputerProgram prevProgram)
 	{

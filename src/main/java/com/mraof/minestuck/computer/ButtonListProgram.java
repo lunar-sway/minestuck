@@ -31,25 +31,29 @@ public abstract class ButtonListProgram extends ComputerProgram
 	 * Creates an ArrayList of UnlocalizedString and returns it.
 	 * The first item in the list must be the message above the buttons, and then it continues with the topmost
 	 * button and down.
+	 *
 	 * @param te The TileEntityComputer this program is associated with, for access to related data.
 	 */
 	protected abstract ArrayList<UnlocalizedString> getStringList(ComputerTileEntity te);
 	
 	/**
 	 * Performs the action caused by pressing a button.
-	 * @param te The computer, if needed.
+	 *
+	 * @param te         The computer, if needed.
 	 * @param buttonName The unlocalized string from getStringList() associated with the pressed button.
-	 * @param data Format data provided by getStringList().
+	 * @param data       Format data provided by getStringList().
 	 */
 	protected abstract void onButtonPressed(ComputerTileEntity te, String buttonName, Object[] data);
 	
-	public final void onButtonPressed(ComputerScreen screen, Button button) {
+	public final void onButtonPressed(ComputerScreen screen, Button button)
+	{
 		UnlocalizedString data = buttonMap.get(button);
-		if (button == upButton)
+		if(button == upButton)
 			index--;
-		else if (button == downButton)
+		else if(button == downButton)
 			index++;
-		else if(data != null) {
+		else if(data != null)
+		{
 			if(!screen.te.latestmessage.get(this.getId()).isEmpty())
 				MSPacketHandler.sendToServer(new ClearMessagePacket(screen.te.getBlockPos(), this.getId()));
 			onButtonPressed(screen.te, data.string, data.formatData);
@@ -88,33 +92,36 @@ public abstract class ButtonListProgram extends ComputerProgram
 		if(!gui.te.latestmessage.get(this.getId()).isEmpty())
 			list.add(1, new UnlocalizedString(CLEAR_BUTTON));
 		int pos = -1;
-		for(UnlocalizedString s : list) 
+		for(UnlocalizedString s : list)
 		{
-			if(pos == -1) 
+			if(pos == -1)
 			{
 				message = s.translate();
-			}
-		       	else
+			} else
 			{
-				if(index > pos) 
+				if(index > pos)
 				{
 					pos++;
 					continue;
 				}
-				if(pos == index + 4) 
+				if(pos == index + 4)
 				{
 					downButton.active = true;
 					break;
 				}
-				buttonMap.put((Button) buttonMap.keySet().toArray()[pos-index], s);
+				buttonMap.put((Button) buttonMap.keySet().toArray()[pos - index], s);
 			}
 			pos++;
 		}
 		if(index == 0 && pos != 4)
 			for(; pos < 4; pos++)
-				buttonMap.put((Button) buttonMap.keySet().toArray()[pos-index], new UnlocalizedString(""));
+			{
+				if(pos >= 0) //can still be -1 in some instances, causing a crash
+					buttonMap.put((Button) buttonMap.keySet().toArray()[pos - index], new UnlocalizedString(""));
+			}
 		
-		for(Entry<Button, UnlocalizedString> entry : buttonMap.entrySet()) {
+		for(Entry<Button, UnlocalizedString> entry : buttonMap.entrySet())
+		{
 			UnlocalizedString data = entry.getValue();
 			entry.getKey().active = !data.string.isEmpty();
 			entry.getKey().setMessage(data.asTextComponent());
@@ -122,15 +129,16 @@ public abstract class ButtonListProgram extends ComputerProgram
 	}
 	
 	@Override
-	public final void paintGui(MatrixStack matrixStack, ComputerScreen gui, ComputerTileEntity te) {
+	public final void paintGui(MatrixStack matrixStack, ComputerScreen gui, ComputerTileEntity te)
+	{
 		Minecraft mc = Minecraft.getInstance();
 		mc.getTextureManager().bind(ComputerScreen.guiBackground);
 		int yOffset = (gui.height / 2) - (ComputerScreen.ySize / 2);
 		gui.blit(matrixStack, (gui.width / 2) - (ComputerScreen.xSize / 2), yOffset, 0, 0, ComputerScreen.xSize, ComputerScreen.ySize);
 		if(te.latestmessage.get(te.programSelected) == null || te.latestmessage.get(te.programSelected).isEmpty())
 			mc.font.draw(matrixStack, message, (gui.width - ComputerScreen.xSize) / 2 + 15, (gui.height - ComputerScreen.ySize) / 2 + 45, 4210752);
-		else 
-			mc.font.draw(matrixStack, I18n.get(te.latestmessage.get(te.programSelected)), (gui.width - ComputerScreen.xSize) / 2  + 15, (gui.height - ComputerScreen.ySize) / 2 + 45, 4210752);
+		else
+			mc.font.draw(matrixStack, I18n.get(te.latestmessage.get(te.programSelected)), (gui.width - ComputerScreen.xSize) / 2 + 15, (gui.height - ComputerScreen.ySize) / 2 + 45, 4210752);
 	}
 	
 	/**
@@ -138,15 +146,19 @@ public abstract class ButtonListProgram extends ComputerProgram
 	 * Is used to represent the value on the buttons, but also the message shown above the buttons.
 	 * See getStringList().
 	 */
-	protected static class UnlocalizedString {
+	protected static class UnlocalizedString
+	{
 		String string;
 		Object[] formatData;
-		public UnlocalizedString(String str, Object... obj) {
+		
+		public UnlocalizedString(String str, Object... obj)
+		{
 			string = str;
 			formatData = obj;
 		}
 		
-		public String translate() {
+		public String translate()
+		{
 			return I18n.get(string, formatData);
 		}
 		

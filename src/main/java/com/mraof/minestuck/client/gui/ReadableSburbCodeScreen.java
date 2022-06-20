@@ -21,7 +21,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+/**
+ * Code is modified components of, or inspired by, WinGameScreen/ReadBookScreen/StoneTabletScreen
+ */
 public class ReadableSburbCodeScreen extends Screen
 {
 	public static final ResourceLocation BOOK_TEXTURES = new ResourceLocation("textures/gui/book.png");
@@ -77,6 +79,7 @@ public class ReadableSburbCodeScreen extends Screen
 			{
 			}
 			
+			//TODO add one last line of code after the rest to simulate the missing piece of code that came with the lotus flower drop
 			if(textList != null)
 			{
 				List<Block> fullBlockList = MSTags.Blocks.GREEN_HIEROGLYPHS.getValues();

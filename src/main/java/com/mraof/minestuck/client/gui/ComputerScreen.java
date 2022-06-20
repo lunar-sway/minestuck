@@ -131,6 +131,7 @@ public class ComputerScreen extends Screen
 		updateGui();
 	}
 	
+	//TODO when both server and client programs are installed, disk burner is no longer iterated to
 	private int getNextProgram()
 	{
 		if(te.installedPrograms.size() == 1)

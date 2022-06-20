@@ -4,9 +4,12 @@ import com.mraof.minestuck.block.MSBlockShapes;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.computer.ProgramData;
+import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.ReadableSburbCodeItem;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
+import com.mraof.minestuck.util.MSTags;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemEntity;
@@ -28,6 +31,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -83,7 +87,9 @@ public class ComputerBlock extends MachineBlock
 			if(tileEntity == null)
 				return ActionResultType.FAIL;
 			
-			if(insertDisk(tileEntity, state, worldIn, pos, player, handIn))
+			if(inputCode(tileEntity, state, worldIn, pos, player, handIn))
+				return ActionResultType.SUCCESS;
+			else if(insertDisk(tileEntity, state, worldIn, pos, player, handIn))
 				return ActionResultType.SUCCESS;
 			
 			if(worldIn.isClientSide && SkaiaClient.requestData(tileEntity))
@@ -109,8 +115,21 @@ public class ComputerBlock extends MachineBlock
 	
 	private boolean insertDisk(ComputerTileEntity tileEntity, BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn)
 	{
-		int id = ProgramData.getProgramID(player.getItemInHand(handIn));
-		if(id != -2 && !tileEntity.hasProgram(id) && tileEntity.installedPrograms.size() < 2 && !tileEntity.hasProgram(-1))
+		ItemStack stackInHand = player.getItemInHand(handIn);
+		int id = ProgramData.getProgramID(stackInHand);
+		
+		if(stackInHand.getItem() == MSItems.BLANK_DISK)
+		{
+			if(tileEntity.blankDisksStored < 2) //only allow two blank disks to be burned at a time
+			{
+				stackInHand.shrink(1);
+				tileEntity.blankDisksStored++;
+				tileEntity.setChanged();
+				worldIn.sendBlockUpdated(pos, state, state, 3);
+				return true;
+			}
+		}
+		else if(id != -2 && !tileEntity.hasProgram(id) && tileEntity.installedPrograms.size() < 3 && !tileEntity.hasProgram(-1))
 		{
 			if(worldIn.isClientSide)
 				return true;
@@ -123,7 +142,41 @@ public class ComputerBlock extends MachineBlock
 			tileEntity.setChanged();
 			worldIn.sendBlockUpdated(pos, state, state, 3);
 			return true;
-		} else return false;
+		}
+		
+		return false;
+	}
+	
+	private boolean inputCode(ComputerTileEntity tileEntity, BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn)
+	{
+		ItemStack heldStack = player.getItemInHand(handIn);
+		if(heldStack.getItem() instanceof ReadableSburbCodeItem)
+		{
+			List<Block> hieroglyphList = ReadableSburbCodeItem.getRecordedBlocks(heldStack);
+			
+			if(!hieroglyphList.isEmpty())
+			{
+				boolean newInfo = false;
+				for(Block iterateBlock : hieroglyphList)
+				{
+					if(tileEntity.hieroglyphsStored != null && MSTags.Blocks.GREEN_HIEROGLYPHS.contains(iterateBlock) && !tileEntity.hieroglyphsStored.contains(iterateBlock))
+					{
+						tileEntity.hieroglyphsStored.add(iterateBlock);
+						newInfo = true;
+					}
+				}
+				
+				if(newInfo)
+				{
+					tileEntity.setChanged();
+					worldIn.sendBlockUpdated(pos, state, state, 3);
+					
+					return true;
+				}
+			}
+		}
+		
+		return false;
 	}
 	
 	@Override
@@ -136,7 +189,9 @@ public class ComputerBlock extends MachineBlock
 	@Override
 	public TileEntity createTileEntity(BlockState state, IBlockReader world)
 	{
-		return new ComputerTileEntity();
+		ComputerTileEntity te = new ComputerTileEntity();
+		te.installedPrograms.put(2, true); //the program disk burner has no associated item and should always exist on the computer
+		return te;
 	}
 	
 	
@@ -168,18 +223,37 @@ public class ComputerBlock extends MachineBlock
 			float rx = rand.nextFloat() * 0.8F + 0.1F;
 			float ry = rand.nextFloat() * 0.8F + 0.1F;
 			float rz = rand.nextFloat() * 0.8F + 0.1F;
-			ItemEntity entityItem = new ItemEntity(world, x + rx, y + ry, z + rz, ProgramData.getItem(program));
+			ItemStack diskStack = ProgramData.getItem(program);
+			if(diskStack != null)
+			{
+				ItemEntity entityItem = new ItemEntity(world, x + rx, y + ry, z + rz, diskStack);
+				entityItem.setDeltaMovement(rand.nextGaussian() * factor, rand.nextGaussian() * factor + 0.2F, rand.nextGaussian() * factor);
+				world.addFreshEntity(entityItem);
+			}
+		}
+		
+		for(int iterate = 0; iterate < te.blankDisksStored; iterate++)
+		{
+			float rx = rand.nextFloat() * 0.8F + 0.1F;
+			float ry = rand.nextFloat() * 0.8F + 0.1F;
+			float rz = rand.nextFloat() * 0.8F + 0.1F;
+			ItemEntity entityItem = new ItemEntity(world, x + rx, y + ry, z + rz, MSItems.BLANK_DISK.getDefaultInstance());
 			entityItem.setDeltaMovement(rand.nextGaussian() * factor, rand.nextGaussian() * factor + 0.2F, rand.nextGaussian() * factor);
 			world.addFreshEntity(entityItem);
 		}
+		
 		if(state.getValue(STATE) == State.BROKEN)
 		{
 			float rx = rand.nextFloat() * 0.8F + 0.1F;
 			float ry = rand.nextFloat() * 0.8F + 0.1F;
 			float rz = rand.nextFloat() * 0.8F + 0.1F;
-			ItemEntity entityItem = new ItemEntity(world, x + rx, y + ry, z + rz, ProgramData.getItem(-1));
-			entityItem.setDeltaMovement(rand.nextGaussian() * factor, rand.nextGaussian() * factor + 0.2F, rand.nextGaussian() * factor);
-			world.addFreshEntity(entityItem);
+			ItemStack diskStack = ProgramData.getItem(-1);
+			if(diskStack != null)
+			{
+				ItemEntity entityItem = new ItemEntity(world, x + rx, y + ry, z + rz, diskStack);
+				entityItem.setDeltaMovement(rand.nextGaussian() * factor, rand.nextGaussian() * factor + 0.2F, rand.nextGaussian() * factor);
+				world.addFreshEntity(entityItem);
+			}
 		}
 	}
 	

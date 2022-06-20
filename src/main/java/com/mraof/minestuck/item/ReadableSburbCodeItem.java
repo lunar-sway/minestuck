@@ -1,12 +1,14 @@
 package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.client.gui.MSScreenFactories;
+import com.mraof.minestuck.util.BlockHitResultUtil;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.StringNBT;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
@@ -27,14 +29,18 @@ public class ReadableSburbCodeItem extends Item
 	@Override
 	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn)
 	{
-		ItemStack itemStackIn = playerIn.getItemInHand(handIn);
-		
-		if(worldIn.isClientSide)
+		if(playerIn.isShiftKeyDown() || !MSTags.Blocks.GREEN_HIEROGLYPHS.contains(BlockHitResultUtil.collidedBlockState(worldIn, playerIn).getBlock()))
 		{
-			MSScreenFactories.displayReadableSburbCodeScreen(getRecordedBlocks(itemStackIn));
+			ItemStack itemStackIn = playerIn.getItemInHand(handIn);
+			
+			if(worldIn.isClientSide)
+			{
+				MSScreenFactories.displayReadableSburbCodeScreen(getRecordedBlocks(itemStackIn));
+			}
+			return ActionResult.success(itemStackIn);
 		}
-		return ActionResult.success(itemStackIn);
-		//return super.use(worldIn, playerIn, handIn);
+		
+		return super.use(worldIn, playerIn, handIn);
 	}
 	
 	/**
@@ -47,7 +53,7 @@ public class ReadableSburbCodeItem extends Item
 		
 		List<ResourceLocation> blockStringList = new ArrayList<>();
 		
-		if(stack.getTag() != null)
+		if(stack.getTag() != null && stack.getTag().contains("recordedHieroglyphs"))
 		{
 			ListNBT hieroglyphList = stack.getTag().getList("recordedHieroglyphs", Constants.NBT.TAG_STRING);
 			
@@ -70,5 +76,48 @@ public class ReadableSburbCodeItem extends Item
 		}
 		
 		return blockList;
+	}
+	
+	/**
+	 * Uses the nbt of a tile entity and attempts to return a list of blocks based on the string of their registry name, used by ComputerTileEntity
+	 */
+	public static List<Block> getRecordedBlocks(ListNBT hieroglyphList)
+	{
+		List<ResourceLocation> blockStringList = new ArrayList<>();
+		
+		for(int iterate = 0; iterate < hieroglyphList.size(); iterate++)
+		{
+			ResourceLocation iterateResourceLocation = ResourceLocation.tryParse(hieroglyphList.getString(iterate));
+			if(iterateResourceLocation != null)
+				blockStringList.add(iterateResourceLocation);
+		}
+		
+		List<Block> blockList = new ArrayList<>();
+		
+		for(ResourceLocation iterateList : blockStringList)
+		{
+			Block iterateBlock = ForgeRegistries.BLOCKS.getValue(iterateList);
+			
+			if(iterateBlock != null)
+				blockList.add(iterateBlock);
+		}
+		
+		return blockList;
+	}
+	
+	public static ListNBT getListNBTFromBlockList(List<Block> blockList)
+	{
+		ListNBT hieroglyphList = new ListNBT();
+		if(blockList != null && !blockList.isEmpty())
+		{
+			for(Block blockIterate : blockList)
+			{
+				String blockRegistryString = String.valueOf(blockIterate.getRegistryName());
+				
+				hieroglyphList.add(StringNBT.valueOf(blockRegistryString));
+			}
+		}
+		
+		return hieroglyphList;
 	}
 }
