@@ -4,6 +4,8 @@ import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.util.BlockHitResultUtil;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.block.Block;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -12,13 +14,20 @@ import net.minecraft.nbt.StringNBT;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The class for the items Sburb Code and Completed Sburb Code which primarily allows them to be read, with Sburb Code extending its usage.
+ * Some checks for the use of sburb code exists in ComputerBlock, and functions from here are used in both ComputerBlock and ComputerTileEntity
+ */
 public class ReadableSburbCodeItem extends Item
 {
 	public ReadableSburbCodeItem(Item.Properties properties)
@@ -119,5 +128,18 @@ public class ReadableSburbCodeItem extends Item
 		}
 		
 		return hieroglyphList;
+	}
+	
+	@Override
+	public void appendHoverText(ItemStack stack, @Nullable World level, List<ITextComponent> tooltip, ITooltipFlag flag)
+	{
+		if(stack.getItem() == MSItems.COMPLETED_SBURB_CODE)
+		{
+			if(Screen.hasShiftDown())
+			{
+				tooltip.add(new TranslationTextComponent("item.minestuck.completed_sburb_code.additional_info"));
+			} else
+				tooltip.add(new TranslationTextComponent("item.minestuck.completed_sburb_code.shift_for_more_info"));
+		}
 	}
 }

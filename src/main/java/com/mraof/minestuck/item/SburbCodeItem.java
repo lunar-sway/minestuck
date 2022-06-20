@@ -102,7 +102,7 @@ public class SburbCodeItem extends ReadableSburbCodeItem
 		return stack;
 	}
 	
-	public void attemptConversionToCompleted(PlayerEntity player, Hand hand)
+	public static void attemptConversionToCompleted(PlayerEntity player, Hand hand)
 	{
 		ItemStack stackInHand = player.getItemInHand(hand);
 		List<Block> recordedList = getRecordedBlocks(stackInHand);

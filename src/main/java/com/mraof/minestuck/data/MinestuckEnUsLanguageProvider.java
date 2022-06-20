@@ -886,10 +886,12 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemExtra(MSItems.SBURB_CODE, "shift_for_more_info", "Press §eSHIFT§r for more info");
 		addItem(MSItems.COMPLETED_SBURB_CODE, "SBURB Code");
 		addItemTooltip(MSItems.COMPLETED_SBURB_CODE, "Everything needed to make... something... is transcribed to this book. If this is for a computer program, it's very big.");
+		addItemExtra(MSItems.COMPLETED_SBURB_CODE, "additional_info", "Right click on an active computer to upload all necessary sburb code.");
+		addItemExtra(MSItems.COMPLETED_SBURB_CODE, "shift_for_more_info", "Press §eSHIFT§r for more info");
 		addItem(MSItems.COMPUTER_PARTS, "Computer Parts");
 		addItemTooltip(MSItems.COMPUTER_PARTS, "Looks like it needs some additional components to get working.");
 		addItem(MSItems.BLANK_DISK, "Blank Disk");
-		addItemTooltip(MSItems.BLANK_DISK, "Can be put into a computer once there is a program on it to run.");
+		addItemTooltip(MSItems.BLANK_DISK, "Can be put into a computer, has space to write a program on to it.");
 		addItem(MSItems.CLIENT_DISK, "SBURB Client Disk");
 		addItem(MSItems.SERVER_DISK, "SBURB Server Disk");
 		addItem(MSItems.CAPTCHA_CARD, "Captchalogue Card");
@@ -1404,7 +1406,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		
 		addAdvancement(MSAdvancementProvider.ROOT, "Minestuck", "The Beginning of Something Really Excellent");
 		addAdvancement(MSAdvancementProvider.SEARCHING, "Searching For Purpose", "Build a Temple Scanner to find special ruins scattered around the land");
-		addAdvancement(MSAdvancementProvider.LONG_TIME_COMING, "Long Time Coming", "Collect SBURB code from a Frog Temple! You get the sense that you need to find a disk to write it onto");
+		addAdvancement(MSAdvancementProvider.LONG_TIME_COMING, "Long Time Coming", "Collect SBURB code from a Frog Temple! You get the sense that you need to find a computer to record its information to");
 		addAdvancement(MSAdvancementProvider.CONNECT, "Connect", "Create a connection with someone");
 		addAdvancement(MSAdvancementProvider.ENTRY, "A New World", "Create, and use the Cruxite Artifact");
 		addAdvancement(MSAdvancementProvider.ALCHEMY, "Step Towards Alchemy", "Getting a punch designix is the first step to alchemizing something else!");
