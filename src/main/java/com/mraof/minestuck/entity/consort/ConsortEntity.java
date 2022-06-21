@@ -442,11 +442,6 @@ public class ConsortEntity extends AnimatedCreatureEntity implements IContainerP
 	{
 		if(!event.isMoving() || event.getAnimatable().getCurrentAction() != Actions.NONE)
 		{
-			if(event.getAnimatable().getConsortType() == EnumConsort.TURTLE)
-			{ // eeeeeeeeeeehhh maybe just fix the turtle anims instead
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("armfix", true));
-				return PlayState.CONTINUE;
-			}
 			return PlayState.STOP;
 		}
 		
