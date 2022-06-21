@@ -1,6 +1,8 @@
 package com.mraof.minestuck.entity;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.SburbCodeItem;
 import com.mraof.minestuck.network.LotusFlowerPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.world.storage.loot.MSLootTables;
@@ -201,6 +203,8 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 			
 			for(ItemStack itemStack : loot)
 			{
+				if(itemStack.getItem() == MSItems.SBURB_CODE)
+					SburbCodeItem.setParadoxInfo(itemStack, true);
 				this.spawnAtLocation(itemStack, 1F);
 			}
 		}

@@ -888,6 +888,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.SBURB_CODE, "SBURB Code");
 		addTooltip(MSItems.SBURB_CODE, "It seems hieroglyphs can be translated into genetic code. Perhaps this genetic code could in turn be made into computer code?");
 		addExtra(MSItems.SBURB_CODE, "completion", "§dPercent completion: %s%%§r"); //section signs result in the percent number being light purple, double percent symbol required to get it to show up in game
+		addExtra(MSItems.SBURB_CODE, "paradox_hint", "All of the hieroglyphs that can be found have been recorded here, what could be missing?");
 		addExtra(MSItems.SBURB_CODE, "additional_info", "Right click on different types of hieroglyph blocks to record them. Create new code books using a Book and Quill on hieroglyphs. Right click on a computer to exchange code.");
 		addExtra(MSItems.SBURB_CODE, "shift_for_more_info", "Press §eSHIFT§r for more info");
 		add(MSItems.COMPLETED_SBURB_CODE, "SBURB Code");

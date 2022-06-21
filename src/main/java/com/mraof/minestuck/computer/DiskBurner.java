@@ -21,7 +21,7 @@ public class DiskBurner extends ButtonListProgram
 		list.add(new UnlocalizedString(CHOOSE));
 		
 		//TODO remove the buttons during an earlier check, it takes two result-less clicks to remove them
-		if(te != null && te.hieroglyphsStored.containsAll(MSTags.Blocks.GREEN_HIEROGLYPHS.getValues()) && te.blankDisksStored > 0)
+		if(te != null && te.hieroglyphsStored.containsAll(MSTags.Blocks.GREEN_HIEROGLYPHS.getValues()) && te.blankDisksStored > 0 && te.hasParadoxInfoStored)
 		{
 			list.add(new UnlocalizedString(BURN_SERVER_DISK));
 			list.add(new UnlocalizedString(BURN_CLIENT_DISK));

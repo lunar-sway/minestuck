@@ -154,10 +154,16 @@ public class ComputerBlock extends MachineBlock
 		if(heldStack.getItem() instanceof ReadableSburbCodeItem)
 		{
 			List<Block> hieroglyphList = ReadableSburbCodeItem.getRecordedBlocks(heldStack);
+			boolean newInfo = false;
+			
+			if(heldStack.getItem() == MSItems.COMPLETED_SBURB_CODE || (SburbCodeItem.getParadoxInfo(heldStack) && !tileEntity.hasParadoxInfoStored))
+			{
+				newInfo = true;
+				tileEntity.hasParadoxInfoStored = true;
+			}
 			
 			if(!hieroglyphList.isEmpty())
 			{
-				boolean newInfo = false;
 				for(Block iterateBlock : hieroglyphList) //for each block in the item's list, adds it to the tile entities list should it not exist yet
 				{
 					if(tileEntity.hieroglyphsStored != null && MSTags.Blocks.GREEN_HIEROGLYPHS.contains(iterateBlock) && !tileEntity.hieroglyphsStored.contains(iterateBlock))
@@ -168,22 +174,28 @@ public class ComputerBlock extends MachineBlock
 				}
 				
 				//checks additionally if the item is also a SburbCodeItem, and does the reverse process of adding any new blocks from the tile entities list to the item's
-				if(tileEntity.hieroglyphsStored != null && heldStack.getItem() instanceof SburbCodeItem)
+				if(heldStack.getItem() instanceof SburbCodeItem)
 				{
-					for(Block iterateBlock : tileEntity.hieroglyphsStored)
+					if(tileEntity.hasParadoxInfoStored)
+						SburbCodeItem.setParadoxInfo(heldStack, true); //put before attemptConversionToCompleted in case it just received the paradox info
+					
+					if(tileEntity.hieroglyphsStored != null)
 					{
-						SburbCodeItem.addRecordedInfo(heldStack, iterateBlock);
-						SburbCodeItem.attemptConversionToCompleted(player, handIn);
+						for(Block iterateBlock : tileEntity.hieroglyphsStored)
+						{
+							SburbCodeItem.addRecordedInfo(heldStack, iterateBlock);
+							SburbCodeItem.attemptConversionToCompleted(player, handIn);
+						}
 					}
 				}
+			}
+			
+			if(newInfo)
+			{
+				tileEntity.setChanged();
+				worldIn.sendBlockUpdated(pos, state, state, 3);
 				
-				if(newInfo)
-				{
-					tileEntity.setChanged();
-					worldIn.sendBlockUpdated(pos, state, state, 3);
-					
-					return true;
-				}
+				return true;
 			}
 		}
 		

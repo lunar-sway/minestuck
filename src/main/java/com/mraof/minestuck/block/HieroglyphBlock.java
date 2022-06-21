@@ -35,6 +35,7 @@ public class HieroglyphBlock extends Block
 				
 				ItemStack newStack = MSItems.SBURB_CODE.getDefaultInstance();
 				SburbCodeItem.addRecordedInfo(newStack, state.getBlock());
+				SburbCodeItem.setParadoxInfo(newStack, false); //since code is being recorded from scratch, it does not contain the paradoxically transferred component
 				newStack.setCount(amountInHandStack);
 				player.setItemInHand(handIn, newStack);
 			}

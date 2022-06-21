@@ -59,7 +59,7 @@ public class MSLootEvents
 		
 		if(event.getType() == VillagerProfession.CARTOGRAPHER)
 		{
-			trades.get(1).add((villager, random) -> new MerchantOffer(new ItemStack(Items.EMERALD, 6), new ItemStack(Items.COMPASS), createFrogTempleMap(villager), 12, 7, 0.2F));
+			trades.get(1).add((villager, random) -> new MerchantOffer(new ItemStack(Items.EMERALD, 8), new ItemStack(Items.COMPASS), createFrogTempleMap(villager), 12, 7, 0.2F));
 		}
 		
 		if(event.getType() == VillagerProfession.LEATHERWORKER)

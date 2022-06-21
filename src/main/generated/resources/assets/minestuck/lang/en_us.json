@@ -1458,6 +1458,7 @@
   "item.minestuck.sburb_code": "SBURB Code",
   "item.minestuck.sburb_code.additional_info": "Right click on different types of hieroglyph blocks to record them. Create new code books using a Book and Quill on hieroglyphs. Right click on a computer to exchange code.",
   "item.minestuck.sburb_code.completion": "\u00A7dPercent completion: %s%%\u00A7r",
+  "item.minestuck.sburb_code.paradox_hint": "All of the hieroglyphs that can be found have been recorded here, what could be missing?",
   "item.minestuck.sburb_code.shift_for_more_info": "Press \u00A7eSHIFT\u00A7r for more info",
   "item.minestuck.sburb_code.tooltip": "It seems hieroglyphs can be translated into genetic code. Perhaps this genetic code could in turn be made into computer code?",
   "item.minestuck.scalemate_applescab": "Officer Applescab",
