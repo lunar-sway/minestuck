@@ -52,9 +52,9 @@ public class SburbCodeItem extends ReadableSburbCodeItem
 				{
 					worldIn.playSound(null, player.blockPosition(), SoundEvents.VILLAGER_WORK_CARTOGRAPHER, SoundCategory.BLOCKS, 1.0F, 1.0F);
 				}
-				
-				attemptConversionToCompleted(player, handIn); //if after addCarvingsToCode the item now possesses all hieroglyphs, convert it to a completed sburb code item
 			}
+			
+			attemptConversionToCompleted(player, handIn); //if after addCarvingsToCode the item now possesses all hieroglyphs, convert it to a completed sburb code item
 		}
 		
 		return ActionResultType.PASS;
@@ -106,12 +106,32 @@ public class SburbCodeItem extends ReadableSburbCodeItem
 	{
 		ItemStack stackInHand = player.getItemInHand(hand);
 		List<Block> recordedList = getRecordedBlocks(stackInHand);
-		List<Block> completeList = MSTags.Blocks.GREEN_HIEROGLYPHS.getValues();
 		
-		if(recordedList.containsAll(completeList))
+		if(hasAllBlocks(recordedList) && getParadoxInfo(stackInHand))
 		{
 			player.setItemInHand(hand, MSItems.COMPLETED_SBURB_CODE.getDefaultInstance());
 		}
+	}
+	
+	public static boolean hasAllBlocks(List<Block> blockList)
+	{
+		List<Block> completeList = MSTags.Blocks.GREEN_HIEROGLYPHS.getValues();
+		
+		return blockList.containsAll(completeList);
+	}
+	
+	public static void setParadoxInfo(ItemStack stack, boolean hasInfo)
+	{
+		CompoundNBT nbt = stack.getOrCreateTag();
+		nbt.putBoolean("hasParadoxInfo", hasInfo);
+		stack.setTag(nbt);
+	}
+	
+	public static boolean getParadoxInfo(ItemStack stack)
+	{
+		CompoundNBT nbt = stack.getTag();
+		
+		return nbt != null && nbt.contains("hasParadoxInfo") && nbt.getBoolean("hasParadoxInfo");
 	}
 	
 	public ItemStack setRecordedInfo(ItemStack stack, List<Block> blockList)
@@ -129,16 +149,22 @@ public class SburbCodeItem extends ReadableSburbCodeItem
 		return stack;
 	}
 	
-	public static float percentCompletion(float sizeOfList)
+	public static float percentCompletion(ItemStack stack)
 	{
-		return ((sizeOfList + 1) / (MSTags.Blocks.GREEN_HIEROGLYPHS.getValues().size() + 1)) * 100; //+1 is to give the illusion that part of it has already been filled in before it was sent through the lotus flower
+		int mod = getParadoxInfo(stack) ? 1 : 0; //the mod of +1 is to give the illusion that part of it has already been filled in before it was sent through the lotus flower, if it has the paradox code
+		float sizeOfList = getRecordedBlocks(stack).size();
+		return ((sizeOfList + mod) / (MSTags.Blocks.GREEN_HIEROGLYPHS.getValues().size() + mod)) * 100;
 	}
 	
 	@Override
 	public void appendHoverText(ItemStack stack, @Nullable World level, List<ITextComponent> tooltip, ITooltipFlag flag)
 	{
 		if(level != null)
-			tooltip.add(new TranslationTextComponent("item.minestuck.sburb_code.completion", (byte) percentCompletion(getRecordedBlocks(stack).size())));
+		{
+			tooltip.add(new TranslationTextComponent("item.minestuck.sburb_code.completion", (byte) percentCompletion(stack)));
+			if(hasAllBlocks(getRecordedBlocks(stack)))
+				tooltip.add(new TranslationTextComponent("item.minestuck.sburb_code.paradox_hint"));
+		}
 		
 		if(Screen.hasShiftDown())
 		{

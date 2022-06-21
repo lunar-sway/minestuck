@@ -46,6 +46,7 @@ public class ComputerTileEntity extends BlockEntity implements ISburbComputer
 	public CompoundTag programData = new CompoundTag();
 	public int programSelected = -1;
 	public List<Block> hieroglyphsStored = new ArrayList<>();
+	public boolean hasParadoxInfoStored = false; //sburb code component received from the lotus flower
 	public int blankDisksStored;
 	
 	@Override
@@ -76,6 +77,8 @@ public class ComputerTileEntity extends BlockEntity implements ISburbComputer
 		
 		if(nbt.contains("hieroglyphsStored"))
 			hieroglyphsStored = ReadableSburbCodeItem.getRecordedBlocks(nbt.getList("hieroglyphsStored", Constants.NBT.TAG_STRING));
+		if(nbt.contains("hasParadoxInfoStored"))
+			hasParadoxInfoStored = nbt.getBoolean("hasParadoxInfoStored");
 		if(nbt.contains("blankDisksStored"))
 			blankDisksStored = nbt.getInt("blankDisksStored");
 	}
@@ -106,6 +109,7 @@ public class ComputerTileEntity extends BlockEntity implements ISburbComputer
 		{
 			compound.put("hieroglyphsStored", hieroglyphListNBT);
 		}
+		compound.putBoolean("hasParadoxInfoStored", hasParadoxInfoStored);
 		
 		compound.putInt("blankDisksStored", blankDisksStored);
 		
