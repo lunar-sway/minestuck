@@ -180,6 +180,7 @@ public class MSBlocks
 	public static final Block FALL_PAD = getNull();
 	public static final Block FRAGILE_STONE = getNull();
 	public static final Block RETRACTABLE_SPIKES = getNull();
+	public static final Block BLOCK_PRESSURE_PLATE = getNull();
 	public static final Block PORTABLE_BLOCK = getNull();
 	public static final Block AND_GATE_BLOCK = getNull();
 	public static final Block OR_GATE_BLOCK = getNull();
@@ -608,6 +609,7 @@ public class MSBlocks
 		registry.register(new FallPadBlock(AbstractBlock.Properties.of(Material.CLOTH_DECORATION).strength(1).sound(SoundType.WOOL).harvestTool(ToolType.PICKAXE)).setRegistryName("fall_pad"));
 		registry.register(new FragileBlock(AbstractBlock.Properties.of(Material.STONE).strength(1).sound(SoundType.STONE).harvestTool(ToolType.PICKAXE)).setRegistryName("fragile_stone"));
 		registry.register(new RetractableSpikesBlock(AbstractBlock.Properties.of(Material.METAL).strength(1).sound(SoundType.METAL).harvestTool(ToolType.PICKAXE)).setRegistryName("retractable_spikes"));
+		registry.register(new BlockPressurePlateBlock(AbstractBlock.Properties.of(Material.STONE).strength(1).sound(SoundType.STONE).harvestTool(ToolType.PICKAXE)).setRegistryName("block_pressure_plate"));
 		registry.register(new PortableBlock(AbstractBlock.Properties.of(Material.STONE).strength(1).sound(SoundType.GILDED_BLACKSTONE).harvestTool(ToolType.PICKAXE)).setRegistryName("portable_block"));
 		registry.register(new LogicGateBlock(AbstractBlock.Properties.of(Material.STONE).strength(1).sound(SoundType.STONE).harvestTool(ToolType.PICKAXE), LogicGateBlock.State.AND).setRegistryName("and_gate_block"));
 		registry.register(new LogicGateBlock(AbstractBlock.Properties.of(Material.STONE).strength(1).sound(SoundType.STONE).harvestTool(ToolType.PICKAXE), LogicGateBlock.State.OR).setRegistryName("or_gate_block"));
