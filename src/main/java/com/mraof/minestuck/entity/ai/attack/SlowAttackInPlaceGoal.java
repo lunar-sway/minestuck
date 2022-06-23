@@ -2,14 +2,18 @@ package com.mraof.minestuck.entity.ai.attack;
 
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.EnumSet;
+import java.util.Objects;
 
 /**
  * Like {@link SlowAttackWhenInRangeGoal}, but interrupts any movement and look goals to stand still and look at the target.
  */
 public class SlowAttackInPlaceGoal<T extends CreatureEntity & AttackState.Holder> extends SlowAttackWhenInRangeGoal<T>
 {
+	private Vector3d lookTarget;
+	
 	public SlowAttackInPlaceGoal(T entity, int attackDelay, int attackRecovery)
 	{
 		super(entity, attackDelay, attackRecovery);
@@ -18,11 +22,18 @@ public class SlowAttackInPlaceGoal<T extends CreatureEntity & AttackState.Holder
 	}
 	
 	@Override
+	public void start()
+	{
+		//the target should be guaranteed to be non-null because canUse() requires it to be non-null.
+		LivingEntity target = Objects.requireNonNull(this.entity.getTarget());
+		this.lookTarget = new Vector3d(target.getX(), target.getEyeY(), target.getZ());
+		super.start();
+	}
+	
+	@Override
 	public void tick()
 	{
-		LivingEntity target = this.entity.getTarget();
-		if(target != null)
-			this.entity.getLookControl().setLookAt(target, 30.0F, 30.0F);
+		this.entity.getLookControl().setLookAt(lookTarget.x, lookTarget.y, lookTarget.z, 30.0F, 30.0F);
 		super.tick();
 	}
 }
