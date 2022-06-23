@@ -36,16 +36,17 @@ public class SendificatorPacket implements PlayToServerPacket
 		Container playerContainer = player.containerMenu;
 		if(playerContainer instanceof SendificatorContainer)
 		{
-			BlockPos machinePos = ((SendificatorContainer) playerContainer).machinePos;
-			SendificatorTileEntity tileEntity = (SendificatorTileEntity) player.level.getBlockEntity(machinePos);
-			if(tileEntity != null)
-			{
-				tileEntity.setDestinationBlockPos(destinationBlockPos);
-				//Imitates the structure block to ensure that changes are sent client-side
-				tileEntity.setChanged();
-				BlockState state = player.level.getBlockState(machinePos);
-				player.level.sendBlockUpdated(machinePos, state, state, 3);
-			}
+			((SendificatorContainer) playerContainer).getPosition().execute((level, machinePos) -> {
+				SendificatorTileEntity tileEntity = (SendificatorTileEntity) level.getBlockEntity(machinePos);
+				if(tileEntity != null)
+				{
+					tileEntity.setDestinationBlockPos(destinationBlockPos);
+					//Imitates the structure block to ensure that changes are sent client-side
+					tileEntity.setChanged();
+					BlockState state = level.getBlockState(machinePos);
+					level.sendBlockUpdated(machinePos, state, state, 3);
+				}
+			});
 		}
 	}
 }

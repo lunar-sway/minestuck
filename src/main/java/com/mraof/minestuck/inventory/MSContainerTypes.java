@@ -42,7 +42,7 @@ public class MSContainerTypes
 		registry.register(new ContainerType<>((IContainerFactory<MiniTotemLatheContainer>) MiniTotemLatheContainer::new).setRegistryName("mini_totem_lathe"));
 		registry.register(new ContainerType<>((IContainerFactory<MiniAlchemiterContainer>) MiniAlchemiterContainer::new).setRegistryName("mini_alchemiter"));
 		registry.register(new ContainerType<>((IContainerFactory<MiniPunchDesignixContainer>) MiniPunchDesignixContainer::new).setRegistryName("mini_punch_designix"));
-		registry.register(new ContainerType<>((IContainerFactory<SendificatorContainer>) SendificatorContainer::new).setRegistryName("sendificator"));
+		registry.register(new ContainerType<>((IContainerFactory<SendificatorContainer>) SendificatorContainer::newFromPacket).setRegistryName("sendificator"));
 		registry.register(new ContainerType<>((IContainerFactory<GristWidgetContainer>) GristWidgetContainer::new).setRegistryName("grist_widget"));
 		registry.register(new ContainerType<>((IContainerFactory<UraniumCookerContainer>) UraniumCookerContainer::new).setRegistryName("uranium_cooker"));
 		registry.register(new ContainerType<>(CaptchaDeckContainer::new).setRegistryName("captcha_deck"));

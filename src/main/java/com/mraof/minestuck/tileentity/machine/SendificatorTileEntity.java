@@ -1,5 +1,6 @@
 package com.mraof.minestuck.tileentity.machine;
 
+import com.mraof.minestuck.inventory.OptionalPosHolder;
 import com.mraof.minestuck.inventory.SendificatorContainer;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.util.ExtraForgeTags;
@@ -7,18 +8,20 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.util.*;
+import net.minecraft.util.Direction;
+import net.minecraft.util.IWorldPosCallable;
+import net.minecraft.util.IntReferenceHolder;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
@@ -26,6 +29,7 @@ import net.minecraftforge.items.wrapper.RangedWrapper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 public class SendificatorTileEntity extends MachineProcessTileEntity implements INamedContainerProvider
 {
@@ -53,6 +57,7 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 			fuel = (short) value;
 		}
 	};
+	private final OptionalPosHolder destinationHolder = OptionalPosHolder.forPos(() -> Optional.ofNullable(this.getDestinationBlockPos()));
 	
 	public SendificatorTileEntity()
 	{
@@ -202,11 +207,18 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 		return super.getCapability(cap, side);
 	}
 	
+	public void openMenu(ServerPlayerEntity player)
+	{
+		NetworkHooks.openGui(player, this, SendificatorContainer.makeExtraDataWriter(this.worldPosition, this.destBlockPos));
+	}
+	
 	@Nullable
 	@Override
 	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity player)
 	{
-		return new SendificatorContainer(windowId, playerInventory, itemHandler, parameters, fuelHolder, IWorldPosCallable.create(level, worldPosition), worldPosition);
+		return new SendificatorContainer(windowId, playerInventory, itemHandler,
+				parameters, fuelHolder, destinationHolder,
+				IWorldPosCallable.create(level, worldPosition), worldPosition);
 	}
 	
 	public short getFuel()
@@ -217,23 +229,5 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 	public void setFuel(short fuel)
 	{
 		this.fuel = fuel;
-	}
-	
-	@Override
-	public CompoundNBT getUpdateTag()
-	{
-		return this.save(new CompoundNBT());
-	}
-	
-	@Override
-	public SUpdateTileEntityPacket getUpdatePacket()
-	{
-		return new SUpdateTileEntityPacket(getBlockPos(), 2, getUpdateTag());
-	}
-	
-	@Override
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
-	{
-		this.load(getBlockState(), pkt.getTag());
 	}
 }

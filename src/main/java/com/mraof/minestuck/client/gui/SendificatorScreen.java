@@ -10,13 +10,13 @@ import com.mraof.minestuck.tileentity.machine.SendificatorTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
+
+import javax.annotation.Nullable;
 
 public class SendificatorScreen extends MachineScreen<SendificatorContainer>
 {
@@ -30,13 +30,13 @@ public class SendificatorScreen extends MachineScreen<SendificatorContainer>
 	private final int goX;
 	private final int goY;
 	
-	private final SendificatorTileEntity te;
 	private TextFieldWidget destinationTextFieldX;
 	private TextFieldWidget destinationTextFieldY;
 	private TextFieldWidget destinationTextFieldZ;
 	private ExtendedButton updateButton;
 	private ExtendedButton goButton;
-	private BlockPos startingDestPos;
+	@Nullable
+	private BlockPos parsedPos;
 	
 	
 	SendificatorScreen(SendificatorContainer screenContainer, PlayerInventory inv, ITextComponent titleIn)
@@ -50,17 +50,6 @@ public class SendificatorScreen extends MachineScreen<SendificatorContainer>
 		progressHeight = 39;
 		goX = 115;
 		goY = 60;
-		
-		//TODO find out if there is a more elegant method of getting the te
-		SendificatorTileEntity tempTE = null;
-		World world = inv.player.level;
-		if(world != null && screenContainer.machinePos != null)
-		{
-			TileEntity tileEntity = world.getBlockEntity(screenContainer.machinePos);
-			if(tileEntity instanceof SendificatorTileEntity)
-				tempTE = ((SendificatorTileEntity) tileEntity); //will cause crashes if a check for a null te is not done
-		}
-		te = tempTE;
 	}
 	
 	@Override
@@ -73,14 +62,17 @@ public class SendificatorScreen extends MachineScreen<SendificatorContainer>
 		updateButton = addButton(new ExtendedButton((width - imageWidth) / 2 + 105, yOffset + 40, 50, 12, new StringTextComponent("Update"), button -> updateDestinationPos()));
 		
 		this.destinationTextFieldX = new TextFieldWidget(this.font, this.width / 2 - 10, yOffset + 10, 35, 15, new StringTextComponent("X value of destination block pos")); //TODO make these translatable
+		destinationTextFieldX.setMaxLength(10);
 		addButton(destinationTextFieldX);
 		destinationTextFieldX.setResponder(s -> onTextFieldChange());
 		
 		this.destinationTextFieldY = new TextFieldWidget(this.font, this.width / 2 + 25, yOffset + 10, 20, 15, new StringTextComponent("Y value of destination block pos"));
+		destinationTextFieldY.setMaxLength(3);
 		addButton(destinationTextFieldY);
 		destinationTextFieldY.setResponder(s -> onTextFieldChange());
 		
 		this.destinationTextFieldZ = new TextFieldWidget(this.font, this.width / 2 + 45, yOffset + 10, 35, 15, new StringTextComponent("Z value of destination block pos"));
+		destinationTextFieldZ.setMaxLength(10);
 		addButton(destinationTextFieldZ);
 		destinationTextFieldZ.setResponder(s -> onTextFieldChange());
 		
@@ -88,19 +80,13 @@ public class SendificatorScreen extends MachineScreen<SendificatorContainer>
 		goButton = new GoButton((width - imageWidth) / 2 + goX, yOffset + goY, 30, 12, new StringTextComponent(menu.overrideStop() ? "STOP" : "GO"));
 		addButton(goButton);
 		
-		BlockPos tePos = te != null ? te.getDestinationBlockPos() : null;
-		
-		if(tePos != null)
+		BlockPos destination = this.menu.getDestination();
+		if(destination != null)
 		{
-			this.destinationTextFieldX.setValue(String.valueOf(tePos.getX()));
-			this.destinationTextFieldY.setValue(String.valueOf(tePos.getY()));
-			this.destinationTextFieldZ.setValue(String.valueOf(tePos.getZ()));
-			
-			startingDestPos = tePos;
-			
-			goButton.active = true;
-		} else
-			goButton.active = false;
+			this.destinationTextFieldX.setValue(String.valueOf(destination.getX()));
+			this.destinationTextFieldY.setValue(String.valueOf(destination.getY()));
+			this.destinationTextFieldZ.setValue(String.valueOf(destination.getZ()));
+		}
 		
 		updateButton.active = false;
 	}
@@ -108,7 +94,10 @@ public class SendificatorScreen extends MachineScreen<SendificatorContainer>
 	@Override
 	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
 	{
-		goButton.active = te != null && te.getDestinationBlockPos() != null;
+		goButton.active = this.menu.hasDestination();
+		// Make the update button clickable only when there is a parsed position and it is different from the original
+		updateButton.active = parsedPos != null && !parsedPos.equals(this.menu.getDestination());
+		
 		this.renderBackground(matrixStack);
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
 		this.renderTooltip(matrixStack, mouseX, mouseY);
@@ -156,9 +145,10 @@ public class SendificatorScreen extends MachineScreen<SendificatorContainer>
 	
 	private void updateDestinationPos()
 	{
-		MSPacketHandler.sendToServer(new SendificatorPacket(parseBlockPos()));
-		updateButton.active = false;
-		goButton.active = true;
+		if(parsedPos != null)
+		{
+			MSPacketHandler.sendToServer(new SendificatorPacket(parsedPos));
+		}
 	}
 	
 	/**
@@ -168,26 +158,19 @@ public class SendificatorScreen extends MachineScreen<SendificatorContainer>
 	{
 		try
 		{
-			if(!parseBlockPos().equals(startingDestPos)) //prevents it from becoming active during resizing or if non-changing modifications are made to the text fields
-				updateButton.active = true;
+			parsedPos = parseBlockPos();
 		} catch(NumberFormatException ignored)
 		{
-			updateButton.active = false;
+			parsedPos = null;
 		}
-	}
-	
-	private static int parseInt(TextFieldWidget widget)
-			throws NumberFormatException
-	{
-		return Integer.parseInt(widget.getValue());
 	}
 	
 	private BlockPos parseBlockPos()
 			throws NumberFormatException
 	{
-		int x = parseInt(destinationTextFieldX);
-		int y = parseInt(destinationTextFieldY);
-		int z = parseInt(destinationTextFieldZ);
+		int x = Integer.parseInt(destinationTextFieldX.getValue());
+		int y = Integer.parseInt(destinationTextFieldY.getValue());
+		int z = Integer.parseInt(destinationTextFieldZ.getValue());
 		
 		return new BlockPos(x, y, z);
 	}
