@@ -41,6 +41,7 @@ import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.List;
+import java.util.Objects;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public final class ClientEditHandler
@@ -93,7 +94,7 @@ public final class ClientEditHandler
 		
 		GristSet have = ClientPlayerData.getClientGrist();
 		
-		addToolTip(event.getItemStack(), event.getToolTip(), have, event.getEntity().level);
+		addToolTip(event.getItemStack(), event.getToolTip(), have);
 		
 	}
 	
@@ -105,9 +106,10 @@ public final class ClientEditHandler
 		else return GristCostRecipe.findCostForItem(stack, null, false, world);
 	}
 	
-	private static void addToolTip(ItemStack stack, List<ITextComponent> toolTip, GristSet have, World world)
+	private static void addToolTip(ItemStack stack, List<ITextComponent> toolTip, GristSet have)
 	{
-		GristSet cost = itemCost(stack, world);
+		World level = Objects.requireNonNull(Minecraft.getInstance().level);
+		GristSet cost = itemCost(stack, level);
 		
 		if(cost == null)
 		{
