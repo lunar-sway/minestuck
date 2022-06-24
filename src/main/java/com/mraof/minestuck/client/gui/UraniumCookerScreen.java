@@ -66,7 +66,7 @@ public class UraniumCookerScreen extends MachineScreen<UraniumCookerContainer>
 		//draw progress bar
 		this.minecraft.getTextureManager().bind(PROGRESS);
 		int width = progressWidth;
-		int height = getScaledValue(menu.getFuel(), UraniumCookerTileEntity.getMaxFuel(), progressHeight);
+		int height = getScaledValue(menu.getFuel(), UraniumCookerTileEntity.MAX_FUEL, progressHeight);
 		blit(matrixStack, x+progressX, y+progressY+progressHeight-height, 0, progressHeight-height, width, height, progressWidth, progressHeight);
 	}
 	

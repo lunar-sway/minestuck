@@ -36,7 +36,6 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 	public static final RunType TYPE = RunType.BUTTON_OVERRIDE;
 	public static final String TITLE = "container.minestuck.sendificator";
 	public static final int DEFAULT_MAX_PROGRESS = 0;
-	public static final int FUEL_INCREASE = 32;
 	public static final short MAX_FUEL = 128;
 	private short fuel = 0;
 	
@@ -137,7 +136,7 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 		
 		ItemStack fuel = itemHandler.getStackInSlot(1);
 		ItemStack input = itemHandler.getStackInSlot(0);
-		return getFuel() <= MAX_FUEL - FUEL_INCREASE && ExtraForgeTags.Items.URANIUM_CHUNKS.contains(fuel.getItem()) || !input.isEmpty();
+		return canBeRefueled() && ExtraForgeTags.Items.URANIUM_CHUNKS.contains(fuel.getItem()) || !input.isEmpty();
 	}
 	
 	/**
@@ -146,7 +145,7 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 	@Override
 	public void processContents()
 	{
-		if(getFuel() <= MAX_FUEL - FUEL_INCREASE)
+		if(canBeRefueled())
 		{
 			//checks for a uranium itemstack in the lower(fuel) item slot, increases the fuel value if some is found and then removes one count from the fuel stack
 			if(ExtraForgeTags.Items.URANIUM_CHUNKS.contains(itemHandler.getStackInSlot(1).getItem()))
@@ -188,6 +187,14 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 		return fuel > 0 && !itemHandler.getStackInSlot(0).isEmpty();
 	}
 	
+	/**
+	 * Checks that fuel can be added without any excess/wasted points being attributed
+	 */
+	public boolean canBeRefueled()
+	{
+		return fuel <= MAX_FUEL - FUEL_INCREASE;
+	}
+	
 	private final LazyOptional<IItemHandler> inputHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 0, 1)); //sendificated item slot
 	private final LazyOptional<IItemHandler> fuelHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 1, 2)); //uranium fuel slot
 	
@@ -219,15 +226,5 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 		return new SendificatorContainer(windowId, playerInventory, itemHandler,
 				parameters, fuelHolder, destinationHolder,
 				IWorldPosCallable.create(level, worldPosition), worldPosition);
-	}
-	
-	public short getFuel()
-	{
-		return fuel;
-	}
-	
-	public void setFuel(short fuel)
-	{
-		this.fuel = fuel;
 	}
 }
