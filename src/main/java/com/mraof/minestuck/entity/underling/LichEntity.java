@@ -1,6 +1,7 @@
 package com.mraof.minestuck.entity.underling;
 
-import com.mraof.minestuck.entity.AttackingAnimatedEntity;
+import com.mraof.minestuck.entity.ai.attack.MoveToTargetGoal;
+import com.mraof.minestuck.entity.ai.attack.SlowAttackWhenInRangeGoal;
 import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
@@ -44,7 +45,8 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 	{
 		super.registerGoals();
 		this.goalSelector.addGoal(1, new AttackResistanceGoal());
-		this.goalSelector.addGoal(3, new AttackingAnimatedEntity.DelayedAttackGoal(this, 1F, false, 14, 16));
+		this.goalSelector.addGoal(2, new SlowAttackWhenInRangeGoal<>(this, 14, 16));
+		this.goalSelector.addGoal(3, new MoveToTargetGoal(this, 1F, false));
 	}
 	
 	protected SoundEvent getAmbientSound()
