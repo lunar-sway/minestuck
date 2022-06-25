@@ -42,6 +42,7 @@ public class ReadableSburbCodeScreen extends Screen
 	private ChangePageButton backButton;
 	
 	List<String> textList = null;
+	int linesPerBlock = 1;
 	
 	//GUI sizes
 	public static final int GUI_WIDTH = 192;
@@ -53,7 +54,6 @@ public class ReadableSburbCodeScreen extends Screen
 	
 	//public final static String EMPTY_SPACE = "                                                                            "; //76 characters
 	public final static String EMPTY_SPACE = "                                                            "; //60 characters
-	//public final static String EMPTY_SPACE = "OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO0000000"; //77 spaces
 	
 	public ReadableSburbCodeScreen(List<Block> blockList)
 	{
@@ -66,16 +66,16 @@ public class ReadableSburbCodeScreen extends Screen
 	protected void init()
 	{
 		super.init();
+		int fullBlockListSize = MSTags.Blocks.GREEN_HIEROGLYPHS.getValues().size();
 		
 		try
 		{
 			IResource iResource = this.minecraft.getResourceManager().getResource(new ResourceLocation(Minestuck.MOD_ID, "texts/rana_temporaria_sec22b.txt")); //The text is broken into lines 60 characters long to neatly fit within a block of text that avoids empty spaces
-			//Debug.debugf("iResource = %s", iResource.toString());
 			InputStream inputStream = iResource.getInputStream();
-			//InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
-			//inputStreamReader
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
 			textList = bufferedReader.lines().collect(Collectors.toList());
+			
+			linesPerBlock = textList.size() / fullBlockListSize;
 		} catch(Exception ignored)
 		{
 		}
@@ -97,30 +97,18 @@ public class ReadableSburbCodeScreen extends Screen
 			if(textList != null)
 			{
 				RenderSystem.pushMatrix();
-				float subtractScale = 0.4F; //was too wide with .
+				float subtractScale = 0.4F;
 				float scale = (1 / subtractScale);
 				RenderSystem.scaled(subtractScale, subtractScale, subtractScale);
 				
 				List<Block> fullBlockList = MSTags.Blocks.GREEN_HIEROGLYPHS.getValues();
 				MutableInt lineY = new MutableInt();
 				boolean isPresent = false;
-				int subStringStart = 0;
-				int numberOfLines = textList.size();
 				
-				//TODO remove its use here, bring it back to a section in which unrecorded code leaves a vacant slot
-				for(int lineIterate = 0; lineY.getValue() < 28 * CUSTOM_LINE_HEIGHT || lineIterate < numberOfLines; lineIterate++)
+				for(int lineIterate = 0; lineIterate < fullBlockList.size(); lineIterate++)
 				{
-					String text = textList.get(lineIterate);
-					font.getSplitter().splitLines(text, TEXT_WIDTH, Style.EMPTY, true, (style, start, end) -> {
-						//limiting the length of the page via this if statement
-						ITextComponent line = new StringTextComponent(text.substring(start, end)).setStyle(style);
-						font.draw(matrixStack, line, ((this.width - GUI_WIDTH) / 2F + TEXT_OFFSET_X) * scale, (lineY.intValue() + TEXT_OFFSET_Y) * scale, 0x000000);
-						lineY.add(CUSTOM_LINE_HEIGHT);
-					});
-				}
-				
-				/*for(int lineIterate = 0; lineIterate < fullBlockList.size(); lineIterate++)
-				{
+					List<String> blockTextList = textList.subList(lineIterate * linesPerBlock + lineIterate, lineIterate * linesPerBlock + linesPerBlock);
+					
 					for(Block blockListIterate : blockList)
 					{
 						if(fullBlockList.get(lineIterate) == blockListIterate)
@@ -130,63 +118,44 @@ public class ReadableSburbCodeScreen extends Screen
 						}
 					}
 					
-					//textList.subList()
-					
-					String text = textList.get(lineIterate);
-					/*ITextComponent line = new StringTextComponent(isPresent ? text : EMPTY_SPACE).setStyle(Style.EMPTY);
-					
-					font.getSplitter().splitLines(text, TEXT_WIDTH, Style.EMPTY, true, (style, start, end) -> {
-						//limiting the length of the page via this if statement, 25 lines of text
-						if(lineY.getValue() < 25 * CUSTOM_LINE_HEIGHT)
-						{
-							//ITextComponent line = new StringTextComponent(text.substring(start, end)).setStyle(style);
-							font.draw(matrixStack, line, ((this.width - GUI_WIDTH) / 2F + TEXT_OFFSET_X) * scale, (lineY.intValue() + TEXT_OFFSET_Y) * scale, 0x000000);
-							lineY.add(CUSTOM_LINE_HEIGHT);
-						}
-					});*/
-					
-					/*if(isPresent) //TODO stop line splitting unless it reaches the edge of a line, provide the whole gene(instead of chromosome) and divy it up into fractions of content as opposed to new lines dependent on the spacing in the text file itself
+					for(String text : blockTextList)
 					{
-						
-						//int subStringStart = 0;
-						/*for(int subStringStart = 0; subStringStart < text.length(); subStringStart += 39)
+						if(isPresent)
 						{
-							ITextComponent line = new StringTextComponent(text.substring(subStringStart, subStringStart + 38)).setStyle(Style.EMPTY);
 							font.getSplitter().splitLines(text, TEXT_WIDTH, Style.EMPTY, true, (style, start, end) -> {
-								
-								font.draw(matrixStack, line, ((this.width - GUI_WIDTH) / 2F + TEXT_OFFSET_X) * (int) (1 / scale), (lineY.intValue() + TEXT_OFFSET_Y) * (int) (1 / scale), 0x000000);
-								lineY.add(font.lineHeight);
+								//limiting the length of the page via this if statement
+								if(stillValidLine(lineY.getValue()))
+								{
+									ITextComponent line = new StringTextComponent(text.substring(start, end)).setStyle(style);
+									font.draw(matrixStack, line, ((this.width - GUI_WIDTH) / 2F + TEXT_OFFSET_X) * scale, (lineY.intValue() + TEXT_OFFSET_Y) * scale, 0x000000);
+									lineY.add(CUSTOM_LINE_HEIGHT);
+								}
 							});
-						}*/
-						
-						/*font.getSplitter().splitLines(text, TEXT_WIDTH, Style.EMPTY, true, (style, start, end) -> {
-							//limiting the length of the page via this if statement
-							if(lineY.getValue() < 25 * CUSTOM_LINE_HEIGHT)
-							{
-								ITextComponent line = new StringTextComponent(text.substring(start, end)).setStyle(style);
-								font.draw(matrixStack, line, ((this.width - GUI_WIDTH) / 2F + TEXT_OFFSET_X) * scale, (lineY.intValue() + TEXT_OFFSET_Y) * scale, 0x000000);
-								lineY.add(CUSTOM_LINE_HEIGHT);
-							}
-						});
-					} else
-					{
-						font.getSplitter().splitLines(EMPTY_SPACE, TEXT_WIDTH, Style.EMPTY, true, (style, start, end) -> {
-							if(lineY.getValue() < 25 * CUSTOM_LINE_HEIGHT)
-							{
-								ITextComponent line = new StringTextComponent(EMPTY_SPACE.substring(start, end)).setStyle(style);
-								font.draw(matrixStack, line, ((this.width - GUI_WIDTH) / 2F + TEXT_OFFSET_X) * scale, (lineY.intValue() + TEXT_OFFSET_Y) * scale, 0x000000);
-								lineY.add(CUSTOM_LINE_HEIGHT);
-							}
-						});
+						} else
+						{
+							font.getSplitter().splitLines(EMPTY_SPACE, TEXT_WIDTH, Style.EMPTY, true, (style, start, end) -> {
+								if(stillValidLine(lineY.getValue()))
+								{
+									ITextComponent line = new StringTextComponent(EMPTY_SPACE.substring(start, end)).setStyle(style);
+									font.draw(matrixStack, line, ((this.width - GUI_WIDTH) / 2F + TEXT_OFFSET_X) * scale, (lineY.intValue() + TEXT_OFFSET_Y) * scale, 0x000000);
+									lineY.add(CUSTOM_LINE_HEIGHT);
+								}
+							});
+						}
 					}
 					
 					isPresent = false;
-				}*/
+				}
 			}
 			
 		}
 		RenderSystem.popMatrix();
 		
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
+	}
+	
+	public boolean stillValidLine(int lineY)
+	{
+		return lineY < 40 * CUSTOM_LINE_HEIGHT;
 	}
 }
