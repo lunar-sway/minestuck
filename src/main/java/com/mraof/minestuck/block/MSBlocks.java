@@ -551,8 +551,8 @@ public class MSBlocks
 		registry.register(new StairsBlock(() -> MSBlocks.END_PLANKS.defaultBlockState(), AbstractBlock.Properties.copy(endPlanks)).setRegistryName("end_planks_stairs"));
 		registry.register(new StairsBlock(() -> MSBlocks.DEAD_PLANKS.defaultBlockState(), AbstractBlock.Properties.copy(deadPlanks)).setRegistryName("dead_planks_stairs"));
 		registry.register(new StairsBlock(() -> MSBlocks.TREATED_PLANKS.defaultBlockState(), AbstractBlock.Properties.copy(treatedPlanks)).setRegistryName("treated_planks_stairs"));
-		registry.register(new CustomShapeBlock(Block.Properties.copy(greenStoneBricks), MSBlockShapes.STEEP_STAIRS_BASE).setRegistryName("steep_green_stone_brick_stairs_base"));
-		registry.register(new CustomShapeBlock(Block.Properties.copy(greenStoneBricks), MSBlockShapes.STEEP_STAIRS_TOP).setRegistryName("steep_green_stone_brick_stairs_top"));
+		registry.register(new SteepStairsBlock(Block.Properties.copy(greenStoneBricks), MSBlockShapes.STEEP_STAIRS_BASE).setRegistryName("steep_green_stone_brick_stairs_base"));
+		registry.register(new SteepStairsBlock(Block.Properties.copy(greenStoneBricks), MSBlockShapes.STEEP_STAIRS_TOP).setRegistryName("steep_green_stone_brick_stairs_top"));
 		registry.register(new SlabBlock(AbstractBlock.Properties.copy(blackChessBricks)).setRegistryName("black_castle_brick_slab"));
 		registry.register(new SlabBlock(AbstractBlock.Properties.copy(darkGrayChessBricks)).setRegistryName("dark_gray_castle_brick_slab"));
 		registry.register(new SlabBlock(AbstractBlock.Properties.copy(lightGrayChessBricks)).setRegistryName("light_gray_castle_brick_slab"));

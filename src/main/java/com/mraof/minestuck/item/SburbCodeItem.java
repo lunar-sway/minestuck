@@ -22,6 +22,9 @@ import net.minecraftforge.common.util.Constants;
 import javax.annotation.Nullable;
 import java.util.List;
 
+/**
+ * Used for the Sburb Code item, extends ReadableSburbCodeItem which is used by Completed Sburb Code. Allows players to store a list of blocks from the GREEN_HIEROGLPYH block tag that in game reflects the collection of genetic code for the creation of sburb
+ */
 public class SburbCodeItem extends ReadableSburbCodeItem
 {
 	public SburbCodeItem(Properties properties)
@@ -151,7 +154,7 @@ public class SburbCodeItem extends ReadableSburbCodeItem
 	
 	public static float percentCompletion(ItemStack stack)
 	{
-		int mod = getParadoxInfo(stack) ? 1 : 0; //the mod of +1 is to give the illusion that part of it has already been filled in before it was sent through the lotus flower, if it has the paradox code
+		int mod = getParadoxInfo(stack) ? 1 : 0; //the mod of 1 is to give the illusion that part of it has already been filled in before it was sent through the lotus flower, if it has the paradox code
 		float sizeOfList = getRecordedBlocks(stack).size();
 		return ((sizeOfList + mod) / (MSTags.Blocks.GREEN_HIEROGLYPHS.getValues().size() + mod)) * 100;
 	}
