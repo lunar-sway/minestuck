@@ -46,21 +46,18 @@ public class SmallMachineBlock<T extends TileEntity> extends MachineProcessBlock
 	@SuppressWarnings("deprecation")
 	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
 	{
-		if(!player.isShiftKeyDown())
+		if(!worldIn.isClientSide)
 		{
-			if(!worldIn.isClientSide)
+			TileEntity tileEntity = worldIn.getBlockEntity(pos);
+			if(tileEntity != null && tileEntity.getType() == this.tileType.get())
 			{
-				TileEntity tileEntity = worldIn.getBlockEntity(pos);
-				if(tileEntity != null && tileEntity.getType() == this.tileType.get())
-				{
-					if(tileEntity instanceof IOwnable)
-						((IOwnable) tileEntity).setOwner(IdentifierHandler.encode(player));
-					if(tileEntity instanceof INamedContainerProvider)
-						NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, pos);
-				}
+				if(tileEntity instanceof IOwnable)
+					((IOwnable) tileEntity).setOwner(IdentifierHandler.encode(player));
+				if(tileEntity instanceof INamedContainerProvider)
+					NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, pos);
 			}
-			return ActionResultType.SUCCESS;
-		} else return ActionResultType.PASS;
+		}
+		return ActionResultType.sidedSuccess(worldIn.isClientSide);
 	}
 	
 	@Override

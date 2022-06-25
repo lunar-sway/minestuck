@@ -37,6 +37,7 @@ public class MSScreenFactories
 		ScreenManager.register(MSContainerTypes.MINI_TOTEM_LATHE, MiniTotemLatheScreen::new);
 		ScreenManager.register(MSContainerTypes.MINI_ALCHEMITER, MiniAlchemiterScreen::new);
 		ScreenManager.register(MSContainerTypes.MINI_PUNCH_DESIGNIX, MiniPunchDesignixScreen::new);
+		ScreenManager.register(MSContainerTypes.SENDIFICATOR, SendificatorScreen::new);
 		ScreenManager.register(MSContainerTypes.GRIST_WIDGET, GristWidgetScreen::new);
 		ScreenManager.register(MSContainerTypes.URANIUM_COOKER, UraniumCookerScreen::new);
 		//ScreenManager.registerFactory(ModContainerTypes.CAPTCHA_DECK, );

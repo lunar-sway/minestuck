@@ -19,10 +19,10 @@ public abstract class MachineProcessBlock extends MachineBlock
 	@SuppressWarnings("deprecation")
 	public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving)
 	{
-		if (state.getBlock() != newState.getBlock())
+		if(state.getBlock() != newState.getBlock())
 		{
 			TileEntity tileentity = worldIn.getBlockEntity(pos);
-			if (tileentity instanceof MachineProcessTileEntity)
+			if(tileentity instanceof MachineProcessTileEntity)
 			{
 				tileentity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(handler ->
 				{

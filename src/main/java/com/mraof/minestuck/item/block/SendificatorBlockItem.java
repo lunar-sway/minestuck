@@ -1,6 +1,7 @@
 package com.mraof.minestuck.item.block;
 
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.util.MSDamageSources;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
@@ -52,11 +53,9 @@ public class SendificatorBlockItem extends BlockItem
 				ItemEntity recoverItemEntity = new ItemEntity(playerIn.level, playerIn.getX(), playerIn.getY(), playerIn.getZ(), recoverItem);
 				playerIn.level.addFreshEntity(recoverItemEntity);
 				playerIn.setSlot(103, new ItemStack(Items.AIR));
-				//playerIn.setHealth(0);
-				playerIn.kill();
+				playerIn.hurt(MSDamageSources.DECAPITATION, Float.MAX_VALUE);
 			}
 		}
 		super.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
 	}
-	
 }

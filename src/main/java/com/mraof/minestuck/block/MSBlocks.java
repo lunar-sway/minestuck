@@ -630,7 +630,7 @@ public class MSBlocks
 		registry.register(new ComputerBlock(ComputerBlock.OLD_COMPUTER_SHAPE, ComputerBlock.OLD_COMPUTER_SHAPE, AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(4.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("old_computer"));
 		registry.register(new TransportalizerBlock(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("transportalizer"));
 		registry.register(new TransportalizerBlock(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("trans_portalizer"));
-		registry.register(new SendificatorBlock(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0), MSBlockShapes.SENDIFICATOR).setRegistryName("sendificator"));
+		registry.register(new SendificatorBlock(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("sendificator"));
 		registry.register(new GristWidgetBlock(AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("grist_widget"));
 		registry.register(new SmallMachineBlock<>(new CustomVoxelShape(new double[]{4, 0, 4, 12, 6, 12}).createRotatedShapes(), MSTileEntityTypes.URANIUM_COOKER, AbstractBlock.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(3.0F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("uranium_cooker"));
 		

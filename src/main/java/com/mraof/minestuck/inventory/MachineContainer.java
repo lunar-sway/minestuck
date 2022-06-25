@@ -15,6 +15,7 @@ public abstract class MachineContainer extends Container
 {
 	
 	private final IIntArray parameters;
+	@Deprecated
 	public final BlockPos machinePos;	//TODO replace this by a check to the open container server-side
 	protected final IWorldPosCallable position;
 	
@@ -56,6 +57,11 @@ public abstract class MachineContainer extends Container
 	public boolean overrideStop()
 	{
 		return parameters.get(1) != 0;
+	}
+	
+	public IWorldPosCallable getPosition()
+	{
+		return position;
 	}
 	
 	protected static void assertItemHandlerSize(IItemHandler handler, int minSize)
