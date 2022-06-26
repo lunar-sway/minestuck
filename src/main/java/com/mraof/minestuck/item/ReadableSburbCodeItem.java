@@ -9,6 +9,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.StringNBT;
 import net.minecraft.util.ActionResult;
@@ -44,7 +45,7 @@ public class ReadableSburbCodeItem extends Item
 			
 			if(worldIn.isClientSide)
 			{
-				MSScreenFactories.displayReadableSburbCodeScreen(getRecordedBlocks(itemStackIn));
+				MSScreenFactories.displayReadableSburbCodeScreen(getRecordedBlocks(itemStackIn), getParadoxInfo(itemStackIn));
 			}
 			return ActionResult.success(itemStackIn);
 		}
@@ -128,6 +129,18 @@ public class ReadableSburbCodeItem extends Item
 		}
 		
 		return hieroglyphList;
+	}
+	
+	public static boolean getParadoxInfo(ItemStack stack)
+	{
+		if(stack.getItem() == MSItems.COMPLETED_SBURB_CODE)
+			return true;
+		else
+		{
+			CompoundNBT nbt = stack.getTag();
+			
+			return nbt != null && nbt.contains("hasParadoxInfo") && nbt.getBoolean("hasParadoxInfo");
+		}
 	}
 	
 	@Override
