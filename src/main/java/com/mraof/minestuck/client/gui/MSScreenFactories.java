@@ -98,9 +98,9 @@ public class MSScreenFactories
 		Minecraft.getInstance().setScreen(new StoneTabletScreen(playerIn, handIn, text, canEdit));
 	}
 	
-	public static void displayReadableSburbCodeScreen(List<Block> blockList)
+	public static void displayReadableSburbCodeScreen(List<Block> blockList, boolean paradoxCode)
 	{
-		Minecraft.getInstance().setScreen(new ReadableSburbCodeScreen(blockList));
+		Minecraft.getInstance().setScreen(new ReadableSburbCodeScreen(blockList, paradoxCode));
 	}
 	
 	public static void displayTitleSelectScreen(Title title)

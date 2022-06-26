@@ -130,13 +130,6 @@ public class SburbCodeItem extends ReadableSburbCodeItem
 		stack.setTag(nbt);
 	}
 	
-	public static boolean getParadoxInfo(ItemStack stack)
-	{
-		CompoundNBT nbt = stack.getTag();
-		
-		return nbt != null && nbt.contains("hasParadoxInfo") && nbt.getBoolean("hasParadoxInfo");
-	}
-	
 	public ItemStack setRecordedInfo(ItemStack stack, List<Block> blockList)
 	{
 		CompoundNBT nbt = stack.getOrCreateTag();
