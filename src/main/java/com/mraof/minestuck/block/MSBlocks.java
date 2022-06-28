@@ -181,7 +181,7 @@ public class MSBlocks
 	public static final Block FRAGILE_STONE = getNull();
 	public static final Block RETRACTABLE_SPIKES = getNull();
 	public static final Block BLOCK_PRESSURE_PLATE = getNull();
-	public static final Block PORTABLE_BLOCK = getNull();
+	public static final Block PUSHABLE_BLOCK = getNull();
 	public static final Block AND_GATE_BLOCK = getNull();
 	public static final Block OR_GATE_BLOCK = getNull();
 	public static final Block XOR_GATE_BLOCK = getNull();
@@ -422,9 +422,9 @@ public class MSBlocks
 		registry.register(new MSDirectionalBlock(AbstractBlock.Properties.of(Material.STONE, MaterialColor.SAND).requiresCorrectToolForDrops().strength(0.8F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("chiseled_sandstone_column"));
 		registry.register(new MSDirectionalBlock(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_ORANGE).requiresCorrectToolForDrops().strength(0.8F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("red_sandstone_column"));
 		registry.register(new MSDirectionalBlock(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_ORANGE).requiresCorrectToolForDrops().strength(0.8F).harvestTool(ToolType.PICKAXE).harvestLevel(0)).setRegistryName("chiseled_red_sandstone_column"));
-		registry.register(new Block(AbstractBlock.Properties.of(Material.WOOD, MaterialColor.WOOD).strength(2.0F).harvestTool(ToolType.AXE).sound(SoundType.WOOD).harvestTool(ToolType.AXE).harvestLevel(1)).setRegistryName("uncarved_wood"));
-		registry.register(new Block(AbstractBlock.Properties.of(Material.WOOD, MaterialColor.WOOD).strength(1.0F).harvestTool(ToolType.AXE).sound(SoundType.SCAFFOLDING).harvestTool(ToolType.AXE).harvestLevel(1)).setRegistryName("chipboard"));
-		registry.register(new Block(AbstractBlock.Properties.of(Material.WOOD, MaterialColor.WOOD).strength(0.4F).harvestTool(ToolType.SHOVEL).sound(SoundType.SAND).harvestTool(ToolType.SHOVEL)).setRegistryName("wood_shavings"));
+		registry.register(new Block(AbstractBlock.Properties.of(Material.WOOD, MaterialColor.WOOD).strength(2.0F).harvestTool(ToolType.AXE).sound(SoundType.WOOD).harvestLevel(1)).setRegistryName("uncarved_wood"));
+		registry.register(new Block(AbstractBlock.Properties.of(Material.WOOD, MaterialColor.WOOD).strength(1.0F).harvestTool(ToolType.AXE).sound(SoundType.SCAFFOLDING).harvestLevel(1)).setRegistryName("chipboard"));
+		registry.register(new Block(AbstractBlock.Properties.of(Material.WOOD, MaterialColor.WOOD).strength(0.4F).harvestTool(ToolType.SHOVEL).sound(SoundType.SAND)).setRegistryName("wood_shavings"));
 		registry.register(new Block(AbstractBlock.Properties.of(Material.GLASS, MaterialColor.COLOR_YELLOW).strength(0.5F).sound(SoundType.SNOW)).setRegistryName("dense_cloud"));
 		registry.register(new Block(AbstractBlock.Properties.of(Material.GLASS, MaterialColor.COLOR_LIGHT_GRAY).strength(0.5F).sound(SoundType.SNOW)).setRegistryName("bright_dense_cloud"));
 		registry.register(new Block(AbstractBlock.Properties.of(Material.SAND, MaterialColor.SNOW).strength(0.4F).sound(SoundType.SAND)).setRegistryName("sugar_cube"));
@@ -610,7 +610,7 @@ public class MSBlocks
 		registry.register(new FragileBlock(AbstractBlock.Properties.of(Material.STONE).strength(1).sound(SoundType.STONE).harvestTool(ToolType.PICKAXE)).setRegistryName("fragile_stone"));
 		registry.register(new RetractableSpikesBlock(AbstractBlock.Properties.of(Material.METAL).strength(1).sound(SoundType.METAL).harvestTool(ToolType.PICKAXE)).setRegistryName("retractable_spikes"));
 		registry.register(new BlockPressurePlateBlock(AbstractBlock.Properties.of(Material.STONE).strength(1).sound(SoundType.STONE).harvestTool(ToolType.PICKAXE)).setRegistryName("block_pressure_plate"));
-		registry.register(new PortableBlock(AbstractBlock.Properties.of(Material.STONE).strength(1).sound(SoundType.GILDED_BLACKSTONE).harvestTool(ToolType.PICKAXE)).setRegistryName("portable_block"));
+		registry.register(new PushableBlock(AbstractBlock.Properties.of(Material.STONE).strength(1).sound(SoundType.GILDED_BLACKSTONE).harvestTool(ToolType.PICKAXE)).setRegistryName("pushable_block"));
 		registry.register(new LogicGateBlock(AbstractBlock.Properties.of(Material.STONE).strength(1).sound(SoundType.STONE).harvestTool(ToolType.PICKAXE), LogicGateBlock.State.AND).setRegistryName("and_gate_block"));
 		registry.register(new LogicGateBlock(AbstractBlock.Properties.of(Material.STONE).strength(1).sound(SoundType.STONE).harvestTool(ToolType.PICKAXE), LogicGateBlock.State.OR).setRegistryName("or_gate_block"));
 		registry.register(new LogicGateBlock(AbstractBlock.Properties.of(Material.STONE).strength(1).sound(SoundType.STONE).harvestTool(ToolType.PICKAXE), LogicGateBlock.State.XOR).setRegistryName("xor_gate_block"));

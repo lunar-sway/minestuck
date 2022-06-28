@@ -423,7 +423,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.FRAGILE_STONE, "Fragile Stone");
 		add(MSBlocks.RETRACTABLE_SPIKES, "Retractable Spikes");
 		add(MSBlocks.BLOCK_PRESSURE_PLATE, "Block Pressure Plate");
-		add(MSBlocks.PORTABLE_BLOCK, "Portable Block");
+		add(MSBlocks.PUSHABLE_BLOCK, "Pushable Block");
 		add(MSBlocks.AND_GATE_BLOCK, "AND Gate");
 		add(MSBlocks.OR_GATE_BLOCK, "OR Gate");
 		add(MSBlocks.XOR_GATE_BLOCK, "XOR Gate");

@@ -44,7 +44,7 @@ public class RemoteComparatorBlock extends MSDirectionalBlock
 	@SuppressWarnings("deprecation")
 	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
 	{
-		if(!CreativeShockEffect.doesCreativeShockLimit(player, 1))
+		if(!CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS))
 		{
 			if(!player.isCrouching())
 			{

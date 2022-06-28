@@ -1,5 +1,6 @@
 package com.mraof.minestuck.tileentity.redstone;
 
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.redstone.RemoteComparatorBlock;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import net.minecraft.block.BlockState;
@@ -12,7 +13,7 @@ import net.minecraft.tileentity.TileEntity;
 public class RemoteComparatorTileEntity extends TileEntity implements ITickableTileEntity
 {
 	private int tickCycle;
-	private static final int WIRELESS_TICK_FREQUENCY = 6;
+	private static final int TICK_FREQUENCY = MinestuckConfig.SERVER.puzzleBlockTickRate.get();
 	
 	public RemoteComparatorTileEntity()
 	{
@@ -25,7 +26,7 @@ public class RemoteComparatorTileEntity extends TileEntity implements ITickableT
 		if(level == null)
 			return;
 		
-		if(tickCycle >= WIRELESS_TICK_FREQUENCY)
+		if(tickCycle >= TICK_FREQUENCY)
 		{
 			sendUpdate();
 			tickCycle = 0;

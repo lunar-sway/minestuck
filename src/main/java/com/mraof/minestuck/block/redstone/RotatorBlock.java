@@ -64,7 +64,7 @@ public class RotatorBlock extends MSDirectionalBlock
 			boolean hasPower = false;
 			Direction stateFacing = state.getValue(FACING);
 			
-			for (Direction direction : Direction.values()) //checks for a signal in any direction except the one it is facing
+			for(Direction direction : Direction.values()) //checks for a signal in any direction except the one it is facing
 			{
 				if(direction != stateFacing && worldIn.getSignal(pos.relative(direction), direction) > 0)
 				{
@@ -89,7 +89,7 @@ public class RotatorBlock extends MSDirectionalBlock
 					rotatedFacingState = facingState.rotate(worldIn, facingPos, Rotation.CLOCKWISE_90);
 				
 				if((rotatedFacingState.canSurvive(worldIn, pos) && !rotatedFacingState.hasLargeCollisionShape() && (PistonBlock.isPushable(rotatedFacingState, worldIn, facingPos, null, false, null)) ||
-						(rotatedFacingState.getBlock() instanceof MSDirectionalBlock || MSTags.Blocks.RULE_EXEMPT_ROTATABLE.contains(rotatedFacingState.getBlock()))))
+						MSTags.Blocks.ROTATOR_WHITELISTED.contains(rotatedFacingState.getBlock())))
 					worldIn.setBlockAndUpdate(facingPos, rotatedFacingState);
 			}
 		}

@@ -119,7 +119,8 @@ public class AreaEffectBlock extends HorizontalBlock
 			BlockState state = worldIn.getBlockState(pos);
 			boolean hasPower = worldIn.hasNeighborSignal(pos);
 			
-			if(state.getValue(SHUT_DOWN))
+			//TODO test this
+			if(state.getValue(SHUT_DOWN)/* && state.getValue(POWERED)*/)
 			{
 				worldIn.setBlockAndUpdate(pos, state.setValue(POWERED, false));
 			} else

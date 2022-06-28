@@ -1,5 +1,6 @@
 package com.mraof.minestuck.tileentity.redstone;
 
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.redstone.WirelessRedstoneReceiverBlock;
 import com.mraof.minestuck.block.redstone.WirelessRedstoneTransmitterBlock;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
@@ -24,7 +25,7 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 	private BlockPos offsetPos;
 	private Direction facing;
 	private int tickCycle;
-	private static final int WIRELESS_TICK_FREQUENCY = 6; //tick speed of components related to wireless redstone, does not occur every tick for performance
+	private static final int WIRELESS_TICK_FREQUENCY = MinestuckConfig.SERVER.puzzleBlockTickRate.get();
 	
 	public WirelessRedstoneTransmitterTileEntity()
 	{

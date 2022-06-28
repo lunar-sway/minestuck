@@ -1,6 +1,7 @@
 package com.mraof.minestuck.tileentity.redstone;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.redstone.StatStorerBlock;
 import com.mraof.minestuck.event.AlchemyEvent;
 import com.mraof.minestuck.event.GristDropsEvent;
@@ -42,7 +43,7 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 	private ActiveType activeType;
 	private int divideValueBy;
 	private int tickCycle;
-	private static final int WIRELESS_TICK_FREQUENCY = 6;
+	private static final int TICK_FREQUENCY = MinestuckConfig.SERVER.puzzleBlockTickRate.get();
 	
 	public enum ActiveType
 	{
@@ -83,7 +84,7 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 		if(level == null || !level.isAreaLoaded(worldPosition, 1))
 			return;
 		
-		if(tickCycle % WIRELESS_TICK_FREQUENCY == 1)
+		if(tickCycle % TICK_FREQUENCY == 1)
 		{
 			if(!level.isClientSide)
 			{

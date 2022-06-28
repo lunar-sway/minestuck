@@ -42,14 +42,14 @@ public class ItemMagnetBlock extends DirectionalCustomShapeBlock
 	@Override
 	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
 	{
-		if(!player.isCrouching() && !CreativeShockEffect.doesCreativeShockLimit(player, 1))
+		if(!CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS))
 		{
 			worldIn.setBlock(pos, state.cycle(REVERSE_POLARITY), Constants.BlockFlags.DEFAULT);
 			if(state.getValue(REVERSE_POLARITY))
 				worldIn.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 1.5F);
 			else
 				worldIn.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 0.5F);
-			return ActionResultType.SUCCESS;
+			return ActionResultType.sidedSuccess(worldIn.isClientSide);
 		}
 		
 		return ActionResultType.PASS;

@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minestuck:portable_block"
+          "name": "minestuck:pushable_block"
         }
       ],
       "conditions": [

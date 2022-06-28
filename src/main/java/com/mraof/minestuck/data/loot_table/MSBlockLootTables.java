@@ -377,7 +377,7 @@ public class MSBlockLootTables extends BlockLootTables
 		dropSelf(FRAGILE_STONE);
 		dropSelf(RETRACTABLE_SPIKES);
 		dropSelf(BLOCK_PRESSURE_PLATE);
-		dropSelf(PORTABLE_BLOCK);
+		dropSelf(PUSHABLE_BLOCK);
 		dropSelf(AND_GATE_BLOCK);
 		dropSelf(OR_GATE_BLOCK);
 		dropSelf(XOR_GATE_BLOCK);

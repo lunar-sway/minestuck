@@ -6,7 +6,6 @@ import com.mraof.minestuck.util.MSTags;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.tags.BlockTags;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
@@ -79,9 +78,9 @@ public class MinestuckBlockTagsProvider extends BlockTagsProvider
 		tag(DIAMOND_ORES).add(PINK_STONE_DIAMOND_ORE);
 		tag(CRUXITE_STORAGE_BLOCKS).add(CRUXITE_BLOCK);
 		tag(END_SAPLING_DIRT).addTag(Tags.Blocks.END_STONES).add(END_GRASS);
-		tag(RULE_EXEMPT_ROTATABLE).add(AND_GATE_BLOCK, OR_GATE_BLOCK, XOR_GATE_BLOCK, NAND_GATE_BLOCK, NOR_GATE_BLOCK, XNOR_GATE_BLOCK, AREA_EFFECT_BLOCK, WIRELESS_REDSTONE_TRANSMITTER);
-		tag(PLATFORM_ABSORBING).addTag(Tags.Blocks.OBSIDIAN).add(Blocks.BEDROCK, Blocks.NETHER_PORTAL, Blocks.END_PORTAL, Blocks.END_PORTAL_FRAME, PORTABLE_BLOCK); //excludes Platform Receptacle blocks as they only absorb conditionally
-		tag(PORTABLE_BLOCK_REPLACABLE).addTags(SAPLINGS, FLOWERS);
+		tag(ROTATOR_WHITELISTED).add(AND_GATE_BLOCK, OR_GATE_BLOCK, XOR_GATE_BLOCK, NAND_GATE_BLOCK, NOR_GATE_BLOCK, XNOR_GATE_BLOCK, AREA_EFFECT_BLOCK, WIRELESS_REDSTONE_TRANSMITTER);
+		tag(PLATFORM_ABSORBING).addTag(Tags.Blocks.OBSIDIAN).add(Blocks.BEDROCK, Blocks.NETHER_PORTAL, Blocks.END_PORTAL, Blocks.END_PORTAL_FRAME, PUSHABLE_BLOCK); //excludes Platform Receptacle blocks as they only absorb conditionally
+		tag(PUSHABLE_BLOCK_REPLACABLE).addTags(SAPLINGS, FLOWERS);
 	}
 	
 	@Override

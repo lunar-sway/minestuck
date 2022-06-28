@@ -1,9 +1,7 @@
 package com.mraof.minestuck.tileentity.redstone;
 
-import com.mraof.minestuck.block.PortableBlock;
+import com.mraof.minestuck.block.PushableBlock;
 import com.mraof.minestuck.block.redstone.ItemMagnetBlock;
-import com.mraof.minestuck.entity.item.GristEntity;
-import com.mraof.minestuck.entity.item.VitalityGelEntity;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.block.BlockState;
@@ -70,7 +68,7 @@ public class ItemMagnetTileEntity extends TileEntity implements ITickableTileEnt
 						
 						BlockState iterateBlockState = level.getBlockState(iteratePos);
 						
-						if(iterateBlockState.getBlock() instanceof PortableBlock)
+						if(iterateBlockState.getBlock() instanceof PushableBlock)
 						{
 							FallingBlockEntity fallingblockentity = new FallingBlockEntity(level, iteratePos.getX() + 0.5D, iteratePos.getY(), iteratePos.getZ() + 0.5D, iterateBlockState);
 							level.addFreshEntity(fallingblockentity);
@@ -91,7 +89,7 @@ public class ItemMagnetTileEntity extends TileEntity implements ITickableTileEnt
 				{
 					for(Entity itemEntity : list)
 					{
-						if(MSTags.EntityTypes.MAGNET_RECEPTIVE.contains(itemEntity.getType()) || (itemEntity instanceof FallingBlockEntity && ((FallingBlockEntity) itemEntity).getBlockState().getBlock() instanceof PortableBlock))
+						if(MSTags.EntityTypes.MAGNET_RECEPTIVE.contains(itemEntity.getType()) || (itemEntity instanceof FallingBlockEntity && ((FallingBlockEntity) itemEntity).getBlockState().getBlock() instanceof PushableBlock))
 						{
 							Direction momentumFromFacing = magnetFacing.getOpposite();
 							Vector3d facingVec = new Vector3d(momentumFromFacing.getStepX(), momentumFromFacing.getStepY(), momentumFromFacing.getStepZ());

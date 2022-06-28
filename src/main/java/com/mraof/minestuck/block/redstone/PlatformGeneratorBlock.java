@@ -35,6 +35,8 @@ public class PlatformGeneratorBlock extends MSDirectionalBlock
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED; //used for texture purposes
 	public static final BooleanProperty INVISIBLE_MODE = MSProperties.MACHINE_TOGGLE;
 	
+	public static final int MAX_GENERATOR_REACH = 16;
+	
 	public PlatformGeneratorBlock(Properties properties)
 	{
 		super(properties);
@@ -48,7 +50,7 @@ public class PlatformGeneratorBlock extends MSDirectionalBlock
 		{
 			worldIn.setBlock(pos, state.cycle(INVISIBLE_MODE), Constants.BlockFlags.DEFAULT);
 			worldIn.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, state.getValue(INVISIBLE_MODE) ? 1.5F : 0.5F);
-		
+			
 			return ActionResultType.SUCCESS;
 		}
 		
@@ -106,7 +108,7 @@ public class PlatformGeneratorBlock extends MSDirectionalBlock
 		super.onRemove(state, worldIn, pos, newState, isMoving);
 		
 		Direction facing = state.getValue(FACING);
-		for(int blockIterate = 1; blockIterate < 16; blockIterate++)
+		for(int blockIterate = 1; blockIterate < MAX_GENERATOR_REACH; blockIterate++)
 		{
 			BlockPos iteratePos = new BlockPos(pos.relative(facing, blockIterate));
 			

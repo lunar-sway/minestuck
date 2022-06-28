@@ -75,16 +75,7 @@ public class PlatformBlock extends MSDirectionalBlock
 			{
 				BlockState supportingState = world.getBlockState(supportingPos);
 				
-				for(int blockIterate = 1; blockIterate < state.getValue(GENERATOR_DISTANCE); blockIterate++) //looping through blocks between the platform block and its generator for absorbing kinds
-				{
-					BlockPos iteratePos = pos.relative(stateFacing.getOpposite(), blockIterate);
-					BlockState iterateState = world.getBlockState(iteratePos);
-					if(MSTags.Blocks.PLATFORM_ABSORBING.contains(iterateState.getBlock()) ||
-							(iterateState.getBlock() instanceof PlatformReceptacleBlock && iterateState.getValue(PlatformReceptacleBlock.ABSORBING)))
-					{
-						world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
-					}
-				}
+				checkForAbsorbers(state, world, pos, stateFacing);
 				
 				if(supportingState.getBlock() instanceof PlatformGeneratorBlock &&
 						(!supportingState.getValue(PlatformGeneratorBlock.POWERED) || supportingState.getValue(PlatformGeneratorBlock.FACING) != stateFacing) ||
@@ -97,6 +88,20 @@ public class PlatformBlock extends MSDirectionalBlock
 					if(!supportingState.getValue(PlatformGeneratorBlock.INVISIBLE_MODE) && state.getValue(INVISIBLE) && supportingState.getValue(PlatformGeneratorBlock.FACING) != stateFacing)
 						world.setBlockAndUpdate(pos, state.setValue(INVISIBLE, false));
 				}
+			}
+		}
+	}
+	
+	public static void checkForAbsorbers(BlockState state, World world, BlockPos pos, Direction stateFacing)
+	{
+		for(int blockIterate = 1; blockIterate < state.getValue(GENERATOR_DISTANCE); blockIterate++) //looping through blocks between the platform block and its generator for absorbing kinds
+		{
+			BlockPos iteratePos = pos.relative(stateFacing.getOpposite(), blockIterate);
+			BlockState iterateState = world.getBlockState(iteratePos);
+			if(MSTags.Blocks.PLATFORM_ABSORBING.contains(iterateState.getBlock()) ||
+					(iterateState.getBlock() instanceof PlatformReceptacleBlock && iterateState.getValue(PlatformReceptacleBlock.ABSORBING)))
+			{
+				world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
 			}
 		}
 	}
