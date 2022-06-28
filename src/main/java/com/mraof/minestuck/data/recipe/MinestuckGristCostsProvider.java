@@ -550,9 +550,7 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSBlocks.REMOTE_OBSERVER).grist(GARNET, 60).grist(MARBLE, 16).grist(AMBER, 10).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.PLATFORM_GENERATOR).grist(TAR, 200).grist(COBALT, 75).grist(AMETHYST, 5).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.PLATFORM_RECEPTACLE).grist(QUARTZ, 5).grist(MERCURY, 5).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSBlocks.ROTATOR).grist(SULFUR, 20).grist(GOLD, 2).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.FALL_PAD).grist(CAULK, 5).grist(SHALE, 2).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSBlocks.FRAGILE_STONE).grist(SHALE, 1).build(recipeSaver);
 		
 		GristCostRecipeBuilder.of(MSBlocks.PETRIFIED_LOG).grist(BUILD, 4).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.FROST_PLANKS).grist(BUILD, 1).build(recipeSaver);

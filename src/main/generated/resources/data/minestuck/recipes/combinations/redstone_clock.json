@@ -1,13 +1,13 @@
 {
   "type": "minestuck:combination",
   "input1": {
-    "tag": "forge:stone"
+    "item": "minecraft:clock"
   },
   "input2": {
-    "item": "minecraft:gravel"
+    "item": "minecraft:comparator"
   },
   "mode": "and",
   "output": {
-    "item": "minestuck:fragile_stone"
+    "item": "minestuck:redstone_clock"
   }
 }

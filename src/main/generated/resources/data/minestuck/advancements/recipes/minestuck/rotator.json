@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minestuck:rotator"
+    ]
+  },
+  "criteria": {
+    "has_piston": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:piston"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minestuck:rotator"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_piston",
+      "has_the_recipe"
+    ]
+  ]
+}

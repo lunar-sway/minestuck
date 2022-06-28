@@ -691,19 +691,26 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSBlocks.PARCEL_PYXIS).input(MSBlocks.PIPE).or().input(MSItems.MAILBOX).buildFor(consumer, Minestuck.MOD_ID);
 		
 		CombinationRecipeBuilder.of(MSBlocks.TRAJECTORY_BLOCK).input(Items.POWERED_RAIL).or().input(Items.SLIME_BLOCK).buildFor(consumer, Minestuck.MOD_ID);
-		CombinationRecipeBuilder.of(MSBlocks.STAT_STORER).input(Items.COMPARATOR).and().input(MSBlocks.REMOTE_OBSERVER).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(MSBlocks.STAT_STORER).input(MSItems.COMPUTER_PARTS).and().input(MSBlocks.REMOTE_OBSERVER).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(MSBlocks.REMOTE_OBSERVER).input(Items.OBSERVER).or().input(MSItems.PLUTONIUM_CORE).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(MSBlocks.WIRELESS_REDSTONE_TRANSMITTER).input(Items.REPEATER).or().input(MSItems.PLUTONIUM_CORE).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(MSBlocks.WIRELESS_REDSTONE_RECEIVER).input(Items.COMPARATOR).or().input(MSItems.PLUTONIUM_CORE).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(MSBlocks.SOLID_SWITCH).input(Items.LEVER).and().input(Items.REDSTONE_LAMP).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(MSBlocks.VARIABLE_SOLID_SWITCH).input(MSBlocks.SOLID_SWITCH).or().input(Items.COMPARATOR).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(MSBlocks.ONE_SECOND_INTERVAL_TIMED_SOLID_SWITCH).input(MSBlocks.SOLID_SWITCH).or().input(Items.STONE_BUTTON).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(MSBlocks.TWO_SECOND_INTERVAL_TIMED_SOLID_SWITCH).input(MSBlocks.SOLID_SWITCH).or().input(ItemTags.WOODEN_BUTTONS).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(MSBlocks.PLATFORM_GENERATOR).input(Items.PISTON).or().input(Items.SHIELD).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(MSBlocks.PLATFORM_RECEPTACLE).input(Items.DAYLIGHT_DETECTOR).or().input(Items.IRON_BLOCK).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(MSBlocks.ITEM_MAGNET).input(MSItems.PLUTONIUM_CORE).or().input(Items.FISHING_ROD).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(MSBlocks.REDSTONE_CLOCK).input(Items.CLOCK).and().input(Items.COMPARATOR).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(MSBlocks.ROTATOR).input(Items.PISTON).or().input(Items.COMPASS).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(MSBlocks.TOGGLER).input(Items.PISTON).or().input(Items.LEVER).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(MSBlocks.REMOTE_COMPARATOR).input(MSBlocks.BLOCK_PRESSURE_PLATE).or().input(MSItems.PLUTONIUM_CORE).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(MSBlocks.FALL_PAD).input(ItemTags.WOOL).or().input(Items.HAY_BLOCK).buildFor(consumer, Minestuck.MOD_ID);
-		CombinationRecipeBuilder.of(MSBlocks.FRAGILE_STONE).input(Tags.Items.STONE).or().input(Items.GRAVEL).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(MSBlocks.FRAGILE_STONE).input(Tags.Items.STONE).and().input(Items.GRAVEL).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(MSBlocks.RETRACTABLE_SPIKES).input(MSBlocks.SPIKES).and().input(Items.STICKY_PISTON).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(MSBlocks.BLOCK_PRESSURE_PLATE).input(Items.OBSERVER).or().input(Items.STONE_PRESSURE_PLATE).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(MSBlocks.PUSHABLE_BLOCK).input(Tags.Items.STONE).or().input(Items.GRAVEL).buildFor(consumer, Minestuck.MOD_ID);
 		
 		CombinationRecipeBuilder.of(MSBlocks.STONE_CRUXITE_ORE).input(MSItems.RAW_CRUXITE).and().input(Items.STONE).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(MSBlocks.NETHERRACK_CRUXITE_ORE).input(MSItems.RAW_CRUXITE).and().input(Items.NETHERRACK).buildFor(consumer, Minestuck.MOD_ID);

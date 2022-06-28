@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minestuck:block_pressure_plate"
+    ]
+  },
+  "criteria": {
+    "has_stone_pressure_plate": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:stone_pressure_plate"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minestuck:block_pressure_plate"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_stone_pressure_plate",
+      "has_the_recipe"
+    ]
+  ]
+}
