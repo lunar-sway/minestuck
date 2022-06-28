@@ -43,7 +43,6 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 	private ActiveType activeType;
 	private int divideValueBy;
 	private int tickCycle;
-	private static final int TICK_FREQUENCY = MinestuckConfig.SERVER.puzzleBlockTickRate.get();
 	
 	public enum ActiveType
 	{
@@ -84,7 +83,7 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 		if(level == null || !level.isAreaLoaded(worldPosition, 1))
 			return;
 		
-		if(tickCycle % TICK_FREQUENCY == 1)
+		if(tickCycle % MinestuckConfig.SERVER.puzzleBlockTickRate.get() == 1)
 		{
 			if(!level.isClientSide)
 			{

@@ -13,7 +13,6 @@ import net.minecraft.tileentity.TileEntity;
 public class RemoteComparatorTileEntity extends TileEntity implements ITickableTileEntity
 {
 	private int tickCycle;
-	private static final int TICK_FREQUENCY = MinestuckConfig.SERVER.puzzleBlockTickRate.get();
 	
 	public RemoteComparatorTileEntity()
 	{
@@ -26,7 +25,7 @@ public class RemoteComparatorTileEntity extends TileEntity implements ITickableT
 		if(level == null)
 			return;
 		
-		if(tickCycle >= TICK_FREQUENCY)
+		if(tickCycle >= MinestuckConfig.SERVER.puzzleBlockTickRate.get())
 		{
 			sendUpdate();
 			tickCycle = 0;

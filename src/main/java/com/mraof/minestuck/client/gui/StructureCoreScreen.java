@@ -25,6 +25,8 @@ public class StructureCoreScreen extends Screen
 	
 	private Button incrementButton;
 	private Button decrementButton;
+	private Button largeIncrementButton;
+	private Button largeDecrementButton;
 	private Button typeButton;
 	
 	
@@ -44,6 +46,8 @@ public class StructureCoreScreen extends Screen
 		
 		addButton(incrementButton = new ExtendedButton(this.width / 2 + 20, (height - GUI_HEIGHT) / 2 + 12, 20, 20, new StringTextComponent("+"), button -> changeRange(1)));
 		addButton(decrementButton = new ExtendedButton(this.width / 2 - 40, (height - GUI_HEIGHT) / 2 + 12, 20, 20, new StringTextComponent("-"), button -> changeRange(-1)));
+		addButton(largeIncrementButton = new ExtendedButton(this.width / 2 + 45, (height - GUI_HEIGHT) / 2 + 12, 20, 20, new StringTextComponent("++"), button -> changeRange(10)));
+		addButton(largeDecrementButton = new ExtendedButton(this.width / 2 - 65, (height - GUI_HEIGHT) / 2 + 12, 20, 20, new StringTextComponent("--"), button -> changeRange(-10)));
 		
 		addButton(typeButton = new ExtendedButton(this.width / 2 - 67, yOffset + 40, 135, 20, new StringTextComponent(actionType.getNameNoSpaces()), button -> changeActionType()));
 		
@@ -65,6 +69,10 @@ public class StructureCoreScreen extends Screen
 	private void changeRange(int change)
 	{
 		shutdownRange = MathHelper.clamp(shutdownRange + change, 1, 64);
+		incrementButton.active = shutdownRange < 64;
+		decrementButton.active = shutdownRange > 1;
+		largeIncrementButton.active = shutdownRange < 64;
+		largeDecrementButton.active = shutdownRange > 1;
 	}
 	
 	@Override

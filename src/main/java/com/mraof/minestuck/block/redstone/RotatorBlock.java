@@ -2,6 +2,7 @@ package com.mraof.minestuck.block.redstone;
 
 import com.mraof.minestuck.block.MSDirectionalBlock;
 import com.mraof.minestuck.block.MSProperties;
+import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
@@ -61,17 +62,8 @@ public class RotatorBlock extends MSDirectionalBlock
 		if(!worldIn.isClientSide)
 		{
 			BlockState state = worldIn.getBlockState(pos);
-			boolean hasPower = false;
 			Direction stateFacing = state.getValue(FACING);
-			
-			for(Direction direction : Direction.values()) //checks for a signal in any direction except the one it is facing
-			{
-				if(direction != stateFacing && worldIn.getSignal(pos.relative(direction), direction) > 0)
-				{
-					hasPower = true;
-					break;
-				}
-			}
+			boolean hasPower = BlockUtil.hasSignalNotFromFacing(worldIn, pos, stateFacing);
 			
 			boolean isPoweredBeforeUpdate = state.getValue(POWERED);
 			

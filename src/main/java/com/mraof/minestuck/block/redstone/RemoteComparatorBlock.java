@@ -1,10 +1,10 @@
 package com.mraof.minestuck.block.redstone;
 
+import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.MSDirectionalBlock;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.tileentity.redstone.RemoteComparatorTileEntity;
-import com.mraof.minestuck.util.ParticlesAroundSolidBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -130,7 +130,7 @@ public class RemoteComparatorBlock extends MSDirectionalBlock
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
 	{
 		if(stateIn.getValue(POWERED))
-			ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE);
+			BlockUtil.spawnParticlesAroundSolidBlock(worldIn, pos, () -> RedstoneParticleData.REDSTONE);
 	}
 	
 	@Override

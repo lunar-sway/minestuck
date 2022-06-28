@@ -1,6 +1,6 @@
 package com.mraof.minestuck.block.redstone;
 
-import com.mraof.minestuck.util.ParticlesAroundSolidBlock;
+import com.mraof.minestuck.block.BlockUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -54,15 +54,11 @@ public class BlockPressurePlateBlock extends Block
 		
 		if(!worldIn.isClientSide)
 		{
-			boolean entityStandingOnBlock = false;
 			AxisAlignedBB checkBB = new AxisAlignedBB(pos);
 			List<PlayerEntity> list = worldIn.getEntitiesOfClass(PlayerEntity.class, checkBB.move(0, 0.5, 0));
-			if(!list.isEmpty())
-			{
-				entityStandingOnBlock = list.stream().anyMatch(playerEntity -> playerEntity.isOnGround() && !playerEntity.isCrouching());
-			}
+			boolean entityStandingOnBlock = list.stream().anyMatch(playerEntity -> playerEntity.isOnGround() && !playerEntity.isCrouching());
 			
-			if(!entityStandingOnBlock && !isAboveBlockSturdy(worldIn, pos.above()) && state.getValue(POWERED))
+			if(!entityStandingOnBlock && !isAboveBlockFullyTouching(worldIn, pos.above()) && state.getValue(POWERED))
 			{
 				worldIn.setBlock(pos, state.setValue(POWERED, false), Constants.BlockFlags.DEFAULT);
 				worldIn.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 1.2F);
@@ -105,7 +101,7 @@ public class BlockPressurePlateBlock extends Block
 		tryDepressPlate(worldIn, pos, state, false);
 	}
 	
-	public static boolean isAboveBlockSturdy(World worldIn, BlockPos abovePos)
+	public static boolean isAboveBlockFullyTouching(World worldIn, BlockPos abovePos)
 	{
 		return worldIn.getBlockState(abovePos).isFaceSturdy(worldIn, abovePos, Direction.DOWN);
 	}
@@ -116,7 +112,7 @@ public class BlockPressurePlateBlock extends Block
 	public void tryDepressPlate(World worldIn, BlockPos pos, BlockState state, boolean steppedOn)
 	{
 		BlockPos abovePos = pos.above();
-		if((isAboveBlockSturdy(worldIn, abovePos) || steppedOn) && !state.getValue(POWERED))
+		if((isAboveBlockFullyTouching(worldIn, abovePos) || steppedOn) && !state.getValue(POWERED))
 		{
 			worldIn.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, 1.2F);
 			worldIn.setBlock(pos, state.setValue(POWERED, true), Constants.BlockFlags.DEFAULT);
@@ -129,7 +125,7 @@ public class BlockPressurePlateBlock extends Block
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
 	{
 		if(stateIn.getValue(POWERED))
-			ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE);
+			BlockUtil.spawnParticlesAroundSolidBlock(worldIn, pos, () -> RedstoneParticleData.REDSTONE);
 	}
 	
 	@Override

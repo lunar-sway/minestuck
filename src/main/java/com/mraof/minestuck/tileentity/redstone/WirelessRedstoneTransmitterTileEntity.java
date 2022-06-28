@@ -25,7 +25,6 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 	private BlockPos offsetPos;
 	private Direction facing;
 	private int tickCycle;
-	private static final int WIRELESS_TICK_FREQUENCY = MinestuckConfig.SERVER.puzzleBlockTickRate.get();
 	
 	public WirelessRedstoneTransmitterTileEntity()
 	{
@@ -38,7 +37,7 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 		if(level == null || !level.isAreaLoaded(getBlockPos(), 1))
 			return;
 		
-		if(tickCycle >= WIRELESS_TICK_FREQUENCY)
+		if(tickCycle >= MinestuckConfig.SERVER.puzzleBlockTickRate.get())
 		{
 			sendUpdateToPosition();
 			tickCycle = 0;

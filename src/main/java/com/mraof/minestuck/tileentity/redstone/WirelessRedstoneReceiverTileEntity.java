@@ -16,7 +16,6 @@ public class WirelessRedstoneReceiverTileEntity extends TileEntity implements IT
 {
 	private BlockPos lastTransmitterBlockPos;
 	private int lastTransmission;
-	private static final int WIRELESS_TICK_FREQUENCY = MinestuckConfig.SERVER.puzzleBlockTickRate.get();
 	
 	public WirelessRedstoneReceiverTileEntity()
 	{
@@ -29,13 +28,13 @@ public class WirelessRedstoneReceiverTileEntity extends TileEntity implements IT
 		if(level == null || !level.isAreaLoaded(getBlockPos(), 1))
 			return;
 		
-		if(lastTransmission >= WIRELESS_TICK_FREQUENCY && level.getBlockState(getBlockPos()).getValue(WirelessRedstoneReceiverBlock.AUTO_RESET))
+		if(lastTransmission >= MinestuckConfig.SERVER.puzzleBlockTickRate.get() && level.getBlockState(getBlockPos()).getValue(WirelessRedstoneReceiverBlock.AUTO_RESET))
 		{
 			renewFromLastTransmitter();
 			lastTransmission = 0;
 		}
 		
-		if(lastTransmission < WIRELESS_TICK_FREQUENCY) //how many ticks since last transmission
+		if(lastTransmission < MinestuckConfig.SERVER.puzzleBlockTickRate.get()) //how many ticks since last transmission
 			lastTransmission++;
 	}
 	

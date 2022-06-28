@@ -2,11 +2,11 @@ package com.mraof.minestuck.block.redstone;
 
 import com.mraof.minestuck.block.MSDirectionalBlock;
 import com.mraof.minestuck.block.MSProperties;
+import com.mraof.minestuck.block.BlockUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.Property;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tags.ItemTags;
@@ -63,17 +63,8 @@ public class TogglerBlock extends MSDirectionalBlock
 		if(!worldIn.isClientSide)
 		{
 			BlockState state = worldIn.getBlockState(pos);
-			boolean hasPower = false;
 			Direction stateFacing = state.getValue(FACING);
-			
-			for(Direction direction : Direction.values()) //checks for a signal in any direction except the one it is facing
-			{
-				if(direction != stateFacing && worldIn.getSignal(pos.relative(direction), direction) > 0)
-				{
-					hasPower = true;
-					break;
-				}
-			}
+			boolean hasPower = BlockUtil.hasSignalNotFromFacing(worldIn, pos, stateFacing);
 			
 			boolean isPoweredBeforeUpdate = state.getValue(POWERED);
 			

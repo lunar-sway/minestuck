@@ -44,8 +44,7 @@ public class FragileBlock extends Block
 	public void fallOn(World worldIn, BlockPos pos, Entity entityIn, float fallDistance)
 	{
 		super.fallOn(worldIn, pos, entityIn, fallDistance);
-		//TODO does not help
-		//entityInside function covers most conditions but if a player sprint jumps there is a ~50% chance they will skip the check, this covers jumps
+		//TODO entityInside function covers most conditions but if a player sprint jumps there is a ~50% chance they will skip the check
 		attemptBreak(worldIn, entityIn, pos);
 	}
 	

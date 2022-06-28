@@ -1,10 +1,10 @@
 package com.mraof.minestuck.block.redstone;
 
+import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.MSDirectionalBlock;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.tileentity.redstone.PlatformGeneratorTileEntity;
-import com.mraof.minestuck.util.ParticlesAroundSolidBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -127,7 +127,7 @@ public class PlatformGeneratorBlock extends MSDirectionalBlock
 	{
 		if(rand.nextInt(15) < stateIn.getValue(POWER))
 		{
-			ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE);
+			BlockUtil.spawnParticlesAroundSolidBlock(worldIn, pos, () -> RedstoneParticleData.REDSTONE);
 		}
 	}
 	
