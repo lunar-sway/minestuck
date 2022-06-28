@@ -58,8 +58,8 @@ public class RemoteComparatorBlock extends MSDirectionalBlock
 					worldIn.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, 1.2F);
 				}
 				
-				return ActionResultType.SUCCESS;
-			} else if(player.isCrouching() && player.getItemInHand(hand).isEmpty())
+				return ActionResultType.sidedSuccess(worldIn.isClientSide);
+			} else if(player.isCrouching())
 			{
 				worldIn.setBlock(pos, state.cycle(CHECK_STATE), Constants.BlockFlags.DEFAULT);
 				if(state.getValue(CHECK_STATE))
@@ -67,7 +67,7 @@ public class RemoteComparatorBlock extends MSDirectionalBlock
 				else
 					worldIn.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 0.5F);
 				
-				return ActionResultType.SUCCESS;
+				return ActionResultType.sidedSuccess(worldIn.isClientSide);
 			}
 		}
 		

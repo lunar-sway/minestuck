@@ -37,7 +37,6 @@ public class SummonerScreen extends Screen
 	private Button unTriggerableButton;
 	
 	private TextFieldWidget entityTypeTextField;
-	private boolean shouldFinish = true;
 	
 	SummonerScreen(SummonerTileEntity te)
 	{
@@ -92,17 +91,6 @@ public class SummonerScreen extends Screen
 		return this.isUntriggerable ? new StringTextComponent("UNTRIGGERABLE") : new StringTextComponent("TRIGGERABLE");
 	}
 	
-	/**
-	 * Returns the current entity type, with a flag(shouldFinish) to prevent invalid strings from going through
-	 */
-	private EntityType<?> getEntityType(String stringInput)
-	{
-		Optional<EntityType<?>> attemptedEntityType = EntityType.byString(stringInput);
-		if(!attemptedEntityType.isPresent())
-			shouldFinish = false;
-		return attemptedEntityType.orElse(MSEntityTypes.IMP); //despite having an orElse(), the packet changing the TE's value will not go through unless it is valid
-	}
-	
 	@Override
 	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
 	{
@@ -118,15 +106,14 @@ public class SummonerScreen extends Screen
 	
 	private void finish()
 	{
-		EntityType<?> entityType = getEntityType(entityTypeTextField.getValue());
-		if(shouldFinish)
+		Optional<EntityType<?>> attemptedEntityType = EntityType.byString(entityTypeTextField.getValue());
+		if(attemptedEntityType.isPresent())
 		{
-			MSPacketHandler.sendToServer(new SummonerPacket(isUntriggerable, summonRange, te.getBlockPos(), entityType));
+			MSPacketHandler.sendToServer(new SummonerPacket(isUntriggerable, summonRange, te.getBlockPos(), attemptedEntityType.get()));
 			onClose();
 		} else
 		{
 			entityTypeTextField.setTextColor(0XFF0000); //changes text to red to indicate that it is an invalid type
-			shouldFinish = true; //will be set to false again if it fails the check upon retrying
 		}
 	}
 }

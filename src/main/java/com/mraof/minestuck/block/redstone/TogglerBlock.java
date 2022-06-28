@@ -88,53 +88,50 @@ public class TogglerBlock extends MSDirectionalBlock
 				
 				if(state.getValue(DISCHARGE))
 				{
-					boolean makeSound = false;
-					
-					//removing redstone power from powered blocks
-					for(Property<?> property : facingState.getProperties())
-					{
-						if(facingState.isSignalSource())
-						{
-							if(property.equals(BlockStateProperties.POWERED) || property.equals(BlockStateProperties.POWER))
-							{
-								if(property.equals(BlockStateProperties.POWERED))
-									worldIn.setBlock(facingPos, facingState.setValue(BlockStateProperties.POWERED, false), Constants.BlockFlags.DEFAULT);
-								if(property.equals(BlockStateProperties.POWER))
-									worldIn.setBlock(facingPos, facingState.setValue(BlockStateProperties.POWER, 0), Constants.BlockFlags.DEFAULT);
-								
-								if(!worldIn.getBlockState(pos.relative(state.getValue(FACING).getOpposite())).getBlock().asItem().is(ItemTags.WOOL)) //wont make a toggle sound if the toggler is "muted" by a wool block
-								{
-									makeSound = true;
-								}
-							}
-						}
-					}
-					
-					if(makeSound)
-					{
-						worldIn.playSound(null, facingPos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 0.5F);
-					}
+					discharge(worldIn, pos, state, facingPos, facingState);
 				} else
 				{
-					for(Property<?> property : facingState.getProperties())
-					{
-						if(property.equals(MSProperties.MACHINE_TOGGLE) && !(facingState.getBlock() instanceof PlatformBlock)) //if it has the property and is not a platform block(platform block property should be toggled by the generator)
-						{
-							worldIn.setBlock(facingPos, facingState.cycle(MSProperties.MACHINE_TOGGLE), Constants.BlockFlags.DEFAULT);
-							
-							if(!worldIn.getBlockState(pos.relative(state.getValue(FACING).getOpposite())).getBlock().asItem().is(ItemTags.WOOL)) //wont make a toggle sound if the toggler is "muted" by a wool block
-							{
-								if(facingState.getValue(MSProperties.MACHINE_TOGGLE))
-									worldIn.playSound(null, facingPos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 1.5F);
-								else
-									worldIn.playSound(null, facingPos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 0.5F);
-							}
-							
-							break;
-						}
-					}
+					toggle(worldIn, pos, state, facingPos, facingState);
 				}
 			}
+		}
+	}
+	
+	private void toggle(World worldIn, BlockPos pos, BlockState state, BlockPos facingPos, BlockState facingState)
+	{
+		if(facingState.hasProperty(MSProperties.MACHINE_TOGGLE) && !(facingState.getBlock() instanceof PlatformBlock)) //if it has the property and is not a platform block(platform block property should be toggled by the generator)
+		{
+			worldIn.setBlock(facingPos, facingState.cycle(MSProperties.MACHINE_TOGGLE), Constants.BlockFlags.DEFAULT);
+			
+			if(!worldIn.getBlockState(pos.relative(state.getValue(FACING).getOpposite())).getBlock().asItem().is(ItemTags.WOOL)) //wont make a toggle sound if the toggler is "muted" by a wool block
+			{
+				worldIn.playSound(null, facingPos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, facingState.getValue(MSProperties.MACHINE_TOGGLE) ? 1.5F : 0.5F);
+			}
+		}
+	}
+	
+	private void discharge(World worldIn, BlockPos pos, BlockState state, BlockPos facingPos, BlockState facingState)
+	{
+		boolean updated = false;
+		
+		//removing redstone power from powered blocks
+		if(facingState.isSignalSource())
+		{
+			if(facingState.hasProperty(BlockStateProperties.POWERED))
+			{
+				worldIn.setBlock(facingPos, facingState.setValue(BlockStateProperties.POWERED, false), Constants.BlockFlags.DEFAULT);
+				updated = true;
+			}
+			if(facingState.hasProperty(BlockStateProperties.POWER))
+			{
+				worldIn.setBlock(facingPos, facingState.setValue(BlockStateProperties.POWER, 0), Constants.BlockFlags.DEFAULT);
+				updated = true;
+			}
+		}
+		
+		if(updated && !worldIn.getBlockState(pos.relative(state.getValue(FACING).getOpposite())).getBlock().asItem().is(ItemTags.WOOL)) //wont make a toggle sound if the toggler is "muted" by a wool block
+		{
+			worldIn.playSound(null, facingPos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 0.5F);
 		}
 	}
 	

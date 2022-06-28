@@ -13,6 +13,7 @@ import net.minecraft.potion.Effect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -87,11 +88,14 @@ public class AreaEffectScreen extends Screen
 		this.effectAmplifierTextField.setValue(String.valueOf(te.getEffectAmplifier()));
 		addButton(effectAmplifierTextField);
 		
-		if(isAllMobs)
-			addButton(allMobsButton = new ExtendedButton(this.width / 2 - 65, yOffset + 105, 85, 20, new StringTextComponent("ALL MOBS"), button -> cycleIsAllMobs()));
-		else
-			addButton(allMobsButton = new ExtendedButton(this.width / 2 - 65, yOffset + 105, 85, 20, new StringTextComponent("JUST PLAYERS"), button -> cycleIsAllMobs()));
+		addButton(allMobsButton = new ExtendedButton(this.width / 2 - 65, yOffset + 105, 85, 20, getAllMobsButtonMessage(), button -> cycleIsAllMobs()));
+		
 		addButton(new ExtendedButton(this.width / 2 + 25, yOffset + 105, 40, 20, new StringTextComponent("DONE"), button -> finish()));
+	}
+	
+	private ITextComponent getAllMobsButtonMessage()
+	{
+		return this.isAllMobs ? new StringTextComponent("UNTRIGGERABLE") : new StringTextComponent("TRIGGERABLE");
 	}
 	
 	/**
@@ -100,10 +104,7 @@ public class AreaEffectScreen extends Screen
 	private void cycleIsAllMobs()
 	{
 		isAllMobs = !isAllMobs;
-		if(isAllMobs)
-			allMobsButton.setMessage(new StringTextComponent("ALL MOBS"));
-		else
-			allMobsButton.setMessage(new StringTextComponent("JUST PLAYERS"));
+		allMobsButton.setMessage(getAllMobsButtonMessage());
 	}
 	
 	/**

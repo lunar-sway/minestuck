@@ -34,7 +34,6 @@ public class RemoteObserverScreen extends Screen
 	private Button largeDecrementButton;
 	
 	private TextFieldWidget entityTypeTextField;
-	private boolean shouldFinish = true;
 	
 	RemoteObserverScreen(RemoteObserverTileEntity te)
 	{
@@ -88,21 +87,6 @@ public class RemoteObserverScreen extends Screen
 		largeDecrementButton.active = observingRange > 1;
 	}
 	
-	/**
-	 * Returns the current entity type if the text field string matches it and the active type is correct, uses a flag(shouldFinish) to prevent invalid strings from going through, or returns null if the correct active type isnt selected
-	 */
-	private EntityType<?> getEntityType(String stringInput)
-	{
-		if(activeType == RemoteObserverTileEntity.ActiveType.CURRENT_ENTITY_PRESENT)
-		{
-			Optional<EntityType<?>> attemptedEntityType = EntityType.byString(stringInput);
-			if(!attemptedEntityType.isPresent())
-				shouldFinish = false;
-			return attemptedEntityType.orElse(EntityType.PLAYER);
-		} else
-			return null;
-	}
-	
 	@Override
 	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
 	{
@@ -118,15 +102,15 @@ public class RemoteObserverScreen extends Screen
 	
 	private void finish()
 	{
-		EntityType<?> entityType = getEntityType(entityTypeTextField.getValue());
-		if(shouldFinish && RemoteObserverTileEntity.entityCanBeObserved(entityType))
+		Optional<EntityType<?>> attemptedEntityType = EntityType.byString(entityTypeTextField.getValue());
+		
+		if(attemptedEntityType.isPresent() && RemoteObserverTileEntity.entityCanBeObserved(attemptedEntityType.get()))
 		{
-			MSPacketHandler.sendToServer(new RemoteObserverPacket(activeType, observingRange, te.getBlockPos(), entityType));
+			MSPacketHandler.sendToServer(new RemoteObserverPacket(activeType, observingRange, te.getBlockPos(), attemptedEntityType.get()));
 			onClose();
 		} else
 		{
 			entityTypeTextField.setTextColor(0XFF0000); //changes text to red to indicate that it is an invalid type
-			shouldFinish = true; //will be set to false again if it fails the check upon retrying
 		}
 	}
 }
