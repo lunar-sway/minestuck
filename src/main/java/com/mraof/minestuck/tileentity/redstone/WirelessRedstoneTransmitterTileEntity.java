@@ -23,7 +23,6 @@ import net.minecraftforge.common.util.Constants;
 public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements INameable, ITickableTileEntity
 {
 	private BlockPos offsetPos;
-	private Direction facing;
 	private int tickCycle;
 	
 	public WirelessRedstoneTransmitterTileEntity()
@@ -50,33 +49,17 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 	{
 		if(offsetPos == null)
 			offsetPos = new BlockPos(0, 0, 0);
-		if(facing == null)
-			facing = getBlockState().getValue(WirelessRedstoneTransmitterBlock.FACING);
 		
 		Direction stateFacing = getBlockState().getValue(WirelessRedstoneTransmitterBlock.FACING);
 		
-		//in cases where the block has been rotated after the coordinates were set(rotator blocks or placement in structure templates), this will transform the relative coordinates by rotating them around the block
-		if(facing != stateFacing)
-			this.offsetPos = offsetPos.rotate(MSRotationUtil.rotationBetween(this.facing, stateFacing));
-		
-		//refreshing the facing value now that offsetPos has been corrected to fix the change
-		this.facing = getBlockState().getValue(WirelessRedstoneTransmitterBlock.FACING);
-		
-		return getBlockPos().offset(offsetPos);
+		return this.getBlockPos().offset(offsetPos.rotate(MSRotationUtil.rotationBetween(Direction.NORTH, stateFacing))); //changes from  north facing to the facing direction
 	}
 	
-	public void setOffsetFromDestinationBlockPos(BlockPos destinationPosIn)
+	public void setOffsetFromDestinationBlockPos(BlockPos destinationPosIn, BlockState blockState)
 	{
-		if(level != null) //level is null when gotten from Load
-		{
-			this.facing = level.getBlockState(worldPosition).getValue(WirelessRedstoneTransmitterBlock.FACING);
-		}
+		Direction facing = blockState.getValue(WirelessRedstoneTransmitterBlock.FACING);
 		
-		int offsetX = destinationPosIn.getX() - worldPosition.getX();
-		int offsetY = destinationPosIn.getY() - worldPosition.getY();
-		int offsetZ = destinationPosIn.getZ() - worldPosition.getZ();
-		
-		this.offsetPos = new BlockPos(offsetX, offsetY, offsetZ);
+		this.offsetPos = destinationPosIn.subtract(worldPosition).rotate(MSRotationUtil.rotationBetween(facing, Direction.NORTH)); //changes from the facing direction to north facing
 	}
 	
 	private void sendUpdateToPosition() //for internal use
@@ -112,7 +95,9 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 				BlockState blockStateIn = worldIn.getBlockState(destBlockPos);
 				if(blockStateIn.getBlock() instanceof WirelessRedstoneReceiverBlock)
 				{
-					worldIn.setBlock(destBlockPos, blockStateIn.setValue(WirelessRedstoneReceiverBlock.POWER, 0), Constants.BlockFlags.DEFAULT);
+					BlockState newState = WirelessRedstoneReceiverBlock.setPower(blockStateIn, 0);
+					if(blockStateIn != newState)
+						worldIn.setBlock(destBlockPos, newState, Constants.BlockFlags.DEFAULT);
 				}
 			}
 		}
@@ -159,7 +144,7 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 			int destX = compound.getInt("destX");
 			int destY = compound.getInt("destY");
 			int destZ = compound.getInt("destZ");
-			setOffsetFromDestinationBlockPos(new BlockPos(destX, destY, destZ));
+			setOffsetFromDestinationBlockPos(new BlockPos(destX, destY, destZ), state);
 		} else
 		{
 			int offsetX = compound.getInt("offsetX");

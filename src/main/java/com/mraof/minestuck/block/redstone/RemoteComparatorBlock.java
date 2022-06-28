@@ -59,7 +59,7 @@ public class RemoteComparatorBlock extends MSDirectionalBlock
 				}
 				
 				return ActionResultType.sidedSuccess(worldIn.isClientSide);
-			} else if(player.isCrouching())
+			} else
 			{
 				worldIn.setBlock(pos, state.cycle(CHECK_STATE), Constants.BlockFlags.DEFAULT);
 				if(state.getValue(CHECK_STATE))

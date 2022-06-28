@@ -93,15 +93,10 @@ public class WirelessRedstoneReceiverBlock extends HorizontalBlock
 	{
 		BlockState receiverState = worldIn.getBlockState(posIn);
 		int newPower = worldIn.getBlockState(transmitterPos).getValue(WirelessRedstoneTransmitterBlock.POWER);
-		//worldIn.setBlock(posIn, worldIn.getBlockState(transmitterPos).setValue(POWER, newPower), Constants.BlockFlags.NOTIFY_NEIGHBORS);
 		
-		if(receiverState.getValue(POWER) != newPower)
-			worldIn.setBlockAndUpdate(posIn, receiverState.setValue(POWER, newPower));
-		else worldIn.sendBlockUpdated(posIn, receiverState, receiverState, 2);
-		
-		if(receiverState.getValue(POWERED) != newPower > 0)
-			worldIn.setBlockAndUpdate(posIn, receiverState.setValue(POWERED, newPower > 0));
-		else worldIn.sendBlockUpdated(posIn, receiverState, receiverState, 2);
+		BlockState newState = setPower(receiverState, newPower);
+		if(receiverState != newState)
+			worldIn.setBlockAndUpdate(posIn, newState);
 		
 		TileEntity tileEntity = worldIn.getBlockEntity(posIn);
 		if(tileEntity instanceof WirelessRedstoneReceiverTileEntity)
@@ -109,6 +104,11 @@ public class WirelessRedstoneReceiverBlock extends HorizontalBlock
 			WirelessRedstoneReceiverTileEntity te = (WirelessRedstoneReceiverTileEntity) tileEntity;
 			te.setLastTransmitterBlockPos(transmitterPos);
 		}
+	}
+	
+	public static BlockState setPower(BlockState state, int newPower)
+	{
+		return state.setValue(POWER, newPower).setValue(POWERED, newPower > 0);
 	}
 	
 	@Override

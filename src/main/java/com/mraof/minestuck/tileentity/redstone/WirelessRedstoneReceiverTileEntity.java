@@ -55,21 +55,30 @@ public class WirelessRedstoneReceiverTileEntity extends TileEntity implements IT
 	 */
 	public void renewFromLastTransmitter()
 	{
-		if(level != null && lastTransmitterBlockPos != null && !level.isClientSide && level.isAreaLoaded(lastTransmitterBlockPos, 1))
+		if(level != null && !level.isClientSide)
 		{
-			TileEntity tileEntity = level.getBlockEntity(lastTransmitterBlockPos);
-			if(tileEntity instanceof WirelessRedstoneTransmitterTileEntity)
+			BlockState state = getBlockState();
+			BlockState newState = WirelessRedstoneReceiverBlock.setPower(state, 0);
+			
+			if(lastTransmitterBlockPos != null && level.isAreaLoaded(lastTransmitterBlockPos, 1))
 			{
-				WirelessRedstoneTransmitterTileEntity te = (WirelessRedstoneTransmitterTileEntity) tileEntity;
-				
-				te.sendUpdateToPosition(level, getBlockPos());
+				TileEntity tileEntity = level.getBlockEntity(lastTransmitterBlockPos);
+				if(tileEntity instanceof WirelessRedstoneTransmitterTileEntity)
+				{
+					WirelessRedstoneTransmitterTileEntity te = (WirelessRedstoneTransmitterTileEntity) tileEntity;
+					
+					te.sendUpdateToPosition(level, getBlockPos());
+				} else
+				{
+					if(state != newState)
+						level.setBlock(getBlockPos(), newState, Constants.BlockFlags.DEFAULT);
+				}
 			} else
 			{
-				level.setBlock(getBlockPos(), level.getBlockState(getBlockPos()).setValue(WirelessRedstoneReceiverBlock.POWER, 0), Constants.BlockFlags.DEFAULT);
+				if(state != newState)
+					level.setBlock(getBlockPos(), newState, Constants.BlockFlags.DEFAULT);
 			}
 		}
-		else if(level != null && !level.isClientSide)
-			level.setBlock(getBlockPos(), level.getBlockState(getBlockPos()).setValue(WirelessRedstoneReceiverBlock.POWER, 0), Constants.BlockFlags.DEFAULT);
 	}
 	
 	@Override
