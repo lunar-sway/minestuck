@@ -4240,7 +4240,7 @@
 				}
 			}
 		},
-		"thip": {
+		"sound": {
 			"loop": true,
 			"animation_length": 0.2,
 			"bones": {
