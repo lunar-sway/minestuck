@@ -421,10 +421,22 @@ public class ConsortEntity extends AnimatedCreatureEntity implements IContainerP
 	@Override
 	public void registerControllers(AnimationData data)
 	{
+		data.addAnimationController(AnimationUtil.createAnimation(this, "idleAnimation", 1, ConsortEntity::idleAnimation));
 		data.addAnimationController(AnimationUtil.createAnimation(this, "walkAnimation", 1, ConsortEntity::walkAnimation));
 		data.addAnimationController(AnimationUtil.createAnimation(this, "armsAnimation", 1, ConsortEntity::armsAnimation));
 		data.addAnimationController(AnimationUtil.createAnimation(this, "deathAnimation", 1, ConsortEntity::deathAnimation));
 		data.addAnimationController(AnimationUtil.createAnimation(this, "actionAnimation", 1, ConsortEntity::actionAnimation));
+	}
+	
+	private static PlayState idleAnimation(AnimationEvent<ConsortEntity> event)
+	{
+		if(event.isMoving() || event.getAnimatable().getCurrentAction() != Actions.NONE)
+		{
+			return PlayState.STOP;
+		}
+		
+		event.getController().setAnimation(new AnimationBuilder().addAnimation("idle", true));
+		return PlayState.CONTINUE;
 	}
 	
 	private static PlayState walkAnimation(AnimationEvent<ConsortEntity> event)
