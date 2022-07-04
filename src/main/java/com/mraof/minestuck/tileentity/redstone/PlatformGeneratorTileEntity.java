@@ -124,7 +124,7 @@ public class PlatformGeneratorTileEntity extends TileEntity implements ITickable
 	private void generatePlatform(World world, BlockPos pos, int loopIteration)
 	{
 		world.setBlockAndUpdate(pos, MSBlocks.PLATFORM_BLOCK.defaultBlockState()
-				.setValue(PlatformGeneratorBlock.INVISIBLE_MODE, getBlockState().getValue(PlatformGeneratorBlock.INVISIBLE_MODE))
+				.setValue(PlatformBlock.INVISIBLE, getBlockState().getValue(PlatformGeneratorBlock.INVISIBLE_MODE))
 				.setValue(PlatformBlock.FACING, getBlockState().getValue(PlatformGeneratorBlock.FACING))
 				.setValue(PlatformBlock.GENERATOR_DISTANCE, loopIteration));
 	}

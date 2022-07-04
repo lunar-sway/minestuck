@@ -90,7 +90,7 @@ public class TogglerBlock extends MSDirectionalBlock
 	
 	private void toggle(World worldIn, BlockPos pos, BlockState state, BlockPos facingPos, BlockState facingState)
 	{
-		if(facingState.hasProperty(MSProperties.MACHINE_TOGGLE) && !(facingState.getBlock() instanceof PlatformBlock)) //if it has the property and is not a platform block(platform block property should be toggled by the generator)
+		if(facingState.hasProperty(MSProperties.MACHINE_TOGGLE))
 		{
 			worldIn.setBlock(facingPos, facingState.cycle(MSProperties.MACHINE_TOGGLE), Constants.BlockFlags.DEFAULT);
 			

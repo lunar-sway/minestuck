@@ -74,12 +74,12 @@ public class AreaEffectBlock extends HorizontalBlock
 				if(heldItemStack.getItem() instanceof PotionItem)
 				{
 					clickWithPotion(worldIn, pos, player, te, heldItemStack);
-				} else if(!player.isCrouching() && worldIn.isClientSide)
+				} else
 				{
 					MSScreenFactories.displayAreaEffectScreen(te);
 				}
 				
-				return ActionResultType.SUCCESS;
+				return ActionResultType.sidedSuccess(worldIn.isClientSide);
 			}
 		}
 		
@@ -117,18 +117,10 @@ public class AreaEffectBlock extends HorizontalBlock
 		if(!worldIn.isClientSide)
 		{
 			BlockState state = worldIn.getBlockState(pos);
-			boolean hasPower = worldIn.hasNeighborSignal(pos);
+			boolean hasPower = !state.getValue(SHUT_DOWN) && worldIn.hasNeighborSignal(pos);
 			
-			//TODO test this
-			if(state.getValue(SHUT_DOWN)/* && state.getValue(POWERED)*/)
-			{
-				worldIn.setBlockAndUpdate(pos, state.setValue(POWERED, false));
-			} else
-			{
-				if(state.getValue(POWERED) != hasPower)
-					worldIn.setBlockAndUpdate(pos, state.setValue(POWERED, hasPower));
-				else worldIn.sendBlockUpdated(pos, state, state, 2);
-			}
+			if(state.getValue(POWERED) != hasPower)
+				worldIn.setBlockAndUpdate(pos, state.setValue(POWERED, hasPower));
 		}
 	}
 	

@@ -22,7 +22,7 @@ import net.minecraftforge.common.util.Constants;
 
 public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements INameable, ITickableTileEntity
 {
-	private BlockPos offsetPos;
+	private BlockPos offsetPos = new BlockPos(0, 0, 0);
 	private int tickCycle;
 	
 	public WirelessRedstoneTransmitterTileEntity()
@@ -47,9 +47,6 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 	
 	public BlockPos getDestinationBlockPosFromOffset()
 	{
-		if(offsetPos == null)
-			offsetPos = new BlockPos(0, 0, 0);
-		
 		Direction stateFacing = getBlockState().getValue(WirelessRedstoneTransmitterBlock.FACING);
 		
 		return this.getBlockPos().offset(offsetPos.rotate(MSRotationUtil.rotationBetween(Direction.NORTH, stateFacing))); //changes from  north facing to the facing direction

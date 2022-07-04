@@ -88,7 +88,7 @@ public class StructureCoreTileEntity extends TileEntity implements ITickableTile
 			StructureStart<?> structureStart = getStructureStart(structureManager);
 			if(structureStart != null && structureStart.isValid())
 			{
-				Debug.debugf("meets all conditions, now doing action type function");
+				Debug.logger.info("meets all conditions, now doing action type function");
 				if(actionType == ActionType.WRITE)
 				{
 					writeToStructure(structureStart);
@@ -105,7 +105,8 @@ public class StructureCoreTileEntity extends TileEntity implements ITickableTile
 							level.setBlockAndUpdate(getBlockPos(), getBlockState().setValue(StructureCoreBlock.POWERED, true));
 					} else
 					{
-						level.setBlockAndUpdate(getBlockPos(), getBlockState().setValue(StructureCoreBlock.POWERED, false));
+						if(getBlockState().getValue(StructureCoreBlock.POWERED))
+							level.setBlockAndUpdate(getBlockPos(), getBlockState().setValue(StructureCoreBlock.POWERED, false));
 					}
 				}
 			}
@@ -132,7 +133,7 @@ public class StructureCoreTileEntity extends TileEntity implements ITickableTile
 			if(!piece.hasBeenCompleted())
 				piece.nowCompleted();
 			else
-				Debug.debugf("has already been completed");
+				Debug.logger.info("has already been completed");
 		}
 	}
 	

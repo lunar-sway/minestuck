@@ -26,7 +26,7 @@ import java.util.Random;
  */
 public class PlatformBlock extends MSDirectionalBlock
 {
-	public static final BooleanProperty INVISIBLE = MSProperties.MACHINE_TOGGLE;
+	public static final BooleanProperty INVISIBLE = MSProperties.INVISIBLE;
 	public static final IntegerProperty GENERATOR_DISTANCE = MSProperties.DISTANCE_1_16;
 	
 	public PlatformBlock(Properties properties)

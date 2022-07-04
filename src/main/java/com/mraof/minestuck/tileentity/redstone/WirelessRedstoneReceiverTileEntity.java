@@ -58,7 +58,7 @@ public class WirelessRedstoneReceiverTileEntity extends TileEntity implements IT
 		if(level != null && !level.isClientSide)
 		{
 			BlockState state = getBlockState();
-			BlockState newState = WirelessRedstoneReceiverBlock.setPower(state, 0);
+			BlockState unpoweredState = WirelessRedstoneReceiverBlock.setPower(state, 0);
 			
 			if(lastTransmitterBlockPos != null && level.isAreaLoaded(lastTransmitterBlockPos, 1))
 			{
@@ -70,13 +70,13 @@ public class WirelessRedstoneReceiverTileEntity extends TileEntity implements IT
 					te.sendUpdateToPosition(level, getBlockPos());
 				} else
 				{
-					if(state != newState)
-						level.setBlock(getBlockPos(), newState, Constants.BlockFlags.DEFAULT);
+					if(state != unpoweredState)
+						level.setBlock(getBlockPos(), unpoweredState, Constants.BlockFlags.DEFAULT);
 				}
 			} else
 			{
-				if(state != newState)
-					level.setBlock(getBlockPos(), newState, Constants.BlockFlags.DEFAULT);
+				if(state != unpoweredState)
+					level.setBlock(getBlockPos(), unpoweredState, Constants.BlockFlags.DEFAULT);
 			}
 		}
 	}

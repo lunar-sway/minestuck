@@ -5,7 +5,6 @@ import com.mraof.minestuck.block.redstone.RemoteComparatorBlock;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -41,7 +40,6 @@ public class RemoteComparatorTileEntity extends TileEntity implements ITickableT
 			
 			if(getBlockState().getValue(RemoteComparatorBlock.POWERED) != shouldBePowered)
 				level.setBlockAndUpdate(getBlockPos(), getBlockState().setValue(RemoteComparatorBlock.POWERED, shouldBePowered));
-			else level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 2);
 		}
 	}
 	
@@ -72,11 +70,5 @@ public class RemoteComparatorTileEntity extends TileEntity implements ITickableT
 	public SUpdateTileEntityPacket getUpdatePacket()
 	{
 		return new SUpdateTileEntityPacket(getBlockPos(), 2, getUpdateTag());
-	}
-	
-	@Override
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
-	{
-		this.load(getBlockState(), pkt.getTag());
 	}
 }
