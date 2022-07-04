@@ -104,9 +104,16 @@ public class RemoteObserverScreen extends Screen
 	{
 		Optional<EntityType<?>> attemptedEntityType = EntityType.byString(entityTypeTextField.getValue());
 		
-		if(attemptedEntityType.isPresent() && RemoteObserverTileEntity.entityCanBeObserved(attemptedEntityType.get()))
+		boolean isCurrentEntityActiveType = activeType == RemoteObserverTileEntity.ActiveType.CURRENT_ENTITY_PRESENT;
+		boolean isValidAndObservableEntityType = attemptedEntityType.isPresent() && RemoteObserverTileEntity.entityCanBeObserved(attemptedEntityType.get());
+		
+		if(!isCurrentEntityActiveType || isValidAndObservableEntityType)
 		{
-			MSPacketHandler.sendToServer(new RemoteObserverPacket(activeType, observingRange, te.getBlockPos(), attemptedEntityType.get()));
+			EntityType<?> entityType = te.getCurrentEntityType();
+			if(isValidAndObservableEntityType)
+				entityType = attemptedEntityType.get();
+			
+			MSPacketHandler.sendToServer(new RemoteObserverPacket(activeType, observingRange, te.getBlockPos(), entityType));
 			onClose();
 		} else
 		{

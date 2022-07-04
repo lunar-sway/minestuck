@@ -38,6 +38,7 @@ public class AreaEffectScreen extends Screen
 	private TextFieldWidget effectTextField;
 	private TextFieldWidget effectAmplifierTextField;
 	private boolean isAllMobs;
+	private boolean validInput = true;
 	
 	private Button allMobsButton;
 	
@@ -95,7 +96,7 @@ public class AreaEffectScreen extends Screen
 	
 	private ITextComponent getAllMobsButtonMessage()
 	{
-		return this.isAllMobs ? new StringTextComponent("UNTRIGGERABLE") : new StringTextComponent("TRIGGERABLE");
+		return this.isAllMobs ? new StringTextComponent("ALL MOBS") : new StringTextComponent("JUST PLAYERS");
 	}
 	
 	/**
@@ -140,18 +141,29 @@ public class AreaEffectScreen extends Screen
 		BlockPos minOffsetPos = new BlockPos(minX, minY, minZ);
 		BlockPos maxOffsetPos = new BlockPos(maxX, maxY, maxZ);
 		
-		MSPacketHandler.sendToServer(new AreaEffectPacket(getEffect(effectTextField.getValue()), MathHelper.clamp(parseInt(effectAmplifierTextField), 0, 255), isAllMobs, minOffsetPos, maxOffsetPos, te.getBlockPos()));
-		onClose();
+		if(validInput)
+		{
+			MSPacketHandler.sendToServer(new AreaEffectPacket(getEffect(effectTextField.getValue()), MathHelper.clamp(parseInt(effectAmplifierTextField), 0, 255), isAllMobs, minOffsetPos, maxOffsetPos, te.getBlockPos()));
+			onClose();
+		}
+		
+		validInput = true; //allows players to try again
 	}
 	
-	private static int parseInt(TextFieldWidget widget)
+	private int parseInt(TextFieldWidget widget)
 	{
+		int parsedValue = 0; //arbitrary starting number that will not be used in the packet as is
+		
 		try
 		{
-			return Integer.parseInt(widget.getValue());
+			parsedValue = Integer.parseInt(widget.getValue());
+			widget.setTextColor(0XFFFFFF); //refreshes text color to white in case it was invalid before but is now acceptable
 		} catch(NumberFormatException ignored)
 		{
-			return 0;
+			validInput = false;
+			widget.setTextColor(0XFF0000); //changes text to red to indicate that it is an invalid type
 		}
+		
+		return parsedValue;
 	}
 }
