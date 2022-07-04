@@ -158,8 +158,6 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 		
 		compound.putInt("tickCycle", tickCycle);
 		
-		getDestinationBlockPosFromOffset();
-		
 		compound.putInt("offsetX", offsetPos.getX());
 		compound.putInt("offsetY", offsetPos.getY());
 		compound.putInt("offsetZ", offsetPos.getZ());

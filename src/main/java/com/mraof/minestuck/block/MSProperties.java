@@ -24,7 +24,7 @@ public class MSProperties
 	public static final BooleanProperty MACHINE_TOGGLE = BooleanProperty.create("machine_toggle"); //for use in TogglerBlock, as a way to change redstone/puzzle block functionality through another block
 	public static final BooleanProperty SHUT_DOWN = BooleanProperty.create("shut_down");
 	public static final BooleanProperty INVISIBLE = BooleanProperty.create("invisible");
-	public static final BooleanProperty UNTRIGGERABLE = BooleanProperty.create("untriggerable"); //for use in SummonerBlock, if used in other blocks then add those cases to StuctureCoreTileEntity
+	public static final BooleanProperty UNTRIGGERABLE = BooleanProperty.create("untriggerable"); //for use in SummonerBlock, if used in other blocks with correlating properties then add those cases to StuctureCoreTileEntity
 	
 	public static final IntegerProperty COUNT_0_2 = IntegerProperty.create("count", 0, 2);
 	public static final IntegerProperty DISTANCE_1_16 = IntegerProperty.create("distance", 1, 16);

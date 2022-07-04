@@ -40,7 +40,7 @@ public class TogglerBlock extends MSDirectionalBlock
 			worldIn.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 1.2F);
 		else
 			worldIn.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, 1.2F);
-		return ActionResultType.SUCCESS;
+		return ActionResultType.sidedSuccess(worldIn.isClientSide);
 	}
 	
 	@Override

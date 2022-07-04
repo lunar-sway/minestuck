@@ -49,7 +49,7 @@ public class RedstoneClockBlock extends MSDirectionalBlock
 				te.incrementClockSpeed(player);
 				
 				return ActionResultType.SUCCESS;
-			} else if(player.isCrouching() && player.getItemInHand(hand).isEmpty())
+			} else
 			{
 				te.decrementClockSpeed(player);
 				

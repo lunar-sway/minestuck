@@ -4,14 +4,12 @@ import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.block.redstone.StructureCoreBlock;
 import com.mraof.minestuck.block.redstone.SummonerBlock;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.structure.CoreCompatibleScatteredStructurePiece;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.state.Property;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -88,25 +86,30 @@ public class StructureCoreTileEntity extends TileEntity implements ITickableTile
 			StructureStart<?> structureStart = getStructureStart(structureManager);
 			if(structureStart != null && structureStart.isValid())
 			{
-				Debug.logger.info("meets all conditions, now doing action type function");
-				if(actionType == ActionType.WRITE)
+				CoreCompatibleScatteredStructurePiece piece = getStructurePiece(structureStart);
+				
+				if(piece != null)
 				{
-					writeToStructure(structureStart);
-				} else if(actionType == ActionType.READ_AND_WIPE)
-				{
-					wipeSlate();
-				} else if(actionType == ActionType.READ_AND_REDSTONE)
-				{
-					CoreCompatibleScatteredStructurePiece piece = getStructurePiece(structureStart);
-					
-					if(piece != null && piece.hasBeenCompleted())
+					if(actionType == ActionType.WRITE)
 					{
-						if(!getBlockState().getValue(StructureCoreBlock.POWERED))
-							level.setBlockAndUpdate(getBlockPos(), getBlockState().setValue(StructureCoreBlock.POWERED, true));
-					} else
+						writeToStructure(piece);
+					} else if(actionType == ActionType.READ_AND_WIPE)
 					{
-						if(getBlockState().getValue(StructureCoreBlock.POWERED))
-							level.setBlockAndUpdate(getBlockPos(), getBlockState().setValue(StructureCoreBlock.POWERED, false));
+						if(piece.hasBeenCompleted())
+						{
+							wipeSlate();
+						}
+					} else if(actionType == ActionType.READ_AND_REDSTONE)
+					{
+						if(piece.hasBeenCompleted())
+						{
+							if(!getBlockState().getValue(StructureCoreBlock.POWERED))
+								level.setBlockAndUpdate(getBlockPos(), getBlockState().setValue(StructureCoreBlock.POWERED, true));
+						} else
+						{
+							if(getBlockState().getValue(StructureCoreBlock.POWERED))
+								level.setBlockAndUpdate(getBlockPos(), getBlockState().setValue(StructureCoreBlock.POWERED, false));
+						}
 					}
 				}
 			}
@@ -123,18 +126,12 @@ public class StructureCoreTileEntity extends TileEntity implements ITickableTile
 		return null;
 	}
 	
-	private void writeToStructure(StructureStart<?> structureStart)
+	private void writeToStructure(CoreCompatibleScatteredStructurePiece piece)
 	{
 		//compoundnbt.putString("id", Registry.STRUCTURE_FEATURE.getKey(this.getFeature()).toString());
 		
-		CoreCompatibleScatteredStructurePiece piece = getStructurePiece(structureStart);
-		if(piece != null)
-		{
-			if(!piece.hasBeenCompleted())
-				piece.nowCompleted();
-			else
-				Debug.logger.info("has already been completed");
-		}
+		if(!piece.hasBeenCompleted())
+			piece.nowCompleted();
 	}
 	
 	private CoreCompatibleScatteredStructurePiece getStructurePiece(StructureStart<?> structureStart)
@@ -160,20 +157,21 @@ public class StructureCoreTileEntity extends TileEntity implements ITickableTile
 				BlockState iterateState = level.getBlockState(iteratePos);
 				
 				//removing functionality from blocks that should have limited survival access
-				for(Property<?> property : iterateState.getProperties())
+				
+				if(iterateState.hasProperty(MSProperties.SHUT_DOWN) && !iterateState.getValue(MSProperties.SHUT_DOWN))
 				{
-					if((property.equals(MSProperties.SHUT_DOWN) && !iterateState.getValue(MSProperties.SHUT_DOWN)) || (property.equals(MSProperties.UNTRIGGERABLE) && iterateState.getValue(MSProperties.UNTRIGGERABLE)))
+					level.setBlock(iteratePos, iterateState.setValue(MSProperties.SHUT_DOWN, true), Constants.BlockFlags.DEFAULT);
+					this.hasWiped = true;
+				}
+				
+				if(iterateState.hasProperty(MSProperties.UNTRIGGERABLE) && iterateState.getValue(MSProperties.UNTRIGGERABLE))
+				{
+					if(iterateState.getBlock() instanceof SummonerBlock)
 					{
-						if(iterateState.getBlock() instanceof SummonerBlock)
-						{
-							level.setBlock(iteratePos, iterateState.setValue(SummonerBlock.UNTRIGGERABLE, false).setValue(SummonerBlock.TRIGGERED, true), Constants.BlockFlags.DEFAULT);
-						} else
-							level.setBlock(iteratePos, iterateState.setValue(MSProperties.SHUT_DOWN, true), Constants.BlockFlags.DEFAULT);
-						
-						this.hasWiped = true;
-						
-						break;
+						level.setBlock(iteratePos, iterateState.setValue(SummonerBlock.UNTRIGGERABLE, false).setValue(SummonerBlock.TRIGGERED, true), Constants.BlockFlags.DEFAULT);
 					}
+					
+					this.hasWiped = true;
 				}
 			}
 		}

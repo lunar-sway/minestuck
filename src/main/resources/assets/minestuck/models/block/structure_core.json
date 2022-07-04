@@ -1,23 +1,8 @@
 {
-    "parent": "block/block",
+    "parent": "block/cube_bottom_top",
     "textures": {
-        "front": "minestuck:block/structure_core_front",
-        "back": "minestuck:block/structure_core_back",
-        "side": "minestuck:block/structure_core_side",
-        "ends": "minestuck:block/redstone_machine_block",
-        "particle": "minestuck:block/structure_core_front"
-    },
-    "elements": [
-        {   "from": [ 0, 0, 0 ],
-            "to": [ 16, 16, 16 ],
-            "faces": {
-                "down":  { "uv": [ 0, 0, 16, 16 ], "texture": "#ends", "cullface": "down" },
-                "up":    { "uv": [ 0, 16, 16, 0 ], "texture": "#ends", "cullface": "up" },
-                "north": { "uv": [ 0, 0, 16, 16 ], "texture": "#front", "cullface": "north" },
-                "south": { "uv": [ 0, 0, 16, 16 ], "texture": "#back", "cullface": "south" },
-                "west":  { "uv": [ 0, 0, 16, 16 ], "texture": "#side", "cullface": "west" },
-                "east":  { "uv": [ 0, 0, 16, 16 ], "texture": "#side", "cullface": "east" }
-            }
-        }
-    ]
+        "bottom": "minestuck:block/structure_core_bottom",
+        "top": "minestuck:block/structure_core_top",
+        "side": "minestuck:block/structure_core_side"
+    }
 }

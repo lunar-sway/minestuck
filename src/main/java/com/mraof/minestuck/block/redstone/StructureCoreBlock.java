@@ -50,22 +50,26 @@ public class StructureCoreBlock extends HorizontalBlock
 			{
 				if(player.isCrouching())
 				{
-					worldIn.setBlock(pos, state.cycle(ACTIVE), Constants.BlockFlags.DEFAULT);
-					if(state.getValue(ACTIVE))
-						worldIn.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 1.2F);
-					else
-					{
-						worldIn.setBlock(pos, state.setValue(POWERED, false), Constants.BlockFlags.DEFAULT);
-						worldIn.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, 1.2F);
-					}
 					((StructureCoreTileEntity) tileEntity).prepForUpdate(); //sets tickCycle to 600 so next tick an update will occur
+					
+					boolean startedOffActive = state.getValue(ACTIVE);
+					
+					if(startedOffActive)
+					{
+						worldIn.setBlockAndUpdate(pos, state.cycle(ACTIVE).setValue(POWERED, false));
+						worldIn.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, 1.2F);
+					} else
+					{
+						worldIn.setBlockAndUpdate(pos, state.cycle(ACTIVE));
+						worldIn.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 1.2F);
+					}
 				} else if(worldIn.isClientSide && !player.isCrouching())
 				{
 					StructureCoreTileEntity te = (StructureCoreTileEntity) tileEntity;
 					MSScreenFactories.displayStructureCoreScreen(te);
 				}
 				
-				return ActionResultType.SUCCESS;
+				return ActionResultType.sidedSuccess(worldIn.isClientSide);
 			}
 		}
 		
