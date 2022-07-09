@@ -12,7 +12,7 @@ import net.minecraft.util.text.StringTextComponent;
 public class UraniumCookerScreen extends MachineScreen<UraniumCookerContainer>
 {
 	private static final ResourceLocation BACKGROUND = new ResourceLocation("minestuck:textures/gui/uranium_cooker.png");
-	private static final ResourceLocation PROGRESS = new ResourceLocation("minestuck:textures/gui/progress/uranium_cooker.png");
+	private static final ResourceLocation PROGRESS = new ResourceLocation("minestuck:textures/gui/progress/uranium_level.png");
 	
 	private int progressX;
 	private int progressY;
@@ -66,7 +66,7 @@ public class UraniumCookerScreen extends MachineScreen<UraniumCookerContainer>
 		//draw progress bar
 		this.minecraft.getTextureManager().bind(PROGRESS);
 		int width = progressWidth;
-		int height = getScaledValue(menu.getFuel(), UraniumCookerTileEntity.getMaxFuel(), progressHeight);
+		int height = getScaledValue(menu.getFuel(), UraniumCookerTileEntity.MAX_FUEL, progressHeight);
 		blit(matrixStack, x+progressX, y+progressY+progressHeight-height, 0, progressHeight-height, width, height, progressWidth, progressHeight);
 	}
 	

@@ -44,7 +44,7 @@ public class SummonerBlock extends Block
 	@Override
 	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
 	{
-		if(!player.isCrouching() && player.isCreative() && !CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS))
+		if(player.isCreative() && !CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS))
 		{
 			ItemStack stackIn = player.getItemInHand(handIn);
 			
@@ -62,7 +62,7 @@ public class SummonerBlock extends Block
 			} else if(!worldIn.isClientSide)
 			{
 				boolean newBooleanState = !worldIn.getBlockState(pos).getValue(UNTRIGGERABLE);
-				worldIn.setBlock(pos, worldIn.getBlockState(pos).cycle(SummonerBlock.UNTRIGGERABLE), Constants.BlockFlags.NOTIFY_NEIGHBORS);
+				worldIn.setBlock(pos, worldIn.getBlockState(pos).cycle(SummonerBlock.UNTRIGGERABLE), Constants.BlockFlags.DEFAULT);
 				player.displayClientMessage(new TranslationTextComponent(getDescriptionId() + "." + UNTRIGGERABLE_CHANGE_MESSAGE, !newBooleanState), true);
 			}
 			

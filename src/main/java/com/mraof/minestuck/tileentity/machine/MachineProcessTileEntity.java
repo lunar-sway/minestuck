@@ -31,6 +31,8 @@ public abstract class MachineProcessTileEntity extends TileEntity implements ITi
 	public boolean ready = false;
 	public boolean overrideStop = false;
 	
+	public static final int FUEL_INCREASE = 32; //how many units of fuel a chunk of uranium adds to a machine powered by it, used by Sendificator and UraniumCooker
+	
 	protected MachineProcessTileEntity(TileEntityType<?> tileEntityTypeIn)
 	{
 		super(tileEntityTypeIn);

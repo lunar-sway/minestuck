@@ -58,7 +58,7 @@ public class UraniumCookerTileEntity extends MachineProcessTileEntity implements
 	};
 	
 	private short fuel = 0;
-	private static final short maxFuel = 128;
+	public static final short MAX_FUEL = 128;
 	
 	public UraniumCookerTileEntity()
 	{
@@ -104,10 +104,10 @@ public class UraniumCookerTileEntity extends MachineProcessTileEntity implements
 		ItemStack fuel = itemHandler.getStackInSlot(1);
 		ItemStack input = itemHandler.getStackInSlot(0);
 		ItemStack output = irradiate();
-		return getFuel() <= getMaxFuel() - 32 && ExtraForgeTags.Items.URANIUM_CHUNKS.contains(fuel.getItem()) || !input.isEmpty() && !output.isEmpty();
+		return canBeRefueled() && ExtraForgeTags.Items.URANIUM_CHUNKS.contains(fuel.getItem()) || !input.isEmpty() && !output.isEmpty();
 	}
 	
-	private ItemStack irradiate()	//TODO Handle the recipe and make sure to use its exp/cooking time
+	private ItemStack irradiate()    //TODO Handle the recipe and make sure to use its exp/cooking time
 	{
 		if(level == null)
 			return ItemStack.EMPTY;
@@ -125,9 +125,9 @@ public class UraniumCookerTileEntity extends MachineProcessTileEntity implements
 	@Override
 	public void processContents()
 	{
-		if(getFuel() <= getMaxFuel() - 32 && ExtraForgeTags.Items.URANIUM_CHUNKS.contains(itemHandler.getStackInSlot(1).getItem()))
+		if(canBeRefueled() && ExtraForgeTags.Items.URANIUM_CHUNKS.contains(itemHandler.getStackInSlot(1).getItem()))
 		{    //Refill fuel
-			fuel += 32;
+			fuel += FUEL_INCREASE;
 			itemHandler.extractItem(1, 1, false);
 		}
 		if(canIrradiate())
@@ -160,8 +160,7 @@ public class UraniumCookerTileEntity extends MachineProcessTileEntity implements
 			if(out.isEmpty())
 			{
 				return true;
-			}
-			else if(out.getMaxStackSize() >= output.getCount() + out.getCount() && out.sameItem(output))
+			} else if(out.getMaxStackSize() >= output.getCount() + out.getCount() && out.sameItem(output))
 			{
 				return true;
 			}
@@ -198,18 +197,8 @@ public class UraniumCookerTileEntity extends MachineProcessTileEntity implements
 		return new TranslationTextComponent(TITLE);
 	}
 	
-	public short getFuel()
+	public boolean canBeRefueled()
 	{
-		return fuel;
-	}
-
-	public void setFuel(short fuel)
-	{
-		this.fuel = fuel;
-	}
-
-	public static short getMaxFuel()
-	{
-		return maxFuel;
+		return fuel <= MAX_FUEL - FUEL_INCREASE;
 	}
 }

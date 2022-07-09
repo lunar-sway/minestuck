@@ -41,8 +41,11 @@ public class FrostLandType extends TerrainLandType
 	{
 		registry.setBlockState("surface", Blocks.GRASS_BLOCK.defaultBlockState());
 		registry.setBlockState("upper", Blocks.DIRT.defaultBlockState());
-		registry.setBlockState("structure_primary", Blocks.PRISMARINE.defaultBlockState());
-		registry.setBlockState("structure_primary_decorative", Blocks.PRISMARINE_BRICKS.defaultBlockState());
+		registry.setBlockState("structure_primary", MSBlocks.FROST_TILE.defaultBlockState());
+		registry.setBlockState("structure_primary_decorative", MSBlocks.CHISELED_FROST_BRICKS.defaultBlockState());
+		registry.setBlockState("structure_primary_cracked", MSBlocks.CRACKED_FROST_BRICKS.defaultBlockState());
+		registry.setBlockState("structure_primary_column", MSBlocks.FROST_COLUMN.defaultBlockState());
+		registry.setBlockState("structure_primary_stairs", MSBlocks.FROST_TILE_STAIRS.defaultBlockState());
 		registry.setBlockState("structure_secondary", MSBlocks.FROST_BRICKS.defaultBlockState());
 		registry.setBlockState("structure_secondary_stairs", MSBlocks.FROST_BRICK_STAIRS.defaultBlockState());
 		registry.setBlockState("structure_secondary_decorative", MSBlocks.CHISELED_FROST_BRICKS.defaultBlockState());

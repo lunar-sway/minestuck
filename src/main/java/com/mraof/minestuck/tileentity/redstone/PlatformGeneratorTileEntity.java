@@ -67,7 +67,10 @@ public class PlatformGeneratorTileEntity extends TileEntity implements ITickable
 						}
 					} else if(iterateBlockState.getMaterial().isLiquid() || iterateBlockState.isAir()/* || iterateBlockState.getBlock() == MSBlocks.PLATFORM_BLOCK && level.getPendingBlockTicks().isTickScheduled(iteratePos, MSBlocks.PLATFORM_BLOCK))*/)
 					{
-						level.setBlock(iteratePos, MSBlocks.PLATFORM_BLOCK.defaultBlockState().setValue(PlatformGeneratorBlock.INVISIBLE_MODE, getBlockState().getValue(PlatformGeneratorBlock.INVISIBLE_MODE)).setValue(PlatformBlock.FACING, getBlockState().getValue(PlatformGeneratorBlock.FACING)), Constants.BlockFlags.NOTIFY_NEIGHBORS);
+						BlockState newState = MSBlocks.PLATFORM_BLOCK.defaultBlockState()
+								.setValue(PlatformBlock.INVISIBLE, getBlockState().getValue(PlatformGeneratorBlock.INVISIBLE_MODE))
+								.setValue(PlatformBlock.FACING, getBlockState().getValue(PlatformGeneratorBlock.FACING));
+						level.setBlock(iteratePos, newState, Constants.BlockFlags.DEFAULT);
 					}
 				}
 			}

@@ -7,6 +7,7 @@ import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.LandGenSettings;
+import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
 import com.mraof.minestuck.world.gen.feature.structure.GateMushroomPiece;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
@@ -41,14 +42,19 @@ public class FungiLandType extends TerrainLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
+		registry.setGroundState(MSBlocks.MYCELIUM_STONE.defaultBlockState(), MSFillerBlockTypes.MYCELIUM_STONE);
 		registry.setBlockState("surface", Blocks.MYCELIUM.defaultBlockState());
 		registry.setBlockState("upper", Blocks.DIRT.defaultBlockState());
 		registry.setBlockState("ocean", Blocks.WATER.defaultBlockState());
-		registry.setBlockState("structure_primary_decorative", Blocks.MOSSY_STONE_BRICKS.defaultBlockState());
-		registry.setBlockState("structure_primary_stairs", Blocks.STONE_BRICK_STAIRS.defaultBlockState());
-		registry.setBlockState("structure_secondary", MSBlocks.MYCELIUM_BRICKS.defaultBlockState());
-		registry.setBlockState("structure_secondary_decorative", Blocks.CHISELED_STONE_BRICKS.defaultBlockState());
-		registry.setBlockState("structure_secondary_stairs", MSBlocks.MYCELIUM_BRICK_STAIRS.defaultBlockState());
+		registry.setBlockState("structure_primary", MSBlocks.MYCELIUM_BRICKS.defaultBlockState());
+		registry.setBlockState("structure_primary_decorative", MSBlocks.CHISELED_MYCELIUM_BRICKS.defaultBlockState());
+		registry.setBlockState("structure_primary_cracked", MSBlocks.CRACKED_MYCELIUM_BRICKS.defaultBlockState());
+		registry.setBlockState("structure_primary_mossy", MSBlocks.MOSSY_MYCELIUM_BRICKS.defaultBlockState());
+		registry.setBlockState("structure_primary_column", MSBlocks.MYCELIUM_COLUMN.defaultBlockState());
+		registry.setBlockState("structure_primary_stairs", MSBlocks.MYCELIUM_BRICK_STAIRS.defaultBlockState());
+		registry.setBlockState("structure_secondary", MSBlocks.POLISHED_MYCELIUM_STONE.defaultBlockState());
+		registry.setBlockState("structure_secondary_decorative", MSBlocks.MYCELIUM_COBBLESTONE.defaultBlockState());
+		registry.setBlockState("structure_secondary_stairs", MSBlocks.MYCELIUM_STAIRS.defaultBlockState());
 		registry.setBlockState("village_path", Blocks.GRASS_PATH.defaultBlockState());
 		registry.setBlockState("light_block", MSBlocks.GLOWY_GOOP.defaultBlockState());
 		registry.setBlockState("torch", Blocks.REDSTONE_TORCH.defaultBlockState());
