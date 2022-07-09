@@ -386,7 +386,6 @@
   "block.minestuck.sandstone_iron_ore": "Iron Ore",
   "block.minestuck.sandstone_uranium_ore": "Uranium Ore",
   "block.minestuck.sendificator": "Sendificator",
-  "block.minestuck.sendificator.activation_message": "The machine indicates that it is irreversibly set to the current time and place, following that up by saying SUBMIT. OBEY.",
   "block.minestuck.sendificator.tooltip": "Approximately head sized",
   "block.minestuck.shade_brick_slab": "Shade Brick Slab",
   "block.minestuck.shade_brick_stairs": "Shade Brick Stairs",
