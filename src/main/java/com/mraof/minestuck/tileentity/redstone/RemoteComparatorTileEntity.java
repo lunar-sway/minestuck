@@ -59,16 +59,4 @@ public class RemoteComparatorTileEntity extends TileEntity implements ITickableT
 		
 		return compound;
 	}
-	
-	@Override
-	public CompoundNBT getUpdateTag()
-	{
-		return this.save(new CompoundNBT());
-	}
-	
-	@Override
-	public SUpdateTileEntityPacket getUpdatePacket()
-	{
-		return new SUpdateTileEntityPacket(getBlockPos(), 2, getUpdateTag());
-	}
 }

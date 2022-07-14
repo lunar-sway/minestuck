@@ -77,16 +77,25 @@ public class PlatformBlock extends MSDirectionalBlock
 				
 				checkForAbsorbers(state, world, pos, stateFacing);
 				
-				if(supportingState.getBlock() instanceof PlatformGeneratorBlock &&
-						(!supportingState.getValue(PlatformGeneratorBlock.POWERED) || supportingState.getValue(PlatformGeneratorBlock.FACING) != stateFacing) ||
-						!(supportingState.getBlock() instanceof PlatformGeneratorBlock))
-					world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState()); //removes platform block if there is no platform generator, or if a platform generator is there but it is either not powered or not facing the platform block
-				else if(supportingState.getBlock() instanceof PlatformGeneratorBlock && supportingState.getValue(PlatformGeneratorBlock.POWERED)) //switches which kind of platform block is present if the Invisibility mode does not match
+				boolean supportingStateIsGenerator = supportingState.getBlock() instanceof PlatformGeneratorBlock;
+				boolean generatorHasSameFacing = false;
+				boolean generatorHasPower = false;
+				if(supportingStateIsGenerator)
 				{
-					if(supportingState.getValue(PlatformGeneratorBlock.INVISIBLE_MODE) != state.getValue(INVISIBLE) && supportingState.getValue(PlatformGeneratorBlock.FACING) == stateFacing)
-						world.setBlockAndUpdate(pos, state.setValue(INVISIBLE, supportingState.getValue(PlatformGeneratorBlock.INVISIBLE_MODE))); //TODO Visible platforms should override invisible ones
-					if(!supportingState.getValue(PlatformGeneratorBlock.INVISIBLE_MODE) && state.getValue(INVISIBLE) && supportingState.getValue(PlatformGeneratorBlock.FACING) != stateFacing)
-						world.setBlockAndUpdate(pos, state.setValue(INVISIBLE, false));
+					generatorHasSameFacing = supportingState.getValue(PlatformGeneratorBlock.FACING) == stateFacing;
+					generatorHasPower = supportingState.getValue(PlatformGeneratorBlock.POWERED);
+				}
+				
+				if(!supportingStateIsGenerator || (!generatorHasPower || !generatorHasSameFacing))
+					world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState()); //removes platform block if there is no platform generator, or if a platform generator is there but it is either not powered or not facing the platform block
+				else
+				{
+					boolean generatorSetToInvisible = supportingState.getValue(PlatformGeneratorBlock.INVISIBLE_MODE);
+					boolean thisSetToInvisible = state.getValue(INVISIBLE);
+					boolean differentInvisibilityStatuses = generatorSetToInvisible != thisSetToInvisible;
+					
+					if(differentInvisibilityStatuses)
+						world.setBlockAndUpdate(pos, state.setValue(INVISIBLE, generatorSetToInvisible)); //TODO Visible platforms should override invisible ones
 				}
 			}
 		}

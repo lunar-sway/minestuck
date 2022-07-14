@@ -152,7 +152,10 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 		
 		this.tickCycle = compound.getInt("tickCycle");
 		this.activeType = ActiveType.fromInt(compound.getInt("activeTypeOrdinal"));
-		observingRange = compound.getInt("observingRange");
+		if(compound.contains("observingRange"))
+			observingRange = compound.getInt("observingRange");
+		else
+			observingRange = 15; //before the range was introduced, it was defaulted to 15
 		Optional<EntityType<?>> attemptedEntityType = EntityType.byString(compound.getString("currentEntityType"));
 		attemptedEntityType.ifPresent(entityType -> this.currentEntityType = entityType);
 	}

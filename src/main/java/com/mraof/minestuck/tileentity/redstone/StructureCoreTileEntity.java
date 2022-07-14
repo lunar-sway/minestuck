@@ -43,12 +43,10 @@ public class StructureCoreTileEntity extends TileEntity implements ITickableTile
 		
 		public static ActionType fromInt(int ordinal) //converts int back into enum
 		{
-			for(ActionType type : ActionType.values())
-			{
-				if(type.ordinal() == ordinal)
-					return type;
-			}
-			throw new IllegalArgumentException("Invalid ordinal of " + ordinal + " for structure core action type!");
+			if(0 <= ordinal && ordinal < ActionType.values().length)
+				return ActionType.values()[ordinal];
+			else
+				throw new IllegalArgumentException("Invalid ordinal of " + ordinal + " for structure core action type!");
 		}
 		
 		public String getNameNoSpaces()
@@ -128,8 +126,6 @@ public class StructureCoreTileEntity extends TileEntity implements ITickableTile
 	
 	private void writeToStructure(CoreCompatibleScatteredStructurePiece piece)
 	{
-		//compoundnbt.putString("id", Registry.STRUCTURE_FEATURE.getKey(this.getFeature()).toString());
-		
 		if(!piece.hasBeenCompleted())
 			piece.nowCompleted();
 	}
