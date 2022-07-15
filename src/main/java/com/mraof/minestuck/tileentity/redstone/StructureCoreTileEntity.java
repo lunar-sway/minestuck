@@ -99,15 +99,9 @@ public class StructureCoreTileEntity extends TileEntity implements ITickableTile
 						}
 					} else if(actionType == ActionType.READ_AND_REDSTONE)
 					{
-						if(piece.hasBeenCompleted())
-						{
-							if(!getBlockState().getValue(StructureCoreBlock.POWERED))
-								level.setBlockAndUpdate(getBlockPos(), getBlockState().setValue(StructureCoreBlock.POWERED, true));
-						} else
-						{
-							if(getBlockState().getValue(StructureCoreBlock.POWERED))
-								level.setBlockAndUpdate(getBlockPos(), getBlockState().setValue(StructureCoreBlock.POWERED, false));
-						}
+						BlockState newState = getBlockState().setValue(StructureCoreBlock.POWERED, piece.hasBeenCompleted());
+						if(newState != getBlockState())
+							level.setBlockAndUpdate(getBlockPos(), newState);
 					}
 				}
 			}
