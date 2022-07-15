@@ -20,6 +20,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.BiPredicate;
 
 public class RemoteObserverTileEntity extends TileEntity implements ITickableTileEntity
 {
@@ -30,25 +31,37 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 	
 	private EntityType<?> currentEntityType;
 	
+	/**
+	 * Each enum value contains an inlined lambda expression/anonymous function that tests whether a given entity passes
+	 */
 	public enum ActiveType
 	{
-		IS_CROUCHING,
-		CURRENT_ENTITY_PRESENT,
-		IS_LIVING_ENTITY_PRESENT,
-		IS_UNDERLING_PRESENT,
-		IS_ENTITY_BURNING,
-		IS_ENTITY_INVISIBLE,
-		IS_ELYTRA_FLYING,
-		IS_ENTITY_IN_WATER; //TODO IS_BOSS_PRESENT
+		//when adding new enums, make sure to insert it at the end. Otherwise the ordinal stored in any already generated observers will be messed up
+		IS_CROUCHING((entity, observer) -> entity.isCrouching()),
+		CURRENT_ENTITY_PRESENT((entity, observer) -> entity.getType() == observer.getCurrentEntityType()),
+		IS_LIVING_ENTITY_PRESENT((entity, observer) -> entity instanceof LivingEntity),
+		IS_UNDERLING_PRESENT((entity, observer) -> entity instanceof UnderlingEntity),
+		IS_ENTITY_BURNING((entity, observer) -> entity.isOnFire()),
+		IS_ENTITY_INVISIBLE((entity, observer) -> entity.isInvisible()),
+		IS_ELYTRA_FLYING((entity, observer) -> entity instanceof LivingEntity && ((LivingEntity) entity).isFallFlying()),
+		IS_ENTITY_UNDER_WATER((entity, observer) -> entity.isUnderWater()),
+		IS_ENTITY_WET((entity, observer) -> entity.isInWaterRainOrBubble()),
+		IS_ENTITY_ON_GROUND((entity, observer) -> entity.isOnGround()),
+		IS_SPRINTING((entity, observer) -> entity.isSprinting()); //TODO IS_BOSS_PRESENT
+		
+		BiPredicate<Entity, RemoteObserverTileEntity> typeConditions;
+		
+		ActiveType(BiPredicate<Entity, RemoteObserverTileEntity> typeConditions)
+		{
+			this.typeConditions = typeConditions;
+		}
 		
 		public static ActiveType fromInt(int ordinal) //converts int back into enum
 		{
-			for(ActiveType type : ActiveType.values())
-			{
-				if(type.ordinal() == ordinal)
-					return type;
-			}
-			throw new IllegalArgumentException("Invalid ordinal of " + ordinal + " for remote observer active type!");
+			if(0 <= ordinal && ordinal < ActiveType.values().length)
+				return ActiveType.values()[ordinal];
+			else
+				throw new IllegalArgumentException("Invalid ordinal of " + ordinal + " for remote observer active type!");
 		}
 		
 		public String getNameNoSpaces()
@@ -87,22 +100,8 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 		{
 			for(Entity entity : entityList)
 			{
-				if(activeType == ActiveType.IS_LIVING_ENTITY_PRESENT && entity instanceof LivingEntity)
-					shouldBePowered = true;
-				else if(activeType == ActiveType.CURRENT_ENTITY_PRESENT && entity.getType() == getCurrentEntityType())
-					shouldBePowered = true;
-				else if(activeType == ActiveType.IS_UNDERLING_PRESENT && entity instanceof UnderlingEntity)
-					shouldBePowered = true;
-				else if(activeType == ActiveType.IS_CROUCHING && entity.isCrouching())
-					shouldBePowered = true;
-				else if(activeType == ActiveType.IS_ENTITY_BURNING && entity.isOnFire())
-					shouldBePowered = true;
-				else if(activeType == ActiveType.IS_ENTITY_INVISIBLE && entity.isInvisible())
-					shouldBePowered = true;
-				else if(activeType == ActiveType.IS_ELYTRA_FLYING && (entity instanceof LivingEntity && ((LivingEntity) entity).isFallFlying()))
-					shouldBePowered = true;
-				else if(activeType == ActiveType.IS_ENTITY_IN_WATER && entity.isInWater())
-					shouldBePowered = true;
+				if(activeType.typeConditions.test(entity, this))
+					shouldBePowered = true; //as long as a single entity from the list matches the conditions of the current active type, it should be powered
 			}
 		}
 		
