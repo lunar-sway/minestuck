@@ -3,6 +3,7 @@ package com.mraof.minestuck.block.redstone;
 import com.mraof.minestuck.block.MSDirectionalBlock;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.block.BlockUtil;
+import com.mraof.minestuck.tileentity.redstone.StatStorerTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -10,6 +11,7 @@ import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -113,6 +115,13 @@ public class TogglerBlock extends MSDirectionalBlock
 				worldIn.setBlock(facingPos, facingState.setValue(BlockStateProperties.POWER, 0), Constants.BlockFlags.DEFAULT);
 				updated = true;
 			}
+		}
+		
+		//setting the active stat type for stat storers to 0
+		TileEntity tileEntity = worldIn.getBlockEntity(facingPos);
+		if(tileEntity instanceof StatStorerTileEntity)
+		{
+			((StatStorerTileEntity) tileEntity).setActiveStoredStatValue(0);
 		}
 		
 		if(updated && !worldIn.getBlockState(pos.relative(state.getValue(FACING).getOpposite())).getBlock().asItem().is(ItemTags.WOOL)) //wont make a toggle sound if the toggler is "muted" by a wool block
