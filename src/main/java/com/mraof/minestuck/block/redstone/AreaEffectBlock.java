@@ -1,9 +1,10 @@
 package com.mraof.minestuck.block.redstone;
 
+import com.mraof.minestuck.block.BlockUtil;
+import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.tileentity.redstone.AreaEffectTileEntity;
-import com.mraof.minestuck.util.ParticlesAroundSolidBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalBlock;
@@ -24,7 +25,6 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -36,13 +36,14 @@ import java.util.Random;
 public class AreaEffectBlock extends HorizontalBlock
 {
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
-	public static final BooleanProperty ALL_MOBS = BlockStateProperties.ENABLED; //checks whether just players should be given the effect or if all living entities should be given the effect
+	public static final BooleanProperty ALL_MOBS = MSProperties.MACHINE_TOGGLE; //checks whether just players should be given the effect or if all living entities should be given the effect
+	public static final BooleanProperty SHUT_DOWN = MSProperties.SHUT_DOWN;
 	public static final String EFFECT_CHANGE_MESSAGE = "effect_change_message";
 	
 	public AreaEffectBlock(Properties properties)
 	{
 		super(properties);
-		this.registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(POWERED, false).setValue(ALL_MOBS, false));
+		this.registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(POWERED, false).setValue(ALL_MOBS, false).setValue(SHUT_DOWN, false));
 	}
 	
 	@Override
@@ -73,15 +74,12 @@ public class AreaEffectBlock extends HorizontalBlock
 				if(heldItemStack.getItem() instanceof PotionItem)
 				{
 					clickWithPotion(worldIn, pos, player, te, heldItemStack);
-				} else if(heldItemStack.isEmpty() && player.isCrouching())
-				{
-					cycleAllMobsProperty(state, worldIn, pos);
-				} else if(!player.isCrouching() && worldIn.isClientSide)
+				} else
 				{
 					MSScreenFactories.displayAreaEffectScreen(te);
 				}
 				
-				return ActionResultType.SUCCESS;
+				return ActionResultType.sidedSuccess(worldIn.isClientSide);
 			}
 		}
 		
@@ -97,18 +95,6 @@ public class AreaEffectBlock extends HorizontalBlock
 			
 			player.displayClientMessage(new TranslationTextComponent(getDescriptionId() + "." + EFFECT_CHANGE_MESSAGE, firstEffect.getEffect().getRegistryName(), firstEffect.getAmplifier()), true); //getDescriptionId was getTranslationKey
 			worldIn.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 1F);
-		}
-	}
-	
-	private void cycleAllMobsProperty(BlockState state, World worldIn, BlockPos pos)
-	{
-		if(!worldIn.isClientSide)
-		{
-			worldIn.setBlock(pos, state.cycle(ALL_MOBS), Constants.BlockFlags.DEFAULT);
-			if(state.getValue(ALL_MOBS))
-				worldIn.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 1.2F);
-			else
-				worldIn.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, 1.2F);
 		}
 	}
 	
@@ -131,11 +117,10 @@ public class AreaEffectBlock extends HorizontalBlock
 		if(!worldIn.isClientSide)
 		{
 			BlockState state = worldIn.getBlockState(pos);
-			boolean hasPower = worldIn.hasNeighborSignal(pos);
+			boolean hasPower = !state.getValue(SHUT_DOWN) && worldIn.hasNeighborSignal(pos);
 			
 			if(state.getValue(POWERED) != hasPower)
 				worldIn.setBlockAndUpdate(pos, state.setValue(POWERED, hasPower));
-			else worldIn.sendBlockUpdated(pos, state, state, 2);
 		}
 	}
 	
@@ -150,7 +135,7 @@ public class AreaEffectBlock extends HorizontalBlock
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
 	{
 		if(stateIn.getValue(POWERED))
-			ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE);
+			BlockUtil.spawnParticlesAroundSolidBlock(worldIn, pos, () -> RedstoneParticleData.REDSTONE);
 	}
 	
 	@Override
@@ -159,6 +144,7 @@ public class AreaEffectBlock extends HorizontalBlock
 		super.createBlockStateDefinition(builder);
 		builder.add(FACING);
 		builder.add(POWERED);
+		builder.add(SHUT_DOWN);
 		builder.add(ALL_MOBS);
 	}
 }

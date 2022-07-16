@@ -2,25 +2,31 @@ package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mraof.minestuck.block.redstone.AreaEffectBlock;
 import com.mraof.minestuck.network.AreaEffectPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.tileentity.redstone.AreaEffectTileEntity;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.potion.Effect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class AreaEffectScreen extends Screen
 {
-	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/generic_medium.png");
+	private static final ResourceLocation GUI_BACKGROUND = new ResourceLocation("minestuck", "textures/gui/generic_large.png");
 	
-	private static final int guiWidth = 150;
-	private static final int guiHeight = 98;
+	private static final int GUI_WIDTH = 150;
+	private static final int GUI_HEIGHT = 132;
 	
-	private static final String minPosMessage = "Min Effect Pos"; //TODO make translatable (lang file + translation key)
-	private static final String maxPosMessage = "Max Effect Pos";
+	private static final String MIN_POS_MESSAGE = "Min Pos Facing Offset"; //TODO make translatable (lang file + translation key)
+	private static final String MAX_POS_MESSAGE = "Max Pos Facing Offset";
 	
 	private final AreaEffectTileEntity te;
 	private TextFieldWidget minPosDestinationTextFieldX;
@@ -29,6 +35,12 @@ public class AreaEffectScreen extends Screen
 	private TextFieldWidget maxPosDestinationTextFieldX;
 	private TextFieldWidget maxPosDestinationTextFieldY;
 	private TextFieldWidget maxPosDestinationTextFieldZ;
+	private TextFieldWidget effectTextField;
+	private TextFieldWidget effectAmplifierTextField;
+	private boolean isAllMobs;
+	private boolean validInput = true;
+	
+	private Button allMobsButton;
 	
 	
 	AreaEffectScreen(AreaEffectTileEntity te)
@@ -36,38 +48,72 @@ public class AreaEffectScreen extends Screen
 		super(new StringTextComponent("Area Effect Block"));
 		
 		this.te = te;
+		this.isAllMobs = te.getBlockState().getValue(AreaEffectBlock.ALL_MOBS);
 	}
 	
 	@Override
 	public void init()
 	{
-		int yOffset = (this.height / 2) - (guiHeight / 2);
+		int yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
 		
 		this.minPosDestinationTextFieldX = new TextFieldWidget(this.font, this.width / 2 - 60, yOffset + 15, 40, 20, new StringTextComponent("X value of min effect pos")); //TODO make these translatable
-		this.minPosDestinationTextFieldX.setValue(String.valueOf(te.getMinEffectPos().getX()));
+		this.minPosDestinationTextFieldX.setValue(String.valueOf(te.getMinAreaOffset().getX()));
 		addButton(minPosDestinationTextFieldX);
 		
 		this.minPosDestinationTextFieldY = new TextFieldWidget(this.font, this.width / 2 - 20, yOffset + 15, 40, 20, new StringTextComponent("Y value of min effect pos"));
-		this.minPosDestinationTextFieldY.setValue(String.valueOf(te.getMinEffectPos().getY()));
+		this.minPosDestinationTextFieldY.setValue(String.valueOf(te.getMinAreaOffset().getY()));
 		addButton(minPosDestinationTextFieldY);
 		
 		this.minPosDestinationTextFieldZ = new TextFieldWidget(this.font, this.width / 2 + 20, yOffset + 15, 40, 20, new StringTextComponent("Z value of min effect pos"));
-		this.minPosDestinationTextFieldZ.setValue(String.valueOf(te.getMinEffectPos().getZ()));
+		this.minPosDestinationTextFieldZ.setValue(String.valueOf(te.getMinAreaOffset().getZ()));
 		addButton(minPosDestinationTextFieldZ);
 		
 		this.maxPosDestinationTextFieldX = new TextFieldWidget(this.font, this.width / 2 - 60, yOffset + 50, 40, 20, new StringTextComponent("X value of max effect pos"));
-		this.maxPosDestinationTextFieldX.setValue(String.valueOf(te.getMaxEffectPos().getX()));
+		this.maxPosDestinationTextFieldX.setValue(String.valueOf(te.getMaxAreaOffset().getX()));
 		addButton(maxPosDestinationTextFieldX);
 		
 		this.maxPosDestinationTextFieldY = new TextFieldWidget(this.font, this.width / 2 - 20, yOffset + 50, 40, 20, new StringTextComponent("Y value of max effect pos"));
-		this.maxPosDestinationTextFieldY.setValue(String.valueOf(te.getMaxEffectPos().getY()));
+		this.maxPosDestinationTextFieldY.setValue(String.valueOf(te.getMaxAreaOffset().getY()));
 		addButton(maxPosDestinationTextFieldY);
 		
 		this.maxPosDestinationTextFieldZ = new TextFieldWidget(this.font, this.width / 2 + 20, yOffset + 50, 40, 20, new StringTextComponent("Z value of max effect pos"));
-		this.maxPosDestinationTextFieldZ.setValue(String.valueOf(te.getMaxEffectPos().getZ()));
+		this.maxPosDestinationTextFieldZ.setValue(String.valueOf(te.getMaxAreaOffset().getZ()));
 		addButton(maxPosDestinationTextFieldZ);
 		
-		addButton(new ExtendedButton(this.width / 2 - 20, yOffset + 73, 40, 20, new StringTextComponent("DONE"), button -> finish()));
+		
+		this.effectTextField = new TextFieldWidget(this.font, this.width / 2 - 65, yOffset + 79, 105, 18, new StringTextComponent("Current Effect"));
+		this.effectTextField.setValue(te.getEffect().getRegistryName().toString());
+		addButton(effectTextField);
+		
+		this.effectAmplifierTextField = new TextFieldWidget(this.font, this.width / 2 + 45, yOffset + 79, 20, 18, new StringTextComponent("Current Effect Amplifier"));
+		this.effectAmplifierTextField.setValue(String.valueOf(te.getEffectAmplifier()));
+		addButton(effectAmplifierTextField);
+		
+		addButton(allMobsButton = new ExtendedButton(this.width / 2 - 65, yOffset + 105, 85, 20, getAllMobsButtonMessage(), button -> cycleIsAllMobs()));
+		
+		addButton(new ExtendedButton(this.width / 2 + 25, yOffset + 105, 40, 20, new StringTextComponent("DONE"), button -> finish()));
+	}
+	
+	private ITextComponent getAllMobsButtonMessage()
+	{
+		return this.isAllMobs ? new StringTextComponent("ALL MOBS") : new StringTextComponent("JUST PLAYERS");
+	}
+	
+	/**
+	 * Cycles between the block affecting all mobs or just players
+	 */
+	private void cycleIsAllMobs()
+	{
+		isAllMobs = !isAllMobs;
+		allMobsButton.setMessage(getAllMobsButtonMessage());
+	}
+	
+	/**
+	 * Returns the current effect type
+	 */
+	private Effect getEffect(String stringInput)
+	{
+		return ForgeRegistries.POTIONS.getValue(ResourceLocation.tryParse(stringInput));
 	}
 	
 	@Override
@@ -75,70 +121,49 @@ public class AreaEffectScreen extends Screen
 	{
 		this.renderBackground(matrixStack);
 		RenderSystem.color4f(1F, 1F, 1F, 1F);
-		this.minecraft.getTextureManager().bind(guiBackground);
-		int yOffset = (this.height / 2) - (guiHeight / 2);
-		this.blit(matrixStack, (this.width / 2) - (guiWidth / 2), yOffset, 0, 0, guiWidth, guiHeight);
-		font.draw(matrixStack, minPosMessage, (width / 2) - font.width(minPosMessage) / 2, yOffset + 5, 0x404040);
-		font.draw(matrixStack, maxPosMessage, (width / 2) - font.width(maxPosMessage) / 2, yOffset + 40, 0x404040);
+		this.minecraft.getTextureManager().bind(GUI_BACKGROUND);
+		int yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
+		this.blit(matrixStack, (this.width / 2) - (GUI_WIDTH / 2), yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
+		font.draw(matrixStack, MIN_POS_MESSAGE, (width / 2) - font.width(MIN_POS_MESSAGE) / 2, yOffset + 5, 0x404040);
+		font.draw(matrixStack, MAX_POS_MESSAGE, (width / 2) - font.width(MAX_POS_MESSAGE) / 2, yOffset + 40, 0x404040);
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
 	}
 	
 	private void finish()
 	{
-		MSPacketHandler.sendToServer(new AreaEffectPacket(parseMinBlockPos(), parseMaxBlockPos(), te.getBlockPos()));
-		onClose();
+		int minX = parseInt(minPosDestinationTextFieldX);
+		int minY = parseInt(minPosDestinationTextFieldY);
+		int minZ = parseInt(minPosDestinationTextFieldZ);
+		int maxX = parseInt(maxPosDestinationTextFieldX);
+		int maxY = parseInt(maxPosDestinationTextFieldY);
+		int maxZ = parseInt(maxPosDestinationTextFieldZ);
+		
+		BlockPos minOffsetPos = new BlockPos(minX, minY, minZ);
+		BlockPos maxOffsetPos = new BlockPos(maxX, maxY, maxZ);
+		
+		if(validInput)
+		{
+			MSPacketHandler.sendToServer(new AreaEffectPacket(getEffect(effectTextField.getValue()), MathHelper.clamp(parseInt(effectAmplifierTextField), 0, 255), isAllMobs, minOffsetPos, maxOffsetPos, te.getBlockPos()));
+			onClose();
+		}
+		
+		validInput = true; //allows players to try again
 	}
 	
-	private static int parseInt(TextFieldWidget widget)
+	private int parseInt(TextFieldWidget widget)
 	{
+		int parsedValue = 0; //arbitrary starting number that will not be used in the packet as is
+		
 		try
 		{
-			return Integer.parseInt(widget.getValue());
+			parsedValue = Integer.parseInt(widget.getValue());
+			widget.setTextColor(0XFFFFFF); //refreshes text color to white in case it was invalid before but is now acceptable
 		} catch(NumberFormatException ignored)
 		{
-			return 0;
+			validInput = false;
+			widget.setTextColor(0XFF0000); //changes text to red to indicate that it is an invalid type
 		}
-	}
-	
-	private BlockPos parseMinBlockPos()
-	{
-		BlockPos tePos = te.getBlockPos();
-		int furthestMinX = tePos.getX() - 64;
-		int furthestMinY = tePos.getY() - 64;
-		int furthestMinZ = tePos.getZ() - 64;
-		int furthestMaxX = tePos.getX() + 64;
-		int furthestMaxY = tePos.getY() + 64;
-		int furthestMaxZ = tePos.getZ() + 64;
 		
-		int x = parseInt(minPosDestinationTextFieldX);
-		int y = parseInt(minPosDestinationTextFieldY);
-		int z = parseInt(minPosDestinationTextFieldZ);
-		
-		x = Math.max(furthestMinX, Math.min(x, furthestMaxX));
-		y = Math.max(furthestMinY, Math.min(y, Math.min(furthestMaxY, te.getLevel().getMaxBuildHeight())));
-		z = Math.max(furthestMinZ, Math.min(z, furthestMaxZ));
-		
-		return new BlockPos(x, y, z);
-	}
-	
-	private BlockPos parseMaxBlockPos()
-	{
-		BlockPos tePos = te.getBlockPos();
-		int furthestMinX = tePos.getX() - 64;
-		int furthestMinY = tePos.getY() - 64;
-		int furthestMinZ = tePos.getZ() - 64;
-		int furthestMaxX = tePos.getX() + 64;
-		int furthestMaxY = tePos.getY() + 64;
-		int furthestMaxZ = tePos.getZ() + 64;
-		
-		int x = parseInt(maxPosDestinationTextFieldX);
-		int y = parseInt(maxPosDestinationTextFieldY);
-		int z = parseInt(maxPosDestinationTextFieldZ);
-		
-		x = Math.min(furthestMaxX, Math.max(x, furthestMinX));
-		y = Math.min(furthestMaxY, Math.max(y, furthestMinY));
-		z = Math.min(furthestMaxZ, Math.max(z, furthestMinZ));
-		
-		return new BlockPos(x, y, z);
+		return parsedValue;
 	}
 }

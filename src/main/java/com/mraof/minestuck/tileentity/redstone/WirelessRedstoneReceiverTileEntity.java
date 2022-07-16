@@ -1,5 +1,6 @@
 package com.mraof.minestuck.tileentity.redstone;
 
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.redstone.WirelessRedstoneReceiverBlock;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import net.minecraft.block.BlockState;
@@ -15,7 +16,6 @@ public class WirelessRedstoneReceiverTileEntity extends TileEntity implements IT
 {
 	private BlockPos lastTransmitterBlockPos;
 	private int lastTransmission;
-	private static final int WIRELESS_CONSTANT = 6;
 	
 	public WirelessRedstoneReceiverTileEntity()
 	{
@@ -28,13 +28,13 @@ public class WirelessRedstoneReceiverTileEntity extends TileEntity implements IT
 		if(level == null || !level.isAreaLoaded(getBlockPos(), 1))
 			return;
 		
-		if(lastTransmission >= WIRELESS_CONSTANT && level.getBlockState(getBlockPos()).getValue(WirelessRedstoneReceiverBlock.AUTO_RESET))
+		if(lastTransmission >= MinestuckConfig.SERVER.puzzleBlockTickRate.get() && level.getBlockState(getBlockPos()).getValue(WirelessRedstoneReceiverBlock.AUTO_RESET))
 		{
 			renewFromLastTransmitter();
 			lastTransmission = 0;
 		}
 		
-		if(lastTransmission < WIRELESS_CONSTANT) //how many ticks since last transmission
+		if(lastTransmission < MinestuckConfig.SERVER.puzzleBlockTickRate.get()) //how many ticks since last transmission
 			lastTransmission++;
 	}
 	
@@ -55,21 +55,30 @@ public class WirelessRedstoneReceiverTileEntity extends TileEntity implements IT
 	 */
 	public void renewFromLastTransmitter()
 	{
-		if(level != null && lastTransmitterBlockPos != null && !level.isClientSide && level.isAreaLoaded(lastTransmitterBlockPos, 1))
+		if(level != null && !level.isClientSide)
 		{
-			TileEntity tileEntity = level.getBlockEntity(lastTransmitterBlockPos);
-			if(tileEntity instanceof WirelessRedstoneTransmitterTileEntity)
+			BlockState state = getBlockState();
+			BlockState unpoweredState = WirelessRedstoneReceiverBlock.setPower(state, 0);
+			
+			if(lastTransmitterBlockPos != null && level.isAreaLoaded(lastTransmitterBlockPos, 1))
 			{
-				WirelessRedstoneTransmitterTileEntity te = (WirelessRedstoneTransmitterTileEntity) tileEntity;
-				
-				te.sendUpdateToPosition(level, getBlockPos());
+				TileEntity tileEntity = level.getBlockEntity(lastTransmitterBlockPos);
+				if(tileEntity instanceof WirelessRedstoneTransmitterTileEntity)
+				{
+					WirelessRedstoneTransmitterTileEntity te = (WirelessRedstoneTransmitterTileEntity) tileEntity;
+					
+					te.sendUpdateToPosition(level, getBlockPos());
+				} else
+				{
+					if(state != unpoweredState)
+						level.setBlock(getBlockPos(), unpoweredState, Constants.BlockFlags.DEFAULT);
+				}
 			} else
 			{
-				level.setBlock(getBlockPos(), level.getBlockState(getBlockPos()).setValue(WirelessRedstoneReceiverBlock.POWER, 0), Constants.BlockFlags.DEFAULT);
+				if(state != unpoweredState)
+					level.setBlock(getBlockPos(), unpoweredState, Constants.BlockFlags.DEFAULT);
 			}
 		}
-		else if(level != null && !level.isClientSide)
-			level.setBlock(getBlockPos(), level.getBlockState(getBlockPos()).setValue(WirelessRedstoneReceiverBlock.POWER, 0), Constants.BlockFlags.DEFAULT);
 	}
 	
 	@Override

@@ -1,6 +1,7 @@
 package com.mraof.minestuck.tileentity.redstone;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.redstone.StatStorerBlock;
 import com.mraof.minestuck.event.AlchemyEvent;
 import com.mraof.minestuck.event.GristDropsEvent;
@@ -13,6 +14,7 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.EntityStruckByLightningEvent;
 import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -82,13 +84,13 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 		if(level == null || !level.isAreaLoaded(worldPosition, 1))
 			return;
 		
-		if(tickCycle % 6 == 1) //6 is wireless constant
+		if(tickCycle % MinestuckConfig.SERVER.puzzleBlockTickRate.get() == 1)
 		{
 			if(!level.isClientSide)
 			{
-				if(getBlockState().getValue(StatStorerBlock.POWER) != Math.min(15, getActiveStoredStatValue() / getDivideValueBy()))
-					level.setBlockAndUpdate(getBlockPos(), getBlockState().setValue(StatStorerBlock.POWER, Math.min(15, getActiveStoredStatValue() / getDivideValueBy())));
-				else level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 2);
+				int moddedStoredValue = Math.min(15, getActiveStoredStatValue() / getDivideValueBy());
+				if(getBlockState().getValue(StatStorerBlock.POWER) != moddedStoredValue)
+					level.setBlock(getBlockPos(), getBlockState().setValue(StatStorerBlock.POWER, moddedStoredValue), Constants.BlockFlags.DEFAULT);
 			}
 			if(tickCycle >= 5000) //setting arbitrarily high value that the tick cannot go past
 				tickCycle = 0;
@@ -274,7 +276,7 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 			changeBlockState = true;
 		}
 		
-		if(changeBlockState)
+		if(changeBlockState && level != null)
 			level.updateNeighborsAt(worldPosition, level.getBlockState(worldPosition).getBlock());
 		
 	}

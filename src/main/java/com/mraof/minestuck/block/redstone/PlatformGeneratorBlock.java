@@ -1,9 +1,10 @@
 package com.mraof.minestuck.block.redstone;
 
+import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.MSDirectionalBlock;
+import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.tileentity.redstone.PlatformGeneratorTileEntity;
-import com.mraof.minestuck.util.ParticlesAroundSolidBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -32,7 +33,9 @@ public class PlatformGeneratorBlock extends MSDirectionalBlock
 {
 	public static final IntegerProperty POWER = BlockStateProperties.POWER;
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED; //used for texture purposes
-	public static final BooleanProperty INVISIBLE_MODE = BlockStateProperties.ENABLED;
+	public static final BooleanProperty INVISIBLE_MODE = MSProperties.MACHINE_TOGGLE;
+	
+	public static final int MAX_GENERATOR_REACH = 16;
 	
 	public PlatformGeneratorBlock(Properties properties)
 	{
@@ -47,7 +50,7 @@ public class PlatformGeneratorBlock extends MSDirectionalBlock
 		{
 			worldIn.setBlock(pos, state.cycle(INVISIBLE_MODE), Constants.BlockFlags.DEFAULT);
 			worldIn.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, state.getValue(INVISIBLE_MODE) ? 1.5F : 0.5F);
-		
+			
 			return ActionResultType.SUCCESS;
 		}
 		
@@ -99,11 +102,32 @@ public class PlatformGeneratorBlock extends MSDirectionalBlock
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
+	public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving)
+	{
+		super.onRemove(state, worldIn, pos, newState, isMoving);
+		
+		Direction facing = state.getValue(FACING);
+		for(int blockIterate = 1; blockIterate < MAX_GENERATOR_REACH; blockIterate++)
+		{
+			BlockPos iteratePos = new BlockPos(pos.relative(facing, blockIterate));
+			
+			if(!worldIn.isAreaLoaded(pos, blockIterate) || World.isOutsideBuildHeight(iteratePos.getY()))
+				break;
+			
+			BlockState iterateBlockState = worldIn.getBlockState(iteratePos);
+			
+			if(iterateBlockState.getBlock() instanceof PlatformBlock)
+				PlatformBlock.updateSurvival(iterateBlockState, worldIn, iteratePos);
+		}
+	}
+	
+	@Override
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
 	{
 		if(rand.nextInt(15) < stateIn.getValue(POWER))
 		{
-			ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE);
+			BlockUtil.spawnParticlesAroundSolidBlock(worldIn, pos, () -> RedstoneParticleData.REDSTONE);
 		}
 	}
 	

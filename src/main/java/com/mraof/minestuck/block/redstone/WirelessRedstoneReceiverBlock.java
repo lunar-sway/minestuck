@@ -1,9 +1,9 @@
 package com.mraof.minestuck.block.redstone;
 
+import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.tileentity.redstone.WirelessRedstoneReceiverTileEntity;
-import com.mraof.minestuck.util.ParticlesAroundSolidBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalBlock;
@@ -33,7 +33,7 @@ public class WirelessRedstoneReceiverBlock extends HorizontalBlock
 {
 	public static final IntegerProperty POWER = BlockStateProperties.POWER;
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED; //used for texture purposes
-	public static final BooleanProperty AUTO_RESET = MSProperties.AUTO_RESET;
+	public static final BooleanProperty AUTO_RESET = MSProperties.MACHINE_TOGGLE;
 	
 	public static final String NOW_AUTO = "minestuck.receiver_now_auto_reset";
 	public static final String NOW_NOT_AUTO = "minestuck.receiver_now_not_auto_reset";
@@ -93,15 +93,10 @@ public class WirelessRedstoneReceiverBlock extends HorizontalBlock
 	{
 		BlockState receiverState = worldIn.getBlockState(posIn);
 		int newPower = worldIn.getBlockState(transmitterPos).getValue(WirelessRedstoneTransmitterBlock.POWER);
-		//worldIn.setBlock(posIn, worldIn.getBlockState(transmitterPos).setValue(POWER, newPower), Constants.BlockFlags.NOTIFY_NEIGHBORS);
 		
-		if(receiverState.getValue(POWER) != newPower)
-			worldIn.setBlockAndUpdate(posIn, receiverState.setValue(POWER, newPower));
-		else worldIn.sendBlockUpdated(posIn, receiverState, receiverState, 2);
-		
-		if(receiverState.getValue(POWERED) != newPower > 0)
-			worldIn.setBlockAndUpdate(posIn, receiverState.setValue(POWERED, newPower > 0));
-		else worldIn.sendBlockUpdated(posIn, receiverState, receiverState, 2);
+		BlockState newState = setPower(receiverState, newPower);
+		if(receiverState != newState)
+			worldIn.setBlockAndUpdate(posIn, newState);
 		
 		TileEntity tileEntity = worldIn.getBlockEntity(posIn);
 		if(tileEntity instanceof WirelessRedstoneReceiverTileEntity)
@@ -109,6 +104,11 @@ public class WirelessRedstoneReceiverBlock extends HorizontalBlock
 			WirelessRedstoneReceiverTileEntity te = (WirelessRedstoneReceiverTileEntity) tileEntity;
 			te.setLastTransmitterBlockPos(transmitterPos);
 		}
+	}
+	
+	public static BlockState setPower(BlockState state, int newPower)
+	{
+		return state.setValue(POWER, newPower).setValue(POWERED, newPower > 0);
 	}
 	
 	@Override
@@ -134,7 +134,7 @@ public class WirelessRedstoneReceiverBlock extends HorizontalBlock
 	{
 		if(rand.nextInt(15) < stateIn.getValue(POWER))
 		{
-			ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE);
+			BlockUtil.spawnParticlesAroundSolidBlock(worldIn, pos, () -> RedstoneParticleData.REDSTONE);
 		}
 	}
 	

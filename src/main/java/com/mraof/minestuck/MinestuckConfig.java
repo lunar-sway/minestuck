@@ -62,6 +62,7 @@ public class MinestuckConfig
 		public final ConfigValue<List<String>> forbiddenDimensionTypesTpz;
 		public final BooleanValue disableGristWidget;
 		public final IntValue alchemiterMaxStacks;
+		public final IntValue puzzleBlockTickRate;
 		
 		//Medium
 		public final BooleanValue canBreakGates;
@@ -197,6 +198,8 @@ public class MinestuckConfig
 					.define("disableGristWidget",false);
 			alchemiterMaxStacks = builder.comment("The number of stacks that can be alchemized at the same time with the alchemiter.")
 					.defineInRange("alchemiterMaxStacks",16,0,999);
+			puzzleBlockTickRate = builder.comment("How often puzzle/redstone related blocks such as the remote observer tick.")
+					.defineInRange("puzzleBlockTickRate",6,2,10);
 			cruxtruderIntake = builder.comment("If enabled, the regular cruxtruder will require raw cruxite to function, which is inserted through the pipe.")
 					.define("cruxtruderIntake",true);
 			forbiddenWorldsTpz = builder.comment("A list of worlds that you cannot travel to or from using transportalizers.")

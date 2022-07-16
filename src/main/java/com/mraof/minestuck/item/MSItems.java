@@ -833,9 +833,14 @@ public class MSItems
 		registerItemBlock(registry, ITEM_MAGNET, MSItemGroup.MAIN);
 		registerItemBlock(registry, REDSTONE_CLOCK, MSItemGroup.MAIN);
 		registerItemBlock(registry, ROTATOR, MSItemGroup.MAIN);
+		registerItemBlock(registry, TOGGLER, MSItemGroup.MAIN);
+		registerItemBlock(registry, REMOTE_COMPARATOR, MSItemGroup.LANDS);
+		registerItemBlock(registry, STRUCTURE_CORE, MSItemGroup.LANDS);
 		registerItemBlock(registry, FALL_PAD, MSItemGroup.MAIN);
 		registerItemBlock(registry, FRAGILE_STONE, MSItemGroup.MAIN);
 		registerItemBlock(registry, RETRACTABLE_SPIKES, MSItemGroup.MAIN);
+		registerItemBlock(registry, BLOCK_PRESSURE_PLATE, MSItemGroup.MAIN);
+		registerItemBlock(registry, PUSHABLE_BLOCK, MSItemGroup.LANDS);
 		registerItemBlock(registry, AND_GATE_BLOCK, MSItemGroup.LANDS);
 		registerItemBlock(registry, OR_GATE_BLOCK, MSItemGroup.LANDS);
 		registerItemBlock(registry, XOR_GATE_BLOCK, MSItemGroup.LANDS);

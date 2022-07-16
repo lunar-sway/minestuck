@@ -1,8 +1,10 @@
 package com.mraof.minestuck.tileentity.redstone;
 
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.redstone.WirelessRedstoneReceiverBlock;
 import com.mraof.minestuck.block.redstone.WirelessRedstoneTransmitterBlock;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
+import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
@@ -10,6 +12,7 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.INameable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
@@ -19,7 +22,7 @@ import net.minecraftforge.common.util.Constants;
 
 public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements INameable, ITickableTileEntity
 {
-	private BlockPos destBlockPos;
+	private BlockPos offsetPos = new BlockPos(0, 0, 0);
 	private int tickCycle;
 	
 	public WirelessRedstoneTransmitterTileEntity()
@@ -33,7 +36,7 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 		if(level == null || !level.isAreaLoaded(getBlockPos(), 1))
 			return;
 		
-		if(tickCycle >= 6) //6 is wireless constant
+		if(tickCycle >= MinestuckConfig.SERVER.puzzleBlockTickRate.get())
 		{
 			sendUpdateToPosition();
 			tickCycle = 0;
@@ -42,20 +45,23 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 		tickCycle++;
 	}
 	
-	public BlockPos getDestinationBlockPos()
+	public BlockPos getDestinationBlockPosFromOffset()
 	{
-		if(destBlockPos == null)
-			destBlockPos = new BlockPos(0, 0, 0);
-		return destBlockPos;
+		Direction stateFacing = getBlockState().getValue(WirelessRedstoneTransmitterBlock.FACING);
+		
+		return this.getBlockPos().offset(offsetPos.rotate(MSRotationUtil.rotationBetween(Direction.NORTH, stateFacing))); //changes from  north facing to the facing direction
 	}
 	
-	public void setDestinationBlockPos(BlockPos destinationPosIn)
+	public void setOffsetFromDestinationBlockPos(BlockPos destinationPosIn, BlockState blockState)
 	{
-		this.destBlockPos = destinationPosIn;
+		Direction facing = blockState.getValue(WirelessRedstoneTransmitterBlock.FACING);
+		
+		this.offsetPos = destinationPosIn.subtract(worldPosition).rotate(MSRotationUtil.rotationBetween(facing, Direction.NORTH)); //changes from the facing direction to north facing
 	}
 	
 	private void sendUpdateToPosition() //for internal use
 	{
+		BlockPos destBlockPos = getDestinationBlockPosFromOffset();
 		if(destBlockPos != null && level != null && !level.isClientSide && level.isAreaLoaded(destBlockPos, 1))
 		{
 			((WirelessRedstoneTransmitterBlock) getBlockState().getBlock()).updatePower(level, getBlockPos());
@@ -73,7 +79,7 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 	{
 		if(destBlockPos != null && worldIn != null && !worldIn.isClientSide && worldIn.isAreaLoaded(destBlockPos, 1))
 		{
-			if(destBlockPos.equals(this.destBlockPos))
+			if(destBlockPos.equals(getDestinationBlockPosFromOffset()))
 			{
 				BlockState blockStateIn = worldIn.getBlockState(destBlockPos);
 				if(blockStateIn.getBlock() instanceof WirelessRedstoneReceiverBlock)
@@ -86,7 +92,9 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 				BlockState blockStateIn = worldIn.getBlockState(destBlockPos);
 				if(blockStateIn.getBlock() instanceof WirelessRedstoneReceiverBlock)
 				{
-					worldIn.setBlock(destBlockPos, blockStateIn.setValue(WirelessRedstoneReceiverBlock.POWER, 0), Constants.BlockFlags.DEFAULT);
+					BlockState newState = WirelessRedstoneReceiverBlock.setPower(blockStateIn, 0);
+					if(blockStateIn != newState)
+						worldIn.setBlock(destBlockPos, newState, Constants.BlockFlags.DEFAULT);
 				}
 			}
 		}
@@ -127,10 +135,20 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 		super.load(state, compound);
 		
 		tickCycle = compound.getInt("tickCycle");
-		int destX = compound.getInt("destX");
-		int destY = compound.getInt("destY");
-		int destZ = compound.getInt("destZ");
-		this.destBlockPos = new BlockPos(destX, destY, destZ);
+		
+		if(compound.contains("destX") && compound.contains("destY") && compound.contains("destZ")) //backwards-portability to the destination based method first utilized
+		{
+			int destX = compound.getInt("destX");
+			int destY = compound.getInt("destY");
+			int destZ = compound.getInt("destZ");
+			setOffsetFromDestinationBlockPos(new BlockPos(destX, destY, destZ), state);
+		} else
+		{
+			int offsetX = compound.getInt("offsetX");
+			int offsetY = compound.getInt("offsetY");
+			int offsetZ = compound.getInt("offsetZ");
+			this.offsetPos = new BlockPos(offsetX, offsetY, offsetZ);
+		}
 	}
 	
 	@Override
@@ -140,11 +158,9 @@ public class WirelessRedstoneTransmitterTileEntity extends TileEntity implements
 		
 		compound.putInt("tickCycle", tickCycle);
 		
-		getDestinationBlockPos();
-		
-		compound.putInt("destX", destBlockPos.getX());
-		compound.putInt("destY", destBlockPos.getY());
-		compound.putInt("destZ", destBlockPos.getZ());
+		compound.putInt("offsetX", offsetPos.getX());
+		compound.putInt("offsetY", offsetPos.getY());
+		compound.putInt("offsetZ", offsetPos.getZ());
 		
 		return compound;
 	}

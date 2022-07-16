@@ -1,4 +1,4 @@
-package com.mraof.minestuck.util;
+package com.mraof.minestuck.block;
 
 import net.minecraft.particles.IParticleData;
 import net.minecraft.util.Direction;
@@ -8,9 +8,22 @@ import net.minecraft.world.World;
 import java.util.Random;
 import java.util.function.Supplier;
 
-public class ParticlesAroundSolidBlock
+public class BlockUtil
 {
-	public static void spawnParticles(World worldIn, BlockPos pos, Supplier<IParticleData> particle)
+	public static boolean hasSignalNotFromFacing(World worldIn, BlockPos pos, Direction stateFacing)
+	{
+		for(Direction direction : Direction.values()) //checks for a signal in any direction except the one it is facing
+		{
+			if(direction != stateFacing && worldIn.hasSignal(pos.relative(direction), direction))
+			{
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public static void spawnParticlesAroundSolidBlock(World worldIn, BlockPos pos, Supplier<IParticleData> particle)
 	{
 		Random random = worldIn.random;
 		

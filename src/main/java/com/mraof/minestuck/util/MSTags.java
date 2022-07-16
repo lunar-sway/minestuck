@@ -39,7 +39,9 @@ public class MSTags
 		public static final Tags.IOptionalNamedTag<Block> DIAMOND_ORES = tag("ores/diamond");
 		public static final Tags.IOptionalNamedTag<Block> CRUXITE_STORAGE_BLOCKS = tag("storage_blocks/cruxite");
 		public static final Tags.IOptionalNamedTag<Block> END_SAPLING_DIRT = tag("end_sapling_dirt");
-		public static final Tags.IOptionalNamedTag<Block> RULE_EXEMPT_ROTATABLE = tag("rule_exempt_rotatable");
+		public static final Tags.IOptionalNamedTag<Block> ROTATOR_WHITELISTED = tag("rule_exempt_rotatable");
+		public static final Tags.IOptionalNamedTag<Block> PLATFORM_ABSORBING = tag("platform_absorbing");
+		public static final Tags.IOptionalNamedTag<Block> PUSHABLE_BLOCK_REPLACABLE = tag("portable_block_replacable");
 		
 		private static Tags.IOptionalNamedTag<Block> tag(String name)
 		{
@@ -110,6 +112,7 @@ public class MSTags
 		public static final Tags.IOptionalNamedTag<EntityType<?>> BISHOPS = tag("carapacians/bishop");
 		public static final Tags.IOptionalNamedTag<EntityType<?>> ROOKS = tag("carapacians/rook");
 		public static final Tags.IOptionalNamedTag<EntityType<?>> MAGNET_RECEPTIVE = tag("magnet_receptive");
+		public static final Tags.IOptionalNamedTag<EntityType<?>> REMOTE_OBSERVER_BLACKLIST = tag("remote_observer_blacklist");
 		
 		private static Tags.IOptionalNamedTag<EntityType<?>> tag(String name)
 		{

@@ -1,6 +1,8 @@
 package com.mraof.minestuck.block.redstone;
 
 import com.mraof.minestuck.block.MSDirectionalBlock;
+import com.mraof.minestuck.block.MSProperties;
+import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,7 +22,7 @@ import net.minecraftforge.common.util.Constants;
 public class RotatorBlock extends MSDirectionalBlock
 {
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
-	public static final BooleanProperty ROTATION_FLIPPED = BlockStateProperties.INVERTED;
+	public static final BooleanProperty ROTATION_FLIPPED = MSProperties.MACHINE_TOGGLE;
 	
 	public RotatorBlock(Properties properties)
 	{
@@ -60,7 +62,8 @@ public class RotatorBlock extends MSDirectionalBlock
 		if(!worldIn.isClientSide)
 		{
 			BlockState state = worldIn.getBlockState(pos);
-			boolean hasPower = worldIn.hasNeighborSignal(pos);
+			Direction stateFacing = state.getValue(FACING);
+			boolean hasPower = BlockUtil.hasSignalNotFromFacing(worldIn, pos, stateFacing);
 			
 			boolean isPoweredBeforeUpdate = state.getValue(POWERED);
 			
@@ -78,7 +81,7 @@ public class RotatorBlock extends MSDirectionalBlock
 					rotatedFacingState = facingState.rotate(worldIn, facingPos, Rotation.CLOCKWISE_90);
 				
 				if((rotatedFacingState.canSurvive(worldIn, pos) && !rotatedFacingState.hasLargeCollisionShape() && (PistonBlock.isPushable(rotatedFacingState, worldIn, facingPos, null, false, null)) ||
-						(rotatedFacingState.getBlock() instanceof MSDirectionalBlock || MSTags.Blocks.RULE_EXEMPT_ROTATABLE.contains(rotatedFacingState.getBlock()))))
+						MSTags.Blocks.ROTATOR_WHITELISTED.contains(rotatedFacingState.getBlock())))
 					worldIn.setBlockAndUpdate(facingPos, rotatedFacingState);
 			}
 		}

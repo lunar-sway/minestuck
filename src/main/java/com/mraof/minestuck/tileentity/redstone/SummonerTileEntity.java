@@ -5,29 +5,25 @@ import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.Constants;
 
-import javax.annotation.Nullable;
 import java.util.Optional;
 
 public class SummonerTileEntity extends TileEntity implements ITickableTileEntity
 {
 	private EntityType<?> summonType;
 	private int cooldownTimer;
-	
-	public static final String SUMMON_TYPE_CHANGE = "block.minestuck.summoner_block.summon_type_change";
+	private int summonRange = 8; //default is 8, but can be set(via gui) between 1 and 64
 	
 	public SummonerTileEntity()
 	{
@@ -60,10 +56,10 @@ public class SummonerTileEntity extends TileEntity implements ITickableTileEntit
 			for(int i = 0; i < 60; i++) //arbitrarily high
 			{
 				iterateTracker = i;
-				double newPosX = summonerBlockPos.getX() + (worldIn.random.nextDouble() - 0.5D) * 16.0D;
-				double newPosY = summonerBlockPos.getY() + (worldIn.random.nextDouble() - 0.5D) * 16.0D;
-				double newPosZ = summonerBlockPos.getZ() + (worldIn.random.nextDouble() - 0.5D) * 16.0D;
-				if(worldIn.noCollision(type.getAABB(newPosX, newPosY, newPosZ)) && //checks that entity wont suffocate //getAABB was getBoundingBoxWithSizeApplied
+				double newPosX = summonerBlockPos.getX() + (worldIn.random.nextDouble() - 0.5D) * summonRange;
+				double newPosY = summonerBlockPos.getY() + (worldIn.random.nextDouble() - 0.5D) * summonRange;
+				double newPosZ = summonerBlockPos.getZ() + (worldIn.random.nextDouble() - 0.5D) * summonRange;
+				if(worldIn.noCollision(type.getAABB(newPosX, newPosY, newPosZ)) && //checks that entity wont suffocate
 						EntitySpawnPlacementRegistry.checkSpawnRules(type, (IServerWorld) worldIn, SpawnReason.SPAWN_EGG, new BlockPos(newPosX, newPosY, newPosZ), worldIn.getRandom())) //helps spawn entity on a valid floor
 				{
 					BlockPos newBlockPos = new BlockPos(newPosX, newPosY, newPosZ);
@@ -93,12 +89,9 @@ public class SummonerTileEntity extends TileEntity implements ITickableTileEntit
 		}
 	}
 	
-	public void setSummonedEntity(EntityType<?> entityTypeIn, @Nullable PlayerEntity playerEntityIn)
+	public void setSummonedEntity(EntityType<?> entityTypeIn)
 	{
 		this.summonType = entityTypeIn;
-		
-		if(playerEntityIn != null)
-			playerEntityIn.displayClientMessage(new TranslationTextComponent(SUMMON_TYPE_CHANGE, summonType.getRegistryName()), true);
 	}
 	
 	public EntityType<?> getSummonedEntity()
@@ -108,12 +101,25 @@ public class SummonerTileEntity extends TileEntity implements ITickableTileEntit
 		return this.summonType;
 	}
 	
+	public void setSummonRange(int rangeIn)
+	{
+		this.summonRange = MathHelper.clamp(rangeIn, 1, 64);
+	}
+	
+	public int getSummonRange()
+	{
+		return summonRange;
+	}
+	
 	@Override
 	public void load(BlockState state, CompoundNBT compound)
 	{
 		super.load(state, compound);
 		
 		cooldownTimer = compound.getInt("cooldownTimer");
+		if(compound.contains("summonRange", Constants.NBT.TAG_ANY_NUMERIC))
+			this.setSummonRange(compound.getInt("summonRange"));
+		else this.setSummonRange(16); //16 was previously the default
 		Optional<EntityType<?>> attemptedSummonType = EntityType.byString(compound.getString("summonType"));
 		attemptedSummonType.ifPresent(entityType -> summonType = entityType);
 	}
@@ -124,6 +130,7 @@ public class SummonerTileEntity extends TileEntity implements ITickableTileEntit
 		super.save(compound);
 		
 		compound.putInt("cooldownTimer", cooldownTimer);
+		compound.putInt("summonRange", summonRange);
 		compound.putString("summonType", EntityType.getKey(getSummonedEntity()).toString());
 		
 		return compound;

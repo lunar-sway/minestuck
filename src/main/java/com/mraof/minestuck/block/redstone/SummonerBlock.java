@@ -1,5 +1,7 @@
 package com.mraof.minestuck.block.redstone;
 
+import com.mraof.minestuck.block.MSProperties;
+import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.tileentity.redstone.SummonerTileEntity;
 import net.minecraft.block.Block;
@@ -20,7 +22,6 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 
@@ -31,9 +32,8 @@ import javax.annotation.Nullable;
 public class SummonerBlock extends Block
 {
 	public static final BooleanProperty TRIGGERED = BlockStateProperties.TRIGGERED;
-	public static final BooleanProperty UNTRIGGERABLE = BlockStateProperties.ENABLED;
-	
-	public static final String UNTRIGGERABLE_CHANGE_MESSAGE = "untriggerable_change_message";
+	public static final BooleanProperty UNTRIGGERABLE = MSProperties.UNTRIGGERABLE;
+	public static final String SUMMON_TYPE_CHANGE = "block.minestuck.summoner_block.summon_type_change";
 	
 	public SummonerBlock(Properties properties)
 	{
@@ -57,16 +57,22 @@ public class SummonerBlock extends Block
 					SpawnEggItem eggItem = (SpawnEggItem) stackIn.getItem();
 					
 					if(!worldIn.isClientSide)
-						summonerTE.setSummonedEntity(eggItem.getType(stackIn.getTag()), player);
+					{
+						summonerTE.setSummonedEntity(eggItem.getType(stackIn.getTag()));
+						player.displayClientMessage(new TranslationTextComponent(SUMMON_TYPE_CHANGE, eggItem.getType(stackIn.getTag()).getRegistryName()), true);
+					}
+					
+					worldIn.playSound(player, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 1F);
 				}
-			} else if(!worldIn.isClientSide)
+			} else if(worldIn.isClientSide)
 			{
-				boolean newBooleanState = !worldIn.getBlockState(pos).getValue(UNTRIGGERABLE);
-				worldIn.setBlock(pos, worldIn.getBlockState(pos).cycle(SummonerBlock.UNTRIGGERABLE), Constants.BlockFlags.DEFAULT);
-				player.displayClientMessage(new TranslationTextComponent(getDescriptionId() + "." + UNTRIGGERABLE_CHANGE_MESSAGE, !newBooleanState), true);
+				TileEntity tileEntity = worldIn.getBlockEntity(pos);
+				if(tileEntity instanceof SummonerTileEntity)
+				{
+					SummonerTileEntity te = (SummonerTileEntity) tileEntity;
+					MSScreenFactories.displaySummonerScreen(te);
+				}
 			}
-			
-			worldIn.playSound(player, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 1F);
 			
 			return ActionResultType.SUCCESS;
 		}

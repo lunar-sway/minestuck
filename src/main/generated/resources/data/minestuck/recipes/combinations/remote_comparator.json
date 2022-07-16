@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:block_pressure_plate"
+  },
+  "input2": {
+    "item": "minestuck:plutonium_core"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:remote_comparator"
+  }
+}

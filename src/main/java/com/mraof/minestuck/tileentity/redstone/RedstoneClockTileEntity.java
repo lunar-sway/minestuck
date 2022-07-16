@@ -34,6 +34,9 @@ public class RedstoneClockTileEntity extends TileEntity implements ITickableTile
 		if(level == null)
 			return;
 		
+		if(clockSpeed < 20)
+			setClockSpeed(20);
+		
 		if(tickCycle >= clockSpeed)
 		{
 			sendUpdate();
@@ -89,13 +92,6 @@ public class RedstoneClockTileEntity extends TileEntity implements ITickableTile
 	public int getClockSpeed()
 	{
 		return clockSpeed;
-	}
-	
-	@Override
-	public void onLoad()
-	{
-		super.onLoad();
-		this.clockSpeed = 60;
 	}
 	
 	@Override

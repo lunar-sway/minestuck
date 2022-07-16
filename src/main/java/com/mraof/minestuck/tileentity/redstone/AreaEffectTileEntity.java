@@ -14,8 +14,10 @@ import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 
 public class AreaEffectTileEntity extends TileEntity implements ITickableTileEntity
 {
@@ -23,8 +25,9 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 	
 	private Effect effect;
 	private int effectAmplifier;
-	private BlockPos minEffectPos;
-	private BlockPos maxEffectPos;
+	private BlockPos minAreaOffset;
+	private BlockPos maxAreaOffset;
+	private boolean needsTranslation = false;
 	
 	public AreaEffectTileEntity()
 	{
@@ -37,7 +40,7 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 		if(level == null || !level.isAreaLoaded(getBlockPos(), 0))
 			return;
 		
-		if(level.getGameTime() % 80 == 0 && !level.isClientSide && level.getBlockState(getBlockPos()).getBlock() instanceof AreaEffectBlock && getBlockState().getValue(AreaEffectBlock.POWERED))
+		if(level.getGameTime() % 80 == 0 && !level.isClientSide && getBlockState().getValue(AreaEffectBlock.POWERED) && !getBlockState().getValue(AreaEffectBlock.SHUT_DOWN))
 		{
 			giveEntitiesEffect();
 		}
@@ -46,9 +49,17 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 	public void giveEntitiesEffect()
 	{
 		//TODO improve flow/reduce repetition of code by extracting repetitive components into another function
+		BlockPos tePos = getBlockPos();
+		Direction teFacing = getBlockState().getValue(AreaEffectBlock.FACING);
+		if(needsTranslation)
+			translateAbsoluteOffsetToDirectional(teFacing);
+		
+		BlockPos minAreaPos = tePos.relative(teFacing, minAreaOffset.getX()).relative(Direction.UP, minAreaOffset.getY()).relative(teFacing.getClockWise(), minAreaOffset.getZ());
+		BlockPos maxAreaPos = tePos.relative(teFacing, maxAreaOffset.getX()).relative(Direction.UP, maxAreaOffset.getY()).relative(teFacing.getClockWise(), maxAreaOffset.getZ());
+		
 		if(getBlockState().getValue(AreaEffectBlock.ALL_MOBS))
 		{
-			for(LivingEntity livingEntity : level.getLoadedEntitiesOfClass(LivingEntity.class, new AxisAlignedBB(minEffectPos, maxEffectPos)))
+			for(LivingEntity livingEntity : level.getLoadedEntitiesOfClass(LivingEntity.class, new AxisAlignedBB(minAreaPos, maxAreaPos)))
 			{
 				if(effect instanceof CreativeShockEffect) //skips later creative/harmful specific checks as the effect should always be given
 				{
@@ -61,15 +72,12 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 							break;
 					}
 					
-					if(effect.isInstantenous())
-						livingEntity.addEffect(new EffectInstance(effect, 1, effectAmplifier, false, false));
-					else
-						livingEntity.addEffect(new EffectInstance(effect, 120, effectAmplifier, false, false));
+					addEffect(livingEntity);
 				}
 			}
 		} else
 		{
-			for(PlayerEntity playerEntity : level.getLoadedEntitiesOfClass(PlayerEntity.class, new AxisAlignedBB(minEffectPos, maxEffectPos)))
+			for(PlayerEntity playerEntity : level.getLoadedEntitiesOfClass(PlayerEntity.class, new AxisAlignedBB(minAreaPos, maxAreaPos)))
 			{
 				if(effect instanceof CreativeShockEffect) //skips later creative/harmful specific checks as the effect should always be given
 				{
@@ -79,13 +87,15 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 					if(playerEntity.isCreative() && !effect.isBeneficial())
 						break;
 					
-					if(effect.isInstantenous())
-						playerEntity.addEffect(new EffectInstance(effect, 1, effectAmplifier, false, false));
-					else
-						playerEntity.addEffect(new EffectInstance(effect, 120, effectAmplifier, false, false));
+					addEffect(playerEntity);
 				}
 			}
 		}
+	}
+	
+	private void addEffect(LivingEntity livingEntity)
+	{
+		livingEntity.addEffect(new EffectInstance(effect, effect.isInstantenous() ? 1 : 120, effectAmplifier, false, false));
 	}
 	
 	public void setEffect(Effect effectIn, int effectAmplifierIn)
@@ -106,28 +116,135 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 		return this.effectAmplifier;
 	}
 	
-	public void setMinAndMaxEffectPos(BlockPos minEffectPosIn, BlockPos maxEffectPosIn)
+	public void setMinAndMaxEffectPosOffset(BlockPos minAreaOffsetIn, BlockPos maxAreaOffsetIn)
 	{
-		this.minEffectPos = minEffectPosIn;
-		this.maxEffectPos = maxEffectPosIn;
+		this.minAreaOffset = minAreaOffsetIn;
+		this.maxAreaOffset = maxAreaOffsetIn;
+		this.setChanged();
+		level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 0);
 	}
 	
-	public BlockPos getMinEffectPos()
+	/**
+	 * sets the area offset pos values from absolute coordinates of the destination block pos, these values will need further modification before use as it does not factor in rotational properties
+	 */
+	private void setAbsoluteOffsetFromDestinationBlockPos(BlockPos minDestinationPosIn, BlockPos maxDestinationPosIn)
 	{
-		if(minEffectPos == null)
-		{
-			minEffectPos = new BlockPos(this.getBlockPos().offset(-16, -16, -16));
-		}
-		return this.minEffectPos;
+		int minOffsetX = minDestinationPosIn.getX() - worldPosition.getX();
+		int minOffsetY = minDestinationPosIn.getY() - worldPosition.getY();
+		int minOffsetZ = minDestinationPosIn.getZ() - worldPosition.getZ();
+		
+		int maxOffsetX = maxDestinationPosIn.getX() - worldPosition.getX();
+		int maxOffsetY = maxDestinationPosIn.getY() - worldPosition.getY();
+		int maxOffsetZ = maxDestinationPosIn.getZ() - worldPosition.getZ();
+		
+		this.minAreaOffset = new BlockPos(minOffsetX, minOffsetY, minOffsetZ);
+		this.maxAreaOffset = new BlockPos(maxOffsetX, maxOffsetY, maxOffsetZ);
+		this.needsTranslation = true;
 	}
 	
-	public BlockPos getMaxEffectPos()
+	/**
+	 * if the current offset values were set through the backwards compatability function setAbsoluteOffsetFromDestinationBlockPos, this utilizes the blockstate facing direction now that it can be loaded
+	 */
+	private void translateAbsoluteOffsetToDirectional(Direction stateFacing)
 	{
-		if(maxEffectPos == null)
+		int minOffsetX = minAreaOffset.getX();
+		int minOffsetZ = minAreaOffset.getZ();
+		int maxOffsetX = maxAreaOffset.getX();
+		int maxOffsetZ = maxAreaOffset.getZ();
+		
+		int minOffsetModX = minOffsetX;
+		int minOffsetModZ = minOffsetZ;
+		int maxOffsetModX = maxOffsetX;
+		int maxOffsetModZ = maxOffsetZ;
+		
+		if(stateFacing == Direction.NORTH)
 		{
-			maxEffectPos = new BlockPos(this.getBlockPos().offset(16, 16, 16));
+			minOffsetModX = -minOffsetZ;
+			maxOffsetModX = -maxOffsetZ;
+			minOffsetModZ = minOffsetX;
+			maxOffsetModZ = maxOffsetX;
+		} else if(stateFacing == Direction.SOUTH) //Direction.EAST is ignored because it is already as desired
+		{
+			minOffsetModX = minOffsetZ;
+			maxOffsetModX = maxOffsetZ;
+			minOffsetModZ = -minOffsetX;
+			maxOffsetModZ = -maxOffsetX;
+		} else if(stateFacing == Direction.WEST)
+		{
+			minOffsetModX = -minOffsetX;
+			maxOffsetModX = -maxOffsetX;
+			minOffsetModZ = -minOffsetZ;
+			maxOffsetModZ = -maxOffsetZ;
 		}
-		return this.maxEffectPos;
+		
+		this.minAreaOffset = new BlockPos(minOffsetModX, minAreaOffset.getY(), minOffsetModZ);
+		this.maxAreaOffset = new BlockPos(maxOffsetModX, maxAreaOffset.getY(), maxOffsetModZ);
+		
+		this.needsTranslation = false;
+	}
+	
+	public BlockPos getMinAreaOffset()
+	{
+		if(minAreaOffset == null)
+		{
+			minAreaOffset = new BlockPos(-16, -16, -16);
+		}
+		
+		minAreaOffset = parseMinBlockPos(this, minAreaOffset.getX(), minAreaOffset.getY(), minAreaOffset.getZ());
+		
+		return this.minAreaOffset;
+	}
+	
+	public BlockPos getMaxAreaOffset()
+	{
+		if(maxAreaOffset == null)
+		{
+			maxAreaOffset = new BlockPos(16, 16, 16);
+		}
+		
+		maxAreaOffset = parseMaxBlockPos(this, maxAreaOffset.getX(), maxAreaOffset.getY(), maxAreaOffset.getZ());
+		
+		return this.maxAreaOffset;
+	}
+	
+	/**
+	 * Checks to make sure that the minimum effect pos is within legal bounds, defaults to the intended boundary if it is too far away from the block
+	 */
+	public static BlockPos parseMinBlockPos(AreaEffectTileEntity te, int x, int y, int z)
+	{
+		BlockPos tePos = te.getBlockPos();
+		
+		x = Math.max(x, -64);
+		y = Math.max(y, -64);
+		z = Math.max(z, -64);
+		
+		y = MathHelper.clamp(y, -tePos.getY(), te.getLevel().getMaxBuildHeight() - tePos.getY());
+		
+		return new BlockPos(x, y, z);
+	}
+	
+	/**
+	 * Checks to make sure that the maximum effect pos is within legal bounds, defaults to the intended boundary if it is too far away from the block
+	 */
+	public static BlockPos parseMaxBlockPos(AreaEffectTileEntity te, int x, int y, int z)
+	{
+		BlockPos tePos = te.getBlockPos();
+		
+		x = Math.min(x, 64);
+		y = Math.min(y, 64);
+		z = Math.min(z, 64);
+		
+		y = MathHelper.clamp(y, -tePos.getY(), te.getLevel().getMaxBuildHeight() - tePos.getY());
+		
+		return new BlockPos(x, y, z);
+	}
+	
+	@Override
+	public void onLoad()
+	{
+		super.onLoad();
+		getMinAreaOffset(); //used only to update the boundaries in case they go too far
+		getMaxAreaOffset();
 	}
 	
 	@Override
@@ -143,15 +260,27 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 		
 		effectAmplifier = compound.getInt("effectAmplifier");
 		
-		int minEffectPosX = compound.getInt("minEffectPosX");
-		int minEffectPosY = compound.getInt("minEffectPosY");
-		int minEffectPosZ = compound.getInt("minEffectPosZ");
-		this.minEffectPos = new BlockPos(minEffectPosX, minEffectPosY, minEffectPosZ);
+		int minAreaOffsetX = compound.getInt("minAreaOffsetX");
+		int minAreaOffsetY = compound.getInt("minAreaOffsetY");
+		int minAreaOffsetZ = compound.getInt("minAreaOffsetZ");
+		this.minAreaOffset = new BlockPos(minAreaOffsetX, minAreaOffsetY, minAreaOffsetZ);
 		
-		int maxEffectPosX = compound.getInt("maxEffectPosX");
-		int maxEffectPosY = compound.getInt("maxEffectPosY");
-		int maxEffectPosZ = compound.getInt("maxEffectPosZ");
-		this.maxEffectPos = new BlockPos(maxEffectPosX, maxEffectPosY, maxEffectPosZ);
+		int maxAreaOffsetX = compound.getInt("maxAreaOffsetX");
+		int maxAreaOffsetY = compound.getInt("maxAreaOffsetY");
+		int maxAreaOffsetZ = compound.getInt("maxAreaOffsetZ");
+		this.maxAreaOffset = new BlockPos(maxAreaOffsetX, maxAreaOffsetY, maxAreaOffsetZ);
+		
+		if(compound.contains("minEffectPosX") && compound.contains("minEffectPosY") && compound.contains("minEffectPosZ") &&
+				compound.contains("maxEffectPosX") && compound.contains("maxEffectPosY") && compound.contains("maxEffectPosZ")) //backwards-portability to the destination based method first utilized
+		{
+			int minDestX = compound.getInt("minEffectPosX");
+			int minDestY = compound.getInt("minEffectPosY");
+			int minDestZ = compound.getInt("minEffectPosZ");
+			int maxDestX = compound.getInt("maxEffectPosX");
+			int maxDestY = compound.getInt("maxEffectPosY");
+			int maxDestZ = compound.getInt("maxEffectPosZ");
+			setAbsoluteOffsetFromDestinationBlockPos(new BlockPos(minDestX, minDestY, minDestZ), new BlockPos(maxDestX, maxDestY, maxDestZ));
+		}
 	}
 	
 	@Override
@@ -162,16 +291,16 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 		compound.putInt("effect", Effect.getId(getEffect()));
 		compound.putInt("effectAmplifier", effectAmplifier);
 		
-		getMinEffectPos();
-		getMaxEffectPos();
+		getMinAreaOffset();
+		getMaxAreaOffset();
 		
-		compound.putInt("minEffectPosX", minEffectPos.getX());
-		compound.putInt("minEffectPosY", minEffectPos.getY());
-		compound.putInt("minEffectPosZ", minEffectPos.getZ());
+		compound.putInt("minAreaOffsetX", minAreaOffset.getX());
+		compound.putInt("minAreaOffsetY", minAreaOffset.getY());
+		compound.putInt("minAreaOffsetZ", minAreaOffset.getZ());
 		
-		compound.putInt("maxEffectPosX", maxEffectPos.getX());
-		compound.putInt("maxEffectPosY", maxEffectPos.getY());
-		compound.putInt("maxEffectPosZ", maxEffectPos.getZ());
+		compound.putInt("maxAreaOffsetX", maxAreaOffset.getX());
+		compound.putInt("maxAreaOffsetY", maxAreaOffset.getY());
+		compound.putInt("maxAreaOffsetZ", maxAreaOffset.getZ());
 		
 		return compound;
 	}

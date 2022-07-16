@@ -1,6 +1,6 @@
 package com.mraof.minestuck.block.redstone;
 
-import com.mraof.minestuck.util.ParticlesAroundSolidBlock;
+import com.mraof.minestuck.block.BlockUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -90,7 +90,7 @@ public class VariableSolidSwitchBlock extends Block
 	{
 		if(rand.nextInt(15) < stateIn.getValue(POWER))
 		{
-			ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE);
+			BlockUtil.spawnParticlesAroundSolidBlock(worldIn, pos, () -> RedstoneParticleData.REDSTONE);
 		}
 	}
 	

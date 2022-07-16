@@ -40,7 +40,6 @@ import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
 import com.mraof.minestuck.tileentity.machine.*;
 import com.mraof.minestuck.tileentity.redstone.RedstoneClockTileEntity;
-import com.mraof.minestuck.tileentity.redstone.SummonerTileEntity;
 import com.mraof.minestuck.util.MSDamageSources;
 import com.mraof.minestuck.world.GateHandler;
 import com.mraof.minestuck.world.lands.GristLayerInfo;
@@ -408,7 +407,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.TWO_SECOND_INTERVAL_TIMED_SOLID_SWITCH, "Timed Solid Switch (Two Second)");
 		addTooltip(MSBlocks.TWO_SECOND_INTERVAL_TIMED_SOLID_SWITCH, "Loses one value of power every two seconds until it turns off.");
 		add(MSBlocks.SUMMONER, "Summoner");
-		addExtra(MSBlocks.SUMMONER, SummonerBlock.UNTRIGGERABLE_CHANGE_MESSAGE, "Block inactivation after successful summoning now %s.");
 		add(MSBlocks.AREA_EFFECT_BLOCK, "Area Effect Block");
 		addExtra(MSBlocks.AREA_EFFECT_BLOCK, AreaEffectBlock.EFFECT_CHANGE_MESSAGE, "Effect type changed to %s with the amplification strength %s.");
 		add(MSBlocks.PLATFORM_GENERATOR, "Platform Generator");
@@ -417,9 +415,14 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.ITEM_MAGNET, "Item Magnet");
 		add(MSBlocks.REDSTONE_CLOCK, "Redstone Clock");
 		add(MSBlocks.ROTATOR, "Rotator");
+		add(MSBlocks.TOGGLER, "Toggler");
+		add(MSBlocks.REMOTE_COMPARATOR, "Remote Comparator");
+		add(MSBlocks.STRUCTURE_CORE, "Structure Core");
 		add(MSBlocks.FALL_PAD, "Fall Pad");
 		add(MSBlocks.FRAGILE_STONE, "Fragile Stone");
 		add(MSBlocks.RETRACTABLE_SPIKES, "Retractable Spikes");
+		add(MSBlocks.BLOCK_PRESSURE_PLATE, "Block Pressure Plate");
+		add(MSBlocks.PUSHABLE_BLOCK, "Pushable Block");
 		add(MSBlocks.AND_GATE_BLOCK, "AND Gate");
 		add(MSBlocks.OR_GATE_BLOCK, "OR Gate");
 		add(MSBlocks.XOR_GATE_BLOCK, "XOR Gate");
@@ -1522,7 +1525,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(UraniumCookerTileEntity.TITLE, "Cookalyzer");
 		add(SendificatorTileEntity.TITLE, "Sendificator");
 		add(GristWidgetTileEntity.TITLE, "GristWidget 12000");
-		add(SummonerTileEntity.SUMMON_TYPE_CHANGE, "Summoned entity type changed to %s.");
 		add(RedstoneClockTileEntity.TIME_CHANGE, "The clock now pulses every %s seconds");
 		add(GuiUtil.NOT_ALCHEMIZABLE, "Not Alchemizable");
 		add(GuiUtil.FREE, "Free!");
@@ -1575,6 +1577,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(GateHandler.MISSING_LAND, "The land this gate leads to does not exist yet!");
 		add(WirelessRedstoneReceiverBlock.NOW_AUTO, "Receiver will now unpower itself automatically.");
 		add(WirelessRedstoneReceiverBlock.NOW_NOT_AUTO, "Receiver will now store the highest input power indefinitely.");
+		add(SummonerBlock.SUMMON_TYPE_CHANGE, "Summoned entity type changed to %s.");
 		add(HashMapModus.MESSAGE, "[HASHMAP] %s %% %s -> %s");
 		add(ButtonListProgram.CLEAR_BUTTON, "Clear message");
 		add(SburbClient.CLOSE_BUTTON, "Disconnect");

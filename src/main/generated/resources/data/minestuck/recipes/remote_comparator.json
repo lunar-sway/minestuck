@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ici",
+    "oeo",
+    "iii"
+  ],
+  "key": {
+    "e": {
+      "item": "minestuck:plutonium_core"
+    },
+    "o": {
+      "item": "minecraft:observer"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "c": {
+      "item": "minecraft:comparator"
+    }
+  },
+  "result": {
+    "item": "minestuck:remote_comparator"
+  }
+}
