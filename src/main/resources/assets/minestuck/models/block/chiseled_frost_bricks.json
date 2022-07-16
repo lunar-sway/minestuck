@@ -1,6 +1,8 @@
 {
-    "parent": "block/cube_all",
-    "textures": {
-        "all": "minestuck:block/chiseled_frost_bricks"
+    "parent": "block/cube_column",
+    "textures":
+    {
+        "end": "minestuck:block/chiseled_frost_bricks",
+        "side": "minestuck:block/chiseled_frost_bricks_side"
     }
 }
