@@ -99,8 +99,8 @@ public class StructureCoreBlock extends HorizontalBlock
 		if(tileEntity instanceof StructureCoreTileEntity)
 		{
 			StructureCoreTileEntity structureCoreTileEntity = (StructureCoreTileEntity) tileEntity;
-			if(structureCoreTileEntity.getBlockState().getValue(ACTIVE) &&
-					structureCoreTileEntity.getActionType() == StructureCoreTileEntity.ActionType.WRITE) //having the variable hasBeenCompleted changed to true as soon as possible will improve the response speed of READ_AND_WIPE functionality
+			//having the variable hasBeenCompleted changed to true as soon as possible will improve the response speed of READ_AND_WIPE functionality
+			if(structureCoreTileEntity.getBlockState().getValue(ACTIVE) && structureCoreTileEntity.getActionType() == StructureCoreTileEntity.ActionType.WRITE)
 			{
 				((StructureCoreTileEntity) tileEntity).prepForUpdate();
 			}

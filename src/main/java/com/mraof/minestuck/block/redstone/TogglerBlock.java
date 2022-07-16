@@ -78,12 +78,9 @@ public class TogglerBlock extends MSDirectionalBlock
 				BlockState facingState = worldIn.getBlockState(facingPos);
 				
 				if(state.getValue(DISCHARGE))
-				{
 					discharge(worldIn, pos, state, facingPos, facingState);
-				} else
-				{
+				else
 					toggle(worldIn, pos, state, facingPos, facingState);
-				}
 			}
 		}
 	}
@@ -95,9 +92,7 @@ public class TogglerBlock extends MSDirectionalBlock
 			worldIn.setBlock(facingPos, facingState.cycle(MSProperties.MACHINE_TOGGLE), Constants.BlockFlags.DEFAULT);
 			
 			if(!worldIn.getBlockState(pos.relative(state.getValue(FACING).getOpposite())).getBlock().asItem().is(ItemTags.WOOL)) //wont make a toggle sound if the toggler is "muted" by a wool block
-			{
 				worldIn.playSound(null, facingPos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, facingState.getValue(MSProperties.MACHINE_TOGGLE) ? 1.5F : 0.5F);
-			}
 		}
 	}
 	
@@ -121,9 +116,7 @@ public class TogglerBlock extends MSDirectionalBlock
 		}
 		
 		if(updated && !worldIn.getBlockState(pos.relative(state.getValue(FACING).getOpposite())).getBlock().asItem().is(ItemTags.WOOL)) //wont make a toggle sound if the toggler is "muted" by a wool block
-		{
 			worldIn.playSound(null, facingPos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 0.5F);
-		}
 	}
 	
 	@Override

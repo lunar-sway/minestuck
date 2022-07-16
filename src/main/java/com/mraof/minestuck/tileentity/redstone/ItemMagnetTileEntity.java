@@ -51,17 +51,15 @@ public class ItemMagnetTileEntity extends TileEntity implements ITickableTileEnt
 			{
 				Direction magnetFacing = getBlockState().getValue(ItemMagnetBlock.FACING);
 				boolean reversePolarity = getBlockState().getValue(ItemMagnetBlock.REVERSE_POLARITY);
-				//boolean alreadyMovingPortableBlock = false;
 				
-				//TODO figure out if alreadyMovingPortableBlock is worth trying, if trying that then put this section below the entity one
-				if(!level.isClientSide && level.getGameTime() % 5 == 0 &&
-						((magnetFacing == Direction.DOWN && !reversePolarity) || (magnetFacing == Direction.UP && reversePolarity))/* &&
-						!alreadyMovingPortableBlock*/) //will only try turning a portable block into a falling entity if its getting moved upwards and if there is not already a portable block being moved, only does so every quarter second
+				//TODO figure out if alreadyMovingPushableBlock(hypothetical boolean for preventing more than one pushable block from getting moved) is worth trying, if trying that then put this section below the entity one
+				//will only try turning a pushable block into a falling entity if its getting moved upwards, only does so every quarter second
+				if(!level.isClientSide && level.getGameTime() % 5 == 0 && ((magnetFacing == Direction.DOWN && !reversePolarity) || (magnetFacing == Direction.UP && reversePolarity)))
 				{
 					for(int blockIterate = 1; blockIterate < powerIn + 1; blockIterate++)
 					{
 						BlockPos iteratePos = new BlockPos(getBlockPos().relative(magnetFacing, blockIterate));
-						if(!level.isAreaLoaded(getBlockPos(), blockIterate) || World.isOutsideBuildHeight(iteratePos.getY())) //checks for portable blocks to grab up until the world bounds
+						if(!level.isAreaLoaded(getBlockPos(), blockIterate) || World.isOutsideBuildHeight(iteratePos.getY())) //checks for pushable blocks to grab up until the world bounds
 						{
 							break;
 						}

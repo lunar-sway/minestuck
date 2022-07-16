@@ -82,7 +82,7 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 		if(level == null || !level.isAreaLoaded(getBlockPos(), 1))
 			return;
 		
-		if(tickCycle >= MinestuckConfig.SERVER.puzzleBlockTickRate.get() * 1.667) //6 * 1.667 ~= 10 ticks or 0.5 sec
+		if(tickCycle >= MinestuckConfig.SERVER.puzzleBlockTickRate.get() * 1.667) //6 * 1.667 ~= 10 ticks or 0.5 sec by default
 		{
 			checkRelaventType();
 			tickCycle = 0;

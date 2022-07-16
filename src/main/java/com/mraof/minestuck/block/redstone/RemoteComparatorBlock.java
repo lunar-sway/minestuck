@@ -97,13 +97,7 @@ public class RemoteComparatorBlock extends MSDirectionalBlock
 			BlockState checkingState = world.getBlockState(posToCheck);
 			BlockState referenceState = world.getBlockState(comparatorPos.relative(comparatorState.getValue(FACING).getOpposite())); //state behind the comparator
 			
-			if(comparatorState.getValue(CHECK_STATE))
-			{
-				return checkingState == referenceState;
-			} else
-			{
-				return checkingState.getBlock() == referenceState.getBlock();
-			}
+			return comparatorState.getValue(CHECK_STATE) ? checkingState == referenceState : checkingState.getBlock() == referenceState.getBlock();
 		} else
 			return false;
 	}
