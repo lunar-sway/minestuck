@@ -89,6 +89,7 @@ public class TogglerBlock extends MSDirectionalBlock
 	
 	private void toggle(World worldIn, BlockPos pos, BlockState state, BlockPos facingPos, BlockState facingState)
 	{
+		//TODO consider allowing the active type of RemoteObserverTileEntity and StatStorerTileEntity to be iterated while in toggle mode
 		if(facingState.hasProperty(MSProperties.MACHINE_TOGGLE))
 		{
 			worldIn.setBlock(facingPos, facingState.cycle(MSProperties.MACHINE_TOGGLE), Constants.BlockFlags.DEFAULT);

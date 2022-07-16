@@ -49,7 +49,7 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 		IS_ENTITY_ON_GROUND((entity, observer) -> entity.isOnGround()),
 		IS_SPRINTING((entity, observer) -> entity.isSprinting()); //TODO IS_BOSS_PRESENT
 		
-		BiPredicate<Entity, RemoteObserverTileEntity> typeConditions;
+		private final BiPredicate<Entity, RemoteObserverTileEntity> typeConditions;
 		
 		ActiveType(BiPredicate<Entity, RemoteObserverTileEntity> typeConditions)
 		{

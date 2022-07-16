@@ -86,27 +86,24 @@ public class StructureCoreTileEntity extends TileEntity implements ITickableTile
 			
 			for(StructureStart<?> structureStartIterate : structureStarts)
 			{
-				if(structureStartIterate != null)
+				CoreCompatibleScatteredStructurePiece piece = getStructurePiece(structureStartIterate);
+				
+				if(piece != null)
 				{
-					CoreCompatibleScatteredStructurePiece piece = getStructurePiece(structureStartIterate);
-					
-					if(piece != null)
+					if(actionType == ActionType.WRITE)
 					{
-						if(actionType == ActionType.WRITE)
+						writeToStructure(piece);
+					} else if(actionType == ActionType.READ_AND_WIPE)
+					{
+						if(piece.hasBeenCompleted())
 						{
-							writeToStructure(piece);
-						} else if(actionType == ActionType.READ_AND_WIPE)
-						{
-							if(piece.hasBeenCompleted())
-							{
-								wipeSlate();
-							}
-						} else if(actionType == ActionType.READ_AND_REDSTONE)
-						{
-							BlockState newState = getBlockState().setValue(StructureCoreBlock.POWERED, piece.hasBeenCompleted());
-							if(newState != getBlockState())
-								level.setBlockAndUpdate(getBlockPos(), newState);
+							wipeSlate();
 						}
+					} else if(actionType == ActionType.READ_AND_REDSTONE)
+					{
+						BlockState newState = getBlockState().setValue(StructureCoreBlock.POWERED, piece.hasBeenCompleted());
+						if(newState != getBlockState())
+							level.setBlockAndUpdate(getBlockPos(), newState); //TODO this results in the block getting powered based on the state of the last structure piece, find out a more optimal set of mechanics
 					}
 				}
 			}
@@ -124,10 +121,7 @@ public class StructureCoreTileEntity extends TileEntity implements ITickableTile
 				structureStartList.add(potentialStructureStart);
 		}
 		
-		if(!structureStartList.isEmpty())
-			return structureStartList;
-		
-		return null;
+		return structureStartList;
 	}
 	
 	private void writeToStructure(CoreCompatibleScatteredStructurePiece piece)

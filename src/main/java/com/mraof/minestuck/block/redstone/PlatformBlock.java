@@ -92,9 +92,8 @@ public class PlatformBlock extends MSDirectionalBlock
 				{
 					boolean generatorSetToInvisible = supportingState.getValue(PlatformGeneratorBlock.INVISIBLE_MODE);
 					boolean thisSetToInvisible = state.getValue(INVISIBLE);
-					boolean differentInvisibilityStatuses = generatorSetToInvisible != thisSetToInvisible;
 					
-					if(differentInvisibilityStatuses)
+					if(generatorSetToInvisible != thisSetToInvisible)
 						world.setBlockAndUpdate(pos, state.setValue(INVISIBLE, generatorSetToInvisible)); //TODO Visible platforms should override invisible ones
 				}
 			}
