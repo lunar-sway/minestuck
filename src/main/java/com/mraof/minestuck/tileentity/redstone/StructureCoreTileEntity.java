@@ -18,6 +18,7 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -81,39 +82,50 @@ public class StructureCoreTileEntity extends TileEntity implements ITickableTile
 		if(level != null && level.isAreaLoaded(getBlockPos(), 1) && getBlockState().getValue(StructureCoreBlock.ACTIVE))
 		{
 			StructureManager structureManager = ((ServerWorld) level).structureFeatureManager();
-			StructureStart<?> structureStart = getStructureStart(structureManager);
-			if(structureStart != null && structureStart.isValid())
+			List<StructureStart<?>> structureStarts = getStructureStarts(structureManager);
+			
+			for(StructureStart<?> structureStartIterate : structureStarts)
 			{
-				CoreCompatibleScatteredStructurePiece piece = getStructurePiece(structureStart);
-				
-				if(piece != null)
+				if(structureStartIterate != null)
 				{
-					if(actionType == ActionType.WRITE)
+					CoreCompatibleScatteredStructurePiece piece = getStructurePiece(structureStartIterate);
+					
+					if(piece != null)
 					{
-						writeToStructure(piece);
-					} else if(actionType == ActionType.READ_AND_WIPE)
-					{
-						if(piece.hasBeenCompleted())
+						if(actionType == ActionType.WRITE)
 						{
-							wipeSlate();
+							writeToStructure(piece);
+						} else if(actionType == ActionType.READ_AND_WIPE)
+						{
+							if(piece.hasBeenCompleted())
+							{
+								wipeSlate();
+							}
+						} else if(actionType == ActionType.READ_AND_REDSTONE)
+						{
+							BlockState newState = getBlockState().setValue(StructureCoreBlock.POWERED, piece.hasBeenCompleted());
+							if(newState != getBlockState())
+								level.setBlockAndUpdate(getBlockPos(), newState);
 						}
-					} else if(actionType == ActionType.READ_AND_REDSTONE)
-					{
-						BlockState newState = getBlockState().setValue(StructureCoreBlock.POWERED, piece.hasBeenCompleted());
-						if(newState != getBlockState())
-							level.setBlockAndUpdate(getBlockPos(), newState);
 					}
 				}
 			}
 		}
 	}
 	
-	public StructureStart<?> getStructureStart(StructureManager structureManager)
+	public List<StructureStart<?>> getStructureStarts(StructureManager structureManager)
 	{
+		List<StructureStart<?>> structureStartList = new ArrayList<>();
 		for(Structure<?> structureListIterate : SOLVABLE_STRUCTURES)
 		{
-			return structureManager.getStructureAt(getBlockPos(), true, structureListIterate);
+			StructureStart<?> potentialStructureStart = structureManager.getStructureAt(getBlockPos(), true, structureListIterate);
+			
+			if(potentialStructureStart.isValid())
+				structureStartList.add(potentialStructureStart);
 		}
+		
+		if(!structureStartList.isEmpty())
+			return structureStartList;
 		
 		return null;
 	}
