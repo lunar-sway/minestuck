@@ -1,29 +1,29 @@
 package com.mraof.minestuck.inventory;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.IWorldPosCallable;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.items.IItemHandler;
 
 import java.util.Objects;
 
-public abstract class MachineContainer extends Container
+public abstract class MachineContainer extends AbstractContainerMenu
 {
 	
-	private final IIntArray parameters;
+	private final ContainerData parameters;
 	@Deprecated
 	public final BlockPos machinePos;	//TODO replace this by a check to the open container server-side
-	protected final IWorldPosCallable position;
+	protected final ContainerLevelAccess access;
 	
-	protected MachineContainer(ContainerType<?> type, int id, IIntArray parameters, IWorldPosCallable position, BlockPos machinePos)
+	protected MachineContainer(MenuType<?> type, int id, ContainerData parameters, ContainerLevelAccess access, BlockPos machinePos)
 	{
 		super(type, id);
 		this.machinePos = Objects.requireNonNull(machinePos);
-		this.position = Objects.requireNonNull(position);
+		this.access = Objects.requireNonNull(access);
 		
 		checkContainerDataCount(parameters, 3);
 		this.parameters = parameters;
@@ -34,9 +34,9 @@ public abstract class MachineContainer extends Container
 	protected abstract Block getValidBlock();
 	
 	@Override
-	public boolean stillValid(PlayerEntity playerIn)
+	public boolean stillValid(Player playerIn)
 	{
-		return stillValid(position, playerIn, getValidBlock());
+		return stillValid(access, playerIn, getValidBlock());
 	}
 	
 	public void setOverrideStop(boolean value)
@@ -59,9 +59,9 @@ public abstract class MachineContainer extends Container
 		return parameters.get(1) != 0;
 	}
 	
-	public IWorldPosCallable getPosition()
+	public ContainerLevelAccess getPosition()
 	{
-		return position;
+		return access;
 	}
 	
 	protected static void assertItemHandlerSize(IItemHandler handler, int minSize)

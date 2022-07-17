@@ -6,18 +6,13 @@ import com.mraof.minestuck.inventory.slot.OutputSlot;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.tileentity.machine.MiniAlchemiterTileEntity;
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.IWorldPosCallable;
-import net.minecraft.util.IntArray;
-import net.minecraft.util.IntReferenceHolder;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.*;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.registries.ForgeRegistry;
@@ -32,21 +27,21 @@ public class MiniAlchemiterContainer extends MachineContainer
 	private static final int OUTPUT_X = 135;
 	private static final int OUTPUT_Y = 20;
 	
-	private final IntReferenceHolder wildcardHolder;
+	private final DataSlot wildcardHolder;
 	
-	public MiniAlchemiterContainer(int windowId, PlayerInventory playerInventory, PacketBuffer buffer)
+	public MiniAlchemiterContainer(int windowId, Inventory playerInventory, FriendlyByteBuf buffer)
 	{
-		this(MSContainerTypes.MINI_ALCHEMITER, windowId, playerInventory, new ItemStackHandler(2), new IntArray(3), IntReferenceHolder.standalone(), IWorldPosCallable.NULL, buffer.readBlockPos());
+		this(MSContainerTypes.MINI_ALCHEMITER, windowId, playerInventory, new ItemStackHandler(2), new SimpleContainerData(3), DataSlot.standalone(), ContainerLevelAccess.NULL, buffer.readBlockPos());
 	}
 	
-	public MiniAlchemiterContainer(int windowId, PlayerInventory playerInventory, IItemHandler inventory, IIntArray parameters, IntReferenceHolder wildcardHolder, IWorldPosCallable position, BlockPos machinePos)
+	public MiniAlchemiterContainer(int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, DataSlot wildcardHolder, ContainerLevelAccess access, BlockPos machinePos)
 	{
-		this(MSContainerTypes.MINI_ALCHEMITER, windowId, playerInventory, inventory, parameters, wildcardHolder, position, machinePos);
+		this(MSContainerTypes.MINI_ALCHEMITER, windowId, playerInventory, inventory, parameters, wildcardHolder, access, machinePos);
 	}
 	
-	public MiniAlchemiterContainer(ContainerType<? extends MiniAlchemiterContainer> type, int windowId, PlayerInventory playerInventory, IItemHandler inventory, IIntArray parameters, IntReferenceHolder wildcardHolder, IWorldPosCallable position, BlockPos machinePos)
+	public MiniAlchemiterContainer(MenuType<? extends MiniAlchemiterContainer> type, int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, DataSlot wildcardHolder, ContainerLevelAccess access, BlockPos machinePos)
 	{
-		super(type, windowId, parameters, position, machinePos);
+		super(type, windowId, parameters, access, machinePos);
 		
 		assertItemHandlerSize(inventory, 2);
 		this.wildcardHolder = wildcardHolder;
@@ -64,7 +59,7 @@ public class MiniAlchemiterContainer extends MachineContainer
 		return MSBlocks.MINI_ALCHEMITER;
 	}
 	
-	protected void bindPlayerInventory(PlayerInventory playerInventory)
+	protected void bindPlayerInventory(Inventory playerInventory)
 	{
 		for (int i = 0; i < 3; i++)
 			for (int j = 0; j < 9; j++)
@@ -77,13 +72,13 @@ public class MiniAlchemiterContainer extends MachineContainer
 	
 	@Nonnull
 	@Override
-	public ItemStack quickMoveStack(PlayerEntity player, int slotNumber)
+	public ItemStack quickMoveStack(Player player, int slotNumber)
 	{
 		ItemStack itemstack = ItemStack.EMPTY;
 		Slot slot = this.slots.get(slotNumber);
 		int allSlots = this.slots.size();
 		
-		if(slot != null && slot.hasItem())
+		if(slot.hasItem())
 		{
 			ItemStack itemstackOrig = slot.getItem();
 			itemstack = itemstackOrig.copy();

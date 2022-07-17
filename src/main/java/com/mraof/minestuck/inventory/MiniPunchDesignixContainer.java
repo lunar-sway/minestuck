@@ -5,17 +5,13 @@ import com.mraof.minestuck.inventory.slot.InputSlot;
 import com.mraof.minestuck.inventory.slot.OutputSlot;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.IWorldPosCallable;
-import net.minecraft.util.IntArray;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.*;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -32,19 +28,19 @@ public class MiniPunchDesignixContainer extends MachineContainer
 	private static final int designixOutputX = 116;
 	private static final int designixOutputY = 37;
 	
-	public MiniPunchDesignixContainer(int windowId, PlayerInventory playerInventory, PacketBuffer buffer)
+	public MiniPunchDesignixContainer(int windowId, Inventory playerInventory, FriendlyByteBuf buffer)
 	{
-		this(MSContainerTypes.MINI_PUNCH_DESIGNIX, windowId, playerInventory, new ItemStackHandler(3), new IntArray(3), IWorldPosCallable.NULL, buffer.readBlockPos());
+		this(MSContainerTypes.MINI_PUNCH_DESIGNIX, windowId, playerInventory, new ItemStackHandler(3), new SimpleContainerData(3), ContainerLevelAccess.NULL, buffer.readBlockPos());
 	}
 	
-	public MiniPunchDesignixContainer(int windowId, PlayerInventory playerInventory, IItemHandler inventory, IIntArray parameters, IWorldPosCallable position, BlockPos machinePos)
+	public MiniPunchDesignixContainer(int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, ContainerLevelAccess access, BlockPos machinePos)
 	{
-		this(MSContainerTypes.MINI_PUNCH_DESIGNIX, windowId, playerInventory, inventory, parameters, position, machinePos);
+		this(MSContainerTypes.MINI_PUNCH_DESIGNIX, windowId, playerInventory, inventory, parameters, access, machinePos);
 	}
 	
-	public MiniPunchDesignixContainer(ContainerType<? extends MiniPunchDesignixContainer> type, int windowId, PlayerInventory playerInventory, IItemHandler inventory, IIntArray parameters, IWorldPosCallable position, BlockPos machinePos)
+	public MiniPunchDesignixContainer(MenuType<? extends MiniPunchDesignixContainer> type, int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, ContainerLevelAccess access, BlockPos machinePos)
 	{
-		super(type, windowId, parameters, position, machinePos);
+		super(type, windowId, parameters, access, machinePos);
 		
 		assertItemHandlerSize(inventory, 3);
 		
@@ -61,7 +57,7 @@ public class MiniPunchDesignixContainer extends MachineContainer
 		return MSBlocks.MINI_PUNCH_DESIGNIX;
 	}
 	
-	protected void bindPlayerInventory(PlayerInventory playerInventory)
+	protected void bindPlayerInventory(Inventory playerInventory)
 	{
 		for (int i = 0; i < 3; i++)
 			for (int j = 0; j < 9; j++)
@@ -74,13 +70,13 @@ public class MiniPunchDesignixContainer extends MachineContainer
 	
 	@Nonnull
 	@Override
-	public ItemStack quickMoveStack(PlayerEntity player, int slotNumber)
+	public ItemStack quickMoveStack(Player player, int slotNumber)
 	{
 		ItemStack itemstack = ItemStack.EMPTY;
 		Slot slot = this.slots.get(slotNumber);
 		int allSlots = this.slots.size();
 		
-		if (slot != null && slot.hasItem())
+		if (slot.hasItem())
 		{
 			ItemStack itemstackOrig = slot.getItem();
 			itemstack = itemstackOrig.copy();

@@ -4,18 +4,13 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.inventory.slot.InputSlot;
 import com.mraof.minestuck.inventory.slot.OutputSlot;
 import com.mraof.minestuck.item.MSItems;
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.IWorldPosCallable;
-import net.minecraft.util.IntArray;
-import net.minecraft.util.IntReferenceHolder;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.*;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -32,21 +27,21 @@ public class UraniumCookerContainer extends MachineContainer
 	private static final int itemOutputX = 117;
 	private static final int itemOutputY = 35;
 	
-	private final IntReferenceHolder fuelHolder;
+	private final DataSlot fuelHolder;
 	
-	public UraniumCookerContainer(int windowId, PlayerInventory playerInventory, PacketBuffer buffer)
+	public UraniumCookerContainer(int windowId, Inventory playerInventory, FriendlyByteBuf buffer)
 	{
-		this(MSContainerTypes.URANIUM_COOKER, windowId, playerInventory, new ItemStackHandler(3), new IntArray(3), IntReferenceHolder.standalone(), IWorldPosCallable.NULL, buffer.readBlockPos());
+		this(MSContainerTypes.URANIUM_COOKER, windowId, playerInventory, new ItemStackHandler(3), new SimpleContainerData(3), DataSlot.standalone(), ContainerLevelAccess.NULL, buffer.readBlockPos());
 	}
 	
-	public UraniumCookerContainer(int windowId, PlayerInventory playerInventory, IItemHandler inventory, IIntArray parameters, IntReferenceHolder fuelHolder, IWorldPosCallable position, BlockPos machinePos)
+	public UraniumCookerContainer(int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, DataSlot fuelHolder, ContainerLevelAccess access, BlockPos machinePos)
 	{
-		this(MSContainerTypes.URANIUM_COOKER, windowId, playerInventory, inventory, parameters, fuelHolder, position, machinePos);
+		this(MSContainerTypes.URANIUM_COOKER, windowId, playerInventory, inventory, parameters, fuelHolder, access, machinePos);
 	}
 	
-	public UraniumCookerContainer(ContainerType<? extends UraniumCookerContainer> type, int windowId, PlayerInventory playerInventory, IItemHandler inventory, IIntArray parameters, IntReferenceHolder fuelHolder, IWorldPosCallable position, BlockPos machinePos)
+	public UraniumCookerContainer(MenuType<? extends UraniumCookerContainer> type, int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, DataSlot fuelHolder, ContainerLevelAccess access, BlockPos machinePos)
 	{
-		super(type, windowId, parameters, position, machinePos);
+		super(type, windowId, parameters, access, machinePos);
 		
 		assertItemHandlerSize(inventory, 3);
 		this.fuelHolder = fuelHolder;
@@ -65,7 +60,7 @@ public class UraniumCookerContainer extends MachineContainer
 		return MSBlocks.URANIUM_COOKER;
 	}
 	
-	protected void bindPlayerInventory(PlayerInventory playerInventory)
+	protected void bindPlayerInventory(Inventory playerInventory)
 	{
 		for (int i = 0; i < 3; i++)
 			for (int j = 0; j < 9; j++)
@@ -78,13 +73,13 @@ public class UraniumCookerContainer extends MachineContainer
 	
 	@Nonnull
 	@Override
-	public ItemStack quickMoveStack(PlayerEntity player, int slotNumber)
+	public ItemStack quickMoveStack(Player player, int slotNumber)
 	{
 		ItemStack itemstack = ItemStack.EMPTY;
 		Slot slot = this.slots.get(slotNumber);
 		int allSlots = this.slots.size();
 		
-		if (slot != null && slot.hasItem())
+		if (slot.hasItem())
 		{
 			ItemStack itemstackOrig = slot.getItem();
 			itemstack = itemstackOrig.copy();

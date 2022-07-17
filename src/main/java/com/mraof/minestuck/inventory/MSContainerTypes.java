@@ -2,11 +2,11 @@ package com.mraof.minestuck.inventory;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckContainer;
-import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.network.IContainerFactory;
+import net.minecraftforge.network.IContainerFactory;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.ObjectHolder;
 
@@ -16,16 +16,16 @@ import javax.annotation.Nonnull;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public class MSContainerTypes
 {
-	public static final ContainerType<MiniCruxtruderContainer> MINI_CRUXTRUDER = getNull();
-	public static final ContainerType<MiniTotemLatheContainer> MINI_TOTEM_LATHE = getNull();
-	public static final ContainerType<MiniAlchemiterContainer> MINI_ALCHEMITER = getNull();
-	public static final ContainerType<MiniPunchDesignixContainer> MINI_PUNCH_DESIGNIX = getNull();
-	public static final ContainerType<SendificatorContainer> SENDIFICATOR = getNull();
-	public static final ContainerType<GristWidgetContainer> GRIST_WIDGET = getNull();
-	public static final ContainerType<UraniumCookerContainer> URANIUM_COOKER = getNull();
-	public static final ContainerType<CaptchaDeckContainer> CAPTCHA_DECK = getNull();
-	public static final ContainerType<EditmodeContainer> EDIT_MODE = getNull();
-	public static final ContainerType<ConsortMerchantContainer> CONSORT_MERCHANT = getNull();
+	public static final MenuType<MiniCruxtruderContainer> MINI_CRUXTRUDER = getNull();
+	public static final MenuType<MiniTotemLatheContainer> MINI_TOTEM_LATHE = getNull();
+	public static final MenuType<MiniAlchemiterContainer> MINI_ALCHEMITER = getNull();
+	public static final MenuType<MiniPunchDesignixContainer> MINI_PUNCH_DESIGNIX = getNull();
+	public static final MenuType<SendificatorContainer> SENDIFICATOR = getNull();
+	public static final MenuType<GristWidgetContainer> GRIST_WIDGET = getNull();
+	public static final MenuType<UraniumCookerContainer> URANIUM_COOKER = getNull();
+	public static final MenuType<CaptchaDeckContainer> CAPTCHA_DECK = getNull();
+	public static final MenuType<EditmodeContainer> EDIT_MODE = getNull();
+	public static final MenuType<ConsortMerchantContainer> CONSORT_MERCHANT = getNull();
 	
 	@Nonnull
 	@SuppressWarnings("ConstantConditions")
@@ -35,18 +35,18 @@ public class MSContainerTypes
 	}
 	
 	@SubscribeEvent
-	public static void onRegisterContainerType(RegistryEvent.Register<ContainerType<?>> event)
+	public static void onRegisterMenuType(RegistryEvent.Register<MenuType<?>> event)
 	{
-		IForgeRegistry<ContainerType<?>> registry = event.getRegistry();
-		registry.register(new ContainerType<>((IContainerFactory<MiniCruxtruderContainer>) MiniCruxtruderContainer::new).setRegistryName("mini_cruxtruder"));
-		registry.register(new ContainerType<>((IContainerFactory<MiniTotemLatheContainer>) MiniTotemLatheContainer::new).setRegistryName("mini_totem_lathe"));
-		registry.register(new ContainerType<>((IContainerFactory<MiniAlchemiterContainer>) MiniAlchemiterContainer::new).setRegistryName("mini_alchemiter"));
-		registry.register(new ContainerType<>((IContainerFactory<MiniPunchDesignixContainer>) MiniPunchDesignixContainer::new).setRegistryName("mini_punch_designix"));
-		registry.register(new ContainerType<>((IContainerFactory<SendificatorContainer>) SendificatorContainer::newFromPacket).setRegistryName("sendificator"));
-		registry.register(new ContainerType<>((IContainerFactory<GristWidgetContainer>) GristWidgetContainer::new).setRegistryName("grist_widget"));
-		registry.register(new ContainerType<>((IContainerFactory<UraniumCookerContainer>) UraniumCookerContainer::new).setRegistryName("uranium_cooker"));
-		registry.register(new ContainerType<>(CaptchaDeckContainer::new).setRegistryName("captcha_deck"));
-		registry.register(new ContainerType<>(EditmodeContainer::new).setRegistryName("edit_mode"));
-		registry.register(new ContainerType<>((IContainerFactory<ConsortMerchantContainer>) ConsortMerchantContainer::load).setRegistryName("consort_merchant"));
+		IForgeRegistry<MenuType<?>> registry = event.getRegistry();
+		registry.register(new MenuType<>((IContainerFactory<MiniCruxtruderContainer>) MiniCruxtruderContainer::new).setRegistryName("mini_cruxtruder"));
+		registry.register(new MenuType<>((IContainerFactory<MiniTotemLatheContainer>) MiniTotemLatheContainer::new).setRegistryName("mini_totem_lathe"));
+		registry.register(new MenuType<>((IContainerFactory<MiniAlchemiterContainer>) MiniAlchemiterContainer::new).setRegistryName("mini_alchemiter"));
+		registry.register(new MenuType<>((IContainerFactory<MiniPunchDesignixContainer>) MiniPunchDesignixContainer::new).setRegistryName("mini_punch_designix"));
+		registry.register(new MenuType<>((IContainerFactory<SendificatorContainer>) SendificatorContainer::newFromPacket).setRegistryName("sendificator"));
+		registry.register(new MenuType<>((IContainerFactory<GristWidgetContainer>) GristWidgetContainer::new).setRegistryName("grist_widget"));
+		registry.register(new MenuType<>((IContainerFactory<UraniumCookerContainer>) UraniumCookerContainer::new).setRegistryName("uranium_cooker"));
+		registry.register(new MenuType<>(CaptchaDeckContainer::new).setRegistryName("captcha_deck"));
+		registry.register(new MenuType<>(EditmodeContainer::new).setRegistryName("edit_mode"));
+		registry.register(new MenuType<>((IContainerFactory<ConsortMerchantContainer>) ConsortMerchantContainer::load).setRegistryName("consort_merchant"));
 	}
 }

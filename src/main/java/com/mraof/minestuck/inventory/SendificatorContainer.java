@@ -3,18 +3,13 @@ package com.mraof.minestuck.inventory;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.inventory.slot.InputSlot;
 import com.mraof.minestuck.item.MSItems;
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.IWorldPosCallable;
-import net.minecraft.util.IntArray;
-import net.minecraft.util.IntReferenceHolder;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.*;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -30,10 +25,10 @@ public class SendificatorContainer extends MachineContainer
 	private static final int itemInputX = 23;
 	private static final int itemInputY = 22;
 	
-	private final IntReferenceHolder fuelHolder;
+	private final DataSlot fuelHolder;
 	private final OptionalPosHolder destinationHolder;
 	
-	public static Consumer<PacketBuffer> makeExtraDataWriter(BlockPos position, @Nullable BlockPos destination)
+	public static Consumer<FriendlyByteBuf> makeExtraDataWriter(BlockPos position, @Nullable BlockPos destination)
 	{
 		return buffer -> {
 			buffer.writeBlockPos(position);
@@ -48,27 +43,27 @@ public class SendificatorContainer extends MachineContainer
 		};
 	}
 	
-	public static SendificatorContainer newFromPacket(int windowId, PlayerInventory playerInventory, PacketBuffer buffer)
+	public static SendificatorContainer newFromPacket(int windowId, Inventory playerInventory, FriendlyByteBuf buffer)
 	{
 		BlockPos pos = buffer.readBlockPos();
 		BlockPos dest = buffer.readBoolean() ? buffer.readBlockPos() : null;
 		
 		return new SendificatorContainer(MSContainerTypes.SENDIFICATOR, windowId, playerInventory, new ItemStackHandler(2),
-				new IntArray(3), IntReferenceHolder.standalone(), OptionalPosHolder.dummy(dest),
-				IWorldPosCallable.NULL, pos);
+				new SimpleContainerData(3), DataSlot.standalone(), OptionalPosHolder.dummy(dest),
+				ContainerLevelAccess.NULL, pos);
 	}
 	
-	public SendificatorContainer(int windowId, PlayerInventory playerInventory, IItemHandler inventory,
-								 IIntArray parameters, IntReferenceHolder fuelHolder, OptionalPosHolder destinationHolder,
-								 IWorldPosCallable position, BlockPos machinePos)
+	public SendificatorContainer(int windowId, Inventory playerInventory, IItemHandler inventory,
+								 ContainerData parameters, DataSlot fuelHolder, OptionalPosHolder destinationHolder,
+								 ContainerLevelAccess position, BlockPos machinePos)
 	{
 		this(MSContainerTypes.SENDIFICATOR, windowId, playerInventory, inventory,
 				parameters, fuelHolder, destinationHolder, position, machinePos);
 	}
 	
-	public SendificatorContainer(ContainerType<? extends SendificatorContainer> type, int windowId, PlayerInventory playerInventory, IItemHandler inventory,
-								 IIntArray parameters, IntReferenceHolder fuelHolder, OptionalPosHolder destinationHolder,
-								 IWorldPosCallable position, BlockPos machinePos)
+	public SendificatorContainer(MenuType<? extends SendificatorContainer> type, int windowId, Inventory playerInventory, IItemHandler inventory,
+								 ContainerData parameters, DataSlot fuelHolder, OptionalPosHolder destinationHolder,
+								 ContainerLevelAccess position, BlockPos machinePos)
 	{
 		super(type, windowId, parameters, position, machinePos);
 		
@@ -90,7 +85,7 @@ public class SendificatorContainer extends MachineContainer
 		return MSBlocks.SENDIFICATOR;
 	}
 	
-	protected void bindPlayerInventory(PlayerInventory playerInventory)
+	protected void bindPlayerInventory(Inventory playerInventory)
 	{
 		for(int i = 0; i < 3; i++)
 			for(int j = 0; j < 9; j++)
@@ -103,13 +98,13 @@ public class SendificatorContainer extends MachineContainer
 	
 	@Nonnull
 	@Override
-	public ItemStack quickMoveStack(PlayerEntity player, int slotNumber)
+	public ItemStack quickMoveStack(Player player, int slotNumber)
 	{
 		ItemStack itemstack = ItemStack.EMPTY;
 		Slot slot = this.slots.get(slotNumber);
 		int allSlots = this.slots.size();
 		
-		if(slot != null && slot.hasItem())
+		if(slot.hasItem())
 		{
 			ItemStack itemstackOrig = slot.getItem();
 			itemstack = itemstackOrig.copy();

@@ -3,27 +3,27 @@ package com.mraof.minestuck.inventory;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.inventory.slot.ConsortMerchantSlot;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.IntArray;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
-public class ConsortMerchantContainer extends Container
+public class ConsortMerchantContainer extends AbstractContainerMenu
 {
 	private final EnumConsort consortType;
 	private final EnumConsort.MerchantType merchantType;
-	private final IIntArray prices;
+	private final ContainerData prices;
 	
-	private final PlayerEntity player;
+	private final Player player;
 	
-	public ConsortMerchantContainer(int windowId, PlayerInventory playerInventory, IInventory storeInv, EnumConsort consortType, EnumConsort.MerchantType merchantType, IIntArray prices)
+	public ConsortMerchantContainer(int windowId, Inventory playerInventory, Container storeInv, EnumConsort consortType, EnumConsort.MerchantType merchantType, ContainerData prices)
 	{
 		super(MSContainerTypes.CONSORT_MERCHANT, windowId);
 		this.player = playerInventory.player;
@@ -40,41 +40,40 @@ public class ConsortMerchantContainer extends Container
 			this.addSlot(new ConsortMerchantSlot(player, storeInv, i, 17 + 35*(i%3), 35 + 33*(i/3)));
 	}
 	
-	public static ConsortMerchantContainer load(int windowId, PlayerInventory playerInventory, PacketBuffer buffer)
+	public static ConsortMerchantContainer load(int windowId, Inventory playerInventory, FriendlyByteBuf buffer)
 	{
 		EnumConsort consortType = EnumConsort.getFromName(buffer.readUtf());
 		EnumConsort.MerchantType merchantType = EnumConsort.MerchantType.getFromName(buffer.readUtf());
 		
-		return new ConsortMerchantContainer(windowId, playerInventory, new Inventory(9), consortType, merchantType, new IntArray(9));
+		return new ConsortMerchantContainer(windowId, playerInventory, new SimpleContainer(9), consortType, merchantType, new SimpleContainerData(9));
 	}
 	
-	public static void write(PacketBuffer buffer, ConsortEntity consort)
+	public static void write(FriendlyByteBuf buffer, ConsortEntity consort)
 	{
 		buffer.writeUtf(consort.getConsortType().getName());
 		buffer.writeUtf(consort.merchantType.getName());
 	}
 	
 	@Override
-	public ItemStack quickMoveStack(PlayerEntity playerIn, int index)
+	public ItemStack quickMoveStack(Player playerIn, int index)
 	{
 		Slot slot = getSlot(index);
-		if(slot != null)
-			slot.remove(0);
+		slot.remove(0);
 		return ItemStack.EMPTY;
 	}
 	
 	@Override
-	public boolean stillValid(PlayerEntity playerIn)
+	public boolean stillValid(Player playerIn)
 	{
 		return this.player == playerIn;
 	}
 	
 	@Override
-	public void removed(PlayerEntity playerIn)
+	public void removed(Player playerIn)
 	{
 		super.removed(playerIn);
-		if(playerIn instanceof ServerPlayerEntity)
-			((ServerPlayerEntity) playerIn).refreshContainer(playerIn.inventoryMenu);
+		if(playerIn instanceof ServerPlayer player)
+			player.inventoryMenu.sendAllDataToRemote();	//TODO is this still needed?
 	}
 	
 	public int getPrice(int index)

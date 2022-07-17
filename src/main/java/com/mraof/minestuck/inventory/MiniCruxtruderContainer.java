@@ -4,17 +4,13 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.inventory.slot.InputSlot;
 import com.mraof.minestuck.inventory.slot.OutputSlot;
 import com.mraof.minestuck.item.MSItems;
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.IWorldPosCallable;
-import net.minecraft.util.IntArray;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.*;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -28,19 +24,19 @@ public class MiniCruxtruderContainer extends MachineContainer
 	private static final int OUTPUT_X = 79;
 	private static final int OUTPUT_Y = 19;
 	
-	public MiniCruxtruderContainer(int windowId, PlayerInventory inventoryPlayer, PacketBuffer buffer)
+	public MiniCruxtruderContainer(int windowId, Inventory inventoryPlayer, FriendlyByteBuf buffer)
 	{
-		this(MSContainerTypes.MINI_CRUXTRUDER, windowId, inventoryPlayer, new ItemStackHandler(2), new IntArray(3), IWorldPosCallable.NULL, buffer.readBlockPos());
+		this(MSContainerTypes.MINI_CRUXTRUDER, windowId, inventoryPlayer, new ItemStackHandler(2), new SimpleContainerData(3), ContainerLevelAccess.NULL, buffer.readBlockPos());
 	}
 	
-	public MiniCruxtruderContainer(int windowId, PlayerInventory playerInventory, IItemHandler inventory, IIntArray parameters, IWorldPosCallable position, BlockPos machinePos)
+	public MiniCruxtruderContainer(int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, ContainerLevelAccess access, BlockPos machinePos)
 	{
-		this(MSContainerTypes.MINI_CRUXTRUDER, windowId, playerInventory, inventory, parameters, position, machinePos);
+		this(MSContainerTypes.MINI_CRUXTRUDER, windowId, playerInventory, inventory, parameters, access, machinePos);
 	}
 	
-	public MiniCruxtruderContainer(ContainerType<? extends MiniCruxtruderContainer> type, int windowId, PlayerInventory playerInventory, IItemHandler inventory, IIntArray parameters, IWorldPosCallable position, BlockPos machinePos)
+	public MiniCruxtruderContainer(MenuType<? extends MiniCruxtruderContainer> type, int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, ContainerLevelAccess access, BlockPos machinePos)
 	{
-		super(type, windowId, parameters, position, machinePos);
+		super(type, windowId, parameters, access, machinePos);
 		
 		assertItemHandlerSize(inventory, 2);
 		
@@ -56,7 +52,7 @@ public class MiniCruxtruderContainer extends MachineContainer
 		return MSBlocks.MINI_CRUXTRUDER;
 	}
 	
-	protected void bindPlayerInventory(PlayerInventory playerInventory)
+	protected void bindPlayerInventory(Inventory playerInventory)
 	{
 		for (int i = 0; i < 3; i++)
 			for (int j = 0; j < 9; j++)
@@ -69,13 +65,13 @@ public class MiniCruxtruderContainer extends MachineContainer
 	
 	@Nonnull
 	@Override
-	public ItemStack quickMoveStack(PlayerEntity player, int slotNumber)
+	public ItemStack quickMoveStack(Player player, int slotNumber)
 	{
 		ItemStack itemstack = ItemStack.EMPTY;
 		Slot slot = this.slots.get(slotNumber);
 		int allSlots = this.slots.size();
 		
-		if (slot != null && slot.hasItem())
+		if (slot.hasItem())
 		{
 			ItemStack itemstackOrig = slot.getItem();
 			itemstack = itemstackOrig.copy();
