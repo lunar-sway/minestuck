@@ -1,32 +1,32 @@
 package com.mraof.minestuck.world.biome;
 
 import com.mraof.minestuck.world.gen.LandChunkGenerator;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.chunk.ChunkGenerator;
 
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
 public class LandBiomeSet
 {
-	public final RegistryKey<Biome> NORMAL, ROUGH, OCEAN;
-	private final Biome.RainType precipitation;
+	public final ResourceKey<Biome> NORMAL, ROUGH, OCEAN;
+	private final Biome.Precipitation precipitation;
 	private final float temperature, downfall;
 	
-	public LandBiomeSet(String mod, String name, Biome.RainType precipitation, float temperature, float downfall)
+	public LandBiomeSet(String mod, String name, Biome.Precipitation precipitation, float temperature, float downfall)
 	{
 		this.precipitation = precipitation;
 		this.temperature = temperature;
 		this.downfall = downfall;
-		NORMAL = RegistryKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(mod, "land_"+name+"_normal"));
-		ROUGH = RegistryKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(mod, "land_"+name+"_rough"));
-		OCEAN = RegistryKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(mod, "land_"+name+"_ocean"));
+		NORMAL = ResourceKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(mod, "land_"+name+"_normal"));
+		ROUGH = ResourceKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(mod, "land_"+name+"_rough"));
+		OCEAN = ResourceKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(mod, "land_"+name+"_ocean"));
 	}
 	
-	public void createForDataGen(BiConsumer<RegistryKey<Biome>, Biome> consumer)
+	public void createForDataGen(BiConsumer<ResourceKey<Biome>, Biome> consumer)
 	{
 		consumer.accept(NORMAL, LandBiome.createNormalBiome(precipitation, temperature, downfall));
 		consumer.accept(ROUGH, LandBiome.createRoughBiome(precipitation, temperature, downfall));
@@ -35,12 +35,12 @@ public class LandBiomeSet
 	
 	public static Optional<LandBiomeSetWrapper> getSet(ChunkGenerator generator)
 	{
-		if(generator instanceof LandChunkGenerator)
-			return Optional.of(((LandChunkGenerator) generator).biomes.baseBiomes);
+		if(generator instanceof LandChunkGenerator landGen)
+			return Optional.of(landGen.biomes.baseBiomes);
 		else return Optional.empty();
 	}
 	
-	public Biome.RainType getPrecipitation()
+	public Biome.Precipitation getPrecipitation()
 	{
 		return precipitation;
 	}
