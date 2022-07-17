@@ -10,6 +10,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.level.material.Fluid;
 
 public class MSTags
@@ -117,6 +118,16 @@ public class MSTags
 		private static TagKey<EntityType<?>> tag(String name)
 		{
 			return TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(Minestuck.MOD_ID, name));
+		}
+	}
+	
+	public static class ConfiguredFeatures
+	{
+		public static final TagKey<ConfiguredStructureFeature<?, ?>> SCANNER_LOCATED = tag("scanner_located");	//TODO should contain frog temple
+		
+		private static TagKey<ConfiguredStructureFeature<?, ?>> tag(String name)
+		{
+			return TagKey.create(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY, new ResourceLocation(Minestuck.MOD_ID, name));
 		}
 	}
 }

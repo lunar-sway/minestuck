@@ -3,18 +3,18 @@ package com.mraof.minestuck.item;
 import com.mraof.minestuck.block.CassettePlayerBlock;
 import com.mraof.minestuck.block.EnumCassetteType;
 import com.mraof.minestuck.block.MSBlocks;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.item.MusicDiscItem;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.RecordItem;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.function.Supplier;
 
-public class CassetteItem extends MusicDiscItem
+public class CassetteItem extends RecordItem
 {
 	public final EnumCassetteType cassetteID;
 	
@@ -25,24 +25,24 @@ public class CassetteItem extends MusicDiscItem
 	}
 	
 	@Override
-	public ActionResultType useOn(ItemUseContext context)
+	public InteractionResult useOn(UseOnContext context)
 	{
-		World world = context.getLevel();
+		Level level = context.getLevel();
 		BlockPos blockpos = context.getClickedPos();
-		BlockState blockstate = world.getBlockState(blockpos);
+		BlockState blockstate = level.getBlockState(blockpos);
 		if(blockstate.getBlock() == MSBlocks.CASSETTE_PLAYER && blockstate.getValue(CassettePlayerBlock.CASSETTE) == EnumCassetteType.NONE && blockstate.getValue(CassettePlayerBlock.OPEN))
 		{
 			ItemStack itemstack = context.getItemInHand();
-			if(!world.isClientSide)
+			if(!level.isClientSide)
 			{
-				(MSBlocks.CASSETTE_PLAYER).insertCassette(world, blockpos, blockstate, itemstack);
+				(MSBlocks.CASSETTE_PLAYER).insertCassette(level, blockpos, blockstate, itemstack);
 				itemstack.shrink(1);
 			}
 			
-			return ActionResultType.SUCCESS;
+			return InteractionResult.SUCCESS;
 		} else
 		{
-			return ActionResultType.PASS;
+			return InteractionResult.PASS;
 		}
 	}
 }

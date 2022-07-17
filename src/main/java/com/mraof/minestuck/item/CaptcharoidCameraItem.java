@@ -1,20 +1,20 @@
 package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.item.ItemFrameEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.item.Items;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.decoration.ItemFrame;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
 
 import java.util.List;
 
@@ -27,40 +27,40 @@ public class CaptcharoidCameraItem extends Item
 	}
 	
 	@Override
-	public ActionResultType useOn(ItemUseContext context)
+	public InteractionResult useOn(UseOnContext context)
 	{
-		World worldIn = context.getLevel();
+		Level level = context.getLevel();
 		BlockPos pos = context.getClickedPos();
-		PlayerEntity player = context.getPlayer();
+		Player player = context.getPlayer();
 		Direction facing = context.getClickedFace();
 		Boolean inside = context.isInside();
 
 		//pos.offset(facing).offset(facing.rotateY()).up(), pos.offset(facing.getOpposite()).offset(facing.rotateYCCW()).down()
-		if(!worldIn.isClientSide) 
+		if(!level.isClientSide)
 		{
 			
-			AxisAlignedBB bb = new AxisAlignedBB(pos.relative(facing));
-			List<ItemFrameEntity> list = worldIn.getEntitiesOfClass(ItemFrameEntity.class, bb);
+			AABB bb = new AABB(pos.relative(facing));
+			List<ItemFrame> list = level.getEntitiesOfClass(ItemFrame.class, bb);
 			
 			if(!list.isEmpty())
 			{
 				ItemStack item = list.get(0).getItem();
 				if(item.isEmpty()) item = new ItemStack(Items.ITEM_FRAME);
 				
-				player.inventory.add(AlchemyHelper.createGhostCard(item));
-				context.getItemInHand().hurtAndBreak(1, player, (playerEntity) -> playerEntity.broadcastBreakEvent(Hand.MAIN_HAND));
+				player.getInventory().add(AlchemyHelper.createGhostCard(item));
+				context.getItemInHand().hurtAndBreak(1, player, (playerEntity) -> playerEntity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
 			}
 			else
 			{
-				BlockState state = worldIn.getBlockState(pos);
-				ItemStack block = state.getPickBlock(new BlockRayTraceResult(context.getClickLocation(), facing, pos, inside), worldIn, pos, player);
+				BlockState state = level.getBlockState(pos);
+				ItemStack block = state.getCloneItemStack(new BlockHitResult(context.getClickLocation(), facing, pos, inside), level, pos, player);
 				
-				player.inventory.add(AlchemyHelper.createGhostCard(block));
-				context.getItemInHand().hurtAndBreak(1, player,  (playerEntity) -> playerEntity.broadcastBreakEvent(Hand.MAIN_HAND));
+				player.getInventory().add(AlchemyHelper.createGhostCard(block));
+				context.getItemInHand().hurtAndBreak(1, player,  (playerEntity) -> playerEntity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
 			}
-			return ActionResultType.PASS;
+			return InteractionResult.PASS;
 		}
 		
-		return ActionResultType.SUCCESS;
+		return InteractionResult.SUCCESS;
 	}
 }

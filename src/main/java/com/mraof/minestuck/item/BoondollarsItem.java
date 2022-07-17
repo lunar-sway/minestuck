@@ -1,25 +1,25 @@
 package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class BoondollarsItem extends Item	//TODO Add custom crafting recipe that merges boondollar stacks
+public class BoondollarsItem extends Item    //TODO Add custom crafting recipe that merges boondollar stacks
 {
 	public BoondollarsItem(Properties properties)
 	{
@@ -27,19 +27,19 @@ public class BoondollarsItem extends Item	//TODO Add custom crafting recipe that
 	}
 	
 	@Override
-	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn)
+	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn)
 	{
-		if(!worldIn.isClientSide)
+		if(!level.isClientSide)
 		{
-			PlayerSavedData.getData((ServerPlayerEntity) playerIn).addBoondollars(getCount(playerIn.getItemInHand(handIn)));
+			PlayerSavedData.getData((ServerPlayer) playerIn).addBoondollars(getCount(playerIn.getItemInHand(handIn)));
 		}
-		return ActionResult.success(ItemStack.EMPTY);
+		return InteractionResultHolder.success(ItemStack.EMPTY);
 	}
 	
 	@Override
-	public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items)
+	public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> items)
 	{
-		if(allowdedIn(group))
+		if(allowdedIn(tab))
 		{
 			items.add(new ItemStack(this));
 			items.add(setCount(new ItemStack(this), 10));
@@ -50,25 +50,25 @@ public class BoondollarsItem extends Item	//TODO Add custom crafting recipe that
 	}
 	
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
+	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn)
 	{
 		long amount = getCount(stack);
-		tooltip.add(new TranslationTextComponent("item.minestuck.boondollars.amount", amount));
+		tooltip.add(new TranslatableComponent("item.minestuck.boondollars.amount", amount));
 	}
 	
 	public static long getCount(ItemStack stack)
 	{
-		if(!stack.hasTag() || !stack.getTag().contains("value", Constants.NBT.TAG_ANY_NUMERIC))
+		if(!stack.hasTag() || !stack.getTag().contains("value", Tag.TAG_ANY_NUMERIC))
 			return 1;
 		else return stack.getTag().getInt("value");
 	}
 	
 	public static ItemStack setCount(ItemStack stack, int value)
 	{
-		CompoundNBT nbt = stack.getTag();
+		CompoundTag nbt = stack.getTag();
 		if(nbt == null)
 		{
-			nbt = new CompoundNBT();
+			nbt = new CompoundTag();
 			stack.setTag(nbt);
 		}
 		nbt.putInt("value", value);

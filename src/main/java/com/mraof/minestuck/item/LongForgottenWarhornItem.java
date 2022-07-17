@@ -1,47 +1,47 @@
 package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.util.MSSoundEvents;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.world.World;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 import java.util.Random;
 
 public class LongForgottenWarhornItem extends Item
 {
-	static EffectInstance[] effect = new EffectInstance[] {
-			new EffectInstance(Effects.BLINDNESS, 400, 0),
-			new EffectInstance(Effects.WITHER, 300, 1),
-			new EffectInstance(Effects.POISON, 300, 2),
-			new EffectInstance(Effects.HUNGER, 400, 1),
-			new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 400, 2),
-			new EffectInstance(Effects.UNLUCK, 600, 3),
-			new EffectInstance(Effects.LUCK, 600, 3),
-			new EffectInstance(Effects.NIGHT_VISION, 400, 0),
-			new EffectInstance(Effects.DAMAGE_BOOST, 200, 1),
-			new EffectInstance(Effects.DAMAGE_RESISTANCE, 300, 1),
-			new EffectInstance(Effects.REGENERATION, 300, 2),
-			new EffectInstance(Effects.JUMP, 400, 2),
-			new EffectInstance(Effects.MOVEMENT_SPEED, 400, 2),
-			new EffectInstance(Effects.DIG_SPEED, 400, 2),
-			new EffectInstance(Effects.ABSORPTION, 500, 1),
-			new EffectInstance(Effects.FIRE_RESISTANCE, 600, 0),
-			new EffectInstance(Effects.GLOWING, 500, 0),
-			new EffectInstance(Effects.HEAL, 20, 0),
-			new EffectInstance(Effects.HARM, 20, 0),
-			new EffectInstance(Effects.INVISIBILITY, 500, 3),
-			new EffectInstance(Effects.WATER_BREATHING, 400, 0),
-			new EffectInstance(Effects.CONFUSION, 300, 0),
-			new EffectInstance(Effects.WEAKNESS, 200, 1),
-			new EffectInstance(Effects.LEVITATION, 200, 2),
-			new EffectInstance(Effects.DIG_SLOWDOWN, 300, 2),
-			new EffectInstance(Effects.SATURATION, 400, 1)};
+	static MobEffectInstance[] effect = new MobEffectInstance[] {
+			new MobEffectInstance(MobEffects.BLINDNESS, 400, 0),
+			new MobEffectInstance(MobEffects.WITHER, 300, 1),
+			new MobEffectInstance(MobEffects.POISON, 300, 2),
+			new MobEffectInstance(MobEffects.HUNGER, 400, 1),
+			new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 400, 2),
+			new MobEffectInstance(MobEffects.UNLUCK, 600, 3),
+			new MobEffectInstance(MobEffects.LUCK, 600, 3),
+			new MobEffectInstance(MobEffects.NIGHT_VISION, 400, 0),
+			new MobEffectInstance(MobEffects.DAMAGE_BOOST, 200, 1),
+			new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 300, 1),
+			new MobEffectInstance(MobEffects.REGENERATION, 300, 2),
+			new MobEffectInstance(MobEffects.JUMP, 400, 2),
+			new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 400, 2),
+			new MobEffectInstance(MobEffects.DIG_SPEED, 400, 2),
+			new MobEffectInstance(MobEffects.ABSORPTION, 500, 1),
+			new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 600, 0),
+			new MobEffectInstance(MobEffects.GLOWING, 500, 0),
+			new MobEffectInstance(MobEffects.HEAL, 20, 0),
+			new MobEffectInstance(MobEffects.HARM, 20, 0),
+			new MobEffectInstance(MobEffects.INVISIBILITY, 500, 3),
+			new MobEffectInstance(MobEffects.WATER_BREATHING, 400, 0),
+			new MobEffectInstance(MobEffects.CONFUSION, 300, 0),
+			new MobEffectInstance(MobEffects.WEAKNESS, 200, 1),
+			new MobEffectInstance(MobEffects.LEVITATION, 200, 2),
+			new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 300, 2),
+			new MobEffectInstance(MobEffects.SATURATION, 400, 1)};
 	
 	public LongForgottenWarhornItem(Properties properties)
 	{
@@ -49,24 +49,24 @@ public class LongForgottenWarhornItem extends Item
 	}
 	
 	@Override
-	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn)
+	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn)
 	{
-		worldIn.playSound(playerIn, playerIn.getX(), playerIn.getY(), playerIn.getZ(), MSSoundEvents.ITEM_LONG_FORGOTTEN_WARHORN_USE, SoundCategory.AMBIENT, 1.5F, 1.0F);
+		level.playSound(playerIn, playerIn.getX(), playerIn.getY(), playerIn.getZ(), MSSoundEvents.ITEM_LONG_FORGOTTEN_WARHORN_USE, SoundSource.AMBIENT, 1.5F, 1.0F);
 		
 		ItemStack item = playerIn.getItemInHand(handIn);
-		if(!worldIn.isClientSide)
+		if(!level.isClientSide)
 		{
 			Random rand = new Random();
 			int durability = rand.nextInt(14) + 1;
 			int raneffect = rand.nextInt(effect.length);
-			playerIn.addEffect(new EffectInstance(effect[raneffect]));
+			playerIn.addEffect(new MobEffectInstance(effect[raneffect]));
 			if(raneffect != 0)
 			{
-				playerIn.addEffect(new EffectInstance(Effects.BLINDNESS, 15, 1));
+				playerIn.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 15, 1));
 			}
-			item.hurtAndBreak(durability, playerIn, playerEntity -> playerEntity.broadcastBreakEvent(Hand.MAIN_HAND));
+			item.hurtAndBreak(durability, playerIn, playerEntity -> playerEntity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
 		}
 		
-		return ActionResult.success(item);
+		return InteractionResultHolder.success(item);
 	}
 }

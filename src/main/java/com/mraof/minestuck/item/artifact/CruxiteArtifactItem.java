@@ -2,8 +2,8 @@ package com.mraof.minestuck.item.artifact;
 
 import com.mraof.minestuck.entry.EntryProcess;
 import com.mraof.minestuck.item.AlchemizedColored;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.Item;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.Item;
 
 public abstract class CruxiteArtifactItem extends Item implements AlchemizedColored
 {
@@ -12,7 +12,7 @@ public abstract class CruxiteArtifactItem extends Item implements AlchemizedColo
 		super(properties);
 	}
 	
-	public void onArtifactActivated(ServerPlayerEntity player)
+	public void onArtifactActivated(ServerPlayer player)
 	{
 		EntryProcess process = new EntryProcess();
 		process.onArtifactActivated(player);

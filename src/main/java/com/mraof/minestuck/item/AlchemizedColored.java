@@ -1,7 +1,7 @@
 package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.util.ColorHandler;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 /**
  * Implement this if the item should be alchemized with a color.

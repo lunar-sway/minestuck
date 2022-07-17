@@ -899,7 +899,7 @@ public class MSItems
 		registry.register(new MultiblockItem(MSBlocks.LOTUS_TIME_CAPSULE_BLOCK, new Item.Properties().tab(MSItemGroup.MAIN)).setRegistryName("lotus_time_capsule"));
 		
 		registerItemBlock(registry, GLOWYSTONE_DUST, MSItemGroup.MAIN);
-
+		
 		//hammers
 		registry.register(new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 2, -2.8F).efficiency(1.0F).set(MSItemTypes.HAMMER_TOOL), new Item.Properties().tab(MSItemGroup.WEAPONS)).setRegistryName("claw_hammer"));
 		registry.register(new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 4, -3.2F).efficiency(4.0F).set(MSItemTypes.HAMMER_TOOL), new Item.Properties().tab(MSItemGroup.WEAPONS)).setRegistryName("sledge_hammer"));
@@ -1127,20 +1127,20 @@ public class MSItems
 		//projectiles
 		registry.register(new ConsumableProjectileWeaponItem(new Item.Properties().tab(MSItemGroup.WEAPONS), 0.5F, 20.0F, 1).setRegistryName("sbahjarang"));
 		registry.register(new ConsumableProjectileWeaponItem(new Item.Properties().tab(MSItemGroup.WEAPONS), 1.0F, 2.8F, 2).setRegistryName("shuriken"));
-		registry.register(new ConsumableProjectileWeaponItem(new Item.Properties().tab(MSItemGroup.WEAPONS), 1.5F, 2.4F,3).setRegistryName("clubs_suitarang"));
-		registry.register(new ConsumableProjectileWeaponItem(new Item.Properties().tab(MSItemGroup.WEAPONS), 1.5F, 2.4F,3).setRegistryName("diamonds_suitarang"));
+		registry.register(new ConsumableProjectileWeaponItem(new Item.Properties().tab(MSItemGroup.WEAPONS), 1.5F, 2.4F, 3).setRegistryName("clubs_suitarang"));
+		registry.register(new ConsumableProjectileWeaponItem(new Item.Properties().tab(MSItemGroup.WEAPONS), 1.5F, 2.4F, 3).setRegistryName("diamonds_suitarang"));
 		registry.register(new ConsumableProjectileWeaponItem(new Item.Properties().tab(MSItemGroup.WEAPONS), 1.5F, 2.4F,3).setRegistryName("hearts_suitarang"));
 		registry.register(new ConsumableProjectileWeaponItem(new Item.Properties().tab(MSItemGroup.WEAPONS), 1.5F, 2.4F,3).setRegistryName("spades_suitarang"));
 		registry.register(new ReturningProjectileWeaponItem(new Item.Properties().tab(MSItemGroup.WEAPONS).durability(250), 1.3F, 1.0F,5, 30).setRegistryName("chakram"));
 		registry.register(new ReturningProjectileWeaponItem(new Item.Properties().tab(MSItemGroup.WEAPONS).durability(2048), 1.5F, 0.6F,12, 20).setRegistryName("umbral_infiltrator"));
-		registry.register(new BouncingProjectileWeaponItem(new Item.Properties().tab(MSItemGroup.WEAPONS).durability(250), 1.5F, 1.0F,5, 20).setRegistryName("sorcerers_pinball"));
+		registry.register(new BouncingProjectileWeaponItem(new Item.Properties().tab(MSItemGroup.WEAPONS).durability(250), 1.5F, 1.0F, 5, 20).setRegistryName("sorcerers_pinball"));
 		
 		registry.register(new SwordItem(MSItemTypes.EMERALD_TIER, 3, -2.4F, new Item.Properties().tab(MSItemGroup.WEAPONS)).setRegistryName("emerald_sword"));
 		registry.register(new AxeItem(MSItemTypes.EMERALD_TIER, 5, -3.0F, new Item.Properties().tab(MSItemGroup.WEAPONS)).setRegistryName("emerald_axe"));
-		registry.register(new PickaxeItem(MSItemTypes.EMERALD_TIER, 1 , -2.8F, new Item.Properties().tab(MSItemGroup.WEAPONS)).setRegistryName("emerald_pickaxe"));
+		registry.register(new PickaxeItem(MSItemTypes.EMERALD_TIER, 1, -2.8F, new Item.Properties().tab(MSItemGroup.WEAPONS)).setRegistryName("emerald_pickaxe"));
 		registry.register(new ShovelItem(MSItemTypes.EMERALD_TIER, 1.5F, -3.0F, new Item.Properties().tab(MSItemGroup.WEAPONS)).setRegistryName("emerald_shovel"));
 		registry.register(new HoeItem(MSItemTypes.EMERALD_TIER, -3, 0.0F, new Item.Properties().tab(MSItemGroup.WEAPONS)).setRegistryName("emerald_hoe"));
-		registry.register(new PickaxeItem(ItemTier.DIAMOND, 1 , -2.8F, new Item.Properties()/*.tab(MSItemGroup.WEAPONS)*/).setRegistryName("mine_and_grist"));
+		registry.register(new PickaxeItem(Tiers.DIAMOND, 1, -2.8F, new Item.Properties()/*.tab(MSItemGroup.WEAPONS)*/).setRegistryName("mine_and_grist"));
 		
 		//armor
 		registry.register(new ArmorItem(MSItemTypes.PRISMARINE_ARMOR, EquipmentSlot.HEAD, new Item.Properties().tab(MSItemGroup.WEAPONS)).setRegistryName("prismarine_helmet"));
@@ -1198,7 +1198,7 @@ public class MSItems
 		registry.register(new Item(new Item.Properties().tab(MSItemGroup.LANDS).food(MSFoods.JAR_OF_BUGS)).setRegistryName("jar_of_bugs"));
 		registry.register(new Item(new Item.Properties().tab(MSItemGroup.LANDS).food(MSFoods.BUG_MAC)).setRegistryName("bug_mac"));
 		registry.register(new Item(new Item.Properties().tab(MSItemGroup.LANDS).food(MSFoods.ONION)).setRegistryName("onion"));
-		registry.register(new SoupItem(new Item.Properties().tab(MSItemGroup.LANDS).food(MSFoods.SALAD).stacksTo(1)).setRegistryName("salad"));
+		registry.register(new BowlFoodItem(new Item.Properties().tab(MSItemGroup.LANDS).food(MSFoods.SALAD).stacksTo(1)).setRegistryName("salad"));
 		registry.register(new Item(new Item.Properties().tab(MSItemGroup.LANDS).food(MSFoods.DESERT_FRUIT)).setRegistryName("desert_fruit"));
 		registry.register(new Item(new Item.Properties().tab(MSItemGroup.LANDS)).setRegistryName("rock_cookie"));	//Not actually food, but let's pretend it is
 		registry.register(new Item(new Item.Properties().tab(MSItemGroup.LANDS).food(MSFoods.WOODEN_CARROT)).setRegistryName("wooden_carrot"));
@@ -1207,7 +1207,7 @@ public class MSItems
 		registry.register(new Item(new Item.Properties().tab(MSItemGroup.LANDS).food(MSFoods.MOREL_MUSHROOM)).setRegistryName("morel_mushroom"));
 		registry.register(new Item(new Item.Properties().tab(MSItemGroup.LANDS)).setRegistryName("sushroom"));
 		registry.register(new Item(new Item.Properties().tab(MSItemGroup.LANDS).food(MSFoods.FRENCH_FRY)).setRegistryName("french_fry"));
-		registry.register(new BlockNamedItem(STRAWBERRY_STEM, new Item.Properties().tab(MSItemGroup.LANDS).food(MSFoods.STRAWBERRY_CHUNK)).setRegistryName("strawberry_chunk"));
+		registry.register(new ItemNameBlockItem(STRAWBERRY_STEM, new Item.Properties().tab(MSItemGroup.LANDS).food(MSFoods.STRAWBERRY_CHUNK)).setRegistryName("strawberry_chunk"));
 		registry.register(new Item(new Item.Properties().stacksTo(16).tab(MSItemGroup.MAIN).food(MSFoods.FOOD_CAN)).setRegistryName("food_can"));
 		
 		
@@ -1254,7 +1254,7 @@ public class MSItems
 		registry.register(new BugNetItem(new Item.Properties().defaultDurability(64).tab(MSItemGroup.LANDS)).setRegistryName("bug_net"));
 		registry.register(new FrogItem(new Item.Properties().stacksTo(1).tab(MSItemGroup.LANDS)).setRegistryName("frog"));
 		registry.register(new Item(new Item.Properties().stacksTo(1).tab(MSItemGroup.LANDS)).setRegistryName("carving_tool"));
-		registry.register(new MSArmorItem(MSItemTypes.CLOTH_ARMOR, EquipmentSlotType.HEAD,new Item.Properties().stacksTo(1).tab(MSItemGroup.LANDS)).setRegistryName("crumply_hat"));
+		registry.register(new MSArmorItem(MSItemTypes.CLOTH_ARMOR, EquipmentSlot.HEAD, new Item.Properties().stacksTo(1).tab(MSItemGroup.LANDS)).setRegistryName("crumply_hat"));
 		registry.register(new Item(new Item.Properties().tab(MSItemGroup.LANDS)).setRegistryName("stone_eyeballs"));
 		//registry.register(new HangingItem((world, pos, facing, stack) -> new EntityShopPoster(world, pos, facing, stack, 0), new Item.Properties().maxStackSize(1).tab(ModItemGroup.LANDS)).setRegistryName("shop_poster"));
 		
@@ -1275,7 +1275,7 @@ public class MSItems
 		registry.register(new Item(new Item.Properties().tab(MSItemGroup.MAIN)).setRegistryName("ice_shard"));
 		registry.register(new SoundItem(() -> MSSoundEvents.ITEM_HORN_USE, new Item.Properties().tab(MSItemGroup.MAIN)).setRegistryName("horn"));
 		registry.register(new Item(new Item.Properties().tab(MSItemGroup.MAIN)).setRegistryName("cake_mix"));
-		registry.register(new StructureScannerItem(new Item.Properties().tab(MSItemGroup.MAIN).stacksTo(1), () -> MSFeatures.FROG_TEMPLE, () -> MSItems.RAW_URANIUM).setRegistryName("temple_scanner"));
+		registry.register(new StructureScannerItem(new Item.Properties().tab(MSItemGroup.MAIN).stacksTo(1), MSTags.ConfiguredFeatures.SCANNER_LOCATED, () -> MSItems.RAW_URANIUM).setRegistryName("temple_scanner"));
 		registry.register(new Item(new Item.Properties().tab(MSItemGroup.MAIN)).setRegistryName("battery"));
 		registry.register(new Item(new Item.Properties().tab(MSItemGroup.MAIN)).setRegistryName("barbasol"));
 		registry.register(new Item(new Item.Properties().tab(MSItemGroup.MAIN)).setRegistryName("clothes_iron"));
@@ -1313,11 +1313,11 @@ public class MSItems
 		registry.register(new Item(new Item.Properties().tab(MSItemGroup.MAIN)).setRegistryName("bi_dye"));
 		registry.register(new RightClickMessageItem(new Item.Properties().tab(MSItemGroup.MAIN), RightClickMessageItem.Type.DEFAULT).setRegistryName("lip_balm"));
 		registry.register(new RightClickMusicItem(new Item.Properties().tab(MSItemGroup.MAIN), RightClickMusicItem.Type.ELECTRIC_AUTOHARP).setRegistryName("electric_autoharp"));
-
+		
 		//Music disks
-		registry.register(new MusicDiscItem(1, () -> MSSoundEvents.MUSIC_DISC_EMISSARY_OF_DANCE, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)).setRegistryName("music_disc_emissary_of_dance"));
-		registry.register(new MusicDiscItem(2, () -> MSSoundEvents.MUSIC_DISC_DANCE_STAB_DANCE, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)).setRegistryName("music_disc_dance_stab_dance"));
-		registry.register(new MusicDiscItem(3, () -> MSSoundEvents.MUSIC_DISC_RETRO_BATTLE_THEME, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)).setRegistryName("music_disc_retro_battle"));
+		registry.register(new RecordItem(1, () -> MSSoundEvents.MUSIC_DISC_EMISSARY_OF_DANCE, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)).setRegistryName("music_disc_emissary_of_dance"));
+		registry.register(new RecordItem(2, () -> MSSoundEvents.MUSIC_DISC_DANCE_STAB_DANCE, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)).setRegistryName("music_disc_dance_stab_dance"));
+		registry.register(new RecordItem(3, () -> MSSoundEvents.MUSIC_DISC_RETRO_BATTLE_THEME, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)).setRegistryName("music_disc_retro_battle"));
 		//Cassettes
 		registry.register(new CassetteItem(1, () -> SoundEvents.MUSIC_DISC_13, EnumCassetteType.THIRTEEN, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)).setRegistryName("cassette_13"));
 		registry.register(new CassetteItem(2, () -> SoundEvents.MUSIC_DISC_CAT, EnumCassetteType.CAT, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)).setRegistryName("cassette_cat"));
@@ -1336,9 +1336,9 @@ public class MSItems
 		return registerItemBlock(registry, new BlockItem(block, new Item.Properties()));
 	}
 	
-	private static Item registerItemBlock(IForgeRegistry<Item> registry, Block block, ItemGroup group)
+	private static Item registerItemBlock(IForgeRegistry<Item> registry, Block block, CreativeModeTab tab)
 	{
-		return registerItemBlock(registry, new BlockItem(block, new Item.Properties().tab(group)));
+		return registerItemBlock(registry, new BlockItem(block, new Item.Properties().tab(tab)));
 	}
 	
 	private static Item registerItemBlock(IForgeRegistry<Item> registry, Block block, Item.Properties properties)
