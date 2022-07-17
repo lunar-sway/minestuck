@@ -7,17 +7,17 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.tileentity.ItemStackTileEntity;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.util.ColorHandler;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.LevelEvent;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
-public class CruxtruderTileEntity extends TileEntity	//TODO check if it is broken
+public class CruxtruderTileEntity extends BlockEntity    //TODO check if it is broken
 {
 	public static final String EMPTY = "block.minestuck.cruxtruder.empty";
 	
@@ -25,9 +25,9 @@ public class CruxtruderTileEntity extends TileEntity	//TODO check if it is broke
 	private boolean broken = false;
 	private int material = 0;
 	
-	public CruxtruderTileEntity()
+	public CruxtruderTileEntity(BlockPos pos, BlockState state)
 	{
-		super(MSTileEntityTypes.CRUXTRUDER.get());
+		super(MSTileEntityTypes.CRUXTRUDER.get(), pos, state);
 	}
 	
 	public int getColor()
@@ -49,13 +49,13 @@ public class CruxtruderTileEntity extends TileEntity	//TODO check if it is broke
 		broken = true;
 	}
 
-	public void onRightClick(PlayerEntity player, boolean top)
+	public void onRightClick(Player player, boolean top)
 	{
-		if(!isBroken())
+		if(!isBroken() && level != null)
 		{
 			BlockPos pos = getBlockPos().above();
-			BlockState state = getLevel().getBlockState(pos);
-			if(top && MinestuckConfig.SERVER.cruxtruderIntake.get() && state.isAir(getLevel(), pos) && material < 64 && material > -1)
+			BlockState state = level.getBlockState(pos);
+			if(top && MinestuckConfig.SERVER.cruxtruderIntake.get() && state.isAir() && material < 64 && material > -1)
 			{
 				ItemStack stack = player.getMainHandItem();
 				if(stack.getItem() != MSItems.RAW_CRUXITE)
@@ -72,19 +72,18 @@ public class CruxtruderTileEntity extends TileEntity	//TODO check if it is broke
 			{
 				if(state.getBlock() == MSBlocks.CRUXITE_DOWEL)
 				{
-					CruxiteDowelBlock.dropDowel(getLevel(), pos);
-				} else if(state.isAir(getLevel(), pos))
+					CruxiteDowelBlock.dropDowel(level, pos);
+				} else if(state.isAir())
 				{
 					if(MinestuckConfig.SERVER.cruxtruderIntake.get() && material == 0)
 					{
-						level.levelEvent(Constants.WorldEvents.DISPENSER_FAIL_SOUND, pos, 0);
-						player.sendMessage(new TranslationTextComponent(EMPTY), Util.NIL_UUID);
+						level.levelEvent(LevelEvent.SOUND_DISPENSER_FAIL, pos, 0);
+						player.sendMessage(new TranslatableComponent(EMPTY), Util.NIL_UUID);
 					} else
 					{
 						level.setBlockAndUpdate(pos, MSBlocks.CRUXITE_DOWEL.defaultBlockState().setValue(CruxiteDowelBlock.DOWEL_TYPE, CruxiteDowelBlock.Type.CRUXTRUDER));
-						TileEntity te = level.getBlockEntity(pos);
-						if(te instanceof ItemStackTileEntity)
-							ColorHandler.setColor(((ItemStackTileEntity) te).getStack(), color);
+						if(level.getBlockEntity(pos) instanceof ItemStackTileEntity blockEntity)
+							ColorHandler.setColor(blockEntity.getStack(), color);
 						if(material > 0)
 							material--;
 					}
@@ -94,9 +93,9 @@ public class CruxtruderTileEntity extends TileEntity	//TODO check if it is broke
 	}
 	
 	@Override
-	public void load(BlockState state, CompoundNBT nbt)
+	public void load(CompoundTag nbt)
 	{
-		super.load(state, nbt);
+		super.load(nbt);
 		
 		if(nbt.contains("color"))
 			color = nbt.getInt("color");
@@ -106,12 +105,11 @@ public class CruxtruderTileEntity extends TileEntity	//TODO check if it is broke
 	}
 	
 	@Override
-	public CompoundNBT save(CompoundNBT compound)
+	public void saveAdditional(CompoundTag compound)
 	{
-		super.save(compound);
+		super.saveAdditional(compound);
 		compound.putInt("color", color);
 		compound.putBoolean("broken", broken);
 		compound.putInt("material", material);
-		return compound;
 	}
 }

@@ -3,24 +3,25 @@ package com.mraof.minestuck.block.machine;
 import com.mraof.minestuck.tileentity.machine.CruxtruderTileEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
 import com.mraof.minestuck.util.MSRotationUtil;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 import java.util.Map;
 
-public class CruxtruderBlock extends MultiMachineBlock
+public class CruxtruderBlock extends MultiMachineBlock implements EntityBlock
 {
 	protected final Map<Direction, VoxelShape> shape;
 	protected final boolean hasTileEntity;
@@ -36,55 +37,47 @@ public class CruxtruderBlock extends MultiMachineBlock
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
+	public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
 	{
 		return shape.get(state.getValue(FACING));
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
 	{
 		if(hasTileEntity && (state.getValue(FACING) == hit.getDirection() || hit.getDirection() == Direction.UP))
 		{
-			if(worldIn.isClientSide)
-				return ActionResultType.SUCCESS;
+			if(level.isClientSide)
+				return InteractionResult.SUCCESS;
 			
-			TileEntity te = worldIn.getBlockEntity(pos);
-			if(te instanceof CruxtruderTileEntity)
-				((CruxtruderTileEntity) te).onRightClick(player, hit.getDirection() == Direction.UP);
-			return ActionResultType.SUCCESS;
+			if(level.getBlockEntity(pos) instanceof CruxtruderTileEntity cruxtruder)
+				cruxtruder.onRightClick(player, hit.getDirection() == Direction.UP);
+			return InteractionResult.SUCCESS;
 		}
-		return ActionResultType.PASS;
-	}
-	
-	@Override
-	public boolean hasTileEntity(BlockState state)
-	{
-		return hasTileEntity;
+		return InteractionResult.PASS;
 	}
 	
 	@Nullable
 	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world)
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
 		if(hasTileEntity)
-			return new CruxtruderTileEntity();
+			return new CruxtruderTileEntity(pos, state);
 		else return null;
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving)
+	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
 	{
 		BlockPos MainPos = getMainPos(state, pos);
-		TileEntity te = worldIn.getBlockEntity(MainPos);
-		if(te instanceof CruxtruderTileEntity)
+		if(level.getBlockEntity(MainPos) instanceof CruxtruderTileEntity cruxtruder)
 		{
-			((CruxtruderTileEntity) te).destroy();
+			cruxtruder.destroy();
 		}
 		
-		super.onRemove(state, worldIn, pos, newState, isMoving);
+		super.onRemove(state, level, pos, newState, isMoving);
 	}
 	
 	public BlockPos getMainPos(BlockState state, BlockPos pos)

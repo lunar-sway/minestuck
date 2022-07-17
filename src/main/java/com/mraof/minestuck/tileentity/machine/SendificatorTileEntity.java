@@ -4,34 +4,34 @@ import com.mraof.minestuck.inventory.OptionalPosHolder;
 import com.mraof.minestuck.inventory.SendificatorContainer;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.util.ExtraForgeTags;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IWorldPosCallable;
-import net.minecraft.util.IntReferenceHolder;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.DataSlot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.RangedWrapper;
+import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-public class SendificatorTileEntity extends MachineProcessTileEntity implements INamedContainerProvider
+public class SendificatorTileEntity extends MachineProcessTileEntity implements MenuProvider
 {
 	public static final RunType TYPE = RunType.BUTTON_OVERRIDE;
 	public static final String TITLE = "container.minestuck.sendificator";
@@ -42,7 +42,7 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 	@Nullable
 	private BlockPos destBlockPos;
 	
-	private final IntReferenceHolder fuelHolder = new IntReferenceHolder()
+	private final DataSlot fuelHolder = new DataSlot()
 	{
 		@Override
 		public int get()
@@ -58,9 +58,9 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 	};
 	private final OptionalPosHolder destinationHolder = OptionalPosHolder.forPos(() -> Optional.ofNullable(this.getDestinationBlockPos()));
 	
-	public SendificatorTileEntity()
+	public SendificatorTileEntity(BlockPos pos, BlockState state)
 	{
-		super(MSTileEntityTypes.SENDIFICATOR.get());
+		super(MSTileEntityTypes.SENDIFICATOR.get(), pos, state);
 		maxProgress = DEFAULT_MAX_PROGRESS;
 	}
 	
@@ -76,15 +76,15 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 	}
 	
 	@Override
-	public ITextComponent getDisplayName()
+	public Component getDisplayName()
 	{
-		return new TranslationTextComponent(TITLE);
+		return new TranslatableComponent(TITLE);
 	}
 	
 	@Override
-	public void load(BlockState state, CompoundNBT compound)
+	public void load(CompoundTag compound)
 	{
-		super.load(state, compound);
+		super.load(compound);
 		
 		if(compound.contains("destX") && compound.contains("destY") && compound.contains("destZ"))
 		{
@@ -98,9 +98,9 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 	}
 	
 	@Override
-	public CompoundNBT save(CompoundNBT compound)
+	public void saveAdditional(CompoundTag compound)
 	{
-		super.save(compound);
+		super.saveAdditional(compound);
 		
 		if(destBlockPos != null)
 		{
@@ -110,14 +110,12 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 		}
 		
 		compound.putShort("fuel", fuel);
-		
-		return compound;
 	}
 	
 	@Override
 	protected ItemStackHandler createItemHandler()
 	{
-		return new MachineProcessTileEntity.CustomHandler(2, (index, stack) -> index == 0 || ExtraForgeTags.Items.URANIUM_CHUNKS.contains(stack.getItem()));
+		return new MachineProcessTileEntity.CustomHandler(2, (index, stack) -> index == 0 || stack.is(ExtraForgeTags.Items.URANIUM_CHUNKS));
 	}
 	
 	@Override
@@ -136,7 +134,7 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 		
 		ItemStack fuel = itemHandler.getStackInSlot(1);
 		ItemStack input = itemHandler.getStackInSlot(0);
-		return canBeRefueled() && ExtraForgeTags.Items.URANIUM_CHUNKS.contains(fuel.getItem()) || !input.isEmpty();
+		return canBeRefueled() && fuel.is(ExtraForgeTags.Items.URANIUM_CHUNKS) || !input.isEmpty();
 	}
 	
 	/**
@@ -148,7 +146,7 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 		if(canBeRefueled())
 		{
 			//checks for a uranium itemstack in the lower(fuel) item slot, increases the fuel value if some is found and then removes one count from the fuel stack
-			if(ExtraForgeTags.Items.URANIUM_CHUNKS.contains(itemHandler.getStackInSlot(1).getItem()))
+			if(itemHandler.getStackInSlot(1).is(ExtraForgeTags.Items.URANIUM_CHUNKS))
 			{
 				//Refill fuel
 				fuel += FUEL_INCREASE;
@@ -214,17 +212,17 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 		return super.getCapability(cap, side);
 	}
 	
-	public void openMenu(ServerPlayerEntity player)
+	public void openMenu(ServerPlayer player)
 	{
 		NetworkHooks.openGui(player, this, SendificatorContainer.makeExtraDataWriter(this.worldPosition, this.destBlockPos));
 	}
 	
 	@Nullable
 	@Override
-	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity player)
+	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player player)
 	{
 		return new SendificatorContainer(windowId, playerInventory, itemHandler,
 				parameters, fuelHolder, destinationHolder,
-				IWorldPosCallable.create(level, worldPosition), worldPosition);
+				ContainerLevelAccess.create(level, worldPosition), worldPosition);
 	}
 }

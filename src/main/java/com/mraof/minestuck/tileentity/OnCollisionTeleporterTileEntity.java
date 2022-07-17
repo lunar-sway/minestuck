@@ -1,22 +1,24 @@
 package com.mraof.minestuck.tileentity;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 
 import java.util.List;
 
-public abstract class OnCollisionTeleporterTileEntity<E extends Entity> extends TileEntity implements ITickableTileEntity
+public abstract class OnCollisionTeleporterTileEntity<E extends Entity> extends BlockEntity
 {
 	private final Class<E> entityClass;
 	private boolean hasCollision = false;
 	
-	public OnCollisionTeleporterTileEntity(TileEntityType<?> tileEntityTypeIn, Class<E> entityClass)
+	public OnCollisionTeleporterTileEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, Class<E> entityClass)
 	{
-		super(tileEntityTypeIn);
+		super(type, pos, state);
 		this.entityClass = entityClass;
 	}
 	
@@ -25,7 +27,7 @@ public abstract class OnCollisionTeleporterTileEntity<E extends Entity> extends 
 		return!entity.isPassenger() && !entity.isVehicle();
 	}
 	
-	protected abstract AxisAlignedBB getTeleportField();
+	protected abstract AABB getTeleportField();
 	
 	protected abstract void teleport(E entity);
 	
@@ -40,21 +42,20 @@ public abstract class OnCollisionTeleporterTileEntity<E extends Entity> extends 
 		}
 	}
 	
-	@Override
-	public void tick()
+	public static <E extends Entity> void serverTick(Level level, BlockPos pos, BlockState state, OnCollisionTeleporterTileEntity<E> blockEntity)
 	{
-		if(hasCollision && level instanceof ServerWorld)
+		if(blockEntity.hasCollision && level instanceof ServerLevel)
 		{
-			AxisAlignedBB boundingBox = getTeleportField();
+			AABB boundingBox = blockEntity.getTeleportField();
 			
-			List<E> entities = level.getEntitiesOfClass(entityClass, boundingBox, entity -> canTeleport(entity) && shouldTeleport(entity));
+			List<E> entities = level.getEntitiesOfClass(blockEntity.entityClass, boundingBox, entity -> canTeleport(entity) && blockEntity.shouldTeleport(entity));
 			for(E entity : entities)
 			{
 				if(entity.isOnPortalCooldown())
 					entity.setPortalCooldown();
-				else teleport(entity);
+				else blockEntity.teleport(entity);
 			}
-			hasCollision = false;	//TODO is this correct behavior if entity.timeUntilPortal != 0?
+			blockEntity.hasCollision = false;	//TODO is this correct behavior if entity.timeUntilPortal != 0?
 		}
 	}
 	

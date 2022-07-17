@@ -5,17 +5,18 @@ import com.mraof.minestuck.inventory.MiniCruxtruderContainer;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.util.ColorHandler;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IWorldPosCallable;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -26,15 +27,15 @@ import net.minecraftforge.items.wrapper.RangedWrapper;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class MiniCruxtruderTileEntity extends MachineProcessTileEntity implements INamedContainerProvider
+public class MiniCruxtruderTileEntity extends MachineProcessTileEntity implements MenuProvider
 {
 	public static final String TITLE = "container.minestuck.mini_cruxtruder";
 	public static final RunType TYPE = RunType.AUTOMATIC;
 	public int color = ColorHandler.DEFAULT_COLOR;
 	
-	public MiniCruxtruderTileEntity()
+	public MiniCruxtruderTileEntity(BlockPos pos, BlockState state)
 	{
-		super(MSTileEntityTypes.MINI_CRUXTRUDER.get());
+		super(MSTileEntityTypes.MINI_CRUXTRUDER.get(), pos, state);
 	}
 	
 	@Override
@@ -68,23 +69,23 @@ public class MiniCruxtruderTileEntity extends MachineProcessTileEntity implement
 	}
 	
 	@Override
-	public void load(BlockState state, CompoundNBT nbt)
+	public void load(CompoundTag nbt)
 	{
-		super.load(state, nbt);
+		super.load(nbt);
 		this.color = nbt.getInt("color");
 	}
 	
 	@Override
-	public CompoundNBT save(CompoundNBT compound)
+	public void saveAdditional(CompoundTag compound)
 	{
 		compound.putInt("color", color);
-		return super.save(compound);
+		super.saveAdditional(compound);
 	}
 	
 	@Override
-	public ITextComponent getDisplayName()
+	public Component getDisplayName()
 	{
-		return new TranslationTextComponent(TITLE);
+		return new TranslatableComponent(TITLE);
 	}
 	
 	private final LazyOptional<IItemHandler> sideHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 0, 1));
@@ -103,8 +104,8 @@ public class MiniCruxtruderTileEntity extends MachineProcessTileEntity implement
 	
 	@Nullable
 	@Override
-	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity player)
+	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player player)
 	{
-		return new MiniCruxtruderContainer(windowId, playerInventory, itemHandler, parameters, IWorldPosCallable.create(level, worldPosition), worldPosition);
+		return new MiniCruxtruderContainer(windowId, playerInventory, itemHandler, parameters, ContainerLevelAccess.create(level, worldPosition), worldPosition);
 	}
 }

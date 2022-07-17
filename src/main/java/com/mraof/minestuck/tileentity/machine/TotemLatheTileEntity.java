@@ -14,29 +14,29 @@ import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.WorldEventUtil;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.Containers;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nonnull;
 
-public class TotemLatheTileEntity extends TileEntity
+public class TotemLatheTileEntity extends BlockEntity
 {
 	private boolean broken = false;
 	//two cards so that we can preform the && alchemy operation
 	private ItemStack card1 = ItemStack.EMPTY;
 	private ItemStack card2 = ItemStack.EMPTY;
 	
-	public TotemLatheTileEntity()
+	public TotemLatheTileEntity(BlockPos pos, BlockState state)
 	{
-		super(MSTileEntityTypes.TOTEM_LATHE.get());
+		super(MSTileEntityTypes.TOTEM_LATHE.get(), pos, state);
 	}
 	
 	private boolean tryAddCard(ItemStack stack)
@@ -126,31 +126,28 @@ public class TotemLatheTileEntity extends TileEntity
 			return true;
 		} else if(stack.getItem() == MSBlocks.CRUXITE_DOWEL.asItem())
 		{
-			BlockState newState = MSBlocks.TOTEM_LATHE.DOWEL_ROD.get().defaultBlockState().setValue(TotemLatheBlock.FACING, facing).setValue(TotemLatheBlock.DowelRod.DOWEL, EnumDowelType.getForDowel(stack));
+			BlockState newState = MSBlocks.TOTEM_LATHE.DOWEL_ROD.get()
+					.defaultBlockState().setValue(TotemLatheBlock.FACING, facing)
+					.setValue(TotemLatheBlock.DowelRod.DOWEL, EnumDowelType.getForDowel(stack));
+			//TODO clean up the following code block
 			if(isValidDowelRod(state, facing))
 			{
-				TileEntity te = level.getBlockEntity(pos);
-				if(!(te instanceof ItemStackTileEntity))
-				{
-					te = new ItemStackTileEntity();
-					level.setBlockEntity(pos, te);
-				}
-				ItemStackTileEntity teItem = (ItemStackTileEntity) te;
+				BlockEntity te = level.getBlockEntity(pos);
+				if(!(te instanceof ItemStackTileEntity teItem))
+					return false;
+				
 				teItem.setStack(stack);
 				if(!state.equals(newState))
 					level.setBlockAndUpdate(pos, newState);
 				else level.sendBlockUpdated(pos, state, state, 2);
 				return true;
-			} else if(state.isAir(level, pos))
+			} else if(state.isAir())
 			{
 				level.setBlockAndUpdate(pos, newState);
-				TileEntity te = level.getBlockEntity(pos);
-				if(!(te instanceof ItemStackTileEntity))
-				{
-					te = new ItemStackTileEntity();
-					level.setBlockEntity(pos, te);
-				}
-				ItemStackTileEntity teItem = (ItemStackTileEntity) te;
+				BlockEntity te = level.getBlockEntity(pos);
+				if(!(te instanceof ItemStackTileEntity teItem))
+					return false;
+				
 				teItem.setStack(stack);
 				
 				return true;
@@ -164,11 +161,8 @@ public class TotemLatheTileEntity extends TileEntity
 		BlockPos pos = getBlockPos().above().relative(getFacing().getCounterClockWise(), 2);
 		if(isValidDowelRod(level.getBlockState(pos), getFacing()))
 		{
-			TileEntity te = level.getBlockEntity(pos);
-			if(te instanceof ItemStackTileEntity)
-			{
-				return ((ItemStackTileEntity) te).getStack();
-			}
+			if(level.getBlockEntity(pos) instanceof ItemStackTileEntity blockEntity)
+				return blockEntity.getStack();
 		}
 		return ItemStack.EMPTY;
 		
@@ -184,7 +178,7 @@ public class TotemLatheTileEntity extends TileEntity
 		return getBlockState().getValue(TotemLatheBlock.FACING);
 	}
 	
-	public void onRightClick(PlayerEntity player, BlockState clickedState)
+	public void onRightClick(Player player, BlockState clickedState)
 	{
 		boolean working = isUseable(clickedState);
 		
@@ -204,7 +198,7 @@ public class TotemLatheTileEntity extends TileEntity
 		}
 	}
 	
-	private void handleSlotClick(PlayerEntity player, boolean isWorking)
+	private void handleSlotClick(Player player, boolean isWorking)
 	{
 		ItemStack heldStack = player.getMainHandItem();
 		ItemStack card = heldStack.copy().split(1);
@@ -217,15 +211,15 @@ public class TotemLatheTileEntity extends TileEntity
 			if(!card.isEmpty())
 			{
 				if(player.getMainHandItem().isEmpty())
-					player.setItemInHand(Hand.MAIN_HAND, card);
-				else if(!player.inventory.add(card))
+					player.setItemInHand(InteractionHand.MAIN_HAND, card);
+				else if(!player.getInventory().add(card))
 					dropItem(false, getBlockPos(), card);
 				else player.inventoryMenu.broadcastChanges();
 			}
 		}
 	}
 	
-	private void handleDowelClick(PlayerEntity player, boolean isWorking)
+	private void handleDowelClick(Player player, boolean isWorking)
 	{
 		ItemStack heldStack = player.getMainHandItem();
 		ItemStack dowel = getDowel();
@@ -243,8 +237,8 @@ public class TotemLatheTileEntity extends TileEntity
 		} else
 		{
 			if(player.getMainHandItem().isEmpty())
-				player.setItemInHand(Hand.MAIN_HAND, dowel);
-			else if(!player.inventory.add(dowel))
+				player.setItemInHand(InteractionHand.MAIN_HAND, dowel);
+			else if(!player.getInventory().add(dowel))
 				dropItem(true, getBlockPos().above().relative(getFacing().getCounterClockWise(), 2), dowel);
 			else player.inventoryMenu.broadcastChanges();
 			setDowel(ItemStack.EMPTY);
@@ -285,13 +279,13 @@ public class TotemLatheTileEntity extends TileEntity
 			dropPos = pos.relative(direction);
 		else dropPos = pos;
 		
-		InventoryHelper.dropItemStack(level, dropPos.getX(), dropPos.getY(), dropPos.getZ(), stack);
+		Containers.dropItemStack(level, dropPos.getX(), dropPos.getY(), dropPos.getZ(), stack);
 	}
 	
 	@Override
-	public void load(BlockState state, CompoundNBT nbt)
+	public void load(CompoundTag nbt)
 	{
-		super.load(state, nbt);
+		super.load(nbt);
 		broken = nbt.getBoolean("broken");
 		card1 = ItemStack.of(nbt.getCompound("card1"));
 		card2 = ItemStack.of(nbt.getCompound("card2"));
@@ -303,13 +297,12 @@ public class TotemLatheTileEntity extends TileEntity
 	}
 	
 	@Override
-	public CompoundNBT save(CompoundNBT compound)
+	public void saveAdditional(CompoundTag compound)
 	{
-		super.save(compound);
+		super.saveAdditional(compound);
 		compound.putBoolean("broken",broken);
-		compound.put("card1", card1.save(new CompoundNBT()));
-		compound.put("card2", card2.save(new CompoundNBT()));
-		return compound;
+		compound.put("card1", card1.save(new CompoundTag()));
+		compound.put("card2", card2.save(new CompoundTag()));
 	}
 	
 	public void processContents()

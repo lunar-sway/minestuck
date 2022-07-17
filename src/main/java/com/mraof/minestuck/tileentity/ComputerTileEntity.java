@@ -10,15 +10,16 @@ import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.management.OpEntry;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.players.ServerOpListEntry;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 import java.util.Hashtable;
@@ -28,11 +29,11 @@ import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-public class ComputerTileEntity extends TileEntity implements ISburbComputer
+public class ComputerTileEntity extends BlockEntity implements ISburbComputer
 {	//TODO The implementation of this class need a serious rewrite
-	public ComputerTileEntity()
+	public ComputerTileEntity(BlockPos pos, BlockState state)
 	{
-		super(MSTileEntityTypes.COMPUTER.get());
+		super(MSTileEntityTypes.COMPUTER.get(), pos, state);
 	}
 	
 	/**
@@ -44,16 +45,16 @@ public class ComputerTileEntity extends TileEntity implements ISburbComputer
 	//client side only
 	public int ownerId;
 	public Hashtable<Integer, String> latestmessage = new Hashtable<Integer, String>();
-	public CompoundNBT programData = new CompoundNBT();
+	public CompoundTag programData = new CompoundTag();
 	public int programSelected = -1;
 	
 	@Override
-	public void load(BlockState state, CompoundNBT nbt)
+	public void load(CompoundTag nbt)
 	{
-		super.load(state, nbt);
+		super.load(nbt);
 		if (nbt.contains("programs"))
 		{
-			CompoundNBT programs = nbt.getCompound("programs");
+			CompoundTag programs = nbt.getCompound("programs");
 			for (Object name : programs.getAllKeys())
 			{
 				installedPrograms.put(programs.getInt((String)name), true);
@@ -75,10 +76,10 @@ public class ComputerTileEntity extends TileEntity implements ISburbComputer
 	}
 	
 	@Override
-	public CompoundNBT save(CompoundNBT compound)
+	public void saveAdditional(CompoundTag compound)
 	{
-		super.save(compound);
-		CompoundNBT programs = new CompoundNBT();
+		super.saveAdditional(compound);
+		CompoundTag programs = new CompoundTag();
 		Iterator<Entry<Integer, Boolean>> it = this.installedPrograms.entrySet().iterator();
 		//int place = 0;
 		while (it.hasNext()) 
@@ -94,13 +95,12 @@ public class ComputerTileEntity extends TileEntity implements ISburbComputer
 		compound.put("programData", programData.copy());
 		if (owner != null) 
 			owner.saveToNBT(compound, "owner");
-		return compound;
 	}
 	
 	@Override
-	public CompoundNBT getUpdateTag()
+	public CompoundTag getUpdateTag()
 	{
-		CompoundNBT tagCompound = this.save(new CompoundNBT());
+		CompoundTag tagCompound = this.saveWithoutMetadata();
 		tagCompound.remove("owner");
 		tagCompound.remove("ownerMost");
 		tagCompound.remove("ownerLeast");
@@ -117,15 +117,9 @@ public class ComputerTileEntity extends TileEntity implements ISburbComputer
 	
 	@Nullable
 	@Override
-	public SUpdateTileEntityPacket getUpdatePacket()
+	public Packet<ClientGamePacketListener> getUpdatePacket()
 	{
-		return new SUpdateTileEntityPacket(this.worldPosition, 2, getUpdateTag());
-	}
-	
-	@Override
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
-	{
-		this.load(getBlockState(), pkt.getTag());
+		return ClientboundBlockEntityDataPacket.create(this);
 	}
 
 	public boolean hasProgram(int id) 
@@ -133,10 +127,10 @@ public class ComputerTileEntity extends TileEntity implements ISburbComputer
 		return installedPrograms.get(id) == null ? false:installedPrograms.get(id);
 	}
 
-	public CompoundNBT getData(int id)
+	public CompoundTag getData(int id)
 	{
 		if(!programData.contains("program_"+id))
-			programData.put("program_" + id, new CompoundNBT());
+			programData.put("program_" + id, new CompoundTag());
 		return programData.getCompound("program_" + id);
 	}
 
@@ -233,16 +227,14 @@ public class ComputerTileEntity extends TileEntity implements ISburbComputer
 		this.level.sendBlockUpdated(worldPosition, state, state, 3);
 	}
 	
-	public static void forNetworkIfPresent(ServerPlayerEntity player, BlockPos pos, Consumer<ComputerTileEntity> consumer)
+	public static void forNetworkIfPresent(ServerPlayer player, BlockPos pos, Consumer<ComputerTileEntity> consumer)
 	{
 		if(player.level.isAreaLoaded(pos, 0))	//TODO also check distance to the computer pos (together with a continual check clientside)
 		{
-			TileEntity te = player.level.getBlockEntity(pos);
-			if(te instanceof ComputerTileEntity)
+			if(player.level.getBlockEntity(pos) instanceof ComputerTileEntity computer)
 			{
-				ComputerTileEntity computer = (ComputerTileEntity) te;
 				MinecraftServer mcServer = Objects.requireNonNull(player.getServer());
-				OpEntry opsEntry = mcServer.getPlayerList().getOps().get(player.getGameProfile());
+				ServerOpListEntry opsEntry = mcServer.getPlayerList().getOps().get(player.getGameProfile());
 				if((!MinestuckConfig.SERVER.privateComputers.get() || IdentifierHandler.encode(player) == computer.owner || opsEntry != null && opsEntry.getLevel() >= 2) && ServerEditHandler.getData(player) == null)
 					consumer.accept(computer);
 			}

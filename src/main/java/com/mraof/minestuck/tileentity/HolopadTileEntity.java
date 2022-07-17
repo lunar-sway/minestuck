@@ -4,40 +4,39 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.machine.HolopadBlock;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.Containers;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
-public class HolopadTileEntity extends TileEntity implements ITickableTileEntity
+public class HolopadTileEntity extends BlockEntity
 {
 	
 	public int innerRotation = 0;
 	protected ItemStack card = ItemStack.EMPTY;
 	
-	public HolopadTileEntity()
+	public HolopadTileEntity(BlockPos pos, BlockState state)
 	{
-		super(MSTileEntityTypes.HOLOPAD.get());
+		super(MSTileEntityTypes.HOLOPAD.get(), pos, state);
 	}
 	
-	public void onRightClick(PlayerEntity player)
+	public void onRightClick(Player player)
 	{
 		if(!card.isEmpty())
 		{
 			if (player.getMainHandItem().isEmpty())
-				player.setItemInHand(Hand.MAIN_HAND, card);
-			else if (!player.inventory.add(card))
+				player.setItemInHand(InteractionHand.MAIN_HAND, card);
+			else if (!player.getInventory().add(card))
 				dropItem(false, level, worldPosition, card);
 			else player.inventoryMenu.broadcastChanges();
 			
@@ -64,16 +63,16 @@ public class HolopadTileEntity extends TileEntity implements ITickableTileEntity
 		}
 	}
 	
-	public void dropItem(boolean inBlock, World worldIn, BlockPos pos, ItemStack item)
+	public void dropItem(boolean inBlock, Level level, BlockPos pos, ItemStack item)
 	{
 		BlockPos dropPos;
 		if(inBlock)
 			dropPos = pos;
-		else if(!Block.canSupportCenter(worldIn, pos.above(), Direction.DOWN))
+		else if(!Block.canSupportCenter(level, pos.above(), Direction.DOWN))
 			dropPos = pos.above();
 		else dropPos = pos;
 		
-		InventoryHelper.dropItemStack(worldIn, dropPos.getX(), dropPos.getY(), dropPos.getZ(), item);
+		Containers.dropItemStack(level, dropPos.getX(), dropPos.getY(), dropPos.getZ(), item);
 		
 	}
 	
@@ -111,49 +110,38 @@ public class HolopadTileEntity extends TileEntity implements ITickableTileEntity
 	}
 	
 	@Override
-	public void load(BlockState state, CompoundNBT nbt)
+	public void load(CompoundTag nbt)
 	{
-		super.load(state, nbt);
+		super.load(nbt);
 		//broken = tagCompound.getBoolean("broken");
 		setCard(ItemStack.of(nbt.getCompound("card")));
 	}
 	
 	@Override
-	public CompoundNBT save(CompoundNBT compound)
+	public void saveAdditional(CompoundTag compound)
 	{
-		super.save(compound);
+		super.saveAdditional(compound);
 		//tagCompound.setBoolean("broken", this.broken);
-		compound.put("card", card.save(new CompoundNBT()));
-		return compound;
+		compound.put("card", card.save(new CompoundTag()));
 	}
 	
 	@Override
-	public CompoundNBT getUpdateTag()
+	public CompoundTag getUpdateTag()
 	{
-		CompoundNBT nbt = super.getUpdateTag();
-		nbt.put("card", card.save(new CompoundNBT()));
+		CompoundTag nbt = super.getUpdateTag();
+		nbt.put("card", card.save(new CompoundTag()));
 		return nbt;
 	}
 	
 	@Override
-	public SUpdateTileEntityPacket getUpdatePacket()
+	public Packet<ClientGamePacketListener> getUpdatePacket()
 	{
-		SUpdateTileEntityPacket packet;
-		packet = new SUpdateTileEntityPacket(this.worldPosition, 0, getUpdateTag());
-		return packet;
+		return ClientboundBlockEntityDataPacket.create(this);
 	}
 	
-	@Override
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
+	public static void clientTick(Level level, BlockPos pos, BlockState state, HolopadTileEntity blockEntity)
 	{
-		handleUpdateTag(getBlockState(), pkt.getTag());
-	}
-	
-	
-	@Override
-	public void tick()
-	{
-		++innerRotation;
+		blockEntity.innerRotation++;
 	}
 	
 	private void updateState()
@@ -163,7 +151,7 @@ public class HolopadTileEntity extends TileEntity implements ITickableTileEntity
 			BlockState state = level.getBlockState(worldPosition);
 			boolean hasCard = !card.isEmpty();
 			if(state.hasProperty(HolopadBlock.HAS_CARD) && hasCard != state.getValue(HolopadBlock.HAS_CARD))
-				level.setBlock(worldPosition, state.setValue(HolopadBlock.HAS_CARD, hasCard), Constants.BlockFlags.BLOCK_UPDATE);
+				level.setBlock(worldPosition, state.setValue(HolopadBlock.HAS_CARD, hasCard), Block.UPDATE_CLIENTS);
 		}
 	}
 }

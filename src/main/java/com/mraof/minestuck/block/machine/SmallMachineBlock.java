@@ -2,74 +2,78 @@ package com.mraof.minestuck.block.machine;
 
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.tileentity.machine.IOwnable;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import com.mraof.minestuck.tileentity.machine.MachineProcessTileEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class SmallMachineBlock<T extends TileEntity> extends MachineProcessBlock
+public class SmallMachineBlock<T extends MachineProcessTileEntity> extends MachineProcessBlock implements EntityBlock
 {
 	private final Map<Direction, VoxelShape> shape;
-	private final Supplier<TileEntityType<T>> tileType;
+	private final Supplier<BlockEntityType<T>> entityType;
 	
-	public SmallMachineBlock(Map<Direction, VoxelShape> shape, Supplier<TileEntityType<T>> tileType, Properties properties)
+	public SmallMachineBlock(Map<Direction, VoxelShape> shape, Supplier<BlockEntityType<T>> entityType, Properties properties)
 	{
 		super(properties);
 		this.shape = shape;
-		this.tileType = tileType;
+		this.entityType = entityType;
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
+	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
 	{
 		return shape.get(state.getValue(FACING));
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
 	{
-		if(!worldIn.isClientSide)
+		if(!level.isClientSide)
 		{
-			TileEntity tileEntity = worldIn.getBlockEntity(pos);
-			if(tileEntity != null && tileEntity.getType() == this.tileType.get())
+			BlockEntity blockEntity = level.getBlockEntity(pos);
+			if(blockEntity != null && blockEntity.getType() == this.entityType.get())
 			{
-				if(tileEntity instanceof IOwnable)
-					((IOwnable) tileEntity).setOwner(IdentifierHandler.encode(player));
-				if(tileEntity instanceof INamedContainerProvider)
-					NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, pos);
+				if(blockEntity instanceof IOwnable ownable)
+					ownable.setOwner(IdentifierHandler.encode(player));
+				if(blockEntity instanceof MenuProvider menuProvider)
+					NetworkHooks.openGui((ServerPlayer) player, menuProvider, pos);
 			}
 		}
-		return ActionResultType.sidedSuccess(worldIn.isClientSide);
-	}
-	
-	@Override
-	public boolean hasTileEntity(BlockState state)
-	{
-		return true;
+		return InteractionResult.sidedSuccess(level.isClientSide);
 	}
 	
 	@Nullable
 	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world)
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
-		return tileType.get().create();
+		return entityType.get().create(pos, state);
+	}
+	
+	@Nullable
+	@Override
+	public <E extends BlockEntity> BlockEntityTicker<E> getTicker(Level level, BlockState state, BlockEntityType<E> placedType)
+	{
+		return createMachineTicker(level, placedType, entityType.get());
 	}
 }

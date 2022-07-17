@@ -3,24 +3,25 @@ package com.mraof.minestuck.block.machine;
 import com.mraof.minestuck.block.MSBlockShapes;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 
-public class TransportalizerBlock extends MachineBlock
+public class TransportalizerBlock extends MachineBlock implements EntityBlock
 {
 	public static final VoxelShape SHAPE = MSBlockShapes.TRANSPORTALIZER.create(Direction.NORTH);
 	
@@ -31,54 +32,47 @@ public class TransportalizerBlock extends MachineBlock
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
+	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
 	{
 		return SHAPE;
 	}
 	
-	@Override
-	public boolean hasTileEntity(BlockState state)
-	{
-		return true;
-	}
-	
 	@Nullable
 	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world)
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
-		return new TransportalizerTileEntity();
+		return new TransportalizerTileEntity(pos, state);
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public void entityInside(BlockState state, World worldIn, BlockPos pos, Entity entityIn)
+	public void entityInside(BlockState state, Level level, BlockPos pos, Entity entityIn)
 	{
-		TileEntity tileEntity = worldIn.getBlockEntity(pos);
-		if(tileEntity instanceof TransportalizerTileEntity)
-			((TransportalizerTileEntity) tileEntity).onCollision(entityIn);
+		if(level.getBlockEntity(pos) instanceof TransportalizerTileEntity transportalizer)
+			transportalizer.onCollision(entityIn);
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public BlockRenderType getRenderShape(BlockState state)
+	public RenderShape getRenderShape(BlockState state)
 	{
-		return BlockRenderType.MODEL;
+		return RenderShape.MODEL;
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
 	{
-		TransportalizerTileEntity tileEntity = (TransportalizerTileEntity) worldIn.getBlockEntity(pos);
+		TransportalizerTileEntity tileEntity = (TransportalizerTileEntity) level.getBlockEntity(pos);
 
 		if (tileEntity == null || player.isShiftKeyDown())
 		{
-			return ActionResultType.PASS;
+			return InteractionResult.PASS;
 		}
 
-		if(worldIn.isClientSide)
+		if(level.isClientSide)
 			MSScreenFactories.displayTransportalizerScreen(tileEntity);
 
-		return ActionResultType.SUCCESS;
+		return InteractionResult.SUCCESS;
 	}
 }

@@ -1,15 +1,16 @@
 package com.mraof.minestuck.tileentity.machine;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IIntArray;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -19,11 +20,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.function.BiPredicate;
 
-public abstract class MachineProcessTileEntity extends TileEntity implements ITickableTileEntity
+public abstract class MachineProcessTileEntity extends BlockEntity
 {
 	protected final ItemStackHandler itemHandler = createItemHandler();
 	private final LazyOptional<IItemHandler> itemOptional = LazyOptional.of(() -> itemHandler);
-	protected final IIntArray parameters = new ProgressIntArray(this);
+	protected final ContainerData parameters = new ProgressIntArray(this);
 	public static final int DEFAULT_MAX_PROGRESS = 100;
 
 	public int progress = 0;
@@ -33,9 +34,9 @@ public abstract class MachineProcessTileEntity extends TileEntity implements ITi
 	
 	public static final int FUEL_INCREASE = 32; //how many units of fuel a chunk of uranium adds to a machine powered by it, used by Sendificator and UraniumCooker
 	
-	protected MachineProcessTileEntity(TileEntityType<?> tileEntityTypeIn)
+	protected MachineProcessTileEntity(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state)
 	{
-		super(tileEntityTypeIn);
+		super(tileEntityTypeIn, pos, state);
 	}
 	
 	protected abstract ItemStackHandler createItemHandler();
@@ -48,29 +49,27 @@ public abstract class MachineProcessTileEntity extends TileEntity implements ITi
 	}
 	
 	@Override
-	public void load(BlockState state, CompoundNBT nbt)
+	public void load(CompoundTag nbt)
 	{
-		super.load(state, nbt);
+		super.load(nbt);
 
 		this.progress = nbt.getInt("progress");
 		if(getRunType() == RunType.BUTTON_OVERRIDE)
 			this.overrideStop = nbt.getBoolean("overrideStop");
-		if(nbt.contains("inventory", Constants.NBT.TAG_COMPOUND))
+		if(nbt.contains("inventory", Tag.TAG_COMPOUND))
 			itemHandler.deserializeNBT(nbt.getCompound("inventory"));
 		else itemHandler.deserializeNBT(nbt);	//TODO reads save format from before the item handler. Remove when we don't care about backwards-compability to early mc1.15 versions
 	}
 	
 	@Override
-	public CompoundNBT save(CompoundNBT compound)
+	protected void saveAdditional(CompoundTag compound)
 	{
-		super.save(compound);
+		super.saveAdditional(compound);
 
 		compound.putInt("progress", this.progress);
 		if(getRunType() == RunType.BUTTON_OVERRIDE)
 			compound.putBoolean("overrideStop", this.overrideStop);
 		compound.put("inventory", itemHandler.serializeNBT());
-
-		return compound;
 	}
 	
 	@Nonnull
@@ -82,32 +81,32 @@ public abstract class MachineProcessTileEntity extends TileEntity implements ITi
 		return super.getCapability(cap, side);
 	}
 	
-	@Override
-	public void tick()
+	public static void serverTick(Level level, BlockPos pos, BlockState state, MachineProcessTileEntity blockEntity)
 	{
-		BlockState state = level.getBlockState(worldPosition);
-		if (level.isClientSide)    //Processing is easier done on the server side only
-			return;
-
-		if ((!ready && getRunType() != RunType.AUTOMATIC) || !contentsValid())
+		if ((!blockEntity.ready && blockEntity.getRunType() != RunType.AUTOMATIC) || !blockEntity.contentsValid())
 		{
-			boolean b = progress == 0;
-			this.progress = 0;
-			this.ready = getOverrideStop();
+			boolean b = blockEntity.progress == 0;
+			blockEntity.progress = 0;
+			blockEntity.ready = blockEntity.getOverrideStop();
 			if (!b)
-				level.sendBlockUpdated(worldPosition, state, state, 3);
+				level.sendBlockUpdated(pos, state, state, 3);
 			return;
 		}
+		
+		blockEntity.progress++;
 
-		this.progress++;
-
-		if (this.progress >= this.maxProgress)
+		if (blockEntity.progress >= blockEntity.maxProgress)
 		{
-			this.progress = 0;
-			this.ready = getOverrideStop();
-			processContents();
+			blockEntity.progress = 0;
+			blockEntity.ready = blockEntity.getOverrideStop();
+			blockEntity.processContents();
 		}
+		
+		blockEntity.tick();
 	}
+	
+	protected void tick()
+	{}
 
 	public abstract boolean contentsValid();
 
@@ -148,7 +147,7 @@ public abstract class MachineProcessTileEntity extends TileEntity implements ITi
 		}
 	}
 	
-	private static class ProgressIntArray implements IIntArray
+	private static class ProgressIntArray implements ContainerData
 	{
 		private final MachineProcessTileEntity tileEntity;
 		

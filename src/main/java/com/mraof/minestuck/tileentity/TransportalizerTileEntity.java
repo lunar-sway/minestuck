@@ -4,31 +4,32 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.storage.TransportalizerSavedData;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.util.INameable;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.GlobalPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.DimensionType;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
+import net.minecraft.core.Registry;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Nameable;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.dimension.DimensionType;
+import net.minecraft.world.phys.AABB;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 
-public class TransportalizerTileEntity extends OnCollisionTeleporterTileEntity<Entity> implements INameable
+public class TransportalizerTileEntity extends OnCollisionTeleporterTileEntity<Entity> implements Nameable
 {
 	public static final String DISABLED = "minestuck.transportalizer.disabled";
 	public static final String BLOCKED = "minestuck.transportalizer.blocked";
@@ -41,9 +42,9 @@ public class TransportalizerTileEntity extends OnCollisionTeleporterTileEntity<E
 	String id = "";
 	private String destId = "";
 	
-	public TransportalizerTileEntity()
+	public TransportalizerTileEntity(BlockPos pos, BlockState state)
 	{
-		super(MSTileEntityTypes.TRANSPORTALIZER.get(), Entity.class);
+		super(MSTileEntityTypes.TRANSPORTALIZER.get(), pos, state, Entity.class);
 	}
 	
 	@Override
@@ -68,29 +69,28 @@ public class TransportalizerTileEntity extends OnCollisionTeleporterTileEntity<E
 		}
 	}
 	
-	@Override
-	public void tick()
+	public static <E extends Entity> void transportalizerTick(Level level, BlockPos pos, BlockState state, TransportalizerTileEntity blockEntity)
 	{
 		if(level.isClientSide)
 			return;
 		// Disable the transportalizer if it's being powered by a redstone signal.
 		// Disabling a transportalizer prevents it from receiving or sending.
 		// Recieving will fail silently. Sending will warn the player.
-		if(level.hasNeighborSignal(this.getBlockPos()))
+		if(level.hasNeighborSignal(blockEntity.getBlockPos()))
 		{
-			if(enabled) { setEnabled(false); }
+			if(blockEntity.enabled) { blockEntity.setEnabled(false); }
 		}
 		else {
-			if(!enabled) { setEnabled(true); }
+			if(!blockEntity.enabled) { blockEntity.setEnabled(true); }
 		}
 		
-		super.tick();
+		serverTick(level, pos, state, blockEntity);
 	}
 	
 	@Override
-	protected AxisAlignedBB getTeleportField()
+	protected AABB getTeleportField()
 	{
-		return new AxisAlignedBB(worldPosition.getX() + 1D/16, worldPosition.getY() + 8D/16, worldPosition.getZ() + 1D/16, worldPosition.getX() + 15D/16, worldPosition.getY() + 1, worldPosition.getZ() + 15D/16);
+		return new AABB(worldPosition.getX() + 1D/16, worldPosition.getY() + 8D/16, worldPosition.getZ() + 1D/16, worldPosition.getX() + 15D/16, worldPosition.getY() + 1, worldPosition.getZ() + 15D/16);
 	}
 	
 	@Override
@@ -100,76 +100,76 @@ public class TransportalizerTileEntity extends OnCollisionTeleporterTileEntity<E
 		if(!enabled)
 		{
 			entity.setPortalCooldown();
-			if(entity instanceof ServerPlayerEntity)
-				entity.sendMessage(new TranslationTextComponent(DISABLED), Util.NIL_UUID);
+			if(entity instanceof ServerPlayer)
+				entity.sendMessage(new TranslatableComponent(DISABLED), Util.NIL_UUID);
 			return;
 		}
 		if(location != null && location.pos().getY() != -1)
 		{
-			ServerWorld world = entity.getServer().getLevel(location.dimension());
-			TransportalizerTileEntity destTransportalizer = (TransportalizerTileEntity) world.getBlockEntity(location.pos());
+			ServerLevel level = entity.getServer().getLevel(location.dimension());
+			TransportalizerTileEntity destTransportalizer = (TransportalizerTileEntity) level.getBlockEntity(location.pos());
 			if(destTransportalizer == null)
 			{
 				Debug.warn("Invalid transportalizer in map: " + this.destId + " at " + location);
-				TransportalizerSavedData.get(world).remove(this.destId, location);
+				TransportalizerSavedData.get(level).remove(this.destId, location);
 				this.destId = "";
 				return;
 			}
 			
 			if(!destTransportalizer.getEnabled()) { return; } // Fail silently to make it look as though the player entered an ID that doesn't map to a transportalizer.
 			
+			if(isDimensionForbidden(this.level))
+			{
+				entity.setPortalCooldown();
+				if(entity instanceof ServerPlayer)
+					entity.sendMessage(new TranslatableComponent(FORBIDDEN), Util.NIL_UUID);
+				return;
+			}
 			if(isDimensionForbidden(level))
 			{
 				entity.setPortalCooldown();
-				if(entity instanceof ServerPlayerEntity)
-					entity.sendMessage(new TranslationTextComponent(FORBIDDEN), Util.NIL_UUID);
-				return;
-			}
-			if(isDimensionForbidden(world))
-			{
-				entity.setPortalCooldown();
-				if(entity instanceof ServerPlayerEntity)
-					entity.sendMessage(new TranslationTextComponent(FORBIDDEN_DESTINATION), Util.NIL_UUID);
+				if(entity instanceof ServerPlayer)
+					entity.sendMessage(new TranslatableComponent(FORBIDDEN_DESTINATION), Util.NIL_UUID);
 				return;
 			}
 			
 			if(isBlocked(this.level, this.worldPosition))
 			{
 				entity.setPortalCooldown();
-				if(entity instanceof ServerPlayerEntity)
-					entity.sendMessage(new TranslationTextComponent(BLOCKED), Util.NIL_UUID);
+				if(entity instanceof ServerPlayer)
+					entity.sendMessage(new TranslatableComponent(BLOCKED), Util.NIL_UUID);
 				return;
 			}
 			
-			if(isBlocked(world, location.pos()))
+			if(isBlocked(level, location.pos()))
 			{
 				entity.setPortalCooldown();
-				if(entity instanceof ServerPlayerEntity)
-					entity.sendMessage(new TranslationTextComponent(BLOCKED_DESTINATION), Util.NIL_UUID);
+				if(entity instanceof ServerPlayer)
+					entity.sendMessage(new TranslatableComponent(BLOCKED_DESTINATION), Util.NIL_UUID);
 				return;
 			}
 			
-			entity = Teleport.teleportEntity(entity, (ServerWorld) destTransportalizer.level, location.pos().getX() + 0.5, location.pos().getY() + 0.6, location.pos().getZ() + 0.5, entity.yRot, entity.xRot);
+			entity = Teleport.teleportEntity(entity, (ServerLevel) destTransportalizer.level, location.pos().getX() + 0.5, location.pos().getY() + 0.6, location.pos().getZ() + 0.5, entity.getYRot(), entity.getXRot());
 			if(entity != null)
 				entity.setPortalCooldown();
 		}
 	}
 	
-	public static boolean isBlocked(World world, BlockPos pos)
+	public static boolean isBlocked(Level level, BlockPos pos)
 	{
-		BlockState block0 = world.getBlockState(pos.above());
-		BlockState block1 = world.getBlockState(pos.above(2));
+		BlockState block0 = level.getBlockState(pos.above());
+		BlockState block1 = level.getBlockState(pos.above(2));
 		return block0.getMaterial().blocksMotion() || block1.getMaterial().blocksMotion();
 	}
 	
-	private static boolean isDimensionForbidden(World world)
+	private static boolean isDimensionForbidden(Level level)
 	{
 		List<String> forbiddenWorlds = MinestuckConfig.SERVER.forbiddenWorldsTpz.get();
 		List<String> forbiddenDimTypes = MinestuckConfig.SERVER.forbiddenDimensionTypesTpz.get();
 		
-		Optional<RegistryKey<DimensionType>> typeKey = world.registryAccess().dimensionTypes().getResourceKey(world.dimensionType());
+		Optional<ResourceKey<DimensionType>> typeKey = level.registryAccess().registryOrThrow(Registry.DIMENSION_TYPE_REGISTRY).getResourceKey(level.dimensionType());
 		
-		return forbiddenWorlds.contains(String.valueOf(world.dimension().location()))
+		return forbiddenWorlds.contains(String.valueOf(level.dimension().location()))
 				|| typeKey.isPresent() && forbiddenDimTypes.contains(String.valueOf(typeKey.get().location()));
 	}
 	
@@ -225,28 +225,28 @@ public class TransportalizerTileEntity extends OnCollisionTeleporterTileEntity<E
 	}
 	
 	@Override
-	public ITextComponent getName()
+	public Component getName()
 	{
-		return new StringTextComponent("Transportalizer");
+		return new TextComponent("Transportalizer");
 	}
 	
 	@Override
-	public ITextComponent getDisplayName()
+	public Component getDisplayName()
 	{
 		return hasCustomName() ? getCustomName() : getName();
 	}
 	
 	@Nullable
 	@Override
-	public ITextComponent getCustomName()
+	public Component getCustomName()
 	{
-		return id.isEmpty() ? null : new StringTextComponent(id);
+		return id.isEmpty() ? null : new TextComponent(id);
 	}
 	
 	@Override
-	public void load(BlockState state, CompoundNBT nbt)
+	public void load(CompoundTag nbt)
 	{
-		super.load(state, nbt);
+		super.load(nbt);
 		this.destId = nbt.getString("destId");
 		this.id = nbt.getString("idString");
 		if(nbt.contains("active"))
@@ -254,33 +254,25 @@ public class TransportalizerTileEntity extends OnCollisionTeleporterTileEntity<E
 	}
 
 	@Override
-	public CompoundNBT save(CompoundNBT compound)
+	public void saveAdditional(CompoundTag compound)
 	{
-		super.save(compound);
+		super.saveAdditional(compound);
 		
 		compound.putString("idString", id);
 		compound.putString("destId", destId);
 		compound.putBoolean("active", active);
-		
-		return compound;
 	}
 	
 	@Override
-	public CompoundNBT getUpdateTag()
+	public CompoundTag getUpdateTag()
 	{
-		return this.save(new CompoundNBT());
+		return this.saveWithoutMetadata();
 	}
 	
 	@Override
-	public SUpdateTileEntityPacket getUpdatePacket()
+	public Packet<ClientGamePacketListener> getUpdatePacket()
 	{
-		return new SUpdateTileEntityPacket(this.worldPosition, 2, this.save(new CompoundNBT()));
-	}
-	
-	@Override
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
-	{
-		this.load(getBlockState(), pkt.getTag());
+		return ClientboundBlockEntityDataPacket.create(this);
 	}
 	
 }

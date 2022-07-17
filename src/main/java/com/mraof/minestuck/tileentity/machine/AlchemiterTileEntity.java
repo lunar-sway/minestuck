@@ -13,34 +13,34 @@ import com.mraof.minestuck.tileentity.IColored;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.util.Debug;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Containers;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.Constants;
 
-public class AlchemiterTileEntity extends TileEntity implements IColored, GristWildcardHolder
+public class AlchemiterTileEntity extends BlockEntity implements IColored, GristWildcardHolder
 {
 	
 	private GristType wildcardGrist = GristTypes.BUILD.get();
 	protected boolean broken = false;
 	protected ItemStack dowel = ItemStack.EMPTY;
 	
-	public AlchemiterTileEntity()
+	public AlchemiterTileEntity(BlockPos pos, BlockState state)
 	{
-		super(MSTileEntityTypes.ALCHEMITER.get());
+		super(MSTileEntityTypes.ALCHEMITER.get(), pos, state);
 	}
 	
 	public void setDowel(ItemStack newDowel)
@@ -55,7 +55,7 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 				if(state.hasProperty(AlchemiterBlock.Pad.DOWEL))	//If not, then the machine has likely been destroyed; don't bother doing anything about it
 				{
 					state = state.setValue(AlchemiterBlock.Pad.DOWEL, EnumDowelType.getForDowel(newDowel));
-					level.setBlock(worldPosition, state, Constants.BlockFlags.BLOCK_UPDATE);
+					level.setBlock(worldPosition, state, Block.UPDATE_CLIENTS);
 				}
 			}
 		}
@@ -74,13 +74,7 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 	
 	public ItemStack getOutput()
 	{
-		/*if(hasUpgrade(AlchemiterUpgrades.captchaCard))
-		{
-		if (!AlchemyRecipes.hasDecodedItem(dowel))
-			return AlchemyRecipes.createCard(new ItemStack(MinestuckBlocks.GENERIC_OBJECT), false);
-		else return AlchemyRecipes.createCard(new ItemStack(AlchemyRecipes.getDecodedItem(dowel).getItem(), 1), false);
-		}
-		else */if (!AlchemyHelper.hasDecodedItem(dowel))
+		if (!AlchemyHelper.hasDecodedItem(dowel))
 			return new ItemStack(MSBlocks.GENERIC_OBJECT);
 		else return AlchemyHelper.getDecodedItem(dowel);
 	}
@@ -126,7 +120,7 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 		if(direction != null && Block.canSupportCenter(level, worldPosition.relative(direction), direction.getOpposite()))
 			dropPos = this.worldPosition;
 		
-		InventoryHelper.dropItemStack(level, dropPos.getX(), dropPos.getY(), dropPos.getZ(), dowel);
+		Containers.dropItemStack(level, dropPos.getX(), dropPos.getY(), dropPos.getZ(), dowel);
 		setDowel(ItemStack.EMPTY);
 	}
 	
@@ -156,9 +150,9 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 	}
 	
 	@Override
-	public void load(BlockState state, CompoundNBT nbt)
+	public void load(CompoundTag nbt)
 	{
-		super.load(state, nbt);
+		super.load(nbt);
 		
 		wildcardGrist = GristType.read(nbt, "gristType");
 		
@@ -182,45 +176,37 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 		
 		//This a slight hack to force a rerender (since it at the time of writing normally happens before we get the update packet). This should not be done normally
 		if(level != null && level.isClientSide && !ItemStack.matches(oldDowel, dowel))
-			level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Constants.BlockFlags.RERENDER_MAIN_THREAD);
+			level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_IMMEDIATE);
 	}
 	
 	@Override
-	public CompoundNBT save(CompoundNBT compound)
+	public void saveAdditional(CompoundTag compound)
 	{
-		super.save(compound);
+		super.saveAdditional(compound);
 
 		compound.putString("gristType", wildcardGrist.getRegistryName().toString());
 		compound.putBoolean("broken", isBroken());
 		
 		if(dowel!= null)
-			compound.put("dowel", dowel.save(new CompoundNBT()));
-		
-		return compound;
+			compound.put("dowel", dowel.save(new CompoundTag()));
 	}
 	
 	@Override
-	public CompoundNBT getUpdateTag()
+	public CompoundTag getUpdateTag()
 	{
-		return save(new CompoundNBT());
+		return saveWithoutMetadata();
 	}
 	
 	
 	@Override
-	public SUpdateTileEntityPacket getUpdatePacket()
+	public Packet<ClientGamePacketListener> getUpdatePacket()
 	{
-		return new SUpdateTileEntityPacket(this.worldPosition, 0, getUpdateTag());
+		return ClientboundBlockEntityDataPacket.create(this);
 	}
 	
-	@Override
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
+	public void onRightClick(Level level, Player playerIn, BlockState state, Direction side)
 	{
-		handleUpdateTag(getBlockState(), pkt.getTag());
-	}
-	
-	public void onRightClick(World worldIn, PlayerEntity playerIn, BlockState state, Direction side)
-	{
-		if(worldIn.isClientSide)
+		if(level.isClientSide)
 		{
 			if(state.getBlock() == MSBlocks.ALCHEMITER.CENTER.get() || state.getBlock() == MSBlocks.ALCHEMITER.CORNER.get() || state.getBlock() == MSBlocks.ALCHEMITER.LEFT_SIDE.get()
 					|| state.getBlock() == MSBlocks.ALCHEMITER.RIGHT_SIDE.get() || state.getBlock() == MSBlocks.ALCHEMITER.TOTEM_CORNER.get())
@@ -237,7 +223,7 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 		onPadRightClick(playerIn, state, side);
 	}
 	
-	public void onPadRightClick(PlayerEntity player, BlockState clickedState, Direction side)
+	public void onPadRightClick(Player player, BlockState clickedState, Direction side)
 	{
 		if (isUseable(clickedState))
 		{
@@ -246,8 +232,8 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 				if (!dowel.isEmpty())
 				{    //Remove dowel from pad
 					if (player.getMainHandItem().isEmpty())
-						player.setItemInHand(Hand.MAIN_HAND, dowel);
-					else if (!player.inventory.add(dowel))
+						player.setItemInHand(InteractionHand.MAIN_HAND, dowel);
+					else if (!player.getInventory().add(dowel))
 						dropItem(side);
 					else player.inventoryMenu.broadcastChanges();
 					
@@ -262,7 +248,7 @@ public class AlchemiterTileEntity extends TileEntity implements IColored, GristW
 		}
 	}
 	
-	public void processContents(int quantity, ServerPlayerEntity player)
+	public void processContents(int quantity, ServerPlayer player)
 	{
 		ItemStack newItem = getOutput();
 		//Clamp quantity

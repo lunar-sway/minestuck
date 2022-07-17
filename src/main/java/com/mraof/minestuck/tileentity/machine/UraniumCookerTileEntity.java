@@ -5,21 +5,21 @@ import com.mraof.minestuck.item.crafting.IrradiatingRecipe;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.util.ExtraForgeTags;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.AbstractCookingRecipe;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IWorldPosCallable;
-import net.minecraft.util.IntReferenceHolder;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.Container;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.DataSlot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.AbstractCookingRecipe;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -34,15 +34,15 @@ import java.util.Comparator;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class UraniumCookerTileEntity extends MachineProcessTileEntity implements INamedContainerProvider
+public class UraniumCookerTileEntity extends MachineProcessTileEntity implements MenuProvider
 {
 	public static final String TITLE = "container.minestuck.uranium_cooker";
 	public static final RunType TYPE = RunType.BUTTON_OVERRIDE;
 	public static final int DEFAULT_MAX_PROGRESS = 0;
 	
-	private final IInventory recipeInventory = new RecipeWrapper(itemHandler);
+	private final Container recipeInventory = new RecipeWrapper(itemHandler);
 	
-	private final IntReferenceHolder fuelHolder = new IntReferenceHolder()
+	private final DataSlot fuelHolder = new DataSlot()
 	{
 		@Override
 		public int get()
@@ -60,30 +60,29 @@ public class UraniumCookerTileEntity extends MachineProcessTileEntity implements
 	private short fuel = 0;
 	public static final short MAX_FUEL = 128;
 	
-	public UraniumCookerTileEntity()
+	public UraniumCookerTileEntity(BlockPos pos, BlockState state)
 	{
-		super(MSTileEntityTypes.URANIUM_COOKER.get());
+		super(MSTileEntityTypes.URANIUM_COOKER.get(), pos, state);
 		maxProgress = DEFAULT_MAX_PROGRESS;
 	}
 	
 	@Override
 	protected ItemStackHandler createItemHandler()
 	{
-		return new CustomHandler(3, (index, stack) -> index == 1 ? ExtraForgeTags.Items.URANIUM_CHUNKS.contains(stack.getItem()) : index != 2);
+		return new CustomHandler(3, (index, stack) -> index == 1 ? stack.is(ExtraForgeTags.Items.URANIUM_CHUNKS) : index != 2);
 	}
 	
 	@Override
-	public CompoundNBT save(CompoundNBT compound)
+	public void saveAdditional(CompoundTag compound)
 	{
-		super.save(compound);
+		super.saveAdditional(compound);
 		compound.putShort("fuel", fuel);
-		return compound;
 	}
 	
 	@Override
-	public void load(BlockState state, CompoundNBT nbt)
+	public void load(CompoundTag nbt)
 	{
-		super.load(state, nbt);
+		super.load(nbt);
 		fuel = nbt.getShort("fuel");
 	}
 	
@@ -104,7 +103,7 @@ public class UraniumCookerTileEntity extends MachineProcessTileEntity implements
 		ItemStack fuel = itemHandler.getStackInSlot(1);
 		ItemStack input = itemHandler.getStackInSlot(0);
 		ItemStack output = irradiate();
-		return canBeRefueled() && ExtraForgeTags.Items.URANIUM_CHUNKS.contains(fuel.getItem()) || !input.isEmpty() && !output.isEmpty();
+		return canBeRefueled() && fuel.is(ExtraForgeTags.Items.URANIUM_CHUNKS) || !input.isEmpty() && !output.isEmpty();
 	}
 	
 	private ItemStack irradiate()    //TODO Handle the recipe and make sure to use its exp/cooking time
@@ -117,7 +116,7 @@ public class UraniumCookerTileEntity extends MachineProcessTileEntity implements
 		//Sort the stream to get non-fallback recipes first, and fallback recipes second
 		stream = stream.sorted(Comparator.comparingInt(o -> (o.isFallback() ? 1 : 0)));
 		//Let the recipe return the recipe actually used (for fallbacks), to clear out all that are not present, and then get the first
-		Optional<? extends AbstractCookingRecipe> cookingRecipe = stream.flatMap(recipe -> Util.toStream(recipe.getCookingRecipe(recipeInventory, level))).findFirst();
+		Optional<? extends AbstractCookingRecipe> cookingRecipe = stream.flatMap(recipe -> recipe.getCookingRecipe(recipeInventory, level).stream()).findFirst();
 		
 		return cookingRecipe.map(abstractCookingRecipe -> abstractCookingRecipe.assemble(recipeInventory)).orElse(ItemStack.EMPTY);
 	}
@@ -125,7 +124,7 @@ public class UraniumCookerTileEntity extends MachineProcessTileEntity implements
 	@Override
 	public void processContents()
 	{
-		if(canBeRefueled() && ExtraForgeTags.Items.URANIUM_CHUNKS.contains(itemHandler.getStackInSlot(1).getItem()))
+		if(canBeRefueled() && itemHandler.getStackInSlot(1).is(ExtraForgeTags.Items.URANIUM_CHUNKS))
 		{    //Refill fuel
 			fuel += FUEL_INCREASE;
 			itemHandler.extractItem(1, 1, false);
@@ -157,13 +156,8 @@ public class UraniumCookerTileEntity extends MachineProcessTileEntity implements
 		if(fuel > 0 && !itemHandler.getStackInSlot(0).isEmpty() && !output.isEmpty())
 		{
 			ItemStack out = itemHandler.getStackInSlot(2);
-			if(out.isEmpty())
-			{
-				return true;
-			} else if(out.getMaxStackSize() >= output.getCount() + out.getCount() && out.sameItem(output))
-			{
-				return true;
-			}
+			
+			return out.isEmpty() || out.getMaxStackSize() >= output.getCount() + out.getCount() && out.sameItem(output);
 		}
 		return false;
 	}
@@ -186,15 +180,15 @@ public class UraniumCookerTileEntity extends MachineProcessTileEntity implements
 	
 	@Nullable
 	@Override
-	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity player)
+	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player player)
 	{
-		return new UraniumCookerContainer(windowId, playerInventory, itemHandler, parameters, fuelHolder, IWorldPosCallable.create(level, worldPosition), worldPosition);
+		return new UraniumCookerContainer(windowId, playerInventory, itemHandler, parameters, fuelHolder, ContainerLevelAccess.create(level, worldPosition), worldPosition);
 	}
 	
 	@Override
-	public ITextComponent getDisplayName()
+	public Component getDisplayName()
 	{
-		return new TranslationTextComponent(TITLE);
+		return new TranslatableComponent(TITLE);
 	}
 	
 	public boolean canBeRefueled()

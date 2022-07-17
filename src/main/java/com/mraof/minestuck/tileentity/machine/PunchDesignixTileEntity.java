@@ -11,30 +11,29 @@ import com.mraof.minestuck.item.crafting.alchemy.CombinerWrapper;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.WorldEventUtil;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Containers;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nonnull;
 
 import static com.mraof.minestuck.block.machine.MachineBlock.FACING;
 
-public class PunchDesignixTileEntity extends TileEntity
+public class PunchDesignixTileEntity extends BlockEntity
 {
 	private boolean broken = false;
 	private ItemStack card = ItemStack.EMPTY;
 	
-	public PunchDesignixTileEntity()
+	public PunchDesignixTileEntity(BlockPos pos, BlockState state)
 	{
-		super(MSTileEntityTypes.PUNCH_DESIGNIX.get());
+		super(MSTileEntityTypes.PUNCH_DESIGNIX.get(), pos, state);
 	}
 	
 	public void setCard(ItemStack card)
@@ -59,7 +58,7 @@ public class PunchDesignixTileEntity extends TileEntity
 			BlockState state = level.getBlockState(worldPosition);
 			boolean hasCard = !card.isEmpty();
 			if(state.hasProperty(PunchDesignixBlock.Slot.HAS_CARD) && hasCard != state.getValue(PunchDesignixBlock.Slot.HAS_CARD))
-				level.setBlock(worldPosition, state.setValue(PunchDesignixBlock.Slot.HAS_CARD, hasCard), Constants.BlockFlags.BLOCK_UPDATE);
+				level.setBlock(worldPosition, state.setValue(PunchDesignixBlock.Slot.HAS_CARD, hasCard), Block.UPDATE_CLIENTS);
 		}
 	}
 	
@@ -69,7 +68,7 @@ public class PunchDesignixTileEntity extends TileEntity
 		return card;
 	}
 	
-	public void onRightClick(ServerPlayerEntity player, BlockState clickedState)
+	public void onRightClick(ServerPlayer player, BlockState clickedState)
 	{
 		validateMachine();
 		
@@ -83,13 +82,13 @@ public class PunchDesignixTileEntity extends TileEntity
 		}
 	}
 	
-	private void handleSlotClick(ServerPlayerEntity player)
+	private void handleSlotClick(ServerPlayer player)
 	{
 		if(!getCard().isEmpty())
 		{
 			if (player.getMainHandItem().isEmpty())
-				player.setItemInHand(Hand.MAIN_HAND, getCard());
-			else if (!player.inventory.add(getCard()))
+				player.setItemInHand(InteractionHand.MAIN_HAND, getCard());
+			else if (!player.getInventory().add(getCard()))
 				dropItem(false);
 			else player.inventoryMenu.broadcastChanges();
 			
@@ -102,7 +101,7 @@ public class PunchDesignixTileEntity extends TileEntity
 		}
 	}
 	
-	private void handleKeyboardClick(ServerPlayerEntity player)
+	private void handleKeyboardClick(ServerPlayer player)
 	{
 		ItemStack heldStack = player.getMainHandItem();
 		if(heldStack.getItem() != MSItems.CAPTCHA_CARD)
@@ -166,24 +165,23 @@ public class PunchDesignixTileEntity extends TileEntity
 			dropPos = this.worldPosition.above();
 		else dropPos = this.worldPosition;
 		
-		InventoryHelper.dropItemStack(level, dropPos.getX(), dropPos.getY(), dropPos.getZ(), getCard());
+		Containers.dropItemStack(level, dropPos.getX(), dropPos.getY(), dropPos.getZ(), getCard());
 		setCard(ItemStack.EMPTY);
 	}
 	
 	@Override
-	public void load(BlockState state, CompoundNBT nbt)
+	public void load(CompoundTag nbt)
 	{
-		super.load(state, nbt);
+		super.load(nbt);
 		broken = nbt.getBoolean("broken");
 		setCard(ItemStack.of(nbt.getCompound("card")));
 	}
 	
 	@Override
-	public CompoundNBT save(CompoundNBT compound)
+	public void saveAdditional(CompoundTag compound)
 	{
-		super.save(compound);
+		super.saveAdditional(compound);
 		compound.putBoolean("broken", this.broken);
-		compound.put("card", getCard().save(new CompoundNBT()));
-		return compound;
+		compound.put("card", getCard().save(new CompoundTag()));
 	}
 }

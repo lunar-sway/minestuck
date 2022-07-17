@@ -3,12 +3,11 @@ package com.mraof.minestuck.block.machine;
 import com.mraof.minestuck.block.MSBlockShapes;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.tileentity.machine.MiniAlchemiterTileEntity;
-import net.minecraft.block.BlockState;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 
@@ -30,16 +29,15 @@ public class MiniAlchemiterBlock extends SmallMachineBlock<MiniAlchemiterTileEnt
 	// If no item can be alchemized, it will provide no signal to the comparator.
 	@Override
 	@SuppressWarnings("deprecation")
-	public int getAnalogOutputSignal(BlockState blockState, World worldIn, BlockPos pos)
+	public int getAnalogOutputSignal(BlockState blockState, Level level, BlockPos pos)
 	{
-		TileEntity tileEntity = worldIn.getBlockEntity(pos);
-		if(tileEntity instanceof MiniAlchemiterTileEntity)
-			return ((MiniAlchemiterTileEntity) tileEntity).comparatorValue();
+		if(level.getBlockEntity(pos) instanceof MiniAlchemiterTileEntity alchemiter)
+			return alchemiter.comparatorValue();
 		return 0;
 	}
 	
 	@Override
-	public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side)
+	public boolean canConnectRedstone(BlockState state, BlockGetter level, BlockPos pos, @Nullable Direction side)
 	{
 		return side != null;
 	}

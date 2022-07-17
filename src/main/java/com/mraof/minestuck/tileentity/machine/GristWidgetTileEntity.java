@@ -12,22 +12,23 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.IWorldPosCallable;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
 
-public class GristWidgetTileEntity extends MachineProcessTileEntity implements INamedContainerProvider, IOwnable
+public class GristWidgetTileEntity extends MachineProcessTileEntity implements MenuProvider, IOwnable
 {
 	public static final String TITLE = "container.minestuck.grist_widget";
 	public static final RunType TYPE = RunType.BUTTON_OVERRIDE;
@@ -35,9 +36,9 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements I
 	private PlayerIdentifier owner;
 	private boolean hasItem;
 	
-	public GristWidgetTileEntity()
+	public GristWidgetTileEntity(BlockPos pos, BlockState state)
 	{
-		super(MSTileEntityTypes.GRIST_WIDGET.get());
+		super(MSTileEntityTypes.GRIST_WIDGET.get(), pos, state);
 	}
 	
 	@Override
@@ -63,12 +64,12 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements I
 		return getGristWidgetResult(itemHandler.getStackInSlot(0), level);
 	}
 	
-	public static GristSet getGristWidgetResult(ItemStack stack, World world)
+	public static GristSet getGristWidgetResult(ItemStack stack, Level level)
 	{
-		if(world == null)
+		if(level == null)
 			return null;
 		ItemStack heldItem = AlchemyHelper.getDecodedItem(stack, true);
-		GristSet gristSet = GristCostRecipe.findCostForItem(heldItem, null, true, world);
+		GristSet gristSet = GristCostRecipe.findCostForItem(heldItem, null, true, level);
 		if(stack.getItem() != MSItems.CAPTCHA_CARD || AlchemyHelper.isPunchedCard(stack) || gristSet == null)
 			return null;
 		
@@ -90,19 +91,6 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements I
 	public RunType getRunType()
 	{
 		return TYPE;
-	}
-	
-	@Override
-	public void tick()
-	{
-		super.tick();
-		
-		boolean item = !itemHandler.getStackInSlot(0).isEmpty();
-		if(item != hasItem)
-		{
-			hasItem = item;
-			resendState();
-		}
 	}
 	
 	@Override
@@ -133,36 +121,34 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements I
 	}
 	
 	@Override
-	public void load(BlockState state, CompoundNBT nbt)
+	public void load(CompoundTag nbt)
 	{
-		super.load(state, nbt);
+		super.load(nbt);
 		
 		if(IdentifierHandler.hasIdentifier(nbt, "owner"))
 			owner = IdentifierHandler.load(nbt, "owner");
 	}
 	
 	@Override
-	public CompoundNBT save(CompoundNBT compound)
+	public void saveAdditional(CompoundTag compound)
 	{
-		super.save(compound);
+		super.saveAdditional(compound);
 		
 		if(owner != null)
 			owner.saveToNBT(compound, "owner");
-		
-		return compound;
 	}
 	
 	@Override
-	public ITextComponent getDisplayName()
+	public Component getDisplayName()
 	{
-		return new TranslationTextComponent(TITLE);
+		return new TranslatableComponent(TITLE);
 	}
 	
 	@Nullable
 	@Override
-	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity player)
+	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player player)
 	{
-		return new GristWidgetContainer(windowId, playerInventory, itemHandler, parameters, IWorldPosCallable.create(level, worldPosition), worldPosition);
+		return new GristWidgetContainer(windowId, playerInventory, itemHandler, parameters, ContainerLevelAccess.create(level, worldPosition), worldPosition);
 	}
 	
 	@Override

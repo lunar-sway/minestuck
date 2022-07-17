@@ -7,18 +7,19 @@ import com.mraof.minestuck.item.crafting.alchemy.*;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IWorldPosCallable;
-import net.minecraft.util.IntReferenceHolder;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.DataSlot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -31,13 +32,13 @@ import net.minecraftforge.registries.ForgeRegistry;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implements INamedContainerProvider, IOwnable, GristWildcardHolder
+public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implements MenuProvider, IOwnable, GristWildcardHolder
 {
 	public static final String TITLE = "container.minestuck.mini_alchemiter";
 	public static final RunType TYPE = RunType.BUTTON_OVERRIDE;
 	public static final int INPUT = 0, OUTPUT = 1;
 	
-	private final IntReferenceHolder wildcardGristHolder = new IntReferenceHolder()
+	private final DataSlot wildcardGristHolder = new DataSlot()
 	{
 		@Override
 		public int get()
@@ -59,9 +60,9 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 	private PlayerIdentifier owner;
 	private GristType wildcardGrist = GristTypes.BUILD.get();
 	
-	public MiniAlchemiterTileEntity()
+	public MiniAlchemiterTileEntity(BlockPos pos, BlockState state)
 	{
-		super(MSTileEntityTypes.MINI_ALCHEMITER.get());
+		super(MSTileEntityTypes.MINI_ALCHEMITER.get(), pos, state);
 	}
 	
 	@Override
@@ -125,7 +126,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 	
 	// We're going to want to trigger a block update every 20 ticks to have comparators pull data from the Alchemiter.
 	@Override
-	public void tick()
+	protected void tick()
 	{
 		super.tick();
 		if (this.ticks_since_update == 20)
@@ -140,9 +141,9 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 	}
 	
 	@Override
-	public void load(BlockState state, CompoundNBT nbt)
+	public void load(CompoundTag nbt)
 	{
-		super.load(state, nbt);
+		super.load(nbt);
 		
 		this.wildcardGrist = GristType.read(nbt, "gristType");
 		
@@ -151,20 +152,20 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 	}
 	
 	@Override
-	public CompoundNBT save(CompoundNBT compound)
+	public void saveAdditional(CompoundTag compound)
 	{
+		super.saveAdditional(compound);
+		
 		compound.putString("gristType", wildcardGrist.getRegistryName().toString());
 		
 		if(owner != null)
 			owner.saveToNBT(compound, "owner");
-		
-		return super.save(compound);
 	}
 	
 	@Override
-	public ITextComponent getDisplayName()
+	public Component getDisplayName()
 	{
-		return new TranslationTextComponent(TITLE);
+		return new TranslatableComponent(TITLE);
 	}
 	
 	private final LazyOptional<IItemHandler> sideHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, INPUT, INPUT + 1));
@@ -225,9 +226,9 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 	
 	@Nullable
 	@Override
-	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity player)
+	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player player)
 	{
-		return new MiniAlchemiterContainer(windowId, playerInventory, itemHandler, parameters, wildcardGristHolder, IWorldPosCallable.create(level, worldPosition), worldPosition);
+		return new MiniAlchemiterContainer(windowId, playerInventory, itemHandler, parameters, wildcardGristHolder, ContainerLevelAccess.create(level, worldPosition), worldPosition);
 	}
 	
 	public GristType getWildcardGrist()

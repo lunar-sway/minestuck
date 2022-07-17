@@ -4,15 +4,17 @@ import com.mraof.minestuck.inventory.MiniPunchDesignixContainer;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.*;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IWorldPosCallable;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -25,16 +27,16 @@ import net.minecraftforge.items.wrapper.RangedWrapper;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class MiniPunchDesignixTileEntity extends MachineProcessTileEntity implements INamedContainerProvider
+public class MiniPunchDesignixTileEntity extends MachineProcessTileEntity implements MenuProvider
 {
 	public static final String TITLE = "container.minestuck.mini_punch_designix";
 	public static final RunType TYPE = RunType.BUTTON;
 	
 	private final ItemCombiner combinerInventory = new ItemCombinerWrapper(itemHandler, CombinationMode.OR);
 	
-	public MiniPunchDesignixTileEntity()
+	public MiniPunchDesignixTileEntity(BlockPos pos, BlockState state)
 	{
-		super(MSTileEntityTypes.MINI_PUNCH_DESIGNIX.get());
+		super(MSTileEntityTypes.MINI_PUNCH_DESIGNIX.get(), pos, state);
 	}
 	
 	@Override
@@ -109,9 +111,9 @@ public class MiniPunchDesignixTileEntity extends MachineProcessTileEntity implem
 	}
 	
 	@Override
-	public ITextComponent getDisplayName()
+	public Component getDisplayName()
 	{
-		return new TranslationTextComponent(TITLE);
+		return new TranslatableComponent(TITLE);
 	}
 	
 	private final LazyOptional<IItemHandler> sideHandler = LazyOptional.of(this::createInputSlotHandler);
@@ -147,8 +149,8 @@ public class MiniPunchDesignixTileEntity extends MachineProcessTileEntity implem
 	
 	@Nullable
 	@Override
-	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity player)
+	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player player)
 	{
-		return new MiniPunchDesignixContainer(windowId, playerInventory, itemHandler, parameters, IWorldPosCallable.create(level, worldPosition), worldPosition);
+		return new MiniPunchDesignixContainer(windowId, playerInventory, itemHandler, parameters, ContainerLevelAccess.create(level, worldPosition), worldPosition);
 	}
 }

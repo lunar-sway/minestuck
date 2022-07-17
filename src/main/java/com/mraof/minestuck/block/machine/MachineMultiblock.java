@@ -1,19 +1,19 @@
 package com.mraof.minestuck.block.machine;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.Item;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.world.IWorld;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -22,7 +22,7 @@ import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public abstract class MachineMultiblock implements IItemProvider    //An abstraction for large machines that might be expanded upon in the future
+public abstract class MachineMultiblock implements ItemLike    //An abstraction for large machines that might be expanded upon in the future
 {
 	//No placed state or states are identical
 	public static final BiPredicate<BlockState, BlockState> BASE_PREDICATE = (state1, state2) -> state1 == null || state1.equals(state2);
@@ -74,32 +74,30 @@ public abstract class MachineMultiblock implements IItemProvider    //An abstrac
 		registryEntries.keySet().forEach(blockRegistryObject -> blockRegistryObject.ifPresent(consumer));
 	}
 	
-	public void placeWithRotation(IWorld world, BlockPos pos, Rotation rotation)
+	public void placeWithRotation(LevelAccessor level, BlockPos pos, Rotation rotation)
 	{
-		blockEntries.forEach(entry -> entry.placeWithRotation(world, pos, rotation));
+		blockEntries.forEach(entry -> entry.placeWithRotation(level, pos, rotation));
 	}
 	
-	private boolean isInvalid(IWorld world, BlockPos pos, Rotation rotation)
+	private boolean isInvalid(BlockGetter level, BlockPos pos, Rotation rotation)
 	{
 		for(PlacementEntry entry : blockEntries)
-			if(!entry.matchesWithRotation(world, pos, rotation))
+			if(!entry.matchesWithRotation(level, pos, rotation))
 				return true;
 		return false;
 	}
 	
-	protected boolean isInvalidFromPlacement(IWorld world, BlockPos pos, PlacementEntry entry)
+	protected boolean isInvalidFromPlacement(BlockGetter level, BlockPos pos, PlacementEntry entry)
 	{
-		BlockState worldState = world.getBlockState(pos);
+		BlockState worldState = level.getBlockState(pos);
 		Rotation rotation = entry.findRotation(worldState);
 		BlockPos zeroPos = entry.getZeroPos(pos, rotation);
-		return isInvalid(world, zeroPos, rotation);
+		return isInvalid(level, zeroPos, rotation);
 	}
 	
-	public MutableBoundingBox getBoundingBox(Rotation rotation)
+	public BoundingBox getBoundingBox(Rotation rotation)
 	{
-		MutableBoundingBox bb = new MutableBoundingBox();
-		blockEntries.forEach(entry -> bb.expand(new MutableBoundingBox(entry.pos.rotate(rotation), entry.pos.rotate(rotation))));
-		return bb;
+		return BoundingBox.encapsulatingPositions(blockEntries.stream().map(entry -> entry.pos).toList()).orElseThrow();
 	}
 	
 	public void registerBlocks(IForgeRegistry<Block> registry)
@@ -140,20 +138,20 @@ public abstract class MachineMultiblock implements IItemProvider    //An abstrac
 			return state;
 		}
 		
-		private void placeWithRotation(IWorld world, BlockPos pos, Rotation rotation)
+		private void placeWithRotation(LevelAccessor level, BlockPos pos, Rotation rotation)
 		{
 			BlockState state = getRotatedState(rotation);
 			if(state != null)
-				world.setBlock(pos.offset(this.pos.rotate(rotation)), state, Constants.BlockFlags.DEFAULT);
+				level.setBlock(pos.offset(this.pos.rotate(rotation)), state, Block.UPDATE_ALL);
 		}
 		
-		private boolean matchesWithRotation(IWorld world, BlockPos pos, Rotation rotation)
+		private boolean matchesWithRotation(BlockGetter level, BlockPos pos, Rotation rotation)
 		{
 			BlockState machineState = getRotatedState(rotation);
 			
 			if(stateValidator != null)
 			{
-				BlockState worldState = world.getBlockState(pos.offset(this.pos.rotate(rotation)));
+				BlockState worldState = level.getBlockState(pos.offset(this.pos.rotate(rotation)));
 				return stateValidator.test(machineState, worldState);
 			} else return true;
 		}
