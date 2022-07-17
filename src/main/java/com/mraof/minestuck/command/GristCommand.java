@@ -8,11 +8,11 @@ import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.NonNegativeGristSet;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.command.arguments.EntityArgument;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerPlayer;
 
 import java.util.Collection;
 
@@ -24,61 +24,61 @@ public class GristCommand
 	public static final String FAILURE = "commands.minestuck.grist.add.failure";
 	public static final String SET = "commands.minestuck.grist.set";
 	
-	public static void register(CommandDispatcher<CommandSource> dispatcher)
+	public static void register(CommandDispatcher<CommandSourceStack> dispatcher)
 	{
 		dispatcher.register(Commands.literal("grist").requires(source -> source.hasPermission(2)).then(createGet()).then(createAdd()).then(createSet()));
 	}
 	
-	private static ArgumentBuilder<CommandSource, ?> createGet()
+	private static ArgumentBuilder<CommandSourceStack, ?> createGet()
 	{
 		return Commands.literal("get").then(Commands.argument("targets", EntityArgument.players()).executes(context -> get(context.getSource(), EntityArgument.getPlayers(context, "targets"))));
 	}
-	private static ArgumentBuilder<CommandSource, ?> createAdd()
+	private static ArgumentBuilder<CommandSourceStack, ?> createAdd()
 	{
 		return Commands.literal("add").then(Commands.argument("targets", EntityArgument.players()).then(Commands.argument("grist", GristSetArgument.gristSet()).executes(context -> add(context.getSource(), EntityArgument.getPlayers(context, "targets"), GristSetArgument.getGristArgument(context, "grist")))));
 	}
-	private static ArgumentBuilder<CommandSource, ?> createSet()
+	private static ArgumentBuilder<CommandSourceStack, ?> createSet()
 	{
 		return Commands.literal("set").then(Commands.argument("targets", EntityArgument.players()).then(Commands.argument("grist", GristSetArgument.nonNegativeSet()).executes(context -> set(context.getSource(), EntityArgument.getPlayers(context, "targets"), GristSetArgument.getNonNegativeGristArgument(context, "grist")))));
 	}
 	
-	private static int get(CommandSource source, Collection<ServerPlayerEntity> players)
+	private static int get(CommandSourceStack source, Collection<ServerPlayer> players)
 	{
-		for(ServerPlayerEntity player : players)
+		for(ServerPlayer player : players)
 		{
 			GristSet grist = PlayerSavedData.getData(player).getGristCache();
-			source.sendSuccess(new TranslationTextComponent(GET, player.getDisplayName(), grist.asTextComponent()), false);
+			source.sendSuccess(new TranslatableComponent(GET, player.getDisplayName(), grist.asTextComponent()), false);
 		}
 		return players.size();
 	}
 	
-	private static int add(CommandSource source, Collection<ServerPlayerEntity> players, GristSet grist)
+	private static int add(CommandSourceStack source, Collection<ServerPlayer> players, GristSet grist)
 	{
 		int i = 0;
-		for(ServerPlayerEntity player : players)
+		for(ServerPlayer player : players)
 		{
 			try
 			{
 				GristHelper.increase(player.level, IdentifierHandler.encode(player), grist);
 				i++;
-				source.sendSuccess(new TranslationTextComponent(SUCCESS, player.getDisplayName()), true);
+				source.sendSuccess(new TranslatableComponent(SUCCESS, player.getDisplayName()), true);
 			} catch(IllegalArgumentException e)
 			{
 				e.printStackTrace();
-				source.sendFailure(new TranslationTextComponent(FAILURE, player.getDisplayName()));
+				source.sendFailure(new TranslatableComponent(FAILURE, player.getDisplayName()));
 			}
 		}
-		source.sendSuccess(new TranslationTextComponent(ADD, i), true);
+		source.sendSuccess(new TranslatableComponent(ADD, i), true);
 		return i;
 	}
 	
-	private static int set(CommandSource source, Collection<ServerPlayerEntity> players, NonNegativeGristSet grist)
+	private static int set(CommandSourceStack source, Collection<ServerPlayer> players, NonNegativeGristSet grist)
 	{
-		for(ServerPlayerEntity player : players)
+		for(ServerPlayer player : players)
 		{
 			PlayerSavedData.getData(player).setGristCache(grist);
 		}
-		source.sendSuccess(new TranslationTextComponent(SET, players.size(), grist.asTextComponent()), true);
+		source.sendSuccess(new TranslatableComponent(SET, players.size(), grist.asTextComponent()), true);
 		return players.size();
 	}
 }
