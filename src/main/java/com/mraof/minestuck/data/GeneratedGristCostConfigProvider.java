@@ -10,11 +10,11 @@ import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.item.crafting.alchemy.generator.*;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DirectoryCache;
-import net.minecraft.data.IDataProvider;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.data.DataProvider;
+import net.minecraft.data.HashCache;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class GeneratedGristCostConfigProvider implements IDataProvider
+public class GeneratedGristCostConfigProvider implements DataProvider
 {
 	private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
 	private final DataGenerator generator;
@@ -38,17 +38,16 @@ public class GeneratedGristCostConfigProvider implements IDataProvider
 	
 	protected void addEntries()
 	{
-		serializer(IRecipeSerializer.SHAPED_RECIPE);
-		serializer(IRecipeSerializer.SHAPELESS_RECIPE);
+		serializer(RecipeSerializer.SHAPED_RECIPE);
+		serializer(RecipeSerializer.SHAPELESS_RECIPE);
 		serializer(MSRecipeTypes.NON_MIRRORED);
-		type(IRecipeType.STONECUTTING);
-		type(IRecipeType.SMITHING, SmithingInterpreter.INSTANCE);
-		type(IRecipeType.SMELTING, new CookingCostInterpreter(new GristSet(GristTypes.TAR, 1)));
+		type(RecipeType.STONECUTTING);
+		type(RecipeType.SMELTING, new CookingCostInterpreter(new GristSet(GristTypes.TAR, 1)));
 		type(MSRecipeTypes.IRRADIATING_TYPE, new CookingCostInterpreter(new GristSet(GristTypes.URANIUM, 1)));
 	}
 	
 	@Override
-	public final void run(DirectoryCache cache) throws IOException
+	public final void run(HashCache cache) throws IOException
 	{
 		addEntries();
 		
@@ -57,7 +56,7 @@ public class GeneratedGristCostConfigProvider implements IDataProvider
 		Path jsonPath = outputFolder.resolve("data/" + modid + "/" + RecipeGeneratedCostHandler.PATH);
 		
 		JsonElement json = serialize();
-		IDataProvider.save(GSON, cache, json, jsonPath);
+		DataProvider.save(GSON, cache, json, jsonPath);
 	}
 	
 	private JsonElement serialize()
@@ -71,12 +70,12 @@ public class GeneratedGristCostConfigProvider implements IDataProvider
 		recipe(location, DefaultInterpreter.INSTANCE);
 	}
 	
-	protected void serializer(IRecipeSerializer<?> serializer)
+	protected void serializer(RecipeSerializer<?> serializer)
 	{
 		serializer(serializer, DefaultInterpreter.INSTANCE);
 	}
 	
-	protected void type(IRecipeType<?> type)
+	protected void type(RecipeType<?> type)
 	{
 		type(type, DefaultInterpreter.INSTANCE);
 	}
@@ -89,7 +88,7 @@ public class GeneratedGristCostConfigProvider implements IDataProvider
 		addEntry(entry, interpreter);
 	}
 	
-	protected void serializer(IRecipeSerializer<?> serializer, RecipeInterpreter interpreter)
+	protected void serializer(RecipeSerializer<?> serializer, RecipeInterpreter interpreter)
 	{
 		JsonObject entry = new JsonObject();
 		entry.addProperty("source_type", "recipe_serializer");
@@ -97,7 +96,7 @@ public class GeneratedGristCostConfigProvider implements IDataProvider
 		addEntry(entry, interpreter);
 	}
 	
-	protected void type(IRecipeType<?> type, RecipeInterpreter interpreter)
+	protected void type(RecipeType<?> type, RecipeInterpreter interpreter)
 	{
 		JsonObject entry = new JsonObject();
 		entry.addProperty("source_type", "recipe_type");

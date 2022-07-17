@@ -11,11 +11,11 @@ import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 
 import java.util.*;
@@ -87,24 +87,24 @@ public class GristHelper
 	/**
 	 * A shortened statement to obtain a certain grist count.
 	 */
-	public static long getGrist(World world, PlayerIdentifier player, GristType type)
+	public static long getGrist(Level level, PlayerIdentifier player, GristType type)
 	{
-		return PlayerSavedData.getData(player, world).getGristCache().getGrist(type);
+		return PlayerSavedData.getData(player, level).getGristCache().getGrist(type);
 	}
 	
-	public static long getGrist(World world, PlayerIdentifier player, Supplier<GristType> type)
+	public static long getGrist(Level level, PlayerIdentifier player, Supplier<GristType> type)
 	{
-		return getGrist(world, player, type.get());
+		return getGrist(level, player, type.get());
 	}
 	
-	public static boolean canAfford(ServerPlayerEntity player, GristSet cost)
+	public static boolean canAfford(ServerPlayer player, GristSet cost)
 	{
 		return canAfford(PlayerSavedData.getData(player).getGristCache(), cost);
 	}
 	
-	public static boolean canAfford(World world, PlayerIdentifier player, GristSet cost)
+	public static boolean canAfford(Level level, PlayerIdentifier player, GristSet cost)
 	{
-		return canAfford(PlayerSavedData.getData(player, world).getGristCache(), cost);
+		return canAfford(PlayerSavedData.getData(player, level).getGristCache(), cost);
 	}
 	
 	public static boolean canAfford(GristSet base, GristSet cost)
@@ -132,17 +132,17 @@ public class GristHelper
 	/**
 	 * Uses the encoded version of the username!
 	 */
-	public static void decrease(World world, PlayerIdentifier player, GristSet set)
+	public static void decrease(Level level, PlayerIdentifier player, GristSet set)
 	{
-		increase(world, player, set.copy().scale(-1));
+		increase(level, player, set.copy().scale(-1));
 	}
 	
-	public static void increase(World world, PlayerIdentifier player, GristSet set)
+	public static void increase(Level level, PlayerIdentifier player, GristSet set)
 	{
-		Objects.requireNonNull(world);
+		Objects.requireNonNull(level);
 		Objects.requireNonNull(player);
 		Objects.requireNonNull(set);
-		PlayerData data = PlayerSavedData.getData(player, world);
+		PlayerData data = PlayerSavedData.getData(player, level);
 		NonNegativeGristSet newCache = new NonNegativeGristSet(data.getGristCache());
 		newCache.addGrist(set);
 		data.setGristCache(newCache);
@@ -155,9 +155,9 @@ public class GristHelper
 			Map<GristType, Long> reqs = set.getMap();
 			for(Entry<GristType, Long> pairs : reqs.entrySet())
 			{
-				ITextComponent type = pairs.getKey().getDisplayName();
+				Component type = pairs.getKey().getDisplayName();
 				long difference = pairs.getValue();
-				sendGristMessage(server, player, new TranslationTextComponent("You gained %s %s grist.", difference, type));
+				sendGristMessage(server, player, new TranslatableComponent("You gained %s %s grist.", difference, type));
 			}
 		}
 	}
@@ -177,24 +177,24 @@ public class GristHelper
 			Map<GristType, Long> reqs = set.getMap();
 			for(Entry<GristType, Long> pairs : reqs.entrySet())
 			{
-				ITextComponent type = pairs.getKey().getDisplayName();
+				Component type = pairs.getKey().getDisplayName();
 				long difference = pairs.getValue();
 				if(increase)
 				{
-					sendGristMessage(server, IdentifierHandler.encode(ed.getEditor()), new TranslationTextComponent("You have refunded %s of %s's %s grist.", difference, player.getUsername(), type));
+					sendGristMessage(server, IdentifierHandler.encode(ed.getEditor()), new TranslatableComponent("You have refunded %s of %s's %s grist.", difference, player.getUsername(), type));
 				} else
 				{
-					sendGristMessage(server, IdentifierHandler.encode(ed.getEditor()), new TranslationTextComponent("You have spent %s of %s's %s grist.", difference, player.getUsername(), type));
+					sendGristMessage(server, IdentifierHandler.encode(ed.getEditor()), new TranslatableComponent("You have spent %s of %s's %s grist.", difference, player.getUsername(), type));
 				}
 			}
 		}
 	}
 	
-	private static void sendGristMessage(MinecraftServer server, PlayerIdentifier player, ITextComponent message)
+	private static void sendGristMessage(MinecraftServer server, PlayerIdentifier player, Component message)
 	{
 		if(player != null)
 		{
-			ServerPlayerEntity client = player.getPlayer(server);
+			ServerPlayer client = player.getPlayer(server);
 			if(client != null)
 			{
 				client.displayClientMessage(message, true);

@@ -6,11 +6,11 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.artifact.CruxiteArtifactItem;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -27,7 +27,7 @@ public class AlchemyHelper
 	@SubscribeEvent
 	public static void onAlchemizedItem(AlchemyEvent event)
 	{
-		Echeladder e = PlayerSavedData.getData(event.getPlayer(), event.getWorld()).getEcheladder();
+		Echeladder e = PlayerSavedData.getData(event.getPlayer(), event.getLevel()).getEcheladder();
 		
 		if(!(event.getItemResult().getItem() instanceof CruxiteArtifactItem))
 		{
@@ -61,7 +61,7 @@ public class AlchemyHelper
 		{
 			return ItemStack.EMPTY;
 		}
-		CompoundNBT tag = card.getTag();
+		CompoundTag tag = card.getTag();
 		
 		Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(tag.getString(("contentID"))));
 		if (item == null) {return ItemStack.EMPTY;}
@@ -91,7 +91,7 @@ public class AlchemyHelper
 	
 	public static boolean hasDecodedItem(ItemStack item)
 	{
-		return item.hasTag() && item.getTag().contains("contentID", Constants.NBT.TAG_STRING);
+		return item.hasTag() && item.getTag().contains("contentID", Tag.TAG_STRING);
 	}
 	
 	/**
@@ -117,10 +117,10 @@ public class AlchemyHelper
 	@Nonnull
 	public static ItemStack createEncodedItem(ItemStack item, boolean registerToCard)
 	{
-		CompoundNBT nbt = null;
+		CompoundTag nbt = null;
 		if(!item.isEmpty())
 		{
-			nbt = new CompoundNBT();
+			nbt = new CompoundTag();
 			nbt.putString("contentID", item.getItem().getRegistryName().toString());
 		}
 		ItemStack stack = new ItemStack(registerToCard ? CAPTCHA_CARD : CRUXITE_DOWEL);
@@ -131,10 +131,10 @@ public class AlchemyHelper
 	@Nonnull
 	public static ItemStack createEncodedItem(ItemStack itemIn, ItemStack itemOut)
 	{
-		CompoundNBT nbt = null;
+		CompoundTag nbt = null;
 		if(!itemIn.isEmpty())
 		{
-			nbt = new CompoundNBT();
+			nbt = new CompoundTag();
 			nbt.putString("contentID", itemIn.getItem().getRegistryName().toString());
 		}
 		ItemStack stack = itemOut;
