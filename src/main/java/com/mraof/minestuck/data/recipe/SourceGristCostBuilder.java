@@ -8,14 +8,13 @@ import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.item.crafting.alchemy.generator.SourceGristCost;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.ITag;
-import net.minecraft.tags.TagCollectionManager;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.ItemLike;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,13 +31,13 @@ public class SourceGristCostBuilder
 	private float multiplier = 1;
 	private Integer priority = null;
 	
-	public static SourceGristCostBuilder of(ITag<Item> tag)
+	public static SourceGristCostBuilder of(TagKey<Item> tag)
 	{
-		ResourceLocation tagId = TagCollectionManager.getInstance().getItems().getIdOrThrow(tag);
+		ResourceLocation tagId = tag.location();
 		return new SourceGristCostBuilder(new ResourceLocation(tagId.getNamespace(), tagId.getPath()+"_tag"), Ingredient.of(tag));
 	}
 	
-	public static SourceGristCostBuilder of(IItemProvider item)
+	public static SourceGristCostBuilder of(ItemLike item)
 	{
 		return new SourceGristCostBuilder(item.asItem().getRegistryName(), Ingredient.of(item));
 	}
@@ -76,7 +75,7 @@ public class SourceGristCostBuilder
 		return this;
 	}
 	
-	public SourceGristCostBuilder source(ITag<Item> source)
+	public SourceGristCostBuilder source(TagKey<Item> source)
 	{
 		sources.add(SourceGristCost.tagString(source));
 		return this;
@@ -95,19 +94,19 @@ public class SourceGristCostBuilder
 		return this;
 	}
 	
-	public void build(Consumer<IFinishedRecipe> recipeSaver)
+	public void build(Consumer<FinishedRecipe> recipeSaver)
 	{
 		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ingredient.getItems()[0].getItem().getRegistryName());
 		build(recipeSaver, name);
 	}
 	
-	public void buildFor(Consumer<IFinishedRecipe> recipeSaver, String modId)
+	public void buildFor(Consumer<FinishedRecipe> recipeSaver, String modId)
 	{
 		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ingredient.getItems()[0].getItem().getRegistryName());
 		build(recipeSaver, new ResourceLocation(modId, name.getPath()));
 	}
 	
-	public void build(Consumer<IFinishedRecipe> recipeSaver, ResourceLocation id)
+	public void build(Consumer<FinishedRecipe> recipeSaver, ResourceLocation id)
 	{
 		recipeSaver.accept(new Result(new ResourceLocation(id.getNamespace(), "grist_costs/"+id.getPath()), ingredient, sources, multiplier, new ImmutableGristSet(costBuilder), priority));
 	}
@@ -136,7 +135,7 @@ public class SourceGristCostBuilder
 		}
 		
 		@Override
-		public IRecipeSerializer<?> getType()
+		public RecipeSerializer<?> getType()
 		{
 			return MSRecipeTypes.SOURCE_GRIST_COST;
 		}

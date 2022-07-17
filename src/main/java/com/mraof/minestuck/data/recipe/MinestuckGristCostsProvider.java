@@ -8,13 +8,13 @@ import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.util.ExtraForgeTags;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.data.RecipeProvider;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.tags.ITag;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.common.Tags;
 
 import java.util.function.Consumer;
@@ -29,7 +29,7 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 	}
 	
 	@Override
-	protected void buildShapelessRecipes(Consumer<IFinishedRecipe> recipeSaver)
+	protected void buildCraftingRecipes(Consumer<FinishedRecipe> recipeSaver)
 	{
 		GeneratedGristCostBuilder.create().build(recipeSaver, new ResourceLocation(Minestuck.MOD_ID, "generated"));
 		
@@ -290,7 +290,7 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(Items.TOTEM_OF_UNDYING).grist(DIAMOND, 200).grist(URANIUM, 350).grist(RUBY, 90).grist(GOLD, 90).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Items.TRIDENT).grist(BUILD, 180).grist(COBALT, 224).grist(DIAMOND, 24).grist(AMETHYST, 47).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Items.BELL).grist(BUILD, 5000).grist(GOLD, 50).grist(RUST, 1).buildFor(recipeSaver, Minestuck.MOD_ID);
-		GristCostRecipeBuilder.of(Items.GLOBE_BANNER_PATTER).grist(BUILD, 100).grist(MARBLE, 15).grist(SHALE, 15).buildFor(recipeSaver, Minestuck.MOD_ID);
+		GristCostRecipeBuilder.of(Items.GLOBE_BANNER_PATTERN).grist(BUILD, 100).grist(MARBLE, 15).grist(SHALE, 15).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Items.PIGLIN_BANNER_PATTERN).grist(BUILD, 120).grist(TAR, 17).grist(GOLD, 12).buildFor(recipeSaver, Minestuck.MOD_ID);
 		
 		//Music Discs
@@ -759,12 +759,12 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		oreCost(ExtraForgeTags.Items.ARDITE_ORES, ExtraForgeTags.Items.ARDITE_INGOTS, 1, recipeSaver, Minestuck.MOD_ID);
 	}
 	
-	public static void oreCost(ITag<Item> ores, ITag<Item> material, float multiplier, Consumer<IFinishedRecipe> recipeSaver, String modId)
+	public static void oreCost(TagKey<Item> ores, TagKey<Item> material, float multiplier, Consumer<FinishedRecipe> recipeSaver, String modId)
 	{
 		SourceGristCostBuilder.of(ores).source(material).multiplier(multiplier).grist(BUILD, 4).buildFor(recipeSaver, modId);
 	}
 	
-	public static void oreCost(ITag<Item> ores, Item material, float multiplier, Consumer<IFinishedRecipe> recipeSaver, String modId)
+	public static void oreCost(TagKey<Item> ores, Item material, float multiplier, Consumer<FinishedRecipe> recipeSaver, String modId)
 	{
 		SourceGristCostBuilder.of(ores).source(material).multiplier(multiplier).grist(BUILD, 4).buildFor(recipeSaver, modId);
 	}

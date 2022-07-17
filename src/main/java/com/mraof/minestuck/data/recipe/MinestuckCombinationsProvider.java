@@ -5,16 +5,16 @@ import com.mraof.minestuck.block.BlockCollections;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.MSTags;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.data.RecipeProvider;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.IItemProvider;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
 
 import java.util.Arrays;
@@ -30,10 +30,10 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 	}
 	
 	@Override
-	protected void buildShapelessRecipes(Consumer<IFinishedRecipe> consumer)
+	protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer)
 	{
 		//Wood
-		final IItemProvider[][] woodItems = {
+		final ItemLike[][] woodItems = {
 				{Blocks.OAK_LOG, Blocks.SPRUCE_LOG, Blocks.BIRCH_LOG, Blocks.JUNGLE_LOG, Blocks.ACACIA_LOG, Blocks.DARK_OAK_LOG},
 				{Blocks.OAK_PLANKS, Blocks.SPRUCE_PLANKS, Blocks.BIRCH_PLANKS, Blocks.JUNGLE_PLANKS, Blocks.ACACIA_PLANKS, Blocks.DARK_OAK_PLANKS},
 				{Blocks.OAK_SLAB, Blocks.SPRUCE_SLAB, Blocks.BIRCH_SLAB, Blocks.JUNGLE_SLAB, Blocks.ACACIA_SLAB, Blocks.DARK_OAK_SLAB},
@@ -51,7 +51,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		// [0] || [1] -> [2]
 		int[][] itemCombinations = {{1, 2, 3}, {0, 5, 4}, {6, 7, 8}, {6, 2, 9}};
 		
-		for(IItemProvider[] itemType : woodItems)
+		for(ItemLike[] itemType : woodItems)
 		{
 			for(int[] combination : woodCombinations)
 				CombinationRecipeBuilder.of(itemType[combination[2]]).input(itemType[combination[0]]).or().input(itemType[combination[1]]).namedSource("wood_combination").buildFor(consumer, Minestuck.MOD_ID);
@@ -755,7 +755,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		Item[] metalLeggings = new Item[] {Items.IRON_LEGGINGS, Items.GOLDEN_LEGGINGS, Items.NETHERITE_LEGGINGS};
 		Item[] metalBoots = new Item[] {Items.IRON_BOOTS, Items.GOLDEN_BOOTS, Items.NETHERITE_BOOTS};
 		for(int i = 0; i < metalHelmets.length; i++)	//Two out of three possible for-loops is enough for me
-			for(IItemProvider prismarine : new IItemProvider[]{Items.PRISMARINE_SHARD, Blocks.PRISMARINE})
+			for(ItemLike prismarine : new ItemLike[]{Items.PRISMARINE_SHARD, Blocks.PRISMARINE})
 			{
 				CombinationRecipeBuilder.of(MSItems.PRISMARINE_HELMET).namedInput(metalHelmets[i]).or().namedInput(prismarine).build(consumer);
 				CombinationRecipeBuilder.of(MSItems.PRISMARINE_CHESTPLATE).namedInput(metalChestplates[i]).or().namedInput(prismarine).build(consumer);

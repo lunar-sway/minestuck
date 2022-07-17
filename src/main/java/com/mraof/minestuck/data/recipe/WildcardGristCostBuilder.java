@@ -2,14 +2,13 @@ package com.mraof.minestuck.data.recipe;
 
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.ITag;
-import net.minecraft.tags.TagCollectionManager;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.ItemLike;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -22,13 +21,13 @@ public class WildcardGristCostBuilder
 	private long cost = 0;
 	private Integer priority = null;
 	
-	public static WildcardGristCostBuilder of(ITag<Item> tag)
+	public static WildcardGristCostBuilder of(TagKey<Item> tag)
 	{
-		ResourceLocation tagId = TagCollectionManager.getInstance().getItems().getIdOrThrow(tag);
+		ResourceLocation tagId = tag.location();
 		return new WildcardGristCostBuilder(new ResourceLocation(tagId.getNamespace(), tagId.getPath()+"_tag"), Ingredient.of(tag));
 	}
 	
-	public static WildcardGristCostBuilder of(IItemProvider item)
+	public static WildcardGristCostBuilder of(ItemLike item)
 	{
 		return new WildcardGristCostBuilder(item.asItem().getRegistryName(), Ingredient.of(item));
 	}
@@ -61,26 +60,26 @@ public class WildcardGristCostBuilder
 		return this;
 	}
 	
-	public void build(Consumer<IFinishedRecipe> recipeSaver)
+	public void build(Consumer<FinishedRecipe> recipeSaver)
 	{
 		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ingredient.getItems()[0].getItem().getRegistryName());
 		build(recipeSaver, name);
 	}
 	
-	public void buildFor(Consumer<IFinishedRecipe> recipeSaver, String modId)
+	public void buildFor(Consumer<FinishedRecipe> recipeSaver, String modId)
 	{
 		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ingredient.getItems()[0].getItem().getRegistryName());
 		build(recipeSaver, new ResourceLocation(modId, name.getPath()));
 	}
 	
-	public void build(Consumer<IFinishedRecipe> recipeSaver, ResourceLocation id)
+	public void build(Consumer<FinishedRecipe> recipeSaver, ResourceLocation id)
 	{
 		if(this.cost == 0)
 			throw new IllegalStateException("Must set the wildcard cost before building!");
 		recipeSaver.accept(new Result(new ResourceLocation(id.getNamespace(), "grist_costs/"+id.getPath()), ingredient, cost, priority));
 	}
 	
-	public static class Result implements IFinishedRecipe
+	public static class Result implements FinishedRecipe
 	{
 		public final ResourceLocation id;
 		public final Ingredient ingredient;
@@ -111,7 +110,7 @@ public class WildcardGristCostBuilder
 		}
 		
 		@Override
-		public IRecipeSerializer<?> getType()
+		public RecipeSerializer<?> getType()
 		{
 			return MSRecipeTypes.WILDCARD_GRIST_COST;
 		}

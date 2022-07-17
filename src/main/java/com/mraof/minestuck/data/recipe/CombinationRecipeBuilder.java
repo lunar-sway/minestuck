@@ -3,15 +3,14 @@ package com.mraof.minestuck.data.recipe;
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.item.crafting.alchemy.CombinationMode;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.ITag;
-import net.minecraft.tags.TagCollectionManager;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.ItemLike;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -30,12 +29,12 @@ public class CombinationRecipeBuilder
 		this.output = Objects.requireNonNull(output);
 	}
 	
-	public static CombinationRecipeBuilder of(Supplier<? extends IItemProvider> supplier)
+	public static CombinationRecipeBuilder of(Supplier<? extends ItemLike> supplier)
 	{
 		return of(supplier.get());
 	}
 	
-	public static CombinationRecipeBuilder of(IItemProvider output)
+	public static CombinationRecipeBuilder of(ItemLike output)
 	{
 		return of(new ItemStack(output.asItem()));
 	}
@@ -45,12 +44,12 @@ public class CombinationRecipeBuilder
 		return new CombinationRecipeBuilder(output);
 	}
 	
-	public CombinationRecipeBuilder input(ITag<Item> tag)
+	public CombinationRecipeBuilder input(TagKey<Item> tag)
 	{
 		return input(Ingredient.of(tag));
 	}
 	
-	public CombinationRecipeBuilder input(IItemProvider item)
+	public CombinationRecipeBuilder input(ItemLike item)
 	{
 		return input(Ingredient.of(item));
 	}
@@ -65,13 +64,13 @@ public class CombinationRecipeBuilder
 		return this;
 	}
 	
-	public CombinationRecipeBuilder namedInput(ITag<Item> tag)
+	public CombinationRecipeBuilder namedInput(TagKey<Item> tag)
 	{
 		input(Ingredient.of(tag));
-		return namedSource(TagCollectionManager.getInstance().getItems().getIdOrThrow(tag).getPath());
+		return namedSource(tag.location().getPath());
 	}
 	
-	public CombinationRecipeBuilder namedInput(IItemProvider item)
+	public CombinationRecipeBuilder namedInput(ItemLike item)
 	{
 		input(Ingredient.of(item));
 		return namedSource(Objects.requireNonNull(item.asItem().getRegistryName()).getPath());
@@ -103,24 +102,24 @@ public class CombinationRecipeBuilder
 		return this;
 	}
 	
-	public void build(Consumer<IFinishedRecipe> recipeSaver)
+	public void build(Consumer<FinishedRecipe> recipeSaver)
 	{
 		ResourceLocation name = Objects.requireNonNull(output.getItem().getRegistryName());
 		build(recipeSaver, new ResourceLocation(name.getNamespace(), name.getPath() + suffix));
 	}
 	
-	public void buildFor(Consumer<IFinishedRecipe> recipeSaver, String modId)
+	public void buildFor(Consumer<FinishedRecipe> recipeSaver, String modId)
 	{
 		ResourceLocation name = Objects.requireNonNull(output.getItem().getRegistryName());
 		build(recipeSaver, new ResourceLocation(modId, name.getPath() + suffix));
 	}
 	
-	public void build(Consumer<IFinishedRecipe> recipeSaver, ResourceLocation id)
+	public void build(Consumer<FinishedRecipe> recipeSaver, ResourceLocation id)
 	{
 		recipeSaver.accept(new Result(new ResourceLocation(id.getNamespace(), "combinations/"+id.getPath()), output, input1, input2, mode));
 	}
 	
-	public static class Result implements IFinishedRecipe
+	public static class Result implements FinishedRecipe
 	{
 		private final ResourceLocation id;
 		private final ItemStack output;
@@ -158,7 +157,7 @@ public class CombinationRecipeBuilder
 		}
 		
 		@Override
-		public IRecipeSerializer<?> getType()
+		public RecipeSerializer<?> getType()
 		{
 			return MSRecipeTypes.COMBINATION;
 		}

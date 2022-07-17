@@ -6,14 +6,13 @@ import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.alchemy.ImmutableGristSet;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.ITag;
-import net.minecraft.tags.TagCollectionManager;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.ItemLike;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -27,13 +26,13 @@ public class GristCostRecipeBuilder
 	private final ImmutableMap.Builder<GristType, Long> costBuilder = ImmutableMap.builder();
 	private Integer priority = null;
 	
-	public static GristCostRecipeBuilder of(ITag<Item> tag)
+	public static GristCostRecipeBuilder of(TagKey<Item> tag)
 	{
-		ResourceLocation tagId = TagCollectionManager.getInstance().getItems().getIdOrThrow(tag);
+		ResourceLocation tagId = tag.location();
 		return new GristCostRecipeBuilder(new ResourceLocation(tagId.getNamespace(), tagId.getPath()+"_tag"), Ingredient.of(tag));
 	}
 	
-	public static GristCostRecipeBuilder of(IItemProvider item)
+	public static GristCostRecipeBuilder of(ItemLike item)
 	{
 		return new GristCostRecipeBuilder(item.asItem().getRegistryName(), Ingredient.of(item));
 	}
@@ -71,24 +70,24 @@ public class GristCostRecipeBuilder
 		return this;
 	}
 	
-	public void build(Consumer<IFinishedRecipe> recipeSaver)
+	public void build(Consumer<FinishedRecipe> recipeSaver)
 	{
 		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ingredient.getItems()[0].getItem().getRegistryName());
 		build(recipeSaver, name);
 	}
 	
-	public void buildFor(Consumer<IFinishedRecipe> recipeSaver, String modId)
+	public void buildFor(Consumer<FinishedRecipe> recipeSaver, String modId)
 	{
 		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ingredient.getItems()[0].getItem().getRegistryName());
 		build(recipeSaver, new ResourceLocation(modId, name.getPath()));
 	}
 	
-	public void build(Consumer<IFinishedRecipe> recipeSaver, ResourceLocation id)
+	public void build(Consumer<FinishedRecipe> recipeSaver, ResourceLocation id)
 	{
 		recipeSaver.accept(new Result(new ResourceLocation(id.getNamespace(), "grist_costs/"+id.getPath()), ingredient, new ImmutableGristSet(costBuilder), priority));
 	}
 	
-	public static class Result implements IFinishedRecipe
+	public static class Result implements FinishedRecipe
 	{
 		public final ResourceLocation id;
 		public final Ingredient ingredient;
@@ -119,7 +118,7 @@ public class GristCostRecipeBuilder
 		}
 		
 		@Override
-		public IRecipeSerializer<?> getType()
+		public RecipeSerializer<?> getType()
 		{
 			return MSRecipeTypes.GRIST_COST;
 		}

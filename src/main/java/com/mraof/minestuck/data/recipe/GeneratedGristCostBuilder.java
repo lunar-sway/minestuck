@@ -2,9 +2,9 @@ package com.mraof.minestuck.data.recipe;
 
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
@@ -19,12 +19,12 @@ public class GeneratedGristCostBuilder
 	protected GeneratedGristCostBuilder()
 	{}
 	
-	public void build(Consumer<IFinishedRecipe> recipeSaver, ResourceLocation id)
+	public void build(Consumer<FinishedRecipe> recipeSaver, ResourceLocation id)
 	{
 		recipeSaver.accept(new GeneratedGristCostBuilder.Result(new ResourceLocation(id.getNamespace(), "grist_costs/"+id.getPath())));
 	}
 	
-	public static class Result implements IFinishedRecipe
+	public static class Result implements FinishedRecipe
 	{
 		public final ResourceLocation id;
 		
@@ -45,7 +45,7 @@ public class GeneratedGristCostBuilder
 		}
 		
 		@Override
-		public IRecipeSerializer<?> getType()
+		public RecipeSerializer<?> getType()
 		{
 			return MSRecipeTypes.RECIPE_GRIST_COST;
 		}
