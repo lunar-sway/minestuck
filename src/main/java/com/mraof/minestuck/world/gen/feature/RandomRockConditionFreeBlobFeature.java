@@ -2,12 +2,12 @@ package com.mraof.minestuck.world.gen.feature;
 
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.block.MSBlocks;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 
 import java.util.Iterator;
 import java.util.Random;
@@ -20,8 +20,13 @@ public class RandomRockConditionFreeBlobFeature extends Feature<RandomRockBlockB
 	}
 	
 	@Override
-	public boolean place(ISeedReader worldIn, ChunkGenerator generator, Random rand, BlockPos pos, RandomRockBlockBlobConfig config)
+	public boolean place(FeaturePlaceContext<RandomRockBlockBlobConfig> context)
 	{
+		WorldGenLevel level = context.level();
+		BlockPos pos = context.origin();
+		Random rand = context.random();
+		RandomRockBlockBlobConfig config = context.config();
+		
 		float randFloat = rand.nextFloat();
 		BlockState randomStone;
 		if(randFloat >= .95)
@@ -72,7 +77,7 @@ public class RandomRockConditionFreeBlobFeature extends Feature<RandomRockBlockB
 				BlockPos blockpos1 = (BlockPos) iterator.next();
 				
 				if(blockpos1.distSqr(pos) <= (double) (f * f))
-					setBlock(worldIn, blockpos1, randomStone);
+					setBlock(level, blockpos1, randomStone);
 			}
 			
 			pos = pos.offset(-(config.startRadius + 1) + rand.nextInt(2 + config.startRadius * 2), 0 - rand.nextInt(2), -(config.startRadius + 1) + rand.nextInt(2 + config.startRadius * 2));

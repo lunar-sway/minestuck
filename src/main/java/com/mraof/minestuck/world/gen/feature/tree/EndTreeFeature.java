@@ -4,36 +4,39 @@ import com.mojang.serialization.Codec;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.plant.DoubleLogBlock;
 import com.mraof.minestuck.block.plant.EndLeavesBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.IWorldGenerationReader;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.TreeFeature;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.LevelSimulatedReader;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.TreeFeature;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
 import java.util.Random;
 
 
-public class EndTreeFeature extends Feature<NoFeatureConfig>
+public class EndTreeFeature extends Feature<NoneFeatureConfiguration>
 {
 	
-	public EndTreeFeature(Codec<NoFeatureConfig> codec)
+	public EndTreeFeature(Codec<NoneFeatureConfiguration> codec)
 	{
 		super(codec);
 	}
 	
 	@Override
-	public boolean place(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos position, NoFeatureConfig config)
+	public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context)
 	{
+		WorldGenLevel level = context.level();
+		BlockPos position = context.origin();
 		BlockPos soilPos = position.below();
-		if(world.getBlockState(soilPos).canSustainPlant(world, soilPos, Direction.UP, MSBlocks.END_SAPLING))
+		if(level.getBlockState(soilPos).canSustainPlant(level, soilPos, Direction.UP, MSBlocks.END_SAPLING))
 		{
-			if(subGenerate(world, rand, position, position, EndLeavesBlock.LEAF_SUSTAIN_DISTANCE, 0, 4))
+			if(subGenerate(level, context.random(), position, position, EndLeavesBlock.LEAF_SUSTAIN_DISTANCE, 0, 4))
 			{
-				setLog(world, position);
+				setLog(level, position);
 				return true;
 			}
 		}
@@ -43,7 +46,7 @@ public class EndTreeFeature extends Feature<NoFeatureConfig>
 	//The point of using this algorithm, pretty much copy-pasted from the code on chorus plants, was to make these trees more reminiscent of chorus plants.
 	//As it stands, however, they don't branch horizontally, the way a chorus plant would.
 	//It's not necessary to fix this for end trees to exist and be enjoyed, but fixing it would be a good idea.
-	private boolean subGenerate(ISeedReader world, Random rand, BlockPos curr, BlockPos origin, int range, int step, int maxSteps)
+	private boolean subGenerate(WorldGenLevel level, Random rand, BlockPos curr, BlockPos origin, int range, int step, int maxSteps)
 	{
 		int height = rand.nextInt(Math.max(1, 4 - step)) + 1;
 		
@@ -51,11 +54,11 @@ public class EndTreeFeature extends Feature<NoFeatureConfig>
 			height++;
 		
 		for(int y = 1; y < height; y++)
-			if(!areAllNeighborsEmpty(world, curr.above(y), null))
+			if(!areAllNeighborsEmpty(level, curr.above(y), null))
 				return false;
 		
 		for(int y = 1; y < height; y++)
-			setLog(world, curr.above(y));
+			setLog(level, curr.above(y));
 		
 		boolean flag = false;
 		
@@ -75,34 +78,34 @@ public class EndTreeFeature extends Feature<NoFeatureConfig>
 				
 				if (Math.abs(nextPos.getX() - origin.getX()) < range
 						&& Math.abs(nextPos.getZ() - origin.getZ()) < range
-						&& TreeFeature.isAirOrLeaves(world, nextPos)
-						&& TreeFeature.isAirOrLeaves(world, nextPos.below())
-						&& areAllNeighborsEmpty(world, nextPos, direction.getOpposite()))
+						&& TreeFeature.isAirOrLeaves(level, nextPos)
+						&& TreeFeature.isAirOrLeaves(level, nextPos.below())
+						&& areAllNeighborsEmpty(level, nextPos, direction.getOpposite()))
 				{
 					flag = true;
 					Direction.Axis axis = direction.getAxis();
-					setLog(world, nextPos, axis);
-					subGenerate(world, rand, nextPos, origin, range, step + 1, maxSteps);
-					generateLeaves(world, nextPos, Direction.Axis.Y, axis);
+					setLog(level, nextPos, axis);
+					subGenerate(level, rand, nextPos, origin, range, step + 1, maxSteps);
+					generateLeaves(level, nextPos, Direction.Axis.Y, axis);
 					nextPos = curr.above(height);
-					setLog(world, nextPos, axis);
+					setLog(level, nextPos, axis);
 				}
 			}
 		}
 		
 		if (!flag)
 		{
-			generateLeaves(world, curr.above(height), Direction.Axis.Y, Direction.Axis.Y);
-			setLog(world, curr.above(height));
+			generateLeaves(level, curr.above(height), Direction.Axis.Y, Direction.Axis.Y);
+			setLog(level, curr.above(height));
 		}
 		return true;
 	}
 	
-	private static boolean areAllNeighborsEmpty(IWorldGenerationReader worldIn, BlockPos pos, Direction excludingSide)
+	private static boolean areAllNeighborsEmpty(LevelSimulatedReader level, BlockPos pos, Direction excludingSide)
 	{
 		for (Direction direction : Direction.Plane.HORIZONTAL)
 		{
-			if (direction != excludingSide && !TreeFeature.isAirOrLeaves(worldIn, pos.relative(direction)))
+			if (direction != excludingSide && !TreeFeature.isAirOrLeaves(level, pos.relative(direction)))
 			{
 				return false;
 			}
@@ -111,59 +114,59 @@ public class EndTreeFeature extends Feature<NoFeatureConfig>
 		return true;
 	}
 	
-	public void generateLeaves(ISeedReader world, BlockPos pos, Direction.Axis primary, Direction.Axis secondary)
+	public void generateLeaves(WorldGenLevel level, BlockPos pos, Direction.Axis primary, Direction.Axis secondary)
 	{
 		if(primary == Direction.Axis.X || secondary == Direction.Axis.X)
 		{
-			leaves(world, pos.east(), 2);
-			leaves(world, pos.west(), 2);
+			leaves(level, pos.east(), 2);
+			leaves(level, pos.west(), 2);
 		}
 		if(primary == Direction.Axis.Y || secondary == Direction.Axis.Y)
 		{
-			leaves(world, pos.above(), 1);
-			leaves(world, pos.below(), 1);
+			leaves(level, pos.above(), 1);
+			leaves(level, pos.below(), 1);
 		}
 		if(primary == Direction.Axis.Z || secondary == Direction.Axis.Z)
 		{
-			leaves(world, pos.south(), 1);
-			leaves(world, pos.north(), 1);
+			leaves(level, pos.south(), 1);
+			leaves(level, pos.north(), 1);
 		}
 	}
 	
-	private void leaves(ISeedReader world, BlockPos curr, int distance)
+	private void leaves(WorldGenLevel level, BlockPos curr, int distance)
 	{
-		if(TreeFeature.isAirOrLeaves(world, curr))
+		if(TreeFeature.isAirOrLeaves(level, curr))
 		{
 			if(distance <= EndLeavesBlock.LEAF_SUSTAIN_DISTANCE)
 			{
-				setLeaf(world, curr);
-				leaves(world, curr.south(), distance + 1);
-				leaves(world, curr.north(), distance + 1);
-				leaves(world, curr.above(), distance + 1);
-				leaves(world, curr.below(), distance + 1);
-				leaves(world, curr.east(), distance + 2);
-				leaves(world, curr.west(), distance + 2);
+				setLeaf(level, curr);
+				leaves(level, curr.south(), distance + 1);
+				leaves(level, curr.north(), distance + 1);
+				leaves(level, curr.above(), distance + 1);
+				leaves(level, curr.below(), distance + 1);
+				leaves(level, curr.east(), distance + 2);
+				leaves(level, curr.west(), distance + 2);
 			}
 		}
 	}
 	
-	private void setLog(ISeedReader world, BlockPos pos)
+	private void setLog(WorldGenLevel level, BlockPos pos)
 	{
-		setLog(world, pos, Direction.Axis.Y);
+		setLog(level, pos, Direction.Axis.Y);
 	}
 	
-	private void setLog(ISeedReader world, BlockPos pos, Direction.Axis axis)
+	private void setLog(WorldGenLevel level, BlockPos pos, Direction.Axis axis)
 	{
-		if(TreeFeature.validTreePos(world, pos))
+		if(TreeFeature.validTreePos(level, pos))
 		{
 			BlockState log = MSBlocks.END_LOG.defaultBlockState().setValue(DoubleLogBlock.AXIS_2, axis);
-			TreeFeature.setBlockKnownShape(world, pos, log);
+			level.setBlock(pos, log, Block.UPDATE_KNOWN_SHAPE + Block.UPDATE_CLIENTS + Block.UPDATE_NEIGHBORS);
 		}
 	}
 	
-	private void setLeaf(ISeedReader world, BlockPos pos)
+	private void setLeaf(WorldGenLevel level, BlockPos pos)
 	{
-		if(TreeFeature.validTreePos(world, pos))
-			TreeFeature.setBlockKnownShape(world, pos, MSBlocks.END_LEAVES.defaultBlockState());
+		if(TreeFeature.validTreePos(level, pos))
+			level.setBlock(pos, MSBlocks.END_LEAVES.defaultBlockState(), Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_CLIENTS | Block.UPDATE_NEIGHBORS);
 	}
 }

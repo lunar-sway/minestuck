@@ -4,37 +4,37 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.gen.feature.structure.*;
 import com.mraof.minestuck.world.gen.feature.structure.castle.*;
 import com.mraof.minestuck.world.gen.feature.structure.village.*;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.gen.feature.structure.IStructurePieceType;
+import net.minecraft.core.Registry;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 
 public final class MSStructurePieces
 {
-	public static IStructurePieceType FROG_TEMPLE, FROG_TEMPLE_PILLAR;
+	public static StructurePieceType FROG_TEMPLE, FROG_TEMPLE_PILLAR;
 	
-	public static IStructurePieceType GATE_PILLAR;
-	public static IStructurePieceType GATE_MUSHROOM;
-	public static IStructurePieceType SMALL_RUIN;
+	public static StructurePieceType GATE_PILLAR;
+	public static StructurePieceType GATE_MUSHROOM;
+	public static StructurePieceType SMALL_RUIN;
 	
-	public static IStructurePieceType IMP_ENTRY, IMP_ENTRY_CORRIDOR;
-	public static IStructurePieceType IMP_STRAIGHT_CORRIDOR, IMP_CROSS_CORRIDOR, IMP_TURN_CORRIDOR;
-	public static IStructurePieceType IMP_RETURN_ROOM, IMP_ALT_RETURN_ROOM;
-	public static IStructurePieceType IMP_SPAWNER_ROOM, IMP_SPAWNER_CORRIDOR, IMP_LARGE_SPAWNER_CORRIDOR;
-	public static IStructurePieceType IMP_BOOKCASE_ROOM, IMP_OGRE_CORRIDOR;
+	public static StructurePieceType IMP_ENTRY, IMP_ENTRY_CORRIDOR;
+	public static StructurePieceType IMP_STRAIGHT_CORRIDOR, IMP_CROSS_CORRIDOR, IMP_TURN_CORRIDOR;
+	public static StructurePieceType IMP_RETURN_ROOM, IMP_ALT_RETURN_ROOM;
+	public static StructurePieceType IMP_SPAWNER_ROOM, IMP_SPAWNER_CORRIDOR, IMP_LARGE_SPAWNER_CORRIDOR;
+	public static StructurePieceType IMP_BOOKCASE_ROOM, IMP_OGRE_CORRIDOR;
 	
-	public static IStructurePieceType VILLAGE_PATH;
-	public static IStructurePieceType MARKET_CENTER;
-	public static IStructurePieceType ROCK_CENTER;
-	public static IStructurePieceType CACTUS_PYRAMID_CENTER;
-	public static IStructurePieceType MUSHROOM_TOWER_CENTER;
-	public static IStructurePieceType TURTLE_WELL_CENTER;
-	public static IStructurePieceType RADIO_TOWER_CENTER;
-	public static IStructurePieceType PIPE_HOUSE_1, HIGH_PIPE_HOUSE_1, SMALL_TOWER_STORE;
-	public static IStructurePieceType SHELL_HOUSE_1, TURTLE_MARKET_1, TURTLE_TEMPLE_1;
-	public static IStructurePieceType SMALL_VILLAGE_TENT_1, LARGE_VILLAGE_TENT_1, SMALL_TENT_STORE;
-	public static IStructurePieceType HIGH_NAK_HOUSING_1, HIGH_NAK_MARKET, HIGH_NAK_INN;
+	public static StructurePieceType VILLAGE_PATH;
+	public static StructurePieceType MARKET_CENTER;
+	public static StructurePieceType ROCK_CENTER;
+	public static StructurePieceType CACTUS_PYRAMID_CENTER;
+	public static StructurePieceType MUSHROOM_TOWER_CENTER;
+	public static StructurePieceType TURTLE_WELL_CENTER;
+	public static StructurePieceType RADIO_TOWER_CENTER;
+	public static StructurePieceType PIPE_HOUSE_1, HIGH_PIPE_HOUSE_1, SMALL_TOWER_STORE;
+	public static StructurePieceType SHELL_HOUSE_1, TURTLE_MARKET_1, TURTLE_TEMPLE_1;
+	public static StructurePieceType SMALL_VILLAGE_TENT_1, LARGE_VILLAGE_TENT_1, SMALL_TENT_STORE;
+	public static StructurePieceType HIGH_NAK_HOUSING_1, HIGH_NAK_MARKET, HIGH_NAK_INN;
 	
-	public static IStructurePieceType SKAIA_CASTLE_START, SKAIA_CASTLE_SOLID, SKAIA_CASTLE_WALL;
-	public static IStructurePieceType SKAIA_CASTLE_ROOM, SKAIA_CASTLE_LIBRARY, SKAIA_CASTLE_STAIRCASE;
+	public static StructurePieceType SKAIA_CASTLE_START, SKAIA_CASTLE_SOLID, SKAIA_CASTLE_WALL;
+	public static StructurePieceType SKAIA_CASTLE_ROOM, SKAIA_CASTLE_LIBRARY, SKAIA_CASTLE_STAIRCASE;
 	
 	/**
 	 * Should only be called by {@link com.mraof.minestuck.world.gen.feature.MSFeatures} on feature registry.
@@ -48,7 +48,7 @@ public final class MSStructurePieces
 		GATE_MUSHROOM = register(GateMushroomPiece::new, Minestuck.MOD_ID+":gate_mushroom");
 		SMALL_RUIN = register(SmallRuinPiece::new, Minestuck.MOD_ID+":small_ruin");
 		
-		IMP_ENTRY = register(ImpDungeonStart.EntryPiece::new, Minestuck.MOD_ID+":imp_entry");
+		IMP_ENTRY = register(ImpDungeonEntryPiece::new, Minestuck.MOD_ID+":imp_entry");
 		IMP_ENTRY_CORRIDOR = register(ImpDungeonPieces.EntryCorridor::new, Minestuck.MOD_ID+":imp_entry_corridor");
 		IMP_STRAIGHT_CORRIDOR = register(ImpDungeonPieces.StraightCorridor::new, Minestuck.MOD_ID+":imp_straight_corridor");
 		IMP_CROSS_CORRIDOR = register(ImpDungeonPieces.CrossCorridor::new, Minestuck.MOD_ID+":imp_cross_corridor");
@@ -89,7 +89,11 @@ public final class MSStructurePieces
 		SKAIA_CASTLE_STAIRCASE = register(CastleStaircasePiece::new, Minestuck.MOD_ID+":skaia_castle_staircase");
 	}
 	
-	private static IStructurePieceType register(IStructurePieceType type, String name) {
+	private static StructurePieceType register(StructurePieceType type, String name) {
 		return Registry.register(Registry.STRUCTURE_PIECE, name, type);
+	}
+	
+	private static StructurePieceType register(StructurePieceType.ContextlessType type, String name) {
+		return register((StructurePieceType) type, name);
 	}
 }

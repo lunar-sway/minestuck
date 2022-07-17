@@ -22,9 +22,11 @@ import com.mraof.minestuck.world.gen.MSSurfaceBuilders;
 import com.mraof.minestuck.world.gen.MSWorldGenTypes;
 import com.mraof.minestuck.world.gen.feature.MSCFeatures;
 import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
-import net.minecraft.command.arguments.ArgumentTypes;
-import net.minecraft.command.arguments.IArgumentSerializer;
-import net.minecraft.item.ItemStack;
+import com.mraof.minestuck.world.gen.feature.structure.MSStructureFeatures;
+import com.mraof.minestuck.world.gen.feature.structure.MSStructureSets;
+import net.minecraft.commands.synchronization.ArgumentSerializer;
+import net.minecraft.commands.synchronization.ArgumentTypes;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -64,6 +66,10 @@ public class Minestuck
 		MSTileEntityTypes.REGISTER.register(eventBus);
 		GristTypes.GRIST_TYPES.register(eventBus);
 		MSEffects.REGISTER.register(eventBus);
+		
+		MSCFeatures.REGISTER.register(eventBus);
+		MSStructureFeatures.REGISTER.register(eventBus);
+		MSStructureSets.REGISTER.register(eventBus);
 	}
 	
 	/**
@@ -110,7 +116,7 @@ public class Minestuck
 		ArgumentTypes.register("minestuck:land_type_pair", LandTypePairArgument.class, LandTypePairArgument.SERIALIZER);
 		ArgumentTypes.register("minestuck:title", TitleArgument.class, TitleArgument.SERIALIZER);
 		//noinspection unchecked,rawtypes
-		ArgumentTypes.register("minestuck:list", ListArgument.class, (IArgumentSerializer) ListArgument.SERIALIZER);
+		ArgumentTypes.register("minestuck:list", ListArgument.class, (ArgumentSerializer) ListArgument.SERIALIZER);
 		
 	}
 	

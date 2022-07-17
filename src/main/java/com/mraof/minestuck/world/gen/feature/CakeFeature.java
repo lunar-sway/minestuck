@@ -2,34 +2,38 @@ package com.mraof.minestuck.world.gen.feature;
 
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.block.MSBlocks;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.CakeBlock;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.ProbabilityConfig;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CakeBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.configurations.ProbabilityFeatureConfiguration;
 
 import java.util.Random;
 
-public class CakeFeature extends Feature<ProbabilityConfig>
+public class CakeFeature extends Feature<ProbabilityFeatureConfiguration>
 {
-	public CakeFeature(Codec<ProbabilityConfig> codec)
+	public CakeFeature(Codec<ProbabilityFeatureConfiguration> codec)
 	{
 		super(codec);
 	}
 	
 	@Override
-	public boolean place(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, ProbabilityConfig config)
+	public boolean place(FeaturePlaceContext<ProbabilityFeatureConfiguration> context)
 	{
+		WorldGenLevel level = context.level();
+		BlockPos pos = context.origin();
+		Random rand = context.random();
+		
 		int bites = Math.max(0, (int) (rand.nextDouble()*10) - 6);
 		float f = rand.nextFloat();
 		Block cake;
 		if(f < 0.1F)
 		{
-			if(rand.nextFloat() < config.probability)
+			if(rand.nextFloat() < context.config().probability)
 				cake = f < 0.05F ? MSBlocks.RED_CAKE : MSBlocks.HOT_CAKE;
 			else cake = f < 0.05F ? MSBlocks.BLUE_CAKE : MSBlocks.COLD_CAKE;
 		}
@@ -46,9 +50,9 @@ public class CakeFeature extends Feature<ProbabilityConfig>
 		
 		BlockState state = cake.defaultBlockState().setValue(CakeBlock.BITES, bites);
 		
-		if(state.canSurvive(world, pos) && !world.getBlockState(pos).getMaterial().isLiquid())
+		if(state.canSurvive(level, pos) && !level.getBlockState(pos).getMaterial().isLiquid())
 		{
-			setBlock(world, pos, state);
+			setBlock(level, pos, state);
 			return true;
 		}
 		

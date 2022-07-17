@@ -1,33 +1,36 @@
 package com.mraof.minestuck.world.gen.feature;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.passive.RabbitEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.animal.Rabbit;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
-import java.util.Random;
+import java.util.Objects;
 
-public class RabbitPlacementFeature extends Feature<NoFeatureConfig>
+public class RabbitPlacementFeature extends Feature<NoneFeatureConfiguration>
 {
-	public RabbitPlacementFeature(Codec<NoFeatureConfig> codec)
+	public RabbitPlacementFeature(Codec<NoneFeatureConfiguration> codec)
 	{
 		super(codec);
 	}
 	
 	@Override
-	public boolean place(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
+	public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context)
 	{
-		if(!world.getBlockState(pos).getMaterial().isLiquid())
+		WorldGenLevel level = context.level();
+		BlockPos pos = context.origin();
+		
+		if(!level.getBlockState(pos).getMaterial().isLiquid())
 		{
-			RabbitEntity rabbit = new RabbitEntity(EntityType.RABBIT, world.getLevel());
+			Rabbit rabbit = Objects.requireNonNull(EntityType.RABBIT.create(level.getLevel()));
 			rabbit.setPos(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
-			rabbit.finalizeSpawn(world, world.getCurrentDifficultyAt(rabbit.blockPosition()), SpawnReason.CHUNK_GENERATION, null, null);
-			world.addFreshEntity(rabbit);
+			rabbit.finalizeSpawn(level, level.getCurrentDifficultyAt(rabbit.blockPosition()), MobSpawnType.CHUNK_GENERATION, null, null);
+			level.addFreshEntity(rabbit);
 			return true;
 		}
 		return false;
