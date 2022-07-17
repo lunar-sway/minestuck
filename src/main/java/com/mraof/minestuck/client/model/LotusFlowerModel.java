@@ -1,7 +1,7 @@
 package com.mraof.minestuck.client.model; // Made with Blockbench 3.8.4 by Riotmode
 
 import com.mraof.minestuck.entity.LotusFlowerEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 

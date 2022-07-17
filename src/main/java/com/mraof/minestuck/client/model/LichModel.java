@@ -1,141 +1,151 @@
 package com.mraof.minestuck.client.model;
 
-import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
 import com.mraof.minestuck.entity.underling.LichEntity;
-import net.minecraft.client.renderer.entity.model.SegmentedModel;
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Quaternion;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.util.Mth;
 
 /**
  * Lich - Caldw3ll
  * Created using Tabula 6.0.0
  */
-public class LichModel<T extends LichEntity> extends SegmentedModel<T>
+public class LichModel<T extends LichEntity> extends HierarchicalModel<T>
 {
 	public float[] modelScale = { 0.9F, 1.5F, 0.9F };
-	public ModelRenderer LegRight;
-	public ModelRenderer LegLeft;
-	public ModelRenderer BodyLower;
-	public ModelRenderer BodyMiddle;
-	public ModelRenderer BodyUpper;
-	public ModelRenderer Neck;
-	public ModelRenderer Head;
-	public ModelRenderer ForearmRight;
-	public ModelRenderer ArmRight;
-	public ModelRenderer ArmLeft;
-	public ModelRenderer ForearmLeft;
-	public ModelRenderer HandLeft;
-	public ModelRenderer HandRight;
-	public ModelRenderer Jaw;
-	public ModelRenderer HornRightBase;
-	public ModelRenderer HornLeftBase;
-	public ModelRenderer HornRightSpikeBase;
-	public ModelRenderer HornLeftSpikeBase;
-	public ModelRenderer HornRightSpike;
-	public ModelRenderer HornLeftSpike;
+	private final ModelPart root;
+	private final ModelPart leftLeg, rightLeg;
+	private final ModelPart lowerBody, midBody, upperBody;
+	private final ModelPart leftArm, rightArm;
+	private final ModelPart leftForearm, rightForearm;
+	private final ModelPart leftHand, rightHand;
+	private final ModelPart neck;
+	private final ModelPart head, jaw;
+	private final ModelPart leftHornBase, rightHornBase;
+	private final ModelPart leftHornSpikeBase, rightHornSpikeBase;
+	private final ModelPart leftHornSpike, rightHornSpike;
 
-	public LichModel()
+	public LichModel(ModelPart root)
 	{
-		this.texWidth = 64;
-		this.texHeight = 64;
-		this.BodyMiddle = new ModelRenderer(this, 6, 19);
-		this.BodyMiddle.setPos(-3.9F, 7.6F, -5.0F);
-		this.BodyMiddle.addBox(0.0F, 0.0F, 0.0F, 6, 9, 10, 0.0F);
-		this.ArmLeft = new ModelRenderer(this, 20, 0);
-		this.ArmLeft.setPos(4.6F, 4.8F, -6.0F);
-		this.ArmLeft.addBox(0.0F, 0.0F, 0.0F, 1, 9, 1, 0.0F);
-		this.setRotation(ArmLeft, 0.0F, 0.0F, 0.136659280431156F);
-		this.HornLeftBase = new ModelRenderer(this, 0, 38);
-		this.HornLeftBase.setPos(2.0F, -4.0F, -6.1F);
-		this.HornLeftBase.addBox(0.0F, 0.0F, 0.0F, 2, 3, 6, 0.0F);
-		this.Head = new ModelRenderer(this, 28, 19);
-		this.Head.setPos(3.0F, -7.1F, -2.0F);
-		this.Head.addBox(0.0F, 0.0F, 0.0F, 9, 4, 4, 0.0F);
-		this.setRotation(Head, 0.0F, 0.0F, 1.0016444577195458F);
-		this.HandRight = new ModelRenderer(this, 54, 14);
-		this.HandRight.setPos(5.0F, 3.7F, 4.5F);
-		this.HandRight.addBox(0.0F, 0.0F, 0.0F, 2, 1, 2, 0.0F);
-		this.setRotation(HandRight, 0.0F, 0.0F, 0.5462880558742251F);
-		this.HornRightSpikeBase = new ModelRenderer(this, 54, 17);
-		this.HornRightSpikeBase.setPos(2.0F, -5.0F, 4.0F);
-		this.HornRightSpikeBase.addBox(0.0F, 0.0F, 0.0F, 2, 1, 2, 0.0F);
-		this.ArmRight = new ModelRenderer(this, 16, 0);
-		this.ArmRight.setPos(4.6F, 4.8F, 5.0F);
-		this.ArmRight.addBox(0.0F, 0.0F, 0.0F, 1, 9, 1, 0.0F);
-		this.setRotation(ArmRight, 0.0F, 0.0F, 0.136659280431156F);
-		this.Neck = new ModelRenderer(this, 38, 0);
-		this.Neck.setPos(1.1F, -3.1F, -2.0F);
-		this.Neck.addBox(0.0F, 0.0F, 0.0F, 3, 5, 4, 0.0F);
-		this.HandLeft = new ModelRenderer(this, 48, 13);
-		this.HandLeft.setPos(5.0F, 4.3F, -6.4F);
-		this.HandLeft.addBox(0.0F, 0.0F, 0.0F, 2, 1, 2, 0.0F);
-		this.setRotation(HandLeft, 0.0F, 0.0F, 0.5462880558742251F);
-		this.ForearmLeft = new ModelRenderer(this, 56, 0);
-		this.ForearmLeft.setPos(0.2F, 2.4F, -6.0F);
-		this.ForearmLeft.addBox(0.0F, 0.0F, 0.0F, 1, 12, 1, 0.0F);
-		this.setRotation(ForearmLeft, 0.0F, 0.0F, -0.2792526803190927F);
-		this.Jaw = new ModelRenderer(this, 48, 16);
-		this.Jaw.setPos(7.7F, 0.2F, -1.0F);
-		this.Jaw.addBox(0.0F, 0.0F, 0.0F, 2, 1, 2, 0.0F);
-		this.setRotation(Jaw, 0.0F, 0.0F, 1.0471975511965976F);
-		this.HornRightBase = new ModelRenderer(this, 0, 20);
-		this.HornRightBase.setPos(2.0F, -4.0F, 0.0F);
-		this.HornRightBase.addBox(0.0F, 0.0F, 0.0F, 2, 3, 6, 0.0F);
-		this.HornRightSpike = new ModelRenderer(this, 38, 0);
-		this.HornRightSpike.setPos(2.5F, -8.0F, 4.5F);
-		this.HornRightSpike.addBox(0.0F, 0.0F, 0.0F, 1, 3, 1, 0.0F);
-		this.BodyLower = new ModelRenderer(this, 16, 0);
-		this.BodyLower.setPos(-3.9F, 15.6F, -5.0F);
-		this.BodyLower.addBox(0.0F, 0.0F, 0.0F, 6, 9, 10, 0.0F);
-		this.setRotation(BodyLower, 0.0F, 0.0F, -0.22759093446006054F);
-		this.LegLeft = new ModelRenderer(this, 8, 0);
-		this.LegLeft.setPos(2.0F, 23.0F, -5.0F);
-		this.LegLeft.addBox(0.0F, 0.0F, 0.0F, 2, 18, 2, 0.0F);
-		this.HornLeftSpikeBase = new ModelRenderer(this, 50, 20);
-		this.HornLeftSpikeBase.setPos(2.0F, -5.0F, -6.1F);
-		this.HornLeftSpikeBase.addBox(0.0F, 0.0F, 0.0F, 2, 1, 2, 0.0F);
-		this.HornLeftSpike = new ModelRenderer(this, 48, 0);
-		this.HornLeftSpike.setPos(2.5F, -8.0F, -5.6F);
-		this.HornLeftSpike.addBox(0.0F, 0.0F, 0.0F, 1, 3, 1, 0.0F);
-		this.LegRight = new ModelRenderer(this, 0, 0);
-		this.LegRight.setPos(2.0F, 23.0F, 3.0F);
-		this.LegRight.addBox(0.0F, 0.0F, 0.0F, 2, 18, 2, 0.0F);
-		this.ForearmRight = new ModelRenderer(this, 52, 0);
-		this.ForearmRight.setPos(0.2F, 2.4F, 5.0F);
-		this.ForearmRight.addBox(0.0F, 0.0F, 0.0F, 1, 12, 1, 0.0F);
-		this.setRotation(ForearmRight, 0.0F, 0.0F, -0.2792526803190927F);
-		this.BodyUpper = new ModelRenderer(this, 28, 28);
-		this.BodyUpper.setPos(-1.7F, -0.1F, -5.0F);
-		this.BodyUpper.addBox(0.0F, 0.0F, 0.0F, 6, 8, 10, 0.0F);
-		this.setRotation(BodyUpper, 0.0F, 0.0F, 0.27314402793711257F);
-	}
-
-	public void renderToBuffer(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha)
-	{
-		matrixStackIn.scale(1F / modelScale[0], 1F / modelScale[1], 1F / modelScale[2]);
-		matrixStackIn.translate(0F, -0.5F, 0F);
-		matrixStackIn.mulPose(new Quaternion(Vector3f.YP, 90.0F, true));
-		super.renderToBuffer(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+		this.root = root;
+		leftLeg = root.getChild("left_leg");
+		rightLeg = root.getChild("right_leg");
+		lowerBody = root.getChild("lower_body");
+		midBody = root.getChild("mid_body");
+		upperBody = root.getChild("upper_body");
+		leftArm = root.getChild("left_arm");
+		rightArm = root.getChild("right_arm");
+		leftForearm = root.getChild("left_forearm");
+		rightForearm = root.getChild("right_forearm");
+		leftHand = root.getChild("left_hand");
+		rightHand = root.getChild("right_hand");
+		neck = root.getChild("neck");
+		head = root.getChild("head");
+		jaw = root.getChild("jaw");
+		leftHornBase = root.getChild("left_horn_base");
+		rightHornBase = root.getChild("right_horn_base");
+		leftHornSpikeBase = root.getChild("left_horn_spike_base");
+		rightHornSpikeBase = root.getChild("right_horn_spike_base");
+		leftHornSpike = root.getChild("left_horn_spike");
+		rightHornSpike = root.getChild("right_horn_spike");
 	}
 	
-	public void setRotation(ModelRenderer model, float x, float y, float z) {
-		model.xRot = x;
-		model.yRot = y;
-		model.zRot = z;
+	public static LayerDefinition createBodyLayer()
+	{
+		MeshDefinition mesh = new MeshDefinition();
+		PartDefinition root = mesh.getRoot();
+		
+		root.addOrReplaceChild("left_leg", CubeListBuilder.create().texOffs(8, 0)
+						.addBox(0, 0, 0, 2, 18, 2),
+				PartPose.offset(2, 23, -5));
+		root.addOrReplaceChild("right_leg", CubeListBuilder.create().texOffs(0, 0)
+						.addBox(0, 0, 0, 2, 18, 2),
+				PartPose.offset(2, 23, 3));
+		root.addOrReplaceChild("lower_body", CubeListBuilder.create().texOffs(16, 0)
+						.addBox(0, 0, 0, 6, 9, 10),
+				PartPose.offsetAndRotation(-3.9F, 15.6F, -5, 0, 0, -0.22759093446006054F));
+		root.addOrReplaceChild("mid_body", CubeListBuilder.create().texOffs(6, 19)
+						.addBox(0, 0, 0, 6, 9, 10),
+				PartPose.offset(-3.9F, 7.6F, -5));
+		root.addOrReplaceChild("upper_body", CubeListBuilder.create().texOffs(28, 28)
+						.addBox(0, 0, 0, 6, 8, 10),
+				PartPose.offsetAndRotation(-1.7F, -0.1F, -5, 0, 0, 0.27314402793711257F));
+		root.addOrReplaceChild("left_arm", CubeListBuilder.create().texOffs(20, 0)
+						.addBox(0, 0, 0, 1, 9, 1),
+				PartPose.offsetAndRotation(4.6F, 4.8F, -6, 0, 0, 0.136659280431156F));
+		root.addOrReplaceChild("right_arm", CubeListBuilder.create().texOffs(16, 0)
+						.addBox(0, 0, 0, 1, 9, 1),
+				PartPose.offsetAndRotation(4.6F, 4.8F, 5, 0, 0, 0.136659280431156F));
+		root.addOrReplaceChild("left_forearm", CubeListBuilder.create().texOffs(56, 0)
+						.addBox(0, 0, 0, 1, 12, 1),
+				PartPose.offsetAndRotation(0.2F, 2.4F, -6, 0, 0, -0.2792526803190927F));
+		root.addOrReplaceChild("right_forearm", CubeListBuilder.create().texOffs(52, 0)
+						.addBox(0, 0, 0, 1, 12, 1),
+				PartPose.offsetAndRotation(0.2F, 2.4F, 5, 0, 0, -0.2792526803190927F));
+		root.addOrReplaceChild("left_hand", CubeListBuilder.create().texOffs(48, 13)
+						.addBox(0, 0, 0, 2, 1, 2),
+				PartPose.offsetAndRotation(5, 4.3F, -6.4F, 0, 0, 0.5462880558742251F));
+		root.addOrReplaceChild("right_hand", CubeListBuilder.create().texOffs(54, 14)
+						.addBox(0, 0, 0, 2, 1, 2),
+				PartPose.offsetAndRotation(5, 3.7F, 4.5F, 0, 0, 0.5462880558742251F));
+		root.addOrReplaceChild("neck", CubeListBuilder.create().texOffs(38, 0)
+						.addBox(0, 0, 0, 3, 5, 4),
+				PartPose.offset(1.1F, -3.1F, -2));
+		root.addOrReplaceChild("head", CubeListBuilder.create().texOffs(28, 19)
+						.addBox(0, 0, 0, 9, 4, 4),
+				PartPose.offsetAndRotation(3, -7.1F, -2, 0, 0, 1.0016444577195458F));
+		root.addOrReplaceChild("jaw", CubeListBuilder.create().texOffs(48, 16)
+						.addBox(0, 0, 0, 2, 1, 2),
+				PartPose.offsetAndRotation(7.7F, 0.2F, -1, 0, 0, 1.0471975511965976F));
+		root.addOrReplaceChild("left_horn_base", CubeListBuilder.create().texOffs(0, 38)
+						.addBox(0, 0, 0, 2, 3, 6),
+				PartPose.offset(2, -4, -6.1F));
+		root.addOrReplaceChild("right_horn_base", CubeListBuilder.create().texOffs(0, 20)
+						.addBox(0, 0, 0, 2, 3, 6),
+				PartPose.offset(2, -4, 0));
+		root.addOrReplaceChild("left_horn_spike_base", CubeListBuilder.create().texOffs(50, 20)
+						.addBox(0, 0, 0, 2, 1, 2),
+				PartPose.offset(2, -5, -6.1F));
+		root.addOrReplaceChild("right_horn_spike_base", CubeListBuilder.create().texOffs(54, 17)
+						.addBox(0, 0, 0, 2, 1, 2),
+				PartPose.offset(2, -5, 4));
+		root.addOrReplaceChild("left_horn_spike", CubeListBuilder.create().texOffs(48, 0)
+						.addBox(0, 0, 0, 1, 3, 1),
+				PartPose.offset(2.5F, -8, -5.6F));
+		root.addOrReplaceChild("right_horn_spike", CubeListBuilder.create().texOffs(38, 0)
+						.addBox(0, 0, 0, 1, 3, 1),
+				PartPose.offset(2.5F, -8, -4.5F));
+		
+		return LayerDefinition.create(mesh, 64, 64);
+	}
+	
+	@Override
+	public ModelPart root()
+	{
+		return root;
+	}
+	
+	@Override
+	public void renderToBuffer(PoseStack poseStack, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha)
+	{
+		poseStack.scale(1F / modelScale[0], 1F / modelScale[1], 1F / modelScale[2]);
+		poseStack.translate(0F, -0.5F, 0F);
+		poseStack.mulPose(new Quaternion(Vector3f.YP, 90.0F, true));
+		super.renderToBuffer(poseStack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
 	}
 	
 	@Override
 	public void setupAnim(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		//TO-DO: Add head movement and fix head and jaw rotation point
-		this.LegLeft.zRot = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
-		this.LegRight.zRot = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount;
-	}
-
-	public Iterable<ModelRenderer> parts() {
-		return ImmutableList.of(this.LegRight, this.LegLeft, this.BodyLower, this.BodyMiddle, this.BodyUpper, this.Neck, this.Head, this.ForearmRight, this.ArmRight, this.ArmLeft, this.ForearmLeft, this.HandLeft, this.HandRight, this.Jaw, this.HornRightBase, this.HornLeftBase, this.HornRightSpikeBase, this.HornLeftSpikeBase, this.HornRightSpike, this.HornLeftSpike);
+		this.leftLeg.zRot = Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
+		this.rightLeg.zRot = Mth.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount;
 	}
 }

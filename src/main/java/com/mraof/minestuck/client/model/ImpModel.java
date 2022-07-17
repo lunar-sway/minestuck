@@ -5,82 +5,80 @@
 // - ZeuX
 package com.mraof.minestuck.client.model;
 
-import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mraof.minestuck.entity.underling.ImpEntity;
-import net.minecraft.client.renderer.entity.model.SegmentedModel;
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.util.Mth;
 
-public class ImpModel<T extends ImpEntity> extends SegmentedModel<T>
+public class ImpModel<T extends ImpEntity> extends HierarchicalModel<T>
 {
-	//fields
-	ModelRenderer Head;
-	ModelRenderer Body;
-	ModelRenderer Armright;
-	ModelRenderer Armleft;
-	ModelRenderer Legleft;
-	ModelRenderer Legright;
+	private final ModelPart root;
+	private final ModelPart head;
+	private final ModelPart body;
+	private final ModelPart leftArm, rightArm;
+	private final ModelPart leftLeg, rightLeg;
 
-	public ImpModel()
+	public ImpModel(ModelPart root)
 	{
-		texWidth = 32;
-		texHeight = 32;
-
-		Head = new ModelRenderer(this, 0, 0);
-		Head.addBox(-3F, -3F, -5F, 5, 5, 5);
-		Head.setPos(0F, 15F, 0F);
-		Head.mirror = true;
-		setRotation(Head, 0F, 0F, 0F); 
-		Body = new ModelRenderer(this, 0, 10);
-		Body.addBox(-3F, -4F, -2F, 5, 6, 4);
-		Body.setPos(0F, 19F, 0F);
-		Body.mirror = true;
-		setRotation(Body, 0F, 0F, 0F);
-		Armright = new ModelRenderer(this, 0, 20);
-		Armright.addBox(-1F, 0F, -1F, 1, 5, 1);
-		Armright.setPos(-3F, 16F, 0F);
-		Armright.mirror = true;
-		setRotation(Armright, 0F, 0.0371786F, 0.0371786F); 
-		Armleft = new ModelRenderer(this, 0, 20);
-		Armleft.addBox(0F, 0F, -1F, 1, 5, 1);
-		Armleft.setPos(2F, 16F, 0F);
-		Armleft.mirror = true;
-		setRotation(Armleft, 0F, 0F, 0F);
-		Legleft = new ModelRenderer(this, 4, 20);
-		Legleft.addBox(-1F, 0F, 0F, 1, 3, 1);
-		Legleft.setPos(-1F, 21F, 0F);
-		Legleft.mirror = true;
-		setRotation(Legleft, 0F, 0F, 0F);
-		Legright = new ModelRenderer(this, 4, 20);
-		Legright.addBox(0F, 0F, 0F, 1, 3, 1);
-		Legright.setPos(0F, 21F, 0F);
-		Legright.mirror = true;
-		setRotation(Legright, 0F, 0F, 0F);
+		this.root = root;
+		head = root.getChild("head");
+		body = root.getChild("body");
+		leftArm = root.getChild("left_arm");
+		rightArm = root.getChild("right_arm");
+		leftLeg = root.getChild("left_leg");
+		rightLeg = root.getChild("right_leg");
 	}
-
-	public void renderToBuffer(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha)
+	
+	public static LayerDefinition createBodyLayer()
 	{
-		matrixStackIn.scale(1.5f, 1.5f, 1.5f);
-		matrixStackIn.translate(0F, -0.5F, 0F);
-		super.renderToBuffer(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+		MeshDefinition mesh = new MeshDefinition();
+		PartDefinition root = mesh.getRoot();
+		
+		root.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 0)
+						.addBox(-3, -3, -5, 5, 5, 5),
+				PartPose.offset(0, 15, 0));
+		root.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 10)
+						.addBox(-3, -4, -2, 5, 6, 4),
+				PartPose.offset(0, 19, 0));
+		root.addOrReplaceChild("left_arm", CubeListBuilder.create().texOffs(0, 20)
+						.addBox(0, 0, -1, 1, 5, 1),
+				PartPose.offset(2, 16, 0));
+		root.addOrReplaceChild("right_arm", CubeListBuilder.create().texOffs(0, 20).mirror()
+						.addBox(-1, 0, -1, 1, 5, 1),
+				PartPose.offsetAndRotation(-3, 16, 0, 0, 0.0371786F, 0.0371786F));
+		root.addOrReplaceChild("left_leg", CubeListBuilder.create().texOffs(4, 20)
+						.addBox(-1, 0, 0, 1, 3, 1),
+				PartPose.offset(-1, 21, 0));
+		root.addOrReplaceChild("right_leg", CubeListBuilder.create().texOffs(4, 20).mirror()
+						.addBox(0, 0, 0, 1, 3, 1),
+				PartPose.offset(0, 21, 0));
+		return LayerDefinition.create(mesh, 32, 32);
 	}
-
-	private void setRotation(ModelRenderer model, float x, float y, float z)
+	
+	@Override
+	public ModelPart root()
 	{
-		model.xRot = x;
-		model.yRot = y;
-		model.zRot = z;
+		return root;
 	}
-
+	
+	@Override
+	public void renderToBuffer(PoseStack poseStack, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha)
+	{
+		poseStack.scale(1.5f, 1.5f, 1.5f);
+		poseStack.translate(0F, -0.5F, 0F);
+		super.renderToBuffer(poseStack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+	}
+	
 	@Override
 	public void setupAnim(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-		this.Legleft.xRot = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
-		this.Legright.xRot = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount;
-	}
-
-	public Iterable<ModelRenderer> parts() {
-		return ImmutableList.of(this.Head, this.Body, this.Armright, this.Armleft, this.Legleft, this.Legright);
+		this.leftLeg.xRot = Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
+		this.rightLeg.xRot = Mth.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount;
 	}
 }

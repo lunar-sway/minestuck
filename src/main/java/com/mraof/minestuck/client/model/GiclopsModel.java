@@ -1,92 +1,90 @@
 package com.mraof.minestuck.client.model;
 
-import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mraof.minestuck.entity.underling.GiclopsEntity;
-import net.minecraft.client.renderer.entity.model.SegmentedModel;
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.util.Mth;
 
-public class GiclopsModel<T extends GiclopsEntity> extends SegmentedModel<T>
+public class GiclopsModel<T extends GiclopsEntity> extends HierarchicalModel<T>
 {
+	
+	private final ModelPart root;
+	private final ModelPart head;
+	private final ModelPart leftLeg, rightLeg;
+	private final ModelPart leftArm, rightArm;
 
-	private ModelRenderer head;
-	private ModelRenderer leftLeg;
-	private ModelRenderer rightLeg;
-	private ModelRenderer body;
-	private ModelRenderer leftArm;
-	private ModelRenderer rightArm;
-	private ModelRenderer tail;
-	float scaling = 2.0F;
-
-	public GiclopsModel()
+	public GiclopsModel(ModelPart root)
 	{
-		float offsetY = -96 + 24 / scaling;
-		this.texWidth = 256;
-		this.texHeight = 256;
-		//setTextureOffset("null.Spike", 0, 0);
-		head = new ModelRenderer(this, 0, 0);
-		head.addBox(-21F, -26F, -25F, 42, 26, 50);
-		head.addBox("Spike", -2F, -34F, -6F, 4, 8, 4, 0.0f, 0, 0);
-		head.addBox("Spike", -2, -34, -16, 4, 8, 4, 0.0f, 0, 0);
-		head.setPos(0F, 26F + offsetY, -14F);
-		body = new ModelRenderer(this, 0, 76);
-		body.addBox(-32F, 0F, -20F, 64, 64, 40);
-		body.setPos(0F, 16F + offsetY, -8F);
-		leftArm = new ModelRenderer(this, 184, 0);
-		leftArm.addBox(-8F, 0F, -4F, 8, 52, 8);
-		leftArm.setPos(-32F, 28F + offsetY, -8F);
-		rightArm = new ModelRenderer(this, 184, 0);
-		rightArm.addBox(0F, 0F, -4F, 8, 52, 8);
-		rightArm.setPos(32F, 28F + offsetY, -8F);
-		rightArm.mirror = true;
-		leftLeg = new ModelRenderer(this, 120, 180);
-		leftLeg.addBox(-12F, 0F, -12F, 24, 16, 24);
-		leftLeg.setPos(-20, 80F + offsetY, -8F);
-		rightLeg = new ModelRenderer(this, 120, 180);
-		rightLeg.addBox(-12F, 0F, -12F, 24, 16, 24);
-		rightLeg.setPos(20, 80F + offsetY, -8F);
-		rightLeg.mirror = true;
-		tail = new ModelRenderer(this, 0, 180);
-		tail.addBox(-20F, -6F, -10F, 40, 44, 20);
-		tail.setPos(0F, 56F + offsetY, 0F);
-		tail.xRot = 30F / (180F / (float)Math.PI);
+		this.root = root;
+		head = root.getChild("head");
+		leftLeg = root.getChild("left_leg");
+		rightLeg = root.getChild("right_leg");
+		leftArm = root.getChild("left_arm");
+		rightArm = root.getChild("right_arm");
 	}
-
+	
+	private static final float scaling = 2.0F;
+	
+	public static LayerDefinition createBodyLayer()
+	{
+		MeshDefinition mesh = new MeshDefinition();
+		PartDefinition root = mesh.getRoot();
+		float offsetY = -96 + 24 / scaling;
+		
+		root.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 0)
+						.addBox(-21, -26, -25, 42, 26, 50)
+						.addBox("spike", -2, -34, -6, 4, 8, 4, 0, 0)
+						.addBox("spike", -2, -34, -16, 4, 8, 4, 0, 0),
+				PartPose.offset(0, 26 + offsetY, -14));
+		root.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 76)
+						.addBox(-32, 0, -20, 64, 64, 40),
+				PartPose.offset(0, 16 + offsetY, -8));
+		root.addOrReplaceChild("left_arm", CubeListBuilder.create().texOffs(184, 0)
+						.addBox(-8, 0, -4, 8, 52, 8),
+				PartPose.offset(-32, 28 + offsetY, -8));
+		root.addOrReplaceChild("right_arm", CubeListBuilder.create().texOffs(184, 0).mirror()
+						.addBox(0, 0, -4, 8, 52, 8),
+				PartPose.offset(32, 28 + offsetY, -8));
+		root.addOrReplaceChild("left_leg", CubeListBuilder.create().texOffs(120, 180)
+						.addBox(-12, 0, -12, 24, 16, 24),
+				PartPose.offset(-20, 80 + offsetY, -8));
+		root.addOrReplaceChild("right_leg", CubeListBuilder.create().texOffs(120, 180).mirror()
+						.addBox(-12, 0, -12, 24, 16, 24),
+				PartPose.offset(20, 80 + offsetY, -8));
+		root.addOrReplaceChild("tail", CubeListBuilder.create().texOffs(0, 180)
+						.addBox(-20, -6, -10, 40, 44, 20),
+				PartPose.offsetAndRotation(0, 56 + offsetY, 0, Mth.TWO_PI/12, 0, 0));
+		
+		return LayerDefinition.create(mesh, 256, 256);
+	}
+	
+	@Override
+	public ModelPart root()
+	{
+		return root;
+	}
+	
 	@Override
 	public void setupAnim(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch)
 	{
 		this.head.yRot = netHeadYaw / (180F / (float)Math.PI);
 		this.head.xRot = (headPitch + 20) / (180F / (float)Math.PI);
-		this.leftLeg.xRot = MathHelper.cos(limbSwing * 0.6662F) * 0.4F * limbSwingAmount;
-		this.rightLeg.xRot = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 0.4F * limbSwingAmount;
-		this.leftArm.xRot = MathHelper.cos(limbSwing * 0.6662F) * 1.2F * limbSwingAmount * 0.5F;
-		this.rightArm.xRot = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.2F * limbSwingAmount * 0.5F;
+		this.leftLeg.xRot = Mth.cos(limbSwing * 0.6662F) * 0.4F * limbSwingAmount;
+		this.rightLeg.xRot = Mth.cos(limbSwing * 0.6662F + (float)Math.PI) * 0.4F * limbSwingAmount;
+		this.leftArm.xRot = Mth.cos(limbSwing * 0.6662F) * 1.2F * limbSwingAmount * 0.5F;
+		this.rightArm.xRot = Mth.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.2F * limbSwingAmount * 0.5F;
 	}
 
-	public void renderToBuffer(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha)
+	@Override
+	public void renderToBuffer(PoseStack poseStack, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha)
 	{
-		super.renderToBuffer(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	}
-
-	/*
-	 	public void render(T entity, float par2, float par3, float par4, float par5, float par6, float par7)
-	 	{
-	 	GL11.glPushMatrix();
-        GL11.glTranslatef(0.0F, par7 * scaling, 0.0F);
-		this.body.render(par7 * scaling);
-		this.rightArm.render(par7 * scaling);
-		this.leftArm.render(par7 * scaling);
-		this.rightLeg.render(par7 * scaling);
-		this.leftLeg.render(par7 * scaling);
-		this.head.render(par7 * scaling);
-		this.tail.render(par7 * scaling);
-		GL11.glPopMatrix();
-	 	}
-	 */
-
-	public Iterable<ModelRenderer> parts() {
-		return ImmutableList.of(this.head, this.body, this.leftArm, this.rightArm, this.leftLeg, this.rightLeg, this.tail);
+		super.renderToBuffer(poseStack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
 	}
 }
