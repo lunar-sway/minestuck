@@ -3,7 +3,8 @@
   "pools": [
     {
       "name": "main",
-      "rolls": 1,
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
@@ -107,9 +108,11 @@
             {
               "function": "minecraft:set_damage",
               "damage": {
+                "type": "minecraft:uniform",
                 "min": 0.05,
                 "max": 0.7
-              }
+              },
+              "add": false
             }
           ],
           "name": "minestuck:crowbar"
@@ -120,7 +123,12 @@
           "functions": [
             {
               "function": "minecraft:set_damage",
-              "damage": 0.05
+              "damage": {
+                "type": "minecraft:uniform",
+                "min": 0.05,
+                "max": 0.05
+              },
+              "add": false
             }
           ],
           "name": "minecraft:golden_shovel"
@@ -131,7 +139,12 @@
           "functions": [
             {
               "function": "minecraft:set_damage",
-              "damage": 0.05
+              "damage": {
+                "type": "minecraft:uniform",
+                "min": 0.05,
+                "max": 0.05
+              },
+              "add": false
             }
           ],
           "name": "minecraft:golden_axe"
@@ -142,7 +155,12 @@
           "functions": [
             {
               "function": "minecraft:set_damage",
-              "damage": 0.05
+              "damage": {
+                "type": "minecraft:uniform",
+                "min": 0.05,
+                "max": 0.05
+              },
+              "add": false
             }
           ],
           "name": "minecraft:golden_sword"
@@ -153,7 +171,12 @@
           "functions": [
             {
               "function": "minecraft:set_damage",
-              "damage": 0.05
+              "damage": {
+                "type": "minecraft:uniform",
+                "min": 0.05,
+                "max": 0.05
+              },
+              "add": false
             }
           ],
           "name": "minecraft:golden_pickaxe"

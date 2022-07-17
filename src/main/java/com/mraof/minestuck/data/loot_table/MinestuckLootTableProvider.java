@@ -3,12 +3,12 @@ package com.mraof.minestuck.data.loot_table;
 import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.LootTableProvider;
-import net.minecraft.loot.LootParameterSet;
-import net.minecraft.loot.LootParameterSets;
-import net.minecraft.loot.LootTable;
-import net.minecraft.loot.ValidationTracker;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.data.loot.LootTableProvider;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.ValidationContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 
 import java.util.List;
 import java.util.Map;
@@ -24,13 +24,14 @@ public class MinestuckLootTableProvider extends LootTableProvider
 	}
 	
 	@Override
-	protected List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootParameterSet>> getTables()
+	protected List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> getTables()
 	{
-		return ImmutableList.of(Pair.of(MSChestLootTables::new, LootParameterSets.CHEST), Pair.of(MSBlockLootTables::new, LootParameterSets.BLOCK), Pair.of(MSGiftLootTables::new, LootParameterSets.GIFT));
+		return ImmutableList.of(Pair.of(MSChestLootTables::new, LootContextParamSets.CHEST), Pair.of(MSBlockLootTables::new, LootContextParamSets.BLOCK), Pair.of(MSGiftLootTables::new, LootContextParamSets.GIFT));
 	}
 	
+	
 	@Override
-	protected void validate(Map<ResourceLocation, LootTable> lootTableMap, ValidationTracker results)
+	protected void validate(Map<ResourceLocation, LootTable> lootTableMap, ValidationContext results)
 	{
 	
 	}
