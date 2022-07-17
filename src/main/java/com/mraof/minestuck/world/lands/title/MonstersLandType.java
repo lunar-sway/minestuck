@@ -6,13 +6,13 @@ import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.biome.MobSpawnInfo;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.level.biome.MobSpawnSettings;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.Vec3;
 
 public class MonstersLandType extends TitleLandType
 {
@@ -48,22 +48,22 @@ public class MonstersLandType extends TitleLandType
 	public void setProperties(LandProperties properties)
 	{
 		properties.skylightBase = Math.min(1/4F, properties.skylightBase);
-		properties.mergeFogColor(new Vector3d(0.1, 0, 0), 0.5F);
+		properties.mergeFogColor(new Vec3(0.1, 0, 0), 0.5F);
 	}
 	
 	@Override
-	public void setSpawnInfo(MobSpawnInfo.Builder builder, LandBiomeType type)
+	public void setSpawnInfo(MobSpawnSettings.Builder builder, LandBiomeType type)
 	{
 		if(this.type == Variant.MONSTERS)
 		{
-			builder.addSpawn(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(EntityType.CREEPER, 1, 1, 1));
-			builder.addSpawn(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(EntityType.SPIDER, 1, 1, 2));
-			builder.addSpawn(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(EntityType.ZOMBIE, 1, 1, 2));
+			builder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.CREEPER, 1, 1, 1));
+			builder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.SPIDER, 1, 1, 2));
+			builder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.ZOMBIE, 1, 1, 2));
 		}
 		else if(this.type == Variant.UNDEAD)
 		{
-			builder.addSpawn(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(EntityType.ZOMBIE, 2, 1, 3));
-			builder.addSpawn(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(EntityType.SKELETON, 1, 1, 2));
+			builder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.ZOMBIE, 2, 1, 3));
+			builder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.SKELETON, 1, 1, 2));
 		}
 	}
 	

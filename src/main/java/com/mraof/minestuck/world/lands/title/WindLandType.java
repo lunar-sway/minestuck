@@ -3,17 +3,13 @@ package com.mraof.minestuck.world.lands.title;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeType;
-import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeGenerationSettings;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.Features;
-import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.BiomeGenerationSettings;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.Vec3;
 
 public class WindLandType extends TitleLandType
 {
@@ -40,7 +36,7 @@ public class WindLandType extends TitleLandType
 	@Override
 	public void setProperties(LandProperties properties)
 	{
-		properties.mergeFogColor(new Vector3d(0.1, 0.2, 0.8), 0.3F);
+		properties.mergeFogColor(new Vec3(0.1, 0.2, 0.8), 0.3F);
 		if(properties.forceRain == LandProperties.ForceType.OFF)
 			properties.forceRain = LandProperties.ForceType.DEFAULT;
 		
@@ -52,9 +48,11 @@ public class WindLandType extends TitleLandType
 	@Override
 	public void setBiomeGeneration(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks, LandBiomeType type, Biome baseBiome)
 	{
+		/*
 		if(type != LandBiomeType.OCEAN)
 			builder.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.PARCEL_PYXIS.configured(IFeatureConfig.NONE)
 					.decorated(Features.Placements.HEIGHTMAP_SQUARE).chance(60));
+		*/
 	}
 	
 	@Override

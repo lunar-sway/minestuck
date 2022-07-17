@@ -1,26 +1,18 @@
 package com.mraof.minestuck.world.lands.terrain;
 
-import com.google.common.collect.Lists;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeType;
-import com.mraof.minestuck.world.biome.MinestuckBiomeFeatures;
-import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeGenerationSettings;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.blockplacer.SimpleBlockPlacer;
-import net.minecraft.world.gen.blockstateprovider.ForestFlowerBlockStateProvider;
-import net.minecraft.world.gen.carver.ConfiguredCarvers;
-import net.minecraft.world.gen.feature.*;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.BiomeGenerationSettings;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.Random;
 
@@ -30,8 +22,8 @@ public class FloraLandType extends TerrainLandType
 	public static final String FLOWERS = "minestuck.flowers";
 	public static final String THORNS = "minestuck.thorns";
 	
-	private static final Vector3d fogColor = new Vector3d(0.5D, 0.6D, 0.9D);
-	private static final Vector3d skyColor = new Vector3d(0.6D, 0.8D, 0.6D);
+	private static final Vec3 fogColor = new Vec3(0.5D, 0.6D, 0.9D);
+	private static final Vec3 skyColor = new Vec3(0.6D, 0.8D, 0.6D);
 	
 	public FloraLandType()
 	{
@@ -52,7 +44,7 @@ public class FloraLandType extends TerrainLandType
 		registry.setBlockState("structure_secondary", Blocks.MOSSY_COBBLESTONE.defaultBlockState());
 		registry.setBlockState("structure_secondary_decorative", MSBlocks.FLOWERY_MOSSY_COBBLESTONE.defaultBlockState());
 		registry.setBlockState("structure_secondary_stairs", Blocks.DARK_OAK_STAIRS.defaultBlockState());
-		registry.setBlockState("village_path", Blocks.GRASS_PATH.defaultBlockState());
+		registry.setBlockState("village_path", Blocks.DIRT_PATH.defaultBlockState());
 		registry.setBlockState("bush", Blocks.FERN.defaultBlockState());
 		registry.setBlockState("structure_wool_1", Blocks.YELLOW_WOOL.defaultBlockState());
 		registry.setBlockState("structure_wool_3", Blocks.CYAN_WOOL.defaultBlockState());
@@ -67,12 +59,13 @@ public class FloraLandType extends TerrainLandType
 	@Override
 	public void setProperties(LandProperties properties)
 	{
-		properties.category = Biome.Category.FOREST;
+		properties.category = Biome.BiomeCategory.FOREST;
 	}
 	
 	@Override
 	public void setBiomeGeneration(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks, LandBiomeType type, Biome baseBiome)
 	{
+		/*
 		if(type == LandBiomeType.NORMAL)
 		{
 			builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Features.PATCH_GRASS_FOREST);
@@ -117,16 +110,17 @@ public class FloraLandType extends TerrainLandType
 				.range(32).squared().count(8));
 		
 		builder.addCarver(GenerationStage.Carving.AIR, ConfiguredCarvers.CAVE);
+		*/
 	}
 	
 	@Override
-	public Vector3d getFogColor()
+	public Vec3 getFogColor()
 	{
 		return fogColor;
 	}
 	
 	@Override
-	public Vector3d getSkyColor()
+	public Vec3 getSkyColor()
 	{
 		return skyColor;
 	}

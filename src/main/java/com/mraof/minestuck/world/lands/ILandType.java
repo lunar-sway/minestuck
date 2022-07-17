@@ -6,11 +6,11 @@ import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.feature.structure.village.ConsortVillageCenter;
 import com.mraof.minestuck.world.gen.feature.structure.village.ConsortVillagePieces;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeGenerationSettings;
-import net.minecraft.world.biome.MobSpawnInfo;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.BiomeGenerationSettings;
+import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import java.util.Random;
@@ -60,7 +60,7 @@ public interface ILandType<A extends ILandType<?>> extends IForgeRegistryEntry<A
 	 * Override this to add additional spawn info to a land biome.
 	 * @param type the type of biome that the spawn info builder is for.
 	 */
-	default void setSpawnInfo(MobSpawnInfo.Builder builder, LandBiomeType type)
+	default void setSpawnInfo(MobSpawnSettings.Builder builder, LandBiomeType type)
 	{}
 	
 	/**

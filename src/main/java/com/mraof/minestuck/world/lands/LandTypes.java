@@ -9,11 +9,11 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.DynamicDimensions;
 import com.mraof.minestuck.world.lands.terrain.*;
 import com.mraof.minestuck.world.lands.title.*;
+import net.minecraft.ResourceLocationException;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.ResourceLocationException;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -87,20 +87,24 @@ public class LandTypes
 	}
 	
 	@SubscribeEvent	@SuppressWarnings("unchecked")
-	public static void onRegistryNewRegistry(final RegistryEvent.NewRegistry event)
+	public static void onRegistryNewRegistry(final NewRegistryEvent event)
 	{
-		TERRAIN_REGISTRY = new RegistryBuilder<TerrainLandType>()
-				.setName(new ResourceLocation(Minestuck.MOD_ID, "terrain_land_type"))
-				.setType(TerrainLandType.class)
-				.addCallback(TerrainCallbacks.INSTANCE)
-				.create();
-		terrainGroupMap = TERRAIN_REGISTRY.getSlaveMap(TERRAIN_GROUP, Map.class);
-		TITLE_REGISTRY = new RegistryBuilder<TitleLandType>()
-				.setName(new ResourceLocation(Minestuck.MOD_ID, "title_land_type"))
-				.setType(TitleLandType.class)
-				.addCallback(TitleCallbacks.INSTANCE)
-				.create();
-		titleGroupMap = TITLE_REGISTRY.getSlaveMap(TITLE_GROUP, Map.class);
+		event.create(new RegistryBuilder<TerrainLandType>()
+						.setName(new ResourceLocation(Minestuck.MOD_ID, "terrain_land_type"))
+						.setType(TerrainLandType.class)
+						.addCallback(TerrainCallbacks.INSTANCE),
+				registry -> {
+					TERRAIN_REGISTRY = registry;
+					terrainGroupMap = TERRAIN_REGISTRY.getSlaveMap(TERRAIN_GROUP, Map.class);
+				});
+		event.create(new RegistryBuilder<TitleLandType>()
+						.setName(new ResourceLocation(Minestuck.MOD_ID, "title_land_type"))
+						.setType(TitleLandType.class)
+						.addCallback(TitleCallbacks.INSTANCE),
+				registry -> {
+					TITLE_REGISTRY = registry;
+					titleGroupMap = TITLE_REGISTRY.getSlaveMap(TITLE_GROUP, Map.class);
+				});
 	}
 
 	@SubscribeEvent
@@ -248,7 +252,7 @@ public class LandTypes
 	 * @param aspects Land aspects that the land should have
 	 * @return Returns the dimension of the newly created land.
 	 */
-	public static RegistryKey<World> createLandDimension(MinecraftServer server, PlayerIdentifier player, LandTypePair aspects)
+	public static ResourceKey<Level> createLandDimension(MinecraftServer server, PlayerIdentifier player, LandTypePair aspects)
 	{
 		String base = "minestuck:land_"+player.getUsername().toLowerCase();
 		ResourceLocation dimensionName;

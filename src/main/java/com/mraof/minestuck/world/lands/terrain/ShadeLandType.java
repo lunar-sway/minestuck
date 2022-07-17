@@ -5,22 +5,15 @@ import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeType;
-import com.mraof.minestuck.world.biome.MinestuckBiomeFeatures;
-import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeGenerationSettings;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.BlockStateFeatureConfig;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.Features;
-import net.minecraft.world.gen.feature.OreFeatureConfig;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.BiomeGenerationSettings;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.Random;
 
@@ -28,7 +21,7 @@ public class ShadeLandType extends TerrainLandType
 {
 	public static final String SHADE = "minestuck.shade";
 	
-	private static final Vector3d skyColor = new Vector3d(0.16D, 0.38D, 0.54D);
+	private static final Vec3 skyColor = new Vec3(0.16D, 0.38D, 0.54D);
 	
 	public ShadeLandType()
 	{
@@ -71,13 +64,14 @@ public class ShadeLandType extends TerrainLandType
 	@Override
 	public void setProperties(LandProperties properties)
 	{
-		properties.category = Biome.Category.MUSHROOM;
+		properties.category = Biome.BiomeCategory.MUSHROOM;
 		properties.forceRain = LandProperties.ForceType.DEFAULT;
 	}
 	
 	@Override
 	public void setBiomeGeneration(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks, LandBiomeType type, Biome baseBiome)
 	{
+		/*
 		if(type == LandBiomeType.NORMAL)
 		{
 			builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_PATCH
@@ -112,6 +106,7 @@ public class ShadeLandType extends TerrainLandType
 		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE
 				.configured(new OreFeatureConfig(blocks.getGroundType(), MSBlocks.SHADE_STONE_URANIUM_ORE.defaultBlockState(), 2))
 				.range(32).squared().count(4));
+		*/
 	}
 	
 	@Override
@@ -121,7 +116,7 @@ public class ShadeLandType extends TerrainLandType
 	}
 	
 	@Override
-	public Vector3d getFogColor()
+	public Vec3 getFogColor()
 	{
 		return skyColor;
 	}

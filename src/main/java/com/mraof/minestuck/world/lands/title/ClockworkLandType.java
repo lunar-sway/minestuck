@@ -3,16 +3,13 @@ package com.mraof.minestuck.world.lands.title;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeType;
-import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeGenerationSettings;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.BiomeGenerationSettings;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.Vec3;
 
 public class ClockworkLandType extends TitleLandType
 {
@@ -40,12 +37,13 @@ public class ClockworkLandType extends TitleLandType
 	@Override
 	public void setProperties(LandProperties properties)
 	{
-		properties.mergeFogColor(new Vector3d(0.5, 0.5, 0.5), 0.5F);
+		properties.mergeFogColor(new Vec3(0.5, 0.5, 0.5), 0.5F);
 	}
 	
 	@Override
 	public void setBiomeGeneration(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks, LandBiomeType type, Biome baseBiome)
 	{
+		/*
 		if(type == LandBiomeType.ROUGH)
 		{
 			builder.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MSFeatures.COG.configured(IFeatureConfig.NONE).chance(2));
@@ -61,6 +59,7 @@ public class ClockworkLandType extends TitleLandType
 		{
 			builder.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MSFeatures.FLOOR_COG.configured(IFeatureConfig.NONE).chance(20));
 		}
+		*/
 	}
 	
 	@Override

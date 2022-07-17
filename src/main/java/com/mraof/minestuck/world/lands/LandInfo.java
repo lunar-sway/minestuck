@@ -2,17 +2,17 @@ package com.mraof.minestuck.world.lands;
 
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTDynamicOps;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -32,7 +32,7 @@ public class LandInfo
 	
 	public final PlayerIdentifier identifier;
 	private final LandTypePair.LazyInstance landAspects;
-	private final RegistryKey<World> dimension;
+	private final ResourceKey<Level> dimension;
 	private final boolean useReverseOrder;
 	private final int terrainNameIndex, titleNameIndex;
 	@Nullable
@@ -41,7 +41,7 @@ public class LandInfo
 	@Nullable
 	private LandTypePair cachedAspects;
 	
-	public LandInfo(PlayerIdentifier identifier, LandTypePair landTypes, RegistryKey<World> dimensionType, Random random)
+	public LandInfo(PlayerIdentifier identifier, LandTypePair landTypes, ResourceKey<Level> dimensionType, Random random)
 	{
 		this.identifier = Objects.requireNonNull(identifier);
 		cachedAspects = Objects.requireNonNull(landTypes);
@@ -52,7 +52,7 @@ public class LandInfo
 		titleNameIndex = random.nextInt(landTypes.getTitle().getNames().length);
 	}
 	
-	private LandInfo(SkaianetHandler handler, PlayerIdentifier identifier, LandTypePair.LazyInstance landAspects, RegistryKey<World> dimensionType, boolean reverseOrder, int terrainNameIndex, int titleNameIndex)
+	private LandInfo(SkaianetHandler handler, PlayerIdentifier identifier, LandTypePair.LazyInstance landAspects, ResourceKey<Level> dimensionType, boolean reverseOrder, int terrainNameIndex, int titleNameIndex)
 	{
 		this.identifier = identifier;
 		this.landAspects = landAspects;
@@ -62,11 +62,11 @@ public class LandInfo
 		this.titleNameIndex = titleNameIndex;
 	}
 	
-	public ITextComponent landAsTextComponent()
+	public Component landAsTextComponent()
 	{
-		ITextComponent aspect1 = new TranslationTextComponent("land."+landName1());
-		ITextComponent aspect2 = new TranslationTextComponent("land."+landName2());
-		return new TranslationTextComponent(LandTypePair.FORMAT, aspect1, aspect2);
+		Component aspect1 = new TranslatableComponent("land."+landName1());
+		Component aspect2 = new TranslatableComponent("land."+landName2());
+		return new TranslatableComponent(LandTypePair.FORMAT, aspect1, aspect2);
 	}
 	
 	public String landName1()
@@ -111,7 +111,7 @@ public class LandInfo
 		return landAspects;
 	}
 	
-	public RegistryKey<World> getDimensionType()
+	public ResourceKey<Level> getDimensionType()
 	{
 		return dimension;
 	}
@@ -131,10 +131,10 @@ public class LandInfo
 	/**
 	 * Saves the info container to nbt, except for the identifier
 	 */
-	public CompoundNBT write(CompoundNBT nbt)
+	public CompoundTag write(CompoundTag nbt)
 	{
 		landAspects.write(nbt);
-		ResourceLocation.CODEC.encodeStart(NBTDynamicOps.INSTANCE, dimension.location()).resultOrPartial(LOGGER::error)
+		ResourceLocation.CODEC.encodeStart(NbtOps.INSTANCE, dimension.location()).resultOrPartial(LOGGER::error)
 				.ifPresent(tag -> nbt.put("dim_type", tag));
 		nbt.putBoolean("reverse_order", useReverseOrder);
 		nbt.putInt("terrain_name_index", terrainNameIndex);
@@ -150,17 +150,17 @@ public class LandInfo
 		return nbt;
 	}
 	
-	public static LandInfo read(CompoundNBT nbt, SkaianetHandler handler, PlayerIdentifier identifier)
+	public static LandInfo read(CompoundTag nbt, SkaianetHandler handler, PlayerIdentifier identifier)
 	{
 		LandTypePair.LazyInstance aspects = LandTypePair.LazyInstance.read(nbt);
-		RegistryKey<World> dimension = World.RESOURCE_KEY_CODEC.parse(NBTDynamicOps.INSTANCE, nbt.get("dim_type")).resultOrPartial(LOGGER::error).get();	//TODO properly use optional, maybe by writing LandInfo with codec
+		ResourceKey<Level> dimension = Level.RESOURCE_KEY_CODEC.parse(NbtOps.INSTANCE, nbt.get("dim_type")).resultOrPartial(LOGGER::error).get();	//TODO properly use optional, maybe by writing LandInfo with codec
 		boolean reverse = nbt.getBoolean("reverse_order");
 		int terrainIndex = nbt.getInt("terrain_name_index");
 		int titleIndex = nbt.getInt("title_name_index");
 		
 		LandInfo info = new LandInfo(handler, identifier, aspects, dimension, reverse, terrainIndex, titleIndex);
 		
-		if(nbt.contains("gate_x", Constants.NBT.TAG_ANY_NUMERIC))
+		if(nbt.contains("gate_x", Tag.TAG_ANY_NUMERIC))
 		{
 			info.gatePos = new BlockPos(nbt.getInt("gate_x"), nbt.getInt("gate_y"), nbt.getInt("gate_z"));
 		}
@@ -169,9 +169,8 @@ public class LandInfo
 		return info;
 	}
 	
-	public void sendLandEntryMessage(ServerPlayerEntity player)
+	public void sendLandEntryMessage(ServerPlayer player)
 	{
-		ITextComponent toSend = new TranslationTextComponent(LAND_ENTRY, this.landAsTextComponent());
-		player.sendMessage(toSend, Util.NIL_UUID);
+		player.sendMessage(new TranslatableComponent(LAND_ENTRY, this.landAsTextComponent()), Util.NIL_UUID);
 	}
 }

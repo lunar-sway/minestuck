@@ -3,12 +3,12 @@ package com.mraof.minestuck.world.lands.terrain;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.phys.Vec3;
 
 public class NullTerrainLandType extends TerrainLandType
 {
-	private static final Vector3d fogColor = new Vector3d(1, 1, 1);
+	private static final Vec3 fogColor = new Vec3(1, 1, 1);
 	
 	public NullTerrainLandType()
 	{
@@ -22,7 +22,7 @@ public class NullTerrainLandType extends TerrainLandType
 	}
 	
 	@Override
-	public Vector3d getFogColor()
+	public Vec3 getFogColor()
 	{
 		return fogColor;
 	}

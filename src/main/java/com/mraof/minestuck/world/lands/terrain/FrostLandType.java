@@ -1,6 +1,5 @@
 package com.mraof.minestuck.world.lands.terrain;
 
-import com.google.common.collect.Lists;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
@@ -11,15 +10,12 @@ import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeGenerationSettings;
-import net.minecraft.world.biome.DefaultBiomeFeatures;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.*;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.BiomeGenerationSettings;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.Random;
 
@@ -29,7 +25,7 @@ public class FrostLandType extends TerrainLandType
 	public static final String ICE = "minestuck.ice";
 	public static final String SNOW = "minestuck.snow";
 	
-	private static final Vector3d fogColor = new Vector3d(0.5D, 0.6D, 0.98D);
+	private static final Vec3 fogColor = new Vec3(0.5D, 0.6D, 0.98D);
 	
 	public FrostLandType()
 	{
@@ -73,7 +69,7 @@ public class FrostLandType extends TerrainLandType
 	@Override
 	public void setProperties(LandProperties properties)
 	{
-		properties.category = Biome.Category.ICY;
+		properties.category = Biome.BiomeCategory.ICY;
 		properties.forceRain = LandProperties.ForceType.ON;
 	}
 	
@@ -89,7 +85,7 @@ public class FrostLandType extends TerrainLandType
 		//TODO
 		//list.add(new SpruceTreeDecorator(MinestuckBlocks.log.getDefaultState().withProperty(BlockMinestuckLog1.VARIANT, BlockMinestuckLog1.BlockType.FROST), MinestuckBlocks.leaves1.getDefaultState().withProperty(BlockMinestuckLeaves1.VARIANT, BlockMinestuckLeaves1.BlockType.FROST).withProperty(BlockMinestuckLeaves1.CHECK_DECAY, Boolean.valueOf(false)), BiomeMinestuck.mediumNormal));
 		//list.add(new SpruceTreeDecorator(MinestuckBlocks.log.getDefaultState().withProperty(BlockMinestuckLog1.VARIANT, BlockMinestuckLog1.BlockType.FROST), MinestuckBlocks.leaves1.getDefaultState().withProperty(BlockMinestuckLeaves1.VARIANT, BlockMinestuckLeaves1.BlockType.FROST).withProperty(BlockMinestuckLeaves1.CHECK_DECAY, Boolean.valueOf(false)), BiomeMinestuck.mediumRough));
-		
+		/*
 		if(type != LandBiomeType.NORMAL)
 			builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.DISK
 					.configured(new SphereReplaceConfig(Blocks.COARSE_DIRT.defaultBlockState(), FeatureSpread.of(2, 4), 2, Lists.newArrayList(blocks.getBlockState("surface"), blocks.getBlockState("upper"))))
@@ -120,7 +116,7 @@ public class FrostLandType extends TerrainLandType
 		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.configured(new OreFeatureConfig(blocks.getGroundType(), Blocks.DIAMOND_ORE.defaultBlockState(), 6))
 				.range(24).squared().count(3));
 
-		DefaultBiomeFeatures.addSurfaceFreezing(builder);
+		DefaultBiomeFeatures.addSurfaceFreezing(builder);*/
 	}
 	
 	@Override
@@ -130,15 +126,15 @@ public class FrostLandType extends TerrainLandType
 	}
 	
 	@Override
-	public Vector3d getFogColor()
+	public Vec3 getFogColor()
 	{
 		return fogColor;
 	}
 	
 	@Override
-	public Vector3d getSkyColor()
+	public Vec3 getSkyColor()
 	{
-		return new Vector3d(0.6D, 0.7D, 0.9D);
+		return new Vec3(0.6D, 0.7D, 0.9D);
 	}
 	
 	@Override

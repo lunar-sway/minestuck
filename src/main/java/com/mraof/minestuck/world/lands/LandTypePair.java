@@ -5,10 +5,10 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.world.gen.LandChunkGenerator;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.chunk.ChunkGenerator;
 
 import javax.annotation.Nonnull;
 import java.util.Objects;
@@ -44,14 +44,14 @@ public class LandTypePair
 		return title;
 	}
 	
-	public CompoundNBT write(CompoundNBT nbt)
+	public CompoundTag write(CompoundTag nbt)
 	{
 		nbt.putString("terrain_aspect", terrain.getRegistryName().toString());
 		nbt.putString("title_aspect", title.getRegistryName().toString());
 		return nbt;
 	}
 	
-	public static LandTypePair read(CompoundNBT nbt)
+	public static LandTypePair read(CompoundTag nbt)
 	{
 		String terrainName = nbt.getString("terrain_aspect");
 		String titleName = nbt.getString("title_aspect");
@@ -98,14 +98,14 @@ public class LandTypePair
 			return new LandTypePair(terrain, title);
 		}
 		
-		public CompoundNBT write(CompoundNBT nbt)
+		public CompoundTag write(CompoundTag nbt)
 		{
 			nbt.putString("terrain_aspect", terrainName.toString());
 			nbt.putString("title_aspect", titleName.toString());
 			return nbt;
 		}
 		
-		public static LazyInstance read(CompoundNBT nbt)
+		public static LazyInstance read(CompoundTag nbt)
 		{
 			String terrainName = nbt.getString("terrain_aspect");
 			String titleName = nbt.getString("title_aspect");
@@ -113,13 +113,13 @@ public class LandTypePair
 			return new LazyInstance(new ResourceLocation(terrainName), new ResourceLocation(titleName));
 		}
 		
-		public void write(PacketBuffer buffer)
+		public void write(FriendlyByteBuf buffer)
 		{
 			buffer.writeResourceLocation(terrainName);
 			buffer.writeResourceLocation(titleName);
 		}
 		
-		public static LazyInstance read(PacketBuffer buffer)
+		public static LazyInstance read(FriendlyByteBuf buffer)
 		{
 			ResourceLocation terrain = buffer.readResourceLocation();
 			ResourceLocation title = buffer.readResourceLocation();

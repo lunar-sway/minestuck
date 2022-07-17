@@ -3,16 +3,11 @@ package com.mraof.minestuck.world.lands.title;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeType;
-import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeGenerationSettings;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.Features;
-import net.minecraft.world.gen.feature.IFeatureConfig;
-import net.minecraft.world.gen.feature.ProbabilityConfig;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.BiomeGenerationSettings;
+import net.minecraft.world.level.block.Blocks;
 
 public class CakeLandType extends TitleLandType
 {
@@ -40,6 +35,7 @@ public class CakeLandType extends TitleLandType
 	@Override
 	public void setBiomeGeneration(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks, LandBiomeType type, Biome baseBiome)
 	{
+		/*
 		if(type != LandBiomeType.OCEAN)
 		{
 			builder.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MSFeatures.CAKE_PEDESTAL.configured(IFeatureConfig.NONE).chance(100));
@@ -47,6 +43,7 @@ public class CakeLandType extends TitleLandType
 		
 		builder.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.CAKE.configured(new ProbabilityConfig(baseBiome.getBaseTemperature()/2))
 				.decorated(Features.Placements.TOP_SOLID_HEIGHTMAP_SQUARE).countRandom(5));
+		*/
 	}
 	
 	@Override

@@ -1,31 +1,22 @@
 package com.mraof.minestuck.world.lands.terrain;
 
-import com.google.common.collect.Lists;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeType;
-import com.mraof.minestuck.world.biome.MinestuckBiomeFeatures;
 import com.mraof.minestuck.world.gen.LandGenSettings;
-import com.mraof.minestuck.world.gen.feature.MSFeatures;
-import com.mraof.minestuck.world.gen.feature.RandomRockBlockBlobConfig;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.feature.structure.village.ConsortVillageCenter;
 import com.mraof.minestuck.world.lands.LandProperties;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeGenerationSettings;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.carver.WorldCarver;
-import net.minecraft.world.gen.feature.*;
-import net.minecraft.world.gen.placement.AtSurfaceWithExtraConfig;
-import net.minecraft.world.gen.placement.Placement;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.BiomeGenerationSettings;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.Random;
 
@@ -85,7 +76,7 @@ public class RockLandType extends TerrainLandType
 	@Override
 	public void setProperties(LandProperties properties)
 	{
-		properties.category = Biome.Category.EXTREME_HILLS;
+		properties.category = Biome.BiomeCategory.EXTREME_HILLS;
 	}
 	
 	@Override
@@ -98,7 +89,7 @@ public class RockLandType extends TerrainLandType
 	public void setBiomeGeneration(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks, LandBiomeType type, Biome baseBiome)
 	{
 		int biomeMultiplier = type == LandBiomeType.ROUGH || type == LandBiomeType.OCEAN ? 2 : 1;
-		
+		/*
 		if(type == LandBiomeType.OCEAN)
 		{
 			builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.DISK
@@ -204,7 +195,7 @@ public class RockLandType extends TerrainLandType
 				.range(24 * biomeMultiplier).squared().count(2 * biomeMultiplier));
 		
 		builder.addCarver(GenerationStage.Carving.AIR, WorldCarver.CANYON.configured(new ProbabilityConfig(0.4F)));
-		
+		*/
 	}
 	
 	@Override
@@ -214,15 +205,15 @@ public class RockLandType extends TerrainLandType
 	}
 	
 	@Override
-	public Vector3d getFogColor()
+	public Vec3 getFogColor()
 	{
-		return new Vector3d(0.5, 0.5, 0.55);
+		return new Vec3(0.5, 0.5, 0.55);
 	}
 	
 	@Override
-	public Vector3d getSkyColor()
+	public Vec3 getSkyColor()
 	{
-		return new Vector3d(0.6D, 0.6D, 0.7D);
+		return new Vec3(0.6D, 0.6D, 0.7D);
 	}
 	
 	@Override

@@ -4,19 +4,14 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeType;
-import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeGenerationSettings;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.BlockStateFeatureConfig;
-import net.minecraft.world.gen.feature.Features;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.BiomeGenerationSettings;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.Vec3;
 
 public class LightLandType extends TitleLandType
 {
@@ -47,12 +42,13 @@ public class LightLandType extends TitleLandType
 	public void setProperties(LandProperties properties)
 	{
 		properties.skylightBase = 1.0F;
-		properties.mergeFogColor(new Vector3d(1, 1, 0.8), 0.5F);
+		properties.mergeFogColor(new Vec3(1, 1, 0.8), 0.5F);
 	}
 	
 	@Override
 	public void setBiomeGeneration(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks, LandBiomeType type, Biome baseBiome)
 	{
+		/*
 		BlockState lightBlock = blocks.getBlockState("light_block");
 		if(type == LandBiomeType.ROUGH)
 		{
@@ -63,6 +59,7 @@ public class LightLandType extends TitleLandType
 			builder.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.PILLAR
 					.configured(new BlockStateFeatureConfig(lightBlock)).decorated(Features.Placements.TOP_SOLID_HEIGHTMAP_SQUARE).chance(2));
 		}
+		 */
 	}
 	
 	@Override

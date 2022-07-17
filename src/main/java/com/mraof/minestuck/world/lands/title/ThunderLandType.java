@@ -6,10 +6,10 @@ import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.Vec3;
 
 public class ThunderLandType extends TitleLandType
 {
@@ -39,7 +39,7 @@ public class ThunderLandType extends TitleLandType
 	@Override
 	public void setProperties(LandProperties properties)
 	{
-		properties.mergeFogColor(new Vector3d(0.1, 0.1, 0.2), 0.5F);
+		properties.mergeFogColor(new Vec3(0.1, 0.1, 0.2), 0.5F);
 		properties.forceRain = LandProperties.ForceType.ON;
 		properties.forceThunder = LandProperties.ForceType.ON;
 	}
@@ -55,7 +55,7 @@ public class ThunderLandType extends TitleLandType
 	{
 		LandProperties properties = LandProperties.createPartial(otherType);
 		
-		return properties.biomes.getPrecipitation() == Biome.RainType.RAIN;
+		return properties.biomes.getPrecipitation() == Biome.Precipitation.RAIN;
 	}
 	
 	@Override

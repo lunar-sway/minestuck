@@ -1,6 +1,5 @@
 package com.mraof.minestuck.world.lands.terrain;
 
-import com.google.common.collect.Lists;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
@@ -9,18 +8,15 @@ import com.mraof.minestuck.world.biome.LandBiomeSet;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.LandGenSettings;
-import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeGenerationSettings;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.*;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.BiomeGenerationSettings;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.Random;
 
@@ -30,8 +26,8 @@ public class RainLandType extends TerrainLandType
 	public static final String ISLANDS = "minestuck.islands";
 	public static final String SKY = "minestuck.sky";
 	
-	private static final Vector3d skyColor = new Vector3d(0.3D, 0.5D, 0.98D);
-	private static final Vector3d fogColor = new Vector3d(0.9D, 0.8D, 0.6D);
+	private static final Vec3 skyColor = new Vec3(0.3D, 0.5D, 0.98D);
+	private static final Vec3 fogColor = new Vec3(0.9D, 0.8D, 0.6D);
 	
 	//TODO:
 	//Pink stone brick temples		Monsters in these temples tend to guard living trees, Magic Beans, and Fertile Soil.
@@ -86,7 +82,7 @@ public class RainLandType extends TerrainLandType
 	@Override
 	public void setProperties(LandProperties properties)
 	{
-		properties.category = Biome.Category.BEACH;	//I guess?
+		properties.category = Biome.BiomeCategory.BEACH;	//I guess?
 		
 		properties.oceanBiomeScale += 0.1;
 		properties.roughBiomeScale += 0.1;
@@ -101,7 +97,7 @@ public class RainLandType extends TerrainLandType
 	
 	@Override
 	public void setBiomeGeneration(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks, LandBiomeType type, Biome baseBiome)
-	{
+	{/*
 		if(type == LandBiomeType.NORMAL)
 		{
 			builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, MSFeatures.LEAFLESS_TREE
@@ -130,16 +126,17 @@ public class RainLandType extends TerrainLandType
 		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE
 				.configured(new OreFeatureConfig(blocks.getGroundType(), MSBlocks.PINK_STONE_DIAMOND_ORE.defaultBlockState(), 6))
 				.range(24).squared().count(3));
+		*/
 	}
 	
 	@Override
-	public Vector3d getFogColor()
+	public Vec3 getFogColor()
 	{
 		return fogColor;
 	}
 	
 	@Override
-	public Vector3d getSkyColor()
+	public Vec3 getSkyColor()
 	{
 		return skyColor;
 	}

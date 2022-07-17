@@ -1,6 +1,5 @@
 package com.mraof.minestuck.world.lands.terrain;
 
-import com.google.common.collect.ImmutableList;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
@@ -9,21 +8,13 @@ import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeGenerationSettings;
-import net.minecraft.world.biome.DefaultBiomeFeatures;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.Features;
-import net.minecraft.world.gen.feature.MultipleRandomFeatureConfig;
-import net.minecraft.world.gen.feature.OreFeatureConfig;
-import net.minecraft.world.gen.placement.AtSurfaceWithExtraConfig;
-import net.minecraft.world.gen.placement.Placement;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.BiomeGenerationSettings;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.Random;
 
@@ -59,7 +50,7 @@ public class ForestLandType extends TerrainLandType
 		registry.setBlockState("structure_secondary", Blocks.STONE_BRICKS.defaultBlockState());
 		registry.setBlockState("structure_secondary_decorative", Blocks.CHISELED_STONE_BRICKS.defaultBlockState());
 		registry.setBlockState("structure_secondary_stairs", Blocks.STONE_BRICK_STAIRS.defaultBlockState());
-		registry.setBlockState("village_path", Blocks.GRASS_PATH.defaultBlockState());
+		registry.setBlockState("village_path", Blocks.DIRT_PATH.defaultBlockState());
 		registry.setBlockState("bush", Blocks.FERN.defaultBlockState());
 		registry.setBlockState("structure_wool_1", Blocks.GREEN_WOOL.defaultBlockState());
 		if(type == Variant.TAIGA) {
@@ -82,14 +73,14 @@ public class ForestLandType extends TerrainLandType
 	@Override
 	public void setProperties(LandProperties properties)
 	{
-		properties.category = this.type == Variant.TAIGA ? Biome.Category.TAIGA : Biome.Category.FOREST;
+		properties.category = this.type == Variant.TAIGA ? Biome.BiomeCategory.TAIGA : Biome.BiomeCategory.FOREST;
 		properties.forceRain = LandProperties.ForceType.DEFAULT;
 	}
 	
 	@Override
 	public void setBiomeGeneration(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks, LandBiomeType type, Biome baseBiome)
 	{
-		if(type == LandBiomeType.NORMAL)
+		/*if(type == LandBiomeType.NORMAL)
 		{
 			builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Features.PATCH_GRASS_FOREST);
 			
@@ -136,18 +127,18 @@ public class ForestLandType extends TerrainLandType
 		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.configured(new OreFeatureConfig(blocks.getGroundType(), Blocks.COAL_ORE.defaultBlockState(), 17))
 				.range(128).squared().count(20));
 		DefaultBiomeFeatures.addExtraEmeralds(builder);
-		
+		*/
 	}
 	@Override
-	public Vector3d getFogColor()
+	public Vec3 getFogColor()
 	{
-		return new Vector3d(0.0D, 1.0D, 0.6D);
+		return new Vec3(0.0D, 1.0D, 0.6D);
 	}
 	
 	@Override
-	public Vector3d getSkyColor()
+	public Vec3 getSkyColor()
 	{
-		return new Vector3d(0.4D, 0.7D, 1.0D);
+		return new Vec3(0.4D, 0.7D, 1.0D);
 	}
 	
 	@Override

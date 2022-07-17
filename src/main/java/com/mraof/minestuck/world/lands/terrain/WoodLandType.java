@@ -1,6 +1,5 @@
 package com.mraof.minestuck.world.lands.terrain;
 
-import com.google.common.collect.Lists;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
@@ -8,14 +7,12 @@ import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeGenerationSettings;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.*;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.BiomeGenerationSettings;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.Random;
 
@@ -25,7 +22,7 @@ public class WoodLandType extends TerrainLandType
 	public static final String OAK = "minestuck.oak";
 	public static final String LUMBER = "minestuck.lumber";
 	
-	private static final Vector3d fogColor = new Vector3d(0.0D, 0.16D, 0.38D);
+	private static final Vec3 fogColor = new Vec3(0.0D, 0.16D, 0.38D);
 	
 	public WoodLandType()
 	{
@@ -63,6 +60,7 @@ public class WoodLandType extends TerrainLandType
 	@Override
 	public void setBiomeGeneration(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks, LandBiomeType type, Biome baseBiome)
 	{
+		/*
 		if(type == LandBiomeType.NORMAL)
 		{
 			builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Features.PATCH_RED_MUSHROOM
@@ -104,6 +102,7 @@ public class WoodLandType extends TerrainLandType
 		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE
 				.configured(new OreFeatureConfig(blocks.getGroundType(), Blocks.EMERALD_ORE.defaultBlockState(), 3))
 				.range(24).squared().count(8));
+		*/
 	}
 	
 	@Override
@@ -113,15 +112,15 @@ public class WoodLandType extends TerrainLandType
 	}
 	
 	@Override
-	public Vector3d getFogColor()
+	public Vec3 getFogColor()
 	{
 		return fogColor;
 	}
 	
 	@Override
-	public Vector3d getSkyColor()
+	public Vec3 getSkyColor()
 	{
-		return new Vector3d(0.0D, 0.3D, 0.4D);
+		return new Vec3(0.0D, 0.3D, 0.4D);
 	}
 	
 	@Override
