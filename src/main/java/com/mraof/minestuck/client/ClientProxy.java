@@ -155,16 +155,17 @@ public class ClientProxy
 	
 	private static void registerArmorModels()
 	{
-		MSItems.CRUMPLY_HAT.setArmorModel(new CrumplyHatModel());
-		DreamerPajamasModel pajamasModel = new DreamerPajamasModel();
-		MSItems.PROSPIT_CIRCLET.setArmorModel(pajamasModel);
-		MSItems.PROSPIT_SHIRT.setArmorModel(pajamasModel);
-		MSItems.PROSPIT_PANTS.setArmorModel(pajamasModel);
-		MSItems.PROSPIT_SHOES.setArmorModel(pajamasModel);
-		MSItems.DERSE_CIRCLET.setArmorModel(pajamasModel);
-		MSItems.DERSE_SHIRT.setArmorModel(pajamasModel);
-		MSItems.DERSE_PANTS.setArmorModel(pajamasModel);
-		MSItems.DERSE_SHOES.setArmorModel(pajamasModel);
+		ArmorModels.register(MSItems.CRUMPLY_HAT, new HumanoidModel<>(CrumplyHatModel.createBodyLayer().bakeRoot()));
+		
+		HumanoidModel<?> pajamasModel = new HumanoidModel<>(DreamerPajamasModel.createBodyLayer().bakeRoot());
+		ArmorModels.register(MSItems.PROSPIT_CIRCLET, pajamasModel);
+		ArmorModels.register(MSItems.PROSPIT_SHIRT, pajamasModel);
+		ArmorModels.register(MSItems.PROSPIT_PANTS, pajamasModel);
+		ArmorModels.register(MSItems.PROSPIT_SHOES, pajamasModel);
+		ArmorModels.register(MSItems.DERSE_CIRCLET, pajamasModel);
+		ArmorModels.register(MSItems.DERSE_SHIRT, pajamasModel);
+		ArmorModels.register(MSItems.DERSE_PANTS, pajamasModel);
+		ArmorModels.register(MSItems.DERSE_SHOES, pajamasModel);
 	}
 	
 	/**
