@@ -3,8 +3,10 @@
     "item": "minecraft:clay_ball"
   },
   "range": {
-    "min": 5.0,
-    "max": 10.0,
-    "type": "minecraft:uniform"
+    "type": "minecraft:uniform",
+    "value": {
+      "min_inclusive": 5,
+      "max_inclusive": 10
+    }
   }
 }

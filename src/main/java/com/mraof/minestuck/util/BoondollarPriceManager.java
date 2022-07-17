@@ -4,14 +4,11 @@ import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
-import net.minecraft.client.resources.JsonReloadListener;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.BinomialRange;
-import net.minecraft.loot.ConstantRange;
-import net.minecraft.loot.RandomValueRange;
-import net.minecraft.profiler.IProfiler;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
+import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -22,13 +19,10 @@ import java.util.*;
 
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class BoondollarPriceManager extends JsonReloadListener
+public class BoondollarPriceManager extends SimpleJsonResourceReloadListener
 {
 	private static final Logger LOGGER = LogManager.getLogger();
-	private static final Gson GSON = new GsonBuilder().registerTypeAdapter(BoondollarPricing.class, new BoondollarPricing.Serializer())
-			.registerTypeAdapter(RandomValueRange.class, new RandomValueRange.Serializer())
-			.registerTypeAdapter(BinomialRange.class, new BinomialRange.Serializer())
-			.registerTypeAdapter(ConstantRange.class, new ConstantRange.Serializer()).create();
+	private static final Gson GSON = new GsonBuilder().registerTypeAdapter(BoondollarPricing.class, new BoondollarPricing.Serializer()).create();
 	
 	private List<BoondollarPricing> pricings;
 	
@@ -45,7 +39,7 @@ public class BoondollarPriceManager extends JsonReloadListener
 	}
 	
 	@Override
-	protected void apply(Map<ResourceLocation, JsonElement> jsonEntries, IResourceManager resourceManager, IProfiler profiler)
+	protected void apply(Map<ResourceLocation, JsonElement> jsonEntries, ResourceManager resourceManager, ProfilerFiller profiler)
 	{
 		ImmutableList.Builder<BoondollarPricing> pricings = ImmutableList.builder();
 		for(Map.Entry<ResourceLocation, JsonElement> entry : jsonEntries.entrySet())

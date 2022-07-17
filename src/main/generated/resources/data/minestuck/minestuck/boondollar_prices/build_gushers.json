@@ -3,8 +3,10 @@
     "item": "minestuck:build_gushers"
   },
   "range": {
-    "min": 90.0,
-    "max": 120.0,
-    "type": "minecraft:uniform"
+    "type": "minecraft:uniform",
+    "value": {
+      "min_inclusive": 90,
+      "max_inclusive": 120
+    }
   }
 }

@@ -1,12 +1,12 @@
 {
   "ingredient": {
-    "item": "minecraft:diamond"
+    "item": "minestuck:glowystone_dust"
   },
   "range": {
     "type": "minecraft:uniform",
     "value": {
-      "min_inclusive": 800,
-      "max_inclusive": 1200
+      "min_inclusive": 20,
+      "max_inclusive": 40
     }
   }
 }

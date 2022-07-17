@@ -3,8 +3,10 @@
     "item": "minecraft:pumpkin_pie"
   },
   "range": {
-    "min": 120.0,
-    "max": 160.0,
-    "type": "minecraft:uniform"
+    "type": "minecraft:uniform",
+    "value": {
+      "min_inclusive": 120,
+      "max_inclusive": 160
+    }
   }
 }

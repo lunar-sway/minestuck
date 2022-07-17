@@ -3,8 +3,10 @@
     "item": "minestuck:mini_frog_statue"
   },
   "range": {
-    "min": 200.0,
-    "max": 250.0,
-    "type": "minecraft:uniform"
+    "type": "minecraft:uniform",
+    "value": {
+      "min_inclusive": 200,
+      "max_inclusive": 250
+    }
   }
 }

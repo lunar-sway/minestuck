@@ -3,8 +3,10 @@
     "item": "minestuck:ruby_croak"
   },
   "range": {
-    "min": 175.0,
-    "max": 210.0,
-    "type": "minecraft:uniform"
+    "type": "minecraft:uniform",
+    "value": {
+      "min_inclusive": 175,
+      "max_inclusive": 210
+    }
   }
 }

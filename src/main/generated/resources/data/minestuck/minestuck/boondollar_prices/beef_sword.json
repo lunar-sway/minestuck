@@ -3,8 +3,10 @@
     "item": "minestuck:beef_sword"
   },
   "range": {
-    "min": 250.0,
-    "max": 625.0,
-    "type": "minecraft:uniform"
+    "type": "minecraft:uniform",
+    "value": {
+      "min_inclusive": 250,
+      "max_inclusive": 625
+    }
   }
 }

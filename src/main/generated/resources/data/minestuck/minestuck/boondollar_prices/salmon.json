@@ -3,8 +3,10 @@
     "item": "minecraft:salmon"
   },
   "range": {
-    "min": 40.0,
-    "max": 60.0,
-    "type": "minecraft:uniform"
+    "type": "minecraft:uniform",
+    "value": {
+      "min_inclusive": 40,
+      "max_inclusive": 60
+    }
   }
 }

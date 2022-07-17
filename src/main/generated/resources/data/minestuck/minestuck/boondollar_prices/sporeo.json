@@ -3,8 +3,10 @@
     "item": "minestuck:sporeo"
   },
   "range": {
-    "min": 15.0,
-    "max": 25.0,
-    "type": "minecraft:uniform"
+    "type": "minecraft:uniform",
+    "value": {
+      "min_inclusive": 15,
+      "max_inclusive": 25
+    }
   }
 }

@@ -3,8 +3,10 @@
     "item": "minestuck:clubs_suitarang"
   },
   "range": {
-    "min": 30.0,
-    "max": 50.0,
-    "type": "minecraft:uniform"
+    "type": "minecraft:uniform",
+    "value": {
+      "min_inclusive": 30,
+      "max_inclusive": 50
+    }
   }
 }

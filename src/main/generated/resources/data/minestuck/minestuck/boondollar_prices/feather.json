@@ -3,8 +3,10 @@
     "item": "minecraft:feather"
   },
   "range": {
-    "min": 25.0,
-    "max": 35.0,
-    "type": "minecraft:uniform"
+    "type": "minecraft:uniform",
+    "value": {
+      "min_inclusive": 25,
+      "max_inclusive": 35
+    }
   }
 }

@@ -1,21 +1,25 @@
 package com.mraof.minestuck.util;
 
 import com.google.gson.*;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.loot.IRandomRange;
-import net.minecraft.loot.RandomRanges;
-import net.minecraft.util.JSONUtils;
+import com.mojang.logging.LogUtils;
+import com.mojang.serialization.JsonOps;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.util.valueproviders.IntProvider;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import org.slf4j.Logger;
 
 import java.lang.reflect.Type;
 import java.util.Random;
 
 public class BoondollarPricing
 {
-	private final Ingredient ingredient;
-	private final IRandomRange priceRange;
+	private static final Logger LOGGER = LogUtils.getLogger();
 	
-	public BoondollarPricing(Ingredient ingredient, IRandomRange priceRange)
+	private final Ingredient ingredient;
+	private final IntProvider priceRange;
+	
+	public BoondollarPricing(Ingredient ingredient, IntProvider priceRange)
 	{
 		this.ingredient = ingredient;
 		this.priceRange = priceRange;
@@ -23,7 +27,7 @@ public class BoondollarPricing
 	
 	public int generatePrice(Random random)
 	{
-		return priceRange.getInt(random);
+		return priceRange.sample(random);
 	}
 	
 	public boolean appliesTo(ItemStack stack)
@@ -36,8 +40,9 @@ public class BoondollarPricing
 		@Override
 		public BoondollarPricing deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext context) throws JsonParseException
 		{
-			JsonObject json = JSONUtils.convertToJsonObject(jsonElement, "boolean pricing");
-			return new BoondollarPricing(Ingredient.fromJson(json.get("ingredient")), RandomRanges.deserialize(json.get("range"), context));
+			JsonObject json = GsonHelper.convertToJsonObject(jsonElement, "boolean pricing");
+			IntProvider priceProvider = IntProvider.CODEC.parse(JsonOps.INSTANCE, json.get("range")).getOrThrow(false, LOGGER::error);
+			return new BoondollarPricing(Ingredient.fromJson(json.get("ingredient")), priceProvider);
 		}
 		
 		@Override
@@ -45,7 +50,7 @@ public class BoondollarPricing
 		{
 			JsonObject json = new JsonObject();
 			json.add("ingredient", pricing.ingredient.toJson());
-			json.add("range", RandomRanges.serialize(pricing.priceRange, context));
+			json.add("range", IntProvider.CODEC.encodeStart(JsonOps.INSTANCE, pricing.priceRange).getOrThrow(false, LOGGER::error));
 			return json;
 		}
 	}

@@ -3,8 +3,10 @@
     "item": "minecraft:gold_ingot"
   },
   "range": {
-    "min": 120.0,
-    "max": 180.0,
-    "type": "minecraft:uniform"
+    "type": "minecraft:uniform",
+    "value": {
+      "min_inclusive": 120,
+      "max_inclusive": 180
+    }
   }
 }

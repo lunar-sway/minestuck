@@ -3,8 +3,10 @@
     "item": "minecraft:obsidian"
   },
   "range": {
-    "min": 8.0,
-    "max": 20.0,
-    "type": "minecraft:uniform"
+    "type": "minecraft:uniform",
+    "value": {
+      "min_inclusive": 8,
+      "max_inclusive": 20
+    }
   }
 }

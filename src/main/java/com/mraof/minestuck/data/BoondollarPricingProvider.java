@@ -6,13 +6,14 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.BoondollarPriceManager;
 import com.mraof.minestuck.util.BoondollarPricing;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DirectoryCache;
-import net.minecraft.data.IDataProvider;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.loot.IRandomRange;
-import net.minecraft.loot.RandomValueRange;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.data.DataProvider;
+import net.minecraft.data.HashCache;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.valueproviders.ConstantInt;
+import net.minecraft.util.valueproviders.IntProvider;
+import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,9 +25,9 @@ import java.util.Objects;
 
 import static com.mraof.minestuck.block.MSBlocks.*;
 import static com.mraof.minestuck.item.MSItems.*;
-import static net.minecraft.item.Items.*;
+import static net.minecraft.world.item.Items.*;
 
-public class BoondollarPricingProvider implements IDataProvider
+public class BoondollarPricingProvider implements DataProvider
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
@@ -52,23 +53,23 @@ public class BoondollarPricingProvider implements IDataProvider
 		add(CHOCOLATE_BEETLE, 30, 35);
 		add(DESERT_FRUIT, 2, 6);
 		add(GLOWING_MUSHROOM, 10, 15);
-		add(COLD_CAKE, 400, 400);
-		add(BLUE_CAKE, 400, 400);
-		add(HOT_CAKE, 400, 400);
-		add(RED_CAKE, 400, 400);
-		add(FUCHSIA_CAKE, 1500, 1500);
+		add(COLD_CAKE, 400);
+		add(BLUE_CAKE, 400);
+		add(HOT_CAKE, 400);
+		add(RED_CAKE, 400);
+		add(FUCHSIA_CAKE, 1500);
 		add(ROCK_COOKIE, 15, 20);
 		add(STRAWBERRY_CHUNK, 100, 150);
-		add(TAB, 200, 200);
-		add(ORANGE_FAYGO, 100, 100);
-		add(CANDY_APPLE_FAYGO, 100, 100);
-		add(FAYGO_COLA, 100, 100);
-		add(COTTON_CANDY_FAYGO, 100, 100);
-		add(CREME_SODA_FAYGO, 100, 100);
-		add(GRAPE_FAYGO, 100, 100);
-		add(MOON_MIST_FAYGO, 100, 100);
-		add(PEACH_FAYGO, 100, 100);
-		add(REDPOP_FAYGO, 100, 100);
+		add(TAB, 200);
+		add(ORANGE_FAYGO, 100);
+		add(CANDY_APPLE_FAYGO, 100);
+		add(FAYGO_COLA, 100);
+		add(COTTON_CANDY_FAYGO, 100);
+		add(CREME_SODA_FAYGO, 100);
+		add(GRAPE_FAYGO, 100);
+		add(MOON_MIST_FAYGO, 100);
+		add(PEACH_FAYGO, 100);
+		add(REDPOP_FAYGO, 100);
 		add(GOLD_SEEDS, 300, 400);
 		add(APPLE_CAKE, 100, 140);
 		add(IRRADIATED_STEAK, 70, 80);
@@ -105,12 +106,12 @@ public class BoondollarPricingProvider implements IDataProvider
 		add(SBAHJ_POSTER, 350, 400);
 		add(GAMEBRO_MAGAZINE, 450, 600);
 		add(GAMEGRL_MAGAZINE, 450, 600);
-		add(MUSIC_DISC_EMISSARY_OF_DANCE, 1000, 1000);
-		add(MUSIC_DISC_DANCE_STAB_DANCE, 1000, 1000);
-		add(MUSIC_DISC_RETRO_BATTLE, 1000, 1000);
+		add(MUSIC_DISC_EMISSARY_OF_DANCE, 1000);
+		add(MUSIC_DISC_DANCE_STAB_DANCE, 1000);
+		add(MUSIC_DISC_RETRO_BATTLE, 1000);
 		add(CRUMPLY_HAT, 80, 100);
 		add(BATTERY, 10, 100);
-		add(GRIMOIRE, 666, 666);
+		add(GRIMOIRE, 666);
 		add(ACE_OF_SPADES, 3000, 5000);
 		add(ACE_OF_HEARTS, 3000, 5000);
 		add(ACE_OF_DIAMONDS, 3000, 5000);
@@ -127,7 +128,7 @@ public class BoondollarPricingProvider implements IDataProvider
 		add(CACTACEAE_CUTLASS, 500, 700);
 		add(STEAK_SWORD, 350, 650);
 		add(BEEF_SWORD, 250, 625);
-		add(GLOWSTONE_DUST, 20, 40);
+		add(GLOWYSTONE_DUST, 20, 40);
 		add(IRON_CANE, 300, 400);
 		add(GLOWING_LOG, 20, 32);
 		add(GLOWING_PLANKS, 5, 8);
@@ -174,7 +175,7 @@ public class BoondollarPricingProvider implements IDataProvider
 		add(COD, 90, 100);
 		add(COOKIE, 120, 150);
 		add(PUMPKIN_PIE, 120, 160);
-		add(GOLDEN_APPLE, 2500, 2500);
+		add(GOLDEN_APPLE, 2500);
 		add(LAPIS_LAZULI, 25, 35);
 		add(FEATHER, 25, 35);
 		add(FLINT, 5, 10);
@@ -228,7 +229,7 @@ public class BoondollarPricingProvider implements IDataProvider
 		add(STONE_BRICKS, 5, 10);
 		add(CHISELED_STONE_BRICKS, 10, 15);
 		add(BREAD, 90, 130);
-		add(CHORUS_FRUIT, 420, 420);
+		add(CHORUS_FRUIT, 420);
 		add(DRAGON_BREATH, 50, 100);
 		add(EGG, 50, 100);
 		add(ELYTRA, 500, 1000);
@@ -236,13 +237,19 @@ public class BoondollarPricingProvider implements IDataProvider
 		add(PAPER, 5, 20);
 	}
 	
-	protected void add(IItemProvider item, int min, int max)
+	protected void add(ItemLike item, int value)
 	{
 		//Just set the name manually if this throws an exception
-		add(Ingredient.of(item), new RandomValueRange(min, max), Objects.requireNonNull(item.asItem().getRegistryName()).getPath());
+		add(Ingredient.of(item), ConstantInt.of(value), Objects.requireNonNull(item.asItem().getRegistryName()).getPath());
 	}
 	
-	protected void add(Ingredient ingredient, IRandomRange range, String name)
+	protected void add(ItemLike item, int min, int max)
+	{
+		//Just set the name manually if this throws an exception
+		add(Ingredient.of(item), UniformInt.of(min, max), Objects.requireNonNull(item.asItem().getRegistryName()).getPath());
+	}
+	
+	protected void add(Ingredient ingredient, IntProvider range, String name)
 	{
 		add(new BoondollarPricing(ingredient, range), new ResourceLocation(modid, name));
 	}
@@ -253,7 +260,7 @@ public class BoondollarPricingProvider implements IDataProvider
 	}
 	
 	@Override
-	public void run(DirectoryCache cache)
+	public void run(HashCache cache)
 	{
 		registerPricings();
 		
@@ -264,7 +271,7 @@ public class BoondollarPricingProvider implements IDataProvider
 			Path pricingPath = getPath(outputPath, entry.getKey());
 			try
 			{
-				IDataProvider.save(GSON, cache, BoondollarPriceManager.parsePrice(entry.getValue()), pricingPath);
+				DataProvider.save(GSON, cache, BoondollarPriceManager.parsePrice(entry.getValue()), pricingPath);
 			} catch(IOException e)
 			{
 				LOGGER.error("Couldn't save boondollar pricing {}", pricingPath, e);

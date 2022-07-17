@@ -3,8 +3,10 @@
     "item": "minestuck:carving_tool"
   },
   "range": {
-    "min": 60.0,
-    "max": 90.0,
-    "type": "minecraft:uniform"
+    "type": "minecraft:uniform",
+    "value": {
+      "min_inclusive": 60,
+      "max_inclusive": 90
+    }
   }
 }
