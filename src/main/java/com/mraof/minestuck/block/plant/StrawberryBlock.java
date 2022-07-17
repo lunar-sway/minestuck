@@ -41,41 +41,12 @@ public class StrawberryBlock extends StemGrownBlock
 	@Override
 	public StemBlock getStem()
 	{
-		return (StemBlock) MSBlocks.STRAWBERRY_STEM;
+		return MSBlocks.STRAWBERRY_STEM;
 	}
 	
 	@Override
 	public AttachedStemBlock getAttachedStem()
 	{
-		return (AttachedStemBlock) MSBlocks.ATTACHED_STRAWBERRY_STEM;
-	}
-	
-	public static class AttachedStem extends AttachedStemBlock
-	{
-		public AttachedStem(StemGrownBlock crop, Properties properties)
-		{
-			super(crop, properties);
-		}
-		
-		@Override
-		protected Item getSeedItem()
-		{
-			return MSItems.STRAWBERRY_CHUNK;
-		}
-	}
-	
-	public static class Stem extends StemBlock
-	{
-		public Stem(StemGrownBlock crop, Properties properties)
-		{
-			super(crop, properties);
-		}
-		
-		@Nullable
-		@Override
-		protected Item getSeedItem()
-		{
-			return MSItems.STRAWBERRY_CHUNK;
-		}
+		return MSBlocks.ATTACHED_STRAWBERRY_STEM;
 	}
 }
