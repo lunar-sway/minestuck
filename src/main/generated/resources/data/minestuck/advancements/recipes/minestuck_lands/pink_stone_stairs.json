@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "minestuck:pink_stone"
+            "items": [
+              "minestuck:pink_stone"
+            ]
           }
         ]
       }

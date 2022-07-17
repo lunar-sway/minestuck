@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "minestuck:end_planks"
+            "items": [
+              "minestuck:end_planks"
+            ]
           }
         ]
       }

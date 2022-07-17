@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "minestuck:dark_gray_castle_bricks"
+            "items": [
+              "minestuck:dark_gray_castle_bricks"
+            ]
           }
         ]
       }

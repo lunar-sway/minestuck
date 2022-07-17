@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "minestuck:mycelium_bricks"
+            "items": [
+              "minestuck:mycelium_bricks"
+            ]
           }
         ]
       }

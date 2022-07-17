@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "minestuck:rainbow_planks"
+            "items": [
+              "minestuck:rainbow_planks"
+            ]
           }
         ]
       }

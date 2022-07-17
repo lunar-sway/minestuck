@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "minestuck:frost_brick_slab"
+            "items": [
+              "minestuck:frost_brick_slab"
+            ]
           }
         ]
       }

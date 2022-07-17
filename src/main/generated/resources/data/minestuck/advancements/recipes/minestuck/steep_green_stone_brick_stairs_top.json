@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "minestuck:green_stone_brick_stairs"
+            "items": [
+              "minestuck:green_stone_brick_stairs"
+            ]
           }
         ]
       }

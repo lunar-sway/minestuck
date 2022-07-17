@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "minestuck:gold_seeds"
+            "items": [
+              "minestuck:gold_seeds"
+            ]
           }
         ]
       }
