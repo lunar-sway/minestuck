@@ -12,17 +12,16 @@ import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
 import com.mraof.minestuck.tileentity.machine.AlchemiterTileEntity;
 import com.mraof.minestuck.tileentity.redstone.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.Hand;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
 
 import java.util.Map;
 import java.util.function.Function;
 
 /**
  * This is the class which registers container type -> screen constructor factories,
- * and this is also the class to hide away all screen display code to prevent standalone server crashes due to references to {@link net.minecraft.client.gui.screen.Screen}
+ * and this is also the class to hide away all screen display code to prevent standalone server crashes due to references to {@link net.minecraft.client.gui.screens.Screen}
  */
 public class MSScreenFactories
 {
@@ -30,16 +29,14 @@ public class MSScreenFactories
 	
 	public static void registerScreenFactories()
 	{
-		ScreenManager.register(MSContainerTypes.MINI_CRUXTRUDER, MiniCruxtruderScreen::new);
-		ScreenManager.register(MSContainerTypes.MINI_TOTEM_LATHE, MiniTotemLatheScreen::new);
-		ScreenManager.register(MSContainerTypes.MINI_ALCHEMITER, MiniAlchemiterScreen::new);
-		ScreenManager.register(MSContainerTypes.MINI_PUNCH_DESIGNIX, MiniPunchDesignixScreen::new);
-		ScreenManager.register(MSContainerTypes.SENDIFICATOR, SendificatorScreen::new);
-		ScreenManager.register(MSContainerTypes.GRIST_WIDGET, GristWidgetScreen::new);
-		ScreenManager.register(MSContainerTypes.URANIUM_COOKER, UraniumCookerScreen::new);
-		//ScreenManager.registerFactory(ModContainerTypes.CAPTCHA_DECK, );
-		//ScreenManager.registerFactory(ModContainerTypes.EDITMODE, );
-		ScreenManager.register(MSContainerTypes.CONSORT_MERCHANT, ConsortShopScreen::new);
+		MenuScreens.register(MSContainerTypes.MINI_CRUXTRUDER, MiniCruxtruderScreen::new);
+		MenuScreens.register(MSContainerTypes.MINI_TOTEM_LATHE, MiniTotemLatheScreen::new);
+		MenuScreens.register(MSContainerTypes.MINI_ALCHEMITER, MiniAlchemiterScreen::new);
+		MenuScreens.register(MSContainerTypes.MINI_PUNCH_DESIGNIX, MiniPunchDesignixScreen::new);
+		MenuScreens.register(MSContainerTypes.SENDIFICATOR, SendificatorScreen::new);
+		MenuScreens.register(MSContainerTypes.GRIST_WIDGET, GristWidgetScreen::new);
+		MenuScreens.register(MSContainerTypes.URANIUM_COOKER, UraniumCookerScreen::new);
+		MenuScreens.register(MSContainerTypes.CONSORT_MERCHANT, ConsortShopScreen::new);
 		
 		registerSylladexFactory(ModusTypes.STACK, StackSylladexScreen::new);
 		registerSylladexFactory(ModusTypes.QUEUE, QueueSylladexScreen::new);
@@ -99,7 +96,7 @@ public class MSScreenFactories
 		Minecraft.getInstance().setScreen(new AlchemiterScreen(tileEntity));
 	}
 	
-	public static void displayStoneTabletScreen(PlayerEntity playerIn, Hand handIn, String text, boolean canEdit)
+	public static void displayStoneTabletScreen(Player playerIn, InteractionHand handIn, String text, boolean canEdit)
 	{
 		Minecraft.getInstance().setScreen(new StoneTabletScreen(playerIn, handIn, text, canEdit));
 	}
@@ -120,8 +117,7 @@ public class MSScreenFactories
 	
 	public static void updateSylladexScreen()
 	{
-		Screen currentScreen = Minecraft.getInstance().screen;
-		if(currentScreen instanceof SylladexScreen)
-			((SylladexScreen) currentScreen).updateContent();
+		if(Minecraft.getInstance().screen instanceof SylladexScreen screen)
+			screen.updateContent();
 	}
 }

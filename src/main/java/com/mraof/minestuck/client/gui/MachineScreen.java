@@ -5,13 +5,13 @@ import com.mraof.minestuck.network.GoButtonPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.tileentity.machine.MachineProcessTileEntity;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SimpleSound;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraftforge.client.gui.widget.ExtendedButton;
 import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nullable;
@@ -19,7 +19,7 @@ import javax.annotation.Nullable;
 /**
  * Created by mraof on 2017 December 07 at 12:55 AM.
  */
-public abstract class MachineScreen<T extends MachineContainer> extends ContainerScreen<T>
+public abstract class MachineScreen<T extends MachineContainer> extends AbstractContainerScreen<T>
 {
 	public static final String GO = "minestuck.button.go";
 	public static final String STOP = "minestuck.button.stop";
@@ -28,7 +28,7 @@ public abstract class MachineScreen<T extends MachineContainer> extends Containe
 	@Nullable
 	protected GoButton goButton;
 	
-	public MachineScreen(MachineProcessTileEntity.RunType runType, T screenContainer, PlayerInventory inv, ITextComponent titleIn)
+	public MachineScreen(MachineProcessTileEntity.RunType runType, T screenContainer, Inventory inv, Component titleIn)
 	{
 		super(screenContainer, inv, titleIn);
 		this.runType = runType;
@@ -39,13 +39,13 @@ public abstract class MachineScreen<T extends MachineContainer> extends Containe
 	{
 		if(keyCode == GLFW.GLFW_KEY_ENTER && goButton != null)
 		{
-			this.minecraft.getSoundManager().play(SimpleSound.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+			this.minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 
 			boolean mode = runType == MachineProcessTileEntity.RunType.BUTTON_OVERRIDE && hasShiftDown();
 			GoButtonPacket packet = new GoButtonPacket(true, mode && !menu.overrideStop());
 			MSPacketHandler.sendToServer(packet);
 			
-			goButton.setMessage(new TranslationTextComponent(mode && !menu.overrideStop() ? STOP : GO));
+			goButton.setMessage(new TranslatableComponent(mode && !menu.overrideStop() ? STOP : GO));
 			return true;
 		}
 		return super.keyPressed(keyCode, scanCode, i);
@@ -53,7 +53,7 @@ public abstract class MachineScreen<T extends MachineContainer> extends Containe
 	
 	protected class GoButton extends ExtendedButton
 	{
-		public GoButton(int x, int y, int widthIn, int heightIn, ITextComponent buttonText)
+		public GoButton(int x, int y, int widthIn, int heightIn, Component buttonText)
 		{
 			super(x, y, widthIn, heightIn, buttonText, null);
 		}
@@ -98,7 +98,7 @@ public abstract class MachineScreen<T extends MachineContainer> extends Containe
 					GoButtonPacket packet = new GoButtonPacket(true, false);
 					MSPacketHandler.sendToServer(packet);
 					
-					setMessage(new TranslationTextComponent(GO));
+					setMessage(new TranslatableComponent(GO));
 				}
 			} else if(mouseKey == GLFW.GLFW_MOUSE_BUTTON_2 && runType == MachineProcessTileEntity.RunType.BUTTON_OVERRIDE)
 			{
@@ -106,7 +106,7 @@ public abstract class MachineScreen<T extends MachineContainer> extends Containe
 				GoButtonPacket packet = new GoButtonPacket(true, !menu.overrideStop());
 				MSPacketHandler.sendToServer(packet);
 				
-				setMessage(new TranslationTextComponent(menu.overrideStop() ? STOP : GO));
+				setMessage(new TranslatableComponent(menu.overrideStop() ? STOP : GO));
 			}
 		}
 	}

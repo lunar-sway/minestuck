@@ -1,19 +1,17 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.*;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,12 +29,12 @@ public abstract class MinestuckScreen extends Screen
 	protected static final int rows = 7;
 	protected static final int columns = 3;
 	
-	protected MinestuckScreen(ITextComponent titleIn)
+	protected MinestuckScreen(Component titleIn)
 	{
 		super(titleIn);
 	}
 	
-	public void drawGrist(MatrixStack matrixStack, int xOffset, int yOffset, int xcor, int ycor, int page)
+	public void drawGrist(PoseStack poseStack, int xOffset, int yOffset, int xcor, int ycor, int page)
 	{
 		if(minecraft == null)
 			return;
@@ -61,7 +59,7 @@ public abstract class MinestuckScreen extends Screen
 
 			if (this.isPointInRegion(gristXOffset + gristIconX, gristYOffset + gristIconY, 16, 16, xcor, ycor))
 			{
-				this.fillGradient(matrixStack, gristXOffset + gristIconX, gristYOffset + gristIconY, gristXOffset + gristIconX + 16, gristYOffset + gristIconY + 17, 0x80ffffff, 0x80ffffff);
+				this.fillGradient(poseStack, gristXOffset + gristIconX, gristYOffset + gristIconY, gristXOffset + gristIconX + 16, gristYOffset + gristIconY + 17, 0x80ffffff, 0x80ffffff);
 				tooltipType = type;
 				showName = true;
 			}
@@ -73,7 +71,7 @@ public abstract class MinestuckScreen extends Screen
 			}
 
 			this.drawIcon(gristXOffset + gristIconX, gristYOffset + gristIconY, type.getIcon());
-			minecraft.font.draw(matrixStack, amount, gristXOffset + gristCountX, gristYOffset + gristCountY, 0xddddee);
+			minecraft.font.draw(poseStack, amount, gristXOffset + gristCountX, gristYOffset + gristCountY, 0xddddee);
 			
 			offset++;
 		}
@@ -81,12 +79,12 @@ public abstract class MinestuckScreen extends Screen
 		{
 			if (showName)
 			{
-				renderTooltip(matrixStack, tooltipType.getNameWithSuffix(), xcor, ycor);
+				renderTooltip(poseStack, tooltipType.getNameWithSuffix(), xcor, ycor);
 
 			}
 			else
 			{
-				renderTooltip(matrixStack, new StringTextComponent(String.valueOf(clientGrist.getGrist(tooltipType))), xcor, ycor);
+				renderTooltip(poseStack, new TextComponent(String.valueOf(clientGrist.getGrist(tooltipType))), xcor, ycor);
 			}
 		}
 	}
@@ -96,8 +94,8 @@ public abstract class MinestuckScreen extends Screen
 		if(icon == null || minecraft == null)
 			return;
 		
-		this.minecraft.getTextureManager().bind(icon);
-		RenderSystem.enableAlphaTest();
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		RenderSystem.setShaderTexture(0, icon);
 
 		float scale = (float) 1 / 16;
 
@@ -106,13 +104,13 @@ public abstract class MinestuckScreen extends Screen
 		int iconU = 0;
 		int iconV = 0;
 
-		BufferBuilder render = Tessellator.getInstance().getBuilder();
-		render.begin(7, DefaultVertexFormats.POSITION_TEX);
+		BufferBuilder render = Tesselator.getInstance().getBuilder();
+		render.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
 		render.vertex(x, y + iconY, 0D).uv((iconU) * scale, (iconV + iconY) * scale).endVertex();
 		render.vertex(x + iconX, y + iconY, 0D).uv((iconU + iconX) * scale, (iconV + iconY) * scale).endVertex();
 		render.vertex(x + iconX, y, 0D).uv((iconU + iconX) * scale, (iconV) * scale).endVertex();
 		render.vertex(x, y, 0D).uv((iconU) * scale, (iconV) * scale).endVertex();
-		Tessellator.getInstance().end();
+		Tesselator.getInstance().end();
 	}
 
 	protected boolean isPointInRegion(int regionX, int regionY, int regionWidth, int regionHeight, int pointX, int pointY)

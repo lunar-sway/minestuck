@@ -1,20 +1,21 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.inventory.SendificatorContainer;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.SendificatorPacket;
 import com.mraof.minestuck.tileentity.machine.MachineProcessTileEntity;
 import com.mraof.minestuck.tileentity.machine.SendificatorTileEntity;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraftforge.client.gui.widget.ExtendedButton;
 
 import javax.annotation.Nullable;
 
@@ -30,16 +31,16 @@ public class SendificatorScreen extends MachineScreen<SendificatorContainer>
 	private final int goX;
 	private final int goY;
 	
-	private TextFieldWidget destinationTextFieldX;
-	private TextFieldWidget destinationTextFieldY;
-	private TextFieldWidget destinationTextFieldZ;
+	private EditBox destinationTextFieldX;
+	private EditBox destinationTextFieldY;
+	private EditBox destinationTextFieldZ;
 	private ExtendedButton updateButton;
 	private ExtendedButton goButton;
 	@Nullable
 	private BlockPos parsedPos;
 	
 	
-	SendificatorScreen(SendificatorContainer screenContainer, PlayerInventory inv, ITextComponent titleIn)
+	SendificatorScreen(SendificatorContainer screenContainer, Inventory inv, Component titleIn)
 	{
 		super(MachineProcessTileEntity.RunType.BUTTON, screenContainer, inv, titleIn);
 		
@@ -59,26 +60,26 @@ public class SendificatorScreen extends MachineScreen<SendificatorContainer>
 		
 		int yOffset = (height - imageHeight) / 2;
 		
-		updateButton = addButton(new ExtendedButton((width - imageWidth) / 2 + 105, yOffset + 40, 50, 12, new StringTextComponent("Update"), button -> updateDestinationPos()));
+		updateButton = addRenderableWidget(new ExtendedButton((width - imageWidth) / 2 + 105, yOffset + 40, 50, 12, new TextComponent("Update"), button -> updateDestinationPos()));
 		
-		this.destinationTextFieldX = new TextFieldWidget(this.font, this.width / 2 - 10, yOffset + 10, 35, 15, new StringTextComponent("X value of destination block pos")); //TODO make these translatable
+		this.destinationTextFieldX = new EditBox(this.font, this.width / 2 - 10, yOffset + 10, 35, 15, new TextComponent("X value of destination block pos")); //TODO make these translatable
 		destinationTextFieldX.setMaxLength(10);
-		addButton(destinationTextFieldX);
+		addRenderableWidget(destinationTextFieldX);
 		destinationTextFieldX.setResponder(s -> onTextFieldChange());
 		
-		this.destinationTextFieldY = new TextFieldWidget(this.font, this.width / 2 + 25, yOffset + 10, 20, 15, new StringTextComponent("Y value of destination block pos"));
+		this.destinationTextFieldY = new EditBox(this.font, this.width / 2 + 25, yOffset + 10, 20, 15, new TextComponent("Y value of destination block pos"));
 		destinationTextFieldY.setMaxLength(3);
-		addButton(destinationTextFieldY);
+		addRenderableWidget(destinationTextFieldY);
 		destinationTextFieldY.setResponder(s -> onTextFieldChange());
 		
-		this.destinationTextFieldZ = new TextFieldWidget(this.font, this.width / 2 + 45, yOffset + 10, 35, 15, new StringTextComponent("Z value of destination block pos"));
+		this.destinationTextFieldZ = new EditBox(this.font, this.width / 2 + 45, yOffset + 10, 35, 15, new TextComponent("Z value of destination block pos"));
 		destinationTextFieldZ.setMaxLength(10);
-		addButton(destinationTextFieldZ);
+		addRenderableWidget(destinationTextFieldZ);
 		destinationTextFieldZ.setResponder(s -> onTextFieldChange());
 		
 		//activates processContents() in SendificatorTileEntity
-		goButton = new GoButton((width - imageWidth) / 2 + goX, yOffset + goY, 30, 12, new StringTextComponent(menu.overrideStop() ? "STOP" : "GO"));
-		addButton(goButton);
+		goButton = new GoButton((width - imageWidth) / 2 + goX, yOffset + goY, 30, 12, new TextComponent(menu.overrideStop() ? "STOP" : "GO"));
+		addRenderableWidget(goButton);
 		
 		BlockPos destination = this.menu.getDestination();
 		if(destination != null)
@@ -92,43 +93,44 @@ public class SendificatorScreen extends MachineScreen<SendificatorContainer>
 	}
 	
 	@Override
-	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
+	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks)
 	{
 		goButton.active = this.menu.hasDestination();
 		// Make the update button clickable only when there is a parsed position and it is different from the original
 		updateButton.active = parsedPos != null && !parsedPos.equals(this.menu.getDestination());
 		
-		this.renderBackground(matrixStack);
-		super.render(matrixStack, mouseX, mouseY, partialTicks);
-		this.renderTooltip(matrixStack, mouseX, mouseY);
+		this.renderBackground(poseStack);
+		super.render(poseStack, mouseX, mouseY, partialTicks);
+		this.renderTooltip(poseStack, mouseX, mouseY);
 	}
 	
 	@Override
-	protected void renderLabels(MatrixStack matrixStack, int mouseX, int mouseY)
+	protected void renderLabels(PoseStack poseStack, int mouseX, int mouseY)
 	{
 		//draws the name of the TE
-		font.draw(matrixStack, this.title, 8, 6, 0x404040);
+		font.draw(poseStack, this.title, 8, 6, 0x404040);
 		
 		//draws "Inventory" or your regional equivalent
-		font.draw(matrixStack, this.inventory.getDisplayName(), 8, imageHeight - 96 + 2, 0x404040);
+		font.draw(poseStack, this.playerInventoryTitle, 8, imageHeight - 96 + 2, 0x404040);
 	}
 	
 	@Override
-	protected void renderBg(MatrixStack matrixStack, float par1, int par2, int par3)
+	protected void renderBg(PoseStack poseStack, float par1, int par2, int par3)
 	{
-		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		RenderSystem.setShaderColor(1, 1, 1, 1);
 		
 		//draw background
-		this.minecraft.getTextureManager().bind(BACKGROUND);
+		RenderSystem.setShaderTexture(0, BACKGROUND);
 		int x = (width - imageWidth) / 2;
 		int y = (height - imageHeight) / 2;
-		this.blit(matrixStack, x, y, 0, 0, imageWidth, imageHeight);
+		this.blit(poseStack, x, y, 0, 0, imageWidth, imageHeight);
 		
 		//draw progress bar
-		this.minecraft.getTextureManager().bind(PROGRESS);
+		RenderSystem.setShaderTexture(0, PROGRESS);
 		int width = progressWidth;
 		int height = getScaledValue(menu.getFuel(), SendificatorTileEntity.MAX_FUEL, progressHeight);
-		blit(matrixStack, x + progressX, y + progressY + progressHeight - height, 0, progressHeight - height, width, height, progressWidth, progressHeight);
+		blit(poseStack, x + progressX, y + progressY + progressHeight - height, 0, progressHeight - height, width, height, progressWidth, progressHeight);
 	}
 	
 	@Override

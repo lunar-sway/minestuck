@@ -1,21 +1,21 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.block.redstone.SummonerBlock;
-import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.SummonerPacket;
 import com.mraof.minestuck.tileentity.redstone.SummonerTileEntity;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.EntityType;
+import net.minecraftforge.client.gui.widget.ExtendedButton;
 
 import java.util.Optional;
 
@@ -36,11 +36,11 @@ public class SummonerScreen extends Screen
 	private Button largeDecrementButton;
 	private Button unTriggerableButton;
 	
-	private TextFieldWidget entityTypeTextField;
+	private EditBox entityTypeTextField;
 	
 	SummonerScreen(SummonerTileEntity te)
 	{
-		super(new StringTextComponent("Summoner")); //TODO convert to translatable text string
+		super(new TextComponent("Summoner")); //TODO convert to translatable text string
 		
 		this.te = te;
 		this.summonRange = te.getSummonRange();
@@ -52,17 +52,17 @@ public class SummonerScreen extends Screen
 	{
 		int yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
 		
-		addButton(incrementButton = new ExtendedButton(this.width / 2 + 20, (height - GUI_HEIGHT) / 2 + 12, 20, 20, new StringTextComponent("+"), button -> changeRange(1)));
-		addButton(decrementButton = new ExtendedButton(this.width / 2 - 40, (height - GUI_HEIGHT) / 2 + 12, 20, 20, new StringTextComponent("-"), button -> changeRange(-1)));
-		addButton(largeIncrementButton = new ExtendedButton(this.width / 2 + 45, (height - GUI_HEIGHT) / 2 + 12, 20, 20, new StringTextComponent("++"), button -> changeRange(10)));
-		addButton(largeDecrementButton = new ExtendedButton(this.width / 2 - 65, (height - GUI_HEIGHT) / 2 + 12, 20, 20, new StringTextComponent("--"), button -> changeRange(-10)));
+		addRenderableWidget(incrementButton = new ExtendedButton(this.width / 2 + 20, (height - GUI_HEIGHT) / 2 + 12, 20, 20, new TextComponent("+"), button -> changeRange(1)));
+		addRenderableWidget(decrementButton = new ExtendedButton(this.width / 2 - 40, (height - GUI_HEIGHT) / 2 + 12, 20, 20, new TextComponent("-"), button -> changeRange(-1)));
+		addRenderableWidget(largeIncrementButton = new ExtendedButton(this.width / 2 + 45, (height - GUI_HEIGHT) / 2 + 12, 20, 20, new TextComponent("++"), button -> changeRange(10)));
+		addRenderableWidget(largeDecrementButton = new ExtendedButton(this.width / 2 - 65, (height - GUI_HEIGHT) / 2 + 12, 20, 20, new TextComponent("--"), button -> changeRange(-10)));
 		
-		this.entityTypeTextField = new TextFieldWidget(this.font, this.width / 2 - 60, yOffset + 40, 120, 18, new StringTextComponent("Current Entity Type"));    //TODO Use translation instead, and maybe look at other text fields for what the text should be
+		this.entityTypeTextField = new EditBox(this.font, this.width / 2 - 60, yOffset + 40, 120, 18, new TextComponent("Current Entity Type"));    //TODO Use translation instead, and maybe look at other text fields for what the text should be
 		this.entityTypeTextField.setValue(EntityType.getKey(te.getSummonedEntity()).toString());
-		addButton(entityTypeTextField);
+		addRenderableWidget(entityTypeTextField);
 		
-		addButton(unTriggerableButton = new ExtendedButton(this.width / 2 - 65, yOffset + 70, 85, 20, getTriggerableButtonMessage(), button -> cycleUntriggerable()));
-		addButton(new ExtendedButton(this.width / 2 + 25, yOffset + 70, 40, 20, new StringTextComponent("DONE"), button -> finish()));
+		addRenderableWidget(unTriggerableButton = new ExtendedButton(this.width / 2 - 65, yOffset + 70, 85, 20, getTriggerableButtonMessage(), button -> cycleUntriggerable()));
+		addRenderableWidget(new ExtendedButton(this.width / 2 + 25, yOffset + 70, 40, 20, new TextComponent("DONE"), button -> finish()));
 	}
 	
 	/**
@@ -70,7 +70,7 @@ public class SummonerScreen extends Screen
 	 */
 	private void changeRange(int change)
 	{
-		summonRange = MathHelper.clamp(summonRange + change, 1, 64);
+		summonRange = Mth.clamp(summonRange + change, 1, 64);
 		incrementButton.active = summonRange < 64;
 		decrementButton.active = summonRange > 1;
 		largeIncrementButton.active = summonRange < 64;
@@ -86,22 +86,25 @@ public class SummonerScreen extends Screen
 		unTriggerableButton.setMessage(getTriggerableButtonMessage());
 	}
 	
-	private ITextComponent getTriggerableButtonMessage()
+	private Component getTriggerableButtonMessage()
 	{
-		return this.isUntriggerable ? new StringTextComponent("UNTRIGGERABLE") : new StringTextComponent("TRIGGERABLE");
+		return this.isUntriggerable ? new TextComponent("UNTRIGGERABLE") : new TextComponent("TRIGGERABLE");
 	}
 	
 	@Override
-	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
+	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground(matrixStack);
-		RenderSystem.color4f(1F, 1F, 1F, 1F);
-		this.minecraft.getTextureManager().bind(GUI_BACKGROUND);
+		this.renderBackground(poseStack);
 		int yOffset = (height - GUI_HEIGHT) / 2;
 		
-		this.blit(matrixStack, (this.width / 2) - (GUI_WIDTH / 2), yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
-		font.draw(matrixStack, Integer.toString(summonRange), (width / 2) - 5, yOffset + 16, 0x404040);
-		super.render(matrixStack, mouseX, mouseY, partialTicks);
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		RenderSystem.setShaderColor(1, 1, 1, 1);
+		RenderSystem.setShaderTexture(0, GUI_BACKGROUND);
+		this.blit(poseStack, (this.width / 2) - (GUI_WIDTH / 2), yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
+		
+		font.draw(poseStack, Integer.toString(summonRange), (width / 2) - 5, yOffset + 16, 0x404040);
+		
+		super.render(poseStack, mouseX, mouseY, partialTicks);
 	}
 	
 	private void finish()
