@@ -2,21 +2,21 @@ package com.mraof.minestuck.entity.item;
 
 import com.google.common.collect.Lists;
 import com.mraof.minestuck.util.Debug;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.item.HangingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.Direction;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.decoration.HangingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.entity.IEntityAdditionalSpawnData;
+import net.minecraftforge.network.NetworkHooks;
 
 import java.util.List;
 import java.util.Set;
@@ -25,14 +25,14 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 {
 	public T art;
 	
-	public HangingArtEntity(EntityType<? extends HangingArtEntity<T>> type, World worldIn)
+	public HangingArtEntity(EntityType<? extends HangingArtEntity<T>> type, Level level)
 	{
-		super(type, worldIn);
+		super(type, level);
 	}
 	
-	public HangingArtEntity(EntityType<? extends HangingArtEntity<T>> type, World worldIn, BlockPos pos, Direction direction)
+	public HangingArtEntity(EntityType<? extends HangingArtEntity<T>> type, Level level, BlockPos pos, Direction direction)
 	{
-		super(type, worldIn, pos);
+		super(type, level, pos);
 		List<T> artList = Lists.newArrayList();
 		int maxValidSize = 0;
 		
@@ -59,9 +59,9 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 		this.setDirection(direction);
 	}
 	
-	public HangingArtEntity(EntityType<? extends HangingArtEntity<T>> type, World worldIn, BlockPos pos, Direction direction, String title)
+	public HangingArtEntity(EntityType<? extends HangingArtEntity<T>> type, Level level, BlockPos pos, Direction direction, String title)
 	{
-		this(type, worldIn, pos, direction);
+		this(type, level, pos, direction);
 		
 		for(T art : this.getArtSet())
 		{
@@ -76,14 +76,14 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 	}
 	
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound)
+	public void addAdditionalSaveData(CompoundTag compound)
 	{
 		super.addAdditionalSaveData(compound);
 		compound.putString("Motive", this.art.getTitle());
 	}
 	
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound)
+	public void readAdditionalSaveData(CompoundTag compound)
 	{
 		String s = compound.getString("Motive");
 		
@@ -122,13 +122,8 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 		{
 			this.playSound(SoundEvents.PAINTING_BREAK, 1.0F, 1.0F);
 			
-			if(brokenEntity instanceof PlayerEntity)
-			{
-				PlayerEntity entityplayer = (PlayerEntity) brokenEntity;
-				
-				if(entityplayer.abilities.instabuild)
-					return;
-			}
+			if(brokenEntity instanceof Player player && player.getAbilities().instabuild)
+				return;
 			
 			this.spawnAtLocation(this.getStackDropped());
 		}
@@ -156,7 +151,7 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 	}
 	
 	@Override
-	public void writeSpawnData(PacketBuffer buffer)
+	public void writeSpawnData(FriendlyByteBuf buffer)
 	{
 		buffer.writeByte(this.direction.ordinal());
 		
@@ -171,7 +166,7 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 	}
 	
 	@Override
-	public void readSpawnData(PacketBuffer data)
+	public void readSpawnData(FriendlyByteBuf data)
 	{
 		Direction facing = Direction.values()[data.readByte()%Direction.values().length];
 		
@@ -194,7 +189,7 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 	}
 	
 	@Override
-	public IPacket<?> getAddEntityPacket()
+	public Packet<?> getAddEntityPacket()
 	{
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}

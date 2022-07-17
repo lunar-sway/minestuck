@@ -1,64 +1,64 @@
 package com.mraof.minestuck.entity.item;
 
-import com.mraof.minestuck.client.renderer.entity.RendersAsItem;
 import com.mraof.minestuck.item.MSItems;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.ProjectileItemEntity;
-import net.minecraft.item.Item;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.HitResult;
+import net.minecraftforge.network.NetworkHooks;
 
-public class BarbasolBombEntity extends ProjectileItemEntity implements RendersAsItem
+public class BarbasolBombEntity extends ThrowableItemProjectile
 {
     private boolean shouldDestroy = true;
     
-    public BarbasolBombEntity(EntityType<? extends BarbasolBombEntity> type, World worldIn)
+    public BarbasolBombEntity(EntityType<? extends BarbasolBombEntity> type, Level level)
     {
-        super(type, worldIn);
+        super(type, level);
     }
     
-    public BarbasolBombEntity(EntityType<? extends BarbasolBombEntity> type, double x, double y, double z, World worldIn)
+    public BarbasolBombEntity(EntityType<? extends BarbasolBombEntity> type, double x, double y, double z, Level level)
     {
-        super(type, x, y, z, worldIn);
+        super(type, x, y, z, level);
     }
     
-    public BarbasolBombEntity(EntityType<? extends BarbasolBombEntity> type, LivingEntity livingEntityIn, World worldIn, boolean shouldDestroy)
+    public BarbasolBombEntity(EntityType<? extends BarbasolBombEntity> type, LivingEntity livingEntityIn, Level level, boolean shouldDestroy)
     {
-        super(type, livingEntityIn, worldIn);
+        super(type, livingEntityIn, level);
         this.shouldDestroy = shouldDestroy;
     }
     
     @Override
-    public void addAdditionalSaveData(CompoundNBT compound)
+    public void addAdditionalSaveData(CompoundTag compound)
     {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("shouldDestroy", shouldDestroy);
     }
     
     @Override
-    public void readAdditionalSaveData(CompoundNBT compound)
+    public void readAdditionalSaveData(CompoundTag compound)
     {
         super.readAdditionalSaveData(compound);
         shouldDestroy = compound.getBoolean("shouldDestroy");
     }
     
     @Override
-    protected void onHit(RayTraceResult result)
+    protected void onHit(HitResult result)
     {
         if(!this.level.isClientSide)
         {
-            level.explode(null, result.getLocation().x, result.getLocation().y, result.getLocation().z, 3F, shouldDestroy ? Explosion.Mode.DESTROY : Explosion.Mode.NONE);
+            level.explode(null, result.getLocation().x, result.getLocation().y, result.getLocation().z, 3F,
+                    shouldDestroy ? Explosion.BlockInteraction.DESTROY : Explosion.BlockInteraction.NONE);
         }
-        this.remove();
+        this.discard();
     }
     
     @Override
-    public IPacket<?> getAddEntityPacket()
+    public Packet<?> getAddEntityPacket()
     {
         return NetworkHooks.getEntitySpawningPacket(this);
     }

@@ -1,19 +1,19 @@
 package com.mraof.minestuck.entity;
 
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.level.Level;
 
 import java.util.Objects;
 
-public abstract class SimpleTexturedEntity extends CreatureEntity
+public abstract class SimpleTexturedEntity extends PathfinderMob
 {
 	private ResourceLocation textureResource;
 	
-	public SimpleTexturedEntity(EntityType<? extends SimpleTexturedEntity> type, World world)
+	public SimpleTexturedEntity(EntityType<? extends SimpleTexturedEntity> type, Level level)
 	{
-		super(type, world);
+		super(type, level);
 	}
 	
 	protected ResourceLocation createTexture()

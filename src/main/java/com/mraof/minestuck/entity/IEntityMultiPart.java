@@ -1,12 +1,12 @@
 package com.mraof.minestuck.entity;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.world.World;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
 
 public interface IEntityMultiPart
 {
-    World getWorld();
+    Level getLevel();
 
     boolean attackEntityFromPart(Entity entityPart, DamageSource source, float damage);
     void updatePartPositions();

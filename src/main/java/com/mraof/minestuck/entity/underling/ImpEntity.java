@@ -6,27 +6,26 @@ import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.FakePlayer;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.level.Level;
 
 public class ImpEntity extends UnderlingEntity
 {
-	public ImpEntity(EntityType<? extends ImpEntity> type, World world)
+	public ImpEntity(EntityType<? extends ImpEntity> type, Level level)
 	{
-		super(type, world, 1);
+		super(type, level, 1);
 	}
 	
-	public static AttributeModifierMap.MutableAttribute impAttributes()
+	public static AttributeSupplier.Builder impAttributes()
 	{
 		return UnderlingEntity.underlingAttributes().add(Attributes.MAX_HEALTH, 6)
 				.add(Attributes.MOVEMENT_SPEED, 0.28).add(Attributes.ATTACK_DAMAGE, 1);
@@ -90,10 +89,10 @@ public class ImpEntity extends UnderlingEntity
 	@Override
 	protected boolean isAppropriateTarget(LivingEntity entity)
 	{
-		if(entity instanceof ServerPlayerEntity)
+		if(entity instanceof ServerPlayer)
 		{
 			//Rung was chosen fairly arbitrary. Feel free to change it if you think a different rung is better
-			return PlayerSavedData.getData((ServerPlayerEntity) entity).getEcheladder().getRung() < 19;
+			return PlayerSavedData.getData((ServerPlayer) entity).getEcheladder().getRung() < 19;
 		}
 		return super.isAppropriateTarget(entity);
 	}

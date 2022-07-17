@@ -1,24 +1,24 @@
 package com.mraof.minestuck.entity.ai;
 
-import net.minecraft.entity.IRangedAttackMob;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.monster.RangedAttackMob;
 
 import java.util.EnumSet;
 
 public class AttackByDistanceGoal extends Goal
 {
 	/** The entity the AI instance has been applied to */
-	private final MobEntity entityHost;
+	private final Mob entityHost;
 
 	/**
 	 * The entity (as a RangedAttackMob) the AI instance has been applied to.
 	 */
-	private final MobEntity attacker;
+	private final Mob attacker;
 	private LivingEntity attackTarget;
 
 	/**
@@ -37,24 +37,24 @@ public class AttackByDistanceGoal extends Goal
 	private float attackRadius;
 	private float attackRadiusSqr;
 
-	public AttackByDistanceGoal(IRangedAttackMob par1IRangedAttackMob, float par2, int par3, float par4)
+	public AttackByDistanceGoal(RangedAttackMob par1IRangedAttackMob, float par2, int par3, float par4)
 	{
 		this(par1IRangedAttackMob, par2, par3, par3, par4);
 	}
 
-	public AttackByDistanceGoal(IRangedAttackMob par1IRangedAttackMob, float par2, int par3, int par4, float par5)
+	public AttackByDistanceGoal(RangedAttackMob par1IRangedAttackMob, float par2, int par3, int par4, float par5)
 	{
 		this.rangedAttackTime = -1;
 		this.ticksSeeingTarget = 0;
 
-		if(!(par1IRangedAttackMob instanceof MobEntity))
+		if(!(par1IRangedAttackMob instanceof Mob mob))
 		{
 			throw new IllegalArgumentException("ArrowAttackGoal requires Mob implements RangedAttackMob");
 		}
 		else
 		{
-			this.attacker = (MobEntity) par1IRangedAttackMob;
-			this.entityHost = (MobEntity)par1IRangedAttackMob;
+			this.attacker = mob;
+			this.entityHost = mob;
 			this.entityMoveSpeed = par2;
 			this.attackIntervalMin = par3;
 			this.maxRangedAttackTime = par4;
@@ -111,7 +111,7 @@ public class AttackByDistanceGoal extends Goal
 	public void tick()
 	{
 		double d0 = this.entityHost.distanceToSqr(this.attackTarget.getX(), this.attackTarget.getBoundingBox().minY, this.attackTarget.getZ());
-		boolean flag = this.entityHost.getSensing().canSee(this.attackTarget);
+		boolean flag = this.entityHost.getSensing().hasLineOfSight(this.attackTarget);
 
 		if (flag)
 		{
@@ -143,26 +143,16 @@ public class AttackByDistanceGoal extends Goal
 					return;
 				}
 	
-				f = MathHelper.sqrt(d0) / this.attackRadius;
-				float f1 = f;
-	
-				if (f < 0.1F)
-				{
-					f1 = 0.1F;
-				}
-	
-				if (f1 > 1.0F)
-				{
-					f1 = 1.0F;
-				}
-	
-				((IRangedAttackMob) this.attacker).performRangedAttack(this.attackTarget, f1);
-				this.rangedAttackTime = MathHelper.floor(f * (float)(this.maxRangedAttackTime - this.attackIntervalMin) + (float)this.attackIntervalMin);
+				f = (float) Math.sqrt(d0) / this.attackRadius;
+				float f1 = Mth.clamp(f, 0.1F, 1.0F);
+				
+				((RangedAttackMob) this.attacker).performRangedAttack(this.attackTarget, f1);
+				this.rangedAttackTime = Mth.floor(f * (float)(this.maxRangedAttackTime - this.attackIntervalMin) + (float)this.attackIntervalMin);
 			}
 			else if (this.rangedAttackTime < 0)
 			{
-				f = MathHelper.sqrt(d0) / this.attackRadius;
-				this.rangedAttackTime = MathHelper.floor(f * (float)(this.maxRangedAttackTime - this.attackIntervalMin) + (float)this.attackIntervalMin);
+				f = (float) Math.sqrt(d0) / this.attackRadius;
+				this.rangedAttackTime = Mth.floor(f * (float)(this.maxRangedAttackTime - this.attackIntervalMin) + (float)this.attackIntervalMin);
 			}
 		}
 		else
@@ -174,9 +164,9 @@ public class AttackByDistanceGoal extends Goal
 				{
 					this.rangedAttackTime = 20;
 	
-					if(!this.attacker.getItemBySlot(EquipmentSlotType.MAINHAND).isEmpty())
+					if(!this.attacker.getItemBySlot(EquipmentSlot.MAINHAND).isEmpty())
 					{
-						this.attacker.swing(Hand.MAIN_HAND);
+						this.attacker.swing(InteractionHand.MAIN_HAND);
 					}
 	
 					this.attacker.doHurtTarget(this.attackTarget);

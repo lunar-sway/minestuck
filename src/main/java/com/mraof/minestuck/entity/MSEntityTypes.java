@@ -8,8 +8,8 @@ import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.entity.item.*;
 import com.mraof.minestuck.entity.underling.*;
-import net.minecraft.entity.*;
-import net.minecraft.world.gen.Heightmap;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -23,8 +23,8 @@ import javax.annotation.Nonnull;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public final class MSEntityTypes
 {
-	public static EntityClassification UNDERLING = EntityClassification.create("UNDERLING", "underling", 35, false, false, 128);
-	public static EntityClassification CONSORT = EntityClassification.create("CONSORT", "consort", 10, true, false, 128);
+	public static MobCategory UNDERLING = MobCategory.create("UNDERLING", "underling", 35, false, false, 128);
+	public static MobCategory CONSORT = MobCategory.create("CONSORT", "consort", 10, true, false, 128);
 	
 	public static final EntityType<FrogEntity> FROG = getNull();
 	public static final EntityType<ConsortEntity> SALAMANDER = getNull();
@@ -73,7 +73,7 @@ public final class MSEntityTypes
 	public static void registerEntities(final RegistryEvent.Register<EntityType<?>> event)
 	{
 		IForgeRegistry<EntityType<?>> registry = event.getRegistry();
-		register(registry, EntityType.Builder.<FrogEntity>of(FrogEntity::new, EntityClassification.CREATURE).sized(0.51F, 0.51F), "frog");
+		register(registry, EntityType.Builder.<FrogEntity>of(FrogEntity::new, MobCategory.CREATURE).sized(0.51F, 0.51F), "frog");
 		register(registry, EntityType.Builder.of(EnumConsort.SALAMANDER::create, CONSORT).sized(0.45F, 1.0F), "salamander");
 		register(registry, EntityType.Builder.of(EnumConsort.TURTLE::create, CONSORT).sized(0.45F, 1.0F), "turtle");
 		register(registry, EntityType.Builder.of(EnumConsort.NAKAGATOR::create, CONSORT).sized(0.45F, 1.1F), "nakagator");
@@ -85,28 +85,28 @@ public final class MSEntityTypes
 		register(registry, EntityType.Builder.of(LichEntity::new, UNDERLING).sized(0.8F, 2.0F), "lich");
 		register(registry, EntityType.Builder.of(GiclopsEntity::new, UNDERLING).sized(8.0F, 12.0F), "giclops");
 		
-		register(registry, EntityType.Builder.of(PawnEntity::createDersite, EntityClassification.MONSTER).sized(0.6F, 2.1F), "dersite_pawn");
-		register(registry, EntityType.Builder.of(PawnEntity::createProspitian, EntityClassification.MONSTER).sized(0.6F, 2.1F), "prospitian_pawn");
-		register(registry, EntityType.Builder.of(BishopEntity::createDersite, EntityClassification.MONSTER).sized(1.9F, 4.1F), "dersite_bishop");
-		register(registry, EntityType.Builder.of(BishopEntity::createProspitian, EntityClassification.MONSTER).sized(1.9F, 4.1F), "prospitian_bishop");
-		register(registry, EntityType.Builder.of(RookEntity::createDersite, EntityClassification.MONSTER).sized(3.5F, 3.5F), "dersite_rook");
-		register(registry, EntityType.Builder.of(RookEntity::createProspitian, EntityClassification.MONSTER).sized(3.5F, 3.5F), "prospitian_rook");
+		register(registry, EntityType.Builder.of(PawnEntity::createDersite, MobCategory.MONSTER).sized(0.6F, 2.1F), "dersite_pawn");
+		register(registry, EntityType.Builder.of(PawnEntity::createProspitian, MobCategory.MONSTER).sized(0.6F, 2.1F), "prospitian_pawn");
+		register(registry, EntityType.Builder.of(BishopEntity::createDersite, MobCategory.MONSTER).sized(1.9F, 4.1F), "dersite_bishop");
+		register(registry, EntityType.Builder.of(BishopEntity::createProspitian, MobCategory.MONSTER).sized(1.9F, 4.1F), "prospitian_bishop");
+		register(registry, EntityType.Builder.of(RookEntity::createDersite, MobCategory.MONSTER).sized(3.5F, 3.5F), "dersite_rook");
+		register(registry, EntityType.Builder.of(RookEntity::createProspitian, MobCategory.MONSTER).sized(3.5F, 3.5F), "prospitian_rook");
 		
-		register(registry, EntityType.Builder.<GristEntity>of(GristEntity::new, EntityClassification.MISC).sized(1 / 3F, 1 / 3F).setTrackingRange(4).setUpdateInterval(20).fireImmune(), "grist");
-		register(registry, EntityType.Builder.<VitalityGelEntity>of(VitalityGelEntity::new, EntityClassification.MISC).sized(1 / 4F, 1 / 4F).setTrackingRange(4).setUpdateInterval(20).fireImmune(), "vitality_gel");
-		register(registry, EntityType.Builder.<DecoyEntity>createNothing(EntityClassification.MISC).setCustomClientFactory((spawnEntity, world) -> new DecoyEntity(world)).noSave().noSummon(), "player_decoy");
+		register(registry, EntityType.Builder.<GristEntity>of(GristEntity::new, MobCategory.MISC).sized(1 / 3F, 1 / 3F).setTrackingRange(4).setUpdateInterval(20).fireImmune(), "grist");
+		register(registry, EntityType.Builder.<VitalityGelEntity>of(VitalityGelEntity::new, MobCategory.MISC).sized(1 / 4F, 1 / 4F).setTrackingRange(4).setUpdateInterval(20).fireImmune(), "vitality_gel");
+		register(registry, EntityType.Builder.<DecoyEntity>createNothing(MobCategory.MISC).setCustomClientFactory((spawnEntity, world) -> new DecoyEntity(world)).noSave().noSummon(), "player_decoy");
 		
-		register(registry, EntityType.Builder.<MetalBoatEntity>of(MetalBoatEntity::new, EntityClassification.MISC).sized(1.375F, 0.5625F), "metal_boat");
-		register(registry, EntityType.Builder.<BarbasolBombEntity>of(BarbasolBombEntity::new, EntityClassification.MISC).sized(0.25F, 0.25F).setTrackingRange(4).setUpdateInterval(10), "barbasol_bomb");
-		register(registry, EntityType.Builder.<CrewPosterEntity>of(CrewPosterEntity::new, EntityClassification.MISC).sized(0.5F, 0.5F).setShouldReceiveVelocityUpdates(false).setTrackingRange(10).setUpdateInterval(Integer.MAX_VALUE), "midnight_crew_poster");
-		register(registry, EntityType.Builder.<SbahjPosterEntity>of(SbahjPosterEntity::new, EntityClassification.MISC).sized(0.5F, 0.5F).setShouldReceiveVelocityUpdates(false).setTrackingRange(10).setUpdateInterval(Integer.MAX_VALUE), "sbahj_poster");
-		register(registry, EntityType.Builder.<ShopPosterEntity>of(ShopPosterEntity::new, EntityClassification.MISC).sized(0.5F, 0.5F).setShouldReceiveVelocityUpdates(false).setTrackingRange(10).setUpdateInterval(Integer.MAX_VALUE), "shop_poster");
-		register(registry, EntityType.Builder.<HologramEntity>of(HologramEntity::new, EntityClassification.MISC).sized(0.25F, 0.25F).setShouldReceiveVelocityUpdates(false).setTrackingRange(10).setUpdateInterval(Integer.MAX_VALUE), "hologram");
-		register(registry, EntityType.Builder.<LotusFlowerEntity>of(LotusFlowerEntity::new, EntityClassification.MISC).sized(2F, 2F).setShouldReceiveVelocityUpdates(false).setTrackingRange(10), "lotus_flower");
+		register(registry, EntityType.Builder.<MetalBoatEntity>of(MetalBoatEntity::new, MobCategory.MISC).sized(1.375F, 0.5625F), "metal_boat");
+		register(registry, EntityType.Builder.<BarbasolBombEntity>of(BarbasolBombEntity::new, MobCategory.MISC).sized(0.25F, 0.25F).setTrackingRange(4).setUpdateInterval(10), "barbasol_bomb");
+		register(registry, EntityType.Builder.<CrewPosterEntity>of(CrewPosterEntity::new, MobCategory.MISC).sized(0.5F, 0.5F).setShouldReceiveVelocityUpdates(false).setTrackingRange(10).setUpdateInterval(Integer.MAX_VALUE), "midnight_crew_poster");
+		register(registry, EntityType.Builder.<SbahjPosterEntity>of(SbahjPosterEntity::new, MobCategory.MISC).sized(0.5F, 0.5F).setShouldReceiveVelocityUpdates(false).setTrackingRange(10).setUpdateInterval(Integer.MAX_VALUE), "sbahj_poster");
+		register(registry, EntityType.Builder.<ShopPosterEntity>of(ShopPosterEntity::new, MobCategory.MISC).sized(0.5F, 0.5F).setShouldReceiveVelocityUpdates(false).setTrackingRange(10).setUpdateInterval(Integer.MAX_VALUE), "shop_poster");
+		register(registry, EntityType.Builder.<HologramEntity>of(HologramEntity::new, MobCategory.MISC).sized(0.25F, 0.25F).setShouldReceiveVelocityUpdates(false).setTrackingRange(10).setUpdateInterval(Integer.MAX_VALUE), "hologram");
+		register(registry, EntityType.Builder.<LotusFlowerEntity>of(LotusFlowerEntity::new, MobCategory.MISC).sized(2F, 2F).setShouldReceiveVelocityUpdates(false).setTrackingRange(10), "lotus_flower");
 		
-		register(registry, EntityType.Builder.<ConsumableProjectileEntity>of(ConsumableProjectileEntity::new, EntityClassification.MISC).sized(0.25F, 0.25F).setTrackingRange(4).setUpdateInterval(10), "consumable_projectile");
-		register(registry, EntityType.Builder.<ReturningProjectileEntity>of(ReturningProjectileEntity::new, EntityClassification.MISC).sized(0.25F, 0.25F).setTrackingRange(6).setUpdateInterval(2), "returning_projectile"); //TODO smaller update interval value is temporary solution to improve client rendering
-		register(registry, EntityType.Builder.<BouncingProjectileEntity>of(BouncingProjectileEntity::new, EntityClassification.MISC).sized(0.25F, 0.25F).setTrackingRange(6).setUpdateInterval(2), "bouncing_projectile");
+		register(registry, EntityType.Builder.<ConsumableProjectileEntity>of(ConsumableProjectileEntity::new, MobCategory.MISC).sized(0.25F, 0.25F).setTrackingRange(4).setUpdateInterval(10), "consumable_projectile");
+		register(registry, EntityType.Builder.<ReturningProjectileEntity>of(ReturningProjectileEntity::new, MobCategory.MISC).sized(0.25F, 0.25F).setTrackingRange(6).setUpdateInterval(2), "returning_projectile"); //TODO smaller update interval value is temporary solution to improve client rendering
+		register(registry, EntityType.Builder.<BouncingProjectileEntity>of(BouncingProjectileEntity::new, MobCategory.MISC).sized(0.25F, 0.25F).setTrackingRange(6).setUpdateInterval(2), "bouncing_projectile");
 	}
 	
 	/**
@@ -114,24 +114,24 @@ public final class MSEntityTypes
 	 */
 	public static void registerPlacements()
 	{
-		EntitySpawnPlacementRegistry.register(DERSITE_PAWN, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, MobEntity::checkMobSpawnRules);
-		EntitySpawnPlacementRegistry.register(PROSPITIAN_PAWN, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, MobEntity::checkMobSpawnRules);
-		EntitySpawnPlacementRegistry.register(DERSITE_BISHOP, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, MobEntity::checkMobSpawnRules);
-		EntitySpawnPlacementRegistry.register(PROSPITIAN_BISHOP, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, MobEntity::checkMobSpawnRules);
-		EntitySpawnPlacementRegistry.register(DERSITE_ROOK, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, MobEntity::checkMobSpawnRules);
-		EntitySpawnPlacementRegistry.register(PROSPITIAN_ROOK, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, MobEntity::checkMobSpawnRules);
-		EntitySpawnPlacementRegistry.register(IMP, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, UnderlingEntity::canSpawnOnAndNotPeaceful);
-		EntitySpawnPlacementRegistry.register(OGRE, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, UnderlingEntity::canSpawnOnAndNotPeaceful);
-		EntitySpawnPlacementRegistry.register(BASILISK, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, UnderlingEntity::canSpawnOnAndNotPeaceful);
-		EntitySpawnPlacementRegistry.register(LICH, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, UnderlingEntity::canSpawnOnAndNotPeaceful);
-		EntitySpawnPlacementRegistry.register(GICLOPS, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, UnderlingEntity::canSpawnOnAndNotPeaceful);
+		SpawnPlacements.register(DERSITE_PAWN, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mob::checkMobSpawnRules);
+		SpawnPlacements.register(PROSPITIAN_PAWN, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mob::checkMobSpawnRules);
+		SpawnPlacements.register(DERSITE_BISHOP, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mob::checkMobSpawnRules);
+		SpawnPlacements.register(PROSPITIAN_BISHOP, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mob::checkMobSpawnRules);
+		SpawnPlacements.register(DERSITE_ROOK, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mob::checkMobSpawnRules);
+		SpawnPlacements.register(PROSPITIAN_ROOK, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mob::checkMobSpawnRules);
+		SpawnPlacements.register(IMP, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, UnderlingEntity::canSpawnOnAndNotPeaceful);
+		SpawnPlacements.register(OGRE, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, UnderlingEntity::canSpawnOnAndNotPeaceful);
+		SpawnPlacements.register(BASILISK, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, UnderlingEntity::canSpawnOnAndNotPeaceful);
+		SpawnPlacements.register(LICH, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, UnderlingEntity::canSpawnOnAndNotPeaceful);
+		SpawnPlacements.register(GICLOPS, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, UnderlingEntity::canSpawnOnAndNotPeaceful);
 		
-		EntitySpawnPlacementRegistry.register(FROG, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, FrogEntity::canFrogSpawnOn);
+		SpawnPlacements.register(FROG, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, FrogEntity::canFrogSpawnOn);
 		
-		EntitySpawnPlacementRegistry.register(SALAMANDER, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ConsortEntity::canConsortSpawnOn);
-		EntitySpawnPlacementRegistry.register(TURTLE, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ConsortEntity::canConsortSpawnOn);
-		EntitySpawnPlacementRegistry.register(NAKAGATOR, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ConsortEntity::canConsortSpawnOn);
-		EntitySpawnPlacementRegistry.register(IGUANA, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ConsortEntity::canConsortSpawnOn);
+		SpawnPlacements.register(SALAMANDER, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ConsortEntity::canConsortSpawnOn);
+		SpawnPlacements.register(TURTLE, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ConsortEntity::canConsortSpawnOn);
+		SpawnPlacements.register(NAKAGATOR, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ConsortEntity::canConsortSpawnOn);
+		SpawnPlacements.register(IGUANA, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ConsortEntity::canConsortSpawnOn);
 	}
 	
 	@SubscribeEvent
@@ -156,7 +156,7 @@ public final class MSEntityTypes
 		event.put(DERSITE_ROOK, RookEntity.rookAttributes().build());
 		event.put(PROSPITIAN_ROOK, RookEntity.rookAttributes().build());
 		
-		event.put(PLAYER_DECOY, MobEntity.createMobAttributes().build());
+		event.put(PLAYER_DECOY, Mob.createMobAttributes().build());
 		
 		event.put(LOTUS_FLOWER, LivingEntity.createLivingAttributes().build());
 	}

@@ -2,31 +2,35 @@ package com.mraof.minestuck.entity;
 
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.MSSoundEvents;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.controller.JumpController;
-import net.minecraft.entity.ai.controller.MovementController;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.pathfinding.Path;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.JumpControl;
+import net.minecraft.world.entity.ai.control.MoveControl;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.Random;
 
-public class FrogEntity extends CreatureEntity
+public class FrogEntity extends PathfinderMob
 {
 	private static final double BASE_HEALTH = 5;
 	private static final double BASE_SPEED = 0.3D;
@@ -35,22 +39,22 @@ public class FrogEntity extends CreatureEntity
 	private int jumpDuration;
 	private boolean wasOnGround;
 	private int currentMoveTypeDuration;
-	private static final DataParameter<Float> FROG_SIZE = EntityDataManager.defineId(FrogEntity.class, DataSerializers.FLOAT);
-	private static final DataParameter<Integer> SKIN_COLOR = EntityDataManager.defineId(FrogEntity.class, DataSerializers.INT);
-	private static final DataParameter<Integer> EYE_COLOR = EntityDataManager.defineId(FrogEntity.class, DataSerializers.INT);
-	private static final DataParameter<Integer> BELLY_COLOR = EntityDataManager.defineId(FrogEntity.class, DataSerializers.INT);
-	private static final DataParameter<Integer> EYE_TYPE = EntityDataManager.defineId(FrogEntity.class, DataSerializers.INT);
-	private static final DataParameter<Integer> BELLY_TYPE = EntityDataManager.defineId(FrogEntity.class, DataSerializers.INT);
-	private static final DataParameter<Integer> TYPE = EntityDataManager.defineId(FrogEntity.class, DataSerializers.INT);
+	private static final EntityDataAccessor<Float> FROG_SIZE = SynchedEntityData.defineId(FrogEntity.class, EntityDataSerializers.FLOAT);
+	private static final EntityDataAccessor<Integer> SKIN_COLOR = SynchedEntityData.defineId(FrogEntity.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> EYE_COLOR = SynchedEntityData.defineId(FrogEntity.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> BELLY_COLOR = SynchedEntityData.defineId(FrogEntity.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> EYE_TYPE = SynchedEntityData.defineId(FrogEntity.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> BELLY_TYPE = SynchedEntityData.defineId(FrogEntity.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> TYPE = SynchedEntityData.defineId(FrogEntity.class, EntityDataSerializers.INT);
 	
-	public FrogEntity(World world)
+	public FrogEntity(Level level)
 	{
-		this(MSEntityTypes.FROG, world);
+		this(MSEntityTypes.FROG, level);
 	}
 	
-	public FrogEntity(EntityType<? extends FrogEntity> type, World world)
+	public FrogEntity(EntityType<? extends FrogEntity> type, Level level)
 	{
-		super(type, world);
+		super(type, level);
 		this.jumpControl = new JumpHelperController(this);
 		this.moveControl = new MoveHelperController(this);
 		this.setMovementSpeed(0.0D);
@@ -70,7 +74,7 @@ public class FrogEntity extends CreatureEntity
 	}
 	
 	@Override
-	protected ActionResultType mobInteract(PlayerEntity player, Hand hand)
+	protected InteractionResult mobInteract(Player player, InteractionHand hand)
 	{
 		ItemStack itemstack = player.getItemInHand(hand);
 		
@@ -85,7 +89,7 @@ public class FrogEntity extends CreatureEntity
 				if(this.hasCustomName())frogItem.setHoverName(this.getCustomName());
 				
 				spawnAtLocation(frogItem, 0);
-				this.remove();
+				this.discard();
 			}
 			else if(itemstack.getItem() == MSItems.GOLDEN_GRASSHOPPER && this.getFrogType() != 5)
 			{
@@ -99,9 +103,9 @@ public class FrogEntity extends CreatureEntity
 		return super.mobInteract(player, hand);
 	}
 	
-	protected CompoundNBT getFrogData()
+	protected CompoundTag getFrogData()
 	{
-		CompoundNBT compound = new CompoundNBT();
+		CompoundTag compound = new CompoundTag();
 		
 		compound.putInt("Type", this.getFrogType());
 		compound.putFloat("Size", this.getFrogSize()+0.4f);
@@ -130,14 +134,14 @@ public class FrogEntity extends CreatureEntity
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose poseIn)
+	public EntityDimensions getDimensions(Pose poseIn)
 	{
 		return super.getDimensions(poseIn).scale((this.getFrogType() == 6) ? 0.6F :this.getFrogSize());
 	}
 	
-	public static AttributeModifierMap.MutableAttribute frogAttributes()
+	public static AttributeSupplier.Builder frogAttributes()
 	{
-		return MobEntity.createMobAttributes().add(Attributes.MAX_HEALTH, BASE_HEALTH);
+		return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, BASE_HEALTH);
 	}
 	
 	//Entity AI
@@ -146,11 +150,11 @@ public class FrogEntity extends CreatureEntity
 	protected void registerGoals()
 	{
 		
-		this.goalSelector.addGoal(1, new SwimGoal(this));
+		this.goalSelector.addGoal(1, new FloatGoal(this));
 		this.goalSelector.addGoal(1, new PanicGoal(this, 2.2D));
 		this.goalSelector.addGoal(3, new TemptGoal(this, 1.0D, Ingredient.of(MSItems.CONE_OF_FLIES, MSItems.BUG_ON_A_STICK, MSItems.GRASSHOPPER, MSItems.JAR_OF_BUGS), false));	//TODO use bug item tag
-		this.goalSelector.addGoal(6, new WaterAvoidingRandomWalkingGoal(this, 0.6D));
-		this.goalSelector.addGoal(11, new LookAtGoal(this, PlayerEntity.class, 10.0F));
+		this.goalSelector.addGoal(6, new WaterAvoidingRandomStrollGoal(this, 0.6D));
+		this.goalSelector.addGoal(11, new LookAtPlayerGoal(this, Player.class, 10.0F));
 		
 	}
 	
@@ -163,7 +167,7 @@ public class FrogEntity extends CreatureEntity
 
 			if (path != null && path.getNextNodeIndex() < path.getNodeCount())
 			{
-				Vector3d vec3d = path.getNextEntityPos(this);
+				Vec3 vec3d = path.getNextEntityPos(this);
 
 				if (vec3d.y > this.getY() + 0.5D)
 				{
@@ -187,11 +191,11 @@ public class FrogEntity extends CreatureEntity
 
 		if (d0 > 0.0D)
 		{
-			double d1 = getHorizontalDistanceSqr(this.getDeltaMovement());
+			double d1 = this.getDeltaMovement().horizontalDistanceSqr();
 
 			if (d1 < 0.01D)
 			{
-				this.moveRelative(0.1F, new Vector3d(0.0F, 0.0F, 1.0F));
+				this.moveRelative(0.1F, new Vec3(0.0F, 0.0F, 1.0F));
 			}
 		}
 
@@ -266,7 +270,7 @@ public class FrogEntity extends CreatureEntity
 				if (this.moveControl.hasWanted() && this.currentMoveTypeDuration == 0)
 				{
 					Path path = this.navigation.getPath();
-					Vector3d vec3d = new Vector3d(this.moveControl.getWantedX(), this.moveControl.getWantedY(), this.moveControl.getWantedZ());
+					Vec3 vec3d = new Vec3(this.moveControl.getWantedX(), this.moveControl.getWantedY(), this.moveControl.getWantedZ());
 
 					if (path != null && path.getNextNodeIndex() < path.getNodeCount())
 					{
@@ -288,7 +292,7 @@ public class FrogEntity extends CreatureEntity
 	
 	private void calculateRotationYaw(double x, double z)
 	{
-		this.yRot = (float)(MathHelper.atan2(z - this.getZ(), x - this.getX()) * (180D / Math.PI)) - 90.0F;
+		this.setYRot((float)(Mth.atan2(z - this.getZ(), x - this.getX()) * (180D / Math.PI)) - 90.0F);
 	}
 
 	private void enableJumpControl()
@@ -361,14 +365,14 @@ public class FrogEntity extends CreatureEntity
 	}
 	
 	@Override
-	protected float getVoicePitch()
+	public float getVoicePitch()
 	{
 		return (this.random.nextFloat() - this.random.nextFloat()) / (this.getFrogSize()+0.4f) * 0.2F + 1.0F;
 	}
 	
 	//NBT
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound)
+	public void addAdditionalSaveData(CompoundTag compound)
 	{
 		super.addAdditionalSaveData(compound);
 		compound.putInt("Type", this.getFrogType());
@@ -383,7 +387,7 @@ public class FrogEntity extends CreatureEntity
 	}
 	
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound)
+	public void readAdditionalSaveData(CompoundTag compound)
 	{
 		super.readAdditionalSaveData(compound);
 		
@@ -448,12 +452,12 @@ public class FrogEntity extends CreatureEntity
 	}
 	
 	@Override
-	public void onSyncedDataUpdated(DataParameter<?> key)
+	public void onSyncedDataUpdated(EntityDataAccessor<?> key)
 	{
 		refreshDimensions();
 		if (FROG_SIZE.equals(key))
 		{
-			this.yRot = this.yHeadRot;
+			this.setYRot(this.yHeadRot);
 			this.yBodyRot = this.yHeadRot;
 
 			if (this.isInWater() && this.random.nextInt(20) == 0)
@@ -523,7 +527,7 @@ public class FrogEntity extends CreatureEntity
 		if(this.entityData.get(TYPE) == 6) this.entityData.set(FROG_SIZE, 0.6f);
 		else this.entityData.set(FROG_SIZE, size);
 		this.setPos(this.getX(), this.getY(), this.getZ());
-		this.getAttribute(Attributes.MAX_HEALTH).setBaseValue((double)(BASE_HEALTH * size));
+		this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(BASE_HEALTH * size);
 		this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(BASE_SPEED * size);
 
 		if (p_70799_2_)
@@ -589,7 +593,7 @@ public class FrogEntity extends CreatureEntity
 		return getRandomFrogType(20, 50, 500);
 	}
 	
-	public static class JumpHelperController extends JumpController
+	public static class JumpHelperController extends JumpControl
 	{
 		private final FrogEntity frog;
 		private boolean canJump;
@@ -626,7 +630,7 @@ public class FrogEntity extends CreatureEntity
 		}
 	}
 
-	static class MoveHelperController extends MovementController
+	static class MoveHelperController extends MoveControl
 	{
 		private final FrogEntity frog;
 		private double nextJumpSpeed;
@@ -674,7 +678,7 @@ public class FrogEntity extends CreatureEntity
 		return false;
 	}
 	
-	public static boolean canFrogSpawnOn(EntityType<FrogEntity> entityType, IWorld world, SpawnReason reason, BlockPos pos, Random random)
+	public static boolean canFrogSpawnOn(EntityType<FrogEntity> entityType, LevelAccessor world, MobSpawnType reason, BlockPos pos, Random random)
 	{
 		return true;
 	}

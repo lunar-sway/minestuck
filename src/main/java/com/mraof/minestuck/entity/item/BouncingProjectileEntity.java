@@ -3,52 +3,52 @@ package com.mraof.minestuck.entity.item;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.weapon.projectiles.ProjectileDamaging;
-import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.ProjectileItemEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Direction;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.network.NetworkHooks;
 
-public class BouncingProjectileEntity extends ProjectileItemEntity
+public class BouncingProjectileEntity extends ThrowableItemProjectile
 {
 	private int bounce;
 	public int maxTick = 0;
 	private int inBlockTicks = 0;
 	
-	public BouncingProjectileEntity(EntityType<? extends BouncingProjectileEntity> type, World worldIn)
+	public BouncingProjectileEntity(EntityType<? extends BouncingProjectileEntity> type, Level level)
 	{
-		super(type, worldIn);
+		super(type, level);
 	}
 	
-	public BouncingProjectileEntity(EntityType<? extends BouncingProjectileEntity> type, double x, double y, double z, World worldIn)
+	public BouncingProjectileEntity(EntityType<? extends BouncingProjectileEntity> type, double x, double y, double z, Level level)
 	{
-		super(type, x, y, z, worldIn);
+		super(type, x, y, z, level);
 	}
 	
-	public BouncingProjectileEntity(EntityType<? extends BouncingProjectileEntity> type, LivingEntity livingEntityIn, World worldIn, int maxTick)
+	public BouncingProjectileEntity(EntityType<? extends BouncingProjectileEntity> type, LivingEntity owner, Level level, int maxTick)
 	{
-		super(type, livingEntityIn, worldIn);
+		super(type, owner, level);
 		this.maxTick = maxTick;
 	}
 	
 	@Override
-	protected void onHit(RayTraceResult result)
+	protected void onHit(HitResult result)
 	{
 		int damage = ProjectileDamaging.getDamageFromItem(getItemFromItemStack().getItem());
 		++bounce;
@@ -60,11 +60,11 @@ public class BouncingProjectileEntity extends ProjectileItemEntity
 		double absVelocityY = Math.abs(velocityY);
 		double absVelocityZ = Math.abs(velocityZ);
 		
-		if(result.getType() == RayTraceResult.Type.ENTITY)
+		if(result.getType() == HitResult.Type.ENTITY)
 		{
 			if(!level.isClientSide)
 			{
-				Entity entity = ((EntityRayTraceResult) result).getEntity();
+				Entity entity = ((EntityHitResult) result).getEntity();
 				if(entity instanceof UnderlingEntity)
 					entity.hurt(DamageSource.thrown(this, getOwner()), damage * 1.5F);
 				else if(entity != getOwner())
@@ -81,9 +81,9 @@ public class BouncingProjectileEntity extends ProjectileItemEntity
 			if(absVelocityZ >= absVelocityY && absVelocityZ >= absVelocityX)
 				this.setDeltaMovement(velocityX, velocityY, -velocityZ);
 			
-		} else if(result.getType() == RayTraceResult.Type.BLOCK)
+		} else if(result.getType() == HitResult.Type.BLOCK)
 		{
-			BlockRayTraceResult blockResult = (BlockRayTraceResult) result;
+			BlockHitResult blockResult = (BlockHitResult) result;
 			Direction blockFace = blockResult.getDirection();
 			BlockPos blockPos = blockResult.getBlockPos();
 			
@@ -91,7 +91,7 @@ public class BouncingProjectileEntity extends ProjectileItemEntity
 			{
 				if(!level.isClientSide)
 				{
-					this.level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.SHIELD_BLOCK, SoundCategory.NEUTRAL, 0.6F, 4.0F);
+					this.level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.SHIELD_BLOCK, SoundSource.NEUTRAL, 0.6F, 4.0F);
 					++bounce;
 				}
 				
@@ -117,16 +117,16 @@ public class BouncingProjectileEntity extends ProjectileItemEntity
 	
 	public void resetThrower()
 	{
-		if(getOwner() instanceof PlayerEntity)
+		if(getOwner() instanceof Player player)
 		{
-			((PlayerEntity)getOwner()).getCooldowns().addCooldown(getItemRaw().getItem(), 5);
-			this.remove();
+			player.getCooldowns().addCooldown(getItemRaw().getItem(), 5);
+			this.discard();
 		}
 	}
 	
 	public void tick()
 	{
-		Vector3d pos = position();
+		Vec3 pos = position();
 		this.xOld = pos.x;
 		this.yOld = pos.y;
 		this.zOld = pos.z;
@@ -145,7 +145,7 @@ public class BouncingProjectileEntity extends ProjectileItemEntity
 	}
 	
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound)
+	public void readAdditionalSaveData(CompoundTag compound)
 	{
 		super.readAdditionalSaveData(compound);
 		bounce = compound.getInt("bounce");
@@ -154,7 +154,7 @@ public class BouncingProjectileEntity extends ProjectileItemEntity
 	}
 	
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound)
+	public void addAdditionalSaveData(CompoundTag compound)
 	{
 		super.addAdditionalSaveData(compound);
 		compound.putInt("bounce", bounce);
@@ -163,7 +163,7 @@ public class BouncingProjectileEntity extends ProjectileItemEntity
 	}
 	
 	@Override
-	public IPacket<?> getAddEntityPacket()
+	public Packet<?> getAddEntityPacket()
 	{
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}

@@ -2,28 +2,28 @@ package com.mraof.minestuck.entity.consort;
 
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.util.MSSoundEvents;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.Level;
 
 import java.util.Random;
 import java.util.function.Supplier;
 
 public enum EnumConsort	//TODO Could ideally be changed into a registry.
 {
-	SALAMANDER(() -> MSEntityTypes.SALAMANDER, "salamander", TextFormatting.YELLOW, () -> MSSoundEvents.ENTITY_SALAMANDER_AMBIENT, () -> MSSoundEvents.ENTITY_SALAMANDER_HURT, () -> MSSoundEvents.ENTITY_SALAMANDER_DEATH),
-	TURTLE(() -> MSEntityTypes.TURTLE, "turtle", TextFormatting.LIGHT_PURPLE, () -> null, () -> MSSoundEvents.ENTITY_TURTLE_HURT, () -> MSSoundEvents.ENTITY_TURTLE_DEATH),
-	NAKAGATOR(() -> MSEntityTypes.NAKAGATOR, "nakagator", TextFormatting.RED, () -> MSSoundEvents.ENTITY_NAKAGATOR_AMBIENT, () -> MSSoundEvents.ENTITY_NAKAGATOR_HURT, () -> MSSoundEvents.ENTITY_NAKAGATOR_DEATH),
-	IGUANA(() -> MSEntityTypes.IGUANA, "iguana", TextFormatting.AQUA, () -> MSSoundEvents.ENTITY_IGUANA_AMBIENT, () -> MSSoundEvents.ENTITY_IGUANA_HURT, () -> MSSoundEvents.ENTITY_IGUANA_DEATH);
+	SALAMANDER(() -> MSEntityTypes.SALAMANDER, "salamander", ChatFormatting.YELLOW, () -> MSSoundEvents.ENTITY_SALAMANDER_AMBIENT, () -> MSSoundEvents.ENTITY_SALAMANDER_HURT, () -> MSSoundEvents.ENTITY_SALAMANDER_DEATH),
+	TURTLE(() -> MSEntityTypes.TURTLE, "turtle", ChatFormatting.LIGHT_PURPLE, () -> null, () -> MSSoundEvents.ENTITY_TURTLE_HURT, () -> MSSoundEvents.ENTITY_TURTLE_DEATH),
+	NAKAGATOR(() -> MSEntityTypes.NAKAGATOR, "nakagator", ChatFormatting.RED, () -> MSSoundEvents.ENTITY_NAKAGATOR_AMBIENT, () -> MSSoundEvents.ENTITY_NAKAGATOR_HURT, () -> MSSoundEvents.ENTITY_NAKAGATOR_DEATH),
+	IGUANA(() -> MSEntityTypes.IGUANA, "iguana", ChatFormatting.AQUA, () -> MSSoundEvents.ENTITY_IGUANA_AMBIENT, () -> MSSoundEvents.ENTITY_IGUANA_HURT, () -> MSSoundEvents.ENTITY_IGUANA_DEATH);
 	
 	private final Supplier<EntityType<? extends ConsortEntity>> consortType;
 	private final String name;
-	private final TextFormatting color;
+	private final ChatFormatting color;
 	private final Supplier<SoundEvent> ambientSound, hurtSound, deathSound;
 	
-	EnumConsort(Supplier<EntityType<? extends ConsortEntity>> consort, String name, TextFormatting color,
+	EnumConsort(Supplier<EntityType<? extends ConsortEntity>> consort, String name, ChatFormatting color,
 				Supplier<SoundEvent> ambientSound, Supplier<SoundEvent> hurtSound, Supplier<SoundEvent> deathSound)
 	{
 		consortType = consort;
@@ -36,10 +36,10 @@ public enum EnumConsort	//TODO Could ideally be changed into a registry.
 	
 	public boolean isConsort(Entity consort)
 	{
-		return consortType.equals(consort.getType());
+		return consortType.get().equals(consort.getType());
 	}
 	
-	public TextFormatting getColor()
+	public ChatFormatting getColor()
 	{
 		return color;
 	}
@@ -69,9 +69,9 @@ public enum EnumConsort	//TODO Could ideally be changed into a registry.
 		return deathSound.get();
 	}
 	
-	public ConsortEntity create(EntityType<? extends ConsortEntity> type, World world)
+	public ConsortEntity create(EntityType<? extends ConsortEntity> type, Level level)
 	{
-		return new ConsortEntity(this, type, world);
+		return new ConsortEntity(this, type, level);
 	}
 	
 	public static MerchantType getRandomMerchant(Random rand)

@@ -3,11 +3,11 @@ package com.mraof.minestuck.entity.ai;
 import com.mraof.minestuck.entity.carapacian.CarapacianEntity;
 import com.mraof.minestuck.entity.carapacian.EnumEntityKingdom;
 import com.mraof.minestuck.world.MSDimensions;
-import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.gen.Heightmap;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.util.DefaultRandomPos;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
 
@@ -15,7 +15,7 @@ public class EntityAIMoveToBattle extends Goal
 {
 	
 	private CarapacianEntity target;
-	protected Vector3d destination;
+	protected Vec3 destination;
 	
 	public EntityAIMoveToBattle(CarapacianEntity entity)
 	{
@@ -35,8 +35,8 @@ public class EntityAIMoveToBattle extends Goal
 		if(type == EnumEntityKingdom.DERSITE && target.getX() >= 0 || type == EnumEntityKingdom.PROSPITIAN && target.getX() <= 0)
 			return false;
 		
-		BlockPos pos = target.level.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, new BlockPos(type == EnumEntityKingdom.DERSITE ? 5 : -5, 0, target.getY()));
-		destination = RandomPositionGenerator.getPosTowards(target, 10, 7, new Vector3d(pos.getX(), pos.getY(), pos.getZ()));
+		BlockPos pos = target.level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, new BlockPos(type == EnumEntityKingdom.DERSITE ? 5 : -5, 0, target.getY()));
+		destination = DefaultRandomPos.getPosTowards(target, 10, 7, new Vec3(pos.getX(), pos.getY(), pos.getZ()), Math.PI / 2);
 		
 		return destination != null;
 	}

@@ -7,30 +7,27 @@ import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.util.MSSoundEvents;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.FakePlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.level.Level;
 
 public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 {
 	private UnderlingPartEntity tail;
 	
-	public BasiliskEntity(EntityType<? extends BasiliskEntity> type, World world)
+	public BasiliskEntity(EntityType<? extends BasiliskEntity> type, Level level)
 	{
-		super(type, world, 5);
+		super(type, level, 5);
 		tail = new UnderlingPartEntity(this, 0, 3F, 2F);
 		//world.addEntity(tail); TODO Not safe to add entities to world on creation. A different solution is needed
 	}
 	
-	public static AttributeModifierMap.MutableAttribute basiliskAttributes()
+	public static AttributeSupplier.Builder basiliskAttributes()
 	{
 		return UnderlingEntity.underlingAttributes().add(Attributes.MAX_HEALTH, 85)
 				.add(Attributes.KNOCKBACK_RESISTANCE, 0.6).add(Attributes.MOVEMENT_SPEED, 0.25)
@@ -44,16 +41,19 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 		this.goalSelector.addGoal(3, new CustomMeleeAttackGoal(this, 1.0F, false, 40, 1.2F));
 	}
 	
+	@Override
 	protected SoundEvent getAmbientSound()
 	{
 		return MSSoundEvents.ENTITY_BASILISK_AMBIENT;
 	}
 	
+	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
 	{
 		return MSSoundEvents.ENTITY_BASILISK_HURT;
 	}
 	
+	@Override
 	protected SoundEvent getDeathSound()
 	{
 		return MSSoundEvents.ENTITY_BASILISK_DEATH;
@@ -81,7 +81,7 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 	}
 	
 	@Override
-	public World getWorld()
+	public Level getLevel()
 	{
 		return this.level;
 	}
@@ -118,11 +118,11 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 	{
 		if(tail == null)
 			return;
-		float f1 = this.yRotO + (this.yRot - this.yRotO);
+		float f1 = this.yRotO + (this.getYRot() - this.yRotO);
 		double tailPosX = (this.getX() + Math.sin(f1 / 180.0 * Math.PI) * tail.getBbWidth());
 		double tailPosZ = (this.getZ() + -Math.cos(f1 / 180.0 * Math.PI) * tail.getBbWidth());
 		
-		tail.absMoveTo(tailPosX, this.getY(), tailPosZ, this.yRot, this.xRot);
+		tail.absMoveTo(tailPosX, this.getY(), tailPosZ, this.getYRot(), this.getXRot());
 	}
 	
 	@Override

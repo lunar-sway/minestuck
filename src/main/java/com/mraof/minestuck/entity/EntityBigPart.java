@@ -1,13 +1,13 @@
 package com.mraof.minestuck.entity;
 
-import net.minecraft.entity.*;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 
 import java.util.ArrayList;
 
@@ -18,13 +18,13 @@ public class EntityBigPart extends Entity implements IEntityAdditionalSpawnData
 {
 	PartGroup group;
 	private int partId;
-	EntitySize size;
+	EntityDimensions size;
 	
-	EntityBigPart(EntityType<?> type, World worldIn, PartGroup group, float width, float height)
+	EntityBigPart(EntityType<?> type, Level level, PartGroup group, float width, float height)
 	{
-		super(type, worldIn);
+		super(type, level);
 		this.group = group;
-		this.size = EntitySize.scalable(width, height);
+		this.size = EntityDimensions.scalable(width, height);
 	}
 
 	void setPartId(int id)
@@ -39,13 +39,13 @@ public class EntityBigPart extends Entity implements IEntityAdditionalSpawnData
 	}
 	
 	@Override
-	protected void readAdditionalSaveData(CompoundNBT compound)
+	protected void readAdditionalSaveData(CompoundTag compound)
 	{
 	
 	}
 	
 	@Override
-	protected void addAdditionalSaveData(CompoundNBT compound)
+	protected void addAdditionalSaveData(CompoundTag compound)
 	{
 	
 	}
@@ -53,9 +53,9 @@ public class EntityBigPart extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	public void baseTick()
 	{
-		if(this.group == null || this.group.parent == null || this.group.parent.removed)
+		if(this.group == null || this.group.parent == null || this.group.parent.isRemoved())
 		{
-			this.remove();
+			this.discard();
 		}
 		super.baseTick();
 		//world.getHeight(this.getPosition());
@@ -68,13 +68,13 @@ public class EntityBigPart extends Entity implements IEntityAdditionalSpawnData
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose poseIn)
+	public EntityDimensions getDimensions(Pose poseIn)
 	{
 		return super.getDimensions(poseIn);
 	}
 	
 	@Override
-	public void writeSpawnData(PacketBuffer buffer)
+	public void writeSpawnData(FriendlyByteBuf buffer)
 	{
 		buffer.writeInt(this.group.parent.getId());
 		buffer.writeFloat(this.getBbWidth());
@@ -82,7 +82,7 @@ public class EntityBigPart extends Entity implements IEntityAdditionalSpawnData
 	}
 
 	@Override
-	public void readSpawnData(PacketBuffer additionalData)
+	public void readSpawnData(FriendlyByteBuf additionalData)
 	{
 		Entity entity = level.getEntity(additionalData.readInt());
 		if(entity instanceof IBigEntity)
@@ -116,14 +116,13 @@ public class EntityBigPart extends Entity implements IEntityAdditionalSpawnData
 	}
 	
 	@Override
-	public void move(MoverType typeIn, Vector3d pos)
+	public void move(MoverType typeIn, Vec3 pos)
 	{
-		this.setBoundingBox(this.getBoundingBox().move(pos));
-		this.setLocationFromBoundingbox();
+		this.setPos(this.getX() + pos.x, this.getY() + pos.y, this.getZ() + pos.z);
 	}
 	
 	@Override
-	public IPacket<?> getAddEntityPacket()
+	public Packet<?> getAddEntityPacket()
 	{
 		throw new UnsupportedOperationException();
 	}

@@ -10,40 +10,37 @@ import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.util.MSSoundEvents;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MoverType;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.FakePlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 
 public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 {
 	private PartGroup partGroup;
 	
-	public GiclopsEntity(EntityType<? extends GiclopsEntity> type, World world)
+	public GiclopsEntity(EntityType<? extends GiclopsEntity> type, Level level)
 	{
-		super(type, world, 7);
+		super(type, level, 7);
 		
 		this.maxUpStep = 2;
 		partGroup = new PartGroup(this);
 		partGroup.addBox(-4, 2, -1.5, 8, 8, 5);
 		partGroup.addBox(-5, 0, -0.5, 3, 2, 3);
 		partGroup.addBox(1, 0, -0.5, 3, 2, 3);
-		partGroup.createEntities(world);
+		partGroup.createEntities(level);
 	}
 	
-	public static AttributeModifierMap.MutableAttribute giclopsAttributes()
+	public static AttributeSupplier.Builder giclopsAttributes()
 	{
 		return UnderlingEntity.underlingAttributes().add(Attributes.MAX_HEALTH, 210)
 				.add(Attributes.KNOCKBACK_RESISTANCE, 0.9).add(Attributes.MOVEMENT_SPEED, 0.23)
@@ -57,16 +54,19 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 		this.goalSelector.addGoal(3, new CustomMeleeAttackGoal(this, 1.0F, false, 50, 1.1F));
 	}
 	
+	@Override
 	protected SoundEvent getAmbientSound()
 	{
 		return MSSoundEvents.ENTITY_GICLOPS_AMBIENT;
 	}
 	
+	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
 	{
 		return MSSoundEvents.ENTITY_GICLOPS_HURT;
 	}
 	
+	@Override
 	protected SoundEvent getDeathSound()
 	{
 		return MSSoundEvents.ENTITY_GICLOPS_DEATH;
@@ -99,7 +99,7 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 		super.baseTick();
 		partGroup.updatePositions();
 		if(!level.isClientSide && MinestuckConfig.SERVER.disableGiclops.get())
-			this.remove();
+			this.discard();
 	}
 	
 	@Override
@@ -110,10 +110,10 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	}
 	
 	@Override
-	protected void doPush(Entity par1Entity)
+	protected void doPush(Entity entity)
 	{
-		if(!(par1Entity instanceof EntityBigPart))
-			super.doPush(par1Entity);
+		if(!(entity instanceof EntityBigPart))
+			super.doPush(entity);
 	}
 	
 	@Override
@@ -147,10 +147,10 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	//Only pay attention to the top for water
 	
 	@Override
-	public boolean updateFluidHeightAndDoFluidPushing(ITag<Fluid> fluidTag, double fluidFactor)
+	public boolean updateFluidHeightAndDoFluidPushing(TagKey<Fluid> fluidTag, double fluidFactor)
 	{
-		AxisAlignedBB realBox = this.getBoundingBox();
-		this.setBoundingBox(new AxisAlignedBB(realBox.minX, realBox.maxY - 1, realBox.minZ, realBox.maxX, realBox.maxY, realBox.maxZ));
+		AABB realBox = this.getBoundingBox();
+		this.setBoundingBox(new AABB(realBox.minX, realBox.maxY - 1, realBox.minZ, realBox.maxX, realBox.maxY, realBox.maxZ));
 		boolean result = super.updateFluidHeightAndDoFluidPushing(fluidTag, fluidFactor);
 		this.setBoundingBox(realBox);
 		return result;
@@ -158,9 +158,9 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	
 	
 	@Override
-	public void move(MoverType typeIn, Vector3d pos)
+	public void move(MoverType typeIn, Vec3 pos)	//TODO probably doesn't work as originally intended anymore. What was this meant to do?
 	{
-		AxisAlignedBB realBox = this.getBoundingBox();
+		AABB realBox = this.getBoundingBox();
 		double minX = pos.x > 0 ? realBox.maxX - pos.x : realBox.minX;
 		/*				y > 0 ? realBox.maxY - y : realBox.minY,*/
 		double minY = realBox.minY;
@@ -168,11 +168,10 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 		double maxX = pos.x < 0 ? realBox.minX - pos.x : realBox.maxX;
 		double maxY = pos.y < 0 ? realBox.minY - pos.y : realBox.maxY;
 		double maxZ = pos.z < 0 ? realBox.minZ - pos.z : realBox.maxZ;
-		this.setBoundingBox(new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ));
+		this.setBoundingBox(new AABB(minX, minY, minZ, maxX, maxY, maxZ));
 		super.move(typeIn, pos);
-		AxisAlignedBB changedBox = this.getBoundingBox();
-		this.setBoundingBox(realBox.move(changedBox.minX - minX, changedBox.minY - minY, changedBox.minZ - minZ));
-		this.setLocationFromBoundingbox();
+		AABB changedBox = this.getBoundingBox();
+		this.setPos(this.getX() + changedBox.minX - minX, this.getY() + changedBox.minY - minY, this.getZ() + changedBox.minZ - minZ);
 	}
 	
 	@Override
@@ -185,9 +184,9 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	 * Will get destroyed next tick.
 	 */
 	@Override
-	public void remove()
+	public void remove(RemovalReason reason)
 	{
-		super.remove();
+		super.remove(reason);
 		partGroup.updatePositions();
 	}
 	

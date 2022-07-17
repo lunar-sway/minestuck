@@ -6,28 +6,25 @@ import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.util.MSSoundEvents;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.FakePlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.level.Level;
 
 //Makes non-stop ogre puns
 public class OgreEntity extends UnderlingEntity
 {
-	public OgreEntity(EntityType<? extends OgreEntity> type, World world)
+	public OgreEntity(EntityType<? extends OgreEntity> type, Level level)
 	{
-		super(type, world, 3);
+		super(type, level, 3);
 		this.maxUpStep = 1.0F;
 	}
 	
-	public static AttributeModifierMap.MutableAttribute ogreAttributes()
+	public static AttributeSupplier.Builder ogreAttributes()
 	{
 		return UnderlingEntity.underlingAttributes().add(Attributes.MAX_HEALTH, 50)
 				.add(Attributes.KNOCKBACK_RESISTANCE, 0.4).add(Attributes.MOVEMENT_SPEED, 0.22)
@@ -41,16 +38,19 @@ public class OgreEntity extends UnderlingEntity
 		this.goalSelector.addGoal(3, new CustomMeleeAttackGoal(this, 1.0F, false, 40, 1.2F));
 	}
 	
+	@Override
 	protected SoundEvent getAmbientSound()
 	{
 		return MSSoundEvents.ENTITY_OGRE_AMBIENT;
 	}
 	
+	@Override
 	protected SoundEvent getDeathSound()
 	{
 		return MSSoundEvents.ENTITY_OGRE_DEATH;
 	}
 	
+	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
 	{
 		return MSSoundEvents.ENTITY_OGRE_HURT;

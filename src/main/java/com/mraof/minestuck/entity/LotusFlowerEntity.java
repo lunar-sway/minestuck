@@ -4,25 +4,26 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.network.LotusFlowerPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MoverType;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.*;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.Util;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.entity.IEntityAdditionalSpawnData;
+import net.minecraftforge.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -59,9 +60,9 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 	@Nonnull
 	private Animation animation = Animation.IDLE;
 	
-	protected LotusFlowerEntity(EntityType<? extends LotusFlowerEntity> type, World worldIn)
+	protected LotusFlowerEntity(EntityType<? extends LotusFlowerEntity> type, Level level)
 	{
-		super(type, worldIn);
+		super(type, level);
 		
 		setInvulnerable(true);
 	}
@@ -86,12 +87,12 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 	}
 	
 	@Override
-	public ActionResultType interact(PlayerEntity player, Hand hand)
+	public InteractionResult interact(Player player, InteractionHand hand)
 	{
 		if(isAlive() && !player.isShiftKeyDown() && animation == Animation.IDLE)
 		{
 			startLotusAnimation();
-			return ActionResultType.SUCCESS;
+			return InteractionResult.SUCCESS;
 		}
 		if(isAlive() && animation == Animation.EMPTY)
 		{
@@ -102,10 +103,10 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 				restoreFromBonemeal();
 			} else if(level.isClientSide && player.distanceToSqr(this) < 36)
 			{
-				player.sendMessage(new TranslationTextComponent(REGROW), Util.NIL_UUID);
+				player.sendMessage(new TranslatableComponent(REGROW), Util.NIL_UUID);
 			}
 			
-			return ActionResultType.SUCCESS;
+			return InteractionResult.SUCCESS;
 		} else
 			return super.interact(player, hand);
 	}
@@ -133,8 +134,8 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 		{
 			setEventTimer(OPEN_START);
 			
-			Vector3d posVec = position();
-			level.playSound(null, posVec.x(), posVec.y(), posVec.z(), SoundEvents.COMPOSTER_READY, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+			Vec3 posVec = position();
+			level.playSound(null, posVec.x(), posVec.y(), posVec.z(), SoundEvents.COMPOSTER_READY, SoundSource.NEUTRAL, 1.0F, 1.0F);
 		}
 	}
 	
@@ -143,7 +144,7 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 		if(!level.isClientSide)
 			setEventTimer(IDLE_TIME);
 		
-		Vector3d posVec = position();
+		Vec3 posVec = position();
 		for(int i = 0; i < 10; i++)
 			this.level.addParticle(ParticleTypes.COMPOSTER, posVec.x, posVec.y + 0.5, posVec.z, 0.5 - random.nextDouble(), 0.5 - random.nextDouble(), 0.5 - random.nextDouble());
 	}
@@ -183,18 +184,18 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 	
 	protected void spawnLoot()
 	{
-		World worldIn = this.level;
-		Vector3d posVec = this.position();
+		Level level = this.level;
+		Vec3 posVec = this.position();
 		
-		ItemEntity unpoweredComputerItemEntity = new ItemEntity(worldIn, posVec.x(), posVec.y() + 1D, posVec.z(), new ItemStack(MSItems.COMPUTER_PARTS, 1));
-		worldIn.addFreshEntity(unpoweredComputerItemEntity);
+		ItemEntity unpoweredComputerItemEntity = new ItemEntity(level, posVec.x(), posVec.y() + 1D, posVec.z(), new ItemStack(MSItems.COMPUTER_PARTS, 1));
+		level.addFreshEntity(unpoweredComputerItemEntity);
 		
-		ItemEntity sburbCodeItemEntity = new ItemEntity(worldIn, posVec.x(), posVec.y() + 1D, posVec.z(), new ItemStack(MSItems.SBURB_CODE, 1));
-		worldIn.addFreshEntity(sburbCodeItemEntity);
+		ItemEntity sburbCodeItemEntity = new ItemEntity(level, posVec.x(), posVec.y() + 1D, posVec.z(), new ItemStack(MSItems.SBURB_CODE, 1));
+		level.addFreshEntity(sburbCodeItemEntity);
 	}
 	
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound)
+	public void addAdditionalSaveData(CompoundTag compound)
 	{
 		super.addAdditionalSaveData(compound);
 		
@@ -202,11 +203,11 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 	}
 	
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound)
+	public void readAdditionalSaveData(CompoundTag compound)
 	{
 		super.readAdditionalSaveData(compound);
 		
-		if(compound.contains("EventTimer", Constants.NBT.TAG_ANY_NUMERIC))
+		if(compound.contains("EventTimer", Tag.TAG_ANY_NUMERIC))
 		{
 			eventTimer = compound.getInt("EventTimer");
 			animation = animationFromEventTimer();
@@ -214,19 +215,19 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 	}
 	
 	@Override
-	public void writeSpawnData(PacketBuffer buffer)
+	public void writeSpawnData(FriendlyByteBuf buffer)
 	{
 		buffer.writeInt(animation.ordinal());
 	}
 	
 	@Override
-	public void readSpawnData(PacketBuffer additionalData)
+	public void readSpawnData(FriendlyByteBuf additionalData)
 	{
 		animation = Animation.values()[additionalData.readInt()];
 	}
 	
 	@Override
-	public IPacket<?> getAddEntityPacket()
+	public Packet<?> getAddEntityPacket()
 	{
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
@@ -245,28 +246,28 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 	
 	protected void addRestoreEffects()
 	{
-		Vector3d posVec = this.position();
+		Vec3 posVec = this.position();
 		this.level.addParticle(ParticleTypes.FLASH, posVec.x, posVec.y + 0.5D, posVec.z, 0.0D, 0.0D, 0.0D);
-		this.level.playLocalSound(posVec.x(), posVec.y(), posVec.z(), SoundEvents.BEEHIVE_EXIT, SoundCategory.NEUTRAL, 1.0F, 1.0F, false);
+		this.level.playLocalSound(posVec.x(), posVec.y(), posVec.z(), SoundEvents.BEEHIVE_EXIT, SoundSource.NEUTRAL, 1.0F, 1.0F, false);
 	}
 	
 	protected void addLootSpawnEffects()
 	{
-		Vector3d posVec = this.position();
+		Vec3 posVec = this.position();
 		this.level.addParticle(ParticleTypes.FLASH, posVec.x, posVec.y + 0.5D, posVec.z, 0.0D, 0.0D, 0.0D);
-		this.level.playLocalSound(posVec.x(), posVec.y(), posVec.z(), SoundEvents.ITEM_PICKUP, SoundCategory.NEUTRAL, 1.0F, 1.3F, false);
-		this.level.playLocalSound(posVec.x(), posVec.y(), posVec.z(), SoundEvents.ITEM_PICKUP, SoundCategory.NEUTRAL, 1.0F, 0.7F, false);
-		this.level.playLocalSound(posVec.x(), posVec.y(), posVec.z(), SoundEvents.BOAT_PADDLE_LAND, SoundCategory.NEUTRAL, 2.0F, 2.0F, false);
+		this.level.playLocalSound(posVec.x(), posVec.y(), posVec.z(), SoundEvents.ITEM_PICKUP, SoundSource.NEUTRAL, 1.0F, 1.3F, false);
+		this.level.playLocalSound(posVec.x(), posVec.y(), posVec.z(), SoundEvents.ITEM_PICKUP, SoundSource.NEUTRAL, 1.0F, 0.7F, false);
+		this.level.playLocalSound(posVec.x(), posVec.y(), posVec.z(), SoundEvents.BOAT_PADDLE_LAND, SoundSource.NEUTRAL, 2.0F, 2.0F, false);
 	}
 	
 	@Override
-	protected boolean isMovementNoisy()
+	protected MovementEmission getMovementEmission()
 	{
-		return false;
+		return Entity.MovementEmission.NONE;
 	}
 	
 	@Override
-	public void move(MoverType typeIn, Vector3d pos)
+	public void move(MoverType typeIn, Vec3 pos)
 	{
 	}
 	
@@ -277,20 +278,20 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 	}
 	
 	@Override
-	public ItemStack getItemBySlot(EquipmentSlotType slotIn)
+	public ItemStack getItemBySlot(EquipmentSlot slotIn)
 	{
 		return ItemStack.EMPTY;
 	}
 	
 	@Override
-	public void setItemSlot(EquipmentSlotType slotIn, ItemStack stack)
+	public void setItemSlot(EquipmentSlot slotIn, ItemStack stack)
 	{
 	}
 	
 	@Override
-	public HandSide getMainArm()
+	public HumanoidArm getMainArm()
 	{
-		return HandSide.RIGHT;
+		return HumanoidArm.RIGHT;
 	}
 	
 	public enum Animation //animationName set in assets/minestuck/animations/lotus_flower.animation.json. Animated blocks/entities also need a section in assets/minestuck/geo

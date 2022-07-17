@@ -1,17 +1,17 @@
 package com.mraof.minestuck.entity.underling;
 
 import com.mraof.minestuck.entity.IEntityMultiPart;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.Pose;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 
 public class UnderlingPartEntity extends Entity implements IEntityAdditionalSpawnData
 {
@@ -19,12 +19,12 @@ public class UnderlingPartEntity extends Entity implements IEntityAdditionalSpaw
 
 	public int id = -1;
 	private int headId = -1;
-	private EntitySize size;
+	private EntityDimensions size;
 	
 	public UnderlingPartEntity(IEntityMultiPart entityMultiPart, int id, float width, float height)
 	{
-		super(((Entity) entityMultiPart).getType(), entityMultiPart.getWorld());
-		size = EntitySize.scalable(width, height);
+		super(((Entity) entityMultiPart).getType(), entityMultiPart.getLevel());
+		size = EntityDimensions.scalable(width, height);
 		this.baseEntity = entityMultiPart;
 		this.id = id;
 	}
@@ -36,19 +36,19 @@ public class UnderlingPartEntity extends Entity implements IEntityAdditionalSpaw
 	}
 	
 	@Override
-	protected void readAdditionalSaveData(CompoundNBT compound)
+	protected void readAdditionalSaveData(CompoundTag compound)
 	{
 	
 	}
 	
 	@Override
-	protected void addAdditionalSaveData(CompoundNBT compound)
+	protected void addAdditionalSaveData(CompoundTag compound)
 	{
 	
 	}
 	
 	@Override
-	public ITextComponent getName()
+	public Component getName()
 	{
 		return ((Entity) baseEntity).getName();
 	}
@@ -77,18 +77,18 @@ public class UnderlingPartEntity extends Entity implements IEntityAdditionalSpaw
 	public void tick()
 	{
 		super.tick();
-		if(this.baseEntity == null || ((Entity)this.baseEntity).removed)
+		if(this.baseEntity == null || ((Entity)this.baseEntity).isRemoved())
 		{
-			this.remove();
+			this.discard();
 		}
 		else
 			this.setBaseById(headId);
 	}
 
 	@Override
-	public void remove()
+	public void remove(Entity.RemovalReason reason)
 	{
-		super.remove();
+		super.remove(reason);
 		if(this.baseEntity != null)
 			baseEntity.onPartDeath(this, this.id);
 	}
@@ -102,13 +102,13 @@ public class UnderlingPartEntity extends Entity implements IEntityAdditionalSpaw
 	}
 	
 	@Override
-	public boolean updateFluidHeightAndDoFluidPushing(ITag<Fluid> fluidTag, double fluidFactor)
+	public boolean updateFluidHeightAndDoFluidPushing(TagKey<Fluid> fluidTag, double fluidFactor)
 	{
 		return false;
 	}
 	
 	@Override
-	public void writeSpawnData(PacketBuffer buffer)
+	public void writeSpawnData(FriendlyByteBuf buffer)
 	{
 		buffer.writeInt(this.id);
 		if(this.baseEntity != null)
@@ -118,7 +118,7 @@ public class UnderlingPartEntity extends Entity implements IEntityAdditionalSpaw
 	}
 	
 	@Override
-	public void readSpawnData(PacketBuffer additionalData)
+	public void readSpawnData(FriendlyByteBuf additionalData)
 	{
 		setBaseById(additionalData.readInt());
 	}
@@ -134,13 +134,13 @@ public class UnderlingPartEntity extends Entity implements IEntityAdditionalSpaw
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose poseIn)
+	public EntityDimensions getDimensions(Pose poseIn)
 	{
 		return this.size;
 	}
 	
 	@Override
-	public IPacket<?> getAddEntityPacket()
+	public Packet<?> getAddEntityPacket()
 	{
 		throw new UnsupportedOperationException();
 	}

@@ -11,13 +11,14 @@ import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import com.mraof.minestuck.world.storage.loot.MSLootTables;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.WeightedRandom;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.random.WeightedEntry;
+import net.minecraft.util.random.WeightedRandom;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.phys.Vec3;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -134,9 +135,9 @@ public class ConsortDialogue
 		
 		//Towers
 		addMessage("climb_high").landTitle(TOWERS, WIND).consort(EnumConsort.IGUANA);
-		addMessage(new ConditionedMessage((ConsortEntity consort, ServerPlayerEntity player) -> consort.getY() < 78, new ChainMessage(new SingleMessage("height_fear.towers.1"), new SingleMessage("height_fear.towers.2")),
+		addMessage(new ConditionedMessage((ConsortEntity consort, ServerPlayer player) -> consort.getY() < 78, new ChainMessage(new SingleMessage("height_fear.towers.1"), new SingleMessage("height_fear.towers.2")),
 				new SingleMessage("height_fear.panic"))).landTitle(TOWERS).consort(EnumConsort.TURTLE);
-		addMessage(new ConditionedMessage((ConsortEntity consort, ServerPlayerEntity player) -> consort.getY() < 78, new ChainMessage(new SingleMessage("height_fear.rock.1"), new SingleMessage("height_fear.rock.2")),
+		addMessage(new ConditionedMessage((ConsortEntity consort, ServerPlayer player) -> consort.getY() < 78, new ChainMessage(new SingleMessage("height_fear.rock.1"), new SingleMessage("height_fear.rock.2")),
 				new SingleMessage("height_fear.panic"))).landTitle(WIND).consort(EnumConsort.TURTLE);
 		
 		//Shade
@@ -224,7 +225,7 @@ public class ConsortDialogue
 
 		//Misc
 		addMessage("denizen_mention").reqLand();
-		addMessage("floating_island").consortReq(consort -> consort.distanceToSqr(new Vector3d(consort.level.getLevelData().getXSpawn(), consort.level.getLevelData().getYSpawn(), consort.level.getLevelData().getZSpawn())) < 65536).reqLand();
+		addMessage("floating_island").consortReq(consort -> consort.distanceToSqr(new Vec3(consort.level.getLevelData().getXSpawn(), consort.level.getLevelData().getYSpawn(), consort.level.getLevelData().getZSpawn())) < 65536).reqLand();
 		addMessage("ring_fishing").consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);
 		addMessage("frog_walk").consort(EnumConsort.TURTLE);
 		addMessage("delicious_hair").consort(EnumConsort.IGUANA);
@@ -281,11 +282,11 @@ public class ConsortDialogue
 		
 		addMessage("useless_pogo");
 		addMessage("await_hero", "land_name", "consort_types", "player_title_land").reqLand();
-		addMessage(new ConditionedMessage("skaia", (ConsortEntity consort, ServerPlayerEntity player) -> !consort.visitedSkaia, new SingleMessage("watch_skaia"),
-				new ConditionedMessage((ConsortEntity consort, ServerPlayerEntity player) -> MSDimensions.isSkaia(consort.level.dimension()),
+		addMessage(new ConditionedMessage("skaia", (ConsortEntity consort, ServerPlayer player) -> !consort.visitedSkaia, new SingleMessage("watch_skaia"),
+				new ConditionedMessage((ConsortEntity consort, ServerPlayer player) -> MSDimensions.isSkaia(consort.level.dimension()),
 						new SingleMessage("at_skaia.1", "consort_sound_2"), new SingleMessage("visited_skaia")))).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA, EnumConsort.NAKAGATOR).reqLand();
-		addMessage(new ConditionedMessage("skaia_turtle", (ConsortEntity consort, ServerPlayerEntity player) -> !consort.visitedSkaia, new SingleMessage("watch_skaia"),
-				new ConditionedMessage((ConsortEntity consort, ServerPlayerEntity player) -> MSDimensions.isSkaia(consort.level.dimension()),
+		addMessage(new ConditionedMessage("skaia_turtle", (ConsortEntity consort, ServerPlayer player) -> !consort.visitedSkaia, new SingleMessage("watch_skaia"),
+				new ConditionedMessage((ConsortEntity consort, ServerPlayer player) -> MSDimensions.isSkaia(consort.level.dimension()),
 						new SingleMessage("at_skaia.2"), new SingleMessage("visited_skaia")))).consort(EnumConsort.TURTLE).reqLand();
 		
 		addMessage(new SingleMessage("zazzerpan")).consort(EnumConsort.TURTLE);
@@ -493,7 +494,7 @@ public class ConsortDialogue
 			list.add(message);
 		}
 		
-		return WeightedRandom.getRandomItem(consort.level.random, list);
+		return WeightedRandom.getRandomItem(consort.level.random, list).orElseThrow();
 	}
 	
 	public static DialogueWrapper getMessageFromString(String name)
@@ -504,7 +505,7 @@ public class ConsortDialogue
 		return null;
 	}
 	
-	public static class DialogueWrapper extends WeightedRandom.Item
+	public static class DialogueWrapper extends WeightedEntry.IntrusiveBase
 	{
 		private DialogueWrapper(int weight)
 		{
@@ -605,12 +606,12 @@ public class ConsortDialogue
 			return this;
 		}
 		
-		public ITextComponent getMessage(ConsortEntity consort, ServerPlayerEntity player)
+		public Component getMessage(ConsortEntity consort, ServerPlayer player)
 		{
 			return messageStart.getMessage(consort, player, "");
 		}
 		
-		public ITextComponent getFromChain(ConsortEntity consort, ServerPlayerEntity player, String fromChain)
+		public Component getFromChain(ConsortEntity consort, ServerPlayer player, String fromChain)
 		{
 			return messageStart.getFromChain(consort, player, "", fromChain);
 		}
@@ -644,13 +645,13 @@ public class ConsortDialogue
 	
 	private static void debugPrintAll()
 	{
-		List<ITextComponent> list = new ArrayList<>();
+		List<Component> list = new ArrayList<>();
 		for(DialogueWrapper wrapper : messages)
 		{
 			wrapper.messageStart.debugAddAllMessages(list);
 		}
 		
-		for(ITextComponent textComponent : list)
+		for(Component textComponent : list)
 			LOGGER.info(textComponent.getString());
 	}
 }

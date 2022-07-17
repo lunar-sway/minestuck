@@ -12,39 +12,44 @@ import com.mraof.minestuck.skaianet.UnderlingController;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.*;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.Difficulty;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraftforge.common.util.FakePlayer;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public abstract class UnderlingEntity extends CreatureEntity implements IMob
+public abstract class UnderlingEntity extends PathfinderMob implements Enemy
 {
 	public static final UUID GRIST_MODIFIER_ID = UUID.fromString("08B6DEFC-E3F4-11EA-87D0-0242AC130003");
-	private static final DataParameter<String> GRIST_TYPE = EntityDataManager.defineId(UnderlingEntity.class, DataSerializers.STRING);
+	private static final EntityDataAccessor<String> GRIST_TYPE = SynchedEntityData.defineId(UnderlingEntity.class, EntityDataSerializers.STRING);
 	protected final EntityListFilter attackEntitySelector = new EntityListFilter(new ArrayList<>());	//TODO this filter isn't being saved. F1X PLZ
 	protected boolean fromSpawner;
 	public boolean dropCandy;
@@ -54,9 +59,9 @@ public abstract class UnderlingEntity extends CreatureEntity implements IMob
 	
 	protected Map<PlayerIdentifier, Double> damageMap = new HashMap<>();    //Map that stores how much damage each player did to this to this underling. Null is used for environmental or other non-player damage
 	
-	public UnderlingEntity(EntityType<? extends UnderlingEntity> type, World world, int consortRep)
+	public UnderlingEntity(EntityType<? extends UnderlingEntity> type, Level level, int consortRep)
 	{
-		super(type, world);
+		super(type, level);
 		this.consortRep = consortRep;
 		
 		attackEntitySelector.entityList.add(EntityType.PLAYER);
@@ -66,13 +71,13 @@ public abstract class UnderlingEntity extends CreatureEntity implements IMob
 	protected void registerGoals()
 	{
 		
-		goalSelector.addGoal(1, new SwimGoal(this));
+		goalSelector.addGoal(1, new FloatGoal(this));
 		goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 0.8D));
-		goalSelector.addGoal(5, new RandomWalkingGoal(this, 0.6D));
-		goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 8.0F));
-		goalSelector.addGoal(7, new LookRandomlyGoal(this));
+		goalSelector.addGoal(5, new RandomStrollGoal(this, 0.6D));
+		goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
+		goalSelector.addGoal(7, new RandomLookAroundGoal(this));
 		
-		targetSelector.addGoal(1, new HurtByTargetAlliedGoal(this, entity -> MSTags.EntityTypes.UNDERLINGS.contains(entity.getType())));
+		targetSelector.addGoal(1, new HurtByTargetAlliedGoal(this, entity -> entity.getType().is(MSTags.EntityTypes.UNDERLINGS)));
 		targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 2, true, false, this::isAppropriateTarget));
 	}
 	
@@ -81,19 +86,19 @@ public abstract class UnderlingEntity extends CreatureEntity implements IMob
 		return attackEntitySelector.isEntityApplicable(entity);
 	}
 	
-	public static AttributeModifierMap.MutableAttribute underlingAttributes()
+	public static AttributeSupplier.Builder underlingAttributes()
 	{
-		return MobEntity.createMobAttributes().add(Attributes.ATTACK_DAMAGE).add(Attributes.FOLLOW_RANGE, 32);
+		return Mob.createMobAttributes().add(Attributes.ATTACK_DAMAGE).add(Attributes.FOLLOW_RANGE, 32);
 	}
 	
 	@Override
-	public SoundCategory getSoundSource()
+	public SoundSource getSoundSource()
 	{
-		return SoundCategory.HOSTILE;
+		return SoundSource.HOSTILE;
 	}
 	
 	@Override
-	protected float getVoicePitch()
+	public float getVoicePitch()
 	{
 		return getGristType() == GristTypes.ARTIFACT.get()
 				? (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 0.7F
@@ -118,7 +123,7 @@ public abstract class UnderlingEntity extends CreatureEntity implements IMob
 	}
 	
 	@Override
-	public void onSyncedDataUpdated(DataParameter<?> parameter)
+	public void onSyncedDataUpdated(EntityDataAccessor<?> parameter)
 	{
 		if(parameter == GRIST_TYPE)
 			onGristTypeUpdated(getGristType());
@@ -202,8 +207,8 @@ public abstract class UnderlingEntity extends CreatureEntity implements IMob
 	public void die(DamageSource cause)
 	{
 		LivingEntity entity = this.getKillCredit();
-		if(entity instanceof ServerPlayerEntity && (!(entity instanceof FakePlayer)))
-			PlayerSavedData.getData((ServerPlayerEntity) entity).addConsortReputation(consortRep, level.dimension());
+		if(entity instanceof ServerPlayer player && (!(player instanceof FakePlayer)))
+			PlayerSavedData.getData(player).addConsortReputation(consortRep, level.dimension());
 		
 		super.die(cause);
 	}
@@ -219,10 +224,10 @@ public abstract class UnderlingEntity extends CreatureEntity implements IMob
 	}
 	
 	@Override
-	public ITextComponent getName()
+	public Component getName()
 	{
 		if(getCustomName() == null)
-			return new TranslationTextComponent(getType().getDescriptionId() + ".type", getGristType().getDisplayName());
+			return new TranslatableComponent(getType().getDescriptionId() + ".type", getGristType().getDisplayName());
 		else return super.getName();
 	}
 	
@@ -238,21 +243,21 @@ public abstract class UnderlingEntity extends CreatureEntity implements IMob
 	
 	public void addEnemy(EntityType<?> enemyType)
 	{
-		if(!attackEntitySelector.entityList.contains(enemyType) && !MSTags.EntityTypes.UNDERLINGS.contains(enemyType))
+		if(!attackEntitySelector.entityList.contains(enemyType) && !enemyType.is(MSTags.EntityTypes.UNDERLINGS))
 		{
 			attackEntitySelector.entityList.add(enemyType);
 		}
 	}
 	
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound)
+	public void addAdditionalSaveData(CompoundTag compound)
 	{
 		super.addAdditionalSaveData(compound);
 		getGristType().write(compound, "Type");
 		compound.putBoolean("Spawned", fromSpawner);
 		if(hasRestriction())
 		{
-			CompoundNBT nbt = new CompoundNBT();
+			CompoundTag nbt = new CompoundTag();
 			BlockPos home = getRestrictCenter();
 			nbt.putInt("HomeX", home.getX());
 			nbt.putInt("HomeY", home.getY());
@@ -263,10 +268,10 @@ public abstract class UnderlingEntity extends CreatureEntity implements IMob
 	}
 	
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound)
+	public void readAdditionalSaveData(CompoundTag compound)
 	{
 		//Note: grist type should be read and applied before reading health due to the modifiers to max health
-		if(compound.contains("Type", Constants.NBT.TAG_STRING))
+		if(compound.contains("Type", Tag.TAG_STRING))
 			applyGristType(GristType.read(compound, "Type", GristTypes.ARTIFACT));
 		else applyGristType(GristHelper.getPrimaryGrist(this.getRandom()));
 		
@@ -274,22 +279,22 @@ public abstract class UnderlingEntity extends CreatureEntity implements IMob
 		
 		fromSpawner = compound.getBoolean("Spawned");
 		
-		if(compound.contains("HomePos", Constants.NBT.TAG_COMPOUND))
+		if(compound.contains("HomePos", Tag.TAG_COMPOUND))
 		{
-			CompoundNBT nbt = compound.getCompound("HomePos");
+			CompoundTag nbt = compound.getCompound("HomePos");
 			BlockPos pos = new BlockPos(nbt.getInt("HomeX"), nbt.getInt("HomeY"), nbt.getInt("HomeZ"));
 			restrictTo(pos, nbt.getInt("MaxHomeDistance"));
 		}
 	}
 	
-	public static boolean canSpawnOnAndNotPeaceful(EntityType<? extends MobEntity> type, IWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn)
+	public static boolean canSpawnOnAndNotPeaceful(EntityType<? extends Mob> type, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos, Random randomIn)
 	{
 		return worldIn.getDifficulty() != Difficulty.PEACEFUL && checkMobSpawnRules(type, worldIn, reason, pos, randomIn);
 	}
 	
 	@Nullable
 	@Override
-	public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag)
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag)
 	{
 		if(!(spawnDataIn instanceof UnderlingData))
 		{
@@ -305,12 +310,12 @@ public abstract class UnderlingEntity extends CreatureEntity implements IMob
 	
 	public void onEntityDamaged(DamageSource source, float amount)
 	{
-		PlayerIdentifier player = null;
-		if(source.getEntity() instanceof ServerPlayerEntity)
-			player = IdentifierHandler.encode((ServerPlayerEntity) source.getEntity());
-		if(damageMap.containsKey(player))
-			damageMap.put(player, damageMap.get(player) + amount);
-		else damageMap.put(player, (double) amount);
+		PlayerIdentifier playerId = null;
+		if(source.getEntity() instanceof ServerPlayer player)
+			playerId = IdentifierHandler.encode(player);
+		if(damageMap.containsKey(playerId))
+			damageMap.put(playerId, damageMap.get(playerId) + amount);
+		else damageMap.put(playerId, (double) amount);
 	}
 	
 	@Override
@@ -355,14 +360,14 @@ public abstract class UnderlingEntity extends CreatureEntity implements IMob
 	
 	protected static void firstKillBonus(Entity killer, byte type)
 	{
-		if(killer instanceof ServerPlayerEntity && (!(killer instanceof FakePlayer)))
+		if(killer instanceof ServerPlayer && (!(killer instanceof FakePlayer)))
 		{
-			Echeladder ladder = PlayerSavedData.getData((ServerPlayerEntity) killer).getEcheladder();
+			Echeladder ladder = PlayerSavedData.getData((ServerPlayer) killer).getEcheladder();
 			ladder.checkBonus(type);
 		}
 	}
 	
-	protected static class UnderlingData implements ILivingEntityData
+	protected static class UnderlingData implements SpawnGroupData
 	{
 		public final GristType type;
 		
