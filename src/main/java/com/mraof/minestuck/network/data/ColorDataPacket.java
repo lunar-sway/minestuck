@@ -2,7 +2,7 @@ package com.mraof.minestuck.network.data;
 
 import com.mraof.minestuck.network.PlayToClientPacket;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 
 public class ColorDataPacket implements PlayToClientPacket
 {
@@ -26,13 +26,13 @@ public class ColorDataPacket implements PlayToClientPacket
 	}
 	
 	@Override
-	public void encode(PacketBuffer buffer)
+	public void encode(FriendlyByteBuf buffer)
 	{
 		if(color != NO_COLOR)
 			buffer.writeInt(color);
 	}
 	
-	public static ColorDataPacket decode(PacketBuffer buffer)
+	public static ColorDataPacket decode(FriendlyByteBuf buffer)
 	{
 		int color;
 		if(buffer.readableBytes() > 0)

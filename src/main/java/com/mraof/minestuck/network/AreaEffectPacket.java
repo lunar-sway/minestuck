@@ -3,24 +3,23 @@ package com.mraof.minestuck.network;
 import com.mraof.minestuck.block.redstone.AreaEffectBlock;
 import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.tileentity.redstone.AreaEffectTileEntity;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.potion.Effect;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class AreaEffectPacket implements PlayToServerPacket
 {
-	private final Effect effect;
+	private final MobEffect effect;
 	private final int effectAmp;
 	private final boolean isAllMobs;
 	private final BlockPos minEffectPos;
 	private final BlockPos maxEffectPos;
 	private final BlockPos tileBlockPos;
 	
-	public AreaEffectPacket(Effect effect, int effectAmp, boolean isAllMobs, BlockPos minPos, BlockPos maxPos, BlockPos tileBlockPos)
+	public AreaEffectPacket(MobEffect effect, int effectAmp, boolean isAllMobs, BlockPos minPos, BlockPos maxPos, BlockPos tileBlockPos)
 	{
 		this.effect = effect;
 		this.effectAmp = effectAmp;
@@ -31,9 +30,9 @@ public class AreaEffectPacket implements PlayToServerPacket
 	}
 	
 	@Override
-	public void encode(PacketBuffer buffer)
+	public void encode(FriendlyByteBuf buffer)
 	{
-		buffer.writeInt(Effect.getId(effect));
+		buffer.writeInt(MobEffect.getId(effect));
 		buffer.writeInt(effectAmp);
 		buffer.writeBoolean(isAllMobs);
 		buffer.writeBlockPos(minEffectPos);
@@ -41,10 +40,10 @@ public class AreaEffectPacket implements PlayToServerPacket
 		buffer.writeBlockPos(tileBlockPos);
 	}
 	
-	public static AreaEffectPacket decode(PacketBuffer buffer)
+	public static AreaEffectPacket decode(FriendlyByteBuf buffer)
 	{
-		Effect effect = MSEffects.CREATIVE_SHOCK.get(); //will keep this as its type if effectRead is null
-		Effect effectRead = Effect.byId(buffer.readInt());
+		MobEffect effect = MSEffects.CREATIVE_SHOCK.get(); //will keep this as its type if effectRead is null
+		MobEffect effectRead = MobEffect.byId(buffer.readInt());
 		if(effectRead != null)
 		{
 			effect = effectRead;
@@ -61,20 +60,19 @@ public class AreaEffectPacket implements PlayToServerPacket
 	}
 	
 	@Override
-	public void execute(ServerPlayerEntity player)
+	public void execute(ServerPlayer player)
 	{
 		if(player.level.isAreaLoaded(tileBlockPos, 0))
 		{
-			TileEntity te = player.level.getBlockEntity(tileBlockPos);
-			if(te instanceof AreaEffectTileEntity)
+			if(player.level.getBlockEntity(tileBlockPos) instanceof AreaEffectTileEntity areaEffect)
 			{
 				if(Math.sqrt(player.distanceToSqr(tileBlockPos.getX() + 0.5, tileBlockPos.getY() + 0.5, tileBlockPos.getZ() + 0.5)) <= 8)
 				{
-					((AreaEffectTileEntity) te).setMinAndMaxEffectPosOffset(minEffectPos, maxEffectPos);
-					((AreaEffectTileEntity) te).setEffect(effect, effectAmp);
+					areaEffect.setMinAndMaxEffectPosOffset(minEffectPos, maxEffectPos);
+					areaEffect.setEffect(effect, effectAmp);
 					//Imitates the structure block to ensure that changes are sent client-side
-					te.setChanged();
-					player.level.setBlock(tileBlockPos, te.getBlockState().setValue(AreaEffectBlock.ALL_MOBS, isAllMobs), Constants.BlockFlags.DEFAULT);
+					areaEffect.setChanged();
+					player.level.setBlock(tileBlockPos, areaEffect.getBlockState().setValue(AreaEffectBlock.ALL_MOBS, isAllMobs), Block.UPDATE_ALL);
 					BlockState state = player.level.getBlockState(tileBlockPos);
 					player.level.sendBlockUpdated(tileBlockPos, state, state, 3);
 				}

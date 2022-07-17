@@ -3,14 +3,14 @@ package com.mraof.minestuck.network;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.computer.*;
 import com.mraof.minestuck.network.data.*;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.network.NetworkEvent;
-import net.minecraftforge.fml.network.NetworkRegistry;
-import net.minecraftforge.fml.network.PacketDistributor;
-import net.minecraftforge.fml.network.simple.SimpleChannel;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.PacketDistributor;
+import net.minecraftforge.network.simple.SimpleChannel;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -70,17 +70,17 @@ public class MSPacketHandler
 	}
 	
 	private static int nextIndex;
-	private static <MSG extends StandardPacket> void registerMessage(Class<MSG> messageType, Function<PacketBuffer, MSG> decoder)
+	private static <MSG extends StandardPacket> void registerMessage(Class<MSG> messageType, Function<FriendlyByteBuf, MSG> decoder)
 	{
 		registerMessage(messageType, StandardPacket::encode, decoder, StandardPacket::consume);
 	}
 	
-	private static <MSG> void registerMessage(Class<MSG> messageType, BiConsumer<MSG, PacketBuffer> encoder, Function<PacketBuffer, MSG> decoder, BiConsumer<MSG, Supplier<NetworkEvent.Context>> messageConsumer)
+	private static <MSG> void registerMessage(Class<MSG> messageType, BiConsumer<MSG, FriendlyByteBuf> encoder, Function<FriendlyByteBuf, MSG> decoder, BiConsumer<MSG, Supplier<NetworkEvent.Context>> messageConsumer)
 	{
 		INSTANCE.registerMessage(nextIndex++, messageType, encoder, decoder, messageConsumer);
 	}
 	
-	public static <MSG> void sendToPlayer(MSG message, ServerPlayerEntity player)
+	public static <MSG> void sendToPlayer(MSG message, ServerPlayer player)
 	{
 		INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), message);
 	}

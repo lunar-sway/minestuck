@@ -1,10 +1,10 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.tileentity.redstone.StatStorerTileEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 public class StatStorerPacket implements PlayToServerPacket
 {
@@ -20,14 +20,14 @@ public class StatStorerPacket implements PlayToServerPacket
 	}
 	
 	@Override
-	public void encode(PacketBuffer buffer)
+	public void encode(FriendlyByteBuf buffer)
 	{
 		buffer.writeEnum(activeType);
 		buffer.writeBlockPos(tileBlockPos);
 		buffer.writeInt(divideValueBy);
 	}
 	
-	public static StatStorerPacket decode(PacketBuffer buffer)
+	public static StatStorerPacket decode(FriendlyByteBuf buffer)
 	{
 		StatStorerTileEntity.ActiveType activeType = buffer.readEnum(StatStorerTileEntity.ActiveType.class);
 		BlockPos tileBlockPos = buffer.readBlockPos();
@@ -37,20 +37,17 @@ public class StatStorerPacket implements PlayToServerPacket
 	}
 	
 	@Override
-	public void execute(ServerPlayerEntity player)
+	public void execute(ServerPlayer player)
 	{
-		if(player.level.isAreaLoaded(tileBlockPos, 0))
+		if(player.level.isAreaLoaded(tileBlockPos, 0)
+				&& Math.sqrt(player.distanceToSqr(tileBlockPos.getX() + 0.5, tileBlockPos.getY() + 0.5, tileBlockPos.getZ() + 0.5)) <= 8)
 		{
-			TileEntity te = player.level.getBlockEntity(tileBlockPos);
+			BlockEntity te = player.level.getBlockEntity(tileBlockPos);
 			
-			if(te instanceof StatStorerTileEntity)
+			if(te instanceof StatStorerTileEntity statStorer)
 			{
-				BlockPos tePos = te.getBlockPos();
-				if(Math.sqrt(player.distanceToSqr(tePos.getX() + 0.5, tePos.getY() + 0.5, tePos.getZ() + 0.5)) <= 8)
-				{
-					int largestDivideValueBy = Math.max(1, divideValueBy); //should not be able to enter 0 or negative number range
-					((StatStorerTileEntity) te).setActiveTypeAndDivideValue(activeType, largestDivideValueBy);
-				}
+				int largestDivideValueBy = Math.max(1, divideValueBy); //should not be able to enter 0 or negative number range
+				statStorer.setActiveTypeAndDivideValue(activeType, largestDivideValueBy);
 			}
 		}
 	}

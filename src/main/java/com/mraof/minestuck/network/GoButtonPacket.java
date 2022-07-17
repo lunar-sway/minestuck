@@ -1,8 +1,8 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.inventory.MachineContainer;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
 
 public class GoButtonPacket implements PlayToServerPacket
 {
@@ -17,13 +17,13 @@ public class GoButtonPacket implements PlayToServerPacket
 	}
 	
 	@Override
-	public void encode(PacketBuffer buffer)
+	public void encode(FriendlyByteBuf buffer)
 	{
 		buffer.writeBoolean(newMode);
 		buffer.writeBoolean(overrideStop);
 	}
 	
-	public static GoButtonPacket decode(PacketBuffer buffer)
+	public static GoButtonPacket decode(FriendlyByteBuf buffer)
 	{
 		boolean newMode = buffer.readBoolean();
 		boolean overrideStop = buffer.readBoolean();
@@ -32,11 +32,10 @@ public class GoButtonPacket implements PlayToServerPacket
 	}
 	
 	@Override
-	public void execute(ServerPlayerEntity player)
+	public void execute(ServerPlayer player)
 	{
-		if(player.containerMenu instanceof MachineContainer)
+		if(player.containerMenu instanceof MachineContainer container)
 		{
-			MachineContainer container = (MachineContainer) player.containerMenu;
 			System.out.println("Button pressed. Machine going!");
 			container.setReady(newMode);
 			container.setOverrideStop(overrideStop);

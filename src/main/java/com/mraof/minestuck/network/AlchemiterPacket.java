@@ -1,10 +1,9 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.tileentity.machine.AlchemiterTileEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
 
 public class AlchemiterPacket implements PlayToServerPacket
 {
@@ -18,13 +17,13 @@ public class AlchemiterPacket implements PlayToServerPacket
 	}
 	
 	@Override
-	public void encode(PacketBuffer buffer)
+	public void encode(FriendlyByteBuf buffer)
 	{
 		buffer.writeBlockPos(pos);
 		buffer.writeInt(quantity);
 	}
 	
-	public static AlchemiterPacket decode(PacketBuffer buffer)
+	public static AlchemiterPacket decode(FriendlyByteBuf buffer)
 	{
 		BlockPos pos = buffer.readBlockPos();
 		int quantity = buffer.readInt();
@@ -33,15 +32,13 @@ public class AlchemiterPacket implements PlayToServerPacket
 	}
 	
 	@Override
-	public void execute(ServerPlayerEntity player)
+	public void execute(ServerPlayer player)
 	{
 		if(player.getCommandSenderWorld().isAreaLoaded(pos, 0))
 		{
-			TileEntity te;
-			te = player.getCommandSenderWorld().getBlockEntity(pos);
-			if(te instanceof AlchemiterTileEntity)
+			if(player.getCommandSenderWorld().getBlockEntity(pos) instanceof AlchemiterTileEntity alchemiter)
 			{
-				((AlchemiterTileEntity) te).processContents(quantity, player);
+				alchemiter.processContents(quantity, player);
 			}
 		}
 	}

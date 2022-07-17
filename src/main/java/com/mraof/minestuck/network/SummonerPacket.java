@@ -3,13 +3,12 @@ package com.mraof.minestuck.network;
 import com.mraof.minestuck.block.redstone.SummonerBlock;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.tileentity.redstone.SummonerTileEntity;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -30,7 +29,7 @@ public class SummonerPacket implements PlayToServerPacket
 	}
 	
 	@Override
-	public void encode(PacketBuffer buffer)
+	public void encode(FriendlyByteBuf buffer)
 	{
 		buffer.writeBoolean(isUntriggerable);
 		buffer.writeInt(summonRange);
@@ -43,7 +42,7 @@ public class SummonerPacket implements PlayToServerPacket
 		
 	}
 	
-	public static SummonerPacket decode(PacketBuffer buffer)
+	public static SummonerPacket decode(FriendlyByteBuf buffer)
 	{
 		boolean isUntriggerable = buffer.readBoolean();
 		int summonRange = buffer.readInt();
@@ -54,21 +53,20 @@ public class SummonerPacket implements PlayToServerPacket
 	}
 	
 	@Override
-	public void execute(ServerPlayerEntity player)
+	public void execute(ServerPlayer player)
 	{
 		if(player.level.isAreaLoaded(tileBlockPos, 0))
 		{
-			TileEntity te = player.level.getBlockEntity(tileBlockPos);
-			if(te instanceof SummonerTileEntity)
+			if(player.level.getBlockEntity(tileBlockPos) instanceof SummonerTileEntity summoner)
 			{
 				if(Math.sqrt(player.distanceToSqr(tileBlockPos.getX() + 0.5, tileBlockPos.getY() + 0.5, tileBlockPos.getZ() + 0.5)) <= 8)
 				{
 					if(entityType != null)
-						((SummonerTileEntity) te).setSummonedEntity(entityType);
-					((SummonerTileEntity) te).setSummonRange(summonRange);
+						summoner.setSummonedEntity(entityType);
+					summoner.setSummonRange(summonRange);
 					//Imitates the structure block to ensure that changes are sent client-side
-					te.setChanged();
-					player.level.setBlock(tileBlockPos, te.getBlockState().setValue(SummonerBlock.UNTRIGGERABLE, isUntriggerable), Constants.BlockFlags.DEFAULT);
+					summoner.setChanged();
+					player.level.setBlock(tileBlockPos, summoner.getBlockState().setValue(SummonerBlock.UNTRIGGERABLE, isUntriggerable), Block.UPDATE_ALL);
 					BlockState state = player.level.getBlockState(tileBlockPos);
 					player.level.sendBlockUpdated(tileBlockPos, state, state, 3);
 				}

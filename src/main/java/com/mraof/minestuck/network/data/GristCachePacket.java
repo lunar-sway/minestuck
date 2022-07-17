@@ -3,7 +3,7 @@ package com.mraof.minestuck.network.data;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.network.PlayToClientPacket;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 
 public class GristCachePacket implements PlayToClientPacket
 {
@@ -17,13 +17,13 @@ public class GristCachePacket implements PlayToClientPacket
 	}
 	
 	@Override
-	public void encode(PacketBuffer buffer)
+	public void encode(FriendlyByteBuf buffer)
 	{
 		gristCache.write(buffer);
 		buffer.writeBoolean(isEditmode);
 	}
 	
-	public static GristCachePacket decode(PacketBuffer buffer)
+	public static GristCachePacket decode(FriendlyByteBuf buffer)
 	{
 		GristSet gristCache = GristSet.read(buffer);
 		boolean isEditmode = buffer.readBoolean();

@@ -2,11 +2,11 @@ package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.inventory.SendificatorContainer;
 import com.mraof.minestuck.tileentity.machine.SendificatorTileEntity;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class SendificatorPacket implements PlayToServerPacket
 {
@@ -18,12 +18,12 @@ public class SendificatorPacket implements PlayToServerPacket
 	}
 	
 	@Override
-	public void encode(PacketBuffer buffer)
+	public void encode(FriendlyByteBuf buffer)
 	{
 		buffer.writeBlockPos(destinationBlockPos);
 	}
 	
-	public static SendificatorPacket decode(PacketBuffer buffer)
+	public static SendificatorPacket decode(FriendlyByteBuf buffer)
 	{
 		BlockPos destinationBlockPos = buffer.readBlockPos();
 		
@@ -31,12 +31,12 @@ public class SendificatorPacket implements PlayToServerPacket
 	}
 	
 	@Override
-	public void execute(ServerPlayerEntity player)
+	public void execute(ServerPlayer player)
 	{
-		Container playerContainer = player.containerMenu;
-		if(playerContainer instanceof SendificatorContainer)
+		AbstractContainerMenu playerContainer = player.containerMenu;
+		if(playerContainer instanceof SendificatorContainer sendificatorMenu)
 		{
-			((SendificatorContainer) playerContainer).getPosition().execute((level, machinePos) -> {
+			sendificatorMenu.getPosition().execute((level, machinePos) -> {
 				SendificatorTileEntity tileEntity = (SendificatorTileEntity) level.getBlockEntity(machinePos);
 				if(tileEntity != null)
 				{

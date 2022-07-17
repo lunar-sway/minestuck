@@ -1,10 +1,9 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.tileentity.redstone.WirelessRedstoneTransmitterTileEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
 
 public class WirelessRedstoneTransmitterPacket implements PlayToServerPacket
 {
@@ -18,13 +17,13 @@ public class WirelessRedstoneTransmitterPacket implements PlayToServerPacket
 	}
 	
 	@Override
-	public void encode(PacketBuffer buffer)
+	public void encode(FriendlyByteBuf buffer)
 	{
 		buffer.writeBlockPos(destinationBlockPos);
 		buffer.writeBlockPos(tileBlockPos);
 	}
 	
-	public static WirelessRedstoneTransmitterPacket decode(PacketBuffer buffer)
+	public static WirelessRedstoneTransmitterPacket decode(FriendlyByteBuf buffer)
 	{
 		BlockPos destinationBlockPos = buffer.readBlockPos();
 		BlockPos tileBlockPos = buffer.readBlockPos();
@@ -33,17 +32,15 @@ public class WirelessRedstoneTransmitterPacket implements PlayToServerPacket
 	}
 	
 	@Override
-	public void execute(ServerPlayerEntity player)
+	public void execute(ServerPlayer player)
 	{
 		if(player.level.isAreaLoaded(tileBlockPos, 0))
 		{
-			TileEntity te = player.level.getBlockEntity(tileBlockPos);
-			if(te instanceof WirelessRedstoneTransmitterTileEntity)
+			if(player.level.getBlockEntity(tileBlockPos) instanceof WirelessRedstoneTransmitterTileEntity transmitter)
 			{
-				BlockPos tePos = te.getBlockPos();
-				if(Math.sqrt(player.distanceToSqr(tePos.getX() + 0.5, tePos.getY() + 0.5, tePos.getZ() + 0.5)) <= 8)
+				if(Math.sqrt(player.distanceToSqr(tileBlockPos.getX() + 0.5, tileBlockPos.getY() + 0.5, tileBlockPos.getZ() + 0.5)) <= 8)
 				{
-					((WirelessRedstoneTransmitterTileEntity) te).setOffsetFromDestinationBlockPos(destinationBlockPos, te.getBlockState());
+					transmitter.setOffsetFromDestinationBlockPos(destinationBlockPos);
 				}
 			}
 		}

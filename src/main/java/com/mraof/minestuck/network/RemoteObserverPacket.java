@@ -1,12 +1,11 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.tileentity.redstone.RemoteObserverTileEntity;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -27,7 +26,7 @@ public class RemoteObserverPacket implements PlayToServerPacket
 	}
 	
 	@Override
-	public void encode(PacketBuffer buffer)
+	public void encode(FriendlyByteBuf buffer)
 	{
 		buffer.writeEnum(activeType);
 		buffer.writeInt(observingRange);
@@ -40,7 +39,7 @@ public class RemoteObserverPacket implements PlayToServerPacket
 		
 	}
 	
-	public static RemoteObserverPacket decode(PacketBuffer buffer)
+	public static RemoteObserverPacket decode(FriendlyByteBuf buffer)
 	{
 		RemoteObserverTileEntity.ActiveType activeType = buffer.readEnum(RemoteObserverTileEntity.ActiveType.class);
 		int observingRange = buffer.readInt();
@@ -51,16 +50,14 @@ public class RemoteObserverPacket implements PlayToServerPacket
 	}
 	
 	@Override
-	public void execute(ServerPlayerEntity player)
+	public void execute(ServerPlayer player)
 	{
 		if(player.level.isAreaLoaded(tileBlockPos, 0))
 		{
-			TileEntity te = player.level.getBlockEntity(tileBlockPos);
-			if(te instanceof RemoteObserverTileEntity)
+			if(player.level.getBlockEntity(tileBlockPos) instanceof RemoteObserverTileEntity observerTE)
 			{
 				if(Math.sqrt(player.distanceToSqr(tileBlockPos.getX() + 0.5, tileBlockPos.getY() + 0.5, tileBlockPos.getZ() + 0.5)) <= 8)
 				{
-					RemoteObserverTileEntity observerTE = ((RemoteObserverTileEntity) te);
 					observerTE.setActiveType(activeType);
 					if(entityType != null)
 						observerTE.setCurrentEntityType(entityType);

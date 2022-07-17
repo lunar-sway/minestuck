@@ -2,7 +2,7 @@ package com.mraof.minestuck.network.data;
 
 import com.mraof.minestuck.network.PlayToClientPacket;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 
 public class BoondollarDataPacket implements PlayToClientPacket
 {
@@ -19,12 +19,12 @@ public class BoondollarDataPacket implements PlayToClientPacket
 	}
 	
 	@Override
-	public void encode(PacketBuffer buffer)
+	public void encode(FriendlyByteBuf buffer)
 	{
 		buffer.writeLong(count);
 	}
 	
-	public static BoondollarDataPacket decode(PacketBuffer buffer)
+	public static BoondollarDataPacket decode(FriendlyByteBuf buffer)
 	{
 		long count = buffer.readLong();
 		return create(count);

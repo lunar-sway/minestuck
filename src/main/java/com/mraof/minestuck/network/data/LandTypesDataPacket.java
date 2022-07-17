@@ -6,26 +6,26 @@ import com.mraof.minestuck.network.PlayToClientPacket;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.World;
+import net.minecraft.core.Registry;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.Level;
 
 import java.util.Map;
 
 public class LandTypesDataPacket implements PlayToClientPacket
 {
-	private final Map<RegistryKey<World>, LandTypePair> types;
+	private final Map<ResourceKey<Level>, LandTypePair> types;
 	
-	public LandTypesDataPacket(Map<RegistryKey<World>, LandTypePair> types)
+	public LandTypesDataPacket(Map<ResourceKey<Level>, LandTypePair> types)
 	{
 		this.types = types;
 	}
 	
 	@Override
-	public void encode(PacketBuffer buffer)
+	public void encode(FriendlyByteBuf buffer)
 	{
-		for (Map.Entry<RegistryKey<World>, LandTypePair> entry : types.entrySet())
+		for (Map.Entry<ResourceKey<Level>, LandTypePair> entry : types.entrySet())
 		{
 			buffer.writeResourceLocation(entry.getKey().location());
 			buffer.writeRegistryId(entry.getValue().getTerrain());
@@ -33,13 +33,13 @@ public class LandTypesDataPacket implements PlayToClientPacket
 		}
 	}
 	
-	public static LandTypesDataPacket decode(PacketBuffer buffer)
+	public static LandTypesDataPacket decode(FriendlyByteBuf buffer)
 	{
-		ImmutableMap.Builder<RegistryKey<World>, LandTypePair> builder = new ImmutableMap.Builder<>();
+		ImmutableMap.Builder<ResourceKey<Level>, LandTypePair> builder = new ImmutableMap.Builder<>();
 		
 		while (buffer.isReadable())
 		{
-			RegistryKey<World> world = RegistryKey.create(Registry.DIMENSION_REGISTRY, buffer.readResourceLocation());
+			ResourceKey<Level> world = ResourceKey.create(Registry.DIMENSION_REGISTRY, buffer.readResourceLocation());
 			TerrainLandType terrain = buffer.readRegistryIdSafe(TerrainLandType.class);
 			TitleLandType title = buffer.readRegistryIdSafe(TitleLandType.class);
 			builder.put(world, new LandTypePair(terrain, title));
@@ -54,7 +54,7 @@ public class LandTypesDataPacket implements PlayToClientPacket
 		ClientDimensionData.receivePacket(this);
 	}
 	
-	public Map<RegistryKey<World>, LandTypePair> getTypes()
+	public Map<ResourceKey<Level>, LandTypePair> getTypes()
 	{
 		return types;
 	}
