@@ -20,7 +20,9 @@
       "trigger": "minecraft:consume_item",
       "conditions": {
         "item": {
-          "item": "minestuck:bug_on_a_stick"
+          "items": [
+            "minestuck:bug_on_a_stick"
+          ]
         }
       }
     },
@@ -28,7 +30,9 @@
       "trigger": "minecraft:consume_item",
       "conditions": {
         "item": {
-          "item": "minestuck:chocolate_beetle"
+          "items": [
+            "minestuck:chocolate_beetle"
+          ]
         }
       }
     },
@@ -36,7 +40,9 @@
       "trigger": "minecraft:consume_item",
       "conditions": {
         "item": {
-          "item": "minestuck:cone_of_flies"
+          "items": [
+            "minestuck:cone_of_flies"
+          ]
         }
       }
     },
@@ -44,7 +50,9 @@
       "trigger": "minecraft:consume_item",
       "conditions": {
         "item": {
-          "item": "minestuck:grasshopper"
+          "items": [
+            "minestuck:grasshopper"
+          ]
         }
       }
     },
@@ -52,7 +60,9 @@
       "trigger": "minecraft:consume_item",
       "conditions": {
         "item": {
-          "item": "minestuck:jar_of_bugs"
+          "items": [
+            "minestuck:jar_of_bugs"
+          ]
         }
       }
     }

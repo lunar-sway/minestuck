@@ -4,20 +4,15 @@ import com.google.gson.JsonObject;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.consort.EnumConsort;
-import net.minecraft.advancements.criterion.AbstractCriterionTrigger;
-import net.minecraft.advancements.criterion.CriterionInstance;
-import net.minecraft.advancements.criterion.EntityPredicate;
-import net.minecraft.advancements.criterion.ItemPredicate;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.ConditionArrayParser;
-import net.minecraft.loot.ConditionArraySerializer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.advancements.critereon.*;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.Objects;
 
-public class ConsortItemTrigger extends AbstractCriterionTrigger<ConsortItemTrigger.Instance>
+public class ConsortItemTrigger extends SimpleCriterionTrigger<ConsortItemTrigger.Instance>
 {
 	private static final ResourceLocation ID = new ResourceLocation(Minestuck.MOD_ID, "consort_item");
 	
@@ -28,26 +23,26 @@ public class ConsortItemTrigger extends AbstractCriterionTrigger<ConsortItemTrig
 	}
 	
 	@Override
-	protected Instance createInstance(JsonObject json, EntityPredicate.AndPredicate predicate, ConditionArrayParser conditionsParser)
+	protected Instance createInstance(JsonObject json, EntityPredicate.Composite predicate, DeserializationContext context)
 	{
-		String table = json.has("table") ? JSONUtils.getAsString(json, "table") : null;
+		String table = json.has("table") ? GsonHelper.getAsString(json, "table") : null;
 		ItemPredicate item = ItemPredicate.fromJson(json.get("item"));
-		EnumConsort.MerchantType type = json.has("type") ? EnumConsort.MerchantType.getFromName(JSONUtils.getAsString(json, "type")) : null;
+		EnumConsort.MerchantType type = json.has("type") ? EnumConsort.MerchantType.getFromName(GsonHelper.getAsString(json, "type")) : null;
 		return new Instance(predicate, table, item, type);
 	}
 	
-	public void trigger(ServerPlayerEntity player, String table, ItemStack item, ConsortEntity consort)
+	public void trigger(ServerPlayer player, String table, ItemStack item, ConsortEntity consort)
 	{
 		trigger(player, instance -> instance.test(table, item, consort.merchantType));
 	}
 	
-	public static class Instance extends CriterionInstance
+	public static class Instance extends AbstractCriterionTriggerInstance
 	{
 		private final String table;
 		private final ItemPredicate item;
 		private final EnumConsort.MerchantType type;
 		
-		public Instance(EntityPredicate.AndPredicate predicate, String table, ItemPredicate item, EnumConsort.MerchantType type)
+		public Instance(EntityPredicate.Composite predicate, String table, ItemPredicate item, EnumConsort.MerchantType type)
 		{
 			super(ID, predicate);
 			this.table = table;
@@ -57,7 +52,7 @@ public class ConsortItemTrigger extends AbstractCriterionTrigger<ConsortItemTrig
 		
 		public static Instance forType(EnumConsort.MerchantType type)
 		{
-			return new Instance(EntityPredicate.AndPredicate.ANY, null, ItemPredicate.ANY, type);
+			return new Instance(EntityPredicate.Composite.ANY, null, ItemPredicate.ANY, type);
 		}
 		
 		public boolean test(String table, ItemStack item, EnumConsort.MerchantType type)
@@ -66,9 +61,9 @@ public class ConsortItemTrigger extends AbstractCriterionTrigger<ConsortItemTrig
 		}
 		
 		@Override
-		public JsonObject serializeToJson(ConditionArraySerializer conditions)
+		public JsonObject serializeToJson(SerializationContext context)
 		{
-			JsonObject json = super.serializeToJson(conditions);
+			JsonObject json = super.serializeToJson(context);
 			if(table != null)
 				json.addProperty("table", table);
 			json.add("item", item.serializeToJson());

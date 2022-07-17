@@ -5,17 +5,15 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.inventory.captchalogue.ModusType;
 import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
-import net.minecraft.advancements.criterion.*;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.ConditionArrayParser;
-import net.minecraft.loot.ConditionArraySerializer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.advancements.critereon.*;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.Objects;
 
-public class CaptchalogueTrigger extends AbstractCriterionTrigger<CaptchalogueTrigger.Instance>
+public class CaptchalogueTrigger extends SimpleCriterionTrigger<CaptchalogueTrigger.Instance>
 {
 	private static final ResourceLocation ID = new ResourceLocation(Minestuck.MOD_ID, "captchalogue");
 	
@@ -26,25 +24,25 @@ public class CaptchalogueTrigger extends AbstractCriterionTrigger<CaptchalogueTr
 	}
 	
 	@Override
-	protected Instance createInstance(JsonObject json, EntityPredicate.AndPredicate predicate, ConditionArrayParser conditionsParser)
+	protected Instance createInstance(JsonObject json, EntityPredicate.Composite predicate, DeserializationContext context)
 	{
-		ModusType<?> modus = json.has("modus") ? ModusTypes.REGISTRY.getValue(new ResourceLocation(JSONUtils.getAsString(json, "modus"))) : null;
+		ModusType<?> modus = json.has("modus") ? ModusTypes.REGISTRY.getValue(new ResourceLocation(GsonHelper.getAsString(json, "modus"))) : null;
 		ItemPredicate item = json.has("item") ? ItemPredicate.fromJson(json.get("item")) : null;
-		MinMaxBounds.IntBound count = MinMaxBounds.IntBound.fromJson(json.get("count"));
+		MinMaxBounds.Ints count = MinMaxBounds.Ints.fromJson(json.get("count"));
 		return new Instance(predicate, modus, item, count);
 	}
 	
-	public void trigger(ServerPlayerEntity player, Modus modus, ItemStack item)
+	public void trigger(ServerPlayer player, Modus modus, ItemStack item)
 	{
 		trigger(player, instance -> instance.test(modus.getType(), item, modus.getNonEmptyCards()));
 	}
 	
-	public static class Instance extends CriterionInstance
+	public static class Instance extends AbstractCriterionTriggerInstance
 	{
 		private final ModusType<?> modus;
 		private final ItemPredicate item;
-		private final MinMaxBounds.IntBound count;
-		public Instance(EntityPredicate.AndPredicate predicate, ModusType<?> modus, ItemPredicate item, MinMaxBounds.IntBound count)
+		private final MinMaxBounds.Ints count;
+		public Instance(EntityPredicate.Composite predicate, ModusType<?> modus, ItemPredicate item, MinMaxBounds.Ints count)
 		{
 			super(ID, predicate);
 			this.modus = modus;
@@ -58,9 +56,9 @@ public class CaptchalogueTrigger extends AbstractCriterionTrigger<CaptchalogueTr
 		}
 		
 		@Override
-		public JsonObject serializeToJson(ConditionArraySerializer conditions)
+		public JsonObject serializeToJson(SerializationContext context)
 		{
-			JsonObject json = super.serializeToJson(conditions);
+			JsonObject json = super.serializeToJson(context);
 			if(modus != null)
 				json.addProperty("modus", modus.getRegistryName().toString());
 			json.add("item", item.serializeToJson());

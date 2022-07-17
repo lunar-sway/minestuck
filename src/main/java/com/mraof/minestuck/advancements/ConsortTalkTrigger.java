@@ -3,16 +3,12 @@ package com.mraof.minestuck.advancements;
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
-import net.minecraft.advancements.criterion.AbstractCriterionTrigger;
-import net.minecraft.advancements.criterion.CriterionInstance;
-import net.minecraft.advancements.criterion.EntityPredicate;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.loot.ConditionArrayParser;
-import net.minecraft.loot.ConditionArraySerializer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.advancements.critereon.*;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.GsonHelper;
 
-public class ConsortTalkTrigger extends AbstractCriterionTrigger<ConsortTalkTrigger.Instance>
+public class ConsortTalkTrigger extends SimpleCriterionTrigger<ConsortTalkTrigger.Instance>
 {
 	private static final ResourceLocation ID = new ResourceLocation(Minestuck.MOD_ID, "consort_talk");
 	
@@ -23,21 +19,21 @@ public class ConsortTalkTrigger extends AbstractCriterionTrigger<ConsortTalkTrig
 	}
 	
 	@Override
-	protected Instance createInstance(JsonObject json, EntityPredicate.AndPredicate predicate, ConditionArrayParser conditionsParser)
+	protected Instance createInstance(JsonObject json, EntityPredicate.Composite predicate, DeserializationContext context)
 	{
-		String message = json.has("message") ? JSONUtils.getAsString(json, "message") : null;
+		String message = json.has("message") ? GsonHelper.getAsString(json, "message") : null;
 		return new Instance(predicate, message);
 	}
 	
-	public void trigger(ServerPlayerEntity player, String message, ConsortEntity consort)
+	public void trigger(ServerPlayer player, String message, ConsortEntity consort)
 	{
 		trigger(player, instance -> instance.test(message));
 	}
 	
-	public static class Instance extends CriterionInstance
+	public static class Instance extends AbstractCriterionTriggerInstance
 	{
 		private final String message;
-		public Instance(EntityPredicate.AndPredicate predicate, String message)
+		public Instance(EntityPredicate.Composite predicate, String message)
 		{
 			super(ID, predicate);
 			this.message = message;
@@ -50,7 +46,7 @@ public class ConsortTalkTrigger extends AbstractCriterionTrigger<ConsortTalkTrig
 		
 		public static Instance forMessage(String message)
 		{
-			return new Instance(EntityPredicate.AndPredicate.ANY, message);
+			return new Instance(EntityPredicate.Composite.ANY, message);
 		}
 		
 		public boolean test(String message)
@@ -59,9 +55,9 @@ public class ConsortTalkTrigger extends AbstractCriterionTrigger<ConsortTalkTrig
 		}
 		
 		@Override
-		public JsonObject serializeToJson(ConditionArraySerializer conditions)
+		public JsonObject serializeToJson(SerializationContext context)
 		{
-			JsonObject json = super.serializeToJson(conditions);
+			JsonObject json = super.serializeToJson(context);
 			if(message != null)
 				json.addProperty("message", message);
 			

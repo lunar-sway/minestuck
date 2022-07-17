@@ -21,7 +21,9 @@
       "conditions": {
         "items": [
           {
-            "item": "minestuck:raw_cruxite"
+            "items": [
+              "minestuck:raw_cruxite"
+            ]
           }
         ]
       }

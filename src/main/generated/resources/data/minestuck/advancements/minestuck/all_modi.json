@@ -21,7 +21,9 @@
       "conditions": {
         "items": [
           {
-            "item": "minestuck:stack_modus_card"
+            "items": [
+              "minestuck:stack_modus_card"
+            ]
           }
         ]
       }
@@ -31,7 +33,9 @@
       "conditions": {
         "items": [
           {
-            "item": "minestuck:queue_modus_card"
+            "items": [
+              "minestuck:queue_modus_card"
+            ]
           }
         ]
       }
@@ -41,7 +45,9 @@
       "conditions": {
         "items": [
           {
-            "item": "minestuck:queuestack_modus_card"
+            "items": [
+              "minestuck:queuestack_modus_card"
+            ]
           }
         ]
       }
@@ -51,7 +57,9 @@
       "conditions": {
         "items": [
           {
-            "item": "minestuck:tree_modus_card"
+            "items": [
+              "minestuck:tree_modus_card"
+            ]
           }
         ]
       }
@@ -61,7 +69,9 @@
       "conditions": {
         "items": [
           {
-            "item": "minestuck:hashmap_modus_card"
+            "items": [
+              "minestuck:hashmap_modus_card"
+            ]
           }
         ]
       }
@@ -71,7 +81,9 @@
       "conditions": {
         "items": [
           {
-            "item": "minestuck:set_modus_card"
+            "items": [
+              "minestuck:set_modus_card"
+            ]
           }
         ]
       }

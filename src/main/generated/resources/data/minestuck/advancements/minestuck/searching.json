@@ -21,7 +21,9 @@
       "conditions": {
         "items": [
           {
-            "item": "minestuck:temple_scanner"
+            "items": [
+              "minestuck:temple_scanner"
+            ]
           }
         ]
       }
