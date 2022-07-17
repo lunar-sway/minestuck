@@ -11,9 +11,10 @@ import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,9 +47,9 @@ public class TotemLatheRecipeCategory implements IRecipeCategory<JeiCombination>
 	}
 
 	@Override
-	public String getTitle()
+	public Component getTitle()
 	{
-		return I18n.get(MSBlocks.TOTEM_LATHE.MIDDLE.get().getDescriptionId());
+		return new TranslatableComponent(MSBlocks.TOTEM_LATHE.MIDDLE.get().getDescriptionId());
 	}
 
 	@Override

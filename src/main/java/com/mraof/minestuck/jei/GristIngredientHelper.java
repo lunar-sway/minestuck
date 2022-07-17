@@ -4,6 +4,9 @@ import com.mraof.minestuck.item.crafting.alchemy.GristAmount;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import mezz.jei.api.ingredients.IIngredientHelper;
+import mezz.jei.api.ingredients.IIngredientType;
+import mezz.jei.api.ingredients.subtypes.UidContext;
+import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -19,17 +22,13 @@ public class GristIngredientHelper implements IIngredientHelper<GristAmount>
 			list.add(new GristAmount(gristType, 1));
 		return list;
 	}
-
-	@Nullable
+	
 	@Override
-	public GristAmount getMatch(Iterable<GristAmount> ingredients, GristAmount ingredientToMatch)
+	public IIngredientType<GristAmount> getIngredientType()
 	{
-		for(GristAmount grist : ingredients)
-			if(grist.getType() == ingredientToMatch.getType())
-				return grist;
-		return null;
+		return MinestuckJeiPlugin.GRIST;
 	}
-
+	
 	@Override
 	public String getDisplayName(GristAmount ingredient)
 	{
@@ -37,21 +36,16 @@ public class GristIngredientHelper implements IIngredientHelper<GristAmount>
 	}
 
 	@Override
-	public String getUniqueId(GristAmount ingredient)
+	public String getUniqueId(GristAmount ingredient, UidContext context)
 	{
 		return "grist:" + ingredient.getType().getRegistryName();
 	}
 
-	@Override
-	public String getWildcardId(GristAmount ingredient)
-	{
-		return getUniqueId(ingredient);
-	}
-
+	@SuppressWarnings("removal")	//getResourceLocation() replaces this. This function is fine to remove as soon as it is not required by IIngredientHelper
 	@Override
 	public String getModId(GristAmount ingredient)
 	{
-		return ingredient.getType().getRegistryName().getNamespace();
+		return getResourceLocation(ingredient).getNamespace();
 	}
 
 	@Override
@@ -59,13 +53,20 @@ public class GristIngredientHelper implements IIngredientHelper<GristAmount>
 	{
 		return Collections.emptyList();	//Not dealing with this right now
 	}
-
+	
+	@SuppressWarnings("removal")	//getResourceLocation() replaces this. This function is fine to remove as soon as it is not required by IIngredientHelper
 	@Override
 	public String getResourceId(GristAmount ingredient)
 	{
-		return ingredient.getType().getRegistryName().getPath();
+		return getResourceLocation(ingredient).getPath();
 	}
-
+	
+	@Override
+	public ResourceLocation getResourceLocation(GristAmount ingredient)
+	{
+		return ingredient.getType().getRegistryName();
+	}
+	
 	@Override
 	public GristAmount copyIngredient(GristAmount ingredient)
 	{

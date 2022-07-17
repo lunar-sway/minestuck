@@ -1,8 +1,8 @@
 package com.mraof.minestuck.jei;
 
 import com.mraof.minestuck.item.crafting.alchemy.CombinationMode;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 
 /**
  * A recipe object that takes away the complexity and open-endedness of minecraft recipes in favor

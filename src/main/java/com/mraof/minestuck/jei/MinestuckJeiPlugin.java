@@ -13,10 +13,10 @@ import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.registration.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.level.Level;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -80,9 +80,9 @@ public class MinestuckJeiPlugin implements IModPlugin
 	@Override
 	public void registerRecipes(IRecipeRegistration registration)
 	{
-		World world = Minecraft.getInstance().level;
-		Collection<IRecipe<?>> recipes = world.getRecipeManager().getRecipes();
-		registration.addRecipes(recipes.stream().filter(recipe -> recipe.getType() == MSRecipeTypes.GRIST_COST_TYPE).flatMap(recipe -> ((GristCostRecipe) recipe).getJeiCosts(world).stream()).collect(Collectors.toList()), GRIST_COST_ID);
+		Level level = Minecraft.getInstance().level;
+		Collection<Recipe<?>> recipes = level.getRecipeManager().getRecipes();
+		registration.addRecipes(recipes.stream().filter(recipe -> recipe.getType() == MSRecipeTypes.GRIST_COST_TYPE).flatMap(recipe -> ((GristCostRecipe) recipe).getJeiCosts(level).stream()).collect(Collectors.toList()), GRIST_COST_ID);
 		registration.addRecipes(recipes.stream().filter(recipe -> recipe.getType() == MSRecipeTypes.COMBINATION_TYPE).flatMap(recipe -> ((CombinationRecipe) recipe).getJeiCombinations().stream()).filter(combination -> combination.getMode() == CombinationMode.AND).collect(Collectors.toList()), LATHE_ID);
 		registration.addRecipes(recipes.stream().filter(recipe -> recipe.getType() == MSRecipeTypes.COMBINATION_TYPE).flatMap(recipe -> ((CombinationRecipe) recipe).getJeiCombinations().stream()).filter(combination -> combination.getMode() == CombinationMode.OR).collect(Collectors.toList()), DESIGNIX_ID);
 	}
