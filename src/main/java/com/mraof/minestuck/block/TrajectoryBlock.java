@@ -1,19 +1,20 @@
 package com.mraof.minestuck.block;
 
-import net.minecraft.block.*;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.IntegerProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -36,23 +37,23 @@ public class TrajectoryBlock extends MSDirectionalBlock
 	}
 	
 	@Override
-	public void fallOn(World worldIn, BlockPos pos, Entity entityIn, float fallDistance)
+	public void fallOn(Level level, BlockState state, BlockPos pos, Entity entityIn, float fallDistance)
 	{
-		BlockState trajectoryState = worldIn.getBlockState(pos);
+		BlockState trajectoryState = level.getBlockState(pos);
 		if(trajectoryState.getValue(FACING) == Direction.UP && trajectoryState.getValue(POWER) >= UPWARDS_POWER_MIN)
 		{
-			entityIn.causeFallDamage(fallDistance, 0.0F); //reduces damage if the trajectory block faces up and is powered a reasonable amount
+			entityIn.causeFallDamage(fallDistance, 0.0F, DamageSource.FALL); //reduces damage if the trajectory block faces up and is powered a reasonable amount
 		}
 		else
-			super.fallOn(worldIn, pos, entityIn, fallDistance);
+			super.fallOn(level, state, pos, entityIn, fallDistance);
 	}
 	
 	@Override
-	public void stepOn(World worldIn, BlockPos pos, Entity entityIn)
+	public void stepOn(Level level, BlockPos pos, BlockState state, Entity entityIn)
 	{
-		super.stepOn(worldIn, pos, entityIn);
-		BlockState blockState = worldIn.getBlockState(pos);
-		updatePower(worldIn, pos);
+		super.stepOn(level, pos, state, entityIn);
+		BlockState blockState = level.getBlockState(pos);
+		updatePower(level, pos);
 		
 		int power = blockState.getValue(POWER);
 		double powerMod = power / 16D;
@@ -65,41 +66,43 @@ public class TrajectoryBlock extends MSDirectionalBlock
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
-	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
 	{
-		super.neighborChanged(state, worldIn, pos, blockIn, fromPos, isMoving);
-		updatePower(worldIn, pos);
+		super.neighborChanged(state, level, pos, blockIn, fromPos, isMoving);
+		updatePower(level, pos);
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
-	public void onPlace(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving)
+	public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
 	{
-		super.onPlace(state, worldIn, pos, oldState, isMoving);
-		updatePower(worldIn, pos);
+		super.onPlace(state, level, pos, oldState, isMoving);
+		updatePower(level, pos);
 	}
 	
-	public void updatePower(World worldIn, BlockPos pos)
+	public void updatePower(Level level, BlockPos pos)
 	{
-		if(!worldIn.isClientSide)
+		if(!level.isClientSide)
 		{
-			BlockState state = worldIn.getBlockState(pos);
-			int powerInt = worldIn.getBestNeighborSignal(pos);
+			BlockState state = level.getBlockState(pos);
+			int powerInt = level.getBestNeighborSignal(pos);
 			if(state.getValue(POWER) != powerInt)
-				worldIn.setBlockAndUpdate(pos, state.setValue(POWER, powerInt));
+				level.setBlockAndUpdate(pos, state.setValue(POWER, powerInt));
 			
 			if(state.getValue(POWERED) != powerInt > 0)
-				worldIn.setBlockAndUpdate(pos, state.setValue(POWERED, powerInt > 0));
+				level.setBlockAndUpdate(pos, state.setValue(POWERED, powerInt > 0));
 		}
 	}
 	
 	@Override
-	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
+	public void animateTick(BlockState stateIn, Level level, BlockPos pos, Random rand)
 	{
 		if(stateIn.getValue(POWER) != 0 && rand.nextInt(10 - (stateIn.getValue(POWER) + 1) / 4) == 0) //at max power nextInt(6) == 0, at 1 to 4 power nextInt(9) == 0. More frequent at higher power
 		{
 			double powerMod = stateIn.getValue(POWER) / 120D + 0.075;
-			worldIn.addParticle(ParticleTypes.CLOUD, pos.getX() + 0.5, pos.above().getY() + 0.25, pos.getZ() + 0.5, stateIn.getValue(FACING).getStepX() * powerMod, stateIn.getValue(FACING).getStepY() * powerMod, stateIn.getValue(FACING).getStepZ() * powerMod);
+			level.addParticle(ParticleTypes.CLOUD, pos.getX() + 0.5, pos.above().getY() + 0.25, pos.getZ() + 0.5, stateIn.getValue(FACING).getStepX() * powerMod, stateIn.getValue(FACING).getStepY() * powerMod, stateIn.getValue(FACING).getStepZ() * powerMod);
 		}
 	}
 	
@@ -108,16 +111,16 @@ public class TrajectoryBlock extends MSDirectionalBlock
 	 */
 	@Nullable
 	@Override
-	public PathNodeType getAiPathNodeType(BlockState state, IBlockReader world, BlockPos pos, @Nullable MobEntity entity)
+	public BlockPathTypes getAiPathNodeType(BlockState state, BlockGetter level, BlockPos pos, @Nullable Mob entity)
 	{
 		if((state.getValue(POWER) >= UPWARDS_POWER_MIN && state.getValue(FACING) == Direction.UP) || (state.getValue(POWER) > 0 && state.getValue(FACING) != Direction.UP))
-			return PathNodeType.DANGER_OTHER;
+			return BlockPathTypes.DANGER_OTHER;
 		else
-			return PathNodeType.WALKABLE;
+			return BlockPathTypes.WALKABLE;
 	}
 	
 	@Override
-	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
 	{
 		super.createBlockStateDefinition(builder);
 		builder.add(POWER);

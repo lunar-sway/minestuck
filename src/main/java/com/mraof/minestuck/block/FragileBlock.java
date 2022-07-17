@@ -1,18 +1,18 @@
 package com.mraof.minestuck.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 /**
  * If the block is stepped on by a player and there is nothing directly underneath it to support it, it crumbles
@@ -29,48 +29,48 @@ public class FragileBlock extends Block
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	public VoxelShape getCollisionShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context)
+	public VoxelShape getCollisionShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context)
 	{
 		return COLLISION_SHAPE;
 	}
 	
 	@Override
-	public void entityInside(BlockState stateIn, World worldIn, BlockPos pos, Entity entityIn)
+	@SuppressWarnings("deprecation")
+	public void entityInside(BlockState stateIn, Level level, BlockPos pos, Entity entityIn)
 	{
-		attemptBreak(worldIn, entityIn, pos);
+		attemptBreak(level, entityIn, pos);
 	}
 	
 	@Override
-	public void fallOn(World worldIn, BlockPos pos, Entity entityIn, float fallDistance)
+	public void fallOn(Level level, BlockState state, BlockPos pos, Entity entityIn, float fallDistance)
 	{
-		super.fallOn(worldIn, pos, entityIn, fallDistance);
+		super.fallOn(level, state, pos, entityIn, fallDistance);
 		//TODO entityInside function covers most conditions but if a player sprint jumps there is a ~50% chance they will skip the check
-		attemptBreak(worldIn, entityIn, pos);
+		attemptBreak(level, entityIn, pos);
 	}
 	
-	public void attemptBreak(World worldIn, Entity entityIn, BlockPos pos)
+	public void attemptBreak(Level level, Entity entityIn, BlockPos pos)
 	{
-		if(entityIn instanceof PlayerEntity)
+		if(entityIn instanceof Player steppingPlayer)
 		{
-			PlayerEntity steppingPlayer = (PlayerEntity) entityIn;
 			
-			if(!worldIn.isClientSide)
+			if(!level.isClientSide)
 			{
-				AxisAlignedBB obfuscateBB = new AxisAlignedBB(pos);
+				AABB obfuscateBB = new AABB(pos);
 				
-				if(directionNeedsObfuscation(worldIn, pos.east()))
+				if(directionNeedsObfuscation(level, pos.east()))
 					obfuscateBB = obfuscateBB.contract(0.6, 0, 0); //reducing the size by .6 is necessary so that it breaks only once it has begun supporting the player
-				if(directionNeedsObfuscation(worldIn, pos.west()))
+				if(directionNeedsObfuscation(level, pos.west()))
 					obfuscateBB = obfuscateBB.contract(-0.6, 0, 0);
-				if(directionNeedsObfuscation(worldIn, pos.south()))
+				if(directionNeedsObfuscation(level, pos.south()))
 					obfuscateBB = obfuscateBB.contract(0, 0, 0.6);
-				if(directionNeedsObfuscation(worldIn, pos.north()))
+				if(directionNeedsObfuscation(level, pos.north()))
 					obfuscateBB = obfuscateBB.contract(0, 0, -0.6);
 				
-				if(steppingPlayer.getBoundingBox().intersects(obfuscateBB) && !isSecure(worldIn.getBlockState(pos.below())))
+				if(steppingPlayer.getBoundingBox().intersects(obfuscateBB) && !isSecure(level.getBlockState(pos.below())))
 				{
-					entityIn.makeStuckInBlock(worldIn.getBlockState(pos), new Vector3d(0.9F, 0.2, 0.9F));
-					worldIn.destroyBlock(pos, false);
+					entityIn.makeStuckInBlock(level.getBlockState(pos), new Vec3(0.9F, 0.2, 0.9F));
+					level.destroyBlock(pos, false);
 				}
 			}
 		}
@@ -79,11 +79,11 @@ public class FragileBlock extends Block
 	/**
 	 * will pretend to be solid if the block in this direction can support a players weight by itself
 	 */
-	public boolean directionNeedsObfuscation(World worldIn, BlockPos pos)
+	public boolean directionNeedsObfuscation(Level level, BlockPos pos)
 	{
-		BlockState state = worldIn.getBlockState(pos);
+		BlockState state = level.getBlockState(pos);
 		//returns true if the block in question is also a fragile block and the block below it cannot be replaced or if the block itself cannot be replaced
-		return state.getBlock() == this ? isSecure(worldIn.getBlockState(pos.below())) : isSecure(state);
+		return state.is(this) ? isSecure(level.getBlockState(pos.below())) : isSecure(state);
 	}
 	
 	public static boolean isSecure(BlockState state) {

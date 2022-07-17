@@ -1,16 +1,16 @@
 package com.mraof.minestuck.block;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.CakeBlock;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.core.BlockPos;
 import net.minecraft.stats.Stats;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.CakeBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 
 public abstract class CustomCakeBlock extends CakeBlock
 {
@@ -20,20 +20,20 @@ public abstract class CustomCakeBlock extends CakeBlock
 	}
 	
 	@Override
-	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
 	{
-		if (!worldIn.isClientSide)
+		if (!level.isClientSide)
 		{
-			return this.eatCake(worldIn, pos, state, player) ? ActionResultType.SUCCESS : ActionResultType.PASS;
+			return this.eatCake(level, pos, state, player) ? InteractionResult.SUCCESS : InteractionResult.PASS;
 		}
 		else
 		{
 			ItemStack itemstack = player.getItemInHand(hand);
-			return this.eatCake(worldIn, pos, state, player) ? ActionResultType.SUCCESS : itemstack.isEmpty() ? ActionResultType.CONSUME : ActionResultType.PASS;
+			return this.eatCake(level, pos, state, player) ? InteractionResult.SUCCESS : itemstack.isEmpty() ? InteractionResult.CONSUME : InteractionResult.PASS;
 		}
 	}
 	
-	public boolean eatCake(World worldIn, BlockPos pos, BlockState state, PlayerEntity player)
+	public boolean eatCake(Level level, BlockPos pos, BlockState state, Player player)
 	{
 		if (!player.canEat(false))
 		{
@@ -42,21 +42,21 @@ public abstract class CustomCakeBlock extends CakeBlock
 		else
 		{
 			player.awardStat(Stats.EAT_CAKE_SLICE);
-			applyEffects(worldIn, pos, state, player);
+			applyEffects(level, pos, state, player);
 			int i = state.getValue(BITES);
 			
 			if (i < 6)
 			{
-				worldIn.setBlock(pos, state.setValue(BITES, i + 1), Constants.BlockFlags.DEFAULT);
+				level.setBlock(pos, state.setValue(BITES, i + 1), Block.UPDATE_ALL);
 			}
 			else
 			{
-				worldIn.removeBlock(pos, false);
+				level.removeBlock(pos, false);
 			}
 			
 			return true;
 		}
 	}
 	
-	protected abstract void applyEffects(World worldIn, BlockPos pos, BlockState state, PlayerEntity player);
+	protected abstract void applyEffects(Level level, BlockPos pos, BlockState state, Player player);
 }

@@ -1,41 +1,39 @@
 package com.mraof.minestuck.tileentity;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.inventory.IClearable;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.Clearable;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
-public class CassettePlayerTileEntity extends TileEntity implements IClearable
+public class CassettePlayerTileEntity extends BlockEntity implements Clearable
 {
 	private ItemStack cassette = ItemStack.EMPTY;
 	
-	public CassettePlayerTileEntity()
+	public CassettePlayerTileEntity(BlockPos pos, BlockState state)
 	{
-		super(MSTileEntityTypes.CASSETTE_PLAYER.get());
+		super(MSTileEntityTypes.CASSETTE_PLAYER.get(), pos, state);
 	}
 	
 	@Override
-	public void load(BlockState state, CompoundNBT nbt)
+	public void load(CompoundTag nbt)
 	{
-		super.load(state, nbt);
+		super.load(nbt);
 		if(nbt.contains("CassetteItem", 10))
 		{
 			this.setCassette(ItemStack.of(nbt.getCompound("CassetteItem")));
 		}
-		
 	}
 	
 	@Override
-	public CompoundNBT save(CompoundNBT compound)
+	public void saveAdditional(CompoundTag compound)
 	{
-		super.save(compound);
+		super.saveAdditional(compound);
 		if(!this.getCassette().isEmpty())
 		{
-			compound.put("CassetteItem", this.getCassette().save(new CompoundNBT()));
+			compound.put("CassetteItem", this.getCassette().save(new CompoundTag()));
 		}
-		
-		return compound;
 	}
 	
 	public ItemStack getCassette()

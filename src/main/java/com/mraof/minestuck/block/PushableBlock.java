@@ -1,15 +1,19 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.util.MSTags;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.FallingBlock;
-import net.minecraft.entity.item.FallingBlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.item.FallingBlockEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.FallingBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 
 /**
  * Can be right clicked on one of its horizontal faces in order to push it in that direction, it will only destroy replaceables in its path.
@@ -24,23 +28,23 @@ public class PushableBlock extends FallingBlock
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
 	{
 		Direction direction = hit.getDirection().getOpposite();
-		if((direction.getAxis() == Direction.Axis.X || direction.getAxis() == Direction.Axis.Z) && isReplaceable(worldIn.getBlockState(pos.relative(direction))))
+		if((direction.getAxis() == Direction.Axis.X || direction.getAxis() == Direction.Axis.Z) && isReplaceable(level.getBlockState(pos.relative(direction))))
 		{
-			if(!worldIn.isClientSide)
+			if(!level.isClientSide)
 			{
-				worldIn.playSound(null, pos, SoundEvents.GRINDSTONE_USE, SoundCategory.BLOCKS, 0.6F, 1.3F);
-				worldIn.removeBlock(pos, false);
-				worldIn.destroyBlock(pos.relative(direction), true);
-				worldIn.setBlock(pos.relative(direction), state, Constants.BlockFlags.DEFAULT);
+				level.playSound(null, pos, SoundEvents.GRINDSTONE_USE, SoundSource.BLOCKS, 0.6F, 1.3F);
+				level.removeBlock(pos, false);
+				level.destroyBlock(pos.relative(direction), true);
+				level.setBlock(pos.relative(direction), state, Block.UPDATE_ALL);
 			}
 			
-			return ActionResultType.sidedSuccess(worldIn.isClientSide);
+			return InteractionResult.sidedSuccess(level.isClientSide);
 		}
 		
-		return ActionResultType.PASS;
+		return InteractionResult.PASS;
 	}
 	
 	@Override
@@ -50,13 +54,13 @@ public class PushableBlock extends FallingBlock
 	}
 	
 	@Override
-	public void onLand(World worldIn, BlockPos pos, BlockState fallingBlockState, BlockState replacedState, FallingBlockEntity fallingBlockEntity)
+	public void onLand(Level level, BlockPos pos, BlockState fallingBlockState, BlockState replacedState, FallingBlockEntity fallingBlockEntity)
 	{
-		worldIn.playSound(null, pos, SoundEvents.GILDED_BLACKSTONE_STEP, SoundCategory.BLOCKS, 0.5F, 0.3F);
+		level.playSound(null, pos, SoundEvents.GILDED_BLACKSTONE_STEP, SoundSource.BLOCKS, 0.5F, 0.3F);
 	}
 	
 	public static boolean isReplaceable(BlockState state)
 	{
-		return isFree(state) || MSTags.Blocks.PUSHABLE_BLOCK_REPLACABLE.contains(state.getBlock());
+		return isFree(state) || state.is(MSTags.Blocks.PUSHABLE_BLOCK_REPLACABLE);
 	}
 }

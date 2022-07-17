@@ -1,11 +1,11 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.block.machine.MachineMultiblock;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Material;
+import net.minecraftforge.registries.RegistryObject;
 
 public class LotusTimeCapsuleMultiblock extends MachineMultiblock
 {

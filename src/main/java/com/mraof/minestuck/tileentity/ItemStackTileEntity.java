@@ -2,23 +2,26 @@ package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.ColorHandler;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 
-public class ItemStackTileEntity extends TileEntity implements IColored
+public class ItemStackTileEntity extends BlockEntity implements IColored
 {
 	public static final ResourceLocation ITEM_DYNAMIC = new ResourceLocation(Minestuck.MOD_ID, "item");
 	
-	public ItemStackTileEntity()
+	public ItemStackTileEntity(BlockPos pos, BlockState state)
 	{
-		super(MSTileEntityTypes.ITEM_STACK.get());
+		super(MSTileEntityTypes.ITEM_STACK.get(), pos, state);
 	}
 	
 	private ItemStack stack = ItemStack.EMPTY;
@@ -44,46 +47,45 @@ public class ItemStackTileEntity extends TileEntity implements IColored
 	}
 	
 	@Override
-	public void load(BlockState state, CompoundNBT nbt)
+	public void load(CompoundTag nbt)
 	{
-		super.load(state, nbt);
+		super.load(nbt);
 		stack = ItemStack.of(nbt.getCompound("stack"));
 	}
 	
 	@Override
-	public CompoundNBT save(CompoundNBT compound)
+	public void saveAdditional(CompoundTag compound)
 	{
-		compound = super.save(compound);
-		compound.put("stack", stack.save(new CompoundNBT()));
-		return compound;
+		super.saveAdditional(compound);
+		compound.put("stack", stack.save(new CompoundTag()));
 	}
 	
 	@Override
-	public CompoundNBT getUpdateTag()
+	public CompoundTag getUpdateTag()
 	{
-		CompoundNBT nbt = super.getUpdateTag();
-		nbt.put("stack", stack.save(new CompoundNBT()));
+		CompoundTag nbt = super.getUpdateTag();
+		nbt.put("stack", stack.save(new CompoundTag()));
 		return nbt;
 	}
 	
 	
 	@Override
-	public void handleUpdateTag(BlockState state, CompoundNBT tag)
+	public void handleUpdateTag(CompoundTag tag)
 	{
 		stack = ItemStack.of(tag.getCompound("stack"));
 	}
 	
 	@Nullable
 	@Override
-	public SUpdateTileEntityPacket getUpdatePacket()
+	public Packet<ClientGamePacketListener> getUpdatePacket()
 	{
-		return new SUpdateTileEntityPacket(getBlockPos(), 2, getUpdateTag());
+		return ClientboundBlockEntityDataPacket.create(this);
 	}
 	
 	@Override
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
+	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt)
 	{
-		handleUpdateTag(getBlockState(), pkt.getTag());
+		handleUpdateTag(pkt.getTag());
 		if(level != null)
 		{
 			BlockState state = level.getBlockState(worldPosition);

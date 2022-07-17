@@ -1,17 +1,17 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.util.Debug;
-import net.minecraft.block.AbstractButtonBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.block.ButtonBlock;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Random;
 
-public class SpecialButtonBlock extends AbstractButtonBlock
+public class SpecialButtonBlock extends ButtonBlock
 {
 	
 	public final boolean explosive, wooden;
@@ -24,20 +24,20 @@ public class SpecialButtonBlock extends AbstractButtonBlock
 	}
 	
 	@Override
-	public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random)
+	public void tick(BlockState state, ServerLevel level, BlockPos pos, Random random)
 	{
 		boolean b = state.getValue(POWERED);
-		super.tick(state, worldIn, pos, random);
-		if(worldIn.getBlockState(pos).getBlock() != this)
+		super.tick(state, level, pos, random);
+		if(level.getBlockState(pos).getBlock() != this)
 		{
 			Debug.warn("Tick update without the correct block/position?");
 			return;
 		}
-		boolean b1 = worldIn.getBlockState(pos).getValue(POWERED);
+		boolean b1 = level.getBlockState(pos).getValue(POWERED);
 		if(explosive && b && !b1)
 		{
-			worldIn.removeBlock(pos, false);
-			worldIn.explode(null, (double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D, 1.5F, Explosion.Mode.DESTROY);
+			level.removeBlock(pos, false);
+			level.explode(null, (double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D, 1.5F, Explosion.BlockInteraction.DESTROY);
 		}
 	}
 	

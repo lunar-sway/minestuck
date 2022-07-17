@@ -4,53 +4,51 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.MSDimensions;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTDynamicOps;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.GlobalPos;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.Heightmap;
 
-public class SkaiaPortalTileEntity extends TileEntity //implements ITeleporter
+public class SkaiaPortalTileEntity extends BlockEntity //implements ITeleporter
 {
 	private GlobalPos destination = GlobalPos.of(MSDimensions.SKAIA, new BlockPos(0, -1, 0));
 	
-	public SkaiaPortalTileEntity()
+	public SkaiaPortalTileEntity(BlockPos pos, BlockState state)
 	{
-		super(MSTileEntityTypes.SKAIA_PORTAL.get());
+		super(MSTileEntityTypes.SKAIA_PORTAL.get(), pos, state);
 	}
 	
 	@Override
-	public void setLevelAndPosition(World worldIn, BlockPos pos)
+	public void setLevel(Level level)
 	{
-		super.setLevelAndPosition(worldIn, pos);
-		if(!worldIn.isClientSide && destination.dimension() == worldIn.dimension())
-			destination = GlobalPos.of(worldIn.dimension() == MSDimensions.SKAIA ? World.OVERWORLD : MSDimensions.SKAIA, destination.pos());
+		super.setLevel(level);
+		if(!level.isClientSide && destination.dimension() == level.dimension())
+			destination = GlobalPos.of(level.dimension() == MSDimensions.SKAIA ? Level.OVERWORLD : MSDimensions.SKAIA, destination.pos());
 	}
 	
 	@Override
-	public void load(BlockState state, CompoundNBT nbt)
+	public void load(CompoundTag nbt)
 	{
-		super.load(state, nbt);
-		if(nbt.contains("dest", Constants.NBT.TAG_COMPOUND))
-			destination = GlobalPos.CODEC.parse(NBTDynamicOps.INSTANCE, nbt.get("dest")).resultOrPartial(Debug::error).orElse(destination);
+		super.load(nbt);
+		if(nbt.contains("dest", Tag.TAG_COMPOUND))
+			destination = GlobalPos.CODEC.parse(NbtOps.INSTANCE, nbt.get("dest")).resultOrPartial(Debug::error).orElse(destination);
 	}
 	
 	@Override
-	public CompoundNBT save(CompoundNBT compound)
+	public void saveAdditional(CompoundTag compound)
 	{
-		super.save(compound);
-		GlobalPos.CODEC.encodeStart(NBTDynamicOps.INSTANCE, destination).resultOrPartial(Debug::error)
+		super.saveAdditional(compound);
+		GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, destination).resultOrPartial(Debug::error)
 				.ifPresent(tag -> compound.put("dest", tag));
-		
-		return compound;
 	}
 	
 	public void teleportEntity(Entity entity)
@@ -63,12 +61,12 @@ public class SkaiaPortalTileEntity extends TileEntity //implements ITeleporter
 		{
 			if(destination.pos().getY() < 0)
 			{
-				ServerWorld world = server.getLevel(destination.dimension());
+				ServerLevel world = server.getLevel(destination.dimension());
 				if(world == null)
 					return;
 				//TODO gets world height on a chunk that doesn't exist
 				// However doesn't matter a lot since the position isn't used yet
-				destination = GlobalPos.of(destination.dimension(), world.getHeightmapPos(Heightmap.Type.WORLD_SURFACE, entity.blockPosition()).above(5));
+				destination = GlobalPos.of(destination.dimension(), world.getHeightmapPos(Heightmap.Types.WORLD_SURFACE, entity.blockPosition()).above(5));
 			}
 			entity = Teleport.teleportEntity(entity, server.getLevel(destination.dimension()), worldPosition.getX() + 0.5, worldPosition.getY(), worldPosition.getZ() + 0.5);
 			if(entity != null)
@@ -78,7 +76,7 @@ public class SkaiaPortalTileEntity extends TileEntity //implements ITeleporter
 				entity.setPortalCooldown();
 	}
 	
-	private void placeDestPlatform(World world)
+	private void placeDestPlatform(Level level)
 	{
 		double x = worldPosition.getX();
 		double y = worldPosition.getY();
@@ -88,9 +86,9 @@ public class SkaiaPortalTileEntity extends TileEntity //implements ITeleporter
 		{
 			for(int blockZ = (int) z - 2; blockZ < z + 2; blockZ++)
 			{
-				world.setBlock(new BlockPos(blockX, (int) y - 1, blockZ), blocks[(blockX + blockZ) & 3].defaultBlockState(), Constants.BlockFlags.DEFAULT);
+				level.setBlock(new BlockPos(blockX, (int) y - 1, blockZ), blocks[(blockX + blockZ) & 3].defaultBlockState(), Block.UPDATE_ALL);
 				for(int blockY = (int) y; blockY < y + 6; blockY++)
-					world.removeBlock(new BlockPos(blockX, blockY, blockZ), false);
+					level.removeBlock(new BlockPos(blockX, blockY, blockZ), false);
 			}
 		}
 	}

@@ -5,6 +5,8 @@ import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.mraof.minestuck.tileentity.GateTileEntity;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
@@ -14,7 +16,7 @@ import net.minecraft.util.math.vector.Matrix3f;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3f;
 
-public class GateRenderer extends TileEntityRenderer<GateTileEntity>
+public class GateRenderer implements BlockEntityRenderer<GateTileEntity>
 {
 
 	private static final ResourceLocation INNER_NODE = new ResourceLocation("minestuck","textures/block/node_spiro_inner.png");
@@ -90,5 +92,11 @@ public class GateRenderer extends TileEntityRenderer<GateTileEntity>
 					.overlayCoords(OverlayTexture.NO_OVERLAY).uv2(combinedLightIn).normal(matrix3f2, 0.0F, 1.0F, 0.0F).endVertex();
 			matrixStackIn.popPose();
 		}
+	}
+	
+	@Override
+	public int getViewDistance()
+	{
+		return 256;
 	}
 }
