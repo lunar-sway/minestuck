@@ -1,40 +1,28 @@
 package com.mraof.minestuck.block.fluid;
 
 import com.mraof.minestuck.fluid.IMSFog;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.entity.Entity;
-import net.minecraft.fluid.FlowingFluid;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.function.Supplier;
 
 /**
  * This class allows for implementing most fluid blocks in the game
  */
-public class FlowingModFluidBlock extends FlowingFluidBlock implements IMSFog
+public class FlowingModFluidBlock extends LiquidBlock implements IMSFog
 {
-	protected final Vector3d fogColor;
+	protected final Vec3 fogColor;
 	protected final float fogDensity;
 	
-	public FlowingModFluidBlock(Supplier<? extends FlowingFluid> fluid, Properties properties)
-	{
-		this(fluid, null, 0, properties);
-	}
-	
-	public FlowingModFluidBlock(Supplier<? extends FlowingFluid> fluid, Vector3d fogColor, float fogDensity, Properties properties)
+	public FlowingModFluidBlock(Supplier<? extends FlowingFluid> fluid, Vec3 fogColor, float fogDensity, Properties properties)
 	{
 		super(fluid, properties);
 		this.fogColor = fogColor;
 		this.fogDensity = fogDensity;
-	}
-	
-	@Override
-	public Vector3d getFogColor(BlockState state, IWorldReader world, BlockPos pos, Entity entity, Vector3d originalColor, float partialTicks)
-	{
-		return fogColor != null ? fogColor : super.getFogColor(state, world, pos, entity, originalColor, partialTicks);
 	}
 	
 	@Override
@@ -44,7 +32,7 @@ public class FlowingModFluidBlock extends FlowingFluidBlock implements IMSFog
 	}
 	
 	@Override
-	public Vector3d getMSFogColor(BlockState state, IWorldReader world, BlockPos pos, Entity entity, Vector3d originalColor, float partialTicks)
+	public Vec3 getMSFogColor(LevelReader level, BlockPos pos, Entity entity, Vec3 originalColor, double partialTicks)
 	{
 		return fogColor;
 	}
