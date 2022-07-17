@@ -1,20 +1,20 @@
 package com.mraof.minestuck.client.renderer;
 
 import com.mraof.minestuck.tileentity.IColored;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.color.IBlockColor;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockDisplayReader;
+import net.minecraft.client.color.block.BlockColor;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 
-public class BlockColorCruxite implements IBlockColor
+public class BlockColorCruxite implements BlockColor
 {
 	@Override
-	public int getColor(BlockState state, @Nullable IBlockDisplayReader worldIn, @Nullable BlockPos pos, int tintIndex)
+	public int getColor(BlockState state, @Nullable BlockAndTintGetter level, @Nullable BlockPos pos, int tintIndex)
 	{
-		TileEntity tileEntity = worldIn != null && pos != null ? worldIn.getBlockEntity(pos) : null;
+		BlockEntity tileEntity = level != null && pos != null ? level.getBlockEntity(pos) : null;
 		if(tileEntity instanceof IColored)
 			return handleColorTint(((IColored) tileEntity).getColor(), tintIndex);
 		

@@ -1,38 +1,27 @@
 package com.mraof.minestuck.client.renderer.tileentity;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.tileentity.SkaiaPortalTileEntity;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GLAllocation;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3d;
-import org.lwjgl.opengl.GL11;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.resources.ResourceLocation;
 
-import java.nio.FloatBuffer;
-import java.util.Random;
-
-public class SkaiaPortalRenderer extends TileEntityRenderer<SkaiaPortalTileEntity>
+public class SkaiaPortalRenderer implements BlockEntityRenderer<SkaiaPortalTileEntity>
 {
 	private static final ResourceLocation tunnel = new ResourceLocation("minestuck","textures/tunnel.png");
     private static final ResourceLocation particlefield = new ResourceLocation("minestuck","textures/particlefield.png");
     
-    FloatBuffer floatBuffer = GLAllocation.createFloatBuffer(16);
+    //FloatBuffer floatBuffer = GLAllocation.createFloatBuffer(16);
 
-	public SkaiaPortalRenderer(TileEntityRendererDispatcher rendererDispatcherIn) {
-		super(rendererDispatcherIn);
-	}
+	public SkaiaPortalRenderer(BlockEntityRendererProvider.Context context)
+	{}
 
 	@Override
-	public void render(SkaiaPortalTileEntity tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn)
+	public void render(SkaiaPortalTileEntity tileEntityIn, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn)
 	{
-		Vector3d position = this.renderer.camera.getPosition();
+		/* TODO Restore this carefully. Make sure you understand the original renderer before attempting this
+		Vec3 position = this.renderer.camera.getPosition();
 
 		float var9 = (float) position.x;
 		float var10 = (float) position.y;
@@ -131,6 +120,6 @@ public class SkaiaPortalRenderer extends TileEntityRenderer<SkaiaPortalTileEntit
         this.floatBuffer.clear();
         this.floatBuffer.put(par1).put(par2).put(par3).put(par4);
         this.floatBuffer.flip();
-        return this.floatBuffer;
+        return this.floatBuffer;*/
     }
 }

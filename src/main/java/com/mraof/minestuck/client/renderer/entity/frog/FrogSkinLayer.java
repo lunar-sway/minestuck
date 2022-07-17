@@ -1,26 +1,28 @@
 package com.mraof.minestuck.client.renderer.entity.frog;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.client.model.FrogModel;
+import com.mraof.minestuck.client.model.MSModelLayers;
 import com.mraof.minestuck.entity.FrogEntity;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.entity.IEntityRenderer;
-import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.model.geom.EntityModelSet;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.RenderLayerParent;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.resources.ResourceLocation;
 
-public class FrogSkinLayer extends LayerRenderer<FrogEntity, FrogModel<FrogEntity>>
+public class FrogSkinLayer extends RenderLayer<FrogEntity, FrogModel<FrogEntity>>
 {
-	private final FrogModel<FrogEntity> frogModel = new FrogModel<>();
+	private final FrogModel<FrogEntity> frogModel;
 	private float colorMin = 0.25f;
-	private String name;
 
-	public FrogSkinLayer(IEntityRenderer<FrogEntity, FrogModel<FrogEntity>> renderIn)
+	public FrogSkinLayer(RenderLayerParent<FrogEntity, FrogModel<FrogEntity>> renderer, EntityModelSet modelSet)
 	{
-		super(renderIn);
+		super(renderer);
+		frogModel = new FrogModel<>(modelSet.bakeLayer(MSModelLayers.FROG));
 	}
 
 	@Override
-	public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, FrogEntity frog, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch)
+	public void render(PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn, FrogEntity frog, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch)
 	{
 		if (!frog.isInvisible()) {
 			int type = frog.getFrogType();
@@ -38,11 +40,11 @@ public class FrogSkinLayer extends LayerRenderer<FrogEntity, FrogModel<FrogEntit
 				if (b < this.colorMin)
 					b = this.colorMin;
 
-				coloredCutoutModelCopyLayerRender(this.getParentModel(), this.frogModel, this.getTexture(type), matrixStackIn, bufferIn, packedLightIn, frog, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, partialTicks, r, g, b);
+				coloredCutoutModelCopyLayerRender(this.getParentModel(), this.frogModel, this.getTexture(type), poseStack, bufferIn, packedLightIn, frog, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, partialTicks, r, g, b);
 			}
 			else
 			{
-				coloredCutoutModelCopyLayerRender(this.getParentModel(), this.frogModel, this.getTexture(type), matrixStackIn, bufferIn, packedLightIn, frog, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, partialTicks, 1.0F, 1.0F, 1.0F);
+				coloredCutoutModelCopyLayerRender(this.getParentModel(), this.frogModel, this.getTexture(type), poseStack, bufferIn, packedLightIn, frog, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, partialTicks, 1.0F, 1.0F, 1.0F);
 			}
 		}
 	}

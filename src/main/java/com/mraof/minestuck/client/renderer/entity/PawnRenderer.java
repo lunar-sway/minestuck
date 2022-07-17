@@ -1,17 +1,18 @@
 package com.mraof.minestuck.client.renderer.entity;
 
+import com.mraof.minestuck.client.model.MSModelLayers;
 import com.mraof.minestuck.entity.carapacian.PawnEntity;
-import net.minecraft.client.renderer.entity.BipedRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.model.BipedModel;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
+import net.minecraft.resources.ResourceLocation;
 
-public class PawnRenderer extends BipedRenderer<PawnEntity, BipedModel<PawnEntity>>
+public class PawnRenderer extends HumanoidMobRenderer<PawnEntity, HumanoidModel<PawnEntity>>
 {
 	
-	public PawnRenderer(EntityRendererManager manager, BipedModel modelBiped, float shadowSize)
+	public PawnRenderer(EntityRendererProvider.Context context)
 	{
-		super(manager, modelBiped, shadowSize);
+		super(context, new HumanoidModel<>(context.bakeLayer(MSModelLayers.PAWN)), 0.5F);
 	}
 	
 	@Override

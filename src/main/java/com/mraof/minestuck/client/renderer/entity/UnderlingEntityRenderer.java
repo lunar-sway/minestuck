@@ -2,10 +2,10 @@ package com.mraof.minestuck.client.renderer.entity;
 
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,9 +19,9 @@ public class UnderlingEntityRenderer<T extends UnderlingEntity, M extends Entity
 {
 	private final Map<GristType, ResourceLocation> textureMap = new HashMap<>();
 	
-	public UnderlingEntityRenderer(EntityRendererManager renderManager, M entityModel, float shadowSize)
+	public UnderlingEntityRenderer(EntityRendererProvider.Context context, M entityModel, float shadowSize)
 	{
-		super(renderManager, entityModel, shadowSize);
+		super(context, entityModel, shadowSize);
 	}
 	
 	@Override
