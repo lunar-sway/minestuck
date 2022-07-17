@@ -5,11 +5,11 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.client.renderer.BlockColorCruxite;
 import com.mraof.minestuck.item.FrogItem;
 import com.mraof.minestuck.item.MSItems;
-import net.minecraft.block.StemBlock;
-import net.minecraft.client.renderer.color.BlockColors;
-import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.client.renderer.color.ItemColors;
-import net.minecraft.item.ItemStack;
+import net.minecraft.client.color.block.BlockColors;
+import net.minecraft.client.color.item.ItemColor;
+import net.minecraft.client.color.item.ItemColors;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.StemBlock;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -43,7 +43,7 @@ public class ColorHandler
         }, MSBlocks.STRAWBERRY_STEM);
     }
 
-    protected static class FrogItemColor implements IItemColor
+    protected static class FrogItemColor implements ItemColor
     {
         public int getColor(ItemStack stack, int tintIndex)
         {
