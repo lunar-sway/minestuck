@@ -1,22 +1,23 @@
 package com.mraof.minestuck.world.lands;
 
-import net.minecraft.command.TimerCallbackManager;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.GameType;
-import net.minecraft.world.border.WorldBorder;
-import net.minecraft.world.storage.IServerWorldInfo;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.border.WorldBorder;
+import net.minecraft.world.level.storage.ServerLevelData;
+import net.minecraft.world.level.timers.TimerQueue;
 
+import javax.annotation.Nullable;
 import java.util.UUID;
 
-public class LandWorldInfo implements IServerWorldInfo
+public class LandWorldInfo implements ServerLevelData
 {
-	private final IServerWorldInfo wrapped;
+	private final ServerLevelData wrapped;
 	private final LandProperties.ForceType forceRain, forceThunder;
 	private final long dayTime;
 	
-	public LandWorldInfo(IServerWorldInfo wrapped,
+	public LandWorldInfo(ServerLevelData wrapped,
 						 LandProperties.ForceType forceRain, LandProperties.ForceType forceThunder, float skylight)
 	{
 		this.wrapped = wrapped;
@@ -215,6 +216,13 @@ public class LandWorldInfo implements IServerWorldInfo
 		wrapped.setWanderingTraderSpawnChance(spawnChance);
 	}
 	
+	@Nullable
+	@Override
+	public UUID getWanderingTraderId()
+	{
+		return wrapped.getWanderingTraderId();
+	}
+	
 	@Override
 	public void setWanderingTraderId(UUID id)
 	{
@@ -228,13 +236,13 @@ public class LandWorldInfo implements IServerWorldInfo
 	}
 	
 	@Override
-	public void setWorldBorder(WorldBorder.Serializer border)
+	public void setWorldBorder(WorldBorder.Settings border)
 	{
 		wrapped.setWorldBorder(border);
 	}
 	
 	@Override
-	public WorldBorder.Serializer getWorldBorder()
+	public WorldBorder.Settings getWorldBorder()
 	{
 		return wrapped.getWorldBorder();
 	}
@@ -264,7 +272,7 @@ public class LandWorldInfo implements IServerWorldInfo
 	}
 	
 	@Override
-	public TimerCallbackManager<MinecraftServer> getScheduledEvents()
+	public TimerQueue<MinecraftServer> getScheduledEvents()
 	{
 		return wrapped.getScheduledEvents();
 	}
@@ -280,4 +288,5 @@ public class LandWorldInfo implements IServerWorldInfo
 	{
 		wrapped.setDayTime(dayTime);
 	}
+	
 }

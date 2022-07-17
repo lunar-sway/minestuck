@@ -2,8 +2,8 @@ package com.mraof.minestuck.world.lands;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.gen.LandChunkGenerator;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.IServerWorldInfo;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.storage.ServerLevelData;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -18,18 +18,16 @@ public class WeatherManager
 	@SubscribeEvent
 	public static void onWorldLoad(WorldEvent.Load event)
 	{
-		if (event.getWorld() instanceof ServerWorld)
+		if (event.getWorld() instanceof ServerLevel level)
 		{
-			ServerWorld world = (ServerWorld) event.getWorld();
-			if (world.getChunkSource().getGenerator() instanceof LandChunkGenerator)
+			if (level.getChunkSource().getGenerator() instanceof LandChunkGenerator generator)
 			{
-				LandChunkGenerator generator = (LandChunkGenerator) world.getChunkSource().getGenerator();
 				LandProperties properties = LandProperties.create(generator.landTypes);
 				
-				if (world.levelData instanceof IServerWorldInfo)
-					world.levelData = new LandWorldInfo((IServerWorldInfo) world.levelData, properties.forceRain, properties.forceThunder, properties.skylightBase);
+				if (level.levelData instanceof ServerLevelData levelData)
+					level.levelData = new LandWorldInfo(levelData, properties.forceRain, properties.forceThunder, properties.skylightBase);
 				else
-					LOGGER.error("Expected level data on server side to be an instance of IServerWorldInfo. Was {}", world.levelData.getClass());
+					LOGGER.error("Expected level data on server side to be an instance of IServerWorldInfo. Was {}", level.levelData.getClass());
 			}
 		}
 	}

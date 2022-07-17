@@ -6,17 +6,17 @@ import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.world.gen.LandChunkGenerator;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraftforge.event.server.ServerStoppedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -40,39 +40,39 @@ public class GristLayerInfo
 	
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private static final Map<RegistryKey<World>, GristLayerInfo> infoByWorldMap = new HashMap<>();
+	private static final Map<ResourceKey<Level>, GristLayerInfo> infoByWorldMap = new HashMap<>();
 	
 	@SubscribeEvent
-	public static void serverStopped(FMLServerStoppedEvent event)
+	public static void serverStopped(ServerStoppedEvent event)
 	{
 		infoByWorldMap.clear();
 	}
 	
-	private static Optional<GristLayerInfo> initAndGetGristLayer(ServerWorld world)
+	private static Optional<GristLayerInfo> initAndGetGristLayer(ServerLevel level)
 	{
-		ChunkGenerator generator = world.getChunkSource().getGenerator();
+		ChunkGenerator generator = level.getChunkSource().getGenerator();
 		if (generator instanceof LandChunkGenerator) {
 			
 			long seed = ((LandChunkGenerator) generator).getSeed();
 			
 			GristType baseType;
-			SburbConnection connection = SburbHandler.getConnectionForDimension(world.getServer(), world.dimension());
+			SburbConnection connection = SburbHandler.getConnectionForDimension(level.getServer(), level.dimension());
 			if (connection != null)
 				baseType = connection.getBaseGrist();
 			else
 			{
-				LOGGER.error("Unable to find sburb connection for land dimension \"{}\" when creating grist layers. Defaulting to amber base type.", world.dimension().location());
+				LOGGER.error("Unable to find sburb connection for land dimension \"{}\" when creating grist layers. Defaulting to amber base type.", level.dimension().location());
 				baseType = GristTypes.AMBER.get();
 			}
 			
 			GristLayerInfo info = new GristLayerInfo(seed, baseType);
-			infoByWorldMap.put(world.dimension(), info);
+			infoByWorldMap.put(level.dimension(), info);
 			return Optional.of(info);
 		} else
 			return Optional.empty();
 	}
 	
-	public static Optional<GristLayerInfo> get(ServerWorld world)
+	public static Optional<GristLayerInfo> get(ServerLevel world)
 	{
 		if (infoByWorldMap.containsKey(world.dimension()))
 			return Optional.ofNullable(infoByWorldMap.get(world.dimension()));
@@ -114,12 +114,12 @@ public class GristLayerInfo
 		}
 	}
 	
-	public ITextComponent getGristLayerInfo(int x, int z)
+	public Component getGristLayerInfo(int x, int z)
 	{
 		GristType commonType = commonGristLayer.getTypeAt(x, z);
 		GristType uncommonType = uncommonGristLayer.getTypeAt(x, z);
 		GristType anyType = anyGristLayer.getTypeAt(x, z);
 		
-		return new TranslationTextComponent(INFO, commonType.getDisplayName(), uncommonType.getDisplayName(), anyType.getDisplayName());
+		return new TranslatableComponent(INFO, commonType.getDisplayName(), uncommonType.getDisplayName(), anyType.getDisplayName());
 	}
 }
