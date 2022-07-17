@@ -3,15 +3,14 @@ package com.mraof.minestuck.world.storage.loot.conditions;
 import com.google.gson.*;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.world.storage.loot.MSLootTables;
-import net.minecraft.entity.Entity;
-import net.minecraft.loot.ILootSerializer;
-import net.minecraft.loot.LootConditionType;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootParameters;
-import net.minecraft.loot.conditions.ILootCondition;
-import net.minecraft.util.JSONUtils;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 
-public class ConsortLootCondition implements ILootCondition
+public class ConsortLootCondition implements LootItemCondition
 {
 	private final EnumConsort[] consorts;
 	
@@ -21,7 +20,7 @@ public class ConsortLootCondition implements ILootCondition
 	}
 	
 	@Override
-	public LootConditionType getType()
+	public LootItemConditionType getType()
 	{
 		return MSLootTables.consortConditionType();
 	}
@@ -29,7 +28,7 @@ public class ConsortLootCondition implements ILootCondition
 	@Override
 	public boolean test(LootContext context)
 	{
-		Entity entity = context.getParamOrNull(LootParameters.THIS_ENTITY);
+		Entity entity = context.getParamOrNull(LootContextParams.THIS_ENTITY);
 		if(entity != null)
 			for(EnumConsort type : consorts)
 				if(type.isConsort(entity))
@@ -37,12 +36,12 @@ public class ConsortLootCondition implements ILootCondition
 		return false;
 	}
 	
-	public static IBuilder builder(EnumConsort... consorts)
+	public static Builder builder(EnumConsort... consorts)
 	{
 		return () -> new ConsortLootCondition(consorts);
 	}
 	
-	public static class Serializer implements ILootSerializer<ConsortLootCondition>
+	public static class Serializer implements net.minecraft.world.level.storage.loot.Serializer<ConsortLootCondition>
 	{
 		@Override
 		public void serialize(JsonObject json, ConsortLootCondition value, JsonSerializationContext context)
@@ -68,9 +67,9 @@ public class ConsortLootCondition implements ILootCondition
 				JsonArray list = json.getAsJsonArray("consort");
 				consorts = new EnumConsort[list.size()];
 				for(int i = 0; i < list.size(); i++)
-					consorts[i] = getType(JSONUtils.convertToString(list.get(i), "consort"));
+					consorts[i] = getType(GsonHelper.convertToString(list.get(i), "consort"));
 				
-			} else consorts = new EnumConsort[] {getType(JSONUtils.getAsString(json, "consort"))};
+			} else consorts = new EnumConsort[] {getType(GsonHelper.getAsString(json, "consort"))};
 			return new ConsortLootCondition(consorts);
 		}
 		

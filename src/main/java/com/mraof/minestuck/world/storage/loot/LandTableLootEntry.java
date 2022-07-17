@@ -5,28 +5,32 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandTypePair;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.*;
-import net.minecraft.loot.conditions.ILootCondition;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntry;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryType;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Field;
-import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-public class LandTableLootEntry extends LootEntry
+public class LandTableLootEntry extends LootPoolEntryContainer
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	private final ResourceLocation table;
 	private final String poolName;
 	
-	private LandTableLootEntry(ResourceLocation table, String pool, ILootCondition[] conditions)
+	private LandTableLootEntry(ResourceLocation table, String pool, LootItemCondition[] conditions)
 	{
 		super(conditions);
 		this.table = table;
@@ -40,7 +44,7 @@ public class LandTableLootEntry extends LootEntry
 	}
 	
 	@Override
-	public boolean expand(LootContext context, Consumer<ILootGenerator> lootGenCollector)
+	public boolean expand(LootContext context, Consumer<LootPoolEntry> lootGenCollector)
 	{
 		LandTypePair aspects = MSDimensions.getAspects(context.getLevel().getServer(), context.getLevel().dimension());
 		if(canRun(context) && aspects != null)
@@ -57,7 +61,7 @@ public class LandTableLootEntry extends LootEntry
 		return false;
 	}
 	
-	private void expandFrom(ResourceLocation tableName, LootContext context, Consumer<ILootGenerator> lootGenCollector)
+	private void expandFrom(ResourceLocation tableName, LootContext context, Consumer<LootPoolEntry> lootGenCollector)
 	{
 		LootTable lootTable = context.getLootTable(tableName);
 		//noinspection ConstantConditions
@@ -72,14 +76,14 @@ public class LandTableLootEntry extends LootEntry
 			//noinspection ConstantConditions
 			if(pool != null)
 			{
-				List<LootEntry> entries = accessWithReflection(pool);
+				LootPoolEntryContainer[] entries = accessWithReflection(pool);
 				if(entries != null)
 				{
-					for(LootEntry entry : entries)
+					for(LootPoolEntryContainer entry : entries)
 						entry.expand(context, lootGenCollector);
 				} else
 				{
-					lootGenCollector.accept(new ILootGenerator()
+					lootGenCollector.accept(new LootPoolEntry()
 					{
 						@Override
 						public int getWeight(float v)
@@ -111,16 +115,15 @@ public class LandTableLootEntry extends LootEntry
 	{
 		try
 		{
-			return ObfuscationReflectionHelper.findField(LootPool.class, "field_186453_a");	//LootPool.entries
+			return ObfuscationReflectionHelper.findField(LootPool.class, "f_79023_");
 		} catch(ObfuscationReflectionHelper.UnableToFindFieldException e)
 		{
-			LOGGER.error("Unable to get field for lootPool.entries. Will be unable to fully insert loot from land type loot tables.", e);
+			LOGGER.error("Unable to get field for lootPool.lootEntries. Will be unable to fully insert loot from land type loot tables.", e);
 			return null;
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
-	private List<LootEntry> accessWithReflection(LootPool pool)
+	private LootPoolEntryContainer[] accessWithReflection(LootPool pool)
 	{
 		if(lootEntries == null)
 			return null;
@@ -128,7 +131,7 @@ public class LandTableLootEntry extends LootEntry
 		{
 			try
 			{
-				return (List<LootEntry>) lootEntries.get(pool);
+				return (LootPoolEntryContainer[]) lootEntries.get(pool);
 			} catch(Exception e)
 			{
 				LOGGER.error("Got exception when accessing loot entries field for loot pool. Will use simpler behaviour for this time.", e);
@@ -146,10 +149,10 @@ public class LandTableLootEntry extends LootEntry
 			json.addProperty("pool", entryIn.poolName);
 		}
 		
-		public final LandTableLootEntry deserializeCustom(JsonObject json, JsonDeserializationContext context, ILootCondition[] conditions)
+		public final LandTableLootEntry deserializeCustom(JsonObject json, JsonDeserializationContext context, LootItemCondition[] conditions)
 		{
-			ResourceLocation table = new ResourceLocation(JSONUtils.getAsString(json, "name"));
-			String pool = JSONUtils.getAsString(json, "pool");
+			ResourceLocation table = new ResourceLocation(GsonHelper.getAsString(json, "name"));
+			String pool = GsonHelper.getAsString(json, "pool");
 			return new LandTableLootEntry(table, pool, conditions);
 		}
 	}
@@ -182,7 +185,7 @@ public class LandTableLootEntry extends LootEntry
 		}
 		
 		@Override
-		public LootEntry build()
+		public LootPoolEntryContainer build()
 		{
 			if(pool == null)
 				throw new IllegalArgumentException("Pool not set");

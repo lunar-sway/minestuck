@@ -4,11 +4,15 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.storage.loot.conditions.ConsortLootCondition;
 import com.mraof.minestuck.world.storage.loot.conditions.LandTypeLootCondition;
 import com.mraof.minestuck.world.storage.loot.functions.SetBoondollarCount;
-import net.minecraft.loot.*;
-import net.minecraft.loot.conditions.ILootCondition;
-import net.minecraft.loot.functions.ILootFunction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.storage.loot.Serializer;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryType;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 
 public class MSLootTables
 {
@@ -19,9 +23,9 @@ public class MSLootTables
 	public static final ResourceLocation CONSORT_FOOD_STOCK = new ResourceLocation("minestuck", "gameplay/consort_food");
 	public static final ResourceLocation CONSORT_GENERAL_STOCK = new ResourceLocation("minestuck", "gameplay/consort_general");
 	
-	private static LootConditionType LAND_TYPE_CONDITION;
-	private static LootConditionType CONSORT_CONDITION;
-	private static LootFunctionType SET_BOONDOLLAR_FUNCTION;
+	private static LootItemConditionType LAND_TYPE_CONDITION;
+	private static LootItemConditionType CONSORT_CONDITION;
+	private static LootItemFunctionType SET_BOONDOLLAR_FUNCTION;
 	private static LootPoolEntryType LAND_TABLE_ENTRY;
 	
 	public static void registerLootSerializers()
@@ -32,17 +36,17 @@ public class MSLootTables
 		LAND_TABLE_ENTRY = registerEntry("land_table", new LandTableLootEntry.SerializerImpl());
 	}
 	
-	public static LootConditionType landTypeConditionType()
+	public static LootItemConditionType landTypeConditionType()
 	{
 		return LAND_TYPE_CONDITION;
 	}
 	
-	public static LootConditionType consortConditionType()
+	public static LootItemConditionType consortConditionType()
 	{
 		return CONSORT_CONDITION;
 	}
 	
-	public static LootFunctionType setBoondollarFunctionType()
+	public static LootItemFunctionType setBoondollarFunctionType()
 	{
 		return SET_BOONDOLLAR_FUNCTION;
 	}
@@ -54,17 +58,17 @@ public class MSLootTables
 	
 	//Currently does not have a forge registry, so we'll have to register it this way
 	
-	private static LootConditionType registerCondition(String name, ILootSerializer<? extends ILootCondition> serializer)
+	private static LootItemConditionType registerCondition(String name, Serializer<? extends LootItemCondition> serializer)
 	{
-		return Registry.register(Registry.LOOT_CONDITION_TYPE, new ResourceLocation(Minestuck.MOD_ID, name), new LootConditionType(serializer));
+		return Registry.register(Registry.LOOT_CONDITION_TYPE, new ResourceLocation(Minestuck.MOD_ID, name), new LootItemConditionType(serializer));
 	}
 	
-	private static LootFunctionType registerFunction(String name, ILootSerializer<? extends ILootFunction> serializer)
+	private static LootItemFunctionType registerFunction(String name, Serializer<? extends LootItemFunction> serializer)
 	{
-		return Registry.register(Registry.LOOT_FUNCTION_TYPE, new ResourceLocation(Minestuck.MOD_ID, name), new LootFunctionType(serializer));
+		return Registry.register(Registry.LOOT_FUNCTION_TYPE, new ResourceLocation(Minestuck.MOD_ID, name), new LootItemFunctionType(serializer));
 	}
 	
-	private static LootPoolEntryType registerEntry(String name, ILootSerializer<? extends LootEntry> serializer)
+	private static LootPoolEntryType registerEntry(String name, Serializer<? extends LootPoolEntryContainer> serializer)
 	{
 		return Registry.register(Registry.LOOT_POOL_ENTRY_TYPE, new ResourceLocation(Minestuck.MOD_ID, name), new LootPoolEntryType(serializer));
 	}

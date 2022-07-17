@@ -5,22 +5,26 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.mraof.minestuck.item.BoondollarsItem;
 import com.mraof.minestuck.world.storage.loot.MSLootTables;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.*;
-import net.minecraft.loot.conditions.ILootCondition;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 
-public class SetBoondollarCount extends LootFunction
+public class SetBoondollarCount extends LootItemConditionalFunction
 {
-	private final IRandomRange countRange;
+	private final NumberProvider countRange;
 	
-	public SetBoondollarCount(ILootCondition[] conditionsIn, IRandomRange countRangeIn)
+	public SetBoondollarCount(LootItemCondition[] conditionsIn, NumberProvider countRangeIn)
 	{
 		super(conditionsIn);
 		this.countRange = countRangeIn;
 	}
 	
 	@Override
-	public LootFunctionType getType()
+	public LootItemFunctionType getType()
 	{
 		return MSLootTables.setBoondollarFunctionType();
 	}
@@ -28,24 +32,24 @@ public class SetBoondollarCount extends LootFunction
 	@Override
 	protected ItemStack run(ItemStack stack, LootContext context)
 	{
-		return BoondollarsItem.setCount(stack, countRange.getInt(context.getRandom()));
+		return BoondollarsItem.setCount(stack, countRange.getInt(context));
 	}
 	
-	public static LootFunction.Builder<?> builder(IRandomRange range)
+	public static LootItemConditionalFunction.Builder<?> builder(NumberProvider range)
 	{
 		return simpleBuilder((conditions) -> new SetBoondollarCount(conditions, range));
 	}
 	
-	public static class Serializer extends LootFunction.Serializer<SetBoondollarCount>
+	public static class Serializer extends LootItemConditionalFunction.Serializer<SetBoondollarCount>
 	{
-		public void serialize(JsonObject object, SetBoondollarCount functionClazz, JsonSerializationContext serializationContext)
+		public void serialize(JsonObject object, SetBoondollarCount function, JsonSerializationContext context)
 		{
-			object.add("count", RandomRanges.serialize(functionClazz.countRange, serializationContext));
+			object.add("count", context.serialize(function.countRange));
 		}
 		
-		public SetBoondollarCount deserialize(JsonObject object, JsonDeserializationContext deserializationContext, ILootCondition[] conditionsIn)
+		public SetBoondollarCount deserialize(JsonObject object, JsonDeserializationContext context, LootItemCondition[] conditionsIn)
 		{
-			return new SetBoondollarCount(conditionsIn, RandomRanges.deserialize(object.get("count"), deserializationContext));
+			return new SetBoondollarCount(conditionsIn, GsonHelper.getAsObject(object, "count", context, NumberProvider.class));
 		}
 	}
 }

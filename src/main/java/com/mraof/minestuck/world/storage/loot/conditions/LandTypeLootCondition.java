@@ -8,20 +8,19 @@ import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import com.mraof.minestuck.world.storage.loot.MSLootTables;
-import net.minecraft.loot.ILootSerializer;
-import net.minecraft.loot.LootConditionType;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.conditions.ILootCondition;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 
-public class LandTypeLootCondition implements ILootCondition
+public class LandTypeLootCondition implements LootItemCondition
 {
 	
 	private final Set<ResourceLocation> terrainGroups;
@@ -41,7 +40,7 @@ public class LandTypeLootCondition implements ILootCondition
 	}
 	
 	@Override
-	public LootConditionType getType()
+	public LootItemConditionType getType()
 	{
 		return MSLootTables.landTypeConditionType();
 	}
@@ -49,11 +48,11 @@ public class LandTypeLootCondition implements ILootCondition
 	@Override
 	public boolean test(LootContext context)
 	{
-		ServerWorld world = context.getLevel();
+		ServerLevel level = context.getLevel();
 		
-		if(world != null && MSDimensions.isLandDimension(world.getServer(), world.dimension()))
+		if(level != null && MSDimensions.isLandDimension(level.getServer(), level.dimension()))
 		{
-			LandTypePair aspects = MSDimensions.getAspects(world.getServer(), world.dimension());
+			LandTypePair aspects = MSDimensions.getAspects(level.getServer(), level.dimension());
 			
 			if(aspects != null && (terrainTypes.contains(aspects.getTerrain()) || titleTypes.contains(aspects.getTitle())
 					|| terrainGroups.contains(aspects.getTerrain().getGroup()) || titleGroups.contains(aspects.getTitle().getGroup())))
@@ -63,7 +62,7 @@ public class LandTypeLootCondition implements ILootCondition
 		return inverted;
 	}
 	
-	public static class Serializer implements ILootSerializer<LandTypeLootCondition>
+	public static class Serializer implements net.minecraft.world.level.storage.loot.Serializer<LandTypeLootCondition>
 	{
 		@Override
 		public void serialize(JsonObject json, LandTypeLootCondition value, JsonSerializationContext context)
@@ -82,7 +81,7 @@ public class LandTypeLootCondition implements ILootCondition
 			Set<ResourceLocation> titleGroups = deserializeSet(json, "title_group", ResourceLocation::new);
 			Set<TerrainLandType> terrainTypes = deserializeSet(json, "terrain_type", s -> LandTypes.TERRAIN_REGISTRY.getValue(new ResourceLocation(s)));
 			Set<TitleLandType> titleTypes = deserializeSet(json, "title_type", s -> LandTypes.TITLE_REGISTRY.getValue(new ResourceLocation(s)));
-			boolean inverted = JSONUtils.getAsBoolean(json, "inverse", false);
+			boolean inverted = GsonHelper.getAsBoolean(json, "inverse", false);
 			return new LandTypeLootCondition(terrainGroups, titleGroups, terrainTypes, titleTypes, inverted);
 		}
 	}
@@ -114,13 +113,13 @@ public class LandTypeLootCondition implements ILootCondition
 				ImmutableSet.Builder<T> builder = ImmutableSet.builder();
 				for(int i = 0; i < list.size(); i++)
 				{
-					String str = JSONUtils.convertToString(list.get(i), name);
+					String str = GsonHelper.convertToString(list.get(i), name);
 					builder.add(Objects.requireNonNull(fromString.apply(str), "Unable to parse "+str+" for type "+name));
 				}
 				return builder.build();
 			} else
 			{
-				String str = JSONUtils.getAsString(json, name);
+				String str = GsonHelper.getAsString(json, name);
 				return ImmutableSet.of(Objects.requireNonNull(fromString.apply(str), "Unable to parse "+str+" for type "+name));
 			}
 		} else return Collections.emptySet();
