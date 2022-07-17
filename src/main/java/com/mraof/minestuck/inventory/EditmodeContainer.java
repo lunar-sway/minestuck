@@ -7,33 +7,33 @@ import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.EditmodeInventoryPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.skaianet.SburbConnection;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class EditmodeContainer extends Container
+public class EditmodeContainer extends AbstractContainerMenu
 {
 	
-	private final PlayerEntity player;
-	private final Inventory inventory = new Inventory(14);
+	private final Player player;
+	private final Container inventory = new SimpleContainer(14);
 	private List<ItemStack> items  = new ArrayList<>();
 	private int scroll;
 	
-	public EditmodeContainer(int windowId, PlayerInventory playerInventory)
+	public EditmodeContainer(int windowId, Inventory playerInventory)
 	{
 		super(MSContainerTypes.EDIT_MODE, windowId);
 		this.player = playerInventory.player;
 		addSlots();
-		if(player instanceof ServerPlayerEntity)
+		if(player instanceof ServerPlayer)
 		{
 			updateInventory();
 		}
@@ -42,19 +42,19 @@ public class EditmodeContainer extends Container
 	public void updateScroll(boolean increase)
 	{
 		scroll += increase ? 1 : -1;
-		scroll = MathHelper.clamp(scroll, 0, items.size()/2-7);
+		scroll = Mth.clamp(scroll, 0, items.size()/2-7);
 		
 		sendPacket();
 	}
 	
 	@Override
-	public boolean stillValid(PlayerEntity player)
+	public boolean stillValid(Player player)
 	{
 		return player == this.player;
 	}
 	
 	@Override
-	public ItemStack quickMoveStack(PlayerEntity player, int slotIndex)
+	public ItemStack quickMoveStack(Player player, int slotIndex)
 	{
 		if(slotIndex >= 14 && slotIndex < this.slots.size())
 		{
@@ -85,7 +85,7 @@ public class EditmodeContainer extends Container
 			addSlot(new InventorySlot(inventory, i, 26+(i/2)*18, 16+(i%2)*18));
 		
 		for(int i = 0; i < 9; i++)
-			addSlot(new ToolbarSlot(player.inventory, i, 8+i*18, 74));
+			addSlot(new ToolbarSlot(player.getInventory(), i, 8+i*18, 74));
 	}
 	
 	private void updateInventory()
@@ -126,7 +126,7 @@ public class EditmodeContainer extends Container
 	
 	private void sendPacket()
 	{
-		if(!(player instanceof ServerPlayerEntity))
+		if(!(player instanceof ServerPlayer serverPlayer))
 			throw new IllegalStateException("Can't send update packet to player! Found player object "+player+".");
 		
 		ArrayList<ItemStack> itemList = new ArrayList<>();
@@ -137,7 +137,7 @@ public class EditmodeContainer extends Container
 		}
 		
 		EditmodeInventoryPacket packet = EditmodeInventoryPacket.update(itemList, scroll > 0, scroll*2 + 14 < items.size());
-		MSPacketHandler.sendToPlayer(packet, (ServerPlayerEntity) player);
+		MSPacketHandler.sendToPlayer(packet, serverPlayer);
 	}
 	
 	public void receiveUpdatePacket(EditmodeInventoryPacket packet)
@@ -153,7 +153,7 @@ public class EditmodeContainer extends Container
 	private static class ToolbarSlot extends Slot
 	{
 		
-		ToolbarSlot(IInventory inventory, int index, int x, int y)
+		ToolbarSlot(Container inventory, int index, int x, int y)
 		{
 			super(inventory, index, x, y);
 		}
@@ -169,7 +169,7 @@ public class EditmodeContainer extends Container
 	private static class InventorySlot extends ToolbarSlot
 	{
 		
-		InventorySlot(IInventory inventory, int index, int x, int y)
+		InventorySlot(Container inventory, int index, int x, int y)
 		{
 			super(inventory, index, x, y);
 		}

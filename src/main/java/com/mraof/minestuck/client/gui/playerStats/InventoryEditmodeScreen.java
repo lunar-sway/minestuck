@@ -1,15 +1,17 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.inventory.EditmodeContainer;
 import com.mraof.minestuck.network.EditmodeInventoryPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
-import net.minecraft.client.audio.SimpleSound;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.player.Inventory;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -25,20 +27,22 @@ public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<Editmode
 	
 	public boolean more, less;
 	
-	public InventoryEditmodeScreen(int windowId, PlayerInventory playerInventory)
+	public InventoryEditmodeScreen(int windowId, Inventory playerInventory)
 	{
-		super(new EditmodeContainer(windowId, playerInventory), playerInventory, new TranslationTextComponent(TITLE));
+		super(new EditmodeContainer(windowId, playerInventory), playerInventory, new TranslatableComponent(TITLE));
 		guiWidth = 176;
 		guiHeight = 98;
 	}
 	
 	@Override
-	protected void renderBg(MatrixStack matrixStack, float par1, int xcor, int ycor)
+	protected void renderBg(PoseStack poseStack, float par1, int xcor, int ycor)
 	{
-		drawTabs(matrixStack);
+		drawTabs(poseStack);
 		
-		minecraft.getTextureManager().bind(guiBackground);
-		this.blit(matrixStack, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
+		RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
+		RenderSystem.setShaderColor(1, 1, 1, 1);
+		RenderSystem.setShaderTexture(0, guiBackground);
+		this.blit(poseStack, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
 		LocalDate localdate = LocalDate.now();
 		int d = localdate.getDayOfMonth();
@@ -47,17 +51,17 @@ public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<Editmode
 		boolean b2 = !b1 && (m == Month.APRIL && d == 13 || m == Month.JUNE && d == 12
 				|| m == Month.OCTOBER && d == 25 || m == Month.NOVEMBER && d == 11
 				|| m == Month.NOVEMBER && d == 27);
-		this.blit(matrixStack, xOffset+leftArrowX, yOffset+arrowY, guiWidth + (b2?36:0), (less?0:18) + (b1?36:0), 18, 18);
-		this.blit(matrixStack, xOffset+rightArrowX, yOffset+arrowY, guiWidth+18 + (b2?36:0), (more?0:18) + (b1?36:0), 18, 18);
+		this.blit(poseStack, xOffset+leftArrowX, yOffset+arrowY, guiWidth + (b2?36:0), (less?0:18) + (b1?36:0), 18, 18);
+		this.blit(poseStack, xOffset+rightArrowX, yOffset+arrowY, guiWidth+18 + (b2?36:0), (more?0:18) + (b1?36:0), 18, 18);
 		
-		drawActiveTabAndIcons(matrixStack);
+		drawActiveTabAndIcons(poseStack);
 		
 	}
 	
 	@Override
-	protected void renderLabels(MatrixStack matrixStack, int mouseX, int mouseY) {
+	protected void renderLabels(PoseStack poseStack, int mouseX, int mouseY) {
 		
-		this.font.draw(matrixStack, this.title, this.titleLabelX, this.titleLabelY, 0x404040);
+		this.font.draw(poseStack, this.title, this.titleLabelX, this.titleLabelY, 0x404040);
 	}
 	
 	@Override
@@ -68,11 +72,11 @@ public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<Editmode
 			EditmodeInventoryPacket packet = null;
 			if(less && xcor >= xOffset + leftArrowX && xcor < xOffset + leftArrowX + 18)
 			{
-				minecraft.getSoundManager().play(SimpleSound.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+				minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 				packet = EditmodeInventoryPacket.scroll(false);
 			} else if(more && xcor >= xOffset + rightArrowX && xcor < xOffset + rightArrowX + 18)
 			{
-				minecraft.getSoundManager().play(SimpleSound.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+				minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 				packet = EditmodeInventoryPacket.scroll(true);
 			}
 			if(packet != null)

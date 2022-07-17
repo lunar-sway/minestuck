@@ -1,7 +1,8 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.MinestuckScreen;
@@ -12,21 +13,24 @@ import com.mraof.minestuck.network.MiscContainerPacket;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SimpleSound;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.util.InputMappings;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.client.CCloseWindowPacket;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.protocol.game.ServerboundContainerClosePacket;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
+import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public abstract class PlayerStatsScreen extends MinestuckScreen
@@ -39,20 +43,43 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 	public enum NormalGuiType
 	{
 		
-		CAPTCHA_DECK((MenuScreenFactory) CaptchaDeckScreen::new, CaptchaDeckScreen.TITLE, false),
-		STRIFE_SPECIBUS((ScreenFactory) StrifeSpecibusScreen::new, StrifeSpecibusScreen.TITLE, false),
-		ECHELADDER((ScreenFactory) EcheladderScreen::new, EcheladderScreen.TITLE, true),
-		GRIST_CACHE((ScreenFactory) GristCacheScreen::new, GristCacheScreen.TITLE, true);
+		CAPTCHA_DECK(CaptchaDeckScreen::new, CaptchaDeckScreen.TITLE, false),
+		STRIFE_SPECIBUS(StrifeSpecibusScreen::new, StrifeSpecibusScreen.TITLE, false),
+		ECHELADDER(EcheladderScreen::new, EcheladderScreen.TITLE, true),
+		GRIST_CACHE(GristCacheScreen::new, GristCacheScreen.TITLE, true);
 		
-		private final TabAction action;
+		final Supplier<? extends Screen> factory;
+		final BiFunction<Integer, Inventory, ? extends AbstractContainerScreen<?>> factory2;
 		final String name;
+		final boolean isContainer;
 		final boolean reqMedium;
 		
-		NormalGuiType(TabAction factory, String name, boolean reqMedium)
+		NormalGuiType(Supplier<? extends Screen> factory, String name, boolean reqMedium)
 		{
-			this.action = factory;
+			this.factory = factory;
+			this.factory2 = null;
 			this.name = name;
+			this.isContainer = false;
 			this.reqMedium = reqMedium;
+		}
+		
+		NormalGuiType(BiFunction<Integer, Inventory, ? extends AbstractContainerScreen<?>> factory, String name, boolean reqMedium)
+		{
+			this.factory = null;
+			this.factory2 = factory;
+			this.name = name;
+			this.isContainer = true;
+			this.reqMedium = reqMedium;
+		}
+		
+		public Screen createGuiInstance()
+		{
+			return factory.get();
+		}
+		
+		public Screen createGuiInstance(int windowId)
+		{
+			return factory2.apply(windowId, Minecraft.getInstance().player.getInventory());
 		}
 		
 		public boolean reqMedium()
@@ -61,56 +88,44 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 				return MinestuckConfig.SERVER.preEntryRungLimit.get() == 0;
 			else return this.reqMedium;
 		}
+		
 	}
 	
 	public enum EditmodeGuiType
 	{
-		DEPLOY_LIST((MenuScreenFactory) InventoryEditmodeScreen::new, InventoryEditmodeScreen.TITLE),
-		//BLOCK_LIST(GuiInventoryEditmode.class, "gui.blockList.name", true, false),
-		GRIST_CACHE((ScreenFactory) GristCacheScreen::new, GristCacheScreen.TITLE);
+		DEPLOY_LIST(InventoryEditmodeScreen::new, InventoryEditmodeScreen.TITLE),
+		GRIST_CACHE(GristCacheScreen::new, GristCacheScreen.TITLE);
 		
-		private final TabAction action;
+		final Supplier<? extends Screen> factory;
+		final BiFunction<Integer, Inventory, ? extends AbstractContainerScreen<?>> factory2;
 		final String name;
+		final boolean isContainer;
 		
-		EditmodeGuiType(TabAction factory, String name)
+		EditmodeGuiType(Supplier<? extends Screen> factory, String name)
 		{
-			this.action = factory;
+			this.factory = factory;
+			this.factory2 = null;
 			this.name = name;
+			this.isContainer = false;
 		}
-	}
-	
-	public interface TabAction
-	{
-		void trigger(Minecraft mc);
-	}
-	
-	public interface ScreenFactory extends TabAction
-	{
-		@Override
-		default void trigger(Minecraft mc)
+		
+		EditmodeGuiType(BiFunction<Integer, Inventory, ? extends AbstractContainerScreen<?>> factory, String name)
 		{
-			mc.setScreen(this.createScreen());
+			this.factory = null;
+			this.factory2 = factory;
+			this.name = name;
+			this.isContainer = true;
 		}
-		PlayerStatsScreen createScreen();
-	}
-	
-	public interface MenuScreenFactory extends TabAction
-	{
-		@Override
-		default void trigger(Minecraft mc)
+		
+		public Screen createGuiInstance()
 		{
-			if (mc.player != null)
-			{
-				int ordinal = (ClientEditHandler.isActive() ? editmodeTab : normalTab).ordinal();
-				int windowId = WINDOW_ID_START + ordinal;
-				PlayerStatsContainerScreen<?> containerScreen = createScreen(windowId, mc.player.inventory);
-				
-				mc.setScreen(containerScreen);
-				if(mc.screen == containerScreen)
-					MSPacketHandler.sendToServer(new MiscContainerPacket(ordinal, ClientEditHandler.isActive()));
-			}
+			return factory.get();
 		}
-		PlayerStatsContainerScreen<?> createScreen(int windowId, PlayerInventory inventory);
+		
+		public Screen createGuiInstance(int windowId)
+		{
+			return factory2.apply(windowId, Minecraft.getInstance().player.getInventory());
+		}
 	}
 	
 	static final int tabWidth = 28, tabHeight = 32, tabOverlap = 4;
@@ -125,7 +140,7 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 	
 	private boolean mode;
 	
-	public PlayerStatsScreen(ITextComponent titleIn)
+	public PlayerStatsScreen(Component titleIn)
 	{
 		super(titleIn);
 		this.mode = !ClientEditHandler.isActive();
@@ -146,11 +161,11 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 		return false;
 	}
 	
-	protected void drawTabs(MatrixStack matrixStack)
+	protected void drawTabs(PoseStack poseStack)
 	{
-		RenderSystem.color3f(1,1,1);
-		
-		mc.getTextureManager().bind(icons);
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		RenderSystem.setShaderColor(1,1,1, 1);
+		RenderSystem.setShaderTexture(0, icons);
 		
 		if(mode)
 		{
@@ -158,7 +173,7 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 				if(type != normalTab && (!type.reqMedium() || SkaiaClient.enteredMedium(SkaiaClient.playerId) || mc.gameMode.hasInfiniteItems()))
 				{
 					int i = type.ordinal();
-					blit(matrixStack, xOffset + i*(tabWidth + 2), yOffset - tabHeight + tabOverlap, i==0? 0:tabWidth, 0, tabWidth, tabHeight);
+					blit(poseStack, xOffset + i*(tabWidth + 2), yOffset - tabHeight + tabOverlap, i==0? 0:tabWidth, 0, tabWidth, tabHeight);
 				}
 		} else
 		{
@@ -166,35 +181,30 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 				if(type != editmodeTab)
 				{
 					int i = type.ordinal();
-					blit(matrixStack, xOffset + i*(tabWidth + 2), yOffset - tabHeight + tabOverlap, i==0? 0:tabWidth, 0, tabWidth, tabHeight);
+					blit(poseStack, xOffset + i*(tabWidth + 2), yOffset - tabHeight + tabOverlap, i==0? 0:tabWidth, 0, tabWidth, tabHeight);
 				}
 		}
 		
 		if(ClientPlayerData.hasDataCheckerAccess())
-			blit(matrixStack, xOffset + guiWidth - tabWidth, yOffset -tabHeight + tabOverlap, 2*tabWidth, 0, tabWidth, tabHeight);
+			blit(poseStack, xOffset + guiWidth - tabWidth, yOffset -tabHeight + tabOverlap, 2*tabWidth, 0, tabWidth, tabHeight);
 	}
 	
-	protected void drawActiveTabAndOther(MatrixStack matrixStack, int xcor, int ycor)
+	protected void drawActiveTabAndOther(PoseStack poseStack, int xcor, int ycor)
 	{
-		RenderSystem.color3f(1,1,1);
-		
-		mc.getTextureManager().bind(icons);
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		RenderSystem.setShaderColor(1,1,1, 1);
+		RenderSystem.setShaderTexture(0, icons);
 		
 		int index = (mode? normalTab:editmodeTab).ordinal();
-		blit(matrixStack, xOffset + index*(tabWidth+2), yOffset - tabHeight + tabOverlap,
+		blit(poseStack, xOffset + index*(tabWidth+2), yOffset - tabHeight + tabOverlap,
 				index == 0? 0:tabWidth, tabHeight, tabWidth, tabHeight);
 		
 		for(int i = 0; i < (mode? NormalGuiType.values():EditmodeGuiType.values()).length; i++)
 			if(!mode || !NormalGuiType.values()[i].reqMedium() || SkaiaClient.enteredMedium(SkaiaClient.playerId) || mc.gameMode.hasInfiniteItems())
-				blit(matrixStack, xOffset + (tabWidth - 16)/2 + (tabWidth+2)*i, yOffset - tabHeight + tabOverlap + 8, i*16, tabHeight*2 + (mode? 0:16), 16, 16);
+				blit(poseStack, xOffset + (tabWidth - 16)/2 + (tabWidth+2)*i, yOffset - tabHeight + tabOverlap + 8, i*16, tabHeight*2 + (mode? 0:16), 16, 16);
 		
 		if(ClientPlayerData.hasDataCheckerAccess())
-			blit(matrixStack, xOffset + guiWidth + (tabWidth - 16)/2 - tabWidth, yOffset - tabHeight + tabOverlap + 8, 5*16, tabHeight*2, 16, 16);
-		
-		RenderSystem.disableRescaleNormal();
-		RenderHelper.turnOff();
-		RenderSystem.disableLighting();
-		RenderSystem.disableDepthTest();
+			blit(poseStack, xOffset + guiWidth + (tabWidth - 16)/2 - tabWidth, yOffset - tabHeight + tabOverlap + 8, 5*16, tabHeight*2, 16, 16);
 		
 		if(ycor < yOffset && ycor > yOffset - tabHeight + 4)
 			for(int i = 0; i < (mode? NormalGuiType.values():EditmodeGuiType.values()).length; i++)
@@ -202,7 +212,7 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 					break;
 				else if(xcor < xOffset + i*(tabWidth + 2) + tabWidth
 						&& (!mode || !NormalGuiType.values()[i].reqMedium() || SkaiaClient.enteredMedium(SkaiaClient.playerId) || mc.gameMode.hasInfiniteItems()))
-					renderTooltip(matrixStack, new TranslationTextComponent(mode? NormalGuiType.values()[i].name:EditmodeGuiType.values()[i].name),
+					renderTooltip(poseStack, new TranslatableComponent(mode? NormalGuiType.values()[i].name:EditmodeGuiType.values()[i].name),
 							xcor, ycor);
 	}
 	
@@ -219,7 +229,7 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 				{
 					if(mode && NormalGuiType.values()[i].reqMedium() && !SkaiaClient.enteredMedium(SkaiaClient.playerId) && mc.gameMode.hasMissTime())
 						return true;
-					mc.getSoundManager().play(SimpleSound.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+					mc.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 					if(i != (mode? normalTab:editmodeTab).ordinal())
 					{
 						if(mode)
@@ -256,21 +266,31 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 		
 		if(reload || mc.screen == null)
 		{
-			if(mc.screen instanceof ContainerScreen<?>)
+			if(mc.screen instanceof AbstractContainerScreen<?>)
 			{
-				mc.player.connection.send(new CCloseWindowPacket(mc.player.containerMenu.containerId));
-				mc.player.inventory.setCarried(ItemStack.EMPTY);
+				mc.player.connection.send(new ServerboundContainerClosePacket(mc.player.containerMenu.containerId));
+				mc.player.containerMenu.setCarried(ItemStack.EMPTY);
 			}
-			
-			(ClientEditHandler.isActive() ? editmodeTab.action : normalTab.action).trigger(mc);
-		} else if(mc.screen instanceof PlayerStatsScreen || mc.screen instanceof PlayerStatsContainerScreen)
+			if(ClientEditHandler.isActive() ? editmodeTab.isContainer : normalTab.isContainer)
+			{
+				int ordinal = (ClientEditHandler.isActive() ? editmodeTab : normalTab).ordinal();
+				int windowId = WINDOW_ID_START + ordinal;
+				PlayerStatsContainerScreen<?> containerScreen = (PlayerStatsContainerScreen<?>) (ClientEditHandler.isActive() ? editmodeTab.createGuiInstance(windowId) : normalTab.createGuiInstance(windowId));
+				
+				mc.setScreen(containerScreen);
+				if(mc.screen == containerScreen)
+					MSPacketHandler.sendToServer(new MiscContainerPacket(ordinal, ClientEditHandler.isActive()));
+			}
+			else mc.setScreen(ClientEditHandler.isActive()? editmodeTab.createGuiInstance():normalTab.createGuiInstance());
+		}
+		else if(mc.screen instanceof PlayerStatsScreen || mc.screen instanceof PlayerStatsContainerScreen)
 			mc.setScreen(null);
 	}
 	
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int i)
 	{
-		if(MSKeyHandler.statKey.isActiveAndMatches(InputMappings.getKey(keyCode, scanCode)))
+		if(MSKeyHandler.statKey.isActiveAndMatches(InputConstants.getKey(keyCode, scanCode)))
 		{
 			mc.setScreen(null);
 			return true;

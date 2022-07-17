@@ -4,8 +4,8 @@ import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.inventory.EditmodeContainer;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckContainer;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,13 +23,13 @@ public class MiscContainerPacket implements PlayToServerPacket
 	}
 	
 	@Override
-	public void encode(PacketBuffer buffer)
+	public void encode(FriendlyByteBuf buffer)
 	{
 		buffer.writeInt(index);
 		buffer.writeBoolean(editmode);
 	}
 	
-	public static MiscContainerPacket decode(PacketBuffer buffer)
+	public static MiscContainerPacket decode(FriendlyByteBuf buffer)
 	{
 		int index = buffer.readInt();
 		boolean editmode = buffer.readBoolean();
@@ -38,7 +38,7 @@ public class MiscContainerPacket implements PlayToServerPacket
 	}
 	
 	@Override
-	public void execute(ServerPlayerEntity player)
+	public void execute(ServerPlayer player)
 	{
 		boolean isInEditmode = ServerEditHandler.getData(player) != null;
 		
@@ -53,13 +53,11 @@ public class MiscContainerPacket implements PlayToServerPacket
 		{
 			if(!isInEditmode)
 			{
-				player.containerMenu = new CaptchaDeckContainer(PlayerStatsScreen.WINDOW_ID_START + index, player.inventory);//ContainerHandler.windowIdStart + i;
+				player.initMenu(new CaptchaDeckContainer(PlayerStatsScreen.WINDOW_ID_START + index, player.getInventory()));//ContainerHandler.windowIdStart + i;
 			} else
 			{
-				player.containerMenu = new EditmodeContainer(PlayerStatsScreen.WINDOW_ID_START + index, player.inventory);
+				player.initMenu(new EditmodeContainer(PlayerStatsScreen.WINDOW_ID_START + index, player.getInventory()));
 			}
-			
-			player.initMenu();
 		}
 	}
 }

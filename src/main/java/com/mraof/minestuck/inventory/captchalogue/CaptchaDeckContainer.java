@@ -3,25 +3,38 @@ package com.mraof.minestuck.inventory.captchalogue;
 import com.mraof.minestuck.inventory.MSContainerTypes;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
-public class CaptchaDeckContainer extends Container
+public class CaptchaDeckContainer extends AbstractContainerMenu
 {
 	
-	public Inventory inventory = new Inventory(1);
+	private final Container inventory = new SimpleContainer(1);
+	private final Player owner;
 	
-	public CaptchaDeckContainer(int windowId, PlayerInventory playerInventory)
+	public CaptchaDeckContainer(int windowId, Inventory playerInventory)
 	{
 		super(MSContainerTypes.CAPTCHA_DECK, windowId);
+		this.owner = playerInventory.player;
 		addSlots(playerInventory);
 	}
 	
-	private void addSlots(PlayerInventory playerInventory)
+	public ItemStack getContainerItem()
+	{
+		return inventory.getItem(0);
+	}
+	
+	public void setContainerItem(ItemStack stack)
+	{
+		inventory.setItem(0, stack);
+	}
+	
+	private void addSlots(Inventory playerInventory)
 	{
 		for(int i = 9; i < 36; i++)
 			addSlot(new Slot(playerInventory, i, 9 + (i%9)*18, 63 + ((i - 9)/9)*18));
@@ -38,7 +51,7 @@ public class CaptchaDeckContainer extends Container
 	}
 	
 	@Override
-	public void removed(PlayerEntity playerIn)
+	public void removed(Player playerIn)
 	{
 		ItemStack stack = this.inventory.removeItemNoUpdate(0);
 		if(!stack.isEmpty())
@@ -46,13 +59,13 @@ public class CaptchaDeckContainer extends Container
 	}
 	
 	@Override
-	public boolean stillValid(PlayerEntity playerIn)
+	public boolean stillValid(Player playerIn)
 	{
-		return ((PlayerInventory)this.getSlot(0).container).player == playerIn;
+		return owner == playerIn;
 	}
 	
 	@Override
-	public ItemStack quickMoveStack(PlayerEntity playerIn, int index)
+	public ItemStack quickMoveStack(Player playerIn, int index)
 	{
 		Slot slot = getSlot(index);
 		int slotCount = slots.size();
@@ -77,5 +90,4 @@ public class CaptchaDeckContainer extends Container
 		}
 		return ItemStack.EMPTY;
 	}
-	
 }
