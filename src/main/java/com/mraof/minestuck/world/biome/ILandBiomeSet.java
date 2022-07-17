@@ -1,12 +1,13 @@
 package com.mraof.minestuck.world.biome;
 
-import net.minecraft.world.biome.Biome;
+import net.minecraft.core.Holder;
+import net.minecraft.world.level.biome.Biome;
 
 import java.util.List;
 
 public interface ILandBiomeSet
 {
-	Biome fromType(LandBiomeType type);
+	Holder<Biome> fromType(LandBiomeType type);
 	
-	List<Biome> getAll();
+	List<Holder<Biome>> getAll();
 }

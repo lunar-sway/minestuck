@@ -1,9 +1,7 @@
 package com.mraof.minestuck.world.biome.gen;
-
+/*
 import com.mraof.minestuck.world.biome.LandBiomeType;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.gen.INoiseRandom;
-import net.minecraft.world.gen.layer.traits.IAreaTransformer0;
+import net.minecraft.util.Mth;
 
 public class LandBaseLayer implements IAreaTransformer0
 {
@@ -13,7 +11,7 @@ public class LandBaseLayer implements IAreaTransformer0
 	
 	public LandBaseLayer(float oceanChance)
 	{
-		this.oceanChance = (int) (Integer.MAX_VALUE * MathHelper.clamp(oceanChance, 0, 1));
+		this.oceanChance = (int) (Integer.MAX_VALUE * Mth.clamp(oceanChance, 0, 1));
 	}
 	
 	@Override
@@ -23,4 +21,4 @@ public class LandBaseLayer implements IAreaTransformer0
 			return NORMAL_BIOME;
 		return OCEAN_BIOME;
 	}
-}
+}*/

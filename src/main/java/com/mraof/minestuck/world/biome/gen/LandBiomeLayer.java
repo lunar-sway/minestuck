@@ -1,15 +1,8 @@
 package com.mraof.minestuck.world.biome.gen;
-
+/*
 import com.mraof.minestuck.world.biome.ILandBiomeSet;
 import com.mraof.minestuck.world.biome.LandBiomeType;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.IExtendedNoiseRandom;
-import net.minecraft.world.gen.LazyAreaLayerContext;
-import net.minecraft.world.gen.area.IArea;
-import net.minecraft.world.gen.area.IAreaFactory;
-import net.minecraft.world.gen.area.LazyArea;
-import net.minecraft.world.gen.layer.LayerUtil;
-import net.minecraft.world.gen.layer.ZoomLayer;
+import net.minecraft.world.level.biome.Biome;
 
 import java.util.Objects;
 import java.util.function.LongFunction;
@@ -55,4 +48,4 @@ public class LandBiomeLayer
 			throw new IllegalStateException("Unknown land biome id: " + id);
 		}
 	}
-}
+}*/

@@ -1,10 +1,6 @@
 package com.mraof.minestuck.world.biome.gen;
 
-import com.mraof.minestuck.world.biome.LandBiomeType;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.gen.INoiseRandom;
-import net.minecraft.world.gen.layer.traits.IC1Transformer;
-
+/*TODO
 public class LandRoughLayer implements IC1Transformer
 {
 	private final int roughChance;
@@ -13,7 +9,7 @@ public class LandRoughLayer implements IC1Transformer
 	
 	public LandRoughLayer(float roughChance)
 	{
-		this.roughChance = (int) (Integer.MAX_VALUE * MathHelper.clamp(roughChance, 0, 1));
+		this.roughChance = (int) (Integer.MAX_VALUE * Mth.clamp(roughChance, 0, 1));
 	}
 	
 	@Override
@@ -23,4 +19,4 @@ public class LandRoughLayer implements IC1Transformer
 			return ROUGH_BIOME;
 		else return value;
 	}
-}
+}*/
