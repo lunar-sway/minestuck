@@ -1,11 +1,11 @@
 package com.mraof.minestuck.util;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.NBTDynamicOps;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,67 +24,63 @@ public class MSNBTUtil
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	/**
-	 * Reads a resource location or throws a {@link net.minecraft.util.ResourceLocationException} if it is invalid.
+	 * Reads a resource location or throws an exception if it is invalid.
 	 */
 	@Nonnull
-	public static ResourceLocation readResourceLocation(CompoundNBT nbt, String key)
+	public static ResourceLocation readResourceLocation(CompoundTag nbt, String key)
 	{
-		return ResourceLocation.CODEC.parse(NBTDynamicOps.INSTANCE, nbt.get(key)).getOrThrow(false, LOGGER::error);
+		return ResourceLocation.CODEC.parse(NbtOps.INSTANCE, nbt.get(key)).getOrThrow(false, LOGGER::error);
 	}
 	
 	/**
 	 * Reads a resource location or returns null if it is invalid.
 	 */
 	@Nullable
-	public static ResourceLocation tryReadResourceLocation(CompoundNBT nbt, String key)
+	public static ResourceLocation tryReadResourceLocation(CompoundTag nbt, String key)
 	{
-		return ResourceLocation.CODEC.parse(NBTDynamicOps.INSTANCE, nbt.get(key)).resultOrPartial(LOGGER::error).orElse(null);
+		return ResourceLocation.CODEC.parse(NbtOps.INSTANCE, nbt.get(key)).resultOrPartial(LOGGER::error).orElse(null);
 	}
 	
-	public static CompoundNBT writeResourceLocation(CompoundNBT nbt, String key, ResourceLocation resourceLocation)
+	public static CompoundTag writeResourceLocation(CompoundTag nbt, String key, ResourceLocation resourceLocation)
 	{
 		Objects.requireNonNull(resourceLocation);
-		nbt.put(key, ResourceLocation.CODEC.encodeStart(NBTDynamicOps.INSTANCE, resourceLocation).getOrThrow(false, LOGGER::error));
+		nbt.put(key, ResourceLocation.CODEC.encodeStart(NbtOps.INSTANCE, resourceLocation).getOrThrow(false, LOGGER::error));
 		return nbt;
 	}
 	
 	/**
-	 * When reading data very early (such as when using a {@link net.minecraftforge.fml.WorldPersistenceHooks.WorldPersistenceHook}, some dimension types might not have loaded yet.
-	 * In that scenario, you should instead lazily load the dimension type by just reading the resource location.
 	 * Reads a dimension type or throws an exception if it is unable to do so.
 	 */
 	@Nonnull
-	public static RegistryKey<World> readDimensionType(CompoundNBT nbt, String key)
+	public static ResourceKey<Level> readDimensionType(CompoundTag nbt, String key)
 	{
-		return World.RESOURCE_KEY_CODEC.parse(NBTDynamicOps.INSTANCE, nbt.get(key)).getOrThrow(false, LOGGER::error);
+		return Level.RESOURCE_KEY_CODEC.parse(NbtOps.INSTANCE, nbt.get(key)).getOrThrow(false, LOGGER::error);
 	}
 	
 	/**
-	 * When reading data very early (such as when using a {@link net.minecraftforge.fml.WorldPersistenceHooks.WorldPersistenceHook}, some dimension types might not have loaded yet.
-	 * In that scenario, you should instead lazily load the dimension type by just reading the resource location.
 	 * Reads a dimension type or returns null if it is unable to do so.
 	 */
 	@Nullable
-	public static RegistryKey<World> tryReadDimensionType(CompoundNBT nbt, String key)
+	public static ResourceKey<Level> tryReadDimensionType(CompoundTag nbt, String key)
 	{
-		return World.RESOURCE_KEY_CODEC.parse(NBTDynamicOps.INSTANCE, nbt.get(key)).resultOrPartial(LOGGER::error).orElse(null);
+		return Level.RESOURCE_KEY_CODEC.parse(NbtOps.INSTANCE, nbt.get(key)).resultOrPartial(LOGGER::error).orElse(null);
 	}
 	
 	/**
 	 * Writes a dimension type or throws an exception if it is unable to do so.
 	 */
-	public static CompoundNBT writeDimensionType(CompoundNBT nbt, String key, RegistryKey<World> dimension)
+	public static CompoundTag writeDimensionType(CompoundTag nbt, String key, ResourceKey<Level> dimension)
 	{
-		nbt.put(key, World.RESOURCE_KEY_CODEC.encodeStart(NBTDynamicOps.INSTANCE, dimension).getOrThrow(false, LOGGER::error));
+		nbt.put(key, Level.RESOURCE_KEY_CODEC.encodeStart(NbtOps.INSTANCE, dimension).getOrThrow(false, LOGGER::error));
 		return nbt;
 	}
 	
 	/**
 	 * Tries to write a dimension type and returns true if it is able to do so.
 	 */
-	public static boolean tryWriteDimensionType(CompoundNBT nbt, String key, RegistryKey<World> dimension)
+	public static boolean tryWriteDimensionType(CompoundTag nbt, String key, ResourceKey<Level> dimension)
 	{
-		Optional<INBT> optional = World.RESOURCE_KEY_CODEC.encodeStart(NBTDynamicOps.INSTANCE, dimension).resultOrPartial(LOGGER::error);
+		Optional<Tag> optional = Level.RESOURCE_KEY_CODEC.encodeStart(NbtOps.INSTANCE, dimension).resultOrPartial(LOGGER::error);
 		optional.ifPresent(inbt -> nbt.put(key, inbt));
 		return optional.isPresent();
 	}

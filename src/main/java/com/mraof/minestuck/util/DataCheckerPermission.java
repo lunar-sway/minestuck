@@ -6,16 +6,16 @@ import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.data.DataCheckerPermissionPacket;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.management.OpEntry;
-import net.minecraft.world.GameType;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.players.ServerOpListEntry;
+import net.minecraft.world.level.GameType;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.server.ServerStoppedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -29,7 +29,7 @@ public class DataCheckerPermission
 	@SubscribeEvent
 	public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event)
 	{
-		sendPacket((ServerPlayerEntity) event.getPlayer());
+		sendPacket((ServerPlayer) event.getPlayer());
 	}
 	
 	@SubscribeEvent
@@ -41,27 +41,26 @@ public class DataCheckerPermission
 	@SubscribeEvent
 	public static void onPlayerTick(TickEvent.PlayerTickEvent event)
 	{
-		if(event.side == LogicalSide.SERVER && event.phase == TickEvent.Phase.END && event.player instanceof ServerPlayerEntity)
+		if(event.side == LogicalSide.SERVER && event.phase == TickEvent.Phase.END && event.player instanceof ServerPlayer player)
 		{
-			ServerPlayerEntity player = (ServerPlayerEntity) event.player;
 			if(shouldUpdateConfigurations(player))
 				sendPacket(player);
 		}
 	}
 	
 	@SubscribeEvent
-	public static void serverStopped(FMLServerStoppedEvent event)
+	public static void serverStopped(ServerStoppedEvent event)
 	{
 		dataCheckerPermission.clear();
 	}
 	
-	private static boolean shouldUpdateConfigurations(ServerPlayerEntity player)
+	private static boolean shouldUpdateConfigurations(ServerPlayer player)
 	{
 		boolean permission = hasPermission(player);
 		return permission != dataCheckerPermission.contains(player.getGameProfile().getId());
 	}
 	
-	private static void sendPacket(ServerPlayerEntity player)
+	private static void sendPacket(ServerPlayer player)
 	{
 		DataCheckerPermissionPacket packet;
 		boolean permission = hasPermission(player);
@@ -72,7 +71,7 @@ public class DataCheckerPermission
 		MSPacketHandler.sendToPlayer(packet, player);
 	}
 	
-	public static boolean hasPermission(ServerPlayerEntity player)
+	public static boolean hasPermission(ServerPlayer player)
 	{
 		switch(MinestuckConfig.SERVER.dataCheckerPermission.get())
 		{
@@ -84,7 +83,7 @@ public class DataCheckerPermission
 		}
 	}
 	
-	private static boolean hasGamemodePermission(ServerPlayerEntity player)
+	private static boolean hasGamemodePermission(ServerPlayer player)
 	{
 		GameType gameType = player.gameMode.getGameModeForPlayer();
 		
@@ -95,12 +94,12 @@ public class DataCheckerPermission
 		return !gameType.isSurvival();
 	}
 	
-	private static boolean hasOp(ServerPlayerEntity player)
+	private static boolean hasOp(ServerPlayer player)
 	{
 		MinecraftServer server = player.getServer();
 		if(server != null && server.getPlayerList().isOp(player.getGameProfile()))
 		{
-			OpEntry entry = server.getPlayerList().getOps().get(player.getGameProfile());
+			ServerOpListEntry entry = server.getPlayerList().getOps().get(player.getGameProfile());
 			return (entry != null ? entry.getLevel() : server.getOperatorUserPermissionLevel()) >= 2;
 		}
 		return false;

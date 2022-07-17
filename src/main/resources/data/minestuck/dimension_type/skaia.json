@@ -9,8 +9,10 @@
     "bed_works" : true,
     "respawn_anchor_works" : false,
     "has_raids" : false,
+    "min_y": 0,
+    "height": 256,
     "logical_height" : 256,
-    "infiniburn" : "minecraft:infiniburn_overworld",
+    "infiniburn" : "#minecraft:infiniburn_overworld",
     "effects" : "minecraft:overworld",
     "ambient_light" : 0
 }

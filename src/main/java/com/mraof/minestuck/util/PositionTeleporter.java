@@ -1,7 +1,7 @@
 package com.mraof.minestuck.util;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 
 public class PositionTeleporter
 {
@@ -10,14 +10,14 @@ public class PositionTeleporter
 	public static void moveEntity(Entity entity, double posX, double posY, double posZ)
 	{
 		entity.stopRiding();
-		if(entity instanceof ServerPlayerEntity)
+		if(entity instanceof ServerPlayer player)
 		{
-			if (((ServerPlayerEntity)entity).isSleeping())
+			if (player.isSleeping())
 			{
-				((ServerPlayerEntity)entity).stopSleeping();
+				player.stopSleeping();
 			}
 			
-			((ServerPlayerEntity)entity).connection.teleport(posX, posY, posZ, entity.yRot, entity.xRot);
+			player.connection.teleport(posX, posY, posZ, entity.getYRot(), entity.getXRot());
 		} else
 		{
 			entity.setPos(posX, posY, posZ);

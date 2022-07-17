@@ -40,12 +40,39 @@
         },
         "size_vertical": 2,
         "size_horizontal": 1,
+        "min_y": 0,
         "height": 256,
-        "density_factor": 1,
-        "density_offset": -0.46875,
         "random_density_offset": true,
         "simplex_surface_noise": true,
         "island_noise_override": false,
-        "amplified": false
-    }
+        "amplified": false,
+        "terrain_shaper": {
+            "offset": -0.46875,
+            "factor": 1,
+            "jaggedness": 0
+        }
+    },
+    "noise_router": {
+        "barrier": "zero",
+        "fluid_level_floodedness": "zero",
+        "fluid_level_spread": "zero",
+        "lava": "zero",
+        "temperature": "zero",
+        "vegetation": "zero",
+        "continents": "zero",
+        "erosion": "zero",
+        "depth": "zero",
+        "ridges": "zero",
+        "initial_density_without_jaggedness": "zero",
+        "final_density": "zero",
+        "vein_toggle": "zero",
+        "vein_ridged": "zero",
+        "vein_gap": "zero"
+    },
+    "surface_rule": {
+        "type": "bandlands"
+    },
+    "aquifers_enabled": false,
+    "ore_veins_enabled": false,
+    "legacy_random_source": true
 }

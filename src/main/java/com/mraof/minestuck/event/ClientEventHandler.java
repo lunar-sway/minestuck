@@ -1,7 +1,5 @@
 package com.mraof.minestuck.event;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.ColorSelectorScreen;
@@ -9,16 +7,16 @@ import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.fluid.IMSFog;
 import com.mraof.minestuck.inventory.ConsortMerchantContainer;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
-import net.minecraft.block.BlockState;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.event.TickEvent;
@@ -66,15 +64,15 @@ public class ClientEventHandler
 				String tooltip = "store."+unlocalized+".tooltip";
 				event.getToolTip().clear();
 				if(I18n.exists(name))
-					event.getToolTip().add(new TranslationTextComponent(name, arg1));
+					event.getToolTip().add(new TranslatableComponent(name, arg1));
 				else event.getToolTip().add(stack.getHoverName());
 				if(I18n.exists(tooltip))
-					event.getToolTip().add(new TranslationTextComponent(tooltip, arg1).withStyle(TextFormatting.GRAY));
+					event.getToolTip().add(new TranslatableComponent(tooltip, arg1).withStyle(ChatFormatting.GRAY));
 			} else if(stack.getItem().getRegistryName().getNamespace().equals(Minestuck.MOD_ID))
 			{
 				String name = stack.getDescriptionId() + ".tooltip";
 				if(I18n.exists(name))
-					event.getToolTip().add(1, new TranslationTextComponent(name).withStyle(TextFormatting.GRAY));
+					event.getToolTip().add(1, new TranslatableComponent(name).withStyle(ChatFormatting.GRAY));
 			}
 		}
 	}
@@ -85,14 +83,20 @@ public class ClientEventHandler
 	@SubscribeEvent
 	public static void onFogRender(EntityViewRenderEvent.FogDensity event)
 	{
-		if (event.getInfo().getFluidInCamera().createLegacyBlock().getBlock() instanceof IMSFog)
+		LevelReader level = event.getCamera().getEntity().level;
+		BlockPos blockPos = event.getCamera().getBlockPosition();
+		Vec3 pos = event.getCamera().getPosition();
+		FluidState fluid = level.getFluidState(blockPos);
+		
+		if (!fluid.isEmpty() && pos.y >= blockPos.getY() + fluid.getHeight(level, blockPos))
+			return;
+		
+		if (fluid.createLegacyBlock().getBlock() instanceof IMSFog fog)
 		{
-			IMSFog fog = (IMSFog)event.getInfo().getFluidInCamera().createLegacyBlock().getBlock();
 			float fogDensity = fog.getMSFogDensity();
 			
 			event.setCanceled(true);
 			event.setDensity(fogDensity);
-			RenderSystem.fogMode(GlStateManager.FogMode.EXP);
 		}
 	}
 	
@@ -102,17 +106,21 @@ public class ClientEventHandler
 	@SubscribeEvent
 	public static void addFogColor(EntityViewRenderEvent.FogColors event)
 	{
-		BlockState state = event.getInfo().getFluidInCamera().createLegacyBlock();
-		IWorldReader world = event.getInfo().getEntity().level;
-		BlockPos pos = event.getInfo().getBlockPosition();
-		Entity entity = event.getInfo().getEntity();
-		Vector3d originalColor = new Vector3d(event.getRed(), event.getGreen(), event.getBlue());
-		float partialTick = (float) (event.getRenderPartialTicks());
+		LevelReader level = event.getCamera().getEntity().level;
+		BlockPos blockPos = event.getCamera().getBlockPosition();
+		Vec3 pos = event.getCamera().getPosition();
+		FluidState fluid = level.getFluidState(blockPos);
 		
-		if(state.getBlock() instanceof IMSFog)
+		if (!fluid.isEmpty() && pos.y >= blockPos.getY() + fluid.getHeight(level, blockPos))
+			return;
+		
+		if(fluid.createLegacyBlock().getBlock() instanceof IMSFog fog)
 		{
-			IMSFog fog = (IMSFog) (state.getBlock());
-			Vector3d fogColor = fog.getMSFogColor(state, world, pos, entity, originalColor, partialTick);
+			Entity entity = event.getCamera().getEntity();
+			Vec3 originalColor = new Vec3(event.getRed(), event.getGreen(), event.getBlue());
+			float partialTick = (float) event.getPartialTicks();
+			
+			Vec3 fogColor = fog.getMSFogColor(level, blockPos, entity, originalColor, partialTick);
 			
 			event.setRed((float) fogColor.x());
 			event.setGreen((float) fogColor.y());

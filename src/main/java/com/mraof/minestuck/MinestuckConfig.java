@@ -6,8 +6,8 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.*;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.server.ServerLifecycleHooks;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
+import net.minecraftforge.server.ServerLifecycleHooks;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
@@ -269,7 +269,7 @@ public class MinestuckConfig
 	}
 	
 	@SubscribeEvent
-	public static void onReload(final ModConfig.Reloading event)
+	public static void onReload(final ModConfigEvent.Reloading event)
 	{
 		MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
 		if(server != null && server.isSameThread())	//TODO Check if this will be true after server start. If not, use a static boolean together with a tick event instead

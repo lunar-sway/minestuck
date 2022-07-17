@@ -1,9 +1,9 @@
 package com.mraof.minestuck.util;
 
 import com.mraof.minestuck.client.gui.StoneTabletScreen;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.Style;
+import net.minecraft.client.gui.Font;
+import net.minecraft.network.chat.Style;
+import net.minecraft.util.Mth;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 public class StoneTabletUtils
@@ -11,7 +11,7 @@ public class StoneTabletUtils
 	/**
 	 * Returns the width of text
 	 */
-	public static int getTextWidth(FontRenderer font, String text)
+	public static int getTextWidth(Font font, String text)
 	{
 		return font.width(font.isBidirectional() ? font.bidirectionalShaping(text) : text);
 	}
@@ -20,7 +20,7 @@ public class StoneTabletUtils
 	 * Calculates the position of the given character index in the text
 	 * Might be appropriate to clean up usage of this function similarly to what vanilla did
 	 */
-	public static Point createPointer(FontRenderer font, String pageText, int index)
+	public static Point createPointer(Font font, String pageText, int index)
 	{
 		Point point = new Point();
 		
@@ -34,7 +34,7 @@ public class StoneTabletUtils
 		return point;
 	}
 	
-	public static void adjustPointerAForBidi(FontRenderer font, Point pointer)
+	public static void adjustPointerAForBidi(Font font, Point pointer)
 	{
 		if (font.isBidirectional())
 			pointer.x = StoneTabletScreen.TEXT_WIDTH - pointer.x;
@@ -53,7 +53,7 @@ public class StoneTabletUtils
 	}
 	
 	
-	public static int getSelectionX(FontRenderer font, String text, int pointerX)
+	public static int getSelectionX(Font font, String text, int pointerX)
 	{
 		if (pointerX < 0)
 			return 0;
@@ -99,7 +99,7 @@ public class StoneTabletUtils
 	 * Get a char index from the given pointer.
 	 * Reverse of createPointer
 	 */
-	public static int getSelectionIndex(FontRenderer font, String text, Point pointer)
+	public static int getSelectionIndex(Font font, String text, Point pointer)
 	{
 		int maxY = 16 * font.lineHeight;
 		if(pointer.y >= 0 && pointer.y < maxY)
@@ -121,9 +121,9 @@ public class StoneTabletUtils
 		} else return -1;
 	}
 	
-	public static int getSelectionWidth(FontRenderer font, String pageText, int selectionEnd)
+	public static int getSelectionWidth(Font font, String pageText, int selectionEnd)
 	{
-		return font.width(String.valueOf(pageText.charAt(MathHelper.clamp(selectionEnd, 0, pageText.length() - 1))));
+		return font.width(String.valueOf(pageText.charAt(Mth.clamp(selectionEnd, 0, pageText.length() - 1))));
 	}
 	
 	public static class Point
