@@ -4,27 +4,34 @@ import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.effects.CreativeShockEffect;
+import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.tileentity.redstone.AreaEffectTileEntity;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.HorizontalBlock;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.PotionItem;
-import net.minecraft.particles.RedstoneParticleData;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.PotionUtils;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.PotionItem;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -33,7 +40,7 @@ import java.util.Random;
  * When powered, the tile entity applies an effect to entities in a designated area between two block pos, similar to beacons but with more versatility.
  * Only creative mode players(who are not under the effects of Creative Shock) can change the effect
  */
-public class AreaEffectBlock extends HorizontalBlock
+public class AreaEffectBlock extends HorizontalDirectionalBlock implements EntityBlock
 {
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 	public static final BooleanProperty ALL_MOBS = MSProperties.MACHINE_TOGGLE; //checks whether just players should be given the effect or if all living entities should be given the effect
@@ -46,100 +53,102 @@ public class AreaEffectBlock extends HorizontalBlock
 		this.registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(POWERED, false).setValue(ALL_MOBS, false).setValue(SHUT_DOWN, false));
 	}
 	
+	@Nullable
 	@Override
-	public boolean hasTileEntity(BlockState state)
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
-		return true;
+		return new AreaEffectTileEntity(pos, state);
 	}
 	
 	@Nullable
 	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world)
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> placedType)
 	{
-		return new AreaEffectTileEntity();
+		return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSTileEntityTypes.AREA_EFFECT.get(), AreaEffectTileEntity::serverTick) : null;
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
-	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
 	{
 		if(player.isCreative() && !CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS))
 		{
-			TileEntity tileEntity = worldIn.getBlockEntity(pos);
-			if(tileEntity instanceof AreaEffectTileEntity)
+			if(level.getBlockEntity(pos) instanceof AreaEffectTileEntity te)
 			{
-				AreaEffectTileEntity te = (AreaEffectTileEntity) tileEntity;
 				
 				ItemStack heldItemStack = player.getItemInHand(hand);
 				
 				if(heldItemStack.getItem() instanceof PotionItem)
 				{
-					clickWithPotion(worldIn, pos, player, te, heldItemStack);
+					clickWithPotion(level, pos, player, te, heldItemStack);
 				} else
 				{
 					MSScreenFactories.displayAreaEffectScreen(te);
 				}
 				
-				return ActionResultType.sidedSuccess(worldIn.isClientSide);
+				return InteractionResult.sidedSuccess(level.isClientSide);
 			}
 		}
 		
-		return ActionResultType.PASS;
+		return InteractionResult.PASS;
 	}
 	
-	private void clickWithPotion(World worldIn, BlockPos pos, PlayerEntity player, AreaEffectTileEntity te, ItemStack potionStack)
+	private void clickWithPotion(Level level, BlockPos pos, Player player, AreaEffectTileEntity te, ItemStack potionStack)
 	{
-		EffectInstance firstEffect = PotionUtils.getPotion(potionStack).getEffects().get(0);
-		if(firstEffect != null && !worldIn.isClientSide)
+		MobEffectInstance firstEffect = PotionUtils.getPotion(potionStack).getEffects().get(0);
+		if(firstEffect != null && !level.isClientSide)
 		{
 			te.setEffect(firstEffect.getEffect(), firstEffect.getAmplifier());
 			
-			player.displayClientMessage(new TranslationTextComponent(getDescriptionId() + "." + EFFECT_CHANGE_MESSAGE, firstEffect.getEffect().getRegistryName(), firstEffect.getAmplifier()), true); //getDescriptionId was getTranslationKey
-			worldIn.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 1F);
+			player.displayClientMessage(new TranslatableComponent(getDescriptionId() + "." + EFFECT_CHANGE_MESSAGE, firstEffect.getEffect().getRegistryName(), firstEffect.getAmplifier()), true); //getDescriptionId was getTranslationKey
+			level.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundSource.BLOCKS, 0.5F, 1F);
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
-	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
 	{
-		super.neighborChanged(state, worldIn, pos, blockIn, fromPos, isMoving);
-		updatePower(worldIn, pos);
+		super.neighborChanged(state, level, pos, blockIn, fromPos, isMoving);
+		updatePower(level, pos);
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
-	public void onPlace(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving)
+	public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
 	{
-		super.onPlace(state, worldIn, pos, oldState, isMoving);
-		updatePower(worldIn, pos);
+		super.onPlace(state, level, pos, oldState, isMoving);
+		updatePower(level, pos);
 	}
 	
-	public void updatePower(World worldIn, BlockPos pos)
+	public void updatePower(Level level, BlockPos pos)
 	{
-		if(!worldIn.isClientSide)
+		if(!level.isClientSide)
 		{
-			BlockState state = worldIn.getBlockState(pos);
-			boolean hasPower = !state.getValue(SHUT_DOWN) && worldIn.hasNeighborSignal(pos);
+			BlockState state = level.getBlockState(pos);
+			boolean hasPower = !state.getValue(SHUT_DOWN) && level.hasNeighborSignal(pos);
 			
 			if(state.getValue(POWERED) != hasPower)
-				worldIn.setBlockAndUpdate(pos, state.setValue(POWERED, hasPower));
+				level.setBlockAndUpdate(pos, state.setValue(POWERED, hasPower));
 		}
 	}
 	
 	@Nullable
 	@Override
-	public BlockState getStateForPlacement(BlockItemUseContext context)
+	public BlockState getStateForPlacement(BlockPlaceContext context)
 	{
 		return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
 	}
 	
 	@Override
-	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
+	public void animateTick(BlockState stateIn, Level level, BlockPos pos, Random rand)
 	{
 		if(stateIn.getValue(POWERED))
-			BlockUtil.spawnParticlesAroundSolidBlock(worldIn, pos, () -> RedstoneParticleData.REDSTONE);
+			BlockUtil.spawnParticlesAroundSolidBlock(level, pos, () -> DustParticleOptions.REDSTONE);
 	}
 	
 	@Override
-	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
 	{
 		super.createBlockStateDefinition(builder);
 		builder.add(FACING);

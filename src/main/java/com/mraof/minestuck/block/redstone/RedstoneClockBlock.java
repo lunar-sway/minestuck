@@ -2,22 +2,27 @@ package com.mraof.minestuck.block.redstone;
 
 import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.MSDirectionalBlock;
+import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.tileentity.redstone.RedstoneClockTileEntity;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particles.RedstoneParticleData;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -25,7 +30,7 @@ import java.util.Random;
 /**
  * Generates a redstone pulse through its tile entity at a modifiable increment. Used as a compact means of creating redstone clocks
  */
-public class RedstoneClockBlock extends MSDirectionalBlock
+public class RedstoneClockBlock extends MSDirectionalBlock implements EntityBlock
 {
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 	
@@ -37,80 +42,82 @@ public class RedstoneClockBlock extends MSDirectionalBlock
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
 	{
-		TileEntity tileEntity = worldIn.getBlockEntity(pos);
-		if(tileEntity instanceof RedstoneClockTileEntity) //does not check for creative shock to anticipate use cases in timing puzzle designs
+		if(level.getBlockEntity(pos) instanceof RedstoneClockTileEntity te) //does not check for creative shock to anticipate use cases in timing puzzle designs
 		{
-			RedstoneClockTileEntity te = (RedstoneClockTileEntity) tileEntity;
 			
 			if(!player.isCrouching())
 			{
 				te.incrementClockSpeed(player);
 				
-				return ActionResultType.SUCCESS;
+				return InteractionResult.SUCCESS;
 			} else
 			{
 				te.decrementClockSpeed(player);
 				
-				return ActionResultType.SUCCESS;
+				return InteractionResult.SUCCESS;
 			}
 		}
 		
-		return ActionResultType.PASS;
+		return InteractionResult.PASS;
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
-	public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand)
+	public void tick(BlockState state, ServerLevel level, BlockPos pos, Random rand)
 	{
-		super.tick(state, worldIn, pos, rand);
+		super.tick(state, level, pos, rand);
 		
 		if(state.getValue(POWERED))
 		{
-			worldIn.setBlock(pos, state.setValue(POWERED, false), Constants.BlockFlags.DEFAULT_AND_RERENDER);
+			level.setBlock(pos, state.setValue(POWERED, false), Block.UPDATE_ALL_IMMEDIATE);
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean isSignalSource(BlockState state)
 	{
 		return state.getValue(POWERED);
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
-	public int getSignal(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side)
+	public int getSignal(BlockState blockState, BlockGetter level, BlockPos pos, Direction side)
 	{
 		return blockState.getValue(POWERED) ? 15 : 0;
 	}
 	
 	@Override
-	public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side)
-	{
-		return true;
-	}
-	
-	@Override
-	public boolean hasTileEntity(BlockState state)
+	public boolean canConnectRedstone(BlockState state, BlockGetter level, BlockPos pos, @Nullable Direction side)
 	{
 		return true;
 	}
 	
 	@Nullable
 	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world)
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
-		return new RedstoneClockTileEntity();
+		return new RedstoneClockTileEntity(pos, state);
+	}
+	
+	@Nullable
+	@Override
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> placedType)
+	{
+		return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSTileEntityTypes.REDSTONE_CLOCK.get(), RedstoneClockTileEntity::serverTick) : null;
 	}
 	
 	@Override
-	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
+	public void animateTick(BlockState stateIn, Level level, BlockPos pos, Random rand)
 	{
 		if(stateIn.getValue(POWERED))
-			BlockUtil.spawnParticlesAroundSolidBlock(worldIn, pos, () -> RedstoneParticleData.REDSTONE);
+			BlockUtil.spawnParticlesAroundSolidBlock(level, pos, () -> DustParticleOptions.REDSTONE);
 	}
 	
 	@Override
-	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
 	{
 		super.createBlockStateDefinition(builder);
 		builder.add(POWERED);

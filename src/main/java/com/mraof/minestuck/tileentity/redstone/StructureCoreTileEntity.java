@@ -4,32 +4,36 @@ import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.block.redstone.StructureCoreBlock;
 import com.mraof.minestuck.block.redstone.SummonerBlock;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
-import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.structure.CoreCompatibleScatteredStructurePiece;
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.gen.feature.structure.*;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.util.Constants;
+import com.mraof.minestuck.world.gen.feature.structure.MSStructureFeatures;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.StructureFeatureManager;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
+import net.minecraft.world.level.levelgen.structure.StructurePiece;
+import net.minecraft.world.level.levelgen.structure.StructureStart;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class StructureCoreTileEntity extends TileEntity implements ITickableTileEntity
+public class StructureCoreTileEntity extends BlockEntity
 {
 	private int tickCycle;
 	@Nonnull
 	private ActionType actionType;
 	private int shutdownRange = 32;
 	private boolean hasWiped = false;
-	public final Structure<?>[] SOLVABLE_STRUCTURES = new Structure<?>[]{MSFeatures.FROG_TEMPLE};
+	public final ConfiguredStructureFeature<?, ?>[] SOLVABLE_STRUCTURES = new ConfiguredStructureFeature<?, ?>[]{MSStructureFeatures.FROG_TEMPLE.get()};
 	
 	/**
 	 * READ AND WIPE checks to see if the structure piece hasBeenCompleted variable is true, and then prevents puzzle blocks not meant to be utilized for survival players from working
@@ -56,35 +60,31 @@ public class StructureCoreTileEntity extends TileEntity implements ITickableTile
 		}
 	}
 	
-	public StructureCoreTileEntity()
+	public StructureCoreTileEntity(BlockPos pos, BlockState state)
 	{
-		super(MSTileEntityTypes.STRUCTURE_CORE.get());
+		super(MSTileEntityTypes.STRUCTURE_CORE.get(), pos, state);
 		actionType = ActionType.READ_AND_REDSTONE;
 	}
 	
-	@Override
-	public void tick()
+	public static void serverTick(Level level, BlockPos pos, BlockState state, StructureCoreTileEntity blockEntity)
 	{
-		if(level == null || level.isClientSide)
-			return;
-		
-		int cycleRate = (hasWiped && actionType == ActionType.READ_AND_WIPE) ? 600 : 100;
-		if(tickCycle >= cycleRate)
+		int cycleRate = (blockEntity.hasWiped && blockEntity.actionType == ActionType.READ_AND_WIPE) ? 600 : 100;
+		if(blockEntity.tickCycle >= cycleRate)
 		{
-			sendUpdate();
-			tickCycle = 0;
+			blockEntity.sendUpdate();
+			blockEntity.tickCycle = 0;
 		}
-		tickCycle++;
+		blockEntity.tickCycle++;
 	}
 	
 	private void sendUpdate()
 	{
 		if(level != null && level.isAreaLoaded(getBlockPos(), 1) && getBlockState().getValue(StructureCoreBlock.ACTIVE))
 		{
-			StructureManager structureManager = ((ServerWorld) level).structureFeatureManager();
-			List<StructureStart<?>> structureStarts = getStructureStarts(structureManager);
+			StructureFeatureManager structureManager = ((ServerLevel) level).structureFeatureManager();
+			List<StructureStart> structureStarts = getStructureStarts(structureManager);
 			
-			for(StructureStart<?> structureStartIterate : structureStarts)
+			for(StructureStart structureStartIterate : structureStarts)
 			{
 				CoreCompatibleScatteredStructurePiece piece = getStructurePiece(structureStartIterate);
 				
@@ -110,12 +110,12 @@ public class StructureCoreTileEntity extends TileEntity implements ITickableTile
 		}
 	}
 	
-	public List<StructureStart<?>> getStructureStarts(StructureManager structureManager)
+	public List<StructureStart> getStructureStarts(StructureFeatureManager structureManager)
 	{
-		List<StructureStart<?>> structureStartList = new ArrayList<>();
-		for(Structure<?> structureListIterate : SOLVABLE_STRUCTURES)
+		List<StructureStart> structureStartList = new ArrayList<>();
+		for(ConfiguredStructureFeature<?, ?> structureListIterate : SOLVABLE_STRUCTURES)
 		{
-			StructureStart<?> potentialStructureStart = structureManager.getStructureAt(getBlockPos(), true, structureListIterate);
+			StructureStart potentialStructureStart = structureManager.getStructureAt(getBlockPos(), structureListIterate);
 			
 			if(potentialStructureStart.isValid())
 				structureStartList.add(potentialStructureStart);
@@ -130,7 +130,7 @@ public class StructureCoreTileEntity extends TileEntity implements ITickableTile
 			piece.nowCompleted();
 	}
 	
-	private CoreCompatibleScatteredStructurePiece getStructurePiece(StructureStart<?> structureStart)
+	private CoreCompatibleScatteredStructurePiece getStructurePiece(StructureStart structureStart)
 	{
 		List<StructurePiece> structurePieceList = structureStart.getPieces();
 		for(StructurePiece pieceIterate : structurePieceList)
@@ -156,7 +156,7 @@ public class StructureCoreTileEntity extends TileEntity implements ITickableTile
 				
 				if(iterateState.hasProperty(MSProperties.SHUT_DOWN) && !iterateState.getValue(MSProperties.SHUT_DOWN))
 				{
-					level.setBlock(iteratePos, iterateState.setValue(MSProperties.SHUT_DOWN, true), Constants.BlockFlags.DEFAULT);
+					level.setBlock(iteratePos, iterateState.setValue(MSProperties.SHUT_DOWN, true), Block.UPDATE_ALL);
 					this.hasWiped = true;
 				}
 				
@@ -164,7 +164,7 @@ public class StructureCoreTileEntity extends TileEntity implements ITickableTile
 				{
 					if(iterateState.getBlock() instanceof SummonerBlock)
 					{
-						level.setBlock(iteratePos, iterateState.setValue(SummonerBlock.UNTRIGGERABLE, false).setValue(SummonerBlock.TRIGGERED, true), Constants.BlockFlags.DEFAULT);
+						level.setBlock(iteratePos, iterateState.setValue(SummonerBlock.UNTRIGGERABLE, false).setValue(SummonerBlock.TRIGGERED, true), Block.UPDATE_ALL);
 					}
 					
 					this.hasWiped = true;
@@ -209,9 +209,9 @@ public class StructureCoreTileEntity extends TileEntity implements ITickableTile
 	}
 	
 	@Override
-	public void load(BlockState state, CompoundNBT compound)
+	public void load(CompoundTag compound)
 	{
-		super.load(state, compound);
+		super.load(compound);
 		tickCycle = compound.getInt("tickCycle");
 		this.actionType = ActionType.fromInt(compound.getInt("actionTypeOrdinal"));
 		hasWiped = compound.getBoolean("hasWiped");
@@ -219,33 +219,25 @@ public class StructureCoreTileEntity extends TileEntity implements ITickableTile
 	}
 	
 	@Override
-	public CompoundNBT save(CompoundNBT compound)
+	public void saveAdditional(CompoundTag compound)
 	{
-		super.save(compound);
+		super.saveAdditional(compound);
 		
 		compound.putInt("tickCycle", tickCycle);
 		compound.putInt("actionTypeOrdinal", getActionType().ordinal());
 		compound.putBoolean("hasWiped", hasWiped);
 		compound.putInt("shutdownRange", shutdownRange);
-		
-		return compound;
 	}
 	
 	@Override
-	public CompoundNBT getUpdateTag()
+	public CompoundTag getUpdateTag()
 	{
-		return this.save(new CompoundNBT());
+		return this.saveWithoutMetadata();
 	}
 	
 	@Override
-	public SUpdateTileEntityPacket getUpdatePacket()
+	public Packet<ClientGamePacketListener> getUpdatePacket()
 	{
-		return new SUpdateTileEntityPacket(getBlockPos(), 2, getUpdateTag());
-	}
-	
-	@Override
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
-	{
-		this.load(getBlockState(), pkt.getTag());
+		return ClientboundBlockEntityDataPacket.create(this);
 	}
 }

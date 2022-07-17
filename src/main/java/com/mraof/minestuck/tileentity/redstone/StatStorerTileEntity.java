@@ -6,15 +6,15 @@ import com.mraof.minestuck.block.redstone.StatStorerBlock;
 import com.mraof.minestuck.event.AlchemyEvent;
 import com.mraof.minestuck.event.GristDropsEvent;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.entity.EntityStruckByLightningEvent;
 import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -29,7 +29,7 @@ import net.minecraftforge.fml.common.Mod;
 import javax.annotation.Nullable;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class StatStorerTileEntity extends TileEntity implements ITickableTileEntity
+public class StatStorerTileEntity extends BlockEntity
 {
 	private float damageStored;
 	private int deathsStored;
@@ -73,35 +73,35 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 		}
 	}
 	
-	public StatStorerTileEntity()
+	public StatStorerTileEntity(BlockPos pos, BlockState state)
 	{
-		super(MSTileEntityTypes.STAT_STORER.get());
+		super(MSTileEntityTypes.STAT_STORER.get(), pos, state);
 	}
 	
-	@Override
-	public void tick()
+	
+	public static void serverTick(Level level, BlockPos pos, BlockState state, StatStorerTileEntity blockEntity)
 	{
-		if(level == null || !level.isAreaLoaded(worldPosition, 1))
+		if(!level.isAreaLoaded(pos, 1))
 			return;
 		
-		if(tickCycle % MinestuckConfig.SERVER.puzzleBlockTickRate.get() == 1)
+		if(blockEntity.tickCycle % MinestuckConfig.SERVER.puzzleBlockTickRate.get() == 1)
 		{
 			if(!level.isClientSide)
 			{
-				int moddedStoredValue = Math.min(15, getActiveStoredStatValue() / getDivideValueBy());
-				if(getBlockState().getValue(StatStorerBlock.POWER) != moddedStoredValue)
-					level.setBlock(getBlockPos(), getBlockState().setValue(StatStorerBlock.POWER, moddedStoredValue), Constants.BlockFlags.DEFAULT);
+				int moddedStoredValue = Math.min(15, blockEntity.getActiveStoredStatValue() / blockEntity.getDivideValueBy());
+				if(state.getValue(StatStorerBlock.POWER) != moddedStoredValue)
+					level.setBlock(pos, state.setValue(StatStorerBlock.POWER, moddedStoredValue), Block.UPDATE_ALL);
 			}
-			if(tickCycle >= 5000) //setting arbitrarily high value that the tick cannot go past
-				tickCycle = 0;
+			if(blockEntity.tickCycle >= 5000) //setting arbitrarily high value that the tick cannot go past
+				blockEntity.tickCycle = 0;
 		}
-		tickCycle++;
+		blockEntity.tickCycle++;
 	}
 	
 	@Override
-	public void load(BlockState state, CompoundNBT compound)
+	public void load(CompoundTag compound)
 	{
-		super.load(state, compound);
+		super.load(compound);
 		
 		if(compound.contains("damageStored"))
 			this.damageStored = compound.getFloat("damageStored");
@@ -158,9 +158,9 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 	}
 	
 	@Override
-	public CompoundNBT save(CompoundNBT compound)
+	public void saveAdditional(CompoundTag compound)
 	{
-		super.save(compound);
+		super.saveAdditional(compound);
 		
 		compound.putFloat("damageStored", damageStored);
 		compound.putInt("deathsStored", deathsStored);
@@ -175,8 +175,6 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 		compound.putInt("tickCycle", tickCycle);
 		compound.putInt("activeTypeOrdinal", getActiveType().ordinal());
 		compound.putInt("divideValueBy", divideValueBy);
-		
-		return compound;
 	}
 	
 	public int getActiveStoredStatValue()
@@ -281,22 +279,20 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 		
 	}
 	
-	public static void attemptStatUpdate(float eventAmount, StatStorerTileEntity.ActiveType activeType, BlockPos eventPos, World world)
+	public static void attemptStatUpdate(float eventAmount, StatStorerTileEntity.ActiveType activeType, BlockPos eventPos, Level level)
 	{
-		if(world != null && !world.isClientSide())
+		if(level != null && !level.isClientSide())
 		{
 			for(BlockPos blockPos : BlockPos.betweenClosed(eventPos.offset(16, 16, 16), eventPos.offset(-16, -16, -16)))
 			{
-				if(!world.isAreaLoaded(blockPos, 0))
+				if(!level.isAreaLoaded(blockPos, 0))
 					return;
 				
-				TileEntity tileEntity = world.getBlockEntity(blockPos);
-				if(tileEntity instanceof StatStorerTileEntity)
+				if(level.getBlockEntity(blockPos) instanceof StatStorerTileEntity statStorer)
 				{
-					StatStorerTileEntity storerTileEntity = (StatStorerTileEntity) tileEntity;
 					
-					if(activeType == storerTileEntity.getActiveType())
-						storerTileEntity.setActiveStoredStatValue(storerTileEntity.getActiveStoredStatValue() + eventAmount);
+					if(activeType == statStorer.getActiveType())
+						statStorer.setActiveStoredStatValue(statStorer.getActiveStoredStatValue() + eventAmount);
 				}
 			}
 		}
@@ -311,7 +307,7 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public static void onSaplingGrow(SaplingGrowTreeEvent event)
 	{
-		attemptStatUpdate(1, StatStorerTileEntity.ActiveType.SAPLING_GROWN, event.getPos(), (World) event.getWorld());
+		attemptStatUpdate(1, StatStorerTileEntity.ActiveType.SAPLING_GROWN, event.getPos(), (Level) event.getWorld());
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
@@ -337,13 +333,13 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public static void onAlchemy(AlchemyEvent event)
 	{
-		attemptStatUpdate(1, StatStorerTileEntity.ActiveType.ALCHEMY_ACTIVATED, event.getAlchemiter().getBlockPos(), event.getWorld());
+		attemptStatUpdate(1, StatStorerTileEntity.ActiveType.ALCHEMY_ACTIVATED, event.getAlchemiter().getBlockPos(), event.getLevel());
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public static void onGristDrop(GristDropsEvent event)
 	{
-		attemptStatUpdate(1, StatStorerTileEntity.ActiveType.GRIST_DROPS, event.getUnderling().getEntity().blockPosition(), event.getUnderling().level);
+		attemptStatUpdate(1, StatStorerTileEntity.ActiveType.GRIST_DROPS, event.getUnderling().blockPosition(), event.getUnderling().level);
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
@@ -359,9 +355,9 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 	}
 	
 	@Override
-	public CompoundNBT getUpdateTag()
+	public CompoundTag getUpdateTag()
 	{
-		CompoundNBT tagCompound = super.getUpdateTag();
+		CompoundTag tagCompound = super.getUpdateTag();
 		tagCompound.putInt("activeTypeOrdinal", getActiveType().ordinal());
 		tagCompound.putInt("divideValueBy", getDivideValueBy());
 		
@@ -370,14 +366,8 @@ public class StatStorerTileEntity extends TileEntity implements ITickableTileEnt
 	
 	@Nullable
 	@Override
-	public SUpdateTileEntityPacket getUpdatePacket()
+	public Packet<ClientGamePacketListener> getUpdatePacket()
 	{
-		return new SUpdateTileEntityPacket(this.worldPosition, 2, getUpdateTag());
-	}
-	
-	@Override
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
-	{
-		this.load(getBlockState(), pkt.getTag());
+		return ClientboundBlockEntityDataPacket.create(this);
 	}
 }

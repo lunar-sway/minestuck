@@ -4,22 +4,29 @@ import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.MSDirectionalBlock;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.effects.CreativeShockEffect;
+import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.tileentity.redstone.RemoteComparatorTileEntity;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particles.RedstoneParticleData;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.IntegerProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -28,7 +35,7 @@ import java.util.Random;
  * Will send out a redstone signal on its sides if the block it is observing(of a distance set by DISTANCE_1_16) matches the block directly behind it.
  * Checks if the blockstates match as well if CHECK_STATE is true.
  */
-public class RemoteComparatorBlock extends MSDirectionalBlock
+public class RemoteComparatorBlock extends MSDirectionalBlock implements EntityBlock
 {
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 	public static final BooleanProperty CHECK_STATE = MSProperties.MACHINE_TOGGLE;
@@ -42,7 +49,7 @@ public class RemoteComparatorBlock extends MSDirectionalBlock
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
 	{
 		if(!CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS))
 		{
@@ -50,85 +57,88 @@ public class RemoteComparatorBlock extends MSDirectionalBlock
 			{
 				if(state.getValue(DISTANCE_1_16) != 16) //increases property until it gets to the highest value at which it resets
 				{
-					worldIn.setBlock(pos, state.setValue(DISTANCE_1_16, state.getValue(DISTANCE_1_16) + 1), Constants.BlockFlags.DEFAULT);
-					worldIn.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 1.2F);
+					level.setBlock(pos, state.setValue(DISTANCE_1_16, state.getValue(DISTANCE_1_16) + 1), Block.UPDATE_ALL);
+					level.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 0.5F, 1.2F);
 				} else
 				{
-					worldIn.setBlock(pos, state.setValue(DISTANCE_1_16, 1), Constants.BlockFlags.DEFAULT);
-					worldIn.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, 1.2F);
+					level.setBlock(pos, state.setValue(DISTANCE_1_16, 1), Block.UPDATE_ALL);
+					level.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundSource.BLOCKS, 0.5F, 1.2F);
 				}
 				
-				return ActionResultType.sidedSuccess(worldIn.isClientSide);
+				return InteractionResult.sidedSuccess(level.isClientSide);
 			} else
 			{
-				worldIn.setBlock(pos, state.cycle(CHECK_STATE), Constants.BlockFlags.DEFAULT);
+				level.setBlock(pos, state.cycle(CHECK_STATE), Block.UPDATE_ALL);
 				if(state.getValue(CHECK_STATE))
-					worldIn.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 1.5F);
+					level.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundSource.BLOCKS, 0.5F, 1.5F);
 				else
-					worldIn.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 0.5F);
+					level.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundSource.BLOCKS, 0.5F, 0.5F);
 				
-				return ActionResultType.sidedSuccess(worldIn.isClientSide);
+				return InteractionResult.sidedSuccess(level.isClientSide);
 			}
 		}
 		
-		return ActionResultType.PASS;
-	}
-	
-	@Override
-	public boolean hasTileEntity(BlockState state)
-	{
-		return true;
+		return InteractionResult.PASS;
 	}
 	
 	@Nullable
 	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world)
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
-		return new RemoteComparatorTileEntity();
+		return new RemoteComparatorTileEntity(pos, state);
 	}
 	
-	public static boolean isMatch(World world, BlockPos comparatorPos)
+	@Nullable
+	@Override
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> placedType)
 	{
-		BlockState comparatorState = world.getBlockState(comparatorPos);
+		return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSTileEntityTypes.REMOTE_COMPARATOR.get(), RemoteComparatorTileEntity::serverTick) : null;
+	}
+	
+	public static boolean isMatch(Level level, BlockPos comparatorPos)
+	{
+		BlockState comparatorState = level.getBlockState(comparatorPos);
 		BlockPos posToCheck = comparatorPos.relative(comparatorState.getValue(FACING), comparatorState.getValue(DISTANCE_1_16));
 		
-		if(world.isAreaLoaded(posToCheck, 0) && world.isAreaLoaded(comparatorPos, 1))
+		if(level.isAreaLoaded(posToCheck, 0) && level.isAreaLoaded(comparatorPos, 1))
 		{
-			BlockState checkingState = world.getBlockState(posToCheck);
-			BlockState referenceState = world.getBlockState(comparatorPos.relative(comparatorState.getValue(FACING).getOpposite())); //state behind the comparator
+			BlockState checkingState = level.getBlockState(posToCheck);
+			BlockState referenceState = level.getBlockState(comparatorPos.relative(comparatorState.getValue(FACING).getOpposite())); //state behind the comparator
 			
 			return comparatorState.getValue(CHECK_STATE) ? checkingState == referenceState : checkingState.getBlock() == referenceState.getBlock();
 		} else
 			return false;
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean isSignalSource(BlockState state)
 	{
 		return state.getValue(POWERED);
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
-	public int getSignal(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side)
+	public int getSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side)
 	{
 		return blockState.getValue(POWERED) ? 15 : 0;
 	}
 	
 	@Override
-	public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side)
+	public boolean canConnectRedstone(BlockState state, BlockGetter level, BlockPos pos, @Nullable Direction side)
 	{
 		return true;
 	}
 	
 	@Override
-	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
+	public void animateTick(BlockState stateIn, Level level, BlockPos pos, Random rand)
 	{
 		if(stateIn.getValue(POWERED))
-			BlockUtil.spawnParticlesAroundSolidBlock(worldIn, pos, () -> RedstoneParticleData.REDSTONE);
+			BlockUtil.spawnParticlesAroundSolidBlock(level, pos, () -> DustParticleOptions.REDSTONE);
 	}
 	
 	@Override
-	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
 	{
 		super.createBlockStateDefinition(builder);
 		builder.add(POWERED);

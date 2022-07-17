@@ -3,33 +3,29 @@ package com.mraof.minestuck.tileentity.redstone;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.redstone.RemoteComparatorBlock;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
-public class RemoteComparatorTileEntity extends TileEntity implements ITickableTileEntity
+public class RemoteComparatorTileEntity extends BlockEntity
 {
 	private int tickCycle;
 	
-	public RemoteComparatorTileEntity()
+	public RemoteComparatorTileEntity(BlockPos pos, BlockState state)
 	{
-		super(MSTileEntityTypes.REMOTE_COMPARATOR.get());
+		super(MSTileEntityTypes.REMOTE_COMPARATOR.get(), pos, state);
 	}
 	
-	@Override
-	public void tick()
+	public static void serverTick(Level level, BlockPos pos, BlockState state, RemoteComparatorTileEntity blockEntity)
 	{
-		if(level == null)
-			return;
-		
-		if(tickCycle >= MinestuckConfig.SERVER.puzzleBlockTickRate.get())
+		if(blockEntity.tickCycle >= MinestuckConfig.SERVER.puzzleBlockTickRate.get())
 		{
-			sendUpdate();
-			tickCycle = 0;
+			blockEntity.sendUpdate();
+			blockEntity.tickCycle = 0;
 		}
-		tickCycle++;
+		blockEntity.tickCycle++;
 	}
 	
 	private void sendUpdate()
@@ -44,19 +40,17 @@ public class RemoteComparatorTileEntity extends TileEntity implements ITickableT
 	}
 	
 	@Override
-	public void load(BlockState state, CompoundNBT compound)
+	public void load(CompoundTag compound)
 	{
-		super.load(state, compound);
+		super.load(compound);
 		tickCycle = compound.getInt("tickCycle");
 	}
 	
 	@Override
-	public CompoundNBT save(CompoundNBT compound)
+	public void saveAdditional(CompoundTag compound)
 	{
-		super.save(compound);
+		super.saveAdditional(compound);
 		
 		compound.putInt("tickCycle", tickCycle);
-		
-		return compound;
 	}
 }

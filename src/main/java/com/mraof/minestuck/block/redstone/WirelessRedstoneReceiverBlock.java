@@ -3,25 +3,33 @@ package com.mraof.minestuck.block.redstone;
 import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.effects.CreativeShockEffect;
+import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.tileentity.redstone.WirelessRedstoneReceiverTileEntity;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.HorizontalBlock;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.particles.RedstoneParticleData;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.IntegerProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -29,7 +37,7 @@ import java.util.Random;
 /**
  * Receives redstone inputs from wireless redstone transmitters. Has a blockstate that allows the receiver to retain the strongest redstone signal it has received
  */
-public class WirelessRedstoneReceiverBlock extends HorizontalBlock
+public class WirelessRedstoneReceiverBlock extends HorizontalDirectionalBlock implements EntityBlock
 {
 	public static final IntegerProperty POWER = BlockStateProperties.POWER;
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED; //used for texture purposes
@@ -44,64 +52,63 @@ public class WirelessRedstoneReceiverBlock extends HorizontalBlock
 		registerDefaultState(stateDefinition.any().setValue(POWER, 0).setValue(POWERED, false).setValue(AUTO_RESET, true).setValue(FACING, Direction.NORTH));
 	}
 	
+	@Nullable
 	@Override
-	public boolean hasTileEntity(BlockState state)
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
-		return true;
+		return new WirelessRedstoneReceiverTileEntity(pos, state);
 	}
 	
 	@Nullable
 	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world)
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> placedType)
 	{
-		return new WirelessRedstoneReceiverTileEntity();
+		return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSTileEntityTypes.WIRELESS_REDSTONE_RECEIVER.get(), WirelessRedstoneReceiverTileEntity::serverTick) : null;
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
 	{
 		if(!CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS))
 		{
-			worldIn.setBlock(pos, state.cycle(AUTO_RESET), Constants.BlockFlags.DEFAULT);
+			level.setBlock(pos, state.cycle(AUTO_RESET), Block.UPDATE_ALL);
 			if(state.getValue(AUTO_RESET))
 			{
-				if(!worldIn.isClientSide)
-					player.sendMessage(new TranslationTextComponent(NOW_NOT_AUTO), Util.NIL_UUID);
-				worldIn.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 1.2F);
+				if(!level.isClientSide)
+					player.sendMessage(new TranslatableComponent(NOW_NOT_AUTO), Util.NIL_UUID);
+				level.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 0.5F, 1.2F);
 			} else
 			{
-				if(!worldIn.isClientSide)
-					player.sendMessage(new TranslationTextComponent(NOW_AUTO), Util.NIL_UUID);
-				worldIn.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, 1.2F);
+				if(!level.isClientSide)
+					player.sendMessage(new TranslatableComponent(NOW_AUTO), Util.NIL_UUID);
+				level.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundSource.BLOCKS, 0.5F, 1.2F);
 			}
 			
-			return ActionResultType.SUCCESS;
+			return InteractionResult.SUCCESS;
 		}
 		
-		return ActionResultType.PASS;
+		return InteractionResult.PASS;
 	}
 	
 	@Nullable
 	@Override
-	public BlockState getStateForPlacement(BlockItemUseContext context)
+	public BlockState getStateForPlacement(BlockPlaceContext context)
 	{
 		return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
 	}
 	
-	public void updatePower(World worldIn, BlockPos posIn, BlockPos transmitterPos)
+	public void updatePower(Level level, BlockPos posIn, BlockPos transmitterPos)
 	{
-		BlockState receiverState = worldIn.getBlockState(posIn);
-		int newPower = worldIn.getBlockState(transmitterPos).getValue(WirelessRedstoneTransmitterBlock.POWER);
+		BlockState receiverState = level.getBlockState(posIn);
+		int newPower = level.getBlockState(transmitterPos).getValue(WirelessRedstoneTransmitterBlock.POWER);
 		
 		BlockState newState = setPower(receiverState, newPower);
 		if(receiverState != newState)
-			worldIn.setBlockAndUpdate(posIn, newState);
+			level.setBlockAndUpdate(posIn, newState);
 		
-		TileEntity tileEntity = worldIn.getBlockEntity(posIn);
-		if(tileEntity instanceof WirelessRedstoneReceiverTileEntity)
+		if(level.getBlockEntity(posIn) instanceof WirelessRedstoneReceiverTileEntity te)
 		{
-			WirelessRedstoneReceiverTileEntity te = (WirelessRedstoneReceiverTileEntity) tileEntity;
 			te.setLastTransmitterBlockPos(transmitterPos);
 		}
 	}
@@ -112,17 +119,18 @@ public class WirelessRedstoneReceiverBlock extends HorizontalBlock
 	}
 	
 	@Override
-	public int getSignal(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side)
+	public int getSignal(BlockState blockState, BlockGetter level, BlockPos pos, Direction side)
 	{
 		return blockState.getValue(POWER);
 	}
 	
 	@Override
-	public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side)
+	public boolean canConnectRedstone(BlockState state, BlockGetter level, BlockPos pos, @Nullable Direction side)
 	{
 		return true;
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean isSignalSource(BlockState state)
 	{
@@ -130,16 +138,16 @@ public class WirelessRedstoneReceiverBlock extends HorizontalBlock
 	}
 	
 	@Override
-	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
+	public void animateTick(BlockState stateIn, Level level, BlockPos pos, Random rand)
 	{
 		if(rand.nextInt(15) < stateIn.getValue(POWER))
 		{
-			BlockUtil.spawnParticlesAroundSolidBlock(worldIn, pos, () -> RedstoneParticleData.REDSTONE);
+			BlockUtil.spawnParticlesAroundSolidBlock(level, pos, () -> DustParticleOptions.REDSTONE);
 		}
 	}
 	
 	@Override
-	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
 	{
 		super.createBlockStateDefinition(builder);
 		builder.add(POWER);

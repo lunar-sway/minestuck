@@ -6,46 +6,44 @@ import com.mraof.minestuck.block.redstone.PlatformGeneratorBlock;
 import com.mraof.minestuck.block.redstone.PlatformReceptacleBlock;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.util.MSTags;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
 
-public class PlatformGeneratorTileEntity extends TileEntity implements ITickableTileEntity
+public class PlatformGeneratorTileEntity extends BlockEntity
 {
 	private int tickCycle;
 	private int platformLength;
 	
-	public PlatformGeneratorTileEntity()
+	public PlatformGeneratorTileEntity(BlockPos pos, BlockState state)
 	{
-		super(MSTileEntityTypes.PLATFORM_GENERATOR.get());
+		super(MSTileEntityTypes.PLATFORM_GENERATOR.get(), pos, state);
 	}
 	
-	@Override
-	public void tick()
+	public static void serverTick(Level level, BlockPos pos, BlockState state, PlatformGeneratorTileEntity blockEntity)
 	{
-		if(level == null || !level.isAreaLoaded(getBlockPos(), 1))
+		if(!level.isAreaLoaded(pos, 1))
 			return;
 		
-		if(tickCycle >= 10)
+		if(blockEntity.tickCycle >= 10)
 		{
-			sendUpdate();
-			tickCycle = 0;
+			blockEntity.sendUpdate();
+			blockEntity.tickCycle = 0;
 		}
 		
-		tickCycle++;
+		blockEntity.tickCycle++;
 	}
 	
 	private void sendUpdate()
 	{
-		if(level != null && !level.isClientSide)
+		if(level != null)
 		{
 			int powerIn = getBlockState().getValue(PlatformGeneratorBlock.POWER);
 			platformLength = powerIn;
@@ -55,7 +53,7 @@ public class PlatformGeneratorTileEntity extends TileEntity implements ITickable
 				for(int blockIterate = 1; blockIterate < platformLength + 1; blockIterate++)
 				{
 					BlockPos iteratePos = new BlockPos(getBlockPos().relative(getBlockState().getValue(PlatformGeneratorBlock.FACING), blockIterate));
-					if(!level.isAreaLoaded(getBlockPos(), blockIterate) || World.isOutsideBuildHeight(iteratePos.getY())) //allows platform blocks to be placed up until it runs out of bounds)
+					if(!level.isAreaLoaded(getBlockPos(), blockIterate) || level.isOutsideBuildHeight(iteratePos)) //allows platform blocks to be placed up until it runs out of bounds)
 					{
 						break;
 					}
@@ -66,7 +64,7 @@ public class PlatformGeneratorTileEntity extends TileEntity implements ITickable
 					{
 						if(iterateBlockState.getValue(PlatformReceptacleBlock.ABSORBING))
 							break;
-					} else if(MSTags.Blocks.PLATFORM_ABSORBING.contains(iterateBlockState.getBlock()))
+					} else if(iterateBlockState.is(MSTags.Blocks.PLATFORM_ABSORBING))
 					{
 						break;
 					} else if(isReplaceable(iterateBlockState))
@@ -85,7 +83,7 @@ public class PlatformGeneratorTileEntity extends TileEntity implements ITickable
 				{
 					BlockPos iteratePos = new BlockPos(getBlockPos().relative(getBlockState().getValue(PlatformGeneratorBlock.FACING), blockIterate));
 					
-					if(!level.isAreaLoaded(getBlockPos(), blockIterate) || World.isOutsideBuildHeight(iteratePos.getY()))
+					if(!level.isAreaLoaded(getBlockPos(), blockIterate) || level.isOutsideBuildHeight(iteratePos.getY()))
 						break;
 					
 					BlockState iterateBlockState = level.getBlockState(iteratePos);
@@ -121,49 +119,41 @@ public class PlatformGeneratorTileEntity extends TileEntity implements ITickable
 		return false;
 	}
 	
-	private void generatePlatform(World world, BlockPos pos, int loopIteration)
+	private void generatePlatform(Level level, BlockPos pos, int loopIteration)
 	{
-		world.setBlockAndUpdate(pos, MSBlocks.PLATFORM_BLOCK.defaultBlockState()
+		level.setBlockAndUpdate(pos, MSBlocks.PLATFORM_BLOCK.defaultBlockState()
 				.setValue(PlatformBlock.INVISIBLE, getBlockState().getValue(PlatformGeneratorBlock.INVISIBLE_MODE))
 				.setValue(PlatformBlock.FACING, getBlockState().getValue(PlatformGeneratorBlock.FACING))
 				.setValue(PlatformBlock.GENERATOR_DISTANCE, loopIteration));
 	}
 	
 	@Override
-	public void load(BlockState state, CompoundNBT compound)
+	public void load(CompoundTag compound)
 	{
-		super.load(state, compound);
+		super.load(compound);
 		
 		tickCycle = compound.getInt("tickCycle");
 		platformLength = compound.getInt("platformLength");
 	}
 	
 	@Override
-	public CompoundNBT save(CompoundNBT compound)
+	public void saveAdditional(CompoundTag compound)
 	{
-		super.save(compound);
+		super.saveAdditional(compound);
 		
 		compound.putInt("tickCycle", tickCycle);
 		compound.putInt("platformLength", platformLength);
-		
-		return compound;
 	}
 	
 	@Override
-	public CompoundNBT getUpdateTag()
+	public CompoundTag getUpdateTag()
 	{
-		return this.save(new CompoundNBT());
+		return this.saveWithoutMetadata();
 	}
 	
 	@Override
-	public SUpdateTileEntityPacket getUpdatePacket()
+	public Packet<ClientGamePacketListener> getUpdatePacket()
 	{
-		return new SUpdateTileEntityPacket(getBlockPos(), 2, getUpdateTag());
-	}
-	
-	@Override
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
-	{
-		this.load(getBlockState(), pkt.getTag());
+		return ClientboundBlockEntityDataPacket.create(this);
 	}
 }

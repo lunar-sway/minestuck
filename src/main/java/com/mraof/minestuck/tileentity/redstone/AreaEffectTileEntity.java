@@ -4,45 +4,46 @@ import com.mraof.minestuck.block.redstone.AreaEffectBlock;
 import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 
-public class AreaEffectTileEntity extends TileEntity implements ITickableTileEntity
+public class AreaEffectTileEntity extends BlockEntity
 {
 	//TODO deserialize/reserialize function + triggering of all summoners
 	
-	private Effect effect;
+	private MobEffect effect;
 	private int effectAmplifier;
 	private BlockPos minAreaOffset;
 	private BlockPos maxAreaOffset;
 	private boolean needsTranslation = false;
 	
-	public AreaEffectTileEntity()
+	public AreaEffectTileEntity(BlockPos pos, BlockState state)
 	{
-		super(MSTileEntityTypes.AREA_EFFECT.get());
+		super(MSTileEntityTypes.AREA_EFFECT.get(), pos, state);
 	}
 	
-	@Override
-	public void tick()
+	public static void serverTick(Level level, BlockPos pos, BlockState state, AreaEffectTileEntity blockEntity)
 	{
-		if(level == null || !level.isAreaLoaded(getBlockPos(), 0))
+		
+		if(!level.isAreaLoaded(pos, 0))
 			return;
 		
-		if(level.getGameTime() % 80 == 0 && !level.isClientSide && getBlockState().getValue(AreaEffectBlock.POWERED) && !getBlockState().getValue(AreaEffectBlock.SHUT_DOWN))
+		if(level.getGameTime() % 80 == 0 && !level.isClientSide && state.getValue(AreaEffectBlock.POWERED) && !state.getValue(AreaEffectBlock.SHUT_DOWN))
 		{
-			giveEntitiesEffect();
+			blockEntity.giveEntitiesEffect();
 		}
 	}
 	
@@ -59,16 +60,16 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 		
 		if(getBlockState().getValue(AreaEffectBlock.ALL_MOBS))
 		{
-			for(LivingEntity livingEntity : level.getLoadedEntitiesOfClass(LivingEntity.class, new AxisAlignedBB(minAreaPos, maxAreaPos)))
+			for(LivingEntity livingEntity : level.getEntitiesOfClass(LivingEntity.class, new AABB(minAreaPos, maxAreaPos)))
 			{
 				if(effect instanceof CreativeShockEffect) //skips later creative/harmful specific checks as the effect should always be given
 				{
-					livingEntity.addEffect(new EffectInstance(effect, 120, effectAmplifier, false, false));
+					livingEntity.addEffect(new MobEffectInstance(effect, 120, effectAmplifier, false, false));
 				} else
 				{
-					if(livingEntity instanceof PlayerEntity)
+					if(livingEntity instanceof Player player)
 					{
-						if(((PlayerEntity) livingEntity).isCreative() && !effect.isBeneficial())
+						if(player.isCreative() && !effect.isBeneficial())
 							break;
 					}
 					
@@ -77,11 +78,11 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 			}
 		} else
 		{
-			for(PlayerEntity playerEntity : level.getLoadedEntitiesOfClass(PlayerEntity.class, new AxisAlignedBB(minAreaPos, maxAreaPos)))
+			for(Player playerEntity : level.getEntitiesOfClass(Player.class, new AABB(minAreaPos, maxAreaPos)))
 			{
 				if(effect instanceof CreativeShockEffect) //skips later creative/harmful specific checks as the effect should always be given
 				{
-					playerEntity.addEffect(new EffectInstance(effect, 120, effectAmplifier, false, false));
+					playerEntity.addEffect(new MobEffectInstance(effect, 120, effectAmplifier, false, false));
 				} else
 				{
 					if(playerEntity.isCreative() && !effect.isBeneficial())
@@ -95,16 +96,16 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 	
 	private void addEffect(LivingEntity livingEntity)
 	{
-		livingEntity.addEffect(new EffectInstance(effect, effect.isInstantenous() ? 1 : 120, effectAmplifier, false, false));
+		livingEntity.addEffect(new MobEffectInstance(effect, effect.isInstantenous() ? 1 : 120, effectAmplifier, false, false));
 	}
 	
-	public void setEffect(Effect effectIn, int effectAmplifierIn)
+	public void setEffect(MobEffect effectIn, int effectAmplifierIn)
 	{
 		this.effect = effectIn;
 		this.effectAmplifier = effectAmplifierIn;
 	}
 	
-	public Effect getEffect()
+	public MobEffect getEffect()
 	{
 		if(effect == null)
 			effect = MSEffects.CREATIVE_SHOCK.get();
@@ -218,7 +219,7 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 		y = Math.max(y, -64);
 		z = Math.max(z, -64);
 		
-		y = MathHelper.clamp(y, -tePos.getY(), te.getLevel().getMaxBuildHeight() - tePos.getY());
+		y = Mth.clamp(y, -tePos.getY(), te.getLevel().getMaxBuildHeight() - tePos.getY());
 		
 		return new BlockPos(x, y, z);
 	}
@@ -234,7 +235,7 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 		y = Math.min(y, 64);
 		z = Math.min(z, 64);
 		
-		y = MathHelper.clamp(y, -tePos.getY(), te.getLevel().getMaxBuildHeight() - tePos.getY());
+		y = Mth.clamp(y, -tePos.getY(), te.getLevel().getMaxBuildHeight() - tePos.getY());
 		
 		return new BlockPos(x, y, z);
 	}
@@ -248,11 +249,11 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 	}
 	
 	@Override
-	public void load(BlockState state, CompoundNBT compound)
+	public void load(CompoundTag compound)
 	{
-		super.load(state, compound);
+		super.load(compound);
 		
-		Effect effectRead = Effect.byId(compound.getInt("effect"));
+		MobEffect effectRead = MobEffect.byId(compound.getInt("effect"));
 		if(effectRead != null)
 		{
 			effect = effectRead;
@@ -284,11 +285,11 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 	}
 	
 	@Override
-	public CompoundNBT save(CompoundNBT compound)
+	public void saveAdditional(CompoundTag compound)
 	{
-		super.save(compound);
+		super.saveAdditional(compound);
 		
-		compound.putInt("effect", Effect.getId(getEffect()));
+		compound.putInt("effect", MobEffect.getId(getEffect()));
 		compound.putInt("effectAmplifier", effectAmplifier);
 		
 		getMinAreaOffset();
@@ -301,25 +302,17 @@ public class AreaEffectTileEntity extends TileEntity implements ITickableTileEnt
 		compound.putInt("maxAreaOffsetX", maxAreaOffset.getX());
 		compound.putInt("maxAreaOffsetY", maxAreaOffset.getY());
 		compound.putInt("maxAreaOffsetZ", maxAreaOffset.getZ());
-		
-		return compound;
 	}
 	
 	@Override
-	public CompoundNBT getUpdateTag()
+	public CompoundTag getUpdateTag()
 	{
-		return this.save(new CompoundNBT());
+		return this.saveWithoutMetadata();
 	}
 	
 	@Override
-	public SUpdateTileEntityPacket getUpdatePacket()
+	public Packet<ClientGamePacketListener> getUpdatePacket()
 	{
-		return new SUpdateTileEntityPacket(getBlockPos(), 2, getUpdateTag());
-	}
-	
-	@Override
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
-	{
-		this.load(getBlockState(), pkt.getTag());
+		return ClientboundBlockEntityDataPacket.create(this);
 	}
 }

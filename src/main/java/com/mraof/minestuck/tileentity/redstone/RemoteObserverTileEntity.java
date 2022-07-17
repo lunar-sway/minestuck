@@ -5,16 +5,18 @@ import com.mraof.minestuck.block.redstone.RemoteObserverBlock;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.util.MSTags;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -22,7 +24,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiPredicate;
 
-public class RemoteObserverTileEntity extends TileEntity implements ITickableTileEntity
+public class RemoteObserverTileEntity extends BlockEntity
 {
 	private int tickCycle;
 	@Nonnull
@@ -70,32 +72,31 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 		}
 	}
 	
-	public RemoteObserverTileEntity()
+	public RemoteObserverTileEntity(BlockPos pos, BlockState state)
 	{
-		super(MSTileEntityTypes.REMOTE_OBSERVER.get());
+		super(MSTileEntityTypes.REMOTE_OBSERVER.get(), pos, state);
 		activeType = ActiveType.IS_LIVING_ENTITY_PRESENT;
 	}
 	
-	@Override
-	public void tick()
+	public static void serverTick(Level level, BlockPos pos, BlockState state, RemoteObserverTileEntity blockEntity)
 	{
-		if(level == null || !level.isAreaLoaded(getBlockPos(), 1))
+		if(!level.isAreaLoaded(pos, 1))
 			return;
 		
-		if(tickCycle >= MinestuckConfig.SERVER.puzzleBlockTickRate.get() * 1.667) //6 * 1.667 ~= 10 ticks or 0.5 sec by default
+		if(blockEntity.tickCycle >= MinestuckConfig.SERVER.puzzleBlockTickRate.get() * 1.667) //6 * 1.667 ~= 10 ticks or 0.5 sec by default
 		{
-			checkRelaventType();
-			tickCycle = 0;
+			blockEntity.checkRelaventType();
+			blockEntity.tickCycle = 0;
 		}
-		tickCycle++;
+		blockEntity.tickCycle++;
 	}
 	
-	public void checkRelaventType()
+	private void checkRelaventType()
 	{
 		boolean shouldBePowered = false;
 		
-		AxisAlignedBB axisalignedbb = new AxisAlignedBB(getBlockPos()).inflate(observingRange);
-		List<Entity> entityList = level.getLoadedEntitiesOfClass(Entity.class, axisalignedbb);
+		AABB axisalignedbb = new AABB(getBlockPos()).inflate(observingRange);
+		List<Entity> entityList = level.getEntities(null, axisalignedbb);
 		if(!entityList.isEmpty())
 		{
 			for(Entity entity : entityList)
@@ -105,12 +106,9 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 			}
 		}
 		
-		if(!level.isClientSide)
-		{
-			if(getBlockState().getValue(RemoteObserverBlock.POWERED) != shouldBePowered)
-				level.setBlockAndUpdate(getBlockPos(), getBlockState().setValue(RemoteObserverBlock.POWERED, shouldBePowered));
-			else level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 2);
-		}
+		if(getBlockState().getValue(RemoteObserverBlock.POWERED) != shouldBePowered)
+			level.setBlockAndUpdate(getBlockPos(), getBlockState().setValue(RemoteObserverBlock.POWERED, shouldBePowered));
+		else level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 2);
 	}
 	
 	public void setCurrentEntityType(EntityType<?> currentEntityType)
@@ -131,7 +129,7 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 	 */
 	public static boolean entityCanBeObserved(EntityType<?> currentEntityType)
 	{
-		return !MSTags.EntityTypes.REMOTE_OBSERVER_BLACKLIST.contains(currentEntityType);
+		return !currentEntityType.is(MSTags.EntityTypes.REMOTE_OBSERVER_BLACKLIST);
 	}
 	
 	public void setObservingRange(int rangeIn)
@@ -145,9 +143,9 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 	}
 	
 	@Override
-	public void load(BlockState state, CompoundNBT compound)
+	public void load(CompoundTag compound)
 	{
-		super.load(state, compound);
+		super.load(compound);
 		
 		this.tickCycle = compound.getInt("tickCycle");
 		this.activeType = ActiveType.fromInt(compound.getInt("activeTypeOrdinal"));
@@ -160,16 +158,14 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 	}
 	
 	@Override
-	public CompoundNBT save(CompoundNBT compound)
+	public void saveAdditional(CompoundTag compound)
 	{
-		super.save(compound);
+		super.saveAdditional(compound);
 		
 		compound.putInt("tickCycle", tickCycle);
 		compound.putInt("activeTypeOrdinal", getActiveType().ordinal());
 		compound.putInt("observingRange", observingRange);
 		compound.putString("currentEntityType", EntityType.getKey(getCurrentEntityType()).toString());
-		
-		return compound;
 	}
 	
 	public ActiveType getActiveType()
@@ -183,20 +179,14 @@ public class RemoteObserverTileEntity extends TileEntity implements ITickableTil
 	}
 	
 	@Override
-	public CompoundNBT getUpdateTag()
+	public CompoundTag getUpdateTag()
 	{
-		return this.save(new CompoundNBT());
+		return this.saveWithoutMetadata();
 	}
 	
 	@Override
-	public SUpdateTileEntityPacket getUpdatePacket()
+	public Packet<ClientGamePacketListener> getUpdatePacket()
 	{
-		return new SUpdateTileEntityPacket(getBlockPos(), 2, getUpdateTag());
-	}
-	
-	@Override
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
-	{
-		this.load(getBlockState(), pkt.getTag());
+		return ClientboundBlockEntityDataPacket.create(this);
 	}
 }

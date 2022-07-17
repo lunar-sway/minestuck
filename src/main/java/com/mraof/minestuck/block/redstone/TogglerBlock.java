@@ -1,22 +1,24 @@
 package com.mraof.minestuck.block.redstone;
 
+import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.MSDirectionalBlock;
 import com.mraof.minestuck.block.MSProperties;
-import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.tileentity.redstone.StatStorerTileEntity;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.phys.BlockHitResult;
 
 /**
  * Toggles the state of the block it is facing upon receiving a new redstone signal if that block has the MACHINE_TOGGLE property from MSProperties,
@@ -35,71 +37,73 @@ public class TogglerBlock extends MSDirectionalBlock
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
 	{
-		worldIn.setBlock(pos, state.cycle(DISCHARGE), Constants.BlockFlags.DEFAULT);
+		level.setBlock(pos, state.cycle(DISCHARGE), Block.UPDATE_ALL);
 		if(state.getValue(DISCHARGE))
-			worldIn.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 1.2F);
+			level.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 0.5F, 1.2F);
 		else
-			worldIn.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, 1.2F);
-		return ActionResultType.sidedSuccess(worldIn.isClientSide);
+			level.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundSource.BLOCKS, 0.5F, 1.2F);
+		return InteractionResult.sidedSuccess(level.isClientSide);
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
-	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
 	{
-		super.neighborChanged(state, worldIn, pos, blockIn, fromPos, isMoving);
+		super.neighborChanged(state, level, pos, blockIn, fromPos, isMoving);
 		if(fromPos != pos.relative(state.getValue(FACING)))
-			updatePower(worldIn, pos);
+			updatePower(level, pos);
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
-	public void onPlace(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving)
+	public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
 	{
-		super.onPlace(state, worldIn, pos, oldState, isMoving);
-		updatePower(worldIn, pos);
+		super.onPlace(state, level, pos, oldState, isMoving);
+		updatePower(level, pos);
 	}
 	
-	public void updatePower(World worldIn, BlockPos pos)
+	public void updatePower(Level level, BlockPos pos)
 	{
-		if(!worldIn.isClientSide)
+		if(!level.isClientSide)
 		{
-			BlockState state = worldIn.getBlockState(pos);
+			BlockState state = level.getBlockState(pos);
 			Direction stateFacing = state.getValue(FACING);
-			boolean hasPower = BlockUtil.hasSignalNotFromFacing(worldIn, pos, stateFacing);
+			boolean hasPower = BlockUtil.hasSignalNotFromFacing(level, pos, stateFacing);
 			
 			boolean isPoweredBeforeUpdate = state.getValue(POWERED);
 			
 			if(state.getValue(POWERED) != hasPower)
-				worldIn.setBlockAndUpdate(pos, state.setValue(POWERED, hasPower));
-			else worldIn.sendBlockUpdated(pos, state, state, 2);
+				level.setBlockAndUpdate(pos, state.setValue(POWERED, hasPower));
+			else level.sendBlockUpdated(pos, state, state, 2);
 			
 			if(!isPoweredBeforeUpdate && hasPower)
 			{
 				BlockPos facingPos = pos.relative(state.getValue(FACING));
-				BlockState facingState = worldIn.getBlockState(facingPos);
+				BlockState facingState = level.getBlockState(facingPos);
 				
 				if(state.getValue(DISCHARGE))
-					discharge(worldIn, pos, state, facingPos, facingState);
+					discharge(level, pos, state, facingPos, facingState);
 				else
-					toggle(worldIn, pos, state, facingPos, facingState);
+					toggle(level, pos, state, facingPos, facingState);
 			}
 		}
 	}
 	
-	private void toggle(World worldIn, BlockPos pos, BlockState state, BlockPos facingPos, BlockState facingState)
+	private void toggle(Level level, BlockPos pos, BlockState state, BlockPos facingPos, BlockState facingState)
 	{
 		//TODO consider allowing the active type of RemoteObserverTileEntity and StatStorerTileEntity to be iterated while in toggle mode
 		if(facingState.hasProperty(MSProperties.MACHINE_TOGGLE))
 		{
-			worldIn.setBlock(facingPos, facingState.cycle(MSProperties.MACHINE_TOGGLE), Constants.BlockFlags.DEFAULT);
+			level.setBlock(facingPos, facingState.cycle(MSProperties.MACHINE_TOGGLE), Block.UPDATE_ALL);
 			
-			if(!worldIn.getBlockState(pos.relative(state.getValue(FACING).getOpposite())).getBlock().asItem().is(ItemTags.WOOL)) //wont make a toggle sound if the toggler is "muted" by a wool block
-				worldIn.playSound(null, facingPos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, facingState.getValue(MSProperties.MACHINE_TOGGLE) ? 1.5F : 0.5F);
+			if(!level.getBlockState(pos.relative(state.getValue(FACING).getOpposite())).is(BlockTags.WOOL)) //wont make a toggle sound if the toggler is "muted" by a wool block
+				level.playSound(null, facingPos, SoundEvents.UI_BUTTON_CLICK, SoundSource.BLOCKS, 0.5F, facingState.getValue(MSProperties.MACHINE_TOGGLE) ? 1.5F : 0.5F);
 		}
 	}
 	
-	private void discharge(World worldIn, BlockPos pos, BlockState state, BlockPos facingPos, BlockState facingState)
+	private void discharge(Level level, BlockPos pos, BlockState state, BlockPos facingPos, BlockState facingState)
 	{
 		boolean updated = false;
 		
@@ -108,29 +112,28 @@ public class TogglerBlock extends MSDirectionalBlock
 		{
 			if(facingState.hasProperty(BlockStateProperties.POWERED))
 			{
-				worldIn.setBlock(facingPos, facingState.setValue(BlockStateProperties.POWERED, false), Constants.BlockFlags.DEFAULT);
+				level.setBlock(facingPos, facingState.setValue(BlockStateProperties.POWERED, false), Block.UPDATE_ALL);
 				updated = true;
 			}
 			if(facingState.hasProperty(BlockStateProperties.POWER))
 			{
-				worldIn.setBlock(facingPos, facingState.setValue(BlockStateProperties.POWER, 0), Constants.BlockFlags.DEFAULT);
+				level.setBlock(facingPos, facingState.setValue(BlockStateProperties.POWER, 0), Block.UPDATE_ALL);
 				updated = true;
 			}
 		}
 		
 		//setting the active stat type for stat storers to 0
-		TileEntity tileEntity = worldIn.getBlockEntity(facingPos);
-		if(tileEntity instanceof StatStorerTileEntity)
+		if(level.getBlockEntity(facingPos) instanceof StatStorerTileEntity statStorer)
 		{
-			((StatStorerTileEntity) tileEntity).setActiveStoredStatValue(0);
+			statStorer.setActiveStoredStatValue(0);
 		}
 		
-		if(updated && !worldIn.getBlockState(pos.relative(state.getValue(FACING).getOpposite())).getBlock().asItem().is(ItemTags.WOOL)) //wont make a toggle sound if the toggler is "muted" by a wool block
-			worldIn.playSound(null, facingPos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, 0.5F);
+		if(updated && !level.getBlockState(pos.relative(state.getValue(FACING).getOpposite())).is(BlockTags.WOOL)) //wont make a toggle sound if the toggler is "muted" by a wool block
+			level.playSound(null, facingPos, SoundEvents.UI_BUTTON_CLICK, SoundSource.BLOCKS, 0.5F, 0.5F);
 	}
 	
 	@Override
-	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
 	{
 		super.createBlockStateDefinition(builder);
 		builder.add(POWERED);

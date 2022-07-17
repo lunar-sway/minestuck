@@ -1,23 +1,22 @@
 package com.mraof.minestuck.block.redstone;
 
 import com.mraof.minestuck.block.BlockUtil;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particles.RedstoneParticleData;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.Direction;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.phys.AABB;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -37,99 +36,102 @@ public class BlockPressurePlateBlock extends Block
 	}
 	
 	@Override
-	public void stepOn(World worldIn, BlockPos pos, Entity entityIn)
+	public void stepOn(Level level, BlockPos pos, BlockState state, Entity entityIn)
 	{
-		BlockState state = worldIn.getBlockState(pos);
-		
-		if(entityIn instanceof PlayerEntity)
+		if(entityIn instanceof Player)
 		{
-			tryDepressPlate(worldIn, pos, state, true);
+			tryDepressPlate(level, pos, state, true);
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
-	public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random)
+	public void tick(BlockState state, ServerLevel level, BlockPos pos, Random random)
 	{
-		super.tick(state, worldIn, pos, random);
+		super.tick(state, level, pos, random);
 		
-		if(!worldIn.isClientSide)
+		if(!level.isClientSide)
 		{
-			AxisAlignedBB checkBB = new AxisAlignedBB(pos);
-			List<PlayerEntity> list = worldIn.getEntitiesOfClass(PlayerEntity.class, checkBB.move(0, 0.5, 0));
+			AABB checkBB = new AABB(pos);
+			List<Player> list = level.getEntitiesOfClass(Player.class, checkBB.move(0, 0.5, 0));
 			boolean entityStandingOnBlock = list.stream().anyMatch(playerEntity -> playerEntity.isOnGround() && !playerEntity.isCrouching());
 			
-			if(!entityStandingOnBlock && !isAboveBlockFullyTouching(worldIn, pos.above()) && state.getValue(POWERED))
+			if(!entityStandingOnBlock && !isAboveBlockFullyTouching(level, pos.above()) && state.getValue(POWERED))
 			{
-				worldIn.setBlock(pos, state.setValue(POWERED, false), Constants.BlockFlags.DEFAULT);
-				worldIn.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 1.2F);
+				level.setBlock(pos, state.setValue(POWERED, false), Block.UPDATE_ALL);
+				level.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 0.5F, 1.2F);
 			} else if(entityStandingOnBlock)
 			{
-				worldIn.getBlockTicks().scheduleTick(new BlockPos(pos), this, 20);
+				level.scheduleTick(new BlockPos(pos), this, 20);
 			}
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean isSignalSource(BlockState state)
 	{
 		return state.getValue(POWERED);
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
-	public int getSignal(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side)
+	public int getSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side)
 	{
 		return blockState.getValue(POWERED) ? 15 : 0;
 	}
 	
 	@Override
-	public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side)
+	public boolean canConnectRedstone(BlockState state, BlockGetter level, BlockPos pos, @Nullable Direction side)
 	{
 		return true;
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
-	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
 	{
-		super.neighborChanged(state, worldIn, pos, blockIn, fromPos, isMoving);
-		tryDepressPlate(worldIn, pos, state, false);
+		super.neighborChanged(state, level, pos, blockIn, fromPos, isMoving);
+		tryDepressPlate(level, pos, state, false);
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
-	public void onPlace(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving)
+	public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
 	{
-		super.onPlace(state, worldIn, pos, oldState, isMoving);
-		tryDepressPlate(worldIn, pos, state, false);
+		super.onPlace(state, level, pos, oldState, isMoving);
+		tryDepressPlate(level, pos, state, false);
 	}
 	
-	public static boolean isAboveBlockFullyTouching(World worldIn, BlockPos abovePos)
+	public static boolean isAboveBlockFullyTouching(Level level, BlockPos abovePos)
 	{
-		return worldIn.getBlockState(abovePos).isFaceSturdy(worldIn, abovePos, Direction.DOWN);
+		return level.getBlockState(abovePos).isFaceSturdy(level, abovePos, Direction.DOWN);
 	}
 	
 	/**
 	 * Will depress the plate assuming the block is being stepped on by a player or while a suitable block is above it, causing it to become powered
 	 */
-	public void tryDepressPlate(World worldIn, BlockPos pos, BlockState state, boolean steppedOn)
+	public void tryDepressPlate(Level level, BlockPos pos, BlockState state, boolean steppedOn)
 	{
 		BlockPos abovePos = pos.above();
-		if((isAboveBlockFullyTouching(worldIn, abovePos) || steppedOn) && !state.getValue(POWERED))
+		if((isAboveBlockFullyTouching(level, abovePos) || steppedOn) && !state.getValue(POWERED))
 		{
-			worldIn.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, 1.2F);
-			worldIn.setBlock(pos, state.setValue(POWERED, true), Constants.BlockFlags.DEFAULT);
+			level.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundSource.BLOCKS, 0.5F, 1.2F);
+			level.setBlock(pos, state.setValue(POWERED, true), Block.UPDATE_ALL);
 		}
 		
-		worldIn.getBlockTicks().scheduleTick(new BlockPos(pos), this, 20);
+		level.scheduleTick(new BlockPos(pos), this, 20);
 	}
 	
 	@Override
-	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
+	public void animateTick(BlockState stateIn, Level level, BlockPos pos, Random rand)
 	{
 		if(stateIn.getValue(POWERED))
-			BlockUtil.spawnParticlesAroundSolidBlock(worldIn, pos, () -> RedstoneParticleData.REDSTONE);
+			BlockUtil.spawnParticlesAroundSolidBlock(level, pos, () -> DustParticleOptions.REDSTONE);
 	}
 	
 	@Override
-	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
 	{
 		super.createBlockStateDefinition(builder);
 		builder.add(POWERED);

@@ -3,21 +3,21 @@ package com.mraof.minestuck.block.redstone;
 import com.mraof.minestuck.block.MSDirectionalBlock;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.util.MSTags;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.IntegerProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.Random;
 
@@ -35,47 +35,51 @@ public class PlatformBlock extends MSDirectionalBlock
 		registerDefaultState(stateDefinition.any().setValue(INVISIBLE, false).setValue(GENERATOR_DISTANCE, 1));
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
-	public float getShadeBrightness(BlockState state, IBlockReader world, BlockPos pos)
+	public float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos)
 	{
 		return 1.0F;
 	}
 	
-	public VoxelShape getVisualShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context)
+	@SuppressWarnings("deprecation")
+	@Override
+	public VoxelShape getVisualShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
 	{
-		return VoxelShapes.empty();
+		return Shapes.empty();
 	}
 	
 	@Override
-	public boolean propagatesSkylightDown(BlockState state, IBlockReader world, BlockPos pos)
+	public boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos)
 	{
 		return true;
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
-	public BlockRenderType getRenderShape(BlockState state)
+	public RenderShape getRenderShape(BlockState state)
 	{
 		if(state.getValue(INVISIBLE))
-			return BlockRenderType.INVISIBLE;
+			return RenderShape.INVISIBLE;
 		else
-			return BlockRenderType.MODEL;
+			return RenderShape.MODEL;
 	}
 	
 	/**
 	 * Using the generator distance block state and its facing,this function determines if a platform generator is still capable of refreshing this block and deletes the block if it is not supported.
 	 * There must be a powered platform generator at the coordinates established by the generator distance and facing, and there must not be any blocks in the tag PLATFORM_ABSORBING or absorbing mode platform receptacles in between the platform block and its generator
 	 */
-	public static void updateSurvival(BlockState state, World world, BlockPos pos)
+	public static void updateSurvival(BlockState state, Level level, BlockPos pos)
 	{
-		if(!world.isClientSide() && state.getBlock() instanceof PlatformBlock)
+		if(!level.isClientSide() && state.getBlock() instanceof PlatformBlock)
 		{
 			Direction stateFacing = state.getValue(FACING);
 			BlockPos supportingPos = pos.relative(stateFacing.getOpposite(), state.getValue(GENERATOR_DISTANCE));
-			if(world.isAreaLoaded(supportingPos, 0))
+			if(level.isAreaLoaded(supportingPos, 0))
 			{
-				BlockState supportingState = world.getBlockState(supportingPos);
+				BlockState supportingState = level.getBlockState(supportingPos);
 				
-				checkForAbsorbers(state, world, pos, stateFacing);
+				checkForAbsorbers(state, level, pos, stateFacing);
 				
 				boolean supportingStateIsGenerator = supportingState.getBlock() instanceof PlatformGeneratorBlock;
 				boolean generatorHasSameFacing = false;
@@ -87,56 +91,59 @@ public class PlatformBlock extends MSDirectionalBlock
 				}
 				
 				if(!supportingStateIsGenerator || (!generatorHasPower || !generatorHasSameFacing))
-					world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState()); //removes platform block if there is no platform generator, or if a platform generator is there but it is either not powered or not facing the platform block
+					level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState()); //removes platform block if there is no platform generator, or if a platform generator is there but it is either not powered or not facing the platform block
 				else
 				{
 					boolean generatorSetToInvisible = supportingState.getValue(PlatformGeneratorBlock.INVISIBLE_MODE);
 					boolean thisSetToInvisible = state.getValue(INVISIBLE);
 					
 					if(generatorSetToInvisible != thisSetToInvisible)
-						world.setBlockAndUpdate(pos, state.setValue(INVISIBLE, generatorSetToInvisible)); //TODO Visible platforms should override invisible ones
+						level.setBlockAndUpdate(pos, state.setValue(INVISIBLE, generatorSetToInvisible)); //TODO Visible platforms should override invisible ones
 				}
 			}
 		}
 	}
 	
-	public static void checkForAbsorbers(BlockState state, World world, BlockPos pos, Direction stateFacing)
+	public static void checkForAbsorbers(BlockState state, Level level, BlockPos pos, Direction stateFacing)
 	{
 		for(int blockIterate = 1; blockIterate < state.getValue(GENERATOR_DISTANCE); blockIterate++) //looping through blocks between the platform block and its generator for absorbing kinds
 		{
 			BlockPos iteratePos = pos.relative(stateFacing.getOpposite(), blockIterate);
-			BlockState iterateState = world.getBlockState(iteratePos);
-			if(MSTags.Blocks.PLATFORM_ABSORBING.contains(iterateState.getBlock()) ||
+			BlockState iterateState = level.getBlockState(iteratePos);
+			if(iterateState.is(MSTags.Blocks.PLATFORM_ABSORBING) ||
 					(iterateState.getBlock() instanceof PlatformReceptacleBlock && iterateState.getValue(PlatformReceptacleBlock.ABSORBING)))
 			{
-				world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+				level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
 			}
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
-	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
 	{
-		super.neighborChanged(state, worldIn, pos, blockIn, fromPos, isMoving);
-		updateSurvival(state, worldIn, pos);
+		super.neighborChanged(state, level, pos, blockIn, fromPos, isMoving);
+		updateSurvival(state, level, pos);
+	}
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public void tick(BlockState state, ServerLevel level, BlockPos pos, Random rand)
+	{
+		super.tick(state, level, pos, rand);
+		updateSurvival(state, level, pos);
+	}
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
+	{
+		super.onPlace(state, level, pos, oldState, isMoving);
+		level.scheduleTick(new BlockPos(pos), this, 20);
 	}
 	
 	@Override
-	public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand)
-	{
-		super.tick(state, worldIn, pos, rand);
-		updateSurvival(state, worldIn, pos);
-	}
-	
-	@Override
-	public void onPlace(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving)
-	{
-		super.onPlace(state, worldIn, pos, oldState, isMoving);
-		worldIn.getBlockTicks().scheduleTick(new BlockPos(pos), this, 20);
-	}
-	
-	@Override
-	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
 	{
 		super.createBlockStateDefinition(builder);
 		builder.add(INVISIBLE);

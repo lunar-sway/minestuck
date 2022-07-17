@@ -4,22 +4,28 @@ import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.MSDirectionalBlock;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.effects.CreativeShockEffect;
+import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.tileentity.redstone.PlatformGeneratorTileEntity;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particles.RedstoneParticleData;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.IntegerProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -29,7 +35,7 @@ import java.util.Random;
  * These blocks will generate even if there is a physical barrier between the generator and the end of the line, but only replace air or fluid blocks.
  * Right clicking the block toggles whether the generated platform blocks are visible
  */
-public class PlatformGeneratorBlock extends MSDirectionalBlock
+public class PlatformGeneratorBlock extends MSDirectionalBlock implements EntityBlock
 {
 	public static final IntegerProperty POWER = BlockStateProperties.POWER;
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED; //used for texture purposes
@@ -43,96 +49,100 @@ public class PlatformGeneratorBlock extends MSDirectionalBlock
 		registerDefaultState(stateDefinition.any().setValue(FACING, Direction.UP).setValue(POWER, 0).setValue(POWERED, false).setValue(INVISIBLE_MODE, false));
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
-	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
 	{
 		if(!CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS))
 		{
-			worldIn.setBlock(pos, state.cycle(INVISIBLE_MODE), Constants.BlockFlags.DEFAULT);
-			worldIn.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 0.5F, state.getValue(INVISIBLE_MODE) ? 1.5F : 0.5F);
+			level.setBlock(pos, state.cycle(INVISIBLE_MODE), Block.UPDATE_ALL);
+			level.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundSource.BLOCKS, 0.5F, state.getValue(INVISIBLE_MODE) ? 1.5F : 0.5F);
 			
-			return ActionResultType.SUCCESS;
+			return InteractionResult.SUCCESS;
 		}
 		
-		return ActionResultType.PASS;
-	}
-	
-	@Override
-	public boolean hasTileEntity(BlockState state)
-	{
-		return true;
+		return InteractionResult.PASS;
 	}
 	
 	@Nullable
 	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world)
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
-		return new PlatformGeneratorTileEntity();
+		return new PlatformGeneratorTileEntity(pos, state);
 	}
 	
+	@Nullable
 	@Override
-	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> placedType)
 	{
-		super.neighborChanged(state, worldIn, pos, blockIn, fromPos, isMoving);
-		updatePower(worldIn, pos);
+		return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSTileEntityTypes.PLATFORM_GENERATOR.get(), PlatformGeneratorTileEntity::serverTick) : null;
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
-	public void onPlace(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving)
+	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
 	{
-		super.onPlace(state, worldIn, pos, oldState, isMoving);
-		updatePower(worldIn, pos);
+		super.neighborChanged(state, level, pos, blockIn, fromPos, isMoving);
+		updatePower(level, pos);
 	}
 	
-	public void updatePower(World worldIn, BlockPos pos)
+	@SuppressWarnings("deprecation")
+	@Override
+	public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
 	{
-		if(!worldIn.isClientSide)
+		super.onPlace(state, level, pos, oldState, isMoving);
+		updatePower(level, pos);
+	}
+	
+	public void updatePower(Level level, BlockPos pos)
+	{
+		if(!level.isClientSide)
 		{
-			BlockState state = worldIn.getBlockState(pos);
-			int powerInt = worldIn.getBestNeighborSignal(pos);
+			BlockState state = level.getBlockState(pos);
+			int powerInt = level.getBestNeighborSignal(pos);
 			
 			if(state.getValue(POWER) != powerInt)
-				worldIn.setBlockAndUpdate(pos, state.setValue(POWER, powerInt));
-			else worldIn.sendBlockUpdated(pos, state, state, 2);
+				level.setBlockAndUpdate(pos, state.setValue(POWER, powerInt));
+			else level.sendBlockUpdated(pos, state, state, 2);
 			
 			if(state.getValue(POWERED) != powerInt > 0)
-				worldIn.setBlockAndUpdate(pos, state.setValue(POWERED, powerInt > 0));
-			else worldIn.sendBlockUpdated(pos, state, state, 2);
+				level.setBlockAndUpdate(pos, state.setValue(POWERED, powerInt > 0));
+			else level.sendBlockUpdated(pos, state, state, 2);
 		}
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving)
+	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
 	{
-		super.onRemove(state, worldIn, pos, newState, isMoving);
+		super.onRemove(state, level, pos, newState, isMoving);
 		
 		Direction facing = state.getValue(FACING);
 		for(int blockIterate = 1; blockIterate < MAX_GENERATOR_REACH; blockIterate++)
 		{
 			BlockPos iteratePos = new BlockPos(pos.relative(facing, blockIterate));
 			
-			if(!worldIn.isAreaLoaded(pos, blockIterate) || World.isOutsideBuildHeight(iteratePos.getY()))
+			if(!level.isAreaLoaded(pos, blockIterate) || level.isOutsideBuildHeight(iteratePos.getY()))
 				break;
 			
-			BlockState iterateBlockState = worldIn.getBlockState(iteratePos);
+			BlockState iterateBlockState = level.getBlockState(iteratePos);
 			
 			if(iterateBlockState.getBlock() instanceof PlatformBlock)
-				PlatformBlock.updateSurvival(iterateBlockState, worldIn, iteratePos);
+				PlatformBlock.updateSurvival(iterateBlockState, level, iteratePos);
 		}
 	}
 	
 	@Override
-	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
+	public void animateTick(BlockState stateIn, Level level, BlockPos pos, Random rand)
 	{
 		if(rand.nextInt(15) < stateIn.getValue(POWER))
 		{
-			BlockUtil.spawnParticlesAroundSolidBlock(worldIn, pos, () -> RedstoneParticleData.REDSTONE);
+			BlockUtil.spawnParticlesAroundSolidBlock(level, pos, () -> DustParticleOptions.REDSTONE);
 		}
 	}
 	
 	@Override
-	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
 	{
 		super.createBlockStateDefinition(builder);
 		builder.add(POWER);

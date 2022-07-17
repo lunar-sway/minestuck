@@ -3,74 +3,74 @@ package com.mraof.minestuck.tileentity.redstone;
 import com.mraof.minestuck.block.redstone.SummonerBlock;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.*;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Optional;
 
-public class SummonerTileEntity extends TileEntity implements ITickableTileEntity
+public class SummonerTileEntity extends BlockEntity
 {
 	private EntityType<?> summonType;
 	private int cooldownTimer;
 	private int summonRange = 8; //default is 8, but can be set(via gui) between 1 and 64
 	
-	public SummonerTileEntity()
+	public SummonerTileEntity(BlockPos pos, BlockState state)
 	{
-		super(MSTileEntityTypes.SUMMONER.get());
+		super(MSTileEntityTypes.SUMMONER.get(), pos, state);
 	}
 	
-	@Override
-	public void tick()
+	public static void serverTick(Level level, BlockPos pos, BlockState state, SummonerTileEntity blockEntity)
 	{
 		if(level == null)
 			return;
 		
-		if(cooldownTimer >= 200) //summoner has a cooldown of 10 seconds(10 sec * 20 tick) to prevent entity spamming
+		if(blockEntity.cooldownTimer >= 200) //summoner has a cooldown of 10 seconds(10 sec * 20 tick) to prevent entity spamming
 		{
-			cooldownTimer = 0;
+			blockEntity.cooldownTimer = 0;
 		}
 		
-		if(cooldownTimer != 0)
-			cooldownTimer++;
+		if(blockEntity.cooldownTimer != 0)
+			blockEntity.cooldownTimer++;
 	}
 	
-	public void summonEntity(World worldIn, BlockPos summonerBlockPos, EntityType<?> type, boolean triggerActivate, boolean playParticles)
+	public void summonEntity(Level levelIn, BlockPos summonerBlockPos, EntityType<?> type, boolean triggerActivate, boolean playParticles)
 	{
 		if(type == null)
 			throw new IllegalStateException("SummonerTileEntity unable to create a new entity. Entity factory returned null!");
 		
-		if(cooldownTimer == 0 && worldIn instanceof IServerWorld)
+		if(cooldownTimer == 0 && levelIn instanceof ServerLevel level)
 		{
 			int iterateTracker = 0;
 			for(int i = 0; i < 60; i++) //arbitrarily high
 			{
 				iterateTracker = i;
-				double newPosX = summonerBlockPos.getX() + (worldIn.random.nextDouble() - 0.5D) * summonRange;
-				double newPosY = summonerBlockPos.getY() + (worldIn.random.nextDouble() - 0.5D) * summonRange;
-				double newPosZ = summonerBlockPos.getZ() + (worldIn.random.nextDouble() - 0.5D) * summonRange;
-				if(worldIn.noCollision(type.getAABB(newPosX, newPosY, newPosZ)) && //checks that entity wont suffocate
-						EntitySpawnPlacementRegistry.checkSpawnRules(type, (IServerWorld) worldIn, SpawnReason.SPAWN_EGG, new BlockPos(newPosX, newPosY, newPosZ), worldIn.getRandom())) //helps spawn entity on a valid floor
+				double newPosX = summonerBlockPos.getX() + (level.random.nextDouble() - 0.5D) * summonRange;
+				double newPosY = summonerBlockPos.getY() + (level.random.nextDouble() - 0.5D) * summonRange;
+				double newPosZ = summonerBlockPos.getZ() + (level.random.nextDouble() - 0.5D) * summonRange;
+				if(level.noCollision(type.getAABB(newPosX, newPosY, newPosZ)) && //checks that entity wont suffocate
+						SpawnPlacements.checkSpawnRules(type, level, MobSpawnType.SPAWN_EGG, new BlockPos(newPosX, newPosY, newPosZ), levelIn.getRandom())) //helps spawn entity on a valid floor
 				{
 					BlockPos newBlockPos = new BlockPos(newPosX, newPosY, newPosZ);
-					type.spawn((ServerWorld) worldIn, null, null, null, newBlockPos, SpawnReason.SPAWN_EGG, true, true); //TODO mob spawning conforms to light level/spawning surface/other conditions of normal generation which limits undead mob use
+					type.spawn(level, null, null, null, newBlockPos, MobSpawnType.SPAWN_EGG, true, true); //TODO mob spawning conforms to light level/spawning surface/other conditions of normal generation which limits undead mob use
 					
 					if(playParticles)
 					{
 						//TODO caused a crash, bring back in later
 						/*for(int particleIterate = 0; particleIterate < 5; particleIterate++)
 						{
-							worldIn.addParticle(ParticleTypes.POOF, true, newPosX, newPosY, newPosZ, 0.1, 0.1, 0.1);
+							level.addParticle(ParticleTypes.POOF, true, newPosX, newPosY, newPosZ, 0.1, 0.1, 0.1);
 						}*/
 					}
 					break;
@@ -78,11 +78,11 @@ public class SummonerTileEntity extends TileEntity implements ITickableTileEntit
 			}
 			
 			if(iterateTracker == 59)
-				worldIn.getBlockTicks().scheduleTick(new BlockPos(summonerBlockPos), worldIn.getBlockState(summonerBlockPos).getBlock(), 30); //if a valid resting spot was not found in the 59 checks of the for loop then the block will be reset and will try again in 1.5 seconds
+				level.scheduleTick(new BlockPos(summonerBlockPos), getBlockState().getBlock(), 30); //if a valid resting spot was not found in the 59 checks of the for loop then the block will be reset and will try again in 1.5 seconds
 			else
 			{
 				if(triggerActivate)
-					worldIn.setBlockAndUpdate(getBlockPos(), getBlockState().setValue(SummonerBlock.TRIGGERED, true));
+					level.setBlockAndUpdate(getBlockPos(), getBlockState().setValue(SummonerBlock.TRIGGERED, true));
 				
 				cooldownTimer = 1;
 			}
@@ -103,7 +103,7 @@ public class SummonerTileEntity extends TileEntity implements ITickableTileEntit
 	
 	public void setSummonRange(int rangeIn)
 	{
-		this.summonRange = MathHelper.clamp(rangeIn, 1, 64);
+		this.summonRange = Mth.clamp(rangeIn, 1, 64);
 	}
 	
 	public int getSummonRange()
@@ -112,12 +112,12 @@ public class SummonerTileEntity extends TileEntity implements ITickableTileEntit
 	}
 	
 	@Override
-	public void load(BlockState state, CompoundNBT compound)
+	public void load(CompoundTag compound)
 	{
-		super.load(state, compound);
+		super.load(compound);
 		
 		cooldownTimer = compound.getInt("cooldownTimer");
-		if(compound.contains("summonRange", Constants.NBT.TAG_ANY_NUMERIC))
+		if(compound.contains("summonRange", Tag.TAG_ANY_NUMERIC))
 			this.setSummonRange(compound.getInt("summonRange"));
 		else this.setSummonRange(16); //16 was previously the default
 		Optional<EntityType<?>> attemptedSummonType = EntityType.byString(compound.getString("summonType"));
@@ -125,32 +125,24 @@ public class SummonerTileEntity extends TileEntity implements ITickableTileEntit
 	}
 	
 	@Override
-	public CompoundNBT save(CompoundNBT compound)
+	public void saveAdditional(CompoundTag compound)
 	{
-		super.save(compound);
+		super.saveAdditional(compound);
 		
 		compound.putInt("cooldownTimer", cooldownTimer);
 		compound.putInt("summonRange", summonRange);
 		compound.putString("summonType", EntityType.getKey(getSummonedEntity()).toString());
-		
-		return compound;
 	}
 	
 	@Override
-	public CompoundNBT getUpdateTag()
+	public CompoundTag getUpdateTag()
 	{
-		return this.save(new CompoundNBT());
+		return this.saveWithoutMetadata();
 	}
 	
 	@Override
-	public SUpdateTileEntityPacket getUpdatePacket()
+	public Packet<ClientGamePacketListener> getUpdatePacket()
 	{
-		return new SUpdateTileEntityPacket(getBlockPos(), 2, getUpdateTag());
-	}
-	
-	@Override
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
-	{
-		this.load(getBlockState(), pkt.getTag());
+		return ClientboundBlockEntityDataPacket.create(this);
 	}
 }

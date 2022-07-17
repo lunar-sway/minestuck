@@ -3,39 +3,39 @@ package com.mraof.minestuck.tileentity.redstone;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.redstone.WirelessRedstoneReceiverBlock;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
-public class WirelessRedstoneReceiverTileEntity extends TileEntity implements ITickableTileEntity
+public class WirelessRedstoneReceiverTileEntity extends BlockEntity
 {
 	private BlockPos lastTransmitterBlockPos;
 	private int lastTransmission;
 	
-	public WirelessRedstoneReceiverTileEntity()
+	public WirelessRedstoneReceiverTileEntity(BlockPos pos, BlockState state)
 	{
-		super(MSTileEntityTypes.WIRELESS_REDSTONE_RECEIVER.get());
+		super(MSTileEntityTypes.WIRELESS_REDSTONE_RECEIVER.get(), pos, state);
 	}
 	
-	@Override
-	public void tick()
+	public static void serverTick(Level level, BlockPos pos, BlockState state, WirelessRedstoneReceiverTileEntity blockEntity)
 	{
-		if(level == null || !level.isAreaLoaded(getBlockPos(), 1))
+		if(!level.isAreaLoaded(pos, 1))
 			return;
 		
-		if(lastTransmission >= MinestuckConfig.SERVER.puzzleBlockTickRate.get() && level.getBlockState(getBlockPos()).getValue(WirelessRedstoneReceiverBlock.AUTO_RESET))
+		if(blockEntity.lastTransmission >= MinestuckConfig.SERVER.puzzleBlockTickRate.get() && state.getValue(WirelessRedstoneReceiverBlock.AUTO_RESET))
 		{
-			renewFromLastTransmitter();
-			lastTransmission = 0;
+			blockEntity.renewFromLastTransmitter();
+			blockEntity.lastTransmission = 0;
 		}
 		
-		if(lastTransmission < MinestuckConfig.SERVER.puzzleBlockTickRate.get()) //how many ticks since last transmission
-			lastTransmission++;
+		if(blockEntity.lastTransmission < MinestuckConfig.SERVER.puzzleBlockTickRate.get()) //how many ticks since last transmission
+			blockEntity.lastTransmission++;
 	}
 	
 	public BlockPos getLastTransmitterBlockPos()
@@ -62,29 +62,27 @@ public class WirelessRedstoneReceiverTileEntity extends TileEntity implements IT
 			
 			if(lastTransmitterBlockPos != null && level.isAreaLoaded(lastTransmitterBlockPos, 1))
 			{
-				TileEntity tileEntity = level.getBlockEntity(lastTransmitterBlockPos);
-				if(tileEntity instanceof WirelessRedstoneTransmitterTileEntity)
+				if(level.getBlockEntity(lastTransmitterBlockPos) instanceof WirelessRedstoneTransmitterTileEntity te)
 				{
-					WirelessRedstoneTransmitterTileEntity te = (WirelessRedstoneTransmitterTileEntity) tileEntity;
 					
 					te.sendUpdateToPosition(level, getBlockPos());
 				} else
 				{
 					if(state != unpoweredState)
-						level.setBlock(getBlockPos(), unpoweredState, Constants.BlockFlags.DEFAULT);
+						level.setBlock(getBlockPos(), unpoweredState, Block.UPDATE_ALL);
 				}
 			} else
 			{
 				if(state != unpoweredState)
-					level.setBlock(getBlockPos(), unpoweredState, Constants.BlockFlags.DEFAULT);
+					level.setBlock(getBlockPos(), unpoweredState, Block.UPDATE_ALL);
 			}
 		}
 	}
 	
 	@Override
-	public void load(BlockState state, CompoundNBT compound)
+	public void load(CompoundTag compound)
 	{
-		super.load(state, compound);
+		super.load(compound);
 		
 		lastTransmission = compound.getInt("lastTransmission");
 		int transmitterX = compound.getInt("transmitterX");
@@ -94,9 +92,9 @@ public class WirelessRedstoneReceiverTileEntity extends TileEntity implements IT
 	}
 	
 	@Override
-	public CompoundNBT save(CompoundNBT compound)
+	public void saveAdditional(CompoundTag compound)
 	{
-		super.save(compound);
+		super.saveAdditional(compound);
 		
 		compound.putInt("lastTransmission", lastTransmission);
 		
@@ -105,25 +103,17 @@ public class WirelessRedstoneReceiverTileEntity extends TileEntity implements IT
 		compound.putInt("transmitterX", lastTransmitterBlockPos.getX());
 		compound.putInt("transmitterY", lastTransmitterBlockPos.getY());
 		compound.putInt("transmitterZ", lastTransmitterBlockPos.getZ());
-		
-		return compound;
 	}
 	
 	@Override
-	public CompoundNBT getUpdateTag()
+	public CompoundTag getUpdateTag()
 	{
-		return this.save(new CompoundNBT());
+		return this.saveWithoutMetadata();
 	}
 	
 	@Override
-	public SUpdateTileEntityPacket getUpdatePacket()
+	public Packet<ClientGamePacketListener> getUpdatePacket()
 	{
-		return new SUpdateTileEntityPacket(getBlockPos(), 2, getUpdateTag());
-	}
-	
-	@Override
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
-	{
-		this.load(getBlockState(), pkt.getTag());
+		return ClientboundBlockEntityDataPacket.create(this);
 	}
 }
