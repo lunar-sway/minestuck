@@ -5,12 +5,12 @@ import com.refinedmods.refinedstorage.api.network.node.INetworkNodeFactory;
 import com.refinedmods.refinedstorage.api.network.node.INetworkNodeManager;
 import com.refinedmods.refinedstorage.apiimpl.API;
 import com.refinedmods.refinedstorage.util.NetworkUtils;
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,19 +21,19 @@ public class RSEntryBlockProcess implements EntryBlockProcessing
 	private static final Logger LOGGER = LogManager.getLogger();
 
 	@Override
-	public void copyOver(ServerWorld oldWorld, BlockPos oldPos, ServerWorld newWorld, BlockPos newPos, BlockState state, @Nullable TileEntity oldTE, @Nullable TileEntity newTE)
+	public void copyOver(ServerLevel oldLevel, BlockPos oldPos, ServerLevel newLevel, BlockPos newPos, BlockState state, @Nullable BlockEntity oldBE, @Nullable BlockEntity newBE)
 	{
 		//1 get the old node
-		INetworkNode node = NetworkUtils.getNodeFromTile(oldTE);
+		INetworkNode node = NetworkUtils.getNodeFromBlockEntity(oldBE);
 
 		if(node != null)
 		{
 			//2 create new node from old node data
-			INetworkNode newNode = createNewNode(node, newWorld, newPos);
+			INetworkNode newNode = createNewNode(node, newLevel, newPos);
 			if(newNode != null)
 			{
 				//3 set new node to node manager
-				INetworkNodeManager manager = API.instance().getNetworkNodeManager(newWorld);
+				INetworkNodeManager manager = API.instance().getNetworkNodeManager(newLevel);
 				manager.setNode(newPos, newNode);
 
 				//4 TODO perhaps do something with networks?
@@ -42,9 +42,9 @@ public class RSEntryBlockProcess implements EntryBlockProcessing
 		}
 	}
 
-	private static INetworkNode createNewNode(INetworkNode oldNode, ServerWorld newWorld, BlockPos newPos)
+	private static INetworkNode createNewNode(INetworkNode oldNode, ServerLevel newLevel, BlockPos newPos)
 	{
-		CompoundNBT nbt = oldNode.write(new CompoundNBT());
+		CompoundTag nbt = oldNode.write(new CompoundTag());
 		ResourceLocation id = oldNode.getId();
 
 		INetworkNodeFactory factory = API.instance().getNetworkNodeRegistry().get(id);
@@ -54,7 +54,7 @@ public class RSEntryBlockProcess implements EntryBlockProcessing
 
 			try
 			{
-				newNode = factory.create(nbt, newWorld, newPos);
+				newNode = factory.create(nbt, newLevel, newPos);
 			} catch(Throwable exception)
 			{
 				LOGGER.warn("Got exception when attempting to make a copy of RE-node {}", id, exception);

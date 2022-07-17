@@ -2,13 +2,13 @@ package com.mraof.minestuck.entry;
 
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.projectile.DragonFireballEntity;
-import net.minecraft.entity.projectile.FireballEntity;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.math.GlobalPos;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
 
+import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -28,7 +28,7 @@ public class EntryEvent
 	private static void handleConnection(SburbConnection connection, MinecraftServer server)
 	{
 		GlobalPos pos = connection.getClientComputer().getPosForEditmode();
-		ServerWorld level = server.getLevel(pos.dimension());
+		ServerLevel level = server.getLevel(pos.dimension());
 		if (level != null && level.isLoaded(pos.pos()))
 		{
 			// Spawn some kind of fireball in the sky near the computer
@@ -38,11 +38,17 @@ public class EntryEvent
 			double y = 256;
 			double z = pos.pos().getZ() + 0.5 + RADIUS * invertedPyramidDist(rand);
 			
-			Entity entity;
+			AbstractHurtingProjectile entity;
 			if (rand.nextFloat() < 0.95)
-				entity = new FireballEntity(level, x, y, z, 0, -1, 0);
+				entity = EntityType.FIREBALL.create(level);
 			else
-				entity = new DragonFireballEntity(level, x, y, z, 0, -1, 0);
+				entity = EntityType.DRAGON_FIREBALL.create(level);
+			Objects.requireNonNull(entity);
+			entity.moveTo(x, y, z, entity.getYRot(), entity.getXRot());
+			entity.xPower = 0;
+			entity.yPower = -0.1D;
+			entity.zPower = 0;
+			
 			level.addFreshEntity(entity);
 		}
 	}
