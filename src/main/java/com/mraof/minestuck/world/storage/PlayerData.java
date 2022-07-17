@@ -21,14 +21,14 @@ import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.world.MSDimensions;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -54,7 +54,7 @@ public final class PlayerData
 	@SubscribeEvent
 	public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event)
 	{
-		ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
+		ServerPlayer player = (ServerPlayer) event.getPlayer();
 		PlayerSavedData.getData(player).onPlayerLoggedIn(player);
 		MSDimensions.sendDimensionData(player);
 	}
@@ -62,7 +62,7 @@ public final class PlayerData
 	@SubscribeEvent
 	public static void onPlayerChangeDimension(PlayerEvent.PlayerChangedDimensionEvent event)
 	{
-		ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
+		ServerPlayer player = (ServerPlayer) event.getPlayer();
 		PlayerSavedData.getData(player).sendConsortReputation(player);
 	}
 	
@@ -94,7 +94,7 @@ public final class PlayerData
 		hasLoggedIn = false;
 	}
 	
-	PlayerData(PlayerSavedData savedData, CompoundNBT nbt)
+	PlayerData(PlayerSavedData savedData, CompoundTag nbt)
 	{
 		this.savedData = savedData;
 		this.identifier = IdentifierHandler.load(nbt, "player");
@@ -111,12 +111,12 @@ public final class PlayerData
 		}
 		else givenModus = nbt.getBoolean("given_modus");
 		boondollars = nbt.getLong("boondollars");
-		gristCache = NonNegativeGristSet.read(nbt.getList("grist_cache", Constants.NBT.TAG_COMPOUND)).asImmutable();
+		gristCache = NonNegativeGristSet.read(nbt.getList("grist_cache", Tag.TAG_COMPOUND)).asImmutable();
 		
-		ListNBT list = nbt.getList("consort_reputation", Constants.NBT.TAG_COMPOUND);
+		ListTag list = nbt.getList("consort_reputation", Tag.TAG_COMPOUND);
 		for(int i = 0; i < list.size(); i++)
 		{
-			CompoundNBT dimensionRep = list.getCompound(i);
+			CompoundTag dimensionRep = list.getCompound(i);
 			ResourceLocation dimension = ResourceLocation.tryParse(dimensionRep.getString("dim"));
 			if(dimension != null)
 				consortReputation.put(dimension, dimensionRep.getInt("rep"));
@@ -128,9 +128,9 @@ public final class PlayerData
 		hasLoggedIn = true;
 	}
 	
-	CompoundNBT writeToNBT()
+	CompoundTag writeToNBT()
 	{
-		CompoundNBT nbt = new CompoundNBT();
+		CompoundTag nbt = new CompoundTag();
 		identifier.saveToNBT(nbt, "player");
 		echeladder.saveEcheladder(nbt);
 		nbt.putInt("color", color);
@@ -139,12 +139,12 @@ public final class PlayerData
 			nbt.put("modus", CaptchaDeckHandler.writeToNBT(modus));
 		else nbt.putBoolean("given_modus", givenModus);
 		nbt.putLong("boondollars", boondollars);
-		nbt.put("grist_cache", gristCache.write(new ListNBT()));
+		nbt.put("grist_cache", gristCache.write(new ListTag()));
 		
-		ListNBT list = new ListNBT();
+		ListTag list = new ListTag();
 		for(Map.Entry<ResourceLocation, Integer> entry : consortReputation.entrySet())
 		{
-			CompoundNBT dimensionRep = new CompoundNBT();
+			CompoundTag dimensionRep = new CompoundTag();
 			dimensionRep.putString("dim", entry.getKey().toString());
 			dimensionRep.putInt("rep", entry.getValue());
 			list.add(dimensionRep);
@@ -269,15 +269,15 @@ public final class PlayerData
 		}
 	}
 	
-	public int getConsortReputation(RegistryKey<World> dim)
+	public int getConsortReputation(ResourceKey<Level> dim)
 	{
 		return consortReputation.getOrDefault(dim.location(), 0);
 	}
 	
-	public void addConsortReputation(int amount, RegistryKey<World> dim)
+	public void addConsortReputation(int amount, ResourceKey<Level> dim)
 	{
 		int oldRep = getConsortReputation(dim);
-		int newRep = MathHelper.clamp(oldRep + amount, -10000, 10000);
+		int newRep = Mth.clamp(oldRep + amount, -10000, 10000);
 		
 		if(newRep != oldRep)
 		{
@@ -328,7 +328,7 @@ public final class PlayerData
 		}
 	}
 	
-	private void tryGiveStartingModus(ServerPlayerEntity player)
+	private void tryGiveStartingModus(ServerPlayer player)
 	{
 		List<String> startingTypes = MinestuckConfig.SERVER.startingModusTypes.get();
 		if(!startingTypes.isEmpty())
@@ -354,7 +354,7 @@ public final class PlayerData
 		}
 	}
 	
-	public void onPlayerLoggedIn(ServerPlayerEntity player)
+	public void onPlayerLoggedIn(ServerPlayer player)
 	{
 		getEcheladder().updateEcheladderBonuses(player);
 		
@@ -376,7 +376,7 @@ public final class PlayerData
 		hasLoggedIn = true;
 	}
 	
-	private void sendColor(ServerPlayerEntity player, boolean firstTime)
+	private void sendColor(ServerPlayer player, boolean firstTime)
 	{
 		if(player == null)
 			return;
@@ -389,7 +389,7 @@ public final class PlayerData
 		}
 	}
 	
-	private void sendBoondollars(ServerPlayerEntity player)
+	private void sendBoondollars(ServerPlayer player)
 	{
 		if(player == null)
 			return;
@@ -397,7 +397,7 @@ public final class PlayerData
 		MSPacketHandler.sendToPlayer(packet, player);
 	}
 	
-	private void sendConsortReputation(ServerPlayerEntity player)
+	private void sendConsortReputation(ServerPlayer player)
 	{
 		if(player == null)
 			return;
@@ -405,7 +405,7 @@ public final class PlayerData
 		//MSPacketHandler.sendToPlayer(packet, player);
 	}
 	
-	private void updateGristCache(ServerPlayerEntity player)
+	private void updateGristCache(ServerPlayer player)
 	{
 		GristSet gristSet = getGristCache();
 		
@@ -428,7 +428,7 @@ public final class PlayerData
 		}
 	}
 	
-	private void sendTitle(ServerPlayerEntity player)
+	private void sendTitle(ServerPlayer player)
 	{
 		Title newTitle = getTitle();
 		if(newTitle == null || player == null)
@@ -437,7 +437,7 @@ public final class PlayerData
 		MSPacketHandler.sendToPlayer(packet, player);
 	}
 	
-	private ServerPlayerEntity getPlayer()
+	private ServerPlayer getPlayer()
 	{
 		return identifier.getPlayer(savedData.mcServer);
 	}

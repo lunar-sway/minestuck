@@ -30,7 +30,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.WorldPersistenceHooks;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -56,8 +55,6 @@ public class Minestuck
 		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, MinestuckConfig.clientSpec);
 		ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, MinestuckConfig.serverSpec);
 		
-		WorldPersistenceHooks.addHook(new MSWorldPersistenceHook());
-
 		GeckoLib.initialize();
 		
 		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -93,7 +90,6 @@ public class Minestuck
 		MSCriteriaTriggers.register();
 		MSEntityTypes.registerPlacements();
 		MSFillerBlockTypes.init();	//Not sure if this is thread safe, but better safe than sorry
-		MSCFeatures.init();
 		MSWorldGenTypes.register();
 		
 		ConsortDialogue.init();

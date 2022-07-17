@@ -3,15 +3,15 @@ package com.mraof.minestuck.player;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -25,7 +25,7 @@ public final class Title
 	
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private static final Effect[] aspectEffects = {Effects.ABSORPTION, Effects.MOVEMENT_SPEED, Effects.DAMAGE_RESISTANCE, Effects.ABSORPTION, Effects.FIRE_RESISTANCE, Effects.REGENERATION, Effects.LUCK, Effects.NIGHT_VISION, Effects.DAMAGE_BOOST, Effects.JUMP, Effects.DIG_SPEED, Effects.INVISIBILITY }; //Blood, Breath, Doom, Heart, Hope, Life, Light, Mind, Rage, Space, Time, Void
+	private static final MobEffect[] aspectEffects = {MobEffects.ABSORPTION, MobEffects.MOVEMENT_SPEED, MobEffects.DAMAGE_RESISTANCE, MobEffects.ABSORPTION, MobEffects.FIRE_RESISTANCE, MobEffects.REGENERATION, MobEffects.LUCK, MobEffects.NIGHT_VISION, MobEffects.DAMAGE_BOOST, MobEffects.JUMP, MobEffects.DIG_SPEED, MobEffects.INVISIBILITY }; //Blood, Breath, Doom, Heart, Hope, Life, Light, Mind, Rage, Space, Time, Void
 	// Increase the starting rungs
 	private static final float[] aspectStrength = new float[] {1.0F/14, 1.0F/15, 1.0F/28, 1.0F/14, 1.0F/18, 1.0F/20, 1.0F/10, 1.0F/12, 1.0F/25, 1.0F/10, 1.0F/13, 1.0F/12}; //Absorption, Speed, Resistance, Saturation, Fire Resistance, Regeneration, Luck, Night Vision, Strength, Jump Boost, Haste, Invisibility
 	
@@ -49,7 +49,7 @@ public final class Title
 		return this.heroAspect;
 	}
 	
-	public void handleAspectEffects(ServerPlayerEntity player)
+	public void handleAspectEffects(ServerPlayer player)
 	{
 		if(!MinestuckConfig.SERVER.aspectEffects.get())
 			return;
@@ -64,12 +64,12 @@ public final class Title
 			{
 				if(rung > 18 && aspect == HOPE)
 				{
-					player.addEffect(new EffectInstance(Effects.WATER_BREATHING, 600, 0));
+					player.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, 600, 0));
 				}
 				
 				if(potionLevel > 0)
 				{
-					player.addEffect(new EffectInstance(aspectEffects[aspect.ordinal()], 600, potionLevel - 1));
+					player.addEffect(new MobEffectInstance(aspectEffects[aspect.ordinal()], 600, potionLevel - 1));
 					LOGGER.debug("Applied aspect potion effect to {}", player.getDisplayName().getString());
 				}
 			}
@@ -82,17 +82,16 @@ public final class Title
 		return heroClass.toString() + " of " + heroAspect.toString();
 	}
 	
-	public ITextComponent asTextComponent()
+	public Component asTextComponent()
 	{
-		return new TranslationTextComponent(FORMAT, heroClass.asTextComponent(), heroAspect.asTextComponent());
+		return new TranslatableComponent(FORMAT, heroClass.asTextComponent(), heroAspect.asTextComponent());
 	}
 	
 	@Override
 	public boolean equals(Object obj)
 	{
-		if(obj instanceof Title)
+		if(obj instanceof Title title)
 		{
-			Title title = (Title) obj;
 			return title.heroClass.equals(this.heroClass) && title.heroAspect.equals(this.heroAspect);
 		}
 		return false;
@@ -109,20 +108,20 @@ public final class Title
 		return prefix != null && !prefix.isEmpty() ? prefix + "_" : "";
 	}
 	
-	public static Title read(PacketBuffer buffer)
+	public static Title read(FriendlyByteBuf buffer)
 	{
 		EnumClass c = EnumClass.getClassFromInt(buffer.readByte());
 		EnumAspect a = EnumAspect.getAspectFromInt(buffer.readByte());
 		return new Title(c, a);
 	}
 	
-	public void write(PacketBuffer buffer)
+	public void write(FriendlyByteBuf buffer)
 	{
 		buffer.writeByte(EnumClass.getIntFromClass(heroClass));
 		buffer.writeByte(EnumAspect.getIntFromAspect(heroAspect));
 	}
 	
-	public static Title read(CompoundNBT nbt, String keyPrefix)
+	public static Title read(CompoundTag nbt, String keyPrefix)
 	{
 		keyPrefix = makeNBTPrefix(keyPrefix);
 		EnumClass c = EnumClass.getClassFromInt(nbt.getByte(keyPrefix+"class"));
@@ -130,10 +129,10 @@ public final class Title
 		return new Title(c, a);
 	}
 	
-	public static Title tryRead(CompoundNBT nbt, String keyPrefix)
+	public static Title tryRead(CompoundTag nbt, String keyPrefix)
 	{
 		keyPrefix = makeNBTPrefix(keyPrefix);
-		if(nbt.contains(keyPrefix+"class", Constants.NBT.TAG_ANY_NUMERIC))
+		if(nbt.contains(keyPrefix+"class", Tag.TAG_ANY_NUMERIC))
 		{
 			EnumClass c = EnumClass.getClassFromInt(nbt.getByte(keyPrefix+"class"));
 			EnumAspect a = EnumAspect.getAspectFromInt(nbt.getByte(keyPrefix+"aspect"));
@@ -143,7 +142,7 @@ public final class Title
 		return null;
 	}
 	
-	public CompoundNBT write(CompoundNBT nbt, String keyPrefix)
+	public CompoundTag write(CompoundTag nbt, String keyPrefix)
 	{
 		keyPrefix = makeNBTPrefix(keyPrefix);
 		nbt.putByte(keyPrefix+"class", (byte) EnumClass.getIntFromClass(heroClass));

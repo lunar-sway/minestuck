@@ -1,6 +1,6 @@
 package com.mraof.minestuck.player;
 
-import net.minecraft.item.*;
+import net.minecraft.world.item.*;
 
 import java.util.ArrayList;
 import java.util.List;
