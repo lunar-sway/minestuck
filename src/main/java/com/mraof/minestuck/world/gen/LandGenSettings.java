@@ -1,17 +1,12 @@
 package com.mraof.minestuck.world.gen;
 
-import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.structure.GateStructure;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandTypePair;
-import net.minecraft.world.gen.DimensionSettings;
-import net.minecraft.world.gen.feature.structure.Structure;
-import net.minecraft.world.gen.settings.*;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.Supplier;
+import net.minecraft.core.Holder;
+import net.minecraft.util.CubicSpline;
+import net.minecraft.world.level.biome.TerrainShaper;
+import net.minecraft.world.level.levelgen.*;
 
 public class LandGenSettings
 {
@@ -53,23 +48,24 @@ public class LandGenSettings
 		return gatePiece;
 	}
 	
-	Supplier<DimensionSettings> createDimensionSettings()
+	Holder<NoiseGeneratorSettings> createDimensionSettings()
 	{
-		Map<Structure<?>, StructureSeparationSettings> structures = new HashMap<>();
-		structures.put(MSFeatures.LAND_GATE, new StructureSeparationSettings(1, 0, 0));
-		structures.put(MSFeatures.SMALL_RUIN, new StructureSeparationSettings(16, 4, 59273643));
-		structures.put(MSFeatures.IMP_DUNGEON, new StructureSeparationSettings(16, 4, 34527185));
-		structures.put(MSFeatures.CONSORT_VILLAGE, new StructureSeparationSettings(24, 5, 10387312));
+		/*TODO structure settings go elsewhere now
+		Map<StructureFeature<?>, StructureFeatureConfiguration> structures = new HashMap<>();
+		structures.put(MSFeatures.LAND_GATE, new StructureFeatureConfiguration(1, 0, 0));
+		structures.put(MSFeatures.SMALL_RUIN, new StructureFeatureConfiguration(16, 4, 59273643));
+		structures.put(MSFeatures.IMP_DUNGEON, new StructureFeatureConfiguration(16, 4, 34527185));
+		structures.put(MSFeatures.CONSORT_VILLAGE, new StructureFeatureConfiguration(24, 5, 10387312));
 		
-		DimensionStructuresSettings structureSettings = new DimensionStructuresSettings(Optional.empty(), structures);
+		StructureSettings structureSettings = new StructureSettings(Optional.empty(), structures);
+		*/
+		NoiseSettings noiseSettings = NoiseSettings.create(0, 256, new NoiseSamplingSettings(1, 1, 80, 160),
+				new NoiseSlider(-10, 3, 0), new NoiseSlider(-30, 0, 0), 1, 2,
+				new TerrainShaper(CubicSpline.constant(0.035F), CubicSpline.constant(1), CubicSpline.constant(0)));
 		
-		NoiseSettings noiseSettings = new NoiseSettings(256, new ScalingSettings(1, 1, 80, 160),
-				new SlideSettings(-10, 3, 0), new SlideSettings(-30, 0, 0),
-				1, 2, 1, -0.46875, true, true, false, false);
+		NoiseGeneratorSettings settings = new NoiseGeneratorSettings(noiseSettings, blockRegistry.getBlockState("ground"),
+				blockRegistry.getBlockState("ocean"), new NoiseRouterWithOnlyNoises(DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero()), SurfaceRules.bandlands(), 64, false, false, false, false);
 		
-		DimensionSettings settings = new DimensionSettings(structureSettings, noiseSettings, blockRegistry.getBlockState("ground"),
-				blockRegistry.getBlockState("ocean"), -1, 0, 64, false);
-		
-		return () -> settings;
+		return Holder.direct(settings);
 	}
 }

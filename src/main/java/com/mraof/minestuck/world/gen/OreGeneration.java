@@ -1,14 +1,9 @@
 package com.mraof.minestuck.world.gen;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.block.MSBlocks;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.OreFeatureConfig;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -31,18 +26,20 @@ public class OreGeneration
 	public static void onBiomeLoad(BiomeLoadingEvent event)
 	{
 		ResourceLocation name = event.getName();
-		if(name != null && BiomeDictionary.hasType(RegistryKey.create(Registry.BIOME_REGISTRY, name), BiomeDictionary.Type.OVERWORLD))
+		if(name != null && BiomeDictionary.hasType(ResourceKey.create(Registry.BIOME_REGISTRY, name), BiomeDictionary.Type.OVERWORLD))
 		{
+			/*TODO
 			if(MinestuckConfig.SERVER.generateCruxiteOre.get())
 			{
-				event.getGeneration().addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.configured(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, MSBlocks.STONE_CRUXITE_ORE.defaultBlockState(), baseCruxiteVeinSize))
+				event.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, Feature.ORE.configured(new OreConfiguration(OreFeatures.STONE_ORE_REPLACEABLES, MSBlocks.STONE_CRUXITE_ORE.defaultBlockState(), baseCruxiteVeinSize))
 						.range(cruxiteStratumMax).squared().count(cruxiteVeinsPerChunk));
 			}
 			if(MinestuckConfig.SERVER.generateUraniumOre.get())
 			{
-				event.getGeneration().addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.configured(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, MSBlocks.STONE_URANIUM_ORE.defaultBlockState(), baseUraniumVeinSize))
+				event.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, Feature.ORE.configured(new OreConfiguration(OreFeatures.STONE_ORE_REPLACEABLES, MSBlocks.STONE_URANIUM_ORE.defaultBlockState(), baseUraniumVeinSize))
 						.range(uraniumStratumMax).squared().count(uraniumVeinsPerChunk));
 			}
+			*/
 		}
 	}
 }

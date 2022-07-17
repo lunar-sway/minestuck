@@ -5,26 +5,27 @@ import com.mojang.serialization.Lifecycle;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.gen.LandChunkGenerator;
 import com.mraof.minestuck.world.lands.LandTypePair;
+import net.minecraft.Util;
+import net.minecraft.core.Registry;
+import net.minecraft.core.WritableRegistry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Util;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.Dimension;
-import net.minecraft.world.DimensionType;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeManager;
-import net.minecraft.world.border.IBorderListener;
-import net.minecraft.world.chunk.listener.LoggingChunkStatusListener;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.settings.DimensionGeneratorSettings;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.DerivedWorldInfo;
-import net.minecraft.world.storage.IServerConfiguration;
-import net.minecraft.world.storage.SaveFormat;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.progress.LoggerChunkProgressListener;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.BiomeManager;
+import net.minecraft.world.level.border.BorderChangeListener;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.dimension.DimensionType;
+import net.minecraft.world.level.dimension.LevelStem;
+import net.minecraft.world.level.levelgen.WorldGenSettings;
+import net.minecraft.world.level.storage.DerivedLevelData;
+import net.minecraft.world.level.storage.LevelStorageSource;
+import net.minecraft.world.level.storage.WorldData;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.WorldEvent;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 import java.lang.reflect.Field;
 import java.util.Map;
@@ -34,61 +35,61 @@ import java.util.Map;
  */
 public class DynamicDimensions
 {
-	private static final RegistryKey<DimensionType> LAND_TYPE = RegistryKey.create(Registry.DIMENSION_TYPE_REGISTRY, new ResourceLocation(Minestuck.MOD_ID, "land"));
+	private static final ResourceKey<DimensionType> LAND_TYPE = ResourceKey.create(Registry.DIMENSION_TYPE_REGISTRY, new ResourceLocation(Minestuck.MOD_ID, "land"));
 	
-	public static RegistryKey<World> createLand(MinecraftServer server, ResourceLocation baseName, LandTypePair landTypes)
+	public static ResourceKey<Level> createLand(MinecraftServer server, ResourceLocation baseName, LandTypePair landTypes)
 	{
-		Map<RegistryKey<World>, ServerWorld> worldMap = server.forgeGetWorldMap();
+		Map<ResourceKey<Level>, ServerLevel> worldMap = server.forgeGetWorldMap();
 		
-		RegistryKey<World> worldKey = findUnusedWorldKey(worldMap, baseName);
+		ResourceKey<Level> worldKey = findUnusedWorldKey(worldMap, baseName);
 		
-		RegistryKey<Dimension> dimensionKey = RegistryKey.create(Registry.LEVEL_STEM_REGISTRY, worldKey.location());
+		ResourceKey<LevelStem> dimensionKey = ResourceKey.create(Registry.LEVEL_STEM_REGISTRY, worldKey.location());
 		
-		IServerConfiguration serverConfig = server.getWorldData();
-		DimensionGeneratorSettings genSettings = serverConfig.worldGenSettings();
+		WorldData worldData = server.getWorldData();
+		WorldGenSettings genSettings = worldData.worldGenSettings();
 		
-		ChunkGenerator chunkGenerator = new LandChunkGenerator(genSettings.seed() + worldKey.location().getPath().hashCode(), landTypes, server.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY));
-		Dimension dimension = new Dimension(() -> server.registryAccess().dimensionTypes().get(LAND_TYPE), chunkGenerator);
+		ChunkGenerator chunkGenerator = new LandChunkGenerator(server.registryAccess().registryOrThrow(Registry.STRUCTURE_SET_REGISTRY), genSettings.seed() + worldKey.location().getPath().hashCode(), landTypes, server.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY));
+		LevelStem dimension = new LevelStem(server.registryAccess().registryOrThrow(Registry.DIMENSION_TYPE_REGISTRY).getOrCreateHolder(LAND_TYPE), chunkGenerator);
 		
-		genSettings.dimensions().register(dimensionKey, dimension, Lifecycle.experimental());
+		((WritableRegistry<LevelStem>) genSettings.dimensions()).register(dimensionKey, dimension, Lifecycle.experimental());
 		
-		SaveFormat.LevelSave levelSave = getLevelSave(server);
-		DerivedWorldInfo worldInfo = new DerivedWorldInfo(serverConfig, serverConfig.overworldData());
+		LevelStorageSource.LevelStorageAccess levelSave = getLevelSave(server);
+		DerivedLevelData worldInfo = new DerivedLevelData(worldData, worldData.overworldData());
 		
-		ServerWorld world = new ServerWorld(server, Util.backgroundExecutor(), levelSave, worldInfo, worldKey,
-				dimension.type(), new LoggingChunkStatusListener(11), chunkGenerator, genSettings.isDebug(),
+		ServerLevel level = new ServerLevel(server, Util.backgroundExecutor(), levelSave, worldInfo, worldKey,
+				dimension.typeHolder(), new LoggerChunkProgressListener(11), chunkGenerator, genSettings.isDebug(),
 				BiomeManager.obfuscateSeed(genSettings.seed()), ImmutableList.of(), false);
 		
-		server.overworld().getWorldBorder().addListener(new IBorderListener.Impl(world.getWorldBorder()));
+		server.overworld().getWorldBorder().addListener(new BorderChangeListener.DelegateBorderChangeListener(level.getWorldBorder()));
 		
-		worldMap.put(worldKey, world);
+		worldMap.put(worldKey, level);
 		server.markWorldsDirty();
 		
-		MinecraftForge.EVENT_BUS.post(new WorldEvent.Load(world));
+		MinecraftForge.EVENT_BUS.post(new WorldEvent.Load(level));
 		
 		return worldKey;
 	}
 	
-	private static RegistryKey<World> findUnusedWorldKey(Map<RegistryKey<World>, ServerWorld> worldMap, ResourceLocation baseName)
+	private static ResourceKey<Level> findUnusedWorldKey(Map<ResourceKey<Level>, ServerLevel> worldMap, ResourceLocation baseName)
 	{
-		RegistryKey<World> key = RegistryKey.create(Registry.DIMENSION_REGISTRY, baseName);
+		ResourceKey<Level> key = ResourceKey.create(Registry.DIMENSION_REGISTRY, baseName);
 		
 		for(int i = 0; worldMap.containsKey(key); i++)
 		{
-			key = RegistryKey.create(Registry.DIMENSION_REGISTRY,
+			key = ResourceKey.create(Registry.DIMENSION_REGISTRY,
 					new ResourceLocation(baseName.getNamespace(), baseName.getPath() + "_" + i));
 		}
 		
 		return key;
 	}
 	
-	private static final Field LEVEL_SAVE_FIELD = ObfuscationReflectionHelper.findField(MinecraftServer.class, "field_71310_m");
+	private static final Field LEVEL_SAVE_FIELD = ObfuscationReflectionHelper.findField(MinecraftServer.class, "f_129744_");
 	
-	private static SaveFormat.LevelSave getLevelSave(MinecraftServer server)
+	private static LevelStorageSource.LevelStorageAccess getLevelSave(MinecraftServer server)
 	{
 		try
 		{
-			return (SaveFormat.LevelSave) (LEVEL_SAVE_FIELD.get(server));
+			return (LevelStorageSource.LevelStorageAccess) (LEVEL_SAVE_FIELD.get(server));
 		}
 		catch (IllegalArgumentException | IllegalAccessException e)
 		{

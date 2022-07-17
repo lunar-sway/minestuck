@@ -7,38 +7,38 @@ import com.mraof.minestuck.skaianet.UnderlingController;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.LandBiomeSetWrapper;
 import com.mraof.minestuck.world.biome.gen.LandBiomeProvider;
-import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.structure.GateStructure;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.LandTypePair;
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryLookupCodec;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.MobSpawnInfo;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.WorldGenRegion;
-import net.minecraft.world.gen.feature.structure.Structure;
-import net.minecraft.world.gen.feature.structure.StructureManager;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.RegistryOps;
+import net.minecraft.server.level.WorldGenRegion;
+import net.minecraft.util.random.WeightedRandomList;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.StructureFeatureManager;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Climate;
+import net.minecraft.world.level.biome.MobSpawnSettings;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.structure.StructureSet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.annotation.Nullable;
-import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 public class LandChunkGenerator extends AbstractChunkGenerator
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	public static final Codec<LandChunkGenerator> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+	public static final Codec<LandChunkGenerator> CODEC = RecordCodecBuilder.create(instance -> commonCodec(instance).and(instance.group(
 					Codec.LONG.fieldOf("seed").stable().forGetter(generator -> generator.seed),
 					LandTypePair.CODEC.fieldOf("land_types").forGetter(generator -> generator.landTypes),
-					RegistryLookupCodec.create(Registry.BIOME_REGISTRY).forGetter(generator -> generator.registry))
+					RegistryOps.retrieveRegistry(Registry.BIOME_REGISTRY).forGetter(generator -> generator.registry)))
 			.apply(instance, instance.stable(LandChunkGenerator::new)));
 	
 	public final LandTypePair landTypes;
@@ -49,19 +49,19 @@ public class LandChunkGenerator extends AbstractChunkGenerator
 	
 	private ChunkPos landGatePosition;
 	
-	public LandChunkGenerator(long seed, LandTypePair landTypes, Registry<Biome> registry)
+	public LandChunkGenerator(Registry<StructureSet> structureSets, long seed, LandTypePair landTypes, Registry<Biome> registry)
 	{
-		this(seed, new LandBiomeSetWrapper(landTypes.getTerrain().getBiomeSet(), registry), registry, LandProperties.create(landTypes), new LandGenSettings(landTypes));
+		this(structureSets, seed, new LandBiomeSetWrapper(landTypes.getTerrain().getBiomeSet(), registry), registry, LandProperties.create(landTypes), new LandGenSettings(landTypes));
 	}
 	
-	private LandChunkGenerator(long seed, LandBiomeSetWrapper baseBiomes, Registry<Biome> registry, LandProperties properties, LandGenSettings genSettings)
+	private LandChunkGenerator(Registry<StructureSet> structureSets, long seed, LandBiomeSetWrapper baseBiomes, Registry<Biome> registry, LandProperties properties, LandGenSettings genSettings)
 	{
-		this(seed, new LandBiomeHolder(baseBiomes, genSettings, properties), registry, genSettings);
+		this(structureSets, seed, new LandBiomeHolder(baseBiomes, genSettings, properties), registry, genSettings);
 	}
 	
-	private LandChunkGenerator(long seed, LandBiomeHolder biomes, Registry<Biome> registry, LandGenSettings genSettings)
+	private LandChunkGenerator(Registry<StructureSet> structureSets, long seed, LandBiomeHolder biomes, Registry<Biome> registry, LandGenSettings genSettings)
 	{
-		super(new LandBiomeProvider(seed, biomes, genSettings), new LandBiomeProvider(seed, biomes.baseBiomes, genSettings),
+		super(structureSets, Optional.empty(), new LandBiomeProvider(seed, biomes, genSettings), new LandBiomeProvider(seed, biomes.baseBiomes, genSettings),
 				seed, genSettings.createDimensionSettings());
 		
 		this.biomes = biomes;
@@ -80,35 +80,35 @@ public class LandChunkGenerator extends AbstractChunkGenerator
 	@Override
 	public ChunkGenerator withSeed(long seed)
 	{
-		return new LandChunkGenerator(seed, landTypes, registry);
+		return new LandChunkGenerator(this.structureSets, seed, landTypes, registry);
 	}
 	
 	@Override
-	protected Biome getBiome(WorldGenRegion region, BlockPos pos)
+	protected Holder<Biome> getBiome(WorldGenRegion region, BlockPos pos)
 	{
 		return biomes.getBiomeFromBase(super.getBiome(region, pos));
 	}
 	
 	@Override
-	public List<MobSpawnInfo.Spawners> getMobsAt(Biome biome, StructureManager structures, EntityClassification classification, BlockPos pos)
+	public WeightedRandomList<MobSpawnSettings.SpawnerData> getMobsAt(Holder<Biome> biome, StructureFeatureManager structures, MobCategory category, BlockPos pos)
 	{
-		if(classification == MSEntityTypes.UNDERLING)
+		if(category == MSEntityTypes.UNDERLING)
 			return UnderlingController.getUnderlingList(pos);
-		else return biomes.getBiomeFromBase(biome).getMobSettings().getMobs(classification);
+		else return biomes.getBiomeFromBase(biome).value().getMobSettings().getMobs(category);
 	}
-	
+	/*TODO gate position elsewhere
 	@Nullable
 	@Override
-	public BlockPos findNearestMapFeature(ServerWorld world, Structure<?> structure, BlockPos pos, int searchSize, boolean checkReference)
+	public Pair<BlockPos, Holder<ConfiguredStructureFeature<?, ?>>> findNearestMapFeature(ServerLevel level, HolderSet<ConfiguredStructureFeature<?, ?>> structure, BlockPos pos, int searchSize, boolean checkReference)
 	{
 		if (structure == MSFeatures.LAND_GATE)
 		{
 			ChunkPos gatePos = getOrFindLandGatePosition();
 			return new BlockPos((gatePos.x << 4) + 8, 32, (gatePos.z << 4) + 8);
 		} else
-			return super.findNearestMapFeature(world, structure, pos, searchSize, checkReference);
+			return super.findNearestMapFeature(level, structure, pos, searchSize, checkReference);
 	}
-	
+	*/
 	public long getSeed()
 	{
 		return seed;
@@ -124,7 +124,7 @@ public class LandChunkGenerator extends AbstractChunkGenerator
 		double angle = 2 * Math.PI * worldRand.nextDouble();
 		int radius = 38 + worldRand.nextInt(12);
 		
-		Biome normalBiome = biomes.baseBiomes.NORMAL;
+		Holder<Biome> normalBiome = biomes.baseBiomes.NORMAL;
 		
 		for(; radius < 65; radius += 6)
 		{
@@ -132,9 +132,9 @@ public class LandChunkGenerator extends AbstractChunkGenerator
 			int posZ = (int) Math.round(Math.sin(angle) * radius);
 			
 			//TODO Could there be a better way to search for a position? (Look for possible positions with the "surrounded by normal biomes" property rather than pick a random one and then check if it has this property)
-			BlockPos pos = getBiomeSource().findBiomeHorizontal((posX << 4) + 8, 0,(posZ << 4) + 8, 96, biome -> biome == normalBiome, worldRand);
+			BlockPos pos = getBiomeSource().findBiomeHorizontal((posX << 4) + 8, 0,(posZ << 4) + 8, 96, biome -> biome == normalBiome, worldRand, climateSampler()).getFirst();
 			
-			if(pos != null && getBiomeSource().getBiomesWithin(pos.getX(), 0, pos.getZ(), 16).stream().allMatch(biome -> biome == normalBiome))
+			if(pos != null && getBiomeSource().getBiomesWithin(pos.getX(), 0, pos.getZ(), 16, climateSampler()).stream().allMatch(biome -> biome == normalBiome))
 				return new ChunkPos(pos.getX() >> 4, pos.getZ() >> 4);
 		}
 		
@@ -142,12 +142,18 @@ public class LandChunkGenerator extends AbstractChunkGenerator
 		int posZ = (int) Math.round(Math.sin(angle) * radius);
 		LOGGER.warn("Did not come across a decent location for land gates. Placing it without regard to any biomes.");
 		
-		BlockPos pos = getBiomeSource().findBiomeHorizontal((posX << 4) + 8, 0, (posZ << 4) + 8, 96, biome -> biome == normalBiome, worldRand);
+		BlockPos pos = getBiomeSource().findBiomeHorizontal((posX << 4) + 8, 0, (posZ << 4) + 8, 96, biome -> biome == normalBiome, worldRand, climateSampler()).getFirst();
 		
 		if(pos != null)
 			landGatePosition = new ChunkPos(pos);
 		else landGatePosition = new ChunkPos(posX, posZ);
 		
 		return landGatePosition;
+	}
+	
+	@Override
+	public Climate.Sampler climateSampler()
+	{
+		return Climate.empty();
 	}
 }

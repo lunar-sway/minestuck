@@ -8,12 +8,12 @@ import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.World;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,12 +26,12 @@ import java.util.Objects;
 public class MSDimensions
 {
 	private static final Logger LOGGER = LogManager.getLogger();
-	private static final Map<RegistryKey<World>, LandInfo> typeToInfoContainer = new HashMap<>();
+	private static final Map<ResourceKey<Level>, LandInfo> typeToInfoContainer = new HashMap<>();
 	
-	public static RegistryKey<World> SKAIA = RegistryKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(Minestuck.MOD_ID, "skaia"));
+	public static ResourceKey<Level> SKAIA = ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(Minestuck.MOD_ID, "skaia"));
 	public static final ResourceLocation LAND_EFFECTS = new ResourceLocation(Minestuck.MOD_ID, "land");
 	
-	public static LandTypePair getAspects(MinecraftServer server, RegistryKey<World> dimension)
+	public static LandTypePair getAspects(MinecraftServer server, ResourceKey<Level> dimension)
 	{
 		LandInfo info = getLandInfo(server, dimension);
 		if(info != null)
@@ -43,24 +43,24 @@ public class MSDimensions
 		} else return null;
 	}
 	
-	public static LandInfo getLandInfo(World world)
+	public static LandInfo getLandInfo(Level level)
 	{
-		return getLandInfo(world.getServer(), world.dimension());
+		return getLandInfo(level.getServer(), level.dimension());
 	}
 	
-	public static LandInfo getLandInfo(MinecraftServer server, RegistryKey<World> dimension)
+	public static LandInfo getLandInfo(MinecraftServer server, ResourceKey<Level> dimension)
 	{
 		Objects.requireNonNull(server);
 		return typeToInfoContainer.get(dimension);
 	}
 	
-	public static boolean isLandDimension(MinecraftServer server, RegistryKey<World> world)
+	public static boolean isLandDimension(MinecraftServer server, ResourceKey<Level> level)
 	{
 		Objects.requireNonNull(server);
-		return typeToInfoContainer.containsKey(world);
+		return typeToInfoContainer.containsKey(level);
 	}
 	
-	public static boolean isSkaia(RegistryKey<World> dimension)
+	public static boolean isSkaia(ResourceKey<Level> dimension)
 	{
 		return dimension == SKAIA;
 	}
@@ -80,16 +80,16 @@ public class MSDimensions
 		typeToInfoContainer.clear();
 	}
 	
-	public static void sendDimensionData(ServerPlayerEntity player)
+	public static void sendDimensionData(ServerPlayer player)
 	{
 		MSPacketHandler.sendToPlayer(createLandTypesPacket(), player);
 	}
 	
 	private static LandTypesDataPacket createLandTypesPacket()
 	{
-		ImmutableMap.Builder<RegistryKey<World>, LandTypePair> builder = new ImmutableMap.Builder<>();
+		ImmutableMap.Builder<ResourceKey<Level>, LandTypePair> builder = new ImmutableMap.Builder<>();
 		
-		for (Map.Entry<RegistryKey<World>, LandInfo> entry : typeToInfoContainer.entrySet())
+		for (Map.Entry<ResourceKey<Level>, LandInfo> entry : typeToInfoContainer.entrySet())
 			builder.put(entry.getKey(), entry.getValue().getLandAspects());
 		
 		return new LandTypesDataPacket(builder.build());
