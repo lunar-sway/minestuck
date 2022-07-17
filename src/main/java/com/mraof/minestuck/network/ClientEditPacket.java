@@ -9,10 +9,10 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.server.management.OpEntry;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.players.ServerOpListEntry;
+import net.minecraft.world.item.ItemStack;
 
 public class ClientEditPacket implements PlayToServerPacket
 {
@@ -36,7 +36,7 @@ public class ClientEditPacket implements PlayToServerPacket
 	}
 	
 	@Override
-	public void encode(PacketBuffer buffer)
+	public void encode(FriendlyByteBuf buffer)
 	{
 		if(user != -1)
 		{
@@ -45,7 +45,7 @@ public class ClientEditPacket implements PlayToServerPacket
 		}
 	}
 	
-	public static ClientEditPacket decode(PacketBuffer buffer)
+	public static ClientEditPacket decode(FriendlyByteBuf buffer)
 	{
 		if(buffer.readableBytes() > 0)
 		{
@@ -58,11 +58,11 @@ public class ClientEditPacket implements PlayToServerPacket
 	}
 	
 	@Override
-	public void execute(ServerPlayerEntity player)
+	public void execute(ServerPlayer player)
 	{
 		if(player == null || player.getServer() == null)
 			return;
-		OpEntry opsEntry = player.getServer().getPlayerList().getOps().get(player.getGameProfile());
+		ServerOpListEntry opsEntry = player.getServer().getPlayerList().getOps().get(player.getGameProfile());
 		if(!MinestuckConfig.SERVER.giveItems.get())
 		{
 			if(user == -1)
@@ -81,7 +81,7 @@ public class ClientEditPacket implements PlayToServerPacket
 		PlayerIdentifier target = IdentifierHandler.getById(this.target);
 		if(user != null && target != null)
 		{
-			ServerPlayerEntity targetPlayer = target.getPlayer(player.getServer());
+			ServerPlayer targetPlayer = target.getPlayer(player.getServer());
 			
 			if(targetPlayer != null && (!MinestuckConfig.SERVER.privateComputers.get() || user.appliesTo(player) || opsEntry != null && opsEntry.getLevel() >= 2))
 			{
@@ -94,7 +94,7 @@ public class ClientEditPacket implements PlayToServerPacket
 					if(!c.hasGivenItem(entry))
 					{
 						ItemStack item = entry.getItemStack(c, player.level);
-						if(!targetPlayer.inventory.contains(item) && targetPlayer.inventory.add(item))
+						if(!targetPlayer.getInventory().contains(item) && targetPlayer.getInventory().add(item))
 							c.setHasGivenItem(entry);
 					}
 				}

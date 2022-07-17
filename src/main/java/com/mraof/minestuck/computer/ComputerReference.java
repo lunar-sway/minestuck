@@ -1,9 +1,9 @@
 package com.mraof.minestuck.computer;
 
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.core.GlobalPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.math.GlobalPos;
 
 import java.util.Objects;
 
@@ -14,7 +14,7 @@ public interface ComputerReference
 		return new TEComputerReference(GlobalPos.of(Objects.requireNonNull(te.getLevel()).dimension(), te.getBlockPos()));
 	}
 	
-	static ComputerReference read(CompoundNBT nbt)
+	static ComputerReference read(CompoundTag nbt)
 	{
 		String type = nbt.getString("type");
 		if(type.equals("tile_entity"))
@@ -22,7 +22,7 @@ public interface ComputerReference
 		else throw new IllegalStateException("Invalid computer type: " + type);
 	}
 	
-	default CompoundNBT write(CompoundNBT nbt)
+	default CompoundTag write(CompoundTag nbt)
 	{
 		return nbt;
 	}

@@ -10,7 +10,7 @@ import com.mraof.minestuck.skaianet.client.ReducedConnection;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import net.minecraft.client.Minecraft;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -31,7 +31,7 @@ public class SburbClient extends ButtonListProgram
 	public ArrayList<UnlocalizedString> getStringList(ComputerTileEntity te)
 	{
 		ArrayList<UnlocalizedString> list = new ArrayList<>();
-		CompoundNBT nbt = te.getData(getId());
+		CompoundTag nbt = te.getData(getId());
 		
 		ReducedConnection c = SkaiaClient.getClientConnection(te.ownerId);
 		if(nbt.getBoolean("connectedToServer") && c != null) //If it is connected to someone.
@@ -69,7 +69,7 @@ public class SburbClient extends ButtonListProgram
 			MSPacketHandler.sendToServer(ConnectToSburbServerPacket.create(te, (Integer) data[1]));
 		else if(buttonName.equals(CLOSE_BUTTON))
 		{
-			CompoundNBT nbt = te.getData(getId());
+			CompoundTag nbt = te.getData(getId());
 			if(!nbt.getBoolean("isResuming") && !nbt.getBoolean("connectedToServer"))
 				MSPacketHandler.sendToServer(CloseRemoteSburbConnectionPacket.asClient(te));
 			else MSPacketHandler.sendToServer(CloseSburbConnectionPacket.asClient(te));

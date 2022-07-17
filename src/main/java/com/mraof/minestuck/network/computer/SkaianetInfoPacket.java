@@ -6,12 +6,12 @@ import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.skaianet.client.ReducedConnection;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.World;
+import net.minecraft.core.Registry;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,9 +25,9 @@ public class SkaianetInfoPacket implements PlayToBothPacket
 	public Map<Integer, String> openServers;
 	public List<SburbConnection> connectionsFrom;
 	public List<ReducedConnection> connectionsTo;
-	public List<List<RegistryKey<World>>> landChains;
+	public List<List<ResourceKey<Level>>> landChains;
 	
-	public static SkaianetInfoPacket landChains(List<List<RegistryKey<World>>> landChains)
+	public static SkaianetInfoPacket landChains(List<List<ResourceKey<Level>>> landChains)
 	{
 		SkaianetInfoPacket packet = new SkaianetInfoPacket();
 		packet.landChains = landChains;
@@ -56,15 +56,15 @@ public class SkaianetInfoPacket implements PlayToBothPacket
 	}
 	
 	@Override
-	public void encode(PacketBuffer buffer)
+	public void encode(FriendlyByteBuf buffer)
 	{
 		if(landChains != null) //Land chain data
 		{
 			buffer.writeBoolean(true);
-			for(List<RegistryKey<World>> list : landChains)
+			for(List<ResourceKey<Level>> list : landChains)
 			{
 				buffer.writeInt(list.size());
-				for(RegistryKey<World> land : list)
+				for(ResourceKey<Level> land : list)
 				{
 					if(land == null)
 						buffer.writeUtf("");
@@ -95,7 +95,7 @@ public class SkaianetInfoPacket implements PlayToBothPacket
 		}
 	}
 	
-	public static SkaianetInfoPacket decode(PacketBuffer buffer)
+	public static SkaianetInfoPacket decode(FriendlyByteBuf buffer)
 	{
 		SkaianetInfoPacket packet = new SkaianetInfoPacket();
 		if(buffer.readBoolean())
@@ -104,13 +104,13 @@ public class SkaianetInfoPacket implements PlayToBothPacket
 			while(buffer.readableBytes() > 0)
 			{
 				int size = buffer.readInt();
-				List<RegistryKey<World>> list = new ArrayList<>();
+				List<ResourceKey<Level>> list = new ArrayList<>();
 				for(int k = 0; k < size; k++)
 				{
 					String landName = buffer.readUtf(32767);
 					if(landName.isEmpty())
 						list.add(null);
-					else list.add(RegistryKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(landName)));
+					else list.add(ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(landName)));
 				}
 				packet.landChains.add(list);
 			}
@@ -140,7 +140,7 @@ public class SkaianetInfoPacket implements PlayToBothPacket
 		SkaiaClient.consumePacket(this);
 	}
 	
-	public void execute(ServerPlayerEntity player)
+	public void execute(ServerPlayer player)
 	{
 		SkaianetHandler.get(player.server).requestInfo(player, IdentifierHandler.getById(this.playerId));
 	}

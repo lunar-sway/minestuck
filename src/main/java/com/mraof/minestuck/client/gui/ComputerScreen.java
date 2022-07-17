@@ -1,18 +1,20 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.computer.ComputerProgram;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.Widget;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Widget;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.narration.NarratableEntry;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.client.gui.widget.ExtendedButton;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -27,15 +29,15 @@ public class ComputerScreen extends Screen
 	public static final int xSize = 176;
 	public static final int ySize = 166;
 	
-	public Button programButton;
+	private Button programButton;
 	
-	public Minecraft mc;
-	public ComputerTileEntity te;
+	public final Minecraft mc;
+	public final ComputerTileEntity te;
 	private ComputerProgram program;
 	
 	ComputerScreen(Minecraft mc, ComputerTileEntity te)
 	{
-		super(new StringTextComponent("Computer"));
+		super(new TextComponent("Computer"));
 		
 		this.mc = mc;
 		this.font = mc.font;
@@ -44,29 +46,24 @@ public class ComputerScreen extends Screen
 	}
 	
 	@Override
-	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
+	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground(matrixStack);
+		this.renderBackground(poseStack);
+		boolean bsod = te.hasProgram(-1);
+		int yOffset = (this.height / 2) - (ySize / 2);
 		
-		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		if(te.hasProgram(-1)) {
-			this.mc.getTextureManager().bind(guiBsod);
-			int yOffset = (this.height / 2) - (ySize / 2);
-			this.blit(matrixStack, (this.width / 2) - (xSize / 2), yOffset, 0, 0, xSize, ySize);
-		} else if(program != null)
-			program.paintGui(matrixStack, this, te);
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		RenderSystem.setShaderColor(1, 1, 1, 1);
+		RenderSystem.setShaderTexture(0, bsod ? guiBsod : guiBackground);
+		this.blit(poseStack, (this.width / 2) - (xSize / 2), yOffset, 0, 0, xSize, ySize);
+		
+		if(!bsod && program != null)
+			program.paintGui(poseStack, this, te);
 		else {
-			this.mc.getTextureManager().bind(guiBackground);
-			int yOffset = (this.height / 2) - (ySize / 2);
-			this.blit(matrixStack, (this.width / 2) - (xSize / 2), yOffset, 0, 0, xSize, ySize);
-			font.draw(matrixStack, "Insert disk.", (width - xSize) / 2F +15, (height - ySize) / 2F +45, 4210752);
+			font.draw(poseStack, "Insert disk.", (width - xSize) / 2F +15, (height - ySize) / 2F +45, 4210752);
 		}
-		RenderSystem.disableRescaleNormal();
-		RenderHelper.turnOff();
-		RenderSystem.disableLighting();
-		RenderSystem.disableDepthTest();
-
-		super.render(matrixStack, mouseX, mouseY, partialTicks);
+		
+		super.render(poseStack, mouseX, mouseY, partialTicks);
 	}
 	
 	@Override
@@ -87,10 +84,10 @@ public class ComputerScreen extends Screen
 		if(te.programSelected != -1 && (program == null || program.getId() != te.programSelected))
 			program = ComputerProgram.getProgram(te.programSelected);
 		
-		programButton = new ExtendedButton((width - xSize)/2 +95,(height - ySize)/2 +10,70,20, StringTextComponent.EMPTY, button -> changeProgram());
-		addButton(programButton);
+		programButton = new ExtendedButton((width - xSize)/2 +95,(height - ySize)/2 +10,70,20, TextComponent.EMPTY, button -> changeProgram());
+		addRenderableWidget(programButton);
 		if(te.programSelected != -1)
-			program.onInitGui(this, null);
+			program.onInitGui(this);
 		
 		updateGui();
 	}
@@ -101,13 +98,13 @@ public class ComputerScreen extends Screen
 		programButton.active = te.installedPrograms.size() > 1;
 		
 		if(te.hasProgram(-1)) {
-			clearButtons();
+			clearWidgets();
 			return;
 		}
 		
 		if(program != null) {
 			program.onUpdateGui(this);
-			programButton.setMessage(new TranslationTextComponent(program.getName()));
+			programButton.setMessage(new TranslatableComponent(program.getName()));
 		}
 		
 	}
@@ -118,10 +115,13 @@ public class ComputerScreen extends Screen
 			return;
 		
 		te.programSelected = getNextProgram();
-		ComputerProgram prevProgram = program;
 		program = ComputerProgram.getProgram(te.programSelected);
 		if(program != null)
-			program.onInitGui(this, prevProgram);
+		{
+			clearWidgets();
+			addRenderableWidget(programButton);
+			program.onInitGui(this);
+		}
 		
 		updateGui();
 	}
@@ -150,14 +150,8 @@ public class ComputerScreen extends Screen
 	}
 	
 	@Override
-	public <T extends Widget> T addButton(T buttonIn)
+	public <T extends GuiEventListener & Widget & NarratableEntry> T addRenderableWidget(T button)
 	{
-		return super.addButton(buttonIn);
-	}
-	
-	public void clearButtons()
-	{
-		children.removeAll(buttons);
-		buttons.clear();
+		return super.addRenderableWidget(button);
 	}
 }
